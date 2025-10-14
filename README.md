@@ -101,7 +101,14 @@ For detailed technical documentation, infrastructure details, and coding standar
 
 ## License
 
-[Your License Here]
+Omnera is licensed under the Business Source License 1.1.
+
+- **Non-production use**: Free for development, testing, and personal projects
+- **Production use**: Allowed for internal business use
+- **Not allowed**: Offering Omnera as a managed service or SaaS to third parties
+- **Converts to**: Apache License 2.0 on October 14, 2029
+
+See [LICENSE.md](LICENSE) for full details.
 
 ---
 
