@@ -6,6 +6,7 @@
   "type": "module",
   "scripts": {
     "format": "prettier --write .",
+    "format:check": "prettier --check .",
     "typecheck": "tsc --noEmit",
     "clean": "knip --fix",
     "lint": "eslint .",
