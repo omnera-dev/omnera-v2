@@ -9,11 +9,13 @@
 ## Critical Distinction: Execution vs Type Checking
 
 ### Bun Runtime
+
 - **Purpose**: Executes TypeScript directly WITHOUT type checking
 - **Speed**: Very fast (~4x faster than Node.js)
 - **Use case**: Development, production, testing
 
 ### TypeScript Compiler (tsc)
+
 - **Purpose**: Validates types WITHOUT emitting files
 - **Speed**: Slow (type analysis is expensive)
 - **Use case**: Pre-commit, CI/CD, manual checks
@@ -33,28 +35,28 @@
 {
   "compilerOptions": {
     // Environment & Features
-    "lib": ["ESNext"],           // Latest JavaScript features
-    "target": ["ESNext"],          // No downleveling needed
-    "module": "Preserve",        // Preserves original module syntax
-    "moduleDetection": "force",  // Treat all files as modules
-    "jsx": "react-jsx",          // JSX support (if React is added)
-    "allowJs": true,             // Allow JavaScript files
+    "lib": ["ESNext"], // Latest JavaScript features
+    "target": ["ESNext"], // No downleveling needed
+    "module": "Preserve", // Preserves original module syntax
+    "moduleDetection": "force", // Treat all files as modules
+    "jsx": "react-jsx", // JSX support (if React is added)
+    "allowJs": true, // Allow JavaScript files
 
     // Bundler Mode (Bun-specific)
     "moduleResolution": "bundler", // Bun's resolution algorithm
     "allowImportingTsExtensions": true, // Can import .ts files directly
     "verbatimModuleSyntax": true, // Explicit import/export syntax
-    "noEmit": true,              // CRITICAL: Bun handles execution, not tsc
+    "noEmit": true, // CRITICAL: Bun handles execution, not tsc
 
     // Type Safety (Strict Mode)
-    "strict": true,              // Enable all strict type-checking options
-    "skipLibCheck": true,        // Skip type checking of declaration files
+    "strict": true, // Enable all strict type-checking options
+    "skipLibCheck": true, // Skip type checking of declaration files
     "noFallthroughCasesInSwitch": true, // Prevent switch fallthrough bugs
-    "noUncheckedIndexedAccess": true,   // Array/object access returns T | undefined
-    "noImplicitOverride": true,  // Explicit override keyword required
+    "noUncheckedIndexedAccess": true, // Array/object access returns T | undefined
+    "noImplicitOverride": true, // Explicit override keyword required
 
     // Optional Strictness (disabled for flexibility)
-    "noUnusedLocals": false,     // Allow unused local variables
+    "noUnusedLocals": false, // Allow unused local variables
     "noUnusedParameters": false, // Allow unused function parameters
     "noPropertyAccessFromIndexSignature": false // Allow obj['prop'] syntax
   }
@@ -78,7 +80,7 @@ import { something } from './module.ts'
 import type { SomeType } from './types.ts'
 
 // INCORRECT - Don't omit extensions
-import { something } from './module'  // ❌
+import { something } from './module' // ❌
 ```
 
 ## Running Type Checks
@@ -115,15 +117,15 @@ bunx tsc --noEmit src/**/*.ts
 
 ## Type Checking vs Execution Comparison
 
-| Aspect | Bun Runtime | TypeScript Compiler (tsc) |
-|--------|-------------|---------------------------|
-| **Speed** | Very fast (~4x faster than Node.js) | Slow (type analysis is expensive) |
-| **Type Checking** | None (skipped for performance) | Comprehensive (all type rules enforced) |
-| **Purpose** | Execute code, run application | Validate types, catch errors |
-| **Output** | Program execution, side effects | Error messages, type diagnostics |
-| **When to Use** | Development, production, testing | Pre-commit, CI/CD, manual checks |
-| **Files Generated** | None | None (with --noEmit) |
-| **Typical Time** | Milliseconds | Seconds (depends on project size) |
+| Aspect              | Bun Runtime                         | TypeScript Compiler (tsc)               |
+| ------------------- | ----------------------------------- | --------------------------------------- |
+| **Speed**           | Very fast (~4x faster than Node.js) | Slow (type analysis is expensive)       |
+| **Type Checking**   | None (skipped for performance)      | Comprehensive (all type rules enforced) |
+| **Purpose**         | Execute code, run application       | Validate types, catch errors            |
+| **Output**          | Program execution, side effects     | Error messages, type diagnostics        |
+| **When to Use**     | Development, production, testing    | Pre-commit, CI/CD, manual checks        |
+| **Files Generated** | None                                | None (with --noEmit)                    |
+| **Typical Time**    | Milliseconds                        | Seconds (depends on project size)       |
 
 ## Common Type Errors Caught by tsc
 
@@ -131,43 +133,50 @@ bunx tsc --noEmit src/**/*.ts
 // Example type errors tsc will catch that Bun runtime won't:
 
 // 1. Type mismatches
-const num: number = 'string'  // Error: Type 'string' not assignable to 'number'
+const num: number = 'string' // Error: Type 'string' not assignable to 'number'
 
 // 2. Missing properties
-interface User { name: string; age: number }
-const user: User = { name: 'Alice' }  // Error: Property 'age' is missing
+interface User {
+  name: string
+  age: number
+}
+const user: User = { name: 'Alice' } // Error: Property 'age' is missing
 
 // 3. Undefined access (with noUncheckedIndexedAccess)
 const items = [1, 2, 3]
-const item = items[10]  // Type: number | undefined (must handle undefined)
+const item = items[10] // Type: number | undefined (must handle undefined)
 
 // 4. Incorrect function calls
 function greet(name: string) {}
-greet(42)  // Error: Argument of type 'number' not assignable to 'string'
+greet(42) // Error: Argument of type 'number' not assignable to 'string'
 
 // 5. Type inference issues
 const value = Math.random() > 0.5 ? 'text' : 42
-const length = value.length  // Error: Property 'length' does not exist on 'number'
+const length = value.length // Error: Property 'length' does not exist on 'number'
 ```
 
 ## When to Run Type Checks
 
 1. **During Development** (optional, for real-time feedback):
+
    ```bash
    bunx tsc --noEmit --watch
    ```
 
 2. **Before Committing** (recommended):
+
    ```bash
    bun run typecheck  # Part of pre-commit checklist
    ```
 
 3. **In CI/CD Pipeline** (critical):
+
    ```bash
    bun run typecheck  # Fail builds if type errors exist
    ```
 
 4. **After Adding Dependencies** (recommended):
+
    ```bash
    bun run typecheck  # Verify type compatibility
    ```

@@ -27,12 +27,12 @@ Semantic-release eliminates manual version bumping, changelog writing, and relea
 
 Semantic-release analyzes commit messages following the Conventional Commits format to determine version bumps:
 
-| Commit Type | Example | Version Change | Example Version |
-|-------------|---------|----------------|-----------------|
-| `fix:` | `fix(api): resolve timeout issue` | Patch (0.0.X) | 0.1.0 → 0.1.1 |
-| `feat:` | `feat(auth): add OAuth support` | Minor (0.X.0) | 0.1.0 → 0.2.0 |
-| `feat!:` or `BREAKING CHANGE:` | `feat!: redesign API structure` | Major (X.0.0) | 0.1.0 → 1.0.0 |
-| `docs:`, `style:`, `refactor:`, `perf:`, `test:`, `chore:`, `ci:` | `docs: update README` | None | 0.1.0 → 0.1.0 |
+| Commit Type                                                       | Example                           | Version Change | Example Version |
+| ----------------------------------------------------------------- | --------------------------------- | -------------- | --------------- |
+| `fix:`                                                            | `fix(api): resolve timeout issue` | Patch (0.0.X)  | 0.1.0 → 0.1.1   |
+| `feat:`                                                           | `feat(auth): add OAuth support`   | Minor (0.X.0)  | 0.1.0 → 0.2.0   |
+| `feat!:` or `BREAKING CHANGE:`                                    | `feat!: redesign API structure`   | Major (X.0.0)  | 0.1.0 → 1.0.0   |
+| `docs:`, `style:`, `refactor:`, `perf:`, `test:`, `chore:`, `ci:` | `docs: update README`             | None           | 0.1.0 → 0.1.0   |
 
 ## Conventional Commits Format
 
@@ -181,10 +181,10 @@ The automated release process runs after the CI workflow completes successfully 
 
 ```yaml
 permissions:
-  contents: write        # Commit version bumps and changelog
-  issues: write          # Close issues referenced in commits
-  pull-requests: write   # Comment on PRs
-  id-token: write        # OpenID Connect token
+  contents: write # Commit version bumps and changelog
+  issues: write # Close issues referenced in commits
+  pull-requests: write # Comment on PRs
+  id-token: write # OpenID Connect token
 ```
 
 ## Release Process Flow
@@ -220,20 +220,32 @@ Release complete
   "plugins": [
     "@semantic-release/commit-analyzer",
     "@semantic-release/release-notes-generator",
-    ["@semantic-release/changelog", {
-      "changelogFile": "CHANGELOG.md"
-    }],
-    ["@semantic-release/exec", {
-      "prepareCmd": "node scripts/update-license-date.js ${nextRelease.version}"
-    }],
-    ["@semantic-release/npm", {
-      "npmPublish": true,
-      "pkgRoot": "."
-    }],
-    ["@semantic-release/git", {
-      "assets": ["CHANGELOG.md", "package.json", "LICENSE.md"],
-      "message": "chore(release): ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}"
-    }],
+    [
+      "@semantic-release/changelog",
+      {
+        "changelogFile": "CHANGELOG.md"
+      }
+    ],
+    [
+      "@semantic-release/exec",
+      {
+        "prepareCmd": "node scripts/update-license-date.js ${nextRelease.version}"
+      }
+    ],
+    [
+      "@semantic-release/npm",
+      {
+        "npmPublish": true,
+        "pkgRoot": "."
+      }
+    ],
+    [
+      "@semantic-release/git",
+      {
+        "assets": ["CHANGELOG.md", "package.json", "LICENSE.md"],
+        "message": "chore(release): ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}"
+      }
+    ],
     "@semantic-release/github"
   ]
 }
@@ -350,28 +362,28 @@ No release when:
 
 ## Integration with Other Tools
 
-| Tool | Integration Point | Notes |
-|------|------------------|-------|
-| **ESLint** | Pre-release validation | Linting must pass before release |
-| **TypeScript** | Pre-release validation | Type checking must pass before release |
-| **Bun Test** | Pre-release validation | Unit tests must pass before release |
-| **Playwright** | Not in release workflow | E2E tests run separately in CI |
-| **Prettier** | No integration | Formatting checked in separate CI workflow |
-| **GitHub Actions** | Release orchestration | Workflow triggers semantic-release |
-| **npm Registry** | Package publishing | "omnera" package published on release |
+| Tool               | Integration Point       | Notes                                      |
+| ------------------ | ----------------------- | ------------------------------------------ |
+| **ESLint**         | Pre-release validation  | Linting must pass before release           |
+| **TypeScript**     | Pre-release validation  | Type checking must pass before release     |
+| **Bun Test**       | Pre-release validation  | Unit tests must pass before release        |
+| **Playwright**     | Not in release workflow | E2E tests run separately in CI             |
+| **Prettier**       | No integration          | Formatting checked in separate CI workflow |
+| **GitHub Actions** | Release orchestration   | Workflow triggers semantic-release         |
+| **npm Registry**   | Package publishing      | "omnera" package published on release      |
 
 ## Semantic Release vs Manual Releases
 
-| Aspect | Semantic Release | Manual Releases |
-|--------|------------------|-----------------|
-| **Version Determination** | Automated from commits | Manual decision |
-| **Changelog** | Auto-generated from commits | Manually written |
-| **Publishing** | Automated to npm | Manual `npm publish` |
-| **GitHub Release** | Auto-created with notes | Manually created |
-| **License Updates** | Automated via script | Manual edits |
-| **Git Tags** | Automatically created | Manual `git tag` |
-| **Consistency** | Always follows semver | Prone to human error |
-| **Speed** | Fast (seconds after push) | Slow (manual steps) |
+| Aspect                    | Semantic Release            | Manual Releases      |
+| ------------------------- | --------------------------- | -------------------- |
+| **Version Determination** | Automated from commits      | Manual decision      |
+| **Changelog**             | Auto-generated from commits | Manually written     |
+| **Publishing**            | Automated to npm            | Manual `npm publish` |
+| **GitHub Release**        | Auto-created with notes     | Manually created     |
+| **License Updates**       | Automated via script        | Manual edits         |
+| **Git Tags**              | Automatically created       | Manual `git tag`     |
+| **Consistency**           | Always follows semver       | Prone to human error |
+| **Speed**                 | Fast (seconds after push)   | Slow (manual steps)  |
 
 ## Troubleshooting
 

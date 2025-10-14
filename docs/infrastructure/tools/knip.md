@@ -137,21 +137,25 @@ Knip can be configured via:
 ## When to Run Knip
 
 1. **Weekly Maintenance** (recommended):
+
    ```bash
    bun run clean  # Regular cleanup
    ```
 
 2. **Before Major Releases** (critical):
+
    ```bash
    bunx knip  # Full report before release
    ```
 
 3. **During Refactoring** (helpful):
+
    ```bash
    bunx knip --watch  # Monitor changes in real-time
    ```
 
 4. **After Dependency Updates** (recommended):
+
    ```bash
    bunx knip  # Verify no unused dependencies
    ```
@@ -163,12 +167,12 @@ Knip can be configured via:
 
 ## Knip vs Other Tools
 
-| Tool | Purpose | When to Run | Auto-Fix |
-|------|---------|-------------|----------|
-| **Knip** | Find unused code/dependencies | Weekly, before releases | Partial (exports only) |
-| **TypeScript (tsc)** | Type checking | Before commits, CI/CD | No |
-| **Prettier** | Code formatting | Before commits, on save | Yes (full) |
-| **Bun Test** | Functionality testing | After changes, CI/CD | No |
+| Tool                 | Purpose                       | When to Run             | Auto-Fix               |
+| -------------------- | ----------------------------- | ----------------------- | ---------------------- |
+| **Knip**             | Find unused code/dependencies | Weekly, before releases | Partial (exports only) |
+| **TypeScript (tsc)** | Type checking                 | Before commits, CI/CD   | No                     |
+| **Prettier**         | Code formatting               | Before commits, on save | Yes (full)             |
+| **Bun Test**         | Functionality testing         | After changes, CI/CD    | No                     |
 
 ## Knip is NOT
 
@@ -256,7 +260,7 @@ export const keepThis = 'value' // @knip-ignore
 # Example GitHub Actions workflow
 - name: Check for unused code
   run: bunx knip --reporter json
-  continue-on-error: true  # Don't fail build, just report
+  continue-on-error: true # Don't fail build, just report
 ```
 
 ## Best Practices

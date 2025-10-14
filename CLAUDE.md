@@ -8,6 +8,7 @@ The following detailed documentation files are imported for Claude Code's memory
 
 @docs/infrastructure/tools/bun.md
 @docs/infrastructure/tools/typescript.md
+@docs/infrastructure/tools/effect.md
 @docs/infrastructure/tools/eslint.md
 @docs/infrastructure/tools/prettier.md
 @docs/infrastructure/tools/knip.md
@@ -50,6 +51,16 @@ Strict type-safe TypeScript with Bun-optimized configuration.
 - **Two-Phase Workflow**: Fast execution (Bun) + Type checking (tsc)
 
 **Detailed Documentation**: [`docs/infrastructure/tools/typescript.md`](docs/infrastructure/tools/typescript.md)
+
+### Effect (3.18.4)
+
+Typed functional programming library for building robust applications.
+
+- **Purpose**: Type-safe error handling, dependency injection, structured concurrency
+- **Key Feature**: Explicit error types tracked at compile time
+- **Why Effect**: Composability, testability, reliability, excellent TypeScript integration
+
+**Detailed Documentation**: [`docs/infrastructure/tools/effect.md`](docs/infrastructure/tools/effect.md)
 
 ## Development Tools
 
@@ -96,7 +107,7 @@ Strict type-safe TypeScript with Bun-optimized configuration.
 omnera-v2/
 ├── docs/
 │   └── infrastructure/          # Technical infrastructure documentation
-│       ├── tools/              # Development tools (Bun, TypeScript, ESLint, Prettier, Knip)
+│       ├── tools/              # Development tools (Bun, TypeScript, Effect, ESLint, Prettier, Knip)
 │       ├── testing/            # Testing frameworks (Bun Test, Playwright)
 │       ├── cicd/               # CI/CD workflows (GitHub Actions)
 │       └── release/            # Release management (semantic-release)
@@ -316,7 +327,7 @@ This project uses a modular documentation approach:
 
 - **CLAUDE.md** (this file): High-level project overview and quick reference
 - **docs/infrastructure/**: Detailed technical documentation
-  - **tools/**: Development tools (Bun, TypeScript, ESLint, Prettier, Knip)
+  - **tools/**: Development tools (Bun, TypeScript, Effect, ESLint, Prettier, Knip)
   - **testing/**: Testing frameworks (Bun Test, Playwright)
   - **cicd/**: CI/CD workflows (GitHub Actions)
   - **release/**: Release management (semantic-release)

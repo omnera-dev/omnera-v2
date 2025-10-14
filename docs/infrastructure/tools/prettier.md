@@ -47,13 +47,13 @@ bunx prettier --write . --config .prettierrc.json
 
 ```json
 {
-  "semi": false,                      // No semicolons
-  "trailingComma": "es5",            // Trailing commas where valid in ES5
-  "singleQuote": true,               // Single quotes for strings
-  "tabWidth": 2,                     // 2 spaces per indentation level
-  "useTabs": false,                  // Spaces, not tabs
-  "printWidth": 100,                 // Wrap lines at 100 characters
-  "singleAttributePerLine": true     // Each attribute on separate line (HTML/JSX)
+  "semi": false, // No semicolons
+  "trailingComma": "es5", // Trailing commas where valid in ES5
+  "singleQuote": true, // Single quotes for strings
+  "tabWidth": 2, // 2 spaces per indentation level
+  "useTabs": false, // Spaces, not tabs
+  "printWidth": 100, // Wrap lines at 100 characters
+  "singleAttributePerLine": true // Each attribute on separate line (HTML/JSX)
 }
 ```
 
@@ -76,7 +76,7 @@ const message = 'Hello world'
 const path = './module.ts'
 
 // INCORRECT
-const message = "Hello world"  // ❌ Double quotes
+const message = 'Hello world' // ❌ Double quotes
 ```
 
 ### 2. Semicolons: Never Use Semicolons
@@ -87,8 +87,8 @@ const value = 42
 const fn = () => console.log('done')
 
 // INCORRECT
-const value = 42;              // ❌ Semicolon
-const fn = () => console.log('done');  // ❌ Semicolon
+const value = 42 // ❌ Semicolon
+const fn = () => console.log('done') // ❌ Semicolon
 ```
 
 ### 3. Line Width: Maximum 100 Characters
@@ -102,7 +102,11 @@ const longObject = {
 }
 
 // INCORRECT - Exceeds 100 characters
-const longObject = { propertyOne: 'value', propertyTwo: 'another value', propertyThree: 'yet another value' }  // ❌
+const longObject = {
+  propertyOne: 'value',
+  propertyTwo: 'another value',
+  propertyThree: 'yet another value',
+} // ❌
 ```
 
 ### 4. Trailing Commas: Use in Multi-line Structures
@@ -112,19 +116,19 @@ const longObject = { propertyOne: 'value', propertyTwo: 'another value', propert
 const array = [
   'item1',
   'item2',
-  'item3',  // Trailing comma
+  'item3', // Trailing comma
 ]
 
 const object = {
   key1: 'value1',
-  key2: 'value2',  // Trailing comma
+  key2: 'value2', // Trailing comma
 }
 
 // INCORRECT
 const array = [
   'item1',
   'item2',
-  'item3'  // ❌ Missing trailing comma
+  'item3', // ❌ Missing trailing comma
 ]
 ```
 
@@ -140,9 +144,10 @@ function example() {
 
 // INCORRECT - Uses 4 spaces or tabs
 function example() {
-    if (condition) {  // ❌ Wrong indentation
-        return true
-    }
+  if (condition) {
+    // ❌ Wrong indentation
+    return true
+  }
 }
 ```
 
@@ -233,16 +238,19 @@ let g:ale_fix_on_save = 1
 ## When to Run Prettier
 
 1. **Before Committing** (critical):
+
    ```bash
    bun run format  # Format all files
    ```
 
 2. **In CI/CD Pipeline** (critical):
+
    ```bash
    bun run format:check  # Verify formatting without modifying
    ```
 
 3. **After Code Changes** (recommended):
+
    ```bash
    bunx prettier --write .  # Auto-format everything
    ```
@@ -277,11 +285,11 @@ playwright/.cache/
 
 ## Prettier vs Other Tools
 
-| Tool | Purpose | When to Run | Auto-Fix | Speed |
-|------|---------|-------------|----------|-------|
-| **Prettier** | Code formatting | Before commits, on save | Yes (full) | Very fast (milliseconds) |
-| **ESLint** | Code quality | Before commits, in CI/CD | Partial (many rules) | Fast (seconds) |
-| **TypeScript (tsc)** | Type checking | Before commits, in CI/CD | No | Medium (seconds) |
+| Tool                 | Purpose         | When to Run              | Auto-Fix             | Speed                    |
+| -------------------- | --------------- | ------------------------ | -------------------- | ------------------------ |
+| **Prettier**         | Code formatting | Before commits, on save  | Yes (full)           | Very fast (milliseconds) |
+| **ESLint**           | Code quality    | Before commits, in CI/CD | Partial (many rules) | Fast (seconds)           |
+| **TypeScript (tsc)** | Type checking   | Before commits, in CI/CD | No                   | Medium (seconds)         |
 
 ## Integration with ESLint
 

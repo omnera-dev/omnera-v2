@@ -82,9 +82,7 @@ The following Bun commands are pre-approved in `.claude/settings.local.json`:
 ```json
 {
   "permissions": {
-    "allow": [
-      "Bash(bun:*)"
-    ]
+    "allow": ["Bash(bun:*)"]
   }
 }
 ```

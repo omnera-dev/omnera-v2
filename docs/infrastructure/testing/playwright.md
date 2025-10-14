@@ -81,15 +81,15 @@ playwright test --workers 1
 import { defineConfig, devices } from '@playwright/test'
 
 export default defineConfig({
-  testDir: './tests',              // E2E tests directory
-  fullyParallel: true,             // Run tests in parallel for speed
-  forbidOnly: !!process.env.CI,    // Prevent test.only in CI
+  testDir: './tests', // E2E tests directory
+  fullyParallel: true, // Run tests in parallel for speed
+  forbidOnly: !!process.env.CI, // Prevent test.only in CI
   retries: process.env.CI ? 2 : 0, // Retry failed tests in CI
   workers: process.env.CI ? 1 : undefined, // Serial in CI, parallel locally
-  reporter: 'html',                // HTML test report
+  reporter: 'html', // HTML test report
 
   use: {
-    trace: 'on-first-retry',       // Capture trace on retry
+    trace: 'on-first-retry', // Capture trace on retry
     // baseURL: 'http://localhost:3000', // Uncomment when server added
   },
 
@@ -238,15 +238,15 @@ use: {
 
 ```typescript
 // Mock API responses
-await page.route('**/api/users', route => {
+await page.route('**/api/users', (route) => {
   route.fulfill({
     status: 200,
-    body: JSON.stringify([{ id: 1, name: 'User' }])
+    body: JSON.stringify([{ id: 1, name: 'User' }]),
   })
 })
 
 // Abort requests (images, CSS)
-await page.route('**/*.{png,jpg,jpeg}', route => route.abort())
+await page.route('**/*.{png,jpg,jpeg}', (route) => route.abort())
 ```
 
 ### Test Isolation
@@ -328,27 +328,31 @@ test.use({ launchOptions: { slowMo: 1000 } }) // 1 second delay
 ### Console Logging
 
 ```typescript
-page.on('console', msg => console.log(msg.text()))
+page.on('console', (msg) => console.log(msg.text()))
 ```
 
 ## When to Run E2E Tests
 
 1. **Before Committing** (recommended):
+
    ```bash
    bun test:all  # Runs both unit and E2E tests
    ```
 
 2. **In CI/CD Pipeline** (critical):
+
    ```bash
    bun test:e2e  # Verify deployable code
    ```
 
 3. **After Feature Development** (recommended):
+
    ```bash
    bun test:e2e tests/new-feature.spec.ts
    ```
 
 4. **Before Releases** (critical):
+
    ```bash
    bun test:e2e  # Full E2E validation
    ```
@@ -472,13 +476,13 @@ bunx playwright install --with-deps  # Install system dependencies
 
 ## Playwright vs Other Tools
 
-| Tool | Purpose | When to Run | Speed |
-|------|---------|-------------|-------|
-| **Playwright** | E2E testing (full workflows) | Before commits, in CI/CD | Slow (seconds-minutes) |
-| **Bun Test** | Unit testing (isolated logic) | Continuously, during dev | Very fast (milliseconds) |
-| **TypeScript (tsc)** | Type checking | Before commits, in CI/CD | Medium (seconds) |
-| **ESLint** | Code quality | Before commits, in CI/CD | Fast (seconds) |
-| **Prettier** | Code formatting | Before commits, on save | Very fast (milliseconds) |
+| Tool                 | Purpose                       | When to Run              | Speed                    |
+| -------------------- | ----------------------------- | ------------------------ | ------------------------ |
+| **Playwright**       | E2E testing (full workflows)  | Before commits, in CI/CD | Slow (seconds-minutes)   |
+| **Bun Test**         | Unit testing (isolated logic) | Continuously, during dev | Very fast (milliseconds) |
+| **TypeScript (tsc)** | Type checking                 | Before commits, in CI/CD | Medium (seconds)         |
+| **ESLint**           | Code quality                  | Before commits, in CI/CD | Fast (seconds)           |
+| **Prettier**         | Code formatting               | Before commits, on save  | Very fast (milliseconds) |
 
 ## Example Workflow
 

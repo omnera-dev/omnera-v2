@@ -76,6 +76,7 @@ jobs:
 ### Fail-Fast Strategy
 
 Tests run sequentially and fail fast:
+
 - If linting fails, subsequent steps don't run
 - If type checking fails, tests don't run
 - If unit tests fail, E2E tests don't run
@@ -207,6 +208,7 @@ git commit -m "docs: update README [skip ci]"
 ```
 
 **Use cases**:
+
 - Documentation-only changes
 - README updates
 - CHANGELOG edits (when manually edited)
@@ -255,11 +257,13 @@ Add workflow status badges to README:
 ### Test Workflow Fails
 
 **Check which step failed**:
+
 1. Go to Actions tab in GitHub
 2. Click on failed workflow run
 3. Expand failed step to see error
 
 **Common failures**:
+
 - Lint errors - Run `bun run lint` locally and fix issues
 - Format errors - Run `bun run format` locally
 - Type errors - Run `bun run typecheck` locally and fix types
@@ -268,6 +272,7 @@ Add workflow status badges to README:
 ### Release Workflow Doesn't Run
 
 **Possible causes**:
+
 1. Test workflow failed - Check Test workflow status
 2. Commit contains `[skip ci]` - Remove from commit message
 3. No `feat:` or `fix:` commits - semantic-release only releases for these
@@ -276,11 +281,13 @@ Add workflow status badges to README:
 ### Release Workflow Fails
 
 **Check logs**:
+
 1. Go to Actions tab
 2. Click on failed release workflow
 3. View semantic-release step output
 
 **Common issues**:
+
 - NPM_TOKEN not configured - Add secret in repository settings
 - Commit message format wrong - Use conventional commits
 - Package name already taken - Change package name in package.json

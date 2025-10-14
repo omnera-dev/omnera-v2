@@ -160,18 +160,18 @@ bun test:all
 
 ## Unit Tests vs E2E Tests
 
-| Aspect | Bun Test (Unit) | Playwright (E2E) |
-|--------|-----------------|------------------|
-| **Purpose** | Test isolated functions, classes, utilities | Test complete user workflows, UI, full app behavior |
-| **Speed** | Very fast (milliseconds) | Slower (seconds to minutes) |
-| **Scope** | Single units of code | Entire application stack |
-| **Browser** | No browser required | Real browsers (Chromium, Firefox, WebKit) |
-| **Dependencies** | Tests pure logic, mocked dependencies | Tests real integrations, actual dependencies |
-| **When to Run** | Frequently (every change) | Less frequently (before commits, in CI/CD) |
-| **Test Files** | `*.test.ts`, `*.spec.ts` (outside tests/ dir) | `tests/**/*.spec.ts` |
-| **Command** | `bun test` (native command) | `playwright test` or `bun test:e2e` |
-| **Feedback Loop** | Immediate (watch mode) | Slower (full app startup) |
-| **What It Catches** | Logic bugs, function correctness | UI bugs, integration issues, user experience problems |
+| Aspect              | Bun Test (Unit)                               | Playwright (E2E)                                      |
+| ------------------- | --------------------------------------------- | ----------------------------------------------------- |
+| **Purpose**         | Test isolated functions, classes, utilities   | Test complete user workflows, UI, full app behavior   |
+| **Speed**           | Very fast (milliseconds)                      | Slower (seconds to minutes)                           |
+| **Scope**           | Single units of code                          | Entire application stack                              |
+| **Browser**         | No browser required                           | Real browsers (Chromium, Firefox, WebKit)             |
+| **Dependencies**    | Tests pure logic, mocked dependencies         | Tests real integrations, actual dependencies          |
+| **When to Run**     | Frequently (every change)                     | Less frequently (before commits, in CI/CD)            |
+| **Test Files**      | `*.test.ts`, `*.spec.ts` (outside tests/ dir) | `tests/**/*.spec.ts`                                  |
+| **Command**         | `bun test` (native command)                   | `playwright test` or `bun test:e2e`                   |
+| **Feedback Loop**   | Immediate (watch mode)                        | Slower (full app startup)                             |
+| **What It Catches** | Logic bugs, function correctness              | UI bugs, integration issues, user experience problems |
 
 ## Why Both Test Types Are Needed
 
@@ -277,16 +277,19 @@ bun test --coverage
 ## When to Run Unit Tests
 
 1. **During Development** (continuous):
+
    ```bash
    bun test --watch  # Auto-run on file changes
    ```
 
 2. **Before Committing** (critical):
+
    ```bash
    bun test  # Ensure all tests pass
    ```
 
 3. **In CI/CD Pipeline** (critical):
+
    ```bash
    bun test  # Fail builds if tests fail
    ```

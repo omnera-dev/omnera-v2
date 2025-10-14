@@ -22,12 +22,12 @@
 
 ## ESLint vs Other Tools
 
-| Tool | Purpose | What It Catches | Auto-Fix | When to Run |
-|------|---------|-----------------|----------|-------------|
-| **ESLint** | Code quality & logic errors | Unused variables, logic bugs, anti-patterns, best practice violations | Partial (many rules) | Before commits, during dev, CI/CD |
-| **TypeScript (tsc)** | Type checking | Type mismatches, missing properties, incorrect function calls | No | Before commits, CI/CD |
-| **Prettier** | Code formatting | Style inconsistencies, formatting issues | Yes (full) | Before commits, on save |
-| **Knip** | Dead code detection | Unused files, exports, dependencies | Partial (exports only) | Weekly, before releases |
+| Tool                 | Purpose                     | What It Catches                                                       | Auto-Fix               | When to Run                       |
+| -------------------- | --------------------------- | --------------------------------------------------------------------- | ---------------------- | --------------------------------- |
+| **ESLint**           | Code quality & logic errors | Unused variables, logic bugs, anti-patterns, best practice violations | Partial (many rules)   | Before commits, during dev, CI/CD |
+| **TypeScript (tsc)** | Type checking               | Type mismatches, missing properties, incorrect function calls         | No                     | Before commits, CI/CD             |
+| **Prettier**         | Code formatting             | Style inconsistencies, formatting issues                              | Yes (full)             | Before commits, on save           |
+| **Knip**             | Dead code detection         | Unused files, exports, dependencies                                   | Partial (exports only) | Weekly, before releases           |
 
 ## Why ESLint is Complementary
 
@@ -165,39 +165,43 @@ export default defineConfig([
 
 ## Common ESLint Rules Enabled
 
-| Rule | What It Catches | Example |
-|------|-----------------|---------|
-| `no-unused-vars` | Variables declared but never used | `const unused = 42` (remove it) |
-| `no-undef` | Using undefined variables | `console.log(undefinedVar)` |
-| `no-unreachable` | Code after return/throw/break | `return 1; console.log('never runs')` |
-| `eqeqeq` | Using `==` instead of `===` | `if (x == null)` (use `===`) |
-| `no-console` | Console statements in production | `console.log('debug')` (remove or use proper logging) |
-| `prefer-const` | Variables that could be `const` | `let x = 5` (use `const` if never reassigned) |
-| `no-var` | Using `var` instead of `let/const` | `var x = 1` (use `let` or `const`) |
-| `@typescript-eslint/no-explicit-any` | Using `any` type | `const x: any = 42` (use proper types) |
-| `@typescript-eslint/no-unused-vars` | TypeScript unused variables | Catches unused function parameters, destructured values |
+| Rule                                 | What It Catches                    | Example                                                 |
+| ------------------------------------ | ---------------------------------- | ------------------------------------------------------- |
+| `no-unused-vars`                     | Variables declared but never used  | `const unused = 42` (remove it)                         |
+| `no-undef`                           | Using undefined variables          | `console.log(undefinedVar)`                             |
+| `no-unreachable`                     | Code after return/throw/break      | `return 1; console.log('never runs')`                   |
+| `eqeqeq`                             | Using `==` instead of `===`        | `if (x == null)` (use `===`)                            |
+| `no-console`                         | Console statements in production   | `console.log('debug')` (remove or use proper logging)   |
+| `prefer-const`                       | Variables that could be `const`    | `let x = 5` (use `const` if never reassigned)           |
+| `no-var`                             | Using `var` instead of `let/const` | `var x = 1` (use `let` or `const`)                      |
+| `@typescript-eslint/no-explicit-any` | Using `any` type                   | `const x: any = 42` (use proper types)                  |
+| `@typescript-eslint/no-unused-vars`  | TypeScript unused variables        | Catches unused function parameters, destructured values |
 
 ## ESLint Catches (Examples TypeScript Misses)
 
 ```typescript
 // 1. Unused variables (ESLint: error, TypeScript: optional)
-const unusedVariable = 42  // ESLint: Remove this
-const { used, unused } = obj  // ESLint: Remove 'unused'
+const unusedVariable = 42 // ESLint: Remove this
+const { used, unused } = obj // ESLint: Remove 'unused'
 
 // 2. Logic errors TypeScript allows
-if (x == null) {}  // ESLint: Use === instead of ==
-return value; console.log('unreachable')  // ESLint: Unreachable code
+if (x == null) {
+} // ESLint: Use === instead of ==
+return value
+console.log('unreachable') // ESLint: Unreachable code
 
 // 3. Anti-patterns TypeScript doesn't care about
-var oldStyle = 1  // ESLint: Use let/const
-let neverReassigned = 2  // ESLint: Use const
+var oldStyle = 1 // ESLint: Use let/const
+let neverReassigned = 2 // ESLint: Use const
 
 // 4. Code quality issues
-console.log('debug')  // ESLint: Remove console in production
-if (true) { doSomething() }  // ESLint: Constant condition
+console.log('debug') // ESLint: Remove console in production
+if (true) {
+  doSomething()
+} // ESLint: Constant condition
 
 // 5. Best practices
-const obj: any = {}  // ESLint: Avoid 'any', use proper types
+const obj: any = {} // ESLint: Avoid 'any', use proper types
 ```
 
 ## Integration with Bun
@@ -214,9 +218,7 @@ The following ESLint commands are pre-approved in `.claude/settings.local.json`:
 ```json
 {
   "permissions": {
-    "allow": [
-      "Bash(bunx eslint:*)"
-    ]
+    "allow": ["Bash(bunx eslint:*)"]
   }
 }
 ```
@@ -224,21 +226,25 @@ The following ESLint commands are pre-approved in `.claude/settings.local.json`:
 ## When to Run ESLint
 
 1. **During Development** (recommended):
+
    ```bash
    bunx eslint . --fix  # Auto-fix on the fly
    ```
 
 2. **Before Committing** (critical):
+
    ```bash
    bun run lint  # Part of pre-commit checklist
    ```
 
 3. **In CI/CD Pipeline** (critical):
+
    ```bash
    bun run lint  # Fail builds if linting errors exist
    ```
 
 4. **After Dependency Updates** (recommended):
+
    ```bash
    bun run lint  # Verify no new linting issues
    ```
@@ -258,7 +264,7 @@ The following ESLint commands are pre-approved in `.claude/settings.local.json`:
 ```json
 {
   "eslint.enable": true,
-  "eslint.format.enable": false,  // Prettier handles formatting
+  "eslint.format.enable": false, // Prettier handles formatting
   "eslint.lintTask.enable": true,
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": true
@@ -305,21 +311,25 @@ let g:ale_fix_on_save = 1
 
 ```typescript
 // TypeScript CATCHES:
-const num: number = 'text'  // Type error
-interface User { name: string }
-const user: User = {}  // Missing property
+const num: number = 'text' // Type error
+interface User {
+  name: string
+}
+const user: User = {} // Missing property
 
 // TypeScript ALLOWS (ESLint CATCHES):
-const unused = 42  // Unused variable
-if (x == null) {}  // Using == instead of ===
-var oldStyle = 1  // Using var
-let neverChanged = 2  // Should be const
+const unused = 42 // Unused variable
+if (x == null) {
+} // Using == instead of ===
+var oldStyle = 1 // Using var
+let neverChanged = 2 // Should be const
 
 // BOTH CATCH:
-undefinedVariable  // TypeScript: Cannot find name, ESLint: no-undef
+undefinedVariable // TypeScript: Cannot find name, ESLint: no-undef
 
 // NEITHER CATCH (logic bugs):
-if (x = 10) {}  // Assignment in condition (ESLint: no-cond-assign catches this!)
+if ((x = 10)) {
+} // Assignment in condition (ESLint: no-cond-assign catches this!)
 ```
 
 ## Configuration Customization
@@ -330,12 +340,15 @@ export default defineConfig([
   // ... existing config
   {
     rules: {
-      'no-console': 'warn',  // Warn on console.log
-      'prefer-const': 'error',  // Enforce const usage
-      '@typescript-eslint/no-explicit-any': 'error',  // Disallow 'any' type
-      '@typescript-eslint/no-unused-vars': ['error', {
-        argsIgnorePattern: '^_',  // Allow unused args starting with _
-      }],
+      'no-console': 'warn', // Warn on console.log
+      'prefer-const': 'error', // Enforce const usage
+      '@typescript-eslint/no-explicit-any': 'error', // Disallow 'any' type
+      '@typescript-eslint/no-unused-vars': [
+        'error',
+        {
+          argsIgnorePattern: '^_', // Allow unused args starting with _
+        },
+      ],
     },
   },
 ])
