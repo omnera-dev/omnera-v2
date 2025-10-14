@@ -110,6 +110,7 @@ import { Stream } from 'effect'
 See **[Effect Schema Documentation](./effect-schema.md)** for comprehensive type-safe data validation patterns.
 
 Effect Schema provides runtime validation with full TypeScript type inference, making it ideal for:
+
 - API request/response validation
 - Configuration file parsing
 - Environment variable validation

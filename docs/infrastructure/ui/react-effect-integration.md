@@ -48,10 +48,7 @@ function UserProfile({ userId }: { userId: number }) {
   useEffect(() => {
     setLoading(true)
 
-    const program = fetchUser(userId).pipe(
-      Effect.retry({ times: 3 }),
-      Effect.timeout('5 seconds')
-    )
+    const program = fetchUser(userId).pipe(Effect.retry({ times: 3 }), Effect.timeout('5 seconds'))
 
     Effect.runPromise(program)
       .then((user) => {
@@ -425,11 +422,7 @@ function Dashboard() {
 
   useEffect(() => {
     const program = Effect.all(
-      [
-        fetchUsers(),
-        fetchPosts(),
-        fetchStats(),
-      ],
+      [fetchUsers(), fetchPosts(), fetchStats()],
       { concurrency: 3 } // Fetch in parallel
     )
 

@@ -518,17 +518,17 @@ Use Playwright for end-to-end tests that require browser interactivity. See [Pla
 
 ## When to Use Unit Tests vs E2E Tests
 
-| Aspect                  | Unit Tests (Bun Test)            | E2E Tests (Playwright)                    |
-| ----------------------- | -------------------------------- | ----------------------------------------- |
-| **Purpose**             | Test component rendering         | Test complete user workflows              |
-| **Speed**               | Very fast (milliseconds)         | Slower (seconds)                          |
-| **Browser Required**    | No (SSR testing)                 | Yes (real browser)                        |
-| **What to Test**        | Component output, props, logic   | User interactions, full app behavior      |
-| **When to Run**         | Every change (watch mode)        | Before commits, in CI/CD                  |
-| **Feedback Loop**       | Immediate                        | Slower                                    |
-| **Coverage**            | Component-level                  | Application-level                         |
-| **Test File Location**  | `*.test.tsx` (co-located)        | `tests/**/*.spec.ts`                      |
-| **Command**             | `bun test`                       | `bun test:e2e`                            |
+| Aspect                 | Unit Tests (Bun Test)          | E2E Tests (Playwright)               |
+| ---------------------- | ------------------------------ | ------------------------------------ |
+| **Purpose**            | Test component rendering       | Test complete user workflows         |
+| **Speed**              | Very fast (milliseconds)       | Slower (seconds)                     |
+| **Browser Required**   | No (SSR testing)               | Yes (real browser)                   |
+| **What to Test**       | Component output, props, logic | User interactions, full app behavior |
+| **When to Run**        | Every change (watch mode)      | Before commits, in CI/CD             |
+| **Feedback Loop**      | Immediate                      | Slower                               |
+| **Coverage**           | Component-level                | Application-level                    |
+| **Test File Location** | `*.test.tsx` (co-located)      | `tests/**/*.spec.ts`                 |
+| **Command**            | `bun test`                     | `bun test:e2e`                       |
 
 ## Running Tests
 

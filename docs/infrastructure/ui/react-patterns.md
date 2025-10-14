@@ -413,8 +413,16 @@ function UncontrolledForm() {
 
   return (
     <form onSubmit={handleSubmit}>
-      <input type="email" ref={emailRef} defaultValue="" />
-      <input type="password" ref={passwordRef} defaultValue="" />
+      <input
+        type="email"
+        ref={emailRef}
+        defaultValue=""
+      />
+      <input
+        type="password"
+        ref={passwordRef}
+        defaultValue=""
+      />
       <button type="submit">Submit</button>
     </form>
   )
@@ -459,11 +467,7 @@ function ThemeProvider({ children }: { children: React.ReactNode }) {
     setTheme((prev) => (prev === 'light' ? 'dark' : 'light'))
   }
 
-  return (
-    <ThemeContext.Provider value={{ theme, toggleTheme }}>
-      {children}
-    </ThemeContext.Provider>
-  )
+  return <ThemeContext.Provider value={{ theme, toggleTheme }}>{children}</ThemeContext.Provider>
 }
 
 // Custom hook to consume context
@@ -547,7 +551,10 @@ function TodoList() {
       <button onClick={() => addTodo('New Task')}>Add Todo</button>
       <ul>
         {todos.map((todo) => (
-          <li key={todo.id} className={todo.pending ? 'opacity-50' : ''}>
+          <li
+            key={todo.id}
+            className={todo.pending ? 'opacity-50' : ''}
+          >
             {todo.text}
           </li>
         ))}

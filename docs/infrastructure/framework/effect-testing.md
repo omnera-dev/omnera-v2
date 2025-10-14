@@ -350,7 +350,9 @@ const createTestLayer = (config: { shouldFail: boolean }) => {
 
 test('should handle successful case', async () => {
   const program = getUserById(1)
-  const result = await Effect.runPromise(Effect.provide(program, createTestLayer({ shouldFail: false })))
+  const result = await Effect.runPromise(
+    Effect.provide(program, createTestLayer({ shouldFail: false }))
+  )
 
   expect(result.name).toBe('Test User')
 })
