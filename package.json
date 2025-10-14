@@ -1,5 +1,5 @@
 {
-  "name": "omnera-v2",
+  "name": "omnera",
   "version": "0.0.1",
   "module": "src/index.ts",
   "license": "BSL-1.1",
