@@ -24,10 +24,52 @@ powershell -c "irm bun.com/install.ps1 | iex"
 bun install
 ```
 
-### Run the Application
+### Run the Example
+
+Omnera provides two API styles:
+
+#### Simple Promise-based API (Recommended for beginners)
 
 ```bash
-bun run src/index.ts
+bun run example.ts
+```
+
+```typescript
+import { startServer } from './src/index'
+
+const myApp = {
+  name: 'My App',
+  description: 'A fullstack application',
+}
+
+// Start server with automatic logging and graceful shutdown
+startServer(myApp, {
+  port: 3000,
+  hostname: 'localhost',
+}).catch((error) => {
+  console.error('Failed to start server:', error)
+  process.exit(1)
+})
+```
+
+#### Effect-based API (Advanced, full control)
+
+```bash
+bun run example-advanced.ts
+```
+
+```typescript
+import { Effect, Console } from 'effect'
+import { start, withGracefulShutdown, logServerInfo } from './src/index'
+
+const program = Effect.gen(function* () {
+  yield* Console.log('Starting server...')
+  const server = yield* start(myApp, { port: 3000 })
+  yield* logServerInfo(server)
+  yield* withGracefulShutdown(server)
+})
+
+Effect.runPromise(program)
 ```
 
 ### Run Tests

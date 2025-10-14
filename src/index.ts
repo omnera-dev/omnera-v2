@@ -89,7 +89,7 @@ export interface StartOptions {
  * )
  * ```
  */
-export const start = (
+export const startEffect = (
   app: unknown,
   options: StartOptions = {}
 ): Effect.Effect<ServerInstance, AppValidationError | ServerCreationError | CSSCompilationError> =>
@@ -118,3 +118,14 @@ export type { App, AppEncoded } from '@/schema'
 export { AppSchema } from '@/schema'
 export type { ServerInstance } from '@/services/server'
 export type { CompiledCSS } from '@/services/css-compiler'
+
+/**
+ * Re-export utilities for server lifecycle and error handling
+ */
+export { withGracefulShutdown, logServerInfo } from '@/utils/server-lifecycle'
+export { handleStartupError, type ServerStartupError } from '@/utils/error-handling'
+
+/**
+ * Re-export simple Promise-based API
+ */
+export { start, type SimpleServer } from '@/simple'
