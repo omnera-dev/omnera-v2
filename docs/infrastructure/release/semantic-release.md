@@ -192,7 +192,7 @@ permissions:
 ```
 Developer commits to main
          ↓
-CI workflow runs (tests must pass)
+Test workflow runs (tests must pass)
          ↓ (if successful)
 Analyze commits for version bump
          ↓
