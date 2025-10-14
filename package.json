@@ -9,8 +9,7 @@
     "typecheck": "tsc --noEmit",
     "clean": "knip --fix",
     "lint": "eslint .",
-    "test": "bun test:unit && bun test:e2e",
-    "test:unit": "bun test",
+    "test:all": "bun test && bun test:e2e",
     "test:e2e": "playwright test"
   },
   "devDependencies": {

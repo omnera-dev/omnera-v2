@@ -983,7 +983,7 @@ bun.lock
 | **Dependencies** | Tests pure logic, mocked dependencies | Tests real integrations, actual dependencies |
 | **When to Run** | Frequently (every change) | Less frequently (before commits, in CI/CD) |
 | **Test Files** | `*.test.ts`, `*.spec.ts` (outside tests/ dir) | `tests/**/*.spec.ts` |
-| **Command** | `bun test` or `bun test:unit` | `playwright test` or `bun test:e2e` |
+| **Command** | `bun test` (native command) | `playwright test` or `bun test:e2e` |
 | **Feedback Loop** | Immediate (watch mode) | Slower (full app startup) |
 | **What It Catches** | Logic bugs, function correctness | UI bugs, integration issues, user experience problems |
 
@@ -1021,7 +1021,7 @@ bun test:e2e
 playwright test
 
 # Run all tests (unit + E2E)
-bun test
+bun test:all
 
 # Run specific test file
 playwright test tests/example.spec.ts
@@ -1244,15 +1244,15 @@ await page.context().storageState({ path: 'auth.json' })
 
 **Integration with Bun**:
 - Command: `bun test:e2e` (runs `playwright test`)
-- Combined: `bun test` (runs `bun test:unit && bun test:e2e`)
+- Combined: `bun test:all` (runs `bun test && bun test:e2e`)
 - Execution: Playwright runs as separate process, uses Bun for TypeScript
 - Compatibility: Works seamlessly with Bun's TypeScript support
 - No compilation needed: Playwright executes TypeScript tests directly
 
 **Test Execution Flow**:
 ```bash
-# When running: bun test
-# 1. Runs unit tests first: bun test:unit (bun test)
+# When running: bun test:all
+# 1. Runs unit tests first: bun test (native command)
 # 2. If unit tests pass, runs E2E tests: bun test:e2e (playwright test)
 # 3. If either fails, entire test suite fails (fail-fast strategy)
 ```
@@ -1301,7 +1301,7 @@ page.on('console', msg => console.log(msg.text()))
 
 1. **Before Committing** (recommended):
    ```bash
-   bun test  # Runs both unit and E2E tests
+   bun test:all  # Runs both unit and E2E tests
    ```
 
 2. **In CI/CD Pipeline** (critical):
@@ -1359,7 +1359,7 @@ Playwright tests run on three browser engines:
   run: bunx playwright install --with-deps
 
 - name: Run unit tests
-  run: bun test:unit
+  run: bun test
 
 - name: Run E2E tests
   run: bun test:e2e
@@ -1412,10 +1412,10 @@ Playwright tests run on three browser engines:
 ```bash
 # 1. Write code
 # 2. Run unit tests continuously
-bun test:unit --watch
+bun test --watch
 
 # 3. Before committing, run full test suite
-bun run lint && bun run format && bun run typecheck && bun test
+bun run lint && bun run format && bun run typecheck && bun test:all
 
 # 4. Commit code
 git add . && git commit -m "feat: add feature"
@@ -1423,8 +1423,8 @@ git add . && git commit -m "feat: add feature"
 # 5. In CI/CD, all tests run again
 # - bun run lint
 # - bun run typecheck
-# - bun test:unit
-# - bun test:e2e
+# - bun test (unit tests)
+# - bun test:e2e (E2E tests)
 ```
 
 **Troubleshooting**:
@@ -1541,12 +1541,11 @@ bunx prettier --write . --config .prettierrc.json
 - **Naming Convention**: Use `.test.ts` for unit tests, `.spec.ts` for E2E tests (optional but recommended)
 
 **Test Commands**:
-```bash
-# Run all unit tests (excludes tests/ directory)
-bun test
-bun test:unit
 
-# Run all tests (unit + E2E)
+**IMPORTANT**: `bun test` is a **native Bun command**, not a package.json script. It directly invokes Bun's built-in test runner without any script wrapper.
+
+```bash
+# Run all unit tests (native command - excludes tests/ directory)
 bun test
 
 # Run specific file/pattern
@@ -1595,21 +1594,21 @@ describe("Feature", () => {
 **Mocking**: `bun:test` includes mock functions
 **Snapshots**: Supported with `.toMatchSnapshot()`
 
-**Test Scripts**:
-- **`bun test`**: Runs `bun test:unit && bun test:e2e` (both unit and E2E tests sequentially)
-- **`bun test:unit`**: Runs `bun test` (unit tests only, excludes `tests/` directory)
-- **`bun test:e2e`**: Runs `playwright test` (E2E tests in `tests/` directory only)
+**Test Execution Approach**:
+- **`bun test`**: Native Bun command for unit tests (NOT a script - directly runs Bun's built-in test runner)
+- **`bun test:all`**: Script that runs both unit and E2E tests sequentially (`bun test && bun test:e2e`)
+- **`bun test:e2e`**: Script that runs Playwright E2E tests (`playwright test`)
 
 **Unit vs E2E Test Execution**:
 ```bash
-# Unit tests only (fast, run frequently)
-bun test:unit
+# Unit tests only (fast, run frequently) - NATIVE COMMAND
+bun test
 
-# E2E tests only (slow, run before commits)
+# E2E tests only (slow, run before commits) - SCRIPT
 bun test:e2e
 
-# Both (recommended before commits)
-bun test
+# Both tests sequentially (recommended before commits) - SCRIPT
+bun test:all
 ```
 
 ## Infrastructure
@@ -1892,9 +1891,9 @@ const user = query.get(userId)
     "dev": "bun run --watch src/index.ts",
 
     // Testing scripts
-    "test": "bun test:unit && bun test:e2e",  // Run both unit and E2E tests
-    "test:unit": "bun test",                   // Unit tests only (Bun Test)
+    "test:all": "bun test && bun test:e2e",    // Run both unit and E2E tests sequentially
     "test:e2e": "playwright test",             // E2E tests only (Playwright)
+    // Note: Unit tests use native `bun test` command directly (no script needed)
 
     // Type checking (validation, not compilation)
     "typecheck": "tsc --noEmit",
@@ -1929,21 +1928,21 @@ const user = query.get(userId)
 
 **Script Explanations**:
 
-- **`test`**: Runs all tests (unit + E2E) sequentially
-  - Command: `bun test:unit && bun test:e2e`
+- **`test:all`**: Runs all tests (unit + E2E) sequentially
+  - Command: `bun test && bun test:e2e`
   - Purpose: Complete test suite validation before commits or releases
   - Execution: Unit tests run first (fail-fast), then E2E tests
   - When to use: Before commits, in CI/CD, before releases
   - Exit code: 0 if all tests pass, non-zero if any test fails
   - Strategy: Fail-fast (stops at first failure for quick feedback)
 
-- **`test:unit`**: Runs unit tests only (Bun Test)
-  - Command: `bun test`
+- **`bun test` (NOT a script)**: Native Bun command for unit tests
+  - This is a **built-in Bun command**, not a package.json script
   - Purpose: Fast testing of isolated functions, classes, utilities
   - Scope: Tests `*.test.ts` and `*.spec.ts` files (excludes `tests/` directory)
   - When to use: During development, continuously with `--watch`
   - Speed: Very fast (milliseconds)
-  - Use with `--watch` for continuous testing: `bun test:unit --watch`
+  - Use with `--watch` for continuous testing: `bun test --watch`
 
 - **`test:e2e`**: Runs E2E tests only (Playwright)
   - Command: `playwright test`
@@ -2410,10 +2409,10 @@ bun run dev              # If script exists
 bun run src/index.ts     # Direct execution (entry point in src/)
 
 # Run tests
-bun test                 # Run all tests (unit + E2E)
-bun test:unit            # Run unit tests only (fast)
+bun test                 # Run unit tests (native Bun command - fast)
+bun test:all             # Run all tests (unit + E2E)
 bun test:e2e             # Run E2E tests only (slow)
-bun test:unit --watch    # Watch mode for unit tests (continuous testing)
+bun test --watch         # Watch mode for unit tests (continuous testing)
 
 # Playwright-specific commands
 playwright test          # Run all E2E tests
@@ -2459,14 +2458,14 @@ bun run lint && bun run format && bun run typecheck && bun test
 | Command | When to Run | Frequency |
 |---------|-------------|-----------|
 | `bun run src/index.ts` | Execute code | Every time you want to run the app |
-| `bun test:unit` | Verify unit tests | After changes, frequently during dev |
+| `bun test` | Verify unit tests | After changes, frequently during dev |
 | `bun test:e2e` | Verify E2E tests | Before commits, less frequently |
-| `bun test` | Run all tests | Before commits, in CI/CD |
+| `bun test:all` | Run all tests | Before commits, in CI/CD |
 | `bun run lint` | Check code quality | Before commits, during development |
 | `bun run typecheck` | Validate types | Before commits, after dependency changes |
 | `bun run format` | Fix formatting | Before commits, after code changes |
 | `bun run clean` | Clean unused code | Weekly, before releases, after refactoring |
-| `bun test:unit --watch` | Continuous unit testing | During active development (recommended) |
+| `bun test --watch` | Continuous unit testing | During active development (recommended) |
 | `playwright test --ui` | Interactive E2E testing | When debugging E2E tests |
 | `playwright test --debug` | Debug E2E tests | When E2E tests fail |
 | `playwright show-report` | View E2E test results | After E2E test failures |
@@ -2496,13 +2495,13 @@ Before committing code, ensure all checks pass in this order:
    - Must have zero type errors
    - **CRITICAL**: Never commit code with type errors
 
-4. **Unit Tests**: Run `bun test:unit` or `bun test`
+4. **Unit Tests**: Run `bun test` (native command)
    - Executes all unit test suites
    - Fast feedback on code correctness
    - Must have all tests passing
    - Run with `--watch` during development for continuous feedback
 
-5. **E2E Tests**: Run `bun test:e2e` or `bun test`
+5. **E2E Tests**: Run `bun test:e2e` or `bun test:all`
    - Executes all end-to-end tests across browsers
    - Validates complete user workflows and UI
    - Slower than unit tests (requires browser startup)
@@ -2517,16 +2516,16 @@ Before committing code, ensure all checks pass in this order:
 **Quick Pre-Commit Command**:
 ```bash
 # Run all checks in sequence (recommended order)
-bun run lint && bun run format && bun run typecheck && bun test && git status
+bun run lint && bun run format && bun run typecheck && bun test:all && git status
 
 # With ESLint auto-fix
-bunx eslint . --fix && bun run format && bun run typecheck && bun test && git status
+bunx eslint . --fix && bun run format && bun run typecheck && bun test:all && git status
 
 # Alternative: Check-only mode (no modifications)
-bunx eslint . && prettier --check . && bun run typecheck && bun test
+bunx eslint . && prettier --check . && bun run typecheck && bun test:all
 
 # Unit tests only (faster, for quick iterations)
-bun run lint && bun run format && bun run typecheck && bun test:unit
+bun run lint && bun run format && bun run typecheck && bun test
 
 # E2E tests only (when unit tests already passed)
 bun test:e2e
@@ -2543,7 +2542,7 @@ bun test:e2e
 - **Linting failure**: Run `bunx eslint . --fix` to auto-fix, then manually fix remaining issues
 - **Formatting failure**: Run `bun run format` to auto-fix
 - **Type checking failure**: Fix reported type errors, then re-run `bun run typecheck`
-- **Unit test failure**: Fix failing tests, then re-run `bun test:unit`
+- **Unit test failure**: Fix failing tests, then re-run `bun test`
 - **E2E test failure**:
   - Debug with `playwright test --debug` or `playwright test --ui`
   - View trace with `playwright show-trace` for failed test artifacts
@@ -2573,7 +2572,7 @@ steps:
     run: bun run typecheck
 
   - name: Run unit tests
-    run: bun test:unit
+    run: bun test
 
   - name: Run E2E tests
     run: bun test:e2e
@@ -2633,7 +2632,7 @@ Before major releases, perform comprehensive quality checks including dead code 
    - Must have zero type errors before release
    - Fix all reported type issues
 
-5. **Unit Tests**: Run `bun test`
+5. **Unit Tests**: Run `bun test` (native command)
    - All tests must pass
    - Consider adding coverage checks: `bun test --coverage`
    - Ensure critical paths are tested
@@ -2652,10 +2651,10 @@ Before major releases, perform comprehensive quality checks including dead code 
 **Quick Pre-Release Command**:
 ```bash
 # Comprehensive release preparation (in recommended order)
-bunx knip && bun run lint && bun run format && bun run typecheck && bun test
+bunx knip && bun run lint && bun run format && bun run typecheck && bun test:all
 
 # With auto-fix flags
-bunx knip && bunx eslint . --fix && bun run format && bun run typecheck && bun test
+bunx knip && bunx eslint . --fix && bun run format && bun run typecheck && bun test:all
 
 # If Knip reports issues, address them and rerun:
 bun remove <unused-package> && bun run clean && bunx knip
@@ -2677,10 +2676,10 @@ bun run clean
 bunx knip  # Should be clean or minimal issues
 
 # 5. Run quality checks (in order)
-bun run lint && bun run format && bun run typecheck && bun test
+bun run lint && bun run format && bun run typecheck && bun test:all
 
 # With auto-fix
-bunx eslint . --fix && bun run format && bun run typecheck && bun test
+bunx eslint . --fix && bun run format && bun run typecheck && bun test:all
 
 # 6. Update version and commit
 # 7. Create git tag and release
@@ -2853,7 +2852,7 @@ bun --version
 - **Dead Code Detection Added**: Knip v5.65.0 for unused code cleanup
 - **E2E Testing Added**: Playwright v1.56.0 for end-to-end browser testing and user workflow validation
 - **Entry Point Moved**: Entry point moved from `index.ts` to `src/index.ts` for better project structure
-- **Test Scripts Restructured**: Split testing into `test:unit` (Bun Test) and `test:e2e` (Playwright)
+- **Test Scripts Simplified**: Removed wrapper scripts for unit tests - use native `bun test` directly. Added `test:all` script for comprehensive testing
 - **Current State**: Complete development toolchain (execution, linting, validation, formatting, unit testing, E2E testing, cleanup)
 
 ## Technology Summary
