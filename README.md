@@ -1,4 +1,4 @@
-# Omnera V2
+# Omnera
 
 A modern TypeScript project built with Bun - the all-in-one JavaScript runtime.
 
@@ -107,7 +107,7 @@ This project uses Bun instead of Node.js for:
 
 ## Documentation
 
-For detailed technical documentation, infrastructure details, and coding standards, see [CLAUDE.md](/Users/thomasjeanneau/Codes/omnera-v2/CLAUDE.md).
+For detailed technical documentation, infrastructure details, and coding standards, see [CLAUDE.md](CLAUDE.md).
 
 ## Contributing
 

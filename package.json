@@ -1,7 +1,7 @@
 {
   "name": "omnera",
   "version": "0.0.1",
-  "description": "Omnera V2 - Modern TypeScript framework built with Bun",
+  "description": "Omnera - Modern TypeScript framework built with Bun",
   "module": "src/index.ts",
   "license": "BSL-1.1",
   "type": "module",
@@ -49,6 +49,7 @@
     "typescript": "^5.9.3"
   },
   "dependencies": {
-    "effect": "^3.18.4"
+    "effect": "^3.18.4",
+    "hono": "^4.9.12"
   }
 }

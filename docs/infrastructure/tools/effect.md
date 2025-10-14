@@ -16,7 +16,7 @@
 7. **Testing Support** - Built-in mocking and test utilities
 8. **Streaming** - Powerful Stream abstraction for data processing
 
-## Why Effect for Omnera V2
+## Why Effect for Omnera
 
 Effect complements the existing tech stack by providing:
 
@@ -557,7 +557,7 @@ const JsonStringSchema = Schema.transform(Schema.String, Schema.Unknown, {
 })
 ```
 
-### Practical Patterns for Omnera V2
+### Practical Patterns for Omnera
 
 #### Pattern 1: API Request Validation
 
@@ -905,7 +905,7 @@ test('should reject invalid email', async () => {
 | **Learning Curve**     | Medium (Effect knowledge)    | Low                       | Low                   |
 | **Documentation**      | Comprehensive                | Excellent                 | Good                  |
 
-**Why Effect Schema for Omnera V2:**
+**Why Effect Schema for Omnera:**
 
 - **Native Integration**: Already using Effect, no additional dependency
 - **Type Safety**: Full TypeScript inference with Effect types
@@ -1482,7 +1482,7 @@ const program = fetchUserEffectWay(1).pipe(
 )
 ```
 
-## Best Practices for Omnera V2
+## Best Practices for Omnera
 
 1. **Use Effect for I/O Operations**
    - Database queries

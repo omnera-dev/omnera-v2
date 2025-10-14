@@ -1,6 +1,6 @@
-# CLAUDE.md - Omnera V2 Project Documentation
+# CLAUDE.md - Omnera Project Documentation
 
-This document provides comprehensive technical documentation for the Omnera V2 project, designed to give Claude Code and other AI assistants complete context for accurate code generation.
+This document provides comprehensive technical documentation for the Omnera project, designed to give Claude Code and other AI assistants complete context for accurate code generation.
 
 ## Documentation Imports
 
@@ -9,6 +9,7 @@ The following detailed documentation files are imported for Claude Code's memory
 @docs/infrastructure/tools/bun.md
 @docs/infrastructure/tools/typescript.md
 @docs/infrastructure/tools/effect.md
+@docs/infrastructure/tools/hono.md
 @docs/infrastructure/tools/eslint.md
 @docs/infrastructure/tools/prettier.md
 @docs/infrastructure/tools/knip.md
@@ -19,7 +20,7 @@ The following detailed documentation files are imported for Claude Code's memory
 
 ## Project Overview
 
-**Project Name**: Omnera V2
+**Project Name**: Omnera
 **NPM Package Name**: omnera
 **Description**: Modern TypeScript framework built with Bun
 **Version**: 0.0.1 (managed by semantic-release)
@@ -61,6 +62,16 @@ Typed functional programming library for building robust applications.
 - **Why Effect**: Composability, testability, reliability, excellent TypeScript integration
 
 **Detailed Documentation**: [`docs/infrastructure/tools/effect.md`](docs/infrastructure/tools/effect.md)
+
+### Hono (4.9.12)
+
+Ultra-lightweight web framework for building APIs and web applications.
+
+- **Purpose**: Fast, type-safe HTTP routing and middleware
+- **Key Feature**: Built on Web Standard APIs, works on Bun, Cloudflare, Deno, AWS, Node.js
+- **Why Hono**: Under 14kB, blazing fast routing, excellent TypeScript support, Effect-ready
+
+**Detailed Documentation**: [`docs/infrastructure/tools/hono.md`](docs/infrastructure/tools/hono.md)
 
 ## Development Tools
 
@@ -107,7 +118,7 @@ Typed functional programming library for building robust applications.
 omnera-v2/
 ├── docs/
 │   └── infrastructure/          # Technical infrastructure documentation
-│       ├── tools/              # Development tools (Bun, TypeScript, Effect, ESLint, Prettier, Knip)
+│       ├── tools/              # Development tools (Bun, TypeScript, Effect, Hono, ESLint, Prettier, Knip)
 │       ├── testing/            # Testing frameworks (Bun Test, Playwright)
 │       ├── cicd/               # CI/CD workflows (GitHub Actions)
 │       └── release/            # Release management (semantic-release)
@@ -328,7 +339,7 @@ This project uses a modular documentation approach:
 
 - **CLAUDE.md** (this file): High-level project overview and quick reference
 - **docs/infrastructure/**: Detailed technical documentation
-  - **tools/**: Development tools (Bun, TypeScript, Effect, ESLint, Prettier, Knip)
+  - **tools/**: Development tools (Bun, TypeScript, Effect, Hono, ESLint, Prettier, Knip)
   - **testing/**: Testing frameworks (Bun Test, Playwright)
   - **cicd/**: CI/CD workflows (GitHub Actions)
   - **release/**: Release management (semantic-release)
