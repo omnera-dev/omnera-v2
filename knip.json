@@ -1,6 +1,11 @@
 {
-  "project": ["src/**/*.ts"],
+  "project": ["src/**/*.ts", "src/**/*.tsx"],
   "ignore": ["**/*.test.ts", "**/*.spec.ts", "scripts/**", "tests/**"],
-  "ignoreDependencies": [],
+  "ignoreDependencies": [
+    "class-variance-authority",
+    "lucide-react",
+    "tailwindcss",
+    "tw-animate-css"
+  ],
   "ignoreExportsUsedInFile": true
 }
