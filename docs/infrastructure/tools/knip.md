@@ -120,12 +120,7 @@ Knip can be configured via:
 {
   "entry": ["src/index.ts"],
   "project": ["src/**/*.ts"],
-  "ignore": [
-    "**/*.test.ts",
-    "**/*.spec.ts",
-    "scripts/**",
-    "tests/**"
-  ],
+  "ignore": ["**/*.test.ts", "**/*.spec.ts", "scripts/**", "tests/**"],
   "ignoreDependencies": [],
   "ignoreExportsUsedInFile": true
 }
@@ -146,18 +141,21 @@ Knip can be configured via:
 ### Why Test Files and Scripts Are Excluded
 
 **Test Files** (`*.test.ts`, `*.spec.ts`):
+
 - Tests often have intentional "unused" exports for testing purposes
 - Test utilities and fixtures may not be imported across test files
 - Knip would incorrectly flag test-specific code as dead code
 - Tests are validated by running them, not by dead code detection
 
 **Scripts Directory** (`scripts/**`):
+
 - Contains utility scripts run directly (not imported)
 - Scripts like `update-license-date.js` are executed by semantic-release
 - Not part of the main application import graph
 - Would be incorrectly flagged as unused files
 
 **Tests Directory** (`tests/**`):
+
 - Playwright E2E tests are not imported, they're executed directly
 - Test files may have setup code not shared across tests
 - Separate from main application source code

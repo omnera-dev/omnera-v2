@@ -10,6 +10,7 @@ The following detailed documentation files are imported for Claude Code's memory
 @docs/infrastructure/tools/typescript.md
 @docs/infrastructure/tools/effect.md
 @docs/infrastructure/tools/hono.md
+@docs/infrastructure/tools/tailwind.md
 @docs/infrastructure/tools/eslint.md
 @docs/infrastructure/tools/prettier.md
 @docs/infrastructure/tools/knip.md
@@ -73,6 +74,16 @@ Ultra-lightweight web framework for building APIs and web applications.
 
 **Detailed Documentation**: [`docs/infrastructure/tools/hono.md`](docs/infrastructure/tools/hono.md)
 
+### Tailwind CSS (4.1.14)
+
+Utility-first CSS framework for rapid UI development.
+
+- **Purpose**: Fast UI development with utility classes, responsive design, dark mode support
+- **Key Feature**: CSS-first configuration with @theme directive, 10x faster v4 engine
+- **Why Tailwind**: No context switching, optimized bundle size, perfect for Hono HTML responses
+
+**Detailed Documentation**: [`docs/infrastructure/tools/tailwind.md`](docs/infrastructure/tools/tailwind.md)
+
 ## Development Tools
 
 ### Code Quality Tools
@@ -83,6 +94,14 @@ Ultra-lightweight web framework for building APIs and web applications.
 | **Prettier** | 3.6.2 | Code formatting | `bun run format` | [`docs/infrastructure/tools/prettier.md`](docs/infrastructure/tools/prettier.md) |
 | **TypeScript (tsc)** | ^5 | Type checking | `bun run typecheck` | [`docs/infrastructure/tools/typescript.md`](docs/infrastructure/tools/typescript.md) |
 | **Knip** | 5.65.0 | Dead code detection | `bun run clean` | [`docs/infrastructure/tools/knip.md`](docs/infrastructure/tools/knip.md) |
+
+### UI Development Tools
+
+| Tool | Version | Purpose | Command | Documentation |
+|------|---------|---------|---------|--------------|
+| **Tailwind CSS** | 4.1.14 | Utility-first CSS framework | `bunx tailwindcss` | [`docs/infrastructure/tools/tailwind.md`](docs/infrastructure/tools/tailwind.md) |
+| **PostCSS** | 8.5.6 | CSS processing (Tailwind integration) | `bunx postcss` | - |
+| **prettier-plugin-tailwindcss** | 0.7.0 | Auto-sort Tailwind classes | `bun run format` | [`docs/infrastructure/tools/tailwind.md`](docs/infrastructure/tools/tailwind.md) |
 
 ### Testing Frameworks
 
@@ -118,7 +137,7 @@ Ultra-lightweight web framework for building APIs and web applications.
 omnera-v2/
 ├── docs/
 │   └── infrastructure/          # Technical infrastructure documentation
-│       ├── tools/              # Development tools (Bun, TypeScript, Effect, Hono, ESLint, Prettier, Knip)
+│       ├── tools/              # Development tools (Bun, TypeScript, Effect, Hono, Tailwind, ESLint, Prettier, Knip)
 │       ├── testing/            # Testing frameworks (Bun Test, Playwright)
 │       ├── cicd/               # CI/CD workflows (GitHub Actions)
 │       └── release/            # Release management (semantic-release)
@@ -339,7 +358,7 @@ This project uses a modular documentation approach:
 
 - **CLAUDE.md** (this file): High-level project overview and quick reference
 - **docs/infrastructure/**: Detailed technical documentation
-  - **tools/**: Development tools (Bun, TypeScript, Effect, Hono, ESLint, Prettier, Knip)
+  - **tools/**: Development tools (Bun, TypeScript, Effect, Hono, Tailwind CSS, ESLint, Prettier, Knip)
   - **testing/**: Testing frameworks (Bun Test, Playwright)
   - **cicd/**: CI/CD workflows (GitHub Actions)
   - **release/**: Release management (semantic-release)
