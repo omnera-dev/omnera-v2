@@ -118,6 +118,7 @@ This project uses [Conventional Commits](https://www.conventionalcommits.org/) f
 Format: `<type>(<scope>): <subject>`
 
 **Types:**
+
 - `feat`: New feature (triggers minor version bump)
 - `fix`: Bug fix (triggers patch version bump)
 - `docs`: Documentation changes
@@ -129,6 +130,7 @@ Format: `<type>(<scope>): <subject>`
 - `ci`: CI configuration changes
 
 **Examples:**
+
 ```bash
 feat(api): add user authentication endpoint
 fix(database): resolve connection timeout issue
@@ -137,6 +139,7 @@ docs(readme): update installation instructions
 
 **Breaking Changes:**
 Add `BREAKING CHANGE:` in the commit body or add `!` after type to trigger major version bump:
+
 ```bash
 feat!: redesign API structure
 
@@ -146,6 +149,7 @@ BREAKING CHANGE: endpoints now use /v2/ prefix
 ### Release Process
 
 Releases are automated via GitHub Actions:
+
 1. Push commits to `main` branch using conventional commit format
 2. CI runs tests and quality checks
 3. semantic-release analyzes commits and determines version bump
