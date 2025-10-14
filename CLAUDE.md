@@ -9,8 +9,16 @@ The following detailed documentation files are imported for Claude Code's memory
 @docs/infrastructure/runtime/bun.md
 @docs/infrastructure/language/typescript.md
 @docs/infrastructure/framework/effect.md
+@docs/infrastructure/framework/effect-schema.md
+@docs/infrastructure/framework/effect-patterns.md
+@docs/infrastructure/framework/effect-testing.md
 @docs/infrastructure/framework/hono.md
 @docs/infrastructure/ui/react.md
+@docs/infrastructure/ui/react-hono-integration.md
+@docs/infrastructure/ui/react-styling.md
+@docs/infrastructure/ui/react-effect-integration.md
+@docs/infrastructure/ui/react-patterns.md
+@docs/infrastructure/ui/react-testing.md
 @docs/infrastructure/ui/tailwind.md
 @docs/infrastructure/ui/shadcn.md
 @docs/infrastructure/quality/eslint.md
