@@ -47,23 +47,42 @@ bun run <script-name>
 ### TypeScript Configuration
 
 **Version**: ^5 (peer dependency)
-**Configuration**: Optimized for Bun's bundler mode
+**Configuration**: Optimized for Bun's bundler mode with strict type safety
+
+**Critical Distinction - Execution vs Type Checking**:
+- **Bun Runtime**: Executes TypeScript directly WITHOUT type checking (fast, for performance)
+- **TypeScript Compiler (tsc)**: Validates types WITHOUT emitting files (slow, for correctness)
+- **Both are needed**: Bun for execution speed, tsc for type safety validation
 
 **Key tsconfig.json Settings**:
 ```json
 {
   "compilerOptions": {
+    // Environment & Features
     "lib": ["ESNext"],           // Latest JavaScript features
     "target": "ESNext",          // No downleveling needed
     "module": "Preserve",        // Preserves original module syntax
+    "moduleDetection": "force",  // Treat all files as modules
+    "jsx": "react-jsx",          // JSX support (if React is added)
+    "allowJs": true,             // Allow JavaScript files
+
+    // Bundler Mode (Bun-specific)
     "moduleResolution": "bundler", // Bun's resolution algorithm
     "allowImportingTsExtensions": true, // Can import .ts files directly
     "verbatimModuleSyntax": true, // Explicit import/export syntax
-    "noEmit": true,              // Bun handles execution, not tsc
-    "jsx": "react-jsx",          // JSX support (if React is added)
-    "strict": true,              // Full type safety
-    "noUncheckedIndexedAccess": true, // Array/object access safety
-    "noImplicitOverride": true   // Explicit override keyword required
+    "noEmit": true,              // CRITICAL: Bun handles execution, not tsc
+
+    // Type Safety (Strict Mode)
+    "strict": true,              // Enable all strict type-checking options
+    "skipLibCheck": true,        // Skip type checking of declaration files
+    "noFallthroughCasesInSwitch": true, // Prevent switch fallthrough bugs
+    "noUncheckedIndexedAccess": true,   // Array/object access returns T | undefined
+    "noImplicitOverride": true,  // Explicit override keyword required
+
+    // Optional Strictness (disabled for flexibility)
+    "noUnusedLocals": false,     // Allow unused local variables
+    "noUnusedParameters": false, // Allow unused function parameters
+    "noPropertyAccessFromIndexSignature": false // Allow obj['prop'] syntax
   }
 }
 ```
@@ -79,6 +98,12 @@ import type { SomeType } from "./types.ts"
 // INCORRECT - Don't omit extensions
 import { something } from "./module"  // ❌
 ```
+
+**Why noEmit is Critical**:
+- `noEmit: true` prevents tsc from generating JavaScript files
+- Bun executes TypeScript directly at runtime (no compilation needed)
+- tsc is ONLY used for static type validation, not for building
+- This separation allows: Fast execution (Bun) + Comprehensive type checking (tsc)
 
 ## Development Tools
 
@@ -118,6 +143,210 @@ bun run --bun <script>     # force Bun runtime
 - Uses hardlinks when possible (saves disk space)
 - Global cache shared across projects
 - Binary lockfile for faster parsing
+
+### TypeScript Type Checker (tsc v2.0.4)
+
+**Purpose**: Provides comprehensive static type checking for TypeScript code without emitting JavaScript files. This is a critical development tool that catches type errors before runtime, complementing Bun's fast but unchecked execution.
+
+**Package Structure**:
+- **tsc package**: v2.0.4 (wrapper that executes TypeScript compiler)
+- **TypeScript peer dependency**: ^5 (the actual TypeScript compiler)
+- **Configuration**: Uses `tsconfig.json` with `noEmit: true`
+
+**Why Type Checking is Separate from Execution**:
+
+Bun's execution model prioritizes speed by skipping type checking:
+```typescript
+// When you run: bun run index.ts
+// Bun does: Parse TypeScript → Execute JavaScript (NO TYPE CHECKING)
+// This is FAST but won't catch type errors until runtime
+
+// When you run: bun run typecheck (or tsc --noEmit)
+// tsc does: Parse TypeScript → Validate all types → Report errors (NO EXECUTION)
+// This is SLOW but catches all type errors before runtime
+```
+
+**The Two-Phase Workflow**:
+1. **Development/Execution**: `bun run index.ts` - Fast execution, no type checking
+2. **Validation**: `bun run typecheck` - Slow type checking, no execution
+
+**Running Type Checks**:
+```bash
+# Via npm script (recommended)
+bun run typecheck
+
+# Direct tsc command (equivalent)
+bun tsc --noEmit
+
+# With bunx (alternative)
+bunx tsc --noEmit
+
+# Watch mode for continuous type checking during development
+bunx tsc --noEmit --watch
+
+# Check specific files/directories
+bunx tsc --noEmit src/
+bunx tsc --noEmit src/**/*.ts
+```
+
+**Understanding --noEmit Flag**:
+- **Critical for Bun projects**: Prevents tsc from generating .js files
+- **Why it matters**: Bun executes TypeScript directly; tsc-generated files would be redundant
+- **Type checking only**: tsc validates types but doesn't produce output
+- **Configuration**: Set in tsconfig.json (`"noEmit": true`) and reinforced via CLI flag
+
+**Type Checking vs Execution Comparison**:
+
+| Aspect | Bun Runtime | TypeScript Compiler (tsc) |
+|--------|-------------|---------------------------|
+| **Speed** | Very fast (~4x faster than Node.js) | Slow (type analysis is expensive) |
+| **Type Checking** | None (skipped for performance) | Comprehensive (all type rules enforced) |
+| **Purpose** | Execute code, run application | Validate types, catch errors |
+| **Output** | Program execution, side effects | Error messages, type diagnostics |
+| **When to Use** | Development, production, testing | Pre-commit, CI/CD, manual checks |
+| **Files Generated** | None | None (with --noEmit) |
+| **Typical Time** | Milliseconds | Seconds (depends on project size) |
+
+**Integration with Bun**:
+- Bun and tsc are **complementary**, not competing tools
+- Bun handles **runtime execution** with maximum performance
+- tsc handles **static validation** with maximum type safety
+- Together they provide: Fast iteration + Comprehensive error detection
+
+**Common Type Errors Caught by tsc**:
+```typescript
+// Example type errors tsc will catch that Bun runtime won't:
+
+// 1. Type mismatches
+const num: number = "string"  // Error: Type 'string' not assignable to 'number'
+
+// 2. Missing properties
+interface User { name: string; age: number }
+const user: User = { name: "Alice" }  // Error: Property 'age' is missing
+
+// 3. Undefined access (with noUncheckedIndexedAccess)
+const items = [1, 2, 3]
+const item = items[10]  // Type: number | undefined (must handle undefined)
+
+// 4. Incorrect function calls
+function greet(name: string) {}
+greet(42)  // Error: Argument of type 'number' not assignable to 'string'
+
+// 5. Type inference issues
+const value = Math.random() > 0.5 ? "text" : 42
+const length = value.length  // Error: Property 'length' does not exist on 'number'
+```
+
+**When to Run Type Checks**:
+
+1. **During Development** (optional, for real-time feedback):
+   ```bash
+   bunx tsc --noEmit --watch
+   ```
+
+2. **Before Committing** (recommended):
+   ```bash
+   bun run typecheck  # Part of pre-commit checklist
+   ```
+
+3. **In CI/CD Pipeline** (critical):
+   ```bash
+   bun run typecheck  # Fail builds if type errors exist
+   ```
+
+4. **After Adding Dependencies** (recommended):
+   ```bash
+   bun run typecheck  # Verify type compatibility
+   ```
+
+5. **Before Production Deployment** (critical):
+   ```bash
+   bun run typecheck  # Final validation before release
+   ```
+
+**Type Check Failure Handling**:
+
+When `bun run typecheck` fails:
+```bash
+# Example output:
+src/index.ts:10:5 - error TS2322: Type 'string' is not assignable to type 'number'.
+
+10     const age: number = "25"
+       ~~~
+
+Found 1 error in src/index.ts:10
+```
+
+**Resolution steps**:
+1. **Read the error message carefully** - tsc provides detailed diagnostics
+2. **Locate the file and line number** - Navigate to the error location
+3. **Understand the type mismatch** - Identify what types conflict
+4. **Fix the code** - Update types, add type guards, or adjust logic
+5. **Re-run type check** - Verify the fix: `bun run typecheck`
+
+**IDE Integration**:
+
+Most IDEs use TypeScript's language server for real-time type checking:
+
+**VS Code** (built-in TypeScript support):
+- Type errors appear as red squiggles
+- Hover over code to see inferred types
+- Uses same tsconfig.json as tsc command
+- Real-time type checking as you type
+- No additional configuration needed
+
+**WebStorm/IntelliJ IDEA** (built-in TypeScript support):
+- Enable TypeScript Language Service in settings
+- Automatic type checking on file save
+- Type errors highlighted inline
+- Uses project's tsconfig.json automatically
+
+**Vim/Neovim** (via Language Server Protocol):
+```vim
+" Using coc-tsserver or typescript-language-server
+" Install: :CocInstall coc-tsserver
+" Type checking happens automatically
+```
+
+**Configuration Reference**:
+
+The `tsc` command respects all settings in `tsconfig.json`:
+- **Type strictness**: `strict`, `noUncheckedIndexedAccess`, etc.
+- **Module resolution**: `moduleResolution: "bundler"`
+- **File inclusion**: Defaults to all .ts/.tsx files in project
+- **Exclusions**: Respects `exclude` patterns (node_modules, dist, etc.)
+
+**Performance Considerations**:
+
+Type checking large projects can be slow:
+```bash
+# Skip library type checks for faster validation (already in tsconfig.json)
+# "skipLibCheck": true
+
+# Check only specific directories
+bunx tsc --noEmit src/
+
+# Incremental mode (caches previous results)
+bunx tsc --noEmit --incremental
+
+# Project references (for monorepos/large projects)
+# Configure in tsconfig.json for faster rebuilds
+```
+
+**Why tsc v2.0.4 Package**:
+- Provides consistent tsc executable across environments
+- Wrapper around TypeScript peer dependency (^5)
+- Allows `bun tsc` command without global TypeScript installation
+- Respects project's TypeScript version (via peer dependency)
+- Ensures compatibility between tsc wrapper and TypeScript compiler
+
+**Type Checking Best Practices**:
+1. **Run type checks frequently** - Don't wait until pre-commit
+2. **Use watch mode during development** - Catch errors immediately
+3. **Never commit with type errors** - Fix all errors before committing
+4. **Include typecheck in CI/CD** - Prevent type errors from reaching production
+5. **Trust the type checker** - If tsc reports an error, there's likely a real issue
+6. **Fix root causes, not symptoms** - Use proper types instead of `any` or `@ts-ignore`
 
 ### Prettier Code Formatter (v3.6.2)
 
@@ -494,22 +723,60 @@ const user = query.get(userId)
   "type": "module",          // ES modules only
   "license": "BSL-1.1",      // Business Source License 1.1
   "scripts": {
+    // Development scripts
     "dev": "bun run --watch index.ts",
+
+    // Testing scripts
     "test": "bun test",
     "test:watch": "bun test --watch",
+
+    // Type checking (validation, not compilation)
     "typecheck": "tsc --noEmit",
-    "format": "bunx prettier --write .",
-    "format:check": "bunx prettier --check ."
+
+    // Code formatting
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
   },
   "devDependencies": {
     "@types/bun": "latest",  // Bun type definitions
-    "prettier": "3.6.2"      // Code formatter
+    "prettier": "3.6.2",     // Code formatter
+    "tsc": "^2.0.4"          // TypeScript compiler wrapper
   },
   "peerDependencies": {
-    "typescript": "^5"       // TypeScript compiler (for types only)
+    "typescript": "^5"       // TypeScript compiler (actual compiler)
   }
 }
 ```
+
+**Script Explanations**:
+
+- **`typecheck`**: Runs TypeScript type checking without emitting files
+  - Command: `tsc --noEmit`
+  - Purpose: Validate all TypeScript types across the project
+  - When to use: Before commits, in CI/CD, during development
+  - Exit code: 0 if no errors, non-zero if type errors found
+  - Does NOT generate any files (only validates types)
+
+- **`format`**: Formats all files using Prettier
+  - Command: `prettier --write .`
+  - Purpose: Auto-format code to match style guidelines
+  - When to use: Before commits, after code changes
+
+- **`format:check`**: Checks formatting without modifying files
+  - Command: `prettier --check .`
+  - Purpose: Verify code is properly formatted
+  - When to use: In CI/CD to enforce formatting
+
+**Dependency Structure**:
+
+- **devDependencies**: Tools used during development only
+  - `tsc`: Wrapper for running TypeScript compiler
+  - `prettier`: Code formatter
+  - `@types/bun`: Type definitions for Bun APIs
+
+- **peerDependencies**: Required by dev tools but not directly used
+  - `typescript`: The actual TypeScript compiler used by tsc wrapper
+  - Allows project to control TypeScript version independently
 
 ### Prettier Configuration (.prettierrc.json)
 
@@ -584,9 +851,17 @@ await Bun.build({
 - ❌ `pnpm` - Use `bun` for package management
 - ❌ `vite` - Bun has built-in bundler
 - ❌ `webpack` - Bun has built-in bundler
-- ❌ `tsc` for compilation - Only for type checking
+- ❌ `tsc` for compilation/building - **ONLY use tsc for type checking with --noEmit flag**
 - ❌ `ts-node` - Bun executes TypeScript natively
 - ❌ `nodemon` - Use `bun --watch` instead
+
+**TypeScript Compiler (tsc) Clarification**:
+- ✅ **CORRECT**: `tsc --noEmit` (type checking only)
+- ✅ **CORRECT**: `bun run typecheck` (runs tsc --noEmit)
+- ❌ **WRONG**: `tsc` (would attempt to compile/emit files)
+- ❌ **WRONG**: `tsc src/file.ts` (would attempt to compile specific files)
+- ❌ **WRONG**: Using tsc to build/compile JavaScript output
+- **Why**: Bun executes TypeScript directly; tsc is ONLY for static type validation
 
 ### Command Replacements
 
@@ -652,30 +927,101 @@ bun run dev          # If script exists
 bun run index.ts     # Direct execution
 
 # Run tests
-bun test
-bun test --watch
+bun test             # Run all tests
+bun test --watch     # Watch mode (continuous testing)
+
+# Type checking
+bun run typecheck    # Validate all types (recommended)
+bun tsc --noEmit     # Alternative: direct tsc command
+bunx tsc --noEmit --watch  # Watch mode (continuous type checking)
 
 # Format code
-bunx prettier --write .          # Format all files
-bunx prettier --check .          # Check formatting
+bun run format       # Format all files (recommended)
+prettier --write .   # Alternative: direct prettier command
+prettier --check .   # Check formatting without modifying
 
-# Add new dependency
-bun add package-name
-
-# Type checking (IDE usually handles this)
-bunx tsc --noEmit
+# Add dependencies
+bun add package-name         # Add runtime dependency
+bun add -d package-name      # Add dev dependency
 
 # Update dependencies
-bun update
+bun update package-name      # Update specific package
+bun update                   # Update all packages
+
+# Complete quality check (before committing)
+bun run format && bun run typecheck && bun test
 ```
+
+**Command Frequency Recommendations**:
+
+| Command | When to Run | Frequency |
+|---------|-------------|-----------|
+| `bun run index.ts` | Execute code | Every time you want to run the app |
+| `bun test` | Verify functionality | After changes, before commits |
+| `bun run typecheck` | Validate types | Before commits, after dependency changes |
+| `bun run format` | Fix formatting | Before commits, after code changes |
+| `bun test --watch` | Continuous testing | During active development (optional) |
+| `bunx tsc --noEmit --watch` | Continuous type checking | During active development (optional) |
+| `bun update` | Update dependencies | Weekly or monthly |
 
 ### Pre-Commit Checklist
 
-Before committing code, ensure:
-1. **Formatting**: Run `bunx prettier --write .` to format all files
-2. **Type checking**: Run `bunx tsc --noEmit` to verify types
-3. **Tests**: Run `bun test` to ensure all tests pass
-4. **Review changes**: Check `git diff` to verify only intended changes
+Before committing code, ensure all checks pass in this order:
+
+1. **Code Formatting**: Run `bun run format` or `prettier --write .`
+   - Ensures consistent code style
+   - Auto-fixes formatting issues
+   - Must pass before proceeding to next steps
+
+2. **Type Checking**: Run `bun run typecheck` or `tsc --noEmit`
+   - Validates all TypeScript types
+   - Catches type errors before runtime
+   - Must have zero type errors
+   - **CRITICAL**: Never commit code with type errors
+
+3. **Unit Tests**: Run `bun test`
+   - Executes all test suites
+   - Ensures functionality works correctly
+   - Must have all tests passing
+
+4. **Review Changes**: Run `git diff` and `git status`
+   - Verify only intended files are staged
+   - Check for accidental debug code or console logs
+   - Ensure no sensitive data (API keys, secrets)
+
+**Quick Pre-Commit Command**:
+```bash
+# Run all checks in sequence
+bun run format && bun run typecheck && bun test && git status
+
+# Alternative: Run formatting check without modifying files
+prettier --check . && bun run typecheck && bun test
+```
+
+**If Any Check Fails**:
+- **Formatting failure**: Run `bun run format` to auto-fix
+- **Type checking failure**: Fix reported type errors, then re-run `bun run typecheck`
+- **Test failure**: Fix failing tests, then re-run `bun test`
+- **Never force commit** with failing checks (don't use `--no-verify`)
+
+**CI/CD Integration**:
+
+These same checks should run in your CI/CD pipeline:
+```yaml
+# Example GitHub Actions workflow
+steps:
+  - name: Install dependencies
+    run: bun install
+
+  - name: Check formatting
+    run: prettier --check .
+
+  - name: Type check
+    run: bun run typecheck
+
+  - name: Run tests
+    run: bun test
+```
 
 ### IDE Integration (Prettier)
 
@@ -752,22 +1098,53 @@ bun --version
 - **TypeScript**: ^5 (peer dependency)
 - **@types/bun**: latest
 - **Prettier**: 3.6.2 (added October 2024)
+- **tsc**: ^2.0.4 (added October 2024 - type checking tool)
+
+**Timeline**:
+- **Initial Setup**: Bun v1.3.0 with TypeScript ^5 and basic configuration
+- **Formatting Added**: Prettier 3.6.2 for consistent code style
+- **Type Checking Added**: tsc v2.0.4 for static type validation (separate from runtime)
+- **Current State**: Complete development toolchain (execution, validation, formatting, testing)
 
 ## Technology Summary
 
-**Runtime & Build Tools**:
-- Bun v1.3.0 (runtime, package manager, test runner, bundler)
-- TypeScript ^5 (type checking only, no compilation)
-- Prettier 3.6.2 (code formatting)
+**Runtime & Execution**:
+- **Bun v1.3.0**: Primary runtime (executes TypeScript directly without type checking)
+- **Role**: Fast execution, package management, testing, bundling
+
+**Type System & Validation**:
+- **TypeScript ^5**: Type system and static analysis (peer dependency)
+- **tsc v2.0.4**: TypeScript compiler wrapper (for type checking only)
+- **Role**: Static type validation with `--noEmit` flag, no compilation/building
+
+**Code Quality Tools**:
+- **Prettier 3.6.2**: Code formatter (enforces consistent style)
+- **Role**: Auto-format code, enforce style guidelines
 
 **Project Metadata**:
 - Version: 0.0.1
 - License: BSL-1.1 (Business Source License 1.1)
 - Module System: ES Modules
+- Type Checking: Strict mode enabled
 
-**Development Dependencies**:
-- @types/bun: latest
-- prettier: 3.6.2
+**Development Dependencies** (`devDependencies`):
+- `@types/bun`: latest - Bun API type definitions
+- `prettier`: 3.6.2 - Code formatter
+- `tsc`: ^2.0.4 - TypeScript compiler wrapper
+
+**Peer Dependencies** (`peerDependencies`):
+- `typescript`: ^5 - TypeScript compiler (actual type checker)
+
+**Development Workflow**:
+1. **Execution**: Bun runs TypeScript directly (fast, no type checking)
+2. **Validation**: tsc checks types separately (slow, comprehensive)
+3. **Formatting**: Prettier enforces consistent style
+4. **Testing**: Bun test runner validates functionality
+
+**Key Principle**: Separation of concerns
+- Bun = Runtime execution (performance priority)
+- tsc = Type validation (correctness priority)
+- Prettier = Code formatting (consistency priority)
 
 ---
 
