@@ -6,14 +6,15 @@ This document provides comprehensive technical documentation for the Omnera proj
 
 The following detailed documentation files are imported for Claude Code's memory:
 
-@docs/infrastructure/tools/bun.md
-@docs/infrastructure/tools/typescript.md
-@docs/infrastructure/tools/effect.md
-@docs/infrastructure/tools/hono.md
-@docs/infrastructure/tools/tailwind.md
-@docs/infrastructure/tools/eslint.md
-@docs/infrastructure/tools/prettier.md
-@docs/infrastructure/tools/knip.md
+@docs/infrastructure/runtime/bun.md
+@docs/infrastructure/language/typescript.md
+@docs/infrastructure/framework/effect.md
+@docs/infrastructure/framework/hono.md
+@docs/infrastructure/ui/react.md
+@docs/infrastructure/ui/tailwind.md
+@docs/infrastructure/quality/eslint.md
+@docs/infrastructure/quality/prettier.md
+@docs/infrastructure/quality/knip.md
 @docs/infrastructure/testing/bun-test.md
 @docs/infrastructure/testing/playwright.md
 @docs/infrastructure/cicd/workflows.md
@@ -42,7 +43,7 @@ All-in-one JavaScript/TypeScript runtime replacing Node.js.
 - **Key Feature**: Executes TypeScript directly without compilation
 - **Why Bun**: 4x faster cold starts, unified toolchain, native TypeScript support
 
-**Detailed Documentation**: [`docs/infrastructure/tools/bun.md`](docs/infrastructure/tools/bun.md)
+**Detailed Documentation**: [`docs/infrastructure/runtime/bun.md`](docs/infrastructure/runtime/bun.md)
 
 ### TypeScript (^5)
 
@@ -52,7 +53,7 @@ Strict type-safe TypeScript with Bun-optimized configuration.
 - **Critical**: `noEmit: true` - Bun executes, tsc validates types
 - **Two-Phase Workflow**: Fast execution (Bun) + Type checking (tsc)
 
-**Detailed Documentation**: [`docs/infrastructure/tools/typescript.md`](docs/infrastructure/tools/typescript.md)
+**Detailed Documentation**: [`docs/infrastructure/language/typescript.md`](docs/infrastructure/language/typescript.md)
 
 ### Effect (3.18.4)
 
@@ -62,7 +63,7 @@ Typed functional programming library for building robust applications.
 - **Key Feature**: Explicit error types tracked at compile time
 - **Why Effect**: Composability, testability, reliability, excellent TypeScript integration
 
-**Detailed Documentation**: [`docs/infrastructure/tools/effect.md`](docs/infrastructure/tools/effect.md)
+**Detailed Documentation**: [`docs/infrastructure/framework/effect.md`](docs/infrastructure/framework/effect.md)
 
 ### Hono (4.9.12)
 
@@ -72,7 +73,17 @@ Ultra-lightweight web framework for building APIs and web applications.
 - **Key Feature**: Built on Web Standard APIs, works on Bun, Cloudflare, Deno, AWS, Node.js
 - **Why Hono**: Under 14kB, blazing fast routing, excellent TypeScript support, Effect-ready
 
-**Detailed Documentation**: [`docs/infrastructure/tools/hono.md`](docs/infrastructure/tools/hono.md)
+**Detailed Documentation**: [`docs/infrastructure/framework/hono.md`](docs/infrastructure/framework/hono.md)
+
+### React (19.2.0)
+
+Component-based UI library for building interactive user interfaces.
+
+- **Purpose**: Declarative, composable UI components with server-side rendering support
+- **Key Feature**: React 19 Compiler for automatic optimization, Actions for form handling, use() hook
+- **Why React**: Rich ecosystem, excellent TypeScript support, perfect SSR with Hono, seamless Tailwind integration
+
+**Detailed Documentation**: [`docs/infrastructure/ui/react.md`](docs/infrastructure/ui/react.md)
 
 ### Tailwind CSS (4.1.14)
 
@@ -80,9 +91,9 @@ Utility-first CSS framework for rapid UI development.
 
 - **Purpose**: Fast UI development with utility classes, responsive design, dark mode support
 - **Key Feature**: CSS-first configuration with @theme directive, 10x faster v4 engine
-- **Why Tailwind**: No context switching, optimized bundle size, perfect for Hono HTML responses
+- **Why Tailwind**: No context switching, optimized bundle size, perfect for React components
 
-**Detailed Documentation**: [`docs/infrastructure/tools/tailwind.md`](docs/infrastructure/tools/tailwind.md)
+**Detailed Documentation**: [`docs/infrastructure/ui/tailwind.md`](docs/infrastructure/ui/tailwind.md)
 
 ## Development Tools
 
@@ -90,18 +101,20 @@ Utility-first CSS framework for rapid UI development.
 
 | Tool | Version | Purpose | Command | Documentation |
 |------|---------|---------|---------|--------------|
-| **ESLint** | 9.37.0 | Code quality & logic errors | `bun run lint` | [`docs/infrastructure/tools/eslint.md`](docs/infrastructure/tools/eslint.md) |
-| **Prettier** | 3.6.2 | Code formatting | `bun run format` | [`docs/infrastructure/tools/prettier.md`](docs/infrastructure/tools/prettier.md) |
-| **TypeScript (tsc)** | ^5 | Type checking | `bun run typecheck` | [`docs/infrastructure/tools/typescript.md`](docs/infrastructure/tools/typescript.md) |
-| **Knip** | 5.65.0 | Dead code detection | `bun run clean` | [`docs/infrastructure/tools/knip.md`](docs/infrastructure/tools/knip.md) |
+| **ESLint** | 9.37.0 | Code quality & logic errors | `bun run lint` | [`docs/infrastructure/quality/eslint.md`](docs/infrastructure/quality/eslint.md) |
+| **Prettier** | 3.6.2 | Code formatting | `bun run format` | [`docs/infrastructure/quality/prettier.md`](docs/infrastructure/quality/prettier.md) |
+| **TypeScript (tsc)** | ^5 | Type checking | `bun run typecheck` | [`docs/infrastructure/language/typescript.md`](docs/infrastructure/language/typescript.md) |
+| **Knip** | 5.65.0 | Dead code detection | `bun run clean` | [`docs/infrastructure/quality/knip.md`](docs/infrastructure/quality/knip.md) |
 
 ### UI Development Tools
 
 | Tool | Version | Purpose | Command | Documentation |
 |------|---------|---------|---------|--------------|
-| **Tailwind CSS** | 4.1.14 | Utility-first CSS framework | `bunx tailwindcss` | [`docs/infrastructure/tools/tailwind.md`](docs/infrastructure/tools/tailwind.md) |
+| **React** | 19.2.0 | Component-based UI library | - | [`docs/infrastructure/ui/react.md`](docs/infrastructure/ui/react.md) |
+| **React DOM** | 19.2.0 | React rendering for web (SSR & client) | - | [`docs/infrastructure/ui/react.md`](docs/infrastructure/ui/react.md) |
+| **Tailwind CSS** | 4.1.14 | Utility-first CSS framework | `bunx tailwindcss` | [`docs/infrastructure/ui/tailwind.md`](docs/infrastructure/ui/tailwind.md) |
 | **PostCSS** | 8.5.6 | CSS processing (Tailwind integration) | `bunx postcss` | - |
-| **prettier-plugin-tailwindcss** | 0.7.0 | Auto-sort Tailwind classes | `bun run format` | [`docs/infrastructure/tools/tailwind.md`](docs/infrastructure/tools/tailwind.md) |
+| **prettier-plugin-tailwindcss** | 0.7.0 | Auto-sort Tailwind classes | `bun run format` | [`docs/infrastructure/ui/tailwind.md`](docs/infrastructure/ui/tailwind.md) |
 
 ### Testing Frameworks
 
@@ -137,7 +150,11 @@ Utility-first CSS framework for rapid UI development.
 omnera-v2/
 ├── docs/
 │   └── infrastructure/          # Technical infrastructure documentation
-│       ├── tools/              # Development tools (Bun, TypeScript, Effect, Hono, Tailwind, ESLint, Prettier, Knip)
+│       ├── runtime/            # Runtime environment (Bun)
+│       ├── language/           # Programming language (TypeScript)
+│       ├── framework/          # Core frameworks (Effect, Hono)
+│       ├── ui/                 # UI libraries (React, Tailwind CSS)
+│       ├── quality/            # Code quality tools (ESLint, Prettier, Knip)
 │       ├── testing/            # Testing frameworks (Bun Test, Playwright)
 │       ├── cicd/               # CI/CD workflows (GitHub Actions)
 │       └── release/            # Release management (semantic-release)
@@ -357,8 +374,12 @@ git push origin main               # Triggers release if feat/fix
 This project uses a modular documentation approach:
 
 - **CLAUDE.md** (this file): High-level project overview and quick reference
-- **docs/infrastructure/**: Detailed technical documentation
-  - **tools/**: Development tools (Bun, TypeScript, Effect, Hono, Tailwind CSS, ESLint, Prettier, Knip)
+- **docs/infrastructure/**: Detailed technical documentation organized by category
+  - **runtime/**: Runtime environment (Bun)
+  - **language/**: Programming language (TypeScript)
+  - **framework/**: Core frameworks (Effect, Hono)
+  - **ui/**: UI libraries and styling (React, Tailwind CSS)
+  - **quality/**: Code quality tools (ESLint, Prettier, Knip)
   - **testing/**: Testing frameworks (Bun Test, Playwright)
   - **cicd/**: CI/CD workflows (GitHub Actions)
   - **release/**: Release management (semantic-release)
