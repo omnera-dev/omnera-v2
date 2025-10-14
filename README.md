@@ -82,6 +82,7 @@ omnera-v2/
 ## Why Bun?
 
 This project uses Bun instead of Node.js for:
+
 - **Native TypeScript** - Direct execution without compilation
 - **Speed** - 4x faster cold starts than Node.js
 - **Unified Tooling** - Runtime, package manager, and test runner in one
@@ -91,6 +92,7 @@ This project uses Bun instead of Node.js for:
 ## Important Notes
 
 ⚠️ **This is a Bun project** - Do not use:
+
 - `node`, `npm`, `yarn`, or `pnpm` commands
 - `npx` (use `bunx` instead)
 - `ts-node` or `nodemon` (Bun handles these natively)
@@ -112,4 +114,4 @@ See [LICENSE.md](LICENSE) for full details.
 
 ---
 
-*This project was created using `bun init` in Bun v1.3.0*
+_This project was created using `bun init` in Bun v1.3.0_

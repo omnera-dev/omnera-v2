@@ -5,10 +5,13 @@ This document provides comprehensive technical documentation for the Omnera V2 p
 ## Project Overview
 
 **Project Name**: Omnera V2
+**Version**: 0.0.1
+**License**: BSL-1.1 (Business Source License 1.1)
 **Created with**: Bun v1.3.0 (via `bun init`)
 **Primary Runtime**: Bun (NOT Node.js)
 **Package Manager**: Bun (NOT npm, yarn, or pnpm)
 **Test Runner**: Bun Test (built-in)
+**Code Formatter**: Prettier 3.6.2
 **Module System**: ES Modules (type: "module")
 **Entry Point**: index.ts
 
@@ -116,6 +119,74 @@ bun run --bun <script>     # force Bun runtime
 - Global cache shared across projects
 - Binary lockfile for faster parsing
 
+### Prettier Code Formatter (v3.6.2)
+
+**Purpose**: Enforces consistent code formatting across the entire codebase automatically, eliminating style debates and ensuring uniform code appearance.
+
+**Why Prettier**:
+- Zero-config opinionated formatter (minimal configuration needed)
+- Supports TypeScript, JavaScript, JSX, TSX, JSON, Markdown, and more
+- Integrates seamlessly with Bun via `bunx`
+- Prevents formatting inconsistencies in version control
+- Saves time during code reviews by eliminating style discussions
+
+**Running Prettier with Bun**:
+```bash
+# Format all files in the project
+bunx prettier --write .
+
+# Check formatting without modifying files
+bunx prettier --check .
+
+# Format specific files or directories
+bunx prettier --write src/
+bunx prettier --write "src/**/*.ts"
+bunx prettier --write index.ts
+
+# Check specific files
+bunx prettier --check "src/**/*.{ts,tsx,json}"
+
+# Format with custom config (if needed)
+bunx prettier --write . --config .prettierrc.json
+```
+
+**Configuration File**: `.prettierrc.json`
+
+**Active Configuration**:
+```json
+{
+  "semi": false,                      // No semicolons
+  "trailingComma": "es5",            // Trailing commas where valid in ES5
+  "singleQuote": true,               // Single quotes for strings
+  "tabWidth": 2,                     // 2 spaces per indentation level
+  "useTabs": false,                  // Spaces, not tabs
+  "printWidth": 100,                 // Wrap lines at 100 characters
+  "singleAttributePerLine": true     // Each attribute on separate line (HTML/JSX)
+}
+```
+
+**Configuration Impact on Code Generation**:
+- **No Semicolons**: All statements should omit trailing semicolons
+- **Single Quotes**: String literals use `'` instead of `"`
+- **100 Character Line Width**: Break long lines at 100 characters
+- **Trailing Commas**: Add trailing commas in arrays, objects, function parameters
+- **2-Space Indentation**: Use 2 spaces for all indentation levels
+- **Single Attribute Per Line**: JSX/TSX attributes each on their own line
+
+**File Support**:
+- TypeScript: `.ts`, `.tsx`
+- JavaScript: `.js`, `.jsx`, `.mjs`
+- JSON: `.json`
+- Markdown: `.md`
+- YAML: `.yml`, `.yaml`
+- HTML: `.html`
+
+**Integration with Development Workflow**:
+1. **Pre-commit**: Consider running `bunx prettier --check .` before commits
+2. **CI/CD**: Add formatting checks to continuous integration
+3. **IDE/Editor**: Configure editor to format on save (see IDE Integration section)
+4. **Manual Formatting**: Run `bunx prettier --write .` when needed
+
 ### Bun Test Runner
 
 **Test File Patterns**:
@@ -181,16 +252,18 @@ describe("Feature", () => {
 
 ```
 omnera-v2/
-├── index.ts           # Entry point
-├── package.json       # Dependencies and scripts
-├── tsconfig.json      # TypeScript config (Bun-optimized)
-├── bun.lock          # Lock file (binary)
-├── README.md         # User documentation
-├── CLAUDE.md         # This file
-└── src/              # Source code (when added)
-    ├── components/   # UI components (if applicable)
-    ├── lib/          # Utility functions
-    └── types/        # TypeScript type definitions
+├── index.ts              # Entry point
+├── package.json          # Dependencies and scripts
+├── tsconfig.json         # TypeScript config (Bun-optimized)
+├── .prettierrc.json      # Prettier formatting configuration
+├── .prettierignore       # Files to exclude from Prettier (optional)
+├── bun.lock             # Lock file (binary)
+├── README.md            # User documentation
+├── CLAUDE.md            # This file - Technical documentation
+└── src/                 # Source code (when added)
+    ├── components/      # UI components (if applicable)
+    ├── lib/             # Utility functions
+    └── types/           # TypeScript type definitions
 ```
 
 ### Environment Variables
@@ -210,17 +283,114 @@ console.log(Bun.env.API_KEY)
 
 ## Coding Standards
 
+### Code Formatting (Prettier)
+
+**All code MUST follow Prettier formatting rules** defined in `.prettierrc.json`. These rules are enforced automatically and should never be manually overridden.
+
+**Formatting Standards**:
+
+1. **Quotes**: Always use single quotes for strings
+```typescript
+// CORRECT
+const message = 'Hello world'
+const path = './module.ts'
+
+// INCORRECT
+const message = "Hello world"  // ❌ Double quotes
+```
+
+2. **Semicolons**: Never use semicolons
+```typescript
+// CORRECT
+const value = 42
+const fn = () => console.log('done')
+
+// INCORRECT
+const value = 42;              // ❌ Semicolon
+const fn = () => console.log('done');  // ❌ Semicolon
+```
+
+3. **Line Width**: Maximum 100 characters per line
+```typescript
+// CORRECT - Breaks at 100 characters
+const longObject = {
+  propertyOne: 'value',
+  propertyTwo: 'another value',
+  propertyThree: 'yet another value',
+}
+
+// INCORRECT - Exceeds 100 characters
+const longObject = { propertyOne: 'value', propertyTwo: 'another value', propertyThree: 'yet another value' }  // ❌
+```
+
+4. **Trailing Commas**: Use trailing commas in multi-line structures
+```typescript
+// CORRECT
+const array = [
+  'item1',
+  'item2',
+  'item3',  // Trailing comma
+]
+
+const object = {
+  key1: 'value1',
+  key2: 'value2',  // Trailing comma
+}
+
+// INCORRECT
+const array = [
+  'item1',
+  'item2',
+  'item3'  // ❌ Missing trailing comma
+]
+```
+
+5. **Indentation**: 2 spaces (no tabs)
+```typescript
+// CORRECT
+function example() {
+  if (condition) {
+    return true
+  }
+}
+
+// INCORRECT - Uses 4 spaces or tabs
+function example() {
+    if (condition) {  // ❌ Wrong indentation
+        return true
+    }
+}
+```
+
+6. **JSX/TSX Attributes**: One attribute per line
+```typescript
+// CORRECT
+<Component
+  prop1="value1"
+  prop2="value2"
+  prop3="value3"
+/>
+
+// INCORRECT
+<Component prop1="value1" prop2="value2" prop3="value3" />  // ❌
+```
+
+**Automatic Formatting**:
+- Run `bunx prettier --write .` before committing code
+- Configure your IDE to format on save (recommended)
+- Prettier will automatically fix all formatting issues
+
 ### Module System
 
 **Always use ES Modules**:
 ```typescript
 // CORRECT
-import { feature } from "./module.ts"
+import { feature } from './module.ts'
 export const myFunction = () => {}
 export default MyComponent
 
 // INCORRECT - CommonJS not recommended
-const feature = require("./module")  // ❌
+const feature = require('./module')  // ❌
 module.exports = myFunction          // ❌
 ```
 
@@ -228,8 +398,8 @@ module.exports = myFunction          // ❌
 
 1. **Explicit Type Imports**:
 ```typescript
-import type { User } from "./types.ts"
-import { type Config, loadConfig } from "./config.ts"
+import type { User } from './types.ts'
+import { type Config, loadConfig } from './config.ts'
 ```
 
 2. **Strict Null Checks**:
@@ -254,7 +424,7 @@ class Child extends Parent {
 
 ```typescript
 // Use native Error classes
-throw new Error("Description")
+throw new Error('Description')
 
 // Bun provides better stack traces
 console.error(error.stack)
@@ -319,21 +489,74 @@ const user = query.get(userId)
 ```json
 {
   "name": "omnera-v2",
+  "version": "0.0.1",
   "module": "index.ts",      // Entry point for Bun
   "type": "module",          // ES modules only
+  "license": "BSL-1.1",      // Business Source License 1.1
   "scripts": {
     "dev": "bun run --watch index.ts",
     "test": "bun test",
     "test:watch": "bun test --watch",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "format": "bunx prettier --write .",
+    "format:check": "bunx prettier --check ."
   },
   "devDependencies": {
-    "@types/bun": "latest"   // Bun type definitions
+    "@types/bun": "latest",  // Bun type definitions
+    "prettier": "3.6.2"      // Code formatter
   },
   "peerDependencies": {
     "typescript": "^5"       // TypeScript compiler (for types only)
   }
 }
+```
+
+### Prettier Configuration (.prettierrc.json)
+
+**Location**: `/Users/thomasjeanneau/Codes/omnera-v2/.prettierrc.json`
+
+**Complete Configuration**:
+```json
+{
+  "semi": false,                      // Omit semicolons
+  "trailingComma": "es5",            // Trailing commas where valid in ES5 (objects, arrays, params)
+  "singleQuote": true,               // Use single quotes instead of double quotes
+  "tabWidth": 2,                     // 2 spaces per indentation level
+  "useTabs": false,                  // Use spaces for indentation, not tabs
+  "printWidth": 100,                 // Wrap lines longer than 100 characters
+  "singleAttributePerLine": true     // Force one JSX/HTML attribute per line
+}
+```
+
+**Configuration Rationale**:
+- **semi: false** - Cleaner code appearance, common in modern TypeScript/JavaScript
+- **singleQuote: true** - Consistency with most TypeScript projects, fewer escape sequences
+- **printWidth: 100** - Balance between readability and fitting code on screen
+- **trailingComma: "es5"** - Cleaner git diffs, prevents missing comma errors
+- **singleAttributePerLine: true** - Improved readability for React/JSX components
+- **tabWidth: 2** - Standard for TypeScript projects, matches common conventions
+
+**Ignored Files**: Create `.prettierignore` to exclude files from formatting:
+```
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+build/
+out/
+
+# Lock files
+bun.lock
+package-lock.json
+yarn.lock
+
+# Generated files
+*.min.js
+*.bundle.js
+
+# Logs
+*.log
 ```
 
 ### Build & Bundle (when needed)
@@ -432,6 +655,10 @@ bun run index.ts     # Direct execution
 bun test
 bun test --watch
 
+# Format code
+bunx prettier --write .          # Format all files
+bunx prettier --check .          # Check formatting
+
 # Add new dependency
 bun add package-name
 
@@ -440,6 +667,55 @@ bunx tsc --noEmit
 
 # Update dependencies
 bun update
+```
+
+### Pre-Commit Checklist
+
+Before committing code, ensure:
+1. **Formatting**: Run `bunx prettier --write .` to format all files
+2. **Type checking**: Run `bunx tsc --noEmit` to verify types
+3. **Tests**: Run `bun test` to ensure all tests pass
+4. **Review changes**: Check `git diff` to verify only intended changes
+
+### IDE Integration (Prettier)
+
+**VS Code**:
+1. Install "Prettier - Code formatter" extension
+2. Add to `.vscode/settings.json`:
+```json
+{
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.formatOnSave": true,
+  "[typescript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[typescriptreact]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[json]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  }
+}
+```
+
+**WebStorm/IntelliJ IDEA**:
+1. Go to Settings > Languages & Frameworks > JavaScript > Prettier
+2. Set Prettier package: `node_modules/prettier`
+3. Enable "Run on save for files" pattern: `{**/*,*}.{ts,tsx,js,jsx,json,md}`
+4. Enable "On 'Reformat Code' action"
+
+**Vim/Neovim**:
+```vim
+" Using vim-prettier plugin
+let g:prettier#autoformat = 1
+let g:prettier#autoformat_require_pragma = 0
+```
+
+**Emacs**:
+```elisp
+;; Using prettier-js package
+(add-hook 'typescript-mode-hook 'prettier-js-mode)
+(add-hook 'json-mode-hook 'prettier-js-mode)
 ```
 
 ### Debugging
@@ -475,6 +751,23 @@ bun --version
 - **Project Created**: Bun v1.3.0 (current)
 - **TypeScript**: ^5 (peer dependency)
 - **@types/bun**: latest
+- **Prettier**: 3.6.2 (added October 2024)
+
+## Technology Summary
+
+**Runtime & Build Tools**:
+- Bun v1.3.0 (runtime, package manager, test runner, bundler)
+- TypeScript ^5 (type checking only, no compilation)
+- Prettier 3.6.2 (code formatting)
+
+**Project Metadata**:
+- Version: 0.0.1
+- License: BSL-1.1 (Business Source License 1.1)
+- Module System: ES Modules
+
+**Development Dependencies**:
+- @types/bun: latest
+- prettier: 3.6.2
 
 ---
 

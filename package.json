@@ -4,8 +4,12 @@
   "module": "index.ts",
   "license": "BSL-1.1",
   "type": "module",
+  "scripts": {
+    "format": "prettier --write ."
+  },
   "devDependencies": {
-    "@types/bun": "latest"
+    "@types/bun": "latest",
+    "prettier": "3.6.2"
   },
   "peerDependencies": {
     "typescript": "^5"
