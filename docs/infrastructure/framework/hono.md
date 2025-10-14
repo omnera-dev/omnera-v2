@@ -5,9 +5,9 @@
 **Version**: 4.9.12
 **Purpose**: Ultra-lightweight, fast web framework for building APIs and web applications built on Web Standard APIs
 
-Hono is a modern web framework designed for the edge. It works seamlessly with Bun, Cloudflare Workers, Deno, AWS Lambda, and Node.js - allowing you to write once and deploy anywhere. With its focus on Web Standards, type safety, and performance, Hono is an ideal choice for building high-performance APIs in Omnera V2.
+Hono is a modern web framework designed for the edge. It works seamlessly with Bun, Cloudflare Workers, Deno, AWS Lambda, and Node.js - allowing you to write once and deploy anywhere. With its focus on Web Standards, type safety, and performance, Hono is an ideal choice for building high-performance APIs in Omnera.
 
-## Why Hono for Omnera V2
+## Why Hono for Omnera
 
 - **Ultra-lightweight**: Under 14kB (with hono/tiny preset) - minimal overhead
 - **Blazing Fast**: Optimized routing with RegExpRouter for maximum performance
@@ -32,7 +32,7 @@ Hono is a modern web framework designed for the edge. It works seamlessly with B
 
 ## Installation
 
-Hono is already installed in Omnera V2:
+Hono is already installed in Omnera:
 
 ```json
 {
@@ -1096,7 +1096,7 @@ app.get('/config', (c) => {
 })
 ```
 
-## Best Practices for Omnera V2
+## Best Practices for Omnera
 
 1. **Use TypeScript Types**: Leverage Hono's type inference for type-safe routing
 2. **Validate with Effect Schema**: Always validate request data with Effect Schema

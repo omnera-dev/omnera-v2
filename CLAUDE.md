@@ -12,6 +12,7 @@ The following detailed documentation files are imported for Claude Code's memory
 @docs/infrastructure/framework/hono.md
 @docs/infrastructure/ui/react.md
 @docs/infrastructure/ui/tailwind.md
+@docs/infrastructure/ui/shadcn.md
 @docs/infrastructure/quality/eslint.md
 @docs/infrastructure/quality/prettier.md
 @docs/infrastructure/quality/knip.md
@@ -95,6 +96,18 @@ Utility-first CSS framework for rapid UI development.
 
 **Detailed Documentation**: [`docs/infrastructure/ui/tailwind.md`](docs/infrastructure/ui/tailwind.md)
 
+### shadcn/ui (Component Collection)
+
+Copy-paste component collection built with Tailwind CSS and React.
+
+- **Purpose**: Production-ready, accessible UI components you own and control
+- **Key Feature**: Components copied into your project (NOT an npm package)
+- **Why shadcn/ui**: Full customization freedom, no vendor lock-in, zero bundle bloat, perfect Tailwind integration
+
+**Key Dependencies**: class-variance-authority (0.7.1), clsx (2.1.1), tailwind-merge (3.3.1), lucide-react (0.545.0)
+
+**Detailed Documentation**: [`docs/infrastructure/ui/shadcn.md`](docs/infrastructure/ui/shadcn.md)
+
 ## Development Tools
 
 ### Code Quality Tools
@@ -113,6 +126,11 @@ Utility-first CSS framework for rapid UI development.
 | **React** | 19.2.0 | Component-based UI library | - | [`docs/infrastructure/ui/react.md`](docs/infrastructure/ui/react.md) |
 | **React DOM** | 19.2.0 | React rendering for web (SSR & client) | - | [`docs/infrastructure/ui/react.md`](docs/infrastructure/ui/react.md) |
 | **Tailwind CSS** | 4.1.14 | Utility-first CSS framework | `bunx tailwindcss` | [`docs/infrastructure/ui/tailwind.md`](docs/infrastructure/ui/tailwind.md) |
+| **shadcn/ui** | N/A | Copy-paste component collection (not npm package) | - | [`docs/infrastructure/ui/shadcn.md`](docs/infrastructure/ui/shadcn.md) |
+| **class-variance-authority** | 0.7.1 | Type-safe component variants | - | [`docs/infrastructure/ui/shadcn.md`](docs/infrastructure/ui/shadcn.md) |
+| **clsx** | 2.1.1 | Conditional className construction | - | [`docs/infrastructure/ui/shadcn.md`](docs/infrastructure/ui/shadcn.md) |
+| **tailwind-merge** | 3.3.1 | Merge Tailwind classes without conflicts | - | [`docs/infrastructure/ui/shadcn.md`](docs/infrastructure/ui/shadcn.md) |
+| **lucide-react** | 0.545.0 | Icon library (1000+ icons) | - | [`docs/infrastructure/ui/shadcn.md`](docs/infrastructure/ui/shadcn.md) |
 | **PostCSS** | 8.5.6 | CSS processing (Tailwind integration) | `bunx postcss` | - |
 | **prettier-plugin-tailwindcss** | 0.7.0 | Auto-sort Tailwind classes | `bun run format` | [`docs/infrastructure/ui/tailwind.md`](docs/infrastructure/ui/tailwind.md) |
 
@@ -153,7 +171,7 @@ omnera-v2/
 │       ├── runtime/            # Runtime environment (Bun)
 │       ├── language/           # Programming language (TypeScript)
 │       ├── framework/          # Core frameworks (Effect, Hono)
-│       ├── ui/                 # UI libraries (React, Tailwind CSS)
+│       ├── ui/                 # UI libraries (React, Tailwind CSS, shadcn/ui)
 │       ├── quality/            # Code quality tools (ESLint, Prettier, Knip)
 │       ├── testing/            # Testing frameworks (Bun Test, Playwright)
 │       ├── cicd/               # CI/CD workflows (GitHub Actions)
@@ -165,12 +183,16 @@ omnera-v2/
 ├── scripts/
 │   └── update-license-date.js  # License date updater (BSL 1.1)
 ├── src/
+│   ├── components/
+│   │   └── ui/                 # shadcn/ui components (Typography, etc.)
+│   ├── lib/
+│   │   └── utils.ts            # Utility functions (cn, etc.)
 │   ├── index.ts                # Entry point
 │   └── **/*.test.ts            # Unit tests (co-located with source)
 ├── tests/
 │   └── **/*.spec.ts            # E2E tests (Playwright only)
 ├── package.json                # Dependencies and scripts
-├── tsconfig.json               # TypeScript config (Bun-optimized)
+├── tsconfig.json               # TypeScript config (Bun-optimized, path aliases)
 ├── playwright.config.ts        # Playwright E2E testing configuration
 ├── eslint.config.ts            # ESLint linting configuration (flat config)
 ├── .prettierrc.json            # Prettier formatting configuration
@@ -264,8 +286,75 @@ import { something } from './module.ts'
 // CORRECT - Type-only imports must be explicit
 import type { SomeType } from './types.ts'
 
+// CORRECT - Use path aliases for components
+import { Button } from '@/components/ui/button'
+import { cn } from '@/lib/utils'
+
 // INCORRECT - Don't omit extensions
 import { something } from './module'  // ❌
+
+// INCORRECT - Don't use relative paths for components
+import { Button } from '../../../components/ui/button'  // ❌
+```
+
+### UI Component Conventions (shadcn/ui)
+
+**All UI components MUST follow shadcn/ui patterns**:
+
+1. **Component Location**: `src/components/ui/{component-name}.tsx`
+2. **Utility Functions**: `src/lib/utils.ts` (for `cn` helper)
+3. **Props Interface**: Extend native HTML element props
+4. **className Merging**: Always use `cn()` utility from `@/lib/utils`
+5. **TypeScript Exports**: Export both component and props interface
+
+**Example Component Structure**:
+
+```typescript
+import type { HTMLAttributes, ReactNode } from 'react'
+import { cn } from '@/lib/utils'
+
+// Props interface extends native HTML props
+export interface ComponentProps extends HTMLAttributes<HTMLDivElement> {
+  children: ReactNode
+  variant?: 'default' | 'outline'
+}
+
+// Component implementation
+export function Component({
+  children,
+  variant = 'default',
+  className,
+  ...props
+}: ComponentProps) {
+  return (
+    <div
+      className={cn(
+        'base-styles', // Base Tailwind classes
+        variant === 'outline' && 'outline-styles', // Variant styles
+        className // User overrides (must come last)
+      )}
+      {...props} // Spread remaining HTML attributes
+    >
+      {children}
+    </div>
+  )
+}
+```
+
+**The `cn` Utility Function**:
+
+```typescript
+// src/lib/utils.ts
+import { clsx, type ClassValue } from 'clsx'
+import { twMerge } from 'tailwind-merge'
+
+export function cn(...inputs: ClassValue[]) {
+  return twMerge(clsx(inputs))
+}
+
+// Usage: Merges classes and resolves Tailwind conflicts
+cn('px-4 py-2', className) // User className overrides base styles
+cn('px-4', 'px-8') // Result: 'px-8' (later value wins)
 ```
 
 ## Development Workflow
@@ -378,7 +467,7 @@ This project uses a modular documentation approach:
   - **runtime/**: Runtime environment (Bun)
   - **language/**: Programming language (TypeScript)
   - **framework/**: Core frameworks (Effect, Hono)
-  - **ui/**: UI libraries and styling (React, Tailwind CSS)
+  - **ui/**: UI libraries and styling (React, Tailwind CSS, shadcn/ui)
   - **quality/**: Code quality tools (ESLint, Prettier, Knip)
   - **testing/**: Testing frameworks (Bun Test, Playwright)
   - **cicd/**: CI/CD workflows (GitHub Actions)
