@@ -1,9 +1,24 @@
 {
   "name": "omnera",
   "version": "0.0.1",
+  "description": "Omnera V2 - Modern TypeScript framework built with Bun",
   "module": "src/index.ts",
   "license": "BSL-1.1",
   "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/omnera-dev/omnera-v2.git"
+  },
+  "bugs": {
+    "url": "https://github.com/omnera-dev/omnera-v2/issues"
+  },
+  "homepage": "https://github.com/omnera-dev/omnera-v2#readme",
+  "keywords": [
+    "omnera",
+    "bun",
+    "typescript",
+    "framework"
+  ],
   "scripts": {
     "format": "prettier --write .",
     "format:check": "prettier --check .",
@@ -11,17 +26,22 @@
     "clean": "knip --fix",
     "lint": "eslint .",
     "test:all": "bun test && bun test:e2e",
-    "test:e2e": "playwright test"
+    "test:e2e": "playwright test",
+    "release": "semantic-release"
   },
   "devDependencies": {
     "@eslint/js": "^9.37.0",
     "@playwright/test": "^1.56.0",
+    "@semantic-release/changelog": "^6.0.3",
+    "@semantic-release/exec": "^7.1.0",
+    "@semantic-release/git": "^10.0.1",
     "@types/bun": "latest",
     "@types/node": "^24.7.2",
     "eslint": "^9.37.0",
     "globals": "^16.4.0",
     "knip": "^5.65.0",
     "prettier": "3.6.2",
+    "semantic-release": "^24.2.9",
     "typescript": "^5.9.3",
     "typescript-eslint": "^8.46.1"
   },

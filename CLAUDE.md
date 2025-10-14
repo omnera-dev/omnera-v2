@@ -5,8 +5,11 @@ This document provides comprehensive technical documentation for the Omnera V2 p
 ## Project Overview
 
 **Project Name**: Omnera V2
-**Version**: 0.0.1
+**NPM Package Name**: omnera
+**Description**: Modern TypeScript framework built with Bun
+**Version**: 0.0.1 (managed by semantic-release)
 **License**: BSL-1.1 (Business Source License 1.1)
+**Repository**: https://github.com/omnera-dev/omnera-v2
 **Created with**: Bun v1.3.0 (via `bun init`)
 **Primary Runtime**: Bun (NOT Node.js)
 **Package Manager**: Bun (NOT npm, yarn, or pnpm)
@@ -14,6 +17,7 @@ This document provides comprehensive technical documentation for the Omnera V2 p
   - Bun Test (built-in) - Unit tests
   - Playwright ^1.56.0 - End-to-end (E2E) tests
 **Code Formatter**: Prettier 3.6.2
+**Release Management**: semantic-release ^24.2.0 (automated versioning & publishing)
 **Module System**: ES Modules (type: "module")
 **Entry Point**: src/index.ts
 
@@ -1611,12 +1615,415 @@ bun test:e2e
 bun test:all
 ```
 
+### Semantic Release (v24.2.0)
+
+**Purpose**: Fully automated version management, changelog generation, and npm package publishing based on conventional commits. Semantic-release eliminates manual version bumping, changelog writing, and release creation by analyzing commit messages to determine the next version number and automating the entire release process.
+
+**What Semantic Release Provides**:
+1. **Automated Versioning** - Determines next version (major.minor.patch) from commit messages
+2. **Changelog Generation** - Auto-generates CHANGELOG.md from commit history
+3. **npm Publishing** - Publishes package "omnera" to npm registry automatically
+4. **GitHub Releases** - Creates GitHub releases with release notes
+5. **License Date Updates** - Custom script updates BSL 1.1 dates in LICENSE.md
+6. **Git Commits** - Commits version bumps and changelog back to repository
+7. **Version Validation** - Ensures semantic versioning (semver) compliance
+
+**Version**: 24.2.0
+**Configuration File**: `.releaserc.json`
+**Trigger**: Push to `main` branch (via GitHub Actions workflow)
+**Package Name**: "omnera" (published to npm)
+
+**Semantic Versioning Rules**:
+
+Semantic-release analyzes commit messages following the Conventional Commits format to determine version bumps:
+
+| Commit Type | Example | Version Change | Example Version |
+|-------------|---------|----------------|-----------------|
+| `fix:` | `fix(api): resolve timeout issue` | Patch (0.0.X) | 0.1.0 → 0.1.1 |
+| `feat:` | `feat(auth): add OAuth support` | Minor (0.X.0) | 0.1.0 → 0.2.0 |
+| `feat!:` or `BREAKING CHANGE:` | `feat!: redesign API structure` | Major (X.0.0) | 0.1.0 → 1.0.0 |
+| `docs:`, `style:`, `refactor:`, `perf:`, `test:`, `chore:`, `ci:` | `docs: update README` | None | 0.1.0 → 0.1.0 |
+
+**Conventional Commits Format**:
+
+All commits to `main` branch MUST follow the Conventional Commits specification:
+
+```
+<type>(<scope>): <subject>
+
+[optional body]
+
+[optional footer]
+```
+
+**Commit Types**:
+- `feat:` - New feature (triggers minor version bump)
+- `fix:` - Bug fix (triggers patch version bump)
+- `docs:` - Documentation changes (no version bump)
+- `style:` - Code style changes (formatting, no logic change, no version bump)
+- `refactor:` - Code refactoring (no new features or bug fixes, no version bump)
+- `perf:` - Performance improvements (no version bump)
+- `test:` - Adding or updating tests (no version bump)
+- `chore:` - Maintenance tasks, dependencies (no version bump)
+- `ci:` - CI/CD configuration changes (no version bump)
+
+**Breaking Changes**:
+- Add `!` after type: `feat!:` or `fix!:`
+- OR include `BREAKING CHANGE:` in footer
+- Triggers major version bump (X.0.0)
+
+**Commit Examples**:
+
+```bash
+# Patch release (0.1.0 → 0.1.1)
+git commit -m "fix(database): resolve connection pool timeout"
+
+# Minor release (0.1.0 → 0.2.0)
+git commit -m "feat(api): add user authentication endpoint"
+
+# Major release (0.1.0 → 1.0.0)
+git commit -m "feat!: redesign API structure
+
+BREAKING CHANGE: API endpoints now use /v2/ prefix"
+
+# No release (documentation)
+git commit -m "docs: update installation instructions"
+
+# Multi-line with scope
+git commit -m "feat(auth): implement OAuth 2.0 flow
+
+- Add OAuth provider configuration
+- Implement token refresh mechanism
+- Add session management"
+```
+
+**Semantic Release Plugin Chain**:
+
+The release process executes these plugins in sequence (defined in `.releaserc.json`):
+
+1. **@semantic-release/commit-analyzer**
+   - Analyzes commit messages since last release
+   - Determines version bump type (major/minor/patch/none)
+   - Uses Conventional Commits specification
+
+2. **@semantic-release/release-notes-generator**
+   - Generates release notes from commit messages
+   - Groups commits by type (Features, Bug Fixes, etc.)
+   - Formats notes for CHANGELOG.md and GitHub release
+
+3. **@semantic-release/changelog**
+   - Updates `CHANGELOG.md` with generated release notes
+   - Prepends new version section to existing changelog
+   - Maintains chronological order (newest first)
+
+4. **@semantic-release/exec**
+   - Runs custom script: `scripts/update-license-date.js`
+   - Updates LICENSE.md with new version and dates
+   - See "License Date Update Script" section below
+
+5. **@semantic-release/npm**
+   - Publishes package "omnera" to npm registry
+   - Requires `NPM_TOKEN` secret configured in GitHub
+   - Updates package.json version (committed later by git plugin)
+
+6. **@semantic-release/git**
+   - Commits updated files back to repository:
+     - `CHANGELOG.md` (updated changelog)
+     - `package.json` (bumped version)
+     - `LICENSE.md` (updated dates and version)
+   - Commit message: `chore(release): X.X.X [skip ci]`
+   - `[skip ci]` prevents infinite release loop
+
+7. **@semantic-release/github**
+   - Creates GitHub release with generated notes
+   - Tags repository with version (e.g., `v1.0.0`)
+   - Attaches release assets if configured
+
+**License Date Update Script**:
+
+The custom script `scripts/update-license-date.js` automatically updates LICENSE.md during each release:
+
+**Updates Performed**:
+1. **Version**: Updates "Licensed Work: Omnera X.X.X" with new version
+2. **Copyright Year**: Updates "(c) YYYY ESSENTIAL SERVICES" with current year
+3. **Change Date**: Calculates and updates BSL 1.1 Change Date (4 years from release)
+
+**BSL 1.1 Change Date Calculation**:
+- Business Source License 1.1 requires a "Change Date" (when code becomes open source)
+- Script calculates: Current Date + 4 years
+- Example: Released 2025-01-15 → Change Date: 2029-01-15
+- Automatically maintained for every release
+
+**Script Execution**:
+```bash
+# Called by semantic-release during release process
+node scripts/update-license-date.js 1.2.3
+
+# Output example:
+✓ Updated LICENSE.md:
+  - Version: 1.2.3
+  - Copyright year: 2025
+  - Change Date: 2029-01-15
+```
+
+**Release Workflow** (.github/workflows/release.yml):
+
+The automated release process runs on every push to `main` branch:
+
+**Workflow Steps**:
+1. **Trigger Check**: Skip if commit message contains `[skip ci]`
+2. **Checkout**: Fetch full git history for version analysis
+3. **Setup Bun**: Install Bun v1.3.0 runtime
+4. **Setup Node.js**: Install Node.js LTS (for semantic-release)
+5. **Install Dependencies**: Run `bun install --frozen-lockfile`
+6. **Run Tests**:
+   - `bun run lint` - ESLint code quality checks
+   - `bun run typecheck` - TypeScript type validation
+   - `bun test` - Unit tests
+7. **Release**: Run `bunx semantic-release` if tests pass
+
+**Required GitHub Secrets**:
+- `GITHUB_TOKEN` - Automatically provided by GitHub Actions
+- `NPM_TOKEN` - Must be configured manually for npm publishing
+
+**Workflow Permissions**:
+```yaml
+permissions:
+  contents: write        # Commit version bumps and changelog
+  issues: write          # Close issues referenced in commits
+  pull-requests: write   # Comment on PRs
+  id-token: write        # OpenID Connect token
+```
+
+**Release Process Flow**:
+
+```
+Developer commits to main
+         ↓
+Workflow triggered (if not [skip ci])
+         ↓
+Run tests (lint, typecheck, unit tests)
+         ↓ (if pass)
+Analyze commits for version bump
+         ↓
+Generate release notes
+         ↓
+Update CHANGELOG.md
+         ↓
+Update LICENSE.md (version + dates)
+         ↓
+Publish to npm as "omnera"
+         ↓
+Commit changes (with [skip ci])
+         ↓
+Create GitHub release with tag
+         ↓
+Release complete
+```
+
+**Configuration Reference** (.releaserc.json):
+
+```json
+{
+  "branches": ["main"],
+  "repositoryUrl": "https://github.com/omnera-dev/omnera-v2",
+  "plugins": [
+    "@semantic-release/commit-analyzer",
+    "@semantic-release/release-notes-generator",
+    ["@semantic-release/changelog", {
+      "changelogFile": "CHANGELOG.md"
+    }],
+    ["@semantic-release/exec", {
+      "prepareCmd": "node scripts/update-license-date.js ${nextRelease.version}"
+    }],
+    ["@semantic-release/npm", {
+      "npmPublish": true,
+      "pkgRoot": "."
+    }],
+    ["@semantic-release/git", {
+      "assets": ["CHANGELOG.md", "package.json", "LICENSE.md"],
+      "message": "chore(release): ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}"
+    }],
+    "@semantic-release/github"
+  ]
+}
+```
+
+**Running Releases**:
+
+**Automated Release** (recommended):
+```bash
+# Release happens automatically on push to main
+git add .
+git commit -m "feat(api): add new endpoint"
+git push origin main
+# Workflow runs, tests pass, version bumps, publishes to npm
+```
+
+**Manual Release** (local testing only):
+```bash
+# Test release process locally (dry-run)
+bunx semantic-release --dry-run
+
+# Manual release (not recommended - use CI/CD instead)
+bunx semantic-release
+# Requires NPM_TOKEN environment variable
+```
+
+**Development Workflow Integration**:
+
+**IMPORTANT**: Conventional commits are REQUIRED for proper versioning.
+
+**Before Committing**:
+1. Determine commit type (feat, fix, docs, etc.)
+2. Write descriptive subject (what changed, not how)
+3. Add scope if applicable (e.g., `feat(auth):`)
+4. Include breaking change marker if needed (`feat!:`)
+
+**Commit Message Guidelines**:
+- **Subject**: Imperative mood ("add feature" not "added feature")
+- **Length**: Subject ≤ 72 characters for readability
+- **Clarity**: Describe what changed and why, not how
+- **Scope**: Optional but recommended (component/module name)
+- **Body**: Add details for complex changes (optional)
+- **Footer**: Reference issues, breaking changes (optional)
+
+**Example Workflow**:
+```bash
+# Make code changes
+vim src/api/auth.ts
+
+# Stage changes
+git add src/api/auth.ts
+
+# Commit with conventional format
+git commit -m "feat(auth): implement JWT token refresh
+
+- Add refresh token endpoint
+- Implement token rotation
+- Add expiration validation"
+
+# Push to main (triggers release if feat/fix)
+git push origin main
+```
+
+**Version Bump Decision Tree**:
+
+```
+Does commit include breaking change?
+├─ Yes → Major version bump (X.0.0)
+└─ No
+   ├─ Is commit type "feat:"? → Minor version bump (0.X.0)
+   ├─ Is commit type "fix:"? → Patch version bump (0.0.X)
+   └─ Other types → No version bump
+```
+
+**Troubleshooting**:
+
+**No release created despite feat/fix commits**:
+- Check commit message format (must match conventional commits)
+- Verify tests passed in workflow
+- Check workflow logs in GitHub Actions
+- Ensure `[skip ci]` not in commit message
+
+**npm publish failed**:
+- Verify `NPM_TOKEN` secret is configured
+- Check npm token has publish permissions
+- Ensure package name "omnera" is available or owned by you
+- Review npm publish logs in workflow
+
+**License update failed**:
+- Verify `scripts/update-license-date.js` exists
+- Check LICENSE.md format matches expected patterns
+- Review workflow logs for script errors
+
+**Workflow skipped**:
+- Check if commit message contains `[skip ci]`
+- Verify workflow file exists at `.github/workflows/release.yml`
+- Ensure push was to `main` branch
+
+**Version conflict**:
+- semantic-release manages versions automatically
+- DO NOT manually edit version in package.json
+- Let semantic-release determine and set version
+
+**Best Practices**:
+
+1. **Always use conventional commits** - Required for proper versioning
+2. **Never skip CI on manual commits** - Only semantic-release should use `[skip ci]`
+3. **Test before pushing to main** - Workflow runs all tests, but catch issues early
+4. **Use descriptive scopes** - Helps organize changelog (e.g., `feat(api):`, `fix(db):`)
+5. **Document breaking changes** - Always explain breaking changes in commit body
+6. **Let automation handle versions** - Never manually bump version in package.json
+7. **Review generated changelogs** - Verify release notes accurately reflect changes
+8. **Squash feature branches** - Cleaner commit history for changelog generation
+
+**Files Created/Modified by Semantic Release**:
+
+**Created**:
+- `CHANGELOG.md` - Auto-generated changelog (updated on each release)
+
+**Modified on Each Release**:
+- `package.json` - Version number updated
+- `CHANGELOG.md` - New release section prepended
+- `LICENSE.md` - Version, copyright year, change date updated
+
+**Committed by semantic-release**:
+- Commit message: `chore(release): X.X.X [skip ci]`
+- Includes updated files listed above
+
+**Integration with Other Tools**:
+
+| Tool | Integration Point | Notes |
+|------|------------------|-------|
+| **ESLint** | Pre-release validation | Linting must pass before release |
+| **TypeScript** | Pre-release validation | Type checking must pass before release |
+| **Bun Test** | Pre-release validation | Unit tests must pass before release |
+| **Playwright** | Not in release workflow | E2E tests run separately in CI |
+| **Prettier** | No integration | Formatting checked in separate CI workflow |
+| **GitHub Actions** | Release orchestration | Workflow triggers semantic-release |
+| **npm Registry** | Package publishing | "omnera" package published on release |
+
+**Semantic Release vs Other Tools**:
+
+| Aspect | Semantic Release | Manual Releases |
+|--------|------------------|-----------------|
+| **Version Determination** | Automated from commits | Manual decision |
+| **Changelog** | Auto-generated from commits | Manually written |
+| **Publishing** | Automated to npm | Manual `npm publish` |
+| **GitHub Release** | Auto-created with notes | Manually created |
+| **License Updates** | Automated via script | Manual edits |
+| **Git Tags** | Automatically created | Manual `git tag` |
+| **Consistency** | Always follows semver | Prone to human error |
+| **Speed** | Fast (seconds after push) | Slow (manual steps) |
+
+**When Releases Occur**:
+
+Releases happen ONLY when:
+1. Commits are pushed to `main` branch
+2. Tests pass (lint, typecheck, unit tests)
+3. At least one commit since last release uses `feat:` or `fix:` type
+4. Commit message does not contain `[skip ci]`
+
+**When Releases DO NOT Occur**:
+
+No release when:
+- All commits since last release are `docs:`, `chore:`, `style:`, etc.
+- Tests fail (lint, typecheck, or unit tests)
+- Commit contains `[skip ci]`
+- Push is to branch other than `main`
+
 ## Infrastructure
 
 ### File Structure
 
 ```
 omnera-v2/
+├── .github/
+│   └── workflows/
+│       └── release.yml      # Automated release workflow (semantic-release)
+├── scripts/
+│   └── update-license-date.js  # License date updater (called by semantic-release)
 ├── src/
 │   ├── index.ts         # Entry point (module: "src/index.ts" in package.json)
 │   ├── components/      # UI components (if applicable)
@@ -1632,9 +2039,12 @@ omnera-v2/
 ├── .prettierrc.json      # Prettier formatting configuration
 ├── .prettierignore       # Files to exclude from Prettier (optional)
 ├── .eslintignore         # Files to exclude from ESLint (optional)
+├── .releaserc.json       # Semantic-release configuration
 ├── bun.lock             # Lock file (binary)
 ├── README.md            # User documentation
 ├── CLAUDE.md            # This file - Technical documentation
+├── CHANGELOG.md         # Auto-generated changelog (semantic-release)
+├── LICENSE.md           # BSL 1.1 license (auto-updated by semantic-release)
 ├── test-results/        # Playwright test execution results (gitignored)
 ├── playwright-report/   # Playwright HTML test reports (gitignored)
 ├── playwright/.cache/   # Playwright browser binaries (gitignored)
@@ -1881,11 +2291,26 @@ const user = query.get(userId)
 
 ```json
 {
-  "name": "omnera-v2",
-  "version": "0.0.1",
-  "module": "src/index.ts",  // Entry point for Bun (moved to src/)
-  "type": "module",          // ES modules only
-  "license": "BSL-1.1",      // Business Source License 1.1
+  "name": "omnera",                  // npm package name (NOT "omnera-v2")
+  "version": "0.0.1",                // Managed by semantic-release (DO NOT manually edit)
+  "description": "Omnera V2 - Modern TypeScript framework built with Bun",
+  "module": "src/index.ts",          // Entry point for Bun (moved to src/)
+  "type": "module",                  // ES modules only
+  "license": "BSL-1.1",              // Business Source License 1.1
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/omnera-dev/omnera-v2.git"
+  },
+  "bugs": {
+    "url": "https://github.com/omnera-dev/omnera-v2/issues"
+  },
+  "homepage": "https://github.com/omnera-dev/omnera-v2#readme",
+  "keywords": [
+    "omnera",
+    "bun",
+    "typescript",
+    "framework"
+  ],
   "scripts": {
     // Development scripts
     "dev": "bun run --watch src/index.ts",
@@ -1906,19 +2331,26 @@ const user = query.get(userId)
     "format:check": "prettier --check .",
 
     // Dead code cleanup
-    "clean": "knip --fix"
+    "clean": "knip --fix",
+
+    // Release management (automated via GitHub Actions)
+    "release": "semantic-release"
   },
   "devDependencies": {
-    "@eslint/js": "^9.37.0",        // ESLint JavaScript rules (flat config)
-    "@playwright/test": "^1.56.0",  // Playwright E2E testing framework
-    "@types/bun": "latest",         // Bun type definitions
-    "@types/node": "^24.7.2",       // Node.js type definitions (for compatibility)
-    "eslint": "^9.37.0",            // ESLint static code analysis tool
-    "globals": "^16.4.0",           // Global variables definitions for ESLint
-    "knip": "^5.65.0",              // Dead code detection tool
-    "prettier": "3.6.2",            // Code formatter
-    "typescript": "^5.9.3",         // TypeScript compiler
-    "typescript-eslint": "^8.46.1"  // TypeScript ESLint rules and parser
+    "@eslint/js": "^9.37.0",                 // ESLint JavaScript rules (flat config)
+    "@playwright/test": "^1.56.0",           // Playwright E2E testing framework
+    "@semantic-release/changelog": "^6.0.3", // Semantic-release changelog plugin
+    "@semantic-release/exec": "^6.0.3",      // Semantic-release exec plugin (runs scripts)
+    "@semantic-release/git": "^10.0.1",      // Semantic-release git plugin (commits changes)
+    "@types/bun": "latest",                  // Bun type definitions
+    "@types/node": "^24.7.2",                // Node.js type definitions (for compatibility)
+    "eslint": "^9.37.0",                     // ESLint static code analysis tool
+    "globals": "^16.4.0",                    // Global variables definitions for ESLint
+    "knip": "^5.65.0",                       // Dead code detection tool
+    "prettier": "3.6.2",                     // Code formatter
+    "semantic-release": "^24.2.0",           // Automated version management and publishing
+    "typescript": "^5.9.3",                  // TypeScript compiler
+    "typescript-eslint": "^8.46.1"           // TypeScript ESLint rules and parser
   },
   "peerDependencies": {
     "typescript": "^5.9.3"     // TypeScript compiler (actual compiler)
@@ -1984,6 +2416,14 @@ const user = query.get(userId)
   - Auto-fixes: Removes unused exports automatically
   - Manual fixes: Reports unused files/dependencies for manual removal
 
+- **`release`**: Runs semantic-release for automated versioning and publishing
+  - Command: `semantic-release`
+  - Purpose: Automated version management, changelog generation, npm publishing
+  - When to use: Automatically via GitHub Actions (NOT manually)
+  - Process: Analyzes commits → determines version → updates files → publishes to npm → creates GitHub release
+  - IMPORTANT: DO NOT run manually - let GitHub Actions workflow handle releases
+  - Manual usage: Only for testing with `--dry-run` flag: `bunx semantic-release --dry-run`
+
 **Dependency Structure**:
 
 - **devDependencies**: Tools used during development only
@@ -1995,6 +2435,10 @@ const user = query.get(userId)
   - `typescript`: TypeScript compiler (provides type checking)
   - `knip`: Dead code detection and cleanup tool
   - `prettier`: Code formatter (enforces style consistency)
+  - `semantic-release`: Automated version management and npm publishing based on commit messages
+  - `@semantic-release/changelog`: Plugin to generate and update CHANGELOG.md
+  - `@semantic-release/exec`: Plugin to execute custom shell commands during release
+  - `@semantic-release/git`: Plugin to commit release changes back to repository
   - `@types/bun`: Type definitions for Bun runtime APIs
   - `@types/node`: Type definitions for Node.js built-in APIs (needed for compatibility)
 
@@ -2308,6 +2752,144 @@ yarn.lock
 *.log
 ```
 
+### Semantic Release Configuration (.releaserc.json)
+
+**Location**: `/Users/thomasjeanneau/Codes/omnera-v2/.releaserc.json`
+
+**Complete Configuration**:
+```json
+{
+  "branches": ["main"],
+  "repositoryUrl": "https://github.com/omnera-dev/omnera-v2",
+  "plugins": [
+    "@semantic-release/commit-analyzer",
+    "@semantic-release/release-notes-generator",
+    [
+      "@semantic-release/changelog",
+      {
+        "changelogFile": "CHANGELOG.md"
+      }
+    ],
+    [
+      "@semantic-release/exec",
+      {
+        "prepareCmd": "node scripts/update-license-date.js ${nextRelease.version}"
+      }
+    ],
+    [
+      "@semantic-release/npm",
+      {
+        "npmPublish": true,
+        "pkgRoot": "."
+      }
+    ],
+    [
+      "@semantic-release/git",
+      {
+        "assets": ["CHANGELOG.md", "package.json", "LICENSE.md"],
+        "message": "chore(release): ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}"
+      }
+    ],
+    "@semantic-release/github"
+  ]
+}
+```
+
+**Configuration Breakdown**:
+
+- **`branches`**: `["main"]`
+  - Releases only occur from `main` branch
+  - Other branches will not trigger releases
+  - Ensures stable release process
+
+- **`repositoryUrl`**: `"https://github.com/omnera-dev/omnera-v2"`
+  - GitHub repository URL
+  - Used for creating releases and tags
+  - Must match actual repository location
+
+**Plugin Configuration**:
+
+1. **`@semantic-release/commit-analyzer`** (no config)
+   - Analyzes commit messages using Conventional Commits specification
+   - Determines version bump type (major/minor/patch)
+   - Default configuration uses standard commit types
+
+2. **`@semantic-release/release-notes-generator`** (no config)
+   - Generates release notes from commits
+   - Groups commits by type (Features, Bug Fixes, etc.)
+   - Uses default formatting for GitHub releases
+
+3. **`@semantic-release/changelog`**
+   - `changelogFile`: `"CHANGELOG.md"` - Target file for changelog
+   - Prepends new release notes to existing changelog
+   - Maintains chronological order (newest first)
+
+4. **`@semantic-release/exec`**
+   - `prepareCmd`: Runs before npm publish
+   - Command: `node scripts/update-license-date.js ${nextRelease.version}`
+   - Updates LICENSE.md with version, copyright year, and change date
+   - `${nextRelease.version}` replaced with actual version (e.g., "1.2.3")
+
+5. **`@semantic-release/npm`**
+   - `npmPublish`: `true` - Enable publishing to npm registry
+   - `pkgRoot`: `"."` - Publish from project root
+   - Package name: "omnera" (from package.json)
+   - Requires `NPM_TOKEN` environment variable
+
+6. **`@semantic-release/git`**
+   - `assets`: Files to commit back to repository
+     - `CHANGELOG.md` - Updated changelog
+     - `package.json` - Bumped version
+     - `LICENSE.md` - Updated dates and version
+   - `message`: Commit message template
+     - Format: `chore(release): X.X.X [skip ci]`
+     - `[skip ci]` prevents workflow loop
+     - Includes release notes in commit body
+
+7. **`@semantic-release/github`** (no config)
+   - Creates GitHub release with generated notes
+   - Tags repository with version (e.g., `v1.0.0`)
+   - Uses default GitHub release format
+
+**Plugin Execution Order**:
+
+The order matters - plugins run sequentially:
+```
+1. Analyze commits (commit-analyzer)
+2. Generate release notes (release-notes-generator)
+3. Update CHANGELOG.md (changelog)
+4. Update LICENSE.md (exec - custom script)
+5. Publish to npm (npm)
+6. Commit changes to git (git)
+7. Create GitHub release (github)
+```
+
+**Environment Variables Required**:
+
+- `GITHUB_TOKEN` - Automatically provided by GitHub Actions
+- `NPM_TOKEN` - Must be configured in GitHub repository secrets
+
+**Custom Script Integration**:
+
+The `@semantic-release/exec` plugin runs `scripts/update-license-date.js`:
+```javascript
+// Receives version as command-line argument
+const version = process.argv[2] // e.g., "1.2.3"
+
+// Updates LICENSE.md:
+// - Licensed Work: Omnera X.X.X
+// - (c) YYYY ESSENTIAL SERVICES (current year)
+// - Change Date: YYYY-MM-DD (release date + 4 years)
+```
+
+**Configuration Rationale**:
+
+- **Changelog before npm**: Ensures changelog is generated before publishing
+- **Exec before npm**: Updates LICENSE.md before package is published
+- **npm before git**: Version in package.json is updated before commit
+- **git before github**: Commits pushed before GitHub release created
+- **[skip ci] in commit**: Prevents infinite loop of releases
+
 ### Build & Bundle (when needed)
 
 ```typescript
@@ -2608,6 +3190,183 @@ steps:
 - Should run after `bun install` but before E2E tests
 - Use `--with-deps` to install OS-level dependencies (fonts, libraries)
 
+### Commit Message Guidelines (Conventional Commits)
+
+**IMPORTANT**: This project uses semantic-release for automated version management. All commits to `main` branch MUST follow the Conventional Commits specification.
+
+**Conventional Commits Format**:
+```
+<type>(<scope>): <subject>
+
+[optional body]
+
+[optional footer]
+```
+
+**Required Commit Types**:
+
+| Type | Description | Version Bump | Example |
+|------|-------------|--------------|---------|
+| `feat` | New feature | Minor (0.X.0) | `feat(auth): add OAuth login` |
+| `fix` | Bug fix | Patch (0.0.X) | `fix(api): resolve timeout issue` |
+| `docs` | Documentation only | None | `docs: update installation guide` |
+| `style` | Code style/formatting | None | `style: fix indentation` |
+| `refactor` | Code refactoring | None | `refactor(db): simplify query logic` |
+| `perf` | Performance improvement | None | `perf(cache): optimize lookup speed` |
+| `test` | Adding/updating tests | None | `test(auth): add login flow tests` |
+| `chore` | Maintenance tasks | None | `chore: update dependencies` |
+| `ci` | CI/CD changes | None | `ci: add release workflow` |
+
+**Breaking Changes**:
+
+Add `!` after type OR include `BREAKING CHANGE:` in footer to trigger major version bump (X.0.0):
+
+```bash
+# Option 1: Exclamation mark after type
+feat!: redesign API structure
+
+# Option 2: BREAKING CHANGE in footer
+feat(api): redesign endpoint structure
+
+BREAKING CHANGE: All API endpoints now use /v2/ prefix
+```
+
+**Commit Message Best Practices**:
+
+1. **Use imperative mood**: "add feature" not "added feature" or "adds feature"
+2. **Keep subject concise**: ≤ 72 characters for readability
+3. **Add scope when relevant**: Component or module name (e.g., `auth`, `api`, `db`)
+4. **Explain the "why"**: Use body to explain motivation, not the "what" (code shows what)
+5. **Reference issues**: Use footer to reference GitHub issues (e.g., `Closes #123`)
+6. **One concern per commit**: Don't mix unrelated changes
+
+**Commit Examples**:
+
+```bash
+# Feature addition (minor version bump: 0.1.0 → 0.2.0)
+git commit -m "feat(auth): implement JWT token refresh
+
+- Add refresh token endpoint
+- Implement token rotation mechanism
+- Add expiration validation logic
+
+Closes #45"
+
+# Bug fix (patch version bump: 0.1.0 → 0.1.1)
+git commit -m "fix(database): resolve connection pool timeout
+
+Connection pool was not properly releasing connections after
+queries completed, causing timeout errors under load.
+
+Fixes #67"
+
+# Breaking change (major version bump: 0.1.0 → 1.0.0)
+git commit -m "feat!: redesign API endpoint structure
+
+BREAKING CHANGE: All API endpoints now use /v2/ prefix.
+Migration guide added to docs/migration-v2.md"
+
+# Documentation update (no version bump)
+git commit -m "docs: add installation instructions for Windows"
+
+# Dependency update (no version bump)
+git commit -m "chore(deps): update TypeScript to 5.9.3"
+
+# Multiple scopes (choose most relevant or use general term)
+git commit -m "refactor(core): simplify authentication flow"
+```
+
+**Commit Workflow**:
+
+1. **Make changes**: Edit files and test thoroughly
+2. **Stage changes**: `git add <files>`
+3. **Determine type**: feat, fix, docs, chore, etc.
+4. **Write commit message**: Follow conventional format
+5. **Commit**: `git commit -m "type(scope): subject"`
+6. **Push to main**: Release happens automatically if tests pass
+
+**Example Complete Workflow**:
+
+```bash
+# 1. Create feature branch (recommended)
+git checkout -b feature/add-oauth
+
+# 2. Make changes
+vim src/auth/oauth.ts
+
+# 3. Run pre-commit checks
+bun run lint && bun run format && bun run typecheck && bun test
+
+# 4. Stage changes
+git add src/auth/oauth.ts
+
+# 5. Commit with conventional format
+git commit -m "feat(auth): add OAuth 2.0 login support
+
+- Implement OAuth provider configuration
+- Add callback handling for OAuth flow
+- Integrate with existing session management
+
+Closes #123"
+
+# 6. Push feature branch
+git push origin feature/add-oauth
+
+# 7. Create PR, review, merge to main
+# (After merge to main, semantic-release runs automatically)
+```
+
+**What Happens After Commit to Main**:
+
+```
+1. Push to main → GitHub Actions triggered
+2. Tests run (lint, typecheck, unit tests)
+3. If tests pass → semantic-release analyzes commits
+4. Determines version bump from commit types
+5. Generates CHANGELOG.md
+6. Updates LICENSE.md (version, dates)
+7. Publishes "omnera" to npm
+8. Commits changes back to main with [skip ci]
+9. Creates GitHub release with notes
+```
+
+**Common Mistakes to Avoid**:
+
+1. ❌ `git commit -m "updates"` - Too vague, no type
+2. ❌ `git commit -m "Added new feature"` - Past tense, no type
+3. ❌ `git commit -m "feat: stuff"` - Not descriptive
+4. ❌ `git commit -m "fix(auth) resolve bug"` - Missing colon after scope
+5. ❌ `git commit -m "FEAT: add feature"` - Type must be lowercase
+
+**Correct Alternatives**:
+
+1. ✅ `git commit -m "feat(api): add user endpoint"`
+2. ✅ `git commit -m "fix(auth): resolve token expiration bug"`
+3. ✅ `git commit -m "docs: update API documentation"`
+4. ✅ `git commit -m "chore(deps): update dependencies"`
+
+**Debugging Failed Releases**:
+
+If no release is created despite pushing `feat:` or `fix:` commits:
+
+1. **Check commit format**: Must exactly match conventional commits spec
+2. **Verify tests passed**: Check GitHub Actions workflow logs
+3. **Check for [skip ci]**: Ensure commit doesn't contain skip directive
+4. **Review workflow logs**: Look for semantic-release errors in GitHub Actions
+
+**Testing Commit Messages Locally**:
+
+```bash
+# Dry-run semantic-release to see what would happen
+bunx semantic-release --dry-run
+
+# Output shows:
+# - Next version number
+# - Commits included in release
+# - Generated release notes
+# - Which files would be updated
+```
+
 ### Pre-Release Checklist
 
 Before major releases, perform comprehensive quality checks including dead code cleanup:
@@ -2646,7 +3405,13 @@ Before major releases, perform comprehensive quality checks including dead code 
    - Review git diff for unintended changes
    - Check for debug code, console logs, or TODOs
    - Ensure no sensitive data or credentials
-   - Verify version number is updated in `package.json`
+   - DO NOT manually update version in package.json (semantic-release handles this)
+
+8. **Verify Conventional Commits**: Review commit history
+   - Ensure all commits since last release follow conventional format
+   - Check that commit types accurately reflect changes (feat, fix, etc.)
+   - Verify breaking changes are properly marked with `!` or `BREAKING CHANGE:`
+   - Run `bunx semantic-release --dry-run` to preview release
 
 **Quick Pre-Release Command**:
 ```bash
@@ -2654,13 +3419,16 @@ Before major releases, perform comprehensive quality checks including dead code 
 bunx knip && bun run lint && bun run format && bun run typecheck && bun test:all
 
 # With auto-fix flags
-bunx knip && bunx eslint . --fix && bun run format && bun run typecheck && bun test:all
+bunx eslint . --fix && bun run format && bun run typecheck && bun test:all
 
 # If Knip reports issues, address them and rerun:
 bun remove <unused-package> && bun run clean && bunx knip
 ```
 
-**Release Workflow**:
+**Release Workflow** (Automated via semantic-release):
+
+**IMPORTANT**: Releases are fully automated. DO NOT manually bump versions or create releases.
+
 ```bash
 # 1. Clean unused code
 bunx knip --reporter markdown > knip-report.md
@@ -2681,8 +3449,30 @@ bun run lint && bun run format && bun run typecheck && bun test:all
 # With auto-fix
 bunx eslint . --fix && bun run format && bun run typecheck && bun test:all
 
-# 6. Update version and commit
-# 7. Create git tag and release
+# 6. Preview release (dry-run)
+bunx semantic-release --dry-run
+# Review: next version, commits included, generated notes
+
+# 7. Commit changes with conventional commit message
+git add .
+git commit -m "chore: prepare for release
+
+- Clean unused code and dependencies
+- Update dependencies to latest versions
+- Fix all linting and type errors"
+
+# 8. Push to main branch
+git push origin main
+
+# 9. Release happens automatically via GitHub Actions
+# - Tests run (lint, typecheck, unit tests)
+# - semantic-release analyzes commits
+# - Version bumped, CHANGELOG updated, LICENSE updated
+# - Package published to npm as "omnera"
+# - GitHub release created with notes
+
+# 10. Pull changes to get updated version
+git pull origin main
 ```
 
 **Why Knip Before Releases**:
@@ -2842,6 +3632,10 @@ bun --version
 - **Prettier**: 3.6.2 (added October 2024)
 - **Knip**: ^5.65.0 (added October 2024)
 - **Playwright**: ^1.56.0 (added October 2024)
+- **semantic-release**: ^24.2.0 (added October 2024)
+- **@semantic-release/changelog**: ^6.0.3 (added October 2024)
+- **@semantic-release/exec**: ^6.0.3 (added October 2024)
+- **@semantic-release/git**: ^10.0.1 (added October 2024)
 
 **Timeline**:
 - **Initial Setup**: Bun v1.3.0 with TypeScript ^5.9.3 and basic configuration
@@ -2853,7 +3647,14 @@ bun --version
 - **E2E Testing Added**: Playwright v1.56.0 for end-to-end browser testing and user workflow validation
 - **Entry Point Moved**: Entry point moved from `index.ts` to `src/index.ts` for better project structure
 - **Test Scripts Simplified**: Removed wrapper scripts for unit tests - use native `bun test` directly. Added `test:all` script for comprehensive testing
-- **Current State**: Complete development toolchain (execution, linting, validation, formatting, unit testing, E2E testing, cleanup)
+- **Release Automation Added**: semantic-release v24.2.0 for automated version management, changelog generation, and npm publishing
+  - Package name: "omnera" (published to npm)
+  - Conventional Commits: Required for all commits to main branch
+  - Automated workflow: Analyzes commits → determines version → updates files → publishes to npm → creates GitHub release
+  - License automation: Custom script updates LICENSE.md with version, copyright year, and BSL 1.1 Change Date (4 years)
+  - CHANGELOG.md: Auto-generated from commit messages
+  - GitHub Actions: Release workflow runs on push to main branch after tests pass
+- **Current State**: Complete development toolchain with automated release management (execution, linting, validation, formatting, unit testing, E2E testing, cleanup, versioning, publishing)
 
 ## Technology Summary
 
@@ -2876,6 +3677,13 @@ bun --version
 - **Knip 5.65.0**: Dead code detector (finds unused code and dependencies)
 - **Role**: Catch logic errors, auto-format code, clean unused code, maintain codebase hygiene
 
+**Release Management**:
+- **semantic-release 24.2.0**: Automated version management and npm publishing
+- **@semantic-release/changelog**: Auto-generates CHANGELOG.md from commits
+- **@semantic-release/exec**: Runs custom scripts during release (LICENSE.md updater)
+- **@semantic-release/git**: Commits release changes back to repository
+- **Role**: Automated versioning based on conventional commits, npm publishing, GitHub releases
+
 **ESLint Supporting Packages**:
 - **@eslint/js v9.37.0**: ESLint's recommended JavaScript rules (flat config)
 - **typescript-eslint v8.46.1**: TypeScript-specific ESLint rules and parser
@@ -2886,8 +3694,11 @@ bun --version
 - **@types/node v24.7.2**: Type definitions for Node.js APIs (compatibility layer)
 
 **Project Metadata**:
-- Version: 0.0.1
+- Name: omnera (npm package name)
+- Version: 0.0.1 (managed by semantic-release)
+- Description: Modern TypeScript framework built with Bun
 - License: BSL-1.1 (Business Source License 1.1)
+- Repository: https://github.com/omnera-dev/omnera-v2
 - Module System: ES Modules
 - Entry Point: src/index.ts (moved from root)
 - Type Checking: Strict mode enabled
@@ -2895,12 +3706,16 @@ bun --version
 **Development Dependencies** (`devDependencies`):
 - `@playwright/test`: ^1.56.0 - E2E testing framework (browser automation)
 - `@eslint/js`: ^9.37.0 - ESLint JavaScript rules (flat config)
+- `@semantic-release/changelog`: ^6.0.3 - semantic-release plugin for CHANGELOG.md generation
+- `@semantic-release/exec`: ^6.0.3 - semantic-release plugin for custom script execution
+- `@semantic-release/git`: ^10.0.1 - semantic-release plugin for git commits
 - `@types/bun`: latest - Bun API type definitions
 - `@types/node`: ^24.7.2 - Node.js API type definitions (for compatibility)
 - `eslint`: ^9.37.0 - Static code analysis tool (linter)
 - `globals`: ^16.4.0 - Global variables definitions for ESLint
 - `knip`: ^5.65.0 - Dead code detection and cleanup tool
 - `prettier`: 3.6.2 - Code formatter
+- `semantic-release`: ^24.2.0 - Automated version management and npm publishing
 - `typescript`: ^5.9.3 - TypeScript compiler
 - `typescript-eslint`: ^8.46.1 - TypeScript ESLint rules and parser
 
