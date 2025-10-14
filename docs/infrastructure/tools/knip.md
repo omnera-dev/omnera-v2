@@ -110,27 +110,63 @@ Unlisted dependencies (1)
 
 Knip can be configured via:
 
-- `knip.json` - Dedicated configuration file
+- `knip.json` - Dedicated configuration file (used in this project)
 - `knip.config.ts` - TypeScript configuration file
 - `package.json` - `"knip"` field for inline config
 
-### Example Configuration (knip.json)
+### Active Configuration (knip.json)
 
 ```json
 {
-  "entry": ["index.ts", "src/main.ts"],
+  "entry": ["src/index.ts"],
   "project": ["src/**/*.ts"],
-  "ignore": ["**/*.test.ts", "**/*.spec.ts"],
-  "ignoreDependencies": ["@types/*"],
+  "ignore": [
+    "**/*.test.ts",
+    "**/*.spec.ts",
+    "scripts/**",
+    "tests/**"
+  ],
+  "ignoreDependencies": [],
   "ignoreExportsUsedInFile": true
 }
 ```
+
+### Configuration Breakdown
+
+- **entry**: `["src/index.ts"]` - Main application entry point
+- **project**: `["src/**/*.ts"]` - Analyze all TypeScript files in src directory
+- **ignore**: Exclude files that should not be checked for dead code:
+  - `**/*.test.ts` - Unit test files (Bun Test)
+  - `**/*.spec.ts` - E2E test files (Playwright)
+  - `scripts/**` - Utility scripts (e.g., update-license-date.js)
+  - `tests/**` - E2E test directory
+- **ignoreDependencies**: No dependencies ignored (empty array)
+- **ignoreExportsUsedInFile**: `true` - Ignore exports used in the same file
+
+### Why Test Files and Scripts Are Excluded
+
+**Test Files** (`*.test.ts`, `*.spec.ts`):
+- Tests often have intentional "unused" exports for testing purposes
+- Test utilities and fixtures may not be imported across test files
+- Knip would incorrectly flag test-specific code as dead code
+- Tests are validated by running them, not by dead code detection
+
+**Scripts Directory** (`scripts/**`):
+- Contains utility scripts run directly (not imported)
+- Scripts like `update-license-date.js` are executed by semantic-release
+- Not part of the main application import graph
+- Would be incorrectly flagged as unused files
+
+**Tests Directory** (`tests/**`):
+- Playwright E2E tests are not imported, they're executed directly
+- Test files may have setup code not shared across tests
+- Separate from main application source code
 
 ### Common Configuration Options
 
 - `entry`: Entry point files (where analysis starts)
 - `project`: Files to include in analysis
-- `ignore`: Files/patterns to exclude
+- `ignore`: Files/patterns to exclude (glob syntax)
 - `ignoreDependencies`: Dependencies to skip checking
 - `ignoreExportsUsedInFile`: Ignore exports used in same file
 

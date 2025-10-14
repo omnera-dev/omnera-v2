@@ -113,7 +113,7 @@ omnera-v2/
 │       └── release/            # Release management (semantic-release)
 ├── .github/
 │   └── workflows/
-│       ├── ci.yml              # Test workflow
+│       ├── test.yml            # Test workflow
 │       └── release.yml         # Release workflow
 ├── scripts/
 │   └── update-license-date.js  # License date updater (BSL 1.1)
@@ -128,6 +128,7 @@ omnera-v2/
 ├── eslint.config.ts            # ESLint linting configuration (flat config)
 ├── .prettierrc.json            # Prettier formatting configuration
 ├── .releaserc.json             # Semantic-release configuration
+├── knip.json                   # Knip dead code detection configuration
 ├── bun.lock                    # Lock file (binary)
 ├── README.md                   # User documentation
 ├── CLAUDE.md                   # This file - Technical documentation
