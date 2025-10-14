@@ -31,7 +31,7 @@ You may NOT use the Licensed Work to:
 - Generate revenue directly or indirectly from the Licensed Work
 - Include it in any commercial product or service offered to customers
 
-For any commercial use beyond internal operations, contact us for a commercial license.
+For any commercial use beyond internal operations, contact us for a commercial license at: thomas.jeanneau@omnera.dev
 
 Disclaimer
 
