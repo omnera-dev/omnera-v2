@@ -35,19 +35,19 @@ try {
   // Update version in "Licensed Work: Omnera X.X.X"
   licenseContent = licenseContent.replace(
     /Licensed Work:\s+Omnera\s+[\d.]+/,
-    `Licensed Work:          Omnera ${version}`,
+    `Licensed Work:          Omnera ${version}`
   )
 
   // Update copyright year in "(c) YYYY ESSENTIAL SERVICES"
   licenseContent = licenseContent.replace(
     /\(c\)\s+\d{4}\s+ESSENTIAL SERVICES/,
-    `(c) ${currentYear} ESSENTIAL SERVICES`,
+    `(c) ${currentYear} ESSENTIAL SERVICES`
   )
 
   // Update Change Date
   licenseContent = licenseContent.replace(
     /Change Date:\s+\d{4}-\d{2}-\d{2}/,
-    `Change Date:            ${changeDateStr}`,
+    `Change Date:            ${changeDateStr}`
   )
 
   writeFileSync(licensePath, licenseContent, 'utf-8')
