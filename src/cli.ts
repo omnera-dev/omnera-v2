@@ -77,13 +77,13 @@ try {
 let options: StartOptions = {}
 if (port || hostname) {
   const parsedPort = port ? parseInt(port, 10) : undefined
-  if (parsedPort !== undefined && (isNaN(parsedPort) || parsedPort <= 0 || parsedPort > 65535)) {
-    console.error(`Error: Invalid port number "${port}". Must be between 1 and 65535.`)
+  if (parsedPort !== undefined && (isNaN(parsedPort) || parsedPort < 0 || parsedPort > 65535)) {
+    console.error(`Error: Invalid port number "${port}". Must be between 0 and 65535 (0 = auto-select).`)
     process.exit(1)
   }
 
   options = {
-    ...(parsedPort && { port: parsedPort }),
+    ...(parsedPort !== undefined && { port: parsedPort }),
     ...(hostname && { hostname }),
   }
 }

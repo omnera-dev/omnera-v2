@@ -1,7 +1,7 @@
 import type { ReactElement } from 'react'
 import { renderToString } from 'react-dom/server'
 import type { App } from '@/schema'
-import { TypographyH1, TypographyLead, TypographyMuted } from '@/components/ui/typography'
+import { TypographyH1, TypographyLead } from '@/components/ui/typography'
 
 /**
  * HomePage component - Displays application information
@@ -32,37 +32,12 @@ export function HomePage({ app }: { app: App }): ReactElement {
       <body className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
         <div className="container-page">
           <div className="flex min-h-screen flex-col items-center justify-center">
-            <div className="card w-full max-w-2xl space-y-6 text-center">
+            <div className="w-full max-w-2xl space-y-6 text-center">
               {/* App Name */}
               <TypographyH1 className="text-center">{app.name}</TypographyH1>
 
               {/* App Description */}
               <TypographyLead className="text-center">{app.description}</TypographyLead>
-
-              {/* Powered by badge */}
-              <div className="flex items-center justify-center space-x-2 pt-4">
-                <TypographyMuted>Powered by</TypographyMuted>
-                <span className="font-bold text-blue-600">Omnera</span>
-              </div>
-
-              {/* Tech stack badges */}
-              <div className="flex flex-wrap items-center justify-center gap-2 pt-4">
-                <span className="rounded-full bg-blue-100 px-3 py-1 text-xs font-medium text-blue-800">
-                  Bun
-                </span>
-                <span className="rounded-full bg-purple-100 px-3 py-1 text-xs font-medium text-purple-800">
-                  Effect
-                </span>
-                <span className="rounded-full bg-green-100 px-3 py-1 text-xs font-medium text-green-800">
-                  Hono
-                </span>
-                <span className="rounded-full bg-cyan-100 px-3 py-1 text-xs font-medium text-cyan-800">
-                  React
-                </span>
-                <span className="rounded-full bg-indigo-100 px-3 py-1 text-xs font-medium text-indigo-800">
-                  Tailwind CSS
-                </span>
-              </div>
             </div>
           </div>
         </div>

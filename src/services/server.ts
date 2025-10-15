@@ -181,7 +181,9 @@ export const createServer = (
       catch: (error) => new ServerCreationError(error),
     })
 
-    const url = `http://${hostname}:${port}`
+    // Use actual port from server (important when port is 0)
+    const actualPort = server.port
+    const url = `http://${hostname}:${actualPort}`
 
     // Create stop effect
     const stop = Effect.gen(function* () {
