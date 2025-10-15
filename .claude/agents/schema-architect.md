@@ -61,7 +61,6 @@ src/schema/
 
 ### Schema Organization
 
-- Follow the "One Property Per File Pattern" (see Key Architectural Pattern above)
 - Main schema file (`index.ts`) imports and composes all property schemas using `Schema.Struct`
 - Include JSDoc comments explaining each property's purpose, validation rules, and examples
 - **DO NOT create:** example.ts files, README.md files, or separate documentation files
@@ -229,7 +228,7 @@ describe('NameSchema - Edge Cases', () => {
 - Each `[property].test.ts` must include:
   - Valid values (should parse successfully)
   - Invalid values (should fail with clear errors)
-  - Edge cases (see Edge Cases section below for specifics)
+  - Edge cases (see Edge Cases section above for specifics)
   - All validation rules and refinements
 - Main schema test file (`index.test.ts`) tests composition and integration
 
@@ -306,19 +305,6 @@ When creating or modifying schemas, follow this file structure pattern:
    - Integration tests with all properties
    - Tests for valid complete configurations
    - Tests for invalid configurations
-
-**Example File Structure:**
-```
-src/schema/
-├── name.ts           # NameSchema definition
-├── name.test.ts      # NameSchema tests
-├── email.ts          # EmailSchema definition
-├── email.test.ts     # EmailSchema tests
-├── port.ts           # PortSchema definition
-├── port.test.ts      # PortSchema tests
-├── index.ts          # Main schema composing all properties
-└── index.test.ts     # Main schema composition tests
-```
 
 **DO NOT create:**
 - ❌ Separate example files (example.ts)
