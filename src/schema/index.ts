@@ -10,7 +10,6 @@ import { Schema } from 'effect'
  * ```typescript
  * const myApp = {
  *   name: 'Todo App',
- *   description: 'A fullstack todo application with user authentication'
  * }
  *
  * const validated = Schema.decodeUnknownSync(AppSchema)(myApp)
@@ -30,24 +29,6 @@ export const AppSchema = Schema.Struct({
       examples: ['Todo App', 'E-commerce Platform', 'Blog System', 'Dashboard Admin'],
     })
   ),
-
-  /**
-   * A detailed description of the application.
-   *
-   * Should explain the purpose, features, and functionality of the application.
-   */
-  description: Schema.String.pipe(
-    Schema.annotations({
-      title: 'Application Description',
-      description: 'A detailed description of what the application does',
-      examples: [
-        'A fullstack todo application with user authentication',
-        'An e-commerce platform with payment integration',
-        'A blog system with markdown support and real-time comments',
-        'An admin dashboard for managing users and analytics',
-      ],
-    })
-  ),
 })
 
 /**
@@ -59,7 +40,6 @@ export const AppSchema = Schema.Struct({
  * ```typescript
  * const app: App = {
  *   name: 'My App',
- *   description: 'A great application'
  * }
  * ```
  */

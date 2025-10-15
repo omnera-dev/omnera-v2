@@ -46,7 +46,6 @@ function createHonoApp(app: App): Hono {
       timestamp: new Date().toISOString(),
       app: {
         name: app.name,
-        description: app.description,
       },
     })
   })
@@ -147,7 +146,7 @@ function createHonoApp(app: App): Hono {
  * ```typescript
  * const program = Effect.gen(function* () {
  *   const server = yield* createServer({
- *     app: { name: 'My App', description: 'A great app' },
+ *     app: { name: 'My App' },
  *     port: 3000
  *   })
  *   console.log(`Server running at ${server.url}`)

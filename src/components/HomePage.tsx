@@ -1,14 +1,14 @@
 import type { ReactElement } from 'react'
 import { renderToString } from 'react-dom/server'
 import type { App } from '@/schema'
-import { TypographyH1, TypographyLead } from '@/components/ui/typography'
+import { TypographyH1 } from '@/components/ui/typography'
 
 /**
  * HomePage component - Displays application information
  *
  * @param props - Component props
  * @param props.app - Validated application data from AppSchema
- * @returns React element with app name and description
+ * @returns React element with app name
  */
 export function HomePage({ app }: { app: App }): ReactElement {
   return (
@@ -18,10 +18,6 @@ export function HomePage({ app }: { app: App }): ReactElement {
         <meta
           name="viewport"
           content="width=device-width, initial-scale=1.0"
-        />
-        <meta
-          name="description"
-          content={app.description}
         />
         <title>{`${app.name} - Powered by Omnera`}</title>
         <link
@@ -35,9 +31,6 @@ export function HomePage({ app }: { app: App }): ReactElement {
             <div className="w-full max-w-2xl space-y-6 text-center">
               {/* App Name */}
               <TypographyH1 className="text-center">{app.name}</TypographyH1>
-
-              {/* App Description */}
-              <TypographyLead className="text-center">{app.description}</TypographyLead>
             </div>
           </div>
         </div>
