@@ -32,10 +32,9 @@ export const NameSchema = Schema.String.pipe(
     message: () =>
       'Name must be lowercase and follow npm package naming conventions (no leading dots/underscores, URL-safe characters only)',
   }),
-  Schema.filter(
-    (name) => name.trim() === name,
-    { message: () => 'Name cannot contain leading or trailing spaces' }
-  ),
+  Schema.filter((name) => name.trim() === name, {
+    message: () => 'Name cannot contain leading or trailing spaces',
+  }),
   Schema.annotations({
     title: 'Application Name',
     description: 'The name of the application (follows npm package naming conventions)',

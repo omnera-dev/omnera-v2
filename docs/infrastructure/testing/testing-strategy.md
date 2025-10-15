@@ -11,6 +11,7 @@ The F.I.R.S.T principles ensure tests are reliable, maintainable, and valuable:
 ### 1. Fast
 
 **Unit Tests (Bun)**: Tests should execute in milliseconds
+
 - ✅ Test pure functions without external dependencies
 - ✅ Mock external services (databases, APIs, file system)
 - ✅ Run in parallel by default (Bun's built-in behavior)
@@ -18,6 +19,7 @@ The F.I.R.S.T principles ensure tests are reliable, maintainable, and valuable:
 - ❌ Avoid actual network calls, database queries, or file I/O
 
 **E2E Tests (Playwright)**: Tests should complete in seconds, not minutes
+
 - ✅ Run tests in parallel across multiple workers
 - ✅ Use network interception to mock slow API responses
 - ✅ Focus on critical user paths (not exhaustive scenarios)
@@ -38,7 +40,7 @@ test('should calculate order total', () => {
 
 // ❌ BAD - Slow (makes actual API call)
 test('should fetch user data', async () => {
-  const user = await fetch('https://api.example.com/users/1').then(r => r.json())
+  const user = await fetch('https://api.example.com/users/1').then((r) => r.json())
   expect(user.name).toBe('Alice')
 })
 ```
@@ -50,10 +52,10 @@ test('should fetch user data', async () => {
 import { test, expect } from '@playwright/test'
 
 test('should display user profile', async ({ page }) => {
-  await page.route('**/api/user', route => {
+  await page.route('**/api/user', (route) => {
     route.fulfill({
       status: 200,
-      body: JSON.stringify({ name: 'Alice', email: 'alice@example.com' })
+      body: JSON.stringify({ name: 'Alice', email: 'alice@example.com' }),
     })
   })
 
@@ -72,6 +74,7 @@ test('should complete full checkout flow', async ({ page }) => {
 ### 2. Isolated / Independent
 
 **Unit Tests (Bun)**: Each test should be completely independent
+
 - ✅ Use `beforeEach` for test setup (creates fresh state)
 - ✅ Avoid shared mutable state between tests
 - ✅ Clean up after tests (use `afterEach` for cleanup)
@@ -79,6 +82,7 @@ test('should complete full checkout flow', async ({ page }) => {
 - ❌ Never rely on test execution order
 
 **E2E Tests (Playwright)**: Each test should run in isolation
+
 - ✅ Use separate browser contexts for each test
 - ✅ Clear cookies/storage before tests (`test.beforeEach`)
 - ✅ Each test creates its own test data
@@ -146,7 +150,7 @@ test('user can login', async ({ page }) => {
 
   // Setup: Create user via API
   await page.request.post('/api/users', {
-    data: { email: uniqueEmail, password: 'password123' }
+    data: { email: uniqueEmail, password: 'password123' },
   })
 
   await page.goto('/login')
@@ -179,6 +183,7 @@ test('login user', async ({ page }) => {
 ### 3. Repeatable
 
 **Unit Tests (Bun)**: Same input always produces same output
+
 - ✅ Use deterministic data (no random values, fixed dates)
 - ✅ Mock time-dependent functions (`Date.now()`, `Math.random()`)
 - ✅ Mock external dependencies with predictable responses
@@ -186,6 +191,7 @@ test('login user', async ({ page }) => {
 - ❌ Never rely on external services, system time, or random data
 
 **E2E Tests (Playwright)**: Tests produce consistent results
+
 - ✅ Use deterministic test data (fixed users, products, dates)
 - ✅ Mock time-sensitive operations (e.g., authentication tokens)
 - ✅ Use `page.route()` to mock unreliable external APIs
@@ -241,15 +247,15 @@ import { test, expect } from '@playwright/test'
 
 // ✅ GOOD - Repeatable (mocked API with fixed data)
 test('should display product details', async ({ page }) => {
-  await page.route('**/api/products/1', route => {
+  await page.route('**/api/products/1', (route) => {
     route.fulfill({
       status: 200,
       body: JSON.stringify({
         id: 1,
         name: 'Test Product',
         price: 29.99,
-        stock: 10
-      })
+        stock: 10,
+      }),
     })
   })
 
@@ -289,6 +295,7 @@ test('should display promotion banner', async ({ page }) => {
 ### 4. Self-Validating
 
 **Unit Tests (Bun)**: Tests determine pass/fail automatically
+
 - ✅ Use explicit assertions (`expect().toBe()`, `expect().toThrow()`)
 - ✅ Test produces boolean output (pass or fail)
 - ✅ No manual inspection of logs or output required
@@ -296,6 +303,7 @@ test('should display promotion banner', async ({ page }) => {
 - ❌ Never require manual verification of results
 
 **E2E Tests (Playwright)**: Tests validate expected outcomes
+
 - ✅ Use Playwright assertions (`expect(locator).toHaveText()`)
 - ✅ Verify UI state changes automatically
 - ✅ Check URLs, element visibility, text content
@@ -405,6 +413,7 @@ test('should display validation errors', async ({ page }) => {
 ### 5. Timely
 
 **Unit Tests (Bun)**: Write tests as you write code
+
 - ✅ Write tests before or alongside feature code (TDD approach)
 - ✅ Tests guide design and catch bugs early
 - ✅ Use `bun test --watch` for continuous feedback
@@ -412,6 +421,7 @@ test('should display validation errors', async ({ page }) => {
 - ❌ Never delay writing tests until "later"
 
 **E2E Tests (Playwright)**: Write tests for critical paths immediately
+
 - ✅ Write E2E tests for new user-facing features
 - ✅ Add tests during feature development (not after)
 - ✅ Tests serve as executable documentation
@@ -596,7 +606,7 @@ import { Schema } from 'effect'
 
 const EmailSchema = Schema.String.pipe(
   Schema.pattern(/^[^\s@]+@[^\s@]+\.[^\s@]+$/, {
-    message: () => 'Invalid email format'
+    message: () => 'Invalid email format',
   })
 )
 
@@ -606,12 +616,12 @@ describe('Email Schema Validation', () => {
     const validEmails = [
       'user@example.com',
       'test.user@company.co.uk',
-      'info+newsletter@domain.org'
+      'info+newsletter@domain.org',
     ]
 
     // When: Each email is validated
     // Then: All emails pass validation
-    validEmails.forEach(email => {
+    validEmails.forEach((email) => {
       const result = Schema.decodeUnknownSync(EmailSchema)(email)
       expect(result).toBe(email)
     })
@@ -619,16 +629,11 @@ describe('Email Schema Validation', () => {
 
   test('should reject invalid email addresses', () => {
     // Given: Invalid email addresses
-    const invalidEmails = [
-      'invalid-email',
-      '@example.com',
-      'user@',
-      'user @example.com'
-    ]
+    const invalidEmails = ['invalid-email', '@example.com', 'user@', 'user @example.com']
 
     // When: Each email is validated
     // Then: All emails fail validation with appropriate error
-    invalidEmails.forEach(email => {
+    invalidEmails.forEach((email) => {
       expect(() => {
         Schema.decodeUnknownSync(EmailSchema)(email)
       }).toThrow('Invalid email format')
@@ -637,17 +642,11 @@ describe('Email Schema Validation', () => {
 
   test('should reject non-string values', () => {
     // Given: Non-string values
-    const invalidValues = [
-      null,
-      undefined,
-      123,
-      true,
-      { email: 'user@example.com' }
-    ]
+    const invalidValues = [null, undefined, 123, true, { email: 'user@example.com' }]
 
     // When: Each value is validated
     // Then: All values fail validation
-    invalidValues.forEach(value => {
+    invalidValues.forEach((value) => {
       expect(() => {
         Schema.decodeUnknownSync(EmailSchema)(value)
       }).toThrow()
@@ -678,7 +677,7 @@ test('should calculate shipping cost with discount', () => {
   const result = calculateShipping(orderWeight, discountCode)
 
   // Then: Cost reflects 50% discount
-  expect(result).toBe(5.00) // Normal: $10, Discounted: $5
+  expect(result).toBe(5.0) // Normal: $10, Discounted: $5
 })
 ```
 
@@ -693,10 +692,10 @@ test('user can apply promo code during checkout', async ({ page }) => {
   // ✅ TIMELY: Written with checkout feature
 
   // Given: User has items in cart and valid promo code
-  await page.route('**/api/cart', route => {
+  await page.route('**/api/cart', (route) => {
     route.fulfill({
       status: 200,
-      body: JSON.stringify({ items: [{ name: 'Widget', price: 100 }], total: 100 })
+      body: JSON.stringify({ items: [{ name: 'Widget', price: 100 }], total: 100 }),
     })
   })
 

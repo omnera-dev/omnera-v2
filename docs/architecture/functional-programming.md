@@ -17,12 +17,12 @@ Omnera embraces Functional Programming (FP) as its core architectural philosophy
 
 ### Integration with Existing Tools
 
-| Tool | FP Support | How It Helps |
-|------|------------|-------------|
-| **Effect.ts** | Native | Effect is built on FP principles: immutability, pure functions, composability |
-| **TypeScript** | Excellent | Strict types, readonly modifiers, functional utilities, const assertions |
-| **Bun** | Compatible | Fast runtime for functional code patterns |
-| **React 19** | Strong | Functional components, hooks, immutable state updates |
+| Tool           | FP Support | How It Helps                                                                  |
+| -------------- | ---------- | ----------------------------------------------------------------------------- |
+| **Effect.ts**  | Native     | Effect is built on FP principles: immutability, pure functions, composability |
+| **TypeScript** | Excellent  | Strict types, readonly modifiers, functional utilities, const assertions      |
+| **Bun**        | Compatible | Fast runtime for functional code patterns                                     |
+| **React 19**   | Strong     | Functional components, hooks, immutable state updates                         |
 
 ## Core Functional Programming Principles
 
@@ -50,7 +50,10 @@ function calculateTotal(items: readonly { price: number; quantity: number }[]): 
 }
 
 // ✅ CORRECT: Pure function with transformation
-function formatUser(user: { name: string; email: string }): { displayName: string; contact: string } {
+function formatUser(user: { name: string; email: string }): {
+  displayName: string
+  contact: string
+} {
   return {
     displayName: user.name.toUpperCase(),
     contact: user.email.toLowerCase(),
@@ -122,7 +125,7 @@ interface User {
 
 // ✅ CORRECT: ReadonlyArray prevents mutations
 function filterActiveUsers(users: readonly User[]): readonly User[] {
-  return users.filter(user => user.status === 'active')
+  return users.filter((user) => user.status === 'active')
 }
 
 // ✅ CORRECT: Use const for immutable references
@@ -138,8 +141,8 @@ function updateUserEmail(user: User, newEmail: string): User {
 
 // ✅ CORRECT: Immutable array operations
 const numbers = [1, 2, 3, 4, 5] as const
-const doubled = numbers.map(n => n * 2) // New array, original unchanged
-const evens = numbers.filter(n => n % 2 === 0) // New array
+const doubled = numbers.map((n) => n * 2) // New array, original unchanged
+const evens = numbers.filter((n) => n % 2 === 0) // New array
 
 // ❌ INCORRECT: Mutating object properties
 function updateUser(user: User): void {
@@ -178,7 +181,7 @@ const counterProgram = Effect.gen(function* () {
   const counter = yield* Ref.make(0)
 
   // Update creates new state internally
-  yield* Ref.update(counter, n => n + 1)
+  yield* Ref.update(counter, (n) => n + 1)
 
   const value = yield* Ref.get(counter)
   return value
@@ -215,13 +218,13 @@ console.log(triple(5)) // 15
 
 // ✅ CORRECT: Array of functions
 const validators: Array<(input: string) => boolean> = [
-  input => input.length > 0,
-  input => input.length < 100,
-  input => /^[a-zA-Z0-9]+$/.test(input),
+  (input) => input.length > 0,
+  (input) => input.length < 100,
+  (input) => /^[a-zA-Z0-9]+$/.test(input),
 ]
 
 function validateInput(input: string): boolean {
-  return validators.every(validator => validator(input))
+  return validators.every((validator) => validator(input))
 }
 ```
 
@@ -265,10 +268,10 @@ const postProgram = fetchMultiple([10, 20], fetchPost)
 ```typescript
 // ✅ CORRECT: map - transforms each element
 const numbers = [1, 2, 3, 4, 5]
-const doubled = numbers.map(n => n * 2) // [2, 4, 6, 8, 10]
+const doubled = numbers.map((n) => n * 2) // [2, 4, 6, 8, 10]
 
 // ✅ CORRECT: filter - selects elements matching predicate
-const evens = numbers.filter(n => n % 2 === 0) // [2, 4]
+const evens = numbers.filter((n) => n % 2 === 0) // [2, 4]
 
 // ✅ CORRECT: reduce - accumulates values
 const sum = numbers.reduce((acc, n) => acc + n, 0) // 15
@@ -304,11 +307,7 @@ console.log(addOneThenDouble(5)) // (5 + 1) * 2 = 12
 import { Effect } from 'effect'
 
 // ✅ CORRECT: Effect.all - parallel execution
-const users = Effect.all([
-  fetchUser(1),
-  fetchUser(2),
-  fetchUser(3),
-])
+const users = Effect.all([fetchUser(1), fetchUser(2), fetchUser(3)])
 
 // ✅ CORRECT: Effect.forEach - sequential or parallel iteration
 const processUsers = Effect.forEach(
@@ -327,10 +326,7 @@ function withTimeout<A, E, R>(
   effect: Effect.Effect<A, E, R>,
   duration: string
 ): Effect.Effect<A, E | TimeoutError, R> {
-  return Effect.race(
-    effect,
-    Effect.fail(new TimeoutError()).pipe(Effect.delay(duration))
-  )
+  return Effect.race(effect, Effect.fail(new TimeoutError()).pipe(Effect.delay(duration)))
 }
 
 const timedFetch = withTimeout(fetchUser(1), '5 seconds')
@@ -404,9 +400,9 @@ import { Effect } from 'effect'
 
 // ✅ CORRECT: Effect.pipe for composing Effect operations
 const program = Effect.succeed(5).pipe(
-  Effect.map(n => n + 1),
-  Effect.map(n => n * 2),
-  Effect.map(n => String(n))
+  Effect.map((n) => n + 1),
+  Effect.map((n) => n * 2),
+  Effect.map((n) => String(n))
 ) // Effect<"12", never, never>
 
 // ✅ CORRECT: Effect.gen for sequential composition
@@ -420,8 +416,8 @@ const userProgram = Effect.gen(function* () {
 
 // ✅ CORRECT: Effect.flatMap for chaining dependent operations
 const chainedProgram = fetchUser(1).pipe(
-  Effect.flatMap(user => fetchUserPosts(user.id)),
-  Effect.flatMap(posts => fetchPostComments(posts[0].id))
+  Effect.flatMap((user) => fetchUserPosts(user.id)),
+  Effect.flatMap((posts) => fetchPostComments(posts[0].id))
 )
 
 // ✅ CORRECT: Composable error handling
@@ -454,7 +450,7 @@ function sumEvenNumbersImperative(numbers: number[]): number {
 // ✅ CORRECT: Declarative (WHAT) - express the intent
 function sumEvenNumbersDeclarative(numbers: readonly number[]): number {
   return numbers
-    .filter(n => n % 2 === 0) // WHAT: Get even numbers
+    .filter((n) => n % 2 === 0) // WHAT: Get even numbers
     .reduce((sum, n) => sum + n, 0) // WHAT: Sum them
 }
 
@@ -471,11 +467,7 @@ function formatNamesImperative(names: string[]): string[] {
 
 // ✅ CORRECT: Declarative string manipulation
 function formatNamesDeclarative(names: readonly string[]): readonly string[] {
-  return names.map(name =>
-    name
-      .trim()
-      .replace(/^./, char => char.toUpperCase())
-  )
+  return names.map((name) => name.trim().replace(/^./, (char) => char.toUpperCase()))
 }
 ```
 
@@ -505,13 +497,9 @@ const imperativeProgram = Effect.gen(function* () {
 
 // ✅ CORRECT: Declarative Effect usage
 const declarativeProgram = Effect.gen(function* () {
-  const user = yield* fetchUser(1).pipe(
-    Effect.catchAll(() => Effect.succeed(defaultUser))
-  )
+  const user = yield* fetchUser(1).pipe(Effect.catchAll(() => Effect.succeed(defaultUser)))
 
-  const posts = yield* fetchUserPosts(user.id).pipe(
-    Effect.catchAll(() => Effect.succeed([]))
-  )
+  const posts = yield* fetchUserPosts(user.id).pipe(Effect.catchAll(() => Effect.succeed([])))
 
   return { user, posts }
 })
@@ -596,9 +584,7 @@ function retryUntilSuccess<A, E>(
     return effect
   }
 
-  return effect.pipe(
-    Effect.catchAll(() => retryUntilSuccess(effect, maxAttempts, attempt + 1))
-  )
+  return effect.pipe(Effect.catchAll(() => retryUntilSuccess(effect, maxAttempts, attempt + 1)))
 }
 ```
 
@@ -788,7 +774,9 @@ class Logger extends Context.Tag('Logger')<
 >() {}
 
 // ✅ CORRECT: Use services in business logic
-const getUserProfile = (id: number): Effect.Effect<User, UserNotFoundError, UserRepository | Logger> =>
+const getUserProfile = (
+  id: number
+): Effect.Effect<User, UserNotFoundError, UserRepository | Logger> =>
   Effect.gen(function* () {
     const logger = yield* Logger
     const repo = yield* UserRepository
@@ -860,6 +848,7 @@ Effect.runPromise(Effect.provide(program, AppLayer))
 ### ❌ DON'T
 
 1. **Mutate Data**
+
    ```typescript
    // ❌ DON'T
    function addItem(items: Item[], item: Item): void {
@@ -873,6 +862,7 @@ Effect.runPromise(Effect.provide(program, AppLayer))
    ```
 
 2. **Mix Side Effects with Business Logic**
+
    ```typescript
    // ❌ DON'T
    function calculateAndSave(data: Data): number {
@@ -896,6 +886,7 @@ Effect.runPromise(Effect.provide(program, AppLayer))
    ```
 
 3. **Use Mutable State**
+
    ```typescript
    // ❌ DON'T
    let counter = 0
@@ -910,6 +901,7 @@ Effect.runPromise(Effect.provide(program, AppLayer))
    ```
 
 4. **Rely on Non-Deterministic Functions**
+
    ```typescript
    // ❌ DON'T
    function generateId(): string {
@@ -926,6 +918,7 @@ Effect.runPromise(Effect.provide(program, AppLayer))
    ```
 
 5. **Use Exceptions for Flow Control**
+
    ```typescript
    // ❌ DON'T
    function divide(a: number, b: number): number {
@@ -943,6 +936,7 @@ Effect.runPromise(Effect.provide(program, AppLayer))
    ```
 
 6. **Create Hidden Dependencies**
+
    ```typescript
    // ❌ DON'T
    function saveUser(user: User): void {
@@ -1137,9 +1131,7 @@ test('getUserProfile fetches user', async () => {
     findById: (id) => Effect.succeed({ id, name: 'Test User', email: 'test@example.com' }),
   })
 
-  const program = getUserProfile(1).pipe(
-    Effect.provide(MockUserRepository)
-  )
+  const program = getUserProfile(1).pipe(Effect.provide(MockUserRepository))
 
   const user = await Effect.runPromise(program)
 
@@ -1148,9 +1140,7 @@ test('getUserProfile fetches user', async () => {
 
 // ✅ Testing error handling
 test('divide returns error for division by zero', async () => {
-  const result = await Effect.runPromise(
-    divide(10, 0).pipe(Effect.either)
-  )
+  const result = await Effect.runPromise(divide(10, 0).pipe(Effect.either))
 
   expect(result._tag).toBe('Left')
 })
