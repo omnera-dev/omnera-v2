@@ -72,6 +72,32 @@ const program = Effect.gen(function* () {
 Effect.runPromise(program)
 ```
 
+#### CLI (Command-line Interface)
+
+You can also start an Omnera server directly from the command line using environment variables:
+
+```bash
+# Using JSON schema environment variable
+OMNERA_APP_SCHEMA='{"name":"My App","description":"Description"}' bun run omnera
+
+# Or with npx
+OMNERA_APP_SCHEMA='{"name":"My App"}' npx omnera
+
+# With custom port and hostname
+OMNERA_PORT=8080 OMNERA_HOSTNAME="0.0.0.0" OMNERA_APP_SCHEMA='{"name":"My App"}' bun run omnera
+
+# Using .env file
+cp .env.example .env
+# Edit .env with your configuration
+bun run start
+```
+
+**Environment Variables:**
+
+- `OMNERA_APP_SCHEMA` (required) - JSON string containing app configuration (name, description, etc.)
+- `OMNERA_PORT` (optional) - Server port (default: 3000)
+- `OMNERA_HOSTNAME` (optional) - Server hostname (default: localhost)
+
 ### Run Tests
 
 ```bash
