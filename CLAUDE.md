@@ -24,6 +24,7 @@ The following detailed documentation files are imported for Claude Code's memory
 @docs/infrastructure/quality/eslint.md
 @docs/infrastructure/quality/prettier.md
 @docs/infrastructure/quality/knip.md
+@docs/infrastructure/testing/testing-strategy.md
 @docs/infrastructure/testing/bun-test.md
 @docs/infrastructure/testing/playwright.md
 @docs/infrastructure/cicd/workflows.md
