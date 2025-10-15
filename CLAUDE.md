@@ -24,11 +24,11 @@ The following detailed documentation files are imported for Claude Code's memory
 @docs/infrastructure/quality/eslint.md
 @docs/infrastructure/quality/prettier.md
 @docs/infrastructure/quality/knip.md
-@docs/infrastructure/testing/testing-strategy.md
 @docs/infrastructure/testing/bun-test.md
 @docs/infrastructure/testing/playwright.md
 @docs/infrastructure/cicd/workflows.md
 @docs/infrastructure/release/semantic-release.md
+@docs/architecture/functional-programming.md
 
 ## Project Overview
 
@@ -176,6 +176,7 @@ Copy-paste component collection built with Tailwind CSS and React.
 ```
 omnera-v2/
 ├── docs/
+│   ├── architecture/           # Architecture documentation (FP principles, patterns)
 │   └── infrastructure/          # Technical infrastructure documentation
 │       ├── runtime/            # Runtime environment (Bun)
 │       ├── language/           # Programming language (TypeScript)
@@ -472,6 +473,8 @@ git push origin main               # Triggers release if feat/fix
 This project uses a modular documentation approach:
 
 - **CLAUDE.md** (this file): High-level project overview and quick reference
+- **docs/architecture/**: Architecture decisions and patterns
+  - **functional-programming.md**: FP principles, patterns, and best practices
 - **docs/infrastructure/**: Detailed technical documentation organized by category
   - **runtime/**: Runtime environment (Bun)
   - **language/**: Programming language (TypeScript)
@@ -494,27 +497,30 @@ See [LICENSE.md](LICENSE.md) for full details.
 
 ---
 
-## Product Specifications
-
-_This section is reserved for product specifications and requirements._
-
-TODO: Add product specifications here
-
----
-
 ## Project Architecture
 
-_This section is reserved for project architecture documentation._
+### Functional Programming Principles
 
-TODO: Add project architecture here
+Omnera follows Functional Programming (FP) principles throughout the codebase. FP provides the foundation for writing predictable, testable, and maintainable code.
 
----
+**Core Principles**:
+- **Pure Functions** - Deterministic functions without side effects
+- **Immutability** - Data structures that cannot be mutated
+- **Function Composition** - Building complex operations from simple functions
+- **Explicit Effects** - Side effects handled explicitly via Effect.ts
+- **Type Safety** - Leveraging TypeScript's strict type system
 
-## Best Practices
+**Why FP for Omnera**:
+- Perfect alignment with Effect.ts architecture
+- Improved testability and predictability
+- Better concurrent programming safety
+- Enhanced code maintainability and readability
 
-_This section is reserved for project-specific best practices and patterns._
+**Detailed Documentation**: [`docs/architecture/functional-programming.md`](docs/architecture/functional-programming.md)
 
-TODO: Add best practices here
+### Architecture Documentation
+
+Additional architecture documentation will be added here as the project evolves.
 
 ---
 
