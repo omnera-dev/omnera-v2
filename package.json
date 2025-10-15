@@ -43,6 +43,7 @@
     "@types/node": "^24.7.2",
     "@types/react-dom": "^19.2.2",
     "eslint": "^9.37.0",
+    "eslint-plugin-playwright": "^2.2.2",
     "globals": "^16.4.0",
     "knip": "^5.65.0",
     "prettier": "3.6.2",

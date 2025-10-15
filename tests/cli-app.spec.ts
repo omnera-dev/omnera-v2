@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test'
+import { test as base, expect } from '@playwright/test'
 import type { ChildProcess } from 'child_process'
 import { spawn } from 'child_process'
 
@@ -114,107 +114,129 @@ async function stopServer(serverProcess: ChildProcess): Promise<void> {
   })
 }
 
+/**
+ * Custom fixtures for CLI server with AppSchema configuration
+ */
+type ServerFixtures = {
+  startServerWithSchema: (appSchema: { name: string; description: string }) => Promise<string>
+}
+
+/**
+ * Extend Playwright test with server fixture
+ * Provides a function to start server with custom AppSchema configuration
+ * Server is automatically cleaned up after test completion
+ */
+const test = base.extend<ServerFixtures>({
+  startServerWithSchema: async ({}, use) => {
+    let serverProcess: ChildProcess | null = null
+
+    // Provide function to start server with custom schema
+    await use(async (appSchema: { name: string; description: string }) => {
+      const server = await startCliServer(appSchema)
+      serverProcess = server.process
+      return server.url
+    })
+
+    // Cleanup: Stop server after test
+    if (serverProcess) {
+      await stopServer(serverProcess)
+    }
+  },
+})
+
 test.describe('CLI App E2E - F.I.R.S.T Principles', () => {
   // Each test is Fast, Independent, Repeatable, Self-validating, and Timely
   // Tests run in parallel using Bun's automatic port selection (port 0)
+  // Playwright fixtures handle server lifecycle automatically
 
-  test('should display app name as title', async ({ page }) => {
-    // Fast: Starts its own server, Independent: No shared state
-    const server = await startCliServer({
+  test('should display app name as title', async ({ page, startServerWithSchema }) => {
+    // GIVEN: A server configured with a specific app name
+    const serverUrl = await startServerWithSchema({
       name: 'Test App Alpha',
       description: 'Alpha test description',
     })
 
-    try {
-      // Self-validating: Clear assertions
-      await page.goto(server.url)
-      const heading = page.locator('h1')
-      await expect(heading).toHaveText('Test App Alpha')
-    } finally {
-      // Timely: Clean up immediately after test
-      await stopServer(server.process)
-    }
+    // WHEN: User navigates to the homepage
+    await page.goto(serverUrl)
+
+    // THEN: The app name should be displayed as the main heading
+    const heading = page.locator('h1')
+    await expect(heading).toHaveText('Test App Alpha')
   })
 
-  test('should display app description as subtitle', async ({ page }) => {
-    // Fast: Starts its own server, Independent: No shared state
-    const server = await startCliServer({
+  test('should display app description as subtitle', async ({ page, startServerWithSchema }) => {
+    // GIVEN: A server configured with a specific app description
+    const serverUrl = await startServerWithSchema({
       name: 'Test App Beta',
       description: 'Beta test description',
     })
 
-    try {
-      // Self-validating: Clear assertions
-      await page.goto(server.url)
-      const description = page.locator('p.text-xl').first()
-      await expect(description).toHaveText('Beta test description')
-    } finally {
-      // Timely: Clean up immediately after test
-      await stopServer(server.process)
-    }
+    // WHEN: User navigates to the homepage
+    await page.goto(serverUrl)
+
+    // THEN: The app description should be displayed as a subtitle
+    const description = page.locator('p.text-xl').first()
+    await expect(description).toHaveText('Beta test description')
   })
 
-  test('should display both name and description together', async ({ page }) => {
-    // Fast: Starts its own server, Independent: No shared state
-    const server = await startCliServer({
+  test('should display both name and description together', async ({
+    page,
+    startServerWithSchema,
+  }) => {
+    // GIVEN: A server configured with both name and description
+    const serverUrl = await startServerWithSchema({
       name: 'Test App Gamma',
       description: 'Gamma test description',
     })
 
-    try {
-      // Self-validating: Multiple clear assertions
-      await page.goto(server.url)
+    // WHEN: User navigates to the homepage
+    await page.goto(serverUrl)
 
-      await expect(page.locator('h1')).toContainText('Test App Gamma')
-      await expect(page.locator('p.text-xl').first()).toContainText('Gamma test description')
-      await expect(page).toHaveTitle(/Test App Gamma - Powered by Omnera/)
-    } finally {
-      // Timely: Clean up immediately after test
-      await stopServer(server.process)
-    }
+    // THEN: Both name and description should be visible
+    await expect(page.locator('h1')).toContainText('Test App Gamma')
+    await expect(page.locator('p.text-xl').first()).toContainText('Gamma test description')
+    await expect(page).toHaveTitle(/Test App Gamma - Powered by Omnera/)
   })
 
-  test('should display different app configurations correctly', async ({ page }) => {
-    // Repeatable: Each run uses fresh configuration
-    const server = await startCliServer({
+  test('should display different app configurations correctly', async ({
+    page,
+    startServerWithSchema,
+  }) => {
+    // GIVEN: A server configured with dynamic app content
+    const serverUrl = await startServerWithSchema({
       name: 'Dynamic App',
       description: 'Dynamically generated content',
     })
 
-    try {
-      // Self-validating: Verifies dynamic content rendering
-      await page.goto(server.url)
+    // WHEN: User navigates to the homepage
+    await page.goto(serverUrl)
 
-      await expect(page.locator('h1')).toHaveText('Dynamic App')
-      await expect(page.locator('p.text-xl').first()).toHaveText('Dynamically generated content')
+    // THEN: Dynamic content should be displayed correctly
+    await expect(page.locator('h1')).toHaveText('Dynamic App')
+    await expect(page.locator('p.text-xl').first()).toHaveText('Dynamically generated content')
 
-      // Verify meta description is also set correctly
-      const metaDescription = page.locator('meta[name="description"]')
-      await expect(metaDescription).toHaveAttribute('content', 'Dynamically generated content')
-    } finally {
-      // Timely: Clean up immediately after test
-      await stopServer(server.process)
-    }
+    // AND: Meta description should be set correctly
+    const metaDescription = page.locator('meta[name="description"]')
+    await expect(metaDescription).toHaveAttribute('content', 'Dynamically generated content')
   })
 
-  test('should handle special characters in app name and description', async ({ page }) => {
-    // Repeatable: Tests edge case with special characters
-    const server = await startCliServer({
+  test('should handle special characters in app name and description', async ({
+    page,
+    startServerWithSchema,
+  }) => {
+    // GIVEN: A server configured with special characters in name and description
+    const serverUrl = await startServerWithSchema({
       name: 'Test & App <Special>',
       description: 'Description with "quotes" & symbols',
     })
 
-    try {
-      // Self-validating: Ensures proper HTML escaping
-      await page.goto(server.url)
+    // WHEN: User navigates to the homepage
+    await page.goto(serverUrl)
 
-      await expect(page.locator('h1')).toHaveText('Test & App <Special>')
-      await expect(page.locator('p.text-xl').first()).toHaveText(
-        'Description with "quotes" & symbols'
-      )
-    } finally {
-      // Timely: Clean up immediately after test
-      await stopServer(server.process)
-    }
+    // THEN: Special characters should be properly escaped and displayed
+    await expect(page.locator('h1')).toHaveText('Test & App <Special>')
+    await expect(page.locator('p.text-xl').first()).toHaveText(
+      'Description with "quotes" & symbols'
+    )
   })
 })

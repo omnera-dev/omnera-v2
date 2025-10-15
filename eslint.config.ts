@@ -2,6 +2,7 @@ import js from '@eslint/js'
 import globals from 'globals'
 import tseslint from 'typescript-eslint'
 import { defineConfig } from 'eslint/config'
+import playwright from 'eslint-plugin-playwright'
 
 export default defineConfig([
   {
@@ -19,4 +20,13 @@ export default defineConfig([
     },
   },
   tseslint.configs.recommended,
+  {
+    ...playwright.configs['flat/recommended'],
+    files: ['tests/**'],
+    rules: {
+      ...playwright.configs['flat/recommended'].rules,
+      // Customize Playwright rules
+      // ...
+    },
+  },
 ])
