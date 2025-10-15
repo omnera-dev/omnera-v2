@@ -21,6 +21,12 @@ export default defineConfig([
   },
   tseslint.configs.recommended,
   {
+    files: ['**/*.test.{ts,tsx}', '**/*.spec.{ts,tsx}'],
+    rules: {
+      '@typescript-eslint/no-explicit-any': 'off', // Allow 'any' in tests for testing invalid inputs
+    },
+  },
+  {
     ...playwright.configs['flat/recommended'],
     files: ['tests/**'],
     rules: {
