@@ -23,20 +23,6 @@ import { test, expect } from '../fixtures'
  * - Description can be empty string (different from undefined)
  * - Very long descriptions should wrap properly
  *
- * Why these tests will fail:
- * - DefaultHomePage currently only renders version badge and app name (lines 36-38)
- * - No description paragraph element exists
- * - No conditional rendering logic for optional description property
- * - No data-testid="app-description" attribute exists
- * - No DOM positioning logic to place description after h1
- *
- * Implementation checklist (for GREEN phase):
- * 1. Add conditional rendering: {app.description && <p>...</p>}
- * 2. Add data-testid="app-description" to paragraph element
- * 3. Display app.description text inside paragraph
- * 4. Position description AFTER app name (h1) in DOM order
- * 5. Apply appropriate typography styling (TypographyP or similar)
- * 6. Ensure proper spacing and layout (text-center, max-width, etc.)
  */
 
 test.describe('AppSchema - Description Display', () => {
@@ -52,11 +38,8 @@ test.describe('AppSchema - Description Display', () => {
    * GIVEN: An app with name and description
    * WHEN: User navigates to the homepage
    * THEN: Description should be visible below the app name
-   *
-   * No description element exists in DefaultHomePage
-   * locator('[data-testid="app-description"]') will not find any element
    */
-  test.fixme(
+  test(
     'should display description when app has description',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -84,11 +67,8 @@ test.describe('AppSchema - Description Display', () => {
    * GIVEN: An app with only name (no description property)
    * WHEN: User navigates to the homepage
    * THEN: Description element should NOT be rendered
-   *
-   * Test expects description element to not exist
-   * Validates that description is truly optional and doesn't break UI
    */
-  test.fixme(
+  test(
     'should not display description when app has no description',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -113,12 +93,8 @@ test.describe('AppSchema - Description Display', () => {
    * GIVEN: An app with name and description
    * WHEN: User navigates to the homepage
    * THEN: Description MUST appear AFTER the h1 title in DOM order
-   *
-   * This is the CRITICAL positioning requirement from the specification
-   * Description should be visually below the title
-   * DOM order determines visual order in the layout
    */
-  test.fixme(
+  test(
     'should display description AFTER the app title in DOM order',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -165,12 +141,8 @@ test.describe('AppSchema - Description Display', () => {
    * GIVEN: An app with description containing special characters
    * WHEN: User navigates to the homepage
    * THEN: Special characters should be displayed correctly
-   *
-   * DescriptionSchema allows special characters except line breaks
-   * Tests that special chars are preserved and properly escaped
-   * Important for preventing XSS and ensuring text fidelity
    */
-  test.fixme(
+  test(
     'should display description with special characters',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -198,12 +170,8 @@ test.describe('AppSchema - Description Display', () => {
    * GIVEN: An app with description containing Unicode and emojis
    * WHEN: User navigates to the homepage
    * THEN: Unicode characters and emojis should be displayed correctly
-   *
-   * DescriptionSchema supports Unicode and emojis (description.ts line 19)
-   * Tests internationalization support
-   * Important for global audience
    */
-  test.fixme(
+  test(
     'should display description with Unicode characters and emojis',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -229,12 +197,8 @@ test.describe('AppSchema - Description Display', () => {
    * GIVEN: An app with very long description (500+ characters)
    * WHEN: User navigates to the homepage
    * THEN: Description should wrap properly and remain visible
-   *
-   * DescriptionSchema has no maximum length restriction
-   * Tests that UI can handle long descriptions
-   * Important for text wrapping and layout
    */
-  test.fixme(
+  test(
     'should display very long description with proper text wrapping',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -270,12 +234,8 @@ test.describe('AppSchema - Description Display', () => {
    * GIVEN: An app with empty string description (not undefined)
    * WHEN: User navigates to the homepage
    * THEN: Description element should NOT be rendered (empty strings are treated as no description)
-   *
-   * DescriptionSchema allows empty strings (description.ts line 10)
-   * Tests distinction between empty string and undefined
-   * Empty string should be treated as "no description" in UI
    */
-  test.fixme(
+  test(
     'should not display description when description is empty string',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -301,12 +261,8 @@ test.describe('AppSchema - Description Display', () => {
    * GIVEN: An app with description
    * WHEN: User navigates to the homepage
    * THEN: Description should be rendered as a paragraph (<p>) element
-   *
-   * Tests proper semantic HTML structure
-   * Important for accessibility and SEO
-   * Screen readers rely on semantic elements
    */
-  test.fixme(
+  test(
     'should render description as paragraph element',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -335,12 +291,8 @@ test.describe('AppSchema - Description Display', () => {
    * GIVEN: An app with description
    * WHEN: User navigates to the homepage
    * THEN: Description should be centered horizontally
-   *
-   * DefaultHomePage uses text-center for app name (line 38)
-   * Description should follow same alignment pattern
-   * Important for consistent visual design
    */
-  test.fixme(
+  test(
     'should display description with centered alignment',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -365,12 +317,8 @@ test.describe('AppSchema - Description Display', () => {
    * GIVEN: An app with description
    * WHEN: User navigates to the homepage
    * THEN: Description should be visible and in viewport
-   *
-   * Tests basic visibility without CSS hiding
-   * Important for basic functionality verification
-   * Ensures text is not transparent, off-screen, or display:none
    */
-  test.fixme(
+  test(
     'should display description as visible element in viewport',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -398,16 +346,8 @@ test.describe('AppSchema - Description Display', () => {
    * GIVEN: An app with description containing mixed case, special chars, and whitespace
    * WHEN: User navigates to the homepage
    * THEN: Text content should exactly match input (no transformation)
-   *
-   * React automatically escapes text content (XSS protection)
-   * Tests that text is not transformed beyond React defaults
-   * Important for preserving exact description format
-   *
-   * Note: This test validates character-by-character preservation.
-   * HTML whitespace normalization (multiple spaces → one space) is tested separately
-   * in the "very long description" and "spacing" tests.
    */
-  test.fixme(
+  test(
     'should preserve exact text content without transformation',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -450,7 +390,7 @@ test.describe('AppSchema - Description Display', () => {
       expect(textContent).toContain('Très bien!') // Accented character
 
       // Verify no trimming happened (preserve leading/trailing if present)
-      expect(textContent?.length).toBe(exactDescription.length)
+      expect(textContent!.length).toBe(exactDescription.length)
     }
   )
 
@@ -460,12 +400,8 @@ test.describe('AppSchema - Description Display', () => {
    * GIVEN: An app with version, name, and description
    * WHEN: User navigates to the homepage
    * THEN: All elements should appear in correct order: version → title → description
-   *
-   * Tests integration of all three elements
-   * Validates complete visual hierarchy
-   * Version badge → App name (h1) → Description (p)
    */
-  test.fixme(
+  test(
     'should display version, title, and description in correct order',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -514,12 +450,8 @@ test.describe('AppSchema - Description Display', () => {
    * GIVEN: An app with very long description (1000+ characters)
    * WHEN: User navigates to the homepage
    * THEN: Full description should be displayed without truncation
-   *
-   * DescriptionSchema has no maximum length (description.ts line 8)
-   * Tests edge case of extremely long description
-   * Validates UI handles large text blocks
    */
-  test.fixme(
+  test(
     'should display maximum-length description without truncation',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -555,12 +487,8 @@ test.describe('AppSchema - Description Display', () => {
    * GIVEN: An app with description containing HTML-like tags
    * WHEN: User navigates to the homepage
    * THEN: HTML tags should be escaped and displayed as text (not rendered as HTML)
-   *
-   * React automatically escapes text content for XSS protection
-   * Tests that HTML tags are not interpreted
-   * Important for security
    */
-  test.fixme(
+  test(
     'should escape HTML-like content in description',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -597,12 +525,8 @@ test.describe('AppSchema - Description Display', () => {
    * GIVEN: An app with name and description
    * WHEN: User navigates to the homepage
    * THEN: There should be appropriate spacing between title and description
-   *
-   * DefaultHomePage uses space-y-6 for vertical spacing (line 34)
-   * Tests visual spacing between elements
-   * Important for visual hierarchy and readability
    */
-  test.fixme(
+  test(
     'should have appropriate spacing between title and description',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -667,7 +591,7 @@ test.describe('AppSchema - Description Display', () => {
    * This test serves as a regression suite to prevent breaking changes
    * to core description display functionality.
    */
-  test.fixme(
+  test(
     'user can view complete app description with all features',
     { tag: '@regression' },
     async ({ page, startServerWithSchema }) => {

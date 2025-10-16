@@ -1,5 +1,5 @@
 import { Badge } from '@/presentation/components/ui/badge'
-import { TypographyH1 } from '@/presentation/components/ui/typography'
+import { TypographyH1, TypographyLead } from '@/presentation/components/ui/typography'
 import type { App } from '@/domain/models/app'
 import type { ReactElement } from 'react'
 
@@ -7,11 +7,11 @@ import type { ReactElement } from 'react'
  * DefaultHomePage component - Default home page displaying application information
  *
  * This is the default home page shown when no custom page configuration is provided.
- * It displays the app name in a centered layout with gradient background.
+ * It displays the app name, optional version badge, and optional description in a centered layout with gradient background.
  *
  * @param props - Component props
  * @param props.app - Validated application data from AppSchema
- * @returns React element with app name
+ * @returns React element with app information
  */
 export function DefaultHomePage({ app }: { readonly app: App }): Readonly<ReactElement> {
   return (
@@ -36,6 +36,15 @@ export function DefaultHomePage({ app }: { readonly app: App }): Readonly<ReactE
               {app.version && <Badge data-testid="app-version-badge">{app.version}</Badge>}
               {/* App Name */}
               <TypographyH1 className="text-center">{app.name}</TypographyH1>
+              {/* App Description */}
+              {app.description && (
+                <TypographyLead
+                  data-testid="app-description"
+                  className="text-center"
+                >
+                  {app.description}
+                </TypographyLead>
+              )}
             </div>
           </div>
         </div>

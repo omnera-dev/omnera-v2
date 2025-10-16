@@ -5,10 +5,11 @@ import type { App } from '@/domain/models/app'
  * Unit tests for DefaultHomePage component
  *
  * Note: DefaultHomePage is a pure presentational component with no business logic.
- * Comprehensive E2E tests in tests/app/version.spec.ts cover all rendering scenarios:
- * - Version badge display with various SemVer formats
- * - Conditional rendering when version is absent
- * - Badge positioning and accessibility
+ * Comprehensive E2E tests cover all rendering scenarios:
+ * - tests/app/version.spec.ts: Version badge display with various SemVer formats
+ * - tests/app/description.spec.ts: Description display with various text formats
+ * - Conditional rendering when optional fields are absent
+ * - Component positioning and accessibility
  * - DOM structure and styling
  *
  * These unit tests focus on type safety and data structure validation,
@@ -25,6 +26,7 @@ describe('DefaultHomePage - Type Safety', () => {
     // Then: Type should be valid (compilation check)
     expect(app.name).toBe('test-app')
     expect(app.version).toBeUndefined()
+    expect(app.description).toBeUndefined()
   })
 
   test('should accept App with name and version', () => {
@@ -93,6 +95,101 @@ describe('DefaultHomePage - Type Safety', () => {
     // Then: Empty string should be treated as falsy
     expect(shouldDisplayBadge).toBe(false)
   })
+
+  test('should accept App with name and description', () => {
+    // Given: App with name and optional description field
+    const app: App = {
+      name: 'test-app',
+      description: 'A simple test application for demo purposes',
+    }
+
+    // Then: Type should be valid with both fields
+    expect(app.name).toBe('test-app')
+    expect(app.description).toBe('A simple test application for demo purposes')
+  })
+
+  test('should accept App with all optional fields', () => {
+    // Given: App with name, version, and description
+    const app: App = {
+      name: 'test-app',
+      version: '1.0.0',
+      description: 'A complete application with all metadata',
+    }
+
+    // Then: Type should be valid with all fields
+    expect(app.name).toBe('test-app')
+    expect(app.version).toBe('1.0.0')
+    expect(app.description).toBe('A complete application with all metadata')
+  })
+
+  test('should handle description as optional property', () => {
+    // Given: App type allows description to be undefined
+    const appWithoutDescription: App = {
+      name: 'app-without-description',
+    }
+
+    const appWithDescription: App = {
+      name: 'app-with-description',
+      description: 'This app has a description',
+    }
+
+    // Then: Both cases should be type-safe
+    expect(appWithoutDescription.description).toBeUndefined()
+    expect(appWithDescription.description).toBe('This app has a description')
+  })
+
+  test('should handle conditional description rendering logic', () => {
+    // Given: Apps with and without description
+    const appWithDescription: App = { name: 'app', description: 'A description' }
+    const appWithoutDescription: App = { name: 'app' }
+
+    // When: Checking if description should be displayed (component logic)
+    const shouldDisplayDescriptionWith = Boolean(appWithDescription.description)
+    const shouldDisplayDescriptionWithout = Boolean(appWithoutDescription.description)
+
+    // Then: Conditional logic should work correctly
+    expect(shouldDisplayDescriptionWith).toBe(true)
+    expect(shouldDisplayDescriptionWithout).toBe(false)
+  })
+
+  test('should handle empty string description as falsy', () => {
+    // Given: App with empty string description (edge case)
+    const appWithEmptyDescription = { name: 'app', description: '' }
+
+    // When: Checking if description should be displayed
+    const shouldDisplayDescription = Boolean(appWithEmptyDescription.description)
+
+    // Then: Empty string should be treated as falsy
+    expect(shouldDisplayDescription).toBe(false)
+  })
+
+  test('should support Unicode and special characters in description', () => {
+    // Given: Description with various character types
+    const unicodeDescription: App = { name: 'app', description: 'Très bien! 你好 🎉' }
+    const specialCharsDescription: App = {
+      name: 'app',
+      description: 'Special chars: !@#$%^&*()_+-={}[]|\\:";\'<>?,./~`',
+    }
+
+    // Then: All character types should be valid
+    expect(unicodeDescription.description).toBe('Très bien! 你好 🎉')
+    expect(specialCharsDescription.description).toBe(
+      'Special chars: !@#$%^&*()_+-={}[]|\\:";\'<>?,./~`'
+    )
+  })
+
+  test('should support very long descriptions', () => {
+    // Given: Very long description (no length restriction)
+    const longDescription =
+      'This is a very long description that should wrap properly in the UI layout without breaking the design. '.repeat(
+        10
+      )
+    const app: App = { name: 'app', description: longDescription }
+
+    // Then: Long description should be valid
+    expect(app.description).toBe(longDescription)
+    expect(app.description!.length).toBeGreaterThan(500)
+  })
 })
 
 /**
@@ -100,13 +197,16 @@ describe('DefaultHomePage - Type Safety', () => {
  *
  * 1. Pure Presentation Component:
  *    - No business logic to test in isolation
- *    - Simple conditional rendering: {app.version && <Badge>...</Badge>}
+ *    - Simple conditional rendering:
+ *      - {app.version && <Badge>...</Badge>}
+ *      - {app.description && <TypographyLead>...</TypographyLead>}
  *    - All logic is covered by type system
  *
  * 2. Comprehensive E2E Coverage:
- *    - tests/app/version.spec.ts covers all rendering scenarios
- *    - Tests version badge display with various SemVer formats
- *    - Tests conditional rendering (with/without version)
+ *    - tests/app/version.spec.ts covers version badge rendering scenarios
+ *    - tests/app/description.spec.ts covers description rendering scenarios
+ *    - Tests display with various formats (SemVer, Unicode, special chars)
+ *    - Tests conditional rendering (with/without optional fields)
  *    - Tests DOM structure, positioning, and accessibility
  *    - Tests complete user-facing behavior
  *
@@ -118,10 +218,10 @@ describe('DefaultHomePage - Type Safety', () => {
  *
  * 4. Type Safety:
  *    - TypeScript ensures correct prop types at compile time
- *    - App type guarantees name is required, version is optional
+ *    - App type guarantees name is required, version/description are optional
  *    - No runtime validation needed beyond type checking
  *
  * If business logic is added to DefaultHomePage in the future
- * (e.g., version formatting, conditional styling logic, computed values),
+ * (e.g., text formatting, conditional styling logic, computed values),
  * unit tests should be added to test that logic in isolation.
  */
