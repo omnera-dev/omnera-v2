@@ -311,6 +311,12 @@ export default defineConfig([
     plugins: {
       functional,
     },
+    languageOptions: {
+      parserOptions: {
+        projectService: true,
+        tsconfigRootDir: import.meta.dirname,
+      },
+    },
     rules: {
       // Immutability - Enforce readonly types
       'functional/prefer-immutable-types': [
@@ -381,6 +387,35 @@ export default defineConfig([
       },
       'boundaries/include': ['src/**/*'],
       'boundaries/ignore': ['**/*.test.ts', '**/*.test.tsx', '**/*.spec.ts', '**/*.spec.tsx'],
+      'boundaries/elements': [
+        // Domain Layer - Pure business logic (models, services, validators, factories, errors)
+        {
+          type: 'domain',
+          pattern: 'src/domain/**/*',
+          mode: 'file',
+        },
+
+        // Application Layer - Use cases, ports (interfaces), errors
+        {
+          type: 'application',
+          pattern: 'src/application/**/*',
+          mode: 'file',
+        },
+
+        // Infrastructure Layer - Repositories, logging, email, layers
+        {
+          type: 'infrastructure',
+          pattern: 'src/infrastructure/**/*',
+          mode: 'file',
+        },
+
+        // Presentation Layer - Components (React), API routes (Hono)
+        {
+          type: 'presentation',
+          pattern: 'src/presentation/**/*',
+          mode: 'file',
+        },
+      ],
     },
     rules: {
       'boundaries/element-types': [
