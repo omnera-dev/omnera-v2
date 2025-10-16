@@ -35,7 +35,7 @@ describe('AppSchema', () => {
     })
   })
 
-  describe('Valid applications - Name and version', () => {
+  describe('Valid applications - Name and optional properties', () => {
     test('should accept app with name and version', () => {
       // GIVEN: An app configuration with name and version
       const app = {
@@ -50,6 +50,42 @@ describe('AppSchema', () => {
       expect(result).toEqual({
         name: 'todo-app',
         version: '1.0.0',
+      })
+    })
+
+    test('should accept app with name and description', () => {
+      // GIVEN: An app configuration with name and description
+      const app = {
+        name: 'todo-app',
+        description: 'A simple todo list application',
+      }
+
+      // WHEN: The app is validated against the schema
+      const result = Schema.decodeUnknownSync(AppSchema)(app)
+
+      // THEN: The app should be accepted with both properties
+      expect(result).toEqual({
+        name: 'todo-app',
+        description: 'A simple todo list application',
+      })
+    })
+
+    test('should accept app with name, version, and description', () => {
+      // GIVEN: An app configuration with all properties
+      const app = {
+        name: 'todo-app',
+        version: '1.0.0',
+        description: 'A simple todo list application',
+      }
+
+      // WHEN: The app is validated against the schema
+      const result = Schema.decodeUnknownSync(AppSchema)(app)
+
+      // THEN: The app should be accepted with all properties
+      expect(result).toEqual({
+        name: 'todo-app',
+        version: '1.0.0',
+        description: 'A simple todo list application',
       })
     })
 
@@ -177,6 +213,70 @@ describe('AppSchema', () => {
       expect(() => {
         Schema.decodeUnknownSync(AppSchema)(invalidApp)
       }).toThrow()
+    })
+  })
+
+  describe('Invalid applications - Description validation', () => {
+    test('should reject app with description containing line breaks (\\n)', () => {
+      // GIVEN: An app with description containing unix line breaks
+      const invalidApp = {
+        name: 'my-app',
+        description: 'First line\nSecond line',
+      }
+
+      // WHEN: The app is validated against the schema
+      // THEN: Validation should throw an error
+      expect(() => {
+        Schema.decodeUnknownSync(AppSchema)(invalidApp)
+      }).toThrow()
+    })
+
+    test('should reject app with description containing windows line breaks (\\r\\n)', () => {
+      // GIVEN: An app with description containing windows line breaks
+      const invalidApp = {
+        name: 'my-app',
+        description: 'First line\r\nSecond line',
+      }
+
+      // WHEN: The app is validated against the schema
+      // THEN: Validation should throw an error
+      expect(() => {
+        Schema.decodeUnknownSync(AppSchema)(invalidApp)
+      }).toThrow()
+    })
+
+    test('should reject app with description containing mac line breaks (\\r)', () => {
+      // GIVEN: An app with description containing mac line breaks
+      const invalidApp = {
+        name: 'my-app',
+        description: 'First line\rSecond line',
+      }
+
+      // WHEN: The app is validated against the schema
+      // THEN: Validation should throw an error
+      expect(() => {
+        Schema.decodeUnknownSync(AppSchema)(invalidApp)
+      }).toThrow()
+    })
+
+    test('should provide helpful error for description with line breaks', () => {
+      // GIVEN: An app with multi-line description
+      const invalidApp = {
+        name: 'my-app',
+        description: 'Line 1\nLine 2',
+      }
+
+      // WHEN: The app is validated against the schema
+      try {
+        Schema.decodeUnknownSync(AppSchema)(invalidApp)
+        expect(true).toBe(false) // Should not reach here
+      } catch (error) {
+        // THEN: Error should mention line breaks
+        expect(error).toBeInstanceOf(ParseResult.ParseError)
+        const message = String(error)
+        expect(message).toContain('single line')
+        expect(message).toContain('line breaks')
+      }
     })
   })
 
@@ -352,6 +452,7 @@ describe('AppSchema', () => {
       const typedApp: App = result
       expect(typedApp.name).toBe('my-app')
       expect(typedApp.version).toBeUndefined()
+      expect(typedApp.description).toBeUndefined()
     })
 
     test('should have correct TypeScript type for name and version', () => {
@@ -368,6 +469,42 @@ describe('AppSchema', () => {
       const typedApp: App = result
       expect(typedApp.name).toBe('my-app')
       expect(typedApp.version).toBe('1.0.0')
+      expect(typedApp.description).toBeUndefined()
+    })
+
+    test('should have correct TypeScript type for name and description', () => {
+      // GIVEN: A valid app configuration with name and description
+      const app = {
+        name: 'my-app',
+        description: 'Test description',
+      }
+
+      // WHEN: The app is validated against the schema
+      const result = Schema.decodeUnknownSync(AppSchema)(app)
+
+      // THEN: TypeScript should infer the correct type
+      const typedApp: App = result
+      expect(typedApp.name).toBe('my-app')
+      expect(typedApp.version).toBeUndefined()
+      expect(typedApp.description).toBe('Test description')
+    })
+
+    test('should have correct TypeScript type for all properties', () => {
+      // GIVEN: A valid app configuration with all properties
+      const app = {
+        name: 'my-app',
+        version: '1.0.0',
+        description: 'Test description',
+      }
+
+      // WHEN: The app is validated against the schema
+      const result = Schema.decodeUnknownSync(AppSchema)(app)
+
+      // THEN: TypeScript should infer the correct type
+      const typedApp: App = result
+      expect(typedApp.name).toBe('my-app')
+      expect(typedApp.version).toBe('1.0.0')
+      expect(typedApp.description).toBe('Test description')
     })
   })
 
@@ -403,14 +540,69 @@ describe('AppSchema', () => {
         version: '1.0.0',
       })
     })
+
+    test('should encode valid app with name and description', () => {
+      // GIVEN: A valid app configuration with name and description
+      const app = {
+        name: 'my-app',
+        description: 'Test description',
+      }
+
+      // WHEN: The app is encoded using the schema
+      const encoded = Schema.encodeSync(AppSchema)(app)
+
+      // THEN: The encoded value should match the original app
+      expect(encoded).toEqual({
+        name: 'my-app',
+        description: 'Test description',
+      })
+    })
+
+    test('should encode valid app with all properties', () => {
+      // GIVEN: A valid app configuration with all properties
+      const app = {
+        name: 'my-app',
+        version: '1.0.0',
+        description: 'Test description',
+      }
+
+      // WHEN: The app is encoded using the schema
+      const encoded = Schema.encodeSync(AppSchema)(app)
+
+      // THEN: The encoded value should match the original app
+      expect(encoded).toEqual({
+        name: 'my-app',
+        version: '1.0.0',
+        description: 'Test description',
+      })
+    })
   })
 
   describe('Real-world examples', () => {
-    test('should validate todo application', () => {
+    test('should validate todo application with description', () => {
       // GIVEN: A real-world todo application configuration
       const app = {
         name: 'todo-master',
         version: '2.1.0',
+        description: 'A simple and efficient todo list application for managing daily tasks',
+      }
+
+      // WHEN: The app is validated against the schema
+      const result = Schema.decodeUnknownSync(AppSchema)(app)
+
+      // THEN: The app should be accepted
+      expect(result).toEqual({
+        name: 'todo-master',
+        version: '2.1.0',
+        description: 'A simple and efficient todo list application for managing daily tasks',
+      })
+    })
+
+    test('should validate todo application without description', () => {
+      // GIVEN: A real-world todo application configuration without description
+      const app = {
+        name: 'todo-master',
+        version: '2.1.0',
       }
 
       // WHEN: The app is validated against the schema
@@ -423,11 +615,12 @@ describe('AppSchema', () => {
       })
     })
 
-    test('should validate e-commerce application', () => {
+    test('should validate e-commerce application with description', () => {
       // GIVEN: A real-world e-commerce application configuration
       const app = {
         name: 'shoppro',
         version: '3.0.0-rc.1',
+        description: 'Full-featured e-commerce platform with cart, checkout & payment processing',
       }
 
       // WHEN: The app is validated against the schema
@@ -437,13 +630,15 @@ describe('AppSchema', () => {
       expect(result).toEqual({
         name: 'shoppro',
         version: '3.0.0-rc.1',
+        description: 'Full-featured e-commerce platform with cart, checkout & payment processing',
       })
     })
 
-    test('should validate blog application without version', () => {
-      // GIVEN: A blog application without version
+    test('should validate blog application with description only', () => {
+      // GIVEN: A blog application without version but with description
       const app = {
         name: 'blogcraft',
+        description: 'Modern blogging platform with markdown support and SEO optimization',
       }
 
       // WHEN: The app is validated against the schema
@@ -452,14 +647,16 @@ describe('AppSchema', () => {
       // THEN: The app should be accepted
       expect(result).toEqual({
         name: 'blogcraft',
+        description: 'Modern blogging platform with markdown support and SEO optimization',
       })
     })
 
-    test('should validate dashboard application with build metadata', () => {
-      // GIVEN: A dashboard application with CI build metadata
+    test('should validate dashboard application with all properties', () => {
+      // GIVEN: A dashboard application with all properties
       const app = {
         name: 'dashboard-admin',
         version: '1.5.2+build.20241016',
+        description: 'Admin dashboard for analytics, user management & reporting',
       }
 
       // WHEN: The app is validated against the schema
@@ -469,14 +666,16 @@ describe('AppSchema', () => {
       expect(result).toEqual({
         name: 'dashboard-admin',
         version: '1.5.2+build.20241016',
+        description: 'Admin dashboard for analytics, user management & reporting',
       })
     })
 
-    test('should validate scoped organization package', () => {
-      // GIVEN: A scoped organization package configuration
+    test('should validate scoped organization package with unicode description', () => {
+      // GIVEN: A scoped organization package with unicode description
       const app = {
         name: '@acme/product',
         version: '0.1.0-dev',
+        description: 'Product management system - Système de gestion de produits - 产品管理系统',
       }
 
       // WHEN: The app is validated against the schema
@@ -486,6 +685,7 @@ describe('AppSchema', () => {
       expect(result).toEqual({
         name: '@acme/product',
         version: '0.1.0-dev',
+        description: 'Product management system - Système de gestion de produits - 产品管理系统',
       })
     })
   })

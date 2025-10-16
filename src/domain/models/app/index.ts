@@ -1,4 +1,5 @@
 import { Schema } from 'effect'
+import { DescriptionSchema } from './description.ts'
 import { NameSchema } from './name.ts'
 import { VersionSchema } from './version.ts'
 
@@ -6,13 +7,14 @@ import { VersionSchema } from './version.ts'
  * AppSchema defines the structure of an application configuration.
  *
  * This schema represents the core metadata for any application built
- * with Omnera, including its name and optional version.
+ * with Omnera, including its name, optional version, and optional description.
  *
  * @example
  * ```typescript
  * const myApp = {
  *   name: 'todo-app',
  *   version: '1.0.0',
+ *   description: 'A simple todo list application',
  * }
  *
  * const validated = Schema.decodeUnknownSync(AppSchema)(myApp)
@@ -43,6 +45,17 @@ export const AppSchema = Schema.Struct({
    * - Optional build metadata (e.g., 1.0.0+build.123)
    */
   version: Schema.optional(VersionSchema),
+
+  /**
+   * A description of the application (optional).
+   *
+   * Must be a single-line string:
+   * - No line breaks allowed (\n, \r, or \r\n)
+   * - No maximum length restriction
+   * - Can contain any characters except line breaks
+   * - Unicode characters and emojis are supported
+   */
+  description: Schema.optional(DescriptionSchema),
 })
 
 /**

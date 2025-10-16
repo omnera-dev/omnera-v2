@@ -197,16 +197,16 @@ test.describe('AppSchema - Version Badge Display', () => {
    *
    * GIVEN: An app with name and version
    * WHEN: User navigates to the home page
-   * THEN: Badge should appear after (below) the app name heading
+   * THEN: Badge should appear before (above) the app name heading
    *
    * Why this will fail:
    * - No badge element exists in the DOM
    * - Tests that badge is positioned correctly in the layout
-   * - Validates visual hierarchy (name first, version second)
+   * - Validates visual hierarchy (badge as metadata, then prominent title)
    */
   // @spec - Validates badge positioning
   test(
-    'should display version badge below app name',
+    'should display version badge above app name',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: A server configured with app name and version
@@ -228,8 +228,8 @@ test.describe('AppSchema - Version Badge Display', () => {
       await expect(badge).toBeVisible()
       await expect(badge).toHaveText('1.2.3')
 
-      // AND: Badge should appear after heading in DOM order
-      // (This validates semantic structure for screen readers)
+      // AND: Badge should appear before heading in DOM order
+      // (Badge appears before (above) the app name heading for proper visual hierarchy)
       const container = page.locator('.space-y-6')
       const children = container.locator('> *')
       const headingIndex = await children.evaluateAll((elements) =>
@@ -239,7 +239,7 @@ test.describe('AppSchema - Version Badge Display', () => {
         elements.findIndex((el) => el.getAttribute('data-testid') === 'app-version-badge')
       )
 
-      expect(badgeIndex).toBeGreaterThan(headingIndex)
+      expect(badgeIndex).toBeLessThan(headingIndex)
     }
   )
 
@@ -287,7 +287,7 @@ test.describe('AppSchema - Version Badge Display', () => {
    * Test Flow:
    * 1. Test app WITH version: Badge displays with complex SemVer format
    * 2. Test app WITHOUT version: Badge is hidden (optional property)
-   * 3. Test badge positioning: Badge appears below app name
+   * 3. Test badge positioning: Badge appears above app name
    * 4. Test different SemVer formats: Simple, pre-release, build metadata
    *
    * GIVEN: Multiple test scenarios with different version configurations
@@ -296,7 +296,7 @@ test.describe('AppSchema - Version Badge Display', () => {
    *   1. Badge displays when version is present
    *   2. Badge is hidden when version is absent
    *   3. Badge supports all SemVer formats (simple, pre-release, build metadata)
-   *   4. Badge is positioned below app name in DOM order
+   *   4. Badge is positioned above app name in DOM order
    *   5. Badge has proper accessibility attributes (data-testid)
    *
    * This test serves as a regression suite to prevent breaking changes
@@ -336,12 +336,12 @@ test.describe('AppSchema - Version Badge Display', () => {
       await expect(badge).toContainText('beta.5') // Pre-release identifier
       await expect(badge).toContainText('build.abc123') // Build metadata
 
-      // AND: Validate badge positioning below app name
+      // AND: Validate badge positioning above app name
       const heading = page.locator('h1')
       await expect(heading).toBeVisible()
       await expect(heading).toHaveText(appName)
 
-      // Validate DOM order: h1 comes before badge
+      // Validate DOM order: badge comes before h1
       const container = page.locator('.space-y-6')
       const children = container.locator('> *')
       const headingIndex = await children.evaluateAll((elements) =>
@@ -350,7 +350,7 @@ test.describe('AppSchema - Version Badge Display', () => {
       const badgeIndex = await children.evaluateAll((elements) =>
         elements.findIndex((el) => el.getAttribute('data-testid') === 'app-version-badge')
       )
-      expect(badgeIndex).toBeGreaterThan(headingIndex)
+      expect(badgeIndex).toBeLessThan(headingIndex)
 
       // AND: Validate badge has accessibility attributes
       await expect(badge).toHaveAttribute('data-slot', 'badge')
