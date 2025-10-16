@@ -369,6 +369,177 @@ page.on('console', (msg) => console.log(msg.text()))
 - Best for validating complete features, not every code change
 - Use unit tests for fast feedback, E2E tests for validation
 
+## Tagged Test Execution
+
+As your E2E suite grows, use Playwright's tagging system to run specific test categories based on context.
+
+### Test Tags
+
+Omnera uses three test tags for efficient test execution:
+
+| Tag           | Purpose             | When to Run  | Command                                |
+| ------------- | ------------------- | ------------ | -------------------------------------- |
+| `@spec`       | Specification (TDD) | Development  | `playwright test --project=spec`       |
+| `@regression` | Regression (CI/CD)  | Every push   | `playwright test --project=regression` |
+| `@critical`   | Critical paths      | Every commit | `playwright test --project=critical`   |
+
+### Example: Tagged Tests
+
+```typescript
+import { test, expect } from '@playwright/test'
+
+// Specification test - Run during development (TDD)
+test('user can enter email', { tag: '@spec' }, async ({ page }) => {
+  await page.goto('/login')
+  await page.getByLabel('Email').fill('user@example.com')
+  await expect(page.getByLabel('Email')).toHaveValue('user@example.com')
+})
+
+// Regression test - Run in CI/CD (consolidated workflow)
+test('user can complete login flow', { tag: '@regression' }, async ({ page }) => {
+  await page.goto('/login')
+  await page.getByLabel('Email').fill('user@example.com')
+  await page.getByLabel('Password').fill('password123')
+  await page.getByRole('button', { name: 'Sign in' }).click()
+  await expect(page).toHaveURL('/dashboard')
+})
+
+// Critical test - Run every commit (essential workflows)
+test('user can authenticate', { tag: '@critical' }, async ({ page }) => {
+  await page.goto('/login')
+  await page.getByLabel('Email').fill('user@example.com')
+  await page.getByLabel('Password').fill('password123')
+  await page.getByRole('button', { name: 'Sign in' }).click()
+  await expect(page).toHaveURL('/dashboard')
+})
+
+// Multiple tags - Test serves multiple purposes
+test('user can save work', { tag: ['@spec', '@critical'] }, async ({ page }) => {
+  // Runs during development AND every commit
+  await page.goto('/editor')
+  await page.getByRole('textbox').fill('Important data')
+  await page.getByRole('button', { name: 'Save' }).click()
+  await expect(page.getByText('Saved')).toBeVisible()
+})
+```
+
+### Running Tagged Tests
+
+```bash
+# Development - Spec tests only (fast feedback)
+playwright test --project=spec
+playwright test --grep="@spec"
+
+# CI/CD - Regression tests (comprehensive coverage)
+playwright test --project=regression
+playwright test --grep="@regression"
+
+# Every commit - Critical paths (essential workflows)
+playwright test --project=critical
+playwright test --grep="@critical"
+
+# Combined - Spec + Critical (pre-commit)
+playwright test --grep="@spec|@critical"
+
+# Combined - Regression + Critical (CI/CD)
+playwright test --grep="@regression|@critical"
+
+# Full suite - All tests (manual runs)
+playwright test
+```
+
+### Configuration
+
+The tagged projects are configured in `playwright.config.ts`:
+
+```typescript
+// playwright.config.ts
+export default defineConfig({
+  projects: [
+    {
+      name: 'spec',
+      grep: /@spec/,
+      use: { ...devices['Desktop Chrome'] },
+    },
+    {
+      name: 'regression',
+      grep: /@regression/,
+      use: { ...devices['Desktop Chrome'] },
+    },
+    {
+      name: 'critical',
+      grep: /@critical/,
+      use: { ...devices['Desktop Chrome'] },
+    },
+  ],
+})
+```
+
+### When to Use Each Tag
+
+**`@spec` - Specification Tests:**
+
+- Write during TDD (RED → GREEN cycle)
+- One test per acceptance criterion
+- Granular, focused tests
+- Run during active development
+- Fast feedback for feature work
+
+**`@regression` - Regression Tests:**
+
+- Consolidate multiple spec tests into one
+- Cover complete user workflows
+- Fewer tests, broader coverage
+- Run in CI/CD pipelines
+- Efficient validation before deployment
+
+**`@critical` - Critical Path Tests:**
+
+- Essential workflows only (auth, data persistence, checkout)
+- Must always work
+- Rock-solid (no flakiness)
+- Run every commit
+- Production smoke tests after deployment
+
+### Migration Strategy
+
+**Phase 1: Development (TDD)**
+
+```typescript
+// Write spec test first
+test.fixme('user can reset password', { tag: '@spec' }, async ({ page }) => {
+  // RED test - defines completion criteria
+})
+```
+
+**Phase 2: Implementation**
+
+```typescript
+// Remove .fixme when feature works
+test('user can reset password', { tag: '@spec' }, async ({ page }) => {
+  // GREEN test - feature complete
+})
+```
+
+**Phase 3: Add Regression Coverage**
+
+```typescript
+// Keep spec test, add regression test
+test('user can reset password', { tag: '@spec' }, ...)  // Keep for debugging
+test('password management flow', { tag: '@regression' }, ...)  // Add consolidated
+```
+
+**Phase 4: Promote Critical Workflows**
+
+```typescript
+// Add @critical tag if essential
+test('user can reset password', { tag: ['@spec', '@critical'] }, async ({ page }) => {
+  // Now runs during development AND every commit
+})
+```
+
+See [Testing Strategy - Test Execution Strategies](../../architecture/testing-strategy.md#test-execution-strategies) for complete documentation.
+
 ## Browser Support
 
 Playwright tests run on three browser engines:
