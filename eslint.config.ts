@@ -588,6 +588,46 @@ export default defineConfig([
     },
   },
 
+  // E2E Tests - Must use Playwright (not Bun Test)
+  // Enforces testing strategy: E2E tests in tests/ directory use Playwright
+  {
+    files: ['tests/**/*.{ts,tsx}'],
+    rules: {
+      'no-restricted-imports': [
+        'error',
+        {
+          paths: [
+            {
+              name: 'bun:test',
+              message:
+                'E2E tests (in tests/ directory) must use Playwright, not Bun Test. Import from @playwright/test instead. See docs/architecture/testing-strategy.md',
+            },
+          ],
+        },
+      ],
+    },
+  },
+
+  // Unit Tests - Must use Bun Test (not Playwright)
+  // Enforces testing strategy: Unit tests (*.test.ts) use Bun Test
+  {
+    files: ['src/**/*.test.{ts,tsx}'],
+    rules: {
+      'no-restricted-imports': [
+        'error',
+        {
+          paths: [
+            {
+              name: '@playwright/test',
+              message:
+                'Unit tests (*.test.ts) must use Bun Test, not Playwright. Import from bun:test instead. See docs/architecture/testing-strategy.md',
+            },
+          ],
+        },
+      ],
+    },
+  },
+
   // Scripts - Allow mutations for build-time utilities
   {
     files: ['scripts/**/*.{js,mjs,cjs,ts}', 'example.ts'],

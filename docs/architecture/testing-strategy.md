@@ -1,8 +1,85 @@
-# Testing Strategy - F.I.R.S.T Principles and Given-When-Then Structure
+# Testing Strategy - E2E-First TDD with Test-After Unit Tests
 
 ## Overview
 
-This document outlines Omnera's comprehensive testing strategy, applying **F.I.R.S.T principles** (Fast, Isolated, Repeatable, Self-validating, Timely) and **Given-When-Then structure** to both unit tests (Bun Test) and end-to-end tests (Playwright).
+This document outlines Omnera's testing strategy: **E2E-First TDD with Test-After Unit Tests**. This hybrid approach uses E2E tests as executable specifications (written before implementation) and unit tests as implementation documentation (written after). The strategy follows **F.I.R.S.T principles** (Fast, Isolated, Repeatable, Self-validating, Timely) and **Given-When-Then structure** for both test types.
+
+## Testing Approach
+
+Omnera uses a **dual-timing strategy** that optimizes for both feature clarity and implementation quality:
+
+**E2E Tests (TDD - Test-Driven Development)**:
+
+- Write E2E tests **BEFORE** implementing features
+- E2E tests serve as **executable specifications** defining feature completion
+- Prevents scope creep and over-engineering
+- Ensures critical user workflows are verified end-to-end
+
+**Unit Tests (Test-After Development)**:
+
+- Write unit tests **AFTER** implementing features
+- Unit tests document the actual solution and implementation details
+- Provide fast feedback for refactoring and edge cases
+- Cover internal logic, error paths, and boundary conditions
+
+**Why This Hybrid Approach?**
+
+1. **E2E-First** ensures you're building the right thing (defines "what works" from user perspective)
+2. **Unit-After** ensures you built it right (documents "how it works" internally)
+3. **Confidence Distribution**: E2E verifies critical paths work end-to-end; unit tests enable fearless refactoring
+4. **Development Flow**: E2E test → Implement until E2E passes → Add unit test coverage
+
+**Visual Workflow**:
+
+```mermaid
+graph TD
+    A[New Feature Request] --> B[Write E2E Test]
+    B --> C{E2E Test}
+    C -->|RED - Fails| D[Implement Feature]
+    D --> E{Run E2E Test}
+    E -->|Still Fails| D
+    E -->|GREEN - Passes| F[Write Unit Tests]
+    F --> G[Document Edge Cases]
+    G --> H[Refactor with Confidence]
+    H --> I[Feature Complete ✓]
+
+    style B fill:#ff6b6b
+    style C fill:#ff6b6b
+    style D fill:#4ecdc4
+    style E fill:#4ecdc4
+    style F fill:#ffe66d
+    style G fill:#ffe66d
+    style H fill:#ffe66d
+    style I fill:#95e1d3
+```
+
+**Example Workflow**:
+
+```bash
+# 1. Write E2E test (TDD - defines requirements)
+tests/features/table-creation.spec.ts  # Failing test
+
+# 2. Implement feature until E2E passes
+src/domain/models/app/tables.ts        # Schema
+src/application/table-service.ts       # Use case
+src/presentation/routes/tables.ts      # API
+
+# 3. Run E2E test
+bun test:e2e  # Should pass now
+
+# 4. Add unit test coverage (test-after)
+src/domain/models/app/tables.test.ts   # Schema validation
+src/application/table-service.test.ts  # Business logic edge cases
+```
+
+## Quick Reference: When to Write Tests
+
+| Test Type      | Timing             | Purpose                                | Location           | Tool       |
+| -------------- | ------------------ | -------------------------------------- | ------------------ | ---------- |
+| **E2E Tests**  | BEFORE (TDD)       | Define feature completion criteria     | `tests/*.spec.ts`  | Playwright |
+| **Unit Tests** | AFTER (Test-After) | Document implementation and edge cases | `src/**/*.test.ts` | Bun Test   |
+
+**Development Flow**: E2E Test (RED) → Implement (GREEN) → Unit Tests (REFACTOR) → Done
 
 ## Test File Naming Convention
 
@@ -22,11 +99,13 @@ This document outlines Omnera's comprehensive testing strategy, applying **F.I.R
 
 **See also**: [Bun Test Documentation](../infrastructure/testing/bun-test.md#test-file-naming-convention) for tool-specific details.
 
-## F.I.R.S.T Principles
+## Testing Principles
 
-The F.I.R.S.T principles ensure tests are reliable, maintainable, and valuable:
+### F.I.R.S.T Principles
 
-### 1. Fast
+The F.I.R.S.T principles ensure tests are reliable, maintainable, and valuable, regardless of when they're written (E2E first or unit after):
+
+#### 1. Fast
 
 **Unit Tests (Bun)**: Tests should execute in milliseconds
 
@@ -89,7 +168,7 @@ test('should complete full checkout flow', async ({ page }) => {
 })
 ```
 
-### 2. Isolated / Independent
+#### 2. Isolated / Independent
 
 **Unit Tests (Bun)**: Each test should be completely independent
 
@@ -198,7 +277,7 @@ test('login user', async ({ page }) => {
 })
 ```
 
-### 3. Repeatable
+#### 3. Repeatable
 
 **Unit Tests (Bun)**: Same input always produces same output
 
@@ -308,7 +387,7 @@ test('should display promotion banner', async ({ page }) => {
 })
 ```
 
-### 4. Self-Validating
+#### 4. Self-Validating
 
 **Unit Tests (Bun)**: Tests determine pass/fail automatically
 
@@ -426,60 +505,30 @@ test('should display validation errors', async ({ page }) => {
 })
 ```
 
-### 5. Timely
+#### 5. Timely
 
-**Unit Tests (Bun)**: Write tests as you write code
+**E2E Tests (Playwright)**: Write tests BEFORE implementing features (TDD)
 
-- ✅ Write tests before or alongside feature code (TDD approach)
-- ✅ Tests guide design and catch bugs early
-- ✅ Use `bun test --watch` for continuous feedback
-- ✅ Tests are part of definition of "done"
-- ❌ Never delay writing tests until "later"
+- ✅ Write E2E tests FIRST as executable specifications
+- ✅ E2E tests define feature completion criteria
+- ✅ Implement feature until E2E test passes
+- ✅ Tests prevent scope creep and over-engineering
+- ❌ Never implement features without E2E tests first
 
-**E2E Tests (Playwright)**: Write tests for critical paths immediately
+**Unit Tests (Bun)**: Write tests AFTER implementing features (Test-After)
 
-- ✅ Write E2E tests for new user-facing features
-- ✅ Add tests during feature development (not after)
-- ✅ Tests serve as executable documentation
-- ✅ Critical workflows have E2E coverage before release
-- ❌ Never ship features without E2E tests
+- ✅ Write unit tests AFTER implementation is complete
+- ✅ Unit tests document actual solution and implementation details
+- ✅ Use `bun test --watch` for continuous feedback during refactoring
+- ✅ Unit tests are part of definition of "done"
+- ❌ Never skip unit tests after implementation
 
-**Example - Timely Unit Test (TDD Approach):**
-
-```typescript
-// Step 1: Write test first (Red)
-import { test, expect } from 'bun:test'
-import { calculateDiscount } from './pricing'
-
-test('should apply 10% discount for orders over $100', () => {
-  const result = calculateDiscount(150)
-  expect(result).toBe(135) // 150 - 15
-})
-
-test('should not apply discount for orders under $100', () => {
-  const result = calculateDiscount(50)
-  expect(result).toBe(50)
-})
-
-// Step 2: Implement feature (Green)
-export function calculateDiscount(amount: number): number {
-  if (amount > 100) {
-    return amount * 0.9
-  }
-  return amount
-}
-
-// Step 3: Refactor if needed (still Green)
-
-// ✅ Tests written BEFORE feature implementation
-```
-
-**Example - Timely E2E Test:**
+**Example - Timely E2E Test (TDD - Written FIRST):**
 
 ```typescript
-// Feature: User can reset password
+// Step 1: Write E2E test BEFORE implementation (Red)
+import { test, expect } from '@playwright/test'
 
-// ✅ GOOD - E2E test written during feature development
 test('user can reset password', async ({ page }) => {
   // Given: User is on password reset page
   await page.goto('/reset-password')
@@ -493,19 +542,114 @@ test('user can reset password', async ({ page }) => {
   await expect(page.locator('.success')).toHaveText('Password reset email sent')
 })
 
-// ❌ BAD - E2E test written months after feature shipped
-// (Test is "timely" only if written during development)
+// Step 2: Implement feature until E2E passes
+// - Create /reset-password route
+// - Implement password reset logic
+// - Add success message UI
+
+// Step 3: Run E2E test - should pass (Green)
+
+// Step 4: Add unit test coverage (see below)
 ```
 
-## Given-When-Then Structure
+**Example - Timely Unit Test (Test-After - Written AFTER implementation):**
 
-The **Given-When-Then** pattern structures tests into three clear phases:
+```typescript
+// Unit tests written AFTER feature implementation and E2E test passes
+
+import { test, expect, describe } from 'bun:test'
+import { sendPasswordResetEmail } from './password-reset'
+import { validateEmail } from './validation'
+
+describe('Password Reset', () => {
+  // Unit test documents actual implementation details
+  test('should validate email format before sending', () => {
+    // Given: Invalid email
+    const invalidEmail = 'not-an-email'
+
+    // When: Email is validated
+    const result = validateEmail(invalidEmail)
+
+    // Then: Validation fails
+    expect(result.success).toBe(false)
+    expect(result.error).toBe('Invalid email format')
+  })
+
+  test('should generate secure reset token', () => {
+    // Given: Valid email
+    const email = 'user@example.com'
+
+    // When: Reset token is generated
+    const token = generateResetToken(email)
+
+    // Then: Token has correct format and length
+    expect(token).toMatch(/^[A-Za-z0-9]{64}$/)
+  })
+
+  test('should set token expiration to 1 hour', () => {
+    // Given: Current time mocked
+    const mockDate = new Date('2025-01-15T12:00:00Z')
+    const dateSpy = spyOn(Date, 'now').mockReturnValue(mockDate.getTime())
+
+    // When: Token expiration is calculated
+    const expiration = calculateTokenExpiration()
+
+    // Then: Expiration is 1 hour from now
+    expect(expiration).toBe('2025-01-15T13:00:00Z')
+
+    dateSpy.mockRestore()
+  })
+})
+
+// ✅ Unit tests written AFTER implementation to document solution
+```
+
+**Complete Development Flow Example:**
+
+```typescript
+// 1️⃣ E2E Test FIRST (TDD - defines "what" feature should do)
+test('user can create table with validation rules', async ({ page }) => {
+  await page.goto('/tables/new')
+
+  await page.fill('[name="table-name"]', 'Customers')
+  await page.click('button[aria-label="Add field"]')
+  await page.fill('[name="field-name"]', 'Email')
+  await page.selectOption('[name="field-type"]', 'email')
+  await page.click('button[type="submit"]')
+
+  await expect(page.locator('.success')).toHaveText('Table created successfully')
+  await expect(page).toHaveURL('/tables/customers')
+})
+
+// 2️⃣ Implement feature until E2E passes
+// src/domain/models/app/tables.ts - Schema
+// src/application/table-service.ts - Use case
+// src/presentation/routes/tables.ts - API
+
+// 3️⃣ Unit Tests AFTER (documents "how" implementation works)
+describe('Table Schema Validation', () => {
+  test('should validate table name is required', () => {
+    const result = TableSchema.decode({ name: '' })
+    expect(result.success).toBe(false)
+  })
+
+  test('should validate email field type', () => {
+    const field = { name: 'Email', type: 'email' }
+    const result = validateField(field)
+    expect(result.success).toBe(true)
+  })
+})
+```
+
+### Given-When-Then Structure
+
+The **Given-When-Then** pattern structures tests into three clear phases, applicable to both E2E and unit tests:
 
 1. **Given** - Setup/preconditions (arrange)
 2. **When** - Action/trigger (act)
 3. **Then** - Expected outcome (assert)
 
-### Unit Test Example (Bun)
+#### Unit Test Example (Bun)
 
 ```typescript
 import { test, expect, describe } from 'bun:test'
@@ -559,7 +703,7 @@ describe('Cart - Adding Products', () => {
 })
 ```
 
-### E2E Test Example (Playwright)
+#### E2E Test Example (Playwright)
 
 ```typescript
 import { test, expect } from '@playwright/test'
@@ -614,7 +758,7 @@ test.describe('User Authentication', () => {
 })
 ```
 
-### Effect Schema Validation Test Example
+#### Effect Schema Validation Test Example
 
 ```typescript
 import { test, expect, describe } from 'bun:test'
@@ -671,9 +815,9 @@ describe('Email Schema Validation', () => {
 })
 ```
 
-## Combining F.I.R.S.T and Given-When-Then
+### Combining F.I.R.S.T and Given-When-Then
 
-Both principles work together to create high-quality tests:
+Both principles work together to create high-quality tests, whether written first (E2E) or after (unit):
 
 ```typescript
 import { test, expect } from 'bun:test'
@@ -730,43 +874,192 @@ test('user can apply promo code during checkout', async ({ page }) => {
 
 ## Best Practices Summary
 
-### Unit Tests (Bun)
-
-1. **Fast**: Test pure functions, mock I/O, run in parallel
-2. **Isolated**: Use `beforeEach` for setup, avoid shared state
-3. **Repeatable**: Mock time/random, use deterministic data
-4. **Self-Validating**: Explicit assertions, clear error messages
-5. **Timely**: Write tests during development (TDD when possible)
-6. **Given-When-Then**: Structure tests into setup, action, assertion
-
-### E2E Tests (Playwright)
+### E2E Tests (Playwright) - Test-Driven Development (TDD)
 
 1. **Fast**: Mock APIs, parallel workers, focused critical paths
 2. **Isolated**: Separate contexts, unique test data, no shared state
 3. **Repeatable**: Mock time-sensitive operations, fixed test data
 4. **Self-Validating**: Playwright assertions, verify UI state
-5. **Timely**: Write tests during feature development
+5. **Timely**: Write E2E tests FIRST (before implementation) as executable specifications
 6. **Given-When-Then**: Structure user workflows clearly
+
+**E2E-First Development Flow:**
+
+```
+1. Write E2E test (defines feature completion)
+2. Implement until E2E passes
+3. Add unit test coverage (see below)
+```
+
+### Unit Tests (Bun) - Test-After Development
+
+1. **Fast**: Test pure functions, mock I/O, run in parallel
+2. **Isolated**: Use `beforeEach` for setup, avoid shared state
+3. **Repeatable**: Mock time/random, use deterministic data
+4. **Self-Validating**: Explicit assertions, clear error messages
+5. **Timely**: Write unit tests AFTER implementation (documents actual solution)
+6. **Given-When-Then**: Structure tests into setup, action, assertion
+
+**Unit-After Development Flow:**
+
+```
+1. Feature implemented (E2E test passing)
+2. Write unit tests for internal logic
+3. Test edge cases, error paths, boundary conditions
+4. Unit tests enable confident refactoring
+```
 
 ## Anti-Patterns to Avoid
 
-### Unit Tests
+### E2E Tests (Written FIRST - TDD)
+
+- ❌ Implementing features without E2E tests first
+- ❌ Testing every edge case in E2E (use unit tests for edge cases)
+- ❌ Relying on test execution order
+- ❌ Using real-time data or live APIs (mock external dependencies)
+- ❌ Manual screenshot comparison instead of assertions
+- ❌ Tests that only pass on developer's machine
+- ❌ Writing E2E tests after feature is complete (defeats purpose of TDD)
+- ❌ Vague E2E tests that don't clearly define feature completion
+
+### Unit Tests (Written AFTER - Test-After)
 
 - ❌ Testing implementation details instead of behavior
 - ❌ Shared mutable state between tests
 - ❌ Tests depending on execution order
 - ❌ Actual network calls or database queries
 - ❌ Manual verification of console output
-- ❌ Delayed test writing ("we'll add tests later")
+- ❌ Skipping unit tests after implementation ("we have E2E tests, that's enough")
+- ❌ Writing unit tests before understanding actual implementation (premature)
+- ❌ Incomplete edge case coverage (unit tests should be comprehensive)
 
-### E2E Tests
+## Enforcement and Code Review
 
-- ❌ Testing every edge case in E2E (use unit tests)
-- ❌ Relying on test execution order
-- ❌ Using real-time data or live APIs
-- ❌ Manual screenshot comparison instead of assertions
-- ❌ Tests that only pass on developer's machine
-- ❌ Shipping features without E2E coverage
+Since the E2E-First TDD with Test-After Unit Tests workflow cannot be fully automated via ESLint or TypeScript (timing discipline requires manual verification), **code review is the primary enforcement mechanism**.
+
+### Automated Enforcement (ESLint)
+
+The following aspects ARE enforced automatically via ESLint (see `eslint.config.ts`):
+
+✅ **Test Tool Usage**:
+
+- E2E tests in `tests/` directory must use Playwright (not Bun Test)
+- Unit tests in `src/**/*.test.ts` must use Bun Test (not Playwright)
+
+✅ **Test File Structure**:
+
+- Test files must follow naming convention (`.test.ts` for unit, `.spec.ts` for E2E)
+
+❌ **NOT Enforced** (manual review required):
+
+- Whether E2E tests were written BEFORE implementation
+- Whether unit tests were written AFTER implementation
+- Test coverage completeness
+
+### Pull Request Review Checklist
+
+Use this checklist during code reviews to ensure the testing strategy is followed:
+
+#### For New Features
+
+- [ ] **E2E Test Exists**: Feature has E2E test in `tests/` directory defining completion criteria
+- [ ] **E2E Test Timing**: E2E test was committed BEFORE or WITH implementation (check git history)
+- [ ] **E2E Test Quality**: Test clearly defines feature completion criteria (not vague)
+- [ ] **Unit Tests Exist**: Co-located unit tests exist for all implementation files
+- [ ] **Unit Tests Timing**: Unit tests were committed AFTER implementation (check git history)
+- [ ] **Unit Test Coverage**: Edge cases, error paths, and boundary conditions covered
+- [ ] **All Tests Pass**: `bun test:all` succeeds
+- [ ] **No Test Skips**: No `.skip()` or `.only()` in committed tests
+
+#### For Refactoring
+
+- [ ] **E2E Tests Still Pass**: Existing E2E tests verify no regression
+- [ ] **Unit Tests Updated**: Unit tests reflect new implementation details
+- [ ] **New Edge Cases**: Unit tests added for edge cases discovered during refactoring
+- [ ] **No Test Deletion**: Tests only removed if feature removed (not to make tests pass)
+
+#### For Bug Fixes
+
+- [ ] **Reproducing Test First**: Test demonstrating bug was added BEFORE fix
+- [ ] **Test Now Passes**: Reproducing test passes after fix
+- [ ] **Unit Tests Added**: Additional unit tests for edge cases related to bug
+
+### Red Flags (Reject Pull Request)
+
+❌ **Implementation without E2E test**
+
+- Feature code merged without corresponding E2E test
+- E2E test written AFTER implementation is complete (defeats TDD purpose)
+
+❌ **Missing unit tests after implementation**
+
+- Feature marked as "done" without unit test coverage
+- Unit tests skipped because "we have E2E tests"
+
+❌ **Vague E2E tests**
+
+- E2E test doesn't clearly define what "feature complete" means
+- E2E test only checks happy path (doesn't verify feature completion)
+
+❌ **Test coverage decreased**
+
+- Pull request reduces overall test coverage percentage
+
+❌ **Skipped tests in production**
+
+- Tests marked with `.skip()` or `.only()` committed to main branch
+
+### How to Verify Test Timing (Git History)
+
+**Check if E2E test was written first**:
+
+```bash
+# View commit history for feature files
+git log --oneline --all -- tests/feature-name.spec.ts src/feature-name.ts
+
+# If E2E test commit is earlier or same as implementation, timing is correct
+```
+
+**Check if unit tests were written after**:
+
+```bash
+# View commit history for implementation and unit tests
+git log --oneline --all -- src/feature-name.ts src/feature-name.test.ts
+
+# Unit test commit should be after implementation commit
+```
+
+### Enforcement During Development
+
+**Pre-commit Checks** (automated):
+
+```bash
+# Run before every commit
+bun test        # Unit tests must pass
+bun test:e2e    # E2E tests must pass
+```
+
+**Pre-merge Checks** (CI/CD):
+
+- All tests pass (`bun test:all`)
+- Test coverage meets minimum threshold (if configured)
+- ESLint rules pass (test tool usage enforced)
+
+### Teaching Moment: Why Manual Enforcement?
+
+**Static analysis cannot detect**:
+
+- **Temporal order** - When code was written (before vs after)
+- **Intent** - Whether test defines requirements or documents implementation
+- **Completeness** - Whether tests adequately cover the feature
+
+**Code review can verify**:
+
+- Git history shows E2E tests written first
+- Tests clearly define feature completion
+- Edge cases are comprehensively covered
+
+This is why **disciplined code review is essential** to the success of the E2E-First TDD with Test-After Unit Tests strategy.
 
 ## References
 
