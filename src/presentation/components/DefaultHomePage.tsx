@@ -3,13 +3,16 @@ import type { App } from '@/domain/models/app'
 import type { ReactElement } from 'react'
 
 /**
- * HomePage component - Displays application information
+ * DefaultHomePage component - Default home page displaying application information
+ *
+ * This is the default home page shown when no custom page configuration is provided.
+ * It displays the app name in a centered layout with gradient background.
  *
  * @param props - Component props
  * @param props.app - Validated application data from AppSchema
  * @returns React element with app name
  */
-export function HomePage({ app }: { readonly app: App }): Readonly<ReactElement> {
+export function DefaultHomePage({ app }: { readonly app: App }): Readonly<ReactElement> {
   return (
     <html lang="en">
       <head>
