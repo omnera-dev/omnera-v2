@@ -255,11 +255,9 @@ Omnera uses a hybrid approach with both **project-based** and **grep-based** exe
   "scripts": {
     "test:e2e": "playwright test",
     "test:e2e:spec": "playwright test --project=spec",
-    "test:e2e:regression": "playwright test --project=regression",
     "test:e2e:critical": "playwright test --project=critical",
     "test:e2e:dev": "playwright test --grep='@spec|@critical'",
-    "test:e2e:ci": "playwright test --grep='@regression|@critical'",
-    "test:e2e:ui": "playwright test --project=spec --ui"
+    "test:e2e:ci": "playwright test --grep='@regression|@critical'"
   }
 }
 ```
