@@ -19,12 +19,12 @@
 | **Effect** | 3.18.4 | Functional programming, DI, error handling |
 | **Hono** | 4.9.12 | Web framework (API routes) |
 | **Better Auth** | 1.3.27 | Authentication |
-| **Drizzle ORM** | ^0.37.0 | Database (PostgreSQL via bun:sql) |
+| **Drizzle ORM** | ^0.44.6 | Database (PostgreSQL via bun:sql) |
 | **React** | 19.2.0 | UI library |
 | **Tailwind CSS** | 4.1.14 | Styling |
 | **shadcn/ui** | N/A | Component collection (copy-paste, not npm) |
 | **TanStack Query** | 5.90.3 | Server state management |
-| **TanStack Table** | ^8.20.5 | Data tables |
+| **TanStack Table** | ^8.21.3 | Data tables |
 
 ## Essential Commands
 
@@ -122,10 +122,13 @@ omnera-v2/
 - `@docs/infrastructure/framework/better-auth.md` - Authentication
 - `@docs/infrastructure/database/drizzle.md` - Drizzle ORM
 - `@docs/infrastructure/ui/react.md` - React 19 patterns
+- `@docs/infrastructure/ui/react-hook-form.md` - Form management (client-side, Zod validation)
+- `@docs/infrastructure/ui/radix-ui.md` - Accessible UI primitives (shadcn/ui foundation)
 - `@docs/infrastructure/ui/tailwind.md` - Tailwind CSS
 - `@docs/infrastructure/ui/shadcn.md` - shadcn/ui components
 - `@docs/infrastructure/ui/tanstack-query.md` - TanStack Query
 - `@docs/infrastructure/ui/tanstack-table.md` - TanStack Table
+- `@docs/infrastructure/utility/date-fns.md` - Date utilities (client-side, date-picker)
 - `@docs/infrastructure/quality/eslint.md` - ESLint linting
 - `@docs/infrastructure/quality/prettier.md` - Prettier formatting
 - `@docs/infrastructure/quality/knip.md` - Dead code detection
@@ -163,7 +166,8 @@ omnera-v2/
 - ✅ **DO use TypeScript directly** - Bun executes .ts files natively
 - ✅ **DO use Effect.gen** - Application layer workflows
 - ✅ **DO use path aliases** - `@/components/ui/button`
-- ✅ **DO validate with Effect Schema** - All user inputs
+- ✅ **DO validate inputs** - Client: Zod (React Hook Form), Server: Effect Schema
+- ✅ **DO use correct date library** - Client: date-fns (date-picker), Server: Effect.DateTime
 
 ---
 

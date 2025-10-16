@@ -2,9 +2,11 @@
 
 ## Overview
 
-**Version**: ^5 (peer dependency)
-**Type Checker**: tsc v2.0.4
+**TypeScript Compiler**: ^5.9.3 (actual compiler version)
+**tsc Wrapper**: v2.0.4 (CLI wrapper package)
 **Configuration**: Optimized for Bun's bundler mode with strict type safety
+
+**Note**: The `tsc` package (v2.0.4) is a lightweight wrapper that provides the `tsc` command. The actual TypeScript compiler is installed as a peer dependency (^5.9.3).
 
 ## Critical Distinction: Execution vs Type Checking
 

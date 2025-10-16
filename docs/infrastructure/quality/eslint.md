@@ -177,6 +177,312 @@ export default defineConfig([
 | `@typescript-eslint/no-explicit-any` | Using `any` type                   | `const x: any = 42` (use proper types)                  |
 | `@typescript-eslint/no-unused-vars`  | TypeScript unused variables        | Catches unused function parameters, destructured values |
 
+## Architectural Enforcement (Critical)
+
+ESLint enforces Omnera's layer-based architecture automatically via **eslint-plugin-boundaries**. This ensures dependency rules are followed at compile-time, preventing architectural violations.
+
+### Layer Dependency Rules
+
+```
+Presentation → Application + Domain (NOT Infrastructure directly)
+Application → Domain + Infrastructure
+Domain → NOTHING (pure, self-contained)
+Infrastructure → Domain
+```
+
+### Enforcement Configuration
+
+```typescript
+// Layer definitions in eslint.config.ts
+'boundaries/elements': [
+  { type: 'domain', pattern: 'src/domain/**/*' },
+  { type: 'application', pattern: 'src/application/**/*' },
+  { type: 'infrastructure', pattern: 'src/infrastructure/**/*' },
+  { type: 'presentation', pattern: 'src/presentation/**/*' }
+]
+```
+
+### What Gets Caught
+
+| Violation | Example | Error Message |
+|-----------|---------|---------------|
+| **Presentation → Infrastructure** | `import { DatabaseRepo } from '@/infrastructure/db'` in React component | "Presentation layer violation: Can only import from Application and Domain layers" |
+| **Domain → Any Layer** | `import { UserRepo } from '@/application'` in domain model | "Domain layer violation: Domain must remain pure with zero external dependencies" |
+| **Application → Presentation** | `import { Button } from '@/presentation/ui'` in use case | "Application layer violation: Can only import from Domain and Infrastructure layers" |
+| **Infrastructure → Application** | `import { CreateUserUseCase } from '@/application'` in repository | "Infrastructure layer violation: Can only import from Domain layer" |
+
+### Examples
+
+```typescript
+// ✅ CORRECT: Presentation → Application → Infrastructure
+// src/presentation/components/UserList.tsx
+import { createUser } from '@/application/usecases/createUser' // OK: Presentation → Application
+import type { User } from '@/domain/models/User' // OK: Presentation → Domain
+
+// ❌ INCORRECT: Presentation → Infrastructure (bypassing Application)
+// src/presentation/components/UserList.tsx
+import { UserRepository } from '@/infrastructure/repositories/UserRepository' // ERROR!
+// Fix: Access UserRepository through Application layer use case
+
+// ✅ CORRECT: Domain layer is pure
+// src/domain/models/User.ts
+export interface User {
+  id: string
+  email: string
+}
+// No imports - pure data structures and business logic only
+
+// ❌ INCORRECT: Domain importing external dependencies
+// src/domain/models/User.ts
+import { Effect } from 'effect' // ERROR! Domain must be pure
+import { validateEmail } from '@/infrastructure/validators' // ERROR!
+// Fix: Keep Effect.ts in Application layer, validators in Domain as pure functions
+
+// ✅ CORRECT: Infrastructure → Domain
+// src/infrastructure/repositories/UserRepository.ts
+import type { User } from '@/domain/models/User' // OK: Infrastructure → Domain
+import { Effect } from 'effect' // OK: Effect is allowed in Infrastructure
+
+// ✅ CORRECT: Application coordinates layers
+// src/application/usecases/createUser.ts
+import type { User } from '@/domain/models/User' // OK: Application → Domain
+import { UserRepository } from '@/infrastructure/repositories/UserRepository' // OK: Application → Infrastructure
+import { Effect } from 'effect' // OK: Effect is Application layer's coordination tool
+```
+
+### Why This Matters
+
+- **Domain Purity**: Keeps business logic free from side effects, making it testable and portable
+- **Prevents Coupling**: UI can't directly access database, ensuring proper abstraction
+- **Enforces Patterns**: Dependency Inversion Principle enforced automatically
+- **Catch Violations Early**: Architectural mistakes caught at lint time, not runtime
+
+## Functional Programming Enforcement
+
+ESLint enforces functional programming patterns via **eslint-plugin-functional** and custom rules to align with Effect.ts and immutability principles.
+
+### Immutability Rules
+
+| Rule | Enforcement | What It Catches |
+|------|-------------|-----------------|
+| **`functional/prefer-immutable-types`** | `error` | Mutable types (non-readonly arrays/objects) |
+| **`functional/no-let`** | `error` | Use of `let` (except in for-loop init) |
+| **`functional/immutable-data`** | `error` | Direct mutations of data structures |
+| **`no-param-reassign`** | `error` | Reassigning function parameters |
+
+### Array Mutation Prevention
+
+ESLint blocks mutating array methods:
+
+```typescript
+// ❌ BLOCKED: Mutating array methods
+const numbers = [1, 2, 3]
+numbers.push(4)        // ERROR: Use [...numbers, 4]
+numbers.pop()          // ERROR: Use numbers.slice(0, -1)
+numbers.shift()        // ERROR: Use numbers.slice(1)
+numbers.unshift(0)     // ERROR: Use [0, ...numbers]
+numbers.splice(1, 1)   // ERROR: Use array.slice() + spread
+numbers.reverse()      // ERROR: Use [...numbers].reverse()
+numbers.sort()         // ERROR: Use [...numbers].sort()
+
+// ✅ CORRECT: Immutable patterns
+const added = [...numbers, 4]
+const removed = numbers.slice(0, -1)
+const shifted = numbers.slice(1)
+const prepended = [0, ...numbers]
+const sorted = [...numbers].sort()
+```
+
+### Effect.ts Patterns
+
+```typescript
+// ❌ BLOCKED: No throw statements (use Effect error handling)
+function riskyOperation() {
+  if (error) throw new Error('Failed') // ERROR: functional/no-throw-statements
+}
+
+// ✅ CORRECT: Effect.ts error handling
+import { Effect } from 'effect'
+
+function riskyOperation() {
+  return Effect.gen(function* () {
+    if (error) return yield* Effect.fail(new Error('Failed'))
+    return yield* Effect.succeed(result)
+  })
+}
+
+// ❌ BLOCKED: Avoid Effect.runSync in business logic
+import { runSync } from 'effect' // ERROR: no-restricted-imports
+
+// ✅ CORRECT: Use Effect.runPromise or Context/Layer
+const result = await Effect.runPromise(program)
+```
+
+### Functional Loops
+
+```typescript
+// ⚠️ WARNING: Prefer functional alternatives
+for (const item of items) {  // WARN: functional/no-loop-statements
+  process(item)
+}
+
+// ✅ PREFERRED: Functional transformations
+items.forEach(process)
+items.map(transform)
+items.filter(predicate)
+items.reduce(accumulate, initial)
+```
+
+### Why This Matters
+
+- **Predictability**: Immutable code is easier to reason about and debug
+- **Effect.ts Alignment**: Functional patterns work seamlessly with Effect.ts
+- **Testability**: Pure functions with no side effects are trivial to test
+- **Concurrency Safety**: Immutable data structures prevent race conditions
+
+## Database Safety Rules (Drizzle ORM)
+
+ESLint enforces **WHERE clause requirements** on database operations via **eslint-plugin-drizzle** to prevent catastrophic mass operations.
+
+### Enforced Rules
+
+| Rule | Enforcement | Protection |
+|------|-------------|------------|
+| **`drizzle/enforce-delete-with-where`** | `error` | Prevents `DELETE FROM table` without WHERE clause |
+| **`drizzle/enforce-update-with-where`** | `error` | Prevents `UPDATE table SET ...` without WHERE clause |
+
+### What Gets Caught
+
+```typescript
+import { db } from '@/infrastructure/database'
+import { users } from '@/infrastructure/database/schema'
+import { eq } from 'drizzle-orm'
+
+// ❌ BLOCKED: Mass delete (deletes ALL users)
+await db.delete(users) // ERROR: drizzle/enforce-delete-with-where
+// This would delete EVERY user in the database!
+
+// ✅ CORRECT: Delete with WHERE clause
+await db.delete(users).where(eq(users.id, userId))
+
+// ❌ BLOCKED: Mass update (updates ALL users)
+await db.update(users).set({ active: false }) // ERROR: drizzle/enforce-update-with-where
+// This would deactivate EVERY user!
+
+// ✅ CORRECT: Update with WHERE clause
+await db.update(users)
+  .set({ active: false })
+  .where(eq(users.id, userId))
+
+// ✅ CORRECT: Intentional mass operations (explicit)
+// If you genuinely need to affect all rows, use a comment to acknowledge:
+// eslint-disable-next-line drizzle/enforce-delete-with-where
+await db.delete(users) // Intentional: Clearing test data
+```
+
+### Real-World Protection
+
+```typescript
+// Scenario: Delete a user's sessions
+// ❌ DANGEROUS: Easy to forget WHERE clause
+async function clearUserSessions(userId: string) {
+  // Typo or copy-paste error - would delete ALL sessions!
+  await db.delete(sessions) // BLOCKED by ESLint!
+}
+
+// ✅ SAFE: ESLint forces WHERE clause
+async function clearUserSessions(userId: string) {
+  await db.delete(sessions).where(eq(sessions.userId, userId))
+}
+```
+
+### Why This Matters
+
+- **Prevents Data Loss**: Catch accidental mass deletes before they reach production
+- **Safety Net**: Even experienced developers make copy-paste errors
+- **Explicit Intent**: Forces developers to consciously decide on operation scope
+- **Production Safety**: Critical for protecting customer data
+
+## React 19 Compiler Guidance
+
+ESLint provides **warnings** (not errors) to guide developers away from manual memoization, since React 19 Compiler handles optimizations automatically.
+
+### What React 19 Compiler Does
+
+- **Automatic memoization**: Components and values are memoized without `useMemo`
+- **Callback stabilization**: Callbacks are stable without `useCallback`
+- **Smart re-renders**: React.memo is rarely needed
+
+### ESLint Warnings
+
+```typescript
+// ⚠️ WARNING: Discouraged patterns (React 19 Compiler handles these)
+import { useMemo, useCallback, memo } from 'react'
+
+// WARN: "React 19 Compiler handles memoization automatically"
+const expensiveValue = useMemo(() => computeValue(data), [data])
+
+// WARN: "React 19 Compiler stabilizes callbacks automatically"
+const handleClick = useCallback(() => onClick(id), [onClick, id])
+
+// WARN: "React 19 Compiler optimizes re-renders automatically"
+const MemoizedComponent = memo(Component)
+```
+
+### When Manual Memoization Is Still OK
+
+ESLint **warns** but doesn't block. Manual memoization is acceptable for:
+
+1. **Expensive computations** (>100ms):
+   ```typescript
+   // OK: Genuinely expensive operation
+   const factorial = useMemo(() => {
+     return calculateFactorial(largeNumber) // Takes 200ms
+   }, [largeNumber])
+   ```
+
+2. **Memoized child components** (rare):
+   ```typescript
+   // OK: Passing callback to manually memoized child
+   const MemoizedChild = memo(ExpensiveChild)
+   const callback = useCallback(() => action(), []) // Prevents child re-render
+   <MemoizedChild onAction={callback} />
+   ```
+
+3. **Identity-dependent hooks** (e.g., `useEffect` deps):
+   ```typescript
+   // OK: useEffect depends on object/array identity
+   const options = useMemo(() => ({ sort: 'asc' }), [])
+   useEffect(() => fetchData(options), [options])
+   ```
+
+### Default Approach
+
+```typescript
+// ✅ PREFERRED: Trust React 19 Compiler
+function UserProfile({ user }) {
+  // No useMemo needed - compiler handles it
+  const displayName = `${user.firstName} ${user.lastName}`
+
+  // No useCallback needed - compiler stabilizes it
+  const handleUpdate = () => updateUser(user.id)
+
+  // No memo needed - compiler optimizes re-renders
+  return (
+    <div onClick={handleUpdate}>
+      {displayName}
+    </div>
+  )
+}
+```
+
+### Why This Matters
+
+- **Cleaner Code**: Removes boilerplate memoization code
+- **Better Performance**: Compiler's optimizations often outperform manual memoization
+- **Less Maintenance**: No need to manage dependency arrays
+- **Modern Patterns**: Align with React 19 best practices
+
 ## ESLint Catches (Examples TypeScript Misses)
 
 ```typescript

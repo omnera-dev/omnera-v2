@@ -118,24 +118,31 @@ Knip can be configured via:
 
 ```json
 {
-  "entry": ["src/index.ts"],
-  "project": ["src/**/*.ts"],
+  "project": ["src/**/*.ts", "src/**/*.tsx"],
   "ignore": ["**/*.test.ts", "**/*.spec.ts", "scripts/**", "tests/**"],
-  "ignoreDependencies": [],
+  "ignoreDependencies": [
+    "class-variance-authority",
+    "lucide-react",
+    "tailwindcss",
+    "tw-animate-css"
+  ],
   "ignoreExportsUsedInFile": true
 }
 ```
 
 ### Configuration Breakdown
 
-- **entry**: `["src/index.ts"]` - Main application entry point
-- **project**: `["src/**/*.ts"]` - Analyze all TypeScript files in src directory
+- **project**: `["src/**/*.ts", "src/**/*.tsx"]` - Analyze all TypeScript and TSX files in src directory (both logic and React components)
 - **ignore**: Exclude files that should not be checked for dead code:
   - `**/*.test.ts` - Unit test files (Bun Test)
   - `**/*.spec.ts` - E2E test files (Playwright)
   - `scripts/**` - Utility scripts (e.g., update-license-date.js)
   - `tests/**` - E2E test directory
-- **ignoreDependencies**: No dependencies ignored (empty array)
+- **ignoreDependencies**: Dependencies used but not statically imported (UI utilities):
+  - `class-variance-authority` - CVA utility for shadcn/ui components (used via cn() helper)
+  - `lucide-react` - Icons used dynamically in shadcn/ui components
+  - `tailwindcss` - CSS framework processed at build time (not imported)
+  - `tw-animate-css` - Tailwind animation utilities (CSS-level dependency)
 - **ignoreExportsUsedInFile**: `true` - Ignore exports used in the same file
 
 ### Why Test Files and Scripts Are Excluded
