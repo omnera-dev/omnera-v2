@@ -55,6 +55,57 @@ function isTypeScriptFile(filePath: string): boolean {
 }
 
 /**
+ * Remove all comments from TypeScript code
+ */
+function stripComments(code: string): string {
+  // Remove single-line comments
+  let stripped = code.replace(/\/\/.*$/gm, '')
+
+  // Remove multi-line comments
+  stripped = stripped.replace(/\/\*[\s\S]*?\*\//g, '')
+
+  // Remove JSDoc comments
+  stripped = stripped.replace(/\/\*\*[\s\S]*?\*\//g, '')
+
+  return stripped
+}
+
+/**
+ * Check if only comments changed in a file using git diff
+ */
+async function isCommentOnlyChange(filePath: string): Promise<boolean> {
+  try {
+    // Check if file is tracked by git
+    const statusResult = await $`git ls-files --error-unmatch "${filePath}"`.quiet()
+    if (statusResult.exitCode !== 0) {
+      // New file, not tracked - run checks
+      return false
+    }
+
+    // Get the current staged/working version
+    const currentContent = await Bun.file(filePath).text()
+
+    // Get the HEAD version
+    const headResult = await $`git show HEAD:"${filePath}"`.quiet()
+    if (headResult.exitCode !== 0) {
+      // File doesn't exist in HEAD (newly added) - run checks
+      return false
+    }
+    const headContent = headResult.stdout.toString()
+
+    // Strip comments from both versions
+    const currentStripped = stripComments(currentContent).trim()
+    const headStripped = stripComments(headContent).trim()
+
+    // If stripped versions are identical, only comments changed
+    return currentStripped === headStripped
+  } catch (error) {
+    // On any error, assume it's not a comment-only change (safer to run checks)
+    return false
+  }
+}
+
+/**
  * Find test file for a given source file
  */
 function findTestFile(filePath: string): string | null {
@@ -92,6 +143,13 @@ async function main() {
     // Get the file path
     const filePath = input.tool_input.file_path
     if (!filePath || !isTypeScriptFile(filePath)) {
+      process.exit(0)
+    }
+
+    // Check if only comments changed
+    const commentOnly = await isCommentOnlyChange(filePath)
+    if (commentOnly) {
+      console.log(`⏭️  Skipping checks for ${basename(filePath)} (comment-only change)`)
       process.exit(0)
     }
 
