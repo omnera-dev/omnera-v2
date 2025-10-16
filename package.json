@@ -34,6 +34,7 @@
     "release": "semantic-release"
   },
   "devDependencies": {
+    "@eslint/compat": "^1.4.0",
     "@eslint/js": "^9.37.0",
     "@playwright/test": "^1.56.0",
     "@semantic-release/changelog": "^6.0.3",
@@ -46,6 +47,7 @@
     "eslint": "^9.37.0",
     "eslint-import-resolver-typescript": "^4.4.4",
     "eslint-plugin-boundaries": "^5.1.0",
+    "eslint-plugin-drizzle": "^0.2.3",
     "eslint-plugin-functional": "^9.0.2",
     "eslint-plugin-import": "^2.32.0",
     "eslint-plugin-playwright": "^2.2.2",

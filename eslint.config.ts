@@ -1,6 +1,8 @@
 import js from '@eslint/js'
 import { defineConfig } from 'eslint/config'
 import boundaries from 'eslint-plugin-boundaries'
+// @ts-expect-error - Plugin lacks proper TypeScript definitions for flat config
+import drizzlePlugin from 'eslint-plugin-drizzle'
 import functionalPlugin from 'eslint-plugin-functional'
 import importPlugin from 'eslint-plugin-import'
 import playwright from 'eslint-plugin-playwright'
@@ -13,6 +15,7 @@ import tseslint from 'typescript-eslint'
 
 // Type workaround for flat config compatibility
 const functional = functionalPlugin as any
+const drizzle = drizzlePlugin as any
 
 export default defineConfig([
   // Base JavaScript configuration
@@ -466,6 +469,22 @@ export default defineConfig([
           ],
         },
       ],
+    },
+  },
+
+  // Drizzle ORM - Safety rules to prevent catastrophic database operations
+  // Enforces WHERE clauses in DELETE and UPDATE to prevent accidental mass operations
+  {
+    files: ['**/*.{ts,tsx}'],
+    plugins: {
+      drizzle,
+    },
+    rules: {
+      // Prevent accidental deletion of all rows - require WHERE clause
+      'drizzle/enforce-delete-with-where': 'error',
+
+      // Prevent accidental update of all rows - require WHERE clause
+      'drizzle/enforce-update-with-where': 'error',
     },
   },
 
