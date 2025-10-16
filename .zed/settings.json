@@ -48,7 +48,7 @@
   // Terminal settings (for Bun commands)
   "terminal": {
     "shell": {
-      "program": "bash"
+      "program": "zsh"
     }
   }
 }
