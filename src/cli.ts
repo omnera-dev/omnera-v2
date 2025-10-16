@@ -58,24 +58,28 @@ if (!appSchemaString) {
 }
 
 // Parse app schema JSON
-let app: AppSchema
-try {
-  app = JSON.parse(appSchemaString) as AppSchema
-} catch {
-  console.error('Error: OMNERA_APP_SCHEMA must be valid JSON')
-  console.error('')
-  console.error('Received:', appSchemaString)
-  console.error('')
-  console.error('Example:')
-  console.error(
-    '  OMNERA_APP_SCHEMA=\'{"name":"My App","description":"My Description"}\' bun run omnera'
-  )
-  process.exit(1)
-}
+const app: AppSchema = (() => {
+  try {
+    return JSON.parse(appSchemaString) as AppSchema
+  } catch {
+    console.error('Error: OMNERA_APP_SCHEMA must be valid JSON')
+    console.error('')
+    console.error('Received:', appSchemaString)
+    console.error('')
+    console.error('Example:')
+    console.error(
+      '  OMNERA_APP_SCHEMA=\'{"name":"My App","description":"My Description"}\' bun run omnera'
+    )
+    process.exit(1)
+  }
+})()
 
 // Build server options
-let options: StartOptions = {}
-if (port || hostname) {
+const options: StartOptions = (() => {
+  if (!port && !hostname) {
+    return {}
+  }
+
   const parsedPort = port ? parseInt(port, 10) : undefined
   if (parsedPort !== undefined && (isNaN(parsedPort) || parsedPort < 0 || parsedPort > 65_535)) {
     console.error(
@@ -84,11 +88,11 @@ if (port || hostname) {
     process.exit(1)
   }
 
-  options = {
+  return {
     ...(parsedPort !== undefined && { port: parsedPort }),
     ...(hostname && { hostname }),
   }
-}
+})()
 
 // Start the server
 console.log('Starting Omnera server from CLI...')

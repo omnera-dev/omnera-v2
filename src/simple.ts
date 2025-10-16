@@ -7,9 +7,10 @@
  */
 
 import { Effect } from 'effect'
-import { startEffect, withGracefulShutdown, logServerInfo } from '@/index'
-import type { StartOptions } from '@/index'
-import type { ServerInstance } from '@/services/server'
+import { startServer } from '@/application/use-cases/StartServer'
+import { withGracefulShutdown, logServerInfo } from '@/infrastructure/services/server-lifecycle'
+import type { StartOptions } from '@/application/use-cases/StartServer'
+import type { ServerInstance } from '@/infrastructure/services/server'
 
 /**
  * Simple server interface with Promise-based methods
@@ -85,7 +86,7 @@ export const start = async (app: unknown, options: StartOptions = {}): Promise<S
     console.log('Starting Omnera server...')
 
     // Start the server
-    const server = yield* startEffect(app, options)
+    const server = yield* startServer(app, options)
 
     // Log server information
     yield* logServerInfo(server)

@@ -1,33 +1,11 @@
-import { Effect, Schema } from 'effect'
-import { AppSchema } from '@/schema'
-import { createServer, type ServerInstance, type ServerCreationError } from '@/services/server'
-import type { App } from '@/schema'
-import type { CSSCompilationError } from '@/services/css-compiler'
+import { startServer, type StartOptions, type AppValidationError } from '@/application/use-cases/StartServer'
+import type { App } from '@/domain/models'
+import type { CSSCompilationError } from '@/infrastructure/services/css-compiler'
+import type { ServerInstance, ServerCreationError } from '@/infrastructure/services/server'
+import type { Effect } from 'effect'
 
-/**
- * Error class for app validation failures
- */
-export class AppValidationError {
-  readonly _tag = 'AppValidationError'
-  constructor(readonly cause: unknown) {}
-}
-
-/**
- * Server configuration options
- */
-export interface StartOptions {
-  /**
-   * Port number for the HTTP server
-   * @default 3000
-   */
-  readonly port?: number
-
-  /**
-   * Hostname to bind the server to
-   * @default "localhost"
-   */
-  readonly hostname?: string
-}
+// Re-export StartOptions for convenience
+export type { StartOptions }
 
 /**
  * Starts an Omnera web server with the given application configuration
@@ -93,37 +71,21 @@ export const startEffect = (
   app: unknown,
   options: StartOptions = {}
 ): Effect.Effect<ServerInstance, AppValidationError | ServerCreationError | CSSCompilationError> =>
-  Effect.gen(function* () {
-    // Validate app configuration using Effect Schema
-    const validatedApp = yield* Effect.try({
-      try: (): App => Schema.decodeUnknownSync(AppSchema)(app),
-      catch: (error) => new AppValidationError(error),
-    })
-
-    // Create and start server
-    const serverInstance = yield* createServer({
-      app: validatedApp,
-      port: options.port,
-      hostname: options.hostname,
-    })
-
-    // Return server control interface
-    return serverInstance
-  })
+  startServer(app, options)
 
 /**
  * Re-export types for convenience
  */
-export type { App, AppEncoded } from '@/schema'
-export { AppSchema } from '@/schema'
-export type { ServerInstance } from '@/services/server'
-export type { CompiledCSS } from '@/services/css-compiler'
+export type { App, AppEncoded } from '@/domain/models'
+export { AppSchema } from '@/domain/models'
+export type { ServerInstance } from '@/infrastructure/services/server'
+export type { CompiledCSS } from '@/infrastructure/services/css-compiler'
 
 /**
  * Re-export utilities for server lifecycle and error handling
  */
-export { withGracefulShutdown, logServerInfo } from '@/utils/server-lifecycle'
-export { handleStartupError, type ServerStartupError } from '@/utils/error-handling'
+export { withGracefulShutdown, logServerInfo } from '@/infrastructure/services/server-lifecycle'
+export { handleStartupError, type ServerStartupError } from '@/application/services/error-handling'
 
 /**
  * Re-export simple Promise-based API
