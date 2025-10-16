@@ -16,11 +16,13 @@ Both test types follow **F.I.R.S.T principles** (Fast, Isolated, Repeatable, Sel
 ## Testing Approach
 
 **E2E-First (TDD)**:
+
 - Write E2E tests BEFORE implementing features
 - Prevents scope creep and ensures critical user workflows are verified
 - Use Playwright's `.fixme` modifier for RED tests (allows CI to stay green during development)
 
 **Unit-After (Test-After)**:
+
 - Write unit tests AFTER implementing features
 - Document actual implementation details and edge cases
 - Provide fast feedback for refactoring
@@ -30,6 +32,7 @@ Both test types follow **F.I.R.S.T principles** (Fast, Isolated, Repeatable, Sel
 When writing E2E tests BEFORE implementation, use `.fixme` to mark tests as known failures:
 
 **Step 1: Write RED test with `.fixme`**
+
 ```typescript
 test.fixme('should display version badge when app has version', async ({ page }) => {
   await page.goto('/')
@@ -40,6 +43,7 @@ test.fixme('should display version badge when app has version', async ({ page })
 **Step 2: Implement feature** (GREEN phase)
 
 **Step 3: Remove `.fixme` when implementation is complete**
+
 ```typescript
 test('should display version badge when app has version', async ({ page }) => {
   await page.goto('/')
@@ -51,27 +55,27 @@ test('should display version badge when app has version', async ({ page }) => {
 
 ### When to Write Tests
 
-| Test Type | Timing | Purpose | Location | Tool |
-|-----------|--------|---------|----------|------|
-| **E2E Tests** | BEFORE (TDD) | Define feature completion criteria | `tests/*.spec.ts` | Playwright |
-| **Unit Tests** | AFTER (Test-After) | Document implementation and edge cases | `src/**/*.test.ts` | Bun Test |
+| Test Type      | Timing             | Purpose                                | Location           | Tool       |
+| -------------- | ------------------ | -------------------------------------- | ------------------ | ---------- |
+| **E2E Tests**  | BEFORE (TDD)       | Define feature completion criteria     | `tests/*.spec.ts`  | Playwright |
+| **Unit Tests** | AFTER (Test-After) | Document implementation and edge cases | `src/**/*.test.ts` | Bun Test   |
 
 ### Test File Naming Convention
 
-| Test Type | Extension | Location | Example |
-|-----------|-----------|----------|---------|
+| Test Type      | Extension  | Location               | Example                  |
+| -------------- | ---------- | ---------------------- | ------------------------ |
 | **Unit Tests** | `.test.ts` | Co-located with source | `src/calculator.test.ts` |
-| **E2E Tests** | `.spec.ts` | `tests/` directory | `tests/login.spec.ts` |
+| **E2E Tests**  | `.spec.ts` | `tests/` directory     | `tests/login.spec.ts`    |
 
 ### Test Execution Commands
 
-| Environment | Tests | Command | Duration |
-|-------------|-------|---------|----------|
-| **Development** (active coding) | `@spec` | `bun test:e2e:spec` | ~30 seconds |
-| **Pre-commit** | `@spec` + `@critical` | `bun test:e2e:dev` | ~1 minute |
-| **CI/CD** | `@regression` + `@critical` | `bun test:e2e:ci` | ~5 minutes |
-| **Pre-release** | All tests | `bun test:e2e` | ~15 minutes |
-| **Production** | `@critical` | `bun test:e2e:critical` | ~30 seconds |
+| Environment                     | Tests                       | Command                 | Duration    |
+| ------------------------------- | --------------------------- | ----------------------- | ----------- |
+| **Development** (active coding) | `@spec`                     | `bun test:e2e:spec`     | ~30 seconds |
+| **Pre-commit**                  | `@spec` + `@critical`       | `bun test:e2e:dev`      | ~1 minute   |
+| **CI/CD**                       | `@regression` + `@critical` | `bun test:e2e:ci`       | ~5 minutes  |
+| **Pre-release**                 | All tests                   | `bun test:e2e`          | ~15 minutes |
+| **Production**                  | `@critical`                 | `bun test:e2e:critical` | ~30 seconds |
 
 **Run all tests**: `bun test:all` (unit + E2E)
 
@@ -80,10 +84,12 @@ test('should display version badge when app has version', async ({ page }) => {
 For detailed information, import the relevant documentation file:
 
 ### Getting Started
+
 - **Quick Start**: `@docs/architecture/testing-strategy/01-start.md`
   - Essential commands and workflow summary for immediate use
 
 ### Core Concepts
+
 - **Overview**: `@docs/architecture/testing-strategy/02-overview.md`
   - High-level explanation of the dual-timing strategy
 - **Testing Approach**: `@docs/architecture/testing-strategy/03-testing-approach.md`
@@ -96,12 +102,14 @@ For detailed information, import the relevant documentation file:
   - Naming conventions and file organization
 
 ### Testing Principles
+
 - **F.I.R.S.T Principles**: `@docs/architecture/testing-strategy/07-testing-principles.md`
   - Fast, Isolated, Repeatable, Self-validating, Timely with comprehensive examples
   - Given-When-Then structure for both E2E and unit tests
   - Effect Schema validation examples
 
 ### Playwright Best Practices
+
 - **Best Practices**: `@docs/architecture/testing-strategy/08-playwright-best-practices.md`
   - Testing philosophy (user-visible behavior, isolation)
   - Locator best practices (role-based, chaining, codegen)
@@ -109,6 +117,7 @@ For detailed information, import the relevant documentation file:
   - Anti-patterns to avoid
 
 ### Test Execution Strategies
+
 - **Tag-Based Execution**: `@docs/architecture/testing-strategy/09-test-execution-strategies.md`
   - Test categories: `@spec`, `@regression`, `@critical`
   - Execution strategy by environment
@@ -116,6 +125,7 @@ For detailed information, import the relevant documentation file:
   - Migration strategies (promoting spec to regression)
 
 ### Summaries and Checklists
+
 - **Best Practices Summary**: `@docs/architecture/testing-strategy/10-best-practices-summary.md`
   - Consolidated checklist for E2E and unit tests
 - **Anti-Patterns**: `@docs/architecture/testing-strategy/11-anti-patterns-to-avoid.md`
@@ -126,6 +136,7 @@ For detailed information, import the relevant documentation file:
   - Red flags for rejecting PRs
 
 ### References
+
 - **External Resources**: `@docs/architecture/testing-strategy/13-references.md`
   - Links to F.I.R.S.T principles, Given-When-Then, Bun Test, Playwright docs
 
@@ -145,17 +156,19 @@ For detailed information, import the relevant documentation file:
   - Restricts: `bun:test` imports in `tests/**/*.{ts,tsx}`
   - Error: "E2E tests must use Playwright"
 
-- **Unit tests in `src/**/*.test.ts` must use Bun Test** (not Playwright)
+- **Unit tests in `src/**/\*.test.ts` must use Bun Test\*\* (not Playwright)
   - Restricts: `@playwright/test` imports in `src/**/*.test.{ts,tsx}`
   - Error: "Unit tests must use Bun Test"
 
 **Test File Structure** (enforced via `eslint-plugin-playwright`):
+
 - E2E tests: `.spec.ts` extension in `tests/` directory
 - Unit tests: `.test.ts` extension co-located with source
 
 ### Manual Enforcement (Code Review Required)
 
 **Not enforceable via static analysis**:
+
 - E2E tests written BEFORE implementation (timing discipline)
 - Unit tests written AFTER implementation (timing discipline)
 - Test coverage completeness
