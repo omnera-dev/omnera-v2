@@ -139,9 +139,10 @@ test.describe('AppSchema - Version Badge Display', () => {
    * - No badge element exists to display any version format
    * - Validates that version rendering preserves SemVer build metadata
    */
-  // FIXME: Implement version badge display in DefaultHomePage (RED phase - feature not implemented)
+  // @spec - Validates build metadata in version
   test.fixme(
     'should display version with build metadata in badge',
+    { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: A server configured with version containing build metadata
       await startServerWithSchema({
@@ -170,9 +171,10 @@ test.describe('AppSchema - Version Badge Display', () => {
    * - No badge element exists to display any version format
    * - Validates full SemVer specification support
    */
-  // FIXME: Implement version badge display in DefaultHomePage (RED phase - feature not implemented)
+  // @spec - Validates complex SemVer format
   test.fixme(
     'should display complex version format in badge',
+    { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: A server configured with complex version format
       await startServerWithSchema({
@@ -202,9 +204,10 @@ test.describe('AppSchema - Version Badge Display', () => {
    * - Tests that badge is positioned correctly in the layout
    * - Validates visual hierarchy (name first, version second)
    */
-  // FIXME: Implement version badge display in DefaultHomePage (RED phase - feature not implemented)
+  // @spec - Validates badge positioning
   test.fixme(
     'should display version badge below app name',
+    { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: A server configured with app name and version
       await startServerWithSchema({
@@ -251,22 +254,159 @@ test.describe('AppSchema - Version Badge Display', () => {
    * - No badge element exists with required data-testid attribute
    * - Validates that badge is testable and accessible
    */
-  // FIXME: Implement version badge display in DefaultHomePage (RED phase - feature not implemented)
-  test.fixme('should have accessible badge element', async ({ page, startServerWithSchema }) => {
-    // GIVEN: A server configured with app version
-    await startServerWithSchema({
-      name: 'accessible-app',
-      version: '3.2.1',
-    })
+  // @spec - Validates accessibility attributes
+  test.fixme(
+    'should have accessible badge element',
+    { tag: '@spec' },
+    async ({ page, startServerWithSchema }) => {
+      // GIVEN: A server configured with app version
+      await startServerWithSchema({
+        name: 'accessible-app',
+        version: '3.2.1',
+      })
 
-    // WHEN: User navigates to the homepage
-    await page.goto('/')
+      // WHEN: User navigates to the homepage
+      await page.goto('/')
 
-    // THEN: Badge should have data-testid for testing
-    const badge = page.locator('[data-testid="app-version-badge"]')
-    await expect(badge).toBeVisible()
+      // THEN: Badge should have data-testid for testing
+      const badge = page.locator('[data-testid="app-version-badge"]')
+      await expect(badge).toBeVisible()
 
-    // AND: Badge should be a span element (default Badge component behavior)
-    await expect(badge).toHaveAttribute('data-slot', 'badge')
-  })
+      // AND: Badge should be a span element (default Badge component behavior)
+      await expect(badge).toHaveAttribute('data-slot', 'badge')
+    }
+  )
+
+  /**
+   * REGRESSION TEST: Complete Version Badge Display Workflow
+   *
+   * This comprehensive test validates the entire version badge display workflow
+   * from end to end, covering all the scenarios tested individually above.
+   * It consolidates multiple behaviors into one realistic user journey.
+   *
+   * Test Flow:
+   * 1. Test app WITH version: Badge displays with complex SemVer format
+   * 2. Test app WITHOUT version: Badge is hidden (optional property)
+   * 3. Test badge positioning: Badge appears below app name
+   * 4. Test different SemVer formats: Simple, pre-release, build metadata
+   *
+   * GIVEN: Multiple test scenarios with different version configurations
+   * WHEN: User navigates to the homepage for each scenario
+   * THEN: All version badge requirements should be met:
+   *   1. Badge displays when version is present
+   *   2. Badge is hidden when version is absent
+   *   3. Badge supports all SemVer formats (simple, pre-release, build metadata)
+   *   4. Badge is positioned below app name in DOM order
+   *   5. Badge has proper accessibility attributes (data-testid)
+   *
+   * This test serves as a regression suite to prevent breaking changes
+   * to core version badge functionality.
+   *
+   * Why this will fail:
+   * - Version badge feature is not implemented yet
+   * - No Badge component import or usage in DefaultHomePage
+   * - No conditional rendering logic for optional version property
+   */
+  test.fixme(
+    'should handle complete version badge display workflow',
+    { tag: '@regression' },
+    async ({ page, startServerWithSchema }) => {
+      // ============================================================
+      // Scenario 1: App WITH version - Complex SemVer format
+      // ============================================================
+
+      // GIVEN: A server configured with app name and complex version (pre-release + build)
+      const appName = 'regression-test-app'
+      const complexVersion = '2.1.0-beta.5+build.abc123'
+
+      await startServerWithSchema({
+        name: appName,
+        version: complexVersion,
+      })
+
+      // WHEN: User navigates to the homepage
+      await page.goto('/')
+
+      // THEN: Validate badge is visible and contains correct version
+      const badge = page.locator('[data-testid="app-version-badge"]')
+      await expect(badge).toBeVisible()
+      await expect(badge).toHaveText(complexVersion)
+
+      // AND: Validate badge supports complex SemVer format (pre-release + build metadata)
+      await expect(badge).toContainText('beta.5') // Pre-release identifier
+      await expect(badge).toContainText('build.abc123') // Build metadata
+
+      // AND: Validate badge positioning below app name
+      const heading = page.locator('h1')
+      await expect(heading).toBeVisible()
+      await expect(heading).toHaveText(appName)
+
+      // Validate DOM order: h1 comes before badge
+      const container = page.locator('.space-y-6')
+      const children = container.locator('> *')
+      const headingIndex = await children.evaluateAll((elements) =>
+        elements.findIndex((el) => el.tagName === 'H1')
+      )
+      const badgeIndex = await children.evaluateAll((elements) =>
+        elements.findIndex((el) => el.getAttribute('data-testid') === 'app-version-badge')
+      )
+      expect(badgeIndex).toBeGreaterThan(headingIndex)
+
+      // AND: Validate badge has accessibility attributes
+      await expect(badge).toHaveAttribute('data-slot', 'badge')
+
+      // ============================================================
+      // Scenario 2: Test different SemVer formats by updating schema
+      // ============================================================
+
+      // Test simple version format (major.minor.patch)
+      await startServerWithSchema({
+        name: appName,
+        version: '1.0.0',
+      })
+      await page.goto('/')
+      await expect(badge).toBeVisible()
+      await expect(badge).toHaveText('1.0.0')
+
+      // Test pre-release version format (with alpha)
+      await startServerWithSchema({
+        name: appName,
+        version: '3.0.0-alpha.1',
+      })
+      await page.goto('/')
+      await expect(badge).toBeVisible()
+      await expect(badge).toHaveText('3.0.0-alpha.1')
+
+      // Test version with build metadata only
+      await startServerWithSchema({
+        name: appName,
+        version: '2.5.0+20250116',
+      })
+      await page.goto('/')
+      await expect(badge).toBeVisible()
+      await expect(badge).toHaveText('2.5.0+20250116')
+
+      // ============================================================
+      // Scenario 3: App WITHOUT version - Badge should be hidden
+      // ============================================================
+
+      // GIVEN: A server configured with app name only (no version)
+      await startServerWithSchema({
+        name: 'no-version-app',
+      })
+
+      // WHEN: User navigates to the homepage
+      await page.goto('/')
+
+      // THEN: Badge should not exist in the DOM
+      const hiddenBadge = page.locator('[data-testid="app-version-badge"]')
+      await expect(hiddenBadge).toBeHidden()
+      await expect(hiddenBadge).toHaveCount(0)
+
+      // AND: App name should still be visible (version is optional)
+      const headingWithoutVersion = page.locator('h1')
+      await expect(headingWithoutVersion).toBeVisible()
+      await expect(headingWithoutVersion).toHaveText('no-version-app')
+    }
+  )
 })

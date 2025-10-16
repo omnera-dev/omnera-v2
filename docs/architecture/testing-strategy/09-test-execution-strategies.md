@@ -193,7 +193,7 @@ test('complete checkout flow', { tag: ['@regression', '@critical'] }, async ({ p
 
 ### Playwright Configuration for Tags
 
-Configure Playwright to support tagged test execution:
+Playwright uses grep patterns to filter tests by tag metadata:
 
 ```typescript
 // playwright.config.ts
@@ -207,31 +207,15 @@ export default defineConfig({
       name: 'chromium',
       use: { ...devices['Desktop Chrome'] },
     },
-    // Tagged test execution (run specific test categories)
-    // Development - Spec tests only
-    {
-      name: 'spec',
-      testMatch: /.*\.spec\.ts/,
-      grep: /@spec/,
-      use: { ...devices['Desktop Chrome'] },
-    },
-    // CI/CD - Regression tests
-    {
-      name: 'regression',
-      testMatch: /.*\.spec\.ts/,
-      grep: /@regression/,
-      use: { ...devices['Desktop Chrome'] },
-    },
-    // Every commit - Critical paths
-    {
-      name: 'critical',
-      testMatch: /.*\.spec\.ts/,
-      grep: /@critical/,
-      use: { ...devices['Desktop Chrome'] },
-    },
   ],
 })
 ```
+
+**Tag filtering happens via CLI** with `--grep` flag:
+
+- `playwright test --grep='@spec'` - Run spec tests only
+- `playwright test --grep='@critical'` - Run critical tests only
+- `playwright test --grep='@spec|@critical'` - Run spec OR critical tests
 
 ### Execution Strategy by Environment
 
@@ -245,17 +229,18 @@ export default defineConfig({
 
 ### NPM Scripts Configuration
 
-Omnera uses a hybrid approach with both **project-based** and **grep-based** execution:
+Omnera uses **grep-based** execution for all test filtering:
 
-- **Project-based** (`--project=name`): Use tagged Playwright projects (spec, regression, critical)
-- **Grep-based** (`--grep='@tag'`): Use pattern matching for flexible tag combinations
+- Tag tests with `{ tag: '@spec' }` metadata in test definitions
+- Use `--grep='@tag'` pattern matching for flexible tag combinations
+- Supports OR logic with `|` operator (e.g., `@spec|@critical`)
 
 ```json
 {
   "scripts": {
     "test:e2e": "playwright test",
-    "test:e2e:spec": "playwright test --project=spec",
-    "test:e2e:critical": "playwright test --project=critical",
+    "test:e2e:spec": "playwright test --grep='@spec'",
+    "test:e2e:critical": "playwright test --grep='@critical'",
     "test:e2e:dev": "playwright test --grep='@spec|@critical'",
     "test:e2e:ci": "playwright test --grep='@regression|@critical'"
   }
