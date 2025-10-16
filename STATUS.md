@@ -16,107 +16,116 @@ This document tracks the current implementation status of Omnera features agains
 
 ## Core Architecture
 
-| Feature | Status | Notes |
-|---------|--------|-------|
-| Runtime Interpretation | 📋 Planned | Currently static config only |
-| Live Configuration Updates | 📋 Planned | Requires file watching |
-| Configuration Schema | 🚧 In Progress | Basic App schema implemented |
+| Feature                    | Status         | Notes                        |
+| -------------------------- | -------------- | ---------------------------- |
+| Runtime Interpretation     | 📋 Planned     | Currently static config only |
+| Live Configuration Updates | 📋 Planned     | Requires file watching       |
+| Configuration Schema       | 🚧 In Progress | Basic App schema implemented |
 
 ---
 
 ## Infrastructure (Built-in Features)
 
 ### Web Server
-| Component | Status | Implementation |
-|-----------|--------|----------------|
-| Hono Web Framework | ✅ Complete | v4.9.12, fully integrated |
-| React SSR | ✅ Complete | React 19, server-side rendering |
-| Tailwind CSS Compilation | ✅ Complete | Dynamic PostCSS compilation |
-| Routing System | 📋 Planned | Only homepage route exists |
-| Static File Serving | 📋 Planned | Only CSS served currently |
-| API Documentation | 📋 Planned | - |
+
+| Component                | Status      | Implementation                  |
+| ------------------------ | ----------- | ------------------------------- |
+| Hono Web Framework       | ✅ Complete | v4.9.12, fully integrated       |
+| React SSR                | ✅ Complete | React 19, server-side rendering |
+| Tailwind CSS Compilation | ✅ Complete | Dynamic PostCSS compilation     |
+| Routing System           | 📋 Planned  | Only homepage route exists      |
+| Static File Serving      | 📋 Planned  | Only CSS served currently       |
+| API Documentation        | 📋 Planned  | -                               |
 
 ### Database
-| Component | Status | Implementation |
-|-----------|--------|----------------|
-| PostgreSQL Support | 📋 Planned | Dependencies installed (Drizzle) |
-| Drizzle ORM | 📋 Planned | Not yet configured |
-| Automatic Schema Generation | 📋 Planned | - |
-| CRUD Operations | 📋 Planned | - |
-| Migrations | 📋 Planned | - |
-| Relationships | 📋 Planned | - |
+
+| Component                   | Status     | Implementation                   |
+| --------------------------- | ---------- | -------------------------------- |
+| PostgreSQL Support          | 📋 Planned | Dependencies installed (Drizzle) |
+| Drizzle ORM                 | 📋 Planned | Not yet configured               |
+| Automatic Schema Generation | 📋 Planned | -                                |
+| CRUD Operations             | 📋 Planned | -                                |
+| Migrations                  | 📋 Planned | -                                |
+| Relationships               | 📋 Planned | -                                |
 
 ### Authentication
-| Component | Status | Implementation |
-|-----------|--------|----------------|
+
+| Component               | Status     | Implementation         |
+| ----------------------- | ---------- | ---------------------- |
 | Better Auth Integration | 📋 Planned | Dependencies installed |
-| Email/Password Login | 📋 Planned | - |
-| OAuth Providers | 📋 Planned | - |
-| Session Management | 📋 Planned | - |
-| Password Reset | 📋 Planned | - |
-| User Registration | 📋 Planned | - |
+| Email/Password Login    | 📋 Planned | -                      |
+| OAuth Providers         | 📋 Planned | -                      |
+| Session Management      | 📋 Planned | -                      |
+| Password Reset          | 📋 Planned | -                      |
+| User Registration       | 📋 Planned | -                      |
 
 ### Other Services
-| Component | Status | Implementation |
-|-----------|--------|----------------|
-| File Storage | 📋 Planned | - |
-| Email Service | 📋 Planned | - |
-| Background Jobs | 📋 Planned | - |
+
+| Component       | Status     | Implementation |
+| --------------- | ---------- | -------------- |
+| File Storage    | 📋 Planned | -              |
+| Email Service   | 📋 Planned | -              |
+| Background Jobs | 📋 Planned | -              |
 
 ---
 
 ## Configuration Features
 
 ### Tables
-| Feature | Status | Notes |
-|---------|--------|-------|
-| Table Schema Definition | 📋 Planned | - |
-| Field Types (text, email, etc.) | 📋 Planned | - |
-| Automatic CRUD APIs | 📋 Planned | - |
-| Validations | 📋 Planned | - |
-| Relationships | 📋 Planned | - |
-| Data Export | 📋 Planned | - |
+
+| Feature                         | Status     | Notes |
+| ------------------------------- | ---------- | ----- |
+| Table Schema Definition         | 📋 Planned | -     |
+| Field Types (text, email, etc.) | 📋 Planned | -     |
+| Automatic CRUD APIs             | 📋 Planned | -     |
+| Validations                     | 📋 Planned | -     |
+| Relationships                   | 📋 Planned | -     |
+| Data Export                     | 📋 Planned | -     |
 
 ### Pages
-| Feature | Status | Notes |
-|---------|--------|-------|
-| Basic Homepage | ✅ Complete | Shows app name only |
-| Dynamic Routing | 📋 Planned | - |
-| Auto-generated Forms | 📋 Planned | - |
-| Data Tables | 📋 Planned | - |
-| Authentication Pages | 📋 Planned | - |
-| Admin Dashboards | 📋 Planned | - |
+
+| Feature              | Status      | Notes               |
+| -------------------- | ----------- | ------------------- |
+| Basic Homepage       | ✅ Complete | Shows app name only |
+| Dynamic Routing      | 📋 Planned  | -                   |
+| Auto-generated Forms | 📋 Planned  | -                   |
+| Data Tables          | 📋 Planned  | -                   |
+| Authentication Pages | 📋 Planned  | -                   |
+| Admin Dashboards     | 📋 Planned  | -                   |
 
 ### Automations
-| Feature | Status | Notes |
-|---------|--------|-------|
-| Event Triggers | 📋 Planned | - |
-| Database Event Hooks | 📋 Planned | - |
-| Scheduled Tasks | 📋 Planned | - |
-| Webhooks | 📋 Planned | - |
-| Email Actions | 📋 Planned | - |
-| API Calls | 📋 Planned | - |
-| Template Variables | 📋 Planned | - |
-| Conditional Logic | 📋 Planned | - |
+
+| Feature              | Status     | Notes |
+| -------------------- | ---------- | ----- |
+| Event Triggers       | 📋 Planned | -     |
+| Database Event Hooks | 📋 Planned | -     |
+| Scheduled Tasks      | 📋 Planned | -     |
+| Webhooks             | 📋 Planned | -     |
+| Email Actions        | 📋 Planned | -     |
+| API Calls            | 📋 Planned | -     |
+| Template Variables   | 📋 Planned | -     |
+| Conditional Logic    | 📋 Planned | -     |
 
 ### Forms
-| Feature | Status | Notes |
-|---------|--------|-------|
-| Form Builder | 📋 Planned | - |
-| Input Types | 📋 Planned | - |
-| Validation Rules | 📋 Planned | - |
-| File Uploads | 📋 Planned | - |
-| Multi-step Forms | 📋 Planned | - |
-| Submission Handling | 📋 Planned | - |
+
+| Feature             | Status     | Notes |
+| ------------------- | ---------- | ----- |
+| Form Builder        | 📋 Planned | -     |
+| Input Types         | 📋 Planned | -     |
+| Validation Rules    | 📋 Planned | -     |
+| File Uploads        | 📋 Planned | -     |
+| Multi-step Forms    | 📋 Planned | -     |
+| Submission Handling | 📋 Planned | -     |
 
 ### Integrations
-| Feature | Status | Notes |
-|---------|--------|-------|
-| OAuth Providers | 📋 Planned | - |
-| Stripe Payments | 📋 Planned | - |
-| Email Services | 📋 Planned | - |
-| Cloud Storage | 📋 Planned | - |
-| Webhooks | 📋 Planned | - |
+
+| Feature         | Status     | Notes |
+| --------------- | ---------- | ----- |
+| OAuth Providers | 📋 Planned | -     |
+| Stripe Payments | 📋 Planned | -     |
+| Email Services  | 📋 Planned | -     |
+| Cloud Storage   | 📋 Planned | -     |
+| Webhooks        | 📋 Planned | -     |
 
 ---
 
@@ -125,16 +134,18 @@ This document tracks the current implementation status of Omnera features agains
 ### What Works Today ✅
 
 **Minimal Web Server**
+
 ```typescript
 import { start } from 'omnera'
 
 start({
   name: 'My App',
-  description: 'A simple application'
+  description: 'A simple application',
 })
 ```
 
 **Features:**
+
 - ✅ Bun runtime (fast TypeScript execution)
 - ✅ Hono web server on port 3000
 - ✅ React 19 SSR for homepage
@@ -145,6 +156,7 @@ start({
 - ✅ CLI support via environment variables
 
 **Stack:**
+
 - Bun 1.3.0
 - TypeScript 5+
 - Effect 3.18.4 (internal)
@@ -170,6 +182,7 @@ start({
 ## Development Roadmap
 
 ### Phase 1: Foundation (Current) 🚧
+
 **Goal**: Minimal viable server
 
 - [x] Project setup and architecture
@@ -182,6 +195,7 @@ start({
 - [ ] Basic routing system
 
 ### Phase 2: Data Layer 📋
+
 **Goal**: CRUD operations and data management
 
 - [ ] Table schema configuration
@@ -192,6 +206,7 @@ start({
 - [ ] Validation system
 
 ### Phase 3: User Management 📋
+
 **Goal**: Authentication and authorization
 
 - [ ] Better Auth integration
@@ -203,6 +218,7 @@ start({
 - [ ] Role-based access control
 
 ### Phase 4: User Interface 📋
+
 **Goal**: Dynamic page generation
 
 - [ ] Page configuration schema
@@ -213,6 +229,7 @@ start({
 - [ ] File upload handling
 
 ### Phase 5: Automations 📋
+
 **Goal**: Event-driven workflows
 
 - [ ] Trigger system (database events, schedules)
@@ -222,6 +239,7 @@ start({
 - [ ] Webhook support
 
 ### Phase 6: Integrations 📋
+
 **Goal**: External service connections
 
 - [ ] Email service integration (SMTP, Resend)
@@ -231,6 +249,7 @@ start({
 - [ ] OAuth provider management
 
 ### Phase 7: Developer Experience 📋
+
 **Goal**: Polish and tooling
 
 - [ ] CLI tool improvements
@@ -242,6 +261,7 @@ start({
 - [ ] Example templates
 
 ### Phase 8: Production Ready 📋
+
 **Goal**: Enterprise features
 
 - [ ] Performance optimization
@@ -267,34 +287,38 @@ When working on Omnera, please:
 
 ## Performance Targets
 
-| Metric | Current | Target (v1.0) |
-|--------|---------|---------------|
-| Server Start Time | ~100ms | <100ms |
-| Homepage SSR | ~50ms | <50ms |
-| CSS Compilation | ~200ms | <100ms |
-| Memory Usage | ~50MB | <100MB |
-| Cold Start | ~500ms | <300ms |
+| Metric            | Current | Target (v1.0) |
+| ----------------- | ------- | ------------- |
+| Server Start Time | ~100ms  | <100ms        |
+| Homepage SSR      | ~50ms   | <50ms         |
+| CSS Compilation   | ~200ms  | <100ms        |
+| Memory Usage      | ~50MB   | <100MB        |
+| Cold Start        | ~500ms  | <300ms        |
 
 ---
 
 ## Version History
 
 ### v0.0.1 (Current)
+
 - ✅ Basic web server with React SSR
 - ✅ Tailwind CSS compilation
 - ✅ Type-safe configuration
 - ✅ CLI support
 
 ### v0.1.0 (Planned - Phase 2)
+
 - Database integration
 - CRUD operations
 - Basic routing
 
 ### v0.2.0 (Planned - Phase 3)
+
 - Authentication system
 - User management
 
 ### v1.0.0 (Target)
+
 - All core features from specifications.md
 - Production-ready platform
 - Complete documentation

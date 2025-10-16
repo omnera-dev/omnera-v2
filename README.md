@@ -1,6 +1,10 @@
 # Omnera
 
-A modern TypeScript project built with Bun - the all-in-one JavaScript runtime.
+> **⚠️ Early Development**: Omnera is in Phase 1 (Foundation). See [STATUS.md](STATUS.md) for implementation progress and [docs/specifications.md](docs/specifications.md) for the full product vision.
+
+A configuration-driven web application platform built with Bun, Effect, React, and Tailwind CSS.
+
+**Current Version**: 0.0.1 - Minimal web server with React SSR and dynamic CSS compilation
 
 ## Prerequisites
 
@@ -16,201 +20,194 @@ curl -fsSL https://bun.com/install | bash
 powershell -c "irm bun.com/install.ps1 | iex"
 ```
 
-## Getting Started
+## Quick Start
 
-### Install Dependencies
+### 1. Install Dependencies
 
 ```bash
 bun install
 ```
 
-### Run the Example
+### 2. Run Your First Server
+
+**Option A: Use the template**
 
 ```bash
-bun run example.ts
+bun run templates/landing-page.ts
 ```
 
+**Option B: Create your own**
+
 ```typescript
-import { start } from './src/index'
+// app.ts
+import { start } from 'omnera'
 
 const myApp = {
   name: 'My App',
-  description: 'A fullstack Bun application',
+  description: 'A simple Bun application',
 }
 
-// Start server with automatic logging and graceful shutdown
+start(myApp)
+```
+
+```bash
+bun run app.ts
+```
+
+Visit **http://localhost:3000** to see your app running!
+
+### 3. Customize Configuration
+
+```typescript
+import { start } from 'omnera'
+
 start(myApp, {
-  port: 3000,
-  hostname: 'localhost',
-}).catch((error) => {
-  console.error('Failed to start server:', error)
-  process.exit(1)
+  port: 8080, // Custom port (default: 3000)
+  hostname: '0.0.0.0', // Custom hostname (default: localhost)
 })
 ```
 
-#### CLI (Command-line Interface)
+## What's Included
 
-You can also start an Omnera server directly from the command line using environment variables:
+**Current Features (v0.0.1):**
 
-```bash
-# Using JSON schema environment variable
-OMNERA_APP_SCHEMA='{"name":"My App","description":"Description"}' bun run omnera
+- ✅ **Bun Runtime** - Fast TypeScript execution without compilation
+- ✅ **Web Server** - Hono-based server with automatic lifecycle management
+- ✅ **React SSR** - Server-side rendering with React 19
+- ✅ **Tailwind CSS** - Auto-compilation with PostCSS (no build step)
+- ✅ **Type Safety** - Effect Schema validation for configuration
+- ✅ **Graceful Shutdown** - Automatic SIGINT/SIGTERM handling
 
-# Or with npx
-OMNERA_APP_SCHEMA='{"name":"My App"}' npx omnera
+**Coming Soon** (see [STATUS.md](STATUS.md)):
 
-# With custom port and hostname
-OMNERA_PORT=8080 OMNERA_HOSTNAME="0.0.0.0" OMNERA_APP_SCHEMA='{"name":"My App"}' bun run omnera
+- 📋 Database integration (PostgreSQL + Drizzle ORM)
+- 📋 Authentication (Better Auth)
+- 📋 Dynamic routing
+- 📋 CRUD operations
+- 📋 Admin dashboards
+- 📋 And much more...
 
-# Using .env file
-cp .env.example .env
-# Edit .env with your configuration
-bun run start
-```
+## Core Stack
 
-**Environment Variables:**
+| Technology       | Version | Purpose                           |
+| ---------------- | ------- | --------------------------------- |
+| **Bun**          | 1.3.0   | Runtime & package manager         |
+| **TypeScript**   | ^5      | Type-safe language                |
+| **Effect**       | 3.18.4  | Functional programming (internal) |
+| **Hono**         | 4.9.12  | Web framework                     |
+| **React**        | 19.2.0  | UI library (SSR)                  |
+| **Tailwind CSS** | 4.1.14  | Styling                           |
 
-- `OMNERA_APP_SCHEMA` (required) - JSON string containing app configuration (name, description, etc.)
-- `OMNERA_PORT` (optional) - Server port (default: 3000)
-- `OMNERA_HOSTNAME` (optional) - Server hostname (default: localhost)
-
-### Run Tests
-
-```bash
-# Run all tests
-bun test
-
-# Watch mode for development
-bun test --watch
-
-# With coverage
-bun test --coverage
-```
+Full stack details in [CLAUDE.md](CLAUDE.md#core-stack)
 
 ## Development
 
-### Adding Dependencies
+### Common Commands
 
 ```bash
-# Add runtime dependency
-bun add package-name
+# Development
+bun install                      # Install dependencies
+bun run templates/landing-page.ts # Run example
 
-# Add dev dependency
-bun add -d package-name
-```
+# Code Quality
+bun run lint                     # Run ESLint
+bun run format                   # Run Prettier
+bun run typecheck                # TypeScript check
 
-### Running in Watch Mode
+# Testing
+bun test                         # Unit tests
+bun test:e2e                     # E2E tests (Playwright)
+bun test --watch                 # Watch mode
 
-```bash
-bun --watch src/index.ts
-```
-
-### Type Checking
-
-```bash
-bunx tsc --noEmit
+# Watch Mode
+bun --watch src/index.ts         # Auto-reload on changes
 ```
 
 ## Project Structure
 
 ```
 omnera-v2/
+├── docs/                           # Detailed documentation
+│   ├── specifications.md           # Product vision & roadmap
+│   ├── architecture/               # Architecture patterns
+│   └── infrastructure/             # Tech stack docs
 ├── src/
-│   └── index.ts           # Application entry point
-├── tests/                 # E2E tests (Playwright)
-├── scripts/               # Build and release scripts
-├── .github/workflows/     # CI/CD workflows
-├── package.json           # Project configuration
-├── tsconfig.json          # TypeScript configuration (Bun-optimized)
-├── playwright.config.ts   # Playwright E2E test configuration
-├── eslint.config.ts       # ESLint configuration
-├── .releaserc.json        # Semantic-release configuration
-├── CHANGELOG.md          # Auto-generated changelog
-├── LICENSE.md            # BSL 1.1 license
-├── README.md            # This file
-└── CLAUDE.md            # Detailed technical documentation
+│   ├── index.ts                    # Main entry point
+│   ├── application/                # Use cases (Effect programs)
+│   ├── domain/                     # Business logic (pure functions)
+│   ├── infrastructure/             # External services
+│   └── presentation/               # UI components & routes
+├── templates/                      # Example applications
+│   └── landing-page.ts             # Minimal landing page template
+├── tests/                          # E2E tests (Playwright)
+├── STATUS.md                       # Implementation progress tracker
+├── CLAUDE.md                       # Technical documentation
+└── README.md                       # This file
 ```
-
-## Why Bun?
-
-This project uses Bun instead of Node.js for:
-
-- **Native TypeScript** - Direct execution without compilation
-- **Speed** - 4x faster cold starts than Node.js
-- **Unified Tooling** - Runtime, package manager, and test runner in one
-- **Modern JavaScript** - Latest features by default
-- **Developer Experience** - Faster installs, built-in watch mode
-
-## Important Notes
-
-⚠️ **This is a Bun project** - Do not use:
-
-- `node`, `npm`, `yarn`, or `pnpm` commands
-- `npx` (use `bunx` instead)
-- `ts-node` or `nodemon` (Bun handles these natively)
 
 ## Documentation
 
-For detailed technical documentation, infrastructure details, and coding standards, see [CLAUDE.md](CLAUDE.md).
+| Document                                             | Purpose                                    |
+| ---------------------------------------------------- | ------------------------------------------ |
+| **[README.md](README.md)**                           | Quick start guide (you are here)           |
+| **[STATUS.md](STATUS.md)**                           | Current implementation status & roadmap    |
+| **[CLAUDE.md](CLAUDE.md)**                           | Technical documentation & coding standards |
+| **[docs/specifications.md](docs/specifications.md)** | Product vision & future features           |
+
+## Why Bun?
+
+Omnera uses **Bun** instead of Node.js:
+
+- ⚡ **Native TypeScript** - Execute `.ts` files directly, no compilation needed
+- 🚀 **4x Faster** - Cold starts and package installs
+- 🛠️ **All-in-One** - Runtime, package manager, test runner, bundler
+- 🎯 **Better DX** - Built-in watch mode, faster feedback loops
+
+**Important**: This is a Bun-only project. Do not use `node`, `npm`, `yarn`, or `pnpm`.
 
 ## Contributing
 
 ### Commit Message Format
 
-This project uses [Conventional Commits](https://www.conventionalcommits.org/) for automated versioning and changelog generation.
-
-Format: `<type>(<scope>): <subject>`
-
-**Types:**
-
-- `feat`: New feature (triggers minor version bump)
-- `fix`: Bug fix (triggers patch version bump)
-- `docs`: Documentation changes
-- `style`: Code style changes (formatting, semicolons, etc.)
-- `refactor`: Code refactoring without feature changes
-- `perf`: Performance improvements
-- `test`: Adding or updating tests
-- `chore`: Build process or auxiliary tool changes
-- `ci`: CI configuration changes
-
-**Examples:**
+This project uses **[Conventional Commits](https://www.conventionalcommits.org/)** for automated versioning:
 
 ```bash
-feat(api): add user authentication endpoint
-fix(database): resolve connection timeout issue
-docs(readme): update installation instructions
+feat(tables): add CRUD operations       # Minor version bump (0.X.0)
+fix(server): resolve port binding       # Patch version bump (0.0.X)
+docs(readme): update installation       # No version bump
+feat!: redesign configuration API       # Major version bump (X.0.0)
 ```
 
-**Breaking Changes:**
-Add `BREAKING CHANGE:` in the commit body or add `!` after type to trigger major version bump:
+**Types**: `feat`, `fix`, `docs`, `style`, `refactor`, `perf`, `test`, `chore`, `ci`
 
-```bash
-feat!: redesign API structure
+See [CLAUDE.md](CLAUDE.md#commit-messages-conventional-commits---required) for full guidelines.
 
-BREAKING CHANGE: endpoints now use /v2/ prefix
-```
+### Development Workflow
 
-### Release Process
+1. **Fork & Clone** - Create your feature branch
+2. **Code** - Follow coding standards in [CLAUDE.md](CLAUDE.md)
+3. **Test** - Run `bun run lint && bun run typecheck && bun test`
+4. **Commit** - Use conventional commits
+5. **Push** - Create a pull request
 
-Releases are automated via GitHub Actions:
-
-1. Push commits to `main` branch using conventional commit format
-2. CI runs tests and quality checks
-3. semantic-release analyzes commits and determines version bump
-4. Updates CHANGELOG.md, package.json, and LICENSE.md
-5. Publishes to npm registry
-6. Creates GitHub release with release notes
+Releases are **fully automated** via GitHub Actions and semantic-release.
 
 ## License
 
-Omnera is licensed under the Business Source License 1.1.
+**Business Source License 1.1 (BSL-1.1)**
 
-- **Non-production use**: Free for development, testing, and personal projects
-- **Production use**: Allowed for internal business use
-- **Not allowed**: Offering Omnera as a managed service or SaaS to third parties
+✅ **Free for**:
 
-See [LICENSE.md](LICENSE) for full details.
+- Development and testing
+- Personal projects
+- Internal business use
+
+❌ **Not allowed**:
+
+- Offering Omnera as a managed service/SaaS to third parties
+
+See [LICENSE.md](LICENSE.md) for full details.
 
 ---
 
-_This project was created using `bun init` in Bun v1.3.0_
+**Questions or feedback?** Open an issue on [GitHub](https://github.com/omnera/omnera) or check the [documentation](docs/specifications.md).
