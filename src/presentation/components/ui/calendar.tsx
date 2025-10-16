@@ -17,9 +17,11 @@ function Calendar({
   formatters,
   components,
   ...props
-}: Readonly<React.ComponentProps<typeof DayPicker> & {
-  buttonVariant?: React.ComponentProps<typeof Button>['variant']
-}>) {
+}: Readonly<
+  React.ComponentProps<typeof DayPicker> & {
+    buttonVariant?: React.ComponentProps<typeof Button>['variant']
+  }
+>) {
   const defaultClassNames = getDefaultClassNames()
 
   return (
@@ -169,7 +171,6 @@ function CalendarDayButton({
 
   const ref = React.useRef<HTMLButtonElement>(null)
   React.useEffect(() => {
-     
     if (modifiers.focused) ref.current?.focus()
   }, [modifiers.focused])
 

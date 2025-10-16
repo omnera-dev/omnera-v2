@@ -20,6 +20,11 @@ const functional = functionalPlugin as any
 const drizzle = drizzlePlugin as any
 
 export default defineConfig([
+  // Global ignores
+  {
+    ignores: ['.claude/**', 'dist/**', 'node_modules/**', '.next/**', '.turbo/**'],
+  },
+
   // Base JavaScript configuration
   {
     files: ['**/*.{js,mjs,cjs,ts,mts,cts,tsx}'],
@@ -492,32 +497,38 @@ export default defineConfig([
 
   // UI Components - Pragmatic rules for presentation layer
   {
-    files: ['src/presentation/**/*.{ts,tsx}', 'src/hooks/**/*.{ts,tsx}'],
+    files: ['src/presentation/**/*.{ts,tsx}'],
     rules: {
       // UI components need side effects for DOM manipulation
-      'functional/no-expression-statements': ['warn', {
-        ignoreVoid: true,
-        ignoreCodePattern: [
-          // React and DOM patterns
-          '.*\\.focus\\(\\)',
-          '.*\\.blur\\(\\)',
-          '.*\\.scrollIntoView\\(\\)',
-          'ref\\.current',
-          'event\\.(preventDefault|stopPropagation)',
-          'set[A-Z].*', // setState functions
-          '.*\\.addEventListener',
-          '.*\\.removeEventListener',
-          'document\\.',
-          'window\\.',
-          // Console
-          'console\\.',
-        ],
-      }],
+      'functional/no-expression-statements': [
+        'warn',
+        {
+          ignoreVoid: true,
+          ignoreCodePattern: [
+            // React and DOM patterns
+            '.*\\.focus\\(\\)',
+            '.*\\.blur\\(\\)',
+            '.*\\.scrollIntoView\\(\\)',
+            'ref\\.current',
+            'event\\.(preventDefault|stopPropagation)',
+            'set[A-Z].*', // setState functions
+            '.*\\.addEventListener',
+            '.*\\.removeEventListener',
+            'document\\.',
+            'window\\.',
+            // Console
+            'console\\.',
+          ],
+        },
+      ],
 
       // UI components work with external libraries that use mutable types
-      'functional/prefer-immutable-types': ['warn', {
-        enforcement: 'None', // Disable for UI components
-      }],
+      'functional/prefer-immutable-types': [
+        'warn',
+        {
+          enforcement: 'None', // Disable for UI components
+        },
+      ],
 
       // Some UI libraries use null
       'unicorn/no-null': 'warn',
@@ -526,10 +537,13 @@ export default defineConfig([
       'functional/no-let': 'warn',
 
       // Some UI patterns need reassignment
-      'no-param-reassign': ['warn', {
-        props: true,
-        ignorePropertyModificationsFor: ['event', 'e', 'ref', 'acc'],
-      }],
+      'no-param-reassign': [
+        'warn',
+        {
+          props: true,
+          ignorePropertyModificationsFor: ['event', 'e', 'ref', 'acc'],
+        },
+      ],
     },
   },
 
@@ -538,22 +552,23 @@ export default defineConfig([
     files: ['src/infrastructure/**/*.{ts,tsx}'],
     rules: {
       // Infrastructure needs side effects for I/O
-      'functional/no-expression-statements': ['warn', {
-        ignoreVoid: true,
-        ignoreCodePattern: [
-          'console\\.',
-          'server\\.',
-          'app\\.',
-          'Bun\\.',
-        ],
-      }],
+      'functional/no-expression-statements': [
+        'warn',
+        {
+          ignoreVoid: true,
+          ignoreCodePattern: ['console\\.', 'server\\.', 'app\\.', 'Bun\\.'],
+        },
+      ],
 
       // External libraries often use mutable types
-      'functional/prefer-immutable-types': ['warn', {
-        enforcement: 'ReadonlyShallow',
-        ignoreInferredTypes: true,
-        ignoreClasses: true,
-      }],
+      'functional/prefer-immutable-types': [
+        'warn',
+        {
+          enforcement: 'ReadonlyShallow',
+          ignoreInferredTypes: true,
+          ignoreClasses: true,
+        },
+      ],
     },
   },
 

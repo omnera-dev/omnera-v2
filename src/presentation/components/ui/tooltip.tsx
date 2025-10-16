@@ -28,7 +28,9 @@ function Tooltip({ ...props }: Readonly<React.ComponentProps<typeof TooltipPrimi
   )
 }
 
-function TooltipTrigger({ ...props }: Readonly<React.ComponentProps<typeof TooltipPrimitive.Trigger>>) {
+function TooltipTrigger({
+  ...props
+}: Readonly<React.ComponentProps<typeof TooltipPrimitive.Trigger>>) {
   return (
     <TooltipPrimitive.Trigger
       data-slot="tooltip-trigger"

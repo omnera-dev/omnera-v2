@@ -13,7 +13,9 @@ function Drawer({ ...props }: Readonly<React.ComponentProps<typeof DrawerPrimiti
   )
 }
 
-function DrawerTrigger({ ...props }: Readonly<React.ComponentProps<typeof DrawerPrimitive.Trigger>>) {
+function DrawerTrigger({
+  ...props
+}: Readonly<React.ComponentProps<typeof DrawerPrimitive.Trigger>>) {
   return (
     <DrawerPrimitive.Trigger
       data-slot="drawer-trigger"
@@ -106,7 +108,10 @@ function DrawerFooter({ className, ...props }: Readonly<React.ComponentProps<'di
   )
 }
 
-function DrawerTitle({ className, ...props }: Readonly<React.ComponentProps<typeof DrawerPrimitive.Title>>) {
+function DrawerTitle({
+  className,
+  ...props
+}: Readonly<React.ComponentProps<typeof DrawerPrimitive.Title>>) {
   return (
     <DrawerPrimitive.Title
       data-slot="drawer-title"

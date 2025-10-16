@@ -40,9 +40,11 @@ function BreadcrumbLink({
   asChild,
   className,
   ...props
-}: Readonly<React.ComponentProps<'a'> & {
-  asChild?: boolean
-}>) {
+}: Readonly<
+  React.ComponentProps<'a'> & {
+    asChild?: boolean
+  }
+>) {
   const Comp = asChild ? Slot : 'a'
 
   return (
@@ -67,7 +69,11 @@ function BreadcrumbPage({ className, ...props }: Readonly<React.ComponentProps<'
   )
 }
 
-function BreadcrumbSeparator({ children, className, ...props }: Readonly<React.ComponentProps<'li'>>) {
+function BreadcrumbSeparator({
+  children,
+  className,
+  ...props
+}: Readonly<React.ComponentProps<'li'>>) {
   return (
     <li
       data-slot="breadcrumb-separator"

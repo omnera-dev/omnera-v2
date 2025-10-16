@@ -5,7 +5,9 @@ import { CheckIcon, ChevronRightIcon, CircleIcon } from 'lucide-react'
 import * as React from 'react'
 import { cn } from '@/presentation/utils/cn'
 
-function ContextMenu({ ...props }: Readonly<React.ComponentProps<typeof ContextMenuPrimitive.Root>>) {
+function ContextMenu({
+  ...props
+}: Readonly<React.ComponentProps<typeof ContextMenuPrimitive.Root>>) {
   return (
     <ContextMenuPrimitive.Root
       data-slot="context-menu"
@@ -25,7 +27,9 @@ function ContextMenuTrigger({
   )
 }
 
-function ContextMenuGroup({ ...props }: Readonly<React.ComponentProps<typeof ContextMenuPrimitive.Group>>) {
+function ContextMenuGroup({
+  ...props
+}: Readonly<React.ComponentProps<typeof ContextMenuPrimitive.Group>>) {
   return (
     <ContextMenuPrimitive.Group
       data-slot="context-menu-group"
@@ -34,7 +38,9 @@ function ContextMenuGroup({ ...props }: Readonly<React.ComponentProps<typeof Con
   )
 }
 
-function ContextMenuPortal({ ...props }: Readonly<React.ComponentProps<typeof ContextMenuPrimitive.Portal>>) {
+function ContextMenuPortal({
+  ...props
+}: Readonly<React.ComponentProps<typeof ContextMenuPrimitive.Portal>>) {
   return (
     <ContextMenuPrimitive.Portal
       data-slot="context-menu-portal"
@@ -43,7 +49,9 @@ function ContextMenuPortal({ ...props }: Readonly<React.ComponentProps<typeof Co
   )
 }
 
-function ContextMenuSub({ ...props }: Readonly<React.ComponentProps<typeof ContextMenuPrimitive.Sub>>) {
+function ContextMenuSub({
+  ...props
+}: Readonly<React.ComponentProps<typeof ContextMenuPrimitive.Sub>>) {
   return (
     <ContextMenuPrimitive.Sub
       data-slot="context-menu-sub"
@@ -68,9 +76,11 @@ function ContextMenuSubTrigger({
   inset,
   children,
   ...props
-}: Readonly<React.ComponentProps<typeof ContextMenuPrimitive.SubTrigger> & {
-  inset?: boolean
-}>) {
+}: Readonly<
+  React.ComponentProps<typeof ContextMenuPrimitive.SubTrigger> & {
+    inset?: boolean
+  }
+>) {
   return (
     <ContextMenuPrimitive.SubTrigger
       data-slot="context-menu-sub-trigger"

@@ -104,7 +104,6 @@ if (options.port) console.log(`Port: ${options.port}`)
 if (options.hostname) console.log(`Hostname: ${options.hostname}`)
 console.log('')
 
- 
 start(app, options).catch((error) => {
   console.error('Failed to start server:', error)
   // eslint-disable-next-line functional/no-expression-statements

@@ -145,9 +145,11 @@ function FieldSeparator({
   children,
   className,
   ...props
-}: Readonly<React.ComponentProps<'div'> & {
-  children?: React.ReactNode
-}>) {
+}: Readonly<
+  React.ComponentProps<'div'> & {
+    children?: React.ReactNode
+  }
+>) {
   return (
     <div
       data-slot="field-separator"
@@ -176,9 +178,11 @@ function FieldError({
   children,
   errors,
   ...props
-}: Readonly<React.ComponentProps<'div'> & {
-  errors?: ReadonlyArray<{ readonly message?: string } | undefined>
-}>) {
+}: Readonly<
+  React.ComponentProps<'div'> & {
+    errors?: ReadonlyArray<{ readonly message?: string } | undefined>
+  }
+>) {
   const content = useMemo(() => {
     if (children) {
       return children

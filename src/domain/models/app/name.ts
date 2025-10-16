@@ -41,4 +41,3 @@ export const NameSchema = Schema.String.pipe(
     examples: ['my-app', 'todo-app', '@myorg/my-app', 'blog-system', 'dashboard-admin'],
   })
 )
-

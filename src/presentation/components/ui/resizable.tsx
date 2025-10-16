@@ -16,7 +16,9 @@ function ResizablePanelGroup({
   )
 }
 
-function ResizablePanel({ ...props }: Readonly<React.ComponentProps<typeof ResizablePrimitive.Panel>>) {
+function ResizablePanel({
+  ...props
+}: Readonly<React.ComponentProps<typeof ResizablePrimitive.Panel>>) {
   return (
     <ResizablePrimitive.Panel
       data-slot="resizable-panel"
@@ -29,9 +31,11 @@ function ResizableHandle({
   withHandle,
   className,
   ...props
-}: Readonly<React.ComponentProps<typeof ResizablePrimitive.PanelResizeHandle> & {
-  withHandle?: boolean
-}>) {
+}: Readonly<
+  React.ComponentProps<typeof ResizablePrimitive.PanelResizeHandle> & {
+    withHandle?: boolean
+  }
+>) {
   return (
     <ResizablePrimitive.PanelResizeHandle
       data-slot="resizable-handle"

@@ -12,7 +12,9 @@ function Dialog({ ...props }: Readonly<React.ComponentProps<typeof DialogPrimiti
   )
 }
 
-function DialogTrigger({ ...props }: Readonly<React.ComponentProps<typeof DialogPrimitive.Trigger>>) {
+function DialogTrigger({
+  ...props
+}: Readonly<React.ComponentProps<typeof DialogPrimitive.Trigger>>) {
   return (
     <DialogPrimitive.Trigger
       data-slot="dialog-trigger"
@@ -60,9 +62,11 @@ function DialogContent({
   children,
   showCloseButton = true,
   ...props
-}: Readonly<React.ComponentProps<typeof DialogPrimitive.Content> & {
-  showCloseButton?: boolean
-}>) {
+}: Readonly<
+  React.ComponentProps<typeof DialogPrimitive.Content> & {
+    showCloseButton?: boolean
+  }
+>) {
   return (
     <DialogPortal data-slot="dialog-portal">
       <DialogOverlay />
@@ -109,7 +113,10 @@ function DialogFooter({ className, ...props }: Readonly<React.ComponentProps<'di
   )
 }
 
-function DialogTitle({ className, ...props }: Readonly<React.ComponentProps<typeof DialogPrimitive.Title>>) {
+function DialogTitle({
+  className,
+  ...props
+}: Readonly<React.ComponentProps<typeof DialogPrimitive.Title>>) {
   return (
     <DialogPrimitive.Title
       data-slot="dialog-title"

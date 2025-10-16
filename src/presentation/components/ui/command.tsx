@@ -30,12 +30,14 @@ function CommandDialog({
   className,
   showCloseButton = true,
   ...props
-}: Readonly<React.ComponentProps<typeof Dialog> & {
-  title?: string
-  description?: string
-  className?: string
-  showCloseButton?: boolean
-}>) {
+}: Readonly<
+  React.ComponentProps<typeof Dialog> & {
+    title?: string
+    description?: string
+    className?: string
+    showCloseButton?: boolean
+  }
+>) {
   return (
     <Dialog {...props}>
       <DialogHeader className="sr-only">
@@ -76,7 +78,10 @@ function CommandInput({
   )
 }
 
-function CommandList({ className, ...props }: Readonly<React.ComponentProps<typeof CommandPrimitive.List>>) {
+function CommandList({
+  className,
+  ...props
+}: Readonly<React.ComponentProps<typeof CommandPrimitive.List>>) {
   return (
     <CommandPrimitive.List
       data-slot="command-list"
@@ -125,7 +130,10 @@ function CommandSeparator({
   )
 }
 
-function CommandItem({ className, ...props }: Readonly<React.ComponentProps<typeof CommandPrimitive.Item>>) {
+function CommandItem({
+  className,
+  ...props
+}: Readonly<React.ComponentProps<typeof CommandPrimitive.Item>>) {
   return (
     <CommandPrimitive.Item
       data-slot="command-item"

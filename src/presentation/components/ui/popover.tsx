@@ -13,7 +13,9 @@ function Popover({ ...props }: Readonly<React.ComponentProps<typeof PopoverPrimi
   )
 }
 
-function PopoverTrigger({ ...props }: Readonly<React.ComponentProps<typeof PopoverPrimitive.Trigger>>) {
+function PopoverTrigger({
+  ...props
+}: Readonly<React.ComponentProps<typeof PopoverPrimitive.Trigger>>) {
   return (
     <PopoverPrimitive.Trigger
       data-slot="popover-trigger"
@@ -44,7 +46,9 @@ function PopoverContent({
   )
 }
 
-function PopoverAnchor({ ...props }: Readonly<React.ComponentProps<typeof PopoverPrimitive.Anchor>>) {
+function PopoverAnchor({
+  ...props
+}: Readonly<React.ComponentProps<typeof PopoverPrimitive.Anchor>>) {
   return (
     <PopoverPrimitive.Anchor
       data-slot="popover-anchor"

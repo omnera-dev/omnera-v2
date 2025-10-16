@@ -219,6 +219,7 @@ Knip can be configured via:
 **Related Dependencies**:
 
 All shadcn/ui related packages are kept in `ignoreDependencies` because:
+
 - They support components that may not be in use yet
 - Removing them would break components when they're needed
 - They're part of the complete shadcn/ui ecosystem

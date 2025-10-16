@@ -9,9 +9,11 @@ function NavigationMenu({
   children,
   viewport = true,
   ...props
-}: Readonly<React.ComponentProps<typeof NavigationMenuPrimitive.Root> & {
-  viewport?: boolean
-}>) {
+}: Readonly<
+  React.ComponentProps<typeof NavigationMenuPrimitive.Root> & {
+    viewport?: boolean
+  }
+>) {
   return (
     <NavigationMenuPrimitive.Root
       data-slot="navigation-menu"

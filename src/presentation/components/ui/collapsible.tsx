@@ -1,6 +1,8 @@
 import * as CollapsiblePrimitive from '@radix-ui/react-collapsible'
 
-function Collapsible({ ...props }: Readonly<React.ComponentProps<typeof CollapsiblePrimitive.Root>>) {
+function Collapsible({
+  ...props
+}: Readonly<React.ComponentProps<typeof CollapsiblePrimitive.Root>>) {
   return (
     <CollapsiblePrimitive.Root
       data-slot="collapsible"

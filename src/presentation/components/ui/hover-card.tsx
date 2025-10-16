@@ -13,7 +13,9 @@ function HoverCard({ ...props }: Readonly<React.ComponentProps<typeof HoverCardP
   )
 }
 
-function HoverCardTrigger({ ...props }: Readonly<React.ComponentProps<typeof HoverCardPrimitive.Trigger>>) {
+function HoverCardTrigger({
+  ...props
+}: Readonly<React.ComponentProps<typeof HoverCardPrimitive.Trigger>>) {
   return (
     <HoverCardPrimitive.Trigger
       data-slot="hover-card-trigger"

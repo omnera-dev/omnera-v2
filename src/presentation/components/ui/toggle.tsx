@@ -9,7 +9,9 @@ function Toggle({
   variant,
   size,
   ...props
-}: Readonly<React.ComponentProps<typeof TogglePrimitive.Root> & VariantProps<typeof toggleVariants>>) {
+}: Readonly<
+  React.ComponentProps<typeof TogglePrimitive.Root> & VariantProps<typeof toggleVariants>
+>) {
   return (
     <TogglePrimitive.Root
       data-slot="toggle"

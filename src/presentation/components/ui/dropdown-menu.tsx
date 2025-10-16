@@ -3,7 +3,9 @@ import { CheckIcon, ChevronRightIcon, CircleIcon } from 'lucide-react'
 import * as React from 'react'
 import { cn } from '@/presentation/utils/cn'
 
-function DropdownMenu({ ...props }: Readonly<React.ComponentProps<typeof DropdownMenuPrimitive.Root>>) {
+function DropdownMenu({
+  ...props
+}: Readonly<React.ComponentProps<typeof DropdownMenuPrimitive.Root>>) {
   return (
     <DropdownMenuPrimitive.Root
       data-slot="dropdown-menu"
@@ -54,7 +56,9 @@ function DropdownMenuContent({
   )
 }
 
-function DropdownMenuGroup({ ...props }: Readonly<React.ComponentProps<typeof DropdownMenuPrimitive.Group>>) {
+function DropdownMenuGroup({
+  ...props
+}: Readonly<React.ComponentProps<typeof DropdownMenuPrimitive.Group>>) {
   return (
     <DropdownMenuPrimitive.Group
       data-slot="dropdown-menu-group"
@@ -68,10 +72,12 @@ function DropdownMenuItem({
   inset,
   variant = 'default',
   ...props
-}: Readonly<React.ComponentProps<typeof DropdownMenuPrimitive.Item> & {
-  inset?: boolean
-  variant?: 'default' | 'destructive'
-}>) {
+}: Readonly<
+  React.ComponentProps<typeof DropdownMenuPrimitive.Item> & {
+    inset?: boolean
+    variant?: 'default' | 'destructive'
+  }
+>) {
   return (
     <DropdownMenuPrimitive.Item
       data-slot="dropdown-menu-item"
@@ -151,9 +157,11 @@ function DropdownMenuLabel({
   className,
   inset,
   ...props
-}: Readonly<React.ComponentProps<typeof DropdownMenuPrimitive.Label> & {
-  inset?: boolean
-}>) {
+}: Readonly<
+  React.ComponentProps<typeof DropdownMenuPrimitive.Label> & {
+    inset?: boolean
+  }
+>) {
   return (
     <DropdownMenuPrimitive.Label
       data-slot="dropdown-menu-label"
@@ -187,7 +195,9 @@ function DropdownMenuShortcut({ className, ...props }: Readonly<React.ComponentP
   )
 }
 
-function DropdownMenuSub({ ...props }: Readonly<React.ComponentProps<typeof DropdownMenuPrimitive.Sub>>) {
+function DropdownMenuSub({
+  ...props
+}: Readonly<React.ComponentProps<typeof DropdownMenuPrimitive.Sub>>) {
   return (
     <DropdownMenuPrimitive.Sub
       data-slot="dropdown-menu-sub"
@@ -201,9 +211,11 @@ function DropdownMenuSubTrigger({
   inset,
   children,
   ...props
-}: Readonly<React.ComponentProps<typeof DropdownMenuPrimitive.SubTrigger> & {
-  inset?: boolean
-}>) {
+}: Readonly<
+  React.ComponentProps<typeof DropdownMenuPrimitive.SubTrigger> & {
+    inset?: boolean
+  }
+>) {
   return (
     <DropdownMenuPrimitive.SubTrigger
       data-slot="dropdown-menu-sub-trigger"

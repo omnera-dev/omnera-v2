@@ -300,7 +300,10 @@ function getPayloadConfigFromPayload(config: ChartConfig, payload: unknown, key:
   }
 
   const payloadPayload =
-    'payload' in payload && typeof payload.payload === 'object' && payload.payload !== undefined && payload.payload !== null
+    'payload' in payload &&
+    typeof payload.payload === 'object' &&
+    payload.payload !== undefined &&
+    payload.payload !== null
       ? payload.payload
       : undefined
 

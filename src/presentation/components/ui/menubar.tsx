@@ -3,7 +3,10 @@ import { CheckIcon, ChevronRightIcon, CircleIcon } from 'lucide-react'
 import * as React from 'react'
 import { cn } from '@/presentation/utils/cn'
 
-function Menubar({ className, ...props }: Readonly<React.ComponentProps<typeof MenubarPrimitive.Root>>) {
+function Menubar({
+  className,
+  ...props
+}: Readonly<React.ComponentProps<typeof MenubarPrimitive.Root>>) {
   return (
     <MenubarPrimitive.Root
       data-slot="menubar"
@@ -34,7 +37,9 @@ function MenubarGroup({ ...props }: Readonly<React.ComponentProps<typeof Menubar
   )
 }
 
-function MenubarPortal({ ...props }: Readonly<React.ComponentProps<typeof MenubarPrimitive.Portal>>) {
+function MenubarPortal({
+  ...props
+}: Readonly<React.ComponentProps<typeof MenubarPrimitive.Portal>>) {
   return (
     <MenubarPrimitive.Portal
       data-slot="menubar-portal"
@@ -43,7 +48,9 @@ function MenubarPortal({ ...props }: Readonly<React.ComponentProps<typeof Menuba
   )
 }
 
-function MenubarRadioGroup({ ...props }: Readonly<React.ComponentProps<typeof MenubarPrimitive.RadioGroup>>) {
+function MenubarRadioGroup({
+  ...props
+}: Readonly<React.ComponentProps<typeof MenubarPrimitive.RadioGroup>>) {
   return (
     <MenubarPrimitive.RadioGroup
       data-slot="menubar-radio-group"
@@ -97,10 +104,12 @@ function MenubarItem({
   inset,
   variant = 'default',
   ...props
-}: Readonly<React.ComponentProps<typeof MenubarPrimitive.Item> & {
-  inset?: boolean
-  variant?: 'default' | 'destructive'
-}>) {
+}: Readonly<
+  React.ComponentProps<typeof MenubarPrimitive.Item> & {
+    inset?: boolean
+    variant?: 'default' | 'destructive'
+  }
+>) {
   return (
     <MenubarPrimitive.Item
       data-slot="menubar-item"
@@ -169,9 +178,11 @@ function MenubarLabel({
   className,
   inset,
   ...props
-}: Readonly<React.ComponentProps<typeof MenubarPrimitive.Label> & {
-  inset?: boolean
-}>) {
+}: Readonly<
+  React.ComponentProps<typeof MenubarPrimitive.Label> & {
+    inset?: boolean
+  }
+>) {
   return (
     <MenubarPrimitive.Label
       data-slot="menubar-label"
@@ -219,9 +230,11 @@ function MenubarSubTrigger({
   inset,
   children,
   ...props
-}: Readonly<React.ComponentProps<typeof MenubarPrimitive.SubTrigger> & {
-  inset?: boolean
-}>) {
+}: Readonly<
+  React.ComponentProps<typeof MenubarPrimitive.SubTrigger> & {
+    inset?: boolean
+  }
+>) {
   return (
     <MenubarPrimitive.SubTrigger
       data-slot="menubar-sub-trigger"

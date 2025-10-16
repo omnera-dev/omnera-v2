@@ -35,9 +35,11 @@ function SelectTrigger({
   size = 'default',
   children,
   ...props
-}: Readonly<React.ComponentProps<typeof SelectPrimitive.Trigger> & {
-  size?: 'sm' | 'default'
-}>) {
+}: Readonly<
+  React.ComponentProps<typeof SelectPrimitive.Trigger> & {
+    size?: 'sm' | 'default'
+  }
+>) {
   return (
     <SelectPrimitive.Trigger
       data-slot="select-trigger"
@@ -93,7 +95,10 @@ function SelectContent({
   )
 }
 
-function SelectLabel({ className, ...props }: Readonly<React.ComponentProps<typeof SelectPrimitive.Label>>) {
+function SelectLabel({
+  className,
+  ...props
+}: Readonly<React.ComponentProps<typeof SelectPrimitive.Label>>) {
   return (
     <SelectPrimitive.Label
       data-slot="select-label"

@@ -14,10 +14,19 @@ import {
   SheetHeader,
   SheetTitle,
 } from '@/presentation/components/ui/sheet'
-import { SidebarContext, useSidebar, type SidebarContextProps } from '@/presentation/components/ui/sidebar-hook'
+import {
+  SidebarContext,
+  useSidebar,
+  type SidebarContextProps,
+} from '@/presentation/components/ui/sidebar-hook'
 import { sidebarMenuButtonVariants } from '@/presentation/components/ui/sidebar-variants'
 import { Skeleton } from '@/presentation/components/ui/skeleton'
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/presentation/components/ui/tooltip'
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '@/presentation/components/ui/tooltip'
 import { cn } from '@/presentation/utils/cn'
 import type { VariantProps } from 'class-variance-authority'
 
@@ -230,7 +239,11 @@ function Sidebar({
   )
 }
 
-function SidebarTrigger({ className, onClick, ...props }: Readonly<React.ComponentProps<typeof Button>>) {
+function SidebarTrigger({
+  className,
+  onClick,
+  ...props
+}: Readonly<React.ComponentProps<typeof Button>>) {
   const { toggleSidebar } = useSidebar()
 
   return (
@@ -325,7 +338,10 @@ function SidebarFooter({ className, ...props }: Readonly<React.ComponentProps<'d
   )
 }
 
-function SidebarSeparator({ className, ...props }: Readonly<React.ComponentProps<typeof Separator>>) {
+function SidebarSeparator({
+  className,
+  ...props
+}: Readonly<React.ComponentProps<typeof Separator>>) {
   return (
     <Separator
       data-slot="sidebar-separator"

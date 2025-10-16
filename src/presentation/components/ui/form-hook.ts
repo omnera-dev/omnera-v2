@@ -16,9 +16,7 @@ type FormItemContextValue = {
   id: string
 }
 
-export const FormItemContext = React.createContext<FormItemContextValue>(
-  {} as FormItemContextValue
-)
+export const FormItemContext = React.createContext<FormItemContextValue>({} as FormItemContextValue)
 
 export const useFormField = () => {
   const fieldContext = React.useContext(FormFieldContext)

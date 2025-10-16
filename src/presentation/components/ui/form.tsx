@@ -2,8 +2,18 @@
 
 import { Slot } from '@radix-ui/react-slot'
 import * as React from 'react'
-import { Controller, FormProvider, type ControllerProps, type FieldPath, type FieldValues } from 'react-hook-form'
-import { FormFieldContext, FormItemContext, useFormField } from '@/presentation/components/ui/form-hook'
+import {
+  Controller,
+  FormProvider,
+  type ControllerProps,
+  type FieldPath,
+  type FieldValues,
+} from 'react-hook-form'
+import {
+  FormFieldContext,
+  FormItemContext,
+  useFormField,
+} from '@/presentation/components/ui/form-hook'
 import { Label } from '@/presentation/components/ui/label'
 import { cn } from '@/presentation/utils/cn'
 import type * as LabelPrimitive from '@radix-ui/react-label'
@@ -37,7 +47,10 @@ function FormItem({ className, ...props }: Readonly<React.ComponentProps<'div'>>
   )
 }
 
-function FormLabel({ className, ...props }: Readonly<React.ComponentProps<typeof LabelPrimitive.Root>>) {
+function FormLabel({
+  className,
+  ...props
+}: Readonly<React.ComponentProps<typeof LabelPrimitive.Root>>) {
   const { error, formItemId } = useFormField()
 
   return (
@@ -98,12 +111,4 @@ function FormMessage({ className, ...props }: Readonly<React.ComponentProps<'p'>
   )
 }
 
-export {
-  Form,
-  FormItem,
-  FormLabel,
-  FormControl,
-  FormDescription,
-  FormMessage,
-  FormField,
-}
+export { Form, FormItem, FormLabel, FormControl, FormDescription, FormMessage, FormField }
