@@ -13,6 +13,8 @@ The following detailed documentation files are imported for Claude Code's memory
 @docs/infrastructure/framework/better-auth.md
 @docs/infrastructure/database/drizzle.md
 @docs/infrastructure/ui/react.md
+@docs/infrastructure/ui/tanstack-query.md
+@docs/infrastructure/ui/tanstack-table.md
 @docs/infrastructure/ui/tailwind.md
 @docs/infrastructure/ui/shadcn.md
 @docs/infrastructure/quality/eslint.md
@@ -149,6 +151,8 @@ Copy-paste component collection built with Tailwind CSS and React.
 |------|---------|---------|---------|--------------|
 | **React** | 19.2.0 | Component-based UI library | - | [`docs/infrastructure/ui/react.md`](docs/infrastructure/ui/react.md) |
 | **React DOM** | 19.2.0 | React rendering for web (SSR & client) | - | [`docs/infrastructure/ui/react.md`](docs/infrastructure/ui/react.md) |
+| **TanStack Query** | 5.90.3 | Server-state management and data fetching | - | [`docs/infrastructure/ui/tanstack-query.md`](docs/infrastructure/ui/tanstack-query.md) |
+| **TanStack Table** | ^8.20.5 | Headless table library for data tables and data grids | - | [`docs/infrastructure/ui/tanstack-table.md`](docs/infrastructure/ui/tanstack-table.md) |
 | **Tailwind CSS** | 4.1.14 | Utility-first CSS framework | `bunx tailwindcss` | [`docs/infrastructure/ui/tailwind.md`](docs/infrastructure/ui/tailwind.md) |
 | **shadcn/ui** | N/A | Copy-paste component collection (not npm package) | - | [`docs/infrastructure/ui/shadcn.md`](docs/infrastructure/ui/shadcn.md) |
 | **class-variance-authority** | 0.7.1 | Type-safe component variants | - | [`docs/infrastructure/ui/shadcn.md`](docs/infrastructure/ui/shadcn.md) |
