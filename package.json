@@ -28,7 +28,7 @@
     "format:check": "prettier --check .",
     "format:session": "./scripts/format-session.sh",
     "typecheck": "tsc --noEmit",
-    "clean": "knip --fix",
+    "clean": "knip",
     "lint": "eslint . --fix",
     "test:all": "bun test && bun test:e2e",
     "test:e2e": "playwright test",

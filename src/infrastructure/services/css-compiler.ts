@@ -87,18 +87,3 @@ export const compileCSS = (): Effect.Effect<CompiledCSS, CSSCompilationError> =>
     return compiled
   })
 
-/**
- * Clears the CSS compilation cache
- * Useful for development when CSS source files change
- *
- * @returns Effect that clears the cache
- */
-export const clearCSSCache = (): Effect.Effect<void> =>
-  Ref.set(cssCache, undefined)
-
-/**
- * Gets the cached CSS if available
- *
- * @returns Effect that yields cached CSS or undefined if not cached
- */
-export const getCachedCSS = (): Effect.Effect<CompiledCSS | undefined> => Ref.get(cssCache)

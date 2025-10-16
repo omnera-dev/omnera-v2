@@ -42,9 +42,3 @@ export const NameSchema = Schema.String.pipe(
   })
 )
 
-/**
- * TypeScript type for application names.
- *
- * Represents a validated application name that follows npm package naming conventions.
- */
-export type Name = Schema.Schema.Type<typeof NameSchema>

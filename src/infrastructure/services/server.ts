@@ -162,6 +162,7 @@ function createHonoApp(app: App, renderHomePage: (app: App) => string): Hono {
  * Effect.runPromise(program)
  * ```
  */
+// @knip-ignore - Used via dynamic import in StartServer.ts
 export const createServer = (
   config: ServerConfig
 ): Effect.Effect<ServerInstance, ServerCreationError | CSSCompilationError> =>
