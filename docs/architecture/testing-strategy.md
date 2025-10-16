@@ -1,5 +1,7 @@
 # Testing Strategy - E2E-First TDD with Test-After Unit Tests
 
+**Testing Tools**: Playwright ^1.56.0 (E2E) | Bun 1.3.0 (Unit) | TypeScript ^5.9.3
+
 ## Overview
 
 This document outlines Omnera's testing strategy: **E2E-First TDD with Test-After Unit Tests**. This hybrid approach uses E2E tests as executable specifications (written before implementation) and unit tests as implementation documentation (written after). The strategy follows **F.I.R.S.T principles** (Fast, Isolated, Repeatable, Self-validating, Timely) and **Given-When-Then structure** for both test types.
@@ -1685,6 +1687,13 @@ export default defineConfig({
   fullyParallel: true,
 
   projects: [
+    // Default - All tests (chromium only)
+    {
+      name: 'chromium',
+      use: { ...devices['Desktop Chrome'] },
+    },
+
+    // Tagged test execution (run specific test categories)
     // Development - Spec tests only
     {
       name: 'spec',
@@ -1708,43 +1717,42 @@ export default defineConfig({
       grep: /@critical/,
       use: { ...devices['Desktop Chrome'] },
     },
-
-    // Full suite - All tests (for manual runs)
-    {
-      name: 'full',
-      testMatch: /.*\.spec\.ts/,
-      use: { ...devices['Desktop Chrome'] },
-    },
   ],
 })
 ```
 
 ### Execution Strategy by Environment
 
-| Environment                       | Tests to Run                | Command              | Duration    |
-| --------------------------------- | --------------------------- | -------------------- | ----------- |
-| **Development** (active coding)   | `@spec`                     | `bun test:e2e:spec`  | ~30 seconds |
-| **Pre-commit** (local validation) | `@spec` + `@critical`       | `bun test:e2e:dev`   | ~1 minute   |
-| **CI/CD** (every push)            | `@regression` + `@critical` | `bun test:e2e:ci`    | ~5 minutes  |
-| **Pre-release** (before deploy)   | All tests                   | `bun test:e2e`       | ~15 minutes |
-| **Production** (smoke test)       | `@critical`                 | `bun test:e2e:smoke` | ~30 seconds |
+| Environment                       | Tests to Run                | Command                 | Duration    |
+| --------------------------------- | --------------------------- | ----------------------- | ----------- |
+| **Development** (active coding)   | `@spec`                     | `bun test:e2e:spec`     | ~30 seconds |
+| **Pre-commit** (local validation) | `@spec` + `@critical`       | `bun test:e2e:dev`      | ~1 minute   |
+| **CI/CD** (every push)            | `@regression` + `@critical` | `bun test:e2e:ci`       | ~5 minutes  |
+| **Pre-release** (before deploy)   | All tests                   | `bun test:e2e`          | ~15 minutes |
+| **Production** (smoke test)       | `@critical`                 | `bun test:e2e:critical` | ~30 seconds |
 
 ### NPM Scripts Configuration
+
+Omnera uses a hybrid approach with both **project-based** and **grep-based** execution:
+
+- **Project-based** (`--project=name`): Use tagged Playwright projects (spec, regression, critical)
+- **Grep-based** (`--grep='@tag'`): Use pattern matching for flexible tag combinations
 
 ```json
 {
   "scripts": {
     "test:e2e": "playwright test",
-    "test:e2e:spec": "playwright test --grep='@spec'",
-    "test:e2e:regression": "playwright test --grep='@regression'",
-    "test:e2e:critical": "playwright test --grep='@critical'",
+    "test:e2e:spec": "playwright test --project=spec",
+    "test:e2e:regression": "playwright test --project=regression",
+    "test:e2e:critical": "playwright test --project=critical",
     "test:e2e:dev": "playwright test --grep='@spec|@critical'",
     "test:e2e:ci": "playwright test --grep='@regression|@critical'",
-    "test:e2e:smoke": "playwright test --grep='@critical' --base-url=${PRODUCTION_URL}",
-    "test:e2e:ui": "playwright test --grep='@spec' --ui"
+    "test:e2e:ui": "playwright test --project=spec --ui"
   }
 }
 ```
+
+**Note**: The `test:e2e:critical` command serves as both the critical path test suite and production smoke tests. Use `--base-url` flag to run against different environments (e.g., `bun test:e2e:critical -- --base-url=https://production.omnera.app`).
 
 ### TDD Workflow with Tags
 
@@ -1993,20 +2001,30 @@ Since the E2E-First TDD with Test-After Unit Tests workflow cannot be fully auto
 
 The following aspects ARE enforced automatically via ESLint (see `eslint.config.ts`):
 
-✅ **Test Tool Usage**:
+✅ **Test Tool Usage** (enforced via `no-restricted-imports` rule):
 
-- E2E tests in `tests/` directory must use Playwright (not Bun Test)
-- Unit tests in `src/**/*.test.ts` must use Bun Test (not Playwright)
+- **E2E tests in `tests/` directory must use Playwright** (not Bun Test)
+  - Rule: `no-restricted-imports` (lines 591-609 in `eslint.config.ts`)
+  - Restricts: `bun:test` imports in `tests/**/*.{ts,tsx}` files
+  - Error message: "E2E tests (in tests/ directory) must use Playwright, not Bun Test. Import from @playwright/test instead."
 
-✅ **Test File Structure**:
+- **Unit tests in `src/**/\*.test.ts` must use Bun Test\*\* (not Playwright)
+  - Rule: `no-restricted-imports` (lines 611-629 in `eslint.config.ts`)
+  - Restricts: `@playwright/test` imports in `src/**/*.test.{ts,tsx}` files
+  - Error message: "Unit tests (\*.test.ts) must use Bun Test, not Playwright. Import from bun:test instead."
 
-- Test files must follow naming convention (`.test.ts` for unit, `.spec.ts` for E2E)
+✅ **Test File Structure** (enforced via `eslint-plugin-playwright` configuration):
+
+- E2E tests must have `.spec.ts` extension and be located in `tests/` directory
+- Unit tests must have `.test.ts` extension and be co-located with source files
+- Configuration: lines 647-665 in `eslint.config.ts`
 
 ❌ **NOT Enforced** (manual review required):
 
-- Whether E2E tests were written BEFORE implementation
-- Whether unit tests were written AFTER implementation
-- Test coverage completeness
+- Whether E2E tests were written BEFORE implementation (timing discipline)
+- Whether unit tests were written AFTER implementation (timing discipline)
+- Test coverage completeness (percentage thresholds)
+- Quality of test assertions and Given-When-Then structure
 
 ### Pull Request Review Checklist
 
