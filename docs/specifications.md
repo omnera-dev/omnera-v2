@@ -1,5 +1,7 @@
 # Omnera Specifications
 
+> **⚠️ Vision Document**: This document describes the **target state** and **product roadmap** for Omnera. Most features described here are **not yet implemented**. For current capabilities and implementation status, see [STATUS.md](../STATUS.md).
+
 ## Overview
 
 Omnera is an npm package that runs a configuration-driven application server. It interprets JSON/TypeScript configuration to automatically create and serve web applications without code generation.
@@ -122,10 +124,10 @@ CRM systems, inventory management, project tracking
 ### Installation
 
 ```javascript
-import Omnera from 'omnera'
+import { start } from 'omnera'
 import config from './config.json'
 
-Omnera.start(config)
+start(config)
 ```
 
 ### Configuration Example

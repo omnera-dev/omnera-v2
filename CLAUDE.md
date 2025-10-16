@@ -2,6 +2,14 @@
 
 > **Note**: This is a streamlined version. Detailed documentation is available in `docs/` directory and imported on-demand when needed.
 
+## Project Context
+
+**Vision**: Omnera aims to be a configuration-driven application platform (see `@docs/specifications.md` for full vision)
+**Current Status**: Phase 1 - Foundation (minimal web server with React SSR)
+**Implementation Progress**: See `STATUS.md` for detailed feature tracking
+
+> 💡 When writing code or tests, keep the target architecture in mind (specifications.md) while working within current capabilities (STATUS.md)
+
 ## Quick Reference
 
 **Project**: Omnera (npm package: "omnera")
@@ -117,6 +125,10 @@ omnera-v2/
 ## Detailed Documentation (On-Demand Import)
 
 **When you need specific details, import the relevant documentation file:**
+
+### Product Vision & Roadmap
+- `@docs/specifications.md` - Target state and product roadmap (future vision)
+- `@STATUS.md` - Current implementation status and development phases
 
 ### Infrastructure
 - `@docs/infrastructure/runtime/bun.md` - Bun runtime & package manager
