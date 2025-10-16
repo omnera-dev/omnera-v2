@@ -151,10 +151,10 @@ Main hook for creating form instance:
 
 ```typescript
 const form = useForm<FormValues>({
-  resolver: zodResolver(schema),  // Zod validation
-  defaultValues: {},              // Initial values
-  mode: 'onSubmit',              // When to validate
-  reValidateMode: 'onChange',    // When to revalidate after error
+  resolver: zodResolver(schema), // Zod validation
+  defaultValues: {}, // Initial values
+  mode: 'onSubmit', // When to validate
+  reValidateMode: 'onChange', // When to revalidate after error
 })
 ```
 
@@ -163,10 +163,10 @@ const form = useForm<FormValues>({
 ```typescript
 const {
   formState: {
-    errors,        // Validation errors
-    isSubmitting,  // True during async submit
-    isDirty,       // True if any field changed
-    isValid,       // True if no errors
+    errors, // Validation errors
+    isSubmitting, // True during async submit
+    isDirty, // True if any field changed
+    isValid, // True if no errors
     touchedFields, // Which fields were interacted with
   },
 } = form
@@ -174,17 +174,17 @@ const {
 
 ## Validation Modes
 
-| Mode | When Validation Runs | Use Case |
-|------|---------------------|----------|
-| `onSubmit` | On form submission only | Default, best UX (no errors while typing) |
-| `onBlur` | When field loses focus | Show errors after user leaves field |
-| `onChange` | On every keystroke | Real-time validation (can be annoying) |
+| Mode        | When Validation Runs      | Use Case                                           |
+| ----------- | ------------------------- | -------------------------------------------------- |
+| `onSubmit`  | On form submission only   | Default, best UX (no errors while typing)          |
+| `onBlur`    | When field loses focus    | Show errors after user leaves field                |
+| `onChange`  | On every keystroke        | Real-time validation (can be annoying)             |
 | `onTouched` | After blur, then onChange | Best of both: no errors until blur, then real-time |
 
 ```typescript
 // Recommended for Omnera
 const form = useForm({
-  mode: 'onSubmit',       // Don't show errors while typing
+  mode: 'onSubmit', // Don't show errors while typing
   reValidateMode: 'onChange', // After first submit, show errors in real-time
 })
 ```
@@ -290,13 +290,15 @@ function ShippingForm() {
 ### Custom Validation
 
 ```typescript
-const schema = z.object({
-  password: z.string().min(8),
-  confirmPassword: z.string(),
-}).refine((data) => data.password === data.confirmPassword, {
-  message: 'Passwords must match',
-  path: ['confirmPassword'], // Show error on confirmPassword field
-})
+const schema = z
+  .object({
+    password: z.string().min(8),
+    confirmPassword: z.string(),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: 'Passwords must match',
+    path: ['confirmPassword'], // Show error on confirmPassword field
+  })
 ```
 
 ## Error Handling
@@ -442,14 +444,16 @@ const loginSchema = z.object({
 ### Registration Form
 
 ```typescript
-const registerSchema = z.object({
-  email: z.string().email(),
-  password: z.string().min(8),
-  confirmPassword: z.string(),
-}).refine((data) => data.password === data.confirmPassword, {
-  message: 'Passwords must match',
-  path: ['confirmPassword'],
-})
+const registerSchema = z
+  .object({
+    email: z.string().email(),
+    password: z.string().min(8),
+    confirmPassword: z.string(),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: 'Passwords must match',
+    path: ['confirmPassword'],
+  })
 ```
 
 ### Settings Form

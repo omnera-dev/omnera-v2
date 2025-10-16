@@ -46,34 +46,34 @@
 
 Omnera includes 21 Radix UI primitive packages:
 
-| Primitive | Usage in shadcn/ui | Purpose |
-|-----------|-------------------|---------|
-| `react-accordion` | Accordion | Collapsible content sections |
-| `react-alert-dialog` | Alert Dialog | Modal dialogs requiring user action |
-| `react-aspect-ratio` | Aspect Ratio | Maintain aspect ratio containers |
-| `react-avatar` | Avatar | User profile images with fallback |
-| `react-checkbox` | Checkbox | Accessible checkbox inputs |
-| `react-collapsible` | Collapsible | Show/hide content |
-| `react-context-menu` | Context Menu | Right-click menus |
-| `react-dialog` | Dialog | Modal dialogs |
-| `react-dropdown-menu` | Dropdown Menu | Dropdown action menus |
-| `react-hover-card` | Hover Card | Popover on hover |
-| `react-label` | Label | Accessible form labels |
-| `react-menubar` | Menubar | Application menu bar |
-| `react-navigation-menu` | Navigation Menu | Complex navigation |
-| `react-popover` | Popover | Floating content |
-| `react-progress` | Progress | Progress indicators |
-| `react-radio-group` | Radio Group | Radio button groups |
-| `react-scroll-area` | Scroll Area | Custom scrollbars |
-| `react-select` | Select | Dropdown selects |
-| `react-separator` | Separator | Visual dividers |
-| `react-slider` | Slider | Range sliders |
-| `react-switch` | Switch | Toggle switches |
-| `react-tabs` | Tabs | Tabbed interfaces |
-| `react-toast` | Sonner (Toast) | Notifications |
-| `react-toggle` | Toggle | Toggle buttons |
-| `react-toggle-group` | Toggle Group | Grouped toggles |
-| `react-tooltip` | Tooltip | Hover tooltips |
+| Primitive               | Usage in shadcn/ui | Purpose                             |
+| ----------------------- | ------------------ | ----------------------------------- |
+| `react-accordion`       | Accordion          | Collapsible content sections        |
+| `react-alert-dialog`    | Alert Dialog       | Modal dialogs requiring user action |
+| `react-aspect-ratio`    | Aspect Ratio       | Maintain aspect ratio containers    |
+| `react-avatar`          | Avatar             | User profile images with fallback   |
+| `react-checkbox`        | Checkbox           | Accessible checkbox inputs          |
+| `react-collapsible`     | Collapsible        | Show/hide content                   |
+| `react-context-menu`    | Context Menu       | Right-click menus                   |
+| `react-dialog`          | Dialog             | Modal dialogs                       |
+| `react-dropdown-menu`   | Dropdown Menu      | Dropdown action menus               |
+| `react-hover-card`      | Hover Card         | Popover on hover                    |
+| `react-label`           | Label              | Accessible form labels              |
+| `react-menubar`         | Menubar            | Application menu bar                |
+| `react-navigation-menu` | Navigation Menu    | Complex navigation                  |
+| `react-popover`         | Popover            | Floating content                    |
+| `react-progress`        | Progress           | Progress indicators                 |
+| `react-radio-group`     | Radio Group        | Radio button groups                 |
+| `react-scroll-area`     | Scroll Area        | Custom scrollbars                   |
+| `react-select`          | Select             | Dropdown selects                    |
+| `react-separator`       | Separator          | Visual dividers                     |
+| `react-slider`          | Slider             | Range sliders                       |
+| `react-switch`          | Switch             | Toggle switches                     |
+| `react-tabs`            | Tabs               | Tabbed interfaces                   |
+| `react-toast`           | Sonner (Toast)     | Notifications                       |
+| `react-toggle`          | Toggle             | Toggle buttons                      |
+| `react-toggle-group`    | Toggle Group       | Grouped toggles                     |
+| `react-tooltip`         | Tooltip            | Hover tooltips                      |
 
 ## When to Use Radix Directly vs shadcn/ui
 
@@ -157,12 +157,14 @@ import * as Select from '@radix-ui/react-select'
 ### 3. Accessibility Built-in
 
 Radix handles:
+
 - ARIA attributes (`aria-expanded`, `aria-controls`, etc.)
 - Keyboard navigation (Tab, Enter, Escape, Arrow keys)
 - Focus management (trap focus in dialogs, restore on close)
 - Screen reader announcements
 
 Example: Dialog automatically handles:
+
 ```typescript
 // Radix adds these automatically:
 <div
@@ -265,16 +267,16 @@ function DeleteUserDialog({ userId }: { userId: string }) {
 
 ### Keyboard Navigation
 
-| Component | Keys | Behavior |
-|-----------|------|----------|
-| **Dialog** | `Escape` | Close dialog |
-| **Dialog** | `Tab` | Focus trap (cycles within dialog) |
-| **Select** | `Arrow Up/Down` | Navigate options |
-| **Select** | `Enter/Space` | Select option |
-| **Accordion** | `Arrow Up/Down` | Navigate panels |
-| **Tabs** | `Arrow Left/Right` | Navigate tabs |
-| **Menubar** | `Arrow Left/Right` | Navigate menu items |
-| **RadioGroup** | `Arrow Up/Down` | Select radio option |
+| Component      | Keys               | Behavior                          |
+| -------------- | ------------------ | --------------------------------- |
+| **Dialog**     | `Escape`           | Close dialog                      |
+| **Dialog**     | `Tab`              | Focus trap (cycles within dialog) |
+| **Select**     | `Arrow Up/Down`    | Navigate options                  |
+| **Select**     | `Enter/Space`      | Select option                     |
+| **Accordion**  | `Arrow Up/Down`    | Navigate panels                   |
+| **Tabs**       | `Arrow Left/Right` | Navigate tabs                     |
+| **Menubar**    | `Arrow Left/Right` | Navigate menu items               |
+| **RadioGroup** | `Arrow Up/Down`    | Select radio option               |
 
 ### Screen Reader Support
 

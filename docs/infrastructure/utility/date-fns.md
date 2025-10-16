@@ -17,9 +17,9 @@
 
 ## Critical: Client vs Server Date Handling
 
-| Context | Library | Use Case |
-|---------|---------|----------|
-| **Client-side** | `date-fns` | Date pickers, formatting for display, UI interactions |
+| Context         | Library           | Use Case                                               |
+| --------------- | ----------------- | ------------------------------------------------------ |
+| **Client-side** | `date-fns`        | Date pickers, formatting for display, UI interactions  |
 | **Server-side** | `Effect.DateTime` | API date handling, business logic, database operations |
 
 ### Why This Split?
@@ -103,15 +103,15 @@ import { format, formatDistance, formatRelative } from 'date-fns'
 
 // Format date to string
 const date = new Date(2024, 0, 15)
-format(date, 'yyyy-MM-dd')           // "2024-01-15"
-format(date, 'MMM d, yyyy')          // "Jan 15, 2024"
-format(date, 'MMMM do, yyyy')        // "January 15th, 2024"
-format(date, 'PPP')                  // "January 15th, 2024" (locale-aware)
-format(date, 'Pp')                   // "Jan 15, 2024, 12:00 AM"
+format(date, 'yyyy-MM-dd') // "2024-01-15"
+format(date, 'MMM d, yyyy') // "Jan 15, 2024"
+format(date, 'MMMM do, yyyy') // "January 15th, 2024"
+format(date, 'PPP') // "January 15th, 2024" (locale-aware)
+format(date, 'Pp') // "Jan 15, 2024, 12:00 AM"
 
 // Relative time
-formatDistance(new Date(), date)     // "8 months ago"
-formatRelative(date, new Date())     // "last Tuesday at 12:00 AM"
+formatDistance(new Date(), date) // "8 months ago"
+formatRelative(date, new Date()) // "last Tuesday at 12:00 AM"
 ```
 
 ### Parsing Dates
@@ -154,41 +154,34 @@ const lastYear = addYears(today, -1)
 const yesterday = subDays(today, 1)
 
 // Start/end of periods
-const dayStart = startOfDay(today)        // 2024-01-15 00:00:00
-const dayEnd = endOfDay(today)            // 2024-01-15 23:59:59
-const monthStart = startOfMonth(today)    // 2024-01-01 00:00:00
-const monthEnd = endOfMonth(today)        // 2024-01-31 23:59:59
+const dayStart = startOfDay(today) // 2024-01-15 00:00:00
+const dayEnd = endOfDay(today) // 2024-01-15 23:59:59
+const monthStart = startOfMonth(today) // 2024-01-01 00:00:00
+const monthEnd = endOfMonth(today) // 2024-01-31 23:59:59
 ```
 
 ### Comparing Dates
 
 ```typescript
-import {
-  isBefore,
-  isAfter,
-  isEqual,
-  isSameDay,
-  isWithinInterval,
-  differenceInDays,
-} from 'date-fns'
+import { isBefore, isAfter, isEqual, isSameDay, isWithinInterval, differenceInDays } from 'date-fns'
 
 const date1 = new Date(2024, 0, 15)
 const date2 = new Date(2024, 0, 20)
 
 // Comparisons
-isBefore(date1, date2)                // true
-isAfter(date1, date2)                 // false
-isEqual(date1, date1)                 // true
-isSameDay(date1, date2)               // false
+isBefore(date1, date2) // true
+isAfter(date1, date2) // false
+isEqual(date1, date1) // true
+isSameDay(date1, date2) // false
 
 // Check if within range
 isWithinInterval(new Date(), {
   start: date1,
   end: date2,
-})                                    // true/false
+}) // true/false
 
 // Calculate difference
-differenceInDays(date2, date1)        // 5
+differenceInDays(date2, date1) // 5
 ```
 
 ## Common Patterns in Omnera
@@ -393,25 +386,25 @@ console.log(modified) // Jan 20
 
 Common tokens for `format()`:
 
-| Token | Example | Description |
-|-------|---------|-------------|
-| `yyyy` | 2024 | 4-digit year |
-| `yy` | 24 | 2-digit year |
-| `MMMM` | January | Full month name |
-| `MMM` | Jan | Short month name |
-| `MM` | 01 | 2-digit month |
-| `M` | 1 | Month number |
-| `dd` | 15 | 2-digit day |
-| `d` | 15 | Day number |
-| `EEEE` | Monday | Full day name |
-| `EEE` | Mon | Short day name |
-| `HH` | 13 | 24-hour (00-23) |
-| `hh` | 01 | 12-hour (01-12) |
-| `mm` | 30 | Minutes |
-| `ss` | 45 | Seconds |
-| `a` | PM | AM/PM |
-| `PPP` | Jan 15, 2024 | Locale-aware date |
-| `Pp` | Jan 15, 2024, 1:30 PM | Locale-aware date+time |
+| Token  | Example               | Description            |
+| ------ | --------------------- | ---------------------- |
+| `yyyy` | 2024                  | 4-digit year           |
+| `yy`   | 24                    | 2-digit year           |
+| `MMMM` | January               | Full month name        |
+| `MMM`  | Jan                   | Short month name       |
+| `MM`   | 01                    | 2-digit month          |
+| `M`    | 1                     | Month number           |
+| `dd`   | 15                    | 2-digit day            |
+| `d`    | 15                    | Day number             |
+| `EEEE` | Monday                | Full day name          |
+| `EEE`  | Mon                   | Short day name         |
+| `HH`   | 13                    | 24-hour (00-23)        |
+| `hh`   | 01                    | 12-hour (01-12)        |
+| `mm`   | 30                    | Minutes                |
+| `ss`   | 45                    | Seconds                |
+| `a`    | PM                    | AM/PM                  |
+| `PPP`  | Jan 15, 2024          | Locale-aware date      |
+| `Pp`   | Jan 15, 2024, 1:30 PM | Locale-aware date+time |
 
 ## Best Practices
 

@@ -204,12 +204,12 @@ Infrastructure → Domain
 
 ### What Gets Caught
 
-| Violation | Example | Error Message |
-|-----------|---------|---------------|
-| **Presentation → Infrastructure** | `import { DatabaseRepo } from '@/infrastructure/db'` in React component | "Presentation layer violation: Can only import from Application and Domain layers" |
-| **Domain → Any Layer** | `import { UserRepo } from '@/application'` in domain model | "Domain layer violation: Domain must remain pure with zero external dependencies" |
-| **Application → Presentation** | `import { Button } from '@/presentation/ui'` in use case | "Application layer violation: Can only import from Domain and Infrastructure layers" |
-| **Infrastructure → Application** | `import { CreateUserUseCase } from '@/application'` in repository | "Infrastructure layer violation: Can only import from Domain layer" |
+| Violation                         | Example                                                                 | Error Message                                                                        |
+| --------------------------------- | ----------------------------------------------------------------------- | ------------------------------------------------------------------------------------ |
+| **Presentation → Infrastructure** | `import { DatabaseRepo } from '@/infrastructure/db'` in React component | "Presentation layer violation: Can only import from Application and Domain layers"   |
+| **Domain → Any Layer**            | `import { UserRepo } from '@/application'` in domain model              | "Domain layer violation: Domain must remain pure with zero external dependencies"    |
+| **Application → Presentation**    | `import { Button } from '@/presentation/ui'` in use case                | "Application layer violation: Can only import from Domain and Infrastructure layers" |
+| **Infrastructure → Application**  | `import { CreateUserUseCase } from '@/application'` in repository       | "Infrastructure layer violation: Can only import from Domain layer"                  |
 
 ### Examples
 
@@ -263,12 +263,12 @@ ESLint enforces functional programming patterns via **eslint-plugin-functional**
 
 ### Immutability Rules
 
-| Rule | Enforcement | What It Catches |
-|------|-------------|-----------------|
-| **`functional/prefer-immutable-types`** | `error` | Mutable types (non-readonly arrays/objects) |
-| **`functional/no-let`** | `error` | Use of `let` (except in for-loop init) |
-| **`functional/immutable-data`** | `error` | Direct mutations of data structures |
-| **`no-param-reassign`** | `error` | Reassigning function parameters |
+| Rule                                    | Enforcement | What It Catches                             |
+| --------------------------------------- | ----------- | ------------------------------------------- |
+| **`functional/prefer-immutable-types`** | `error`     | Mutable types (non-readonly arrays/objects) |
+| **`functional/no-let`**                 | `error`     | Use of `let` (except in for-loop init)      |
+| **`functional/immutable-data`**         | `error`     | Direct mutations of data structures         |
+| **`no-param-reassign`**                 | `error`     | Reassigning function parameters             |
 
 ### Array Mutation Prevention
 
@@ -277,13 +277,13 @@ ESLint blocks mutating array methods:
 ```typescript
 // ❌ BLOCKED: Mutating array methods
 const numbers = [1, 2, 3]
-numbers.push(4)        // ERROR: Use [...numbers, 4]
-numbers.pop()          // ERROR: Use numbers.slice(0, -1)
-numbers.shift()        // ERROR: Use numbers.slice(1)
-numbers.unshift(0)     // ERROR: Use [0, ...numbers]
-numbers.splice(1, 1)   // ERROR: Use array.slice() + spread
-numbers.reverse()      // ERROR: Use [...numbers].reverse()
-numbers.sort()         // ERROR: Use [...numbers].sort()
+numbers.push(4) // ERROR: Use [...numbers, 4]
+numbers.pop() // ERROR: Use numbers.slice(0, -1)
+numbers.shift() // ERROR: Use numbers.slice(1)
+numbers.unshift(0) // ERROR: Use [0, ...numbers]
+numbers.splice(1, 1) // ERROR: Use array.slice() + spread
+numbers.reverse() // ERROR: Use [...numbers].reverse()
+numbers.sort() // ERROR: Use [...numbers].sort()
 
 // ✅ CORRECT: Immutable patterns
 const added = [...numbers, 4]
@@ -322,7 +322,8 @@ const result = await Effect.runPromise(program)
 
 ```typescript
 // ⚠️ WARNING: Prefer functional alternatives
-for (const item of items) {  // WARN: functional/no-loop-statements
+for (const item of items) {
+  // WARN: functional/no-loop-statements
   process(item)
 }
 
@@ -346,10 +347,10 @@ ESLint enforces **WHERE clause requirements** on database operations via **eslin
 
 ### Enforced Rules
 
-| Rule | Enforcement | Protection |
-|------|-------------|------------|
-| **`drizzle/enforce-delete-with-where`** | `error` | Prevents `DELETE FROM table` without WHERE clause |
-| **`drizzle/enforce-update-with-where`** | `error` | Prevents `UPDATE table SET ...` without WHERE clause |
+| Rule                                    | Enforcement | Protection                                           |
+| --------------------------------------- | ----------- | ---------------------------------------------------- |
+| **`drizzle/enforce-delete-with-where`** | `error`     | Prevents `DELETE FROM table` without WHERE clause    |
+| **`drizzle/enforce-update-with-where`** | `error`     | Prevents `UPDATE table SET ...` without WHERE clause |
 
 ### What Gets Caught
 
@@ -370,9 +371,7 @@ await db.update(users).set({ active: false }) // ERROR: drizzle/enforce-update-w
 // This would deactivate EVERY user!
 
 // ✅ CORRECT: Update with WHERE clause
-await db.update(users)
-  .set({ active: false })
-  .where(eq(users.id, userId))
+await db.update(users).set({ active: false }).where(eq(users.id, userId))
 
 // ✅ CORRECT: Intentional mass operations (explicit)
 // If you genuinely need to affect all rows, use a comment to acknowledge:
@@ -434,6 +433,7 @@ const MemoizedComponent = memo(Component)
 ESLint **warns** but doesn't block. Manual memoization is acceptable for:
 
 1. **Expensive computations** (>100ms):
+
    ```typescript
    // OK: Genuinely expensive operation
    const factorial = useMemo(() => {
@@ -442,6 +442,7 @@ ESLint **warns** but doesn't block. Manual memoization is acceptable for:
    ```
 
 2. **Memoized child components** (rare):
+
    ```typescript
    // OK: Passing callback to manually memoized child
    const MemoizedChild = memo(ExpensiveChild)

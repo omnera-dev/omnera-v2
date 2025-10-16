@@ -812,17 +812,17 @@ Omnera's functional programming principles are **automatically enforced** via ES
 
 ### ESLint Enforcement Mechanisms
 
-| Rule | Plugin | What It Enforces |
-|------|--------|------------------|
-| `functional/prefer-immutable-types` | eslint-plugin-functional | Requires `readonly` types |
-| `functional/no-let` | eslint-plugin-functional | Prevents mutable variable declarations (`let`) |
-| `functional/immutable-data` | eslint-plugin-functional | Catches direct data mutations |
-| `functional/no-throw-statements` | eslint-plugin-functional | Enforces Effect.ts error handling over exceptions |
-| `functional/no-loop-statements` | eslint-plugin-functional | Warns against imperative loops (prefers `map`/`filter`/`reduce`) |
-| `no-param-reassign` | ESLint core | Prevents parameter reassignment |
-| `prefer-const` | ESLint core | Enforces `const` over `let` when variables aren't reassigned |
-| `no-restricted-syntax` | ESLint core (custom) | Blocks array mutations (`push`, `pop`, `splice`, etc.) |
-| `no-restricted-imports` | ESLint core (custom) | Blocks `Effect.runSync` in business logic |
+| Rule                                | Plugin                   | What It Enforces                                                 |
+| ----------------------------------- | ------------------------ | ---------------------------------------------------------------- |
+| `functional/prefer-immutable-types` | eslint-plugin-functional | Requires `readonly` types                                        |
+| `functional/no-let`                 | eslint-plugin-functional | Prevents mutable variable declarations (`let`)                   |
+| `functional/immutable-data`         | eslint-plugin-functional | Catches direct data mutations                                    |
+| `functional/no-throw-statements`    | eslint-plugin-functional | Enforces Effect.ts error handling over exceptions                |
+| `functional/no-loop-statements`     | eslint-plugin-functional | Warns against imperative loops (prefers `map`/`filter`/`reduce`) |
+| `no-param-reassign`                 | ESLint core              | Prevents parameter reassignment                                  |
+| `prefer-const`                      | ESLint core              | Enforces `const` over `let` when variables aren't reassigned     |
+| `no-restricted-syntax`              | ESLint core (custom)     | Blocks array mutations (`push`, `pop`, `splice`, etc.)           |
+| `no-restricted-imports`             | ESLint core (custom)     | Blocks `Effect.runSync` in business logic                        |
 
 ### Array Mutation Prevention
 
@@ -832,13 +832,13 @@ ESLint automatically blocks all mutating array methods:
 const numbers = [1, 2, 3]
 
 // ❌ BLOCKED by ESLint
-numbers.push(4)        // ERROR: Use [...numbers, 4]
-numbers.pop()          // ERROR: Use numbers.slice(0, -1)
-numbers.shift()        // ERROR: Use numbers.slice(1)
-numbers.unshift(0)     // ERROR: Use [0, ...numbers]
-numbers.splice(1, 1)   // ERROR: Use array.slice() + spread
-numbers.reverse()      // ERROR: Use [...numbers].reverse()
-numbers.sort()         // ERROR: Use [...numbers].sort()
+numbers.push(4) // ERROR: Use [...numbers, 4]
+numbers.pop() // ERROR: Use numbers.slice(0, -1)
+numbers.shift() // ERROR: Use numbers.slice(1)
+numbers.unshift(0) // ERROR: Use [0, ...numbers]
+numbers.splice(1, 1) // ERROR: Use array.slice() + spread
+numbers.reverse() // ERROR: Use [...numbers].reverse()
+numbers.sort() // ERROR: Use [...numbers].sort()
 
 // ✅ CORRECT: Immutable patterns (ESLint allows)
 const added = [...numbers, 4]
@@ -849,6 +849,7 @@ const sorted = [...numbers].sort()
 ```
 
 **Error Message Example**:
+
 ```
 Avoid array.push() - use immutable patterns like [...array, item] instead
 ```
@@ -890,9 +891,9 @@ ESLint catches mutations at lint time:
 
 ```typescript
 // ❌ BLOCKED by ESLint
-let counter = 0  // ERROR: functional/no-let
+let counter = 0 // ERROR: functional/no-let
 function increment() {
-  counter++      // ERROR: Mutation detected
+  counter++ // ERROR: Mutation detected
 }
 
 // ✅ CORRECT: Immutable pattern (ESLint allows)
@@ -900,8 +901,8 @@ const increment = (counter: number): number => counter + 1
 
 // ❌ BLOCKED by ESLint
 interface User {
-  id: number       // ERROR: functional/prefer-immutable-types
-  name: string     // "Property should be readonly"
+  id: number // ERROR: functional/prefer-immutable-types
+  name: string // "Property should be readonly"
 }
 
 // ✅ CORRECT: Readonly types (ESLint allows)
@@ -912,7 +913,7 @@ interface User {
 
 // ❌ BLOCKED by ESLint
 function updateUser(user: User, name: string): void {
-  user.name = name  // ERROR: immutable-data violation
+  user.name = name // ERROR: immutable-data violation
 }
 
 // ✅ CORRECT: Create new object (ESLint allows)
@@ -927,8 +928,9 @@ ESLint warns against imperative loops (warnings, not errors):
 
 ```typescript
 // ⚠️ WARNING from ESLint
-for (const item of items) {  // WARN: functional/no-loop-statements
-  process(item)              // "Prefer map/filter/reduce over loops"
+for (const item of items) {
+  // WARN: functional/no-loop-statements
+  process(item) // "Prefer map/filter/reduce over loops"
 }
 
 // ✅ PREFERRED: Functional alternatives
@@ -957,6 +959,7 @@ bun run lint
 ### Enforcement Configuration
 
 See the complete ESLint configuration:
+
 - **Full enforcement details**: `@docs/infrastructure/quality/eslint.md#functional-programming-enforcement`
 - **ESLint config file**: `eslint.config.ts` (lines 90-367)
 

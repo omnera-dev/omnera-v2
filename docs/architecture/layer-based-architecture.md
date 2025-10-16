@@ -367,12 +367,12 @@ Once the layer-based directory structure is implemented, **eslint-plugin-boundar
 
 **Enforced Dependency Rules**:
 
-| From Layer | Allowed Imports | Blocked Imports | Error Message |
-|-----------|-----------------|-----------------|---------------|
-| **Presentation** | Application, Domain | Infrastructure | "Presentation layer violation: Can only import from Application and Domain layers" |
-| **Application** | Domain, Infrastructure | Presentation | "Application layer violation: Can only import from Domain and Infrastructure layers" |
-| **Domain** | NOTHING | All layers | "Domain layer violation: Domain must remain pure with zero external dependencies" |
-| **Infrastructure** | Domain | Application, Presentation | "Infrastructure layer violation: Can only import from Domain layer" |
+| From Layer         | Allowed Imports        | Blocked Imports           | Error Message                                                                        |
+| ------------------ | ---------------------- | ------------------------- | ------------------------------------------------------------------------------------ |
+| **Presentation**   | Application, Domain    | Infrastructure            | "Presentation layer violation: Can only import from Application and Domain layers"   |
+| **Application**    | Domain, Infrastructure | Presentation              | "Application layer violation: Can only import from Domain and Infrastructure layers" |
+| **Domain**         | NOTHING                | All layers                | "Domain layer violation: Domain must remain pure with zero external dependencies"    |
+| **Infrastructure** | Domain                 | Application, Presentation | "Infrastructure layer violation: Can only import from Domain layer"                  |
 
 ### What Will Be Enforced
 
@@ -417,12 +417,14 @@ import { Effect } from 'effect' // OK: Effect allowed in Infrastructure
 Once the codebase is refactored to the layer-based structure:
 
 1. **Verify layer directories exist**:
+
    ```bash
    ls -la src/
    # Should show: domain/, application/, infrastructure/, presentation/
    ```
 
 2. **Run ESLint to catch violations**:
+
    ```bash
    bun run lint
 
@@ -445,6 +447,7 @@ Until the layer-based structure is implemented, follow these manual guidelines:
 ### Enforcement Documentation
 
 For complete enforcement details:
+
 - **ESLint boundary rules**: `@docs/infrastructure/quality/eslint.md#architectural-enforcement-critical`
 - **ESLint config**: `eslint.config.ts` (lines 369-473)
 
