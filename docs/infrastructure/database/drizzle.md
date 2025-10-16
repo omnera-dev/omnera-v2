@@ -1,188 +1,48 @@
-# Drizzle ORM - Type-Safe SQL Database Toolkit
+# Drizzle ORM - Type-Safe Database Operations
 
 ## Overview
 
-**Version**: TBD (installed as dependency)
-**Purpose**: TypeScript-first ORM for SQL databases providing type-safe queries with zero-cost type safety, SQL-like syntax, and native Bun runtime integration
+**Purpose**: TypeScript-first ORM for SQL databases providing type-safe queries with zero-cost type safety and seamless integration with Bun, Effect.ts, and Better Auth
 
-Drizzle ORM is a headless TypeScript ORM that acts as a type-safe SQL wrapper rather than a traditional abstraction layer. It provides full TypeScript inference, compile-time validation, and a query API that closely resembles SQL while maintaining complete type safety.
+Drizzle ORM is a lightweight, performant ORM designed for TypeScript developers who want SQL-like syntax with full type inference. It integrates natively with Bun's SQL module for PostgreSQL connections and works seamlessly with Effect.ts for dependency injection and error handling.
 
-## Why Drizzle ORM for Omnera
+> **Note**: This document provides a high-level summary with essential examples. For comprehensive coverage including advanced patterns, all query types, migration strategies, and detailed PostgreSQL optimizations, see the full documentation at `docs/infrastructure/database/drizzle/` directory.
 
-- **TypeScript-First**: Schemas define types, queries are fully type-safe with inference
-- **Zero-Cost Type Safety**: Types are erased at build time, no runtime overhead
-- **Bun SQL Native Support**: Direct integration with Bun's SQL module for PostgreSQL (no external drivers)
-- **PostgreSQL-Optimized**: Native support for PostgreSQL features (JSONB, enums, CTEs, partial indexes)
-- **SQL-Like Syntax**: Familiar SQL patterns without learning a new query language
-- **Effect-Ready**: Perfect integration with Effect.ts for database operations
-- **Better Auth Compatible**: Native adapter support for authentication integration with PostgreSQL
-- **Lightweight**: Minimal bundle size, no heavy ORM abstractions
-- **Migration System**: drizzle-kit provides powerful schema migration tools
-- **Relational Queries**: Automatic joins with type-safe relationship definitions
-- **Connection Pooling**: Built-in pool management for production workloads
+## Why Drizzle for Omnera
+
+- **Zero Runtime Overhead**: Schema and query types resolved at compile time
+- **SQL-Like Syntax**: Familiar SQL-style API (no learning curve for SQL developers)
+- **Full TypeScript Inference**: Complete type safety from schema to query results
+- **Bun Native Integration**: Uses Bun's built-in `bun:sql` module (no external drivers)
+- **Effect.ts Ready**: Perfect for repository pattern with Effect Context
+- **Better Auth Compatible**: Works with Better Auth via `drizzleAdapter`
+- **PostgreSQL Focus**: Production-ready with advanced PostgreSQL features
+- **Lightweight**: Small bundle size, minimal dependencies
+- **Migration System**: Declarative migrations with drizzle-kit
 
 ## Installation
 
-Drizzle ORM requires two packages:
+Drizzle is already installed in Omnera:
 
-```bash
-# Install Drizzle ORM and Drizzle Kit
-bun add drizzle-orm
-bun add -d drizzle-kit
-
-# For PostgreSQL with Bun SQL (recommended)
-# No additional driver needed - Bun has built-in PostgreSQL support via bun:sql
-# This eliminates dependencies like postgres, pg, or node-postgres
+```json
+{
+  "dependencies": {
+    "drizzle-orm": "^0.37.0",
+    "@types/bun": "latest"
+  },
+  "devDependencies": {
+    "drizzle-kit": "^0.30.1"
+  }
+}
 ```
 
-**Key Advantage**: Unlike Node.js which requires external PostgreSQL drivers (`pg`, `postgres`, etc.), Bun's native SQL module provides direct PostgreSQL integration out of the box. This means:
-
-- ✅ No external dependencies
-- ✅ Faster connection establishment
-- ✅ Better performance with native bindings
-- ✅ Simpler dependency management
-- ✅ Unified API across SQL databases
-
-## Integration with Omnera Stack
-
-### TypeScript (^5)
-
-Drizzle leverages TypeScript's type system for full type safety:
-
-```typescript
-import { pgTable, serial, text } from 'drizzle-orm/pg-core'
-
-// Schema definition generates TypeScript types
-export const users = pgTable('users', {
-  id: serial('id').primaryKey(),
-  name: text('name').notNull(),
-  email: text('email').notNull().unique(),
-})
-
-// Infer types from schema
-export type User = typeof users.$inferSelect // { id: number; name: string; email: string }
-export type NewUser = typeof users.$inferInsert // { name: string; email: string; id?: number }
-```
-
-### Effect.ts (3.18.4)
-
-Drizzle operations integrate seamlessly with Effect using Bun SQL:
-
-```typescript
-import { Effect, Context, Layer } from 'effect'
-import { SQL } from 'bun'
-import { drizzle } from 'drizzle-orm/bun-sql'
-
-// Define Database service
-class Database extends Context.Tag('Database')<Database, ReturnType<typeof drizzle>>() {}
-
-// Database layer with Bun SQL
-const DatabaseLive = Layer.sync(Database, () => {
-  const client = new SQL({
-    url: process.env.DATABASE_URL!,
-    max: 20,
-  })
-  return drizzle({ client })
-})
-
-// Database operations as Effect programs
-const findUserById = (id: number): Effect.Effect<User, UserNotFoundError, Database> =>
-  Effect.gen(function* () {
-    const db = yield* Database
-
-    const result = yield* Effect.tryPromise({
-      try: () => db.select().from(users).where(eq(users.id, id)).get(),
-      catch: (error) => new DatabaseError({ cause: error }),
-    })
-
-    if (!result) {
-      return yield* Effect.fail(new UserNotFoundError({ userId: id }))
-    }
-
-    return result
-  })
-```
-
-### Better Auth (drizzleAdapter)
-
-Drizzle provides a native adapter for Better Auth:
-
-```typescript
-import { betterAuth } from 'better-auth'
-import { drizzleAdapter } from 'better-auth/adapters/drizzle'
-import { db } from './db'
-
-export const auth = betterAuth({
-  database: drizzleAdapter(db, {
-    provider: 'sqlite', // or 'pg' for PostgreSQL
-  }),
-  // ... other Better Auth configuration
-})
-```
-
-### Layer-Based Architecture (Infrastructure Layer)
-
-Drizzle fits in the Infrastructure Layer:
-
-```
-┌─────────────────────────────────────┐
-│      Presentation Layer             │
-│  (Hono routes, React components)    │
-└─────────────────────────────────────┘
-              ↓
-┌─────────────────────────────────────┐
-│      Application Layer              │
-│  (Business logic, use cases)        │
-└─────────────────────────────────────┘
-              ↓
-┌─────────────────────────────────────┐
-│      Domain Layer                   │
-│  (Entities, value objects)          │
-└─────────────────────────────────────┘
-              ↓
-┌─────────────────────────────────────┐
-│      Infrastructure Layer           │
-│  (Drizzle ORM, repositories)        │  ← Drizzle lives here
-└─────────────────────────────────────┘
-```
+No additional installation needed.
 
 ## Database Setup
 
-### PostgreSQL with Bun SQL (Recommended)
+### PostgreSQL with Bun SQL (Production)
 
-Bun provides native PostgreSQL support through its built-in SQL module. This is the recommended approach for both development and production.
-
-#### Development Setup
-
-```typescript
-// src/db/index.ts
-import { SQL } from 'bun'
-import { drizzle } from 'drizzle-orm/bun-sql'
-
-// Development PostgreSQL connection
-// Uses local Postgres with simpler configuration
-const client = new SQL({
-  url: process.env.DATABASE_URL || 'postgres://localhost:5432/omnera_dev',
-  max: 5, // Lower pool size for development
-  idleTimeout: 20, // Close idle connections after 20s
-  connectionTimeout: 10, // Connection timeout in seconds
-})
-
-export const db = drizzle({ client })
-export type DrizzleDB = typeof db
-```
-
-**Development .env file**:
-
-```bash
-# Local PostgreSQL connection
-DATABASE_URL=postgres://localhost:5432/omnera_dev
-
-# Or with credentials
-DATABASE_URL=postgres://user:password@localhost:5432/omnera_dev
-```
-
-#### Production Setup
+Bun provides native PostgreSQL support via the built-in `bun:sql` module:
 
 ```typescript
 // src/db/index.ts
@@ -190,12 +50,10 @@ import { SQL } from 'bun'
 import { drizzle } from 'drizzle-orm/bun-sql'
 
 // Production PostgreSQL connection
-// Uses connection pooling and SSL for security
 const client = new SQL({
-  url: process.env.DATABASE_URL!,
-  max: 20, // Higher pool size for production load
-  idleTimeout: 30, // Close idle connections after 30s
-  maxLifetime: 0, // Connection lifetime (0 = unlimited)
+  url: process.env.DATABASE_URL || 'postgres://localhost:5432/omnera',
+  max: 20, // Connection pool size
+  idleTimeout: 60, // Idle timeout in seconds
   connectionTimeout: 30, // Connection timeout in seconds
 })
 
@@ -203,241 +61,93 @@ export const db = drizzle({ client })
 export type DrizzleDB = typeof db
 ```
 
-**Production .env file**:
+**Environment Variables**:
 
 ```bash
-# Production PostgreSQL connection with SSL
-DATABASE_URL=postgres://user:password@production-host:5432/omnera_prod?sslmode=require
-
-# Or using alternative environment variables
-POSTGRES_URL=postgres://user:password@production-host:5432/omnera_prod?sslmode=require
+# .env
+DATABASE_URL=postgres://user:password@localhost:5432/omnera
 ```
 
-#### Connection String Formats
+### Effect Layer for Database
 
-Bun SQL supports multiple PostgreSQL connection string formats:
-
-```bash
-# Standard PostgreSQL format
-postgres://user:password@host:port/database
-
-# PostgreSQL alternative format
-postgresql://user:password@host:port/database
-
-# With SSL mode (production)
-postgres://user:password@host:port/database?sslmode=require
-
-# With SSL verification (most secure)
-postgres://user:password@host:port/database?sslmode=verify-full
-
-# Local development (no password)
-postgres://localhost:5432/omnera_dev
-```
-
-#### Environment Variable Detection
-
-Bun automatically detects PostgreSQL connection from these environment variables (in order):
-
-1. `POSTGRES_URL`
-2. `DATABASE_URL`
-3. `PGURL` or `PG_URL`
-4. `TLS_POSTGRES_DATABASE_URL`
-
-#### Simple Connection (Auto-Detection)
-
-For simple cases, Bun can auto-detect the connection:
-
-```typescript
-// src/db/index.ts
-import { drizzle } from 'drizzle-orm/bun-sql'
-
-// Auto-detects DATABASE_URL or POSTGRES_URL
-export const db = drizzle(process.env.DATABASE_URL!)
-
-// Even simpler with default environment variable
-// Bun checks DATABASE_URL automatically
-export const db = drizzle()
-```
-
-### SQLite with Bun (Alternative for Local Development)
-
-For local development without PostgreSQL, you can use SQLite:
-
-```typescript
-// src/db/index.ts
-import { drizzle } from 'drizzle-orm/bun-sqlite'
-import { Database } from 'bun:sqlite'
-
-// Create SQLite database connection
-const sqlite = new Database('local.db')
-export const db = drizzle(sqlite)
-
-// Type-safe database instance
-export type DrizzleDB = typeof db
-```
-
-**Note**: Use SQLite only for local development. Production should use PostgreSQL with Bun SQL.
-
-### Database as Effect Layer
+Provide database as Effect Context service:
 
 ```typescript
 // src/db/layer.ts
-import { Effect, Layer, Context } from 'effect'
-import { SQL } from 'bun'
-import { drizzle } from 'drizzle-orm/bun-sql'
+import { Context, Layer, Effect } from 'effect'
+import { db, type DrizzleDB } from './index'
 
-// Database service
-export class Database extends Context.Tag('Database')<Database, ReturnType<typeof drizzle>>() {}
+export class Database extends Context.Tag('Database')<Database, DrizzleDB>() {}
 
-// Database layer (singleton) - Development
-export const DatabaseLive = Layer.sync(Database, () => {
-  const client = new SQL({
-    url: process.env.DATABASE_URL || 'postgres://localhost:5432/omnera_dev',
-    max: 5, // Development pool size
-    idleTimeout: 20,
-    connectionTimeout: 10,
-  })
+export const DatabaseLive = Layer.succeed(Database, db)
+```
 
-  return drizzle({ client })
-})
+**Usage in Effect programs**:
 
-// Database layer - Production
-export const DatabaseProduction = Layer.sync(Database, () => {
-  const client = new SQL({
-    url: process.env.DATABASE_URL!,
-    max: 20, // Production pool size
-    idleTimeout: 30,
-    maxLifetime: 0,
-    connectionTimeout: 30,
-  })
+```typescript
+import { Effect } from 'effect'
+import { Database } from '@/db/layer'
 
-  return drizzle({ client })
-})
-
-// Environment-aware layer
-export const DatabaseEnv = process.env.NODE_ENV === 'production'
-  ? DatabaseProduction
-  : DatabaseLive
-
-// Usage in Effect programs
 const program = Effect.gen(function* () {
   const db = yield* Database
-  const users = yield* Effect.promise(() => db.select().from(usersTable))
-  return users
+  // Use db for queries
 })
-
-// Run with database layer
-Effect.runPromise(Effect.provide(program, DatabaseEnv))
 ```
 
 ## Schema Definition
 
-### Basic Table Schema (PostgreSQL)
+### Basic Table Schema
+
+Define tables with type-safe columns:
 
 ```typescript
 // src/db/schema/users.ts
-import { pgTable, serial, text, timestamp } from 'drizzle-orm/pg-core'
+import { pgTable, serial, text, timestamp, boolean } from 'drizzle-orm/pg-core'
 
 export const users = pgTable('users', {
   id: serial('id').primaryKey(),
   name: text('name').notNull(),
   email: text('email').notNull().unique(),
-  createdAt: timestamp('created_at', { withTimezone: true })
-    .notNull()
-    .defaultNow(),
+  emailVerified: boolean('email_verified').notNull().default(false),
+  image: text('image'),
+  createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+  updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
 })
 
-// Infer TypeScript types
-export type User = typeof users.$inferSelect
-export type NewUser = typeof users.$inferInsert
+// Infer TypeScript types from schema
+export type User = typeof users.$inferSelect // Select type (all fields)
+export type NewUser = typeof users.$inferInsert // Insert type (optional fields)
 ```
 
-**Key differences from SQLite**:
-
-- Use `pgTable` instead of `sqliteTable`
-- Use `serial` for auto-incrementing primary keys (instead of `integer({ autoIncrement: true })`)
-- Use `timestamp` for date/time columns (instead of `integer({ mode: 'timestamp' })`)
-- Use `.defaultNow()` for current timestamp (instead of `.$defaultFn(() => new Date())`)
-- Use `withTimezone: true` for timezone-aware timestamps (recommended)
-
-### Column Types (PostgreSQL)
+**Type Inference**:
 
 ```typescript
-import {
-  pgTable,
-  serial,
-  integer,
-  text,
-  varchar,
-  boolean,
-  timestamp,
-  numeric,
-  jsonb,
-  pgEnum,
-  bytea,
-} from 'drizzle-orm/pg-core'
+const user: User = {
+  id: 1,
+  name: 'Alice',
+  email: 'alice@example.com',
+  emailVerified: false,
+  image: null,
+  createdAt: new Date(),
+  updatedAt: new Date(),
+}
 
-// Define enum type (PostgreSQL native enum)
-export const statusEnum = pgEnum('status', ['active', 'inactive', 'archived'])
-
-export const products = pgTable('products', {
-  // Numeric types
-  id: serial('id').primaryKey(),
-  quantity: integer('quantity').notNull().default(0),
-  price: numeric('price', { precision: 10, scale: 2 }).notNull(), // Money-safe decimal
-
-  // Text types
-  name: varchar('name', { length: 255 }).notNull(),
-  description: text('description'),
-  sku: varchar('sku', { length: 50 }).notNull().unique(),
-
-  // Enum type (PostgreSQL native)
-  status: statusEnum('status').notNull().default('active'),
-
-  // Boolean type
-  featured: boolean('featured').notNull().default(false),
-
-  // JSON type (JSONB for better performance)
-  metadata: jsonb('metadata').$type<{ tags: string[]; featured: boolean }>(),
-
-  // Timestamps with timezone
-  createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
-  updatedAt: timestamp('updated_at', { withTimezone: true })
-    .notNull()
-    .defaultNow()
-    .$onUpdate(() => new Date()),
-
-  // Binary data
-  image: bytea('image'),
-})
+const newUser: NewUser = {
+  name: 'Bob',
+  email: 'bob@example.com',
+  // id, createdAt, updatedAt are optional (auto-generated)
+}
 ```
 
-**PostgreSQL Type Mapping**:
+### Relationships
 
-| PostgreSQL Type   | Drizzle Type | Use Case                              |
-| ----------------- | ------------ | ------------------------------------- |
-| `SERIAL`          | `serial()`   | Auto-incrementing integer primary key |
-| `INTEGER`         | `integer()`  | Whole numbers (-2B to +2B)            |
-| `BIGINT`          | `bigint()`   | Large integers                        |
-| `NUMERIC`         | `numeric()`  | Precise decimal numbers (money)       |
-| `REAL`            | `real()`     | Floating point numbers                |
-| `TEXT`            | `text()`     | Unlimited text                        |
-| `VARCHAR(n)`      | `varchar()`  | Variable-length string with limit     |
-| `BOOLEAN`         | `boolean()`  | True/false values                     |
-| `TIMESTAMP`       | `timestamp()` | Date and time                        |
-| `TIMESTAMPTZ`     | `timestamp({ withTimezone: true })` | Timezone-aware timestamp |
-| `JSONB`           | `jsonb()`    | Binary JSON (faster than JSON)        |
-| `BYTEA`           | `bytea()`    | Binary data                           |
-| `UUID`            | `uuid()`     | Universally unique identifier         |
-| `ENUM`            | `pgEnum()`   | Custom enum type                      |
-
-### Relationships (PostgreSQL)
+Define one-to-many and many-to-many relationships:
 
 ```typescript
 // src/db/schema/posts.ts
 import { pgTable, serial, text, integer, timestamp } from 'drizzle-orm/pg-core'
-import { relations } from 'drizzle-orm'
 import { users } from './users'
+import { relations } from 'drizzle-orm'
 
 export const posts = pgTable('posts', {
   id: serial('id').primaryKey(),
@@ -449,78 +159,17 @@ export const posts = pgTable('posts', {
   createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
 })
 
-// Define relationships
-export const usersRelations = relations(users, ({ many }) => ({
-  posts: many(posts),
-}))
-
+// Define relations for type-safe joins
 export const postsRelations = relations(posts, ({ one }) => ({
   author: one(users, {
     fields: [posts.authorId],
     references: [users.id],
   }),
 }))
-```
 
-**PostgreSQL Foreign Key Options**:
-
-- `onDelete: 'cascade'` - Delete posts when user is deleted
-- `onDelete: 'set null'` - Set authorId to null when user is deleted
-- `onDelete: 'restrict'` - Prevent user deletion if posts exist
-- `onUpdate: 'cascade'` - Update references when primary key changes
-
-### Indexes and Constraints (PostgreSQL)
-
-```typescript
-import { pgTable, serial, varchar, text, uniqueIndex, index } from 'drizzle-orm/pg-core'
-
-export const users = pgTable(
-  'users',
-  {
-    id: serial('id').primaryKey(),
-    email: varchar('email', { length: 255 }).notNull(),
-    username: varchar('username', { length: 100 }).notNull(),
-    status: text('status').notNull(),
-  },
-  (table) => ({
-    // Unique index (alternative to .unique() on column)
-    emailIdx: uniqueIndex('email_idx').on(table.email),
-
-    // Composite index for queries filtering by status and username
-    statusUsernameIdx: index('status_username_idx').on(table.status, table.username),
-
-    // Partial index (PostgreSQL feature)
-    activeUsersIdx: index('active_users_idx')
-      .on(table.username)
-      .where(sql`status = 'active'`),
-  })
-)
-```
-
-**PostgreSQL Index Types**:
-
-- `index()` - B-tree index (default, most common)
-- `uniqueIndex()` - Unique constraint with index
-- Partial indexes with `.where()` clause (PostgreSQL-specific optimization)
-
-### Type Inference
-
-```typescript
-import { users, posts } from './schema'
-
-// Select types (from database)
-type User = typeof users.$inferSelect
-// { id: number; name: string; email: string; createdAt: Date }
-
-type Post = typeof posts.$inferSelect
-// { id: number; title: string; content: string; authorId: number; createdAt: Date }
-
-// Insert types (to database)
-type NewUser = typeof users.$inferInsert
-// { name: string; email: string; createdAt?: Date; id?: number }
-
-type NewPost = typeof posts.$inferInsert
-// { title: string; content: string; authorId: number; createdAt?: Date; id?: number }
+export const usersRelations = relations(users, ({ many }) => ({
+  posts: many(posts),
+}))
 ```
 
 ## Query API
@@ -528,256 +177,100 @@ type NewPost = typeof posts.$inferInsert
 ### Select Queries
 
 ```typescript
-import { db } from './db'
-import { users } from './schema'
-import { eq, gt, like, and, or } from 'drizzle-orm'
+import { db } from '@/db'
+import { users } from '@/db/schema'
+import { eq, and, or, like, gt, lt } from 'drizzle-orm'
 
 // Select all users
 const allUsers = await db.select().from(users)
 
 // Select specific columns
-const userEmails = await db.select({ email: users.email }).from(users)
+const userNames = await db
+  .select({
+    id: users.id,
+    name: users.name,
+  })
+  .from(users)
 
 // Where conditions
-const activeUsers = await db.select().from(users).where(eq(users.status, 'active'))
+const user = await db.select().from(users).where(eq(users.id, 1))
 
 // Multiple conditions
-const filteredUsers = await db
+const verifiedUsers = await db
   .select()
   .from(users)
-  .where(and(eq(users.status, 'active'), gt(users.createdAt, new Date('2024-01-01'))))
+  .where(and(eq(users.emailVerified, true), like(users.email, '%@example.com')))
 
-// Pattern matching
-const searchResults = await db.select().from(users).where(like(users.email, '%@example.com'))
-
-// Limit and offset
-const paginatedUsers = await db.select().from(users).limit(10).offset(20)
-
-// Order by
-const sortedUsers = await db.select().from(users).orderBy(users.createdAt)
-
-// Single result
-const user = await db.select().from(users).where(eq(users.id, 1)).get()
+// Limit and offset (pagination)
+const page1 = await db.select().from(users).limit(10).offset(0)
 ```
 
-### Insert Queries
+### Insert, Update, Delete
 
 ```typescript
-import { db } from './db'
-import { users } from './schema'
-
-// Insert single record
+// Insert
 const newUser = await db
   .insert(users)
   .values({
-    name: 'Alice Johnson',
+    name: 'Alice',
     email: 'alice@example.com',
   })
   .returning()
 
-// Insert multiple records
-const newUsers = await db
-  .insert(users)
-  .values([
-    { name: 'Bob Smith', email: 'bob@example.com' },
-    { name: 'Charlie Brown', email: 'charlie@example.com' },
-  ])
-  .returning()
-
-// Insert with conflict handling (upsert)
-const upsertedUser = await db
-  .insert(users)
-  .values({ email: 'alice@example.com', name: 'Alice Updated' })
-  .onConflictDoUpdate({
-    target: users.email,
-    set: { name: 'Alice Updated' },
-  })
-  .returning()
-```
-
-### Update Queries
-
-```typescript
-import { db } from './db'
-import { users } from './schema'
-import { eq } from 'drizzle-orm'
-
-// Update single record
+// Update
 const updatedUser = await db
   .update(users)
-  .set({ name: 'Alice Smith Updated' })
+  .set({ name: 'Alice Smith' })
   .where(eq(users.id, 1))
   .returning()
 
-// Update multiple records
-const updatedUsers = await db
-  .update(users)
-  .set({ status: 'inactive' })
-  .where(eq(users.status, 'pending'))
-  .returning()
-
-// Partial updates
-const partialUpdate = await db
-  .update(users)
-  .set({ email: 'newemail@example.com' })
-  .where(eq(users.id, 1))
-  .returning()
-```
-
-### Delete Queries
-
-```typescript
-import { db } from './db'
-import { users } from './schema'
-import { eq, lt } from 'drizzle-orm'
-
-// Delete single record
+// Delete
 await db.delete(users).where(eq(users.id, 1))
-
-// Delete multiple records
-await db.delete(users).where(eq(users.status, 'deleted'))
-
-// Delete with condition
-await db.delete(users).where(lt(users.createdAt, new Date('2020-01-01')))
-
-// Delete with returning
-const deletedUsers = await db.delete(users).where(eq(users.status, 'spam')).returning()
 ```
 
-### Joins
+### Joins and Relations
 
 ```typescript
-import { db } from './db'
-import { users, posts } from './schema'
-import { eq } from 'drizzle-orm'
+import { posts, users } from '@/db/schema'
 
-// Inner join
-const usersWithPosts = await db
+// Manual join
+const postsWithAuthors = await db
   .select({
-    user: users,
     post: posts,
+    author: users,
   })
-  .from(users)
-  .innerJoin(posts, eq(users.id, posts.authorId))
+  .from(posts)
+  .leftJoin(users, eq(posts.authorId, users.id))
 
-// Left join
-const allUsersWithPosts = await db
-  .select({
-    user: users,
-    post: posts,
-  })
-  .from(users)
-  .leftJoin(posts, eq(users.id, posts.authorId))
-
-// Select specific columns from joins
-const userPostTitles = await db
-  .select({
-    userName: users.name,
-    postTitle: posts.title,
-  })
-  .from(users)
-  .innerJoin(posts, eq(users.id, posts.authorId))
-```
-
-### Relational Queries
-
-```typescript
-import { db } from './db'
-import { users, posts } from './schema'
-
-// Query with automatic joins
+// Relational query (type-safe)
 const usersWithPosts = await db.query.users.findMany({
   with: {
     posts: true,
   },
 })
-
-// Nested relations
-const usersWithPostsAndComments = await db.query.users.findMany({
-  with: {
-    posts: {
-      with: {
-        comments: true,
-      },
-    },
-  },
-})
-
-// Filter related data
-const activeUsersWithRecentPosts = await db.query.users.findMany({
-  where: (users, { eq }) => eq(users.status, 'active'),
-  with: {
-    posts: {
-      where: (posts, { gt }) => gt(posts.createdAt, new Date('2024-01-01')),
-    },
-  },
-})
-
-// Find single record
-const userWithPosts = await db.query.users.findFirst({
-  where: (users, { eq }) => eq(users.id, 1),
-  with: {
-    posts: true,
-  },
-})
 ```
 
-## Transactions
+## Effect Integration with Repository Pattern
 
-```typescript
-import { db } from './db'
-import { users, posts } from './schema'
-
-// Basic transaction
-await db.transaction(async (tx) => {
-  const newUser = await tx
-    .insert(users)
-    .values({ name: 'Alice', email: 'alice@example.com' })
-    .returning()
-
-  await tx.insert(posts).values({
-    title: 'First Post',
-    content: 'Hello World',
-    authorId: newUser[0].id,
-  })
-})
-
-// Transaction with rollback
-try {
-  await db.transaction(async (tx) => {
-    await tx.update(users).set({ status: 'active' }).where(eq(users.id, 1))
-
-    // This will rollback the entire transaction if it fails
-    await tx.update(posts).set({ published: true }).where(eq(posts.authorId, 1))
-  })
-} catch (error) {
-  console.error('Transaction failed:', error)
-}
-```
-
-## Effect Integration Patterns
-
-### Database Repository Pattern
+### Repository Interface
 
 ```typescript
 // src/repositories/UserRepository.ts
-import { Effect, Context } from 'effect'
-import { Database } from '../db/layer'
-import { users, type User, type NewUser } from '../db/schema'
+import { Effect, Context, Layer } from 'effect'
+import { Database } from '@/db/layer'
+import { users, type User, type NewUser } from '@/db/schema'
 import { eq } from 'drizzle-orm'
 
-// Define errors
-export class UserNotFoundError {
+class UserNotFoundError {
   readonly _tag = 'UserNotFoundError'
   constructor(readonly userId: number) {}
 }
 
-export class DatabaseError {
+class DatabaseError {
   readonly _tag = 'DatabaseError'
   constructor(readonly cause: unknown) {}
 }
 
-// UserRepository service
 export class UserRepository extends Context.Tag('UserRepository')<
   UserRepository,
   {
@@ -792,8 +285,11 @@ export class UserRepository extends Context.Tag('UserRepository')<
     readonly list: () => Effect.Effect<readonly User[], DatabaseError>
   }
 >() {}
+```
 
-// UserRepository implementation
+### Repository Implementation
+
+```typescript
 export const UserRepositoryLive = Layer.effect(
   UserRepository,
   Effect.gen(function* () {
@@ -802,7 +298,10 @@ export const UserRepositoryLive = Layer.effect(
     return UserRepository.of({
       findById: (id) =>
         Effect.tryPromise({
-          try: () => db.select().from(users).where(eq(users.id, id)).get(),
+          try: async () => {
+            const result = await db.select().from(users).where(eq(users.id, id))
+            return result[0]
+          },
           catch: (error) => new DatabaseError(error),
         }).pipe(
           Effect.flatMap((result) =>
@@ -812,41 +311,50 @@ export const UserRepositoryLive = Layer.effect(
 
       findByEmail: (email) =>
         Effect.tryPromise({
-          try: () => db.select().from(users).where(eq(users.email, email)).get(),
+          try: async () => {
+            const result = await db.select().from(users).where(eq(users.email, email))
+            return result[0] || null
+          },
           catch: (error) => new DatabaseError(error),
-        }).pipe(Effect.map((result) => result ?? null)),
+        }),
 
       create: (user) =>
         Effect.tryPromise({
           try: async () => {
-            const [created] = await db.insert(users).values(user).returning()
-            return created
+            const result = await db.insert(users).values(user).returning()
+            return result[0]
           },
           catch: (error) => new DatabaseError(error),
         }),
 
       update: (id, data) =>
         Effect.gen(function* () {
-          const [updated] = yield* Effect.tryPromise({
-            try: () => db.update(users).set(data).where(eq(users.id, id)).returning(),
+          const result = yield* Effect.tryPromise({
+            try: async () => {
+              const updated = await db.update(users).set(data).where(eq(users.id, id)).returning()
+              return updated[0]
+            },
             catch: (error) => new DatabaseError(error),
           })
 
-          if (!updated) {
+          if (!result) {
             return yield* Effect.fail(new UserNotFoundError(id))
           }
 
-          return updated
+          return result
         }),
 
       delete: (id) =>
         Effect.gen(function* () {
           const result = yield* Effect.tryPromise({
-            try: () => db.delete(users).where(eq(users.id, id)).returning(),
+            try: async () => {
+              const deleted = await db.delete(users).where(eq(users.id, id)).returning()
+              return deleted[0]
+            },
             catch: (error) => new DatabaseError(error),
           })
 
-          if (result.length === 0) {
+          if (!result) {
             return yield* Effect.fail(new UserNotFoundError(id))
           }
         }),
@@ -861,20 +369,14 @@ export const UserRepositoryLive = Layer.effect(
 )
 ```
 
-### Using Repositories in Application Logic
+### Application Layer Usage
 
 ```typescript
-// src/services/UserService.ts
+// src/application/use-cases/GetUserProfile.ts
 import { Effect } from 'effect'
-import {
-  UserRepository,
-  type UserNotFoundError,
-  type DatabaseError,
-} from '../repositories/UserRepository'
+import { UserRepository } from '@/repositories/UserRepository'
 
-export const getUserProfile = (
-  userId: number
-): Effect.Effect<UserProfile, UserNotFoundError | DatabaseError, UserRepository> =>
+export const GetUserProfile = (userId: number) =>
   Effect.gen(function* () {
     const userRepo = yield* UserRepository
 
@@ -884,86 +386,41 @@ export const getUserProfile = (
       id: user.id,
       name: user.name,
       email: user.email,
+      joinedAt: user.createdAt,
     }
   })
 
-export const createUser = (
-  name: string,
-  email: string
-): Effect.Effect<User, DatabaseError, UserRepository> =>
-  Effect.gen(function* () {
-    const userRepo = yield* UserRepository
+// Provide dependencies and run
+const program = GetUserProfile(1).pipe(Effect.provide(UserRepositoryLive))
 
-    return yield* userRepo.create({ name, email })
-  })
+const result = await Effect.runPromise(program.pipe(Effect.either))
+
+if (result._tag === 'Left') {
+  console.error('Error:', result.left)
+} else {
+  console.log('User:', result.right)
+}
 ```
 
-### Application Layer with Database
-
-```typescript
-// src/layers/AppLayer.ts
-import { Layer } from 'effect'
-import { DatabaseLive } from '../db/layer'
-import { UserRepositoryLive } from '../repositories/UserRepository'
-
-// Compose all layers
-export const AppLayer = Layer.provide(UserRepositoryLive, DatabaseLive)
-
-// Usage
-import { Effect } from 'effect'
-import { getUserProfile } from '../services/UserService'
-import { AppLayer } from '../layers/AppLayer'
-
-const program = getUserProfile(1)
-
-Effect.runPromise(Effect.provide(program, AppLayer))
-  .then((profile) => console.log('User profile:', profile))
-  .catch((error) => console.error('Failed:', error))
-```
-
-## Migrations with Drizzle Kit
+## Migrations with drizzle-kit
 
 ### Configuration
 
 ```typescript
 // drizzle.config.ts
-import type { Config } from 'drizzle-kit'
+import { defineConfig } from 'drizzle-kit'
 
-export default {
-  schema: './src/db/schema/*',
-  out: './drizzle',
-  dialect: 'postgresql', // Use PostgreSQL dialect
-  dbCredentials: {
-    url: process.env.DATABASE_URL || 'postgres://localhost:5432/omnera_dev',
-  },
-} satisfies Config
-```
-
-**Environment-Specific Configuration**:
-
-```typescript
-// drizzle.config.ts
-import type { Config } from 'drizzle-kit'
-
-const isProduction = process.env.NODE_ENV === 'production'
-
-export default {
-  schema: './src/db/schema/*',
+export default defineConfig({
+  schema: './src/db/schema/*.ts',
   out: './drizzle',
   dialect: 'postgresql',
   dbCredentials: {
     url: process.env.DATABASE_URL!,
-    // Production SSL configuration
-    ...(isProduction && {
-      ssl: {
-        rejectUnauthorized: true,
-      },
-    }),
   },
-} satisfies Config
+})
 ```
 
-### Migration Commands
+### Generate and Run Migrations
 
 ```bash
 # Generate migration from schema changes
@@ -972,823 +429,258 @@ bunx drizzle-kit generate
 # Apply migrations to database
 bunx drizzle-kit migrate
 
-# Push schema changes directly (no migration files)
-bunx drizzle-kit push
-
-# Pull schema from existing database
-bunx drizzle-kit pull
-
-# Open Drizzle Studio (database GUI)
+# View database schema in Drizzle Studio
 bunx drizzle-kit studio
 ```
 
-### Migration Workflow (PostgreSQL)
+**Migration Workflow**:
 
-```typescript
-// 1. Define/update schema
-// src/db/schema/users.ts
-import { pgTable, serial, text, varchar, pgEnum } from 'drizzle-orm/pg-core'
+1. Define or modify schema in `src/db/schema/*.ts`
+2. Run `bunx drizzle-kit generate` to create migration SQL
+3. Review generated migration in `drizzle/` directory
+4. Run `bunx drizzle-kit migrate` to apply migration
+5. Commit migration files to version control
 
-export const roleEnum = pgEnum('role', ['admin', 'user'])
+## Better Auth Integration
 
-export const users = pgTable('users', {
-  id: serial('id').primaryKey(),
-  name: varchar('name', { length: 255 }).notNull(),
-  email: varchar('email', { length: 255 }).notNull().unique(),
-  role: roleEnum('role').notNull().default('user'), // New field
-})
-
-// 2. Generate migration
-// $ bunx drizzle-kit generate
-// Creates: drizzle/0001_add_role_to_users.sql
-
-// 3. Review migration
-// drizzle/0001_add_role_to_users.sql
-// CREATE TYPE "role" AS ENUM('admin', 'user');
-// ALTER TABLE users ADD COLUMN role "role" DEFAULT 'user' NOT NULL;
-
-// 4. Apply migration
-// $ bunx drizzle-kit migrate
-```
-
-**Key PostgreSQL Migration Features**:
-
-- **Enum Types**: PostgreSQL creates native ENUM types
-- **Indexes**: Automatically creates indexes for foreign keys
-- **Constraints**: CHECK constraints, UNIQUE constraints preserved
-- **Triggers**: Can add custom triggers in migration files
-- **Extensions**: Can enable PostgreSQL extensions (e.g., `uuid-ossp`, `postgis`)
-
-### Programmatic Migrations (PostgreSQL)
-
-```typescript
-// src/db/migrate.ts
-import { SQL } from 'bun'
-import { drizzle } from 'drizzle-orm/bun-sql'
-import { migrate } from 'drizzle-orm/bun-sql/migrator'
-
-const client = new SQL({
-  url: process.env.DATABASE_URL || 'postgres://localhost:5432/omnera_dev',
-})
-const db = drizzle({ client })
-
-// Run migrations
-await migrate(db, { migrationsFolder: './drizzle' })
-
-console.log('Migrations applied successfully')
-
-// Close connection
-await client.end()
-```
-
-**Running Migrations on Startup** (Effect Pattern):
-
-```typescript
-// src/db/migrations.ts
-import { Effect } from 'effect'
-import { SQL } from 'bun'
-import { drizzle } from 'drizzle-orm/bun-sql'
-import { migrate } from 'drizzle-orm/bun-sql/migrator'
-
-export const runMigrations = Effect.gen(function* () {
-  console.log('Running database migrations...')
-
-  const client = new SQL({
-    url: process.env.DATABASE_URL!,
-  })
-
-  const db = drizzle({ client })
-
-  yield* Effect.tryPromise({
-    try: () => migrate(db, { migrationsFolder: './drizzle' }),
-    catch: (error) => new Error(`Migration failed: ${error}`),
-  })
-
-  console.log('Migrations completed successfully')
-
-  yield* Effect.promise(() => client.end())
-})
-
-// In application startup
-import { Effect } from 'effect'
-import { runMigrations } from './db/migrations'
-
-const app = Effect.gen(function* () {
-  // Run migrations on startup
-  yield* runMigrations
-
-  // Start application
-  // ... rest of application code
-})
-
-Effect.runPromise(app)
-```
-
-## Best Practices
-
-### 1. Type Safety
-
-```typescript
-// ✅ CORRECT: Use inferred types
-type User = typeof users.$inferSelect
-type NewUser = typeof users.$inferInsert
-
-function createUser(data: NewUser): Promise<User> {
-  return db.insert(users).values(data).returning().get()
-}
-
-// ❌ INCORRECT: Manual type definitions
-interface User {
-  id: number
-  name: string
-  email: string
-}
-
-// Types can drift from schema
-```
-
-### 2. Schema Organization
-
-```typescript
-// ✅ CORRECT: Separate schema files by domain
-// src/db/schema/users.ts
-export const users = sqliteTable('users', { ... })
-export const usersRelations = relations(users, { ... })
-
-// src/db/schema/posts.ts
-export const posts = sqliteTable('posts', { ... })
-export const postsRelations = relations(posts, { ... })
-
-// src/db/schema/index.ts
-export * from './users'
-export * from './posts'
-```
-
-### 3. Query Optimization
-
-```typescript
-// ✅ CORRECT: Select only needed columns
-const userNames = await db.select({ id: users.id, name: users.name }).from(users)
-
-// ❌ INCORRECT: Select all when you only need some
-const allUsers = await db.select().from(users)
-const names = allUsers.map((u) => u.name) // Fetched unnecessary data
-
-// ✅ CORRECT: Use indexes for frequently queried columns
-export const users = sqliteTable(
-  'users',
-  {
-    email: text('email').notNull(),
-  },
-  (table) => ({
-    emailIdx: index('email_idx').on(table.email),
-  })
-)
-
-// ✅ CORRECT: Use pagination for large result sets
-const paginatedUsers = await db
-  .select()
-  .from(users)
-  .limit(20)
-  .offset(page * 20)
-```
-
-### 4. Error Handling with Effect
-
-```typescript
-// ✅ CORRECT: Explicit error types
-export class UserNotFoundError {
-  readonly _tag = 'UserNotFoundError'
-  constructor(readonly userId: number) {}
-}
-
-export class DatabaseError {
-  readonly _tag = 'DatabaseError'
-  constructor(readonly cause: unknown) {}
-}
-
-const findUser = (id: number): Effect.Effect<User, UserNotFoundError | DatabaseError, Database> =>
-  Effect.gen(function* () {
-    const db = yield* Database
-
-    const result = yield* Effect.tryPromise({
-      try: () => db.select().from(users).where(eq(users.id, id)).get(),
-      catch: (error) => new DatabaseError(error),
-    })
-
-    if (!result) {
-      return yield* Effect.fail(new UserNotFoundError(id))
-    }
-
-    return result
-  })
-
-// Handle errors explicitly
-const program = findUser(1).pipe(
-  Effect.catchTag('UserNotFoundError', (error) => Effect.succeed(defaultUser)),
-  Effect.catchTag('DatabaseError', (error) => {
-    console.error('Database error:', error)
-    return Effect.fail(error)
-  })
-)
-```
-
-### 5. Transaction Management
-
-```typescript
-// ✅ CORRECT: Use transactions for multi-step operations
-const transferFunds = (fromId: number, toId: number, amount: number) =>
-  Effect.gen(function* () {
-    const db = yield* Database
-
-    yield* Effect.tryPromise({
-      try: () =>
-        db.transaction(async (tx) => {
-          // Deduct from sender
-          await tx
-            .update(accounts)
-            .set({ balance: sql`${accounts.balance} - ${amount}` })
-            .where(eq(accounts.userId, fromId))
-
-          // Add to receiver
-          await tx
-            .update(accounts)
-            .set({ balance: sql`${accounts.balance} + ${amount}` })
-            .where(eq(accounts.userId, toId))
-        }),
-      catch: (error) => new DatabaseError(error),
-    })
-  })
-
-// ❌ INCORRECT: Separate operations without transaction
-// Risk of inconsistent state if second update fails
-await db
-  .update(accounts)
-  .set({ balance: senderBalance - amount })
-  .where(eq(accounts.userId, fromId))
-await db
-  .update(accounts)
-  .set({ balance: receiverBalance + amount })
-  .where(eq(accounts.userId, toId))
-```
-
-### 6. Testing
-
-```typescript
-// src/repositories/UserRepository.test.ts
-import { test, expect, beforeEach } from 'bun:test'
-import { Effect, Layer } from 'effect'
-import { UserRepository, UserRepositoryLive } from './UserRepository'
-import { DatabaseLive } from '../db/layer'
-
-// Test with real database (SQLite in-memory)
-const TestDatabaseLive = Layer.sync(Database, () => {
-  const sqlite = new Database(':memory:')
-  return drizzle(sqlite)
-})
-
-const TestAppLayer = Layer.provide(UserRepositoryLive, TestDatabaseLive)
-
-beforeEach(async () => {
-  // Run migrations in test database
-  const db = await Effect.runPromise(Database.pipe(Effect.provide(TestDatabaseLive)))
-  await migrate(db, { migrationsFolder: './drizzle' })
-})
-
-test('UserRepository.findById returns user', async () => {
-  const program = Effect.gen(function* () {
-    const repo = yield* UserRepository
-
-    // Create test user
-    const user = yield* repo.create({ name: 'Alice', email: 'alice@test.com' })
-
-    // Find by ID
-    const found = yield* repo.findById(user.id)
-
-    return found
-  })
-
-  const result = await Effect.runPromise(Effect.provide(program, TestAppLayer))
-
-  expect(result.name).toBe('Alice')
-  expect(result.email).toBe('alice@test.com')
-})
-
-test('UserRepository.findById fails for non-existent user', async () => {
-  const program = Effect.gen(function* () {
-    const repo = yield* UserRepository
-    return yield* repo.findById(999)
-  })
-
-  const result = await Effect.runPromise(Effect.provide(program, TestAppLayer).pipe(Effect.either))
-
-  expect(result._tag).toBe('Left')
-  if (result._tag === 'Left') {
-    expect(result.left._tag).toBe('UserNotFoundError')
-  }
-})
-```
-
-### 7. Prepared Statements
-
-```typescript
-// ✅ CORRECT: Use prepared statements for repeated queries
-import { db } from './db'
-import { users } from './schema'
-import { eq } from 'drizzle-orm'
-
-const findUserByIdStmt = db
-  .select()
-  .from(users)
-  .where(eq(users.id, sql.placeholder('id')))
-  .prepare()
-
-// Execute multiple times efficiently
-const user1 = await findUserByIdStmt.execute({ id: 1 })
-const user2 = await findUserByIdStmt.execute({ id: 2 })
-const user3 = await findUserByIdStmt.execute({ id: 3 })
-```
-
-## Common Patterns
-
-### Soft Deletes
-
-```typescript
-// Schema with deletedAt timestamp
-export const users = sqliteTable('users', {
-  id: integer('id').primaryKey({ autoIncrement: true }),
-  name: text('name').notNull(),
-  deletedAt: integer('deleted_at', { mode: 'timestamp' }),
-})
-
-// Soft delete helper
-const softDeleteUser = (id: number) =>
-  db.update(users).set({ deletedAt: new Date() }).where(eq(users.id, id))
-
-// Query active users only
-const activeUsers = await db.select().from(users).where(isNull(users.deletedAt))
-```
-
-### Audit Timestamps
-
-```typescript
-export const users = sqliteTable('users', {
-  id: integer('id').primaryKey({ autoIncrement: true }),
-  name: text('name').notNull(),
-  createdAt: integer('created_at', { mode: 'timestamp' })
-    .notNull()
-    .$defaultFn(() => new Date()),
-  updatedAt: integer('updated_at', { mode: 'timestamp' })
-    .notNull()
-    .$defaultFn(() => new Date())
-    .$onUpdateFn(() => new Date()),
-})
-```
-
-### Pagination
-
-```typescript
-interface PaginationOptions {
-  page: number
-  pageSize: number
-}
-
-const paginateUsers = ({ page, pageSize }: PaginationOptions) =>
-  Effect.gen(function* () {
-    const db = yield* Database
-
-    const offset = (page - 1) * pageSize
-
-    const [users, totalCount] = yield* Effect.all([
-      Effect.promise(() => db.select().from(usersTable).limit(pageSize).offset(offset)),
-      Effect.promise(() =>
-        db
-          .select({ count: sql<number>`count(*)` })
-          .from(usersTable)
-          .get()
-      ),
-    ])
-
-    return {
-      data: users,
-      pagination: {
-        page,
-        pageSize,
-        totalPages: Math.ceil(totalCount!.count / pageSize),
-        totalCount: totalCount!.count,
-      },
-    }
-  })
-```
-
-### Search and Filtering
-
-```typescript
-interface UserFilters {
-  status?: 'active' | 'inactive'
-  search?: string
-  minCreatedAt?: Date
-}
-
-const searchUsers = (filters: UserFilters) =>
-  Effect.gen(function* () {
-    const db = yield* Database
-
-    let query = db.select().from(users)
-
-    // Build dynamic where conditions
-    const conditions = []
-
-    if (filters.status) {
-      conditions.push(eq(users.status, filters.status))
-    }
-
-    if (filters.search) {
-      conditions.push(
-        or(like(users.name, `%${filters.search}%`), like(users.email, `%${filters.search}%`))
-      )
-    }
-
-    if (filters.minCreatedAt) {
-      conditions.push(gt(users.createdAt, filters.minCreatedAt))
-    }
-
-    if (conditions.length > 0) {
-      query = query.where(and(...conditions))
-    }
-
-    return yield* Effect.promise(() => query)
-  })
-```
-
-## Integration with Better Auth (PostgreSQL)
-
-Drizzle provides native adapter support for Better Auth with PostgreSQL:
+Use `drizzleAdapter` to integrate Better Auth with Drizzle:
 
 ```typescript
 // src/auth/index.ts
 import { betterAuth } from 'better-auth'
 import { drizzleAdapter } from 'better-auth/adapters/drizzle'
-import { db } from '../db'
+import { db } from '@/db'
 
 export const auth = betterAuth({
   database: drizzleAdapter(db, {
-    provider: 'pg', // Use PostgreSQL provider
+    provider: 'pg',
+    usePlural: true,
   }),
+
   emailAndPassword: {
     enabled: true,
   },
-  // Better Auth automatically creates these tables:
-  // - user
-  // - session
-  // - account
-  // - verification
-})
-
-// Custom user fields in schema (PostgreSQL)
-import { pgTable, text, varchar, boolean, timestamp, uuid, pgEnum } from 'drizzle-orm/pg-core'
-
-export const roleEnum = pgEnum('user_role', ['admin', 'user', 'moderator'])
-
-export const users = pgTable('user', {
-  id: uuid('id').primaryKey().defaultRandom(), // UUID for distributed systems
-  name: varchar('name', { length: 255 }).notNull(),
-  email: varchar('email', { length: 255 }).notNull().unique(),
-  emailVerified: boolean('emailVerified').notNull().default(false),
-  image: text('image'),
-  createdAt: timestamp('createdAt', { withTimezone: true }).notNull().defaultNow(),
-  updatedAt: timestamp('updatedAt', { withTimezone: true })
-    .notNull()
-    .defaultNow()
-    .$onUpdate(() => new Date()),
-
-  // Custom fields
-  role: roleEnum('role').notNull().default('user'),
-  bio: text('bio'),
 })
 ```
 
-For detailed Better Auth integration, see [Better Auth Documentation](../auth/better-auth.md).
+Better Auth automatically creates and manages tables:
 
-## Performance Considerations
+- `users` - User accounts
+- `sessions` - Active sessions
+- `accounts` - OAuth provider accounts
+- `verifications` - Email verification tokens
 
-### Query Optimization (PostgreSQL)
+## Best Practices
 
-- **Select specific columns**: Only fetch data you need
-- **Use indexes**: Add indexes for frequently queried columns
-- **Paginate large result sets**: Avoid loading all records at once
-- **Use prepared statements**: For repeated queries with different parameters
-- **Batch operations**: Insert/update multiple records in single query
-- **Use JSONB indexes**: Index JSONB columns for faster queries
-- **Partial indexes**: Create indexes with WHERE clauses for specific query patterns
-- **Use EXPLAIN ANALYZE**: Profile queries to identify bottlenecks
+### 1. Use Type Inference
 
 ```typescript
-// Example: JSONB indexing in PostgreSQL
-export const products = pgTable('products', {
-  id: serial('id').primaryKey(),
-  metadata: jsonb('metadata').$type<{ tags: string[]; category: string }>(),
-}, (table) => ({
-  // GIN index for JSONB queries
-  metadataIdx: index('metadata_idx').on(table.metadata).using('gin'),
-}))
+// ✅ CORRECT: Infer types from schema
+export type User = typeof users.$inferSelect
+export type NewUser = typeof users.$inferInsert
 
-// Efficient JSONB queries
-const productsWithTag = await db
-  .select()
-  .from(products)
-  .where(sql`metadata->>'category' = 'electronics'`)
+// ❌ INCORRECT: Manual type definitions (out of sync risk)
+type User = {
+  id: number
+  name: string
+  email: string
+}
 ```
 
-### Connection Pooling (Bun SQL with PostgreSQL)
-
-Bun SQL provides built-in connection pooling for PostgreSQL:
+### 2. Parameterized Queries (SQL Injection Prevention)
 
 ```typescript
-// src/db/index.ts
-import { SQL } from 'bun'
-import { drizzle } from 'drizzle-orm/bun-sql'
+// ✅ CORRECT: Drizzle uses parameterized queries automatically
+const email = userInput.email
+const user = await db.select().from(users).where(eq(users.email, email))
 
-// Development pool configuration
-const devClient = new SQL({
-  url: process.env.DATABASE_URL || 'postgres://localhost:5432/omnera_dev',
-  max: 5, // Smaller pool for development
-  idleTimeout: 20, // Close idle connections after 20s
-  connectionTimeout: 10, // Connection timeout in seconds
-})
-
-// Production pool configuration
-const prodClient = new SQL({
-  url: process.env.DATABASE_URL!,
-  max: 20, // Larger pool for production load
-  idleTimeout: 30, // Keep connections longer
-  maxLifetime: 3600, // Connection max lifetime (1 hour)
-  connectionTimeout: 30, // Longer timeout for production
-})
-
-export const db = drizzle({
-  client: process.env.NODE_ENV === 'production' ? prodClient : devClient,
-})
+// ❌ INCORRECT: String concatenation (SQL injection risk)
+const query = `SELECT * FROM users WHERE email = '${userInput.email}'`
+const user = await db.execute(query) // Vulnerable to SQL injection!
 ```
 
-**Connection Pool Best Practices**:
-
-- **Development**: Use smaller pool (5-10 connections) to conserve resources
-- **Production**: Scale pool size based on concurrent load (20-100 connections)
-- **Idle Timeout**: Balance between connection reuse and resource consumption
-- **Max Lifetime**: Rotate connections periodically to handle connection issues
-- **Monitoring**: Track pool utilization and adjust based on metrics
-
-### PostgreSQL-Specific Optimizations
+### 3. Repository Pattern with Effect
 
 ```typescript
-// 1. Use RETURNING clause efficiently
-const newUsers = await db
-  .insert(users)
-  .values([
-    { name: 'Alice', email: 'alice@example.com' },
-    { name: 'Bob', email: 'bob@example.com' },
-  ])
-  .returning({ id: users.id, email: users.email }) // Return only needed columns
-
-// 2. Bulk inserts with ON CONFLICT
-await db
-  .insert(users)
-  .values(largeUserArray)
-  .onConflictDoUpdate({
-    target: users.email,
-    set: { updatedAt: sql`EXCLUDED.updated_at` },
+// ✅ CORRECT: Repository with Effect Context
+export const UserRepositoryLive = Layer.effect(
+  UserRepository,
+  Effect.gen(function* () {
+    const db = yield* Database
+    // Implementation
   })
+)
 
-// 3. Use WITH queries (CTEs) for complex operations
-await db.execute(sql`
-  WITH active_users AS (
-    SELECT id FROM users WHERE status = 'active'
-  )
-  SELECT p.* FROM posts p
-  INNER JOIN active_users u ON p.author_id = u.id
-`)
-
-// 4. Parallel queries with Effect
-import { Effect } from 'effect'
-
-const fetchDashboardData = Effect.all({
-  users: Effect.promise(() => db.select().from(users).limit(10)),
-  posts: Effect.promise(() => db.select().from(posts).limit(20)),
-  stats: Effect.promise(() => db.query.stats.findFirst()),
-}, { concurrency: 3 }) // Execute 3 queries in parallel
+// ❌ INCORRECT: Direct database access in application layer
+const user = await db.select().from(users).where(eq(users.id, 1))
 ```
 
-### Caching with Effect
+### 4. Use Relations for Type-Safe Joins
 
 ```typescript
-import { Effect } from 'effect'
-
-// Cache frequently accessed data
-const getCachedUser = (id: number) =>
-  findUser(id).pipe(
-    Effect.cached, // Cache result
-    Effect.withRequestCaching(true) // Enable request-level caching
-  )
-```
-
-## Common Pitfalls to Avoid
-
-- ❌ **Not using transactions for multi-step operations** - Risk of inconsistent state
-- ❌ **Fetching all columns when only some are needed** - Wastes bandwidth and memory
-- ❌ **Missing indexes on frequently queried columns** - Slow query performance
-- ❌ **Not handling database errors explicitly** - Silent failures or poor error messages
-- ❌ **Using raw SQL without type safety** - Loses Drizzle's type inference benefits
-- ❌ **Not testing database operations** - Bugs in data layer can corrupt application state
-- ❌ **Forgetting to run migrations** - Schema drift between environments
-- ❌ **Hardcoding database credentials** - Security risk, use environment variables
-
-## Drizzle Studio
-
-Drizzle Kit includes a visual database browser:
-
-```bash
-# Start Drizzle Studio
-bunx drizzle-kit studio
-
-# Opens web interface at http://localhost:4983
-```
-
-**Features**:
-
-- Browse database tables and data
-- Run queries visually
-- Inspect relationships
-- Edit records (with caution in production)
-
-## PostgreSQL Best Practices for Omnera
-
-### 1. Environment-Specific Configuration
-
-```bash
-# Development (.env.local)
-DATABASE_URL=postgres://localhost:5432/omnera_dev
-NODE_ENV=development
-
-# Production (.env.production)
-DATABASE_URL=postgres://user:password@prod-host:5432/omnera_prod?sslmode=require
-NODE_ENV=production
-```
-
-### 2. Security Considerations
-
-```typescript
-// ✅ CORRECT: Use environment variables for credentials
-const client = new SQL({
-  url: process.env.DATABASE_URL!,
+// ✅ CORRECT: Relational query (type-safe)
+const usersWithPosts = await db.query.users.findMany({
+  with: { posts: true },
 })
 
-// ❌ INCORRECT: Hardcoded credentials
-const client = new SQL({
-  url: 'postgres://user:password@localhost:5432/db', // Never commit credentials
+// ❌ LESS IDEAL: Manual join (more verbose)
+const result = await db
+  .select()
+  .from(users)
+  .leftJoin(posts, eq(posts.authorId, users.id))
+```
+
+### 5. Transaction Management
+
+```typescript
+// ✅ CORRECT: Use transactions for multiple operations
+await db.transaction(async (tx) => {
+  const user = await tx.insert(users).values(newUser).returning()
+  await tx.insert(posts).values({ authorId: user[0].id, title: 'First Post' })
 })
 ```
 
-**Production Security Checklist**:
+## Common Patterns
 
-- ✅ Use SSL/TLS connections (`?sslmode=require` or `?sslmode=verify-full`)
-- ✅ Store credentials in environment variables or secrets management
-- ✅ Use connection pooling to prevent resource exhaustion
-- ✅ Implement database-level access controls (roles and permissions)
-- ✅ Enable query logging in production (for debugging)
-- ✅ Regularly update PostgreSQL and Drizzle ORM versions
-- ✅ Use prepared statements (Drizzle does this automatically)
-- ✅ Sanitize user input with Effect Schema validation
-
-### 3. Development Workflow
-
-```bash
-# 1. Start local PostgreSQL
-docker run --name omnera-postgres -e POSTGRES_PASSWORD=dev -p 5432:5432 -d postgres:16
-
-# 2. Create development database
-createdb omnera_dev
-
-# 3. Generate initial migration
-bunx drizzle-kit generate
-
-# 4. Apply migration
-bunx drizzle-kit migrate
-
-# 5. Open Drizzle Studio to inspect
-bunx drizzle-kit studio
-```
-
-### 4. Database Schema Best Practices
+### Pagination
 
 ```typescript
-// ✅ CORRECT: Use explicit column types with constraints
-export const users = pgTable('users', {
-  id: uuid('id').primaryKey().defaultRandom(),
-  email: varchar('email', { length: 255 }).notNull().unique(),
-  name: varchar('name', { length: 100 }).notNull(),
-  createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
-})
+const PAGE_SIZE = 10
 
-// ❌ INCORRECT: Using text for everything
-export const users = pgTable('users', {
-  id: text('id'), // No primary key constraint
-  email: text('email'), // No unique constraint
-  name: text('name'), // No length limit
-  createdAt: text('created_at'), // Should be timestamp
-})
-```
-
-### 5. Migration Strategy
-
-- **Never edit existing migrations** - Always create new migration files
-- **Review generated SQL** - Check migration files before applying
-- **Test migrations locally** - Apply to development database first
-- **Backup before production migrations** - Always have rollback plan
-- **Run migrations in transactions** - PostgreSQL supports transactional DDL
-
-### 6. Error Handling Patterns
-
-```typescript
-import { Effect } from 'effect'
-import { Database } from './db/layer'
-
-// PostgreSQL-specific error handling
-export class DatabaseConnectionError {
-  readonly _tag = 'DatabaseConnectionError'
-  constructor(readonly cause: unknown) {}
-}
-
-export class UniqueViolationError {
-  readonly _tag = 'UniqueViolationError'
-  constructor(readonly field: string) {}
-}
-
-const createUser = (email: string, name: string) =>
+export const listUsersPaginated = (page: number) =>
   Effect.gen(function* () {
     const db = yield* Database
 
-    return yield* Effect.tryPromise({
+    const users = yield* Effect.tryPromise({
       try: () =>
         db
-          .insert(users)
-          .values({ email, name })
-          .returning(),
-      catch: (error: any) => {
-        // PostgreSQL error code for unique violation
-        if (error.code === '23505') {
-          return new UniqueViolationError('email')
-        }
-        return new DatabaseConnectionError(error)
-      },
+          .select()
+          .from(users)
+          .limit(PAGE_SIZE)
+          .offset(page * PAGE_SIZE),
+      catch: (error) => new DatabaseError(error),
     })
+
+    return users
   })
 ```
+
+### Search with Filters
+
+```typescript
+import { like, or } from 'drizzle-orm'
+
+export const searchUsers = (query: string) =>
+  Effect.gen(function* () {
+    const db = yield* Database
+
+    const results = yield* Effect.tryPromise({
+      try: () =>
+        db
+          .select()
+          .from(users)
+          .where(or(like(users.name, `%${query}%`), like(users.email, `%${query}%`))),
+      catch: (error) => new DatabaseError(error),
+    })
+
+    return results
+  })
+```
+
+## Performance Optimization
+
+### Use Indexes
+
+```typescript
+// Define indexes in schema for frequent queries
+export const users = pgTable(
+  'users',
+  {
+    id: serial('id').primaryKey(),
+    email: text('email').notNull().unique(),
+    name: text('name').notNull(),
+  },
+  (table) => ({
+    emailIdx: index('email_idx').on(table.email),
+    nameIdx: index('name_idx').on(table.name),
+  })
+)
+```
+
+### Select Only Needed Columns
+
+```typescript
+// ✅ CORRECT: Select specific columns
+const userNames = await db
+  .select({
+    id: users.id,
+    name: users.name,
+  })
+  .from(users)
+
+// ❌ INCORRECT: Fetch all columns when only few needed
+const allUsers = await db.select().from(users) // Wasteful if only need names
+```
+
+### Use Joins Instead of Multiple Queries (N+1 Problem)
+
+```typescript
+// ✅ CORRECT: Single query with join
+const usersWithPosts = await db.query.users.findMany({
+  with: { posts: true },
+})
+
+// ❌ INCORRECT: N+1 queries
+const users = await db.select().from(users)
+const usersWithPosts = await Promise.all(
+  users.map(async (user) => ({
+    ...user,
+    posts: await db.select().from(posts).where(eq(posts.authorId, user.id)),
+  }))
+)
+```
+
+## Common Pitfalls
+
+- ❌ **Not using type inference** - Manually defining types that drift from schema
+- ❌ **Forgetting migrations** - Modifying schema without generating migrations
+- ❌ **N+1 queries** - Making separate queries in loops instead of joins
+- ❌ **Ignoring indexes** - Not adding indexes for frequently queried columns
+- ❌ **Skipping transactions** - Not using transactions for multi-step operations
+- ❌ **Direct database access** - Bypassing repository pattern in application layer
+
+## Drizzle vs Other ORMs
+
+| Aspect                 | Drizzle ORM                  | Prisma                          | TypeORM                    |
+| ---------------------- | ---------------------------- | ------------------------------- | -------------------------- |
+| **Type Safety**        | Full (compile-time)          | Full (code generation required) | Partial (decorators)       |
+| **Bundle Size**        | Small (~15KB)                | Large (~50KB+)                  | Large (~100KB+)            |
+| **SQL-Like API**       | Yes (familiar to SQL users)  | No (custom query language)      | Yes (QueryBuilder)         |
+| **Bun Native Support** | Yes (bun:sql module)         | No (needs external driver)      | No (needs external driver) |
+| **Performance**        | Excellent (zero overhead)    | Good                            | Moderate                   |
+| **Migrations**         | Declarative (drizzle-kit)    | Declarative (prisma migrate)    | Imperative or declarative  |
+| **Effect Integration** | Seamless (natural fit)       | Manual wrapping needed          | Manual wrapping needed     |
+| **Learning Curve**     | Low (SQL knowledge)          | Medium (custom DSL)             | Medium (decorators)        |
+| **PostgreSQL Focus**   | Yes (all features supported) | Yes (all features)              | Yes (all features)         |
+
+## Summary
+
+Drizzle ORM in Omnera provides:
+
+1. **Zero-Cost Type Safety** - Full TypeScript inference from schema definitions
+2. **Bun Native Integration** - Uses built-in `bun:sql` for PostgreSQL connections
+3. **Effect-Ready** - Repository pattern with Effect Context and dependency injection
+4. **SQL-Like Syntax** - Familiar query API for SQL developers
+5. **Better Auth Compatible** - Works seamlessly via `drizzleAdapter`
+6. **Migration System** - Declarative migrations with drizzle-kit
+7. **Performance** - Lightweight, zero runtime overhead, optimized queries
+
+By following the repository pattern with Effect.ts, Drizzle enables type-safe, testable, and maintainable database operations that align with Omnera's functional programming principles and layer-based architecture.
 
 ## References
 
 - Drizzle ORM documentation: https://orm.drizzle.team/
-- Bun SQL integration: https://orm.drizzle.team/docs/connect-bun-sql
-- Bun SQL API: https://bun.sh/docs/api/sql
-- PostgreSQL documentation: https://www.postgresql.org/docs/
-- Drizzle Kit migrations: https://orm.drizzle.team/kit-docs/overview
-- Better Auth adapter: https://www.better-auth.com/docs/adapters/drizzle
-- Effect.ts documentation: https://effect.website/docs/introduction
-
-## Summary
-
-Drizzle ORM with Bun SQL and PostgreSQL provides production-ready database access for Omnera:
-
-### Key Features
-
-- **Zero-Cost Type Safety**: Full TypeScript inference without runtime overhead
-- **SQL-Like Syntax**: Familiar query patterns for SQL developers
-- **Bun SQL Native Integration**: Direct support for Bun's PostgreSQL module (no external drivers)
-- **PostgreSQL-First**: Native support for PostgreSQL features (JSONB, enums, partial indexes)
-- **Effect-Ready**: Seamless integration with Effect's functional patterns
-- **Connection Pooling**: Built-in pool management for development and production
-- **Migration System**: Powerful drizzle-kit for schema management
-- **Better Auth Compatible**: Native adapter for authentication with PostgreSQL
-- **Relational Queries**: Automatic joins with type-safe relationships
-- **Layer-Based Architecture**: Fits perfectly in Infrastructure Layer
-
-### Development vs Production
-
-| Aspect | Development | Production |
-|--------|-------------|------------|
-| **Database** | Local PostgreSQL | Production PostgreSQL |
-| **Connection** | Simple URL | SSL-enabled URL |
-| **Pool Size** | 5-10 connections | 20-100 connections |
-| **Timeouts** | Shorter (10-20s) | Longer (30s) |
-| **SSL** | Optional | Required (`sslmode=require`) |
-| **Monitoring** | Basic logging | Full metrics and alerts |
-
-### Why Bun SQL with PostgreSQL?
-
-1. **Native Integration**: No external drivers, leverages Bun's built-in PostgreSQL support
-2. **Performance**: Bun's native bindings provide exceptional speed
-3. **Simplicity**: Single import (`import { SQL } from 'bun'`)
-4. **Auto-Detection**: Automatically detects `DATABASE_URL` environment variable
-5. **Production-Ready**: Built-in connection pooling and SSL support
-
-By combining Drizzle with Effect, TypeScript, Bun SQL, and PostgreSQL, Omnera achieves type-safe, performant, and maintainable database operations following functional programming principles.
+- Bun SQL module: https://bun.sh/docs/api/sql
+- drizzle-kit migrations: https://orm.drizzle.team/kit-docs/overview
+- Effect Context and Layer: https://effect.website/docs/context-management/layers
+- Better Auth Drizzle adapter: https://www.better-auth.com/docs/adapters/drizzle

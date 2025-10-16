@@ -11,9 +11,12 @@ The following detailed documentation files are imported for Claude Code's memory
 @docs/infrastructure/framework/effect.md
 @docs/infrastructure/framework/hono.md
 @docs/infrastructure/framework/better-auth.md
+@docs/infrastructure/database/drizzle.md
 @docs/infrastructure/ui/react.md
 @docs/infrastructure/ui/tailwind.md
 @docs/infrastructure/ui/shadcn.md
+@docs/infrastructure/ui/tanstack-query.md
+@docs/infrastructure/ui/tanstack-table.md
 @docs/infrastructure/quality/eslint.md
 @docs/infrastructure/quality/prettier.md
 @docs/infrastructure/quality/knip.md
@@ -22,6 +25,7 @@ The following detailed documentation files are imported for Claude Code's memory
 @docs/infrastructure/cicd/workflows.md
 @docs/infrastructure/release/semantic-release.md
 @docs/architecture/functional-programming.md
+@docs/architecture/layer-based-architecture.md
 @docs/architecture/testing-strategy.md
 @docs/architecture/performance-optimization.md
 @docs/architecture/security-best-practices.md
