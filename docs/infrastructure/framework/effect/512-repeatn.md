@@ -5,9 +5,9 @@ The `repeatN` function returns a new effect that repeats the specified effect a 
 **Example** (Repeating an Action Multiple Times)
 
 ```ts twoslash
-import { Effect, Console } from "effect"
+import { Effect, Console } from 'effect'
 
-const action = Console.log("success")
+const action = Console.log('success')
 
 // Repeat the action 2 additional times after the first execution
 const program = Effect.repeatN(action, 2)

@@ -5,17 +5,17 @@ When calling third-party APIs, it is often necessary to enforce timeouts and imp
 **Example** (Retrying an API Call with a Timeout)
 
 ```ts twoslash
-import { Console, Effect } from "effect"
+import { Console, Effect } from 'effect'
 
 // Function to make the API call
 const getJson = (url: string) =>
   Effect.tryPromise(() =>
     fetch(url).then((res) => {
       if (!res.ok) {
-        console.log("error")
+        console.log('error')
         throw new Error(res.statusText)
       }
-      console.log("ok")
+      console.log('ok')
       return res.json() as unknown
     })
   )
@@ -25,26 +25,26 @@ const getJson = (url: string) =>
 const program = (url: string) =>
   getJson(url).pipe(
     Effect.retry({ times: 2 }),
-    Effect.timeout("4 seconds"),
+    Effect.timeout('4 seconds'),
     Effect.catchAll(Console.error)
   )
 
 // Test case: successful API response
-Effect.runFork(program("https://dummyjson.com/products/1?delay=1000"))
+Effect.runFork(program('https://dummyjson.com/products/1?delay=1000'))
 /*
 Output:
 ok
 */
 
 // Test case: API call exceeding timeout limit
-Effect.runFork(program("https://dummyjson.com/products/1?delay=5000"))
+Effect.runFork(program('https://dummyjson.com/products/1?delay=5000'))
 /*
 Output:
 TimeoutException: Operation timed out before the specified duration of '4s' elapsed
 */
 
 // Test case: API returning an error response
-Effect.runFork(program("https://dummyjson.com/auth/products/1?delay=500"))
+Effect.runFork(program('https://dummyjson.com/auth/products/1?delay=500'))
 /*
 Output:
 error

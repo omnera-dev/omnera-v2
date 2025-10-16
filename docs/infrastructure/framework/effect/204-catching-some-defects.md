@@ -21,18 +21,14 @@ The function provided to `Effect.catchSomeDefect` acts as a filter and a handler
 **Example** (Handling Specific Defects)
 
 ```ts twoslash
-import { Effect, Cause, Option, Console } from "effect"
+import { Effect, Cause, Option, Console } from 'effect'
 
 // Simulating a runtime error
-const task = Effect.dieMessage("Boom!")
+const task = Effect.dieMessage('Boom!')
 
 const program = Effect.catchSomeDefect(task, (defect) => {
   if (Cause.isIllegalArgumentException(defect)) {
-    return Option.some(
-      Console.log(
-        `Caught an IllegalArgumentException defect: ${defect.message}`
-      )
-    )
+    return Option.some(Console.log(`Caught an IllegalArgumentException defect: ${defect.message}`))
   }
   return Option.none()
 })

@@ -19,24 +19,24 @@ In this example, a deferred is used to pass a value between two fibers.
 By running both fibers concurrently and using the deferred as a synchronization point, we can ensure that `fiberB` only proceeds after `fiberA` has completed its task.
 
 ```ts twoslash
-import { Effect, Deferred, Fiber } from "effect"
+import { Effect, Deferred, Fiber } from 'effect'
 
 const program = Effect.gen(function* () {
   const deferred = yield* Deferred.make<string, string>()
 
   // Completes the Deferred with a value after a delay
   const taskA = Effect.gen(function* () {
-    console.log("Starting task to complete the Deferred")
-    yield* Effect.sleep("1 second")
-    console.log("Completing the Deferred")
-    return yield* Deferred.succeed(deferred, "hello world")
+    console.log('Starting task to complete the Deferred')
+    yield* Effect.sleep('1 second')
+    console.log('Completing the Deferred')
+    return yield* Deferred.succeed(deferred, 'hello world')
   })
 
   // Waits for the Deferred and prints the value
   const taskB = Effect.gen(function* () {
-    console.log("Starting task to get the value from the Deferred")
+    console.log('Starting task to get the value from the Deferred')
     const value = yield* Deferred.await(deferred)
-    console.log("Got the value from the Deferred")
+    console.log('Got the value from the Deferred')
     return value
   })
 

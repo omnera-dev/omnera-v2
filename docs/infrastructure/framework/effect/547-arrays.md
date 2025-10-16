@@ -5,7 +5,7 @@ The Schema module allows you to define schemas for arrays, making it easy to val
 **Example** (Defining an Array Schema)
 
 ```ts twoslash
-import { Schema } from "effect"
+import { Schema } from 'effect'
 
 // Define a schema for an array of numbers
 //
@@ -26,7 +26,7 @@ To create a schema for a mutable array, you can use the `Schema.mutable` functio
 **Example** (Creating a Mutable Array Schema)
 
 ```ts twoslash
-import { Schema } from "effect"
+import { Schema } from 'effect'
 
 // Define a schema for a mutable array of numbers
 //
@@ -46,7 +46,7 @@ You can access the value type of an array schema using the `value` property:
 **Example** (Accessing the Value Type of an Array Schema)
 
 ```ts twoslash
-import { Schema } from "effect"
+import { Schema } from 'effect'
 
 const schema = Schema.Array(Schema.Number)
 

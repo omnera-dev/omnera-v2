@@ -9,11 +9,11 @@ When you use `Equal.equals` and your objects do not implement the `Equal` interf
 **Example** (Using `Equal.equals` with Default Comparison)
 
 ```ts twoslash
-import { Equal } from "effect"
+import { Equal } from 'effect'
 
 // Two objects with identical properties and values
-const a = { name: "Alice", age: 30 }
-const b = { name: "Alice", age: 30 }
+const a = { name: 'Alice', age: 30 }
+const b = { name: 'Alice', age: 30 }
 
 // Equal.equals falls back to the default '===' comparison
 console.log(Equal.equals(a, b))
@@ -37,7 +37,7 @@ To create custom equality behavior, you can implement the `Equal` interface in y
 **Example** (Implementing `Equal` and `Hash` for a Custom Class)
 
 ```ts twoslash
-import { Equal, Hash } from "effect"
+import { Equal, Hash } from 'effect'
 
 class Person implements Equal.Equal {
   constructor(
@@ -72,7 +72,7 @@ Once you've implemented the `Equal` interface, you can utilize the `Equal.equals
 **Example** (Comparing `Person` Instances)
 
 ```ts twoslash collapse={3-26}
-import { Equal, Hash } from "effect"
+import { Equal, Hash } from 'effect'
 
 class Person implements Equal.Equal {
   constructor(
@@ -99,11 +99,11 @@ class Person implements Equal.Equal {
   }
 }
 
-const alice = new Person(1, "Alice", 30)
-console.log(Equal.equals(alice, new Person(1, "Alice", 30)))
+const alice = new Person(1, 'Alice', 30)
+console.log(Equal.equals(alice, new Person(1, 'Alice', 30)))
 // Output: true
 
-const bob = new Person(2, "Bob", 40)
+const bob = new Person(2, 'Bob', 40)
 console.log(Equal.equals(alice, bob))
 // Output: false
 ```
@@ -117,18 +117,16 @@ Implementing both `Equal` and `Hash` can become cumbersome when all you need is 
 **Example** (Using `Data.struct` for Equality Checks)
 
 ```ts twoslash
-import { Equal, Data } from "effect"
+import { Equal, Data } from 'effect'
 
-const alice = Data.struct({ id: 1, name: "Alice", age: 30 })
+const alice = Data.struct({ id: 1, name: 'Alice', age: 30 })
 
-const bob = Data.struct({ id: 2, name: "Bob", age: 40 })
+const bob = Data.struct({ id: 2, name: 'Bob', age: 40 })
 
-console.log(
-  Equal.equals(alice, Data.struct({ id: 1, name: "Alice", age: 30 }))
-)
+console.log(Equal.equals(alice, Data.struct({ id: 1, name: 'Alice', age: 30 })))
 // Output: true
 
-console.log(Equal.equals(alice, { id: 1, name: "Alice", age: 30 }))
+console.log(Equal.equals(alice, { id: 1, name: 'Alice', age: 30 }))
 // Output: false
 
 console.log(Equal.equals(alice, bob))

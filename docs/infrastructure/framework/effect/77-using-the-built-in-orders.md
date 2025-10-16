@@ -12,9 +12,9 @@ The Order module comes with several built-in comparators for common data types:
 **Example** (Using Built-in Comparators)
 
 ```ts twoslash
-import { Order } from "effect"
+import { Order } from 'effect'
 
-console.log(Order.string("apple", "banana"))
+console.log(Order.string('apple', 'banana'))
 // Output: -1, as "apple" < "banana"
 
 console.log(Order.number(1, 1))

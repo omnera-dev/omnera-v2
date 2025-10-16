@@ -11,10 +11,10 @@ Although not yet a native feature in JavaScript, there's an ongoing [tc39 propos
 **Example** (Handling Different Data Types with Pattern Matching)
 
 ```ts twoslash
-import { Match } from "effect"
+import { Match } from 'effect'
 
 // Simulated dynamic input that can be a string or a number
-const input: string | number = "some input"
+const input: string | number = 'some input'
 
 //      ┌─── string
 //      ▼

@@ -5,7 +5,7 @@ Filters allow you to define constraints on individual values.
 **Example** (Using Filters to Enforce Ranges)
 
 ```ts twoslash
-import { Schema } from "effect"
+import { Schema } from 'effect'
 
 const MyNumber = Schema.Number.pipe(Schema.between(1, 10))
 

@@ -5,13 +5,13 @@ Combining and reusing schemas is often needed in complex applications, and the `
 **Example** (Composing Schemas to Parse a Delimited String into Numbers)
 
 ```ts twoslash
-import { Schema } from "effect"
+import { Schema } from 'effect'
 
 // Schema to split a string by commas into an array of strings
 //
 //     ┌─── Schema<readonly string[], string, never>
 //     ▼
-const schema1 = Schema.asSchema(Schema.split(","))
+const schema1 = Schema.asSchema(Schema.split(','))
 
 // Schema to convert an array of strings to an array of numbers
 //
@@ -34,20 +34,18 @@ When composing schemas, you may encounter cases where the output of one schema d
 **Example** (Using Non-strict Option in Composition)
 
 ```ts twoslash
-import { Schema } from "effect"
+import { Schema } from 'effect'
 
 // Without the `strict: false` option,
 // this composition raises a TypeScript error
 Schema.compose(
-// @errors: 2769
-  Schema.Union(Schema.Null, Schema.Literal("0")),
+  // @errors: 2769
+  Schema.Union(Schema.Null, Schema.Literal('0')),
   Schema.NumberFromString
 )
 
 // Use `strict: false` to allow type flexibility
-Schema.compose(
-  Schema.Union(Schema.Null, Schema.Literal("0")),
-  Schema.NumberFromString,
-  { strict: false }
-)
+Schema.compose(Schema.Union(Schema.Null, Schema.Literal('0')), Schema.NumberFromString, {
+  strict: false,
+})
 ```

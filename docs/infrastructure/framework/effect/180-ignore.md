@@ -8,11 +8,11 @@ This is useful when you only care about the side effects of the effect and do no
 **Example** (Using `Effect.ignore` to Discard Values)
 
 ```ts twoslash
-import { Effect } from "effect"
+import { Effect } from 'effect'
 
 //      ┌─── Effect<number, string, never>
 //      ▼
-const task = Effect.fail("Uh oh!").pipe(Effect.as(5))
+const task = Effect.fail('Uh oh!').pipe(Effect.as(5))
 
 //      ┌─── Effect<void, never, never>
 //      ▼

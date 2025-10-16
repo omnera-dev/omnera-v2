@@ -37,14 +37,14 @@ Like `Fiber.await`, the `Fiber.interrupt` function returns an [Exit](/docs/data-
 **Example** (Interrupting a Fiber)
 
 ```ts twoslash
-import { Effect, Fiber } from "effect"
+import { Effect, Fiber } from 'effect'
 
 const program = Effect.gen(function* () {
   // Fork a fiber that runs indefinitely, printing "Hi!"
   const fiber = yield* Effect.fork(
-    Effect.forever(Effect.log("Hi!").pipe(Effect.delay("10 millis")))
+    Effect.forever(Effect.log('Hi!').pipe(Effect.delay('10 millis')))
   )
-  yield* Effect.sleep("30 millis")
+  yield* Effect.sleep('30 millis')
   // Interrupt the fiber and get an Exit value detailing how it finished
   const exit = yield* Fiber.interrupt(fiber)
   console.log(exit)
@@ -79,15 +79,15 @@ If you do not require this waiting behavior, you can fork the interruption itsel
 **Example** (Forking an Interruption)
 
 ```ts twoslash
-import { Effect, Fiber } from "effect"
+import { Effect, Fiber } from 'effect'
 
 const program = Effect.gen(function* () {
   const fiber = yield* Effect.fork(
-    Effect.forever(Effect.log("Hi!").pipe(Effect.delay("10 millis")))
+    Effect.forever(Effect.log('Hi!').pipe(Effect.delay('10 millis')))
   )
-  yield* Effect.sleep("30 millis")
+  yield* Effect.sleep('30 millis')
   const _ = yield* Effect.fork(Fiber.interrupt(fiber))
-  console.log("Do something else...")
+  console.log('Do something else...')
 })
 
 Effect.runFork(program)
@@ -102,16 +102,16 @@ Do something else...
 There is also a shorthand for background interruption called `Fiber.interruptFork`.
 
 ```ts twoslash del={8} ins={9}
-import { Effect, Fiber } from "effect"
+import { Effect, Fiber } from 'effect'
 
 const program = Effect.gen(function* () {
   const fiber = yield* Effect.fork(
-    Effect.forever(Effect.log("Hi!").pipe(Effect.delay("10 millis")))
+    Effect.forever(Effect.log('Hi!').pipe(Effect.delay('10 millis')))
   )
-  yield* Effect.sleep("30 millis")
+  yield* Effect.sleep('30 millis')
   // const _ = yield* Effect.fork(Fiber.interrupt(fiber))
   const _ = yield* Fiber.interruptFork(fiber)
-  console.log("Do something else...")
+  console.log('Do something else...')
 })
 
 Effect.runFork(program)

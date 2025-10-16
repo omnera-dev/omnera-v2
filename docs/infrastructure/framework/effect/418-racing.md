@@ -5,10 +5,10 @@ The `Effect.race` function allows you to run multiple effects concurrently, retu
 **Example** (Basic Race Between Effects)
 
 ```ts twoslash
-import { Micro } from "effect"
+import { Micro } from 'effect'
 
-const task1 = Micro.delay(Micro.fail("task1"), 1_000)
-const task2 = Micro.delay(Micro.succeed("task2"), 2_000)
+const task1 = Micro.delay(Micro.fail('task1'), 1_000)
+const task2 = Micro.delay(Micro.succeed('task2'), 2_000)
 
 // Run both tasks concurrently and return
 // the result of the first to complete
@@ -26,10 +26,10 @@ If you want to handle the result of whichever task completes first, whether it s
 **Example** (Handling Success or Failure with Either)
 
 ```ts twoslash
-import { Micro } from "effect"
+import { Micro } from 'effect'
 
-const task1 = Micro.delay(Micro.fail("task1"), 1_000)
-const task2 = Micro.delay(Micro.succeed("task2"), 2_000)
+const task1 = Micro.delay(Micro.fail('task1'), 1_000)
+const task2 = Micro.delay(Micro.succeed('task2'), 2_000)
 
 // Run both tasks concurrently, wrapping the result
 // in Either to capture success or failure

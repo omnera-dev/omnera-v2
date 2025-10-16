@@ -9,7 +9,7 @@ promise-based code.
 **Example** (Running a Successful Effect as a Promise)
 
 ```ts twoslash
-import { Effect } from "effect"
+import { Effect } from 'effect'
 
 Effect.runPromise(Effect.succeed(1)).then(console.log)
 // Output: 1
@@ -21,9 +21,9 @@ effect fails, the promise will reject with an error.
 **Example** (Handling a Failing Effect as a Rejected Promise)
 
 ```ts twoslash
-import { Effect } from "effect"
+import { Effect } from 'effect'
 
-Effect.runPromise(Effect.fail("my error")).catch(console.error)
+Effect.runPromise(Effect.fail('my error')).catch(console.error)
 /*
 Output:
 (FiberFailure) Error: my error

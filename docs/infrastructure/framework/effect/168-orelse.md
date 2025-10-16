@@ -9,11 +9,11 @@ one encounters an error.
 **Example** (Handling Fallback with `Effect.orElse`)
 
 ```ts twoslash
-import { Effect } from "effect"
+import { Effect } from 'effect'
 
-const success = Effect.succeed("success")
-const failure = Effect.fail("failure")
-const fallback = Effect.succeed("fallback")
+const success = Effect.succeed('success')
+const failure = Effect.fail('failure')
+const fallback = Effect.succeed('fallback')
 
 // Try the success effect first, fallback is not used
 const program1 = Effect.orElse(success, () => fallback)

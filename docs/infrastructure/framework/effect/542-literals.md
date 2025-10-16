@@ -14,11 +14,11 @@ Literals can be of the following types:
 **Example** (Defining Literal Schemas)
 
 ```ts twoslash
-import { Schema } from "effect"
+import { Schema } from 'effect'
 
 // Define various literal schemas
 Schema.Null // Same as S.Literal(null)
-Schema.Literal("a") // string literal
+Schema.Literal('a') // string literal
 Schema.Literal(1) // number literal
 Schema.Literal(true) // boolean literal
 Schema.Literal(2n) // BigInt literal
@@ -27,20 +27,20 @@ Schema.Literal(2n) // BigInt literal
 **Example** (Defining a Literal Schema for `"a"`)
 
 ```ts twoslash
-import { Schema } from "effect"
+import { Schema } from 'effect'
 
 //     ┌─── Literal<["a"]>
 //     ▼
-const schema = Schema.Literal("a")
+const schema = Schema.Literal('a')
 
 //     ┌─── "a"
 //     ▼
 type Type = typeof schema.Type
 
-console.log(Schema.decodeUnknownSync(schema)("a"))
+console.log(Schema.decodeUnknownSync(schema)('a'))
 // Output: "a"
 
-console.log(Schema.decodeUnknownSync(schema)("b"))
+console.log(Schema.decodeUnknownSync(schema)('b'))
 /*
 throws:
 ParseError: Expected "a", actual "b"
@@ -54,11 +54,11 @@ You can create a union of multiple literals by passing them as arguments to the 
 **Example** (Defining a Union of Literals)
 
 ```ts twoslash
-import { Schema } from "effect"
+import { Schema } from 'effect'
 
 //     ┌─── Literal<["a", "b", "c"]>
 //     ▼
-const schema = Schema.Literal("a", "b", "c")
+const schema = Schema.Literal('a', 'b', 'c')
 
 //     ┌─── "a" | "b" | "c"
 //     ▼
@@ -79,10 +79,10 @@ If you want to set a custom error message for the entire union of literals, you 
 **Example** (Adding a Custom Message to a Union of Literals)
 
 ```ts twoslash
-import { Schema } from "effect"
+import { Schema } from 'effect'
 
 // Schema with individual messages for each literal
-const individualMessages = Schema.Literal("a", "b", "c")
+const individualMessages = Schema.Literal('a', 'b', 'c')
 
 console.log(Schema.decodeUnknownSync(individualMessages)(null))
 /*
@@ -94,8 +94,8 @@ ParseError: "a" | "b" | "c"
 */
 
 // Schema with a unified custom message for all literals
-const unifiedMessage = Schema.Literal("a", "b", "c").annotations({
-  message: () => ({ message: "Not a valid code", override: true })
+const unifiedMessage = Schema.Literal('a', 'b', 'c').annotations({
+  message: () => ({ message: 'Not a valid code', override: true }),
 })
 
 console.log(Schema.decodeUnknownSync(unifiedMessage)(null))
@@ -110,9 +110,9 @@ ParseError: Not a valid code
 You can access the literals defined in a literal schema using the `literals` property:
 
 ```ts twoslash
-import { Schema } from "effect"
+import { Schema } from 'effect'
 
-const schema = Schema.Literal("a", "b", "c")
+const schema = Schema.Literal('a', 'b', 'c')
 
 //      ┌─── readonly ["a", "b", "c"]
 //      ▼
@@ -126,15 +126,13 @@ You can use `Schema.pickLiteral` with a literal schema to narrow down its possib
 **Example** (Using `pickLiteral` to Narrow Values)
 
 ```ts twoslash
-import { Schema } from "effect"
+import { Schema } from 'effect'
 
 // Create a schema for a subset of literals ("a" and "b") from a larger set
 //
 //      ┌─── Literal<["a", "b"]>
 //      ▼
-const schema = Schema.Literal("a", "b", "c").pipe(
-  Schema.pickLiteral("a", "b")
-)
+const schema = Schema.Literal('a', 'b', 'c').pipe(Schema.pickLiteral('a', 'b'))
 ```
 
 Sometimes, you may need to reuse a literal schema in other parts of your code. Below is an example demonstrating how to do this:
@@ -142,21 +140,21 @@ Sometimes, you may need to reuse a literal schema in other parts of your code. B
 **Example** (Creating a Subtype from a Literal Schema)
 
 ```ts twoslash
-import { Schema } from "effect"
+import { Schema } from 'effect'
 
 // Define the base set of fruit categories
-const FruitCategory = Schema.Literal("sweet", "citrus", "tropical")
+const FruitCategory = Schema.Literal('sweet', 'citrus', 'tropical')
 
 // Define a general Fruit schema with the base category set
 const Fruit = Schema.Struct({
   id: Schema.Number,
-  category: FruitCategory
+  category: FruitCategory,
 })
 
 // Define a specific Fruit schema for only "sweet" and "citrus" categories
 const SweetAndCitrusFruit = Schema.Struct({
   id: Schema.Number,
-  category: FruitCategory.pipe(Schema.pickLiteral("sweet", "citrus"))
+  category: FruitCategory.pipe(Schema.pickLiteral('sweet', 'citrus')),
 })
 ```
 

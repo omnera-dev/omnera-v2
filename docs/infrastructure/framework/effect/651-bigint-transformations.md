@@ -7,26 +7,26 @@ Converts a string to a `BigInt` using the `BigInt` constructor.
 **Example** (Parsing BigInt from String)
 
 ```ts twoslash
-import { Schema } from "effect"
+import { Schema } from 'effect'
 
 const decode = Schema.decodeUnknownSync(Schema.BigInt)
 
 // success cases
-console.log(decode("1")) // 1n
-console.log(decode("-1")) // -1n
+console.log(decode('1')) // 1n
+console.log(decode('-1')) // -1n
 
 // failure cases
-decode("a")
+decode('a')
 /*
 throws:
 ParseError: bigint
 └─ Transformation process failure
    └─ Expected bigint, actual "a"
 */
-decode("1.5") // throws
-decode("NaN") // throws
-decode("Infinity") // throws
-decode("-Infinity") // throws
+decode('1.5') // throws
+decode('NaN') // throws
+decode('Infinity') // throws
+decode('-Infinity') // throws
 ```
 
 ### BigIntFromNumber
@@ -36,7 +36,7 @@ Converts a number to a `BigInt` using the `BigInt` constructor.
 **Example** (Parsing BigInt from Number)
 
 ```ts twoslash
-import { Schema } from "effect"
+import { Schema } from 'effect'
 
 const decode = Schema.decodeUnknownSync(Schema.BigIntFromNumber)
 const encode = Schema.encodeSync(Schema.BigIntFromNumber)
@@ -70,7 +70,7 @@ Restricts a `BigInt` within a specified range.
 **Example** (Clamping BigInt)
 
 ```ts twoslash
-import { Schema } from "effect"
+import { Schema } from 'effect'
 
 // clamps the input to -1n <= x <= 1n
 const schema = Schema.BigIntFromSelf.pipe(Schema.clampBigInt(-1n, 1n))

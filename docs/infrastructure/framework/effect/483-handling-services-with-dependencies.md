@@ -7,13 +7,13 @@ Sometimes a service in your application may depend on other services. To maintai
 Consider a scenario where multiple services depend on each other. In this case, the `Logger` service requires access to a configuration service (`Config`).
 
 ```ts twoslash
-import { Effect, Context } from "effect"
+import { Effect, Context } from 'effect'
 
 // Declaring a tag for the Config service
-class Config extends Context.Tag("Config")<Config, {}>() {}
+class Config extends Context.Tag('Config')<Config, {}>() {}
 
 // Declaring a tag for the logging service
-class Logger extends Context.Tag("MyLoggerService")<
+class Logger extends Context.Tag('MyLoggerService')<
   Logger,
   {
     // ❌ Avoid exposing Config as a requirement

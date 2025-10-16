@@ -13,7 +13,7 @@ The `Micro.runSyncExit` function is used to execute an Effect synchronously, whi
 **Example** (Handling Results as MicroExit)
 
 ```ts twoslash
-import { Micro } from "effect"
+import { Micro } from 'effect'
 
 const result1 = Micro.runSyncExit(Micro.succeed(1))
 console.log(result1)
@@ -26,7 +26,7 @@ Output:
 }
 */
 
-const result2 = Micro.runSyncExit(Micro.fail("my error"))
+const result2 = Micro.runSyncExit(Micro.fail('my error'))
 console.log(result2)
 /*
 Output:
@@ -50,7 +50,7 @@ The `Micro.runPromiseExit` function is used to execute an Effect and obtain the 
 **Example** (Handling Results as MicroExit)
 
 ```ts twoslash
-import { Micro } from "effect"
+import { Micro } from 'effect'
 
 Micro.runPromiseExit(Micro.succeed(1)).then(console.log)
 /*
@@ -62,7 +62,7 @@ Output:
 }
 */
 
-Micro.runPromiseExit(Micro.fail("my error")).then(console.log)
+Micro.runPromiseExit(Micro.fail('my error')).then(console.log)
 /*
 Output:
 {
@@ -87,7 +87,7 @@ You can listen for the result by adding an observer using the `addObserver` meth
 **Example** (Observing an Asynchronous Effect)
 
 ```ts twoslash
-import { Micro } from "effect"
+import { Micro } from 'effect'
 
 //      ┌─── MicroFiber<number, never>
 //      ▼
@@ -98,7 +98,7 @@ fiber.addObserver((result) => {
   console.log(result)
 })
 
-console.log("observing...")
+console.log('observing...')
 /*
 Output:
 observing...

@@ -8,15 +8,13 @@ In the following example, we provided the `ALive` layer two times locally, and E
 So, it will be initialized two times:
 
 ```ts twoslash
-import { Effect, Context, Layer } from "effect"
+import { Effect, Context, Layer } from 'effect'
 
-class A extends Context.Tag("A")<A, { readonly a: number }>() {}
+class A extends Context.Tag('A')<A, { readonly a: number }>() {}
 
 const Alive = Layer.effect(
   A,
-  Effect.succeed({ a: 5 }).pipe(
-    Effect.tap(() => Effect.log("initialized"))
-  )
+  Effect.succeed({ a: 5 }).pipe(Effect.tap(() => Effect.log('initialized')))
 )
 
 const program = Effect.gen(function* () {

@@ -5,7 +5,7 @@ Convert a `Chunk` to a `ReadonlyArray` using `Chunk.toReadonlyArray`. The result
 **Example** (Converting a Chunk to a ReadonlyArray)
 
 ```ts twoslash
-import { Chunk } from "effect"
+import { Chunk } from 'effect'
 
 //      ┌─── readonly [number, ...number[]]
 //      ▼

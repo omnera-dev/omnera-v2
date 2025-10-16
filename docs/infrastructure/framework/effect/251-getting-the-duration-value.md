@@ -5,7 +5,7 @@ You can retrieve the value of a duration in milliseconds using `Duration.toMilli
 **Example** (Getting Duration in Milliseconds)
 
 ```ts twoslash
-import { Duration } from "effect"
+import { Duration } from 'effect'
 
 console.log(Duration.toMillis(Duration.seconds(30)))
 // Output: 30000
@@ -16,7 +16,7 @@ To get the value of a duration in nanoseconds, use `Duration.toNanos`. Note that
 **Example** (Getting Duration in Nanoseconds)
 
 ```ts twoslash
-import { Duration } from "effect"
+import { Duration } from 'effect'
 
 console.log(Duration.toNanos(Duration.millis(100)))
 /*
@@ -30,7 +30,7 @@ To get a `bigint` value without `Option`, use `Duration.unsafeToNanos`. However,
 **Example** (Retrieving Nanoseconds Unsafely)
 
 ```ts twoslash
-import { Duration } from "effect"
+import { Duration } from 'effect'
 
 console.log(Duration.unsafeToNanos(Duration.millis(100)))
 // Output: 100000000n

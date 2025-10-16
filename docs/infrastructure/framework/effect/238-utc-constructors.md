@@ -14,13 +14,13 @@ When a `Date` object is passed, it is converted to a `Utc` instance. The time is
 The following example assumes the code is executed on a system in Italy (CET timezone):
 
 ```ts twoslash
-import { DateTime } from "effect"
+import { DateTime } from 'effect'
 
 // Create a Utc instance from a local JavaScript Date
 //
 //     ┌─── Utc
 //     ▼
-const utc = DateTime.unsafeFromDate(new Date("2025-01-01 04:00:00"))
+const utc = DateTime.unsafeFromDate(new Date('2025-01-01 04:00:00'))
 
 console.log(utc)
 // Output: DateTime.Utc(2025-01-01T03:00:00.000Z)
@@ -44,10 +44,10 @@ Creates a `Utc` from a [DateTime.Input](#the-datetimeinput-type).
 The following example assumes the code is executed on a system in Italy (CET timezone):
 
 ```ts twoslash
-import { DateTime } from "effect"
+import { DateTime } from 'effect'
 
 // From a JavaScript Date
-const utc1 = DateTime.unsafeMake(new Date("2025-01-01 04:00:00"))
+const utc1 = DateTime.unsafeMake(new Date('2025-01-01 04:00:00'))
 console.log(utc1)
 // Output: DateTime.Utc(2025-01-01T03:00:00.000Z)
 
@@ -57,7 +57,7 @@ console.log(utc2)
 // Output: DateTime.Utc(2025-01-01T00:00:00.000Z)
 
 // From a string
-const utc3 = DateTime.unsafeMake("2025-01-01")
+const utc3 = DateTime.unsafeMake('2025-01-01')
 console.log(utc3)
 // Output: DateTime.Utc(2025-01-01T00:00:00.000Z)
 ```
@@ -77,10 +77,10 @@ If the input is invalid, it returns `None`. If valid, it returns `Some` containi
 The following example assumes the code is executed on a system in Italy (CET timezone):
 
 ```ts twoslash
-import { DateTime } from "effect"
+import { DateTime } from 'effect'
 
 // From a JavaScript Date
-const maybeUtc1 = DateTime.make(new Date("2025-01-01 04:00:00"))
+const maybeUtc1 = DateTime.make(new Date('2025-01-01 04:00:00'))
 console.log(maybeUtc1)
 /*
 Output:
@@ -96,7 +96,7 @@ Output:
 */
 
 // From a string
-const maybeUtc3 = DateTime.make("2025-01-01")
+const maybeUtc3 = DateTime.make('2025-01-01')
 console.log(maybeUtc3)
 /*
 Output:

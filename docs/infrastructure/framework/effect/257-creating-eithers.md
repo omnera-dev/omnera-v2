@@ -7,7 +7,7 @@ Use `Either.right` to create a `Right` value of type `R`.
 **Example** (Creating a Right Value)
 
 ```ts twoslash
-import { Either } from "effect"
+import { Either } from 'effect'
 
 const rightValue = Either.right(42)
 
@@ -23,9 +23,9 @@ Use `Either.left` to create a `Left` value of type `L`.
 **Example** (Creating a Left Value)
 
 ```ts twoslash
-import { Either } from "effect"
+import { Either } from 'effect'
 
-const leftValue = Either.left("not a number")
+const leftValue = Either.left('not a number')
 
 console.log(leftValue)
 /*

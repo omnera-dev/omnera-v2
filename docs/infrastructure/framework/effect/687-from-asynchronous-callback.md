@@ -5,25 +5,23 @@ Imagine you have an asynchronous function that relies on callbacks. If you want 
 Let's break down how to use it in the following example:
 
 ```ts twoslash
-import { Stream, Effect, Chunk, Option, StreamEmit } from "effect"
+import { Stream, Effect, Chunk, Option, StreamEmit } from 'effect'
 
 const events = [1, 2, 3, 4]
 
-const stream = Stream.async(
-  (emit: StreamEmit.Emit<never, never, number, void>) => {
-    events.forEach((n) => {
-      setTimeout(() => {
-        if (n === 3) {
-          // Terminate the stream
-          emit(Effect.fail(Option.none()))
-        } else {
-          // Add the current item to the stream
-          emit(Effect.succeed(Chunk.of(n)))
-        }
-      }, 100 * n)
-    })
-  }
-)
+const stream = Stream.async((emit: StreamEmit.Emit<never, never, number, void>) => {
+  events.forEach((n) => {
+    setTimeout(() => {
+      if (n === 3) {
+        // Terminate the stream
+        emit(Effect.fail(Option.none()))
+      } else {
+        // Add the current item to the stream
+        emit(Effect.succeed(Chunk.of(n)))
+      }
+    }, 100 * n)
+  })
+})
 
 Effect.runPromise(Stream.runCollect(stream)).then(console.log)
 // { _id: 'Chunk', values: [ 1, 2 ] }

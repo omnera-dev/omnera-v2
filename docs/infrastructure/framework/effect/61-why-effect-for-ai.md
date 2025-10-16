@@ -14,6 +14,6 @@ By using Effect for your LLM interactions you'll benefit from:
   Run concurrent LLM calls, cancel stale requests, stream partial results, or race multiple providers — all safely managed by Effect’s structured concurrency model
 
 - 🔍 **Observability**
-  Leverage Effect's built-in tracing, logging, and metrics to instrument your LLM interactions to gain deep insight into  performance bottlenecks or failures in production
+  Leverage Effect's built-in tracing, logging, and metrics to instrument your LLM interactions to gain deep insight into performance bottlenecks or failures in production
 
 ...and much more!

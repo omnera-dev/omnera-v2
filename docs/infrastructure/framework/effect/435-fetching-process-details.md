@@ -5,21 +5,16 @@ You can access details about a running process, such as `exitCode`, `stdout`, an
 **Example** (Accessing Exit Code and Streams from a Running Process)
 
 ```ts twoslash
-import { Command } from "@effect/platform"
-import { NodeContext, NodeRuntime } from "@effect/platform-node"
-import { Effect, Stream, String, pipe } from "effect"
+import { Command } from '@effect/platform'
+import { NodeContext, NodeRuntime } from '@effect/platform-node'
+import { Effect, Stream, String, pipe } from 'effect'
 
 // Helper function to collect stream output as a string
-const runString = <E, R>(
-  stream: Stream.Stream<Uint8Array, E, R>
-): Effect.Effect<string, E, R> =>
-  stream.pipe(
-    Stream.decodeText(),
-    Stream.runFold(String.empty, String.concat)
-  )
+const runString = <E, R>(stream: Stream.Stream<Uint8Array, E, R>): Effect.Effect<string, E, R> =>
+  stream.pipe(Stream.decodeText(), Stream.runFold(String.empty, String.concat))
 
 const program = Effect.gen(function* () {
-  const command = Command.make("ls")
+  const command = Command.make('ls')
 
   const [exitCode, stdout, stderr] = yield* pipe(
     // Start running the command and return a handle to the running process
@@ -33,7 +28,7 @@ const program = Effect.gen(function* () {
           // The standard output stream of the process
           runString(process.stdout),
           // The standard error stream of the process
-          runString(process.stderr)
+          runString(process.stderr),
         ],
         { concurrency: 3 }
       )
@@ -42,7 +37,5 @@ const program = Effect.gen(function* () {
   console.log({ exitCode, stdout, stderr })
 })
 
-NodeRuntime.runMain(
-  Effect.scoped(program).pipe(Effect.provide(NodeContext.layer))
-)
+NodeRuntime.runMain(Effect.scoped(program).pipe(Effect.provide(NodeContext.layer)))
 ```

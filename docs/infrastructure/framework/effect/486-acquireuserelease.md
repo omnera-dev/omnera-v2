@@ -21,7 +21,7 @@ Effect.acquireUseRelease(acquire, use, release)
 **Example** (Automatically Managing Resource Lifetime)
 
 ```ts twoslash
-import { Effect, Console } from "effect"
+import { Effect, Console } from 'effect'
 
 // Define an interface for a resource
 interface MyResource {
@@ -32,22 +32,22 @@ interface MyResource {
 // Simulate resource acquisition
 const getMyResource = (): Promise<MyResource> =>
   Promise.resolve({
-    contents: "lorem ipsum",
+    contents: 'lorem ipsum',
     close: () =>
       new Promise((resolve) => {
-        console.log("Resource released")
+        console.log('Resource released')
         resolve()
-      })
+      }),
   })
 
 // Define how the resource is acquired
 const acquire = Effect.tryPromise({
   try: () =>
     getMyResource().then((res) => {
-      console.log("Resource acquired")
+      console.log('Resource acquired')
       return res
     }),
-  catch: () => new Error("getMyResourceError")
+  catch: () => new Error('getMyResourceError'),
 })
 
 // Define how the resource is released

@@ -27,8 +27,8 @@ Schema.Option(schema: Schema<A, I, R>)
 **Example**
 
 ```ts twoslash
-import { Schema } from "effect"
-import { Option } from "effect"
+import { Schema } from 'effect'
+import { Option } from 'effect'
 
 const schema = Schema.Option(Schema.NumberFromString)
 
@@ -45,10 +45,10 @@ const encode = Schema.encodeSync(schema)
 
 // Decoding examples
 
-console.log(decode({ _tag: "None" }))
+console.log(decode({ _tag: 'None' }))
 // Output: { _id: 'Option', _tag: 'None' }
 
-console.log(decode({ _tag: "Some", value: "1" }))
+console.log(decode({ _tag: 'Some', value: '1' }))
 // Output: { _id: 'Option', _tag: 'Some', value: 1 }
 
 // Encoding examples
@@ -87,8 +87,8 @@ Schema.OptionFromSelf(schema: Schema<A, I, R>)
 **Example**
 
 ```ts twoslash
-import { Schema } from "effect"
-import { Option } from "effect"
+import { Schema } from 'effect'
+import { Option } from 'effect'
 
 const schema = Schema.OptionFromSelf(Schema.NumberFromString)
 
@@ -108,7 +108,7 @@ const encode = Schema.encodeSync(schema)
 console.log(decode(Option.none()))
 // Output: { _id: 'Option', _tag: 'None' }
 
-console.log(decode(Option.some("1")))
+console.log(decode(Option.some('1')))
 // Output: { _id: 'Option', _tag: 'Some', value: 1 }
 
 // Encoding examples
@@ -147,8 +147,8 @@ Schema.OptionFromUndefinedOr(schema: Schema<A, I, R>)
 **Example**
 
 ```ts twoslash
-import { Schema } from "effect"
-import { Option } from "effect"
+import { Schema } from 'effect'
+import { Option } from 'effect'
 
 const schema = Schema.OptionFromUndefinedOr(Schema.NumberFromString)
 
@@ -168,7 +168,7 @@ const encode = Schema.encodeSync(schema)
 console.log(decode(undefined))
 // Output: { _id: 'Option', _tag: 'None' }
 
-console.log(decode("1"))
+console.log(decode('1'))
 // Output: { _id: 'Option', _tag: 'Some', value: 1 }
 
 // Encoding examples
@@ -207,8 +207,8 @@ Schema.OptionFromNullOr(schema: Schema<A, I, R>)
 **Example**
 
 ```ts twoslash
-import { Schema } from "effect"
-import { Option } from "effect"
+import { Schema } from 'effect'
+import { Option } from 'effect'
 
 const schema = Schema.OptionFromNullOr(Schema.NumberFromString)
 
@@ -228,7 +228,7 @@ const encode = Schema.encodeSync(schema)
 console.log(decode(null))
 // Output: { _id: 'Option', _tag: 'None' }
 
-console.log(decode("1"))
+console.log(decode('1'))
 // Output: { _id: 'Option', _tag: 'Some', value: 1 }
 
 // Encoding examples
@@ -270,8 +270,8 @@ Schema.OptionFromNullishOr(
 **Example**
 
 ```ts twoslash
-import { Schema } from "effect"
-import { Option } from "effect"
+import { Schema } from 'effect'
+import { Option } from 'effect'
 
 const schema = Schema.OptionFromNullishOr(
   Schema.NumberFromString,
@@ -297,7 +297,7 @@ console.log(decode(null))
 console.log(decode(undefined))
 // Output: { _id: 'Option', _tag: 'None' }
 
-console.log(decode("1"))
+console.log(decode('1'))
 // Output: { _id: 'Option', _tag: 'Some', value: 1 }
 
 // Encoding examples
@@ -330,7 +330,7 @@ The `Schema.OptionFromNonEmptyTrimmedString` schema is designed for handling str
 **Example**
 
 ```ts twoslash
-import { Schema, Option } from "effect"
+import { Schema, Option } from 'effect'
 
 //     ┌─── string
 //     ▼
@@ -340,20 +340,18 @@ type Encoded = typeof Schema.OptionFromNonEmptyTrimmedString
 //     ▼
 type Type = typeof Schema.OptionFromNonEmptyTrimmedString
 
-const decode = Schema.decodeUnknownSync(
-  Schema.OptionFromNonEmptyTrimmedString
-)
+const decode = Schema.decodeUnknownSync(Schema.OptionFromNonEmptyTrimmedString)
 const encode = Schema.encodeSync(Schema.OptionFromNonEmptyTrimmedString)
 
 // Decoding examples
 
-console.log(decode(""))
+console.log(decode(''))
 // Output: { _id: 'Option', _tag: 'None' }
 
-console.log(decode(" a "))
+console.log(decode(' a '))
 // Output: { _id: 'Option', _tag: 'Some', value: 'a' }
 
-console.log(decode("a"))
+console.log(decode('a'))
 // Output: { _id: 'Option', _tag: 'Some', value: 'a' }
 
 // Encoding examples
@@ -361,6 +359,6 @@ console.log(decode("a"))
 console.log(encode(Option.none()))
 // Output: ""
 
-console.log(encode(Option.some("example")))
+console.log(encode(Option.some('example')))
 // Output: "example"
 ```

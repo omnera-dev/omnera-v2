@@ -6,22 +6,17 @@ The `Schema.TemplateLiteral` constructor allows you to create a schema for these
 **Example** (Defining Template Literals)
 
 ```ts twoslash
-import { Schema } from "effect"
+import { Schema } from 'effect'
 
 // This creates a schema for: `a${string}`
 //
 //      ┌─── TemplateLiteral<`a${string}`>
 //      ▼
-const schema1 = Schema.TemplateLiteral("a", Schema.String)
+const schema1 = Schema.TemplateLiteral('a', Schema.String)
 
 // This creates a schema for:
 // `https://${string}.com` | `https://${string}.net`
-const schema2 = Schema.TemplateLiteral(
-  "https://",
-  Schema.String,
-  ".",
-  Schema.Literal("com", "net")
-)
+const schema2 = Schema.TemplateLiteral('https://', Schema.String, '.', Schema.Literal('com', 'net'))
 ```
 
 **Example** (From [template literals types](https://www.typescriptlang.org/docs/handbook/2/template-literal-types.html) Documentation)
@@ -30,18 +25,15 @@ Let's look at a more complex example. Suppose you have two sets of locale IDs fo
 You can use the `Schema.TemplateLiteral` constructor to create a schema that combines these IDs:
 
 ```ts twoslash
-import { Schema } from "effect"
+import { Schema } from 'effect'
 
-const EmailLocaleIDs = Schema.Literal("welcome_email", "email_heading")
-const FooterLocaleIDs = Schema.Literal("footer_title", "footer_sendoff")
+const EmailLocaleIDs = Schema.Literal('welcome_email', 'email_heading')
+const FooterLocaleIDs = Schema.Literal('footer_title', 'footer_sendoff')
 
 // This creates a schema for:
 // "welcome_email_id" | "email_heading_id" |
 // "footer_title_id" | "footer_sendoff_id"
-const schema = Schema.TemplateLiteral(
-  Schema.Union(EmailLocaleIDs, FooterLocaleIDs),
-  "_id"
-)
+const schema = Schema.TemplateLiteral(Schema.Union(EmailLocaleIDs, FooterLocaleIDs), '_id')
 ```
 
 ### Supported Span Types
@@ -57,16 +49,14 @@ The `Schema.TemplateLiteral` constructor supports the following types of spans:
 **Example** (Using a Branded String in a Template Literal)
 
 ```ts twoslash
-import { Schema } from "effect"
+import { Schema } from 'effect'
 
 // Create a branded string schema for an authorization token
-const AuthorizationToken = Schema.String.pipe(
-  Schema.brand("AuthorizationToken")
-)
+const AuthorizationToken = Schema.String.pipe(Schema.brand('AuthorizationToken'))
 
 // This creates a schema for:
 // `Bearer ${string & Brand<"AuthorizationToken">}`
-const schema = Schema.TemplateLiteral("Bearer ", AuthorizationToken)
+const schema = Schema.TemplateLiteral('Bearer ', AuthorizationToken)
 ```
 
 ### TemplateLiteralParser
@@ -80,19 +70,15 @@ The `Schema.TemplateLiteralParser` constructor supports the same types of [spans
 **Example** (Using TemplateLiteralParser for Parsing and Encoding)
 
 ```ts twoslash
-import { Schema } from "effect"
+import { Schema } from 'effect'
 
 //      ┌─── Schema<readonly [number, "a", string], `${string}a${string}`>
 //      ▼
-const schema = Schema.TemplateLiteralParser(
-  Schema.NumberFromString,
-  "a",
-  Schema.NonEmptyString
-)
+const schema = Schema.TemplateLiteralParser(Schema.NumberFromString, 'a', Schema.NonEmptyString)
 
-console.log(Schema.decodeSync(schema)("100afoo"))
+console.log(Schema.decodeSync(schema)('100afoo'))
 // Output: [ 100, 'a', 'foo' ]
 
-console.log(Schema.encodeSync(schema)([100, "a", "foo"]))
+console.log(Schema.encodeSync(schema)([100, 'a', 'foo']))
 // Output: '100afoo'
 ```

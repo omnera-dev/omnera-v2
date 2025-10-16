@@ -9,7 +9,7 @@ In "typical" TypeScript, without Effect, we write code that assumes that a funct
 ```ts twoslash
 const divide = (a: number, b: number): number => {
   if (b === 0) {
-    throw new Error("Cannot divide by zero")
+    throw new Error('Cannot divide by zero')
   }
   return a / b
 }

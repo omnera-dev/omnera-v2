@@ -5,12 +5,12 @@ Sometimes, you may encounter situations where an environment variable is missing
 **Example** (Using Default Values)
 
 ```ts twoslash title="defaults.ts"
-import { Effect, Config } from "effect"
+import { Effect, Config } from 'effect'
 
 const program = Effect.gen(function* () {
-  const host = yield* Config.string("HOST")
+  const host = yield* Config.string('HOST')
   // Use default 8080 if PORT is not set
-  const port = yield* Config.number("PORT").pipe(Config.withDefault(8080))
+  const port = yield* Config.number('PORT').pipe(Config.withDefault(8080))
   console.log(`Application started: ${host}:${port}`)
 })
 

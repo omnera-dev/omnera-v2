@@ -32,28 +32,26 @@ In this example, we will create a summary to track response times. The summary w
 We'll apply the summary to an effect that generates random integers, simulating response times.
 
 ```ts twoslash
-import { Metric, Random, Effect } from "effect"
+import { Metric, Random, Effect } from 'effect'
 
 // Define the summary for response times
 const responseTimeSummary = Metric.summary({
-  name: "response_time_summary", // Name of the summary metric
-  maxAge: "1 day", // Maximum sample age
+  name: 'response_time_summary', // Name of the summary metric
+  maxAge: '1 day', // Maximum sample age
   maxSize: 100, // Maximum number of samples to retain
   error: 0.03, // Error margin for quantile calculation
   quantiles: [0.1, 0.5, 0.9], // Quantiles to observe (10%, 50%, 90%)
   // Optional
-  description: "Measures the distribution of response times"
+  description: 'Measures the distribution of response times',
 })
 
 const program = Effect.gen(function* () {
   // Record 100 random response times between 1 and 120 ms
-  yield* responseTimeSummary(Random.nextIntBetween(1, 120)).pipe(
-    Effect.repeatN(99)
-  )
+  yield* responseTimeSummary(Random.nextIntBetween(1, 120)).pipe(Effect.repeatN(99))
 
   // Retrieve and log the current state of the summary
   const state = yield* Metric.value(responseTimeSummary)
-  console.log("%o", state)
+  console.log('%o', state)
 })
 
 Effect.runPromise(program)

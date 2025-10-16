@@ -5,7 +5,7 @@ You can control the repetition of an effect by a condition using either a `while
 **Example** (Repeating Until a Condition is Met)
 
 ```ts twoslash
-import { Effect } from "effect"
+import { Effect } from 'effect'
 
 let count = 0
 

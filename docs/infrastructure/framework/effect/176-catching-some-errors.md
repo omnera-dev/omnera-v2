@@ -9,11 +9,11 @@ By yielding an `Either`, we gain the ability to "pattern match" on this type to 
 **Example** (Handling Specific Errors with `Effect.either`)
 
 ```ts twoslash
-import { Effect, Random, Either, Data } from "effect"
+import { Effect, Random, Either, Data } from 'effect'
 
-class HttpError extends Data.TaggedError("HttpError")<{}> {}
+class HttpError extends Data.TaggedError('HttpError')<{}> {}
 
-class ValidationError extends Data.TaggedError("ValidationError")<{}> {}
+class ValidationError extends Data.TaggedError('ValidationError')<{}> {}
 
 //      ┌─── Effect<string, HttpError | ValidationError, never>
 //      ▼
@@ -26,7 +26,7 @@ const program = Effect.gen(function* () {
   if (n2 < 0.5) {
     return yield* Effect.fail(new ValidationError())
   }
-  return "some result"
+  return 'some result'
 })
 
 //      ┌─── Effect<string, ValidationError, never>
@@ -36,8 +36,8 @@ const recovered = Effect.gen(function* () {
   if (Either.isLeft(failureOrSuccess)) {
     const error = failureOrSuccess.left
     // Only handle HttpError errors
-    if (error._tag === "HttpError") {
-      return "Recovering from HttpError"
+    if (error._tag === 'HttpError') {
+      return 'Recovering from HttpError'
     } else {
       // Rethrow ValidationError
       return yield* Effect.fail(error)
@@ -59,11 +59,11 @@ indicating that `HttpError` has been handled.
 If we also want to handle `ValidationError`, we can easily add another case to our code:
 
 ```ts twoslash collapse={3-17} {28-30}
-import { Effect, Random, Either, Data } from "effect"
+import { Effect, Random, Either, Data } from 'effect'
 
-class HttpError extends Data.TaggedError("HttpError")<{}> {}
+class HttpError extends Data.TaggedError('HttpError')<{}> {}
 
-class ValidationError extends Data.TaggedError("ValidationError")<{}> {}
+class ValidationError extends Data.TaggedError('ValidationError')<{}> {}
 
 const program = Effect.gen(function* () {
   const n1 = yield* Random.next
@@ -74,7 +74,7 @@ const program = Effect.gen(function* () {
   if (n2 < 0.5) {
     return yield* Effect.fail(new ValidationError())
   }
-  return "some result"
+  return 'some result'
 })
 
 //      ┌─── Effect<string, never, never>
@@ -84,10 +84,10 @@ const recovered = Effect.gen(function* () {
   if (Either.isLeft(failureOrSuccess)) {
     const error = failureOrSuccess.left
     // Handle both HttpError and ValidationError
-    if (error._tag === "HttpError") {
-      return "Recovering from HttpError"
+    if (error._tag === 'HttpError') {
+      return 'Recovering from HttpError'
     } else {
-      return "Recovering from ValidationError"
+      return 'Recovering from ValidationError'
     }
   } else {
     return failureOrSuccess.right
@@ -116,11 +116,11 @@ remains the same as in the original effect.
 **Example** (Handling Specific Errors with `Effect.catchSome`)
 
 ```ts twoslash
-import { Effect, Random, Option, Data } from "effect"
+import { Effect, Random, Option, Data } from 'effect'
 
-class HttpError extends Data.TaggedError("HttpError")<{}> {}
+class HttpError extends Data.TaggedError('HttpError')<{}> {}
 
-class ValidationError extends Data.TaggedError("ValidationError")<{}> {}
+class ValidationError extends Data.TaggedError('ValidationError')<{}> {}
 
 //      ┌─── Effect<string, HttpError | ValidationError, never>
 //      ▼
@@ -133,7 +133,7 @@ const program = Effect.gen(function* () {
   if (n2 < 0.5) {
     return yield* Effect.fail(new ValidationError())
   }
-  return "some result"
+  return 'some result'
 })
 
 //      ┌─── Effect<string, HttpError | ValidationError, never>
@@ -141,8 +141,8 @@ const program = Effect.gen(function* () {
 const recovered = program.pipe(
   Effect.catchSome((error) => {
     // Only handle HttpError errors
-    if (error._tag === "HttpError") {
-      return Option.some(Effect.succeed("Recovering from HttpError"))
+    if (error._tag === 'HttpError') {
+      return Option.some(Effect.succeed('Recovering from HttpError'))
     } else {
       return Option.none()
     }
@@ -172,11 +172,11 @@ error type unless a user-defined type guard is used to narrow the type.
 **Example** (Catching Specific Errors with a Predicate)
 
 ```ts twoslash
-import { Data, Effect, Random } from "effect"
+import { Data, Effect, Random } from 'effect'
 
-class HttpError extends Data.TaggedError("HttpError")<{}> {}
+class HttpError extends Data.TaggedError('HttpError')<{}> {}
 
-class ValidationError extends Data.TaggedError("ValidationError")<{}> {}
+class ValidationError extends Data.TaggedError('ValidationError')<{}> {}
 
 //      ┌─── Effect<string, HttpError | ValidationError, never>
 //      ▼
@@ -189,7 +189,7 @@ const program = Effect.gen(function* () {
   if (n2 < 0.5) {
     return yield* Effect.fail(new ValidationError())
   }
-  return "some result"
+  return 'some result'
 })
 
 //      ┌─── Effect<string, ValidationError, never>
@@ -197,8 +197,8 @@ const program = Effect.gen(function* () {
 const recovered = program.pipe(
   Effect.catchIf(
     // Only handle HttpError errors
-    (error) => error._tag === "HttpError",
-    () => Effect.succeed("Recovering from HttpError")
+    (error) => error._tag === 'HttpError',
+    () => Effect.succeed('Recovering from HttpError')
   )
 )
 ```
@@ -217,11 +217,11 @@ In TypeScript versions >= 5.5, improved type narrowing causes the resulting erro
 If you provide a [user-defined type guard](https://www.typescriptlang.org/docs/handbook/2/narrowing.html#using-type-predicates) instead of a predicate, the resulting error type will be pruned, returning an `Effect<string, ValidationError, never>`:
 
 ```ts twoslash collapse={3-19} {25-26}
-import { Data, Effect, Random } from "effect"
+import { Data, Effect, Random } from 'effect'
 
-class HttpError extends Data.TaggedError("HttpError")<{}> {}
+class HttpError extends Data.TaggedError('HttpError')<{}> {}
 
-class ValidationError extends Data.TaggedError("ValidationError")<{}> {}
+class ValidationError extends Data.TaggedError('ValidationError')<{}> {}
 
 //      ┌─── Effect<string, HttpError | ValidationError, never>
 //      ▼
@@ -234,7 +234,7 @@ const program = Effect.gen(function* () {
   if (n2 < 0.5) {
     return yield* Effect.fail(new ValidationError())
   }
-  return "some result"
+  return 'some result'
 })
 
 //      ┌─── Effect<string, ValidationError, never>
@@ -242,8 +242,8 @@ const program = Effect.gen(function* () {
 const recovered = program.pipe(
   Effect.catchIf(
     // User-defined type guard
-    (error): error is HttpError => error._tag === "HttpError",
-    () => Effect.succeed("Recovering from HttpError")
+    (error): error is HttpError => error._tag === 'HttpError',
+    () => Effect.succeed('Recovering from HttpError')
   )
 )
 ```
@@ -263,11 +263,11 @@ is used to identify and match errors.
 **Example** (Handling Errors by Tag)
 
 ```ts twoslash
-import { Effect, Random, Data } from "effect"
+import { Effect, Random, Data } from 'effect'
 
-class HttpError extends Data.TaggedError("HttpError")<{}> {}
+class HttpError extends Data.TaggedError('HttpError')<{}> {}
 
-class ValidationError extends Data.TaggedError("ValidationError")<{}> {}
+class ValidationError extends Data.TaggedError('ValidationError')<{}> {}
 
 //      ┌─── Effect<string, HttpError | ValidationError, never>
 //      ▼
@@ -280,16 +280,14 @@ const program = Effect.gen(function* () {
   if (n2 < 0.5) {
     return yield* Effect.fail(new ValidationError())
   }
-  return "some result"
+  return 'some result'
 })
 
 //      ┌─── Effect<string, ValidationError, never>
 //      ▼
 const recovered = program.pipe(
   // Only handle HttpError errors
-  Effect.catchTag("HttpError", (_HttpError) =>
-    Effect.succeed("Recovering from HttpError")
-  )
+  Effect.catchTag('HttpError', (_HttpError) => Effect.succeed('Recovering from HttpError'))
 )
 ```
 
@@ -310,11 +308,11 @@ If we also wanted to handle `ValidationError`, we can simply add another `catchT
 **Example** (Handling Multiple Error Types with `catchTag`)
 
 ```ts twoslash collapse={3-19} {28-30}
-import { Effect, Random, Data } from "effect"
+import { Effect, Random, Data } from 'effect'
 
-class HttpError extends Data.TaggedError("HttpError")<{}> {}
+class HttpError extends Data.TaggedError('HttpError')<{}> {}
 
-class ValidationError extends Data.TaggedError("ValidationError")<{}> {}
+class ValidationError extends Data.TaggedError('ValidationError')<{}> {}
 
 //      ┌─── Effect<string, HttpError | ValidationError, never>
 //      ▼
@@ -327,18 +325,16 @@ const program = Effect.gen(function* () {
   if (n2 < 0.5) {
     return yield* Effect.fail(new ValidationError())
   }
-  return "some result"
+  return 'some result'
 })
 
 //      ┌─── Effect<string, never, never>
 //      ▼
 const recovered = program.pipe(
   // Handle both HttpError and ValidationError
-  Effect.catchTag("HttpError", (_HttpError) =>
-    Effect.succeed("Recovering from HttpError")
-  ),
-  Effect.catchTag("ValidationError", (_ValidationError) =>
-    Effect.succeed("Recovering from ValidationError")
+  Effect.catchTag('HttpError', (_HttpError) => Effect.succeed('Recovering from HttpError')),
+  Effect.catchTag('ValidationError', (_ValidationError) =>
+    Effect.succeed('Recovering from ValidationError')
   )
 )
 ```
@@ -369,11 +365,11 @@ error types in a single call.
 **Example** (Handling Multiple Tagged Error Types at Once)
 
 ```ts twoslash
-import { Effect, Random, Data } from "effect"
+import { Effect, Random, Data } from 'effect'
 
-class HttpError extends Data.TaggedError("HttpError")<{}> {}
+class HttpError extends Data.TaggedError('HttpError')<{}> {}
 
-class ValidationError extends Data.TaggedError("ValidationError")<{}> {}
+class ValidationError extends Data.TaggedError('ValidationError')<{}> {}
 
 //      ┌─── Effect<string, HttpError | ValidationError, never>
 //      ▼
@@ -386,17 +382,15 @@ const program = Effect.gen(function* () {
   if (n2 < 0.5) {
     return yield* Effect.fail(new ValidationError())
   }
-  return "some result"
+  return 'some result'
 })
 
 //      ┌─── Effect<string, never, never>
 //      ▼
 const recovered = program.pipe(
   Effect.catchTags({
-    HttpError: (_HttpError) =>
-      Effect.succeed(`Recovering from HttpError`),
-    ValidationError: (_ValidationError) =>
-      Effect.succeed(`Recovering from ValidationError`)
+    HttpError: (_HttpError) => Effect.succeed(`Recovering from HttpError`),
+    ValidationError: (_ValidationError) => Effect.succeed(`Recovering from ValidationError`),
   })
 )
 ```

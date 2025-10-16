@@ -15,12 +15,10 @@ The `Micro.die` function returns an effect that throws a specified error. This f
 **Example** (Terminating on Division by Zero with `Effect.die`)
 
 ```ts twoslash
-import { Micro } from "effect"
+import { Micro } from 'effect'
 
 const divide = (a: number, b: number): Micro.Micro<number> =>
-  b === 0
-    ? Micro.die(new Error("Cannot divide by zero"))
-    : Micro.succeed(a / b)
+  b === 0 ? Micro.die(new Error('Cannot divide by zero')) : Micro.succeed(a / b)
 
 Micro.runPromise(divide(1, 0))
 /*
@@ -37,12 +35,10 @@ The `Micro.orDie` function converts an effect's failure into a termination of th
 **Example** (Converting Failure to Defect with `Micro.orDie`)
 
 ```ts twoslash
-import { Micro } from "effect"
+import { Micro } from 'effect'
 
 const divide = (a: number, b: number): Micro.Micro<number, Error> =>
-  b === 0
-    ? Micro.fail(new Error("Cannot divide by zero"))
-    : Micro.succeed(a / b)
+  b === 0 ? Micro.fail(new Error('Cannot divide by zero')) : Micro.succeed(a / b)
 
 //      ┌─── Micro<number, never, never>
 //      ▼
@@ -63,17 +59,15 @@ The `Micro.catchAllDefect` function allows you to recover from all defects using
 **Example** (Handling All Defects with `Micro.catchAllDefect`)
 
 ```ts twoslash
-import { Micro } from "effect"
+import { Micro } from 'effect'
 
 // Helper function to log a message
 const log = (message: string) => Micro.sync(() => console.log(message))
 
 // Simulating a runtime error
-const task = Micro.die("Boom!")
+const task = Micro.die('Boom!')
 
-const program = Micro.catchAllDefect(task, (defect) =>
-  log(`Unknown defect caught: ${defect}`)
-)
+const program = Micro.catchAllDefect(task, (defect) => log(`Unknown defect caught: ${defect}`))
 
 // We get a Right because we caught all defects
 Micro.runPromiseExit(program).then((exit) => console.log(exit))

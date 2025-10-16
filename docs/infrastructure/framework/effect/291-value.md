@@ -5,9 +5,9 @@ The `Redacted.value` function retrieves the original value from a `Redacted` ins
 **Example** (Accessing the Underlying Sensitive Value)
 
 ```ts twoslash
-import { Redacted } from "effect"
+import { Redacted } from 'effect'
 
-const API_KEY = Redacted.make("1234567890")
+const API_KEY = Redacted.make('1234567890')
 
 // Expose the redacted value
 console.log(Redacted.value(API_KEY))

@@ -7,7 +7,7 @@ You can compare `Option` values using the `Option.getEquivalence` function. This
 Suppose you have optional numbers and want to check if they are equivalent. Here's how you can use `Option.getEquivalence`:
 
 ```ts twoslash
-import { Option, Equivalence } from "effect"
+import { Option, Equivalence } from 'effect'
 
 const myEquivalence = Option.getEquivalence(Equivalence.number)
 

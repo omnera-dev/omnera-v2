@@ -5,7 +5,7 @@ Use `Either.isLeft` and `Either.isRight` to check whether an `Either` is a `Left
 **Example** (Using Guards to Check the Type of Either)
 
 ```ts twoslash
-import { Either } from "effect"
+import { Either } from 'effect'
 
 const foo = Either.right(42)
 

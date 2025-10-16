@@ -9,11 +9,11 @@ To define a class using `Schema.Class`, you need to specify:
 **Example** (Defining a Schema Class)
 
 ```ts twoslash
-import { Schema } from "effect"
+import { Schema } from 'effect'
 
-class Person extends Schema.Class<Person>("Person")({
+class Person extends Schema.Class<Person>('Person')({
   id: Schema.Number,
-  name: Schema.NonEmptyString
+  name: Schema.NonEmptyString,
 }) {}
 ```
 
@@ -22,21 +22,21 @@ In this example, `Person` is both a schema and a TypeScript class. Instances of 
 **Example** (Creating Instances)
 
 ```ts twoslash
-import { Schema } from "effect"
+import { Schema } from 'effect'
 
-class Person extends Schema.Class<Person>("Person")({
+class Person extends Schema.Class<Person>('Person')({
   id: Schema.Number,
-  name: Schema.NonEmptyString
+  name: Schema.NonEmptyString,
 }) {}
 
-console.log(new Person({ id: 1, name: "John" }))
+console.log(new Person({ id: 1, name: 'John' }))
 /*
 Output:
 Person { id: 1, name: 'John' }
 */
 
 // Using the factory function
-console.log(Person.make({ id: 1, name: "John" }))
+console.log(Person.make({ id: 1, name: 'John' }))
 /*
 Output:
 Person { id: 1, name: 'John' }
@@ -62,17 +62,17 @@ Class schemas [transform](/docs/schema/transformations/) a struct schema into a 
 **Example** (Decoding and Encoding a Class)
 
 ```ts twoslash
-import { Schema } from "effect"
+import { Schema } from 'effect'
 
-class Person extends Schema.Class<Person>("Person")({
+class Person extends Schema.Class<Person>('Person')({
   id: Schema.Number,
-  name: Schema.NonEmptyString
+  name: Schema.NonEmptyString,
 }) {}
 
-const person = Person.make({ id: 1, name: "John" })
+const person = Person.make({ id: 1, name: 'John' })
 
 // Decode from a plain object into a class instance
-const decoded = Schema.decodeUnknownSync(Person)({ id: 1, name: "John" })
+const decoded = Schema.decodeUnknownSync(Person)({ id: 1, name: 'John' })
 console.log(decoded)
 // Output: Person { id: 1, name: 'John' }
 
@@ -89,10 +89,10 @@ When your schema does not require any fields, you can define a class with an emp
 **Example** (Defining and Using a Class Without Arguments)
 
 ```ts twoslash
-import { Schema } from "effect"
+import { Schema } from 'effect'
 
 // Define a class with no fields
-class NoArgs extends Schema.Class<NoArgs>("NoArgs")({}) {}
+class NoArgs extends Schema.Class<NoArgs>('NoArgs')({}) {}
 
 // Create an instance using the default constructor
 const noargs1 = new NoArgs()
@@ -108,15 +108,13 @@ Filters allow you to validate input when decoding, encoding, or creating an inst
 **Example** (Applying a Filter to a Schema Class)
 
 ```ts twoslash
-import { Schema } from "effect"
+import { Schema } from 'effect'
 
-class WithFilter extends Schema.Class<WithFilter>("WithFilter")(
+class WithFilter extends Schema.Class<WithFilter>('WithFilter')(
   Schema.Struct({
     a: Schema.NumberFromString,
-    b: Schema.NumberFromString
-  }).pipe(
-    Schema.filter(({ a, b }) => a >= b || "a must be greater than b")
-  )
+    b: Schema.NumberFromString,
+  }).pipe(Schema.filter(({ a, b }) => a >= b || 'a must be greater than b'))
 ) {}
 
 // Constructor
@@ -129,7 +127,7 @@ ParseError: WithFilter (Constructor)
 */
 
 // Decoding
-console.log(Schema.decodeUnknownSync(WithFilter)({ a: "1", b: "2" }))
+console.log(Schema.decodeUnknownSync(WithFilter)({ a: '1', b: '2' }))
 /*
 throws:
 ParseError: (WithFilter (Encoded side) <-> WithFilter)

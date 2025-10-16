@@ -201,8 +201,7 @@ app.get(
   '/static/*',
   serveStatic({
     root: './',
-    rewriteRequestPath: (path) =>
-      path.replace(/^\/static/, '/statics'),
+    rewriteRequestPath: (path) => path.replace(/^\/static/, '/statics'),
   })
 )
 ```
@@ -295,4 +294,3 @@ EXPOSE 3000
 
 CMD ["node", "/app/dist/index.js"]
 ```
-

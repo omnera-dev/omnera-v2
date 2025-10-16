@@ -5,11 +5,11 @@ When you define a class with `Schema.Class`, it serves both as a schema and as a
 **Example** (Using a Class in an Array Schema)
 
 ```ts twoslash
-import { Schema } from "effect"
+import { Schema } from 'effect'
 
-class Person extends Schema.Class<Person>("Person")({
+class Person extends Schema.Class<Person>('Person')({
   id: Schema.Number,
-  name: Schema.NonEmptyString
+  name: Schema.NonEmptyString,
 }) {}
 
 // Use the Person class in an array schema
@@ -27,11 +27,11 @@ The class also includes a `fields` static property, which outlines the fields de
 **Example** (Accessing the `fields` Property)
 
 ```ts twoslash
-import { Schema } from "effect"
+import { Schema } from 'effect'
 
-class Person extends Schema.Class<Person>("Person")({
+class Person extends Schema.Class<Person>('Person')({
   id: Schema.Number,
-  name: Schema.NonEmptyString
+  name: Schema.NonEmptyString,
 }) {}
 
 //       ┌─── {

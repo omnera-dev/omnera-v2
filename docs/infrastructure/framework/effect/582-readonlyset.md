@@ -25,7 +25,7 @@ Schema.ReadonlySet(schema: Schema<A, I, R>)
 **Example**
 
 ```ts twoslash
-import { Schema } from "effect"
+import { Schema } from 'effect'
 
 const schema = Schema.ReadonlySet(Schema.NumberFromString)
 
@@ -42,7 +42,7 @@ const encode = Schema.encodeSync(schema)
 
 // Decoding examples
 
-console.log(decode(["1", "2", "3"]))
+console.log(decode(['1', '2', '3']))
 // Output: Set(3) { 1, 2, 3 }
 
 // Encoding examples
@@ -76,7 +76,7 @@ Schema.ReadonlySetFromSelf(schema: Schema<A, I, R>)
 **Example**
 
 ```ts twoslash
-import { Schema } from "effect"
+import { Schema } from 'effect'
 
 const schema = Schema.ReadonlySetFromSelf(Schema.NumberFromString)
 
@@ -93,7 +93,7 @@ const encode = Schema.encodeSync(schema)
 
 // Decoding examples
 
-console.log(decode(new Set(["1", "2", "3"])))
+console.log(decode(new Set(['1', '2', '3'])))
 // Output: Set(3) { 1, 2, 3 }
 
 // Encoding examples

@@ -5,13 +5,13 @@ Returns an effect that caches its result for a specified duration, known as the 
 **Example** (Caching with Time-to-Live)
 
 ```ts twoslash
-import { Effect, Console } from "effect"
+import { Effect, Console } from 'effect'
 
 let i = 1
 
 // Simulating an expensive task with a delay
 const expensiveTask = Effect.promise<string>(() => {
-  console.log("expensive task...")
+  console.log('expensive task...')
   return new Promise((resolve) => {
     setTimeout(() => {
       resolve(`result ${i++}`)
@@ -21,7 +21,7 @@ const expensiveTask = Effect.promise<string>(() => {
 
 const program = Effect.gen(function* () {
   // Caches the result for 150 milliseconds
-  const cached = yield* Effect.cachedWithTTL(expensiveTask, "150 millis")
+  const cached = yield* Effect.cachedWithTTL(expensiveTask, '150 millis')
 
   // First evaluation triggers the task
   yield* cached.pipe(Effect.andThen(Console.log))
@@ -30,7 +30,7 @@ const program = Effect.gen(function* () {
   yield* cached.pipe(Effect.andThen(Console.log))
 
   // Wait for 100 milliseconds, ensuring the cache expires
-  yield* Effect.sleep("100 millis")
+  yield* Effect.sleep('100 millis')
 
   // Recomputes the task after cache expiration
   yield* cached.pipe(Effect.andThen(Console.log))

@@ -11,13 +11,13 @@ The `Effect.repeat` function returns a new effect that repeats the given effect 
 **Example** (Repeating a Successful Effect)
 
 ```ts twoslash
-import { Effect, Schedule, Console } from "effect"
+import { Effect, Schedule, Console } from 'effect'
 
 // Define an effect that logs a message to the console
-const action = Console.log("success")
+const action = Console.log('success')
 
 // Define a schedule that repeats the action 2 more times with a delay
-const policy = Schedule.addDelay(Schedule.recurs(2), () => "100 millis")
+const policy = Schedule.addDelay(Schedule.recurs(2), () => '100 millis')
 
 // Repeat the action according to the schedule
 const program = Effect.repeat(action, policy)
@@ -36,24 +36,24 @@ repetitions: 2
 **Example** (Handling Failures in Repetition)
 
 ```ts twoslash
-import { Effect, Schedule } from "effect"
+import { Effect, Schedule } from 'effect'
 
 let count = 0
 
 // Define an async effect that simulates an action with potential failure
 const action = Effect.async<string, string>((resume) => {
   if (count > 1) {
-    console.log("failure")
-    resume(Effect.fail("Uh oh!"))
+    console.log('failure')
+    resume(Effect.fail('Uh oh!'))
   } else {
     count++
-    console.log("success")
-    resume(Effect.succeed("yay!"))
+    console.log('success')
+    resume(Effect.succeed('yay!'))
   }
 })
 
 // Define a schedule that repeats the action 2 more times with a delay
-const policy = Schedule.addDelay(Schedule.recurs(2), () => "100 millis")
+const policy = Schedule.addDelay(Schedule.recurs(2), () => '100 millis')
 
 // Repeat the action according to the schedule
 const program = Effect.repeat(action, policy)
@@ -80,11 +80,11 @@ If you want to avoid the first execution and only run the action according to a 
 **Example** (Skipping First Execution)
 
 ```ts twoslash
-import { Effect, Schedule, Console } from "effect"
+import { Effect, Schedule, Console } from 'effect'
 
-const action = Console.log("success")
+const action = Console.log('success')
 
-const policy = Schedule.addDelay(Schedule.recurs(2), () => "100 millis")
+const policy = Schedule.addDelay(Schedule.recurs(2), () => '100 millis')
 
 const program = Effect.schedule(action, policy)
 

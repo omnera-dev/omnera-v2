@@ -8,24 +8,24 @@ However, you can override specific behaviors by passing an object to `FileSystem
 **Example** (Mocking File System with Custom Behavior)
 
 ```ts twoslash
-import { FileSystem } from "@effect/platform"
-import { Effect } from "effect"
+import { FileSystem } from '@effect/platform'
+import { Effect } from 'effect'
 
 const program = Effect.gen(function* () {
   const fs = yield* FileSystem.FileSystem
 
-  const exists = yield* fs.exists("/some/path")
+  const exists = yield* fs.exists('/some/path')
   console.log(exists)
 
-  const content = yield* fs.readFileString("/some/path")
+  const content = yield* fs.readFileString('/some/path')
   console.log(content)
 })
 
 //      ┌─── Layer<FileSystem.FileSystem, never, never>
 //      ▼
 const customMock = FileSystem.layerNoop({
-  readFileString: () => Effect.succeed("mocked content"),
-  exists: (path) => Effect.succeed(path === "/some/path")
+  readFileString: () => Effect.succeed('mocked content'),
+  exists: (path) => Effect.succeed(path === '/some/path'),
 })
 
 // Provide the customized FileSystem mock implementation

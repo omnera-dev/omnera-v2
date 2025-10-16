@@ -9,10 +9,10 @@ To create a Cartesian Product of two streams, the `Stream.cross` operator is ava
 **Example** (Creating a Cartesian Product of Two Streams)
 
 ```ts twoslash
-import { Stream, Effect, Console } from "effect"
+import { Stream, Effect, Console } from 'effect'
 
 const s1 = Stream.make(1, 2, 3).pipe(Stream.tap(Console.log))
-const s2 = Stream.make("a", "b").pipe(Stream.tap(Console.log))
+const s2 = Stream.make('a', 'b').pipe(Stream.tap(Console.log))
 
 const cartesianProduct = Stream.cross(s1, s2)
 

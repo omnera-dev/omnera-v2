@@ -22,11 +22,10 @@ In real-world applications, `SynchronizedRef` is useful when you need to execute
 In this example, we simulate fetching user ages concurrently and updating a shared state that stores the ages:
 
 ```ts twoslash
-import { Effect, SynchronizedRef } from "effect"
+import { Effect, SynchronizedRef } from 'effect'
 
 // Simulated API to get user age
-const getUserAge = (userId: number) =>
-  Effect.succeed(userId * 10).pipe(Effect.delay(10 - userId))
+const getUserAge = (userId: number) => Effect.succeed(userId * 10).pipe(Effect.delay(10 - userId))
 
 const meanAge = Effect.gen(function* () {
   // Initialize a SynchronizedRef to hold an array of ages
@@ -53,7 +52,7 @@ const meanAge = Effect.gen(function* () {
 
   // Run tasks concurrently with a limit of 2 concurrent tasks
   yield* Effect.all([task(1), task(2), task(3), task(4)], {
-    concurrency: 2
+    concurrency: 2,
   })
 
   // Retrieve the updated value

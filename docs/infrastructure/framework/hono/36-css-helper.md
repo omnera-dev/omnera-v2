@@ -164,9 +164,7 @@ const buttonClass = css`
 const primaryClass = css`
   background: orange;
 `
-const Button = () => (
-  <a class={cx(buttonClass, primaryClass)}>Click!</a>
-)
+const Button = () => <a class={cx(buttonClass, primaryClass)}>Click!</a>
 ```
 
 It can also compose simple strings.
@@ -217,4 +215,3 @@ app.get('/', (c) => {
 If you use VS Code, you can use [vscode-styled-components](https://marketplace.visualstudio.com/items?itemName=styled-components.vscode-styled-components) for Syntax highlighting and IntelliSense for css tagged literals.
 
 ![](/images/css-ss.png)
-

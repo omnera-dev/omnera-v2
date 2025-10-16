@@ -26,10 +26,10 @@ The `Micro.repeat` function returns a new effect that repeats the given effect a
 **Example** (Repeating a Successful Effect)
 
 ```ts twoslash
-import { Micro } from "effect"
+import { Micro } from 'effect'
 
 // Define an effect that logs a message to the console
-const action = Micro.sync(() => console.log("success"))
+const action = Micro.sync(() => console.log('success'))
 
 // Define a schedule that repeats the action 2 more times with a delay
 const policy = Micro.scheduleAddDelay(Micro.scheduleRecurs(2), () => 100)
@@ -49,19 +49,19 @@ success
 **Example** (Handling Failures in Repetition)
 
 ```ts twoslash
-import { Micro } from "effect"
+import { Micro } from 'effect'
 
 let count = 0
 
 // Define an async effect that simulates an action with potential failure
 const action = Micro.async<string, string>((resume) => {
   if (count > 1) {
-    console.log("failure")
-    resume(Micro.fail("Uh oh!"))
+    console.log('failure')
+    resume(Micro.fail('Uh oh!'))
   } else {
     count++
-    console.log("success")
-    resume(Micro.succeed("yay!"))
+    console.log('success')
+    resume(Micro.succeed('yay!'))
   }
 })
 
@@ -96,7 +96,7 @@ failure
 This helper function, `dryRun`, demonstrates how different scheduling policies control repetition timing without executing an actual effect. By returning an array of delay intervals, it visualizes how a schedule would space repetitions.
 
 ```ts twoslash
-import { Option, Micro } from "effect"
+import { Option, Micro } from 'effect'
 
 // Helper function to simulate and visualize a schedule's behavior
 const dryRun = (
@@ -131,14 +131,11 @@ A schedule that repeats indefinitely, each repetition spaced the specified durat
 **Example** (Recurring with Delay Between Executions)
 
 ```ts twoslash collapse={5-21}
-import { Micro } from "effect"
-import * as Option from "effect/Option"
+import { Micro } from 'effect'
+import * as Option from 'effect/Option'
 
 // Helper function to simulate and visualize a schedule's behavior
-const dryRun = (
-  schedule: Micro.MicroSchedule,
-  maxAttempt: number = 7
-): Array<number> => {
+const dryRun = (schedule: Micro.MicroSchedule, maxAttempt: number = 7): Array<number> => {
   let attempt = 1
   let elapsed = 0
   const out: Array<number> = []
@@ -172,14 +169,11 @@ A schedule that recurs using exponential backoff, with each delay increasing exp
 **Example** (Exponential Backoff Schedule)
 
 ```ts twoslash collapse={5-21}
-import { Micro } from "effect"
-import * as Option from "effect/Option"
+import { Micro } from 'effect'
+import * as Option from 'effect/Option'
 
 // Helper function to simulate and visualize a schedule's behavior
-const dryRun = (
-  schedule: Micro.MicroSchedule,
-  maxAttempt: number = 7
-): Array<number> => {
+const dryRun = (schedule: Micro.MicroSchedule, maxAttempt: number = 7): Array<number> => {
   let attempt = 1
   let elapsed = 0
   const out: Array<number> = []
@@ -214,14 +208,11 @@ Combines two schedules using union. The schedule recurs as long as one of the sc
 **Example** (Union of Exponential and Spaced Schedules)
 
 ```ts twoslash collapse={5-21}
-import { Micro } from "effect"
-import * as Option from "effect/Option"
+import { Micro } from 'effect'
+import * as Option from 'effect/Option'
 
 // Helper function to simulate and visualize a schedule's behavior
-const dryRun = (
-  schedule: Micro.MicroSchedule,
-  maxAttempt: number = 7
-): Array<number> => {
+const dryRun = (schedule: Micro.MicroSchedule, maxAttempt: number = 7): Array<number> => {
   let attempt = 1
   let elapsed = 0
   const out: Array<number> = []
@@ -236,10 +227,7 @@ const dryRun = (
   return out
 }
 
-const policy = Micro.scheduleUnion(
-  Micro.scheduleExponential(10),
-  Micro.scheduleSpaced(300)
-)
+const policy = Micro.scheduleUnion(Micro.scheduleExponential(10), Micro.scheduleSpaced(300))
 
 console.log(dryRun(policy))
 /*
@@ -263,14 +251,11 @@ Combines two schedules using intersection. The schedule recurs only if both sche
 **Example** (Intersection of Exponential and Recurs Schedules)
 
 ```ts twoslash collapse={5-21}
-import { Micro } from "effect"
-import * as Option from "effect/Option"
+import { Micro } from 'effect'
+import * as Option from 'effect/Option'
 
 // Helper function to simulate and visualize a schedule's behavior
-const dryRun = (
-  schedule: Micro.MicroSchedule,
-  maxAttempt: number = 7
-): Array<number> => {
+const dryRun = (schedule: Micro.MicroSchedule, maxAttempt: number = 7): Array<number> => {
   let attempt = 1
   let elapsed = 0
   const out: Array<number> = []
@@ -285,10 +270,7 @@ const dryRun = (
   return out
 }
 
-const policy = Micro.scheduleIntersect(
-  Micro.scheduleExponential(10),
-  Micro.scheduleSpaced(300)
-)
+const policy = Micro.scheduleIntersect(Micro.scheduleExponential(10), Micro.scheduleSpaced(300))
 
 console.log(dryRun(policy))
 /*

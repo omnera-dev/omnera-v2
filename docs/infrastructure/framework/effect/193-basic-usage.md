@@ -9,17 +9,17 @@ The `Effect.timeout` function employs a [Duration](/docs/data-types/duration/) p
 Here, the task completes within the timeout duration, so the result is returned successfully.
 
 ```ts twoslash
-import { Effect } from "effect"
+import { Effect } from 'effect'
 
 const task = Effect.gen(function* () {
-  console.log("Start processing...")
-  yield* Effect.sleep("2 seconds") // Simulates a delay in processing
-  console.log("Processing complete.")
-  return "Result"
+  console.log('Start processing...')
+  yield* Effect.sleep('2 seconds') // Simulates a delay in processing
+  console.log('Processing complete.')
+  return 'Result'
 })
 
 // Sets a 3-second timeout for the task
-const timedEffect = task.pipe(Effect.timeout("3 seconds"))
+const timedEffect = task.pipe(Effect.timeout('3 seconds'))
 
 // Output will show that the task completes successfully
 // as it falls within the timeout duration
@@ -35,18 +35,18 @@ Processing complete.
 If the operation exceeds the specified duration, a `TimeoutException` is raised:
 
 ```ts twoslash
-import { Effect } from "effect"
+import { Effect } from 'effect'
 
 const task = Effect.gen(function* () {
-  console.log("Start processing...")
-  yield* Effect.sleep("2 seconds") // Simulates a delay in processing
-  console.log("Processing complete.")
-  return "Result"
+  console.log('Start processing...')
+  yield* Effect.sleep('2 seconds') // Simulates a delay in processing
+  console.log('Processing complete.')
+  return 'Result'
 })
 
 // Output will show a TimeoutException as the task takes longer
 // than the specified timeout duration
-const timedEffect = task.pipe(Effect.timeout("1 second"))
+const timedEffect = task.pipe(Effect.timeout('1 second'))
 
 Effect.runPromiseExit(timedEffect).then(console.log)
 /*
@@ -73,18 +73,18 @@ If you want to handle timeouts more gracefully, consider using `Effect.timeoutOp
 In this example, the first task completes successfully, while the second times out. The result of the timed-out task is represented as `None` in the `Option` type.
 
 ```ts twoslash
-import { Effect } from "effect"
+import { Effect } from 'effect'
 
 const task = Effect.gen(function* () {
-  console.log("Start processing...")
-  yield* Effect.sleep("2 seconds") // Simulates a delay in processing
-  console.log("Processing complete.")
-  return "Result"
+  console.log('Start processing...')
+  yield* Effect.sleep('2 seconds') // Simulates a delay in processing
+  console.log('Processing complete.')
+  return 'Result'
 })
 
 const timedOutEffect = Effect.all([
-  task.pipe(Effect.timeoutOption("3 seconds")),
-  task.pipe(Effect.timeoutOption("1 second"))
+  task.pipe(Effect.timeoutOption('3 seconds')),
+  task.pipe(Effect.timeoutOption('1 second')),
 ])
 
 Effect.runPromise(timedOutEffect).then(console.log)

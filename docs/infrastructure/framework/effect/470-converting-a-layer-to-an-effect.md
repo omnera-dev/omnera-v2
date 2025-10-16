@@ -5,15 +5,15 @@ Sometimes your entire application might be a Layer, for example, an HTTP server.
 **Example** (Launching an HTTP Server Layer)
 
 ```ts twoslash
-import { Console, Context, Effect, Layer } from "effect"
+import { Console, Context, Effect, Layer } from 'effect'
 
-class HTTPServer extends Context.Tag("HTTPServer")<HTTPServer, void>() {}
+class HTTPServer extends Context.Tag('HTTPServer')<HTTPServer, void>() {}
 
 // Simulating an HTTP server
 const server = Layer.effect(
   HTTPServer,
   // Log a message to simulate a server starting
-  Console.log("Listening on http://localhost:3000")
+  Console.log('Listening on http://localhost:3000')
 )
 
 // Converts the layer to an effect and runs it

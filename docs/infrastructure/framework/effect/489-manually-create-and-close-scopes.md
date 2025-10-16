@@ -8,16 +8,16 @@ Let's start by looking at how scopes are merged by default:
 **Example** (Merging Scopes)
 
 ```ts twoslash
-import { Effect, Console } from "effect"
+import { Effect, Console } from 'effect'
 
 const task1 = Effect.gen(function* () {
-  console.log("task 1")
-  yield* Effect.addFinalizer(() => Console.log("finalizer after task 1"))
+  console.log('task 1')
+  yield* Effect.addFinalizer(() => Console.log('finalizer after task 1'))
 })
 
 const task2 = Effect.gen(function* () {
-  console.log("task 2")
-  yield* Effect.addFinalizer(() => Console.log("finalizer after task 2"))
+  console.log('task 2')
+  yield* Effect.addFinalizer(() => Console.log('finalizer after task 2'))
 })
 
 const program = Effect.gen(function* () {
@@ -43,16 +43,16 @@ If you want more control over when each scope is closed, you can manually create
 **Example** (Manually Creating and Closing Scopes)
 
 ```ts twoslash
-import { Console, Effect, Exit, Scope } from "effect"
+import { Console, Effect, Exit, Scope } from 'effect'
 
 const task1 = Effect.gen(function* () {
-  console.log("task 1")
-  yield* Effect.addFinalizer(() => Console.log("finalizer after task 1"))
+  console.log('task 1')
+  yield* Effect.addFinalizer(() => Console.log('finalizer after task 1'))
 })
 
 const task2 = Effect.gen(function* () {
-  console.log("task 2")
-  yield* Effect.addFinalizer(() => Console.log("finalizer after task 2"))
+  console.log('task 2')
+  yield* Effect.addFinalizer(() => Console.log('finalizer after task 2'))
 })
 
 const program = Effect.gen(function* () {
@@ -67,7 +67,7 @@ const program = Effect.gen(function* () {
 
   // Manually close scope1 and scope2
   yield* Scope.close(scope1, Exit.void)
-  yield* Console.log("doing something else")
+  yield* Console.log('doing something else')
   yield* Scope.close(scope2, Exit.void)
 })
 
@@ -97,12 +97,12 @@ The key point to note is that the scope closing doesn't force the task to be int
 **Example** (Closing a Scope with Pending Tasks)
 
 ```ts twoslash
-import { Console, Effect, Exit, Scope } from "effect"
+import { Console, Effect, Exit, Scope } from 'effect'
 
 const task = Effect.gen(function* () {
-  yield* Effect.sleep("1 second")
-  console.log("Executed")
-  yield* Effect.addFinalizer(() => Console.log("Task Finalizer"))
+  yield* Effect.sleep('1 second')
+  console.log('Executed')
+  yield* Effect.addFinalizer(() => Console.log('Task Finalizer'))
 })
 
 const program = Effect.gen(function* () {
@@ -110,7 +110,7 @@ const program = Effect.gen(function* () {
 
   // Close the scope immediately
   yield* Scope.close(scope, Exit.void)
-  console.log("Scope closed")
+  console.log('Scope closed')
 
   // This task will be executed even if the scope is closed
   yield* task.pipe(Scope.extend(scope))

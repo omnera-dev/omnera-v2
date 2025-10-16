@@ -20,20 +20,20 @@ Here's the distinction:
 Consider a scenario where a long-running data processing task is initiated, and you want to ensure the system remains responsive, even if the data processing takes too long:
 
 ```ts twoslash
-import { Effect } from "effect"
+import { Effect } from 'effect'
 
 const longRunningTask = Effect.gen(function* () {
-  console.log("Start heavy processing...")
-  yield* Effect.sleep("5 seconds") // Simulate a long process
-  console.log("Heavy processing done.")
-  return "Data processed"
+  console.log('Start heavy processing...')
+  yield* Effect.sleep('5 seconds') // Simulate a long process
+  console.log('Heavy processing done.')
+  return 'Data processed'
 })
 
 const timedEffect = longRunningTask.pipe(
   Effect.uninterruptible,
   // Allows the task to finish in the background if it times out
   Effect.disconnect,
-  Effect.timeout("1 second")
+  Effect.timeout('1 second')
 )
 
 Effect.runPromiseExit(timedEffect).then(console.log)

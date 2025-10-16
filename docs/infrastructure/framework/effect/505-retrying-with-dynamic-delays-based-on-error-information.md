@@ -7,12 +7,12 @@ Some API errors, such as `429 Too Many Requests`, include a `Retry-After` header
 This approach ensures that the retry delay adapts dynamically to the server's response, preventing unnecessary retries while respecting the provided `Retry-After` value.
 
 ```ts twoslash
-import { Duration, Effect, Schedule, Data } from "effect"
+import { Duration, Effect, Schedule, Data } from 'effect'
 
 // Custom error class representing a "Too Many Requests" response
-class TooManyRequestsError extends Data.TaggedError(
-  "TooManyRequestsError"
-)<{ readonly retryAfter: number }> {}
+class TooManyRequestsError extends Data.TaggedError('TooManyRequestsError')<{
+  readonly retryAfter: number
+}> {}
 
 let n = 1
 const request = Effect.gen(function* () {
@@ -23,14 +23,14 @@ const request = Effect.gen(function* () {
     // Simulate retrieving the retry-after header
     return yield* Effect.fail(new TooManyRequestsError({ retryAfter }))
   }
-  console.log("Done")
-  return "some result"
+  console.log('Done')
+  return 'some result'
 })
 
 // Retry policy that extracts the retry delay from the error
 const policy = Schedule.identity<TooManyRequestsError>().pipe(
   Schedule.addDelay((error) =>
-    error._tag === "TooManyRequestsError"
+    error._tag === 'TooManyRequestsError'
       ? // Wait for the specified retry-after duration
         Duration.millis(error.retryAfter)
       : Duration.zero

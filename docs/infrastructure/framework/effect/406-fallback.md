@@ -7,13 +7,13 @@ The `Effect.orElseSucceed` function will replace the original failure with a suc
 **Example** (Replacing Failure with Success using `Micro.orElseSucceed`)
 
 ```ts twoslash
-import { Micro } from "effect"
+import { Micro } from 'effect'
 
 const validate = (age: number): Micro.Micro<number, string> => {
   if (age < 0) {
-    return Micro.fail("NegativeAgeError")
+    return Micro.fail('NegativeAgeError')
   } else if (age < 18) {
-    return Micro.fail("IllegalAgeError")
+    return Micro.fail('IllegalAgeError')
   } else {
     return Micro.succeed(age)
   }

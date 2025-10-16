@@ -10,26 +10,24 @@ This is useful for structuring your code to respond differently to success or fa
 **Example** (Handling Both Success and Failure Cases)
 
 ```ts twoslash
-import { Effect } from "effect"
+import { Effect } from 'effect'
 
 const success: Effect.Effect<number, Error> = Effect.succeed(42)
 
 const program1 = Effect.match(success, {
   onFailure: (error) => `failure: ${error.message}`,
-  onSuccess: (value) => `success: ${value}`
+  onSuccess: (value) => `success: ${value}`,
 })
 
 // Run and log the result of the successful effect
 Effect.runPromise(program1).then(console.log)
 // Output: "success: 42"
 
-const failure: Effect.Effect<number, Error> = Effect.fail(
-  new Error("Uh oh!")
-)
+const failure: Effect.Effect<number, Error> = Effect.fail(new Error('Uh oh!'))
 
 const program2 = Effect.match(failure, {
   onFailure: (error) => `failure: ${error.message}`,
-  onSuccess: (value) => `success: ${value}`
+  onSuccess: (value) => `success: ${value}`,
 })
 
 // Run and log the result of the failed effect

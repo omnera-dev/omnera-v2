@@ -59,9 +59,7 @@ const Layout: FC = (props) => {
   )
 }
 
-const Top: FC<{ messages: string[] }> = (props: {
-  messages: string[]
-}) => {
+const Top: FC<{ messages: string[] }> = (props: { messages: string[] }) => {
   return (
     <Layout>
       <h1>Hello Hono!</h1>
@@ -107,7 +105,10 @@ app.get('/about', (c) => {
   return c.render(
     <>
       <title>About Page</title>
-      <meta name='description' content='This is the about page.' />
+      <meta
+        name="description"
+        content="This is the about page."
+      />
       about page content
     </>
   )
@@ -356,9 +357,7 @@ app.get('/', (c) => {
   const stream = renderToReadableStream(
     <html>
       <body>
-        <StreamingContext
-          value={{ scriptNonce: 'random-nonce-value' }}
-        >
+        <StreamingContext value={{ scriptNonce: 'random-nonce-value' }}>
           <Suspense fallback={<div>Loading...</div>}>
             <AsyncComponent />
           </Suspense>
@@ -371,8 +370,7 @@ app.get('/', (c) => {
     headers: {
       'Content-Type': 'text/html; charset=UTF-8',
       'Transfer-Encoding': 'chunked',
-      'Content-Security-Policy':
-        "script-src 'nonce-random-nonce-value'",
+      'Content-Security-Policy': "script-src 'nonce-random-nonce-value'",
     },
   })
 })
@@ -446,4 +444,3 @@ declare module 'hono/jsx' {
   }
 }
 ```
-

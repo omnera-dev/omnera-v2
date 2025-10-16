@@ -6,7 +6,10 @@ For example, let's create a `HostPort` class, which has two fields: `host` and `
 
 ```ts twoslash
 class HostPort {
-  constructor(readonly host: string, readonly port: number) {}
+  constructor(
+    readonly host: string,
+    readonly port: number
+  ) {}
   get url() {
     return `${this.host}:${this.port}`
   }
@@ -18,23 +21,23 @@ To define a configuration for this custom type, we can combine primitive configs
 **Example** (Defining a Custom Configuration)
 
 ```ts twoslash
-import { Config } from "effect"
+import { Config } from 'effect'
 
 class HostPort {
-  constructor(readonly host: string, readonly port: number) {}
+  constructor(
+    readonly host: string,
+    readonly port: number
+  ) {}
   get url() {
     return `${this.host}:${this.port}`
   }
 }
 
 // Combine the configuration for 'HOST' and 'PORT'
-const both = Config.all([Config.string("HOST"), Config.number("PORT")])
+const both = Config.all([Config.string('HOST'), Config.number('PORT')])
 
 // Map the configuration values into a HostPort instance
-const config = Config.map(
-  both,
-  ([host, port]) => new HostPort(host, port)
-)
+const config = Config.map(both, ([host, port]) => new HostPort(host, port))
 ```
 
 In this example, `Config.all(configs)` combines two primitive configurations, `Config<string>` and `Config<number>`, into a `Config<[string, number]>`. The `Config.map` operator is then used to transform these values into an instance of the `HostPort` class.
@@ -42,23 +45,23 @@ In this example, `Config.all(configs)` combines two primitive configurations, `C
 **Example** (Using Custom Configuration)
 
 ```ts twoslash title="App.ts"
-import { Effect, Config } from "effect"
+import { Effect, Config } from 'effect'
 
 class HostPort {
-  constructor(readonly host: string, readonly port: number) {}
+  constructor(
+    readonly host: string,
+    readonly port: number
+  ) {}
   get url() {
     return `${this.host}:${this.port}`
   }
 }
 
 // Combine the configuration for 'HOST' and 'PORT'
-const both = Config.all([Config.string("HOST"), Config.number("PORT")])
+const both = Config.all([Config.string('HOST'), Config.number('PORT')])
 
 // Map the configuration values into a HostPort instance
-const config = Config.map(
-  both,
-  ([host, port]) => new HostPort(host, port)
-)
+const config = Config.map(both, ([host, port]) => new HostPort(host, port))
 
 // Main program that reads configuration and starts the application
 const program = Effect.gen(function* () {

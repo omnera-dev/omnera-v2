@@ -11,7 +11,7 @@ type Options = {
 The `concurrency` option is used to determine the level of concurrency, with the following values:
 
 ```ts showLineNumbers=false
-type Concurrency = number | "unbounded" | "inherit"
+type Concurrency = number | 'unbounded' | 'inherit'
 ```
 
 Let's explore each configuration in detail.
@@ -28,7 +28,7 @@ By default, if you don't specify any concurrency option, effects will run sequen
 **Example** (Sequential Execution)
 
 ```ts twoslash
-import { Effect, Duration } from "effect"
+import { Effect, Duration } from 'effect'
 
 // Helper function to simulate a task with a delay
 const makeTask = (n: number, delay: Duration.DurationInput) =>
@@ -43,8 +43,8 @@ const makeTask = (n: number, delay: Duration.DurationInput) =>
       })
   )
 
-const task1 = makeTask(1, "200 millis")
-const task2 = makeTask(2, "100 millis")
+const task1 = makeTask(1, '200 millis')
+const task2 = makeTask(2, '100 millis')
 
 const sequential = Effect.all([task1, task2])
 
@@ -65,7 +65,7 @@ You can control how many effects run concurrently by setting a `number` for `con
 **Example** (Limiting to 2 Concurrent Tasks)
 
 ```ts twoslash
-import { Effect, Duration } from "effect"
+import { Effect, Duration } from 'effect'
 
 // Helper function to simulate a task with a delay
 const makeTask = (n: number, delay: Duration.DurationInput) =>
@@ -80,14 +80,14 @@ const makeTask = (n: number, delay: Duration.DurationInput) =>
       })
   )
 
-const task1 = makeTask(1, "200 millis")
-const task2 = makeTask(2, "100 millis")
-const task3 = makeTask(3, "210 millis")
-const task4 = makeTask(4, "110 millis")
-const task5 = makeTask(5, "150 millis")
+const task1 = makeTask(1, '200 millis')
+const task2 = makeTask(2, '100 millis')
+const task3 = makeTask(3, '210 millis')
+const task4 = makeTask(4, '110 millis')
+const task5 = makeTask(5, '150 millis')
 
 const numbered = Effect.all([task1, task2, task3, task4, task5], {
-  concurrency: 2
+  concurrency: 2,
 })
 
 Effect.runPromise(numbered)
@@ -113,7 +113,7 @@ When `concurrency: "unbounded"` is used, there's no limit to the number of effec
 **Example** (Unbounded Concurrency)
 
 ```ts twoslash
-import { Effect, Duration } from "effect"
+import { Effect, Duration } from 'effect'
 
 // Helper function to simulate a task with a delay
 const makeTask = (n: number, delay: Duration.DurationInput) =>
@@ -128,14 +128,14 @@ const makeTask = (n: number, delay: Duration.DurationInput) =>
       })
   )
 
-const task1 = makeTask(1, "200 millis")
-const task2 = makeTask(2, "100 millis")
-const task3 = makeTask(3, "210 millis")
-const task4 = makeTask(4, "110 millis")
-const task5 = makeTask(5, "150 millis")
+const task1 = makeTask(1, '200 millis')
+const task2 = makeTask(2, '100 millis')
+const task3 = makeTask(3, '210 millis')
+const task4 = makeTask(4, '110 millis')
+const task5 = makeTask(5, '150 millis')
 
 const unbounded = Effect.all([task1, task2, task3, task4, task5], {
-  concurrency: "unbounded"
+  concurrency: 'unbounded',
 })
 
 Effect.runPromise(unbounded)
@@ -161,7 +161,7 @@ When using `concurrency: "inherit"`, the concurrency level is inherited from the
 **Example** (Inheriting Concurrency from Context)
 
 ```ts twoslash
-import { Effect, Duration } from "effect"
+import { Effect, Duration } from 'effect'
 
 // Helper function to simulate a task with a delay
 const makeTask = (n: number, delay: Duration.DurationInput) =>
@@ -176,16 +176,16 @@ const makeTask = (n: number, delay: Duration.DurationInput) =>
       })
   )
 
-const task1 = makeTask(1, "200 millis")
-const task2 = makeTask(2, "100 millis")
-const task3 = makeTask(3, "210 millis")
-const task4 = makeTask(4, "110 millis")
-const task5 = makeTask(5, "150 millis")
+const task1 = makeTask(1, '200 millis')
+const task2 = makeTask(2, '100 millis')
+const task3 = makeTask(3, '210 millis')
+const task4 = makeTask(4, '110 millis')
+const task5 = makeTask(5, '150 millis')
 
 // Running all tasks with concurrency: "inherit",
 // which defaults to "unbounded"
 const inherit = Effect.all([task1, task2, task3, task4, task5], {
-  concurrency: "inherit"
+  concurrency: 'inherit',
 })
 
 Effect.runPromise(inherit)
@@ -209,7 +209,7 @@ If you use `Effect.withConcurrency`, the concurrency configuration will adjust t
 **Example** (Setting Concurrency Option)
 
 ```ts twoslash
-import { Effect, Duration } from "effect"
+import { Effect, Duration } from 'effect'
 
 // Helper function to simulate a task with a delay
 const makeTask = (n: number, delay: Duration.DurationInput) =>
@@ -224,16 +224,16 @@ const makeTask = (n: number, delay: Duration.DurationInput) =>
       })
   )
 
-const task1 = makeTask(1, "200 millis")
-const task2 = makeTask(2, "100 millis")
-const task3 = makeTask(3, "210 millis")
-const task4 = makeTask(4, "110 millis")
-const task5 = makeTask(5, "150 millis")
+const task1 = makeTask(1, '200 millis')
+const task2 = makeTask(2, '100 millis')
+const task3 = makeTask(3, '210 millis')
+const task4 = makeTask(4, '110 millis')
+const task5 = makeTask(5, '150 millis')
 
 // Running tasks with concurrency: "inherit",
 // which will inherit the surrounding context
 const inherit = Effect.all([task1, task2, task3, task4, task5], {
-  concurrency: "inherit"
+  concurrency: 'inherit',
 })
 
 // Setting a concurrency limit of 2

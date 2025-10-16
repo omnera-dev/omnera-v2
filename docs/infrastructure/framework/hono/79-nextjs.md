@@ -164,4 +164,3 @@ In order for this to work with the Pages Router, it's important to disable Verce
 ```text
 NODEJS_HELPERS=0
 ```
-

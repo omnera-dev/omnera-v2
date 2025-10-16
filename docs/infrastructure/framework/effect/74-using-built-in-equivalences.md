@@ -14,12 +14,12 @@ The module provides several built-in equivalence relations for common data types
 **Example** (Using Built-in Equivalences)
 
 ```ts twoslash
-import { Equivalence } from "effect"
+import { Equivalence } from 'effect'
 
-console.log(Equivalence.string("apple", "apple"))
+console.log(Equivalence.string('apple', 'apple'))
 // Output: true
 
-console.log(Equivalence.string("apple", "orange"))
+console.log(Equivalence.string('apple', 'orange'))
 // Output: false
 
 console.log(Equivalence.Date(new Date(2023, 1, 1), new Date(2023, 1, 1)))

@@ -7,15 +7,15 @@ When creating objects, you might want to assign default values to certain fields
 In this example, all fields are required when creating a new instance.
 
 ```ts twoslash
-import { Schema } from "effect"
+import { Schema } from 'effect'
 
 const Person = Schema.Struct({
   name: Schema.NonEmptyString,
-  age: Schema.Number
+  age: Schema.Number,
 })
 
 // Both name and age must be provided
-console.log(Person.make({ name: "John", age: 30 }))
+console.log(Person.make({ name: 'John', age: 30 }))
 /*
 Output: { name: 'John', age: 30 }
 */
@@ -26,24 +26,24 @@ Output: { name: 'John', age: 30 }
 Here, the `age` field is optional because it has a default value of `0`.
 
 ```ts twoslash
-import { Schema } from "effect"
+import { Schema } from 'effect'
 
 const Person = Schema.Struct({
   name: Schema.NonEmptyString,
   age: Schema.Number.pipe(
     Schema.propertySignature,
     Schema.withConstructorDefault(() => 0)
-  )
+  ),
 })
 
 // The age field is optional and defaults to 0
-console.log(Person.make({ name: "John" }))
+console.log(Person.make({ name: 'John' }))
 /*
 Output:
 { name: 'John', age: 0 }
 */
 
-console.log(Person.make({ name: "John", age: 30 }))
+console.log(Person.make({ name: 'John', age: 30 }))
 /*
 Output:
 { name: 'John', age: 30 }
@@ -57,17 +57,17 @@ Default values in schemas are shallow, meaning that defaults defined in nested s
 **Example** (Shallow Defaults in Nested Structs)
 
 ```ts twoslash
-import { Schema } from "effect"
+import { Schema } from 'effect'
 
 const Config = Schema.Struct({
   // Define a nested struct with a default value
   web: Schema.Struct({
     application_url: Schema.String.pipe(
       Schema.propertySignature,
-      Schema.withConstructorDefault(() => "http://localhost")
+      Schema.withConstructorDefault(() => 'http://localhost')
     ),
-    application_port: Schema.Number
-  })
+    application_port: Schema.Number,
+  }),
 })
 
 // This will cause a type error because `application_url`
@@ -83,16 +83,16 @@ To work around this limitation, extract the constructor for the nested struct an
 **Example** (Using Nested Struct Constructors)
 
 ```ts twoslash
-import { Schema } from "effect"
+import { Schema } from 'effect'
 
 const Config = Schema.Struct({
   web: Schema.Struct({
     application_url: Schema.String.pipe(
       Schema.propertySignature,
-      Schema.withConstructorDefault(() => "http://localhost")
+      Schema.withConstructorDefault(() => 'http://localhost')
     ),
-    application_port: Schema.Number
-  })
+    application_port: Schema.Number,
+  }),
 })
 
 // Extract the nested struct constructor
@@ -120,7 +120,7 @@ Defaults are lazily evaluated, meaning that a new instance of the default is gen
 In this example, the `timestamp` field generates a new value for each instance.
 
 ```ts twoslash
-import { Schema } from "effect"
+import { Schema } from 'effect'
 
 const Person = Schema.Struct({
   name: Schema.NonEmptyString,
@@ -131,16 +131,16 @@ const Person = Schema.Struct({
   timestamp: Schema.Number.pipe(
     Schema.propertySignature,
     Schema.withConstructorDefault(() => new Date().getTime())
-  )
+  ),
 })
 
-console.log(Person.make({ name: "name1" }))
+console.log(Person.make({ name: 'name1' }))
 /*
 Example Output:
 { age: 0, timestamp: 1714232909221, name: 'name1' }
 */
 
-console.log(Person.make({ name: "name2" }))
+console.log(Person.make({ name: 'name2' }))
 /*
 Example Output:
 { age: 0, timestamp: 1714232909227, name: 'name2' }
@@ -154,7 +154,7 @@ Default values are also "portable", meaning that if you reuse the same property 
 **Example** (Reusing Defaults in Another Schema)
 
 ```ts twoslash
-import { Schema } from "effect"
+import { Schema } from 'effect'
 
 const Person = Schema.Struct({
   name: Schema.NonEmptyString,
@@ -165,15 +165,15 @@ const Person = Schema.Struct({
   timestamp: Schema.Number.pipe(
     Schema.propertySignature,
     Schema.withConstructorDefault(() => new Date().getTime())
-  )
+  ),
 })
 
 const AnotherSchema = Schema.Struct({
   foo: Schema.String,
-  age: Person.fields.age
+  age: Person.fields.age,
 })
 
-console.log(AnotherSchema.make({ foo: "bar" }))
+console.log(AnotherSchema.make({ foo: 'bar' }))
 /*
 Output:
 { foo: 'bar', age: 0 }
@@ -187,9 +187,9 @@ Default values can also be applied when working with the `Class` API, ensuring c
 **Example** (Defaults in a Class)
 
 ```ts twoslash
-import { Schema } from "effect"
+import { Schema } from 'effect'
 
-class Person extends Schema.Class<Person>("Person")({
+class Person extends Schema.Class<Person>('Person')({
   name: Schema.NonEmptyString,
   age: Schema.Number.pipe(
     Schema.propertySignature,
@@ -198,16 +198,16 @@ class Person extends Schema.Class<Person>("Person")({
   timestamp: Schema.Number.pipe(
     Schema.propertySignature,
     Schema.withConstructorDefault(() => new Date().getTime())
-  )
+  ),
 }) {}
 
-console.log(new Person({ name: "name1" }))
+console.log(new Person({ name: 'name1' }))
 /*
 Example Output:
 Person { age: 0, timestamp: 1714400867208, name: 'name1' }
 */
 
-console.log(new Person({ name: "name2" }))
+console.log(new Person({ name: 'name2' }))
 /*
 Example Output:
 Person { age: 0, timestamp: 1714400867215, name: 'name2' }

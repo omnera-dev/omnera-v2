@@ -5,7 +5,7 @@ When working with streams, there might be situations where you want to selective
 **Example**
 
 ```ts twoslash
-import { Stream, Option } from "effect"
+import { Stream, Option } from 'effect'
 
 const stream = Stream.fail(new Error())
 

@@ -8,8 +8,8 @@ JavaScript's built-in `Set` and `Map` can be a bit tricky when it comes to check
 const set = new Set()
 
 // Adding two objects with the same content to the set
-set.add({ name: "Alice", age: 30 })
-set.add({ name: "Alice", age: 30 })
+set.add({ name: 'Alice', age: 30 })
+set.add({ name: 'Alice', age: 30 })
 
 // Even though the objects have identical values, they are treated
 // as different elements because JavaScript compares objects by reference,
@@ -29,12 +29,12 @@ When you use the `HashSet`, it correctly handles value-based equality checks. In
 **Example** (Using `HashSet` for Value-Based Equality)
 
 ```ts twoslash
-import { HashSet, Data } from "effect"
+import { HashSet, Data } from 'effect'
 
 // Creating a HashSet with objects that implement the Equal interface
 const set = HashSet.empty().pipe(
-  HashSet.add(Data.struct({ name: "Alice", age: 30 })),
-  HashSet.add(Data.struct({ name: "Alice", age: 30 }))
+  HashSet.add(Data.struct({ name: 'Alice', age: 30 })),
+  HashSet.add(Data.struct({ name: 'Alice', age: 30 }))
 )
 
 // HashSet recognizes them as equal, so only one element is stored
@@ -47,13 +47,13 @@ console.log(HashSet.size(set))
 **Example** (Reference-Based Equality in `HashSet`)
 
 ```ts twoslash
-import { HashSet } from "effect"
+import { HashSet } from 'effect'
 
 // Creating a HashSet with objects that do NOT implement
 // the Equal interface
 const set = HashSet.empty().pipe(
-  HashSet.add({ name: "Alice", age: 30 }),
-  HashSet.add({ name: "Alice", age: 30 })
+  HashSet.add({ name: 'Alice', age: 30 }),
+  HashSet.add({ name: 'Alice', age: 30 })
 )
 
 // Since these objects are compared by reference,
@@ -71,19 +71,19 @@ When working with the `HashMap`, you have the advantage of comparing keys by the
 **Example** (Value-Based Key Comparisons with `HashMap`)
 
 ```ts twoslash
-import { HashMap, Data } from "effect"
+import { HashMap, Data } from 'effect'
 
 // Adding two objects with identical values as keys
 const map = HashMap.empty().pipe(
-  HashMap.set(Data.struct({ name: "Alice", age: 30 }), 1),
-  HashMap.set(Data.struct({ name: "Alice", age: 30 }), 2)
+  HashMap.set(Data.struct({ name: 'Alice', age: 30 }), 1),
+  HashMap.set(Data.struct({ name: 'Alice', age: 30 }), 2)
 )
 
 console.log(HashMap.size(map))
 // Output: 1
 
 // Retrieve the value associated with a key
-console.log(HashMap.get(map, Data.struct({ name: "Alice", age: 30 })))
+console.log(HashMap.get(map, Data.struct({ name: 'Alice', age: 30 })))
 /*
 Output:
 { _id: 'Option', _tag: 'Some', value: 2 }

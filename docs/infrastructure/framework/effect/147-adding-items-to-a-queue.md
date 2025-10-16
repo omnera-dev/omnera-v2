@@ -7,7 +7,7 @@ Use `Queue.offer` to add values to the queue.
 **Example** (Adding a Single Item)
 
 ```ts twoslash
-import { Effect, Queue } from "effect"
+import { Effect, Queue } from 'effect'
 
 const program = Effect.gen(function* () {
   const queue = yield* Queue.bounded<number>(100)
@@ -21,7 +21,7 @@ When using a back-pressured queue, `Queue.offer` suspends if the queue is full. 
 **Example** (Handling a Full Queue with `Effect.fork`)
 
 ```ts twoslash
-import { Effect, Queue, Fiber } from "effect"
+import { Effect, Queue, Fiber } from 'effect'
 
 const program = Effect.gen(function* () {
   const queue = yield* Queue.bounded<number>(1)
@@ -48,7 +48,7 @@ You can also add multiple items at once using `Queue.offerAll`.
 **Example** (Adding Multiple Items)
 
 ```ts twoslash
-import { Effect, Queue, Array } from "effect"
+import { Effect, Queue, Array } from 'effect'
 
 const program = Effect.gen(function* () {
   const queue = yield* Queue.bounded<number>(100)

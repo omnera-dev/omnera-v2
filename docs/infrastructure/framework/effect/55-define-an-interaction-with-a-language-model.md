@@ -5,17 +5,17 @@ First let's define a simple interaction with a large language model (LLM):
 **Example** (Using the `LanguageModel` Service to Generate a Dad Joke)
 
 ```ts twoslash
-import { LanguageModel } from "@effect/ai"
-import { Effect } from "effect"
+import { LanguageModel } from '@effect/ai'
+import { Effect } from 'effect'
 
 // Using `LanguageModel` will add it to your program's requirements
 //
 //          ┌─── Effect<GenerateTextResponse<{}>, AiError, LanguageModel>
 //          ▼
-const generateDadJoke = Effect.gen(function*() {
+const generateDadJoke = Effect.gen(function* () {
   // Use the `LanguageModel` to generate some text
   const response = yield* LanguageModel.generateText({
-    prompt: "Generate a dad joke"
+    prompt: 'Generate a dad joke',
   })
   // Log the generated text to the console
   console.log(response.text)

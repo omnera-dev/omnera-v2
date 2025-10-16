@@ -3,7 +3,7 @@
 To gather all the elements from a stream into a single `Chunk`, you can use the `Stream.runCollect` function.
 
 ```ts twoslash
-import { Stream, Effect } from "effect"
+import { Stream, Effect } from 'effect'
 
 const stream = Stream.make(1, 2, 3, 4, 5)
 

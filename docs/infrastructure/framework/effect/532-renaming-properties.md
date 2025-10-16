@@ -7,11 +7,11 @@ To rename a property directly during schema creation, you can utilize the `Schem
 **Example** (Renaming a Required Property)
 
 ```ts twoslash
-import { Schema } from "effect"
+import { Schema } from 'effect'
 
 const schema = Schema.Struct({
-  a: Schema.propertySignature(Schema.String).pipe(Schema.fromKey("c")),
-  b: Schema.Number
+  a: Schema.propertySignature(Schema.String).pipe(Schema.fromKey('c')),
+  b: Schema.Number,
 })
 
 //     ┌─── { readonly c: string; readonly b: number; }
@@ -22,18 +22,18 @@ type Encoded = typeof schema.Encoded
 //     ▼
 type Type = typeof schema.Type
 
-console.log(Schema.decodeUnknownSync(schema)({ c: "c", b: 1 }))
+console.log(Schema.decodeUnknownSync(schema)({ c: 'c', b: 1 }))
 // Output: { a: "c", b: 1 }
 ```
 
 **Example** (Renaming an Optional Property)
 
 ```ts twoslash
-import { Schema } from "effect"
+import { Schema } from 'effect'
 
 const schema = Schema.Struct({
-  a: Schema.optional(Schema.String).pipe(Schema.fromKey("c")),
-  b: Schema.Number
+  a: Schema.optional(Schema.String).pipe(Schema.fromKey('c')),
+  b: Schema.Number,
 })
 
 //     ┌─── { readonly b: number; readonly c?: string | undefined; }
@@ -44,7 +44,7 @@ type Encoded = typeof schema.Encoded
 //     ▼
 type Type = typeof schema.Type
 
-console.log(Schema.decodeUnknownSync(schema)({ c: "c", b: 1 }))
+console.log(Schema.decodeUnknownSync(schema)({ c: 'c', b: 1 }))
 // Output: { a: 'c', b: 1 }
 
 console.log(Schema.decodeUnknownSync(schema)({ b: 1 }))
@@ -60,11 +60,11 @@ For existing schemas, the `Schema.rename` API offers a way to systematically cha
 **Example** (Renaming Properties in a Struct Schema)
 
 ```ts twoslash
-import { Schema } from "effect"
+import { Schema } from 'effect'
 
 const Original = Schema.Struct({
   c: Schema.String,
-  b: Schema.Number
+  b: Schema.Number,
 })
 
 // Renaming the "c" property to "a"
@@ -75,25 +75,25 @@ const Original = Schema.Struct({
 //      |      readonly b: number;
 //      |    }>
 //      ▼
-const Renamed = Schema.rename(Original, { c: "a" })
+const Renamed = Schema.rename(Original, { c: 'a' })
 
-console.log(Schema.decodeUnknownSync(Renamed)({ c: "c", b: 1 }))
+console.log(Schema.decodeUnknownSync(Renamed)({ c: 'c', b: 1 }))
 // Output: { a: "c", b: 1 }
 ```
 
 **Example** (Renaming Properties in Union Schemas)
 
 ```ts twoslash
-import { Schema } from "effect"
+import { Schema } from 'effect'
 
 const Original = Schema.Union(
   Schema.Struct({
     c: Schema.String,
-    b: Schema.Number
+    b: Schema.Number,
   }),
   Schema.Struct({
     c: Schema.String,
-    d: Schema.Boolean
+    d: Schema.Boolean,
   })
 )
 
@@ -107,11 +107,11 @@ const Original = Schema.Union(
 //      |      readonly d: number;
 //      |    }>
 //      ▼
-const Renamed = Schema.rename(Original, { c: "a" })
+const Renamed = Schema.rename(Original, { c: 'a' })
 
-console.log(Schema.decodeUnknownSync(Renamed)({ c: "c", b: 1 }))
+console.log(Schema.decodeUnknownSync(Renamed)({ c: 'c', b: 1 }))
 // Output: { a: "c", b: 1 }
 
-console.log(Schema.decodeUnknownSync(Renamed)({ c: "c", d: false }))
+console.log(Schema.decodeUnknownSync(Renamed)({ c: 'c', d: false }))
 // Output: { a: 'c', d: false }
 ```

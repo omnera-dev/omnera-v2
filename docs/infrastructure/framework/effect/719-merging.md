@@ -9,15 +9,11 @@ The `Stream.merge` operation combines elements from two source streams into a si
 **Example** (Interleaving Two Streams with `Stream.merge`)
 
 ```ts twoslash
-import { Schedule, Stream, Effect } from "effect"
+import { Schedule, Stream, Effect } from 'effect'
 
 // Create two streams with different emission intervals
-const s1 = Stream.make(1, 2, 3).pipe(
-  Stream.schedule(Schedule.spaced("100 millis"))
-)
-const s2 = Stream.make(4, 5, 6).pipe(
-  Stream.schedule(Schedule.spaced("200 millis"))
-)
+const s1 = Stream.make(1, 2, 3).pipe(Stream.schedule(Schedule.spaced('100 millis')))
+const s2 = Stream.make(4, 5, 6).pipe(Stream.schedule(Schedule.spaced('200 millis')))
 
 // Merge s1 and s2 into a single stream that interleaves their values
 const merged = Stream.merge(s1, s2)
@@ -44,16 +40,12 @@ By default, `Stream.merge` waits for both streams to terminate before ending the
 **Example** (Using `haltStrategy: "left"` to Control Stream Termination)
 
 ```ts twoslash
-import { Stream, Schedule, Effect } from "effect"
+import { Stream, Schedule, Effect } from 'effect'
 
-const s1 = Stream.range(1, 5).pipe(
-  Stream.schedule(Schedule.spaced("100 millis"))
-)
-const s2 = Stream.repeatValue(0).pipe(
-  Stream.schedule(Schedule.spaced("200 millis"))
-)
+const s1 = Stream.range(1, 5).pipe(Stream.schedule(Schedule.spaced('100 millis')))
+const s2 = Stream.repeatValue(0).pipe(Stream.schedule(Schedule.spaced('200 millis')))
 
-const merged = Stream.merge(s1, s2, { haltStrategy: "left" })
+const merged = Stream.merge(s1, s2, { haltStrategy: 'left' })
 
 Effect.runPromise(Stream.runCollect(merged)).then(console.log)
 /*
@@ -75,20 +67,16 @@ In some cases, you may want to merge two streams while transforming their elemen
 **Example** (Merging and Transforming Two Streams)
 
 ```ts twoslash
-import { Schedule, Stream, Effect } from "effect"
+import { Schedule, Stream, Effect } from 'effect'
 
-const s1 = Stream.make("1", "2", "3").pipe(
-  Stream.schedule(Schedule.spaced("100 millis"))
-)
-const s2 = Stream.make(4.1, 5.3, 6.2).pipe(
-  Stream.schedule(Schedule.spaced("200 millis"))
-)
+const s1 = Stream.make('1', '2', '3').pipe(Stream.schedule(Schedule.spaced('100 millis')))
+const s2 = Stream.make(4.1, 5.3, 6.2).pipe(Stream.schedule(Schedule.spaced('200 millis')))
 
 const merged = Stream.mergeWith(s1, s2, {
   // Convert string elements from `s1` to integers
   onSelf: (s) => parseInt(s),
   // Round down decimal elements from `s2`
-  onOther: (n) => Math.floor(n)
+  onOther: (n) => Math.floor(n),
 })
 
 Effect.runPromise(Stream.runCollect(merged)).then(console.log)

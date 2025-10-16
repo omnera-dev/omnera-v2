@@ -10,12 +10,10 @@ When generating arbitrary data, it is important to understand how transformation
 **Example** (Filters and Transformations)
 
 ```ts twoslash
-import { Arbitrary, FastCheck, Schema } from "effect"
+import { Arbitrary, FastCheck, Schema } from 'effect'
 
 // Schema with filters before the transformation
-const schema1 = Schema.compose(Schema.NonEmptyString, Schema.Trim).pipe(
-  Schema.maxLength(500)
-)
+const schema1 = Schema.compose(Schema.NonEmptyString, Schema.Trim).pipe(Schema.maxLength(500))
 
 // May produce empty strings due to ignored NonEmpty filter
 console.log(FastCheck.sample(Arbitrary.make(schema1), 2))
@@ -25,10 +23,7 @@ Example Output:
 */
 
 // Schema with filters applied after transformations
-const schema2 = Schema.Trim.pipe(
-  Schema.nonEmptyString(),
-  Schema.maxLength(500)
-)
+const schema2 = Schema.Trim.pipe(Schema.nonEmptyString(), Schema.maxLength(500))
 
 // Adheres to all filters, avoiding empty strings
 console.log(FastCheck.sample(Arbitrary.make(schema2), 2))
@@ -58,7 +53,7 @@ This setup ensures that each stage of data processing is precise and well-define
 Avoid haphazard combinations of transformations and filters:
 
 ```ts twoslash
-import { Schema } from "effect"
+import { Schema } from 'effect'
 
 // Less optimal approach: Mixing transformations and filters
 const problematic = Schema.compose(Schema.Lowercase, Schema.Trim)
@@ -69,7 +64,7 @@ Prefer a structured approach by separating transformation steps from filter appl
 **Example** (Preferred Structured Approach)
 
 ```ts twoslash
-import { Schema } from "effect"
+import { Schema } from 'effect'
 
 // Recommended: Separate transformations and filters
 const improved = Schema.transform(
@@ -78,7 +73,7 @@ const improved = Schema.transform(
   {
     strict: true,
     decode: (s) => s.trim().toLowerCase(),
-    encode: (s) => s
+    encode: (s) => s,
   }
 )
 ```

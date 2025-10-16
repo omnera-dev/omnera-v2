@@ -28,11 +28,11 @@ By yielding an `Either`, we gain the ability to "pattern match" on this type to 
 **Example** (Using `Effect.either` to Handle Errors)
 
 ```ts twoslash
-import { Effect, Either, Random, Data } from "effect"
+import { Effect, Either, Random, Data } from 'effect'
 
-class HttpError extends Data.TaggedError("HttpError")<{}> {}
+class HttpError extends Data.TaggedError('HttpError')<{}> {}
 
-class ValidationError extends Data.TaggedError("ValidationError")<{}> {}
+class ValidationError extends Data.TaggedError('ValidationError')<{}> {}
 
 //      ┌─── Effect<string, HttpError | ValidationError, never>
 //      ▼
@@ -45,7 +45,7 @@ const program = Effect.gen(function* () {
   if (n2 < 0.5) {
     return yield* Effect.fail(new ValidationError())
   }
-  return "some result"
+  return 'some result'
 })
 
 //      ┌─── Effect<string, never, never>
@@ -76,11 +76,11 @@ We can make the code less verbose by using the `Either.match` function, which di
 **Example** (Simplifying with `Either.match`)
 
 ```ts twoslash collapse={3-19}
-import { Effect, Either, Random, Data } from "effect"
+import { Effect, Either, Random, Data } from 'effect'
 
-class HttpError extends Data.TaggedError("HttpError")<{}> {}
+class HttpError extends Data.TaggedError('HttpError')<{}> {}
 
-class ValidationError extends Data.TaggedError("ValidationError")<{}> {}
+class ValidationError extends Data.TaggedError('ValidationError')<{}> {}
 
 //      ┌─── Effect<string, HttpError | ValidationError, never>
 //      ▼
@@ -93,7 +93,7 @@ const program = Effect.gen(function* () {
   if (n2 < 0.5) {
     return yield* Effect.fail(new ValidationError())
   }
-  return "some result"
+  return 'some result'
 })
 
 //      ┌─── Effect<string, never, never>
@@ -104,7 +104,7 @@ const recovered = Effect.gen(function* () {
   const failureOrSuccess = yield* Effect.either(program)
   return Either.match(failureOrSuccess, {
     onLeft: (error) => `Recovering from ${error._tag}`,
-    onRight: (value) => value // Do nothing in case of success
+    onRight: (value) => value, // Do nothing in case of success
   })
 })
 ```
@@ -123,7 +123,7 @@ The resulting effect cannot fail directly, as the error type is set to `never`. 
 **Example** (Using `Effect.option` to Handle Errors)
 
 ```ts twoslash
-import { Effect } from "effect"
+import { Effect } from 'effect'
 
 const maybe1 = Effect.option(Effect.succeed(1))
 
@@ -137,7 +137,7 @@ Output:
 }
 */
 
-const maybe2 = Effect.option(Effect.fail("Uh oh!"))
+const maybe2 = Effect.option(Effect.fail('Uh oh!'))
 
 Effect.runPromiseExit(maybe2).then(console.log)
 /*
@@ -149,7 +149,7 @@ Output:
 }
 */
 
-const maybe3 = Effect.option(Effect.die("Boom!"))
+const maybe3 = Effect.option(Effect.die('Boom!'))
 
 Effect.runPromiseExit(maybe3).then(console.log)
 /*
@@ -180,11 +180,11 @@ from errors using the provided fallback logic.
 **Example** (Providing Recovery Logic for Recoverable Errors)
 
 ```ts twoslash
-import { Effect, Random, Data } from "effect"
+import { Effect, Random, Data } from 'effect'
 
-class HttpError extends Data.TaggedError("HttpError")<{}> {}
+class HttpError extends Data.TaggedError('HttpError')<{}> {}
 
-class ValidationError extends Data.TaggedError("ValidationError")<{}> {}
+class ValidationError extends Data.TaggedError('ValidationError')<{}> {}
 
 //      ┌─── Effect<string, HttpError | ValidationError, never>
 //      ▼
@@ -197,15 +197,13 @@ const program = Effect.gen(function* () {
   if (n2 < 0.5) {
     return yield* Effect.fail(new ValidationError())
   }
-  return "some result"
+  return 'some result'
 })
 
 //      ┌─── Effect<string, never, never>
 //      ▼
 const recovered = program.pipe(
-  Effect.catchAll((error) =>
-    Effect.succeed(`Recovering from ${error._tag}`)
-  )
+  Effect.catchAll((error) => Effect.succeed(`Recovering from ${error._tag}`))
 )
 ```
 
@@ -229,17 +227,17 @@ the failure.
 **Example** (Recovering from All Errors)
 
 ```ts twoslash
-import { Cause, Effect } from "effect"
+import { Cause, Effect } from 'effect'
 
 // Define an effect that may fail with a recoverable or unrecoverable error
-const program = Effect.fail("Something went wrong!")
+const program = Effect.fail('Something went wrong!')
 
 // Recover from all errors by examining the cause
 const recovered = program.pipe(
   Effect.catchAllCause((cause) =>
     Cause.isFailType(cause)
-      ? Effect.succeed("Recovered from a regular error")
-      : Effect.succeed("Recovered from a defect")
+      ? Effect.succeed('Recovered from a regular error')
+      : Effect.succeed('Recovered from a defect')
   )
 )
 

@@ -9,9 +9,9 @@ The `Stream.concat` operator is a straightforward method for joining two streams
 **Example** (Concatenating Two Streams Sequentially)
 
 ```ts twoslash
-import { Stream, Effect } from "effect"
+import { Stream, Effect } from 'effect'
 
-const stream = Stream.concat(Stream.make(1, 2, 3), Stream.make("a", "b"))
+const stream = Stream.concat(Stream.make(1, 2, 3), Stream.make('a', 'b'))
 
 Effect.runPromise(Stream.runCollect(stream)).then(console.log)
 /*
@@ -27,15 +27,13 @@ If you have multiple streams to concatenate, `Stream.concatAll` provides an effi
 **Example** (Concatenating Multiple Streams)
 
 ```ts twoslash
-import { Stream, Effect, Chunk } from "effect"
+import { Stream, Effect, Chunk } from 'effect'
 
 const s1 = Stream.make(1, 2, 3)
-const s2 = Stream.make("a", "b")
+const s2 = Stream.make('a', 'b')
 const s3 = Stream.make(true, false, false)
 
-const stream = Stream.concatAll<number | string | boolean, never, never>(
-  Chunk.make(s1, s2, s3)
-)
+const stream = Stream.concatAll<number | string | boolean, never, never>(Chunk.make(s1, s2, s3))
 
 Effect.runPromise(Stream.runCollect(stream)).then(console.log)
 /*
@@ -60,7 +58,7 @@ This operator then concatenates all the resulting streams, effectively flattenin
 **Example** (Generating Repeated Elements with `Stream.flatMap`)
 
 ```ts twoslash
-import { Stream, Effect } from "effect"
+import { Stream, Effect } from 'effect'
 
 // Create a stream where each element is repeated 4 times
 const stream = Stream.make(1, 2, 3).pipe(
@@ -90,28 +88,22 @@ result and want to conserve resources by cancelling outdated operations.
 **Example** (Using the `switch` option)
 
 ```ts twoslash
-import { Stream, Effect, Console } from "effect"
+import { Stream, Effect, Console } from 'effect'
 
 // Helper function to create a stream with logging
 const createStreamWithLogging = (n: number) =>
   Stream.fromEffect(
     Effect.gen(function* () {
       console.log(`Starting stream for value: ${n}`)
-      const result = yield* Effect.delay(Effect.succeed(n), "500 millis")
+      const result = yield* Effect.delay(Effect.succeed(n), '500 millis')
       console.log(`Completed stream for value: ${result}`)
       return result
-    }).pipe(
-      Effect.onInterrupt(() =>
-        Console.log(`Interrupted stream for value: ${n}`)
-      )
-    )
+    }).pipe(Effect.onInterrupt(() => Console.log(`Interrupted stream for value: ${n}`)))
   )
 
 // Without switch (default behavior):
 // all streams run to completion
-const stream1 = Stream.fromIterable([1, 2, 3]).pipe(
-  Stream.flatMap(createStreamWithLogging)
-)
+const stream1 = Stream.fromIterable([1, 2, 3]).pipe(Stream.flatMap(createStreamWithLogging))
 
 // With switch behavior:
 // only the last stream completes, previous streams
@@ -123,11 +115,11 @@ const stream2 = Stream.fromIterable([1, 2, 3]).pipe(
 // Run examples sequentially to see the difference
 Effect.runPromise(
   Effect.gen(function* () {
-    console.log("=== Without switch (all streams complete) ===")
+    console.log('=== Without switch (all streams complete) ===')
     const result1 = yield* Stream.runCollect(stream1)
     console.log(result1)
 
-    console.log("\n=== With switch (only last stream completes) ===")
+    console.log('\n=== With switch (only last stream completes) ===')
     const result2 = yield* Stream.runCollect(stream2)
     console.log(result2)
   })

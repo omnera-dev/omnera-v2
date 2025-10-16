@@ -5,18 +5,17 @@ You can customize how arbitrary data is generated using the `arbitrary` annotati
 **Example** (Custom Arbitrary Generator)
 
 ```ts twoslash
-import { Arbitrary, FastCheck, Schema } from "effect"
+import { Arbitrary, FastCheck, Schema } from 'effect'
 
 const Name = Schema.NonEmptyString.annotations({
-  arbitrary: () => (fc) =>
-    fc.constantFrom("Alice Johnson", "Dante Howell", "Marta Reyes")
+  arbitrary: () => (fc) => fc.constantFrom('Alice Johnson', 'Dante Howell', 'Marta Reyes'),
 })
 
 const Age = Schema.Int.pipe(Schema.between(1, 80))
 
 const Person = Schema.Struct({
   name: Name,
-  age: Age
+  age: Age,
 })
 
 const arb = Arbitrary.make(Person)
@@ -39,22 +38,22 @@ you can combine them with `fast-check` to generate realistic data for testing pu
 **Example** (Integrating with Faker)
 
 ```ts twoslash
-import { Arbitrary, FastCheck, Schema } from "effect"
-import { faker } from "@faker-js/faker"
+import { Arbitrary, FastCheck, Schema } from 'effect'
+import { faker } from '@faker-js/faker'
 
 const Name = Schema.NonEmptyString.annotations({
   arbitrary: () => (fc) =>
     fc.constant(null).map(() => {
       // Each time the arbitrary is sampled, faker generates a new name
       return faker.person.fullName()
-    })
+    }),
 })
 
 const Age = Schema.Int.pipe(Schema.between(1, 80))
 
 const Person = Schema.Struct({
   name: Name,
-  age: Age
+  age: Age,
 })
 
 const arb = Arbitrary.make(Person)

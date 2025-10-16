@@ -7,23 +7,23 @@ By default, `DEBUG` messages **are not displayed**. To enable `DEBUG` logs, you 
 **Example** (Enabling Debug Logs)
 
 ```ts twoslash
-import { Effect, Logger, LogLevel } from "effect"
+import { Effect, Logger, LogLevel } from 'effect'
 
 const task1 = Effect.gen(function* () {
-  yield* Effect.sleep("2 seconds")
-  yield* Effect.logDebug("task1 done") // Log a debug message
+  yield* Effect.sleep('2 seconds')
+  yield* Effect.logDebug('task1 done') // Log a debug message
 }).pipe(Logger.withMinimumLogLevel(LogLevel.Debug)) // Enable DEBUG level
 
 const task2 = Effect.gen(function* () {
-  yield* Effect.sleep("1 second")
-  yield* Effect.logDebug("task2 done") // This message won't be logged
+  yield* Effect.sleep('1 second')
+  yield* Effect.logDebug('task2 done') // This message won't be logged
 })
 
 const program = Effect.gen(function* () {
-  yield* Effect.log("start")
+  yield* Effect.log('start')
   yield* task1
   yield* task2
-  yield* Effect.log("done")
+  yield* Effect.log('done')
 })
 
 Effect.runFork(program)
@@ -48,13 +48,13 @@ The `INFO` log level is displayed by default. This level is typically used for g
 **Example** (Logging at the Info Level)
 
 ```ts twoslash
-import { Effect } from "effect"
+import { Effect } from 'effect'
 
 const program = Effect.gen(function* () {
-  yield* Effect.logInfo("start")
-  yield* Effect.sleep("2 seconds")
-  yield* Effect.sleep("1 second")
-  yield* Effect.logInfo("done")
+  yield* Effect.logInfo('start')
+  yield* Effect.sleep('2 seconds')
+  yield* Effect.sleep('1 second')
+  yield* Effect.logInfo('done')
 })
 
 Effect.runFork(program)
@@ -72,9 +72,9 @@ The `WARN` log level is displayed by default. This level is intended for potenti
 **Example** (Logging at the Warning Level)
 
 ```ts twoslash
-import { Effect, Either } from "effect"
+import { Effect, Either } from 'effect'
 
-const task = Effect.fail("Oh uh!").pipe(Effect.as(2))
+const task = Effect.fail('Oh uh!').pipe(Effect.as(2))
 
 const program = Effect.gen(function* () {
   const failureOrSuccess = yield* Effect.either(task)
@@ -100,9 +100,9 @@ The `ERROR` log level is displayed by default. These messages represent issues t
 **Example** (Logging at the Error Level)
 
 ```ts twoslash
-import { Effect, Either } from "effect"
+import { Effect, Either } from 'effect'
 
-const task = Effect.fail("Oh uh!").pipe(Effect.as(2))
+const task = Effect.fail('Oh uh!').pipe(Effect.as(2))
 
 const program = Effect.gen(function* () {
   const failureOrSuccess = yield* Effect.either(task)
@@ -128,9 +128,9 @@ The `FATAL` log level is displayed by default. This log level is typically reser
 **Example** (Logging at the Fatal Level)
 
 ```ts twoslash
-import { Effect, Either } from "effect"
+import { Effect, Either } from 'effect'
 
-const task = Effect.fail("Oh uh!").pipe(Effect.as(2))
+const task = Effect.fail('Oh uh!').pipe(Effect.as(2))
 
 const program = Effect.gen(function* () {
   const failureOrSuccess = yield* Effect.either(task)

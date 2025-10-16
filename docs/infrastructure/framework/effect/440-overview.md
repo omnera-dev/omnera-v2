@@ -1,10 +1,10 @@
 ## Overview
 
 import {
-  Aside,
-  Tabs,
-  TabItem,
-  Badge
+Aside,
+Tabs,
+TabItem,
+Badge
 } from "@astrojs/starlight/components"
 
 `@effect/platform` is a library for building platform-independent abstractions in environments such as Node.js, Deno, Bun, and browsers.

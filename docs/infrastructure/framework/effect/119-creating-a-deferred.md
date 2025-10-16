@@ -5,7 +5,7 @@ A deferred can be created using the `Deferred.make` constructor. This returns an
 **Example** (Creating a Deferred)
 
 ```ts twoslash
-import { Deferred } from "effect"
+import { Deferred } from 'effect'
 
 //      ┌─── Effect<Deferred<string, Error>>
 //      ▼

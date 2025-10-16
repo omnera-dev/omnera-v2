@@ -5,7 +5,7 @@ The `Stream.filter` operation allows you to pass through only elements that meet
 **Example** (Filtering Even Numbers)
 
 ```ts twoslash
-import { Stream, Effect } from "effect"
+import { Stream, Effect } from 'effect'
 
 const stream = Stream.range(1, 11).pipe(Stream.filter((n) => n % 2 === 0))
 

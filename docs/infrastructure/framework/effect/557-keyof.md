@@ -5,11 +5,11 @@ The `Schema.keyof` operation creates a schema that represents the keys of a give
 **Example** (Extracting Keys from an Object Schema)
 
 ```ts twoslash
-import { Schema } from "effect"
+import { Schema } from 'effect'
 
 const schema = Schema.Struct({
   a: Schema.String,
-  b: Schema.Number
+  b: Schema.Number,
 })
 
 const keys = Schema.keyof(schema)

@@ -71,11 +71,7 @@ The arguments for toSSG are specified in ToSSGInterface.
 
 ```ts
 export interface ToSSGInterface {
-  (
-    app: Hono,
-    fsModule: FileSystemModule,
-    options?: ToSSGOptions
-  ): Promise<ToSSGResult>
+  (app: Hono, fsModule: FileSystemModule, options?: ToSSGOptions): Promise<ToSSGResult>
 }
 ```
 
@@ -85,10 +81,7 @@ export interface ToSSGInterface {
 ```ts
 export interface FileSystemModule {
   writeFile(path: string, data: string | Uint8Array): Promise<void>
-  mkdir(
-    path: string,
-    options: { recursive: boolean }
-  ): Promise<void | string>
+  mkdir(path: string, options: { recursive: boolean }): Promise<void | string>
 }
 ```
 
@@ -238,9 +231,7 @@ Plugins can use the following hooks to customize the `toSSG` process:
 ```ts
 export type BeforeRequestHook = (req: Request) => Request | false
 export type AfterResponseHook = (res: Response) => Response | false
-export type AfterGenerateHook = (
-  result: ToSSGResult
-) => void | Promise<void>
+export type AfterGenerateHook = (result: ToSSGResult) => void | Promise<void>
 ```
 
 - **BeforeRequestHook**: Called before processing each request. Return `false` to skip the route.
@@ -313,9 +304,7 @@ export const sitemapPlugin = (baseURL: string): SSGPlugin => {
     afterGenerateHook: (result, fsModule, options) => {
       const outputDir = options?.dir ?? DEFAULT_OUTPUT_DIR
       const filePath = path.join(outputDir, 'sitemap.xml')
-      const urls = result.files.map((file) =>
-        new URL(file, baseURL).toString()
-      )
+      const urls = result.files.map((file) => new URL(file, baseURL).toString())
       const siteMapText = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 ${urls.map((url) => `<url><loc>${url}</loc></url>`).join('\n')}
@@ -342,4 +331,3 @@ toSSG(app, fs, {
   ],
 })
 ```
-

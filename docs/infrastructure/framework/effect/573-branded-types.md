@@ -5,12 +5,9 @@ Branded schemas add metadata to a value to give it a more specific type, while s
 **Example** (Creating Branded Values)
 
 ```ts twoslash
-import { Schema } from "effect"
+import { Schema } from 'effect'
 
-const BrandedNumberSchema = Schema.Number.pipe(
-  Schema.between(1, 10),
-  Schema.brand("MyNumber")
-)
+const BrandedNumberSchema = Schema.Number.pipe(Schema.between(1, 10), Schema.brand('MyNumber'))
 
 // Successful creation
 const n = BrandedNumberSchema.make(5)

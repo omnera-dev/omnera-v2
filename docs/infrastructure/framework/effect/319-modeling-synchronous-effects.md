@@ -28,7 +28,7 @@ This feature ensures that even unexpected failures in your application are not l
 In the example below, `Effect.sync` is used to defer the side-effect of writing to the console.
 
 ```ts twoslash
-import { Effect } from "effect"
+import { Effect } from 'effect'
 
 const log = (message: string) =>
   Effect.sync(() => {
@@ -37,7 +37,7 @@ const log = (message: string) =>
 
 //      ┌─── Effect<void, never, never>
 //      ▼
-const program = log("Hello, World!")
+const program = log('Hello, World!')
 ```
 
 The side effect (logging to the console) encapsulated within `program` won't occur until the effect is explicitly run (see the [Running Effects](/docs/getting-started/running-effects/) section for more details). This allows you to define side effects at one point in your code and control when they are activated, improving manageability and predictability of side effects in larger applications.
@@ -54,7 +54,7 @@ This constructor is designed to handle operations that could throw exceptions by
 Suppose you have a function that attempts to parse a JSON string. This operation can fail and throw an error if the input string is not properly formatted as JSON:
 
 ```ts twoslash
-import { Effect } from "effect"
+import { Effect } from 'effect'
 
 const parse = (input: string) =>
   // This might throw an error if input is not valid JSON
@@ -62,7 +62,7 @@ const parse = (input: string) =>
 
 //      ┌─── Effect<any, UnknownException, never>
 //      ▼
-const program = parse("")
+const program = parse('')
 ```
 
 In this example:
@@ -77,19 +77,19 @@ You might want to transform the caught exception into a more specific error or p
 **Example** (Custom Error Handling)
 
 ```ts twoslash {8}
-import { Effect } from "effect"
+import { Effect } from 'effect'
 
 const parse = (input: string) =>
   Effect.try({
     // JSON.parse may throw for bad input
     try: () => JSON.parse(input),
     // remap the error
-    catch: (unknown) => new Error(`something went wrong ${unknown}`)
+    catch: (unknown) => new Error(`something went wrong ${unknown}`),
   })
 
 //      ┌─── Effect<any, Error, never>
 //      ▼
-const program = parse("")
+const program = parse('')
 ```
 
 You can think of this as a similar pattern to the traditional try-catch block in JavaScript:

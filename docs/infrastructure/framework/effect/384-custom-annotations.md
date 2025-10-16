@@ -10,14 +10,14 @@ You can apply a single annotation as a key/value pair to all log entries within 
 **Example** (Single Key/Value Annotation)
 
 ```ts twoslash
-import { Effect } from "effect"
+import { Effect } from 'effect'
 
 const program = Effect.gen(function* () {
-  yield* Effect.log("message1")
-  yield* Effect.log("message2")
+  yield* Effect.log('message1')
+  yield* Effect.log('message2')
 }).pipe(
   // Annotation as key/value pair
-  Effect.annotateLogs("key", "value")
+  Effect.annotateLogs('key', 'value')
 )
 
 Effect.runFork(program)
@@ -45,21 +45,21 @@ Annotations propagate to all logs generated within nested or downstream effects.
 In this example, the annotation `key=value` is included in all logs, even those from the nested `anotherProgram` effect.
 
 ```ts twoslash
-import { Effect } from "effect"
+import { Effect } from 'effect'
 
 // Define a child program that logs an error
 const anotherProgram = Effect.gen(function* () {
-  yield* Effect.logError("error1")
+  yield* Effect.logError('error1')
 })
 
 // Define the main program
 const program = Effect.gen(function* () {
-  yield* Effect.log("message1")
-  yield* Effect.log("message2")
+  yield* Effect.log('message1')
+  yield* Effect.log('message2')
   yield* anotherProgram // Call the nested program
 }).pipe(
   // Attach an annotation to all logs in the scope
-  Effect.annotateLogs("key", "value")
+  Effect.annotateLogs('key', 'value')
 )
 
 Effect.runFork(program)
@@ -78,14 +78,14 @@ You can also apply multiple annotations at once by passing an object with key/va
 **Example** (Multiple Annotations)
 
 ```ts twoslash
-import { Effect } from "effect"
+import { Effect } from 'effect'
 
 const program = Effect.gen(function* () {
-  yield* Effect.log("message1")
-  yield* Effect.log("message2")
+  yield* Effect.log('message1')
+  yield* Effect.log('message2')
 }).pipe(
   // Add multiple annotations
-  Effect.annotateLogs({ key1: "value1", key2: "value2" })
+  Effect.annotateLogs({ key1: 'value1', key2: 'value2' })
 )
 
 Effect.runFork(program)
@@ -105,17 +105,17 @@ If you want to limit the scope of your annotations so that they only apply to ce
 **Example** (Scoped Annotations)
 
 ```ts twoslash
-import { Effect } from "effect"
+import { Effect } from 'effect'
 
 const program = Effect.gen(function* () {
-  yield* Effect.log("no annotations") // No annotations
-  yield* Effect.annotateLogsScoped({ key: "value" }) // Scoped annotation
-  yield* Effect.log("message1") // Annotation applied
-  yield* Effect.log("message2") // Annotation applied
+  yield* Effect.log('no annotations') // No annotations
+  yield* Effect.annotateLogsScoped({ key: 'value' }) // Scoped annotation
+  yield* Effect.log('message1') // Annotation applied
+  yield* Effect.log('message2') // Annotation applied
 }).pipe(
   Effect.scoped,
   // Outside scope, no annotations
-  Effect.andThen(Effect.log("no annotations again"))
+  Effect.andThen(Effect.log('no annotations again'))
 )
 
 Effect.runFork(program)

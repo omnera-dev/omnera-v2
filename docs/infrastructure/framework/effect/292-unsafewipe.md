@@ -5,9 +5,9 @@ The `Redacted.unsafeWipe` function erases the underlying value of a `Redacted` i
 **Example** (Wiping Sensitive Data from Memory)
 
 ```ts twoslash
-import { Redacted } from "effect"
+import { Redacted } from 'effect'
 
-const API_KEY = Redacted.make("1234567890")
+const API_KEY = Redacted.make('1234567890')
 
 console.log(Redacted.value(API_KEY))
 // Output: "1234567890"

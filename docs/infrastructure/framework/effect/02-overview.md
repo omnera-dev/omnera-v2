@@ -9,31 +9,31 @@ In typical application development, when interacting with external APIs, databas
 Here's a basic model that outlines the structure of our data and possible errors:
 
 ```ts twoslash
-import { Data } from "effect"
+import { Data } from 'effect'
 
 // ------------------------------
 // Model
 // ------------------------------
 
 interface User {
-  readonly _tag: "User"
+  readonly _tag: 'User'
   readonly id: number
   readonly name: string
   readonly email: string
 }
 
-class GetUserError extends Data.TaggedError("GetUserError")<{}> {}
+class GetUserError extends Data.TaggedError('GetUserError')<{}> {}
 
 interface Todo {
-  readonly _tag: "Todo"
+  readonly _tag: 'Todo'
   readonly id: number
   readonly message: string
   readonly ownerId: number
 }
 
-class GetTodosError extends Data.TaggedError("GetTodosError")<{}> {}
+class GetTodosError extends Data.TaggedError('GetTodosError')<{}> {}
 
-class SendEmailError extends Data.TaggedError("SendEmailError")<{}> {}
+class SendEmailError extends Data.TaggedError('SendEmailError')<{}> {}
 ```
 
 <Aside type="tip" title="Use Precise Types and Detailed Errors">
@@ -48,31 +48,31 @@ class SendEmailError extends Data.TaggedError("SendEmailError")<{}> {}
 Let's define functions that interact with an external API, handling common operations such as fetching todos, retrieving user details, and sending emails.
 
 ```ts twoslash collapse={7-25}
-import { Effect, Data } from "effect"
+import { Effect, Data } from 'effect'
 
 // ------------------------------
 // Model
 // ------------------------------
 
 interface User {
-  readonly _tag: "User"
+  readonly _tag: 'User'
   readonly id: number
   readonly name: string
   readonly email: string
 }
 
-class GetUserError extends Data.TaggedError("GetUserError")<{}> {}
+class GetUserError extends Data.TaggedError('GetUserError')<{}> {}
 
 interface Todo {
-  readonly _tag: "Todo"
+  readonly _tag: 'Todo'
   readonly id: number
   readonly message: string
   readonly ownerId: number
 }
 
-class GetTodosError extends Data.TaggedError("GetTodosError")<{}> {}
+class GetTodosError extends Data.TaggedError('GetTodosError')<{}> {}
 
-class SendEmailError extends Data.TaggedError("SendEmailError")<{}> {}
+class SendEmailError extends Data.TaggedError('SendEmailError')<{}> {}
 
 // ------------------------------
 // API
@@ -81,10 +81,8 @@ class SendEmailError extends Data.TaggedError("SendEmailError")<{}> {}
 // Fetches a list of todos from an external API
 const getTodos = Effect.tryPromise({
   try: () =>
-    fetch("https://api.example.demo/todos").then(
-      (res) => res.json() as Promise<Array<Todo>>
-    ),
-  catch: () => new GetTodosError()
+    fetch('https://api.example.demo/todos').then((res) => res.json() as Promise<Array<Todo>>),
+  catch: () => new GetTodosError(),
 })
 
 // Retrieves a user by their ID from an external API
@@ -94,35 +92,31 @@ const getUserById = (id: number) =>
       fetch(`https://api.example.demo/getUserById?id=${id}`).then(
         (res) => res.json() as Promise<User>
       ),
-    catch: () => new GetUserError()
+    catch: () => new GetUserError(),
   })
 
 // Sends an email via an external API
 const sendEmail = (address: string, text: string) =>
   Effect.tryPromise({
     try: () =>
-      fetch("https://api.example.demo/sendEmail", {
-        method: "POST",
+      fetch('https://api.example.demo/sendEmail', {
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json"
+          'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ address, text })
+        body: JSON.stringify({ address, text }),
       }).then((res) => res.json() as Promise<void>),
-    catch: () => new SendEmailError()
+    catch: () => new SendEmailError(),
   })
 
 // Sends an email to a user by fetching their details first
 const sendEmailToUser = (id: number, message: string) =>
-  getUserById(id).pipe(
-    Effect.andThen((user) => sendEmail(user.email, message))
-  )
+  getUserById(id).pipe(Effect.andThen((user) => sendEmail(user.email, message)))
 
 // Notifies the owner of a todo by sending them an email
 const notifyOwner = (todo: Todo) =>
   getUserById(todo.ownerId).pipe(
-    Effect.andThen((user) =>
-      sendEmailToUser(user.id, `hey ${user.name} you got a todo!`)
-    )
+    Effect.andThen((user) => sendEmailToUser(user.id, `hey ${user.name} you got a todo!`))
   )
 ```
 
@@ -140,31 +134,31 @@ While this approach is straightforward and readable, it may not be the most effi
 While these functions are clear and easy to understand, their use may not be the most efficient. For example, notifying todo owners involves repeated API calls which can be optimized.
 
 ```ts twoslash collapse={7-25,31-76}
-import { Effect, Data } from "effect"
+import { Effect, Data } from 'effect'
 
 // ------------------------------
 // Model
 // ------------------------------
 
 interface User {
-  readonly _tag: "User"
+  readonly _tag: 'User'
   readonly id: number
   readonly name: string
   readonly email: string
 }
 
-class GetUserError extends Data.TaggedError("GetUserError")<{}> {}
+class GetUserError extends Data.TaggedError('GetUserError')<{}> {}
 
 interface Todo {
-  readonly _tag: "Todo"
+  readonly _tag: 'Todo'
   readonly id: number
   readonly message: string
   readonly ownerId: number
 }
 
-class GetTodosError extends Data.TaggedError("GetTodosError")<{}> {}
+class GetTodosError extends Data.TaggedError('GetTodosError')<{}> {}
 
-class SendEmailError extends Data.TaggedError("SendEmailError")<{}> {}
+class SendEmailError extends Data.TaggedError('SendEmailError')<{}> {}
 
 // ------------------------------
 // API
@@ -173,10 +167,8 @@ class SendEmailError extends Data.TaggedError("SendEmailError")<{}> {}
 // Fetches a list of todos from an external API
 const getTodos = Effect.tryPromise({
   try: () =>
-    fetch("https://api.example.demo/todos").then(
-      (res) => res.json() as Promise<Array<Todo>>
-    ),
-  catch: () => new GetTodosError()
+    fetch('https://api.example.demo/todos').then((res) => res.json() as Promise<Array<Todo>>),
+  catch: () => new GetTodosError(),
 })
 
 // Retrieves a user by their ID from an external API
@@ -186,42 +178,38 @@ const getUserById = (id: number) =>
       fetch(`https://api.example.demo/getUserById?id=${id}`).then(
         (res) => res.json() as Promise<User>
       ),
-    catch: () => new GetUserError()
+    catch: () => new GetUserError(),
   })
 
 // Sends an email via an external API
 const sendEmail = (address: string, text: string) =>
   Effect.tryPromise({
     try: () =>
-      fetch("https://api.example.demo/sendEmail", {
-        method: "POST",
+      fetch('https://api.example.demo/sendEmail', {
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json"
+          'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ address, text })
+        body: JSON.stringify({ address, text }),
       }).then((res) => res.json() as Promise<void>),
-    catch: () => new SendEmailError()
+    catch: () => new SendEmailError(),
   })
 
 // Sends an email to a user by fetching their details first
 const sendEmailToUser = (id: number, message: string) =>
-  getUserById(id).pipe(
-    Effect.andThen((user) => sendEmail(user.email, message))
-  )
+  getUserById(id).pipe(Effect.andThen((user) => sendEmail(user.email, message)))
 
 // Notifies the owner of a todo by sending them an email
 const notifyOwner = (todo: Todo) =>
   getUserById(todo.ownerId).pipe(
-    Effect.andThen((user) =>
-      sendEmailToUser(user.id, `hey ${user.name} you got a todo!`)
-    )
+    Effect.andThen((user) => sendEmailToUser(user.id, `hey ${user.name} you got a todo!`))
   )
 
 // Orchestrates operations on todos, notifying their owners
 const program = Effect.gen(function* () {
   const todos = yield* getTodos
   yield* Effect.forEach(todos, (todo) => notifyOwner(todo), {
-    concurrency: "unbounded"
+    concurrency: 'unbounded',
   })
 })
 ```

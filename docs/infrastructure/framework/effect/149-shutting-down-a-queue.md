@@ -7,7 +7,7 @@ The `Queue.shutdown` operation allows you to interrupt all fibers that are curre
 **Example** (Interrupting Fibers on Queue Shutdown)
 
 ```ts twoslash
-import { Effect, Queue, Fiber } from "effect"
+import { Effect, Queue, Fiber } from 'effect'
 
 const program = Effect.gen(function* () {
   const queue = yield* Queue.bounded<number>(3)
@@ -27,15 +27,13 @@ The `Queue.awaitShutdown` operation can be used to run an effect when the queue 
 **Example** (Waiting for Queue Shutdown)
 
 ```ts twoslash
-import { Effect, Queue, Fiber, Console } from "effect"
+import { Effect, Queue, Fiber, Console } from 'effect'
 
 const program = Effect.gen(function* () {
   const queue = yield* Queue.bounded<number>(3)
   // Forks a fiber to await queue shutdown and log a message
   const fiber = yield* Effect.fork(
-    Queue.awaitShutdown(queue).pipe(
-      Effect.andThen(Console.log("shutting down"))
-    )
+    Queue.awaitShutdown(queue).pipe(Effect.andThen(Console.log('shutting down')))
   )
   // Shuts down the queue, triggering the await in the fiber
   yield* Queue.shutdown(queue)

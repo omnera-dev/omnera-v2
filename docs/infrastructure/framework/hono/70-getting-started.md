@@ -167,9 +167,7 @@ We can easily handle POST, PUT, and DELETE not only GET.
 
 ```ts
 app.post('/posts', (c) => c.text('Created!', 201))
-app.delete('/posts/:id', (c) =>
-  c.text(`${c.req.param('id')} is deleted!`)
-)
+app.delete('/posts/:id', (c) => c.text(`${c.req.param('id')} is deleted!`))
 ```
 
 ## Return HTML
@@ -250,4 +248,3 @@ app.get(
 Most code will work on any platform, but there are guides for each.
 For instance, how to set up projects or how to deploy.
 Please see the page for the exact platform you want to use to create your application!
-

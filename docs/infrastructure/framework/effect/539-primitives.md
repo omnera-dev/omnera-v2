@@ -19,7 +19,7 @@ The Schema module provides built-in schemas for common primitive types.
 **Example** (Using a Primitive Schema)
 
 ```ts twoslash
-import { Schema } from "effect"
+import { Schema } from 'effect'
 
 const schema = Schema.String
 

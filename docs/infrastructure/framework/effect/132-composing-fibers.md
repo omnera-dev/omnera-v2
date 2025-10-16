@@ -7,12 +7,12 @@ The `Fiber.zip` and `Fiber.zipWith` functions allow you to combine two fibers in
 In this example, both fibers run concurrently, and the results are combined into a tuple.
 
 ```ts twoslash
-import { Effect, Fiber } from "effect"
+import { Effect, Fiber } from 'effect'
 
 const program = Effect.gen(function* () {
   // Fork two fibers that each produce a string
-  const fiber1 = yield* Effect.fork(Effect.succeed("Hi!"))
-  const fiber2 = yield* Effect.fork(Effect.succeed("Bye!"))
+  const fiber1 = yield* Effect.fork(Effect.succeed('Hi!'))
+  const fiber2 = yield* Effect.fork(Effect.succeed('Bye!'))
 
   // Combine the two fibers using Fiber.zip
   const fiber = Fiber.zip(fiber1, fiber2)
@@ -34,13 +34,13 @@ Another way to compose fibers is by using `Fiber.orElse`. This function allows y
 **Example** (Providing a Fallback Fiber with `Fiber.orElse`)
 
 ```ts twoslash
-import { Effect, Fiber } from "effect"
+import { Effect, Fiber } from 'effect'
 
 const program = Effect.gen(function* () {
   // Fork a fiber that will fail
-  const fiber1 = yield* Effect.fork(Effect.fail("Uh oh!"))
+  const fiber1 = yield* Effect.fork(Effect.fail('Uh oh!'))
   // Fork another fiber that will succeed
-  const fiber2 = yield* Effect.fork(Effect.succeed("Hurray!"))
+  const fiber2 = yield* Effect.fork(Effect.succeed('Hurray!'))
   // If fiber1 fails, fiber2 will be used as a fallback
   const fiber = Fiber.orElse(fiber1, fiber2)
   const message = yield* Fiber.join(fiber)

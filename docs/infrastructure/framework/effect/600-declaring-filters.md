@@ -5,14 +5,14 @@ Filters are declared using the `Schema.filter` function. This function requires 
 **Example** (Defining a Minimum String Length Filter)
 
 ```ts twoslash
-import { Schema } from "effect"
+import { Schema } from 'effect'
 
 // Define a string schema with a filter to ensure the string
 // is at least 10 characters long
 const LongString = Schema.String.pipe(
   Schema.filter(
     // Custom error message for strings shorter than 10 characters
-    (s) => s.length >= 10 || "a string at least 10 characters long"
+    (s) => s.length >= 10 || 'a string at least 10 characters long'
   )
 )
 
@@ -20,7 +20,7 @@ const LongString = Schema.String.pipe(
 //     ▼
 type Type = typeof LongString.Type
 
-console.log(Schema.decodeUnknownSync(LongString)("a"))
+console.log(Schema.decodeUnknownSync(LongString)('a'))
 /*
 throws:
 ParseError: { string | filter }

@@ -5,7 +5,7 @@
 Here is a list of useful string filters provided by the Schema module:
 
 ```ts twoslash
-import { Schema } from "effect"
+import { Schema } from 'effect'
 
 // Specifies maximum length of a string
 Schema.String.pipe(Schema.maxLength(5))
@@ -28,13 +28,13 @@ Schema.String.pipe(Schema.length({ min: 2, max: 4 }))
 Schema.String.pipe(Schema.pattern(/^[a-z]+$/))
 
 // Ensures a string starts with a specific substring
-Schema.String.pipe(Schema.startsWith("prefix"))
+Schema.String.pipe(Schema.startsWith('prefix'))
 
 // Ensures a string ends with a specific substring
-Schema.String.pipe(Schema.endsWith("suffix"))
+Schema.String.pipe(Schema.endsWith('suffix'))
 
 // Checks if a string includes a specific substring
-Schema.String.pipe(Schema.includes("substring"))
+Schema.String.pipe(Schema.includes('substring'))
 
 // Validates that a string has no leading or trailing whitespaces
 Schema.String.pipe(Schema.trimmed())
@@ -63,7 +63,7 @@ Schema.String.pipe(Schema.uncapitalized())
 Here is a list of useful number filters provided by the Schema module:
 
 ```ts twoslash
-import { Schema } from "effect"
+import { Schema } from 'effect'
 
 // Specifies a number greater than 5
 Schema.Number.pipe(Schema.greaterThan(5))
@@ -131,7 +131,7 @@ Schema.Uint8
 Here is a list of useful array filters provided by the Schema module:
 
 ```ts twoslash
-import { Schema } from "effect"
+import { Schema } from 'effect'
 
 // Specifies the maximum number of items in the array
 Schema.Array(Schema.Number).pipe(Schema.maxItems(2))
@@ -146,7 +146,7 @@ Schema.Array(Schema.Number).pipe(Schema.itemsCount(2))
 ### Date Filters
 
 ```ts twoslash
-import { Schema } from "effect"
+import { Schema } from 'effect'
 
 // Specifies a valid date (rejects values like `new Date("Invalid Date")`)
 Schema.DateFromSelf.pipe(Schema.validDate())
@@ -174,7 +174,7 @@ Schema.Date.pipe(Schema.betweenDate(new Date(0), new Date()))
 Here is a list of useful `BigInt` filters provided by the Schema module:
 
 ```ts twoslash
-import { Schema } from "effect"
+import { Schema } from 'effect'
 
 // Specifies a BigInt greater than 5
 Schema.BigInt.pipe(Schema.greaterThanBigInt(5n))
@@ -217,33 +217,22 @@ Schema.NonPositiveBigIntFromSelf
 Here is a list of useful `BigDecimal` filters provided by the Schema module:
 
 ```ts twoslash
-import { Schema, BigDecimal } from "effect"
+import { Schema, BigDecimal } from 'effect'
 
 // Specifies a BigDecimal greater than 5
-Schema.BigDecimal.pipe(
-  Schema.greaterThanBigDecimal(BigDecimal.unsafeFromNumber(5))
-)
+Schema.BigDecimal.pipe(Schema.greaterThanBigDecimal(BigDecimal.unsafeFromNumber(5)))
 
 // Specifies a BigDecimal greater than or equal to 5
-Schema.BigDecimal.pipe(
-  Schema.greaterThanOrEqualToBigDecimal(BigDecimal.unsafeFromNumber(5))
-)
+Schema.BigDecimal.pipe(Schema.greaterThanOrEqualToBigDecimal(BigDecimal.unsafeFromNumber(5)))
 // Specifies a BigDecimal less than 5
-Schema.BigDecimal.pipe(
-  Schema.lessThanBigDecimal(BigDecimal.unsafeFromNumber(5))
-)
+Schema.BigDecimal.pipe(Schema.lessThanBigDecimal(BigDecimal.unsafeFromNumber(5)))
 
 // Specifies a BigDecimal less than or equal to 5
-Schema.BigDecimal.pipe(
-  Schema.lessThanOrEqualToBigDecimal(BigDecimal.unsafeFromNumber(5))
-)
+Schema.BigDecimal.pipe(Schema.lessThanOrEqualToBigDecimal(BigDecimal.unsafeFromNumber(5)))
 
 // Specifies a BigDecimal between -2 and 2, inclusive
 Schema.BigDecimal.pipe(
-  Schema.betweenBigDecimal(
-    BigDecimal.unsafeFromNumber(-2),
-    BigDecimal.unsafeFromNumber(2)
-  )
+  Schema.betweenBigDecimal(BigDecimal.unsafeFromNumber(-2), BigDecimal.unsafeFromNumber(2))
 )
 
 // Specifies a positive BigDecimal (> 0)
@@ -264,22 +253,22 @@ Schema.BigDecimal.pipe(Schema.nonPositiveBigDecimal())
 Here is a list of useful [Duration](/docs/data-types/duration/) filters provided by the Schema module:
 
 ```ts twoslash
-import { Schema } from "effect"
+import { Schema } from 'effect'
 
 // Specifies a duration greater than 5 seconds
-Schema.Duration.pipe(Schema.greaterThanDuration("5 seconds"))
+Schema.Duration.pipe(Schema.greaterThanDuration('5 seconds'))
 
 // Specifies a duration greater than or equal to 5 seconds
-Schema.Duration.pipe(Schema.greaterThanOrEqualToDuration("5 seconds"))
+Schema.Duration.pipe(Schema.greaterThanOrEqualToDuration('5 seconds'))
 
 // Specifies a duration less than 5 seconds
-Schema.Duration.pipe(Schema.lessThanDuration("5 seconds"))
+Schema.Duration.pipe(Schema.lessThanDuration('5 seconds'))
 
 // Specifies a duration less than or equal to 5 seconds
-Schema.Duration.pipe(Schema.lessThanOrEqualToDuration("5 seconds"))
+Schema.Duration.pipe(Schema.lessThanOrEqualToDuration('5 seconds'))
 
 // Specifies a duration between 5 seconds and 10 seconds, inclusive
-Schema.Duration.pipe(Schema.betweenDuration("5 seconds", "10 seconds"))
+Schema.Duration.pipe(Schema.betweenDuration('5 seconds', '10 seconds'))
 ```
 
 # [Getting Started](https://effect.website/docs/schema/getting-started/)

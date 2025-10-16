@@ -13,10 +13,10 @@ Let's create a service for generating random numbers.
 2. **Type**. The service type will have a single operation called `next` that returns a random number.
 
 ```ts twoslash
-import { Effect, Context } from "effect"
+import { Effect, Context } from 'effect'
 
 // Declaring a tag for a service that generates random numbers
-class Random extends Context.Tag("MyRandomService")<
+class Random extends Context.Tag('MyRandomService')<
   Random,
   { readonly next: Effect.Effect<number> }
 >() {}

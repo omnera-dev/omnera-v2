@@ -5,7 +5,7 @@ Stream scanning allows you to apply a function cumulatively to each element in t
 **Example** (Cumulative Addition)
 
 ```ts twoslash
-import { Stream, Effect } from "effect"
+import { Stream, Effect } from 'effect'
 
 const stream = Stream.range(1, 5).pipe(Stream.scan(0, (a, b) => a + b))
 
@@ -21,7 +21,7 @@ If you need only the final accumulated value, you can use [Stream.runFold](/docs
 **Example** (Final Accumulated Result)
 
 ```ts twoslash
-import { Stream, Effect } from "effect"
+import { Stream, Effect } from 'effect'
 
 const fold = Stream.range(1, 5).pipe(Stream.runFold(0, (a, b) => a + b))
 

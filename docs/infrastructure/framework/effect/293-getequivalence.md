@@ -5,11 +5,11 @@ The `Redacted.getEquivalence` function generates an [Equivalence](/docs/behaviou
 **Example** (Comparing Redacted Values)
 
 ```ts twoslash
-import { Redacted, Equivalence } from "effect"
+import { Redacted, Equivalence } from 'effect'
 
-const API_KEY1 = Redacted.make("1234567890")
-const API_KEY2 = Redacted.make("1-34567890")
-const API_KEY3 = Redacted.make("1234567890")
+const API_KEY1 = Redacted.make('1234567890')
+const API_KEY2 = Redacted.make('1-34567890')
+const API_KEY3 = Redacted.make('1234567890')
 
 const equivalence = Redacted.getEquivalence(Equivalence.string)
 

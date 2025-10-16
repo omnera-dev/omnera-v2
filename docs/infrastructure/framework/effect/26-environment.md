@@ -5,14 +5,14 @@ In Effect, we represent the environment required to run an effect workflow as a 
 **Example** (Defining the Environment with a Union of Services)
 
 ```ts twoslash "Console | Logger"
-import { Effect } from "effect"
+import { Effect } from 'effect'
 
 interface IOError {
-  readonly _tag: "IOError"
+  readonly _tag: 'IOError'
 }
 
 interface HttpError {
-  readonly _tag: "HttpError"
+  readonly _tag: 'HttpError'
 }
 
 interface Console {

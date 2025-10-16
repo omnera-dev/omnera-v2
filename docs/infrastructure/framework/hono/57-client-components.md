@@ -92,18 +92,12 @@ export default function App() {
   return (
     <>
       <Style />
-      <button
-        onClick={() =>
-          startViewTransition(() =>
-            setShowLargeImage((state) => !state)
-          )
-        }
-      >
+      <button onClick={() => startViewTransition(() => setShowLargeImage((state) => !state))}>
         Click!
       </button>
       <div>
         {!showLargeImage ? (
-          <img src='https://hono.dev/images/logo.png' />
+          <img src="https://hono.dev/images/logo.png" />
         ) : (
           <div
             class={css`
@@ -157,23 +151,16 @@ export default function App() {
   return (
     <>
       <Style />
-      <button
-        onClick={() =>
-          startViewTransition(() =>
-            setShowLargeImage((state) => !state)
-          )
-        }
-      >
+      <button onClick={() => startViewTransition(() => setShowLargeImage((state) => !state))}>
         Click!
       </button>
       <div>
         {!showLargeImage ? (
-          <img src='https://hono.dev/images/logo.png' />
+          <img src="https://hono.dev/images/logo.png" />
         ) : (
           <div
             class={css`
-              ${transitionNameClass}
-              background: url('https://hono.dev/images/logo-large.png');
+              ${transitionNameClass} background: url('https://hono.dev/images/logo-large.png');
               background-size: contain;
               background-repeat: no-repeat;
               background-position: center;
@@ -227,23 +214,16 @@ export default function App() {
   return (
     <>
       <Style />
-      <button
-        onClick={() =>
-          startViewTransition(() =>
-            setShowLargeImage((state) => !state)
-          )
-        }
-      >
+      <button onClick={() => startViewTransition(() => setShowLargeImage((state) => !state))}>
         Click!
       </button>
       <div>
         {!showLargeImage ? (
-          <img src='https://hono.dev/images/logo.png' />
+          <img src="https://hono.dev/images/logo.png" />
         ) : (
           <div
             class={css`
-              ${transitionNameClass}
-              background: url('https://hono.dev/images/logo-large.png');
+              ${transitionNameClass} background: url('https://hono.dev/images/logo-large.png');
               background-size: contain;
               background-repeat: no-repeat;
               background-position: center;
@@ -292,4 +272,3 @@ export default defineConfig({
   },
 })
 ```
-

@@ -7,7 +7,7 @@ The `Stream.debounce` function achieves this by delaying the emission of values 
 **Example** (Debouncing a Stream of Rapidly Emitted Values)
 
 ```ts twoslash
-import { Stream, Effect } from "effect"
+import { Stream, Effect } from 'effect'
 
 // Helper function to log with elapsed time since the last log
 let last = Date.now()
@@ -20,19 +20,15 @@ const log = (message: string) =>
 
 const stream = Stream.make(1, 2, 3).pipe(
   // Emit the value 4 after 200 ms
-  Stream.concat(
-    Stream.fromEffect(Effect.sleep("200 millis").pipe(Effect.as(4)))
-  ),
+  Stream.concat(Stream.fromEffect(Effect.sleep('200 millis').pipe(Effect.as(4)))),
   // Continue with more rapid values
   Stream.concat(Stream.make(5, 6)),
   // Emit 7 after 150 ms
-  Stream.concat(
-    Stream.fromEffect(Effect.sleep("150 millis").pipe(Effect.as(7)))
-  ),
+  Stream.concat(Stream.fromEffect(Effect.sleep('150 millis').pipe(Effect.as(7)))),
   Stream.concat(Stream.make(8)),
   Stream.tap((n) => log(`Received ${n}`)),
   // Only emit values after a pause of at least 100 milliseconds
-  Stream.debounce("100 millis"),
+  Stream.debounce('100 millis'),
   Stream.tap((n) => log(`> Emitted ${n}`))
 )
 

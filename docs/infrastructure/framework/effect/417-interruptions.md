@@ -20,14 +20,12 @@ Similar to `.await`, `.interrupt` returns a `MicroExit` value describing how the
 **Example** (Interrupting a Fiber)
 
 ```ts twoslash
-import { Micro } from "effect"
+import { Micro } from 'effect'
 
 const program = Micro.gen(function* () {
   // Fork a fiber that runs indefinitely, printing "Hi!"
   const fiber = yield* Micro.fork(
-    Micro.forever(
-      Micro.sync(() => console.log("Hi!")).pipe(Micro.delay(10))
-    )
+    Micro.forever(Micro.sync(() => console.log('Hi!')).pipe(Micro.delay(10)))
   )
   yield* Micro.sleep(30)
   // Interrupt the fiber
@@ -51,12 +49,12 @@ A fiber can be interrupted using the `Micro.interrupt` effect on that particular
 In this case, the program runs without any interruption, logging the start and completion of the task.
 
 ```ts twoslash
-import { Micro } from "effect"
+import { Micro } from 'effect'
 
 const program = Micro.gen(function* () {
-  console.log("start")
+  console.log('start')
   yield* Micro.sleep(2_000)
-  console.log("done")
+  console.log('done')
 })
 
 Micro.runPromiseExit(program).then(console.log)
@@ -76,13 +74,13 @@ done
 Here, the fiber is interrupted after the log `"start"` but before the `"done"` log. The `Effect.interrupt` stops the fiber, and it never reaches the final log.
 
 ```ts {6} twoslash
-import { Micro } from "effect"
+import { Micro } from 'effect'
 
 const program = Micro.gen(function* () {
-  console.log("start")
+  console.log('start')
   yield* Micro.sleep(2_000)
   yield* Micro.interrupt
-  console.log("done")
+  console.log('done')
 })
 
 Micro.runPromiseExit(program).then(console.log)
@@ -110,7 +108,7 @@ When running multiple effects concurrently, such as with `Micro.forEach`, if one
 **Example** (Interrupting Concurrent Effects)
 
 ```ts twoslash
-import { Micro } from "effect"
+import { Micro } from 'effect'
 
 const program = Micro.forEach(
   [1, 2, 3],
@@ -123,12 +121,10 @@ const program = Micro.forEach(
       }
       console.log(`done #${n}`)
     }),
-  { concurrency: "unbounded" }
+  { concurrency: 'unbounded' }
 )
 
-Micro.runPromiseExit(program).then((exit) =>
-  console.log(JSON.stringify(exit, null, 2))
-)
+Micro.runPromiseExit(program).then((exit) => console.log(JSON.stringify(exit, null, 2)))
 /*
 Output:
 start #1

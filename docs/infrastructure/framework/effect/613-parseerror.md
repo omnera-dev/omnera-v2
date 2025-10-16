@@ -10,7 +10,7 @@ where `ParseError` is defined as follows (simplified):
 
 ```ts showLineNumbers=false
 interface ParseError {
-  readonly _tag: "ParseError"
+  readonly _tag: 'ParseError'
   readonly issue: ParseIssue
 }
 ```

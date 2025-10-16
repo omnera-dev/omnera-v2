@@ -7,14 +7,14 @@ The `Queue.take` operation removes and returns the oldest item from the queue. I
 **Example** (Waiting for an Item in a Fiber)
 
 ```ts twoslash
-import { Effect, Queue, Fiber } from "effect"
+import { Effect, Queue, Fiber } from 'effect'
 
 const program = Effect.gen(function* () {
   const queue = yield* Queue.bounded<string>(100)
   // This take operation will suspend because the queue is empty
   const fiber = yield* Effect.fork(Queue.take(queue))
   // Adds an item to the queue
-  yield* Queue.offer(queue, "something")
+  yield* Queue.offer(queue, 'something')
   // Joins the fiber to get the result of the take operation
   const value = yield* Fiber.join(fiber)
   return value
@@ -31,7 +31,7 @@ To retrieve the queue's first item without suspending, use `Queue.poll`. If the 
 **Example** (Polling an Item)
 
 ```ts twoslash
-import { Effect, Queue } from "effect"
+import { Effect, Queue } from 'effect'
 
 const program = Effect.gen(function* () {
   const queue = yield* Queue.bounded<number>(100)
@@ -66,7 +66,7 @@ If you need to wait for an exact number of items before proceeding, consider usi
 **Example** (Taking Up to N Items)
 
 ```ts twoslash
-import { Effect, Queue } from "effect"
+import { Effect, Queue } from 'effect'
 
 const program = Effect.gen(function* () {
   const queue = yield* Queue.bounded<number>(100)
@@ -80,7 +80,7 @@ const program = Effect.gen(function* () {
   const chunk = yield* Queue.takeUpTo(queue, 2)
   console.log(chunk)
 
-  return "some result"
+  return 'some result'
 })
 
 Effect.runPromise(program).then(console.log)
@@ -100,7 +100,7 @@ This function is useful for scenarios where processing requires an exact number 
 **Example** (Taking a Fixed Number of Items)
 
 ```ts twoslash
-import { Effect, Queue, Fiber } from "effect"
+import { Effect, Queue, Fiber } from 'effect'
 
 const program = Effect.gen(function* () {
   // Create a queue that can hold up to 100 elements
@@ -109,7 +109,7 @@ const program = Effect.gen(function* () {
   // Fork a fiber that attempts to take 3 items from the queue
   const fiber = yield* Effect.fork(
     Effect.gen(function* () {
-      console.log("Attempting to take 3 items from the queue...")
+      console.log('Attempting to take 3 items from the queue...')
       const chunk = yield* Queue.takeN(queue, 3)
       console.log(`Successfully took 3 items: ${chunk}`)
     })
@@ -118,20 +118,18 @@ const program = Effect.gen(function* () {
   // Offer only 2 items initially
   yield* Queue.offer(queue, 1)
   yield* Queue.offer(queue, 2)
-  console.log(
-    "Offered 2 items. The fiber is now waiting for the 3rd item..."
-  )
+  console.log('Offered 2 items. The fiber is now waiting for the 3rd item...')
 
   // Simulate some delay
-  yield* Effect.sleep("2 seconds")
+  yield* Effect.sleep('2 seconds')
 
   // Offer the 3rd item, which will unblock the takeN call
   yield* Queue.offer(queue, 3)
-  console.log("Offered the 3rd item, which should unblock the fiber.")
+  console.log('Offered the 3rd item, which should unblock the fiber.')
 
   // Wait for the fiber to finish
   yield* Fiber.join(fiber)
-  return "some result"
+  return 'some result'
 })
 
 Effect.runPromise(program).then(console.log)
@@ -159,7 +157,7 @@ To retrieve all items from the queue at once, use `Queue.takeAll`. This operatio
 **Example** (Taking All Items)
 
 ```ts twoslash
-import { Effect, Queue } from "effect"
+import { Effect, Queue } from 'effect'
 
 const program = Effect.gen(function* () {
   const queue = yield* Queue.bounded<number>(100)

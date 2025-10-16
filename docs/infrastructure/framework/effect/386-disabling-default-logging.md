@@ -7,12 +7,12 @@ Sometimes, perhaps during test execution, you might want to disable default logg
 One convenient way to disable logging is by using the `Logger.withMinimumLogLevel` function. This allows you to set the minimum log level to `None`, effectively turning off all log output.
 
 ```ts twoslash
-import { Effect, Logger, LogLevel } from "effect"
+import { Effect, Logger, LogLevel } from 'effect'
 
 const program = Effect.gen(function* () {
-  yield* Effect.log("Executing task...")
-  yield* Effect.sleep("100 millis")
-  console.log("task done")
+  yield* Effect.log('Executing task...')
+  yield* Effect.sleep('100 millis')
+  console.log('task done')
 })
 
 // Default behavior: logging enabled
@@ -36,12 +36,12 @@ task done
 Another approach to disable logging is by creating a layer that sets the minimum log level to `LogLevel.None`, effectively turning off all log output.
 
 ```ts twoslash
-import { Effect, Logger, LogLevel } from "effect"
+import { Effect, Logger, LogLevel } from 'effect'
 
 const program = Effect.gen(function* () {
-  yield* Effect.log("Executing task...")
-  yield* Effect.sleep("100 millis")
-  console.log("task done")
+  yield* Effect.log('Executing task...')
+  yield* Effect.sleep('100 millis')
+  console.log('task done')
 })
 
 // Create a layer that disables logging
@@ -60,18 +60,16 @@ task done
 You can also disable logging by creating a custom runtime that includes the configuration to turn off logging:
 
 ```ts twoslash
-import { Effect, Logger, LogLevel, ManagedRuntime } from "effect"
+import { Effect, Logger, LogLevel, ManagedRuntime } from 'effect'
 
 const program = Effect.gen(function* () {
-  yield* Effect.log("Executing task...")
-  yield* Effect.sleep("100 millis")
-  console.log("task done")
+  yield* Effect.log('Executing task...')
+  yield* Effect.sleep('100 millis')
+  console.log('task done')
 })
 
 // Create a custom runtime that disables logging
-const customRuntime = ManagedRuntime.make(
-  Logger.minimumLogLevel(LogLevel.None)
-)
+const customRuntime = ManagedRuntime.make(Logger.minimumLogLevel(LogLevel.None))
 
 // Run the program using the custom runtime
 customRuntime.runFork(program)

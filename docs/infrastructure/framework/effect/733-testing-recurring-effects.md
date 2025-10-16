@@ -11,15 +11,15 @@ In this example, we test an effect that runs at regular intervals. An unbounded 
 3. The effect executes exactly once.
 
 ```ts twoslash
-import { Effect, Queue, TestClock, Option, TestContext } from "effect"
-import * as assert from "node:assert"
+import { Effect, Queue, TestClock, Option, TestContext } from 'effect'
+import * as assert from 'node:assert'
 
 const test = Effect.gen(function* () {
   const q = yield* Queue.unbounded()
 
   yield* Queue.offer(q, undefined).pipe(
     // Delay the effect for 60 minutes and repeat it forever
-    Effect.delay("60 minutes"),
+    Effect.delay('60 minutes'),
     Effect.forever,
     Effect.fork
   )
@@ -28,7 +28,7 @@ const test = Effect.gen(function* () {
   const a = yield* Queue.poll(q).pipe(Effect.andThen(Option.isNone))
 
   // Adjust the TestClock by 60 minutes to simulate the passage of time
-  yield* TestClock.adjust("60 minutes")
+  yield* TestClock.adjust('60 minutes')
 
   // Check if an effect is performed after the recurrence period
   const b = yield* Queue.take(q).pipe(Effect.as(true))
@@ -37,7 +37,7 @@ const test = Effect.gen(function* () {
   const c = yield* Queue.poll(q).pipe(Effect.andThen(Option.isNone))
 
   // Adjust the TestClock by another 60 minutes
-  yield* TestClock.adjust("60 minutes")
+  yield* TestClock.adjust('60 minutes')
 
   // Check if another effect is performed
   const d = yield* Queue.take(q).pipe(Effect.as(true))

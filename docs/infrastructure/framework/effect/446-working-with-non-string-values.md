@@ -7,16 +7,13 @@ A `SchemaStore` uses a [schema](/docs/schema/introduction/) to validate and conv
 **Example** (Storing a Typed Object Using a Schema)
 
 ```ts twoslash
-import {
-  KeyValueStore,
-  layerMemory
-} from "@effect/platform/KeyValueStore"
-import { Effect, Schema } from "effect"
+import { KeyValueStore, layerMemory } from '@effect/platform/KeyValueStore'
+import { Effect, Schema } from 'effect'
 
 // Define a JSON-compatible schema
 const Person = Schema.Struct({
   name: Schema.String,
-  age: Schema.Number
+  age: Schema.Number,
 })
 
 const program = Effect.gen(function* () {
@@ -24,12 +21,12 @@ const program = Effect.gen(function* () {
   const kv = (yield* KeyValueStore).forSchema(Person)
 
   // Store a typed value
-  const value = { name: "Alice", age: 30 }
-  yield* kv.set("user1", value)
+  const value = { name: 'Alice', age: 30 }
+  yield* kv.set('user1', value)
   console.log(yield* kv.size)
 
   // Retrieve the value
-  console.log(yield* kv.get("user1"))
+  console.log(yield* kv.get('user1'))
 })
 
 // Use the in-memory store for this example

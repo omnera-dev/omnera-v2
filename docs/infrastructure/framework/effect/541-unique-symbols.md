@@ -5,9 +5,9 @@ You can create a schema for unique symbols using `Schema.UniqueSymbolFromSelf`.
 **Example** (Creating a Schema for a Unique Symbol)
 
 ```ts twoslash
-import { Schema } from "effect"
+import { Schema } from 'effect'
 
-const mySymbol = Symbol.for("mySymbol")
+const mySymbol = Symbol.for('mySymbol')
 
 const schema = Schema.UniqueSymbolFromSelf(mySymbol)
 

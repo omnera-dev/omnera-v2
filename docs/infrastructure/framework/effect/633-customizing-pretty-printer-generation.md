@@ -7,11 +7,11 @@ The `pretty` annotation takes any type parameters provided (`typeParameters`) an
 **Example** (Custom Pretty Printer for Numbers)
 
 ```ts twoslash
-import { Pretty, Schema } from "effect"
+import { Pretty, Schema } from 'effect'
 
 // Define a schema with a custom pretty annotation
 const schema = Schema.Number.annotations({
-  pretty: (/**typeParameters**/) => (value) => `my format: ${value}`
+  pretty: (/**typeParameters**/) => (value) => `my format: ${value}`,
 })
 
 // Create the pretty printer

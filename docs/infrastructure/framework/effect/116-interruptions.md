@@ -24,13 +24,13 @@ The resulting interruption can be observed in the [Exit](/docs/data-types/exit/)
 In this case, the program runs without any interruption, logging the start and completion of the task.
 
 ```ts twoslash
-import { Effect } from "effect"
+import { Effect } from 'effect'
 
 const program = Effect.gen(function* () {
-  console.log("start")
-  yield* Effect.sleep("2 seconds")
-  console.log("done")
-  return "some result"
+  console.log('start')
+  yield* Effect.sleep('2 seconds')
+  console.log('done')
+  return 'some result'
 })
 
 Effect.runPromiseExit(program).then(console.log)
@@ -47,14 +47,14 @@ done
 Here, the fiber is interrupted after the log `"start"` but before the `"done"` log. The `Effect.interrupt` stops the fiber, and it never reaches the final log.
 
 ```ts {6} twoslash
-import { Effect } from "effect"
+import { Effect } from 'effect'
 
 const program = Effect.gen(function* () {
-  console.log("start")
-  yield* Effect.sleep("2 seconds")
+  console.log('start')
+  yield* Effect.sleep('2 seconds')
   yield* Effect.interrupt
-  console.log("done")
-  return "some result"
+  console.log('done')
+  return 'some result'
 })
 
 Effect.runPromiseExit(program).then(console.log)
@@ -90,17 +90,12 @@ when the fiber is interrupted, allowing you to perform cleanup or other actions.
 In this example, we set up a handler that logs "Cleanup completed" whenever the fiber is interrupted. We then show three cases: a successful effect, a failing effect, and an interrupted effect, demonstrating how the handler is triggered depending on how the effect ends.
 
 ```ts twoslash
-import { Console, Effect } from "effect"
+import { Console, Effect } from 'effect'
 
 // This handler is executed when the fiber is interrupted
-const handler = Effect.onInterrupt((_fibers) =>
-  Console.log("Cleanup completed")
-)
+const handler = Effect.onInterrupt((_fibers) => Console.log('Cleanup completed'))
 
-const success = Console.log("Task completed").pipe(
-  Effect.as("some result"),
-  handler
-)
+const success = Console.log('Task completed').pipe(Effect.as('some result'), handler)
 
 Effect.runFork(success)
 /*
@@ -108,10 +103,7 @@ Output:
 Task completed
 */
 
-const failure = Console.log("Task failed").pipe(
-  Effect.andThen(Effect.fail("some error")),
-  handler
-)
+const failure = Console.log('Task failed').pipe(Effect.andThen(Effect.fail('some error')), handler)
 
 Effect.runFork(failure)
 /*
@@ -119,10 +111,7 @@ Output:
 Task failed
 */
 
-const interruption = Console.log("Task interrupted").pipe(
-  Effect.andThen(Effect.interrupt),
-  handler
-)
+const interruption = Console.log('Task interrupted').pipe(Effect.andThen(Effect.interrupt), handler)
 
 Effect.runFork(interruption)
 /*
@@ -141,7 +130,7 @@ The resulting [cause](/docs/data-types/cause/) includes information about which 
 **Example** (Interrupting Concurrent Effects)
 
 ```ts twoslash
-import { Effect, Console } from "effect"
+import { Effect, Console } from 'effect'
 
 const program = Effect.forEach(
   [1, 2, 3],
@@ -154,12 +143,10 @@ const program = Effect.forEach(
       }
       console.log(`done #${n}`)
     }).pipe(Effect.onInterrupt(() => Console.log(`interrupted #${n}`))),
-  { concurrency: "unbounded" }
+  { concurrency: 'unbounded' }
 )
 
-Effect.runPromiseExit(program).then((exit) =>
-  console.log(JSON.stringify(exit, null, 2))
-)
+Effect.runPromiseExit(program).then((exit) => console.log(JSON.stringify(exit, null, 2)))
 /*
 Output:
 start #1

@@ -5,14 +5,14 @@ When working with streams, it's essential to be prepared for various failure sce
 **Example**
 
 ```ts twoslash
-import { Stream, Effect } from "effect"
+import { Stream, Effect } from 'effect'
 
 const s1 = Stream.make(1, 2, 3).pipe(
-  Stream.concat(Stream.dieMessage("Boom!")),
+  Stream.concat(Stream.dieMessage('Boom!')),
   Stream.concat(Stream.make(4, 5))
 )
 
-const s2 = Stream.make("a", "b", "c")
+const s2 = Stream.make('a', 'b', 'c')
 
 const stream = Stream.catchAllCause(s1, () => s2)
 

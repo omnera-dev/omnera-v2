@@ -29,6 +29,7 @@ Effect<Success, Error, Requirements>
 ```
 
 **Type Parameters:**
+
 - `Success` - The type of value produced on success
 - `Error` - The type of error that can occur
 - `Requirements` - The dependencies (Context) needed to run
@@ -116,9 +117,7 @@ Effect provides comprehensive, type-safe error handling:
 import { Effect } from 'effect'
 
 // catchAll - Handle all errors
-const withFallback = fetchUser(1).pipe(
-  Effect.catchAll((error) => Effect.succeed(defaultUser))
-)
+const withFallback = fetchUser(1).pipe(Effect.catchAll((error) => Effect.succeed(defaultUser)))
 
 // catchTag - Handle specific error types
 const tagged = fetchUser(1).pipe(
@@ -127,9 +126,7 @@ const tagged = fetchUser(1).pipe(
 )
 
 // orElse - Provide alternative Effect
-const alternative = fetchUser(1).pipe(
-  Effect.orElse(() => fetchUserFromCache(1))
-)
+const alternative = fetchUser(1).pipe(Effect.orElse(() => fetchUserFromCache(1)))
 
 // retry - Retry failed operations
 const resilient = fetchUser(1).pipe(
@@ -184,14 +181,16 @@ const program = Effect.gen(function* () {
 
 // Provide implementations
 const DatabaseLive = Layer.succeed(Database, {
-  query: (sql) => Effect.tryPromise({
-    try: () => pool.query(sql),
-    catch: (error) => new DatabaseError({ cause: error }),
-  }),
-  execute: (sql) => Effect.tryPromise({
-    try: () => pool.execute(sql),
-    catch: (error) => new DatabaseError({ cause: error }),
-  }),
+  query: (sql) =>
+    Effect.tryPromise({
+      try: () => pool.query(sql),
+      catch: (error) => new DatabaseError({ cause: error }),
+    }),
+  execute: (sql) =>
+    Effect.tryPromise({
+      try: () => pool.execute(sql),
+      catch: (error) => new DatabaseError({ cause: error }),
+    }),
 })
 
 const LoggerLive = Layer.succeed(Logger, {
@@ -228,11 +227,7 @@ const parallel = Effect.all({
 })
 
 // Parallel with array
-const users = Effect.all([
-  fetchUser(1),
-  fetchUser(2),
-  fetchUser(3),
-])
+const users = Effect.all([fetchUser(1), fetchUser(2), fetchUser(3)])
 
 // Controlled concurrency
 const controlled = Effect.forEach(
@@ -242,15 +237,10 @@ const controlled = Effect.forEach(
 )
 
 // Race - First to complete wins
-const raced = Effect.race(
-  fetchFromPrimaryAPI(),
-  fetchFromBackupAPI()
-)
+const raced = Effect.race(fetchFromPrimaryAPI(), fetchFromBackupAPI())
 
 // Timeout
-const timed = fetchUser(1).pipe(
-  Effect.timeout('5 seconds')
-)
+const timed = fetchUser(1).pipe(Effect.timeout('5 seconds'))
 
 // Fork to background fiber
 const forked = Effect.gen(function* () {
@@ -300,13 +290,9 @@ const programPipe = fetchUser(1).pipe(
 
 // Error handling in Effect.gen
 const resilient = Effect.gen(function* () {
-  const user = yield* fetchUser(1).pipe(
-    Effect.catchAll(() => Effect.succeed(defaultUser))
-  )
+  const user = yield* fetchUser(1).pipe(Effect.catchAll(() => Effect.succeed(defaultUser)))
 
-  const posts = yield* fetchUserPosts(user.id).pipe(
-    Effect.catchAll(() => Effect.succeed([]))
-  )
+  const posts = yield* fetchUserPosts(user.id).pipe(Effect.catchAll(() => Effect.succeed([])))
 
   return { user, posts }
 })
@@ -422,7 +408,11 @@ class EmailService extends Context.Tag('EmailService')<
 function registerUser(
   email: string,
   name: string
-): Effect.Effect<User, UserNotFoundError | DatabaseError | EmailError, UserRepository | EmailService> {
+): Effect.Effect<
+  User,
+  UserNotFoundError | DatabaseError | EmailError,
+  UserRepository | EmailService
+> {
   return Effect.gen(function* () {
     const repo = yield* UserRepository
     const emailService = yield* EmailService
@@ -438,25 +428,29 @@ function registerUser(
 
 // Provide implementations
 const UserRepositoryLive = Layer.succeed(UserRepository, {
-  findById: (id) => Effect.tryPromise({
-    try: () => db.query('SELECT * FROM users WHERE id = ?', [id]),
-    catch: () => new UserNotFoundError(),
-  }),
-  save: (user) => Effect.tryPromise({
-    try: () => db.execute('INSERT INTO users VALUES (?, ?, ?)', [user.id, user.email, user.name]),
-    catch: (error) => new DatabaseError({ cause: error }),
-  }),
-  findAll: () => Effect.tryPromise({
-    try: () => db.query('SELECT * FROM users'),
-    catch: (error) => new DatabaseError({ cause: error }),
-  }),
+  findById: (id) =>
+    Effect.tryPromise({
+      try: () => db.query('SELECT * FROM users WHERE id = ?', [id]),
+      catch: () => new UserNotFoundError(),
+    }),
+  save: (user) =>
+    Effect.tryPromise({
+      try: () => db.execute('INSERT INTO users VALUES (?, ?, ?)', [user.id, user.email, user.name]),
+      catch: (error) => new DatabaseError({ cause: error }),
+    }),
+  findAll: () =>
+    Effect.tryPromise({
+      try: () => db.query('SELECT * FROM users'),
+      catch: (error) => new DatabaseError({ cause: error }),
+    }),
 })
 
 const EmailServiceLive = Layer.succeed(EmailService, {
-  send: (to, subject, body) => Effect.tryPromise({
-    try: () => sendEmailAPI(to, subject, body),
-    catch: (error) => new EmailError({ cause: error }),
-  }),
+  send: (to, subject, body) =>
+    Effect.tryPromise({
+      try: () => sendEmailAPI(to, subject, body),
+      catch: (error) => new EmailError({ cause: error }),
+    }),
 })
 
 const AppLayer = Layer.mergeAll(UserRepositoryLive, EmailServiceLive)
@@ -506,17 +500,17 @@ const safe = parseUser({ id: 1, name: 'Alice', email: 'invalid', age: 30 }).pipe
 
 ## Effect vs Other Approaches
 
-| Aspect                 | Effect                                       | Try/Catch                    | Promise                       |
-| ---------------------- | -------------------------------------------- | ---------------------------- | ----------------------------- |
-| **Error Tracking**     | Type-safe, compile-time                      | Runtime only                 | Runtime only                  |
-| **Error Types**        | Multiple error types tracked                 | Single catch                 | Single catch                  |
-| **Composability**      | Highly composable with operators             | Hard to compose              | Moderate (then/catch)         |
-| **Testability**        | Pure, easy to test                           | Requires mocks               | Requires mocks                |
-| **Dependency Injection** | Built-in (Context/Layer)                     | Manual DI                    | Manual DI                     |
-| **Cancellation**       | Built-in (Fiber interruption)                | Not supported                | AbortController (manual)      |
-| **Resource Management**  | Automatic (Scope)                            | Manual (finally)             | Manual                        |
-| **Concurrency**        | Structured (Fiber)                           | Unstructured                 | Promise.all/race              |
-| **Type Inference**     | Full type inference                          | No error type inference      | No error type inference       |
+| Aspect                   | Effect                           | Try/Catch               | Promise                  |
+| ------------------------ | -------------------------------- | ----------------------- | ------------------------ |
+| **Error Tracking**       | Type-safe, compile-time          | Runtime only            | Runtime only             |
+| **Error Types**          | Multiple error types tracked     | Single catch            | Single catch             |
+| **Composability**        | Highly composable with operators | Hard to compose         | Moderate (then/catch)    |
+| **Testability**          | Pure, easy to test               | Requires mocks          | Requires mocks           |
+| **Dependency Injection** | Built-in (Context/Layer)         | Manual DI               | Manual DI                |
+| **Cancellation**         | Built-in (Fiber interruption)    | Not supported           | AbortController (manual) |
+| **Resource Management**  | Automatic (Scope)                | Manual (finally)        | Manual                   |
+| **Concurrency**          | Structured (Fiber)               | Unstructured            | Promise.all/race         |
+| **Type Inference**       | Full type inference              | No error type inference | No error type inference  |
 
 ## Integration with Bun
 
@@ -541,13 +535,9 @@ app.get('/users/:id', async (c) => {
   const program = Effect.gen(function* () {
     const user = yield* fetchUser(id)
     return user
-  }).pipe(
-    Effect.provide(AppLayer)
-  )
+  }).pipe(Effect.provide(AppLayer))
 
-  const result = await Effect.runPromise(
-    program.pipe(Effect.either)
-  )
+  const result = await Effect.runPromise(program.pipe(Effect.either))
 
   if (result._tag === 'Left') {
     return c.json({ error: 'User not found' }, 404)
@@ -606,6 +596,7 @@ This is a high-level summary of Effect.ts. For comprehensive documentation cover
 **Location**: `docs/infrastructure/framework/effect/`
 
 The full documentation (49,540 lines) is split into 741 sections covering:
+
 - Batching and caching strategies
 - Configuration management
 - Complete API reference

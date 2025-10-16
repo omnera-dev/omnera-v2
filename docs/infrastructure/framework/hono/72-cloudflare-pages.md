@@ -258,9 +258,15 @@ app.get('/', (c) => {
     <html>
       <head>
         {import.meta.env.PROD ? (
-          <script type='module' src='/static/client.js'></script>
+          <script
+            type="module"
+            src="/static/client.js"
+          ></script>
         ) : (
-          <script type='module' src='/src/client.ts'></script>
+          <script
+            type="module"
+            src="/src/client.ts"
+          ></script>
         )}
       </head>
       <body>
@@ -403,4 +409,3 @@ app.get('/hello', (c) => {
 
 export const onRequest = handle(app)
 ```
-

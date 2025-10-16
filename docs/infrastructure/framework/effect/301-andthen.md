@@ -30,15 +30,12 @@ The second action can be:
 Let's look at an example comparing `Effect.andThen` with `Effect.map` and `Effect.flatMap`:
 
 ```ts twoslash
-import { pipe, Effect } from "effect"
+import { pipe, Effect } from 'effect'
 
 // Function to apply a discount safely to a transaction amount
-const applyDiscount = (
-  total: number,
-  discountRate: number
-): Effect.Effect<number, Error> =>
+const applyDiscount = (total: number, discountRate: number): Effect.Effect<number, Error> =>
   discountRate === 0
-    ? Effect.fail(new Error("Discount rate cannot be zero"))
+    ? Effect.fail(new Error('Discount rate cannot be zero'))
     : Effect.succeed(total - (total * discountRate) / 100)
 
 // Simulated asynchronous task to fetch a transaction amount from database
@@ -70,7 +67,7 @@ Both [Option](/docs/data-types/option/#interop-with-effect) and [Either](/docs/d
 **Example** (with Option)
 
 ```ts twoslash
-import { pipe, Effect, Option } from "effect"
+import { pipe, Effect, Option } from 'effect'
 
 // Simulated asynchronous task fetching a number from a database
 const fetchNumberValue = Effect.tryPromise(() => Promise.resolve(42))
@@ -94,16 +91,14 @@ A value of type `Option<A>` is interpreted as an effect of type `Effect<A, NoSuc
 **Example** (with Either)
 
 ```ts twoslash
-import { pipe, Effect, Either } from "effect"
+import { pipe, Effect, Either } from 'effect'
 
 // Function to parse an integer from a string that can fail
 const parseInteger = (input: string): Either.Either<number, string> =>
-  isNaN(parseInt(input))
-    ? Either.left("Invalid integer")
-    : Either.right(parseInt(input))
+  isNaN(parseInt(input)) ? Either.left('Invalid integer') : Either.right(parseInt(input))
 
 // Simulated asynchronous task fetching a string from database
-const fetchStringValue = Effect.tryPromise(() => Promise.resolve("42"))
+const fetchStringValue = Effect.tryPromise(() => Promise.resolve('42'))
 
 //      ┌─── Effect<number, string | UnknownException, never>
 //      ▼

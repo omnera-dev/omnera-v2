@@ -3,23 +3,17 @@
 In the context of tracing, logs are converted into "Span Events." These events offer structured insights into your application's activities and provide a timeline of when specific operations occurred.
 
 ```ts twoslash {47}
-import { Effect } from "effect"
-import { NodeSdk } from "@effect/opentelemetry"
-import {
-  ConsoleSpanExporter,
-  BatchSpanProcessor
-} from "@opentelemetry/sdk-trace-base"
+import { Effect } from 'effect'
+import { NodeSdk } from '@effect/opentelemetry'
+import { ConsoleSpanExporter, BatchSpanProcessor } from '@opentelemetry/sdk-trace-base'
 
 // Define a program that logs a message and delays for 100 milliseconds
-const program = Effect.log("Hello").pipe(
-  Effect.delay("100 millis"),
-  Effect.withSpan("myspan")
-)
+const program = Effect.log('Hello').pipe(Effect.delay('100 millis'), Effect.withSpan('myspan'))
 
 // Set up tracing with the OpenTelemetry SDK
 const NodeSdkLive = NodeSdk.layer(() => ({
-  resource: { serviceName: "example" },
-  spanProcessor: new BatchSpanProcessor(new ConsoleSpanExporter())
+  resource: { serviceName: 'example' },
+  spanProcessor: new BatchSpanProcessor(new ConsoleSpanExporter()),
 }))
 
 // Run the effect, providing the tracing layer

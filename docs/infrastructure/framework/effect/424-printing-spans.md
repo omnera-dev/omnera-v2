@@ -83,24 +83,21 @@ Once the dependencies are installed, you can set up span printing using OpenTele
 **Example** (Setting Up and Printing a Span)
 
 ```ts twoslash
-import { Effect } from "effect"
-import { NodeSdk } from "@effect/opentelemetry"
-import {
-  ConsoleSpanExporter,
-  BatchSpanProcessor
-} from "@opentelemetry/sdk-trace-base"
+import { Effect } from 'effect'
+import { NodeSdk } from '@effect/opentelemetry'
+import { ConsoleSpanExporter, BatchSpanProcessor } from '@opentelemetry/sdk-trace-base'
 
 // Define an effect that delays for 100 milliseconds
-const program = Effect.void.pipe(Effect.delay("100 millis"))
+const program = Effect.void.pipe(Effect.delay('100 millis'))
 
 // Instrument the effect with a span for tracing
-const instrumented = program.pipe(Effect.withSpan("myspan"))
+const instrumented = program.pipe(Effect.withSpan('myspan'))
 
 // Set up tracing with the OpenTelemetry SDK
 const NodeSdkLive = NodeSdk.layer(() => ({
-  resource: { serviceName: "example" },
+  resource: { serviceName: 'example' },
   // Export span data to the console
-  spanProcessor: new BatchSpanProcessor(new ConsoleSpanExporter())
+  spanProcessor: new BatchSpanProcessor(new ConsoleSpanExporter()),
 }))
 
 // Run the effect, providing the tracing layer
@@ -157,26 +154,18 @@ Here's how a span looks when the effect encounters an error:
 **Example** (Span for an Effect that Fails)
 
 ```ts twoslash "code: 2"
-import { Effect } from "effect"
-import { NodeSdk } from "@effect/opentelemetry"
-import {
-  ConsoleSpanExporter,
-  BatchSpanProcessor
-} from "@opentelemetry/sdk-trace-base"
+import { Effect } from 'effect'
+import { NodeSdk } from '@effect/opentelemetry'
+import { ConsoleSpanExporter, BatchSpanProcessor } from '@opentelemetry/sdk-trace-base'
 
-const program = Effect.fail("Oh no!").pipe(
-  Effect.delay("100 millis"),
-  Effect.withSpan("myspan")
-)
+const program = Effect.fail('Oh no!').pipe(Effect.delay('100 millis'), Effect.withSpan('myspan'))
 
 const NodeSdkLive = NodeSdk.layer(() => ({
-  resource: { serviceName: "example" },
-  spanProcessor: new BatchSpanProcessor(new ConsoleSpanExporter())
+  resource: { serviceName: 'example' },
+  spanProcessor: new BatchSpanProcessor(new ConsoleSpanExporter()),
 }))
 
-Effect.runPromiseExit(program.pipe(Effect.provide(NodeSdkLive))).then(
-  console.log
-)
+Effect.runPromiseExit(program.pipe(Effect.provide(NodeSdkLive))).then(console.log)
 /*
 Example Output:
 {

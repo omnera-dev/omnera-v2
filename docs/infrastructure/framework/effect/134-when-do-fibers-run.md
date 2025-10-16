@@ -8,7 +8,7 @@ In the following example, the `changes` stream only captures a single value, `2`
 This happens because the fiber created by `Effect.fork` starts **after** the value is updated.
 
 ```ts twoslash
-import { Effect, SubscriptionRef, Stream, Console } from "effect"
+import { Effect, SubscriptionRef, Stream, Console } from 'effect'
 
 const program = Effect.gen(function* () {
   const ref = yield* SubscriptionRef.make(0)
@@ -42,7 +42,7 @@ If you add a short delay with `Effect.sleep()` or call `Effect.yieldNow()`, you 
 **Example** (Delay Allows Fiber to Capture All Values)
 
 ```ts twoslash ins={14}
-import { Effect, SubscriptionRef, Stream, Console } from "effect"
+import { Effect, SubscriptionRef, Stream, Console } from 'effect'
 
 const program = Effect.gen(function* () {
   const ref = yield* SubscriptionRef.make(0)
@@ -55,7 +55,7 @@ const program = Effect.gen(function* () {
   )
 
   // Allow the fiber a chance to start
-  yield* Effect.sleep("100 millis")
+  yield* Effect.sleep('100 millis')
 
   yield* SubscriptionRef.set(ref, 1)
   yield* SubscriptionRef.set(ref, 2)

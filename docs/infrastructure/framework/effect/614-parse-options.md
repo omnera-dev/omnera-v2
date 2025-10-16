@@ -11,19 +11,19 @@ If you want to detect and handle unexpected properties, use the `onExcessPropert
 **Example** (Setting `onExcessProperty` to `"error"`)
 
 ```ts twoslash
-import { Schema } from "effect"
+import { Schema } from 'effect'
 
 const Person = Schema.Struct({
   name: Schema.String,
-  age: Schema.Number
+  age: Schema.Number,
 })
 
 // Excess properties are ignored by default
 console.log(
   Schema.decodeUnknownSync(Person)({
-    name: "Bob",
+    name: 'Bob',
     age: 40,
-    email: "bob@example.com" // Ignored
+    email: 'bob@example.com', // Ignored
   })
 )
 /*
@@ -35,11 +35,11 @@ Output:
 // an error is thrown for excess properties
 Schema.decodeUnknownSync(Person)(
   {
-    name: "Bob",
+    name: 'Bob',
     age: 40,
-    email: "bob@example.com" // Will raise an error
+    email: 'bob@example.com', // Will raise an error
   },
-  { onExcessProperty: "error" }
+  { onExcessProperty: 'error' }
 )
 /*
 throws
@@ -54,22 +54,22 @@ To retain extra properties, set `onExcessProperty` to `"preserve"`.
 **Example** (Setting `onExcessProperty` to `"preserve"`)
 
 ```ts twoslash
-import { Schema } from "effect"
+import { Schema } from 'effect'
 
 const Person = Schema.Struct({
   name: Schema.String,
-  age: Schema.Number
+  age: Schema.Number,
 })
 
 // Excess properties are preserved in the output
 console.log(
   Schema.decodeUnknownSync(Person)(
     {
-      name: "Bob",
+      name: 'Bob',
       age: 40,
-      email: "bob@example.com"
+      email: 'bob@example.com',
     },
-    { onExcessProperty: "preserve" }
+    { onExcessProperty: 'preserve' }
   )
 )
 /*
@@ -84,21 +84,21 @@ The `errors` option enables you to retrieve all errors encountered during parsin
 **Example** (Setting `errors` to `"all"`)
 
 ```ts twoslash
-import { Schema } from "effect"
+import { Schema } from 'effect'
 
 const Person = Schema.Struct({
   name: Schema.String,
-  age: Schema.Number
+  age: Schema.Number,
 })
 
 // Attempt to parse with multiple issues in the input data
 Schema.decodeUnknownSync(Person)(
   {
-    name: "Bob",
-    age: "abc",
-    email: "bob@example.com"
+    name: 'Bob',
+    age: 'abc',
+    email: 'bob@example.com',
   },
-  { errors: "all", onExcessProperty: "error" }
+  { errors: 'all', onExcessProperty: 'error' }
 )
 /*
 throws
@@ -122,62 +122,52 @@ Setting `propertyOrder` to `"original"` ensures that the keys are ordered as the
 **Example** (Synchronous Decoding)
 
 ```ts twoslash
-import { Schema } from "effect"
+import { Schema } from 'effect'
 
 const schema = Schema.Struct({
   a: Schema.Number,
-  b: Schema.Literal("b"),
-  c: Schema.Number
+  b: Schema.Literal('b'),
+  c: Schema.Number,
 })
 
 // Default decoding, where property order is system-defined
-console.log(Schema.decodeUnknownSync(schema)({ b: "b", c: 2, a: 1 }))
+console.log(Schema.decodeUnknownSync(schema)({ b: 'b', c: 2, a: 1 }))
 // Output may vary: { a: 1, b: 'b', c: 2 }
 
 // Decoding while preserving input order
-console.log(
-  Schema.decodeUnknownSync(schema)(
-    { b: "b", c: 2, a: 1 },
-    { propertyOrder: "original" }
-  )
-)
+console.log(Schema.decodeUnknownSync(schema)({ b: 'b', c: 2, a: 1 }, { propertyOrder: 'original' }))
 // Output preserves input order: { b: 'b', c: 2, a: 1 }
 ```
 
 **Example** (Asynchronous Decoding)
 
 ```ts twoslash
-import type { Duration } from "effect"
-import { Effect, ParseResult, Schema } from "effect"
+import type { Duration } from 'effect'
+import { Effect, ParseResult, Schema } from 'effect'
 
 // Helper function to simulate an async operation in schema
 const effectify = (duration: Duration.DurationInput) =>
   Schema.Number.pipe(
     Schema.transformOrFail(Schema.Number, {
       strict: true,
-      decode: (x) =>
-        Effect.sleep(duration).pipe(
-          Effect.andThen(ParseResult.succeed(x))
-        ),
-      encode: ParseResult.succeed
+      decode: (x) => Effect.sleep(duration).pipe(Effect.andThen(ParseResult.succeed(x))),
+      encode: ParseResult.succeed,
     })
   )
 
 // Define a structure with asynchronous behavior in each field
 const schema = Schema.Struct({
-  a: effectify("200 millis"),
-  b: effectify("300 millis"),
-  c: effectify("100 millis")
+  a: effectify('200 millis'),
+  b: effectify('300 millis'),
+  c: effectify('100 millis'),
 }).annotations({ concurrency: 3 })
 
 // Default decoding, where property order is system-defined
-Schema.decode(schema)({ a: 1, b: 2, c: 3 })
-  .pipe(Effect.runPromise)
-  .then(console.log)
+Schema.decode(schema)({ a: 1, b: 2, c: 3 }).pipe(Effect.runPromise).then(console.log)
 // Output decided internally: { c: 3, a: 1, b: 2 }
 
 // Decoding while preserving input order
-Schema.decode(schema)({ a: 1, b: 2, c: 3 }, { propertyOrder: "original" })
+Schema.decode(schema)({ a: 1, b: 2, c: 3 }, { propertyOrder: 'original' })
   .pipe(Effect.runPromise)
   .then(console.log)
 // Output preserving input order: { a: 1, b: 2, c: 3 }
@@ -190,30 +180,27 @@ The `parseOptions` annotation allows you to customize parsing behavior at differ
 **Example** (Using `parseOptions` to Customize Error Handling)
 
 ```ts twoslash
-import { Schema } from "effect"
-import { Either } from "effect"
+import { Schema } from 'effect'
+import { Either } from 'effect'
 
 const schema = Schema.Struct({
   a: Schema.Struct({
     b: Schema.String,
-    c: Schema.String
+    c: Schema.String,
   }).annotations({
-    title: "first error only",
+    title: 'first error only',
     // Limit errors to the first in this sub-schema
-    parseOptions: { errors: "first" }
+    parseOptions: { errors: 'first' },
   }),
-  d: Schema.String
+  d: Schema.String,
 }).annotations({
-  title: "all errors",
+  title: 'all errors',
   // Capture all errors for the main schema
-  parseOptions: { errors: "all" }
+  parseOptions: { errors: 'all' },
 })
 
 // Decode input with custom error-handling behavior
-const result = Schema.decodeUnknownEither(schema)(
-  { a: {} },
-  { errors: "first" }
-)
+const result = Schema.decodeUnknownEither(schema)({ a: {} }, { errors: 'first' })
 if (Either.isLeft(result)) {
   console.log(result.left.message)
 }

@@ -5,11 +5,11 @@ The `Effect.flip` function allows you to switch the error and success channels o
 **Example** (Swapping Error and Success Channels)
 
 ```ts twoslash
-import { Effect } from "effect"
+import { Effect } from 'effect'
 
 //      ┌─── Effect<number, string, never>
 //      ▼
-const program = Effect.fail("Oh uh!").pipe(Effect.as(2))
+const program = Effect.fail('Oh uh!').pipe(Effect.as(2))
 
 //      ┌─── Effect<string, number, never>
 //      ▼

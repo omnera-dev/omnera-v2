@@ -29,17 +29,14 @@ Complicated usage:
 
 ```ts
 app.get('/proxy/:path', async (c) => {
-  const res = await proxy(
-    `http://${originServer}/${c.req.param('path')}`,
-    {
-      headers: {
-        ...c.req.header(), // optional, specify only when forwarding all the request data (including credentials) is necessary.
-        'X-Forwarded-For': '127.0.0.1',
-        'X-Forwarded-Host': c.req.header('host'),
-        Authorization: undefined, // do not propagate request headers contained in c.req.header('Authorization')
-      },
-    }
-  )
+  const res = await proxy(`http://${originServer}/${c.req.param('path')}`, {
+    headers: {
+      ...c.req.header(), // optional, specify only when forwarding all the request data (including credentials) is necessary.
+      'X-Forwarded-For': '127.0.0.1',
+      'X-Forwarded-Host': c.req.header('host'),
+      Authorization: undefined, // do not propagate request headers contained in c.req.header('Authorization')
+    },
+  })
   res.headers.delete('Set-Cookie')
   return res
 })
@@ -87,10 +84,6 @@ interface ProxyRequestInit extends Omit<RequestInit, 'headers'> {
 }
 
 interface ProxyFetch {
-  (
-    input: string | URL | Request,
-    init?: ProxyRequestInit
-  ): Promise<Response>
+  (input: string | URL | Request, init?: ProxyRequestInit): Promise<Response>
 }
 ```
-

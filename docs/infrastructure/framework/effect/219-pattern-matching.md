@@ -5,23 +5,18 @@ The `Cause.match` function provides a straightforward way to handle each case of
 **Example** (Pattern Matching on Different Causes)
 
 ```ts twoslash
-import { Cause } from "effect"
+import { Cause } from 'effect'
 
-const cause = Cause.parallel(
-  Cause.fail(new Error("my fail message")),
-  Cause.die("my die message")
-)
+const cause = Cause.parallel(Cause.fail(new Error('my fail message')), Cause.die('my die message'))
 
 console.log(
   Cause.match(cause, {
-    onEmpty: "(empty)",
+    onEmpty: '(empty)',
     onFail: (error) => `(error: ${error.message})`,
     onDie: (defect) => `(defect: ${defect})`,
     onInterrupt: (fiberId) => `(fiberId: ${fiberId})`,
-    onSequential: (left, right) =>
-      `(onSequential (left: ${left}) (right: ${right}))`,
-    onParallel: (left, right) =>
-      `(onParallel (left: ${left}) (right: ${right})`
+    onSequential: (left, right) => `(onSequential (left: ${left}) (right: ${right}))`,
+    onParallel: (left, right) => `(onParallel (left: ${left}) (right: ${right})`,
   })
 )
 /*

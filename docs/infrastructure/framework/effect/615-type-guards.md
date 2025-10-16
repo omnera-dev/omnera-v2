@@ -17,19 +17,19 @@ Here's how the `Schema.is` function works:
 **Example** (Creating and Using a Type Guard)
 
 ```ts twoslash
-import { Schema } from "effect"
+import { Schema } from 'effect'
 
 // Define a schema for a Person object
 const Person = Schema.Struct({
   name: Schema.String,
-  age: Schema.Number
+  age: Schema.Number,
 })
 
 // Generate a type guard from the schema
 const isPerson = Schema.is(Person)
 
 // Test the type guard with various inputs
-console.log(isPerson({ name: "Alice", age: 30 }))
+console.log(isPerson({ name: 'Alice', age: 30 }))
 // Output: true
 
 console.log(isPerson(null))

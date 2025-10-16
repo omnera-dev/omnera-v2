@@ -141,17 +141,13 @@ To get Docker, follow these steps:
    The following code simulates a set of tasks and generates traces for each task. It also sets up a `Layer` which will export traces from our application to our OpenTelemetry backend over HTTP in OTLP format.
 
    ```ts twoslash
-   import { Effect } from "effect"
-   import { NodeSdk } from "@effect/opentelemetry"
-   import { BatchSpanProcessor } from "@opentelemetry/sdk-trace-base"
-   import { OTLPTraceExporter } from "@opentelemetry/exporter-trace-otlp-http"
+   import { Effect } from 'effect'
+   import { NodeSdk } from '@effect/opentelemetry'
+   import { BatchSpanProcessor } from '@opentelemetry/sdk-trace-base'
+   import { OTLPTraceExporter } from '@opentelemetry/exporter-trace-otlp-http'
 
    // Function to simulate a task with possible subtasks
-   const task = (
-     name: string,
-     delay: number,
-     children: ReadonlyArray<Effect.Effect<void>> = []
-   ) =>
+   const task = (name: string, delay: number, children: ReadonlyArray<Effect.Effect<void>> = []) =>
      Effect.gen(function* () {
        yield* Effect.log(name)
        yield* Effect.sleep(`${delay} millis`)
@@ -161,34 +157,28 @@ To get Docker, follow these steps:
        yield* Effect.sleep(`${delay} millis`)
      }).pipe(Effect.withSpan(name))
 
-   const poll = task("/poll", 1)
+   const poll = task('/poll', 1)
 
    // Create a program with tasks and subtasks
-   const program = task("client", 2, [
-     task("/api", 3, [
-       task("/authN", 4, [task("/authZ", 5)]),
-       task("/payment Gateway", 6, [
-         task("DB", 7),
-         task("Ext. Merchant", 8)
+   const program = task('client', 2, [
+     task('/api', 3, [
+       task('/authN', 4, [task('/authZ', 5)]),
+       task('/payment Gateway', 6, [task('DB', 7), task('Ext. Merchant', 8)]),
+       task('/dispatch', 9, [
+         task('/dispatch/search', 10),
+         Effect.all([poll, poll, poll], { concurrency: 'inherit' }),
+         task('/pollDriver/{id}', 11),
        ]),
-       task("/dispatch", 9, [
-         task("/dispatch/search", 10),
-         Effect.all([poll, poll, poll], { concurrency: "inherit" }),
-         task("/pollDriver/{id}", 11)
-       ])
-     ])
+     ]),
    ])
 
    const NodeSdkLive = NodeSdk.layer(() => ({
-     resource: { serviceName: "example" },
-     spanProcessor: new BatchSpanProcessor(new OTLPTraceExporter())
+     resource: { serviceName: 'example' },
+     spanProcessor: new BatchSpanProcessor(new OTLPTraceExporter()),
    }))
 
    Effect.runPromise(
-     program.pipe(
-       Effect.provide(NodeSdkLive),
-       Effect.catchAllCause(Effect.logError)
-     )
+     program.pipe(Effect.provide(NodeSdkLive), Effect.catchAllCause(Effect.logError))
    )
    /*
    Output:
@@ -207,18 +197,19 @@ To get Docker, follow these steps:
    timestamp=... level=INFO fiber=#0 message=/pollDriver/{id}
    */
    ```
+
 4. **Visualize Traces**
 
    Open your web browser and go to `http://localhost:3000/explore`. You should see the Grafana Tempo TraceQL interface.
 
-   ![Tempo TraceQL Interface](../_assets/tempo-traceql-interface.png "The Grafana Tempo TraceQL interface without a TraceQL query specified")
+   ![Tempo TraceQL Interface](../_assets/tempo-traceql-interface.png 'The Grafana Tempo TraceQL interface without a TraceQL query specified')
 
    To get a list of all available traces, we can select the `"Search"` query type to get a list of all available traces.
 
-   ![Tempo Search Selector](../_assets/tempo-trace-list.png "The Grafana Tempo TraceQL interface with the Search selector outlined by a red box")
+   ![Tempo Search Selector](../_assets/tempo-trace-list.png 'The Grafana Tempo TraceQL interface with the Search selector outlined by a red box')
 
    Clicking the generated Trace ID will allow us to inspect the details of the trace.
 
-   ![Traces in Grafana Tempo](../_assets/trace.png "The details of an Effect application trace visualized as a waterfall diagram in Grafana Tempo")
+   ![Traces in Grafana Tempo](../_assets/trace.png 'The details of an Effect application trace visualized as a waterfall diagram in Grafana Tempo')
 
 </Steps>

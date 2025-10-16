@@ -10,7 +10,7 @@ The `Effect.loop` function allows you to repeatedly update a state using a `step
 Effect.loop(initial, {
   while: (state) => boolean,
   step: (state) => state,
-  body: (state) => Effect
+  body: (state) => Effect,
 })
 ```
 
@@ -31,7 +31,7 @@ return result
 **Example** (Looping with Collected Results)
 
 ```ts twoslash
-import { Effect } from "effect"
+import { Effect } from 'effect'
 
 // A loop that runs 5 times, collecting each iteration's result
 const result = Effect.loop(
@@ -43,7 +43,7 @@ const result = Effect.loop(
     // State update function
     step: (state) => state + 1,
     // Effect to be performed on each iteration
-    body: (state) => Effect.succeed(state)
+    body: (state) => Effect.succeed(state),
   }
 )
 
@@ -60,7 +60,7 @@ The `discard` option, when set to `true`, will discard the results of each effec
 **Example** (Loop with Discarded Results)
 
 ```ts twoslash "discard: true"
-import { Effect, Console } from "effect"
+import { Effect, Console } from 'effect'
 
 const result = Effect.loop(
   // Initial state
@@ -73,7 +73,7 @@ const result = Effect.loop(
     // Effect to be performed on each iteration
     body: (state) => Console.log(`Currently at state ${state}`),
     // Discard intermediate results
-    discard: true
+    discard: true,
   }
 )
 
@@ -100,7 +100,7 @@ The `Effect.iterate` function lets you repeatedly update a state through an effe
 ```ts showLineNumbers=false
 Effect.iterate(initial, {
   while: (result) => boolean,
-  body: (result) => Effect
+  body: (result) => Effect,
 })
 ```
 
@@ -119,7 +119,7 @@ return result
 **Example** (Effectful Iteration)
 
 ```ts twoslash
-import { Effect } from "effect"
+import { Effect } from 'effect'
 
 const result = Effect.iterate(
   // Initial result
@@ -128,7 +128,7 @@ const result = Effect.iterate(
     // Condition to continue iterating
     while: (result) => result <= 5,
     // Operation to change the result
-    body: (result) => Effect.succeed(result + 1)
+    body: (result) => Effect.succeed(result + 1),
   }
 )
 
@@ -151,7 +151,7 @@ concurrently. By default, the operations are performed sequentially.
 **Example** (Applying Effects to Iterable Elements)
 
 ```ts twoslash
-import { Effect, Console } from "effect"
+import { Effect, Console } from 'effect'
 
 const result = Effect.forEach([1, 2, 3, 4, 5], (n, index) =>
   Console.log(`Currently at index ${index}`).pipe(Effect.as(n * 2))
@@ -178,13 +178,12 @@ The `discard` option, when set to `true`, will discard the results of each effec
 **Example** (Using `discard` to Ignore Results)
 
 ```ts twoslash "{ discard: true }"
-import { Effect, Console } from "effect"
+import { Effect, Console } from 'effect'
 
 // Apply effects but discard the results
 const result = Effect.forEach(
   [1, 2, 3, 4, 5],
-  (n, index) =>
-    Console.log(`Currently at index ${index}`).pipe(Effect.as(n * 2)),
+  (n, index) => Console.log(`Currently at index ${index}`).pipe(Effect.as(n * 2)),
   { discard: true }
 )
 

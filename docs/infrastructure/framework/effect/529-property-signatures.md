@@ -9,28 +9,20 @@ A property signature can be defined with annotations to provide additional conte
 **Example** (Adding Annotations to a Property Signature)
 
 ```ts twoslash
-import { Schema } from "effect"
+import { Schema } from 'effect'
 
 const Person = Schema.Struct({
   name: Schema.String,
   age: Schema.propertySignature(Schema.NumberFromString).annotations({
-    title: "Age" // Annotation to label the age field
-  })
+    title: 'Age', // Annotation to label the age field
+  }),
 })
 ```
 
 A `PropertySignature` type contains several parameters, each providing details about the transformation between the source field (From) and the target field (To). Let's take a look at what each of these parameters represents:
 
 ```ts showLineNumbers=false
-age: PropertySignature<
-  ToToken,
-  ToType,
-  FromKey,
-  FromToken,
-  FromType,
-  HasDefault,
-  Context
->
+age: PropertySignature<ToToken, ToType, FromKey, FromToken, FromType, HasDefault, Context>
 ```
 
 | Parameter    | Description                                                                                                         |
@@ -46,7 +38,7 @@ age: PropertySignature<
 In the example above, the `PropertySignature` type for `age` is:
 
 ```ts showLineNumbers=false
-PropertySignature<":", number, never, ":", string, false, never>
+PropertySignature<':', number, never, ':', string, false, never>
 ```
 
 This means:
@@ -66,24 +58,24 @@ Sometimes, the source field (the "From" field) may have a different name from th
 **Example** (Mapping from a Different Key)
 
 ```ts twoslash
-import { Schema } from "effect"
+import { Schema } from 'effect'
 
 const Person = Schema.Struct({
   name: Schema.String,
   age: Schema.propertySignature(Schema.NumberFromString).pipe(
-    Schema.fromKey("AGE") // Maps from "AGE" to "age"
-  )
+    Schema.fromKey('AGE') // Maps from "AGE" to "age"
+  ),
 })
 
-console.log(Schema.decodeUnknownSync(Person)({ name: "name", AGE: "18" }))
+console.log(Schema.decodeUnknownSync(Person)({ name: 'name', AGE: '18' }))
 // Output: { name: 'name', age: 18 }
 ```
 
 When you map from `"AGE"` to `"age"`, the `PropertySignature` type changes to:
 
 ```ts showLineNumbers=false ""AGE"" del={1} ins={2}
-PropertySignature<":", number, never, ":", string, false, never>
-PropertySignature<":", number, "AGE", ":", string, false, never>
+PropertySignature<':', number, never, ':', string, false, never>
+PropertySignature<':', number, 'AGE', ':', string, false, never>
 ```
 
 ### Optional Fields
@@ -117,10 +109,10 @@ creates an optional property within a schema, allowing fields to be omitted or s
 **Example** (Defining an Optional Number Field)
 
 ```ts twoslash
-import { Schema } from "effect"
+import { Schema } from 'effect'
 
 const Product = Schema.Struct({
-  quantity: Schema.optional(Schema.NumberFromString)
+  quantity: Schema.optional(Schema.NumberFromString),
 })
 
 //     ┌─── { readonly quantity?: string | undefined; }
@@ -133,7 +125,7 @@ type Type = typeof Product.Type
 
 // Decoding examples
 
-console.log(Schema.decodeUnknownSync(Product)({ quantity: "1" }))
+console.log(Schema.decodeUnknownSync(Product)({ quantity: '1' }))
 // Output: { quantity: 1 }
 console.log(Schema.decodeUnknownSync(Product)({}))
 // Output: {}
@@ -157,10 +149,10 @@ You can access the original schema type (before it was marked as optional) using
 **Example** (Accessing the Original Schema)
 
 ```ts twoslash
-import { Schema } from "effect"
+import { Schema } from 'effect'
 
 const Product = Schema.Struct({
-  quantity: Schema.optional(Schema.NumberFromString)
+  quantity: Schema.optional(Schema.NumberFromString),
 })
 
 //      ┌─── typeof Schema.NumberFromString
@@ -198,12 +190,12 @@ creates an optional property within a schema, treating `null` values the same as
 **Example** (Handling Null as Missing Value)
 
 ```ts twoslash
-import { Schema } from "effect"
+import { Schema } from 'effect'
 
 const Product = Schema.Struct({
   quantity: Schema.optionalWith(Schema.NumberFromString, {
-    nullable: true
-  })
+    nullable: true,
+  }),
 })
 
 //     ┌─── { readonly quantity?: string | null | undefined; }
@@ -216,7 +208,7 @@ type Type = typeof Product.Type
 
 // Decoding examples
 
-console.log(Schema.decodeUnknownSync(Product)({ quantity: "1" }))
+console.log(Schema.decodeUnknownSync(Product)({ quantity: '1' }))
 // Output: { quantity: 1 }
 console.log(Schema.decodeUnknownSync(Product)({}))
 // Output: {}
@@ -242,12 +234,12 @@ You can access the original schema type (before it was marked as optional) using
 **Example** (Accessing the Original Schema)
 
 ```ts twoslash
-import { Schema } from "effect"
+import { Schema } from 'effect'
 
 const Product = Schema.Struct({
   quantity: Schema.optionalWith(Schema.NumberFromString, {
-    nullable: true
-  })
+    nullable: true,
+  }),
 })
 
 //      ┌─── typeof Schema.NumberFromString
@@ -283,10 +275,10 @@ creates an optional property while enforcing strict typing. This means that only
 **Example** (Using Exactness with Optional Field)
 
 ```ts twoslash
-import { Schema } from "effect"
+import { Schema } from 'effect'
 
 const Product = Schema.Struct({
-  quantity: Schema.optionalWith(Schema.NumberFromString, { exact: true })
+  quantity: Schema.optionalWith(Schema.NumberFromString, { exact: true }),
 })
 
 //     ┌─── { readonly quantity?: string; }
@@ -299,7 +291,7 @@ type Type = typeof Product.Type
 
 // Decoding examples
 
-console.log(Schema.decodeUnknownSync(Product)({ quantity: "1" }))
+console.log(Schema.decodeUnknownSync(Product)({ quantity: '1' }))
 // Output: { quantity: 1 }
 console.log(Schema.decodeUnknownSync(Product)({}))
 // Output: {}
@@ -328,10 +320,10 @@ You can access the original schema type (before it was marked as optional) using
 **Example** (Accessing the Original Schema)
 
 ```ts twoslash
-import { Schema } from "effect"
+import { Schema } from 'effect'
 
 const Product = Schema.Struct({
-  quantity: Schema.optionalWith(Schema.NumberFromString, { exact: true })
+  quantity: Schema.optionalWith(Schema.NumberFromString, { exact: true }),
 })
 
 //      ┌─── typeof Schema.NumberFromString
@@ -368,13 +360,13 @@ allows you to define an optional property that enforces strict typing (exact typ
 **Example** (Using Exactness and Handling Null as Missing Value with Optional Field)
 
 ```ts twoslash
-import { Schema } from "effect"
+import { Schema } from 'effect'
 
 const Product = Schema.Struct({
   quantity: Schema.optionalWith(Schema.NumberFromString, {
     exact: true,
-    nullable: true
-  })
+    nullable: true,
+  }),
 })
 
 //     ┌─── { readonly quantity?: string | null; }
@@ -387,7 +379,7 @@ type Type = typeof Product.Type
 
 // Decoding examples
 
-console.log(Schema.decodeUnknownSync(Product)({ quantity: "1" }))
+console.log(Schema.decodeUnknownSync(Product)({ quantity: '1' }))
 // Output: { quantity: 1 }
 console.log(Schema.decodeUnknownSync(Product)({}))
 // Output: {}
@@ -422,13 +414,13 @@ You can access the original schema type (before it was marked as optional) using
 **Example** (Accessing the Original Schema)
 
 ```ts twoslash
-import { Schema } from "effect"
+import { Schema } from 'effect'
 
 const Product = Schema.Struct({
   quantity: Schema.optionalWith(Schema.NumberFromString, {
     exact: true,
-    nullable: true
-  })
+    nullable: true,
+  }),
 })
 
 //      ┌─── typeof Schema.NumberFromString
@@ -454,10 +446,10 @@ This setting affects whether the schema should treat optional `never`-typed fiel
 When this feature is turned off, you can employ the `Schema.optional` function. This approach allows the field to implicitly accept `undefined` as a value.
 
 ```ts twoslash
-import { Schema } from "effect"
+import { Schema } from 'effect'
 
 const Product = Schema.Struct({
-  quantity: Schema.optional(Schema.Never)
+  quantity: Schema.optional(Schema.Never),
 })
 
 //     ┌─── { readonly quantity?: undefined; }
@@ -475,10 +467,10 @@ When this feature is turned on, the `Schema.optionalWith` function is recommende
 It ensures stricter enforcement of the field's absence.
 
 ```ts twoslash
-import { Schema } from "effect"
+import { Schema } from 'effect'
 
 const Product = Schema.Struct({
-  quantity: Schema.optionalWith(Schema.Never, { exact: true })
+  quantity: Schema.optionalWith(Schema.Never, { exact: true }),
 })
 
 //     ┌─── { readonly quantity?: never; }
@@ -515,12 +507,12 @@ Schema.optionalWith(schema: Schema<A, I, R>, { default: () => A })
 **Example** (Applying Default When Field Is Missing or `undefined`)
 
 ```ts twoslash
-import { Schema } from "effect"
+import { Schema } from 'effect'
 
 const Product = Schema.Struct({
   quantity: Schema.optionalWith(Schema.NumberFromString, {
-    default: () => 1 // Default value for quantity
-  })
+    default: () => 1, // Default value for quantity
+  }),
 })
 
 //     ┌─── { readonly quantity?: string | undefined; }
@@ -539,7 +531,7 @@ console.log(Schema.decodeUnknownSync(Product)({}))
 console.log(Schema.decodeUnknownSync(Product)({ quantity: undefined }))
 // Output: { quantity: 1 }
 
-console.log(Schema.decodeUnknownSync(Product)({ quantity: "2" }))
+console.log(Schema.decodeUnknownSync(Product)({ quantity: '2' }))
 // Output: { quantity: 2 }
 
 // Object construction examples with default applied
@@ -558,12 +550,12 @@ You can access the original schema type (before it was marked as optional) using
 **Example** (Accessing the Original Schema)
 
 ```ts twoslash
-import { Schema } from "effect"
+import { Schema } from 'effect'
 
 const Product = Schema.Struct({
   quantity: Schema.optionalWith(Schema.NumberFromString, {
-    default: () => 1 // Default value for quantity
-  })
+    default: () => 1, // Default value for quantity
+  }),
 })
 
 //      ┌─── typeof Schema.NumberFromString
@@ -592,13 +584,13 @@ Schema.optionalWith(schema: Schema<A, I, R>, {
 **Example** (Applying Default Only When Field Is Missing)
 
 ```ts twoslash
-import { Schema } from "effect"
+import { Schema } from 'effect'
 
 const Product = Schema.Struct({
   quantity: Schema.optionalWith(Schema.NumberFromString, {
     default: () => 1, // Default value for quantity
-    exact: true // Only apply default if quantity is not provided
-  })
+    exact: true, // Only apply default if quantity is not provided
+  }),
 })
 
 //     ┌─── { readonly quantity?: string; }
@@ -612,7 +604,7 @@ type Type = typeof Product.Type
 console.log(Schema.decodeUnknownSync(Product)({}))
 // Output: { quantity: 1 }
 
-console.log(Schema.decodeUnknownSync(Product)({ quantity: "2" }))
+console.log(Schema.decodeUnknownSync(Product)({ quantity: '2' }))
 // Output: { quantity: 2 }
 
 console.log(Schema.decodeUnknownSync(Product)({ quantity: undefined }))
@@ -649,13 +641,13 @@ Schema.optionalWith(schema: Schema<A, I, R>, {
 **Example** (Applying Default When Field Is Missing or `undefined` or `null`)
 
 ```ts twoslash
-import { Schema } from "effect"
+import { Schema } from 'effect'
 
 const Product = Schema.Struct({
   quantity: Schema.optionalWith(Schema.NumberFromString, {
     default: () => 1, // Default value for quantity
-    nullable: true // Apply default if quantity is null
-  })
+    nullable: true, // Apply default if quantity is null
+  }),
 })
 
 //     ┌─── { readonly quantity?: string | null | undefined; }
@@ -675,7 +667,7 @@ console.log(Schema.decodeUnknownSync(Product)({ quantity: undefined }))
 console.log(Schema.decodeUnknownSync(Product)({ quantity: null }))
 // Output: { quantity: 1 }
 
-console.log(Schema.decodeUnknownSync(Product)({ quantity: "2" }))
+console.log(Schema.decodeUnknownSync(Product)({ quantity: '2' }))
 // Output: { quantity: 2 }
 ```
 
@@ -701,14 +693,14 @@ Schema.optionalWith(schema: Schema<A, I, R>, {
 **Example** (Applying Default Only When Field Is Missing or `null`)
 
 ```ts twoslash
-import { Schema } from "effect"
+import { Schema } from 'effect'
 
 const Product = Schema.Struct({
   quantity: Schema.optionalWith(Schema.NumberFromString, {
     default: () => 1, // Default value for quantity
     exact: true, // Only apply default if quantity is not provided
-    nullable: true // Apply default if quantity is null
-  })
+    nullable: true, // Apply default if quantity is null
+  }),
 })
 
 //     ┌─── { readonly quantity?: string | null; }
@@ -725,7 +717,7 @@ console.log(Schema.decodeUnknownSync(Product)({}))
 console.log(Schema.decodeUnknownSync(Product)({ quantity: null }))
 // Output: { quantity: 1 }
 
-console.log(Schema.decodeUnknownSync(Product)({ quantity: "2" }))
+console.log(Schema.decodeUnknownSync(Product)({ quantity: '2' }))
 // Output: { quantity: 2 }
 
 console.log(Schema.decodeUnknownSync(Product)({ quantity: undefined }))
@@ -773,10 +765,10 @@ optionalWith(schema: Schema<A, I, R>, { as: "Option" })
 **Example** (Handling Optional Field as Option)
 
 ```ts twoslash
-import { Schema } from "effect"
+import { Schema } from 'effect'
 
 const Product = Schema.Struct({
-  quantity: Schema.optionalWith(Schema.NumberFromString, { as: "Option" })
+  quantity: Schema.optionalWith(Schema.NumberFromString, { as: 'Option' }),
 })
 
 //     ┌─── { readonly quantity?: string | undefined; }
@@ -793,7 +785,7 @@ console.log(Schema.decodeUnknownSync(Product)({}))
 console.log(Schema.decodeUnknownSync(Product)({ quantity: undefined }))
 // Output: { quantity: { _id: 'Option', _tag: 'None' } }
 
-console.log(Schema.decodeUnknownSync(Product)({ quantity: "2" }))
+console.log(Schema.decodeUnknownSync(Product)({ quantity: '2' }))
 // Output: { quantity: { _id: 'Option', _tag: 'Some', value: 2 } }
 ```
 
@@ -804,10 +796,10 @@ You can access the original schema type (before it was marked as optional) using
 **Example** (Accessing the Original Schema)
 
 ```ts twoslash
-import { Schema } from "effect"
+import { Schema } from 'effect'
 
 const Product = Schema.Struct({
-  quantity: Schema.optionalWith(Schema.NumberFromString, { as: "Option" })
+  quantity: Schema.optionalWith(Schema.NumberFromString, { as: 'Option' }),
 })
 
 //      ┌─── typeof Schema.NumberFromString
@@ -846,13 +838,13 @@ optionalWith(schema: Schema<A, I, R>, {
 **Example** (Using Exactness with Optional Field as Option)
 
 ```ts twoslash
-import { Schema } from "effect"
+import { Schema } from 'effect'
 
 const Product = Schema.Struct({
   quantity: Schema.optionalWith(Schema.NumberFromString, {
-    as: "Option",
-    exact: true
-  })
+    as: 'Option',
+    exact: true,
+  }),
 })
 
 //     ┌─── { readonly quantity?: string; }
@@ -866,7 +858,7 @@ type Type = typeof Product.Type
 console.log(Schema.decodeUnknownSync(Product)({}))
 // Output: { quantity: { _id: 'Option', _tag: 'None' } }
 
-console.log(Schema.decodeUnknownSync(Product)({ quantity: "2" }))
+console.log(Schema.decodeUnknownSync(Product)({ quantity: '2' }))
 // Output: { quantity: { _id: 'Option', _tag: 'Some', value: 2 } }
 
 console.log(Schema.decodeUnknownSync(Product)({ quantity: undefined }))
@@ -889,13 +881,13 @@ You can access the original schema type (before it was marked as optional) using
 **Example** (Accessing the Original Schema)
 
 ```ts twoslash
-import { Schema } from "effect"
+import { Schema } from 'effect'
 
 const Product = Schema.Struct({
   quantity: Schema.optionalWith(Schema.NumberFromString, {
-    as: "Option",
-    exact: true
-  })
+    as: 'Option',
+    exact: true,
+  }),
 })
 
 //      ┌─── typeof Schema.NumberFromString
@@ -935,13 +927,13 @@ optionalWith(schema: Schema<A, I, R>, {
 **Example** (Handling Null as Missing Value with Optional Field as Option)
 
 ```ts twoslash
-import { Schema } from "effect"
+import { Schema } from 'effect'
 
 const Product = Schema.Struct({
   quantity: Schema.optionalWith(Schema.NumberFromString, {
-    as: "Option",
-    nullable: true
-  })
+    as: 'Option',
+    nullable: true,
+  }),
 })
 
 //     ┌─── { readonly quantity?: string | null | undefined; }
@@ -961,7 +953,7 @@ console.log(Schema.decodeUnknownSync(Product)({ quantity: undefined }))
 console.log(Schema.decodeUnknownSync(Product)({ quantity: null }))
 // Output: { quantity: { _id: 'Option', _tag: 'None' } }
 
-console.log(Schema.decodeUnknownSync(Product)({ quantity: "2" }))
+console.log(Schema.decodeUnknownSync(Product)({ quantity: '2' }))
 // Output: { quantity: { _id: 'Option', _tag: 'Some', value: 2 } }
 ```
 
@@ -972,13 +964,13 @@ You can access the original schema type (before it was marked as optional) using
 **Example** (Accessing the Original Schema)
 
 ```ts twoslash
-import { Schema } from "effect"
+import { Schema } from 'effect'
 
 const Product = Schema.Struct({
   quantity: Schema.optionalWith(Schema.NumberFromString, {
-    as: "Option",
-    nullable: true
-  })
+    as: 'Option',
+    nullable: true,
+  }),
 })
 
 //      ┌─── typeof Schema.NumberFromString
@@ -1019,14 +1011,14 @@ optionalWith(schema: Schema<A, I, R>, {
 **Example** (Using Exactness and Handling Null as Missing Value with Optional Field as Option)
 
 ```ts twoslash
-import { Schema } from "effect"
+import { Schema } from 'effect'
 
 const Product = Schema.Struct({
   quantity: Schema.optionalWith(Schema.NumberFromString, {
-    as: "Option",
+    as: 'Option',
     exact: true,
-    nullable: true
-  })
+    nullable: true,
+  }),
 })
 
 //     ┌─── { readonly quantity?: string | null; }
@@ -1043,7 +1035,7 @@ console.log(Schema.decodeUnknownSync(Product)({}))
 console.log(Schema.decodeUnknownSync(Product)({ quantity: null }))
 // Output: { quantity: { _id: 'Option', _tag: 'None' } }
 
-console.log(Schema.decodeUnknownSync(Product)({ quantity: "2" }))
+console.log(Schema.decodeUnknownSync(Product)({ quantity: '2' }))
 // Output: { quantity: { _id: 'Option', _tag: 'Some', value: 2 } }
 
 console.log(Schema.decodeUnknownSync(Product)({ quantity: undefined }))
@@ -1066,14 +1058,14 @@ You can access the original schema type (before it was marked as optional) using
 **Example** (Accessing the Original Schema)
 
 ```ts twoslash
-import { Schema } from "effect"
+import { Schema } from 'effect'
 
 const Product = Schema.Struct({
   quantity: Schema.optionalWith(Schema.NumberFromString, {
-    as: "Option",
+    as: 'Option',
     exact: true,
-    nullable: true
-  })
+    nullable: true,
+  }),
 })
 
 //      ┌─── typeof Schema.NumberFromString

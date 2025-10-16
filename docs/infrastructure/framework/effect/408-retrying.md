@@ -7,7 +7,7 @@ The `Micro.retry` function allows you to retry a failing effect according to a d
 **Example** (Retrying with a Fixed Delay)
 
 ```ts twoslash
-import { Micro } from "effect"
+import { Micro } from 'effect'
 
 let count = 0
 
@@ -15,11 +15,11 @@ let count = 0
 const effect = Micro.async<string, Error>((resume) => {
   if (count <= 2) {
     count++
-    console.log("failure")
+    console.log('failure')
     resume(Micro.fail(new Error()))
   } else {
-    console.log("success")
-    resume(Micro.succeed("yay!"))
+    console.log('success')
+    resume(Micro.succeed('yay!'))
   }
 })
 

@@ -6,7 +6,7 @@ In traditional programming, when an error occurs, it is often handled by throwin
 // Type signature doesn't show possible exceptions
 const divide = (a: number, b: number): number => {
   if (b === 0) {
-    throw new Error("Cannot divide by zero")
+    throw new Error('Cannot divide by zero')
   }
   return a / b
 }
@@ -26,7 +26,7 @@ without any errors or external dependencies.
 **Example** (Creating a Successful Effect)
 
 ```ts twoslash
-import { Effect } from "effect"
+import { Effect } from 'effect'
 
 //      ┌─── Effect<number, never, never>
 //      ▼
@@ -59,13 +59,11 @@ functions like [Effect.catchAll](/docs/error-management/expected-errors/#catchal
 **Example** (Creating a Failed Effect)
 
 ```ts twoslash
-import { Effect } from "effect"
+import { Effect } from 'effect'
 
 //      ┌─── Effect<never, Error, never>
 //      ▼
-const failure = Effect.fail(
-  new Error("Operation failed due to network error")
-)
+const failure = Effect.fail(new Error('Operation failed due to network error'))
 ```
 
 The type of `failure` is `Effect<never, Error, never>`, which means:
@@ -89,9 +87,9 @@ Using "tagged" errors (objects with a `_tag` field) can help identify error type
 **Example** (Using Tagged Errors)
 
 ```ts twoslash
-import { Effect, Data } from "effect"
+import { Effect, Data } from 'effect'
 
-class HttpError extends Data.TaggedError("HttpError")<{}> {}
+class HttpError extends Data.TaggedError('HttpError')<{}> {}
 
 //      ┌─── Effect<never, HttpError, never>
 //      ▼

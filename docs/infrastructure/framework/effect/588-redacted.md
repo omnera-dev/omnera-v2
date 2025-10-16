@@ -8,7 +8,7 @@ This transformation ensures that the sensitive data is not exposed in the applic
 **Example** (Basic Redacted Schema)
 
 ```ts twoslash
-import { Schema } from "effect"
+import { Schema } from 'effect'
 
 const schema = Schema.Redacted(Schema.String)
 
@@ -24,7 +24,7 @@ const decode = Schema.decodeUnknownSync(schema)
 
 // Decoding examples
 
-console.log(decode("keep it secret, keep it safe"))
+console.log(decode('keep it secret, keep it safe'))
 // Output: <redacted>
 ```
 
@@ -41,14 +41,12 @@ It's important to note that when successfully decoding a `Redacted`, the output 
 In the example below, if the input string does not meet the criteria (e.g., contains spaces), the error message generated might inadvertently expose sensitive information included in the input.
 
 ```ts twoslash
-import { Schema } from "effect"
-import { Redacted } from "effect"
+import { Schema } from 'effect'
+import { Redacted } from 'effect'
 
-const schema = Schema.Trimmed.pipe(
-  Schema.compose(Schema.Redacted(Schema.String))
-)
+const schema = Schema.Trimmed.pipe(Schema.compose(Schema.Redacted(Schema.String)))
 
-console.log(Schema.decodeUnknownEither(schema)(" SECRET"))
+console.log(Schema.decodeUnknownEither(schema)(' SECRET'))
 /*
 {
   _id: 'Either',
@@ -64,7 +62,7 @@ console.log(Schema.decodeUnknownEither(schema)(" SECRET"))
 }
 */
 
-console.log(Schema.encodeEither(schema)(Redacted.make(" SECRET")))
+console.log(Schema.encodeEither(schema)(Redacted.make(' SECRET')))
 /*
 {
   _id: 'Either',
@@ -88,14 +86,14 @@ To reduce the risk of sensitive information leakage in error messages, you can c
 **Example** (Customizing Error Messages)
 
 ```ts twoslash
-import { Schema } from "effect"
-import { Redacted } from "effect"
+import { Schema } from 'effect'
+import { Redacted } from 'effect'
 
 const schema = Schema.Trimmed.annotations({
-  message: () => "Expected Trimmed, actual <redacted>"
+  message: () => 'Expected Trimmed, actual <redacted>',
 }).pipe(Schema.compose(Schema.Redacted(Schema.String)))
 
-console.log(Schema.decodeUnknownEither(schema)(" SECRET"))
+console.log(Schema.decodeUnknownEither(schema)(' SECRET'))
 /*
 {
   _id: 'Either',
@@ -109,7 +107,7 @@ console.log(Schema.decodeUnknownEither(schema)(" SECRET"))
 }
 */
 
-console.log(Schema.encodeEither(schema)(Redacted.make(" SECRET")))
+console.log(Schema.encodeEither(schema)(Redacted.make(' SECRET')))
 /*
 {
   _id: 'Either',
@@ -131,8 +129,8 @@ The `Schema.RedactedFromSelf` schema is designed to validate that a given value 
 **Example**
 
 ```ts twoslash
-import { Schema } from "effect"
-import { Redacted } from "effect"
+import { Schema } from 'effect'
+import { Redacted } from 'effect'
 
 const schema = Schema.RedactedFromSelf(Schema.String)
 
@@ -148,7 +146,7 @@ const decode = Schema.decodeUnknownSync(schema)
 
 // Decoding examples
 
-console.log(decode(Redacted.make("mysecret")))
+console.log(decode(Redacted.make('mysecret')))
 // Output: <redacted>
 
 console.log(decode(null))

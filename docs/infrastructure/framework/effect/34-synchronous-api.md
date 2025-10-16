@@ -9,9 +9,9 @@
 <TabItem label="neverthrow">
 
 ```ts twoslash
-import { ok } from "neverthrow"
+import { ok } from 'neverthrow'
 
-const result = ok({ myData: "test" })
+const result = ok({ myData: 'test' })
 
 result.isOk() // true
 result.isErr() // false
@@ -22,9 +22,9 @@ result.isErr() // false
 <TabItem label="Effect">
 
 ```ts twoslash
-import * as Either from "effect/Either"
+import * as Either from 'effect/Either'
 
-const result = Either.right({ myData: "test" })
+const result = Either.right({ myData: 'test' })
 
 Either.isRight(result) // true
 Either.isLeft(result) // false
@@ -43,9 +43,9 @@ Either.isLeft(result) // false
 <TabItem label="neverthrow">
 
 ```ts twoslash
-import { err } from "neverthrow"
+import { err } from 'neverthrow'
 
-const result = err("Oh no")
+const result = err('Oh no')
 
 result.isOk() // false
 result.isErr() // true
@@ -56,9 +56,9 @@ result.isErr() // true
 <TabItem label="Effect">
 
 ```ts twoslash
-import * as Either from "effect/Either"
+import * as Either from 'effect/Either'
 
-const result = Either.left("Oh no")
+const result = Either.left('Oh no')
 
 Either.isRight(result) // false
 Either.isLeft(result) // true
@@ -77,11 +77,11 @@ Either.isLeft(result) // true
 <TabItem label="neverthrow">
 
 ```ts twoslash
-import { Result } from "neverthrow"
+import { Result } from 'neverthrow'
 
 declare function getLines(s: string): Result<Array<string>, Error>
 
-const result = getLines("1\n2\n3\n4\n")
+const result = getLines('1\n2\n3\n4\n')
 
 // this Result now has a Array<number> inside it
 const newResult = result.map((arr) => arr.map(parseInt))
@@ -94,11 +94,11 @@ newResult.isOk() // true
 <TabItem label="Effect">
 
 ```ts twoslash
-import * as Either from "effect/Either"
+import * as Either from 'effect/Either'
 
 declare function getLines(s: string): Either.Either<Array<string>, Error>
 
-const result = getLines("1\n2\n3\n4\n")
+const result = getLines('1\n2\n3\n4\n')
 
 // this Either now has a Array<number> inside it
 const newResult = result.pipe(Either.map((arr) => arr.map(parseInt)))
@@ -119,13 +119,11 @@ Either.isRight(newResult) // true
 <TabItem label="neverthrow">
 
 ```ts twoslash
-import { Result } from "neverthrow"
+import { Result } from 'neverthrow'
 
-declare function parseHeaders(
-  raw: string
-): Result<Record<string, string>, string>
+declare function parseHeaders(raw: string): Result<Record<string, string>, string>
 
-const rawHeaders = "nonsensical gibberish and badly formatted stuff"
+const rawHeaders = 'nonsensical gibberish and badly formatted stuff'
 
 const result = parseHeaders(rawHeaders)
 
@@ -138,13 +136,11 @@ const newResult = result.mapErr((err) => new Error(err))
 <TabItem label="Effect">
 
 ```ts twoslash
-import * as Either from "effect/Either"
+import * as Either from 'effect/Either'
 
-declare function parseHeaders(
-  raw: string
-): Either.Either<Record<string, string>, string>
+declare function parseHeaders(raw: string): Either.Either<Record<string, string>, string>
 
-const rawHeaders = "nonsensical gibberish and badly formatted stuff"
+const rawHeaders = 'nonsensical gibberish and badly formatted stuff'
 
 const result = parseHeaders(rawHeaders)
 
@@ -165,9 +161,9 @@ const newResult = result.pipe(Either.mapLeft((err) => new Error(err)))
 <TabItem label="neverthrow">
 
 ```ts twoslash
-import { err } from "neverthrow"
+import { err } from 'neverthrow'
 
-const result = err("Oh no")
+const result = err('Oh no')
 
 const multiply = (value: number): number => value * 2
 
@@ -179,9 +175,9 @@ const unwrapped = result.map(multiply).unwrapOr(10)
 <TabItem label="Effect">
 
 ```ts twoslash
-import * as Either from "effect/Either"
+import * as Either from 'effect/Either'
 
-const result = Either.left("Oh no")
+const result = Either.left('Oh no')
 
 const multiply = (value: number): number => value * 2
 
@@ -204,10 +200,10 @@ const unwrapped = result.pipe(
 <TabItem label="neverthrow">
 
 ```ts twoslash
-import { ok, Result, err } from "neverthrow"
+import { ok, Result, err } from 'neverthrow'
 
 const sqrt = (n: number): Result<number, string> =>
-  n > 0 ? ok(Math.sqrt(n)) : err("n must be positive")
+  n > 0 ? ok(Math.sqrt(n)) : err('n must be positive')
 
 ok(16).andThen(sqrt).andThen(sqrt)
 // Ok(2)
@@ -218,10 +214,10 @@ ok(16).andThen(sqrt).andThen(sqrt)
 <TabItem label="Effect">
 
 ```ts twoslash
-import * as Either from "effect/Either"
+import * as Either from 'effect/Either'
 
 const sqrt = (n: number): Either.Either<number, string> =>
-  n > 0 ? Either.right(Math.sqrt(n)) : Either.left("n must be positive")
+  n > 0 ? Either.right(Math.sqrt(n)) : Either.left('n must be positive')
 
 Either.right(16).pipe(Either.andThen(sqrt), Either.andThen(sqrt))
 // Right(2)
@@ -240,7 +236,7 @@ Either.right(16).pipe(Either.andThen(sqrt), Either.andThen(sqrt))
 <TabItem label="neverthrow">
 
 ```ts twoslash
-import { ok, okAsync } from "neverthrow"
+import { ok, okAsync } from 'neverthrow'
 
 // const result: ResultAsync<number, never>
 const result = ok(1).asyncAndThen((n) => okAsync(n + 1))
@@ -251,13 +247,11 @@ const result = ok(1).asyncAndThen((n) => okAsync(n + 1))
 <TabItem label="Effect">
 
 ```ts twoslash
-import * as Either from "effect/Either"
-import * as Effect from "effect/Effect"
+import * as Either from 'effect/Either'
+import * as Effect from 'effect/Effect'
 
 // const result: Effect<number, never, never>
-const result = Either.right(1).pipe(
-  Effect.andThen((n) => Effect.succeed(n + 1))
-)
+const result = Either.right(1).pipe(Effect.andThen((n) => Effect.succeed(n + 1)))
 ```
 
 </TabItem>
@@ -273,21 +267,17 @@ const result = Either.right(1).pipe(
 <TabItem label="neverthrow">
 
 ```ts twoslash
-import { Result, err, ok } from "neverthrow"
+import { Result, err, ok } from 'neverthrow'
 
 enum DatabaseError {
-  PoolExhausted = "PoolExhausted",
-  NotFound = "NotFound"
+  PoolExhausted = 'PoolExhausted',
+  NotFound = 'NotFound',
 }
 
-const dbQueryResult: Result<string, DatabaseError> = err(
-  DatabaseError.NotFound
-)
+const dbQueryResult: Result<string, DatabaseError> = err(DatabaseError.NotFound)
 
 const updatedQueryResult = dbQueryResult.orElse((dbError) =>
-  dbError === DatabaseError.NotFound
-    ? ok("User does not exist")
-    : err(500)
+  dbError === DatabaseError.NotFound ? ok('User does not exist') : err(500)
 )
 ```
 
@@ -296,22 +286,18 @@ const updatedQueryResult = dbQueryResult.orElse((dbError) =>
 <TabItem label="Effect">
 
 ```ts twoslash
-import * as Either from "effect/Either"
+import * as Either from 'effect/Either'
 
 enum DatabaseError {
-  PoolExhausted = "PoolExhausted",
-  NotFound = "NotFound"
+  PoolExhausted = 'PoolExhausted',
+  NotFound = 'NotFound',
 }
 
-const dbQueryResult: Either.Either<string, DatabaseError> = Either.left(
-  DatabaseError.NotFound
-)
+const dbQueryResult: Either.Either<string, DatabaseError> = Either.left(DatabaseError.NotFound)
 
 const updatedQueryResult = dbQueryResult.pipe(
   Either.orElse((dbError) =>
-    dbError === DatabaseError.NotFound
-      ? Either.right("User does not exist")
-      : Either.left(500)
+    dbError === DatabaseError.NotFound ? Either.right('User does not exist') : Either.left(500)
   )
 )
 ```
@@ -329,7 +315,7 @@ const updatedQueryResult = dbQueryResult.pipe(
 <TabItem label="neverthrow">
 
 ```ts twoslash
-import { Result } from "neverthrow"
+import { Result } from 'neverthrow'
 
 declare const myResult: Result<number, string>
 
@@ -344,14 +330,14 @@ myResult.match(
 <TabItem label="Effect">
 
 ```ts twoslash
-import * as Either from "effect/Either"
+import * as Either from 'effect/Either'
 
 declare const myResult: Either.Either<number, string>
 
 myResult.pipe(
   Either.match({
     onLeft: (error) => `The error is ${error}`,
-    onRight: (value) => `The value is ${value}`
+    onRight: (value) => `The value is ${value}`,
   })
 )
 ```
@@ -369,25 +355,19 @@ myResult.pipe(
 <TabItem label="neverthrow">
 
 ```ts twoslash
-import { Result } from "neverthrow"
+import { Result } from 'neverthrow'
 
 interface User {}
-declare function parseHeaders(
-  raw: string
-): Result<Record<string, string>, string>
-declare function findUserInDatabase(
-  authorization: string
-): Promise<User | undefined>
+declare function parseHeaders(raw: string): Result<Record<string, string>, string>
+declare function findUserInDatabase(authorization: string): Promise<User | undefined>
 
-const rawHeader = "Authorization: Bearer 1234567890"
+const rawHeader = 'Authorization: Bearer 1234567890'
 
 // const asyncResult: ResultAsync<User | undefined, string>
 const asyncResult = parseHeaders(rawHeader)
-  .map((kvMap) => kvMap["Authorization"])
+  .map((kvMap) => kvMap['Authorization'])
   .asyncMap((authorization) =>
-    authorization === undefined
-      ? Promise.resolve(undefined)
-      : findUserInDatabase(authorization)
+    authorization === undefined ? Promise.resolve(undefined) : findUserInDatabase(authorization)
   )
 ```
 
@@ -396,26 +376,20 @@ const asyncResult = parseHeaders(rawHeader)
 <TabItem label="Effect">
 
 ```ts twoslash "UnknownException"
-import * as Either from "effect/Either"
-import * as Effect from "effect/Effect"
+import * as Either from 'effect/Either'
+import * as Effect from 'effect/Effect'
 
 interface User {}
-declare function parseHeaders(
-  raw: string
-): Either.Either<Record<string, string>, string>
-declare function findUserInDatabase(
-  authorization: string
-): Promise<User | undefined>
+declare function parseHeaders(raw: string): Either.Either<Record<string, string>, string>
+declare function findUserInDatabase(authorization: string): Promise<User | undefined>
 
-const rawHeader = "Authorization: Bearer 1234567890"
+const rawHeader = 'Authorization: Bearer 1234567890'
 
 // const asyncResult: Effect<User | undefined, string | UnknownException>
 const asyncResult = parseHeaders(rawHeader).pipe(
-  Either.map((kvMap) => kvMap["Authorization"]),
+  Either.map((kvMap) => kvMap['Authorization']),
   Effect.andThen((authorization) =>
-    authorization === undefined
-      ? Promise.resolve(undefined)
-      : findUserInDatabase(authorization)
+    authorization === undefined ? Promise.resolve(undefined) : findUserInDatabase(authorization)
   )
 )
 ```
@@ -437,7 +411,7 @@ If the Promise rejects, the rejection is turned into an `UnknownException`, whic
 <TabItem label="neverthrow">
 
 ```ts twoslash
-import { Result, ok } from "neverthrow"
+import { Result, ok } from 'neverthrow'
 
 const results: Result<number, string>[] = [ok(1), ok(2)]
 
@@ -450,12 +424,9 @@ const combined = Result.combine(results)
 <TabItem label="Effect">
 
 ```ts twoslash
-import * as Either from "effect/Either"
+import * as Either from 'effect/Either'
 
-const results: Either.Either<number, string>[] = [
-  Either.right(1),
-  Either.right(2)
-]
+const results: Either.Either<number, string>[] = [Either.right(1), Either.right(2)]
 
 // const combined: Either<number[], string>
 const combined = Either.all(results)
@@ -474,14 +445,9 @@ const combined = Either.all(results)
 <TabItem label="neverthrow">
 
 ```ts twoslash
-import { Result, ok, err } from "neverthrow"
+import { Result, ok, err } from 'neverthrow'
 
-const results: Result<number, string>[] = [
-  ok(123),
-  err("boooom!"),
-  ok(456),
-  err("ahhhhh!")
-]
+const results: Result<number, string>[] = [ok(123), err('boooom!'), ok(456), err('ahhhhh!')]
 
 const result = Result.combineWithAllErrors(results)
 // result is Err(['boooom!', 'ahhhhh!'])
@@ -492,14 +458,14 @@ const result = Result.combineWithAllErrors(results)
 <TabItem label="Effect">
 
 ```ts twoslash
-import * as Either from "effect/Either"
-import * as Array from "effect/Array"
+import * as Either from 'effect/Either'
+import * as Array from 'effect/Array'
 
 const results: Either.Either<number, string>[] = [
   Either.right(123),
-  Either.left("boooom!"),
+  Either.left('boooom!'),
   Either.right(456),
-  Either.left("ahhhhh!")
+  Either.left('ahhhhh!'),
 ]
 
 const errors = Array.getLefts(results)

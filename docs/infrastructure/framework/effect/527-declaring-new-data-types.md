@@ -7,17 +7,15 @@ To declare a schema for a primitive data type, such as `File`, you can use the `
 **Example** (Declaring a Schema for `File`)
 
 ```ts twoslash
-import { Schema } from "effect"
+import { Schema } from 'effect'
 
 // Declare a schema for the File type using a type guard
-const FileFromSelf = Schema.declare(
-  (input: unknown): input is File => input instanceof File
-)
+const FileFromSelf = Schema.declare((input: unknown): input is File => input instanceof File)
 
 const decode = Schema.decodeUnknownSync(FileFromSelf)
 
 // Decoding a valid File object
-console.log(decode(new File([], "")))
+console.log(decode(new File([], '')))
 /*
 Output:
 File { size: 0, type: '', name: '', lastModified: 1724774163056 }
@@ -45,23 +43,20 @@ To enhance the default error message, you can add annotations, particularly the 
 **Example** (Declaring a Schema with Annotations)
 
 ```ts twoslash
-import { Schema } from "effect"
+import { Schema } from 'effect'
 
 // Declare a schema for the File type with additional annotations
-const FileFromSelf = Schema.declare(
-  (input: unknown): input is File => input instanceof File,
-  {
-    // A unique identifier for the schema
-    identifier: "FileFromSelf",
-    // Detailed description of the schema
-    description: "The `File` type in JavaScript"
-  }
-)
+const FileFromSelf = Schema.declare((input: unknown): input is File => input instanceof File, {
+  // A unique identifier for the schema
+  identifier: 'FileFromSelf',
+  // Detailed description of the schema
+  description: 'The `File` type in JavaScript',
+})
 
 const decode = Schema.decodeUnknownSync(FileFromSelf)
 
 // Decoding a valid File object
-console.log(decode(new File([], "")))
+console.log(decode(new File([], '')))
 /*
 Output:
 File { size: 0, type: '', name: '', lastModified: 1724774163056 }
@@ -82,7 +77,7 @@ Type constructors are generic types that take one or more types as arguments and
 **Example** (Declaring a Schema for `ReadonlySet<A>`)
 
 ```ts twoslash
-import { ParseResult, Schema } from "effect"
+import { ParseResult, Schema } from 'effect'
 
 export const MyReadonlySet = <A, I, R>(
   // Schema for the elements of the Set
@@ -101,10 +96,7 @@ export const MyReadonlySet = <A, I, R>(
             parseOptions
           )
           // Return a ReadonlySet containing the decoded elements
-          return ParseResult.map(
-            elements,
-            (as): ReadonlySet<A> => new Set(as)
-          )
+          return ParseResult.map(elements, (as): ReadonlySet<A> => new Set(as))
         }
         // Handle invalid input
         return ParseResult.fail(new ParseResult.Type(ast, input))
@@ -118,17 +110,14 @@ export const MyReadonlySet = <A, I, R>(
             parseOptions
           )
           // Return a ReadonlySet containing the encoded elements
-          return ParseResult.map(
-            elements,
-            (is): ReadonlySet<I> => new Set(is)
-          )
+          return ParseResult.map(elements, (is): ReadonlySet<I> => new Set(is))
         }
         // Handle invalid input
         return ParseResult.fail(new ParseResult.Type(ast, input))
-      }
+      },
     },
     {
-      description: `ReadonlySet<${Schema.format(item)}>`
+      description: `ReadonlySet<${Schema.format(item)}>`,
     }
   )
 
@@ -137,7 +126,7 @@ const setOfNumbers = MyReadonlySet(Schema.NumberFromString)
 
 const decode = Schema.decodeUnknownSync(setOfNumbers)
 
-console.log(decode(new Set(["1", "2", "3"]))) // Set(3) { 1, 2, 3 }
+console.log(decode(new Set(['1', '2', '3']))) // Set(3) { 1, 2, 3 }
 
 // Decode an invalid input
 decode(null)
@@ -147,7 +136,7 @@ ParseError: Expected ReadonlySet<NumberFromString>, actual null
 */
 
 // Decode a Set with an invalid element
-decode(new Set(["1", null, "3"]))
+decode(new Set(['1', null, '3']))
 /*
 throws
 ParseError: ReadonlyArray<NumberFromString>
@@ -173,15 +162,12 @@ This can result in an error, as the compiler may lack the necessary information 
 **Example** (Attempting to Generate Arbitrary Values Without Required Annotations)
 
 ```ts twoslash
-import { Arbitrary, Schema } from "effect"
+import { Arbitrary, Schema } from 'effect'
 
 // Define a schema for the File type
-const FileFromSelf = Schema.declare(
-  (input: unknown): input is File => input instanceof File,
-  {
-    identifier: "FileFromSelf"
-  }
-)
+const FileFromSelf = Schema.declare((input: unknown): input is File => input instanceof File, {
+  identifier: 'FileFromSelf',
+})
 
 // Try creating an Arbitrary instance for the schema
 const arb = Arbitrary.make(FileFromSelf)
@@ -198,19 +184,14 @@ In the above example, attempting to generate arbitrary values for the `FileFromS
 **Example** (Adding Arbitrary Annotation for Custom `File` Schema)
 
 ```ts twoslash
-import { Arbitrary, FastCheck, Pretty, Schema } from "effect"
+import { Arbitrary, FastCheck, Pretty, Schema } from 'effect'
 
-const FileFromSelf = Schema.declare(
-  (input: unknown): input is File => input instanceof File,
-  {
-    identifier: "FileFromSelf",
-    // Provide a function to generate random File instances
-    arbitrary: () => (fc) =>
-      fc
-        .tuple(fc.string(), fc.string())
-        .map(([content, path]) => new File([content], path))
-  }
-)
+const FileFromSelf = Schema.declare((input: unknown): input is File => input instanceof File, {
+  identifier: 'FileFromSelf',
+  // Provide a function to generate random File instances
+  arbitrary: () => (fc) =>
+    fc.tuple(fc.string(), fc.string()).map(([content, path]) => new File([content], path)),
+})
 
 // Create an Arbitrary instance for the schema
 const arb = Arbitrary.make(FileFromSelf)

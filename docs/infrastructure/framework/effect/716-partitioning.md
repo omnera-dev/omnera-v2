@@ -9,13 +9,11 @@ The `Stream.partition` function takes a predicate (a condition) as input and div
 **Example** (Partitioning a Stream into Odd and Even Numbers)
 
 ```ts twoslash
-import { Stream, Effect } from "effect"
+import { Stream, Effect } from 'effect'
 
 //      ┌─── Effect<[Stream<number>, Stream<number>], never, Scope>
 //      ▼
-const program = Stream.range(1, 9).pipe(
-  Stream.partition((n) => n % 2 === 0, { bufferSize: 5 })
-)
+const program = Stream.range(1, 9).pipe(Stream.partition((n) => n % 2 === 0, { bufferSize: 5 }))
 
 Effect.runPromise(
   Effect.scoped(
@@ -40,7 +38,7 @@ In some cases, you might need to partition a stream using a condition that invol
 **Example** (Partitioning a Stream with an Effectful Predicate)
 
 ```ts twoslash
-import { Stream, Effect, Either } from "effect"
+import { Stream, Effect, Either } from 'effect'
 
 //      ┌─── Effect<[Stream<number>, Stream<number>], never, Scope>
 //      ▼

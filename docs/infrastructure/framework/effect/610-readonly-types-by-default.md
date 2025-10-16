@@ -8,11 +8,11 @@ It's important to note that by default, most constructors exported by
 For instance, in the `Person` schema below:
 
 ```ts twoslash
-import { Schema } from "effect"
+import { Schema } from 'effect'
 
 const Person = Schema.Struct({
   name: Schema.String,
-  age: Schema.Number
+  age: Schema.Number,
 })
 ```
 

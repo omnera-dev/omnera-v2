@@ -7,9 +7,9 @@ Literals are transformed into `enum` types within JSON Schema.
 **Example** (Single Literal)
 
 ```ts twoslash
-import { JSONSchema, Schema } from "effect"
+import { JSONSchema, Schema } from 'effect'
 
-const schema = Schema.Literal("a")
+const schema = Schema.Literal('a')
 
 console.log(JSON.stringify(JSONSchema.make(schema), null, 2))
 /*
@@ -27,9 +27,9 @@ Output:
 **Example** (Union of literals)
 
 ```ts twoslash
-import { JSONSchema, Schema } from "effect"
+import { JSONSchema, Schema } from 'effect'
 
-const schema = Schema.Literal("a", "b")
+const schema = Schema.Literal('a', 'b')
 
 console.log(JSON.stringify(JSONSchema.make(schema), null, 2))
 /*
@@ -48,7 +48,7 @@ Output:
 ### Void
 
 ```ts twoslash
-import { JSONSchema, Schema } from "effect"
+import { JSONSchema, Schema } from 'effect'
 
 const schema = Schema.Void
 
@@ -66,7 +66,7 @@ Output:
 ### Any
 
 ```ts twoslash
-import { JSONSchema, Schema } from "effect"
+import { JSONSchema, Schema } from 'effect'
 
 const schema = Schema.Any
 
@@ -84,7 +84,7 @@ Output:
 ### Unknown
 
 ```ts twoslash
-import { JSONSchema, Schema } from "effect"
+import { JSONSchema, Schema } from 'effect'
 
 const schema = Schema.Unknown
 
@@ -102,7 +102,7 @@ Output:
 ### Object
 
 ```ts twoslash
-import { JSONSchema, Schema } from "effect"
+import { JSONSchema, Schema } from 'effect'
 
 const schema = Schema.Object
 
@@ -129,7 +129,7 @@ Output:
 ### String
 
 ```ts twoslash
-import { JSONSchema, Schema } from "effect"
+import { JSONSchema, Schema } from 'effect'
 
 const schema = Schema.String
 
@@ -146,7 +146,7 @@ Output:
 ### Number
 
 ```ts twoslash
-import { JSONSchema, Schema } from "effect"
+import { JSONSchema, Schema } from 'effect'
 
 const schema = Schema.Number
 
@@ -163,7 +163,7 @@ Output:
 ### Boolean
 
 ```ts twoslash
-import { JSONSchema, Schema } from "effect"
+import { JSONSchema, Schema } from 'effect'
 
 const schema = Schema.Boolean
 
@@ -180,7 +180,7 @@ Output:
 ### Tuples
 
 ```ts twoslash
-import { JSONSchema, Schema } from "effect"
+import { JSONSchema, Schema } from 'effect'
 
 const schema = Schema.Tuple(Schema.String, Schema.Number)
 
@@ -207,7 +207,7 @@ Output:
 ### Arrays
 
 ```ts twoslash
-import { JSONSchema, Schema } from "effect"
+import { JSONSchema, Schema } from 'effect'
 
 const schema = Schema.Array(Schema.String)
 
@@ -231,7 +231,7 @@ Represents an array with at least one element.
 **Example**
 
 ```ts twoslash
-import { JSONSchema, Schema } from "effect"
+import { JSONSchema, Schema } from 'effect'
 
 const schema = Schema.NonEmptyArray(Schema.String)
 
@@ -252,11 +252,11 @@ Output:
 ### Structs
 
 ```ts twoslash
-import { JSONSchema, Schema } from "effect"
+import { JSONSchema, Schema } from 'effect'
 
 const schema = Schema.Struct({
   name: Schema.String,
-  age: Schema.Number
+  age: Schema.Number,
 })
 
 console.log(JSON.stringify(JSONSchema.make(schema), null, 2))
@@ -285,11 +285,11 @@ Output:
 ### Records
 
 ```ts twoslash
-import { JSONSchema, Schema } from "effect"
+import { JSONSchema, Schema } from 'effect'
 
 const schema = Schema.Record({
   key: Schema.String,
-  value: Schema.Number
+  value: Schema.Number,
 })
 
 console.log(JSON.stringify(JSONSchema.make(schema), null, 2))
@@ -316,16 +316,16 @@ Combines fixed properties from a struct with dynamic properties from a record.
 **Example**
 
 ```ts twoslash
-import { JSONSchema, Schema } from "effect"
+import { JSONSchema, Schema } from 'effect'
 
 const schema = Schema.Struct(
   {
     name: Schema.String,
-    age: Schema.Number
+    age: Schema.Number,
   },
   Schema.Record({
     key: Schema.String,
-    value: Schema.Union(Schema.String, Schema.Number)
+    value: Schema.Union(Schema.String, Schema.Number),
   })
 )
 
@@ -366,11 +366,11 @@ Output:
 ### Enums
 
 ```ts twoslash
-import { JSONSchema, Schema } from "effect"
+import { JSONSchema, Schema } from 'effect'
 
 enum Fruits {
   Apple,
-  Banana
+  Banana,
 }
 
 const schema = Schema.Enums(Fruits)
@@ -404,9 +404,9 @@ Output:
 ### Template Literals
 
 ```ts twoslash
-import { JSONSchema, Schema } from "effect"
+import { JSONSchema, Schema } from 'effect'
 
-const schema = Schema.TemplateLiteral(Schema.Literal("a"), Schema.Number)
+const schema = Schema.TemplateLiteral(Schema.Literal('a'), Schema.Number)
 
 console.log(JSON.stringify(JSONSchema.make(schema), null, 2))
 /*
@@ -428,7 +428,7 @@ Unions are expressed using `anyOf` or `enum`, depending on the types involved:
 **Example** (Generic Union)
 
 ```ts twoslash
-import { JSONSchema, Schema } from "effect"
+import { JSONSchema, Schema } from 'effect'
 
 const schema = Schema.Union(Schema.String, Schema.Number)
 
@@ -452,9 +452,9 @@ Output:
 **Example** (Union of literals)
 
 ```ts twoslash
-import { JSONSchema, Schema } from "effect"
+import { JSONSchema, Schema } from 'effect'
 
-const schema = Schema.Literal("a", "b")
+const schema = Schema.Literal('a', 'b')
 
 console.log(JSON.stringify(JSONSchema.make(schema), null, 2))
 /*

@@ -7,15 +7,15 @@ The `Either.zipWith` function lets you combine two `Either` values using a provi
 **Example** (Combining Two Eithers into an Object)
 
 ```ts twoslash
-import { Either } from "effect"
+import { Either } from 'effect'
 
-const maybeName: Either.Either<string, string> = Either.right("John")
+const maybeName: Either.Either<string, string> = Either.right('John')
 const maybeAge: Either.Either<number, string> = Either.right(25)
 
 // Combine the name and age into a person object
 const person = Either.zipWith(maybeName, maybeAge, (name, age) => ({
   name: name.toUpperCase(),
-  age
+  age,
 }))
 
 console.log(person)
@@ -30,15 +30,15 @@ If either of the `Either` values is `Left`, the result will be `Left`, holding t
 **Example** (Combining Eithers with a Left Value)
 
 ```ts twoslash {4}
-import { Either } from "effect"
+import { Either } from 'effect'
 
-const maybeName: Either.Either<string, string> = Either.right("John")
-const maybeAge: Either.Either<number, string> = Either.left("Oh no!")
+const maybeName: Either.Either<string, string> = Either.right('John')
+const maybeAge: Either.Either<number, string> = Either.left('Oh no!')
 
 // Since maybeAge is a Left, the result will also be Left
 const person = Either.zipWith(maybeName, maybeAge, (name, age) => ({
   name: name.toUpperCase(),
-  age
+  age,
 }))
 
 console.log(person)
@@ -59,9 +59,9 @@ To combine multiple `Either` values without transforming their contents, you can
 **Example** (Combining Multiple Eithers into a Tuple and Struct)
 
 ```ts twoslash
-import { Either } from "effect"
+import { Either } from 'effect'
 
-const maybeName: Either.Either<string, string> = Either.right("John")
+const maybeName: Either.Either<string, string> = Either.right('John')
 const maybeAge: Either.Either<number, string> = Either.right(25)
 
 //      ┌─── Either<[string, number], string>
@@ -88,12 +88,10 @@ If one or more `Either` values are `Left`, the first `Left` encountered is retur
 **Example** (Handling Multiple Left Values)
 
 ```ts
-import { Either } from "effect"
+import { Either } from 'effect'
 
-const maybeName: Either.Either<string, string> =
-  Either.left("name not found")
-const maybeAge: Either.Either<number, string> =
-  Either.left("age not found")
+const maybeName: Either.Either<string, string> = Either.left('name not found')
+const maybeAge: Either.Either<number, string> = Either.left('age not found')
 
 // The first Left value will be returned
 console.log(Either.all([maybeName, maybeAge]))

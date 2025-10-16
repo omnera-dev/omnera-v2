@@ -17,19 +17,19 @@
 **Example** (Applying a Time Zone to a DateTime)
 
 ```ts twoslash
-import { DateTime } from "effect"
+import { DateTime } from 'effect'
 
 // Create a UTC DateTime
 //
 //     ┌─── Utc
 //     ▼
-const utc = DateTime.unsafeMake("2024-01-01")
+const utc = DateTime.unsafeMake('2024-01-01')
 
 // Create a named time zone for New York
 //
 //      ┌─── TimeZone.Named
 //      ▼
-const zoneNY = DateTime.zoneUnsafeMakeNamed("America/New_York")
+const zoneNY = DateTime.zoneUnsafeMakeNamed('America/New_York')
 
 // Apply it to the DateTime
 //
@@ -58,20 +58,20 @@ If the input string is invalid, `Option.none()` is returned.
 **Example** (Parsing a Time Zone from a String)
 
 ```ts twoslash
-import { DateTime, Option } from "effect"
+import { DateTime, Option } from 'effect'
 
 // Attempt to parse a numeric offset
-const offsetZone = DateTime.zoneFromString("+01:00")
+const offsetZone = DateTime.zoneFromString('+01:00')
 console.log(Option.isSome(offsetZone))
 // Output: true
 
 // Attempt to parse an IANA time zone
-const namedZone = DateTime.zoneFromString("Europe/London")
+const namedZone = DateTime.zoneFromString('Europe/London')
 console.log(Option.isSome(namedZone))
 // Output: true
 
 // Invalid input
-const invalidZone = DateTime.zoneFromString("Invalid/Zone")
+const invalidZone = DateTime.zoneFromString('Invalid/Zone')
 console.log(Option.isSome(invalidZone))
 // Output: false
 ```

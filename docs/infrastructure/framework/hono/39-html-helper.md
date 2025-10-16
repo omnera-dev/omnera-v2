@@ -121,4 +121,3 @@ Thanks to these libraries, Visual Studio Code and vim also interprets template l
 
 - <https://marketplace.visualstudio.com/items?itemName=bierner.lit-html>
 - <https://github.com/MaxMEllon/vim-jsx-pretty>
-

@@ -73,4 +73,3 @@ The header name used for the request ID. The default is `X-Request-Id`.
 ### <Badge type="info" text="optional" /> generator: `(c: Context) => string`
 
 The request ID generation function. By default, it uses `crypto.randomUUID()`.
-

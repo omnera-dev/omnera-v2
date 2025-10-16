@@ -25,10 +25,10 @@ Additionally, there are three special combinators for specific use cases:
 The following example demonstrates how to load an environment variable as an array of strings using the `Config.array` constructor.
 
 ```ts twoslash title="index.ts"
-import { Config, Effect } from "effect"
+import { Config, Effect } from 'effect'
 
 const program = Effect.gen(function* () {
-  const config = yield* Config.array(Config.string(), "MYARRAY")
+  const config = yield* Config.array(Config.string(), 'MYARRAY')
   console.log(config)
 })
 
@@ -42,10 +42,10 @@ Effect.runPromise(program)
 **Example** (Using the `hashSet` combinator)
 
 ```ts twoslash title="index.ts"
-import { Config, Effect } from "effect"
+import { Config, Effect } from 'effect'
 
 const program = Effect.gen(function* () {
-  const config = yield* Config.hashSet(Config.string(), "MYSET")
+  const config = yield* Config.hashSet(Config.string(), 'MYSET')
   console.log(config)
 })
 
@@ -59,10 +59,10 @@ Effect.runPromise(program)
 **Example** (Using the `hashMap` combinator)
 
 ```ts twoslash title="index.ts"
-import { Config, Effect } from "effect"
+import { Config, Effect } from 'effect'
 
 const program = Effect.gen(function* () {
-  const config = yield* Config.hashMap(Config.string(), "MYMAP")
+  const config = yield* Config.hashMap(Config.string(), 'MYMAP')
   console.log(config)
 })
 

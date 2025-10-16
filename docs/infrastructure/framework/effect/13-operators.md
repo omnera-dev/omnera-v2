@@ -16,14 +16,14 @@ These operators enable you to modify configurations or validate their values:
 **Example** (Using `validate` Operator)
 
 ```ts twoslash title="validate.ts"
-import { Effect, Config } from "effect"
+import { Effect, Config } from 'effect'
 
 const program = Effect.gen(function* () {
   // Load the NAME environment variable and validate its length
-  const config = yield* Config.string("NAME").pipe(
+  const config = yield* Config.string('NAME').pipe(
     Config.validate({
-      message: "Expected a string at least 4 characters long",
-      validation: (s) => s.length >= 4
+      message: 'Expected a string at least 4 characters long',
+      validation: (s) => s.length >= 4,
     })
   )
   console.log(config)
@@ -69,20 +69,20 @@ Fallback operators are useful when you want to provide alternative configuration
 In this example, the program requires two configuration values: `A` and `B`. We set up two configuration providers, each containing only one of the required values. Using the `orElse` operator, we combine these providers so the program can retrieve both `A` and `B`.
 
 ```ts twoslash title="orElse.ts"
-import { Config, ConfigProvider, Effect } from "effect"
+import { Config, ConfigProvider, Effect } from 'effect'
 
 // A program that requires two configurations: A and B
 const program = Effect.gen(function* () {
-  const A = yield* Config.string("A") // Retrieve config A
-  const B = yield* Config.string("B") // Retrieve config B
+  const A = yield* Config.string('A') // Retrieve config A
+  const B = yield* Config.string('B') // Retrieve config B
   console.log(`A: ${A}, B: ${B}`)
 })
 
 // First provider has A but is missing B
-const provider1 = ConfigProvider.fromMap(new Map([["A", "A"]]))
+const provider1 = ConfigProvider.fromMap(new Map([['A', 'A']]))
 
 // Second provider has B but is missing A
-const provider2 = ConfigProvider.fromMap(new Map([["B", "B"]]))
+const provider2 = ConfigProvider.fromMap(new Map([['B', 'B']]))
 
 // Use `orElse` to fall back from provider1 to provider2
 const provider = provider1.pipe(ConfigProvider.orElse(() => provider2))

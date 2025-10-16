@@ -13,19 +13,19 @@ The `Schema.tag` constructor is specifically designed to create a property signa
 **Example** (Defining a Tagged Struct)
 
 ```ts twoslash
-import { Schema } from "effect"
+import { Schema } from 'effect'
 
 const User = Schema.Struct({
-  _tag: Schema.tag("User"),
+  _tag: Schema.tag('User'),
   name: Schema.String,
-  age: Schema.Number
+  age: Schema.Number,
 })
 
 //     ┌─── { readonly _tag: "User"; readonly name: string; readonly age: number; }
 //     ▼
 type Type = typeof User.Type
 
-console.log(User.make({ name: "John", age: 44 }))
+console.log(User.make({ name: 'John', age: 44 }))
 /*
 Output:
 { _tag: 'User', name: 'John', age: 44 }
@@ -42,19 +42,19 @@ The `Schema.TaggedStruct` constructor streamlines the process of creating tagged
 **Example** (Using `TaggedStruct` for a Simplified Tagged Struct)
 
 ```ts twoslash
-import { Schema } from "effect"
+import { Schema } from 'effect'
 
-const User = Schema.TaggedStruct("User", {
+const User = Schema.TaggedStruct('User', {
   name: Schema.String,
-  age: Schema.Number
+  age: Schema.Number,
 })
 
 // `_tag` is automatically applied when constructing an instance
-console.log(User.make({ name: "John", age: 44 }))
+console.log(User.make({ name: 'John', age: 44 }))
 // Output: { _tag: 'User', name: 'John', age: 44 }
 
 // `_tag` is required when decoding from an unknown source
-console.log(Schema.decodeUnknownSync(User)({ name: "John", age: 44 }))
+console.log(Schema.decodeUnknownSync(User)({ name: 'John', age: 44 }))
 /*
 throws:
 ParseError: { readonly _tag: "User"; readonly name: string; readonly age: number }
@@ -73,13 +73,10 @@ If you need `_tag` to be applied automatically during decoding as well, you can 
 **Example** (Custom `TaggedStruct` with `_tag` Applied during Decoding)
 
 ```ts twoslash
-import type { SchemaAST } from "effect"
-import { Schema } from "effect"
+import type { SchemaAST } from 'effect'
+import { Schema } from 'effect'
 
-const TaggedStruct = <
-  Tag extends SchemaAST.LiteralValue,
-  Fields extends Schema.Struct.Fields
->(
+const TaggedStruct = <Tag extends SchemaAST.LiteralValue, Fields extends Schema.Struct.Fields>(
   tag: Tag,
   fields: Fields
 ) =>
@@ -88,21 +85,21 @@ const TaggedStruct = <
       Schema.optional,
       Schema.withDefaults({
         constructor: () => tag, // Apply _tag during instance construction
-        decoding: () => tag // Apply _tag during decoding
+        decoding: () => tag, // Apply _tag during decoding
       })
     ),
-    ...fields
+    ...fields,
   })
 
-const User = TaggedStruct("User", {
+const User = TaggedStruct('User', {
   name: Schema.String,
-  age: Schema.Number
+  age: Schema.Number,
 })
 
-console.log(User.make({ name: "John", age: 44 }))
+console.log(User.make({ name: 'John', age: 44 }))
 // Output: { _tag: 'User', name: 'John', age: 44 }
 
-console.log(Schema.decodeUnknownSync(User)({ name: "John", age: 44 }))
+console.log(Schema.decodeUnknownSync(User)({ name: 'John', age: 44 }))
 // Output: { _tag: 'User', name: 'John', age: 44 }
 ```
 
@@ -115,16 +112,16 @@ While a primary tag is often sufficient, TypeScript allows you to define multipl
 This example defines a product schema with a primary tag (`"Product"`) and an additional category tag (`"Electronics"`), adding further specificity to the data structure.
 
 ```ts twoslash
-import { Schema } from "effect"
+import { Schema } from 'effect'
 
-const Product = Schema.TaggedStruct("Product", {
-  category: Schema.tag("Electronics"),
+const Product = Schema.TaggedStruct('Product', {
+  category: Schema.tag('Electronics'),
   name: Schema.String,
-  price: Schema.Number
+  price: Schema.Number,
 })
 
 // `_tag` and `category` are optional when creating an instance
-console.log(Product.make({ name: "Smartphone", price: 999 }))
+console.log(Product.make({ name: 'Smartphone', price: 999 }))
 /*
 Output:
 {

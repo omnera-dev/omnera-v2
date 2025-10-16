@@ -12,7 +12,7 @@ The "taking" operations in streams let you extract a specific set of elements, e
 **Example** (Extracting Elements in Different Ways)
 
 ```ts twoslash
-import { Stream, Effect } from "effect"
+import { Stream, Effect } from 'effect'
 
 const stream = Stream.iterate(0, (n) => n + 1)
 

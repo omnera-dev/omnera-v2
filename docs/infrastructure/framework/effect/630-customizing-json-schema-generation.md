@@ -8,10 +8,10 @@ This absence typically leads to an error when the schema is generated.
 Attempting to generate a JSON Schema for unsupported types like `bigint` will lead to a missing annotation error:
 
 ```ts twoslash
-import { JSONSchema, Schema } from "effect"
+import { JSONSchema, Schema } from 'effect'
 
 const schema = Schema.Struct({
-  a_bigint_field: Schema.BigIntFromSelf
+  a_bigint_field: Schema.BigIntFromSelf,
 })
 
 const jsonSchema = JSONSchema.make(schema)
@@ -31,15 +31,15 @@ To address this, you can enhance the schema with a custom `jsonSchema` annotatio
 **Example** (Using Custom Annotation for Unsupported Type)
 
 ```ts twoslash
-import { JSONSchema, Schema } from "effect"
+import { JSONSchema, Schema } from 'effect'
 
 const schema = Schema.Struct({
   // Adding a custom JSON Schema annotation for the `bigint` type
   a_bigint_field: Schema.BigIntFromSelf.annotations({
     jsonSchema: {
-      type: "some custom way to represent a bigint in JSON Schema"
-    }
-  })
+      type: 'some custom way to represent a bigint in JSON Schema',
+    },
+  }),
 })
 
 const jsonSchema = JSONSchema.make(schema)
@@ -70,19 +70,19 @@ When defining a refinement (e.g., through the `Schema.filter` function), you can
 **Example** (Using Refinements with Merged Annotations)
 
 ```ts twoslash
-import { JSONSchema, Schema } from "effect"
+import { JSONSchema, Schema } from 'effect'
 
 // Define a schema with a refinement for positive numbers
 const Positive = Schema.Number.pipe(
   Schema.filter((n) => n > 0, {
-    jsonSchema: { minimum: 0 }
+    jsonSchema: { minimum: 0 },
   })
 )
 
 // Add an upper bound refinement to the schema
 const schema = Positive.pipe(
   Schema.filter((n) => n <= 10, {
-    jsonSchema: { maximum: 10 }
+    jsonSchema: { maximum: 10 },
   })
 )
 
@@ -109,18 +109,18 @@ If you prefer stricter type enforcement or need to support non-standard extensio
 In the following example, we've used the `@types/json-schema` package to provide TypeScript definitions for JSON Schema. This approach not only ensures type correctness but also enables autocomplete suggestions in your IDE.
 
 ```ts twoslash
-import { JSONSchema, Schema } from "effect"
-import type { JSONSchema7 } from "json-schema"
+import { JSONSchema, Schema } from 'effect'
+import type { JSONSchema7 } from 'json-schema'
 
 const Positive = Schema.Number.pipe(
   Schema.filter((n) => n > 0, {
-    jsonSchema: { minimum: 0 } // Generic object, no type enforcement
+    jsonSchema: { minimum: 0 }, // Generic object, no type enforcement
   })
 )
 
 const schema = Positive.pipe(
   Schema.filter((n) => n <= 10, {
-    jsonSchema: { maximum: 10 } satisfies JSONSchema7 // Enforces type constraints
+    jsonSchema: { maximum: 10 } satisfies JSONSchema7, // Enforces type constraints
   })
 )
 
@@ -143,11 +143,11 @@ For schema types other than refinements, you can override the default generated 
 **Example** (Custom Annotation for a Struct)
 
 ```ts twoslash
-import { JSONSchema, Schema } from "effect"
+import { JSONSchema, Schema } from 'effect'
 
 // Define a struct with a custom JSON Schema annotation
 const schema = Schema.Struct({ foo: Schema.String }).annotations({
-  jsonSchema: { type: "object" }
+  jsonSchema: { type: 'object' },
 })
 
 const jsonSchema = JSONSchema.make(schema)

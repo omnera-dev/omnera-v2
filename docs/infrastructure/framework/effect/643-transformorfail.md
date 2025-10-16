@@ -36,7 +36,7 @@ These tools allow for detailed and specific error handling, enhancing the reliab
 A common use case for `Schema.transformOrFail` is converting string representations of numbers into actual numeric types. This scenario is typical when dealing with user inputs or data from external sources.
 
 ```ts twoslash
-import { ParseResult, Schema } from "effect"
+import { ParseResult, Schema } from 'effect'
 
 export const NumberFromString = Schema.transformOrFail(
   // Source schema: accepts any string
@@ -58,13 +58,13 @@ export const NumberFromString = Schema.transformOrFail(
             // Include the problematic input
             input,
             // Optional custom error message
-            "Failed to convert string to number"
+            'Failed to convert string to number'
           )
         )
       }
       return ParseResult.succeed(parsed)
     },
-    encode: (input, options, ast) => ParseResult.succeed(input.toString())
+    encode: (input, options, ast) => ParseResult.succeed(input.toString()),
   }
 )
 
@@ -76,10 +76,10 @@ type Encoded = typeof NumberFromString.Encoded
 //     ▼
 type Type = typeof NumberFromString.Type
 
-console.log(Schema.decodeUnknownSync(NumberFromString)("123"))
+console.log(Schema.decodeUnknownSync(NumberFromString)('123'))
 // Output: 123
 
-console.log(Schema.decodeUnknownSync(NumberFromString)("-"))
+console.log(Schema.decodeUnknownSync(NumberFromString)('-'))
 /*
 throws:
 ParseError: (string <-> number)
@@ -99,7 +99,7 @@ In modern applications, especially those interacting with external APIs, you mig
 Consider a scenario where you need to validate a person's ID by making an API call. Here's how you can implement it:
 
 ```ts twoslash
-import { Effect, Schema, ParseResult } from "effect"
+import { Effect, Schema, ParseResult } from 'effect'
 
 // Define a function to make API requests
 const get = (url: string): Effect.Effect<unknown, Error> =>
@@ -111,29 +111,25 @@ const get = (url: string): Effect.Effect<unknown, Error> =>
         }
         throw new Error(String(res.status))
       }),
-    catch: (e) => new Error(String(e))
+    catch: (e) => new Error(String(e)),
   })
 
 // Create a branded schema for a person's ID
-const PeopleId = Schema.String.pipe(Schema.brand("PeopleId"))
+const PeopleId = Schema.String.pipe(Schema.brand('PeopleId'))
 
 // Define a schema with async transformation
-const PeopleIdFromString = Schema.transformOrFail(
-  Schema.String,
-  PeopleId,
-  {
-    strict: true,
-    decode: (s, _, ast) =>
-      // Make an API call to validate the ID
-      Effect.mapBoth(get(`https://swapi.dev/api/people/${s}`), {
-        // Error handling for failed API call
-        onFailure: (e) => new ParseResult.Type(ast, s, e.message),
-        // Return the ID if the API call succeeds
-        onSuccess: () => s
-      }),
-    encode: ParseResult.succeed
-  }
-)
+const PeopleIdFromString = Schema.transformOrFail(Schema.String, PeopleId, {
+  strict: true,
+  decode: (s, _, ast) =>
+    // Make an API call to validate the ID
+    Effect.mapBoth(get(`https://swapi.dev/api/people/${s}`), {
+      // Error handling for failed API call
+      onFailure: (e) => new ParseResult.Type(ast, s, e.message),
+      // Return the ID if the API call succeeds
+      onSuccess: () => s,
+    }),
+  encode: ParseResult.succeed,
+})
 
 //     ┌─── string
 //     ▼
@@ -148,18 +144,14 @@ type Type = typeof PeopleIdFromString.Type
 type Context = typeof PeopleIdFromString.Context
 
 // Run a successful decode operation
-Effect.runPromiseExit(Schema.decodeUnknown(PeopleIdFromString)("1")).then(
-  console.log
-)
+Effect.runPromiseExit(Schema.decodeUnknown(PeopleIdFromString)('1')).then(console.log)
 /*
 Output:
 { _id: 'Exit', _tag: 'Success', value: '1' }
 */
 
 // Run a decode operation that will fail
-Effect.runPromiseExit(
-  Schema.decodeUnknown(PeopleIdFromString)("fail")
-).then(console.log)
+Effect.runPromiseExit(Schema.decodeUnknown(PeopleIdFromString)('fail')).then(console.log)
 /*
 Output:
 {
@@ -190,10 +182,10 @@ Schema<Type, Encoded, Requirements>
 **Example** (Validating Data with a Service)
 
 ```ts twoslash {46}
-import { Context, Effect, Schema, ParseResult, Layer } from "effect"
+import { Context, Effect, Schema, ParseResult, Layer } from 'effect'
 
 // Define a Validation service for dependency injection
-class Validation extends Context.Tag("Validation")<
+class Validation extends Context.Tag('Validation')<
   Validation,
   {
     readonly validatePeopleid: (s: string) => Effect.Effect<void, Error>
@@ -201,29 +193,23 @@ class Validation extends Context.Tag("Validation")<
 >() {}
 
 // Create a branded schema for a person's ID
-const PeopleId = Schema.String.pipe(Schema.brand("PeopleId"))
+const PeopleId = Schema.String.pipe(Schema.brand('PeopleId'))
 
 // Transform a string into a validated PeopleId,
 // using an external validation service
-const PeopleIdFromString = Schema.transformOrFail(
-  Schema.String,
-  PeopleId,
-  {
-    strict: true,
-    decode: (s, _, ast) =>
-      // Asynchronously validate the ID using the injected service
-      Effect.gen(function* () {
-        // Access the validation service
-        const validator = yield* Validation
-        // Use service to validate ID
-        yield* validator.validatePeopleid(s)
-        return s
-      }).pipe(
-        Effect.mapError((e) => new ParseResult.Type(ast, s, e.message))
-      ),
-    encode: ParseResult.succeed // Encode by simply returning the string
-  }
-)
+const PeopleIdFromString = Schema.transformOrFail(Schema.String, PeopleId, {
+  strict: true,
+  decode: (s, _, ast) =>
+    // Asynchronously validate the ID using the injected service
+    Effect.gen(function* () {
+      // Access the validation service
+      const validator = yield* Validation
+      // Use service to validate ID
+      yield* validator.validatePeopleid(s)
+      return s
+    }).pipe(Effect.mapError((e) => new ParseResult.Type(ast, s, e.message))),
+  encode: ParseResult.succeed, // Encode by simply returning the string
+})
 
 //     ┌─── string
 //     ▼
@@ -239,14 +225,12 @@ type Context = typeof PeopleIdFromString.Context
 
 // Layer to provide a successful validation service
 const SuccessTest = Layer.succeed(Validation, {
-  validatePeopleid: (_) => Effect.void
+  validatePeopleid: (_) => Effect.void,
 })
 
 // Run a successful decode operation
 Effect.runPromiseExit(
-  Schema.decodeUnknown(PeopleIdFromString)("1").pipe(
-    Effect.provide(SuccessTest)
-  )
+  Schema.decodeUnknown(PeopleIdFromString)('1').pipe(Effect.provide(SuccessTest))
 ).then(console.log)
 /*
 Output:
@@ -255,14 +239,12 @@ Output:
 
 // Layer to provide a failing validation service
 const FailureTest = Layer.succeed(Validation, {
-  validatePeopleid: (_) => Effect.fail(new Error("404"))
+  validatePeopleid: (_) => Effect.fail(new Error('404')),
 })
 
 // Run a decode operation that will fail
 Effect.runPromiseExit(
-  Schema.decodeUnknown(PeopleIdFromString)("fail").pipe(
-    Effect.provide(FailureTest)
-  )
+  Schema.decodeUnknown(PeopleIdFromString)('fail').pipe(Effect.provide(FailureTest))
 ).then(console.log)
 /*
 Output:

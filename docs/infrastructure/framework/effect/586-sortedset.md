@@ -25,8 +25,8 @@ Schema.SortedSet(schema: Schema<A, I, R>, order: Order<A>)
 **Example**
 
 ```ts twoslash
-import { Schema } from "effect"
-import { Number, SortedSet } from "effect"
+import { Schema } from 'effect'
+import { Number, SortedSet } from 'effect'
 
 const schema = Schema.SortedSet(Schema.NumberFromString, Number.Order)
 
@@ -43,7 +43,7 @@ const encode = Schema.encodeSync(schema)
 
 // Decoding examples
 
-console.log(decode(["1", "2", "3"]))
+console.log(decode(['1', '2', '3']))
 // Output: { _id: 'SortedSet', values: [ 1, 2, 3 ] }
 
 // Encoding examples
@@ -81,14 +81,10 @@ Schema.SortedSetFromSelf(
 **Example**
 
 ```ts twoslash
-import { Schema } from "effect"
-import { Number, SortedSet, String } from "effect"
+import { Schema } from 'effect'
+import { Number, SortedSet, String } from 'effect'
 
-const schema = Schema.SortedSetFromSelf(
-  Schema.NumberFromString,
-  Number.Order,
-  String.Order
-)
+const schema = Schema.SortedSetFromSelf(Schema.NumberFromString, Number.Order, String.Order)
 
 //     ┌─── SortedSet<string>
 //     ▼
@@ -103,7 +99,7 @@ const encode = Schema.encodeSync(schema)
 
 // Decoding examples
 
-console.log(decode(SortedSet.fromIterable(String.Order)(["1", "2", "3"])))
+console.log(decode(SortedSet.fromIterable(String.Order)(['1', '2', '3'])))
 // Output: { _id: 'SortedSet', values: [ 1, 2, 3 ] }
 
 // Encoding examples

@@ -7,10 +7,10 @@ When we require the usage of more than one service, the process remains similar 
 Let's examine an example where we need two services, namely `Random` and `Logger`:
 
 ```ts twoslash
-import { Effect, Context } from "effect"
+import { Effect, Context } from 'effect'
 
 // Declaring a tag for a service that generates random numbers
-class Random extends Context.Tag("MyRandomService")<
+class Random extends Context.Tag('MyRandomService')<
   Random,
   {
     readonly next: Effect.Effect<number>
@@ -18,7 +18,7 @@ class Random extends Context.Tag("MyRandomService")<
 >() {}
 
 // Declaring a tag for the logging service
-class Logger extends Context.Tag("MyLoggerService")<
+class Logger extends Context.Tag('MyLoggerService')<
   Logger,
   {
     readonly log: (message: string) => Effect.Effect<void>
@@ -49,10 +49,10 @@ To execute the `program`, we need to provide implementations for both services:
 **Example** (Providing Multiple Services)
 
 ```ts twoslash collapse={3-24}
-import { Effect, Context } from "effect"
+import { Effect, Context } from 'effect'
 
 // Declaring a tag for a service that generates random numbers
-class Random extends Context.Tag("MyRandomService")<
+class Random extends Context.Tag('MyRandomService')<
   Random,
   {
     readonly next: Effect.Effect<number>
@@ -60,7 +60,7 @@ class Random extends Context.Tag("MyRandomService")<
 >() {}
 
 // Declaring a tag for the logging service
-class Logger extends Context.Tag("MyLoggerService")<
+class Logger extends Context.Tag('MyLoggerService')<
   Logger,
   {
     readonly log: (message: string) => Effect.Effect<void>
@@ -77,10 +77,10 @@ const program = Effect.gen(function* () {
 // Provide service implementations for 'Random' and 'Logger'
 const runnable = program.pipe(
   Effect.provideService(Random, {
-    next: Effect.sync(() => Math.random())
+    next: Effect.sync(() => Math.random()),
   }),
   Effect.provideService(Logger, {
-    log: (message) => Effect.sync(() => console.log(message))
+    log: (message) => Effect.sync(() => console.log(message)),
   })
 )
 ```
@@ -90,10 +90,10 @@ Alternatively, instead of calling `provideService` multiple times, we can combin
 **Example** (Combining Service Implementations)
 
 ```ts twoslash collapse={3-24}
-import { Effect, Context } from "effect"
+import { Effect, Context } from 'effect'
 
 // Declaring a tag for a service that generates random numbers
-class Random extends Context.Tag("MyRandomService")<
+class Random extends Context.Tag('MyRandomService')<
   Random,
   {
     readonly next: Effect.Effect<number>
@@ -101,7 +101,7 @@ class Random extends Context.Tag("MyRandomService")<
 >() {}
 
 // Declaring a tag for the logging service
-class Logger extends Context.Tag("MyLoggerService")<
+class Logger extends Context.Tag('MyLoggerService')<
   Logger,
   {
     readonly log: (message: string) => Effect.Effect<void>
@@ -119,7 +119,7 @@ const program = Effect.gen(function* () {
 const context = Context.empty().pipe(
   Context.add(Random, { next: Effect.sync(() => Math.random()) }),
   Context.add(Logger, {
-    log: (message) => Effect.sync(() => console.log(message))
+    log: (message) => Effect.sync(() => console.log(message)),
   })
 )
 

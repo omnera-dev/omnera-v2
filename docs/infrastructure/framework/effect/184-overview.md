@@ -9,10 +9,10 @@ When working with Effect, if an error occurs, the default behavior is to fail wi
 Here, the program fails with the first error it encounters, `"Oh uh!"`.
 
 ```ts twoslash
-import { Effect } from "effect"
+import { Effect } from 'effect'
 
-const fail = Effect.fail("Oh uh!")
-const die = Effect.dieMessage("Boom!")
+const fail = Effect.fail('Oh uh!')
+const die = Effect.dieMessage('Boom!')
 
 // Run both effects sequentially
 const program = Effect.all([fail, die])

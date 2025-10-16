@@ -11,10 +11,10 @@ Nominal branded types are useful when we only want to create distinct types for 
 **Example** (Defining Distinct Identifiers with Nominal Branding)
 
 ```ts twoslash
-import { Brand } from "effect"
+import { Brand } from 'effect'
 
 // Define UserId as a branded number
-type UserId = number & Brand.Brand<"UserId">
+type UserId = number & Brand.Brand<'UserId'>
 
 // Constructor for UserId
 const UserId = Brand.nominal<UserId>()
@@ -24,7 +24,7 @@ const getUserById = (id: UserId) => {
 }
 
 // Define ProductId as a branded number
-type ProductId = number & Brand.Brand<"ProductId">
+type ProductId = number & Brand.Brand<'ProductId'>
 
 // Constructor for ProductId
 const ProductId = Brand.nominal<ProductId>()
@@ -39,9 +39,9 @@ Attempting to assign a non-`ProductId` value will result in a compile-time error
 **Example** (Type Safety with Branded Identifiers)
 
 ```ts twoslash
-import { Brand } from "effect"
+import { Brand } from 'effect'
 
-type UserId = number & Brand.Brand<"UserId">
+type UserId = number & Brand.Brand<'UserId'>
 
 const UserId = Brand.nominal<UserId>()
 
@@ -49,7 +49,7 @@ const getUserById = (id: UserId) => {
   // Logic to retrieve user
 }
 
-type ProductId = number & Brand.Brand<"ProductId">
+type ProductId = number & Brand.Brand<'ProductId'>
 
 const ProductId = Brand.nominal<ProductId>()
 
@@ -78,10 +78,10 @@ When the input data does not meet the criteria, the function uses `Brand.error` 
 **Example** (Creating a Branded Type with Validation)
 
 ```ts twoslash
-import { Brand } from "effect"
+import { Brand } from 'effect'
 
 // Define a branded type 'Int' to represent integer values
-type Int = number & Brand.Brand<"Int">
+type Int = number & Brand.Brand<'Int'>
 
 // Define the constructor using 'refined' to enforce integer values
 const Int = Brand.refined<Int>(
@@ -95,9 +95,9 @@ const Int = Brand.refined<Int>(
 **Example** (Using the `Int` Constructor)
 
 ```ts twoslash
-import { Brand } from "effect"
+import { Brand } from 'effect'
 
-type Int = number & Brand.Brand<"Int">
+type Int = number & Brand.Brand<'Int'>
 
 const Int = Brand.refined<Int>(
   // Check if the value is an integer
@@ -120,9 +120,9 @@ Attempting to assign a non-`Int` value will result in a compile-time error:
 **Example** (Compile-Time Error for Incorrect Assignments)
 
 ```ts twoslash
-import { Brand } from "effect"
+import { Brand } from 'effect'
 
-type Int = number & Brand.Brand<"Int">
+type Int = number & Brand.Brand<'Int'>
 
 const Int = Brand.refined<Int>(
   (n) => Number.isInteger(n),

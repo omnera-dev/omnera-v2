@@ -5,7 +5,7 @@ You can define a cron schedule by specifying numeric constraints for seconds, mi
 **Example** (Creating a Cron)
 
 ```ts twoslash
-import { Cron, DateTime } from "effect"
+import { Cron, DateTime } from 'effect'
 
 // Build a cron that triggers at 4:00 AM
 // on the 8th to the 14th of each month
@@ -16,7 +16,7 @@ const cron = Cron.make({
   days: [8, 9, 10, 11, 12, 13, 14], // Specific days of the month
   months: [], // No restrictions on the month
   weekdays: [], // No restrictions on the weekday
-  tz: DateTime.zoneUnsafeMakeNamed("Europe/Rome") // Optional time zone
+  tz: DateTime.zoneUnsafeMakeNamed('Europe/Rome'), // Optional time zone
 })
 ```
 

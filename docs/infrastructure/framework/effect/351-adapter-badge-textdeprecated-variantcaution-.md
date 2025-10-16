@@ -7,7 +7,7 @@ In earlier versions of TypeScript, the generator "adapter" function was necessar
 **Example** (Adapter in Older Code)
 
 ```ts twoslash "$"
-import { Effect } from "effect"
+import { Effect } from 'effect'
 
 const fetchTransactionAmount = Effect.promise(() => Promise.resolve(100))
 

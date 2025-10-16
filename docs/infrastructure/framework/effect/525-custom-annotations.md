@@ -5,12 +5,10 @@ In addition to built-in annotations, you can define custom annotations to meet s
 **Example** (Defining a Custom Annotation)
 
 ```ts twoslash
-import { Schema } from "effect"
+import { Schema } from 'effect'
 
 // Define a unique identifier for your custom annotation
-const DeprecatedId = Symbol.for(
-  "some/unique/identifier/for/your/custom/annotation"
-)
+const DeprecatedId = Symbol.for('some/unique/identifier/for/your/custom/annotation')
 
 // Apply the custom annotation to the schema
 const MyString = Schema.String.annotations({ [DeprecatedId]: true })
@@ -37,14 +35,12 @@ To make your new custom annotation type-safe, you can use a module augmentation.
 **Example** (Adding Type Safety to Custom Annotations)
 
 ```ts twoslash
-import { Schema } from "effect"
+import { Schema } from 'effect'
 
-const DeprecatedId = Symbol.for(
-  "some/unique/identifier/for/your/custom/annotation"
-)
+const DeprecatedId = Symbol.for('some/unique/identifier/for/your/custom/annotation')
 
 // Module augmentation
-declare module "effect/Schema" {
+declare module 'effect/Schema' {
   namespace Annotations {
     interface GenericSchema<A> extends Schema<A> {
       [DeprecatedId]?: boolean
@@ -53,8 +49,8 @@ declare module "effect/Schema" {
 }
 
 const MyString = Schema.String.annotations({
-// @errors: 2418
-  [DeprecatedId]: "bad value"
+  // @errors: 2418
+  [DeprecatedId]: 'bad value',
 })
 ```
 
@@ -63,14 +59,12 @@ You can retrieve custom annotations using the `SchemaAST.getAnnotation` helper f
 **Example** (Retrieving a Custom Annotation)
 
 ```ts twoslash collapse={4-16}
-import { SchemaAST, Schema } from "effect"
-import { Option } from "effect"
+import { SchemaAST, Schema } from 'effect'
+import { Option } from 'effect'
 
-const DeprecatedId = Symbol.for(
-  "some/unique/identifier/for/your/custom/annotation"
-)
+const DeprecatedId = Symbol.for('some/unique/identifier/for/your/custom/annotation')
 
-declare module "effect/Schema" {
+declare module 'effect/Schema' {
   namespace Annotations {
     interface GenericSchema<A> extends Schema<A> {
       [DeprecatedId]?: boolean
@@ -82,9 +76,7 @@ const MyString = Schema.String.annotations({ [DeprecatedId]: true })
 
 // Helper function to check if a schema is marked as deprecated
 const isDeprecated = <A, I, R>(schema: Schema.Schema<A, I, R>): boolean =>
-  SchemaAST.getAnnotation<boolean>(DeprecatedId)(schema.ast).pipe(
-    Option.getOrElse(() => false)
-  )
+  SchemaAST.getAnnotation<boolean>(DeprecatedId)(schema.ast).pipe(Option.getOrElse(() => false))
 
 console.log(isDeprecated(Schema.String))
 // Output: false

@@ -12,12 +12,12 @@ Frequencies are particularly useful for tracking how often distinct string value
 In this example, we'll create a `Frequency` to observe how often different error codes occur. This can be applied to effects that return a `string` value:
 
 ```ts twoslash
-import { Metric, Random, Effect } from "effect"
+import { Metric, Random, Effect } from 'effect'
 
 // Define a frequency metric to track errors
-const errorFrequency = Metric.frequency("error_frequency", {
+const errorFrequency = Metric.frequency('error_frequency', {
   // Optional
-  description: "Counts the occurrences of errors."
+  description: 'Counts the occurrences of errors.',
 })
 
 const task = Effect.gen(function* () {
@@ -31,7 +31,7 @@ const program = Effect.gen(function* () {
 
   // Retrieve and log the current state of the summary
   const state = yield* Metric.value(errorFrequency)
-  console.log("%o", state)
+  console.log('%o', state)
 })
 
 Effect.runPromise(program)

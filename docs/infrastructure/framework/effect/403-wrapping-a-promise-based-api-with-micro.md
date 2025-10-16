@@ -13,10 +13,10 @@ This guide shows how to wrap a `Promise`-based API using the `Micro` library fro
    function fetchWeather(city: string): Promise<string> {
      return new Promise((resolve, reject) => {
        setTimeout(() => {
-         if (city === "London") {
-           resolve("Sunny")
+         if (city === 'London') {
+           resolve('Sunny')
          } else {
-           reject(new Error("Weather data not found for this location"))
+           reject(new Error('Weather data not found for this location'))
          }
        }, 1_000)
      })
@@ -28,16 +28,16 @@ This guide shows how to wrap a `Promise`-based API using the `Micro` library fro
    Now, wrap the `fetchWeather` function using Micro, converting the `Promise` to a Micro effect to manage both success and failure scenarios.
 
    ```ts twoslash collapse={4-14}
-   import { Micro } from "effect"
+   import { Micro } from 'effect'
 
    // Simulate fetching weather data
    function fetchWeather(city: string): Promise<string> {
      return new Promise((resolve, reject) => {
        setTimeout(() => {
-         if (city === "London") {
-           resolve("Sunny")
+         if (city === 'London') {
+           resolve('Sunny')
          } else {
-           reject(new Error("Weather data not found for this location"))
+           reject(new Error('Weather data not found for this location'))
          }
        }, 1_000)
      })
@@ -57,16 +57,16 @@ This guide shows how to wrap a `Promise`-based API using the `Micro` library fro
    **Example** (Executing the Micro Effect)
 
    ```ts twoslash collapse={4-14}
-   import { Micro } from "effect"
+   import { Micro } from 'effect'
 
    // Simulate fetching weather data
    function fetchWeather(city: string): Promise<string> {
      return new Promise((resolve, reject) => {
        setTimeout(() => {
-         if (city === "London") {
-           resolve("Sunny")
+         if (city === 'London') {
+           resolve('Sunny')
          } else {
-           reject(new Error("Weather data not found for this location"))
+           reject(new Error('Weather data not found for this location'))
          }
        }, 1_000)
      })
@@ -78,13 +78,11 @@ This guide shows how to wrap a `Promise`-based API using the `Micro` library fro
 
    //      ┌─── Micro<string, never, never>
    //      ▼
-   const weatherEffect = getWeather("London")
+   const weatherEffect = getWeather('London')
 
    Micro.runPromise(weatherEffect)
      .then((data) => console.log(`The weather in London is: ${data}`))
-     .catch((error) =>
-       console.error(`Failed to fetch weather data: ${error.message}`)
-     )
+     .catch((error) => console.error(`Failed to fetch weather data: ${error.message}`))
    /*
    Output:
    The weather in London is: Sunny
@@ -98,16 +96,16 @@ This guide shows how to wrap a `Promise`-based API using the `Micro` library fro
    **Example** (Inspecting Exit Status)
 
    ```ts twoslash collapse={4-14}
-   import { Micro } from "effect"
+   import { Micro } from 'effect'
 
    // Simulate fetching weather data
    function fetchWeather(city: string): Promise<string> {
      return new Promise((resolve, reject) => {
        setTimeout(() => {
-         if (city === "London") {
-           resolve("Sunny")
+         if (city === 'London') {
+           resolve('Sunny')
          } else {
-           reject(new Error("Weather data not found for this location"))
+           reject(new Error('Weather data not found for this location'))
          }
        }, 1_000)
      })
@@ -119,7 +117,7 @@ This guide shows how to wrap a `Promise`-based API using the `Micro` library fro
 
    //      ┌─── Micro<string, never, never>
    //      ▼
-   const weatherEffect = getWeather("London")
+   const weatherEffect = getWeather('London')
 
    Micro.runPromiseExit(weatherEffect).then(
      // ┌─── MicroExit<string, never>
@@ -144,23 +142,23 @@ This guide shows how to wrap a `Promise`-based API using the `Micro` library fro
    **Example** (Handling Specific Errors)
 
    ```ts twoslash collapse={4-14}
-   import { Micro } from "effect"
+   import { Micro } from 'effect'
 
    // Simulate fetching weather data
    function fetchWeather(city: string): Promise<string> {
      return new Promise((resolve, reject) => {
        setTimeout(() => {
-         if (city === "London") {
-           resolve("Sunny")
+         if (city === 'London') {
+           resolve('Sunny')
          } else {
-           reject(new Error("Weather data not found for this location"))
+           reject(new Error('Weather data not found for this location'))
          }
        }, 1_000)
      })
    }
 
    class WeatherError {
-     readonly _tag = "WeatherError"
+     readonly _tag = 'WeatherError'
      constructor(readonly message: string) {}
    }
 
@@ -168,19 +166,17 @@ This guide shows how to wrap a `Promise`-based API using the `Micro` library fro
      return Micro.tryPromise({
        try: () => fetchWeather(city),
        // remap the error
-       catch: (error) => new WeatherError(String(error))
+       catch: (error) => new WeatherError(String(error)),
      })
    }
 
    //      ┌─── Micro<string, WeatherError, never>
    //      ▼
-   const weatherEffect = getWeather("Paris")
+   const weatherEffect = getWeather('Paris')
 
    Micro.runPromise(weatherEffect)
      .then((data) => console.log(`The weather in London is: ${data}`))
-     .catch((error) =>
-       console.error(`Failed to fetch weather data: ${error}`)
-     )
+     .catch((error) => console.error(`Failed to fetch weather data: ${error}`))
    /*
    Output:
    Failed to fetch weather data: MicroCause.Fail: {"_tag":"WeatherError","message":"Error: Weather data not found for this location"}

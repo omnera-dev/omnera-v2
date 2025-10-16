@@ -6,15 +6,13 @@ It will return a scoped effect that, if evaluated, will return the lazily comput
 **Example**
 
 ```ts twoslash
-import { Effect, Context, Layer } from "effect"
+import { Effect, Context, Layer } from 'effect'
 
-class A extends Context.Tag("A")<A, { readonly a: number }>() {}
+class A extends Context.Tag('A')<A, { readonly a: number }>() {}
 
 const ALive = Layer.effect(
   A,
-  Effect.succeed({ a: 5 }).pipe(
-    Effect.tap(() => Effect.log("initialized"))
-  )
+  Effect.succeed({ a: 5 }).pipe(Effect.tap(() => Effect.log('initialized')))
 )
 
 const program = Effect.scoped(

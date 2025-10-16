@@ -6,14 +6,12 @@ In this example, the `Category` schema depends on itself because it has a field 
 **Example** (Self-Referencing Schema)
 
 ```ts twoslash
-import { Schema } from "effect"
+import { Schema } from 'effect'
 
 // Define a Category schema with a recursive subcategories field
-class Category extends Schema.Class<Category>("Category")({
+class Category extends Schema.Class<Category>('Category')({
   name: Schema.String,
-  subcategories: Schema.Array(
-    Schema.suspend((): Schema.Schema<Category> => Category)
-  )
+  subcategories: Schema.Array(Schema.suspend((): Schema.Schema<Category> => Category)),
 }) {}
 ```
 
@@ -26,12 +24,12 @@ class Category extends Schema.Class<Category>("Category")({
 **Example** (Missing Type Annotation Error)
 
 ```ts twoslash
-import { Schema } from "effect"
+import { Schema } from 'effect'
 
 // @errors: 2506 7024
-class Category extends Schema.Class<Category>("Category")({
+class Category extends Schema.Class<Category>('Category')({
   name: Schema.String,
-  subcategories: Schema.Array(Schema.suspend(() => Category))
+  subcategories: Schema.Array(Schema.suspend(() => Category)),
 }) {}
 ```
 
@@ -42,21 +40,21 @@ Sometimes, schemas depend on each other in a mutually recursive way. For instanc
 **Example** (Arithmetic Expression Tree)
 
 ```ts twoslash
-import { Schema } from "effect"
+import { Schema } from 'effect'
 
-class Expression extends Schema.Class<Expression>("Expression")({
-  type: Schema.Literal("expression"),
+class Expression extends Schema.Class<Expression>('Expression')({
+  type: Schema.Literal('expression'),
   value: Schema.Union(
     Schema.Number,
     Schema.suspend((): Schema.Schema<Operation> => Operation)
-  )
+  ),
 }) {}
 
-class Operation extends Schema.Class<Operation>("Operation")({
-  type: Schema.Literal("operation"),
-  operator: Schema.Literal("+", "-"),
+class Operation extends Schema.Class<Operation>('Operation')({
+  type: Schema.Literal('operation'),
+  operator: Schema.Literal('+', '-'),
   left: Expression,
-  right: Expression
+  right: Expression,
 }) {}
 ```
 
@@ -71,15 +69,15 @@ It's important to note that `NumberFromString` is a schema that transforms a str
 When we add this field to the `Category` schema, TypeScript raises an error:
 
 ```ts twoslash
-import { Schema } from "effect"
+import { Schema } from 'effect'
 
-class Category extends Schema.Class<Category>("Category")({
+class Category extends Schema.Class<Category>('Category')({
   id: Schema.NumberFromString,
   name: Schema.String,
   subcategories: Schema.Array(
-// @errors: 2322
+    // @errors: 2322
     Schema.suspend((): Schema.Schema<Category> => Category)
-  )
+  ),
 }) {}
 ```
 
@@ -88,7 +86,7 @@ This error occurs because the explicit annotation `S.suspend((): S.Schema<Catego
 **Example** (Adjusting the Schema with Explicit `Encoded` Type)
 
 ```ts twoslash
-import { Schema } from "effect"
+import { Schema } from 'effect'
 
 interface CategoryEncoded {
   readonly id: string
@@ -96,14 +94,12 @@ interface CategoryEncoded {
   readonly subcategories: ReadonlyArray<CategoryEncoded>
 }
 
-class Category extends Schema.Class<Category>("Category")({
+class Category extends Schema.Class<Category>('Category')({
   id: Schema.NumberFromString,
   name: Schema.String,
   subcategories: Schema.Array(
-    Schema.suspend(
-      (): Schema.Schema<Category, CategoryEncoded> => Category
-    )
-  )
+    Schema.suspend((): Schema.Schema<Category, CategoryEncoded> => Category)
+  ),
 }) {}
 ```
 
@@ -113,11 +109,11 @@ One pattern to mitigate this is to **separate the field responsible for recursio
 **Example** (Separating Recursive Field)
 
 ```ts twoslash
-import { Schema } from "effect"
+import { Schema } from 'effect'
 
 const fields = {
   id: Schema.NumberFromString,
-  name: Schema.String
+  name: Schema.String,
   // ...possibly other fields
 }
 
@@ -126,13 +122,11 @@ interface CategoryEncoded extends Schema.Struct.Encoded<typeof fields> {
   readonly subcategories: ReadonlyArray<CategoryEncoded>
 }
 
-class Category extends Schema.Class<Category>("Category")({
+class Category extends Schema.Class<Category>('Category')({
   ...fields, // Include the fields
   subcategories: Schema.Array(
     // Define `subcategories` using recursion
-    Schema.suspend(
-      (): Schema.Schema<Category, CategoryEncoded> => Category
-    )
-  )
+    Schema.suspend((): Schema.Schema<Category, CategoryEncoded> => Category)
+  ),
 }) {}
 ```

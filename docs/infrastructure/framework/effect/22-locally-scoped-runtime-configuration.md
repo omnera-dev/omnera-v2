@@ -14,7 +14,7 @@ To achieve this, we make use of the `Effect.provide` function, which allow us to
 In this example, we create a simple logger using `Logger.replace`, which replaces the default logger with a custom one that logs messages without timestamps or levels. We then use `Effect.provide` to apply this custom logger to the program.
 
 ```ts twoslash
-import { Logger, Effect } from "effect"
+import { Logger, Effect } from 'effect'
 
 const addSimpleLogger = Logger.replace(
   Logger.defaultLogger,
@@ -23,8 +23,8 @@ const addSimpleLogger = Logger.replace(
 )
 
 const program = Effect.gen(function* () {
-  yield* Effect.log("Application started!")
-  yield* Effect.log("Application is about to exit!")
+  yield* Effect.log('Application started!')
+  yield* Effect.log('Application is about to exit!')
 })
 
 // Running with the default logger
@@ -51,7 +51,7 @@ To ensure that the runtime configuration is only applied to a specific part of a
 In this example, we demonstrate how to apply a custom logger configuration only to a specific section of the program. The default logger is used for most of the program, but when we apply the `Effect.provide(addSimpleLogger)` call, it overrides the logger within that specific nested block. After that, the configuration reverts to its original state.
 
 ```ts twoslash
-import { Logger, Effect } from "effect"
+import { Logger, Effect } from 'effect'
 
 const addSimpleLogger = Logger.replace(
   Logger.defaultLogger,
@@ -63,28 +63,26 @@ const removeDefaultLogger = Logger.remove(Logger.defaultLogger)
 
 const program = Effect.gen(function* () {
   // Logs with default logger
-  yield* Effect.log("Application started!")
+  yield* Effect.log('Application started!')
 
   yield* Effect.gen(function* () {
     // This log is suppressed
     yield* Effect.log("I'm not going to be logged!")
 
     // Custom logger applied here
-    yield* Effect.log("I will be logged by the simple logger.").pipe(
+    yield* Effect.log('I will be logged by the simple logger.').pipe(
       Effect.provide(addSimpleLogger)
     )
 
     // This log is suppressed
-    yield* Effect.log(
-      "Reset back to the previous configuration, so I won't be logged."
-    )
+    yield* Effect.log("Reset back to the previous configuration, so I won't be logged.")
   }).pipe(
     // Remove the default logger temporarily
     Effect.provide(removeDefaultLogger)
   )
 
   // Logs with default logger again
-  yield* Effect.log("Application is about to exit!")
+  yield* Effect.log('Application is about to exit!')
 })
 
 Effect.runSync(program)

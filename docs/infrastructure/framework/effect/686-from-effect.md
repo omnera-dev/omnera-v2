@@ -3,7 +3,7 @@
 You can generate a stream from an Effect workflow by employing the `Stream.fromEffect` constructor. For instance, consider the following stream, which generates a single random number:
 
 ```ts twoslash
-import { Stream, Random, Effect } from "effect"
+import { Stream, Random, Effect } from 'effect'
 
 const stream = Stream.fromEffect(Random.nextInt)
 

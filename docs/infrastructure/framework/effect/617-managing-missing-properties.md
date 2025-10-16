@@ -5,7 +5,7 @@ When decoding, it's important to understand how missing properties are processed
 **Example** (Default Behavior of Missing Properties)
 
 ```ts twoslash
-import { Schema } from "effect"
+import { Schema } from 'effect'
 
 const schema = Schema.Struct({ a: Schema.Unknown })
 const input = {}
@@ -21,7 +21,7 @@ If you need your validation logic to differentiate between genuinely missing pro
 **Example** (Setting `exact: true` to Distinguish Missing Properties)
 
 ```ts twoslash
-import { Schema } from "effect"
+import { Schema } from 'effect'
 
 const schema = Schema.Struct({ a: Schema.Unknown })
 const input = {}
@@ -40,8 +40,8 @@ For the APIs `Schema.is` and `Schema.asserts`, however, the default behavior is 
 **Example** (Strict Handling of Missing Properties with `Schema.is` and `Schema.asserts`)
 
 ```ts twoslash
-import type { SchemaAST } from "effect"
-import { Schema } from "effect"
+import type { SchemaAST } from 'effect'
+import { Schema } from 'effect'
 
 const schema = Schema.Struct({ a: Schema.Unknown })
 const input = {}
@@ -61,9 +61,9 @@ const asserts: (
 
 try {
   asserts(input)
-  console.log("asserts passed")
+  console.log('asserts passed')
 } catch (e: any) {
-  console.error("asserts failed")
+  console.error('asserts failed')
   console.error(e.message)
 }
 /*
@@ -76,9 +76,9 @@ asserts failed
 
 try {
   asserts(input, { exact: false })
-  console.log("asserts passed")
+  console.log('asserts passed')
 } catch (e: any) {
-  console.error("asserts failed")
+  console.error('asserts failed')
   console.error(e.message)
 }
 // Output: asserts passed

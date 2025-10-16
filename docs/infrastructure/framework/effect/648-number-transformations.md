@@ -11,22 +11,22 @@ The following special string values are supported: "NaN", "Infinity", "-Infinity
 **Example** (Parsing Number from String)
 
 ```ts twoslash
-import { Schema } from "effect"
+import { Schema } from 'effect'
 
 const schema = Schema.NumberFromString
 
 const decode = Schema.decodeUnknownSync(schema)
 
 // success cases
-console.log(decode("1")) // 1
-console.log(decode("-1")) // -1
-console.log(decode("1.5")) // 1.5
-console.log(decode("NaN")) // NaN
-console.log(decode("Infinity")) // Infinity
-console.log(decode("-Infinity")) // -Infinity
+console.log(decode('1')) // 1
+console.log(decode('-1')) // -1
+console.log(decode('1.5')) // 1.5
+console.log(decode('NaN')) // NaN
+console.log(decode('Infinity')) // Infinity
+console.log(decode('-Infinity')) // -Infinity
 
 // failure cases
-decode("a")
+decode('a')
 /*
 throws:
 ParseError: NumberFromString
@@ -42,7 +42,7 @@ Restricts a number within a specified range.
 **Example** (Clamping a Number)
 
 ```ts twoslash
-import { Schema } from "effect"
+import { Schema } from 'effect'
 
 // clamps the input to -1 <= x <= 1
 const schema = Schema.Number.pipe(Schema.clamp(-1, 1))
@@ -65,16 +65,16 @@ The following special string values are supported: "NaN", "Infinity", "-Infinity
 **Example** (Parsing and Validating Numbers)
 
 ```ts twoslash
-import { Schema } from "effect"
+import { Schema } from 'effect'
 
 const schema = Schema.String.pipe(Schema.parseNumber)
 
 const decode = Schema.decodeUnknownSync(schema)
 
-console.log(decode("1")) // 1
-console.log(decode("Infinity")) // Infinity
-console.log(decode("NaN")) // NaN
-console.log(decode("-"))
+console.log(decode('1')) // 1
+console.log(decode('Infinity')) // Infinity
+console.log(decode('NaN')) // NaN
+console.log(decode('-'))
 /*
 throws
 ParseError: (string <-> number)

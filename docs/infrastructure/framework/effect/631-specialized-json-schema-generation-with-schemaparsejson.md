@@ -7,13 +7,13 @@ This behavior ensures that the generated JSON Schema reflects the intended struc
 **Example** (Generating JSON Schema for a Parsed Object)
 
 ```ts twoslash
-import { JSONSchema, Schema } from "effect"
+import { JSONSchema, Schema } from 'effect'
 
 // Define a schema that parses a JSON string into a structured object
 const schema = Schema.parseJson(
   Schema.Struct({
     // Nested parsing: JSON string to a number
-    a: Schema.parseJson(Schema.NumberFromString)
+    a: Schema.parseJson(Schema.NumberFromString),
   })
 )
 

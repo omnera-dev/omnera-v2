@@ -9,7 +9,7 @@ A bounded queue applies back-pressure when full, meaning any `Queue.offer` opera
 **Example** (Creating a Bounded Queue)
 
 ```ts twoslash
-import { Queue } from "effect"
+import { Queue } from 'effect'
 
 // Creating a bounded queue with a capacity of 100
 const boundedQueue = Queue.bounded<number>(100)
@@ -22,7 +22,7 @@ A dropping queue discards new values if the queue is full.
 **Example** (Creating a Dropping Queue)
 
 ```ts twoslash
-import { Queue } from "effect"
+import { Queue } from 'effect'
 
 // Creating a dropping queue with a capacity of 100
 const droppingQueue = Queue.dropping<number>(100)
@@ -35,7 +35,7 @@ A sliding queue removes old values to make space for new ones when it reaches ca
 **Example** (Creating a Sliding Queue)
 
 ```ts twoslash
-import { Queue } from "effect"
+import { Queue } from 'effect'
 
 // Creating a sliding queue with a capacity of 100
 const slidingQueue = Queue.sliding<number>(100)
@@ -48,7 +48,7 @@ An unbounded queue has no capacity limit, allowing unrestricted additions.
 **Example** (Creating an Unbounded Queue)
 
 ```ts twoslash
-import { Queue } from "effect"
+import { Queue } from 'effect'
 
 // Creates an unbounded queue without a capacity limit
 const unboundedQueue = Queue.unbounded<number>()

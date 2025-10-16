@@ -10,7 +10,7 @@ A `PubSub<A>` stores messages of type `A` and provides two fundamental operation
 **Example** (Publishing a Message to Multiple Subscribers)
 
 ```ts twoslash
-import { Effect, PubSub, Queue } from "effect"
+import { Effect, PubSub, Queue } from 'effect'
 
 const program = Effect.scoped(
   Effect.gen(function* () {
@@ -21,11 +21,11 @@ const program = Effect.scoped(
     const dequeue2 = yield* PubSub.subscribe(pubsub)
 
     // Publish a message to the pubsub
-    yield* PubSub.publish(pubsub, "Hello from a PubSub!")
+    yield* PubSub.publish(pubsub, 'Hello from a PubSub!')
 
     // Each subscriber receives the message
-    console.log("Subscriber 1: " + (yield* Queue.take(dequeue1)))
-    console.log("Subscriber 2: " + (yield* Queue.take(dequeue2)))
+    console.log('Subscriber 1: ' + (yield* Queue.take(dequeue1)))
+    console.log('Subscriber 2: ' + (yield* Queue.take(dequeue2)))
   })
 )
 

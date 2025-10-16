@@ -28,11 +28,11 @@ Schema.ReadonlyMap(options: {
 **Example**
 
 ```ts twoslash
-import { Schema } from "effect"
+import { Schema } from 'effect'
 
 const schema = Schema.ReadonlyMap({
   key: Schema.String,
-  value: Schema.NumberFromString
+  value: Schema.NumberFromString,
 })
 
 //     ┌─── readonly (readonly [string, string])[]
@@ -50,9 +50,9 @@ const encode = Schema.encodeSync(schema)
 
 console.log(
   decode([
-    ["a", "2"],
-    ["b", "2"],
-    ["c", "3"]
+    ['a', '2'],
+    ['b', '2'],
+    ['c', '3'],
   ])
 )
 // Output: Map(3) { 'a' => 2, 'b' => 2, 'c' => 3 }
@@ -62,9 +62,9 @@ console.log(
 console.log(
   encode(
     new Map([
-      ["a", 1],
-      ["b", 2],
-      ["c", 3]
+      ['a', 1],
+      ['b', 2],
+      ['c', 3],
     ])
   )
 )
@@ -99,11 +99,11 @@ Schema.ReadonlyMapFromSelf(options: {
 **Example**
 
 ```ts twoslash
-import { Schema } from "effect"
+import { Schema } from 'effect'
 
 const schema = Schema.ReadonlyMapFromSelf({
   key: Schema.String,
-  value: Schema.NumberFromString
+  value: Schema.NumberFromString,
 })
 
 //     ┌─── ReadonlyMap<string, string>
@@ -122,9 +122,9 @@ const encode = Schema.encodeSync(schema)
 console.log(
   decode(
     new Map([
-      ["a", "2"],
-      ["b", "2"],
-      ["c", "3"]
+      ['a', '2'],
+      ['b', '2'],
+      ['c', '3'],
     ])
   )
 )
@@ -135,9 +135,9 @@ console.log(
 console.log(
   encode(
     new Map([
-      ["a", 1],
-      ["b", 2],
-      ["c", 3]
+      ['a', 1],
+      ['b', 2],
+      ['c', 3],
     ])
   )
 )
@@ -153,7 +153,7 @@ The `Schema.ReadonlyMapFromRecord` function is a utility to transform a `Readonl
 ```ts showLineNumbers=false
 Schema.ReadonlyMapFromRecord({
   key: Schema<KA, KI, KR>,
-  value: Schema<VA, VI, VR>
+  value: Schema<VA, VI, VR>,
 })
 ```
 
@@ -172,11 +172,11 @@ Schema.ReadonlyMapFromRecord({
 **Example**
 
 ```ts twoslash
-import { Schema } from "effect"
+import { Schema } from 'effect'
 
 const schema = Schema.ReadonlyMapFromRecord({
   key: Schema.NumberFromString,
-  value: Schema.NumberFromString
+  value: Schema.NumberFromString,
 })
 
 //     ┌─── { readonly [x: string]: string; }
@@ -194,9 +194,9 @@ const encode = Schema.encodeSync(schema)
 
 console.log(
   decode({
-    "1": "4",
-    "2": "5",
-    "3": "6"
+    '1': '4',
+    '2': '5',
+    '3': '6',
   })
 )
 // Output: Map(3) { 1 => 4, 2 => 5, 3 => 6 }
@@ -208,7 +208,7 @@ console.log(
     new Map([
       [1, 4],
       [2, 5],
-      [3, 6]
+      [3, 6],
     ])
   )
 )

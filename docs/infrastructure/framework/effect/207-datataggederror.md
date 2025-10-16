@@ -5,30 +5,30 @@ The `Data.TaggedError` constructor lets you define custom yieldable errors with 
 **Example** (Handling Multiple Tagged Errors)
 
 ```ts twoslash
-import { Effect, Data, Random } from "effect"
+import { Effect, Data, Random } from 'effect'
 
 // An error with _tag: "Foo"
-class FooError extends Data.TaggedError("Foo")<{
+class FooError extends Data.TaggedError('Foo')<{
   message: string
 }> {}
 
 // An error with _tag: "Bar"
-class BarError extends Data.TaggedError("Bar")<{
+class BarError extends Data.TaggedError('Bar')<{
   randomNumber: number
 }> {}
 
 const program = Effect.gen(function* () {
   const n = yield* Random.next
   return n > 0.5
-    ? "yay!"
+    ? 'yay!'
     : n < 0.2
-    ? yield* new FooError({ message: "Oh no!" })
-    : yield* new BarError({ randomNumber: n })
+      ? yield* new FooError({ message: 'Oh no!' })
+      : yield* new BarError({ randomNumber: n })
 }).pipe(
   // Handle different tagged errors using catchTags
   Effect.catchTags({
     Foo: (error) => Effect.succeed(`Foo error: ${error.message}`),
-    Bar: (error) => Effect.succeed(`Bar error: ${error.randomNumber}`)
+    Bar: (error) => Effect.succeed(`Bar error: ${error.randomNumber}`),
   })
 )
 

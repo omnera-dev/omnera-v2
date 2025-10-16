@@ -9,15 +9,13 @@ The `Effect.addFinalizer` function is a high-level API that allows you to add fi
 <TabItem label="Using Effect.gen">
 
 ```ts twoslash
-import { Effect, Console } from "effect"
+import { Effect, Console } from 'effect'
 
 //      ┌─── Effect<string, never, Scope>
 //      ▼
 const program = Effect.gen(function* () {
-  yield* Effect.addFinalizer((exit) =>
-    Console.log(`Finalizer executed. Exit status: ${exit._tag}`)
-  )
-  return "some result"
+  yield* Effect.addFinalizer((exit) => Console.log(`Finalizer executed. Exit status: ${exit._tag}`))
+  return 'some result'
 })
 
 // Wrapping the effect in a scope
@@ -39,13 +37,13 @@ Finalizer executed. Exit status: Success
 <TabItem label="Using pipe">
 
 ```ts twoslash
-import { Effect, Console } from "effect"
+import { Effect, Console } from 'effect'
 
 //      ┌─── Effect<string, never, Scope>
 //      ▼
 const program = Effect.addFinalizer((exit) =>
   Console.log(`Finalizer executed. Exit status: ${exit._tag}`)
-).pipe(Effect.andThen(Effect.succeed("some result")))
+).pipe(Effect.andThen(Effect.succeed('some result')))
 
 // Wrapping the effect in a scope
 //
@@ -88,15 +86,13 @@ shows that the workflow requires a `Scope` to run. You can provide this `Scope` 
 <TabItem label="Using Effect.gen">
 
 ```ts twoslash
-import { Effect, Console } from "effect"
+import { Effect, Console } from 'effect'
 
 //      ┌─── Effect<never, string, Scope>
 //      ▼
 const program = Effect.gen(function* () {
-  yield* Effect.addFinalizer((exit) =>
-    Console.log(`Finalizer executed. Exit status: ${exit._tag}`)
-  )
-  return yield* Effect.fail("Uh oh!")
+  yield* Effect.addFinalizer((exit) => Console.log(`Finalizer executed. Exit status: ${exit._tag}`))
+  return yield* Effect.fail('Uh oh!')
 })
 
 // Wrapping the effect in a scope
@@ -122,13 +118,13 @@ Finalizer executed. Exit status: Failure
 <TabItem label="Using pipe">
 
 ```ts twoslash
-import { Effect, Console } from "effect"
+import { Effect, Console } from 'effect'
 
 //      ┌─── Effect<never, string, Scope>
 //      ▼
 const program = Effect.addFinalizer((exit) =>
   Console.log(`Finalizer executed. Exit status: ${exit._tag}`)
-).pipe(Effect.andThen(Effect.fail("Uh oh!")))
+).pipe(Effect.andThen(Effect.fail('Uh oh!')))
 
 // Wrapping the effect in a scope
 //
@@ -161,14 +157,12 @@ In this case, the finalizer is executed even when the effect fails. The log outp
 <TabItem label="Using Effect.gen">
 
 ```ts twoslash
-import { Effect, Console } from "effect"
+import { Effect, Console } from 'effect'
 
 //      ┌─── Effect<never, never, Scope>
 //      ▼
 const program = Effect.gen(function* () {
-  yield* Effect.addFinalizer((exit) =>
-    Console.log(`Finalizer executed. Exit status: ${exit._tag}`)
-  )
+  yield* Effect.addFinalizer((exit) => Console.log(`Finalizer executed. Exit status: ${exit._tag}`))
   return yield* Effect.interrupt
 })
 
@@ -204,7 +198,7 @@ Finalizer executed. Exit status: Failure
 <TabItem label="Using pipe">
 
 ```ts twoslash
-import { Effect, Console } from "effect"
+import { Effect, Console } from 'effect'
 
 //      ┌─── Effect<never, never, Scope>
 //      ▼

@@ -15,12 +15,9 @@ Combines two schedules and recurs if either schedule wants to continue, using th
 **Example** (Combining Exponential and Spaced Intervals)
 
 ```ts twoslash collapse={3-26}
-import { Array, Chunk, Duration, Effect, Schedule } from "effect"
+import { Array, Chunk, Duration, Effect, Schedule } from 'effect'
 
-const log = (
-  schedule: Schedule.Schedule<unknown>,
-  delay: Duration.DurationInput = 0
-): void => {
+const log = (schedule: Schedule.Schedule<unknown>, delay: Duration.DurationInput = 0): void => {
   const maxRecurs = 10
   const delays = Chunk.toArray(
     Effect.runSync(
@@ -34,18 +31,15 @@ const log = (
   delays.forEach((duration, i) => {
     console.log(
       i === maxRecurs
-        ? "..."
+        ? '...'
         : i === delays.length - 1
-        ? "(end)"
-        : `#${i + 1}: ${Duration.toMillis(duration)}ms`
+          ? '(end)'
+          : `#${i + 1}: ${Duration.toMillis(duration)}ms`
     )
   })
 }
 
-const schedule = Schedule.union(
-  Schedule.exponential("100 millis"),
-  Schedule.spaced("1 second")
-)
+const schedule = Schedule.union(Schedule.exponential('100 millis'), Schedule.spaced('1 second'))
 
 log(schedule)
 /*
@@ -73,12 +67,9 @@ Combines two schedules and recurs only if both schedules want to continue, using
 **Example** (Limiting Exponential Backoff with a Fixed Number of Retries)
 
 ```ts twoslash collapse={3-26}
-import { Array, Chunk, Duration, Effect, Schedule } from "effect"
+import { Array, Chunk, Duration, Effect, Schedule } from 'effect'
 
-const log = (
-  schedule: Schedule.Schedule<unknown>,
-  delay: Duration.DurationInput = 0
-): void => {
+const log = (schedule: Schedule.Schedule<unknown>, delay: Duration.DurationInput = 0): void => {
   const maxRecurs = 10
   const delays = Chunk.toArray(
     Effect.runSync(
@@ -92,18 +83,15 @@ const log = (
   delays.forEach((duration, i) => {
     console.log(
       i === maxRecurs
-        ? "..."
+        ? '...'
         : i === delays.length - 1
-        ? "(end)"
-        : `#${i + 1}: ${Duration.toMillis(duration)}ms`
+          ? '(end)'
+          : `#${i + 1}: ${Duration.toMillis(duration)}ms`
     )
   })
 }
 
-const schedule = Schedule.intersect(
-  Schedule.exponential("10 millis"),
-  Schedule.recurs(5)
-)
+const schedule = Schedule.intersect(Schedule.exponential('10 millis'), Schedule.recurs(5))
 
 log(schedule)
 /*
@@ -126,12 +114,9 @@ Combines two schedules by running the first one fully, then switching to the sec
 **Example** (Switching from Fixed Retries to Periodic Execution)
 
 ```ts twoslash collapse={3-26}
-import { Array, Chunk, Duration, Effect, Schedule } from "effect"
+import { Array, Chunk, Duration, Effect, Schedule } from 'effect'
 
-const log = (
-  schedule: Schedule.Schedule<unknown>,
-  delay: Duration.DurationInput = 0
-): void => {
+const log = (schedule: Schedule.Schedule<unknown>, delay: Duration.DurationInput = 0): void => {
   const maxRecurs = 10
   const delays = Chunk.toArray(
     Effect.runSync(
@@ -145,18 +130,15 @@ const log = (
   delays.forEach((duration, i) => {
     console.log(
       i === maxRecurs
-        ? "..."
+        ? '...'
         : i === delays.length - 1
-        ? "(end)"
-        : `#${i + 1}: ${Duration.toMillis(duration)}ms`
+          ? '(end)'
+          : `#${i + 1}: ${Duration.toMillis(duration)}ms`
     )
   })
 }
 
-const schedule = Schedule.andThen(
-  Schedule.recurs(5),
-  Schedule.spaced("1 second")
-)
+const schedule = Schedule.andThen(Schedule.recurs(5), Schedule.spaced('1 second'))
 
 log(schedule)
 /*

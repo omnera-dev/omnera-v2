@@ -9,10 +9,10 @@ Now that we have our service tag defined, let's see how we can use it by buildin
 <TabItem label="Using Effect.gen">
 
 ```ts twoslash
-import { Effect, Context } from "effect"
+import { Effect, Context } from 'effect'
 
 // Declaring a tag for a service that generates random numbers
-class Random extends Context.Tag("MyRandomService")<
+class Random extends Context.Tag('MyRandomService')<
   Random,
   { readonly next: Effect.Effect<number> }
 >() {}
@@ -36,10 +36,10 @@ This allows us to access the `next` operation of the service.
 <TabItem label="Using pipe">
 
 ```ts twoslash
-import { Effect, Context, Console } from "effect"
+import { Effect, Context, Console } from 'effect'
 
 // Declaring a tag for a service that generates random numbers
-class Random extends Context.Tag("MyRandomService")<
+class Random extends Context.Tag('MyRandomService')<
   Random,
   { readonly next: Effect.Effect<number> }
 >() {}
@@ -50,9 +50,7 @@ class Random extends Context.Tag("MyRandomService")<
 //      ▼
 const program = Random.pipe(
   Effect.andThen((random) => random.next),
-  Effect.andThen((randomNumber) =>
-    Console.log(`random number: ${randomNumber}`)
-  )
+  Effect.andThen((randomNumber) => Console.log(`random number: ${randomNumber}`))
 )
 ```
 
@@ -76,10 +74,10 @@ If we attempt to execute the effect without providing the necessary service we w
 **Example** (Type Error Without Service Provision)
 
 ```ts twoslash
-import { Effect, Context } from "effect"
+import { Effect, Context } from 'effect'
 
 // Declaring a tag for a service that generates random numbers
-class Random extends Context.Tag("MyRandomService")<
+class Random extends Context.Tag('MyRandomService')<
   Random,
   { readonly next: Effect.Effect<number> }
 >() {}

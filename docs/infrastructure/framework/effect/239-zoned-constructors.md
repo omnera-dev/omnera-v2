@@ -20,10 +20,10 @@ If the input or time zone is invalid, an `IllegalArgumentException` is thrown.
 The following example assumes the code is executed on a system in Italy (CET timezone):
 
 ```ts twoslash
-import { DateTime } from "effect"
+import { DateTime } from 'effect'
 
 // Create a Zoned DateTime based on the system's local time zone
-const zoned = DateTime.unsafeMakeZoned(new Date("2025-01-01 04:00:00"))
+const zoned = DateTime.unsafeMakeZoned(new Date('2025-01-01 04:00:00'))
 
 console.log(zoned)
 // Output: DateTime.Zoned(2025-01-01T04:00:00.000+01:00)
@@ -39,11 +39,11 @@ Here, the system's time zone (CET, which is UTC+1 in January) is used to create 
 The following example assumes the code is executed on a system in Italy (CET timezone):
 
 ```ts twoslash
-import { DateTime } from "effect"
+import { DateTime } from 'effect'
 
 // Create a Zoned DateTime with a specified named time zone
-const zoned = DateTime.unsafeMakeZoned(new Date("2025-01-01 04:00:00"), {
-  timeZone: "Europe/Rome"
+const zoned = DateTime.unsafeMakeZoned(new Date('2025-01-01 04:00:00'), {
+  timeZone: 'Europe/Rome',
 })
 
 console.log(zoned)
@@ -62,12 +62,12 @@ By default, the input date is treated as a UTC value and then adjusted for the s
 The following example assumes the code is executed on a system in Italy (CET timezone):
 
 ```ts twoslash
-import { DateTime } from "effect"
+import { DateTime } from 'effect'
 
 // Interpret the input date as being in the specified time zone
-const zoned = DateTime.unsafeMakeZoned(new Date("2025-01-01 04:00:00"), {
-  timeZone: "Europe/Rome",
-  adjustForTimeZone: true
+const zoned = DateTime.unsafeMakeZoned(new Date('2025-01-01 04:00:00'), {
+  timeZone: 'Europe/Rome',
+  adjustForTimeZone: true,
 })
 
 console.log(zoned)
@@ -90,16 +90,16 @@ If the input is invalid, it returns `None`. If valid, it returns `Some` containi
 **Example** (Safely Creating a Zoned DateTime)
 
 ```ts twoslash
-import { DateTime, Option } from "effect"
+import { DateTime, Option } from 'effect'
 
 //      ┌─── Option<Zoned>
 //      ▼
-const zoned = DateTime.makeZoned(new Date("2025-01-01 04:00:00"), {
-  timeZone: "Europe/Rome"
+const zoned = DateTime.makeZoned(new Date('2025-01-01 04:00:00'), {
+  timeZone: 'Europe/Rome',
 })
 
 if (Option.isSome(zoned)) {
-  console.log("The DateTime is valid")
+  console.log('The DateTime is valid')
 }
 ```
 
@@ -112,15 +112,13 @@ If the input string is valid, the function returns a `Some` containing the `Zone
 **Example** (Parsing a Zoned DateTime from a String)
 
 ```ts twoslash
-import { DateTime, Option } from "effect"
+import { DateTime, Option } from 'effect'
 
 //      ┌─── Option<Zoned>
 //      ▼
-const zoned = DateTime.makeZonedFromString(
-  "2025-01-01T03:00:00.000+01:00[Europe/Rome]"
-)
+const zoned = DateTime.makeZonedFromString('2025-01-01T03:00:00.000+01:00[Europe/Rome]')
 
 if (Option.isSome(zoned)) {
-  console.log("The DateTime is valid")
+  console.log('The DateTime is valid')
 }
 ```

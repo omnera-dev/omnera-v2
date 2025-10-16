@@ -89,7 +89,7 @@ You can apply multiple updates to a `HashSet` in a temporary mutable context usi
 **Example** (Batching changes without mutating the original)
 
 ```ts twoslash
-import { HashSet } from "effect"
+import { HashSet } from 'effect'
 
 // Create an immutable HashSet
 const original = HashSet.make(1, 2, 3)

@@ -18,9 +18,7 @@ declare const map: {
 In the first overload, the `self` argument comes **last**:
 
 ```ts showLineNumbers=false "self"
-declare const map: <A, B>(
-  f: (a: A) => B
-) => <E, R>(self: Effect<A, E, R>) => Effect<B, E, R>
+declare const map: <A, B>(f: (a: A) => B) => <E, R>(self: Effect<A, E, R>) => Effect<B, E, R>
 ```
 
 This version is commonly used with the `pipe` function. You start by passing the `Effect` as the initial argument to `pipe` and then chain transformations like `Effect.map`:
@@ -42,10 +40,7 @@ pipe(effect, Effect.map(func1), Effect.map(func2), ...)
 In the second overload, the `self` argument comes **first**:
 
 ```ts showLineNumbers=false "self"
-declare const map: <A, E, R, B>(
-  self: Effect<A, E, R>,
-  f: (a: A) => B
-) => Effect<B, E, R>
+declare const map: <A, E, R, B>(self: Effect<A, E, R>, f: (a: A) => B) => Effect<B, E, R>
 ```
 
 This form doesn't require `pipe`. Instead, you provide the `Effect` directly as the first argument:

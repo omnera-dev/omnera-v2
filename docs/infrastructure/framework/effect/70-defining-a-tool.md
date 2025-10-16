@@ -16,22 +16,23 @@ This constructor accepts several parameters that allow us to fully describe the 
 **Example** (Defining a Tool)
 
 ```ts twoslash
-import { Tool } from "@effect/ai"
-import { Schema } from "effect"
+import { Tool } from '@effect/ai'
+import { Schema } from 'effect'
 
-const GetDadJoke = Tool.make("GetDadJoke", {
-  description: "Get a hilarious dad joke from the ICanHazDadJoke API",
+const GetDadJoke = Tool.make('GetDadJoke', {
+  description: 'Get a hilarious dad joke from the ICanHazDadJoke API',
   success: Schema.String,
   failure: Schema.Never,
   parameters: {
     searchTerm: Schema.String.annotations({
-      description: "The search term to use to find dad jokes"
-    })
-  }
+      description: 'The search term to use to find dad jokes',
+    }),
+  },
 })
 ```
 
 Based on the above, a request to call the `GetDadJoke` tool:
+
 - Takes a single `searchTerm` parameter
 - Will return a string if it succeeds (i.e. the joke)
 - Does not have any expected failure scenarios
@@ -43,18 +44,18 @@ Once we have a tool request defined, we can create a `Toolkit`, which is a colle
 **Example** (Creating a `Toolkit`)
 
 ```ts twoslash
-import { Tool, Toolkit } from "@effect/ai"
-import { Schema } from "effect"
+import { Tool, Toolkit } from '@effect/ai'
+import { Schema } from 'effect'
 
-const GetDadJoke = Tool.make("GetDadJoke", {
-  description: "Get a hilarious dad joke from the ICanHazDadJoke API",
+const GetDadJoke = Tool.make('GetDadJoke', {
+  description: 'Get a hilarious dad joke from the ICanHazDadJoke API',
   success: Schema.String,
   failure: Schema.Never,
   parameters: {
     searchTerm: Schema.String.annotations({
-      description: "The search term to use to find dad jokes"
-    })
-  }
+      description: 'The search term to use to find dad jokes',
+    }),
+  },
 })
 
 const DadJokeTools = Toolkit.make(GetDadJoke)
@@ -67,79 +68,76 @@ The `.toLayer(...)` method on a `Toolkit` allows you to define the handlers for 
 **Example** (Implementing a `Toolkit`)
 
 ```ts twoslash /DadJokeTools.toLayer/ collapse={10-46}
-import { Tool, Toolkit } from "@effect/ai"
-import {
-  HttpClient,
-  HttpClientRequest,
-  HttpClientResponse
-} from "@effect/platform"
-import { NodeHttpClient } from "@effect/platform-node"
-import { Array, Effect, Schema } from "effect"
+import { Tool, Toolkit } from '@effect/ai'
+import { HttpClient, HttpClientRequest, HttpClientResponse } from '@effect/platform'
+import { NodeHttpClient } from '@effect/platform-node'
+import { Array, Effect, Schema } from 'effect'
 
-class DadJoke extends Schema.Class<DadJoke>("DadJoke")({
+class DadJoke extends Schema.Class<DadJoke>('DadJoke')({
   id: Schema.String,
-  joke: Schema.String
+  joke: Schema.String,
 }) {}
 
-class SearchResponse extends Schema.Class<SearchResponse>("SearchResponse")({
-  results: Schema.Array(DadJoke)
+class SearchResponse extends Schema.Class<SearchResponse>('SearchResponse')({
+  results: Schema.Array(DadJoke),
 }) {}
 
-class ICanHazDadJoke extends Effect.Service<ICanHazDadJoke>()("ICanHazDadJoke", {
+class ICanHazDadJoke extends Effect.Service<ICanHazDadJoke>()('ICanHazDadJoke', {
   dependencies: [NodeHttpClient.layerUndici],
-  effect: Effect.gen(function*() {
+  effect: Effect.gen(function* () {
     const httpClient = yield* HttpClient.HttpClient
     const httpClientOk = httpClient.pipe(
       HttpClient.filterStatusOk,
-      HttpClient.mapRequest(HttpClientRequest.prependUrl("https://icanhazdadjoke.com"))
+      HttpClient.mapRequest(HttpClientRequest.prependUrl('https://icanhazdadjoke.com'))
     )
 
-    const search = Effect.fn("ICanHazDadJoke.search")(
-      function*(searchTerm: string) {
-        return yield* httpClientOk.get("/search", {
+    const search = Effect.fn('ICanHazDadJoke.search')(function* (searchTerm: string) {
+      return yield* httpClientOk
+        .get('/search', {
           acceptJson: true,
-          urlParams: { searchTerm }
-        }).pipe(
+          urlParams: { searchTerm },
+        })
+        .pipe(
           Effect.flatMap(HttpClientResponse.schemaBodyJson(SearchResponse)),
           Effect.flatMap(({ results }) => Array.head(results)),
           Effect.map((joke) => joke.joke),
           Effect.orDie
         )
-      }
-    )
+    })
 
     return {
-      search
+      search,
     } as const
-  })
+  }),
 }) {}
 
-const GetDadJoke = Tool.make("GetDadJoke", {
-  description: "Get a hilarious dad joke from the ICanHazDadJoke API",
+const GetDadJoke = Tool.make('GetDadJoke', {
+  description: 'Get a hilarious dad joke from the ICanHazDadJoke API',
   success: Schema.String,
   failure: Schema.Never,
   parameters: {
     searchTerm: Schema.String.annotations({
-      description: "The search term to use to find dad jokes"
-    })
-  }
+      description: 'The search term to use to find dad jokes',
+    }),
+  },
 })
 
 const DadJokeTools = Toolkit.make(GetDadJoke)
 
 const DadJokeToolHandlers = DadJokeTools.toLayer(
-  Effect.gen(function*() {
+  Effect.gen(function* () {
     // Access the `ICanHazDadJoke` service
     const icanhazdadjoke = yield* ICanHazDadJoke
     return {
       // Implement the handler for the `GetDadJoke` tool call request
-      GetDadJoke: ({ searchTerm }) => icanhazdadjoke.search(searchTerm)
+      GetDadJoke: ({ searchTerm }) => icanhazdadjoke.search(searchTerm),
     }
   })
 )
 ```
 
 In the code above:
+
 - We access the `ICanHazDadJoke` service from our application
 - Register a handler for the `GetDadJoke` tool using `.handle("GetDadJoke", ...)`
 - Use the `.search` method on our `ICanHazDadJoke` service to search for a dad joke based on the tool call parameters
@@ -155,25 +153,25 @@ Once the tools are defined and implemented, you can pass them along to the model
 **Example** (Using a `Toolkit`)
 
 ```ts twoslash {19}
-import { LanguageModel, Tool, Toolkit } from "@effect/ai"
-import { Effect, Schema } from "effect"
+import { LanguageModel, Tool, Toolkit } from '@effect/ai'
+import { Effect, Schema } from 'effect'
 
-const GetDadJoke = Tool.make("GetDadJoke", {
-  description: "Get a hilarious dad joke from the ICanHazDadJoke API",
+const GetDadJoke = Tool.make('GetDadJoke', {
+  description: 'Get a hilarious dad joke from the ICanHazDadJoke API',
   success: Schema.String,
   failure: Schema.Never,
   parameters: {
     searchTerm: Schema.String.annotations({
-      description: "The search term to use to find dad jokes"
-    })
-  }
+      description: 'The search term to use to find dad jokes',
+    }),
+  },
 })
 
 const DadJokeTools = Toolkit.make(GetDadJoke)
 
 const generateDadJoke = LanguageModel.generateText({
-  prompt: "Generate a dad joke about pirates",
-  toolkit: DadJokeTools
+  prompt: 'Generate a dad joke about pirates',
+  toolkit: DadJokeTools,
 })
 ```
 
@@ -184,91 +182,84 @@ To make the program executable, we must provide the implementation of our tool c
 **Example** (Providing the Tool Call Handlers to a Program)
 
 ```ts twoslash /DadJokeToolHandlers/ collapse={11-61}
-import { LanguageModel, Tool, Toolkit } from "@effect/ai"
-import { OpenAiClient, OpenAiLanguageModel } from "@effect/ai-openai"
-import {
-  HttpClient,
-  HttpClientRequest,
-  HttpClientResponse
-} from "@effect/platform"
-import { NodeHttpClient } from "@effect/platform-node"
-import { Array, Config, Console, Effect, Layer, Schema } from "effect"
+import { LanguageModel, Tool, Toolkit } from '@effect/ai'
+import { OpenAiClient, OpenAiLanguageModel } from '@effect/ai-openai'
+import { HttpClient, HttpClientRequest, HttpClientResponse } from '@effect/platform'
+import { NodeHttpClient } from '@effect/platform-node'
+import { Array, Config, Console, Effect, Layer, Schema } from 'effect'
 
-class DadJoke extends Schema.Class<DadJoke>("DadJoke")({
+class DadJoke extends Schema.Class<DadJoke>('DadJoke')({
   id: Schema.String,
-  joke: Schema.String
+  joke: Schema.String,
 }) {}
 
-class SearchResponse extends Schema.Class<SearchResponse>("SearchResponse")({
-  results: Schema.Array(DadJoke)
+class SearchResponse extends Schema.Class<SearchResponse>('SearchResponse')({
+  results: Schema.Array(DadJoke),
 }) {}
 
-class ICanHazDadJoke extends Effect.Service<ICanHazDadJoke>()("ICanHazDadJoke", {
+class ICanHazDadJoke extends Effect.Service<ICanHazDadJoke>()('ICanHazDadJoke', {
   dependencies: [NodeHttpClient.layerUndici],
-  effect: Effect.gen(function*() {
+  effect: Effect.gen(function* () {
     const httpClient = yield* HttpClient.HttpClient
     const httpClientOk = httpClient.pipe(
       HttpClient.filterStatusOk,
-      HttpClient.mapRequest(HttpClientRequest.prependUrl("https://icanhazdadjoke.com"))
+      HttpClient.mapRequest(HttpClientRequest.prependUrl('https://icanhazdadjoke.com'))
     )
 
-    const search = Effect.fn("ICanHazDadJoke.search")(
-      function*(searchTerm: string) {
-        return yield* httpClientOk.get("/search", {
+    const search = Effect.fn('ICanHazDadJoke.search')(function* (searchTerm: string) {
+      return yield* httpClientOk
+        .get('/search', {
           acceptJson: true,
-          urlParams: { searchTerm }
-        }).pipe(
+          urlParams: { searchTerm },
+        })
+        .pipe(
           Effect.flatMap(HttpClientResponse.schemaBodyJson(SearchResponse)),
           Effect.flatMap(({ results }) => Array.head(results)),
           Effect.map((joke) => joke.joke),
           Effect.scoped,
           Effect.orDie
         )
-      }
-    )
+    })
 
     return {
-      search
+      search,
     } as const
-  })
+  }),
 }) {}
 
-const GetDadJoke = Tool.make("GetDadJoke", {
-  description: "Get a hilarious dad joke from the ICanHazDadJoke API",
+const GetDadJoke = Tool.make('GetDadJoke', {
+  description: 'Get a hilarious dad joke from the ICanHazDadJoke API',
   success: Schema.String,
   failure: Schema.Never,
   parameters: {
     searchTerm: Schema.String.annotations({
-      description: "The search term to use to find dad jokes"
-    })
-  }
+      description: 'The search term to use to find dad jokes',
+    }),
+  },
 })
 
 const DadJokeTools = Toolkit.make(GetDadJoke)
 
 const DadJokeToolHandlers = DadJokeTools.toLayer(
-  Effect.gen(function*() {
+  Effect.gen(function* () {
     const icanhazdadjoke = yield* ICanHazDadJoke
     return {
-      GetDadJoke: ({ searchTerm }) => icanhazdadjoke.search(searchTerm)
+      GetDadJoke: ({ searchTerm }) => icanhazdadjoke.search(searchTerm),
     }
   })
 ).pipe(Layer.provide(ICanHazDadJoke.Default))
 
 const program = LanguageModel.generateText({
-  prompt: "Generate a dad joke about pirates",
-  toolkit: DadJokeTools
+  prompt: 'Generate a dad joke about pirates',
+  toolkit: DadJokeTools,
 }).pipe(
   Effect.flatMap((response) => Console.log(response.text)),
-  Effect.provide(OpenAiLanguageModel.model("gpt-4o"))
+  Effect.provide(OpenAiLanguageModel.model('gpt-4o'))
 )
 
 const OpenAi = OpenAiClient.layerConfig({
-  apiKey: Config.redacted("OPENAI_API_KEY")
+  apiKey: Config.redacted('OPENAI_API_KEY'),
 }).pipe(Layer.provide(NodeHttpClient.layerUndici))
 
-program.pipe(
-  Effect.provide([OpenAi, DadJokeToolHandlers]),
-  Effect.runPromise
-)
+program.pipe(Effect.provide([OpenAi, DadJokeToolHandlers]), Effect.runPromise)
 ```

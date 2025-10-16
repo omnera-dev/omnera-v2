@@ -5,9 +5,9 @@ To access a service while using `Micro.gen`, you need to wrap the service tag us
 **Example** (Accessing a Service in `Micro.gen`)
 
 ```ts twoslash
-import { Micro, Context } from "effect"
+import { Micro, Context } from 'effect'
 
-class Random extends Context.Tag("MyRandomService")<
+class Random extends Context.Tag('MyRandomService')<
   Random,
   { readonly next: Micro.Micro<number> }
 >() {}
@@ -20,7 +20,7 @@ const program = Micro.gen(function* () {
 })
 
 const runnable = Micro.provideService(program, Random, {
-  next: Micro.sync(() => Math.random())
+  next: Micro.sync(() => Math.random()),
 })
 
 Micro.runPromise(runnable)

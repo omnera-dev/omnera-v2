@@ -5,13 +5,11 @@ In this section, we'll explore a scenario where we need to perform actions after
 Consider a situation where our application has completed its primary logic and finalized some resources, but we also need to perform additional actions afterward. We can use `Stream.ensuring` for this purpose:
 
 ```ts twoslash
-import { Stream, Console, Effect } from "effect"
+import { Stream, Console, Effect } from 'effect'
 
-const program = Stream.fromEffect(Console.log("Application Logic.")).pipe(
-  Stream.concat(Stream.finalizer(Console.log("Finalizing the stream"))),
-  Stream.ensuring(
-    Console.log("Doing some other works after stream's finalization")
-  )
+const program = Stream.fromEffect(Console.log('Application Logic.')).pipe(
+  Stream.concat(Stream.finalizer(Console.log('Finalizing the stream'))),
+  Stream.ensuring(Console.log("Doing some other works after stream's finalization"))
 )
 
 Effect.runPromise(Stream.runCollect(program)).then(console.log)

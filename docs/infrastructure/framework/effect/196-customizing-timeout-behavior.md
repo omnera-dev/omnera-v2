@@ -9,21 +9,21 @@ The `Effect.timeoutFail` function allows you to produce a specific error when a 
 **Example** (Custom Timeout Error)
 
 ```ts twoslash
-import { Effect, Data } from "effect"
+import { Effect, Data } from 'effect'
 
 const task = Effect.gen(function* () {
-  console.log("Start processing...")
-  yield* Effect.sleep("2 seconds") // Simulates a delay in processing
-  console.log("Processing complete.")
-  return "Result"
+  console.log('Start processing...')
+  yield* Effect.sleep('2 seconds') // Simulates a delay in processing
+  console.log('Processing complete.')
+  return 'Result'
 })
 
-class MyTimeoutError extends Data.TaggedError("MyTimeoutError")<{}> {}
+class MyTimeoutError extends Data.TaggedError('MyTimeoutError')<{}> {}
 
 const program = task.pipe(
   Effect.timeoutFail({
-    duration: "1 second",
-    onTimeout: () => new MyTimeoutError() // Custom timeout error
+    duration: '1 second',
+    onTimeout: () => new MyTimeoutError(), // Custom timeout error
   })
 )
 
@@ -50,19 +50,19 @@ Start processing...
 **Example** (Custom Defect on Timeout)
 
 ```ts twoslash
-import { Effect, Cause } from "effect"
+import { Effect, Cause } from 'effect'
 
 const task = Effect.gen(function* () {
-  console.log("Start processing...")
-  yield* Effect.sleep("2 seconds") // Simulates a delay in processing
-  console.log("Processing complete.")
-  return "Result"
+  console.log('Start processing...')
+  yield* Effect.sleep('2 seconds') // Simulates a delay in processing
+  console.log('Processing complete.')
+  return 'Result'
 })
 
 const program = task.pipe(
   Effect.timeoutFailCause({
-    duration: "1 second",
-    onTimeout: () => Cause.die("Timed out!") // Custom defect for timeout
+    duration: '1 second',
+    onTimeout: () => Cause.die('Timed out!'), // Custom defect for timeout
   })
 )
 
@@ -85,22 +85,20 @@ Start processing...
 **Example** (Handling Success and Timeout with [Either](/docs/data-types/either/))
 
 ```ts twoslash
-import { Effect, Either } from "effect"
+import { Effect, Either } from 'effect'
 
 const task = Effect.gen(function* () {
-  console.log("Start processing...")
-  yield* Effect.sleep("2 seconds") // Simulates a delay in processing
-  console.log("Processing complete.")
-  return "Result"
+  console.log('Start processing...')
+  yield* Effect.sleep('2 seconds') // Simulates a delay in processing
+  console.log('Processing complete.')
+  return 'Result'
 })
 
 const program = task.pipe(
   Effect.timeoutTo({
-    duration: "1 second",
-    onSuccess: (result): Either.Either<string, string> =>
-      Either.right(result),
-    onTimeout: (): Either.Either<string, string> =>
-      Either.left("Timed out!")
+    duration: '1 second',
+    onSuccess: (result): Either.Either<string, string> => Either.right(result),
+    onTimeout: (): Either.Either<string, string> => Either.left('Timed out!'),
   })
 )
 

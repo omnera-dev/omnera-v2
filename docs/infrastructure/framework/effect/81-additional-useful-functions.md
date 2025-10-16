@@ -9,7 +9,7 @@ The Order module provides additional functions for common comparison operations,
 **Example** (Reversing an Order)
 
 ```ts twoslash
-import { Order } from "effect"
+import { Order } from 'effect'
 
 const ascendingOrder = Order.number
 
@@ -35,7 +35,7 @@ These functions allow you to perform simple comparisons between values:
 **Example** (Using Comparison Functions)
 
 ```ts twoslash
-import { Order } from "effect"
+import { Order } from 'effect'
 
 console.log(Order.lessThan(Order.number)(1, 2))
 // Output: true (1 < 2)
@@ -57,7 +57,7 @@ The `Order.min` and `Order.max` functions return the minimum or maximum value be
 **Example** (Finding Minimum and Maximum Numbers)
 
 ```ts twoslash
-import { Order } from "effect"
+import { Order } from 'effect'
 
 console.log(Order.min(Order.number)(3, 1))
 // Output: 1 (1 is the minimum)
@@ -73,12 +73,12 @@ console.log(Order.max(Order.number)(5, 8))
 **Example** (Clamping Numbers to a Range)
 
 ```ts twoslash
-import { Order } from "effect"
+import { Order } from 'effect'
 
 // Define a function to clamp numbers between 20 and 30
 const clampNumbers = Order.clamp(Order.number)({
   minimum: 20,
-  maximum: 30
+  maximum: 30,
 })
 
 // Value 26 is within the range [20, 30], so it remains unchanged
@@ -101,12 +101,12 @@ console.log(clampNumbers(40))
 **Example** (Checking if Numbers Fall Within a Range)
 
 ```ts twoslash
-import { Order } from "effect"
+import { Order } from 'effect'
 
 // Create a function to check if numbers are between 20 and 30
 const betweenNumbers = Order.between(Order.number)({
   minimum: 20,
-  maximum: 30
+  maximum: 30,
 })
 
 // Value 26 falls within the range [20, 30], so it returns true

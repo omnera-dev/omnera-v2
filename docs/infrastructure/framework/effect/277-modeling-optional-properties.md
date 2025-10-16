@@ -3,7 +3,7 @@
 Consider a `User` model where the `"email"` property is optional and can hold a `string` value. We use the `Option<string>` type to represent this optional property:
 
 ```ts {6} twoslash
-import { Option } from "effect"
+import { Option } from 'effect'
 
 interface User {
   readonly id: number
@@ -23,7 +23,7 @@ Here are examples of how to create `User` instances with and without an email:
 **Example** (Creating Users with and without Email)
 
 ```ts twoslash
-import { Option } from "effect"
+import { Option } from 'effect'
 
 interface User {
   readonly id: number
@@ -33,13 +33,13 @@ interface User {
 
 const withEmail: User = {
   id: 1,
-  username: "john_doe",
-  email: Option.some("john.doe@example.com")
+  username: 'john_doe',
+  email: Option.some('john.doe@example.com'),
 }
 
 const withoutEmail: User = {
   id: 2,
-  username: "jane_doe",
-  email: Option.none()
+  username: 'jane_doe',
+  email: Option.none(),
 }
 ```

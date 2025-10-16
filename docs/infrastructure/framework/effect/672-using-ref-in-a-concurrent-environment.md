@@ -7,7 +7,7 @@ We can also use `Ref` in concurrent scenarios, where multiple tasks might be upd
 For this example, let's update the counter concurrently:
 
 ```ts twoslash collapse={3-15}
-import { Effect, Ref } from "effect"
+import { Effect, Ref } from 'effect'
 
 class Counter {
   inc: Effect.Effect<void>
@@ -27,20 +27,17 @@ const program = Effect.gen(function* () {
   const counter = yield* make
 
   // Helper to log the counter's value before running an effect
-  const logCounter = <R, E, A>(
-    label: string,
-    effect: Effect.Effect<A, E, R>
-  ) =>
+  const logCounter = <R, E, A>(label: string, effect: Effect.Effect<A, E, R>) =>
     Effect.gen(function* () {
       const value = yield* counter.get
       yield* Effect.log(`${label} get: ${value}`)
       return yield* effect
     })
 
-  yield* logCounter("task 1", counter.inc).pipe(
-    Effect.zip(logCounter("task 2", counter.inc), { concurrent: true }),
-    Effect.zip(logCounter("task 3", counter.dec), { concurrent: true }),
-    Effect.zip(logCounter("task 4", counter.inc), { concurrent: true })
+  yield* logCounter('task 1', counter.inc).pipe(
+    Effect.zip(logCounter('task 2', counter.inc), { concurrent: true }),
+    Effect.zip(logCounter('task 3', counter.dec), { concurrent: true }),
+    Effect.zip(logCounter('task 4', counter.inc), { concurrent: true })
   )
   const value = yield* counter.get
   yield* Effect.log(`This counter has a value of ${value}.`)

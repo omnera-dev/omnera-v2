@@ -37,15 +37,15 @@ In this example, we define a histogram with linear buckets, where the values ran
 The program generates random numbers between `1` and `120`, records them in the histogram, and then prints the histogram's state, showing the count of values that fall into each bucket.
 
 ```ts twoslash
-import { Effect, Metric, MetricBoundaries, Random } from "effect"
+import { Effect, Metric, MetricBoundaries, Random } from 'effect'
 
 // Define a histogram to track request latencies, with linear buckets
 const latency = Metric.histogram(
-  "request_latency",
+  'request_latency',
   // Buckets from 0-100, with an extra Infinity bucket
   MetricBoundaries.linear({ start: 0, width: 10, count: 11 }),
   // Optional
-  "Measures the distribution of request latency."
+  'Measures the distribution of request latency.'
 )
 
 const program = Effect.gen(function* () {
@@ -92,10 +92,10 @@ We generate random values to simulate varying wait times, record the durations i
 **Example** (Tracking Workflow Durations with a Timer Metric)
 
 ```ts twoslash
-import { Metric, Array, Random, Effect } from "effect"
+import { Metric, Array, Random, Effect } from 'effect'
 
 // Create a timer metric with predefined boundaries from 1 to 10
-const timer = Metric.timerWithBoundaries("timer", Array.range(1, 10))
+const timer = Metric.timerWithBoundaries('timer', Array.range(1, 10))
 
 // Define a task that simulates random wait times
 const task = Effect.gen(function* () {

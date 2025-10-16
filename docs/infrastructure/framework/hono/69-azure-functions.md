@@ -158,4 +158,3 @@ Deploy your project to the function app in Azure Cloud. Replace `<YourFunctionAp
 ```sh
 func azure functionapp publish <YourFunctionAppName>
 ```
-

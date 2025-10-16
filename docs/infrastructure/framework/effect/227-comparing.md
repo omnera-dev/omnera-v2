@@ -5,7 +5,7 @@ To check if two `Chunk` instances are equal, use [`Equal.equals`](/docs/trait/eq
 **Example** (Comparing Two Chunks)
 
 ```ts twoslash
-import { Chunk, Equal } from "effect"
+import { Chunk, Equal } from 'effect'
 
 const chunk1 = Chunk.make(1, 2)
 const chunk2 = Chunk.make(1, 2, 3)

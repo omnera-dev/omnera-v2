@@ -12,7 +12,7 @@ The `Match.type` constructor defines a `Matcher` that operates on a specific typ
 **Example** (Matching Numbers and Strings)
 
 ```ts twoslash
-import { Match } from "effect"
+import { Match } from 'effect'
 
 // Create a matcher for values that are either strings or numbers
 //
@@ -30,7 +30,7 @@ const match = Match.type<string | number>().pipe(
 console.log(match(0))
 // Output: "number: 0"
 
-console.log(match("hello"))
+console.log(match('hello'))
 // Output: "string: hello"
 ```
 
@@ -41,19 +41,16 @@ Instead of creating a matcher for a type, you can define one directly from a spe
 **Example** (Matching an Object by Property)
 
 ```ts twoslash
-import { Match } from "effect"
+import { Match } from 'effect'
 
-const input = { name: "John", age: 30 }
+const input = { name: 'John', age: 30 }
 
 // Create a matcher for the specific object
 const result = Match.value(input).pipe(
   // Match when the 'name' property is "John"
-  Match.when(
-    { name: "John" },
-    (user) => `${user.name} is ${user.age} years old`
-  ),
+  Match.when({ name: 'John' }, (user) => `${user.name} is ${user.age} years old`),
   // Provide a fallback if no match is found
-  Match.orElse(() => "Oh, not John")
+  Match.orElse(() => 'Oh, not John')
 )
 
 console.log(result)
@@ -69,13 +66,13 @@ You can use `Match.withReturnType<T>()` to ensure that all branches return a spe
 This example enforces that every matching branch returns a `string`.
 
 ```ts twoslash
-import { Match } from "effect"
+import { Match } from 'effect'
 
 const match = Match.type<{ a: number } | { b: string }>().pipe(
   // Ensure all branches return a string
   Match.withReturnType<string>(),
   // ❌ Type error: returns a number
-// @errors: 2322
+  // @errors: 2322
   Match.when({ a: Match.number }, (_) => _.a),
   // ✅ Correct: returns a string
   Match.when({ b: Match.string }, (_) => _.b),

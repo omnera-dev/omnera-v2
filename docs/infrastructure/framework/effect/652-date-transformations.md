@@ -7,14 +7,14 @@ Converts a string into a **valid** `Date`, ensuring that invalid dates, such as 
 **Example** (Parsing and Validating Date)
 
 ```ts twoslash
-import { Schema } from "effect"
+import { Schema } from 'effect'
 
 const decode = Schema.decodeUnknownSync(Schema.Date)
 
-console.log(decode("1970-01-01T00:00:00.000Z"))
+console.log(decode('1970-01-01T00:00:00.000Z'))
 // Output: 1970-01-01T00:00:00.000Z
 
-decode("a")
+decode('a')
 /*
 throws:
 ParseError: Date
@@ -27,7 +27,7 @@ const validate = Schema.validateSync(Schema.Date)
 console.log(validate(new Date(0)))
 // Output: 1970-01-01T00:00:00.000Z
 
-console.log(validate(new Date("Invalid Date")))
+console.log(validate(new Date('Invalid Date')))
 /*
 throws:
 ParseError: Date

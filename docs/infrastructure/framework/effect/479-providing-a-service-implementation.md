@@ -5,10 +5,10 @@ In order to provide an actual implementation of the `Random` service, we can uti
 **Example** (Providing a Random Number Implementation)
 
 ```ts twoslash
-import { Effect, Context } from "effect"
+import { Effect, Context } from 'effect'
 
 // Declaring a tag for a service that generates random numbers
-class Random extends Context.Tag("MyRandomService")<
+class Random extends Context.Tag('MyRandomService')<
   Random,
   { readonly next: Effect.Effect<number> }
 >() {}
@@ -25,7 +25,7 @@ const program = Effect.gen(function* () {
 //      ┌─── Effect<void, never, never>
 //      ▼
 const runnable = Effect.provideService(program, Random, {
-  next: Effect.sync(() => Math.random())
+  next: Effect.sync(() => Math.random()),
 })
 
 // Run successfully

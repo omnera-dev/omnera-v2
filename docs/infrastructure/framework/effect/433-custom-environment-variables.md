@@ -7,13 +7,13 @@ You can customize environment variables in a command by using `Command.env`. Thi
 In this example, the command runs in a shell to ensure environment variables are correctly processed.
 
 ```ts twoslash
-import { Command } from "@effect/platform"
-import { NodeContext, NodeRuntime } from "@effect/platform-node"
-import { Effect } from "effect"
+import { Command } from '@effect/platform'
+import { NodeContext, NodeRuntime } from '@effect/platform-node'
+import { Effect } from 'effect'
 
-const command = Command.make("echo", "-n", "$MY_CUSTOM_VAR").pipe(
+const command = Command.make('echo', '-n', '$MY_CUSTOM_VAR').pipe(
   Command.env({
-    MY_CUSTOM_VAR: "Hello, this is a custom environment variable!"
+    MY_CUSTOM_VAR: 'Hello, this is a custom environment variable!',
   }),
   // Use shell to interpret variables correctly
   // on Windows and Unix-like systems

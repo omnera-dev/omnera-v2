@@ -274,4 +274,3 @@ const route = app.post(
   }
 )
 ```
-

@@ -1,5 +1,6 @@
 # Input your AccessKeyID & AccessKeySecret
-```
+
+````
 
 Edit `s.yaml`
 
@@ -23,7 +24,7 @@ resources:
       handler: index.handler
       memorySize: 1024
       timeout: 300
-```
+````
 
 Edit `scripts` section in `package.json`:
 
@@ -44,4 +45,3 @@ Finally, run the command to deploy:
 npm run build # Compile the TypeScript code to JavaScript
 npm run deploy # Deploy the function to Alibaba Cloud Function Compute
 ```
-

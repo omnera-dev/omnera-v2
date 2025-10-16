@@ -9,15 +9,15 @@ The constructor ensures that each property, like `id` and `name`, adheres to the
 **Example** (Creating a Valid Instance)
 
 ```ts twoslash
-import { Schema } from "effect"
+import { Schema } from 'effect'
 
-class Person extends Schema.Class<Person>("Person")({
+class Person extends Schema.Class<Person>('Person')({
   id: Schema.Number,
-  name: Schema.NonEmptyString
+  name: Schema.NonEmptyString,
 }) {}
 
 // Create an instance with valid properties
-const john = new Person({ id: 1, name: "John" })
+const john = new Person({ id: 1, name: 'John' })
 ```
 
 ### Handling Invalid Properties
@@ -27,15 +27,15 @@ If invalid properties are provided during instantiation, the constructor throws 
 **Example** (Creating an Instance with Invalid Properties)
 
 ```ts twoslash
-import { Schema } from "effect"
+import { Schema } from 'effect'
 
-class Person extends Schema.Class<Person>("Person")({
+class Person extends Schema.Class<Person>('Person')({
   id: Schema.Number,
-  name: Schema.NonEmptyString
+  name: Schema.NonEmptyString,
 }) {}
 
 // Attempt to create an instance with an invalid `name`
-new Person({ id: 1, name: "" })
+new Person({ id: 1, name: '' })
 /*
 throws:
 ParseError: Person (Constructor)
@@ -55,16 +55,16 @@ In some scenarios, you might want to bypass the validation logic. While not gene
 **Example** (Bypassing Validation)
 
 ```ts twoslash
-import { Schema } from "effect"
+import { Schema } from 'effect'
 
-class Person extends Schema.Class<Person>("Person")({
+class Person extends Schema.Class<Person>('Person')({
   id: Schema.Number,
-  name: Schema.NonEmptyString
+  name: Schema.NonEmptyString,
 }) {}
 
 // Bypass validation during instantiation
-const john = new Person({ id: 1, name: "" }, true)
+const john = new Person({ id: 1, name: '' }, true)
 
 // Or use the `disableValidation` option explicitly
-new Person({ id: 1, name: "" }, { disableValidation: true })
+new Person({ id: 1, name: '' }, { disableValidation: true })
 ```

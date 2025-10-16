@@ -10,7 +10,7 @@ To define a tuple with required elements, you can use the `Schema.Tuple` constru
 **Example** (Defining a Tuple with Required Elements)
 
 ```ts twoslash
-import { Schema } from "effect"
+import { Schema } from 'effect'
 
 // Define a tuple with a string and a number as required elements
 //
@@ -30,7 +30,7 @@ You can append additional required elements to an existing tuple by using the sp
 **Example** (Adding an Element to an Existing Tuple)
 
 ```ts twoslash
-import { Schema } from "effect"
+import { Schema } from 'effect'
 
 const tuple1 = Schema.Tuple(Schema.String, Schema.Number)
 
@@ -49,7 +49,7 @@ To define an optional element, use the `Schema.optionalElement` constructor.
 **Example** (Defining a Tuple with Optional Elements)
 
 ```ts twoslash
-import { Schema } from "effect"
+import { Schema } from 'effect'
 
 // Define a tuple with a required string and an optional number
 const schema = Schema.Tuple(
@@ -70,7 +70,7 @@ The rest element allows the tuple to accept additional elements of a specific ty
 **Example** (Using a Rest Element)
 
 ```ts twoslash
-import { Schema } from "effect"
+import { Schema } from 'effect'
 
 // Define a tuple with required elements and a rest element of type boolean
 const schema = Schema.Tuple(
@@ -88,7 +88,7 @@ You can also include other elements after the rest:
 **Example** (Including Additional Elements After a Rest Element)
 
 ```ts twoslash
-import { Schema } from "effect"
+import { Schema } from 'effect'
 
 // Define a tuple with required elements, a rest element,
 // and an additional element
@@ -111,17 +111,17 @@ This is especially helpful for generating documentation or JSON schemas.
 **Example** (Adding Annotations to Tuple Elements)
 
 ```ts twoslash
-import { JSONSchema, Schema } from "effect"
+import { JSONSchema, Schema } from 'effect'
 
 // Define a tuple representing a point with annotations for each coordinate
 const Point = Schema.Tuple(
   Schema.element(Schema.Number).annotations({
-    title: "X",
-    description: "X coordinate"
+    title: 'X',
+    description: 'X coordinate',
   }),
   Schema.optionalElement(Schema.Number).annotations({
-    title: "Y",
-    description: "optional Y coordinate"
+    title: 'Y',
+    description: 'optional Y coordinate',
   })
 )
 
@@ -153,7 +153,7 @@ You can access the elements and rest elements of a tuple schema using the `eleme
 **Example** (Accessing Elements and Rest Element in a Tuple Schema)
 
 ```ts twoslash
-import { Schema } from "effect"
+import { Schema } from 'effect'
 
 // Define a tuple with required, optional, and rest elements
 const schema = Schema.Tuple(

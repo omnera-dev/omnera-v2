@@ -5,11 +5,11 @@ The `Schema.filterEffect` function enables validations that require asynchronous
 **Example** (Asynchronous Username Validation)
 
 ```ts twoslash
-import { Effect, Schema } from "effect"
+import { Effect, Schema } from 'effect'
 
 // Mock async function to validate a username
 async function validateUsername(username: string) {
-  return Promise.resolve(username === "gcanti")
+  return Promise.resolve(username === 'gcanti')
 }
 
 // Define a schema with an effectful filter
@@ -18,16 +18,12 @@ const ValidUsername = Schema.String.pipe(
     Effect.promise(() =>
       // Validate the username asynchronously,
       // returning an error message if invalid
-      validateUsername(username).then(
-        (valid) => valid || "Invalid username"
-      )
+      validateUsername(username).then((valid) => valid || 'Invalid username')
     )
   )
-).annotations({ identifier: "ValidUsername" })
+).annotations({ identifier: 'ValidUsername' })
 
-Effect.runPromise(Schema.decodeUnknown(ValidUsername)("xxx")).then(
-  console.log
-)
+Effect.runPromise(Schema.decodeUnknown(ValidUsername)('xxx')).then(console.log)
 /*
 ParseError: ValidUsername
 └─ Transformation process failure

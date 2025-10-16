@@ -5,7 +5,7 @@ The `Schema.partial` function makes all properties within a schema optional.
 **Example** (Making All Properties Optional)
 
 ```ts twoslash
-import { Schema } from "effect"
+import { Schema } from 'effect'
 
 // Create a schema with an optional property "a"
 const schema = Schema.partial(Schema.Struct({ a: Schema.String }))
@@ -20,12 +20,12 @@ By default, the `Schema.partial` operation adds `undefined` to the type of each 
 **Example** (Defining an Exact Partial Schema)
 
 ```ts twoslash
-import { Schema } from "effect"
+import { Schema } from 'effect'
 
 // Create a schema with an optional property "a" without allowing undefined
 const schema = Schema.partialWith(
   Schema.Struct({
-    a: Schema.String
+    a: Schema.String,
   }),
   { exact: true }
 )

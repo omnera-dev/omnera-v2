@@ -5,21 +5,21 @@ Sometimes, streams may encounter failures that are temporary or recoverable. In 
 **Example**
 
 ```ts twoslash
-import { Stream, Effect, Schedule } from "effect"
-import * as NodeReadLine from "node:readline"
+import { Stream, Effect, Schedule } from 'effect'
+import * as NodeReadLine from 'node:readline'
 
 const stream = Stream.make(1, 2, 3).pipe(
   Stream.concat(
     Stream.fromEffect(
       Effect.gen(function* () {
-        const s = yield* readLine("Enter a number: ")
+        const s = yield* readLine('Enter a number: ')
         const n = parseInt(s)
         if (Number.isNaN(n)) {
-          return yield* Effect.fail("NaN")
+          return yield* Effect.fail('NaN')
         }
         return n
       })
-    ).pipe(Stream.retry(Schedule.exponential("1 second")))
+    ).pipe(Stream.retry(Schedule.exponential('1 second')))
   )
 )
 
@@ -42,7 +42,7 @@ const readLine = (message: string): Effect.Effect<string> =>
       new Promise((resolve) => {
         const rl = NodeReadLine.createInterface({
           input: process.stdin,
-          output: process.stdout
+          output: process.stdout,
         })
         rl.question(message, (answer) => {
           rl.close()

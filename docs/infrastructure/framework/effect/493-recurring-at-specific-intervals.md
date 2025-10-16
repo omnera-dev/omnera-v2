@@ -13,12 +13,9 @@ It returns the number of recurrences each time it runs.
 **Example** (Recurring with Delay Between Executions)
 
 ```ts twoslash collapse={3-26}
-import { Array, Chunk, Duration, Effect, Schedule } from "effect"
+import { Array, Chunk, Duration, Effect, Schedule } from 'effect'
 
-const log = (
-  schedule: Schedule.Schedule<unknown>,
-  delay: Duration.DurationInput = 0
-): void => {
+const log = (schedule: Schedule.Schedule<unknown>, delay: Duration.DurationInput = 0): void => {
   const maxRecurs = 10
   const delays = Chunk.toArray(
     Effect.runSync(
@@ -32,20 +29,20 @@ const log = (
   delays.forEach((duration, i) => {
     console.log(
       i === maxRecurs
-        ? "..."
+        ? '...'
         : i === delays.length - 1
-        ? "(end)"
-        : `#${i + 1}: ${Duration.toMillis(duration)}ms`
+          ? '(end)'
+          : `#${i + 1}: ${Duration.toMillis(duration)}ms`
     )
   })
 }
 
-const schedule = Schedule.spaced("200 millis")
+const schedule = Schedule.spaced('200 millis')
 
 //               ┌─── Simulating an effect that takes
 //               │    100 milliseconds to complete
 //               ▼
-log(schedule, "100 millis")
+log(schedule, '100 millis')
 /*
 Output:
 #1: 300ms < spaced
@@ -77,12 +74,9 @@ If the action run between updates takes longer than the interval, then the actio
 **Example** (Fixed Interval Recurrence)
 
 ```ts twoslash collapse={3-26}
-import { Array, Chunk, Duration, Effect, Schedule } from "effect"
+import { Array, Chunk, Duration, Effect, Schedule } from 'effect'
 
-const log = (
-  schedule: Schedule.Schedule<unknown>,
-  delay: Duration.DurationInput = 0
-): void => {
+const log = (schedule: Schedule.Schedule<unknown>, delay: Duration.DurationInput = 0): void => {
   const maxRecurs = 10
   const delays = Chunk.toArray(
     Effect.runSync(
@@ -96,20 +90,20 @@ const log = (
   delays.forEach((duration, i) => {
     console.log(
       i === maxRecurs
-        ? "..."
+        ? '...'
         : i === delays.length - 1
-        ? "(end)"
-        : `#${i + 1}: ${Duration.toMillis(duration)}ms`
+          ? '(end)'
+          : `#${i + 1}: ${Duration.toMillis(duration)}ms`
     )
   })
 }
 
-const schedule = Schedule.fixed("200 millis")
+const schedule = Schedule.fixed('200 millis')
 
 //               ┌─── Simulating an effect that takes
 //               │    100 milliseconds to complete
 //               ▼
-log(schedule, "100 millis")
+log(schedule, '100 millis')
 /*
 Output:
 #1: 300ms < fixed

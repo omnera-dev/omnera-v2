@@ -62,4 +62,3 @@ const setKV = (value: string) => {
   return getContext<Env>().env.KV.put('key', value)
 }
 ```
-

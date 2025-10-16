@@ -12,23 +12,22 @@ If the input does not match the schema, it throws a detailed error, making it us
 **Example** (Creating and Using an Assertion)
 
 ```ts twoslash
-import { Schema } from "effect"
+import { Schema } from 'effect'
 
 // Define a schema for a Person object
 const Person = Schema.Struct({
   name: Schema.String,
-  age: Schema.Number
+  age: Schema.Number,
 })
 
 // Generate an assertion function from the schema
-const assertsPerson: Schema.Schema.ToAsserts<typeof Person> =
-  Schema.asserts(Person)
+const assertsPerson: Schema.Schema.ToAsserts<typeof Person> = Schema.asserts(Person)
 
 try {
   // Attempt to assert that the input matches the Person schema
-  assertsPerson({ name: "Alice", age: "30" })
+  assertsPerson({ name: 'Alice', age: '30' })
 } catch (e) {
-  console.error("The input does not match the schema:")
+  console.error('The input does not match the schema:')
   console.error(e)
 }
 /*
@@ -43,7 +42,7 @@ The input does not match the schema:
 */
 
 // This input matches the schema and will not throw an error
-assertsPerson({ name: "Alice", age: 30 })
+assertsPerson({ name: 'Alice', age: 30 })
 ```
 
 The `assertsPerson` function generated from the schema has the following signature:

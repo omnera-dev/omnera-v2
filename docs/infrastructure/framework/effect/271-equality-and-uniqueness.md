@@ -8,7 +8,7 @@ Both `HashSet` and `MutableHashSet` use Effect's [`Equal`](/docs/trait/equal/) t
 **Example** (Using custom equality and hashing)
 
 ```ts twoslash
-import { Equal, Hash, HashSet } from "effect"
+import { Equal, Hash, HashSet } from 'effect'
 
 // Define a custom class that implements the Equal interface
 class Person implements Equal.Equal {
@@ -38,8 +38,8 @@ class Person implements Equal.Equal {
 
 // Add two different instances with the same content
 const set = HashSet.empty().pipe(
-  HashSet.add(new Person(1, "Alice", 30)),
-  HashSet.add(new Person(1, "Alice", 30))
+  HashSet.add(new Person(1, 'Alice', 30)),
+  HashSet.add(new Person(1, 'Alice', 30))
 )
 
 // Only one instance is kept
@@ -54,11 +54,11 @@ Effect's [`Data`](/docs/data-types/data/) and [`Schema.Data`](/docs/schema/effec
 **Example** (Using `Data.struct`)
 
 ```ts twoslash
-import { Data, Equal, HashSet, pipe } from "effect"
+import { Data, Equal, HashSet, pipe } from 'effect'
 
 // Define two records with the same content
-const person1 = Data.struct({ id: 1, name: "Alice", age: 30 })
-const person2 = Data.struct({ id: 1, name: "Alice", age: 30 })
+const person1 = Data.struct({ id: 1, name: 'Alice', age: 30 })
+const person2 = Data.struct({ id: 1, name: 'Alice', age: 30 })
 
 // They are different object references
 console.log(Object.is(person1, person2))
@@ -69,11 +69,7 @@ console.log(Equal.equals(person1, person2))
 // Output: true
 
 // Add both to a HashSet — only one will be stored
-const set = pipe(
-  HashSet.empty(),
-  HashSet.add(person1),
-  HashSet.add(person2)
-)
+const set = pipe(HashSet.empty(), HashSet.add(person1), HashSet.add(person2))
 
 console.log(HashSet.size(set))
 // Output: 1
@@ -82,32 +78,29 @@ console.log(HashSet.size(set))
 **Example** (Using `Schema.Data`)
 
 ```ts twoslash
-import { Equal, MutableHashSet, Schema } from "effect"
+import { Equal, MutableHashSet, Schema } from 'effect'
 
 // Define a schema that describes the structure of a Person
 const PersonSchema = Schema.Data(
   Schema.Struct({
     id: Schema.Number,
     name: Schema.String,
-    age: Schema.Number
+    age: Schema.Number,
   })
 )
 
 // Decode values from plain objects
 const Person = Schema.decodeSync(PersonSchema)
 
-const person1 = Person({ id: 1, name: "Alice", age: 30 })
-const person2 = Person({ id: 1, name: "Alice", age: 30 })
+const person1 = Person({ id: 1, name: 'Alice', age: 30 })
+const person2 = Person({ id: 1, name: 'Alice', age: 30 })
 
 // person1 and person2 are different instances but equal in value
 console.log(Equal.equals(person1, person2))
 // Output: true
 
 // Add both to a MutableHashSet — only one will be stored
-const set = MutableHashSet.empty().pipe(
-  MutableHashSet.add(person1),
-  MutableHashSet.add(person2)
-)
+const set = MutableHashSet.empty().pipe(MutableHashSet.add(person1), MutableHashSet.add(person2))
 
 console.log(MutableHashSet.size(set))
 // Output: 1

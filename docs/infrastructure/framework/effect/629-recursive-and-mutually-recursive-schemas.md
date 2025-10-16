@@ -7,7 +7,7 @@ Recursive and mutually recursive schemas are supported, however it's **mandatory
 In this example, the `Category` schema refers to itself, making it necessary to use an `identifier` annotation to facilitate the reference.
 
 ```ts twoslash
-import { JSONSchema, Schema } from "effect"
+import { JSONSchema, Schema } from 'effect'
 
 // Define the interface representing a category structure
 interface Category {
@@ -21,8 +21,8 @@ const Category = Schema.Struct({
   categories: Schema.Array(
     // Recursive reference to the Category schema
     Schema.suspend((): Schema.Schema<Category> => Category)
-  )
-}).annotations({ identifier: "Category" })
+  ),
+}).annotations({ identifier: 'Category' })
 
 const jsonSchema = JSONSchema.make(Category)
 

@@ -5,21 +5,17 @@ Embedding metadata within the schema, such as identifiers, JSON schema specifica
 **Example** (Adding Metadata with Annotations)
 
 ```ts twoslash
-import { Schema, JSONSchema } from "effect"
+import { Schema, JSONSchema } from 'effect'
 
 const LongString = Schema.String.pipe(
-  Schema.filter(
-    (s) =>
-      s.length >= 10 ? undefined : "a string at least 10 characters long",
-    {
-      identifier: "LongString",
-      jsonSchema: { minLength: 10 },
-      description: "Lorem ipsum dolor sit amet, ..."
-    }
-  )
+  Schema.filter((s) => (s.length >= 10 ? undefined : 'a string at least 10 characters long'), {
+    identifier: 'LongString',
+    jsonSchema: { minLength: 10 },
+    description: 'Lorem ipsum dolor sit amet, ...',
+  })
 )
 
-console.log(Schema.decodeUnknownSync(LongString)("a"))
+console.log(Schema.decodeUnknownSync(LongString)('a'))
 /*
 throws:
 ParseError: LongString

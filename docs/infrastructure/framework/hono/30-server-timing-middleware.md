@@ -92,4 +92,3 @@ The origin this timings header should be readable.
 - If string, from this domain(s). Multiple domains must be separated with a comma.
 
 The default is `false`. See more [docs](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Timing-Allow-Origin).
-

@@ -9,12 +9,12 @@ which is particularly useful for generating random test data that adheres to the
 **Example** (Generating Arbitrary Data for a Schema)
 
 ```ts twoslash
-import { Arbitrary, FastCheck, Schema } from "effect"
+import { Arbitrary, FastCheck, Schema } from 'effect'
 
 // Define a Person schema with constraints
 const Person = Schema.Struct({
   name: Schema.NonEmptyString,
-  age: Schema.Int.pipe(Schema.between(1, 80))
+  age: Schema.Int.pipe(Schema.between(1, 80)),
 })
 
 // Create an Arbitrary based on the schema

@@ -9,9 +9,9 @@ Both of the following executions are functionally equivalent:
 **Example** (Running an Effect Using the Default Runtime)
 
 ```ts twoslash
-import { Effect, Runtime } from "effect"
+import { Effect, Runtime } from 'effect'
 
-const program = Effect.log("Application started!")
+const program = Effect.log('Application started!')
 
 Effect.runPromise(program)
 /*

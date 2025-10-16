@@ -58,4 +58,3 @@ The default values.
 ### <Badge type="info" text="optional" /> match: `(accepts: Accept[], config: acceptsConfig) => string`
 
 The custom match function.
-

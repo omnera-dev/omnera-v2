@@ -69,3 +69,4 @@ Add the Alibaba Cloud AccessKeyID & AccessKeySecret
 
 ```sh
 npx s config add
+```

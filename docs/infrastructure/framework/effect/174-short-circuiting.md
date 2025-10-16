@@ -10,12 +10,12 @@ In simpler terms, the short-circuiting behavior ensures that if something goes w
 **Example** (Short-Circuiting Behavior)
 
 ```ts twoslash {14-15}
-import { Effect, Console } from "effect"
+import { Effect, Console } from 'effect'
 
 // Define three effects representing different tasks.
-const task1 = Console.log("Executing task1...")
-const task2 = Effect.fail("Something went wrong!")
-const task3 = Console.log("Executing task3...")
+const task1 = Console.log('Executing task1...')
+const task2 = Effect.fail('Something went wrong!')
+const task3 = Console.log('Executing task3...')
 
 // Compose the three tasks to run them in sequence.
 // If one of the tasks fails, the subsequent tasks won't be executed.

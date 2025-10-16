@@ -16,10 +16,10 @@ The `BigDecimal` module provides several functions for comparing decimal values.
 **Example** (Comparing Two BigDecimal Values)
 
 ```ts twoslash
-import { BigDecimal } from "effect"
+import { BigDecimal } from 'effect'
 
-const dec1 = BigDecimal.unsafeFromString("1.05")
-const dec2 = BigDecimal.unsafeFromString("2.10")
+const dec1 = BigDecimal.unsafeFromString('1.05')
+const dec2 = BigDecimal.unsafeFromString('2.10')
 
 console.log(BigDecimal.lessThan(dec1, dec2))
 // Output: true
@@ -55,12 +55,12 @@ The module also includes predicates to check specific properties of a `BigDecima
 **Example** (Checking the Sign and Properties of BigDecimal Values)
 
 ```ts twoslash
-import { BigDecimal } from "effect"
+import { BigDecimal } from 'effect'
 
-const dec1 = BigDecimal.unsafeFromString("1.05")
-const dec2 = BigDecimal.unsafeFromString("-2.10")
+const dec1 = BigDecimal.unsafeFromString('1.05')
+const dec2 = BigDecimal.unsafeFromString('-2.10')
 
-console.log(BigDecimal.isZero(BigDecimal.unsafeFromString("0")))
+console.log(BigDecimal.isZero(BigDecimal.unsafeFromString('0')))
 // Output: true
 
 console.log(BigDecimal.isPositive(dec1))
@@ -71,15 +71,12 @@ console.log(BigDecimal.isNegative(dec2))
 
 console.log(
   BigDecimal.between({
-    minimum: BigDecimal.unsafeFromString("1"),
-    maximum: BigDecimal.unsafeFromString("2")
+    minimum: BigDecimal.unsafeFromString('1'),
+    maximum: BigDecimal.unsafeFromString('2'),
   })(dec1)
 )
 // Output: true
 
-console.log(
-  BigDecimal.isInteger(dec2),
-  BigDecimal.isInteger(BigDecimal.fromBigInt(3n))
-)
+console.log(BigDecimal.isInteger(dec2), BigDecimal.isInteger(BigDecimal.fromBigInt(3n)))
 // Output: false true
 ```

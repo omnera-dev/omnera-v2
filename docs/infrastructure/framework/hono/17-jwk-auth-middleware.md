@@ -59,8 +59,7 @@ const app = new Hono()
 app.use(
   '/auth/*',
   jwk({
-    jwks_uri: (c) =>
-      `https://${c.env.authServer}/.well-known/jwks.json`,
+    jwks_uri: (c) => `https://${c.env.authServer}/.well-known/jwks.json`,
     allow_anon: true,
   })
 )
@@ -108,4 +107,3 @@ If this value is set, then the value is retrieved from the cookie header using t
 ### <Badge type="info" text="optional" /> headerName: `string`
 
 The name of the header to look for the JWT token. The default is `Authorization`.
-

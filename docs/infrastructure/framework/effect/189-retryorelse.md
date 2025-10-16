@@ -9,7 +9,7 @@ This function is useful when you want to handle failures gracefully by specifyin
 **Example** (Retrying with Fallback)
 
 ```ts twoslash
-import { Effect, Schedule, Console } from "effect"
+import { Effect, Schedule, Console } from 'effect'
 
 let count = 0
 
@@ -17,23 +17,23 @@ let count = 0
 const task = Effect.async<string, Error>((resume) => {
   if (count <= 2) {
     count++
-    console.log("failure")
+    console.log('failure')
     resume(Effect.fail(new Error()))
   } else {
-    console.log("success")
-    resume(Effect.succeed("yay!"))
+    console.log('success')
+    resume(Effect.succeed('yay!'))
   }
 })
 
 // Retry the task with a delay between retries and a maximum of 2 retries
-const policy = Schedule.addDelay(Schedule.recurs(2), () => "100 millis")
+const policy = Schedule.addDelay(Schedule.recurs(2), () => '100 millis')
 
 // If all retries fail, run the fallback effect
 const repeated = Effect.retryOrElse(
   task,
   policy,
   // fallback
-  () => Console.log("orElse").pipe(Effect.as("default value"))
+  () => Console.log('orElse').pipe(Effect.as('default value'))
 )
 
 Effect.runPromise(repeated).then(console.log)

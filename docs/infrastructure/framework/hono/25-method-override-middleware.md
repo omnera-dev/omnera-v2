@@ -30,9 +30,19 @@ Since HTML forms cannot send a DELETE method, you can put the value `DELETE` in 
 The HTML form:
 
 ```html
-<form action="/posts" method="POST">
-  <input type="hidden" name="_method" value="DELETE" />
-  <input type="text" name="id" />
+<form
+  action="/posts"
+  method="POST"
+>
+  <input
+    type="hidden"
+    name="_method"
+    value="DELETE"
+  />
+  <input
+    type="text"
+    name="id"
+  />
 </form>
 ```
 
@@ -53,10 +63,7 @@ You can change the default values or use the header value and query value:
 
 ```ts
 app.use('/posts', methodOverride({ app, form: '_custom_name' }))
-app.use(
-  '/posts',
-  methodOverride({ app, header: 'X-METHOD-OVERRIDE' })
-)
+app.use('/posts', methodOverride({ app, header: 'X-METHOD-OVERRIDE' }))
 app.use('/posts', methodOverride({ app, query: '_method' }))
 ```
 
@@ -78,4 +85,3 @@ Header name with a value containing the method name.
 ### <Badge type="info" text="optional" /> query: `boolean`
 
 Query parameter key with a value containing the method name.
-

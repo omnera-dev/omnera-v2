@@ -12,7 +12,7 @@ With the `MicroScope` data type, you can:
 **Example** (Managing a Scope)
 
 ```ts twoslash
-import { Micro } from "effect"
+import { Micro } from 'effect'
 
 // Helper function to log a message
 const log = (message: string) => Micro.sync(() => console.log(message))
@@ -21,13 +21,11 @@ const program =
   // create a new scope
   Micro.scopeMake.pipe(
     // add finalizer 1
-    Micro.tap((scope) => scope.addFinalizer(() => log("finalizer 1"))),
+    Micro.tap((scope) => scope.addFinalizer(() => log('finalizer 1'))),
     // add finalizer 2
-    Micro.tap((scope) => scope.addFinalizer(() => log("finalizer 2"))),
+    Micro.tap((scope) => scope.addFinalizer(() => log('finalizer 2'))),
     // close the scope
-    Micro.andThen((scope) =>
-      scope.close(Micro.exitSucceed("scope closed successfully"))
-    )
+    Micro.andThen((scope) => scope.close(Micro.exitSucceed('scope closed successfully')))
   )
 
 Micro.runPromise(program)
@@ -51,7 +49,7 @@ The `Micro.addFinalizer` function is a high-level API that allows you to add fin
 **Example** (Adding a Finalizer on Success)
 
 ```ts twoslash
-import { Micro } from "effect"
+import { Micro } from 'effect'
 
 // Helper function to log a message
 const log = (message: string) => Micro.sync(() => console.log(message))
@@ -60,7 +58,7 @@ const log = (message: string) => Micro.sync(() => console.log(message))
 //      ▼
 const program = Micro.gen(function* () {
   yield* Micro.addFinalizer((exit) => log(`finalizer after ${exit._tag}`))
-  return "some result"
+  return 'some result'
 })
 
 //      ┌─── Micro<string, never, never>
@@ -80,14 +78,14 @@ Next, let's explore how things behave in the event of a failure:
 **Example** (Adding a Finalizer on Failure)
 
 ```ts twoslash
-import { Micro } from "effect"
+import { Micro } from 'effect'
 
 // Helper function to log a message
 const log = (message: string) => Micro.sync(() => console.log(message))
 
 const program = Micro.gen(function* () {
   yield* Micro.addFinalizer((exit) => log(`finalizer after ${exit._tag}`))
-  return yield* Micro.fail("Uh oh!")
+  return yield* Micro.fail('Uh oh!')
 })
 
 const runnable = Micro.scoped(program)
@@ -127,7 +125,7 @@ The guarantee of the `Micro.acquireRelease` operator is that if the `acquire` wo
 **Example** (Defining a Simple Resource)
 
 ```ts twoslash
-import { Micro } from "effect"
+import { Micro } from 'effect'
 
 // Define an interface for a resource
 interface MyResource {
@@ -138,22 +136,22 @@ interface MyResource {
 // Simulate resource acquisition
 const getMyResource = (): Promise<MyResource> =>
   Promise.resolve({
-    contents: "lorem ipsum",
+    contents: 'lorem ipsum',
     close: () =>
       new Promise((resolve) => {
-        console.log("Resource released")
+        console.log('Resource released')
         resolve()
-      })
+      }),
   })
 
 // Define how the resource is acquired
 const acquire = Micro.tryPromise({
   try: () =>
     getMyResource().then((res) => {
-      console.log("Resource acquired")
+      console.log('Resource acquired')
       return res
     }),
-  catch: () => new Error("getMyResourceError")
+  catch: () => new Error('getMyResourceError'),
 })
 
 // Define how the resource is released
@@ -193,7 +191,7 @@ The main difference is that `acquireUseRelease` eliminates the need to manually 
 **Example** (Automatically Managing Resource Lifetime)
 
 ```ts twoslash
-import { Micro } from "effect"
+import { Micro } from 'effect'
 
 // Define the interface for the resource
 interface MyResource {
@@ -204,29 +202,28 @@ interface MyResource {
 // Simulate getting the resource
 const getMyResource = (): Promise<MyResource> =>
   Promise.resolve({
-    contents: "lorem ipsum",
+    contents: 'lorem ipsum',
     close: () =>
       new Promise((resolve) => {
-        console.log("Resource released")
+        console.log('Resource released')
         resolve()
-      })
+      }),
   })
 
 // Define the acquisition of the resource with error handling
 const acquire = Micro.tryPromise({
   try: () =>
     getMyResource().then((res) => {
-      console.log("Resource acquired")
+      console.log('Resource acquired')
       return res
     }),
-  catch: () => new Error("getMyResourceError")
+  catch: () => new Error('getMyResourceError'),
 })
 
 // Define the release of the resource
 const release = (res: MyResource) => Micro.promise(() => res.close())
 
-const use = (res: MyResource) =>
-  Micro.sync(() => console.log(`content is ${res.contents}`))
+const use = (res: MyResource) => Micro.sync(() => console.log(`content is ${res.contents}`))
 
 //      ┌─── Micro<void, Error, never>
 //      ▼

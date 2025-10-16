@@ -7,26 +7,24 @@ The `Micro.match` function lets you handle both success and failure cases withou
 **Example** (Handling Both Success and Failure Cases)
 
 ```ts twoslash
-import { Micro } from "effect"
+import { Micro } from 'effect'
 
 const success: Micro.Micro<number, Error> = Micro.succeed(42)
 
 const program1 = Micro.match(success, {
   onFailure: (error) => `failure: ${error.message}`,
-  onSuccess: (value) => `success: ${value}`
+  onSuccess: (value) => `success: ${value}`,
 })
 
 // Run and log the result of the successful effect
 Micro.runPromise(program1).then(console.log)
 // Output: "success: 42"
 
-const failure: Micro.Micro<number, Error> = Micro.fail(
-  new Error("Uh oh!")
-)
+const failure: Micro.Micro<number, Error> = Micro.fail(new Error('Uh oh!'))
 
 const program2 = Micro.match(failure, {
   onFailure: (error) => `failure: ${error.message}`,
-  onSuccess: (value) => `success: ${value}`
+  onSuccess: (value) => `success: ${value}`,
 })
 
 // Run and log the result of the failed effect
@@ -41,21 +39,17 @@ The `Micro.matchEffect` function, similar to `Micro.match`, allows you to handle
 **Example** (Handling Success and Failure with Side Effects)
 
 ```ts twoslash
-import { Micro } from "effect"
+import { Micro } from 'effect'
 
 // Helper function to log a message
 const log = (message: string) => Micro.sync(() => console.log(message))
 
 const success: Micro.Micro<number, Error> = Micro.succeed(42)
-const failure: Micro.Micro<number, Error> = Micro.fail(
-  new Error("Uh oh!")
-)
+const failure: Micro.Micro<number, Error> = Micro.fail(new Error('Uh oh!'))
 
 const program1 = Micro.matchEffect(success, {
-  onFailure: (error) =>
-    Micro.succeed(`failure: ${error.message}`).pipe(Micro.tap(log)),
-  onSuccess: (value) =>
-    Micro.succeed(`success: ${value}`).pipe(Micro.tap(log))
+  onFailure: (error) => Micro.succeed(`failure: ${error.message}`).pipe(Micro.tap(log)),
+  onSuccess: (value) => Micro.succeed(`success: ${value}`).pipe(Micro.tap(log)),
 })
 
 Micro.runSync(program1)
@@ -65,10 +59,8 @@ success: 42
 */
 
 const program2 = Micro.matchEffect(failure, {
-  onFailure: (error) =>
-    Micro.succeed(`failure: ${error.message}`).pipe(Micro.tap(log)),
-  onSuccess: (value) =>
-    Micro.succeed(`success: ${value}`).pipe(Micro.tap(log))
+  onFailure: (error) => Micro.succeed(`failure: ${error.message}`).pipe(Micro.tap(log)),
+  onSuccess: (value) => Micro.succeed(`success: ${value}`).pipe(Micro.tap(log)),
 })
 
 Micro.runSync(program2)
@@ -85,30 +77,30 @@ The `Micro.matchCause` and `Micro.matchCauseEffect` functions allow you to handl
 **Example** (Handling Different Failure Causes with `Micro.matchCauseEffect`)
 
 ```ts twoslash
-import { Micro } from "effect"
+import { Micro } from 'effect'
 
 // Helper function to log a message
 const log = (message: string) => Micro.sync(() => console.log(message))
 
-const task: Micro.Micro<number, Error> = Micro.die("Uh oh!")
+const task: Micro.Micro<number, Error> = Micro.die('Uh oh!')
 
 const program = Micro.matchCauseEffect(task, {
   onFailure: (cause) => {
     switch (cause._tag) {
-      case "Fail":
+      case 'Fail':
         // Handle standard failure with a logged message
         return log(`Fail: ${cause.error.message}`)
-      case "Die":
+      case 'Die':
         // Handle defects (unexpected errors) by logging the defect
         return log(`Die: ${cause.defect}`)
-      case "Interrupt":
+      case 'Interrupt':
         // Handle interruption
-        return log("Interrupt")
+        return log('Interrupt')
     }
   },
   onSuccess: (value) =>
     // Log success if the task completes successfully
-    log(`succeeded with ${value} value`)
+    log(`succeeded with ${value} value`),
 })
 
 Micro.runSync(program)

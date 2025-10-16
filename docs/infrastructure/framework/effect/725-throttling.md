@@ -9,8 +9,8 @@ The `Stream.throttle` function uses the [token bucket algorithm](https://en.wiki
 ```ts showLineNumbers=false
 Stream.throttle({
   cost: () => 1,
-  duration: "100 millis",
-  units: 1
+  duration: '100 millis',
+  units: 1,
 })
 ```
 
@@ -32,7 +32,7 @@ This strategy ensures that data throughput does not exceed defined limits, allow
 **Example** (Applying Throttling with the Shape Strategy)
 
 ```ts twoslash
-import { Stream, Effect, Schedule, Chunk } from "effect"
+import { Stream, Effect, Schedule, Chunk } from 'effect'
 
 // Helper function to log with elapsed time since last log
 let last = Date.now()
@@ -43,13 +43,13 @@ const log = (message: string) =>
     last = end
   })
 
-const stream = Stream.fromSchedule(Schedule.spaced("50 millis")).pipe(
+const stream = Stream.fromSchedule(Schedule.spaced('50 millis')).pipe(
   Stream.take(6),
   Stream.tap((n) => log(`Received ${n}`)),
   Stream.throttle({
     cost: Chunk.size,
-    duration: "100 millis",
-    units: 1
+    duration: '100 millis',
+    units: 1,
   }),
   Stream.tap((n) => log(`> Emitted ${n}`))
 )
@@ -80,7 +80,7 @@ The "enforce" strategy strictly regulates data flow by discarding chunks that ex
 **Example** (Throttling with the Enforce Strategy)
 
 ```ts twoslash
-import { Stream, Effect, Schedule, Chunk } from "effect"
+import { Stream, Effect, Schedule, Chunk } from 'effect'
 
 // Helper function to log with elapsed time since last log
 let last = Date.now()
@@ -92,13 +92,13 @@ const log = (message: string) =>
   })
 
 const stream = Stream.make(1, 2, 3, 4, 5, 6).pipe(
-  Stream.schedule(Schedule.exponential("100 millis")),
+  Stream.schedule(Schedule.exponential('100 millis')),
   Stream.tap((n) => log(`Received ${n}`)),
   Stream.throttle({
     cost: Chunk.size,
-    duration: "1 second",
+    duration: '1 second',
     units: 1,
-    strategy: "enforce"
+    strategy: 'enforce',
   }),
   Stream.tap((n) => log(`> Emitted ${n}`))
 )
@@ -129,7 +129,7 @@ The burst capacity provides additional tokens in the token bucket, enabling the 
 **Example** (Throttling with Burst Capacity)
 
 ```ts twoslash
-import { Effect, Schedule, Stream, Chunk } from "effect"
+import { Effect, Schedule, Stream, Chunk } from 'effect'
 
 // Helper function to log with elapsed time since last log
 let last = Date.now()
@@ -140,15 +140,15 @@ const log = (message: string) =>
     last = end
   })
 
-const stream = Stream.fromSchedule(Schedule.spaced("10 millis")).pipe(
+const stream = Stream.fromSchedule(Schedule.spaced('10 millis')).pipe(
   Stream.take(20),
   Stream.tap((n) => log(`Received ${n}`)),
   Stream.throttle({
     cost: Chunk.size,
-    duration: "200 millis",
+    duration: '200 millis',
     units: 5,
-    strategy: "enforce",
-    burst: 2
+    strategy: 'enforce',
+    burst: 2,
   }),
   Stream.tap((n) => log(`> Emitted ${n}`))
 )

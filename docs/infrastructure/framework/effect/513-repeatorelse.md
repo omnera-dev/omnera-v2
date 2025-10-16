@@ -7,30 +7,30 @@ Scheduled recurrences are in addition to the initial execution, so `Effect.repea
 **Example** (Handling Failure During Repeats)
 
 ```ts twoslash
-import { Effect, Schedule } from "effect"
+import { Effect, Schedule } from 'effect'
 
 let count = 0
 
 // Define an async effect that simulates an action with possible failures
 const action = Effect.async<string, string>((resume) => {
   if (count > 1) {
-    console.log("failure")
-    resume(Effect.fail("Uh oh!"))
+    console.log('failure')
+    resume(Effect.fail('Uh oh!'))
   } else {
     count++
-    console.log("success")
-    resume(Effect.succeed("yay!"))
+    console.log('success')
+    resume(Effect.succeed('yay!'))
   }
 })
 
 // Define a schedule that repeats up to 2 times
 // with a 100ms delay between attempts
-const policy = Schedule.addDelay(Schedule.recurs(2), () => "100 millis")
+const policy = Schedule.addDelay(Schedule.recurs(2), () => '100 millis')
 
 // Provide a handler to run when failure occurs after the retries
 const program = Effect.repeatOrElse(action, policy, () =>
   Effect.sync(() => {
-    console.log("orElse")
+    console.log('orElse')
     return count - 1
   })
 )

@@ -14,9 +14,9 @@
 **Example** (Finding the Distance Between Two DateTimes)
 
 ```ts twoslash
-import { DateTime } from "effect"
+import { DateTime } from 'effect'
 
-const utc1 = DateTime.unsafeMake("2025-01-01T00:00:00Z")
+const utc1 = DateTime.unsafeMake('2025-01-01T00:00:00Z')
 const utc2 = DateTime.add(utc1, { days: 1 })
 
 console.log(DateTime.distance(utc1, utc2))

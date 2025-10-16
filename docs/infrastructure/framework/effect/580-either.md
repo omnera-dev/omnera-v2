@@ -30,11 +30,11 @@ Schema.Either(options: {
 **Example**
 
 ```ts twoslash
-import { Schema, Either } from "effect"
+import { Schema, Either } from 'effect'
 
 const schema = Schema.Either({
   left: Schema.Trim,
-  right: Schema.NumberFromString
+  right: Schema.NumberFromString,
 })
 
 //     ┌─── EitherEncoded<string, string>
@@ -50,15 +50,15 @@ const encode = Schema.encodeSync(schema)
 
 // Decoding examples
 
-console.log(decode({ _tag: "Left", left: " a " }))
+console.log(decode({ _tag: 'Left', left: ' a ' }))
 // Output: { _id: 'Either', _tag: 'Left', left: 'a' }
 
-console.log(decode({ _tag: "Right", right: "1" }))
+console.log(decode({ _tag: 'Right', right: '1' }))
 // Output: { _id: 'Either', _tag: 'Right', right: 1 }
 
 // Encoding examples
 
-console.log(encode(Either.left("a")))
+console.log(encode(Either.left('a')))
 // Output: { _tag: 'Left', left: 'a' }
 
 console.log(encode(Either.right(1)))
@@ -95,11 +95,11 @@ Schema.EitherFromSelf(options: {
 **Example**
 
 ```ts twoslash
-import { Schema, Either } from "effect"
+import { Schema, Either } from 'effect'
 
 const schema = Schema.EitherFromSelf({
   left: Schema.Trim,
-  right: Schema.NumberFromString
+  right: Schema.NumberFromString,
 })
 
 //     ┌─── Either<string, string>
@@ -115,15 +115,15 @@ const encode = Schema.encodeSync(schema)
 
 // Decoding examples
 
-console.log(decode(Either.left(" a ")))
+console.log(decode(Either.left(' a ')))
 // Output: { _id: 'Either', _tag: 'Left', left: 'a' }
 
-console.log(decode(Either.right("1")))
+console.log(decode(Either.right('1')))
 // Output: { _id: 'Either', _tag: 'Right', right: 1 }
 
 // Encoding examples
 
-console.log(encode(Either.left("a")))
+console.log(encode(Either.left('a')))
 // Output: { _id: 'Either', _tag: 'Left', left: 'a' }
 
 console.log(encode(Either.right(1)))
@@ -160,11 +160,11 @@ Schema.EitherFromUnion(options: {
 **Example**
 
 ```ts twoslash
-import { Schema, Either } from "effect"
+import { Schema, Either } from 'effect'
 
 const schema = Schema.EitherFromUnion({
   left: Schema.Boolean,
-  right: Schema.NumberFromString
+  right: Schema.NumberFromString,
 })
 
 //     ┌─── string | boolean
@@ -183,7 +183,7 @@ const encode = Schema.encodeSync(schema)
 console.log(decode(true))
 // Output: { _id: 'Either', _tag: 'Left', left: true }
 
-console.log(decode("1"))
+console.log(decode('1'))
 // Output: { _id: 'Either', _tag: 'Right', right: 1 }
 
 // Encoding examples

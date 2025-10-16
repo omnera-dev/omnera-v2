@@ -31,4 +31,3 @@ app.get('/cookie', (c) => {
 - [Streaming](/docs/helpers/streaming)
 - [Testing](/docs/helpers/testing)
 - [WebSocket](/docs/helpers/websocket)
-

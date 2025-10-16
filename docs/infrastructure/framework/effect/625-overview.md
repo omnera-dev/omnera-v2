@@ -7,11 +7,11 @@ The `JSONSchema.make` function allows you to generate a JSON Schema from a schem
 The following example defines a `Person` schema with properties for `name` (a string) and `age` (a number). It then generates the corresponding JSON Schema.
 
 ```ts twoslash
-import { JSONSchema, Schema } from "effect"
+import { JSONSchema, Schema } from 'effect'
 
 const Person = Schema.Struct({
   name: Schema.String,
-  age: Schema.Number
+  age: Schema.Number,
 })
 
 const jsonSchema = JSONSchema.make(Person)
@@ -47,7 +47,7 @@ It does this by traversing the schema from the most nested component, incorporat
 Consider modifying the `age` field to include both a refinement and a transformation. Only the refinement is reflected in the JSON Schema.
 
 ```ts twoslash
-import { JSONSchema, Schema } from "effect"
+import { JSONSchema, Schema } from 'effect'
 
 const Person = Schema.Struct({
   name: Schema.String,
@@ -56,7 +56,7 @@ const Person = Schema.Struct({
     Schema.int(),
     // Transformation excluded from the JSON Schema
     Schema.clamp(1, 10)
-  )
+  ),
 })
 
 const jsonSchema = JSONSchema.make(Person)

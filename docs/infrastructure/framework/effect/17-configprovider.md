@@ -14,12 +14,12 @@ If your application requires a custom delimiter for nested configuration keys, y
 The following example modifies the path delimiter (`"__"`) and sequence delimiter (`"|"`) for environment variables.
 
 ```ts twoslash title="index.ts"
-import { Config, ConfigProvider, Effect } from "effect"
+import { Config, ConfigProvider, Effect } from 'effect'
 
 const program = Effect.gen(function* () {
   // Read SERVER_HOST and SERVER_PORT as nested configuration values
-  const port = yield* Config.nested(Config.number("PORT"), "SERVER")
-  const host = yield* Config.nested(Config.string("HOST"), "SERVER")
+  const port = yield* Config.nested(Config.number('PORT'), 'SERVER')
+  const host = yield* Config.nested(Config.string('HOST'), 'SERVER')
   console.log(`Application started: ${host}:${port}`)
 })
 
@@ -27,7 +27,7 @@ Effect.runPromise(
   Effect.withConfigProvider(
     program,
     // Custom delimiters
-    ConfigProvider.fromEnv({ pathDelim: "__", seqDelim: "|" })
+    ConfigProvider.fromEnv({ pathDelim: '__', seqDelim: '|' })
   )
 )
 ```
@@ -51,21 +51,19 @@ The `ConfigProvider.fromJson` function creates a `ConfigProvider` that loads val
 **Example** (Reading Nested Configuration from JSON)
 
 ```ts twoslash
-import { Config, ConfigProvider, Effect } from "effect"
+import { Config, ConfigProvider, Effect } from 'effect'
 
 const program = Effect.gen(function* () {
   // Read SERVER_HOST and SERVER_PORT as nested configuration values
-  const port = yield* Config.nested(Config.number("PORT"), "SERVER")
-  const host = yield* Config.nested(Config.string("HOST"), "SERVER")
+  const port = yield* Config.nested(Config.number('PORT'), 'SERVER')
+  const host = yield* Config.nested(Config.string('HOST'), 'SERVER')
   console.log(`Application started: ${host}:${port}`)
 })
 
 Effect.runPromise(
   Effect.withConfigProvider(
     program,
-    ConfigProvider.fromJson(
-      JSON.parse(`{"SERVER":{"PORT":8080,"HOST":"localhost"}}`)
-    )
+    ConfigProvider.fromJson(JSON.parse(`{"SERVER":{"PORT":8080,"HOST":"localhost"}}`))
   )
 )
 // Output: Application started: localhost:8080
@@ -79,11 +77,11 @@ This is helpful when structuring settings logically, such as grouping `SERVER`-r
 **Example** (Using a Nested Namespace)
 
 ```ts twoslash title="index.ts"
-import { Config, ConfigProvider, Effect } from "effect"
+import { Config, ConfigProvider, Effect } from 'effect'
 
 const program = Effect.gen(function* () {
-  const port = yield* Config.number("PORT") // Reads SERVER_PORT
-  const host = yield* Config.string("HOST") // Reads SERVER_HOST
+  const port = yield* Config.number('PORT') // Reads SERVER_PORT
+  const host = yield* Config.string('HOST') // Reads SERVER_HOST
   console.log(`Application started: ${host}:${port}`)
 })
 
@@ -92,7 +90,7 @@ Effect.runPromise(
     program,
     ConfigProvider.fromEnv().pipe(
       // Uses SERVER as a namespace
-      ConfigProvider.nested("SERVER")
+      ConfigProvider.nested('SERVER')
     )
   )
 )
@@ -118,11 +116,11 @@ This is useful when adapting environment variables to match different naming con
 **Example** (Using `constantCase` for Environment Variables)
 
 ```ts twoslash title="index.ts"
-import { Config, ConfigProvider, Effect } from "effect"
+import { Config, ConfigProvider, Effect } from 'effect'
 
 const program = Effect.gen(function* () {
-  const port = yield* Config.number("Port") // Reads PORT
-  const host = yield* Config.string("Host") // Reads HOST
+  const port = yield* Config.number('Port') // Reads PORT
+  const host = yield* Config.string('Host') // Reads HOST
   console.log(`Application started: ${host}:${port}`)
 })
 

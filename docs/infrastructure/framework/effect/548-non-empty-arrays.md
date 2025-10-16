@@ -5,7 +5,7 @@ The Schema module also provides a way to define schemas for non-empty arrays, en
 **Example** (Defining a Non-Empty Array Schema)
 
 ```ts twoslash
-import { Schema } from "effect"
+import { Schema } from 'effect'
 
 // Define a schema for a non-empty array of numbers
 //
@@ -25,7 +25,7 @@ You can access the value type of a non-empty array schema using the `value` prop
 **Example** (Accessing the Value Type of a Non-Empty Array Schema)
 
 ```ts twoslash
-import { Schema } from "effect"
+import { Schema } from 'effect'
 
 // Define a schema for a non-empty array of numbers
 const schema = Schema.NonEmptyArray(Schema.Number)

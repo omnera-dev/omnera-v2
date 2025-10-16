@@ -10,4 +10,3 @@ In this section, we introduce API of Hono like below.
 - About routing
 - Context object
 - About middleware
-

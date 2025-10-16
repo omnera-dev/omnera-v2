@@ -8,25 +8,25 @@
 
 ```ts twoslash
 const task1 = new Promise<number>((resolve, reject) => {
-  console.log("Executing task1...")
+  console.log('Executing task1...')
   setTimeout(() => {
-    console.log("task1 done")
+    console.log('task1 done')
     resolve(1)
   }, 100)
 })
 
 const task2 = new Promise<number>((resolve, reject) => {
-  console.log("Executing task2...")
+  console.log('Executing task2...')
   setTimeout(() => {
-    console.log("task2 done")
-    reject("Uh oh!")
+    console.log('task2 done')
+    reject('Uh oh!')
   }, 200)
 })
 
 const task3 = new Promise<number>((resolve, reject) => {
-  console.log("Executing task3...")
+  console.log('Executing task3...')
   setTimeout(() => {
-    console.log("task3 done")
+    console.log('task3 done')
     resolve(3)
   }, 300)
 })
@@ -51,31 +51,31 @@ task3 done
 <TabItem label="Effect">
 
 ```ts twoslash
-import { Effect } from "effect"
+import { Effect } from 'effect'
 
 const task1 = Effect.gen(function* () {
-  console.log("Executing task1...")
-  yield* Effect.sleep("100 millis")
-  console.log("task1 done")
+  console.log('Executing task1...')
+  yield* Effect.sleep('100 millis')
+  console.log('task1 done')
   return 1
 })
 
 const task2 = Effect.gen(function* () {
-  console.log("Executing task2...")
-  yield* Effect.sleep("200 millis")
-  console.log("task2 done")
-  return yield* Effect.fail("Uh oh!")
+  console.log('Executing task2...')
+  yield* Effect.sleep('200 millis')
+  console.log('task2 done')
+  return yield* Effect.fail('Uh oh!')
 })
 
 const task3 = Effect.gen(function* () {
-  console.log("Executing task3...")
-  yield* Effect.sleep("300 millis")
-  console.log("task3 done")
+  console.log('Executing task3...')
+  yield* Effect.sleep('300 millis')
+  console.log('task3 done')
   return 3
 })
 
 const program = Effect.all([task1, task2, task3], {
-  concurrency: "unbounded"
+  concurrency: 'unbounded',
 })
 
 Effect.runPromise(program).then(console.log, console.error)
@@ -102,25 +102,25 @@ task2 done
 
 ```ts
 const task1 = new Promise<number>((resolve, reject) => {
-  console.log("Executing task1...")
+  console.log('Executing task1...')
   setTimeout(() => {
-    console.log("task1 done")
+    console.log('task1 done')
     resolve(1)
   }, 100)
 })
 
 const task2 = new Promise<number>((resolve, reject) => {
-  console.log("Executing task2...")
+  console.log('Executing task2...')
   setTimeout(() => {
-    console.log("task2 done")
-    reject("Uh oh!")
+    console.log('task2 done')
+    reject('Uh oh!')
   }, 200)
 })
 
 const task3 = new Promise<number>((resolve, reject) => {
-  console.log("Executing task3...")
+  console.log('Executing task3...')
   setTimeout(() => {
-    console.log("task3 done")
+    console.log('task3 done')
     resolve(3)
   }, 300)
 })
@@ -149,26 +149,26 @@ task3 done
 <TabItem label="Effect">
 
 ```ts twoslash
-import { Effect } from "effect"
+import { Effect } from 'effect'
 
 const task1 = Effect.gen(function* () {
-  console.log("Executing task1...")
-  yield* Effect.sleep("100 millis")
-  console.log("task1 done")
+  console.log('Executing task1...')
+  yield* Effect.sleep('100 millis')
+  console.log('task1 done')
   return 1
 })
 
 const task2 = Effect.gen(function* () {
-  console.log("Executing task2...")
-  yield* Effect.sleep("200 millis")
-  console.log("task2 done")
-  return yield* Effect.fail("Uh oh!")
+  console.log('Executing task2...')
+  yield* Effect.sleep('200 millis')
+  console.log('task2 done')
+  return yield* Effect.fail('Uh oh!')
 })
 
 const task3 = Effect.gen(function* () {
-  console.log("Executing task3...")
-  yield* Effect.sleep("300 millis")
-  console.log("task3 done")
+  console.log('Executing task3...')
+  yield* Effect.sleep('300 millis')
+  console.log('task3 done')
   return 3
 })
 
@@ -176,7 +176,7 @@ const program = Effect.forEach(
   [task1, task2, task3],
   (task) => Effect.either(task), // or Effect.exit
   {
-    concurrency: "unbounded"
+    concurrency: 'unbounded',
   }
 )
 
@@ -219,26 +219,26 @@ task3 done
 
 ```ts
 const task1 = new Promise<number>((resolve, reject) => {
-  console.log("Executing task1...")
+  console.log('Executing task1...')
   setTimeout(() => {
-    console.log("task1 done")
-    reject("Something went wrong!")
+    console.log('task1 done')
+    reject('Something went wrong!')
   }, 100)
 })
 
 const task2 = new Promise<number>((resolve, reject) => {
-  console.log("Executing task2...")
+  console.log('Executing task2...')
   setTimeout(() => {
-    console.log("task2 done")
+    console.log('task2 done')
     resolve(2)
   }, 200)
 })
 
 const task3 = new Promise<number>((resolve, reject) => {
-  console.log("Executing task3...")
+  console.log('Executing task3...')
   setTimeout(() => {
-    console.log("task3 done")
-    reject("Uh oh!")
+    console.log('task3 done')
+    reject('Uh oh!')
   }, 300)
 })
 
@@ -262,27 +262,27 @@ task3 done
 <TabItem label="Effect">
 
 ```ts twoslash
-import { Effect } from "effect"
+import { Effect } from 'effect'
 
 const task1 = Effect.gen(function* () {
-  console.log("Executing task1...")
-  yield* Effect.sleep("100 millis")
-  console.log("task1 done")
-  return yield* Effect.fail("Something went wrong!")
+  console.log('Executing task1...')
+  yield* Effect.sleep('100 millis')
+  console.log('task1 done')
+  return yield* Effect.fail('Something went wrong!')
 })
 
 const task2 = Effect.gen(function* () {
-  console.log("Executing task2...")
-  yield* Effect.sleep("200 millis")
-  console.log("task2 done")
+  console.log('Executing task2...')
+  yield* Effect.sleep('200 millis')
+  console.log('task2 done')
   return 2
 })
 
 const task3 = Effect.gen(function* () {
-  console.log("Executing task3...")
-  yield* Effect.sleep("300 millis")
-  console.log("task3 done")
-  return yield* Effect.fail("Uh oh!")
+  console.log('Executing task3...')
+  yield* Effect.sleep('300 millis')
+  console.log('task3 done')
+  return yield* Effect.fail('Uh oh!')
 })
 
 const program = Effect.raceAll([task1, task2, task3])
@@ -311,25 +311,25 @@ task2 done
 
 ```ts twoslash
 const task1 = new Promise<number>((resolve, reject) => {
-  console.log("Executing task1...")
+  console.log('Executing task1...')
   setTimeout(() => {
-    console.log("task1 done")
-    reject("Something went wrong!")
+    console.log('task1 done')
+    reject('Something went wrong!')
   }, 100)
 })
 
 const task2 = new Promise<number>((resolve, reject) => {
-  console.log("Executing task2...")
+  console.log('Executing task2...')
   setTimeout(() => {
-    console.log("task2 done")
-    reject("Uh oh!")
+    console.log('task2 done')
+    reject('Uh oh!')
   }, 200)
 })
 
 const task3 = new Promise<number>((resolve, reject) => {
-  console.log("Executing task3...")
+  console.log('Executing task3...')
   setTimeout(() => {
-    console.log("task3 done")
+    console.log('task3 done')
     resolve(3)
   }, 300)
 })
@@ -354,26 +354,26 @@ task3 done
 <TabItem label="Effect">
 
 ```ts twoslash
-import { Effect } from "effect"
+import { Effect } from 'effect'
 
 const task1 = Effect.gen(function* () {
-  console.log("Executing task1...")
-  yield* Effect.sleep("100 millis")
-  console.log("task1 done")
-  return yield* Effect.fail("Something went wrong!")
+  console.log('Executing task1...')
+  yield* Effect.sleep('100 millis')
+  console.log('task1 done')
+  return yield* Effect.fail('Something went wrong!')
 })
 
 const task2 = Effect.gen(function* () {
-  console.log("Executing task2...")
-  yield* Effect.sleep("200 millis")
-  console.log("task2 done")
-  return yield* Effect.fail("Uh oh!")
+  console.log('Executing task2...')
+  yield* Effect.sleep('200 millis')
+  console.log('task2 done')
+  return yield* Effect.fail('Uh oh!')
 })
 
 const task3 = Effect.gen(function* () {
-  console.log("Executing task3...")
-  yield* Effect.sleep("300 millis")
-  console.log("task3 done")
+  console.log('Executing task3...')
+  yield* Effect.sleep('300 millis')
+  console.log('task3 done')
   return 3
 })
 

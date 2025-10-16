@@ -5,7 +5,7 @@
 You can create a pure stream from an `Iterable` of values using the `Stream.fromIterable` constructor. It's a straightforward way to convert a collection of values into a stream.
 
 ```ts twoslash
-import { Stream, Effect } from "effect"
+import { Stream, Effect } from 'effect'
 
 const numbers = [1, 2, 3]
 
@@ -22,9 +22,9 @@ When you have an effect that produces a value of type `Iterable`, you can employ
 For instance, let's say you have a database operation that retrieves a list of users. Since this operation involves effects, you can utilize `Stream.fromIterableEffect` to convert the result into a `Stream`:
 
 ```ts twoslash
-import { Stream, Effect, Context } from "effect"
+import { Stream, Effect, Context } from 'effect'
 
-class Database extends Context.Tag("Database")<
+class Database extends Context.Tag('Database')<
   Database,
   { readonly getUsers: Effect.Effect<Array<string>> }
 >() {}
@@ -37,7 +37,7 @@ Effect.runPromise(
   Stream.runCollect(
     stream.pipe(
       Stream.provideService(Database, {
-        getUsers: Effect.succeed(["user1", "user2"])
+        getUsers: Effect.succeed(['user1', 'user2']),
       })
     )
   )
@@ -52,7 +52,7 @@ This enables you to work seamlessly with effects and convert their results into 
 Async iterables are another type of data source that can be converted into a stream. With the `Stream.fromAsyncIterable` constructor, you can work with asynchronous data sources and handle potential errors gracefully.
 
 ```ts twoslash
-import { Stream, Effect } from "effect"
+import { Stream, Effect } from 'effect'
 
 const myAsyncIterable = async function* () {
   yield 1

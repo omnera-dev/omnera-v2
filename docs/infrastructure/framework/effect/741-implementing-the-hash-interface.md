@@ -6,7 +6,7 @@ By implementing both the `Equal` and `Hash` interfaces, you can efficiently mana
 **Example** (Implementing `Equal` and `Hash` for a Custom Class)
 
 ```ts twoslash
-import { Equal, Hash } from "effect"
+import { Equal, Hash } from 'effect'
 
 class Person implements Equal.Equal {
   constructor(
@@ -33,11 +33,11 @@ class Person implements Equal.Equal {
   }
 }
 
-const alice = new Person(1, "Alice", 30)
-console.log(Equal.equals(alice, new Person(1, "Alice", 30)))
+const alice = new Person(1, 'Alice', 30)
+console.log(Equal.equals(alice, new Person(1, 'Alice', 30)))
 // Output: true
 
-const bob = new Person(2, "Bob", 40)
+const bob = new Person(2, 'Bob', 40)
 console.log(Equal.equals(alice, bob))
 // Output: false
 ```

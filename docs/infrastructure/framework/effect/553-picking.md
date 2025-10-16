@@ -5,13 +5,13 @@ The `pick` static function available on each struct schema can be used to create
 **Example** (Picking Properties from a Struct)
 
 ```ts twoslash
-import { Schema } from "effect"
+import { Schema } from 'effect'
 
 // Define a struct schema with properties "a", "b", and "c"
 const MyStruct = Schema.Struct({
   a: Schema.String,
   b: Schema.Number,
-  c: Schema.Boolean
+  c: Schema.Boolean,
 })
 
 // Create a new schema that picks properties "a" and "c"
@@ -21,7 +21,7 @@ const MyStruct = Schema.Struct({
 //      |      c: typeof Schema.Boolean;
 //      |    }>
 //      ▼
-const PickedSchema = MyStruct.pick("a", "c")
+const PickedSchema = MyStruct.pick('a', 'c')
 ```
 
 The `Schema.pick` function can be applied more broadly beyond just `Struct` types, such as with unions of schemas.
@@ -30,7 +30,7 @@ However it returns a generic `SchemaClass`.
 **Example** (Picking Properties from a Union)
 
 ```ts twoslash
-import { Schema } from "effect"
+import { Schema } from 'effect'
 
 // Define a union of two struct schemas
 const MyUnion = Schema.Union(
@@ -45,5 +45,5 @@ const MyUnion = Schema.Union(
 //      |      readonly b: string | number;
 //      |    }>
 //      ▼
-const PickedSchema = MyUnion.pipe(Schema.pick("a", "b"))
+const PickedSchema = MyUnion.pipe(Schema.pick('a', 'b'))
 ```

@@ -9,18 +9,15 @@ The `Effect.mapError` function is used when you need to transform or modify an e
 Here, the error type changes from `string` to `Error`.
 
 ```ts twoslash
-import { Effect } from "effect"
+import { Effect } from 'effect'
 
 //      ┌─── Effect<number, string, never>
 //      ▼
-const simulatedTask = Effect.fail("Oh no!").pipe(Effect.as(1))
+const simulatedTask = Effect.fail('Oh no!').pipe(Effect.as(1))
 
 //      ┌─── Effect<number, Error, never>
 //      ▼
-const mapped = Effect.mapError(
-  simulatedTask,
-  (message) => new Error(message)
-)
+const mapped = Effect.mapError(simulatedTask, (message) => new Error(message))
 ```
 
 <Aside type="note">
@@ -37,17 +34,17 @@ The `Effect.mapBoth` function allows you to apply transformations to both channe
 **Example** (Mapping Both Success and Error)
 
 ```ts twoslash
-import { Effect } from "effect"
+import { Effect } from 'effect'
 
 //      ┌─── Effect<number, string, never>
 //      ▼
-const simulatedTask = Effect.fail("Oh no!").pipe(Effect.as(1))
+const simulatedTask = Effect.fail('Oh no!').pipe(Effect.as(1))
 
 //      ┌─── Effect<boolean, Error, never>
 //      ▼
 const modified = Effect.mapBoth(simulatedTask, {
   onFailure: (message) => new Error(message),
-  onSuccess: (n) => n > 0
+  onSuccess: (n) => n > 0,
 })
 ```
 

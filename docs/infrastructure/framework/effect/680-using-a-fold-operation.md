@@ -3,11 +3,9 @@
 The `Stream.fold` function is another way to consume a stream by performing a fold operation over the stream of values and returning an effect containing the result. Here are a couple of examples:
 
 ```ts twoslash
-import { Stream, Effect } from "effect"
+import { Stream, Effect } from 'effect'
 
-const foldedStream = Stream.make(1, 2, 3, 4, 5).pipe(
-  Stream.runFold(0, (a, b) => a + b)
-)
+const foldedStream = Stream.make(1, 2, 3, 4, 5).pipe(Stream.runFold(0, (a, b) => a + b))
 
 Effect.runPromise(foldedStream).then(console.log)
 // Output: 15

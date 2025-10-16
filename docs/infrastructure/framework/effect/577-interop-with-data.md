@@ -5,10 +5,10 @@ The [Data](/docs/data-types/data/) module in the Effect ecosystem simplifies val
 **Example** (Comparing Structs with Data)
 
 ```ts twoslash
-import { Data, Equal } from "effect"
+import { Data, Equal } from 'effect'
 
-const person1 = Data.struct({ name: "Alice", age: 30 })
-const person2 = Data.struct({ name: "Alice", age: 30 })
+const person1 = Data.struct({ name: 'Alice', age: 30 })
+const person2 = Data.struct({ name: 'Alice', age: 30 })
 
 console.log(Equal.equals(person1, person2))
 // Output: true
@@ -19,18 +19,18 @@ By default, schemas like `Schema.Struct` do not implement the `Equal` and `Hash`
 **Example** (Default Behavior Without `Equal` and `Hash`)
 
 ```ts twoslash
-import { Schema } from "effect"
-import { Equal } from "effect"
+import { Schema } from 'effect'
+import { Equal } from 'effect'
 
 const schema = Schema.Struct({
   name: Schema.String,
-  age: Schema.Number
+  age: Schema.Number,
 })
 
 const decode = Schema.decode(schema)
 
-const person1 = decode({ name: "Alice", age: 30 })
-const person2 = decode({ name: "Alice", age: 30 })
+const person1 = decode({ name: 'Alice', age: 30 })
+const person2 = decode({ name: 'Alice', age: 30 })
 
 console.log(Equal.equals(person1, person2))
 // Output: false
@@ -41,20 +41,20 @@ The `Schema.Data` function can be used to enhance a schema by including the `Equ
 **Example** (Using `Schema.Data` to Add Equality)
 
 ```ts twoslash
-import { Schema } from "effect"
-import { Equal } from "effect"
+import { Schema } from 'effect'
+import { Equal } from 'effect'
 
 const schema = Schema.Data(
   Schema.Struct({
     name: Schema.String,
-    age: Schema.Number
+    age: Schema.Number,
   })
 )
 
 const decode = Schema.decode(schema)
 
-const person1 = decode({ name: "Alice", age: 30 })
-const person2 = decode({ name: "Alice", age: 30 })
+const person1 = decode({ name: 'Alice', age: 30 })
+const person2 = decode({ name: 'Alice', age: 30 })
 
 console.log(Equal.equals(person1, person2))
 // Output: true

@@ -5,11 +5,11 @@ You can use the `Effect.cause` function to expose the cause of an effect, which 
 **Example** (Logging the Cause of Failure)
 
 ```ts twoslash
-import { Effect, Console } from "effect"
+import { Effect, Console } from 'effect'
 
 //      ┌─── Effect<number, string, never>
 //      ▼
-const program = Effect.fail("Oh uh!").pipe(Effect.as(2))
+const program = Effect.fail('Oh uh!').pipe(Effect.as(2))
 
 //      ┌─── Effect<void, never, never>
 //      ▼

@@ -3,9 +3,9 @@
 **Example** (Reading a Line from Standard Input)
 
 ```ts twoslash
-import { Terminal } from "@effect/platform"
-import { NodeRuntime, NodeTerminal } from "@effect/platform-node"
-import { Effect } from "effect"
+import { Terminal } from '@effect/platform'
+import { NodeRuntime, NodeTerminal } from '@effect/platform-node'
+import { Effect } from 'effect'
 
 const program = Effect.gen(function* () {
   const terminal = yield* Terminal.Terminal

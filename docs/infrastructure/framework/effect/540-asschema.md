@@ -9,7 +9,7 @@ The `Schema.asSchema` function allows you to view any schema as `Schema<Type, En
 For example, while `Schema.String` is defined as a class with a type of `typeof Schema.String`, using `Schema.asSchema` provides the schema in its extended form as `Schema<string, string, never>`.
 
 ```ts twoslash
-import { Schema } from "effect"
+import { Schema } from 'effect'
 
 //     ┌─── typeof Schema.String
 //     ▼

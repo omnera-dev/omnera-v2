@@ -18,10 +18,10 @@ The BigDecimal module supports a variety of arithmetic operations that provide p
 **Example** (Performing Basic Arithmetic with BigDecimal)
 
 ```ts twoslash
-import { BigDecimal } from "effect"
+import { BigDecimal } from 'effect'
 
-const dec1 = BigDecimal.unsafeFromString("1.05")
-const dec2 = BigDecimal.unsafeFromString("2.10")
+const dec1 = BigDecimal.unsafeFromString('1.05')
+const dec2 = BigDecimal.unsafeFromString('2.10')
 
 // Addition
 console.log(String(BigDecimal.sum(dec1, dec2)))
@@ -55,11 +55,7 @@ console.log(String(BigDecimal.negate(dec1)))
 // Output: BigDecimal(-1.05)
 
 // Modulus (unsafe, throws if divisor is zero)
-console.log(
-  String(
-    BigDecimal.unsafeRemainder(dec2, BigDecimal.unsafeFromString("0.6"))
-  )
-)
+console.log(String(BigDecimal.unsafeRemainder(dec2, BigDecimal.unsafeFromString('0.6'))))
 // Output: BigDecimal(0.3)
 ```
 

@@ -7,7 +7,7 @@ Create an empty `Chunk` with `Chunk.empty`.
 **Example** (Creating an Empty Chunk)
 
 ```ts twoslash
-import { Chunk } from "effect"
+import { Chunk } from 'effect'
 
 //      ┌─── Chunk<number>
 //      ▼
@@ -21,7 +21,7 @@ To create a `Chunk` with specific values, use `Chunk.make(...values)`. Note that
 **Example** (Creating a Non-Empty Chunk)
 
 ```ts twoslash
-import { Chunk } from "effect"
+import { Chunk } from 'effect'
 
 //      ┌─── NonEmptyChunk<number>
 //      ▼
@@ -35,7 +35,7 @@ You can create a `Chunk` by providing a collection, either from an iterable or d
 **Example** (Creating a Chunk from an Iterable)
 
 ```ts twoslash
-import { Chunk, List } from "effect"
+import { Chunk, List } from 'effect'
 
 const fromArray = Chunk.fromIterable([1, 2, 3])
 
@@ -55,7 +55,7 @@ const fromList = Chunk.fromIterable(List.make(1, 2, 3))
 **Example** (Directly Creating a Chunk from an Array)
 
 ```ts twoslash
-import { Chunk } from "effect"
+import { Chunk } from 'effect'
 
 const chunk = Chunk.unsafeFromArray([1, 2, 3])
 ```

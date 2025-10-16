@@ -12,9 +12,7 @@ Let's compare the two approaches:
 const increment = (x: number) => x + 1
 
 const divide = (a: number, b: number): Promise<number> =>
-  b === 0
-    ? Promise.reject(new Error("Cannot divide by zero"))
-    : Promise.resolve(a / b)
+  b === 0 ? Promise.reject(new Error('Cannot divide by zero')) : Promise.resolve(a / b)
 
 const task1 = Promise.resolve(10)
 
@@ -36,14 +34,12 @@ program().then(console.log) // Output: "Result is: 6"
 <TabItem label="Effect">
 
 ```ts twoslash
-import { Effect } from "effect"
+import { Effect } from 'effect'
 
 const increment = (x: number) => x + 1
 
 const divide = (a: number, b: number): Effect.Effect<number, Error> =>
-  b === 0
-    ? Effect.fail(new Error("Cannot divide by zero"))
-    : Effect.succeed(a / b)
+  b === 0 ? Effect.fail(new Error('Cannot divide by zero')) : Effect.succeed(a / b)
 
 const task1 = Effect.promise(() => Promise.resolve(10))
 

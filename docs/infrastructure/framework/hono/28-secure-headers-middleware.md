@@ -38,8 +38,7 @@ const app = new Hono()
 app.use(
   '*',
   secureHeaders({
-    strictTransportSecurity:
-      'max-age=63072000; includeSubDomains; preload',
+    strictTransportSecurity: 'max-age=63072000; includeSubDomains; preload',
     xFrameOptions: 'DENY',
     xXssProtection: '1',
   })
@@ -170,7 +169,7 @@ app.get('/', (c) => {
       <body>
         {/** contents */}
         <script
-          src='/js/client.js'
+          src="/js/client.js"
           nonce={c.get('secureHeadersNonce')}
         />
       </body>
@@ -207,7 +206,10 @@ app.get('/', (c) => {
     <html>
       <body>
         {/** contents */}
-        <script src='/js/client.js' nonce={c.get('myNonce')} />
+        <script
+          src="/js/client.js"
+          nonce={c.get('myNonce')}
+        />
       </body>
     </html>
   )
@@ -234,12 +236,8 @@ app.use(
       usb: ['self', 'https://a.example.com', 'https://b.example.com'], // usb=(self "https://a.example.com" "https://b.example.com")
       accelerometer: ['https://*.example.com'], // accelerometer=("https://*.example.com")
       gyroscope: ['src'], // gyroscope=(src)
-      magnetometer: [
-        'https://a.example.com',
-        'https://b.example.com',
-      ], // magnetometer=("https://a.example.com" "https://b.example.com")
+      magnetometer: ['https://a.example.com', 'https://b.example.com'], // magnetometer=("https://a.example.com" "https://b.example.com")
     },
   })
 )
 ```
-

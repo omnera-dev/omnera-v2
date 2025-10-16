@@ -10,14 +10,14 @@ The `Error` constructor provides a way to define a base class for yieldable erro
 **Example** (Creating and Yielding a Custom Error)
 
 ```ts twoslash
-import { Micro } from "effect"
+import { Micro } from 'effect'
 
 // Define a custom error class extending Error
 class MyError extends Micro.Error<{ message: string }> {}
 
 export const program = Micro.gen(function* () {
   // Yield a custom error (equivalent to failing with MyError)
-  yield* new MyError({ message: "Oh no!" })
+  yield* new MyError({ message: 'Oh no!' })
 })
 
 Micro.runPromiseExit(program).then(console.log)
@@ -45,33 +45,29 @@ The `TaggedError` constructor lets you define custom yieldable errors with uniqu
 **Example** (Handling Multiple Tagged Errors)
 
 ```ts twoslash
-import { Micro } from "effect"
+import { Micro } from 'effect'
 
 // An error with _tag: "Foo"
-class FooError extends Micro.TaggedError("Foo")<{
+class FooError extends Micro.TaggedError('Foo')<{
   message: string
 }> {}
 
 // An error with _tag: "Bar"
-class BarError extends Micro.TaggedError("Bar")<{
+class BarError extends Micro.TaggedError('Bar')<{
   randomNumber: number
 }> {}
 
 export const program = Micro.gen(function* () {
   const n = Math.random()
   return n > 0.5
-    ? "yay!"
+    ? 'yay!'
     : n < 0.2
-    ? yield* new FooError({ message: "Oh no!" })
-    : yield* new BarError({ randomNumber: n })
+      ? yield* new FooError({ message: 'Oh no!' })
+      : yield* new BarError({ randomNumber: n })
 }).pipe(
   // Handle different tagged errors using catchTag
-  Micro.catchTag("Foo", (error) =>
-    Micro.succeed(`Foo error: ${error.message}`)
-  ),
-  Micro.catchTag("Bar", (error) =>
-    Micro.succeed(`Bar error: ${error.randomNumber}`)
-  )
+  Micro.catchTag('Foo', (error) => Micro.succeed(`Foo error: ${error.message}`)),
+  Micro.catchTag('Bar', (error) => Micro.succeed(`Bar error: ${error.randomNumber}`))
 )
 
 Micro.runPromise(program).then(console.log, console.error)

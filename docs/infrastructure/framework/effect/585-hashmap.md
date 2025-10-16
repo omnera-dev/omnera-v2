@@ -26,12 +26,12 @@ Schema.HashMap(options: {
 **Example**
 
 ```ts twoslash
-import { Schema } from "effect"
-import { HashMap } from "effect"
+import { Schema } from 'effect'
+import { HashMap } from 'effect'
 
 const schema = Schema.HashMap({
   key: Schema.String,
-  value: Schema.NumberFromString
+  value: Schema.NumberFromString,
 })
 
 //     ┌─── readonly (readonly [string, string])[]
@@ -49,9 +49,9 @@ const encode = Schema.encodeSync(schema)
 
 console.log(
   decode([
-    ["a", "2"],
-    ["b", "2"],
-    ["c", "3"]
+    ['a', '2'],
+    ['b', '2'],
+    ['c', '3'],
   ])
 )
 // Output: { _id: 'HashMap', values: [ [ 'a', 2 ], [ 'c', 3 ], [ 'b', 2 ] ] }
@@ -61,9 +61,9 @@ console.log(
 console.log(
   encode(
     HashMap.fromIterable([
-      ["a", 1],
-      ["b", 2],
-      ["c", 3]
+      ['a', 1],
+      ['b', 2],
+      ['c', 3],
     ])
   )
 )
@@ -98,12 +98,12 @@ Schema.HashMapFromSelf(options: {
 **Example**
 
 ```ts twoslash
-import { Schema } from "effect"
-import { HashMap } from "effect"
+import { Schema } from 'effect'
+import { HashMap } from 'effect'
 
 const schema = Schema.HashMapFromSelf({
   key: Schema.String,
-  value: Schema.NumberFromString
+  value: Schema.NumberFromString,
 })
 
 //     ┌─── HashMap<string, string>
@@ -122,9 +122,9 @@ const encode = Schema.encodeSync(schema)
 console.log(
   decode(
     HashMap.fromIterable([
-      ["a", "2"],
-      ["b", "2"],
-      ["c", "3"]
+      ['a', '2'],
+      ['b', '2'],
+      ['c', '3'],
     ])
   )
 )
@@ -135,9 +135,9 @@ console.log(
 console.log(
   encode(
     HashMap.fromIterable([
-      ["a", 1],
-      ["b", 2],
-      ["c", 3]
+      ['a', 1],
+      ['b', 2],
+      ['c', 3],
     ])
   )
 )

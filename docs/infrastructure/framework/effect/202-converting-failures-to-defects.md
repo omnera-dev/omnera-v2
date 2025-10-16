@@ -13,12 +13,10 @@ This is useful for propagating failures as defects, signaling that they should n
 **Example** (Propagating an Error as a Defect)
 
 ```ts twoslash
-import { Effect } from "effect"
+import { Effect } from 'effect'
 
 const divide = (a: number, b: number) =>
-  b === 0
-    ? Effect.fail(new Error("Cannot divide by zero"))
-    : Effect.succeed(a / b)
+  b === 0 ? Effect.fail(new Error('Cannot divide by zero')) : Effect.succeed(a / b)
 
 //      ┌─── Effect<number, never, never>
 //      ▼
@@ -47,19 +45,14 @@ as a defect.
 **Example** (Customizing Defect)
 
 ```ts twoslash
-import { Effect } from "effect"
+import { Effect } from 'effect'
 
 const divide = (a: number, b: number) =>
-  b === 0
-    ? Effect.fail(new Error("Cannot divide by zero"))
-    : Effect.succeed(a / b)
+  b === 0 ? Effect.fail(new Error('Cannot divide by zero')) : Effect.succeed(a / b)
 
 //      ┌─── Effect<number, never, never>
 //      ▼
-const program = Effect.orDieWith(
-  divide(1, 0),
-  (error) => new Error(`defect: ${error.message}`)
-)
+const program = Effect.orDieWith(divide(1, 0), (error) => new Error(`defect: ${error.message}`))
 
 Effect.runPromise(program).catch(console.error)
 /*

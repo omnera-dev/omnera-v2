@@ -10,12 +10,10 @@ The following code demonstrates how to create a single fiber using the `Micro.fo
 **Example** (Forking a Fiber)
 
 ```ts twoslash
-import { Micro } from "effect"
+import { Micro } from 'effect'
 
 const fib = (n: number): Micro.Micro<number> =>
-  n < 2
-    ? Micro.succeed(n)
-    : Micro.zipWith(fib(n - 1), fib(n - 2), (a, b) => a + b)
+  n < 2 ? Micro.succeed(n) : Micro.zipWith(fib(n - 1), fib(n - 2), (a, b) => a + b)
 
 //      ┌─── Micro<MicroFiber<number, never>, never, never>
 //      ▼
@@ -30,12 +28,10 @@ This function returns a `Micro` that will succeed or fail based on the outcome o
 **Example** (Joining a Fiber)
 
 ```ts twoslash
-import { Micro } from "effect"
+import { Micro } from 'effect'
 
 const fib = (n: number): Micro.Micro<number> =>
-  n < 2
-    ? Micro.succeed(n)
-    : Micro.zipWith(fib(n - 1), fib(n - 2), (a, b) => a + b)
+  n < 2 ? Micro.succeed(n) : Micro.zipWith(fib(n - 1), fib(n - 2), (a, b) => a + b)
 
 //      ┌─── Micro<MicroFiber<number, never>, never, never>
 //      ▼
@@ -61,12 +57,10 @@ This function returns an effect containing a `MicroExit` value, which provides d
 **Example** (Awaiting Fiber Completion)
 
 ```ts twoslash
-import { Micro } from "effect"
+import { Micro } from 'effect'
 
 const fib = (n: number): Micro.Micro<number> =>
-  n < 2
-    ? Micro.succeed(n)
-    : Micro.zipWith(fib(n - 1), fib(n - 2), (a, b) => a + b)
+  n < 2 ? Micro.succeed(n) : Micro.zipWith(fib(n - 1), fib(n - 2), (a, b) => a + b)
 
 //      ┌─── Micro<MicroFiber<number, never>, never, never>
 //      ▼

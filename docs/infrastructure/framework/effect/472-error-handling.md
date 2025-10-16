@@ -9,15 +9,15 @@ The `Layer.catchAll` function allows you to recover from errors during layer con
 **Example** (Recovering from Errors During Layer Construction)
 
 ```ts twoslash
-import { Config, Context, Effect, Layer } from "effect"
+import { Config, Context, Effect, Layer } from 'effect'
 
-class HTTPServer extends Context.Tag("HTTPServer")<HTTPServer, void>() {}
+class HTTPServer extends Context.Tag('HTTPServer')<HTTPServer, void>() {}
 
 // Simulating an HTTP server
 const server = Layer.effect(
   HTTPServer,
   Effect.gen(function* () {
-    const host = yield* Config.string("HOST")
+    const host = yield* Config.string('HOST')
     console.log(`Listening on http://localhost:${host}`)
   })
 ).pipe(
@@ -50,20 +50,16 @@ The `Layer.orElse` function provides a simpler way to fall back to an alternativ
 **Example** (Fallback to an Alternative Layer)
 
 ```ts twoslash
-import { Config, Context, Effect, Layer } from "effect"
+import { Config, Context, Effect, Layer } from 'effect'
 
-class Database extends Context.Tag("Database")<Database, void>() {}
+class Database extends Context.Tag('Database')<Database, void>() {}
 
 // Simulating a database connection
 const postgresDatabaseLayer = Layer.effect(
   Database,
   Effect.gen(function* () {
-    const databaseConnectionString = yield* Config.string(
-      "CONNECTION_STRING"
-    )
-    console.log(
-      `Connecting to database with: ${databaseConnectionString}`
-    )
+    const databaseConnectionString = yield* Config.string('CONNECTION_STRING')
+    console.log(`Connecting to database with: ${databaseConnectionString}`)
   })
 )
 
@@ -76,9 +72,7 @@ const inMemoryDatabaseLayer = Layer.effect(
 )
 
 // Fallback to in-memory database if PostgreSQL connection fails
-const database = postgresDatabaseLayer.pipe(
-  Layer.orElse(() => inMemoryDatabaseLayer)
-)
+const database = postgresDatabaseLayer.pipe(Layer.orElse(() => inMemoryDatabaseLayer))
 
 Effect.runFork(Layer.launch(database))
 /*

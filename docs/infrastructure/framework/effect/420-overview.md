@@ -1,10 +1,10 @@
 ## Overview
 
 import {
-  Tabs,
-  TabItem,
-  Steps,
-  Aside
+Tabs,
+TabItem,
+Steps,
+Aside
 } from "@astrojs/starlight/components"
 
 Although logs and metrics are useful to understand the behavior of individual services, they are not enough to provide a complete overview of the lifetime of a request in a distributed system.

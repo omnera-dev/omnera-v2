@@ -11,7 +11,7 @@ You can also extract values as an array using `.toValues`.
 **Example** (Using HashSet values in JS-native ways)
 
 ```ts twoslash
-import { HashSet, MutableHashSet } from "effect"
+import { HashSet, MutableHashSet } from 'effect'
 
 // Immutable HashSet
 const hashSet = HashSet.make(1, 2, 3)

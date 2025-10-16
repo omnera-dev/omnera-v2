@@ -21,7 +21,7 @@ This mutability can improve performance when you need to build or update a set r
 **Example** (Working with a mutable set)
 
 ```ts twoslash
-import { MutableHashSet } from "effect"
+import { MutableHashSet } from 'effect'
 
 // Create a mutable set with initial values
 const set = MutableHashSet.make(1, 2, 3)

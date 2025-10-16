@@ -5,13 +5,10 @@ You can pass a `Ref` as a [service](/docs/requirements-management/services/) to 
 **Example** (Using `Ref` as a Service)
 
 ```ts twoslash
-import { Effect, Context, Ref } from "effect"
+import { Effect, Context, Ref } from 'effect'
 
 // Create a Tag for our state
-class MyState extends Context.Tag("MyState")<
-  MyState,
-  Ref.Ref<number>
->() {}
+class MyState extends Context.Tag('MyState')<MyState, Ref.Ref<number>>() {}
 
 // Subprogram 1: Increment the state value twice
 const subprogram1 = Effect.gen(function* () {
@@ -45,9 +42,7 @@ const program = Effect.gen(function* () {
 const initialState = Ref.make(0)
 
 // Provide the Ref as a service
-const runnable = program.pipe(
-  Effect.provideServiceEffect(MyState, initialState)
-)
+const runnable = program.pipe(Effect.provideServiceEffect(MyState, initialState))
 
 // Run the program and observe the output
 Effect.runPromise(runnable)

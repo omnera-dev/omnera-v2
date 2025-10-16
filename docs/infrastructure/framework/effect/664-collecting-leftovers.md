@@ -5,7 +5,7 @@ If a sink doesn't consume all elements from the upstream source, the remaining e
 **Example** (Collecting Leftover Elements)
 
 ```ts twoslash
-import { Stream, Sink, Effect } from "effect"
+import { Stream, Sink, Effect } from 'effect'
 
 const stream = Stream.make(1, 2, 3, 4, 5)
 

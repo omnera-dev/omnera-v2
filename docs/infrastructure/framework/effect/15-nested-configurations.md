@@ -22,7 +22,7 @@ If you were to use this configuration in your application, it would expect the `
 To do this, you can use the `Config.nested` operator, which allows you to nest configuration values under a specific namespace. Let's update the previous example to reflect this:
 
 ```ts twoslash
-import { Config } from "effect"
+import { Config } from 'effect'
 
 class ServiceConfig {
   constructor(
@@ -35,17 +35,14 @@ class ServiceConfig {
   }
 }
 
-const serverConfig = Config.all([
-  Config.string("HOST"),
-  Config.number("PORT")
-])
+const serverConfig = Config.all([Config.string('HOST'), Config.number('PORT')])
 
 const serviceConfig = Config.map(
   Config.all([
     // Read 'HOST' and 'PORT' from 'SERVER' namespace
-    Config.nested(serverConfig, "SERVER"),
+    Config.nested(serverConfig, 'SERVER'),
     // Read 'TIMEOUT' from the root namespace
-    Config.number("TIMEOUT")
+    Config.number('TIMEOUT'),
   ]),
   ([[host, port], timeout]) => new ServiceConfig(host, port, timeout)
 )

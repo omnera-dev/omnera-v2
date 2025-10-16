@@ -344,4 +344,3 @@ Before you deploy your project to Cloudflare, remember to set the environment va
 
 > For more about this section you can find in the Cloudflare documentation:
 > https://developers.cloudflare.com/workers/configuration/environment-variables/#add-environment-variables-via-the-dashboard
-

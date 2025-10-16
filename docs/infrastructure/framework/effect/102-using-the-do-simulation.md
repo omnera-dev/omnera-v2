@@ -15,7 +15,7 @@ Here's how the do simulation works:
 2. Within the do simulation scope, you can use the `Effect.bind` function to define variables and bind them to `Effect` values:
 
    ```ts showLineNumbers=false
-   Effect.bind("variableName", (scope) => effectValue)
+   Effect.bind('variableName', (scope) => effectValue)
    ```
 
    - `variableName` is the name you choose for the variable you want to define. It must be unique within the scope.
@@ -32,7 +32,7 @@ Here's how the do simulation works:
 4. Inside the do simulation scope, you can also use the `Effect.let` function to define variables and bind them to simple values:
 
    ```ts showLineNumbers=false
-   Effect.let("variableName", (scope) => simpleValue)
+   Effect.let('variableName', (scope) => simpleValue)
    ```
 
    - `variableName` is the name you give to the variable. Like before, it must be unique within the scope.
@@ -54,20 +54,18 @@ With the do simulation, you can rewrite the `elapsed` function like this:
 **Example** (Using Do Simulation to Measure Elapsed Time)
 
 ```ts twoslash
-import { Effect, Console } from "effect"
+import { Effect, Console } from 'effect'
 
 // Get the current timestamp
 const now = Effect.sync(() => new Date().getTime())
 
-const elapsed = <R, E, A>(
-  self: Effect.Effect<A, E, R>
-): Effect.Effect<A, E, R> =>
+const elapsed = <R, E, A>(self: Effect.Effect<A, E, R>): Effect.Effect<A, E, R> =>
   Effect.Do.pipe(
-    Effect.bind("startMillis", () => now),
-    Effect.bind("result", () => self),
-    Effect.bind("endMillis", () => now),
+    Effect.bind('startMillis', () => now),
+    Effect.bind('result', () => self),
+    Effect.bind('endMillis', () => now),
     Effect.let(
-      "elapsed",
+      'elapsed',
       // Calculate the elapsed time in milliseconds
       ({ startMillis, endMillis }) => endMillis - startMillis
     ),
@@ -77,7 +75,7 @@ const elapsed = <R, E, A>(
   )
 
 // Simulates a successful computation with a delay of 200 milliseconds
-const task = Effect.succeed("some task").pipe(Effect.delay("200 millis"))
+const task = Effect.succeed('some task').pipe(Effect.delay('200 millis'))
 
 const program = elapsed(task)
 

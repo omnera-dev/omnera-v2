@@ -8,7 +8,7 @@ Imagine you have a list of `Person` objects, and you want to sort them by their 
 To achieve this, you can create a custom `Order`.
 
 ```ts twoslash
-import { Order } from "effect"
+import { Order } from 'effect'
 
 // Define the Person interface
 interface Person {
@@ -20,10 +20,7 @@ interface Person {
 //
 //      ┌─── Order<Person>
 //      ▼
-const byName = Order.mapInput(
-  Order.string,
-  (person: Person) => person.name
-)
+const byName = Order.mapInput(Order.string, (person: Person) => person.name)
 ```
 
 The `Order.mapInput` function takes two arguments:
@@ -36,7 +33,7 @@ Once you have defined your custom `Order`, you can apply it to sort an array of 
 **Example** (Sorting Objects Using a Custom Order)
 
 ```ts twoslash collapse={3-13}
-import { Order, Array } from "effect"
+import { Order, Array } from 'effect'
 
 // Define the Person interface
 interface Person {
@@ -45,15 +42,12 @@ interface Person {
 }
 
 // Create a custom order to sort Person objects by name in ascending order
-const byName = Order.mapInput(
-  Order.string,
-  (person: Person) => person.name
-)
+const byName = Order.mapInput(Order.string, (person: Person) => person.name)
 
 const persons: ReadonlyArray<Person> = [
-  { name: "Charlie", age: 22 },
-  { name: "Alice", age: 25 },
-  { name: "Bob", age: 30 }
+  { name: 'Charlie', age: 22 },
+  { name: 'Alice', age: 25 },
+  { name: 'Bob', age: 30 },
 ]
 
 // Sort persons array using the custom order

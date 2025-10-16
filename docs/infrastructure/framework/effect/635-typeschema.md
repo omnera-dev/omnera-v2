@@ -11,10 +11,10 @@ declare const typeSchema: <A, I, R>(schema: Schema<A, I, R>) => Schema<A>
 **Example** (Extracting Only Type-Specific Properties)
 
 ```ts twoslash
-import { Schema } from "effect"
+import { Schema } from 'effect'
 
 const Original = Schema.Struct({
-  quantity: Schema.NumberFromString.pipe(Schema.greaterThanOrEqualTo(2))
+  quantity: Schema.NumberFromString.pipe(Schema.greaterThanOrEqualTo(2)),
 })
 
 // This creates a schema where 'quantity' is defined as a number
@@ -23,6 +23,6 @@ const TypeSchema = Schema.typeSchema(Original)
 
 // TypeSchema is equivalent to:
 const TypeSchema2 = Schema.Struct({
-  quantity: Schema.Number.pipe(Schema.greaterThanOrEqualTo(2))
+  quantity: Schema.Number.pipe(Schema.greaterThanOrEqualTo(2)),
 })
 ```

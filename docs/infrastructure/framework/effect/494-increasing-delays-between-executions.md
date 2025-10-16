@@ -8,12 +8,9 @@ Returns the current duration between recurrences.
 **Example** (Exponential Backoff Schedule)
 
 ```ts twoslash collapse={3-26}
-import { Array, Chunk, Duration, Effect, Schedule } from "effect"
+import { Array, Chunk, Duration, Effect, Schedule } from 'effect'
 
-const log = (
-  schedule: Schedule.Schedule<unknown>,
-  delay: Duration.DurationInput = 0
-): void => {
+const log = (schedule: Schedule.Schedule<unknown>, delay: Duration.DurationInput = 0): void => {
   const maxRecurs = 10
   const delays = Chunk.toArray(
     Effect.runSync(
@@ -27,15 +24,15 @@ const log = (
   delays.forEach((duration, i) => {
     console.log(
       i === maxRecurs
-        ? "..."
+        ? '...'
         : i === delays.length - 1
-        ? "(end)"
-        : `#${i + 1}: ${Duration.toMillis(duration)}ms`
+          ? '(end)'
+          : `#${i + 1}: ${Duration.toMillis(duration)}ms`
     )
   })
 }
 
-const schedule = Schedule.exponential("10 millis")
+const schedule = Schedule.exponential('10 millis')
 
 log(schedule)
 /*
@@ -61,12 +58,9 @@ A schedule that always recurs, increasing delays by summing the preceding two de
 **Example** (Fibonacci Delay Schedule)
 
 ```ts twoslash collapse={3-26}
-import { Array, Chunk, Duration, Effect, Schedule } from "effect"
+import { Array, Chunk, Duration, Effect, Schedule } from 'effect'
 
-const log = (
-  schedule: Schedule.Schedule<unknown>,
-  delay: Duration.DurationInput = 0
-): void => {
+const log = (schedule: Schedule.Schedule<unknown>, delay: Duration.DurationInput = 0): void => {
   const maxRecurs = 10
   const delays = Chunk.toArray(
     Effect.runSync(
@@ -80,15 +74,15 @@ const log = (
   delays.forEach((duration, i) => {
     console.log(
       i === maxRecurs
-        ? "..."
+        ? '...'
         : i === delays.length - 1
-        ? "(end)"
-        : `#${i + 1}: ${Duration.toMillis(duration)}ms`
+          ? '(end)'
+          : `#${i + 1}: ${Duration.toMillis(duration)}ms`
     )
   })
 }
 
-const schedule = Schedule.fibonacci("10 millis")
+const schedule = Schedule.fibonacci('10 millis')
 
 log(schedule)
 /*

@@ -12,12 +12,10 @@ With async iterables, data is processed in a loop until a break or return statem
 **Example** (Using `Stream.toPull`)
 
 ```ts twoslash
-import { Stream, Effect } from "effect"
+import { Stream, Effect } from 'effect'
 
 // Simulate a chunked stream
-const stream = Stream.fromIterable([1, 2, 3, 4, 5]).pipe(
-  Stream.rechunk(2)
-)
+const stream = Stream.fromIterable([1, 2, 3, 4, 5]).pipe(Stream.rechunk(2))
 
 const program = Effect.gen(function* () {
   // Create an effect to get data chunks from the stream

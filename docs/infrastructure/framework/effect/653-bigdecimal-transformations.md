@@ -7,11 +7,11 @@ Converts a string to a `BigDecimal`.
 **Example** (Parsing BigDecimal from String)
 
 ```ts twoslash
-import { Schema } from "effect"
+import { Schema } from 'effect'
 
 const decode = Schema.decodeUnknownSync(Schema.BigDecimal)
 
-console.log(decode(".124"))
+console.log(decode('.124'))
 // Output: { _id: 'BigDecimal', value: '124', scale: 3 }
 ```
 
@@ -27,7 +27,7 @@ Converts a number to a `BigDecimal`.
 **Example** (Parsing BigDecimal from Number)
 
 ```ts twoslash
-import { Schema } from "effect"
+import { Schema } from 'effect'
 
 const decode = Schema.decodeUnknownSync(Schema.BigDecimalFromNumber)
 
@@ -42,25 +42,22 @@ Clamps a `BigDecimal` within a specified range.
 **Example** (Clamping BigDecimal)
 
 ```ts twoslash
-import { Schema } from "effect"
-import { BigDecimal } from "effect"
+import { Schema } from 'effect'
+import { BigDecimal } from 'effect'
 
 const schema = Schema.BigDecimal.pipe(
-  Schema.clampBigDecimal(
-    BigDecimal.fromNumber(-1),
-    BigDecimal.fromNumber(1)
-  )
+  Schema.clampBigDecimal(BigDecimal.fromNumber(-1), BigDecimal.fromNumber(1))
 )
 
 const decode = Schema.decodeUnknownSync(schema)
 
-console.log(decode("-2"))
+console.log(decode('-2'))
 // Output: { _id: 'BigDecimal', value: '-1', scale: 0 }
 
-console.log(decode("0"))
+console.log(decode('0'))
 // Output: { _id: 'BigDecimal', value: '0', scale: 0 }
 
-console.log(decode("3"))
+console.log(decode('3'))
 // Output: { _id: 'BigDecimal', value: '1', scale: 0 }
 ```
 

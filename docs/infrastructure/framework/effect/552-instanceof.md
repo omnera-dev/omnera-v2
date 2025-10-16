@@ -5,7 +5,7 @@ When you need to define a schema for your custom data type defined through a `cl
 **Example** (Defining a Schema with `instanceOf`)
 
 ```ts twoslash
-import { Schema } from "effect"
+import { Schema } from 'effect'
 
 // Define a custom class
 class MyData {
@@ -19,10 +19,10 @@ const MyDataSchema = Schema.instanceOf(MyData)
 //     ▼
 type Type = typeof MyDataSchema.Type
 
-console.log(Schema.decodeUnknownSync(MyDataSchema)(new MyData("name")))
+console.log(Schema.decodeUnknownSync(MyDataSchema)(new MyData('name')))
 // Output: MyData { name: 'name' }
 
-console.log(Schema.decodeUnknownSync(MyDataSchema)({ name: "name" }))
+console.log(Schema.decodeUnknownSync(MyDataSchema)({ name: 'name' }))
 /*
 throws:
 ParseError: Expected MyData, actual {"name":"name"}
@@ -39,7 +39,7 @@ If you try to use it with classes that, for some reason, have marked the constru
 **Example** (Error With Private Constructors)
 
 ```ts twoslash
-import { Schema } from "effect"
+import { Schema } from 'effect'
 
 class MyData {
   static make = (name: string) => new MyData(name)
@@ -55,7 +55,7 @@ In such cases, you cannot use `Schema.instanceOf`, and you must rely on [Schema.
 **Example** (Using `Schema.declare` With Private Constructors)
 
 ```ts twoslash
-import { Schema } from "effect"
+import { Schema } from 'effect'
 
 class MyData {
   static make = (name: string) => new MyData(name)
@@ -64,12 +64,12 @@ class MyData {
 
 const MyDataSchema = Schema.declare(
   (input: unknown): input is MyData => input instanceof MyData
-).annotations({ identifier: "MyData" })
+).annotations({ identifier: 'MyData' })
 
-console.log(Schema.decodeUnknownSync(MyDataSchema)(MyData.make("name")))
+console.log(Schema.decodeUnknownSync(MyDataSchema)(MyData.make('name')))
 // Output: MyData { name: 'name' }
 
-console.log(Schema.decodeUnknownSync(MyDataSchema)({ name: "name" }))
+console.log(Schema.decodeUnknownSync(MyDataSchema)({ name: 'name' }))
 /*
 throws:
 ParseError: Expected MyData, actual {"name":"name"}
@@ -83,14 +83,14 @@ To validate the fields of a class instance, you can use a [filter](/docs/schema/
 **Example** (Adding Field Validation to an Instance Schema)
 
 ```ts twoslash
-import { Either, ParseResult, Schema } from "effect"
+import { Either, ParseResult, Schema } from 'effect'
 
 class MyData {
   constructor(readonly name: string) {}
 }
 
 const MyDataFields = Schema.Struct({
-  name: Schema.NonEmptyString
+  name: Schema.NonEmptyString,
 })
 
 // Define a schema for the class instance with additional field validation
@@ -107,11 +107,11 @@ const MyDataSchema = Schema.instanceOf(MyData).pipe(
 )
 
 // Example: Valid instance
-console.log(Schema.validateSync(MyDataSchema)(new MyData("John")))
+console.log(Schema.validateSync(MyDataSchema)(new MyData('John')))
 // Output: MyData { name: 'John' }
 
 // Example: Invalid instance (empty name)
-console.log(Schema.validateSync(MyDataSchema)(new MyData("")))
+console.log(Schema.validateSync(MyDataSchema)(new MyData('')))
 /*
 throws:
 ParseError: { MyData | filter }

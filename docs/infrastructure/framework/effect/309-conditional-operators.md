@@ -13,11 +13,11 @@ is executed. If it is `false`, the `onFalse` effect is executed instead.
 In this example, we simulate a virtual coin flip using `Random.nextBoolean` to generate a random boolean value. If the value is `true`, the `onTrue` effect logs "Head". If the value is `false`, the `onFalse` effect logs "Tail".
 
 ```ts twoslash
-import { Effect, Random, Console } from "effect"
+import { Effect, Random, Console } from 'effect'
 
 const flipTheCoin = Effect.if(Random.nextBoolean, {
-  onTrue: () => Console.log("Head"), // Runs if the predicate is true
-  onFalse: () => Console.log("Tail") // Runs if the predicate is false
+  onTrue: () => Console.log('Head'), // Runs if the predicate is true
+  onFalse: () => Console.log('Tail'), // Runs if the predicate is false
 })
 
 Effect.runFork(flipTheCoin)
@@ -40,11 +40,9 @@ representing that the effect was skipped.
 **Example** (Conditional Effect Execution)
 
 ```ts twoslash
-import { Effect, Option } from "effect"
+import { Effect, Option } from 'effect'
 
-const validateWeightOption = (
-  weight: number
-): Effect.Effect<Option.Option<number>> =>
+const validateWeightOption = (weight: number): Effect.Effect<Option.Option<number>> =>
   // Conditionally execute the effect if the weight is non-negative
   Effect.succeed(weight).pipe(Effect.when(() => weight >= 0))
 
@@ -91,11 +89,9 @@ representing that the effect was skipped.
 The following function creates a random integer, but only if a randomly generated boolean is `true`.
 
 ```ts twoslash
-import { Effect, Random } from "effect"
+import { Effect, Random } from 'effect'
 
-const randomIntOption = Random.nextInt.pipe(
-  Effect.whenEffect(Random.nextBoolean)
-)
+const randomIntOption = Random.nextInt.pipe(Effect.whenEffect(Random.nextBoolean))
 
 console.log(Effect.runSync(randomIntOption))
 /*

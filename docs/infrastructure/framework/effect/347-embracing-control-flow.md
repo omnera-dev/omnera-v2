@@ -5,15 +5,12 @@ One significant advantage of using `Effect.gen` in conjunction with generators i
 **Example** (Using Control Flow)
 
 ```ts twoslash
-import { Effect } from "effect"
+import { Effect } from 'effect'
 
-const calculateTax = (
-  amount: number,
-  taxRate: number
-): Effect.Effect<number, Error> =>
+const calculateTax = (amount: number, taxRate: number): Effect.Effect<number, Error> =>
   taxRate > 0
     ? Effect.succeed((amount * taxRate) / 100)
-    : Effect.fail(new Error("Invalid tax rate"))
+    : Effect.fail(new Error('Invalid tax rate'))
 
 const program = Effect.gen(function* () {
   let i = 1

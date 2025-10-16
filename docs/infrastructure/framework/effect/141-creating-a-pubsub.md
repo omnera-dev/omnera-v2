@@ -9,7 +9,7 @@ Back pressure ensures that all subscribers receive all messages while they are s
 **Example** (Bounded PubSub Creation)
 
 ```ts twoslash
-import { PubSub } from "effect"
+import { PubSub } from 'effect'
 
 // Creates a bounded PubSub with a capacity of 2
 const boundedPubSub = PubSub.bounded<string>(2)
@@ -24,7 +24,7 @@ In a dropping pubsub, publishers can continue to publish new values, but subscri
 **Example** (Dropping PubSub Creation)
 
 ```ts twoslash
-import { PubSub } from "effect"
+import { PubSub } from 'effect'
 
 // Creates a dropping PubSub with a capacity of 2
 const droppingPubSub = PubSub.dropping<string>(2)
@@ -39,7 +39,7 @@ A sliding pubsub prevents slow subscribers from impacting the message delivery r
 **Example** (Sliding PubSub Creation)
 
 ```ts twoslash
-import { PubSub } from "effect"
+import { PubSub } from 'effect'
 
 // Creates a sliding PubSub with a capacity of 2
 const slidingPubSub = PubSub.sliding<string>(2)
@@ -56,7 +56,7 @@ Generally, it's recommended to use bounded, dropping, or sliding pubsubs unless 
 **Example**
 
 ```ts twoslash
-import { PubSub } from "effect"
+import { PubSub } from 'effect'
 
 // Creates an unbounded PubSub with unlimited capacity
 const unboundedPubSub = PubSub.unbounded<string>()

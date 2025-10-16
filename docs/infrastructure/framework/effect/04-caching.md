@@ -8,7 +8,5 @@ Here's how you can implement caching for the `getUserById` query:
 
 ```ts {3} showLineNumbers=false
 const getUserById = (id: number) =>
-  Effect.request(GetUserById({ id }), GetUserByIdResolver).pipe(
-    Effect.withRequestCaching(true)
-  )
+  Effect.request(GetUserById({ id }), GetUserByIdResolver).pipe(Effect.withRequestCaching(true))
 ```

@@ -5,15 +5,15 @@ In Effect, `runMain` is the primary entry point for executing an Effect applicat
 **Example** (Running an Effect Application with Graceful Teardown)
 
 ```ts
-import { Effect, Console, Schedule, pipe } from "effect"
-import { NodeRuntime } from "@effect/platform-node"
+import { Effect, Console, Schedule, pipe } from 'effect'
+import { NodeRuntime } from '@effect/platform-node'
 
 const program = pipe(
-  Effect.addFinalizer(() => Console.log("Application is about to exit!")),
-  Effect.andThen(Console.log("Application started!")),
+  Effect.addFinalizer(() => Console.log('Application is about to exit!')),
+  Effect.andThen(Console.log('Application started!')),
   Effect.andThen(
-    Effect.repeat(Console.log("still alive..."), {
-      schedule: Schedule.spaced("1 second")
+    Effect.repeat(Console.log('still alive...'), {
+      schedule: Schedule.spaced('1 second'),
     })
   ),
   Effect.scoped

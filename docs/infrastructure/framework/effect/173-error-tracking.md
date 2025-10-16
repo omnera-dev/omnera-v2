@@ -8,11 +8,11 @@ The example below illustrates how errors are automatically tracked for you.
 **Example** (Automatically Tracking Errors)
 
 ```ts twoslash
-import { Effect, Random, Data } from "effect"
+import { Effect, Random, Data } from 'effect'
 
-class HttpError extends Data.TaggedError("HttpError")<{}> {}
+class HttpError extends Data.TaggedError('HttpError')<{}> {}
 
-class ValidationError extends Data.TaggedError("ValidationError")<{}> {}
+class ValidationError extends Data.TaggedError('ValidationError')<{}> {}
 
 //      ┌─── Effect<string, HttpError | ValidationError, never>
 //      ▼
@@ -30,7 +30,7 @@ const program = Effect.gen(function* () {
     return yield* Effect.fail(new ValidationError())
   }
 
-  return "some result"
+  return 'some result'
 })
 ```
 

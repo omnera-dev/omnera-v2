@@ -5,7 +5,7 @@ For more complex data structures, you may need custom equivalences. The Equivale
 **Example** (Creating a Custom Equivalence for Objects)
 
 ```ts twoslash
-import { Equivalence } from "effect"
+import { Equivalence } from 'effect'
 
 interface User {
   readonly id: number
@@ -19,7 +19,7 @@ const equivalence = Equivalence.mapInput(
 )
 
 // Compare two User objects: they are equivalent if their ids are the same
-console.log(equivalence({ id: 1, name: "Alice" }, { id: 1, name: "Al" }))
+console.log(equivalence({ id: 1, name: 'Alice' }, { id: 1, name: 'Al' }))
 // Output: true
 ```
 

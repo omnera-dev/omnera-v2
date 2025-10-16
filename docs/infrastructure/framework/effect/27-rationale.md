@@ -17,7 +17,7 @@ interface B {
 
 // @errors: 2322
 const ab: A & B = {
-  prop: ""
+  prop: '',
 }
 ```
 
@@ -40,7 +40,7 @@ interface B {
 
 // ok
 const ab: A | B = {
-  prop: ""
+  prop: '',
 }
 ```
 

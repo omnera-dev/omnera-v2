@@ -30,10 +30,7 @@ app.use(csrf({ origin: 'https://myapp.example.com' }))
 // Allow multiple origins
 app.use(
   csrf({
-    origin: [
-      'https://myapp.example.com',
-      'https://development.myapp.example.com',
-    ],
+    origin: ['https://myapp.example.com', 'https://development.myapp.example.com'],
   })
 )
 
@@ -47,8 +44,7 @@ app.use(csrf({ secFetchSite: ['same-origin', 'none'] }))
 app.use(
   '*',
   csrf({
-    origin: (origin) =>
-      /https:\/\/(\w+\.)?myapp\.example\.com$/.test(origin),
+    origin: (origin) => /https:\/\/(\w+\.)?myapp\.example\.com$/.test(origin),
   })
 )
 
@@ -59,10 +55,7 @@ app.use(
       // Always allow same-origin
       if (secFetchSite === 'same-origin') return true
       // Allow cross-site for webhook endpoints
-      if (
-        secFetchSite === 'cross-site' &&
-        c.req.path.startsWith('/webhook/')
-      ) {
+      if (secFetchSite === 'cross-site' && c.req.path.startsWith('/webhook/')) {
         return true
       }
       return false
@@ -103,4 +96,3 @@ Standard Sec-Fetch-Site values:
 - `none`: Request not from a web page (e.g., browser address bar, bookmark)
 
 The function handler receives the request's `Sec-Fetch-Site` header value and the request context, enabling dynamic validation based on request properties.
-

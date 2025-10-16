@@ -17,11 +17,11 @@ To create a counter, you can use the `Metric.counter` constructor.
 **Example** (Creating a Counter)
 
 ```ts twoslash
-import { Metric, Effect } from "effect"
+import { Metric, Effect } from 'effect'
 
-const requestCount = Metric.counter("request_count", {
+const requestCount = Metric.counter('request_count', {
   // Optional
-  description: "A counter for tracking requests"
+  description: 'A counter for tracking requests',
 })
 ```
 
@@ -30,9 +30,9 @@ Once created, the counter can accept an effect that returns a `number`, which wi
 **Example** (Using a Counter)
 
 ```ts twoslash
-import { Metric, Effect } from "effect"
+import { Metric, Effect } from 'effect'
 
-const requestCount = Metric.counter("request_count")
+const requestCount = Metric.counter('request_count')
 
 const program = Effect.gen(function* () {
   // Increment the counter by 1
@@ -70,16 +70,16 @@ CounterState {
 You can specify whether the counter tracks a `number` or `bigint`.
 
 ```ts twoslash
-import { Metric } from "effect"
+import { Metric } from 'effect'
 
-const numberCounter = Metric.counter("request_count", {
-  description: "A counter for tracking requests"
+const numberCounter = Metric.counter('request_count', {
+  description: 'A counter for tracking requests',
   // bigint: false // default
 })
 
-const bigintCounter = Metric.counter("error_count", {
-  description: "A counter for tracking errors",
-  bigint: true
+const bigintCounter = Metric.counter('error_count', {
+  description: 'A counter for tracking errors',
+  bigint: true,
 })
 ```
 
@@ -90,11 +90,11 @@ If you need a counter that only increments, you can use the `incremental: true` 
 **Example** (Using an Increment-Only Counter)
 
 ```ts twoslash
-import { Metric, Effect } from "effect"
+import { Metric, Effect } from 'effect'
 
-const incrementalCounter = Metric.counter("count", {
-  description: "a counter that only increases its value",
-  incremental: true
+const incrementalCounter = Metric.counter('count', {
+  description: 'a counter that only increases its value',
+  incremental: true,
 })
 
 const program = Effect.gen(function* () {
@@ -129,15 +129,15 @@ You can configure a counter to always increment by a fixed value each time it is
 **Example** (Constant Input)
 
 ```ts twoslash
-import { Metric, Effect } from "effect"
+import { Metric, Effect } from 'effect'
 
-const taskCount = Metric.counter("task_count").pipe(
+const taskCount = Metric.counter('task_count').pipe(
   Metric.withConstantInput(1) // Automatically increments by 1
 )
 
-const task1 = Effect.succeed(1).pipe(Effect.delay("100 millis"))
-const task2 = Effect.succeed(2).pipe(Effect.delay("200 millis"))
-const task3 = Effect.succeed(-4).pipe(Effect.delay("300 millis"))
+const task1 = Effect.succeed(1).pipe(Effect.delay('100 millis'))
+const task2 = Effect.succeed(2).pipe(Effect.delay('200 millis'))
+const task3 = Effect.succeed(-4).pipe(Effect.delay('300 millis'))
 
 const program = Effect.gen(function* () {
   const a = yield* taskCount(task1)

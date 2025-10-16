@@ -27,7 +27,7 @@ Let's see an example to better understand how `pipe` works:
 **Example** (Chaining Arithmetic Operations)
 
 ```ts twoslash
-import { pipe } from "effect"
+import { pipe } from 'effect'
 
 // Define simple arithmetic operations
 const increment = (x: number) => x + 1

@@ -20,11 +20,11 @@ To create a gauge, you can use the `Metric.gauge` constructor.
 **Example** (Creating a Gauge)
 
 ```ts twoslash
-import { Metric } from "effect"
+import { Metric } from 'effect'
 
-const memory = Metric.gauge("memory_usage", {
+const memory = Metric.gauge('memory_usage', {
   // Optional
-  description: "A gauge for memory usage"
+  description: 'A gauge for memory usage',
 })
 ```
 
@@ -33,10 +33,10 @@ Once created, a gauge can be updated by passing an effect that produces the valu
 **Example** (Using a Gauge)
 
 ```ts twoslash
-import { Metric, Effect, Random } from "effect"
+import { Metric, Effect, Random } from 'effect'
 
 // Create a gauge to track temperature
-const temperature = Metric.gauge("temperature")
+const temperature = Metric.gauge('temperature')
 
 // Simulate fetching a random temperature
 const getTemperature = Effect.gen(function* () {
@@ -86,15 +86,15 @@ GaugeState {
 You can specify whether the gauge tracks a `number` or `bigint`.
 
 ```ts twoslash
-import { Metric } from "effect"
+import { Metric } from 'effect'
 
-const numberGauge = Metric.gauge("memory_usage", {
-  description: "A gauge for memory usage"
+const numberGauge = Metric.gauge('memory_usage', {
+  description: 'A gauge for memory usage',
   // bigint: false // default
 })
 
-const bigintGauge = Metric.gauge("cpu_load", {
-  description: "A gauge for CPU load",
-  bigint: true
+const bigintGauge = Metric.gauge('cpu_load', {
+  description: 'A gauge for CPU load',
+  bigint: true,
 })
 ```

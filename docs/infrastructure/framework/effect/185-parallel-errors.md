@@ -7,14 +7,14 @@ In some cases, you might encounter multiple errors, especially during concurrent
 In this example, both the `fail` and `die` effects are executed concurrently. Since both fail, the program will report multiple errors in the output.
 
 ```ts twoslash
-import { Effect } from "effect"
+import { Effect } from 'effect'
 
-const fail = Effect.fail("Oh uh!")
-const die = Effect.dieMessage("Boom!")
+const fail = Effect.fail('Oh uh!')
+const die = Effect.dieMessage('Boom!')
 
 // Run both effects concurrently
 const program = Effect.all([fail, die], {
-  concurrency: "unbounded"
+  concurrency: 'unbounded',
 }).pipe(Effect.asVoid)
 
 Effect.runPromiseExit(program).then(console.log)
@@ -42,15 +42,15 @@ Effect provides a function called `Effect.parallelErrors` that captures all fail
 In this example, `Effect.parallelErrors` combines the errors from `fail1` and `fail2` into a single error.
 
 ```ts twoslash
-import { Effect } from "effect"
+import { Effect } from 'effect'
 
-const fail1 = Effect.fail("Oh uh!")
-const fail2 = Effect.fail("Oh no!")
-const die = Effect.dieMessage("Boom!")
+const fail1 = Effect.fail('Oh uh!')
+const fail2 = Effect.fail('Oh no!')
+const die = Effect.dieMessage('Boom!')
 
 // Run all effects concurrently and capture all errors
 const program = Effect.all([fail1, fail2, die], {
-  concurrency: "unbounded"
+  concurrency: 'unbounded',
 }).pipe(Effect.asVoid, Effect.parallelErrors)
 
 Effect.runPromiseExit(program).then(console.log)

@@ -9,7 +9,7 @@ This function extracts the value from a `Some`. If the `Option` is `None`, it th
 **Example** (Retrieving Value or Throwing an Error)
 
 ```ts twoslash
-import { Option } from "effect"
+import { Option } from 'effect'
 
 console.log(Option.getOrThrow(Option.some(10)))
 // Output: 10
@@ -25,7 +25,7 @@ These functions convert a `None` to either `null` or `undefined`, which is usefu
 **Example** (Converting `None` to `null` or `undefined`)
 
 ```ts twoslash
-import { Option } from "effect"
+import { Option } from 'effect'
 
 console.log(Option.getOrNull(Option.some(5)))
 // Output: 5
@@ -47,7 +47,7 @@ This function allows you to specify a default value to return when the `Option` 
 **Example** (Providing a Default Value When `None`)
 
 ```ts twoslash
-import { Option } from "effect"
+import { Option } from 'effect'
 
 console.log(Option.getOrElse(Option.some(5), () => 0))
 // Output: 5

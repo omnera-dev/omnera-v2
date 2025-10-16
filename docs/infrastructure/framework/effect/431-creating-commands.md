@@ -5,9 +5,9 @@ The `Command.make` function generates a command object, which includes details s
 **Example** (Defining a Command for Directory Listing)
 
 ```ts twoslash
-import { Command } from "@effect/platform"
+import { Command } from '@effect/platform'
 
-const command = Command.make("ls", "-al")
+const command = Command.make('ls', '-al')
 console.log(command)
 /*
 {

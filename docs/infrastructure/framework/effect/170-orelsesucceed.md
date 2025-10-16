@@ -17,13 +17,13 @@ already succeeds, it will remain unchanged.
 **Example** (Replacing Failure with Success using `Effect.orElseSucceed`)
 
 ```ts twoslash
-import { Effect } from "effect"
+import { Effect } from 'effect'
 
 const validate = (age: number): Effect.Effect<number, string> => {
   if (age < 0) {
-    return Effect.fail("NegativeAgeError")
+    return Effect.fail('NegativeAgeError')
   } else if (age < 18) {
-    return Effect.fail("IllegalAgeError")
+    return Effect.fail('IllegalAgeError')
   } else {
     return Effect.succeed(age)
   }

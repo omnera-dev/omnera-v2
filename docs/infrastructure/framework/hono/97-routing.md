@@ -27,14 +27,10 @@ app.all('/hello', (c) => c.text('Any Method /hello'))
 app.on('PURGE', '/cache', (c) => c.text('PURGE Method /cache'))
 
 // Multiple Method
-app.on(['PUT', 'DELETE'], '/post', (c) =>
-  c.text('PUT or DELETE /post')
-)
+app.on(['PUT', 'DELETE'], '/post', (c) => c.text('PUT or DELETE /post'))
 
 // Multiple Paths
-app.on('GET', ['/hello', '/ja/hello', '/en/hello'], (c) =>
-  c.text('Hello')
-)
+app.on('GET', ['/hello', '/ja/hello', '/en/hello'], (c) => c.text('Hello'))
 ```
 
 ## Path Parameter
@@ -191,9 +187,7 @@ import { Hono } from 'hono'
 // ---cut---
 const app = new Hono({
   getPath: (req) =>
-    '/' +
-    req.headers.get('host') +
-    req.url.replace(/^https?:\/\/[^/]+(\/[^?]*).*/, '$1'),
+    '/' + req.headers.get('host') + req.url.replace(/^https?:\/\/[^/]+(\/[^?]*).*/, '$1'),
 })
 
 app.get('/www1.example.com/hello', (c) => c.text('hello www1'))

@@ -7,12 +7,10 @@ With `Effect.succeed` and `Effect.fail`, you can explicitly handle success and f
 Here's how you can rewrite the [`divide`](#why-not-throw-errors) function using Effect, making error handling explicit.
 
 ```ts twoslash
-import { Effect } from "effect"
+import { Effect } from 'effect'
 
 const divide = (a: number, b: number): Effect.Effect<number, Error> =>
-  b === 0
-    ? Effect.fail(new Error("Cannot divide by zero"))
-    : Effect.succeed(a / b)
+  b === 0 ? Effect.fail(new Error('Cannot divide by zero')) : Effect.succeed(a / b)
 ```
 
 In this example, the `divide` function indicates in its return type `Effect<number, Error>` that the operation can either succeed with a `number` or fail with an `Error`.
@@ -31,7 +29,7 @@ This clear type signature helps ensure that errors are handled properly and that
 Let's imagine another scenario where we use `Effect.succeed` and `Effect.fail` to model a simple user retrieval operation where the user data is hardcoded, which could be useful in testing scenarios or when mocking data:
 
 ```ts twoslash
-import { Effect } from "effect"
+import { Effect } from 'effect'
 
 // Define a User type
 interface User {
@@ -43,8 +41,8 @@ interface User {
 const getUser = (userId: number): Effect.Effect<User, Error> => {
   // Normally, you would access a database or API here, but we'll mock it
   const userDatabase: Record<number, User> = {
-    1: { id: 1, name: "John Doe" },
-    2: { id: 2, name: "Jane Smith" }
+    1: { id: 1, name: 'John Doe' },
+    2: { id: 2, name: 'Jane Smith' },
   }
 
   // Check if the user exists in our "database" and return appropriately
@@ -52,7 +50,7 @@ const getUser = (userId: number): Effect.Effect<User, Error> => {
   if (user) {
     return Effect.succeed(user)
   } else {
-    return Effect.fail(new Error("User not found"))
+    return Effect.fail(new Error('User not found'))
   }
 }
 

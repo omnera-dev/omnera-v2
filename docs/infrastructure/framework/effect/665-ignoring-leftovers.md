@@ -5,15 +5,12 @@ If leftover elements are not needed, you can ignore them using `Sink.ignoreLefto
 **Example** (Ignoring Leftover Elements)
 
 ```ts twoslash
-import { Stream, Sink, Effect } from "effect"
+import { Stream, Sink, Effect } from 'effect'
 
 const stream = Stream.make(1, 2, 3, 4, 5)
 
 // Take the first 3 elements and ignore any remaining elements
-const sink = Sink.take<number>(3).pipe(
-  Sink.ignoreLeftover,
-  Sink.collectLeftover
-)
+const sink = Sink.take<number>(3).pipe(Sink.ignoreLeftover, Sink.collectLeftover)
 
 Effect.runPromise(Stream.run(stream, sink)).then(console.log)
 /*

@@ -21,7 +21,7 @@ Also, when effects with side effects or scoped captures are created, use `Effect
 **Example** (Lazy Evaluation with Side Effects)
 
 ```ts twoslash
-import { Effect } from "effect"
+import { Effect } from 'effect'
 
 let i = 0
 
@@ -53,12 +53,10 @@ For example it's fairly common for `Effect.suspend` to be used in recursive func
 **Example** (Recursive Fibonacci)
 
 ```ts twoslash
-import { Effect } from "effect"
+import { Effect } from 'effect'
 
 const blowsUp = (n: number): Effect.Effect<number> =>
-  n < 2
-    ? Effect.succeed(1)
-    : Effect.zipWith(blowsUp(n - 1), blowsUp(n - 2), (a, b) => a + b)
+  n < 2 ? Effect.succeed(1) : Effect.zipWith(blowsUp(n - 1), blowsUp(n - 2), (a, b) => a + b)
 
 // console.log(Effect.runSync(blowsUp(32)))
 // crash: JavaScript heap out of memory
@@ -93,7 +91,7 @@ In situations where TypeScript struggles to unify the returned effect type, `Eff
 **Example** (Using `Effect.suspend` to Help TypeScript Infer Types)
 
 ```ts twoslash
-import { Effect } from "effect"
+import { Effect } from 'effect'
 
 /*
   Without suspend, TypeScript may struggle with type inference.
@@ -103,9 +101,7 @@ import { Effect } from "effect"
       Effect<never, Error, never> | Effect<number, never, never>
 */
 const withoutSuspend = (a: number, b: number) =>
-  b === 0
-    ? Effect.fail(new Error("Cannot divide by zero"))
-    : Effect.succeed(a / b)
+  b === 0 ? Effect.fail(new Error('Cannot divide by zero')) : Effect.succeed(a / b)
 
 /*
   Using suspend to unify return types.
@@ -115,8 +111,6 @@ const withoutSuspend = (a: number, b: number) =>
 */
 const withSuspend = (a: number, b: number) =>
   Effect.suspend(() =>
-    b === 0
-      ? Effect.fail(new Error("Cannot divide by zero"))
-      : Effect.succeed(a / b)
+    b === 0 ? Effect.fail(new Error('Cannot divide by zero')) : Effect.succeed(a / b)
   )
 ```

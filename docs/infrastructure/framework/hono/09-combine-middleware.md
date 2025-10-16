@@ -30,10 +30,7 @@ const app = new Hono()
 app.use(
   '*',
   some(
-    every(
-      ipRestriction(getConnInfo, { allowList: ['192.168.0.2'] }),
-      bearerAuth({ token })
-    ),
+    every(ipRestriction(getConnInfo, { allowList: ['192.168.0.2'] }), bearerAuth({ token })),
     // If both conditions are met, rateLimit will not execute.
     rateLimit()
   )
@@ -53,10 +50,7 @@ import { myRateLimit } from '@/rate-limit'
 
 // If client has a valid token, skip rate limiting.
 // Otherwise, apply rate limiting.
-app.use(
-  '/api/*',
-  some(bearerAuth({ token }), myRateLimit({ limit: 100 }))
-)
+app.use('/api/*', some(bearerAuth({ token }), myRateLimit({ limit: 100 })))
 ```
 
 ### every
@@ -73,10 +67,7 @@ import { myRateLimit } from '@/rate-limit'
 // Otherwise, apply authentication and rate limiting.
 app.use(
   '/api/*',
-  some(
-    myCheckLocalNetwork(),
-    every(bearerAuth({ token }), myRateLimit({ limit: 100 }))
-  )
+  some(myCheckLocalNetwork(), every(bearerAuth({ token }), myRateLimit({ limit: 100 })))
 )
 ```
 
@@ -92,4 +83,3 @@ import { bearerAuth } from 'hono/bearer-auth'
 // Otherwise, require a valid token.
 app.use('/api/*', except('/api/public/*', bearerAuth({ token })))
 ```
-

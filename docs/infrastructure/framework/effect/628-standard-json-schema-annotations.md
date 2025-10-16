@@ -6,13 +6,13 @@ These annotations allow you to enrich your schemas with metadata that can enhanc
 **Example** (Using Annotations for Metadata)
 
 ```ts twoslash
-import { JSONSchema, Schema } from "effect"
+import { JSONSchema, Schema } from 'effect'
 
 const schema = Schema.String.annotations({
-  description: "my custom description",
-  title: "my custom title",
-  default: "",
-  examples: ["a", "b"]
+  description: 'my custom description',
+  title: 'my custom title',
+  default: '',
+  examples: ['a', 'b'],
 })
 
 const jsonSchema = JSONSchema.make(schema)
@@ -42,15 +42,15 @@ This method is more semantically appropriate as it links descriptive titles and 
 **Example** (Annotated Struct Properties)
 
 ```ts twoslash
-import { JSONSchema, Schema } from "effect"
+import { JSONSchema, Schema } from 'effect'
 
 const Person = Schema.Struct({
   firstName: Schema.propertySignature(Schema.String).annotations({
-    title: "First name"
+    title: 'First name',
   }),
   lastName: Schema.propertySignature(Schema.String).annotations({
-    title: "Last Name"
-  })
+    title: 'Last Name',
+  }),
 })
 
 const jsonSchema = JSONSchema.make(Person)

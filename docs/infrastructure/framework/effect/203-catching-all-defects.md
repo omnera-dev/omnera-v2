@@ -33,24 +33,19 @@ By yielding an `Exit`, we gain the ability to "pattern match" on this type to ha
 **Example** (Catching Defects with `Effect.exit`)
 
 ```ts twoslash
-import { Effect, Cause, Console, Exit } from "effect"
+import { Effect, Cause, Console, Exit } from 'effect'
 
 // Simulating a runtime error
-const task = Effect.dieMessage("Boom!")
+const task = Effect.dieMessage('Boom!')
 
 const program = Effect.gen(function* () {
   const exit = yield* Effect.exit(task)
   if (Exit.isFailure(exit)) {
     const cause = exit.cause
-    if (
-      Cause.isDieType(cause) &&
-      Cause.isRuntimeException(cause.defect)
-    ) {
-      yield* Console.log(
-        `RuntimeException defect caught: ${cause.defect.message}`
-      )
+    if (Cause.isDieType(cause) && Cause.isRuntimeException(cause.defect)) {
+      yield* Console.log(`RuntimeException defect caught: ${cause.defect.message}`)
     } else {
-      yield* Console.log("Unknown failure caught.")
+      yield* Console.log('Unknown failure caught.')
     }
   }
 })
@@ -82,18 +77,16 @@ execution interruptions (like those from [Effect.interrupt](/docs/concurrency/ba
 **Example** (Handling All Defects)
 
 ```ts twoslash
-import { Effect, Cause, Console } from "effect"
+import { Effect, Cause, Console } from 'effect'
 
 // Simulating a runtime error
-const task = Effect.dieMessage("Boom!")
+const task = Effect.dieMessage('Boom!')
 
 const program = Effect.catchAllDefect(task, (defect) => {
   if (Cause.isRuntimeException(defect)) {
-    return Console.log(
-      `RuntimeException defect caught: ${defect.message}`
-    )
+    return Console.log(`RuntimeException defect caught: ${defect.message}`)
   }
-  return Console.log("Unknown defect caught.")
+  return Console.log('Unknown defect caught.')
 })
 
 // We get an Exit.Success because we caught all defects

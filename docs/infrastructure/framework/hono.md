@@ -719,6 +719,7 @@ This is a high-level summary of Hono. For comprehensive documentation covering a
 **Location**: `docs/infrastructure/framework/hono/`
 
 The full documentation (12,797 lines) is split into 97 sections covering:
+
 - All built-in middleware (auth, cache, compress, CORS, CSRF, etc.)
 - Advanced routing patterns
 - WebSocket support

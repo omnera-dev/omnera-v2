@@ -7,13 +7,13 @@ The `PubSub.publishAll` function lets you publish multiple values to the pubsub 
 **Example** (Publishing Multiple Messages)
 
 ```ts twoslash
-import { Effect, PubSub, Queue } from "effect"
+import { Effect, PubSub, Queue } from 'effect'
 
 const program = Effect.scoped(
   Effect.gen(function* () {
     const pubsub = yield* PubSub.bounded<string>(2)
     const dequeue = yield* PubSub.subscribe(pubsub)
-    yield* PubSub.publishAll(pubsub, ["Message 1", "Message 2"])
+    yield* PubSub.publishAll(pubsub, ['Message 1', 'Message 2'])
     console.log(yield* Queue.takeAll(dequeue))
   })
 )
@@ -35,7 +35,7 @@ In contrast, `PubSub.size` returns an effect that determines the current size of
 **Example** (Retrieving PubSub Capacity and Size)
 
 ```ts twoslash
-import { Effect, PubSub } from "effect"
+import { Effect, PubSub } from 'effect'
 
 const program = Effect.gen(function* () {
   const pubsub = yield* PubSub.bounded<number>(2)

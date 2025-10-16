@@ -120,4 +120,3 @@ The `iat` (not before) claim will be verified if present and this is set to `tru
 #### <Badge type="info" text="optional" /> verifyOptions.exp: `boolean`
 
 The `exp` (not before) claim will be verified if present and this is set to `true`. The default is `true`.
-

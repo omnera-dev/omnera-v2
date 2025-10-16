@@ -12,7 +12,7 @@ The `Option` type works as a subtype of the `Effect` type, allowing you to use i
 **Example** (Combining `Option` with `Effect`)
 
 ```ts twoslash
-import { Effect, Option } from "effect"
+import { Effect, Option } from 'effect'
 
 // Function to get the head of an array, returning Option
 const head = <A>(array: ReadonlyArray<A>): Option.Option<A> =>
@@ -21,9 +21,7 @@ const head = <A>(array: ReadonlyArray<A>): Option.Option<A> =>
 // Simulated fetch function that returns Effect
 const fetchData = (): Effect.Effect<string, string> => {
   const success = Math.random() > 0.5
-  return success
-    ? Effect.succeed("some data")
-    : Effect.fail("Failed to fetch data")
+  return success ? Effect.succeed('some data') : Effect.fail('Failed to fetch data')
 }
 
 // Mixing Either and Effect

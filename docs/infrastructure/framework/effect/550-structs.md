@@ -12,7 +12,7 @@ This example defines a struct schema for an object with the following properties
 - `age`: a number
 
 ```ts twoslash
-import { Schema } from "effect"
+import { Schema } from 'effect'
 
 //      ┌─── Schema.Struct<{
 //      │      name: typeof Schema.String;
@@ -21,7 +21,7 @@ import { Schema } from "effect"
 //      ▼
 const schema = Schema.Struct({
   name: Schema.String,
-  age: Schema.Number
+  age: Schema.Number,
 })
 
 // The inferred TypeScript type from the schema
@@ -51,7 +51,7 @@ declare const Struct: (props, ...indexSignatures) => Struct<...>
 **Example** (Adding an Index Signature)
 
 ```ts twoslash
-import { Schema } from "effect"
+import { Schema } from 'effect'
 
 // Define a struct with a specific property "a"
 // and an index signature allowing additional properties
@@ -77,7 +77,7 @@ type Type = typeof schema.Type
 You can achieve the same result using `Schema.Record`:
 
 ```ts twoslash
-import { Schema } from "effect"
+import { Schema } from 'effect'
 
 // Define a struct with a fixed property "a"
 // and a dynamic index signature using Schema.Record
@@ -103,7 +103,7 @@ You can define **one** index signature per key type (`string` or `symbol`). Defi
 **Example** (Valid Multiple Index Signatures)
 
 ```ts twoslash
-import { Schema } from "effect"
+import { Schema } from 'effect'
 
 // Define a struct with a fixed property "a"
 // and valid index signatures for both strings and symbols
@@ -131,7 +131,7 @@ Defining multiple index signatures of the same key type (`string` or `symbol`) w
 **Example** (Invalid Multiple Index Signatures)
 
 ```ts twoslash
-import { Schema } from "effect"
+import { Schema } from 'effect'
 
 Schema.Struct(
   { a: Schema.Number },
@@ -154,15 +154,12 @@ This can lead to unexpected TypeScript behavior.
 **Example** (Conflicting Index Signature)
 
 ```ts twoslash
-import { Schema } from "effect"
+import { Schema } from 'effect'
 
 // Attempting to define a struct with a conflicting index signature
 // - The fixed property "a" is a number
 // - The index signature requires all values to be strings
-const schema = Schema.Struct(
-  { a: Schema.String },
-  { key: Schema.String, value: Schema.Number }
-)
+const schema = Schema.Struct({ a: Schema.String }, { key: Schema.String, value: Schema.Number })
 
 // ❌ Incorrect TypeScript type:
 //
@@ -232,36 +229,30 @@ By using [Schema.transform](/docs/schema/transformations/#transform) and [Schema
 you can preprocess the input data before validation. This approach ensures that fixed properties and index signature properties are treated independently.
 
 ```ts twoslash
-import { Schema } from "effect"
+import { Schema } from 'effect'
 
 // Define a schema for the fixed property "a"
 const FixedProperties = Schema.Struct({
-  a: Schema.String
+  a: Schema.String,
 })
 
 // Define a schema for index signature properties
 const IndexSignatureProperties = Schema.Record({
   // Exclude keys that are already present in FixedProperties
   key: Schema.String.pipe(
-    Schema.filter(
-      (key) => !Object.keys(FixedProperties.fields).includes(key)
-    )
+    Schema.filter((key) => !Object.keys(FixedProperties.fields).includes(key))
   ),
-  value: Schema.Number
+  value: Schema.Number,
 })
 
 // Create a schema that duplicates an object into two parts
-const Duplicate = Schema.transform(
-  Schema.Object,
-  Schema.Tuple(Schema.Object, Schema.Object),
-  {
-    strict: true,
-    // Create a tuple containing the input twice
-    decode: (a) => [a, a] as const,
-    // Merge both parts back when encoding
-    encode: ([a, b]) => ({ ...a, ...b })
-  }
-)
+const Duplicate = Schema.transform(Schema.Object, Schema.Tuple(Schema.Object, Schema.Object), {
+  strict: true,
+  // Create a tuple containing the input twice
+  decode: (a) => [a, a] as const,
+  // Merge both parts back when encoding
+  encode: ([a, b]) => ({ ...a, ...b }),
+})
 
 //      ┌─── Schema<readonly [
 //      |      { readonly a: string; },
@@ -271,16 +262,16 @@ const Duplicate = Schema.transform(
 const Result = Schema.compose(
   Duplicate,
   Schema.Tuple(FixedProperties, IndexSignatureProperties).annotations({
-    parseOptions: { onExcessProperty: "ignore" }
+    parseOptions: { onExcessProperty: 'ignore' },
   })
 )
 
 // Decoding: Separates fixed and indexed properties
-console.log(Schema.decodeUnknownSync(Result)({ a: "a", b: 1, c: 2 }))
+console.log(Schema.decodeUnknownSync(Result)({ a: 'a', b: 1, c: 2 }))
 // Output: [ { a: 'a' }, { b: 1, c: 2 } ]
 
 // Encoding: Combines them back into an object
-console.log(Schema.encodeSync(Result)([{ a: "a" }, { b: 1, c: 2 }]))
+console.log(Schema.encodeSync(Result)([{ a: 'a' }, { b: 1, c: 2 }]))
 // Output: { a: 'a', b: 1, c: 2 }
 ```
 
@@ -291,7 +282,7 @@ You can access the fields and records of a struct schema using the `fields` and 
 **Example** (Accessing Fields and Records)
 
 ```ts twoslash
-import { Schema } from "effect"
+import { Schema } from 'effect'
 
 const schema = Schema.Struct(
   { a: Schema.Number },
@@ -319,11 +310,9 @@ To create a mutable version of the struct, use the `Schema.mutable` function, wh
 **Example** (Creating a Mutable Struct Schema)
 
 ```ts twoslash
-import { Schema } from "effect"
+import { Schema } from 'effect'
 
-const schema = Schema.mutable(
-  Schema.Struct({ a: Schema.String, b: Schema.Number })
-)
+const schema = Schema.mutable(Schema.Struct({ a: Schema.String, b: Schema.Number }))
 
 //     ┌─── { a: string; b: number; }
 //     ▼

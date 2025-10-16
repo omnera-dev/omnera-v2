@@ -13,7 +13,7 @@ The result of `Stream.groupByKey` is a `GroupBy` data type, representing the gro
 In the following example, we use `Stream.groupByKey` to group exam scores by the tens place and count the number of scores in each group:
 
 ```ts twoslash
-import { Stream, GroupBy, Effect, Chunk } from "effect"
+import { Stream, GroupBy, Effect, Chunk } from 'effect'
 
 class Exam {
   constructor(
@@ -24,11 +24,11 @@ class Exam {
 
 // Define a list of exam results
 const examResults = [
-  new Exam("Alex", 64),
-  new Exam("Michael", 97),
-  new Exam("Bill", 77),
-  new Exam("John", 78),
-  new Exam("Bobby", 71)
+  new Exam('Alex', 64),
+  new Exam('Michael', 97),
+  new Exam('Bill', 77),
+  new Exam('John', 78),
+  new Exam('Bobby', 71),
 ]
 
 // Group exam results by the tens place in the score
@@ -39,9 +39,7 @@ const groupByKeyResult = Stream.fromIterable(examResults).pipe(
 // Count the number of exam results in each group
 const stream = GroupBy.evaluate(groupByKeyResult, (key, stream) =>
   Stream.fromEffect(
-    Stream.runCollect(stream).pipe(
-      Effect.andThen((chunk) => [key, Chunk.size(chunk)] as const)
-    )
+    Stream.runCollect(stream).pipe(Effect.andThen((chunk) => [key, Chunk.size(chunk)] as const))
   )
 )
 
@@ -61,18 +59,18 @@ For more complex grouping requirements where partitioning involves effects, you 
 In the following example, we group names by their first letter and count the number of names in each group. Here, the partitioning operation is set up as an effectful operation:
 
 ```ts twoslash
-import { Stream, GroupBy, Effect, Chunk } from "effect"
+import { Stream, GroupBy, Effect, Chunk } from 'effect'
 
 // Group names by their first letter
 const groupByKeyResult = Stream.fromIterable([
-  "Mary",
-  "James",
-  "Robert",
-  "Patricia",
-  "John",
-  "Jennifer",
-  "Rebecca",
-  "Peter"
+  'Mary',
+  'James',
+  'Robert',
+  'Patricia',
+  'John',
+  'Jennifer',
+  'Rebecca',
+  'Peter',
 ]).pipe(
   // Simulate an effectful groupBy operation
   Stream.groupBy((name) => Effect.succeed([name.substring(0, 1), name]))
@@ -81,9 +79,7 @@ const groupByKeyResult = Stream.fromIterable([
 // Count the number of names in each group and display results
 const stream = GroupBy.evaluate(groupByKeyResult, (key, stream) =>
   Stream.fromEffect(
-    Stream.runCollect(stream).pipe(
-      Effect.andThen((chunk) => [key, Chunk.size(chunk)] as const)
-    )
+    Stream.runCollect(stream).pipe(Effect.andThen((chunk) => [key, Chunk.size(chunk)] as const))
   )
 )
 
@@ -104,14 +100,12 @@ The `Stream.grouped` function is ideal for dividing a stream into chunks of a sp
 **Example** (Dividing a Stream into Chunks of 3 Elements)
 
 ```ts twoslash
-import { Stream, Effect } from "effect"
+import { Stream, Effect } from 'effect'
 
 // Create a stream of numbers and group them into chunks of 3
 const stream = Stream.range(0, 8).pipe(Stream.grouped(3))
 
-Effect.runPromise(Stream.runCollect(stream)).then((chunks) =>
-  console.log("%o", chunks)
-)
+Effect.runPromise(Stream.runCollect(stream)).then((chunks) => console.log('%o', chunks))
 /*
 Output:
 {
@@ -135,18 +129,16 @@ The `Stream.groupedWithin` function allows for flexible grouping by creating chu
 In this example, `Stream.groupedWithin(18, "1.5 seconds")` groups the stream into chunks whenever either 18 elements accumulate or 1.5 seconds elapse since the last chunk was created.
 
 ```ts twoslash
-import { Stream, Schedule, Effect, Chunk } from "effect"
+import { Stream, Schedule, Effect, Chunk } from 'effect'
 
 // Create a stream that repeats every second and group by size or time
 const stream = Stream.range(0, 9).pipe(
-  Stream.repeat(Schedule.spaced("1 second")),
-  Stream.groupedWithin(18, "1.5 seconds"),
+  Stream.repeat(Schedule.spaced('1 second')),
+  Stream.groupedWithin(18, '1.5 seconds'),
   Stream.take(3)
 )
 
-Effect.runPromise(Stream.runCollect(stream)).then((chunks) =>
-  console.log(Chunk.toArray(chunks))
-)
+Effect.runPromise(Stream.runCollect(stream)).then((chunks) => console.log(Chunk.toArray(chunks)))
 /*
 Output:
 [

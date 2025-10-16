@@ -12,9 +12,9 @@ To determine the specific type of a `Cause`, use the guards provided in the Caus
 **Example** (Using Guards to Identify Cause Types)
 
 ```ts twoslash
-import { Cause } from "effect"
+import { Cause } from 'effect'
 
-const cause = Cause.fail(new Error("my message"))
+const cause = Cause.fail(new Error('my message'))
 
 if (Cause.isFailType(cause)) {
   console.log(cause.error.message) // Output: my message

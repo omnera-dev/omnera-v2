@@ -12,14 +12,12 @@ Here's how you can create a custom cache and apply it to part of your applicatio
 const program = Effect.gen(function* () {
   const todos = yield* getTodos
   yield* Effect.forEach(todos, (todo) => notifyOwner(todo), {
-    concurrency: "unbounded"
+    concurrency: 'unbounded',
   })
 }).pipe(
-  Effect.repeat(Schedule.fixed("10 seconds")),
+  Effect.repeat(Schedule.fixed('10 seconds')),
   Effect.provide(
-    Layer.setRequestCache(
-      Request.makeCache({ capacity: 256, timeToLive: "60 minutes" })
-    )
+    Layer.setRequestCache(Request.makeCache({ capacity: 256, timeToLive: '60 minutes' }))
   )
 )
 ```

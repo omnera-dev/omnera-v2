@@ -7,7 +7,7 @@ The `make` function creates a `BigDecimal` by specifying a `BigInt` value and a 
 **Example** (Creating a BigDecimal with a Specified Scale)
 
 ```ts twoslash
-import { BigDecimal } from "effect"
+import { BigDecimal } from 'effect'
 
 // Create a BigDecimal from a BigInt (1n) with a scale of 2
 const decimal = BigDecimal.make(1n, 2)
@@ -35,7 +35,7 @@ The `fromBigInt` function creates a `BigDecimal` from a `bigint`. The `scale` de
 **Example** (Creating a BigDecimal from a BigInt)
 
 ```ts twoslash
-import { BigDecimal } from "effect"
+import { BigDecimal } from 'effect'
 
 const decimal = BigDecimal.fromBigInt(10n)
 
@@ -53,9 +53,9 @@ Parses a numerical string into a `BigDecimal`. Returns an `Option<BigDecimal>`:
 **Example** (Parsing a String into a BigDecimal)
 
 ```ts twoslash
-import { BigDecimal } from "effect"
+import { BigDecimal } from 'effect'
 
-const decimal = BigDecimal.fromString("0.02")
+const decimal = BigDecimal.fromString('0.02')
 
 console.log(decimal)
 /*
@@ -75,9 +75,9 @@ The `unsafeFromString` function is a variant of `fromString` that throws an erro
 **Example** (Unsafe Parsing of a String)
 
 ```ts twoslash
-import { BigDecimal } from "effect"
+import { BigDecimal } from 'effect'
 
-const decimal = BigDecimal.unsafeFromString("0.02")
+const decimal = BigDecimal.unsafeFromString('0.02')
 
 console.log(decimal)
 // Output: { _id: 'BigDecimal', value: '2', scale: 2 }
@@ -90,7 +90,7 @@ Creates a `BigDecimal` from a JavaScript `number`. Throws a `RangeError` for non
 **Example** (Unsafe Parsing of a Number)
 
 ```ts twoslash
-import { BigDecimal } from "effect"
+import { BigDecimal } from 'effect'
 
 console.log(BigDecimal.unsafeFromNumber(123.456))
 // Output: { _id: 'BigDecimal', value: '123456', scale: 3 }

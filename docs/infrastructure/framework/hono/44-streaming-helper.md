@@ -98,9 +98,7 @@ app.get('/stream', (c) => {
         console.log('Aborted!')
       })
       // Write a Uint8Array.
-      await stream.write(
-        new Uint8Array([0x48, 0x65, 0x6c, 0x6c, 0x6f])
-      )
+      await stream.write(new Uint8Array([0x48, 0x65, 0x6c, 0x6c, 0x6f]))
       // Pipe a readable stream.
       await stream.pipe(anotherReadableStream)
     },
@@ -121,4 +119,3 @@ If the callback function of the streaming helper throws an error, the `onError` 
 `onError` is a hook to handle errors before the response is sent and overwrite the response. However, when the callback function is executed, the stream has already started, so it cannot be overwritten.
 
 :::
-

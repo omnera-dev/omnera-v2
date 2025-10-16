@@ -9,7 +9,7 @@ The `Stream.buffer` operator queues elements to allow the producer to work indep
 **Example** (Using a Buffer to Handle Speed Mismatch)
 
 ```ts twoslash
-import { Stream, Console, Schedule, Effect } from "effect"
+import { Stream, Console, Schedule, Effect } from 'effect'
 
 const stream = Stream.range(1, 10).pipe(
   // Log each element before buffering
@@ -19,7 +19,7 @@ const stream = Stream.range(1, 10).pipe(
   // Log each element after buffering
   Stream.tap((n) => Console.log(`after buffering: ${n}`)),
   // Add a 5-second delay between each emission
-  Stream.schedule(Schedule.spaced("5 seconds"))
+  Stream.schedule(Schedule.spaced('5 seconds'))
 )
 
 Effect.runPromise(Stream.runCollect(stream)).then(console.log)

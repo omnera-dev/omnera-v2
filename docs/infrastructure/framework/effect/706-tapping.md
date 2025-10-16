@@ -7,7 +7,7 @@ The `Stream.tap` operation allows you to run an effect on each element emitted b
 For example, `Stream.tap` can be used to log each element before and after a mapping operation:
 
 ```ts twoslash
-import { Stream, Console, Effect } from "effect"
+import { Stream, Console, Effect } from 'effect'
 
 const stream = Stream.make(1, 2, 3).pipe(
   Stream.tap((n) => Console.log(`before mapping: ${n}`)),

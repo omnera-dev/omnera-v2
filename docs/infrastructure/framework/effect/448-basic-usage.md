@@ -5,8 +5,8 @@ The module provides a single `Path` [tag](/docs/requirements-management/services
 **Example** (Accessing the Path Service)
 
 ```ts twoslash
-import { Path } from "@effect/platform"
-import { Effect } from "effect"
+import { Path } from '@effect/platform'
+import { Effect } from 'effect'
 
 const program = Effect.gen(function* () {
   const path = yield* Path.Path
@@ -37,14 +37,14 @@ The `Path` interface includes the following operations:
 **Example** (Joining Path Segments)
 
 ```ts twoslash
-import { Path } from "@effect/platform"
-import { Effect } from "effect"
-import { NodeContext, NodeRuntime } from "@effect/platform-node"
+import { Path } from '@effect/platform'
+import { Effect } from 'effect'
+import { NodeContext, NodeRuntime } from '@effect/platform-node'
 
 const program = Effect.gen(function* () {
   const path = yield* Path.Path
 
-  const mypath = path.join("tmp", "file.txt")
+  const mypath = path.join('tmp', 'file.txt')
   console.log(mypath)
 })
 

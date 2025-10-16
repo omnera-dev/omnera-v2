@@ -7,7 +7,7 @@ The `Logger.zip` function combines two loggers into a new logger. This new logge
 **Example** (Combining Two Loggers)
 
 ```ts
-import { Effect, Logger } from "effect"
+import { Effect, Logger } from 'effect'
 
 // Define a custom logger that logs to the console
 const logger = Logger.make(({ logLevel, message }) => {
@@ -20,7 +20,7 @@ const logger = Logger.make(({ logLevel, message }) => {
 //      ▼
 const combined = Logger.zip(Logger.defaultLogger, logger)
 
-const program = Effect.log("something")
+const program = Effect.log('something')
 
 Effect.runFork(
   program.pipe(

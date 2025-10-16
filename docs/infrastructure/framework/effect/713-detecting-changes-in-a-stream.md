@@ -5,7 +5,7 @@ The `Stream.changes` operation detects and emits elements that differ from their
 **Example** (Emitting Distinct Consecutive Elements)
 
 ```ts twoslash
-import { Stream, Effect } from "effect"
+import { Stream, Effect } from 'effect'
 
 const stream = Stream.make(1, 1, 1, 2, 2, 3, 4).pipe(Stream.changes)
 

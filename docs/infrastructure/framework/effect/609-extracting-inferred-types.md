@@ -10,11 +10,11 @@ Once you've defined a schema (`Schema<Type, Encoded, Context>`), you can extract
 **Example** (Extracting Inferred Type)
 
 ```ts twoslash
-import { Schema } from "effect"
+import { Schema } from 'effect'
 
 const Person = Schema.Struct({
   name: Schema.String,
-  age: Schema.Number
+  age: Schema.Number,
 })
 
 // 1. Using the Schema.Type utility
@@ -38,11 +38,11 @@ Alternatively, you can extract the `Person` type using the `interface` keyword, 
 **Example** (Extracting Type with an Interface)
 
 ```ts twoslash
-import { Schema } from "effect"
+import { Schema } from 'effect'
 
 const Person = Schema.Struct({
   name: Schema.String,
-  age: Schema.Number
+  age: Schema.Number,
 })
 
 interface Person extends Schema.Schema.Type<typeof Person> {}
@@ -60,12 +60,12 @@ In a `Schema<Type, Encoded, Context>`, the `Encoded` type can differ from the `T
 **Example** (Extracting the Encoded Type)
 
 ```ts twoslash
-import { Schema } from "effect"
+import { Schema } from 'effect'
 
 const Person = Schema.Struct({
   name: Schema.String,
   // a schema that decodes a string to a number
-  age: Schema.NumberFromString
+  age: Schema.NumberFromString,
 })
 
 // 1. Using the Schema.Encoded utility
@@ -91,12 +91,12 @@ Alternatively, you can define the `PersonEncoded` type using the `interface` key
 **Example** (Extracting Encoded Type with an Interface)
 
 ```ts twoslash
-import { Schema } from "effect"
+import { Schema } from 'effect'
 
 const Person = Schema.Struct({
   name: Schema.String,
   // a schema that decodes a string to a number
-  age: Schema.NumberFromString
+  age: Schema.NumberFromString,
 })
 
 interface PersonEncoded extends Schema.Schema.Encoded<typeof Person> {}
@@ -114,11 +114,11 @@ In a `Schema<Type, Encoded, Context>`, the `Context` type represents any externa
 **Example** (Extracting the Context Type)
 
 ```ts twoslash
-import { Schema } from "effect"
+import { Schema } from 'effect'
 
 const Person = Schema.Struct({
   name: Schema.String,
-  age: Schema.Number
+  age: Schema.Number,
 })
 
 // 1. Using the Schema.Context utility
@@ -137,12 +137,12 @@ When defining a schema, you may want to create a schema with an opaque type. Thi
 To create a schema with an opaque type, you can use the following technique that re-declares the schema:
 
 ```ts twoslash
-import { Schema } from "effect"
+import { Schema } from 'effect'
 
 // Define the schema structure
 const _Person = Schema.Struct({
   name: Schema.String,
-  age: Schema.Number
+  age: Schema.Number,
 })
 
 // Declare the type interface to make it opaque
@@ -159,13 +159,13 @@ Note that the technique shown above becomes more complex when the schema is defi
 **Example** (Opaque Schema with Different Type and Encoded)
 
 ```ts twoslash "NumberFromString"
-import { Schema } from "effect"
+import { Schema } from 'effect'
 
 // Define the schema structure, with a field that
 // decodes a string to a number
 const _Person = Schema.Struct({
   name: Schema.String,
-  age: Schema.NumberFromString
+  age: Schema.NumberFromString,
 })
 
 // Create the `Type` interface for an opaque schema

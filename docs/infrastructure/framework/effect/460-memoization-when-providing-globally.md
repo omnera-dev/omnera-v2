@@ -7,19 +7,17 @@ One important feature of an Effect application is that layers are shared by defa
 For example, assume we have the three services `A`, `B`, and `C`. The implementation of both `B` and `C` is dependent on the `A` service:
 
 ```ts twoslash
-import { Effect, Context, Layer } from "effect"
+import { Effect, Context, Layer } from 'effect'
 
-class A extends Context.Tag("A")<A, { readonly a: number }>() {}
+class A extends Context.Tag('A')<A, { readonly a: number }>() {}
 
-class B extends Context.Tag("B")<B, { readonly b: string }>() {}
+class B extends Context.Tag('B')<B, { readonly b: string }>() {}
 
-class C extends Context.Tag("C")<C, { readonly c: boolean }>() {}
+class C extends Context.Tag('C')<C, { readonly c: boolean }>() {}
 
 const ALive = Layer.effect(
   A,
-  Effect.succeed({ a: 5 }).pipe(
-    Effect.tap(() => Effect.log("initialized"))
-  )
+  Effect.succeed({ a: 5 }).pipe(Effect.tap(() => Effect.log('initialized')))
 )
 
 const BLive = Layer.effect(

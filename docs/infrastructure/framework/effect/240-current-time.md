@@ -7,7 +7,7 @@ Provides the current UTC time as a `Effect<Utc>`, using the [Clock](/docs/requir
 **Example** (Retrieving the Current UTC Time)
 
 ```ts twoslash
-import { DateTime, Effect } from "effect"
+import { DateTime, Effect } from 'effect'
 
 const program = Effect.gen(function* () {
   //      ┌─── Utc
@@ -29,7 +29,7 @@ Retrieves the current UTC time immediately using `Date.now()`, without the [Cloc
 **Example** (Getting the Current UTC Time Immediately)
 
 ```ts twoslash
-import { DateTime } from "effect"
+import { DateTime } from 'effect'
 
 //      ┌─── Utc
 //      ▼

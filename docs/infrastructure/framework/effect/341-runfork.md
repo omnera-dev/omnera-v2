@@ -13,14 +13,11 @@ for all other run functions. It starts a fiber that can be observed or interrupt
 **Example** (Running an Effect in the Background)
 
 ```ts twoslash
-import { Effect, Console, Schedule, Fiber } from "effect"
+import { Effect, Console, Schedule, Fiber } from 'effect'
 
 //      ┌─── Effect<number, never, never>
 //      ▼
-const program = Effect.repeat(
-  Console.log("running..."),
-  Schedule.spaced("200 millis")
-)
+const program = Effect.repeat(Console.log('running...'), Schedule.spaced('200 millis'))
 
 //      ┌─── RuntimeFiber<number, never>
 //      ▼

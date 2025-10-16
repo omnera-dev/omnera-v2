@@ -5,10 +5,10 @@ Think of a `Stream` as an extension of an `Effect`. While an `Effect<A, E, R>` r
 To clarify, let's examine some examples using `Effect`:
 
 ```ts twoslash
-import { Effect, Chunk, Option } from "effect"
+import { Effect, Chunk, Option } from 'effect'
 
 // An Effect that fails with a string error
-const failedEffect = Effect.fail("fail!")
+const failedEffect = Effect.fail('fail!')
 
 // An Effect that produces a single number
 const oneNumberValue = Effect.succeed(3)

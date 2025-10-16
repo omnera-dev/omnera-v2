@@ -5,25 +5,18 @@ To dynamically load the log level from a [configuration](/docs/configuration/) a
 **Example** (Loading Log Level from Configuration)
 
 ```ts twoslash
-import {
-  Effect,
-  Config,
-  Logger,
-  Layer,
-  ConfigProvider,
-  LogLevel
-} from "effect"
+import { Effect, Config, Logger, Layer, ConfigProvider, LogLevel } from 'effect'
 
 // Simulate a program with logs
 const program = Effect.gen(function* () {
-  yield* Effect.logError("ERROR!")
-  yield* Effect.logWarning("WARNING!")
-  yield* Effect.logInfo("INFO!")
-  yield* Effect.logDebug("DEBUG!")
+  yield* Effect.logError('ERROR!')
+  yield* Effect.logWarning('WARNING!')
+  yield* Effect.logInfo('INFO!')
+  yield* Effect.logDebug('DEBUG!')
 })
 
 // Load the log level from the configuration and apply it as a layer
-const LogLevelLive = Config.logLevel("LOG_LEVEL").pipe(
+const LogLevelLive = Config.logLevel('LOG_LEVEL').pipe(
   Effect.andThen((level) =>
     // Set the minimum log level
     Logger.minimumLogLevel(level)
@@ -37,11 +30,7 @@ const configured = Effect.provide(program, LogLevelLive)
 // Test the program using a mock configuration provider
 const test = Effect.provide(
   configured,
-  Layer.setConfigProvider(
-    ConfigProvider.fromMap(
-      new Map([["LOG_LEVEL", LogLevel.Warning.label]])
-    )
-  )
+  Layer.setConfigProvider(ConfigProvider.fromMap(new Map([['LOG_LEVEL', LogLevel.Warning.label]])))
 )
 
 Effect.runFork(test)

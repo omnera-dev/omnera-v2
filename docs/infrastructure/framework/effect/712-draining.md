@@ -5,7 +5,7 @@ Stream draining lets you execute effectful operations within a stream while disc
 **Example** (Executing Effectful Operations without Collecting Values)
 
 ```ts twoslash
-import { Stream, Effect, Random } from "effect"
+import { Stream, Effect, Random } from 'effect'
 
 const stream = Stream.repeatEffect(
   Effect.gen(function* () {

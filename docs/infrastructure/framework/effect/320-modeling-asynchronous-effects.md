@@ -19,7 +19,7 @@ This feature ensures that even unexpected failures in your application are not l
 **Example** (Delayed Message)
 
 ```ts twoslash
-import { Effect } from "effect"
+import { Effect } from 'effect'
 
 const delay = (message: string) =>
   Effect.promise<string>(
@@ -33,7 +33,7 @@ const delay = (message: string) =>
 
 //      ┌─── Effect<string, never, never>
 //      ▼
-const program = delay("Async operation completed successfully!")
+const program = delay('Async operation completed successfully!')
 ```
 
 The `program` value has the type `Effect<string, never, never>` and can be interpreted as an effect that:
@@ -53,13 +53,11 @@ By default if an error occurs, it will be caught and propagated to the error cha
 **Example** (Fetching a TODO Item)
 
 ```ts twoslash
-import { Effect } from "effect"
+import { Effect } from 'effect'
 
 const getTodo = (id: number) =>
   // Will catch any errors and propagate them as UnknownException
-  Effect.tryPromise(() =>
-    fetch(`https://jsonplaceholder.typicode.com/todos/${id}`)
-  )
+  Effect.tryPromise(() => fetch(`https://jsonplaceholder.typicode.com/todos/${id}`))
 
 //      ┌─── Effect<Response, UnknownException, never>
 //      ▼
@@ -79,13 +77,13 @@ If you want more control over what gets propagated to the error channel, you can
 **Example** (Custom Error Handling)
 
 ```ts twoslash {7}
-import { Effect } from "effect"
+import { Effect } from 'effect'
 
 const getTodo = (id: number) =>
   Effect.tryPromise({
     try: () => fetch(`https://jsonplaceholder.typicode.com/todos/${id}`),
     // remap the error
-    catch: (unknown) => new Error(`something went wrong ${unknown}`)
+    catch: (unknown) => new Error(`something went wrong ${unknown}`),
   })
 
 //      ┌─── Effect<Response, Error, never>

@@ -9,7 +9,7 @@ Converts an hrtime(i.e. `[seconds: number, nanos: number]`) into a `Duration`.
 **Example**
 
 ```ts twoslash
-import { Schema } from "effect"
+import { Schema } from 'effect'
 
 const schema = Schema.Duration
 
@@ -39,7 +39,7 @@ The `DurationFromSelf` schema is designed to validate that a given value conform
 **Example**
 
 ```ts twoslash
-import { Schema, Duration } from "effect"
+import { Schema, Duration } from 'effect'
 
 const schema = Schema.DurationFromSelf
 
@@ -72,7 +72,7 @@ Converts a `number` into a `Duration` where the number represents the number of 
 **Example**
 
 ```ts twoslash
-import { Schema } from "effect"
+import { Schema } from 'effect'
 
 const schema = Schema.DurationFromMillis
 
@@ -102,7 +102,7 @@ Converts a `BigInt` into a `Duration` where the number represents the number of 
 **Example**
 
 ```ts twoslash
-import { Schema } from "effect"
+import { Schema } from 'effect'
 
 const schema = Schema.DurationFromNanos
 
@@ -132,11 +132,9 @@ Clamps a `Duration` between a minimum and a maximum value.
 **Example**
 
 ```ts twoslash
-import { Schema, Duration } from "effect"
+import { Schema, Duration } from 'effect'
 
-const schema = Schema.DurationFromSelf.pipe(
-  Schema.clampDuration("5 seconds", "10 seconds")
-)
+const schema = Schema.DurationFromSelf.pipe(Schema.clampDuration('5 seconds', '10 seconds'))
 
 //     ┌─── Duration
 //     ▼
@@ -150,12 +148,12 @@ const decode = Schema.decodeUnknownSync(schema)
 
 // Decoding examples
 
-console.log(decode(Duration.decode("2 seconds")))
+console.log(decode(Duration.decode('2 seconds')))
 // Output: { _id: 'Duration', _tag: 'Millis', millis: 5000 }
 
-console.log(decode(Duration.decode("6 seconds")))
+console.log(decode(Duration.decode('6 seconds')))
 // Output: { _id: 'Duration', _tag: 'Millis', millis: 6000 }
 
-console.log(decode(Duration.decode("11 seconds")))
+console.log(decode(Duration.decode('11 seconds')))
 // Output: { _id: 'Duration', _tag: 'Millis', millis: 10000 }
 ```

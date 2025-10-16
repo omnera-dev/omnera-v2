@@ -12,29 +12,29 @@ logging or other operations).
 **Example** (Handling Different Failure Causes with Side Effects)
 
 ```ts twoslash
-import { Effect, Console } from "effect"
+import { Effect, Console } from 'effect'
 
-const task: Effect.Effect<number, Error> = Effect.die("Uh oh!")
+const task: Effect.Effect<number, Error> = Effect.die('Uh oh!')
 
 const program = Effect.matchCauseEffect(task, {
   onFailure: (cause) => {
     switch (cause._tag) {
-      case "Fail":
+      case 'Fail':
         // Handle standard failure with a logged message
         return Console.log(`Fail: ${cause.error.message}`)
-      case "Die":
+      case 'Die':
         // Handle defects (unexpected errors) by logging the defect
         return Console.log(`Die: ${cause.defect}`)
-      case "Interrupt":
+      case 'Interrupt':
         // Handle interruption and log the fiberId that was interrupted
         return Console.log(`${cause.fiberId} interrupted!`)
     }
     // Fallback for other causes
-    return Console.log("failed due to other causes")
+    return Console.log('failed due to other causes')
   },
   onSuccess: (value) =>
     // Log success if the task completes successfully
-    Console.log(`succeeded with ${value} value`)
+    Console.log(`succeeded with ${value} value`),
 })
 
 Effect.runPromise(program)

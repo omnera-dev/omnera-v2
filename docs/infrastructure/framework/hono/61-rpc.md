@@ -155,10 +155,7 @@ if (res.ok) {
 type ResponseType = InferResponseType<typeof client.posts.$get>
 
 // { post: Post }
-type ResponseType200 = InferResponseType<
-  typeof client.posts.$get,
-  200
->
+type ResponseType200 = InferResponseType<typeof client.posts.$get, 200>
 ```
 
 ## Not Found
@@ -429,3 +426,5 @@ You can set the custom `fetch` method.
 In the following example script for Cloudflare Worker, the Service Bindings' `fetch` method is used instead of the default `fetch`.
 
 ```toml
+
+```

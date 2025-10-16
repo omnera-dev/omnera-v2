@@ -11,7 +11,7 @@ When we employ these services, there's no need to explicitly provide their imple
 **Example** (Using Clock and Console)
 
 ```ts twoslash
-import { Effect, Clock, Console } from "effect"
+import { Effect, Clock, Console } from 'effect'
 
 //      ┌─── Effect<void, never, never>
 //      ▼

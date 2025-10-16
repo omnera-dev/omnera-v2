@@ -5,13 +5,13 @@ The `Schema.required` function ensures that all properties in a schema are manda
 **Example** (Making All Properties Required)
 
 ```ts twoslash
-import { Schema } from "effect"
+import { Schema } from 'effect'
 
 // Create a schema and make all properties required
 const schema = Schema.required(
   Schema.Struct({
     a: Schema.optionalWith(Schema.String, { exact: true }),
-    b: Schema.optionalWith(Schema.Number, { exact: true })
+    b: Schema.optionalWith(Schema.Number, { exact: true }),
   })
 )
 

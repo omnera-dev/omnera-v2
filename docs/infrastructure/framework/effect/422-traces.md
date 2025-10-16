@@ -8,6 +8,6 @@ A trace is made of one or more spans. The first span represents the root span. E
 
 Many Observability back-ends visualize traces as waterfall diagrams that may look something like this:
 
-![Trace Waterfall Diagram](../_assets/waterfall-trace.svg "An image displaying an application trace visualized as a waterfall diagram")
+![Trace Waterfall Diagram](../_assets/waterfall-trace.svg 'An image displaying an application trace visualized as a waterfall diagram')
 
 Waterfall diagrams show the parent-child relationship between a root span and its child spans. When a span encapsulates another span, this also represents a nested relationship.

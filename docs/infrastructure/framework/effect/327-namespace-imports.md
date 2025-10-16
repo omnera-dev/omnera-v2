@@ -3,13 +3,13 @@
 In addition to importing the `Effect` module with a named import, as shown previously:
 
 ```ts showLineNumbers=false
-import { Effect } from "effect"
+import { Effect } from 'effect'
 ```
 
 You can also import it using a namespace import like this:
 
 ```ts showLineNumbers=false
-import * as Effect from "effect/Effect"
+import * as Effect from 'effect/Effect'
 ```
 
 Both forms of import allow you to access the functionalities provided by the `Effect` module.

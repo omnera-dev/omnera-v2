@@ -21,7 +21,7 @@ Sometimes, you might need to replace the default services with custom implementa
 **Example** (Overriding Random Service)
 
 ```ts twoslash
-import { Effect, Random } from "effect"
+import { Effect, Random } from 'effect'
 
 // A program that logs a random number
 const program = Effect.gen(function* () {
@@ -32,7 +32,7 @@ Effect.runSync(program)
 // Example Output: 0.23208633934454326 (varies each run)
 
 // Override the Random service with a seeded generator
-const override = program.pipe(Effect.withRandom(Random.make("myseed")))
+const override = program.pipe(Effect.withRandom(Random.make('myseed')))
 
 Effect.runSync(override)
 // Output: 0.6862142528438508 (consistent output with the seed)

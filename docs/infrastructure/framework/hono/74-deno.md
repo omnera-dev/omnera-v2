@@ -98,8 +98,7 @@ app.get(
   '/static/*',
   serveStatic({
     root: './',
-    rewriteRequestPath: (path) =>
-      path.replace(/^\/static/, '/statics'),
+    rewriteRequestPath: (path) => path.replace(/^\/static/, '/statics'),
   })
 )
 ```
@@ -235,4 +234,3 @@ We also provide many third-party middleware packages on [JSR](https://jsr.io/@ho
   }
 }
 ```
-

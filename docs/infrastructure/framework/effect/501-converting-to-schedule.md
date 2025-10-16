@@ -9,15 +9,7 @@ The `Schedule.cron` function generates a [Schedule](/docs/scheduling/introductio
 **Example** (Creating a Schedule from a Cron)
 
 ```ts twoslash collapse={12-40}
-import {
-  Effect,
-  Schedule,
-  TestClock,
-  Fiber,
-  TestContext,
-  Cron,
-  Console
-} from "effect"
+import { Effect, Schedule, TestClock, Fiber, TestContext, Cron, Console } from 'effect'
 
 // A helper function to log output at each interval of the schedule
 const log = <A>(
@@ -27,24 +19,21 @@ const log = <A>(
   let i = 0
 
   Effect.gen(function* () {
-    const fiber: Fiber.RuntimeFiber<[[number, number], number]> =
-      yield* Effect.gen(function* () {
-        yield* action
-        i++
-      }).pipe(
-        Effect.repeat(
-          schedule.pipe(
-            // Limit the number of iterations for the example
-            Schedule.intersect(Schedule.recurs(10)),
-            Schedule.tapOutput(([Out]) =>
-              Console.log(
-                i === 11 ? "..." : [new Date(Out[0]), new Date(Out[1])]
-              )
-            )
+    const fiber: Fiber.RuntimeFiber<[[number, number], number]> = yield* Effect.gen(function* () {
+      yield* action
+      i++
+    }).pipe(
+      Effect.repeat(
+        schedule.pipe(
+          // Limit the number of iterations for the example
+          Schedule.intersect(Schedule.recurs(10)),
+          Schedule.tapOutput(([Out]) =>
+            Console.log(i === 11 ? '...' : [new Date(Out[0]), new Date(Out[1])])
           )
-        ),
-        Effect.fork
-      )
+        )
+      ),
+      Effect.fork
+    )
     yield* TestClock.adjust(Infinity)
     yield* Fiber.join(fiber)
   }).pipe(Effect.provide(TestContext.TestContext), Effect.runPromise)
@@ -52,7 +41,7 @@ const log = <A>(
 
 // Build a cron that triggers at 4:00 AM
 // on the 8th to the 14th of each month
-const cron = Cron.unsafeParse("0 0 4 8-14 * *", "UTC")
+const cron = Cron.unsafeParse('0 0 4 8-14 * *', 'UTC')
 
 // Convert the Cron into a Schedule
 const schedule = Schedule.cron(cron)

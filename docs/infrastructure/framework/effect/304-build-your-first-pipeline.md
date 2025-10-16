@@ -5,18 +5,15 @@ Let's now combine the `pipe` function, `Effect.all`, and `Effect.andThen` to cre
 **Example** (Building a Transaction Pipeline)
 
 ```ts twoslash
-import { Effect, pipe } from "effect"
+import { Effect, pipe } from 'effect'
 
 // Function to add a small service charge to a transaction amount
 const addServiceCharge = (amount: number) => amount + 1
 
 // Function to apply a discount safely to a transaction amount
-const applyDiscount = (
-  total: number,
-  discountRate: number
-): Effect.Effect<number, Error> =>
+const applyDiscount = (total: number, discountRate: number): Effect.Effect<number, Error> =>
   discountRate === 0
-    ? Effect.fail(new Error("Discount rate cannot be zero"))
+    ? Effect.fail(new Error('Discount rate cannot be zero'))
     : Effect.succeed(total - (total * discountRate) / 100)
 
 // Simulated asynchronous task to fetch a transaction amount from database
@@ -41,9 +38,7 @@ const program = pipe(
   Effect.andThen(addServiceCharge),
 
   // Format the final result for display
-  Effect.andThen(
-    (finalAmount) => `Final amount to charge: ${finalAmount}`
-  )
+  Effect.andThen((finalAmount) => `Final amount to charge: ${finalAmount}`)
 )
 
 // Execute the program and log the result

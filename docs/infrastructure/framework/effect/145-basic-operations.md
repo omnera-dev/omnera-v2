@@ -10,7 +10,7 @@ A `Queue<A>` stores values of type `A` and provides two fundamental operations:
 **Example** (Adding and Retrieving an Item)
 
 ```ts twoslash
-import { Effect, Queue } from "effect"
+import { Effect, Queue } from 'effect'
 
 const program = Effect.gen(function* () {
   // Creates a bounded queue with capacity 100

@@ -13,27 +13,27 @@ These operators offer different strategies for handling cases where the predicat
 **Example** (Filtering Success Values)
 
 ```ts twoslash
-import { Effect, Random, Cause } from "effect"
+import { Effect, Random, Cause } from 'effect'
 
 // Fail with a custom error if predicate is false
 const task1 = Effect.filterOrFail(
   Random.nextRange(-1, 1),
   (n) => n >= 0,
-  () => "random number is negative"
+  () => 'random number is negative'
 )
 
 // Die with a custom exception if predicate is false
 const task2 = Effect.filterOrDie(
   Random.nextRange(-1, 1),
   (n) => n >= 0,
-  () => new Cause.IllegalArgumentException("random number is negative")
+  () => new Cause.IllegalArgumentException('random number is negative')
 )
 
 // Die with a custom error message if predicate is false
 const task3 = Effect.filterOrDieMessage(
   Random.nextRange(-1, 1),
   (n) => n >= 0,
-  "random number is negative"
+  'random number is negative'
 )
 
 // Run an alternative effect if predicate is false
@@ -51,7 +51,7 @@ The filtering APIs can also be combined with [user-defined type guards](https://
 **Example** (Using a Type Guard)
 
 ```ts twoslash {15}
-import { Effect, pipe } from "effect"
+import { Effect, pipe } from 'effect'
 
 // Define a user interface
 interface User {
@@ -66,7 +66,7 @@ const program = pipe(
   // Use filterOrFail with a custom type guard to ensure user is not null
   Effect.filterOrFail(
     (user): user is User => user !== null, // Type guard
-    () => new Error("Unauthorized")
+    () => new Error('Unauthorized')
   ),
   // 'user' now has the type `User` (not `User | null`)
   Effect.andThen((user) => user.name)

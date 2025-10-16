@@ -5,10 +5,10 @@ Sometimes, retries should only happen for certain error conditions. For example,
 **Example** (Retrying Only on Specific Error Codes)
 
 ```ts twoslash
-import { Console, Effect, Data } from "effect"
+import { Console, Effect, Data } from 'effect'
 
 // Custom error class for handling status codes
-class Err extends Data.TaggedError("Err")<{
+class Err extends Data.TaggedError('Err')<{
   readonly message: string
   readonly status: number
 }> {}
@@ -24,7 +24,7 @@ const getJson = (url: string) =>
         }
         return res.json() as unknown
       }),
-    catch: (e) => e as Err
+    catch: (e) => e as Err,
   })
 
 // Program that retries only when the error status is 401 (Unauthorized)
@@ -35,9 +35,7 @@ const program = (url: string) =>
   )
 
 // Test case: API returns 401 (triggers multiple retries)
-Effect.runFork(
-  program("https://dummyjson.com/auth/products/1?delay=1000")
-)
+Effect.runFork(program('https://dummyjson.com/auth/products/1?delay=1000'))
 /*
 Output:
 401
@@ -48,7 +46,7 @@ Output:
 */
 
 // Test case: API returns 404 (no retries)
-Effect.runFork(program("https://dummyjson.com/-"))
+Effect.runFork(program('https://dummyjson.com/-'))
 /*
 Output:
 404

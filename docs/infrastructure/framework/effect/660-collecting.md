@@ -9,7 +9,7 @@ The final output is a chunk containing all elements from the stream, in the orde
 **Example** (Collecting All Stream Elements)
 
 ```ts twoslash
-import { Stream, Sink, Effect } from "effect"
+import { Stream, Sink, Effect } from 'effect'
 
 const stream = Stream.make(1, 2, 3, 4)
 
@@ -27,7 +27,7 @@ To collect a fixed number of elements from a stream into a [Chunk](/docs/data-ty
 **Example** (Collecting a Limited Number of Elements)
 
 ```ts twoslash
-import { Stream, Sink, Effect } from "effect"
+import { Stream, Sink, Effect } from 'effect'
 
 const stream = Stream.make(1, 2, 3, 4, 5)
 
@@ -51,7 +51,7 @@ To gather elements from a stream while they satisfy a specific condition, use `S
 **Example** (Collecting Elements Until a Condition Fails)
 
 ```ts twoslash
-import { Stream, Sink, Effect } from "effect"
+import { Stream, Sink, Effect } from 'effect'
 
 const stream = Stream.make(1, 2, 0, 4, 0, 6, 7)
 
@@ -75,13 +75,11 @@ To accumulate stream elements into a `HashSet`, use `Sink.collectAllToSet()`. Th
 **Example** (Collecting Unique Elements into a HashSet)
 
 ```ts twoslash
-import { Stream, Sink, Effect } from "effect"
+import { Stream, Sink, Effect } from 'effect'
 
 const stream = Stream.make(1, 2, 2, 3, 4, 4)
 
-Effect.runPromise(Stream.run(stream, Sink.collectAllToSet())).then(
-  console.log
-)
+Effect.runPromise(Stream.run(stream, Sink.collectAllToSet())).then(console.log)
 /*
 Output:
 { _id: 'HashSet', values: [ 1, 2, 3, 4 ] }
@@ -95,7 +93,7 @@ For controlled collection into a `HashSet` with a specified maximum size, use `S
 **Example** (Collecting Unique Elements with a Set Size Limit)
 
 ```ts twoslash
-import { Stream, Sink, Effect } from "effect"
+import { Stream, Sink, Effect } from 'effect'
 
 const stream = Stream.make(1, 2, 2, 3, 4, 4)
 
@@ -122,7 +120,7 @@ This sink requires both a key function to define each element's grouping and a m
 In this example, we use `(n) => n % 3` to determine map keys and `(a, b) => a + b` to merge elements with the same key:
 
 ```ts twoslash
-import { Stream, Sink, Effect } from "effect"
+import { Stream, Sink, Effect } from 'effect'
 
 const stream = Stream.make(1, 3, 2, 3, 1, 5, 1)
 
@@ -148,7 +146,7 @@ To accumulate elements into a `HashMap` with a maximum number of keys, use `Sink
 **Example** (Limiting Collected Keys in a HashMap)
 
 ```ts twoslash
-import { Stream, Sink, Effect } from "effect"
+import { Stream, Sink, Effect } from 'effect'
 
 const stream = Stream.make(1, 3, 2, 3, 1, 5, 1)
 

@@ -17,7 +17,7 @@ const success = Promise.resolve(2)
 <TabItem label="Effect">
 
 ```ts twoslash
-import { Effect } from "effect"
+import { Effect } from 'effect'
 
 const success = Effect.succeed(2)
 ```
@@ -35,7 +35,7 @@ Now, let's see how to handle failures with `Promise` and `Effect`:
 <TabItem label="Promise">
 
 ```ts twoslash
-const failure = Promise.reject("Uh oh!")
+const failure = Promise.reject('Uh oh!')
 ```
 
 </TabItem>
@@ -43,9 +43,9 @@ const failure = Promise.reject("Uh oh!")
 <TabItem label="Effect">
 
 ```ts twoslash
-import { Effect } from "effect"
+import { Effect } from 'effect'
 
-const failure = Effect.fail("Uh oh!")
+const failure = Effect.fail('Uh oh!')
 ```
 
 </TabItem>
@@ -63,7 +63,7 @@ Creating operations with custom logic:
 ```ts twoslash
 const task = new Promise<number>((resolve, reject) => {
   setTimeout(() => {
-    Math.random() > 0.5 ? resolve(2) : reject("Uh oh!")
+    Math.random() > 0.5 ? resolve(2) : reject('Uh oh!')
   }, 300)
 })
 ```
@@ -73,11 +73,11 @@ const task = new Promise<number>((resolve, reject) => {
 <TabItem label="Effect">
 
 ```ts twoslash
-import { Effect } from "effect"
+import { Effect } from 'effect'
 
 const task = Effect.gen(function* () {
-  yield* Effect.sleep("300 millis")
-  return Math.random() > 0.5 ? 2 : yield* Effect.fail("Uh oh!")
+  yield* Effect.sleep('300 millis')
+  return Math.random() > 0.5 ? 2 : yield* Effect.fail('Uh oh!')
 })
 ```
 

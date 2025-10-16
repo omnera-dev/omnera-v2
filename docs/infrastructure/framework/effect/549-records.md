@@ -9,7 +9,7 @@ You can define a record with string keys and a specified type for the values.
 **Example** (String Keys with Number Values)
 
 ```ts twoslash
-import { Schema } from "effect"
+import { Schema } from 'effect'
 
 // Define a record schema with string keys and number values
 //
@@ -29,12 +29,12 @@ Records can also use symbols as keys.
 **Example** (Symbol Keys with Number Values)
 
 ```ts twoslash
-import { Schema } from "effect"
+import { Schema } from 'effect'
 
 // Define a record schema with symbol keys and number values
 const schema = Schema.Record({
   key: Schema.SymbolFromSelf,
-  value: Schema.Number
+  value: Schema.Number,
 })
 
 //     ┌─── { readonly [x: symbol]: number; }
@@ -49,13 +49,13 @@ Use a union of literals to restrict keys to a specific set of values.
 **Example** (Union of String Literals as Keys)
 
 ```ts twoslash
-import { Schema } from "effect"
+import { Schema } from 'effect'
 
 // Define a record schema where keys are limited
 // to specific string literals ("a" or "b")
 const schema = Schema.Record({
-  key: Schema.Union(Schema.Literal("a"), Schema.Literal("b")),
-  value: Schema.Number
+  key: Schema.Union(Schema.Literal('a'), Schema.Literal('b')),
+  value: Schema.Number,
 })
 
 //     ┌─── { readonly a: number; readonly b: number; }
@@ -70,13 +70,13 @@ Records can use template literals as keys, allowing for more complex key pattern
 **Example** (Template Literal Keys with Number Values)
 
 ```ts twoslash
-import { Schema } from "effect"
+import { Schema } from 'effect'
 
 // Define a record schema with keys that match
 // the template literal pattern "a${string}"
 const schema = Schema.Record({
-  key: Schema.TemplateLiteral(Schema.Literal("a"), Schema.String),
-  value: Schema.Number
+  key: Schema.TemplateLiteral(Schema.Literal('a'), Schema.String),
+  value: Schema.Number,
 })
 
 //     ┌─── { readonly [x: `a${string}`]: number; }
@@ -91,12 +91,12 @@ You can refine the key type with additional constraints.
 **Example** (Filtering Keys by Minimum Length)
 
 ```ts twoslash
-import { Schema } from "effect"
+import { Schema } from 'effect'
 
 // Define a record schema where keys are strings with a minimum length of 2
 const schema = Schema.Record({
   key: Schema.String.pipe(Schema.minLength(2)),
-  value: Schema.Number
+  value: Schema.Number,
 })
 
 //     ┌─── { readonly [x: string]: number; }
@@ -111,11 +111,11 @@ it is removed from the decoded output instead of triggering an error.
 **Example** (Keys That Do Not Meet Constraints Are Removed)
 
 ```ts twoslash
-import { Schema } from "effect"
+import { Schema } from 'effect'
 
 const schema = Schema.Record({
   key: Schema.String.pipe(Schema.minLength(2)),
-  value: Schema.Number
+  value: Schema.Number,
 })
 
 console.log(Schema.decodeUnknownSync(schema)({ a: 1, bb: 2 }))
@@ -128,17 +128,17 @@ you can set [`onExcessProperty`](/docs/schema/getting-started/#managing-excess-p
 **Example** (Forcing an Error on Invalid Keys)
 
 ```ts twoslash "onExcessProperty"
-import { Schema } from "effect"
+import { Schema } from 'effect'
 
 const schema = Schema.Record({
   key: Schema.String.pipe(Schema.minLength(2)),
-  value: Schema.Number
+  value: Schema.Number,
 })
 
 console.log(
-  Schema.decodeUnknownSync(schema, { onExcessProperty: "error" })({
+  Schema.decodeUnknownSync(schema, { onExcessProperty: 'error' })({
     a: 1,
-    bb: 2
+    bb: 2,
   })
 )
 /*
@@ -157,11 +157,11 @@ Attempting to apply a transformation to keys will result in an `Unsupported key 
 **Example** (Attempting to Transform Keys)
 
 ```ts twoslash
-import { Schema } from "effect"
+import { Schema } from 'effect'
 
 const schema = Schema.Record({
   key: Schema.Trim,
-  value: Schema.NumberFromString
+  value: Schema.NumberFromString,
 })
 /*
 throws:
@@ -183,30 +183,28 @@ A common approach is to use [Schema.transform](/docs/schema/transformations/#tra
 **Example** (Trimming Keys While Decoding)
 
 ```ts twoslash
-import { Schema, Record, identity } from "effect"
+import { Schema, Record, identity } from 'effect'
 
 const schema = Schema.transform(
   // Define the input schema with unprocessed keys
   Schema.Record({
     key: Schema.String,
-    value: Schema.NumberFromString
+    value: Schema.NumberFromString,
   }),
   // Define the output schema with transformed keys
   Schema.Record({
     key: Schema.Trimmed,
-    value: Schema.Number
+    value: Schema.Number,
   }),
   {
     strict: true,
     // Trim keys during decoding
     decode: (record) => Record.mapKeys(record, (key) => key.trim()),
-    encode: identity
+    encode: identity,
   }
 )
 
-console.log(
-  Schema.decodeUnknownSync(schema)({ " key1 ": "1", key2: "2" })
-)
+console.log(Schema.decodeUnknownSync(schema)({ ' key1 ': '1', key2: '2' }))
 // Output: { key1: 1, key2: 2 }
 ```
 
@@ -218,12 +216,10 @@ To create a schema for a mutable record, you can use the `Schema.mutable` functi
 **Example** (Creating a Mutable Record Schema)
 
 ```ts twoslash
-import { Schema } from "effect"
+import { Schema } from 'effect'
 
 // Create a schema for a mutable record with string keys and number values
-const schema = Schema.mutable(
-  Schema.Record({ key: Schema.String, value: Schema.Number })
-)
+const schema = Schema.mutable(Schema.Record({ key: Schema.String, value: Schema.Number }))
 
 //     ┌─── { [x: string]: number; }
 //     ▼
@@ -237,7 +233,7 @@ You can access the `key` and `value` types of a record schema using the `key` an
 **Example** (Accessing Key and Value Types)
 
 ```ts twoslash
-import { Schema } from "effect"
+import { Schema } from 'effect'
 
 const schema = Schema.Record({ key: Schema.String, value: Schema.Number })
 

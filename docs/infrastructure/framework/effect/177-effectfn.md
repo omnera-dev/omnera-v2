@@ -16,12 +16,12 @@ A function can be defined using either:
 **Example** (Creating a Traced Function with a Span Name)
 
 ```ts twoslash
-import { Effect } from "effect"
+import { Effect } from 'effect'
 
-const myfunc = Effect.fn("myspan")(function* <N extends number>(n: N) {
-  yield* Effect.annotateCurrentSpan("n", n) // Attach metadata to the span
+const myfunc = Effect.fn('myspan')(function* <N extends number>(n: N) {
+  yield* Effect.annotateCurrentSpan('n', n) // Attach metadata to the span
   console.log(`got: ${n}`)
-  yield* Effect.fail(new Error("Boom!")) // Simulate failure
+  yield* Effect.fail(new Error('Boom!')) // Simulate failure
 })
 
 Effect.runFork(myfunc(100).pipe(Effect.catchAllCause(Effect.logError)))
@@ -42,25 +42,22 @@ timestamp=... level=ERROR fiber=#0 cause="Error: Boom!
 **Example** (Exporting Spans to the Console)
 
 ```ts twoslash
-import { Effect } from "effect"
-import { NodeSdk } from "@effect/opentelemetry"
-import {
-  ConsoleSpanExporter,
-  BatchSpanProcessor
-} from "@opentelemetry/sdk-trace-base"
+import { Effect } from 'effect'
+import { NodeSdk } from '@effect/opentelemetry'
+import { ConsoleSpanExporter, BatchSpanProcessor } from '@opentelemetry/sdk-trace-base'
 
-const myfunc = Effect.fn("myspan")(function* <N extends number>(n: N) {
-  yield* Effect.annotateCurrentSpan("n", n)
+const myfunc = Effect.fn('myspan')(function* <N extends number>(n: N) {
+  yield* Effect.annotateCurrentSpan('n', n)
   console.log(`got: ${n}`)
-  yield* Effect.fail(new Error("Boom!"))
+  yield* Effect.fail(new Error('Boom!'))
 })
 
 const program = myfunc(100)
 
 const NodeSdkLive = NodeSdk.layer(() => ({
-  resource: { serviceName: "example" },
+  resource: { serviceName: 'example' },
   // Export span data to the console
-  spanProcessor: new BatchSpanProcessor(new ConsoleSpanExporter())
+  spanProcessor: new BatchSpanProcessor(new ConsoleSpanExporter()),
 }))
 
 Effect.runFork(program.pipe(Effect.provide(NodeSdkLive)))
@@ -120,12 +117,12 @@ the starting value of the pipeline.
 **Example** (Creating a Traced Function with a Delay)
 
 ```ts twoslash
-import { Effect } from "effect"
+import { Effect } from 'effect'
 
 const myfunc = Effect.fn(
   function* (n: number) {
     console.log(`got: ${n}`)
-    yield* Effect.fail(new Error("Boom!"))
+    yield* Effect.fail(new Error('Boom!'))
   },
   // You can access both the created effect and the original arguments
   (effect, n) => Effect.delay(effect, `${n / 100} seconds`)

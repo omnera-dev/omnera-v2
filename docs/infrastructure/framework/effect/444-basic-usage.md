@@ -5,8 +5,8 @@ The module exposes a single [service](/docs/requirements-management/services/), 
 **Example** (Accessing the KeyValueStore Service)
 
 ```ts twoslash
-import { KeyValueStore } from "@effect/platform"
-import { Effect } from "effect"
+import { KeyValueStore } from '@effect/platform'
+import { Effect } from 'effect'
 
 const program = Effect.gen(function* () {
   const kv = yield* KeyValueStore.KeyValueStore
@@ -34,11 +34,8 @@ The `KeyValueStore` interface includes the following operations:
 **Example** (Basic Operations with a Key-Value Store)
 
 ```ts twoslash
-import {
-  KeyValueStore,
-  layerMemory
-} from "@effect/platform/KeyValueStore"
-import { Effect } from "effect"
+import { KeyValueStore, layerMemory } from '@effect/platform/KeyValueStore'
+import { Effect } from 'effect'
 
 const program = Effect.gen(function* () {
   const kv = yield* KeyValueStore
@@ -47,15 +44,15 @@ const program = Effect.gen(function* () {
   console.log(yield* kv.size)
 
   // Set a key-value pair
-  yield* kv.set("key", "value")
+  yield* kv.set('key', 'value')
   console.log(yield* kv.size)
 
   // Retrieve the value
-  const value = yield* kv.get("key")
+  const value = yield* kv.get('key')
   console.log(value)
 
   // Remove the key
-  yield* kv.remove("key")
+  yield* kv.remove('key')
   console.log(yield* kv.size)
 })
 

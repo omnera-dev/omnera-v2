@@ -5,10 +5,10 @@ This example demonstrates how to create a complete number-guessing game by readi
 **Example** (Interactive Number Guessing Game)
 
 ```ts twoslash
-import { Terminal } from "@effect/platform"
-import type { PlatformError } from "@effect/platform/Error"
-import { Effect, Option, Random } from "effect"
-import { NodeRuntime, NodeTerminal } from "@effect/platform-node"
+import { Terminal } from '@effect/platform'
+import type { PlatformError } from '@effect/platform/Error'
+import { Effect, Option, Random } from 'effect'
+import { NodeRuntime, NodeTerminal } from '@effect/platform-node'
 
 // Generate a secret random number between 1 and 100
 const secret = Random.nextIntBetween(1, 100)
@@ -29,24 +29,21 @@ const display = (message: string) =>
 // Prompt the user for a guess
 const prompt = Effect.gen(function* () {
   const terminal = yield* Terminal.Terminal
-  yield* terminal.display("Enter a guess: ")
+  yield* terminal.display('Enter a guess: ')
   return yield* terminal.readLine
 })
 
 // Get the user's guess, validating it as an integer between 1 and 100
-const answer: Effect.Effect<
-  number,
-  Terminal.QuitException | PlatformError,
-  Terminal.Terminal
-> = Effect.gen(function* () {
-  const input = yield* prompt
-  const guess = parseGuess(input)
-  if (Option.isNone(guess)) {
-    yield* display("You must enter an integer from 1 to 100")
-    return yield* answer
-  }
-  return guess.value
-})
+const answer: Effect.Effect<number, Terminal.QuitException | PlatformError, Terminal.Terminal> =
+  Effect.gen(function* () {
+    const input = yield* prompt
+    const guess = parseGuess(input)
+    if (Option.isNone(guess)) {
+      yield* display('You must enter an integer from 1 to 100')
+      return yield* answer
+    }
+    return guess.value
+  })
 
 // Check if the guess is too high, too low, or correct
 const check = <A, E, R>(
@@ -57,10 +54,10 @@ const check = <A, E, R>(
 ) =>
   Effect.gen(function* () {
     if (guess > secret) {
-      yield* display("Too high")
+      yield* display('Too high')
       return yield* ko
     } else if (guess < secret) {
-      yield* display("Too low")
+      yield* display('Too low')
       return yield* ko
     } else {
       return yield* ok
@@ -68,16 +65,12 @@ const check = <A, E, R>(
   })
 
 // End the game with a success message
-const end = display("You guessed it!")
+const end = display('You guessed it!')
 
 // Main game loop
 const loop = (
   secret: number
-): Effect.Effect<
-  void,
-  Terminal.QuitException | PlatformError,
-  Terminal.Terminal
-> =>
+): Effect.Effect<void, Terminal.QuitException | PlatformError, Terminal.Terminal> =>
   Effect.gen(function* () {
     const guess = yield* answer
     return yield* check(

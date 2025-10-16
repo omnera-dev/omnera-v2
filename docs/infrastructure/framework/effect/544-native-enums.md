@@ -5,11 +5,11 @@ The Schema module provides support for native TypeScript enums. You can define a
 **Example** (Defining a Schema for an Enum)
 
 ```ts twoslash
-import { Schema } from "effect"
+import { Schema } from 'effect'
 
 enum Fruits {
   Apple,
-  Banana
+  Banana,
 }
 
 //      ┌─── Enums<typeof Fruits>
@@ -27,11 +27,11 @@ type Type = typeof schema.Type
 Enums are accessible through the `enums` property of the schema. You can use this property to retrieve individual members or the entire set of enum values.
 
 ```ts twoslash
-import { Schema } from "effect"
+import { Schema } from 'effect'
 
 enum Fruits {
   Apple,
-  Banana
+  Banana,
 }
 
 const schema = Schema.Enums(Fruits)

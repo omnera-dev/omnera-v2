@@ -138,4 +138,3 @@ test('GET /posts', async () => {
   const res = await app.request('/posts', {}, MOCK_ENV)
 })
 ```
-

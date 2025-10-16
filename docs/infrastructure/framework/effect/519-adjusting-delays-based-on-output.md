@@ -5,12 +5,9 @@ The `Schedule.modifyDelay` combinator allows you to dynamically change the delay
 **Example** (Reducing Delay After a Certain Number of Repetitions)
 
 ```ts twoslash collapse={3-26}
-import { Array, Chunk, Duration, Effect, Schedule } from "effect"
+import { Array, Chunk, Duration, Effect, Schedule } from 'effect'
 
-const log = (
-  schedule: Schedule.Schedule<unknown>,
-  delay: Duration.DurationInput = 0
-): void => {
+const log = (schedule: Schedule.Schedule<unknown>, delay: Duration.DurationInput = 0): void => {
   const maxRecurs = 10
   const delays = Chunk.toArray(
     Effect.runSync(
@@ -24,17 +21,16 @@ const log = (
   delays.forEach((duration, i) => {
     console.log(
       i === maxRecurs
-        ? "..."
+        ? '...'
         : i === delays.length - 1
-        ? "(end)"
-        : `#${i + 1}: ${Duration.toMillis(duration)}ms`
+          ? '(end)'
+          : `#${i + 1}: ${Duration.toMillis(duration)}ms`
     )
   })
 }
 
-const schedule = Schedule.modifyDelay(
-  Schedule.spaced("1 second"),
-  (out, duration) => (out > 2 ? "100 millis" : duration)
+const schedule = Schedule.modifyDelay(Schedule.spaced('1 second'), (out, duration) =>
+  out > 2 ? '100 millis' : duration
 )
 
 log(schedule)

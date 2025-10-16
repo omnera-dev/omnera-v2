@@ -11,7 +11,7 @@ Additionally, you can use the `Deferred.isDone` function to check if a deferred 
 **Example** (Polling and Checking Completion Status)
 
 ```ts twoslash
-import { Effect, Deferred } from "effect"
+import { Effect, Deferred } from 'effect'
 
 const program = Effect.gen(function* () {
   const deferred = yield* Deferred.make<number, string>()

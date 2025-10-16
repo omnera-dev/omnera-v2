@@ -5,7 +5,7 @@ The `Effect.validateFirst` function is similar to `Effect.validateAll` but it re
 **Example** (Returning the First Success)
 
 ```ts twoslash
-import { Effect, Console } from "effect"
+import { Effect, Console } from 'effect'
 
 //      ┌─── Effect<number, string[], never>
 //      ▼

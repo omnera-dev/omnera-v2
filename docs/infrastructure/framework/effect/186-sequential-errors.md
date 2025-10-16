@@ -8,13 +8,13 @@ This happens because regardless of whether the original effect has any errors or
 In this example, both `fail` and the finalizer `die` result in sequential errors, and both are captured.
 
 ```ts twoslash
-import { Effect } from "effect"
+import { Effect } from 'effect'
 
 // Simulate an effect that fails
-const fail = Effect.fail("Oh uh!")
+const fail = Effect.fail('Oh uh!')
 
 // Simulate a finalizer that causes a defect
-const die = Effect.dieMessage("Boom!")
+const die = Effect.dieMessage('Boom!')
 
 // The finalizer 'die' will always run, even if 'fail' fails
 const program = fail.pipe(Effect.ensuring(die))

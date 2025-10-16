@@ -5,12 +5,12 @@ The `extend` static utility allows you to enhance an existing schema class by ad
 **Example** (Extending a Schema Class)
 
 ```ts twoslash
-import { Schema } from "effect"
+import { Schema } from 'effect'
 
 // Define the base class
-class Person extends Schema.Class<Person>("Person")({
+class Person extends Schema.Class<Person>('Person')({
   id: Schema.Number,
-  name: Schema.NonEmptyString
+  name: Schema.NonEmptyString,
 }) {
   // A custom getter that converts the name to uppercase
   get upperName() {
@@ -19,11 +19,9 @@ class Person extends Schema.Class<Person>("Person")({
 }
 
 // Extend the base class to include an "age" field
-class PersonWithAge extends Person.extend<PersonWithAge>("PersonWithAge")(
-  {
-    age: Schema.Number
-  }
-) {
+class PersonWithAge extends Person.extend<PersonWithAge>('PersonWithAge')({
+  age: Schema.Number,
+}) {
   // A custom getter to check if the person is an adult
   get isAdult() {
     return this.age >= 18
@@ -31,7 +29,7 @@ class PersonWithAge extends Person.extend<PersonWithAge>("PersonWithAge")(
 }
 
 // Usage
-const john = new PersonWithAge({ id: 1, name: "John", age: 25 })
+const john = new PersonWithAge({ id: 1, name: 'John', age: 25 })
 console.log(john.upperName) // Output: "JOHN"
 console.log(john.isAdult) // Output: true
 ```
@@ -41,19 +39,19 @@ Note that you can only add additional fields when extending a class.
 **Example** (Attempting to Overwrite Existing Fields)
 
 ```ts twoslash
-import { Schema } from "effect"
+import { Schema } from 'effect'
 
-class Person extends Schema.Class<Person>("Person")({
+class Person extends Schema.Class<Person>('Person')({
   id: Schema.Number,
-  name: Schema.NonEmptyString
+  name: Schema.NonEmptyString,
 }) {
   get upperName() {
     return this.name.toUpperCase()
   }
 }
 
-class BadExtension extends Person.extend<BadExtension>("BadExtension")({
-  name: Schema.Number
+class BadExtension extends Person.extend<BadExtension>('BadExtension')({
+  name: Schema.Number,
 }) {}
 /*
 throws:

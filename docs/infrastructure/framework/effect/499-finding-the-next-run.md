@@ -7,14 +7,14 @@ If `next` cannot find a matching date within a predefined number of iterations, 
 **Example** (Determining the Next Matching Date)
 
 ```ts twoslash
-import { Cron } from "effect"
+import { Cron } from 'effect'
 
 // Define a cron expression for 4:00 AM
 // on the 8th to the 14th of every month
-const cron = Cron.unsafeParse("0 0 4 8-14 * *", "UTC")
+const cron = Cron.unsafeParse('0 0 4 8-14 * *', 'UTC')
 
 // Specify the starting point for the search
-const after = new Date("2025-01-08")
+const after = new Date('2025-01-08')
 
 // Find the next matching date
 const nextDate = Cron.next(cron, after)

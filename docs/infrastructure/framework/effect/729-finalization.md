@@ -5,18 +5,16 @@ In this section, we'll explore the concept of finalization in streams. Finalizat
 Imagine a scenario where our streaming application needs to clean up a temporary directory when it completes its execution. We can achieve this using the `Stream.finalizer` function:
 
 ```ts twoslash
-import { Stream, Console, Effect } from "effect"
+import { Stream, Console, Effect } from 'effect'
 
-const application = Stream.fromEffect(Console.log("Application Logic."))
+const application = Stream.fromEffect(Console.log('Application Logic.'))
 
 const deleteDir = (dir: string) => Console.log(`Deleting dir: ${dir}`)
 
 const program = application.pipe(
   Stream.concat(
     Stream.finalizer(
-      deleteDir("tmp").pipe(
-        Effect.andThen(Console.log("Temporary directory was deleted."))
-      )
+      deleteDir('tmp').pipe(Effect.andThen(Console.log('Temporary directory was deleted.')))
     )
   )
 )

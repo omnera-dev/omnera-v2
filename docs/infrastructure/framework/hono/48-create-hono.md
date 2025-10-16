@@ -12,3 +12,5 @@ When you use `npm create` (or `npx`) arguments intended for the initializer scri
 ::: code-group
 
 ```sh [npm]
+
+```

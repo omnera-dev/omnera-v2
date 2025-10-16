@@ -7,7 +7,7 @@ The `Stream.map` operation applies a specified function to each element in a str
 **Example** (Incrementing Each Element by 1)
 
 ```ts twoslash
-import { Stream, Effect } from "effect"
+import { Stream, Effect } from 'effect'
 
 const stream = Stream.make(1, 2, 3).pipe(
   Stream.map((n) => n + 1) // Increment each element by 1
@@ -27,7 +27,7 @@ The `Stream.as` method allows you to replace each success value in a stream with
 **Example** (Mapping to `null`)
 
 ```ts twoslash
-import { Stream, Effect } from "effect"
+import { Stream, Effect } from 'effect'
 
 const stream = Stream.range(1, 5).pipe(Stream.as(null))
 
@@ -45,7 +45,7 @@ For transformations involving effects, use `Stream.mapEffect`. This function app
 **Example** (Random Number Generation)
 
 ```ts twoslash
-import { Stream, Random, Effect } from "effect"
+import { Stream, Random, Effect } from 'effect'
 
 const stream = Stream.make(10, 20, 30).pipe(
   // Generate a random number between 0 and each element
@@ -64,17 +64,17 @@ To handle multiple effectful transformations concurrently, you can use the [conc
 **Example** (Fetching URLs Concurrently)
 
 ```ts twoslash
-import { Stream, Effect } from "effect"
+import { Stream, Effect } from 'effect'
 
 const fetchUrl = (url: string) =>
   Effect.gen(function* () {
     console.log(`Fetching ${url}`)
-    yield* Effect.sleep("100 millis")
+    yield* Effect.sleep('100 millis')
     console.log(`Fetching ${url} done`)
     return [`Resource 0-${url}`, `Resource 1-${url}`, `Resource 2-${url}`]
   })
 
-const stream = Stream.make("url1", "url2", "url3").pipe(
+const stream = Stream.make('url1', 'url2', 'url3').pipe(
   // Fetch each URL concurrently with a limit of 2
   Stream.mapEffect(fetchUrl, { concurrency: 2 })
 )
@@ -106,7 +106,7 @@ Fetching url3 done
 **Example** (Calculating a Running Total)
 
 ```ts twoslash
-import { Stream, Effect } from "effect"
+import { Stream, Effect } from 'effect'
 
 const stream = Stream.range(1, 5).pipe(
   //                                  ┌─── next state
@@ -129,11 +129,9 @@ The `Stream.mapConcat` operation is similar to `Stream.map`, but it goes further
 **Example** (Splitting and Flattening a Stream)
 
 ```ts twoslash
-import { Stream, Effect } from "effect"
+import { Stream, Effect } from 'effect'
 
-const numbers = Stream.make("1-2-3", "4-5", "6").pipe(
-  Stream.mapConcat((s) => s.split("-"))
-)
+const numbers = Stream.make('1-2-3', '4-5', '6').pipe(Stream.mapConcat((s) => s.split('-')))
 
 Effect.runPromise(Stream.runCollect(numbers)).then(console.log)
 /*

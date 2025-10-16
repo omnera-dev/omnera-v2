@@ -16,7 +16,7 @@ The `BigDecimal.normalize` function adjusts the scale of a `BigDecimal` and elim
 **Example** (Normalizing a BigDecimal)
 
 ```ts twoslash
-import { BigDecimal } from "effect"
+import { BigDecimal } from 'effect'
 
 const dec = BigDecimal.make(1050n, 3)
 
@@ -31,7 +31,7 @@ To check if two `BigDecimal` values are numerically equal, regardless of their i
 **Example** (Checking Equality)
 
 ```ts twoslash
-import { BigDecimal } from "effect"
+import { BigDecimal } from 'effect'
 
 const dec1 = BigDecimal.make(105n, 2)
 const dec2 = BigDecimal.make(1050n, 3)

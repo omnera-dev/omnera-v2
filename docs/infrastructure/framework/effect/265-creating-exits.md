@@ -11,7 +11,7 @@ You use this function when you want to indicate that a computation completed suc
 **Example** (Creating a Successful Exit)
 
 ```ts twoslash
-import { Exit } from "effect"
+import { Exit } from 'effect'
 
 // Create an Exit representing a successful outcome with the value 42
 //
@@ -31,13 +31,13 @@ The failure is described using a [Cause](/docs/data-types/cause/) object, which 
 **Example** (Creating a Failed Exit)
 
 ```ts twoslash
-import { Exit, Cause } from "effect"
+import { Exit, Cause } from 'effect'
 
 // Create an Exit representing a failure with an error message
 //
 //      ┌─── Exit<never, string>
 //      ▼
-const failureExit = Exit.failCause(Cause.fail("Something went wrong"))
+const failureExit = Exit.failCause(Cause.fail('Something went wrong'))
 
 console.log(failureExit)
 /*

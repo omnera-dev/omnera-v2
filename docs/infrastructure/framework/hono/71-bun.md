@@ -113,8 +113,7 @@ app.get(
   '/static/*',
   serveStatic({
     root: './',
-    rewriteRequestPath: (path) =>
-      path.replace(/^\/static/, '/statics'),
+    rewriteRequestPath: (path) => path.replace(/^\/static/, '/statics'),
   })
 )
 ```
@@ -201,4 +200,3 @@ Then, run the command.
 ```sh
 bun test index.test.ts
 ```
-

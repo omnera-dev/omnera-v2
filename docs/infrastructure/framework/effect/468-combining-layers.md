@@ -7,10 +7,10 @@ Layers can be combined in two primary ways: **merging** and **composing**.
 Layers can be combined through merging using the `Layer.merge` function:
 
 ```ts twoslash
-import { Layer } from "effect"
+import { Layer } from 'effect'
 
-declare const layer1: Layer.Layer<"Out1", never, "In1">
-declare const layer2: Layer.Layer<"Out2", never, "In2">
+declare const layer1: Layer.Layer<'Out1', never, 'In1'>
+declare const layer2: Layer.Layer<'Out2', never, 'In2'>
 
 // Layer<"Out1" | "Out2", never, "In1" | "In2">
 const merging = Layer.merge(layer1, layer2)
@@ -24,10 +24,10 @@ When we merge two layers, the resulting layer:
 For example, in our web application above, we can merge our `ConfigLive` and `LoggerLive` layers into a single `AppConfigLive` layer, which retains the requirements of both layers (`never | Config = Config`) and the outputs of both layers (`Config | Logger`):
 
 ```ts twoslash collapse={4-20,23-41}
-import { Effect, Context, Layer } from "effect"
+import { Effect, Context, Layer } from 'effect'
 
 // Declaring a tag for the Config service
-class Config extends Context.Tag("Config")<
+class Config extends Context.Tag('Config')<
   Config,
   {
     readonly getConfig: Effect.Effect<{
@@ -40,13 +40,13 @@ class Config extends Context.Tag("Config")<
 // Layer<Config, never, never>
 const ConfigLive = Layer.succeed(Config, {
   getConfig: Effect.succeed({
-    logLevel: "INFO",
-    connection: "mysql://username:password@hostname:port/database_name"
-  })
+    logLevel: 'INFO',
+    connection: 'mysql://username:password@hostname:port/database_name',
+  }),
 })
 
 // Declaring a tag for the Logger service
-class Logger extends Context.Tag("Logger")<
+class Logger extends Context.Tag('Logger')<
   Logger,
   { readonly log: (message: string) => Effect.Effect<void> }
 >() {}
@@ -61,7 +61,7 @@ const LoggerLive = Layer.effect(
         Effect.gen(function* () {
           const { logLevel } = yield* config.getConfig
           console.log(`[${logLevel}] ${message}`)
-        })
+        }),
     }
   })
 )
@@ -75,10 +75,10 @@ const AppConfigLive = Layer.merge(ConfigLive, LoggerLive)
 Layers can be composed using the `Layer.provide` function:
 
 ```ts twoslash
-import { Layer } from "effect"
+import { Layer } from 'effect'
 
-declare const inner: Layer.Layer<"OutInner", never, "InInner">
-declare const outer: Layer.Layer<"InInner", never, "InOuter">
+declare const inner: Layer.Layer<'OutInner', never, 'InInner'>
+declare const outer: Layer.Layer<'InInner', never, 'InOuter'>
 
 // Layer<"OutInner", never, "InOuter">
 const composition = Layer.provide(inner, outer)
@@ -90,10 +90,10 @@ resulting in a single layer with the requirements of the outer layer and the out
 Now we can compose the `AppConfigLive` layer with the `DatabaseLive` layer:
 
 ```ts twoslash collapse={4-20,23-41,44-64}
-import { Effect, Context, Layer } from "effect"
+import { Effect, Context, Layer } from 'effect'
 
 // Declaring a tag for the Config service
-class Config extends Context.Tag("Config")<
+class Config extends Context.Tag('Config')<
   Config,
   {
     readonly getConfig: Effect.Effect<{
@@ -106,13 +106,13 @@ class Config extends Context.Tag("Config")<
 // Layer<Config, never, never>
 const ConfigLive = Layer.succeed(Config, {
   getConfig: Effect.succeed({
-    logLevel: "INFO",
-    connection: "mysql://username:password@hostname:port/database_name"
-  })
+    logLevel: 'INFO',
+    connection: 'mysql://username:password@hostname:port/database_name',
+  }),
 })
 
 // Declaring a tag for the Logger service
-class Logger extends Context.Tag("Logger")<
+class Logger extends Context.Tag('Logger')<
   Logger,
   { readonly log: (message: string) => Effect.Effect<void> }
 >() {}
@@ -127,13 +127,13 @@ const LoggerLive = Layer.effect(
         Effect.gen(function* () {
           const { logLevel } = yield* config.getConfig
           console.log(`[${logLevel}] ${message}`)
-        })
+        }),
     }
   })
 )
 
 // Declaring a tag for the Database service
-class Database extends Context.Tag("Database")<
+class Database extends Context.Tag('Database')<
   Database,
   { readonly query: (sql: string) => Effect.Effect<unknown> }
 >() {}
@@ -150,7 +150,7 @@ const DatabaseLive = Layer.effect(
           yield* logger.log(`Executing query: ${sql}`)
           const { connection } = yield* config.getConfig
           return { result: `Results from ${connection}` }
-        })
+        }),
     }
   })
 )
@@ -180,10 +180,10 @@ This layer is the fully resolved layer for our application.
 Let's say we want our `MainLive` layer to return both the `Config` and `Database` services. We can achieve this with `Layer.provideMerge`:
 
 ```ts twoslash collapse={4-19,22-39,42-61}
-import { Effect, Context, Layer } from "effect"
+import { Effect, Context, Layer } from 'effect'
 
 // Declaring a tag for the Config service
-class Config extends Context.Tag("Config")<
+class Config extends Context.Tag('Config')<
   Config,
   {
     readonly getConfig: Effect.Effect<{
@@ -195,13 +195,13 @@ class Config extends Context.Tag("Config")<
 
 const ConfigLive = Layer.succeed(Config, {
   getConfig: Effect.succeed({
-    logLevel: "INFO",
-    connection: "mysql://username:password@hostname:port/database_name"
-  })
+    logLevel: 'INFO',
+    connection: 'mysql://username:password@hostname:port/database_name',
+  }),
 })
 
 // Declaring a tag for the Logger service
-class Logger extends Context.Tag("Logger")<
+class Logger extends Context.Tag('Logger')<
   Logger,
   { readonly log: (message: string) => Effect.Effect<void> }
 >() {}
@@ -215,13 +215,13 @@ const LoggerLive = Layer.effect(
         Effect.gen(function* () {
           const { logLevel } = yield* config.getConfig
           console.log(`[${logLevel}] ${message}`)
-        })
+        }),
     }
   })
 )
 
 // Declaring a tag for the Database service
-class Database extends Context.Tag("Database")<
+class Database extends Context.Tag('Database')<
   Database,
   { readonly query: (sql: string) => Effect.Effect<unknown> }
 >() {}
@@ -237,7 +237,7 @@ const DatabaseLive = Layer.effect(
           yield* logger.log(`Executing query: ${sql}`)
           const { connection } = yield* config.getConfig
           return { result: `Results from ${connection}` }
-        })
+        }),
     }
   })
 )
@@ -246,8 +246,5 @@ const DatabaseLive = Layer.effect(
 const AppConfigLive = Layer.merge(ConfigLive, LoggerLive)
 
 // Layer<Config | Database, never, never>
-const MainLive = DatabaseLive.pipe(
-  Layer.provide(AppConfigLive),
-  Layer.provideMerge(ConfigLive)
-)
+const MainLive = DatabaseLive.pipe(Layer.provide(AppConfigLive), Layer.provideMerge(ConfigLive))
 ```

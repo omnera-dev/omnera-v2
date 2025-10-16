@@ -13,7 +13,7 @@ This is because these types can hold almost any kind of value.
 **Example** (Comparing Empty Objects Using Reference Equality)
 
 ```ts twoslash
-import { Schema } from "effect"
+import { Schema } from 'effect'
 
 const schema = Schema.Struct({})
 

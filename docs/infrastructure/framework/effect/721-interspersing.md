@@ -9,7 +9,7 @@ The `Stream.intersperse` operator inserts a specified delimiter element between 
 **Example** (Inserting Delimiters Between Stream Elements)
 
 ```ts twoslash
-import { Stream, Effect } from "effect"
+import { Stream, Effect } from 'effect'
 
 // Create a stream of numbers and intersperse `0` between them
 const stream = Stream.make(1, 2, 3, 4, 5).pipe(Stream.intersperse(0))
@@ -34,7 +34,7 @@ For more complex needs, `Stream.intersperseAffixes` provides control over differ
 **Example** (Adding Affixes to a Stream)
 
 ```ts twoslash
-import { Stream, Effect } from "effect"
+import { Stream, Effect } from 'effect'
 
 // Create a stream and add affixes:
 // - `[` at the start
@@ -42,9 +42,9 @@ import { Stream, Effect } from "effect"
 // - `]` at the end
 const stream = Stream.make(1, 2, 3, 4, 5).pipe(
   Stream.intersperseAffixes({
-    start: "[",
-    middle: "|",
-    end: "]"
+    start: '[',
+    middle: '|',
+    end: ']',
   })
 )
 

@@ -17,15 +17,15 @@ The `Schema.decodeUnknownSync` function is useful when you want to parse a value
 **Example** (Using `decodeUnknownSync` for Immediate Decoding)
 
 ```ts twoslash
-import { Schema } from "effect"
+import { Schema } from 'effect'
 
 const Person = Schema.Struct({
   name: Schema.String,
-  age: Schema.Number
+  age: Schema.Number,
 })
 
 // Simulate an unknown input
-const input: unknown = { name: "Alice", age: 30 }
+const input: unknown = { name: 'Alice', age: 30 }
 
 // Example of valid input matching the schema
 console.log(Schema.decodeUnknownSync(Person)(input))
@@ -46,18 +46,18 @@ The `Schema.decodeUnknownEither` function allows you to parse a value and receiv
 **Example** (Using `Schema.decodeUnknownEither` for Error Handling)
 
 ```ts twoslash
-import { Schema } from "effect"
-import { Either } from "effect"
+import { Schema } from 'effect'
+import { Either } from 'effect'
 
 const Person = Schema.Struct({
   name: Schema.String,
-  age: Schema.Number
+  age: Schema.Number,
 })
 
 const decode = Schema.decodeUnknownEither(Person)
 
 // Simulate an unknown input
-const input: unknown = { name: "Alice", age: 30 }
+const input: unknown = { name: 'Alice', age: 30 }
 
 // Attempt decoding a valid input
 const result1 = decode(input)
@@ -91,26 +91,22 @@ In such cases, you should use the `Schema.decodeUnknown` function, which returns
 **Example** (Handling Asynchronous Decoding)
 
 ```ts twoslash
-import { Schema } from "effect"
-import { Effect } from "effect"
+import { Schema } from 'effect'
+import { Effect } from 'effect'
 
 const PersonId = Schema.Number
 
 const Person = Schema.Struct({
   id: PersonId,
   name: Schema.String,
-  age: Schema.Number
+  age: Schema.Number,
 })
 
 const asyncSchema = Schema.transformOrFail(PersonId, Person, {
   strict: true,
   // Decode with simulated async transformation
-  decode: (id) =>
-    Effect.succeed({ id, name: "name", age: 18 }).pipe(
-      Effect.delay("10 millis")
-    ),
-  encode: (person) =>
-    Effect.succeed(person.id).pipe(Effect.delay("10 millis"))
+  decode: (id) => Effect.succeed({ id, name: 'name', age: 18 }).pipe(Effect.delay('10 millis')),
+  encode: (person) => Effect.succeed(person.id).pipe(Effect.delay('10 millis')),
 })
 
 // Attempting to use a synchronous decoder on an async schema

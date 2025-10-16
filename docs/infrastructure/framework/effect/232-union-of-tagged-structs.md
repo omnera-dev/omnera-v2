@@ -10,7 +10,7 @@ and the values define the structure of the corresponding data types.
 **Example** (Defining a Tagged Union and Checking Equality)
 
 ```ts twoslash
-import { Data, Equal } from "effect"
+import { Data, Equal } from 'effect'
 
 // Define a union type using TaggedEnum
 type RemoteData = Data.TaggedEnum<{
@@ -24,9 +24,9 @@ const { Loading, Success, Failure } = Data.taggedEnum<RemoteData>()
 
 // Instantiate different states
 const state1 = Loading()
-const state2 = Success({ data: "test" })
-const state3 = Success({ data: "test" })
-const state4 = Failure({ reason: "not found" })
+const state2 = Success({ data: 'test' })
+const state3 = Success({ data: 'test' })
+const state4 = Failure({ reason: 'not found' })
 
 // Check equality between states
 console.log(Equal.equals(state2, state3)) // Output: true
@@ -50,7 +50,7 @@ The `Data.taggedEnum` provides `$is` and `$match` functions for convenient type 
 **Example** (Using Type Guards and Pattern Matching)
 
 ```ts twoslash
-import { Data } from "effect"
+import { Data } from 'effect'
 
 type RemoteData = Data.TaggedEnum<{
   Loading: {}
@@ -61,21 +61,21 @@ type RemoteData = Data.TaggedEnum<{
 const { $is, $match, Loading, Success } = Data.taggedEnum<RemoteData>()
 
 // Use `$is` to create a type guard for "Loading"
-const isLoading = $is("Loading")
+const isLoading = $is('Loading')
 
 console.log(isLoading(Loading()))
 // Output: true
-console.log(isLoading(Success({ data: "test" })))
+console.log(isLoading(Success({ data: 'test' })))
 // Output: false
 
 // Use `$match` for pattern matching
 const matcher = $match({
-  Loading: () => "this is a Loading",
+  Loading: () => 'this is a Loading',
   Success: ({ data }) => `this is a Success: ${data}`,
-  Failure: ({ reason }) => `this is a Failure: ${reason}`
+  Failure: ({ reason }) => `this is a Failure: ${reason}`,
 })
 
-console.log(matcher(Success({ data: "test" })))
+console.log(matcher(Success({ data: 'test' })))
 // Output: "this is a Success: test"
 ```
 
@@ -86,7 +86,7 @@ You can create more flexible and reusable tagged unions by using `TaggedEnum.Wit
 **Example** (Using Generics with TaggedEnum)
 
 ```ts twoslash
-import { Data } from "effect"
+import { Data } from 'effect'
 
 // Define a generic TaggedEnum for RemoteData
 type RemoteData<Success, Failure> = Data.TaggedEnum<{
@@ -97,15 +97,14 @@ type RemoteData<Success, Failure> = Data.TaggedEnum<{
 
 // Extend TaggedEnum.WithGenerics to add generics
 interface RemoteDataDefinition extends Data.TaggedEnum.WithGenerics<2> {
-  readonly taggedEnum: RemoteData<this["A"], this["B"]>
+  readonly taggedEnum: RemoteData<this['A'], this['B']>
 }
 
 // Create constructors for the generic RemoteData
-const { Loading, Failure, Success } =
-  Data.taggedEnum<RemoteDataDefinition>()
+const { Loading, Failure, Success } = Data.taggedEnum<RemoteDataDefinition>()
 
 // Instantiate each case with specific types
 const loading = Loading()
-const failure = Failure({ reason: "not found" })
+const failure = Failure({ reason: 'not found' })
 const success = Success({ data: 1 })
 ```

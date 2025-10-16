@@ -16,7 +16,7 @@ You can complete a deferred in several ways, depending on whether you want to su
 **Example** (Completing a Deferred with Success)
 
 ```ts twoslash
-import { Effect, Deferred } from "effect"
+import { Effect, Deferred } from 'effect'
 
 const program = Effect.gen(function* () {
   const deferred = yield* Deferred.make<number, string>()
@@ -39,13 +39,13 @@ Completing a deferred produces an `Effect<boolean>`. This effect returns `true` 
 **Example** (Checking Completion Status)
 
 ```ts twoslash
-import { Effect, Deferred } from "effect"
+import { Effect, Deferred } from 'effect'
 
 const program = Effect.gen(function* () {
   const deferred = yield* Deferred.make<number, string>()
 
   // Attempt to fail the Deferred
-  const firstAttempt = yield* Deferred.fail(deferred, "oh no!")
+  const firstAttempt = yield* Deferred.fail(deferred, 'oh no!')
 
   // Attempt to succeed after it has already been completed
   const secondAttempt = yield* Deferred.succeed(deferred, 1)

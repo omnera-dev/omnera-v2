@@ -9,21 +9,21 @@ The `parse(cronExpression, tz?)` function safely parses a cron string into a `Cr
 **Example** (Safely Parsing a Cron Expression)
 
 ```ts twoslash
-import { Either, Cron } from "effect"
+import { Either, Cron } from 'effect'
 
 // Define a cron expression for 4:00 AM
 // on the 8th to the 14th of every month
-const expression = "0 0 4 8-14 * *"
+const expression = '0 0 4 8-14 * *'
 
 // Parse the cron expression
 const eitherCron = Cron.parse(expression)
 
 if (Either.isRight(eitherCron)) {
   // Successfully parsed
-  console.log("Parsed cron:", eitherCron.right)
+  console.log('Parsed cron:', eitherCron.right)
 } else {
   // Parsing failed
-  console.error("Failed to parse cron:", eitherCron.left.message)
+  console.error('Failed to parse cron:', eitherCron.left.message)
 }
 ```
 
@@ -34,10 +34,10 @@ The `unsafeParse(cronExpression, tz?)` function works like [parse](#parse), but 
 **Example** (Parsing a Cron Expression)
 
 ```ts twoslash
-import { Cron } from "effect"
+import { Cron } from 'effect'
 
 // Parse a cron expression for 4:00 AM
 // on the 8th to the 14th of every month
 // Throws if the expression is invalid
-const cron = Cron.unsafeParse("0 0 4 8-14 * *")
+const cron = Cron.unsafeParse('0 0 4 8-14 * *')
 ```

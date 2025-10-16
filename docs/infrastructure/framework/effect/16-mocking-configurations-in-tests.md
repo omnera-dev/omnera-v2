@@ -9,17 +9,20 @@ You can then use this mock provider in place of the default one by calling `Effe
 **Example** (Mocking a Config Provider for Testing)
 
 ```ts twoslash
-import { Config, ConfigProvider, Effect } from "effect"
+import { Config, ConfigProvider, Effect } from 'effect'
 
 class HostPort {
-  constructor(readonly host: string, readonly port: number) {}
+  constructor(
+    readonly host: string,
+    readonly port: number
+  ) {}
   get url() {
     return `${this.host}:${this.port}`
   }
 }
 
 const config = Config.map(
-  Config.all([Config.string("HOST"), Config.number("PORT")]),
+  Config.all([Config.string('HOST'), Config.number('PORT')]),
   ([host, port]) => new HostPort(host, port)
 )
 
@@ -31,8 +34,8 @@ const program = Effect.gen(function* () {
 // Create a mock config provider using a map with test data
 const mockConfigProvider = ConfigProvider.fromMap(
   new Map([
-    ["HOST", "localhost"],
-    ["PORT", "8080"]
+    ['HOST', 'localhost'],
+    ['PORT', '8080'],
   ])
 )
 
@@ -50,9 +53,9 @@ For more complex setups, configurations often include nested keys. By default, `
 **Example** (Providing Nested Configuration Values)
 
 ```ts twoslash
-import { Config, ConfigProvider, Effect } from "effect"
+import { Config, ConfigProvider, Effect } from 'effect'
 
-const config = Config.nested(Config.number("PORT"), "SERVER")
+const config = Config.nested(Config.number('PORT'), 'SERVER')
 
 const program = Effect.gen(function* () {
   const port = yield* config
@@ -60,9 +63,7 @@ const program = Effect.gen(function* () {
 })
 
 // Mock configuration using '.' as the separator for nested keys
-const mockConfigProvider = ConfigProvider.fromMap(
-  new Map([["SERVER.PORT", "8080"]])
-)
+const mockConfigProvider = ConfigProvider.fromMap(new Map([['SERVER.PORT', '8080']]))
 
 Effect.runPromise(Effect.withConfigProvider(program, mockConfigProvider))
 // Output: Server is running on port 8080
@@ -75,9 +76,9 @@ If your configuration data uses a different separator (such as `_`), you can cha
 **Example** (Using a Custom Path Delimiter)
 
 ```ts twoslash
-import { Config, ConfigProvider, Effect } from "effect"
+import { Config, ConfigProvider, Effect } from 'effect'
 
-const config = Config.nested(Config.number("PORT"), "SERVER")
+const config = Config.nested(Config.number('PORT'), 'SERVER')
 
 const program = Effect.gen(function* () {
   const port = yield* config
@@ -85,10 +86,9 @@ const program = Effect.gen(function* () {
 })
 
 // Mock configuration using '_' as the separator
-const mockConfigProvider = ConfigProvider.fromMap(
-  new Map([["SERVER_PORT", "8080"]]),
-  { pathDelim: "_" }
-)
+const mockConfigProvider = ConfigProvider.fromMap(new Map([['SERVER_PORT', '8080']]), {
+  pathDelim: '_',
+})
 
 Effect.runPromise(Effect.withConfigProvider(program, mockConfigProvider))
 // Output: Server is running on port 8080

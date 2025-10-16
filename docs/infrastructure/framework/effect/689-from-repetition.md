@@ -5,13 +5,11 @@
 You can create a stream that endlessly repeats a specific value using the `Stream.repeatValue` constructor:
 
 ```ts twoslash
-import { Stream, Effect } from "effect"
+import { Stream, Effect } from 'effect'
 
 const stream = Stream.repeatValue(0)
 
-Effect.runPromise(Stream.runCollect(stream.pipe(Stream.take(5)))).then(
-  console.log
-)
+Effect.runPromise(Stream.runCollect(stream.pipe(Stream.take(5)))).then(console.log)
 // { _id: 'Chunk', values: [ 0, 0, 0, 0, 0 ] }
 ```
 
@@ -20,14 +18,12 @@ Effect.runPromise(Stream.runCollect(stream.pipe(Stream.take(5)))).then(
 `Stream.repeat` allows you to create a stream that repeats a specified stream's content according to a schedule. This can be useful for generating recurring events or values.
 
 ```ts twoslash
-import { Stream, Effect, Schedule } from "effect"
+import { Stream, Effect, Schedule } from 'effect'
 
 // Creating a stream that repeats a value indefinitely
 const stream = Stream.repeat(Stream.succeed(1), Schedule.forever)
 
-Effect.runPromise(Stream.runCollect(stream.pipe(Stream.take(5)))).then(
-  console.log
-)
+Effect.runPromise(Stream.runCollect(stream.pipe(Stream.take(5)))).then(console.log)
 // { _id: 'Chunk', values: [ 1, 1, 1, 1, 1 ] }
 ```
 
@@ -38,13 +34,11 @@ Imagine you have an effectful API call, and you want to use the result of that c
 Here's an example of generating a stream of random numbers:
 
 ```ts twoslash
-import { Stream, Effect, Random } from "effect"
+import { Stream, Effect, Random } from 'effect'
 
 const stream = Stream.repeatEffect(Random.nextInt)
 
-Effect.runPromise(Stream.runCollect(stream.pipe(Stream.take(5)))).then(
-  console.log
-)
+Effect.runPromise(Stream.runCollect(stream.pipe(Stream.take(5)))).then(console.log)
 /*
 Example Output:
 {
@@ -61,7 +55,7 @@ You can repeatedly evaluate a given effect and terminate the stream based on spe
 In this example, we're draining an `Iterator` to create a stream from it:
 
 ```ts twoslash
-import { Stream, Effect, Option } from "effect"
+import { Stream, Effect, Option } from 'effect'
 
 const drainIterator = <A>(it: Iterator<A>): Stream.Stream<A> =>
   Stream.repeatEffectOption(
@@ -81,13 +75,11 @@ const drainIterator = <A>(it: Iterator<A>): Stream.Stream<A> =>
 You can create a stream that emits `void` values at specified intervals using the `Stream.tick` constructor. This is useful for creating periodic events.
 
 ```ts twoslash
-import { Stream, Effect } from "effect"
+import { Stream, Effect } from 'effect'
 
-const stream = Stream.tick("100 millis")
+const stream = Stream.tick('100 millis')
 
-Effect.runPromise(Stream.runCollect(stream.pipe(Stream.take(5)))).then(
-  console.log
-)
+Effect.runPromise(Stream.runCollect(stream.pipe(Stream.take(5)))).then(console.log)
 /*
 Output:
 {

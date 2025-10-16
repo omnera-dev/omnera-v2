@@ -28,12 +28,12 @@ Below is the TypeScript definition for the `DateTime` type:
 type DateTime = Utc | Zoned
 
 interface Utc {
-  readonly _tag: "Utc"
+  readonly _tag: 'Utc'
   readonly epochMillis: number
 }
 
 interface Zoned {
-  readonly _tag: "Zoned"
+  readonly _tag: 'Zoned'
   readonly epochMillis: number
   readonly zone: TimeZone
 }
@@ -42,12 +42,12 @@ type TimeZone = TimeZone.Offset | TimeZone.Named
 
 declare namespace TimeZone {
   interface Offset {
-    readonly _tag: "Offset"
+    readonly _tag: 'Offset'
     readonly offset: number
   }
 
   interface Named {
-    readonly _tag: "Named"
+    readonly _tag: 'Named'
     readonly id: string
   }
 }

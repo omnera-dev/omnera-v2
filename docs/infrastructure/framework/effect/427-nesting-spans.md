@@ -5,28 +5,22 @@ Spans can be nested to represent a hierarchy of operations. This allows you to t
 **Example** (Nesting Spans in a Trace)
 
 ```ts twoslash "a09e5c3fdfdbbc1d"
-import { Effect } from "effect"
-import { NodeSdk } from "@effect/opentelemetry"
-import {
-  ConsoleSpanExporter,
-  BatchSpanProcessor
-} from "@opentelemetry/sdk-trace-base"
+import { Effect } from 'effect'
+import { NodeSdk } from '@effect/opentelemetry'
+import { ConsoleSpanExporter, BatchSpanProcessor } from '@opentelemetry/sdk-trace-base'
 
-const child = Effect.void.pipe(
-  Effect.delay("100 millis"),
-  Effect.withSpan("child")
-)
+const child = Effect.void.pipe(Effect.delay('100 millis'), Effect.withSpan('child'))
 
 const parent = Effect.gen(function* () {
-  yield* Effect.sleep("20 millis")
+  yield* Effect.sleep('20 millis')
   yield* child
-  yield* Effect.sleep("10 millis")
-}).pipe(Effect.withSpan("parent"))
+  yield* Effect.sleep('10 millis')
+}).pipe(Effect.withSpan('parent'))
 
 // Set up tracing with the OpenTelemetry SDK
 const NodeSdkLive = NodeSdk.layer(() => ({
-  resource: { serviceName: "example" },
-  spanProcessor: new BatchSpanProcessor(new ConsoleSpanExporter())
+  resource: { serviceName: 'example' },
+  spanProcessor: new BatchSpanProcessor(new ConsoleSpanExporter()),
 }))
 
 // Run the effect, providing the tracing layer

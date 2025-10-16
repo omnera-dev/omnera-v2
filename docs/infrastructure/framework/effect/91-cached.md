@@ -5,13 +5,13 @@ Returns an effect that computes a result lazily and caches it. Subsequent evalua
 **Example** (Lazy Caching of an Expensive Task)
 
 ```ts twoslash
-import { Effect, Console } from "effect"
+import { Effect, Console } from 'effect'
 
 let i = 1
 
 // Simulating an expensive task with a delay
 const expensiveTask = Effect.promise<string>(() => {
-  console.log("expensive task...")
+  console.log('expensive task...')
   return new Promise((resolve) => {
     setTimeout(() => {
       resolve(`result ${i++}`)
@@ -21,12 +21,12 @@ const expensiveTask = Effect.promise<string>(() => {
 
 const program = Effect.gen(function* () {
   // Without caching, the task is executed each time
-  console.log("-- non-cached version:")
+  console.log('-- non-cached version:')
   yield* expensiveTask.pipe(Effect.andThen(Console.log))
   yield* expensiveTask.pipe(Effect.andThen(Console.log))
 
   // With caching, the result is reused after the first run
-  console.log("-- cached version:")
+  console.log('-- cached version:')
   const cached = yield* Effect.cached(expensiveTask)
   yield* cached.pipe(Effect.andThen(Console.log))
   yield* cached.pipe(Effect.andThen(Console.log))

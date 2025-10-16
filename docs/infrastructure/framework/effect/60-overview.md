@@ -8,11 +8,12 @@ import { Aside } from "@astrojs/starlight/components"
 
 Welcome to the documentation for Effect's AI integration packages — a set of libraries designed to make working with large language models (LLMs) seamless, flexible, and provider-agnostic.
 
-These packages enable you to write programs that describe *what* you want to do with an LLM — generating completions, handling chat interactions, running function calls — without having to commit to *how* or *where* those operations are executed.
+These packages enable you to write programs that describe _what_ you want to do with an LLM — generating completions, handling chat interactions, running function calls — without having to commit to _how_ or _where_ those operations are executed.
 
 The core package, [`@effect/ai`](https://www.npmjs.com/package/@effect/ai), provides a high-level, unified interface for modeling LLM interactions, independent of any specific provider. Once you're ready to run your program, you can plug in the services your program requires from our LLM provider integration packages.
 
 This separation of concerns allows you to:
+
 - Write clean, declarative business logic without worrying about provider-specific quirks
 - Easily swap between or combine providers at runtime or during testing
 - Take advantage of Effect’s features when building AI-driven workflows

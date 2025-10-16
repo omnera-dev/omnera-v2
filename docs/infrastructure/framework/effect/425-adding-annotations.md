@@ -6,25 +6,22 @@ This function allows you to attach key-value pairs, offering more context about 
 **Example** (Annotating a Span)
 
 ```ts twoslash "attributes: { key: 'value' }"
-import { Effect } from "effect"
-import { NodeSdk } from "@effect/opentelemetry"
-import {
-  ConsoleSpanExporter,
-  BatchSpanProcessor
-} from "@opentelemetry/sdk-trace-base"
+import { Effect } from 'effect'
+import { NodeSdk } from '@effect/opentelemetry'
+import { ConsoleSpanExporter, BatchSpanProcessor } from '@opentelemetry/sdk-trace-base'
 
 const program = Effect.void.pipe(
-  Effect.delay("100 millis"),
+  Effect.delay('100 millis'),
   // Annotate the span with a key-value pair
-  Effect.tap(() => Effect.annotateCurrentSpan("key", "value")),
+  Effect.tap(() => Effect.annotateCurrentSpan('key', 'value')),
   // Wrap the effect in a span named 'myspan'
-  Effect.withSpan("myspan")
+  Effect.withSpan('myspan')
 )
 
 // Set up tracing with the OpenTelemetry SDK
 const NodeSdkLive = NodeSdk.layer(() => ({
-  resource: { serviceName: "example" },
-  spanProcessor: new BatchSpanProcessor(new ConsoleSpanExporter())
+  resource: { serviceName: 'example' },
+  spanProcessor: new BatchSpanProcessor(new ConsoleSpanExporter()),
 }))
 
 // Run the effect, providing the tracing layer

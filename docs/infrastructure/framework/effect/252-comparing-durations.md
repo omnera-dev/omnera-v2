@@ -12,7 +12,7 @@ Use the following functions to compare two durations:
 **Example** (Comparing Two Durations)
 
 ```ts twoslash
-import { Duration } from "effect"
+import { Duration } from 'effect'
 
 const duration1 = Duration.seconds(30)
 const duration2 = Duration.minutes(1)

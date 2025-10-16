@@ -53,9 +53,7 @@ app.use(
   cors({
     // `c` is a `Context` object
     origin: (origin, c) => {
-      return origin.endsWith('.example.com')
-        ? origin
-        : 'http://example.com'
+      return origin.endsWith('.example.com') ? origin : 'http://example.com'
     },
   })
 )
@@ -67,8 +65,7 @@ Dynamic allowed methods based on origin:
 app.use(
   '/api5/*',
   cors({
-    origin: (origin) =>
-      origin === 'https://example.com' ? origin : '*',
+    origin: (origin) => (origin === 'https://example.com' ? origin : '*'),
     // `c` is a `Context` object
     allowMethods: (origin, c) =>
       origin === 'https://example.com'
@@ -133,4 +130,3 @@ export default defineConfig({
   plugins: [cloudflare()],
 })
 ```
-

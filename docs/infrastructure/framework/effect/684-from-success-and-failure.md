@@ -3,11 +3,10 @@
 Much like the `Effect` data type, you can generate a `Stream` using the `fail` and `succeed` functions:
 
 ```ts twoslash
-import { Stream, Effect } from "effect"
+import { Stream, Effect } from 'effect'
 
 // Creating a stream that can emit errors
-const streamWithError: Stream.Stream<never, string> =
-  Stream.fail("Uh oh!")
+const streamWithError: Stream.Stream<never, string> = Stream.fail('Uh oh!')
 
 Effect.runPromise(Stream.runCollect(streamWithError))
 // throws Error: Uh oh!

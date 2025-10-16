@@ -9,10 +9,10 @@ The `Config.secret` function was previously used to secure sensitive information
 **Example** (Using Deprecated `Config.secret`)
 
 ```ts twoslash title="secret.ts"
-import { Effect, Config, Secret } from "effect"
+import { Effect, Config, Secret } from 'effect'
 
 const program = Effect.gen(function* () {
-  const secret = yield* Config.secret("API_KEY")
+  const secret = yield* Config.secret('API_KEY')
 
   // Log the secret value, which won't reveal the actual secret
   console.log(`Console output: ${secret}`)

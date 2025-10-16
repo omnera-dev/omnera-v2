@@ -19,10 +19,10 @@ This means that the `Effect` type captures not only what the program returns on 
 In this example, we define a program that might randomly fail with an `HttpError`.
 
 ```ts twoslash
-import { Effect, Random, Data } from "effect"
+import { Effect, Random, Data } from 'effect'
 
 // Define a custom error type using Data.TaggedError
-class HttpError extends Data.TaggedError("HttpError")<{}> {}
+class HttpError extends Data.TaggedError('HttpError')<{}> {}
 
 //      ┌─── Effect<string, HttpError, never>
 //      ▼
@@ -35,7 +35,7 @@ const program = Effect.gen(function* () {
     return yield* Effect.fail(new HttpError())
   }
 
-  return "some result"
+  return 'some result'
 })
 ```
 

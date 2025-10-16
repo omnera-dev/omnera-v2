@@ -9,13 +9,13 @@ All methods for adding values to a queue are defined by the `Enqueue` interface.
 **Example** (Restricting Queue to Offer-only Operations)
 
 ```ts twoslash
-import { Queue } from "effect"
+import { Queue } from 'effect'
 
 const send = (offerOnlyQueue: Queue.Enqueue<number>, value: number) => {
   // This queue is restricted to offer operations only
 
   // Error: cannot use take on an offer-only queue
-// @errors: 2345
+  // @errors: 2345
   Queue.take(offerOnlyQueue)
 
   // Valid offer operation
@@ -30,13 +30,13 @@ Similarly, all methods for retrieving values from a queue are defined by the `De
 **Example** (Restricting Queue to Take-only Operations)
 
 ```ts twoslash
-import { Queue } from "effect"
+import { Queue } from 'effect'
 
 const receive = (takeOnlyQueue: Queue.Dequeue<number>) => {
   // This queue is restricted to take operations only
 
   // Error: cannot use offer on a take-only queue
-// @errors: 2345
+  // @errors: 2345
   Queue.offer(takeOnlyQueue, 1)
 
   // Valid take operation
@@ -49,7 +49,7 @@ The `Queue` type combines both `Enqueue` and `Dequeue`, so you can easily pass i
 **Example** (Using Offer-only and Take-only Queues Together)
 
 ```ts twoslash
-import { Effect, Queue } from "effect"
+import { Effect, Queue } from 'effect'
 
 const send = (offerOnlyQueue: Queue.Enqueue<number>, value: number) => {
   return Queue.offer(offerOnlyQueue, value)

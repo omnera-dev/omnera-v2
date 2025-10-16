@@ -49,10 +49,10 @@ Layer<Database, never, Config | Logger>
 The `Config` service does not depend on any other services, so `ConfigLive` will be the simplest layer to implement. Just like in the [Managing Services](/docs/requirements-management/services/) page, we must create a tag for the service. And because the service has no dependencies, we can create the layer directly using the `Layer.succeed` constructor:
 
 ```ts twoslash
-import { Effect, Context, Layer } from "effect"
+import { Effect, Context, Layer } from 'effect'
 
 // Declaring a tag for the Config service
-class Config extends Context.Tag("Config")<
+class Config extends Context.Tag('Config')<
   Config,
   {
     readonly getConfig: Effect.Effect<{
@@ -67,9 +67,9 @@ const ConfigLive = Layer.succeed(
   Config,
   Config.of({
     getConfig: Effect.succeed({
-      logLevel: "INFO",
-      connection: "mysql://username:password@hostname:port/database_name"
-    })
+      logLevel: 'INFO',
+      connection: 'mysql://username:password@hostname:port/database_name',
+    }),
   })
 )
 ```
@@ -86,10 +86,10 @@ for the implementation. It's possible to skip this helper and construct the
 implementation directly as a simple object:
 
 ```ts twoslash collapse={4-12}
-import { Effect, Context, Layer } from "effect"
+import { Effect, Context, Layer } from 'effect'
 
 // Declaring a tag for the Config service
-class Config extends Context.Tag("Config")<
+class Config extends Context.Tag('Config')<
   Config,
   {
     readonly getConfig: Effect.Effect<{
@@ -102,9 +102,9 @@ class Config extends Context.Tag("Config")<
 // Layer<Config, never, never>
 const ConfigLive = Layer.succeed(Config, {
   getConfig: Effect.succeed({
-    logLevel: "INFO",
-    connection: "mysql://username:password@hostname:port/database_name"
-  })
+    logLevel: 'INFO',
+    connection: 'mysql://username:password@hostname:port/database_name',
+  }),
 })
 ```
 
@@ -117,10 +117,10 @@ Just like we did in the [Managing Services](/docs/requirements-management/servic
 Given that using the `Config` tag is an effectful operation, we use `Layer.effect` to create a layer from the resulting effect.
 
 ```ts twoslash collapse={4-20}
-import { Effect, Context, Layer } from "effect"
+import { Effect, Context, Layer } from 'effect'
 
 // Declaring a tag for the Config service
-class Config extends Context.Tag("Config")<
+class Config extends Context.Tag('Config')<
   Config,
   {
     readonly getConfig: Effect.Effect<{
@@ -133,13 +133,13 @@ class Config extends Context.Tag("Config")<
 // Layer<Config, never, never>
 const ConfigLive = Layer.succeed(Config, {
   getConfig: Effect.succeed({
-    logLevel: "INFO",
-    connection: "mysql://username:password@hostname:port/database_name"
-  })
+    logLevel: 'INFO',
+    connection: 'mysql://username:password@hostname:port/database_name',
+  }),
 })
 
 // Declaring a tag for the Logger service
-class Logger extends Context.Tag("Logger")<
+class Logger extends Context.Tag('Logger')<
   Logger,
   { readonly log: (message: string) => Effect.Effect<void> }
 >() {}
@@ -154,7 +154,7 @@ const LoggerLive = Layer.effect(
         Effect.gen(function* () {
           const { logLevel } = yield* config.getConfig
           console.log(`[${logLevel}] ${message}`)
-        })
+        }),
     }
   })
 )
@@ -177,10 +177,10 @@ we can observe that:
 Finally, we can use our `Config` and `Logger` services to implement the `Database` service.
 
 ```ts twoslash collapse={4-20,23-41}
-import { Effect, Context, Layer } from "effect"
+import { Effect, Context, Layer } from 'effect'
 
 // Declaring a tag for the Config service
-class Config extends Context.Tag("Config")<
+class Config extends Context.Tag('Config')<
   Config,
   {
     readonly getConfig: Effect.Effect<{
@@ -193,13 +193,13 @@ class Config extends Context.Tag("Config")<
 // Layer<Config, never, never>
 const ConfigLive = Layer.succeed(Config, {
   getConfig: Effect.succeed({
-    logLevel: "INFO",
-    connection: "mysql://username:password@hostname:port/database_name"
-  })
+    logLevel: 'INFO',
+    connection: 'mysql://username:password@hostname:port/database_name',
+  }),
 })
 
 // Declaring a tag for the Logger service
-class Logger extends Context.Tag("Logger")<
+class Logger extends Context.Tag('Logger')<
   Logger,
   { readonly log: (message: string) => Effect.Effect<void> }
 >() {}
@@ -214,13 +214,13 @@ const LoggerLive = Layer.effect(
         Effect.gen(function* () {
           const { logLevel } = yield* config.getConfig
           console.log(`[${logLevel}] ${message}`)
-        })
+        }),
     }
   })
 )
 
 // Declaring a tag for the Database service
-class Database extends Context.Tag("Database")<
+class Database extends Context.Tag('Database')<
   Database,
   { readonly query: (sql: string) => Effect.Effect<unknown> }
 >() {}
@@ -237,7 +237,7 @@ const DatabaseLive = Layer.effect(
           yield* logger.log(`Executing query: ${sql}`)
           const { connection } = yield* config.getConfig
           return { result: `Results from ${connection}` }
-        })
+        }),
     }
   })
 )

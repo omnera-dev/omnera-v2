@@ -1,15 +1,17 @@
 # wrangler.toml
+
 services = [
-  { binding = "AUTH", service = "auth-service" },
+{ binding = "AUTH", service = "auth-service" },
 ]
-```
+
+````
 
 ```ts
 // src/client.ts
 const client = hc<CreateProfileType>('http://localhost', {
   fetch: c.env.AUTH.fetch.bind(c.env.AUTH),
 })
-```
+````
 
 ## Infer
 
@@ -34,11 +36,9 @@ You can use `parseResponse()` helper to easily parse a Response from `hc` with t
 import { parseResponse, DetailedError } from 'hono/client'
 
 // result contains the parsed response body (automatically parsed based on Content-Type)
-const result = await parseResponse(client.hello.$get()).catch(
-  (e: DetailedError) => {
-    console.error(e)
-  }
-)
+const result = await parseResponse(client.hello.$get()).catch((e: DetailedError) => {
+  console.error(e)
+})
 // parseResponse automatically throws an error if response is not ok
 ```
 
@@ -56,11 +56,10 @@ const App = () => {
   const client = hc<AppType>('/api')
   const $get = client.hello.$get
 
-  const fetcher =
-    (arg: InferRequestType<typeof $get>) => async () => {
-      const res = await $get(arg)
-      return await res.json()
-    }
+  const fetcher = (arg: InferRequestType<typeof $get>) => async () => {
+    const res = await $get(arg)
+    return await res.json()
+  }
 
   const { data, error, isLoading } = useSWR(
     'api-hello',
@@ -137,9 +136,7 @@ For example, suppose your app has a route like this:
 
 ```ts
 // app.ts
-export const app = new Hono().get('foo/:id', (c) =>
-  c.json({ ok: true }, 200)
-)
+export const app = new Hono().get('foo/:id', (c) => c.json({ ok: true }, 200))
 ```
 
 Hono will infer the type as follows:
@@ -181,8 +178,7 @@ import { hc } from 'hono/client'
 // this is a trick to calculate the type when compiling
 export type Client = ReturnType<typeof hc<typeof app>>
 
-export const hcWithType = (...args: Parameters<typeof hc>): Client =>
-  hc<typeof app>(...args)
+export const hcWithType = (...args: Parameters<typeof hc>): Client => hc<typeof app>(...args)
 ```
 
 After compiling, you can use `hcWithType` instead of `hc` to get the client with the type already calculated.
@@ -206,9 +202,7 @@ You can also coordinate your build process manually with tools like `concurrentl
 This is a bit cumbersome, but you can specify type arguments manually to avoid type instantiation.
 
 ```ts
-const app = new Hono().get<'foo/:id'>('foo/:id', (c) =>
-  c.json({ ok: true }, 200)
-)
+const app = new Hono().get<'foo/:id'>('foo/:id', (c) => c.json({ ok: true }, 200))
 ```
 
 Specifying just single type argument make a difference in performance, while it may take you a lot of time and effort if you have a lot of routes.
@@ -232,4 +226,3 @@ const booksClient = hc<typeof booksApp>('/books')
 ```
 
 This way, `tsserver` doesn't need to instantiate types for all routes at once.
-

@@ -5,7 +5,7 @@ The Schema module includes a built-in `Schema.Union` constructor for creating "O
 **Example** (Defining a Union Schema)
 
 ```ts twoslash
-import { Schema } from "effect"
+import { Schema } from 'effect'
 
 //      ┌─── Union<[typeof Schema.String, typeof Schema.Number]>
 //      ▼
@@ -25,29 +25,29 @@ If multiple schemas could decode the same value, the order matters. Placing a mo
 **Example** (Handling Overlapping Schemas in a Union)
 
 ```ts twoslash
-import { Schema } from "effect"
+import { Schema } from 'effect'
 
 // Define two overlapping schemas
 
 const Member1 = Schema.Struct({
-  a: Schema.String
+  a: Schema.String,
 })
 
 const Member2 = Schema.Struct({
   a: Schema.String,
-  b: Schema.Number
+  b: Schema.Number,
 })
 
 // ❌ Define a union where Member1 appears first
 const Bad = Schema.Union(Member1, Member2)
 
-console.log(Schema.decodeUnknownSync(Bad)({ a: "a", b: 12 }))
+console.log(Schema.decodeUnknownSync(Bad)({ a: 'a', b: 12 }))
 // Output: { a: 'a' }  (Member1 matched first, so `b` was ignored)
 
 // ✅ Define a union where Member2 appears first
 const Good = Schema.Union(Member2, Member1)
 
-console.log(Schema.decodeUnknownSync(Good)({ a: "a", b: 12 }))
+console.log(Schema.decodeUnknownSync(Good)({ a: 'a', b: 12 }))
 // Output: { a: 'a', b: 12 } (Member2 matched first, so `b` was included)
 ```
 
@@ -58,15 +58,11 @@ While you can create a union of literals by combining individual literal schemas
 **Example** (Using Individual Literal Schemas)
 
 ```ts twoslash
-import { Schema } from "effect"
+import { Schema } from 'effect'
 
 //      ┌─── Union<[Schema.Literal<["a"]>, Schema.Literal<["b"]>, Schema.Literal<["c"]>]>
 //      ▼
-const schema = Schema.Union(
-  Schema.Literal("a"),
-  Schema.Literal("b"),
-  Schema.Literal("c")
-)
+const schema = Schema.Union(Schema.Literal('a'), Schema.Literal('b'), Schema.Literal('c'))
 ```
 
 You can simplify the process by passing multiple literals directly to the `Schema.Literal` constructor:
@@ -74,11 +70,11 @@ You can simplify the process by passing multiple literals directly to the `Schem
 **Example** (Defining a Union of Literals)
 
 ```ts twoslash
-import { Schema } from "effect"
+import { Schema } from 'effect'
 
 //     ┌─── Literal<["a", "b", "c"]>
 //     ▼
-const schema = Schema.Literal("a", "b", "c")
+const schema = Schema.Literal('a', 'b', 'c')
 
 //     ┌─── "a" | "b" | "c"
 //     ▼
@@ -90,10 +86,10 @@ If you want to set a custom error message for the entire union of literals, you 
 **Example** (Adding a Custom Message to a Union of Literals)
 
 ```ts twoslash
-import { Schema } from "effect"
+import { Schema } from 'effect'
 
 // Schema with individual messages for each literal
-const individualMessages = Schema.Literal("a", "b", "c")
+const individualMessages = Schema.Literal('a', 'b', 'c')
 
 console.log(Schema.decodeUnknownSync(individualMessages)(null))
 /*
@@ -105,8 +101,8 @@ ParseError: "a" | "b" | "c"
 */
 
 // Schema with a unified custom message for all literals
-const unifiedMessage = Schema.Literal("a", "b", "c").annotations({
-  message: () => ({ message: "Not a valid code", override: true })
+const unifiedMessage = Schema.Literal('a', 'b', 'c').annotations({
+  message: () => ({ message: 'Not a valid code', override: true }),
 })
 
 console.log(Schema.decodeUnknownSync(unifiedMessage)(null))
@@ -123,7 +119,7 @@ The Schema module includes utility functions for defining schemas that allow nul
 **Example** (Creating Nullable Schemas)
 
 ```ts twoslash
-import { Schema } from "effect"
+import { Schema } from 'effect'
 
 // Represents a schema for a string or null value
 Schema.NullOr(Schema.String)
@@ -145,12 +141,12 @@ In a discriminated union, each variant of the union has a common property, calle
 
 ```ts twoslash
 type Circle = {
-  readonly kind: "circle"
+  readonly kind: 'circle'
   readonly radius: number
 }
 
 type Square = {
-  readonly kind: "square"
+  readonly kind: 'square'
   readonly sideLength: number
 }
 
@@ -162,16 +158,16 @@ In the `Schema` module, you can define a discriminated union similarly by specif
 **Example** (Defining a Discriminated Union Using Schema)
 
 ```ts twoslash
-import { Schema } from "effect"
+import { Schema } from 'effect'
 
 const Circle = Schema.Struct({
-  kind: Schema.Literal("circle"),
-  radius: Schema.Number
+  kind: Schema.Literal('circle'),
+  radius: Schema.Number,
 })
 
 const Square = Schema.Struct({
-  kind: Schema.Literal("square"),
-  sideLength: Schema.Number
+  kind: Schema.Literal('square'),
+  sideLength: Schema.Number,
 })
 
 const Shape = Schema.Union(Circle, Square)
@@ -188,14 +184,14 @@ If you start with a simple union and want to transform it into a discriminated u
 For example, let's say you've defined a `Shape` union as a combination of `Circle` and `Square` without any special property:
 
 ```ts twoslash
-import { Schema } from "effect"
+import { Schema } from 'effect'
 
 const Circle = Schema.Struct({
-  radius: Schema.Number
+  radius: Schema.Number,
 })
 
 const Square = Schema.Struct({
-  sideLength: Schema.Number
+  sideLength: Schema.Number,
 })
 
 const Shape = Schema.Union(Circle, Square)
@@ -209,40 +205,40 @@ Here's how you can [transform](/docs/schema/transformations/#transform) the `Sha
 **Example** (Adding Discriminant Property)
 
 ```ts twoslash
-import { Schema } from "effect"
+import { Schema } from 'effect'
 
 const Circle = Schema.Struct({
-  radius: Schema.Number
+  radius: Schema.Number,
 })
 
 const Square = Schema.Struct({
-  sideLength: Schema.Number
+  sideLength: Schema.Number,
 })
 
 const DiscriminatedShape = Schema.Union(
   Schema.transform(
     Circle,
     // Add a "kind" property with the literal value "circle" to Circle
-    Schema.Struct({ ...Circle.fields, kind: Schema.Literal("circle") }),
+    Schema.Struct({ ...Circle.fields, kind: Schema.Literal('circle') }),
     {
       strict: true,
       // Add the discriminant property to Circle
-      decode: (circle) => ({ ...circle, kind: "circle" as const }),
+      decode: (circle) => ({ ...circle, kind: 'circle' as const }),
       // Remove the discriminant property
-      encode: ({ kind: _kind, ...rest }) => rest
+      encode: ({ kind: _kind, ...rest }) => rest,
     }
   ),
 
   Schema.transform(
     Square,
     // Add a "kind" property with the literal value "square" to Square
-    Schema.Struct({ ...Square.fields, kind: Schema.Literal("square") }),
+    Schema.Struct({ ...Square.fields, kind: Schema.Literal('square') }),
     {
       strict: true,
       // Add the discriminant property to Square
-      decode: (square) => ({ ...square, kind: "square" as const }),
+      decode: (square) => ({ ...square, kind: 'square' as const }),
       // Remove the discriminant property
-      encode: ({ kind: _kind, ...rest }) => rest
+      encode: ({ kind: _kind, ...rest }) => rest,
     }
   )
 )
@@ -250,9 +246,7 @@ const DiscriminatedShape = Schema.Union(
 console.log(Schema.decodeUnknownSync(DiscriminatedShape)({ radius: 10 }))
 // Output: { radius: 10, kind: 'circle' }
 
-console.log(
-  Schema.decodeUnknownSync(DiscriminatedShape)({ sideLength: 10 })
-)
+console.log(Schema.decodeUnknownSync(DiscriminatedShape)({ sideLength: 10 }))
 // Output: { sideLength: 10, kind: 'square' }
 ```
 
@@ -262,19 +256,19 @@ However, it requires a lot of boilerplate. Fortunately, there is an API called `
 **Example** (Using `Schema.attachPropertySignature` for Less Code)
 
 ```ts twoslash
-import { Schema } from "effect"
+import { Schema } from 'effect'
 
 const Circle = Schema.Struct({
-  radius: Schema.Number
+  radius: Schema.Number,
 })
 
 const Square = Schema.Struct({
-  sideLength: Schema.Number
+  sideLength: Schema.Number,
 })
 
 const DiscriminatedShape = Schema.Union(
-  Circle.pipe(Schema.attachPropertySignature("kind", "circle")),
-  Square.pipe(Schema.attachPropertySignature("kind", "square"))
+  Circle.pipe(Schema.attachPropertySignature('kind', 'circle')),
+  Square.pipe(Schema.attachPropertySignature('kind', 'square'))
 )
 
 // decoding
@@ -284,8 +278,8 @@ console.log(Schema.decodeUnknownSync(DiscriminatedShape)({ radius: 10 }))
 // encoding
 console.log(
   Schema.encodeSync(DiscriminatedShape)({
-    kind: "circle",
-    radius: 10
+    kind: 'circle',
+    radius: 10,
   })
 )
 // Output: { radius: 10 }
@@ -301,7 +295,7 @@ console.log(
 You can access the individual members of a union schema represented as a tuple:
 
 ```ts twoslash
-import { Schema } from "effect"
+import { Schema } from 'effect'
 
 const schema = Schema.Union(Schema.String, Schema.Number)
 

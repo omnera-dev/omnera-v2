@@ -16,7 +16,7 @@ The `Effect.acquireRelease` function guarantees that once a resource is successf
 **Example** (Defining a Simple Resource)
 
 ```ts twoslash
-import { Effect } from "effect"
+import { Effect } from 'effect'
 
 // Define an interface for a resource
 interface MyResource {
@@ -27,22 +27,22 @@ interface MyResource {
 // Simulate resource acquisition
 const getMyResource = (): Promise<MyResource> =>
   Promise.resolve({
-    contents: "lorem ipsum",
+    contents: 'lorem ipsum',
     close: () =>
       new Promise((resolve) => {
-        console.log("Resource released")
+        console.log('Resource released')
         resolve()
-      })
+      }),
   })
 
 // Define how the resource is acquired
 const acquire = Effect.tryPromise({
   try: () =>
     getMyResource().then((res) => {
-      console.log("Resource acquired")
+      console.log('Resource acquired')
       return res
     }),
-  catch: () => new Error("getMyResourceError")
+  catch: () => new Error('getMyResourceError'),
 })
 
 // Define how the resource is released
@@ -70,7 +70,7 @@ We can continue working with the resource for as long as we want by using `Effec
 **Example** (Using the Resource)
 
 ```ts twoslash collapse={3-34}
-import { Effect } from "effect"
+import { Effect } from 'effect'
 
 // Define an interface for a resource
 interface MyResource {
@@ -81,22 +81,22 @@ interface MyResource {
 // Simulate resource acquisition
 const getMyResource = (): Promise<MyResource> =>
   Promise.resolve({
-    contents: "lorem ipsum",
+    contents: 'lorem ipsum',
     close: () =>
       new Promise((resolve) => {
-        console.log("Resource released")
+        console.log('Resource released')
         resolve()
-      })
+      }),
   })
 
 // Define how the resource is acquired
 const acquire = Effect.tryPromise({
   try: () =>
     getMyResource().then((res) => {
-      console.log("Resource acquired")
+      console.log('Resource acquired')
       return res
     }),
-  catch: () => new Error("getMyResourceError")
+  catch: () => new Error('getMyResourceError'),
 })
 
 // Define how the resource is released
@@ -118,7 +118,7 @@ To ensure proper resource management, the `Scope` should be closed when you're d
 **Example** (Providing the `Scope` with `Effect.scoped`)
 
 ```ts twoslash collapse={3-34}
-import { Effect } from "effect"
+import { Effect } from 'effect'
 
 // Define an interface for a resource
 interface MyResource {
@@ -129,22 +129,22 @@ interface MyResource {
 // Simulate resource acquisition
 const getMyResource = (): Promise<MyResource> =>
   Promise.resolve({
-    contents: "lorem ipsum",
+    contents: 'lorem ipsum',
     close: () =>
       new Promise((resolve) => {
-        console.log("Resource released")
+        console.log('Resource released')
         resolve()
-      })
+      }),
   })
 
 // Define how the resource is acquired
 const acquire = Effect.tryPromise({
   try: () =>
     getMyResource().then((res) => {
-      console.log("Resource acquired")
+      console.log('Resource acquired')
       return res
     }),
-  catch: () => new Error("getMyResourceError")
+  catch: () => new Error('getMyResourceError'),
 })
 
 // Define how the resource is released
@@ -184,15 +184,15 @@ To begin, we define the domain model for the required [services](/docs/requireme
 - `Database`
 
 ```ts twoslash
-import { Effect, Context, Data } from "effect"
+import { Effect, Context, Data } from 'effect'
 
-class S3Error extends Data.TaggedError("S3Error")<{}> {}
+class S3Error extends Data.TaggedError('S3Error')<{}> {}
 
 interface Bucket {
   readonly name: string
 }
 
-class S3 extends Context.Tag("S3")<
+class S3 extends Context.Tag('S3')<
   S3,
   {
     readonly createBucket: Effect.Effect<Bucket, S3Error>
@@ -200,15 +200,13 @@ class S3 extends Context.Tag("S3")<
   }
 >() {}
 
-class ElasticSearchError extends Data.TaggedError(
-  "ElasticSearchError"
-)<{}> {}
+class ElasticSearchError extends Data.TaggedError('ElasticSearchError')<{}> {}
 
 interface Index {
   readonly id: string
 }
 
-class ElasticSearch extends Context.Tag("ElasticSearch")<
+class ElasticSearch extends Context.Tag('ElasticSearch')<
   ElasticSearch,
   {
     readonly createIndex: Effect.Effect<Index, ElasticSearchError>
@@ -216,19 +214,16 @@ class ElasticSearch extends Context.Tag("ElasticSearch")<
   }
 >() {}
 
-class DatabaseError extends Data.TaggedError("DatabaseError")<{}> {}
+class DatabaseError extends Data.TaggedError('DatabaseError')<{}> {}
 
 interface Entry {
   readonly id: string
 }
 
-class Database extends Context.Tag("Database")<
+class Database extends Context.Tag('Database')<
   Database,
   {
-    readonly createEntry: (
-      bucket: Bucket,
-      index: Index
-    ) => Effect.Effect<Entry, DatabaseError>
+    readonly createEntry: (bucket: Bucket, index: Index) => Effect.Effect<Entry, DatabaseError>
     readonly deleteEntry: (entry: Entry) => Effect.Effect<void>
   }
 >() {}
@@ -237,15 +232,15 @@ class Database extends Context.Tag("Database")<
 Next, we define the three create actions and the overall transaction (`make`) for the workspace.
 
 ```ts twoslash collapse={3-48}
-import { Effect, Context, Exit, Data } from "effect"
+import { Effect, Context, Exit, Data } from 'effect'
 
-class S3Error extends Data.TaggedError("S3Error")<{}> {}
+class S3Error extends Data.TaggedError('S3Error')<{}> {}
 
 interface Bucket {
   readonly name: string
 }
 
-class S3 extends Context.Tag("S3")<
+class S3 extends Context.Tag('S3')<
   S3,
   {
     readonly createBucket: Effect.Effect<Bucket, S3Error>
@@ -253,15 +248,13 @@ class S3 extends Context.Tag("S3")<
   }
 >() {}
 
-class ElasticSearchError extends Data.TaggedError(
-  "ElasticSearchError"
-)<{}> {}
+class ElasticSearchError extends Data.TaggedError('ElasticSearchError')<{}> {}
 
 interface Index {
   readonly id: string
 }
 
-class ElasticSearch extends Context.Tag("ElasticSearch")<
+class ElasticSearch extends Context.Tag('ElasticSearch')<
   ElasticSearch,
   {
     readonly createIndex: Effect.Effect<Index, ElasticSearchError>
@@ -269,19 +262,16 @@ class ElasticSearch extends Context.Tag("ElasticSearch")<
   }
 >() {}
 
-class DatabaseError extends Data.TaggedError("DatabaseError")<{}> {}
+class DatabaseError extends Data.TaggedError('DatabaseError')<{}> {}
 
 interface Entry {
   readonly id: string
 }
 
-class Database extends Context.Tag("Database")<
+class Database extends Context.Tag('Database')<
   Database,
   {
-    readonly createEntry: (
-      bucket: Bucket,
-      index: Index
-    ) => Effect.Effect<Entry, DatabaseError>
+    readonly createEntry: (bucket: Bucket, index: Index) => Effect.Effect<Entry, DatabaseError>
     readonly deleteEntry: (entry: Entry) => Effect.Effect<void>
   }
 >() {}
@@ -318,10 +308,8 @@ const createIndex = Effect.gen(function* () {
 const createEntry = (bucket: Bucket, index: Index) =>
   Effect.gen(function* () {
     const { createEntry, deleteEntry } = yield* Database
-    return yield* Effect.acquireRelease(
-      createEntry(bucket, index),
-      (entry, exit) =>
-        Exit.isFailure(exit) ? deleteEntry(entry) : Effect.void
+    return yield* Effect.acquireRelease(createEntry(bucket, index), (entry, exit) =>
+      Exit.isFailure(exit) ? deleteEntry(entry) : Effect.void
     )
   })
 
@@ -339,15 +327,15 @@ To achieve this, we will utilize [layers](/docs/requirements-management/layers/)
 These layers will be able to handle various scenarios, including errors, which we can control using the `FailureCase` type.
 
 ```ts twoslash collapse={3-95}
-import { Effect, Context, Exit, Data, Layer, Console } from "effect"
+import { Effect, Context, Exit, Data, Layer, Console } from 'effect'
 
-class S3Error extends Data.TaggedError("S3Error")<{}> {}
+class S3Error extends Data.TaggedError('S3Error')<{}> {}
 
 interface Bucket {
   readonly name: string
 }
 
-class S3 extends Context.Tag("S3")<
+class S3 extends Context.Tag('S3')<
   S3,
   {
     readonly createBucket: Effect.Effect<Bucket, S3Error>
@@ -355,15 +343,13 @@ class S3 extends Context.Tag("S3")<
   }
 >() {}
 
-class ElasticSearchError extends Data.TaggedError(
-  "ElasticSearchError"
-)<{}> {}
+class ElasticSearchError extends Data.TaggedError('ElasticSearchError')<{}> {}
 
 interface Index {
   readonly id: string
 }
 
-class ElasticSearch extends Context.Tag("ElasticSearch")<
+class ElasticSearch extends Context.Tag('ElasticSearch')<
   ElasticSearch,
   {
     readonly createIndex: Effect.Effect<Index, ElasticSearchError>
@@ -371,19 +357,16 @@ class ElasticSearch extends Context.Tag("ElasticSearch")<
   }
 >() {}
 
-class DatabaseError extends Data.TaggedError("DatabaseError")<{}> {}
+class DatabaseError extends Data.TaggedError('DatabaseError')<{}> {}
 
 interface Entry {
   readonly id: string
 }
 
-class Database extends Context.Tag("Database")<
+class Database extends Context.Tag('Database')<
   Database,
   {
-    readonly createEntry: (
-      bucket: Bucket,
-      index: Index
-    ) => Effect.Effect<Entry, DatabaseError>
+    readonly createEntry: (bucket: Bucket, index: Index) => Effect.Effect<Entry, DatabaseError>
     readonly deleteEntry: (entry: Entry) => Effect.Effect<void>
   }
 >() {}
@@ -420,10 +403,8 @@ const createIndex = Effect.gen(function* () {
 const createEntry = (bucket: Bucket, index: Index) =>
   Effect.gen(function* () {
     const { createEntry, deleteEntry } = yield* Database
-    return yield* Effect.acquireRelease(
-      createEntry(bucket, index),
-      (entry, exit) =>
-        Exit.isFailure(exit) ? deleteEntry(entry) : Effect.void
+    return yield* Effect.acquireRelease(createEntry(bucket, index), (entry, exit) =>
+      Exit.isFailure(exit) ? deleteEntry(entry) : Effect.void
     )
   })
 
@@ -448,12 +429,9 @@ const make = Effect.scoped(
 // where we want to test the absence of errors, we can provide
 // `undefined`. By using this parameter, we can thoroughly test our
 // services and verify their behavior under different error conditions.
-type FailureCaseLiterals = "S3" | "ElasticSearch" | "Database" | undefined
+type FailureCaseLiterals = 'S3' | 'ElasticSearch' | 'Database' | undefined
 
-class FailureCase extends Context.Tag("FailureCase")<
-  FailureCase,
-  FailureCaseLiterals
->() {}
+class FailureCase extends Context.Tag('FailureCase')<FailureCase, FailureCaseLiterals>() {}
 
 // Create a test layer for the S3 service
 
@@ -463,15 +441,14 @@ const S3Test = Layer.effect(
     const failureCase = yield* FailureCase
     return {
       createBucket: Effect.gen(function* () {
-        console.log("[S3] creating bucket")
-        if (failureCase === "S3") {
+        console.log('[S3] creating bucket')
+        if (failureCase === 'S3') {
           return yield* Effect.fail(new S3Error())
         } else {
-          return { name: "<bucket.name>" }
+          return { name: '<bucket.name>' }
         }
       }),
-      deleteBucket: (bucket) =>
-        Console.log(`[S3] delete bucket ${bucket.name}`)
+      deleteBucket: (bucket) => Console.log(`[S3] delete bucket ${bucket.name}`),
     }
   })
 )
@@ -484,15 +461,14 @@ const ElasticSearchTest = Layer.effect(
     const failureCase = yield* FailureCase
     return {
       createIndex: Effect.gen(function* () {
-        console.log("[ElasticSearch] creating index")
-        if (failureCase === "ElasticSearch") {
+        console.log('[ElasticSearch] creating index')
+        if (failureCase === 'ElasticSearch') {
           return yield* Effect.fail(new ElasticSearchError())
         } else {
-          return { id: "<index.id>" }
+          return { id: '<index.id>' }
         }
       }),
-      deleteIndex: (index) =>
-        Console.log(`[ElasticSearch] delete index ${index.id}`)
+      deleteIndex: (index) => Console.log(`[ElasticSearch] delete index ${index.id}`),
     }
   })
 )
@@ -507,17 +483,15 @@ const DatabaseTest = Layer.effect(
       createEntry: (bucket, index) =>
         Effect.gen(function* () {
           console.log(
-            "[Database] creating entry for bucket" +
-              `${bucket.name} and index ${index.id}`
+            '[Database] creating entry for bucket' + `${bucket.name} and index ${index.id}`
           )
-          if (failureCase === "Database") {
+          if (failureCase === 'Database') {
             return yield* Effect.fail(new DatabaseError())
           } else {
-            return { id: "<entry.id>" }
+            return { id: '<entry.id>' }
           }
         }),
-      deleteEntry: (entry) =>
-        Console.log(`[Database] delete entry ${entry.id}`)
+      deleteEntry: (entry) => Console.log(`[Database] delete entry ${entry.id}`),
     }
   })
 )
@@ -529,10 +503,7 @@ const layer = Layer.mergeAll(S3Test, ElasticSearchTest, DatabaseTest)
 // Create a runnable effect to test the Workspace code. The effect is
 // provided with the test layer and a FailureCase service with undefined
 // value (no failure case).
-const runnable = make.pipe(
-  Effect.provide(layer),
-  Effect.provideService(FailureCase, undefined)
-)
+const runnable = make.pipe(Effect.provide(layer), Effect.provideService(FailureCase, undefined))
 
 Effect.runPromise(Effect.either(runnable)).then(console.log)
 ```
@@ -551,10 +522,7 @@ In this case, all operations succeed, and we see a successful result with `right
 Now, let's simulate a failure in the `Database`:
 
 ```ts showLineNumbers=false
-const runnable = make.pipe(
-  Effect.provide(layer),
-  Effect.provideService(FailureCase, "Database")
-)
+const runnable = make.pipe(Effect.provide(layer), Effect.provideService(FailureCase, 'Database'))
 ```
 
 The console output will be:
@@ -575,7 +543,7 @@ Let's now make the index creation fail instead:
 ```ts showLineNumbers=false
 const runnable = make.pipe(
   Effect.provide(layer),
-  Effect.provideService(FailureCase, "ElasticSearch")
+  Effect.provideService(FailureCase, 'ElasticSearch')
 )
 ```
 

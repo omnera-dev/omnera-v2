@@ -10,16 +10,16 @@ Once both effects succeed, their results are combined into a tuple.
 **Example** (Combining Two Effects Sequentially)
 
 ```ts twoslash
-import { Effect } from "effect"
+import { Effect } from 'effect'
 
 const task1 = Effect.succeed(1).pipe(
-  Effect.delay("200 millis"),
-  Effect.tap(Effect.log("task1 done"))
+  Effect.delay('200 millis'),
+  Effect.tap(Effect.log('task1 done'))
 )
 
-const task2 = Effect.succeed("hello").pipe(
-  Effect.delay("100 millis"),
-  Effect.tap(Effect.log("task2 done"))
+const task2 = Effect.succeed('hello').pipe(
+  Effect.delay('100 millis'),
+  Effect.tap(Effect.log('task2 done'))
 )
 
 // Combine the two effects together
@@ -42,16 +42,16 @@ By default, the effects are run sequentially. To run them concurrently, use the 
 **Example** (Combining Two Effects Concurrently)
 
 ```ts collapse={3-11} "{ concurrent: true }" "task2 done"
-import { Effect } from "effect"
+import { Effect } from 'effect'
 
 const task1 = Effect.succeed(1).pipe(
-  Effect.delay("200 millis"),
-  Effect.tap(Effect.log("task1 done"))
+  Effect.delay('200 millis'),
+  Effect.tap(Effect.log('task1 done'))
 )
 
-const task2 = Effect.succeed("hello").pipe(
-  Effect.delay("100 millis"),
-  Effect.tap(Effect.log("task2 done"))
+const task2 = Effect.succeed('hello').pipe(
+  Effect.delay('100 millis'),
+  Effect.tap(Effect.log('task2 done'))
 )
 
 // Run both effects concurrently using the concurrent option
@@ -80,15 +80,15 @@ By default, the effects are run sequentially. To run them concurrently, use the 
 **Example** (Combining Effects with a Custom Function)
 
 ```ts twoslash
-import { Effect } from "effect"
+import { Effect } from 'effect'
 
 const task1 = Effect.succeed(1).pipe(
-  Effect.delay("200 millis"),
-  Effect.tap(Effect.log("task1 done"))
+  Effect.delay('200 millis'),
+  Effect.tap(Effect.log('task1 done'))
 )
-const task2 = Effect.succeed("hello").pipe(
-  Effect.delay("100 millis"),
-  Effect.tap(Effect.log("task2 done"))
+const task2 = Effect.succeed('hello').pipe(
+  Effect.delay('100 millis'),
+  Effect.tap(Effect.log('task2 done'))
 )
 
 //      ┌─── Effect<number, never, never>

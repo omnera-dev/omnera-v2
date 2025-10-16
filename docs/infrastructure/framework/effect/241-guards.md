@@ -12,13 +12,13 @@
 **Example** (Validating a DateTime)
 
 ```ts twoslash
-import { DateTime } from "effect"
+import { DateTime } from 'effect'
 
 function printDateTimeInfo(x: unknown) {
   if (DateTime.isDateTime(x)) {
-    console.log("This is a valid DateTime")
+    console.log('This is a valid DateTime')
   } else {
-    console.log("Not a DateTime")
+    console.log('Not a DateTime')
   }
 }
 ```

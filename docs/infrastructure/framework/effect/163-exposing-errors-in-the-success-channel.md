@@ -26,13 +26,13 @@ This function becomes especially useful when recovering from effects that may fa
 **Example** (Using `Effect.either` to Handle Errors)
 
 ```ts twoslash
-import { Effect, Either, Console } from "effect"
+import { Effect, Either, Console } from 'effect'
 
 // Simulate a task that fails
 //
 //      ┌─── Either<number, string, never>
 //      ▼
-const program = Effect.fail("Oh uh!").pipe(Effect.as(2))
+const program = Effect.fail('Oh uh!').pipe(Effect.as(2))
 
 //      ┌─── Either<number, never, never>
 //      ▼

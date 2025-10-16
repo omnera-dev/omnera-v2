@@ -27,10 +27,10 @@ For example, in an `Effect.ensuring` operation (analogous to `try-finally`), if 
 **Example** (Capturing Sequential Failures with a `Sequential` Cause)
 
 ```ts twoslash
-import { Effect, Cause } from "effect"
+import { Effect, Cause } from 'effect'
 
-const program = Effect.failCause(Cause.fail("Oh no!")).pipe(
-  Effect.ensuring(Effect.failCause(Cause.die("Boom!")))
+const program = Effect.failCause(Cause.fail('Oh no!')).pipe(
+  Effect.ensuring(Effect.failCause(Cause.die('Boom!')))
 )
 
 Effect.runPromiseExit(program).then(console.log)
@@ -58,13 +58,10 @@ In Effect programs, two operations may run in parallel, potentially leading to m
 **Example** (Capturing Concurrent Failures with a `Parallel` Cause)
 
 ```ts twoslash
-import { Effect, Cause } from "effect"
+import { Effect, Cause } from 'effect'
 
 const program = Effect.all(
-  [
-    Effect.failCause(Cause.fail("Oh no!")),
-    Effect.failCause(Cause.die("Boom!"))
-  ],
+  [Effect.failCause(Cause.fail('Oh no!')), Effect.failCause(Cause.die('Boom!'))],
   { concurrency: 2 }
 )
 

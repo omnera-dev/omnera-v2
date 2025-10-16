@@ -5,14 +5,14 @@ To generate multiple future dates that match a cron schedule, you can use the `s
 **Example** (Generating Future Dates with an Iterator)
 
 ```ts
-import { Cron } from "effect"
+import { Cron } from 'effect'
 
 // Define a cron expression for 4:00 AM
 // on the 8th to the 14th of every month
-const cron = Cron.unsafeParse("0 0 4 8-14 * *", "UTC")
+const cron = Cron.unsafeParse('0 0 4 8-14 * *', 'UTC')
 
 // Specify the starting date
-const start = new Date("2021-01-08")
+const start = new Date('2021-01-08')
 
 // Create an iterator for the schedule
 const iterator = Cron.sequence(cron, start)

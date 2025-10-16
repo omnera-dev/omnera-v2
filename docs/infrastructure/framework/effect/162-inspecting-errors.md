@@ -10,15 +10,13 @@ Executes an effectful operation to inspect the failure of an effect without alte
 **Example** (Inspecting Errors)
 
 ```ts twoslash
-import { Effect, Console } from "effect"
+import { Effect, Console } from 'effect'
 
 // Simulate a task that fails with an error
-const task: Effect.Effect<number, string> = Effect.fail("NetworkError")
+const task: Effect.Effect<number, string> = Effect.fail('NetworkError')
 
 // Use tapError to log the error message when the task fails
-const tapping = Effect.tapError(task, (error) =>
-  Console.log(`expected error: ${error}`)
-)
+const tapping = Effect.tapError(task, (error) => Console.log(`expected error: ${error}`))
 
 Effect.runFork(tapping)
 /*
@@ -34,23 +32,24 @@ This function allows you to inspect errors that match a specific tag, helping yo
 **Example** (Inspecting Tagged Errors)
 
 ```ts twoslash
-import { Effect, Console, Data } from "effect"
+import { Effect, Console, Data } from 'effect'
 
-class NetworkError extends Data.TaggedError("NetworkError")<{
+class NetworkError extends Data.TaggedError('NetworkError')<{
   readonly statusCode: number
 }> {}
 
-class ValidationError extends Data.TaggedError("ValidationError")<{
+class ValidationError extends Data.TaggedError('ValidationError')<{
   readonly field: string
 }> {}
 
 // Create a task that fails with a NetworkError
-const task: Effect.Effect<number, NetworkError | ValidationError> =
-  Effect.fail(new NetworkError({ statusCode: 504 }))
+const task: Effect.Effect<number, NetworkError | ValidationError> = Effect.fail(
+  new NetworkError({ statusCode: 504 })
+)
 
 // Use tapErrorTag to inspect only NetworkError types
 // and log the status code
-const tapping = Effect.tapErrorTag(task, "NetworkError", (error) =>
+const tapping = Effect.tapErrorTag(task, 'NetworkError', (error) =>
   Console.log(`expected error: ${error.statusCode}`)
 )
 
@@ -68,14 +67,12 @@ This function inspects the complete cause of an error, including failures and de
 **Example** (Inspecting Error Causes)
 
 ```ts twoslash
-import { Effect, Console } from "effect"
+import { Effect, Console } from 'effect'
 
 // Create a task that fails with a NetworkError
-const task1: Effect.Effect<number, string> = Effect.fail("NetworkError")
+const task1: Effect.Effect<number, string> = Effect.fail('NetworkError')
 
-const tapping1 = Effect.tapErrorCause(task1, (cause) =>
-  Console.log(`error cause: ${cause}`)
-)
+const tapping1 = Effect.tapErrorCause(task1, (cause) => Console.log(`error cause: ${cause}`))
 
 Effect.runFork(tapping1)
 /*
@@ -84,13 +81,9 @@ error cause: Error: NetworkError
 */
 
 // Simulate a severe failure in the system
-const task2: Effect.Effect<number, string> = Effect.dieMessage(
-  "Something went wrong"
-)
+const task2: Effect.Effect<number, string> = Effect.dieMessage('Something went wrong')
 
-const tapping2 = Effect.tapErrorCause(task2, (cause) =>
-  Console.log(`error cause: ${cause}`)
-)
+const tapping2 = Effect.tapErrorCause(task2, (cause) => Console.log(`error cause: ${cause}`))
 
 Effect.runFork(tapping2)
 /*
@@ -107,15 +100,13 @@ Specifically inspects non-recoverable failures or defects in an effect (i.e., on
 **Example** (Inspecting Defects)
 
 ```ts twoslash
-import { Effect, Console } from "effect"
+import { Effect, Console } from 'effect'
 
 // Simulate a task that fails with a recoverable error
-const task1: Effect.Effect<number, string> = Effect.fail("NetworkError")
+const task1: Effect.Effect<number, string> = Effect.fail('NetworkError')
 
 // tapDefect won't log anything because NetworkError is not a defect
-const tapping1 = Effect.tapDefect(task1, (cause) =>
-  Console.log(`defect: ${cause}`)
-)
+const tapping1 = Effect.tapDefect(task1, (cause) => Console.log(`defect: ${cause}`))
 
 Effect.runFork(tapping1)
 /*
@@ -123,14 +114,10 @@ No Output
 */
 
 // Simulate a severe failure in the system
-const task2: Effect.Effect<number, string> = Effect.dieMessage(
-  "Something went wrong"
-)
+const task2: Effect.Effect<number, string> = Effect.dieMessage('Something went wrong')
 
 // Log the defect using tapDefect
-const tapping2 = Effect.tapDefect(task2, (cause) =>
-  Console.log(`defect: ${cause}`)
-)
+const tapping2 = Effect.tapDefect(task2, (cause) => Console.log(`defect: ${cause}`))
 
 Effect.runFork(tapping2)
 /*
@@ -147,20 +134,19 @@ Inspects both success and failure outcomes of an effect, performing different ac
 **Example** (Inspecting Both Success and Failure)
 
 ```ts twoslash
-import { Effect, Random, Console } from "effect"
+import { Effect, Random, Console } from 'effect'
 
 // Simulate a task that might fail
 const task = Effect.filterOrFail(
   Random.nextRange(-1, 1),
   (n) => n >= 0,
-  () => "random number is negative"
+  () => 'random number is negative'
 )
 
 // Use tapBoth to log both success and failure outcomes
 const tapping = Effect.tapBoth(task, {
   onFailure: (error) => Console.log(`failure: ${error}`),
-  onSuccess: (randomNumber) =>
-    Console.log(`random number: ${randomNumber}`)
+  onSuccess: (randomNumber) => Console.log(`random number: ${randomNumber}`),
 })
 
 Effect.runFork(tapping)

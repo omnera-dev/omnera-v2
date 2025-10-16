@@ -5,19 +5,15 @@ The `Sink.race` operation allows multiple sinks to compete for completion. The f
 **Example** (Racing Two Sinks to Capture the First Result)
 
 ```ts twoslash
-import { Sink, Console, Stream, Schedule, Effect } from "effect"
+import { Sink, Console, Stream, Schedule, Effect } from 'effect'
 
-const stream = Stream.make("1", "2", "3", "4", "5").pipe(
-  Stream.schedule(Schedule.spaced("10 millis"))
+const stream = Stream.make('1', '2', '3', '4', '5').pipe(
+  Stream.schedule(Schedule.spaced('10 millis'))
 )
 
-const sink1 = Sink.forEach((s: string) =>
-  Console.log(`sink 1: ${s}`)
-).pipe(Sink.as(1))
+const sink1 = Sink.forEach((s: string) => Console.log(`sink 1: ${s}`)).pipe(Sink.as(1))
 
-const sink2 = Sink.forEach((s: string) =>
-  Console.log(`sink 2: ${s}`)
-).pipe(Sink.as(2))
+const sink2 = Sink.forEach((s: string) => Console.log(`sink 2: ${s}`)).pipe(Sink.as(2))
 
 // Race the two sinks, the result will be from the first to complete
 const sink = Sink.race(sink1, sink2)

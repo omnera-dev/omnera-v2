@@ -12,9 +12,9 @@ You can also use other APIs such as `Effect.runPromiseExit`, which can capture a
 <TabItem label="neverthrow">
 
 ```ts twoslash
-import { okAsync } from "neverthrow"
+import { okAsync } from 'neverthrow'
 
-const myResultAsync = okAsync({ myData: "test" })
+const myResultAsync = okAsync({ myData: 'test' })
 
 const result = await myResultAsync
 
@@ -27,10 +27,10 @@ result.isErr() // false
 <TabItem label="Effect">
 
 ```ts twoslash
-import * as Either from "effect/Either"
-import * as Effect from "effect/Effect"
+import * as Either from 'effect/Either'
+import * as Effect from 'effect/Effect'
 
-const myResultAsync = Effect.succeed({ myData: "test" })
+const myResultAsync = Effect.succeed({ myData: 'test' })
 
 const result = await Effect.runPromise(Effect.either(myResultAsync))
 
@@ -51,9 +51,9 @@ Either.isLeft(result) // false
 <TabItem label="neverthrow">
 
 ```ts twoslash
-import { errAsync } from "neverthrow"
+import { errAsync } from 'neverthrow'
 
-const myResultAsync = errAsync("Oh no")
+const myResultAsync = errAsync('Oh no')
 
 const myResult = await myResultAsync
 
@@ -66,10 +66,10 @@ myResult.isErr() // true
 <TabItem label="Effect">
 
 ```ts twoslash
-import * as Either from "effect/Either"
-import * as Effect from "effect/Effect"
+import * as Either from 'effect/Either'
+import * as Effect from 'effect/Effect'
 
-const myResultAsync = Effect.fail("Oh no")
+const myResultAsync = Effect.fail('Oh no')
 
 const result = await Effect.runPromise(Effect.either(myResultAsync))
 
@@ -90,16 +90,13 @@ Either.isLeft(result) // true
 <TabItem label="neverthrow">
 
 ```ts twoslash
-import { ResultAsync } from "neverthrow"
+import { ResultAsync } from 'neverthrow'
 
 interface User {}
 declare function insertIntoDb(user: User): Promise<User>
 
 // (user: User) => ResultAsync<User, Error>
-const insertUser = ResultAsync.fromThrowable(
-  insertIntoDb,
-  () => new Error("Database error")
-)
+const insertUser = ResultAsync.fromThrowable(insertIntoDb, () => new Error('Database error'))
 ```
 
 </TabItem>
@@ -107,7 +104,7 @@ const insertUser = ResultAsync.fromThrowable(
 <TabItem label="Effect">
 
 ```ts twoslash
-import * as Effect from "effect/Effect"
+import * as Effect from 'effect/Effect'
 
 interface User {}
 declare function insertIntoDb(user: User): Promise<User>
@@ -116,7 +113,7 @@ declare function insertIntoDb(user: User): Promise<User>
 const insertUser = (user: User) =>
   Effect.tryPromise({
     try: () => insertIntoDb(user),
-    catch: () => new Error("Database error")
+    catch: () => new Error('Database error'),
   })
 ```
 
@@ -133,32 +130,23 @@ const insertUser = (user: User) =>
 <TabItem label="neverthrow">
 
 ```ts twoslash
-import { Result, ResultAsync } from "neverthrow"
+import { Result, ResultAsync } from 'neverthrow'
 
 interface User {
   readonly name: string
 }
-declare function findUsersIn(
-  country: string
-): ResultAsync<Array<User>, Error>
+declare function findUsersIn(country: string): ResultAsync<Array<User>, Error>
 
-const usersInCanada = findUsersIn("Canada")
+const usersInCanada = findUsersIn('Canada')
 
-const namesInCanada = usersInCanada.map((users: Array<User>) =>
-  users.map((user) => user.name)
-)
+const namesInCanada = usersInCanada.map((users: Array<User>) => users.map((user) => user.name))
 
 // We can extract the Result using .then() or await
 namesInCanada.then((namesResult: Result<Array<string>, Error>) => {
   if (namesResult.isErr()) {
-    console.log(
-      "Couldn't get the users from the database",
-      namesResult.error
-    )
+    console.log("Couldn't get the users from the database", namesResult.error)
   } else {
-    console.log(
-      "Users in Canada are named: " + namesResult.value.join(",")
-    )
+    console.log('Users in Canada are named: ' + namesResult.value.join(','))
   }
 })
 ```
@@ -168,17 +156,15 @@ namesInCanada.then((namesResult: Result<Array<string>, Error>) => {
 <TabItem label="Effect">
 
 ```ts twoslash
-import * as Effect from "effect/Effect"
-import * as Either from "effect/Either"
+import * as Effect from 'effect/Effect'
+import * as Either from 'effect/Either'
 
 interface User {
   readonly name: string
 }
-declare function findUsersIn(
-  country: string
-): Effect.Effect<Array<User>, Error>
+declare function findUsersIn(country: string): Effect.Effect<Array<User>, Error>
 
-const usersInCanada = findUsersIn("Canada")
+const usersInCanada = findUsersIn('Canada')
 
 const namesInCanada = usersInCanada.pipe(
   Effect.map((users: Array<User>) => users.map((user) => user.name))
@@ -188,14 +174,9 @@ const namesInCanada = usersInCanada.pipe(
 Effect.runPromise(Effect.either(namesInCanada)).then(
   (namesResult: Either.Either<Array<string>, Error>) => {
     if (Either.isLeft(namesResult)) {
-      console.log(
-        "Couldn't get the users from the database",
-        namesResult.left
-      )
+      console.log("Couldn't get the users from the database", namesResult.left)
     } else {
-      console.log(
-        "Users in Canada are named: " + namesResult.right.join(",")
-      )
+      console.log('Users in Canada are named: ' + namesResult.right.join(','))
     }
   }
 )
@@ -214,32 +195,27 @@ Effect.runPromise(Effect.either(namesInCanada)).then(
 <TabItem label="neverthrow">
 
 ```ts twoslash
-import { Result, ResultAsync } from "neverthrow"
+import { Result, ResultAsync } from 'neverthrow'
 
 interface User {
   readonly name: string
 }
-declare function findUsersIn(
-  country: string
-): ResultAsync<Array<User>, Error>
+declare function findUsersIn(country: string): ResultAsync<Array<User>, Error>
 
-const usersInCanada = findUsersIn("Canada").mapErr((error: Error) => {
+const usersInCanada = findUsersIn('Canada').mapErr((error: Error) => {
   // The only error we want to pass to the user is "Unknown country"
-  if (error.message === "Unknown country") {
+  if (error.message === 'Unknown country') {
     return error.message
   }
   // All other errors will be labelled as a system error
-  return "System error, please contact an administrator."
+  return 'System error, please contact an administrator.'
 })
 
 usersInCanada.then((usersResult: Result<Array<User>, string>) => {
   if (usersResult.isErr()) {
-    console.log(
-      "Couldn't get the users from the database",
-      usersResult.error
-    )
+    console.log("Couldn't get the users from the database", usersResult.error)
   } else {
-    console.log("Users in Canada are: " + usersResult.value.join(","))
+    console.log('Users in Canada are: ' + usersResult.value.join(','))
   }
 })
 ```
@@ -249,36 +225,31 @@ usersInCanada.then((usersResult: Result<Array<User>, string>) => {
 <TabItem label="Effect">
 
 ```ts twoslash
-import * as Effect from "effect/Effect"
-import * as Either from "effect/Either"
+import * as Effect from 'effect/Effect'
+import * as Either from 'effect/Either'
 
 interface User {
   readonly name: string
 }
-declare function findUsersIn(
-  country: string
-): Effect.Effect<Array<User>, Error>
+declare function findUsersIn(country: string): Effect.Effect<Array<User>, Error>
 
-const usersInCanada = findUsersIn("Canada").pipe(
+const usersInCanada = findUsersIn('Canada').pipe(
   Effect.mapError((error: Error) => {
     // The only error we want to pass to the user is "Unknown country"
-    if (error.message === "Unknown country") {
+    if (error.message === 'Unknown country') {
       return error.message
     }
     // All other errors will be labelled as a system error
-    return "System error, please contact an administrator."
+    return 'System error, please contact an administrator.'
   })
 )
 
 Effect.runPromise(Effect.either(usersInCanada)).then(
   (usersResult: Either.Either<Array<User>, string>) => {
     if (Either.isLeft(usersResult)) {
-      console.log(
-        "Couldn't get the users from the database",
-        usersResult.left
-      )
+      console.log("Couldn't get the users from the database", usersResult.left)
     } else {
-      console.log("Users in Canada are: " + usersResult.right.join(","))
+      console.log('Users in Canada are: ' + usersResult.right.join(','))
     }
   }
 )
@@ -297,7 +268,7 @@ Effect.runPromise(Effect.either(usersInCanada)).then(
 <TabItem label="neverthrow">
 
 ```ts twoslash
-import { errAsync } from "neverthrow"
+import { errAsync } from 'neverthrow'
 
 const unwrapped = await errAsync(0).unwrapOr(10)
 // unwrapped = 10
@@ -308,11 +279,9 @@ const unwrapped = await errAsync(0).unwrapOr(10)
 <TabItem label="Effect">
 
 ```ts twoslash
-import * as Effect from "effect/Effect"
+import * as Effect from 'effect/Effect'
 
-const unwrapped = await Effect.runPromise(
-  Effect.fail(0).pipe(Effect.orElseSucceed(() => 10))
-)
+const unwrapped = await Effect.runPromise(Effect.fail(0).pipe(Effect.orElseSucceed(() => 10)))
 // unwrapped = 10
 ```
 
@@ -329,7 +298,7 @@ const unwrapped = await Effect.runPromise(
 <TabItem label="neverthrow">
 
 ```ts twoslash
-import { Result, ResultAsync } from "neverthrow"
+import { Result, ResultAsync } from 'neverthrow'
 
 interface User {}
 declare function validateUser(user: User): ResultAsync<User, Error>
@@ -338,17 +307,13 @@ declare function sendNotification(user: User): ResultAsync<void, Error>
 
 const user: User = {}
 
-const resAsync = validateUser(user)
-  .andThen(insertUser)
-  .andThen(sendNotification)
+const resAsync = validateUser(user).andThen(insertUser).andThen(sendNotification)
 
 resAsync.then((res: Result<void, Error>) => {
   if (res.isErr()) {
-    console.log("Oops, at least one step failed", res.error)
+    console.log('Oops, at least one step failed', res.error)
   } else {
-    console.log(
-      "User has been validated, inserted and notified successfully."
-    )
+    console.log('User has been validated, inserted and notified successfully.')
   }
 })
 ```
@@ -358,8 +323,8 @@ resAsync.then((res: Result<void, Error>) => {
 <TabItem label="Effect">
 
 ```ts twoslash
-import * as Effect from "effect/Effect"
-import * as Either from "effect/Either"
+import * as Effect from 'effect/Effect'
+import * as Either from 'effect/Either'
 
 interface User {}
 declare function validateUser(user: User): Effect.Effect<User, Error>
@@ -373,17 +338,13 @@ const resAsync = validateUser(user).pipe(
   Effect.andThen(sendNotification)
 )
 
-Effect.runPromise(Effect.either(resAsync)).then(
-  (res: Either.Either<void, Error>) => {
-    if (Either.isLeft(res)) {
-      console.log("Oops, at least one step failed", res.left)
-    } else {
-      console.log(
-        "User has been validated, inserted and notified successfully."
-      )
-    }
+Effect.runPromise(Effect.either(resAsync)).then((res: Either.Either<void, Error>) => {
+  if (Either.isLeft(res)) {
+    console.log('Oops, at least one step failed', res.left)
+  } else {
+    console.log('User has been validated, inserted and notified successfully.')
   }
-)
+})
 ```
 
 </TabItem>
@@ -399,22 +360,20 @@ Effect.runPromise(Effect.either(resAsync)).then(
 <TabItem label="neverthrow">
 
 ```ts twoslash
-import { ResultAsync, ok } from "neverthrow"
+import { ResultAsync, ok } from 'neverthrow'
 
 interface User {}
 declare function fetchUserData(id: string): ResultAsync<User, Error>
 declare function getDefaultUser(): User
 
-const userId = "123"
+const userId = '123'
 
 // Try to fetch user data, but provide a default if it fails
-const userResult = fetchUserData(userId).orElse(() =>
-  ok(getDefaultUser())
-)
+const userResult = fetchUserData(userId).orElse(() => ok(getDefaultUser()))
 
 userResult.then((result) => {
   if (result.isOk()) {
-    console.log("User data:", result.value)
+    console.log('User data:', result.value)
   }
 })
 ```
@@ -424,23 +383,21 @@ userResult.then((result) => {
 <TabItem label="Effect">
 
 ```ts twoslash
-import * as Effect from "effect/Effect"
-import * as Either from "effect/Either"
+import * as Effect from 'effect/Effect'
+import * as Either from 'effect/Either'
 
 interface User {}
 declare function fetchUserData(id: string): Effect.Effect<User, Error>
 declare function getDefaultUser(): User
 
-const userId = "123"
+const userId = '123'
 
 // Try to fetch user data, but provide a default if it fails
-const userResult = fetchUserData(userId).pipe(
-  Effect.orElse(() => Effect.succeed(getDefaultUser()))
-)
+const userResult = fetchUserData(userId).pipe(Effect.orElse(() => Effect.succeed(getDefaultUser())))
 
 Effect.runPromise(Effect.either(userResult)).then((result) => {
   if (Either.isRight(result)) {
-    console.log("User data:", result.right)
+    console.log('User data:', result.right)
   }
 })
 ```
@@ -458,7 +415,7 @@ Effect.runPromise(Effect.either(userResult)).then((result) => {
 <TabItem label="neverthrow">
 
 ```ts twoslash
-import { ResultAsync } from "neverthrow"
+import { ResultAsync } from 'neverthrow'
 
 interface User {
   readonly name: string
@@ -466,7 +423,7 @@ interface User {
 declare function validateUser(user: User): ResultAsync<User, Error>
 declare function insertUser(user: User): ResultAsync<User, Error>
 
-const user: User = { name: "John" }
+const user: User = { name: 'John' }
 
 // Handle both cases at the end of the chain using match
 const resultMessage = await validateUser(user)
@@ -482,7 +439,7 @@ const resultMessage = await validateUser(user)
 <TabItem label="Effect">
 
 ```ts twoslash
-import * as Effect from "effect/Effect"
+import * as Effect from 'effect/Effect'
 
 interface User {
   readonly name: string
@@ -490,17 +447,15 @@ interface User {
 declare function validateUser(user: User): Effect.Effect<User, Error>
 declare function insertUser(user: User): Effect.Effect<User, Error>
 
-const user: User = { name: "John" }
+const user: User = { name: 'John' }
 
 // Handle both cases at the end of the chain using match
 const resultMessage = await Effect.runPromise(
   validateUser(user).pipe(
     Effect.andThen(insertUser),
     Effect.match({
-      onSuccess: (user) =>
-        `User ${user.name} has been successfully created`,
-      onFailure: (error) =>
-        `User could not be created because ${error.message}`
+      onSuccess: (user) => `User ${user.name} has been successfully created`,
+      onFailure: (error) => `User could not be created because ${error.message}`,
     })
   )
 )
@@ -519,7 +474,7 @@ const resultMessage = await Effect.runPromise(
 <TabItem label="neverthrow">
 
 ```ts twoslash
-import { ResultAsync, okAsync } from "neverthrow"
+import { ResultAsync, okAsync } from 'neverthrow'
 
 const resultList: ResultAsync<number, string>[] = [okAsync(1), okAsync(2)]
 
@@ -532,12 +487,9 @@ const combinedList = ResultAsync.combine(resultList)
 <TabItem label="Effect">
 
 ```ts twoslash
-import * as Effect from "effect/Effect"
+import * as Effect from 'effect/Effect'
 
-const resultList: Effect.Effect<number, string>[] = [
-  Effect.succeed(1),
-  Effect.succeed(2)
-]
+const resultList: Effect.Effect<number, string>[] = [Effect.succeed(1), Effect.succeed(2)]
 
 // const combinedList: Effect<number[], string>
 const combinedList = Effect.all(resultList)
@@ -556,13 +508,13 @@ const combinedList = Effect.all(resultList)
 <TabItem label="neverthrow">
 
 ```ts twoslash
-import { ResultAsync, okAsync, errAsync } from "neverthrow"
+import { ResultAsync, okAsync, errAsync } from 'neverthrow'
 
 const resultList: ResultAsync<number, string>[] = [
   okAsync(123),
-  errAsync("boooom!"),
+  errAsync('boooom!'),
   okAsync(456),
-  errAsync("ahhhhh!")
+  errAsync('ahhhhh!'),
 ]
 
 const result = await ResultAsync.combineWithAllErrors(resultList)
@@ -574,18 +526,16 @@ const result = await ResultAsync.combineWithAllErrors(resultList)
 <TabItem label="Effect">
 
 ```ts twoslash
-import { Effect, identity } from "effect"
+import { Effect, identity } from 'effect'
 
 const resultList: Effect.Effect<number, string>[] = [
   Effect.succeed(123),
-  Effect.fail("boooom!"),
+  Effect.fail('boooom!'),
   Effect.succeed(456),
-  Effect.fail("ahhhhh!")
+  Effect.fail('ahhhhh!'),
 ]
 
-const result = await Effect.runPromise(
-  Effect.either(Effect.validateAll(resultList, identity))
-)
+const result = await Effect.runPromise(Effect.either(Effect.validateAll(resultList, identity)))
 // result is left(['boooom!', 'ahhhhh!'])
 ```
 

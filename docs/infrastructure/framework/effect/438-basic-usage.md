@@ -5,8 +5,8 @@ The module provides a single `FileSystem` [tag](/docs/requirements-management/se
 **Example** (Accessing File System Operations)
 
 ```ts twoslash
-import { FileSystem } from "@effect/platform"
-import { Effect } from "effect"
+import { FileSystem } from '@effect/platform'
+import { Effect } from 'effect'
 
 const program = Effect.gen(function* () {
   const fs = yield* FileSystem.FileSystem
@@ -52,9 +52,9 @@ The `FileSystem` interface includes the following operations:
 **Example** (Reading a File as a String)
 
 ```ts twoslash
-import { FileSystem } from "@effect/platform"
-import { NodeContext, NodeRuntime } from "@effect/platform-node"
-import { Effect } from "effect"
+import { FileSystem } from '@effect/platform'
+import { NodeContext, NodeRuntime } from '@effect/platform-node'
+import { Effect } from 'effect'
 
 //      ┌─── Effect<void, PlatformError, FileSystem>
 //      ▼
@@ -62,7 +62,7 @@ const program = Effect.gen(function* () {
   const fs = yield* FileSystem.FileSystem
 
   // Reading the content of the same file where this code is written
-  const content = yield* fs.readFileString("./index.ts", "utf8")
+  const content = yield* fs.readFileString('./index.ts', 'utf8')
   console.log(content)
 })
 

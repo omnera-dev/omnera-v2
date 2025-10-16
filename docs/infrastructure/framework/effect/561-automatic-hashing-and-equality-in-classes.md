@@ -9,16 +9,16 @@ Two class instances are considered equal if their properties have identical valu
 **Example** (Comparing Instances with Equal Properties)
 
 ```ts twoslash
-import { Schema } from "effect"
-import { Equal } from "effect"
+import { Schema } from 'effect'
+import { Equal } from 'effect'
 
-class Person extends Schema.Class<Person>("Person")({
+class Person extends Schema.Class<Person>('Person')({
   id: Schema.Number,
-  name: Schema.NonEmptyString
+  name: Schema.NonEmptyString,
 }) {}
 
-const john1 = new Person({ id: 1, name: "John" })
-const john2 = new Person({ id: 1, name: "John" })
+const john1 = new Person({ id: 1, name: 'John' })
+const john2 = new Person({ id: 1, name: 'John' })
 
 // Compare instances
 console.log(Equal.equals(john1, john2))
@@ -32,24 +32,24 @@ The `Equal` trait performs comparisons at the first level. If a property is a mo
 **Example** (Shallow Equality for Arrays)
 
 ```ts twoslash
-import { Schema } from "effect"
-import { Equal } from "effect"
+import { Schema } from 'effect'
+import { Equal } from 'effect'
 
-class Person extends Schema.Class<Person>("Person")({
+class Person extends Schema.Class<Person>('Person')({
   id: Schema.Number,
   name: Schema.NonEmptyString,
-  hobbies: Schema.Array(Schema.String) // Standard array schema
+  hobbies: Schema.Array(Schema.String), // Standard array schema
 }) {}
 
 const john1 = new Person({
   id: 1,
-  name: "John",
-  hobbies: ["reading", "coding"]
+  name: 'John',
+  hobbies: ['reading', 'coding'],
 })
 const john2 = new Person({
   id: 1,
-  name: "John",
-  hobbies: ["reading", "coding"]
+  name: 'John',
+  hobbies: ['reading', 'coding'],
 })
 
 // Equality fails because `hobbies` are not deeply compared
@@ -62,24 +62,24 @@ To achieve deep equality for nested structures like arrays, use `Schema.Data` in
 **Example** (Using `Schema.Data` for Deep Equality)
 
 ```ts twoslash
-import { Schema } from "effect"
-import { Data, Equal } from "effect"
+import { Schema } from 'effect'
+import { Data, Equal } from 'effect'
 
-class Person extends Schema.Class<Person>("Person")({
+class Person extends Schema.Class<Person>('Person')({
   id: Schema.Number,
   name: Schema.NonEmptyString,
-  hobbies: Schema.Data(Schema.Array(Schema.String)) // Enable deep equality
+  hobbies: Schema.Data(Schema.Array(Schema.String)), // Enable deep equality
 }) {}
 
 const john1 = new Person({
   id: 1,
-  name: "John",
-  hobbies: Data.array(["reading", "coding"])
+  name: 'John',
+  hobbies: Data.array(['reading', 'coding']),
 })
 const john2 = new Person({
   id: 1,
-  name: "John",
-  hobbies: Data.array(["reading", "coding"])
+  name: 'John',
+  hobbies: Data.array(['reading', 'coding']),
 })
 
 // Equality succeeds because `hobbies` are deeply compared

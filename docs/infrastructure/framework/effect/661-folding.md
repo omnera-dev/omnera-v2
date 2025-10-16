@@ -7,7 +7,7 @@ If you want to reduce a stream into a single cumulative value by applying an ope
 **Example** (Summing Elements in a Stream Using Fold Left)
 
 ```ts twoslash
-import { Stream, Sink, Effect } from "effect"
+import { Stream, Sink, Effect } from 'effect'
 
 const stream = Stream.make(1, 2, 3, 4)
 
@@ -28,7 +28,7 @@ Sometimes, you may want to fold elements in a stream but stop the process once a
 **Example** (Folding with a Condition to Stop Early)
 
 ```ts twoslash
-import { Stream, Sink, Effect } from "effect"
+import { Stream, Sink, Effect } from 'effect'
 
 const stream = Stream.iterate(0, (n) => n + 1)
 
@@ -52,7 +52,7 @@ To accumulate elements until a specific count is reached, use `Sink.foldUntil`. 
 **Example** (Accumulating a Set Number of Elements)
 
 ```ts twoslash
-import { Stream, Sink, Effect } from "effect"
+import { Stream, Sink, Effect } from 'effect'
 
 const stream = Stream.make(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
 
@@ -75,7 +75,7 @@ In some scenarios, you may want to fold elements based on a defined "weight" or 
 In the example below, each element has a weight of `1`, and the folding resets when the accumulated weight hits `3`.
 
 ```ts twoslash
-import { Stream, Sink, Chunk, Effect } from "effect"
+import { Stream, Sink, Chunk, Effect } from 'effect'
 
 const stream = Stream.make(3, 2, 4, 1, 5, 6, 2, 1, 3, 5, 6).pipe(
   Stream.transduce(
@@ -83,14 +83,12 @@ const stream = Stream.make(3, 2, 4, 1, 5, 6, 2, 1, 3, 5, 6).pipe(
       initial: Chunk.empty<number>(), // Initial empty Chunk
       maxCost: 3, // Maximum accumulated cost
       cost: () => 1, // Each element has a weight of 1
-      body: (acc, el) => Chunk.append(acc, el) // Append element to the Chunk
+      body: (acc, el) => Chunk.append(acc, el), // Append element to the Chunk
     })
   )
 )
 
-Effect.runPromise(Stream.runCollect(stream)).then((chunk) =>
-  console.log("%o", chunk)
-)
+Effect.runPromise(Stream.runCollect(stream)).then((chunk) => console.log('%o', chunk))
 /*
 Output:
 {

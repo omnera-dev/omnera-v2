@@ -7,13 +7,10 @@ Zipping combines elements from two streams into a new stream, pairing elements f
 In this example, elements from the two streams are paired sequentially. The resulting stream ends when one of the streams is exhausted.
 
 ```ts twoslash
-import { Stream, Effect } from "effect"
+import { Stream, Effect } from 'effect'
 
 // Zip two streams together
-const stream = Stream.zip(
-  Stream.make(1, 2, 3, 4, 5, 6),
-  Stream.make("a", "b", "c")
-)
+const stream = Stream.zip(Stream.make(1, 2, 3, 4, 5, 6), Stream.make('a', 'b', 'c'))
 
 Effect.runPromise(Stream.runCollect(stream)).then(console.log)
 /*
@@ -27,14 +24,13 @@ Output:
 Here, `Stream.zipWith` applies custom logic to each pair, combining elements in a user-defined way.
 
 ```ts twoslash
-import { Stream, Effect } from "effect"
+import { Stream, Effect } from 'effect'
 
 // Zip two streams with custom pairing logic
-const stream = Stream.zipWith(
-  Stream.make(1, 2, 3, 4, 5, 6),
-  Stream.make("a", "b", "c"),
-  (n, s) => [n + 10, s + "!"]
-)
+const stream = Stream.zipWith(Stream.make(1, 2, 3, 4, 5, 6), Stream.make('a', 'b', 'c'), (n, s) => [
+  n + 10,
+  s + '!',
+])
 
 Effect.runPromise(Stream.runCollect(stream)).then(console.log)
 /*
@@ -52,12 +48,12 @@ If one input stream ends before the other, you might want to zip with default va
 In this example, when the second stream completes, the first stream continues with "x" as a default value for the second stream.
 
 ```ts twoslash
-import { Stream, Effect } from "effect"
+import { Stream, Effect } from 'effect'
 
 const stream = Stream.zipAll(Stream.make(1, 2, 3, 4, 5, 6), {
-  other: Stream.make("a", "b", "c"),
+  other: Stream.make('a', 'b', 'c'),
   defaultSelf: -1,
-  defaultOther: "x"
+  defaultOther: 'x',
 })
 
 Effect.runPromise(Stream.runCollect(stream)).then(console.log)
@@ -82,13 +78,13 @@ Output:
 With `Stream.zipAllWith`, custom logic determines how to combine elements when either stream runs out, offering flexibility to handle these cases.
 
 ```ts twoslash
-import { Stream, Effect } from "effect"
+import { Stream, Effect } from 'effect'
 
 const stream = Stream.zipAllWith(Stream.make(1, 2, 3, 4, 5, 6), {
-  other: Stream.make("a", "b", "c"),
-  onSelf: (n) => [n, "x"],
+  other: Stream.make('a', 'b', 'c'),
+  onSelf: (n) => [n, 'x'],
   onOther: (s) => [-1, s],
-  onBoth: (n, s) => [n + 10, s + "!"]
+  onBoth: (n, s) => [n + 10, s + '!'],
 })
 
 Effect.runPromise(Stream.runCollect(stream)).then(console.log)
@@ -115,15 +111,11 @@ When combining streams that emit elements at different speeds, you may not want 
 **Example** (Combining Streams with Different Emission Rates)
 
 ```ts twoslash
-import { Stream, Schedule, Effect } from "effect"
+import { Stream, Schedule, Effect } from 'effect'
 
-const s1 = Stream.make(1, 2, 3).pipe(
-  Stream.schedule(Schedule.spaced("1 second"))
-)
+const s1 = Stream.make(1, 2, 3).pipe(Stream.schedule(Schedule.spaced('1 second')))
 
-const s2 = Stream.make("a", "b", "c", "d").pipe(
-  Stream.schedule(Schedule.spaced("500 millis"))
-)
+const s2 = Stream.make('a', 'b', 'c', 'd').pipe(Stream.schedule(Schedule.spaced('500 millis')))
 
 const stream = Stream.zipLatest(s1, s2)
 
@@ -155,13 +147,11 @@ Output:
 **Example** (Pairing Stream Elements with Next)
 
 ```ts twoslash
-import { Stream, Effect } from "effect"
+import { Stream, Effect } from 'effect'
 
 const stream = Stream.zipWithNext(Stream.make(1, 2, 3, 4))
 
-Effect.runPromise(Stream.runCollect(stream)).then((chunks) =>
-  console.log("%o", chunks)
-)
+Effect.runPromise(Stream.runCollect(stream)).then((chunks) => console.log('%o', chunks))
 /*
 Output:
 {
@@ -184,11 +174,9 @@ The `Stream.zipWithIndex` operator is a helpful tool for indexing each element i
 **Example** (Indexing Each Element in a Stream)
 
 ```ts twoslash
-import { Stream, Effect } from "effect"
+import { Stream, Effect } from 'effect'
 
-const stream = Stream.zipWithIndex(
-  Stream.make("Mary", "James", "Robert", "Patricia")
-)
+const stream = Stream.zipWithIndex(Stream.make('Mary', 'James', 'Robert', 'Patricia'))
 
 Effect.runPromise(Stream.runCollect(stream)).then(console.log)
 /*

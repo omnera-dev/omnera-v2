@@ -10,12 +10,12 @@ In simpler terms, if something fails at any point, the program will stop right t
 **Example** (Halting Execution at the First Error)
 
 ```ts twoslash
-import { Effect, Console } from "effect"
+import { Effect, Console } from 'effect'
 
-const task1 = Console.log("task1...")
-const task2 = Console.log("task2...")
-const failure = Effect.fail("Something went wrong!")
-const task4 = Console.log("task4...")
+const task1 = Console.log('task1...')
+const task2 = Console.log('task2...')
+const failure = Effect.fail('Something went wrong!')
+const task4 = Console.log('task4...')
 
 const program = Effect.gen(function* () {
   yield* task1
@@ -24,7 +24,7 @@ const program = Effect.gen(function* () {
   yield* failure
   // The following lines never run
   yield* task4
-  return "some result"
+  return 'some result'
 })
 
 Effect.runPromise(program).then(console.log, console.error)
@@ -43,7 +43,7 @@ For example, consider the following scenario where you want to narrow the type o
 **Example** (Type Narrowing without Explicit Return)
 
 ```ts twoslash
-import { Effect } from "effect"
+import { Effect } from 'effect'
 
 type User = {
   readonly name: string
@@ -62,7 +62,7 @@ function greetUser(id: string) {
       yield* Effect.fail(`User with id ${id} not found`)
     }
 
-// @errors: 18048
+    // @errors: 18048
     return `Hello, ${user.name}!`
   })
 }
@@ -75,7 +75,7 @@ To fix this, explicitly return right after calling `Effect.fail`:
 **Example** (Type Narrowing with Explicit Return)
 
 ```ts twoslash {15}
-import { Effect } from "effect"
+import { Effect } from 'effect'
 
 type User = {
   readonly name: string

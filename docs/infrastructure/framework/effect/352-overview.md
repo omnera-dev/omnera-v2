@@ -23,9 +23,7 @@ This type indicates that an effect:
 Conceptually, you can think of `Effect` as an effectful version of the following function type:
 
 ```ts showLineNumbers=false
-type Effect<Success, Error, Requirements> = (
-  context: Context<Requirements>
-) => Error | Success
+type Effect<Success, Error, Requirements> = (context: Context<Requirements>) => Error | Success
 ```
 
 However, effects are not actually functions. They can model synchronous, asynchronous, concurrent, and resourceful computations.

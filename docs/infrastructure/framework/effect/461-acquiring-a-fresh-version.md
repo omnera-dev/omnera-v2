@@ -5,19 +5,17 @@ If we don't want to share a module, we should create a fresh, non-shared version
 **Example**
 
 ```ts twoslash
-import { Effect, Context, Layer } from "effect"
+import { Effect, Context, Layer } from 'effect'
 
-class A extends Context.Tag("A")<A, { readonly a: number }>() {}
+class A extends Context.Tag('A')<A, { readonly a: number }>() {}
 
-class B extends Context.Tag("B")<B, { readonly b: string }>() {}
+class B extends Context.Tag('B')<B, { readonly b: string }>() {}
 
-class C extends Context.Tag("C")<C, { readonly c: boolean }>() {}
+class C extends Context.Tag('C')<C, { readonly c: boolean }>() {}
 
 const ALive = Layer.effect(
   A,
-  Effect.succeed({ a: 5 }).pipe(
-    Effect.tap(() => Effect.log("initialized"))
-  )
+  Effect.succeed({ a: 5 }).pipe(Effect.tap(() => Effect.log('initialized')))
 )
 
 const BLive = Layer.effect(
@@ -43,10 +41,7 @@ const program = Effect.gen(function* () {
 
 const runnable = Effect.provide(
   program,
-  Layer.merge(
-    Layer.provide(BLive, Layer.fresh(ALive)),
-    Layer.provide(CLive, Layer.fresh(ALive))
-  )
+  Layer.merge(Layer.provide(BLive, Layer.fresh(ALive)), Layer.provide(CLive, Layer.fresh(ALive)))
 )
 
 Effect.runPromise(runnable)

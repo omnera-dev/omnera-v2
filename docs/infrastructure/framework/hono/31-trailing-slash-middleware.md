@@ -8,10 +8,7 @@ This middleware handles Trailing Slash in the URL on a GET request.
 
 ```ts
 import { Hono } from 'hono'
-import {
-  appendTrailingSlash,
-  trimTrailingSlash,
-} from 'hono/trailing-slash'
+import { appendTrailingSlash, trimTrailingSlash } from 'hono/trailing-slash'
 ```
 
 ## Usage
@@ -43,4 +40,3 @@ app.get('/about/me', (c) => c.text('Without Trailing Slash'))
 ## Note
 
 It will be enabled when the request method is `GET` and the response status is `404`.
-

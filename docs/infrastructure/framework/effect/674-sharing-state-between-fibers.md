@@ -9,8 +9,8 @@ Let's look at an example where we continuously read names from user input until 
 First, let's introduce a `readLine` utility to read user input (ensure you have `@types/node` installed):
 
 ```ts twoslash
-import { Effect } from "effect"
-import * as NodeReadLine from "node:readline"
+import { Effect } from 'effect'
+import * as NodeReadLine from 'node:readline'
 
 // Utility to read user input
 const readLine = (message: string): Effect.Effect<string> =>
@@ -19,7 +19,7 @@ const readLine = (message: string): Effect.Effect<string> =>
       new Promise((resolve) => {
         const rl = NodeReadLine.createInterface({
           input: process.stdin,
-          output: process.stdout
+          output: process.stdout,
         })
         rl.question(message, (answer) => {
           rl.close()
@@ -32,8 +32,8 @@ const readLine = (message: string): Effect.Effect<string> =>
 Next, we implement the main program to collect names:
 
 ```ts twoslash collapse={5-18}
-import { Effect, Chunk, Ref } from "effect"
-import * as NodeReadLine from "node:readline"
+import { Effect, Chunk, Ref } from 'effect'
+import * as NodeReadLine from 'node:readline'
 
 // Utility to read user input
 const readLine = (message: string): Effect.Effect<string> =>
@@ -42,7 +42,7 @@ const readLine = (message: string): Effect.Effect<string> =>
       new Promise((resolve) => {
         const rl = NodeReadLine.createInterface({
           input: process.stdin,
-          output: process.stdout
+          output: process.stdout,
         })
         rl.question(message, (answer) => {
           rl.close()
@@ -54,8 +54,8 @@ const readLine = (message: string): Effect.Effect<string> =>
 const getNames = Effect.gen(function* () {
   const ref = yield* Ref.make(Chunk.empty<string>())
   while (true) {
-    const name = yield* readLine("Please enter a name or `q` to exit: ")
-    if (name === "q") {
+    const name = yield* readLine('Please enter a name or `q` to exit: ')
+    if (name === 'q') {
       break
     }
     yield* Ref.update(ref, (state) => Chunk.append(state, name))
@@ -83,8 +83,8 @@ For example, assume while we are reading from the console, we have another fiber
 Here, one fiber reads names from user input, while another fiber concurrently adds preset names at regular intervals:
 
 ```ts twoslash collapse={5-18}
-import { Effect, Chunk, Ref, Fiber } from "effect"
-import * as NodeReadLine from "node:readline"
+import { Effect, Chunk, Ref, Fiber } from 'effect'
+import * as NodeReadLine from 'node:readline'
 
 // Utility to read user input
 const readLine = (message: string): Effect.Effect<string> =>
@@ -93,7 +93,7 @@ const readLine = (message: string): Effect.Effect<string> =>
       new Promise((resolve) => {
         const rl = NodeReadLine.createInterface({
           input: process.stdin,
-          output: process.stdout
+          output: process.stdout,
         })
         rl.question(message, (answer) => {
           rl.close()
@@ -109,10 +109,8 @@ const getNames = Effect.gen(function* () {
   const fiber1 = yield* Effect.fork(
     Effect.gen(function* () {
       while (true) {
-        const name = yield* readLine(
-          "Please enter a name or `q` to exit: "
-        )
-        if (name === "q") {
+        const name = yield* readLine('Please enter a name or `q` to exit: ')
+        if (name === 'q') {
           break
         }
         yield* Ref.update(ref, (state) => Chunk.append(state, name))
@@ -123,9 +121,9 @@ const getNames = Effect.gen(function* () {
   // Fiber 2: Updating the state with predefined names
   const fiber2 = yield* Effect.fork(
     Effect.gen(function* () {
-      for (const name of ["John", "Jane", "Joe", "Tom"]) {
+      for (const name of ['John', 'Jane', 'Joe', 'Tom']) {
         yield* Ref.update(ref, (state) => Chunk.append(state, name))
-        yield* Effect.sleep("1 second")
+        yield* Effect.sleep('1 second')
       }
     })
   )

@@ -5,9 +5,9 @@ By using the utility types `Effect.Success`, `Effect.Error`, and `Effect.Context
 **Example** (Extracting Success, Error, and Context Types)
 
 ```ts twoslash
-import { Effect, Context } from "effect"
+import { Effect, Context } from 'effect'
 
-class SomeContext extends Context.Tag("SomeContext")<SomeContext, {}>() {}
+class SomeContext extends Context.Tag('SomeContext')<SomeContext, {}>() {}
 
 // Assume we have an effect that succeeds with a number,
 // fails with an Error, and requires SomeContext

@@ -5,7 +5,7 @@ The `Schema.filter` API supports reporting multiple validation issues at once, w
 **Example** (Reporting Multiple Validation Errors)
 
 ```ts twoslash
-import { Either, Schema, ParseResult } from "effect"
+import { Either, Schema, ParseResult } from 'effect'
 
 const Password = Schema.Trim.pipe(Schema.minLength(2))
 const OptionalString = Schema.optional(Schema.String)
@@ -14,7 +14,7 @@ const MyForm = Schema.Struct({
   password: Password,
   confirm_password: Password,
   name: OptionalString,
-  surname: OptionalString
+  surname: OptionalString,
 }).pipe(
   Schema.filter((input) => {
     const issues: Array<Schema.FilterIssue> = []
@@ -22,16 +22,16 @@ const MyForm = Schema.Struct({
     // Check if passwords match
     if (input.password !== input.confirm_password) {
       issues.push({
-        path: ["confirm_password"],
-        message: "Passwords do not match"
+        path: ['confirm_password'],
+        message: 'Passwords do not match',
       })
     }
 
     // Ensure either name or surname is present
     if (!input.name && !input.surname) {
       issues.push({
-        path: ["surname"],
-        message: "Surname must be present if name is not present"
+        path: ['surname'],
+        message: 'Surname must be present if name is not present',
       })
     }
     return issues
@@ -41,13 +41,9 @@ const MyForm = Schema.Struct({
 console.log(
   JSON.stringify(
     Schema.decodeUnknownEither(MyForm)({
-      password: "abc",
-      confirm_password: "abd" // Confirm password does not match
-    }).pipe(
-      Either.mapLeft((error) =>
-        ParseResult.ArrayFormatter.formatErrorSync(error)
-      )
-    ),
+      password: 'abc',
+      confirm_password: 'abd', // Confirm password does not match
+    }).pipe(Either.mapLeft((error) => ParseResult.ArrayFormatter.formatErrorSync(error))),
     null,
     2
   )

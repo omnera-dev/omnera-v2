@@ -11,7 +11,7 @@ You can supervise an effect by using the `Effect.supervised` function. This func
 In this example, we'll periodically monitor the number of fibers running in the application using a supervisor. The program calculates a Fibonacci number, spawning multiple fibers in the process, while a separate monitor tracks the fiber count.
 
 ```ts twoslash
-import { Effect, Supervisor, Schedule, Fiber, FiberStatus } from "effect"
+import { Effect, Supervisor, Schedule, Fiber, FiberStatus } from 'effect'
 
 // Main program that monitors fibers while calculating a Fibonacci number
 const program = Effect.gen(function* () {
@@ -26,7 +26,7 @@ const program = Effect.gen(function* () {
   )
 
   // Define a schedule to periodically monitor the fiber count every 500ms
-  const policy = Schedule.spaced("500 millis").pipe(
+  const policy = Schedule.spaced('500 millis').pipe(
     Schedule.whileInputEffect((_) =>
       Fiber.status(fibFiber).pipe(
         // Continue while the Fibonacci fiber is not done
@@ -65,7 +65,7 @@ const fib = (n: number): Effect.Effect<number> =>
     if (n <= 1) {
       return 1
     }
-    yield* Effect.sleep("500 millis") // Simulate work by delaying
+    yield* Effect.sleep('500 millis') // Simulate work by delaying
 
     // Fork two fibers for the recursive Fibonacci calls
     const fiber1 = yield* Effect.fork(fib(n - 2))

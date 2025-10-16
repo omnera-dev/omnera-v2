@@ -7,12 +7,12 @@ To send span data directly to Sentry for analysis, replace the default span proc
 **Example** (Configuring Sentry for Tracing)
 
 ```ts twoslash
-import { NodeSdk } from "@effect/opentelemetry"
-import { SentrySpanProcessor } from "@sentry/opentelemetry"
+import { NodeSdk } from '@effect/opentelemetry'
+import { SentrySpanProcessor } from '@sentry/opentelemetry'
 
 const NodeSdkLive = NodeSdk.layer(() => ({
-  resource: { serviceName: "example" },
-  spanProcessor: new SentrySpanProcessor()
+  resource: { serviceName: 'example' },
+  spanProcessor: new SentrySpanProcessor(),
 }))
 ```
 

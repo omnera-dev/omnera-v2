@@ -5,15 +5,13 @@ The most concise and convenient solution is to use [Effect.gen](/docs/getting-st
 **Example** (Using Effect.gen to Measure Elapsed Time)
 
 ```ts twoslash
-import { Effect } from "effect"
+import { Effect } from 'effect'
 
 // Get the current timestamp
 const now = Effect.sync(() => new Date().getTime())
 
 // Prints the elapsed time occurred to `self` to execute
-const elapsed = <R, E, A>(
-  self: Effect.Effect<A, E, R>
-): Effect.Effect<A, E, R> =>
+const elapsed = <R, E, A>(self: Effect.Effect<A, E, R>): Effect.Effect<A, E, R> =>
   Effect.gen(function* () {
     const startMillis = yield* now
     const result = yield* self
@@ -26,7 +24,7 @@ const elapsed = <R, E, A>(
   })
 
 // Simulates a successful computation with a delay of 200 milliseconds
-const task = Effect.succeed("some task").pipe(Effect.delay("200 millis"))
+const task = Effect.succeed('some task').pipe(Effect.delay('200 millis'))
 
 const program = elapsed(task)
 

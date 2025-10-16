@@ -11,12 +11,12 @@ The `stringLogger` logger produces logs in a human-readable key-value style. Thi
 This logger does not have a corresponding layer because it is the default logger.
 
 ```ts twoslash
-import { Effect } from "effect"
+import { Effect } from 'effect'
 
-const program = Effect.log("msg1", "msg2", ["msg3", "msg4"]).pipe(
-  Effect.delay("100 millis"),
-  Effect.annotateLogs({ key1: "value1", key2: "value2" }),
-  Effect.withLogSpan("myspan")
+const program = Effect.log('msg1', 'msg2', ['msg3', 'msg4']).pipe(
+  Effect.delay('100 millis'),
+  Effect.annotateLogs({ key1: 'value1', key2: 'value2' }),
+  Effect.withLogSpan('myspan')
 )
 
 Effect.runFork(program)
@@ -36,12 +36,12 @@ timestamp=2024-12-28T10:44:31.281Z level=INFO fiber=#0 message=msg1 message=msg2
 The `logfmtLogger` logger produces logs in a human-readable key-value format, similar to the [stringLogger](#stringlogger-default) logger. The main difference is that `logfmtLogger` removes extra spaces to make logs more compact.
 
 ```ts twoslash
-import { Effect, Logger } from "effect"
+import { Effect, Logger } from 'effect'
 
-const program = Effect.log("msg1", "msg2", ["msg3", "msg4"]).pipe(
-  Effect.delay("100 millis"),
-  Effect.annotateLogs({ key1: "value1", key2: "value2" }),
-  Effect.withLogSpan("myspan")
+const program = Effect.log('msg1', 'msg2', ['msg3', 'msg4']).pipe(
+  Effect.delay('100 millis'),
+  Effect.annotateLogs({ key1: 'value1', key2: 'value2' }),
+  Effect.withLogSpan('myspan')
 )
 
 Effect.runFork(program.pipe(Effect.provide(Logger.logFmt)))
@@ -58,12 +58,12 @@ timestamp=2024-12-28T10:44:31.281Z level=INFO fiber=#0 message=msg1 message=msg2
 The `prettyLogger` logger enhances log output by using color and indentation for better readability, making it particularly useful during development when visually scanning logs in the console.
 
 ```ts twoslash
-import { Effect, Logger } from "effect"
+import { Effect, Logger } from 'effect'
 
-const program = Effect.log("msg1", "msg2", ["msg3", "msg4"]).pipe(
-  Effect.delay("100 millis"),
-  Effect.annotateLogs({ key1: "value1", key2: "value2" }),
-  Effect.withLogSpan("myspan")
+const program = Effect.log('msg1', 'msg2', ['msg3', 'msg4']).pipe(
+  Effect.delay('100 millis'),
+  Effect.annotateLogs({ key1: 'value1', key2: 'value2' }),
+  Effect.withLogSpan('myspan')
 )
 
 Effect.runFork(program.pipe(Effect.provide(Logger.pretty)))
@@ -84,12 +84,12 @@ Output:
 The `structuredLogger` logger produces logs in a detailed object-based format. This format is helpful when you need more traceable logs, especially if other systems analyze them or store them for later review.
 
 ```ts twoslash
-import { Effect, Logger } from "effect"
+import { Effect, Logger } from 'effect'
 
-const program = Effect.log("msg1", "msg2", ["msg3", "msg4"]).pipe(
-  Effect.delay("100 millis"),
-  Effect.annotateLogs({ key1: "value1", key2: "value2" }),
-  Effect.withLogSpan("myspan")
+const program = Effect.log('msg1', 'msg2', ['msg3', 'msg4']).pipe(
+  Effect.delay('100 millis'),
+  Effect.annotateLogs({ key1: 'value1', key2: 'value2' }),
+  Effect.withLogSpan('myspan')
 )
 
 Effect.runFork(program.pipe(Effect.provide(Logger.structured)))
@@ -125,12 +125,12 @@ The `jsonLogger` logger produces logs in JSON format. This can be useful for too
 It calls `JSON.stringify` on the object created by the [structuredLogger](#structuredlogger) logger.
 
 ```ts twoslash
-import { Effect, Logger } from "effect"
+import { Effect, Logger } from 'effect'
 
-const program = Effect.log("msg1", "msg2", ["msg3", "msg4"]).pipe(
-  Effect.delay("100 millis"),
-  Effect.annotateLogs({ key1: "value1", key2: "value2" }),
-  Effect.withLogSpan("myspan")
+const program = Effect.log('msg1', 'msg2', ['msg3', 'msg4']).pipe(
+  Effect.delay('100 millis'),
+  Effect.annotateLogs({ key1: 'value1', key2: 'value2' }),
+  Effect.withLogSpan('myspan')
 )
 
 Effect.runFork(program.pipe(Effect.provide(Logger.json)))

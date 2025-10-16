@@ -11,7 +11,7 @@ type Username = string
 
 declare const getUser: (id: UserId) => object
 
-const myUsername: Username = "gcanti"
+const myUsername: Username = 'gcanti'
 
 getUser(myUsername) // This erroneously works
 ```
@@ -23,14 +23,14 @@ To prevent this, Effect introduces **branded types**. These types attach a uniqu
 **Example** (Defining Branded Types)
 
 ```ts twoslash
-import { Brand } from "effect"
+import { Brand } from 'effect'
 
-type UserId = string & Brand.Brand<"UserId">
+type UserId = string & Brand.Brand<'UserId'>
 type Username = string
 
 declare const getUser: (id: UserId) => object
 
-const myUsername: Username = "gcanti"
+const myUsername: Username = 'gcanti'
 
 // @errors: 2345
 getUser(myUsername)
@@ -50,9 +50,9 @@ To define a schema for a branded type from scratch, use the `Schema.brand` funct
 **Example** (Creating a schema for a Branded Type)
 
 ```ts twoslash
-import { Schema } from "effect"
+import { Schema } from 'effect'
 
-const UserId = Schema.String.pipe(Schema.brand("UserId"))
+const UserId = Schema.String.pipe(Schema.brand('UserId'))
 
 // string & Brand<"UserId">
 type UserId = typeof UserId.Type
@@ -63,9 +63,9 @@ Note that you can use `unique symbol`s as brands to ensure uniqueness across mod
 **Example** (Using a unique symbol as a Brand)
 
 ```ts twoslash
-import { Schema } from "effect"
+import { Schema } from 'effect'
 
-const UserIdBrand: unique symbol = Symbol.for("UserId")
+const UserIdBrand: unique symbol = Symbol.for('UserId')
 
 const UserId = Schema.String.pipe(Schema.brand(UserIdBrand))
 
@@ -80,11 +80,11 @@ If you have already defined a branded type using the [`effect/Brand`](/docs/code
 **Example** (Reusing an Existing Branded Type)
 
 ```ts twoslash
-import { Schema } from "effect"
-import { Brand } from "effect"
+import { Schema } from 'effect'
+import { Brand } from 'effect'
 
 // the existing branded type
-type UserId = string & Brand.Brand<"UserId">
+type UserId = string & Brand.Brand<'UserId'>
 
 const UserId = Brand.nominal<UserId>()
 
@@ -97,9 +97,9 @@ const UserIdSchema = Schema.String.pipe(Schema.fromBrand(UserId))
 The `Schema.brand` function includes a default constructor to facilitate the creation of branded values.
 
 ```ts twoslash
-import { Schema } from "effect"
+import { Schema } from 'effect'
 
-const UserId = Schema.String.pipe(Schema.brand("UserId"))
+const UserId = Schema.String.pipe(Schema.brand('UserId'))
 
-const userId = UserId.make("123") // Creates a branded UserId
+const userId = UserId.make('123') // Creates a branded UserId
 ```

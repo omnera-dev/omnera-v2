@@ -12,16 +12,16 @@ When an operation does not finish within the specified duration, the behavior of
 1. **Interruptible Operation**: If the operation can be interrupted, it is terminated immediately once the timeout threshold is reached, resulting in a `TimeoutException`.
 
    ```ts twoslash
-   import { Effect } from "effect"
+   import { Effect } from 'effect'
 
    const task = Effect.gen(function* () {
-     console.log("Start processing...")
-     yield* Effect.sleep("2 seconds") // Simulates a delay in processing
-     console.log("Processing complete.")
-     return "Result"
+     console.log('Start processing...')
+     yield* Effect.sleep('2 seconds') // Simulates a delay in processing
+     console.log('Processing complete.')
+     return 'Result'
    })
 
-   const timedEffect = task.pipe(Effect.timeout("1 second"))
+   const timedEffect = task.pipe(Effect.timeout('1 second'))
 
    Effect.runPromiseExit(timedEffect).then(console.log)
    /*
@@ -42,19 +42,16 @@ When an operation does not finish within the specified duration, the behavior of
 2. **Uninterruptible Operation**: If the operation is uninterruptible, it continues until completion before the `TimeoutException` is assessed.
 
    ```ts twoslash
-   import { Effect } from "effect"
+   import { Effect } from 'effect'
 
    const task = Effect.gen(function* () {
-     console.log("Start processing...")
-     yield* Effect.sleep("2 seconds") // Simulates a delay in processing
-     console.log("Processing complete.")
-     return "Result"
+     console.log('Start processing...')
+     yield* Effect.sleep('2 seconds') // Simulates a delay in processing
+     console.log('Processing complete.')
+     return 'Result'
    })
 
-   const timedEffect = task.pipe(
-     Effect.uninterruptible,
-     Effect.timeout("1 second")
-   )
+   const timedEffect = task.pipe(Effect.uninterruptible, Effect.timeout('1 second'))
 
    // Outputs a TimeoutException after the task completes,
    // because the task is uninterruptible

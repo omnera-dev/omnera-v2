@@ -21,4 +21,3 @@ An ecosystem has sprung up.
 
 In other words, Hono is damn fast, makes a lot of things possible, and works anywhere.
 We might imagine that Hono could become the **Standard for Web Standards**.
-

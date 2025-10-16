@@ -11,7 +11,7 @@ This can be useful when dealing with intermittent failures, such as network issu
 **Example** (Retrying with a Fixed Delay)
 
 ```ts twoslash
-import { Effect, Schedule } from "effect"
+import { Effect, Schedule } from 'effect'
 
 let count = 0
 
@@ -19,16 +19,16 @@ let count = 0
 const task = Effect.async<string, Error>((resume) => {
   if (count <= 2) {
     count++
-    console.log("failure")
+    console.log('failure')
     resume(Effect.fail(new Error()))
   } else {
-    console.log("success")
-    resume(Effect.succeed("yay!"))
+    console.log('success')
+    resume(Effect.succeed('yay!'))
   }
 })
 
 // Define a repetition policy using a fixed delay between retries
-const policy = Schedule.fixed("100 millis")
+const policy = Schedule.fixed('100 millis')
 
 const repeated = Effect.retry(task, policy)
 
@@ -50,7 +50,7 @@ You can also retry a failing effect a set number of times with a simpler policy 
 **Example** (Retrying a Task up to 5 times)
 
 ```ts twoslash
-import { Effect } from "effect"
+import { Effect } from 'effect'
 
 let count = 0
 
@@ -58,11 +58,11 @@ let count = 0
 const task = Effect.async<string, Error>((resume) => {
   if (count <= 2) {
     count++
-    console.log("failure")
+    console.log('failure')
     resume(Effect.fail(new Error()))
   } else {
-    console.log("success")
-    resume(Effect.succeed("yay!"))
+    console.log('success')
+    resume(Effect.succeed('yay!'))
   }
 })
 
@@ -84,7 +84,7 @@ You can customize how retries are managed by specifying conditions. Use the `unt
 **Example** (Retrying Until a Specific Condition is Met)
 
 ```ts twoslash
-import { Effect } from "effect"
+import { Effect } from 'effect'
 
 let count = 0
 
@@ -96,7 +96,7 @@ const action = Effect.failSync(() => {
 
 // Retry the action until a specific condition is met
 const program = Effect.retry(action, {
-  until: (err) => err === "Error 3"
+  until: (err) => err === 'Error 3',
 })
 
 Effect.runPromiseExit(program).then(console.log)

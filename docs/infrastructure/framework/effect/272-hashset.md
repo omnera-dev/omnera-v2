@@ -35,7 +35,7 @@ Any operation that would modify the set (like adding or removing a value) return
 **Example** (Basic creation and operations)
 
 ```ts twoslash
-import { HashSet } from "effect"
+import { HashSet } from 'effect'
 
 // Create an initial set with 3 values
 const set1 = HashSet.make(1, 2, 3)
@@ -75,7 +75,7 @@ console.log(HashSet.toValues(difference))
 **Example** (Chaining with `pipe`)
 
 ```ts twoslash
-import { HashSet, pipe } from "effect"
+import { HashSet, pipe } from 'effect'
 
 const result = pipe(
   // Duplicates are ignored

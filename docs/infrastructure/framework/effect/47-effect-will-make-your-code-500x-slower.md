@@ -9,11 +9,9 @@ const result = 1 + 1
 to
 
 ```ts twoslash
-import { Effect } from "effect"
+import { Effect } from 'effect'
 
-const result = Effect.runSync(
-  Effect.zipWith(Effect.succeed(1), Effect.succeed(1), (a, b) => a + b)
-)
+const result = Effect.runSync(Effect.zipWith(Effect.succeed(1), Effect.succeed(1), (a, b) => a + b))
 ```
 
 The reason is one operation is optimized by the JIT compiler to be a direct CPU instruction and the other isn't.

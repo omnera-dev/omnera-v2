@@ -5,7 +5,7 @@ Here is a simple example using `Ref` to create a counter:
 **Example** (Basic Counter with `Ref`)
 
 ```ts twoslash
-import { Effect, Ref } from "effect"
+import { Effect, Ref } from 'effect'
 
 class Counter {
   inc: Effect.Effect<void>
@@ -25,7 +25,7 @@ const make = Effect.andThen(Ref.make(0), (value) => new Counter(value))
 **Example** (Using the Counter)
 
 ```ts twoslash collapse={3-15}
-import { Effect, Ref } from "effect"
+import { Effect, Ref } from 'effect'
 
 class Counter {
   inc: Effect.Effect<void>

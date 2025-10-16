@@ -12,7 +12,7 @@ Here are the possible scenarios for a `Stream`:
 Let's see these scenarios in action:
 
 ```ts twoslash
-import { Stream } from "effect"
+import { Stream } from 'effect'
 
 // An empty Stream
 const emptyStream = Stream.empty

@@ -21,7 +21,7 @@ the outcome of the resulting `Effect` value.
 In this example, we try to retrieve a configuration from different nodes. If the primary node fails, we fall back to other nodes until we find a successful configuration.
 
 ```ts twoslash
-import { Effect, Console } from "effect"
+import { Effect, Console } from 'effect'
 
 interface Config {
   host: string
@@ -33,14 +33,14 @@ interface Config {
 const makeConfig = (name: string): Config => ({
   host: `${name}.example.com`,
   port: 8080,
-  apiKey: "12345-abcde"
+  apiKey: '12345-abcde',
 })
 
 // Simulate retrieving configuration from a remote node
 const remoteConfig = (name: string): Effect.Effect<Config, Error> =>
   Effect.gen(function* () {
     // Simulate node3 being the only one with available config
-    if (name === "node3") {
+    if (name === 'node3') {
       yield* Console.log(`Config for ${name} found`)
       return makeConfig(name)
     } else {
@@ -50,8 +50,8 @@ const remoteConfig = (name: string): Effect.Effect<Config, Error> =>
   })
 
 // Define the master configuration and potential fallback nodes
-const masterConfig = remoteConfig("master")
-const nodeConfigs = ["node1", "node2", "node3", "node4"].map(remoteConfig)
+const masterConfig = remoteConfig('master')
+const nodeConfigs = ['node1', 'node2', 'node3', 'node4'].map(remoteConfig)
 
 // Attempt to find a working configuration,
 // starting with the master and then falling back to other nodes

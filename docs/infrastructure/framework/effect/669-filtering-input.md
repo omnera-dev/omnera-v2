@@ -7,21 +7,17 @@ Sinks can also filter incoming elements based on specific conditions with `Sink.
 In the example below, elements are collected in chunks of three, but only positive numbers are included:
 
 ```ts twoslash
-import { Stream, Sink, Effect } from "effect"
+import { Stream, Sink, Effect } from 'effect'
 
 // Define a stream with positive, negative, and zero values
-const stream = Stream.fromIterable([
-  1, -2, 0, 1, 3, -3, 4, 2, 0, 1, -3, 1, 1, 6
-]).pipe(
+const stream = Stream.fromIterable([1, -2, 0, 1, 3, -3, 4, 2, 0, 1, -3, 1, 1, 6]).pipe(
   Stream.transduce(
     // Collect chunks of 3, filtering out non-positive numbers
     Sink.collectAllN<number>(3).pipe(Sink.filterInput((n) => n > 0))
   )
 )
 
-Effect.runPromise(Stream.runCollect(stream)).then((chunk) =>
-  console.log("%o", chunk)
-)
+Effect.runPromise(Stream.runCollect(stream)).then((chunk) => console.log('%o', chunk))
 /*
 Output:
 {

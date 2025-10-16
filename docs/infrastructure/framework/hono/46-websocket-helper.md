@@ -146,10 +146,10 @@ app.get('/', (c) => {
   return c.html(
     <html>
       <head>
-        <meta charset='UTF-8' />
+        <meta charset="UTF-8" />
       </head>
       <body>
-        <div id='now-time'></div>
+        <div id="now-time"></div>
         {html`
           <script>
             const ws = new WebSocket('ws://localhost:3000/ws')
@@ -186,4 +186,3 @@ export default {
   websocket,
 }
 ```
-

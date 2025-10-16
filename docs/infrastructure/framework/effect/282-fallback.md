@@ -7,7 +7,7 @@ When a computation returns `None`, you might want to try an alternative computat
 **Example** (Attempting Alternative Computations)
 
 ```ts twoslash
-import { Option } from "effect"
+import { Option } from 'effect'
 
 // Simulating a computation that may or may not produce a result
 const computation = (): Option.Option<number> =>
@@ -18,14 +18,12 @@ const alternativeComputation = (): Option.Option<number> =>
   Math.random() < 0.5 ? Option.some(20) : Option.none()
 
 // Attempt the first computation, then try an alternative if needed
-const program = computation().pipe(
-  Option.orElse(() => alternativeComputation())
-)
+const program = computation().pipe(Option.orElse(() => alternativeComputation()))
 
 const result = Option.match(program, {
-  onNone: () => "Both computations resulted in None",
+  onNone: () => 'Both computations resulted in None',
   // At least one computation succeeded
-  onSome: (value) => `Computed value: ${value}`
+  onSome: (value) => `Computed value: ${value}`,
 })
 
 console.log(result)
@@ -39,14 +37,9 @@ You can also use `Option.firstSomeOf` to get the first `Some` value from an iter
 **Example** (Retrieving the First `Some` Value)
 
 ```ts twoslash
-import { Option } from "effect"
+import { Option } from 'effect'
 
-const first = Option.firstSomeOf([
-  Option.none(),
-  Option.some(2),
-  Option.none(),
-  Option.some(3)
-])
+const first = Option.firstSomeOf([Option.none(), Option.some(2), Option.none(), Option.some(3)])
 
 console.log(first)
 // Output: { _id: 'Option', _tag: 'Some', value: 2 }

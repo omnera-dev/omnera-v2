@@ -7,7 +7,7 @@ The `Schema.suspend` function is designed for defining schemas that reference th
 In this example, the `Category` schema references itself through the `subcategories` field, which is an array of `Category` objects.
 
 ```ts twoslash
-import { Schema } from "effect"
+import { Schema } from 'effect'
 
 interface Category {
   readonly name: string
@@ -16,9 +16,7 @@ interface Category {
 
 const Category = Schema.Struct({
   name: Schema.String,
-  subcategories: Schema.Array(
-    Schema.suspend((): Schema.Schema<Category> => Category)
-  )
+  subcategories: Schema.Array(Schema.suspend((): Schema.Schema<Category> => Category)),
 })
 ```
 
@@ -32,13 +30,13 @@ const Category = Schema.Struct({
 **Example** (Type Inference Error)
 
 ```ts twoslash
-import { Schema } from "effect"
+import { Schema } from 'effect'
 
 // @errors: 7022
 const Category = Schema.Struct({
   name: Schema.String,
-// @errors: 7022 7024
-  subcategories: Schema.Array(Schema.suspend(() => Category))
+  // @errors: 7022 7024
+  subcategories: Schema.Array(Schema.suspend(() => Category)),
 })
 ```
 
@@ -50,10 +48,10 @@ One pattern to mitigate this is to **separate the field responsible for recursio
 **Example** (Separating Recursive Fields)
 
 ```ts twoslash
-import { Schema } from "effect"
+import { Schema } from 'effect'
 
 const fields = {
-  name: Schema.String
+  name: Schema.String,
   // ...other fields as needed
 }
 
@@ -69,7 +67,7 @@ const Category = Schema.Struct({
   subcategories: Schema.Array(
     // Define `subcategories` using recursion
     Schema.suspend((): Schema.Schema<Category> => Category)
-  )
+  ),
 })
 ```
 
@@ -80,33 +78,33 @@ You can also use `Schema.suspend` to create mutually recursive schemas, where tw
 **Example** (Defining Mutually Recursive Schemas)
 
 ```ts twoslash
-import { Schema } from "effect"
+import { Schema } from 'effect'
 
 interface Expression {
-  readonly type: "expression"
+  readonly type: 'expression'
   readonly value: number | Operation
 }
 
 interface Operation {
-  readonly type: "operation"
-  readonly operator: "+" | "-"
+  readonly type: 'operation'
+  readonly operator: '+' | '-'
   readonly left: Expression
   readonly right: Expression
 }
 
 const Expression = Schema.Struct({
-  type: Schema.Literal("expression"),
+  type: Schema.Literal('expression'),
   value: Schema.Union(
     Schema.Number,
     Schema.suspend((): Schema.Schema<Operation> => Operation)
-  )
+  ),
 })
 
 const Operation = Schema.Struct({
-  type: Schema.Literal("operation"),
-  operator: Schema.Literal("+", "-"),
+  type: Schema.Literal('operation'),
+  operator: Schema.Literal('+', '-'),
   left: Expression,
-  right: Expression
+  right: Expression,
 })
 ```
 
@@ -121,11 +119,11 @@ It's important to note that `NumberFromString` is a schema that transforms a str
 When we add this field to the `Category` schema, TypeScript raises an error:
 
 ```ts twoslash
-import { Schema } from "effect"
+import { Schema } from 'effect'
 
 const fields = {
   id: Schema.NumberFromString,
-  name: Schema.String
+  name: Schema.String,
 }
 
 interface Category extends Schema.Struct.Type<typeof fields> {
@@ -135,20 +133,20 @@ interface Category extends Schema.Struct.Type<typeof fields> {
 const Category = Schema.Struct({
   ...fields,
   subcategories: Schema.Array(
-// @errors: 2322
+    // @errors: 2322
     Schema.suspend((): Schema.Schema<Category> => Category)
-  )
+  ),
 })
 ```
 
 This error occurs because the explicit annotation `Schema.Schema<Category>` is no longer sufficient and needs to be adjusted by explicitly adding the `Encoded` type:
 
 ```ts twoslash
-import { Schema } from "effect"
+import { Schema } from 'effect'
 
 const fields = {
   id: Schema.NumberFromString,
-  name: Schema.String
+  name: Schema.String,
 }
 
 interface Category extends Schema.Struct.Type<typeof fields> {
@@ -162,10 +160,8 @@ interface CategoryEncoded extends Schema.Struct.Encoded<typeof fields> {
 const Category = Schema.Struct({
   ...fields,
   subcategories: Schema.Array(
-    Schema.suspend(
-      (): Schema.Schema<Category, CategoryEncoded> => Category
-    )
-  )
+    Schema.suspend((): Schema.Schema<Category, CategoryEncoded> => Category)
+  ),
 })
 ```
 

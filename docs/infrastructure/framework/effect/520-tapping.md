@@ -5,12 +5,9 @@
 **Example** (Logging Schedule Outputs)
 
 ```ts twoslash collapse={3-26}
-import { Array, Chunk, Duration, Effect, Schedule, Console } from "effect"
+import { Array, Chunk, Duration, Effect, Schedule, Console } from 'effect'
 
-const log = (
-  schedule: Schedule.Schedule<unknown>,
-  delay: Duration.DurationInput = 0
-): void => {
+const log = (schedule: Schedule.Schedule<unknown>, delay: Duration.DurationInput = 0): void => {
   const maxRecurs = 10
   const delays = Chunk.toArray(
     Effect.runSync(
@@ -24,17 +21,15 @@ const log = (
   delays.forEach((duration, i) => {
     console.log(
       i === maxRecurs
-        ? "..."
+        ? '...'
         : i === delays.length - 1
-        ? "(end)"
-        : `#${i + 1}: ${Duration.toMillis(duration)}ms`
+          ? '(end)'
+          : `#${i + 1}: ${Duration.toMillis(duration)}ms`
     )
   })
 }
 
-const schedule = Schedule.tapOutput(Schedule.recurs(2), (n) =>
-  Console.log(`Schedule Output: ${n}`)
-)
+const schedule = Schedule.tapOutput(Schedule.recurs(2), (n) => Console.log(`Schedule Output: ${n}`))
 
 log(schedule)
 /*

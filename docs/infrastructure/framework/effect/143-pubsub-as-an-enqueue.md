@@ -5,7 +5,7 @@
 Essentially, a `PubSub` can be seen as a `Enqueue` that only allows writes:
 
 ```ts twoslash showLineNumbers=false
-import type { Queue } from "effect"
+import type { Queue } from 'effect'
 
 interface PubSub<A> extends Queue.Enqueue<A> {}
 ```

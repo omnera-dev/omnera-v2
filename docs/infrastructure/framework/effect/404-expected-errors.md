@@ -42,14 +42,14 @@ By yielding an `Either`, we gain the ability to "pattern match" on this type to 
 **Example** (Using `Micro.either` to Handle Errors)
 
 ```ts twoslash
-import { Micro, Either } from "effect"
+import { Micro, Either } from 'effect'
 
 class HttpError {
-  readonly _tag = "HttpError"
+  readonly _tag = 'HttpError'
 }
 
 class ValidationError {
-  readonly _tag = "ValidationError"
+  readonly _tag = 'ValidationError'
 }
 
 //      ┌─── Micro<string, HttpError | ValidationError, never>
@@ -58,7 +58,7 @@ const program = Micro.gen(function* () {
   // Simulate http and validation errors
   if (Math.random() > 0.5) yield* Micro.fail(new HttpError())
   if (Math.random() > 0.5) yield* Micro.fail(new ValidationError())
-  return "some result"
+  return 'some result'
 })
 
 //      ┌─── Micro<string, never, never>
@@ -71,7 +71,7 @@ const recovered = Micro.gen(function* () {
     // Failure case
     onLeft: (error) => `Recovering from ${error._tag}`,
     // Success case
-    onRight: (value) => `Result is: ${value}`
+    onRight: (value) => `Result is: ${value}`,
   })
 })
 
@@ -99,14 +99,14 @@ The `Micro.catchAll` function allows you to catch any error that occurs in the p
 **Example** (Catching All Errors with `Micro.catchAll`)
 
 ```ts twoslash
-import { Micro } from "effect"
+import { Micro } from 'effect'
 
 class HttpError {
-  readonly _tag = "HttpError"
+  readonly _tag = 'HttpError'
 }
 
 class ValidationError {
-  readonly _tag = "ValidationError"
+  readonly _tag = 'ValidationError'
 }
 
 //      ┌─── Micro<string, HttpError | ValidationError, never>
@@ -115,15 +115,13 @@ const program = Micro.gen(function* () {
   // Simulate http and validation errors
   if (Math.random() > 0.5) yield* Micro.fail(new HttpError())
   if (Math.random() > 0.5) yield* Micro.fail(new ValidationError())
-  return "some result"
+  return 'some result'
 })
 
 //      ┌─── Micro<string, never, never>
 //      ▼
 const recovered = program.pipe(
-  Micro.catchAll((error) =>
-    Micro.succeed(`Recovering from ${error._tag}`)
-  )
+  Micro.catchAll((error) => Micro.succeed(`Recovering from ${error._tag}`))
 )
 
 Micro.runPromiseExit(recovered).then(console.log)
@@ -152,14 +150,14 @@ If your program's errors are **all tagged** with a `_tag` field that acts as a d
 **Example** (Handling Errors by Tag with `Micro.catchTag`)
 
 ```ts twoslash
-import { Micro } from "effect"
+import { Micro } from 'effect'
 
 class HttpError {
-  readonly _tag = "HttpError"
+  readonly _tag = 'HttpError'
 }
 
 class ValidationError {
-  readonly _tag = "ValidationError"
+  readonly _tag = 'ValidationError'
 }
 
 //      ┌─── Micro<string, HttpError | ValidationError, never>
@@ -168,15 +166,13 @@ const program = Micro.gen(function* () {
   // Simulate http and validation errors
   if (Math.random() > 0.5) yield* Micro.fail(new HttpError())
   if (Math.random() > 0.5) yield* Micro.fail(new ValidationError())
-  return "Success"
+  return 'Success'
 })
 
 //      ┌─── Micro<string, ValidationError, never>
 //      ▼
 const recovered = program.pipe(
-  Micro.catchTag("HttpError", (_HttpError) =>
-    Micro.succeed("Recovering from HttpError")
-  )
+  Micro.catchTag('HttpError', (_HttpError) => Micro.succeed('Recovering from HttpError'))
 )
 
 Micro.runPromiseExit(recovered).then(console.log)

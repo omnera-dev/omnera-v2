@@ -12,13 +12,13 @@ const task = (delay: number, name: string) =>
   )
 
 export async function program() {
-  const r0 = task(2_000, "long running task")
-  const r1 = await task(200, "task 2")
-  const r2 = await task(100, "task 3")
+  const r0 = task(2_000, 'long running task')
+  const r1 = await task(200, 'task 2')
+  const r2 = await task(100, 'task 3')
   return {
     r1,
     r2,
-    r0: await r0
+    r0: await r0,
   }
 }
 
@@ -35,7 +35,7 @@ long running task done
 **Answer:** You can achieve this by utilizing `Effect.fork` and `Fiber.join`.
 
 ```ts {11,17} twoslash
-import { Effect, Fiber } from "effect"
+import { Effect, Fiber } from 'effect'
 
 const task = (delay: number, name: string) =>
   Effect.gen(function* () {
@@ -45,13 +45,13 @@ const task = (delay: number, name: string) =>
   })
 
 const program = Effect.gen(function* () {
-  const r0 = yield* Effect.fork(task(2_000, "long running task"))
-  const r1 = yield* task(200, "task 2")
-  const r2 = yield* task(100, "task 3")
+  const r0 = yield* Effect.fork(task(2_000, 'long running task'))
+  const r1 = yield* task(200, 'task 2')
+  const r2 = yield* task(100, 'task 3')
   return {
     r1,
     r2,
-    r0: yield* Fiber.join(r0)
+    r0: yield* Fiber.join(r0),
   }
 })
 

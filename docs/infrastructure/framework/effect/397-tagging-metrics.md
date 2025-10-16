@@ -12,13 +12,11 @@ This allows you to add specific tags to a single metric, providing detailed cont
 **Example** (Tagging an Individual Metric)
 
 ```ts twoslash
-import { Metric } from "effect"
+import { Metric } from 'effect'
 
 // Create a counter metric for request count
 // and tag it with "environment: production"
-const counter = Metric.counter("request_count").pipe(
-  Metric.tagged("environment", "production")
-)
+const counter = Metric.counter('request_count').pipe(Metric.tagged('environment', 'production'))
 ```
 
 Here, the `request_count` metric is tagged with `"environment": "production"`, allowing you to filter or analyze metrics by this tag later.
@@ -30,20 +28,20 @@ You can use `Effect.tagMetrics` to apply tags to all metrics within the same con
 **Example** (Tagging Multiple Metrics)
 
 ```ts twoslash
-import { Metric, Effect } from "effect"
+import { Metric, Effect } from 'effect'
 
 // Create two separate counters
-const counter1 = Metric.counter("counter1")
-const counter2 = Metric.counter("counter2")
+const counter1 = Metric.counter('counter1')
+const counter2 = Metric.counter('counter2')
 
 // Define a task that simulates some work with a slight delay
-const task = Effect.succeed(1).pipe(Effect.delay("100 millis"))
+const task = Effect.succeed(1).pipe(Effect.delay('100 millis'))
 
 // Apply the environment tag to both counters in the same context
 Effect.gen(function* () {
   yield* counter1(task)
   yield* counter2(task)
-}).pipe(Effect.tagMetrics("environment", "production"))
+}).pipe(Effect.tagMetrics('environment', 'production'))
 ```
 
 If you only want to apply tags within a specific [scope](/docs/resource-management/scope/), you can use `Effect.tagMetricsScoped`. This limits the tag application to metrics within that scope, allowing for more precise tagging control.

@@ -31,12 +31,12 @@ Schema.Exit(options: {
 **Example**
 
 ```ts twoslash
-import { Schema, Exit } from "effect"
+import { Schema, Exit } from 'effect'
 
 const schema = Schema.Exit({
   failure: Schema.String,
   success: Schema.NumberFromString,
-  defect: Schema.String
+  defect: Schema.String,
 })
 
 //     ┌─── ExitEncoded<string, string, string>
@@ -52,9 +52,7 @@ const encode = Schema.encodeSync(schema)
 
 // Decoding examples
 
-console.log(
-  decode({ _tag: "Failure", cause: { _tag: "Fail", error: "a" } })
-)
+console.log(decode({ _tag: 'Failure', cause: { _tag: 'Fail', error: 'a' } }))
 /*
 Output:
 {
@@ -64,7 +62,7 @@ Output:
 }
 */
 
-console.log(decode({ _tag: "Success", value: "1" }))
+console.log(decode({ _tag: 'Success', value: '1' }))
 /*
 Output:
 { _id: 'Exit', _tag: 'Success', value: 1 }
@@ -72,7 +70,7 @@ Output:
 
 // Encoding examples
 
-console.log(encode(Exit.fail("a")))
+console.log(encode(Exit.fail('a')))
 /*
 Output:
 { _tag: 'Failure', cause: { _tag: 'Fail', error: 'a' } }
@@ -97,18 +95,18 @@ This is useful when transmitting errors across network requests or logging syste
 **Example** (Encoding and Decoding Defects)
 
 ```ts twoslash
-import { Schema, Exit } from "effect"
+import { Schema, Exit } from 'effect'
 
 const schema = Schema.Exit({
   failure: Schema.String,
   success: Schema.NumberFromString,
-  defect: Schema.Defect
+  defect: Schema.Defect,
 })
 
 const decode = Schema.decodeSync(schema)
 const encode = Schema.encodeSync(schema)
 
-console.log(encode(Exit.die(new Error("Message"))))
+console.log(encode(Exit.die(new Error('Message'))))
 /*
 Output:
 {
@@ -117,12 +115,12 @@ Output:
 }
 */
 
-console.log(encode(Exit.fail("a")))
+console.log(encode(Exit.fail('a')))
 
 console.log(
   decode({
-    _tag: "Failure",
-    cause: { _tag: "Die", defect: { name: "Error", message: "Message" } }
+    _tag: 'Failure',
+    cause: { _tag: 'Die', defect: { name: 'Error', message: 'Message' } },
   })
 )
 /*
@@ -170,12 +168,12 @@ Schema.ExitFromSelf(options: {
 **Example**
 
 ```ts twoslash
-import { Schema, Exit } from "effect"
+import { Schema, Exit } from 'effect'
 
 const schema = Schema.ExitFromSelf({
   failure: Schema.String,
   success: Schema.NumberFromString,
-  defect: Schema.String
+  defect: Schema.String,
 })
 
 //     ┌─── Exit<string, string>
@@ -191,7 +189,7 @@ const encode = Schema.encodeSync(schema)
 
 // Decoding examples
 
-console.log(decode(Exit.fail("a")))
+console.log(decode(Exit.fail('a')))
 /*
 Output:
 {
@@ -201,7 +199,7 @@ Output:
 }
 */
 
-console.log(decode(Exit.succeed("1")))
+console.log(decode(Exit.succeed('1')))
 /*
 Output:
 { _id: 'Exit', _tag: 'Success', value: 1 }
@@ -209,7 +207,7 @@ Output:
 
 // Encoding examples
 
-console.log(encode(Exit.fail("a")))
+console.log(encode(Exit.fail('a')))
 /*
 Output:
 {

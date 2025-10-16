@@ -7,15 +7,10 @@ Effect's major unique insight is that we can use the type system to track **erro
 Here's the same divide function from above, but with the Effect pattern:
 
 ```ts twoslash
-import { Effect } from "effect"
+import { Effect } from 'effect'
 
-const divide = (
-  a: number,
-  b: number
-): Effect.Effect<number, Error, never> =>
-  b === 0
-    ? Effect.fail(new Error("Cannot divide by zero"))
-    : Effect.succeed(a / b)
+const divide = (a: number, b: number): Effect.Effect<number, Error, never> =>
+  b === 0 ? Effect.fail(new Error('Cannot divide by zero')) : Effect.succeed(a / b)
 ```
 
 With this approach, the function no longer throws exceptions. Instead, errors are handled as values, which can be passed along like success values. The type signature also makes it clear:

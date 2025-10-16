@@ -30,7 +30,7 @@ To generate efficient arbitraries for strings that must match a certain pattern,
 **Example** (Using `Schema.pattern` for Pattern Constraints)
 
 ```ts twoslash
-import { Schema } from "effect"
+import { Schema } from 'effect'
 
 // ❌ Without using Schema.pattern (less efficient)
 const Bad = Schema.String.pipe(Schema.filter((s) => /^[a-z]+$/.test(s)))

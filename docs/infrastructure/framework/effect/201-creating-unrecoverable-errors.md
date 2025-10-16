@@ -25,12 +25,10 @@ it cannot recover from this failure.
 **Example** (Terminating on Division by Zero with a Specified Error)
 
 ```ts twoslash
-import { Effect } from "effect"
+import { Effect } from 'effect'
 
 const divide = (a: number, b: number) =>
-  b === 0
-    ? Effect.die(new Error("Cannot divide by zero"))
-    : Effect.succeed(a / b)
+  b === 0 ? Effect.die(new Error('Cannot divide by zero')) : Effect.succeed(a / b)
 
 //      ┌─── Effect<number, never, never>
 //      ▼
@@ -61,12 +59,10 @@ not handle or recover from the error.
 **Example** (Terminating on Division by Zero with a Specified Message)
 
 ```ts twoslash
-import { Effect } from "effect"
+import { Effect } from 'effect'
 
 const divide = (a: number, b: number) =>
-  b === 0
-    ? Effect.dieMessage("Cannot divide by zero")
-    : Effect.succeed(a / b)
+  b === 0 ? Effect.dieMessage('Cannot divide by zero') : Effect.succeed(a / b)
 
 //      ┌─── Effect<number, never, never>
 //      ▼

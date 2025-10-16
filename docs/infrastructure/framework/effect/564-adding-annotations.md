@@ -5,11 +5,11 @@ Defining a class with `Schema.Class` is similar to creating a [transformation](/
 For example, consider the following class definition:
 
 ```ts twoslash
-import { Schema } from "effect"
+import { Schema } from 'effect'
 
-class Person extends Schema.Class<Person>("Person")({
+class Person extends Schema.Class<Person>('Person')({
   id: Schema.Number,
-  name: Schema.NonEmptyString
+  name: Schema.NonEmptyString,
 }) {}
 ```
 
@@ -18,7 +18,7 @@ Under the hood, this definition creates a transformation schema that maps:
 ```ts showLineNumbers=false
 Schema.Struct({
   id: Schema.Number,
-  name: Schema.NonEmptyString
+  name: Schema.NonEmptyString,
 })
 ```
 
@@ -39,12 +39,12 @@ You can annotate each of these schemas by passing a tuple as the second argument
 **Example** (Annotating Different Parts of the Class Schema)
 
 ```ts twoslash
-import { Schema, SchemaAST } from "effect"
+import { Schema, SchemaAST } from 'effect'
 
-class Person extends Schema.Class<Person>("Person")(
+class Person extends Schema.Class<Person>('Person')(
   {
     id: Schema.Number,
-    name: Schema.NonEmptyString
+    name: Schema.NonEmptyString,
   },
   [
     // Annotations for the "to" schema
@@ -54,7 +54,7 @@ class Person extends Schema.Class<Person>("Person")(
     { description: `"transformation" description` },
 
     // Annotations for the "from" schema
-    { description: `"from" description` }
+    { description: `"from" description` },
   ]
 ) {}
 
@@ -73,19 +73,19 @@ If you do not want to annotate all three schemas, you can pass `undefined` for t
 **Example** (Skipping Annotations)
 
 ```ts twoslash
-import { Schema, SchemaAST } from "effect"
+import { Schema, SchemaAST } from 'effect'
 
-class Person extends Schema.Class<Person>("Person")(
+class Person extends Schema.Class<Person>('Person')(
   {
     id: Schema.Number,
-    name: Schema.NonEmptyString
+    name: Schema.NonEmptyString,
   },
   [
     // No annotations for the "to" schema
     undefined,
 
     // Annotations for the "transformation schema
-    { description: `"transformation" description` }
+    { description: `"transformation" description` },
   ]
 ) {}
 
@@ -104,14 +104,14 @@ By default, the unique identifier used to define the class is also applied as th
 **Example** (Default Identifier Annotation)
 
 ```ts twoslash
-import { Schema, SchemaAST } from "effect"
+import { Schema, SchemaAST } from 'effect'
 
 // Used as default identifier annotation ────┐
 //                                           |
 //                                           ▼
-class Person extends Schema.Class<Person>("Person")({
+class Person extends Schema.Class<Person>('Person')({
   id: Schema.Number,
-  name: Schema.NonEmptyString
+  name: Schema.NonEmptyString,
 }) {}
 
 console.log(SchemaAST.getIdentifierAnnotation(Person.ast.to))

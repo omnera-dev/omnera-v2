@@ -9,11 +9,11 @@ A getter can be used to derive computed values from the fields of the class. For
 **Example** (Adding a Getter for Uppercase Name)
 
 ```ts twoslash
-import { Schema } from "effect"
+import { Schema } from 'effect'
 
-class Person extends Schema.Class<Person>("Person")({
+class Person extends Schema.Class<Person>('Person')({
   id: Schema.Number,
-  name: Schema.NonEmptyString
+  name: Schema.NonEmptyString,
 }) {
   // Custom getter to return the name in uppercase
   get upperName() {
@@ -21,7 +21,7 @@ class Person extends Schema.Class<Person>("Person")({
   }
 }
 
-const john = new Person({ id: 1, name: "John" })
+const john = new Person({ id: 1, name: 'John' })
 
 // Use the custom getter
 console.log(john.upperName)
@@ -35,11 +35,11 @@ In addition to getters, you can define methods to encapsulate more complex logic
 **Example** (Adding a Method)
 
 ```ts twoslash
-import { Schema } from "effect"
+import { Schema } from 'effect'
 
-class Person extends Schema.Class<Person>("Person")({
+class Person extends Schema.Class<Person>('Person')({
   id: Schema.Number,
-  name: Schema.NonEmptyString
+  name: Schema.NonEmptyString,
 }) {
   // Custom method to return a greeting
   greet() {
@@ -47,7 +47,7 @@ class Person extends Schema.Class<Person>("Person")({
   }
 }
 
-const john = new Person({ id: 1, name: "John" })
+const john = new Person({ id: 1, name: 'John' })
 
 // Use the custom method
 console.log(john.greet())

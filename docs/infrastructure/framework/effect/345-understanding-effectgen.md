@@ -7,18 +7,15 @@ The `Effect.gen` utility simplifies the task of writing effectful code by utiliz
 Let's explore a practical program that performs a series of data transformations commonly found in application logic:
 
 ```ts twoslash
-import { Effect } from "effect"
+import { Effect } from 'effect'
 
 // Function to add a small service charge to a transaction amount
 const addServiceCharge = (amount: number) => amount + 1
 
 // Function to apply a discount safely to a transaction amount
-const applyDiscount = (
-  total: number,
-  discountRate: number
-): Effect.Effect<number, Error> =>
+const applyDiscount = (total: number, discountRate: number): Effect.Effect<number, Error> =>
   discountRate === 0
-    ? Effect.fail(new Error("Discount rate cannot be zero"))
+    ? Effect.fail(new Error('Discount rate cannot be zero'))
     : Effect.succeed(total - (total * discountRate) / 100)
 
 // Simulated asynchronous task to fetch a transaction amount from a
@@ -38,10 +35,7 @@ const program = Effect.gen(function* () {
   const discountRate = yield* fetchDiscountRate
 
   // Calculate discounted amount
-  const discountedAmount = yield* applyDiscount(
-    transactionAmount,
-    discountRate
-  )
+  const discountedAmount = yield* applyDiscount(transactionAmount, discountRate)
 
   // Apply service charge
   const finalAmount = addServiceCharge(discountedAmount)

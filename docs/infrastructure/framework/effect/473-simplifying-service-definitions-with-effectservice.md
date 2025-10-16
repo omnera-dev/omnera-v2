@@ -10,12 +10,12 @@ The following example defines a `Cache` service that depends on a file system.
 **Example** (Defining a Cache Service)
 
 ```ts twoslash
-import { FileSystem } from "@effect/platform"
-import { NodeFileSystem } from "@effect/platform-node"
-import { Effect } from "effect"
+import { FileSystem } from '@effect/platform'
+import { NodeFileSystem } from '@effect/platform-node'
+import { Effect } from 'effect'
 
 // Define a Cache service
-class Cache extends Effect.Service<Cache>()("app/Cache", {
+class Cache extends Effect.Service<Cache>()('app/Cache', {
   // Define how to create the service
   effect: Effect.gen(function* () {
     const fs = yield* FileSystem.FileSystem
@@ -23,7 +23,7 @@ class Cache extends Effect.Service<Cache>()("app/Cache", {
     return { lookup } as const
   }),
   // Specify dependencies
-  dependencies: [NodeFileSystem.layer]
+  dependencies: [NodeFileSystem.layer],
 }) {}
 ```
 
@@ -37,18 +37,18 @@ The `Effect.Service` API automatically generates layers for the service.
 | `Cache.DefaultWithoutDependencies` | Provides the `Cache` service but requires dependencies to be provided separately. |
 
 ```ts twoslash collapse={6-13}
-import { FileSystem } from "@effect/platform"
-import { NodeFileSystem } from "@effect/platform-node"
-import { Effect } from "effect"
+import { FileSystem } from '@effect/platform'
+import { NodeFileSystem } from '@effect/platform-node'
+import { Effect } from 'effect'
 
 // Define a Cache service
-class Cache extends Effect.Service<Cache>()("app/Cache", {
+class Cache extends Effect.Service<Cache>()('app/Cache', {
   effect: Effect.gen(function* () {
     const fs = yield* FileSystem.FileSystem
     const lookup = (key: string) => fs.readFileString(`cache/${key}`)
     return { lookup } as const
   }),
-  dependencies: [NodeFileSystem.layer]
+  dependencies: [NodeFileSystem.layer],
 }) {}
 
 // Layer that includes all required dependencies
@@ -71,24 +71,24 @@ A service created with `Effect.Service` can be accessed like any other Effect se
 **Example** (Accessing the Cache Service)
 
 ```ts twoslash collapse={6-13}
-import { FileSystem } from "@effect/platform"
-import { NodeFileSystem } from "@effect/platform-node"
-import { Effect, Console } from "effect"
+import { FileSystem } from '@effect/platform'
+import { NodeFileSystem } from '@effect/platform-node'
+import { Effect, Console } from 'effect'
 
 // Define a Cache service
-class Cache extends Effect.Service<Cache>()("app/Cache", {
+class Cache extends Effect.Service<Cache>()('app/Cache', {
   effect: Effect.gen(function* () {
     const fs = yield* FileSystem.FileSystem
     const lookup = (key: string) => fs.readFileString(`cache/${key}`)
     return { lookup } as const
   }),
-  dependencies: [NodeFileSystem.layer]
+  dependencies: [NodeFileSystem.layer],
 }) {}
 
 // Accessing the Cache Service
 const program = Effect.gen(function* () {
   const cache = yield* Cache
-  const data = yield* cache.lookup("my-key")
+  const data = yield* cache.lookup('my-key')
   console.log(data)
 }).pipe(Effect.catchAllCause((cause) => Console.log(cause)))
 
@@ -122,30 +122,30 @@ To test the program without depending on the real file system, we can inject a t
 **Example** (Using a Test File System)
 
 ```ts twoslash collapse={6-13,16-20}
-import { FileSystem } from "@effect/platform"
-import { NodeFileSystem } from "@effect/platform-node"
-import { Effect, Console } from "effect"
+import { FileSystem } from '@effect/platform'
+import { NodeFileSystem } from '@effect/platform-node'
+import { Effect, Console } from 'effect'
 
 // Define a Cache service
-class Cache extends Effect.Service<Cache>()("app/Cache", {
+class Cache extends Effect.Service<Cache>()('app/Cache', {
   effect: Effect.gen(function* () {
     const fs = yield* FileSystem.FileSystem
     const lookup = (key: string) => fs.readFileString(`cache/${key}`)
     return { lookup } as const
   }),
-  dependencies: [NodeFileSystem.layer]
+  dependencies: [NodeFileSystem.layer],
 }) {}
 
 // Accessing the Cache Service
 const program = Effect.gen(function* () {
   const cache = yield* Cache
-  const data = yield* cache.lookup("my-key")
+  const data = yield* cache.lookup('my-key')
   console.log(data)
 }).pipe(Effect.catchAllCause((cause) => Console.log(cause)))
 
 // Create a test file system that always returns a fixed value
 const FileSystemTest = FileSystem.layerNoop({
-  readFileString: () => Effect.succeed("File Content...")
+  readFileString: () => Effect.succeed('File Content...'),
 })
 
 const runnable = program.pipe(
@@ -165,30 +165,30 @@ Alternatively, you can mock the `Cache` service itself instead of replacing its 
 **Example** (Mocking the Cache Service)
 
 ```ts twoslash collapse={6-13,16-20}
-import { FileSystem } from "@effect/platform"
-import { NodeFileSystem } from "@effect/platform-node"
-import { Effect, Console } from "effect"
+import { FileSystem } from '@effect/platform'
+import { NodeFileSystem } from '@effect/platform-node'
+import { Effect, Console } from 'effect'
 
 // Define a Cache service
-class Cache extends Effect.Service<Cache>()("app/Cache", {
+class Cache extends Effect.Service<Cache>()('app/Cache', {
   effect: Effect.gen(function* () {
     const fs = yield* FileSystem.FileSystem
     const lookup = (key: string) => fs.readFileString(`cache/${key}`)
     return { lookup } as const
   }),
-  dependencies: [NodeFileSystem.layer]
+  dependencies: [NodeFileSystem.layer],
 }) {}
 
 // Accessing the Cache Service
 const program = Effect.gen(function* () {
   const cache = yield* Cache
-  const data = yield* cache.lookup("my-key")
+  const data = yield* cache.lookup('my-key')
   console.log(data)
 }).pipe(Effect.catchAllCause((cause) => Console.log(cause)))
 
 // Create a mock implementation of Cache
 const cache = new Cache({
-  lookup: () => Effect.succeed("Cache Content...")
+  lookup: () => Effect.succeed('Cache Content...'),
 })
 
 // Provide the mock Cache service
@@ -212,12 +212,12 @@ The `Effect.Service` API supports multiple ways to define a service:
 **Example** (Defining a Service with a Static Implementation)
 
 ```ts twoslash
-import { Effect, Random } from "effect"
+import { Effect, Random } from 'effect'
 
-class Sync extends Effect.Service<Sync>()("Sync", {
+class Sync extends Effect.Service<Sync>()('Sync', {
   sync: () => ({
-    next: Random.nextInt
-  })
+    next: Random.nextInt,
+  }),
 }) {}
 
 //      ┌─── Effect<void, never, Sync>
@@ -235,19 +235,19 @@ Effect.runPromise(program.pipe(Effect.provide(Sync.Default)))
 **Example** (Managing a Service with Lifecycle Control)
 
 ```ts twoslash
-import { Effect, Console } from "effect"
+import { Effect, Console } from 'effect'
 
-class Scoped extends Effect.Service<Scoped>()("Scoped", {
+class Scoped extends Effect.Service<Scoped>()('Scoped', {
   scoped: Effect.gen(function* () {
     // Acquire the resource and ensure it is properly released
     const resource = yield* Effect.acquireRelease(
-      Console.log("Aquiring...").pipe(Effect.as("foo")),
-      () => Console.log("Releasing...")
+      Console.log('Aquiring...').pipe(Effect.as('foo')),
+      () => Console.log('Releasing...')
     )
     // Register a finalizer to run when the effect is completed
-    yield* Effect.addFinalizer(() => Console.log("Shutting down"))
+    yield* Effect.addFinalizer(() => Console.log('Shutting down'))
     return { resource }
-  })
+  }),
 }) {}
 
 //      ┌─── Effect<void, never, Scoped>
@@ -283,13 +283,13 @@ By setting `accessors: true`, you can call service methods directly using the se
 **Example** (Defining a Service with Direct Method Access)
 
 ```ts twoslash del={11-12} ins={13}
-import { Effect, Random } from "effect"
+import { Effect, Random } from 'effect'
 
-class Sync extends Effect.Service<Sync>()("Sync", {
+class Sync extends Effect.Service<Sync>()('Sync', {
   sync: () => ({
-    next: Random.nextInt
+    next: Random.nextInt,
   }),
-  accessors: true // Enables direct method access via the tag
+  accessors: true, // Enables direct method access via the tag
 }) {}
 
 const program = Effect.gen(function* () {

@@ -6,12 +6,7 @@ The Route Helper provides enhanced routing information for debugging and middlew
 
 ```ts
 import { Hono } from 'hono'
-import {
-  matchedRoutes,
-  routePath,
-  baseRoutePath,
-  basePath,
-} from 'hono/route'
+import { matchedRoutes, routePath, baseRoutePath, basePath } from 'hono/route'
 ```
 
 ## Usage
@@ -141,4 +136,3 @@ subApp.get('/posts/:id', (c) => {
 
 app.route('/:sub', subApp)
 ```
-

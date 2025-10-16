@@ -5,15 +5,15 @@ Here's a basic example using the `Path` module to create a file path, which can 
 **Example** (Cross-Platform Path Handling)
 
 ```ts twoslash title="index.ts"
-import { Path } from "@effect/platform"
-import { Effect } from "effect"
+import { Path } from '@effect/platform'
+import { Effect } from 'effect'
 
 const program = Effect.gen(function* () {
   // Access the Path service
   const path = yield* Path.Path
 
   // Join parts of a path to create a complete file path
-  const mypath = path.join("tmp", "file.txt")
+  const mypath = path.join('tmp', 'file.txt')
 
   console.log(mypath)
 })
@@ -64,16 +64,16 @@ Update the program to load the Node.js-specific context:
 **Example** (Providing Node.js Context)
 
 ```ts twoslash title="index.ts" ins={3,15}
-import { Path } from "@effect/platform"
-import { Effect } from "effect"
-import { NodeContext, NodeRuntime } from "@effect/platform-node"
+import { Path } from '@effect/platform'
+import { Effect } from 'effect'
+import { NodeContext, NodeRuntime } from '@effect/platform-node'
 
 const program = Effect.gen(function* () {
   // Access the Path service
   const path = yield* Path.Path
 
   // Join parts of a path to create a complete file path
-  const mypath = path.join("tmp", "file.txt")
+  const mypath = path.join('tmp', 'file.txt')
 
   console.log(mypath)
 })
@@ -142,16 +142,16 @@ Update the program to use the Bun-specific context:
 **Example** (Providing Bun Context)
 
 ```ts twoslash title="index.ts" ins={3,15}
-import { Path } from "@effect/platform"
-import { Effect } from "effect"
-import { BunContext, BunRuntime } from "@effect/platform-bun"
+import { Path } from '@effect/platform'
+import { Effect } from 'effect'
+import { BunContext, BunRuntime } from '@effect/platform-bun'
 
 const program = Effect.gen(function* () {
   // Access the Path service
   const path = yield* Path.Path
 
   // Join parts of a path to create a complete file path
-  const mypath = path.join("tmp", "file.txt")
+  const mypath = path.join('tmp', 'file.txt')
 
   console.log(mypath)
 })

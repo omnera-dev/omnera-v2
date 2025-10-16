@@ -6,8 +6,7 @@ It ensures consistency in configuration data and provides detailed feedback for 
 **Syntax**
 
 ```ts showLineNumbers=false
-Config: <A, I extends string>(name: string, schema: Schema<A, I>) =>
-  Config<A>
+Config: <A, I extends string>(name: string, schema: Schema<A, I>) => Config<A>
 ```
 
 This function takes two arguments:
@@ -28,13 +27,10 @@ Behind the scenes, `Schema.Config` follows these steps:
 **Example** (Decoding a Configuration Value)
 
 ```ts twoslash filename="config.ts"
-import { Effect, Schema } from "effect"
+import { Effect, Schema } from 'effect'
 
 // Define a config that expects a string with at least 4 characters
-const myConfig = Schema.Config(
-  "Foo",
-  Schema.String.pipe(Schema.minLength(4))
-)
+const myConfig = Schema.Config('Foo', Schema.String.pipe(Schema.minLength(4)))
 
 const program = Effect.gen(function* () {
   const foo = yield* myConfig

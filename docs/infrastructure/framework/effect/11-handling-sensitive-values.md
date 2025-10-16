@@ -10,12 +10,12 @@ When you log a `Redacted` value using `console.log`, the actual content remains 
 **Example** (Protecting Sensitive Data)
 
 ```ts twoslash title="redacted.ts"
-import { Effect, Config, Redacted } from "effect"
+import { Effect, Config, Redacted } from 'effect'
 
 const program = Effect.gen(function* () {
   //      ┌─── Redacted<string>
   //      ▼
-  const redacted = yield* Config.redacted("API_KEY")
+  const redacted = yield* Config.redacted('API_KEY')
 
   // Log the redacted value, which won't reveal the actual secret
   console.log(`Console output: ${redacted}`)
@@ -49,14 +49,14 @@ By default, when you pass a string to `Config.redacted`, it returns a `Redacted<
 **Example** (Redacting and Validating a Number)
 
 ```ts twoslash
-import { Effect, Config, Redacted } from "effect"
+import { Effect, Config, Redacted } from 'effect'
 
 const program = Effect.gen(function* () {
   // Wrap the validated number configuration with redaction
   //
   //      ┌─── Redacted<number>
   //      ▼
-  const redacted = yield* Config.redacted(Config.number("SECRET"))
+  const redacted = yield* Config.redacted(Config.number('SECRET'))
 
   console.log(`Console output: ${redacted}`)
   console.log(`Actual value: ${Redacted.value(redacted)}`)

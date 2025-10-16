@@ -7,7 +7,7 @@ The `Stream.interleave` operator lets you pull one element at a time from each o
 **Example** (Basic Interleaving of Two Streams)
 
 ```ts twoslash
-import { Stream, Effect } from "effect"
+import { Stream, Effect } from 'effect'
 
 const s1 = Stream.make(1, 2, 3)
 const s2 = Stream.make(4, 5, 6)
@@ -28,7 +28,7 @@ For more complex interleaving, `Stream.interleaveWith` provides additional contr
 **Example** (Custom Interleaving Logic Using `Stream.interleaveWith`)
 
 ```ts twoslash
-import { Stream, Effect } from "effect"
+import { Stream, Effect } from 'effect'
 
 const s1 = Stream.make(1, 3, 5, 7, 9)
 const s2 = Stream.make(2, 4, 6, 8, 10)

@@ -32,4 +32,3 @@ The compression scheme to allow for response compression. Either `gzip` or `defl
 ### <Badge type="info" text="optional" /> threshold: `number`
 
 The minimum size in bytes to compress. Defaults to 1024 bytes.
-

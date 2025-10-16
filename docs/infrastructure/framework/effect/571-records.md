@@ -5,18 +5,18 @@ Record schemas allow you to define key-value mappings where the keys and values 
 **Example** (Creating Record Instances)
 
 ```ts twoslash
-import { Schema } from "effect"
+import { Schema } from 'effect'
 
 const Record = Schema.Record({
   key: Schema.String,
-  value: Schema.NonEmptyString
+  value: Schema.NonEmptyString,
 })
 
 // Successful creation
-Record.make({ a: "a", b: "b" })
+Record.make({ a: 'a', b: 'b' })
 
 // This will throw an error because 'b' is empty
-Record.make({ a: "a", b: "" })
+Record.make({ a: 'a', b: '' })
 /*
 throws
 ParseError: { readonly [x: string]: NonEmptyString }
@@ -27,5 +27,5 @@ ParseError: { readonly [x: string]: NonEmptyString }
 */
 
 // Bypasses validation
-Record.make({ a: "a", b: "" }, { disableValidation: true })
+Record.make({ a: 'a', b: '' }, { disableValidation: true })
 ```

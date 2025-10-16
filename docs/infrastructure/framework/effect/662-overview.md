@@ -24,7 +24,7 @@ To process a stream using a `Sink`, you can pass it directly to the `Stream.run`
 **Example** (Using a Sink to Collect Stream Elements)
 
 ```ts twoslash
-import { Stream, Sink, Effect } from "effect"
+import { Stream, Sink, Effect } from 'effect'
 
 //      ┌─── Stream<number, never, never>
 //      ▼

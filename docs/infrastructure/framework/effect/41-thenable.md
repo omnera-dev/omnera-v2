@@ -9,7 +9,7 @@ Mapping the result of an operation:
 <TabItem label="Promise">
 
 ```ts twoslash
-const mapped = Promise.resolve("Hello").then((s) => s.length)
+const mapped = Promise.resolve('Hello').then((s) => s.length)
 ```
 
 </TabItem>
@@ -17,9 +17,9 @@ const mapped = Promise.resolve("Hello").then((s) => s.length)
 <TabItem label="Effect">
 
 ```ts twoslash
-import { Effect } from "effect"
+import { Effect } from 'effect'
 
-const mapped = Effect.succeed("Hello").pipe(
+const mapped = Effect.succeed('Hello').pipe(
   Effect.map((s) => s.length)
   // or Effect.andThen((s) => s.length)
 )
@@ -38,9 +38,7 @@ Chaining multiple operations:
 <TabItem label="Promise">
 
 ```ts twoslash
-const flatMapped = Promise.resolve("Hello").then((s) =>
-  Promise.resolve(s.length)
-)
+const flatMapped = Promise.resolve('Hello').then((s) => Promise.resolve(s.length))
 ```
 
 </TabItem>
@@ -48,9 +46,9 @@ const flatMapped = Promise.resolve("Hello").then((s) =>
 <TabItem label="Effect">
 
 ```ts twoslash
-import { Effect } from "effect"
+import { Effect } from 'effect'
 
-const flatMapped = Effect.succeed("Hello").pipe(
+const flatMapped = Effect.succeed('Hello').pipe(
   Effect.flatMap((s) => Effect.succeed(s.length))
   // or Effect.andThen((s) => Effect.succeed(s.length))
 )

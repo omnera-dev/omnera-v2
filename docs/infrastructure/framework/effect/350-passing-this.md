@@ -6,7 +6,7 @@ You can achieve this by utilizing an overload that accepts the reference as the 
 **Example** (Passing `this` to Generator)
 
 ```ts twoslash
-import { Effect } from "effect"
+import { Effect } from 'effect'
 
 class MyClass {
   readonly local = 1

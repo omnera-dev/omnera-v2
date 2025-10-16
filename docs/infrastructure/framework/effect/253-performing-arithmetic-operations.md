@@ -5,7 +5,7 @@ You can perform arithmetic operations on durations, like addition and multiplica
 **Example** (Adding and Multiplying Durations)
 
 ```ts twoslash
-import { Duration } from "effect"
+import { Duration } from 'effect'
 
 const duration1 = Duration.seconds(30)
 const duration2 = Duration.minutes(1)

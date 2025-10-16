@@ -29,12 +29,12 @@ In this example, we start with a schema that accepts `"on"` or `"off"` and trans
 **Example** (Converting a String to a Boolean)
 
 ```ts twoslash
-import { Schema } from "effect"
+import { Schema } from 'effect'
 
 // Convert "on"/"off" to boolean and back
 const BooleanFromString = Schema.transform(
   // Source schema: "on" or "off"
-  Schema.Literal("on", "off"),
+  Schema.Literal('on', 'off'),
   // Target schema: boolean
   Schema.Boolean,
   {
@@ -43,9 +43,9 @@ const BooleanFromString = Schema.transform(
     // Transformation to convert the output of the
     // source schema ("on" | "off") into the input of the
     // target schema (boolean)
-    decode: (literal) => literal === "on", // Always succeeds here
+    decode: (literal) => literal === 'on', // Always succeeds here
     // Reverse transformation
-    encode: (bool) => (bool ? "on" : "off")
+    encode: (bool) => (bool ? 'on' : 'off'),
   }
 )
 
@@ -57,7 +57,7 @@ type Encoded = typeof BooleanFromString.Encoded
 //     ▼
 type Type = typeof BooleanFromString.Type
 
-console.log(Schema.decodeUnknownSync(BooleanFromString)("on"))
+console.log(Schema.decodeUnknownSync(BooleanFromString)('on'))
 // Output: true
 ```
 
@@ -66,21 +66,17 @@ The `decode` function above never fails by itself. However, the full decoding pr
 **Example** (Handling Invalid Input)
 
 ```ts twoslash collapse={4-12}
-import { Schema } from "effect"
+import { Schema } from 'effect'
 
 // Convert "on"/"off" to boolean and back
-const BooleanFromString = Schema.transform(
-  Schema.Literal("on", "off"),
-  Schema.Boolean,
-  {
-    strict: true,
-    decode: (s) => s === "on",
-    encode: (bool) => (bool ? "on" : "off")
-  }
-)
+const BooleanFromString = Schema.transform(Schema.Literal('on', 'off'), Schema.Boolean, {
+  strict: true,
+  decode: (s) => s === 'on',
+  encode: (bool) => (bool ? 'on' : 'off'),
+})
 
 // Providing input not allowed by the source schema
-Schema.decodeUnknownSync(BooleanFromString)("wrong")
+Schema.decodeUnknownSync(BooleanFromString)('wrong')
 /*
 throws:
 ParseError: ("on" | "off" <-> boolean)
@@ -108,18 +104,14 @@ By composing these transformations, we get a schema that decodes a string into a
 **Example** (Combining Two Transformation Schemas)
 
 ```ts twoslash collapse={4-12}
-import { Schema } from "effect"
+import { Schema } from 'effect'
 
 // Convert "on"/"off" to boolean and back
-const BooleanFromString = Schema.transform(
-  Schema.Literal("on", "off"),
-  Schema.Boolean,
-  {
-    strict: true,
-    decode: (s) => s === "on",
-    encode: (bool) => (bool ? "on" : "off")
-  }
-)
+const BooleanFromString = Schema.transform(Schema.Literal('on', 'off'), Schema.Boolean, {
+  strict: true,
+  decode: (s) => s === 'on',
+  encode: (bool) => (bool ? 'on' : 'off'),
+})
 
 const BooleanFromNumericString = Schema.transform(
   // Source schema: Convert string -> number
@@ -129,9 +121,9 @@ const BooleanFromNumericString = Schema.transform(
   {
     strict: true,
     // If number is positive, use "on", otherwise "off"
-    decode: (n) => (n > 0 ? "on" : "off"),
+    decode: (n) => (n > 0 ? 'on' : 'off'),
     // If boolean is "on", use 1, otherwise -1
-    encode: (bool) => (bool === "on" ? 1 : -1)
+    encode: (bool) => (bool === 'on' ? 1 : -1),
   }
 )
 
@@ -143,7 +135,7 @@ type Encoded = typeof BooleanFromNumericString.Encoded
 //     ▼
 type Type = typeof BooleanFromNumericString.Type
 
-console.log(Schema.decodeUnknownSync(BooleanFromNumericString)("100"))
+console.log(Schema.decodeUnknownSync(BooleanFromNumericString)('100'))
 // Output: true
 ```
 
@@ -152,7 +144,7 @@ console.log(Schema.decodeUnknownSync(BooleanFromNumericString)("100"))
 In this example, we convert an array into a `ReadonlySet`. The `decode` function takes an array and creates a new `ReadonlySet`. The `encode` function converts the set back into an array. We also provide the schema of the array items so they are properly validated.
 
 ```ts twoslash
-import { Schema } from "effect"
+import { Schema } from 'effect'
 
 // This function builds a schema that converts between a readonly array
 // and a readonly set of items
@@ -169,7 +161,7 @@ const ReadonlySetFromArray = <A, I, R>(
     {
       strict: true,
       decode: (items) => new Set(items),
-      encode: (set) => Array.from(set.values())
+      encode: (set) => Array.from(set.values()),
     }
   )
 
@@ -183,10 +175,10 @@ type Encoded = typeof schema.Encoded
 //     ▼
 type Type = typeof schema.Type
 
-console.log(Schema.decodeUnknownSync(schema)(["a", "b", "c"]))
+console.log(Schema.decodeUnknownSync(schema)(['a', 'b', 'c']))
 // Output: Set(3) { 'a', 'b', 'c' }
 
-console.log(Schema.encodeSync(schema)(new Set(["a", "b", "c"])))
+console.log(Schema.encodeSync(schema)(new Set(['a', 'b', 'c'])))
 // Output: [ 'a', 'b', 'c' ]
 ```
 
@@ -206,7 +198,7 @@ In some cases, strict type checking can create issues during data transformation
 Let's consider the scenario where you need to define a constructor `clamp` that ensures a number falls within a specific range. This function returns a schema that "clamps" a number to a specified minimum and maximum range:
 
 ```ts twoslash
-import { Schema, Number } from "effect"
+import { Schema, Number } from 'effect'
 
 const clamp =
   (minimum: number, maximum: number) =>
@@ -219,12 +211,12 @@ const clamp =
         Schema.typeSchema,
         Schema.filter((a) => a <= minimum || a >= maximum)
       ),
-// @errors: 2345
+      // @errors: 2345
       {
         strict: true,
         // Clamp the number within the specified range
         decode: (a) => Number.clamp(a, { minimum, maximum }),
-        encode: (a) => a
+        encode: (a) => a,
       }
     )
 ```
@@ -244,7 +236,7 @@ There are two ways to resolve this issue:
    Setting `strict: false` in the transformation options allows the schema to bypass some of TypeScript's type-checking rules, accommodating the type discrepancy:
 
    ```ts twoslash
-   import { Schema, Number } from "effect"
+   import { Schema, Number } from 'effect'
 
    const clamp =
      (minimum: number, maximum: number) =>
@@ -258,7 +250,7 @@ There are two ways to resolve this issue:
          {
            strict: false,
            decode: (a) => Number.clamp(a, { minimum, maximum }),
-           encode: (a) => a
+           encode: (a) => a,
          }
        )
    ```

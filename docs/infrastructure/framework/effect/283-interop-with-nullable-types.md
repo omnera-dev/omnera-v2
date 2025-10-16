@@ -9,7 +9,7 @@ When dealing with the `Option` data type, you may encounter code that uses `unde
 **Example** (Creating Option from Nullable Values)
 
 ```ts twoslash
-import { Option } from "effect"
+import { Option } from 'effect'
 
 console.log(Option.fromNullable(null))
 // Output: { _id: 'Option', _tag: 'None' }

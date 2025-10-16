@@ -16,17 +16,17 @@ worrying about the other effect.
 **Example** (Both Tasks Succeed)
 
 ```ts twoslash
-import { Effect, Console } from "effect"
+import { Effect, Console } from 'effect'
 
-const task1 = Effect.succeed("task1").pipe(
-  Effect.delay("200 millis"),
-  Effect.tap(Console.log("task1 done")),
-  Effect.onInterrupt(() => Console.log("task1 interrupted"))
+const task1 = Effect.succeed('task1').pipe(
+  Effect.delay('200 millis'),
+  Effect.tap(Console.log('task1 done')),
+  Effect.onInterrupt(() => Console.log('task1 interrupted'))
 )
-const task2 = Effect.succeed("task2").pipe(
-  Effect.delay("100 millis"),
-  Effect.tap(Console.log("task2 done")),
-  Effect.onInterrupt(() => Console.log("task2 interrupted"))
+const task2 = Effect.succeed('task2').pipe(
+  Effect.delay('100 millis'),
+  Effect.tap(Console.log('task2 done')),
+  Effect.onInterrupt(() => Console.log('task2 interrupted'))
 )
 
 const program = Effect.race(task1, task2)
@@ -42,17 +42,17 @@ task1 interrupted
 **Example** (One Task Fails, One Succeeds)
 
 ```ts twoslash
-import { Effect, Console } from "effect"
+import { Effect, Console } from 'effect'
 
-const task1 = Effect.fail("task1").pipe(
-  Effect.delay("100 millis"),
-  Effect.tap(Console.log("task1 done")),
-  Effect.onInterrupt(() => Console.log("task1 interrupted"))
+const task1 = Effect.fail('task1').pipe(
+  Effect.delay('100 millis'),
+  Effect.tap(Console.log('task1 done')),
+  Effect.onInterrupt(() => Console.log('task1 interrupted'))
 )
-const task2 = Effect.succeed("task2").pipe(
-  Effect.delay("200 millis"),
-  Effect.tap(Console.log("task2 done")),
-  Effect.onInterrupt(() => Console.log("task2 interrupted"))
+const task2 = Effect.succeed('task2').pipe(
+  Effect.delay('200 millis'),
+  Effect.tap(Console.log('task2 done')),
+  Effect.onInterrupt(() => Console.log('task2 interrupted'))
 )
 
 const program = Effect.race(task1, task2)
@@ -67,17 +67,17 @@ task2 done
 **Example** (Both Tasks Fail)
 
 ```ts twoslash
-import { Effect, Console } from "effect"
+import { Effect, Console } from 'effect'
 
-const task1 = Effect.fail("task1").pipe(
-  Effect.delay("100 millis"),
-  Effect.tap(Console.log("task1 done")),
-  Effect.onInterrupt(() => Console.log("task1 interrupted"))
+const task1 = Effect.fail('task1').pipe(
+  Effect.delay('100 millis'),
+  Effect.tap(Console.log('task1 done')),
+  Effect.onInterrupt(() => Console.log('task1 interrupted'))
 )
-const task2 = Effect.fail("task2").pipe(
-  Effect.delay("200 millis"),
-  Effect.tap(Console.log("task2 done")),
-  Effect.onInterrupt(() => Console.log("task2 interrupted"))
+const task2 = Effect.fail('task2').pipe(
+  Effect.delay('200 millis'),
+  Effect.tap(Console.log('task2 done')),
+  Effect.onInterrupt(() => Console.log('task2 interrupted'))
 )
 
 const program = Effect.race(task1, task2)
@@ -103,17 +103,17 @@ If you want to handle the result of whichever task completes first, whether it s
 **Example** (Handling Success or Failure with Either)
 
 ```ts twoslash
-import { Effect, Console } from "effect"
+import { Effect, Console } from 'effect'
 
-const task1 = Effect.fail("task1").pipe(
-  Effect.delay("100 millis"),
-  Effect.tap(Console.log("task1 done")),
-  Effect.onInterrupt(() => Console.log("task1 interrupted"))
+const task1 = Effect.fail('task1').pipe(
+  Effect.delay('100 millis'),
+  Effect.tap(Console.log('task1 done')),
+  Effect.onInterrupt(() => Console.log('task1 interrupted'))
 )
-const task2 = Effect.succeed("task2").pipe(
-  Effect.delay("200 millis"),
-  Effect.tap(Console.log("task2 done")),
-  Effect.onInterrupt(() => Console.log("task2 interrupted"))
+const task2 = Effect.succeed('task2').pipe(
+  Effect.delay('200 millis'),
+  Effect.tap(Console.log('task2 done')),
+  Effect.onInterrupt(() => Console.log('task2 interrupted'))
 )
 
 // Run both tasks concurrently, wrapping the result
@@ -142,23 +142,23 @@ worrying about the other effects.
 **Example** (All Tasks Succeed)
 
 ```ts twoslash
-import { Effect, Console } from "effect"
+import { Effect, Console } from 'effect'
 
-const task1 = Effect.succeed("task1").pipe(
-  Effect.delay("100 millis"),
-  Effect.tap(Console.log("task1 done")),
-  Effect.onInterrupt(() => Console.log("task1 interrupted"))
+const task1 = Effect.succeed('task1').pipe(
+  Effect.delay('100 millis'),
+  Effect.tap(Console.log('task1 done')),
+  Effect.onInterrupt(() => Console.log('task1 interrupted'))
 )
-const task2 = Effect.succeed("task2").pipe(
-  Effect.delay("200 millis"),
-  Effect.tap(Console.log("task2 done")),
-  Effect.onInterrupt(() => Console.log("task2 interrupted"))
+const task2 = Effect.succeed('task2').pipe(
+  Effect.delay('200 millis'),
+  Effect.tap(Console.log('task2 done')),
+  Effect.onInterrupt(() => Console.log('task2 interrupted'))
 )
 
-const task3 = Effect.succeed("task3").pipe(
-  Effect.delay("150 millis"),
-  Effect.tap(Console.log("task3 done")),
-  Effect.onInterrupt(() => Console.log("task3 interrupted"))
+const task3 = Effect.succeed('task3').pipe(
+  Effect.delay('150 millis'),
+  Effect.tap(Console.log('task3 done')),
+  Effect.onInterrupt(() => Console.log('task3 interrupted'))
 )
 
 const program = Effect.raceAll([task1, task2, task3])
@@ -175,23 +175,23 @@ task3 interrupted
 **Example** (One Task Fails, Two Tasks Succeed)
 
 ```ts twoslash
-import { Effect, Console } from "effect"
+import { Effect, Console } from 'effect'
 
-const task1 = Effect.fail("task1").pipe(
-  Effect.delay("100 millis"),
-  Effect.tap(Console.log("task1 done")),
-  Effect.onInterrupt(() => Console.log("task1 interrupted"))
+const task1 = Effect.fail('task1').pipe(
+  Effect.delay('100 millis'),
+  Effect.tap(Console.log('task1 done')),
+  Effect.onInterrupt(() => Console.log('task1 interrupted'))
 )
-const task2 = Effect.succeed("task2").pipe(
-  Effect.delay("200 millis"),
-  Effect.tap(Console.log("task2 done")),
-  Effect.onInterrupt(() => Console.log("task2 interrupted"))
+const task2 = Effect.succeed('task2').pipe(
+  Effect.delay('200 millis'),
+  Effect.tap(Console.log('task2 done')),
+  Effect.onInterrupt(() => Console.log('task2 interrupted'))
 )
 
-const task3 = Effect.succeed("task3").pipe(
-  Effect.delay("150 millis"),
-  Effect.tap(Console.log("task3 done")),
-  Effect.onInterrupt(() => Console.log("task3 interrupted"))
+const task3 = Effect.succeed('task3').pipe(
+  Effect.delay('150 millis'),
+  Effect.tap(Console.log('task3 done')),
+  Effect.onInterrupt(() => Console.log('task3 interrupted'))
 )
 
 const program = Effect.raceAll([task1, task2, task3])
@@ -207,23 +207,23 @@ task2 interrupted
 **Example** (All Tasks Fail)
 
 ```ts twoslash
-import { Effect, Console } from "effect"
+import { Effect, Console } from 'effect'
 
-const task1 = Effect.fail("task1").pipe(
-  Effect.delay("100 millis"),
-  Effect.tap(Console.log("task1 done")),
-  Effect.onInterrupt(() => Console.log("task1 interrupted"))
+const task1 = Effect.fail('task1').pipe(
+  Effect.delay('100 millis'),
+  Effect.tap(Console.log('task1 done')),
+  Effect.onInterrupt(() => Console.log('task1 interrupted'))
 )
-const task2 = Effect.fail("task2").pipe(
-  Effect.delay("200 millis"),
-  Effect.tap(Console.log("task2 done")),
-  Effect.onInterrupt(() => Console.log("task2 interrupted"))
+const task2 = Effect.fail('task2').pipe(
+  Effect.delay('200 millis'),
+  Effect.tap(Console.log('task2 done')),
+  Effect.onInterrupt(() => Console.log('task2 interrupted'))
 )
 
-const task3 = Effect.fail("task3").pipe(
-  Effect.delay("150 millis"),
-  Effect.tap(Console.log("task3 done")),
-  Effect.onInterrupt(() => Console.log("task3 interrupted"))
+const task3 = Effect.fail('task3').pipe(
+  Effect.delay('150 millis'),
+  Effect.tap(Console.log('task3 done')),
+  Effect.onInterrupt(() => Console.log('task3 interrupted'))
 )
 
 const program = Effect.raceAll([task1, task2, task3])
@@ -252,26 +252,20 @@ or fails.
 **Example** (Both Tasks Succeed)
 
 ```ts twoslash
-import { Effect, Console } from "effect"
+import { Effect, Console } from 'effect'
 
-const task1 = Effect.succeed("task1").pipe(
-  Effect.delay("100 millis"),
-  Effect.tap(Console.log("task1 done")),
-  Effect.onInterrupt(() =>
-    Console.log("task1 interrupted").pipe(Effect.delay("100 millis"))
-  )
+const task1 = Effect.succeed('task1').pipe(
+  Effect.delay('100 millis'),
+  Effect.tap(Console.log('task1 done')),
+  Effect.onInterrupt(() => Console.log('task1 interrupted').pipe(Effect.delay('100 millis')))
 )
-const task2 = Effect.succeed("task2").pipe(
-  Effect.delay("200 millis"),
-  Effect.tap(Console.log("task2 done")),
-  Effect.onInterrupt(() =>
-    Console.log("task2 interrupted").pipe(Effect.delay("100 millis"))
-  )
+const task2 = Effect.succeed('task2').pipe(
+  Effect.delay('200 millis'),
+  Effect.tap(Console.log('task2 done')),
+  Effect.onInterrupt(() => Console.log('task2 interrupted').pipe(Effect.delay('100 millis')))
 )
 
-const program = Effect.raceFirst(task1, task2).pipe(
-  Effect.tap(Console.log("more work..."))
-)
+const program = Effect.raceFirst(task1, task2).pipe(Effect.tap(Console.log('more work...')))
 
 Effect.runPromiseExit(program).then(console.log)
 /*
@@ -286,26 +280,20 @@ more work...
 **Example** (One Task Fails, One Succeeds)
 
 ```ts twoslash
-import { Effect, Console } from "effect"
+import { Effect, Console } from 'effect'
 
-const task1 = Effect.fail("task1").pipe(
-  Effect.delay("100 millis"),
-  Effect.tap(Console.log("task1 done")),
-  Effect.onInterrupt(() =>
-    Console.log("task1 interrupted").pipe(Effect.delay("100 millis"))
-  )
+const task1 = Effect.fail('task1').pipe(
+  Effect.delay('100 millis'),
+  Effect.tap(Console.log('task1 done')),
+  Effect.onInterrupt(() => Console.log('task1 interrupted').pipe(Effect.delay('100 millis')))
 )
-const task2 = Effect.succeed("task2").pipe(
-  Effect.delay("200 millis"),
-  Effect.tap(Console.log("task2 done")),
-  Effect.onInterrupt(() =>
-    Console.log("task2 interrupted").pipe(Effect.delay("100 millis"))
-  )
+const task2 = Effect.succeed('task2').pipe(
+  Effect.delay('200 millis'),
+  Effect.tap(Console.log('task2 done')),
+  Effect.onInterrupt(() => Console.log('task2 interrupted').pipe(Effect.delay('100 millis')))
 )
 
-const program = Effect.raceFirst(task1, task2).pipe(
-  Effect.tap(Console.log("more work..."))
-)
+const program = Effect.raceFirst(task1, task2).pipe(Effect.tap(Console.log('more work...')))
 
 Effect.runPromiseExit(program).then(console.log)
 /*
@@ -340,28 +328,23 @@ This allows both effects to complete independently while still terminating the l
 **Example** (Using `Effect.disconnect` for Quicker Return)
 
 ```ts twoslash
-import { Effect, Console } from "effect"
+import { Effect, Console } from 'effect'
 
-const task1 = Effect.succeed("task1").pipe(
-  Effect.delay("100 millis"),
-  Effect.tap(Console.log("task1 done")),
-  Effect.onInterrupt(() =>
-    Console.log("task1 interrupted").pipe(Effect.delay("100 millis"))
-  )
+const task1 = Effect.succeed('task1').pipe(
+  Effect.delay('100 millis'),
+  Effect.tap(Console.log('task1 done')),
+  Effect.onInterrupt(() => Console.log('task1 interrupted').pipe(Effect.delay('100 millis')))
 )
-const task2 = Effect.succeed("task2").pipe(
-  Effect.delay("200 millis"),
-  Effect.tap(Console.log("task2 done")),
-  Effect.onInterrupt(() =>
-    Console.log("task2 interrupted").pipe(Effect.delay("100 millis"))
-  )
+const task2 = Effect.succeed('task2').pipe(
+  Effect.delay('200 millis'),
+  Effect.tap(Console.log('task2 done')),
+  Effect.onInterrupt(() => Console.log('task2 interrupted').pipe(Effect.delay('100 millis')))
 )
 
 // Race the two tasks with disconnect to allow quicker return
-const program = Effect.raceFirst(
-  Effect.disconnect(task1),
-  Effect.disconnect(task2)
-).pipe(Effect.tap(Console.log("more work...")))
+const program = Effect.raceFirst(Effect.disconnect(task1), Effect.disconnect(task2)).pipe(
+  Effect.tap(Console.log('more work...'))
+)
 
 Effect.runPromiseExit(program).then(console.log)
 /*
@@ -386,26 +369,22 @@ This function is useful when you need to react to the completion of either effec
 **Example** (Handling Results of Concurrent Tasks)
 
 ```ts twoslash
-import { Effect, Console } from "effect"
+import { Effect, Console } from 'effect'
 
-const task1 = Effect.succeed("task1").pipe(
-  Effect.delay("100 millis"),
-  Effect.tap(Console.log("task1 done")),
-  Effect.onInterrupt(() =>
-    Console.log("task1 interrupted").pipe(Effect.delay("100 millis"))
-  )
+const task1 = Effect.succeed('task1').pipe(
+  Effect.delay('100 millis'),
+  Effect.tap(Console.log('task1 done')),
+  Effect.onInterrupt(() => Console.log('task1 interrupted').pipe(Effect.delay('100 millis')))
 )
-const task2 = Effect.succeed("task2").pipe(
-  Effect.delay("200 millis"),
-  Effect.tap(Console.log("task2 done")),
-  Effect.onInterrupt(() =>
-    Console.log("task2 interrupted").pipe(Effect.delay("100 millis"))
-  )
+const task2 = Effect.succeed('task2').pipe(
+  Effect.delay('200 millis'),
+  Effect.tap(Console.log('task2 done')),
+  Effect.onInterrupt(() => Console.log('task2 interrupted').pipe(Effect.delay('100 millis')))
 )
 
 const program = Effect.raceWith(task1, task2, {
   onSelfDone: (exit) => Console.log(`task1 exited with ${exit}`),
-  onOtherDone: (exit) => Console.log(`task2 exited with ${exit}`)
+  onOtherDone: (exit) => Console.log(`task2 exited with ${exit}`),
 })
 
 Effect.runFork(program)

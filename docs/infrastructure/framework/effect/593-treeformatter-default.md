@@ -5,18 +5,18 @@ The `TreeFormatter` is the default method for formatting errors. It organizes er
 **Example** (Decoding with Missing Properties)
 
 ```ts twoslash
-import { Either, Schema, ParseResult } from "effect"
+import { Either, Schema, ParseResult } from 'effect'
 
 const Person = Schema.Struct({
   name: Schema.String,
-  age: Schema.Number
+  age: Schema.Number,
 })
 
 const decode = Schema.decodeUnknownEither(Person)
 
 const result = decode({})
 if (Either.isLeft(result)) {
-  console.error("Decoding failed:")
+  console.error('Decoding failed:')
   console.error(ParseResult.TreeFormatter.formatErrorSync(result.left))
 }
 /*
@@ -42,12 +42,12 @@ You can make the error output more concise and meaningful by annotating the sche
 Adding a `title` annotation replaces the schema structure in the error message with the more human-readable "Person" making it easier to understand.
 
 ```ts twoslash
-import { Either, Schema, ParseResult } from "effect"
+import { Either, Schema, ParseResult } from 'effect'
 
 const Person = Schema.Struct({
   name: Schema.String,
-  age: Schema.Number
-}).annotations({ title: "Person" }) // Add a title annotation
+  age: Schema.Number,
+}).annotations({ title: 'Person' }) // Add a title annotation
 
 const result = Schema.decodeUnknownEither(Person)({})
 if (Either.isLeft(result)) {
@@ -67,18 +67,18 @@ By default, decoding functions like `Schema.decodeUnknownEither` report only the
 **Example** (Listing All Errors)
 
 ```ts twoslash
-import { Either, Schema, ParseResult } from "effect"
+import { Either, Schema, ParseResult } from 'effect'
 
 const Person = Schema.Struct({
   name: Schema.String,
-  age: Schema.Number
+  age: Schema.Number,
 })
 
-const decode = Schema.decodeUnknownEither(Person, { errors: "all" })
+const decode = Schema.decodeUnknownEither(Person, { errors: 'all' })
 
 const result = decode({})
 if (Either.isLeft(result)) {
-  console.error("Decoding failed:")
+  console.error('Decoding failed:')
   console.error(ParseResult.TreeFormatter.formatErrorSync(result.left))
 }
 /*
@@ -98,9 +98,7 @@ The `parseIssueTitle` annotation allows you to add dynamic context to error mess
 **Annotation Type**
 
 ```ts
-export type ParseIssueTitleAnnotation = (
-  issue: ParseIssue
-) => string | undefined
+export type ParseIssueTitleAnnotation = (issue: ParseIssue) => string | undefined
 ```
 
 **Return Value**:
@@ -115,8 +113,8 @@ export type ParseIssueTitleAnnotation = (
 **Example** (Dynamic Titles Using `parseIssueTitle`)
 
 ```ts twoslash
-import type { ParseResult } from "effect"
-import { Schema } from "effect"
+import type { ParseResult } from 'effect'
+import { Schema } from 'effect'
 
 // Function to generate titles for OrderItem issues
 const getOrderItemId = ({ actual }: ParseResult.ParseIssue) => {
@@ -128,10 +126,10 @@ const getOrderItemId = ({ actual }: ParseResult.ParseIssue) => {
 const OrderItem = Schema.Struct({
   id: Schema.String,
   name: Schema.String,
-  price: Schema.Number
+  price: Schema.Number,
 }).annotations({
-  identifier: "OrderItem",
-  parseIssueTitle: getOrderItemId
+  identifier: 'OrderItem',
+  parseIssueTitle: getOrderItemId,
 })
 
 // Function to generate titles for Order issues
@@ -144,13 +142,13 @@ const getOrderId = ({ actual }: ParseResult.ParseIssue) => {
 const Order = Schema.Struct({
   id: Schema.Number,
   name: Schema.String,
-  items: Schema.Array(OrderItem)
+  items: Schema.Array(OrderItem),
 }).annotations({
-  identifier: "Order",
-  parseIssueTitle: getOrderId
+  identifier: 'Order',
+  parseIssueTitle: getOrderId,
 })
 
-const decode = Schema.decodeUnknownSync(Order, { errors: "all" })
+const decode = Schema.decodeUnknownSync(Order, { errors: 'all' })
 
 // Case 1: No id available, uses the `identifier` annotation
 decode({})
@@ -177,7 +175,7 @@ ParseError: Order with id: 1
 */
 
 // Case 3: Nested issues with IDs for both Order and OrderItem
-decode({ id: 1, items: [{ id: "22b", price: "100" }] })
+decode({ id: 1, items: [{ id: '22b', price: '100' }] })
 /*
 throws
 ParseError: Order with id: 1

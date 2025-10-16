@@ -141,4 +141,3 @@ const client = hc<AppType>('http://localhost') // Typed correctly
 ```
 
 For more detailed information, please see [the RPC page](/docs/guides/rpc#using-rpc-with-larger-applications).
-

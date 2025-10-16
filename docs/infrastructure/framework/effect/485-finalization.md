@@ -13,16 +13,13 @@ If you need access to the effect's result, consider using [onExit](#onexit).
 **Example** (Running a Finalizer in All Outcomes)
 
 ```ts twoslash
-import { Console, Effect } from "effect"
+import { Console, Effect } from 'effect'
 
 // Define a cleanup effect
-const handler = Effect.ensuring(Console.log("Cleanup completed"))
+const handler = Effect.ensuring(Console.log('Cleanup completed'))
 
 // Define a successful effect
-const success = Console.log("Task completed").pipe(
-  Effect.as("some result"),
-  handler
-)
+const success = Console.log('Task completed').pipe(Effect.as('some result'), handler)
 
 Effect.runFork(success)
 /*
@@ -32,10 +29,7 @@ Cleanup completed
 */
 
 // Define a failing effect
-const failure = Console.log("Task failed").pipe(
-  Effect.andThen(Effect.fail("some error")),
-  handler
-)
+const failure = Console.log('Task failed').pipe(Effect.andThen(Effect.fail('some error')), handler)
 
 Effect.runFork(failure)
 /*
@@ -45,10 +39,7 @@ Cleanup completed
 */
 
 // Define an interrupted effect
-const interruption = Console.log("Task interrupted").pipe(
-  Effect.andThen(Effect.interrupt),
-  handler
-)
+const interruption = Console.log('Task interrupted').pipe(Effect.andThen(Effect.interrupt), handler)
 
 Effect.runFork(interruption)
 /*
@@ -71,7 +62,7 @@ The cleanup step itself is uninterruptible, which can help manage resources in c
 **Example** (Running a Cleanup Function with the Effect's Result)
 
 ```ts twoslash
-import { Console, Effect, Exit } from "effect"
+import { Console, Effect, Exit } from 'effect'
 
 // Define a cleanup effect that logs the result
 const handler = Effect.onExit((exit) =>
@@ -79,10 +70,7 @@ const handler = Effect.onExit((exit) =>
 )
 
 // Define a successful effect
-const success = Console.log("Task completed").pipe(
-  Effect.as("some result"),
-  handler
-)
+const success = Console.log('Task completed').pipe(Effect.as('some result'), handler)
 
 Effect.runFork(success)
 /*
@@ -92,10 +80,7 @@ Cleanup completed: some result
 */
 
 // Define a failing effect
-const failure = Console.log("Task failed").pipe(
-  Effect.andThen(Effect.fail("some error")),
-  handler
-)
+const failure = Console.log('Task failed').pipe(Effect.andThen(Effect.fail('some error')), handler)
 
 Effect.runFork(failure)
 /*
@@ -105,10 +90,7 @@ Cleanup completed: Error: some error
 */
 
 // Define an interrupted effect
-const interruption = Console.log("Task interrupted").pipe(
-  Effect.andThen(Effect.interrupt),
-  handler
-)
+const interruption = Console.log('Task interrupted').pipe(Effect.andThen(Effect.interrupt), handler)
 
 Effect.runFork(interruption)
 /*
@@ -129,18 +111,13 @@ The cleanup effect will also run if the failure is caused by interruption, and i
 **Example** (Running Cleanup Only on Failure)
 
 ```ts twoslash
-import { Console, Effect } from "effect"
+import { Console, Effect } from 'effect'
 
 // This handler logs the failure cause when the effect fails
-const handler = Effect.onError((cause) =>
-  Console.log(`Cleanup completed: ${cause}`)
-)
+const handler = Effect.onError((cause) => Console.log(`Cleanup completed: ${cause}`))
 
 // Define a successful effect
-const success = Console.log("Task completed").pipe(
-  Effect.as("some result"),
-  handler
-)
+const success = Console.log('Task completed').pipe(Effect.as('some result'), handler)
 
 Effect.runFork(success)
 /*
@@ -149,10 +126,7 @@ Task completed
 */
 
 // Define a failing effect
-const failure = Console.log("Task failed").pipe(
-  Effect.andThen(Effect.fail("some error")),
-  handler
-)
+const failure = Console.log('Task failed').pipe(Effect.andThen(Effect.fail('some error')), handler)
 
 Effect.runFork(failure)
 /*
@@ -162,8 +136,8 @@ Cleanup completed: Error: some error
 */
 
 // Define a failing effect
-const defect = Console.log("Task failed with defect").pipe(
-  Effect.andThen(Effect.die("Boom!")),
+const defect = Console.log('Task failed with defect').pipe(
+  Effect.andThen(Effect.die('Boom!')),
   handler
 )
 
@@ -175,10 +149,7 @@ Cleanup completed: Error: Boom!
 */
 
 // Define an interrupted effect
-const interruption = Console.log("Task interrupted").pipe(
-  Effect.andThen(Effect.interrupt),
-  handler
-)
+const interruption = Console.log('Task interrupted').pipe(Effect.andThen(Effect.interrupt), handler)
 
 Effect.runFork(interruption)
 /*

@@ -21,7 +21,7 @@ To create a `SubscriptionRef`, you can use the `SubscriptionRef.make` constructo
 **Example** (Creating a `SubscriptionRef`)
 
 ```ts twoslash
-import { SubscriptionRef } from "effect"
+import { SubscriptionRef } from 'effect'
 
 const ref = SubscriptionRef.make(0)
 ```
@@ -33,11 +33,10 @@ const ref = SubscriptionRef.make(0)
 In the following example, a "server" continually updates a shared value, while multiple "clients" observe the changes:
 
 ```ts twoslash
-import { Ref, Effect } from "effect"
+import { Ref, Effect } from 'effect'
 
 // Server function that increments a shared value forever
-const server = (ref: Ref.Ref<number>) =>
-  Ref.update(ref, (n) => n + 1).pipe(Effect.forever)
+const server = (ref: Ref.Ref<number>) => Ref.update(ref, (n) => n + 1).pipe(Effect.forever)
 ```
 
 The `server` function operates on a regular `Ref` and continuously updates the value. It doesn't need to know about `SubscriptionRef` directly.
@@ -45,11 +44,10 @@ The `server` function operates on a regular `Ref` and continuously updates the v
 Next, let's define a `client` that subscribes to changes and collects a specified number of values:
 
 ```ts twoslash
-import { Ref, Effect, Stream, Random } from "effect"
+import { Ref, Effect, Stream, Random } from 'effect'
 
 // Server function that increments a shared value forever
-const server = (ref: Ref.Ref<number>) =>
-  Ref.update(ref, (n) => n + 1).pipe(Effect.forever)
+const server = (ref: Ref.Ref<number>) => Ref.update(ref, (n) => n + 1).pipe(Effect.forever)
 
 // Client function that observes the stream of changes
 const client = (changes: Stream.Stream<number>) =>
@@ -65,18 +63,10 @@ Similarly, the `client` function only works with a `Stream` of values and doesn'
 To tie everything together, we start the server, launch multiple client instances in parallel, and then shut down the server when we're finished. We also create the `SubscriptionRef` in this process.
 
 ```ts twoslash
-import {
-  Ref,
-  Effect,
-  Stream,
-  Random,
-  SubscriptionRef,
-  Fiber
-} from "effect"
+import { Ref, Effect, Stream, Random, SubscriptionRef, Fiber } from 'effect'
 
 // Server function that increments a shared value forever
-const server = (ref: Ref.Ref<number>) =>
-  Ref.update(ref, (n) => n + 1).pipe(Effect.forever)
+const server = (ref: Ref.Ref<number>) => Ref.update(ref, (n) => n + 1).pipe(Effect.forever)
 
 // Client function that observes the stream of changes
 const client = (changes: Stream.Stream<number>) =>
@@ -97,7 +87,7 @@ const program = Effect.gen(function* () {
   const clients = new Array(5).fill(null).map(() => client(ref.changes))
 
   // Run all clients in concurrently and collect their results
-  const chunks = yield* Effect.all(clients, { concurrency: "unbounded" })
+  const chunks = yield* Effect.all(clients, { concurrency: 'unbounded' })
 
   // Interrupt the server when clients are done
   yield* Fiber.interrupt(serverFiber)

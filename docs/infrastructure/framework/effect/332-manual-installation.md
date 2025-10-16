@@ -136,9 +136,9 @@ touch src/index.ts
 Open the `index.ts` file and add the following code:
 
 ```ts title="src/index.ts"
-import { Effect, Console } from "effect"
+import { Effect, Console } from 'effect'
 
-const program = Console.log("Hello, World!")
+const program = Console.log('Hello, World!')
 
 Effect.runSync(program)
 ```
@@ -185,9 +185,9 @@ Let's write and run a simple program to ensure that everything is set up correct
 Open the `main.ts` file and replace the content with the following code:
 
 ```ts title="main.ts"
-import { Effect, Console } from "effect"
+import { Effect, Console } from 'effect'
 
-const program = Console.log("Hello, World!")
+const program = Console.log('Hello, World!')
 
 Effect.runSync(program)
 ```
@@ -246,9 +246,9 @@ Let's write and run a simple program to ensure that everything is set up correct
 Open the `index.ts` file and replace the content with the following code:
 
 ```ts title="index.ts"
-import { Effect, Console } from "effect"
+import { Effect, Console } from 'effect'
 
-const program = Console.log("Hello, World!")
+const program = Console.log('Hello, World!')
 
 Effect.runSync(program)
 ```

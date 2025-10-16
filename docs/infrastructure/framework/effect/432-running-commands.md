@@ -5,11 +5,11 @@ You need a `CommandExecutor` to run the command, which can capture output in var
 **Example** (Running a Command and Printing Output)
 
 ```ts twoslash
-import { Command } from "@effect/platform"
-import { NodeContext, NodeRuntime } from "@effect/platform-node"
-import { Effect } from "effect"
+import { Command } from '@effect/platform'
+import { NodeContext, NodeRuntime } from '@effect/platform-node'
+import { Effect } from 'effect'
 
-const command = Command.make("ls", "-al")
+const command = Command.make('ls', '-al')
 
 // The program depends on a CommandExecutor
 const program = Effect.gen(function* () {
@@ -40,11 +40,11 @@ If you only need the exit code of a command, use `Command.exitCode`.
 **Example** (Getting the Exit Code)
 
 ```ts twoslash
-import { Command } from "@effect/platform"
-import { NodeContext, NodeRuntime } from "@effect/platform-node"
-import { Effect } from "effect"
+import { Command } from '@effect/platform'
+import { NodeContext, NodeRuntime } from '@effect/platform-node'
+import { Effect } from 'effect'
 
-const command = Command.make("ls", "-al")
+const command = Command.make('ls', '-al')
 
 const program = Effect.gen(function* () {
   const exitCode = yield* Command.exitCode(command)

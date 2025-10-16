@@ -17,13 +17,13 @@
 **Example** (Using the Current Time Zone in an Effect)
 
 ```ts twoslash
-import { DateTime, Effect } from "effect"
+import { DateTime, Effect } from 'effect'
 
 // Retrieve the current time in the "Europe/London" time zone
 const program = Effect.gen(function* () {
   const zonedNow = yield* DateTime.nowInCurrentZone
   console.log(zonedNow)
-}).pipe(DateTime.withCurrentZoneNamed("Europe/London"))
+}).pipe(DateTime.withCurrentZoneNamed('Europe/London'))
 
 Effect.runFork(program)
 /*

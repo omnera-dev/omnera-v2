@@ -1,10 +1,10 @@
 ## Overview
 
 import {
-  Aside,
-  Tabs,
-  TabItem,
-  Badge
+Aside,
+Tabs,
+TabItem,
+Badge
 } from "@astrojs/starlight/components"
 
 Effect offers a convenient syntax, similar to `async`/`await`, to write effectful code using [generators](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Generator).

@@ -76,7 +76,10 @@ Edit `index.html`:
 <html>
   <body>
     <a href="/sw">Hello World by Service Worker</a>
-    <script type="module" src="/main.ts"></script>
+    <script
+      type="module"
+      src="/main.ts"
+    ></script>
   </body>
 </html>
 ```
@@ -85,27 +88,23 @@ Edit `index.html`:
 
 ```ts
 function register() {
-  navigator.serviceWorker
-    .register('/sw.ts', { scope: '/sw', type: 'module' })
-    .then(
-      function (_registration) {
-        console.log('Register Service Worker: Success')
-      },
-      function (_error) {
-        console.log('Register Service Worker: Error')
-      }
-    )
+  navigator.serviceWorker.register('/sw.ts', { scope: '/sw', type: 'module' }).then(
+    function (_registration) {
+      console.log('Register Service Worker: Success')
+    },
+    function (_error) {
+      console.log('Register Service Worker: Error')
+    }
+  )
 }
 function start() {
-  navigator.serviceWorker
-    .getRegistrations()
-    .then(function (registrations) {
-      for (const registration of registrations) {
-        console.log('Unregister Service Worker')
-        registration.unregister()
-      }
-      register()
-    })
+  navigator.serviceWorker.getRegistrations().then(function (registrations) {
+    for (const registration of registrations) {
+      console.log('Unregister Service Worker')
+      registration.unregister()
+    }
+    register()
+  })
 }
 start()
 ```
@@ -165,4 +164,3 @@ bun run dev
 :::
 
 By default, the development server will run on port `5173`. Access `http://localhost:5173/` in your browser to complete the Service Worker registration. Then, access `/sw` to see the response from the Hono application.
-

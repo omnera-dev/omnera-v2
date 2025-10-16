@@ -3,11 +3,7 @@
 The predicate function in a filter follows this structure:
 
 ```ts
-type Predicate = (
-  a: A,
-  options: ParseOptions,
-  self: AST.Refinement
-) => FilterReturnType
+type Predicate = (a: A, options: ParseOptions, self: AST.Refinement) => FilterReturnType
 ```
 
 where
@@ -18,12 +14,7 @@ interface FilterIssue {
   readonly issue: string | ParseResult.ParseIssue
 }
 
-type FilterOutput =
-  | undefined
-  | boolean
-  | string
-  | ParseResult.ParseIssue
-  | FilterIssue
+type FilterOutput = undefined | boolean | string | ParseResult.ParseIssue | FilterIssue
 
 type FilterReturnType = FilterOutput | ReadonlyArray<FilterOutput>
 ```

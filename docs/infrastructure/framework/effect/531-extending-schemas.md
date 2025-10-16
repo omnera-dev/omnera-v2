@@ -17,18 +17,18 @@ Structs provide access to their fields through the `fields` property, which allo
 **Example** (Adding New Fields)
 
 ```ts twoslash
-import { Schema } from "effect"
+import { Schema } from 'effect'
 
 const Original = Schema.Struct({
   a: Schema.String,
-  b: Schema.String
+  b: Schema.String,
 })
 
 const Extended = Schema.Struct({
   ...Original.fields,
   // Adding new fields
   c: Schema.String,
-  d: Schema.String
+  d: Schema.String,
 })
 
 //     ┌─── {
@@ -44,11 +44,11 @@ type Type = typeof Extended.Type
 **Example** (Adding Additional Index Signatures)
 
 ```ts twoslash
-import { Schema } from "effect"
+import { Schema } from 'effect'
 
 const Original = Schema.Struct({
   a: Schema.String,
-  b: Schema.String
+  b: Schema.String,
 })
 
 const Extended = Schema.Struct(
@@ -69,21 +69,21 @@ type Type = typeof Extended.Type
 **Example** (Combining Fields from Multiple Structs)
 
 ```ts twoslash
-import { Schema } from "effect"
+import { Schema } from 'effect'
 
 const Struct1 = Schema.Struct({
   a: Schema.String,
-  b: Schema.String
+  b: Schema.String,
 })
 
 const Struct2 = Schema.Struct({
   c: Schema.String,
-  d: Schema.String
+  d: Schema.String,
 })
 
 const Extended = Schema.Struct({
   ...Struct1.fields,
-  ...Struct2.fields
+  ...Struct2.fields,
 })
 
 //     ┌─── {
@@ -120,10 +120,10 @@ Supported extensions include:
 **Example** (Extending a Struct with a Union of Structs)
 
 ```ts twoslash
-import { Schema } from "effect"
+import { Schema } from 'effect'
 
 const Struct = Schema.Struct({
-  a: Schema.String
+  a: Schema.String,
 })
 
 const UnionOfStructs = Schema.Union(
@@ -149,10 +149,10 @@ type Type = typeof Extended.Type
 This example demonstrates an attempt to extend a struct with another struct that contains overlapping field names, resulting in an error due to conflicting types.
 
 ```ts twoslash
-import { Schema } from "effect"
+import { Schema } from 'effect'
 
 const Struct = Schema.Struct({
-  a: Schema.String
+  a: Schema.String,
 })
 
 const OverlappingUnion = Schema.Union(
@@ -174,10 +174,10 @@ details: cannot extend string with number
 In this example, we extend two refinements, `Integer` and `Positive`, creating a schema that enforces both integer and positivity constraints.
 
 ```ts twoslash
-import { Schema } from "effect"
+import { Schema } from 'effect'
 
-const Integer = Schema.Int.pipe(Schema.brand("Int"))
-const Positive = Schema.Positive.pipe(Schema.brand("Positive"))
+const Integer = Schema.Int.pipe(Schema.brand('Int'))
+const Positive = Schema.Positive.pipe(Schema.brand('Positive'))
 
 //      ┌─── Schema<number & Brand<"Positive"> & Brand<"Int">, number, never>
 //      ▼

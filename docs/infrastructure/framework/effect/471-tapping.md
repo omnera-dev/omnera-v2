@@ -8,26 +8,22 @@ The `Layer.tap` and `Layer.tapError` functions allow you to perform additional e
 **Example** (Logging Success and Failure During Layer Acquisition)
 
 ```ts twoslash
-import { Config, Context, Effect, Layer, Console } from "effect"
+import { Config, Context, Effect, Layer, Console } from 'effect'
 
-class HTTPServer extends Context.Tag("HTTPServer")<HTTPServer, void>() {}
+class HTTPServer extends Context.Tag('HTTPServer')<HTTPServer, void>() {}
 
 // Simulating an HTTP server
 const server = Layer.effect(
   HTTPServer,
   Effect.gen(function* () {
-    const host = yield* Config.string("HOST")
+    const host = yield* Config.string('HOST')
     console.log(`Listening on http://localhost:${host}`)
   })
 ).pipe(
   // Log a message if the layer acquisition succeeds
-  Layer.tap((ctx) =>
-    Console.log(`layer acquisition succeeded with:\n${ctx}`)
-  ),
+  Layer.tap((ctx) => Console.log(`layer acquisition succeeded with:\n${ctx}`)),
   // Log a message if the layer acquisition fails
-  Layer.tapError((err) =>
-    Console.log(`layer acquisition failed with:\n${err}`)
-  )
+  Layer.tapError((err) => Console.log(`layer acquisition failed with:\n${err}`))
 )
 
 Effect.runFork(Layer.launch(server))

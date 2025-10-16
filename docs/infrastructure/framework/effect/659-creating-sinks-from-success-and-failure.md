@@ -9,7 +9,7 @@ This example creates a sink that doesn’t consume any elements from its upstrea
 **Example** (Sink that Always Succeeds with a Value)
 
 ```ts twoslash
-import { Stream, Sink, Effect } from "effect"
+import { Stream, Sink, Effect } from 'effect'
 
 const stream = Stream.make(1, 2, 3, 4)
 
@@ -24,13 +24,11 @@ In this example, the sink also doesn’t consume any elements from its upstream 
 **Example** (Sink that Always Fails with an Error Message)
 
 ```ts twoslash
-import { Stream, Sink, Effect } from "effect"
+import { Stream, Sink, Effect } from 'effect'
 
 const stream = Stream.make(1, 2, 3, 4)
 
-Effect.runPromiseExit(Stream.run(stream, Sink.fail("fail!"))).then(
-  console.log
-)
+Effect.runPromiseExit(Stream.run(stream, Sink.fail('fail!'))).then(console.log)
 /*
 Output:
 {

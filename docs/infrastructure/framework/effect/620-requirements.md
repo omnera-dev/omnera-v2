@@ -20,10 +20,10 @@ The `effect/Schema` module takes advantage of the `exactOptionalPropertyTypes` o
 **Example** (With `exactOptionalPropertyTypes` Enabled)
 
 ```ts twoslash
-import { Schema } from "effect"
+import { Schema } from 'effect'
 
 const Person = Schema.Struct({
-  name: Schema.optionalWith(Schema.NonEmptyString, { exact: true })
+  name: Schema.optionalWith(Schema.NonEmptyString, { exact: true }),
 })
 
 type Type = Schema.Schema.Type<typeof Person>
@@ -44,10 +44,10 @@ Here, notice that the type of `name` is "exact" (`string`), which means the type
 If, for some reason, you can't enable the `exactOptionalPropertyTypes` option (perhaps due to conflicts with other third-party libraries), you can still use `effect/Schema`. However, there will be a mismatch between the types and the runtime behavior:
 
 ```ts
-import { Schema } from "effect"
+import { Schema } from 'effect'
 
 const Person = Schema.Struct({
-  name: Schema.optionalWith(Schema.NonEmptyString, { exact: true })
+  name: Schema.optionalWith(Schema.NonEmptyString, { exact: true }),
 })
 
 type Type = Schema.Schema.Type<typeof Person>

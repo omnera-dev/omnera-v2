@@ -1,6 +1,8 @@
 # Via header
+
 curl -H 'Accept-Language: ar,en;q=0.9' http://localhost:8787/
-```
+
+````
 
 ## Default Configuration
 
@@ -23,7 +25,7 @@ export const DEFAULT_OPTIONS: DetectorOptions = {
   },
   debug: false,
 }
-```
+````
 
 ## Key Behaviors
 
@@ -171,4 +173,3 @@ languageDetector({
   convertDetectedLanguage: (lang) => lang.replace('_', '-'), // Normalize
 })
 ```
-

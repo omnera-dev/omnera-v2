@@ -5,15 +5,15 @@ You can add `identifier` annotations to schemas to improve structure and maintai
 **Example** (Using Identifier Annotations)
 
 ```ts twoslash
-import { JSONSchema, Schema } from "effect"
+import { JSONSchema, Schema } from 'effect'
 
-const Name = Schema.String.annotations({ identifier: "Name" })
+const Name = Schema.String.annotations({ identifier: 'Name' })
 
-const Age = Schema.Number.annotations({ identifier: "Age" })
+const Age = Schema.Number.annotations({ identifier: 'Age' })
 
 const Person = Schema.Struct({
   name: Name,
-  age: Age
+  age: Age,
 })
 
 const jsonSchema = JSONSchema.make(Person)

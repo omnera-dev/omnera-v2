@@ -14,7 +14,7 @@ The `Exit` type represents the result of the effect:
 **Example** (Handling Results as Exit)
 
 ```ts twoslash
-import { Effect } from "effect"
+import { Effect } from 'effect'
 
 console.log(Effect.runSyncExit(Effect.succeed(1)))
 /*
@@ -26,7 +26,7 @@ Output:
 }
 */
 
-console.log(Effect.runSyncExit(Effect.fail("my error")))
+console.log(Effect.runSyncExit(Effect.fail('my error')))
 /*
 Output:
 {
@@ -48,7 +48,7 @@ resolved synchronously.
 **Example** (Asynchronous Operation Resulting in Die)
 
 ```ts twoslash
-import { Effect } from "effect"
+import { Effect } from 'effect'
 
 console.log(Effect.runSyncExit(Effect.promise(() => Promise.resolve(1))))
 /*

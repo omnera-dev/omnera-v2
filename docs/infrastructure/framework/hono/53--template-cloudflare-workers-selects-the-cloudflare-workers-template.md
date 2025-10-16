@@ -1,6 +1,8 @@
 # "--template cloudflare-workers" selects the Cloudflare Workers template
+
 deno init --npm hono@latest my-app --template cloudflare-workers
-```
+
+````
 
 :::
 
@@ -22,7 +24,7 @@ deno init --npm hono@latest my-app --template cloudflare-workers
 
 ```bash
 npm create hono@latest my-app
-```
+````
 
 This prompts you for template and options.
 
@@ -48,4 +50,3 @@ pnpm create hono@latest my-app --template deno --offline
 ## Links & references
 
 - `create-hono` repository : [create-hono](https://github.com/honojs/create-hono)
-

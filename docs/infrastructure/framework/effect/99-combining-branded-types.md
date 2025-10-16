@@ -5,16 +5,16 @@ In some cases, you might need to combine multiple branded types. The Brand modul
 **Example** (Combining Multiple Branded Types)
 
 ```ts twoslash
-import { Brand } from "effect"
+import { Brand } from 'effect'
 
-type Int = number & Brand.Brand<"Int">
+type Int = number & Brand.Brand<'Int'>
 
 const Int = Brand.refined<Int>(
   (n) => Number.isInteger(n),
   (n) => Brand.error(`Expected ${n} to be an integer`)
 )
 
-type Positive = number & Brand.Brand<"Positive">
+type Positive = number & Brand.Brand<'Positive'>
 
 const Positive = Brand.refined<Positive>(
   (n) => n > 0,

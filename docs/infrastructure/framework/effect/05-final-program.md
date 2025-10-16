@@ -6,9 +6,9 @@ Assuming you've wired everything up correctly:
 const program = Effect.gen(function* () {
   const todos = yield* getTodos
   yield* Effect.forEach(todos, (todo) => notifyOwner(todo), {
-    concurrency: "unbounded"
+    concurrency: 'unbounded',
   })
-}).pipe(Effect.repeat(Schedule.fixed("10 seconds")))
+}).pipe(Effect.repeat(Schedule.fixed('10 seconds')))
 ```
 
 With this program, the `getTodos` operation retrieves the todos for each user. Then, the `Effect.forEach` function is used to notify the owner of each todo concurrently, without waiting for the notifications to complete.

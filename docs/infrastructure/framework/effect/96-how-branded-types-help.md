@@ -8,11 +8,11 @@ This method ensures that types remain distinct without altering their runtime ch
 Let's start by introducing the `BrandTypeId` symbol:
 
 ```ts twoslash
-const BrandTypeId: unique symbol = Symbol.for("effect/Brand")
+const BrandTypeId: unique symbol = Symbol.for('effect/Brand')
 
 type ProductId = number & {
   readonly [BrandTypeId]: {
-    readonly ProductId: "ProductId" // unique identifier for ProductId
+    readonly ProductId: 'ProductId' // unique identifier for ProductId
   }
 }
 ```
@@ -25,11 +25,11 @@ Attempting to use a `UserId` in place of a `ProductId` now results in an error:
 **Example** (Enforcing Type Safety with Branded Types)
 
 ```ts twoslash
-const BrandTypeId: unique symbol = Symbol.for("effect/Brand")
+const BrandTypeId: unique symbol = Symbol.for('effect/Brand')
 
 type ProductId = number & {
   readonly [BrandTypeId]: {
-    readonly ProductId: "ProductId"
+    readonly ProductId: 'ProductId'
   }
 }
 
@@ -54,11 +54,11 @@ Let's add branding to `UserId` as well:
 **Example** (Branding UserId and ProductId)
 
 ```ts twoslash
-const BrandTypeId: unique symbol = Symbol.for("effect/Brand")
+const BrandTypeId: unique symbol = Symbol.for('effect/Brand')
 
 type ProductId = number & {
   readonly [BrandTypeId]: {
-    readonly ProductId: "ProductId" // unique identifier for ProductId
+    readonly ProductId: 'ProductId' // unique identifier for ProductId
   }
 }
 
@@ -68,7 +68,7 @@ const getProductById = (id: ProductId) => {
 
 type UserId = number & {
   readonly [BrandTypeId]: {
-    readonly UserId: "UserId" // unique identifier for UserId
+    readonly UserId: 'UserId' // unique identifier for UserId
   }
 }
 

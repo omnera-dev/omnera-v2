@@ -5,13 +5,13 @@ When validating forms or structured data, it's possible to associate specific er
 **Example** (Matching Passwords)
 
 ```ts twoslash
-import { Either, Schema, ParseResult } from "effect"
+import { Either, Schema, ParseResult } from 'effect'
 
 const Password = Schema.Trim.pipe(Schema.minLength(2))
 
 const MyForm = Schema.Struct({
   password: Password,
-  confirm_password: Password
+  confirm_password: Password,
 }).pipe(
   // Add a filter to ensure that passwords match
   Schema.filter((input) => {
@@ -19,8 +19,8 @@ const MyForm = Schema.Struct({
       // Return an error message associated
       // with the "confirm_password" field
       return {
-        path: ["confirm_password"],
-        message: "Passwords do not match"
+        path: ['confirm_password'],
+        message: 'Passwords do not match',
       }
     }
   })
@@ -29,13 +29,9 @@ const MyForm = Schema.Struct({
 console.log(
   JSON.stringify(
     Schema.decodeUnknownEither(MyForm)({
-      password: "abc",
-      confirm_password: "abd" // Confirm password does not match
-    }).pipe(
-      Either.mapLeft((error) =>
-        ParseResult.ArrayFormatter.formatErrorSync(error)
-      )
-    ),
+      password: 'abc',
+      confirm_password: 'abd', // Confirm password does not match
+    }).pipe(Either.mapLeft((error) => ParseResult.ArrayFormatter.formatErrorSync(error))),
     null,
     2
   )

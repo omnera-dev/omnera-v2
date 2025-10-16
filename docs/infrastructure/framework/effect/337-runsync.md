@@ -5,10 +5,10 @@ Executes an effect synchronously, running it immediately and returning the resul
 **Example** (Synchronous Logging)
 
 ```ts twoslash
-import { Effect } from "effect"
+import { Effect } from 'effect'
 
 const program = Effect.sync(() => {
-  console.log("Hello, World!")
+  console.log('Hello, World!')
   return 1
 })
 
@@ -24,11 +24,11 @@ Use `Effect.runSync` to run an effect that does not fail and does not include an
 **Example** (Incorrect Usage with Failing or Async Effects)
 
 ```ts twoslash
-import { Effect } from "effect"
+import { Effect } from 'effect'
 
 try {
   // Attempt to run an effect that fails
-  Effect.runSync(Effect.fail("my error"))
+  Effect.runSync(Effect.fail('my error'))
 } catch (e) {
   console.error(e)
 }

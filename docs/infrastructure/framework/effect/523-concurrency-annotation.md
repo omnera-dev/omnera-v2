@@ -3,7 +3,7 @@
 For more complex schemas like `Struct`, `Array`, or `Union` that contain multiple nested schemas, the `concurrency` annotation provides a way to control how validations are executed concurrently.
 
 ```ts showLineNumbers=false
-type ConcurrencyAnnotation = number | "unbounded" | "inherit" | undefined
+type ConcurrencyAnnotation = number | 'unbounded' | 'inherit' | undefined
 ```
 
 Here's a shorter version presented in a table:
@@ -20,9 +20,9 @@ Here's a shorter version presented in a table:
 In this example, we define three tasks that simulate asynchronous operations with different durations. Since no concurrency is specified, the tasks are executed sequentially, one after the other.
 
 ```ts twoslash
-import { Schema } from "effect"
-import type { Duration } from "effect"
-import { Effect } from "effect"
+import { Schema } from 'effect'
+import type { Duration } from 'effect'
+import { Effect } from 'effect'
 
 // Simulates an async task
 const item = (id: number, duration: Duration.DurationInput) =>
@@ -36,13 +36,9 @@ const item = (id: number, duration: Duration.DurationInput) =>
     )
   )
 
-const Sequential = Schema.Tuple(
-  item(1, "30 millis"),
-  item(2, "10 millis"),
-  item(3, "20 millis")
-)
+const Sequential = Schema.Tuple(item(1, '30 millis'), item(2, '10 millis'), item(3, '20 millis'))
 
-Effect.runPromise(Schema.decode(Sequential)(["a", "b", "c"]))
+Effect.runPromise(Schema.decode(Sequential)(['a', 'b', 'c']))
 /*
 Output:
 Task 1 done
@@ -56,9 +52,9 @@ Task 3 done
 By adding a `concurrency` annotation set to `"unbounded"`, the tasks can now run concurrently, meaning they don't wait for one another to finish before starting. This allows faster execution when multiple tasks are involved.
 
 ```ts twoslash
-import { Schema } from "effect"
-import type { Duration } from "effect"
-import { Effect } from "effect"
+import { Schema } from 'effect'
+import type { Duration } from 'effect'
+import { Effect } from 'effect'
 
 // Simulates an async task
 const item = (id: number, duration: Duration.DurationInput) =>
@@ -73,12 +69,12 @@ const item = (id: number, duration: Duration.DurationInput) =>
   )
 
 const Concurrent = Schema.Tuple(
-  item(1, "30 millis"),
-  item(2, "10 millis"),
-  item(3, "20 millis")
-).annotations({ concurrency: "unbounded" })
+  item(1, '30 millis'),
+  item(2, '10 millis'),
+  item(3, '20 millis')
+).annotations({ concurrency: 'unbounded' })
 
-Effect.runPromise(Schema.decode(Concurrent)(["a", "b", "c"]))
+Effect.runPromise(Schema.decode(Concurrent)(['a', 'b', 'c']))
 /*
 Output:
 Task 2 done

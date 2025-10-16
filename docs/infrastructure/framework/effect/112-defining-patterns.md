@@ -7,14 +7,14 @@ The `Match.when` function allows you to define conditions for matching values. I
 **Example** (Matching with Values and Predicates)
 
 ```ts twoslash
-import { Match } from "effect"
+import { Match } from 'effect'
 
 // Create a matcher for objects with an "age" property
 const match = Match.type<{ age: number }>().pipe(
   // Match when age is greater than 18
   Match.when({ age: (age) => age > 18 }, (user) => `Age: ${user.age}`),
   // Match when age is exactly 18
-  Match.when({ age: 18 }, () => "You can vote"),
+  Match.when({ age: 18 }, () => 'You can vote'),
   // Fallback case for all other ages
   Match.orElse((user) => `${user.age} is too young`)
 )
@@ -36,20 +36,20 @@ The `Match.not` function allows you to exclude specific values while matching al
 **Example** (Ignoring a Specific Value)
 
 ```ts twoslash
-import { Match } from "effect"
+import { Match } from 'effect'
 
 // Create a matcher for string or number values
 const match = Match.type<string | number>().pipe(
   // Match any value except "hi", returning "ok"
-  Match.not("hi", () => "ok"),
+  Match.not('hi', () => 'ok'),
   // Fallback case for when the value is "hi"
-  Match.orElse(() => "fallback")
+  Match.orElse(() => 'fallback')
 )
 
-console.log(match("hello"))
+console.log(match('hello'))
 // Output: "ok"
 
-console.log(match("hi"))
+console.log(match('hi'))
 // Output: "fallback"
 ```
 
@@ -60,29 +60,29 @@ The `Match.tag` function allows pattern matching based on the `_tag` field in a 
 **Example** (Matching a Discriminated Union by Tag)
 
 ```ts twoslash
-import { Match } from "effect"
+import { Match } from 'effect'
 
 type Event =
-  | { readonly _tag: "fetch" }
-  | { readonly _tag: "success"; readonly data: string }
-  | { readonly _tag: "error"; readonly error: Error }
-  | { readonly _tag: "cancel" }
+  | { readonly _tag: 'fetch' }
+  | { readonly _tag: 'success'; readonly data: string }
+  | { readonly _tag: 'error'; readonly error: Error }
+  | { readonly _tag: 'cancel' }
 
 // Create a Matcher for Either<number, string>
 const match = Match.type<Event>().pipe(
   // Match either "fetch" or "success"
-  Match.tag("fetch", "success", () => `Ok!`),
+  Match.tag('fetch', 'success', () => `Ok!`),
   // Match "error" and extract the error message
-  Match.tag("error", (event) => `Error: ${event.error.message}`),
+  Match.tag('error', (event) => `Error: ${event.error.message}`),
   // Match "cancel"
-  Match.tag("cancel", () => "Cancelled"),
+  Match.tag('cancel', () => 'Cancelled'),
   Match.exhaustive
 )
 
-console.log(match({ _tag: "success", data: "Hello" }))
+console.log(match({ _tag: 'success', data: 'Hello' }))
 // Output: "Ok!"
 
-console.log(match({ _tag: "error", error: new Error("Oops!") }))
+console.log(match({ _tag: 'error', error: new Error('Oops!') }))
 // Output: "Error: Oops!"
 ```
 
@@ -100,7 +100,7 @@ The `Match` module provides built-in predicates for common types, such as `Match
 **Example** (Using Built-in Predicates for Property Keys)
 
 ```ts twoslash
-import { Match } from "effect"
+import { Match } from 'effect'
 
 const matchPropertyKey = Match.type<PropertyKey>().pipe(
   // Match when the value is a number
@@ -116,10 +116,10 @@ const matchPropertyKey = Match.type<PropertyKey>().pipe(
 console.log(matchPropertyKey(42))
 // Output: "Key is a number: 42"
 
-console.log(matchPropertyKey("username"))
+console.log(matchPropertyKey('username'))
 // Output: "Key is a string: username"
 
-console.log(matchPropertyKey(Symbol("id")))
+console.log(matchPropertyKey(Symbol('id')))
 // Output: "Key is a symbol: Symbol(id)"
 ```
 

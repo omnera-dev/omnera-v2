@@ -11,10 +11,10 @@ To represent this optionality it returns an [Option](/docs/data-types/option/) o
 To determine what action to take, we can use the `Option.isNone` function provided by the Option module. This function allows us to check if the service is available or not by returning `true` when the service is not available.
 
 ```ts twoslash
-import { Effect, Context, Option } from "effect"
+import { Effect, Context, Option } from 'effect'
 
 // Declaring a tag for a service that generates random numbers
-class Random extends Context.Tag("MyRandomService")<
+class Random extends Context.Tag('MyRandomService')<
   Random,
   { readonly next: Effect.Effect<number> }
 >() {}
@@ -46,7 +46,7 @@ However, if we provide the `Random` service implementation:
 ```ts showLineNumbers=false
 Effect.runPromise(
   Effect.provideService(program, Random, {
-    next: Effect.sync(() => Math.random())
+    next: Effect.sync(() => Math.random()),
   })
 ).then(console.log)
 // Example Output: 0.9957979486841035

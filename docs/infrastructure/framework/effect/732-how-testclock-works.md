@@ -7,23 +7,23 @@ When we adjust the clock time, any effects scheduled to run at or before that ti
 **Example** (Simulating a Timeout with TestClock)
 
 ```ts twoslash
-import { Effect, TestClock, Fiber, Option, TestContext } from "effect"
-import * as assert from "node:assert"
+import { Effect, TestClock, Fiber, Option, TestContext } from 'effect'
+import * as assert from 'node:assert'
 
 const test = Effect.gen(function* () {
   // Create a fiber that sleeps for 5 minutes and then times out
   // after 1 minute
-  const fiber = yield* Effect.sleep("5 minutes").pipe(
+  const fiber = yield* Effect.sleep('5 minutes').pipe(
     Effect.timeoutTo({
-      duration: "1 minute",
+      duration: '1 minute',
       onSuccess: Option.some,
-      onTimeout: () => Option.none<void>()
+      onTimeout: () => Option.none<void>(),
     }),
     Effect.fork
   )
 
   // Adjust the TestClock by 1 minute to simulate the passage of time
-  yield* TestClock.adjust("1 minute")
+  yield* TestClock.adjust('1 minute')
 
   // Get the result of the fiber
   const result = yield* Fiber.join(fiber)

@@ -1,10 +1,10 @@
 ## Overview
 
 import {
-  Aside,
-  Tabs,
-  TabItem,
-  Steps
+Aside,
+Tabs,
+TabItem,
+Steps
 } from "@astrojs/starlight/components"
 
 <Aside type="caution" title="Experimental Module">

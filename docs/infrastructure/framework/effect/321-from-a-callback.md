@@ -10,8 +10,8 @@ To handle callback-based APIs, Effect provides the `Effect.async` constructor.
 Let's wrap the `readFile` function from Node.js's `fs` module into an Effect-based API (make sure `@types/node` is installed):
 
 ```ts twoslash
-import { Effect } from "effect"
-import * as NodeFS from "node:fs"
+import { Effect } from 'effect'
+import * as NodeFS from 'node:fs'
 
 const readFile = (filename: string) =>
   Effect.async<Buffer, Error>((resume) => {
@@ -28,7 +28,7 @@ const readFile = (filename: string) =>
 
 //      ┌─── Effect<Buffer, Error, never>
 //      ▼
-const program = readFile("example.txt")
+const program = readFile('example.txt')
 ```
 
 In the above example, we manually annotate the types when calling `Effect.async`:
@@ -47,7 +47,7 @@ The `resume` function inside `Effect.async` should be called exactly once. Calli
 **Example** (Ignoring Subsequent `resume` Calls)
 
 ```ts twoslash
-import { Effect } from "effect"
+import { Effect } from 'effect'
 
 const program = Effect.async<number>((resume) => {
   resume(Effect.succeed(1))
@@ -71,8 +71,8 @@ In this example:
 - This ensures that resources like open file handles are cleaned up properly when the operation is canceled.
 
 ```ts twoslash
-import { Effect, Fiber } from "effect"
-import * as NodeFS from "node:fs"
+import { Effect, Fiber } from 'effect'
+import * as NodeFS from 'node:fs'
 
 // Simulates a long-running operation to write to a file
 const writeFileWithCleanup = (filename: string, data: string) =>
@@ -83,10 +83,10 @@ const writeFileWithCleanup = (filename: string, data: string) =>
     writeStream.write(data)
 
     // When the stream is finished, resume with success
-    writeStream.on("finish", () => resume(Effect.void))
+    writeStream.on('finish', () => resume(Effect.void))
 
     // In case of an error during writing, resume with failure
-    writeStream.on("error", (err) => resume(Effect.fail(err)))
+    writeStream.on('error', (err) => resume(Effect.fail(err)))
 
     // Handle interruption by returning a cleanup effect
     return Effect.sync(() => {
@@ -96,11 +96,9 @@ const writeFileWithCleanup = (filename: string, data: string) =>
   })
 
 const program = Effect.gen(function* () {
-  const fiber = yield* Effect.fork(
-    writeFileWithCleanup("example.txt", "Some long data...")
-  )
+  const fiber = yield* Effect.fork(writeFileWithCleanup('example.txt', 'Some long data...'))
   // Simulate interrupting the fiber after 1 second
-  yield* Effect.sleep("1 second")
+  yield* Effect.sleep('1 second')
   yield* Fiber.interrupt(fiber) // This will trigger the cleanup
 })
 
@@ -117,19 +115,19 @@ If the operation you're wrapping supports interruption, the `resume` function ca
 **Example** (Handling Interruption with `AbortSignal`)
 
 ```ts twoslash
-import { Effect, Fiber } from "effect"
+import { Effect, Fiber } from 'effect'
 
 // A task that supports interruption using AbortSignal
 const interruptibleTask = Effect.async<void, Error>((resume, signal) => {
   // Handle interruption
-  signal.addEventListener("abort", () => {
-    console.log("Abort signal received")
+  signal.addEventListener('abort', () => {
+    console.log('Abort signal received')
     clearTimeout(timeoutId)
   })
 
   // Simulate a long-running task
   const timeoutId = setTimeout(() => {
-    console.log("Operation completed")
+    console.log('Operation completed')
     resume(Effect.void)
   }, 2000)
 })
@@ -137,7 +135,7 @@ const interruptibleTask = Effect.async<void, Error>((resume, signal) => {
 const program = Effect.gen(function* () {
   const fiber = yield* Effect.fork(interruptibleTask)
   // Simulate interrupting the fiber after 1 second
-  yield* Effect.sleep("1 second")
+  yield* Effect.sleep('1 second')
   yield* Fiber.interrupt(fiber)
 })
 

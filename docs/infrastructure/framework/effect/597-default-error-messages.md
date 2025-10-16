@@ -6,11 +6,11 @@ For example, if a required property is missing or a data type does not match, th
 **Example** (Type Mismatch)
 
 ```ts twoslash
-import { Schema } from "effect"
+import { Schema } from 'effect'
 
 const Person = Schema.Struct({
   name: Schema.String,
-  age: Schema.Number
+  age: Schema.Number,
 })
 
 Schema.decodeUnknownSync(Person)(null)
@@ -20,14 +20,14 @@ Schema.decodeUnknownSync(Person)(null)
 **Example** (Missing Properties)
 
 ```ts twoslash
-import { Schema } from "effect"
+import { Schema } from 'effect'
 
 const Person = Schema.Struct({
   name: Schema.String,
-  age: Schema.Number
+  age: Schema.Number,
 })
 
-Schema.decodeUnknownSync(Person)({}, { errors: "all" })
+Schema.decodeUnknownSync(Person)({}, { errors: 'all' })
 /*
 throws:
 ParseError: { readonly name: string; readonly age: number }
@@ -41,17 +41,14 @@ ParseError: { readonly name: string; readonly age: number }
 **Example** (Incorrect Property Type)
 
 ```ts twoslash
-import { Schema } from "effect"
+import { Schema } from 'effect'
 
 const Person = Schema.Struct({
   name: Schema.String,
-  age: Schema.Number
+  age: Schema.Number,
 })
 
-Schema.decodeUnknownSync(Person)(
-  { name: null, age: "age" },
-  { errors: "all" }
-)
+Schema.decodeUnknownSync(Person)({ name: null, age: 'age' }, { errors: 'all' })
 /*
 throws:
 ParseError: { readonly name: string; readonly age: number }
@@ -70,16 +67,16 @@ To address this, you can enhance the clarity and brevity of these messages by ut
 **Example** (Using Identifiers for Clarity)
 
 ```ts twoslash
-import { Schema } from "effect"
+import { Schema } from 'effect'
 
-const Name = Schema.String.annotations({ identifier: "Name" })
+const Name = Schema.String.annotations({ identifier: 'Name' })
 
-const Age = Schema.Number.annotations({ identifier: "Age" })
+const Age = Schema.Number.annotations({ identifier: 'Age' })
 
 const Person = Schema.Struct({
   name: Name,
-  age: Age
-}).annotations({ identifier: "Person" })
+  age: Age,
+}).annotations({ identifier: 'Person' })
 
 Schema.decodeUnknownSync(Person)(null)
 /*
@@ -87,7 +84,7 @@ throws:
 ParseError: Expected Person, actual null
 */
 
-Schema.decodeUnknownSync(Person)({}, { errors: "all" })
+Schema.decodeUnknownSync(Person)({}, { errors: 'all' })
 /*
 throws:
 ParseError: Person
@@ -97,10 +94,7 @@ ParseError: Person
    └─ is missing
 */
 
-Schema.decodeUnknownSync(Person)(
-  { name: null, age: null },
-  { errors: "all" }
-)
+Schema.decodeUnknownSync(Person)({ name: null, age: null }, { errors: 'all' })
 /*
 throws:
 ParseError: Person
@@ -118,16 +112,16 @@ When a refinement fails, the default error message indicates whether the failure
 **Example** (Refinement Errors)
 
 ```ts twoslash
-import { Schema } from "effect"
+import { Schema } from 'effect'
 
-const Name = Schema.NonEmptyString.annotations({ identifier: "Name" })
+const Name = Schema.NonEmptyString.annotations({ identifier: 'Name' })
 
-const Age = Schema.Positive.pipe(Schema.int({ identifier: "Age" }))
+const Age = Schema.Positive.pipe(Schema.int({ identifier: 'Age' }))
 
 const Person = Schema.Struct({
   name: Name,
-  age: Age
-}).annotations({ identifier: "Person" })
+  age: Age,
+}).annotations({ identifier: 'Person' })
 
 // From side failure
 Schema.decodeUnknownSync(Person)({ name: null, age: 18 })
@@ -141,7 +135,7 @@ ParseError: Person
 */
 
 // Predicate refinement failure
-Schema.decodeUnknownSync(Person)({ name: "", age: 18 })
+Schema.decodeUnknownSync(Person)({ name: '', age: 18 })
 /*
 throws:
 ParseError: Person
@@ -167,20 +161,14 @@ The system provides a structured error message to specify where the error occurr
 **Example** (Transformation Errors)
 
 ```ts twoslash
-import { ParseResult, Schema } from "effect"
+import { ParseResult, Schema } from 'effect'
 
-const schema = Schema.transformOrFail(
-  Schema.String,
-  Schema.String.pipe(Schema.minLength(2)),
-  {
-    strict: true,
-    decode: (s, _, ast) =>
-      s.length > 0
-        ? ParseResult.succeed(s)
-        : ParseResult.fail(new ParseResult.Type(ast, s)),
-    encode: ParseResult.succeed
-  }
-)
+const schema = Schema.transformOrFail(Schema.String, Schema.String.pipe(Schema.minLength(2)), {
+  strict: true,
+  decode: (s, _, ast) =>
+    s.length > 0 ? ParseResult.succeed(s) : ParseResult.fail(new ParseResult.Type(ast, s)),
+  encode: ParseResult.succeed,
+})
 
 // Encoded side failure
 Schema.decodeUnknownSync(schema)(null)
@@ -192,7 +180,7 @@ ParseError: (string <-> minLength(2))
 */
 
 // transformation failure
-Schema.decodeUnknownSync(schema)("")
+Schema.decodeUnknownSync(schema)('')
 /*
 throws:
 ParseError: (string <-> minLength(2))
@@ -201,7 +189,7 @@ ParseError: (string <-> minLength(2))
 */
 
 // Type side failure
-Schema.decodeUnknownSync(schema)("a")
+Schema.decodeUnknownSync(schema)('a')
 /*
 throws:
 ParseError: (string <-> minLength(2))

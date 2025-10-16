@@ -21,6 +21,7 @@ The following detailed documentation files are imported for Claude Code's memory
 @docs/infrastructure/cicd/workflows.md
 @docs/infrastructure/release/semantic-release.md
 @docs/architecture/functional-programming.md
+@docs/architecture/layer-based-architecture.md
 
 ## Project Overview
 
@@ -467,6 +468,7 @@ This project uses a modular documentation approach:
 - **CLAUDE.md** (this file): High-level project overview and quick reference
 - **docs/architecture/**: Architecture decisions and patterns
   - **functional-programming.md**: FP principles, patterns, and best practices
+  - **layer-based-architecture.md**: Layered architecture pattern, layer separation, and communication
 - **docs/infrastructure/**: Detailed technical documentation organized by category
   - **runtime/**: Runtime environment (Bun)
   - **language/**: Programming language (TypeScript)
@@ -510,9 +512,31 @@ Omnera follows Functional Programming (FP) principles throughout the codebase. F
 
 **Detailed Documentation**: [`docs/architecture/functional-programming.md`](docs/architecture/functional-programming.md)
 
-### Architecture Documentation
+### Layer-Based Architecture
 
-Additional architecture documentation will be added here as the project evolves.
+Omnera follows a **Layer-Based Architecture** (also known as **Layered Architecture**) that organizes code into four distinct horizontal layers with well-defined responsibilities and clear boundaries.
+
+**Four Layers**:
+1. **Presentation Layer (UI/API)** - React components, Hono routes, user interactions
+2. **Application Layer (Use Cases)** - Workflow orchestration, Effect programs, business workflows
+3. **Domain Layer (Business Logic)** - Pure business rules, domain models, validation (FP principles)
+4. **Infrastructure Layer (External)** - Database access, APIs, file system, external services
+
+**Key Principles**:
+- **Dependency Direction**: Outer layers depend on inner layers (never reverse)
+- **Pure Domain**: Domain Layer contains only pure functions (no side effects)
+- **Effect Orchestration**: Application Layer coordinates workflows with Effect.ts
+- **Interface Segregation**: Infrastructure implements interfaces defined in Application Layer
+- **Type-Safe Boundaries**: TypeScript enforces layer contracts
+
+**Why Layered Architecture**:
+- Clear separation of concerns and responsibilities
+- Independent development and testing of each layer
+- Business logic isolated from UI and infrastructure
+- Easy to swap infrastructure implementations
+- Perfect alignment with Effect.ts dependency injection
+
+**Detailed Documentation**: [`docs/architecture/layer-based-architecture.md`](docs/architecture/layer-based-architecture.md)
 
 ---
 

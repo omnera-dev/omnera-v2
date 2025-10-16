@@ -10,29 +10,29 @@ failure type based on the cause.
 **Example** (Handling Different Failure Causes)
 
 ```ts twoslash
-import { Effect } from "effect"
+import { Effect } from 'effect'
 
-const task: Effect.Effect<number, Error> = Effect.die("Uh oh!")
+const task: Effect.Effect<number, Error> = Effect.die('Uh oh!')
 
 const program = Effect.matchCause(task, {
   onFailure: (cause) => {
     switch (cause._tag) {
-      case "Fail":
+      case 'Fail':
         // Handle standard failure
         return `Fail: ${cause.error.message}`
-      case "Die":
+      case 'Die':
         // Handle defects (unexpected errors)
         return `Die: ${cause.defect}`
-      case "Interrupt":
+      case 'Interrupt':
         // Handle interruption
         return `${cause.fiberId} interrupted!`
     }
     // Fallback for other causes
-    return "failed due to other causes"
+    return 'failed due to other causes'
   },
   onSuccess: (value) =>
     // task completes successfully
-    `succeeded with ${value} value`
+    `succeeded with ${value} value`,
 })
 
 Effect.runPromise(program).then(console.log)

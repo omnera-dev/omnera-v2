@@ -19,13 +19,11 @@ If needed, we can undo the sandboxing operation with `Effect.unsandbox`.
 **Example** (Handling Different Error Causes)
 
 ```ts twoslash
-import { Effect, Console } from "effect"
+import { Effect, Console } from 'effect'
 
 //      ┌─── Effect<string, Error, never>
 //      ▼
-const task = Effect.fail(new Error("Oh uh!")).pipe(
-  Effect.as("primary result")
-)
+const task = Effect.fail(new Error('Oh uh!')).pipe(Effect.as('primary result'))
 
 //      ┌─── Effect<string, Cause<Error>, never>
 //      ▼
@@ -33,17 +31,13 @@ const sandboxed = Effect.sandbox(task)
 
 const program = Effect.catchTags(sandboxed, {
   Die: (cause) =>
-    Console.log(`Caught a defect: ${cause.defect}`).pipe(
-      Effect.as("fallback result on defect")
-    ),
+    Console.log(`Caught a defect: ${cause.defect}`).pipe(Effect.as('fallback result on defect')),
   Interrupt: (cause) =>
     Console.log(`Caught a defect: ${cause.fiberId}`).pipe(
-      Effect.as("fallback result on fiber interruption")
+      Effect.as('fallback result on fiber interruption')
     ),
   Fail: (cause) =>
-    Console.log(`Caught a defect: ${cause.error}`).pipe(
-      Effect.as("fallback result on failure")
-    )
+    Console.log(`Caught a defect: ${cause.error}`).pipe(Effect.as('fallback result on failure')),
 })
 
 // Restore the original error handling with unsandbox

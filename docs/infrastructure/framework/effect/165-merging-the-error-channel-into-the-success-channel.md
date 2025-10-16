@@ -5,11 +5,11 @@ The `Effect.merge` function allows you to combine the error channel with the suc
 **Example** (Combining Error and Success Channels)
 
 ```ts twoslash
-import { Effect } from "effect"
+import { Effect } from 'effect'
 
 //      ┌─── Effect<number, string, never>
 //      ▼
-const program = Effect.fail("Oh uh!").pipe(Effect.as(2))
+const program = Effect.fail('Oh uh!').pipe(Effect.as(2))
 
 //      ┌─── Effect<number | string, never, never>
 //      ▼

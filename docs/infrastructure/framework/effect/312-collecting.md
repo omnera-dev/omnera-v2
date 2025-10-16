@@ -25,11 +25,11 @@ Let's explore examples for different types of structures: tuples, iterables, obj
 **Example** (Combining Effects in Tuples)
 
 ```ts twoslash
-import { Effect, Console } from "effect"
+import { Effect, Console } from 'effect'
 
 const tupleOfEffects = [
   Effect.succeed(42).pipe(Effect.tap(Console.log)),
-  Effect.succeed("Hello").pipe(Effect.tap(Console.log))
+  Effect.succeed('Hello').pipe(Effect.tap(Console.log)),
 ] as const
 
 //      ┌─── Effect<[number, string], never, never>
@@ -48,10 +48,10 @@ Hello
 **Example** (Combining Effects in Iterables)
 
 ```ts twoslash
-import { Effect, Console } from "effect"
+import { Effect, Console } from 'effect'
 
-const iterableOfEffects: Iterable<Effect.Effect<number>> = [1, 2, 3].map(
-  (n) => Effect.succeed(n).pipe(Effect.tap(Console.log))
+const iterableOfEffects: Iterable<Effect.Effect<number>> = [1, 2, 3].map((n) =>
+  Effect.succeed(n).pipe(Effect.tap(Console.log))
 )
 
 //      ┌─── Effect<number[], never, never>
@@ -71,11 +71,11 @@ Output:
 **Example** (Combining Effects in Structs)
 
 ```ts twoslash
-import { Effect, Console } from "effect"
+import { Effect, Console } from 'effect'
 
 const structOfEffects = {
   a: Effect.succeed(42).pipe(Effect.tap(Console.log)),
-  b: Effect.succeed("Hello").pipe(Effect.tap(Console.log))
+  b: Effect.succeed('Hello').pipe(Effect.tap(Console.log)),
 }
 
 //      ┌─── Effect<{ a: number; b: string; }, never, never>
@@ -94,11 +94,11 @@ Hello
 **Example** (Combining Effects in Records)
 
 ```ts twoslash
-import { Effect, Console } from "effect"
+import { Effect, Console } from 'effect'
 
 const recordOfEffects: Record<string, Effect.Effect<number>> = {
   key1: Effect.succeed(1).pipe(Effect.tap(Console.log)),
-  key2: Effect.succeed(2).pipe(Effect.tap(Console.log))
+  key2: Effect.succeed(2).pipe(Effect.tap(Console.log)),
 }
 
 //      ┌─── Effect<{ [x: string]: number; }, never, never>
@@ -122,13 +122,13 @@ If any effect in the collection fails, the remaining effects will not run, and t
 **Example** (Bail Out on First Failure)
 
 ```ts twoslash
-import { Effect, Console } from "effect"
+import { Effect, Console } from 'effect'
 
 const program = Effect.all([
-  Effect.succeed("Task1").pipe(Effect.tap(Console.log)),
-  Effect.fail("Task2: Oh no!").pipe(Effect.tap(Console.log)),
+  Effect.succeed('Task1').pipe(Effect.tap(Console.log)),
+  Effect.fail('Task2: Oh no!').pipe(Effect.tap(Console.log)),
   // Won't execute due to earlier failure
-  Effect.succeed("Task3").pipe(Effect.tap(Console.log))
+  Effect.succeed('Task3').pipe(Effect.tap(Console.log)),
 ])
 
 Effect.runPromiseExit(program).then(console.log)
@@ -152,15 +152,15 @@ The `{ mode: "either" }` option changes the behavior of `Effect.all` to ensure a
 **Example** (Collecting Results with `mode: "either"`)
 
 ```ts twoslash /{ mode: "either" }/
-import { Effect, Console } from "effect"
+import { Effect, Console } from 'effect'
 
 const effects = [
-  Effect.succeed("Task1").pipe(Effect.tap(Console.log)),
-  Effect.fail("Task2: Oh no!").pipe(Effect.tap(Console.log)),
-  Effect.succeed("Task3").pipe(Effect.tap(Console.log))
+  Effect.succeed('Task1').pipe(Effect.tap(Console.log)),
+  Effect.fail('Task2: Oh no!').pipe(Effect.tap(Console.log)),
+  Effect.succeed('Task3').pipe(Effect.tap(Console.log)),
 ]
 
-const program = Effect.all(effects, { mode: "either" })
+const program = Effect.all(effects, { mode: 'either' })
 
 Effect.runPromiseExit(program).then(console.log)
 /*
@@ -184,17 +184,17 @@ Similarly, the `{ mode: "validate" }` option uses `Option` to indicate success o
 **Example** (Collecting Results with `mode: "validate"`)
 
 ```ts twoslash /{ mode: "validate" }/
-import { Effect, Console } from "effect"
+import { Effect, Console } from 'effect'
 
 const effects = [
-  Effect.succeed("Task1").pipe(Effect.tap(Console.log)),
-  Effect.fail("Task2: Oh no!").pipe(Effect.tap(Console.log)),
-  Effect.succeed("Task3").pipe(Effect.tap(Console.log))
+  Effect.succeed('Task1').pipe(Effect.tap(Console.log)),
+  Effect.fail('Task2: Oh no!').pipe(Effect.tap(Console.log)),
+  Effect.succeed('Task3').pipe(Effect.tap(Console.log)),
 ]
 
-const program = Effect.all(effects, { mode: "validate" })
+const program = Effect.all(effects, { mode: 'validate' })
 
-Effect.runPromiseExit(program).then((result) => console.log("%o", result))
+Effect.runPromiseExit(program).then((result) => console.log('%o', result))
 /*
 Output:
 Task1

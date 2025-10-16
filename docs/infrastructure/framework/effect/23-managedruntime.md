@@ -9,7 +9,7 @@ In these cases, you can create a top-level runtime by converting a configuration
 In this example, we first create a custom configuration layer called `appLayer`, which replaces the default logger with a simple one that logs messages to the console. Next, we use `ManagedRuntime.make` to turn this configuration layer into a runtime.
 
 ```ts twoslash
-import { Effect, ManagedRuntime, Logger } from "effect"
+import { Effect, ManagedRuntime, Logger } from 'effect'
 
 // Define a configuration layer that replaces the default logger
 const appLayer = Logger.replace(
@@ -21,7 +21,7 @@ const appLayer = Logger.replace(
 // Create a custom runtime from the configuration layer
 const runtime = ManagedRuntime.make(appLayer)
 
-const program = Effect.log("Application started!")
+const program = Effect.log('Application started!')
 
 // Execute the program using the custom runtime
 runtime.runSync(program)
@@ -41,9 +41,9 @@ When working with runtimes that you pass around, `Effect.Tag` can help simplify 
 **Example** (Defining a Tag for Notifications)
 
 ```ts twoslash
-import { Effect } from "effect"
+import { Effect } from 'effect'
 
-class Notifications extends Effect.Tag("Notifications")<
+class Notifications extends Effect.Tag('Notifications')<
   Notifications,
   { readonly notify: (message: string) => Effect.Effect<void> }
 >() {}
@@ -56,9 +56,9 @@ This allows you to interact with the service directly:
 **Example** (Using the Notifications Tag)
 
 ```ts twoslash
-import { Effect } from "effect"
+import { Effect } from 'effect'
 
-class Notifications extends Effect.Tag("Notifications")<
+class Notifications extends Effect.Tag('Notifications')<
   Notifications,
   { readonly notify: (message: string) => Effect.Effect<void> }
 >() {}
@@ -67,7 +67,7 @@ class Notifications extends Effect.Tag("Notifications")<
 //
 //      ┌─── Effect<void, never, Notifications>
 //      ▼
-const action = Notifications.notify("Hello, world!")
+const action = Notifications.notify('Hello, world!')
 ```
 
 In this example, the `action` effect depends on the `Notifications` service. This approach allows you to reference services without manually passing them around. Later, you can create a `Layer` that provides the `Notifications` service and build a `ManagedRuntime` with that layer to ensure the service is available where needed.
@@ -83,16 +83,16 @@ Here's how to manage a service's lifecycle within an external framework:
 **Example** (Using `ManagedRuntime` in an External Framework)
 
 ```ts twoslash
-import { Effect, ManagedRuntime, Layer, Console } from "effect"
+import { Effect, ManagedRuntime, Layer, Console } from 'effect'
 
 // Define the Notifications service using Effect.Tag
-class Notifications extends Effect.Tag("Notifications")<
+class Notifications extends Effect.Tag('Notifications')<
   Notifications,
   { readonly notify: (message: string) => Effect.Effect<void> }
 >() {
   // Provide a live implementation of the Notifications service
   static Live = Layer.succeed(this, {
-    notify: (message) => Console.log(message)
+    notify: (message) => Console.log(message),
   })
 }
 
@@ -102,7 +102,7 @@ async function main() {
   const runtime = ManagedRuntime.make(Notifications.Live)
 
   // Run the effect
-  await runtime.runPromise(Notifications.notify("Hello, world!"))
+  await runtime.runPromise(Notifications.notify('Hello, world!'))
 
   // Dispose of the runtime, cleaning up resources
   await runtime.dispose()

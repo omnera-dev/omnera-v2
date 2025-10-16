@@ -9,10 +9,10 @@ Each property in the object is defined by its own schema, which specifies the da
 This `Person` schema describes an object with a `name` (string) and `age` (number) property:
 
 ```ts twoslash
-import { Schema } from "effect"
+import { Schema } from 'effect'
 
 const Person = Schema.Struct({
   name: Schema.String,
-  age: Schema.Number
+  age: Schema.Number,
 })
 ```

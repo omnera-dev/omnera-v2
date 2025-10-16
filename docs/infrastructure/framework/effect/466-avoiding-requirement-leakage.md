@@ -7,22 +7,20 @@ You might be tempted to define the `Database` service as follows:
 **Example** (Leaking Dependencies in the Service Interface)
 
 ```ts twoslash "Config | Logger"
-import { Effect, Context } from "effect"
+import { Effect, Context } from 'effect'
 
 // Declaring a tag for the Config service
-class Config extends Context.Tag("Config")<Config, {}>() {}
+class Config extends Context.Tag('Config')<Config, {}>() {}
 
 // Declaring a tag for the Logger service
-class Logger extends Context.Tag("Logger")<Logger, {}>() {}
+class Logger extends Context.Tag('Logger')<Logger, {}>() {}
 
 // Declaring a tag for the Database service
-class Database extends Context.Tag("Database")<
+class Database extends Context.Tag('Database')<
   Database,
   {
     // ❌ Avoid exposing Config and Logger as a requirement
-    readonly query: (
-      sql: string
-    ) => Effect.Effect<unknown, never, Config | Logger>
+    readonly query: (sql: string) => Effect.Effect<unknown, never, Config | Logger>
   }
 >() {}
 ```
@@ -45,36 +43,34 @@ To demonstrate the problem, let's create a test instance of the `Database` servi
 **Example** (Creating a Test Instance with Leaked Dependencies)
 
 ```ts twoslash collapse={3-17}
-import { Effect, Context } from "effect"
+import { Effect, Context } from 'effect'
 
 // Declaring a tag for the Config service
-class Config extends Context.Tag("Config")<Config, {}>() {}
+class Config extends Context.Tag('Config')<Config, {}>() {}
 
 // Declaring a tag for the Logger service
-class Logger extends Context.Tag("Logger")<Logger, {}>() {}
+class Logger extends Context.Tag('Logger')<Logger, {}>() {}
 
 // Declaring a tag for the Database service
-class Database extends Context.Tag("Database")<
+class Database extends Context.Tag('Database')<
   Database,
   {
-    readonly query: (
-      sql: string
-    ) => Effect.Effect<unknown, never, Config | Logger>
+    readonly query: (sql: string) => Effect.Effect<unknown, never, Config | Logger>
   }
 >() {}
 
 // Declaring a test instance of the Database service
 const DatabaseTest = Database.of({
   // Simulating a simple response
-  query: (sql: string) => Effect.succeed([])
+  query: (sql: string) => Effect.succeed([]),
 })
 
-import * as assert from "node:assert"
+import * as assert from 'node:assert'
 
 // A test that uses the Database service
 const test = Effect.gen(function* () {
   const database = yield* Database
-  const result = yield* database.query("SELECT * FROM users")
+  const result = yield* database.query('SELECT * FROM users')
   assert.deepStrictEqual(result, [])
 })
 

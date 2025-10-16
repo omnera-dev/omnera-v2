@@ -5,12 +5,10 @@ One common operation with fibers is **joining** them. By using the `Fiber.join` 
 **Example** (Joining a Fiber)
 
 ```ts twoslash
-import { Effect, Fiber } from "effect"
+import { Effect, Fiber } from 'effect'
 
 const fib = (n: number): Effect.Effect<number> =>
-  n < 2
-    ? Effect.succeed(n)
-    : Effect.zipWith(fib(n - 1), fib(n - 2), (a, b) => a + b)
+  n < 2 ? Effect.succeed(n) : Effect.zipWith(fib(n - 1), fib(n - 2), (a, b) => a + b)
 
 //      ┌─── Effect<RuntimeFiber<number, never>, never, never>
 //      ▼

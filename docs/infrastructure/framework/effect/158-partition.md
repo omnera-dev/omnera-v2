@@ -5,7 +5,7 @@ The `Effect.partition` function processes an iterable and applies an effectful f
 **Example** (Partitioning Successes and Failures)
 
 ```ts twoslash
-import { Effect } from "effect"
+import { Effect } from 'effect'
 
 //      ┌─── Effect<[string[], number[]], never, never>
 //      ▼

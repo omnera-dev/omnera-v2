@@ -47,4 +47,3 @@ Number of spaces for indentation. The default is `2`.
 ### <Badge type="info" text="optional" /> query: `string`
 
 The name of the query string for applying. The default is `pretty`.
-

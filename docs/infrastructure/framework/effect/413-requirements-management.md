@@ -15,10 +15,10 @@ To create a new service, you need two things:
 - A type describing the possible operations of the service.
 
 ```ts twoslash
-import { Micro, Context } from "effect"
+import { Micro, Context } from 'effect'
 
 // Declaring a tag for a service that generates random numbers
-class Random extends Context.Tag("MyRandomService")<
+class Random extends Context.Tag('MyRandomService')<
   Random,
   { readonly next: Micro.Micro<number> }
 >() {}
@@ -29,11 +29,11 @@ Now that we have our service tag defined, let's see how we can use it by buildin
 **Example** (Using a Custom Service in a Program)
 
 ```ts twoslash
-import * as Context from "effect/Context"
-import { Micro } from "effect"
+import * as Context from 'effect/Context'
+import { Micro } from 'effect'
 
 // Declaring a tag for a service that generates random numbers
-class Random extends Context.Tag("MyRandomService")<
+class Random extends Context.Tag('MyRandomService')<
   Random,
   { readonly next: Micro.Micro<number> }
 >() {}
@@ -66,10 +66,10 @@ To successfully execute the program, we need to provide an actual implementation
 **Example** (Providing and Using a Service)
 
 ```ts twoslash
-import { Micro, Context } from "effect"
+import { Micro, Context } from 'effect'
 
 // Declaring a tag for a service that generates random numbers
-class Random extends Context.Tag("MyRandomService")<
+class Random extends Context.Tag('MyRandomService')<
   Random,
   { readonly next: Micro.Micro<number> }
 >() {}
@@ -90,7 +90,7 @@ const program = Micro.gen(function* () {
 //      ┌─── Micro<void, never, never>
 //      ▼
 const runnable = Micro.provideService(program, Random, {
-  next: Micro.sync(() => Math.random())
+  next: Micro.sync(() => Math.random()),
 })
 
 Micro.runPromise(runnable)

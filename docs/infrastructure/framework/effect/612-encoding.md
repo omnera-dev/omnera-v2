@@ -13,21 +13,21 @@ The `Schema` module provides several `encode*` functions to encode data accordin
 **Example** (Using `Schema.encodeSync` for Immediate Encoding)
 
 ```ts twoslash
-import { Schema } from "effect"
+import { Schema } from 'effect'
 
 const Person = Schema.Struct({
   // Ensure name is a non-empty string
   name: Schema.NonEmptyString,
   // Allow age to be decoded from a string and encoded to a string
-  age: Schema.NumberFromString
+  age: Schema.NumberFromString,
 })
 
 // Valid input: encoding succeeds and returns expected types
-console.log(Schema.encodeSync(Person)({ name: "Alice", age: 30 }))
+console.log(Schema.encodeSync(Person)({ name: 'Alice', age: 30 }))
 // Output: { name: 'Alice', age: '30' }
 
 // Invalid input: encoding fails due to empty name string
-console.log(Schema.encodeSync(Person)({ name: "", age: 30 }))
+console.log(Schema.encodeSync(Person)({ name: '', age: 30 }))
 /*
 throws:
 ParseError: { readonly name: NonEmptyString; readonly age: NumberFromString }
@@ -49,7 +49,7 @@ In certain cases, it may not be feasible to support encoding for a schema. While
 Here is an example of a transformation that never fails during decoding. It returns an [Either](/docs/data-types/either/) containing either the decoded value or the original input. For encoding, it is reasonable to not support it and use `Forbidden` as the result.
 
 ```ts twoslash
-import { Either, ParseResult, Schema } from "effect"
+import { Either, ParseResult, Schema } from 'effect'
 
 // Define a schema that safely decodes to Either type
 export const SafeDecode = <A, I>(self: Schema.Schema<A, I, never>) => {
@@ -58,31 +58,23 @@ export const SafeDecode = <A, I>(self: Schema.Schema<A, I, never>) => {
     Schema.Unknown,
     Schema.EitherFromSelf({
       left: Schema.Unknown,
-      right: Schema.typeSchema(self)
+      right: Schema.typeSchema(self),
     }),
     {
       strict: true,
       // Decode: map a failed result to the input as Left,
       // successful result as Right
       decode: (input) =>
-        ParseResult.succeed(
-          Either.mapLeft(decodeUnknownEither(input), () => input)
-        ),
+        ParseResult.succeed(Either.mapLeft(decodeUnknownEither(input), () => input)),
       // Encode: only support encoding Right values,
       // Left values raise Forbidden error
       encode: (actual, _, ast) =>
         Either.match(actual, {
           onLeft: () =>
-            ParseResult.fail(
-              new ParseResult.Forbidden(
-                ast,
-                actual,
-                "cannot encode a Left"
-              )
-            ),
+            ParseResult.fail(new ParseResult.Forbidden(ast, actual, 'cannot encode a Left')),
           // Successfully encode a Right value
-          onRight: ParseResult.succeed
-        })
+          onRight: ParseResult.succeed,
+        }),
     }
   )
 }

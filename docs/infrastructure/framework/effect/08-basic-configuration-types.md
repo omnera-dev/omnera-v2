@@ -22,12 +22,12 @@ Effect provides several built-in types for configuration values, which you can u
 Here's an example of loading a basic configuration using environment variables for `HOST` and `PORT`:
 
 ```ts twoslash title="primitives.ts"
-import { Effect, Config } from "effect"
+import { Effect, Config } from 'effect'
 
 // Define a program that loads HOST and PORT configuration
 const program = Effect.gen(function* () {
-  const host = yield* Config.string("HOST") // Read as a string
-  const port = yield* Config.number("PORT") // Read as a number
+  const host = yield* Config.string('HOST') // Read as a string
+  const port = yield* Config.number('PORT') // Read as a number
 
   console.log(`Application started: ${host}:${port}`)
 })

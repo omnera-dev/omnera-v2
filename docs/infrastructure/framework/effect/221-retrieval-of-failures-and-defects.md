@@ -5,15 +5,11 @@ To specifically collect failures or defects from a `Cause`, you can use `Cause.f
 **Example** (Extracting Failures and Defects from a Cause)
 
 ```ts twoslash
-import { Effect, Cause } from "effect"
+import { Effect, Cause } from 'effect'
 
 const program = Effect.gen(function* () {
   const cause = yield* Effect.cause(
-    Effect.all([
-      Effect.fail("error 1"),
-      Effect.die("defect"),
-      Effect.fail("error 2")
-    ])
+    Effect.all([Effect.fail('error 1'), Effect.die('defect'), Effect.fail('error 2')])
   )
   console.log(Cause.failures(cause))
   console.log(Cause.defects(cause))

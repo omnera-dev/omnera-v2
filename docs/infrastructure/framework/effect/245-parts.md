@@ -10,13 +10,13 @@
 **Example** (Extracting Parts from a DateTime)
 
 ```ts twoslash
-import { DateTime } from "effect"
+import { DateTime } from 'effect'
 
 const zoned = DateTime.setZone(
-  DateTime.unsafeMake("2024-01-01"),
-  DateTime.zoneUnsafeMakeNamed("Europe/Rome")
+  DateTime.unsafeMake('2024-01-01'),
+  DateTime.zoneUnsafeMakeNamed('Europe/Rome')
 )
 
-console.log(DateTime.getPart(zoned, "month"))
+console.log(DateTime.getPart(zoned, 'month'))
 // Output: 1
 ```

@@ -21,7 +21,7 @@ If you need a safer alternative, consider using [Schema.validateEither](#error-h
 **Example** (Using a Refinement Default Constructor)
 
 ```ts twoslash
-import { Schema } from "effect"
+import { Schema } from 'effect'
 
 const schema = Schema.NumberFromString.pipe(Schema.between(1, 10))
 

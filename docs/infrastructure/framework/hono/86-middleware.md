@@ -21,4 +21,3 @@ app.use(async (c, next) => {
 ```
 
 With this simple method, we can write our own custom middleware and we can use the built-in or third party middleware.
-

@@ -7,7 +7,7 @@ If you need a "safe" constructor that does not throw errors but instead returns 
 **Example** (Using `Schema.validateEither` for Safe Validation)
 
 ```ts twoslash
-import { Schema } from "effect"
+import { Schema } from 'effect'
 
 const schema = Schema.NumberFromString.pipe(Schema.between(1, 10))
 

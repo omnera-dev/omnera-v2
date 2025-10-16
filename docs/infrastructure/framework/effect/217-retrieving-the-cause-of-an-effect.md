@@ -5,10 +5,10 @@ To retrieve the cause of a failed effect, use `Effect.cause`. This allows you to
 **Example** (Retrieving and Inspecting a Failure Cause)
 
 ```ts twoslash
-import { Effect } from "effect"
+import { Effect } from 'effect'
 
 const program = Effect.gen(function* () {
-  const cause = yield* Effect.cause(Effect.fail("Oh no!"))
+  const cause = yield* Effect.cause(Effect.fail('Oh no!'))
   console.log(cause)
 })
 

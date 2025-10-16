@@ -20,4 +20,3 @@ In your `renovate.json` :
 ```
 
 see [renovate-config-hono](https://github.com/shinGangan/renovate-config-hono) repository for more details.
-

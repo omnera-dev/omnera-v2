@@ -7,19 +7,19 @@ In some cases, encoding a value back to its original form may not make sense or 
 Consider a scenario where you need to hash a user's plain text password for secure storage. It is important that the hashed password cannot be reversed back to plain text. By using `Schema.transformOrFail`, you can enforce this restriction, ensuring a one-way transformation from plain text to a hashed password.
 
 ```ts twoslash
-import { Schema, ParseResult, Redacted } from "effect"
-import { createHash } from "node:crypto"
+import { Schema, ParseResult, Redacted } from 'effect'
+import { createHash } from 'node:crypto'
 
 // Define a schema for plain text passwords
 // with a minimum length requirement
 const PlainPassword = Schema.String.pipe(
   Schema.minLength(6),
-  Schema.brand("PlainPassword", { identifier: "PlainPassword" })
+  Schema.brand('PlainPassword', { identifier: 'PlainPassword' })
 )
 
 // Define a schema for hashed passwords as a separate branded type
 const HashedPassword = Schema.String.pipe(
-  Schema.brand("HashedPassword", { identifier: "HashedPassword" })
+  Schema.brand('HashedPassword', { identifier: 'HashedPassword' })
 )
 
 // Define a one-way transformation from plain passwords to hashed passwords
@@ -31,9 +31,7 @@ export const PasswordHashing = Schema.transformOrFail(
     strict: true,
     // Decode: Transform a plain password into a hashed password
     decode: (plainPassword) => {
-      const hash = createHash("sha256")
-        .update(plainPassword)
-        .digest("hex")
+      const hash = createHash('sha256').update(plainPassword).digest('hex')
       // Wrap the hash in Redacted
       return ParseResult.succeed(Redacted.make(hash))
     },
@@ -43,9 +41,9 @@ export const PasswordHashing = Schema.transformOrFail(
         new ParseResult.Forbidden(
           ast,
           hashedPassword,
-          "Encoding hashed passwords back to plain text is forbidden."
+          'Encoding hashed passwords back to plain text is forbidden.'
         )
-      )
+      ),
   }
 )
 
@@ -58,15 +56,11 @@ type Encoded = typeof PasswordHashing.Encoded
 type Type = typeof PasswordHashing.Type
 
 // Example: Decoding a plain password into a hashed password
-console.log(
-  Schema.decodeUnknownSync(PasswordHashing)("myPlainPassword123")
-)
+console.log(Schema.decodeUnknownSync(PasswordHashing)('myPlainPassword123'))
 // Output: <redacted>
 
 // Example: Attempting to encode a hashed password back to plain text
-console.log(
-  Schema.encodeUnknownSync(PasswordHashing)(Redacted.make("2ef2b7..."))
-)
+console.log(Schema.encodeUnknownSync(PasswordHashing)(Redacted.make('2ef2b7...')))
 /*
 throws:
 ParseError: (PlainPassword <-> Redacted(<redacted>))

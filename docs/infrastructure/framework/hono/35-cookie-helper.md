@@ -40,11 +40,7 @@ app.get('/signed-cookie', (c) => {
   const secret = 'secret' // make sure it's a large enough string to be secure
 
   await setSignedCookie(c, 'cookie_name0', 'cookie_value', secret)
-  const fortuneCookie = await getSignedCookie(
-    c,
-    secret,
-    'cookie_name0'
-  )
+  const fortuneCookie = await getSignedCookie(c, secret, 'cookie_name0')
   deleteCookie(c, 'cookie_name0')
   // `getSignedCookie` will return `false` for a specified cookie if the signature was tampered with or is invalid
   const allSignedCookies = await getSignedCookie(c, secret)
@@ -127,21 +123,15 @@ setCookie(c, 'great_cookie', 'banana', {
 })
 
 // Signed cookies
-await setSignedCookie(
-  c,
-  'fortune_cookie',
-  'lots-of-money',
-  'secret ingredient',
-  {
-    path: '/',
-    secure: true,
-    domain: 'example.com',
-    httpOnly: true,
-    maxAge: 1000,
-    expires: new Date(Date.UTC(2000, 11, 24, 10, 30, 59, 900)),
-    sameSite: 'Strict',
-  }
-)
+await setSignedCookie(c, 'fortune_cookie', 'lots-of-money', 'secret ingredient', {
+  path: '/',
+  secure: true,
+  domain: 'example.com',
+  httpOnly: true,
+  maxAge: 1000,
+  expires: new Date(Date.UTC(2000, 11, 24, 10, 30, 59, 900)),
+  sameSite: 'Strict',
+})
 ```
 
 ### `deleteCookie`
@@ -176,18 +166,8 @@ If you want to verify if the cookie name has a prefix, specify the prefix option
 const securePrefixCookie = getCookie(c, 'yummy_cookie', 'secure')
 const hostPrefixCookie = getCookie(c, 'yummy_cookie', 'host')
 
-const securePrefixSignedCookie = await getSignedCookie(
-  c,
-  secret,
-  'fortune_cookie',
-  'secure'
-)
-const hostPrefixSignedCookie = await getSignedCookie(
-  c,
-  secret,
-  'fortune_cookie',
-  'host'
-)
+const securePrefixSignedCookie = await getSignedCookie(c, secret, 'fortune_cookie', 'secure')
+const hostPrefixSignedCookie = await getSignedCookie(c, secret, 'fortune_cookie', 'host')
 ```
 
 Also, if you wish to specify a prefix when setting the cookie, specify a value for the prefix option.
@@ -197,15 +177,9 @@ setCookie(c, 'delicious_cookie', 'macha', {
   prefix: 'secure', // or `host`
 })
 
-await setSignedCookie(
-  c,
-  'delicious_cookie',
-  'macha',
-  'secret choco chips',
-  {
-    prefix: 'secure', // or `host`
-  }
-)
+await setSignedCookie(c, 'delicious_cookie', 'macha', 'secret choco chips', {
+  prefix: 'secure', // or `host`
+})
 ```
 
 ## Following the best practices
@@ -227,4 +201,3 @@ The cookie helper will throw an `Error` when parsing cookies under the following
 - The cookie name starts with `__Host-`, but `domain` is set.
 - The `maxAge` option value is greater than 400 days.
 - The `expires` option value is 400 days later than the current time.
-

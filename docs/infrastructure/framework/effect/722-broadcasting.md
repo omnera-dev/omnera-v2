@@ -7,38 +7,30 @@ Broadcasting a stream creates multiple downstream streams that each receive the 
 In the following example, we broadcast a stream of numbers to two downstream consumers. The first calculates the maximum value in the stream, while the second logs each number with a delay. The upstream stream's speed adjusts based on the slower logging stream:
 
 ```ts twoslash
-import { Effect, Stream, Console, Schedule, Fiber } from "effect"
+import { Effect, Stream, Console, Schedule, Fiber } from 'effect'
 
 const numbers = Effect.scoped(
   Stream.range(1, 20).pipe(
-    Stream.tap((n) =>
-      Console.log(`Emit ${n} element before broadcasting`)
-    ),
+    Stream.tap((n) => Console.log(`Emit ${n} element before broadcasting`)),
     // Broadcast to 2 downstream consumers with max lag of 5
     Stream.broadcast(2, 5),
     Stream.flatMap(([first, second]) =>
       Effect.gen(function* () {
         // First downstream stream: calculates maximum
-        const fiber1 = yield* Stream.runFold(first, 0, (acc, e) =>
-          Math.max(acc, e)
-        ).pipe(
+        const fiber1 = yield* Stream.runFold(first, 0, (acc, e) => Math.max(acc, e)).pipe(
           Effect.andThen((max) => Console.log(`Maximum: ${max}`)),
           Effect.fork
         )
 
         // Second downstream stream: logs each element with a delay
         const fiber2 = yield* second.pipe(
-          Stream.schedule(Schedule.spaced("1 second")),
-          Stream.runForEach((n) =>
-            Console.log(`Logging to the Console: ${n}`)
-          ),
+          Stream.schedule(Schedule.spaced('1 second')),
+          Stream.runForEach((n) => Console.log(`Logging to the Console: ${n}`)),
           Effect.fork
         )
 
         // Wait for both fibers to complete
-        yield* Fiber.join(fiber1).pipe(
-          Effect.zip(Fiber.join(fiber2), { concurrent: true })
-        )
+        yield* Fiber.join(fiber1).pipe(Effect.zip(Fiber.join(fiber2), { concurrent: true }))
       })
     ),
     Stream.runCollect

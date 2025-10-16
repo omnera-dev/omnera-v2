@@ -125,4 +125,3 @@ The custom message if the authentication header is invalid.
 ### <Badge type="info" text="optional" /> invalidTokenMessage: `string | object | MessageFunction`
 
 The custom message if the token is invalid.
-

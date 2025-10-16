@@ -24,10 +24,10 @@ When calling `runMain`, pass in a configuration object with these fields (all op
 **Example** (Running a Successful Program)
 
 ```ts twoslash
-import { NodeRuntime } from "@effect/platform-node"
-import { Effect } from "effect"
+import { NodeRuntime } from '@effect/platform-node'
+import { Effect } from 'effect'
 
-const success = Effect.succeed("Hello, World!")
+const success = Effect.succeed('Hello, World!')
 
 NodeRuntime.runMain(success)
 // No Output
@@ -36,10 +36,10 @@ NodeRuntime.runMain(success)
 **Example** (Running a Failing Program)
 
 ```ts twoslash
-import { NodeRuntime } from "@effect/platform-node"
-import { Effect } from "effect"
+import { NodeRuntime } from '@effect/platform-node'
+import { Effect } from 'effect'
 
-const failure = Effect.fail("Uh oh!")
+const failure = Effect.fail('Uh oh!')
 
 NodeRuntime.runMain(failure)
 /*
@@ -52,10 +52,10 @@ Output:
 **Example** (Running a Failing Program Without Pretty Logger)
 
 ```ts twoslash
-import { NodeRuntime } from "@effect/platform-node"
-import { Effect } from "effect"
+import { NodeRuntime } from '@effect/platform-node'
+import { Effect } from 'effect'
 
-const failure = Effect.fail("Uh oh!")
+const failure = Effect.fail('Uh oh!')
 
 NodeRuntime.runMain(failure, { disablePrettyLogger: true })
 /*
@@ -67,10 +67,10 @@ timestamp=2025-01-14T11:43:46.276Z level=ERROR fiber=#0 cause="Error: Uh oh!"
 **Example** (Running a Failing Program Without Error Reporting)
 
 ```ts twoslash
-import { NodeRuntime } from "@effect/platform-node"
-import { Effect } from "effect"
+import { NodeRuntime } from '@effect/platform-node'
+import { Effect } from 'effect'
 
-const failure = Effect.fail("Uh oh!")
+const failure = Effect.fail('Uh oh!')
 
 NodeRuntime.runMain(failure, { disableErrorReporting: true })
 // No Output
@@ -79,21 +79,21 @@ NodeRuntime.runMain(failure, { disableErrorReporting: true })
 **Example** (Running a Failing Program With Custom Teardown)
 
 ```ts twoslash
-import { NodeRuntime } from "@effect/platform-node"
-import { Effect } from "effect"
+import { NodeRuntime } from '@effect/platform-node'
+import { Effect } from 'effect'
 
-const failure = Effect.fail("Uh oh!")
+const failure = Effect.fail('Uh oh!')
 
 NodeRuntime.runMain(failure, {
   teardown: function customTeardown(exit, onExit) {
-    if (exit._tag === "Failure") {
-      console.error("Program ended with an error.")
+    if (exit._tag === 'Failure') {
+      console.error('Program ended with an error.')
       onExit(1)
     } else {
-      console.log("Program finished successfully.")
+      console.log('Program finished successfully.')
       onExit(0)
     }
-  }
+  },
 })
 /*
 Output:
