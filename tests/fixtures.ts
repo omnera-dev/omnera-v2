@@ -141,10 +141,7 @@ export const test = base.extend<ServerFixtures>({
 
       // Override page.goto to prepend baseURL for relative paths
       const originalGoto = page.goto.bind(page)
-      page.goto = async (
-        url: string,
-        options?: Parameters<typeof page.goto>[1]
-      ): ReturnType<typeof page.goto> => {
+      page.goto = (url: string, options?: Parameters<typeof page.goto>[1]) => {
         const fullUrl = url.startsWith('/') ? `${serverUrl}${url}` : url
         return originalGoto(fullUrl, options)
       }
