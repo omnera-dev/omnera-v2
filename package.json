@@ -30,14 +30,12 @@
     "typecheck": "tsc --noEmit",
     "clean": "knip",
     "lint": "eslint . --fix",
-    "test:all": "bun test && bun test:e2e",
+    "test:all": "bun test && bun test:e2e:ci",
     "test:e2e": "playwright test",
     "test:e2e:spec": "playwright test --project=spec",
-    "test:e2e:regression": "playwright test --project=regression",
     "test:e2e:critical": "playwright test --project=critical",
     "test:e2e:dev": "playwright test --grep='@spec|@critical'",
     "test:e2e:ci": "playwright test --grep='@regression|@critical'",
-    "test:e2e:ui": "playwright test --project=spec --ui",
     "release": "semantic-release"
   },
   "devDependencies": {
