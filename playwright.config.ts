@@ -32,13 +32,35 @@ export default defineConfig({
     trace: 'on-first-retry',
   },
 
-  /* Configure projects for major browsers */
+  /* Configure projects for major browsers and tagged test execution */
   projects: [
+    // Default - All tests (chromium only)
     {
       name: 'chromium',
       use: { ...devices['Desktop Chrome'] },
     },
 
+    // Tagged test execution (run specific test categories)
+    {
+      name: 'spec',
+      testMatch: /.*\.spec\.ts/,
+      grep: /@spec/,
+      use: { ...devices['Desktop Chrome'] },
+    },
+    {
+      name: 'regression',
+      testMatch: /.*\.spec\.ts/,
+      grep: /@regression/,
+      use: { ...devices['Desktop Chrome'] },
+    },
+    {
+      name: 'critical',
+      testMatch: /.*\.spec\.ts/,
+      grep: /@critical/,
+      use: { ...devices['Desktop Chrome'] },
+    },
+
+    /* Cross-browser testing (uncomment when needed) */
     /*{
       name: 'firefox',
       use: { ...devices['Desktop Firefox'] },

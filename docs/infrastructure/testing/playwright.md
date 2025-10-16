@@ -425,18 +425,309 @@ Ignored in .gitignore:
 - `/playwright/.cache/` - Cached browser binaries
 - `/playwright/.auth/` - Authentication state files
 
-## Best Practices
+## Playwright Best Practices (Official)
+
+These best practices come directly from [Playwright's official documentation](https://playwright.dev/docs/best-practices). Following these guidelines ensures resilient, maintainable E2E tests.
+
+### 1. Test User-Visible Behavior
+
+Focus on what users see and interact with, not implementation details like function names, CSS classes, or internal structure.
+
+**✅ DO:**
+
+```typescript
+// Test user-visible behavior
+test('user can log in', async ({ page }) => {
+  await page.goto('/login')
+  await page.getByLabel('Email').fill('user@example.com')
+  await page.getByLabel('Password').fill('password123')
+  await page.getByRole('button', { name: 'Sign in' }).click()
+
+  await expect(page).toHaveURL('/dashboard')
+  await expect(page.getByRole('heading')).toHaveText('Welcome')
+})
+```
+
+**❌ DON'T:**
+
+```typescript
+// Don't test implementation details
+test('user can log in', async ({ page }) => {
+  await page.locator('.login-form-input-email').fill('user@example.com') // CSS class
+  await page.locator('button#submit-btn-v2').click() // Internal ID
+  await expect(page.locator('div.dashboard-container')).toBeVisible()
+})
+```
+
+### 2. Use Role-Based Locators
+
+Prioritize user-facing attributes and ARIA roles over CSS selectors or XPath.
+
+**Locator Priority (Best to Worst):**
+
+1. `page.getByRole('button', { name: 'Submit' })` - **Recommended**
+2. `page.getByLabel('Email address')` - Form labels
+3. `page.getByPlaceholder('Enter email')` - Input placeholders
+4. `page.getByText('Welcome')` - Visible text
+5. `page.getByTestId('submit-button')` - Test IDs
+6. `page.locator('.submit-btn')` - **Last resort** (CSS/XPath)
+
+**✅ DO:**
+
+```typescript
+// Use role-based locators
+await page.getByRole('button', { name: 'Add to cart' }).click()
+await page.getByLabel('Email').fill('user@example.com')
+await expect(page.getByRole('heading', { name: 'Products' })).toBeVisible()
+```
+
+**❌ DON'T:**
+
+```typescript
+// Don't use CSS classes
+await page.locator('.btn-primary.add-to-cart').click()
+await page.locator('input.email-input').fill('user@example.com')
+await expect(page.locator('h1.products-heading')).toBeVisible()
+```
+
+### 3. Use Web-First Assertions (Auto-Waiting)
+
+Playwright's web-first assertions automatically wait until the expected condition is met.
+
+**✅ DO:**
+
+```typescript
+// Auto-waits until element is visible (retries up to timeout)
+await expect(page.getByText('Success')).toBeVisible()
+await expect(page).toHaveURL(/.*dashboard/)
+await expect(page.getByRole('button')).toBeEnabled()
+```
+
+**❌ DON'T:**
+
+```typescript
+// No auto-waiting - returns immediately
+const isVisible = await page.getByText('Success').isVisible()
+expect(isVisible).toBe(true) // May fail if element appears after delay
+```
+
+### 4. Chain and Filter Locators
+
+Narrow searches to specific page sections for more resilient tests.
+
+**✅ DO:**
+
+```typescript
+// Chain locators to find element within specific context
+const productCard = page.getByRole('article').filter({ hasText: 'Blue T-Shirt' })
+await productCard.getByRole('button', { name: 'Add to cart' }).click()
+```
+
+**❌ DON'T:**
+
+```typescript
+// Ambiguous - which product if there are multiple?
+await page.getByRole('button', { name: 'Add to cart' }).click()
+```
+
+### 5. Avoid Manual Waits
+
+Never use arbitrary timeouts. Trust Playwright's auto-waiting.
+
+**✅ DO:**
+
+```typescript
+// Playwright waits for element to be actionable
+await page.getByRole('button', { name: 'Submit' }).click()
+await expect(page.getByText('Success')).toBeVisible()
+```
+
+**❌ DON'T:**
+
+```typescript
+// Arbitrary wait - fragile and slow
+await page.waitForTimeout(3000)
+```
+
+**When explicit waits ARE needed:**
+
+```typescript
+// Wait for specific load state
+await page.waitForLoadState('networkidle')
+
+// Wait for URL
+await page.waitForURL('**/dashboard')
+
+// Wait for response
+await page.waitForResponse('**/api/data')
+```
+
+### 6. Test Isolation
+
+Each test must run independently with its own storage, session data, and cookies.
+
+**✅ DO:**
+
+```typescript
+test.describe('User Features', () => {
+  test.beforeEach(async ({ page }) => {
+    // Each test gets fresh state
+    await page.goto('/login')
+    await page.getByLabel('Email').fill('user@example.com')
+    await page.getByLabel('Password').fill('password123')
+    await page.getByRole('button', { name: 'Sign in' }).click()
+  })
+
+  test('can view profile', async ({ page }) => {
+    await page.getByRole('link', { name: 'Profile' }).click()
+    await expect(page).toHaveURL('/profile')
+  })
+})
+```
+
+**❌ DON'T:**
+
+```typescript
+// Shared state - tests depend on execution order
+let authToken: string
+
+test('user logs in', async ({ page }) => {
+  authToken = await page.evaluate(() => localStorage.getItem('token'))
+})
+
+test('user views profile', async ({ page }) => {
+  // Assumes previous test ran first
+  await page.evaluate((token) => localStorage.setItem('token', token), authToken)
+})
+```
+
+### 7. Avoid Testing Third-Party Services
+
+Don't test external sites or APIs you don't control. Mock them instead.
+
+**✅ DO:**
+
+```typescript
+// Mock external API
+test('displays weather data', async ({ page }) => {
+  await page.route('**/api.weather.com/current', (route) => {
+    route.fulfill({
+      status: 200,
+      body: JSON.stringify({ temperature: 72, condition: 'sunny' }),
+    })
+  })
+
+  await page.goto('/weather')
+  await expect(page.getByText('72°F')).toBeVisible()
+})
+```
+
+**❌ DON'T:**
+
+```typescript
+// Don't test external services
+test('displays weather data', async ({ page }) => {
+  // Test fails if API is down or data changes
+  await page.goto('/weather')
+  await expect(page.getByText(/\d+°F/)).toBeVisible()
+})
+```
+
+### 8. Use Codegen for Locators
+
+Generate resilient locators automatically with Playwright's codegen tool.
+
+```bash
+# Record interactions and generate locators
+npx playwright codegen http://localhost:3000
+```
+
+Codegen prioritizes:
+
+1. Role-based locators
+2. Text content
+3. Test IDs
+4. CSS selectors (fallback)
+
+### 9. Use Soft Assertions for Multiple Checks
+
+Soft assertions don't stop execution at first failure, showing all issues.
+
+**✅ DO:**
+
+```typescript
+test('product card shows all info', async ({ page }) => {
+  await page.goto('/products/123')
+
+  // All assertions run even if some fail
+  await expect.soft(page.getByRole('heading')).toBeVisible()
+  await expect.soft(page.getByText('$99.99')).toBeVisible()
+  await expect.soft(page.getByRole('img')).toBeVisible()
+  await expect.soft(page.getByRole('button', { name: 'Add to cart' })).toBeEnabled()
+
+  // Test fails if ANY soft assertion failed
+})
+```
+
+**❌ DON'T:**
+
+```typescript
+// Stops at first failure
+test('product card shows all info', async ({ page }) => {
+  await expect(page.getByRole('heading')).toBeVisible()
+  await expect(page.getByText('$99.99')).toBeVisible() // If this fails, rest don't run
+  await expect(page.getByRole('img')).toBeVisible()
+})
+```
+
+### Common Anti-Patterns
+
+#### ❌ Don't Use `page.waitForTimeout()`
+
+```typescript
+// BAD
+await page.waitForTimeout(3000)
+
+// GOOD
+await expect(page.getByText('Loaded')).toBeVisible()
+```
+
+#### ❌ Don't Use Implementation Details
+
+```typescript
+// BAD
+await page.locator('#submit-btn-2023-v2').click()
+
+// GOOD
+await page.getByRole('button', { name: 'Submit' }).click()
+```
+
+#### ❌ Don't Chain `.isVisible()` with `expect()`
+
+```typescript
+// BAD - No auto-waiting
+expect(await page.getByText('Welcome').isVisible()).toBe(true)
+
+// GOOD - Auto-waiting
+await expect(page.getByText('Welcome')).toBeVisible()
+```
+
+## Best Practices Summary
 
 1. **Keep E2E tests focused** - Test user workflows, not implementation details
-2. **Use descriptive test names** - Clearly state what user action is being tested
-3. **Prefer role-based selectors** - More resilient to UI changes
-4. **Avoid testing third-party services** - Mock external APIs
-5. **Use test data carefully** - Clean up after tests to avoid state pollution
-6. **Run E2E tests less frequently** - Reserve for validation, not rapid iteration
-7. **Leverage auto-waiting** - Trust Playwright's built-in waits, avoid manual timeouts
-8. **Use screenshots/traces for debugging** - Visual feedback for failed tests
-9. **Test critical paths first** - Authentication, checkout, core workflows
-10. **Keep tests independent** - Each test should run in isolation
+2. **Use role-based locators** - `getByRole`, `getByLabel`, `getByText` over CSS selectors
+3. **Use web-first assertions** - `await expect()` for auto-waiting
+4. **Avoid manual waits** - No `waitForTimeout()`, trust auto-waiting
+5. **Test isolation** - Each test runs independently with fresh state
+6. **Mock external services** - Don't test third-party APIs
+7. **Use descriptive test names** - Clearly state what user action is being tested
+8. **Chain locators** - Narrow searches to specific page sections
+9. **Use soft assertions** - See all failures, not just the first one
+10. **Leverage auto-waiting** - Trust Playwright's built-in waits
+11. **Use screenshots/traces for debugging** - Visual feedback for failed tests
+12. **Test critical paths first** - Authentication, checkout, core workflows
+13. **Run E2E tests strategically** - Before commits and in CI, not constantly
+14. **Use codegen** - Generate resilient locators automatically
 
 ## Common Pitfalls
 
@@ -506,6 +797,9 @@ git add . && git commit -m "feat: add feature"
 
 ## References
 
-- Playwright documentation: https://playwright.dev/
-- Test API reference: https://playwright.dev/docs/api/class-test
-- Best practices: https://playwright.dev/docs/best-practices
+- **Playwright Documentation**: https://playwright.dev/
+- **Test API Reference**: https://playwright.dev/docs/api/class-test
+- **Best Practices**: https://playwright.dev/docs/best-practices
+- **Locators**: https://playwright.dev/docs/locators
+- **Assertions**: https://playwright.dev/docs/test-assertions
+- **Auto-Waiting**: https://playwright.dev/docs/actionability

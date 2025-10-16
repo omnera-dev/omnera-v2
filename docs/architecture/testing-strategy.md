@@ -1424,6 +1424,502 @@ test('can connect GitHub account', async ({ page }) => {
 })
 ```
 
+## Test Execution Strategies
+
+As your E2E test suite grows, running all tests becomes time-consuming. This section outlines strategies for running tests efficiently during development while maintaining comprehensive coverage in CI/CD.
+
+### The Challenge: Speed vs. Coverage
+
+**Problem:**
+
+- **Development**: Need fast feedback (seconds, not minutes)
+- **CI/CD**: Need comprehensive coverage (all scenarios)
+- **Debugging**: Need granular tests to pinpoint failures
+
+**Solution:** Tag-based test execution with three test categories.
+
+### Test Categories and Tags
+
+Omnera uses Playwright's tagging system to categorize E2E tests by purpose:
+
+| Tag           | Purpose                         | When to Run                          | Speed     | Coverage  |
+| ------------- | ------------------------------- | ------------------------------------ | --------- | --------- |
+| `@spec`       | Specification tests (TDD)       | During development, pre-commit       | Fast      | Granular  |
+| `@regression` | Regression tests (consolidated) | CI/CD, before releases               | Medium    | Broad     |
+| `@critical`   | Critical path tests             | Every commit, production smoke tests | Very Fast | Essential |
+
+### 1. Specification Tests (`@spec`)
+
+**Purpose:** Define feature completion criteria during TDD development.
+
+**Characteristics:**
+
+- **Granular** - One test per user story acceptance criterion
+- **Fast** - Focused on specific behavior
+- **Frequent** - Run during active development
+- **Educational** - Document expected behavior in detail
+
+**When to use:**
+
+- During TDD development (RED → GREEN cycle)
+- Pre-commit verification
+- Debugging specific feature behavior
+
+**Example:**
+
+```typescript
+// tests/auth/login.spec.ts
+import { test, expect } from '@playwright/test'
+
+test.describe('Login Flow - Specification', () => {
+  // @spec - Validates email input behavior
+  test('user can enter valid email', { tag: '@spec' }, async ({ page }) => {
+    await page.goto('/login')
+    await page.getByLabel('Email').fill('user@example.com')
+    await expect(page.getByLabel('Email')).toHaveValue('user@example.com')
+  })
+
+  // @spec - Validates password input behavior
+  test('user can enter password', { tag: '@spec' }, async ({ page }) => {
+    await page.goto('/login')
+    await page.getByLabel('Password').fill('password123')
+    await expect(page.getByLabel('Password')).toHaveAttribute('type', 'password')
+  })
+
+  // @spec - Validates validation error display
+  test('user sees error for invalid email', { tag: '@spec' }, async ({ page }) => {
+    await page.goto('/login')
+    await page.getByLabel('Email').fill('invalid-email')
+    await page.getByRole('button', { name: 'Sign in' }).click()
+    await expect(page.getByText('Invalid email format')).toBeVisible()
+  })
+
+  // @spec - Validates successful login behavior
+  test('user is redirected after successful login', { tag: '@spec' }, async ({ page }) => {
+    await page.goto('/login')
+    await page.getByLabel('Email').fill('user@example.com')
+    await page.getByLabel('Password').fill('password123')
+    await page.getByRole('button', { name: 'Sign in' }).click()
+    await expect(page).toHaveURL('/dashboard')
+  })
+
+  // @spec - Validates session creation
+  test('session is created on login', { tag: '@spec' }, async ({ page }) => {
+    await page.goto('/login')
+    await page.getByLabel('Email').fill('user@example.com')
+    await page.getByLabel('Password').fill('password123')
+    await page.getByRole('button', { name: 'Sign in' }).click()
+
+    // Verify session cookie exists
+    const cookies = await page.context().cookies()
+    expect(cookies.find((c) => c.name === 'session')).toBeDefined()
+  })
+})
+```
+
+**Running spec tests:**
+
+```bash
+# During development - run only spec tests
+playwright test --grep="@spec"
+
+# Run specific spec test file
+playwright test tests/auth/login.spec.ts --grep="@spec"
+
+# Watch mode for TDD
+playwright test --grep="@spec" --ui
+```
+
+### 2. Regression Tests (`@regression`)
+
+**Purpose:** Validate complete workflows work end-to-end with consolidated coverage.
+
+**Characteristics:**
+
+- **Consolidated** - One test covers multiple acceptance criteria
+- **Comprehensive** - Tests complete user journey
+- **Efficient** - Fewer tests, broader coverage
+- **CI-focused** - Optimized for automated pipelines
+
+**When to use:**
+
+- CI/CD pipeline (every push to main)
+- Before releases
+- Production smoke tests
+- When you need high confidence with minimal test count
+
+**Example:**
+
+```typescript
+// tests/auth/login.spec.ts (same file as spec tests)
+import { test, expect } from '@playwright/test'
+
+test.describe('Login Flow - Regression', () => {
+  // @regression - Consolidates all spec tests above into one comprehensive test
+  test('user can complete full login flow', { tag: '@regression' }, async ({ page }) => {
+    // Given: User is on login page
+    await page.goto('/login')
+
+    // When: User enters invalid email
+    await page.getByLabel('Email').fill('invalid-email')
+    await page.getByRole('button', { name: 'Sign in' }).click()
+
+    // Then: Validation error is shown
+    await expect(page.getByText('Invalid email format')).toBeVisible()
+
+    // When: User enters valid credentials
+    await page.getByLabel('Email').fill('user@example.com')
+    await page.getByLabel('Password').fill('password123')
+    await page.getByRole('button', { name: 'Sign in' }).click()
+
+    // Then: User is redirected to dashboard
+    await expect(page).toHaveURL('/dashboard')
+    await expect(page.getByRole('heading')).toHaveText('Welcome')
+
+    // Then: Session cookie is created
+    const cookies = await page.context().cookies()
+    expect(cookies.find((c) => c.name === 'session')).toBeDefined()
+  })
+})
+```
+
+**Running regression tests:**
+
+```bash
+# CI/CD - run only regression tests
+playwright test --grep="@regression"
+
+# Before release - all regression tests
+playwright test --grep="@regression" --project=chromium --project=firefox --project=webkit
+```
+
+### 3. Critical Path Tests (`@critical`)
+
+**Purpose:** Validate essential workflows that must always work (authentication, checkout, data loss prevention).
+
+**Characteristics:**
+
+- **Essential** - Core functionality only
+- **Fast** - Optimized for speed
+- **Reliable** - Minimal flakiness
+- **Always run** - Every commit, production deployments
+
+**When to use:**
+
+- Every commit (pre-merge checks)
+- Production smoke tests after deployment
+- Health checks in monitoring
+- When you need maximum confidence in minimum time
+
+**Example:**
+
+```typescript
+// tests/critical/critical-paths.spec.ts
+import { test, expect } from '@playwright/test'
+
+test.describe('Critical Paths', () => {
+  // @critical - Must always work
+  test('user can authenticate', { tag: '@critical' }, async ({ page }) => {
+    await page.goto('/login')
+    await page.getByLabel('Email').fill('user@example.com')
+    await page.getByLabel('Password').fill('password123')
+    await page.getByRole('button', { name: 'Sign in' }).click()
+    await expect(page).toHaveURL('/dashboard')
+  })
+
+  // @critical - Data integrity
+  test('user can save work', { tag: '@critical' }, async ({ page }) => {
+    await page.goto('/editor')
+    await page.getByRole('textbox').fill('Important data')
+    await page.getByRole('button', { name: 'Save' }).click()
+    await expect(page.getByText('Saved successfully')).toBeVisible()
+
+    // Reload and verify data persists
+    await page.reload()
+    await expect(page.getByRole('textbox')).toHaveValue('Important data')
+  })
+})
+```
+
+**Running critical tests:**
+
+```bash
+# Every commit - critical paths only
+playwright test --grep="@critical"
+
+# Production smoke test after deployment
+playwright test --grep="@critical" --base-url=https://production.omnera.app
+```
+
+### Tag Combinations
+
+Tests can have multiple tags for flexible execution:
+
+```typescript
+// Test is both a spec test AND a critical path
+test('user can authenticate', { tag: ['@spec', '@critical'] }, async ({ page }) => {
+  // This test runs during development (@spec) AND every commit (@critical)
+  await page.goto('/login')
+  await page.getByLabel('Email').fill('user@example.com')
+  await page.getByLabel('Password').fill('password123')
+  await page.getByRole('button', { name: 'Sign in' }).click()
+  await expect(page).toHaveURL('/dashboard')
+})
+
+// Test is both regression AND critical
+test('complete checkout flow', { tag: ['@regression', '@critical'] }, async ({ page }) => {
+  // This test runs in CI (@regression) AND every commit (@critical)
+})
+```
+
+### Playwright Configuration for Tags
+
+Configure Playwright to support tagged test execution:
+
+```typescript
+// playwright.config.ts
+import { defineConfig, devices } from '@playwright/test'
+
+export default defineConfig({
+  testDir: './tests',
+  fullyParallel: true,
+
+  projects: [
+    // Development - Spec tests only
+    {
+      name: 'spec',
+      testMatch: /.*\.spec\.ts/,
+      grep: /@spec/,
+      use: { ...devices['Desktop Chrome'] },
+    },
+
+    // CI/CD - Regression tests
+    {
+      name: 'regression',
+      testMatch: /.*\.spec\.ts/,
+      grep: /@regression/,
+      use: { ...devices['Desktop Chrome'] },
+    },
+
+    // Every commit - Critical paths
+    {
+      name: 'critical',
+      testMatch: /.*\.spec\.ts/,
+      grep: /@critical/,
+      use: { ...devices['Desktop Chrome'] },
+    },
+
+    // Full suite - All tests (for manual runs)
+    {
+      name: 'full',
+      testMatch: /.*\.spec\.ts/,
+      use: { ...devices['Desktop Chrome'] },
+    },
+  ],
+})
+```
+
+### Execution Strategy by Environment
+
+| Environment                       | Tests to Run                | Command              | Duration    |
+| --------------------------------- | --------------------------- | -------------------- | ----------- |
+| **Development** (active coding)   | `@spec`                     | `bun test:e2e:spec`  | ~30 seconds |
+| **Pre-commit** (local validation) | `@spec` + `@critical`       | `bun test:e2e:dev`   | ~1 minute   |
+| **CI/CD** (every push)            | `@regression` + `@critical` | `bun test:e2e:ci`    | ~5 minutes  |
+| **Pre-release** (before deploy)   | All tests                   | `bun test:e2e`       | ~15 minutes |
+| **Production** (smoke test)       | `@critical`                 | `bun test:e2e:smoke` | ~30 seconds |
+
+### NPM Scripts Configuration
+
+```json
+{
+  "scripts": {
+    "test:e2e": "playwright test",
+    "test:e2e:spec": "playwright test --grep='@spec'",
+    "test:e2e:regression": "playwright test --grep='@regression'",
+    "test:e2e:critical": "playwright test --grep='@critical'",
+    "test:e2e:dev": "playwright test --grep='@spec|@critical'",
+    "test:e2e:ci": "playwright test --grep='@regression|@critical'",
+    "test:e2e:smoke": "playwright test --grep='@critical' --base-url=${PRODUCTION_URL}",
+    "test:e2e:ui": "playwright test --grep='@spec' --ui"
+  }
+}
+```
+
+### TDD Workflow with Tags
+
+**Step 1: Write RED spec test with `.fixme` and `@spec` tag**
+
+```typescript
+test.fixme('user can reset password', { tag: '@spec' }, async ({ page }) => {
+  // Test defines completion criteria
+  await page.goto('/reset-password')
+  await page.getByLabel('Email').fill('user@example.com')
+  await page.getByRole('button', { name: 'Send reset link' }).click()
+  await expect(page.getByText('Check your email')).toBeVisible()
+})
+```
+
+**Step 2: Implement feature until spec test passes**
+
+```typescript
+// Remove .fixme when implementation complete
+test('user can reset password', { tag: '@spec' }, async ({ page }) => {
+  await page.goto('/reset-password')
+  await page.getByLabel('Email').fill('user@example.com')
+  await page.getByRole('button', { name: 'Send reset link' }).click()
+  await expect(page.getByText('Check your email')).toBeVisible()
+})
+```
+
+**Step 3: Add regression test (consolidated workflow)**
+
+```typescript
+// Add regression test covering multiple password management scenarios
+test('password management workflow', { tag: '@regression' }, async ({ page }) => {
+  // Covers: reset password + change password + forgot password
+  // Consolidated version of multiple @spec tests
+})
+```
+
+**Step 4: Promote critical functionality**
+
+```typescript
+// If password reset is critical, add @critical tag
+test('user can reset password', { tag: ['@spec', '@critical'] }, async ({ page }) => {
+  // Now runs during development AND every commit
+})
+```
+
+### Migration Strategy: Promoting Spec → Regression
+
+As features mature, promote spec tests to regression tests:
+
+**Option 1: Dual tagging (keep spec test, add to regression)**
+
+```typescript
+// Spec test becomes both @spec and @regression
+test('user can complete checkout', { tag: ['@spec', '@regression'] }, async ({ page }) => {
+  // Test runs in both development and CI/CD
+})
+```
+
+**Option 2: Create dedicated regression test (keep spec, add regression)**
+
+```typescript
+// Keep granular spec tests
+test('user can add item to cart', { tag: '@spec' }, async ({ page }) => {
+  // Granular test for development
+})
+
+test('user can remove item from cart', { tag: '@spec' }, async ({ page }) => {
+  // Granular test for development
+})
+
+// Add consolidated regression test
+test('user can manage cart', { tag: '@regression' }, async ({ page }) => {
+  // Consolidates add + remove + update quantity
+  // Faster execution in CI/CD
+})
+```
+
+**Option 3: Archive spec test (move to regression only)**
+
+```typescript
+// Original spec test
+test('user can login', { tag: '@spec' }, async ({ page }) => {
+  // ...
+})
+
+// After feature is stable, remove @spec tag and add @regression
+test('user can login', { tag: '@regression' }, async ({ page }) => {
+  // Now only runs in CI/CD
+})
+```
+
+### Best Practices for Tagged Tests
+
+1. **Start with `@spec` during TDD** - All new tests begin as specification tests
+2. **Add `@critical` for essential workflows** - Authentication, data persistence, checkout
+3. **Create `@regression` tests once stable** - Consolidate multiple spec tests into one
+4. **Use multiple tags sparingly** - Only when test truly serves both purposes
+5. **Review tag assignments quarterly** - Remove outdated `@spec` tags, add `@critical` as needed
+6. **Document tag decisions** - Add comments explaining why test has specific tags
+
+### Anti-Patterns to Avoid
+
+❌ **Don't delete spec tests prematurely**
+
+```typescript
+// BAD - Deleting spec test after creating regression test
+// test('user can enter email', { tag: '@spec' }, ...) // DELETED
+
+// GOOD - Keep spec test, archive it
+test('user can enter email', { tag: '@spec' }, ...) // Keep for debugging
+test('complete login flow', { tag: '@regression' }, ...) // Add regression
+```
+
+❌ **Don't tag everything as `@critical`**
+
+```typescript
+// BAD - Too many critical tests
+test('user can change theme', { tag: '@critical' }, ...) // Not critical
+test('user can view profile', { tag: '@critical' }, ...) // Not critical
+
+// GOOD - Only truly essential workflows
+test('user can authenticate', { tag: '@critical' }, ...) // Critical
+test('user can save work', { tag: '@critical' }, ...) // Critical
+```
+
+❌ **Don't create duplicate tests**
+
+```typescript
+// BAD - Same test in two files
+// tests/spec/login.spec.ts
+test('user can login', ...)
+
+// tests/regression/login.spec.ts
+test('user can login', ...) // Duplicate
+
+// GOOD - One test, tagged appropriately
+test('user can login', { tag: ['@spec', '@regression'] }, ...)
+```
+
+### Troubleshooting Tagged Tests
+
+**Problem:** Spec test passes, regression test fails
+
+**Solution:** Spec test may be too narrow. Regression test should cover broader workflow.
+
+```typescript
+// Spec test (too narrow)
+test('user can click submit', { tag: '@spec' }, async ({ page }) => {
+  await page.getByRole('button', { name: 'Submit' }).click()
+  // Missing: form validation, API call, redirect
+})
+
+// Regression test (comprehensive)
+test('user can submit form', { tag: '@regression' }, async ({ page }) => {
+  // Fill form, validate, submit, verify redirect
+})
+```
+
+**Problem:** Tests tagged `@critical` are flaky
+
+**Solution:** Critical tests must be rock-solid. Add retries or fix flakiness before tagging as critical.
+
+```typescript
+// BAD - Flaky test tagged as critical
+test('user can login', { tag: '@critical' }, async ({ page }) => {
+  await page.waitForTimeout(3000) // Flaky
+})
+
+// GOOD - Stable test with auto-waiting
+test('user can login', { tag: '@critical' }, async ({ page }) => {
+  await expect(page.getByRole('button')).toBeEnabled() // Reliable
+})
+```
+
 ## Best Practices Summary
 
 ### E2E Tests (Playwright) - Test-Driven Development (TDD)
