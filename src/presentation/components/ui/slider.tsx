@@ -4,6 +4,14 @@ import * as SliderPrimitive from '@radix-ui/react-slider'
 import * as React from 'react'
 import { cn } from '@/presentation/utils/cn'
 
+/**
+ * Slider component built on Radix UI primitives
+ * @param className - Additional CSS classes
+ * @param defaultValue - Default slider value(s)
+ * @param value - Controlled slider value(s)
+ * @param min - Minimum value (default: 0)
+ * @param max - Maximum value (default: 100)
+ */
 function Slider({
   className,
   defaultValue,
