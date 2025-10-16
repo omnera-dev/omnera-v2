@@ -1,35 +1,24 @@
 /**
- * Landing Page Template - Minimal Omnera Application
+ * Example usage of Omnera's start function
  *
- * This template demonstrates the simplest possible Omnera application:
- * a single landing page with just an app name.
+ * This file demonstrates the basic usage of Omnera to create and run
+ * a web application with minimal boilerplate.
  *
- * ## Running This Template
+ * ## Running this example
  *
  * ```bash
- * bun run templates/landing-page.ts
+ * bun run example.ts
  * ```
  *
  * Then visit http://localhost:3000 in your browser.
  *
- * ## What You Get
+ * ## What This Example Shows
  *
- * - **Single-page app** - Clean landing page with app name
- * - **React SSR** - Server-side rendered with React 19
- * - **Tailwind CSS** - Styled with gradient background, auto-compiled
- * - **Auto-shutdown** - Graceful shutdown on Ctrl+C (SIGINT/SIGTERM)
- * - **Zero config** - Runs on port 3000, localhost by default
- *
- * ## Customization
- *
- * To customize the port or hostname:
- *
- * ```typescript
- * start(myApp, {
- *   port: 8080,
- *   hostname: '0.0.0.0'
- * })
- * ```
+ * - Basic server startup with `start()` function
+ * - Automatic graceful shutdown handling (Ctrl+C)
+ * - Automatic server information logging
+ * - Simple Promise-based API (no Effect knowledge required)
+ * - Default configuration (port: 3000, hostname: 'localhost')
  */
 
 import { start, type App } from '@/index'
@@ -40,4 +29,8 @@ const myApp: App = {
 }
 
 // Start the server (handles everything automatically with defaults)
-start(myApp)
+start(myApp).catch((error: Readonly<Error>) => {
+  console.error('Failed to start server:', error)
+  // eslint-disable-next-line functional/no-expression-statements
+  process.exit(1)
+})
