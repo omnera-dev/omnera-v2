@@ -4,6 +4,23 @@
 
 This document outlines Omnera's comprehensive testing strategy, applying **F.I.R.S.T principles** (Fast, Isolated, Repeatable, Self-validating, Timely) and **Given-When-Then structure** to both unit tests (Bun Test) and end-to-end tests (Playwright).
 
+## Test File Naming Convention
+
+**Recommended convention for clarity and consistency**:
+
+| Test Type | Extension | Location | Example |
+|-----------|-----------|----------|---------|
+| **Unit Tests** | `.test.ts` | Co-located with source | `src/calculator.test.ts` |
+| **E2E Tests** | `.spec.ts` | `tests/` directory | `tests/login.spec.ts` |
+
+**Why this convention**:
+- **Clear Separation**: `.test.ts` = unit, `.spec.ts` = E2E (visual distinction)
+- **Tool Compatibility**: Bun recognizes both, Playwright defaults to `.spec.ts`
+- **Industry Standard**: Matches patterns used by Jest, Vitest, Playwright
+- **Searchability**: Easy to find all unit tests (`**/*.test.ts`) or E2E tests (`tests/**/*.spec.ts`)
+
+**See also**: [Bun Test Documentation](../infrastructure/testing/bun-test.md#test-file-naming-convention) for tool-specific details.
+
 ## F.I.R.S.T Principles
 
 The F.I.R.S.T principles ensure tests are reliable, maintainable, and valuable:
@@ -201,18 +218,17 @@ test('login user', async ({ page }) => {
 **Example - Repeatable Unit Test:**
 
 ```typescript
-import { test, expect, mock } from 'bun:test'
+import { test, expect, mock, spyOn } from 'bun:test'
 
-// ✅ GOOD - Repeatable (mocked Date)
+// ✅ GOOD - Repeatable (mocked Date with Bun's spyOn)
 test('should generate expiration date 30 days from now', () => {
   const mockDate = new Date('2025-01-15T00:00:00Z')
-  const dateSpy = mock(() => mockDate.getTime())
-  global.Date.now = dateSpy
+  const dateSpy = spyOn(Date, 'now').mockReturnValue(mockDate.getTime())
 
   const result = generateExpirationDate()
   expect(result).toBe('2025-02-14T00:00:00Z')
 
-  global.Date.now = Date.now // Restore
+  dateSpy.mockRestore() // Restore original Date.now
 })
 
 // ❌ BAD - Not repeatable (uses real time)
@@ -222,15 +238,14 @@ test('should generate expiration date', () => {
   expect(result).toBe('2025-02-15T00:00:00Z')
 })
 
-// ✅ GOOD - Repeatable (fixed random seed)
+// ✅ GOOD - Repeatable (fixed random seed with Bun's spyOn)
 test('should generate random ID', () => {
-  const mockRandom = mock(() => 0.5)
-  global.Math.random = mockRandom
+  const randomSpy = spyOn(Math, 'random').mockReturnValue(0.5)
 
   const result = generateId()
   expect(result).toBe('ID_50000')
 
-  global.Math.random = Math.random // Restore
+  randomSpy.mockRestore() // Restore original Math.random
 })
 
 // ❌ BAD - Not repeatable (actual random)

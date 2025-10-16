@@ -27,6 +27,8 @@ The following detailed documentation files are imported for Claude Code's memory
 @docs/architecture/functional-programming.md
 @docs/architecture/layer-based-architecture.md
 @docs/architecture/testing-strategy.md
+@docs/architecture/performance-optimization.md
+@docs/architecture/security-best-practices.md
 
 ## Project Overview
 

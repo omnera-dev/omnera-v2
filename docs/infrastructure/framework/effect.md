@@ -18,6 +18,8 @@ Effect.ts is a powerful library that brings advanced functional programming patt
 - **Performance**: Highly optimized runtime with efficient memory usage
 - **Excellent TypeScript Integration**: First-class TypeScript support with full type inference
 
+> **TypeScript Strict Mode Required**: Effect.ts relies on TypeScript's strict mode for accurate type inference and error tracking. Ensure `"strict": true` is enabled in `tsconfig.json` (already configured in Omnera). Without strict mode, Effect's type-level error tracking and Context requirements won't work correctly.
+
 ## Core Concepts
 
 ### 1. Effect Type
@@ -330,6 +332,196 @@ Effect.runCallback(program, (exit) => {
 // Run in Fiber (background)
 Effect.runFork(program)
 ```
+
+## Effect.gen vs async/await: When to Use Each
+
+Understanding when to use Effect.gen versus async/await is crucial for writing idiomatic Omnera code.
+
+### When to Use Effect.gen ✅
+
+**Use Effect.gen for:**
+- **Business Logic & Use Cases** - Application layer workflows
+- **Type-Safe Error Handling** - When errors need to be tracked in types
+- **Dependency Injection** - When accessing services via Effect Context
+- **Complex Workflows** - Multi-step operations with error handling
+- **Testable Code** - Pure programs that can be tested with mock layers
+
+```typescript
+// ✅ CORRECT: Effect.gen for business logic (Application Layer)
+export const RegisterUser = (input: RegisterUserInput): Effect.Effect<
+  User,
+  InvalidEmailError | UserAlreadyExistsError,
+  UserRepository | EmailService | Logger
+> =>
+  Effect.gen(function* () {
+    const logger = yield* Logger
+    const userRepo = yield* UserRepository
+    const emailService = yield* EmailService
+
+    // Validate (Domain Layer)
+    const emailValidation = validateEmail(input.email)
+    if (!emailValidation.isValid) {
+      return yield* Effect.fail(new InvalidEmailError({ message: emailValidation.error }))
+    }
+
+    // Check existence (Infrastructure)
+    const existingUser = yield* userRepo.findByEmail(input.email).pipe(Effect.option)
+    if (existingUser._tag === 'Some') {
+      return yield* Effect.fail(new UserAlreadyExistsError({ email: input.email }))
+    }
+
+    // Create and save user
+    const newUser = createUser(input) // Domain Layer factory
+    yield* userRepo.save(newUser)
+
+    // Send welcome email
+    yield* emailService.sendWelcomeEmail({ to: newUser.email, name: newUser.name })
+
+    yield* logger.info(`New user registered: ${newUser.email}`)
+
+    return newUser
+  })
+```
+
+### When to Use async/await ✅
+
+**Use async/await for:**
+- **Presentation Layer** - Hono routes, React component effects
+- **Running Effect Programs** - Converting Effect to Promise with `Effect.runPromise`
+- **Simple Async Operations** - When Effect's features aren't needed
+- **External Integrations** - Interfacing with non-Effect libraries
+
+```typescript
+// ✅ CORRECT: async/await in Presentation Layer (Hono route)
+import { Hono } from 'hono'
+import { Effect } from 'effect'
+import { RegisterUser } from '@/application/use-cases/RegisterUser'
+import { AppLayer } from '@/infrastructure/layers/AppLayer'
+
+const app = new Hono()
+
+app.post('/register', async (c) => {
+  const body = await c.req.json()
+
+  // Call Effect program from Application Layer
+  const program = RegisterUser({
+    name: body.name,
+    email: body.email,
+    password: body.password,
+  }).pipe(Effect.provide(AppLayer))
+
+  // Run Effect program as Promise
+  const result = await Effect.runPromise(program.pipe(Effect.either))
+
+  // Handle result in Presentation Layer
+  if (result._tag === 'Left') {
+    const error = result.left
+    if (error._tag === 'InvalidEmailError') {
+      return c.json({ error: error.message }, 400)
+    }
+    if (error._tag === 'UserAlreadyExistsError') {
+      return c.json({ error: 'User already exists' }, 409)
+    }
+    return c.json({ error: 'Internal server error' }, 500)
+  }
+
+  const user = result.right
+  return c.json({ userId: user.id, name: user.name }, 201)
+})
+
+export default app
+```
+
+### Pattern Comparison
+
+| Aspect | Effect.gen | async/await |
+|--------|------------|-------------|
+| **Use Case** | Business logic, use cases | HTTP routes, component effects |
+| **Layer** | Application, Infrastructure | Presentation |
+| **Error Types** | Tracked in type system | Thrown exceptions (untracked) |
+| **Dependencies** | Injected via Effect Context | Manual DI or globals |
+| **Testability** | Pure, easy to mock | Requires mocking infrastructure |
+| **Composability** | Highly composable | Less composable |
+| **Type Safety** | Full error type inference | No error type inference |
+
+### Example: Full Stack Integration
+
+```typescript
+// Domain Layer: Pure functions
+export function validateEmail(email: string): EmailValidationResult {
+  // Pure validation logic
+  return { isValid: true }
+}
+
+// Application Layer: Effect.gen for workflows
+export const GetUserProfile = (
+  input: GetUserProfileInput
+): Effect.Effect<UserProfile, UserNotFoundError, UserRepository | Logger> =>
+  Effect.gen(function* () {
+    const logger = yield* Logger
+    const userRepo = yield* UserRepository
+
+    yield* logger.info(`Fetching user profile for user ${input.userId}`)
+
+    const user = yield* userRepo.findById(input.userId)
+    const posts = yield* userRepo.findUserPosts(user.id)
+
+    yield* logger.info(`User profile retrieved: ${user.name}`)
+
+    return { ...user, postCount: posts.length }
+  })
+
+// Presentation Layer: async/await in Hono route
+app.get('/users/:id/profile', async (c) => {
+  const userId = Number(c.req.param('id'))
+
+  if (isNaN(userId) || userId <= 0) {
+    return c.json({ error: 'Invalid user ID' }, 400)
+  }
+
+  const program = GetUserProfile({ userId }).pipe(Effect.provide(AppLayer))
+
+  const result = await Effect.runPromise(program.pipe(Effect.either))
+
+  if (result._tag === 'Left') {
+    return c.json({ error: 'User not found' }, 404)
+  }
+
+  return c.json(result.right)
+})
+
+// Presentation Layer: async/await in React component
+function UserProfile({ userId }: { userId: number }) {
+  const [profile, setProfile] = useState<UserProfile | null>(null)
+
+  useEffect(() => {
+    const program = GetUserProfile({ userId }).pipe(Effect.provide(AppLayer))
+
+    Effect.runPromise(program)
+      .then(setProfile)
+      .catch((error) => console.error('Failed to load profile:', error))
+  }, [userId])
+
+  if (!profile) return <div>Loading...</div>
+
+  return (
+    <div>
+      <h1>{profile.name}</h1>
+      <p>Posts: {profile.postCount}</p>
+    </div>
+  )
+}
+```
+
+### Key Takeaways
+
+1. **Layer Separation**: Effect.gen in Application Layer, async/await in Presentation Layer
+2. **Type Safety**: Use Effect.gen when error types matter, async/await when exceptions are acceptable
+3. **Dependency Injection**: Effect.gen enables type-safe DI, async/await requires manual DI
+4. **Testability**: Effect.gen programs are pure and testable, async/await requires mocking
+5. **Conversion**: Always use `Effect.runPromise` to convert Effect to Promise in Presentation Layer
+
+**Best Practice**: Write business logic with Effect.gen, consume it with async/await in routes and components.
 
 ## Common Patterns in Omnera
 

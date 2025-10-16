@@ -15,7 +15,26 @@
 
 - **Unit Tests (Bun)**: Place `*.test.ts` or `*.spec.ts` files alongside source code (e.g., `src/utils.test.ts`)
 - **E2E Tests (Playwright)**: Place `*.spec.ts` files in `tests/` directory (e.g., `tests/login.spec.ts`)
-- **Naming Convention**: Use `.test.ts` for unit tests, `.spec.ts` for E2E tests (optional but recommended)
+
+## Test File Naming Convention
+
+**Recommended convention for clarity and consistency**:
+
+| Test Type | Extension | Location | Example |
+|-----------|-----------|----------|---------|
+| **Unit Tests** | `.test.ts` | Co-located with source | `src/calculator.test.ts` |
+| **E2E Tests** | `.spec.ts` | `tests/` directory | `tests/login.spec.ts` |
+
+**Why this convention**:
+- **Clear Separation**: `.test.ts` = unit, `.spec.ts` = E2E (visual distinction)
+- **Tool Compatibility**: Bun recognizes both, Playwright defaults to `.spec.ts`
+- **Industry Standard**: Matches patterns used by Jest, Vitest, Playwright
+- **Searchability**: Easy to find all unit tests (`**/*.test.ts`) or E2E tests (`tests/**/*.spec.ts`)
+
+**Alternative (also valid)**:
+You can use `.spec.ts` for both unit and E2E tests, relying on location for distinction:
+- Unit: `src/calculator.spec.ts` (co-located)
+- E2E: `tests/login.spec.ts` (in tests/ directory)
 
 ## Test Commands
 

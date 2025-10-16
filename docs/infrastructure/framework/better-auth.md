@@ -176,7 +176,9 @@ await authClient.signOut({
 
 ### 3. Session Management
 
-Access user session data from client and server:
+Access user session data from client and server.
+
+> **For managing authentication state with TanStack Query**, including caching, optimistic updates, and React integration patterns, see [TanStack Query Authentication Patterns](../../ui/tanstack-query.md#authentication-with-better-auth).
 
 #### Client-Side Session
 
@@ -864,11 +866,11 @@ if (session && !session.user.emailVerified) {
 Better Auth requires core database tables. Use the CLI to generate schema:
 
 ```bash
-# Generate schema for your ORM/database
-npx @better-auth/cli generate
+# Generate schema for your ORM/database (Bun-first approach)
+bunx @better-auth/cli generate
 
 # Apply migration directly (Kysely only)
-npx @better-auth/cli migrate
+bunx @better-auth/cli migrate
 ```
 
 **Core tables:**
@@ -889,14 +891,14 @@ npx @better-auth/cli migrate
 Better Auth provides a CLI for schema management:
 
 ```bash
-# Generate schema/migration
-npx @better-auth/cli generate
+# Generate schema/migration (Bun-first approach)
+bunx @better-auth/cli generate
 
 # Apply migration (Kysely only)
-npx @better-auth/cli migrate
+bunx @better-auth/cli migrate
 
 # View current schema
-npx @better-auth/cli schema
+bunx @better-auth/cli schema
 ```
 
 ## Security Features
