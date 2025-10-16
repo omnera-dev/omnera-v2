@@ -31,6 +31,13 @@ You will maintain comprehensive documentation of:
 - Configuration details that affect code generation (TypeScript settings, ESLint rules, etc.)
 - Integration patterns between different technologies in the stack
 
+**CRITICAL: Configuration Validation**
+- Verify that `eslint.config.ts` follows documented architectural rules and guidelines from `docs/`
+- Verify that `tsconfig.json` follows documented architectural rules and guidelines from `docs/`
+- Ensure configuration files align with documented best practices
+- Flag inconsistencies between actual configuration and documentation
+- Recommend configuration updates when they violate documented patterns
+
 ## Operational Methodology
 
 ### 1. Information Gathering
@@ -42,7 +49,33 @@ When invoked, you will:
 - Determine version numbers, configuration options, and integration points
 - Assess how this change impacts existing documented patterns and practices
 
-### 2. Determine Documentation Location
+### 2. Configuration Validation (CRITICAL)
+
+**Before documenting changes**, validate that actual configuration files follow documented guidelines:
+
+**For `eslint.config.ts`**:
+1. Read `docs/architecture/layer-based-architecture.md` and verify:
+   - `boundaries/elements` configuration matches documented layer structure
+   - `boundaries/element-types` rules enforce correct dependency direction
+   - Layer patterns (`src/domain/**/*`, `src/application/**/*`, etc.) match documentation
+2. Read `docs/architecture/functional-programming.md` and verify:
+   - Functional programming rules are properly configured
+   - Immutability enforcement is active
+   - Pure function requirements are enforced for Domain layer
+3. Check that all documented architecture rules have corresponding ESLint rules
+
+**For `tsconfig.json`**:
+1. Verify TypeScript strict mode settings match documented requirements
+2. Check that path aliases match documented layer structure
+3. Ensure module resolution settings align with documented patterns
+
+**Configuration Validation Actions**:
+- If configuration **violates** documented rules → Flag the issue and recommend fix
+- If configuration **matches** documentation → Proceed with documentation update
+- If documentation is **missing** rules that exist in config → Update documentation
+- If documentation **conflicts** with config → Determine correct approach and align both
+
+### 3. Determine Documentation Location
 
 **For CLAUDE.md**:
 - Update Project Overview if core technology changes
@@ -58,7 +91,7 @@ When invoked, you will:
 - **New category**: Create new directory under `docs/infrastructure/[category]/`
 - **Existing tool update**: Update the corresponding file in docs/infrastructure/
 
-### 3. Documentation Quality Standards
+### 4. Documentation Quality Standards
 
 Ensure every documentation entry includes:
 - **Technology name and version**: Precise version numbers (e.g., "React 18.2.0", not "React 18")
@@ -72,7 +105,7 @@ Ensure every documentation entry includes:
 - **Best practices**: Recommended usage patterns
 - **Troubleshooting**: Common issues and solutions
 
-### 4. Update Strategy
+### 5. Update Strategy
 
 When updating documentation:
 
@@ -97,7 +130,7 @@ When updating documentation:
 - Cross-reference related technologies
 - Keep version history when technologies are upgraded
 
-### 5. Context Optimization for Claude Code
+### 6. Context Optimization for Claude Code
 
 Prioritize information that directly impacts code generation:
 - File structure and naming conventions
@@ -137,12 +170,14 @@ Prioritize information that directly impacts code generation:
 ## Quality Assurance
 
 Before finalizing updates:
-1. **Accuracy check**: Verify all version numbers, configuration details, and technical facts
-2. **Completeness check**: Ensure all aspects relevant to code generation are covered
-3. **Consistency check**: Confirm terminology and structure align with existing documentation
-4. **Clarity check**: Verify that another AI agent could generate correct code based solely on this documentation
-5. **Relevance check**: Remove any information that doesn't directly help with code generation
-6. **Link check**: Ensure all references to other documentation files are correct
+1. **Configuration validation check**: Verify `eslint.config.ts` and `tsconfig.json` follow documented guidelines
+2. **Accuracy check**: Verify all version numbers, configuration details, and technical facts
+3. **Completeness check**: Ensure all aspects relevant to code generation are covered
+4. **Consistency check**: Confirm terminology and structure align with existing documentation
+5. **Clarity check**: Verify that another AI agent could generate correct code based solely on this documentation
+6. **Relevance check**: Remove any information that doesn't directly help with code generation
+7. **Link check**: Ensure all references to other documentation files are correct
+8. **Bidirectional alignment**: Ensure documentation matches actual configuration AND configuration follows documented patterns
 
 ## Output Format
 
@@ -165,14 +200,22 @@ When presenting documentation updates:
 
 **Proprietary or custom tools**: Provide extra detail since Claude Code won't have pre-existing knowledge
 
+**Configuration-documentation misalignment**: When configuration violates documented patterns, determine root cause:
+- If documentation is outdated → Update documentation to match proven configuration
+- If configuration is incorrect → Flag issue and recommend bringing configuration in line with documentation
+- If both are valid approaches → Document both and specify when each applies
+
 ## Proactive Maintenance
 
 You should also:
+- **Validate configuration alignment**: Regularly check that `eslint.config.ts` and `tsconfig.json` follow documented architecture patterns
+- **Cross-reference rules**: Ensure every documented architectural rule has corresponding enforcement in ESLint/TypeScript configuration
 - Identify gaps in existing documentation when reviewing project files
 - Suggest documentation improvements when you notice inconsistencies
 - Flag outdated information when you detect version mismatches
 - Recommend documentation structure improvements for better clarity
 - Propose splitting large documentation files when they become unwieldy
+- **Bi-directional sync**: When updating documentation, also verify actual configurations match; when configs change, update documentation
 
 ## Communication Style
 
