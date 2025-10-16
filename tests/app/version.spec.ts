@@ -40,9 +40,10 @@ test.describe('AppSchema - Version Badge Display', () => {
    * - No badge element exists in DefaultHomePage
    * - locator('[data-testid="app-version-badge"]') will not find any element
    */
-  // FIXME: Implement version badge display in DefaultHomePage (RED phase - feature not implemented)
+  // @spec - Validates version badge display
   test.fixme(
     'should display version badge when app has version',
+    { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: A server configured with app name and version
       await startServerWithSchema({
@@ -75,23 +76,25 @@ test.describe('AppSchema - Version Badge Display', () => {
    * - This test might pass accidentally if implementation is missing
    * - This validates that version is truly optional and doesn't break UI
    */
-  test('should not display version badge when app has no version', async ({
-    page,
-    startServerWithSchema,
-  }) => {
-    // GIVEN: A server configured with app name only (no version)
-    await startServerWithSchema({
-      name: 'test-app-no-version',
-    })
+  // @spec - Validates optional version property
+  test(
+    'should not display version badge when app has no version',
+    { tag: '@spec' },
+    async ({ page, startServerWithSchema }) => {
+      // GIVEN: A server configured with app name only (no version)
+      await startServerWithSchema({
+        name: 'test-app-no-version',
+      })
 
-    // WHEN: User navigates to the homepage
-    await page.goto('/')
+      // WHEN: User navigates to the homepage
+      await page.goto('/')
 
-    // THEN: The version badge should not exist in the DOM
-    const badge = page.locator('[data-testid="app-version-badge"]')
-    await expect(badge).toBeHidden()
-    await expect(badge).toHaveCount(0)
-  })
+      // THEN: The version badge should not exist in the DOM
+      const badge = page.locator('[data-testid="app-version-badge"]')
+      await expect(badge).toBeHidden()
+      await expect(badge).toHaveCount(0)
+    }
+  )
 
   /**
    * Test Case 3: Pre-release version format
@@ -104,9 +107,10 @@ test.describe('AppSchema - Version Badge Display', () => {
    * - No badge element exists to display any version format
    * - Validates that version rendering preserves SemVer pre-release identifiers
    */
-  // FIXME: Implement version badge display in DefaultHomePage (RED phase - feature not implemented)
+  // @spec - Validates pre-release version format
   test.fixme(
     'should display pre-release version in badge',
+    { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: A server configured with pre-release version
       await startServerWithSchema({
