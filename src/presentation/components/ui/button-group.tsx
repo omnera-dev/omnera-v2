@@ -24,9 +24,9 @@ function ButtonGroupText({
   className,
   asChild = false,
   ...props
-}: Readonly<React.ComponentProps<'div'>> & {
+}: Readonly<React.ComponentProps<'div'> & {
   asChild?: boolean
-}) {
+}>) {
   const Comp = asChild ? Slot : 'div'
 
   return (

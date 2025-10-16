@@ -59,7 +59,7 @@ if (!appSchemaString) {
 }
 
 // Parse app schema JSON
-const app: AppSchema = (() => {
+const app: Readonly<AppSchema> = (() => {
   try {
     return JSON.parse(appSchemaString) as AppSchema
   } catch {

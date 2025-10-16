@@ -21,12 +21,13 @@ type ChartContextProps = {
   config: ChartConfig
 }
 
-const ChartContext = React.createContext<ChartContextProps | null>(null)
+const ChartContext = React.createContext<ChartContextProps | undefined>(undefined)
 
 function useChart() {
   const context = React.useContext(ChartContext)
 
   if (!context) {
+    // eslint-disable-next-line functional/no-throw-statements
     throw new Error('useChart must be used within a <ChartContainer />')
   }
 
@@ -71,7 +72,7 @@ const ChartStyle = ({ id, config }: Readonly<{ id: string; config: ChartConfig }
   const colorConfig = Object.entries(config).filter(([, config]) => config.theme || config.color)
 
   if (!colorConfig.length) {
-    return null
+    return undefined
   }
 
   return (
@@ -84,7 +85,7 @@ ${prefix} [data-chart=${id}] {
 ${colorConfig
   .map(([key, itemConfig]) => {
     const color = itemConfig.theme?.[theme as keyof typeof itemConfig.theme] || itemConfig.color
-    return color ? `  --color-${key}: ${color};` : null
+    return color ? `  --color-${key}: ${color};` : undefined
   })
   .join('\n')}
 }
@@ -124,7 +125,7 @@ function ChartTooltipContent({
 
   const tooltipLabel = React.useMemo(() => {
     if (hideLabel || !payload?.length) {
-      return null
+      return undefined
     }
 
     const [item] = payload
@@ -142,14 +143,14 @@ function ChartTooltipContent({
     }
 
     if (!value) {
-      return null
+      return undefined
     }
 
     return <div className={cn('font-medium', labelClassName)}>{value}</div>
   }, [label, labelFormatter, payload, hideLabel, labelClassName, config, labelKey])
 
   if (!active || !payload?.length) {
-    return null
+    return undefined
   }
 
   const nestLabel = payload.length === 1 && indicator !== 'dot'
@@ -161,7 +162,7 @@ function ChartTooltipContent({
         className
       )}
     >
-      {!nestLabel ? tooltipLabel : null}
+      {!nestLabel ? tooltipLabel : undefined}
       <div className="grid gap-1.5">
         {payload
           .filter((item) => item.type !== 'none')
@@ -213,7 +214,7 @@ function ChartTooltipContent({
                       )}
                     >
                       <div className="grid gap-1.5">
-                        {nestLabel ? tooltipLabel : null}
+                        {nestLabel ? tooltipLabel : undefined}
                         <span className="text-muted-foreground">
                           {itemConfig?.label || item.name}
                         </span>
@@ -250,7 +251,7 @@ function ChartLegendContent({
   const { config } = useChart()
 
   if (!payload?.length) {
-    return null
+    return undefined
   }
 
   return (
@@ -294,24 +295,27 @@ function ChartLegendContent({
 
 // Helper to extract item config from a payload.
 function getPayloadConfigFromPayload(config: ChartConfig, payload: unknown, key: string) {
-  if (typeof payload !== 'object' || payload === null) {
+  if (typeof payload !== 'object' || payload === undefined || payload === null) {
     return undefined
   }
 
   const payloadPayload =
-    'payload' in payload && typeof payload.payload === 'object' && payload.payload !== null
+    'payload' in payload && typeof payload.payload === 'object' && payload.payload !== undefined && payload.payload !== null
       ? payload.payload
       : undefined
 
+  // eslint-disable-next-line functional/no-let
   let configLabelKey: string = key
 
   if (key in payload && typeof payload[key as keyof typeof payload] === 'string') {
+    // eslint-disable-next-line functional/no-expression-statements
     configLabelKey = payload[key as keyof typeof payload] as string
   } else if (
     payloadPayload &&
     key in payloadPayload &&
     typeof payloadPayload[key as keyof typeof payloadPayload] === 'string'
   ) {
+    // eslint-disable-next-line functional/no-expression-statements
     configLabelKey = payloadPayload[key as keyof typeof payloadPayload] as string
   }
 

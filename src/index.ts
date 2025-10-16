@@ -1,5 +1,8 @@
-import { startServer, type StartOptions, type AppValidationError } from '@/application/use-cases/StartServer'
-import type { App } from '@/domain/models'
+import {
+  startServer,
+  type StartOptions,
+  type AppValidationError,
+} from '@/application/use-cases/StartServer'
 import type { CSSCompilationError } from '@/infrastructure/services/css-compiler'
 import type { ServerInstance, ServerCreationError } from '@/infrastructure/services/server'
 import type { Effect } from 'effect'
@@ -76,8 +79,8 @@ export const startEffect = (
 /**
  * Re-export types for convenience
  */
-export type { App, AppEncoded } from '@/domain/models'
-export { AppSchema } from '@/domain/models'
+export type { App, AppEncoded } from '@/domain/models/app'
+export { AppSchema } from '@/domain/models/app'
 export type { ServerInstance } from '@/infrastructure/services/server'
 export type { CompiledCSS } from '@/infrastructure/services/css-compiler'
 

@@ -1,6 +1,6 @@
 import { spawn } from 'node:child_process'
 import { test as base } from '@playwright/test'
-import type { App } from '@/schema'
+import type { App } from '@/domain/models/app'
 import type { ChildProcess } from 'node:child_process'
 
 /**

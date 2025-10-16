@@ -1,8 +1,8 @@
 import { Effect, Schema } from 'effect'
-import { AppSchema } from '@/domain/models'
-import type { App } from '@/domain/models'
+import { AppSchema } from '@/domain/models/app'
+import type { App } from '@/domain/models/app'
 import type { CSSCompilationError } from '@/infrastructure/services/css-compiler'
-import type { ServerInstance , ServerCreationError } from '@/infrastructure/services/server'
+import type { ServerInstance, ServerCreationError } from '@/infrastructure/services/server'
 
 /**
  * Error class for app validation failures
@@ -52,7 +52,9 @@ export const startServer = (
     })
 
     // Import presentation layer rendering function
-    const { renderHomePage } = yield* Effect.promise(() => import('@/presentation/utils/render-homepage'))
+    const { renderHomePage } = yield* Effect.promise(
+      () => import('@/presentation/utils/render-homepage')
+    )
 
     // Defer to infrastructure layer for actual server creation
     const { createServer } = yield* Effect.promise(() => import('@/infrastructure/services/server'))

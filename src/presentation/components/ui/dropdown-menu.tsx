@@ -68,10 +68,10 @@ function DropdownMenuItem({
   inset,
   variant = 'default',
   ...props
-}: Readonly<React.ComponentProps<typeof DropdownMenuPrimitive.Item>> & {
+}: Readonly<React.ComponentProps<typeof DropdownMenuPrimitive.Item> & {
   inset?: boolean
   variant?: 'default' | 'destructive'
-}) {
+}>) {
   return (
     <DropdownMenuPrimitive.Item
       data-slot="dropdown-menu-item"
@@ -151,9 +151,9 @@ function DropdownMenuLabel({
   className,
   inset,
   ...props
-}: Readonly<React.ComponentProps<typeof DropdownMenuPrimitive.Label>> & {
+}: Readonly<React.ComponentProps<typeof DropdownMenuPrimitive.Label> & {
   inset?: boolean
-}) {
+}>) {
   return (
     <DropdownMenuPrimitive.Label
       data-slot="dropdown-menu-label"
@@ -201,9 +201,9 @@ function DropdownMenuSubTrigger({
   inset,
   children,
   ...props
-}: Readonly<React.ComponentProps<typeof DropdownMenuPrimitive.SubTrigger>> & {
+}: Readonly<React.ComponentProps<typeof DropdownMenuPrimitive.SubTrigger> & {
   inset?: boolean
-}) {
+}>) {
   return (
     <DropdownMenuPrimitive.SubTrigger
       data-slot="dropdown-menu-sub-trigger"

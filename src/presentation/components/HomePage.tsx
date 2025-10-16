@@ -1,5 +1,5 @@
 import { TypographyH1 } from '@/presentation/components/ui/typography'
-import type { App } from '@/domain/models'
+import type { App } from '@/domain/models/app'
 import type { ReactElement } from 'react'
 
 /**
@@ -9,7 +9,7 @@ import type { ReactElement } from 'react'
  * @param props.app - Validated application data from AppSchema
  * @returns React element with app name
  */
-export function HomePage({ app }: { readonly app: App }): ReactElement {
+export function HomePage({ app }: { readonly app: App }): Readonly<ReactElement> {
   return (
     <html lang="en">
       <head>

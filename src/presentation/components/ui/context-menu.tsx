@@ -68,9 +68,9 @@ function ContextMenuSubTrigger({
   inset,
   children,
   ...props
-}: Readonly<React.ComponentProps<typeof ContextMenuPrimitive.SubTrigger>> & {
+}: Readonly<React.ComponentProps<typeof ContextMenuPrimitive.SubTrigger> & {
   inset?: boolean
-}) {
+}>) {
   return (
     <ContextMenuPrimitive.SubTrigger
       data-slot="context-menu-sub-trigger"

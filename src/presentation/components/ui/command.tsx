@@ -30,12 +30,12 @@ function CommandDialog({
   className,
   showCloseButton = true,
   ...props
-}: Readonly<React.ComponentProps<typeof Dialog>> & {
+}: Readonly<React.ComponentProps<typeof Dialog> & {
   title?: string
   description?: string
   className?: string
   showCloseButton?: boolean
-}) {
+}>) {
   return (
     <Dialog {...props}>
       <DialogHeader className="sr-only">

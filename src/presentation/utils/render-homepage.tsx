@@ -1,6 +1,6 @@
 import { renderToString } from 'react-dom/server'
 import { HomePage } from '@/presentation/components/HomePage'
-import type { App } from '@/domain/models'
+import type { App } from '@/domain/models/app'
 
 /**
  * Renders HomePage to HTML string for server-side rendering

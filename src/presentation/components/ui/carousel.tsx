@@ -13,7 +13,7 @@ type CarouselProps = {
   opts?: CarouselOptions
   plugins?: CarouselPlugin
   orientation?: 'horizontal' | 'vertical'
-  setApi?: (api: CarouselApi) => void
+  setApi?: (api: Readonly<CarouselApi>) => void
 }
 
 type CarouselContextProps = {
@@ -25,12 +25,13 @@ type CarouselContextProps = {
   canScrollNext: boolean
 } & CarouselProps
 
-const CarouselContext = React.createContext<CarouselContextProps | null>(null)
+const CarouselContext = React.createContext<CarouselContextProps | undefined>(undefined)
 
 function useCarousel() {
   const context = React.useContext(CarouselContext)
 
   if (!context) {
+    // eslint-disable-next-line functional/no-throw-statements
     throw new Error('useCarousel must be used within a <Carousel />')
   }
 
@@ -63,10 +64,12 @@ function Carousel({
   }, [])
 
   const scrollPrev = React.useCallback(() => {
+    // eslint-disable-next-line functional/no-expression-statements
     api?.scrollPrev()
   }, [api])
 
   const scrollNext = React.useCallback(() => {
+    // eslint-disable-next-line functional/no-expression-statements
     api?.scrollNext()
   }, [api])
 
@@ -91,10 +94,13 @@ function Carousel({
   React.useEffect(() => {
     if (!api) return
     onSelect(api)
+    // eslint-disable-next-line functional/no-expression-statements
     api.on('reInit', onSelect)
+    // eslint-disable-next-line functional/no-expression-statements
     api.on('select', onSelect)
 
     return () => {
+      // eslint-disable-next-line functional/no-expression-statements
       api?.off('select', onSelect)
     }
   }, [api, onSelect])

@@ -33,10 +33,12 @@ export const withGracefulShutdown = (server: ServerInstance): Effect.Effect<neve
         Effect.gen(function* () {
           yield* Console.log('\nReceived SIGINT, stopping server...')
           yield* server.stop
+          // eslint-disable-next-line functional/no-expression-statements
           process.exit(0)
         })
       ).catch((error) => {
         console.error('Failed to stop server:', error)
+        // eslint-disable-next-line functional/no-expression-statements
         process.exit(1)
       })
     })

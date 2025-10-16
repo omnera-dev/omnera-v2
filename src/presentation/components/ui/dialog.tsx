@@ -60,9 +60,9 @@ function DialogContent({
   children,
   showCloseButton = true,
   ...props
-}: Readonly<React.ComponentProps<typeof DialogPrimitive.Content>> & {
+}: Readonly<React.ComponentProps<typeof DialogPrimitive.Content> & {
   showCloseButton?: boolean
-}) {
+}>) {
   return (
     <DialogPortal data-slot="dialog-portal">
       <DialogOverlay />

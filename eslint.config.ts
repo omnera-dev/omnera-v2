@@ -14,7 +14,9 @@ import globals from 'globals'
 import tseslint from 'typescript-eslint'
 
 // Type workaround for flat config compatibility
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const functional = functionalPlugin as any
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const drizzle = drizzlePlugin as any
 
 export default defineConfig([
@@ -199,7 +201,7 @@ export default defineConfig([
     },
     rules: {
       // Helpful warnings
-      'import/no-unresolved': 'error',
+      'import/no-unresolved': ['error', { ignore: ['^bun:'] }],
       'import/named': 'error',
       'import/default': 'error',
       'import/namespace': 'error',
@@ -488,22 +490,102 @@ export default defineConfig([
     },
   },
 
+  // UI Components - Pragmatic rules for presentation layer
+  {
+    files: ['src/presentation/**/*.{ts,tsx}', 'src/hooks/**/*.{ts,tsx}'],
+    rules: {
+      // UI components need side effects for DOM manipulation
+      'functional/no-expression-statements': ['warn', {
+        ignoreVoid: true,
+        ignoreCodePattern: [
+          // React and DOM patterns
+          '.*\\.focus\\(\\)',
+          '.*\\.blur\\(\\)',
+          '.*\\.scrollIntoView\\(\\)',
+          'ref\\.current',
+          'event\\.(preventDefault|stopPropagation)',
+          'set[A-Z].*', // setState functions
+          '.*\\.addEventListener',
+          '.*\\.removeEventListener',
+          'document\\.',
+          'window\\.',
+          // Console
+          'console\\.',
+        ],
+      }],
+
+      // UI components work with external libraries that use mutable types
+      'functional/prefer-immutable-types': ['warn', {
+        enforcement: 'None', // Disable for UI components
+      }],
+
+      // Some UI libraries use null
+      'unicorn/no-null': 'warn',
+
+      // UI state management sometimes needs let
+      'functional/no-let': 'warn',
+
+      // Some UI patterns need reassignment
+      'no-param-reassign': ['warn', {
+        props: true,
+        ignorePropertyModificationsFor: ['event', 'e', 'ref', 'acc'],
+      }],
+    },
+  },
+
+  // Infrastructure Layer - Services need side effects
+  {
+    files: ['src/infrastructure/**/*.{ts,tsx}'],
+    rules: {
+      // Infrastructure needs side effects for I/O
+      'functional/no-expression-statements': ['warn', {
+        ignoreVoid: true,
+        ignoreCodePattern: [
+          'console\\.',
+          'server\\.',
+          'app\\.',
+          'Bun\\.',
+        ],
+      }],
+
+      // External libraries often use mutable types
+      'functional/prefer-immutable-types': ['warn', {
+        enforcement: 'ReadonlyShallow',
+        ignoreInferredTypes: true,
+        ignoreClasses: true,
+      }],
+    },
+  },
+
   // Test files - Allow 'any' for testing flexibility
   {
-    files: ['**/*.test.{ts,tsx}', '**/*.spec.{ts,tsx}'],
+    files: ['**/*.test.{ts,tsx}', '**/*.spec.{ts,tsx}', 'tests/**/*.{ts,tsx}'],
     rules: {
       '@typescript-eslint/no-explicit-any': 'off', // Allow 'any' in tests for testing invalid inputs
       'no-restricted-syntax': 'off', // Allow mutations in tests for setup/mocking
       'no-param-reassign': 'off', // Allow parameter reassignment in test setup
+      'functional/no-expression-statements': 'off', // Allow test assertions and setup
+      'functional/no-let': 'off', // Allow let in test setup
+      'functional/immutable-data': 'off', // Allow mutations in test setup
+      'functional/prefer-immutable-types': 'off', // Allow mutable types in tests
+      'functional/no-throw-statements': 'off', // Allow throwing in tests
+      'unicorn/no-null': 'off', // Allow null in tests for edge cases
     },
   },
 
   // Scripts - Allow mutations for build-time utilities
   {
-    files: ['scripts/**/*.{js,mjs,cjs,ts}'],
+    files: ['scripts/**/*.{js,mjs,cjs,ts}', 'example.ts'],
     rules: {
       'no-restricted-syntax': 'off', // Allow mutations in scripts
       'no-param-reassign': 'off', // Allow parameter reassignment in scripts
+      'functional/no-expression-statements': 'off', // Scripts need side effects
+      'functional/no-let': 'off', // Allow let in scripts
+      'functional/immutable-data': 'off', // Allow mutations in scripts
+      'functional/prefer-immutable-types': 'off', // Allow mutable types
+      'functional/no-loop-statements': 'off', // Allow loops in scripts
+      'functional/no-throw-statements': 'off', // Allow throwing in scripts
+      'unicorn/no-null': 'off', // Allow null in scripts
     },
   },
 

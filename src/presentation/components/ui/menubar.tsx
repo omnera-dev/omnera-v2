@@ -97,10 +97,10 @@ function MenubarItem({
   inset,
   variant = 'default',
   ...props
-}: Readonly<React.ComponentProps<typeof MenubarPrimitive.Item>> & {
+}: Readonly<React.ComponentProps<typeof MenubarPrimitive.Item> & {
   inset?: boolean
   variant?: 'default' | 'destructive'
-}) {
+}>) {
   return (
     <MenubarPrimitive.Item
       data-slot="menubar-item"
@@ -169,9 +169,9 @@ function MenubarLabel({
   className,
   inset,
   ...props
-}: Readonly<React.ComponentProps<typeof MenubarPrimitive.Label>> & {
+}: Readonly<React.ComponentProps<typeof MenubarPrimitive.Label> & {
   inset?: boolean
-}) {
+}>) {
   return (
     <MenubarPrimitive.Label
       data-slot="menubar-label"
@@ -219,9 +219,9 @@ function MenubarSubTrigger({
   inset,
   children,
   ...props
-}: Readonly<React.ComponentProps<typeof MenubarPrimitive.SubTrigger>> & {
+}: Readonly<React.ComponentProps<typeof MenubarPrimitive.SubTrigger> & {
   inset?: boolean
-}) {
+}>) {
   return (
     <MenubarPrimitive.SubTrigger
       data-slot="menubar-sub-trigger"

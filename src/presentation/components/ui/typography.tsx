@@ -201,19 +201,3 @@ export function TypographyMuted({ children, className, ...props }: TypographyMut
     </p>
   )
 }
-
-// Export all components as default object for convenience
-export const Typography = {
-  H1: TypographyH1,
-  H2: TypographyH2,
-  H3: TypographyH3,
-  H4: TypographyH4,
-  P: TypographyP,
-  Blockquote: TypographyBlockquote,
-  List: TypographyList,
-  InlineCode: TypographyInlineCode,
-  Lead: TypographyLead,
-  Large: TypographyLarge,
-  Small: TypographySmall,
-  Muted: TypographyMuted,
-}

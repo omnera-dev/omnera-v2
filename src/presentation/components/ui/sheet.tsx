@@ -60,9 +60,9 @@ function SheetContent({
   children,
   side = 'right',
   ...props
-}: Readonly<React.ComponentProps<typeof SheetPrimitive.Content>> & {
+}: Readonly<React.ComponentProps<typeof SheetPrimitive.Content> & {
   side?: 'top' | 'right' | 'bottom' | 'left'
-}) {
+}>) {
   return (
     <SheetPortal>
       <SheetOverlay />

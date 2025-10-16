@@ -25,7 +25,7 @@ import { start } from './src'
 
 // Define your application configuration
 const myApp = {
-  name: 'Omnera Demo',
+  name: 'omnera-demo',
   description:
     'A modern fullstack TypeScript framework built with Bun, Effect, Hono, React, and Tailwind CSS',
 }
@@ -33,5 +33,6 @@ const myApp = {
 // Start the server (handles everything automatically with defaults)
 start(myApp).catch((error) => {
   console.error('Failed to start server:', error)
+
   process.exit(1)
 })

@@ -57,5 +57,6 @@ export const handleStartupError = (error: ServerStartupError): Effect.Effect<nev
     }
 
     // Exit process with error code
+    // eslint-disable-next-line functional/no-expression-statements
     process.exit(1)
   })

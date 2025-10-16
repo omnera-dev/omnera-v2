@@ -40,9 +40,9 @@ function BreadcrumbLink({
   asChild,
   className,
   ...props
-}: Readonly<React.ComponentProps<'a'>> & {
+}: Readonly<React.ComponentProps<'a'> & {
   asChild?: boolean
-}) {
+}>) {
   const Comp = asChild ? Slot : 'a'
 
   return (

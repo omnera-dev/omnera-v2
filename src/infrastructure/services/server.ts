@@ -1,7 +1,7 @@
 import { Effect, Console } from 'effect'
 import { Hono } from 'hono'
 import { compileCSS, type CSSCompilationError } from './css-compiler'
-import type { App } from '@/domain/models'
+import type { App } from '@/domain/models/app'
 
 /**
  * Error class for server creation failures
@@ -37,10 +37,12 @@ export interface ServerInstance {
  * @param renderHomePage - Function to render the homepage
  * @returns Configured Hono app instance
  */
-function createHonoApp(app: readonly App, renderHomePage: (app: App) => string): Hono {
+// eslint-disable-next-line functional/prefer-immutable-types
+function createHonoApp(app: App, renderHomePage: (app: App) => string): Hono {
   const honoApp = new Hono()
 
   // Health check route
+
   honoApp.get('/health', (c) => {
     return c.json({
       status: 'ok',
@@ -52,12 +54,14 @@ function createHonoApp(app: readonly App, renderHomePage: (app: App) => string):
   })
 
   // Homepage route - Renders React component to HTML
+  // eslint-disable-next-line functional/no-expression-statements
   honoApp.get('/', (c) => {
     const html = renderHomePage(app)
     return c.html(html)
   })
 
   // CSS route - Serves dynamically compiled Tailwind CSS
+
   honoApp.get('/output.css', async (c) => {
     try {
       // Compile CSS using Effect
@@ -78,6 +82,7 @@ function createHonoApp(app: readonly App, renderHomePage: (app: App) => string):
   })
 
   // 404 handler
+  // eslint-disable-next-line functional/no-expression-statements
   honoApp.notFound((c) => {
     return c.html(
       `
@@ -103,6 +108,7 @@ function createHonoApp(app: readonly App, renderHomePage: (app: App) => string):
   })
 
   // Error handler
+
   honoApp.onError((error, c) => {
     console.error('Server error:', error)
     return c.html(
