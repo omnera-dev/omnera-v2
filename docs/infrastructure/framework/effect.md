@@ -340,6 +340,7 @@ Understanding when to use Effect.gen versus async/await is crucial for writing i
 ### When to Use Effect.gen ✅
 
 **Use Effect.gen for:**
+
 - **Business Logic & Use Cases** - Application layer workflows
 - **Type-Safe Error Handling** - When errors need to be tracked in types
 - **Dependency Injection** - When accessing services via Effect Context
@@ -348,7 +349,9 @@ Understanding when to use Effect.gen versus async/await is crucial for writing i
 
 ```typescript
 // ✅ CORRECT: Effect.gen for business logic (Application Layer)
-export const RegisterUser = (input: RegisterUserInput): Effect.Effect<
+export const RegisterUser = (
+  input: RegisterUserInput
+): Effect.Effect<
   User,
   InvalidEmailError | UserAlreadyExistsError,
   UserRepository | EmailService | Logger
@@ -386,6 +389,7 @@ export const RegisterUser = (input: RegisterUserInput): Effect.Effect<
 ### When to Use async/await ✅
 
 **Use async/await for:**
+
 - **Presentation Layer** - Hono routes, React component effects
 - **Running Effect Programs** - Converting Effect to Promise with `Effect.runPromise`
 - **Simple Async Operations** - When Effect's features aren't needed
@@ -434,15 +438,15 @@ export default app
 
 ### Pattern Comparison
 
-| Aspect | Effect.gen | async/await |
-|--------|------------|-------------|
-| **Use Case** | Business logic, use cases | HTTP routes, component effects |
-| **Layer** | Application, Infrastructure | Presentation |
-| **Error Types** | Tracked in type system | Thrown exceptions (untracked) |
-| **Dependencies** | Injected via Effect Context | Manual DI or globals |
-| **Testability** | Pure, easy to mock | Requires mocking infrastructure |
-| **Composability** | Highly composable | Less composable |
-| **Type Safety** | Full error type inference | No error type inference |
+| Aspect            | Effect.gen                  | async/await                     |
+| ----------------- | --------------------------- | ------------------------------- |
+| **Use Case**      | Business logic, use cases   | HTTP routes, component effects  |
+| **Layer**         | Application, Infrastructure | Presentation                    |
+| **Error Types**   | Tracked in type system      | Thrown exceptions (untracked)   |
+| **Dependencies**  | Injected via Effect Context | Manual DI or globals            |
+| **Testability**   | Pure, easy to mock          | Requires mocking infrastructure |
+| **Composability** | Highly composable           | Less composable                 |
+| **Type Safety**   | Full error type inference   | No error type inference         |
 
 ### Example: Full Stack Integration
 

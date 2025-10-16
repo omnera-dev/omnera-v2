@@ -132,7 +132,11 @@ export const RegisterUser = (input: {
   name: string
   email: string
   password: string
-}): Effect.Effect<{ userId: number }, InvalidEmailError | UserAlreadyExistsError, UserRepository | EmailService | Logger> =>
+}): Effect.Effect<
+  { userId: number },
+  InvalidEmailError | UserAlreadyExistsError,
+  UserRepository | EmailService | Logger
+> =>
   Effect.gen(function* () {
     const logger = yield* Logger
     const userRepo = yield* UserRepository
@@ -343,14 +347,14 @@ export const AppLayer = Layer.mergeAll(UserRepositoryLive, LoggerLive, EmailServ
 
 ## Integration with Functional Programming
 
-| FP Principle              | Layer Application                                          |
-| ------------------------- | ---------------------------------------------------------- |
-| **Pure Functions**        | Domain Layer contains only pure functions                  |
-| **Immutability**          | All layers use immutable data structures                   |
-| **Composition**           | Use cases compose domain functions and infrastructure      |
-| **Explicit Effects**      | Infrastructure wraps side effects in Effect programs       |
-| **Type Safety**           | TypeScript enforces layer boundaries via interfaces        |
-| **Dependency Injection**  | Effect Context makes dependencies explicit at boundaries   |
+| FP Principle             | Layer Application                                        |
+| ------------------------ | -------------------------------------------------------- |
+| **Pure Functions**       | Domain Layer contains only pure functions                |
+| **Immutability**         | All layers use immutable data structures                 |
+| **Composition**          | Use cases compose domain functions and infrastructure    |
+| **Explicit Effects**     | Infrastructure wraps side effects in Effect programs     |
+| **Type Safety**          | TypeScript enforces layer boundaries via interfaces      |
+| **Dependency Injection** | Effect Context makes dependencies explicit at boundaries |
 
 ## Testing Strategy
 

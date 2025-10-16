@@ -2,10 +2,10 @@
 
 > **Note**: This is part 9 of the split documentation. See navigation links below.
 
-
 ## Filtering
 
 ### Column Filtering
+
 ```typescript
 import { useReactTable, getFilteredRowModel, ColumnFiltersState } from '@tanstack/react-table'
 function FilterableTable() {
@@ -25,6 +25,7 @@ function FilterableTable() {
 ```
 
 ### Column Filter Input
+
 ```typescript
 function ColumnFilter({ column }: { column: Column<any> }) {
   const filterValue = column.getFilterValue()
@@ -53,6 +54,7 @@ const columns: ColumnDef<User>[] = [
 ```
 
 ### Global Filtering
+
 ```typescript
 import { useReactTable, getFilteredRowModel } from '@tanstack/react-table'
 function GlobalFilterTable() {
@@ -84,6 +86,7 @@ function GlobalFilterTable() {
 ```
 
 ### Custom Filter Functions
+
 ```typescript
 const columns: ColumnDef<User>[] = [
   {
@@ -99,6 +102,7 @@ const columns: ColumnDef<User>[] = [
 ```
 
 ### Fuzzy Search
+
 ```typescript
 import { rankItem } from '@tanstack/match-sorter-utils'
 import { FilterFn } from '@tanstack/react-table'
@@ -123,6 +127,7 @@ const table = useReactTable({
 ```
 
 ### Debounced Filtering
+
 ```typescript
 import { useEffect, useState } from 'react'
 function DebouncedInput({
@@ -159,12 +164,11 @@ function GlobalFilter({ table }: { table: Table<User> }) {
   )
 }
 ```
----
 
+---
 
 ## Navigation
 
 [← Part 8](./08-sorting.md) | [Part 10 →](./10-pagination.md)
-
 
 **Parts**: [Part 1](./01-start.md) | [Part 2](./02-overview.md) | [Part 3](./03-why-tanstack-table-for-omnera.md) | [Part 4](./04-core-concepts.md) | [Part 5](./05-installation.md) | [Part 6](./06-basic-table-setup.md) | [Part 7](./07-column-definitions.md) | [Part 8](./08-sorting.md) | **Part 9** | [Part 10](./10-pagination.md) | [Part 11](./11-row-selection.md) | [Part 12](./12-column-visibility.md) | [Part 13](./13-integration-with-tanstack-query.md) | [Part 14](./14-integration-with-effectts.md) | [Part 15](./15-styling-with-tailwind-css.md) | [Part 16](./16-reusable-data-table-component-shadcnui-pattern.md) | [Part 17](./17-performance-optimization.md) | [Part 18](./18-testing.md) | [Part 19](./19-best-practices.md) | [Part 20](./20-common-pitfalls.md) | [Part 21](./21-when-to-use-tanstack-table.md) | [Part 22](./22-full-stack-integration-with-layered-architecture.md) | [Part 23](./23-references.md)

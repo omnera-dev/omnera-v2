@@ -21,7 +21,7 @@
  * - Default configuration (port: 3000, hostname: 'localhost')
  */
 
-import { start } from './src/index'
+import { start } from './src'
 
 // Define your application configuration
 const myApp = {

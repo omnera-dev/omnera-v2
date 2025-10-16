@@ -1,7 +1,7 @@
-import type { App } from '@/schema'
+import { spawn } from 'node:child_process'
 import { test as base } from '@playwright/test'
-import type { ChildProcess } from 'child_process'
-import { spawn } from 'child_process'
+import type { App } from '@/schema'
+import type { ChildProcess } from 'node:child_process'
 
 /**
  * Helper function to extract port from server output

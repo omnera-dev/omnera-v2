@@ -2,11 +2,12 @@
 
 > **Note**: This is part 16 of the split documentation. See navigation links below.
 
-
 ## Best Practices
 
 ### 1. Query Key Organization
+
 Establish consistent query key conventions:
+
 ```typescript
 // ✅ Hierarchical structure
 const queryKeys = {
@@ -31,7 +32,9 @@ queryClient.invalidateQueries({ queryKey: queryKeys.users.all })
 ```
 
 ### 2. Stale Time Configuration
+
 Configure stale time based on data characteristics:
+
 ```typescript
 // Fast-changing data (stock prices, live scores)
 staleTime: 0 // Always stale, refetch immediately
@@ -44,7 +47,9 @@ staleTime: Infinity // Never stale, manual invalidation only
 ```
 
 ### 3. Error Handling
+
 Consistent error handling patterns:
+
 ```typescript
 // Global error handler
 const queryClient = new QueryClient({
@@ -75,7 +80,9 @@ useQuery({
 ```
 
 ### 4. Loading States
+
 Handle loading states gracefully:
+
 ```typescript
 function DataView() {
   const { data, isPending, isFetching, isError, error } = useQuery({
@@ -98,7 +105,9 @@ function DataView() {
 ```
 
 ### 5. Invalidation Strategies
+
 Choose appropriate invalidation strategy:
+
 ```typescript
 // Option 1: Invalidate (marks stale, refetches if active)
 queryClient.invalidateQueries({ queryKey: ['users'] })
@@ -111,7 +120,9 @@ queryClient.setQueryData(['users'], newUsers)
 ```
 
 ### 6. Avoid Over-Fetching
+
 Don't fetch more data than needed:
+
 ```typescript
 // ❌ DON'T: Fetch all users just to display count
 const { data: users } = useQuery({ queryKey: ['users'], queryFn: fetchAllUsers })
@@ -121,7 +132,9 @@ const { data: count } = useQuery({ queryKey: ['users', 'count'], queryFn: fetchU
 ```
 
 ### 7. Normalize Related Data
+
 Separate related data into distinct queries:
+
 ```typescript
 // ❌ DON'T: Nested data structure
 const { data } = useQuery({
@@ -141,7 +154,9 @@ const { data: posts } = useQuery({
 ```
 
 ### 8. Use TypeScript Strictly
+
 Leverage TypeScript for type-safe queries:
+
 ```typescript
 // ✅ Generic types for data and error
 const { data, error } = useQuery<User, UserError>({
@@ -157,12 +172,11 @@ const mutation = useMutation<User, Error, CreateUserInput>({
   mutationFn: createUser,
 })
 ```
----
 
+---
 
 ## Navigation
 
 [← Part 15](./15-testing-with-tanstack-query.md) | [Part 17 →](./17-common-pitfalls-to-avoid.md)
-
 
 **Parts**: [Part 1](./01-start.md) | [Part 2](./02-overview.md) | [Part 3](./03-why-tanstack-query-for-omnera.md) | [Part 4](./04-installation.md) | [Part 5](./05-basic-setup.md) | [Part 6](./06-core-concepts.md) | [Part 7](./07-usequery-hook.md) | [Part 8](./08-integration-with-effectts.md) | [Part 9](./09-usemutation-hook.md) | [Part 10](./10-usequeries-hook.md) | [Part 11](./11-useinfinitequery-hook.md) | [Part 12](./12-server-side-rendering-ssr-with-hono.md) | [Part 13](./13-integration-with-better-auth.md) | [Part 14](./14-advanced-patterns.md) | [Part 15](./15-testing-with-tanstack-query.md) | **Part 16** | [Part 17](./17-common-pitfalls-to-avoid.md) | [Part 18](./18-performance-optimization.md) | [Part 19](./19-devtools.md) | [Part 20](./20-summary.md) | [Part 21](./21-references.md)

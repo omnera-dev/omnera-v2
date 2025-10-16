@@ -2,10 +2,10 @@
 
 > **Note**: This is part 7 of the split documentation. See navigation links below.
 
-
 ## Schema Definition
 
 ### Basic Table Schema (PostgreSQL)
+
 ```typescript
 // src/db/schema/users.ts
 import { pgTable, serial, text, timestamp } from 'drizzle-orm/pg-core'
@@ -13,15 +13,15 @@ export const users = pgTable('users', {
   id: serial('id').primaryKey(),
   name: text('name').notNull(),
   email: text('email').notNull().unique(),
-  createdAt: timestamp('created_at', { withTimezone: true })
-    .notNull()
-    .defaultNow(),
+  createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
 })
 // Infer TypeScript types
 export type User = typeof users.$inferSelect
 export type NewUser = typeof users.$inferInsert
 ```
+
 **Key differences from SQLite**:
+
 - Use `pgTable` instead of `sqliteTable`
 - Use `serial` for auto-incrementing primary keys (instead of `integer({ autoIncrement: true })`)
 - Use `timestamp` for date/time columns (instead of `integer({ mode: 'timestamp' })`)
@@ -29,6 +29,7 @@ export type NewUser = typeof users.$inferInsert
 - Use `withTimezone: true` for timezone-aware timestamps (recommended)
 
 ### Column Types (PostgreSQL)
+
 ```typescript
 import {
   pgTable,
@@ -70,25 +71,27 @@ export const products = pgTable('products', {
   image: bytea('image'),
 })
 ```
+
 **PostgreSQL Type Mapping**:
-| PostgreSQL Type   | Drizzle Type | Use Case                              |
+| PostgreSQL Type | Drizzle Type | Use Case |
 | ----------------- | ------------ | ------------------------------------- |
-| `SERIAL`          | `serial()`   | Auto-incrementing integer primary key |
-| `INTEGER`         | `integer()`  | Whole numbers (-2B to +2B)            |
-| `BIGINT`          | `bigint()`   | Large integers                        |
-| `NUMERIC`         | `numeric()`  | Precise decimal numbers (money)       |
-| `REAL`            | `real()`     | Floating point numbers                |
-| `TEXT`            | `text()`     | Unlimited text                        |
-| `VARCHAR(n)`      | `varchar()`  | Variable-length string with limit     |
-| `BOOLEAN`         | `boolean()`  | True/false values                     |
-| `TIMESTAMP`       | `timestamp()` | Date and time                        |
-| `TIMESTAMPTZ`     | `timestamp({ withTimezone: true })` | Timezone-aware timestamp |
-| `JSONB`           | `jsonb()`    | Binary JSON (faster than JSON)        |
-| `BYTEA`           | `bytea()`    | Binary data                           |
-| `UUID`            | `uuid()`     | Universally unique identifier         |
-| `ENUM`            | `pgEnum()`   | Custom enum type                      |
+| `SERIAL` | `serial()` | Auto-incrementing integer primary key |
+| `INTEGER` | `integer()` | Whole numbers (-2B to +2B) |
+| `BIGINT` | `bigint()` | Large integers |
+| `NUMERIC` | `numeric()` | Precise decimal numbers (money) |
+| `REAL` | `real()` | Floating point numbers |
+| `TEXT` | `text()` | Unlimited text |
+| `VARCHAR(n)` | `varchar()` | Variable-length string with limit |
+| `BOOLEAN` | `boolean()` | True/false values |
+| `TIMESTAMP` | `timestamp()` | Date and time |
+| `TIMESTAMPTZ` | `timestamp({ withTimezone: true })` | Timezone-aware timestamp |
+| `JSONB` | `jsonb()` | Binary JSON (faster than JSON) |
+| `BYTEA` | `bytea()` | Binary data |
+| `UUID` | `uuid()` | Universally unique identifier |
+| `ENUM` | `pgEnum()` | Custom enum type |
 
 ### Relationships (PostgreSQL)
+
 ```typescript
 // src/db/schema/posts.ts
 import { pgTable, serial, text, integer, timestamp } from 'drizzle-orm/pg-core'
@@ -114,13 +117,16 @@ export const postsRelations = relations(posts, ({ one }) => ({
   }),
 }))
 ```
+
 **PostgreSQL Foreign Key Options**:
+
 - `onDelete: 'cascade'` - Delete posts when user is deleted
 - `onDelete: 'set null'` - Set authorId to null when user is deleted
 - `onDelete: 'restrict'` - Prevent user deletion if posts exist
 - `onUpdate: 'cascade'` - Update references when primary key changes
 
 ### Indexes and Constraints (PostgreSQL)
+
 ```typescript
 import { pgTable, serial, varchar, text, uniqueIndex, index } from 'drizzle-orm/pg-core'
 export const users = pgTable(
@@ -143,12 +149,15 @@ export const users = pgTable(
   })
 )
 ```
+
 **PostgreSQL Index Types**:
+
 - `index()` - B-tree index (default, most common)
 - `uniqueIndex()` - Unique constraint with index
 - Partial indexes with `.where()` clause (PostgreSQL-specific optimization)
 
 ### Type Inference
+
 ```typescript
 import { users, posts } from './schema'
 // Select types (from database)
@@ -162,12 +171,11 @@ type NewUser = typeof users.$inferInsert
 type NewPost = typeof posts.$inferInsert
 // { title: string; content: string; authorId: number; createdAt?: Date; id?: number }
 ```
----
 
+---
 
 ## Navigation
 
 [← Part 6](./06-database-setup.md) | [Part 8 →](./08-query-api.md)
-
 
 **Parts**: [Part 1](./01-start.md) | [Part 2](./02-overview.md) | [Part 3](./03-why-drizzle-orm-for-omnera.md) | [Part 4](./04-installation.md) | [Part 5](./05-integration-with-omnera-stack.md) | [Part 6](./06-database-setup.md) | **Part 7** | [Part 8](./08-query-api.md) | [Part 9](./09-transactions.md) | [Part 10](./10-effect-integration-patterns.md) | [Part 11](./11-migrations-with-drizzle-kit.md) | [Part 12](./12-best-practices.md) | [Part 13](./13-common-patterns.md) | [Part 14](./14-integration-with-better-auth-postgresql.md) | [Part 15](./15-performance-considerations.md) | [Part 16](./16-common-pitfalls-to-avoid.md) | [Part 17](./17-drizzle-studio.md) | [Part 18](./18-postgresql-best-practices-for-omnera.md) | [Part 19](./19-references.md) | [Part 20](./20-summary.md)

@@ -27,8 +27,8 @@
  *   ...
  */
 
-import { readFile, writeFile, mkdir } from 'fs/promises'
-import { join, dirname, basename, extname } from 'path'
+import { readFile, writeFile, mkdir } from 'node:fs/promises'
+import { join, dirname, basename, extname } from 'node:path'
 
 interface Section {
   heading: string

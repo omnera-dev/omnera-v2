@@ -2,10 +2,10 @@
 
 > **Note**: This is part 11 of the split documentation. See navigation links below.
 
-
 ## Migrations with Drizzle Kit
 
 ### Configuration
+
 ```typescript
 // drizzle.config.ts
 import type { Config } from 'drizzle-kit'
@@ -18,7 +18,9 @@ export default {
   },
 } satisfies Config
 ```
+
 **Environment-Specific Configuration**:
+
 ```typescript
 // drizzle.config.ts
 import type { Config } from 'drizzle-kit'
@@ -40,7 +42,8 @@ export default {
 ```
 
 ### Migration Commands
-```bash
+
+````bash
 
 ### Migration Workflow (PostgreSQL)
 ```typescript
@@ -63,8 +66,10 @@ export const users = pgTable('users', {
 // ALTER TABLE users ADD COLUMN role "role" DEFAULT 'user' NOT NULL;
 // 4. Apply migration
 // $ bunx drizzle-kit migrate
-```
+````
+
 **Key PostgreSQL Migration Features**:
+
 - **Enum Types**: PostgreSQL creates native ENUM types
 - **Indexes**: Automatically creates indexes for foreign keys
 - **Constraints**: CHECK constraints, UNIQUE constraints preserved
@@ -72,6 +77,7 @@ export const users = pgTable('users', {
 - **Extensions**: Can enable PostgreSQL extensions (e.g., `uuid-ossp`, `postgis`)
 
 ### Programmatic Migrations (PostgreSQL)
+
 ```typescript
 // src/db/migrate.ts
 import { SQL } from 'bun'
@@ -87,7 +93,9 @@ console.log('Migrations applied successfully')
 // Close connection
 await client.end()
 ```
+
 **Running Migrations on Startup** (Effect Pattern):
+
 ```typescript
 // src/db/migrations.ts
 import { Effect } from 'effect'
@@ -118,12 +126,11 @@ const app = Effect.gen(function* () {
 })
 Effect.runPromise(app)
 ```
----
 
+---
 
 ## Navigation
 
 [← Part 10](./10-effect-integration-patterns.md) | [Part 12 →](./12-best-practices.md)
-
 
 **Parts**: [Part 1](./01-start.md) | [Part 2](./02-overview.md) | [Part 3](./03-why-drizzle-orm-for-omnera.md) | [Part 4](./04-installation.md) | [Part 5](./05-integration-with-omnera-stack.md) | [Part 6](./06-database-setup.md) | [Part 7](./07-schema-definition.md) | [Part 8](./08-query-api.md) | [Part 9](./09-transactions.md) | [Part 10](./10-effect-integration-patterns.md) | **Part 11** | [Part 12](./12-best-practices.md) | [Part 13](./13-common-patterns.md) | [Part 14](./14-integration-with-better-auth-postgresql.md) | [Part 15](./15-performance-considerations.md) | [Part 16](./16-common-pitfalls-to-avoid.md) | [Part 17](./17-drizzle-studio.md) | [Part 18](./18-postgresql-best-practices-for-omnera.md) | [Part 19](./19-references.md) | [Part 20](./20-summary.md)

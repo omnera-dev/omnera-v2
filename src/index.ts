@@ -1,7 +1,7 @@
 import { Effect, Schema } from 'effect'
-import type { App } from '@/schema'
 import { AppSchema } from '@/schema'
 import { createServer, type ServerInstance, type ServerCreationError } from '@/services/server'
+import type { App } from '@/schema'
 import type { CSSCompilationError } from '@/services/css-compiler'
 
 /**

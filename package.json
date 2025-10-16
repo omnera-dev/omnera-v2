@@ -28,7 +28,7 @@
     "format:check": "prettier --check .",
     "typecheck": "tsc --noEmit",
     "clean": "knip --fix",
-    "lint": "eslint .",
+    "lint": "eslint . --fix",
     "test:all": "bun test && bun test:e2e",
     "test:e2e": "playwright test",
     "release": "semantic-release"

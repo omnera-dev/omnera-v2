@@ -2,11 +2,12 @@
 
 > **Note**: This is part 9 of the split documentation. See navigation links below.
 
-
 ## useMutation Hook
+
 Mutations modify data on the server (POST, PUT, DELETE):
 
 ### Basic Mutation
+
 ```typescript
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 interface CreateUserInput {
@@ -53,6 +54,7 @@ function CreateUserForm() {
 ```
 
 ### Mutation States
+
 ```typescript
 const mutation = useMutation({ mutationFn })
 // States
@@ -72,6 +74,7 @@ mutation.reset() // Reset to idle state
 ```
 
 ### Mutation with Effect.ts
+
 ```typescript
 function useCreateUser() {
   const queryClient = useQueryClient()
@@ -92,10 +95,13 @@ function useCreateUser() {
 ```
 
 ### Optimistic Updates
+
 Update UI immediately, rollback on error:
 
 #### Pattern 1: Via UI (Simple)
+
 Show temporary state using `mutation.variables`:
+
 ```typescript
 function TodoList() {
   const { data: todos } = useQuery({ queryKey: ['todos'], queryFn: fetchTodos })
@@ -118,7 +124,9 @@ function TodoList() {
 ```
 
 #### Pattern 2: Via Cache (Advanced)
+
 Directly manipulate cache for instant feedback:
+
 ```typescript
 function useOptimisticTodo() {
   const queryClient = useQueryClient()
@@ -147,7 +155,9 @@ function useOptimisticTodo() {
 ```
 
 ### Query Invalidation Strategies
+
 Invalidate queries to trigger refetch:
+
 ```typescript
 const queryClient = useQueryClient()
 // Invalidate all queries
@@ -166,12 +176,11 @@ queryClient.invalidateQueries({ queryKey: ['users'], refetchType: 'active' })
 // Reset query (clears cache and refetches)
 queryClient.resetQueries({ queryKey: ['users'] })
 ```
----
 
+---
 
 ## Navigation
 
 [← Part 8](./08-integration-with-effectts.md) | [Part 10 →](./10-usequeries-hook.md)
-
 
 **Parts**: [Part 1](./01-start.md) | [Part 2](./02-overview.md) | [Part 3](./03-why-tanstack-query-for-omnera.md) | [Part 4](./04-installation.md) | [Part 5](./05-basic-setup.md) | [Part 6](./06-core-concepts.md) | [Part 7](./07-usequery-hook.md) | [Part 8](./08-integration-with-effectts.md) | **Part 9** | [Part 10](./10-usequeries-hook.md) | [Part 11](./11-useinfinitequery-hook.md) | [Part 12](./12-server-side-rendering-ssr-with-hono.md) | [Part 13](./13-integration-with-better-auth.md) | [Part 14](./14-advanced-patterns.md) | [Part 15](./15-testing-with-tanstack-query.md) | [Part 16](./16-best-practices.md) | [Part 17](./17-common-pitfalls-to-avoid.md) | [Part 18](./18-performance-optimization.md) | [Part 19](./19-devtools.md) | [Part 20](./20-summary.md) | [Part 21](./21-references.md)

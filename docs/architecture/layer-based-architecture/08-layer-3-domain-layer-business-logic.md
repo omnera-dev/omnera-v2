@@ -2,17 +2,19 @@
 
 > **Note**: This is part 8 of the split documentation. See navigation links below.
 
-
 ## Layer 3: Domain Layer (Business Logic)
 
 ### Responsibility
+
 Contain pure business logic, domain models, validation rules, and core algorithms. This is the heart of the application.
 
 ### Technologies
+
 - **TypeScript** - Pure functions, interfaces, type definitions
 - **Functional Programming** - Immutability, pure functions, composition
 
 ### What Belongs Here
+
 - Domain models (entities, value objects)
 - Business rules (validation, calculations)
 - Pure functions (deterministic, no side effects)
@@ -22,6 +24,7 @@ Contain pure business logic, domain models, validation rules, and core algorithm
 - Domain errors (business rule violations)
 
 ### What Does NOT Belong Here
+
 - ❌ UI components or rendering
 - ❌ HTTP routes or API endpoints
 - ❌ Database queries or I/O operations
@@ -30,6 +33,7 @@ Contain pure business logic, domain models, validation rules, and core algorithm
 - ❌ Infrastructure concerns
 
 ### Communication Pattern
+
 - **Inbound**: Calls from Application Layer
 - **Outbound**: NONE (pure, self-contained)
 - **Dependencies**: ZERO external dependencies
@@ -37,6 +41,7 @@ Contain pure business logic, domain models, validation rules, and core algorithm
 ### Code Examples
 
 #### Domain Model
+
 ```typescript
 // src/domain/models/User.ts
 // ✅ CORRECT: Immutable domain model
@@ -51,6 +56,7 @@ export interface User {
 ```
 
 #### Domain Validator (Pure Function)
+
 ```typescript
 // src/domain/validators/emailValidator.ts
 // ✅ CORRECT: Pure validation function
@@ -77,6 +83,7 @@ export function validateEmail(email: string): EmailValidationResult {
 ```
 
 #### Domain Service (Pure Functions)
+
 ```typescript
 // src/domain/services/passwordService.ts
 import { createHash } from 'crypto'
@@ -121,6 +128,7 @@ export function validatePasswordStrength(password: string): PasswordStrengthResu
 ```
 
 #### Domain Factory
+
 ```typescript
 // src/domain/factories/userFactory.ts
 import type { User } from '@/domain/models/User'
@@ -143,6 +151,7 @@ export function createUser(input: CreateUserInput): User {
 ```
 
 #### Domain Calculations (Pure Functions)
+
 ```typescript
 // src/domain/services/orderCalculator.ts
 // ✅ CORRECT: Pure business calculations
@@ -180,6 +189,7 @@ export function calculateOrderTotal(
 ```
 
 #### Domain Errors
+
 ```typescript
 // src/domain/errors/InvalidEmailError.ts
 import { Data } from 'effect'
@@ -192,6 +202,7 @@ export class InvalidEmailError extends Data.TaggedError('InvalidEmailError')<{
 ### Do's and Don'ts
 
 #### ✅ DO
+
 1. **Write pure functions** (deterministic, no side effects)
 2. **Use immutable data structures** (readonly, const)
 3. **Validate business rules** (email format, password strength)
@@ -201,18 +212,18 @@ export class InvalidEmailError extends Data.TaggedError('InvalidEmailError')<{
 7. **Keep dependencies to ZERO** (no external dependencies)
 
 #### ❌ DON'T
+
 1. **Perform I/O operations** (database, file system, network)
 2. **Use Effect programs** (Effect belongs in Application Layer)
 3. **Access external services** (repositories, APIs)
 4. **Mix presentation concerns** (UI, HTTP)
 5. **Use non-deterministic functions** (Date.now(), Math.random())
 6. **Depend on other layers** (self-contained)
----
 
+---
 
 ## Navigation
 
 [← Part 7](./07-layer-2-application-layer-use-casesorchestration.md) | [Part 9 →](./09-layer-4-infrastructure-layer-external-services.md)
-
 
 **Parts**: [Part 1](./01-start.md) | [Part 2](./02-overview.md) | [Part 3](./03-what-is-layer-based-architecture.md) | [Part 4](./04-why-layer-based-architecture-for-omnera.md) | [Part 5](./05-omneras-four-layers.md) | [Part 6](./06-layer-1-presentation-layer-uiapi.md) | [Part 7](./07-layer-2-application-layer-use-casesorchestration.md) | **Part 8** | [Part 9](./09-layer-4-infrastructure-layer-external-services.md) | [Part 10](./10-layer-communication-patterns.md) | [Part 11](./11-integration-with-functional-programming.md) | [Part 12](./12-testing-layer-based-architecture.md) | [Part 13](./13-file-structure.md) | [Part 14](./14-best-practices.md) | [Part 15](./15-common-pitfalls.md) | [Part 16](./16-resources-and-references.md) | [Part 17](./17-summary.md)

@@ -2,11 +2,11 @@
 
 > **Note**: This is part 18 of the split documentation. See navigation links below.
 
-
 ## PostgreSQL Best Practices for Omnera
 
 ### 1. Environment-Specific Configuration
-```bash
+
+````bash
 
 ### 2. Security Considerations
 ```typescript
@@ -18,8 +18,10 @@ const client = new SQL({
 const client = new SQL({
   url: 'postgres://user:password@localhost:5432/db', // Never commit credentials
 })
-```
+````
+
 **Production Security Checklist**:
+
 - ✅ Use SSL/TLS connections (`?sslmode=require` or `?sslmode=verify-full`)
 - ✅ Store credentials in environment variables or secrets management
 - ✅ Use connection pooling to prevent resource exhaustion
@@ -30,7 +32,8 @@ const client = new SQL({
 - ✅ Sanitize user input with Effect Schema validation
 
 ### 3. Development Workflow
-```bash
+
+````bash
 
 ### 4. Database Schema Best Practices
 ```typescript
@@ -48,9 +51,10 @@ export const users = pgTable('users', {
   name: text('name'), // No length limit
   createdAt: text('created_at'), // Should be timestamp
 })
-```
+````
 
 ### 5. Migration Strategy
+
 - **Never edit existing migrations** - Always create new migration files
 - **Review generated SQL** - Check migration files before applying
 - **Test migrations locally** - Apply to development database first
@@ -58,6 +62,7 @@ export const users = pgTable('users', {
 - **Run migrations in transactions** - PostgreSQL supports transactional DDL
 
 ### 6. Error Handling Patterns
+
 ```typescript
 import { Effect } from 'effect'
 import { Database } from './db/layer'
@@ -74,11 +79,7 @@ const createUser = (email: string, name: string) =>
   Effect.gen(function* () {
     const db = yield* Database
     return yield* Effect.tryPromise({
-      try: () =>
-        db
-          .insert(users)
-          .values({ email, name })
-          .returning(),
+      try: () => db.insert(users).values({ email, name }).returning(),
       catch: (error: any) => {
         // PostgreSQL error code for unique violation
         if (error.code === '23505') {
@@ -89,12 +90,11 @@ const createUser = (email: string, name: string) =>
     })
   })
 ```
----
 
+---
 
 ## Navigation
 
 [← Part 17](./17-drizzle-studio.md) | [Part 19 →](./19-references.md)
-
 
 **Parts**: [Part 1](./01-start.md) | [Part 2](./02-overview.md) | [Part 3](./03-why-drizzle-orm-for-omnera.md) | [Part 4](./04-installation.md) | [Part 5](./05-integration-with-omnera-stack.md) | [Part 6](./06-database-setup.md) | [Part 7](./07-schema-definition.md) | [Part 8](./08-query-api.md) | [Part 9](./09-transactions.md) | [Part 10](./10-effect-integration-patterns.md) | [Part 11](./11-migrations-with-drizzle-kit.md) | [Part 12](./12-best-practices.md) | [Part 13](./13-common-patterns.md) | [Part 14](./14-integration-with-better-auth-postgresql.md) | [Part 15](./15-performance-considerations.md) | [Part 16](./16-common-pitfalls-to-avoid.md) | [Part 17](./17-drizzle-studio.md) | **Part 18** | [Part 19](./19-references.md) | [Part 20](./20-summary.md)

@@ -2,11 +2,12 @@
 
 > **Note**: This is part 22 of the split documentation. See navigation links below.
 
-
 ## Full Stack Integration with Layered Architecture
+
 TanStack Table integrates seamlessly with Omnera's layered architecture. This section demonstrates the complete flow from Domain → Infrastructure → Application → Presentation.
 
 ### Architecture Overview
+
 ```
 ┌─────────────────────────────────────────────────────────────┐
 │ PRESENTATION LAYER (React Components + Hono Routes)        │
@@ -35,6 +36,7 @@ TanStack Table integrates seamlessly with Omnera's layered architecture. This se
 ### Complete Example: Users Table with Authentication
 
 #### 1. Domain Layer (Pure Business Logic)
+
 ```typescript
 // src/domain/user/user.ts
 export interface User {
@@ -69,6 +71,7 @@ export function toUserListItem(user: User): UserListItem {
 ```
 
 #### 2. Infrastructure Layer (Database Access)
+
 ```typescript
 // src/infrastructure/database/repositories/UserRepository.ts
 import { Effect, Context } from 'effect'
@@ -94,7 +97,7 @@ export const UserRepositoryLive = Layer.succeed(UserRepository, {
     Effect.tryPromise({
       try: async () => {
         const result = await db.select().from(users)
-        return result.map(row => ({
+        return result.map((row) => ({
           id: row.id,
           name: row.name,
           email: row.email,
@@ -134,6 +137,7 @@ export const UserRepositoryLive = Layer.succeed(UserRepository, {
 ```
 
 #### 3. Application Layer (Business Logic with Effect)
+
 ```typescript
 // src/application/users/GetUsers.ts
 import { Effect } from 'effect'
@@ -197,6 +201,7 @@ export const BulkDeleteUsers = (userIds: readonly number[]) =>
 ```
 
 #### 4. Presentation Layer - Hono Route (API Endpoint)
+
 ```typescript
 // src/presentation/routes/users.ts
 import { Hono } from 'hono'
@@ -249,6 +254,7 @@ export default app
 ```
 
 #### 5. Presentation Layer - React Component (TanStack Table)
+
 ```typescript
 // src/presentation/components/UsersTable.tsx
 import { useState, useMemo } from 'react'
@@ -492,39 +498,41 @@ export function UsersTable() {
 ```
 
 ### Key Patterns Demonstrated
+
 **1. Effect.gen for Business Logic (Application Layer)**:
+
 - Use `Effect.gen` for all business logic with type-safe error handling
 - Explicit dependencies via Effect Context (UserRepository, AuthService)
 - Pure functions in Domain layer called from Effect programs
-**2. async/await in Presentation Layer**:
+  **2. async/await in Presentation Layer**:
 - Hono routes use `async/await` to run Effect programs with `Effect.runPromise`
 - React components use `async/await` with TanStack Query for data fetching
-**3. TanStack Query Integration**:
+  **3. TanStack Query Integration**:
 - `useQuery` for fetching data (caching, refetching, loading states)
 - `useMutation` for mutations (optimistic updates, error handling)
 - Automatic cache invalidation after mutations
-**4. Better Auth Integration**:
+  **4. Better Auth Integration**:
 - AuthService provides current user via Effect Context
 - Domain layer validates permissions (pure function)
 - Unauthorized errors handled at API level
-**5. Drizzle ORM Integration**:
+  **5. Drizzle ORM Integration**:
 - UserRepository wraps Drizzle queries in Effect programs
 - Type-safe database access with schema
 - Error handling with DatabaseError type
 
 ### Benefits of This Architecture
+
 - **Type Safety**: Errors are explicit in type signatures
 - **Testability**: Pure functions and Effect programs are trivial to test
 - **Separation of Concerns**: Each layer has a clear responsibility
 - **Composability**: Business logic is composable via Effect
 - **Maintainability**: Changes to one layer don't affect others
 - **Performance**: TanStack Query handles caching and refetching
----
 
+---
 
 ## Navigation
 
 [← Part 21](./21-when-to-use-tanstack-table.md) | [Part 23 →](./23-references.md)
-
 
 **Parts**: [Part 1](./01-start.md) | [Part 2](./02-overview.md) | [Part 3](./03-why-tanstack-table-for-omnera.md) | [Part 4](./04-core-concepts.md) | [Part 5](./05-installation.md) | [Part 6](./06-basic-table-setup.md) | [Part 7](./07-column-definitions.md) | [Part 8](./08-sorting.md) | [Part 9](./09-filtering.md) | [Part 10](./10-pagination.md) | [Part 11](./11-row-selection.md) | [Part 12](./12-column-visibility.md) | [Part 13](./13-integration-with-tanstack-query.md) | [Part 14](./14-integration-with-effectts.md) | [Part 15](./15-styling-with-tailwind-css.md) | [Part 16](./16-reusable-data-table-component-shadcnui-pattern.md) | [Part 17](./17-performance-optimization.md) | [Part 18](./18-testing.md) | [Part 19](./19-best-practices.md) | [Part 20](./20-common-pitfalls.md) | [Part 21](./21-when-to-use-tanstack-table.md) | **Part 22** | [Part 23](./23-references.md)

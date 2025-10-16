@@ -2,13 +2,14 @@
 
 > **Note**: This is part 6 of the split documentation. See navigation links below.
 
-
 ## Database Setup
 
 ### PostgreSQL with Bun SQL (Recommended)
+
 Bun provides native PostgreSQL support through its built-in SQL module. This is the recommended approach for both development and production.
 
 #### Development Setup
+
 ```typescript
 // src/db/index.ts
 import { SQL } from 'bun'
@@ -24,8 +25,10 @@ const client = new SQL({
 export const db = drizzle({ client })
 export type DrizzleDB = typeof db
 ```
+
 **Development .env file**:
-```bash
+
+````bash
 
 #### Production Setup
 ```typescript
@@ -43,9 +46,11 @@ const client = new SQL({
 })
 export const db = drizzle({ client })
 export type DrizzleDB = typeof db
-```
+````
+
 **Production .env file**:
-```bash
+
+````bash
 
 #### Connection String Formats
 Bun SQL supports multiple PostgreSQL connection string formats:
@@ -68,10 +73,12 @@ export const db = drizzle(process.env.DATABASE_URL!)
 // Even simpler with default environment variable
 // Bun checks DATABASE_URL automatically
 export const db = drizzle()
-```
+````
 
 ### SQLite with Bun (Alternative for Local Development)
+
 For local development without PostgreSQL, you can use SQLite:
+
 ```typescript
 // src/db/index.ts
 import { drizzle } from 'drizzle-orm/bun-sqlite'
@@ -82,9 +89,11 @@ export const db = drizzle(sqlite)
 // Type-safe database instance
 export type DrizzleDB = typeof db
 ```
+
 **Note**: Use SQLite only for local development. Production should use PostgreSQL with Bun SQL.
 
 ### Database as Effect Layer
+
 ```typescript
 // src/db/layer.ts
 import { Effect, Layer, Context } from 'effect'
@@ -114,9 +123,7 @@ export const DatabaseProduction = Layer.sync(Database, () => {
   return drizzle({ client })
 })
 // Environment-aware layer
-export const DatabaseEnv = process.env.NODE_ENV === 'production'
-  ? DatabaseProduction
-  : DatabaseLive
+export const DatabaseEnv = process.env.NODE_ENV === 'production' ? DatabaseProduction : DatabaseLive
 // Usage in Effect programs
 const program = Effect.gen(function* () {
   const db = yield* Database
@@ -126,12 +133,11 @@ const program = Effect.gen(function* () {
 // Run with database layer
 Effect.runPromise(Effect.provide(program, DatabaseEnv))
 ```
----
 
+---
 
 ## Navigation
 
 [← Part 5](./05-integration-with-omnera-stack.md) | [Part 7 →](./07-schema-definition.md)
-
 
 **Parts**: [Part 1](./01-start.md) | [Part 2](./02-overview.md) | [Part 3](./03-why-drizzle-orm-for-omnera.md) | [Part 4](./04-installation.md) | [Part 5](./05-integration-with-omnera-stack.md) | **Part 6** | [Part 7](./07-schema-definition.md) | [Part 8](./08-query-api.md) | [Part 9](./09-transactions.md) | [Part 10](./10-effect-integration-patterns.md) | [Part 11](./11-migrations-with-drizzle-kit.md) | [Part 12](./12-best-practices.md) | [Part 13](./13-common-patterns.md) | [Part 14](./14-integration-with-better-auth-postgresql.md) | [Part 15](./15-performance-considerations.md) | [Part 16](./16-common-pitfalls-to-avoid.md) | [Part 17](./17-drizzle-studio.md) | [Part 18](./18-postgresql-best-practices-for-omnera.md) | [Part 19](./19-references.md) | [Part 20](./20-summary.md)

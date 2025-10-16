@@ -1,7 +1,7 @@
 import { Effect, Console } from 'effect'
 import type { AppValidationError } from '@/index'
-import type { ServerCreationError } from '@/services/server'
 import type { CSSCompilationError } from '@/services/css-compiler'
+import type { ServerCreationError } from '@/services/server'
 
 /**
  * Error types that can occur during server startup

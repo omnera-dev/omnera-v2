@@ -2,11 +2,12 @@
 
 > **Note**: This is part 12 of the split documentation. See navigation links below.
 
-
 ## Server-Side Rendering (SSR) with Hono
+
 TanStack Query provides first-class SSR support for fast initial page loads.
 
 ### SSR Setup Pattern
+
 ```typescript
 // src/server.tsx
 import { Hono } from 'hono'
@@ -63,6 +64,7 @@ export default app
 ```
 
 ### Client-Side Hydration
+
 ```typescript
 // src/client.tsx
 import { hydrateRoot } from 'react-dom/client'
@@ -85,7 +87,9 @@ hydrateRoot(
 ```
 
 ### SSR Best Practices
+
 **1. Create QueryClient per request**:
+
 ```typescript
 // ❌ DON'T: Shared QueryClient (data leakage between users)
 const queryClient = new QueryClient()
@@ -98,7 +102,9 @@ app.get('/', (c) => {
   // Isolated cache per request
 })
 ```
+
 **2. Set appropriate staleTime**:
+
 ```typescript
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -108,14 +114,18 @@ const queryClient = new QueryClient({
   },
 })
 ```
+
 **3. Use prefetchQuery for critical content**:
+
 ```typescript
 // ✅ Critical content (blocks render)
 await queryClient.prefetchQuery({ queryKey: ['user'], queryFn: fetchUser })
 // ✅ Non-critical content (fetches on client)
 // Don't prefetch - component will fetch when needed
 ```
+
 **4. Parallel prefetching**:
+
 ```typescript
 // ✅ Fetch multiple queries in parallel
 await Promise.all([
@@ -126,7 +136,9 @@ await Promise.all([
 ```
 
 ### SSR with Effect.ts
+
 Prefetch Effect programs on the server:
+
 ```typescript
 import { Effect } from 'effect'
 import { QueryClient } from '@tanstack/react-query'
@@ -158,7 +170,9 @@ app.get('/users/:id', async (c) => {
 ```
 
 ### Streaming SSR (React 19)
+
 TanStack Query works with React 19's streaming SSR:
+
 ```typescript
 import { renderToReadableStream } from 'react-dom/server'
 app.get('/', async (c) => {
@@ -178,12 +192,11 @@ app.get('/', async (c) => {
   })
 })
 ```
----
 
+---
 
 ## Navigation
 
 [← Part 11](./11-useinfinitequery-hook.md) | [Part 13 →](./13-integration-with-better-auth.md)
-
 
 **Parts**: [Part 1](./01-start.md) | [Part 2](./02-overview.md) | [Part 3](./03-why-tanstack-query-for-omnera.md) | [Part 4](./04-installation.md) | [Part 5](./05-basic-setup.md) | [Part 6](./06-core-concepts.md) | [Part 7](./07-usequery-hook.md) | [Part 8](./08-integration-with-effectts.md) | [Part 9](./09-usemutation-hook.md) | [Part 10](./10-usequeries-hook.md) | [Part 11](./11-useinfinitequery-hook.md) | **Part 12** | [Part 13](./13-integration-with-better-auth.md) | [Part 14](./14-advanced-patterns.md) | [Part 15](./15-testing-with-tanstack-query.md) | [Part 16](./16-best-practices.md) | [Part 17](./17-common-pitfalls-to-avoid.md) | [Part 18](./18-performance-optimization.md) | [Part 19](./19-devtools.md) | [Part 20](./20-summary.md) | [Part 21](./21-references.md)

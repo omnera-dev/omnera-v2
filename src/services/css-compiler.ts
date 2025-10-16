@@ -1,8 +1,8 @@
-import { Effect } from 'effect'
-import postcss from 'postcss'
-import tailwindcss from '@tailwindcss/postcss'
 import { readFile } from 'node:fs/promises'
 import { join } from 'node:path'
+import tailwindcss from '@tailwindcss/postcss'
+import { Effect } from 'effect'
+import postcss from 'postcss'
 
 /**
  * Error class for CSS compilation failures

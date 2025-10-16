@@ -2,11 +2,12 @@
 
 > **Note**: This is part 5 of the split documentation. See navigation links below.
 
-
 ## Integration with Omnera Stack
 
 ### TypeScript (^5)
+
 Drizzle leverages TypeScript's type system for full type safety:
+
 ```typescript
 import { pgTable, serial, text } from 'drizzle-orm/pg-core'
 // Schema definition generates TypeScript types
@@ -21,7 +22,9 @@ export type NewUser = typeof users.$inferInsert // { name: string; email: string
 ```
 
 ### Effect.ts (3.18.4)
+
 Drizzle operations integrate seamlessly with Effect using Bun SQL:
+
 ```typescript
 import { Effect, Context, Layer } from 'effect'
 import { SQL } from 'bun'
@@ -52,7 +55,9 @@ const findUserById = (id: number): Effect.Effect<User, UserNotFoundError, Databa
 ```
 
 ### Better Auth (drizzleAdapter)
+
 Drizzle provides a native adapter for Better Auth:
+
 ```typescript
 import { betterAuth } from 'better-auth'
 import { drizzleAdapter } from 'better-auth/adapters/drizzle'
@@ -66,7 +71,9 @@ export const auth = betterAuth({
 ```
 
 ### Layer-Based Architecture (Infrastructure Layer)
+
 Drizzle fits in the Infrastructure Layer:
+
 ```
 ┌─────────────────────────────────────┐
 │      Presentation Layer             │
@@ -88,12 +95,11 @@ Drizzle fits in the Infrastructure Layer:
 │  (Drizzle ORM, repositories)        │  ← Drizzle lives here
 └─────────────────────────────────────┘
 ```
----
 
+---
 
 ## Navigation
 
 [← Part 4](./04-installation.md) | [Part 6 →](./06-database-setup.md)
-
 
 **Parts**: [Part 1](./01-start.md) | [Part 2](./02-overview.md) | [Part 3](./03-why-drizzle-orm-for-omnera.md) | [Part 4](./04-installation.md) | **Part 5** | [Part 6](./06-database-setup.md) | [Part 7](./07-schema-definition.md) | [Part 8](./08-query-api.md) | [Part 9](./09-transactions.md) | [Part 10](./10-effect-integration-patterns.md) | [Part 11](./11-migrations-with-drizzle-kit.md) | [Part 12](./12-best-practices.md) | [Part 13](./13-common-patterns.md) | [Part 14](./14-integration-with-better-auth-postgresql.md) | [Part 15](./15-performance-considerations.md) | [Part 16](./16-common-pitfalls-to-avoid.md) | [Part 17](./17-drizzle-studio.md) | [Part 18](./18-postgresql-best-practices-for-omnera.md) | [Part 19](./19-references.md) | [Part 20](./20-summary.md)

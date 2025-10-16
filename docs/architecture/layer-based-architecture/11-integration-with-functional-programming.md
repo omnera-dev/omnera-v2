@@ -2,19 +2,20 @@
 
 > **Note**: This is part 11 of the split documentation. See navigation links below.
 
-
 ## Integration with Functional Programming
+
 Layer-Based Architecture complements Functional Programming principles:
-| FP Principle          | Layer Application                                              |
+| FP Principle | Layer Application |
 | --------------------- | -------------------------------------------------------------- |
-| **Pure Functions**    | Domain Layer contains only pure functions                      |
-| **Immutability**      | All layers use immutable data structures                       |
-| **Composition**       | Use cases compose domain functions and infrastructure effects  |
-| **Explicit Effects**  | Infrastructure Layer wraps side effects in Effect programs     |
-| **Type Safety**       | TypeScript enforces layer boundaries via interfaces            |
+| **Pure Functions** | Domain Layer contains only pure functions |
+| **Immutability** | All layers use immutable data structures |
+| **Composition** | Use cases compose domain functions and infrastructure effects |
+| **Explicit Effects** | Infrastructure Layer wraps side effects in Effect programs |
+| **Type Safety** | TypeScript enforces layer boundaries via interfaces |
 | **Dependency Inject** | Effect Context makes dependencies explicit at layer boundaries |
 
 ### Example: Pure Domain + Effect Application + Infrastructure
+
 ```typescript
 // Domain Layer: Pure function (FP principle: Pure Functions)
 export function calculateDiscount(price: number, percent: number): number {
@@ -49,12 +50,11 @@ export const OrderRepositoryLive = Layer.succeed(OrderRepository, {
   save: (order) => Effect.promise(() => database.execute('UPDATE ...', [order])),
 })
 ```
----
 
+---
 
 ## Navigation
 
 [← Part 10](./10-layer-communication-patterns.md) | [Part 12 →](./12-testing-layer-based-architecture.md)
-
 
 **Parts**: [Part 1](./01-start.md) | [Part 2](./02-overview.md) | [Part 3](./03-what-is-layer-based-architecture.md) | [Part 4](./04-why-layer-based-architecture-for-omnera.md) | [Part 5](./05-omneras-four-layers.md) | [Part 6](./06-layer-1-presentation-layer-uiapi.md) | [Part 7](./07-layer-2-application-layer-use-casesorchestration.md) | [Part 8](./08-layer-3-domain-layer-business-logic.md) | [Part 9](./09-layer-4-infrastructure-layer-external-services.md) | [Part 10](./10-layer-communication-patterns.md) | **Part 11** | [Part 12](./12-testing-layer-based-architecture.md) | [Part 13](./13-file-structure.md) | [Part 14](./14-best-practices.md) | [Part 15](./15-common-pitfalls.md) | [Part 16](./16-resources-and-references.md) | [Part 17](./17-summary.md)

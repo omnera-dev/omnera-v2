@@ -2,17 +2,19 @@
 
 > **Note**: This is part 7 of the split documentation. See navigation links below.
 
-
 ## Layer 2: Application Layer (Use Cases/Orchestration)
 
 ### Responsibility
+
 Orchestrate business workflows, coordinate between layers, and handle application-specific logic.
 
 ### Technologies
+
 - **Effect.ts** - Use case orchestration, dependency injection
 - **TypeScript** - Type-safe interfaces and error handling
 
 ### What Belongs Here
+
 - Use case implementations (application workflows)
 - Service orchestration (coordinating multiple domain services)
 - Transaction management (coordinating multiple operations)
@@ -22,12 +24,14 @@ Orchestrate business workflows, coordinate between layers, and handle applicatio
 - Cross-cutting concerns (logging, monitoring, caching)
 
 ### What Does NOT Belong Here
+
 - ❌ UI rendering or HTTP routing
 - ❌ Pure business logic (domain responsibility)
 - ❌ Database queries (infrastructure responsibility)
 - ❌ External API implementations (infrastructure responsibility)
 
 ### Communication Pattern
+
 - **Inbound**: Calls from Presentation Layer
 - **Outbound**: Calls Domain Layer (pure functions), Infrastructure Layer (via interfaces)
 - **Dependencies**: Domain Layer, Infrastructure Layer interfaces
@@ -35,6 +39,7 @@ Orchestrate business workflows, coordinate between layers, and handle applicatio
 ### Code Examples
 
 #### Use Case: Get User Profile
+
 ```typescript
 // src/application/use-cases/GetUserProfile.ts
 import { Effect } from 'effect'
@@ -63,6 +68,7 @@ export const GetUserProfile = (
 ```
 
 #### Use Case: Update User Email
+
 ```typescript
 // src/application/use-cases/UpdateUserEmail.ts
 import { Effect } from 'effect'
@@ -101,6 +107,7 @@ export const UpdateUserEmail = (
 ```
 
 #### Use Case: Register New User
+
 ```typescript
 // src/application/use-cases/RegisterUser.ts
 import { Effect } from 'effect'
@@ -160,6 +167,7 @@ export const RegisterUser = (
 ```
 
 #### Application Ports (Interfaces)
+
 ```typescript
 // src/application/ports/UserRepository.ts
 import { Effect, Context } from 'effect'
@@ -177,6 +185,7 @@ export class UserRepository extends Context.Tag('UserRepository')<
   }
 >() {}
 ```
+
 ```typescript
 // src/application/ports/Logger.ts
 import { Effect, Context } from 'effect'
@@ -195,6 +204,7 @@ export class Logger extends Context.Tag('Logger')<
 ### Do's and Don'ts
 
 #### ✅ DO
+
 1. **Orchestrate workflows** using Effect.gen
 2. **Define infrastructure interfaces** (ports/adapters pattern)
 3. **Call Domain Layer pure functions** for business logic
@@ -204,16 +214,16 @@ export class Logger extends Context.Tag('Logger')<
 7. **Return typed errors** in Effect signatures
 
 #### ❌ DON'T
+
 1. **Implement UI logic** (belongs in Presentation Layer)
 2. **Write pure business rules** (belongs in Domain Layer)
 3. **Access database directly** (define interface, implement in Infrastructure)
 4. **Mix orchestration with business logic** (separate concerns)
----
 
+---
 
 ## Navigation
 
 [← Part 6](./06-layer-1-presentation-layer-uiapi.md) | [Part 8 →](./08-layer-3-domain-layer-business-logic.md)
-
 
 **Parts**: [Part 1](./01-start.md) | [Part 2](./02-overview.md) | [Part 3](./03-what-is-layer-based-architecture.md) | [Part 4](./04-why-layer-based-architecture-for-omnera.md) | [Part 5](./05-omneras-four-layers.md) | [Part 6](./06-layer-1-presentation-layer-uiapi.md) | **Part 7** | [Part 8](./08-layer-3-domain-layer-business-logic.md) | [Part 9](./09-layer-4-infrastructure-layer-external-services.md) | [Part 10](./10-layer-communication-patterns.md) | [Part 11](./11-integration-with-functional-programming.md) | [Part 12](./12-testing-layer-based-architecture.md) | [Part 13](./13-file-structure.md) | [Part 14](./14-best-practices.md) | [Part 15](./15-common-pitfalls.md) | [Part 16](./16-resources-and-references.md) | [Part 17](./17-summary.md)

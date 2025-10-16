@@ -524,10 +524,7 @@ const usersWithPosts = await db.query.users.findMany({
 })
 
 // ❌ LESS IDEAL: Manual join (more verbose)
-const result = await db
-  .select()
-  .from(users)
-  .leftJoin(posts, eq(posts.authorId, users.id))
+const result = await db.select().from(users).leftJoin(posts, eq(posts.authorId, users.id))
 ```
 
 ### 5. Transaction Management

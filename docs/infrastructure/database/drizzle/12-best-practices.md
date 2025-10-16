@@ -2,10 +2,10 @@
 
 > **Note**: This is part 12 of the split documentation. See navigation links below.
 
-
 ## Best Practices
 
 ### 1. Type Safety
+
 ```typescript
 // ✅ CORRECT: Use inferred types
 type User = typeof users.$inferSelect
@@ -23,6 +23,7 @@ interface User {
 ```
 
 ### 2. Schema Organization
+
 ```typescript
 // ✅ CORRECT: Separate schema files by domain
 // src/db/schema/users.ts
@@ -37,6 +38,7 @@ export * from './posts'
 ```
 
 ### 3. Query Optimization
+
 ```typescript
 // ✅ CORRECT: Select only needed columns
 const userNames = await db.select({ id: users.id, name: users.name }).from(users)
@@ -62,6 +64,7 @@ const paginatedUsers = await db
 ```
 
 ### 4. Error Handling with Effect
+
 ```typescript
 // ✅ CORRECT: Explicit error types
 export class UserNotFoundError {
@@ -95,6 +98,7 @@ const program = findUser(1).pipe(
 ```
 
 ### 5. Transaction Management
+
 ```typescript
 // ✅ CORRECT: Use transactions for multi-step operations
 const transferFunds = (fromId: number, toId: number, amount: number) =>
@@ -130,6 +134,7 @@ await db
 ```
 
 ### 6. Testing
+
 ```typescript
 // src/repositories/UserRepository.test.ts
 import { test, expect, beforeEach } from 'bun:test'
@@ -174,6 +179,7 @@ test('UserRepository.findById fails for non-existent user', async () => {
 ```
 
 ### 7. Prepared Statements
+
 ```typescript
 // ✅ CORRECT: Use prepared statements for repeated queries
 import { db } from './db'
@@ -189,12 +195,11 @@ const user1 = await findUserByIdStmt.execute({ id: 1 })
 const user2 = await findUserByIdStmt.execute({ id: 2 })
 const user3 = await findUserByIdStmt.execute({ id: 3 })
 ```
----
 
+---
 
 ## Navigation
 
 [← Part 11](./11-migrations-with-drizzle-kit.md) | [Part 13 →](./13-common-patterns.md)
-
 
 **Parts**: [Part 1](./01-start.md) | [Part 2](./02-overview.md) | [Part 3](./03-why-drizzle-orm-for-omnera.md) | [Part 4](./04-installation.md) | [Part 5](./05-integration-with-omnera-stack.md) | [Part 6](./06-database-setup.md) | [Part 7](./07-schema-definition.md) | [Part 8](./08-query-api.md) | [Part 9](./09-transactions.md) | [Part 10](./10-effect-integration-patterns.md) | [Part 11](./11-migrations-with-drizzle-kit.md) | **Part 12** | [Part 13](./13-common-patterns.md) | [Part 14](./14-integration-with-better-auth-postgresql.md) | [Part 15](./15-performance-considerations.md) | [Part 16](./16-common-pitfalls-to-avoid.md) | [Part 17](./17-drizzle-studio.md) | [Part 18](./18-postgresql-best-practices-for-omnera.md) | [Part 19](./19-references.md) | [Part 20](./20-summary.md)

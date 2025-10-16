@@ -1,15 +1,15 @@
 import js from '@eslint/js'
-import globals from 'globals'
-import tseslint from 'typescript-eslint'
 import { defineConfig } from 'eslint/config'
+import boundaries from 'eslint-plugin-boundaries'
+import functionalPlugin from 'eslint-plugin-functional'
+import importPlugin from 'eslint-plugin-import'
 import playwright from 'eslint-plugin-playwright'
 import react from 'eslint-plugin-react'
 import reactHooks from 'eslint-plugin-react-hooks'
 import reactRefresh from 'eslint-plugin-react-refresh'
-import boundaries from 'eslint-plugin-boundaries'
-import functionalPlugin from 'eslint-plugin-functional'
-import importPlugin from 'eslint-plugin-import'
 import unicorn from 'eslint-plugin-unicorn'
+import globals from 'globals'
+import tseslint from 'typescript-eslint'
 
 // Type workaround for flat config compatibility
 const functional = functionalPlugin as any
@@ -424,52 +424,44 @@ export default defineConfig([
           default: 'disallow',
           rules: [
             // Presentation Layer Rules
-            // Can import: Application (use cases), Domain (models, validators), Shared (utils)
+            // Can import: Application (use cases), Domain (models, validators)
             // Cannot import: Infrastructure (must go through Application layer)
             {
               from: ['presentation'],
-              allow: ['application', 'domain', 'shared'],
+              allow: ['application', 'domain'],
               message:
-                'Presentation layer violation: Can only import from Application, Domain, and Shared layers. Access Infrastructure through Application layer use cases.',
+                'Presentation layer violation: Can only import from Application and Domain layers. Access Infrastructure through Application layer use cases.',
             },
 
             // Application Layer Rules
-            // Can import: Domain (models, validators), Infrastructure (to define interfaces), Shared (utils)
+            // Can import: Domain (models, validators), Infrastructure (to define interfaces)
             // Cannot import: Presentation
             {
               from: ['application'],
-              allow: ['domain', 'infrastructure', 'shared'],
+              allow: ['domain', 'infrastructure'],
               message:
-                'Application layer violation: Can only import from Domain, Infrastructure, and Shared layers. Application defines interfaces that Infrastructure implements.',
+                'Application layer violation: Can only import from Domain and Infrastructure layers. Application defines interfaces that Infrastructure implements.',
             },
 
             // Domain Layer Rules
-            // Can import: Shared (only utilities)
-            // Cannot import: Any other layer (must remain pure and self-contained)
+            // Can import: NOTHING (must remain pure and self-contained)
+            // Cannot import: Any other layer
             {
               from: ['domain'],
-              allow: ['shared'],
+              allow: [],
               message:
-                'Domain layer violation: Domain must remain pure with no external dependencies. Can only import from Shared utilities. No side effects, I/O, or external calls allowed.',
+                'Domain layer violation: Domain must remain pure with zero external dependencies. No side effects, I/O, or external calls allowed.',
             },
 
             // Infrastructure Layer Rules
-            // Can import: Domain (to implement business logic), Shared (utils)
+            // Can import: Domain (to implement business logic)
             // Cannot import: Presentation, Application
             // Note: Infrastructure implements interfaces defined in Application, but doesn't import Application
             {
               from: ['infrastructure'],
-              allow: ['domain', 'shared'],
+              allow: ['domain'],
               message:
-                'Infrastructure layer violation: Can only import from Domain and Shared layers. Infrastructure implements interfaces defined by Application layer.',
-            },
-
-            // Shared Utilities Rules
-            // Can import: Other shared utilities only
-            {
-              from: ['shared'],
-              allow: ['shared'],
-              message: 'Shared utilities violation: Can only import from other shared utilities.',
+                'Infrastructure layer violation: Can only import from Domain layer. Infrastructure implements interfaces defined by Application layer.',
             },
           ],
         },

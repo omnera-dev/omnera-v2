@@ -2,10 +2,10 @@
 
 > **Note**: This is part 15 of the split documentation. See navigation links below.
 
-
 ## Performance Considerations
 
 ### Query Optimization (PostgreSQL)
+
 - **Select specific columns**: Only fetch data you need
 - **Use indexes**: Add indexes for frequently queried columns
 - **Paginate large result sets**: Avoid loading all records at once
@@ -14,15 +14,20 @@
 - **Use JSONB indexes**: Index JSONB columns for faster queries
 - **Partial indexes**: Create indexes with WHERE clauses for specific query patterns
 - **Use EXPLAIN ANALYZE**: Profile queries to identify bottlenecks
+
 ```typescript
 // Example: JSONB indexing in PostgreSQL
-export const products = pgTable('products', {
-  id: serial('id').primaryKey(),
-  metadata: jsonb('metadata').$type<{ tags: string[]; category: string }>(),
-}, (table) => ({
-  // GIN index for JSONB queries
-  metadataIdx: index('metadata_idx').on(table.metadata).using('gin'),
-}))
+export const products = pgTable(
+  'products',
+  {
+    id: serial('id').primaryKey(),
+    metadata: jsonb('metadata').$type<{ tags: string[]; category: string }>(),
+  },
+  (table) => ({
+    // GIN index for JSONB queries
+    metadataIdx: index('metadata_idx').on(table.metadata).using('gin'),
+  })
+)
 // Efficient JSONB queries
 const productsWithTag = await db
   .select()
@@ -31,7 +36,9 @@ const productsWithTag = await db
 ```
 
 ### Connection Pooling (Bun SQL with PostgreSQL)
+
 Bun SQL provides built-in connection pooling for PostgreSQL:
+
 ```typescript
 // src/db/index.ts
 import { SQL } from 'bun'
@@ -55,7 +62,9 @@ export const db = drizzle({
   client: process.env.NODE_ENV === 'production' ? prodClient : devClient,
 })
 ```
+
 **Connection Pool Best Practices**:
+
 - **Development**: Use smaller pool (5-10 connections) to conserve resources
 - **Production**: Scale pool size based on concurrent load (20-100 connections)
 - **Idle Timeout**: Balance between connection reuse and resource consumption
@@ -63,6 +72,7 @@ export const db = drizzle({
 - **Monitoring**: Track pool utilization and adjust based on metrics
 
 ### PostgreSQL-Specific Optimizations
+
 ```typescript
 // 1. Use RETURNING clause efficiently
 const newUsers = await db
@@ -90,14 +100,18 @@ await db.execute(sql`
 `)
 // 4. Parallel queries with Effect
 import { Effect } from 'effect'
-const fetchDashboardData = Effect.all({
-  users: Effect.promise(() => db.select().from(users).limit(10)),
-  posts: Effect.promise(() => db.select().from(posts).limit(20)),
-  stats: Effect.promise(() => db.query.stats.findFirst()),
-}, { concurrency: 3 }) // Execute 3 queries in parallel
+const fetchDashboardData = Effect.all(
+  {
+    users: Effect.promise(() => db.select().from(users).limit(10)),
+    posts: Effect.promise(() => db.select().from(posts).limit(20)),
+    stats: Effect.promise(() => db.query.stats.findFirst()),
+  },
+  { concurrency: 3 }
+) // Execute 3 queries in parallel
 ```
 
 ### Caching with Effect
+
 ```typescript
 import { Effect } from 'effect'
 // Cache frequently accessed data
@@ -107,12 +121,11 @@ const getCachedUser = (id: number) =>
     Effect.withRequestCaching(true) // Enable request-level caching
   )
 ```
----
 
+---
 
 ## Navigation
 
 [← Part 14](./14-integration-with-better-auth-postgresql.md) | [Part 16 →](./16-common-pitfalls-to-avoid.md)
-
 
 **Parts**: [Part 1](./01-start.md) | [Part 2](./02-overview.md) | [Part 3](./03-why-drizzle-orm-for-omnera.md) | [Part 4](./04-installation.md) | [Part 5](./05-integration-with-omnera-stack.md) | [Part 6](./06-database-setup.md) | [Part 7](./07-schema-definition.md) | [Part 8](./08-query-api.md) | [Part 9](./09-transactions.md) | [Part 10](./10-effect-integration-patterns.md) | [Part 11](./11-migrations-with-drizzle-kit.md) | [Part 12](./12-best-practices.md) | [Part 13](./13-common-patterns.md) | [Part 14](./14-integration-with-better-auth-postgresql.md) | **Part 15** | [Part 16](./16-common-pitfalls-to-avoid.md) | [Part 17](./17-drizzle-studio.md) | [Part 18](./18-postgresql-best-practices-for-omnera.md) | [Part 19](./19-references.md) | [Part 20](./20-summary.md)

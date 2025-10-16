@@ -48,6 +48,7 @@ export const auth = betterAuth({
 ```
 
 **Security Benefits**:
+
 - `httpOnly`: Protects against XSS attacks stealing session tokens
 - `secure`: Ensures cookies only sent over HTTPS in production
 - `sameSite: 'lax'`: Mitigates CSRF attacks
@@ -76,6 +77,7 @@ await db.insert(users).values(user)
 ```
 
 **Password Requirements** (enforce in validation):
+
 - Minimum 8 characters
 - Mix of uppercase, lowercase, numbers, special characters
 - Not common passwords (use password strength library if needed)
@@ -199,6 +201,7 @@ const user = await db.execute(query) // Vulnerable to SQL injection!
 ```
 
 **Why Parameterized Queries are Safe**:
+
 - User input treated as data, not SQL code
 - Drizzle automatically escapes special characters
 - No way to inject malicious SQL
@@ -241,6 +244,7 @@ function UserProfile({ user }: { user: User }) {
 ```
 
 **When to Sanitize**:
+
 - Rich text content (WYSIWYG editors)
 - User-generated HTML
 - Content from external sources
@@ -263,6 +267,7 @@ advanced: {
 ```
 
 **How `sameSite: 'lax'` Works**:
+
 - Cookies not sent with cross-site POST requests
 - Prevents malicious sites from making authenticated requests
 - Still allows top-level navigation (clicking links)
@@ -368,10 +373,7 @@ class AuthorizationError {
   constructor(readonly message: string) {}
 }
 
-class CurrentUser extends Context.Tag('CurrentUser')<
-  CurrentUser,
-  { id: number; role: string }
->() {}
+class CurrentUser extends Context.Tag('CurrentUser')<CurrentUser, { id: number; role: string }>() {}
 
 const requireAdmin = Effect.gen(function* () {
   const user = yield* CurrentUser
@@ -468,6 +470,7 @@ if (!API_KEY) {
 ```
 
 **Store secrets in**:
+
 - `.env` file (local development, add to `.gitignore`)
 - Environment variables (production deployment)
 - Secret management service (AWS Secrets Manager, etc.)
@@ -642,8 +645,9 @@ const userProgram = Effect.gen(function* () {
   const user = yield* UserService.findById(userId)
   return user
 }).pipe(
-  Effect.catchTag('UserNotFoundError', () =>
-    Effect.succeed({ error: 'User not found' }) // Generic message
+  Effect.catchTag(
+    'UserNotFoundError',
+    () => Effect.succeed({ error: 'User not found' }) // Generic message
   ),
   Effect.catchAll((error) => {
     // Log detailed error (server-side only)

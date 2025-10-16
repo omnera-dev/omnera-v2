@@ -23,16 +23,16 @@ TanStack Table (formerly React Table) is a headless UI library for building feat
 
 ### Integration with Omnera Stack
 
-| Technology | Integration |
-|-----------|------------|
-| **React 19** | Full support for modern hooks and patterns |
-| **TypeScript** | Complete type inference for columns, rows, and state |
-| **Tailwind CSS** | 100% control over styling with utility classes |
-| **shadcn/ui** | Follows same headless philosophy, perfect synergy |
-| **TanStack Query** | Server-side data fetching, caching, and mutations |
-| **Effect.ts** | Type-safe business logic in table actions |
-| **Better Auth** | Permission-based row selection and actions |
-| **Drizzle ORM** | Database queries for server-side features |
+| Technology         | Integration                                          |
+| ------------------ | ---------------------------------------------------- |
+| **React 19**       | Full support for modern hooks and patterns           |
+| **TypeScript**     | Complete type inference for columns, rows, and state |
+| **Tailwind CSS**   | 100% control over styling with utility classes       |
+| **shadcn/ui**      | Follows same headless philosophy, perfect synergy    |
+| **TanStack Query** | Server-side data fetching, caching, and mutations    |
+| **Effect.ts**      | Type-safe business logic in table actions            |
+| **Better Auth**    | Permission-based row selection and actions           |
+| **Drizzle ORM**    | Database queries for server-side features            |
 
 ## Core Concepts
 
@@ -45,6 +45,7 @@ TanStack Table doesn't render any DOM elements. Instead, it provides:
 - **Computed values** for rendering (rows, columns, headers)
 
 **You control**:
+
 - HTML markup structure
 - CSS styling (with Tailwind CSS)
 - Component architecture
@@ -150,9 +151,7 @@ const data = useMemo(
 )
 
 // ❌ INCORRECT: New reference on every render
-const data = [
-  { id: 1, name: 'Alice', email: 'alice@example.com', status: 'active' },
-] // Will cause infinite re-renders!
+const data = [{ id: 1, name: 'Alice', email: 'alice@example.com', status: 'active' }] // Will cause infinite re-renders!
 ```
 
 ## Basic Table Setup
@@ -238,6 +237,7 @@ function UserTable() {
 ```
 
 **Key Components**:
+
 1. **flexRender**: Utility to render cells/headers (supports JSX, strings, or functions)
 2. **getHeaderGroups()**: Returns header rows (supports nested headers)
 3. **getRowModel().rows**: Returns current rows (after sorting, filtering, pagination)
@@ -759,6 +759,7 @@ TanStack Table fits perfectly into Omnera's layered architecture:
 ```
 
 **Key Pattern**:
+
 - Domain Layer: Pure validation functions
 - Application Layer: Effect.gen programs for business logic
 - Infrastructure Layer: Drizzle ORM wrapped in Effect

@@ -8,12 +8,13 @@ This document outlines Omnera's comprehensive testing strategy, applying **F.I.R
 
 **Recommended convention for clarity and consistency**:
 
-| Test Type | Extension | Location | Example |
-|-----------|-----------|----------|---------|
+| Test Type      | Extension  | Location               | Example                  |
+| -------------- | ---------- | ---------------------- | ------------------------ |
 | **Unit Tests** | `.test.ts` | Co-located with source | `src/calculator.test.ts` |
-| **E2E Tests** | `.spec.ts` | `tests/` directory | `tests/login.spec.ts` |
+| **E2E Tests**  | `.spec.ts` | `tests/` directory     | `tests/login.spec.ts`    |
 
 **Why this convention**:
+
 - **Clear Separation**: `.test.ts` = unit, `.spec.ts` = E2E (visual distinction)
 - **Tool Compatibility**: Bun recognizes both, Playwright defaults to `.spec.ts`
 - **Industry Standard**: Matches patterns used by Jest, Vitest, Playwright

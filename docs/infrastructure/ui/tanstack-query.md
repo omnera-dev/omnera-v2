@@ -28,8 +28,8 @@ Traditional data fetching in React requires manual management of:
 
 ### Perfect Integration with Omnera Stack
 
-| Component           | Integration                                                                    |
-| ------------------- | ------------------------------------------------------------------------------ |
+| Component           | Integration                                                                   |
+| ------------------- | ----------------------------------------------------------------------------- |
 | **React 19**        | Built for React, works with Server Components, Actions, and use() hook        |
 | **Effect.ts**       | Convert Effect programs to query/mutation functions seamlessly                |
 | **Hono SSR**        | Prefetch queries on server, hydrate on client for fast initial page loads     |

@@ -1,7 +1,7 @@
-import type { ReactElement } from 'react'
 import { renderToString } from 'react-dom/server'
-import type { App } from '@/schema'
 import { TypographyH1 } from '@/components/ui/typography'
+import type { App } from '@/schema'
+import type { ReactElement } from 'react'
 
 /**
  * HomePage component - Displays application information

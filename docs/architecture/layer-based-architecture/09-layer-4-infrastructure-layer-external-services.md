@@ -2,19 +2,21 @@
 
 > **Note**: This is part 9 of the split documentation. See navigation links below.
 
-
 ## Layer 4: Infrastructure Layer (External Services)
 
 ### Responsibility
+
 Implement interfaces defined in Application Layer, handle I/O, interact with external systems.
 
 ### Technologies
+
 - **Bun** - Runtime environment, file system, execution
 - **Effect.ts** - Side effect management
 - **Database drivers** - PostgreSQL, SQLite, etc.
 - **HTTP clients** - Fetch API, axios, etc.
 
 ### What Belongs Here
+
 - Repository implementations (database access)
 - External API clients (third-party services)
 - File system operations
@@ -24,12 +26,14 @@ Implement interfaces defined in Application Layer, handle I/O, interact with ext
 - Effect Layer definitions (dependency wiring)
 
 ### What Does NOT Belong Here
+
 - ❌ Business logic or validation
 - ❌ UI components or rendering
 - ❌ Use case orchestration
 - ❌ Domain models (those belong in Domain Layer)
 
 ### Communication Pattern
+
 - **Inbound**: Called by Application Layer via interfaces
 - **Outbound**: External systems (databases, APIs, file system)
 - **Dependencies**: Application Layer interfaces (implements them)
@@ -37,6 +41,7 @@ Implement interfaces defined in Application Layer, handle I/O, interact with ext
 ### Code Examples
 
 #### Repository Implementation
+
 ```typescript
 // src/infrastructure/repositories/UserRepositoryImpl.ts
 import { Effect, Layer } from 'effect'
@@ -132,6 +137,7 @@ export const UserRepositoryLive = Layer.succeed(UserRepository, {
 ```
 
 #### Logger Implementation
+
 ```typescript
 // src/infrastructure/logging/LoggerImpl.ts
 import { Effect, Layer } from 'effect'
@@ -160,6 +166,7 @@ export const LoggerLive = Layer.succeed(Logger, {
 ```
 
 #### Email Service Implementation
+
 ```typescript
 // src/infrastructure/email/EmailServiceImpl.ts
 import { Effect, Layer } from 'effect'
@@ -213,6 +220,7 @@ export const EmailServiceLive = Layer.succeed(EmailService, {
 ```
 
 #### Application Layer (Dependency Wiring)
+
 ```typescript
 // src/infrastructure/layers/AppLayer.ts
 import { Layer } from 'effect'
@@ -226,6 +234,7 @@ export const AppLayer = Layer.mergeAll(UserRepositoryLive, LoggerLive, EmailServ
 ### Do's and Don'ts
 
 #### ✅ DO
+
 1. **Implement Application Layer interfaces** (ports/adapters)
 2. **Handle I/O operations** (database, network, file system)
 3. **Wrap external services** in Effect programs
@@ -234,16 +243,16 @@ export const AppLayer = Layer.mergeAll(UserRepositoryLive, LoggerLive, EmailServ
 6. **Isolate implementation details** (database schema, API formats)
 
 #### ❌ DON'T
+
 1. **Implement business logic** (belongs in Domain Layer)
 2. **Orchestrate use cases** (belongs in Application Layer)
 3. **Expose infrastructure details** to upper layers
 4. **Mix infrastructure concerns** with domain models
----
 
+---
 
 ## Navigation
 
 [← Part 8](./08-layer-3-domain-layer-business-logic.md) | [Part 10 →](./10-layer-communication-patterns.md)
-
 
 **Parts**: [Part 1](./01-start.md) | [Part 2](./02-overview.md) | [Part 3](./03-what-is-layer-based-architecture.md) | [Part 4](./04-why-layer-based-architecture-for-omnera.md) | [Part 5](./05-omneras-four-layers.md) | [Part 6](./06-layer-1-presentation-layer-uiapi.md) | [Part 7](./07-layer-2-application-layer-use-casesorchestration.md) | [Part 8](./08-layer-3-domain-layer-business-logic.md) | **Part 9** | [Part 10](./10-layer-communication-patterns.md) | [Part 11](./11-integration-with-functional-programming.md) | [Part 12](./12-testing-layer-based-architecture.md) | [Part 13](./13-file-structure.md) | [Part 14](./14-best-practices.md) | [Part 15](./15-common-pitfalls.md) | [Part 16](./16-resources-and-references.md) | [Part 17](./17-summary.md)

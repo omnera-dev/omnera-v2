@@ -2,18 +2,20 @@
 
 > **Note**: This is part 6 of the split documentation. See navigation links below.
 
-
 ## Layer 1: Presentation Layer (UI/API)
 
 ### Responsibility
+
 Handle user interactions, render UI, route HTTP requests, and present data to users.
 
 ### Technologies
+
 - **React 19** - UI components, user interactions
 - **Hono** - HTTP routing, API endpoints
 - **Tailwind CSS** - Component styling
 
 ### What Belongs Here
+
 - React components (presentational and container)
 - Hono route handlers (API endpoints)
 - HTTP request/response formatting
@@ -24,6 +26,7 @@ Handle user interactions, render UI, route HTTP requests, and present data to us
 - Form handling and submission
 
 ### What Does NOT Belong Here
+
 - ❌ Business logic and calculations
 - ❌ Database queries or operations
 - ❌ Complex validation rules (domain responsibility)
@@ -31,6 +34,7 @@ Handle user interactions, render UI, route HTTP requests, and present data to us
 - ❌ External API calls (infrastructure responsibility)
 
 ### Communication Pattern
+
 - **Inbound**: User input, HTTP requests
 - **Outbound**: Calls Application Layer use cases
 - **Dependencies**: Application Layer interfaces
@@ -38,6 +42,7 @@ Handle user interactions, render UI, route HTTP requests, and present data to us
 ### Code Examples
 
 #### React Component (Presentation Layer)
+
 ```typescript
 // src/presentation/components/UserProfile.tsx
 import { useState, useEffect } from 'react'
@@ -84,6 +89,7 @@ export function UserProfile({ userId }: UserProfileProps) {
 ```
 
 #### Hono Route Handler (Presentation Layer)
+
 ```typescript
 // src/presentation/api/users.ts
 import { Hono } from 'hono'
@@ -145,6 +151,7 @@ export default app
 ### Do's and Don'ts
 
 #### ✅ DO
+
 1. **Delegate business logic** to Application Layer use cases
 2. **Handle presentation concerns** (routing, rendering, styling)
 3. **Validate input format** (basic checks like type, presence)
@@ -153,17 +160,17 @@ export default app
 6. **Map errors to user-friendly messages** (presentation responsibility)
 
 #### ❌ DON'T
+
 1. **Implement business rules** (belongs in Domain Layer)
 2. **Access databases directly** (use Application Layer)
 3. **Perform complex calculations** (belongs in Domain Layer)
 4. **Make external API calls** (use Application Layer)
 5. **Mix presentation and business logic** (separate concerns)
----
 
+---
 
 ## Navigation
 
 [← Part 5](./05-omneras-four-layers.md) | [Part 7 →](./07-layer-2-application-layer-use-casesorchestration.md)
-
 
 **Parts**: [Part 1](./01-start.md) | [Part 2](./02-overview.md) | [Part 3](./03-what-is-layer-based-architecture.md) | [Part 4](./04-why-layer-based-architecture-for-omnera.md) | [Part 5](./05-omneras-four-layers.md) | **Part 6** | [Part 7](./07-layer-2-application-layer-use-casesorchestration.md) | [Part 8](./08-layer-3-domain-layer-business-logic.md) | [Part 9](./09-layer-4-infrastructure-layer-external-services.md) | [Part 10](./10-layer-communication-patterns.md) | [Part 11](./11-integration-with-functional-programming.md) | [Part 12](./12-testing-layer-based-architecture.md) | [Part 13](./13-file-structure.md) | [Part 14](./14-best-practices.md) | [Part 15](./15-common-pitfalls.md) | [Part 16](./16-resources-and-references.md) | [Part 17](./17-summary.md)

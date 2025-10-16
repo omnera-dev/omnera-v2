@@ -31,11 +31,7 @@ function ExpensiveComponent({ data }: { data: Data }) {
     console.log(processed)
   }
 
-  return (
-    <div onClick={handleClick}>
-      {processed.value}
-    </div>
-  )
+  return <div onClick={handleClick}>{processed.value}</div>
 }
 
 // ❌ INCORRECT: Manual memoization no longer needed
@@ -50,6 +46,7 @@ const ExpensiveComponent = React.memo(({ data }: { data: Data }) => {
 ```
 
 **Key Benefits**:
+
 - No need for `React.memo`, `useMemo`, or `useCallback` in most cases
 - Compiler determines optimal re-render boundaries automatically
 - Zero runtime overhead (optimizations at build time)
@@ -112,7 +109,10 @@ function LargeList({ items }: { items: Item[] }) {
   })
 
   return (
-    <div ref={parentRef} className="h-screen overflow-auto">
+    <div
+      ref={parentRef}
+      className="h-screen overflow-auto"
+    >
       <div
         style={{
           height: `${virtualizer.getTotalSize()}px`,
@@ -152,11 +152,12 @@ Effect programs are lazy by default - they only execute when run:
 import { Effect } from 'effect'
 
 // ✅ CORRECT: Effect is lazy - no execution until runPromise
-const fetchUser = (id: number) => Effect.gen(function* () {
-  console.log('Fetching user') // Only logs when Effect runs
-  const user = yield* UserService.findById(id)
-  return user
-})
+const fetchUser = (id: number) =>
+  Effect.gen(function* () {
+    console.log('Fetching user') // Only logs when Effect runs
+    const user = yield* UserService.findById(id)
+    return user
+  })
 
 // Creating the Effect doesn't execute it
 const userProgram = fetchUser(1) // No fetch happens yet
@@ -174,8 +175,8 @@ Use `Effect.all` for parallel operations:
 ```typescript
 // ❌ INCORRECT: Sequential execution (slow)
 const sequentialProgram = Effect.gen(function* () {
-  const user = yield* fetchUser(1)      // Wait 200ms
-  const posts = yield* fetchPosts()     // Wait 300ms
+  const user = yield* fetchUser(1) // Wait 200ms
+  const posts = yield* fetchPosts() // Wait 300ms
   const comments = yield* fetchComments() // Wait 150ms
   // Total: 650ms
 
@@ -198,15 +199,16 @@ Cache expensive Effect computations:
 import { Effect, Cache } from 'effect'
 
 // ✅ CORRECT: Cache Effect results
-const getUserWithCache = (id: number) => Effect.gen(function* () {
-  const cache = yield* Cache.make({
-    capacity: 100,
-    timeToLive: '5 minutes',
-    lookup: (id: number) => UserService.findById(id),
-  })
+const getUserWithCache = (id: number) =>
+  Effect.gen(function* () {
+    const cache = yield* Cache.make({
+      capacity: 100,
+      timeToLive: '5 minutes',
+      lookup: (id: number) => UserService.findById(id),
+    })
 
-  return yield* Cache.get(cache, id)
-})
+    return yield* Cache.get(cache, id)
+  })
 
 // First call fetches from database
 const user1 = await Effect.runPromise(getUserWithCache(1))
@@ -222,9 +224,7 @@ Don't wrap pure functions in Effect:
 ```typescript
 // ❌ INCORRECT: Pure function unnecessarily wrapped in Effect
 function calculateTotal(items: Item[]): Effect.Effect<number, never, never> {
-  return Effect.succeed(
-    items.reduce((sum, item) => sum + item.price, 0)
-  ) // Unnecessary Effect wrapper
+  return Effect.succeed(items.reduce((sum, item) => sum + item.price, 0)) // Unnecessary Effect wrapper
 }
 
 // ✅ CORRECT: Pure function stays pure
@@ -233,11 +233,12 @@ function calculateTotal(items: Item[]): number {
 }
 
 // Use Effect only when side effects are needed
-const saveTotal = (items: Item[]) => Effect.gen(function* () {
-  const total = calculateTotal(items) // Pure calculation
-  yield* Database.save({ total }) // Side effect in Effect
-  return total
-})
+const saveTotal = (items: Item[]) =>
+  Effect.gen(function* () {
+    const total = calculateTotal(items) // Pure calculation
+    yield* Database.save({ total }) // Side effect in Effect
+    return total
+  })
 ```
 
 ---
@@ -328,24 +329,25 @@ const usersWithPosts = await Promise.all(
 ) // N+1 queries!
 
 // ✅ CORRECT: Single query with join
-const usersWithPosts = await db
-  .select()
-  .from(users)
-  .leftJoin(posts, eq(posts.userId, users.id))
+const usersWithPosts = await db.select().from(users).leftJoin(posts, eq(posts.userId, users.id))
 ```
 
 ### Use Indexes for Frequent Queries
 
 ```typescript
 // Define indexes in schema for performance
-export const users = pgTable('users', {
-  id: serial('id').primaryKey(),
-  email: text('email').notNull().unique(),
-  name: text('name').notNull(),
-}, (table) => ({
-  // Index for frequent email lookups
-  emailIdx: index('email_idx').on(table.email),
-}))
+export const users = pgTable(
+  'users',
+  {
+    id: serial('id').primaryKey(),
+    email: text('email').notNull().unique(),
+    name: text('name').notNull(),
+  },
+  (table) => ({
+    // Index for frequent email lookups
+    emailIdx: index('email_idx').on(table.email),
+  })
+)
 ```
 
 ---
@@ -474,6 +476,7 @@ const mutation = useMutation({
 Tailwind v4 automatically purges unused utilities in production builds.
 
 **Verify purging**:
+
 ```bash
 # Build for production
 bun run build
@@ -508,16 +511,15 @@ Tailwind v4 uses Just-In-Time compilation by default, generating only the CSS yo
 import { Profiler } from 'react'
 
 function App() {
-  const onRenderCallback = (
-    id: string,
-    phase: 'mount' | 'update',
-    actualDuration: number,
-  ) => {
+  const onRenderCallback = (id: string, phase: 'mount' | 'update', actualDuration: number) => {
     console.log(`${id} (${phase}) took ${actualDuration}ms`)
   }
 
   return (
-    <Profiler id="App" onRender={onRenderCallback}>
+    <Profiler
+      id="App"
+      onRender={onRenderCallback}
+    >
       <YourComponent />
     </Profiler>
   )
@@ -544,18 +546,19 @@ import { Effect, Metric } from 'effect'
 
 const fetchUserMetric = Metric.timer('fetch_user_duration')
 
-const fetchUserWithMetrics = (id: number) => Effect.gen(function* () {
-  const startTime = yield* Effect.clock
+const fetchUserWithMetrics = (id: number) =>
+  Effect.gen(function* () {
+    const startTime = yield* Effect.clock
 
-  const user = yield* UserService.findById(id)
+    const user = yield* UserService.findById(id)
 
-  const endTime = yield* Effect.clock
-  const duration = endTime - startTime
+    const endTime = yield* Effect.clock
+    const duration = endTime - startTime
 
-  yield* Metric.set(fetchUserMetric, duration)
+    yield* Metric.set(fetchUserMetric, duration)
 
-  return user
-})
+    return user
+  })
 ```
 
 ---
@@ -606,10 +609,7 @@ const user = await db.select().from(users).where(eq(users.id, 1))
 return user.name
 
 // ✅ Fetch only required field
-const result = await db
-  .select({ name: users.name })
-  .from(users)
-  .where(eq(users.id, 1))
+const result = await db.select({ name: users.name }).from(users).where(eq(users.id, 1))
 return result[0].name
 ```
 
@@ -619,15 +619,15 @@ return result[0].name
 
 Target metrics for Omnera applications:
 
-| Metric | Target | Tool |
-|--------|--------|------|
-| **First Contentful Paint (FCP)** | < 1.5s | Lighthouse |
-| **Largest Contentful Paint (LCP)** | < 2.5s | Lighthouse |
-| **Time to Interactive (TTI)** | < 3.5s | Lighthouse |
-| **Total Blocking Time (TBT)** | < 300ms | Lighthouse |
-| **Cumulative Layout Shift (CLS)** | < 0.1 | Lighthouse |
-| **Initial JS Bundle** | < 200KB | Bundle analyzer |
-| **Database Query Time** | < 100ms | Effect metrics |
+| Metric                             | Target  | Tool            |
+| ---------------------------------- | ------- | --------------- |
+| **First Contentful Paint (FCP)**   | < 1.5s  | Lighthouse      |
+| **Largest Contentful Paint (LCP)** | < 2.5s  | Lighthouse      |
+| **Time to Interactive (TTI)**      | < 3.5s  | Lighthouse      |
+| **Total Blocking Time (TBT)**      | < 300ms | Lighthouse      |
+| **Cumulative Layout Shift (CLS)**  | < 0.1   | Lighthouse      |
+| **Initial JS Bundle**              | < 200KB | Bundle analyzer |
+| **Database Query Time**            | < 100ms | Effect metrics  |
 
 ---
 

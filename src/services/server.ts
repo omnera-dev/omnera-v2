@@ -1,8 +1,8 @@
 import { Effect, Console } from 'effect'
 import { Hono } from 'hono'
-import type { App } from '@/schema'
 import { renderHomePage } from '@/components/HomePage'
 import { compileCSS, type CSSCompilationError } from './css-compiler'
+import type { App } from '@/schema'
 
 /**
  * Error class for server creation failures
