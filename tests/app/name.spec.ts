@@ -60,10 +60,8 @@ test.describe('AppSchema - Name Display', () => {
    * WHEN: User navigates to the homepage
    * THEN: Browser title should be "my-dashboard - Powered by Omnera"
    *
-   * Why this will fail:
-   * - DefaultHomePage currently sets title to "{app.name} - Powered by Omnera" (line 24)
-   * - This test validates that page metadata is correctly configured
-   * - Important for browser tabs, bookmarks, and SEO
+   * This test validates that page metadata is correctly configured.
+   * Important for browser tabs, bookmarks, and SEO.
    */
   // @spec - Validates app name in page title metadata
   test(
@@ -90,10 +88,9 @@ test.describe('AppSchema - Name Display', () => {
    * WHEN: User navigates to the homepage
    * THEN: Single character should be displayed as heading
    *
-   * Why this will fail:
-   * - NameSchema allows minimum 1 character (name.ts line 29)
-   * - Tests edge case of shortest valid name
-   * - Validates no minimum display length restrictions
+   * NameSchema allows minimum 1 character (name.ts line 29)
+   * Tests edge case of shortest valid name
+   * Validates no minimum display length restrictions
    */
   // @spec - Validates minimum length name (1 character)
   test(
@@ -122,11 +119,10 @@ test.describe('AppSchema - Name Display', () => {
    * WHEN: User navigates to the homepage
    * THEN: Full name should be displayed without truncation
    *
-   * Why this will fail:
-   * - NameSchema allows maximum 214 characters (name.ts line 30)
-   * - Tests edge case of longest valid name
-   * - Validates that UI can handle very long names
-   * - Important for text wrapping and layout
+   * NameSchema allows maximum 214 characters (name.ts line 30)
+   * Tests edge case of longest valid name
+   * Validates that UI can handle very long names
+   * Important for text wrapping and layout
    */
   // @spec - Validates maximum length name (214 characters)
   test(
@@ -161,10 +157,9 @@ test.describe('AppSchema - Name Display', () => {
    * WHEN: User navigates to the homepage
    * THEN: Full scoped name including @ and / should be displayed
    *
-   * Why this will fail:
-   * - NameSchema supports scoped packages via pattern (name.ts line 31)
-   * - Tests that special characters (@, /) are rendered correctly
-   * - Common pattern in npm ecosystem
+   * NameSchema supports scoped packages via pattern (name.ts line 31)
+   * Tests that special characters (@, /) are rendered correctly
+   * Common pattern in npm ecosystem
    */
   // @spec - Validates scoped package name (@scope/package)
   test(
@@ -192,10 +187,9 @@ test.describe('AppSchema - Name Display', () => {
    * WHEN: User navigates to the homepage
    * THEN: Name with hyphens should be displayed exactly
    *
-   * Why this will fail:
-   * - NameSchema allows hyphens within name (name.ts pattern)
-   * - Common naming convention (kebab-case)
-   * - Tests that hyphens are preserved
+   * NameSchema allows hyphens within name (name.ts pattern)
+   * Common naming convention (kebab-case)
+   * Tests that hyphens are preserved
    */
   // @spec - Validates name with hyphens (kebab-case)
   test(
@@ -223,10 +217,9 @@ test.describe('AppSchema - Name Display', () => {
    * WHEN: User navigates to the homepage
    * THEN: Name with underscores should be displayed exactly
    *
-   * Why this will fail:
-   * - NameSchema allows underscores within name (name.ts pattern)
-   * - Less common but valid naming convention
-   * - Tests that underscores are preserved
+   * NameSchema allows underscores within name (name.ts pattern)
+   * Less common but valid naming convention
+   * Tests that underscores are preserved
    */
   // @spec - Validates name with underscores (snake_case)
   test(
@@ -254,10 +247,9 @@ test.describe('AppSchema - Name Display', () => {
    * WHEN: User navigates to the homepage
    * THEN: Name with dots should be displayed exactly
    *
-   * Why this will fail:
-   * - NameSchema allows dots within name (name.ts pattern allows ._~)
-   * - Valid npm package naming convention
-   * - Tests that dots are preserved
+   * NameSchema allows dots within name (name.ts pattern allows ._~)
+   * Valid npm package naming convention
+   * Tests that dots are preserved
    */
   // @spec - Validates name with dots (package.subname)
   test(
@@ -285,10 +277,9 @@ test.describe('AppSchema - Name Display', () => {
    * WHEN: User navigates to the homepage
    * THEN: All special characters should be preserved
    *
-   * Why this will fail:
-   * - NameSchema allows complex combinations (name.ts pattern)
-   * - Tests that regex pattern correctly handles all valid characters
-   * - Edge case for most complex valid name format
+   * NameSchema allows complex combinations (name.ts pattern)
+   * Tests that regex pattern correctly handles all valid characters
+   * Edge case for most complex valid name format
    */
   // @spec - Validates name with mixed special characters
   test(
@@ -316,11 +307,10 @@ test.describe('AppSchema - Name Display', () => {
    * WHEN: User navigates to the homepage
    * THEN: Page should have exactly one h1 element (primary heading)
    *
-   * Why this will fail:
-   * - DefaultHomePage currently renders one h1 (line 35)
-   * - This test validates proper semantic HTML structure
-   * - Important for accessibility and SEO
-   * - Screen readers use heading hierarchy for navigation
+   * DefaultHomePage currently renders one h1 (line 35)
+   * This test validates proper semantic HTML structure
+   * Important for accessibility and SEO
+   * Screen readers use heading hierarchy for navigation
    */
   // @spec - Validates heading hierarchy (single h1)
   test(
@@ -351,11 +341,10 @@ test.describe('AppSchema - Name Display', () => {
    * WHEN: User navigates to the homepage
    * THEN: h1 should be the first heading level on the page
    *
-   * Why this will fail:
-   * - DefaultHomePage currently renders h1 as first heading
-   * - This test validates no h2-h6 appear before h1
-   * - Proper heading hierarchy is critical for screen reader navigation
-   * - WCAG 2.1 Success Criterion 1.3.1 (Info and Relationships)
+   * DefaultHomePage currently renders h1 as first heading
+   * This test validates no h2-h6 appear before h1
+   * Proper heading hierarchy is critical for screen reader navigation
+   * WCAG 2.1 Success Criterion 1.3.1 (Info and Relationships)
    */
   // @spec - Validates h1 as primary heading landmark
   test(
@@ -388,11 +377,10 @@ test.describe('AppSchema - Name Display', () => {
    * WHEN: User navigates to the homepage
    * THEN: h1 heading should be centered horizontally
    *
-   * Why this will fail:
-   * - DefaultHomePage applies "text-center" class to h1 (line 35)
-   * - TypographyH1 component also has "text-center" in className (line 35)
-   * - This test validates visual layout matches design
-   * - Important for consistent user experience
+   * DefaultHomePage applies "text-center" class to h1 (line 35)
+   * TypographyH1 component also has "text-center" in className (line 35)
+   * This test validates visual layout matches design
+   * Important for consistent user experience
    */
   // @spec - Validates centered alignment
   test(
@@ -420,11 +408,10 @@ test.describe('AppSchema - Name Display', () => {
    * WHEN: User navigates to the homepage
    * THEN: h1 heading should be visible and not hidden
    *
-   * Why this will fail:
-   * - DefaultHomePage renders h1 with visible content
-   * - This test validates no CSS rules hide the heading
-   * - Important for basic functionality verification
-   * - Ensures text is not transparent, off-screen, or display:none
+   * DefaultHomePage renders h1 with visible content
+   * This test validates no CSS rules hide the heading
+   * Important for basic functionality verification
+   * Ensures text is not transparent, off-screen, or display:none
    */
   test(
     'should display heading as visible element',
@@ -454,11 +441,10 @@ test.describe('AppSchema - Name Display', () => {
    * WHEN: User navigates to the homepage
    * THEN: Text content should exactly match input (no sanitization)
    *
-   * Why this will fail:
-   * - DefaultHomePage renders {app.name} directly in JSX (line 35)
-   * - React automatically escapes text content (XSS protection)
-   * - This test validates text is not transformed or sanitized beyond React defaults
-   * - Important for preserving exact name format
+   * DefaultHomePage renders {app.name} directly in JSX (line 35)
+   * React automatically escapes text content (XSS protection)
+   * This test validates text is not transformed or sanitized beyond React defaults
+   * Important for preserving exact name format
    */
   test(
     'should preserve exact text content without transformation',
@@ -562,10 +548,9 @@ test.describe('AppSchema - Name Display', () => {
    * WHEN: User navigates to the homepage
    * THEN: Page title should be "x - Powered by Omnera"
    *
-   * Why this will fail:
-   * - Tests edge case of shortest name in page title
-   * - Validates title template works with minimal input
-   * - Important for consistent title formatting
+   * Tests edge case of shortest name in page title
+   * Validates title template works with minimal input
+   * Important for consistent title formatting
    */
   test(
     'should display single-character name in page title',
@@ -591,10 +576,9 @@ test.describe('AppSchema - Name Display', () => {
    * WHEN: User navigates to the homepage
    * THEN: Page title should preserve @ symbol and forward slash
    *
-   * Why this will fail:
-   * - Tests that special characters in scoped packages appear in title
-   * - Browser title should not sanitize @ or / characters
-   * - Important for accurate representation in browser tabs
+   * Tests that special characters in scoped packages appear in title
+   * Browser title should not sanitize @ or / characters
+   * Important for accurate representation in browser tabs
    */
   test(
     'should display scoped package name in page title',
@@ -620,11 +604,10 @@ test.describe('AppSchema - Name Display', () => {
    * WHEN: User navigates to the homepage
    * THEN: h1 should use TypographyH1 component styling (large font size)
    *
-   * Why this will fail:
-   * - DefaultHomePage uses TypographyH1 component (line 35)
-   * - TypographyH1 applies specific typography styles
-   * - This test validates correct component is used for styling
-   * - Important for consistent visual hierarchy
+   * DefaultHomePage uses TypographyH1 component (line 35)
+   * TypographyH1 applies specific typography styles
+   * This test validates correct component is used for styling
+   * Important for consistent visual hierarchy
    */
   test(
     'should apply TypographyH1 component styling',
@@ -659,10 +642,9 @@ test.describe('AppSchema - Name Display', () => {
    * WHEN: User navigates to each homepage
    * THEN: Each should display its respective app name
    *
-   * Why this will fail:
-   * - Tests that server configuration is properly isolated per test
-   * - Validates fixture setup correctly passes different schemas
-   * - Important for test independence and repeatability
+   * Tests that server configuration is properly isolated per test
+   * Validates fixture setup correctly passes different schemas
+   * Important for test independence and repeatability
    */
   test(
     'should display different app names in separate test runs',
@@ -692,10 +674,9 @@ test.describe('AppSchema - Name Display', () => {
    * WHEN: User navigates to the homepage
    * THEN: Tilde should be displayed in heading
    *
-   * Why this will fail:
-   * - NameSchema pattern allows tilde character (name.ts line 31: [a-z0-9-._~])
-   * - Less common but valid character in npm packages
-   * - Tests that regex pattern correctly handles tilde
+   * NameSchema pattern allows tilde character (name.ts line 31: [a-z0-9-._~])
+   * Less common but valid character in npm packages
+   * Tests that regex pattern correctly handles tilde
    */
   test(
     'should display app name with tilde character',
@@ -722,10 +703,9 @@ test.describe('AppSchema - Name Display', () => {
    * WHEN: User navigates to the homepage
    * THEN: Full scoped name with dots and hyphens should be displayed
    *
-   * Why this will fail:
-   * - NameSchema allows complex scope names (name.ts pattern)
-   * - Tests combination of scoped package + multiple special chars
-   * - Real-world naming scenario for organizations
+   * NameSchema allows complex scope names (name.ts pattern)
+   * Tests combination of scoped package + multiple special chars
+   * Real-world naming scenario for organizations
    */
   test(
     'should display complex scoped package name',

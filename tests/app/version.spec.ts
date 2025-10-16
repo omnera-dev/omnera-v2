@@ -36,9 +36,8 @@ test.describe('AppSchema - Version Badge Display', () => {
    * WHEN: User navigates to the home page
    * THEN: Version badge should be visible below app name with correct version text
    *
-   * Why this will fail:
-   * - No badge element exists in DefaultHomePage
-   * - locator('[data-testid="app-version-badge"]') will not find any element
+   * No badge element exists in DefaultHomePage
+   * locator('[data-testid="app-version-badge"]') will not find any element
    */
   // @spec - Validates version badge display
   test(
@@ -70,11 +69,10 @@ test.describe('AppSchema - Version Badge Display', () => {
    * WHEN: User navigates to the home page
    * THEN: Version badge should NOT be rendered
    *
-   * Why this will fail:
-   * - Test expects badge to not exist, but current implementation doesn't
+   * Test expects badge to not exist, but current implementation doesn't
    *   have any badge rendering logic (conditional or otherwise)
-   * - This test might pass accidentally if implementation is missing
-   * - This validates that version is truly optional and doesn't break UI
+   * This test might pass accidentally if implementation is missing
+   * This validates that version is truly optional and doesn't break UI
    */
   // @spec - Validates optional version property
   test(
@@ -103,9 +101,8 @@ test.describe('AppSchema - Version Badge Display', () => {
    * WHEN: User navigates to the home page
    * THEN: Badge should display pre-release version exactly as specified
    *
-   * Why this will fail:
-   * - No badge element exists to display any version format
-   * - Validates that version rendering preserves SemVer pre-release identifiers
+   * No badge element exists to display any version format
+   * Validates that version rendering preserves SemVer pre-release identifiers
    */
   // @spec - Validates pre-release version format
   test(
@@ -135,9 +132,8 @@ test.describe('AppSchema - Version Badge Display', () => {
    * WHEN: User navigates to the home page
    * THEN: Badge should display version with build metadata intact
    *
-   * Why this will fail:
-   * - No badge element exists to display any version format
-   * - Validates that version rendering preserves SemVer build metadata
+   * No badge element exists to display any version format
+   * Validates that version rendering preserves SemVer build metadata
    */
   // @spec - Validates build metadata in version
   test(
@@ -167,9 +163,8 @@ test.describe('AppSchema - Version Badge Display', () => {
    * WHEN: User navigates to the home page
    * THEN: Badge should display complete version string
    *
-   * Why this will fail:
-   * - No badge element exists to display any version format
-   * - Validates full SemVer specification support
+   * No badge element exists to display any version format
+   * Validates full SemVer specification support
    */
   // @spec - Validates complex SemVer format
   test(
@@ -199,10 +194,9 @@ test.describe('AppSchema - Version Badge Display', () => {
    * WHEN: User navigates to the home page
    * THEN: Badge should appear before (above) the app name heading
    *
-   * Why this will fail:
-   * - No badge element exists in the DOM
-   * - Tests that badge is positioned correctly in the layout
-   * - Validates visual hierarchy (badge as metadata, then prominent title)
+   * No badge element exists in the DOM
+   * Tests that badge is positioned correctly in the layout
+   * Validates visual hierarchy (badge as metadata, then prominent title)
    */
   // @spec - Validates badge positioning
   test(
@@ -250,9 +244,8 @@ test.describe('AppSchema - Version Badge Display', () => {
    * WHEN: User navigates to the home page
    * THEN: Badge should have proper accessibility attributes
    *
-   * Why this will fail:
-   * - No badge element exists with required data-testid attribute
-   * - Validates that badge is testable and accessible
+   * No badge element exists with required data-testid attribute
+   * Validates that badge is testable and accessible
    */
   // @spec - Validates accessibility attributes
   test(
@@ -302,10 +295,9 @@ test.describe('AppSchema - Version Badge Display', () => {
    * This test serves as a regression suite to prevent breaking changes
    * to core version badge functionality.
    *
-   * Why this will fail:
-   * - Version badge feature is not implemented yet
-   * - No Badge component import or usage in DefaultHomePage
-   * - No conditional rendering logic for optional version property
+   * Version badge feature is not implemented yet
+   * No Badge component import or usage in DefaultHomePage
+   * No conditional rendering logic for optional version property
    */
   test(
     'should handle complete version badge display workflow',
