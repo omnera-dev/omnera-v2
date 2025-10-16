@@ -57,7 +57,7 @@ export const compileCSS = (): Effect.Effect<CompiledCSS, CSSCompilationError> =>
     }
 
     // Read source CSS file
-    const cssPath = join(process.cwd(), 'src', 'styles', 'globals.css')
+    const cssPath = join(process.cwd(), 'src', 'presentation', 'styles', 'globals.css')
     const sourceCSS = yield* Effect.tryPromise({
       try: () => readFile(cssPath, 'utf-8'),
       catch: (error) => new CSSCompilationError(error),

@@ -21,7 +21,7 @@
  * - Default configuration (port: 3000, hostname: 'localhost')
  */
 
-import { start } from './src'
+import { start } from '@/index'
 
 // Define your application configuration
 const myApp = {
@@ -31,8 +31,8 @@ const myApp = {
 }
 
 // Start the server (handles everything automatically with defaults)
-start(myApp).catch((error) => {
+start(myApp).catch((error: Readonly<Error>) => {
   console.error('Failed to start server:', error)
-
+  // eslint-disable-next-line functional/no-expression-statements
   process.exit(1)
 })

@@ -3,7 +3,6 @@
 import { Slot } from '@radix-ui/react-slot'
 import { PanelLeftIcon } from 'lucide-react'
 import * as React from 'react'
-import { useIsMobile } from '@/hooks/use-mobile'
 import { Button } from '@/presentation/components/ui/button'
 import { Input } from '@/presentation/components/ui/input'
 import { Separator } from '@/presentation/components/ui/separator'
@@ -27,6 +26,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from '@/presentation/components/ui/tooltip'
+import { useIsMobile } from '@/presentation/hooks/use-mobile'
 import { cn } from '@/presentation/utils/cn'
 import type { VariantProps } from 'class-variance-authority'
 

@@ -8,7 +8,6 @@
     "tests/**",
     "src/presentation/components/ui/**",
     "src/presentation/hooks/use-mobile.ts",
-    "src/hooks/**",
     "src/infrastructure/services/server.ts",
     "src/presentation/utils/render-homepage.tsx"
   ],

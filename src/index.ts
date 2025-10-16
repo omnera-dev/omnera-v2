@@ -1,96 +1,119 @@
-import {
-  startServer,
-  type StartOptions,
-  type AppValidationError,
-} from '@/application/use-cases/StartServer'
-import type { CSSCompilationError } from '@/infrastructure/services/css-compiler'
-import type { ServerInstance, ServerCreationError } from '@/infrastructure/services/server'
-import type { Effect } from 'effect'
+/**
+ * Omnera - A Bun web framework with React SSR and Tailwind CSS
+ *
+ * This is the main entry point for Omnera applications. It provides a simple
+ * Promise-based API for starting a web server with automatic:
+ * - React 19 server-side rendering
+ * - Tailwind CSS compilation (no build step)
+ * - Type-safe configuration validation
+ * - Graceful shutdown handling
+ */
 
-// Re-export StartOptions for convenience
-export type { StartOptions }
+import { Effect } from 'effect'
+import { startServer } from '@/application/use-cases/StartServer'
+import { withGracefulShutdown, logServerInfo } from '@/infrastructure/services/server-lifecycle'
+import type { StartOptions } from '@/application/use-cases/StartServer'
+import type { ServerInstance } from '@/infrastructure/services/server'
 
 /**
- * Starts an Omnera web server with the given application configuration
+ * Simple server interface with Promise-based methods
+ */
+export interface SimpleServer {
+  /**
+   * Server URL (e.g., "http://localhost:3000")
+   */
+  readonly url: string
+
+  /**
+   * Stop the server gracefully
+   * @returns Promise that resolves when server is stopped
+   */
+  stop: () => Promise<void>
+}
+
+/**
+ * Convert Effect-based ServerInstance to simple Promise-based interface
+ */
+const toSimpleServer = (server: ServerInstance): SimpleServer => ({
+  url: server.url,
+  stop: () => Effect.runPromise(server.stop),
+})
+
+/**
+ * Start an Omnera server with automatic logging and graceful shutdown
  *
  * This is the main entry point for Omnera applications. It:
  * 1. Validates the app configuration using Effect Schema
  * 2. Compiles Tailwind CSS dynamically using PostCSS
  * 3. Creates a Hono web server with React SSR
  * 4. Serves the homepage at "/" and compiled CSS at "/output.css"
- * 5. Returns a ServerInstance with server details and stop capability
+ * 5. Sets up graceful shutdown handlers (SIGINT, SIGTERM)
+ * 6. Returns a simple server interface with url and stop method
  *
- * ## Architecture
- *
- * - **Effect-based**: All operations use Effect for type-safe error handling
- * - **React SSR**: Homepage rendered server-side with React 19 components
- * - **Dynamic CSS**: Tailwind CSS compiled on-the-fly (no build step)
- * - **Type-safe**: AppSchema validation ensures data integrity
- * - **Graceful shutdown**: stop Effect properly closes the server
- *
- * @param app - Application configuration (name and description)
+ * @param app - Application configuration with name and description
  * @param options - Optional server configuration (port, hostname)
- * @returns Effect that yields ServerInstance or error
+ * @returns Promise that resolves to a simple server interface
  *
  * @example
  * Basic usage:
  * ```typescript
- * import { Effect } from 'effect'
- * import { start } from '@/index'
+ * import { start } from 'omnera'
  *
  * const myApp = {
- *   name: 'Todo App',
- *   description: 'A fullstack todo application with user authentication'
+ *   name: 'My App',
+ *   description: 'A simple Bun application'
  * }
  *
- * const program = Effect.gen(function* () {
- *   const server = yield* start(myApp)
- *   console.log(`Server running at ${server.url}`)
- *
- *   // Stop server after 5 seconds
- *   yield* Effect.sleep('5 seconds')
- *   yield* server.stop
- * })
- *
- * Effect.runPromise(program)
+ * // Start with default port (3000) and hostname ('localhost')
+ * const server = await start(myApp)
+ * console.log(`Server running at ${server.url}`)
+ * // Server stays alive until Ctrl+C
  * ```
  *
  * @example
- * With custom port:
+ * With custom configuration:
  * ```typescript
- * const server = yield* start(myApp, { port: 8080, hostname: '0.0.0.0' })
+ * const server = await start(myApp, {
+ *   port: 8080,
+ *   hostname: '0.0.0.0'
+ * })
  * ```
  *
  * @example
  * With error handling:
  * ```typescript
- * const program = start(myApp).pipe(
- *   Effect.tap((server) => Console.log(`Server started at ${server.url}`)),
- *   Effect.catchAll((error) => Console.error('Failed to start server:', error))
- * )
+ * start(myApp).catch((error) => {
+ *   console.error('Failed to start server:', error)
+ *   process.exit(1)
+ * })
  * ```
  */
-export const startEffect = (
-  app: unknown,
-  options: StartOptions = {}
-): Effect.Effect<ServerInstance, AppValidationError | ServerCreationError | CSSCompilationError> =>
-  startServer(app, options)
+export const start = async (app: unknown, options: StartOptions = {}): Promise<SimpleServer> => {
+  const program = Effect.gen(function* () {
+    console.log('Starting Omnera server...')
+
+    // Start the server
+    const server = yield* startServer(app, options)
+
+    // Log server information
+    yield* logServerInfo(server)
+
+    // Setup graceful shutdown (keeps process alive)
+    yield* withGracefulShutdown(server)
+
+    // This line is never reached due to Effect.never in withGracefulShutdown
+    // But TypeScript needs a return value
+    return server
+  })
+
+  // Run the Effect program and convert to simple server interface
+  const server = await Effect.runPromise(program)
+  return toSimpleServer(server)
+}
 
 /**
  * Re-export types for convenience
  */
+export type { StartOptions }
 export type { App, AppEncoded } from '@/domain/models/app'
 export { AppSchema } from '@/domain/models/app'
-export type { ServerInstance } from '@/infrastructure/services/server'
-export type { CompiledCSS } from '@/infrastructure/services/css-compiler'
-
-/**
- * Re-export utilities for server lifecycle and error handling
- */
-export { withGracefulShutdown, logServerInfo } from '@/infrastructure/services/server-lifecycle'
-export { handleStartupError, type ServerStartupError } from '@/application/services/error-handling'
-
-/**
- * Re-export simple Promise-based API
- */
-export { start, type SimpleServer } from '@/simple'

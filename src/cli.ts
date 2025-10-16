@@ -25,8 +25,7 @@
  * - `OMNERA_HOSTNAME` (optional) - Server hostname (default: localhost)
  */
 
-import { start } from '@/simple'
-import type { StartOptions } from '@/index'
+import { start, type StartOptions } from '@/index'
 
 interface AppSchema {
   name?: string
