@@ -24,9 +24,9 @@ export function HomePage({ app }: { readonly app: App }): Readonly<ReactElement>
           href="/output.css"
         />
       </head>
-      <body className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
-        <div className="container-page">
-          <div className="flex min-h-screen flex-col items-center justify-center">
+      <body className="h-screen overflow-hidden bg-gradient-to-br from-gray-50 to-gray-100">
+        <div className="container-page h-full">
+          <div className="flex h-full flex-col items-center justify-center">
             <div className="w-full max-w-2xl space-y-6 text-center">
               {/* App Name */}
               <TypographyH1 className="text-center">{app.name}</TypographyH1>
