@@ -2,7 +2,7 @@ import { cn } from '@/presentation/utils/cn'
 import type { HTMLAttributes, ReactNode } from 'react'
 
 // H1 Heading - Extra large, bold heading
-export interface TypographyH1Props extends HTMLAttributes<HTMLHeadingElement>>) {
+export interface TypographyH1Props extends HTMLAttributes<HTMLHeadingElement> {
   children: ReactNode
 }
 
@@ -21,7 +21,7 @@ export function TypographyH1({ children, className, ...props }: TypographyH1Prop
 }
 
 // H2 Heading - Large section heading with bottom border
-export interface TypographyH2Props extends HTMLAttributes<HTMLHeadingElement>>) {
+export interface TypographyH2Props extends HTMLAttributes<HTMLHeadingElement> {
   children: ReactNode
 }
 
@@ -40,7 +40,7 @@ export function TypographyH2({ children, className, ...props }: TypographyH2Prop
 }
 
 // H3 Heading - Medium section heading
-export interface TypographyH3Props extends HTMLAttributes<HTMLHeadingElement>>) {
+export interface TypographyH3Props extends HTMLAttributes<HTMLHeadingElement> {
   children: ReactNode
 }
 
@@ -56,7 +56,7 @@ export function TypographyH3({ children, className, ...props }: TypographyH3Prop
 }
 
 // H4 Heading - Small section heading
-export interface TypographyH4Props extends HTMLAttributes<HTMLHeadingElement>>) {
+export interface TypographyH4Props extends HTMLAttributes<HTMLHeadingElement> {
   children: ReactNode
 }
 
@@ -72,7 +72,7 @@ export function TypographyH4({ children, className, ...props }: TypographyH4Prop
 }
 
 // Paragraph - Standard body text
-export interface TypographyPProps extends HTMLAttributes<HTMLParagraphElement>>) {
+export interface TypographyPProps extends HTMLAttributes<HTMLParagraphElement> {
   children: ReactNode
 }
 
@@ -88,7 +88,7 @@ export function TypographyP({ children, className, ...props }: TypographyPProps)
 }
 
 // Blockquote - Styled quote block
-export interface TypographyBlockquoteProps extends HTMLAttributes<HTMLQuoteElement>>) {
+export interface TypographyBlockquoteProps extends HTMLAttributes<HTMLQuoteElement> {
   children: ReactNode
 }
 
@@ -104,7 +104,7 @@ export function TypographyBlockquote({ children, className, ...props }: Typograp
 }
 
 // List - Unordered list with disc bullets
-export interface TypographyListProps extends HTMLAttributes<HTMLUListElement>>) {
+export interface TypographyListProps extends HTMLAttributes<HTMLUListElement> {
   children: ReactNode
 }
 
@@ -120,7 +120,7 @@ export function TypographyList({ children, className, ...props }: TypographyList
 }
 
 // Inline Code - Code snippet with background
-export interface TypographyInlineCodeProps extends HTMLAttributes<HTMLElement>>) {
+export interface TypographyInlineCodeProps extends HTMLAttributes<HTMLElement> {
   children: ReactNode
 }
 
@@ -139,7 +139,7 @@ export function TypographyInlineCode({ children, className, ...props }: Typograp
 }
 
 // Lead - Large introductory text
-export interface TypographyLeadProps extends HTMLAttributes<HTMLParagraphElement>>) {
+export interface TypographyLeadProps extends HTMLAttributes<HTMLParagraphElement> {
   children: ReactNode
 }
 
@@ -155,7 +155,7 @@ export function TypographyLead({ children, className, ...props }: TypographyLead
 }
 
 // Large - Large emphasized text
-export interface TypographyLargeProps extends HTMLAttributes<HTMLDivElement>>) {
+export interface TypographyLargeProps extends HTMLAttributes<HTMLDivElement> {
   children: ReactNode
 }
 
@@ -171,7 +171,7 @@ export function TypographyLarge({ children, className, ...props }: TypographyLar
 }
 
 // Small - Small text (labels, captions)
-export interface TypographySmallProps extends HTMLAttributes<HTMLElement>>) {
+export interface TypographySmallProps extends HTMLAttributes<HTMLElement> {
   children: ReactNode
 }
 
@@ -187,7 +187,7 @@ export function TypographySmall({ children, className, ...props }: TypographySma
 }
 
 // Muted - Muted/secondary text
-export interface TypographyMutedProps extends HTMLAttributes<HTMLParagraphElement>>) {
+export interface TypographyMutedProps extends HTMLAttributes<HTMLParagraphElement> {
   children: ReactNode
 }
 

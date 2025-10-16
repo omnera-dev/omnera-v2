@@ -1,14 +1,14 @@
 import { Command as CommandPrimitive } from 'cmdk'
 import { SearchIcon } from 'lucide-react'
 import * as React from 'react'
-import { cn } from '@/presentation/utils/cn'
 import {
   Dialog,
   DialogContent,
   DialogDescription,
   DialogHeader,
   DialogTitle,
-} from '@/components/ui/dialog'
+} from '@/presentation/components/ui/dialog'
+import { cn } from '@/presentation/utils/cn'
 
 function Command({ className, ...props }: Readonly<React.ComponentProps<typeof CommandPrimitive>>) {
   return (

@@ -11,9 +11,9 @@ import {
   type FieldPath,
   type FieldValues,
 } from 'react-hook-form'
+import { Label } from '@/presentation/components/ui/label'
 import { cn } from '@/presentation/utils/cn'
 import type * as LabelPrimitive from '@radix-ui/react-label'
-import { Label } from '@/components/ui/label'
 
 const Form = FormProvider
 
@@ -31,7 +31,7 @@ const FormField = <
   TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
 >({
   ...props
-}: ControllerProps<TFieldValues, TName>) => {
+}: Readonly<ControllerProps<TFieldValues, TName>>) => {
   return (
     <FormFieldContext.Provider value={{ name: props.name }}>
       <Controller {...props} />

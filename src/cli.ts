@@ -54,6 +54,7 @@ if (!appSchemaString) {
   console.error('Optional environment variables:')
   console.error('  OMNERA_PORT - Server port (default: 3000)')
   console.error('  OMNERA_HOSTNAME - Server hostname (default: localhost)')
+  // eslint-disable-next-line functional/no-expression-statements
   process.exit(1)
 }
 
@@ -70,6 +71,7 @@ const app: AppSchema = (() => {
     console.error(
       '  OMNERA_APP_SCHEMA=\'{"name":"My App","description":"My Description"}\' bun run omnera'
     )
+    // eslint-disable-next-line functional/no-expression-statements
     process.exit(1)
   }
 })()
@@ -85,6 +87,7 @@ const options: StartOptions = (() => {
     console.error(
       `Error: Invalid port number "${port}". Must be between 0 and 65535 (0 = auto-select).`
     )
+    // eslint-disable-next-line functional/no-expression-statements
     process.exit(1)
   }
 
@@ -101,7 +104,9 @@ if (options.port) console.log(`Port: ${options.port}`)
 if (options.hostname) console.log(`Hostname: ${options.hostname}`)
 console.log('')
 
+ 
 start(app, options).catch((error) => {
   console.error('Failed to start server:', error)
+  // eslint-disable-next-line functional/no-expression-statements
   process.exit(1)
 })
