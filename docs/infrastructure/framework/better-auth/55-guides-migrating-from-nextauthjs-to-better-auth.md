@@ -1,24 +1,26 @@
 # guides: Migrating from NextAuth.js to Better Auth
+
 URL: /docs/guides/next-auth-migration-guide
 Source: https://raw.githubusercontent.com/better-auth/better-auth/refs/heads/main/docs/content/docs/guides/next-auth-migration-guide.mdx
 
 A step-by-step guide to transitioning from NextAuth.js to Better Auth.
 
-***
+---
 
 title: Migrating from NextAuth.js to Better Auth
 description: A step-by-step guide to transitioning from NextAuth.js to Better Auth.
------------------------------------------------------------------------------------
+
+---
 
 In this guide, weâ€™ll walk through the steps to migrate a project from [NextAuth.js](https://authjs.dev/) to Better Auth, ensuring no loss of data or functionality. While this guide focuses on Next.js, it can be adapted for other frameworks as well.
 
-***
+---
 
 ## Before You Begin
 
 Before starting the migration process, set up Better Auth in your project. Follow the [installation guide](/docs/installation) to get started.
 
-***
+---
 
 <Steps>
   <Step>
@@ -101,6 +103,7 @@ Before starting the migration process, set up Better Auth in your project. Follo
     ```
 
     Make sure to have `createdAt` and `updatedAt` fields on your account schema.
+
   </Step>
 
   <Step>
@@ -114,6 +117,7 @@ Before starting the migration process, set up Better Auth in your project. Follo
 
     export const { POST, GET } = toNextJsHandler(auth);
     ```
+
   </Step>
 
   <Step>
@@ -164,6 +168,7 @@ Before starting the migration process, set up Better Auth in your project. Follo
         );
     };
     ```
+
   </Step>
 
   <Step>
@@ -183,12 +188,14 @@ Before starting the migration process, set up Better Auth in your project. Follo
         });
     };
     ```
+
   </Step>
 
   <Step>
     ### Middleware
 
     To protect routes with middleware, refer to the [Next.js middleware guide](/docs/integrations/next#middleware).
+
   </Step>
 </Steps>
 
@@ -197,5 +204,3 @@ Before starting the migration process, set up Better Auth in your project. Follo
 Congratulations! Youâ€™ve successfully migrated from NextAuth.js to Better Auth. For a complete implementation with multiple authentication methods, check out the [demo repository](https://github.com/Bekacru/t3-app-better-auth).
 
 Better Auth offers greater flexibility and more featuresâ€”be sure to explore the [documentation](/docs) to unlock its full potential.
-
-

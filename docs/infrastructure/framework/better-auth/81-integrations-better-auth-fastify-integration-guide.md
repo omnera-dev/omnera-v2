@@ -1,14 +1,16 @@
 # integrations: Better Auth Fastify Integration Guide
+
 URL: /docs/integrations/fastify
 Source: https://raw.githubusercontent.com/better-auth/better-auth/refs/heads/main/docs/content/docs/integrations/fastify.mdx
 
 Learn how to seamlessly integrate Better Auth with your Fastify application.
 
-***
+---
 
 title: Better Auth Fastify Integration Guide
 description: Learn how to seamlessly integrate Better Auth with your Fastify application.
------------------------------------------------------------------------------------------
+
+---
 
 This guide provides step-by-step instructions for configuring both essential handlers and CORS settings.
 
@@ -20,16 +22,16 @@ This guide provides step-by-step instructions for configuring both essential han
 
 Verify the following requirements before integration:
 
-* **Node.js Environment**: v16 or later installed
-* **ES Module Support**: Enable ES modules in either:
-  * `package.json`: `{ "type": "module" }`
-  * TypeScript `tsconfig.json`: `{ "module": "ESNext" }`
-* **Fastify Dependencies**:
+- **Node.js Environment**: v16 or later installed
+- **ES Module Support**: Enable ES modules in either:
+  - `package.json`: `{ "type": "module" }`
+  - TypeScript `tsconfig.json`: `{ "module": "ESNext" }`
+- **Fastify Dependencies**:
   <CodeBlockTabs defaultValue="npm">
-    <CodeBlockTabsList>
-      <CodeBlockTabsTrigger value="npm">
-        npm
-      </CodeBlockTabsTrigger>
+  <CodeBlockTabsList>
+  <CodeBlockTabsTrigger value="npm">
+  npm
+  </CodeBlockTabsTrigger>
 
       <CodeBlockTabsTrigger value="pnpm">
         pnpm
@@ -42,6 +44,7 @@ Verify the following requirements before integration:
       <CodeBlockTabsTrigger value="bun">
         bun
       </CodeBlockTabsTrigger>
+
     </CodeBlockTabsList>
 
     <CodeBlockTab value="npm">
@@ -76,59 +79,58 @@ Verify the following requirements before integration:
 Configure Better Auth to process authentication requests by creating a catch-all route:
 
 ```ts title="server.ts"
-import Fastify from "fastify";
-import { auth } from "./auth"; // Your configured Better Auth instance
+import Fastify from 'fastify'
+import { auth } from './auth' // Your configured Better Auth instance
 
-const fastify = Fastify({ logger: true });
+const fastify = Fastify({ logger: true })
 
 // Register authentication endpoint
 fastify.route({
-  method: ["GET", "POST"],
-  url: "/api/auth/*",
+  method: ['GET', 'POST'],
+  url: '/api/auth/*',
   async handler(request, reply) {
     try {
       // Construct request URL
-      const url = new URL(request.url, `http://${request.headers.host}`);
+      const url = new URL(request.url, `http://${request.headers.host}`)
 
       // Convert Fastify headers to standard Headers object
-      const headers = new Headers();
+      const headers = new Headers()
       Object.entries(request.headers).forEach(([key, value]) => {
-        if (value) headers.append(key, value.toString());
-      });
+        if (value) headers.append(key, value.toString())
+      })
 
       // Create Fetch API-compatible request
       const req = new Request(url.toString(), {
         method: request.method,
         headers,
         body: request.body ? JSON.stringify(request.body) : undefined,
-      });
+      })
 
       // Process authentication request
-      const response = await auth.handler(req);
+      const response = await auth.handler(req)
 
       // Forward response to client
-      reply.status(response.status);
-      response.headers.forEach((value, key) => reply.header(key, value));
-      reply.send(response.body ? await response.text() : null);
-
+      reply.status(response.status)
+      response.headers.forEach((value, key) => reply.header(key, value))
+      reply.send(response.body ? await response.text() : null)
     } catch (error) {
-      fastify.log.error("Authentication Error:", error);
+      fastify.log.error('Authentication Error:', error)
       reply.status(500).send({
-        error: "Internal authentication error",
-        code: "AUTH_FAILURE"
-      });
+        error: 'Internal authentication error',
+        code: 'AUTH_FAILURE',
+      })
     }
-  }
-});
+  },
+})
 
 // Initialize server
 fastify.listen({ port: 4000 }, (err) => {
   if (err) {
-    fastify.log.error(err);
-    process.exit(1);
+    fastify.log.error(err)
+    process.exit(1)
   }
-  console.log("Server running on port 4000");
-});
+  console.log('Server running on port 4000')
+})
 ```
 
 ### Trusted origins
@@ -137,8 +139,8 @@ When a request is made from a different origin, the request will be blocked by d
 
 ```ts
 export const auth = betterAuth({
-  trustedOrigins: ["http://localhost:3000", "https://example.com"],
-});
+  trustedOrigins: ['http://localhost:3000', 'https://example.com'],
+})
 ```
 
 ### Configuring CORS
@@ -146,25 +148,19 @@ export const auth = betterAuth({
 Secure your API endpoints with proper CORS configuration:
 
 ```ts
-import fastifyCors from "@fastify/cors";
+import fastifyCors from '@fastify/cors'
 
 // Configure CORS policies
 fastify.register(fastifyCors, {
-  origin: process.env.CLIENT_ORIGIN || "http://localhost:3000",
-  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-  allowedHeaders: [
-    "Content-Type",
-    "Authorization",
-    "X-Requested-With"
-  ],
+  origin: process.env.CLIENT_ORIGIN || 'http://localhost:3000',
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
   credentials: true,
-  maxAge: 86400
-});
+  maxAge: 86400,
+})
 
 // Mount authentication handler after CORS registration
 // (Use previous handler configuration here)
 ```
 
 <Callout type="warning"> Always restrict CORS origins in production environments. Use environment variables for dynamic configuration. </Callout>
-
-

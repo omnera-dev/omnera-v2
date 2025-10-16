@@ -1,14 +1,16 @@
 # guides: Create your first plugin
+
 URL: /docs/guides/your-first-plugin
 Source: https://raw.githubusercontent.com/better-auth/better-auth/refs/heads/main/docs/content/docs/guides/your-first-plugin.mdx
 
 A step-by-step guide to creating your first Better Auth plugin.
 
-***
+---
 
 title: Create your first plugin
 description: A step-by-step guide to creating your first Better Auth plugin.
-----------------------------------------------------------------------------
+
+---
 
 In this guide, weâ€™ll walk you through the steps of creating your first Better Auth plugin.
 
@@ -23,6 +25,7 @@ In this guide, weâ€™ll walk you through the steps of creating your first Be
     Before beginning, you must know what plugin you intend to create.
 
     In this guide, weâ€™ll create a **birthday plugin** to keep track of user birth dates.
+
   </Step>
 
   <Step>
@@ -60,6 +63,7 @@ In this guide, weâ€™ll walk you through the steps of creating your first Be
     ```
 
     Although this does nothing, you have technically just made yourself your first plugin, congratulations! ðŸŽ‰
+
   </Step>
 
   <Step>
@@ -92,6 +96,7 @@ In this guide, weâ€™ll walk you through the steps of creating your first Be
         },
       } satisfies BetterAuthPlugin);
     ```
+
   </Step>
 
   <Step>
@@ -160,6 +165,7 @@ In this guide, weâ€™ll walk you through the steps of creating your first Be
     **Authorized!** ðŸ”’
 
     Weâ€™ve now successfully written code to ensure authorization for users above 5!
+
   </Step>
 
   <Step>
@@ -199,6 +205,7 @@ In this guide, weâ€™ll walk you through the steps of creating your first Be
     What weâ€™ve done is allow the client plugin to infer the types defined by our schema from the server plugin.
 
     And thatâ€™s it!  This is all it takes for the birthday client plugin. ðŸŽ‚
+
   </Step>
 
   <Step>
@@ -241,6 +248,7 @@ In this guide, weâ€™ll walk you through the steps of creating your first Be
     ```bash
     npx @better-auth/cli@latest generate
     ```
+
   </Step>
 </Steps>
 
@@ -253,5 +261,3 @@ If you have a plugin youâ€™d like to share with the community, feel free to
 our <Link href="https://discord.gg/better-auth">Discord server</Link>,
 or through a <Link href="https://github.com/better-auth/better-auth/pulls">pull-request</Link>
 and we may add it to the <Link href="/docs/plugins/community-plugins">community-plugins</Link> list!
-
-

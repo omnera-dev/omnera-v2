@@ -1,14 +1,16 @@
 # guides: Migrating from Clerk to Better Auth
+
 URL: /docs/guides/clerk-migration-guide
 Source: https://raw.githubusercontent.com/better-auth/better-auth/refs/heads/main/docs/content/docs/guides/clerk-migration-guide.mdx
 
 A step-by-step guide to transitioning from Clerk to Better Auth.
 
-***
+---
 
 title: Migrating from Clerk to Better Auth
 description: A step-by-step guide to transitioning from Clerk to Better Auth.
------------------------------------------------------------------------------
+
+---
 
 In this guide, we'll walk through the steps to migrate a project from Clerk to Better Auth â€” including email/password with proper hashing, social/external accounts, phone number, two-factor data, and more.
 
@@ -81,6 +83,7 @@ Before starting the migration process, set up Better Auth in your project. Follo
         }),
     })
     ```
+
   </Step>
 
   <Step>
@@ -107,6 +110,7 @@ Before starting the migration process, set up Better Auth in your project. Follo
     ```
 
     See [Email and Password](/docs/authentication/email-password) for more configuration options.
+
   </Step>
 
   <Step>
@@ -132,6 +136,7 @@ Before starting the migration process, set up Better Auth in your project. Follo
         } // [!code highlight]
     })
     ```
+
   </Step>
 
   <Step>
@@ -168,6 +173,7 @@ Before starting the migration process, set up Better Auth in your project. Follo
         plugins: [admin(), twoFactor(), phoneNumber(), username()], // [!code highlight]
     })
     ```
+
   </Step>
 
   <Step>
@@ -184,12 +190,14 @@ Before starting the migration process, set up Better Auth in your project. Follo
     ```sh
     npx @better-auth/cli migrate
     ```
+
   </Step>
 
   <Step>
     ### Export Clerk Users
 
     Go to the Clerk dashboard and export the users. Check how to do it [here](https://clerk.com/docs/deployments/exporting-users#export-your-users-data-from-the-clerk-dashboard). It will download a CSV file with the users data. You need to save it as `exported_users.csv` and put it in the root of your project.
+
   </Step>
 
   <Step>
@@ -437,6 +445,7 @@ Before starting the migration process, set up Better Auth in your project. Follo
     ```
 
     Make sure to replace the `process.env.CLERK_SECRET_KEY` with your own Clerk secret key. Feel free to customize the script to your needs.
+
   </Step>
 
   <Step>
@@ -456,12 +465,14 @@ Before starting the migration process, set up Better Auth in your project. Follo
       3. Verify the migrated data in Better Auth before proceeding
       4. Keep Clerk installed and configured until the migration is complete
     </Callout>
+
   </Step>
 
   <Step>
     ### Verify the migration
 
     After running the migration, verify that all users have been properly migrated by checking the database.
+
   </Step>
 
   <Step>
@@ -493,6 +504,7 @@ Before starting the migration process, set up Better Auth in your project. Follo
       );
     };
     ```
+
   </Step>
 
   <Step>
@@ -520,6 +532,7 @@ Before starting the migration process, set up Better Auth in your project. Follo
       matcher: ["/dashboard", "/login", "/signup"],
     };
     ```
+
   </Step>
 
   <Step>
@@ -530,6 +543,7 @@ Before starting the migration process, set up Better Auth in your project. Follo
     ```bash title="Remove Clerk"
     pnpm remove @clerk/nextjs @clerk/themes @clerk/types
     ```
+
   </Step>
 </Steps>
 
@@ -542,5 +556,3 @@ Before starting the migration process, set up Better Auth in your project. Follo
 Congratulations! You've successfully migrated from Clerk to Better Auth.
 
 Better Auth offers greater flexibility and more featuresâ€”be sure to explore the [documentation](/docs) to unlock its full potential.
-
-

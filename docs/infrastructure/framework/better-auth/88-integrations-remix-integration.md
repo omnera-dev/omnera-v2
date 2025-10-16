@@ -1,14 +1,16 @@
 # integrations: Remix Integration
+
 URL: /docs/integrations/remix
 Source: https://raw.githubusercontent.com/better-auth/better-auth/refs/heads/main/docs/content/docs/integrations/remix.mdx
 
 Integrate Better Auth with Remix.
 
-***
+---
 
 title: Remix Integration
 description: Integrate Better Auth with Remix.
-----------------------------------------------
+
+---
 
 Better Auth can be easily integrated with Remix. This guide will show you how to integrate Better Auth with Remix.
 
@@ -20,9 +22,9 @@ If you have followed the installation steps, you can skip the first step.
 
 Create a file named `auth.server.ts` in one of these locations:
 
-* Project root
-* `lib/` folder
-* `utils/` folder
+- Project root
+- `lib/` folder
+- `utils/` folder
 
 You can also nest any of these folders under `app/` folder. (e.g. `app/lib/auth.server.ts`)
 
@@ -33,13 +35,13 @@ And in this file, import Better Auth and create your instance.
 </Callout>
 
 ```ts title="app/lib/auth.server.ts"
-import { betterAuth } from "better-auth"
+import { betterAuth } from 'better-auth'
 
 export const auth = betterAuth({
-    database: {
-        provider: "postgres", //change this to your database provider
-        url: process.env.DATABASE_URL, // path to your database or connection string
-    }
+  database: {
+    provider: 'postgres', //change this to your database provider
+    url: process.env.DATABASE_URL, // path to your database or connection string
+  },
 })
 ```
 
@@ -49,14 +51,14 @@ We need to mount the handler to a API route. Create a resource route file `api.a
 
 ```ts title="app/routes/api.auth.$.ts"
 import { auth } from '~/lib/auth.server' // Adjust the path as necessary
-import type { LoaderFunctionArgs, ActionFunctionArgs } from "@remix-run/node"
+import type { LoaderFunctionArgs, ActionFunctionArgs } from '@remix-run/node'
 
 export async function loader({ request }: LoaderFunctionArgs) {
-    return auth.handler(request)
+  return auth.handler(request)
 }
 
 export async function action({ request }: ActionFunctionArgs) {
-    return auth.handler(request)
+  return auth.handler(request)
 }
 ```
 
@@ -69,10 +71,10 @@ export async function action({ request }: ActionFunctionArgs) {
 Create a client instance. Here we are creating `auth-client.ts` file inside the `lib/` directory.
 
 ```ts title="app/lib/auth-client.ts"
-import { createAuthClient } from "better-auth/react" // make sure to import from better-auth/react
+import { createAuthClient } from 'better-auth/react' // make sure to import from better-auth/react
 
 export const authClient = createAuthClient({
-    //you can pass client configuration here
+  //you can pass client configuration here
 })
 ```
 
@@ -208,5 +210,3 @@ export default function SignIn() {
   )
 }
 ```
-
-

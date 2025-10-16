@@ -1,14 +1,16 @@
 # authentication: GitHub
+
 URL: /docs/authentication/github
 Source: https://raw.githubusercontent.com/better-auth/better-auth/refs/heads/main/docs/content/docs/authentication/github.mdx
 
 GitHub provider setup and usage.
 
-***
+---
 
 title: GitHub
 description: GitHub provider setup and usage.
----------------------------------------------
+
+---
 
 <Steps>
   <Step>
@@ -19,6 +21,7 @@ description: GitHub provider setup and usage.
     Make sure to set the redirect URL to `http://localhost:3000/api/auth/callback/github` for local development. For production, you should set it to the URL of your application. If you change the base path of the auth routes, you should update the redirect URL accordingly.
 
     Important: You MUST include the user:email scope in your GitHub app. See details below.
+
   </Step>
 
   <Step>
@@ -38,6 +41,7 @@ description: GitHub provider setup and usage.
         },
     })
     ```
+
   </Step>
 
   <Step>
@@ -57,6 +61,7 @@ description: GitHub provider setup and usage.
         })
     }
     ```
+
   </Step>
 </Steps>
 
@@ -68,7 +73,7 @@ Github has two types of apps: Github apps and OAuth apps.
 
 For OAuth apps, you don't have to do anything special (just follow the steps above). For Github apps, you DO have to add one more thing, which is enable it to read the user's email:
 
-1. After creating your app, go to *Permissions and Events* > *Account Permissions* > *Email Addresses* and select "Read-Only"
+1. After creating your app, go to _Permissions and Events_ > _Account Permissions_ > _Email Addresses_ and select "Read-Only"
 
 2. Save changes.
 
@@ -84,5 +89,3 @@ Github doesn't issue refresh tokens for OAuth apps. For regular OAuth apps,
 GitHub issues access tokens that remain valid indefinitely unless the user revokes them,
 the app revokes them, or they go unused for a year.
 There's no need for a refresh token because the access token doesn't expire on a short interval like Google or Discord.
-
-

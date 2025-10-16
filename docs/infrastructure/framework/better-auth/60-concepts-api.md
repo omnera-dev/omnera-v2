@@ -1,14 +1,16 @@
 # concepts: API
+
 URL: /docs/concepts/api
 Source: https://raw.githubusercontent.com/better-auth/better-auth/refs/heads/main/docs/content/docs/concepts/api.mdx
 
 Better Auth API.
 
-***
+---
 
 title: API
 description: Better Auth API.
------------------------------
+
+---
 
 When you create a new Better Auth instance, it provides you with an `api` object. This object exposes every endpoint that exists in your Better Auth instance. And you can use this to interact with Better Auth server side.
 
@@ -19,16 +21,16 @@ Any endpoint added to Better Auth, whether from plugins or the core, will be acc
 To call an API endpoint on the server, import your `auth` instance and call the endpoint using the `api` object.
 
 ```ts title="server.ts"
-import { betterAuth } from "better-auth";
-import { headers } from "next/headers";
+import { betterAuth } from 'better-auth'
+import { headers } from 'next/headers'
 
 export const auth = betterAuth({
-    //...
+  //...
 })
 
 // calling get session on the server
 await auth.api.getSession({
-    headers: await headers() // some endpoints might require headers
+  headers: await headers(), // some endpoints might require headers
 })
 ```
 
@@ -38,21 +40,21 @@ Unlike the client, the server needs the values to be passed as an object with th
 
 ```ts title="server.ts"
 await auth.api.getSession({
-    headers: await headers()
+  headers: await headers(),
 })
 
 await auth.api.signInEmail({
-    body: {
-        email: "john@doe.com",
-        password: "password"
-    },
-    headers: await headers() // optional but would be useful to get the user IP, user agent, etc.
+  body: {
+    email: 'john@doe.com',
+    password: 'password',
+  },
+  headers: await headers(), // optional but would be useful to get the user IP, user agent, etc.
 })
 
 await auth.api.verifyEmail({
-    query: {
-        token: "my_token"
-    }
+  query: {
+    token: 'my_token',
+  },
 })
 ```
 
@@ -72,20 +74,20 @@ To get the `headers`, you can pass the `returnHeaders` option to the endpoint.
 
 ```ts
 const { headers, response } = await auth.api.signUpEmail({
-	returnHeaders: true,
-	body: {
-		email: "john@doe.com",
-		password: "password",
-		name: "John Doe",
-	},
-});
+  returnHeaders: true,
+  body: {
+    email: 'john@doe.com',
+    password: 'password',
+    name: 'John Doe',
+  },
+})
 ```
 
 The `headers` will be a `Headers` object, which you can use to get the cookies or the headers.
 
 ```ts
-const cookies = headers.get("set-cookie");
-const headers = headers.get("x-custom-header");
+const cookies = headers.get('set-cookie')
+const headers = headers.get('x-custom-header')
 ```
 
 #### Getting `Response` Object
@@ -94,11 +96,11 @@ To get the `Response` object, you can pass the `asResponse` option to the endpoi
 
 ```ts title="server.ts"
 const response = await auth.api.signInEmail({
-    body: {
-        email: "",
-        password: ""
-    },
-    asResponse: true
+  body: {
+    email: '',
+    password: '',
+  },
+  asResponse: true,
 })
 ```
 
@@ -107,20 +109,18 @@ const response = await auth.api.signInEmail({
 When you call an API endpoint on the server, it will throw an error if the request fails. You can catch the error and handle it as you see fit. The error instance is an instance of `APIError`.
 
 ```ts title="server.ts"
-import { APIError } from "better-auth/api";
+import { APIError } from 'better-auth/api'
 
 try {
-    await auth.api.signInEmail({
-        body: {
-            email: "",
-            password: ""
-        }
-    })
+  await auth.api.signInEmail({
+    body: {
+      email: '',
+      password: '',
+    },
+  })
 } catch (error) {
-    if (error instanceof APIError) {
-        console.log(error.message, error.status)
-    }
+  if (error instanceof APIError) {
+    console.log(error.message, error.status)
+  }
 }
 ```
-
-

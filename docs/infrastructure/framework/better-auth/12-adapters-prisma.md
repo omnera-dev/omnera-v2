@@ -1,14 +1,16 @@
 # adapters: Prisma
+
 URL: /docs/adapters/prisma
 Source: https://raw.githubusercontent.com/better-auth/better-auth/refs/heads/main/docs/content/docs/adapters/prisma.mdx
 
 Integrate Better Auth with Prisma.
 
-***
+---
 
 title: Prisma
 description: Integrate Better Auth with Prisma.
------------------------------------------------
+
+---
 
 Prisma ORM is an open-source database toolkit that simplifies database access and management in applications by providing a type-safe query builder and an intuitive data modeling interface.
 Read more [here](https://www.prisma.io/).
@@ -19,17 +21,17 @@ Make sure you have Prisma installed and configured.
 Then, you can use the Prisma adapter to connect to your database.
 
 ```ts title="auth.ts"
-import { betterAuth } from "better-auth";
-import { prismaAdapter } from "better-auth/adapters/prisma";
-import { PrismaClient } from "@prisma/client";
+import { betterAuth } from 'better-auth'
+import { prismaAdapter } from 'better-auth/adapters/prisma'
+import { PrismaClient } from '@prisma/client'
 
-const prisma = new PrismaClient();
+const prisma = new PrismaClient()
 
 export const auth = betterAuth({
   database: prismaAdapter(prisma, {
-    provider: "sqlite",
+    provider: 'sqlite',
   }),
-});
+})
 ```
 
 <Callout type="warning">
@@ -52,6 +54,7 @@ your database schema based on your Better Auth configuration and plugins.
         <p className="font-bold text-[16px] mb-1">Prisma Schema Migration</p>
       </th>
     </tr>
+
   </thead>
 
   <tbody>
@@ -69,5 +72,3 @@ npx @better-auth/cli@latest generate
 ## Additional Information
 
 If you're looking for performance improvements or tips, take a look at our guide to <Link href="/docs/guides/optimizing-for-performance">performance optimizations</Link>.
-
-

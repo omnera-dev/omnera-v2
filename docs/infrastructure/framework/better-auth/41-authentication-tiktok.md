@@ -1,14 +1,16 @@
 # authentication: TikTok
+
 URL: /docs/authentication/tiktok
 Source: https://raw.githubusercontent.com/better-auth/better-auth/refs/heads/main/docs/content/docs/authentication/tiktok.mdx
 
 TikTok provider setup and usage.
 
-***
+---
 
 title: TikTok
 description: TikTok provider setup and usage.
----------------------------------------------
+
+---
 
 <Steps>
   <Step>
@@ -36,6 +38,7 @@ description: TikTok provider setup and usage.
       * The TikTok API does not provide email addresses. As a workaround, this implementation uses the user's `username` value for the `email` field, which is why it requires the `user.info.profile` scope instead of just `user.info.basic`.
       * For production use, you will need to request approval from TikTok for the scopes you intend to use.
     </Callout>
+
   </Step>
 
   <Step>
@@ -55,6 +58,7 @@ description: TikTok provider setup and usage.
         },
     })
     ```
+
   </Step>
 
   <Step>
@@ -74,7 +78,6 @@ description: TikTok provider setup and usage.
         })
     }
     ```
+
   </Step>
 </Steps>
-
-

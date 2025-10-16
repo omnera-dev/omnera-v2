@@ -90,24 +90,27 @@ export const auth = betterAuth({
 // Client usage - Sign Up
 import { authClient } from '@/lib/auth-client'
 
-const { data, error } = await authClient.signUp.email({
-  email: 'user@example.com',
-  password: 'securePassword123',
-  name: 'Alice Johnson',
-  image: 'https://example.com/avatar.jpg', // Optional
-  callbackURL: '/dashboard', // Redirect after email verification
-}, {
-  onRequest: () => {
-    // Show loading state
+const { data, error } = await authClient.signUp.email(
+  {
+    email: 'user@example.com',
+    password: 'securePassword123',
+    name: 'Alice Johnson',
+    image: 'https://example.com/avatar.jpg', // Optional
+    callbackURL: '/dashboard', // Redirect after email verification
   },
-  onSuccess: (ctx) => {
-    // Redirect or show success
-  },
-  onError: (ctx) => {
-    // Display error message
-    alert(ctx.error.message)
-  },
-})
+  {
+    onRequest: () => {
+      // Show loading state
+    },
+    onSuccess: (ctx) => {
+      // Redirect or show success
+    },
+    onError: (ctx) => {
+      // Display error message
+      alert(ctx.error.message)
+    },
+  }
+)
 
 // Client usage - Sign In
 const { data, error } = await authClient.signIn.email({
@@ -653,9 +656,7 @@ import { auth } from './auth'
 class BetterAuthService extends Context.Tag('BetterAuthService')<
   BetterAuthService,
   {
-    readonly getSession: (
-      headers: Headers
-    ) => Effect.Effect<Session | null, AuthError, never>
+    readonly getSession: (headers: Headers) => Effect.Effect<Session | null, AuthError, never>
     readonly requireSession: (headers: Headers) => Effect.Effect<Session, AuthError, never>
   }
 >() {}
@@ -948,23 +949,23 @@ test('sign in with valid credentials', async () => {
 
 ## Better Auth vs Other Solutions
 
-| Aspect                   | Better Auth    | Auth.js (NextAuth) | Lucia Auth  | Clerk         |
-| ------------------------ | -------------- | ------------------ | ----------- | ------------- |
-| **Framework Support**    | All frameworks | Next.js focused    | All         | All           |
-| **TypeScript**           | Excellent      | Good               | Excellent   | Good          |
-| **Built-in Features**    | Very Rich      | Basic              | Minimal     | Very Rich     |
-| **Plugin System**        | Yes            | Limited            | No          | No            |
-| **Self-Hosted**          | Yes            | Yes                | Yes         | No (SaaS)     |
-| **Database Control**     | Full           | Full               | Full        | No (managed)  |
-| **Cost**                 | Free           | Free               | Free        | Paid          |
-| **Bundle Size**          | Small          | Medium             | Tiny        | Large (SDK)   |
-| **Social Providers**     | 15+            | 50+                | DIY         | Many          |
-| **2FA/Passkeys**         | Built-in       | Via plugins        | DIY         | Built-in      |
-| **Session Management**   | Built-in       | Built-in           | Manual      | Built-in      |
-| **Learning Curve**       | Easy           | Medium             | Steep (DIY) | Easy          |
-| **Vendor Lock-in**       | None           | None               | None        | High (SaaS)   |
-| **Bun Compatibility**    | Native         | Works              | Native      | Works         |
-| **Effect Integration**   | Easy           | Manual             | Manual      | Manual        |
+| Aspect                 | Better Auth    | Auth.js (NextAuth) | Lucia Auth  | Clerk        |
+| ---------------------- | -------------- | ------------------ | ----------- | ------------ |
+| **Framework Support**  | All frameworks | Next.js focused    | All         | All          |
+| **TypeScript**         | Excellent      | Good               | Excellent   | Good         |
+| **Built-in Features**  | Very Rich      | Basic              | Minimal     | Very Rich    |
+| **Plugin System**      | Yes            | Limited            | No          | No           |
+| **Self-Hosted**        | Yes            | Yes                | Yes         | No (SaaS)    |
+| **Database Control**   | Full           | Full               | Full        | No (managed) |
+| **Cost**               | Free           | Free               | Free        | Paid         |
+| **Bundle Size**        | Small          | Medium             | Tiny        | Large (SDK)  |
+| **Social Providers**   | 15+            | 50+                | DIY         | Many         |
+| **2FA/Passkeys**       | Built-in       | Via plugins        | DIY         | Built-in     |
+| **Session Management** | Built-in       | Built-in           | Manual      | Built-in     |
+| **Learning Curve**     | Easy           | Medium             | Steep (DIY) | Easy         |
+| **Vendor Lock-in**     | None           | None               | None        | High (SaaS)  |
+| **Bun Compatibility**  | Native         | Works              | Native      | Works        |
+| **Effect Integration** | Easy           | Manual             | Manual      | Manual       |
 
 ## Best Practices
 

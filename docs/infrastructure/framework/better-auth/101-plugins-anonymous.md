@@ -1,14 +1,16 @@
 # plugins: Anonymous
+
 URL: /docs/plugins/anonymous
 Source: https://raw.githubusercontent.com/better-auth/better-auth/refs/heads/main/docs/content/docs/plugins/anonymous.mdx
 
 Anonymous plugin for Better Auth.
 
-***
+---
 
 title: Anonymous\
 description: Anonymous plugin for Better Auth.
-----------------------------------------------
+
+---
 
 The Anonymous plugin allows users to have an authenticated experience without requiring them to provide an email address, password, OAuth provider, or any other Personally Identifiable Information (PII). Users can later link an authentication method to their account when ready.
 
@@ -31,6 +33,7 @@ The Anonymous plugin allows users to have an authenticated experience without re
         ]
     })
     ```
+
   </Step>
 
   <Step>
@@ -53,6 +56,7 @@ The Anonymous plugin allows users to have an authenticated experience without re
     </Tabs>
 
     See the [Schema](#schema) section to add the fields manually.
+
   </Step>
 
   <Step>
@@ -70,6 +74,7 @@ The Anonymous plugin allows users to have an authenticated experience without re
         ]
     })
     ```
+
   </Step>
 </Steps>
 
@@ -106,40 +111,38 @@ Then when you call `signIn` or `signUp` with another method, the `onLinkAccount`
 
 ```ts title="example.ts"
 const user = await authClient.signIn.email({
-    email,
+  email,
 })
 ```
 
 ## Options
 
-* `emailDomainName`: The domain name to use when generating an email address for anonymous users. Defaults to the domain name of the current site.
+- `emailDomainName`: The domain name to use when generating an email address for anonymous users. Defaults to the domain name of the current site.
 
 ```ts title="auth.ts"
-import { betterAuth } from "better-auth"
+import { betterAuth } from 'better-auth'
 
 export const auth = betterAuth({
-    plugins: [
-        anonymous({
-            emailDomainName: "example.com"
-        })
-    ]
+  plugins: [
+    anonymous({
+      emailDomainName: 'example.com',
+    }),
+  ],
 })
 ```
 
-* `onLinkAccount`: A callback function that is called when an anonymous user links their account to a new authentication method. The callback receives an object with the `anonymousUser` and the `newUser`.
+- `onLinkAccount`: A callback function that is called when an anonymous user links their account to a new authentication method. The callback receives an object with the `anonymousUser` and the `newUser`.
 
-* `disableDeleteAnonymousUser`: By default, the anonymous user is deleted when the account is linked to a new authentication method. Set this option to `true` to disable this behavior.
+- `disableDeleteAnonymousUser`: By default, the anonymous user is deleted when the account is linked to a new authentication method. Set this option to `true` to disable this behavior.
 
-* `generateName`: A callback function that is called to generate a name for the anonymous user. Useful if you want to have random names for anonymous users, or if `name` is unique in your database.
+- `generateName`: A callback function that is called to generate a name for the anonymous user. Useful if you want to have random names for anonymous users, or if `name` is unique in your database.
 
 ## Schema
 
 The anonymous plugin requires an additional field in the user table:
 
 <DatabaseTable
-  fields={[
-      { name: "isAnonymous", type: "boolean", description: "Indicates whether the user is anonymous.", isOptional: true },
-  ]}
+fields={[
+{ name: "isAnonymous", type: "boolean", description: "Indicates whether the user is anonymous.", isOptional: true },
+]}
 />
-
-

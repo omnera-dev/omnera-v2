@@ -1,14 +1,16 @@
 # plugins: Passkey
+
 URL: /docs/plugins/passkey
 Source: https://raw.githubusercontent.com/better-auth/better-auth/refs/heads/main/docs/content/docs/plugins/passkey.mdx
 
 Passkey
 
-***
+---
 
 title: Passkey
 description: Passkey
---------------------
+
+---
 
 Passkeys are a secure, passwordless authentication method using cryptographic key pairs, supported by WebAuthn and FIDO2 standards in web browsers. They replace passwords with unique key pairs: a private key stored on the user's device and a public key shared with the website. Users can log in using biometrics, PINs, or security keys, providing strong, phishing-resistant authentication without traditional passwords.
 
@@ -57,6 +59,7 @@ The passkey plugin implementation is powered by [SimpleWebAuthn](https://simplew
         ], // [!code highlight]
     })
     ```
+
   </Step>
 
   <Step>
@@ -79,6 +82,7 @@ The passkey plugin implementation is powered by [SimpleWebAuthn](https://simplew
     </Tabs>
 
     See the [Schema](#schema) section to add the fields manually.
+
   </Step>
 
   <Step>
@@ -94,6 +98,7 @@ The passkey plugin implementation is powered by [SimpleWebAuthn](https://simplew
         ] // [!code highlight]
     })
     ```
+
   </Step>
 </Steps>
 
@@ -107,20 +112,20 @@ To add or register a passkey make sure a user is authenticated and then call the
 
 ```ts
 const { data, error } = await authClient.passkey.addPasskey({
-    name: example-passkey-name, // required
-    authenticatorAttachment: cross-platform, // required
-});
+  name: example - passkey - name, // required
+  authenticatorAttachment: cross - platform, // required
+})
 ```
 
 ### Server Side
 
 ```ts
 const data = await auth.api.addPasskey({
-    body: {
-        name: example-passkey-name, // required
-        authenticatorAttachment: cross-platform, // required
-    }
-});
+  body: {
+    name: example - passkey - name, // required
+    authenticatorAttachment: cross - platform, // required
+  },
+})
 ```
 
 ### Type Definition
@@ -151,18 +156,18 @@ To sign in with a passkey you can use the `signIn.passkey` method. This will pro
 
 ```ts
 const { data, error } = await authClient.signIn.passkey({
-    autoFill, // required
-});
+  autoFill, // required
+})
 ```
 
 ### Server Side
 
 ```ts
 const data = await auth.api.signInPasskey({
-    body: {
-        autoFill, // required
-    }
-});
+  body: {
+    autoFill, // required
+  },
+})
 ```
 
 ### Type Definition
@@ -182,18 +187,18 @@ type signInPasskey = {
 ```ts
 // With post authentication redirect
 await authClient.signIn.passkey({
-    autoFill: true,
-    fetchOptions: {
-        onSuccess(context) {
-            // Redirect to dashboard after successful authentication
-            window.location.href = "/dashboard";
-        },
-        onError(context) {
-            // Handle authentication errors
-            console.error("Authentication failed:", context.error.message);
-        }
-    }
-});
+  autoFill: true,
+  fetchOptions: {
+    onSuccess(context) {
+      // Redirect to dashboard after successful authentication
+      window.location.href = '/dashboard'
+    },
+    onError(context) {
+      // Handle authentication errors
+      console.error('Authentication failed:', context.error.message)
+    },
+  },
+})
 ```
 
 ### List passkeys
@@ -203,25 +208,22 @@ You can list all of the passkeys for the authenticated user by calling `passkey.
 ### Client Side
 
 ```ts
-const { data, error } = await authClient.passkey.listUserPasskeys({});
+const { data, error } = await authClient.passkey.listUserPasskeys({})
 ```
 
 ### Server Side
 
 ```ts
 const passkeys = await auth.api.listPasskeys({
-
-    // This endpoint requires session cookies.
-    headers: await headers()
-});
+  // This endpoint requires session cookies.
+  headers: await headers(),
+})
 ```
 
 ### Type Definition
 
 ```ts
-type listPasskeys = {
-
-}
+type listPasskeys = {}
 ```
 
 ### Deleting passkeys
@@ -232,20 +234,20 @@ You can delete a passkey by calling `passkey.delete` and providing the passkey I
 
 ```ts
 const { data, error } = await authClient.passkey.deletePasskey({
-    id: some-passkey-id,
-});
+  id: some - passkey - id,
+})
 ```
 
 ### Server Side
 
 ```ts
 const data = await auth.api.deletePasskey({
-    body: {
-        id: some-passkey-id,
-    },
-    // This endpoint requires session cookies.
-    headers: await headers()
-});
+  body: {
+    id: some - passkey - id,
+  },
+  // This endpoint requires session cookies.
+  headers: await headers(),
+})
 ```
 
 ### Type Definition
@@ -320,6 +322,7 @@ There are two requirements for conditional UI to work:
     <label for="password">Password:</label>
     <input type="password" name="password" autocomplete="current-password webauthn">
     ```
+
   </Step>
 
   <Step>
@@ -343,6 +346,7 @@ There are two requirements for conditional UI to work:
         ```
       </Tab>
     </Tabs>
+
   </Step>
 </Steps>
 
@@ -361,67 +365,67 @@ The plugin require a new table in the database to store passkey data.
 Table Name: `passkey`
 
 <DatabaseTable
-  fields={[
-      {
-          name: "id",
-          type: "string",
-          description: "Unique identifier for each passkey",
-          isPrimaryKey: true
-      },
-      {
-          name: "name",
-          type: "string",
-          description: "The name of the passkey",
-          isOptional: true
-      },
-      {
-          name: "publicKey",
-          type: "string",
-          description: "The public key of the passkey",
-      },
-      {
-          name: "userId",
-          type: "string",
-          description: "The ID of the user",
-          isForeignKey: true
-      },
-      {
-          name: "credentialID",
-          type: "string",
-          description: "The unique identifier of the registered credential",
-      },
-      {
-          name: "counter",
-          type: "number",
-          description: "The counter of the passkey",
-      },
-      {
-          name: "deviceType",
-          type: "string",
-          description: "The type of device used to register the passkey",
-      },
-      {
-          name: "backedUp",
-          type: "boolean",
-          description: "Whether the passkey is backed up",
-      },
-      {
-          name: "transports",
-          type: "string",
-          description: "The transports used to register the passkey",
-      },
-      {
-          name: "createdAt",
-          type: "Date",
-          description: "The time when the passkey was created",
-      },
-      {
-              name: "aaguid",
-              type: "string",
-              description: "Authenticator's Attestation GUID indicating the type of the authenticator",
-              isOptional: true
-      },
-  ]}
+fields={[
+{
+name: "id",
+type: "string",
+description: "Unique identifier for each passkey",
+isPrimaryKey: true
+},
+{
+name: "name",
+type: "string",
+description: "The name of the passkey",
+isOptional: true
+},
+{
+name: "publicKey",
+type: "string",
+description: "The public key of the passkey",
+},
+{
+name: "userId",
+type: "string",
+description: "The ID of the user",
+isForeignKey: true
+},
+{
+name: "credentialID",
+type: "string",
+description: "The unique identifier of the registered credential",
+},
+{
+name: "counter",
+type: "number",
+description: "The counter of the passkey",
+},
+{
+name: "deviceType",
+type: "string",
+description: "The type of device used to register the passkey",
+},
+{
+name: "backedUp",
+type: "boolean",
+description: "Whether the passkey is backed up",
+},
+{
+name: "transports",
+type: "string",
+description: "The transports used to register the passkey",
+},
+{
+name: "createdAt",
+type: "Date",
+description: "The time when the passkey was created",
+},
+{
+name: "aaguid",
+type: "string",
+description: "Authenticator's Attestation GUID indicating the type of the authenticator",
+isOptional: true
+},
+]}
 />
 
 ## Options
@@ -435,5 +439,3 @@ Table Name: `passkey`
 **authenticatorSelection**: Allows customization of WebAuthn authenticator selection criteria. When unspecified, both platform and cross-platform authenticators are allowed with `preferred` settings for `residentKey` and `userVerification`.
 
 **aaguid**: (optional) Authenticator Attestation GUID. This is a unique identifier for the passkey provider (device or authenticator type) and can be used to identify the type of passkey device used during registration or authentication.
-
-

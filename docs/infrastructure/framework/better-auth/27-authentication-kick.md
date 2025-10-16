@@ -1,14 +1,16 @@
 # authentication: Kick
+
 URL: /docs/authentication/kick
 Source: https://raw.githubusercontent.com/better-auth/better-auth/refs/heads/main/docs/content/docs/authentication/kick.mdx
 
 Kick provider setup and usage.
 
-***
+---
 
 title: Kick
 description: Kick provider setup and usage.
--------------------------------------------
+
+---
 
 <Steps>
   <Step>
@@ -17,6 +19,7 @@ description: Kick provider setup and usage.
     To use Kick sign in, you need a client ID and client secret. You can get them from the [Kick Developer Portal](https://kick.com/settings/developer).
 
     Make sure to set the redirect URL to `http://localhost:3000/api/auth/callback/kick` for local development. For production, you should set it to the URL of your application. If you change the base path of the auth routes, you should update the redirect URL accordingly.
+
   </Step>
 
   <Step>
@@ -36,6 +39,7 @@ description: Kick provider setup and usage.
         }
     })
     ```
+
   </Step>
 
   <Step>
@@ -55,7 +59,6 @@ description: Kick provider setup and usage.
         })
     }
     ```
+
   </Step>
 </Steps>
-
-

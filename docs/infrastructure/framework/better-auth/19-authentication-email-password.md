@@ -1,14 +1,16 @@
 # authentication: Email & Password
+
 URL: /docs/authentication/email-password
 Source: https://raw.githubusercontent.com/better-auth/better-auth/refs/heads/main/docs/content/docs/authentication/email-password.mdx
 
 Implementing email and password authentication with Better Auth.
 
-***
+---
 
 title: Email & Password
 description: Implementing email and password authentication with Better Auth.
------------------------------------------------------------------------------
+
+---
 
 Email and password authentication is a common method used by many applications. Better Auth provides a built-in email and password authenticator that you can easily integrate into your project.
 
@@ -23,13 +25,14 @@ Email and password authentication is a common method used by many applications. 
 To enable email and password authentication, you need to set the `emailAndPassword.enabled` option to `true` in the `auth` configuration.
 
 ```ts title="auth.ts"
-import { betterAuth } from "better-auth";
+import { betterAuth } from 'better-auth'
 
 export const auth = betterAuth({
-  emailAndPassword: { // [!code highlight]
+  emailAndPassword: {
+    // [!code highlight]
     enabled: true, // [!code highlight]
   }, // [!code highlight]
-});
+})
 ```
 
 <Callout type="info">
@@ -166,25 +169,22 @@ To sign a user out, you can use the `signOut` function provided by the client.
 ### Client Side
 
 ```ts
-const { data, error } = await authClient.signOut({});
+const { data, error } = await authClient.signOut({})
 ```
 
 ### Server Side
 
 ```ts
 await auth.api.signOut({
-
-    // This endpoint requires session cookies.
-    headers: await headers()
-});
+  // This endpoint requires session cookies.
+  headers: await headers(),
+})
 ```
 
 ### Type Definition
 
 ```ts
-type signOut = {
-
-}
+type signOut = {}
 ```
 
 you can pass `fetchOptions` to redirect onSuccess
@@ -193,37 +193,37 @@ you can pass `fetchOptions` to redirect onSuccess
 await authClient.signOut({
   fetchOptions: {
     onSuccess: () => {
-      router.push("/login"); // redirect to login page
+      router.push('/login') // redirect to login page
     },
   },
-});
+})
 ```
 
 ### Email Verification
 
 To enable email verification, you need to pass a function that sends a verification email with a link. The `sendVerificationEmail` function takes a data object with the following properties:
 
-* `user`: The user object.
-* `url`: The URL to send to the user which contains the token.
-* `token`: A verification token used to complete the email verification.
+- `user`: The user object.
+- `url`: The URL to send to the user which contains the token.
+- `token`: A verification token used to complete the email verification.
 
 and a `request` object as the second parameter.
 
 ```ts title="auth.ts"
-import { betterAuth } from "better-auth";
-import { sendEmail } from "./email"; // your email sending function
+import { betterAuth } from 'better-auth'
+import { sendEmail } from './email' // your email sending function
 
 export const auth = betterAuth({
   emailVerification: {
-    sendVerificationEmail: async ( { user, url, token }, request) => {
+    sendVerificationEmail: async ({ user, url, token }, request) => {
       await sendEmail({
         to: user.email,
-        subject: "Verify your email address",
+        subject: 'Verify your email address',
         text: `Click the link to verify your email: ${url}`,
-      });
+      })
     },
   },
-});
+})
 ```
 
 On the client side you can use `sendVerificationEmail` function to send verification link to user. This will trigger the `sendVerificationEmail` function you provided in the `auth` configuration.
@@ -244,7 +244,7 @@ export const auth = betterAuth({
   emailAndPassword: {
     requireEmailVerification: true,
   },
-});
+})
 ```
 
 If a user tries to sign in without verifying their email, you can handle the error and show a message to the user.
@@ -252,20 +252,20 @@ If a user tries to sign in without verifying their email, you can handle the err
 ```ts title="auth-client.ts"
 await authClient.signIn.email(
   {
-    email: "email@example.com",
-    password: "password",
+    email: 'email@example.com',
+    password: 'password',
   },
   {
     onError: (ctx) => {
       // Handle the error
       if (ctx.error.status === 403) {
-        alert("Please verify your email address");
+        alert('Please verify your email address')
       }
       //you can also show the original error message
-      alert(ctx.error.message);
+      alert(ctx.error.message)
     },
   }
-);
+)
 ```
 
 #### Triggering manually Email Verification
@@ -274,41 +274,41 @@ You can trigger the email verification manually by calling the `sendVerification
 
 ```ts
 await authClient.sendVerificationEmail({
-  email: "user@email.com",
-  callbackURL: "/", // The redirect URL after verification
-});
+  email: 'user@email.com',
+  callbackURL: '/', // The redirect URL after verification
+})
 ```
 
 ### Request Password Reset
 
 To allow users to reset a password first you need to provide `sendResetPassword` function to the email and password authenticator. The `sendResetPassword` function takes a data object with the following properties:
 
-* `user`: The user object.
-* `url`: The URL to send to the user which contains the token.
-* `token`: A verification token used to complete the password reset.
+- `user`: The user object.
+- `url`: The URL to send to the user which contains the token.
+- `token`: A verification token used to complete the password reset.
 
 and a `request` object as the second parameter.
 
 ```ts title="auth.ts"
-import { betterAuth } from "better-auth";
-import { sendEmail } from "./email"; // your email sending function
+import { betterAuth } from 'better-auth'
+import { sendEmail } from './email' // your email sending function
 
 export const auth = betterAuth({
   emailAndPassword: {
     enabled: true,
-    sendResetPassword: async ({user, url, token}, request) => {
+    sendResetPassword: async ({ user, url, token }, request) => {
       await sendEmail({
         to: user.email,
-        subject: "Reset your password",
+        subject: 'Reset your password',
         text: `Click the link to reset your password: ${url}`,
-      });
+      })
     },
     onPasswordReset: async ({ user }, request) => {
       // your logic here
-      console.log(`Password for user ${user.email} has been reset.`);
+      console.log(`Password for user ${user.email} has been reset.`)
     },
   },
-});
+})
 ```
 
 Additionally, you can provide an `onPasswordReset` callback to execute logic after a password has been successfully reset.
@@ -353,33 +353,33 @@ type requestPasswordReset = {
 
 When a user clicks on the link in the email, they will be redirected to the reset password page. You can add the reset password page to your app. Then you can use `resetPassword` function to reset the password. It takes an object with the following properties:
 
-* `newPassword`: The new password of the user.
+- `newPassword`: The new password of the user.
 
 ```ts title="auth-client.ts"
 const { data, error } = await authClient.resetPassword({
-  newPassword: "password1234",
+  newPassword: 'password1234',
   token,
-});
+})
 ```
 
 ### Client Side
 
 ```ts
 const { data, error } = await authClient.resetPassword({
-    newPassword: password1234,
-    token,
-});
+  newPassword: password1234,
+  token,
+})
 ```
 
 ### Server Side
 
 ```ts
 const data = await auth.api.resetPassword({
-    body: {
-        newPassword: password1234,
-        token,
-    }
-});
+  body: {
+    newPassword: password1234,
+    token,
+  },
+})
 ```
 
 ### Type Definition
@@ -406,24 +406,24 @@ A user's password isn't stored in the user table. Instead, it's stored in the ac
 
 ```ts
 const { data, error } = await authClient.changePassword({
-    newPassword: newpassword1234,
-    currentPassword: oldpassword1234,
-    revokeOtherSessions, // required
-});
+  newPassword: newpassword1234,
+  currentPassword: oldpassword1234,
+  revokeOtherSessions, // required
+})
 ```
 
 ### Server Side
 
 ```ts
 const data = await auth.api.changePassword({
-    body: {
-        newPassword: newpassword1234,
-        currentPassword: oldpassword1234,
-        revokeOtherSessions, // required
-    },
-    // This endpoint requires session cookies.
-    headers: await headers()
-});
+  body: {
+    newPassword: newpassword1234,
+    currentPassword: oldpassword1234,
+    revokeOtherSessions, // required
+  },
+  // This endpoint requires session cookies.
+  headers: await headers(),
+})
 ```
 
 ### Type Definition
@@ -472,7 +472,7 @@ export const auth = betterAuth({
 ```
 
 <TypeTable
-  type={{
+type={{
   enabled: {
     description: "Enable email and password authentication.",
     type: "boolean",
@@ -525,5 +525,3 @@ export const auth = betterAuth({
   },
 }}
 />
-
-

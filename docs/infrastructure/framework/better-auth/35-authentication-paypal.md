@@ -1,14 +1,16 @@
 # authentication: PayPal
+
 URL: /docs/authentication/paypal
 Source: https://raw.githubusercontent.com/better-auth/better-auth/refs/heads/main/docs/content/docs/authentication/paypal.mdx
 
 Paypal provider setup and usage.
 
-***
+---
 
 title: PayPal
 description: Paypal provider setup and usage.
----------------------------------------------
+
+---
 
 <Steps>
   <Step>
@@ -46,6 +48,7 @@ description: Paypal provider setup and usage.
       * PayPal doesn't use traditional OAuth2 scopes in the authorization URL. Instead, you configure permissions directly in the Developer Dashboard
       * For live apps, PayPal must review and approve your application before it can go live, which typically takes a few weeks
     </Callout>
+
   </Step>
 
   <Step>
@@ -86,6 +89,7 @@ description: Paypal provider setup and usage.
         },
     })
     ```
+
   </Step>
 
   <Step>
@@ -121,7 +125,6 @@ description: Paypal provider setup and usage.
     * `getUserInfo`: Custom function to retrieve user information.
       For more details refer to the [User Reference](https://developer.paypal.com/docs/api/identity/v1/#userinfo_get)
     * `verifyIdToken`: Custom ID token verification function.
+
   </Step>
 </Steps>
-
-

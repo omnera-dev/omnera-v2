@@ -1,14 +1,16 @@
 # authentication: Reddit
+
 URL: /docs/authentication/reddit
 Source: https://raw.githubusercontent.com/better-auth/better-auth/refs/heads/main/docs/content/docs/authentication/reddit.mdx
 
 Reddit provider setup and usage.
 
-***
+---
 
 title: Reddit
 description: Reddit provider setup and usage.
----------------------------------------------
+
+---
 
 <Steps>
   <Step>
@@ -23,6 +25,7 @@ description: Reddit provider setup and usage.
     5. After creating the app, you'll get the client ID (under the app name) and client secret
 
     If you change the base path of the auth routes, make sure to update the redirect URL accordingly.
+
   </Step>
 
   <Step>
@@ -42,6 +45,7 @@ description: Reddit provider setup and usage.
         },
     })
     ```
+
   </Step>
 
   <Step>
@@ -61,6 +65,7 @@ description: Reddit provider setup and usage.
         })
     }
     ```
+
   </Step>
 </Steps>
 
@@ -72,25 +77,23 @@ By default, Reddit provides basic user information. If you need additional permi
 
 ```ts title="auth.ts"
 export const auth = betterAuth({
-    socialProviders: {
-        reddit: {
-            clientId: process.env.REDDIT_CLIENT_ID as string,
-            clientSecret: process.env.REDDIT_CLIENT_SECRET as string,
-            duration: "permanent",
-            scope: ["read", "submit"] // Add required scopes
-        },
+  socialProviders: {
+    reddit: {
+      clientId: process.env.REDDIT_CLIENT_ID as string,
+      clientSecret: process.env.REDDIT_CLIENT_SECRET as string,
+      duration: 'permanent',
+      scope: ['read', 'submit'], // Add required scopes
     },
+  },
 })
 ```
 
 Common Reddit scopes include:
 
-* `identity`: Access basic account information
-* `read`: Access posts and comments
-* `submit`: Submit posts and comments
-* `subscribe`: Manage subreddit subscriptions
-* `history`: Access voting history
+- `identity`: Access basic account information
+- `read`: Access posts and comments
+- `submit`: Submit posts and comments
+- `subscribe`: Manage subreddit subscriptions
+- `history`: Access voting history
 
 For a complete list of available scopes, refer to the [Reddit OAuth2 documentation](https://www.reddit.com/dev/api/oauth).
-
-

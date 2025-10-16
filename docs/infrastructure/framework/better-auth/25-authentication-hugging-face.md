@@ -1,14 +1,16 @@
 # authentication: Hugging Face
+
 URL: /docs/authentication/huggingface
 Source: https://raw.githubusercontent.com/better-auth/better-auth/refs/heads/main/docs/content/docs/authentication/huggingface.mdx
 
 Hugging Face provider setup and usage.
 
-***
+---
 
 title: Hugging Face
 description: Hugging Face provider setup and usage.
----------------------------------------------------
+
+---
 
 <Steps>
   <Step>
@@ -17,6 +19,7 @@ description: Hugging Face provider setup and usage.
     To use Hugging Face sign in, you need a client ID and client secret. [Hugging Face OAuth documentation](https://huggingface.co/docs/hub/oauth). Make sure the created oauth app on Hugging Face has the "email" scope.
 
     Make sure to set the redirect URL to `http://localhost:3000/api/auth/callback/huggingface` for local development. For production, you should set it to the URL of your application. If you change the base path of the auth routes, you should update the redirect URL accordingly.
+
   </Step>
 
   <Step>
@@ -36,6 +39,7 @@ description: Hugging Face provider setup and usage.
         },
     })
     ```
+
   </Step>
 
   <Step>
@@ -55,7 +59,6 @@ description: Hugging Face provider setup and usage.
         })
     }
     ```
+
   </Step>
 </Steps>
-
-

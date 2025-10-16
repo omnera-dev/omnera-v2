@@ -1,14 +1,16 @@
 # plugins: Open API
+
 URL: /docs/plugins/open-api
 Source: https://raw.githubusercontent.com/better-auth/better-auth/refs/heads/main/docs/content/docs/plugins/open-api.mdx
 
 Open API reference for Better Auth.
 
-***
+---
 
 title: Open API
 description: Open API reference for Better Auth.
-------------------------------------------------
+
+---
 
 This is a plugin that provides an Open API reference for Better Auth. It shows all endpoints added by plugins and the core. It also provides a way to test the endpoints. It uses [Scalar](https://scalar.com/) to display the Open API reference.
 
@@ -32,6 +34,7 @@ This is a plugin that provides an Open API reference for Better Auth. It shows a
         ] // [!code highlight]
     })
     ```
+
   </Step>
 
   <Step>
@@ -40,6 +43,7 @@ This is a plugin that provides an Open API reference for Better Auth. It shows a
     Each plugin endpoints are grouped by the plugin name. The core endpoints are grouped under the `Default` group. And Model schemas are grouped under the `Models` group.
 
     ![Open API reference](/open-api-reference.png)
+
   </Step>
 </Steps>
 
@@ -56,7 +60,7 @@ The reference is generated using the [Scalar](https://scalar.com/) library. Scal
 To get the generated Open API schema directly as JSON, you can do `auth.api.generateOpenAPISchema()`. This will return the Open API schema as a JSON object.
 
 ```ts
-import { auth } from "~/lib/auth"
+import { auth } from '~/lib/auth'
 
 const openAPISchema = await auth.api.generateOpenAPISchema()
 console.log(openAPISchema)
@@ -69,14 +73,17 @@ If you're using Scalar for your API documentation, you can add Better Auth as an
 When using Hono with Scalar for OpenAPI documentation, you can integrate Better Auth by adding it as a source:
 
 ```ts
-app.get("/docs", Scalar({
-  pageTitle: "API Documentation",
-  sources: [
-    { url: "/api/open-api", title: "API" },
-    // Better Auth schema generation endpoint
-    { url: "/api/auth/open-api/generate-schema", title: "Auth" },
-  ],
-}));
+app.get(
+  '/docs',
+  Scalar({
+    pageTitle: 'API Documentation',
+    sources: [
+      { url: '/api/open-api', title: 'API' },
+      // Better Auth schema generation endpoint
+      { url: '/api/auth/open-api/generate-schema', title: 'Auth' },
+    ],
+  })
+)
 ```
 
 ## Configuration
@@ -88,5 +95,3 @@ app.get("/docs", Scalar({
 This allows you to display both your application's API and Better Auth's authentication endpoints in a unified documentation interface.
 
 `theme` - Allows you to change the theme of the OpenAPI reference page. Default is `default`.
-
-

@@ -1,14 +1,16 @@
 # reference: Security
+
 URL: /docs/reference/security
 Source: https://raw.githubusercontent.com/better-auth/better-auth/refs/heads/main/docs/content/docs/reference/security.mdx
 
 Better Auth security features.
 
-***
+---
 
 title: Security
 description: Better Auth security features.
--------------------------------------------
+
+---
 
 This page contains information about security features of Better Auth.
 
@@ -82,11 +84,7 @@ The most basic usage is to specify exact origins:
 
 ```typescript
 {
-  trustedOrigins: [
-    "https://example.com",
-    "https://app.example.com",
-    "http://localhost:3000"
-  ]
+  trustedOrigins: ['https://example.com', 'https://app.example.com', 'http://localhost:3000']
 }
 ```
 
@@ -97,9 +95,9 @@ Better Auth supports wildcard patterns in trusted origins, which allows you to t
 ```typescript
 {
   trustedOrigins: [
-    "*.example.com",             // Trust all subdomains of example.com (any protocol)
-    "https://*.example.com",     // Trust only HTTPS subdomains of example.com
-    "http://*.dev.example.com"   // Trust all HTTP subdomains of dev.example.com
+    '*.example.com', // Trust all subdomains of example.com (any protocol)
+    'https://*.example.com', // Trust only HTTPS subdomains of example.com
+    'http://*.dev.example.com', // Trust all HTTP subdomains of dev.example.com
   ]
 }
 ```
@@ -108,16 +106,16 @@ Better Auth supports wildcard patterns in trusted origins, which allows you to t
 
 When using a wildcard pattern with a protocol prefix (like `https://`):
 
-* The protocol must match exactly
-* The domain can have any subdomain in place of the `*`
-* Requests using a different protocol will be rejected, even if the domain matches
+- The protocol must match exactly
+- The domain can have any subdomain in place of the `*`
+- Requests using a different protocol will be rejected, even if the domain matches
 
 #### Protocol-agnostic wildcards
 
 When using a wildcard pattern without a protocol prefix (like `*.example.com`):
 
-* Any protocol (http, https, etc.) will be accepted
-* The domain must match the wildcard pattern
+- Any protocol (http, https, etc.) will be accepted
+- The domain must match the wildcard pattern
 
 ### Custom Schemes
 
@@ -126,8 +124,8 @@ Trusted origins also support custom schemes for mobile apps and browser extensio
 ```typescript
 {
   trustedOrigins: [
-    "myapp://",                               // Mobile app scheme
-    "chrome-extension://YOUR_EXTENSION_ID"    // Browser extension
+    'myapp://', // Mobile app scheme
+    'chrome-extension://YOUR_EXTENSION_ID', // Browser extension
   ]
 }
 ```
@@ -135,5 +133,3 @@ Trusted origins also support custom schemes for mobile apps and browser extensio
 ## Reporting Vulnerabilities
 
 If you discover a security vulnerability in Better Auth, please report it to us at [security@better-auth.com](mailto:security@better-auth.com). We address all reports promptly, and credits will be given for validated discoveries.
-
-

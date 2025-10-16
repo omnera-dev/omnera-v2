@@ -1,14 +1,16 @@
 # integrations: NestJS Integration
+
 URL: /docs/integrations/nestjs
 Source: https://raw.githubusercontent.com/better-auth/better-auth/refs/heads/main/docs/content/docs/integrations/nestjs.mdx
 
 Integrate Better Auth with NestJS.
 
-***
+---
 
 title: NestJS Integration
 description: Integrate Better Auth with NestJS.
------------------------------------------------
+
+---
 
 This guide will show you how to integrate Better Auth with [NestJS](https://nestjs.com/).
 
@@ -39,6 +41,7 @@ Install the NestJS integration library:
     <CodeBlockTabsTrigger value="bun">
       bun
     </CodeBlockTabsTrigger>
+
   </CodeBlockTabsList>
 
   <CodeBlockTab value="npm">
@@ -77,16 +80,16 @@ Install the NestJS integration library:
 Disable NestJS's built-in body parser to allow Better Auth to handle the raw request body:
 
 ```ts title="main.ts"
-import { NestFactory } from "@nestjs/core";
-import { AppModule } from "./app.module";
+import { NestFactory } from '@nestjs/core'
+import { AppModule } from './app.module'
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
     bodyParser: false, // Required for Better Auth
-  });
-  await app.listen(process.env.PORT ?? 3000);
+  })
+  await app.listen(process.env.PORT ?? 3000)
 }
-bootstrap();
+bootstrap()
 ```
 
 ### 2. Import AuthModule
@@ -94,14 +97,12 @@ bootstrap();
 Import the `AuthModule` in your root module:
 
 ```ts title="app.module.ts"
-import { Module } from '@nestjs/common';
-import { AuthModule } from '@thallesp/nestjs-better-auth';
-import { auth } from "./auth"; // Your Better Auth instance
+import { Module } from '@nestjs/common'
+import { AuthModule } from '@thallesp/nestjs-better-auth'
+import { auth } from './auth' // Your Better Auth instance
 
 @Module({
-  imports: [
-    AuthModule.forRoot({ auth }),
-  ],
+  imports: [AuthModule.forRoot({ auth })],
 })
 export class AppModule {}
 ```
@@ -113,26 +114,26 @@ export class AppModule {}
 Use the `Session` decorator to access the user session:
 
 ```ts title="user.controller.ts"
-import { Controller, Get } from '@nestjs/common';
-import { Session, UserSession, AllowAnonymous, OptionalAuth } from '@thallesp/nestjs-better-auth';
+import { Controller, Get } from '@nestjs/common'
+import { Session, UserSession, AllowAnonymous, OptionalAuth } from '@thallesp/nestjs-better-auth'
 
 @Controller('users')
 export class UserController {
   @Get('me')
   async getProfile(@Session() session: UserSession) {
-    return { user: session.user };
+    return { user: session.user }
   }
 
   @Get('public')
   @AllowAnonymous() // Allow anonymous access
   async getPublic() {
-    return { message: 'Public route' };
+    return { message: 'Public route' }
   }
 
   @Get('optional')
   @OptionalAuth() // Authentication is optional
   async getOptional(@Session() session: UserSession) {
-    return { authenticated: !!session };
+    return { authenticated: !!session }
   }
 }
 ```
@@ -140,5 +141,3 @@ export class UserController {
 ## Full Documentation
 
 For comprehensive documentation including decorators, hooks, global guards, and advanced configuration, visit the [NestJS Better Auth repository](https://github.com/thallesp/nestjs-better-auth).
-
-

@@ -1,14 +1,16 @@
 # adapters: MySQL
+
 URL: /docs/adapters/mysql
 Source: https://raw.githubusercontent.com/better-auth/better-auth/refs/heads/main/docs/content/docs/adapters/mysql.mdx
 
 Integrate Better Auth with MySQL.
 
-***
+---
 
 title: MySQL
 description: Integrate Better Auth with MySQL.
-----------------------------------------------
+
+---
 
 MySQL is a popular open-source relational database management system (RDBMS) that is widely used for building web applications and other types of software. It provides a flexible and scalable database solution that allows for efficient storage and retrieval of data.
 Read more here: [MySQL](https://www.mysql.com/).
@@ -19,18 +21,18 @@ Make sure you have MySQL installed and configured.
 Then, you can connect it straight into Better Auth.
 
 ```ts title="auth.ts"
-import { betterAuth } from "better-auth";
-import { createPool } from "mysql2/promise";
+import { betterAuth } from 'better-auth'
+import { createPool } from 'mysql2/promise'
 
 export const auth = betterAuth({
   database: createPool({
-    host: "localhost",
-    user: "root",
-    password: "password",
-    database: "database",
-    timezone: "Z", // Important to ensure consistent timezone values
+    host: 'localhost',
+    user: 'root',
+    password: 'password',
+    database: 'database',
+    timezone: 'Z', // Important to ensure consistent timezone values
   }),
-});
+})
 ```
 
 <Callout>
@@ -54,6 +56,7 @@ your database schema based on your Better Auth configuration and plugins.
         <p className="font-bold text-[16px] mb-1">MySQL Schema Migration</p>
       </th>
     </tr>
+
   </thead>
 
   <tbody>
@@ -77,5 +80,3 @@ npx @better-auth/cli@latest migrate
 MySQL is supported under the hood via the [Kysely](https://kysely.dev/) adapter, any database supported by Kysely would also be supported. (<Link href="/docs/adapters/other-relational-databases">Read more here</Link>)
 
 If you're looking for performance improvements or tips, take a look at our guide to <Link href="/docs/guides/optimizing-for-performance">performance optimizations</Link>.
-
-

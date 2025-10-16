@@ -1,14 +1,16 @@
 # authentication: Cognito
+
 URL: /docs/authentication/cognito
 Source: https://raw.githubusercontent.com/better-auth/better-auth/refs/heads/main/docs/content/docs/authentication/cognito.mdx
 
 Amazon Cognito provider setup and usage.
 
-***
+---
 
 title: Cognito
 description: Amazon Cognito provider setup and usage.
------------------------------------------------------
+
+---
 
 <Steps>
   <Step>
@@ -30,6 +32,7 @@ description: Amazon Cognito provider setup and usage.
       * **User Pool is required** for Cognito authentication.
       * Make sure the callback URL matches exactly what you configure in Cognito.
     </Callout>
+
   </Step>
 
   <Step>
@@ -52,6 +55,7 @@ description: Amazon Cognito provider setup and usage.
       },
     })
     ```
+
   </Step>
 
   <Step>
@@ -87,7 +91,6 @@ description: Amazon Cognito provider setup and usage.
     <Callout type="info">
       For more information about Amazon Cognito's scopes and API capabilities, refer to the [official documentation](https://docs.aws.amazon.com/cognito/latest/developerguide/cognito-user-pools-define-resource-servers.html?utm_source).
     </Callout>
+
   </Step>
 </Steps>
-
-

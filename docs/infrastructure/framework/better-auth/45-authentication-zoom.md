@@ -1,14 +1,16 @@
 # authentication: Zoom
+
 URL: /docs/authentication/zoom
 Source: https://raw.githubusercontent.com/better-auth/better-auth/refs/heads/main/docs/content/docs/authentication/zoom.mdx
 
 Zoom provider setup and usage.
 
-***
+---
 
 title: Zoom
 description: Zoom provider setup and usage.
--------------------------------------------
+
+---
 
 <Steps>
   <Step>
@@ -19,6 +21,7 @@ description: Zoom provider setup and usage.
     2. Hover on the `Develop` button and select `Build App`
 
     3. Select `General App` and click `Create`
+
   </Step>
 
   <Step>
@@ -46,6 +49,7 @@ description: Zoom provider setup and usage.
     1. Click the `Add Scopes` button
     2. Search for `user:read:user` (View a user) and select it
     3. Add any other scopes your applications needs and click `Done`
+
   </Step>
 
   <Step>
@@ -65,6 +69,7 @@ description: Zoom provider setup and usage.
       },
     })
     ```
+
   </Step>
 
   <Step>
@@ -83,7 +88,6 @@ description: Zoom provider setup and usage.
       })
     }
     ```
+
   </Step>
 </Steps>
-
-

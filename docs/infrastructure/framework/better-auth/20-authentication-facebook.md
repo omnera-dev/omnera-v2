@@ -1,14 +1,16 @@
 # authentication: Facebook
+
 URL: /docs/authentication/facebook
 Source: https://raw.githubusercontent.com/better-auth/better-auth/refs/heads/main/docs/content/docs/authentication/facebook.mdx
 
 Facebook provider setup and usage.
 
-***
+---
 
 title: Facebook
 description: Facebook provider setup and usage.
------------------------------------------------
+
+---
 
 <Steps>
   <Step>
@@ -25,6 +27,7 @@ description: Facebook provider setup and usage.
     </Callout>
 
     Make sure to set the redirect URL to `http://localhost:3000/api/auth/callback/facebook` for local development. For production, you should set it to the URL of your application. If you change the base path of the auth routes, you should update the redirect URL accordingly.
+
   </Step>
 
   <Step>
@@ -49,6 +52,7 @@ description: Facebook provider setup and usage.
       BetterAuth also supports Facebook Login for Business, all you need
       to do is provide the `configId` as listed in **Facebook Login For Business > Configurations** alongside your `clientId` and `clientSecret`. Note that the app must be a Business app and, since BetterAuth expects to have an email address and account id, the configuration must be of the "User access token" type. "System-user access token" is not supported.
     </Callout>
+
   </Step>
 
   <Step>
@@ -68,6 +72,7 @@ description: Facebook provider setup and usage.
         })
     }
     ```
+
   </Step>
 </Steps>
 
@@ -79,23 +84,23 @@ By default, Facebook provides basic user information. If you need additional per
 
 ```ts title="auth.ts"
 export const auth = betterAuth({
-    socialProviders: {
-        facebook: {
-            clientId: process.env.FACEBOOK_CLIENT_ID as string,
-            clientSecret: process.env.FACEBOOK_CLIENT_SECRET as string,
-            scopes: ["email", "public_profile", "user_friends"], // Overwrites permissions
-            fields: ["user_friends"], // Extending list of fields
-        },
+  socialProviders: {
+    facebook: {
+      clientId: process.env.FACEBOOK_CLIENT_ID as string,
+      clientSecret: process.env.FACEBOOK_CLIENT_SECRET as string,
+      scopes: ['email', 'public_profile', 'user_friends'], // Overwrites permissions
+      fields: ['user_friends'], // Extending list of fields
     },
+  },
 })
 ```
 
 Additional options:
 
-* `scopes`: Access basic account information (overwrites).
-  * Default: `"email", "public_profile"`
-* `fields`: Extend list of fields to retrieve from the Facebook user profile (assignment).
-  * Default: `"id", "name", "email", "picture"`
+- `scopes`: Access basic account information (overwrites).
+  - Default: `"email", "public_profile"`
+- `fields`: Extend list of fields to retrieve from the Facebook user profile (assignment).
+  - Default: `"id", "name", "email", "picture"`
 
 ### Sign In with Facebook With ID or Access Token
 
@@ -111,15 +116,14 @@ For limited login, you need to pass `idToken.token`, for only `accessToken` you 
 
 ```ts title="auth-client.ts"
 const data = await authClient.signIn.social({
-    provider: "facebook",
-    idToken: {  // [!code highlight]
-        ...(platform === 'ios' ?  // [!code highlight]
-            { token: idToken }  // [!code highlight]
-            : { token: accessToken, accessToken: accessToken }), // [!code highlight]
-    },
+  provider: 'facebook',
+  idToken: {
+    // [!code highlight]
+    ...(platform === 'ios' // [!code highlight]
+      ? { token: idToken } // [!code highlight]
+      : { token: accessToken, accessToken: accessToken }), // [!code highlight]
+  },
 })
 ```
 
 For a complete list of available permissions, refer to the [Permissions Reference](https://developers.facebook.com/docs/permissions).
-
-

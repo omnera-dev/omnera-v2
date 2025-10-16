@@ -1,14 +1,16 @@
 # integrations: Convex Integration
+
 URL: /docs/integrations/convex
 Source: https://raw.githubusercontent.com/better-auth/better-auth/refs/heads/main/docs/content/docs/integrations/convex.mdx
 
 Integrate Better Auth with Convex.
 
-***
+---
 
 title: Convex Integration
 description: Integrate Better Auth with Convex.
------------------------------------------------
+
+---
 
 <Callout>
   This documentation comes from the [Convex documentation](https://convex-better-auth.netlify.app/),
@@ -69,6 +71,7 @@ description: Integrate Better Auth with Convex.
     </CodeBlockTabs>
 
     Check out the [Convex docs](https://docs.convex.dev/home) to learn more about Convex.
+
   </Step>
 
   <Step>
@@ -120,6 +123,7 @@ description: Integrate Better Auth with Convex.
         ```
       </CodeBlockTab>
     </CodeBlockTabs>
+
   </Step>
 </Steps>
 
@@ -192,6 +196,7 @@ If you're not using Next.js, please refer to the [installation guide by Convex](
         ```
       </CodeBlockTab>
     </CodeBlockTabs>
+
   </Step>
 
   <Step>
@@ -208,6 +213,7 @@ If you're not using Next.js, please refer to the [installation guide by Convex](
 
     export default app;
     ```
+
   </Step>
 
   <Step>
@@ -225,6 +231,7 @@ If you're not using Next.js, please refer to the [installation guide by Convex](
         ],
     };
     ```
+
   </Step>
 
   <Step>
@@ -352,6 +359,7 @@ If you're not using Next.js, please refer to the [installation guide by Convex](
     # Your local site URL // [!code ++]
     SITE_URL=http://localhost:3000 # [!code ++]
     ```
+
   </Step>
 
   <Step>
@@ -408,6 +416,7 @@ If you're not using Next.js, please refer to the [installation guide by Convex](
         },
     });
     ```
+
   </Step>
 
   <Step>
@@ -423,6 +432,7 @@ If you're not using Next.js, please refer to the [installation guide by Convex](
         plugins: [convexClient()],
     });
     ```
+
   </Step>
 
   <Step>
@@ -448,6 +458,7 @@ If you're not using Next.js, please refer to the [installation guide by Convex](
 
     export const { GET, POST } = nextJsHandler();
     ```
+
   </Step>
 
   <Step>
@@ -476,6 +487,7 @@ If you're not using Next.js, please refer to the [installation guide by Convex](
       );
     }
     ```
+
   </Step>
 </Steps>
 
@@ -495,21 +507,21 @@ and call the function from your server code.
 First, a token helper for calling Convex functions from your server code.
 
 ```ts title="src/lib/auth-server.ts"
-import { createAuth } from "@/convex/auth";
-import { getToken as getTokenNextjs } from "@convex-dev/better-auth/nextjs";
+import { createAuth } from '@/convex/auth'
+import { getToken as getTokenNextjs } from '@convex-dev/better-auth/nextjs'
 
 export const getToken = () => {
-  return getTokenNextjs(createAuth);
-};
+  return getTokenNextjs(createAuth)
+}
 ```
 
 Here's an example Convex function that uses Better Auth's server methods, and
 a server action that calls the Convex function.
 
 ```ts title="convex/users.ts"
-import { mutation } from "./_generated/server";
-import { v } from "convex/values";
-import { createAuth, authComponent } from "./auth";
+import { mutation } from './_generated/server'
+import { v } from 'convex/values'
+import { createAuth, authComponent } from './auth'
 
 export const updateUserPassword = mutation({
   args: {
@@ -523,32 +535,28 @@ export const updateUserPassword = mutation({
         newPassword: args.newPassword,
       },
       headers: await authComponent.getHeaders(ctx),
-    });
+    })
   },
-});
+})
 ```
 
 ```ts title="app/actions.ts"
-"use server";
+'use server'
 
-import { fetchMutation } from "convex/nextjs";
-import { api } from "../convex/_generated/api";
-import { getToken } from "../lib/auth-server";
+import { fetchMutation } from 'convex/nextjs'
+import { api } from '../convex/_generated/api'
+import { getToken } from '../lib/auth-server'
 
 // Authenticated mutation via server function
 export async function updatePassword({
   currentPassword,
   newPassword,
 }: {
-  currentPassword: string;
-  newPassword: string;
+  currentPassword: string
+  newPassword: string
 }) {
-  const token = await getToken();
-  await fetchMutation(
-    api.users.updatePassword,
-    { currentPassword, newPassword },
-    { token }
-  );
+  const token = await getToken()
+  await fetchMutation(api.users.updatePassword, { currentPassword, newPassword }, { token })
 }
 ```
 
@@ -556,5 +564,3 @@ export async function updatePassword({
   This documentation comes from the [Convex documentation](https://convex-better-auth.netlify.app/),
   for more information, please refer to their documentation.
 </Callout>
-
-

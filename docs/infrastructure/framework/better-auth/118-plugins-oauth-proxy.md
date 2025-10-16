@@ -1,14 +1,16 @@
 # plugins: OAuth Proxy
+
 URL: /docs/plugins/oauth-proxy
 Source: https://raw.githubusercontent.com/better-auth/better-auth/refs/heads/main/docs/content/docs/plugins/oauth-proxy.mdx
 
 OAuth Proxy plugin for Better Auth
 
-***
+---
 
 title: OAuth Proxy
 description: OAuth Proxy plugin for Better Auth
------------------------------------------------
+
+---
 
 A proxy plugin, that allows you to proxy OAuth requests. Useful for development and preview deployments where the redirect URL can't be known in advance to add to the OAuth provider.
 
@@ -31,6 +33,7 @@ A proxy plugin, that allows you to proxy OAuth requests. Useful for development 
         ] // [!code highlight]
     })
     ```
+
   </Step>
 
   <Step>
@@ -52,6 +55,7 @@ A proxy plugin, that allows you to proxy OAuth requests. Useful for development 
        }
     })
     ```
+
   </Step>
 </Steps>
 
@@ -61,8 +65,8 @@ The plugin adds an endpoint to your server that proxies OAuth requests. When you
 
 ```ts
 await authClient.signIn.social({
-    provider: "github",
-    callbackURL: "/dashboard" // the plugin will override this to something like "http://localhost:3000/api/auth/oauth-proxy?callbackURL=/dashboard"
+  provider: 'github',
+  callbackURL: '/dashboard', // the plugin will override this to something like "http://localhost:3000/api/auth/oauth-proxy?callbackURL=/dashboard"
 })
 ```
 
@@ -79,5 +83,3 @@ To share cookies between the proxy server and your main server it uses URL query
 **currentURL**: The application's current URL is automatically determined by the plugin. It first checks for the request URL if invoked by a client, then it checks the base URL from popular hosting providers, and finally falls back to the `baseURL` in your auth config. If the URL isnâ€™t inferred correctly, you can specify it manually here.
 
 **productionURL**: If this value matches the `baseURL` in your auth config, requests will not be proxied. Defaults to the `BETTER_AUTH_URL` environment variable.
-
-

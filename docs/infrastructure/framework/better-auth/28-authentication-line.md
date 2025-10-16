@@ -1,14 +1,16 @@
 # authentication: LINE
+
 URL: /docs/authentication/line
 Source: https://raw.githubusercontent.com/better-auth/better-auth/refs/heads/main/docs/content/docs/authentication/line.mdx
 
 LINE provider setup and usage.
 
-***
+---
 
 title: LINE
 description: LINE provider setup and usage.
--------------------------------------------
+
+---
 
 <Steps>
   <Step>
@@ -20,6 +22,7 @@ description: LINE provider setup and usage.
     4. Enable required scopes (at least `openid`; add `profile`, `email` if you need name, avatar, email).
 
     See LINE Login v2.1 reference for details: \[`https://developers.line.biz/en/reference/line-login/#issue-access-token`]
+
   </Step>
 
   <Step>
@@ -42,6 +45,7 @@ description: LINE provider setup and usage.
       },
     });
     ```
+
   </Step>
 </Steps>
 
@@ -52,11 +56,11 @@ description: LINE provider setup and usage.
 Use the client `signIn.social` with `provider: "line"`.
 
 ```ts title="auth-client.ts"
-import { createAuthClient } from "better-auth/client";
-const authClient = createAuthClient();
+import { createAuthClient } from 'better-auth/client'
+const authClient = createAuthClient()
 
 async function signInWithLINE() {
-  const res = await authClient.signIn.social({ provider: "line" });
+  const res = await authClient.signIn.social({ provider: 'line' })
 }
 ```
 
@@ -66,20 +70,18 @@ If you obtain the LINE ID token on the client, you can sign in directly without 
 
 ```ts title="auth-client.ts"
 await authClient.signIn.social({
-  provider: "line",
+  provider: 'line',
   idToken: {
-    token: "<LINE_ID_TOKEN>",
-    accessToken: "<LINE_ACCESS_TOKEN>",
+    token: '<LINE_ID_TOKEN>',
+    accessToken: '<LINE_ACCESS_TOKEN>',
   },
-});
+})
 ```
 
 ### Notes
 
-* Default scopes include `openid profile email`. Adjust as needed via provider options.
-* Verify redirect URI exactly matches the value configured in LINE Developers Console.
-* LINE ID token verification uses the official endpoint and checks audience and optional nonce per spec.
+- Default scopes include `openid profile email`. Adjust as needed via provider options.
+- Verify redirect URI exactly matches the value configured in LINE Developers Console.
+- LINE ID token verification uses the official endpoint and checks audience and optional nonce per spec.
 
 Designing a login button? Follow LINE's button [guidelines](https://developers.line.biz/en/docs/line-login/login-button/).
-
-

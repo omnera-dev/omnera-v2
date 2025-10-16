@@ -1,14 +1,16 @@
 # authentication: Roblox
+
 URL: /docs/authentication/roblox
 Source: https://raw.githubusercontent.com/better-auth/better-auth/refs/heads/main/docs/content/docs/authentication/roblox.mdx
 
 Roblox provider setup and usage.
 
-***
+---
 
 title: Roblox
 description: Roblox provider setup and usage.
----------------------------------------------
+
+---
 
 <Steps>
   <Step>
@@ -21,6 +23,7 @@ description: Roblox provider setup and usage.
     <Callout type="info">
       The Roblox API does not provide email addresses. As a workaround, the user's `email` field uses the `preferred_username` value instead.
     </Callout>
+
   </Step>
 
   <Step>
@@ -40,6 +43,7 @@ description: Roblox provider setup and usage.
         },
     })
     ```
+
   </Step>
 
   <Step>
@@ -59,7 +63,6 @@ description: Roblox provider setup and usage.
         })
     }
     ```
+
   </Step>
 </Steps>
-
-

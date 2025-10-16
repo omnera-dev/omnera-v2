@@ -1,14 +1,16 @@
 # guides: Migrating from Supabase Auth to Better Auth
+
 URL: /docs/guides/supabase-migration-guide
 Source: https://raw.githubusercontent.com/better-auth/better-auth/refs/heads/main/docs/content/docs/guides/supabase-migration-guide.mdx
 
 A step-by-step guide to transitioning from Supabase Auth to Better Auth.
 
-***
+---
 
 title: Migrating from Supabase Auth to Better Auth
 description: A step-by-step guide to transitioning from Supabase Auth to Better Auth.
--------------------------------------------------------------------------------------
+
+---
 
 In this guide, we'll walk through the steps to migrate a project from Supabase Auth to Better Auth.
 
@@ -81,6 +83,7 @@ Before starting the migration process, set up Better Auth in your project. Follo
         }),
     })
     ```
+
   </Step>
 
   <Step>
@@ -106,6 +109,7 @@ Before starting the migration process, set up Better Auth in your project. Follo
         } // [!code highlight]
     })
     ```
+
   </Step>
 
   <Step>
@@ -131,6 +135,7 @@ Before starting the migration process, set up Better Auth in your project. Follo
         } // [!code highlight]
     })
     ```
+
   </Step>
 
   <Step>
@@ -157,6 +162,7 @@ Before starting the migration process, set up Better Auth in your project. Follo
         plugins: [admin(), anonymous()], // [!code highlight]
     })
     ```
+
   </Step>
 
   <Step>
@@ -176,6 +182,7 @@ Before starting the migration process, set up Better Auth in your project. Follo
     * [`verification`](/docs/concepts/database#verification)
 
     This tables will be created on the `public` schema.
+
   </Step>
 
   <Step>
@@ -301,6 +308,7 @@ Before starting the migration process, set up Better Auth in your project. Follo
     };
     migrateFromSupabase();
     ```
+
   </Step>
 
   <Step>
@@ -311,6 +319,7 @@ Before starting the migration process, set up Better Auth in your project. Follo
     * `role`: remove `role` if you're not using the `admin` plugin
     * `isAnonymous`: remove `isAnonymous` if you're not using the `anonymous` plugin.
     * update other tables that reference the `users` table to use the `id` field.
+
   </Step>
 
   <Step>
@@ -321,6 +330,7 @@ Before starting the migration process, set up Better Auth in your project. Follo
     ```bash title="Terminal"
     bun migration.ts # or use node, ts-node, etc.
     ```
+
   </Step>
 
   <Step>
@@ -354,6 +364,7 @@ Before starting the migration process, set up Better Auth in your project. Follo
        }
     })
     ```
+
   </Step>
 
   <Step>
@@ -379,6 +390,7 @@ Before starting the migration process, set up Better Auth in your project. Follo
     * [Email OTP](/docs/authentication/email-otp): Learn how to add email OTP authentication to your project.
     * [Hooks](/docs/concepts/hooks): Learn how to use the hooks to listen for events.
     * [Next.js](/docs/integrations/next): Learn how to use the auth client in a Next.js project.
+
   </Step>
 </Steps>
 
@@ -391,5 +403,3 @@ To protect routes with middleware, refer to the [Next.js middleware guide](/docs
 Congratulations! You've successfully migrated from Supabase Auth to Better Auth.
 
 Better Auth offers greater flexibility and more featuresâ€”be sure to explore the [documentation](/docs) to unlock its full potential.
-
-

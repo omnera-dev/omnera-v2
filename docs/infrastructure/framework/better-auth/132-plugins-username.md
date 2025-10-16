@@ -1,14 +1,16 @@
 # plugins: Username
+
 URL: /docs/plugins/username
 Source: https://raw.githubusercontent.com/better-auth/better-auth/refs/heads/main/docs/content/docs/plugins/username.mdx
 
 Username plugin
 
-***
+---
 
 title: Username
 description: Username plugin
-----------------------------
+
+---
 
 The username plugin is a lightweight plugin that adds username support to the email and password authenticator. This allows users to sign in and sign up with their username instead of their email.
 
@@ -28,6 +30,7 @@ The username plugin is a lightweight plugin that adds username support to the em
         ] // [!code highlight]
     })
     ```
+
   </Step>
 
   <Step>
@@ -50,6 +53,7 @@ The username plugin is a lightweight plugin that adds username support to the em
     </Tabs>
 
     See the [Schema](#schema) section to add the fields manually.
+
   </Step>
 
   <Step>
@@ -65,6 +69,7 @@ The username plugin is a lightweight plugin that adds username support to the em
         ] // [!code highlight]
     })
     ```
+
   </Step>
 </Steps>
 
@@ -141,20 +146,20 @@ To sign in a user with username, you can use the `signIn.username` function prov
 
 ```ts
 const { data, error } = await authClient.signIn.username({
-    username: test,
-    password: password1234,
-});
+  username: test,
+  password: password1234,
+})
 ```
 
 ### Server Side
 
 ```ts
 const data = await auth.api.signInUsername({
-    body: {
-        username: test,
-        password: password1234,
-    }
-});
+  body: {
+    username: test,
+    password: password1234,
+  },
+})
 ```
 
 ### Type Definition
@@ -248,15 +253,15 @@ type isUsernameAvailable = {
 The minimum length of the username. Default is `3`.
 
 ```ts title="auth.ts"
-import { betterAuth } from "better-auth"
-import { username } from "better-auth/plugins"
+import { betterAuth } from 'better-auth'
+import { username } from 'better-auth/plugins'
 
 const auth = betterAuth({
-    plugins: [
-        username({
-            minUsernameLength: 5
-        })
-    ]
+  plugins: [
+    username({
+      minUsernameLength: 5,
+    }),
+  ],
 })
 ```
 
@@ -265,15 +270,15 @@ const auth = betterAuth({
 The maximum length of the username. Default is `30`.
 
 ```ts title="auth.ts"
-import { betterAuth } from "better-auth"
-import { username } from "better-auth/plugins"
+import { betterAuth } from 'better-auth'
+import { username } from 'better-auth/plugins'
 
 const auth = betterAuth({
-    plugins: [
-        username({
-            maxUsernameLength: 100
-        })
-    ]
+  plugins: [
+    username({
+      maxUsernameLength: 100,
+    }),
+  ],
 })
 ```
 
@@ -282,20 +287,20 @@ const auth = betterAuth({
 A function that validates the username. The function should return false if the username is invalid. By default, the username should only contain alphanumeric characters, underscores, and dots.
 
 ```ts title="auth.ts"
-import { betterAuth } from "better-auth"
-import { username } from "better-auth/plugins"
+import { betterAuth } from 'better-auth'
+import { username } from 'better-auth/plugins'
 
 const auth = betterAuth({
-    plugins: [
-        username({
-            usernameValidator: (username) => {
-                if (username === "admin") {
-                    return false
-                }
-                return true
-            }
-        })
-    ]
+  plugins: [
+    username({
+      usernameValidator: (username) => {
+        if (username === 'admin') {
+          return false
+        }
+        return true
+      },
+    }),
+  ],
 })
 ```
 
@@ -304,18 +309,18 @@ const auth = betterAuth({
 A function that validates the display username. The function should return false if the display username is invalid. By default, no validation is applied to display username.
 
 ```ts title="auth.ts"
-import { betterAuth } from "better-auth"
-import { username } from "better-auth/plugins"
+import { betterAuth } from 'better-auth'
+import { username } from 'better-auth/plugins'
 
 const auth = betterAuth({
-    plugins: [
-        username({
-            displayUsernameValidator: (displayUsername) => {
-                // Allow only alphanumeric characters, underscores, and hyphens
-                return /^[a-zA-Z0-9_-]+$/.test(displayUsername)
-            }
-        })
-    ]
+  plugins: [
+    username({
+      displayUsernameValidator: (displayUsername) => {
+        // Allow only alphanumeric characters, underscores, and hyphens
+        return /^[a-zA-Z0-9_-]+$/.test(displayUsername)
+      },
+    }),
+  ],
 })
 ```
 
@@ -326,20 +331,17 @@ A function that normalizes the username, or `false` if you want to disable norma
 By default, usernames are normalized to lowercase, so "TestUser" and "testuser", for example, are considered the same username. The `username` field will contain the normalized (lower case) username, while `displayUsername` will contain the original `username`.
 
 ```ts title="auth.ts"
-import { betterAuth } from "better-auth"
-import { username } from "better-auth/plugins"
+import { betterAuth } from 'better-auth'
+import { username } from 'better-auth/plugins'
 
 const auth = betterAuth({
-    plugins: [
-        username({
-            usernameNormalization: (username) => {
-                return username.toLowerCase()
-                    .replaceAll("0", "o")
-                    .replaceAll("3", "e")
-                    .replaceAll("4", "a");
-            }
-        })
-    ]
+  plugins: [
+    username({
+      usernameNormalization: (username) => {
+        return username.toLowerCase().replaceAll('0', 'o').replaceAll('3', 'e').replaceAll('4', 'a')
+      },
+    }),
+  ],
 })
 ```
 
@@ -350,15 +352,15 @@ A function that normalizes the display username, or `false` to disable normaliza
 By default, display usernames are not normalized. When only `username` is provided during signup or update, the `displayUsername` will be set to match the original `username` value (before normalization). You can also explicitly set a `displayUsername` which will be preserved as-is. For custom normalization, provide a function that takes the display username as input and returns the normalized version.
 
 ```ts title="auth.ts"
-import { betterAuth } from "better-auth"
-import { username } from "better-auth/plugins"
+import { betterAuth } from 'better-auth'
+import { username } from 'better-auth/plugins'
 
 const auth = betterAuth({
-    plugins: [
-        username({
-            displayUsernameNormalization: (displayUsername) => displayUsername.toLowerCase(),
-        })
-    ]
+  plugins: [
+    username({
+      displayUsernameNormalization: (displayUsername) => displayUsername.toLowerCase(),
+    }),
+  ],
 })
 ```
 
@@ -367,18 +369,18 @@ const auth = betterAuth({
 By default, username and display username are validated before normalization. You can change this behavior by setting `validationOrder` to `post-normalization`.
 
 ```ts title="auth.ts"
-import { betterAuth } from "better-auth"
-import { username } from "better-auth/plugins"
+import { betterAuth } from 'better-auth'
+import { username } from 'better-auth/plugins'
 
 const auth = betterAuth({
-    plugins: [
-        username({
-            validationOrder: {
-                username: "post-normalization",
-                displayUsername: "post-normalization",
-            }
-        })
-    ]
+  plugins: [
+    username({
+      validationOrder: {
+        username: 'post-normalization',
+        displayUsername: 'post-normalization',
+      },
+    }),
+  ],
 })
 ```
 
@@ -387,18 +389,18 @@ const auth = betterAuth({
 The plugin requires 2 fields to be added to the user table:
 
 <DatabaseTable
-  fields={[
-      {
-          name: "username",
-          type: "string",
-          description: "The username of the user",
-          isUnique: true
-      },
-      {
-          name: "displayUsername",
-          type: "string",
-          description: "Non normalized username of the user",
-          isUnique: true
-      },
-  ]}
+fields={[
+{
+name: "username",
+type: "string",
+description: "The username of the user",
+isUnique: true
+},
+{
+name: "displayUsername",
+type: "string",
+description: "Non normalized username of the user",
+isUnique: true
+},
+]}
 />

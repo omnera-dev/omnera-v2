@@ -1,14 +1,16 @@
 # examples: Nuxt Example
+
 URL: /docs/examples/nuxt
 Source: https://raw.githubusercontent.com/better-auth/better-auth/refs/heads/main/docs/content/docs/examples/nuxt.mdx
 
 Better Auth Nuxt example.
 
-***
+---
 
 title: Nuxt Example
 description: Better Auth Nuxt example.
---------------------------------------
+
+---
 
 This is an example of how to use Better Auth with Nuxt.
 
@@ -41,5 +43,3 @@ Email & Password . Social Sign-in with Google
    pnpm dev
    ```
 4. Open the browser and navigate to `http://localhost:3000`
-
-

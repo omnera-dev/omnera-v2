@@ -1,14 +1,16 @@
 # adapters: Community Adapters
+
 URL: /docs/adapters/community-adapters
 Source: https://raw.githubusercontent.com/better-auth/better-auth/refs/heads/main/docs/content/docs/adapters/community-adapters.mdx
 
 Integrate Better Auth with community made database adapters.
 
-***
+---
 
 title: Community Adapters
 description: Integrate Better Auth with community made database adapters.
--------------------------------------------------------------------------
+
+---
 
 This page showcases a list of recommended community made database adapters.
 We encourage you to create any missing database adapters and maybe get added to the list!
@@ -23,5 +25,3 @@ We encourage you to create any missing database adapters and maybe get added to 
 | [@ronin/better-auth](https://github.com/ronin-co/better-auth)                                           | [RONIN](https://ronin.co)                  | <img src="https://github.com/ronin-co.png" className="rounded-full w-6 h-6 border opacity-70 m-0 inline mr-1" /> [ronin-co](https://github.com/ronin-co)                                       |
 | [better-auth-instantdb](https://github.com/daveyplate/better-auth-instantdb)                            | [InstantDB](https://www.instantdb.com/)    | <img src="https://github.com/daveycodez.png" className="rounded-full w-6 h-6 border opacity-70 m-0 inline mr-1" /> [daveycodez](https://github.com/daveycodez)                                 |
 | [@nerdfolio/remult-better-auth](https://github.com/nerdfolio/remult-better-auth)                        | [Remult](https://remult.dev/)              | <img src="https://github.com/taivo.png" className="rounded-full w-6 h-6 border opacity-70 m-0 inline mr-1" /> [Tai Vo](https://github.com/taivo)                                               |
-
-

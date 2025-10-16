@@ -1,14 +1,16 @@
 # guides: SAML SSO with Okta
+
 URL: /docs/guides/saml-sso-with-okta
 Source: https://raw.githubusercontent.com/better-auth/better-auth/refs/heads/main/docs/content/docs/guides/saml-sso-with-okta.mdx
 
 A guide to integrating SAML Single Sign-On (SSO) with Better Auth, featuring Okta
 
-***
+---
 
 title: SAML SSO with Okta
 description: A guide to integrating SAML Single Sign-On (SSO) with Better Auth, featuring Okta
-----------------------------------------------------------------------------------------------
+
+---
 
 This guide walks you through setting up SAML Single Sign-On (SSO) with your Identity Provider (IdP), using Okta as an example. For advanced configuration details and the full API reference, check out the [SSO Plugin Documentation](/docs/plugins/sso).
 
@@ -18,8 +20,8 @@ SAML (Security Assertion Markup Language) is an XML-based standard for exchangin
 
 In this setup:
 
-* **IdP (Okta)**: Authenticates users and sends assertions about their identity.
-* **SP (Better Auth)**: Validates assertions and logs the user in.up.
+- **IdP (Okta)**: Authenticates users and sends assertions about their identity.
+- **SP (Better Auth)**: Validates assertions and logs the user in.up.
 
 ### Step 1: Create a SAML Application in Okta
 
@@ -32,10 +34,9 @@ In this setup:
 4. Select "SAML 2.0" as the Sign-in method
 
 5. Configure the following settings:
-
-   * **Single Sign-on URL**: Your Better Auth ACS endpoint (e.g., `http://localhost:3000/api/auth/sso/saml2/sp/acs/sso`). while `sso` being your providerId
-   * **Audience URI (SP Entity ID)**: Your Better Auth metadata URL (e.g., `http://localhost:3000/api/auth/sso/saml2/sp/metadata`)
-   * **Name ID format**: Email Address or any of your choice.
+   - **Single Sign-on URL**: Your Better Auth ACS endpoint (e.g., `http://localhost:3000/api/auth/sso/saml2/sp/acs/sso`). while `sso` being your providerId
+   - **Audience URI (SP Entity ID)**: Your Better Auth metadata URL (e.g., `http://localhost:3000/api/auth/sso/saml2/sp/metadata`)
+   - **Name ID format**: Email Address or any of your choice.
 
 6. Download the IdP metadata XML file and certificate
 
@@ -45,41 +46,47 @@ Hereâ€™s an example configuration for Okta in a dev environment:
 
 ```typescript
 const ssoConfig = {
-  defaultSSO: [{
-    domain: "localhost:3000", // Your domain
-    providerId: "sso",
-    samlConfig: {
-      // SP Configuration
-      issuer: "http://localhost:3000/api/auth/sso/saml2/sp/metadata",
-      entryPoint: "https://trial-1076874.okta.com/app/trial-1076874_samltest_1/exktofb0a62hqLAUL697/sso/saml",
-      callbackUrl: "/dashboard", // Redirect after successful authentication
+  defaultSSO: [
+    {
+      domain: 'localhost:3000', // Your domain
+      providerId: 'sso',
+      samlConfig: {
+        // SP Configuration
+        issuer: 'http://localhost:3000/api/auth/sso/saml2/sp/metadata',
+        entryPoint:
+          'https://trial-1076874.okta.com/app/trial-1076874_samltest_1/exktofb0a62hqLAUL697/sso/saml',
+        callbackUrl: '/dashboard', // Redirect after successful authentication
 
-      // IdP Configuration
-      idpMetadata: {
-        entityID: "https://trial-1076874.okta.com/app/exktofb0a62hqLAUL697/sso/saml/metadata",
-        singleSignOnService: [{
-          Binding: "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect",
-          Location: "https://trial-1076874.okta.com/app/trial-1076874_samltest_1/exktofb0a62hqLAUL697/sso/saml"
-        }],
-        cert: `-----BEGIN CERTIFICATE-----
+        // IdP Configuration
+        idpMetadata: {
+          entityID: 'https://trial-1076874.okta.com/app/exktofb0a62hqLAUL697/sso/saml/metadata',
+          singleSignOnService: [
+            {
+              Binding: 'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect',
+              Location:
+                'https://trial-1076874.okta.com/app/trial-1076874_samltest_1/exktofb0a62hqLAUL697/sso/saml',
+            },
+          ],
+          cert: `-----BEGIN CERTIFICATE-----
 MIIDqjCCApKgAwIBAgIGAZhVGMeUMA0GCSqGSIb3DQEBCwUAMIGVMQswCQYDVQQGEwJVUzETMBEG
 ...
 [Your Okta Certificate]
 ...
------END CERTIFICATE-----`
-      },
+-----END CERTIFICATE-----`,
+        },
 
-      // SP Metadata
-      spMetadata: {
-        metadata: `<md:EntityDescriptor xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata"
+        // SP Metadata
+        spMetadata: {
+          metadata: `<md:EntityDescriptor xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata"
           entityID="http://localhost:3000/api/sso/saml2/sp/metadata">
           ...
           [Your SP Metadata XML]
           ...
-        </md:EntityDescriptor>`
-      }
-    }
-  }]
+        </md:EntityDescriptor>`,
+        },
+      },
+    },
+  ],
 }
 ```
 
@@ -91,27 +98,27 @@ You can configure multiple SAML providers for different domains:
 const ssoConfig = {
   defaultSSO: [
     {
-      domain: "company.com",
-      providerId: "company-okta",
+      domain: 'company.com',
+      providerId: 'company-okta',
       samlConfig: {
         // Okta SAML configuration for company.com
-      }
+      },
     },
     {
-      domain: "partner.com",
-      providerId: "partner-adfs",
+      domain: 'partner.com',
+      providerId: 'partner-adfs',
       samlConfig: {
         // ADFS SAML configuration for partner.com
-      }
+      },
     },
     {
-      domain: "contractor.org",
-      providerId: "contractor-azure",
+      domain: 'contractor.org',
+      providerId: 'contractor-azure',
       samlConfig: {
         // Azure AD SAML configuration for contractor.org
-      }
-    }
-  ]
+      },
+    },
+  ],
 }
 ```
 
@@ -129,9 +136,9 @@ You can start an SSO flow in three ways:
 ```typescript
 // Explicitly specify which provider to use
 await authClient.signIn.sso({
-  providerId: "company-okta",
-  callbackURL: "/dashboard"
-});
+  providerId: 'company-okta',
+  callbackURL: '/dashboard',
+})
 ```
 
 **2. By email domain matching:**
@@ -139,9 +146,9 @@ await authClient.signIn.sso({
 ```typescript
 // Automatically matches provider based on email domain
 await authClient.signIn.sso({
-  email: "user@company.com",
-  callbackURL: "/dashboard"
-});
+  email: 'user@company.com',
+  callbackURL: '/dashboard',
+})
 ```
 
 **3. By specifying domain:**
@@ -149,17 +156,17 @@ await authClient.signIn.sso({
 ```typescript
 // Explicitly specify domain for matching
 await authClient.signIn.sso({
-  domain: "partner.com",
-  callbackURL: "/dashboard"
-});
+  domain: 'partner.com',
+  callbackURL: '/dashboard',
+})
 ```
 
 **Important Notes**:
 
-* DummyIDP should ONLY be used for development and testing
-* Never use these certificates in production
-* The example uses `localhost:3000` - adjust URLs for your environment
-* For production, always use proper IdP providers like Okta, Azure AD, or OneLogin
+- DummyIDP should ONLY be used for development and testing
+- Never use these certificates in production
+- The example uses `localhost:3000` - adjust URLs for your environment
+- For production, always use proper IdP providers like Okta, Azure AD, or OneLogin
 
 ### Step 5: Dynamically Registering SAML Providers
 
@@ -169,19 +176,17 @@ Example registration:
 
 ```typescript
 await authClient.sso.register({
-  providerId: "okta-prod",
-  issuer: "https://your-domain.com",
-  domain: "your-domain.com",
+  providerId: 'okta-prod',
+  issuer: 'https://your-domain.com',
+  domain: 'your-domain.com',
   samlConfig: {
     // Your production SAML configuration
-  }
-});
+  },
+})
 ```
 
 ## Additional Resources
 
-* [SSO Plugin Documentation](/docs/plugins/sso)
-* [Okta SAML Documentation](https://developer.okta.com/docs/concepts/saml/)
-* [SAML 2.0 Specification](https://docs.oasis-open.org/security/saml/v2.0/saml-core-2.0-os.pdf)
-
-
+- [SSO Plugin Documentation](/docs/plugins/sso)
+- [Okta SAML Documentation](https://developer.okta.com/docs/concepts/saml/)
+- [SAML 2.0 Specification](https://docs.oasis-open.org/security/saml/v2.0/saml-core-2.0-os.pdf)

@@ -1,14 +1,16 @@
 # authentication: Notion
+
 URL: /docs/authentication/notion
 Source: https://raw.githubusercontent.com/better-auth/better-auth/refs/heads/main/docs/content/docs/authentication/notion.mdx
 
 Notion provider setup and usage.
 
-***
+---
 
 title: Notion
 description: Notion provider setup and usage.
----------------------------------------------
+
+---
 
 <Steps>
   <Step>
@@ -21,6 +23,7 @@ description: Notion provider setup and usage.
     <Callout>
       Make sure your Notion integration has the appropriate capabilities enabled. For user authentication, you'll need the "Read user information including email addresses" capability.
     </Callout>
+
   </Step>
 
   <Step>
@@ -40,6 +43,7 @@ description: Notion provider setup and usage.
         },
     })
     ```
+
   </Step>
 </Steps>
 
@@ -49,16 +53,16 @@ description: Notion provider setup and usage.
 
 To sign in with Notion, you can use the `signIn.social` function provided by the client. The `signIn` function takes an object with the following properties:
 
-* `provider`: The provider to use. It should be set to `notion`.
+- `provider`: The provider to use. It should be set to `notion`.
 
 ```ts title="auth-client.ts"
-import { createAuthClient } from "better-auth/client"
-const authClient =  createAuthClient()
+import { createAuthClient } from 'better-auth/client'
+const authClient = createAuthClient()
 
 const signIn = async () => {
-    const data = await authClient.signIn.social({
-        provider: "notion"
-    })
+  const data = await authClient.signIn.social({
+    provider: 'notion',
+  })
 }
 ```
 
@@ -66,8 +70,8 @@ const signIn = async () => {
 
 Notion supports different integration types. When creating your integration, you can choose between:
 
-* **Public integrations**: Can be installed by any Notion workspace
-* **Internal integrations**: Limited to your own workspace
+- **Public integrations**: Can be installed by any Notion workspace
+- **Internal integrations**: Limited to your own workspace
 
 For most authentication use cases, you'll want to create a public integration to allow users from different workspaces to sign in.
 
@@ -90,5 +94,3 @@ return <button onClick={requestNotionAccess}>Connect Notion Workspace</button>;
 <Callout>
   After authentication, you can use the access token to interact with the Notion API to read and write pages, databases, and other content that the user has granted access to.
 </Callout>
-
-

@@ -1,14 +1,16 @@
 # authentication: Dropbox
+
 URL: /docs/authentication/dropbox
 Source: https://raw.githubusercontent.com/better-auth/better-auth/refs/heads/main/docs/content/docs/authentication/dropbox.mdx
 
 Dropbox provider setup and usage.
 
-***
+---
 
 title: Dropbox
 description: Dropbox provider setup and usage.
-----------------------------------------------
+
+---
 
 <Steps>
   <Step>
@@ -17,9 +19,10 @@ description: Dropbox provider setup and usage.
     To use Dropbox sign in, you need a client ID and client secret. You can get them from the [Dropbox Developer Portal](https://www.dropbox.com/developers). You can Allow "Implicit Grant & PKCE" for the application in the App Console.
 
     Make sure to set the redirect URL to `http://localhost:3000/api/auth/callback/dropbox` for local development. For production, you should set it to the URL of your application. If you change the base path of the auth routes, you should update the redirect URL accordingly.
+
   </Step>
 
-  If you need deeper dive into Dropbox Authentication, you can check out the [official documentation](https://developers.dropbox.com/oauth-guide).
+If you need deeper dive into Dropbox Authentication, you can check out the [official documentation](https://developers.dropbox.com/oauth-guide).
 
   <Step>
     ### Configure the provider
@@ -38,6 +41,7 @@ description: Dropbox provider setup and usage.
         },
     })
     ```
+
   </Step>
 
   <Step>
@@ -57,7 +61,6 @@ description: Dropbox provider setup and usage.
         })
     }
     ```
+
   </Step>
 </Steps>
-
-

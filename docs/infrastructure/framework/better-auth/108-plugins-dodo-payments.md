@@ -1,14 +1,16 @@
 # plugins: Dodo Payments
+
 URL: /docs/plugins/dodopayments
 Source: https://raw.githubusercontent.com/better-auth/better-auth/refs/heads/main/docs/content/docs/plugins/dodopayments.mdx
 
 Better Auth Plugin for Dodo Payments
 
-***
+---
 
 title: Dodo Payments
 description: Better Auth Plugin for Dodo Payments
--------------------------------------------------
+
+---
 
 [Dodo Payments](https://dodopayments.com) is a global Merchant-of-Record platform that lets AI, SaaS and digital businesses sell in 150+ countries without touching tax, fraud, or compliance. A single, developer-friendly API powers checkout, billing, and payouts so you can launch worldwide in minutes.
 
@@ -19,10 +21,10 @@ description: Better Auth Plugin for Dodo Payments
 
 ## Features
 
-* Automatic customer creation on sign-up
-* Type-safe checkout flows with product slug mapping
-* Self-service customer portal
-* Real-time webhook event processing with signature verification
+- Automatic customer creation on sign-up
+- Type-safe checkout flows with product slug mapping
+- Self-service customer portal
+- Real-time webhook event processing with signature verification
 
 <Card href="https://app.dodopayments.com" title="Get started with Dodo Payments">
   You need a Dodo Payments account and API keys to use this integration.
@@ -37,6 +39,7 @@ description: Better Auth Plugin for Dodo Payments
     ```bash
     npm install @dodopayments/better-auth dodopayments better-auth zod
     ```
+
   </Step>
 
   <Step title="Configure environment variables">
@@ -46,6 +49,7 @@ description: Better Auth Plugin for Dodo Payments
     DODO_PAYMENTS_API_KEY=your_api_key_here
     DODO_PAYMENTS_WEBHOOK_SECRET=your_webhook_secret_here
     ```
+
   </Step>
 
   <Step title="Set up server-side integration">
@@ -98,6 +102,7 @@ description: Better Auth Plugin for Dodo Payments
     <Card>
       Set `environment` to `live_mode` for production.
     </Card>
+
   </Step>
 
   <Step title="Set up client-side integration">
@@ -111,6 +116,7 @@ description: Better Auth Plugin for Dodo Payments
       plugins: [dodopaymentsClient()],
     });
     ```
+
   </Step>
 </Steps>
 
@@ -120,32 +126,32 @@ description: Better Auth Plugin for Dodo Payments
 
 ```typescript
 const { data: checkout, error } = await authClient.dodopayments.checkout({
-  slug: "premium-plan",
+  slug: 'premium-plan',
   customer: {
-    email: "customer@example.com",
-    name: "John Doe",
+    email: 'customer@example.com',
+    name: 'John Doe',
   },
   billing: {
-    city: "San Francisco",
-    country: "US",
-    state: "CA",
-    street: "123 Market St",
-    zipcode: "94103",
+    city: 'San Francisco',
+    country: 'US',
+    state: 'CA',
+    street: '123 Market St',
+    zipcode: '94103',
   },
-  referenceId: "order_123",
-});
+  referenceId: 'order_123',
+})
 
 if (checkout) {
-  window.location.href = checkout.url;
+  window.location.href = checkout.url
 }
 ```
 
 ### Accessing the Customer Portal
 
 ```typescript
-const { data: customerPortal, error } = await authClient.dodopayments.customer.portal();
+const { data: customerPortal, error } = await authClient.dodopayments.customer.portal()
 if (customerPortal && customerPortal.redirect) {
-  window.location.href = customerPortal.url;
+  window.location.href = customerPortal.url
 }
 ```
 
@@ -153,23 +159,22 @@ if (customerPortal && customerPortal.redirect) {
 
 ```typescript
 // Get subscriptions
-const { data: subscriptions, error } =
-  await authClient.dodopayments.customer.subscriptions.list({
-    query: {
-      limit: 10,
-      page: 1,
-      active: true,
-    },
-  });
+const { data: subscriptions, error } = await authClient.dodopayments.customer.subscriptions.list({
+  query: {
+    limit: 10,
+    page: 1,
+    active: true,
+  },
+})
 
 // Get payment history
 const { data: payments, error } = await authClient.dodopayments.customer.payments.list({
   query: {
     limit: 10,
     page: 1,
-    status: "succeeded",
+    status: 'succeeded',
   },
-});
+})
 ```
 
 ### Webhooks
@@ -185,6 +190,7 @@ const { data: payments, error } = await authClient.dodopayments.customer.payment
     ```txt
     DODO_PAYMENTS_WEBHOOK_SECRET=your_webhook_secret_here
     ```
+
   </Step>
 
   <Step title="Handle webhook events">
@@ -198,6 +204,7 @@ const { data: payments, error } = await authClient.dodopayments.customer.payment
       },
     });
     ```
+
   </Step>
 </Steps>
 
@@ -205,16 +212,14 @@ const { data: payments, error } = await authClient.dodopayments.customer.payment
 
 ### Plugin Options
 
-* **client** (required): DodoPayments client instance
-* **createCustomerOnSignUp** (optional): Auto-create customers on user signup
-* **use** (required): Array of plugins to enable (checkout, portal, webhooks)
+- **client** (required): DodoPayments client instance
+- **createCustomerOnSignUp** (optional): Auto-create customers on user signup
+- **use** (required): Array of plugins to enable (checkout, portal, webhooks)
 
 ### Checkout Plugin Options
 
-* **products**: Array of products or async function returning products
-* **successUrl**: URL to redirect after successful payment
-* **authenticatedUsersOnly**: Require user authentication (default: false)
+- **products**: Array of products or async function returning products
+- **successUrl**: URL to redirect after successful payment
+- **authenticatedUsersOnly**: Require user authentication (default: false)
 
 If you encounter any issues, please refer to the [Dodo Payments documentation](https://docs.dodopayments.com) for troubleshooting steps.
-
-

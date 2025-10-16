@@ -1,14 +1,16 @@
 # examples: Remix Example
+
 URL: /docs/examples/remix
 Source: https://raw.githubusercontent.com/better-auth/better-auth/refs/heads/main/docs/content/docs/examples/remix.mdx
 
 Better Auth Remix example.
 
-***
+---
 
 title: Remix Example
 description: Better Auth Remix example.
----------------------------------------
+
+---
 
 This is an example of how to use Better Auth with Remix.
 
@@ -41,5 +43,3 @@ Email & Password . Social Sign-in with Google . Passkeys . Email Verification . 
    pnpm run dev
    ```
 4. Open the browser and navigate to `http://localhost:3000`
-
-

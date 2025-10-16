@@ -1,14 +1,16 @@
 # authentication: Atlassian
+
 URL: /docs/authentication/atlassian
 Source: https://raw.githubusercontent.com/better-auth/better-auth/refs/heads/main/docs/content/docs/authentication/atlassian.mdx
 
 Atlassian provider setup and usage.
 
-***
+---
 
 title: Atlassian
 description: Atlassian provider setup and usage.
-------------------------------------------------
+
+---
 
 <Steps>
   <Step>
@@ -25,6 +27,7 @@ description: Atlassian provider setup and usage.
     </Callout>
 
     Make sure to set the redirect URI to match your application's callback URL. If you change the base path of the auth routes, you should update the redirect URI accordingly.
+
   </Step>
 
   <Step>
@@ -44,6 +47,7 @@ description: Atlassian provider setup and usage.
         },
     })
     ```
+
   </Step>
 
   <Step>
@@ -67,7 +71,6 @@ description: Atlassian provider setup and usage.
     <Callout type="info">
       For more information about Atlassian's OAuth scopes and API capabilities, refer to the [official Atlassian OAuth 2.0 (3LO) apps documentation](https://developer.atlassian.com/cloud/confluence/oauth-2-3lo-apps/).
     </Callout>
+
   </Step>
 </Steps>
-
-

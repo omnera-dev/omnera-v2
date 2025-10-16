@@ -1,14 +1,16 @@
 # authentication: Other Social Providers
+
 URL: /docs/authentication/other-social-providers
 Source: https://raw.githubusercontent.com/better-auth/better-auth/refs/heads/main/docs/content/docs/authentication/other-social-providers.mdx
 
 Other social providers setup and usage.
 
-***
+---
 
 title: Other Social Providers
 description: Other social providers setup and usage.
-----------------------------------------------------
+
+---
 
 Better Auth provides out of the box support for a [Generic OAuth Plugin](/docs/plugins/generic-oauth) which allows you to use any social provider that implements the OAuth2 protocol or OpenID Connect (OIDC) flows.
 
@@ -44,6 +46,7 @@ To use a provider that is not supported out of the box, you can use the [Generic
         ]
     })
     ```
+
   </Step>
 
   <Step>
@@ -61,6 +64,7 @@ To use a provider that is not supported out of the box, you can use the [Generic
         ]
     })
     ```
+
   </Step>
 </Steps>
 
@@ -74,8 +78,8 @@ To use a provider that is not supported out of the box, you can use the [Generic
 ### Instagram Example
 
 ```ts title="auth.ts"
-import { betterAuth } from "better-auth";
-import { genericOAuth } from "better-auth/plugins";
+import { betterAuth } from 'better-auth'
+import { genericOAuth } from 'better-auth/plugins'
 
 export const auth = betterAuth({
   // ... other config options
@@ -83,31 +87,31 @@ export const auth = betterAuth({
     genericOAuth({
       config: [
         {
-          providerId: "instagram",
+          providerId: 'instagram',
           clientId: process.env.INSTAGRAM_CLIENT_ID as string,
           clientSecret: process.env.INSTAGRAM_CLIENT_SECRET as string,
-          authorizationUrl: "https://api.instagram.com/oauth/authorize",
-          tokenUrl: "https://api.instagram.com/oauth/access_token",
-          scopes: ["user_profile", "user_media"],
+          authorizationUrl: 'https://api.instagram.com/oauth/authorize',
+          tokenUrl: 'https://api.instagram.com/oauth/access_token',
+          scopes: ['user_profile', 'user_media'],
         },
       ],
     }),
   ],
-});
+})
 ```
 
 ```ts title="sign-in.ts"
 const response = await authClient.signIn.oauth2({
-  providerId: "instagram",
-  callbackURL: "/dashboard", // the path to redirect to after the user is authenticated
-});
+  providerId: 'instagram',
+  callbackURL: '/dashboard', // the path to redirect to after the user is authenticated
+})
 ```
 
 ### Coinbase Example
 
 ```ts title="auth.ts"
-import { betterAuth } from "better-auth";
-import { genericOAuth } from "better-auth/plugins";
+import { betterAuth } from 'better-auth'
+import { genericOAuth } from 'better-auth/plugins'
 
 export const auth = betterAuth({
   // ... other config options
@@ -115,24 +119,22 @@ export const auth = betterAuth({
     genericOAuth({
       config: [
         {
-          providerId: "coinbase",
+          providerId: 'coinbase',
           clientId: process.env.COINBASE_CLIENT_ID as string,
           clientSecret: process.env.COINBASE_CLIENT_SECRET as string,
-          authorizationUrl: "https://www.coinbase.com/oauth/authorize",
-          tokenUrl: "https://api.coinbase.com/oauth/token",
-          scopes: ["wallet:user:read"], // and more...
+          authorizationUrl: 'https://www.coinbase.com/oauth/authorize',
+          tokenUrl: 'https://api.coinbase.com/oauth/token',
+          scopes: ['wallet:user:read'], // and more...
         },
       ],
     }),
   ],
-});
+})
 ```
 
 ```ts title="sign-in.ts"
 const response = await authClient.signIn.oauth2({
-  providerId: "coinbase",
-  callbackURL: "/dashboard", // the path to redirect to after the user is authenticated
-});
+  providerId: 'coinbase',
+  callbackURL: '/dashboard', // the path to redirect to after the user is authenticated
+})
 ```
-
-

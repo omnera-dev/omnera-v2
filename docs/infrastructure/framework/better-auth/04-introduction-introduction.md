@@ -1,14 +1,16 @@
 # introduction: Introduction
+
 URL: /docs/introduction
 Source: https://raw.githubusercontent.com/better-auth/better-auth/refs/heads/main/docs/content/docs/introduction.mdx
 
 Introduction to Better Auth.
 
-***
+---
 
 title: Introduction
 description: Introduction to Better Auth.
------------------------------------------
+
+---
 
 Better Auth is a framework-agnostic, universal authentication and authorization framework for TypeScript. It provides a comprehensive set of features out of the box and includes a plugin ecosystem that simplifies adding advanced functionalities. Whether you need 2FA, passkey, multi-tenancy, multi-session support, or even enterprise features like SSO, creating your own IDP, it lets you focus on building your application instead of reinventing the wheel.
 
@@ -20,7 +22,7 @@ Better Auth aims to be the most comprehensive auth library. It provides a wide r
 
 ...and much more!
 
-***
+---
 
 ## AI tooling
 
@@ -39,11 +41,11 @@ Better Auth provides an MCP server so you can use it with any AI model that supp
 Use the Better Auth CLI to easily add the MCP server to your preferred client:
 
 <Tabs items={["Cursor", "Claude Code", "Open Code", "Manual"]}>
-  <Tab value="Cursor">
-    ```bash title="terminal"
+<Tab value="Cursor">
+`bash title="terminal"
     pnpm @better-auth/cli mcp --cursor
-    ```
-  </Tab>
+    `
+</Tab>
 
   <Tab value="Claude Code">
     ```bash title="terminal"
@@ -69,11 +71,11 @@ Use the Better Auth CLI to easily add the MCP server to your preferred client:
 Alternatively, you can manually configure the MCP server for each client:
 
 <Tabs items={["Claude Code", "Open Code", "Manual"]}>
-  <Tab value="Claude Code">
-    ```bash title="terminal"
+<Tab value="Claude Code">
+`bash title="terminal"
     claude mcp add --transport http better-auth https://mcp.chonkie.ai/better-auth/better-auth-builder/mcp
-    ```
-  </Tab>
+    `
+</Tab>
 
   <Tab value="Open Code">
     ```json title="opencode.json"
@@ -104,5 +106,3 @@ Alternatively, you can manually configure the MCP server for each client:
 <Callout>
   We provide a firstâ€‘party MCP, powered by [Chonkie](https://chonkie.ai). You can alternatively use [`context7`](https://context7.com/) and other MCP providers.
 </Callout>
-
-

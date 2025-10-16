@@ -1,14 +1,16 @@
 # authentication: Apple
+
 URL: /docs/authentication/apple
 Source: https://raw.githubusercontent.com/better-auth/better-auth/refs/heads/main/docs/content/docs/authentication/apple.mdx
 
 Apple provider setup and usage.
 
-***
+---
 
 title: Apple
 description: Apple provider setup and usage.
---------------------------------------------
+
+---
 
 <Steps>
   <Step>
@@ -66,6 +68,7 @@ description: Apple provider setup and usage.
        You can use the guide below from [Apple's documentation](https://developer.apple.com/documentation/accountorganizationaldatasharing/creating-a-client-secret) to understand how to generate this client secret. You can also use our built in generator [below](#generate-apple-client-secret-jwt) to generate the client secret JWT required for 'Sign in with Apple'.
 
        **Note:** Apple allows a maximum expiration of 6 months (180 days) for the client secret JWT. You will need to regenerate the client secret before it expires to maintain uninterrupted authentication.
+
   </Step>
 
   <Step>
@@ -93,6 +96,7 @@ description: Apple provider setup and usage.
     ```
 
     On native iOS, it doesn't use the service ID but the app ID (bundle ID) as client ID, so if using the service ID as `clientId` in `signIn.social` with `idToken`, it throws an error: `JWTClaimValidationFailed: unexpected "aud" claim value`. So you need to provide the `appBundleIdentifier` when you want to sign in with Apple using the ID Token.
+
   </Step>
 </Steps>
 
@@ -102,16 +106,16 @@ description: Apple provider setup and usage.
 
 To sign in with Apple, you can use the `signIn.social` function provided by the client. The `signIn` function takes an object with the following properties:
 
-* `provider`: The provider to use. It should be set to `apple`.
+- `provider`: The provider to use. It should be set to `apple`.
 
 ```ts title="auth-client.ts"  /
-import { createAuthClient } from "better-auth/client"
-const authClient =  createAuthClient()
+import { createAuthClient } from 'better-auth/client'
+const authClient = createAuthClient()
 
 const signIn = async () => {
-    const data = await authClient.signIn.social({
-        provider: "apple"
-    })
+  const data = await authClient.signIn.social({
+    provider: 'apple',
+  })
 }
 ```
 
@@ -139,5 +143,3 @@ await authClient.signIn.social({
 ## Generate Apple Client Secret (JWT)
 
 <GenerateAppleJwt />
-
-

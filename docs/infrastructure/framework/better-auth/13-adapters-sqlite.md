@@ -1,14 +1,16 @@
 # adapters: SQLite
+
 URL: /docs/adapters/sqlite
 Source: https://raw.githubusercontent.com/better-auth/better-auth/refs/heads/main/docs/content/docs/adapters/sqlite.mdx
 
 Integrate Better Auth with SQLite.
 
-***
+---
 
 title: SQLite
 description: Integrate Better Auth with SQLite.
------------------------------------------------
+
+---
 
 SQLite is a lightweight, serverless, self-contained SQL database engine that is widely used for local data storage in applications.
 Read more [here.](https://www.sqlite.org/)
@@ -22,12 +24,12 @@ Better Auth supports multiple SQLite drivers. Choose the one that best fits your
 The most popular and stable SQLite driver for Node.js:
 
 ```ts title="auth.ts"
-import { betterAuth } from "better-auth";
-import Database from "better-sqlite3";
+import { betterAuth } from 'better-auth'
+import Database from 'better-sqlite3'
 
 export const auth = betterAuth({
-  database: new Database("database.sqlite"),
-});
+  database: new Database('database.sqlite'),
+})
 ```
 
 <Callout>
@@ -44,12 +46,12 @@ export const auth = betterAuth({
 Starting from Node.js 22.5.0, you can use the built-in [SQLite](https://nodejs.org/api/sqlite.html) module:
 
 ```ts title="auth.ts"
-import { betterAuth } from "better-auth";
-import { DatabaseSync } from "node:sqlite";
+import { betterAuth } from 'better-auth'
+import { DatabaseSync } from 'node:sqlite'
 
 export const auth = betterAuth({
-  database: new DatabaseSync("database.sqlite"),
-});
+  database: new DatabaseSync('database.sqlite'),
+})
 ```
 
 To run your application with Node.js SQLite:
@@ -63,11 +65,11 @@ node your-app.js
 You can also use the built-in [SQLite](https://bun.com/docs/api/sqlite) module in Bun, which is similar to the Node.js version:
 
 ```ts title="auth.ts"
-import { betterAuth } from "better-auth";
-import { Database } from "bun:sqlite";
+import { betterAuth } from 'better-auth'
+import { Database } from 'bun:sqlite'
 export const auth = betterAuth({
-  database: new Database("database.sqlite"),
-});
+  database: new Database('database.sqlite'),
+})
 ```
 
 ## Schema generation & migration
@@ -86,6 +88,7 @@ your database schema based on your Better Auth configuration and plugins.
         <p className="font-bold text-[16px] mb-1">SQLite Schema Migration</p>
       </th>
     </tr>
+
   </thead>
 
   <tbody>
@@ -109,5 +112,3 @@ npx @better-auth/cli@latest migrate
 SQLite is supported under the hood via the [Kysely](https://kysely.dev/) adapter, any database supported by Kysely would also be supported. (<Link href="/docs/adapters/other-relational-databases">Read more here</Link>)
 
 If you're looking for performance improvements or tips, take a look at our guide to <Link href="/docs/guides/optimizing-for-performance">performance optimizations</Link>.
-
-

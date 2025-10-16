@@ -1,14 +1,16 @@
 # authentication: Google
+
 URL: /docs/authentication/google
 Source: https://raw.githubusercontent.com/better-auth/better-auth/refs/heads/main/docs/content/docs/authentication/google.mdx
 
 Google provider setup and usage.
 
-***
+---
 
 title: Google
 description: Google provider setup and usage.
----------------------------------------------
+
+---
 
 <Steps>
   <Step>
@@ -17,6 +19,7 @@ description: Google provider setup and usage.
     To use Google as a social provider, you need to get your Google credentials. You can get them by creating a new project in the [Google Cloud Console](https://console.cloud.google.com/apis/dashboard).
 
     In the Google Cloud Console > Credentials > Authorized redirect URIs, make sure to set the redirect URL to `http://localhost:3000/api/auth/callback/google` for local development. For production, make sure to set the redirect URL as your application domain, e.g. `https://example.com/api/auth/callback/google`. If you change the base path of the auth routes, you should update the redirect URL accordingly.
+
   </Step>
 
   <Step>
@@ -36,6 +39,7 @@ description: Google provider setup and usage.
         },
     })
     ```
+
   </Step>
 </Steps>
 
@@ -45,17 +49,17 @@ description: Google provider setup and usage.
 
 To sign in with Google, you can use the `signIn.social` function provided by the client. The `signIn` function takes an object with the following properties:
 
-* `provider`: The provider to use. It should be set to `google`.
+- `provider`: The provider to use. It should be set to `google`.
 
 ```ts title="auth-client.ts"  /
-import { createAuthClient } from "better-auth/client";
-const authClient = createAuthClient();
+import { createAuthClient } from 'better-auth/client'
+const authClient = createAuthClient()
 
 const signIn = async () => {
   const data = await authClient.signIn.social({
-    provider: "google",
-  });
-};
+    provider: 'google',
+  })
+}
 ```
 
 ### Sign In with Google With ID Token
@@ -105,17 +109,13 @@ If your application needs additional Google scopes after the user has already si
 ```tsx title="auth-client.ts"
 const requestGoogleDriveAccess = async () => {
   await authClient.linkSocial({
-    provider: "google",
-    scopes: ["https://www.googleapis.com/auth/drive.file"],
-  });
-};
+    provider: 'google',
+    scopes: ['https://www.googleapis.com/auth/drive.file'],
+  })
+}
 
 // Example usage in a React component
-return (
-  <button onClick={requestGoogleDriveAccess}>
-    Add Google Drive Permissions
-  </button>
-);
+return <button onClick={requestGoogleDriveAccess}>Add Google Drive Permissions</button>
 ```
 
 This will trigger a new OAuth flow that requests the additional scopes. After completion, your account will have the new scope in the database, and the access token will give you access to the requested Google APIs.
@@ -149,5 +149,3 @@ socialProviders: {
   already authorized your app, you must have them revoke your app's access in
   their Google account settings, then re-authorize.
 </Callout>
-
-

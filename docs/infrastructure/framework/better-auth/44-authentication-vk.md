@@ -1,14 +1,16 @@
 # authentication: VK
+
 URL: /docs/authentication/vk
 Source: https://raw.githubusercontent.com/better-auth/better-auth/refs/heads/main/docs/content/docs/authentication/vk.mdx
 
 VK ID Provider
 
-***
+---
 
 title: VK
 description: VK ID Provider
----------------------------
+
+---
 
 <Steps>
   <Step>
@@ -17,6 +19,7 @@ description: VK ID Provider
     To use VK ID sign in, you need a client ID and client secret. You can get them from the [VK ID Developer Portal](https://id.vk.com/about/business/go/docs).
 
     Make sure to set the redirect URL to `http://localhost:3000/api/auth/callback/vk` for local development. For production, you should set it to the URL of your application. If you change the base path of the auth routes, you should update the redirect URL accordingly.
+
   </Step>
 
   <Step>
@@ -36,6 +39,7 @@ description: VK ID Provider
       },
     });
     ```
+
   </Step>
 
   <Step>
@@ -55,7 +59,6 @@ description: VK ID Provider
       });
     };
     ```
+
   </Step>
 </Steps>
-
-

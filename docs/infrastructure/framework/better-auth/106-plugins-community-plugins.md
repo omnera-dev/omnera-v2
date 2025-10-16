@@ -1,14 +1,16 @@
 # plugins: Community Plugins
+
 URL: /docs/plugins/community-plugins
 Source: https://raw.githubusercontent.com/better-auth/better-auth/refs/heads/main/docs/content/docs/plugins/community-plugins.mdx
 
 A list of recommended community plugins.
 
-***
+---
 
 title: Community Plugins
 description: A list of recommended community plugins.
------------------------------------------------------
+
+---
 
 This page showcases a list of recommended community made plugins.
 
@@ -26,5 +28,3 @@ To create your own custom plugin, get started by reading our [plugins documentat
 | [better-auth-cloudflare](https://github.com/zpg6/better-auth-cloudflare)                      | Seamlessly integrate with Cloudflare Workers, D1, Hyperdrive, KV, R2, and geolocation services. Includes CLI for project generation, automated resource provisioning on Cloudflare, and database migrations. Supports Next.js, Hono, and more! | <img src="https://github.com/zpg6.png" className="rounded-full w-6 h-6 border opacity-70 m-0 inline mr-1" /> [zpg6](https://github.com/zpg6)                      |
 | [expo-better-auth-passkey](https://github.com/kevcube/expo-better-auth-passkey)               | Better-auth client plugin for using passkeys on mobile platforms in expo apps. Supports iOS, macOS, Android (and web!) by wrapping the existing better-auth passkey client plugin.                                                             | <img src="https://github.com/kevcube.png" className="rounded-full w-6 h-6 border opacity-70 m-0 inline mr-1" /> [kevcube](https://github.com/kevcube)             |
 | [better-auth-credentials-plugin](https://github.com/erickweil/better-auth-credentials-plugin) | LDAP authentication plugin for Better Auth.                                                                                                                                                                                                    | <img src="https://github.com/erickweil.png" className="rounded-full w-6 h-6 border opacity-70 m-0 inline mr-1" /> [erickweil](https://github.com/erickweil)       |
-
-

@@ -1,14 +1,16 @@
 # authentication: Linear
+
 URL: /docs/authentication/linear
 Source: https://raw.githubusercontent.com/better-auth/better-auth/refs/heads/main/docs/content/docs/authentication/linear.mdx
 
 Linear provider setup and usage.
 
-***
+---
 
 title: Linear
 description: Linear provider setup and usage.
----------------------------------------------
+
+---
 
 <Steps>
   <Step>
@@ -19,6 +21,7 @@ description: Linear provider setup and usage.
     Make sure to set the redirect URL to `http://localhost:3000/api/auth/callback/linear` for local development. For production, you should set it to the URL of your application. If you change the base path of the auth routes, you should update the redirect URL accordingly.
 
     When creating your OAuth application in Linear, you'll need to specify the required scopes. The default scope is `read`, but you can also request additional scopes like `write` if needed.
+
   </Step>
 
   <Step>
@@ -38,6 +41,7 @@ description: Linear provider setup and usage.
         },
     })
     ```
+
   </Step>
 
   <Step>
@@ -57,6 +61,7 @@ description: Linear provider setup and usage.
         })
     }
     ```
+
   </Step>
 
   <Step>
@@ -84,7 +89,6 @@ description: Linear provider setup and usage.
         },
     })
     ```
+
   </Step>
 </Steps>
-
-

@@ -1,14 +1,16 @@
 # examples: SvelteKit Example
+
 URL: /docs/examples/svelte-kit
 Source: https://raw.githubusercontent.com/better-auth/better-auth/refs/heads/main/docs/content/docs/examples/svelte-kit.mdx
 
 Better Auth SvelteKit example.
 
-***
+---
 
 title: SvelteKit Example
 description: Better Auth SvelteKit example.
--------------------------------------------
+
+---
 
 This is an example of how to use Better Auth with SvelteKit.
 
@@ -41,5 +43,3 @@ Email & Password . <u>Social Sign-in with Google</u> . Passkeys . Email Verifica
    pnpm dev
    ```
 4. Open the browser and navigate to `http://localhost:3000`
-
-

@@ -1,14 +1,16 @@
 # concepts: OAuth
+
 URL: /docs/concepts/oauth
 Source: https://raw.githubusercontent.com/better-auth/better-auth/refs/heads/main/docs/content/docs/concepts/oauth.mdx
 
 How Better Auth handles OAuth
 
-***
+---
 
 title: OAuth
 description: How Better Auth handles OAuth
-------------------------------------------
+
+---
 
 Better Auth comes with built-in support for OAuth 2.0 and OpenID Connect. This allows you to authenticate users via popular OAuth providers like Google, Facebook, GitHub, and more.
 
@@ -21,17 +23,17 @@ To enable a social provider, you need to provide `clientId` and `clientSecret` f
 Here's an example of how to configure Google as a provider:
 
 ```ts title="auth.ts"
-import { betterAuth } from "better-auth";
+import { betterAuth } from 'better-auth'
 
 export const auth = betterAuth({
   // Other configurations...
   socialProviders: {
     google: {
-      clientId: "YOUR_GOOGLE_CLIENT_ID",
-      clientSecret: "YOUR_GOOGLE_CLIENT_SECRET",
+      clientId: 'YOUR_GOOGLE_CLIENT_ID',
+      clientSecret: 'YOUR_GOOGLE_CLIENT_SECRET',
     },
   },
-});
+})
 ```
 
 ## Usage
@@ -43,7 +45,7 @@ To sign in with a social provider, you can use the `signIn.social` function with
 ```ts
 // client-side usage
 await authClient.signIn.social({
-  provider: "google", // or any other provider id
+  provider: 'google', // or any other provider id
 })
 ```
 
@@ -51,9 +53,9 @@ await authClient.signIn.social({
 // server-side usage
 await auth.api.signInSocial({
   body: {
-    provider: "google", // or any other provider id
+    provider: 'google', // or any other provider id
   },
-});
+})
 ```
 
 ### Link account
@@ -62,7 +64,7 @@ To link an account to a social provider, you can use the `linkAccount` function 
 
 ```ts
 await authClient.linkSocial({
-  provider: "google", // or any other provider id
+  provider: 'google', // or any other provider id
 })
 ```
 
@@ -83,8 +85,8 @@ To get the access token for a social provider, you can use the `getAccessToken` 
 
 ```ts
 const { accessToken } = await authClient.getAccessToken({
-  providerId: "google", // or any other provider id
-  accountId: "accountId", // optional, if you want to get the access token for a specific account
+  providerId: 'google', // or any other provider id
+  accountId: 'accountId', // optional, if you want to get the access token for a specific account
 })
 ```
 
@@ -107,7 +109,7 @@ To get provider specific account info you can use the `accountInfo` function wit
 
 ```ts
 const info = await authClient.accountInfo({
-  accountId: "accountId", // here you pass in the provider given account id, the provider is automatically detected from the account id
+  accountId: 'accountId', // here you pass in the provider given account id, the provider is automatically detected from the account id
 })
 ```
 
@@ -128,11 +130,11 @@ You can request additional scopes by using the `linkSocial` method with the same
 
 ```ts
 const requestAdditionalScopes = async () => {
-    await authClient.linkSocial({
-        provider: "google",
-        scopes: ["https://www.googleapis.com/auth/drive.file"],
-    });
-};
+  await authClient.linkSocial({
+    provider: 'google',
+    scopes: ['https://www.googleapis.com/auth/drive.file'],
+  })
+}
 ```
 
 <Callout>
@@ -146,18 +148,18 @@ const requestAdditionalScopes = async () => {
 The scope of the access request. For example, `email` or `profile`.
 
 ```ts title="auth.ts"
-import { betterAuth } from "better-auth";
+import { betterAuth } from 'better-auth'
 
 export const auth = betterAuth({
   // Other configurations...
   socialProviders: {
     google: {
-      clientId: "YOUR_GOOGLE_CLIENT_ID",
-      clientSecret: "YOUR_GOOGLE_CLIENT_SECRET",
-      scope: ["email", "profile"],
+      clientId: 'YOUR_GOOGLE_CLIENT_ID',
+      clientSecret: 'YOUR_GOOGLE_CLIENT_SECRET',
+      scope: ['email', 'profile'],
     },
   },
-});
+})
 ```
 
 ### redirectURI
@@ -165,17 +167,16 @@ export const auth = betterAuth({
 Custom redirect URI for the provider. By default, it uses `/api/auth/callback/${providerName}`
 
 ```ts title="auth.ts"
-
 export const auth = betterAuth({
   // Other configurations...
   socialProviders: {
     google: {
-      clientId: "YOUR_GOOGLE_CLIENT_ID",
-      clientSecret: "YOUR_GOOGLE_CLIENT_SECRET",
-      redirectURI: "https://your-app.com/auth/callback",
+      clientId: 'YOUR_GOOGLE_CLIENT_ID',
+      clientSecret: 'YOUR_GOOGLE_CLIENT_SECRET',
+      redirectURI: 'https://your-app.com/auth/callback',
     },
   },
-});
+})
 ```
 
 ### disableSignUp
@@ -201,23 +202,23 @@ A custom function to map the user profile returned from the provider to the user
 Useful, if you have additional fields in your user object you want to populate from the provider's profile. Or if you want to change how by default the user object is mapped.
 
 ```ts title="auth.ts"
-import { betterAuth } from "better-auth";
+import { betterAuth } from 'better-auth'
 
 export const auth = betterAuth({
   // Other configurations...
   socialProviders: {
     google: {
-      clientId: "YOUR_GOOGLE_CLIENT_ID",
-      clientSecret: "YOUR_GOOGLE_CLIENT_SECRET",
+      clientId: 'YOUR_GOOGLE_CLIENT_ID',
+      clientSecret: 'YOUR_GOOGLE_CLIENT_SECRET',
       mapProfileToUser: (profile) => {
         return {
           firstName: profile.given_name,
           lastName: profile.family_name,
-        };
+        }
       },
     },
   },
-});
+})
 ```
 
 ### refreshAccessToken
@@ -225,23 +226,23 @@ export const auth = betterAuth({
 A custom function to refresh the token. This feature is only supported for built-in social providers (Google, Facebook, GitHub, etc.) and is not currently supported for custom OAuth providers configured through the Generic OAuth Plugin. For built-in providers, you can provide a custom function to refresh the token if needed.
 
 ```ts title="auth.ts"
-import { betterAuth } from "better-auth";
+import { betterAuth } from 'better-auth'
 
 export const auth = betterAuth({
   // Other configurations...
   socialProviders: {
     google: {
-      clientId: "YOUR_GOOGLE_CLIENT_ID",
-      clientSecret: "YOUR_GOOGLE_CLIENT_SECRET",
+      clientId: 'YOUR_GOOGLE_CLIENT_ID',
+      clientSecret: 'YOUR_GOOGLE_CLIENT_SECRET',
       refreshAccessToken: async (token) => {
         return {
-          accessToken: "new-access-token",
-          refreshToken: "new-refresh-token",
-        };
+          accessToken: 'new-access-token',
+          refreshToken: 'new-refresh-token',
+        }
       },
     },
   },
-});
+})
 ```
 
 ### clientKey
@@ -249,17 +250,17 @@ export const auth = betterAuth({
 The client key of your application. This is used by TikTok Social Provider instead of `clientId`.
 
 ```ts title="auth.ts"
-import { betterAuth } from "better-auth";
+import { betterAuth } from 'better-auth'
 
 export const auth = betterAuth({
   // Other configurations...
   socialProviders: {
     tiktok: {
-      clientKey: "YOUR_TIKTOK_CLIENT_KEY",
-      clientSecret: "YOUR_TIKTOK_CLIENT_SECRET",
+      clientKey: 'YOUR_TIKTOK_CLIENT_KEY',
+      clientSecret: 'YOUR_TIKTOK_CLIENT_SECRET',
     },
   },
-});
+})
 ```
 
 ### getUserInfo
@@ -267,22 +268,22 @@ export const auth = betterAuth({
 A custom function to get user info from the provider. This allows you to override the default user info retrieval process.
 
 ```ts title="auth.ts"
-import { betterAuth } from "better-auth";
+import { betterAuth } from 'better-auth'
 
 export const auth = betterAuth({
   // Other configurations...
   socialProviders: {
     google: {
-      clientId: "YOUR_GOOGLE_CLIENT_ID",
-      clientSecret: "YOUR_GOOGLE_CLIENT_SECRET",
+      clientId: 'YOUR_GOOGLE_CLIENT_ID',
+      clientSecret: 'YOUR_GOOGLE_CLIENT_SECRET',
       getUserInfo: async (token) => {
         // Custom implementation to get user info
-        const response = await fetch("https://www.googleapis.com/oauth2/v2/userinfo", {
+        const response = await fetch('https://www.googleapis.com/oauth2/v2/userinfo', {
           headers: {
             Authorization: `Bearer ${token.accessToken}`,
           },
-        });
-        const profile = await response.json();
+        })
+        const profile = await response.json()
         return {
           user: {
             id: profile.id,
@@ -292,11 +293,11 @@ export const auth = betterAuth({
             emailVerified: profile.verified_email,
           },
           data: profile,
-        };
+        }
       },
     },
   },
-});
+})
 ```
 
 ### disableImplicitSignUp
@@ -304,18 +305,18 @@ export const auth = betterAuth({
 Disables implicit sign up for new users. When set to true for the provider, sign-in needs to be called with `requestSignUp` as true to create new users.
 
 ```ts title="auth.ts"
-import { betterAuth } from "better-auth";
+import { betterAuth } from 'better-auth'
 
 export const auth = betterAuth({
   // Other configurations...
   socialProviders: {
     google: {
-      clientId: "YOUR_GOOGLE_CLIENT_ID",
-      clientSecret: "YOUR_GOOGLE_CLIENT_SECRET",
+      clientId: 'YOUR_GOOGLE_CLIENT_ID',
+      clientSecret: 'YOUR_GOOGLE_CLIENT_SECRET',
       disableImplicitSignUp: true,
     },
   },
-});
+})
 ```
 
 ### prompt
@@ -323,18 +324,18 @@ export const auth = betterAuth({
 The prompt to use for the authorization code request. This controls the authentication flow behavior.
 
 ```ts title="auth.ts"
-import { betterAuth } from "better-auth";
+import { betterAuth } from 'better-auth'
 
 export const auth = betterAuth({
   // Other configurations...
   socialProviders: {
     google: {
-      clientId: "YOUR_GOOGLE_CLIENT_ID",
-      clientSecret: "YOUR_GOOGLE_CLIENT_SECRET",
-      prompt: "select_account", // or "consent", "login", "none", "select_account+consent"
+      clientId: 'YOUR_GOOGLE_CLIENT_ID',
+      clientSecret: 'YOUR_GOOGLE_CLIENT_SECRET',
+      prompt: 'select_account', // or "consent", "login", "none", "select_account+consent"
     },
   },
-});
+})
 ```
 
 ### responseMode
@@ -342,18 +343,18 @@ export const auth = betterAuth({
 The response mode to use for the authorization code request. This determines how the authorization response is returned.
 
 ```ts title="auth.ts"
-import { betterAuth } from "better-auth";
+import { betterAuth } from 'better-auth'
 
 export const auth = betterAuth({
   // Other configurations...
   socialProviders: {
     google: {
-      clientId: "YOUR_GOOGLE_CLIENT_ID",
-      clientSecret: "YOUR_GOOGLE_CLIENT_SECRET",
-      responseMode: "query", // or "form_post"
+      clientId: 'YOUR_GOOGLE_CLIENT_ID',
+      clientSecret: 'YOUR_GOOGLE_CLIENT_SECRET',
+      responseMode: 'query', // or "form_post"
     },
   },
-});
+})
 ```
 
 ### disableDefaultScope
@@ -361,23 +362,21 @@ export const auth = betterAuth({
 Removes the default scopes of the provider. By default, providers include certain scopes like `email` and `profile`. Set this to `true` to remove these default scopes and use only the scopes you specify.
 
 ```ts title="auth.ts"
-import { betterAuth } from "better-auth";
+import { betterAuth } from 'better-auth'
 
 export const auth = betterAuth({
   // Other configurations...
   socialProviders: {
     google: {
-      clientId: "YOUR_GOOGLE_CLIENT_ID",
-      clientSecret: "YOUR_GOOGLE_CLIENT_SECRET",
+      clientId: 'YOUR_GOOGLE_CLIENT_ID',
+      clientSecret: 'YOUR_GOOGLE_CLIENT_SECRET',
       disableDefaultScope: true,
-      scope: ["https://www.googleapis.com/auth/userinfo.email"], // Only this scope will be used
+      scope: ['https://www.googleapis.com/auth/userinfo.email'], // Only this scope will be used
     },
   },
-});
+})
 ```
 
 ### Other Provider Configurations
 
 Each provider may have additional options, check the specific provider documentation for more details.
-
-

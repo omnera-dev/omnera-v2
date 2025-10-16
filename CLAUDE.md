@@ -11,6 +11,7 @@ The following detailed documentation files are imported for Claude Code's memory
 @docs/infrastructure/framework/effect.md
 @docs/infrastructure/framework/hono.md
 @docs/infrastructure/framework/better-auth.md
+@docs/infrastructure/database/drizzle.md
 @docs/infrastructure/ui/react.md
 @docs/infrastructure/ui/tailwind.md
 @docs/infrastructure/ui/shadcn.md
@@ -88,6 +89,16 @@ Framework-agnostic authentication and authorization library for TypeScript.
 - **Why Better Auth**: Works seamlessly with Hono and Effect, Bun-native, rich plugin ecosystem, no per-user costs
 
 **Detailed Documentation**: [`docs/infrastructure/framework/better-auth.md`](docs/infrastructure/framework/better-auth.md)
+
+### Drizzle ORM
+
+TypeScript-first ORM for SQL databases providing type-safe queries with zero-cost type safety.
+
+- **Purpose**: Type-safe database operations, schema management, migrations, and relational queries
+- **Key Feature**: SQL-like syntax with full TypeScript inference, native Bun SQL integration (bun:sqlite)
+- **Why Drizzle**: Zero runtime overhead, perfect Effect integration, Better Auth compatible via drizzleAdapter, SQL-familiar API
+
+**Detailed Documentation**: [`docs/infrastructure/database/drizzle.md`](docs/infrastructure/database/drizzle.md)
 
 ### React (19.2.0)
 
@@ -184,7 +195,8 @@ omnera-v2/
 │   └── infrastructure/          # Technical infrastructure documentation
 │       ├── runtime/            # Runtime environment (Bun)
 │       ├── language/           # Programming language (TypeScript)
-│       ├── framework/          # Core frameworks (Effect, Hono)
+│       ├── framework/          # Core frameworks (Effect, Hono, Better Auth)
+│       ├── database/           # Database technologies (Drizzle ORM)
 │       ├── ui/                 # UI libraries (React, Tailwind CSS, shadcn/ui)
 │       ├── quality/            # Code quality tools (ESLint, Prettier, Knip)
 │       ├── testing/            # Testing frameworks (Bun Test, Playwright)
@@ -484,6 +496,7 @@ This project uses a modular documentation approach:
   - **runtime/**: Runtime environment (Bun)
   - **language/**: Programming language (TypeScript)
   - **framework/**: Core frameworks (Effect, Hono, Better Auth)
+  - **database/**: Database technologies (Drizzle ORM)
   - **ui/**: UI libraries and styling (React, Tailwind CSS, shadcn/ui)
   - **quality/**: Code quality tools (ESLint, Prettier, Knip)
   - **testing/**: Testing frameworks (Bun Test, Playwright)

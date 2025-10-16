@@ -1,14 +1,16 @@
 # reference: FAQ
+
 URL: /docs/reference/faq
 Source: https://raw.githubusercontent.com/better-auth/better-auth/refs/heads/main/docs/content/docs/reference/faq.mdx
 
 Frequently asked questions about Better Auth.
 
-***
+---
 
 title: FAQ
 description: Frequently asked questions about Better Auth.
-----------------------------------------------------------
+
+---
 
 This page contains frequently asked questions, common issues, and other helpful information about Better Auth.
 
@@ -27,6 +29,7 @@ This page contains frequently asked questions, common issues, and other helpful 
     ```ts title="server.ts"
     import { createAuthClient } from "better-auth/client";
     ```
+
   </Accordion>
 
   <Accordion title="getSession not working">
@@ -53,6 +56,7 @@ This page contains frequently asked questions, common issues, and other helpful 
         }
     })
     ```
+
   </Accordion>
 
   <Accordion title="Adding custom fields to the users table">
@@ -80,6 +84,7 @@ This page contains frequently asked questions, common issues, and other helpful 
       `getSession` is available on both server and client auth instances.
       Not just the latter.
     </Callout>
+
   </Accordion>
 
   <Accordion title="Common TypeScript Errors">
@@ -104,13 +109,13 @@ This page contains frequently asked questions, common issues, and other helpful 
     ```
 
     You can learn more in our <Link href="/docs/concepts/typescript#typescript-config">TypeScript docs</Link>.
+
   </Accordion>
 
   <Accordion title="Can I remove `name`, `image`, or `email` fields from the user table?">
     At this time, you can't remove the `name`, `image`, or `email` fields from the user table.
 
     We do plan to have more customizability in the future in this regard, but for now, you can't remove these fields.
+
   </Accordion>
 </Accordions>
-
-

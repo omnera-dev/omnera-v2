@@ -1,14 +1,16 @@
 # guides: Optimizing for Performance
+
 URL: /docs/guides/optimizing-for-performance
 Source: https://raw.githubusercontent.com/better-auth/better-auth/refs/heads/main/docs/content/docs/guides/optimizing-for-performance.mdx
 
 A guide to optimizing your Better Auth application for performance.
 
-***
+---
 
 title: Optimizing for Performance
 description: A guide to optimizing your Better Auth application for performance.
---------------------------------------------------------------------------------
+
+---
 
 In this guide, weâ€™ll go over some of the ways you can optimize your application for a more performant Better Auth app.
 
@@ -23,7 +25,7 @@ Calling your database every time `useSession` or `getSession` is invoked isnâ�
 To turn on cookie caching, just set `session.cookieCache` in your auth config:
 
 ```ts title="auth.ts"
-import { betterAuth } from "better-auth";
+import { betterAuth } from 'better-auth'
 
 export const auth = betterAuth({
   session: {
@@ -32,7 +34,7 @@ export const auth = betterAuth({
       maxAge: 5 * 60, // Cache duration in seconds
     },
   },
-});
+})
 ```
 
 Read more about [cookie caching](/docs/concepts/session-management#cookie-cache).
@@ -42,8 +44,8 @@ Read more about [cookie caching](/docs/concepts/session-management#cookie-cache)
 Here are examples of how you can do caching in different frameworks and environments:
 
 <Tabs items={["Next", "Remix", "SolidStart", "React Query"]}>
-  <Tab value="Next">
-    Since Next v15, we can use the `"use cache"` directive to cache the response of a server function.
+<Tab value="Next">
+Since Next v15, we can use the `"use cache"` directive to cache the response of a server function.
 
     ```ts
     export async function getUsers() {
@@ -54,6 +56,7 @@ Here are examples of how you can do caching in different frameworks and environm
     ```
 
     Learn more about NextJS use cache directive <Link href="https://nextjs.org/docs/app/api-reference/directives/use-cache">here</Link>.
+
   </Tab>
 
   <Tab value="Remix">
@@ -73,6 +76,7 @@ Here are examples of how you can do caching in different frameworks and environm
     ```
 
     You can read a nice guide on Loader vs Route Cache Headers in Remix <Link href="https://sergiodxa.com/articles/loader-vs-route-cache-headers-in-remix">here</Link>.
+
   </Tab>
 
   <Tab value="SolidStart">
@@ -86,6 +90,7 @@ Here are examples of how you can do caching in different frameworks and environm
     ```
 
     Learn more about SolidStart `query` function <Link href="https://docs.solidjs.com/solid-router/reference/data-apis/query">here</Link>.
+
   </Tab>
 
   <Tab value="React Query">
@@ -117,6 +122,7 @@ Here are examples of how you can do caching in different frameworks and environm
     ```
 
     Learn more about React Query use cache directive <Link href="https://react-query.tanstack.com/reference/useQuery#usecache">here</Link>.
+
   </Tab>
 </Tabs>
 
@@ -127,7 +133,7 @@ If you're using a framework that supports server-side rendering, it's usually be
 ```ts
 const session = await auth.api.getSession({
   headers: await headers(),
-});
+})
 //then pass the session to the client
 ```
 
@@ -152,5 +158,3 @@ Optimizing database performance is essential to get the best out of Better Auth.
 <Callout>
   We intend to add indexing support in our schema generation tool in the future.
 </Callout>
-
-

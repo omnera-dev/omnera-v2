@@ -1,14 +1,16 @@
 # authentication: Microsoft
+
 URL: /docs/authentication/microsoft
 Source: https://raw.githubusercontent.com/better-auth/better-auth/refs/heads/main/docs/content/docs/authentication/microsoft.mdx
 
 Microsoft provider setup and usage.
 
-***
+---
 
 title: Microsoft
 description: Microsoft provider setup and usage.
-------------------------------------------------
+
+---
 
 Enabling OAuth with Microsoft Azure Entra ID (formerly Active Directory) allows your users to sign in and sign up to your application with their Microsoft account.
 
@@ -21,6 +23,7 @@ Enabling OAuth with Microsoft Azure Entra ID (formerly Active Directory) allows 
     Make sure to set the redirect URL to `http://localhost:3000/api/auth/callback/microsoft` for local development. For production, you should change it to the URL of your application. If you change the base path of the auth routes, you should update the redirect URL accordingly.
 
     see the [Microsoft Entra ID documentation](https://docs.microsoft.com/en-us/azure/active-directory/develop/quickstart-register-app) for more information.
+
   </Step>
 
   <Step>
@@ -46,6 +49,7 @@ Enabling OAuth with Microsoft Azure Entra ID (formerly Active Directory) allows 
     ```
 
     **Authority URL**: Use the default `https://login.microsoftonline.com` for standard Entra ID scenarios or `https://<tenant-id>.ciamlogin.com` for CIAM (Customer Identity and Access Management) scenarios.
+
   </Step>
 </Steps>
 
@@ -53,19 +57,17 @@ Enabling OAuth with Microsoft Azure Entra ID (formerly Active Directory) allows 
 
 To sign in with Microsoft, you can use the `signIn.social` function provided by the client. The `signIn` function takes an object with the following properties:
 
-* `provider`: The provider to use. It should be set to `microsoft`.
+- `provider`: The provider to use. It should be set to `microsoft`.
 
 ```ts title="auth-client.ts"
-import { createAuthClient } from "better-auth/client";
+import { createAuthClient } from 'better-auth/client'
 
-const authClient = createAuthClient();
+const authClient = createAuthClient()
 
 const signIn = async () => {
   const data = await authClient.signIn.social({
-    provider: "microsoft",
-    callbackURL: "/dashboard", // The URL to redirect to after the sign in
-  });
-};
+    provider: 'microsoft',
+    callbackURL: '/dashboard', // The URL to redirect to after the sign in
+  })
+}
 ```
-
-

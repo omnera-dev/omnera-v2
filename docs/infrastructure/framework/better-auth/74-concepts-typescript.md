@@ -1,14 +1,16 @@
 # concepts: TypeScript
+
 URL: /docs/concepts/typescript
 Source: https://raw.githubusercontent.com/better-auth/better-auth/refs/heads/main/docs/content/docs/concepts/typescript.mdx
 
 Better Auth TypeScript integration.
 
-***
+---
 
 title: TypeScript
 description: Better Auth TypeScript integration.
-------------------------------------------------
+
+---
 
 Better Auth is designed to be type-safe. Both the client and server are built with TypeScript, allowing you to easily infer types.
 
@@ -31,7 +33,7 @@ if you can't set `strict` to `true`, you can enable `strictNullChecks`:
 ```json title="tsconfig.json"
 {
   "compilerOptions": {
-    "strictNullChecks": true,
+    "strictNullChecks": true
   }
 }
 ```
@@ -46,7 +48,7 @@ if you can't set `strict` to `true`, you can enable `strictNullChecks`:
 Both the client SDK and the server offer types that can be inferred using the `$Infer` property. Plugins can extend base types like `User` and `Session`, and you can use `$Infer` to infer these types. Additionally, plugins can provide extra types that can also be inferred through `$Infer`.
 
 ```ts title="auth-client.ts"
-import { createAuthClient } from "better-auth/client"
+import { createAuthClient } from 'better-auth/client'
 
 const authClient = createAuthClient()
 
@@ -58,11 +60,11 @@ The `Session` type includes both `session` and `user` properties. The user prope
 You can also infer types on the server side.
 
 ```ts title="auth.ts"
-import { betterAuth } from "better-auth"
-import Database from "better-sqlite3"
+import { betterAuth } from 'better-auth'
+import Database from 'better-sqlite3'
 
 export const auth = betterAuth({
-    database: new Database("database.db")
+  database: new Database('database.db'),
 })
 
 type Session = typeof auth.$Infer.Session
@@ -73,20 +75,19 @@ type Session = typeof auth.$Infer.Session
 Better Auth allows you to add additional fields to the user and session objects. All additional fields are properly inferred and available on the server and client side.
 
 ```ts
-import { betterAuth } from "better-auth"
-import Database from "better-sqlite3"
+import { betterAuth } from 'better-auth'
+import Database from 'better-sqlite3'
 
 export const auth = betterAuth({
-    database: new Database("database.db"),
-    user: {
-       additionalFields: {
-          role: {
-              type: "string",
-              input: false
-            }
-        }
-    }
-
+  database: new Database('database.db'),
+  user: {
+    additionalFields: {
+      role: {
+        type: 'string',
+        input: false,
+      },
+    },
+  },
 })
 
 type Session = typeof auth.$Infer.Session
@@ -122,13 +123,13 @@ To make sure proper type inference for additional fields on the client side, you
 If your server and client code reside in the same project, you can use the `inferAdditionalFields` plugin to automatically infer the additional fields from your server configuration.
 
 ```ts
-import { inferAdditionalFields } from "better-auth/client/plugins";
-import { createAuthClient } from "better-auth/react";
-import type { auth } from "./auth";
+import { inferAdditionalFields } from 'better-auth/client/plugins'
+import { createAuthClient } from 'better-auth/react'
+import type { auth } from './auth'
 
 export const authClient = createAuthClient({
   plugins: [inferAdditionalFields<typeof auth>()],
-});
+})
 ```
 
 2. For Separate Client-Server Projects
@@ -136,17 +137,17 @@ export const authClient = createAuthClient({
 If your client and server are in separate projects, you'll need to manually specify the additional fields when creating the auth client.
 
 ```ts
-import { inferAdditionalFields } from "better-auth/client/plugins";
+import { inferAdditionalFields } from 'better-auth/client/plugins'
 
 export const authClient = createAuthClient({
-  plugins: [inferAdditionalFields({
+  plugins: [
+    inferAdditionalFields({
       user: {
         role: {
-          type: "string"
-        }
-      }
-  })],
-});
+          type: 'string',
+        },
+      },
+    }),
+  ],
+})
 ```
-
-

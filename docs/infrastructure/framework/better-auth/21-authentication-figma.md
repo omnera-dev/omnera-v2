@@ -1,14 +1,16 @@
 # authentication: Figma
+
 URL: /docs/authentication/figma
 Source: https://raw.githubusercontent.com/better-auth/better-auth/refs/heads/main/docs/content/docs/authentication/figma.mdx
 
 Figma provider setup and usage.
 
-***
+---
 
 title: Figma
 description: Figma provider setup and usage.
---------------------------------------------
+
+---
 
 <Steps>
   <Step>
@@ -25,6 +27,7 @@ description: Figma provider setup and usage.
     </Callout>
 
     Make sure to set the redirect URI to match your application's callback URL. If you change the base path of the auth routes, you should update the redirect URI accordingly.
+
   </Step>
 
   <Step>
@@ -45,6 +48,7 @@ description: Figma provider setup and usage.
         },
     })
     ```
+
   </Step>
 
   <Step>
@@ -68,7 +72,6 @@ description: Figma provider setup and usage.
     <Callout type="info">
       For more information about Figma's OAuth scopes and API capabilities, refer to the [official Figma API documentation](https://www.figma.com/developers/api).
     </Callout>
+
   </Step>
 </Steps>
-
-

@@ -1,14 +1,16 @@
 # plugins: One-Time Token Plugin
+
 URL: /docs/plugins/one-time-token
 Source: https://raw.githubusercontent.com/better-auth/better-auth/refs/heads/main/docs/content/docs/plugins/one-time-token.mdx
 
 Generate and verify single-use token
 
-***
+---
 
 title: One-Time Token Plugin
 description: Generate and verify single-use token
--------------------------------------------------
+
+---
 
 The One-Time Token (OTT) plugin provides functionality to generate and verify secure, single-use session tokens. These are commonly used for across domains authentication.
 
@@ -31,6 +33,7 @@ The One-Time Token (OTT) plugin provides functionality to generate and verify se
         // ... other auth config
     });
     ```
+
   </Step>
 
   <Step>
@@ -48,6 +51,7 @@ The One-Time Token (OTT) plugin provides functionality to generate and verify se
         ]
     })
     ```
+
   </Step>
 </Steps>
 
@@ -60,25 +64,22 @@ Generate a token using `auth.api.generateOneTimeToken` or `authClient.oneTimeTok
 ### Client Side
 
 ```ts
-const { data, error } = await authClient.oneTimeToken.generate({});
+const { data, error } = await authClient.oneTimeToken.generate({})
 ```
 
 ### Server Side
 
 ```ts
 const data = await auth.api.generateOneTimeToken({
-
-    // This endpoint requires session cookies.
-    headers: await headers()
-});
+  // This endpoint requires session cookies.
+  headers: await headers(),
+})
 ```
 
 ### Type Definition
 
 ```ts
-type generateOneTimeToken = {
-
-}
+type generateOneTimeToken = {}
 ```
 
 This will return a `token` that is attached to the current session which can be used to verify the one-time token. By default, the token will expire in 3 minutes.
@@ -91,18 +92,18 @@ When the user clicks the link or submits the token, use the `auth.api.verifyOneT
 
 ```ts
 const { data, error } = await authClient.oneTimeToken.verify({
-    token: some-token,
-});
+  token: some - token,
+})
 ```
 
 ### Server Side
 
 ```ts
 const data = await auth.api.verifyOneTimeToken({
-    body: {
-        token: some-token,
-    }
-});
+  body: {
+    token: some - token,
+  },
+})
 ```
 
 ### Type Definition
@@ -123,22 +124,21 @@ This will return the session that was attached to the token.
 
 These options can be configured when adding the `oneTimeToken` plugin:
 
-* **`disableClientRequest`** (boolean): Optional. If `true`, the token will only be generated on the server side. Default: `false`.
-* **`expiresIn`** (number): Optional. The duration for which the token is valid in minutes. Default: `3`.
+- **`disableClientRequest`** (boolean): Optional. If `true`, the token will only be generated on the server side. Default: `false`.
+- **`expiresIn`** (number): Optional. The duration for which the token is valid in minutes. Default: `3`.
 
 ```ts
 oneTimeToken({
-    expiresIn: 10 // 10 minutes
+  expiresIn: 10, // 10 minutes
 })
 ```
 
-* **`generateToken`**: A custom token generator function that takes `session` object and a `ctx` as paramters.
+- **`generateToken`**: A custom token generator function that takes `session` object and a `ctx` as paramters.
 
-* **`storeToken`**: Optional. This option allows you to configure how the token is stored in your database.
-
-  * **`plain`**: The token is stored in plain text. (Default)
-  * **`hashed`**: The token is hashed using the default hasher.
-  * **`custom-hasher`**: A custom hasher function that takes a token and returns a hashed token.
+- **`storeToken`**: Optional. This option allows you to configure how the token is stored in your database.
+  - **`plain`**: The token is stored in plain text. (Default)
+  - **`hashed`**: The token is hashed using the default hasher.
+  - **`custom-hasher`**: A custom hasher function that takes a token and returns a hashed token.
 
 <Callout type="info">
   Note: It will not affect the token that's sent, it will only affect the token stored in your database.
@@ -148,25 +148,23 @@ Examples:
 
 ```ts title="No hashing (default)"
 oneTimeToken({
-    storeToken: "plain"
+  storeToken: 'plain',
 })
 ```
 
 ```ts title="built-in hasher"
 oneTimeToken({
-    storeToken: "hashed"
+  storeToken: 'hashed',
 })
 ```
 
 ```ts title="custom hasher"
 oneTimeToken({
-    storeToken: {
-        type: "custom-hasher",
-        hash: async (token) => {
-            return myCustomHasher(token);
-        }
-    }
+  storeToken: {
+    type: 'custom-hasher',
+    hash: async (token) => {
+      return myCustomHasher(token)
+    },
+  },
 })
 ```
-
-

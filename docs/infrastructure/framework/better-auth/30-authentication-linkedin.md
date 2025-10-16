@@ -1,14 +1,16 @@
 # authentication: LinkedIn
+
 URL: /docs/authentication/linkedin
 Source: https://raw.githubusercontent.com/better-auth/better-auth/refs/heads/main/docs/content/docs/authentication/linkedin.mdx
 
 LinkedIn Provider
 
-***
+---
 
 title: LinkedIn
 description: LinkedIn Provider
-------------------------------
+
+---
 
 <Steps>
   <Step>
@@ -17,15 +19,16 @@ description: LinkedIn Provider
     To use LinkedIn sign in, you need a client ID and client secret. You can get them from the [LinkedIn Developer Portal](https://www.linkedin.com/developers/).
 
     Make sure to set the redirect URL to `http://localhost:3000/api/auth/callback/linkedin` for local development. For production, you should set it to the URL of your application. If you change the base path of the auth routes, you should update the redirect URL accordingly.
+
   </Step>
 
   <Callout type="info">
     In the LinkedIn portal under products you need the **Sign In with LinkedIn using OpenID Connect** product.
   </Callout>
 
-  There are some different Guides here:
-  [Authorization Code Flow (3-legged OAuth) (Outdated)](https://learn.microsoft.com/en-us/linkedin/shared/authentication/authorization-code-flow)
-  [Sign In with LinkedIn using OpenID Connect](https://learn.microsoft.com/en-us/linkedin/consumer/integrations/self-serve/sign-in-with-linkedin-v2?context=linkedin%2Fconsumer%2Fcontext)
+There are some different Guides here:
+[Authorization Code Flow (3-legged OAuth) (Outdated)](https://learn.microsoft.com/en-us/linkedin/shared/authentication/authorization-code-flow)
+[Sign In with LinkedIn using OpenID Connect](https://learn.microsoft.com/en-us/linkedin/consumer/integrations/self-serve/sign-in-with-linkedin-v2?context=linkedin%2Fconsumer%2Fcontext)
 
   <Step>
     ### Configure the provider
@@ -44,6 +47,7 @@ description: LinkedIn Provider
         },
     })
     ```
+
   </Step>
 
   <Step>
@@ -63,7 +67,6 @@ description: LinkedIn Provider
         })
     }
     ```
+
   </Step>
 </Steps>
-
-

@@ -1,28 +1,30 @@
 # plugins: Stripe
+
 URL: /docs/plugins/stripe
 Source: https://raw.githubusercontent.com/better-auth/better-auth/refs/heads/main/docs/content/docs/plugins/stripe.mdx
 
 Stripe plugin for Better Auth to manage subscriptions and payments.
 
-***
+---
 
 title: Stripe
 description: Stripe plugin for Better Auth to manage subscriptions and payments.
---------------------------------------------------------------------------------
+
+---
 
 The Stripe plugin integrates Stripe's payment and subscription functionality with Better Auth. Since payment and authentication are often tightly coupled, this plugin simplifies the integration of Stripe into your application, handling customer creation, subscription management, and webhook processing.
 
 ## Features
 
-* Create Stripe Customers automatically when users sign up
-* Manage subscription plans and pricing
-* Process subscription lifecycle events (creation, updates, cancellations)
-* Handle Stripe webhooks securely with signature verification
-* Expose subscription data to your application
-* Support for trial periods and subscription upgrades
-* **Automatic trial abuse prevention** - Users can only get one trial per account across all plans
-* Flexible reference system to associate subscriptions with users or organizations
-* Team subscription support with seats management
+- Create Stripe Customers automatically when users sign up
+- Manage subscription plans and pricing
+- Process subscription lifecycle events (creation, updates, cancellations)
+- Handle Stripe webhooks securely with signature verification
+- Expose subscription data to your application
+- Support for trial periods and subscription upgrades
+- **Automatic trial abuse prevention** - Users can only get one trial per account across all plans
+- Flexible reference system to associate subscriptions with users or organizations
+- Team subscription support with seats management
 
 ## Installation
 
@@ -79,6 +81,7 @@ The Stripe plugin integrates Stripe's payment and subscription functionality wit
     <Callout>
       If you're using a separate client and server setup, make sure to install the plugin in both parts of your project.
     </Callout>
+
   </Step>
 
   <Step>
@@ -129,6 +132,7 @@ The Stripe plugin integrates Stripe's payment and subscription functionality wit
         ```
       </CodeBlockTab>
     </CodeBlockTabs>
+
   </Step>
 
   <Step>
@@ -154,6 +158,7 @@ The Stripe plugin integrates Stripe's payment and subscription functionality wit
         ]
     })
     ```
+
   </Step>
 
   <Step>
@@ -172,6 +177,7 @@ The Stripe plugin integrates Stripe's payment and subscription functionality wit
         ]
     })
     ```
+
   </Step>
 
   <Step>
@@ -194,6 +200,7 @@ The Stripe plugin integrates Stripe's payment and subscription functionality wit
     </Tabs>
 
     See the [Schema](#schema) section to add the tables manually.
+
   </Step>
 
   <Step>
@@ -214,6 +221,7 @@ The Stripe plugin integrates Stripe's payment and subscription functionality wit
     * `customer.subscription.deleted`
 
     Save the webhook signing secret provided by Stripe and add it to your environment variables as `STRIPE_WEBHOOK_SECRET`.
+
   </Step>
 </Steps>
 
@@ -228,20 +236,20 @@ You can customize the customer creation process:
 
 ```ts title="auth.ts"
 stripe({
-    // ... other options
-    createCustomerOnSignUp: true,
-    onCustomerCreate: async ({ customer, stripeCustomer, user }, request) => {
-        // Do something with the newly created customer
-        console.log(`Customer ${customer.id} created for user ${user.id}`);
-    },
-    getCustomerCreateParams: async ({ user, session }, request) => {
-        // Customize the Stripe customer creation parameters
-        return {
-            metadata: {
-                referralSource: user.metadata?.referralSource
-            }
-        };
+  // ... other options
+  createCustomerOnSignUp: true,
+  onCustomerCreate: async ({ customer, stripeCustomer, user }, request) => {
+    // Do something with the newly created customer
+    console.log(`Customer ${customer.id} created for user ${user.id}`)
+  },
+  getCustomerCreateParams: async ({ user, session }, request) => {
+    // Customize the Stripe customer creation parameters
+    return {
+      metadata: {
+        referralSource: user.metadata?.referralSource,
+      },
     }
+  },
 })
 ```
 
@@ -303,6 +311,24 @@ To create a subscription, use the `subscription.upgrade` method:
 
 ```ts
 const { data, error } = await authClient.subscription.upgrade({
+  plan: pro,
+  annual, // required
+  referenceId: 123, // required
+  subscriptionId: sub_123, // required
+  metadata, // required
+  seats, // required
+  successUrl,
+  cancelUrl,
+  returnUrl, // required
+  disableRedirect,
+})
+```
+
+### Server Side
+
+```ts
+const data = await auth.api.upgradeSubscription({
+  body: {
     plan: pro,
     annual, // required
     referenceId: 123, // required
@@ -313,28 +339,10 @@ const { data, error } = await authClient.subscription.upgrade({
     cancelUrl,
     returnUrl, // required
     disableRedirect,
-});
-```
-
-### Server Side
-
-```ts
-const data = await auth.api.upgradeSubscription({
-    body: {
-        plan: pro,
-        annual, // required
-        referenceId: 123, // required
-        subscriptionId: sub_123, // required
-        metadata, // required
-        seats, // required
-        successUrl,
-        cancelUrl,
-        returnUrl, // required
-        disableRedirect,
-    },
-    // This endpoint requires session cookies.
-    headers: await headers()
-});
+  },
+  // This endpoint requires session cookies.
+  headers: await headers(),
+})
 ```
 
 ### Type Definition
@@ -386,13 +394,13 @@ type upgradeSubscription = {
 
 ```ts title="client.ts"
 await client.subscription.upgrade({
-    plan: "pro",
-    successUrl: "/dashboard",
-    cancelUrl: "/pricing",
-    annual: true, // Optional: upgrade to an annual plan
-    referenceId: "org_123", // Optional: defaults to the current logged in user ID
-    seats: 5 // Optional: for team plans
-});
+  plan: 'pro',
+  successUrl: '/dashboard',
+  cancelUrl: '/pricing',
+  annual: true, // Optional: upgrade to an annual plan
+  referenceId: 'org_123', // Optional: defaults to the current logged in user ID
+  seats: 5, // Optional: for team plans
+})
 ```
 
 This will create a Checkout Session and redirect the user to the Stripe Checkout page.
@@ -405,12 +413,12 @@ This will create a Checkout Session and redirect the user to the Stripe Checkout
 
 ```ts
 const { error } = await client.subscription.upgrade({
-    plan: "pro",
-    successUrl: "/dashboard",
-    cancelUrl: "/pricing",
-});
-if(error) {
-    alert(error.message);
+  plan: 'pro',
+  successUrl: '/dashboard',
+  cancelUrl: '/pricing',
+})
+if (error) {
+  alert(error.message)
 }
 ```
 
@@ -424,11 +432,11 @@ To switch a subscription to a different plan, use the `subscription.upgrade` met
 
 ```ts title="client.ts"
 await client.subscription.upgrade({
-    plan: "pro",
-    successUrl: "/dashboard",
-    cancelUrl: "/pricing",
-    subscriptionId: "sub_123", // the Stripe subscription ID of the user's current plan
-});
+  plan: 'pro',
+  successUrl: '/dashboard',
+  cancelUrl: '/pricing',
+  subscriptionId: 'sub_123', // the Stripe subscription ID of the user's current plan
+})
 ```
 
 This ensures that the user only pays for the new plan, and not both.
@@ -441,20 +449,20 @@ To get the user's active subscriptions:
 
 ```ts
 const { data, error } = await authClient.subscription.list({
-    referenceId: 123, // required
-});
+  referenceId: 123, // required
+})
 ```
 
 ### Server Side
 
 ```ts
 const subscriptions = await auth.api.listActiveSubscriptions({
-    query: {
-        referenceId: 123, // required
-    },
-    // This endpoint requires session cookies.
-    headers: await headers()
-});
+  query: {
+    referenceId: 123, // required
+  },
+  // This endpoint requires session cookies.
+  headers: await headers(),
+})
 ```
 
 ### Type Definition
@@ -527,22 +535,22 @@ If a user changes their mind after canceling a subscription (but before the subs
 
 ```ts
 const { data, error } = await authClient.subscription.restore({
-    referenceId: 123, // required
-    subscriptionId: sub_123, // required
-});
+  referenceId: 123, // required
+  subscriptionId: sub_123, // required
+})
 ```
 
 ### Server Side
 
 ```ts
 const data = await auth.api.restoreSubscription({
-    body: {
-        referenceId: 123, // required
-        subscriptionId: sub_123, // required
-    },
-    // This endpoint requires session cookies.
-    headers: await headers()
-});
+  body: {
+    referenceId: 123, // required
+    subscriptionId: sub_123, // required
+  },
+  // This endpoint requires session cookies.
+  headers: await headers(),
+})
 ```
 
 ### Type Definition
@@ -573,24 +581,24 @@ To create a [Stripe billing portal session](https://docs.stripe.com/api/customer
 
 ```ts
 const { data, error } = await authClient.subscription.billingPortal({
-    locale, // required
-    referenceId: 123, // required
-    returnUrl, // required
-});
+  locale, // required
+  referenceId: 123, // required
+  returnUrl, // required
+})
 ```
 
 ### Server Side
 
 ```ts
 const data = await auth.api.createBillingPortal({
-    body: {
-        locale, // required
-        referenceId: 123, // required
-        returnUrl, // required
-    },
-    // This endpoint requires session cookies.
-    headers: await headers()
-});
+  body: {
+    locale, // required
+    referenceId: 123, // required
+    returnUrl, // required
+  },
+  // This endpoint requires session cookies.
+  headers: await headers(),
+})
 ```
 
 ### Type Definition
@@ -626,19 +634,19 @@ By default, subscriptions are associated with the user ID. However, you can use 
 ```ts title="client.ts"
 // Create a subscription for an organization
 await client.subscription.upgrade({
-    plan: "pro",
-    referenceId: "org_123456",
-    successUrl: "/dashboard",
-    cancelUrl: "/pricing",
-    seats: 5 // Number of seats for team plans
-});
+  plan: 'pro',
+  referenceId: 'org_123456',
+  successUrl: '/dashboard',
+  cancelUrl: '/pricing',
+  seats: 5, // Number of seats for team plans
+})
 
 // List subscriptions for an organization
 const { data: subscriptions } = await client.subscription.list({
-    query: {
-        referenceId: "org_123456"
-    }
-});
+  query: {
+    referenceId: 'org_123456',
+  },
+})
 ```
 
 #### Team Subscriptions with Seats
@@ -647,12 +655,12 @@ For team or organization plans, you can specify the number of seats:
 
 ```ts
 await client.subscription.upgrade({
-    plan: "team",
-    referenceId: "org_123456",
-    seats: 10, // 10 team members
-    successUrl: "/org/billing/success",
-    cancelUrl: "/org/billing"
-});
+  plan: 'team',
+  referenceId: 'org_123456',
+  seats: 10, // 10 team members
+  successUrl: '/org/billing/success',
+  cancelUrl: '/org/billing',
+})
 ```
 
 The `seats` parameter is passed to Stripe as the quantity for the subscription item. You can use this value in your application logic to limit the number of members in a team or organization.
@@ -661,20 +669,24 @@ To authorize reference IDs, implement the `authorizeReference` function:
 
 ```ts title="auth.ts"
 subscription: {
-    // ... other options
-    authorizeReference: async ({ user, session, referenceId, action }) => {
-        // Check if the user has permission to manage subscriptions for this reference
-        if (action === "upgrade-subscription" || action === "cancel-subscription" || action === "restore-subscription") {
-            const org = await db.member.findFirst({
-                where: {
-                    organizationId: referenceId,
-                    userId: user.id
-                }
-            });
-            return org?.role === "owner"
-        }
-        return true;
+  // ... other options
+  authorizeReference: async ({ user, session, referenceId, action }) => {
+    // Check if the user has permission to manage subscriptions for this reference
+    if (
+      action === 'upgrade-subscription' ||
+      action === 'cancel-subscription' ||
+      action === 'restore-subscription'
+    ) {
+      const org = await db.member.findFirst({
+        where: {
+          organizationId: referenceId,
+          userId: user.id,
+        },
+      })
+      return org?.role === 'owner'
     }
+    return true
+  }
 }
 ```
 
@@ -682,26 +694,26 @@ subscription: {
 
 The plugin automatically handles common webhook events:
 
-* `checkout.session.completed`: Updates subscription status after checkout
-* `customer.subscription.updated`: Updates subscription details when changed
-* `customer.subscription.deleted`: Marks subscription as canceled
+- `checkout.session.completed`: Updates subscription status after checkout
+- `customer.subscription.updated`: Updates subscription details when changed
+- `customer.subscription.deleted`: Marks subscription as canceled
 
 You can also handle custom events:
 
 ```ts title="auth.ts"
 stripe({
-    // ... other options
-    onEvent: async (event) => {
-        // Handle any Stripe event
-        switch (event.type) {
-            case "invoice.paid":
-                // Handle paid invoice
-                break;
-            case "payment_intent.succeeded":
-                // Handle successful payment
-                break;
-        }
+  // ... other options
+  onEvent: async (event) => {
+    // Handle any Stripe event
+    switch (event.type) {
+      case 'invoice.paid':
+        // Handle paid invoice
+        break
+      case 'payment_intent.succeeded':
+        // Handle successful payment
+        break
     }
+  },
 })
 ```
 
@@ -766,13 +778,13 @@ The Stripe plugin adds the following tables to your database:
 Table Name: `user`
 
 <DatabaseTable
-  fields={[
-  {
-    name: "stripeCustomerId",
-    type: "string",
-    description: "The Stripe customer ID",
-    isOptional: true
-  },
+fields={[
+{
+name: "stripeCustomerId",
+type: "string",
+description: "The Stripe customer ID",
+isOptional: true
+},
 ]}
 />
 
@@ -781,79 +793,79 @@ Table Name: `user`
 Table Name: `subscription`
 
 <DatabaseTable
-  fields={[
-  {
-    name: "id",
-    type: "string",
-    description: "Unique identifier for each subscription",
-    isPrimaryKey: true
-  },
-  {
-    name: "plan",
-    type: "string",
-    description: "The name of the subscription plan"
-  },
-  {
-    name: "referenceId",
-    type: "string",
-    description: "The ID this subscription is associated with (user ID by default)",
-    isUnique: true
-  },
-  {
-    name: "stripeCustomerId",
-    type: "string",
-    description: "The Stripe customer ID",
-    isOptional: true
-  },
-  {
-    name: "stripeSubscriptionId",
-    type: "string",
-    description: "The Stripe subscription ID",
-    isOptional: true
-  },
-  {
-    name: "status",
-    type: "string",
-    description: "The status of the subscription (active, canceled, etc.)",
-    defaultValue: "incomplete"
-  },
-  {
-    name: "periodStart",
-    type: "Date",
-    description: "Start date of the current billing period",
-    isOptional: true
-  },
-  {
-    name: "periodEnd",
-    type: "Date",
-    description: "End date of the current billing period",
-    isOptional: true
-  },
-  {
-    name: "cancelAtPeriodEnd",
-    type: "boolean",
-    description: "Whether the subscription will be canceled at the end of the period",
-    defaultValue: false,
-    isOptional: true
-  },
-  {
-    name: "seats",
-    type: "number",
-    description: "Number of seats for team plans",
-    isOptional: true
-  },
-  {
-    name: "trialStart",
-    type: "Date",
-    description: "Start date of the trial period",
-    isOptional: true
-  },
-  {
-    name: "trialEnd",
-    type: "Date",
-    description: "End date of the trial period",
-    isOptional: true
-  }
+fields={[
+{
+name: "id",
+type: "string",
+description: "Unique identifier for each subscription",
+isPrimaryKey: true
+},
+{
+name: "plan",
+type: "string",
+description: "The name of the subscription plan"
+},
+{
+name: "referenceId",
+type: "string",
+description: "The ID this subscription is associated with (user ID by default)",
+isUnique: true
+},
+{
+name: "stripeCustomerId",
+type: "string",
+description: "The Stripe customer ID",
+isOptional: true
+},
+{
+name: "stripeSubscriptionId",
+type: "string",
+description: "The Stripe subscription ID",
+isOptional: true
+},
+{
+name: "status",
+type: "string",
+description: "The status of the subscription (active, canceled, etc.)",
+defaultValue: "incomplete"
+},
+{
+name: "periodStart",
+type: "Date",
+description: "Start date of the current billing period",
+isOptional: true
+},
+{
+name: "periodEnd",
+type: "Date",
+description: "End date of the current billing period",
+isOptional: true
+},
+{
+name: "cancelAtPeriodEnd",
+type: "boolean",
+description: "Whether the subscription will be canceled at the end of the period",
+defaultValue: false,
+isOptional: true
+},
+{
+name: "seats",
+type: "number",
+description: "Number of seats for team plans",
+isOptional: true
+},
+{
+name: "trialStart",
+type: "Date",
+description: "Start date of the trial period",
+isOptional: true
+},
+{
+name: "trialEnd",
+type: "Date",
+description: "End date of the trial period",
+isOptional: true
+}
 ]}
 />
 
@@ -863,15 +875,15 @@ To change the schema table names or fields, you can pass a `schema` option to th
 
 ```ts title="auth.ts"
 stripe({
-    // ... other options
-    schema: {
-        subscription: {
-            modelName: "stripeSubscriptions", // map the subscription table to stripeSubscriptions
-            fields: {
-                plan: "planName" // map the plan field to planName
-            }
-        }
-    }
+  // ... other options
+  schema: {
+    subscription: {
+      modelName: 'stripeSubscriptions', // map the subscription table to stripeSubscriptions
+      fields: {
+        plan: 'planName', // map the plan field to planName
+      },
+    },
+  },
 })
 ```
 
@@ -921,10 +933,10 @@ Each plan can have the following properties:
 
 **freeTrial**: Object containing trial configuration:
 
-* **days**: `number` - Number of trial days.
-* **onTrialStart**: `(subscription: Subscription) => Promise<void>` - Called when a trial starts.
-* **onTrialEnd**: `(data: { subscription: Subscription, user: User }, request?: Request) => Promise<void>` - Called when a trial ends.
-* **onTrialExpired**: `(subscription: Subscription) => Promise<void>` - Called when a trial expires without conversion.
+- **days**: `number` - Number of trial days.
+- **onTrialStart**: `(subscription: Subscription) => Promise<void>` - Called when a trial starts.
+- **onTrialEnd**: `(data: { subscription: Subscription, user: User }, request?: Request) => Promise<void>` - Called when a trial ends.
+- **onTrialExpired**: `(subscription: Subscription) => Promise<void>` - Called when a trial expires without conversion.
 
 ## Advanced Usage
 
@@ -934,31 +946,31 @@ The Stripe plugin works well with the organization plugin. You can associate sub
 
 ```ts title="client.ts"
 // Get the active organization
-const { data: activeOrg } = client.useActiveOrganization();
+const { data: activeOrg } = client.useActiveOrganization()
 
 // Create a subscription for the organization
 await client.subscription.upgrade({
-    plan: "team",
-    referenceId: activeOrg.id,
-    seats: 10,
-    annual: true, // upgrade to an annual plan (optional)
-    successUrl: "/org/billing/success",
-    cancelUrl: "/org/billing"
-});
+  plan: 'team',
+  referenceId: activeOrg.id,
+  seats: 10,
+  annual: true, // upgrade to an annual plan (optional)
+  successUrl: '/org/billing/success',
+  cancelUrl: '/org/billing',
+})
 ```
 
 Make sure to implement the `authorizeReference` function to verify that the user has permission to manage subscriptions for the organization:
 
 ```ts title="auth.ts"
 authorizeReference: async ({ user, referenceId, action }) => {
-    const member = await db.members.findFirst({
-        where: {
-            userId: user.id,
-            organizationId: referenceId
-        }
-    });
+  const member = await db.members.findFirst({
+    where: {
+      userId: user.id,
+      organizationId: referenceId,
+    },
+  })
 
-    return member?.role === "owner" || member?.role === "admin";
+  return member?.role === 'owner' || member?.role === 'admin'
 }
 ```
 
@@ -968,27 +980,27 @@ You can customize the Stripe Checkout session with additional parameters:
 
 ```ts title="auth.ts"
 getCheckoutSessionParams: async ({ user, session, plan, subscription }, request) => {
-    return {
-        params: {
-            allow_promotion_codes: true,
-            tax_id_collection: {
-                enabled: true
-            },
-            billing_address_collection: "required",
-            custom_text: {
-                submit: {
-                    message: "We'll start your subscription right away"
-                }
-            },
-            metadata: {
-                planType: "business",
-                referralCode: user.metadata?.referralCode
-            }
+  return {
+    params: {
+      allow_promotion_codes: true,
+      tax_id_collection: {
+        enabled: true,
+      },
+      billing_address_collection: 'required',
+      custom_text: {
+        submit: {
+          message: "We'll start your subscription right away",
         },
-        options: {
-            idempotencyKey: `sub_${user.id}_${plan.name}_${Date.now()}`
-        }
-    };
+      },
+      metadata: {
+        planType: 'business',
+        referralCode: user.metadata?.referralCode,
+      },
+    },
+    options: {
+      idempotencyKey: `sub_${user.id}_${plan.name}_${Date.now()}`,
+    },
+  }
 }
 ```
 
@@ -998,16 +1010,16 @@ To collect tax IDs from the customer, set `tax_id_collection` to true:
 
 ```ts title="auth.ts"
 subscription: {
-    // ... other options
-    getCheckoutSessionParams: async ({ user, session, plan, subscription }, request) => {
-        return {
-            params: {
-                tax_id_collection: {
-                    enabled: true
-                }
-            }
-        };
+  // ... other options
+  getCheckoutSessionParams: async ({ user, session, plan, subscription }, request) => {
+    return {
+      params: {
+        tax_id_collection: {
+          enabled: true,
+        },
+      },
     }
+  }
 }
 ```
 
@@ -1017,16 +1029,16 @@ To enable automatic tax calculation using the customer's location, set `automati
 
 ```ts title="auth.ts"
 subscription: {
-    // ... other options
-    getCheckoutSessionParams: async ({ user, session, plan, subscription }, request) => {
-        return {
-            params: {
-                automatic_tax: {
-                    enabled: true
-                }
-            }
-        };
+  // ... other options
+  getCheckoutSessionParams: async ({ user, session, plan, subscription }, request) => {
+    return {
+      params: {
+        automatic_tax: {
+          enabled: true,
+        },
+      },
     }
+  }
 }
 ```
 
@@ -1036,10 +1048,10 @@ The Stripe plugin automatically prevents users from getting multiple free trials
 
 **How it works:**
 
-* The system tracks trial usage across all plans for each user
-* When a user subscribes to a plan with a trial, the system checks their subscription history
-* If the user has ever had a trial (indicated by `trialStart`/`trialEnd` fields or `trialing` status), no new trial will be offered
-* This prevents abuse where users cancel subscriptions and resubscribe to get multiple free trials
+- The system tracks trial usage across all plans for each user
+- When a user subscribes to a plan with a trial, the system checks their subscription history
+- If the user has ever had a trial (indicated by `trialStart`/`trialEnd` fields or `trialing` status), no new trial will be offered
+- This prevents abuse where users cancel subscriptions and resubscribe to get multiple free trials
 
 **Example scenario:**
 
@@ -1078,5 +1090,3 @@ stripe listen --forward-to localhost:3000/api/auth/stripe/webhook
 ```
 
 This will provide you with a webhook signing secret that you can use in your local environment.
-
-

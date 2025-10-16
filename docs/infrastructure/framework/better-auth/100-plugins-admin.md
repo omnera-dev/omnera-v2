@@ -1,14 +1,16 @@
 # plugins: Admin
+
 URL: /docs/plugins/admin
 Source: https://raw.githubusercontent.com/better-auth/better-auth/refs/heads/main/docs/content/docs/plugins/admin.mdx
 
 Admin plugin for Better Auth
 
-***
+---
 
 title: Admin
 description: Admin plugin for Better Auth
------------------------------------------
+
+---
 
 The Admin plugin provides a set of administrative functions for user management in your application. It allows administrators to perform various operations such as creating users, managing user roles, banning/unbanning users, impersonating users, and more.
 
@@ -31,6 +33,7 @@ The Admin plugin provides a set of administrative functions for user management 
         ]
     })
     ```
+
   </Step>
 
   <Step>
@@ -53,6 +56,7 @@ The Admin plugin provides a set of administrative functions for user management 
     </Tabs>
 
     See the [Schema](#schema) section to add the fields manually.
+
   </Step>
 
   <Step>
@@ -70,6 +74,7 @@ The Admin plugin provides a set of administrative functions for user management 
         ]
     })
     ```
+
   </Step>
 </Steps>
 
@@ -245,27 +250,27 @@ The `listUsers` function supports pagination by returning metadata alongside the
 
 To paginate results, use the `total`, `limit`, and `offset` values to calculate:
 
-* **Total pages:** `Math.ceil(total / limit)`
-* **Current page:** `(offset / limit) + 1`
-* **Next page offset:** `Math.min(offset + limit, (total - 1))` â€“ The value to use as `offset` for the next page, ensuring it does not exceed the total number of pages.
-* **Previous page offset:** `Math.max(0, offset - limit)` â€“ The value to use as `offset` for the previous page (ensuring it doesnâ€™t go below zero).
+- **Total pages:** `Math.ceil(total / limit)`
+- **Current page:** `(offset / limit) + 1`
+- **Next page offset:** `Math.min(offset + limit, (total - 1))` â€“ The value to use as `offset` for the next page, ensuring it does not exceed the total number of pages.
+- **Previous page offset:** `Math.max(0, offset - limit)` â€“ The value to use as `offset` for the previous page (ensuring it doesnâ€™t go below zero).
 
 ##### Example Usage
 
 Fetching the second page with 10 users per page:
 
 ```ts title="admin.ts"
-const pageSize = 10;
-const currentPage = 2;
+const pageSize = 10
+const currentPage = 2
 
 const users = await authClient.admin.listUsers({
-    query: {
-        limit: pageSize,
-        offset: (currentPage - 1) * pageSize
-    }
-});
+  query: {
+    limit: pageSize,
+    offset: (currentPage - 1) * pageSize,
+  },
+})
 
-const totalUsers = users.total;
+const totalUsers = users.total
 const totalPages = Math.ceil(totalUsers / pageSize)
 ```
 
@@ -277,22 +282,22 @@ Changes the role of a user.
 
 ```ts
 const { data, error } = await authClient.admin.setRole({
-    userId: user-id, // required
-    role: admin,
-});
+  userId: user - id, // required
+  role: admin,
+})
 ```
 
 ### Server Side
 
 ```ts
 const data = await auth.api.setRole({
-    body: {
-        userId: user-id, // required
-        role: admin,
-    },
-    // This endpoint requires session cookies.
-    headers: await headers()
-});
+  body: {
+    userId: user - id, // required
+    role: admin,
+  },
+  // This endpoint requires session cookies.
+  headers: await headers(),
+})
 ```
 
 ### Type Definition
@@ -361,22 +366,22 @@ Update a user's details.
 
 ```ts
 const { data, error } = await authClient.admin.updateUser({
-    userId: user-id,
-    data,
-});
+  userId: user - id,
+  data,
+})
 ```
 
 ### Server Side
 
 ```ts
 const data = await auth.api.adminUpdateUser({
-    body: {
-        userId: user-id,
-        data,
-    },
-    // This endpoint requires session cookies.
-    headers: await headers()
-});
+  body: {
+    userId: user - id,
+    data,
+  },
+  // This endpoint requires session cookies.
+  headers: await headers(),
+})
 ```
 
 ### Type Definition
@@ -402,24 +407,24 @@ Bans a user, preventing them from signing in and revokes all of their existing s
 
 ```ts
 const { data, error } = await authClient.admin.banUser({
-    userId: user-id,
-    banReason: Spamming, // required
-    banExpiresIn, // required
-});
+  userId: user - id,
+  banReason: Spamming, // required
+  banExpiresIn, // required
+})
 ```
 
 ### Server Side
 
 ```ts
 await auth.api.banUser({
-    body: {
-        userId: user-id,
-        banReason: Spamming, // required
-        banExpiresIn, // required
-    },
-    // This endpoint requires session cookies.
-    headers: await headers()
-});
+  body: {
+    userId: user - id,
+    banReason: Spamming, // required
+    banExpiresIn, // required
+  },
+  // This endpoint requires session cookies.
+  headers: await headers(),
+})
 ```
 
 ### Type Definition
@@ -450,20 +455,20 @@ Removes the ban from a user, allowing them to sign in again.
 
 ```ts
 const { data, error } = await authClient.admin.unbanUser({
-    userId: user-id,
-});
+  userId: user - id,
+})
 ```
 
 ### Server Side
 
 ```ts
 await auth.api.unbanUser({
-    body: {
-        userId: user-id,
-    },
-    // This endpoint requires session cookies.
-    headers: await headers()
-});
+  body: {
+    userId: user - id,
+  },
+  // This endpoint requires session cookies.
+  headers: await headers(),
+})
 ```
 
 ### Type Definition
@@ -486,20 +491,20 @@ Lists all sessions for a user.
 
 ```ts
 const { data, error } = await authClient.admin.listUserSessions({
-    userId: user-id,
-});
+  userId: user - id,
+})
 ```
 
 ### Server Side
 
 ```ts
 const data = await auth.api.listUserSessions({
-    body: {
-        userId: user-id,
-    },
-    // This endpoint requires session cookies.
-    headers: await headers()
-});
+  body: {
+    userId: user - id,
+  },
+  // This endpoint requires session cookies.
+  headers: await headers(),
+})
 ```
 
 ### Type Definition
@@ -522,20 +527,20 @@ Revokes a specific session for a user.
 
 ```ts
 const { data, error } = await authClient.admin.revokeUserSession({
-    sessionToken: session_token_here,
-});
+  sessionToken: session_token_here,
+})
 ```
 
 ### Server Side
 
 ```ts
 const data = await auth.api.revokeUserSession({
-    body: {
-        sessionToken: session_token_here,
-    },
-    // This endpoint requires session cookies.
-    headers: await headers()
-});
+  body: {
+    sessionToken: session_token_here,
+  },
+  // This endpoint requires session cookies.
+  headers: await headers(),
+})
 ```
 
 ### Type Definition
@@ -558,20 +563,20 @@ Revokes all sessions for a user.
 
 ```ts
 const { data, error } = await authClient.admin.revokeUserSessions({
-    userId: user-id,
-});
+  userId: user - id,
+})
 ```
 
 ### Server Side
 
 ```ts
 const data = await auth.api.revokeUserSessions({
-    body: {
-        userId: user-id,
-    },
-    // This endpoint requires session cookies.
-    headers: await headers()
-});
+  body: {
+    userId: user - id,
+  },
+  // This endpoint requires session cookies.
+  headers: await headers(),
+})
 ```
 
 ### Type Definition
@@ -594,20 +599,20 @@ This feature allows an admin to create a session that mimics the specified user.
 
 ```ts
 const { data, error } = await authClient.admin.impersonateUser({
-    userId: user-id,
-});
+  userId: user - id,
+})
 ```
 
 ### Server Side
 
 ```ts
 const data = await auth.api.impersonateUser({
-    body: {
-        userId: user-id,
-    },
-    // This endpoint requires session cookies.
-    headers: await headers()
-});
+  body: {
+    userId: user - id,
+  },
+  // This endpoint requires session cookies.
+  headers: await headers(),
+})
 ```
 
 ### Type Definition
@@ -629,25 +634,22 @@ To stop impersonating a user and continue with the admin account, you can use `s
 ### Client Side
 
 ```ts
-const { data, error } = await authClient.admin.stopImpersonating({});
+const { data, error } = await authClient.admin.stopImpersonating({})
 ```
 
 ### Server Side
 
 ```ts
 await auth.api.stopImpersonating({
-
-    // This endpoint requires session cookies.
-    headers: await headers()
-});
+  // This endpoint requires session cookies.
+  headers: await headers(),
+})
 ```
 
 ### Type Definition
 
 ```ts
-type stopImpersonating = {
-
-}
+type stopImpersonating = {}
 ```
 
 ### Remove User
@@ -658,20 +660,20 @@ Hard deletes a user from the database.
 
 ```ts
 const { data, error } = await authClient.admin.removeUser({
-    userId: user-id,
-});
+  userId: user - id,
+})
 ```
 
 ### Server Side
 
 ```ts
 const deletedUser = await auth.api.removeUser({
-    body: {
-        userId: user-id,
-    },
-    // This endpoint requires session cookies.
-    headers: await headers()
-});
+  body: {
+    userId: user - id,
+  },
+  // This endpoint requires session cookies.
+  headers: await headers(),
+})
 ```
 
 ### Type Definition
@@ -736,6 +738,7 @@ The plugin provides an easy way to define your own set of permissions for each r
 
     const ac = createAccessControl(statement); // [!code highlight]
     ```
+
   </Step>
 
   <Step>
@@ -784,6 +787,7 @@ The plugin provides an easy way to define your own set of permissions for each r
         ...adminAc.statements, // [!code highlight]
     });
     ```
+
   </Step>
 
   <Step>
@@ -830,6 +834,7 @@ The plugin provides an easy way to define your own set of permissions for each r
         ]
     })
     ```
+
   </Step>
 </Steps>
 
@@ -843,22 +848,22 @@ To check a user's permissions, you can use the `hasPermission` function provided
 
 ```ts
 const { data, error } = await authClient.admin.hasPermission({
-    userId: user-id, // required
-    role: admin, // required
-    permission, // required
-});
+  userId: user - id, // required
+  role: admin, // required
+  permission, // required
+})
 ```
 
 ### Server Side
 
 ```ts
 const data = await auth.api.userHasPermission({
-    body: {
-        userId: user-id, // required
-        role: admin, // required
-        permission, // required
-    }
-});
+  body: {
+    userId: user - id, // required
+    role: admin, // required
+    permission, // required
+  },
+})
 ```
 
 ### Type Definition
@@ -886,53 +891,53 @@ Example usage:
 ```ts title="auth-client.ts"
 const canCreateProject = await authClient.admin.hasPermission({
   permissions: {
-    project: ["create"],
+    project: ['create'],
   },
-});
+})
 
 // You can also check multiple resource permissions at the same time
 const canCreateProjectAndCreateSale = await authClient.admin.hasPermission({
   permissions: {
-    project: ["create"],
-    sale: ["create"]
+    project: ['create'],
+    sale: ['create'],
   },
-});
+})
 ```
 
 If you want to check a user's permissions server-side, you can use the `userHasPermission` action provided by the `api` to check the user's permissions.
 
 ```ts title="api.ts"
-import { auth } from "@/auth";
+import { auth } from '@/auth'
 
 await auth.api.userHasPermission({
   body: {
     userId: 'id', //the user id
     permissions: {
-      project: ["create"], // This must match the structure in your access control
+      project: ['create'], // This must match the structure in your access control
     },
   },
-});
+})
 
 // You can also just pass the role directly
 await auth.api.userHasPermission({
   body: {
-   role: "admin",
+    role: 'admin',
     permissions: {
-      project: ["create"], // This must match the structure in your access control
+      project: ['create'], // This must match the structure in your access control
     },
   },
-});
+})
 
 // You can also check multiple resource permissions at the same time
 await auth.api.userHasPermission({
   body: {
-   role: "admin",
+    role: 'admin',
     permissions: {
-      project: ["create"], // This must match the structure in your access control
-      sale: ["create"]
+      project: ['create'], // This must match the structure in your access control
+      sale: ['create'],
     },
   },
-});
+})
 ```
 
 **Check Role Permission**:
@@ -944,19 +949,19 @@ Note that this function does **not** check the permissions of the currently logg
 ```ts title="auth-client.ts"
 const canCreateProject = authClient.admin.checkRolePermission({
   permissions: {
-    user: ["delete"],
+    user: ['delete'],
   },
-  role: "admin",
-});
+  role: 'admin',
+})
 
 // You can also check multiple resource permissions at the same time
 const canDeleteUserAndRevokeSession = authClient.admin.checkRolePermission({
   permissions: {
-    user: ["delete"],
-    session: ["revoke"]
+    user: ['delete'],
+    session: ['revoke'],
   },
-  role: "admin",
-});
+  role: 'admin',
+})
 ```
 
 ## Schema
@@ -964,45 +969,45 @@ const canDeleteUserAndRevokeSession = authClient.admin.checkRolePermission({
 This plugin adds the following fields to the `user` table:
 
 <DatabaseTable
-  fields={[
-  {
-    name: "role",
-    type: "string",
-    description:
-      "The user's role. Defaults to `user`. Admins will have the `admin` role.",
-    isOptional: true,
-  },
-  {
-    name: "banned",
-    type: "boolean",
-    description: "Indicates whether the user is banned.",
-    isOptional: true,
-  },
-  {
-    name: "banReason",
-    type: "string",
-    description: "The reason for the user's ban.",
-    isOptional: true,
-  },
-  {
-    name: "banExpires",
-    type: "date",
-    description: "The date when the user's ban will expire.",
-    isOptional: true,
-  },
+fields={[
+{
+name: "role",
+type: "string",
+description:
+"The user's role. Defaults to `user`. Admins will have the `admin` role.",
+isOptional: true,
+},
+{
+name: "banned",
+type: "boolean",
+description: "Indicates whether the user is banned.",
+isOptional: true,
+},
+{
+name: "banReason",
+type: "string",
+description: "The reason for the user's ban.",
+isOptional: true,
+},
+{
+name: "banExpires",
+type: "date",
+description: "The date when the user's ban will expire.",
+isOptional: true,
+},
 ]}
 />
 
 And adds one field in the `session` table:
 
 <DatabaseTable
-  fields={[
-  {
-    name: "impersonatedBy",
-    type: "string",
-    description: "The ID of the admin that is impersonating this session.",
-    isOptional: true,
-  },
+fields={[
+{
+name: "impersonatedBy",
+type: "string",
+description: "The ID of the admin that is impersonating this session.",
+isOptional: true,
+},
 ]}
 />
 
@@ -1014,8 +1019,8 @@ The default role for a user. Defaults to `user`.
 
 ```ts title="auth.ts"
 admin({
-  defaultRole: "regular",
-});
+  defaultRole: 'regular',
+})
 ```
 
 ### Admin Roles
@@ -1024,8 +1029,8 @@ The roles that are considered admin roles. Defaults to `["admin"]`.
 
 ```ts title="auth.ts"
 admin({
-  adminRoles: ["admin", "superadmin"],
-});
+  adminRoles: ['admin', 'superadmin'],
+})
 ```
 
 <Callout type="warning">
@@ -1039,7 +1044,7 @@ You can pass an array of userIds that should be considered as admin. Default to 
 
 ```ts title="auth.ts"
 admin({
-    adminUserIds: ["user_id_1", "user_id_2"]
+  adminUserIds: ['user_id_1', 'user_id_2'],
 })
 ```
 
@@ -1052,7 +1057,7 @@ The duration of the impersonation session in seconds. Defaults to 1 hour.
 ```ts title="auth.ts"
 admin({
   impersonationSessionDuration: 60 * 60 * 24, // 1 day
-});
+})
 ```
 
 ### Default Ban Reason
@@ -1061,8 +1066,8 @@ The default ban reason for a user created by the admin. Defaults to `No reason`.
 
 ```ts title="auth.ts"
 admin({
-  defaultBanReason: "Spamming",
-});
+  defaultBanReason: 'Spamming',
+})
 ```
 
 ### Default Ban Expires In
@@ -1072,7 +1077,7 @@ The default ban expires in for a user created by the admin in seconds. Defaults 
 ```ts title="auth.ts"
 admin({
   defaultBanExpiresIn: 60 * 60 * 24, // 1 day
-});
+})
 ```
 
 ### bannedUserMessage
@@ -1081,8 +1086,6 @@ The message to show when a banned user tries to sign in. Defaults to "You have b
 
 ```ts title="auth.ts"
 admin({
-  bannedUserMessage: "Custom banned user message",
-});
+  bannedUserMessage: 'Custom banned user message',
+})
 ```
-
-

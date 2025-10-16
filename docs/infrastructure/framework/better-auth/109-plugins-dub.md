@@ -1,14 +1,16 @@
 # plugins: Dub
+
 URL: /docs/plugins/dub
 Source: https://raw.githubusercontent.com/better-auth/better-auth/refs/heads/main/docs/content/docs/plugins/dub.mdx
 
 Better Auth Plugin for Lead Tracking using Dub links and OAuth Linking
 
-***
+---
 
 title: Dub
 description: Better Auth Plugin for Lead Tracking using Dub links and OAuth Linking
------------------------------------------------------------------------------------
+
+---
 
 [Dub](https://dub.co/) is an open source modern link management platform for entrepreneurs, creators, and growth teams.
 
@@ -65,6 +67,7 @@ This plugins allows you to track leads when a user signs up using a Dub link. It
         ```
       </CodeBlockTab>
     </CodeBlockTabs>
+
   </Step>
 
   <Step>
@@ -115,6 +118,7 @@ This plugins allows you to track leads when a user signs up using a Dub link. It
         ```
       </CodeBlockTab>
     </CodeBlockTabs>
+
   </Step>
 
   <Step>
@@ -135,6 +139,7 @@ This plugins allows you to track leads when a user signs up using a Dub link. It
         ]
     })
     ```
+
   </Step>
 </Steps>
 
@@ -145,11 +150,11 @@ This plugins allows you to track leads when a user signs up using a Dub link. It
 By default, the plugin will track sign up events as leads. You can disable this by setting `disableLeadTracking` to `true`.
 
 ```ts
-import { dubAnalytics } from "@dub/better-auth";
-import { betterAuth } from "better-auth";
-import { Dub } from "dub";
+import { dubAnalytics } from '@dub/better-auth'
+import { betterAuth } from 'better-auth'
+import { Dub } from 'dub'
 
-const dub = new Dub();
+const dub = new Dub()
 
 const betterAuth = betterAuth({
   plugins: [
@@ -158,7 +163,7 @@ const betterAuth = betterAuth({
       disableLeadTracking: true, // Disable lead tracking
     }),
   ],
-});
+})
 ```
 
 ### OAuth Linking
@@ -173,21 +178,21 @@ Once you get the client ID and client secret, you can configure the plugin.
 dubAnalytics({
   dubClient: dub,
   oauth: {
-    clientId: "your-client-id",
-    clientSecret: "your-client-secret",
+    clientId: 'your-client-id',
+    clientSecret: 'your-client-secret',
   },
-});
+})
 ```
 
 And in the client, you need to use the `dubAnalyticsClient` plugin.
 
 ```ts
-import { createAuthClient } from "better-auth/client";
-import { dubAnalyticsClient } from "@dub/better-auth/client";
+import { createAuthClient } from 'better-auth/client'
+import { dubAnalyticsClient } from '@dub/better-auth/client'
 
 const authClient = createAuthClient({
   plugins: [dubAnalyticsClient()],
-});
+})
 ```
 
 To link account with Dub, you need to use the `dub.link`.
@@ -260,5 +265,3 @@ Client secret for Dub OAuth.
 ### `oauth.pkce`
 
 Enable PKCE for Dub OAuth.
-
-

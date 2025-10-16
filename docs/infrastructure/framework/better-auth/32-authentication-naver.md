@@ -1,14 +1,16 @@
 # authentication: Naver
+
 URL: /docs/authentication/naver
 Source: https://raw.githubusercontent.com/better-auth/better-auth/refs/heads/main/docs/content/docs/authentication/naver.mdx
 
 Naver provider setup and usage.
 
-***
+---
 
 title: Naver
 description: Naver provider setup and usage.
---------------------------------------------
+
+---
 
 <Steps>
   <Step>
@@ -17,6 +19,7 @@ description: Naver provider setup and usage.
     To use Naver sign in, you need a client ID and client secret. You can get them from the [Naver Developers](https://developers.naver.com/).
 
     Make sure to set the redirect URL to `http://localhost:3000/api/auth/callback/naver` for local development. For production, you should set it to the URL of your application. If you change the base path of the auth routes, you should update the redirect URL accordingly.
+
   </Step>
 
   <Step>
@@ -36,6 +39,7 @@ description: Naver provider setup and usage.
         }
     })
     ```
+
   </Step>
 
   <Step>
@@ -55,7 +59,6 @@ description: Naver provider setup and usage.
         })
     }
     ```
+
   </Step>
 </Steps>
-
-

@@ -1,14 +1,16 @@
 # guides: Migrating from Auth0 to Better Auth
+
 URL: /docs/guides/auth0-migration-guide
 Source: https://raw.githubusercontent.com/better-auth/better-auth/refs/heads/main/docs/content/docs/guides/auth0-migration-guide.mdx
 
 A step-by-step guide to transitioning from Auth0 to Better Auth.
 
-***
+---
 
 title: Migrating from Auth0 to Better Auth
 description: A step-by-step guide to transitioning from Auth0 to Better Auth.
------------------------------------------------------------------------------
+
+---
 
 In this guide, we'll walk through the steps to migrate a project from Auth0 to Better Auth â€” including email/password with proper hashing, social/external accounts, two-factor authentication, and more.
 
@@ -81,6 +83,7 @@ Before starting the migration process, set up Better Auth in your project. Follo
         }),
     })
     ```
+
   </Step>
 
   <Step>
@@ -107,6 +110,7 @@ Before starting the migration process, set up Better Auth in your project. Follo
     ```
 
     See [Email and Password](/docs/authentication/email-password) for more configuration options.
+
   </Step>
 
   <Step>
@@ -136,6 +140,7 @@ Before starting the migration process, set up Better Auth in your project. Follo
         } // [!code highlight]
     })
     ```
+
   </Step>
 
   <Step>
@@ -179,6 +184,7 @@ Before starting the migration process, set up Better Auth in your project. Follo
         plugins: [admin(), twoFactor(), username()], // [!code highlight]
     })
     ```
+
   </Step>
 
   <Step>
@@ -195,6 +201,7 @@ Before starting the migration process, set up Better Auth in your project. Follo
     ```sh
     npx @better-auth/cli migrate
     ```
+
   </Step>
 
   <Step>
@@ -205,6 +212,7 @@ Before starting the migration process, set up Better Auth in your project. Follo
     ```bash
     npm install auth0
     ```
+
   </Step>
 
   <Step>
@@ -591,6 +599,7 @@ Before starting the migration process, set up Better Auth in your project. Follo
     * `AUTH0_DOMAIN`
     * `AUTH0_CLIENT_ID`
     * `AUTH0_SECRET`
+
   </Step>
 
   <Step>
@@ -611,6 +620,7 @@ Before starting the migration process, set up Better Auth in your project. Follo
       4. Keep Auth0 installed and configured until the migration is complete
       5. The script handles bcrypt password hashes by default. For custom password hashing algorithms, you'll need to modify the `migratePassword` function
     </Callout>
+
   </Step>
 
   <Step>
@@ -644,6 +654,7 @@ Before starting the migration process, set up Better Auth in your project. Follo
        }
     })
     ```
+
   </Step>
 
   <Step>
@@ -656,6 +667,7 @@ Before starting the migration process, set up Better Auth in your project. Follo
     3. Password-based authentication is working
     4. Two-factor authentication settings are preserved (if enabled)
     5. User roles and permissions are correctly mapped
+
   </Step>
 
   <Step>
@@ -687,6 +699,7 @@ Before starting the migration process, set up Better Auth in your project. Follo
       );
     };
     ```
+
   </Step>
 
   <Step>
@@ -717,6 +730,7 @@ Before starting the migration process, set up Better Auth in your project. Follo
       matcher: ["/dashboard", "/login", "/signup"],
     };
     ```
+
   </Step>
 
   <Step>
@@ -727,6 +741,7 @@ Before starting the migration process, set up Better Auth in your project. Follo
     ```bash
     npm remove @auth0/auth0-react @auth0/auth0-spa-js @auth0/nextjs-auth0
     ```
+
   </Step>
 </Steps>
 
@@ -749,5 +764,3 @@ The migration script includes pagination to handle large numbers of users. Adjus
 Now! You've successfully migrated from Auth0 to Better Auth.
 
 Better Auth offers greater flexibility and more featuresâ€”be sure to explore the [documentation](/docs) to unlock its full potential.
-
-

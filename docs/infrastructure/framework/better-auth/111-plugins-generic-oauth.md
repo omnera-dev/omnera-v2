@@ -1,14 +1,16 @@
 # plugins: Generic OAuth
+
 URL: /docs/plugins/generic-oauth
 Source: https://raw.githubusercontent.com/better-auth/better-auth/refs/heads/main/docs/content/docs/plugins/generic-oauth.mdx
 
 Authenticate users with any OAuth provider
 
-***
+---
 
 title: Generic OAuth
 description: Authenticate users with any OAuth provider
--------------------------------------------------------
+
+---
 
 The Generic OAuth plugin provides a flexible way to integrate authentication with any OAuth provider. It supports both OAuth 2.0 and OpenID Connect (OIDC) flows, allowing you to easily add social login or custom OAuth authentication to your application.
 
@@ -42,6 +44,7 @@ The Generic OAuth plugin provides a flexible way to integrate authentication wit
         ]
     })
     ```
+
   </Step>
 
   <Step>
@@ -59,6 +62,7 @@ The Generic OAuth plugin provides a flexible way to integrate authentication wit
         ]
     })
     ```
+
   </Step>
 </Steps>
 
@@ -188,20 +192,20 @@ When adding the plugin to your auth config, you can configure multiple OAuth pro
 
 ```ts
 interface GenericOAuthConfig {
-  providerId: string;
-  discoveryUrl?: string;
-  authorizationUrl?: string;
-  tokenUrl?: string;
-  userInfoUrl?: string;
-  clientId: string;
-  clientSecret: string;
-  scopes?: string[];
-  redirectURI?: string;
-  responseType?: string;
-  prompt?: string;
-  pkce?: boolean;
-  accessType?: string;
-  getUserInfo?: (tokens: OAuth2Tokens) => Promise<User | null>;
+  providerId: string
+  discoveryUrl?: string
+  authorizationUrl?: string
+  tokenUrl?: string
+  userInfoUrl?: string
+  clientId: string
+  clientSecret: string
+  scopes?: string[]
+  redirectURI?: string
+  responseType?: string
+  prompt?: string
+  pkce?: boolean
+  accessType?: string
+  getUserInfo?: (tokens: OAuth2Tokens) => Promise<User | null>
 }
 ```
 
@@ -265,20 +269,20 @@ You can provide a custom `getUserInfo` function to handle specific provider requ
 genericOAuth({
   config: [
     {
-      providerId: "custom-provider",
+      providerId: 'custom-provider',
       // ... other config options
       getUserInfo: async (tokens) => {
         // Custom logic to fetch and return user info
-        const userInfo = await fetchUserInfoFromCustomProvider(tokens);
+        const userInfo = await fetchUserInfoFromCustomProvider(tokens)
         return {
           id: userInfo.sub,
           email: userInfo.email,
           name: userInfo.name,
           // ... map other fields as needed
-        };
-      }
-    }
-  ]
+        }
+      },
+    },
+  ],
 })
 ```
 
@@ -290,21 +294,19 @@ If the user info returned by the provider does not match the expected format, or
 genericOAuth({
   config: [
     {
-      providerId: "custom-provider",
+      providerId: 'custom-provider',
       // ... other config options
       mapProfileToUser: async (profile) => {
         return {
           firstName: profile.given_name,
           // ... map other fields as needed
-        };
-      }
-    }
-  ]
+        }
+      },
+    },
+  ],
 })
 ```
 
 ### Error Handling
 
 The plugin includes built-in error handling for common OAuth issues. Errors are typically redirected to your application's error page with an appropriate error message in the URL parameters. If the callback URL is not provided, the user will be redirected to Better Auth's default error page.
-
-

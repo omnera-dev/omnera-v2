@@ -1,14 +1,16 @@
 # authentication: GitLab
+
 URL: /docs/authentication/gitlab
 Source: https://raw.githubusercontent.com/better-auth/better-auth/refs/heads/main/docs/content/docs/authentication/gitlab.mdx
 
 GitLab provider setup and usage.
 
-***
+---
 
 title: GitLab
 description: GitLab provider setup and usage.
----------------------------------------------
+
+---
 
 <Steps>
   <Step>
@@ -17,6 +19,7 @@ description: GitLab provider setup and usage.
     To use GitLab sign in, you need a client ID and client secret. [GitLab OAuth documentation](https://docs.gitlab.com/ee/api/oauth2.html).
 
     Make sure to set the redirect URL to `http://localhost:3000/api/auth/callback/gitlab` for local development. For production, you should set it to the URL of your application. If you change the base path of the auth routes, you should update the redirect URL accordingly.
+
   </Step>
 
   <Step>
@@ -63,6 +66,7 @@ description: GitLab provider setup and usage.
         },
     })
     ```
+
   </Step>
 
   <Step>
@@ -82,7 +86,6 @@ description: GitLab provider setup and usage.
         })
     }
     ```
+
   </Step>
 </Steps>
-
-

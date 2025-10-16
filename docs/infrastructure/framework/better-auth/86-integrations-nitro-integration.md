@@ -1,14 +1,16 @@
 # integrations: Nitro Integration
+
 URL: /docs/integrations/nitro
 Source: https://raw.githubusercontent.com/better-auth/better-auth/refs/heads/main/docs/content/docs/integrations/nitro.mdx
 
 Integrate Better Auth with Nitro.
 
-***
+---
 
 title: Nitro Integration
 description: Integrate Better Auth with Nitro.
-----------------------------------------------
+
+---
 
 Better Auth can be integrated with your [Nitro Application](https://nitro.build/) (an open source framework to build web servers).
 
@@ -29,7 +31,7 @@ This will create the `nitro-app` directory and install all the dependencies. You
 <Callout>
   This guide assumes that you have a basic understanding of Prisma. If you are new to Prisma, you can check out the [Prisma documentation](https://www.prisma.io/docs/getting-started).
 
-  The `sqlite` database used in this guide will not work in a production environment. You should replace it with a production-ready database like `PostgreSQL`.
+The `sqlite` database used in this guide will not work in a production environment. You should replace it with a production-ready database like `PostgreSQL`.
 </Callout>
 
 For this guide, we will be using the Prisma adapter. You can install prisma client by running the following command:
@@ -51,6 +53,7 @@ For this guide, we will be using the Prisma adapter. You can install prisma clie
     <CodeBlockTabsTrigger value="bun">
       bun
     </CodeBlockTabsTrigger>
+
   </CodeBlockTabsList>
 
   <CodeBlockTab value="npm">
@@ -97,6 +100,7 @@ For this guide, we will be using the Prisma adapter. You can install prisma clie
     <CodeBlockTabsTrigger value="bun">
       bun
     </CodeBlockTabsTrigger>
+
   </CodeBlockTabsList>
 
   <CodeBlockTab value="npm">
@@ -168,15 +172,15 @@ Follow steps 1 & 2 from the [installation guide](/docs/installation) to install 
 Once that is done, create your Better Auth instance within the `server/utils/auth.ts` file.
 
 ```ts title="server/utils/auth.ts"
-import { betterAuth } from "better-auth";
-import { prismaAdapter } from "better-auth/adapters/prisma";
-import { PrismaClient } from "@prisma/client";
+import { betterAuth } from 'better-auth'
+import { prismaAdapter } from 'better-auth/adapters/prisma'
+import { PrismaClient } from '@prisma/client'
 
-const prisma = new PrismaClient();
+const prisma = new PrismaClient()
 export const auth = betterAuth({
-  database: prismaAdapter(prisma, { provider: "sqlite" }),
+  database: prismaAdapter(prisma, { provider: 'sqlite' }),
   emailAndPassword: { enabled: true },
-});
+})
 ```
 
 ### Update Prisma Schema
@@ -201,8 +205,8 @@ You can now mount the Better Auth handler in your Nitro application. You can do 
 
 ```ts title="server/routes/api/auth/[...all].ts"
 export default defineEventHandler((event) => {
-  return auth.handler(toWebRequest(event));
-});
+  return auth.handler(toWebRequest(event))
+})
 ```
 
 <Callout>
@@ -232,6 +236,7 @@ Start by installing the cors package:
     <CodeBlockTabsTrigger value="bun">
       bun
     </CodeBlockTabsTrigger>
+
   </CodeBlockTabsList>
 
   <CodeBlockTab value="npm">
@@ -262,16 +267,16 @@ Start by installing the cors package:
 You can now create a new file `server/plugins/cors.ts` and add the following code:
 
 ```ts title="server/plugins/cors.ts"
-import cors from "cors";
+import cors from 'cors'
 export default defineNitroPlugin((plugin) => {
   plugin.h3App.use(
     fromNodeMiddleware(
       cors({
-        origin: "*",
-      }),
-    ),
-  );
-});
+        origin: '*',
+      })
+    )
+  )
+})
 ```
 
 <Callout>
@@ -283,8 +288,8 @@ export default defineNitroPlugin((plugin) => {
 You can add an auth guard to your Nitro application to protect routes that require authentication. You can do this by creating a new file `server/utils/require-auth.ts` and adding the following code:
 
 ```ts title="server/utils/require-auth.ts"
-import { EventHandler, H3Event } from "h3";
-import { fromNodeHeaders } from "better-auth/node";
+import { EventHandler, H3Event } from 'h3'
+import { fromNodeHeaders } from 'better-auth/node'
 
 /**
  * Middleware used to require authentication for a route.
@@ -292,19 +297,19 @@ import { fromNodeHeaders } from "better-auth/node";
  * Can be extended to check for specific roles or permissions.
  */
 export const requireAuth: EventHandler = async (event: H3Event) => {
-  const headers = event.headers;
+  const headers = event.headers
 
   const session = await auth.api.getSession({
     headers: headers,
-  });
+  })
   if (!session)
     throw createError({
       statusCode: 401,
-      statusMessage: "Unauthorized",
-    });
+      statusMessage: 'Unauthorized',
+    })
   // You can save the session to the event context for later use
-  event.context.auth = session;
-};
+  event.context.auth = session
+}
 ```
 
 You can now use this event handler/middleware in your routes to protect them:
@@ -315,14 +320,12 @@ export default defineEventHandler({
   // The user has to be logged in to access this route
   onRequest: [requireAuth],
   handler: async (event) => {
-    setResponseStatus(event, 201, "Secret data");
-    return { message: "Secret data" };
+    setResponseStatus(event, 201, 'Secret data')
+    return { message: 'Secret data' }
   },
-});
+})
 ```
 
 ### Example
 
 You can find an example of a Nitro application integrated with Better Auth & Prisma [here](https://github.com/BayBreezy/nitrojs-better-auth-prisma).
-
-

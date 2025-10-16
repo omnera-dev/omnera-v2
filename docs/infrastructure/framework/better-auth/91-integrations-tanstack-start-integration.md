@@ -1,14 +1,16 @@
 # integrations: TanStack Start Integration
+
 URL: /docs/integrations/tanstack
 Source: https://raw.githubusercontent.com/better-auth/better-auth/refs/heads/main/docs/content/docs/integrations/tanstack.mdx
 
 Integrate Better Auth with TanStack Start.
 
-***
+---
 
 title: TanStack Start Integration
 description: Integrate Better Auth with TanStack Start.
--------------------------------------------------------
+
+---
 
 This integration guide is assuming you are using TanStack Start.
 
@@ -40,10 +42,7 @@ export const Route = createFileRoute('/api/auth/$')({
 If you haven't created your server route handler yet, you can do so by creating a file: `/src/server.ts`
 
 ```ts title="src/server.ts"
-import {
-  createStartHandler,
-  defaultStreamHandler,
-} from '@tanstack/react-start/server'
+import { createStartHandler, defaultStreamHandler } from '@tanstack/react-start/server'
 import { createRouter } from './router'
 
 export default createStartHandler({
@@ -53,32 +52,30 @@ export default createStartHandler({
 
 ### Usage tips
 
-* We recommend using the client SDK or `authClient` to handle authentication, rather than server actions with `auth.api`.
-* When you call functions that need to set cookies (like `signInEmail` or `signUpEmail`), you'll need to handle cookie setting for TanStack Start. Better Auth provides a `reactStartCookies` plugin to automatically handle this for you.
+- We recommend using the client SDK or `authClient` to handle authentication, rather than server actions with `auth.api`.
+- When you call functions that need to set cookies (like `signInEmail` or `signUpEmail`), you'll need to handle cookie setting for TanStack Start. Better Auth provides a `reactStartCookies` plugin to automatically handle this for you.
 
 ```ts title="src/lib/auth.ts"
-import { betterAuth } from "better-auth";
-import { reactStartCookies } from "better-auth/react-start";
+import { betterAuth } from 'better-auth'
+import { reactStartCookies } from 'better-auth/react-start'
 
 export const auth = betterAuth({
-    //...your config
-    plugins: [reactStartCookies()] // make sure this is the last plugin in the array
+  //...your config
+  plugins: [reactStartCookies()], // make sure this is the last plugin in the array
 })
 ```
 
 Now, when you call functions that set cookies, they will be automatically set using TanStack Start's cookie handling system.
 
 ```ts
-import { auth } from "@/lib/auth"
+import { auth } from '@/lib/auth'
 
 const signIn = async () => {
-    await auth.api.signInEmail({
-        body: {
-            email: "user@email.com",
-            password: "password",
-        }
-    })
+  await auth.api.signInEmail({
+    body: {
+      email: 'user@email.com',
+      password: 'password',
+    },
+  })
 }
 ```
-
-

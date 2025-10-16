@@ -1,14 +1,16 @@
 # plugins: Sign In With Ethereum (SIWE)
+
 URL: /docs/plugins/siwe
 Source: https://raw.githubusercontent.com/better-auth/better-auth/refs/heads/main/docs/content/docs/plugins/siwe.mdx
 
 Sign in with Ethereum plugin for Better Auth
 
-***
+---
 
 title: Sign In With Ethereum (SIWE)
 description: Sign in with Ethereum plugin for Better Auth
----------------------------------------------------------
+
+---
 
 The Sign in with Ethereum (SIWE) plugin allows users to authenticate using their Ethereum wallets following the [ERC-4361 standard](https://eips.ethereum.org/EIPS/eip-4361). This plugin provides flexibility by allowing you to implement your own message verification and nonce generation logic.
 
@@ -50,6 +52,7 @@ The Sign in with Ethereum (SIWE) plugin allows users to authenticate using their
         ],
     });
     ```
+
   </Step>
 
   <Step>
@@ -72,6 +75,7 @@ The Sign in with Ethereum (SIWE) plugin allows users to authenticate using their
     </Tabs>
 
     See the [Schema](#schema) section to add the fields manually.
+
   </Step>
 
   <Step>
@@ -85,6 +89,7 @@ The Sign in with Ethereum (SIWE) plugin allows users to authenticate using their
         plugins: [siweClient()],
     });
     ```
+
   </Step>
 </Steps>
 
@@ -96,12 +101,12 @@ Before signing a SIWE message, you need to generate a nonce for the wallet addre
 
 ```ts title="generate-nonce.ts"
 const { data, error } = await authClient.siwe.nonce({
-  walletAddress: "0x1234567890abcdef1234567890abcdef12345678",
+  walletAddress: '0x1234567890abcdef1234567890abcdef12345678',
   chainId: 1, // optional for Ethereum mainnet, required for other chains. Defaults to 1
-});
+})
 
 if (data) {
-  console.log("Nonce:", data.nonce);
+  console.log('Nonce:', data.nonce)
 }
 ```
 
@@ -111,15 +116,15 @@ After generating a nonce and creating a SIWE message, verify the signature to au
 
 ```ts title="sign-in-siwe.ts"
 const { data, error } = await authClient.siwe.verify({
-  message: "Your SIWE message string",
-  signature: "0x...", // The signature from the user's wallet
-  walletAddress: "0x1234567890abcdef1234567890abcdef12345678",
+  message: 'Your SIWE message string',
+  signature: '0x...', // The signature from the user's wallet
+  walletAddress: '0x1234567890abcdef1234567890abcdef12345678',
   chainId: 1, // optional for Ethereum mainnet, required for other chains. Must match Chain ID in SIWE message
-  email: "user@example.com", // optional, required if anonymous is false
-});
+  email: 'user@example.com', // optional, required if anonymous is false
+})
 
 if (data) {
-  console.log("Authentication successful:", data.user);
+  console.log('Authentication successful:', data.user)
 }
 ```
 
@@ -134,7 +139,7 @@ const { data, error } = await authClient.siwe.verify({
   signature,
   walletAddress,
   // chainId: 1 (default)
-});
+})
 ```
 
 ```ts title="polygon.ts"
@@ -144,7 +149,7 @@ const { data, error } = await authClient.siwe.verify({
   signature,
   walletAddress,
   chainId: 137, // Required for Polygon
-});
+})
 ```
 
 ```ts title="arbitrum.ts"
@@ -154,7 +159,7 @@ const { data, error } = await authClient.siwe.verify({
   signature,
   walletAddress,
   chainId: 42161, // Required for Arbitrum
-});
+})
 ```
 
 ```ts title="base.ts"
@@ -164,7 +169,7 @@ const { data, error } = await authClient.siwe.verify({
   signature,
   walletAddress,
   chainId: 8453, // Required for Base
-});
+})
 ```
 
 <Callout type="warning">
@@ -177,20 +182,20 @@ const { data, error } = await authClient.siwe.verify({
 
 The SIWE plugin accepts the following configuration options:
 
-* **domain**: The domain name of your application (required for SIWE message generation)
-* **emailDomainName**: The email domain name for creating user accounts when not using anonymous mode. Defaults to the domain from your base URL
-* **anonymous**: Whether to allow anonymous sign-ins without requiring an email. Default is `true`
-* **getNonce**: Function to generate a unique nonce for each sign-in attempt. You must implement this function to return a cryptographically secure random string. Must return a `Promise<string>`
-* **verifyMessage**: Function to verify the signed SIWE message. Receives message details and should return `Promise<boolean>`
-* **ensLookup**: Optional function to lookup ENS names and avatars for Ethereum addresses
+- **domain**: The domain name of your application (required for SIWE message generation)
+- **emailDomainName**: The email domain name for creating user accounts when not using anonymous mode. Defaults to the domain from your base URL
+- **anonymous**: Whether to allow anonymous sign-ins without requiring an email. Default is `true`
+- **getNonce**: Function to generate a unique nonce for each sign-in attempt. You must implement this function to return a cryptographically secure random string. Must return a `Promise<string>`
+- **verifyMessage**: Function to verify the signed SIWE message. Receives message details and should return `Promise<boolean>`
+- **ensLookup**: Optional function to lookup ENS names and avatars for Ethereum addresses
 
 ### Client Options
 
 The SIWE client plugin doesn't require any configuration options, but you can pass them if needed for future extensibility:
 
 ```ts title="auth-client.ts"
-import { createAuthClient } from "better-auth/client";
-import { siweClient } from "better-auth/client/plugins";
+import { createAuthClient } from 'better-auth/client'
+import { siweClient } from 'better-auth/client/plugins'
 
 export const authClient = createAuthClient({
   plugins: [
@@ -198,7 +203,7 @@ export const authClient = createAuthClient({
       // Optional client configuration can go here
     }),
   ],
-});
+})
 ```
 
 ## Schema
@@ -219,11 +224,11 @@ The SIWE plugin adds a `walletAddress` table to store user wallet associations:
 Here's a complete example showing how to implement SIWE authentication:
 
 ```ts title="auth.ts"
-import { betterAuth } from "better-auth";
-import { siwe } from "better-auth/plugins";
-import { generateRandomString } from "better-auth/crypto";
-import { verifyMessage, createPublicClient, http } from "viem";
-import { mainnet } from "viem/chains";
+import { betterAuth } from 'better-auth'
+import { siwe } from 'better-auth/plugins'
+import { generateRandomString } from 'better-auth/crypto'
+import { verifyMessage, createPublicClient, http } from 'viem'
+import { mainnet } from 'viem/chains'
 
 export const auth = betterAuth({
   database: {
@@ -231,12 +236,12 @@ export const auth = betterAuth({
   },
   plugins: [
     siwe({
-      domain: "myapp.com",
-      emailDomainName: "myapp.com",
+      domain: 'myapp.com',
+      emailDomainName: 'myapp.com',
       anonymous: false,
       getNonce: async () => {
         // Generate a cryptographically secure random nonce
-        return generateRandomString(32);
+        return generateRandomString(32)
       },
       verifyMessage: async ({ message, signature, address }) => {
         try {
@@ -245,11 +250,11 @@ export const auth = betterAuth({
             address: address as `0x${string}`,
             message,
             signature: signature as `0x${string}`,
-          });
-          return isValid;
+          })
+          return isValid
         } catch (error) {
-          console.error("SIWE verification failed:", error);
-          return false;
+          console.error('SIWE verification failed:', error)
+          return false
         }
       },
       ensLookup: async ({ walletAddress }) => {
@@ -259,32 +264,30 @@ export const auth = betterAuth({
           const client = createPublicClient({
             chain: mainnet,
             transport: http(),
-          });
+          })
 
           const ensName = await client.getEnsName({
             address: walletAddress as `0x${string}`,
-          });
+          })
 
           const ensAvatar = ensName
             ? await client.getEnsAvatar({
                 name: ensName,
               })
-            : null;
+            : null
 
           return {
             name: ensName || walletAddress,
-            avatar: ensAvatar || "",
-          };
+            avatar: ensAvatar || '',
+          }
         } catch {
           return {
             name: walletAddress,
-            avatar: "",
-          };
+            avatar: '',
+          }
         }
       },
     }),
   ],
-});
+})
 ```
-
-

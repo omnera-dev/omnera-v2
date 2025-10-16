@@ -1,14 +1,16 @@
 # plugins: Email OTP
+
 URL: /docs/plugins/email-otp
 Source: https://raw.githubusercontent.com/better-auth/better-auth/refs/heads/main/docs/content/docs/plugins/email-otp.mdx
 
 Email OTP plugin for Better Auth.
 
-***
+---
 
 title: Email OTP
 description: Email OTP plugin for Better Auth.
-----------------------------------------------
+
+---
 
 The Email OTP plugin allows user to sign in, verify their email, or reset their password using a one-time password (OTP) sent to their email address.
 
@@ -41,6 +43,7 @@ The Email OTP plugin allows user to sign in, verify their email, or reset their 
         ]
     })
     ```
+
   </Step>
 
   <Step>
@@ -56,6 +59,7 @@ The Email OTP plugin allows user to sign in, verify their email, or reset their 
         ]
     })
     ```
+
   </Step>
 </Steps>
 
@@ -434,7 +438,7 @@ type resetPasswordEmailOTP = {
 To override the default email verification, pass `overrideDefaultEmailVerification: true` in the options. This will make the system use an email OTP instead of the default verification link whenever email verification is triggered. In other words, the user will verify their email using an OTP rather than clicking a link.
 
 ```ts title="auth.ts"
-import { betterAuth } from "better-auth";
+import { betterAuth } from 'better-auth'
 
 export const auth = betterAuth({
   plugins: [
@@ -445,57 +449,57 @@ export const auth = betterAuth({
       },
     }),
   ],
-});
+})
 ```
 
 ## Options
 
-* `sendVerificationOTP`: A function that sends the OTP to the user's email address. The function receives an object with the following properties:
-  * `email`: The user's email address.
-  * `otp`: The OTP to send.
-  * `type`: The type of OTP to send. Can be "sign-in", "email-verification", or "forget-password".
+- `sendVerificationOTP`: A function that sends the OTP to the user's email address. The function receives an object with the following properties:
+  - `email`: The user's email address.
+  - `otp`: The OTP to send.
+  - `type`: The type of OTP to send. Can be "sign-in", "email-verification", or "forget-password".
 
-* `otpLength`: The length of the OTP. Defaults to `6`.
+- `otpLength`: The length of the OTP. Defaults to `6`.
 
-* `expiresIn`: The expiry time of the OTP in seconds. Defaults to `300` seconds.
+- `expiresIn`: The expiry time of the OTP in seconds. Defaults to `300` seconds.
 
 ```ts title="auth.ts"
-import { betterAuth } from "better-auth"
+import { betterAuth } from 'better-auth'
 
 export const auth = betterAuth({
-    plugins: [
-        emailOTP({
-            otpLength: 8,
-            expiresIn: 600
-        })
-    ]
+  plugins: [
+    emailOTP({
+      otpLength: 8,
+      expiresIn: 600,
+    }),
+  ],
 })
 ```
 
-* `sendVerificationOnSignUp`: A boolean value that determines whether to send the OTP when a user signs up. Defaults to `false`.
+- `sendVerificationOnSignUp`: A boolean value that determines whether to send the OTP when a user signs up. Defaults to `false`.
 
-* `disableSignUp`: A boolean value that determines whether to prevent automatic sign-up when the user is not registered. Defaults to `false`.
+- `disableSignUp`: A boolean value that determines whether to prevent automatic sign-up when the user is not registered. Defaults to `false`.
 
-* `generateOTP`: A function that generates the OTP. Defaults to a random 6-digit number.
+- `generateOTP`: A function that generates the OTP. Defaults to a random 6-digit number.
 
-* `allowedAttempts`: The maximum number of attempts allowed for verifying an OTP. Defaults to `3`. After exceeding this limit, the OTP becomes invalid and the user needs to request a new one.
+- `allowedAttempts`: The maximum number of attempts allowed for verifying an OTP. Defaults to `3`. After exceeding this limit, the OTP becomes invalid and the user needs to request a new one.
 
 ```ts title="auth.ts"
-import { betterAuth } from "better-auth"
+import { betterAuth } from 'better-auth'
 
 export const auth = betterAuth({
-    plugins: [
-        emailOTP({
-            allowedAttempts: 5, // Allow 5 attempts before invalidating the OTP
-            expiresIn: 300
-        })
-    ]
+  plugins: [
+    emailOTP({
+      allowedAttempts: 5, // Allow 5 attempts before invalidating the OTP
+      expiresIn: 300,
+    }),
+  ],
 })
 ```
 
 When the maximum attempts are exceeded, the `verifyOTP`, `signIn.emailOtp`, `verifyEmail`, and `resetPassword` methods will return an error with code `TOO_MANY_ATTEMPTS`.
 
-* `storeOTP`: The method to store the OTP in your database, wether `encrypted`, `hashed` or `plain` text. Default is `plain` text.
+- `storeOTP`: The method to store the OTP in your database, wether `encrypted`, `hashed` or `plain` text. Default is `plain` text.
 
 <Callout>
   Note: This will not affect the OTP sent to the user, it will only affect the OTP stored in your database.
@@ -507,14 +511,14 @@ Alternatively, you can pass a custom encryptor or hasher to store the OTP in you
 
 ```ts title="auth.ts"
 emailOTP({
-    storeOTP: {
-        encrypt: async (otp) => {
-            return myCustomEncryptor(otp);
-        },
-        decrypt: async (otp) => {
-            return myCustomDecryptor(otp);
-        },
-    }
+  storeOTP: {
+    encrypt: async (otp) => {
+      return myCustomEncryptor(otp)
+    },
+    decrypt: async (otp) => {
+      return myCustomDecryptor(otp)
+    },
+  },
 })
 ```
 
@@ -522,12 +526,10 @@ emailOTP({
 
 ```ts title="auth.ts"
 emailOTP({
-    storeOTP: {
-        hash: async (otp) => {
-            return myCustomHasher(otp);
-        },
-    }
+  storeOTP: {
+    hash: async (otp) => {
+      return myCustomHasher(otp)
+    },
+  },
 })
 ```
-
-

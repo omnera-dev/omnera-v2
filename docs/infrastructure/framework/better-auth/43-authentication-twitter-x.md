@@ -1,14 +1,16 @@
 # authentication: Twitter (X)
+
 URL: /docs/authentication/twitter
 Source: https://raw.githubusercontent.com/better-auth/better-auth/refs/heads/main/docs/content/docs/authentication/twitter.mdx
 
 Twitter provider setup and usage.
 
-***
+---
 
 title: Twitter (X)
 description: Twitter provider setup and usage.
-----------------------------------------------
+
+---
 
 <Steps>
   <Step>
@@ -21,6 +23,7 @@ description: Twitter provider setup and usage.
     <Callout type="info">
       Twitter API v2 now supports email address retrieval. Make sure to request the `user.email` scope when configuring your Twitter app to enable this feature.
     </Callout>
+
   </Step>
 
   <Step>
@@ -40,6 +43,7 @@ description: Twitter provider setup and usage.
         },
     })
     ```
+
   </Step>
 
   <Step>
@@ -59,7 +63,6 @@ description: Twitter provider setup and usage.
         })
     }
     ```
+
   </Step>
 </Steps>
-
-

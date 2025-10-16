@@ -1,14 +1,16 @@
 # plugins: Two-Factor Authentication (2FA)
+
 URL: /docs/plugins/2fa
 Source: https://raw.githubusercontent.com/better-auth/better-auth/refs/heads/main/docs/content/docs/plugins/2fa.mdx
 
 Enhance your app's security with two-factor authentication.
 
-***
+---
 
 title: Two-Factor Authentication (2FA)
 description: Enhance your app's security with two-factor authentication.
-------------------------------------------------------------------------
+
+---
 
 `OTP` `TOTP` `Backup Codes` `Trusted Devices`
 
@@ -21,9 +23,9 @@ This plugin offers two main methods to do a second factor verification:
 
 **Additional features include:**
 
-* Generating backup codes for account recovery
-* Enabling/disabling 2FA
-* Managing trusted devices
+- Generating backup codes for account recovery
+- Enabling/disabling 2FA
+- Managing trusted devices
 
 ## Installation
 
@@ -45,6 +47,7 @@ This plugin offers two main methods to do a second factor verification:
         ]
     })
     ```
+
   </Step>
 
   <Step>
@@ -67,6 +70,7 @@ This plugin offers two main methods to do a second factor verification:
     </Tabs>
 
     See the [Schema](#schema) section to add the fields manually.
+
   </Step>
 
   <Step>
@@ -84,6 +88,7 @@ This plugin offers two main methods to do a second factor verification:
         ]
     })
     ```
+
   </Step>
 </Steps>
 
@@ -97,22 +102,22 @@ To enable two-factor authentication, call `twoFactor.enable` with the user's pas
 
 ```ts
 const { data, error } = await authClient.twoFactor.enable({
-    password: secure-password,
-    issuer: my-app-name, // required
-});
+  password: secure - password,
+  issuer: my - app - name, // required
+})
 ```
 
 ### Server Side
 
 ```ts
 const data = await auth.api.enableTwoFactor({
-    body: {
-        password: secure-password,
-        issuer: my-app-name, // required
-    },
-    // This endpoint requires session cookies.
-    headers: await headers()
-});
+  body: {
+    password: secure - password,
+    issuer: my - app - name, // required
+  },
+  // This endpoint requires session cookies.
+  headers: await headers(),
+})
 ```
 
 ### Type Definition
@@ -133,8 +138,8 @@ type enableTwoFactor = {
 
 When 2FA is enabled:
 
-* An encrypted `secret` and `backupCodes` are generated.
-* `enable` returns `totpURI` and `backupCodes`.
+- An encrypted `secret` and `backupCodes` are generated.
+- `enable` returns `totpURI` and `backupCodes`.
 
 Note: `twoFactorEnabled` wonâ€™t be set to `true` until the user verifies their TOTP code. Learn more about veryifying TOTP [here](#totp). You can skip verification by setting `skipVerificationOnEnable` to true in your plugin config.
 
@@ -149,54 +154,56 @@ When a user with 2FA enabled tries to sign in via email, the response object wil
 You can handle this in the `onSuccess` callback or by providing a `onTwoFactorRedirect` callback in the plugin config.
 
 ```ts title="sign-in.tsx"
-await authClient.signIn.email({
-        email: "user@example.com",
-        password: "password123",
+await authClient.signIn.email(
+  {
+    email: 'user@example.com',
+    password: 'password123',
+  },
+  {
+    async onSuccess(context) {
+      if (context.data.twoFactorRedirect) {
+        // Handle the 2FA verification in place
+      }
     },
-    {
-        async onSuccess(context) {
-            if (context.data.twoFactorRedirect) {
-                // Handle the 2FA verification in place
-            }
-        },
-    }
+  }
 )
 ```
 
 Using the `onTwoFactorRedirect` config:
 
 ```ts title="sign-in.ts"
-import { createAuthClient } from "better-auth/client";
-import { twoFactorClient } from "better-auth/client/plugins";
+import { createAuthClient } from 'better-auth/client'
+import { twoFactorClient } from 'better-auth/client/plugins'
 
 const authClient = createAuthClient({
-    plugins: [
-        twoFactorClient({
-            onTwoFactorRedirect(){
-                // Handle the 2FA verification globally
-            },
-        }),
-    ],
-});
+  plugins: [
+    twoFactorClient({
+      onTwoFactorRedirect() {
+        // Handle the 2FA verification globally
+      },
+    }),
+  ],
+})
 ```
 
 <Callout type="warn">
   **With `auth.api`**
 
-  When you call `auth.api.signInEmail` on the server, and the user has 2FA enabled, it will return an object where `twoFactorRedirect` is set to `true`. This behavior isnâ€™t inferred in TypeScript, which can be misleading. You can check using `in` instead to check if `twoFactorRedirect` is set to `true`.
+When you call `auth.api.signInEmail` on the server, and the user has 2FA enabled, it will return an object where `twoFactorRedirect` is set to `true`. This behavior isnâ€™t inferred in TypeScript, which can be misleading. You can check using `in` instead to check if `twoFactorRedirect` is set to `true`.
 
-  ```ts
-  const response = await auth.api.signInEmail({
-  	body: {
-  		email: "test@test.com",
-  		password: "test",
-  	},
-  });
+```ts
+const response = await auth.api.signInEmail({
+  body: {
+    email: 'test@test.com',
+    password: 'test',
+  },
+})
 
-  if ("twoFactorRedirect" in response) {
-  	// Handle the 2FA verification in place
-  }
-  ```
+if ('twoFactorRedirect' in response) {
+  // Handle the 2FA verification in place
+}
+```
+
 </Callout>
 
 ### Disabling 2FA
@@ -207,31 +214,30 @@ To disable two-factor authentication, call `twoFactor.disable` with the user's p
 
 ```ts
 const { data, error } = await authClient.twoFactor.disable({
-    password,
-});
+  password,
+})
 ```
 
 ### Server Side
 
 ```ts
 const data = await auth.api.disableTwoFactor({
-    body: {
-        password,
-    },
-    // This endpoint requires session cookies.
-    headers: await headers()
-});
+  body: {
+    password,
+  },
+  // This endpoint requires session cookies.
+  headers: await headers(),
+})
 ```
 
 ### Type Definition
 
 ```ts
 type disableTwoFactor = {
-    /**
-     * The user's password
-     */
-    password: string
-
+  /**
+   * The user's password
+   */
+  password: string
 }
 ```
 
@@ -249,31 +255,30 @@ After enabling 2FA, you can get the TOTP URI to display to the user. This URI is
 
 ```ts
 const { data, error } = await authClient.twoFactor.getTotpUri({
-    password,
-});
+  password,
+})
 ```
 
 ### Server Side
 
 ```ts
 const data = await auth.api.getTOTPURI({
-    body: {
-        password,
-    },
-    // This endpoint requires session cookies.
-    headers: await headers()
-});
+  body: {
+    password,
+  },
+  // This endpoint requires session cookies.
+  headers: await headers(),
+})
 ```
 
 ### Type Definition
 
 ```ts
 type getTOTPURI = {
-    /**
-     * The user's password
-     */
-    password: string
-
+  /**
+   * The user's password
+   */
+  password: string
 }
 ```
 
@@ -282,21 +287,19 @@ type getTOTPURI = {
 Once you have the TOTP URI, you can use it to generate a QR code for the user to scan with their authenticator app.
 
 ```tsx title="user-card.tsx"
-import QRCode from "react-qr-code";
+import QRCode from 'react-qr-code'
 
-export default function UserCard({ password }: { password: string }){
-    const { data: session } = client.useSession();
-	const { data: qr } = useQuery({
-		queryKey: ["two-factor-qr"],
-		queryFn: async () => {
-			const res = await authClient.twoFactor.getTotpUri({ password });
-			return res.data;
-		},
-		enabled: !!session?.user.twoFactorEnabled,
-	});
-    return (
-        <QRCode value={qr?.totpURI || ""} />
-   )
+export default function UserCard({ password }: { password: string }) {
+  const { data: session } = client.useSession()
+  const { data: qr } = useQuery({
+    queryKey: ['two-factor-qr'],
+    queryFn: async () => {
+      const res = await authClient.twoFactor.getTotpUri({ password })
+      return res.data
+    },
+    enabled: !!session?.user.twoFactorEnabled,
+  })
+  return <QRCode value={qr?.totpURI || ''} />
 }
 ```
 
@@ -351,19 +354,19 @@ OTP (One-Time Password) is similar to TOTP but a random code is generated and se
 Before using OTP to verify the second factor, you need to configure `sendOTP` in your Better Auth instance. This function is responsible for sending the OTP to the user's email, phone, or any other method supported by your application.
 
 ```ts title="auth.ts"
-import { betterAuth } from "better-auth"
-import { twoFactor } from "better-auth/plugins"
+import { betterAuth } from 'better-auth'
+import { twoFactor } from 'better-auth/plugins'
 
 export const auth = betterAuth({
-    plugins: [
-        twoFactor({
-          	otpOptions: {
-				async sendOTP({ user, otp }, request) {
-                    // send otp to user
-				},
-			},
-        })
-    ]
+  plugins: [
+    twoFactor({
+      otpOptions: {
+        async sendOTP({ user, otp }, request) {
+          // send otp to user
+        },
+      },
+    }),
+  ],
 })
 ```
 
@@ -375,18 +378,18 @@ Sending an OTP is done by calling the `twoFactor.sendOtp` function. This functio
 
 ```ts
 const { data, error } = await authClient.twoFactor.sendOtp({
-    trustDevice, // required
-});
+  trustDevice, // required
+})
 ```
 
 ### Server Side
 
 ```ts
 const data = await auth.api.send2FaOTP({
-    body: {
-        trustDevice, // required
-    }
-});
+  body: {
+    trustDevice, // required
+  },
+})
 ```
 
 ### Type Definition
@@ -453,31 +456,30 @@ Generate backup codes for account recovery:
 
 ```ts
 const { data, error } = await authClient.twoFactor.generateBackupCodes({
-    password,
-});
+  password,
+})
 ```
 
 ### Server Side
 
 ```ts
 const data = await auth.api.generateBackupCodes({
-    body: {
-        password,
-    },
-    // This endpoint requires session cookies.
-    headers: await headers()
-});
+  body: {
+    password,
+  },
+  // This endpoint requires session cookies.
+  headers: await headers(),
+})
 ```
 
 ### Type Definition
 
 ```ts
 type generateBackupCodes = {
-    /**
-     * The users password.
-     */
-    password: string
-
+  /**
+   * The users password.
+   */
+  password: string
 }
 ```
 
@@ -493,22 +495,22 @@ You can now allow users to provider backup code as account recover method.
 
 ```ts
 const { data, error } = await authClient.twoFactor.verifyBackupCode({
-    code: 123456,
-    disableSession, // required
-    trustDevice, // required
-});
+  code: 123456,
+  disableSession, // required
+  trustDevice, // required
+})
 ```
 
 ### Server Side
 
 ```ts
 const data = await auth.api.verifyBackupCode({
-    body: {
-        code: 123456,
-        disableSession, // required
-        trustDevice, // required
-    }
-});
+  body: {
+    code: 123456,
+    disableSession, // required
+    trustDevice, // required
+  },
+})
 ```
 
 ### Type Definition
@@ -543,18 +545,18 @@ To display the backup codes to the user, you can call `viewBackupCodes` on the s
 
 ```ts
 const { data, error } = await authClient.twoFactor.viewBackupCodes({
-    userId: user-id, // required
-});
+  userId: user - id, // required
+})
 ```
 
 ### Server Side
 
 ```ts
 const data = await auth.api.viewBackupCodes({
-    body: {
-        userId: user-id, // required
-    }
-});
+  body: {
+    userId: user - id, // required
+  },
+})
 ```
 
 ### Type Definition
@@ -575,14 +577,14 @@ You can mark a device as trusted by passing `trustDevice` to `verifyTotp` or `ve
 
 ```ts
 const verify2FA = async (code: string) => {
-    const { data, error } = await authClient.twoFactor.verifyTotp({
-        code,
-        callbackURL: "/dashboard",
-        trustDevice: true // Mark this device as trusted
-    })
-    if (data) {
-        // 2FA verified and device trusted
-    }
+  const { data, error } = await authClient.twoFactor.verifyTotp({
+    code,
+    callbackURL: '/dashboard',
+    trustDevice: true, // Mark this device as trusted
+  })
+  if (data) {
+    // 2FA verified and device trusted
+  }
 }
 ```
 
@@ -596,11 +598,11 @@ For example, if your user uses Google Auth, the default appName will show up as 
 
 ```ts
 twoFactor({
-    issuer: "my-app-name" // [!code highlight]
+  issuer: 'my-app-name', // [!code highlight]
 })
 ```
 
-***
+---
 
 ## Schema
 
@@ -609,20 +611,20 @@ The plugin requires 1 additional fields in the `user` table and 1 additional tab
 Table: `user`
 
 <DatabaseTable
-  fields={[
-      { name: "twoFactorEnabled", type: "boolean", description: "Whether two factor authentication is enabled for the user.", isOptional: true },
-  ]}
+fields={[
+{ name: "twoFactorEnabled", type: "boolean", description: "Whether two factor authentication is enabled for the user.", isOptional: true },
+]}
 />
 
 Table: `twoFactor`
 
 <DatabaseTable
-  fields={[
-      { name: "id", type: "string", description: "The ID of the two factor authentication.", isPrimaryKey: true },
-      { name: "userId", type: "string", description: "The ID of the user", isForeignKey: true },
-      { name: "secret", type: "string", description: "The secret used to generate the TOTP code.", isOptional: true },
-      { name: "backupCodes", type: "string", description: "The backup codes used to recover access to the account if the user loses access to their phone or email.", isOptional: true },
-  ]}
+fields={[
+{ name: "id", type: "string", description: "The ID of the two factor authentication.", isPrimaryKey: true },
+{ name: "userId", type: "string", description: "The ID of the user", isForeignKey: true },
+{ name: "secret", type: "string", description: "The secret used to generate the TOTP code.", isOptional: true },
+{ name: "backupCodes", type: "string", description: "The backup codes used to recover access to the account if the user loses access to their phone or email.", isOptional: true },
+]}
 />
 
 ## Options
@@ -640,7 +642,7 @@ Table: `twoFactor`
 these are options for TOTP.
 
 <TypeTable
-  type={{
+type={{
   digits:{
       description: "The number of digits the otp to be",
       type: "number",
@@ -659,7 +661,7 @@ these are options for TOTP.
 these are options for OTP.
 
 <TypeTable
-  type={{
+type={{
   sendOTP: {
       description: "a function that sends the otp to the user's email or phone number. It takes two parameters: user and otp",
       type: "function",
@@ -682,7 +684,7 @@ these are options for OTP.
 backup codes are generated and stored in the database when the user enabled two factor authentication. This can be used to recover access to the account if the user loses access to their phone or email.
 
 <TypeTable
-  type={{
+type={{
       amount: {
           description: "The amount of backup codes to generate",
           type: "number",
@@ -710,22 +712,22 @@ backup codes are generated and stored in the database when the user enabled two 
 To use the two factor plugin in the client, you need to add it on your plugins list.
 
 ```ts title="auth-client.ts"
-import { createAuthClient } from "better-auth/client"
-import { twoFactorClient } from "better-auth/client/plugins"
+import { createAuthClient } from 'better-auth/client'
+import { twoFactorClient } from 'better-auth/client/plugins'
 
-const authClient =  createAuthClient({
-    plugins: [
-        twoFactorClient({ // [!code highlight]
-            onTwoFactorRedirect(){ // [!code highlight]
-                window.location.href = "/2fa" // Handle the 2FA verification redirect // [!code highlight]
-            } // [!code highlight]
-        }) // [!code highlight]
-    ]
+const authClient = createAuthClient({
+  plugins: [
+    twoFactorClient({
+      // [!code highlight]
+      onTwoFactorRedirect() {
+        // [!code highlight]
+        window.location.href = '/2fa' // Handle the 2FA verification redirect // [!code highlight]
+      }, // [!code highlight]
+    }), // [!code highlight]
+  ],
 })
 ```
 
 **Options**
 
 `onTwoFactorRedirect`: A callback that will be called when the user needs to verify their 2FA code. This can be used to redirect the user to the 2FA page.
-
-

@@ -1,14 +1,16 @@
 # authentication: Salesforce
+
 URL: /docs/authentication/salesforce
 Source: https://raw.githubusercontent.com/better-auth/better-auth/refs/heads/main/docs/content/docs/authentication/salesforce.mdx
 
 Salesforce provider setup and usage.
 
-***
+---
 
 title: Salesforce
 description: Salesforce provider setup and usage.
--------------------------------------------------
+
+---
 
 <Steps>
   <Step>
@@ -41,6 +43,7 @@ description: Salesforce provider setup and usage.
     <Callout type="warning">
       For sandbox testing, you can create the Connected App in your sandbox org, or use the same Connected App but specify `environment: "sandbox"` in the provider configuration.
     </Callout>
+
   </Step>
 
   <Step>
@@ -91,6 +94,7 @@ description: Salesforce provider setup and usage.
       * The `loginUrl` option is useful for organizations with My Domain enabled
       * The `redirectURI` option helps resolve redirect URI mismatch errors
     </Callout>
+
   </Step>
 
   <Step>
@@ -111,6 +115,7 @@ description: Salesforce provider setup and usage.
     SALESFORCE_CLIENT_SECRET=your_consumer_secret_here
     BETTER_AUTH_URL=https://yourdomain.com
     ```
+
   </Step>
 
   <Step>
@@ -130,6 +135,7 @@ description: Salesforce provider setup and usage.
         })
     }
     ```
+
   </Step>
 
   <Step>
@@ -165,7 +171,6 @@ description: Salesforce provider setup and usage.
     <Callout type="info">
       The default scopes requested are `openid`, `email`, and `profile`. The provider will automatically include the `id` scope for accessing basic user information.
     </Callout>
+
   </Step>
 </Steps>
-
-

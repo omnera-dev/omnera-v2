@@ -1,14 +1,16 @@
 # adapters: MS SQL
+
 URL: /docs/adapters/mssql
 Source: https://raw.githubusercontent.com/better-auth/better-auth/refs/heads/main/docs/content/docs/adapters/mssql.mdx
 
 Integrate Better Auth with MS SQL.
 
-***
+---
 
 title: MS SQL
 description: Integrate Better Auth with MS SQL.
------------------------------------------------
+
+---
 
 Microsoft SQL Server is a relational database management system developed by Microsoft, designed for enterprise-level data storage, management, and analytics with robust security and scalability features.
 Read more [here](https://en.wikipedia.org/wiki/Microsoft_SQL_Server).
@@ -19,8 +21,8 @@ Make sure you have MS SQL installed and configured.
 Then, you can connect it straight into Better Auth.
 
 ```ts title="auth.ts"
-import { betterAuth } from "better-auth";
-import { MssqlDialect } from "kysely";
+import { betterAuth } from 'better-auth'
+import { MssqlDialect } from 'kysely'
 import * as Tedious from 'tedious'
 import * as Tarn from 'tarn'
 
@@ -34,36 +36,35 @@ const dialect = new MssqlDialect({
   },
   tedious: {
     ...Tedious,
-    connectionFactory: () => new Tedious.Connection({
-      authentication: {
-        options: {
-          password: 'password',
-          userName: 'username',
+    connectionFactory: () =>
+      new Tedious.Connection({
+        authentication: {
+          options: {
+            password: 'password',
+            userName: 'username',
+          },
+          type: 'default',
         },
-        type: 'default',
-      },
-      options: {
-        database: 'some_db',
-        port: 1433,
-        trustServerCertificate: true,
-      },
-      server: 'localhost',
-    }),
+        options: {
+          database: 'some_db',
+          port: 1433,
+          trustServerCertificate: true,
+        },
+        server: 'localhost',
+      }),
   },
   TYPES: {
-		...Tedious.TYPES,
-		DateTime: Tedious.TYPES.DateTime2,
-	},
+    ...Tedious.TYPES,
+    DateTime: Tedious.TYPES.DateTime2,
+  },
 })
 
 export const auth = betterAuth({
   database: {
     dialect,
-    type: "mssql"
-  }
-});
-
-
+    type: 'mssql',
+  },
+})
 ```
 
 <Callout>
@@ -86,6 +87,7 @@ your database schema based on your Better Auth configuration and plugins.
         <p className="font-bold text-[16px] mb-1">MS SQL Schema Migration</p>
       </th>
     </tr>
+
   </thead>
 
   <tbody>
@@ -109,5 +111,3 @@ npx @better-auth/cli@latest migrate
 MS SQL is supported under the hood via the [Kysely](https://kysely.dev/) adapter, any database supported by Kysely would also be supported. (<Link href="/docs/adapters/other-relational-databases">Read more here</Link>)
 
 If you're looking for performance improvements or tips, take a look at our guide to <Link href="/docs/guides/optimizing-for-performance">performance optimizations</Link>.
-
-

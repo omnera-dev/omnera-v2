@@ -1,14 +1,16 @@
 # guides: Browser Extension Guide
+
 URL: /docs/guides/browser-extension-guide
 Source: https://raw.githubusercontent.com/better-auth/better-auth/refs/heads/main/docs/content/docs/guides/browser-extension-guide.mdx
 
 A step-by-step guide to creating a browser extension with Better Auth.
 
-***
+---
 
 title: Browser Extension Guide
 description: A step-by-step guide to creating a browser extension with Better Auth.
------------------------------------------------------------------------------------
+
+---
 
 In this guide, we'll walk you through the steps of creating a browser extension using <Link href="https://docs.plasmo.com/">Plasmo</Link> with Better Auth for authentication.
 
@@ -42,6 +44,7 @@ If you would like to view a completed example, you can check out the <Link href=
     ```bash
     pnpm dev
     ```
+
   </Step>
 
   <Step>
@@ -64,6 +67,7 @@ If you would like to view a completed example, you can check out the <Link href=
         }
     }
     ```
+
   </Step>
 
   <Step>
@@ -87,6 +91,7 @@ If you would like to view a completed example, you can check out the <Link href=
         plugins: [],
     });
     ```
+
   </Step>
 
   <Step>
@@ -106,6 +111,7 @@ If you would like to view a completed example, you can check out the <Link href=
         }
     }
     ```
+
   </Step>
 
   <Step>
@@ -138,6 +144,7 @@ If you would like to view a completed example, you can check out the <Link href=
 
     export default IndexPopup;
     ```
+
   </Step>
 
   <Step>
@@ -158,6 +165,7 @@ If you would like to view a completed example, you can check out the <Link href=
     To see your popup, click on the puzzle piece icon on the Chrome toolbar, and click on your extension.
 
     Learn more about <Link href="https://docs.plasmo.com/framework#loading-the-extension-in-chrome">bundling your extension here.</Link>
+
   </Step>
 
   <Step>
@@ -200,12 +208,14 @@ If you would like to view a completed example, you can check out the <Link href=
       Using wildcards for extension origins (`chrome-extension://*`) reduces security by trusting all extensions.
       It's safer to explicitly list each extension ID you trust. Only use wildcards for development and testing.
     </Callout>
+
   </Step>
 
   <Step>
     ## That's it!
 
     Everything is set up! You can now start developing your extension. ðŸŽ‰
+
   </Step>
 </Steps>
 
@@ -217,5 +227,3 @@ We highly recommend you visit the <Link href="https://docs.plasmo.com/">Plasmo d
 If you would like to view a completed example, you can check out the <Link href="https://github.com/better-auth/examples/tree/main/browser-extension-example">browser extension example</Link>.
 
 If you have any questions, feel free to open an issue on our <Link href="https://github.com/better-auth/better-auth/issues">GitHub repo</Link>, or join our <Link href="https://discord.gg/better-auth">Discord server</Link> for support.
-
-
