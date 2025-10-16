@@ -70,6 +70,10 @@ function VeryExpensiveComponent() {
 const StableChildComponent = React.memo(ExpensiveChild) // Only if measured benefit
 ```
 
+**ESLint Enforcement**: Omnera's ESLint configuration warns when `useMemo`, `useCallback`, or `React.memo` are used, guiding developers to rely on the React 19 Compiler. These are warnings (not errors) to allow manual optimization when measured as necessary.
+
+**See**: `@docs/infrastructure/quality/eslint.md#react-19-compiler-guidance` for complete enforcement details.
+
 ### Code Splitting
 
 Split large components to reduce initial bundle size:

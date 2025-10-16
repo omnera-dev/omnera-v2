@@ -20,7 +20,7 @@
 export const products = pgTable(
   'products',
   {
-    id: serial('id').primaryKey(),
+    id: integer().primaryKey().generatedAlwaysAsIdentity(),
     metadata: jsonb('metadata').$type<{ tags: string[]; category: string }>(),
   },
   (table) => ({

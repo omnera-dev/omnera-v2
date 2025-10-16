@@ -27,10 +27,10 @@ interface User {
 ```typescript
 // ✅ CORRECT: Separate schema files by domain
 // src/db/schema/users.ts
-export const users = sqliteTable('users', { ... })
+export const users = pgTable('users', { ... })
 export const usersRelations = relations(users, { ... })
 // src/db/schema/posts.ts
-export const posts = sqliteTable('posts', { ... })
+export const posts = pgTable('posts', { ... })
 export const postsRelations = relations(posts, { ... })
 // src/db/schema/index.ts
 export * from './users'
@@ -46,7 +46,7 @@ const userNames = await db.select({ id: users.id, name: users.name }).from(users
 const allUsers = await db.select().from(users)
 const names = allUsers.map((u) => u.name) // Fetched unnecessary data
 // ✅ CORRECT: Use indexes for frequently queried columns
-export const users = sqliteTable(
+export const users = pgTable(
   'users',
   {
     email: text('email').notNull(),

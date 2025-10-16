@@ -206,6 +206,10 @@ const user = await db.execute(query) // Vulnerable to SQL injection!
 - Drizzle automatically escapes special characters
 - No way to inject malicious SQL
 
+**ESLint Enforcement**: Omnera's ESLint configuration automatically enforces WHERE clauses on DELETE and UPDATE operations via eslint-plugin-drizzle, preventing accidental mass operations that could compromise data integrity or expose security vulnerabilities.
+
+**See**: `@docs/infrastructure/quality/eslint.md#database-safety-rules` for complete enforcement details.
+
 ### XSS Prevention (Cross-Site Scripting)
 
 React escapes strings by default, but be careful with `dangerouslySetInnerHTML`:

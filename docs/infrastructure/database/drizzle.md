@@ -13,12 +13,13 @@ Drizzle ORM is a lightweight, performant ORM designed for TypeScript developers 
 - **Zero Runtime Overhead**: Schema and query types resolved at compile time
 - **SQL-Like Syntax**: Familiar SQL-style API (no learning curve for SQL developers)
 - **Full TypeScript Inference**: Complete type safety from schema to query results
-- **Bun Native Integration**: Uses Bun's built-in `bun:sql` module (no external drivers)
+- **Bun Native Integration**: Uses Bun's built-in `bun:sql` module since v0.39.0 (no external drivers)
 - **Effect.ts Ready**: Perfect for repository pattern with Effect Context
 - **Better Auth Compatible**: Works with Better Auth via `drizzleAdapter`
 - **PostgreSQL Focus**: Production-ready with advanced PostgreSQL features
 - **Lightweight**: Small bundle size, minimal dependencies
 - **Migration System**: Declarative migrations with drizzle-kit
+- **Active Development**: Recent improvements include enhanced error handling (v0.44.0), advanced CTE operations (v0.39.0), and cross/lateral joins (v0.43.0)
 
 ## Installation
 
@@ -27,11 +28,11 @@ Drizzle is already installed in Omnera:
 ```json
 {
   "dependencies": {
-    "drizzle-orm": "^0.37.0",
+    "drizzle-orm": "^0.44.6",
     "@types/bun": "latest"
   },
   "devDependencies": {
-    "drizzle-kit": "^0.30.1"
+    "drizzle-kit": "^0.31.5"
   }
 }
 ```
@@ -42,23 +43,30 @@ No additional installation needed.
 
 ### PostgreSQL with Bun SQL (Production)
 
-Bun provides native PostgreSQL support via the built-in `bun:sql` module:
+Bun provides native PostgreSQL support via the built-in `bun:sql` module (added in Bun 1.2.0, with Drizzle support since v0.39.0):
 
 ```typescript
 // src/db/index.ts
-import { SQL } from 'bun'
 import { drizzle } from 'drizzle-orm/bun-sql'
 
-// Production PostgreSQL connection
-const client = new SQL({
-  url: process.env.DATABASE_URL || 'postgres://localhost:5432/omnera',
-  max: 20, // Connection pool size
-  idleTimeout: 60, // Idle timeout in seconds
-  connectionTimeout: 30, // Connection timeout in seconds
-})
-
-export const db = drizzle({ client })
+// Simplest form (recommended for most cases)
+export const db = drizzle(process.env.DATABASE_URL!)
 export type DrizzleDB = typeof db
+
+// Alternative: With connection options
+// export const db = drizzle({
+//   connection: { url: process.env.DATABASE_URL! }
+// })
+
+// Alternative: With explicit client configuration
+// import { SQL } from 'bun'
+// const client = new SQL({
+//   url: process.env.DATABASE_URL || 'postgres://localhost:5432/omnera',
+//   max: 20, // Connection pool size
+//   idleTimeout: 60, // Idle timeout in seconds
+//   connectionTimeout: 30, // Connection timeout in seconds
+// })
+// export const db = drizzle({ client })
 ```
 
 **Environment Variables**:
@@ -102,10 +110,10 @@ Define tables with type-safe columns:
 
 ```typescript
 // src/db/schema/users.ts
-import { pgTable, serial, text, timestamp, boolean } from 'drizzle-orm/pg-core'
+import { pgTable, integer, text, timestamp, boolean } from 'drizzle-orm/pg-core'
 
 export const users = pgTable('users', {
-  id: serial('id').primaryKey(),
+  id: integer().primaryKey().generatedAlwaysAsIdentity(),
   name: text('name').notNull(),
   email: text('email').notNull().unique(),
   emailVerified: boolean('email_verified').notNull().default(false),
@@ -145,12 +153,12 @@ Define one-to-many and many-to-many relationships:
 
 ```typescript
 // src/db/schema/posts.ts
-import { pgTable, serial, text, integer, timestamp } from 'drizzle-orm/pg-core'
+import { pgTable, integer, text, timestamp } from 'drizzle-orm/pg-core'
 import { users } from './users'
 import { relations } from 'drizzle-orm'
 
 export const posts = pgTable('posts', {
-  id: serial('id').primaryKey(),
+  id: integer().primaryKey().generatedAlwaysAsIdentity(),
   title: text('title').notNull(),
   content: text('content').notNull(),
   authorId: integer('author_id')
@@ -593,7 +601,7 @@ export const searchUsers = (query: string) =>
 export const users = pgTable(
   'users',
   {
-    id: serial('id').primaryKey(),
+    id: integer().primaryKey().generatedAlwaysAsIdentity(),
     email: text('email').notNull().unique(),
     name: text('name').notNull(),
   },

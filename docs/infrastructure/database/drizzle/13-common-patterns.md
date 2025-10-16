@@ -7,11 +7,11 @@
 ### Soft Deletes
 
 ```typescript
-// Schema with deletedAt timestamp
-export const users = sqliteTable('users', {
-  id: integer('id').primaryKey({ autoIncrement: true }),
+// Schema with deletedAt timestamp (PostgreSQL)
+export const users = pgTable('users', {
+  id: integer().primaryKey().generatedAlwaysAsIdentity(),
   name: text('name').notNull(),
-  deletedAt: integer('deleted_at', { mode: 'timestamp' }),
+  deletedAt: timestamp('deleted_at', { withTimezone: true }),
 })
 // Soft delete helper
 const softDeleteUser = (id: number) =>
@@ -23,16 +23,14 @@ const activeUsers = await db.select().from(users).where(isNull(users.deletedAt))
 ### Audit Timestamps
 
 ```typescript
-export const users = sqliteTable('users', {
-  id: integer('id').primaryKey({ autoIncrement: true }),
+export const users = pgTable('users', {
+  id: integer().primaryKey().generatedAlwaysAsIdentity(),
   name: text('name').notNull(),
-  createdAt: integer('created_at', { mode: 'timestamp' })
+  createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+  updatedAt: timestamp('updated_at', { withTimezone: true })
     .notNull()
-    .$defaultFn(() => new Date()),
-  updatedAt: integer('updated_at', { mode: 'timestamp' })
-    .notNull()
-    .$defaultFn(() => new Date())
-    .$onUpdateFn(() => new Date()),
+    .defaultNow()
+    .$onUpdate(() => new Date()),
 })
 ```
 

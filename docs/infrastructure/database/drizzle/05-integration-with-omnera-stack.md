@@ -9,10 +9,10 @@
 Drizzle leverages TypeScript's type system for full type safety:
 
 ```typescript
-import { pgTable, serial, text } from 'drizzle-orm/pg-core'
+import { pgTable, integer, text } from 'drizzle-orm/pg-core'
 // Schema definition generates TypeScript types
 export const users = pgTable('users', {
-  id: serial('id').primaryKey(),
+  id: integer().primaryKey().generatedAlwaysAsIdentity(),
   name: text('name').notNull(),
   email: text('email').notNull().unique(),
 })

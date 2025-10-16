@@ -49,10 +49,10 @@ export default {
 ```typescript
 // 1. Define/update schema
 // src/db/schema/users.ts
-import { pgTable, serial, text, varchar, pgEnum } from 'drizzle-orm/pg-core'
+import { pgTable, integer, text, varchar, pgEnum } from 'drizzle-orm/pg-core'
 export const roleEnum = pgEnum('role', ['admin', 'user'])
 export const users = pgTable('users', {
-  id: serial('id').primaryKey(),
+  id: integer().primaryKey().generatedAlwaysAsIdentity(),
   name: varchar('name', { length: 255 }).notNull(),
   email: varchar('email', { length: 255 }).notNull().unique(),
   role: roleEnum('role').notNull().default('user'), // New field

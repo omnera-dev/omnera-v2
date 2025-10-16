@@ -806,6 +806,168 @@ const program = getUserProfile(1)
 Effect.runPromise(Effect.provide(program, AppLayer))
 ```
 
+## Enforcement
+
+Omnera's functional programming principles are **automatically enforced** via ESLint rules, ensuring that code adheres to FP patterns at compile-time.
+
+### ESLint Enforcement Mechanisms
+
+| Rule | Plugin | What It Enforces |
+|------|--------|------------------|
+| `functional/prefer-immutable-types` | eslint-plugin-functional | Requires `readonly` types |
+| `functional/no-let` | eslint-plugin-functional | Prevents mutable variable declarations (`let`) |
+| `functional/immutable-data` | eslint-plugin-functional | Catches direct data mutations |
+| `functional/no-throw-statements` | eslint-plugin-functional | Enforces Effect.ts error handling over exceptions |
+| `functional/no-loop-statements` | eslint-plugin-functional | Warns against imperative loops (prefers `map`/`filter`/`reduce`) |
+| `no-param-reassign` | ESLint core | Prevents parameter reassignment |
+| `prefer-const` | ESLint core | Enforces `const` over `let` when variables aren't reassigned |
+| `no-restricted-syntax` | ESLint core (custom) | Blocks array mutations (`push`, `pop`, `splice`, etc.) |
+| `no-restricted-imports` | ESLint core (custom) | Blocks `Effect.runSync` in business logic |
+
+### Array Mutation Prevention
+
+ESLint automatically blocks all mutating array methods:
+
+```typescript
+const numbers = [1, 2, 3]
+
+// ❌ BLOCKED by ESLint
+numbers.push(4)        // ERROR: Use [...numbers, 4]
+numbers.pop()          // ERROR: Use numbers.slice(0, -1)
+numbers.shift()        // ERROR: Use numbers.slice(1)
+numbers.unshift(0)     // ERROR: Use [0, ...numbers]
+numbers.splice(1, 1)   // ERROR: Use array.slice() + spread
+numbers.reverse()      // ERROR: Use [...numbers].reverse()
+numbers.sort()         // ERROR: Use [...numbers].sort()
+
+// ✅ CORRECT: Immutable patterns (ESLint allows)
+const added = [...numbers, 4]
+const removed = numbers.slice(0, -1)
+const shifted = numbers.slice(1)
+const prepended = [0, ...numbers]
+const sorted = [...numbers].sort()
+```
+
+**Error Message Example**:
+```
+Avoid array.push() - use immutable patterns like [...array, item] instead
+```
+
+### Effect.ts Error Handling Enforcement
+
+ESLint enforces Effect.ts patterns over traditional exception handling:
+
+```typescript
+// ❌ BLOCKED by ESLint
+function riskyOperation() {
+  if (error) throw new Error('Failed')
+  // ERROR: functional/no-throw-statements
+  // "Avoid throw statements. Use Effect error handling instead."
+}
+
+// ✅ CORRECT: Effect.ts error handling (ESLint allows)
+import { Effect } from 'effect'
+
+function riskyOperation() {
+  return Effect.gen(function* () {
+    if (error) return yield* Effect.fail(new Error('Failed'))
+    return yield* Effect.succeed(result)
+  })
+}
+
+// ❌ BLOCKED by ESLint
+import { runSync } from 'effect'
+// ERROR: no-restricted-imports
+// "Avoid Effect.runSync in application code. Use Effect.runPromise or provide dependencies via Context/Layer."
+
+// ✅ CORRECT: Use Effect.runPromise (ESLint allows)
+const result = await Effect.runPromise(program)
+```
+
+### Immutability Enforcement
+
+ESLint catches mutations at lint time:
+
+```typescript
+// ❌ BLOCKED by ESLint
+let counter = 0  // ERROR: functional/no-let
+function increment() {
+  counter++      // ERROR: Mutation detected
+}
+
+// ✅ CORRECT: Immutable pattern (ESLint allows)
+const increment = (counter: number): number => counter + 1
+
+// ❌ BLOCKED by ESLint
+interface User {
+  id: number       // ERROR: functional/prefer-immutable-types
+  name: string     // "Property should be readonly"
+}
+
+// ✅ CORRECT: Readonly types (ESLint allows)
+interface User {
+  readonly id: number
+  readonly name: string
+}
+
+// ❌ BLOCKED by ESLint
+function updateUser(user: User, name: string): void {
+  user.name = name  // ERROR: immutable-data violation
+}
+
+// ✅ CORRECT: Create new object (ESLint allows)
+function updateUser(user: User, name: string): User {
+  return { ...user, name }
+}
+```
+
+### Functional Loop Enforcement
+
+ESLint warns against imperative loops (warnings, not errors):
+
+```typescript
+// ⚠️ WARNING from ESLint
+for (const item of items) {  // WARN: functional/no-loop-statements
+  process(item)              // "Prefer map/filter/reduce over loops"
+}
+
+// ✅ PREFERRED: Functional alternatives
+items.forEach(process)
+items.map(transform)
+items.filter(predicate)
+items.reduce(accumulate, initial)
+```
+
+### How to Check Enforcement
+
+Run ESLint to verify FP rules are enforced:
+
+```bash
+# Check for FP violations
+bun run lint
+
+# Example output:
+# src/utils.ts
+#   10:7  error  'counter' is never reassigned. Use 'const' instead  prefer-const
+#   15:3  error  Avoid array.push() - use [...array, item] instead  no-restricted-syntax
+#   22:5  error  Use readonly types for immutability                functional/prefer-immutable-types
+#   28:10 error  Avoid throw statements. Use Effect error handling  functional/no-throw-statements
+```
+
+### Enforcement Configuration
+
+See the complete ESLint configuration:
+- **Full enforcement details**: `@docs/infrastructure/quality/eslint.md#functional-programming-enforcement`
+- **ESLint config file**: `eslint.config.ts` (lines 90-367)
+
+### Why Enforcement Matters
+
+1. **Catch Violations Early**: FP mistakes caught at lint time, not runtime
+2. **Consistent Codebase**: All developers follow the same FP patterns
+3. **Prevent Bugs**: Immutability and purity prevent entire classes of bugs
+4. **Educate Developers**: ESLint error messages teach FP best practices
+5. **Safe Refactoring**: Confidence that changes maintain FP principles
+
 ## Do's and Don'ts
 
 ### ✅ DO

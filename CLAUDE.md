@@ -90,6 +90,10 @@ git push origin main               # Triggers release if feat/fix
 4. **Composition** - Build complex from simple functions
 5. **Type Safety** - Strict TypeScript, Effect error types
 
+**Enforcement**: FP patterns automatically enforced via ESLint (`eslint-plugin-functional`). See `@docs/infrastructure/quality/eslint.md#functional-programming-enforcement`
+
+**Note**: Layer-based architecture (domain/, application/, infrastructure/, presentation/) is aspirational - current codebase uses flat structure. See `@docs/architecture/layer-based-architecture.md#enforcement` for details.
+
 ## File Structure
 
 ```

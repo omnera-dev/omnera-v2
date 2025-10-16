@@ -8,9 +8,9 @@
 
 ```typescript
 // src/db/schema/users.ts
-import { pgTable, serial, text, timestamp } from 'drizzle-orm/pg-core'
+import { pgTable, integer, text, timestamp } from 'drizzle-orm/pg-core'
 export const users = pgTable('users', {
-  id: serial('id').primaryKey(),
+  id: integer().primaryKey().generatedAlwaysAsIdentity(),
   name: text('name').notNull(),
   email: text('email').notNull().unique(),
   createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
@@ -23,7 +23,7 @@ export type NewUser = typeof users.$inferInsert
 **Key differences from SQLite**:
 
 - Use `pgTable` instead of `sqliteTable`
-- Use `serial` for auto-incrementing primary keys (instead of `integer({ autoIncrement: true })`)
+- Use `integer().primaryKey().generatedAlwaysAsIdentity()` for auto-incrementing primary keys (modern PostgreSQL IDENTITY columns, preferred over deprecated `serial()`)
 - Use `timestamp` for date/time columns (instead of `integer({ mode: 'timestamp' })`)
 - Use `.defaultNow()` for current timestamp (instead of `.$defaultFn(() => new Date())`)
 - Use `withTimezone: true` for timezone-aware timestamps (recommended)
@@ -33,7 +33,6 @@ export type NewUser = typeof users.$inferInsert
 ```typescript
 import {
   pgTable,
-  serial,
   integer,
   text,
   varchar,
@@ -48,7 +47,7 @@ import {
 export const statusEnum = pgEnum('status', ['active', 'inactive', 'archived'])
 export const products = pgTable('products', {
   // Numeric types
-  id: serial('id').primaryKey(),
+  id: integer().primaryKey().generatedAlwaysAsIdentity(),
   quantity: integer('quantity').notNull().default(0),
   price: numeric('price', { precision: 10, scale: 2 }).notNull(), // Money-safe decimal
   // Text types
@@ -75,7 +74,8 @@ export const products = pgTable('products', {
 **PostgreSQL Type Mapping**:
 | PostgreSQL Type | Drizzle Type | Use Case |
 | ----------------- | ------------ | ------------------------------------- |
-| `SERIAL` | `serial()` | Auto-incrementing integer primary key |
+| `SERIAL` (deprecated) | `serial()` | Auto-incrementing integer primary key (legacy) |
+| `IDENTITY` | `integer().generatedAlwaysAsIdentity()` | Auto-incrementing primary key (modern, preferred) |
 | `INTEGER` | `integer()` | Whole numbers (-2B to +2B) |
 | `BIGINT` | `bigint()` | Large integers |
 | `NUMERIC` | `numeric()` | Precise decimal numbers (money) |
@@ -94,11 +94,11 @@ export const products = pgTable('products', {
 
 ```typescript
 // src/db/schema/posts.ts
-import { pgTable, serial, text, integer, timestamp } from 'drizzle-orm/pg-core'
+import { pgTable, integer, text, timestamp } from 'drizzle-orm/pg-core'
 import { relations } from 'drizzle-orm'
 import { users } from './users'
 export const posts = pgTable('posts', {
-  id: serial('id').primaryKey(),
+  id: integer().primaryKey().generatedAlwaysAsIdentity(),
   title: text('title').notNull(),
   content: text('content').notNull(),
   authorId: integer('author_id')
@@ -128,11 +128,11 @@ export const postsRelations = relations(posts, ({ one }) => ({
 ### Indexes and Constraints (PostgreSQL)
 
 ```typescript
-import { pgTable, serial, varchar, text, uniqueIndex, index } from 'drizzle-orm/pg-core'
+import { pgTable, integer, varchar, text, uniqueIndex, index } from 'drizzle-orm/pg-core'
 export const users = pgTable(
   'users',
   {
-    id: serial('id').primaryKey(),
+    id: integer().primaryKey().generatedAlwaysAsIdentity(),
     email: varchar('email', { length: 255 }).notNull(),
     username: varchar('username', { length: 100 }).notNull(),
     status: text('status').notNull(),
