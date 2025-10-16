@@ -9,6 +9,7 @@ import reactRefresh from 'eslint-plugin-react-refresh'
 import boundaries from 'eslint-plugin-boundaries'
 import functionalPlugin from 'eslint-plugin-functional'
 import importPlugin from 'eslint-plugin-import'
+import unicorn from 'eslint-plugin-unicorn'
 
 // Type workaround for flat config compatibility
 const functional = functionalPlugin as any
@@ -243,6 +244,63 @@ export default defineConfig([
           allowObject: false,
         },
       ],
+    },
+  },
+
+  // Code Quality - eslint-plugin-unicorn (curated rules)
+  // Cherry-picked rules that complement existing FP/architecture enforcement
+  {
+    files: ['**/*.{ts,tsx,mts,cts,js,jsx}'],
+    plugins: {
+      unicorn,
+    },
+    rules: {
+      // Prefer undefined over null (aligns with FP patterns)
+      'unicorn/no-null': 'error',
+
+      // Use node: protocol for built-in imports (modern best practice)
+      'unicorn/prefer-node-protocol': 'error',
+
+      // Consistent function scoping for better organization
+      'unicorn/consistent-function-scoping': 'error',
+
+      // Prevent deeply nested ternaries (readability)
+      'unicorn/no-nested-ternary': 'warn',
+
+      // Prefer switch over multiple if/else (readability)
+      'unicorn/prefer-switch': ['warn', { minimumCases: 3 }],
+
+      // Cleaner Promise usage
+      'unicorn/no-useless-promise-resolve-reject': 'error',
+
+      // Better error handling patterns
+      'unicorn/prefer-type-error': 'error',
+
+      // Numeric separators for readability (1_000_000 vs 1000000)
+      'unicorn/numeric-separators-style': [
+        'warn',
+        {
+          onlyIfContainsSeparator: false,
+          number: {
+            minimumDigits: 5,
+            groupLength: 3,
+          },
+        },
+      ],
+
+      // Throw errors, not primitives
+      'unicorn/throw-new-error': 'off', // Conflicts with functional/no-throw-statements
+
+      // Prefer Set#has() over Array#includes() for performance
+      'unicorn/prefer-set-has': 'warn',
+
+      // Prefer modern Array methods
+      'unicorn/prefer-array-flat': 'error',
+      'unicorn/prefer-array-flat-map': 'error',
+
+      // Better string methods
+      'unicorn/prefer-string-starts-ends-with': 'error',
+      'unicorn/prefer-string-trim-start-end': 'error',
     },
   },
 
