@@ -205,6 +205,15 @@ export default defineConfig([
     },
   },
 
+  // Scripts - Allow mutations for build-time utilities
+  {
+    files: ['scripts/**/*.{js,mjs,cjs,ts}'],
+    rules: {
+      'no-restricted-syntax': 'off', // Allow mutations in scripts
+      'no-param-reassign': 'off', // Allow parameter reassignment in scripts
+    },
+  },
+
   // Playwright E2E tests
   {
     ...playwright.configs['flat/recommended'],
