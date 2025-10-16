@@ -1,220 +1,162 @@
-# Effect - Typed Functional Programming Library
+# Effect.ts - Typed Functional Programming Library
 
 ## Overview
 
 **Version**: 3.18.4
-**Purpose**: Powerful TypeScript library for building robust, type-safe applications using functional programming principles with comprehensive error handling, dependency injection, and structured concurrency
+**Purpose**: Comprehensive typed functional programming library for building robust, composable, and maintainable TypeScript applications with explicit error handling, dependency injection, and structured concurrency
 
-## What Effect Provides
-
-1. **Type-Safe Error Handling** - Explicit error types tracked at the type level
-2. **Dependency Injection** - Type-safe service management via Context and Layers
-3. **Structured Concurrency** - Fiber-based concurrency with interruption support
-4. **Resource Management** - Automatic resource cleanup with Scope
-5. **Asynchronous Operations** - Promise-like but more powerful Effect type
-6. **Retry and Timeout Logic** - Built-in retry policies and timeout handling
-7. **Testing Support** - Built-in mocking and test utilities
-8. **Streaming** - Powerful Stream abstraction for data processing
+Effect.ts is a powerful library that brings advanced functional programming patterns to TypeScript. It provides a complete toolkit for managing complexity in modern applications through type-safe effects, composable operations, and declarative error handling.
 
 ## Why Effect for Omnera
 
-Effect complements the existing tech stack by providing:
-
-- **Type-Safe Error Handling**: Makes error types explicit, catching bugs at compile time
-- **Composability**: Build complex logic from simple, reusable pieces
-- **Testability**: Dependency injection makes testing easier with mocked services
-- **Maintainability**: Clear separation of concerns and explicit dependencies
-- **Reliability**: Structured concurrency prevents resource leaks and race conditions
-- **Performance**: Efficient fiber-based concurrency model
-- **Developer Experience**: Excellent TypeScript integration with full type inference
-
-## The Effect Type
-
-The core type is `Effect<Success, Error, Requirements>`:
-
-```typescript
-Effect<A, E, R>
-```
-
-- **A (Success)**: The type of value produced on success
-- **E (Error)**: The type of errors that can occur
-- **R (Requirements)**: Services/dependencies required to run this effect
-
-### Examples
-
-```typescript
-import { Effect } from 'effect'
-
-// Simple effect that always succeeds
-const alwaysSucceeds: Effect.Effect<number, never, never> = Effect.succeed(42)
-
-// Effect that might fail
-const mightFail: Effect.Effect<string, Error, never> = Effect.fail(new Error('Oops'))
-
-// Effect requiring a service
-class Database extends Effect.Tag('Database')<
-  Database,
-  { query: (sql: string) => Effect.Effect<unknown[]> }
->() {}
-
-const fetchUser: Effect.Effect<User, DatabaseError, Database> = Effect.gen(function* () {
-  const db = yield* Database
-  const rows = yield* db.query('SELECT * FROM users WHERE id = 1')
-  return parseUser(rows[0])
-})
-```
-
-## Integration with Bun and TypeScript
-
-- **Native TypeScript**: Effect leverages TypeScript's type system for maximum safety
-- **Bun Runtime**: Effect runs seamlessly on Bun's fast JavaScript runtime
-- **No Compilation Needed**: Bun executes Effect TypeScript code directly
-- **Type Checking**: Use `tsc --noEmit` to validate Effect types (same as rest of project)
-
-## Installation and Setup
-
-Effect is already installed in this project:
-
-```json
-{
-  "dependencies": {
-    "effect": "^3.18.4"
-  }
-}
-```
-
-### Basic Import Patterns
-
-```typescript
-// Core Effect type and constructors
-import { Effect } from 'effect'
-
-// Console operations (built-in service)
-import { Console } from 'effect'
-
-// Error helpers
-import { Data } from 'effect'
-
-// Layer and Context for dependency injection
-import { Layer, Context } from 'effect'
-
-// Fiber operations for concurrency
-import { Fiber } from 'effect'
-
-// Stream for data processing
-import { Stream } from 'effect'
-```
-
-## Effect Schema - Type-Safe Data Validation
-
-See **[Effect Schema Documentation](./effect-schema.md)** for comprehensive type-safe data validation patterns.
-
-Effect Schema provides runtime validation with full TypeScript type inference, making it ideal for:
-
-- API request/response validation
-- Configuration file parsing
-- Environment variable validation
-- User input validation (forms, CLI)
-- Database query results
+- **Type-Safe Error Handling**: Errors are tracked at the type level, making them impossible to ignore
+- **Dependency Injection**: Built-in, type-safe dependency injection via Context and Layer
+- **Composability**: Build complex workflows from simple, reusable building blocks
+- **Structured Concurrency**: Safe concurrent programming with Fibers (lightweight threads)
+- **Testability**: Pure functional core makes testing trivial without mocks
+- **Resource Management**: Automatic cleanup with Scope for safe resource handling
+- **Performance**: Highly optimized runtime with efficient memory usage
+- **Excellent TypeScript Integration**: First-class TypeScript support with full type inference
 
 ## Core Concepts
 
-### 1. Creating Effects
+### 1. Effect Type
+
+The `Effect` type represents a program that may succeed with a value, fail with an error, or require dependencies:
+
+```typescript
+Effect<Success, Error, Requirements>
+```
+
+**Type Parameters:**
+- `Success` - The type of value produced on success
+- `Error` - The type of error that can occur
+- `Requirements` - The dependencies (Context) needed to run
+
+**Examples:**
+
+```typescript
+import { Effect } from 'effect'
+
+// Effect that always succeeds with number 42
+const success: Effect.Effect<number, never, never> = Effect.succeed(42)
+
+// Effect that may fail with UserNotFoundError
+const fetchUser: Effect.Effect<User, UserNotFoundError, never> = Effect.tryPromise({
+  try: () => fetch('/api/users/1').then((res) => res.json()),
+  catch: () => new UserNotFoundError(),
+})
+
+// Effect requiring Database service
+const saveUser: Effect.Effect<void, DatabaseError, Database> = Effect.gen(function* () {
+  const db = yield* Database
+  yield* db.save(user)
+})
+```
+
+### 2. Effect Constructors
+
+Create Effect programs from values, functions, or promises:
 
 ```typescript
 import { Effect } from 'effect'
 
 // Success value
-const success = Effect.succeed(42)
+const num = Effect.succeed(42)
 
 // Failure value
-const failure = Effect.fail(new Error('Something went wrong'))
+const err = Effect.fail(new Error('Something went wrong'))
 
-// From a synchronous function
+// Synchronous function (no side effects)
 const sync = Effect.sync(() => Math.random())
 
-// From a Promise
-const async = Effect.promise(() => fetch('https://api.example.com'))
+// Asynchronous promise
+const async = Effect.promise(() => fetch('/api/data').then((res) => res.json()))
 
-// Try/catch wrapper
-const tryEffect = Effect.try({
-  try: () => JSON.parse(input),
-  catch: (error) => new ParseError({ cause: error }),
+// Promise with error handling
+const tryAsync = Effect.tryPromise({
+  try: () => fetch('/api/data').then((res) => res.json()),
+  catch: (error) => new ApiError({ cause: error }),
 })
 
-// Generator style (recommended for complex logic)
-const program = Effect.gen(function* () {
-  const x = yield* Effect.succeed(10)
-  const y = yield* Effect.succeed(20)
-  return x + y
-})
+// Lazy evaluation
+const lazy = Effect.suspend(() => Effect.succeed(expensiveComputation()))
 ```
 
-### 2. Error Handling
+### 3. Effect Transformations (map, flatMap, tap)
 
-Effect makes errors explicit in the type system:
+Transform Effect values using functional operations:
 
 ```typescript
-import { Effect, Data } from 'effect'
+import { Effect } from 'effect'
 
-// Define custom error types
-class NetworkError extends Data.TaggedError('NetworkError')<{
-  reason: string
-  statusCode: number
-}> {}
+// map - Transform success value
+const doubled = Effect.succeed(21).pipe(Effect.map((n) => n * 2)) // Effect<42, never, never>
 
-class ValidationError extends Data.TaggedError('ValidationError')<{
-  field: string
-  message: string
-}> {}
-
-// Effect with explicit error type
-const fetchData: Effect.Effect<string, NetworkError, never> = Effect.gen(function* () {
-  const response = yield* Effect.tryPromise({
-    try: () => fetch('https://api.example.com/data'),
-    catch: (error) => new NetworkError({ reason: String(error), statusCode: 500 }),
-  })
-
-  if (!response.ok) {
-    return yield* Effect.fail(
-      new NetworkError({
-        reason: 'Request failed',
-        statusCode: response.status,
-      })
-    )
-  }
-
-  return yield* Effect.promise(() => response.text())
-})
-
-// Handle errors explicitly
-const program = fetchData.pipe(
-  Effect.catchTag('NetworkError', (error) =>
-    Effect.succeed(`Failed with status ${error.statusCode}`)
-  )
+// flatMap - Chain dependent operations
+const program = fetchUser(1).pipe(
+  Effect.flatMap((user) => fetchUserPosts(user.id)),
+  Effect.flatMap((posts) => fetchPostComments(posts[0].id))
 )
 
-// Catch all errors
-const withFallback = fetchData.pipe(Effect.catchAll((error) => Effect.succeed('default value')))
+// tap - Side effect without changing value (for logging, etc.)
+const logged = fetchUser(1).pipe(
+  Effect.tap((user) => Effect.sync(() => console.log('Fetched user:', user.name)))
+)
 
-// Retry on failure
-const withRetry = fetchData.pipe(Effect.retry({ times: 3 }))
-
-// Add timeout
-const withTimeout = fetchData.pipe(Effect.timeout('5 seconds'))
+// andThen - Simpler flatMap syntax
+const simple = fetchUser(1).pipe(Effect.andThen((user) => fetchUserPosts(user.id)))
 ```
 
-### 3. Dependency Injection with Context and Layers
+### 4. Error Handling
+
+Effect provides comprehensive, type-safe error handling:
+
+```typescript
+import { Effect } from 'effect'
+
+// catchAll - Handle all errors
+const withFallback = fetchUser(1).pipe(
+  Effect.catchAll((error) => Effect.succeed(defaultUser))
+)
+
+// catchTag - Handle specific error types
+const tagged = fetchUser(1).pipe(
+  Effect.catchTag('UserNotFoundError', () => Effect.succeed(defaultUser)),
+  Effect.catchTag('NetworkError', (error) => Effect.fail(new ServiceUnavailableError()))
+)
+
+// orElse - Provide alternative Effect
+const alternative = fetchUser(1).pipe(
+  Effect.orElse(() => fetchUserFromCache(1))
+)
+
+// retry - Retry failed operations
+const resilient = fetchUser(1).pipe(
+  Effect.retry({
+    times: 3,
+    schedule: Schedule.exponential('100 millis'),
+  })
+)
+
+// either - Convert errors to Either type
+const either = fetchUser(1).pipe(Effect.either)
+// Effect<Either<User, UserNotFoundError>, never, never>
+```
+
+### 5. Dependency Injection (Context & Layer)
+
+Effect provides type-safe dependency injection:
 
 ```typescript
 import { Effect, Context, Layer } from 'effect'
 
-// Define a service interface
-class UserRepository extends Context.Tag('UserRepository')<
-  UserRepository,
+// Define service interface
+class Database extends Context.Tag('Database')<
+  Database,
   {
-    readonly findById: (id: number) => Effect.Effect<User, DatabaseError>
-    readonly save: (user: User) => Effect.Effect<void, DatabaseError>
+    readonly query: (sql: string) => Effect.Effect<unknown[], DatabaseError>
+    readonly execute: (sql: string) => Effect.Effect<void, DatabaseError>
   }
 >() {}
 
@@ -226,364 +168,459 @@ class Logger extends Context.Tag('Logger')<
   }
 >() {}
 
-// Use services in your program
-const getUserById = (id: number): Effect.Effect<User, DatabaseError, UserRepository> =>
-  Effect.gen(function* () {
-    const repo = yield* UserRepository
-    const user = yield* repo.findById(id)
-    return user
-  })
+// Use services in program
+const program = Effect.gen(function* () {
+  const db = yield* Database
+  const logger = yield* Logger
 
-// Provide implementations via Layers
-const UserRepositoryLive = Layer.succeed(UserRepository, {
-  findById: (id) =>
-    Effect.gen(function* () {
-      // Actual database implementation
-      const db = yield* Database
-      return yield* db.query('SELECT * FROM users WHERE id = ?', [id])
-    }),
-  save: (user) =>
-    Effect.gen(function* () {
-      const db = yield* Database
-      yield* db.execute('UPDATE users SET ...', [user])
-    }),
+  yield* logger.info('Starting query')
+  const results = yield* db.query('SELECT * FROM users')
+  yield* logger.info(`Found ${results.length} users`)
+
+  return results
+})
+
+// Type: Effect<unknown[], DatabaseError, Database | Logger>
+
+// Provide implementations
+const DatabaseLive = Layer.succeed(Database, {
+  query: (sql) => Effect.tryPromise({
+    try: () => pool.query(sql),
+    catch: (error) => new DatabaseError({ cause: error }),
+  }),
+  execute: (sql) => Effect.tryPromise({
+    try: () => pool.execute(sql),
+    catch: (error) => new DatabaseError({ cause: error }),
+  }),
 })
 
 const LoggerLive = Layer.succeed(Logger, {
-  info: (message) => Console.log(`[INFO] ${message}`),
-  error: (message) => Console.error(`[ERROR] ${message}`),
+  info: (message) => Effect.sync(() => console.log(`[INFO] ${message}`)),
+  error: (message) => Effect.sync(() => console.error(`[ERROR] ${message}`)),
 })
 
-// Combine layers
-const AppLayer = Layer.mergeAll(UserRepositoryLive, LoggerLive)
+// Compose layers
+const AppLayer = Layer.mergeAll(DatabaseLive, LoggerLive)
 
-// Run program with provided dependencies
-const program = getUserById(1)
-const runnable = Effect.provide(program, AppLayer)
-
-Effect.runPromise(runnable).then(console.log)
+// Run program with dependencies
+Effect.runPromise(Effect.provide(program, AppLayer))
 ```
 
-### 4. Structured Concurrency with Fibers
+### 6. Concurrency (Fiber, all, race)
+
+Effect provides structured concurrency with Fibers:
 
 ```typescript
 import { Effect, Fiber } from 'effect'
 
-// Run effects in parallel
-const parallel = Effect.all([fetchUser(1), fetchUser(2), fetchUser(3)], { concurrency: 3 })
-
-// Race multiple effects (first to complete wins)
-const raced = Effect.race(fetchFromCache, fetchFromDatabase)
-
-// Fork effect into a fiber (background task)
-const program = Effect.gen(function* () {
-  const fiber = yield* Effect.fork(longRunningTask)
-
-  // Do other work...
-
-  // Wait for fiber to complete
-  const result = yield* Fiber.join(fiber)
-
-  return result
+// Sequential execution (default)
+const sequential = Effect.gen(function* () {
+  const user = yield* fetchUser(1)
+  const posts = yield* fetchUserPosts(user.id)
+  return { user, posts }
 })
 
-// Interrupt fiber if it takes too long
-const withTimeout = Effect.gen(function* () {
-  const fiber = yield* Effect.fork(longRunningTask)
-  const result = yield* Fiber.join(fiber).pipe(Effect.timeout('10 seconds'))
-  return result
+// Parallel execution with Effect.all
+const parallel = Effect.all({
+  user: fetchUser(1),
+  posts: fetchUserPosts(1),
+  stats: fetchStats(),
 })
-```
 
-### 5. Resource Management with Scope
+// Parallel with array
+const users = Effect.all([
+  fetchUser(1),
+  fetchUser(2),
+  fetchUser(3),
+])
 
-```typescript
-import { Effect } from 'effect'
-
-// Acquire resource with automatic cleanup
-const withConnection = Effect.acquireRelease(
-  Effect.sync(() => openDatabaseConnection()), // acquire
-  (conn) => Effect.sync(() => conn.close()) // release
+// Controlled concurrency
+const controlled = Effect.forEach(
+  [1, 2, 3, 4, 5],
+  (id) => fetchUser(id),
+  { concurrency: 2 } // Max 2 concurrent requests
 )
 
-// Use resource (cleanup happens automatically)
-const program = Effect.gen(function* () {
-  const conn = yield* withConnection
-  const result = yield* conn.query('SELECT * FROM users')
+// Race - First to complete wins
+const raced = Effect.race(
+  fetchFromPrimaryAPI(),
+  fetchFromBackupAPI()
+)
+
+// Timeout
+const timed = fetchUser(1).pipe(
+  Effect.timeout('5 seconds')
+)
+
+// Fork to background fiber
+const forked = Effect.gen(function* () {
+  const fiber = yield* Effect.fork(longRunningTask())
+  // Do other work
+  const result = yield* Fiber.join(fiber)
   return result
-  // Connection automatically closed here, even if error occurs
 })
 ```
 
-## Running Effects
+### 7. Effect.gen (Generator Syntax)
 
-Effects are lazy and must be explicitly run:
+Effect.gen provides async/await-like syntax for Effect programs:
+
+```typescript
+import { Effect } from 'effect'
+
+// Using Effect.gen (recommended)
+const program = Effect.gen(function* () {
+  const user = yield* fetchUser(1)
+  const posts = yield* fetchUserPosts(user.id)
+  const comments = yield* fetchPostComments(posts[0].id)
+
+  return {
+    user,
+    posts,
+    comments,
+  }
+})
+
+// Equivalent using pipe (more verbose)
+const programPipe = fetchUser(1).pipe(
+  Effect.flatMap((user) =>
+    fetchUserPosts(user.id).pipe(
+      Effect.flatMap((posts) =>
+        fetchPostComments(posts[0].id).pipe(
+          Effect.map((comments) => ({
+            user,
+            posts,
+            comments,
+          }))
+        )
+      )
+    )
+  )
+)
+
+// Error handling in Effect.gen
+const resilient = Effect.gen(function* () {
+  const user = yield* fetchUser(1).pipe(
+    Effect.catchAll(() => Effect.succeed(defaultUser))
+  )
+
+  const posts = yield* fetchUserPosts(user.id).pipe(
+    Effect.catchAll(() => Effect.succeed([]))
+  )
+
+  return { user, posts }
+})
+```
+
+### 8. Running Effects
+
+Effect programs are pure descriptions - they don't execute until explicitly run:
 
 ```typescript
 import { Effect } from 'effect'
 
 const program = Effect.gen(function* () {
-  yield* Console.log('Hello, Effect!')
-  return 42
+  const user = yield* fetchUser(1)
+  return user
 })
 
-// Synchronous execution (blocks until complete)
-const result = Effect.runSync(program)
-console.log(result) // 42
-
-// Asynchronous execution (returns Promise)
-Effect.runPromise(program).then(console.log)
-
-// With error handling
+// Run as Promise (most common)
 Effect.runPromise(program)
-  .then((value) => console.log('Success:', value))
+  .then((user) => console.log('Success:', user))
   .catch((error) => console.error('Error:', error))
 
-// Get an Either result (no throw)
-const either = await Effect.runPromise(Effect.either(program))
-if (either._tag === 'Right') {
-  console.log('Success:', either.right)
-} else {
-  console.log('Failure:', either.left)
-}
+// Run synchronously (must not have async operations)
+const result = Effect.runSync(Effect.succeed(42)) // 42
+
+// Run with callback
+Effect.runCallback(program, (exit) => {
+  if (exit._tag === 'Success') {
+    console.log('Success:', exit.value)
+  } else {
+    console.error('Failure:', exit.cause)
+  }
+})
+
+// Run in Fiber (background)
+Effect.runFork(program)
 ```
 
-## Common Patterns
+## Common Patterns in Omnera
 
-See **[Effect Patterns Documentation](./effect-patterns.md)** for detailed examples of common usage patterns including:
-
-- Pattern 1: API Request with Error Handling
-- Pattern 2: Service Layer with Dependencies
-- Pattern 3: Parallel Operations
-- Pattern 4: Race Operations
-- Pattern 5: Retry with Backoff
-- Pattern 6: Resource Management
-- Pattern 7: Error Recovery
-- Pattern 8: Timeout with Custom Fallback
-- Pattern 9: Validation Pipeline
-- Pattern 10: Event Sourcing
-
-## Testing with Effect
-
-See **[Effect Testing Documentation](./effect-testing.md)** for comprehensive testing guide covering:
-
-- Testing simple effects
-- Testing with services and mocked implementations
-- Testing error handling
-- Testing with multiple services
-- Testing async operations
-- Testing retry logic
-- Testing timeout behavior
-- Testing with Effect Schema
-- Testing parallel operations
-- Testing resource cleanup
-
-## Effect vs Promise
-
-| Feature             | Promise                      | Effect                                |
-| ------------------- | ---------------------------- | ------------------------------------- |
-| **Error Type**      | `unknown` (not typed)        | Explicit error type `Effect<A, E, R>` |
-| **Dependencies**    | Global state, DI frameworks  | Built-in type-safe context            |
-| **Cancellation**    | Not supported                | Full interruption support             |
-| **Lazy Evaluation** | Eager (starts immediately)   | Lazy (starts when run)                |
-| **Retries**         | Manual implementation        | Built-in `Effect.retry()`             |
-| **Timeout**         | Manual with `Promise.race()` | Built-in `Effect.timeout()`           |
-| **Resource Safety** | Manual cleanup               | Automatic with `acquireRelease`       |
-| **Composability**   | Limited                      | Highly composable                     |
-| **Type Safety**     | Partial (success only)       | Full (success, error, requirements)   |
-| **Testing**         | Requires mocking frameworks  | Built-in dependency injection         |
-
-## Effect vs Try/Catch
+### Pattern 1: API Request with Error Handling
 
 ```typescript
-// Traditional try/catch
-async function fetchUserOldWay(id: number): Promise<User> {
-  try {
-    const response = await fetch(`/api/users/${id}`)
-    if (!response.ok) throw new Error('Request failed')
-    return await response.json()
-  } catch (error) {
-    // Error type is 'unknown' - not type-safe
-    console.error(error)
-    throw error
-  }
+import { Effect, Data } from 'effect'
+
+// Define error types
+class ApiError extends Data.TaggedError('ApiError')<{
+  readonly status: number
+  readonly message: string
+}> {}
+
+class NetworkError extends Data.TaggedError('NetworkError')<{
+  readonly cause: unknown
+}> {}
+
+// API request with error handling
+function fetchUser(id: number): Effect.Effect<User, ApiError | NetworkError, never> {
+  return Effect.tryPromise({
+    try: async () => {
+      const response = await fetch(`/api/users/${id}`)
+      if (!response.ok) {
+        throw new ApiError({
+          status: response.status,
+          message: response.statusText,
+        })
+      }
+      return response.json()
+    },
+    catch: (error) => {
+      if (error instanceof ApiError) return error
+      return new NetworkError({ cause: error })
+    },
+  })
 }
 
-// Effect way
-class NetworkError extends Data.TaggedError('NetworkError')<{ statusCode: number }> {}
-class ParseError extends Data.TaggedError('ParseError')<{ cause: unknown }> {}
-
-const fetchUserEffectWay = (id: number): Effect.Effect<User, NetworkError | ParseError, never> =>
-  Effect.gen(function* () {
-    const response = yield* Effect.tryPromise({
-      try: () => fetch(`/api/users/${id}`),
-      catch: () => new NetworkError({ statusCode: 0 }),
-    })
-
-    if (!response.ok) {
-      return yield* Effect.fail(new NetworkError({ statusCode: response.status }))
+// Usage with resilience
+const program = fetchUser(1).pipe(
+  Effect.retry({ times: 3 }),
+  Effect.timeout('10 seconds'),
+  Effect.catchTag('ApiError', (error) => {
+    if (error.status === 404) {
+      return Effect.succeed(defaultUser)
     }
-
-    const json = yield* Effect.tryPromise({
-      try: () => response.json(),
-      catch: (cause) => new ParseError({ cause }),
-    })
-
-    return json as User
-  })
-
-// Type-safe error handling
-const program = fetchUserEffectWay(1).pipe(
-  Effect.catchTag('NetworkError', (error) => {
-    // TypeScript knows error is NetworkError
-    console.log('Network error:', error.statusCode)
-    return Effect.succeed(defaultUser)
+    return Effect.fail(error)
   }),
-  Effect.catchTag('ParseError', (error) => {
-    // TypeScript knows error is ParseError
-    console.log('Parse error:', error.cause)
+  Effect.catchTag('NetworkError', () => Effect.succeed(cachedUser))
+)
+```
+
+### Pattern 2: Service-Oriented Architecture
+
+```typescript
+import { Effect, Context, Layer } from 'effect'
+
+// Define services
+class UserRepository extends Context.Tag('UserRepository')<
+  UserRepository,
+  {
+    readonly findById: (id: number) => Effect.Effect<User, UserNotFoundError>
+    readonly save: (user: User) => Effect.Effect<void, DatabaseError>
+    readonly findAll: () => Effect.Effect<User[], DatabaseError>
+  }
+>() {}
+
+class EmailService extends Context.Tag('EmailService')<
+  EmailService,
+  {
+    readonly send: (to: string, subject: string, body: string) => Effect.Effect<void, EmailError>
+  }
+>() {}
+
+// Business logic using services
+function registerUser(
+  email: string,
+  name: string
+): Effect.Effect<User, UserNotFoundError | DatabaseError | EmailError, UserRepository | EmailService> {
+  return Effect.gen(function* () {
+    const repo = yield* UserRepository
+    const emailService = yield* EmailService
+
+    const user = { id: Date.now(), email, name }
+
+    yield* repo.save(user)
+    yield* emailService.send(email, 'Welcome', `Hello ${name}!`)
+
+    return user
+  })
+}
+
+// Provide implementations
+const UserRepositoryLive = Layer.succeed(UserRepository, {
+  findById: (id) => Effect.tryPromise({
+    try: () => db.query('SELECT * FROM users WHERE id = ?', [id]),
+    catch: () => new UserNotFoundError(),
+  }),
+  save: (user) => Effect.tryPromise({
+    try: () => db.execute('INSERT INTO users VALUES (?, ?, ?)', [user.id, user.email, user.name]),
+    catch: (error) => new DatabaseError({ cause: error }),
+  }),
+  findAll: () => Effect.tryPromise({
+    try: () => db.query('SELECT * FROM users'),
+    catch: (error) => new DatabaseError({ cause: error }),
+  }),
+})
+
+const EmailServiceLive = Layer.succeed(EmailService, {
+  send: (to, subject, body) => Effect.tryPromise({
+    try: () => sendEmailAPI(to, subject, body),
+    catch: (error) => new EmailError({ cause: error }),
+  }),
+})
+
+const AppLayer = Layer.mergeAll(UserRepositoryLive, EmailServiceLive)
+
+// Run with dependencies
+Effect.runPromise(Effect.provide(registerUser('user@example.com', 'Alice'), AppLayer))
+```
+
+### Pattern 3: Data Validation with Effect Schema
+
+```typescript
+import { Effect } from 'effect'
+import { Schema } from 'effect/Schema'
+
+// Define schema
+const UserSchema = Schema.Struct({
+  id: Schema.Number,
+  name: Schema.String,
+  email: Schema.String.pipe(Schema.pattern(/^[^@]+@[^@]+$/)),
+  age: Schema.Number.pipe(Schema.between(0, 120)),
+})
+
+type User = typeof UserSchema.Type
+
+// Parse with validation
+function parseUser(input: unknown): Effect.Effect<User, ParseError, never> {
+  return Schema.decode(UserSchema)(input)
+}
+
+// Usage
+const program = Effect.gen(function* () {
+  const input = { id: 1, name: 'Alice', email: 'alice@example.com', age: 30 }
+
+  const user = yield* parseUser(input)
+
+  return user
+})
+
+// With error handling
+const safe = parseUser({ id: 1, name: 'Alice', email: 'invalid', age: 30 }).pipe(
+  Effect.catchAll((error) => {
+    console.error('Validation error:', error)
     return Effect.succeed(defaultUser)
   })
 )
 ```
 
-## Best Practices for Omnera
+## Effect vs Other Approaches
 
-1. **Use Effect for I/O Operations**
-   - Database queries
-   - HTTP requests
-   - File system operations
-   - External API calls
+| Aspect                 | Effect                                       | Try/Catch                    | Promise                       |
+| ---------------------- | -------------------------------------------- | ---------------------------- | ----------------------------- |
+| **Error Tracking**     | Type-safe, compile-time                      | Runtime only                 | Runtime only                  |
+| **Error Types**        | Multiple error types tracked                 | Single catch                 | Single catch                  |
+| **Composability**      | Highly composable with operators             | Hard to compose              | Moderate (then/catch)         |
+| **Testability**        | Pure, easy to test                           | Requires mocks               | Requires mocks                |
+| **Dependency Injection** | Built-in (Context/Layer)                     | Manual DI                    | Manual DI                     |
+| **Cancellation**       | Built-in (Fiber interruption)                | Not supported                | AbortController (manual)      |
+| **Resource Management**  | Automatic (Scope)                            | Manual (finally)             | Manual                        |
+| **Concurrency**        | Structured (Fiber)                           | Unstructured                 | Promise.all/race              |
+| **Type Inference**     | Full type inference                          | No error type inference      | No error type inference       |
 
-2. **Define Explicit Error Types**
-   - Use `Data.TaggedError` for custom errors
-   - Make errors descriptive and actionable
-   - Leverage TypeScript's type narrowing in error handlers
+## Integration with Bun
 
-3. **Leverage Dependency Injection**
-   - Define services with `Context.Tag`
-   - Provide implementations with `Layer`
-   - Keep business logic pure and testable
+- **Native Execution**: Bun executes Effect TypeScript code directly
+- **Fast Runtime**: Bun's speed complements Effect's performance
+- **Type Checking**: Use `tsc --noEmit` to validate Effect types
+- **Testing**: Effect programs are easy to test with Bun Test
 
-4. **Use Effect.gen for Complex Logic**
-   - Generator syntax is more readable than `.pipe()`
-   - Use `yield*` to unwrap Effect values
-   - Combine multiple effects naturally
+## Integration with Hono
 
-5. **Add Retry and Timeout Policies**
-   - Always add timeouts to network operations
-   - Use exponential backoff for retries
-   - Set reasonable limits based on use case
+Effect works seamlessly with Hono for web applications:
 
-6. **Handle Resources Properly**
-   - Use `acquireRelease` for resources that need cleanup
-   - Let Effect manage lifecycle automatically
-   - Avoid manual resource management
+```typescript
+import { Hono } from 'hono'
+import { Effect } from 'effect'
 
-7. **Test with Mocked Services**
-   - Use `Layer` to provide mock implementations
-   - Test success and failure paths
-   - Verify error handling logic
+const app = new Hono()
 
-8. **Keep Effects Composable**
-   - Break complex logic into smaller effects
-   - Compose effects using `pipe()` or `Effect.gen`
-   - Reuse common patterns across codebase
+app.get('/users/:id', async (c) => {
+  const id = Number(c.req.param('id'))
 
-9. **Run Effects at Boundaries**
-   - Keep core logic as pure Effect values
-   - Run effects only at application boundaries (HTTP handlers, CLI entry points)
-   - Delay execution as long as possible
+  const program = Effect.gen(function* () {
+    const user = yield* fetchUser(id)
+    return user
+  }).pipe(
+    Effect.provide(AppLayer)
+  )
 
-10. **Document Effect Signatures**
-    - Clearly document error types
-    - Specify required services in function signatures
-    - Use descriptive names for custom error classes
+  const result = await Effect.runPromise(
+    program.pipe(Effect.either)
+  )
 
-## Common Pitfalls to Avoid
+  if (result._tag === 'Left') {
+    return c.json({ error: 'User not found' }, 404)
+  }
 
-- ❌ Running effects inside other effects without `yield*`
-- ❌ Using `Effect.runSync` with async operations (use `Effect.runPromise`)
-- ❌ Mixing Promise and Effect without proper conversion
-- ❌ Forgetting to provide required services (type error at runtime)
-- ❌ Using `any` or `unknown` for error types (defeats purpose)
-- ❌ Creating services without proper cleanup in `acquireRelease`
-- ❌ Not handling errors explicitly (unhandled errors bubble up)
+  return c.json(result.right)
+})
+
+export default app
+```
+
+## Best Practices
+
+1. **Use Effect.gen for Readability**: Prefer `Effect.gen` over `pipe` for complex workflows
+2. **Define Error Types**: Use `Data.TaggedError` for type-safe error handling
+3. **Make Dependencies Explicit**: Use Context and Layer for dependency injection
+4. **Handle Errors Explicitly**: Always handle errors with `catchAll`, `catchTag`, or `either`
+5. **Use Parallel Execution**: Leverage `Effect.all` for independent operations
+6. **Resource Management**: Use `Effect.acquireRelease` for resources requiring cleanup
+7. **Test with Mock Layers**: Provide test implementations via Layer for unit tests
+8. **Type Inference**: Let TypeScript infer types, avoid manual annotations
+9. **Keep Effects Pure**: Business logic should be pure, side effects in Effect programs
+10. **Use Schema for Validation**: Validate external data with Effect Schema
+
+## Common Pitfalls
+
+- ❌ **Running Effects Too Early**: Effects are lazy, run only when needed
+- ❌ **Not Handling Errors**: Uncaught errors will cause Effect.runPromise to reject
+- ❌ **Mixing Promises and Effects**: Convert promises to Effects with `Effect.promise`
+- ❌ **Ignoring Type Errors**: Effect's types are precise, don't use `any` or `@ts-ignore`
+- ❌ **Over-Using Effect.sync**: Use `Effect.succeed` for pure values, `Effect.sync` for side effects
+- ❌ **Not Using Dependency Injection**: Avoid global state, use Context/Layer
+- ❌ **Forgetting to Provide Dependencies**: Effects requiring Context will fail without Layer
 
 ## When to Use Effect
 
 **Use Effect for:**
 
-- Database interactions
-- HTTP API calls
-- File system operations
-- Complex business logic with multiple dependencies
-- Operations requiring retries, timeouts, or cancellation
-- Code requiring comprehensive error handling
-- Logic that benefits from dependency injection
+- Complex business logic with error handling
+- Applications requiring dependency injection
+- Concurrent operations and async workflows
+- Resource management with automatic cleanup
+- Type-safe error handling across the application
+- Testable, composable code architecture
 
-**Don't use Effect for:**
+**Consider alternatives for:**
 
-- Simple synchronous computations (use plain functions)
-- Pure utility functions (use regular TypeScript)
-- One-off scripts where type safety isn't critical
-- Performance-critical hot paths (Effect has overhead)
+- Simple synchronous functions (use pure functions)
+- Trivial async operations (use promises directly)
+- Performance-critical hot paths (measure first)
 
-## Integration with Existing Stack
+## Full Documentation Reference
 
-| Tool            | Integration Point | Notes                                       |
-| --------------- | ----------------- | ------------------------------------------- |
-| **Bun Runtime** | Native execution  | Effect TypeScript runs directly in Bun      |
-| **TypeScript**  | Type checking     | Use `tsc --noEmit` to validate Effect types |
-| **Bun Test**    | Testing framework | Mock services with Layer for testing        |
-| **ESLint**      | Code quality      | ESLint rules apply to Effect code           |
-| **Prettier**    | Code formatting   | Prettier formats Effect code automatically  |
+This is a high-level summary of Effect.ts. For comprehensive documentation covering all features, patterns, and advanced topics, see the split documentation sections:
 
-## Performance Considerations
+**Location**: `docs/infrastructure/framework/effect/`
 
-- Effect has minimal runtime overhead (fiber-based)
-- Lazy evaluation allows for optimization opportunities
-- Structured concurrency prevents resource leaks
-- Fiber interruption is efficient and immediate
-- Type-level computations happen at compile time
+The full documentation (49,540 lines) is split into 741 sections covering:
+- Batching and caching strategies
+- Configuration management
+- Complete API reference
+- Advanced patterns (streaming, interruption, scheduling)
+- Performance optimization
+- Testing strategies
+- Real-world examples
+- Integration guides
 
-## Running Effect in Bun
-
-```typescript
-// src/index.ts
-import { Effect, Console } from 'effect'
-
-const program = Effect.gen(function* () {
-  yield* Console.log('Starting application...')
-
-  // Your application logic here
-  const result = yield* performWork()
-
-  yield* Console.log('Application completed!')
-  return result
-})
-
-// Run with Bun
-Effect.runPromise(program)
-  .then(() => process.exit(0))
-  .catch((error) => {
-    console.error('Application error:', error)
-    process.exit(1)
-  })
-```
-
-```bash
-# Execute with Bun
-bun run src/index.ts
-
-# Watch mode
-bun --watch src/index.ts
-```
+To explore specific topics in depth, refer to the numbered section files in the `effect/` directory.
 
 ## References
 
 - Effect documentation: https://effect.website/docs/introduction
-- API reference: https://effect-ts.github.io/effect/
-- Effect examples: https://github.com/Effect-TS/effect/tree/main/packages/effect/examples
-- Discord community: https://discord.gg/effect-ts
-- GitHub repository: https://github.com/Effect-TS/effect
+- Effect GitHub: https://github.com/Effect-TS/effect
+- Effect Discord: https://discord.gg/effect-ts
+- Effect Schema: https://effect.website/docs/schema/introduction
+- Effect Patterns: [./effect-patterns.md](./effect-patterns.md) (if exists)
