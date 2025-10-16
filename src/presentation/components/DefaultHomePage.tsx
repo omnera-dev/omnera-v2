@@ -1,3 +1,4 @@
+import { Badge } from '@/presentation/components/ui/badge'
 import { TypographyH1 } from '@/presentation/components/ui/typography'
 import type { App } from '@/domain/models/app'
 import type { ReactElement } from 'react'
@@ -33,6 +34,9 @@ export function DefaultHomePage({ app }: { readonly app: App }): Readonly<ReactE
             <div className="w-full max-w-2xl space-y-6 text-center">
               {/* App Name */}
               <TypographyH1 className="text-center">{app.name}</TypographyH1>
+
+              {/* Version Badge */}
+              {app.version && <Badge data-testid="app-version-badge">{app.version}</Badge>}
             </div>
           </div>
         </div>

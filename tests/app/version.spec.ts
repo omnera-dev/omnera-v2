@@ -41,7 +41,7 @@ test.describe('AppSchema - Version Badge Display', () => {
    * - locator('[data-testid="app-version-badge"]') will not find any element
    */
   // @spec - Validates version badge display
-  test.fixme(
+  test(
     'should display version badge when app has version',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -108,7 +108,7 @@ test.describe('AppSchema - Version Badge Display', () => {
    * - Validates that version rendering preserves SemVer pre-release identifiers
    */
   // @spec - Validates pre-release version format
-  test.fixme(
+  test(
     'should display pre-release version in badge',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -140,7 +140,7 @@ test.describe('AppSchema - Version Badge Display', () => {
    * - Validates that version rendering preserves SemVer build metadata
    */
   // @spec - Validates build metadata in version
-  test.fixme(
+  test(
     'should display version with build metadata in badge',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -172,7 +172,7 @@ test.describe('AppSchema - Version Badge Display', () => {
    * - Validates full SemVer specification support
    */
   // @spec - Validates complex SemVer format
-  test.fixme(
+  test(
     'should display complex version format in badge',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -205,7 +205,7 @@ test.describe('AppSchema - Version Badge Display', () => {
    * - Validates visual hierarchy (name first, version second)
    */
   // @spec - Validates badge positioning
-  test.fixme(
+  test(
     'should display version badge below app name',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -255,7 +255,7 @@ test.describe('AppSchema - Version Badge Display', () => {
    * - Validates that badge is testable and accessible
    */
   // @spec - Validates accessibility attributes
-  test.fixme(
+  test(
     'should have accessible badge element',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -307,7 +307,7 @@ test.describe('AppSchema - Version Badge Display', () => {
    * - No Badge component import or usage in DefaultHomePage
    * - No conditional rendering logic for optional version property
    */
-  test.fixme(
+  test(
     'should handle complete version badge display workflow',
     { tag: '@regression' },
     async ({ page, startServerWithSchema }) => {
