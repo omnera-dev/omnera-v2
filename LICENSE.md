@@ -3,10 +3,10 @@ Business Source License 1.1
 Parameters
 
 Licensor:               ESSENTIAL SERVICES
-Licensed Work:          Omnera 0.0.1
+Licensed Work:          Omnera 1.0.0
                         The Licensed Work is (c) 2025 ESSENTIAL SERVICES.
 Additional Use Grant:   See grant terms below
-Change Date:            2029-10-14
+Change Date:            2029-10-16
 Change License:         Apache License 2.0
 
 Terms
