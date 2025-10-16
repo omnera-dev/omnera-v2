@@ -6,7 +6,7 @@ function Progress({
   className,
   value,
   ...props
-}: React.ComponentProps<typeof ProgressPrimitive.Root>) {
+}: Readonly<React.ComponentProps<typeof ProgressPrimitive.Root>>) {
   return (
     <ProgressPrimitive.Root
       data-slot="progress"

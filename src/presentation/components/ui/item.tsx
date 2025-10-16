@@ -4,7 +4,7 @@ import * as React from 'react'
 import { cn } from '@/presentation/utils/cn'
 import { Separator } from '@/components/ui/separator'
 
-function ItemGroup({ className, ...props }: React.ComponentProps<'div'>) {
+function ItemGroup({ className, ...props }: Readonly<React.ComponentProps<'div'>>) {
   return (
     <div
       role="list"
@@ -15,7 +15,7 @@ function ItemGroup({ className, ...props }: React.ComponentProps<'div'>) {
   )
 }
 
-function ItemSeparator({ className, ...props }: React.ComponentProps<typeof Separator>) {
+function ItemSeparator({ className, ...props }: Readonly<React.ComponentProps<typeof Separator>>) {
   return (
     <Separator
       data-slot="item-separator"
@@ -53,7 +53,7 @@ function Item({
   size = 'default',
   asChild = false,
   ...props
-}: React.ComponentProps<'div'> & VariantProps<typeof itemVariants> & { asChild?: boolean }) {
+}: Readonly<React.ComponentProps<'div'> & VariantProps<typeof itemVariants>> & { asChild?: boolean }) {
   const Comp = asChild ? Slot : 'div'
   return (
     <Comp
@@ -86,7 +86,7 @@ function ItemMedia({
   className,
   variant = 'default',
   ...props
-}: React.ComponentProps<'div'> & VariantProps<typeof itemMediaVariants>) {
+}: Readonly<React.ComponentProps<'div'> & VariantProps<typeof itemMediaVariants>>) {
   return (
     <div
       data-slot="item-media"
@@ -97,7 +97,7 @@ function ItemMedia({
   )
 }
 
-function ItemContent({ className, ...props }: React.ComponentProps<'div'>) {
+function ItemContent({ className, ...props }: Readonly<React.ComponentProps<'div'>>) {
   return (
     <div
       data-slot="item-content"
@@ -107,7 +107,7 @@ function ItemContent({ className, ...props }: React.ComponentProps<'div'>) {
   )
 }
 
-function ItemTitle({ className, ...props }: React.ComponentProps<'div'>) {
+function ItemTitle({ className, ...props }: Readonly<React.ComponentProps<'div'>>) {
   return (
     <div
       data-slot="item-title"
@@ -117,7 +117,7 @@ function ItemTitle({ className, ...props }: React.ComponentProps<'div'>) {
   )
 }
 
-function ItemDescription({ className, ...props }: React.ComponentProps<'p'>) {
+function ItemDescription({ className, ...props }: Readonly<React.ComponentProps<'p'>>) {
   return (
     <p
       data-slot="item-description"
@@ -131,7 +131,7 @@ function ItemDescription({ className, ...props }: React.ComponentProps<'p'>) {
   )
 }
 
-function ItemActions({ className, ...props }: React.ComponentProps<'div'>) {
+function ItemActions({ className, ...props }: Readonly<React.ComponentProps<'div'>>) {
   return (
     <div
       data-slot="item-actions"
@@ -141,7 +141,7 @@ function ItemActions({ className, ...props }: React.ComponentProps<'div'>) {
   )
 }
 
-function ItemHeader({ className, ...props }: React.ComponentProps<'div'>) {
+function ItemHeader({ className, ...props }: Readonly<React.ComponentProps<'div'>>) {
   return (
     <div
       data-slot="item-header"
@@ -151,7 +151,7 @@ function ItemHeader({ className, ...props }: React.ComponentProps<'div'>) {
   )
 }
 
-function ItemFooter({ className, ...props }: React.ComponentProps<'div'>) {
+function ItemFooter({ className, ...props }: Readonly<React.ComponentProps<'div'>>) {
   return (
     <div
       data-slot="item-footer"

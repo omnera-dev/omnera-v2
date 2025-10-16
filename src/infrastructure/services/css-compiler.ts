@@ -1,7 +1,7 @@
 import { readFile } from 'node:fs/promises'
 import { join } from 'node:path'
 import tailwindcss from '@tailwindcss/postcss'
-import { Effect } from 'effect'
+import { Effect, Ref } from 'effect'
 import postcss from 'postcss'
 
 /**
@@ -21,10 +21,11 @@ export interface CompiledCSS {
 }
 
 /**
- * In-memory cache for compiled CSS
+ * In-memory cache for compiled CSS using Effect.Ref
  * Avoids recompiling on every request for better performance
+ * Uses functional state management to avoid mutations
  */
-let cachedCSS: CompiledCSS | null = null
+const cssCache = Ref.unsafeMake<CompiledCSS | undefined>(undefined)
 
 /**
  * Compiles Tailwind CSS using PostCSS with @tailwindcss/postcss plugin
@@ -49,9 +50,10 @@ let cachedCSS: CompiledCSS | null = null
  */
 export const compileCSS = (): Effect.Effect<CompiledCSS, CSSCompilationError> =>
   Effect.gen(function* () {
-    // Return cached CSS if available
-    if (cachedCSS) {
-      return cachedCSS
+    // Check cache first
+    const cached = yield* Ref.get(cssCache)
+    if (cached !== undefined) {
+      return cached
     }
 
     // Read source CSS file
@@ -79,8 +81,8 @@ export const compileCSS = (): Effect.Effect<CompiledCSS, CSSCompilationError> =>
       timestamp: Date.now(),
     }
 
-    // Cache the result
-    cachedCSS = compiled
+    // Update cache using functional approach
+    yield* Ref.set(cssCache, compiled)
 
     return compiled
   })
@@ -92,13 +94,11 @@ export const compileCSS = (): Effect.Effect<CompiledCSS, CSSCompilationError> =>
  * @returns Effect that clears the cache
  */
 export const clearCSSCache = (): Effect.Effect<void> =>
-  Effect.sync(() => {
-    cachedCSS = null
-  })
+  Ref.set(cssCache, undefined)
 
 /**
  * Gets the cached CSS if available
  *
- * @returns Effect that yields cached CSS or null if not cached
+ * @returns Effect that yields cached CSS or undefined if not cached
  */
-export const getCachedCSS = (): Effect.Effect<CompiledCSS | null> => Effect.sync(() => cachedCSS)
+export const getCachedCSS = (): Effect.Effect<CompiledCSS | undefined> => Ref.get(cssCache)

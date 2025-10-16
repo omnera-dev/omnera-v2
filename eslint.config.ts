@@ -427,23 +427,23 @@ export default defineConfig([
           default: 'disallow',
           rules: [
             // Presentation Layer Rules
-            // Can import: Application (use cases), Domain (models, validators)
+            // Can import: Application (use cases), Domain (models, validators), Other presentation (UI components)
             // Cannot import: Infrastructure (must go through Application layer)
             {
               from: ['presentation'],
-              allow: ['application', 'domain'],
+              allow: ['application', 'domain', 'presentation'],
               message:
-                'Presentation layer violation: Can only import from Application and Domain layers. Access Infrastructure through Application layer use cases.',
+                'Presentation layer violation: Can import from Application, Domain, and other Presentation components. Access Infrastructure through Application layer use cases.',
             },
 
             // Application Layer Rules
-            // Can import: Domain (models, validators), Infrastructure (to define interfaces)
+            // Can import: Domain (models, validators), Infrastructure (to define interfaces), Other application (use cases)
             // Cannot import: Presentation
             {
               from: ['application'],
-              allow: ['domain', 'infrastructure'],
+              allow: ['domain', 'infrastructure', 'application'],
               message:
-                'Application layer violation: Can only import from Domain and Infrastructure layers. Application defines interfaces that Infrastructure implements.',
+                'Application layer violation: Can only import from Domain, Infrastructure, and other Application modules. Application defines interfaces that Infrastructure implements.',
             },
 
             // Domain Layer Rules

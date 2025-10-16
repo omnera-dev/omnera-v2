@@ -4,7 +4,7 @@ import { cn } from '@/presentation/utils/cn'
 import type { Button } from '@/components/ui/button'
 import { buttonVariants } from '@/components/ui/button'
 
-function Pagination({ className, ...props }: React.ComponentProps<'nav'>) {
+function Pagination({ className, ...props }: Readonly<React.ComponentProps<'nav'>>) {
   return (
     <nav
       role="navigation"
@@ -16,7 +16,7 @@ function Pagination({ className, ...props }: React.ComponentProps<'nav'>) {
   )
 }
 
-function PaginationContent({ className, ...props }: React.ComponentProps<'ul'>) {
+function PaginationContent({ className, ...props }: Readonly<React.ComponentProps<'ul'>>) {
   return (
     <ul
       data-slot="pagination-content"
@@ -26,7 +26,7 @@ function PaginationContent({ className, ...props }: React.ComponentProps<'ul'>) 
   )
 }
 
-function PaginationItem({ ...props }: React.ComponentProps<'li'>) {
+function PaginationItem({ ...props }: Readonly<React.ComponentProps<'li'>>) {
   return (
     <li
       data-slot="pagination-item"
@@ -58,7 +58,7 @@ function PaginationLink({ className, isActive, size = 'icon', ...props }: Pagina
   )
 }
 
-function PaginationPrevious({ className, ...props }: React.ComponentProps<typeof PaginationLink>) {
+function PaginationPrevious({ className, ...props }: Readonly<React.ComponentProps<typeof PaginationLink>>) {
   return (
     <PaginationLink
       aria-label="Go to previous page"
@@ -72,7 +72,7 @@ function PaginationPrevious({ className, ...props }: React.ComponentProps<typeof
   )
 }
 
-function PaginationNext({ className, ...props }: React.ComponentProps<typeof PaginationLink>) {
+function PaginationNext({ className, ...props }: Readonly<React.ComponentProps<typeof PaginationLink>>) {
   return (
     <PaginationLink
       aria-label="Go to next page"
@@ -86,7 +86,7 @@ function PaginationNext({ className, ...props }: React.ComponentProps<typeof Pag
   )
 }
 
-function PaginationEllipsis({ className, ...props }: React.ComponentProps<'span'>) {
+function PaginationEllipsis({ className, ...props }: Readonly<React.ComponentProps<'span'>>) {
   return (
     <span
       aria-hidden

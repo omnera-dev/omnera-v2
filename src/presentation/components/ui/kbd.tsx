@@ -1,6 +1,6 @@
 import { cn } from '@/presentation/utils/cn'
 
-function Kbd({ className, ...props }: React.ComponentProps<'kbd'>) {
+function Kbd({ className, ...props }: Readonly<React.ComponentProps<'kbd'>>) {
   return (
     <kbd
       data-slot="kbd"
@@ -15,7 +15,7 @@ function Kbd({ className, ...props }: React.ComponentProps<'kbd'>) {
   )
 }
 
-function KbdGroup({ className, ...props }: React.ComponentProps<'div'>) {
+function KbdGroup({ className, ...props }: Readonly<React.ComponentProps<'div'>>) {
   return (
     <kbd
       data-slot="kbd-group"

@@ -45,7 +45,7 @@ function Carousel({
   className,
   children,
   ...props
-}: React.ComponentProps<'div'> & CarouselProps) {
+}: Readonly<React.ComponentProps<'div'>> & CarouselProps) {
   const [carouselRef, api] = useEmblaCarousel(
     {
       ...opts,
@@ -126,7 +126,7 @@ function Carousel({
   )
 }
 
-function CarouselContent({ className, ...props }: React.ComponentProps<'div'>) {
+function CarouselContent({ className, ...props }: Readonly<React.ComponentProps<'div'>>) {
   const { carouselRef, orientation } = useCarousel()
 
   return (
@@ -143,7 +143,7 @@ function CarouselContent({ className, ...props }: React.ComponentProps<'div'>) {
   )
 }
 
-function CarouselItem({ className, ...props }: React.ComponentProps<'div'>) {
+function CarouselItem({ className, ...props }: Readonly<React.ComponentProps<'div'>>) {
   const { orientation } = useCarousel()
 
   return (
@@ -166,7 +166,7 @@ function CarouselPrevious({
   variant = 'outline',
   size = 'icon',
   ...props
-}: React.ComponentProps<typeof Button>) {
+}: Readonly<React.ComponentProps<typeof Button>>) {
   const { orientation, scrollPrev, canScrollPrev } = useCarousel()
 
   return (
@@ -196,7 +196,7 @@ function CarouselNext({
   variant = 'outline',
   size = 'icon',
   ...props
-}: React.ComponentProps<typeof Button>) {
+}: Readonly<React.ComponentProps<typeof Button>>) {
   const { orientation, scrollNext, canScrollNext } = useCarousel()
 
   return (

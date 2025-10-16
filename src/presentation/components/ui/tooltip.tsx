@@ -7,7 +7,7 @@ import { cn } from '@/presentation/utils/cn'
 function TooltipProvider({
   delayDuration = 0,
   ...props
-}: React.ComponentProps<typeof TooltipPrimitive.Provider>) {
+}: Readonly<React.ComponentProps<typeof TooltipPrimitive.Provider>>) {
   return (
     <TooltipPrimitive.Provider
       data-slot="tooltip-provider"
@@ -17,7 +17,7 @@ function TooltipProvider({
   )
 }
 
-function Tooltip({ ...props }: React.ComponentProps<typeof TooltipPrimitive.Root>) {
+function Tooltip({ ...props }: Readonly<React.ComponentProps<typeof TooltipPrimitive.Root>>) {
   return (
     <TooltipProvider>
       <TooltipPrimitive.Root
@@ -28,7 +28,7 @@ function Tooltip({ ...props }: React.ComponentProps<typeof TooltipPrimitive.Root
   )
 }
 
-function TooltipTrigger({ ...props }: React.ComponentProps<typeof TooltipPrimitive.Trigger>) {
+function TooltipTrigger({ ...props }: Readonly<React.ComponentProps<typeof TooltipPrimitive.Trigger>>) {
   return (
     <TooltipPrimitive.Trigger
       data-slot="tooltip-trigger"
@@ -42,7 +42,7 @@ function TooltipContent({
   sideOffset = 0,
   children,
   ...props
-}: React.ComponentProps<typeof TooltipPrimitive.Content>) {
+}: Readonly<React.ComponentProps<typeof TooltipPrimitive.Content>>) {
   return (
     <TooltipPrimitive.Portal>
       <TooltipPrimitive.Content

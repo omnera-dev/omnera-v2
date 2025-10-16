@@ -7,7 +7,7 @@ function InputOTP({
   className,
   containerClassName,
   ...props
-}: React.ComponentProps<typeof OTPInput> & {
+}: Readonly<React.ComponentProps<typeof OTPInput>> & {
   containerClassName?: string
 }) {
   return (
@@ -20,7 +20,7 @@ function InputOTP({
   )
 }
 
-function InputOTPGroup({ className, ...props }: React.ComponentProps<'div'>) {
+function InputOTPGroup({ className, ...props }: Readonly<React.ComponentProps<'div'>>) {
   return (
     <div
       data-slot="input-otp-group"
@@ -34,7 +34,7 @@ function InputOTPSlot({
   index,
   className,
   ...props
-}: React.ComponentProps<'div'> & {
+}: Readonly<React.ComponentProps<'div'>> & {
   index: number
 }) {
   const inputOTPContext = React.useContext(OTPInputContext)
@@ -60,7 +60,7 @@ function InputOTPSlot({
   )
 }
 
-function InputOTPSeparator({ ...props }: React.ComponentProps<'div'>) {
+function InputOTPSeparator({ ...props }: Readonly<React.ComponentProps<'div'>>) {
   return (
     <div
       data-slot="input-otp-separator"
