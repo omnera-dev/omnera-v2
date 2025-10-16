@@ -96,7 +96,8 @@ A redirect URL will be automatically generated using the provider ID. For instan
 
 <Tabs items={["client", "server"]}>
 <Tab value="client">
-```ts title="register-oidc-provider.ts"
+
+````ts title="register-oidc-provider.ts"
 import { authClient } from "@/lib/auth-client";
 
     // Register with OIDC configuration
@@ -291,7 +292,7 @@ const response = await auth.api.spMetadata({
 
 const metadataXML = await response.text()
 console.log(metadataXML)
-```
+````
 
 ### Sign In with SSO
 

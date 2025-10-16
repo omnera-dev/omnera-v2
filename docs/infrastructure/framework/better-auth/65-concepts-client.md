@@ -148,7 +148,8 @@ In addition to the standard methods, the client provides hooks to easily access 
 
 <Tabs items={["React", "Vue","Svelte", "Solid"]} defaultValue="react">
 <Tab value="React">
-```tsx title="user.tsx"
+
+````tsx title="user.tsx"
 //make sure you're using the react client
 import { createAuthClient } from "better-auth/react"
 const { useSession } = createAuthClient() // [!code highlight]
@@ -273,7 +274,7 @@ const authClient = createAuthClient({
     //any better-fetch options
   },
 })
-```
+````
 
 You can also pass fetch options to most of the client functions. Either as the second argument or as a property in the object.
 

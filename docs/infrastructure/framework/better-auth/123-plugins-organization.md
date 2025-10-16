@@ -520,7 +520,8 @@ To list the organizations that a user is a member of, you can use `useListOrgani
 
 <Tabs items={["React", "Vue", "Svelte"]} default="React">
 <Tab value="React">
-```tsx title="client.tsx"
+
+````tsx title="client.tsx"
 import { authClient } from "@/lib/auth-client"
 
     function App(){
@@ -595,7 +596,7 @@ Or alternatively, you can call `organization.list` if you don't want to use a ho
 
 ```ts
 const { data, error } = await authClient.organization.list({})
-```
+````
 
 ### Server Side
 
@@ -696,7 +697,8 @@ To retrieve the active organization for the user, you can call the `useActiveOrg
 
 <Tabs items={['React', 'Vue', 'Svelte']}>
 <Tab value="React">
-```tsx title="client.tsx"
+
+````tsx title="client.tsx"
 import { authClient } from "@/lib/auth-client"
 
     function App(){
@@ -770,7 +772,7 @@ const { data, error } = await authClient.organization.getFullOrganization({
   organizationSlug: org - slug, // required
   membersLimit, // required
 })
-```
+````
 
 ### Server Side
 

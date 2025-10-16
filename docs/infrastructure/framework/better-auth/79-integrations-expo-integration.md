@@ -393,7 +393,8 @@ With Better Auth initialized, you can now use the `authClient` to authenticate u
 
 <Tabs items={["sign-in", "sign-up"]}>
 <Tab value="sign-in">
-```tsx title="app/sign-in.tsx"
+
+````tsx title="app/sign-in.tsx"
 import { useState } from "react";
 import { View, TextInput, Button } from "react-native";
 import { authClient } from "@/lib/auth-client";
@@ -495,7 +496,7 @@ export default function SocialSignIn() {
     />
   )
 }
-```
+````
 
 #### IdToken Sign-In
 

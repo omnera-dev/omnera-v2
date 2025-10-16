@@ -257,7 +257,8 @@ Server-side, you can access Autumn's functions through the `auth` object.
 
 <Tabs items={["Client", "Server"]}>
 <Tab value="Client">
-```jsx
+
+````jsx
 import { useCustomer } from "autumn-js/react";
 
     export default function SendChatMessage() {
@@ -338,7 +339,7 @@ export default function BillingSettings() {
     </button>
   )
 }
-```
+````
 
 #### cancel()
 
