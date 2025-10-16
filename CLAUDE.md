@@ -10,6 +10,7 @@ The following detailed documentation files are imported for Claude Code's memory
 @docs/infrastructure/language/typescript.md
 @docs/infrastructure/framework/effect.md
 @docs/infrastructure/framework/hono.md
+@docs/infrastructure/framework/better-auth.md
 @docs/infrastructure/ui/react.md
 @docs/infrastructure/ui/tailwind.md
 @docs/infrastructure/ui/shadcn.md
@@ -77,6 +78,16 @@ Ultra-lightweight web framework for building APIs and web applications.
 - **Why Hono**: Under 14kB, blazing fast routing, excellent TypeScript support, Effect-ready
 
 **Detailed Documentation**: [`docs/infrastructure/framework/hono.md`](docs/infrastructure/framework/hono.md)
+
+### Better Auth (1.3.27)
+
+Framework-agnostic authentication and authorization library for TypeScript.
+
+- **Purpose**: Type-safe authentication with email/password, OAuth, 2FA, passkeys, and session management
+- **Key Feature**: Extensible plugin system, full control over user data, zero vendor lock-in
+- **Why Better Auth**: Works seamlessly with Hono and Effect, Bun-native, rich plugin ecosystem, no per-user costs
+
+**Detailed Documentation**: [`docs/infrastructure/framework/better-auth.md`](docs/infrastructure/framework/better-auth.md)
 
 ### React (19.2.0)
 
@@ -472,7 +483,7 @@ This project uses a modular documentation approach:
 - **docs/infrastructure/**: Detailed technical documentation organized by category
   - **runtime/**: Runtime environment (Bun)
   - **language/**: Programming language (TypeScript)
-  - **framework/**: Core frameworks (Effect, Hono)
+  - **framework/**: Core frameworks (Effect, Hono, Better Auth)
   - **ui/**: UI libraries and styling (React, Tailwind CSS, shadcn/ui)
   - **quality/**: Code quality tools (ESLint, Prettier, Knip)
   - **testing/**: Testing frameworks (Bun Test, Playwright)
