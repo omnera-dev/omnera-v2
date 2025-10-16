@@ -26,6 +26,7 @@ The following detailed documentation files are imported for Claude Code's memory
 @docs/infrastructure/release/semantic-release.md
 @docs/architecture/functional-programming.md
 @docs/architecture/layer-based-architecture.md
+@docs/architecture/testing-strategy.md
 
 ## Project Overview
 

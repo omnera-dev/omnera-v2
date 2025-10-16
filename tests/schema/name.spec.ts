@@ -1,4 +1,4 @@
-import { test, expect } from './__fixtures__'
+import { test, expect } from '../__fixtures__'
 
 test('should display app name as title', async ({ page, startServerWithSchema }) => {
   // GIVEN: A server configured with a specific app name
