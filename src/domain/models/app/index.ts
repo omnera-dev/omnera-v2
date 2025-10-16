@@ -1,16 +1,18 @@
 import { Schema } from 'effect'
-import { NameSchema } from './name'
+import { NameSchema } from './name.ts'
+import { VersionSchema } from './version.ts'
 
 /**
  * AppSchema defines the structure of an application configuration.
  *
  * This schema represents the core metadata for any application built
- * with Omnera, including its name and description.
+ * with Omnera, including its name and optional version.
  *
  * @example
  * ```typescript
  * const myApp = {
  *   name: 'todo-app',
+ *   version: '1.0.0',
  * }
  *
  * const validated = Schema.decodeUnknownSync(AppSchema)(myApp)
@@ -30,6 +32,17 @@ export const AppSchema = Schema.Struct({
    * - Can include hyphens and underscores (but not at the start)
    */
   name: NameSchema,
+
+  /**
+   * The version of the application (optional).
+   *
+   * Must follow Semantic Versioning (SemVer) 2.0.0 specification:
+   * - Format: MAJOR.MINOR.PATCH (e.g., 1.0.0)
+   * - No leading zeros in version components
+   * - Optional pre-release identifiers (e.g., 1.0.0-alpha)
+   * - Optional build metadata (e.g., 1.0.0+build.123)
+   */
+  version: Schema.optional(VersionSchema),
 })
 
 /**
