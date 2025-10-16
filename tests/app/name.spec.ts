@@ -550,8 +550,8 @@ test.describe('AppSchema - Name Display', () => {
       await expect(heading).toBeInViewport()
 
       // AND: Validate text content preservation (no sanitization beyond React defaults)
-      const textContent = await heading.textContent()
-      expect(textContent).toBe(complexName) // Exact match
+      const textContent = heading
+      await expect(textContent).toHaveText(complexName) // Exact match
     }
   )
 

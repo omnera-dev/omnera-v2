@@ -32,11 +32,10 @@ export function DefaultHomePage({ app }: { readonly app: App }): Readonly<ReactE
         <div className="container-page h-full">
           <div className="flex h-full flex-col items-center justify-center">
             <div className="w-full max-w-2xl space-y-6 text-center">
-              {/* App Name */}
-              <TypographyH1 className="text-center">{app.name}</TypographyH1>
-
               {/* Version Badge */}
               {app.version && <Badge data-testid="app-version-badge">{app.version}</Badge>}
+              {/* App Name */}
+              <TypographyH1 className="text-center">{app.name}</TypographyH1>
             </div>
           </div>
         </div>

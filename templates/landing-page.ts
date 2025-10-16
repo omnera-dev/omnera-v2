@@ -26,6 +26,7 @@ import { start, type App } from '@/index'
 // Define your application configuration
 const myApp: App = {
   name: 'omnera-landing-page-demo',
+  version: '1.0.0',
 }
 
 // Start the server (handles everything automatically with defaults)

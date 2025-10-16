@@ -34,6 +34,7 @@
     "test:e2e": "playwright test",
     "test:e2e:spec": "playwright test --grep='@spec'",
     "test:e2e:critical": "playwright test --grep='@critical'",
+    "test:e2e:regression": "playwright test --grep='@regression'",
     "test:e2e:dev": "playwright test --grep='@spec|@critical'",
     "test:e2e:ci": "playwright test --grep='@regression|@critical'",
     "release": "semantic-release"

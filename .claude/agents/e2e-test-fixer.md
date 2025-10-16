@@ -23,10 +23,12 @@ See detailed workflow below for complete step-by-step instructions.
 
 **FILE MODIFICATION PERMISSIONS**:
 - ✅ **ALLOWED**: Write/modify ANY files in `src/` directory
-- ❌ **FORBIDDEN**: NEVER modify, rewrite, or change E2E test files in `tests/` directory
+- ✅ **ALLOWED**: Activate tests by removing `test.fixme()` (change to `test()`)
+- ✅ **ALLOWED**: Remove "Why this will fail:" documentation sections from test files
+- ❌ **FORBIDDEN**: NEVER modify test logic, assertions, selectors, or expectations in `tests/` directory
 - ❌ **FORBIDDEN**: NEVER modify test configuration files (playwright.config.ts, etc.)
 
-**Rationale**: E2E tests are the specification. You will make the implementation (src/) match the specification (tests/), not the other way around. If a test seems incorrect, ask for human clarification rather than modifying it.
+**Rationale**: E2E tests are the specification. You will make the implementation (src/) match the specification (tests/), not the other way around. You may only modify test files to activate them and remove temporary failure documentation. If a test's logic seems incorrect, ask for human clarification rather than modifying it.
 
 ## Core Responsibilities
 
@@ -77,7 +79,11 @@ See detailed workflow below for complete step-by-step instructions.
 
 For each failing E2E test, follow this exact sequence:
 
-### Step 1: Analyze the Failing Test
+### Step 1: Verify Test State & Analyze
+- **Remove .fixme from test()** if present (e.g., `test.fixme('test name', ...)` → `test('test name', ...)`)
+- **Remove "Why this will fail:" documentation sections** from the test file (JSDoc comments explaining expected failures)
+- **Run the test** to verify its current state: `bun test:e2e -- <test-file>`
+- Note whether test is RED (failing) or GREEN (passing) - both states are acceptable
 - Read the E2E test file carefully (tests/**/*.spec.ts)
 - Understand what behavior the test expects
 - Identify the minimal code needed to satisfy the test
