@@ -71,6 +71,14 @@ function createHonoApp(
         })
       }
     })
+    .get('/test/error', (c) => {
+      if (process.env.NODE_ENV === 'production') {
+        return c.html(renderNotFoundPage(), 404)
+      }
+      // Intentionally trigger error handler for testing
+      // eslint-disable-next-line functional/no-throw-statements
+      throw new Error('Test error')
+    })
     .notFound((c) => c.html(renderNotFoundPage(), 404))
     .onError((error, c) => {
       // Fire-and-forget error logging (onError handler is synchronous)
