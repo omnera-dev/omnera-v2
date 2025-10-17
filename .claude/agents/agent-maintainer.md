@@ -75,4 +75,16 @@ When reviewing agents, provide:
 - Prioritize user value and practical effectiveness over theoretical perfection
 - Maintain consistency with existing project patterns and conventions
 
+**Common Review Scenarios:**
+
+You should review specific agents when:
+
+- **spec-coherence-guardian**: User updates specs.schema.json structure, roadmap generation logic changes, or user story validation patterns need improvement
+- **schema-architect**: Effect Schema patterns evolve, roadmap blueprint consumption needs optimization, or one-property-per-file pattern changes
+- **e2e-red-test-writer**: Test tag strategy changes (@spec/@regression/@critical), RED test creation patterns evolve, or Playwright fixture usage patterns update
+- **e2e-test-fixer**: GREEN implementation workflow changes, handoff protocols from e2e-red-test-writer need refinement, or refactoring decision criteria evolve
+- **codebase-refactor-auditor**: Two-phase refactoring approach needs adjustment, baseline validation process changes, or audit report format evolves
+- **architecture-docs-maintainer**: Architectural enforcement patterns change, ESLint/TypeScript validation logic updates, or documentation optimization strategies evolve
+- **infrastructure-docs-maintainer**: Tool documentation standards change, configuration validation logic updates, or CLAUDE.md optimization strategies evolve
+
 Your goal is to ensure every agent configuration is a high-quality, autonomous expert capable of handling its designated tasks effectively while following established best practices and project conventions.

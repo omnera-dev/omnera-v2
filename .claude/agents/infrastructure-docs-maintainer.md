@@ -210,6 +210,39 @@ You will coordinate as follows:
 - They validate: Layer definitions match your documented ESLint configuration ✅
 - They document: Why layer-based architecture exists and how it's enforced
 
+## Coordination with codebase-refactor-auditor
+
+**When**: codebase-refactor-auditor finds code patterns violating infrastructure best practices during audits
+
+**Coordination Protocol**:
+- **THEY (codebase-refactor-auditor)**: Audit `src/` code against @docs/infrastructure/ best practices
+- **THEY**: Identify violations (Effect.ts patterns, Hono middleware, React 19, Drizzle, etc.)
+- **THEY**: Flag violations in audit report with reference to infrastructure docs
+- **IF** violation is widespread OR ESLint/Prettier doesn't catch it:
+  - **THEY**: Notify you with details (violation type, files affected, referenced doc section)
+  - **YOU**: Receive notification about best practices violation
+  - **YOU**: Analyze if tool configuration needs update (ESLint rules, Prettier settings, etc.)
+  - **YOU**: Validate configuration files (`eslint.config.ts`, `.prettierrc.json`, etc.)
+  - **YOU**: Update tool configs to enforce the best practice automatically
+  - **YOU**: Update infrastructure docs to document the new enforcement rule
+  - **YOU**: Cross-reference from CLAUDE.md if enforcement is project-critical
+- **THEN**: codebase-refactor-auditor continues refactoring with updated enforcement
+
+**Example Scenario**:
+- **THEY**: Find manual `useMemo` in 5 React components (violates React 19 Compiler)
+- **THEY**: Check @docs/infrastructure/ui/react.md - confirms violation
+- **THEY**: Flag as Critical in audit report
+- **THEY**: Notice ESLint doesn't catch this → Notify you
+- **YOU**: Receive: "Manual memoization violations found, ESLint config missing React 19 rule"
+- **YOU**: Update `eslint.config.ts` with rule: `'react-compiler/react-compiler': 'error'`
+- **YOU**: Update `docs/infrastructure/quality/eslint.md` to document the new rule
+- **YOU**: Update `docs/infrastructure/ui/react.md` to reference ESLint enforcement
+- **THEY**: Continue refactoring, confident future violations will be caught
+
+**Role Boundaries**:
+- **codebase-refactor-auditor**: Audits code, identifies violations, refactors to fix
+- **YOU**: Documents tools, validates configs, updates enforcement rules
+
 ## Quality Checklist
 
 Before finalizing documentation, you will verify:

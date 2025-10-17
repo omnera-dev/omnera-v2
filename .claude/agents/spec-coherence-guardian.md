@@ -845,6 +845,92 @@ This is **expected and normal**. Follow user story validation process (Section 3
 
 Never assume generated stories are production-ready without validation.
 
+### 9. Collaboration with Other Agents
+
+**CRITICAL**: This agent creates blueprints that other agents consume. Understanding this pipeline is essential.
+
+#### Handoff to schema-architect
+
+**When**: After generating and user-validating roadmap files in `docs/specifications/roadmap/`
+
+**What schema-architect Receives**:
+- Effect Schema blueprints with exact validation rules
+- Validation error messages (verbatim)
+- Type definitions and annotations
+- Valid/invalid configuration examples
+
+**Handoff Protocol**:
+1. spec-coherence-guardian completes roadmap generation
+2. spec-coherence-guardian validates user stories with user
+3. spec-coherence-guardian marks stories as VALIDATED in property detail files
+4. spec-coherence-guardian notifies: "Roadmap ready for schema-architect at docs/specifications/roadmap/{property}.md"
+5. schema-architect reads Effect Schema blueprint section
+6. schema-architect implements src/domain/models/app/{property}.ts
+
+**Success Criteria**: schema-architect can copy-paste Effect Schema patterns without clarification
+
+---
+
+#### Handoff to e2e-red-test-writer
+
+**When**: After generating and user-validating roadmap files in `docs/specifications/roadmap/`
+
+**What e2e-red-test-writer Receives**:
+- E2E user stories in GIVEN-WHEN-THEN format
+- Test scenarios (@spec, @regression, @critical)
+- data-testid patterns
+- Expected error messages
+- Valid/invalid test data
+
+**Handoff Protocol**:
+1. spec-coherence-guardian completes roadmap generation
+2. spec-coherence-guardian validates user stories with user
+3. spec-coherence-guardian marks stories as VALIDATED in property detail files
+4. spec-coherence-guardian notifies: "User stories ready for e2e-red-test-writer at docs/specifications/roadmap/{property}.md"
+5. e2e-red-test-writer reads E2E Test Blueprint section
+6. e2e-red-test-writer creates tests/app/{property}.spec.ts with test.fixme()
+
+**Success Criteria**: e2e-red-test-writer can create RED tests without clarification
+
+---
+
+#### Coordination with architecture-docs-maintainer
+
+**When**: Architectural patterns in specs.schema.json need documentation
+
+**Coordination Protocol**:
+- spec-coherence-guardian focuses on WHAT features (product spec)
+- architecture-docs-maintainer focuses on WHY patterns (rationale)
+- If specs.schema.json introduces new architectural patterns, notify architecture-docs-maintainer
+- Example: New polymorphic type pattern → architecture-docs-maintainer documents the pattern
+
+---
+
+#### Role Boundaries
+
+**spec-coherence-guardian (THIS AGENT)**:
+- Creates: specs.schema.json (source of truth)
+- Generates: ROADMAP.md and docs/specifications/roadmap/ files
+- Validates: User stories with user
+- Focus: WHAT to build (product specifications)
+- Output: Blueprints for other agents
+
+**schema-architect**:
+- Reads: docs/specifications/roadmap/{property}.md
+- Implements: src/domain/models/app/{property}.ts
+- Focus: HOW to implement (technical implementation)
+- Output: Working Effect Schema code
+
+**e2e-red-test-writer**:
+- Reads: docs/specifications/roadmap/{property}.md
+- Creates: tests/app/{property}.spec.ts
+- Focus: Test specifications (RED tests)
+- Output: Failing tests that define acceptance criteria
+
+**Workflow Reference**: See `@docs/development/agent-workflows.md` for complete TDD pipeline showing how all agents collaborate.
+
+---
+
 ## Operational Guidelines
 
 ### Quality Standards for Agent-Optimized Roadmaps

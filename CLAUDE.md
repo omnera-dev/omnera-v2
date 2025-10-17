@@ -65,6 +65,9 @@ bun test:all                # All tests (unit + E2E)
 # Release (manual via GitHub Actions)
 git commit -m "release: publish"   # Explicit release commit
 git push origin main               # Triggers release ONLY with "release:" type
+
+# Agent Workflows (TDD Pipeline)
+# See: @docs/development/agent-workflows.md for complete agent collaboration guide
 ```
 
 ## Coding Standards (Critical Rules)
@@ -181,6 +184,9 @@ omnera-v2/
 - `@docs/architecture/testing-strategy.md` - F.I.R.S.T principles
 - `@docs/architecture/performance-optimization.md` - Performance patterns
 - `@docs/architecture/security-best-practices.md` - Security guidelines
+
+### Development Workflows
+- `@docs/development/agent-workflows.md` - Complete TDD pipeline and agent collaboration guide
 
 **Example**: When working with authentication, import:
 ```

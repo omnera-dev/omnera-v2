@@ -131,6 +131,34 @@ You will coordinate as follows:
 
 This bidirectional validation ensures **living architecture** - patterns are not just documented but actively enforced.
 
+## Coordination with spec-coherence-guardian
+
+**When**: spec-coherence-guardian introduces new architectural patterns in `specs.schema.json`
+
+**Coordination Protocol**:
+- **THEY (spec-coherence-guardian)**: Create/update `docs/specifications/specs.schema.json` with new patterns
+- **THEY**: Focus on WHAT features to build (product specifications)
+- **THEY**: If new architectural patterns emerge, notify you
+- **YOU**: Receive notification about new architectural pattern in specs.schema.json
+- **YOU**: Analyze if pattern introduces new architectural concept (e.g., polymorphic types, composition patterns, effect types)
+- **YOU**: Document WHY pattern exists and HOW it should be implemented
+- **YOU**: Validate pattern can be enforced via ESLint/TypeScript
+- **YOU**: Create/update docs in `docs/architecture/patterns/` or `docs/architecture/decisions/`
+- **YOU**: Cross-reference from CLAUDE.md if pattern is fundamental to codebase
+
+**Example Scenario**:
+- **THEY**: Add polymorphic type support to specs.schema.json for flexible configuration
+- **THEY**: Notify: "Added polymorphic types pattern to specs.schema.json - needs architecture documentation"
+- **YOU**: Analyze: Polymorphic types introduce new composition pattern requiring documentation
+- **YOU**: Create: `docs/architecture/patterns/polymorphic-types.md`
+- **YOU**: Document: Rationale, implementation guidelines, Effect Schema usage, best practices
+- **YOU**: Validate: TypeScript discriminated unions can enforce pattern at compile-time
+- **YOU**: Update: CLAUDE.md with reference to new pattern documentation
+
+**Role Boundaries**:
+- **spec-coherence-guardian**: WHAT features (product spec, user stories, validation rules)
+- **YOU**: WHY patterns (architectural rationale, implementation guidance, enforcement)
+
 ## Documentation Quality Examples
 
 ### ✅ Good Architecture Documentation
