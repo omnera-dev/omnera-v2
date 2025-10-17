@@ -12,13 +12,39 @@
  * Usage: bun run scripts/export-schema.ts
  */
 
-import { Schema, JSONSchema } from 'effect'
-import { mkdir, writeFile } from 'fs/promises'
-import { join } from 'path'
-import { existsSync } from 'fs'
-
+import { existsSync } from 'node:fs'
+import { mkdir, writeFile } from 'node:fs/promises'
+import { join } from 'node:path'
+import { JSONSchema } from 'effect'
 // Import schema
-import { AppSchema } from '../src/domain/models/app/index.ts'
+import { AppSchema } from '../src/domain/models/app'
+import type { Schema } from 'effect'
+
+/**
+ * JSON Schema property definition
+ */
+interface JsonSchemaProperty {
+  type?: string
+  title?: string
+  description?: string
+  minLength?: number
+  maxLength?: number
+  pattern?: string
+  minimum?: number
+  maximum?: number
+  examples?: unknown[]
+}
+
+/**
+ * JSON Schema definition
+ */
+interface JsonSchemaDefinition {
+  title?: string
+  description?: string
+  properties?: Record<string, JsonSchemaProperty>
+  required?: string[]
+  examples?: unknown[]
+}
 
 /**
  * Get package version from package.json
@@ -31,14 +57,14 @@ async function getPackageVersion(): Promise<string> {
 /**
  * Generate JSON Schema from Effect Schema
  */
-function generateJsonSchema(schema: Schema.Schema<any, any, never>): unknown {
+function generateJsonSchema(schema: Schema.Schema.Any): unknown {
   return JSONSchema.make(schema)
 }
 
 /**
  * Generate TypeScript type definitions from JSON Schema
  */
-function generateTypeDefinitions(jsonSchema: any): string {
+function generateTypeDefinitions(jsonSchema: JsonSchemaDefinition): string {
   const lines: string[] = [
     '/**',
     ' * TypeScript type definitions for AppSchema',
@@ -61,7 +87,10 @@ function generateTypeDefinitions(jsonSchema: any): string {
   const properties = jsonSchema.properties || {}
   const required = jsonSchema.required || []
 
-  for (const [propName, propSchema] of Object.entries(properties) as [string, any][]) {
+  for (const [propName, propSchema] of Object.entries(properties) as [
+    string,
+    JsonSchemaProperty,
+  ][]) {
     const isRequired = required.includes(propName)
     const propDescription = propSchema.description
     const propTitle = propSchema.title
@@ -85,16 +114,28 @@ function generateTypeDefinitions(jsonSchema: any): string {
 
     // Determine TypeScript type
     let tsType = 'any'
-    if (propSchema.type === 'string') {
-      tsType = 'string'
-    } else if (propSchema.type === 'number' || propSchema.type === 'integer') {
-      tsType = 'number'
-    } else if (propSchema.type === 'boolean') {
-      tsType = 'boolean'
-    } else if (propSchema.type === 'array') {
-      tsType = 'any[]'
-    } else if (propSchema.type === 'object') {
-      tsType = 'Record<string, any>'
+    switch (propSchema.type) {
+      case 'string': {
+        tsType = 'string'
+        break
+      }
+      case 'number':
+      case 'integer': {
+        tsType = 'number'
+        break
+      }
+      case 'boolean': {
+        tsType = 'boolean'
+        break
+      }
+      case 'array': {
+        tsType = 'any[]'
+        break
+      }
+      case 'object': {
+        tsType = 'Record<string, any>'
+        break
+      }
     }
 
     lines.push(`  ${propName}${isRequired ? '' : '?'}: ${tsType}`)
@@ -108,7 +149,7 @@ function generateTypeDefinitions(jsonSchema: any): string {
 /**
  * Generate README documentation from JSON Schema
  */
-function generateReadme(version: string, jsonSchema: any): string {
+function generateReadme(version: string, jsonSchema: JsonSchemaDefinition): string {
   const schemaTitle = jsonSchema.title || 'AppSchema'
   const schemaDescription = jsonSchema.description || 'Application configuration schema'
   const properties = jsonSchema.properties || {}
@@ -158,7 +199,10 @@ function generateReadme(version: string, jsonSchema: any): string {
   // Schema details
   lines.push('## Schema Properties', '')
 
-  for (const [propName, propSchema] of Object.entries(properties) as [string, any][]) {
+  for (const [propName, propSchema] of Object.entries(properties) as [
+    string,
+    JsonSchemaProperty,
+  ][]) {
     const isRequired = required.includes(propName)
     const propTitle = propSchema.title || propName
     const propDescription = propSchema.description
@@ -254,14 +298,14 @@ async function exportSchema(): Promise<void> {
 
   // Generate and write TypeScript definitions
   console.log('\n📝 Generating TypeScript definitions...')
-  const typeDefinitions = generateTypeDefinitions(jsonSchema)
+  const typeDefinitions = generateTypeDefinitions(jsonSchema as JsonSchemaDefinition)
   const typesPath = join(outputDir, 'types.d.ts')
   await writeFile(typesPath, typeDefinitions)
   console.log('   ✓ types.d.ts')
 
   // Generate and write README
   console.log('\n📝 Generating documentation...')
-  const readme = generateReadme(version, jsonSchema)
+  const readme = generateReadme(version, jsonSchema as JsonSchemaDefinition)
   const readmePath = join(outputDir, 'README.md')
   await writeFile(readmePath, readme)
   console.log('   ✓ README.md')

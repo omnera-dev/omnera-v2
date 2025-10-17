@@ -1,10 +1,10 @@
 {
-  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$schema": "http://json-schema.org/draft-07/schema#",
   "title": "Application Configuration",
   "description": "Complete configuration for your application including metadata, data models, automations, and integrations",
   "version": "0.81.0",
   "type": "object",
-  "$defs": {
+  "definitions": {
     "id": {
       "description": "Unique identifier",
       "title": "ID",
@@ -176,13 +176,13 @@
         "type": "object",
         "properties": {
           "id": {
-            "$ref": "#/$defs/id",
+            "$ref": "#/definitions/id",
             "title": "Table ID",
             "description": "Unique identifier for the table",
             "examples": [1, 2, 100]
           },
           "name": {
-            "$ref": "#/$defs/name",
+            "$ref": "#/definitions/name",
             "title": "Table Name",
             "description": "Name of the database table",
             "placeholder": "Enter table name",
@@ -214,10 +214,10 @@
                   "type": "object",
                   "properties": {
                     "id": {
-                      "$ref": "#/$defs/id"
+                      "$ref": "#/definitions/id"
                     },
                     "name": {
-                      "$ref": "#/$defs/name"
+                      "$ref": "#/definitions/name"
                     },
                     "required": {
                       "type": "boolean",
@@ -240,10 +240,10 @@
                   "type": "object",
                   "properties": {
                     "id": {
-                      "$ref": "#/$defs/id"
+                      "$ref": "#/definitions/id"
                     },
                     "name": {
-                      "$ref": "#/$defs/name"
+                      "$ref": "#/definitions/name"
                     },
                     "required": {
                       "type": "boolean",
@@ -287,10 +287,10 @@
                   "type": "object",
                   "properties": {
                     "id": {
-                      "$ref": "#/$defs/id"
+                      "$ref": "#/definitions/id"
                     },
                     "name": {
-                      "$ref": "#/$defs/name"
+                      "$ref": "#/definitions/name"
                     },
                     "required": {
                       "type": "boolean",
@@ -330,10 +330,10 @@
                   "type": "object",
                   "properties": {
                     "id": {
-                      "$ref": "#/$defs/id"
+                      "$ref": "#/definitions/id"
                     },
                     "name": {
-                      "$ref": "#/$defs/name"
+                      "$ref": "#/definitions/name"
                     },
                     "required": {
                       "type": "boolean",
@@ -356,10 +356,10 @@
                   "type": "object",
                   "properties": {
                     "id": {
-                      "$ref": "#/$defs/id"
+                      "$ref": "#/definitions/id"
                     },
                     "name": {
-                      "$ref": "#/$defs/name"
+                      "$ref": "#/definitions/name"
                     },
                     "required": {
                       "type": "boolean",
@@ -390,10 +390,10 @@
                   "type": "object",
                   "properties": {
                     "id": {
-                      "$ref": "#/$defs/id"
+                      "$ref": "#/definitions/id"
                     },
                     "name": {
-                      "$ref": "#/$defs/name"
+                      "$ref": "#/definitions/name"
                     },
                     "required": {
                       "type": "boolean",
@@ -432,10 +432,10 @@
                   "type": "object",
                   "properties": {
                     "id": {
-                      "$ref": "#/$defs/id"
+                      "$ref": "#/definitions/id"
                     },
                     "name": {
-                      "$ref": "#/$defs/name"
+                      "$ref": "#/definitions/name"
                     },
                     "required": {
                       "type": "boolean",
@@ -471,10 +471,10 @@
                   "type": "object",
                   "properties": {
                     "id": {
-                      "$ref": "#/$defs/id"
+                      "$ref": "#/definitions/id"
                     },
                     "name": {
-                      "$ref": "#/$defs/name"
+                      "$ref": "#/definitions/name"
                     },
                     "required": {
                       "type": "boolean",
@@ -525,10 +525,10 @@
                   "type": "object",
                   "properties": {
                     "id": {
-                      "$ref": "#/$defs/id"
+                      "$ref": "#/definitions/id"
                     },
                     "name": {
-                      "$ref": "#/$defs/name"
+                      "$ref": "#/definitions/name"
                     },
                     "required": {
                       "type": "boolean",
@@ -616,7 +616,7 @@
                 "const": "custom-html"
               },
               "name": {
-                "$ref": "#/$defs/name",
+                "$ref": "#/definitions/name",
                 "title": "Page Name",
                 "description": "Internal name for the page",
                 "placeholder": "Enter page name",
@@ -624,7 +624,7 @@
                 "help": "Unique identifier for the page"
               },
               "path": {
-                "$ref": "#/$defs/path",
+                "$ref": "#/definitions/path",
                 "title": "Page Path",
                 "description": "URL path where the page is accessible",
                 "placeholder": "/about",
@@ -824,20 +824,20 @@
                 "const": "form"
               },
               "id": {
-                "$ref": "#/$defs/id",
+                "$ref": "#/definitions/id",
                 "title": "Form ID",
                 "description": "Unique identifier for the form",
                 "examples": [1, 2, 100]
               },
               "name": {
-                "$ref": "#/$defs/name",
+                "$ref": "#/definitions/name",
                 "title": "Form Name",
                 "description": "Internal name for the form",
                 "placeholder": "Enter form name",
                 "examples": ["Contact Form", "Registration Form", "Feedback Survey"]
               },
               "path": {
-                "$ref": "#/$defs/path",
+                "$ref": "#/definitions/path",
                 "title": "Form Path",
                 "description": "URL path where the form is accessible",
                 "placeholder": "/contact",
@@ -1047,7 +1047,7 @@
                 }
               },
               "redirectUrl": {
-                "$ref": "#/$defs/path",
+                "$ref": "#/definitions/path",
                 "description": "URL to redirect to after successful submission"
               }
             },
@@ -1064,12 +1064,12 @@
                 "const": "table-view"
               },
               "name": {
-                "$ref": "#/$defs/name",
+                "$ref": "#/definitions/name",
                 "title": "Page Name",
                 "description": "Internal name for the page"
               },
               "path": {
-                "$ref": "#/$defs/path",
+                "$ref": "#/definitions/path",
                 "title": "Page Path",
                 "description": "URL path where the page is accessible",
                 "placeholder": "/users",
@@ -1145,12 +1145,12 @@
                 "const": "detail-view"
               },
               "name": {
-                "$ref": "#/$defs/name",
+                "$ref": "#/definitions/name",
                 "title": "Page Name",
                 "description": "Internal name for the page"
               },
               "path": {
-                "$ref": "#/$defs/path",
+                "$ref": "#/definitions/path",
                 "title": "Page Path",
                 "description": "URL path with :id parameter",
                 "placeholder": "/users/:id",

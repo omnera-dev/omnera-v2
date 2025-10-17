@@ -1,6 +1,7 @@
 import { test, expect, describe } from 'bun:test'
 import { Effect } from 'effect'
-import { compileCSS, CSSCompilationError, type CompiledCSS } from './compiler'
+import { CSSCompilationError } from '@/infrastructure/errors/css-compilation-error'
+import { compileCSS, type CompiledCSS } from './compiler'
 
 describe('CSSCompilationError', () => {
   test('should create error with correct tag', () => {

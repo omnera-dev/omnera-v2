@@ -1,5 +1,5 @@
 import { renderToString } from 'react-dom/server'
-import { DefaultHomePage } from '@/presentation/components/DefaultHomePage'
+import { DefaultHomePage } from '@/presentation/components/pages/DefaultHomePage'
 import type { App } from '@/domain/models/app'
 
 /**

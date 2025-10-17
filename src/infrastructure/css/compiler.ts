@@ -3,14 +3,7 @@ import { join } from 'node:path'
 import tailwindcss from '@tailwindcss/postcss'
 import { Effect, Ref } from 'effect'
 import postcss from 'postcss'
-
-/**
- * Error class for CSS compilation failures
- */
-export class CSSCompilationError {
-  readonly _tag = 'CSSCompilationError'
-  constructor(readonly cause: unknown) {}
-}
+import { CSSCompilationError } from '@/infrastructure/errors/css-compilation-error'
 
 /**
  * Compiled CSS result with metadata

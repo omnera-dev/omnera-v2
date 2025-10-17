@@ -3,7 +3,7 @@ Business Source License 1.1
 Parameters
 
 Licensor:               ESSENTIAL SERVICES
-Licensed Work:          Omnera 0.0.1
+Licensed Work:          Omnera 1.2.3
                         The Licensed Work is (c) 2025 ESSENTIAL SERVICES.
 Additional Use Grant:   See grant terms below
 Change Date:            2029-10-17

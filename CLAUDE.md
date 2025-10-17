@@ -162,6 +162,8 @@ omnera-v2/
 ### Architecture
 - `@docs/architecture/functional-programming.md` - FP principles
 - `@docs/architecture/layer-based-architecture.md` - Layered architecture
+- `@docs/architecture/naming-conventions.md` - Comprehensive naming conventions (files, variables, functions, classes, types)
+- `@docs/architecture/file-naming-conventions.md` - Detailed file naming guide
 - `@docs/architecture/api-conventions.md` - Convention-based API routing
 - `@docs/architecture/testing-strategy.md` - F.I.R.S.T principles
 - `@docs/architecture/performance-optimization.md` - Performance patterns

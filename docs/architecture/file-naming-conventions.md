@@ -53,6 +53,7 @@ All names support TypeScript's import autocomplete and IDE navigation. Path alia
 ### 5. **Ecosystem Alignment**
 
 Naming patterns match ecosystem conventions:
+
 - **Web URLs** - kebab-case for routes (`/api/health`)
 - **CLI tools** - kebab-case for scripts (`update-license.sh`)
 - **React hooks** - kebab-case with `use-` prefix (`use-mobile.ts`)
@@ -65,6 +66,7 @@ Naming patterns match ecosystem conventions:
 ### The Two-Style System
 
 **95% of files: kebab-case** (default)
+
 ```
 src/application/use-cases/server/start-server.ts
 src/domain/errors/invalid-config-error.ts
@@ -72,6 +74,7 @@ src/presentation/components/ui/button.tsx
 ```
 
 **5% of files: PascalCase** (page-level components only)
+
 ```
 src/presentation/components/pages/DefaultHomePage.tsx
 src/presentation/components/pages/LoginPage.tsx
@@ -157,15 +160,15 @@ src/domain/models/app/
 
 ```typescript
 // ✅ CORRECT
-src/domain/models/app/name.ts                  // exports NameSchema
-src/domain/models/table/field-types.ts         // exports FieldTypeSchema
-src/domain/models/page/route.ts                // exports RouteSchema
+src / domain / models / app / name.ts // exports NameSchema
+src / domain / models / table / field - types.ts // exports FieldTypeSchema
+src / domain / models / page / route.ts // exports RouteSchema
 
 // ❌ INCORRECT
-src/domain/models/app/Name.ts                  // Don't use PascalCase
-src/domain/models/app/AppName.ts               // Don't use PascalCase
-src/domain/models/app/validate-name.ts         // Don't use action verbs
-src/domain/models/app/name.schema.ts           // Don't add .schema suffix
+src / domain / models / app / Name.ts // Don't use PascalCase
+src / domain / models / app / AppName.ts // Don't use PascalCase
+src / domain / models / app / validate - name.ts // Don't use action verbs
+src / domain / models / app / name.schema.ts // Don't add .schema suffix
 ```
 
 **Why this pattern:**
@@ -194,12 +197,12 @@ src/domain/validators/
 
 ```typescript
 // ✅ CORRECT
-src/domain/validators/email.ts                 // exports validateEmail()
-src/domain/validators/url.ts                   // exports validateUrl()
+src / domain / validators / email.ts // exports validateEmail()
+src / domain / validators / url.ts // exports validateUrl()
 
 // ❌ INCORRECT
-src/domain/validators/EmailValidator.ts        // Don't use PascalCase
-src/domain/validators/validate-email.ts        // Don't use action verb prefix
+src / domain / validators / EmailValidator.ts // Don't use PascalCase
+src / domain / validators / validate - email.ts // Don't use action verb prefix
 ```
 
 ### Domain Service Files
@@ -221,12 +224,12 @@ src/domain/services/
 
 ```typescript
 // ✅ CORRECT
-src/domain/services/table-generator.ts         // exports generateTableSQL()
-src/domain/services/route-matcher.ts           // exports matchRoute()
+src / domain / services / table - generator.ts // exports generateTableSQL()
+src / domain / services / route - matcher.ts // exports matchRoute()
 
 // ❌ INCORRECT
-src/domain/services/TableGenerator.ts          // Don't use PascalCase
-src/domain/services/generateTable.ts           // Use descriptive noun, not verb
+src / domain / services / TableGenerator.ts // Don't use PascalCase
+src / domain / services / generateTable.ts // Use descriptive noun, not verb
 ```
 
 ### Domain Error Classes
@@ -255,8 +258,8 @@ export class InvalidConfigError {
 }
 
 // ❌ INCORRECT
-src/domain/errors/InvalidConfigError.ts        // Don't use PascalCase
-src/domain/errors/config-error.ts              // Include error type descriptor
+src / domain / errors / InvalidConfigError.ts // Don't use PascalCase
+src / domain / errors / config - error.ts // Include error type descriptor
 ```
 
 **Why kebab-case for errors:**
@@ -354,9 +357,9 @@ export interface IConfigLoader {
 }
 
 // ❌ INCORRECT
-src/application/ports/IConfigLoader.ts         // Don't use PascalCase
-src/application/ports/ConfigLoader.ts          // Don't use PascalCase
-src/application/ports/config-loader-port.ts    // Don't add "port" suffix
+src / application / ports / IConfigLoader.ts // Don't use PascalCase
+src / application / ports / ConfigLoader.ts // Don't use PascalCase
+src / application / ports / config - loader - port.ts // Don't add "port" suffix
 ```
 
 **Why kebab-case for ports:**
@@ -418,8 +421,8 @@ export class ServerStartError {
 }
 
 // ❌ INCORRECT
-src/application/errors/ServerStartError.ts    // Don't use PascalCase
-src/application/errors/server-start.ts        // Include "error" suffix
+src / application / errors / ServerStartError.ts // Don't use PascalCase
+src / application / errors / server - start.ts // Include "error" suffix
 ```
 
 ---
@@ -493,8 +496,8 @@ export class UserRepository implements IUserRepository {
 }
 
 // ❌ INCORRECT
-src/infrastructure/database/repositories/UserRepository.ts  // Don't use PascalCase
-src/infrastructure/database/repositories/user.ts            // Include "repository" suffix
+src / infrastructure / database / repositories / UserRepository.ts // Don't use PascalCase
+src / infrastructure / database / repositories / user.ts // Include "repository" suffix
 ```
 
 **Why kebab-case for repositories:**
@@ -562,8 +565,8 @@ src/infrastructure/layers/
 export const AppLayer = Layer.mergeAll(DatabaseLayer, ServicesLayer)
 
 // ❌ INCORRECT
-src/infrastructure/layers/AppLayer.ts         // Don't use PascalCase
-src/infrastructure/layers/application.ts      // Include "layer" suffix
+src / infrastructure / layers / AppLayer.ts // Don't use PascalCase
+src / infrastructure / layers / application.ts // Include "layer" suffix
 ```
 
 **Why kebab-case for layers:**
@@ -580,6 +583,7 @@ The presentation layer separates **API routes** (Hono) from **React components**
 ### React Component Files
 
 **Pattern**:
+
 - **UI primitives**: `{component}.tsx` (kebab-case)
 - **Page components**: `{Component}.tsx` (PascalCase)
 
@@ -650,14 +654,16 @@ src/presentation/components/ui/
 
 ```typescript
 // ✅ CORRECT
-src/presentation/components/ui/button-variants.ts
+src / presentation / components / ui / button - variants.ts
 export const buttonVariants = cva('inline-flex items-center...', {
-  variants: { /* ... */ },
+  variants: {
+    /* ... */
+  },
 })
 
 // ❌ INCORRECT
-src/presentation/components/ui/ButtonVariants.ts      // Use kebab-case
-src/presentation/components/ui/button.variants.ts     // Use hyphen, not dot
+src / presentation / components / ui / ButtonVariants.ts // Use kebab-case
+src / presentation / components / ui / button.variants.ts // Use hyphen, not dot
 ```
 
 ### React Hook Files
@@ -681,17 +687,21 @@ src/presentation/components/ui/
 
 ```typescript
 // ✅ CORRECT - Standalone hooks (use- prefix)
-src/presentation/hooks/use-mobile.ts
-export function useIsMobile() { /* ... */ }
+src / presentation / hooks / use - mobile.ts
+export function useIsMobile() {
+  /* ... */
+}
 
 // ✅ CORRECT - Component-specific hooks (shadcn pattern)
-src/presentation/components/ui/sidebar-hook.ts
-export function useSidebar() { /* ... */ }
+src / presentation / components / ui / sidebar - hook.ts
+export function useSidebar() {
+  /* ... */
+}
 
 // ❌ INCORRECT
-src/presentation/hooks/mobile.ts              // Missing "use-" prefix
-src/presentation/hooks/useMobile.ts           // Use kebab-case
-src/presentation/components/ui/use-sidebar.ts // Component hooks use "-hook" suffix
+src / presentation / hooks / mobile.ts // Missing "use-" prefix
+src / presentation / hooks / useMobile.ts // Use kebab-case
+src / presentation / components / ui / use - sidebar.ts // Component hooks use "-hook" suffix
 ```
 
 ### Utility Files
@@ -713,15 +723,17 @@ src/presentation/utils/
 
 ```typescript
 // ✅ CORRECT
-src/presentation/utils/cn.ts
-export function cn(...inputs) { /* ... */ }
+src / presentation / utils / cn.ts
+export function cn(...inputs) {
+  /* ... */
+}
 
-src/presentation/utils/variant-classes.ts
+src / presentation / utils / variant - classes.ts
 export const COMMON_INTERACTIVE_CLASSES = '...'
 
 // ❌ INCORRECT
-src/presentation/utils/CN.ts                  // Use lowercase
-src/presentation/utils/classNameMerger.ts     // Use kebab-case
+src / presentation / utils / CN.ts // Use lowercase
+src / presentation / utils / classNameMerger.ts // Use kebab-case
 ```
 
 ### API Route Files
@@ -747,17 +759,19 @@ src/presentation/api/routes/
 
 ```typescript
 // ✅ CORRECT - Static routes
-src/presentation/api/routes/health.ts
+src / presentation / api / routes / health.ts
 app.get('/health', (c) => c.json({ status: 'ok' }))
 
 // ✅ CORRECT - Dynamic routes (bracket notation)
-src/presentation/api/routes/tables/[table].ts
-app.get('/tables/:table', (c) => { /* ... */ })
+src / presentation / api / routes / tables / [table].ts
+app.get('/tables/:table', (c) => {
+  /* ... */
+})
 
 // ❌ INCORRECT
-src/presentation/api/routes/Health.ts         // Use lowercase
-src/presentation/api/routes/health-check.ts   // Keep names concise
-src/presentation/api/routes/tables/table.ts   // Use brackets for dynamic params
+src / presentation / api / routes / Health.ts // Use lowercase
+src / presentation / api / routes / health - check.ts // Keep names concise
+src / presentation / api / routes / tables / table.ts // Use brackets for dynamic params
 ```
 
 ### Middleware Files
@@ -779,13 +793,15 @@ src/presentation/api/middleware/
 
 ```typescript
 // ✅ CORRECT
-src/presentation/api/middleware/auth.ts
-export const authMiddleware = (c, next) => { /* ... */ }
+src / presentation / api / middleware / auth.ts
+export const authMiddleware = (c, next) => {
+  /* ... */
+}
 
 // ❌ INCORRECT
-src/presentation/api/middleware/Auth.ts           // Use lowercase
-src/presentation/api/middleware/authentication.ts // Keep names concise
-src/presentation/api/middleware/auth-middleware.ts // Don't add "middleware" suffix
+src / presentation / api / middleware / Auth.ts // Use lowercase
+src / presentation / api / middleware / authentication.ts // Keep names concise
+src / presentation / api / middleware / auth - middleware.ts // Don't add "middleware" suffix
 ```
 
 ---
@@ -820,16 +836,18 @@ src/infrastructure/css/
 
 ```typescript
 // ✅ CORRECT
-src/domain/models/app/name.test.ts
+src / domain / models / app / name.test.ts
 import { test, expect } from 'bun:test'
 import { NameSchema } from './name.ts'
 
-test('validates npm package names', () => { /* ... */ })
+test('validates npm package names', () => {
+  /* ... */
+})
 
 // ❌ INCORRECT
-src/domain/models/app/name.spec.ts        // Use .test.ts for unit tests
-src/domain/models/app/name-test.ts        // Use dot separator
-src/domain/models/app/test-name.ts        // Keep source name first
+src / domain / models / app / name.spec.ts // Use .test.ts for unit tests
+src / domain / models / app / name - test.ts // Use dot separator
+src / domain / models / app / test - name.ts // Keep source name first
 ```
 
 **Why this pattern:**
@@ -863,7 +881,7 @@ tests/
 
 ```typescript
 // ✅ CORRECT
-tests/app/name.spec.ts
+tests / app / name.spec.ts
 import { test, expect } from '@playwright/test'
 
 test('should display app name as title', async ({ page }) => {
@@ -871,9 +889,9 @@ test('should display app name as title', async ({ page }) => {
 })
 
 // ❌ INCORRECT
-tests/app/name.test.ts                 // Use .spec.ts for E2E tests
-tests/app/AppNameTests.spec.ts         // Use kebab-case
-tests/name.spec.ts                     // Include feature domain (app/)
+tests / app / name.test.ts // Use .spec.ts for E2E tests
+tests / app / AppNameTests.spec.ts // Use kebab-case
+tests / name.spec.ts // Include feature domain (app/)
 ```
 
 ### Test Fixture Files
@@ -903,30 +921,30 @@ tests/
 
 ### All Layers (kebab-case)
 
-| File Type     | Pattern                  | Example                      | Layer          |
-| ------------- | ------------------------ | ---------------------------- | -------------- |
-| Schema        | `{entity}.ts`            | `name.ts`                    | Domain         |
-| Validator     | `{type}.ts`              | `email.ts`                   | Domain         |
-| Service       | `{service}.ts`           | `table-generator.ts`         | Domain         |
-| Error         | `{type}-error.ts`        | `invalid-config-error.ts`    | Domain         |
-| Use Case      | `{action}-{entity}.ts`   | `start-server.ts`            | Application    |
-| Port          | `{service}.ts`           | `config-loader.ts`           | Application    |
-| Service       | `{service}.ts`           | `error-handling.ts`          | Application    |
-| Error         | `{type}-error.ts`        | `server-start-error.ts`      | Application    |
-| Service       | `{service}.ts`           | `server.ts`                  | Infrastructure |
-| Repository    | `{entity}-repository.ts` | `user-repository.ts`         | Infrastructure |
-| Adapter       | `{technology}.ts`        | `smtp.ts`, `s3.ts`           | Infrastructure |
-| Layer         | `{layer}-layer.ts`       | `app-layer.ts`               | Infrastructure |
-| UI Component  | `{component}.tsx`        | `button.tsx`                 | Presentation   |
-| Variants      | `{component}-variants.ts`| `button-variants.ts`         | Presentation   |
-| Hook          | `use-{name}.ts`          | `use-mobile.ts`              | Presentation   |
-| Hook (comp)   | `{component}-hook.ts`    | `sidebar-hook.ts`            | Presentation   |
-| Utility       | `{utility}.ts`           | `cn.ts`                      | Presentation   |
-| API Route     | `{route}.ts`             | `health.ts`                  | Presentation   |
-| Dynamic Route | `[{param}].ts`           | `[table].ts`                 | Presentation   |
-| Middleware    | `{middleware}.ts`        | `auth.ts`                    | Presentation   |
-| Unit Test     | `{source}.test.ts`       | `name.test.ts`               | Co-located     |
-| E2E Test      | `{feature}.spec.ts`      | `name.spec.ts`               | tests/         |
+| File Type     | Pattern                   | Example                   | Layer          |
+| ------------- | ------------------------- | ------------------------- | -------------- |
+| Schema        | `{entity}.ts`             | `name.ts`                 | Domain         |
+| Validator     | `{type}.ts`               | `email.ts`                | Domain         |
+| Service       | `{service}.ts`            | `table-generator.ts`      | Domain         |
+| Error         | `{type}-error.ts`         | `invalid-config-error.ts` | Domain         |
+| Use Case      | `{action}-{entity}.ts`    | `start-server.ts`         | Application    |
+| Port          | `{service}.ts`            | `config-loader.ts`        | Application    |
+| Service       | `{service}.ts`            | `error-handling.ts`       | Application    |
+| Error         | `{type}-error.ts`         | `server-start-error.ts`   | Application    |
+| Service       | `{service}.ts`            | `server.ts`               | Infrastructure |
+| Repository    | `{entity}-repository.ts`  | `user-repository.ts`      | Infrastructure |
+| Adapter       | `{technology}.ts`         | `smtp.ts`, `s3.ts`        | Infrastructure |
+| Layer         | `{layer}-layer.ts`        | `app-layer.ts`            | Infrastructure |
+| UI Component  | `{component}.tsx`         | `button.tsx`              | Presentation   |
+| Variants      | `{component}-variants.ts` | `button-variants.ts`      | Presentation   |
+| Hook          | `use-{name}.ts`           | `use-mobile.ts`           | Presentation   |
+| Hook (comp)   | `{component}-hook.ts`     | `sidebar-hook.ts`         | Presentation   |
+| Utility       | `{utility}.ts`            | `cn.ts`                   | Presentation   |
+| API Route     | `{route}.ts`              | `health.ts`               | Presentation   |
+| Dynamic Route | `[{param}].ts`            | `[table].ts`              | Presentation   |
+| Middleware    | `{middleware}.ts`         | `auth.ts`                 | Presentation   |
+| Unit Test     | `{source}.test.ts`        | `name.test.ts`            | Co-located     |
+| E2E Test      | `{feature}.spec.ts`       | `name.spec.ts`            | tests/         |
 
 ### Only Exception (PascalCase)
 
@@ -1025,6 +1043,63 @@ echo "✅ Migration complete. Run: bun run typecheck && bun test"
 ---
 
 ## Enforcement
+
+### ESLint Enforcement
+
+Omnera uses ESLint's `unicorn/filename-case` rule to automatically enforce file naming conventions:
+
+**Configuration** (`eslint.config.ts`):
+
+```json
+{
+  "unicorn/filename-case": [
+    "error",
+    {
+      "case": "kebabCase",
+      "ignore": [
+        // Page components use PascalCase
+        "^src/presentation/components/pages/[A-Z][a-zA-Z]*\\.tsx$"
+      ]
+    }
+  ]
+}
+```
+
+**How it works:**
+
+- **Default**: All files must use kebab-case
+- **Exception**: Files in `src/presentation/components/pages/` can use PascalCase
+- **Automatic detection**: ESLint will error on any file violating these rules
+- **Pre-commit enforcement**: The `bun run lint` command runs before commits
+
+**Example violations:**
+
+```bash
+# ❌ Will fail ESLint
+src/domain/models/app/AppName.ts           # Should be: app-name.ts
+src/application/use-cases/StartServer.ts   # Should be: start-server.ts
+src/presentation/components/ui/Button.tsx  # Should be: button.tsx
+
+# ✅ Will pass ESLint
+src/domain/models/app/name.ts
+src/application/use-cases/start-server.ts
+src/presentation/components/ui/button.tsx
+src/presentation/components/pages/DefaultHomePage.tsx  # PascalCase allowed here
+```
+
+**Running lint checks:**
+
+```bash
+bun run lint              # Check all files
+bun run lint --fix        # Auto-fix violations (renames not automatic)
+```
+
+**Benefits:**
+
+- **Automated enforcement** - No manual review needed
+- **Immediate feedback** - Developers see errors during development
+- **CI validation** - Pull requests automatically checked
+- **Consistent codebase** - Zero naming convention violations
 
 ### TypeScript Path Aliases
 
@@ -1155,12 +1230,14 @@ Omnera's file naming conventions prioritize **simplicity** and **consistency**:
 ### The Two-Style System
 
 **95% kebab-case** (default for everything):
+
 - Domain: schemas, validators, services, errors
 - Application: use cases, ports, services, errors
 - Infrastructure: services, repositories, adapters, layers
 - Presentation: UI components, hooks, utilities, routes, middleware
 
 **5% PascalCase** (page components only):
+
 - Presentation: page-level components (`DefaultHomePage.tsx`, `LoginPage.tsx`)
 
 ### Key Principles
