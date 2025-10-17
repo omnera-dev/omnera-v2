@@ -250,7 +250,7 @@ Bun is the JavaScript runtime and package manager for this project. It replaces 
 |---------|---------|
 | bun install | Install dependencies |
 | bun run src/index.ts | Execute TypeScript directly |
-| bun test | Run tests |
+| CLAUDECODE=1 bun test --concurrent | Run unit tests (optimized for AI development) |
 
 ## Integration
 - Executes TypeScript natively (no tsc/ts-node needed)

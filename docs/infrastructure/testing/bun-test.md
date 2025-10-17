@@ -15,15 +15,17 @@
 
 - **Unit Tests (Bun)**: Place `*.test.ts` or `*.spec.ts` files alongside source code (e.g., `src/utils.test.ts`)
 - **E2E Tests (Playwright)**: Place `*.spec.ts` files in `tests/` directory (e.g., `tests/login.spec.ts`)
+- **Script Tests (Bun)**: Place `*.test.ts` files alongside scripts (e.g., `scripts/export-schema.test.ts`)
 
 ## Test File Naming Convention
 
 **Recommended convention for clarity and consistency**:
 
-| Test Type      | Extension  | Location               | Example                  |
-| -------------- | ---------- | ---------------------- | ------------------------ |
-| **Unit Tests** | `.test.ts` | Co-located with source | `src/calculator.test.ts` |
-| **E2E Tests**  | `.spec.ts` | `tests/` directory     | `tests/login.spec.ts`    |
+| Test Type        | Extension  | Location               | Example                         |
+| ---------------- | ---------- | ---------------------- | ------------------------------- |
+| **Unit Tests**   | `.test.ts` | Co-located with source | `src/calculator.test.ts`        |
+| **Script Tests** | `.test.ts` | Co-located with script | `scripts/export-schema.test.ts` |
+| **E2E Tests**    | `.spec.ts` | `tests/` directory     | `tests/login.spec.ts`           |
 
 **Why this convention**:
 
@@ -65,6 +67,161 @@ bun test --bail
 
 # Timeout
 bun test --timeout 5000  # 5 seconds
+```
+
+## AI-Assisted Development Optimization
+
+### Recommended Command for AI Workflows
+
+```bash
+CLAUDECODE=1 bun test --concurrent
+```
+
+This optimized command combines two powerful features specifically designed for AI-assisted development with Claude Code.
+
+### `--concurrent` Flag
+
+**Purpose**: Run all tests concurrently within their respective files for maximum speed.
+
+**Behavior**:
+
+- Tests within each file execute in parallel
+- Dramatically reduces total test execution time
+- Safe for independent unit tests (no shared state)
+- Maintains test isolation within files
+
+**Example**:
+
+```bash
+# Sequential (default)
+bun test                    # ~5 seconds for 50 tests
+
+# Concurrent
+bun test --concurrent       # ~1.5 seconds for 50 tests
+```
+
+**When to Use**:
+
+- ✅ Unit tests with no shared state
+- ✅ Pure function tests
+- ✅ Script tests in `scripts/` directory
+- ❌ Tests that share mutable global state
+- ❌ Tests that modify the same files/database
+
+### `CLAUDECODE=1` Environment Variable
+
+**Purpose**: Reduce test output verbosity for AI context efficiency while maintaining visibility into failures.
+
+**Behavior**:
+
+- ✅ **Test failures are displayed in detail** (full error messages, stack traces, diffs)
+- ✅ **Summary statistics remain intact** (total tests, passed, failed, duration)
+- ❌ **Passing test indicators are hidden** (no green checkmarks for each passing test)
+- ❌ **Skipped test indicators are hidden** (no yellow indicators for skipped tests)
+- ❌ **Todo test indicators are hidden** (no cyan indicators for todo tests)
+
+**Why This Matters for AI Development**:
+
+1. **Context Efficiency**: AI assistants have limited context windows. Hiding passing test noise preserves context for actual failures.
+2. **Signal-to-Noise Ratio**: Only failures matter during development. Passing tests provide no actionable information.
+3. **Faster Analysis**: Claude Code can immediately focus on failures without parsing hundreds of passing test lines.
+4. **Token Conservation**: Reduced output means more tokens available for code analysis and fixes.
+
+**Output Comparison**:
+
+```bash
+# WITHOUT CLAUDECODE=1 (verbose)
+✓ calculator.add should add two numbers
+✓ calculator.add should handle negative numbers
+✓ calculator.add should handle zero
+✓ calculator.subtract should subtract numbers
+✗ calculator.divide should throw on division by zero
+  Expected error to be thrown
+
+  at divide (calculator.ts:15:10)
+  at Object.<anonymous> (calculator.test.ts:28:12)
+
+✓ calculator.divide should divide numbers
+✓ calculator.multiply should multiply numbers
+~ calculator.power is not implemented yet (skipped)
+⏭ calculator.sqrt (todo)
+
+Tests: 6 passed, 1 failed, 1 skipped, 1 todo, 9 total
+Time: 145ms
+```
+
+```bash
+# WITH CLAUDECODE=1 (focused)
+✗ calculator.divide should throw on division by zero
+  Expected error to be thrown
+
+  at divide (calculator.ts:15:10)
+  at Object.<anonymous> (calculator.test.ts:28:12)
+
+Tests: 6 passed, 1 failed, 1 skipped, 1 todo, 9 total
+Time: 145ms
+```
+
+**Notice**: Only the failure is shown, but the summary still reports all test counts. This gives Claude Code exactly what it needs: the failure to fix and confirmation that other tests passed.
+
+### Combined Usage
+
+**Recommended for all AI-assisted development**:
+
+```bash
+# Run tests with maximum speed and minimal noise
+CLAUDECODE=1 bun test --concurrent
+
+# Run specific file with optimization
+CLAUDECODE=1 bun test --concurrent ./src/calculator.test.ts
+
+# Watch mode with optimization (continuous TDD)
+CLAUDECODE=1 bun test --concurrent --watch
+```
+
+### Integration with package.json Scripts
+
+Update your `package.json` to use this optimized command:
+
+```json
+{
+  "scripts": {
+    "test": "CLAUDECODE=1 bun test --concurrent",
+    "test:watch": "CLAUDECODE=1 bun test --concurrent --watch",
+    "test:coverage": "CLAUDECODE=1 bun test --concurrent --coverage"
+  }
+}
+```
+
+**Note**: The environment variable syntax shown above is for Unix-like systems (macOS, Linux). For cross-platform compatibility, you can use `cross-env`:
+
+```json
+{
+  "scripts": {
+    "test": "cross-env CLAUDECODE=1 bun test --concurrent"
+  }
+}
+```
+
+However, since Omnera uses Bun as the runtime and targets Unix-like development environments, the direct environment variable syntax is preferred for simplicity.
+
+### When NOT to Use CLAUDECODE=1
+
+Avoid `CLAUDECODE=1` when:
+
+- **Debugging passing tests**: You need to see all test output to verify test behavior
+- **CI/CD pipelines**: Full output provides better visibility in logs (though it's still safe to use)
+- **Test development**: Writing new tests and want to see all output
+- **Human-only review**: Developers may prefer seeing all passing tests
+
+For these scenarios, use standard commands:
+
+```bash
+# Standard output (all tests visible)
+bun test --concurrent
+
+# CI/CD (full verbosity)
+bun test --concurrent --verbose
 ```
 
 ## Test Structure
@@ -226,6 +383,158 @@ describe('Calculator', () => {
     test('should throw error when dividing by zero', () => {
       expect(() => divide(10, 0)).toThrow('Division by zero')
     })
+  })
+})
+```
+
+## Testing Scripts in `scripts/` Directory
+
+The `scripts/` directory contains TypeScript utility scripts executed by Bun (e.g., build tools, code generators, data exporters). These scripts should have colocated unit tests to ensure reliability.
+
+### Script Structure
+
+```
+scripts/
+├── export-schema.ts       # Script implementation
+├── export-schema.test.ts  # Unit tests for the script
+├── format-session.sh      # Shell script (no tests needed)
+└── split-docs.ts          # Another TypeScript script
+```
+
+### Script Testing Guidelines
+
+1. **Colocate tests**: Place `*.test.ts` files alongside scripts (e.g., `scripts/my-script.test.ts`)
+2. **Test pure functions**: Extract testable logic into pure functions
+3. **Mock file system**: Use Bun's built-in mocking for `fs` operations
+4. **Test edge cases**: Validate error handling, missing files, invalid inputs
+5. **Executable scripts**: Scripts should have shebang `#!/usr/bin/env bun` and be executable
+
+### Script Test Example
+
+```typescript
+// scripts/string-utils.ts
+export function sanitizeFilename(name: string): string {
+  return name.replace(/[^a-z0-9-_]/gi, '-').toLowerCase()
+}
+
+export function getVersion(pkg: { version: string }): string {
+  if (!pkg.version) {
+    throw new Error('Package version is required')
+  }
+  return pkg.version
+}
+```
+
+```typescript
+// scripts/string-utils.test.ts
+import { test, expect, describe } from 'bun:test'
+import { sanitizeFilename, getVersion } from './string-utils.ts'
+
+describe('string-utils', () => {
+  describe('sanitizeFilename', () => {
+    test('should sanitize filename with special characters', () => {
+      expect(sanitizeFilename('My File!@#$%^&*().txt')).toBe('my-file--------.txt')
+    })
+
+    test('should preserve hyphens and underscores', () => {
+      expect(sanitizeFilename('my-awesome_file.txt')).toBe('my-awesome_file.txt')
+    })
+
+    test('should handle empty strings', () => {
+      expect(sanitizeFilename('')).toBe('')
+    })
+  })
+
+  describe('getVersion', () => {
+    test('should return version from package object', () => {
+      expect(getVersion({ version: '1.0.0' })).toBe('1.0.0')
+    })
+
+    test('should throw error when version is missing', () => {
+      expect(() => getVersion({ version: '' })).toThrow('Package version is required')
+    })
+  })
+})
+```
+
+### Running Script Tests
+
+```bash
+# Run all tests including scripts
+bun test
+
+# Run only script tests
+bun test ./scripts/
+
+# Run specific script test
+bun test ./scripts/export-schema.test.ts
+
+# Watch mode for script development
+bun test --watch ./scripts/
+```
+
+### Mocking File System Operations
+
+```typescript
+import { test, expect, mock } from 'bun:test'
+import { writeFile, mkdir } from 'fs/promises'
+
+test('should create directory and write file', async () => {
+  // Mock filesystem operations
+  const mockMkdir = mock(mkdir)
+  const mockWriteFile = mock(writeFile)
+
+  mockMkdir.mockResolvedValue(undefined)
+  mockWriteFile.mockResolvedValue(undefined)
+
+  // Test your script logic
+  await mockMkdir('/output')
+  await mockWriteFile('/output/file.txt', 'content')
+
+  expect(mockMkdir).toHaveBeenCalledWith('/output', { recursive: true })
+  expect(mockWriteFile).toHaveBeenCalledWith('/output/file.txt', 'content')
+})
+```
+
+### Best Practices for Script Testing
+
+1. **Extract logic from main execution**: Separate testable functions from script entry point
+2. **Test helpers separately**: Unit test utility functions independent of main script
+3. **Mock external dependencies**: Use mocks for file system, network, external APIs
+4. **Test error paths**: Verify error handling for missing files, invalid data, etc.
+5. **Keep tests fast**: Scripts tests should run in milliseconds like other unit tests
+
+### Example: Testing a Build Script
+
+```typescript
+// scripts/build-helpers.ts
+export function calculateBuildHash(files: string[]): string {
+  return files.sort().join('|')
+}
+
+export function validateBuildConfig(config: any): void {
+  if (!config.outDir) {
+    throw new Error('outDir is required in build config')
+  }
+}
+```
+
+```typescript
+// scripts/build-helpers.test.ts
+import { test, expect, describe } from 'bun:test'
+import { calculateBuildHash, validateBuildConfig } from './build-helpers.ts'
+
+describe('build-helpers', () => {
+  test('calculateBuildHash should sort files and create hash', () => {
+    expect(calculateBuildHash(['c.ts', 'a.ts', 'b.ts'])).toBe('a.ts|b.ts|c.ts')
+  })
+
+  test('validateBuildConfig should throw on missing outDir', () => {
+    expect(() => validateBuildConfig({})).toThrow('outDir is required')
+  })
+
+  test('validateBuildConfig should pass with valid config', () => {
+    expect(() => validateBuildConfig({ outDir: './dist' })).not.toThrow()
   })
 })
 ```

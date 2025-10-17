@@ -116,7 +116,7 @@ Schema Implementation:
 - [ ] Validation rules implemented with clear error messages
 - [ ] Type exported: `export type {Property}`
 - [ ] Tests in src/domain/models/app/{property}.test.ts
-- [ ] All tests pass: `bun test src/domain/models/app/{property}.test.ts`
+- [ ] All tests pass: `CLAUDECODE=1 bun test --concurrent src/domain/models/app/{property}.test.ts`
 
 E2E Tests:
 - [ ] Spec tests in tests/app/{property}.spec.ts
@@ -632,7 +632,7 @@ test.describe('AppSchema - {PropertyName}', () => {
 - [ ] Exported type: `export type {Property}`
 - [ ] Created `src/domain/models/app/{property}.test.ts`
 - [ ] Tests cover: valid values, invalid values, edge cases
-- [ ] All tests pass: `bun test src/domain/models/app/{property}.test.ts`
+- [ ] All tests pass: `CLAUDECODE=1 bun test --concurrent src/domain/models/app/{property}.test.ts`
 
 **E2E Tests** (e2e-red-test-writer agent):
 - [ ] Created `tests/app/{property}.spec.ts`
