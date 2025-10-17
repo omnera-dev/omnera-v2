@@ -2,7 +2,7 @@
 
 > **Purpose**: Comprehensive naming standards for files, code elements, and patterns across the Omnera project.
 >
-> **Status**: ⚠️ Active - File naming enforced via `eslint-plugin-check-file`, code naming enforced via code review
+> **Status**: ✅ Active - File naming AND code naming enforced via ESLint
 >
 > **Last Updated**: 2025-10-17
 
@@ -85,6 +85,8 @@ This decoupling allows optimal naming for each context.
 ### Variables
 
 **Pattern**: camelCase
+**Enforcement**: ✅ Automatic via `@typescript-eslint/naming-convention`
+**Allowed Formats**: `camelCase`, `UPPER_CASE`, `PascalCase` (Effect Schema constants)
 
 **Purpose**: Store values, references, and state
 
@@ -122,6 +124,8 @@ const SELECTED_INDEX = 0 // Don't use SCREAMING_SNAKE (not a constant)
 ### Functions
 
 **Pattern**: camelCase, verb-first
+**Enforcement**: ✅ Automatic via `@typescript-eslint/naming-convention`
+**Allowed Formats**: `camelCase` (or `PascalCase` for React components)
 
 **Purpose**: Perform actions and transformations
 
@@ -170,6 +174,7 @@ function get() {} // Too generic
 ### Classes
 
 **Pattern**: PascalCase, noun
+**Enforcement**: ✅ Automatic via `@typescript-eslint/naming-convention`
 
 **Purpose**: Object-oriented blueprints and error types
 
@@ -212,6 +217,7 @@ class GetUser {} // Don't use verbs (classes are nouns)
 ### Types & Interfaces
 
 **Pattern**: PascalCase
+**Enforcement**: ✅ Automatic via `@typescript-eslint/naming-convention`
 
 **Purpose**: Type definitions and contracts
 
@@ -275,6 +281,7 @@ interface ButtonProps {
 ### Constants
 
 **Pattern**: SCREAMING_SNAKE_CASE for primitives, camelCase for objects
+**Enforcement**: ✅ Automatic via `@typescript-eslint/naming-convention` (format only, not semantic "constant" check)
 
 **Purpose**: Immutable configuration values
 
@@ -344,6 +351,7 @@ const colorPalette = ['red', 'blue', 'green'] as const
 ### Effect Schemas
 
 **Pattern**: PascalCase + "Schema" suffix
+**Enforcement**: ⚠️ Format enforced (PascalCase), suffix NOT enforced
 
 **Purpose**: Effect Schema validation definitions
 
@@ -384,6 +392,7 @@ export const USER_SCHEMA = Schema.Struct({}) // Don't use SCREAMING_SNAKE
 ### React Components & Hooks
 
 **Components Pattern**: PascalCase, noun
+**Enforcement**: ✅ Automatic via `@typescript-eslint/naming-convention`
 
 ```typescript
 // ✅ CORRECT - React components (PascalCase)
@@ -406,6 +415,7 @@ export function ButtonComponent() {}  // Don't add "Component" suffix
 ```
 
 **Hooks Pattern**: camelCase, "use" prefix
+**Enforcement**: ⚠️ Format enforced (camelCase), "use" prefix NOT enforced
 
 ```typescript
 // ✅ CORRECT - React hooks (use + camelCase)
@@ -438,6 +448,7 @@ export function UseMobile() {} // Don't use PascalCase for hooks
 ### CVA Variants
 
 **Pattern**: camelCase + "Variants" suffix
+**Enforcement**: ⚠️ Format enforced (camelCase), "Variants" suffix NOT enforced
 
 **Purpose**: Class Variance Authority variant definitions
 
@@ -629,93 +640,118 @@ const UrlParser = {}
 
 ### Current Status
 
-⚠️ **Code naming conventions (variables, functions, classes, types) are NOT automatically enforced by ESLint.**
+✅ **Code naming conventions ARE automatically enforced via `@typescript-eslint/naming-convention`**
 
-Enforcement currently relies on:
+**Automated Enforcement Coverage**:
 
-- **Team discipline and code review** - Manual validation during PR reviews
-- **TypeScript's type system** - Catches some naming errors (e.g., mismatched exports)
-- **IDE warnings and autocomplete** - Provides hints for correct naming patterns
-- **Project conventions** - This document serves as the single source of truth
+- ✅ **Variables**: camelCase, UPPER_CASE, or PascalCase (for Effect Schema constants)
+- ✅ **Functions**: camelCase (PascalCase allowed for React components)
+- ✅ **Classes/Types/Interfaces**: PascalCase
+- ✅ **Exported functions**: Both PascalCase and camelCase allowed (React component pattern)
+- ✅ **Object properties**: Flexible format (allows external APIs, CSS properties, HTTP headers)
+- ✅ **File naming**: Enforced via `eslint-plugin-check-file` (see `@docs/architecture/file-naming-conventions.md`)
 
-**File naming conventions ARE automatically enforced** - See `@docs/architecture/file-naming-conventions.md#enforcement` for details on `eslint-plugin-check-file` enforcement.
+**Not Automatically Enforced** (Manual review required):
 
-### Rationale for Manual Code Naming Enforcement
+- ⚠️ **Boolean prefixes** - `is/has/should/can/will` pattern (requires type-aware ESLint)
+- ⚠️ **Action verb prefixes** - `get/set/create` pattern (semantic validation difficult)
+- ⚠️ **Schema suffix pattern** - `Schema` suffix for Effect Schemas (variable naming, not checked)
+- ⚠️ **Hook function naming** - File naming enforced (`use-*.ts`), function names flexible
 
-We prioritize **file naming enforcement** over code naming because:
+### Actual ESLint Configuration
 
-1. **File names impact architecture** - Incorrect file names break imports and layer boundaries
-2. **Code names are self-correcting** - TypeScript errors surface mismatched names quickly
-3. **Reduced linter noise** - Too many naming rules create alert fatigue
-4. **Team consensus** - Clear documentation + code review catches violations effectively
+**Location**: `eslint.config.ts` lines 146-178
 
-### Future Enhancement: Automated Code Naming
-
-We may add `@typescript-eslint/naming-convention` rules in the future to automatically enforce code naming patterns. Proposed configuration:
+**Base Rules** (applies to all TypeScript files except exceptions):
 
 ```typescript
-// FUTURE: Proposed @typescript-eslint/naming-convention rules
-import tseslint from 'typescript-eslint'
-
-export default tseslint.config({
-  rules: {
-    '@typescript-eslint/naming-convention': [
-      'error',
-      // Variables: camelCase or SCREAMING_SNAKE_CASE
-      {
-        selector: 'variable',
-        format: ['camelCase', 'UPPER_CASE'],
-        leadingUnderscore: 'allow', // Allow _private
-      },
-      // Functions: camelCase
-      {
-        selector: 'function',
-        format: ['camelCase'],
-      },
-      // Classes, Interfaces, Types, Enums: PascalCase
-      {
-        selector: 'typeLike',
-        format: ['PascalCase'],
-      },
-      // Boolean variables: require is/has/should/can/will prefix
-      {
-        selector: 'variable',
-        types: ['boolean'],
-        format: ['camelCase'],
-        prefix: ['is', 'has', 'should', 'can', 'will', 'do'],
-      },
-      // React components: PascalCase (exported functions returning JSX)
-      {
-        selector: 'function',
-        modifiers: ['exported'],
-        format: ['PascalCase'],
-        // Note: Cannot distinguish JSX-returning functions automatically
-      },
-      // Object properties: camelCase (API responses may vary)
-      {
-        selector: 'property',
-        format: ['camelCase'],
-        leadingUnderscore: 'allow',
-        // Allow quoted properties to support API contracts
-        filter: {
-          regex: '^[A-Z_]+$',
-          match: false,
-        },
-      },
-    ],
+'@typescript-eslint/naming-convention': [
+  'error',
+  // Variables: camelCase, UPPER_CASE, or PascalCase
+  {
+    selector: 'variable',
+    format: ['camelCase', 'UPPER_CASE', 'PascalCase'],
+    leadingUnderscore: 'allow', // Allow _private
   },
-})
+  // Functions: camelCase
+  {
+    selector: 'function',
+    format: ['camelCase'],
+  },
+  // Classes, Interfaces, Types, Enums: PascalCase
+  {
+    selector: 'typeLike',
+    format: ['PascalCase'],
+  },
+  // React components: PascalCase for exported functions
+  {
+    selector: 'function',
+    modifiers: ['exported'],
+    format: ['PascalCase', 'camelCase'],
+  },
+  // Object properties: Allow any format
+  {
+    selector: 'property',
+    format: null, // Flexible for external APIs
+    leadingUnderscore: 'allow',
+  },
+]
 ```
 
-**Trade-offs to consider**:
+**Presentation Layer Override** (`src/presentation/**/*.{ts,tsx}`):
 
-- ✅ Automatic detection of naming violations
-- ✅ Consistent enforcement across team
-- ❌ Increased linter noise and false positives
-- ❌ Difficulty distinguishing React components from regular functions
-- ❌ Requires exceptions for third-party library integration
+```typescript
+// Allow both camelCase and PascalCase for ALL functions (React components)
+{
+  selector: 'function',
+  format: ['camelCase', 'PascalCase'],
+}
+```
 
-**Decision**: Deferred until team consensus on acceptable noise level.
+**Exceptions** (rules disabled):
+
+- ✅ **Test files** (`**/*.test.{ts,tsx}`, `**/*.spec.{ts,tsx}`) - Flexible naming for test utilities
+- ✅ **Scripts** (`scripts/**/*.{ts,js}`) - Flexible naming for build utilities
+- ✅ **Config files** (`*.config.ts`, `**/*.config.ts`) - Excluded from all naming rules
+
+### Why PascalCase Variables Are Allowed
+
+**Reason**: Effect Schema constants use PascalCase naming convention:
+
+```typescript
+// ✅ CORRECT - PascalCase for schemas (convention)
+export const UserSchema = Schema.Struct({...})
+export const AppSchema = Schema.Struct({...})
+
+// ⚠️ ALLOWED - PascalCase variables elsewhere (use sparingly)
+const UserData = { name: 'John' } // Prefer: userData
+```
+
+**Rationale**: Rather than fighting the ecosystem's established pattern, we allow PascalCase globally for variables. Use with intent.
+
+### Why Object Properties Are Flexible
+
+**Reason**: External APIs, CSS properties, and HTTP headers use various naming conventions:
+
+```typescript
+// ✅ CORRECT - Flexible property naming
+const headers = {
+  'Content-Type': 'text/css',
+  'Cache-Control': 'public, max-age=3600',
+}
+
+const styles = {
+  '--color-bg': '#fff',
+  '--color-border': '#ccc',
+}
+
+const classNames = {
+  'h-2.5 w-2.5': 'size-2.5',
+  'w-1': 'w-1',
+}
+```
+
+**Rationale**: Enforcing camelCase would break external integrations. Property naming is flexible to support real-world use cases.
 
 ### Current Enforcement Mechanisms
 
