@@ -22,6 +22,19 @@
     "typescript",
     "framework"
   ],
+  "files": [
+    "src/**/*.ts",
+    "src/**/*.tsx",
+    "src/**/*.css",
+    "!src/**/*.test.ts",
+    "!src/**/*.test.tsx",
+    "!src/**/*.spec.ts",
+    "!src/**/*.spec.tsx",
+    "LICENSE.md",
+    "README.md",
+    "CHANGELOG.md",
+    "tsconfig.json"
+  ],
   "scripts": {
     "start": "bun run src/cli.ts",
     "format": "prettier --write .",
