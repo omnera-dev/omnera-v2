@@ -523,26 +523,6 @@ export default defineConfig([
           pattern: 'src/presentation/components/ui/**/*',
           mode: 'file',
         },
-        {
-          type: 'presentation-component-page',
-          pattern: 'src/presentation/components/pages/**/*',
-          mode: 'file',
-        },
-        {
-          type: 'presentation-component-form',
-          pattern: 'src/presentation/components/forms/**/*',
-          mode: 'file',
-        },
-        {
-          type: 'presentation-component-table',
-          pattern: 'src/presentation/components/tables/**/*',
-          mode: 'file',
-        },
-        {
-          type: 'presentation-component-layout',
-          pattern: 'src/presentation/components/layout/**/*',
-          mode: 'file',
-        },
         { type: 'presentation-util', pattern: 'src/presentation/utils/**/*', mode: 'file' },
       ],
     },
@@ -874,13 +854,7 @@ export default defineConfig([
 
             // React components - Can import domain, use cases, other components
             {
-              from: [
-                'presentation-component-ui',
-                'presentation-component-page',
-                'presentation-component-form',
-                'presentation-component-table',
-                'presentation-component-layout',
-              ],
+              from: ['presentation-component-ui'],
               allow: [
                 'domain-model-app',
                 'domain-model-table',
@@ -897,10 +871,6 @@ export default defineConfig([
                 'application-use-case',
                 'application-error',
                 'presentation-component-ui',
-                'presentation-component-page',
-                'presentation-component-form',
-                'presentation-component-table',
-                'presentation-component-layout',
                 'presentation-util',
               ],
               message:

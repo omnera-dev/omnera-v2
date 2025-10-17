@@ -180,29 +180,11 @@ omnera-v2/
 │       │       ├── cors.ts               # CORS handling
 │       │       └── error.ts              # Error handling middleware
 │       │
-│       ├── components/                   # React Components
-│       │   ├── ui/                       # ✅ EXISTING - shadcn/ui components
-│       │   │   ├── button.tsx
-│       │   │   ├── input.tsx
-│       │   │   ├── card.tsx
-│       │   │   └── ... (all shadcn components)
-│       │   │
-│       │   ├── pages/                    # Page Components (Phase 4) 📋
-│       │   │   ├── HomePage.tsx          # Homepage (✅ EXISTING logic in utils/)
-│       │   │   ├── TablePage.tsx         # Dynamic table view
-│       │   │   └── FormPage.tsx          # Dynamic form view
-│       │   │
-│       │   ├── forms/                    # Form Components (Phase 4) 📋
-│       │   │   ├── DynamicForm.tsx       # Render forms from config
-│       │   │   └── FormField.tsx         # Individual field renderer
-│       │   │
-│       │   ├── tables/                   # Table Components (Phase 4) 📋
-│       │   │   └── DataTable.tsx         # TanStack Table wrapper
-│       │   │
-│       │   └── layout/                   # Layout Components (Phase 4) 📋
-│       │       ├── Header.tsx
-│       │       ├── Sidebar.tsx
-│       │       └── Footer.tsx
+│       ├── components/ui/                # ✅ EXISTING - shadcn/ui components
+│       │   ├── button.tsx
+│       │   ├── input.tsx
+│       │   ├── card.tsx
+│       │   └── ... (all shadcn components)
 │       │
 │       └── utils/                        # Presentation Utilities
 │           ├── cn.ts                     # ✅ EXISTING - className merger

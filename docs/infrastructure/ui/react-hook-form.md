@@ -63,7 +63,7 @@ bun add zod  # ^4.1.12
 ### 1. Define Zod Schema
 
 ```typescript
-// src/presentation/components/forms/LoginForm.tsx
+// src/presentation/components/LoginForm.tsx
 import { z } from 'zod'
 
 const loginSchema = z.object({
