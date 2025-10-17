@@ -1,6 +1,6 @@
 ---
 name: spec-coherence-guardian
-description: Use this agent when:\n\n1. **Schema Changes**: After any modifications to docs/specifications/specs.schema.json (the source of truth)\n   - Example: User updates specs.schema.json with new entity definitions\n   - Assistant: "I'll use the spec-coherence-guardian agent to ensure all documentation reflects these schema changes"\n\n2. **Documentation Updates**: When specifications documents need synchronization\n   - Example: User asks "Can you check if our specs are aligned with the schema?"\n   - Assistant: "Let me launch the spec-coherence-guardian agent to verify coherence across docs/specifications/vision.md, ROADMAP.md, and specs.schema.json"\n\n3. **Roadmap Rebuilds**: When comparing vision/goals against current implementation\n   - Example: User requests "Update the roadmap based on our current schema progress"\n   - Assistant: "I'm using the spec-coherence-guardian agent to analyze schemas/0.0.1/app.schema.json against specs.schema.json vision and rebuild the roadmap"\n\n4. **Specification Iterations**: During product design discussions that affect the schema\n   - Example: User says "We need to add multi-tenancy support to our data model"\n   - Assistant: "I'll engage the spec-coherence-guardian agent to update specs.schema.json and propagate changes to all specification documents"\n\n5. **Proactive Coherence Checks**: After significant codebase changes\n   - Example: User commits major feature work\n   - Assistant: "Now that we've implemented authentication, let me use the spec-coherence-guardian agent to verify our specifications and roadmap reflect this progress"\n\n6. **Gap Analysis**: When identifying discrepancies between vision and reality\n   - Example: User asks "What features are we missing from our original vision?"\n   - Assistant: "I'll launch the spec-coherence-guardian agent to compare specs.schema.json goals with schemas/0.0.1/app.schema.json and identify gaps"
+description: Use this agent when working with product specifications and roadmaps:\n\n1. **Schema Changes** - After modifying docs/specifications/specs.schema.json (MANDATORY workflow)\n2. **Documentation Sync** - Aligning vision.md, ROADMAP.md, and specs.schema.json\n3. **Roadmap Generation** - Comparing current implementation against vision schema\n4. **Specification Iterations** - During product design affecting the schema\n5. **Coherence Validation** - After significant codebase changes\n6. **Gap Analysis** - Identifying discrepancies between vision and implementation\n\n**File Triggers**:\n- Modifying: `docs/specifications/specs.schema.json`\n- Reviewing: `ROADMAP.md`, `docs/specifications/vision.md`\n- Analyzing: `schemas/0.0.1/app.schema.json`, `docs/specifications/roadmap/*.md`\n\n**Command Patterns**:\n- "Validate the schema"\n- "Regenerate the roadmap"\n- "Check spec coherence"\n- "Update roadmap based on schema changes"\n- "Validate user stories with me"\n\n**CRITICAL**: This agent MUST BE USED after ANY specs.schema.json modification to validate schema and regenerate roadmap files with user story validation.
 model: sonnet
 color: cyan
 ---
@@ -100,6 +100,8 @@ git commit -m "feat: update schema and regenerate roadmap"
 ### 3. User Story Validation
 
 **CRITICAL**: Auto-generated user stories in `docs/specifications/roadmap/` property detail files MUST be validated by the user to ensure they are pertinent, useful, and accurately represent desired functionality.
+
+**Why This Section Exists**: Auto-generation creates user stories from JSON Schema definitions, but schemas describe structure, not business intent. User validation ensures stories capture real-world workflows, edge cases, and business requirements that can't be inferred from type definitions alone. Without this validation, generated E2E tests may pass technically but fail to verify actual user needs.
 
 #### Why User Story Validation Matters
 
@@ -429,7 +431,7 @@ You maintain perfect coherence across three primary artifacts:
 - **Structure**: Each phase file contains Effect Schema patterns, test scenarios, validation rules, code templates
 - **Dependencies**: Identify prerequisite features and optimal implementation order
 
-### 4. Agent-Optimized Roadmap Generation
+### 5. Agent-Optimized Roadmap Generation
 
 **Critical Requirement**: The ROADMAP.md must be optimized for the schema-architect and e2e-red-test-writer agents to consume and implement features autonomously.
 
@@ -573,7 +575,7 @@ await expect(page.locator('[data-testid="{property}-value"]')).toHaveText(expect
 \`\`\`
 ```
 
-### 5. Systematic Roadmap Reconstruction Process
+### 6. Systematic Roadmap Reconstruction Process
 
 When rebuilding ROADMAP.md, follow this process:
 
@@ -657,7 +659,7 @@ Before finalizing ROADMAP.md, verify:
 - [ ] Reference validation rules unambiguously
 - [ ] Know exact file paths to create
 
-### 6. Specification Iteration Support
+### 7. Specification Iteration Support
 
 During product design discussions:
 
@@ -687,6 +689,161 @@ During product design discussions:
 - Ensure specs.schema.json, vision.md, and ROADMAP.md are aligned
 - Verify no contradictions exist
 - Check that agent blueprints are complete and actionable (review generated files)
+
+### 8. Troubleshooting Common Issues
+
+When errors occur during the workflow, follow these resolution steps:
+
+#### Schema Validation Fails
+
+**Symptoms**:
+- `validate-schema.ts` reports errors
+- JSON syntax issues
+- Invalid schema structure
+
+**Resolution**:
+1. Review error output from `bun run scripts/validate-schema.ts`
+2. Common issues:
+   - **Missing commas**: Check JSON syntax around reported line
+   - **Invalid types**: Ensure all `type` fields use valid JSON Schema types
+   - **Missing required fields**: Add `title`, `description`, `examples` to all properties
+   - **Incorrect references**: Verify `$ref` paths point to existing definitions
+3. Fix structural issues in `docs/specifications/specs.schema.json`
+4. Re-run validation: `bun run scripts/validate-schema.ts`
+5. **DO NOT proceed** to roadmap generation until validation is clean
+
+**Example Error**:
+```
+❌ Schema validation failed:
+   Line 42: Unexpected token, expected ","
+```
+**Fix**: Add missing comma in specs.schema.json at line 42
+
+#### Roadmap Generation Fails
+
+**Symptoms**:
+- `generate-roadmap.ts` crashes or errors
+- Missing output files
+- Partial generation
+
+**Resolution**:
+1. Verify required files exist:
+   ```bash
+   ls -la docs/specifications/specs.schema.json
+   ls -la schemas/0.0.1/app.schema.json
+   ```
+2. Check for syntax errors in schema files:
+   ```bash
+   bun run scripts/validate-schema.ts
+   ```
+3. Review script error output for specific issues
+4. Common problems:
+   - **Missing schema files**: Ensure both schemas exist
+   - **Invalid JSON**: Run validation first
+   - **Permission issues**: Check write permissions on `docs/specifications/roadmap/`
+5. Fix issues and re-run: `bun run scripts/generate-roadmap.ts`
+
+#### User Unavailable for Story Validation
+
+**Symptoms**:
+- Roadmap generated but user can't validate immediately
+- User is offline or unavailable
+- Need to commit partial work
+
+**Resolution**:
+1. Mark stories as **PENDING USER VALIDATION** in property detail files:
+   ```markdown
+   **User Story Validation Status**: ⏳ PENDING USER VALIDATION
+   **Generated**: {date}
+   **Validation Notes**: Auto-generated, awaiting user review
+   ```
+2. Commit with explicit note:
+   ```bash
+   git add docs/specifications/roadmap/
+   git commit -m "feat(roadmap): add property detail files (stories pending validation)
+
+   User stories auto-generated and require validation before implementation.
+   - Generated from specs.schema.json
+   - Review and validate user stories before using for E2E test writing"
+   ```
+3. Create follow-up task to validate stories with user
+4. **DO NOT mark as validated** until user confirms
+5. **DO NOT begin implementation** until stories are validated
+
+#### Merge Conflicts in Roadmap Files
+
+**Symptoms**:
+- Git merge conflicts in `ROADMAP.md` or property detail files
+- Multiple team members editing simultaneously
+
+**Resolution**:
+1. **Always regenerate, never manually merge**:
+   ```bash
+   # Discard conflicted files
+   git checkout --theirs docs/specifications/roadmap/
+
+   # Regenerate from schema
+   bun run scripts/validate-schema.ts
+   bun run scripts/generate-roadmap.ts
+
+   # Review and re-validate user stories
+   ```
+2. If validated user stories exist, preserve them:
+   - Extract validated stories from backup
+   - Regenerate roadmap from schema
+   - Manually merge validated stories back into regenerated file
+   - Preserve validation markers
+3. Never manually edit generated files to resolve conflicts
+
+#### Script Not Found Errors
+
+**Symptoms**:
+- `bun: command not found`
+- `scripts/validate-schema.ts: No such file or directory`
+
+**Resolution**:
+1. Verify Bun is installed:
+   ```bash
+   bun --version
+   ```
+   If not installed, see `@docs/infrastructure/runtime/bun.md`
+
+2. Verify script files exist:
+   ```bash
+   ls -la scripts/validate-schema.ts
+   ls -la scripts/generate-roadmap.ts
+   ```
+
+3. Run from project root directory:
+   ```bash
+   pwd  # Should show: /Users/.../omnera-v2
+   ```
+
+4. Use correct command syntax:
+   ```bash
+   # ✅ CORRECT
+   bun run scripts/validate-schema.ts
+
+   # ❌ WRONG
+   node scripts/validate-schema.ts
+   npm run scripts/validate-schema.ts
+   ```
+
+#### Generated Stories Don't Match User Intent
+
+**Symptoms**:
+- User stories are technically correct but miss business context
+- Stories test structure but not real workflows
+- Edge cases not covered
+
+**Resolution**:
+This is **expected and normal**. Follow user story validation process (Section 3):
+1. Present generated stories to user
+2. Ask validation questions
+3. Refine based on user feedback
+4. Mark as user-validated
+
+Never assume generated stories are production-ready without validation.
 
 ## Operational Guidelines
 
