@@ -25,13 +25,14 @@
 | **Bun** | 1.3.0 | Runtime & package manager |
 | **TypeScript** | ^5 | Type-safe language |
 | **Effect** | 3.18.4 | Functional programming, DI, error handling |
-| **Hono** | 4.9.12 | Web framework (API routes) |
+| **Hono** | 4.10.0 | Web framework (API routes) |
+| **Zod** | 4.1.12 | Client-side validation (React Hook Form) |
 | **Better Auth** | 1.3.27 | Authentication |
 | **Drizzle ORM** | ^0.44.6 | Database (PostgreSQL via bun:sql) |
 | **React** | 19.2.0 | UI library |
 | **Tailwind CSS** | 4.1.14 | Styling |
 | **shadcn/ui** | N/A | Component collection (copy-paste, not npm) |
-| **TanStack Query** | 5.90.3 | Server state management |
+| **TanStack Query** | 5.90.5 | Server state management |
 | **TanStack Table** | ^8.21.3 | Data tables |
 
 ## Essential Commands
@@ -43,15 +44,23 @@ bun run src/index.ts        # Run application
 
 # Scripts (TypeScript utilities)
 bun run scripts/export-schema.ts  # Run a specific script
-bun test:unit                     # Test all unit tests (src/ and scripts/)
+bun run export:schema              # Export schema to JSON file
+bun test:unit                      # Test all unit tests (src/ and scripts/)
 
 # Code Quality (pre-commit)
 bun run lint                # ESLint
 bun run format              # Prettier
 bun run typecheck           # TypeScript
 bun test:unit               # Unit tests (Bun Test - src/ and scripts/)
-bun test:e2e                # E2E tests (Playwright)
-bun test:all                # All tests
+bun test:unit:watch         # Unit tests in watch mode
+bun test:e2e                # E2E tests (Playwright - all)
+bun test:e2e:spec           # E2E spec tests (@spec tag)
+bun test:e2e:critical       # E2E critical tests (@critical tag)
+bun test:e2e:regression     # E2E regression tests (@regression tag)
+bun test:e2e:dev            # E2E dev subset (@spec + @critical)
+bun test:e2e:ci             # E2E CI subset (@regression + @critical)
+bun test:e2e:ui             # E2E tests with Playwright UI
+bun test:all                # All tests (unit + E2E)
 
 # Release (manual via GitHub Actions)
 git commit -m "release: publish"   # Explicit release commit

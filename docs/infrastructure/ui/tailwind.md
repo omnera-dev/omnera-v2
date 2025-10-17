@@ -4,7 +4,7 @@
 
 **Version**: 4.1.14
 **PostCSS Integration**: @tailwindcss/postcss 4.1.14
-**PostCSS Version**: 8.5.6
+**PostCSS Version**: ^8.5.6 (flexible range, minimum 8.5.6)
 **Prettier Plugin**: prettier-plugin-tailwindcss 0.7.0
 **Purpose**: Modern utility-first CSS framework for rapidly building custom user interfaces with exceptional performance
 

@@ -2,7 +2,8 @@
 
 ## Overview
 
-**Version**: 5.90.3
+**Version**: 5.90.5
+**DevTools Version**: 5.90.2
 **Purpose**: Powerful data fetching and server-state management library for React applications. Handles caching, background updates, request deduplication, and synchronization with minimal boilerplate.
 
 > **Note**: This document provides a high-level summary with essential patterns. For comprehensive coverage including all hooks, advanced patterns, query cancellation strategies, and detailed performance optimizations, see the full documentation in the TanStack Query reference.
@@ -55,7 +56,8 @@ TanStack Query is already installed in Omnera:
 ```json
 {
   "dependencies": {
-    "@tanstack/react-query": "^5.90.3"
+    "@tanstack/react-query": "^5.90.5",
+    "@tanstack/react-query-devtools": "^5.90.2"
   }
 }
 ```
