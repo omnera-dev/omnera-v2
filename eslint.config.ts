@@ -105,6 +105,7 @@ export default defineConfig([
   // TypeScript and Functional Programming rules
   {
     files: ['**/*.{ts,tsx,mts,cts}'],
+    ignores: ['*.config.ts', '**/*.config.ts'], // Exclude config files from naming rules
     rules: {
       // Functional Programming - Prefer const
       'prefer-const': 'error',
@@ -139,6 +140,40 @@ export default defineConfig([
           prefer: 'type-imports',
           disallowTypeAnnotations: true,
           fixStyle: 'separate-type-imports',
+        },
+      ],
+
+      // Code Naming Conventions - Enforce consistent naming patterns
+      '@typescript-eslint/naming-convention': [
+        'error',
+        // Variables: camelCase or SCREAMING_SNAKE_CASE or PascalCase (for Effect constants)
+        {
+          selector: 'variable',
+          format: ['camelCase', 'UPPER_CASE', 'PascalCase'],
+          leadingUnderscore: 'allow', // Allow _private
+        },
+        // Functions: camelCase
+        {
+          selector: 'function',
+          format: ['camelCase'],
+        },
+        // Classes, Interfaces, Types, Enums: PascalCase
+        {
+          selector: 'typeLike',
+          format: ['PascalCase'],
+        },
+        // React components: PascalCase for exported functions
+        // Note: Can't distinguish JSX-returning functions, so allow both
+        {
+          selector: 'function',
+          modifiers: ['exported'],
+          format: ['PascalCase', 'camelCase'],
+        },
+        // Object properties: Allow any format for external APIs, CSS, HTTP headers
+        {
+          selector: 'property',
+          format: null,
+          leadingUnderscore: 'allow',
         },
       ],
 
@@ -269,6 +304,7 @@ export default defineConfig([
   // Cherry-picked rules that complement existing FP/architecture enforcement
   {
     files: ['**/*.{ts,tsx,mts,cts,js,jsx}'],
+    ignores: ['*.config.ts', '**/*.config.ts'], // Exclude config files
     plugins: {
       unicorn,
     },
@@ -1063,6 +1099,33 @@ export default defineConfig([
   {
     files: ['src/presentation/**/*.{ts,tsx}'],
     rules: {
+      // React components: Allow PascalCase for all functions (internal or exported)
+      '@typescript-eslint/naming-convention': [
+        'error',
+        // Variables: camelCase, UPPER_CASE, or PascalCase
+        {
+          selector: 'variable',
+          format: ['camelCase', 'UPPER_CASE', 'PascalCase'],
+          leadingUnderscore: 'allow',
+        },
+        // Functions: Allow both camelCase and PascalCase (for React components)
+        {
+          selector: 'function',
+          format: ['camelCase', 'PascalCase'],
+        },
+        // Classes, Interfaces, Types, Enums: PascalCase
+        {
+          selector: 'typeLike',
+          format: ['PascalCase'],
+        },
+        // Object properties: Allow any format
+        {
+          selector: 'property',
+          format: null,
+          leadingUnderscore: 'allow',
+        },
+      ],
+
       // UI components need side effects for DOM manipulation
       'functional/no-expression-statements': [
         'warn',
@@ -1141,6 +1204,7 @@ export default defineConfig([
     files: ['**/*.test.{ts,tsx}', '**/*.spec.{ts,tsx}', 'tests/**/*.{ts,tsx}'],
     rules: {
       '@typescript-eslint/no-explicit-any': 'off', // Allow 'any' in tests for testing invalid inputs
+      '@typescript-eslint/naming-convention': 'off', // Allow flexible naming in tests
       'no-restricted-syntax': 'off', // Allow mutations in tests for setup/mocking
       'no-param-reassign': 'off', // Allow parameter reassignment in test setup
       'functional/no-expression-statements': 'off', // Allow test assertions and setup
@@ -1196,6 +1260,7 @@ export default defineConfig([
   {
     files: ['scripts/**/*.{js,mjs,cjs,ts}', 'example.ts'],
     rules: {
+      '@typescript-eslint/naming-convention': 'off', // Allow flexible naming in scripts
       'no-restricted-syntax': 'off', // Allow mutations in scripts
       'no-param-reassign': 'off', // Allow parameter reassignment in scripts
       'functional/no-expression-statements': 'off', // Scripts need side effects

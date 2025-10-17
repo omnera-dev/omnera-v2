@@ -2,7 +2,7 @@
 
 > **Purpose**: Establish consistent, predictable file naming patterns across all layers of the Omnera architecture.
 >
-> **Status**: ✅ Active - Enforced via ESLint boundaries plugin
+> **Status**: ✅ Active - Enforced via `eslint-plugin-check-file`
 >
 > **Last Updated**: 2025-10-17
 
@@ -1044,62 +1044,209 @@ echo "✅ Migration complete. Run: bun run typecheck && bun test"
 
 ## Enforcement
 
-### ESLint Enforcement
+### ESLint Enforcement (eslint-plugin-check-file)
 
-Omnera uses ESLint's `unicorn/filename-case` rule to automatically enforce file naming conventions:
+Omnera uses `eslint-plugin-check-file` to automatically enforce file and folder naming conventions with pattern-specific rules.
 
-**Configuration** (`eslint.config.ts`):
+**Configuration** (`eslint.config.ts` lines 329-387):
 
-```json
+```typescript
+// ==========================================
+// STEP 1: Page Components (PascalCase exception)
+// This rule MUST come BEFORE the general kebab-case rule
+// ==========================================
 {
-  "unicorn/filename-case": [
-    "error",
-    {
-      "case": "kebabCase",
-      "ignore": [
-        // Page components use PascalCase
-        "^src/presentation/components/pages/[A-Z][a-zA-Z]*\\.tsx$"
-      ]
-    }
-  ]
+  files: ['src/presentation/components/pages/**/*.{ts,tsx}'],
+  plugins: { 'check-file': checkFilePlugin },
+  rules: {
+    'check-file/filename-naming-convention': [
+      'error',
+      { '**/*.{ts,tsx}': 'PASCAL_CASE' },
+      { ignoreMiddleExtensions: true }
+    ]
+  }
+}
+
+// ==========================================
+// STEP 2: All other files (kebab-case with pattern specificity)
+// ==========================================
+{
+  files: ['src/**/*.{ts,tsx,js,jsx}'],
+  ignores: ['src/presentation/components/pages/**/*.{ts,tsx}'], // Already handled above
+  plugins: { 'check-file': checkFilePlugin },
+  rules: {
+    // File naming - Specific patterns checked BEFORE default
+    'check-file/filename-naming-convention': [
+      'error',
+      {
+        // SPECIFIC PATTERNS (checked first, in order)
+        'src/**/errors/*-error.ts': '*-error',                              // Error classes
+        'src/infrastructure/database/repositories/*.ts': '*-repository',    // Repositories
+        'src/infrastructure/layers/*.ts': '*-layer',                        // Effect Layers
+        'src/presentation/components/ui/*-variants.ts': '*-variants',       // CVA variants
+        'src/presentation/hooks/*.{ts,tsx}': 'use-*',                       // React hooks (standalone)
+        'src/presentation/components/ui/*-hook.ts': '*-hook',               // React hooks (component-specific)
+
+        // DEFAULT (must be last)
+        '**/*.{ts,tsx,js,jsx}': 'KEBAB_CASE'
+      },
+      { ignoreMiddleExtensions: true }
+    ],
+
+    // Folder naming - kebab-case for src/ directories
+    'check-file/folder-naming-convention': [
+      'error',
+      { 'src/**/': 'KEBAB_CASE' }
+    ]
+  }
 }
 ```
 
 **How it works:**
 
-- **Default**: All files must use kebab-case
-- **Exception**: Files in `src/presentation/components/pages/` can use PascalCase
-- **Automatic detection**: ESLint will error on any file violating these rules
-- **Pre-commit enforcement**: The `bun run lint` command runs before commits
+1. **Two-Stage Processing**:
+   - First, page components are checked for PascalCase
+   - Then, all other files are checked with pattern-specific rules
 
-**Example violations:**
+2. **Pattern Precedence** (specific → default):
+   - Checks specific patterns first (errors, repositories, layers, variants, hooks)
+   - Falls back to default kebab-case for files not matching specific patterns
+   - Order matters: Specific patterns must come BEFORE the catch-all `KEBAB_CASE`
 
-```bash
-# ❌ Will fail ESLint
-src/domain/models/app/AppName.ts           # Should be: app-name.ts
-src/application/use-cases/StartServer.ts   # Should be: start-server.ts
-src/presentation/components/ui/Button.tsx  # Should be: button.tsx
+3. **Middle Extension Handling**:
+   - `ignoreMiddleExtensions: true` means `.test`, `.spec`, `.config` are ignored
+   - Example: `name.test.ts` validates only "name" (ignores ".test")
+   - Example: `compiler.test.ts` validates only "compiler" (ignores ".test")
 
-# ✅ Will pass ESLint
-src/domain/models/app/name.ts
-src/application/use-cases/start-server.ts
-src/presentation/components/ui/button.tsx
-src/presentation/components/pages/DefaultHomePage.tsx  # PascalCase allowed here
-```
+4. **Automatic Detection**:
+   - ESLint errors on any file violating these rules
+   - Runs during development (IDE integration) and CI/CD (pre-commit/GitHub Actions)
 
-**Running lint checks:**
+**Example Violations and Fixes:**
 
 ```bash
-bun run lint              # Check all files
-bun run lint --fix        # Auto-fix violations (renames not automatic)
+# ❌ VIOLATIONS (ESLint will error)
+src/domain/models/app/AppName.ts
+  → Fix: Rename to app-name.ts (default kebab-case)
+
+src/application/use-cases/StartServer.ts
+  → Fix: Rename to start-server.ts (default kebab-case)
+
+src/presentation/components/ui/Button.tsx
+  → Fix: Rename to button.tsx (default kebab-case)
+
+src/domain/errors/InvalidConfig.ts
+  → Fix: Rename to invalid-config-error.ts (requires *-error suffix)
+
+src/infrastructure/database/repositories/User.ts
+  → Fix: Rename to user-repository.ts (requires *-repository suffix)
+
+src/infrastructure/layers/App.ts
+  → Fix: Rename to app-layer.ts (requires *-layer suffix)
+
+src/presentation/components/ui/button-styles.ts
+  → Fix: Rename to button-variants.ts (variants require *-variants suffix)
+
+src/presentation/hooks/mobile.ts
+  → Fix: Rename to use-mobile.ts (hooks require use-* prefix)
+
+# ✅ CORRECT (ESLint will pass)
+src/domain/models/app/name.ts                           # kebab-case ✓
+src/application/use-cases/start-server.ts               # kebab-case ✓
+src/presentation/components/ui/button.tsx               # kebab-case ✓
+src/domain/errors/invalid-config-error.ts               # *-error pattern ✓
+src/infrastructure/database/repositories/user-repository.ts  # *-repository pattern ✓
+src/infrastructure/layers/app-layer.ts                  # *-layer pattern ✓
+src/presentation/components/ui/button-variants.ts       # *-variants pattern ✓
+src/presentation/hooks/use-mobile.ts                    # use-* pattern ✓
+src/presentation/components/ui/sidebar-hook.ts          # *-hook pattern ✓
+src/presentation/components/pages/DefaultHomePage.tsx   # PascalCase exception ✓
 ```
+
+**Running Lint Checks:**
+
+```bash
+bun run lint              # Check all files for violations
+bun run lint --fix        # Auto-fix some violations (cannot rename files automatically)
+```
+
+**Note**: ESLint cannot automatically rename files. Developers must use `git mv` to rename files manually.
 
 **Benefits:**
 
-- **Automated enforcement** - No manual review needed
-- **Immediate feedback** - Developers see errors during development
-- **CI validation** - Pull requests automatically checked
-- **Consistent codebase** - Zero naming convention violations
+- **Automated Enforcement** - No manual review needed for file naming
+- **Immediate Feedback** - ESLint errors appear in IDE during development
+- **CI/CD Validation** - Pull requests automatically checked via GitHub Actions
+- **Pattern-Specific Rules** - Different rules for errors, repositories, layers, variants, hooks
+- **Consistent Codebase** - Zero naming convention violations
+
+**Limitations:**
+
+- **Cannot Auto-Rename** - ESLint cannot automatically rename files (must be done manually with `git mv`)
+- **Pattern Coverage** - Some patterns (dynamic route brackets `[param].ts`) are not automatically enforced
+- **Folder Scope** - Only `src/` folders enforced, not `tests/`, `scripts/`, `docs/`
+
+### Pattern Matching Reference
+
+**eslint-plugin-check-file Pattern Constants:**
+
+| Pattern Constant | Meaning                 | Example Match               | Example Non-Match      |
+| ---------------- | ----------------------- | --------------------------- | ---------------------- |
+| `KEBAB_CASE`     | Lowercase with hyphens  | `start-server.ts` ✓         | `StartServer.ts` ❌    |
+| `PASCAL_CASE`    | Each word capitalized   | `HomePage.tsx` ✓            | `homePage.tsx` ❌      |
+| `*-error`        | Ends with `-error`      | `invalid-config-error.ts` ✓ | `invalid-config.ts` ❌ |
+| `*-repository`   | Ends with `-repository` | `user-repository.ts` ✓      | `user-repo.ts` ❌      |
+| `*-layer`        | Ends with `-layer`      | `app-layer.ts` ✓            | `app.ts` ❌            |
+| `*-variants`     | Ends with `-variants`   | `button-variants.ts` ✓      | `button-styles.ts` ❌  |
+| `use-*`          | Starts with `use-`      | `use-mobile.ts` ✓           | `mobile-hook.ts` ❌    |
+| `*-hook`         | Ends with `-hook`       | `sidebar-hook.ts` ✓         | `use-sidebar.ts` ❌    |
+
+**Pattern Precedence Order** (specific → default):
+
+The check-file plugin evaluates patterns in the order they appear in the configuration. Specific patterns are checked BEFORE the default:
+
+1. ✓ Check if file is in `src/**/errors/` AND ends with `-error.ts`
+2. ✓ Check if file is in `src/infrastructure/database/repositories/` AND ends with `-repository.ts`
+3. ✓ Check if file is in `src/infrastructure/layers/` AND ends with `-layer.ts`
+4. ✓ Check if file is in `src/presentation/components/ui/` AND ends with `-variants.ts`
+5. ✓ Check if file is in `src/presentation/hooks/` AND starts with `use-`
+6. ✓ Check if file is in `src/presentation/components/ui/` AND ends with `-hook.ts`
+7. ✓ **DEFAULT**: All other files must use `KEBAB_CASE`
+
+**Example**: File `src/domain/errors/invalid-config-error.ts`
+
+- Step 1 matches: File is in `src/**/errors/` and ends with `-error.ts` → ✓ Valid
+- Steps 2-7 are not checked (first match wins)
+
+**Example**: File `src/domain/errors/invalid-config.ts`
+
+- Step 1 does NOT match: File is in `src/**/errors/` but does NOT end with `-error.ts` → ❌ Invalid
+- ESLint error: "Files in src/\*\*/errors/ must end with -error.ts"
+
+**Example**: File `src/application/use-cases/start-server.ts`
+
+- Steps 1-6 do NOT match (file not in those directories)
+- Step 7 (DEFAULT) applies: Must use `KEBAB_CASE` → ✓ Valid
+
+**ignoreMiddleExtensions Behavior:**
+
+When `ignoreMiddleExtensions: true`, the plugin ignores extensions before the final extension:
+
+```
+name.test.ts       → Checks: "name" (ignores ".test")
+compiler.test.ts   → Checks: "compiler" (ignores ".test")
+eslint.config.ts   → Checks: "eslint" (ignores ".config")
+app.d.ts           → Checks: "app" (ignores ".d")
+```
+
+This allows:
+
+- Unit test files: `name.test.ts` (validates "name" only)
+- E2E test files: `name.spec.ts` (validates "name" only)
+- Config files: `eslint.config.ts` (validates "eslint" only)
+- Type declaration files: `global.d.ts` (validates "global" only)
+
+Without this option, ESLint would try to validate "name.test" as a complete filename, which would fail kebab-case validation.
 
 ### TypeScript Path Aliases
 
@@ -1151,33 +1298,9 @@ Configure IDE to enforce naming patterns:
 }
 ```
 
-### Pre-commit Hooks
-
-Add naming validation to pre-commit hooks:
-
-```bash
-#!/usr/bin/env bash
-# .husky/pre-commit
-
-# Check for PascalCase files outside pages/ directory
-invalid_files=$(find src -type f \( -name "*.ts" -o -name "*.tsx" \) | \
-  grep -v "/pages/" | \
-  grep -v ".test.ts" | \
-  grep -v ".spec.ts" | \
-  grep -E "[A-Z]" || true)
-
-if [ -n "$invalid_files" ]; then
-  echo "❌ Found PascalCase files outside pages/ directory:"
-  echo "$invalid_files"
-  echo ""
-  echo "Use kebab-case instead. See docs/architecture/file-naming-conventions.md"
-  exit 1
-fi
-```
-
 ### CI/CD Validation
 
-Add naming checks to CI pipeline:
+File naming conventions are automatically validated in CI/CD via ESLint:
 
 ```yaml
 # .github/workflows/ci.yml
@@ -1192,24 +1315,26 @@ jobs:
       - uses: actions/checkout@v4
       - uses: oven-sh/setup-bun@v1
 
-      - name: Validate file naming conventions
-        run: |
-          # Check for PascalCase files outside pages/
-          invalid=$(find src -type f \( -name "*.ts" -o -name "*.tsx" \) | \
-            grep -v "/pages/" | \
-            grep -v ".test.ts" | \
-            grep -v ".spec.ts" | \
-            grep -E "[A-Z]" || true)
+      - name: Install dependencies
+        run: bun install
 
-          if [ -n "$invalid" ]; then
-            echo "❌ Found files violating naming conventions:"
-            echo "$invalid"
-            echo ""
-            echo "Use kebab-case for all files except page components."
-            echo "See docs/architecture/file-naming-conventions.md"
-            exit 1
-          fi
+      - name: Run ESLint (includes file naming validation)
+        run: bun run lint
 ```
+
+**How it works:**
+
+1. **ESLint runs automatically** - `bun run lint` includes check-file plugin
+2. **PR checks fail** - Any file naming violations block PR merge
+3. **Clear error messages** - ESLint shows which files violate which patterns
+4. **No custom scripts** - All validation handled by ESLint configuration
+
+**Benefits:**
+
+- Single source of truth (eslint.config.ts)
+- No duplicate validation logic
+- Same errors locally and in CI
+- Automatic enforcement without custom scripts
 
 ---
 

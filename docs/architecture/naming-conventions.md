@@ -2,7 +2,7 @@
 
 > **Purpose**: Comprehensive naming standards for files, code elements, and patterns across the Omnera project.
 >
-> **Status**: ✅ Active - Enforced via ESLint `@typescript-eslint/naming-convention`
+> **Status**: ⚠️ Active - File naming enforced via `eslint-plugin-check-file`, code naming enforced via code review
 >
 > **Last Updated**: 2025-10-17
 
@@ -627,11 +627,34 @@ const UrlParser = {}
 
 ## ESLint Enforcement
 
-### Configuration
+### Current Status
 
-Add to `eslint.config.ts`:
+⚠️ **Code naming conventions (variables, functions, classes, types) are NOT automatically enforced by ESLint.**
+
+Enforcement currently relies on:
+
+- **Team discipline and code review** - Manual validation during PR reviews
+- **TypeScript's type system** - Catches some naming errors (e.g., mismatched exports)
+- **IDE warnings and autocomplete** - Provides hints for correct naming patterns
+- **Project conventions** - This document serves as the single source of truth
+
+**File naming conventions ARE automatically enforced** - See `@docs/architecture/file-naming-conventions.md#enforcement` for details on `eslint-plugin-check-file` enforcement.
+
+### Rationale for Manual Code Naming Enforcement
+
+We prioritize **file naming enforcement** over code naming because:
+
+1. **File names impact architecture** - Incorrect file names break imports and layer boundaries
+2. **Code names are self-correcting** - TypeScript errors surface mismatched names quickly
+3. **Reduced linter noise** - Too many naming rules create alert fatigue
+4. **Team consensus** - Clear documentation + code review catches violations effectively
+
+### Future Enhancement: Automated Code Naming
+
+We may add `@typescript-eslint/naming-convention` rules in the future to automatically enforce code naming patterns. Proposed configuration:
 
 ```typescript
+// FUTURE: Proposed @typescript-eslint/naming-convention rules
 import tseslint from 'typescript-eslint'
 
 export default tseslint.config({
@@ -661,19 +684,12 @@ export default tseslint.config({
         format: ['camelCase'],
         prefix: ['is', 'has', 'should', 'can', 'will', 'do'],
       },
-      // React components: PascalCase
+      // React components: PascalCase (exported functions returning JSX)
       {
         selector: 'function',
         modifiers: ['exported'],
         format: ['PascalCase'],
-        // Only if function returns JSX (manually verified)
-      },
-      // Const enums: SCREAMING_SNAKE_CASE
-      {
-        selector: 'variable',
-        modifiers: ['const'],
-        types: ['boolean', 'string', 'number'],
-        format: ['UPPER_CASE'],
+        // Note: Cannot distinguish JSX-returning functions automatically
       },
       // Object properties: camelCase (API responses may vary)
       {
@@ -691,23 +707,46 @@ export default tseslint.config({
 })
 ```
 
-### Exceptions
+**Trade-offs to consider**:
 
-**Disable for specific files:**
+- ✅ Automatic detection of naming violations
+- ✅ Consistent enforcement across team
+- ❌ Increased linter noise and false positives
+- ❌ Difficulty distinguishing React components from regular functions
+- ❌ Requires exceptions for third-party library integration
 
-```typescript
-// In files that interface with external APIs
-/* eslint-disable @typescript-eslint/naming-convention */
-const api_response = externalAPI.getData()
-/* eslint-enable @typescript-eslint/naming-convention */
-```
+**Decision**: Deferred until team consensus on acceptable noise level.
 
-**Disable for specific lines:**
+### Current Enforcement Mechanisms
 
-```typescript
-// eslint-disable-next-line @typescript-eslint/naming-convention
-const _tag = 'SpecialCase' // Effect discriminant (intentional underscore)
-```
+**Code Review Checklist** (for reviewers):
+
+When reviewing PRs, verify:
+
+- [ ] Variables use camelCase (except SCREAMING_SNAKE_CASE constants)
+- [ ] Functions use camelCase with action verbs
+- [ ] Classes use PascalCase nouns
+- [ ] Types/Interfaces use PascalCase (no `I` prefix)
+- [ ] Boolean variables have is/has/should/can/will prefix
+- [ ] Effect Schemas use PascalCase + "Schema" suffix
+- [ ] CVA variants use camelCase + "Variants" suffix
+- [ ] React components use PascalCase
+- [ ] React hooks use "use" + camelCase
+
+**IDE Configuration** (optional):
+
+Configure your IDE to highlight naming violations:
+
+**VS Code** - Install extensions:
+
+- ESLint (enforces file naming automatically)
+- TypeScript and JavaScript Language Features (built-in)
+- Error Lens (highlights TypeScript errors inline)
+
+**JetBrains IDEs** (WebStorm, IntelliJ):
+
+- Enable "TypeScript" inspections
+- Enable "Naming conventions" inspections (Settings → Editor → Inspections → JavaScript and TypeScript → Code style issues)
 
 ---
 
@@ -812,7 +851,7 @@ What are you naming?
 
 ### Enforcement
 
-✅ **Automated** - ESLint `@typescript-eslint/naming-convention` rule
+⚠️ **Code Naming** - Manual enforcement via code review (see ESLint Enforcement section)
+✅ **File Naming** - Automated via `eslint-plugin-check-file` (see file-naming-conventions.md)
 ✅ **IDE Support** - TypeScript autocomplete and refactoring
-✅ **Code Review** - Team enforces patterns during PR reviews
 ✅ **Documentation** - This guide as single source of truth
