@@ -69,7 +69,8 @@ bun run scripts/generate-roadmap.ts
 2. You IMMEDIATELY run `bun run scripts/validate-schema.ts`
 3. If validation passes, you IMMEDIATELY run `bun run scripts/generate-roadmap.ts`
 4. You review the generated roadmap files for completeness
-5. You commit all changes together: specs.schema.json + ROADMAP.md + property detail files
+5. **You validate user stories with the user** (See "User Story Validation" below)
+6. You commit all changes together: specs.schema.json + ROADMAP.md + property detail files
 
 **Why This Workflow is Non-Negotiable**:
 - **Validation ensures schema correctness**: Prevents syntax errors and invalid JSON Schema from entering the codebase
@@ -96,7 +97,316 @@ git add docs/specifications/specs.schema.json ROADMAP.md docs/specifications/roa
 git commit -m "feat: update schema and regenerate roadmap"
 ```
 
-### 3. Documentation Synchronization
+### 3. User Story Validation
+
+**CRITICAL**: Auto-generated user stories in `docs/specifications/roadmap/` property detail files MUST be validated by the user to ensure they are pertinent, useful, and accurately represent desired functionality.
+
+#### Why User Story Validation Matters
+
+**Auto-Generation Limitations**:
+- Scripts generate user stories based on JSON Schema definitions
+- They infer behavior from property types and validation rules
+- They may not capture nuanced business requirements
+- They might miss edge cases or user workflows
+- They need human validation to ensure real-world usefulness
+
+**User Validation Benefits**:
+- Ensures stories reflect actual user needs
+- Catches missing scenarios or incorrect assumptions
+- Improves story quality and test coverage
+- Aligns technical implementation with business goals
+- Creates shared understanding between user and agent
+
+#### When to Validate User Stories
+
+**Trigger Points**:
+1. **After running `bun run scripts/generate-roadmap.ts`** - Always review newly generated stories
+2. **Before committing roadmap changes** - Don't commit unvalidated stories
+3. **During specification iterations** - When refining product requirements
+4. **When user provides feedback** - Incorporate feedback into stories immediately
+
+#### User Story Validation Process
+
+**Step 1: Present Generated Stories**
+
+After running `generate-roadmap.ts`, present the auto-generated user stories from property detail files:
+
+```markdown
+I've generated roadmap files for the following properties:
+- `docs/specifications/roadmap/{property-name}.md`
+
+Let me show you the auto-generated user stories for **{PropertyName}**:
+
+**Story 1: {scenario description}**
+```
+GIVEN: {setup}
+WHEN: {action}
+THEN: {expected outcome}
+```
+
+**Story 2: {error scenario}**
+```
+GIVEN: {invalid setup}
+WHEN: {action}
+THEN: {error message}
+```
+
+**Story 3: {workflow scenario}**
+```
+GIVEN: {complete setup}
+WHEN: {user journey}
+THEN: {full workflow outcome}
+```
+
+Do these stories accurately capture how you want **{PropertyName}** to work?
+```
+
+**Step 2: Ask Validation Questions**
+
+Ask the user specific questions to validate story quality:
+
+```markdown
+**Questions to validate these user stories**:
+
+1. **Completeness**: Are there any important scenarios missing?
+   - Edge cases we haven't covered?
+   - User workflows we should test?
+   - Interactions with other properties?
+
+2. **Correctness**: Do the stories match your vision?
+   - Are the expected outcomes correct?
+   - Are the error messages appropriate?
+   - Are the test data values realistic?
+
+3. **Clarity**: Are the stories clear and actionable?
+   - Is the GIVEN-WHEN-THEN structure easy to follow?
+   - Are the data-testid patterns intuitive?
+   - Would an E2E test writer understand what to implement?
+
+4. **Prioritization**: Which stories are most critical?
+   - Which should be @critical tests?
+   - Which cover the happy path (@regression)?
+   - Which are edge cases (@spec)?
+```
+
+**Step 3: Collect User Feedback**
+
+Listen for the user's response and capture feedback:
+
+**Positive Feedback Examples**:
+- "Yes, these stories look good" → Proceed with committing
+- "Story 1 and 2 are perfect" → Mark as validated
+- "This captures what I need" → Stories are approved
+
+**Refinement Feedback Examples**:
+- "Story 1 should also test {additional behavior}" → Add scenario
+- "The error message should be '{different message}'" → Update story
+- "We're missing a scenario for {edge case}" → Add new story
+- "Story 3 isn't realistic, users would actually {different action}" → Rewrite story
+- "The test data should use {different example}" → Update examples
+
+**Critical Feedback Examples**:
+- "This doesn't match how the feature should work" → Rewrite story
+- "We need to add {completely new scenario}" → Add new story
+- "Remove story 2, that's not a valid use case" → Delete story
+
+**Step 4: Refine Stories Based on Feedback**
+
+Update the property detail files based on user feedback:
+
+**For Additions**:
+```markdown
+I'm adding a new user story to `docs/specifications/roadmap/{property-name}.md`:
+
+**Story 4: {new scenario based on user feedback}**
+```
+GIVEN: {user-specified setup}
+WHEN: {user-specified action}
+THEN: {user-specified outcome}
+```
+
+Does this capture what you described?
+```
+
+**For Modifications**:
+```markdown
+I'm updating Story 2 in `docs/specifications/roadmap/{property-name}.md`:
+
+**Before**:
+```
+GIVEN: {old setup}
+WHEN: {old action}
+THEN: {old outcome}
+```
+
+**After** (based on your feedback):
+```
+GIVEN: {updated setup}
+WHEN: {updated action}
+THEN: {updated outcome}
+```
+
+Is this what you meant?
+```
+
+**For Deletions**:
+```markdown
+I'm removing Story 3 from `docs/specifications/roadmap/{property-name}.md` as you indicated it's not a valid use case.
+```
+
+**Step 5: Mark Stories as User-Validated**
+
+After user validation, add a validation marker to the property detail file:
+
+```markdown
+<!-- At the top of the E2E Test Blueprint section -->
+
+**User Story Validation Status**: ✅ VALIDATED ({date})
+**Validated By**: User
+**Validation Notes**:
+- Story 1: Approved as-is
+- Story 2: Updated error message per user feedback
+- Story 3: Added edge case scenario requested by user
+- Story 4: Removed as not applicable
+```
+
+**Step 6: Commit Validated Stories**
+
+Only commit roadmap files after user validation:
+
+```bash
+# After user validation
+git add docs/specifications/roadmap/{property-name}.md
+git commit -m "feat(roadmap): add user-validated stories for {property}"
+```
+
+#### Validation Examples
+
+**Example 1: User Approves Stories**
+
+```markdown
+**User**: "Yes, these stories look good. Story 1 and 2 cover the main scenarios."
+
+**Agent**: Perfect! I'll mark these stories as user-validated and commit the roadmap files.
+
+<!-- Agent adds validation marker to property file -->
+**User Story Validation Status**: ✅ VALIDATED (2025-01-15)
+**Validated By**: User
+**Validation Notes**: Stories 1-2 approved as-is. Cover main scenarios effectively.
+```
+
+**Example 2: User Requests Addition**
+
+```markdown
+**User**: "These are good, but we're missing a scenario where the user inputs an empty value. That should show a specific error."
+
+**Agent**: Great catch! I'll add a new story for the empty value scenario:
+
+**Story 4: Empty Value Error**
+```
+GIVEN: User provides empty {property}
+WHEN: Server validates configuration
+THEN: Display error "Property {property} cannot be empty"
+```
+
+Does this capture the scenario you described?
+
+**User**: "Perfect!"
+
+**Agent**: Excellent! I'm updating the roadmap file with this new story and marking it as user-validated.
+```
+
+**Example 3: User Corrects Story**
+
+```markdown
+**User**: "Story 2's error message is wrong. It should say 'Invalid format for {property}' not 'Property {property} is invalid'."
+
+**Agent**: Thanks for catching that! I'm updating Story 2:
+
+**Before**:
+```
+THEN: Display error "Property {property} is invalid"
+```
+
+**After**:
+```
+THEN: Display error "Invalid format for {property}"
+```
+
+I'll also update the validation rule in the Effect Schema Blueprint to match this error message exactly.
+
+**User**: "That's correct now."
+
+**Agent**: Perfect! Marking Story 2 as validated with the corrected error message.
+```
+
+#### Integration with Workflow
+
+The complete workflow with user story validation:
+
+```markdown
+1. User or you modify `docs/specifications/specs.schema.json`
+2. You IMMEDIATELY run `bun run scripts/validate-schema.ts`
+3. If validation passes, you IMMEDIATELY run `bun run scripts/generate-roadmap.ts`
+4. You review the generated roadmap files for completeness
+5. **You present auto-generated user stories to the user**
+6. **You ask validation questions and collect feedback**
+7. **You refine stories based on user feedback**
+8. **You mark stories as user-validated in the property detail files**
+9. You commit all changes together: specs.schema.json + ROADMAP.md + validated property detail files
+
+**CRITICAL**: Never skip step 5-8. User-validated stories are essential for quality E2E tests.
+```
+
+#### Preserving Validated Stories During Regeneration
+
+**Challenge**: When you re-run `generate-roadmap.ts`, it may overwrite manually refined user stories.
+
+**Solution**: Before regenerating roadmap:
+1. **Check for existing validated stories** in property detail files
+2. **Backup validated stories** if property file exists
+3. **Run `generate-roadmap.ts`** to regenerate from schema
+4. **Merge validated stories** back into regenerated file
+5. **Preserve validation markers** showing user approval
+
+**Merge Strategy**:
+```markdown
+If property detail file exists with validation marker:
+  1. Extract validated user stories from existing file
+  2. Generate new property detail file from schema
+  3. Replace auto-generated stories with validated stories
+  4. Keep validation marker intact
+  5. Only regenerate Effect Schema blueprint and validation rules
+```
+
+**When to Regenerate Stories**:
+- Schema structure changed significantly (new validation rules)
+- Property type changed (string → object)
+- User requests story regeneration explicitly
+
+**When to Preserve Stories**:
+- Minor schema updates (description changes, example updates)
+- Adding new optional properties
+- Schema remains structurally identical
+
+#### Best Practices
+
+**DO**:
+- ✅ Always present generated stories to the user
+- ✅ Ask specific validation questions
+- ✅ Incorporate user feedback immediately
+- ✅ Mark stories as validated with date
+- ✅ Preserve validated stories during regeneration
+- ✅ Update error messages in both stories AND schema blueprints
+
+**DON'T**:
+- ❌ Commit unvalidated auto-generated stories
+- ❌ Assume generated stories are always correct
+- ❌ Skip validation questions
+- ❌ Overwrite user-refined stories without checking
+- ❌ Forget to update validation markers
+
+### 4. Documentation Synchronization
 
 You maintain perfect coherence across three primary artifacts:
 
@@ -799,6 +1109,16 @@ Before completing any roadmap update, verify:
 - [ ] Ran `bun run scripts/generate-roadmap.ts` after validation passed
 - [ ] Reviewed generated ROADMAP.md and all property detail files
 - [ ] All generated files are committed together with specs.schema.json
+
+**User Story Validation** (CRITICAL):
+- [ ] Presented auto-generated user stories to the user
+- [ ] Asked validation questions (completeness, correctness, clarity, prioritization)
+- [ ] Collected and incorporated user feedback on stories
+- [ ] Refined stories based on user input (additions, modifications, deletions)
+- [ ] Marked stories as user-validated with date in property detail files
+- [ ] Preserved user-validated stories during roadmap regeneration
+- [ ] Updated error messages in both stories AND Effect Schema blueprints
+- [ ] Only committed roadmap files after user validation completed
 
 **Schema Coherence**:
 - [ ] specs.schema.json is valid JSON Schema Draft 7 (verified by validate-schema.ts)
