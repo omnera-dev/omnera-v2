@@ -23,11 +23,13 @@ import {
 } from './templates/property-detail-template.ts'
 import { generateRoadmapMarkdown } from './templates/roadmap-template.ts'
 import { generateEffectSchema } from './utils/effect-schema-generator.ts'
+import { getImplementationStatus } from './utils/implementation-checker.ts'
 import {
   calculateStats,
   compareSchemas,
   extractAllPropertiesRecursively,
 } from './utils/schema-comparison.ts'
+import { extractUserStoriesFromSchema } from './utils/schema-user-stories-extractor.ts'
 import { generateUserStories } from './utils/user-story-generator.ts'
 import type { JSONSchema, PropertyDocumentation, RoadmapData } from './types/roadmap.ts'
 
@@ -127,6 +129,13 @@ async function main() {
   )
   console.log()
 
+  // Check implementation status for ALL properties (including nested)
+  console.log(`🔍 Checking implementation status...`)
+  for (const property of allProperties) {
+    property.implementationStatus = getImplementationStatus(property.name)
+  }
+  console.log()
+
   // List properties by status
   console.log(`📋 Generating ROADMAP.md...`)
   for (const prop of topLevelProperties) {
@@ -149,6 +158,7 @@ async function main() {
   const roadmapData: RoadmapData = {
     stats,
     properties: topLevelProperties,
+    allProperties,
     timestamp: new Date().toISOString().split('T')[0]!,
   }
 
@@ -186,8 +196,14 @@ async function main() {
       visionSchema.definitions
     )
 
-    // Generate E2E user stories with comprehensive context
-    const userStories = generateUserStories(property.name, property.visionVersion)
+    // Extract user stories from schema x-user-stories key
+    const schemaUserStories = extractUserStoriesFromSchema(property.name, visionSchema)
+
+    // Use schema user stories if available, otherwise generate them
+    const userStories =
+      schemaUserStories.spec.length > 0
+        ? schemaUserStories
+        : generateUserStories(property.name, property.visionVersion)
 
     // Create property documentation
     const propertyDoc: PropertyDocumentation = {

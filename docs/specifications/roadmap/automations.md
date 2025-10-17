@@ -4,7 +4,7 @@
 > **Completion**: 0%
 > **Complexity**: 5 points
 
-List of automation workflows that define business logic and integrations
+Workflow automations that execute actions when triggered by specific events or conditions. Automations enable business logic such as sending emails when records are created, updating related data when values change, or integrating with external services via webhooks. Each automation consists of a trigger (when to run) and a sequence of actions (what to do).
 
 ## Implementation Status
 
@@ -44,12 +44,13 @@ import { Schema } from 'effect'
 /**
  * Automations
  *
- * List of automation workflows that define business logic and integrations
+ * Workflow automations that execute actions when triggered by specific events or conditions. Automations enable business logic such as sending emails when records are created, updating related data when values change, or integrating with external services via webhooks. Each automation consists of a trigger (when to run) and a sequence of actions (what to do).
  */
 export const AutomationsSchema = Schema.Array(Schema.Unknown).pipe(
   Schema.annotations({
     title: 'Automations',
-    description: 'List of automation workflows that define business logic and integrations',
+    description:
+      'Workflow automations that execute actions when triggered by specific events or conditions. Automations enable business logic such as sending emails when records are created, updating related data when values change, or integrating with external services via webhooks. Each automation consists of a trigger (when to run) and a sequence of actions (what to do).',
   })
 )
 
@@ -72,36 +73,52 @@ These tests define specific acceptance criteria. Each test validates ONE behavio
 
 **Scenario 1**: Validation Test
 
-- **GIVEN**: user manages Automations
-- **WHEN**: adding a new item
-- **THEN**: display empty item form
+- **GIVEN**: the application is running
+- **WHEN**: I list automations
+- **THEN**: it should work correctly
 - **Tag**: `@spec`
 
 **Scenario 2**: Validation Test
 
-- **GIVEN**: user manages Automations
-- **WHEN**: removing an item
-- **THEN**: item is removed from the list
+- **GIVEN**: the application is running
+- **WHEN**: I disable an automation
+- **THEN**: it should work correctly
 - **Tag**: `@spec`
 
-### @regression User Story (Complete Workflow)
+**Scenario 3**: Validation Test
 
-This test consolidates ALL @spec tests into ONE comprehensive workflow.
+- **GIVEN**: the application is running
+- **WHEN**: I enable an automation
+- **THEN**: it should work correctly
+- **Tag**: `@spec`
 
-**Complete Configuration Workflow**:
+**Scenario 4**: Validation Test
 
-- **GIVEN**: user is configuring Automations in the application
-- **WHEN**: user completes full configuration workflow including all fields and validations
-- **THEN**: configuration is saved successfully with all validations passing and data persists correctly
-- **Tag**: `@regression`
+- **GIVEN**: the application is running
+- **WHEN**: I open the edit url
+- **THEN**: it should work correctly
+- **Tag**: `@spec`
+
+**Scenario 5**: Validation Test
+
+- **GIVEN**: the application is running
+- **WHEN**: I return a list of automations
+- **THEN**: it should work correctly
+- **Tag**: `@spec`
+
+**Scenario 6**: Validation Test
+
+- **GIVEN**: I am working with same integration actions in a queue
+- **WHEN**: I run parallel automations
+- **THEN**: it should complete successfully
+- **Tag**: `@spec`
 
 ### data-testid Patterns
 
 Use these standardized test IDs for reliable selectors:
 
-- `[data-testid="automations-list"]`
-- `[data-testid="automations-add-button"]`
-- `[data-testid="automations-remove-button"]`
+- `[data-testid="automations-input"]`
+- `[data-testid="automations-error"]`
 
 ---
 
@@ -110,8 +127,7 @@ Use these standardized test IDs for reliable selectors:
 This property is complete when:
 
 - [ ] Effect Schema implemented and exported
-- [ ] All 2 @spec E2E tests passing
-- [ ] All 1 @regression E2E tests passing
+- [ ] All 6 @spec E2E tests passing
 - [ ] Unit test coverage >80%
 - [ ] All TypeScript strict mode checks passing
 - [ ] All ESLint checks passing

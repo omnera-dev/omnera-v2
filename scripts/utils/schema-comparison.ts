@@ -54,7 +54,7 @@ function extractServiceEventCombinations(
   const results: PropertyStatus[] = []
   const defType = eventOrActionKey === 'event' ? 'automation_trigger' : 'automation_action'
 
-  function extractFromVariants(variants: JSONSchemaProperty[], parentTitle?: string) {
+  function extractFromVariants(variants: JSONSchemaProperty[], _parentTitle?: string) {
     for (const variant of variants) {
       // Check if this variant has nested anyOf/oneOf
       if (variant.anyOf || variant.oneOf) {

@@ -54,6 +54,23 @@ export interface JSONSchema {
 export type PropertyStatusType = 'complete' | 'partial' | 'missing'
 
 /**
+ * Implementation status for Definition of Done checklist
+ */
+export interface ImplementationStatus {
+  // Schema implementation
+  schemaFileExists: boolean
+  schemaExported: boolean
+
+  // Test implementation
+  testFileExists: boolean
+  expectedTestCount: number
+  implementedTestCount: number
+
+  // Code quality (proxy: check if files exist)
+  hasUnitTests: boolean
+}
+
+/**
  * Detailed status of a single schema property
  */
 export interface PropertyStatus {
@@ -65,6 +82,7 @@ export interface PropertyStatus {
   missingFeatures: string[]
   complexity: number
   dependencies: string[]
+  implementationStatus?: ImplementationStatus
 }
 
 /**
@@ -146,6 +164,7 @@ export interface RoadmapStats {
 export interface RoadmapData {
   stats: RoadmapStats
   properties: PropertyStatus[]
+  allProperties: PropertyStatus[]
   timestamp: string
 }
 

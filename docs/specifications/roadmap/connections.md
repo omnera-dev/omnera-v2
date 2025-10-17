@@ -4,7 +4,7 @@
 > **Completion**: 0%
 > **Complexity**: 5 points
 
-Connect your application to external services like Calendly, Airtable, Google, LinkedIn, or Facebook
+External service integrations that connect your application to third-party platforms. Connections enable OAuth authentication, API access, and data synchronization with services like Calendly (scheduling), Airtable (databases), Google (workspace apps), LinkedIn (professional network), and Facebook (social platform). Each connection requires proper credentials and scopes.
 
 ## Implementation Status
 
@@ -38,7 +38,7 @@ import { Schema } from 'effect'
 /**
  * Connections
  *
- * Connect your application to external services like Calendly, Airtable, Google, LinkedIn, or Facebook
+ * External service integrations that connect your application to third-party platforms. Connections enable OAuth authentication, API access, and data synchronization with services like Calendly (scheduling), Airtable (databases), Google (workspace apps), LinkedIn (professional network), and Facebook (social platform). Each connection requires proper credentials and scopes.
  */
 export const ConnectionsSchema = Schema.Array(
   Schema.Union(
@@ -129,7 +129,7 @@ export const ConnectionsSchema = Schema.Array(
   Schema.annotations({
     title: 'Connections',
     description:
-      'Connect your application to external services like Calendly, Airtable, Google, LinkedIn, or Facebook',
+      'External service integrations that connect your application to third-party platforms. Connections enable OAuth authentication, API access, and data synchronization with services like Calendly (scheduling), Airtable (databases), Google (workspace apps), LinkedIn (professional network), and Facebook (social platform). Each connection requires proper credentials and scopes.',
   })
 )
 

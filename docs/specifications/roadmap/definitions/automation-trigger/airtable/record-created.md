@@ -75,83 +75,17 @@ These tests define specific acceptance criteria. Each test validates ONE behavio
 
 **Scenario 1**: Validation Test
 
-- **GIVEN**: user is configuring Automation trigger.airtable.record-created
-- **WHEN**: account field is empty
-- **THEN**: display error "Account is required"
+- **GIVEN**: I am working with a cron time
+- **WHEN**: I trigger the automation
+- **THEN**: it should complete successfully
 - **Tag**: `@spec`
-
-**Scenario 2**: Validation Test
-
-- **GIVEN**: user is configuring Automation trigger.airtable.record-created
-- **WHEN**: service field is empty
-- **THEN**: display error "Service is required"
-- **Tag**: `@spec`
-
-**Scenario 3**: Validation Test
-
-- **GIVEN**: user is configuring Automation trigger.airtable.record-created
-- **WHEN**: event field is empty
-- **THEN**: display error "Event is required"
-- **Tag**: `@spec`
-
-**Scenario 4**: Validation Test
-
-- **GIVEN**: user is configuring Automation trigger.airtable.record-created
-- **WHEN**: params field is empty
-- **THEN**: display error "Params is required"
-- **Tag**: `@spec`
-
-**Scenario 5**: Validation Test
-
-- **GIVEN**: user configures Automation trigger.airtable.record-created
-- **WHEN**: entering Account
-- **THEN**: field is optional
-- **Tag**: `@spec`
-
-**Scenario 6**: Validation Test
-
-- **GIVEN**: user configures Automation trigger.airtable.record-created
-- **WHEN**: entering Service
-- **THEN**: field is optional
-- **Tag**: `@spec`
-
-**Scenario 7**: Validation Test
-
-- **GIVEN**: user configures Automation trigger.airtable.record-created
-- **WHEN**: entering Event
-- **THEN**: field is optional
-- **Tag**: `@spec`
-
-**Scenario 8**: Validation Test
-
-- **GIVEN**: user configures Automation trigger.airtable.record-created
-- **WHEN**: entering Params
-- **THEN**: field is required
-- **Tag**: `@spec`
-
-### @regression User Story (Complete Workflow)
-
-This test consolidates ALL @spec tests into ONE comprehensive workflow.
-
-**Complete Configuration Workflow**:
-
-- **GIVEN**: user is configuring Automation trigger.airtable.record-created in the application
-- **WHEN**: user completes full configuration workflow including all fields and validations
-- **THEN**: configuration is saved successfully with all validations passing and data persists correctly
-- **Tag**: `@regression`
 
 ### data-testid Patterns
 
 Use these standardized test IDs for reliable selectors:
 
-- `[data-testid="automation_trigger.airtable.record-created-account-input"]`
-- `[data-testid="automation_trigger.airtable.record-created-account-error"]`
-- `[data-testid="automation_trigger.airtable.record-created-service-input"]`
-- `[data-testid="automation_trigger.airtable.record-created-service-error"]`
-- `[data-testid="automation_trigger.airtable.record-created-event-input"]`
-- `[data-testid="automation_trigger.airtable.record-created-event-error"]`
-- `[data-testid="automation_trigger.airtable.record-created-params-input"]`
-- `[data-testid="automation_trigger.airtable.record-created-params-error"]`
+- `[data-testid="automation_trigger-airtable-record-created-input"]`
+- `[data-testid="automation_trigger-airtable-record-created-error"]`
 
 ---
 
@@ -160,8 +94,7 @@ Use these standardized test IDs for reliable selectors:
 This property is complete when:
 
 - [ ] Effect Schema implemented and exported
-- [ ] All 8 @spec E2E tests passing
-- [ ] All 1 @regression E2E tests passing
+- [ ] All 1 @spec E2E tests passing
 - [ ] Unit test coverage >80%
 - [ ] All TypeScript strict mode checks passing
 - [ ] All ESLint checks passing

@@ -48,11 +48,12 @@ import { Schema } from 'effect'
 export const Pages.form-page.pathSchema = Schema.String.pipe(
     Schema.minLength(1, { message: () => 'This field is required' }),
     Schema.pattern(/^/[a-z0-9-/]*$/, {
-    message: () => 'URL path'
+    message: () => 'URL path for routing and navigation. Must start with forward slash (/), contain only lowercase letters, numbers, hyphens, and forward slashes. Used for page routing, API endpoints, and navigation links. Paths should be hierarchical and descriptive (e.g., /customers/orders, /admin/settings). Nested paths are supported.'
   }),
     Schema.annotations({
     title: "Path",
-    description: "URL path"
+    description: "URL path for routing and navigation. Must start with forward slash (/), contain only lowercase letters, numbers, hyphens, and forward slashes. Used for page routing, API endpoints, and navigation links. Paths should be hierarchical and descriptive (e.g., /customers/orders, /admin/settings). Nested paths are supported.",
+    examples: ["/home","/customers","/products/inventory","/admin/settings","/reports/sales"]
   })
   )
 

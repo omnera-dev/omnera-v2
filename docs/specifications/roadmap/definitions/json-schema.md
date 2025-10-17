@@ -4,7 +4,7 @@
 > **Completion**: 0%
 > **Complexity**: 331 points
 
-Schema describing data structure
+JSON Schema definition (Draft 07 compatible) for validating structured data in JSON fields. Define the expected structure, types, required properties, constraints, and validation rules. Used to ensure JSON field data conforms to a specific schema. Supports all JSON Schema features: types, properties, required, patterns, enums, nested objects, arrays, and custom validation. Useful for API configurations, structured metadata, and flexible data models with enforced structure.
 
 ## Implementation Status
 
@@ -38,7 +38,7 @@ import { Schema } from 'effect'
 /**
  * JSON Schema
  *
- * Schema describing data structure
+ * JSON Schema definition (Draft 07 compatible) for validating structured data in JSON fields. Define the expected structure, types, required properties, constraints, and validation rules. Used to ensure JSON field data conforms to a specific schema. Supports all JSON Schema features: types, properties, required, patterns, enums, nested objects, arrays, and custom validation. Useful for API configurations, structured metadata, and flexible data models with enforced structure.
  */
 export const Json_schemaSchema = Schema.Struct({
   type: Schema.optional(Schema.Union(Schema.String, Schema.Array(Schema.String))),
@@ -74,7 +74,8 @@ export const Json_schemaSchema = Schema.Struct({
 }).pipe(
   Schema.annotations({
     title: 'JSON Schema',
-    description: 'Schema describing data structure',
+    description:
+      'JSON Schema definition (Draft 07 compatible) for validating structured data in JSON fields. Define the expected structure, types, required properties, constraints, and validation rules. Used to ensure JSON field data conforms to a specific schema. Supports all JSON Schema features: types, properties, required, patterns, enums, nested objects, arrays, and custom validation. Useful for API configurations, structured metadata, and flexible data models with enforced structure.',
   })
 )
 

@@ -80,99 +80,17 @@ These tests define specific acceptance criteria. Each test validates ONE behavio
 
 **Scenario 1**: Validation Test
 
-- **GIVEN**: user is configuring Automation action.facebook-ads.get-leadgen
-- **WHEN**: name field is empty
-- **THEN**: display error "Name is required"
+- **GIVEN**: the application is running
+- **WHEN**: I create a record from an automation
+- **THEN**: it should work correctly
 - **Tag**: `@spec`
-
-**Scenario 2**: Validation Test
-
-- **GIVEN**: user is configuring Automation action.facebook-ads.get-leadgen
-- **WHEN**: account field is empty
-- **THEN**: display error "Account is required"
-- **Tag**: `@spec`
-
-**Scenario 3**: Validation Test
-
-- **GIVEN**: user is configuring Automation action.facebook-ads.get-leadgen
-- **WHEN**: service field is empty
-- **THEN**: display error "Service is required"
-- **Tag**: `@spec`
-
-**Scenario 4**: Validation Test
-
-- **GIVEN**: user is configuring Automation action.facebook-ads.get-leadgen
-- **WHEN**: action field is empty
-- **THEN**: display error "Action is required"
-- **Tag**: `@spec`
-
-**Scenario 5**: Validation Test
-
-- **GIVEN**: user is configuring Automation action.facebook-ads.get-leadgen
-- **WHEN**: params field is empty
-- **THEN**: display error "Params is required"
-- **Tag**: `@spec`
-
-**Scenario 6**: Validation Test
-
-- **GIVEN**: user configures Automation action.facebook-ads.get-leadgen
-- **WHEN**: entering Name
-- **THEN**: field is optional
-- **Tag**: `@spec`
-
-**Scenario 7**: Validation Test
-
-- **GIVEN**: user configures Automation action.facebook-ads.get-leadgen
-- **WHEN**: entering Account
-- **THEN**: field is optional
-- **Tag**: `@spec`
-
-**Scenario 8**: Validation Test
-
-- **GIVEN**: user configures Automation action.facebook-ads.get-leadgen
-- **WHEN**: entering Service
-- **THEN**: field is optional
-- **Tag**: `@spec`
-
-**Scenario 9**: Validation Test
-
-- **GIVEN**: user configures Automation action.facebook-ads.get-leadgen
-- **WHEN**: entering Action
-- **THEN**: field is optional
-- **Tag**: `@spec`
-
-**Scenario 10**: Validation Test
-
-- **GIVEN**: user configures Automation action.facebook-ads.get-leadgen
-- **WHEN**: entering Params
-- **THEN**: field is required
-- **Tag**: `@spec`
-
-### @regression User Story (Complete Workflow)
-
-This test consolidates ALL @spec tests into ONE comprehensive workflow.
-
-**Complete Configuration Workflow**:
-
-- **GIVEN**: user is configuring Automation action.facebook-ads.get-leadgen in the application
-- **WHEN**: user completes full configuration workflow including all fields and validations
-- **THEN**: configuration is saved successfully with all validations passing and data persists correctly
-- **Tag**: `@regression`
 
 ### data-testid Patterns
 
 Use these standardized test IDs for reliable selectors:
 
-- `[data-testid="automation_action.facebook-ads.get-leadgen-name-input"]`
-- `[data-testid="automation_action.facebook-ads.get-leadgen-name-error"]`
-- `[data-testid="automation_action.facebook-ads.get-leadgen-account-input"]`
-- `[data-testid="automation_action.facebook-ads.get-leadgen-account-error"]`
-- `[data-testid="automation_action.facebook-ads.get-leadgen-service-input"]`
-- `[data-testid="automation_action.facebook-ads.get-leadgen-service-error"]`
-- `[data-testid="automation_action.facebook-ads.get-leadgen-action-input"]`
-- `[data-testid="automation_action.facebook-ads.get-leadgen-action-error"]`
-- `[data-testid="automation_action.facebook-ads.get-leadgen-params-input"]`
-- `[data-testid="automation_action.facebook-ads.get-leadgen-params-error"]`
+- `[data-testid="automation_action-facebook-ads-get-leadgen-input"]`
+- `[data-testid="automation_action-facebook-ads-get-leadgen-error"]`
 
 ---
 
@@ -181,8 +99,7 @@ Use these standardized test IDs for reliable selectors:
 This property is complete when:
 
 - [ ] Effect Schema implemented and exported
-- [ ] All 10 @spec E2E tests passing
-- [ ] All 1 @regression E2E tests passing
+- [ ] All 1 @spec E2E tests passing
 - [ ] Unit test coverage >80%
 - [ ] All TypeScript strict mode checks passing
 - [ ] All ESLint checks passing

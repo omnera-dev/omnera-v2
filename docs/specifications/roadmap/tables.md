@@ -4,7 +4,7 @@
 > **Completion**: 0%
 > **Complexity**: 5 points
 
-Database tables that store your application data
+Collection of database tables that define the data structure of your application. Each table represents an entity (e.g., users, products, orders) with fields that define the schema. Tables support relationships, indexes, constraints, and various field types. Tables are the foundation of your application's data model and determine what information can be stored and how it relates.
 
 ## Implementation Status
 
@@ -38,7 +38,7 @@ import { Schema } from 'effect'
 /**
  * Data Tables
  *
- * Database tables that store your application data
+ * Collection of database tables that define the data structure of your application. Each table represents an entity (e.g., users, products, orders) with fields that define the schema. Tables support relationships, indexes, constraints, and various field types. Tables are the foundation of your application's data model and determine what information can be stored and how it relates.
  */
 export const TablesSchema = Schema.Array(Schema.Struct({
     id: Schema.Unknown,
@@ -564,7 +564,7 @@ export const TablesSchema = Schema.Array(Schema.Struct({
   })).pipe(
     Schema.annotations({
     title: "Data Tables",
-    description: "Database tables that store your application data"
+    description: "Collection of database tables that define the data structure of your application. Each table represents an entity (e.g., users, products, orders) with fields that define the schema. Tables support relationships, indexes, constraints, and various field types. Tables are the foundation of your application's data model and determine what information can be stored and how it relates."
   })
   )
 

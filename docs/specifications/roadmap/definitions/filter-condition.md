@@ -4,6 +4,8 @@
 > **Completion**: 0%
 > **Complexity**: 97 points
 
+Filter conditions for querying and filtering data in table views, automations, and reports. Specify field to filter on, comparison operator (equals, not equals, contains, greater than, less than, is empty, is not empty), and comparison value. Conditions can be combined with AND/OR logic. Supports dynamic values from other fields, current user, or system variables. Used throughout the application for data filtering and conditional logic.
+
 ## Implementation Status
 
 ⏳ **Not Started**
@@ -33,6 +35,10 @@ import { Schema } from 'effect'
 **Implementation**:
 
 ```typescript
+/**
+ *
+ * Filter conditions for querying and filtering data in table views, automations, and reports. Specify field to filter on, comparison operator (equals, not equals, contains, greater than, less than, is empty, is not empty), and comparison value. Conditions can be combined with AND/OR logic. Supports dynamic values from other fields, current user, or system variables. Used throughout the application for data filtering and conditional logic.
+ */
 export const Filter_conditionSchema = Schema.Union(
   Schema.Struct({
     target: Schema.String,

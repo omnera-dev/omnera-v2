@@ -73,83 +73,24 @@ These tests define specific acceptance criteria. Each test validates ONE behavio
 
 **Scenario 1**: Validation Test
 
-- **GIVEN**: user is configuring Automation action.http.get
-- **WHEN**: name field is empty
-- **THEN**: display error "Name is required"
+- **GIVEN**: the application is running
+- **WHEN**: I run a get http action
+- **THEN**: it should work correctly
 - **Tag**: `@spec`
 
 **Scenario 2**: Validation Test
 
-- **GIVEN**: user is configuring Automation action.http.get
-- **WHEN**: service field is empty
-- **THEN**: display error "Service is required"
+- **GIVEN**: I am working with headers
+- **WHEN**: I run a get http action
+- **THEN**: it should complete successfully
 - **Tag**: `@spec`
-
-**Scenario 3**: Validation Test
-
-- **GIVEN**: user is configuring Automation action.http.get
-- **WHEN**: action field is empty
-- **THEN**: display error "Action is required"
-- **Tag**: `@spec`
-
-**Scenario 4**: Validation Test
-
-- **GIVEN**: user is configuring Automation action.http.get
-- **WHEN**: params field is empty
-- **THEN**: display error "Params is required"
-- **Tag**: `@spec`
-
-**Scenario 5**: Validation Test
-
-- **GIVEN**: user configures Automation action.http.get
-- **WHEN**: entering Name
-- **THEN**: field is optional
-- **Tag**: `@spec`
-
-**Scenario 6**: Validation Test
-
-- **GIVEN**: user configures Automation action.http.get
-- **WHEN**: entering Service
-- **THEN**: field is optional
-- **Tag**: `@spec`
-
-**Scenario 7**: Validation Test
-
-- **GIVEN**: user configures Automation action.http.get
-- **WHEN**: entering Action
-- **THEN**: field is optional
-- **Tag**: `@spec`
-
-**Scenario 8**: Validation Test
-
-- **GIVEN**: user configures Automation action.http.get
-- **WHEN**: entering Params
-- **THEN**: field is required
-- **Tag**: `@spec`
-
-### @regression User Story (Complete Workflow)
-
-This test consolidates ALL @spec tests into ONE comprehensive workflow.
-
-**Complete Configuration Workflow**:
-
-- **GIVEN**: user is configuring Automation action.http.get in the application
-- **WHEN**: user completes full configuration workflow including all fields and validations
-- **THEN**: configuration is saved successfully with all validations passing and data persists correctly
-- **Tag**: `@regression`
 
 ### data-testid Patterns
 
 Use these standardized test IDs for reliable selectors:
 
-- `[data-testid="automation_action.http.get-name-input"]`
-- `[data-testid="automation_action.http.get-name-error"]`
-- `[data-testid="automation_action.http.get-service-input"]`
-- `[data-testid="automation_action.http.get-service-error"]`
-- `[data-testid="automation_action.http.get-action-input"]`
-- `[data-testid="automation_action.http.get-action-error"]`
-- `[data-testid="automation_action.http.get-params-input"]`
-- `[data-testid="automation_action.http.get-params-error"]`
+- `[data-testid="automation_action-http-get-input"]`
+- `[data-testid="automation_action-http-get-error"]`
 
 ---
 
@@ -158,8 +99,7 @@ Use these standardized test IDs for reliable selectors:
 This property is complete when:
 
 - [ ] Effect Schema implemented and exported
-- [ ] All 8 @spec E2E tests passing
-- [ ] All 1 @regression E2E tests passing
+- [ ] All 2 @spec E2E tests passing
 - [ ] Unit test coverage >80%
 - [ ] All TypeScript strict mode checks passing
 - [ ] All ESLint checks passing

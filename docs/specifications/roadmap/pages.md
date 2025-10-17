@@ -4,7 +4,7 @@
 > **Completion**: 0%
 > **Complexity**: 10 points
 
-Pages and forms in the application
+User interface pages and views that users interact with. Pages can display data from tables (table-view, detail-view), collect input through forms (form), or render custom HTML content. Each page has a unique URL path, navigation visibility settings, and configurable layouts. Pages connect your data model to the user experience.
 
 ## Implementation Status
 
@@ -44,7 +44,7 @@ import { Schema } from 'effect'
 /**
  * Pages
  *
- * Pages and forms in the application
+ * User interface pages and views that users interact with. Pages can display data from tables (table-view, detail-view), collect input through forms (form), or render custom HTML content. Each page has a unique URL path, navigation visibility settings, and configurable layouts. Pages connect your data model to the user experience.
  */
 export const PagesSchema = Schema.Array(
   Schema.Union(
@@ -282,7 +282,8 @@ export const PagesSchema = Schema.Array(
   Schema.minItems(1),
   Schema.annotations({
     title: 'Pages',
-    description: 'Pages and forms in the application',
+    description:
+      'User interface pages and views that users interact with. Pages can display data from tables (table-view, detail-view), collect input through forms (form), or render custom HTML content. Each page has a unique URL path, navigation visibility settings, and configurable layouts. Pages connect your data model to the user experience.',
   })
 )
 

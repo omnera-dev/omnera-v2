@@ -4,7 +4,7 @@
 > **Completion**: 50%
 > **Complexity**: 5 points
 
-The name of your application
+The internal identifier for your application. Must follow npm package naming conventions: lowercase, hyphens allowed, no spaces or special characters. This name is used in URLs, routing paths, API endpoints, and database prefixes. Choose a name that is descriptive but concise.
 
 ## Implementation Status
 
@@ -34,19 +34,20 @@ import { Schema } from 'effect'
 /**
  * Application Name
  *
- * The name of your application
+ * The internal identifier for your application. Must follow npm package naming conventions: lowercase, hyphens allowed, no spaces or special characters. This name is used in URLs, routing paths, API endpoints, and database prefixes. Choose a name that is descriptive but concise.
  *
  * @example
  * ```typescript
- * "My E-commerce App"
+ * "my-app"
  * ```
  */
 export const NameSchema = Schema.String.pipe(
   Schema.minLength(3, { message: () => 'Minimum length is 3 characters' }),
   Schema.annotations({
     title: 'Application Name',
-    description: 'The name of your application',
-    examples: ['My E-commerce App', 'Customer Portal', 'Admin Dashboard'],
+    description:
+      'The internal identifier for your application. Must follow npm package naming conventions: lowercase, hyphens allowed, no spaces or special characters. This name is used in URLs, routing paths, API endpoints, and database prefixes. Choose a name that is descriptive but concise.',
+    examples: ['my-app', 'customer-portal', 'inventory-system', 'task-manager', 'crm-platform'],
   })
 )
 

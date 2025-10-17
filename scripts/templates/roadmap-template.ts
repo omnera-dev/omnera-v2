@@ -293,7 +293,7 @@ interface TreeNode {
   isDirectory: boolean
 }
 
-function buildTree(allProperties: PropertyStatus[]): TreeNode {
+function _buildTree(allProperties: PropertyStatus[]): TreeNode {
   const root: TreeNode = {
     name: 'root',
     children: new Map(),
@@ -328,7 +328,7 @@ function buildTree(allProperties: PropertyStatus[]): TreeNode {
 /**
  * Render tree node recursively
  */
-function renderTreeNode(
+function _renderTreeNode(
   node: TreeNode,
   depth: number = 0,
   prefix: string = '',
@@ -378,7 +378,7 @@ function renderTreeNode(
   children.forEach(([, childNode], index) => {
     const isLastChild = index === children.length - 1
     const newPrefix = depth > 0 ? prefix + (isLast ? '   ' : '│  ') : ''
-    md += renderTreeNode(childNode, depth + 1, newPrefix, isLastChild)
+    md += _renderTreeNode(childNode, depth + 1, newPrefix, isLastChild)
   })
 
   return md
@@ -739,7 +739,9 @@ function renderPropertyTable(
           : '⏳'
       : '⏳'
     const testStatus =
-      impl && impl.expectedTestCount > 0 ? `${impl.implementedTestCount}/${impl.expectedTestCount}` : '-'
+      impl && impl.expectedTestCount > 0
+        ? `${impl.implementedTestCount}/${impl.expectedTestCount}`
+        : '-'
     const qualityIcon = impl && impl.hasUnitTests ? '✅' : '⏳'
 
     const fileName = prop.name.replace(/\./g, '/')
@@ -878,7 +880,7 @@ interface TableRow {
   guide: string
 }
 
-function flattenTreeForTable(node: TreeNode, basePath: string = ''): TableRow[] {
+function _flattenTreeForTable(node: TreeNode, basePath: string = ''): TableRow[] {
   const rows: TableRow[] = []
 
   const children = Array.from(node.children.entries()).sort((a, b) => {
@@ -923,7 +925,7 @@ function flattenTreeForTable(node: TreeNode, basePath: string = ''): TableRow[] 
       })
     } else if (childNode.isDirectory) {
       // This is a directory - recurse
-      rows.push(...flattenTreeForTable(childNode, currentPath))
+      rows.push(..._flattenTreeForTable(childNode, currentPath))
     }
   })
 

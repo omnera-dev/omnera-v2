@@ -4,7 +4,7 @@
 > **Completion**: 50%
 > **Complexity**: 5 points
 
-A brief description of what your application does
+A comprehensive description of your application's purpose, features, and intended use. This description helps users understand what the application does and appears in application listings, documentation, and metadata. Use clear, concise language that explains the business value.
 
 ## Implementation Status
 
@@ -34,19 +34,25 @@ import { Schema } from 'effect'
 /**
  * Application Description
  *
- * A brief description of what your application does
+ * A comprehensive description of your application's purpose, features, and intended use. This description helps users understand what the application does and appears in application listings, documentation, and metadata. Use clear, concise language that explains the business value.
  *
  * @example
  * ```typescript
- * "A platform for managing customer orders"
+ * "A customer relationship management system for tracking sales leads and opportunities"
  * ```
  */
 export const DescriptionSchema = Schema.String.pipe(
   Schema.minLength(1, { message: () => 'This field is required' }),
   Schema.annotations({
     title: 'Application Description',
-    description: 'A brief description of what your application does',
-    examples: ['A platform for managing customer orders', 'Internal tool for data analytics'],
+    description:
+      "A comprehensive description of your application's purpose, features, and intended use. This description helps users understand what the application does and appears in application listings, documentation, and metadata. Use clear, concise language that explains the business value.",
+    examples: [
+      'A customer relationship management system for tracking sales leads and opportunities',
+      'Internal inventory management platform with automated reordering workflows',
+      'Project management tool for agile teams with sprint planning and kanban boards',
+      'Employee onboarding portal with document management and task tracking',
+    ],
   })
 )
 

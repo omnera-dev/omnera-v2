@@ -69,83 +69,136 @@ These tests define specific acceptance criteria. Each test validates ONE behavio
 
 **Scenario 1**: Validation Test
 
-- **GIVEN**: user is configuring Automation action.filter.only-continue-if
-- **WHEN**: name field is empty
-- **THEN**: display error "Name is required"
+- **GIVEN**: the application is running
+- **WHEN**: I not run an action if the filter returns false
+- **THEN**: it should work correctly
 - **Tag**: `@spec`
 
 **Scenario 2**: Validation Test
 
-- **GIVEN**: user is configuring Automation action.filter.only-continue-if
-- **WHEN**: service field is empty
-- **THEN**: display error "Service is required"
+- **GIVEN**: the application is running
+- **WHEN**: I run an and filter action that returns true
+- **THEN**: it should work correctly
 - **Tag**: `@spec`
 
 **Scenario 3**: Validation Test
 
-- **GIVEN**: user is configuring Automation action.filter.only-continue-if
-- **WHEN**: action field is empty
-- **THEN**: display error "Action is required"
+- **GIVEN**: the application is running
+- **WHEN**: I run an and filter action that returns false
+- **THEN**: it should work correctly
 - **Tag**: `@spec`
 
 **Scenario 4**: Validation Test
 
-- **GIVEN**: user is configuring Automation action.filter.only-continue-if
-- **WHEN**: params field is empty
-- **THEN**: display error "Params is required"
+- **GIVEN**: the application is running
+- **WHEN**: I run an or filter action that returns true
+- **THEN**: it should work correctly
 - **Tag**: `@spec`
 
 **Scenario 5**: Validation Test
 
-- **GIVEN**: user configures Automation action.filter.only-continue-if
-- **WHEN**: entering Name
-- **THEN**: field is optional
+- **GIVEN**: the application is running
+- **WHEN**: I run an or filter action that returns false
+- **THEN**: it should work correctly
 - **Tag**: `@spec`
 
 **Scenario 6**: Validation Test
 
-- **GIVEN**: user configures Automation action.filter.only-continue-if
-- **WHEN**: entering Service
-- **THEN**: field is optional
+- **GIVEN**: the application is running
+- **WHEN**: I run an action if the filter returns true
+- **THEN**: it should work correctly
 - **Tag**: `@spec`
 
 **Scenario 7**: Validation Test
 
-- **GIVEN**: user configures Automation action.filter.only-continue-if
-- **WHEN**: entering Action
-- **THEN**: field is optional
+- **GIVEN**: the application is running
+- **WHEN**: I run an exists filter action that returns true
+- **THEN**: it should work correctly
 - **Tag**: `@spec`
 
 **Scenario 8**: Validation Test
 
-- **GIVEN**: user configures Automation action.filter.only-continue-if
-- **WHEN**: entering Params
-- **THEN**: field is optional
+- **GIVEN**: the application is running
+- **WHEN**: I run an exists filter action that returns false
+- **THEN**: it should work correctly
 - **Tag**: `@spec`
 
-### @regression User Story (Complete Workflow)
+**Scenario 9**: Validation Test
 
-This test consolidates ALL @spec tests into ONE comprehensive workflow.
+- **GIVEN**: the application is running
+- **WHEN**: I run an does-not-exist filter action that returns true
+- **THEN**: it should work correctly
+- **Tag**: `@spec`
 
-**Complete Configuration Workflow**:
+**Scenario 10**: Validation Test
 
-- **GIVEN**: user is configuring Automation action.filter.only-continue-if in the application
-- **WHEN**: user completes full configuration workflow including all fields and validations
-- **THEN**: configuration is saved successfully with all validations passing and data persists correctly
-- **Tag**: `@regression`
+- **GIVEN**: the application is running
+- **WHEN**: I run an does-not-exist filter action that returns false
+- **THEN**: it should work correctly
+- **Tag**: `@spec`
+
+**Scenario 11**: Validation Test
+
+- **GIVEN**: the application is running
+- **WHEN**: I run an is-true filter action that returns true
+- **THEN**: it should work correctly
+- **Tag**: `@spec`
+
+**Scenario 12**: Validation Test
+
+- **GIVEN**: the application is running
+- **WHEN**: I run an is-true filter action that returns false
+- **THEN**: it should work correctly
+- **Tag**: `@spec`
+
+**Scenario 13**: Validation Test
+
+- **GIVEN**: the application is running
+- **WHEN**: I run an is-false filter action that returns true
+- **THEN**: it should work correctly
+- **Tag**: `@spec`
+
+**Scenario 14**: Validation Test
+
+- **GIVEN**: the application is running
+- **WHEN**: I run an is-false filter action that returns false
+- **THEN**: it should work correctly
+- **Tag**: `@spec`
+
+**Scenario 15**: Validation Test
+
+- **GIVEN**: the application is running
+- **WHEN**: I run an contains filter action that returns true
+- **THEN**: it should work correctly
+- **Tag**: `@spec`
+
+**Scenario 16**: Validation Test
+
+- **GIVEN**: the application is running
+- **WHEN**: I run an contains filter action that returns false
+- **THEN**: it should work correctly
+- **Tag**: `@spec`
+
+**Scenario 17**: Validation Test
+
+- **GIVEN**: the application is running
+- **WHEN**: I run an does-not-contain filter action that returns true
+- **THEN**: it should work correctly
+- **Tag**: `@spec`
+
+**Scenario 18**: Validation Test
+
+- **GIVEN**: the application is running
+- **WHEN**: I run an does-not-contain filter action that returns false
+- **THEN**: it should work correctly
+- **Tag**: `@spec`
 
 ### data-testid Patterns
 
 Use these standardized test IDs for reliable selectors:
 
-- `[data-testid="automation_action.filter.only-continue-if-name-input"]`
-- `[data-testid="automation_action.filter.only-continue-if-name-error"]`
-- `[data-testid="automation_action.filter.only-continue-if-service-input"]`
-- `[data-testid="automation_action.filter.only-continue-if-service-error"]`
-- `[data-testid="automation_action.filter.only-continue-if-action-input"]`
-- `[data-testid="automation_action.filter.only-continue-if-action-error"]`
-- `[data-testid="automation_action.filter.only-continue-if-params-input"]`
-- `[data-testid="automation_action.filter.only-continue-if-params-error"]`
+- `[data-testid="automation_action-filter-only-continue-if-input"]`
+- `[data-testid="automation_action-filter-only-continue-if-error"]`
 
 ---
 
@@ -154,8 +207,7 @@ Use these standardized test IDs for reliable selectors:
 This property is complete when:
 
 - [ ] Effect Schema implemented and exported
-- [ ] All 8 @spec E2E tests passing
-- [ ] All 1 @regression E2E tests passing
+- [ ] All 18 @spec E2E tests passing
 - [ ] Unit test coverage >80%
 - [ ] All TypeScript strict mode checks passing
 - [ ] All ESLint checks passing

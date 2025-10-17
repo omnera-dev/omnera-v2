@@ -71,67 +71,52 @@ These tests define specific acceptance criteria. Each test validates ONE behavio
 
 **Scenario 1**: Validation Test
 
-- **GIVEN**: user is configuring Automation trigger.http.get
-- **WHEN**: service field is empty
-- **THEN**: display error "Service is required"
+- **GIVEN**: Facebook sends GET validation request
+- **WHEN**: I respond with hub.challenge
+- **THEN**: it should succeed
 - **Tag**: `@spec`
 
 **Scenario 2**: Validation Test
 
-- **GIVEN**: user is configuring Automation trigger.http.get
-- **WHEN**: event field is empty
-- **THEN**: display error "Event is required"
+- **GIVEN**: hub.mode is not subscribe
+- **WHEN**: I not respond with challenge
+- **THEN**: it should succeed
 - **Tag**: `@spec`
 
 **Scenario 3**: Validation Test
 
-- **GIVEN**: user is configuring Automation trigger.http.get
-- **WHEN**: params field is empty
-- **THEN**: display error "Params is required"
+- **GIVEN**: I am working with a get request
+- **WHEN**: I not found the automation
+- **THEN**: it should complete successfully
 - **Tag**: `@spec`
 
 **Scenario 4**: Validation Test
 
-- **GIVEN**: user configures Automation trigger.http.get
-- **WHEN**: entering Service
-- **THEN**: field is optional
+- **GIVEN**: I am working with a wrong path
+- **WHEN**: I not found the automation
+- **THEN**: it should complete successfully
 - **Tag**: `@spec`
 
 **Scenario 5**: Validation Test
 
-- **GIVEN**: user configures Automation trigger.http.get
-- **WHEN**: entering Event
-- **THEN**: field is optional
+- **GIVEN**: LinkedIn sends GET validation request
+- **WHEN**: I respond with correctly computed challengeResponse
+- **THEN**: it should succeed
 - **Tag**: `@spec`
 
 **Scenario 6**: Validation Test
 
-- **GIVEN**: user configures Automation trigger.http.get
-- **WHEN**: entering Params
-- **THEN**: field is required
+- **GIVEN**: I am working with correct HMAC computation
+- **WHEN**: I handle GET validation for HTTP trigger path
+- **THEN**: it should complete successfully
 - **Tag**: `@spec`
-
-### @regression User Story (Complete Workflow)
-
-This test consolidates ALL @spec tests into ONE comprehensive workflow.
-
-**Complete Configuration Workflow**:
-
-- **GIVEN**: user is configuring Automation trigger.http.get in the application
-- **WHEN**: user completes full configuration workflow including all fields and validations
-- **THEN**: configuration is saved successfully with all validations passing and data persists correctly
-- **Tag**: `@regression`
 
 ### data-testid Patterns
 
 Use these standardized test IDs for reliable selectors:
 
-- `[data-testid="automation_trigger.http.get-service-input"]`
-- `[data-testid="automation_trigger.http.get-service-error"]`
-- `[data-testid="automation_trigger.http.get-event-input"]`
-- `[data-testid="automation_trigger.http.get-event-error"]`
-- `[data-testid="automation_trigger.http.get-params-input"]`
-- `[data-testid="automation_trigger.http.get-params-error"]`
+- `[data-testid="automation_trigger-http-get-input"]`
+- `[data-testid="automation_trigger-http-get-error"]`
 
 ---
 
@@ -141,7 +126,6 @@ This property is complete when:
 
 - [ ] Effect Schema implemented and exported
 - [ ] All 6 @spec E2E tests passing
-- [ ] All 1 @regression E2E tests passing
 - [ ] Unit test coverage >80%
 - [ ] All TypeScript strict mode checks passing
 - [ ] All ESLint checks passing

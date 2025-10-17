@@ -39,29 +39,16 @@ Unlike traditional no-code tools with visual builders, Omnera embraces **configu
 export default {
   name: 'MyApp',
   tables: [
-    {
-      /* database schema */
-    },
+    /* database schemas */
   ],
   pages: [
-    {
-      /* UI routes */
-    },
+    /* web interfaces */
   ],
   automations: [
-    {
-      /* workflows */
-    },
+    /* workflows */
   ],
-  forms: [
-    {
-      /* data collection */
-    },
-  ],
-  integrations: [
-    {
-      /* external services */
-    },
+  connections: [
+    /* external services */
   ],
 }
 ```
@@ -92,53 +79,14 @@ The runtime server:
 
 ## Configuration Schema
 
-### Tables
+Omnera applications are defined through JSON configuration files that specify:
 
-Define data structures with automatic database management:
+- **Tables**: Database schemas and data structures
+- **Pages**: Web interfaces and routing
+- **Automations**: Event-driven workflows and integrations
+- **Connections**: External service integrations
 
-- Field types: text, email, number, date, boolean, select, file
-- Automatic CRUD operations and REST APIs
-- Built-in relationships and validations
-- No SQL or ORM code required
-
-### Pages
-
-Configure web interfaces:
-
-- Dynamic routing from path definitions
-- Auto-generated forms from table schemas
-- Data tables with sorting/filtering
-- Authentication pages (login, register, reset)
-- Admin dashboards
-
-### Automations
-
-Event-driven workflows:
-
-- **Triggers**: database events, schedules, webhooks, form submissions
-- **Actions**: send emails, update data, call APIs, run code
-- **Conditions**: if-then rules, data validation
-- Template variables with `{{variable}}` syntax
-
-### Forms
-
-Data collection interfaces:
-
-- Input types matching table field types
-- Built-in validation
-- File uploads
-- Multi-step forms
-- Submission handling
-
-### Integrations
-
-External service connections:
-
-- OAuth providers (Google, GitHub, etc.)
-- Payment systems (Stripe)
-- Email services (SMTP, Resend)
-- APIs and webhooks
-- Cloud storage
+All configuration options, validation rules, field types, and examples are documented in `docs/specifications/specs.schema.json`, which serves as the complete technical specification for the Omnera configuration format.
 
 ## Built-in Features
 
@@ -203,29 +151,16 @@ start(config)
 
 ### Configuration Example
 
-```TypeScript
+```typescript
 {
   name: "MyApp",
-  tables: [{
-    name: "users",
-    fields: [
-      { name: "email", type: "email" },
-      { name: "name", type: "text" },
-      { name: "role", type: "select", options: ["admin", "user"] }
-    ]
-  }],
-  pages: [{
-    path: "/dashboard",
-    title: "Dashboard",
-    table: "users"
-  }],
-  automations: [{
-    trigger: "users.created",
-    action: "sendEmail",
-    template: "welcome"
-  }]
+  tables: [ /* define data structures */ ],
+  pages: [ /* define web pages */ ],
+  automations: [ /* define workflows */ ]
 }
 ```
+
+> For complete configuration schema and examples, see `docs/specifications/specs.schema.json`
 
 ## Performance Metrics
 

@@ -37,12 +37,12 @@ export const Tables.fields.number-field.nameSchema = Schema.String.pipe(
     Schema.minLength(1, { message: () => 'This field is required' }),
     Schema.maxLength(63, { message: () => 'Maximum length is 63 characters' }),
     Schema.pattern(/^[a-z][a-z0-9_]*$/, {
-    message: () => 'Internal identifier name. Use lowercase letters, numbers, and underscores. Must start with a letter. This name is used for database tables, fields, and internal references.'
+    message: () => 'Internal identifier name used for database tables, columns, and programmatic references. Must follow database naming conventions: start with a letter, contain only lowercase letters, numbers, and underscores, maximum 63 characters (PostgreSQL limit). This name is used in SQL queries, API endpoints, and code generation. Choose descriptive names that clearly indicate the purpose (e.g., "email_address" not "ea").'
   }),
     Schema.annotations({
     title: "Name",
-    description: "Internal identifier name. Use lowercase letters, numbers, and underscores. Must start with a letter. This name is used for database tables, fields, and internal references.",
-    examples: ["user","product_category","order_item","email_address"]
+    description: "Internal identifier name used for database tables, columns, and programmatic references. Must follow database naming conventions: start with a letter, contain only lowercase letters, numbers, and underscores, maximum 63 characters (PostgreSQL limit). This name is used in SQL queries, API endpoints, and code generation. Choose descriptive names that clearly indicate the purpose (e.g., \"email_address\" not \"ea\").",
+    examples: ["user","product","order_item","customer_email","shipping_address","created_at"]
   })
   )
 

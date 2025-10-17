@@ -72,67 +72,101 @@ These tests define specific acceptance criteria. Each test validates ONE behavio
 
 **Scenario 1**: Validation Test
 
-- **GIVEN**: user is configuring Automation trigger.http.post
-- **WHEN**: service field is empty
-- **THEN**: display error "Service is required"
+- **GIVEN**: a airtable record is created
+- **WHEN**: I trigger an automation
+- **THEN**: it should succeed
 - **Tag**: `@spec`
 
 **Scenario 2**: Validation Test
 
-- **GIVEN**: user is configuring Automation trigger.http.post
-- **WHEN**: event field is empty
-- **THEN**: display error "Event is required"
+- **GIVEN**: POST request sent
+- **WHEN**: I process actual lead data
+- **THEN**: it should succeed
 - **Tag**: `@spec`
 
 **Scenario 3**: Validation Test
 
-- **GIVEN**: user is configuring Automation trigger.http.post
-- **WHEN**: params field is empty
-- **THEN**: display error "Params is required"
+- **GIVEN**: the application is running
+- **WHEN**: I handle validation for HTTP trigger path as well
+- **THEN**: it should work correctly
 - **Tag**: `@spec`
 
 **Scenario 4**: Validation Test
 
-- **GIVEN**: user configures Automation trigger.http.post
-- **WHEN**: entering Service
-- **THEN**: field is optional
+- **GIVEN**: the application is running
+- **WHEN**: I trigger an automation
+- **THEN**: it should work correctly
 - **Tag**: `@spec`
 
 **Scenario 5**: Validation Test
 
-- **GIVEN**: user configures Automation trigger.http.post
-- **WHEN**: entering Event
-- **THEN**: field is optional
+- **GIVEN**: I am working with immediate response
+- **WHEN**: I trigger an automation
+- **THEN**: it should complete successfully
 - **Tag**: `@spec`
 
 **Scenario 6**: Validation Test
 
-- **GIVEN**: user configures Automation trigger.http.post
-- **WHEN**: entering Params
-- **THEN**: field is required
+- **GIVEN**: I am working with a invalid body
+- **WHEN**: I not trigger an automation
+- **THEN**: it should complete successfully
 - **Tag**: `@spec`
 
-### @regression User Story (Complete Workflow)
+**Scenario 7**: Validation Test
 
-This test consolidates ALL @spec tests into ONE comprehensive workflow.
+- **GIVEN**: I am working with a valid object body
+- **WHEN**: I trigger an automation
+- **THEN**: it should complete successfully
+- **Tag**: `@spec`
 
-**Complete Configuration Workflow**:
+**Scenario 8**: Validation Test
 
-- **GIVEN**: user is configuring Automation trigger.http.post in the application
-- **WHEN**: user completes full configuration workflow including all fields and validations
-- **THEN**: configuration is saved successfully with all validations passing and data persists correctly
-- **Tag**: `@regression`
+- **GIVEN**: I am working with a valid array body
+- **WHEN**: I trigger an automation
+- **THEN**: it should complete successfully
+- **Tag**: `@spec`
+
+**Scenario 9**: Validation Test
+
+- **GIVEN**: I am working with a valid array body and respond immediately
+- **WHEN**: I trigger an automation
+- **THEN**: it should complete successfully
+- **Tag**: `@spec`
+
+**Scenario 10**: Validation Test
+
+- **GIVEN**: I am working with form data
+- **WHEN**: I trigger an automation
+- **THEN**: it should complete successfully
+- **Tag**: `@spec`
+
+**Scenario 11**: Validation Test
+
+- **GIVEN**: I am working with a post request
+- **WHEN**: I not found the automation
+- **THEN**: it should complete successfully
+- **Tag**: `@spec`
+
+**Scenario 12**: Validation Test
+
+- **GIVEN**: a calendly invite is created
+- **WHEN**: I trigger an automation
+- **THEN**: it should succeed
+- **Tag**: `@spec`
+
+**Scenario 13**: Validation Test
+
+- **GIVEN**: POST request sent
+- **WHEN**: I process actual lead form data
+- **THEN**: it should succeed
+- **Tag**: `@spec`
 
 ### data-testid Patterns
 
 Use these standardized test IDs for reliable selectors:
 
-- `[data-testid="automation_trigger.http.post-service-input"]`
-- `[data-testid="automation_trigger.http.post-service-error"]`
-- `[data-testid="automation_trigger.http.post-event-input"]`
-- `[data-testid="automation_trigger.http.post-event-error"]`
-- `[data-testid="automation_trigger.http.post-params-input"]`
-- `[data-testid="automation_trigger.http.post-params-error"]`
+- `[data-testid="automation_trigger-http-post-input"]`
+- `[data-testid="automation_trigger-http-post-error"]`
 
 ---
 
@@ -141,8 +175,7 @@ Use these standardized test IDs for reliable selectors:
 This property is complete when:
 
 - [ ] Effect Schema implemented and exported
-- [ ] All 6 @spec E2E tests passing
-- [ ] All 1 @regression E2E tests passing
+- [ ] All 13 @spec E2E tests passing
 - [ ] Unit test coverage >80%
 - [ ] All TypeScript strict mode checks passing
 - [ ] All ESLint checks passing
