@@ -1,6 +1,6 @@
 import { Effect, Console } from 'effect'
 import { Hono } from 'hono'
-import { compileCSS, type CSSCompilationError } from './css-compiler'
+import { compileCSS, type CSSCompilationError } from '../css/compiler'
 import type { App } from '@/domain/models/app'
 
 /**

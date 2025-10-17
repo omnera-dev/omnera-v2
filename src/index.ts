@@ -11,9 +11,9 @@
 
 import { Effect } from 'effect'
 import { startServer } from '@/application/use-cases/server/StartServer'
-import { withGracefulShutdown, logServerInfo } from '@/infrastructure/services/server-lifecycle'
+import { withGracefulShutdown, logServerInfo } from '@/infrastructure/server/lifecycle'
 import type { StartOptions } from '@/application/use-cases/server/StartServer'
-import type { ServerInstance } from '@/infrastructure/services/server'
+import type { ServerInstance } from '@/infrastructure/server/server'
 
 /**
  * Simple server interface with Promise-based methods

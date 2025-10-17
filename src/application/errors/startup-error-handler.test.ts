@@ -1,6 +1,6 @@
 import { test, expect, describe } from 'bun:test'
 import { Effect } from 'effect'
-import { handleStartupError, type ServerStartupError } from './error-handling'
+import { handleStartupError, type ServerStartupError } from './startup-error-handler'
 
 describe('handleStartupError', () => {
   test('should handle AppValidationError with correct message', () => {

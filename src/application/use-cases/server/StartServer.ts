@@ -1,8 +1,8 @@
 import { Effect, Schema } from 'effect'
 import { AppSchema } from '@/domain/models/app'
 import type { App } from '@/domain/models/app'
-import type { CSSCompilationError } from '@/infrastructure/services/css-compiler'
-import type { ServerInstance, ServerCreationError } from '@/infrastructure/services/server'
+import type { CSSCompilationError } from '@/infrastructure/css/compiler'
+import type { ServerInstance, ServerCreationError } from '@/infrastructure/server/server'
 
 /**
  * Error class for app validation failures
@@ -57,7 +57,7 @@ export const startServer = (
     )
 
     // Defer to infrastructure layer for actual server creation
-    const { createServer } = yield* Effect.promise(() => import('@/infrastructure/services/server'))
+    const { createServer } = yield* Effect.promise(() => import('@/infrastructure/server/server'))
 
     const serverInstance = yield* createServer({
       app: validatedApp,
