@@ -201,7 +201,7 @@ async function main() {
     if (testFile) {
       const testFileName = basename(testFile)
       console.log(`  🧪 Running tests in ${testFileName}...`)
-      await runCommand(`bun test "${testFile}" --bail`, 30000)
+      await runCommand(`CLAUDECODE=1 bun test "${testFile}" --bail --concurrent`, 30000)
     }
 
     const elapsed = Math.round(performance.now() - startTime)

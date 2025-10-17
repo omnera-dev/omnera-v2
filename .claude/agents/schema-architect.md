@@ -570,7 +570,7 @@ You MUST verify the following before completing any schema work:
 - ✅ **All schemas include annotations** with `title`, `description`, and `examples` (NO EXCEPTIONS)
 - ✅ Main schema (`index.ts`) properly composes all properties
 - ✅ All schemas compile without TypeScript errors
-- ✅ All tests pass (valid, invalid, edge cases) - run `CLAUDECODE=1 bun test --concurrent` to verify
+- ✅ All tests pass (valid, invalid, edge cases) - run `CLAUDECODE=1 bun test:unit` to verify
 - ✅ Error messages are clear and actionable with specific guidance
 - ✅ Code follows project formatting (single quotes, no semicolons, 2-space indent)
 - ✅ Types are correctly exported and inferred (`export type X = Schema.Schema.Type<typeof XSchema>`)

@@ -87,7 +87,7 @@ See detailed workflow below for complete step-by-step instructions.
 - Use **Bash** for test execution (`bun test:e2e -- <test-file>`)
 - Use **Bash** for regression tests (`bun test:e2e:regression`)
 - Use **Bash** for quality checks (`bun run lint`, `bun run format`, `bun run typecheck`)
-- Use **Bash** for unit tests (`CLAUDECODE=1 bun test --concurrent`)
+- Use **Bash** for unit tests (`CLAUDECODE=1 bun test:unit`)
 
 ---
 
@@ -138,7 +138,7 @@ For each failing E2E test, follow this exact sequence:
 - Create co-located unit tests (src/**/*.test.ts) for the code you wrote
 - Follow F.I.R.S.T principles: Fast, Isolated, Repeatable, Self-validating, Timely
 - Use Bun Test framework
-- Ensure unit tests pass: `CLAUDECODE=1 bun test --concurrent`
+- Ensure unit tests pass: `CLAUDECODE=1 bun test:unit`
 
 ### Step 6: Commit
 - Make a conventional commit with appropriate type:

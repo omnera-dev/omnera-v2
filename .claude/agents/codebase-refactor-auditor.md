@@ -89,7 +89,7 @@ color: orange
 <!-- Tool Access: Inherits all tools -->
 <!-- Justification: This agent requires full tool access to:
   - Read documentation (@docs) and source code (@src)
-  - Execute tests (CLAUDECODE=1 bun test --concurrent, bun test:e2e)
+  - Execute tests (CLAUDECODE=1 bun test:unit, bun test:e2e)
   - Modify files during refactoring (Edit, Write)
   - Search for patterns (Glob, Grep)
   - Run shell commands for validation (Bash)
@@ -310,7 +310,7 @@ bun test:e2e --grep @critical    # Must pass 100%
 bun test:e2e --grep @regression  # Must pass 100%
 
 # Validate after refactoring (Phase 5)
-CLAUDECODE=1 bun test --concurrent  # All unit tests
+CLAUDECODE=1 bun test:unit       # All unit tests
 bun test:e2e --grep @critical    # Compare to baseline
 bun test:e2e --grep @regression  # Compare to baseline
 ```
@@ -346,7 +346,7 @@ Use this template to document test baseline state:
 4. **Abort if any tests fail** - refactoring on broken baseline is forbidden
 
 **Phase 5 (Post-Refactoring)**:
-1. Run all unit tests: `CLAUDECODE=1 bun test --concurrent`
+1. Run all unit tests: `CLAUDECODE=1 bun test:unit`
 2. Run @critical tests: `bun test:e2e --grep @critical`
 3. Run @regression tests: `bun test:e2e --grep @regression`
 4. Compare results against Phase 0 baseline
@@ -781,7 +781,7 @@ Recommendations are prioritized by benefit-to-effort ratio:
 
 ### Unit Tests
 - ✅ X/X passing (no regressions)
-- Command: `CLAUDECODE=1 bun test --concurrent`
+- Command: `CLAUDECODE=1 bun test:unit`
 
 ### Critical E2E Tests (@critical)
 - ✅ X/X passing (baseline maintained)

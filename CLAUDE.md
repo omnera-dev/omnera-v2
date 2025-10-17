@@ -41,11 +41,15 @@
 bun install                 # Install dependencies
 bun run src/index.ts        # Run application
 
+# Scripts (TypeScript utilities)
+bun run scripts/export-schema.ts  # Run a specific script
+bun test:unit                     # Test all unit tests (src/ and scripts/)
+
 # Code Quality (pre-commit)
 bun run lint                # ESLint
 bun run format              # Prettier
 bun run typecheck           # TypeScript
-bun test                    # Unit tests (Bun Test)
+bun test:unit               # Unit tests (Bun Test - src/ and scripts/)
 bun test:e2e                # E2E tests (Playwright)
 bun test:all                # All tests
 
@@ -108,6 +112,9 @@ omnera-v2/
 ├── docs/                        # Detailed documentation (import on-demand)
 │   ├── infrastructure/          # Tech stack docs
 │   └── architecture/            # Architecture patterns
+├── scripts/                     # Build & utility scripts (TypeScript, run by Bun)
+│   ├── **/*.ts                  # TypeScript scripts (executable with Bun)
+│   └── **/*.test.ts             # Script unit tests (co-located)
 ├── src/
 │   ├── components/ui/           # shadcn/ui components
 │   ├── lib/utils.ts             # Utilities (cn helper)
@@ -168,7 +175,7 @@ omnera-v2/
 ## Development Workflow
 
 1. **Write code** following standards above
-2. **Test locally**: `bun run lint && bun run format && bun run typecheck && bun test`
+2. **Test locally**: `bun run lint && bun run format && bun run typecheck && bun test:unit`
 3. **Commit**: Use conventional commits (`feat:`, `fix:`, etc.) for regular work
 4. **Push**: GitHub Actions runs tests
 5. **Release**: When ready to publish, use `git commit -m "release: publish"` and push

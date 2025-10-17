@@ -73,11 +73,26 @@ bun test --timeout 5000  # 5 seconds
 
 ### Recommended Command for AI Workflows
 
+**For Claude Code (AI-assisted development)**:
+
 ```bash
-CLAUDECODE=1 bun test --concurrent
+CLAUDECODE=1 bun test:unit
 ```
 
-This optimized command combines two powerful features specifically designed for AI-assisted development with Claude Code.
+**For humans (manual testing)**:
+
+```bash
+bun test:unit
+```
+
+These commands use a package.json script that automatically runs tests in both `src/` and `scripts/` directories with optimized flags (`--concurrent` for parallel execution).
+
+**Why use a script instead of raw `bun test`?**
+
+- The raw `bun test` command requires explicit directories: `bun test src/ scripts/`
+- The `test:unit` script handles directory specification automatically
+- Consistent command across development and CI/CD environments
+- Easy to update flags globally without changing every command
 
 ### `--concurrent` Flag
 
@@ -93,11 +108,14 @@ This optimized command combines two powerful features specifically designed for 
 **Example**:
 
 ```bash
-# Sequential (default)
-bun test                    # ~5 seconds for 50 tests
+# Sequential (default) - manual command
+bun test src/ scripts/              # ~5 seconds for 50 tests
 
-# Concurrent
-bun test --concurrent       # ~1.5 seconds for 50 tests
+# Concurrent - manual command
+bun test --concurrent src/ scripts/ # ~1.5 seconds for 50 tests
+
+# With script (handles directories automatically)
+bun test:unit                       # ~1.5 seconds for 50 tests
 ```
 
 **When to Use**:
@@ -166,44 +184,64 @@ Time: 145ms
 
 ### Combined Usage
 
-**Recommended for all AI-assisted development**:
+**For Claude Code (AI-assisted development)**:
 
 ```bash
-# Run tests with maximum speed and minimal noise
-CLAUDECODE=1 bun test --concurrent
+# Run all unit tests with AI optimization
+CLAUDECODE=1 bun test:unit
 
 # Run specific file with optimization
 CLAUDECODE=1 bun test --concurrent ./src/calculator.test.ts
 
 # Watch mode with optimization (continuous TDD)
-CLAUDECODE=1 bun test --concurrent --watch
+CLAUDECODE=1 bun test:unit:watch
 ```
 
-### Integration with package.json Scripts
+**For humans (manual testing)**:
 
-Update your `package.json` to use this optimized command:
+```bash
+# Run all unit tests
+bun test:unit
+
+# Run specific file
+bun test --concurrent ./src/calculator.test.ts
+
+# Watch mode
+bun test:unit:watch
+```
+
+### Required package.json Scripts
+
+Add these scripts to your `package.json`:
 
 ```json
 {
   "scripts": {
-    "test": "CLAUDECODE=1 bun test --concurrent",
-    "test:watch": "CLAUDECODE=1 bun test --concurrent --watch",
-    "test:coverage": "CLAUDECODE=1 bun test --concurrent --coverage"
+    "test:unit": "bun test --concurrent src/ scripts/",
+    "test:unit:watch": "bun test --concurrent --watch src/ scripts/",
+    "test:unit:coverage": "bun test --concurrent --coverage src/ scripts/"
   }
 }
 ```
 
-**Note**: The environment variable syntax shown above is for Unix-like systems (macOS, Linux). For cross-platform compatibility, you can use `cross-env`:
+**Why this structure?**
 
-```json
-{
-  "scripts": {
-    "test": "cross-env CLAUDECODE=1 bun test --concurrent"
-  }
-}
+- `test:unit` handles directory specification (src/ and scripts/) automatically
+- `--concurrent` flag enables parallel execution for speed
+- Consistent naming with `test:e2e` for end-to-end tests
+- Easy to add CLAUDECODE=1 prefix when needed for AI workflows
+
+**For AI-assisted development**, Claude Code will use:
+
+```bash
+CLAUDECODE=1 bun test:unit  # Optimized output for AI context efficiency
 ```
 
-However, since Omnera uses Bun as the runtime and targets Unix-like development environments, the direct environment variable syntax is preferred for simplicity.
+**For human development**, you'll use:
+
+```bash
+bun test:unit  # Full verbose output for human review
+```
 
 ### When NOT to Use CLAUDECODE=1
 
@@ -218,10 +256,13 @@ For these scenarios, use standard commands:
 
 ```bash
 # Standard output (all tests visible)
-bun test --concurrent
+bun test:unit
+
+# Specific directory without script
+bun test --concurrent src/
 
 # CI/CD (full verbosity)
-bun test --concurrent --verbose
+bun test --concurrent --verbose src/ scripts/
 ```
 
 ## Test Structure
@@ -397,7 +438,6 @@ The `scripts/` directory contains TypeScript utility scripts executed by Bun (e.
 scripts/
 ├── export-schema.ts       # Script implementation
 ├── export-schema.test.ts  # Unit tests for the script
-├── format-session.sh      # Shell script (no tests needed)
 └── split-docs.ts          # Another TypeScript script
 ```
 
