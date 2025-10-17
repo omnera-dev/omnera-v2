@@ -19,7 +19,7 @@
     [
       "@semantic-release/exec",
       {
-        "prepareCmd": "node scripts/update-license-date.js ${nextRelease.version}"
+        "prepareCmd": "bun run scripts/update-license-date.ts ${nextRelease.version}"
       }
     ],
     [

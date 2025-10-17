@@ -1,16 +1,11 @@
-#!/usr/bin/env node
+#!/usr/bin/env bun
 
 /**
  * Updates the license date and version in LICENSE.md for BSL 1.1
  * Called by semantic-release during the release process
  */
 
-import { readFileSync, writeFileSync } from 'node:fs'
-import { dirname, join } from 'node:path'
-import { fileURLToPath } from 'node:url'
-
-const __filename = fileURLToPath(import.meta.url)
-const __dirname = dirname(__filename)
+import { join } from 'node:path'
 
 const version = process.argv[2]
 
@@ -19,10 +14,12 @@ if (!version) {
   process.exit(1)
 }
 
-const licensePath = join(__dirname, '..', 'LICENSE.md')
+const licensePath = join(import.meta.dir, '..', 'LICENSE.md')
 
 try {
-  let licenseContent = readFileSync(licensePath, 'utf-8')
+  // Read license file
+  const licenseFile = Bun.file(licensePath)
+  let licenseContent = await licenseFile.text()
 
   // Get current year for copyright
   const currentYear = new Date().getFullYear()
@@ -50,13 +47,14 @@ try {
     `Change Date:            ${changeDateStr}`
   )
 
-  writeFileSync(licensePath, licenseContent, 'utf-8')
+  // Write updated content
+  await Bun.write(licensePath, licenseContent)
 
-  console.log(`✓ Updated LICENSE.md:`)
+  console.log('✓ Updated LICENSE.md:')
   console.log(`  - Version: ${version}`)
   console.log(`  - Copyright year: ${currentYear}`)
   console.log(`  - Change Date: ${changeDateStr}`)
 } catch (error) {
-  console.error('Error updating LICENSE.md:', error.message)
+  console.error('Error updating LICENSE.md:', (error as Error).message)
   process.exit(1)
 }
