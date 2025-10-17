@@ -10,9 +10,9 @@
  */
 
 import { Effect } from 'effect'
-import { startServer } from '@/application/use-cases/server/StartServer'
+import { startServer } from '@/application/use-cases/server/start-server'
 import { withGracefulShutdown, logServerInfo } from '@/infrastructure/server/lifecycle'
-import type { StartOptions } from '@/application/use-cases/server/StartServer'
+import type { StartOptions } from '@/application/use-cases/server/start-server'
 import type { ServerInstance } from '@/infrastructure/server/server'
 
 /**

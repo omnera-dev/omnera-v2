@@ -1,5 +1,5 @@
 import { Effect, Console } from 'effect'
-import type { AppValidationError } from '@/application/use-cases/server/StartServer'
+import type { AppValidationError } from '@/application/use-cases/server/start-server'
 import type { CSSCompilationError } from '@/infrastructure/css/compiler'
 import type { ServerCreationError } from '@/infrastructure/server/server'
 
