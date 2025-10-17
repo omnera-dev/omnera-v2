@@ -1,6 +1,7 @@
 import js from '@eslint/js'
 import { defineConfig } from 'eslint/config'
 import boundaries from 'eslint-plugin-boundaries'
+import checkFilePlugin from 'eslint-plugin-check-file'
 // @ts-expect-error - Plugin lacks proper TypeScript definitions for flat config
 import drizzlePlugin from 'eslint-plugin-drizzle'
 import functionalPlugin from 'eslint-plugin-functional'
@@ -318,6 +319,70 @@ export default defineConfig([
       // Better string methods
       'unicorn/prefer-string-starts-ends-with': 'error',
       'unicorn/prefer-string-trim-start-end': 'error',
+
+      // File naming conventions are now enforced by check-file plugin (see below)
+      // Removed: 'unicorn/filename-case' - replaced with eslint-plugin-check-file
+    },
+  },
+
+  // File Naming Conventions - Page Components (PascalCase exception)
+  // Must come before the general kebab-case rule
+  {
+    files: ['src/presentation/components/pages/**/*.{ts,tsx}'],
+    plugins: {
+      'check-file': checkFilePlugin,
+    },
+    rules: {
+      'check-file/filename-naming-convention': [
+        'error',
+        {
+          '**/*.{ts,tsx}': 'PASCAL_CASE',
+        },
+        {
+          ignoreMiddleExtensions: true,
+        },
+      ],
+    },
+  },
+
+  // File Naming Conventions - All other files (kebab-case)
+  // Comprehensive enforcement of naming patterns from docs/architecture/file-naming-conventions.md
+  {
+    files: ['src/**/*.{ts,tsx,js,jsx}'],
+    ignores: ['src/presentation/components/pages/**/*.{ts,tsx}'], // Already handled above
+    plugins: {
+      'check-file': checkFilePlugin,
+    },
+    rules: {
+      // File naming with pattern specificity (specific patterns first)
+      'check-file/filename-naming-convention': [
+        'error',
+        {
+          // Error CLASS files ending with -error.ts (not handlers)
+          'src/**/errors/*-error.ts': '*-error',
+
+          // Specific patterns for file types
+          'src/infrastructure/database/repositories/*.ts': '*-repository',
+          'src/infrastructure/layers/*.ts': '*-layer',
+          'src/presentation/components/ui/*-variants.ts': '*-variants',
+          'src/presentation/hooks/*.{ts,tsx}': 'use-*',
+          'src/presentation/components/ui/*-hook.ts': '*-hook',
+
+          // DEFAULT: All other files use kebab-case (must be last)
+          '**/*.{ts,tsx,js,jsx}': 'KEBAB_CASE',
+        },
+        {
+          ignoreMiddleExtensions: true,
+        },
+      ],
+
+      // Folder naming: kebab-case for src/ directories only
+      'check-file/folder-naming-convention': [
+        'error',
+        {
+          'src/**/': 'KEBAB_CASE',
+        },
+      ],
     },
   },
 
@@ -498,6 +563,8 @@ export default defineConfig([
           pattern: 'src/infrastructure/logging/**/*',
           mode: 'file',
         },
+        { type: 'infrastructure-server', pattern: 'src/infrastructure/server/**/*', mode: 'file' },
+        { type: 'infrastructure-css', pattern: 'src/infrastructure/css/**/*', mode: 'file' },
         {
           type: 'infrastructure-service',
           pattern: 'src/infrastructure/services/**/*',
@@ -668,6 +735,8 @@ export default defineConfig([
                 'infrastructure-storage',
                 'infrastructure-webhooks',
                 'infrastructure-logging',
+                'infrastructure-server',
+                'infrastructure-css',
                 'infrastructure-service',
               ],
               message:
@@ -722,23 +791,48 @@ export default defineConfig([
                 'infrastructure-storage',
                 'infrastructure-webhooks',
                 'infrastructure-logging',
+                'infrastructure-server',
+                'infrastructure-css',
                 'infrastructure-service',
               ],
               message:
                 'Application service violation: Can import domain, ports, use-cases, and infrastructure. Use for cross-cutting utilities only.',
             },
 
-            // Application errors - Can import domain models
+            // Application errors - Can import domain + use-cases + infrastructure (cross-cutting concern)
             {
               from: ['application-error'],
               allow: [
+                // Domain models
                 'domain-model-app',
                 'domain-model-table',
                 'domain-model-page',
                 'domain-model-automation',
+                'domain-error',
+                // Application errors (error classes and handlers can import each other)
+                'application-error',
+                // Application use-cases (for error type imports)
+                'application-use-case-server',
+                'application-use-case-config',
+                'application-use-case-database',
+                'application-use-case-auth',
+                'application-use-case-routing',
+                'application-use-case-automation',
+                'application-use-case',
+                // Infrastructure (for error type imports)
+                'infrastructure-config',
+                'infrastructure-database',
+                'infrastructure-auth',
+                'infrastructure-email',
+                'infrastructure-storage',
+                'infrastructure-webhooks',
+                'infrastructure-logging',
+                'infrastructure-server',
+                'infrastructure-css',
+                'infrastructure-service',
               ],
               message:
-                'Application error violation: Can only import domain models for type definitions.',
+                'Application error violation: Error handlers are cross-cutting concerns. Can import domain models, use-case errors, and infrastructure errors.',
             },
 
             // ==========================================
@@ -755,6 +849,8 @@ export default defineConfig([
                 'infrastructure-storage',
                 'infrastructure-webhooks',
                 'infrastructure-logging',
+                'infrastructure-server',
+                'infrastructure-css',
                 'infrastructure-service',
               ],
               allow: [
@@ -775,6 +871,8 @@ export default defineConfig([
                 'infrastructure-storage',
                 'infrastructure-webhooks',
                 'infrastructure-logging',
+                'infrastructure-server',
+                'infrastructure-css',
                 'infrastructure-service',
               ],
               message:
@@ -801,6 +899,8 @@ export default defineConfig([
                 'infrastructure-storage',
                 'infrastructure-webhooks',
                 'infrastructure-logging',
+                'infrastructure-server',
+                'infrastructure-css',
                 'infrastructure-service',
               ],
               message:
