@@ -887,7 +887,7 @@ What are you naming?
 
 ### Enforcement
 
-⚠️ **Code Naming** - Manual enforcement via code review (see ESLint Enforcement section)
+✅ **Code Naming** - Partially automated via `@typescript-eslint/naming-convention` (format enforced, semantic patterns require manual review - see ESLint Enforcement section)
 ✅ **File Naming** - Automated via `eslint-plugin-check-file` (see file-naming-conventions.md)
 ✅ **IDE Support** - TypeScript autocomplete and refactoring
 ✅ **Documentation** - This guide as single source of truth

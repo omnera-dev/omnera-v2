@@ -208,7 +208,7 @@ const user = await db.execute(query) // Vulnerable to SQL injection!
 
 **ESLint Enforcement**: Omnera's ESLint configuration automatically enforces WHERE clauses on DELETE and UPDATE operations via eslint-plugin-drizzle, preventing accidental mass operations that could compromise data integrity or expose security vulnerabilities.
 
-**See**: `@docs/infrastructure/quality/eslint.md#database-safety-rules` for complete enforcement details.
+**See**: `eslint.config.ts` lines 1090-1094 for the drizzle plugin enforcement rules.
 
 ### XSS Prevention (Cross-Site Scripting)
 

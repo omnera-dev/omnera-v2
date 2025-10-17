@@ -347,13 +347,13 @@ export const AppLayer = Layer.mergeAll(UserRepositoryLive, LoggerLive, EmailServ
 
 ## Enforcement
 
-> **⚠️ IMPORTANT NOTE**: Layer-based architecture enforcement is currently **ASPIRATIONAL**. The documented 4-layer structure (`domain/`, `application/`, `infrastructure/`, `presentation/`) represents the target architecture. The current codebase uses a flat structure and will be refactored to match these layers in a future release.
+> **✅ ACTIVE**: Layer-based architecture enforcement is **CURRENTLY ACTIVE** via `eslint-plugin-boundaries`. The 4-layer structure (`domain/`, `application/`, `infrastructure/`, `presentation/`) is implemented and layer boundaries are automatically enforced at lint time.
 
-### ESLint Boundary Enforcement (Planned)
+### ESLint Boundary Enforcement (Active)
 
-Once the layer-based directory structure is implemented, **eslint-plugin-boundaries** will automatically enforce layer dependencies at lint time.
+The **eslint-plugin-boundaries** plugin automatically enforces layer dependencies at lint time. Run `bun run lint` to verify layer boundaries are not violated.
 
-**Configured Rules** (will be active after refactoring):
+**Active Rules** (currently enforced):
 
 ```typescript
 // eslint.config.ts
@@ -374,10 +374,10 @@ Once the layer-based directory structure is implemented, **eslint-plugin-boundar
 | **Domain**         | NOTHING                | All layers                | "Domain layer violation: Domain must remain pure with zero external dependencies"    |
 | **Infrastructure** | Domain                 | Application, Presentation | "Infrastructure layer violation: Can only import from Domain layer"                  |
 
-### What Will Be Enforced
+### What Is Enforced
 
 ```typescript
-// ❌ WILL BE BLOCKED: Presentation → Infrastructure (bypassing Application)
+// ❌ BLOCKED: Presentation → Infrastructure (bypassing Application)
 // src/presentation/components/UserList.tsx
 import { UserRepository } from '@/infrastructure/repositories/UserRepository'
 // ERROR: "Presentation layer violation: Can only import from Application and Domain layers"
@@ -387,7 +387,7 @@ import { UserRepository } from '@/infrastructure/repositories/UserRepository'
 // src/presentation/components/UserList.tsx
 import { GetUsers } from '@/application/use-cases/GetUsers'
 
-// ❌ WILL BE BLOCKED: Domain → Any Layer
+// ❌ BLOCKED: Domain → Any Layer
 // src/domain/models/User.ts
 import { Effect } from 'effect'
 // ERROR: "Domain layer violation: Domain must remain pure with zero external dependencies"
@@ -400,7 +400,7 @@ export interface User {
   readonly name: string
 }
 
-// ❌ WILL BE BLOCKED: Infrastructure → Application
+// ❌ BLOCKED: Infrastructure → Application
 // src/infrastructure/repositories/UserRepositoryImpl.ts
 import { GetUsers } from '@/application/use-cases/GetUsers'
 // ERROR: "Infrastructure layer violation: Can only import from Domain layer"
@@ -412,11 +412,11 @@ import type { User } from '@/domain/models/User'
 import { Effect } from 'effect' // OK: Effect allowed in Infrastructure
 ```
 
-### How to Enable Enforcement
+### How to Verify Enforcement
 
-Once the codebase is refactored to the layer-based structure:
+To verify that layer boundaries are properly enforced:
 
-1. **Verify layer directories exist**:
+1. **Confirm layer directories exist**:
 
    ```bash
    ls -la src/
@@ -433,16 +433,7 @@ Once the codebase is refactored to the layer-based structure:
    #   10:23  error  Presentation layer violation: Can only import from Application and Domain layers  boundaries/element-types
    ```
 
-3. **Fix violations** by moving imports to appropriate layers
-
-### Current Workaround
-
-Until the layer-based structure is implemented, follow these manual guidelines:
-
-- **Keep business logic separate** from UI and I/O code
-- **Use interfaces** to decouple infrastructure from application logic
-- **Avoid direct database access** from UI components
-- **Code review** to check layer boundaries manually
+3. **Fix violations** by moving imports to appropriate layers according to the dependency rules above
 
 ### Enforcement Documentation
 
@@ -459,16 +450,16 @@ For complete enforcement details:
 4. **Guide Developers**: ESLint error messages teach proper layer usage
 5. **Safe Refactoring**: Confidence that changes respect architectural boundaries
 
-### Enabling Enforcement Checklist
+### Enforcement Status
 
-When implementing layer-based architecture:
+Layer-based architecture is fully implemented:
 
-- [ ] Create layer directories (`domain/`, `application/`, `infrastructure/`, `presentation/`)
-- [ ] Migrate existing code to appropriate layers
-- [ ] Verify ESLint boundaries configuration matches directory structure
-- [ ] Run `bun run lint` and fix any violations
-- [ ] Update this document to remove "aspirational" note
-- [ ] Add enforcement validation to CI/CD pipeline
+- [x] Layer directories created (`domain/`, `application/`, `infrastructure/`, `presentation/`)
+- [x] Code organized into appropriate layers
+- [x] ESLint boundaries configuration matches directory structure
+- [x] Enforcement validated via `bun run lint`
+- [x] Documentation updated to reflect active enforcement
+- [ ] Enforcement validation in CI/CD pipeline (recommended next step)
 
 ## Integration with Functional Programming
 

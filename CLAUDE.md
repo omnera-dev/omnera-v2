@@ -103,7 +103,7 @@ git push origin main               # Triggers release ONLY with "release:" type
 
 **Enforcement**: FP patterns automatically enforced via ESLint (`eslint-plugin-functional`). See `@docs/infrastructure/quality/eslint.md#functional-programming-enforcement`
 
-**Note**: Layer-based architecture (domain/, application/, infrastructure/, presentation/) is aspirational - current codebase uses flat structure. See `@docs/architecture/layer-based-architecture.md#enforcement` for details.
+**Layer Enforcement**: Layer-based architecture (domain/, application/, infrastructure/, presentation/) is actively enforced via `eslint-plugin-boundaries`. See `@docs/architecture/layer-based-architecture.md#enforcement` for details.
 
 ## File Structure
 
@@ -115,9 +115,11 @@ omnera-v2/
 ├── scripts/                     # Build & utility scripts (TypeScript, run by Bun)
 │   ├── **/*.ts                  # TypeScript scripts (executable with Bun)
 │   └── **/*.test.ts             # Script unit tests (co-located)
-├── src/
-│   ├── components/ui/           # shadcn/ui components
-│   ├── lib/utils.ts             # Utilities (cn helper)
+├── src/                         # Layer-based architecture (see @docs/architecture/layer-based-architecture.md)
+│   ├── domain/                  # Domain Layer - Pure business logic
+│   ├── application/             # Application Layer - Use cases, orchestration
+│   ├── infrastructure/          # Infrastructure Layer - External services, I/O
+│   ├── presentation/            # Presentation Layer - UI components, API routes
 │   ├── index.ts                 # Entry point
 │   └── **/*.test.ts             # Unit tests (co-located)
 ├── tests/**/*.spec.ts           # E2E tests (Playwright)

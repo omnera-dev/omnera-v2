@@ -668,31 +668,32 @@ src / presentation / components / ui / button.variants.ts // Use hyphen, not dot
 
 ### React Hook Files
 
-**Pattern**: `use-{hook-name}.ts` or `{component}-hook.ts`
+**Pattern**:
 
-**Location**: `src/presentation/hooks/` or `src/presentation/components/ui/`
+- `use-{hook-name}.ts` for **standalone hooks** in `src/presentation/hooks/`
+- `{component}-hook.ts` for **component-specific hooks** in `src/presentation/components/ui/`
 
 **Purpose**: React hook definitions
 
 ```
 src/presentation/hooks/
-└── use-mobile.ts          # ✅ EXISTING - useIsMobile hook
+└── use-mobile.ts          # ✅ EXISTING - useIsMobile hook (standalone)
 
 src/presentation/components/ui/
-├── sidebar-hook.ts        # ✅ EXISTING - useSidebar hook (shadcn pattern)
-└── form-hook.ts           # ✅ EXISTING - useForm hook (shadcn pattern)
+├── sidebar-hook.ts        # ✅ EXISTING - useSidebar hook (component-specific, shadcn pattern)
+└── form-hook.ts           # ✅ EXISTING - useForm hook (component-specific, shadcn pattern)
 ```
 
 **Examples:**
 
 ```typescript
-// ✅ CORRECT - Standalone hooks (use- prefix)
+// ✅ CORRECT - Standalone hooks (use-* pattern in hooks/ directory)
 src / presentation / hooks / use - mobile.ts
 export function useIsMobile() {
   /* ... */
 }
 
-// ✅ CORRECT - Component-specific hooks (shadcn pattern)
+// ✅ CORRECT - Component-specific hooks (*-hook pattern in components/ui/ directory)
 src / presentation / components / ui / sidebar - hook.ts
 export function useSidebar() {
   /* ... */
@@ -701,7 +702,8 @@ export function useSidebar() {
 // ❌ INCORRECT
 src / presentation / hooks / mobile.ts // Missing "use-" prefix
 src / presentation / hooks / useMobile.ts // Use kebab-case
-src / presentation / components / ui / use - sidebar.ts // Component hooks use "-hook" suffix
+src / presentation / hooks / sidebar - hook.ts // Use "use-*" pattern in hooks/, not "*-hook"
+src / presentation / components / ui / use - sidebar.ts // Use "*-hook" pattern in components/ui/, not "use-*"
 ```
 
 ### Utility Files

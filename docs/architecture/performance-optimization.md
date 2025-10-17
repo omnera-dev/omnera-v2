@@ -72,7 +72,7 @@ const StableChildComponent = React.memo(ExpensiveChild) // Only if measured bene
 
 **ESLint Enforcement**: Omnera's ESLint configuration warns when `useMemo`, `useCallback`, or `React.memo` are used, guiding developers to rely on the React 19 Compiler. These are warnings (not errors) to allow manual optimization when measured as necessary.
 
-**See**: `@docs/infrastructure/quality/eslint.md#react-19-compiler-guidance` for complete enforcement details.
+**See**: `eslint.config.ts` lines 84-101 for the no-restricted-syntax rules.
 
 ### Code Splitting
 

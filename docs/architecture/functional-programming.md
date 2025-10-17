@@ -1057,21 +1057,39 @@ Effect.runPromise(Effect.provide(program, AppLayer))
 
 ## Enforcement
 
-Omnera's functional programming principles are **automatically enforced** via ESLint rules, ensuring that code adheres to FP patterns at compile-time.
+Omnera's functional programming principles are **automatically enforced** via ESLint rules with different severity levels: **errors** (blocking) and **warnings** (guidance).
+
+### Enforcement Levels
+
+**Errors (Blocking)** - Must fix before committing:
+
+- ✅ Immutability (`immutable-data`, `no-let`)
+- ✅ Array mutations (`no-restricted-syntax`)
+- ✅ Exception handling (`no-throw-statements`)
+- ✅ Parameter reassignment (`no-param-reassign`)
+
+**Warnings (Guidance)** - Should follow but not blocking:
+
+- ⚠️ Imperative loops (`no-loop-statements`)
+- ⚠️ Expression statements (`no-expression-statements`)
+
+**Partial Enforcement** - Format checked, semantics relaxed:
+
+- ⚠️ Readonly types (`prefer-immutable-types` with `ignoreInferredTypes: true`)
 
 ### ESLint Enforcement Mechanisms
 
-| Rule                                | Plugin                   | What It Enforces                                                 |
-| ----------------------------------- | ------------------------ | ---------------------------------------------------------------- |
-| `functional/prefer-immutable-types` | eslint-plugin-functional | Requires `readonly` types                                        |
-| `functional/no-let`                 | eslint-plugin-functional | Prevents mutable variable declarations (`let`)                   |
-| `functional/immutable-data`         | eslint-plugin-functional | Catches direct data mutations                                    |
-| `functional/no-throw-statements`    | eslint-plugin-functional | Enforces Effect.ts error handling over exceptions                |
-| `functional/no-loop-statements`     | eslint-plugin-functional | Warns against imperative loops (prefers `map`/`filter`/`reduce`) |
-| `no-param-reassign`                 | ESLint core              | Prevents parameter reassignment                                  |
-| `prefer-const`                      | ESLint core              | Enforces `const` over `let` when variables aren't reassigned     |
-| `no-restricted-syntax`              | ESLint core (custom)     | Blocks array mutations (`push`, `pop`, `splice`, etc.)           |
-| `no-restricted-imports`             | ESLint core (custom)     | Blocks `Effect.runSync` in business logic                        |
+| Rule                                | Severity | Plugin                   | What It Enforces                                                 |
+| ----------------------------------- | -------- | ------------------------ | ---------------------------------------------------------------- |
+| `functional/prefer-immutable-types` | Warning  | eslint-plugin-functional | Requires `readonly` types (inferred types excluded)              |
+| `functional/no-let`                 | Error    | eslint-plugin-functional | Prevents mutable variable declarations (`let`)                   |
+| `functional/immutable-data`         | Error    | eslint-plugin-functional | Catches direct data mutations                                    |
+| `functional/no-throw-statements`    | Error    | eslint-plugin-functional | Enforces Effect.ts error handling over exceptions                |
+| `functional/no-loop-statements`     | Warning  | eslint-plugin-functional | Warns against imperative loops (prefers `map`/`filter`/`reduce`) |
+| `no-param-reassign`                 | Error    | ESLint core              | Prevents parameter reassignment                                  |
+| `prefer-const`                      | Error    | ESLint core              | Enforces `const` over `let` when variables aren't reassigned     |
+| `no-restricted-syntax`              | Error    | ESLint core (custom)     | Blocks array mutations (`push`, `pop`, `splice`, etc.)           |
+| `no-restricted-imports`             | Error    | ESLint core (custom)     | Blocks `Effect.runSync` in business logic                        |
 
 ### Array Mutation Prevention
 

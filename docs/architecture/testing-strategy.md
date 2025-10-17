@@ -160,15 +160,17 @@ For detailed information, import the relevant documentation file:
   - Restricts: `@playwright/test` imports in `src/**/*.test.{ts,tsx}`
   - Error: "Unit tests must use Bun Test"
 
-**Test File Structure** (enforced via `eslint-plugin-playwright`):
+**What IS Enforced**:
+- ✅ Import restrictions (which test tool is used where)
 
-- E2E tests: `.spec.ts` extension in `tests/` directory
-- Unit tests: `.test.ts` extension co-located with source
+**What is NOT Enforced**:
+- ❌ File naming convention (`.spec.ts` vs `.test.ts` - by convention only)
 
 ### Manual Enforcement (Code Review Required)
 
 **Not enforceable via static analysis**:
 
+- File naming convention compliance (`.spec.ts` for E2E, `.test.ts` for unit)
 - E2E tests written BEFORE implementation (timing discipline)
 - Unit tests written AFTER implementation (timing discipline)
 - Test coverage completeness
