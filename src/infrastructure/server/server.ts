@@ -1,15 +1,9 @@
-import { Effect, Console } from 'effect'
+import { Console, Effect } from 'effect'
 import { Hono } from 'hono'
-import { compileCSS, type CSSCompilationError } from '../css/compiler'
+import { ServerCreationError } from '@/infrastructure/errors/server-creation-error'
+import { compileCSS } from '../css/compiler'
 import type { App } from '@/domain/models/app'
-
-/**
- * Error class for server creation failures
- */
-export class ServerCreationError {
-  readonly _tag = 'ServerCreationError'
-  constructor(readonly cause: unknown) {}
-}
+import type { CSSCompilationError } from '@/infrastructure/errors/css-compilation-error'
 
 /**
  * Cache duration for CSS files in seconds (1 hour)
@@ -24,6 +18,8 @@ export interface ServerConfig {
   readonly port?: number
   readonly hostname?: string
   readonly renderHomePage: (app: App) => string
+  readonly renderNotFoundPage: () => string
+  readonly renderErrorPage: () => string
 }
 
 /**
@@ -40,106 +36,52 @@ export interface ServerInstance {
  *
  * @param app - Validated application data from AppSchema
  * @param renderHomePage - Function to render the homepage
+ * @param renderNotFoundPage - Function to render 404 page
+ * @param renderErrorPage - Function to render error page
  * @returns Configured Hono app instance
  */
-// eslint-disable-next-line functional/prefer-immutable-types
-function createHonoApp(app: App, renderHomePage: (app: App) => string): Hono {
-  const honoApp = new Hono()
-
-  // Health check route
-
-  honoApp.get('/health', (c) => {
-    return c.json({
-      status: 'ok',
-      timestamp: new Date().toISOString(),
-      app: {
-        name: app.name,
-      },
+function createHonoApp(
+  app: App,
+  renderHomePage: (app: App) => string,
+  renderNotFoundPage: () => string,
+  renderErrorPage: () => string
+): Readonly<Hono> {
+  return new Hono()
+    .get('/health', (c) =>
+      c.json({
+        status: 'ok',
+        timestamp: new Date().toISOString(),
+        app: {
+          name: app.name,
+        },
+      })
+    )
+    .get('/', (c) => {
+      const html = renderHomePage(app)
+      return c.html(html)
     })
-  })
+    .get('/output.css', async (c) => {
+      try {
+        const result = await Effect.runPromise(
+          compileCSS().pipe(Effect.tap(() => Console.log('CSS compiled successfully')))
+        )
 
-  // Homepage route - Renders React component to HTML
-  // eslint-disable-next-line functional/no-expression-statements
-  honoApp.get('/', (c) => {
-    const html = renderHomePage(app)
-    return c.html(html)
-  })
-
-  // CSS route - Serves dynamically compiled Tailwind CSS
-  // eslint-disable-next-line functional/no-expression-statements
-  honoApp.get('/output.css', async (c) => {
-    try {
-      // Compile CSS using Effect
-      const result = await Effect.runPromise(
-        compileCSS().pipe(Effect.tap(() => Console.log('CSS compiled successfully')))
-      )
-
-      return c.text(result.css, 200, {
-        'Content-Type': 'text/css',
-        'Cache-Control': `public, max-age=${CSS_CACHE_DURATION_SECONDS}`,
-      })
-    } catch (error) {
-      Effect.runSync(Console.error('CSS compilation failed:', error))
-      return c.text('/* CSS compilation failed */', 500, {
-        'Content-Type': 'text/css',
-      })
-    }
-  })
-
-  // 404 handler
-  // eslint-disable-next-line functional/no-expression-statements
-  honoApp.notFound((c) => {
-    return c.html(
-      `
-      <!DOCTYPE html>
-      <html lang="en">
-        <head>
-          <meta charset="UTF-8">
-          <meta name="viewport" content="width=device-width, initial-scale=1.0">
-          <title>404 - Not Found</title>
-          <link rel="stylesheet" href="/output.css">
-        </head>
-        <body class="min-h-screen bg-gray-50 flex items-center justify-center">
-          <div class="text-center">
-            <h1 class="text-6xl font-bold text-gray-900 mb-4">404</h1>
-            <p class="text-xl text-gray-600 mb-8">Page not found</p>
-            <a href="/" class="text-blue-600 hover:text-blue-700 font-medium">Go back home</a>
-          </div>
-        </body>
-      </html>
-      `,
-      404
-    )
-  })
-
-  // Error handler
-  // eslint-disable-next-line functional/no-expression-statements
-  honoApp.onError((error, c) => {
-    Effect.runSync(Console.error('Server error:', error))
-    return c.html(
-      `
-      <!DOCTYPE html>
-      <html lang="en">
-        <head>
-          <meta charset="UTF-8">
-          <meta name="viewport" content="width=device-width, initial-scale=1.0">
-          <title>500 - Internal Server Error</title>
-          <link rel="stylesheet" href="/output.css">
-        </head>
-        <body class="min-h-screen bg-gray-50 flex items-center justify-center">
-          <div class="text-center">
-            <h1 class="text-6xl font-bold text-red-600 mb-4">500</h1>
-            <p class="text-xl text-gray-600 mb-8">Internal Server Error</p>
-            <a href="/" class="text-blue-600 hover:text-blue-700 font-medium">Go back home</a>
-          </div>
-        </body>
-      </html>
-      `,
-      500
-    )
-  })
-
-  return honoApp
+        return c.text(result.css, 200, {
+          'Content-Type': 'text/css',
+          'Cache-Control': `public, max-age=${CSS_CACHE_DURATION_SECONDS}`,
+        })
+      } catch (error) {
+        Effect.runSync(Console.error('CSS compilation failed:', error))
+        return c.text('/* CSS compilation failed */', 500, {
+          'Content-Type': 'text/css',
+        })
+      }
+    })
+    .notFound((c) => c.html(renderNotFoundPage(), 404))
+    .onError((error, c) => {
+      Effect.runSync(Console.error('Server error:', error))
+      return c.html(renderErrorPage(), 500)
+    })
 }
 
 /**
@@ -172,7 +114,14 @@ export const createServer = (
   config: ServerConfig
 ): Effect.Effect<ServerInstance, ServerCreationError | CSSCompilationError> =>
   Effect.gen(function* () {
-    const { app, port = 3000, hostname = 'localhost', renderHomePage } = config
+    const {
+      app,
+      port = 3000,
+      hostname = 'localhost',
+      renderHomePage,
+      renderNotFoundPage,
+      renderErrorPage,
+    } = config
 
     // Pre-compile CSS on startup
     yield* Console.log('Compiling CSS...')
@@ -180,7 +129,7 @@ export const createServer = (
     yield* Console.log(`CSS compiled: ${cssResult.css.length} bytes`)
 
     // Create Hono app
-    const honoApp = createHonoApp(app, renderHomePage)
+    const honoApp = createHonoApp(app, renderHomePage, renderNotFoundPage, renderErrorPage)
 
     // Start Bun server
     const server = yield* Effect.try({

@@ -1,16 +1,10 @@
 import { Effect, Schema } from 'effect'
+import { AppValidationError } from '@/application/errors/app-validation-error'
 import { AppSchema } from '@/domain/models/app'
 import type { App } from '@/domain/models/app'
-import type { CSSCompilationError } from '@/infrastructure/css/compiler'
-import type { ServerInstance, ServerCreationError } from '@/infrastructure/server/server'
-
-/**
- * Error class for app validation failures
- */
-export class AppValidationError {
-  readonly _tag = 'AppValidationError'
-  constructor(readonly cause: unknown) {}
-}
+import type { CSSCompilationError } from '@/infrastructure/errors/css-compilation-error'
+import type { ServerCreationError } from '@/infrastructure/errors/server-creation-error'
+import type { ServerInstance } from '@/infrastructure/server/server'
 
 /**
  * Server configuration options
@@ -51,9 +45,12 @@ export const startServer = (
       catch: (error) => new AppValidationError(error),
     })
 
-    // Import presentation layer rendering function
+    // Import presentation layer rendering functions
     const { renderHomePage } = yield* Effect.promise(
       () => import('@/presentation/utils/render-homepage')
+    )
+    const { renderNotFoundPage, renderErrorPage } = yield* Effect.promise(
+      () => import('@/presentation/utils/render-error-pages')
     )
 
     // Defer to infrastructure layer for actual server creation
@@ -64,6 +61,8 @@ export const startServer = (
       port: options.port,
       hostname: options.hostname,
       renderHomePage,
+      renderNotFoundPage,
+      renderErrorPage,
     })
 
     return serverInstance
