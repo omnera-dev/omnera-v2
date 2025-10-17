@@ -29,7 +29,7 @@ import { Schema } from 'effect'
  * ```
  */
 export const DescriptionSchema = Schema.String.pipe(
-  Schema.filter((desc) => !/[\r\n]/.test(desc), {
+  Schema.pattern(/^[^\r\n]*$/, {
     message: () => 'Description must be a single line (line breaks are not allowed)',
   }),
   Schema.annotations({

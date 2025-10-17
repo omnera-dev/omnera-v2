@@ -1,0 +1,63 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "required": ["name"],
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "The name of the application (follows npm package naming conventions)",
+      "title": "Application Name",
+      "minLength": 1,
+      "maxLength": 214,
+      "examples": ["my-app", "todo-app", "@myorg/my-app", "blog-system", "dashboard-admin"],
+      "pattern": "^(?:@[a-z0-9-~][a-z0-9-._~]*\\/)?[a-z0-9-~][a-z0-9-._~]*$"
+    },
+    "version": {
+      "type": "string",
+      "description": "The version of the application following Semantic Versioning (SemVer) 2.0.0 specification",
+      "title": "Application Version",
+      "minLength": 5,
+      "examples": [
+        "1.0.0",
+        "0.0.1",
+        "1.2.3",
+        "1.0.0-alpha",
+        "1.0.0-beta.1",
+        "2.0.0-rc.1",
+        "1.0.0+build.123",
+        "1.0.0-alpha+001"
+      ],
+      "pattern": "^(0|[1-9]\\d*)\\.(0|[1-9]\\d*)\\.(0|[1-9]\\d*)(?:-((?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\\.(?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\\+([0-9a-zA-Z-]+(?:\\.[0-9a-zA-Z-]+)*))?$"
+    },
+    "description": {
+      "type": "string",
+      "description": "A single-line description of the application (line breaks not allowed)",
+      "title": "Application Description",
+      "examples": [
+        "A simple application",
+        "My app - with special characters!@#$%",
+        "Très bien! 你好 🎉",
+        "Full-featured e-commerce platform with cart, checkout & payment processing"
+      ],
+      "pattern": "^[^\\r\\n]*$"
+    }
+  },
+  "additionalProperties": false,
+  "description": "Complete application configuration including name, version, and description. This is the root schema for Omnera applications.",
+  "title": "Application Configuration",
+  "examples": [
+    {
+      "name": "todo-app",
+      "version": "1.0.0",
+      "description": "A simple todo list application"
+    },
+    {
+      "name": "@myorg/dashboard",
+      "version": "2.0.0-beta.1",
+      "description": "Admin dashboard for analytics and reporting"
+    },
+    {
+      "name": "blog-system"
+    }
+  ]
+}

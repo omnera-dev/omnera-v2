@@ -61,7 +61,28 @@ export const AppSchema = Schema.Struct({
    * - Unicode characters and emojis are supported
    */
   description: Schema.optional(DescriptionSchema),
-})
+}).pipe(
+  Schema.annotations({
+    title: 'Application Configuration',
+    description:
+      'Complete application configuration including name, version, and description. This is the root schema for Omnera applications.',
+    examples: [
+      {
+        name: 'todo-app',
+        version: '1.0.0',
+        description: 'A simple todo list application',
+      },
+      {
+        name: '@myorg/dashboard',
+        version: '2.0.0-beta.1',
+        description: 'Admin dashboard for analytics and reporting',
+      },
+      {
+        name: 'blog-system',
+      },
+    ],
+  })
+)
 
 /**
  * TypeScript type inferred from AppSchema.

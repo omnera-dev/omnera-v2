@@ -22,7 +22,14 @@ const drizzle = drizzlePlugin as any
 export default defineConfig([
   // Global ignores
   {
-    ignores: ['.claude/**', 'dist/**', 'node_modules/**', '.next/**', '.turbo/**'],
+    ignores: [
+      '.claude/**',
+      'dist/**',
+      'node_modules/**',
+      '.next/**',
+      '.turbo/**',
+      'OLD_V1/**', // Legacy codebase - not subject to new architecture rules
+    ],
   },
 
   // Base JavaScript configuration
@@ -373,16 +380,17 @@ export default defineConfig([
     },
   },
 
-  // Layer-based Architecture - Automated boundary enforcement
-  // Based on: docs/architecture/layer-based-architecture.md
+  // Layer-based Architecture - Granular boundary enforcement
+  // Based on: docs/architecture/layer-based-architecture/13-file-structure.md
   //
   // Dependency Direction: Presentation → Application → Domain ← Infrastructure
   //
-  // Rules:
+  // Key Rules:
   // 1. Presentation depends on Application + Domain (NOT Infrastructure directly)
-  // 2. Application depends on Domain + Infrastructure (defines interfaces/ports)
+  // 2. Application depends on Domain + Ports (defines Infrastructure interfaces)
   // 3. Domain depends on NOTHING (pure, self-contained)
-  // 4. Infrastructure depends on Domain (implements Application interfaces)
+  // 4. Infrastructure depends ONLY on Domain + Ports (strict dependency inversion)
+  // 5. Feature Isolation: domain/models/table ≠> domain/models/automation (strict)
   {
     files: ['src/**/*.{ts,tsx}'],
     plugins: {
@@ -398,33 +406,144 @@ export default defineConfig([
       'boundaries/include': ['src/**/*'],
       'boundaries/ignore': ['**/*.test.ts', '**/*.test.tsx', '**/*.spec.ts', '**/*.spec.tsx'],
       'boundaries/elements': [
-        // Domain Layer - Pure business logic (models, services, validators, factories, errors)
+        // ==========================================
+        // DOMAIN LAYER - Feature Models (STRICT ISOLATION)
+        // ==========================================
+        { type: 'domain-model-app', pattern: 'src/domain/models/app/**/*', mode: 'file' },
+        { type: 'domain-model-table', pattern: 'src/domain/models/table/**/*', mode: 'file' },
+        { type: 'domain-model-page', pattern: 'src/domain/models/page/**/*', mode: 'file' },
         {
-          type: 'domain',
-          pattern: 'src/domain/**/*',
+          type: 'domain-model-automation',
+          pattern: 'src/domain/models/automation/**/*',
           mode: 'file',
         },
 
-        // Application Layer - Use cases, ports (interfaces), errors
-        {
-          type: 'application',
-          pattern: 'src/application/**/*',
-          mode: 'file',
-        },
+        // DOMAIN LAYER - Shared Utilities
+        { type: 'domain-validator', pattern: 'src/domain/validators/**/*', mode: 'file' },
+        { type: 'domain-service', pattern: 'src/domain/services/**/*', mode: 'file' },
+        { type: 'domain-factory', pattern: 'src/domain/factories/**/*', mode: 'file' },
+        { type: 'domain-error', pattern: 'src/domain/errors/**/*', mode: 'file' },
 
-        // Infrastructure Layer - Repositories, logging, email, layers
+        // ==========================================
+        // APPLICATION LAYER - Use Cases (Phase-based)
+        // ==========================================
         {
-          type: 'infrastructure',
-          pattern: 'src/infrastructure/**/*',
+          type: 'application-use-case-server',
+          pattern: 'src/application/use-cases/server/**/*',
           mode: 'file',
         },
+        {
+          type: 'application-use-case-config',
+          pattern: 'src/application/use-cases/config/**/*',
+          mode: 'file',
+        },
+        {
+          type: 'application-use-case-database',
+          pattern: 'src/application/use-cases/database/**/*',
+          mode: 'file',
+        },
+        {
+          type: 'application-use-case-auth',
+          pattern: 'src/application/use-cases/auth/**/*',
+          mode: 'file',
+        },
+        {
+          type: 'application-use-case-routing',
+          pattern: 'src/application/use-cases/routing/**/*',
+          mode: 'file',
+        },
+        {
+          type: 'application-use-case-automation',
+          pattern: 'src/application/use-cases/automation/**/*',
+          mode: 'file',
+        },
+        {
+          type: 'application-use-case',
+          pattern: 'src/application/use-cases/**/*',
+          mode: 'file',
+        }, // Fallback
 
-        // Presentation Layer - Components (React), API routes (Hono)
+        // APPLICATION LAYER - Ports & Services
+        { type: 'application-port', pattern: 'src/application/ports/**/*', mode: 'file' },
+        { type: 'application-service', pattern: 'src/application/services/**/*', mode: 'file' },
+        { type: 'application-error', pattern: 'src/application/errors/**/*', mode: 'file' },
+
+        // ==========================================
+        // INFRASTRUCTURE LAYER - Service Organization
+        // ==========================================
         {
-          type: 'presentation',
-          pattern: 'src/presentation/**/*',
+          type: 'infrastructure-config',
+          pattern: 'src/infrastructure/config/**/*',
           mode: 'file',
         },
+        {
+          type: 'infrastructure-database',
+          pattern: 'src/infrastructure/database/**/*',
+          mode: 'file',
+        },
+        { type: 'infrastructure-auth', pattern: 'src/infrastructure/auth/**/*', mode: 'file' },
+        { type: 'infrastructure-email', pattern: 'src/infrastructure/email/**/*', mode: 'file' },
+        {
+          type: 'infrastructure-storage',
+          pattern: 'src/infrastructure/storage/**/*',
+          mode: 'file',
+        },
+        {
+          type: 'infrastructure-webhooks',
+          pattern: 'src/infrastructure/webhooks/**/*',
+          mode: 'file',
+        },
+        {
+          type: 'infrastructure-logging',
+          pattern: 'src/infrastructure/logging/**/*',
+          mode: 'file',
+        },
+        {
+          type: 'infrastructure-service',
+          pattern: 'src/infrastructure/services/**/*',
+          mode: 'file',
+        },
+        { type: 'infrastructure-layer', pattern: 'src/infrastructure/layers/**/*', mode: 'file' },
+
+        // ==========================================
+        // PRESENTATION LAYER - API vs Components
+        // ==========================================
+        {
+          type: 'presentation-api-route',
+          pattern: 'src/presentation/api/routes/**/*',
+          mode: 'file',
+        },
+        {
+          type: 'presentation-api-middleware',
+          pattern: 'src/presentation/api/middleware/**/*',
+          mode: 'file',
+        },
+        {
+          type: 'presentation-component-ui',
+          pattern: 'src/presentation/components/ui/**/*',
+          mode: 'file',
+        },
+        {
+          type: 'presentation-component-page',
+          pattern: 'src/presentation/components/pages/**/*',
+          mode: 'file',
+        },
+        {
+          type: 'presentation-component-form',
+          pattern: 'src/presentation/components/forms/**/*',
+          mode: 'file',
+        },
+        {
+          type: 'presentation-component-table',
+          pattern: 'src/presentation/components/tables/**/*',
+          mode: 'file',
+        },
+        {
+          type: 'presentation-component-layout',
+          pattern: 'src/presentation/components/layout/**/*',
+          mode: 'file',
+        },
+        { type: 'presentation-util', pattern: 'src/presentation/utils/**/*', mode: 'file' },
       ],
     },
     rules: {
@@ -433,47 +552,422 @@ export default defineConfig([
         {
           default: 'disallow',
           rules: [
-            // Presentation Layer Rules
-            // Can import: Application (use cases), Domain (models, validators), Other presentation (UI components)
-            // Cannot import: Infrastructure (must go through Application layer)
+            // ==========================================
+            // DOMAIN LAYER - STRICT FEATURE ISOLATION
+            // ==========================================
+
+            // App model (root) - Zero dependencies
             {
-              from: ['presentation'],
-              allow: ['application', 'domain', 'presentation'],
+              from: ['domain-model-app'],
+              allow: ['domain-model-app'],
               message:
-                'Presentation layer violation: Can import from Application, Domain, and other Presentation components. Access Infrastructure through Application layer use cases.',
+                'App model violation: Must remain pure with zero external dependencies (can only import from itself).',
             },
 
-            // Application Layer Rules
-            // Can import: Domain (models, validators), Infrastructure (to define interfaces), Other application (use cases)
-            // Cannot import: Presentation
+            // Feature models - ONLY import from app model (NO CROSS-FEATURE IMPORTS)
             {
-              from: ['application'],
-              allow: ['domain', 'infrastructure', 'application'],
+              from: ['domain-model-table'],
+              allow: ['domain-model-app', 'domain-model-table'],
               message:
-                'Application layer violation: Can only import from Domain, Infrastructure, and other Application modules. Application defines interfaces that Infrastructure implements.',
+                'Table model violation: Can only import from app model. FORBIDDEN: Cannot import from page/automation models (strict feature isolation).',
+            },
+            {
+              from: ['domain-model-page'],
+              allow: ['domain-model-app', 'domain-model-page'],
+              message:
+                'Page model violation: Can only import from app model. FORBIDDEN: Cannot import from table/automation models (strict feature isolation).',
+            },
+            {
+              from: ['domain-model-automation'],
+              allow: ['domain-model-app', 'domain-model-automation'],
+              message:
+                'Automation model violation: Can only import from app model. FORBIDDEN: Cannot import from table/page models (strict feature isolation).',
             },
 
-            // Domain Layer Rules
-            // Can import: NOTHING (must remain pure and self-contained)
-            // Cannot import: Any other layer
+            // Domain validators - Can import all domain models + other validators
             {
-              from: ['domain'],
-              allow: [],
+              from: ['domain-validator'],
+              allow: [
+                'domain-model-app',
+                'domain-model-table',
+                'domain-model-page',
+                'domain-model-automation',
+                'domain-validator',
+              ],
               message:
-                'Domain layer violation: Domain must remain pure with zero external dependencies. No side effects, I/O, or external calls allowed.',
+                'Domain validator violation: Can only import domain models and other validators. No application/infrastructure dependencies.',
             },
 
-            // Infrastructure Layer Rules
-            // Can import: Domain (to implement business logic)
-            // Cannot import: Presentation, Application
-            // Note: Infrastructure implements interfaces defined in Application, but doesn't import Application
+            // Domain services - Can import models, validators, other services
             {
-              from: ['infrastructure'],
-              allow: ['domain'],
+              from: ['domain-service'],
+              allow: [
+                'domain-model-app',
+                'domain-model-table',
+                'domain-model-page',
+                'domain-model-automation',
+                'domain-validator',
+                'domain-service',
+              ],
               message:
-                'Infrastructure layer violation: Can only import from Domain layer. Infrastructure implements interfaces defined by Application layer.',
+                'Domain service violation: Can only import domain models, validators, and other services. Must remain pure.',
+            },
+
+            // Domain factories - Can import models, validators, services, other factories
+            {
+              from: ['domain-factory'],
+              allow: [
+                'domain-model-app',
+                'domain-model-table',
+                'domain-model-page',
+                'domain-model-automation',
+                'domain-validator',
+                'domain-service',
+                'domain-factory',
+              ],
+              message:
+                'Domain factory violation: Can only import domain models, validators, services, and other factories.',
+            },
+
+            // Domain errors - Can import models only
+            {
+              from: ['domain-error'],
+              allow: [
+                'domain-model-app',
+                'domain-model-table',
+                'domain-model-page',
+                'domain-model-automation',
+              ],
+              message:
+                'Domain error violation: Can only import domain models for type definitions.',
+            },
+
+            // ==========================================
+            // APPLICATION LAYER - USE CASES
+            // ==========================================
+
+            // Use cases - Can import domain + ports + other application + infrastructure (Phase 1 pragmatic)
+            // TODO(Phase 2): Refactor to use ports pattern for infrastructure dependencies
+            {
+              from: [
+                'application-use-case-server',
+                'application-use-case-config',
+                'application-use-case-database',
+                'application-use-case-auth',
+                'application-use-case-routing',
+                'application-use-case-automation',
+                'application-use-case',
+              ],
+              allow: [
+                // All domain
+                'domain-model-app',
+                'domain-model-table',
+                'domain-model-page',
+                'domain-model-automation',
+                'domain-validator',
+                'domain-service',
+                'domain-factory',
+                'domain-error',
+                // Application layer
+                'application-port',
+                'application-service',
+                'application-error',
+                // Other use cases
+                'application-use-case-server',
+                'application-use-case-config',
+                'application-use-case-database',
+                'application-use-case-auth',
+                'application-use-case-routing',
+                'application-use-case-automation',
+                'application-use-case',
+                // Infrastructure (Phase 1 pragmatic - TODO: refactor to ports)
+                'infrastructure-config',
+                'infrastructure-database',
+                'infrastructure-auth',
+                'infrastructure-email',
+                'infrastructure-storage',
+                'infrastructure-webhooks',
+                'infrastructure-logging',
+                'infrastructure-service',
+              ],
+              message:
+                'Use case violation: Can import domain, application, and infrastructure (Phase 1). TODO: Refactor to use ports pattern for cleaner dependency inversion.',
+            },
+
+            // Application ports - Can import domain only (interface definitions)
+            {
+              from: ['application-port'],
+              allow: [
+                'domain-model-app',
+                'domain-model-table',
+                'domain-model-page',
+                'domain-model-automation',
+                'domain-validator',
+                'domain-service',
+                'domain-factory',
+                'domain-error',
+              ],
+              message:
+                'Port violation: Can only import domain models and errors for interface definitions. Keep ports lightweight.',
+            },
+
+            // Application services - Can import domain + ports + use-cases + infrastructure (utilities)
+            {
+              from: ['application-service'],
+              allow: [
+                'domain-model-app',
+                'domain-model-table',
+                'domain-model-page',
+                'domain-model-automation',
+                'domain-validator',
+                'domain-service',
+                'domain-factory',
+                'domain-error',
+                'application-port',
+                'application-error',
+                'application-service',
+                // Allow use-cases for cross-cutting utilities
+                'application-use-case-server',
+                'application-use-case-config',
+                'application-use-case-database',
+                'application-use-case-auth',
+                'application-use-case-routing',
+                'application-use-case-automation',
+                'application-use-case',
+                // Allow infrastructure for utility services
+                'infrastructure-config',
+                'infrastructure-database',
+                'infrastructure-auth',
+                'infrastructure-email',
+                'infrastructure-storage',
+                'infrastructure-webhooks',
+                'infrastructure-logging',
+                'infrastructure-service',
+              ],
+              message:
+                'Application service violation: Can import domain, ports, use-cases, and infrastructure. Use for cross-cutting utilities only.',
+            },
+
+            // Application errors - Can import domain models
+            {
+              from: ['application-error'],
+              allow: [
+                'domain-model-app',
+                'domain-model-table',
+                'domain-model-page',
+                'domain-model-automation',
+              ],
+              message:
+                'Application error violation: Can only import domain models for type definitions.',
+            },
+
+            // ==========================================
+            // INFRASTRUCTURE LAYER - STRICT PORTS PATTERN
+            // ==========================================
+
+            // Infrastructure services - Can import domain + ports + other infrastructure
+            {
+              from: [
+                'infrastructure-config',
+                'infrastructure-database',
+                'infrastructure-auth',
+                'infrastructure-email',
+                'infrastructure-storage',
+                'infrastructure-webhooks',
+                'infrastructure-logging',
+                'infrastructure-service',
+              ],
+              allow: [
+                'domain-model-app',
+                'domain-model-table',
+                'domain-model-page',
+                'domain-model-automation',
+                'domain-validator',
+                'domain-service',
+                'domain-factory',
+                'domain-error',
+                'application-port', // ONLY ports, NOT use-cases
+                // Allow infrastructure services to import each other
+                'infrastructure-config',
+                'infrastructure-database',
+                'infrastructure-auth',
+                'infrastructure-email',
+                'infrastructure-storage',
+                'infrastructure-webhooks',
+                'infrastructure-logging',
+                'infrastructure-service',
+              ],
+              message:
+                'Infrastructure violation: Can only import domain, application/ports, and other infrastructure services. FORBIDDEN: Cannot import use-cases (use ports for dependency inversion).',
+            },
+
+            // Infrastructure layers - Special case, can import all infrastructure for Effect Layer composition
+            {
+              from: ['infrastructure-layer'],
+              allow: [
+                'domain-model-app',
+                'domain-model-table',
+                'domain-model-page',
+                'domain-model-automation',
+                'domain-validator',
+                'domain-service',
+                'domain-factory',
+                'domain-error',
+                'application-port',
+                'infrastructure-config',
+                'infrastructure-database',
+                'infrastructure-auth',
+                'infrastructure-email',
+                'infrastructure-storage',
+                'infrastructure-webhooks',
+                'infrastructure-logging',
+                'infrastructure-service',
+              ],
+              message:
+                'Infrastructure layer composition: Can import domain, ports, and all infrastructure services for Effect Layer composition.',
+            },
+
+            // ==========================================
+            // PRESENTATION LAYER
+            // ==========================================
+
+            // API routes - Can import use cases, domain, other presentation
+            {
+              from: ['presentation-api-route'],
+              allow: [
+                'domain-model-app',
+                'domain-model-table',
+                'domain-model-page',
+                'domain-model-automation',
+                'domain-validator',
+                'domain-service',
+                'domain-factory',
+                'domain-error',
+                'application-use-case-server',
+                'application-use-case-config',
+                'application-use-case-database',
+                'application-use-case-auth',
+                'application-use-case-routing',
+                'application-use-case-automation',
+                'application-use-case',
+                'application-error',
+                'presentation-api-middleware',
+                'presentation-util',
+              ],
+              message:
+                'API route violation: Can import domain and application use cases. FORBIDDEN: Access infrastructure through use cases, not directly.',
+            },
+
+            // API middleware - Can import domain, application errors, other middleware
+            {
+              from: ['presentation-api-middleware'],
+              allow: [
+                'domain-model-app',
+                'domain-error',
+                'application-error',
+                'presentation-api-middleware',
+                'presentation-util',
+              ],
+              message:
+                'API middleware violation: Can import domain models/errors and application errors. Keep middleware lightweight.',
+            },
+
+            // React components - Can import domain, use cases, other components
+            {
+              from: [
+                'presentation-component-ui',
+                'presentation-component-page',
+                'presentation-component-form',
+                'presentation-component-table',
+                'presentation-component-layout',
+              ],
+              allow: [
+                'domain-model-app',
+                'domain-model-table',
+                'domain-model-page',
+                'domain-model-automation',
+                'domain-validator',
+                'domain-error',
+                'application-use-case-server',
+                'application-use-case-config',
+                'application-use-case-database',
+                'application-use-case-auth',
+                'application-use-case-routing',
+                'application-use-case-automation',
+                'application-use-case',
+                'application-error',
+                'presentation-component-ui',
+                'presentation-component-page',
+                'presentation-component-form',
+                'presentation-component-table',
+                'presentation-component-layout',
+                'presentation-util',
+              ],
+              message:
+                'Component violation: Can import domain and application use cases. FORBIDDEN: Access infrastructure through use cases, not directly.',
+            },
+
+            // Presentation utils - Can import domain only
+            {
+              from: ['presentation-util'],
+              allow: [
+                'domain-model-app',
+                'domain-model-table',
+                'domain-model-page',
+                'domain-model-automation',
+                'presentation-util',
+              ],
+              message:
+                'Presentation util violation: Can only import domain models and other utils. Keep utilities pure.',
             },
           ],
+        },
+      ],
+    },
+  },
+
+  // Effect.ts Domain Layer Restriction - Enforce pure domain layer
+  // Domain layer must be pure functions with zero dependencies
+  // ALLOWED: Schema from 'effect' (for validation, no side effects)
+  // FORBIDDEN: Effect, Context, Layer (side effects and orchestration)
+  {
+    files: ['src/domain/**/*.ts'],
+    rules: {
+      'no-restricted-imports': [
+        'error',
+        {
+          paths: [
+            {
+              name: 'effect',
+              importNames: ['Effect', 'Context', 'Layer', 'pipe', 'flow'],
+              message:
+                'Domain layer must be pure - no Effect programs (Effect, Context, Layer) allowed. Use Effect in Application layer (use-cases) for side effects and orchestration. ALLOWED: Schema for validation. See docs/architecture/layer-based-architecture/08-layer-3-domain-layer-business-logic.md',
+            },
+          ],
+          patterns: [
+            {
+              group: ['effect/Effect', 'effect/Context', 'effect/Layer'],
+              message:
+                'Domain layer must be pure - no Effect programs allowed. Use Effect in Application layer. See docs/architecture/layer-based-architecture/08-layer-3-domain-layer-business-logic.md',
+            },
+          ],
+        },
+      ],
+    },
+  },
+
+  // Use Case Organization Hints - Suggest phase-based structure
+  // Warn when use cases are in flat directory instead of phase subdirectories
+  // This is a suggestion, not a hard requirement (warnings, not errors)
+  {
+    files: ['src/application/use-cases/*.ts'],
+    rules: {
+      'no-restricted-syntax': [
+        'warn',
+        {
+          selector: 'Program',
+          message:
+            'Consider organizing use cases into phase subdirectories (server/, config/, database/, auth/, routing/, automation/) for better structure. See docs/architecture/layer-based-architecture/13-file-structure.md#phase-based-use-case-organization',
         },
       ],
     },

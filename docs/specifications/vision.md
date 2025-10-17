@@ -1,6 +1,6 @@
 # Omnera Specifications
 
-> **⚠️ Vision Document**: This document describes the **target state** and **product roadmap** for Omnera. Most features described here are **not yet implemented**. For current capabilities and implementation status, see [STATUS.md](../STATUS.md).
+> **⚠️ Vision Document**: This document describes the **target state** and **product vision** for Omnera. Most features described here are **not yet implemented**. For current capabilities and implementation status, see [ROADMAP.md](../../ROADMAP.md).
 
 ## Overview
 

@@ -1,0 +1,1255 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Application Configuration",
+  "description": "Complete configuration for your application including metadata, data models, automations, and integrations",
+  "version": "0.81.0",
+  "type": "object",
+  "$defs": {
+    "id": {
+      "description": "Unique identifier",
+      "title": "ID",
+      "readOnly": true,
+      "type": "integer",
+      "exclusiveMinimum": 0,
+      "maximum": 9007199254740991
+    },
+    "name": {
+      "description": "Internal name",
+      "title": "Name",
+      "type": "string",
+      "minLength": 1
+    },
+    "path": {
+      "description": "URL path",
+      "title": "Path",
+      "type": "string",
+      "pattern": "^/[a-z0-9-/]*$",
+      "minLength": 1
+    }
+  },
+  "properties": {
+    "name": {
+      "description": "The name of your application",
+      "title": "Application Name",
+      "examples": ["My E-commerce App", "Customer Portal", "Admin Dashboard"],
+      "placeholder": "Enter your application name",
+      "default": "My app",
+      "type": "string",
+      "minLength": 3
+    },
+    "description": {
+      "description": "A brief description of what your application does",
+      "title": "Application Description",
+      "examples": ["A platform for managing customer orders", "Internal tool for data analytics"],
+      "placeholder": "Describe your application purpose",
+      "uiSchema": {
+        "ui:widget": "textarea",
+        "ui:rows": 3
+      },
+      "default": "My app description",
+      "type": "string",
+      "minLength": 1
+    },
+    "icon": {
+      "description": "The icon that represents your application",
+      "title": "Application Icon",
+      "enumNames": [
+        "Shopping Cart",
+        "Chart Bar",
+        "Users",
+        "File Text",
+        "Calendar",
+        "Mail",
+        "Database",
+        "Cloud",
+        "Shield",
+        "Globe",
+        "Play Circle",
+        "Settings",
+        "Briefcase",
+        "Heart",
+        "Book",
+        "Dollar Sign",
+        "Truck",
+        "Home",
+        "Zap",
+        "Package"
+      ],
+      "placeholder": "Select an icon",
+      "default": "globe",
+      "type": "string",
+      "enum": [
+        "shopping-cart",
+        "chart-bar",
+        "users",
+        "file-text",
+        "calendar",
+        "mail",
+        "database",
+        "cloud",
+        "shield",
+        "globe",
+        "play-circle",
+        "settings",
+        "briefcase",
+        "heart",
+        "book",
+        "dollar-sign",
+        "truck",
+        "home",
+        "zap",
+        "package"
+      ]
+    },
+    "color": {
+      "description": "The primary color theme for your application",
+      "title": "Theme Color",
+      "enumNames": [
+        "Blue",
+        "Emerald",
+        "Violet",
+        "Amber",
+        "Red",
+        "Cyan",
+        "Pink",
+        "Indigo",
+        "Lime",
+        "Orange",
+        "Teal",
+        "Purple"
+      ],
+      "placeholder": "Select a color theme",
+      "default": "blue",
+      "type": "string",
+      "enum": [
+        "blue",
+        "emerald",
+        "violet",
+        "amber",
+        "red",
+        "cyan",
+        "pink",
+        "indigo",
+        "lime",
+        "orange",
+        "teal",
+        "purple"
+      ]
+    },
+    "appVersion": {
+      "description": "The version of your application following semantic versioning",
+      "title": "Application Version",
+      "examples": ["1.0.0", "2.1.3", "0.5.0-beta"],
+      "placeholder": "1.0.0",
+      "pattern": "^\\d+\\.\\d+\\.\\d+(-[a-zA-Z0-9]+)?$",
+      "default": "1.0.0",
+      "type": "string",
+      "minLength": 5
+    },
+    "schemaVersion": {
+      "description": "The version of the schema format being used",
+      "title": "Schema Version",
+      "examples": ["latest", "1.0.0", "2.0.0"],
+      "placeholder": "latest",
+      "readOnly": true,
+      "default": "latest",
+      "type": "string",
+      "minLength": 5
+    },
+    "tables": {
+      "description": "Database tables that store your application data",
+      "title": "Data Tables",
+      "uiSchema": {
+        "ui:ArrayFieldTemplate": "collapsible",
+        "ui:options": {
+          "orderable": true,
+          "removable": true,
+          "addable": true
+        }
+      },
+      "default": [],
+      "type": "array",
+      "items": {
+        "title": "Data Table",
+        "description": "A database table definition with its fields and structure",
+        "version": "0.81.0",
+        "type": "object",
+        "properties": {
+          "id": {
+            "$ref": "#/$defs/id",
+            "title": "Table ID",
+            "description": "Unique identifier for the table",
+            "examples": [1, 2, 100]
+          },
+          "name": {
+            "$ref": "#/$defs/name",
+            "title": "Table Name",
+            "description": "Name of the database table",
+            "placeholder": "Enter table name",
+            "examples": ["users", "products", "orders", "customers"],
+            "pattern": "^[a-z][a-z0-9_]*$",
+            "help": "Use lowercase letters, numbers, and underscores. Must start with a letter."
+          },
+          "fields": {
+            "description": "List of fields/columns in this table",
+            "title": "Table Fields",
+            "minItems": 1,
+            "uiSchema": {
+              "ui:ArrayFieldTemplate": "collapsible",
+              "ui:options": {
+                "orderable": true,
+                "removable": true,
+                "addable": true
+              }
+            },
+            "default": [],
+            "type": "array",
+            "items": {
+              "title": "Field",
+              "description": "A field in the table",
+              "anyOf": [
+                {
+                  "title": "Text Field",
+                  "description": "Text field with various format options",
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "$ref": "#/$defs/id"
+                    },
+                    "name": {
+                      "$ref": "#/$defs/name"
+                    },
+                    "required": {
+                      "type": "boolean",
+                      "default": false
+                    },
+                    "type": {
+                      "type": "string",
+                      "enum": ["single-line-text", "long-text", "phone-number", "email", "url"]
+                    },
+                    "default": {
+                      "type": "string"
+                    }
+                  },
+                  "required": ["id", "name", "type"],
+                  "additionalProperties": false
+                },
+                {
+                  "title": "Number Field",
+                  "description": "Numeric field with various subtypes",
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "$ref": "#/$defs/id"
+                    },
+                    "name": {
+                      "$ref": "#/$defs/name"
+                    },
+                    "required": {
+                      "type": "boolean",
+                      "default": false
+                    },
+                    "type": {
+                      "type": "string",
+                      "enum": ["integer", "decimal", "currency", "percentage"]
+                    },
+                    "min": {
+                      "type": "number",
+                      "description": "Minimum value"
+                    },
+                    "max": {
+                      "type": "number",
+                      "description": "Maximum value"
+                    },
+                    "precision": {
+                      "type": "integer",
+                      "description": "Number of decimal places (for decimal type)",
+                      "minimum": 0,
+                      "maximum": 10,
+                      "default": 2
+                    },
+                    "currency": {
+                      "type": "string",
+                      "description": "Currency code (for currency type)",
+                      "default": "USD",
+                      "examples": ["USD", "EUR", "GBP"]
+                    },
+                    "default": {
+                      "type": "number"
+                    }
+                  },
+                  "required": ["id", "name", "type"],
+                  "additionalProperties": false
+                },
+                {
+                  "title": "Date Field",
+                  "description": "Date/time field with format options",
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "$ref": "#/$defs/id"
+                    },
+                    "name": {
+                      "$ref": "#/$defs/name"
+                    },
+                    "required": {
+                      "type": "boolean",
+                      "default": false
+                    },
+                    "type": {
+                      "type": "string",
+                      "enum": ["date", "datetime", "time"]
+                    },
+                    "format": {
+                      "type": "string",
+                      "description": "Date format string",
+                      "default": "YYYY-MM-DD",
+                      "examples": ["YYYY-MM-DD", "MM/DD/YYYY", "DD-MM-YYYY"]
+                    },
+                    "includeTime": {
+                      "type": "boolean",
+                      "description": "Include time component (for date type)",
+                      "default": false
+                    },
+                    "timezone": {
+                      "type": "string",
+                      "description": "Timezone for datetime fields",
+                      "default": "UTC",
+                      "examples": ["UTC", "America/New_York", "Europe/London"]
+                    },
+                    "default": {
+                      "type": "string"
+                    }
+                  },
+                  "required": ["id", "name", "type"],
+                  "additionalProperties": false
+                },
+                {
+                  "title": "Checkbox Field",
+                  "description": "Boolean checkbox field",
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "$ref": "#/$defs/id"
+                    },
+                    "name": {
+                      "$ref": "#/$defs/name"
+                    },
+                    "required": {
+                      "type": "boolean",
+                      "default": false
+                    },
+                    "type": {
+                      "type": "string",
+                      "const": "checkbox"
+                    },
+                    "default": {
+                      "type": "boolean"
+                    }
+                  },
+                  "required": ["id", "name", "type"],
+                  "additionalProperties": false
+                },
+                {
+                  "title": "Single Select Field",
+                  "description": "Select one option from a list",
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "$ref": "#/$defs/id"
+                    },
+                    "name": {
+                      "$ref": "#/$defs/name"
+                    },
+                    "required": {
+                      "type": "boolean",
+                      "default": false
+                    },
+                    "type": {
+                      "type": "string",
+                      "const": "single-select"
+                    },
+                    "options": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      },
+                      "minItems": 1,
+                      "default": []
+                    },
+                    "default": {
+                      "type": "string"
+                    }
+                  },
+                  "required": ["id", "name", "type", "options"],
+                  "additionalProperties": false
+                },
+                {
+                  "title": "Multi Select Field",
+                  "description": "Select multiple options from a list",
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "$ref": "#/$defs/id"
+                    },
+                    "name": {
+                      "$ref": "#/$defs/name"
+                    },
+                    "required": {
+                      "type": "boolean",
+                      "default": false
+                    },
+                    "type": {
+                      "type": "string",
+                      "const": "multi-select"
+                    },
+                    "options": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      },
+                      "minItems": 1,
+                      "default": []
+                    },
+                    "maxSelections": {
+                      "type": "integer",
+                      "description": "Maximum number of selections allowed",
+                      "minimum": 1
+                    },
+                    "default": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    }
+                  },
+                  "required": ["id", "name", "type", "options"],
+                  "additionalProperties": false
+                },
+                {
+                  "title": "Relationship Field",
+                  "description": "Foreign key relationship to another table",
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "$ref": "#/$defs/id"
+                    },
+                    "name": {
+                      "$ref": "#/$defs/name"
+                    },
+                    "required": {
+                      "type": "boolean",
+                      "default": false
+                    },
+                    "type": {
+                      "type": "string",
+                      "const": "relationship"
+                    },
+                    "relatedTable": {
+                      "type": "string",
+                      "description": "Name of the related table",
+                      "minLength": 1
+                    },
+                    "relationType": {
+                      "type": "string",
+                      "enum": ["one-to-one", "one-to-many", "many-to-many"],
+                      "default": "one-to-many",
+                      "description": "Type of relationship"
+                    },
+                    "displayField": {
+                      "type": "string",
+                      "description": "Field from related table to display in UI",
+                      "minLength": 1
+                    }
+                  },
+                  "required": ["id", "name", "type", "relatedTable", "relationType"],
+                  "additionalProperties": false
+                },
+                {
+                  "title": "Single Attachment Field",
+                  "description": "Single file attachment with storage configuration",
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "$ref": "#/$defs/id"
+                    },
+                    "name": {
+                      "$ref": "#/$defs/name"
+                    },
+                    "required": {
+                      "type": "boolean",
+                      "default": false
+                    },
+                    "type": {
+                      "type": "string",
+                      "const": "single-attachment"
+                    },
+                    "storage": {
+                      "type": "object",
+                      "properties": {
+                        "provider": {
+                          "type": "string",
+                          "enum": ["local", "s3"],
+                          "default": "local",
+                          "description": "Storage provider"
+                        },
+                        "bucket": {
+                          "type": "string",
+                          "description": "S3 bucket name (required for s3 provider)"
+                        },
+                        "maxSize": {
+                          "type": "integer",
+                          "description": "Maximum file size in bytes",
+                          "default": 10485760,
+                          "minimum": 1
+                        },
+                        "allowedTypes": {
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          },
+                          "description": "Allowed MIME types or file extensions",
+                          "default": ["image/*", "application/pdf"],
+                          "examples": [["image/*"], ["application/pdf", "application/msword"]]
+                        }
+                      },
+                      "additionalProperties": false
+                    }
+                  },
+                  "required": ["id", "name", "type"],
+                  "additionalProperties": false
+                },
+                {
+                  "title": "Multiple Attachments Field",
+                  "description": "Multiple file attachments with storage configuration",
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "$ref": "#/$defs/id"
+                    },
+                    "name": {
+                      "$ref": "#/$defs/name"
+                    },
+                    "required": {
+                      "type": "boolean",
+                      "default": false
+                    },
+                    "type": {
+                      "type": "string",
+                      "const": "multiple-attachments"
+                    },
+                    "maxFiles": {
+                      "type": "integer",
+                      "description": "Maximum number of files allowed",
+                      "minimum": 1,
+                      "default": 10
+                    },
+                    "storage": {
+                      "type": "object",
+                      "properties": {
+                        "provider": {
+                          "type": "string",
+                          "enum": ["local", "s3"],
+                          "default": "local",
+                          "description": "Storage provider"
+                        },
+                        "bucket": {
+                          "type": "string",
+                          "description": "S3 bucket name (required for s3 provider)"
+                        },
+                        "maxSize": {
+                          "type": "integer",
+                          "description": "Maximum file size in bytes per file",
+                          "default": 10485760,
+                          "minimum": 1
+                        },
+                        "allowedTypes": {
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          },
+                          "description": "Allowed MIME types or file extensions",
+                          "default": ["image/*", "application/pdf"],
+                          "examples": [["image/*"], ["application/pdf", "application/msword"]]
+                        }
+                      },
+                      "additionalProperties": false
+                    }
+                  },
+                  "required": ["id", "name", "type"],
+                  "additionalProperties": false
+                }
+              ]
+            }
+          }
+        },
+        "required": ["id", "name", "fields"],
+        "additionalProperties": false
+      }
+    },
+    "pages": {
+      "description": "Pages and forms in the application",
+      "title": "Pages",
+      "minItems": 1,
+      "uiSchema": {
+        "ui:ArrayFieldTemplate": "collapsible",
+        "ui:options": {
+          "orderable": true,
+          "removable": true,
+          "addable": true
+        }
+      },
+      "default": [],
+      "type": "array",
+      "items": {
+        "title": "Page",
+        "description": "A page in your application",
+        "version": "0.81.0",
+        "anyOf": [
+          {
+            "title": "Custom HTML Page",
+            "description": "A static page with customizable head and body content",
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "const": "custom-html"
+              },
+              "name": {
+                "$ref": "#/$defs/name",
+                "title": "Page Name",
+                "description": "Internal name for the page",
+                "placeholder": "Enter page name",
+                "examples": ["home", "about", "contact"],
+                "help": "Unique identifier for the page"
+              },
+              "path": {
+                "$ref": "#/$defs/path",
+                "title": "Page Path",
+                "description": "URL path where the page is accessible",
+                "placeholder": "/about",
+                "examples": ["/", "/about", "/contact"],
+                "help": "Must start with / and use lowercase letters, numbers, hyphens"
+              },
+              "head": {
+                "description": "List of head elements (meta tags, scripts, styles, links)",
+                "title": "Head Elements",
+                "minItems": 0,
+                "uiSchema": {
+                  "ui:ArrayFieldTemplate": "collapsible",
+                  "ui:options": {
+                    "orderable": true,
+                    "removable": true,
+                    "addable": true
+                  }
+                },
+                "default": [],
+                "type": "array",
+                "items": {
+                  "anyOf": [
+                    {
+                      "title": "Meta Element",
+                      "description": "Meta tag for page metadata",
+                      "type": "object",
+                      "properties": {
+                        "tag": {
+                          "type": "string",
+                          "const": "meta"
+                        },
+                        "name": {
+                          "type": "string",
+                          "minLength": 1
+                        },
+                        "content": {
+                          "type": "string",
+                          "minLength": 1
+                        }
+                      },
+                      "required": ["tag", "name", "content"],
+                      "additionalProperties": false
+                    },
+                    {
+                      "title": "Title Element",
+                      "description": "Page title",
+                      "type": "object",
+                      "properties": {
+                        "tag": {
+                          "type": "string",
+                          "const": "title"
+                        },
+                        "content": {
+                          "type": "string",
+                          "minLength": 1
+                        }
+                      },
+                      "required": ["tag", "content"],
+                      "additionalProperties": false
+                    },
+                    {
+                      "title": "Script Element",
+                      "description": "JavaScript include or inline script",
+                      "type": "object",
+                      "properties": {
+                        "tag": {
+                          "type": "string",
+                          "const": "script"
+                        },
+                        "src": {
+                          "type": "string",
+                          "format": "uri"
+                        },
+                        "content": {
+                          "type": "string"
+                        },
+                        "type": {
+                          "type": "string"
+                        },
+                        "async": {
+                          "type": "boolean"
+                        },
+                        "defer": {
+                          "type": "boolean"
+                        }
+                      },
+                      "required": ["tag"],
+                      "additionalProperties": false
+                    },
+                    {
+                      "title": "Style Element",
+                      "description": "Inline CSS styles",
+                      "type": "object",
+                      "properties": {
+                        "tag": {
+                          "type": "string",
+                          "const": "style"
+                        },
+                        "content": {
+                          "type": "string",
+                          "minLength": 1
+                        },
+                        "type": {
+                          "type": "string"
+                        },
+                        "media": {
+                          "type": "string"
+                        }
+                      },
+                      "required": ["tag", "content"],
+                      "additionalProperties": false
+                    },
+                    {
+                      "title": "Link Element",
+                      "description": "External resource link",
+                      "type": "object",
+                      "properties": {
+                        "tag": {
+                          "type": "string",
+                          "const": "link"
+                        },
+                        "href": {
+                          "type": "string",
+                          "minLength": 1
+                        },
+                        "rel": {
+                          "type": "string",
+                          "minLength": 1
+                        },
+                        "type": {
+                          "type": "string"
+                        },
+                        "media": {
+                          "type": "string"
+                        },
+                        "sizes": {
+                          "type": "string"
+                        },
+                        "crossorigin": {
+                          "type": "string",
+                          "enum": ["anonymous", "use-credentials"]
+                        }
+                      },
+                      "required": ["tag", "href", "rel"],
+                      "additionalProperties": false
+                    }
+                  ]
+                }
+              },
+              "body": {
+                "description": "List of body elements for page content",
+                "title": "Body Elements",
+                "minItems": 1,
+                "uiSchema": {
+                  "ui:ArrayFieldTemplate": "collapsible",
+                  "ui:options": {
+                    "orderable": true,
+                    "removable": true,
+                    "addable": true
+                  }
+                },
+                "default": [],
+                "type": "array",
+                "items": {
+                  "anyOf": [
+                    {
+                      "title": "HTML Content",
+                      "description": "Custom HTML content",
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "const": "custom-html"
+                        },
+                        "content": {
+                          "type": "string",
+                          "minLength": 1
+                        }
+                      },
+                      "required": ["type", "content"],
+                      "additionalProperties": false
+                    }
+                  ]
+                }
+              }
+            },
+            "required": ["type", "name", "path", "head", "body"],
+            "additionalProperties": false
+          },
+          {
+            "title": "Form Page",
+            "description": "A page with a form for collecting user input",
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "const": "form"
+              },
+              "id": {
+                "$ref": "#/$defs/id",
+                "title": "Form ID",
+                "description": "Unique identifier for the form",
+                "examples": [1, 2, 100]
+              },
+              "name": {
+                "$ref": "#/$defs/name",
+                "title": "Form Name",
+                "description": "Internal name for the form",
+                "placeholder": "Enter form name",
+                "examples": ["Contact Form", "Registration Form", "Feedback Survey"]
+              },
+              "path": {
+                "$ref": "#/$defs/path",
+                "title": "Form Path",
+                "description": "URL path where the form is accessible",
+                "placeholder": "/contact",
+                "examples": ["/contact", "/signup", "/feedback"],
+                "help": "Must start with / and use lowercase letters, numbers, hyphens"
+              },
+              "title": {
+                "type": "string",
+                "description": "Display title shown to users",
+                "title": "Display Title",
+                "placeholder": "Form title visible to users",
+                "examples": ["Contact Us", "Create Your Account", "We Value Your Feedback"]
+              },
+              "description": {
+                "type": "string",
+                "description": "Help text or instructions for the form",
+                "title": "Form Description",
+                "placeholder": "Describe the purpose of this form",
+                "examples": [
+                  "Fill out this form to get in touch with our team",
+                  "Please provide your details to create an account"
+                ],
+                "uiSchema": {
+                  "ui:widget": "textarea",
+                  "ui:rows": 2
+                }
+              },
+              "inputs": {
+                "description": "List of form fields for user input",
+                "title": "Form Fields",
+                "minItems": 1,
+                "uiSchema": {
+                  "ui:ArrayFieldTemplate": "collapsible",
+                  "ui:options": {
+                    "orderable": true,
+                    "removable": true,
+                    "addable": true
+                  }
+                },
+                "default": [],
+                "type": "array",
+                "items": {
+                  "title": "Input",
+                  "description": "A form input field",
+                  "anyOf": [
+                    {
+                      "title": "Text Input",
+                      "description": "Text input field",
+                      "type": "object",
+                      "properties": {
+                        "name": {
+                          "type": "string"
+                        },
+                        "label": {
+                          "type": "string"
+                        },
+                        "description": {
+                          "type": "string"
+                        },
+                        "required": {
+                          "type": "boolean"
+                        },
+                        "defaultValue": {
+                          "type": "string"
+                        },
+                        "placeholder": {
+                          "type": "string"
+                        },
+                        "type": {
+                          "type": "string",
+                          "enum": ["single-line-text", "long-text", "phone-number", "email", "url"]
+                        }
+                      },
+                      "required": ["name", "type"],
+                      "additionalProperties": false
+                    },
+                    {
+                      "title": "Checkbox Input",
+                      "description": "Checkbox input field",
+                      "type": "object",
+                      "properties": {
+                        "name": {
+                          "type": "string"
+                        },
+                        "label": {
+                          "type": "string"
+                        },
+                        "description": {
+                          "type": "string"
+                        },
+                        "required": {
+                          "type": "boolean"
+                        },
+                        "defaultValue": {
+                          "type": "boolean"
+                        },
+                        "type": {
+                          "type": "string",
+                          "const": "checkbox"
+                        }
+                      },
+                      "required": ["name", "type"],
+                      "additionalProperties": false
+                    },
+                    {
+                      "title": "Select Input",
+                      "description": "Single select dropdown",
+                      "type": "object",
+                      "properties": {
+                        "name": {
+                          "type": "string"
+                        },
+                        "label": {
+                          "type": "string"
+                        },
+                        "description": {
+                          "type": "string"
+                        },
+                        "required": {
+                          "type": "boolean"
+                        },
+                        "defaultValue": {
+                          "type": "string"
+                        },
+                        "placeholder": {
+                          "type": "string"
+                        },
+                        "options": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "label": {
+                                "type": "string"
+                              },
+                              "value": {
+                                "type": "string"
+                              }
+                            },
+                            "required": ["label", "value"],
+                            "additionalProperties": false
+                          }
+                        },
+                        "type": {
+                          "type": "string",
+                          "const": "single-select"
+                        }
+                      },
+                      "required": ["name", "options", "type"],
+                      "additionalProperties": false
+                    },
+                    {
+                      "title": "Attachment Input",
+                      "description": "File upload field",
+                      "type": "object",
+                      "properties": {
+                        "name": {
+                          "type": "string"
+                        },
+                        "label": {
+                          "type": "string"
+                        },
+                        "description": {
+                          "type": "string"
+                        },
+                        "required": {
+                          "type": "boolean"
+                        },
+                        "accept": {
+                          "type": "string"
+                        },
+                        "type": {
+                          "type": "string",
+                          "const": "single-attachment"
+                        }
+                      },
+                      "required": ["name", "type"],
+                      "additionalProperties": false
+                    }
+                  ]
+                }
+              },
+              "action": {
+                "type": "string",
+                "description": "What to do with form submission",
+                "enum": ["create-record", "send-email", "trigger-automation"],
+                "default": "create-record"
+              },
+              "table": {
+                "type": "string",
+                "description": "Table to save form data (required for create-record action)",
+                "minLength": 1
+              },
+              "successMessage": {
+                "type": "string",
+                "description": "Message displayed after successful form submission",
+                "title": "Success Message",
+                "placeholder": "Thank you for your submission!",
+                "examples": [
+                  "Thank you! We will get back to you soon.",
+                  "Your account has been created successfully!",
+                  "Form submitted successfully."
+                ],
+                "uiSchema": {
+                  "ui:widget": "textarea",
+                  "ui:rows": 2
+                }
+              },
+              "redirectUrl": {
+                "$ref": "#/$defs/path",
+                "description": "URL to redirect to after successful submission"
+              }
+            },
+            "required": ["type", "id", "name", "path", "inputs", "action"],
+            "additionalProperties": false
+          },
+          {
+            "title": "Table View Page",
+            "description": "A page displaying records from a table with CRUD operations",
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "const": "table-view"
+              },
+              "name": {
+                "$ref": "#/$defs/name",
+                "title": "Page Name",
+                "description": "Internal name for the page"
+              },
+              "path": {
+                "$ref": "#/$defs/path",
+                "title": "Page Path",
+                "description": "URL path where the page is accessible",
+                "placeholder": "/users",
+                "examples": ["/users", "/products", "/orders"]
+              },
+              "table": {
+                "type": "string",
+                "description": "Name of the table to display",
+                "minLength": 1
+              },
+              "title": {
+                "type": "string",
+                "description": "Display title for the page",
+                "minLength": 1
+              },
+              "columns": {
+                "type": "array",
+                "description": "Which table fields to show as columns",
+                "items": {
+                  "type": "string"
+                },
+                "minItems": 1
+              },
+              "searchable": {
+                "type": "boolean",
+                "description": "Enable search functionality",
+                "default": true
+              },
+              "sortable": {
+                "type": "boolean",
+                "description": "Enable column sorting",
+                "default": true
+              },
+              "filterable": {
+                "type": "boolean",
+                "description": "Enable column filtering",
+                "default": true
+              },
+              "actions": {
+                "type": "object",
+                "description": "Enable CRUD actions",
+                "properties": {
+                  "create": {
+                    "type": "boolean",
+                    "default": true
+                  },
+                  "edit": {
+                    "type": "boolean",
+                    "default": true
+                  },
+                  "delete": {
+                    "type": "boolean",
+                    "default": true
+                  },
+                  "export": {
+                    "type": "boolean",
+                    "default": false
+                  }
+                },
+                "additionalProperties": false
+              }
+            },
+            "required": ["type", "name", "path", "table", "columns"],
+            "additionalProperties": false
+          },
+          {
+            "title": "Detail View Page",
+            "description": "A page displaying a single record with detailed information",
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "const": "detail-view"
+              },
+              "name": {
+                "$ref": "#/$defs/name",
+                "title": "Page Name",
+                "description": "Internal name for the page"
+              },
+              "path": {
+                "$ref": "#/$defs/path",
+                "title": "Page Path",
+                "description": "URL path with :id parameter",
+                "placeholder": "/users/:id",
+                "examples": ["/users/:id", "/products/:id", "/orders/:id"]
+              },
+              "table": {
+                "type": "string",
+                "description": "Name of the table to display",
+                "minLength": 1
+              },
+              "title": {
+                "type": "string",
+                "description": "Display title for the page",
+                "minLength": 1
+              },
+              "layout": {
+                "type": "string",
+                "description": "Layout style for the detail view",
+                "enum": ["single-column", "two-column", "tabs", "accordion"],
+                "default": "single-column"
+              },
+              "sections": {
+                "type": "array",
+                "description": "Sections grouping related fields",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "title": {
+                      "type": "string",
+                      "description": "Section title",
+                      "minLength": 1
+                    },
+                    "fields": {
+                      "type": "array",
+                      "description": "Fields to display in this section",
+                      "items": {
+                        "type": "string"
+                      },
+                      "minItems": 1
+                    }
+                  },
+                  "required": ["title", "fields"],
+                  "additionalProperties": false
+                },
+                "minItems": 1
+              }
+            },
+            "required": ["type", "name", "path", "table", "sections"],
+            "additionalProperties": false
+          }
+        ]
+      }
+    },
+    "automations": {
+      "description": "List of automation workflows that define business logic and integrations",
+      "title": "Automations",
+      "uiSchema": {
+        "ui:ArrayFieldTemplate": "collapsible",
+        "ui:options": {
+          "orderable": true,
+          "removable": true,
+          "addable": true
+        }
+      },
+      "default": [],
+      "type": "array",
+      "items": {
+        "$comment": "Automations schema from original - keeping as-is since it's comprehensive"
+      }
+    },
+    "connections": {
+      "description": "External service connections and API integrations",
+      "title": "Connections",
+      "uiSchema": {
+        "ui:ArrayFieldTemplate": "collapsible",
+        "ui:options": {
+          "orderable": true,
+          "removable": true,
+          "addable": true
+        }
+      },
+      "default": [],
+      "type": "array",
+      "items": {
+        "$comment": "Connections schema from original - keeping as-is since it's comprehensive"
+      }
+    }
+  },
+  "required": [
+    "name",
+    "description",
+    "icon",
+    "color",
+    "appVersion",
+    "schemaVersion",
+    "tables",
+    "pages",
+    "automations",
+    "connections"
+  ],
+  "additionalProperties": false
+}

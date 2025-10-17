@@ -30,10 +30,7 @@ export const NameSchema = Schema.String.pipe(
   Schema.maxLength(214, { message: () => 'Name must not exceed 214 characters' }),
   Schema.pattern(/^(?:@[a-z0-9-~][a-z0-9-._~]*\/)?[a-z0-9-~][a-z0-9-._~]*$/, {
     message: () =>
-      'Name must be lowercase and follow npm package naming conventions (no leading dots/underscores, URL-safe characters only)',
-  }),
-  Schema.filter((name) => name.trim() === name, {
-    message: () => 'Name cannot contain leading or trailing spaces',
+      'Name must be lowercase and follow npm package naming conventions (no leading/trailing spaces, no dots/underscores at start, URL-safe characters only)',
   }),
   Schema.annotations({
     title: 'Application Name',
@@ -41,3 +38,22 @@ export const NameSchema = Schema.String.pipe(
     examples: ['my-app', 'todo-app', '@myorg/my-app', 'blog-system', 'dashboard-admin'],
   })
 )
+
+/**
+ * TypeScript type inferred from NameSchema.
+ *
+ * Use this type for type-safe access to validated application names.
+ *
+ * @example
+ * ```typescript
+ * const name: Name = 'my-app'
+ * ```
+ */
+export type Name = Schema.Schema.Type<typeof NameSchema>
+
+/**
+ * Encoded type of NameSchema (what goes in).
+ *
+ * In this case, it's the same as Name since we don't use transformations.
+ */
+export type NameEncoded = Schema.Schema.Encoded<typeof NameSchema>

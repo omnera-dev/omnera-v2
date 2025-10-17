@@ -168,22 +168,13 @@ async function main() {
       // ESLint
       (async () => {
         console.log(`  📝 Linting ${fileName}...`)
-        return await runCommand(`bunx eslint "${filePath}" --fix --quiet`, 30000)
+        return await runCommand(`bunx eslint "${filePath}" --max-warnings 0`, 30000)
       })(),
 
       // TypeScript incremental check
       (async () => {
         console.log(`  ✅ Type checking...`)
-        return await runCommand('bunx tsc --noEmit --incremental', 60000)
-      })(),
-
-      // Prettier
-      (async () => {
-        console.log(`  💅 Formatting ${fileName}...`)
-        return await runCommand(
-          `bunx prettier --write "${filePath}" --log-level error`,
-          10000
-        )
+        return await runCommand('bunx tsc --noEmit', 60000)
       })(),
     ]
 
@@ -203,7 +194,7 @@ async function main() {
       )
     }
 
-    const results = await Promise.all(checks)
+    await Promise.all(checks)
 
     // Run test if test file exists (sequential since it might depend on formatted code)
     const testFile = findTestFile(filePath)

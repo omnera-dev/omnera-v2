@@ -4,11 +4,11 @@
 
 ## Project Context
 
-**Vision**: Omnera aims to be a configuration-driven application platform (see `@docs/specifications.md` for full vision)
-**Current Status**: Phase 1 - Foundation (minimal web server with React SSR)
-**Implementation Progress**: See `STATUS.md` for detailed feature tracking
+**Vision**: Omnera aims to be a configuration-driven application platform (see `@docs/specifications/vision.md` for full vision)
+**Current Status**: Phase 0 - Foundation (minimal schema with metadata only)
+**Implementation Progress**: See `ROADMAP.md` for detailed feature tracking and development phases
 
-> 💡 When writing code or tests, keep the target architecture in mind (specifications.md) while working within current capabilities (STATUS.md)
+> 💡 When writing code or tests, keep the target architecture in mind (vision.md) while working within current capabilities (ROADMAP.md)
 
 ## Quick Reference
 
@@ -126,8 +126,8 @@ omnera-v2/
 **When you need specific details, import the relevant documentation file:**
 
 ### Product Vision & Roadmap
-- `@docs/specifications.md` - Target state and product roadmap (future vision)
-- `@STATUS.md` - Current implementation status and development phases
+- `@docs/specifications/vision.md` - Target state and product vision (future capabilities)
+- `@ROADMAP.md` - Implementation roadmap with phases and current development status
 
 ### Infrastructure
 - `@docs/infrastructure/runtime/bun.md` - Bun runtime & package manager
@@ -155,6 +155,7 @@ omnera-v2/
 ### Architecture
 - `@docs/architecture/functional-programming.md` - FP principles
 - `@docs/architecture/layer-based-architecture.md` - Layered architecture
+- `@docs/architecture/api-conventions.md` - Convention-based API routing
 - `@docs/architecture/testing-strategy.md` - F.I.R.S.T principles
 - `@docs/architecture/performance-optimization.md` - Performance patterns
 - `@docs/architecture/security-best-practices.md` - Security guidelines
