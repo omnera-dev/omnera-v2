@@ -28,20 +28,25 @@ import type { ServerInstance } from '@/infrastructure/services/server'
 export const withGracefulShutdown = (server: ServerInstance): Effect.Effect<never> =>
   Effect.gen(function* () {
     // Setup SIGINT handler for graceful shutdown
-    process.on('SIGINT', () => {
-      Effect.runPromise(
-        Effect.gen(function* () {
-          yield* Console.log('\nReceived SIGINT, stopping server...')
-          yield* server.stop
+    // Wrap process.on() side effect in Effect.sync for testability
+    yield* Effect.sync(() =>
+      process.on('SIGINT', () => {
+        Effect.runPromise(
+          Effect.gen(function* () {
+            yield* Console.log('\nReceived SIGINT, stopping server...')
+            yield* server.stop
+            // Terminate process - imperative statement required for graceful shutdown
+            // eslint-disable-next-line functional/no-expression-statements
+            process.exit(0)
+          })
+        ).catch((error) => {
+          Effect.runSync(Console.error('Failed to stop server:', error))
+          // Terminate process - imperative statement required for error handling
           // eslint-disable-next-line functional/no-expression-statements
-          process.exit(0)
+          process.exit(1)
         })
-      ).catch((error) => {
-        console.error('Failed to stop server:', error)
-        // eslint-disable-next-line functional/no-expression-statements
-        process.exit(1)
       })
-    })
+    )
 
     // Keep the process alive indefinitely
     return yield* Effect.never

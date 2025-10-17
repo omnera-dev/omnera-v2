@@ -49,9 +49,9 @@ bun test                    # Unit tests (Bun Test)
 bun test:e2e                # E2E tests (Playwright)
 bun test:all                # All tests
 
-# Release (automated via GitHub Actions)
-git commit -m "feat: add feature"  # Conventional commit
-git push origin main               # Triggers release if feat/fix
+# Release (manual via GitHub Actions)
+git commit -m "release: publish"   # Explicit release commit
+git push origin main               # Triggers release ONLY with "release:" type
 ```
 
 ## Coding Standards (Critical Rules)
@@ -76,10 +76,8 @@ git push origin main               # Triggers release if feat/fix
 - **Exports**: Export both component and props interface
 
 ### Commit Messages (Conventional Commits - REQUIRED)
-- `feat:` → Minor version bump (0.X.0)
-- `fix:` → Patch version bump (0.0.X)
-- `feat!:` or `BREAKING CHANGE:` → Major version bump (X.0.0)
-- `docs:`, `style:`, `refactor:`, `test:`, `chore:` → No version bump
+- `release:` → Publish new version (patch bump 0.0.X) - **ONLY this triggers releases**
+- `feat:`, `fix:`, `docs:`, `style:`, `refactor:`, `test:`, `chore:` → No version bump
 
 ## Architecture Principles
 
@@ -92,11 +90,12 @@ git push origin main               # Triggers release if feat/fix
 **Dependency Direction**: Outer → Inner (Presentation → Application → Domain ← Infrastructure)
 
 ### Functional Programming (Core Principles)
-1. **Pure Functions** - No side effects in Domain layer
-2. **Immutability** - Use `readonly`, never mutate
-3. **Explicit Effects** - Use Effect.ts for side effects
-4. **Composition** - Build complex from simple functions
-5. **Type Safety** - Strict TypeScript, Effect error types
+1. **DRY (Don't Repeat Yourself)** - Single source of truth for all logic
+2. **Pure Functions** - No side effects in Domain layer
+3. **Immutability** - Use `readonly`, never mutate
+4. **Explicit Effects** - Use Effect.ts for side effects
+5. **Composition** - Build complex from simple functions
+6. **Type Safety** - Strict TypeScript, Effect error types
 
 **Enforcement**: FP patterns automatically enforced via ESLint (`eslint-plugin-functional`). See `@docs/infrastructure/quality/eslint.md#functional-programming-enforcement`
 
@@ -169,8 +168,9 @@ omnera-v2/
 
 1. **Write code** following standards above
 2. **Test locally**: `bun run lint && bun run format && bun run typecheck && bun test`
-3. **Commit**: Use conventional commits (`feat:`, `fix:`, etc.)
-4. **Push**: GitHub Actions runs tests and creates release if needed
+3. **Commit**: Use conventional commits (`feat:`, `fix:`, etc.) for regular work
+4. **Push**: GitHub Actions runs tests
+5. **Release**: When ready to publish, use `git commit -m "release: publish"` and push
 
 ## Key Differences from Typical Stacks
 

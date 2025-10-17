@@ -25,6 +25,7 @@
  * - `OMNERA_HOSTNAME` (optional) - Server hostname (default: localhost)
  */
 
+import { Effect, Console } from 'effect'
 import { start, type StartOptions } from '@/index'
 
 interface AppSchema {
@@ -33,26 +34,31 @@ interface AppSchema {
   [key: string]: unknown
 }
 
-// Read environment variables
-const appSchemaString = process.env.OMNERA_APP_SCHEMA || Bun.env.OMNERA_APP_SCHEMA
-const port = process.env.OMNERA_PORT || Bun.env.OMNERA_PORT
-const hostname = process.env.OMNERA_HOSTNAME || Bun.env.OMNERA_HOSTNAME
+// Read environment variables (Bun-specific)
+const appSchemaString = Bun.env.OMNERA_APP_SCHEMA
+const port = Bun.env.OMNERA_PORT
+const hostname = Bun.env.OMNERA_HOSTNAME
 
 // Validate required environment variables
 if (!appSchemaString) {
-  console.error('Error: OMNERA_APP_SCHEMA environment variable is required')
-  console.error('')
-  console.error('Usage:')
-  console.error('  OMNERA_APP_SCHEMA=\'{"name":"My App"}\' bun run omnera')
-  console.error('')
-  console.error('Example with description:')
-  console.error(
-    '  OMNERA_APP_SCHEMA=\'{"name":"My App","description":"My Description"}\' bun run omnera'
+  Effect.runSync(
+    Effect.gen(function* () {
+      yield* Console.error('Error: OMNERA_APP_SCHEMA environment variable is required')
+      yield* Console.error('')
+      yield* Console.error('Usage:')
+      yield* Console.error('  OMNERA_APP_SCHEMA=\'{"name":"My App"}\' bun run omnera')
+      yield* Console.error('')
+      yield* Console.error('Example with description:')
+      yield* Console.error(
+        '  OMNERA_APP_SCHEMA=\'{"name":"My App","description":"My Description"}\' bun run omnera'
+      )
+      yield* Console.error('')
+      yield* Console.error('Optional environment variables:')
+      yield* Console.error('  OMNERA_PORT - Server port (default: 3000)')
+      yield* Console.error('  OMNERA_HOSTNAME - Server hostname (default: localhost)')
+    })
   )
-  console.error('')
-  console.error('Optional environment variables:')
-  console.error('  OMNERA_PORT - Server port (default: 3000)')
-  console.error('  OMNERA_HOSTNAME - Server hostname (default: localhost)')
+  // Terminate process - imperative statement required for CLI
   // eslint-disable-next-line functional/no-expression-statements
   process.exit(1)
 }
@@ -62,14 +68,19 @@ const app: Readonly<AppSchema> = (() => {
   try {
     return JSON.parse(appSchemaString) as AppSchema
   } catch {
-    console.error('Error: OMNERA_APP_SCHEMA must be valid JSON')
-    console.error('')
-    console.error('Received:', appSchemaString)
-    console.error('')
-    console.error('Example:')
-    console.error(
-      '  OMNERA_APP_SCHEMA=\'{"name":"My App","description":"My Description"}\' bun run omnera'
+    Effect.runSync(
+      Effect.gen(function* () {
+        yield* Console.error('Error: OMNERA_APP_SCHEMA must be valid JSON')
+        yield* Console.error('')
+        yield* Console.error('Received:', appSchemaString)
+        yield* Console.error('')
+        yield* Console.error('Example:')
+        yield* Console.error(
+          '  OMNERA_APP_SCHEMA=\'{"name":"My App","description":"My Description"}\' bun run omnera'
+        )
+      })
     )
+    // Terminate process - imperative statement required for CLI
     // eslint-disable-next-line functional/no-expression-statements
     process.exit(1)
   }
@@ -83,9 +94,12 @@ const options: StartOptions = (() => {
 
   const parsedPort = port ? parseInt(port, 10) : undefined
   if (parsedPort !== undefined && (isNaN(parsedPort) || parsedPort < 0 || parsedPort > 65_535)) {
-    console.error(
-      `Error: Invalid port number "${port}". Must be between 0 and 65535 (0 = auto-select).`
+    Effect.runSync(
+      Console.error(
+        `Error: Invalid port number "${port}". Must be between 0 and 65535 (0 = auto-select).`
+      )
     )
+    // Terminate process - imperative statement required for CLI
     // eslint-disable-next-line functional/no-expression-statements
     process.exit(1)
   }
@@ -97,14 +111,19 @@ const options: StartOptions = (() => {
 })()
 
 // Start the server
-console.log('Starting Omnera server from CLI...')
-console.log(`App: ${app.name}${app.description ? ` - ${app.description}` : ''}`)
-if (options.port) console.log(`Port: ${options.port}`)
-if (options.hostname) console.log(`Hostname: ${options.hostname}`)
-console.log('')
+Effect.runSync(
+  Effect.gen(function* () {
+    yield* Console.log('Starting Omnera server from CLI...')
+    yield* Console.log(`App: ${app.name}${app.description ? ` - ${app.description}` : ''}`)
+    if (options.port) yield* Console.log(`Port: ${options.port}`)
+    if (options.hostname) yield* Console.log(`Hostname: ${options.hostname}`)
+    yield* Console.log('')
+  })
+)
 
 start(app, options).catch((error) => {
-  console.error('Failed to start server:', error)
+  Effect.runSync(Console.error('Failed to start server:', error))
+  // Terminate process - imperative statement required for CLI
   // eslint-disable-next-line functional/no-expression-statements
   process.exit(1)
 })

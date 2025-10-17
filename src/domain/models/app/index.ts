@@ -3,6 +3,11 @@ import { DescriptionSchema } from './description.ts'
 import { NameSchema } from './name.ts'
 import { VersionSchema } from './version.ts'
 
+// Re-export all domain model schemas and types for convenient imports
+export * from './name.ts'
+export * from './version.ts'
+export * from './description.ts'
+
 /**
  * AppSchema defines the structure of an application configuration.
  *

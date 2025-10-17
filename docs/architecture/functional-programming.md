@@ -26,6 +26,255 @@ Omnera embraces Functional Programming (FP) as its core architectural philosophy
 
 ## Core Functional Programming Principles
 
+### 0. DRY (Don't Repeat Yourself)
+
+**Definition**: Every piece of knowledge should have a single, unambiguous, authoritative representation within a system.
+
+#### Why DRY Matters in Omnera
+
+DRY is foundational to all other FP principles—repeated code is:
+
+- **Harder to maintain** - Changes must be synchronized across multiple locations
+- **More error-prone** - Inconsistencies creep in when duplicates diverge
+- **Difficult to test** - Each duplicate needs its own tests
+- **Obscures intent** - The core logic is hidden among repetitions
+
+#### DRY in Practice
+
+```typescript
+// ❌ INCORRECT: Repeated validation logic
+function validateEmail(email: string): boolean {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
+}
+
+function validateUserEmail(user: User): boolean {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(user.email) // Duplicate regex
+}
+
+function validateFormEmail(formData: FormData): boolean {
+  const email = formData.get('email') as string
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) // Duplicate regex
+}
+
+// ✅ CORRECT: Single source of truth
+const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/ as const
+
+function isValidEmail(email: string): boolean {
+  return EMAIL_REGEX.test(email)
+}
+
+function validateUserEmail(user: User): boolean {
+  return isValidEmail(user.email) // Reuse
+}
+
+function validateFormEmail(formData: FormData): boolean {
+  const email = formData.get('email') as string
+  return isValidEmail(email) // Reuse
+}
+```
+
+#### DRY with Pure Functions
+
+Pure functions are naturally reusable, making DRY easier:
+
+```typescript
+// ❌ INCORRECT: Repeated calculation logic
+function calculateOrderTotal(items: OrderItem[]): number {
+  return items.reduce((sum, item) => sum + item.price * item.quantity, 0)
+}
+
+function calculateCartTotal(cartItems: CartItem[]): number {
+  return cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0) // Duplicate
+}
+
+function calculateInvoiceTotal(invoiceItems: InvoiceItem[]): number {
+  return invoiceItems.reduce((sum, item) => sum + item.price * item.quantity, 0) // Duplicate
+}
+
+// ✅ CORRECT: Single reusable pure function
+interface PricedItem {
+  readonly price: number
+  readonly quantity: number
+}
+
+function calculateItemsTotal(items: readonly PricedItem[]): number {
+  return items.reduce((sum, item) => sum + item.price * item.quantity, 0)
+}
+
+// Reuse for all cases
+const orderTotal = calculateItemsTotal(orderItems)
+const cartTotal = calculateItemsTotal(cartItems)
+const invoiceTotal = calculateItemsTotal(invoiceItems)
+```
+
+#### DRY with Type Definitions
+
+```typescript
+// ❌ INCORRECT: Repeated type definitions
+interface User {
+  id: number
+  name: string
+  email: string
+}
+
+interface UserDTO {
+  id: number // Duplicate
+  name: string // Duplicate
+  email: string // Duplicate
+  createdAt: string
+}
+
+interface UserResponse {
+  id: number // Duplicate
+  name: string // Duplicate
+  email: string // Duplicate
+  lastLogin: string
+}
+
+// ✅ CORRECT: Compose types from base interface
+interface UserBase {
+  readonly id: number
+  readonly name: string
+  readonly email: string
+}
+
+interface User extends UserBase {
+  readonly passwordHash: string
+}
+
+type UserDTO = UserBase & {
+  readonly createdAt: string
+}
+
+type UserResponse = UserBase & {
+  readonly lastLogin: string
+}
+```
+
+#### DRY with Effect.ts Patterns
+
+```typescript
+// ❌ INCORRECT: Repeated Effect patterns
+function fetchUser(id: number): Effect.Effect<User, UserError, Database> {
+  return Effect.gen(function* () {
+    const db = yield* Database
+    const user = yield* db.query(`SELECT * FROM users WHERE id = ${id}`)
+    if (!user) return yield* Effect.fail(new UserNotFoundError())
+    return user
+  })
+}
+
+function fetchPost(id: number): Effect.Effect<Post, PostError, Database> {
+  return Effect.gen(function* () {
+    const db = yield* Database
+    const post = yield* db.query(`SELECT * FROM posts WHERE id = ${id}`) // Similar pattern
+    if (!post) return yield* Effect.fail(new PostNotFoundError())
+    return post
+  })
+}
+
+// ✅ CORRECT: Reusable Effect pattern
+function fetchById<T, E>(
+  table: string,
+  id: number,
+  createError: () => E
+): Effect.Effect<T, E, Database> {
+  return Effect.gen(function* () {
+    const db = yield* Database
+    const result = yield* db.query(`SELECT * FROM ${table} WHERE id = ${id}`)
+    if (!result) return yield* Effect.fail(createError())
+    return result as T
+  })
+}
+
+const fetchUser = (id: number) =>
+  fetchById<User, UserNotFoundError>('users', id, () => new UserNotFoundError())
+
+const fetchPost = (id: number) =>
+  fetchById<Post, PostNotFoundError>('posts', id, () => new PostNotFoundError())
+```
+
+#### DRY with Higher-Order Functions
+
+Higher-order functions are powerful DRY tools:
+
+```typescript
+// ❌ INCORRECT: Repeated transformation patterns
+function mapUsers(users: User[]): UserDTO[] {
+  return users.map((user) => ({
+    id: user.id,
+    name: user.name,
+    email: user.email,
+    displayName: user.name.toUpperCase(),
+  }))
+}
+
+function mapPosts(posts: Post[]): PostDTO[] {
+  return posts.map((post) => ({
+    id: post.id,
+    title: post.title,
+    content: post.content,
+    displayTitle: post.title.toUpperCase(), // Similar pattern
+  }))
+}
+
+// ✅ CORRECT: Reusable transformation pattern
+function mapWithDisplay<T extends { name: string }, R>(
+  items: readonly T[],
+  transform: (item: T, displayName: string) => R
+): readonly R[] {
+  return items.map((item) => transform(item, item.name.toUpperCase()))
+}
+
+const userDTOs = mapWithDisplay(users, (user, displayName) => ({
+  id: user.id,
+  name: user.name,
+  email: user.email,
+  displayName,
+}))
+```
+
+#### DRY Anti-Patterns to Avoid
+
+```typescript
+// ❌ ANTI-PATTERN: Over-abstraction (DRY taken too far)
+function doEverything<T, U, V, W>(
+  a: T,
+  b: U,
+  fn1: (x: T) => V,
+  fn2: (y: U) => W,
+  combiner: (v: V, w: W) => string
+): string {
+  return combiner(fn1(a), fn2(b))
+}
+// This is TOO generic - obscures intent
+
+// ✅ BETTER: Specific, clear functions
+function formatUserGreeting(user: User): string {
+  const displayName = user.name.toUpperCase()
+  const greeting = `Hello, ${displayName}!`
+  return greeting
+}
+
+// ❌ ANTI-PATTERN: Premature abstraction
+// Don't extract a function until you've seen the pattern 3+ times
+
+// ✅ RULE OF THREE: Extract after third repetition
+// 1st occurrence: Write it
+// 2nd occurrence: Note the similarity
+// 3rd occurrence: Extract the pattern
+```
+
+#### DRY Checklist
+
+Before writing new code, ask:
+
+1. **Does this logic exist elsewhere?** Search before implementing
+2. **Can I reuse an existing function?** Check utility libraries
+3. **Should I extract this pattern?** Apply Rule of Three
+4. **Is this abstraction clear?** Don't sacrifice readability for DRY
+5. **Are types reusable?** Use TypeScript utility types and composition
+
 ### 1. Pure Functions
 
 **Definition**: Functions that always return the same output for the same input and have no side effects.
@@ -975,38 +1224,45 @@ See the complete ESLint configuration:
 
 ### ✅ DO
 
-1. **Write Pure Functions**
+1. **Follow DRY Principles**
+   - Extract repeated logic into reusable functions
+   - Apply the Rule of Three (extract after 3rd repetition)
+   - Use TypeScript utility types to avoid type duplication
+   - Create shared constants for repeated values
+   - Balance DRY with readability (don't over-abstract)
+
+2. **Write Pure Functions**
    - Keep functions deterministic and side-effect free
    - Use Effect for side effects
 
-2. **Embrace Immutability**
+3. **Embrace Immutability**
    - Use `readonly` and `as const` extensively
    - Never mutate objects or arrays
    - Create new values instead of modifying existing ones
 
-3. **Compose Small Functions**
+4. **Compose Small Functions**
    - Build complex logic from simple, reusable pieces
    - Use `pipe` and `compose` for transformation pipelines
 
-4. **Make Dependencies Explicit**
+5. **Make Dependencies Explicit**
    - Use Effect Context for dependency injection
    - Avoid hidden dependencies and global state
 
-5. **Handle Errors Explicitly**
+6. **Handle Errors Explicitly**
    - Use Effect's type-safe error handling
    - Make error types explicit in function signatures
 
-6. **Use TypeScript Strictly**
+7. **Use TypeScript Strictly**
    - Enable strict mode
    - Use readonly types
    - Avoid `any` and `unknown` without guards
 
-7. **Prefer Declarative Code**
+8. **Prefer Declarative Code**
    - Express WHAT to do, not HOW
    - Use `map`, `filter`, `reduce` over loops
    - Use Effect combinators over imperative control flow
 
-8. **Test Pure Functions**
+9. **Test Pure Functions**
    - Pure functions are trivial to test
    - No mocking needed for pure logic
 
@@ -1382,13 +1638,14 @@ const cachedUser = fetchUser(1).pipe(Effect.cached)
 
 Functional Programming in Omnera means:
 
-1. **Pure Functions** - No side effects, deterministic behavior
-2. **Immutability** - Never mutate data, always create new values
-3. **Composition** - Build complex logic from simple, reusable pieces
-4. **Explicit Effects** - Use Effect.ts to manage side effects
-5. **Type Safety** - Leverage TypeScript's strict type system
-6. **Declarative Code** - Express WHAT to do, not HOW
-7. **Testability** - Pure functions and Effect programs are easy to test
+1. **DRY (Don't Repeat Yourself)** - Single source of truth for all logic
+2. **Pure Functions** - No side effects, deterministic behavior
+3. **Immutability** - Never mutate data, always create new values
+4. **Composition** - Build complex logic from simple, reusable pieces
+5. **Explicit Effects** - Use Effect.ts to manage side effects
+6. **Type Safety** - Leverage TypeScript's strict type system
+7. **Declarative Code** - Express WHAT to do, not HOW
+8. **Testability** - Pure functions and Effect programs are easy to test
 
 By following these principles, Omnera achieves:
 

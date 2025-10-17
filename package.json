@@ -1,6 +1,6 @@
 {
   "name": "omnera",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "Omnera - Modern TypeScript framework built with Bun",
   "module": "src/index.ts",
   "bin": {

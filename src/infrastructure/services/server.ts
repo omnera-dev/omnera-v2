@@ -12,6 +12,11 @@ export class ServerCreationError {
 }
 
 /**
+ * Cache duration for CSS files in seconds (1 hour)
+ */
+const CSS_CACHE_DURATION_SECONDS = 3600
+
+/**
  * Server configuration options
  */
 export interface ServerConfig {
@@ -71,10 +76,10 @@ function createHonoApp(app: App, renderHomePage: (app: App) => string): Hono {
 
       return c.text(result.css, 200, {
         'Content-Type': 'text/css',
-        'Cache-Control': 'public, max-age=3600', // Cache for 1 hour
+        'Cache-Control': `public, max-age=${CSS_CACHE_DURATION_SECONDS}`,
       })
     } catch (error) {
-      console.error('CSS compilation failed:', error)
+      Effect.runSync(Console.error('CSS compilation failed:', error))
       return c.text('/* CSS compilation failed */', 500, {
         'Content-Type': 'text/css',
       })
@@ -110,7 +115,7 @@ function createHonoApp(app: App, renderHomePage: (app: App) => string): Hono {
   // Error handler
 
   honoApp.onError((error, c) => {
-    console.error('Server error:', error)
+    Effect.runSync(Console.error('Server error:', error))
     return c.html(
       `
       <!DOCTYPE html>

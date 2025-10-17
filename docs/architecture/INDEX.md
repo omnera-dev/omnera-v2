@@ -41,6 +41,7 @@ This index provides a comprehensive guide to Omnera's architecture documentation
 
 **Key Concepts**:
 
+- DRY (Don't Repeat Yourself) - single source of truth
 - Pure functions (no side effects)
 - Immutability (no mutations)
 - Effect.ts for controlled side effects

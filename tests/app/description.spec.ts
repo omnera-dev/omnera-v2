@@ -375,8 +375,8 @@ test.describe('AppSchema - Description Display', () => {
       await expect(description).toHaveText(exactDescription)
 
       // Additional verification: Check textContent directly (not innerHTML)
-      const textContent = await description.textContent()
-      expect(textContent).toBe(exactDescription)
+      const textContent = description
+      await expect(textContent).toHaveText(exactDescription)
 
       // Verify specific case preservation (no toLowerCase/toUpperCase applied)
       expect(textContent).toContain('MyApp') // Capital M, capital A
