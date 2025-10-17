@@ -23,9 +23,51 @@ React is a modern UI library created by Facebook (Meta) that revolutionized web 
 
 ## React 19 Major Features
 
-### 1. React Compiler (Automatic Optimization)
+### ⚠️ React Compilation in Omnera - Important Distinction
 
-React 19 introduces an automatic compiler that optimizes components without manual intervention:
+There are **two different types of "React compilation"** - Omnera uses Bun which supports one but not the other:
+
+#### ✅ JSX Transpilation (Available with Bun)
+
+This is **syntax transformation** - converting JSX to JavaScript. Bun handles this natively:
+
+```tsx
+// JSX (what you write)
+;<Button onClick={handleClick}>Click me</Button>
+
+// JavaScript (what Bun compiles to)
+React.createElement(Button, { onClick: handleClick }, 'Click me')
+```
+
+**Status**: ✅ **Fully supported** via Bun's built-in JSX/TSX transpiler
+**What it enables**: You can write React components with JSX syntax
+**How it works**: Bun automatically transpiles `.tsx` files at runtime (no build step needed)
+**Reference**: [Bun Fullstack Dev Server](https://bun.com/docs/bundler/fullstack)
+
+#### ❌ React Compiler Optimization (Not Available Yet)
+
+This is **performance optimization** - automatic memoization to reduce unnecessary re-renders:
+
+```tsx
+// What the React Compiler would add automatically:
+// - Memoizes processData(data) result
+// - Memoizes handler functions
+// - Optimizes re-render boundaries
+```
+
+**Status**: ❌ **NOT available** - requires `babel-plugin-react-compiler` which Bun doesn't support yet
+**What it would enable**: Automatic `useMemo`, `useCallback`, and `React.memo` optimizations
+**Workaround**: Use manual optimization patterns (see Performance Optimization section below) when needed
+
+**Key Takeaway**: All React 19 features work in Omnera EXCEPT the Compiler's automatic memoization. You can use Actions, `use()` hook, Server Components, document metadata, and ref as prop - but manual performance optimization is still required for computationally expensive components.
+
+---
+
+### 1. React Compiler (Automatic Optimization) - NOT AVAILABLE IN OMNERA
+
+> **⚠️ IMPORTANT**: The automatic React Compiler optimization described below is **NOT currently available** in Omnera. Bun does not yet support `babel-plugin-react-compiler`. The examples show the target architecture, but manual optimization is still required.
+
+React 19 introduces an automatic compiler that would optimize components without manual intervention:
 
 - **Automatic Memoization**: No more manual `useMemo`, `useCallback`, or `React.memo`
 - **Smart Re-rendering**: Compiler determines optimal re-render boundaries
@@ -596,39 +638,26 @@ function SearchResults({ query, filters }: { query: string; filters: Filters }) 
 }
 ```
 
-## Advanced Topics
+## Additional Resources
 
-For detailed information on specialized React topics, see the following documentation:
+For advanced React topics and integrations with the Omnera stack, see:
 
-### Server-Side Rendering with Hono
+### Omnera Stack Integration
 
-Learn how to render React components on the server using Hono for improved performance and SEO.
+- **Server-Side Rendering**: `@docs/infrastructure/framework/hono.md` - Rendering React with Hono
+- **Styling**: `@docs/infrastructure/ui/tailwind.md` - Tailwind CSS patterns for React components
+- **Data Fetching**: `@docs/infrastructure/ui/tanstack-query.md` - TanStack Query with React
+- **Effect Integration**: `@docs/infrastructure/framework/effect.md` - Using Effect.ts with React components
+- **Form Handling**: `@docs/infrastructure/ui/react-hook-form.md` - React Hook Form with Zod validation
+- **Testing**: `@docs/infrastructure/testing/bun-test.md` and `@docs/architecture/testing-strategy.md`
 
-[Read React Hono Integration Documentation](./react-hono-integration.md)
+### Official React Documentation
 
-### Styling with Tailwind CSS
-
-Discover patterns for styling React components with Tailwind CSS utility classes.
-
-[Read React Styling Documentation](./react-styling.md)
-
-### Integration with Effect
-
-Learn how to integrate React with Effect for type-safe data fetching, error handling, and form validation.
-
-[Read React Effect Integration Documentation](./react-effect-integration.md)
-
-### Component Patterns
-
-Explore common React component patterns including Container/Presentational, Compound Components, Render Props, Custom Hooks, and more.
-
-[Read React Patterns Documentation](./react-patterns.md)
-
-### Testing Components
-
-Learn how to test React components using Bun's built-in test runner with server-side rendering.
-
-[Read React Testing Documentation](./react-testing.md)
+- **React Docs**: [https://react.dev](https://react.dev) - Official React documentation
+- **React 19 Release**: [https://react.dev/blog/2024/12/05/react-19](https://react.dev/blog/2024/12/05/react-19)
+- **TypeScript with React**: [https://react-typescript-cheatsheet.netlify.app](https://react-typescript-cheatsheet.netlify.app)
+- **React Patterns**: [https://reactpatterns.com](https://reactpatterns.com)
+- **React Server Components**: [https://react.dev/reference/rsc/server-components](https://react.dev/reference/rsc/server-components)
 
 ## Best Practices for Omnera
 
@@ -639,7 +668,7 @@ Learn how to test React components using Bun's built-in test runner with server-
 5. **Effect for Business Logic**: Use Effect for data fetching, error handling, and side effects
 6. **Effect Schema for Validation**: Validate all user inputs with Effect Schema
 7. **Component Composition**: Build complex UIs from small, reusable components
-8. **Trust React 19 Compiler**: Don't over-optimize with manual memoization
+8. **Manual Performance Optimization**: Use `useMemo`, `useCallback`, `React.memo` when measured performance issues occur (React Compiler not available yet)
 9. **Co-locate Tests**: Keep component tests close to component files
 10. **Semantic HTML**: Use proper HTML tags for accessibility
 
@@ -649,7 +678,7 @@ Learn how to test React components using Bun's built-in test runner with server-
 - ❌ Missing dependencies in useEffect (causes stale closures)
 - ❌ Using indexes as keys in lists (breaks reconciliation)
 - ❌ Forgetting to clean up effects (causes memory leaks)
-- ❌ Over-optimizing with memo/useMemo/useCallback in React 19
+- ❌ Not using performance optimization when needed (React Compiler not available - use manual optimization for expensive computations)
 - ❌ Not handling loading and error states
 - ❌ Using class components (use functional components instead)
 - ❌ Mixing server and client logic in components

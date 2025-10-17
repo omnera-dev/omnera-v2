@@ -2,7 +2,7 @@
 
 ## Overview
 
-**Version**: 4.9.12
+**Version**: ^4.10.1 (minimum 4.10.1, allows patch/minor updates)
 **Purpose**: Ultrafast, lightweight, and flexible web framework for building APIs and web applications on Bun, Cloudflare Workers, Deno, AWS Lambda, and Node.js
 
 Hono is a modern web framework built on Web Standard APIs. It's designed to be blazing fast, under 14kB, and works seamlessly across multiple JavaScript runtimes without runtime-specific code.

@@ -25,7 +25,7 @@
 | **Bun** | 1.3.0 | Runtime & package manager |
 | **TypeScript** | ^5 | Type-safe language |
 | **Effect** | 3.18.4 | Functional programming, DI, error handling |
-| **Hono** | 4.10.0 | Web framework (API routes) |
+| **Hono** | 4.10.1 | Web framework (API routes) |
 | **Zod** | 4.1.12 | Client-side validation (React Hook Form) |
 | **Better Auth** | 1.3.27 | Authentication |
 | **Drizzle ORM** | ^0.44.6 | Database (PostgreSQL via bun:sql) |
@@ -140,6 +140,8 @@ omnera-v2/
 ```
 
 ## Detailed Documentation (On-Demand Import)
+
+> **Note on Documentation Links**: This document uses `@docs/` syntax optimized for Claude Code. Human developers should interpret `@docs/` as the `docs/` directory in the project root. Example: `@docs/infrastructure/runtime/bun.md` → `docs/infrastructure/runtime/bun.md`
 
 **When you need specific details, import the relevant documentation file:**
 

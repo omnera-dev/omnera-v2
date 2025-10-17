@@ -2,7 +2,7 @@
 
 ## Overview
 
-**Version**: 3.18.4
+**Version**: ^3.18.4 (minimum 3.18.4, allows patch/minor updates)
 **Purpose**: Comprehensive typed functional programming library for building robust, composable, and maintainable TypeScript applications with explicit error handling, dependency injection, and structured concurrency
 
 Effect.ts is a powerful library that brings advanced functional programming patterns to TypeScript. It provides a complete toolkit for managing complexity in modern applications through type-safe effects, composable operations, and declarative error handling.
@@ -787,22 +787,52 @@ export default app
 
 ## Full Documentation Reference
 
-This is a high-level summary of Effect.ts. For comprehensive documentation covering all features, patterns, and advanced topics, see the split documentation sections:
+This is a high-level summary of Effect.ts. For comprehensive documentation covering all features, patterns, and advanced topics, see the split documentation sections in `docs/infrastructure/framework/effect/`.
 
-**Location**: `docs/infrastructure/framework/effect/`
+### Essential Topics
 
-The full documentation (49,540 lines) is split into 741 sections covering:
+**Getting Started:**
 
-- Batching and caching strategies
-- Configuration management
-- Complete API reference
-- Advanced patterns (streaming, interruption, scheduling)
-- Performance optimization
-- Testing strategies
-- Real-world examples
-- Integration guides
+- [Installing Effect](./effect/325-installing-effect.md) - Setup and installation
+- [Creating Effects](./effect/364-creating-effects.md) - Basic Effect constructors
+- [Synchronous vs Asynchronous Effects](./effect/342-synchronous-vs-asynchronous-effects.md)
+- [Running Effects](./effect/365-running-effects.md) - Effect.runPromise, runSync, runCallback
+- [Effect.gen Usage](./effect/103-using-effectgen.md) - Generator-based syntax
+- [Comparing Effect.gen with async/await](./effect/346-comparing-effectgen-with-asyncawait.md)
 
-To explore specific topics in depth, refer to the numbered section files in the `effect/` directory.
+**Core Patterns:**
+
+- [Understanding Effect.gen](./effect/345-understanding-effectgen.md) - Deep dive into generator syntax
+- [The Effect Pattern](./effect/356-the-effect-pattern.md) - Core patterns and best practices
+- [Managing Services](./effect/475-managing-services-with-effect.md) - Dependency injection with Context
+- [Providing Layers to Effects](./effect/469-providing-a-layer-to-an-effect.md)
+- [Simplifying Service Definitions](./effect/473-simplifying-service-definitions-with-effectservice.md)
+
+**Error Handling:**
+
+- [Comparing Effects and Promises](./effect/38-comparing-effects-and-promises-key-distinctions.md)
+- [Retrieving Effect Causes](./effect/217-retrieving-the-cause-of-an-effect.md)
+- [matchEffect](./effect/181-matcheffect.md) - Pattern matching on Effect results
+- [matchCauseEffect](./effect/183-matchcauseeffect.md) - Pattern matching on error causes
+
+**Advanced Topics:**
+
+- [Forking Effects](./effect/128-forking-effects.md) - Background execution with Fibers
+- [Effect.fn](./effect/177-effectfn.md) - Creating Effect functions
+- [Interop with Effect](./effect/284-interop-with-effect.md) - Integrating with non-Effect code
+- [Testing Recurring Effects](./effect/733-testing-recurring-effects.md)
+- [Equality Checking in Effect](./effect/737-how-to-perform-equality-checking-in-effect.md)
+
+**Performance & Architecture:**
+
+- [Effect Performance Overhead](./effect/48-effect-has-a-huge-performance-overhead.md) - Performance characteristics
+- [Why Effect vs Generators](./effect/46-effect-heavily-relies-on-generators-and-generators-are-slow.md)
+- [Effect vs RxJS](./effect/51-effect-is-the-same-as-rxjs-and-shares-its-problems.md)
+- [Why Effect for AI](./effect/61-why-effect-for-ai.md) - Use cases and benefits
+
+The full documentation covers 700+ sections including batching, caching, configuration, streaming, scheduling, interruption, and real-world integration examples.
+
+**For comprehensive reference**, browse all sections in `docs/infrastructure/framework/effect/` directory or visit the [official Effect documentation](https://effect.website/docs).
 
 ## References
 

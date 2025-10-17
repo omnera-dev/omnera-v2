@@ -2,7 +2,7 @@
 
 ## Overview
 
-**Version**: 7.65.0
+**Version**: ^7.65.0 (minimum 7.65.0, allows patch/minor updates)
 **Purpose**: Performant, flexible form management library for React with built-in validation support
 **Scope**: Client-side only (Presentation layer)
 

@@ -2,7 +2,7 @@
 
 ## Overview
 
-**Version**: 4.1.0
+**Version**: ^4.1.0 (minimum 4.1.0, allows patch/minor updates)
 **Purpose**: Modern JavaScript date utility library for parsing, formatting, and manipulating dates
 **Scope**: Client-side only (Presentation layer) - specifically for date-picker components
 **Server-side Alternative**: Use `Effect.DateTime` instead
