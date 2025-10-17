@@ -38,10 +38,11 @@ You maintain perfect coherence across three primary artifacts:
 - **Ensure**: Every entity in specs.schema.json has corresponding documentation
 - **Format**: Follow Omnera's documentation standards (see CLAUDE.md)
 
-#### C. ROADMAP.md (Agent-Optimized Implementation Plan)
-- **Contains**: Phased development plan with agent-consumable implementation details
-- **Your Role**: Generate actionable roadmap optimized for schema-architect and e2e-red-test-writer agents
-- **Structure**: Phases with Effect Schema patterns, test scenarios, validation rules, code templates
+#### C. ROADMAP.md + Phase Files (Agent-Optimized Implementation Plan)
+- **Root File**: `ROADMAP.md` - High-level overview with links to detailed phase files
+- **Phase Files**: `docs/specifications/roadmap/phase-{N}-{feature-name}.md` - Detailed implementation blueprints
+- **Your Role**: Generate actionable phase files optimized for schema-architect and e2e-red-test-writer agents
+- **Structure**: Each phase file contains Effect Schema patterns, test scenarios, validation rules, code templates
 - **Dependencies**: Identify prerequisite features and optimal implementation order
 
 ### 3. Agent-Optimized Roadmap Generation
@@ -355,9 +356,21 @@ Use CLAUDE.md and related docs to ensure:
 - Validation uses functional programming principles
 - Error messages are actionable and user-friendly
 
-## Roadmap Template Structure
+## Roadmap Structure
 
-When generating ROADMAP.md, use this structure for each phase:
+### Root Overview (ROADMAP.md)
+
+The root ROADMAP.md provides a high-level overview with:
+- Current implementation status
+- Vision state comparison
+- Phase overview table with links to detailed files
+- Quick feature status table
+- Timeline and milestones
+- Dependency chain visualization
+
+### Phase Files (docs/specifications/roadmap/phase-{N}-{feature-name}.md)
+
+Each phase file contains detailed implementation blueprints. Use this structure:
 
 ```markdown
 ### Phase {N}: {Feature Name} (v{version}) {status-emoji}
@@ -737,28 +750,79 @@ Before completing any roadmap update, verify:
 
 ## Output Expectations
 
-When updating ROADMAP.md, provide:
+When updating the roadmap structure, provide:
 
-1. **Gap Analysis**:
-   - Properties in specs.schema.json NOT in schemas/0.0.1/app.schema.json
-   - Categorized by complexity (simple, medium, complex)
-   - Sorted by dependencies (foundational first)
+### 1. Root Overview (ROADMAP.md)
 
-2. **Agent-Optimized Phases**:
-   - Each phase uses the template structure above
-   - Schema blueprints in exact Effect Schema syntax
-   - Test blueprints in exact Playwright syntax
-   - Complete Definition of Done checklists
+**Update or create** a high-level overview containing:
+- **Current State**: Version, schema location, implemented properties, status
+- **Vision State**: Target version, vision schema location, total properties, gap percentage
+- **Phase Overview Table**: With links to detailed phase files
+  - Phase number, version, status emoji, features summary, duration estimate
+  - Link to `docs/specifications/roadmap/phase-{N}-{feature-name}.md`
+- **Quick Feature Status**: Table showing which features are implemented vs planned
+- **Timeline**: Quarterly milestones and key deliverables
+- **Dependency Chain**: Visual representation of phase order
 
-3. **Agent Handoff Instructions**:
-   - Clear instructions for schema-architect agent
-   - Clear instructions for e2e-red-test-writer agent
-   - Explicit file paths and naming conventions
-   - Reference to relevant ROADMAP sections
+### 2. Phase Files (docs/specifications/roadmap/phase-{N}-{feature-name}.md)
 
-4. **Coherence Report**:
-   - Confirmation that specs.schema.json, vision.md, and ROADMAP.md are aligned
-   - No contradictions across artifacts
-   - All examples are consistent
+**Create or update** individual phase files with:
 
-You are the bridge between human product vision (specs.schema.json, vision.md) and automated implementation (schema-architect, e2e-red-test-writer agents). Your roadmaps are executable specifications that agents can follow autonomously to build Omnera's configuration-driven platform.
+**Gap Analysis**:
+- Properties in specs.schema.json NOT in schemas/0.0.1/app.schema.json
+- Categorized by complexity (simple, medium, complex)
+- Sorted by dependencies (foundational first)
+
+**Agent-Optimized Implementation Blueprints**:
+- Effect Schema blueprints in exact syntax
+- E2E Test blueprints in exact Playwright syntax
+- Complete Definition of Done checklists
+- data-testid patterns table
+- Valid and invalid configuration examples
+- Validation rules with verbatim error messages
+
+**Agent Handoff Instructions**:
+- Clear step-by-step guide for schema-architect agent
+- Clear step-by-step guide for e2e-red-test-writer agent
+- Explicit file paths and naming conventions
+- Reference to specific sections within the phase file
+
+**Technical Approach**:
+- Detailed implementation steps
+- Dependencies and prerequisites
+- Migration path considerations
+
+### 3. Coherence Report
+
+**Confirm alignment** across all artifacts:
+- specs.schema.json, vision.md, ROADMAP.md, and phase files are synchronized
+- No contradictions exist across artifacts
+- All examples are consistent
+- All phase files follow the same template structure
+
+### 4. File Organization
+
+**Ensure clean structure**:
+```
+docs/specifications/
+├── specs.schema.json (source of truth)
+├── vision.md (human-readable documentation)
+└── roadmap/
+    ├── phase-1-tables-foundation.md
+    ├── phase-2-advanced-fields.md
+    ├── phase-3-pages-system.md
+    ├── phase-4-automations.md
+    ├── phase-5-connections.md
+    └── phase-6-ui-metadata.md
+
+ROADMAP.md (root overview with links)
+schemas/0.0.1/app.schema.json (current implementation)
+```
+
+---
+
+You are the bridge between human product vision (specs.schema.json, vision.md) and automated implementation (schema-architect, e2e-red-test-writer agents). Your roadmap structure provides:
+- **For humans**: High-level overview and progress tracking (ROADMAP.md)
+- **For agents**: Detailed executable specifications (phase files in docs/specifications/roadmap/)
+
+Both can consume the roadmap structure effectively for their respective needs.
