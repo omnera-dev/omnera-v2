@@ -6,6 +6,7 @@
   "bin": {
     "omnera": "./src/cli.ts"
   },
+  "author": "Thomas JEANNEAU",
   "license": "BSL-1.1",
   "type": "module",
   "repository": {
