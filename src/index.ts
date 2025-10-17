@@ -11,9 +11,10 @@
 
 import { Effect } from 'effect'
 import { startServer } from '@/application/use-cases/server/start-server'
+import { AppLayer } from '@/infrastructure/layers/app-layer'
 import { withGracefulShutdown, logServerInfo } from '@/infrastructure/server/lifecycle'
+import type { ServerInstance } from '@/application/models/server'
 import type { StartOptions } from '@/application/use-cases/server/start-server'
-import type { ServerInstance } from '@/infrastructure/server/server'
 
 /**
  * Simple server interface with Promise-based methods
@@ -34,7 +35,7 @@ export interface SimpleServer {
 /**
  * Convert Effect-based ServerInstance to simple Promise-based interface
  */
-const toSimpleServer = (server: ServerInstance): SimpleServer => ({
+const toSimpleServer = (server: Readonly<ServerInstance>): SimpleServer => ({
   url: server.url,
   stop: () => Effect.runPromise(server.stop),
 })
@@ -92,7 +93,7 @@ export const start = async (app: unknown, options: StartOptions = {}): Promise<S
   const program = Effect.gen(function* () {
     console.log('Starting Omnera server...')
 
-    // Start the server
+    // Start the server (dependencies injected via AppLayer)
     const server = yield* startServer(app, options)
 
     // Log server information
@@ -104,7 +105,10 @@ export const start = async (app: unknown, options: StartOptions = {}): Promise<S
     // This line is never reached due to Effect.never in withGracefulShutdown
     // But TypeScript needs a return value
     return server
-  })
+  }).pipe(
+    // Provide dependencies (ServerFactory + PageRenderer)
+    Effect.provide(AppLayer)
+  )
 
   // Run the Effect program and convert to simple server interface
   const server = await Effect.runPromise(program)

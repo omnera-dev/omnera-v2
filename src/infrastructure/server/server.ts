@@ -2,6 +2,7 @@ import { Console, Effect } from 'effect'
 import { Hono } from 'hono'
 import { ServerCreationError } from '@/infrastructure/errors/server-creation-error'
 import { compileCSS } from '../css/compiler'
+import type { ServerInstance } from '@/application/models/server'
 import type { App } from '@/domain/models/app'
 import type { CSSCompilationError } from '@/infrastructure/errors/css-compilation-error'
 
@@ -20,15 +21,6 @@ export interface ServerConfig {
   readonly renderHomePage: (app: App) => string
   readonly renderNotFoundPage: () => string
   readonly renderErrorPage: () => string
-}
-
-/**
- * Running server instance with stop capability
- */
-export interface ServerInstance {
-  readonly server: ReturnType<typeof Bun.serve>
-  readonly url: string
-  readonly stop: Effect.Effect<void>
 }
 
 /**

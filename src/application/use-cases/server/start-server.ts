@@ -1,10 +1,12 @@
 import { Effect, Schema } from 'effect'
 import { AppValidationError } from '@/application/errors/app-validation-error'
+import { PageRenderer } from '@/application/ports/page-renderer'
+import { ServerFactory } from '@/application/ports/server-factory'
 import { AppSchema } from '@/domain/models/app'
+import type { ServerInstance } from '@/application/models/server'
 import type { App } from '@/domain/models/app'
 import type { CSSCompilationError } from '@/infrastructure/errors/css-compilation-error'
 import type { ServerCreationError } from '@/infrastructure/errors/server-creation-error'
-import type { ServerInstance } from '@/infrastructure/server/server'
 
 /**
  * Server configuration options
@@ -28,16 +30,31 @@ export interface StartOptions {
  *
  * This orchestrates the server startup process:
  * 1. Validates the app configuration using Effect Schema
- * 2. Creates and starts the server via infrastructure layer
+ * 2. Obtains rendering and server creation services via Effect Context
+ * 3. Creates and starts the server via injected dependencies
+ *
+ * Dependencies are provided via Effect.provide(AppLayer) at the application boundary.
  *
  * @param app - Application configuration
  * @param options - Server configuration options
  * @returns Effect that yields ServerInstance or errors
+ *
+ * @example
+ * ```typescript
+ * // In src/index.ts
+ * const program = startServer(appConfig, { port: 3000 }).pipe(
+ *   Effect.provide(AppLayer)
+ * )
+ * ```
  */
 export const startServer = (
   app: unknown,
   options: StartOptions = {}
-): Effect.Effect<ServerInstance, AppValidationError | ServerCreationError | CSSCompilationError> =>
+): Effect.Effect<
+  ServerInstance,
+  AppValidationError | ServerCreationError | CSSCompilationError,
+  ServerFactory | PageRenderer
+> =>
   Effect.gen(function* () {
     // Validate app configuration using domain model schema
     const validatedApp = yield* Effect.try({
@@ -45,24 +62,18 @@ export const startServer = (
       catch: (error) => new AppValidationError(error),
     })
 
-    // Import presentation layer rendering functions
-    const { renderHomePage } = yield* Effect.promise(
-      () => import('@/presentation/utils/render-homepage')
-    )
-    const { renderNotFoundPage, renderErrorPage } = yield* Effect.promise(
-      () => import('@/presentation/utils/render-error-pages')
-    )
+    // Obtain dependencies from Effect Context
+    const serverFactory = yield* ServerFactory
+    const pageRenderer = yield* PageRenderer
 
-    // Defer to infrastructure layer for actual server creation
-    const { createServer } = yield* Effect.promise(() => import('@/infrastructure/server/server'))
-
-    const serverInstance = yield* createServer({
+    // Create server using injected dependencies
+    const serverInstance = yield* serverFactory.create({
       app: validatedApp,
       port: options.port,
       hostname: options.hostname,
-      renderHomePage,
-      renderNotFoundPage,
-      renderErrorPage,
+      renderHomePage: pageRenderer.renderHome,
+      renderNotFoundPage: pageRenderer.renderNotFound,
+      renderErrorPage: pageRenderer.renderError,
     })
 
     return serverInstance

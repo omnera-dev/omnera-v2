@@ -1,5 +1,5 @@
 import { Effect, Console } from 'effect'
-import type { ServerInstance } from '@/infrastructure/server/server'
+import type { ServerInstance } from '@/application/models/server'
 
 /**
  * Sets up graceful server shutdown on SIGINT (Ctrl+C)
