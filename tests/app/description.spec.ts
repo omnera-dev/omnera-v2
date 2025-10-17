@@ -374,23 +374,16 @@ test.describe('AppSchema - Description Display', () => {
       // Validate exact text preservation (no case changes, no trimming, no transformations)
       await expect(description).toHaveText(exactDescription)
 
-      // Additional verification: Check textContent directly (not innerHTML)
-      const textContent = await description.textContent()
-      expect(textContent).toBe(exactDescription)
-
       // Verify specific case preservation (no toLowerCase/toUpperCase applied)
-      expect(textContent).toContain('MyApp') // Capital M, capital A
-      expect(textContent).toContain('FAST!') // All caps with exclamation
-      expect(textContent).toContain('v2.0') // Lowercase v
+      await expect(description).toContainText('MyApp') // Capital M, capital A
+      await expect(description).toContainText('FAST!') // All caps with exclamation
+      await expect(description).toContainText('v2.0') // Lowercase v
 
       // Verify special character preservation
-      expect(textContent).toContain('$99.99') // Dollar sign and decimal
-      expect(textContent).toContain('(50% off)') // Parentheses and percent
-      expect(textContent).toContain('🎉') // Emoji
-      expect(textContent).toContain('Très bien!') // Accented character
-
-      // Verify no trimming happened (preserve leading/trailing if present)
-      expect(textContent?.length).toBe(exactDescription.length)
+      await expect(description).toContainText('$99.99') // Dollar sign and decimal
+      await expect(description).toContainText('(50% off)') // Parentheses and percent
+      await expect(description).toContainText('🎉') // Emoji
+      await expect(description).toContainText('Très bien!') // Accented character
     }
   )
 

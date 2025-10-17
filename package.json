@@ -42,7 +42,7 @@
     "format:session": "./scripts/format-session.sh",
     "typecheck": "tsc --noEmit",
     "clean": "knip",
-    "lint": "eslint . --fix",
+    "lint": "eslint .",
     "test:all": "bun test && bun test:e2e:ci",
     "test:e2e": "playwright test",
     "test:e2e:spec": "playwright test --grep='@spec'",

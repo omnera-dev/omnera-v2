@@ -121,6 +121,8 @@ Effect.runSync(
   })
 )
 
+// CLI entry point - side effects required to start server and handle errors
+// eslint-disable-next-line functional/no-expression-statements
 start(app, options).catch((error) => {
   Effect.runSync(Console.error('Failed to start server:', error))
   // Terminate process - imperative statement required for CLI

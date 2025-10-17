@@ -66,7 +66,7 @@ function createHonoApp(app: App, renderHomePage: (app: App) => string): Hono {
   })
 
   // CSS route - Serves dynamically compiled Tailwind CSS
-
+  // eslint-disable-next-line functional/no-expression-statements
   honoApp.get('/output.css', async (c) => {
     try {
       // Compile CSS using Effect
@@ -113,7 +113,7 @@ function createHonoApp(app: App, renderHomePage: (app: App) => string): Hono {
   })
 
   // Error handler
-
+  // eslint-disable-next-line functional/no-expression-statements
   honoApp.onError((error, c) => {
     Effect.runSync(Console.error('Server error:', error))
     return c.html(
