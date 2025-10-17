@@ -63,7 +63,9 @@ function createHonoApp(
           'Cache-Control': `public, max-age=${CSS_CACHE_DURATION_SECONDS}`,
         })
       } catch (error) {
-        Effect.runSync(Console.error('CSS compilation failed:', error))
+        // Log error - intentional side effect for error tracking
+        // eslint-disable-next-line functional/no-expression-statements
+        await Effect.runPromise(Console.error('CSS compilation failed:', error))
         return c.text('/* CSS compilation failed */', 500, {
           'Content-Type': 'text/css',
         })
@@ -71,7 +73,10 @@ function createHonoApp(
     })
     .notFound((c) => c.html(renderNotFoundPage(), 404))
     .onError((error, c) => {
-      Effect.runSync(Console.error('Server error:', error))
+      // Fire-and-forget error logging (onError handler is synchronous)
+      Effect.runPromise(Console.error('Server error:', error)).catch(() => {
+        // Silently ignore logging failures to prevent unhandled promise rejections
+      })
       return c.html(renderErrorPage(), 500)
     })
 }
