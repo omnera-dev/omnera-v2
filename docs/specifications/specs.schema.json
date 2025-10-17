@@ -6,18 +6,22 @@
   "type": "object",
   "definitions": {
     "id": {
-      "description": "Unique identifier",
+      "description": "Unique positive integer identifier. Must be unique within its parent collection (e.g., field IDs must be unique within a table, table IDs must be unique within the application).",
       "title": "ID",
       "readOnly": true,
       "type": "integer",
-      "exclusiveMinimum": 0,
-      "maximum": 9007199254740991
+      "minimum": 1,
+      "maximum": 9007199254740991,
+      "examples": [1, 2, 3, 100, 1000]
     },
     "name": {
-      "description": "Internal name",
+      "description": "Internal identifier name. Use lowercase letters, numbers, and underscores. Must start with a letter. This name is used for database tables, fields, and internal references.",
       "title": "Name",
       "type": "string",
-      "minLength": 1
+      "minLength": 1,
+      "maxLength": 63,
+      "pattern": "^[a-z][a-z0-9_]*$",
+      "examples": ["user", "product_category", "order_item", "email_address"]
     },
     "path": {
       "description": "URL path",
@@ -25,6 +29,2277 @@
       "type": "string",
       "pattern": "^/[a-z0-9-/]*$",
       "minLength": 1
+    },
+    "automation": {
+      "title": "Automation Workflow",
+      "description": "A workflow that executes a series of actions when triggered by specific events or conditions",
+      "type": "object",
+      "properties": {
+        "id": {
+          "$ref": "#/definitions/id",
+          "title": "Automation ID",
+          "examples": [1, 2, 100]
+        },
+        "name": {
+          "description": "Name of the automation workflow",
+          "title": "Automation Name",
+          "placeholder": "Enter automation name",
+          "examples": ["Send Welcome Email", "Process Order", "Sync Customer Data"],
+          "type": "string",
+          "minLength": 3
+        },
+        "description": {
+          "description": "Detailed description of what this automation does",
+          "title": "Description",
+          "placeholder": "Describe what this automation does",
+          "examples": [
+            "Sends a welcome email when a new user signs up",
+            "Processes incoming orders and updates inventory"
+          ],
+          "uiSchema": {
+            "ui:widget": "textarea",
+            "ui:rows": 2
+          },
+          "type": "string"
+        },
+        "editUrl": {
+          "description": "URL to edit this automation in an external tool",
+          "title": "Edit URL",
+          "placeholder": "https://example.com/automations/edit/123",
+          "examples": [
+            "https://zapier.com/app/editor/123456",
+            "https://make.com/scenario/edit/789"
+          ],
+          "uiSchema": {
+            "ui:widget": "uri"
+          },
+          "type": "string",
+          "format": "uri"
+        },
+        "trigger": {
+          "$ref": "#/definitions/automation_trigger"
+        },
+        "actions": {
+          "description": "Sequence of actions to execute when triggered",
+          "title": "Actions",
+          "uiSchema": {
+            "ui:ArrayFieldTemplate": "collapsible",
+            "ui:options": {
+              "orderable": true,
+              "removable": true,
+              "addable": true
+            }
+          },
+          "default": [],
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/automation_action"
+          }
+        }
+      },
+      "required": ["id", "name", "trigger", "actions"],
+      "additionalProperties": false
+    },
+    "automation_trigger": {
+      "title": "Trigger",
+      "description": "The event or condition that starts this automation",
+      "uiSchema": {
+        "ui:widget": "trigger-selector"
+      },
+      "anyOf": [
+        {
+          "title": "HTTP Trigger",
+          "description": "Triggered by HTTP requests",
+          "anyOf": [
+            {
+              "title": "POST Request",
+              "description": "Triggered by a POST request",
+              "type": "object",
+              "properties": {
+                "service": {
+                  "type": "string",
+                  "const": "http"
+                },
+                "event": {
+                  "type": "string",
+                  "const": "post"
+                },
+                "params": {
+                  "type": "object",
+                  "properties": {
+                    "path": {
+                      "type": "string"
+                    },
+                    "respondImmediately": {
+                      "default": false,
+                      "type": "boolean"
+                    },
+                    "requestBody": {
+                      "$ref": "#/definitions/json_schema"
+                    }
+                  },
+                  "required": ["path"],
+                  "additionalProperties": false
+                }
+              },
+              "required": ["service", "event", "params"],
+              "additionalProperties": false
+            },
+            {
+              "title": "GET Request",
+              "description": "Triggered by a GET request",
+              "type": "object",
+              "properties": {
+                "service": {
+                  "type": "string",
+                  "const": "http"
+                },
+                "event": {
+                  "type": "string",
+                  "const": "get"
+                },
+                "params": {
+                  "type": "object",
+                  "properties": {
+                    "path": {
+                      "type": "string"
+                    },
+                    "respondImmediately": {
+                      "default": false,
+                      "type": "boolean"
+                    }
+                  },
+                  "required": ["path"],
+                  "additionalProperties": false
+                }
+              },
+              "required": ["service", "event", "params"],
+              "additionalProperties": false
+            }
+          ]
+        },
+        {
+          "title": "Database Trigger",
+          "description": "Triggered by database events",
+          "anyOf": [
+            {
+              "title": "Record Created",
+              "description": "Triggered when a record is created",
+              "type": "object",
+              "properties": {
+                "service": {
+                  "type": "string",
+                  "const": "database"
+                },
+                "event": {
+                  "type": "string",
+                  "const": "record-created"
+                },
+                "params": {
+                  "type": "object",
+                  "properties": {
+                    "table": {
+                      "type": "string"
+                    }
+                  },
+                  "required": ["table"],
+                  "additionalProperties": false
+                }
+              },
+              "required": ["service", "event", "params"],
+              "additionalProperties": false
+            },
+            {
+              "title": "Record Updated",
+              "description": "Triggered when a record is updated",
+              "type": "object",
+              "properties": {
+                "service": {
+                  "type": "string",
+                  "const": "database"
+                },
+                "event": {
+                  "type": "string",
+                  "const": "record-updated"
+                },
+                "params": {
+                  "type": "object",
+                  "properties": {
+                    "table": {
+                      "type": "string"
+                    }
+                  },
+                  "required": ["table"],
+                  "additionalProperties": false
+                }
+              },
+              "required": ["service", "event", "params"],
+              "additionalProperties": false
+            }
+          ]
+        },
+        {
+          "title": "Schedule Trigger",
+          "description": "Triggered on a schedule",
+          "anyOf": [
+            {
+              "title": "Cron Time",
+              "description": "Triggered by a cron expression",
+              "type": "object",
+              "properties": {
+                "service": {
+                  "type": "string",
+                  "const": "schedule"
+                },
+                "event": {
+                  "type": "string",
+                  "const": "cron-time"
+                },
+                "params": {
+                  "type": "object",
+                  "properties": {
+                    "expression": {
+                      "type": "string"
+                    },
+                    "timeZone": {
+                      "type": "string"
+                    }
+                  },
+                  "required": ["expression", "timeZone"],
+                  "additionalProperties": false
+                }
+              },
+              "required": ["service", "event", "params"],
+              "additionalProperties": false
+            }
+          ]
+        },
+        {
+          "title": "Integration Trigger",
+          "description": "Triggered by external service events",
+          "anyOf": [
+            {
+              "title": "Calendly",
+              "description": "Triggered by Calendly events",
+              "anyOf": [
+                {
+                  "title": "Invite Created",
+                  "description": "Triggered when a Calendly invite is created",
+                  "type": "object",
+                  "properties": {
+                    "account": {
+                      "anyOf": [
+                        {
+                          "type": "number"
+                        },
+                        {
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    "service": {
+                      "type": "string",
+                      "const": "calendly"
+                    },
+                    "event": {
+                      "type": "string",
+                      "const": "invite-created"
+                    },
+                    "params": {
+                      "type": "object",
+                      "properties": {
+                        "organization": {
+                          "description": "The organization of the trigger",
+                          "default": "Current user organization",
+                          "type": "string"
+                        },
+                        "scope": {
+                          "description": "The scope of the trigger",
+                          "default": "user",
+                          "type": "string",
+                          "enum": ["user", "organization", "group"]
+                        }
+                      },
+                      "additionalProperties": false
+                    }
+                  },
+                  "required": ["account", "service", "event"],
+                  "additionalProperties": false
+                }
+              ]
+            },
+            {
+              "title": "Airtable",
+              "description": "Triggered by Airtable events",
+              "anyOf": [
+                {
+                  "title": "Record Created",
+                  "description": "Triggered when an Airtable record is created",
+                  "type": "object",
+                  "properties": {
+                    "account": {
+                      "anyOf": [
+                        {
+                          "type": "number"
+                        },
+                        {
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    "service": {
+                      "type": "string",
+                      "const": "airtable"
+                    },
+                    "event": {
+                      "type": "string",
+                      "const": "record-created"
+                    },
+                    "params": {
+                      "type": "object",
+                      "properties": {
+                        "baseId": {
+                          "type": "string"
+                        },
+                        "tableId": {
+                          "type": "string"
+                        }
+                      },
+                      "required": ["baseId", "tableId"],
+                      "additionalProperties": false
+                    }
+                  },
+                  "required": ["account", "service", "event", "params"],
+                  "additionalProperties": false
+                }
+              ]
+            },
+            {
+              "title": "LinkedIn Ads",
+              "description": "Triggered by LinkedIn lead events",
+              "anyOf": [
+                {
+                  "title": "New Lead Gen Form Response",
+                  "description": "Triggered when a new LinkedIn Lead Gen Form response is created",
+                  "type": "object",
+                  "properties": {
+                    "account": {
+                      "anyOf": [
+                        {
+                          "type": "number"
+                        },
+                        {
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    "service": {
+                      "type": "string",
+                      "const": "linkedin-ads"
+                    },
+                    "event": {
+                      "type": "string",
+                      "const": "new-lead-gen-form-response"
+                    },
+                    "params": {
+                      "type": "object",
+                      "properties": {
+                        "organizationId": {
+                          "title": "LinkedIn Organization ID",
+                          "description": "Required for non-sponsored lead forms",
+                          "type": "string"
+                        },
+                        "sponsoredAccountId": {
+                          "title": "LinkedIn Sponsored Account ID",
+                          "description": "Required for sponsored lead forms (leadType: SPONSORED)",
+                          "type": "string"
+                        },
+                        "leadType": {
+                          "default": "SPONSORED",
+                          "description": "Type of lead form. SPONSORED requires sponsoredAccountId",
+                          "type": "string",
+                          "enum": ["SPONSORED"]
+                        }
+                      },
+                      "additionalProperties": false
+                    }
+                  },
+                  "required": ["account", "service", "event", "params"],
+                  "additionalProperties": false
+                }
+              ]
+            },
+            {
+              "title": "Facebook",
+              "description": "Triggered by Facebook lead events",
+              "anyOf": [
+                {
+                  "title": "New Lead",
+                  "description": "Triggered when a new Facebook Lead Ad response is created",
+                  "type": "object",
+                  "properties": {
+                    "account": {
+                      "anyOf": [
+                        {
+                          "type": "number"
+                        },
+                        {
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    "service": {
+                      "type": "string",
+                      "const": "facebook-ads"
+                    },
+                    "event": {
+                      "type": "string",
+                      "const": "new-lead"
+                    },
+                    "params": {
+                      "type": "object",
+                      "properties": {
+                        "pageId": {
+                          "title": "Facebook Page ID",
+                          "description": "The ID of the Facebook page with lead forms",
+                          "type": "string"
+                        },
+                        "appId": {
+                          "title": "Facebook App ID",
+                          "description": "Your Facebook App ID from the developer console",
+                          "type": "string"
+                        },
+                        "appSecret": {
+                          "title": "Facebook App Secret",
+                          "description": "Your Facebook App Secret from the developer console",
+                          "type": "string"
+                        },
+                        "verifyToken": {
+                          "title": "Webhook Verify Token",
+                          "description": "Security token for webhook verification (auto-generated if not provided)",
+                          "type": "string"
+                        }
+                      },
+                      "required": ["pageId", "appId", "appSecret"],
+                      "additionalProperties": false
+                    }
+                  },
+                  "required": ["account", "service", "event", "params"],
+                  "additionalProperties": false
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "automation_action": {
+      "title": "Action",
+      "description": "An action performed by the automation",
+      "anyOf": [
+        {
+          "title": "HTTP Action",
+          "description": "HTTP request action",
+          "anyOf": [
+            {
+              "title": "GET Request",
+              "description": "Make a GET HTTP request",
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "service": {
+                  "type": "string",
+                  "const": "http"
+                },
+                "action": {
+                  "type": "string",
+                  "const": "get"
+                },
+                "params": {
+                  "type": "object",
+                  "properties": {
+                    "url": {
+                      "type": "string"
+                    },
+                    "headers": {
+                      "type": "object",
+                      "propertyNames": {
+                        "type": "string"
+                      },
+                      "additionalProperties": {
+                        "type": "string"
+                      }
+                    }
+                  },
+                  "required": ["url"],
+                  "additionalProperties": false
+                }
+              },
+              "required": ["name", "service", "action", "params"],
+              "additionalProperties": false
+            },
+            {
+              "title": "POST Request",
+              "description": "Make a POST HTTP request",
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "service": {
+                  "type": "string",
+                  "const": "http"
+                },
+                "action": {
+                  "type": "string",
+                  "const": "post"
+                },
+                "params": {
+                  "type": "object",
+                  "properties": {
+                    "url": {
+                      "type": "string"
+                    },
+                    "headers": {
+                      "type": "object",
+                      "propertyNames": {
+                        "type": "string"
+                      },
+                      "additionalProperties": {
+                        "type": "string"
+                      }
+                    },
+                    "body": {
+                      "type": "object",
+                      "propertyNames": {
+                        "type": "string"
+                      },
+                      "additionalProperties": {}
+                    }
+                  },
+                  "required": ["url"],
+                  "additionalProperties": false
+                }
+              },
+              "required": ["name", "service", "action", "params"],
+              "additionalProperties": false
+            },
+            {
+              "title": "HTTP Response",
+              "description": "Send an HTTP response",
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "service": {
+                  "type": "string",
+                  "const": "http"
+                },
+                "action": {
+                  "type": "string",
+                  "const": "response"
+                },
+                "params": {
+                  "type": "object",
+                  "properties": {
+                    "headers": {
+                      "type": "object",
+                      "propertyNames": {
+                        "type": "string"
+                      },
+                      "additionalProperties": {
+                        "type": "string"
+                      }
+                    },
+                    "body": {
+                      "anyOf": [
+                        {
+                          "type": "object",
+                          "propertyNames": {
+                            "type": "string"
+                          },
+                          "additionalProperties": {}
+                        },
+                        {
+                          "type": "string"
+                        }
+                      ]
+                    }
+                  },
+                  "additionalProperties": false
+                }
+              },
+              "required": ["name", "service", "action"],
+              "additionalProperties": false
+            }
+          ]
+        },
+        {
+          "title": "Code Action",
+          "description": "Execute custom code",
+          "anyOf": [
+            {
+              "title": "Run TypeScript",
+              "description": "Execute TypeScript code",
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "service": {
+                  "type": "string",
+                  "const": "code"
+                },
+                "action": {
+                  "type": "string",
+                  "const": "run-typescript"
+                },
+                "params": {
+                  "type": "object",
+                  "properties": {
+                    "inputData": {
+                      "default": {},
+                      "type": "object",
+                      "propertyNames": {
+                        "type": "string"
+                      },
+                      "additionalProperties": {
+                        "type": "string"
+                      }
+                    },
+                    "code": {
+                      "type": "string"
+                    }
+                  },
+                  "required": ["code"],
+                  "additionalProperties": false
+                }
+              },
+              "required": ["name", "service", "action", "params"],
+              "additionalProperties": false
+            },
+            {
+              "title": "Run JavaScript",
+              "description": "Execute JavaScript code",
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "service": {
+                  "type": "string",
+                  "const": "code"
+                },
+                "action": {
+                  "type": "string",
+                  "const": "run-javascript"
+                },
+                "params": {
+                  "type": "object",
+                  "properties": {
+                    "inputData": {
+                      "default": {},
+                      "type": "object",
+                      "propertyNames": {
+                        "type": "string"
+                      },
+                      "additionalProperties": {
+                        "type": "string"
+                      }
+                    },
+                    "code": {
+                      "type": "string"
+                    }
+                  },
+                  "required": ["code"],
+                  "additionalProperties": false
+                }
+              },
+              "required": ["name", "service", "action", "params"],
+              "additionalProperties": false
+            }
+          ]
+        },
+        {
+          "title": "Filter Action",
+          "description": "Filter or branch automation flow",
+          "anyOf": [
+            {
+              "title": "Only Continue If",
+              "description": "Continue only if condition is met",
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "service": {
+                  "type": "string",
+                  "const": "filter"
+                },
+                "action": {
+                  "type": "string",
+                  "const": "only-continue-if"
+                },
+                "params": {
+                  "$ref": "#/definitions/filter_condition"
+                }
+              },
+              "required": ["name", "service", "action", "params"],
+              "additionalProperties": false
+            },
+            {
+              "title": "Split Into Paths",
+              "description": "Branch automation into multiple paths",
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "service": {
+                  "type": "string",
+                  "const": "filter"
+                },
+                "action": {
+                  "type": "string",
+                  "const": "split-into-paths"
+                },
+                "params": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "name": {
+                        "type": "string"
+                      },
+                      "filter": {
+                        "$ref": "#/definitions/filter_condition"
+                      },
+                      "actions": {
+                        "type": "array",
+                        "items": {
+                          "$ref": "#/definitions/automation_action"
+                        }
+                      }
+                    },
+                    "required": ["name", "filter", "actions"],
+                    "additionalProperties": false
+                  }
+                }
+              },
+              "required": ["name", "service", "action", "params"],
+              "additionalProperties": false
+            }
+          ]
+        },
+        {
+          "title": "Database Action",
+          "description": "Database operations",
+          "anyOf": [
+            {
+              "title": "Create Record",
+              "description": "Create a record in a database table",
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "service": {
+                  "type": "string",
+                  "const": "database"
+                },
+                "action": {
+                  "type": "string",
+                  "const": "create-record"
+                },
+                "params": {
+                  "type": "object",
+                  "properties": {
+                    "table": {
+                      "anyOf": [
+                        {
+                          "type": "string"
+                        },
+                        {
+                          "type": "number"
+                        }
+                      ]
+                    },
+                    "fields": {
+                      "type": "object",
+                      "propertyNames": {
+                        "type": "string"
+                      },
+                      "additionalProperties": {
+                        "anyOf": [
+                          {
+                            "type": "string"
+                          },
+                          {
+                            "type": "number"
+                          },
+                          {
+                            "type": "boolean"
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
+                      }
+                    }
+                  },
+                  "required": ["table", "fields"],
+                  "additionalProperties": false
+                }
+              },
+              "required": ["name", "service", "action", "params"],
+              "additionalProperties": false
+            }
+          ]
+        },
+        {
+          "title": "Integration Action",
+          "description": "Actions performed via external service integrations",
+          "anyOf": [
+            {
+              "title": "Calendly",
+              "description": "Actions for Calendly API",
+              "anyOf": [
+                {
+                  "title": "List Webhook Subscriptions",
+                  "description": "Lists the webhook subscriptions for a given organization",
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "type": "string"
+                    },
+                    "account": {
+                      "anyOf": [
+                        {
+                          "type": "number"
+                        },
+                        {
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    "service": {
+                      "type": "string",
+                      "const": "calendly"
+                    },
+                    "action": {
+                      "type": "string",
+                      "const": "list-webhook-subscriptions"
+                    },
+                    "params": {
+                      "type": "object",
+                      "properties": {
+                        "organization": {
+                          "default": "Current user organisation",
+                          "type": "string"
+                        },
+                        "scope": {
+                          "default": "user",
+                          "type": "string",
+                          "enum": ["user", "organization", "group"]
+                        },
+                        "count": {
+                          "default": 20,
+                          "type": "number",
+                          "minimum": 1,
+                          "maximum": 100
+                        }
+                      },
+                      "additionalProperties": false
+                    }
+                  },
+                  "required": ["name", "account", "service", "action"],
+                  "additionalProperties": false
+                },
+                {
+                  "title": "Get Event Type",
+                  "description": "Gets the event type for a given uuid",
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "type": "string"
+                    },
+                    "account": {
+                      "anyOf": [
+                        {
+                          "type": "number"
+                        },
+                        {
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    "service": {
+                      "type": "string",
+                      "const": "calendly"
+                    },
+                    "action": {
+                      "type": "string",
+                      "const": "get-event-type"
+                    },
+                    "params": {
+                      "type": "object",
+                      "properties": {
+                        "uuid": {
+                          "type": "string"
+                        }
+                      },
+                      "required": ["uuid"],
+                      "additionalProperties": false
+                    }
+                  },
+                  "required": ["name", "account", "service", "action", "params"],
+                  "additionalProperties": false
+                }
+              ]
+            },
+            {
+              "title": "Airtable",
+              "description": "Actions for Airtable API",
+              "anyOf": [
+                {
+                  "title": "List Webhook Payloads",
+                  "description": "Lists the webhook payloads for a given webhook",
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "type": "string"
+                    },
+                    "account": {
+                      "anyOf": [
+                        {
+                          "type": "number"
+                        },
+                        {
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    "service": {
+                      "type": "string",
+                      "const": "airtable"
+                    },
+                    "action": {
+                      "type": "string",
+                      "const": "list-webhook-payloads"
+                    },
+                    "params": {
+                      "type": "object",
+                      "properties": {
+                        "baseId": {
+                          "type": "string"
+                        },
+                        "webhookId": {
+                          "type": "string"
+                        },
+                        "cursor": {
+                          "type": "number"
+                        },
+                        "limit": {
+                          "type": "number"
+                        }
+                      },
+                      "required": ["baseId", "webhookId"],
+                      "additionalProperties": false
+                    }
+                  },
+                  "required": ["name", "account", "service", "action", "params"],
+                  "additionalProperties": false
+                }
+              ]
+            },
+            {
+              "title": "Google Sheets",
+              "description": "Actions for Google Sheets API",
+              "anyOf": [
+                {
+                  "title": "Append Values",
+                  "description": "Appends values to a Google Sheets spreadsheet",
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "type": "string"
+                    },
+                    "account": {
+                      "anyOf": [
+                        {
+                          "type": "number"
+                        },
+                        {
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    "service": {
+                      "type": "string",
+                      "const": "google-sheets"
+                    },
+                    "action": {
+                      "type": "string",
+                      "const": "append-values"
+                    },
+                    "params": {
+                      "type": "object",
+                      "properties": {
+                        "spreadsheetId": {
+                          "type": "string"
+                        },
+                        "range": {
+                          "type": "string"
+                        },
+                        "values": {
+                          "type": "array",
+                          "items": {
+                            "type": "array",
+                            "items": {
+                              "type": "string"
+                            }
+                          }
+                        }
+                      },
+                      "required": ["spreadsheetId", "range", "values"],
+                      "additionalProperties": false
+                    }
+                  },
+                  "required": ["name", "account", "service", "action", "params"],
+                  "additionalProperties": false
+                }
+              ]
+            },
+            {
+              "title": "Google Gmail",
+              "description": "Actions for Google Gmail API",
+              "anyOf": [
+                {
+                  "title": "Send Email",
+                  "description": "Sends an email",
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "type": "string"
+                    },
+                    "account": {
+                      "anyOf": [
+                        {
+                          "type": "number"
+                        },
+                        {
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    "service": {
+                      "type": "string",
+                      "const": "google-gmail"
+                    },
+                    "action": {
+                      "type": "string",
+                      "const": "send-email"
+                    },
+                    "params": {
+                      "type": "object",
+                      "properties": {
+                        "from": {
+                          "type": "string"
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "to": {
+                          "anyOf": [
+                            {
+                              "type": "string"
+                            },
+                            {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            }
+                          ]
+                        },
+                        "cc": {
+                          "anyOf": [
+                            {
+                              "type": "string"
+                            },
+                            {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            }
+                          ]
+                        },
+                        "bcc": {
+                          "anyOf": [
+                            {
+                              "type": "string"
+                            },
+                            {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            }
+                          ]
+                        },
+                        "subject": {
+                          "type": "string"
+                        },
+                        "html": {
+                          "type": "string"
+                        },
+                        "text": {
+                          "type": "string"
+                        }
+                      },
+                      "required": ["to", "subject", "html"],
+                      "additionalProperties": false
+                    }
+                  },
+                  "required": ["name", "account", "service", "action", "params"],
+                  "additionalProperties": false
+                }
+              ]
+            },
+            {
+              "title": "LinkedIn Ads",
+              "description": "Actions for LinkedIn Ads API",
+              "anyOf": [
+                {
+                  "title": "Create Lead Notification Subscription",
+                  "description": "Creates a LinkedIn Lead Notification subscription at owner level",
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "type": "string"
+                    },
+                    "account": {
+                      "anyOf": [
+                        {
+                          "type": "number"
+                        },
+                        {
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    "service": {
+                      "type": "string",
+                      "const": "linkedin-ads"
+                    },
+                    "action": {
+                      "type": "string",
+                      "const": "create-lead-notification-subscription"
+                    },
+                    "params": {
+                      "type": "object",
+                      "properties": {
+                        "webhook": {
+                          "title": "Webhook URL",
+                          "type": "string",
+                          "format": "uri"
+                        },
+                        "organizationId": {
+                          "title": "LinkedIn Organization ID",
+                          "type": "string"
+                        },
+                        "leadType": {
+                          "default": "SPONSORED",
+                          "type": "string",
+                          "enum": ["SPONSORED"]
+                        }
+                      },
+                      "required": ["webhook", "organizationId"],
+                      "additionalProperties": false
+                    }
+                  },
+                  "required": ["name", "account", "service", "action", "params"],
+                  "additionalProperties": false
+                },
+                {
+                  "title": "List Lead Notification Subscriptions",
+                  "description": "Lists LinkedIn lead notification subscriptions for an organization",
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "type": "string"
+                    },
+                    "account": {
+                      "anyOf": [
+                        {
+                          "type": "number"
+                        },
+                        {
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    "service": {
+                      "type": "string",
+                      "const": "linkedin-ads"
+                    },
+                    "action": {
+                      "type": "string",
+                      "const": "list-lead-notification-subscriptions"
+                    },
+                    "params": {
+                      "type": "object",
+                      "properties": {
+                        "organizationId": {
+                          "title": "LinkedIn Organization ID",
+                          "type": "string"
+                        }
+                      },
+                      "required": ["organizationId"],
+                      "additionalProperties": false
+                    }
+                  },
+                  "required": ["name", "account", "service", "action", "params"],
+                  "additionalProperties": false
+                },
+                {
+                  "title": "Get Lead Form Response",
+                  "description": "Retrieves a single LinkedIn Lead Form Response by its ID",
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "type": "string"
+                    },
+                    "account": {
+                      "anyOf": [
+                        {
+                          "type": "number"
+                        },
+                        {
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    "service": {
+                      "type": "string",
+                      "const": "linkedin-ads"
+                    },
+                    "action": {
+                      "type": "string",
+                      "const": "get-lead-form-response"
+                    },
+                    "params": {
+                      "type": "object",
+                      "properties": {
+                        "leadResponseId": {
+                          "title": "Lead Response ID",
+                          "description": "The unique identifier for the lead form response",
+                          "type": "string"
+                        }
+                      },
+                      "required": ["leadResponseId"],
+                      "additionalProperties": false
+                    }
+                  },
+                  "required": ["name", "account", "service", "action", "params"],
+                  "additionalProperties": false
+                }
+              ]
+            },
+            {
+              "title": "Facebook Ads",
+              "description": "Actions for Facebook Ads API",
+              "anyOf": [
+                {
+                  "title": "List App Subscriptions",
+                  "description": "Lists subscriptions configured on the Facebook App",
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "type": "string"
+                    },
+                    "account": {
+                      "anyOf": [
+                        {
+                          "type": "number"
+                        },
+                        {
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    "service": {
+                      "type": "string",
+                      "const": "facebook-ads"
+                    },
+                    "action": {
+                      "type": "string",
+                      "const": "list-app-subscriptions"
+                    },
+                    "params": {
+                      "type": "object",
+                      "properties": {
+                        "appId": {
+                          "title": "Facebook App ID",
+                          "type": "string"
+                        },
+                        "appSecret": {
+                          "title": "Facebook App Secret",
+                          "type": "string"
+                        }
+                      },
+                      "required": ["appId", "appSecret"],
+                      "additionalProperties": false
+                    }
+                  },
+                  "required": ["name", "account", "service", "action", "params"],
+                  "additionalProperties": false
+                },
+                {
+                  "title": "Get LeadGen",
+                  "description": "Retrieves lead generation data using the leadgen_id from webhook",
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "type": "string"
+                    },
+                    "account": {
+                      "anyOf": [
+                        {
+                          "type": "number"
+                        },
+                        {
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    "service": {
+                      "type": "string",
+                      "const": "facebook-ads"
+                    },
+                    "action": {
+                      "type": "string",
+                      "const": "get-leadgen"
+                    },
+                    "params": {
+                      "type": "object",
+                      "properties": {
+                        "leadgenId": {
+                          "title": "Leadgen ID",
+                          "description": "The leadgen_id from Facebook webhook data",
+                          "type": "string"
+                        }
+                      },
+                      "required": ["leadgenId"],
+                      "additionalProperties": false
+                    }
+                  },
+                  "required": ["name", "account", "service", "action", "params"],
+                  "additionalProperties": false
+                }
+              ]
+            },
+            {
+              "title": "Notion",
+              "description": "Actions for Notion API",
+              "anyOf": [
+                {
+                  "title": "Create Page",
+                  "description": "Creates a new page in Notion",
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "type": "string"
+                    },
+                    "account": {
+                      "anyOf": [
+                        {
+                          "type": "number"
+                        },
+                        {
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    "service": {
+                      "type": "string",
+                      "const": "notion"
+                    },
+                    "action": {
+                      "type": "string",
+                      "const": "create-page"
+                    },
+                    "params": {
+                      "type": "object",
+                      "properties": {
+                        "parent": {
+                          "description": "Parent of the new page",
+                          "anyOf": [
+                            {
+                              "type": "object",
+                              "properties": {
+                                "type": {
+                                  "type": "string",
+                                  "const": "database_id"
+                                },
+                                "database_id": {
+                                  "type": "string"
+                                }
+                              },
+                              "required": ["type", "database_id"],
+                              "additionalProperties": false
+                            },
+                            {
+                              "type": "object",
+                              "properties": {
+                                "type": {
+                                  "type": "string",
+                                  "const": "page_id"
+                                },
+                                "page_id": {
+                                  "type": "string"
+                                }
+                              },
+                              "required": ["type", "page_id"],
+                              "additionalProperties": false
+                            },
+                            {
+                              "type": "object",
+                              "properties": {
+                                "type": {
+                                  "type": "string",
+                                  "const": "workspace"
+                                },
+                                "workspace": {
+                                  "type": "boolean",
+                                  "const": true
+                                }
+                              },
+                              "required": ["type", "workspace"],
+                              "additionalProperties": false
+                            }
+                          ]
+                        },
+                        "properties": {
+                          "description": "Page properties",
+                          "type": "object",
+                          "propertyNames": {
+                            "type": "string"
+                          },
+                          "additionalProperties": {}
+                        },
+                        "children": {
+                          "description": "Page content blocks",
+                          "type": "array",
+                          "items": {}
+                        },
+                        "icon": {
+                          "description": "Page icon",
+                          "anyOf": [
+                            {
+                              "type": "object",
+                              "properties": {
+                                "type": {
+                                  "type": "string",
+                                  "const": "emoji"
+                                },
+                                "emoji": {
+                                  "type": "string"
+                                }
+                              },
+                              "required": ["type", "emoji"],
+                              "additionalProperties": false
+                            },
+                            {
+                              "type": "object",
+                              "properties": {
+                                "type": {
+                                  "type": "string",
+                                  "const": "external"
+                                },
+                                "external": {
+                                  "type": "object",
+                                  "properties": {
+                                    "url": {
+                                      "type": "string"
+                                    }
+                                  },
+                                  "required": ["url"],
+                                  "additionalProperties": false
+                                }
+                              },
+                              "required": ["type", "external"],
+                              "additionalProperties": false
+                            }
+                          ]
+                        },
+                        "cover": {
+                          "description": "Page cover image",
+                          "type": "object",
+                          "properties": {
+                            "type": {
+                              "type": "string",
+                              "const": "external"
+                            },
+                            "external": {
+                              "type": "object",
+                              "properties": {
+                                "url": {
+                                  "type": "string"
+                                }
+                              },
+                              "required": ["url"],
+                              "additionalProperties": false
+                            }
+                          },
+                          "required": ["type", "external"],
+                          "additionalProperties": false
+                        }
+                      },
+                      "required": ["parent", "properties"],
+                      "additionalProperties": false
+                    }
+                  },
+                  "required": ["name", "account", "service", "action", "params"],
+                  "additionalProperties": false
+                },
+                {
+                  "title": "Get Page",
+                  "description": "Retrieves a page from Notion",
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "type": "string"
+                    },
+                    "account": {
+                      "anyOf": [
+                        {
+                          "type": "number"
+                        },
+                        {
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    "service": {
+                      "type": "string",
+                      "const": "notion"
+                    },
+                    "action": {
+                      "type": "string",
+                      "const": "get-page"
+                    },
+                    "params": {
+                      "type": "object",
+                      "properties": {
+                        "pageId": {
+                          "description": "The ID of the page to retrieve",
+                          "type": "string"
+                        },
+                        "filterProperties": {
+                          "description": "Properties to include in response",
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          }
+                        }
+                      },
+                      "required": ["pageId"],
+                      "additionalProperties": false
+                    }
+                  },
+                  "required": ["name", "account", "service", "action", "params"],
+                  "additionalProperties": false
+                },
+                {
+                  "title": "Update Page",
+                  "description": "Updates properties, icon, cover, or archived status of a Notion page",
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "type": "string"
+                    },
+                    "account": {
+                      "anyOf": [
+                        {
+                          "type": "number"
+                        },
+                        {
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    "service": {
+                      "type": "string",
+                      "const": "notion"
+                    },
+                    "action": {
+                      "type": "string",
+                      "const": "update-page"
+                    },
+                    "params": {
+                      "type": "object",
+                      "properties": {
+                        "pageId": {
+                          "description": "The ID of the page to update",
+                          "type": "string"
+                        },
+                        "properties": {
+                          "description": "Page properties to update",
+                          "type": "object",
+                          "propertyNames": {
+                            "type": "string"
+                          },
+                          "additionalProperties": {}
+                        },
+                        "icon": {
+                          "description": "Page icon to set",
+                          "anyOf": [
+                            {
+                              "type": "object",
+                              "properties": {
+                                "type": {
+                                  "type": "string",
+                                  "const": "emoji"
+                                },
+                                "emoji": {
+                                  "type": "string"
+                                }
+                              },
+                              "required": ["type", "emoji"],
+                              "additionalProperties": false
+                            },
+                            {
+                              "type": "object",
+                              "properties": {
+                                "type": {
+                                  "type": "string",
+                                  "const": "external"
+                                },
+                                "external": {
+                                  "type": "object",
+                                  "properties": {
+                                    "url": {
+                                      "type": "string"
+                                    }
+                                  },
+                                  "required": ["url"],
+                                  "additionalProperties": false
+                                }
+                              },
+                              "required": ["type", "external"],
+                              "additionalProperties": false
+                            }
+                          ]
+                        },
+                        "cover": {
+                          "description": "Page cover image to set",
+                          "type": "object",
+                          "properties": {
+                            "type": {
+                              "type": "string",
+                              "const": "external"
+                            },
+                            "external": {
+                              "type": "object",
+                              "properties": {
+                                "url": {
+                                  "type": "string"
+                                }
+                              },
+                              "required": ["url"],
+                              "additionalProperties": false
+                            }
+                          },
+                          "required": ["type", "external"],
+                          "additionalProperties": false
+                        },
+                        "archived": {
+                          "description": "Whether to archive/unarchive the page",
+                          "type": "boolean"
+                        }
+                      },
+                      "required": ["pageId"],
+                      "additionalProperties": false
+                    }
+                  },
+                  "required": ["name", "account", "service", "action", "params"],
+                  "additionalProperties": false
+                },
+                {
+                  "title": "Delete Page",
+                  "description": "Deletes (archives) a page in Notion",
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "type": "string"
+                    },
+                    "account": {
+                      "anyOf": [
+                        {
+                          "type": "number"
+                        },
+                        {
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    "service": {
+                      "type": "string",
+                      "const": "notion"
+                    },
+                    "action": {
+                      "type": "string",
+                      "const": "delete-page"
+                    },
+                    "params": {
+                      "type": "object",
+                      "properties": {
+                        "pageId": {
+                          "description": "The ID of the page to delete",
+                          "type": "string"
+                        }
+                      },
+                      "required": ["pageId"],
+                      "additionalProperties": false
+                    }
+                  },
+                  "required": ["name", "account", "service", "action", "params"],
+                  "additionalProperties": false
+                },
+                {
+                  "title": "List Pages",
+                  "description": "Lists pages from a Notion database",
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "type": "string"
+                    },
+                    "account": {
+                      "anyOf": [
+                        {
+                          "type": "number"
+                        },
+                        {
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    "service": {
+                      "type": "string",
+                      "const": "notion"
+                    },
+                    "action": {
+                      "type": "string",
+                      "const": "list-pages"
+                    },
+                    "params": {
+                      "type": "object",
+                      "properties": {
+                        "databaseId": {
+                          "description": "The ID of the database to query",
+                          "type": "string"
+                        },
+                        "filter": {
+                          "description": "Filter conditions for the query"
+                        },
+                        "sorts": {
+                          "description": "Sort conditions for the query",
+                          "type": "array",
+                          "items": {}
+                        },
+                        "startCursor": {
+                          "description": "Pagination cursor",
+                          "type": "string"
+                        },
+                        "pageSize": {
+                          "description": "Number of results per page",
+                          "type": "number",
+                          "minimum": 1,
+                          "maximum": 100
+                        }
+                      },
+                      "required": ["databaseId"],
+                      "additionalProperties": false
+                    }
+                  },
+                  "required": ["name", "account", "service", "action", "params"],
+                  "additionalProperties": false
+                },
+                {
+                  "title": "Search Pages",
+                  "description": "Searches for pages in Notion",
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "type": "string"
+                    },
+                    "account": {
+                      "anyOf": [
+                        {
+                          "type": "number"
+                        },
+                        {
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    "service": {
+                      "type": "string",
+                      "const": "notion"
+                    },
+                    "action": {
+                      "type": "string",
+                      "const": "search-pages"
+                    },
+                    "params": {
+                      "type": "object",
+                      "properties": {
+                        "query": {
+                          "description": "Search query text",
+                          "type": "string"
+                        },
+                        "filter": {
+                          "description": "Optional filter for search results",
+                          "type": "object",
+                          "properties": {
+                            "property": {
+                              "type": "string"
+                            },
+                            "value": {
+                              "type": "string"
+                            }
+                          },
+                          "additionalProperties": false
+                        }
+                      },
+                      "required": ["query"],
+                      "additionalProperties": false
+                    }
+                  },
+                  "required": ["name", "account", "service", "action", "params"],
+                  "additionalProperties": false
+                }
+              ]
+            },
+            {
+              "title": "Qonto",
+              "description": "Actions for Qonto API",
+              "anyOf": [
+                {
+                  "title": "Create Client",
+                  "description": "Creates a new client in Qonto",
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "type": "string"
+                    },
+                    "account": {
+                      "anyOf": [
+                        {
+                          "type": "number"
+                        },
+                        {
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    "service": {
+                      "type": "string",
+                      "const": "qonto"
+                    },
+                    "action": {
+                      "type": "string",
+                      "const": "create-client"
+                    },
+                    "params": {
+                      "type": "object",
+                      "properties": {
+                        "name": {
+                          "description": "Client name",
+                          "type": "string"
+                        },
+                        "email": {
+                          "description": "Client email",
+                          "type": "string",
+                          "format": "email",
+                          "pattern": "^(?!\\.)(?!.*\\.\\.)([A-Za-z0-9_'+\\-\\.]*)[A-Za-z0-9_+-]@([A-Za-z0-9][A-Za-z0-9\\-]*\\.)+[A-Za-z]{2,}$"
+                        },
+                        "phone": {
+                          "description": "Client phone number",
+                          "type": "string"
+                        },
+                        "address": {
+                          "description": "Client address",
+                          "type": "object",
+                          "properties": {
+                            "street": {
+                              "description": "Street address",
+                              "type": "string"
+                            },
+                            "city": {
+                              "description": "City",
+                              "type": "string"
+                            },
+                            "postal_code": {
+                              "description": "Postal code",
+                              "type": "string"
+                            },
+                            "country": {
+                              "description": "Country",
+                              "type": "string"
+                            }
+                          },
+                          "required": ["street", "city", "postal_code", "country"],
+                          "additionalProperties": false
+                        },
+                        "vat_number": {
+                          "description": "VAT number",
+                          "type": "string"
+                        }
+                      },
+                      "required": ["name"],
+                      "additionalProperties": false
+                    }
+                  },
+                  "required": ["name", "account", "service", "action", "params"],
+                  "additionalProperties": false
+                },
+                {
+                  "title": "Create Invoice",
+                  "description": "Creates a new invoice in Qonto",
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "type": "string"
+                    },
+                    "account": {
+                      "anyOf": [
+                        {
+                          "type": "number"
+                        },
+                        {
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    "service": {
+                      "type": "string",
+                      "const": "qonto"
+                    },
+                    "action": {
+                      "type": "string",
+                      "const": "create-invoice"
+                    },
+                    "params": {
+                      "type": "object",
+                      "properties": {
+                        "client_id": {
+                          "description": "ID of the client for this invoice",
+                          "type": "string"
+                        },
+                        "amount": {
+                          "description": "Invoice total amount",
+                          "type": "number",
+                          "exclusiveMinimum": 0
+                        },
+                        "currency": {
+                          "description": "Invoice currency",
+                          "default": "EUR",
+                          "type": "string"
+                        },
+                        "due_date": {
+                          "description": "Invoice due date (ISO 8601 format)",
+                          "type": "string"
+                        },
+                        "items": {
+                          "description": "Invoice line items",
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "description": {
+                                "description": "Item description",
+                                "type": "string"
+                              },
+                              "quantity": {
+                                "description": "Quantity",
+                                "type": "number",
+                                "exclusiveMinimum": 0
+                              },
+                              "unit_price": {
+                                "description": "Unit price",
+                                "type": "number",
+                                "exclusiveMinimum": 0
+                              }
+                            },
+                            "required": ["description", "quantity", "unit_price"],
+                            "additionalProperties": false
+                          }
+                        },
+                        "reference": {
+                          "description": "Invoice reference number",
+                          "type": "string"
+                        },
+                        "notes": {
+                          "description": "Additional notes",
+                          "type": "string"
+                        }
+                      },
+                      "required": ["client_id", "amount", "currency", "due_date", "items"],
+                      "additionalProperties": false
+                    }
+                  },
+                  "required": ["name", "account", "service", "action", "params"],
+                  "additionalProperties": false
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "filter_condition": {
+      "anyOf": [
+        {
+          "type": "object",
+          "properties": {
+            "target": {
+              "type": "string"
+            },
+            "operator": {
+              "type": "string",
+              "enum": ["contains", "does-not-contain"]
+            },
+            "value": {
+              "type": "string"
+            }
+          },
+          "required": ["target", "operator", "value"],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "target": {
+              "type": "string"
+            },
+            "operator": {
+              "type": "string",
+              "enum": ["exists", "does-not-exist", "is-true", "is-false"]
+            }
+          },
+          "required": ["target", "operator"],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "and": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/filter_condition"
+              }
+            }
+          },
+          "required": ["and"],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "or": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/filter_condition"
+              }
+            }
+          },
+          "required": ["or"],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "json_schema": {
+      "title": "JSON Schema",
+      "description": "Schema describing data structure",
+      "type": "object",
+      "properties": {
+        "type": {
+          "anyOf": [
+            {
+              "type": "string",
+              "enum": ["string", "number", "integer", "boolean", "object", "array", "null"]
+            },
+            {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": ["string", "number", "integer", "boolean", "object", "array", "null"]
+              }
+            }
+          ]
+        },
+        "properties": {
+          "type": "object",
+          "propertyNames": {
+            "type": "string"
+          },
+          "additionalProperties": {
+            "anyOf": [
+              {
+                "$ref": "#/definitions/json_schema"
+              },
+              {
+                "type": "boolean"
+              }
+            ]
+          }
+        },
+        "required": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "items": {
+          "anyOf": [
+            {
+              "anyOf": [
+                {
+                  "$ref": "#/definitions/json_schema"
+                },
+                {
+                  "type": "boolean"
+                }
+              ]
+            },
+            {
+              "type": "array",
+              "items": {
+                "anyOf": [
+                  {
+                    "$ref": "#/definitions/json_schema"
+                  },
+                  {
+                    "type": "boolean"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "additionalProperties": {
+          "anyOf": [
+            {
+              "anyOf": [
+                {
+                  "$ref": "#/definitions/json_schema"
+                },
+                {
+                  "type": "boolean"
+                }
+              ]
+            },
+            {
+              "type": "boolean"
+            }
+          ]
+        },
+        "enum": {
+          "type": "array",
+          "items": {}
+        },
+        "const": {},
+        "title": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "default": {},
+        "minimum": {
+          "type": "number"
+        },
+        "maximum": {
+          "type": "number"
+        },
+        "multipleOf": {
+          "type": "number"
+        },
+        "minLength": {
+          "type": "number"
+        },
+        "maxLength": {
+          "type": "number"
+        },
+        "pattern": {
+          "type": "string"
+        },
+        "minItems": {
+          "type": "number"
+        },
+        "maxItems": {
+          "type": "number"
+        },
+        "uniqueItems": {
+          "type": "boolean"
+        },
+        "allOf": {
+          "type": "array",
+          "items": {
+            "anyOf": [
+              {
+                "$ref": "#/definitions/json_schema"
+              },
+              {
+                "type": "boolean"
+              }
+            ]
+          }
+        },
+        "anyOf": {
+          "type": "array",
+          "items": {
+            "anyOf": [
+              {
+                "$ref": "#/definitions/json_schema"
+              },
+              {
+                "type": "boolean"
+              }
+            ]
+          }
+        },
+        "oneOf": {
+          "type": "array",
+          "items": {
+            "anyOf": [
+              {
+                "$ref": "#/definitions/json_schema"
+              },
+              {
+                "type": "boolean"
+              }
+            ]
+          }
+        },
+        "not": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/json_schema"
+            },
+            {
+              "type": "boolean"
+            }
+          ]
+        }
+      },
+      "additionalProperties": false
     }
   },
   "properties": {
@@ -50,109 +2325,13 @@
       "type": "string",
       "minLength": 1
     },
-    "icon": {
-      "description": "The icon that represents your application",
-      "title": "Application Icon",
-      "enumNames": [
-        "Shopping Cart",
-        "Chart Bar",
-        "Users",
-        "File Text",
-        "Calendar",
-        "Mail",
-        "Database",
-        "Cloud",
-        "Shield",
-        "Globe",
-        "Play Circle",
-        "Settings",
-        "Briefcase",
-        "Heart",
-        "Book",
-        "Dollar Sign",
-        "Truck",
-        "Home",
-        "Zap",
-        "Package"
-      ],
-      "placeholder": "Select an icon",
-      "default": "globe",
-      "type": "string",
-      "enum": [
-        "shopping-cart",
-        "chart-bar",
-        "users",
-        "file-text",
-        "calendar",
-        "mail",
-        "database",
-        "cloud",
-        "shield",
-        "globe",
-        "play-circle",
-        "settings",
-        "briefcase",
-        "heart",
-        "book",
-        "dollar-sign",
-        "truck",
-        "home",
-        "zap",
-        "package"
-      ]
-    },
-    "color": {
-      "description": "The primary color theme for your application",
-      "title": "Theme Color",
-      "enumNames": [
-        "Blue",
-        "Emerald",
-        "Violet",
-        "Amber",
-        "Red",
-        "Cyan",
-        "Pink",
-        "Indigo",
-        "Lime",
-        "Orange",
-        "Teal",
-        "Purple"
-      ],
-      "placeholder": "Select a color theme",
-      "default": "blue",
-      "type": "string",
-      "enum": [
-        "blue",
-        "emerald",
-        "violet",
-        "amber",
-        "red",
-        "cyan",
-        "pink",
-        "indigo",
-        "lime",
-        "orange",
-        "teal",
-        "purple"
-      ]
-    },
-    "appVersion": {
+    "version": {
       "description": "The version of your application following semantic versioning",
-      "title": "Application Version",
+      "title": "Version",
       "examples": ["1.0.0", "2.1.3", "0.5.0-beta"],
       "placeholder": "1.0.0",
       "pattern": "^\\d+\\.\\d+\\.\\d+(-[a-zA-Z0-9]+)?$",
       "default": "1.0.0",
-      "type": "string",
-      "minLength": 5
-    },
-    "schemaVersion": {
-      "description": "The version of the schema format being used",
-      "title": "Schema Version",
-      "examples": ["latest", "1.0.0", "2.0.0"],
-      "placeholder": "latest",
-      "readOnly": true,
-      "default": "latest",
       "type": "string",
       "minLength": 5
     },
@@ -223,6 +2402,16 @@
                       "type": "boolean",
                       "default": false
                     },
+                    "unique": {
+                      "type": "boolean",
+                      "default": false,
+                      "description": "Whether this field must contain unique values across all rows"
+                    },
+                    "indexed": {
+                      "type": "boolean",
+                      "default": false,
+                      "description": "Whether to create a database index on this field for faster queries"
+                    },
                     "type": {
                       "type": "string",
                       "enum": ["single-line-text", "long-text", "phone-number", "email", "url"]
@@ -248,6 +2437,16 @@
                     "required": {
                       "type": "boolean",
                       "default": false
+                    },
+                    "unique": {
+                      "type": "boolean",
+                      "default": false,
+                      "description": "Whether this field must contain unique values across all rows"
+                    },
+                    "indexed": {
+                      "type": "boolean",
+                      "default": false,
+                      "description": "Whether to create a database index on this field for faster queries"
                     },
                     "type": {
                       "type": "string",
@@ -296,6 +2495,16 @@
                       "type": "boolean",
                       "default": false
                     },
+                    "unique": {
+                      "type": "boolean",
+                      "default": false,
+                      "description": "Whether this field must contain unique values across all rows"
+                    },
+                    "indexed": {
+                      "type": "boolean",
+                      "default": false,
+                      "description": "Whether to create a database index on this field for faster queries"
+                    },
                     "type": {
                       "type": "string",
                       "enum": ["date", "datetime", "time"]
@@ -339,6 +2548,11 @@
                       "type": "boolean",
                       "default": false
                     },
+                    "indexed": {
+                      "type": "boolean",
+                      "default": false,
+                      "description": "Whether to create a database index on this field for faster queries"
+                    },
                     "type": {
                       "type": "string",
                       "const": "checkbox"
@@ -364,6 +2578,11 @@
                     "required": {
                       "type": "boolean",
                       "default": false
+                    },
+                    "indexed": {
+                      "type": "boolean",
+                      "default": false,
+                      "description": "Whether to create a database index on this field for faster queries"
                     },
                     "type": {
                       "type": "string",
@@ -398,6 +2617,11 @@
                     "required": {
                       "type": "boolean",
                       "default": false
+                    },
+                    "indexed": {
+                      "type": "boolean",
+                      "default": false,
+                      "description": "Whether to create a database index on this field for faster queries"
                     },
                     "type": {
                       "type": "string",
@@ -441,6 +2665,11 @@
                       "type": "boolean",
                       "default": false
                     },
+                    "indexed": {
+                      "type": "boolean",
+                      "default": true,
+                      "description": "Whether to create a database index on this field for faster queries (recommended for foreign keys)"
+                    },
                     "type": {
                       "type": "string",
                       "const": "relationship"
@@ -460,6 +2689,18 @@
                       "type": "string",
                       "description": "Field from related table to display in UI",
                       "minLength": 1
+                    },
+                    "onDelete": {
+                      "type": "string",
+                      "enum": ["cascade", "set-null", "restrict", "no-action"],
+                      "default": "restrict",
+                      "description": "Action to take when the related record is deleted"
+                    },
+                    "onUpdate": {
+                      "type": "string",
+                      "enum": ["cascade", "set-null", "restrict", "no-action"],
+                      "default": "cascade",
+                      "description": "Action to take when the related record's key is updated"
                     }
                   },
                   "required": ["id", "name", "type", "relatedTable", "relationType"],
@@ -479,6 +2720,11 @@
                     "required": {
                       "type": "boolean",
                       "default": false
+                    },
+                    "indexed": {
+                      "type": "boolean",
+                      "default": false,
+                      "description": "Whether to create a database index on this field for faster queries"
                     },
                     "type": {
                       "type": "string",
@@ -534,6 +2780,11 @@
                       "type": "boolean",
                       "default": false
                     },
+                    "indexed": {
+                      "type": "boolean",
+                      "default": false,
+                      "description": "Whether to create a database index on this field for faster queries"
+                    },
                     "type": {
                       "type": "string",
                       "const": "multiple-attachments"
@@ -578,8 +2829,779 @@
                   },
                   "required": ["id", "name", "type"],
                   "additionalProperties": false
+                },
+                {
+                  "title": "Formula Field",
+                  "description": "Computed field that calculates values using a formula expression",
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "$ref": "#/definitions/id"
+                    },
+                    "name": {
+                      "$ref": "#/definitions/name"
+                    },
+                    "type": {
+                      "type": "string",
+                      "const": "formula"
+                    },
+                    "formula": {
+                      "type": "string",
+                      "description": "Formula expression to compute the value. Supports field references, operators, and functions.",
+                      "minLength": 1,
+                      "examples": [
+                        "price * quantity",
+                        "CONCAT(first_name, ' ', last_name)",
+                        "IF(status = 'active', 'Yes', 'No')",
+                        "ROUND(total * 0.15, 2)"
+                      ]
+                    },
+                    "resultType": {
+                      "type": "string",
+                      "enum": ["text", "number", "boolean", "date"],
+                      "default": "text",
+                      "description": "Expected data type of the formula result"
+                    },
+                    "format": {
+                      "type": "string",
+                      "description": "Display format for the result (e.g., currency, percentage)",
+                      "examples": ["currency", "percentage", "decimal", "date"]
+                    }
+                  },
+                  "required": ["id", "name", "type", "formula"],
+                  "additionalProperties": false
+                },
+                {
+                  "title": "Rollup Field",
+                  "description": "Aggregate values from related records (e.g., sum, count, average)",
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "$ref": "#/definitions/id"
+                    },
+                    "name": {
+                      "$ref": "#/definitions/name"
+                    },
+                    "type": {
+                      "type": "string",
+                      "const": "rollup"
+                    },
+                    "relationshipField": {
+                      "type": "string",
+                      "description": "Name of the relationship field to aggregate from",
+                      "minLength": 1
+                    },
+                    "relatedField": {
+                      "type": "string",
+                      "description": "Name of the field in the related table to aggregate",
+                      "minLength": 1
+                    },
+                    "aggregation": {
+                      "type": "string",
+                      "enum": [
+                        "sum",
+                        "count",
+                        "average",
+                        "min",
+                        "max",
+                        "median",
+                        "concat",
+                        "unique"
+                      ],
+                      "description": "Aggregation function to apply"
+                    },
+                    "format": {
+                      "type": "string",
+                      "description": "Display format for the result",
+                      "examples": ["currency", "number", "percentage"]
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "name",
+                    "type",
+                    "relationshipField",
+                    "relatedField",
+                    "aggregation"
+                  ],
+                  "additionalProperties": false
+                },
+                {
+                  "title": "Lookup Field",
+                  "description": "Display field values from related records",
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "$ref": "#/definitions/id"
+                    },
+                    "name": {
+                      "$ref": "#/definitions/name"
+                    },
+                    "type": {
+                      "type": "string",
+                      "const": "lookup"
+                    },
+                    "relationshipField": {
+                      "type": "string",
+                      "description": "Name of the relationship field to lookup from",
+                      "minLength": 1
+                    },
+                    "relatedField": {
+                      "type": "string",
+                      "description": "Name of the field in the related table to display",
+                      "minLength": 1
+                    }
+                  },
+                  "required": ["id", "name", "type", "relationshipField", "relatedField"],
+                  "additionalProperties": false
+                },
+                {
+                  "title": "User Field",
+                  "description": "Reference to a user/collaborator for assignments and mentions",
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "$ref": "#/definitions/id"
+                    },
+                    "name": {
+                      "$ref": "#/definitions/name"
+                    },
+                    "required": {
+                      "type": "boolean",
+                      "default": false
+                    },
+                    "indexed": {
+                      "type": "boolean",
+                      "default": true,
+                      "description": "Whether to create a database index on this field for faster queries"
+                    },
+                    "type": {
+                      "type": "string",
+                      "const": "user"
+                    },
+                    "allowMultiple": {
+                      "type": "boolean",
+                      "default": false,
+                      "description": "Whether to allow multiple users to be selected"
+                    }
+                  },
+                  "required": ["id", "name", "type"],
+                  "additionalProperties": false
+                },
+                {
+                  "title": "Created At Field",
+                  "description": "Automatically set timestamp when record is created (read-only)",
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "$ref": "#/definitions/id"
+                    },
+                    "name": {
+                      "$ref": "#/definitions/name"
+                    },
+                    "type": {
+                      "type": "string",
+                      "const": "created-at"
+                    },
+                    "indexed": {
+                      "type": "boolean",
+                      "default": true
+                    }
+                  },
+                  "required": ["id", "name", "type"],
+                  "additionalProperties": false
+                },
+                {
+                  "title": "Updated At Field",
+                  "description": "Automatically updated timestamp when record is modified (read-only)",
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "$ref": "#/definitions/id"
+                    },
+                    "name": {
+                      "$ref": "#/definitions/name"
+                    },
+                    "type": {
+                      "type": "string",
+                      "const": "updated-at"
+                    },
+                    "indexed": {
+                      "type": "boolean",
+                      "default": true
+                    }
+                  },
+                  "required": ["id", "name", "type"],
+                  "additionalProperties": false
+                },
+                {
+                  "title": "Created By Field",
+                  "description": "Automatically set user who created the record (read-only)",
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "$ref": "#/definitions/id"
+                    },
+                    "name": {
+                      "$ref": "#/definitions/name"
+                    },
+                    "type": {
+                      "type": "string",
+                      "const": "created-by"
+                    },
+                    "indexed": {
+                      "type": "boolean",
+                      "default": true
+                    }
+                  },
+                  "required": ["id", "name", "type"],
+                  "additionalProperties": false
+                },
+                {
+                  "title": "Updated By Field",
+                  "description": "Automatically updated with user who last modified the record (read-only)",
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "$ref": "#/definitions/id"
+                    },
+                    "name": {
+                      "$ref": "#/definitions/name"
+                    },
+                    "type": {
+                      "type": "string",
+                      "const": "updated-by"
+                    },
+                    "indexed": {
+                      "type": "boolean",
+                      "default": true
+                    }
+                  },
+                  "required": ["id", "name", "type"],
+                  "additionalProperties": false
+                },
+                {
+                  "title": "Rating Field",
+                  "description": "Star rating or numeric score",
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "$ref": "#/definitions/id"
+                    },
+                    "name": {
+                      "$ref": "#/definitions/name"
+                    },
+                    "required": {
+                      "type": "boolean",
+                      "default": false
+                    },
+                    "type": {
+                      "type": "string",
+                      "const": "rating"
+                    },
+                    "max": {
+                      "type": "integer",
+                      "minimum": 1,
+                      "maximum": 10,
+                      "default": 5,
+                      "description": "Maximum rating value"
+                    },
+                    "style": {
+                      "type": "string",
+                      "enum": ["star", "number", "heart"],
+                      "default": "star",
+                      "description": "Visual style for the rating"
+                    }
+                  },
+                  "required": ["id", "name", "type"],
+                  "additionalProperties": false
+                },
+                {
+                  "title": "Duration Field",
+                  "description": "Time duration in hours, minutes, and seconds",
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "$ref": "#/definitions/id"
+                    },
+                    "name": {
+                      "$ref": "#/definitions/name"
+                    },
+                    "required": {
+                      "type": "boolean",
+                      "default": false
+                    },
+                    "type": {
+                      "type": "string",
+                      "const": "duration"
+                    },
+                    "format": {
+                      "type": "string",
+                      "enum": ["h:mm", "h:mm:ss", "minutes", "seconds"],
+                      "default": "h:mm:ss",
+                      "description": "Display format for the duration"
+                    }
+                  },
+                  "required": ["id", "name", "type"],
+                  "additionalProperties": false
+                },
+                {
+                  "title": "Rich Text Field",
+                  "description": "Formatted text with markdown support",
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "$ref": "#/definitions/id"
+                    },
+                    "name": {
+                      "$ref": "#/definitions/name"
+                    },
+                    "required": {
+                      "type": "boolean",
+                      "default": false
+                    },
+                    "type": {
+                      "type": "string",
+                      "const": "rich-text"
+                    },
+                    "maxLength": {
+                      "type": "integer",
+                      "minimum": 1,
+                      "description": "Maximum length in characters"
+                    }
+                  },
+                  "required": ["id", "name", "type"],
+                  "additionalProperties": false
+                },
+                {
+                  "title": "Status Field",
+                  "description": "Workflow status with customizable options and colors",
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "$ref": "#/definitions/id"
+                    },
+                    "name": {
+                      "$ref": "#/definitions/name"
+                    },
+                    "required": {
+                      "type": "boolean",
+                      "default": false
+                    },
+                    "indexed": {
+                      "type": "boolean",
+                      "default": true
+                    },
+                    "type": {
+                      "type": "string",
+                      "const": "status"
+                    },
+                    "options": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "value": {
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          "color": {
+                            "type": "string",
+                            "pattern": "^#[0-9a-fA-F]{6}$",
+                            "description": "Hex color code for the status"
+                          }
+                        },
+                        "required": ["value"]
+                      },
+                      "minItems": 1
+                    },
+                    "default": {
+                      "type": "string"
+                    }
+                  },
+                  "required": ["id", "name", "type", "options"],
+                  "additionalProperties": false
+                },
+                {
+                  "title": "Button Field",
+                  "description": "Trigger actions or open URLs",
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "$ref": "#/definitions/id"
+                    },
+                    "name": {
+                      "$ref": "#/definitions/name"
+                    },
+                    "type": {
+                      "type": "string",
+                      "const": "button"
+                    },
+                    "label": {
+                      "type": "string",
+                      "description": "Button text label",
+                      "minLength": 1
+                    },
+                    "action": {
+                      "type": "string",
+                      "enum": ["url", "automation"],
+                      "description": "Type of action to trigger"
+                    },
+                    "url": {
+                      "type": "string",
+                      "description": "URL to open (when action is 'url')"
+                    },
+                    "automation": {
+                      "type": "string",
+                      "description": "Automation name to trigger (when action is 'automation')"
+                    }
+                  },
+                  "required": ["id", "name", "type", "label", "action"],
+                  "additionalProperties": false
+                },
+                {
+                  "title": "Autonumber Field",
+                  "description": "Auto-incrementing unique number (read-only)",
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "$ref": "#/definitions/id"
+                    },
+                    "name": {
+                      "$ref": "#/definitions/name"
+                    },
+                    "type": {
+                      "type": "string",
+                      "const": "autonumber"
+                    },
+                    "prefix": {
+                      "type": "string",
+                      "description": "Optional prefix for the autonumber",
+                      "examples": ["INV-", "ORD-", ""]
+                    },
+                    "startFrom": {
+                      "type": "integer",
+                      "minimum": 1,
+                      "default": 1,
+                      "description": "Starting number"
+                    },
+                    "digits": {
+                      "type": "integer",
+                      "minimum": 1,
+                      "maximum": 10,
+                      "default": 3,
+                      "description": "Number of digits with zero padding"
+                    }
+                  },
+                  "required": ["id", "name", "type"],
+                  "additionalProperties": false
+                },
+                {
+                  "title": "Barcode Field",
+                  "description": "Display and scan barcodes",
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "$ref": "#/definitions/id"
+                    },
+                    "name": {
+                      "$ref": "#/definitions/name"
+                    },
+                    "required": {
+                      "type": "boolean",
+                      "default": false
+                    },
+                    "type": {
+                      "type": "string",
+                      "const": "barcode"
+                    },
+                    "format": {
+                      "type": "string",
+                      "enum": ["qr", "ean13", "code128", "code39"],
+                      "default": "qr",
+                      "description": "Barcode format"
+                    }
+                  },
+                  "required": ["id", "name", "type"],
+                  "additionalProperties": false
+                },
+                {
+                  "title": "Progress Field",
+                  "description": "Visual progress bar (0-100%)",
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "$ref": "#/definitions/id"
+                    },
+                    "name": {
+                      "$ref": "#/definitions/name"
+                    },
+                    "required": {
+                      "type": "boolean",
+                      "default": false
+                    },
+                    "type": {
+                      "type": "string",
+                      "const": "progress"
+                    },
+                    "color": {
+                      "type": "string",
+                      "pattern": "^#[0-9a-fA-F]{6}$",
+                      "description": "Color of the progress bar"
+                    }
+                  },
+                  "required": ["id", "name", "type"],
+                  "additionalProperties": false
+                },
+                {
+                  "title": "Color Field",
+                  "description": "Color picker for hex colors",
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "$ref": "#/definitions/id"
+                    },
+                    "name": {
+                      "$ref": "#/definitions/name"
+                    },
+                    "required": {
+                      "type": "boolean",
+                      "default": false
+                    },
+                    "type": {
+                      "type": "string",
+                      "const": "color"
+                    },
+                    "default": {
+                      "type": "string",
+                      "pattern": "^#[0-9a-fA-F]{6}$"
+                    }
+                  },
+                  "required": ["id", "name", "type"],
+                  "additionalProperties": false
+                },
+                {
+                  "title": "Geolocation Field",
+                  "description": "Geographic coordinates (latitude/longitude)",
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "$ref": "#/definitions/id"
+                    },
+                    "name": {
+                      "$ref": "#/definitions/name"
+                    },
+                    "required": {
+                      "type": "boolean",
+                      "default": false
+                    },
+                    "type": {
+                      "type": "string",
+                      "const": "geolocation"
+                    }
+                  },
+                  "required": ["id", "name", "type"],
+                  "additionalProperties": false
+                },
+                {
+                  "title": "JSON Field",
+                  "description": "Store structured JSON data",
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "$ref": "#/definitions/id"
+                    },
+                    "name": {
+                      "$ref": "#/definitions/name"
+                    },
+                    "required": {
+                      "type": "boolean",
+                      "default": false
+                    },
+                    "type": {
+                      "type": "string",
+                      "const": "json"
+                    },
+                    "schema": {
+                      "type": "object",
+                      "description": "Optional JSON Schema to validate the data"
+                    }
+                  },
+                  "required": ["id", "name", "type"],
+                  "additionalProperties": false
+                },
+                {
+                  "title": "Array Field",
+                  "description": "List of values (tags, keywords)",
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "$ref": "#/definitions/id"
+                    },
+                    "name": {
+                      "$ref": "#/definitions/name"
+                    },
+                    "required": {
+                      "type": "boolean",
+                      "default": false
+                    },
+                    "type": {
+                      "type": "string",
+                      "const": "array"
+                    },
+                    "itemType": {
+                      "type": "string",
+                      "enum": ["text", "number"],
+                      "default": "text",
+                      "description": "Type of items in the array"
+                    },
+                    "maxItems": {
+                      "type": "integer",
+                      "minimum": 1,
+                      "description": "Maximum number of items allowed"
+                    }
+                  },
+                  "required": ["id", "name", "type"],
+                  "additionalProperties": false
                 }
               ]
+            }
+          },
+          "primaryKey": {
+            "description": "Primary key configuration for the table. The primary key uniquely identifies each row and is automatically indexed.",
+            "title": "Primary Key",
+            "type": "object",
+            "examples": [
+              { "type": "auto-increment", "field": "id" },
+              { "type": "uuid", "field": "id" },
+              { "type": "composite", "fields": ["tenant_id", "user_id"] }
+            ],
+            "properties": {
+              "type": {
+                "type": "string",
+                "enum": ["auto-increment", "uuid", "composite"],
+                "default": "auto-increment",
+                "description": "Primary key generation strategy. 'auto-increment' uses sequential integers (1, 2, 3...), 'uuid' generates random unique identifiers, 'composite' uses multiple fields together."
+              },
+              "field": {
+                "type": "string",
+                "description": "Field name for single-column primary key. Only used with 'auto-increment' or 'uuid' type.",
+                "default": "id",
+                "pattern": "^[a-z][a-z0-9_]*$",
+                "examples": ["id", "user_id", "product_id"]
+              },
+              "fields": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "description": "Field names for composite primary key. Only used when type is 'composite'. The combination of these fields must be unique.",
+                "minItems": 2,
+                "examples": [
+                  ["tenant_id", "user_id"],
+                  ["order_id", "product_id"]
+                ]
+              }
+            },
+            "required": ["type"],
+            "additionalProperties": false
+          },
+          "uniqueConstraints": {
+            "description": "Composite unique constraints ensure that combinations of multiple field values are unique across all rows. Use this when you need uniqueness across multiple fields (e.g., email + tenant_id must be unique together).",
+            "title": "Unique Constraints",
+            "type": "array",
+            "default": [],
+            "examples": [
+              [
+                {
+                  "name": "uq_user_email_tenant",
+                  "fields": ["email", "tenant_id"]
+                },
+                {
+                  "name": "uq_product_sku_variant",
+                  "fields": ["sku", "variant_id"]
+                }
+              ]
+            ],
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "description": "Name of the unique constraint. Use descriptive names like 'uq_tablename_field1_field2'",
+                  "minLength": 1,
+                  "pattern": "^[a-z][a-z0-9_]*$",
+                  "examples": [
+                    "uq_users_email_tenant",
+                    "uq_products_sku_variant",
+                    "uq_orders_number_year"
+                  ]
+                },
+                "fields": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "description": "Field names that must be unique together. The combination of values in these fields must be unique across all rows.",
+                  "minItems": 2,
+                  "examples": [
+                    ["email", "tenant_id"],
+                    ["first_name", "last_name", "birth_date"]
+                  ]
+                }
+              },
+              "required": ["name", "fields"],
+              "additionalProperties": false
+            }
+          },
+          "indexes": {
+            "description": "Custom database indexes for query optimization. Indexes improve query performance by creating efficient lookup structures for specified fields.",
+            "title": "Database Indexes",
+            "type": "array",
+            "default": [],
+            "examples": [
+              [
+                {
+                  "name": "idx_user_email",
+                  "fields": ["email"]
+                },
+                {
+                  "name": "idx_user_created",
+                  "fields": ["created_at"],
+                  "unique": false
+                }
+              ]
+            ],
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "description": "Name of the index. Use descriptive names like 'idx_tablename_fieldname'",
+                  "minLength": 1,
+                  "pattern": "^[a-z][a-z0-9_]*$",
+                  "examples": ["idx_users_email", "idx_products_sku", "idx_orders_status"]
+                },
+                "fields": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "description": "Field names to include in the index. Order matters for multi-column indexes.",
+                  "minItems": 1,
+                  "examples": [["email"], ["first_name", "last_name"], ["status", "created_at"]]
+                },
+                "unique": {
+                  "type": "boolean",
+                  "default": false,
+                  "description": "Whether this index enforces uniqueness. Use this for unique constraints across multiple fields."
+                }
+              },
+              "required": ["name", "fields"],
+              "additionalProperties": false
             }
           }
         },
@@ -1218,11 +4240,11 @@
       "default": [],
       "type": "array",
       "items": {
-        "$comment": "Automations schema from original - keeping as-is since it's comprehensive"
+        "$ref": "#/definitions/automation"
       }
     },
     "connections": {
-      "description": "External service connections and API integrations",
+      "description": "Connect your application to external services like Calendly, Airtable, Google, LinkedIn, or Facebook",
       "title": "Connections",
       "uiSchema": {
         "ui:ArrayFieldTemplate": "collapsible",
@@ -1235,21 +4257,240 @@
       "default": [],
       "type": "array",
       "items": {
-        "$comment": "Connections schema from original - keeping as-is since it's comprehensive"
+        "title": "Service Connection",
+        "description": "Connect to an external service",
+        "uiSchema": {
+          "ui:widget": "connection-selector",
+          "ui:options": {
+            "showIcon": true,
+            "groupBy": "category"
+          }
+        },
+        "anyOf": [
+          {
+            "title": "Calendly",
+            "description": "The Calendly connection is a connection to the Calendly API",
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 9007199254740991
+              },
+              "name": {
+                "type": "string"
+              },
+              "clientId": {
+                "type": "string"
+              },
+              "clientSecret": {
+                "type": "string"
+              },
+              "service": {
+                "type": "string",
+                "const": "calendly"
+              }
+            },
+            "required": ["id", "name", "clientId", "clientSecret", "service"],
+            "additionalProperties": false
+          },
+          {
+            "title": "Airtable",
+            "description": "The Airtable connection is a connection to the Airtable API",
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 9007199254740991
+              },
+              "name": {
+                "type": "string"
+              },
+              "clientId": {
+                "type": "string"
+              },
+              "clientSecret": {
+                "type": "string"
+              },
+              "service": {
+                "type": "string",
+                "const": "airtable"
+              }
+            },
+            "required": ["id", "name", "clientId", "clientSecret", "service"],
+            "additionalProperties": false
+          },
+          {
+            "anyOf": [
+              {
+                "title": "Google Gmail",
+                "description": "The Google Gmail connection is a connection to the Google Gmail API",
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 9007199254740991
+                  },
+                  "name": {
+                    "type": "string"
+                  },
+                  "clientId": {
+                    "type": "string"
+                  },
+                  "clientSecret": {
+                    "type": "string"
+                  },
+                  "service": {
+                    "type": "string",
+                    "const": "google-gmail"
+                  }
+                },
+                "required": ["id", "name", "clientId", "clientSecret", "service"],
+                "additionalProperties": false
+              },
+              {
+                "title": "Google Sheets",
+                "description": "The Google Sheets connection is a connection to the Google Sheets API",
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 9007199254740991
+                  },
+                  "name": {
+                    "type": "string"
+                  },
+                  "clientId": {
+                    "type": "string"
+                  },
+                  "clientSecret": {
+                    "type": "string"
+                  },
+                  "service": {
+                    "type": "string",
+                    "const": "google-sheets"
+                  }
+                },
+                "required": ["id", "name", "clientId", "clientSecret", "service"],
+                "additionalProperties": false
+              }
+            ]
+          },
+          {
+            "title": "LinkedIn Ads",
+            "description": "The LinkedIn Ads connection is a connection to the LinkedIn Ads API",
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 9007199254740991
+              },
+              "name": {
+                "type": "string"
+              },
+              "clientId": {
+                "type": "string"
+              },
+              "clientSecret": {
+                "type": "string"
+              },
+              "service": {
+                "type": "string",
+                "const": "linkedin-ads"
+              }
+            },
+            "required": ["id", "name", "clientId", "clientSecret", "service"],
+            "additionalProperties": false
+          },
+          {
+            "title": "Facebook Ads",
+            "description": "The Facebook Ads connection is a connection to the Facebook Ads API",
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 9007199254740991
+              },
+              "name": {
+                "type": "string"
+              },
+              "clientId": {
+                "type": "string"
+              },
+              "clientSecret": {
+                "type": "string"
+              },
+              "service": {
+                "type": "string",
+                "const": "facebook-ads"
+              }
+            },
+            "required": ["id", "name", "clientId", "clientSecret", "service"],
+            "additionalProperties": false
+          },
+          {
+            "title": "Notion",
+            "description": "The Notion connection is a connection to the Notion API",
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 9007199254740991
+              },
+              "name": {
+                "type": "string"
+              },
+              "clientId": {
+                "type": "string"
+              },
+              "clientSecret": {
+                "type": "string"
+              },
+              "service": {
+                "type": "string",
+                "const": "notion"
+              }
+            },
+            "required": ["id", "name", "clientId", "clientSecret", "service"],
+            "additionalProperties": false
+          },
+          {
+            "title": "Qonto",
+            "description": "The Qonto connection is a connection to the Qonto API",
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 9007199254740991
+              },
+              "name": {
+                "type": "string"
+              },
+              "clientId": {
+                "type": "string"
+              },
+              "clientSecret": {
+                "type": "string"
+              },
+              "service": {
+                "type": "string",
+                "const": "qonto"
+              }
+            },
+            "required": ["id", "name", "clientId", "clientSecret", "service"],
+            "additionalProperties": false
+          }
+        ]
       }
     }
   },
-  "required": [
-    "name",
-    "description",
-    "icon",
-    "color",
-    "appVersion",
-    "schemaVersion",
-    "tables",
-    "pages",
-    "automations",
-    "connections"
-  ],
+  "required": ["name", "description", "version", "tables", "pages", "automations", "connections"],
   "additionalProperties": false
 }

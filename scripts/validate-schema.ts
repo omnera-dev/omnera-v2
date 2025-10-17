@@ -100,10 +100,7 @@ async function validateWithAjv() {
     const sampleDoc = {
       name: 'Test App',
       description: 'A test application',
-      icon: 'globe',
-      color: 'blue',
-      appVersion: '1.0.0',
-      schemaVersion: 'latest',
+      version: '1.0.0',
       tables: [],
       pages: [
         {

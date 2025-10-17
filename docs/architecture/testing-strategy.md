@@ -161,9 +161,11 @@ For detailed information, import the relevant documentation file:
   - Error: "Unit tests must use Bun Test"
 
 **What IS Enforced**:
+
 - ✅ Import restrictions (which test tool is used where)
 
 **What is NOT Enforced**:
+
 - ❌ File naming convention (`.spec.ts` vs `.test.ts` - by convention only)
 
 ### Manual Enforcement (Code Review Required)

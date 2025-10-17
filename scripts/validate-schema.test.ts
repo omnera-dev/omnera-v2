@@ -73,11 +73,19 @@ describe('validate-schema.ts', () => {
       if (schema.definitions) {
         Object.entries(schema.definitions).forEach(([_key, def]) => {
           expect(def).toBeDefined()
-          expect((def as Record<string, any>).type).toBeDefined()
 
-          // Check that type is valid JSON Schema type
-          const validTypes = ['string', 'number', 'integer', 'boolean', 'object', 'array', 'null']
           const defTyped = def as Record<string, any>
+          // Definitions should have either a type, $ref, or combiners (anyOf/oneOf/allOf)
+          const hasType = defTyped.type !== undefined
+          const hasRef = defTyped.$ref !== undefined
+          const hasAnyOf = defTyped.anyOf !== undefined
+          const hasOneOf = defTyped.oneOf !== undefined
+          const hasAllOf = defTyped.allOf !== undefined
+
+          expect(hasType || hasRef || hasAnyOf || hasOneOf || hasAllOf).toBe(true)
+
+          // Check that type is valid JSON Schema type if present
+          const validTypes = ['string', 'number', 'integer', 'boolean', 'object', 'array', 'null']
           if (typeof defTyped.type === 'string') {
             expect(validTypes).toContain(defTyped.type)
           }
@@ -165,10 +173,7 @@ describe('validate-schema.ts', () => {
       const expectedProps = [
         'name',
         'description',
-        'icon',
-        'color',
-        'appVersion',
-        'schemaVersion',
+        'version',
         'tables',
         'pages',
         'automations',
@@ -192,8 +197,8 @@ describe('validate-schema.ts', () => {
     })
 
     test('version follows semantic versioning pattern', () => {
-      if (schema.properties.appVersion.pattern) {
-        const { pattern } = schema.properties.appVersion
+      if (schema.properties.version.pattern) {
+        const { pattern } = schema.properties.version
         // Test valid semver strings
         const validVersions = ['1.0.0', '2.1.3', '0.5.0-beta']
         validVersions.forEach((version) => {
@@ -242,10 +247,7 @@ describe('validate-schema.ts', () => {
       const minimalDoc = {
         name: 'Test App',
         description: 'Test description',
-        icon: 'globe',
-        color: 'blue',
-        appVersion: '1.0.0',
-        schemaVersion: 'latest',
+        version: '1.0.0',
         tables: [],
         pages: [
           {
@@ -264,20 +266,6 @@ describe('validate-schema.ts', () => {
       schema.required.forEach((field: string) => {
         expect(minimalDoc[field as keyof typeof minimalDoc]).toBeDefined()
       })
-    })
-
-    test('icon enum values are valid', () => {
-      const iconEnum = schema.properties.icon.enum
-      expect(iconEnum).toBeInstanceOf(Array)
-      expect(iconEnum.length).toBeGreaterThan(0)
-      expect(iconEnum).toContain('globe')
-    })
-
-    test('color enum values are valid', () => {
-      const colorEnum = schema.properties.color.enum
-      expect(colorEnum).toBeInstanceOf(Array)
-      expect(colorEnum.length).toBeGreaterThan(0)
-      expect(colorEnum).toContain('blue')
     })
   })
 })
