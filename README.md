@@ -1,6 +1,6 @@
 # Omnera
 
-> **⚠️ Early Development**: Omnera is in Phase 1 (Foundation). See [STATUS.md](STATUS.md) for implementation progress and [docs/specifications.md](docs/specifications.md) for the full product vision.
+> **⚠️ Early Development**: Omnera is in Phase 0 (Foundation). See [ROADMAP.md](ROADMAP.md) for implementation progress and [docs/specifications/vision.md](docs/specifications/vision.md) for the full product vision.
 
 A configuration-driven web application platform built with Bun, Effect, React, and Tailwind CSS.
 
@@ -78,7 +78,7 @@ start(myApp, {
 - ✅ **Type Safety** - Effect Schema validation for configuration
 - ✅ **Graceful Shutdown** - Automatic SIGINT/SIGTERM handling
 
-**Coming Soon** (see [STATUS.md](STATUS.md)):
+**Coming Soon** (see [ROADMAP.md](ROADMAP.md)):
 
 - 📋 Database integration (PostgreSQL + Drizzle ORM)
 - 📋 Authentication (Better Auth)
@@ -128,31 +128,50 @@ bun --watch src/index.ts         # Auto-reload on changes
 ```
 omnera-v2/
 ├── docs/                           # Detailed documentation
-│   ├── specifications.md           # Product vision & roadmap
+│   ├── specifications/             # Product vision & roadmap
+│   │   ├── vision.md               # Target state and product vision
+│   │   └── roadmap/                # Generated implementation roadmap
 │   ├── architecture/               # Architecture patterns
+│   ├── development/                # Development workflows
 │   └── infrastructure/             # Tech stack docs
-├── src/
+├── src/                            # Layer-based architecture
 │   ├── index.ts                    # Main entry point
-│   ├── application/                # Use cases (Effect programs)
-│   ├── domain/                     # Business logic (pure functions)
-│   ├── infrastructure/             # External services
-│   └── presentation/               # UI components & routes
+│   ├── domain/                     # Domain Layer - Pure business logic
+│   ├── application/                # Application Layer - Use cases
+│   ├── infrastructure/             # Infrastructure Layer - External services
+│   └── presentation/               # Presentation Layer - UI & API routes
+├── scripts/                        # Build & utility scripts (TypeScript)
 ├── templates/                      # Example applications
 │   └── landing-page.ts             # Minimal landing page template
 ├── tests/                          # E2E tests (Playwright)
-├── STATUS.md                       # Implementation progress tracker
-├── CLAUDE.md                       # Technical documentation
-└── README.md                       # This file
+├── ROADMAP.md                      # Implementation progress tracker
+├── CLAUDE.md                       # Technical documentation (for AI/developers)
+└── README.md                       # This file (for humans on GitHub)
 ```
 
 ## Documentation
 
-| Document                                             | Purpose                                    |
-| ---------------------------------------------------- | ------------------------------------------ |
-| **[README.md](README.md)**                           | Quick start guide (you are here)           |
-| **[STATUS.md](STATUS.md)**                           | Current implementation status & roadmap    |
-| **[CLAUDE.md](CLAUDE.md)**                           | Technical documentation & coding standards |
-| **[docs/specifications.md](docs/specifications.md)** | Product vision & future features           |
+> **Note**: This README uses standard markdown links for GitHub rendering. Developers working with Claude Code should reference [CLAUDE.md](CLAUDE.md), which uses `@docs/` syntax optimized for AI-assisted development.
+
+### Quick Reference
+
+| Document                                                           | Purpose                                    |
+| ------------------------------------------------------------------ | ------------------------------------------ |
+| **[README.md](README.md)**                                         | Quick start guide (you are here)           |
+| **[ROADMAP.md](ROADMAP.md)**                                       | Current implementation status & roadmap    |
+| **[CLAUDE.md](CLAUDE.md)**                                         | Technical documentation & coding standards |
+| **[docs/specifications/vision.md](docs/specifications/vision.md)** | Product vision & future features           |
+
+### Detailed Documentation
+
+For comprehensive documentation on architecture, infrastructure, and development workflows, explore the `docs/` directory:
+
+- **[docs/specifications/](docs/specifications/)** - Product vision and roadmap
+- **[docs/architecture/](docs/architecture/)** - Architecture patterns and principles
+- **[docs/infrastructure/](docs/infrastructure/)** - Technology stack documentation
+- **[docs/development/](docs/development/)** - Development workflows and agent collaboration
+
+All detailed documentation is imported on-demand when needed (see [CLAUDE.md](CLAUDE.md) for the complete reference).
 
 ## Why Bun?
 
@@ -210,4 +229,4 @@ See [LICENSE.md](LICENSE.md) for full details.
 
 ---
 
-**Questions or feedback?** Open an issue on [GitHub](https://github.com/omnera/omnera) or check the [documentation](docs/specifications.md).
+**Questions or feedback?** Open an issue on [GitHub](https://github.com/omnera/omnera) or check the [documentation](docs/specifications/vision.md).
