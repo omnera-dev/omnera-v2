@@ -10,12 +10,6 @@ import { DescriptionSchema } from './description'
 import { NameSchema } from './name'
 import { VersionSchema } from './version'
 
-// Re-export all domain model schemas and types for convenient imports
-export * from './name'
-export * from './version'
-export * from './description'
-export * from './tables'
-
 /**
  * AppSchema defines the structure of an application configuration.
  *
@@ -112,3 +106,9 @@ export type App = Schema.Schema.Type<typeof AppSchema>
  * In this case, it's the same as App since we don't use transformations.
  */
 export type AppEncoded = Schema.Schema.Encoded<typeof AppSchema>
+
+// Re-export all domain model schemas and types for convenient imports
+export * from './name'
+export * from './version'
+export * from './description'
+export * from './tables'

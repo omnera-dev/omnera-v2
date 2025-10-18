@@ -28,7 +28,6 @@ import { BaseFieldSchema } from './base-field'
 export const GeolocationFieldSchema = BaseFieldSchema.pipe(
   Schema.extend(
     Schema.Struct({
-      required: Schema.optional(Schema.Boolean),
       type: Schema.Literal('geolocation'),
     })
   )

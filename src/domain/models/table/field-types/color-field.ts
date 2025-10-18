@@ -29,7 +29,6 @@ import { BaseFieldSchema } from './base-field'
 export const ColorFieldSchema = BaseFieldSchema.pipe(
   Schema.extend(
     Schema.Struct({
-      required: Schema.optional(Schema.Boolean),
       type: Schema.Literal('color'),
       default: Schema.optional(
         Schema.String.pipe(

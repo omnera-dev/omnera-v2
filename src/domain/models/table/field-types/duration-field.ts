@@ -29,7 +29,6 @@ import { BaseFieldSchema } from './base-field'
 export const DurationFieldSchema = BaseFieldSchema.pipe(
   Schema.extend(
     Schema.Struct({
-      required: Schema.optional(Schema.Boolean),
       type: Schema.Literal('duration'),
       format: Schema.optional(
         Schema.String.pipe(

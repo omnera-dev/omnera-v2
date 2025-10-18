@@ -30,7 +30,6 @@ export const CreatedByFieldSchema = BaseFieldSchema.pipe(
   Schema.extend(
     Schema.Struct({
       type: Schema.Literal('created-by'),
-      indexed: Schema.optional(Schema.Boolean),
     })
   )
 ).pipe(

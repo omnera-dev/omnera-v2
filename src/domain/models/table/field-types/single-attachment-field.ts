@@ -11,8 +11,6 @@ import { BaseFieldSchema } from './base-field'
 export const SingleAttachmentFieldSchema = BaseFieldSchema.pipe(
   Schema.extend(
     Schema.Struct({
-      required: Schema.optional(Schema.Boolean),
-      indexed: Schema.optional(Schema.Boolean),
       type: Schema.Literal('single-attachment'),
       storage: Schema.optional(
         Schema.Struct({

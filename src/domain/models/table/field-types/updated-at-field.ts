@@ -30,7 +30,6 @@ export const UpdatedAtFieldSchema = BaseFieldSchema.pipe(
   Schema.extend(
     Schema.Struct({
       type: Schema.Literal('updated-at'),
-      indexed: Schema.optional(Schema.Boolean),
     })
   )
 ).pipe(

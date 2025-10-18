@@ -11,8 +11,6 @@ import { BaseFieldSchema } from './base-field'
 export const RelationshipFieldSchema = BaseFieldSchema.pipe(
   Schema.extend(
     Schema.Struct({
-      required: Schema.optional(Schema.Boolean),
-      indexed: Schema.optional(Schema.Boolean),
       type: Schema.Literal('relationship'),
       relatedTable: Schema.String.pipe(
         Schema.minLength(1, { message: () => 'This field is required' }),

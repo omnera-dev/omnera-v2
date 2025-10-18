@@ -11,8 +11,6 @@ import { BaseFieldSchema } from './base-field'
 export const MultipleAttachmentsFieldSchema = BaseFieldSchema.pipe(
   Schema.extend(
     Schema.Struct({
-      required: Schema.optional(Schema.Boolean),
-      indexed: Schema.optional(Schema.Boolean),
       type: Schema.Literal('multiple-attachments'),
       maxFiles: Schema.optional(
         Schema.Int.pipe(

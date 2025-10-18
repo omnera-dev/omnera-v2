@@ -29,7 +29,6 @@ export const CreatedAtFieldSchema = BaseFieldSchema.pipe(
   Schema.extend(
     Schema.Struct({
       type: Schema.Literal('created-at'),
-      indexed: Schema.optional(Schema.Boolean),
     })
   )
 ).pipe(

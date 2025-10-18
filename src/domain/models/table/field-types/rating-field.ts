@@ -29,7 +29,6 @@ import { BaseFieldSchema } from './base-field'
 export const RatingFieldSchema = BaseFieldSchema.pipe(
   Schema.extend(
     Schema.Struct({
-      required: Schema.optional(Schema.Boolean),
       type: Schema.Literal('rating'),
       max: Schema.optional(
         Schema.Int.pipe(

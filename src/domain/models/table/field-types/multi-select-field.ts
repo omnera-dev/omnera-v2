@@ -11,8 +11,6 @@ import { BaseFieldSchema } from './base-field'
 export const MultiSelectFieldSchema = BaseFieldSchema.pipe(
   Schema.extend(
     Schema.Struct({
-      required: Schema.optional(Schema.Boolean),
-      indexed: Schema.optional(Schema.Boolean),
       type: Schema.Literal('multi-select'),
       options: Schema.Array(Schema.String),
       maxSelections: Schema.optional(

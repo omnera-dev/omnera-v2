@@ -219,14 +219,14 @@ Here's how all three layers combine to create a comprehensive specification:
 
 ### How Each Audience Benefits
 
-| Audience                           | Layer Used                         | Benefit                                                                                             |
-| ---------------------------------- | ---------------------------------- | --------------------------------------------------------------------------------------------------- |
-| **Frontend Developer**             | What (description, type, examples) | "I need to render an ID - it's an integer between 1 and 9007199254740991"                           |
-| **Backend Engineer**               | Why (x-business-rules)             | "IDs are auto-generated and immutable - I shouldn't allow manual assignment"                        |
-| **QA Tester**                      | Who/When (x-user-stories)          | "I need to test that IDs remain unchanged after updates"                                            |
-| **Product Manager**                | All three layers                   | "IDs are auto-generated (What), to ensure uniqueness (Why), and users can't change them (Who/When)" |
-| **AI Agent (e2e-test-translator)** | Who/When (x-user-stories)          | "Generate a test: GIVEN entity updated WHEN ID checked THEN ID unchanged"                           |
-| **AI Agent (effect-schema-translator)**    | What + Why                         | "Implement Effect Schema with min(1), max(MAX_SAFE_INTEGER), and auto-generation logic"             |
+| Audience                                | Layer Used                         | Benefit                                                                                             |
+| --------------------------------------- | ---------------------------------- | --------------------------------------------------------------------------------------------------- |
+| **Frontend Developer**                  | What (description, type, examples) | "I need to render an ID - it's an integer between 1 and 9007199254740991"                           |
+| **Backend Engineer**                    | Why (x-business-rules)             | "IDs are auto-generated and immutable - I shouldn't allow manual assignment"                        |
+| **QA Tester**                           | Who/When (x-user-stories)          | "I need to test that IDs remain unchanged after updates"                                            |
+| **Product Manager**                     | All three layers                   | "IDs are auto-generated (What), to ensure uniqueness (Why), and users can't change them (Who/When)" |
+| **AI Agent (e2e-test-translator)**      | Who/When (x-user-stories)          | "Generate a test: GIVEN entity updated WHEN ID checked THEN ID unchanged"                           |
+| **AI Agent (effect-schema-translator)** | What + Why                         | "Implement Effect Schema with min(1), max(MAX_SAFE_INTEGER), and auto-generation logic"             |
 
 ---
 

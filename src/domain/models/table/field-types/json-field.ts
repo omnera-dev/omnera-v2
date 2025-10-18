@@ -11,7 +11,6 @@ import { BaseFieldSchema } from './base-field'
 export const JsonFieldSchema = BaseFieldSchema.pipe(
   Schema.extend(
     Schema.Struct({
-      required: Schema.optional(Schema.Boolean),
       type: Schema.Literal('json'),
       schema: Schema.optional(Schema.Struct({})),
     })

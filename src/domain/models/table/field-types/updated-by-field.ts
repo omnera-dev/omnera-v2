@@ -31,7 +31,6 @@ export const UpdatedByFieldSchema = BaseFieldSchema.pipe(
   Schema.extend(
     Schema.Struct({
       type: Schema.Literal('updated-by'),
-      indexed: Schema.optional(Schema.Boolean),
     })
   )
 ).pipe(

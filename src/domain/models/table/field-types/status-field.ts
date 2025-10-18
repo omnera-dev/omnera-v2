@@ -11,8 +11,6 @@ import { BaseFieldSchema } from './base-field'
 export const StatusFieldSchema = BaseFieldSchema.pipe(
   Schema.extend(
     Schema.Struct({
-      required: Schema.optional(Schema.Boolean),
-      indexed: Schema.optional(Schema.Boolean),
       type: Schema.Literal('status'),
       options: Schema.Array(
         Schema.Struct({

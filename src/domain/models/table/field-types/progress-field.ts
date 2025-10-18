@@ -30,7 +30,6 @@ import { BaseFieldSchema } from './base-field'
 export const ProgressFieldSchema = BaseFieldSchema.pipe(
   Schema.extend(
     Schema.Struct({
-      required: Schema.optional(Schema.Boolean),
       type: Schema.Literal('progress'),
       color: Schema.optional(
         Schema.String.pipe(

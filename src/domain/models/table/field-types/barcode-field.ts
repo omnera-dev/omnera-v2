@@ -29,7 +29,6 @@ import { BaseFieldSchema } from './base-field'
 export const BarcodeFieldSchema = BaseFieldSchema.pipe(
   Schema.extend(
     Schema.Struct({
-      required: Schema.optional(Schema.Boolean),
       type: Schema.Literal('barcode'),
       format: Schema.optional(
         Schema.String.pipe(

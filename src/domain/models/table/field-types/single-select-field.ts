@@ -29,8 +29,6 @@ import { BaseFieldSchema } from './base-field'
 export const SingleSelectFieldSchema = BaseFieldSchema.pipe(
   Schema.extend(
     Schema.Struct({
-      required: Schema.optional(Schema.Boolean),
-      indexed: Schema.optional(Schema.Boolean),
       type: Schema.Literal('single-select'),
       options: Schema.Array(Schema.String),
       default: Schema.optional(Schema.String),
