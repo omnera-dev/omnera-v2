@@ -155,6 +155,22 @@ export interface PhaseDocumentation {
 }
 
 /**
+ * User story with implementation status
+ */
+export interface TrackedUserStory {
+  propertyPath: string
+  story: string
+  index: number
+  implemented: boolean
+  matchedTest?: {
+    filePath: string
+    testName: string
+    tag: string
+    confidence: number
+  }
+}
+
+/**
  * Overall roadmap statistics
  */
 export interface RoadmapStats {
@@ -165,6 +181,9 @@ export interface RoadmapStats {
   overallCompletion: number
   currentVersion: string
   targetVersion: string
+  totalUserStories: number
+  implementedUserStories: number
+  testCoverage: number // Percentage of user stories with tests
 }
 
 /**
@@ -174,6 +193,7 @@ export interface RoadmapData {
   stats: RoadmapStats
   properties: PropertyStatus[]
   allProperties: PropertyStatus[]
+  userStories: TrackedUserStory[]
   timestamp: string
 }
 

@@ -14,6 +14,7 @@ import type {
   JSONSchemaProperty,
   PropertyStatus,
   PropertyStatusType,
+  TrackedUserStory,
 } from '../types/roadmap'
 
 /**
@@ -594,7 +595,8 @@ function extractDependencies(
 export function calculateStats(
   statuses: PropertyStatus[],
   currentVersion: string,
-  targetVersion: string
+  targetVersion: string,
+  userStories: TrackedUserStory[] = []
 ) {
   const implemented = statuses.filter((s) => s.status === 'complete').length
   const partial = statuses.filter((s) => s.status === 'partial').length
@@ -605,6 +607,12 @@ export function calculateStats(
     statuses.reduce((sum, s) => sum + s.completionPercent, 0) / total
   )
 
+  // Calculate test coverage statistics
+  const totalUserStories = userStories.length
+  const implementedUserStories = userStories.filter((s) => s.implemented).length
+  const testCoverage =
+    totalUserStories > 0 ? Math.round((implementedUserStories / totalUserStories) * 100) : 0
+
   return {
     totalProperties: total,
     implementedProperties: implemented,
@@ -613,5 +621,8 @@ export function calculateStats(
     overallCompletion,
     currentVersion,
     targetVersion,
+    totalUserStories,
+    implementedUserStories,
+    testCoverage,
   }
 }
