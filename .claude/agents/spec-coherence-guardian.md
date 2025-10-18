@@ -122,7 +122,62 @@ bun run scripts/add-user-stories.ts
 - **Script**: For new properties, bulk updates, consistent story format
 - **Best Practice**: Run script first, then refine generated stories with user validation
 
-### 3. Required Workflow After Schema Modifications
+### 3. Understanding Multi-File Schema Structure
+
+**IMPORTANT**: The schema is now modularized across multiple files using JSON Schema `$ref` for better organization and maintainability.
+
+**Schema File Structure**:
+```
+docs/specifications/
+├── specs.schema.json (root schema with $ref to features)
+└── schemas/
+    ├── common/definitions.schema.json (shared definitions: id, name, path)
+    ├── tables/tables.schema.json (table configuration)
+    ├── automations/automations.schema.json (automation workflows + related definitions)
+    ├── pages/pages.schema.json (page routing)
+    └── connections/connections.schema.json (external integrations)
+```
+
+**How Property Definitions Work**:
+- **Root Schema** (`specs.schema.json`): Contains high-level properties with `$ref` pointing to feature schemas
+- **Feature Schemas** (`schemas/*/`): Contain full property definitions with Triple-Documentation Pattern (description, examples, x-business-rules, x-user-stories)
+- **Common Definitions** (`schemas/common/`): Shared type definitions referenced by feature schemas
+
+**Example - Tables Property**:
+```json
+// specs.schema.json (root)
+{
+  "properties": {
+    "tables": {
+      "$ref": "./schemas/tables/tables.schema.json"
+    }
+  }
+}
+
+// schemas/tables/tables.schema.json (feature schema)
+{
+  "type": "array",
+  "description": "Database table definitions...",
+  "x-business-rules": ["Tables must have unique names..."],
+  "x-user-stories": ["GIVEN user creates table WHEN..."],
+  "items": {
+    "properties": {
+      "id": {
+        "$ref": "../common/definitions.schema.json#/definitions/id"
+      }
+    }
+  }
+}
+```
+
+**When Validating or Modifying Schemas**:
+1. Start at `specs.schema.json` to understand the root structure
+2. Follow `$ref` paths to feature schemas for full property definitions
+3. Check `schemas/common/` for shared type definitions
+4. Ensure all `$ref` paths are valid (use `scripts/validate-schema-refs.ts`)
+5. Validate complete schema structure (use `scripts/validate-schema.ts`)
+
+### 4. Required Workflow After Schema Modifications
 
 **CRITICAL**: After ANY modification to `docs/specifications/specs.schema.json`, you MUST execute this workflow in order:
 

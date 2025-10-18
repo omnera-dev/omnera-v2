@@ -459,6 +459,61 @@ test.fixme('should display badge', { tag: '@spec' }, async () => {
 - **Examples**: Valid configuration values from `examples` field
 - **Description**: Context about what the property does
 
+**Navigating Multi-File Schema Structure**:
+
+The schema is now modularized across multiple files using JSON Schema `$ref`:
+
+```
+docs/specifications/
+├── specs.schema.json (root schema with $ref to features)
+└── schemas/
+    ├── common/definitions.schema.json (id, name, path definitions)
+    ├── tables/tables.schema.json (table configuration with x-user-stories)
+    ├── automations/automations.schema.json (automation workflows with x-user-stories)
+    ├── pages/pages.schema.json (page routing with x-user-stories)
+    └── connections/connections.schema.json (external integrations)
+```
+
+**How to Find User Stories**:
+1. Start at `docs/specifications/specs.schema.json` (root schema)
+2. Look for the property (e.g., `properties.tables`)
+3. If you see `"$ref": "./schemas/tables/tables.schema.json"`:
+   - Navigate to that file to find the x-user-stories array
+   - The file contains all GIVEN-WHEN-THEN scenarios
+4. User stories may reference common definitions:
+   - Follow `"$ref": "../common/definitions.schema.json#/definitions/id"` to understand validation constraints
+
+**Example - Reading Tables User Stories**:
+```typescript
+// Step 1: Read specs.schema.json
+{
+  "properties": {
+    "tables": {
+      "$ref": "./schemas/tables/tables.schema.json"  // ← Follow this ref
+    }
+  }
+}
+
+// Step 2: Read schemas/tables/tables.schema.json
+{
+  "type": "array",
+  "x-user-stories": [
+    "GIVEN user provides tables array WHEN creating app THEN each table should have unique name",
+    "GIVEN table with fields WHEN validating THEN each field must have valid type"
+  ],
+  "items": {
+    "properties": {
+      "name": {
+        "$ref": "../common/definitions.schema.json#/definitions/name",
+        "x-user-stories": [
+          "GIVEN user enters table name WHEN validating THEN name must follow database conventions"
+        ]
+      }
+    }
+  }
+}
+```
+
 **Handoff Protocol FROM spec-coherence-guardian**:
 1. spec-coherence-guardian validates specs.schema.json structure
 2. spec-coherence-guardian ensures property has `x-user-stories` array

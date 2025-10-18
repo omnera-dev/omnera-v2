@@ -607,6 +607,70 @@ If any item fails verification, you must correct it before considering the task 
 - **Metadata**: `description` (what the property does), `examples` (valid values)
 - **Type Information**: JSON Schema type system (string, integer, object, array, etc.)
 
+**Navigating Multi-File Schema Structure**:
+
+The schema is now modularized across multiple files using JSON Schema `$ref`:
+
+```
+docs/specifications/
+├── specs.schema.json (root schema with $ref to features)
+└── schemas/
+    ├── common/definitions.schema.json (id, name, path definitions)
+    ├── tables/tables.schema.json (table configuration)
+    ├── automations/automations.schema.json (automation workflows)
+    ├── pages/pages.schema.json (page routing)
+    └── connections/connections.schema.json (external integrations)
+```
+
+**How to Read Property Definitions**:
+1. Start at `docs/specifications/specs.schema.json` (root schema)
+2. Look for the property (e.g., `properties.tables`)
+3. If you see `"$ref": "./schemas/tables/tables.schema.json"`:
+   - Navigate to that file to find the full property definition
+   - The file contains all validation rules, x-business-rules, x-user-stories
+4. If the feature schema has `$ref` to common definitions:
+   - Follow `"$ref": "../common/definitions.schema.json#/definitions/id"`
+   - Common definitions contain shared types (id, name, path)
+
+**Example - Reading Tables Property**:
+```typescript
+// Step 1: Read specs.schema.json
+{
+  "properties": {
+    "tables": {
+      "$ref": "./schemas/tables/tables.schema.json"  // ← Follow this ref
+    }
+  }
+}
+
+// Step 2: Read schemas/tables/tables.schema.json
+{
+  "type": "array",
+  "items": {
+    "properties": {
+      "id": {
+        "$ref": "../common/definitions.schema.json#/definitions/id"  // ← Follow for id definition
+      },
+      "name": {
+        "$ref": "../common/definitions.schema.json#/definitions/name"
+      },
+      // ... more fields with x-business-rules and x-user-stories
+    }
+  }
+}
+
+// Step 3: Read schemas/common/definitions.schema.json (if needed)
+{
+  "definitions": {
+    "id": {
+      "type": "integer",
+      "minimum": 1,
+      "x-business-rules": ["IDs are auto-generated..."]
+    }
+  }
+}
+```
+
 **Handoff Protocol FROM spec-coherence-guardian**:
 1. spec-coherence-guardian validates specs.schema.json structure
 2. spec-coherence-guardian ensures property has complete Triple-Documentation Pattern
