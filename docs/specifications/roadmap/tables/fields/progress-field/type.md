@@ -6,6 +6,10 @@
 
 ## Implementation Status
 
+**Schema**: 🔴 Not implemented
+
+**Tests**: 🔴 No tests found
+
 ⏳ **Not Started**
 
 ### Required Features
@@ -33,9 +37,9 @@ import { Schema } from 'effect'
 **Implementation**:
 
 ```typescript
-export const Tables.fields.progress-field.typeSchema = Schema.Literal("progress")
+export const TablesFieldsProgressFieldTypeSchema = Schema.Literal("progress")
 
-export type Tables.fields.progress-field.type = Schema.Schema.Type<typeof Tables.fields.progress-field.typeSchema>
+export type TablesFieldsProgressFieldType = Schema.Schema.Type<typeof TablesFieldsProgressFieldTypeSchema>
 ```
 
 ---

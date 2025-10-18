@@ -8,6 +8,10 @@ Starting number
 
 ## Implementation Status
 
+**Schema**: 🔴 Not implemented
+
+**Tests**: 🔴 No tests found
+
 ⏳ **Not Started**
 
 ### Required Features
@@ -36,17 +40,17 @@ import { Schema } from 'effect'
 
 ```typescript
 /**
- *
+ * 
  * Starting number
  */
-export const Tables.fields.autonumber-field.startFromSchema = Schema.Int.pipe(
+export const TablesFieldsAutonumberFieldStartFromSchema = Schema.Int.pipe(
     Schema.greaterThanOrEqualTo(1),
     Schema.annotations({
     description: "Starting number"
   })
   )
 
-export type Tables.fields.autonumber-field.startFrom = Schema.Schema.Type<typeof Tables.fields.autonumber-field.startFromSchema>
+export type TablesFieldsAutonumberFieldStartFrom = Schema.Schema.Type<typeof TablesFieldsAutonumberFieldStartFromSchema>
 ```
 
 ---

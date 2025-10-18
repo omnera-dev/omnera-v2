@@ -6,6 +6,10 @@
 
 ## Implementation Status
 
+**Schema**: 🔴 Not implemented
+
+**Tests**: 🔴 No tests found
+
 ⏳ **Not Started**
 
 ### Required Features
@@ -33,9 +37,9 @@ import { Schema } from 'effect'
 **Implementation**:
 
 ```typescript
-export const Pages.form-page.inputs.text-input.requiredSchema = Schema.Boolean
+export const PagesFormPageInputsTextInputRequiredSchema = Schema.Boolean
 
-export type Pages.form-page.inputs.text-input.required = Schema.Schema.Type<typeof Pages.form-page.inputs.text-input.requiredSchema>
+export type PagesFormPageInputsTextInputRequired = Schema.Schema.Type<typeof PagesFormPageInputsTextInputRequiredSchema>
 ```
 
 ---

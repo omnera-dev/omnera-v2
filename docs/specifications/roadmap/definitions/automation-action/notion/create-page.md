@@ -8,6 +8,10 @@ Creates a new page in Notion
 
 ## Implementation Status
 
+**Schema**: 🔴 Not implemented
+
+**Tests**: 🔴 No tests found
+
 ⏳ **Not Started**
 
 ### Required Features
@@ -37,10 +41,10 @@ import { Schema } from 'effect'
 ```typescript
 /**
  * Create Page
- *
+ * 
  * Creates a new page in Notion
  */
-export const Automation_action.notion.create-pageSchema = Schema.Struct({
+export const AutomationActionNotionCreatePageSchema = Schema.Struct({
     name: Schema.String,
     account: Schema.Union(
       Schema.Number,
@@ -90,7 +94,7 @@ export const Automation_action.notion.create-pageSchema = Schema.Struct({
     description: "Creates a new page in Notion"
   }))
 
-export type Automation_action.notion.create-page = Schema.Schema.Type<typeof Automation_action.notion.create-pageSchema>
+export type AutomationActionNotionCreatePage = Schema.Schema.Type<typeof AutomationActionNotionCreatePageSchema>
 ```
 
 ---

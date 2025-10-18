@@ -22,6 +22,7 @@ import {
   generateSuccessCriteria,
 } from './templates/property-detail-template.ts'
 import { generateRoadmapMarkdown } from './templates/roadmap-template.ts'
+import { formatValidationResults, validateBlueprint } from './utils/blueprint-validator.ts'
 import { generateEffectSchema } from './utils/effect-schema-generator.ts'
 import { getImplementationStatus } from './utils/implementation-checker.ts'
 import {
@@ -29,7 +30,9 @@ import {
   compareSchemas,
   extractAllPropertiesRecursively,
 } from './utils/schema-comparison.ts'
+import { checkPropertyImplementation, runSchemaExport } from './utils/schema-export-runner.ts'
 import { extractUserStoriesFromSchema } from './utils/schema-user-stories-extractor.ts'
+import { checkTestStatus, formatTestStatus } from './utils/test-status-checker.ts'
 import { generateUserStories } from './utils/user-story-generator.ts'
 import type { JSONSchema, PropertyDocumentation, RoadmapData } from './types/roadmap.ts'
 
@@ -136,6 +139,19 @@ async function main() {
   }
   console.log()
 
+  // Run schema export once to check which properties are actually implemented
+  console.log(`🔍 Running schema export to check implementation...`)
+  let currentSchemaExport: JSONSchema
+  try {
+    currentSchemaExport = await runSchemaExport()
+    console.log(`   ✅ Schema export completed successfully`)
+  } catch (error) {
+    console.warn(`   ⚠️  Could not run schema export, skipping implementation checks`)
+    console.warn(`   Error: ${error}`)
+    currentSchemaExport = currentSchema // Fallback to comparison schema
+  }
+  console.log()
+
   // List properties by status
   console.log(`📋 Generating ROADMAP.md...`)
   for (const prop of topLevelProperties) {
@@ -196,6 +212,12 @@ async function main() {
       visionSchema.definitions
     )
 
+    // Validate blueprint before proceeding
+    const validationResult = validateBlueprint(effectSchema, property.visionVersion)
+    if (!validationResult.valid || validationResult.warnings.length > 0) {
+      console.log(formatValidationResults(validationResult, property.name))
+    }
+
     // Extract user stories from schema x-user-stories key
     const schemaUserStories = extractUserStoriesFromSchema(property.name, visionSchema)
 
@@ -211,6 +233,23 @@ async function main() {
       effectSchema,
       userStories,
       successCriteria: [],
+    }
+
+    // Check test status for this property
+    const testStatus = await checkTestStatus(property.name)
+    propertyDoc.testStatus = {
+      testFileExists: testStatus.testFileExists,
+      totalTests: testStatus.summary.total,
+      passingTests: testStatus.summary.passing,
+      fixmeTests: testStatus.summary.fixme,
+      coveragePercent: testStatus.coveragePercent,
+    }
+
+    // Check schema implementation status
+    const schemaStatus = checkPropertyImplementation(property.name, currentSchemaExport)
+    propertyDoc.schemaStatus = {
+      isImplemented: schemaStatus.isImplemented,
+      schemaFilePath: schemaStatus.schemaFilePath,
     }
 
     // Generate success criteria
@@ -242,7 +281,12 @@ async function main() {
       actionIcon = '⏭️'
     }
 
+    // Format status information
+    const schemaStatusIcon = schemaStatus.isImplemented ? '✅' : '🔴'
+    const testStatusFormatted = formatTestStatus(testStatus)
+
     console.log(`   ${statusIcon} ${actionIcon} ${filePath}`)
+    console.log(`      Schema: ${schemaStatusIcon} | Tests: ${testStatusFormatted}`)
   }
 
   console.log()

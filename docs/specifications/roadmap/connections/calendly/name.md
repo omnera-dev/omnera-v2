@@ -6,6 +6,10 @@
 
 ## Implementation Status
 
+**Schema**: 🔴 Not implemented
+
+**Tests**: 🔴 No tests found
+
 ⏳ **Not Started**
 
 ### Required Features
@@ -33,9 +37,9 @@ import { Schema } from 'effect'
 **Implementation**:
 
 ```typescript
-export const Connections.calendly.nameSchema = Schema.String
+export const ConnectionsCalendlyNameSchema = Schema.String
 
-export type Connections.calendly.name = Schema.Schema.Type<typeof Connections.calendly.nameSchema>
+export type ConnectionsCalendlyName = Schema.Schema.Type<typeof ConnectionsCalendlyNameSchema>
 ```
 
 ---

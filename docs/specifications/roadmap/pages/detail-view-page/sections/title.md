@@ -8,6 +8,10 @@ Section title
 
 ## Implementation Status
 
+**Schema**: 🔴 Not implemented
+
+**Tests**: 🔴 No tests found
+
 ⏳ **Not Started**
 
 ### Required Features
@@ -36,17 +40,17 @@ import { Schema } from 'effect'
 
 ```typescript
 /**
- *
+ * 
  * Section title
  */
-export const Pages.detail-view-page.sections.titleSchema = Schema.String.pipe(
+export const PagesDetailViewPageSectionsTitleSchema = Schema.String.pipe(
     Schema.minLength(1, { message: () => 'This field is required' }),
     Schema.annotations({
     description: "Section title"
   })
   )
 
-export type Pages.detail-view-page.sections.title = Schema.Schema.Type<typeof Pages.detail-view-page.sections.titleSchema>
+export type PagesDetailViewPageSectionsTitle = Schema.Schema.Type<typeof PagesDetailViewPageSectionsTitleSchema>
 ```
 
 ---

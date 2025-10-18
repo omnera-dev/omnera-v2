@@ -8,6 +8,10 @@ Automation name to trigger (when action is 'automation')
 
 ## Implementation Status
 
+**Schema**: 🔴 Not implemented
+
+**Tests**: 🔴 No tests found
+
 ⏳ **Not Started**
 
 ### Required Features
@@ -36,16 +40,16 @@ import { Schema } from 'effect'
 
 ```typescript
 /**
- *
+ * 
  * Automation name to trigger (when action is 'automation')
  */
-export const Tables.fields.button-field.automationSchema = Schema.String.pipe(
+export const TablesFieldsButtonFieldAutomationSchema = Schema.String.pipe(
     Schema.annotations({
     description: "Automation name to trigger (when action is 'automation')"
   })
   )
 
-export type Tables.fields.button-field.automation = Schema.Schema.Type<typeof Tables.fields.button-field.automationSchema>
+export type TablesFieldsButtonFieldAutomation = Schema.Schema.Type<typeof TablesFieldsButtonFieldAutomationSchema>
 ```
 
 ---

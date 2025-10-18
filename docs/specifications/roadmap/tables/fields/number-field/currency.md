@@ -8,6 +8,10 @@ Currency code (for currency type)
 
 ## Implementation Status
 
+**Schema**: 🔴 Not implemented
+
+**Tests**: 🔴 No tests found
+
 ⏳ **Not Started**
 
 ### Required Features
@@ -34,25 +38,25 @@ import { Schema } from 'effect'
 
 **Implementation**:
 
-````typescript
+```typescript
 /**
- *
+ * 
  * Currency code (for currency type)
- *
+ * 
  * @example
  * ```typescript
  * "USD"
  * ```
  */
-export const Tables.fields.number-field.currencySchema = Schema.String.pipe(
+export const TablesFieldsNumberFieldCurrencySchema = Schema.String.pipe(
     Schema.annotations({
     description: "Currency code (for currency type)",
     examples: ["USD","EUR","GBP"]
   })
   )
 
-export type Tables.fields.number-field.currency = Schema.Schema.Type<typeof Tables.fields.number-field.currencySchema>
-````
+export type TablesFieldsNumberFieldCurrency = Schema.Schema.Type<typeof TablesFieldsNumberFieldCurrencySchema>
+```
 
 ---
 

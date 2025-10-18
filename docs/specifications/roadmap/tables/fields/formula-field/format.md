@@ -8,6 +8,10 @@ Display format for the result (e.g., currency, percentage)
 
 ## Implementation Status
 
+**Schema**: 🔴 Not implemented
+
+**Tests**: 🔴 No tests found
+
 ⏳ **Not Started**
 
 ### Required Features
@@ -34,25 +38,25 @@ import { Schema } from 'effect'
 
 **Implementation**:
 
-````typescript
+```typescript
 /**
- *
+ * 
  * Display format for the result (e.g., currency, percentage)
- *
+ * 
  * @example
  * ```typescript
  * "currency"
  * ```
  */
-export const Tables.fields.formula-field.formatSchema = Schema.String.pipe(
+export const TablesFieldsFormulaFieldFormatSchema = Schema.String.pipe(
     Schema.annotations({
     description: "Display format for the result (e.g., currency, percentage)",
     examples: ["currency","percentage","decimal","date"]
   })
   )
 
-export type Tables.fields.formula-field.format = Schema.Schema.Type<typeof Tables.fields.formula-field.formatSchema>
-````
+export type TablesFieldsFormulaFieldFormat = Schema.Schema.Type<typeof TablesFieldsFormulaFieldFormatSchema>
+```
 
 ---
 

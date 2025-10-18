@@ -8,6 +8,10 @@ Name of the relationship field to lookup from
 
 ## Implementation Status
 
+**Schema**: 🔴 Not implemented
+
+**Tests**: 🔴 No tests found
+
 ⏳ **Not Started**
 
 ### Required Features
@@ -36,17 +40,17 @@ import { Schema } from 'effect'
 
 ```typescript
 /**
- *
+ * 
  * Name of the relationship field to lookup from
  */
-export const Tables.fields.lookup-field.relationshipFieldSchema = Schema.String.pipe(
+export const TablesFieldsLookupFieldRelationshipFieldSchema = Schema.String.pipe(
     Schema.minLength(1, { message: () => 'This field is required' }),
     Schema.annotations({
     description: "Name of the relationship field to lookup from"
   })
   )
 
-export type Tables.fields.lookup-field.relationshipField = Schema.Schema.Type<typeof Tables.fields.lookup-field.relationshipFieldSchema>
+export type TablesFieldsLookupFieldRelationshipField = Schema.Schema.Type<typeof TablesFieldsLookupFieldRelationshipFieldSchema>
 ```
 
 ---

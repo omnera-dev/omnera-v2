@@ -6,6 +6,10 @@
 
 ## Implementation Status
 
+**Schema**: 🔴 Not implemented
+
+**Tests**: 🔴 No tests found
+
 ⏳ **Not Started**
 
 ### Required Features
@@ -33,9 +37,9 @@ import { Schema } from 'effect'
 **Implementation**:
 
 ```typescript
-export const Pages.custom-html-page.head.link-element.crossoriginSchema = Schema.Literal("anonymous", "use-credentials")
+export const PagesCustomHtmlPageHeadLinkElementCrossoriginSchema = Schema.Literal("anonymous", "use-credentials")
 
-export type Pages.custom-html-page.head.link-element.crossorigin = Schema.Schema.Type<typeof Pages.custom-html-page.head.link-element.crossoriginSchema>
+export type PagesCustomHtmlPageHeadLinkElementCrossorigin = Schema.Schema.Type<typeof PagesCustomHtmlPageHeadLinkElementCrossoriginSchema>
 ```
 
 ---

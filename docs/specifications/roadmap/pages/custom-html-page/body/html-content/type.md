@@ -6,6 +6,10 @@
 
 ## Implementation Status
 
+**Schema**: 🔴 Not implemented
+
+**Tests**: 🔴 No tests found
+
 ⏳ **Not Started**
 
 ### Required Features
@@ -33,9 +37,9 @@ import { Schema } from 'effect'
 **Implementation**:
 
 ```typescript
-export const Pages.custom-html-page.body.html-content.typeSchema = Schema.Literal("custom-html")
+export const PagesCustomHtmlPageBodyHtmlContentTypeSchema = Schema.Literal("custom-html")
 
-export type Pages.custom-html-page.body.html-content.type = Schema.Schema.Type<typeof Pages.custom-html-page.body.html-content.typeSchema>
+export type PagesCustomHtmlPageBodyHtmlContentType = Schema.Schema.Type<typeof PagesCustomHtmlPageBodyHtmlContentTypeSchema>
 ```
 
 ---

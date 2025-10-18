@@ -8,6 +8,10 @@ Whether this field must contain unique values across all rows
 
 ## Implementation Status
 
+**Schema**: 🔴 Not implemented
+
+**Tests**: 🔴 No tests found
+
 ⏳ **Not Started**
 
 ### Required Features
@@ -36,12 +40,12 @@ import { Schema } from 'effect'
 
 ```typescript
 /**
- *
+ * 
  * Whether this field must contain unique values across all rows
  */
-export const Tables.fields.text-field.uniqueSchema = Schema.Boolean
+export const TablesFieldsTextFieldUniqueSchema = Schema.Boolean
 
-export type Tables.fields.text-field.unique = Schema.Schema.Type<typeof Tables.fields.text-field.uniqueSchema>
+export type TablesFieldsTextFieldUnique = Schema.Schema.Type<typeof TablesFieldsTextFieldUniqueSchema>
 ```
 
 ---

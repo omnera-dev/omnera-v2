@@ -8,6 +8,10 @@ List of form fields for user input
 
 ## Implementation Status
 
+**Schema**: 🔴 Not implemented
+
+**Tests**: 🔴 No tests found
+
 ⏳ **Not Started**
 
 ### Required Features
@@ -37,10 +41,10 @@ import { Schema } from 'effect'
 ```typescript
 /**
  * Form Fields
- *
+ * 
  * List of form fields for user input
  */
-export const Pages.form-page.inputsSchema = Schema.Array(Schema.Union(
+export const PagesFormPageInputsSchema = Schema.Array(Schema.Union(
     Schema.Struct({
       name: Schema.String,
       label: Schema.optional(Schema.String),
@@ -87,7 +91,7 @@ export const Pages.form-page.inputsSchema = Schema.Array(Schema.Union(
   })
   )
 
-export type Pages.form-page.inputs = Schema.Schema.Type<typeof Pages.form-page.inputsSchema>
+export type PagesFormPageInputs = Schema.Schema.Type<typeof PagesFormPageInputsSchema>
 ```
 
 ---

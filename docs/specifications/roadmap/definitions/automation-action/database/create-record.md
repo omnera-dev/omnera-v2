@@ -8,6 +8,10 @@ Create a record in a database table
 
 ## Implementation Status
 
+**Schema**: 🔴 Not implemented
+
+**Tests**: 🔴 No tests found
+
 ⏳ **Not Started**
 
 ### Required Features
@@ -37,10 +41,10 @@ import { Schema } from 'effect'
 ```typescript
 /**
  * Create Record
- *
+ * 
  * Create a record in a database table
  */
-export const Automation_action.database.create-recordSchema = Schema.Struct({
+export const AutomationActionDatabaseCreateRecordSchema = Schema.Struct({
     name: Schema.String,
     service: Schema.String,
     action: Schema.String,
@@ -57,7 +61,7 @@ export const Automation_action.database.create-recordSchema = Schema.Struct({
     description: "Create a record in a database table"
   }))
 
-export type Automation_action.database.create-record = Schema.Schema.Type<typeof Automation_action.database.create-recordSchema>
+export type AutomationActionDatabaseCreateRecord = Schema.Schema.Type<typeof AutomationActionDatabaseCreateRecordSchema>
 ```
 
 ---

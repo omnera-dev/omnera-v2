@@ -6,6 +6,10 @@
 
 ## Implementation Status
 
+**Schema**: 🔴 Not implemented
+
+**Tests**: 🔴 No tests found
+
 ⏳ **Not Started**
 
 ### Required Features
@@ -33,9 +37,9 @@ import { Schema } from 'effect'
 **Implementation**:
 
 ```typescript
-export const Pages.form-page.inputs.checkbox-input.defaultValueSchema = Schema.Boolean
+export const PagesFormPageInputsCheckboxInputDefaultValueSchema = Schema.Boolean
 
-export type Pages.form-page.inputs.checkbox-input.defaultValue = Schema.Schema.Type<typeof Pages.form-page.inputs.checkbox-input.defaultValueSchema>
+export type PagesFormPageInputsCheckboxInputDefaultValue = Schema.Schema.Type<typeof PagesFormPageInputsCheckboxInputDefaultValueSchema>
 ```
 
 ---

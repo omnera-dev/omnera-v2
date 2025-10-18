@@ -8,6 +8,10 @@ Maximum rating value
 
 ## Implementation Status
 
+**Schema**: 🔴 Not implemented
+
+**Tests**: 🔴 No tests found
+
 ⏳ **Not Started**
 
 ### Required Features
@@ -36,10 +40,10 @@ import { Schema } from 'effect'
 
 ```typescript
 /**
- *
+ * 
  * Maximum rating value
  */
-export const Tables.fields.rating-field.maxSchema = Schema.Int.pipe(
+export const TablesFieldsRatingFieldMaxSchema = Schema.Int.pipe(
     Schema.greaterThanOrEqualTo(1),
     Schema.lessThanOrEqualTo(10),
     Schema.annotations({
@@ -47,7 +51,7 @@ export const Tables.fields.rating-field.maxSchema = Schema.Int.pipe(
   })
   )
 
-export type Tables.fields.rating-field.max = Schema.Schema.Type<typeof Tables.fields.rating-field.maxSchema>
+export type TablesFieldsRatingFieldMax = Schema.Schema.Type<typeof TablesFieldsRatingFieldMaxSchema>
 ```
 
 ---

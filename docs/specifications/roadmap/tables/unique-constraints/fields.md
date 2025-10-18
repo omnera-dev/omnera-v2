@@ -8,6 +8,10 @@ Field names that must be unique together. The combination of values in these fie
 
 ## Implementation Status
 
+**Schema**: 🔴 Not implemented
+
+**Tests**: 🔴 No tests found
+
 ⏳ **Not Started**
 
 ### Required Features
@@ -34,11 +38,11 @@ import { Schema } from 'effect'
 
 **Implementation**:
 
-````typescript
+```typescript
 /**
- *
+ * 
  * Field names that must be unique together. The combination of values in these fields must be unique across all rows.
- *
+ * 
  * @example
  * ```typescript
  * [
@@ -47,7 +51,7 @@ import { Schema } from 'effect'
  * ]
  * ```
  */
-export const Tables.uniqueConstraints.fieldsSchema = Schema.Array(Schema.String.pipe(
+export const TablesUniqueConstraintsFieldsSchema = Schema.Array(Schema.String.pipe(
     Schema.minLength(1, { message: () => 'This field is required' })
   )).pipe(
     Schema.minItems(2),
@@ -57,8 +61,8 @@ export const Tables.uniqueConstraints.fieldsSchema = Schema.Array(Schema.String.
   })
   )
 
-export type Tables.uniqueConstraints.fields = Schema.Schema.Type<typeof Tables.uniqueConstraints.fieldsSchema>
-````
+export type TablesUniqueConstraintsFields = Schema.Schema.Type<typeof TablesUniqueConstraintsFieldsSchema>
+```
 
 ---
 

@@ -8,6 +8,10 @@ Display format for the duration
 
 ## Implementation Status
 
+**Schema**: 🔴 Not implemented
+
+**Tests**: 🔴 No tests found
+
 ⏳ **Not Started**
 
 ### Required Features
@@ -36,14 +40,14 @@ import { Schema } from 'effect'
 
 ```typescript
 /**
- *
+ * 
  * Display format for the duration
  */
-export const Tables.fields.duration-field.formatSchema = Schema.Literal("h:mm", "h:mm:ss", "minutes", "seconds").pipe(Schema.annotations({
+export const TablesFieldsDurationFieldFormatSchema = Schema.Literal("h:mm", "h:mm:ss", "minutes", "seconds").pipe(Schema.annotations({
     description: "Display format for the duration"
   }))
 
-export type Tables.fields.duration-field.format = Schema.Schema.Type<typeof Tables.fields.duration-field.formatSchema>
+export type TablesFieldsDurationFieldFormat = Schema.Schema.Type<typeof TablesFieldsDurationFieldFormatSchema>
 ```
 
 ---

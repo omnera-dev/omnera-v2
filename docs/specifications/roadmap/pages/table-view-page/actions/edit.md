@@ -6,6 +6,10 @@
 
 ## Implementation Status
 
+**Schema**: 🔴 Not implemented
+
+**Tests**: 🔴 No tests found
+
 ⏳ **Not Started**
 
 ### Required Features
@@ -33,9 +37,9 @@ import { Schema } from 'effect'
 **Implementation**:
 
 ```typescript
-export const Pages.table-view-page.actions.editSchema = Schema.Boolean
+export const PagesTableViewPageActionsEditSchema = Schema.Boolean
 
-export type Pages.table-view-page.actions.edit = Schema.Schema.Type<typeof Pages.table-view-page.actions.editSchema>
+export type PagesTableViewPageActionsEdit = Schema.Schema.Type<typeof PagesTableViewPageActionsEditSchema>
 ```
 
 ---

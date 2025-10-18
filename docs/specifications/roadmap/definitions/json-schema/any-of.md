@@ -6,6 +6,10 @@
 
 ## Implementation Status
 
+**Schema**: 🔴 Not implemented
+
+**Tests**: 🔴 No tests found
+
 ⏳ **Not Started**
 
 ### Required Features
@@ -33,12 +37,12 @@ import { Schema } from 'effect'
 **Implementation**:
 
 ```typescript
-export const Json_schema.anyOfSchema = Schema.Array(Schema.Union(
+export const JsonSchemaAnyOfSchema = Schema.Array(Schema.Union(
     Schema.Unknown,
     Schema.Boolean
   ))
 
-export type Json_schema.anyOf = Schema.Schema.Type<typeof Json_schema.anyOfSchema>
+export type JsonSchemaAnyOf = Schema.Schema.Type<typeof JsonSchemaAnyOfSchema>
 ```
 
 ---

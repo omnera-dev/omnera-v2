@@ -8,6 +8,10 @@ List of fields/columns in this table
 
 ## Implementation Status
 
+**Schema**: 🔴 Not implemented
+
+**Tests**: 🔴 No tests found
+
 ⏳ **Not Started**
 
 ### Required Features
@@ -37,10 +41,10 @@ import { Schema } from 'effect'
 ```typescript
 /**
  * Table Fields
- *
+ * 
  * List of fields/columns in this table
  */
-export const Tables.fieldsSchema = Schema.Array(Schema.Union(
+export const TablesFieldsSchema = Schema.Array(Schema.Union(
     Schema.Struct({
       id: Schema.Unknown,
       name: Schema.Unknown,
@@ -515,7 +519,7 @@ export const Tables.fieldsSchema = Schema.Array(Schema.Union(
   })
   )
 
-export type Tables.fields = Schema.Schema.Type<typeof Tables.fieldsSchema>
+export type TablesFields = Schema.Schema.Type<typeof TablesFieldsSchema>
 ```
 
 ---

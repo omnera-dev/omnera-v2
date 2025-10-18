@@ -8,6 +8,10 @@ Unique identifier for the table
 
 ## Implementation Status
 
+**Schema**: 🔴 Not implemented
+
+**Tests**: 🔴 No tests found
+
 ⏳ **Not Started**
 
 ### Required Features
@@ -34,18 +38,18 @@ import { Schema } from 'effect'
 
 **Implementation**:
 
-````typescript
+```typescript
 /**
  * Table ID
- *
+ * 
  * Unique identifier for the table
- *
+ * 
  * @example
  * ```typescript
  * 1
  * ```
  */
-export const Tables.idSchema = Schema.Int.pipe(
+export const TablesIdSchema = Schema.Int.pipe(
     Schema.greaterThanOrEqualTo(1),
     Schema.lessThanOrEqualTo(9007199254740991),
     Schema.annotations({
@@ -55,8 +59,8 @@ export const Tables.idSchema = Schema.Int.pipe(
   })
   )
 
-export type Tables.id = Schema.Schema.Type<typeof Tables.idSchema>
-````
+export type TablesId = Schema.Schema.Type<typeof TablesIdSchema>
+```
 
 ---
 

@@ -6,6 +6,10 @@
 
 ## Implementation Status
 
+**Schema**: 🔴 Not implemented
+
+**Tests**: 🔴 No tests found
+
 ⏳ **Not Started**
 
 ### Required Features
@@ -33,9 +37,9 @@ import { Schema } from 'effect'
 **Implementation**:
 
 ```typescript
-export const Tables.fields.multiple-attachments-field.typeSchema = Schema.Literal("multiple-attachments")
+export const TablesFieldsMultipleAttachmentsFieldTypeSchema = Schema.Literal("multiple-attachments")
 
-export type Tables.fields.multiple-attachments-field.type = Schema.Schema.Type<typeof Tables.fields.multiple-attachments-field.typeSchema>
+export type TablesFieldsMultipleAttachmentsFieldType = Schema.Schema.Type<typeof TablesFieldsMultipleAttachmentsFieldTypeSchema>
 ```
 
 ---

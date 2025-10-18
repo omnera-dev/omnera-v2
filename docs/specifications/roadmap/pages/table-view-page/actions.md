@@ -8,6 +8,10 @@ Enable CRUD actions
 
 ## Implementation Status
 
+**Schema**: 🔴 Not implemented
+
+**Tests**: 🔴 No tests found
+
 ⏳ **Not Started**
 
 ### Required Features
@@ -36,10 +40,10 @@ import { Schema } from 'effect'
 
 ```typescript
 /**
- *
+ * 
  * Enable CRUD actions
  */
-export const Pages.table-view-page.actionsSchema = Schema.Struct({
+export const PagesTableViewPageActionsSchema = Schema.Struct({
     create: Schema.optional(Schema.Boolean),
     edit: Schema.optional(Schema.Boolean),
     delete: Schema.optional(Schema.Boolean),
@@ -48,7 +52,7 @@ export const Pages.table-view-page.actionsSchema = Schema.Struct({
     description: "Enable CRUD actions"
   }))
 
-export type Pages.table-view-page.actions = Schema.Schema.Type<typeof Pages.table-view-page.actionsSchema>
+export type PagesTableViewPageActions = Schema.Schema.Type<typeof PagesTableViewPageActionsSchema>
 ```
 
 ---

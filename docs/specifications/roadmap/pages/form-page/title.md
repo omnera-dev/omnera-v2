@@ -8,6 +8,10 @@ Display title shown to users
 
 ## Implementation Status
 
+**Schema**: 🔴 Not implemented
+
+**Tests**: 🔴 No tests found
+
 ⏳ **Not Started**
 
 ### Required Features
@@ -34,18 +38,18 @@ import { Schema } from 'effect'
 
 **Implementation**:
 
-````typescript
+```typescript
 /**
  * Display Title
- *
+ * 
  * Display title shown to users
- *
+ * 
  * @example
  * ```typescript
  * "Contact Us"
  * ```
  */
-export const Pages.form-page.titleSchema = Schema.String.pipe(
+export const PagesFormPageTitleSchema = Schema.String.pipe(
     Schema.annotations({
     title: "Display Title",
     description: "Display title shown to users",
@@ -53,8 +57,8 @@ export const Pages.form-page.titleSchema = Schema.String.pipe(
   })
   )
 
-export type Pages.form-page.title = Schema.Schema.Type<typeof Pages.form-page.titleSchema>
-````
+export type PagesFormPageTitle = Schema.Schema.Type<typeof PagesFormPageTitleSchema>
+```
 
 ---
 

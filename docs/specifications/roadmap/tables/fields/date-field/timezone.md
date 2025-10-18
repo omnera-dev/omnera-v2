@@ -8,6 +8,10 @@ Timezone for datetime fields
 
 ## Implementation Status
 
+**Schema**: 🔴 Not implemented
+
+**Tests**: 🔴 No tests found
+
 ⏳ **Not Started**
 
 ### Required Features
@@ -34,25 +38,25 @@ import { Schema } from 'effect'
 
 **Implementation**:
 
-````typescript
+```typescript
 /**
- *
+ * 
  * Timezone for datetime fields
- *
+ * 
  * @example
  * ```typescript
  * "UTC"
  * ```
  */
-export const Tables.fields.date-field.timezoneSchema = Schema.String.pipe(
+export const TablesFieldsDateFieldTimezoneSchema = Schema.String.pipe(
     Schema.annotations({
     description: "Timezone for datetime fields",
     examples: ["UTC","America/New_York","Europe/London"]
   })
   )
 
-export type Tables.fields.date-field.timezone = Schema.Schema.Type<typeof Tables.fields.date-field.timezoneSchema>
-````
+export type TablesFieldsDateFieldTimezone = Schema.Schema.Type<typeof TablesFieldsDateFieldTimezoneSchema>
+```
 
 ---
 

@@ -130,6 +130,8 @@ export interface PropertyUserStories {
  */
 export interface EffectSchemaBlueprint {
   propertyName: string
+  sanitizedName: string
+  fileName: string
   code: string
   imports: string[]
   exports: string[]
@@ -176,4 +178,15 @@ export interface PropertyDocumentation {
   effectSchema: EffectSchemaBlueprint
   userStories: PropertyUserStories
   successCriteria: string[]
+  testStatus?: {
+    testFileExists: boolean
+    totalTests: number
+    passingTests: number
+    fixmeTests: number
+    coveragePercent: number
+  }
+  schemaStatus?: {
+    isImplemented: boolean
+    schemaFilePath?: string
+  }
 }

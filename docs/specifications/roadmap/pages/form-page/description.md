@@ -8,6 +8,10 @@ Help text or instructions for the form
 
 ## Implementation Status
 
+**Schema**: 🔴 Not implemented
+
+**Tests**: 🔴 No tests found
+
 ⏳ **Not Started**
 
 ### Required Features
@@ -34,18 +38,18 @@ import { Schema } from 'effect'
 
 **Implementation**:
 
-````typescript
+```typescript
 /**
  * Form Description
- *
+ * 
  * Help text or instructions for the form
- *
+ * 
  * @example
  * ```typescript
  * "Fill out this form to get in touch with our team"
  * ```
  */
-export const Pages.form-page.descriptionSchema = Schema.String.pipe(
+export const PagesFormPageDescriptionSchema = Schema.String.pipe(
     Schema.annotations({
     title: "Form Description",
     description: "Help text or instructions for the form",
@@ -53,8 +57,8 @@ export const Pages.form-page.descriptionSchema = Schema.String.pipe(
   })
   )
 
-export type Pages.form-page.description = Schema.Schema.Type<typeof Pages.form-page.descriptionSchema>
-````
+export type PagesFormPageDescription = Schema.Schema.Type<typeof PagesFormPageDescriptionSchema>
+```
 
 ---
 

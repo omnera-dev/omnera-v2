@@ -8,6 +8,10 @@ Action to take when the related record's key is updated
 
 ## Implementation Status
 
+**Schema**: 🔴 Not implemented
+
+**Tests**: 🔴 No tests found
+
 ⏳ **Not Started**
 
 ### Required Features
@@ -36,14 +40,14 @@ import { Schema } from 'effect'
 
 ```typescript
 /**
- *
+ * 
  * Action to take when the related record's key is updated
  */
-export const Tables.fields.relationship-field.onUpdateSchema = Schema.Literal("cascade", "set-null", "restrict", "no-action").pipe(Schema.annotations({
+export const TablesFieldsRelationshipFieldOnUpdateSchema = Schema.Literal("cascade", "set-null", "restrict", "no-action").pipe(Schema.annotations({
     description: "Action to take when the related record's key is updated"
   }))
 
-export type Tables.fields.relationship-field.onUpdate = Schema.Schema.Type<typeof Tables.fields.relationship-field.onUpdateSchema>
+export type TablesFieldsRelationshipFieldOnUpdate = Schema.Schema.Type<typeof TablesFieldsRelationshipFieldOnUpdateSchema>
 ```
 
 ---

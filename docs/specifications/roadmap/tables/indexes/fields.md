@@ -8,6 +8,10 @@ Field names to include in the index. Order matters for multi-column indexes.
 
 ## Implementation Status
 
+**Schema**: 🔴 Not implemented
+
+**Tests**: 🔴 No tests found
+
 ⏳ **Not Started**
 
 ### Required Features
@@ -34,11 +38,11 @@ import { Schema } from 'effect'
 
 **Implementation**:
 
-````typescript
+```typescript
 /**
- *
+ * 
  * Field names to include in the index. Order matters for multi-column indexes.
- *
+ * 
  * @example
  * ```typescript
  * [
@@ -46,7 +50,7 @@ import { Schema } from 'effect'
  * ]
  * ```
  */
-export const Tables.indexes.fieldsSchema = Schema.Array(Schema.String.pipe(
+export const TablesIndexesFieldsSchema = Schema.Array(Schema.String.pipe(
     Schema.minLength(1, { message: () => 'This field is required' })
   )).pipe(
     Schema.minItems(1),
@@ -56,8 +60,8 @@ export const Tables.indexes.fieldsSchema = Schema.Array(Schema.String.pipe(
   })
   )
 
-export type Tables.indexes.fields = Schema.Schema.Type<typeof Tables.indexes.fieldsSchema>
-````
+export type TablesIndexesFields = Schema.Schema.Type<typeof TablesIndexesFieldsSchema>
+```
 
 ---
 

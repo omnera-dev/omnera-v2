@@ -6,6 +6,10 @@
 
 ## Implementation Status
 
+**Schema**: 🔴 Not implemented
+
+**Tests**: 🔴 No tests found
+
 ⏳ **Not Started**
 
 ### Required Features
@@ -33,9 +37,9 @@ import { Schema } from 'effect'
 **Implementation**:
 
 ```typescript
-export const Pages.detail-view-page.typeSchema = Schema.Literal("detail-view")
+export const PagesDetailViewPageTypeSchema = Schema.Literal("detail-view")
 
-export type Pages.detail-view-page.type = Schema.Schema.Type<typeof Pages.detail-view-page.typeSchema>
+export type PagesDetailViewPageType = Schema.Schema.Type<typeof PagesDetailViewPageTypeSchema>
 ```
 
 ---

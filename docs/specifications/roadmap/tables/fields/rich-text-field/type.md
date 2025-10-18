@@ -6,6 +6,10 @@
 
 ## Implementation Status
 
+**Schema**: 🔴 Not implemented
+
+**Tests**: 🔴 No tests found
+
 ⏳ **Not Started**
 
 ### Required Features
@@ -33,9 +37,9 @@ import { Schema } from 'effect'
 **Implementation**:
 
 ```typescript
-export const Tables.fields.rich-text-field.typeSchema = Schema.Literal("rich-text")
+export const TablesFieldsRichTextFieldTypeSchema = Schema.Literal("rich-text")
 
-export type Tables.fields.rich-text-field.type = Schema.Schema.Type<typeof Tables.fields.rich-text-field.typeSchema>
+export type TablesFieldsRichTextFieldType = Schema.Schema.Type<typeof TablesFieldsRichTextFieldTypeSchema>
 ```
 
 ---

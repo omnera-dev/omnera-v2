@@ -8,6 +8,10 @@ Name of the field in the related table to aggregate
 
 ## Implementation Status
 
+**Schema**: 🔴 Not implemented
+
+**Tests**: 🔴 No tests found
+
 ⏳ **Not Started**
 
 ### Required Features
@@ -36,17 +40,17 @@ import { Schema } from 'effect'
 
 ```typescript
 /**
- *
+ * 
  * Name of the field in the related table to aggregate
  */
-export const Tables.fields.rollup-field.relatedFieldSchema = Schema.String.pipe(
+export const TablesFieldsRollupFieldRelatedFieldSchema = Schema.String.pipe(
     Schema.minLength(1, { message: () => 'This field is required' }),
     Schema.annotations({
     description: "Name of the field in the related table to aggregate"
   })
   )
 
-export type Tables.fields.rollup-field.relatedField = Schema.Schema.Type<typeof Tables.fields.rollup-field.relatedFieldSchema>
+export type TablesFieldsRollupFieldRelatedField = Schema.Schema.Type<typeof TablesFieldsRollupFieldRelatedFieldSchema>
 ```
 
 ---

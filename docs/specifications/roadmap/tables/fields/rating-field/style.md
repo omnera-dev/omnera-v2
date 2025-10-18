@@ -8,6 +8,10 @@ Visual style for the rating
 
 ## Implementation Status
 
+**Schema**: 🔴 Not implemented
+
+**Tests**: 🔴 No tests found
+
 ⏳ **Not Started**
 
 ### Required Features
@@ -36,14 +40,14 @@ import { Schema } from 'effect'
 
 ```typescript
 /**
- *
+ * 
  * Visual style for the rating
  */
-export const Tables.fields.rating-field.styleSchema = Schema.Literal("star", "number", "heart").pipe(Schema.annotations({
+export const TablesFieldsRatingFieldStyleSchema = Schema.Literal("star", "number", "heart").pipe(Schema.annotations({
     description: "Visual style for the rating"
   }))
 
-export type Tables.fields.rating-field.style = Schema.Schema.Type<typeof Tables.fields.rating-field.styleSchema>
+export type TablesFieldsRatingFieldStyle = Schema.Schema.Type<typeof TablesFieldsRatingFieldStyleSchema>
 ```
 
 ---

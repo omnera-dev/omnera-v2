@@ -8,6 +8,10 @@ Make a GET HTTP request
 
 ## Implementation Status
 
+**Schema**: 🔴 Not implemented
+
+**Tests**: 🔴 No tests found
+
 ⏳ **Not Started**
 
 ### Required Features
@@ -37,10 +41,10 @@ import { Schema } from 'effect'
 ```typescript
 /**
  * GET Request
- *
+ * 
  * Make a GET HTTP request
  */
-export const Automation_action.http.getSchema = Schema.Struct({
+export const AutomationActionHttpGetSchema = Schema.Struct({
     name: Schema.String,
     service: Schema.String,
     action: Schema.String,
@@ -54,7 +58,7 @@ export const Automation_action.http.getSchema = Schema.Struct({
     description: "Make a GET HTTP request"
   }))
 
-export type Automation_action.http.get = Schema.Schema.Type<typeof Automation_action.http.getSchema>
+export type AutomationActionHttpGet = Schema.Schema.Type<typeof AutomationActionHttpGetSchema>
 ```
 
 ---

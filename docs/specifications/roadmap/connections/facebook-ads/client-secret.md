@@ -6,6 +6,10 @@
 
 ## Implementation Status
 
+**Schema**: 🔴 Not implemented
+
+**Tests**: 🔴 No tests found
+
 ⏳ **Not Started**
 
 ### Required Features
@@ -33,9 +37,9 @@ import { Schema } from 'effect'
 **Implementation**:
 
 ```typescript
-export const Connections.facebook-ads.clientSecretSchema = Schema.String
+export const ConnectionsFacebookAdsClientSecretSchema = Schema.String
 
-export type Connections.facebook-ads.clientSecret = Schema.Schema.Type<typeof Connections.facebook-ads.clientSecretSchema>
+export type ConnectionsFacebookAdsClientSecret = Schema.Schema.Type<typeof ConnectionsFacebookAdsClientSecretSchema>
 ```
 
 ---

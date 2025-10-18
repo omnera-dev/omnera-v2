@@ -6,6 +6,10 @@
 
 ## Implementation Status
 
+**Schema**: 🔴 Not implemented
+
+**Tests**: 🔴 No tests found
+
 ⏳ **Not Started**
 
 ### Required Features
@@ -33,11 +37,11 @@ import { Schema } from 'effect'
 **Implementation**:
 
 ```typescript
-export const Tables.fields.multi-select-field.optionsSchema = Schema.Array(Schema.String).pipe(
+export const TablesFieldsMultiSelectFieldOptionsSchema = Schema.Array(Schema.String).pipe(
     Schema.minItems(1)
   )
 
-export type Tables.fields.multi-select-field.options = Schema.Schema.Type<typeof Tables.fields.multi-select-field.optionsSchema>
+export type TablesFieldsMultiSelectFieldOptions = Schema.Schema.Type<typeof TablesFieldsMultiSelectFieldOptionsSchema>
 ```
 
 ---

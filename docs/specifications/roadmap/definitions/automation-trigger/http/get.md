@@ -8,6 +8,10 @@ Triggered by a GET request
 
 ## Implementation Status
 
+**Schema**: 🔴 Not implemented
+
+**Tests**: 🔴 No tests found
+
 ⏳ **Not Started**
 
 ### Required Features
@@ -37,10 +41,10 @@ import { Schema } from 'effect'
 ```typescript
 /**
  * GET Request
- *
+ * 
  * Triggered by a GET request
  */
-export const Automation_trigger.http.getSchema = Schema.Struct({
+export const AutomationTriggerHttpGetSchema = Schema.Struct({
     service: Schema.String,
     event: Schema.String,
     params: Schema.Struct({
@@ -52,7 +56,7 @@ export const Automation_trigger.http.getSchema = Schema.Struct({
     description: "Triggered by a GET request"
   }))
 
-export type Automation_trigger.http.get = Schema.Schema.Type<typeof Automation_trigger.http.getSchema>
+export type AutomationTriggerHttpGet = Schema.Schema.Type<typeof AutomationTriggerHttpGetSchema>
 ```
 
 ---

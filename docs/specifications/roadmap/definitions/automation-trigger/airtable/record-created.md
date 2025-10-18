@@ -8,6 +8,10 @@ Triggered when an Airtable record is created
 
 ## Implementation Status
 
+**Schema**: 🔴 Not implemented
+
+**Tests**: 🔴 No tests found
+
 ⏳ **Not Started**
 
 ### Required Features
@@ -37,10 +41,10 @@ import { Schema } from 'effect'
 ```typescript
 /**
  * Record Created
- *
+ * 
  * Triggered when an Airtable record is created
  */
-export const Automation_trigger.airtable.record-createdSchema = Schema.Struct({
+export const AutomationTriggerAirtableRecordCreatedSchema = Schema.Struct({
     account: Schema.Union(
       Schema.Number,
       Schema.String
@@ -56,7 +60,7 @@ export const Automation_trigger.airtable.record-createdSchema = Schema.Struct({
     description: "Triggered when an Airtable record is created"
   }))
 
-export type Automation_trigger.airtable.record-created = Schema.Schema.Type<typeof Automation_trigger.airtable.record-createdSchema>
+export type AutomationTriggerAirtableRecordCreated = Schema.Schema.Type<typeof AutomationTriggerAirtableRecordCreatedSchema>
 ```
 
 ---

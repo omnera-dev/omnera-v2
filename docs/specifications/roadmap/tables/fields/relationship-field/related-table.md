@@ -8,6 +8,10 @@ Name of the related table
 
 ## Implementation Status
 
+**Schema**: 🔴 Not implemented
+
+**Tests**: 🔴 No tests found
+
 ⏳ **Not Started**
 
 ### Required Features
@@ -36,17 +40,17 @@ import { Schema } from 'effect'
 
 ```typescript
 /**
- *
+ * 
  * Name of the related table
  */
-export const Tables.fields.relationship-field.relatedTableSchema = Schema.String.pipe(
+export const TablesFieldsRelationshipFieldRelatedTableSchema = Schema.String.pipe(
     Schema.minLength(1, { message: () => 'This field is required' }),
     Schema.annotations({
     description: "Name of the related table"
   })
   )
 
-export type Tables.fields.relationship-field.relatedTable = Schema.Schema.Type<typeof Tables.fields.relationship-field.relatedTableSchema>
+export type TablesFieldsRelationshipFieldRelatedTable = Schema.Schema.Type<typeof TablesFieldsRelationshipFieldRelatedTableSchema>
 ```
 
 ---

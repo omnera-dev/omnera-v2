@@ -6,6 +6,10 @@
 
 ## Implementation Status
 
+**Schema**: 🔴 Not implemented
+
+**Tests**: 🔴 No tests found
+
 ⏳ **Not Started**
 
 ### Required Features
@@ -33,9 +37,9 @@ import { Schema } from 'effect'
 **Implementation**:
 
 ```typescript
-export const Pages.form-page.inputs.checkbox-input.descriptionSchema = Schema.String
+export const PagesFormPageInputsCheckboxInputDescriptionSchema = Schema.String
 
-export type Pages.form-page.inputs.checkbox-input.description = Schema.Schema.Type<typeof Pages.form-page.inputs.checkbox-input.descriptionSchema>
+export type PagesFormPageInputsCheckboxInputDescription = Schema.Schema.Type<typeof PagesFormPageInputsCheckboxInputDescriptionSchema>
 ```
 
 ---

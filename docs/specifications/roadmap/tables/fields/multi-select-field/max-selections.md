@@ -8,6 +8,10 @@ Maximum number of selections allowed
 
 ## Implementation Status
 
+**Schema**: 🔴 Not implemented
+
+**Tests**: 🔴 No tests found
+
 ⏳ **Not Started**
 
 ### Required Features
@@ -36,17 +40,17 @@ import { Schema } from 'effect'
 
 ```typescript
 /**
- *
+ * 
  * Maximum number of selections allowed
  */
-export const Tables.fields.multi-select-field.maxSelectionsSchema = Schema.Int.pipe(
+export const TablesFieldsMultiSelectFieldMaxSelectionsSchema = Schema.Int.pipe(
     Schema.greaterThanOrEqualTo(1),
     Schema.annotations({
     description: "Maximum number of selections allowed"
   })
   )
 
-export type Tables.fields.multi-select-field.maxSelections = Schema.Schema.Type<typeof Tables.fields.multi-select-field.maxSelectionsSchema>
+export type TablesFieldsMultiSelectFieldMaxSelections = Schema.Schema.Type<typeof TablesFieldsMultiSelectFieldMaxSelectionsSchema>
 ```
 
 ---

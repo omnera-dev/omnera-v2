@@ -8,6 +8,10 @@ Maximum number of files allowed
 
 ## Implementation Status
 
+**Schema**: 🔴 Not implemented
+
+**Tests**: 🔴 No tests found
+
 ⏳ **Not Started**
 
 ### Required Features
@@ -36,17 +40,17 @@ import { Schema } from 'effect'
 
 ```typescript
 /**
- *
+ * 
  * Maximum number of files allowed
  */
-export const Tables.fields.multiple-attachments-field.maxFilesSchema = Schema.Int.pipe(
+export const TablesFieldsMultipleAttachmentsFieldMaxFilesSchema = Schema.Int.pipe(
     Schema.greaterThanOrEqualTo(1),
     Schema.annotations({
     description: "Maximum number of files allowed"
   })
   )
 
-export type Tables.fields.multiple-attachments-field.maxFiles = Schema.Schema.Type<typeof Tables.fields.multiple-attachments-field.maxFilesSchema>
+export type TablesFieldsMultipleAttachmentsFieldMaxFiles = Schema.Schema.Type<typeof TablesFieldsMultipleAttachmentsFieldMaxFilesSchema>
 ```
 
 ---

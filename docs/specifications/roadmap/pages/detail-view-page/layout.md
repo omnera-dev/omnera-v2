@@ -8,6 +8,10 @@ Layout style for the detail view
 
 ## Implementation Status
 
+**Schema**: 🔴 Not implemented
+
+**Tests**: 🔴 No tests found
+
 ⏳ **Not Started**
 
 ### Required Features
@@ -36,14 +40,14 @@ import { Schema } from 'effect'
 
 ```typescript
 /**
- *
+ * 
  * Layout style for the detail view
  */
-export const Pages.detail-view-page.layoutSchema = Schema.Literal("single-column", "two-column", "tabs", "accordion").pipe(Schema.annotations({
+export const PagesDetailViewPageLayoutSchema = Schema.Literal("single-column", "two-column", "tabs", "accordion").pipe(Schema.annotations({
     description: "Layout style for the detail view"
   }))
 
-export type Pages.detail-view-page.layout = Schema.Schema.Type<typeof Pages.detail-view-page.layoutSchema>
+export type PagesDetailViewPageLayout = Schema.Schema.Type<typeof PagesDetailViewPageLayoutSchema>
 ```
 
 ---

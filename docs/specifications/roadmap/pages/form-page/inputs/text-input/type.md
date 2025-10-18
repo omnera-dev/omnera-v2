@@ -6,6 +6,10 @@
 
 ## Implementation Status
 
+**Schema**: 🔴 Not implemented
+
+**Tests**: 🔴 No tests found
+
 ⏳ **Not Started**
 
 ### Required Features
@@ -33,9 +37,9 @@ import { Schema } from 'effect'
 **Implementation**:
 
 ```typescript
-export const Pages.form-page.inputs.text-input.typeSchema = Schema.Literal("single-line-text", "long-text", "phone-number", "email", "url")
+export const PagesFormPageInputsTextInputTypeSchema = Schema.Literal("single-line-text", "long-text", "phone-number", "email", "url")
 
-export type Pages.form-page.inputs.text-input.type = Schema.Schema.Type<typeof Pages.form-page.inputs.text-input.typeSchema>
+export type PagesFormPageInputsTextInputType = Schema.Schema.Type<typeof PagesFormPageInputsTextInputTypeSchema>
 ```
 
 ---

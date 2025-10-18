@@ -6,6 +6,10 @@
 
 ## Implementation Status
 
+**Schema**: 🔴 Not implemented
+
+**Tests**: 🔴 No tests found
+
 ⏳ **Not Started**
 
 ### Required Features
@@ -33,12 +37,12 @@ import { Schema } from 'effect'
 **Implementation**:
 
 ```typescript
-export const Connections.facebook-ads.idSchema = Schema.Int.pipe(
+export const ConnectionsFacebookAdsIdSchema = Schema.Int.pipe(
     Schema.greaterThanOrEqualTo(1),
     Schema.lessThanOrEqualTo(9007199254740991)
   )
 
-export type Connections.facebook-ads.id = Schema.Schema.Type<typeof Connections.facebook-ads.idSchema>
+export type ConnectionsFacebookAdsId = Schema.Schema.Type<typeof ConnectionsFacebookAdsIdSchema>
 ```
 
 ---

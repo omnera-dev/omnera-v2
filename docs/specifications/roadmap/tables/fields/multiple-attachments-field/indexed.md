@@ -8,6 +8,10 @@ Whether to create a database index on this field for faster queries
 
 ## Implementation Status
 
+**Schema**: 🔴 Not implemented
+
+**Tests**: 🔴 No tests found
+
 ⏳ **Not Started**
 
 ### Required Features
@@ -36,12 +40,12 @@ import { Schema } from 'effect'
 
 ```typescript
 /**
- *
+ * 
  * Whether to create a database index on this field for faster queries
  */
-export const Tables.fields.multiple-attachments-field.indexedSchema = Schema.Boolean
+export const TablesFieldsMultipleAttachmentsFieldIndexedSchema = Schema.Boolean
 
-export type Tables.fields.multiple-attachments-field.indexed = Schema.Schema.Type<typeof Tables.fields.multiple-attachments-field.indexedSchema>
+export type TablesFieldsMultipleAttachmentsFieldIndexed = Schema.Schema.Type<typeof TablesFieldsMultipleAttachmentsFieldIndexedSchema>
 ```
 
 ---

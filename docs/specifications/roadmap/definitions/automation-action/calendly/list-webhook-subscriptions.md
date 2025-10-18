@@ -8,6 +8,10 @@ Lists the webhook subscriptions for a given organization
 
 ## Implementation Status
 
+**Schema**: 🔴 Not implemented
+
+**Tests**: 🔴 No tests found
+
 ⏳ **Not Started**
 
 ### Required Features
@@ -37,10 +41,10 @@ import { Schema } from 'effect'
 ```typescript
 /**
  * List Webhook Subscriptions
- *
+ * 
  * Lists the webhook subscriptions for a given organization
  */
-export const Automation_action.calendly.list-webhook-subscriptionsSchema = Schema.Struct({
+export const AutomationActionCalendlyListWebhookSubscriptionsSchema = Schema.Struct({
     name: Schema.String,
     account: Schema.Union(
       Schema.Number,
@@ -61,7 +65,7 @@ export const Automation_action.calendly.list-webhook-subscriptionsSchema = Schem
     description: "Lists the webhook subscriptions for a given organization"
   }))
 
-export type Automation_action.calendly.list-webhook-subscriptions = Schema.Schema.Type<typeof Automation_action.calendly.list-webhook-subscriptionsSchema>
+export type AutomationActionCalendlyListWebhookSubscriptions = Schema.Schema.Type<typeof AutomationActionCalendlyListWebhookSubscriptionsSchema>
 ```
 
 ---

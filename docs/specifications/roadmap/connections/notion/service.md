@@ -6,6 +6,10 @@
 
 ## Implementation Status
 
+**Schema**: 🔴 Not implemented
+
+**Tests**: 🔴 No tests found
+
 ⏳ **Not Started**
 
 ### Required Features
@@ -33,9 +37,9 @@ import { Schema } from 'effect'
 **Implementation**:
 
 ```typescript
-export const Connections.notion.serviceSchema = Schema.Literal("notion")
+export const ConnectionsNotionServiceSchema = Schema.Literal("notion")
 
-export type Connections.notion.service = Schema.Schema.Type<typeof Connections.notion.serviceSchema>
+export type ConnectionsNotionService = Schema.Schema.Type<typeof ConnectionsNotionServiceSchema>
 ```
 
 ---

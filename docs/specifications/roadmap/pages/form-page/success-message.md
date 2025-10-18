@@ -8,6 +8,10 @@ Message displayed after successful form submission
 
 ## Implementation Status
 
+**Schema**: 🔴 Not implemented
+
+**Tests**: 🔴 No tests found
+
 ⏳ **Not Started**
 
 ### Required Features
@@ -34,18 +38,18 @@ import { Schema } from 'effect'
 
 **Implementation**:
 
-````typescript
+```typescript
 /**
  * Success Message
- *
+ * 
  * Message displayed after successful form submission
- *
+ * 
  * @example
  * ```typescript
  * "Thank you! We will get back to you soon."
  * ```
  */
-export const Pages.form-page.successMessageSchema = Schema.String.pipe(
+export const PagesFormPageSuccessMessageSchema = Schema.String.pipe(
     Schema.annotations({
     title: "Success Message",
     description: "Message displayed after successful form submission",
@@ -53,8 +57,8 @@ export const Pages.form-page.successMessageSchema = Schema.String.pipe(
   })
   )
 
-export type Pages.form-page.successMessage = Schema.Schema.Type<typeof Pages.form-page.successMessageSchema>
-````
+export type PagesFormPageSuccessMessage = Schema.Schema.Type<typeof PagesFormPageSuccessMessageSchema>
+```
 
 ---
 

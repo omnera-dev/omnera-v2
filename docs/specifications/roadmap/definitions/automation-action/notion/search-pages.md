@@ -8,6 +8,10 @@ Searches for pages in Notion
 
 ## Implementation Status
 
+**Schema**: 🔴 Not implemented
+
+**Tests**: 🔴 No tests found
+
 ⏳ **Not Started**
 
 ### Required Features
@@ -37,10 +41,10 @@ import { Schema } from 'effect'
 ```typescript
 /**
  * Search Pages
- *
+ * 
  * Searches for pages in Notion
  */
-export const Automation_action.notion.search-pagesSchema = Schema.Struct({
+export const AutomationActionNotionSearchPagesSchema = Schema.Struct({
     name: Schema.String,
     account: Schema.Union(
       Schema.Number,
@@ -64,7 +68,7 @@ export const Automation_action.notion.search-pagesSchema = Schema.Struct({
     description: "Searches for pages in Notion"
   }))
 
-export type Automation_action.notion.search-pages = Schema.Schema.Type<typeof Automation_action.notion.search-pagesSchema>
+export type AutomationActionNotionSearchPages = Schema.Schema.Type<typeof AutomationActionNotionSearchPagesSchema>
 ```
 
 ---

@@ -8,6 +8,10 @@ S3 bucket name (required for s3 provider)
 
 ## Implementation Status
 
+**Schema**: 🔴 Not implemented
+
+**Tests**: 🔴 No tests found
+
 ⏳ **Not Started**
 
 ### Required Features
@@ -36,16 +40,16 @@ import { Schema } from 'effect'
 
 ```typescript
 /**
- *
+ * 
  * S3 bucket name (required for s3 provider)
  */
-export const Tables.fields.multiple-attachments-field.storage.bucketSchema = Schema.String.pipe(
+export const TablesFieldsMultipleAttachmentsFieldStorageBucketSchema = Schema.String.pipe(
     Schema.annotations({
     description: "S3 bucket name (required for s3 provider)"
   })
   )
 
-export type Tables.fields.multiple-attachments-field.storage.bucket = Schema.Schema.Type<typeof Tables.fields.multiple-attachments-field.storage.bucketSchema>
+export type TablesFieldsMultipleAttachmentsFieldStorageBucket = Schema.Schema.Type<typeof TablesFieldsMultipleAttachmentsFieldStorageBucketSchema>
 ```
 
 ---

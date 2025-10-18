@@ -8,6 +8,10 @@ Whether to create a database index on this field for faster queries (recommended
 
 ## Implementation Status
 
+**Schema**: 🔴 Not implemented
+
+**Tests**: 🔴 No tests found
+
 ⏳ **Not Started**
 
 ### Required Features
@@ -36,12 +40,12 @@ import { Schema } from 'effect'
 
 ```typescript
 /**
- *
+ * 
  * Whether to create a database index on this field for faster queries (recommended for foreign keys)
  */
-export const Tables.fields.relationship-field.indexedSchema = Schema.Boolean
+export const TablesFieldsRelationshipFieldIndexedSchema = Schema.Boolean
 
-export type Tables.fields.relationship-field.indexed = Schema.Schema.Type<typeof Tables.fields.relationship-field.indexedSchema>
+export type TablesFieldsRelationshipFieldIndexed = Schema.Schema.Type<typeof TablesFieldsRelationshipFieldIndexedSchema>
 ```
 
 ---

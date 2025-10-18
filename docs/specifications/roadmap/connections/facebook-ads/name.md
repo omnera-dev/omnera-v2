@@ -6,6 +6,10 @@
 
 ## Implementation Status
 
+**Schema**: 🔴 Not implemented
+
+**Tests**: 🔴 No tests found
+
 ⏳ **Not Started**
 
 ### Required Features
@@ -33,9 +37,9 @@ import { Schema } from 'effect'
 **Implementation**:
 
 ```typescript
-export const Connections.facebook-ads.nameSchema = Schema.String
+export const ConnectionsFacebookAdsNameSchema = Schema.String
 
-export type Connections.facebook-ads.name = Schema.Schema.Type<typeof Connections.facebook-ads.nameSchema>
+export type ConnectionsFacebookAdsName = Schema.Schema.Type<typeof ConnectionsFacebookAdsNameSchema>
 ```
 
 ---

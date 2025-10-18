@@ -8,6 +8,10 @@ Lists the webhook payloads for a given webhook
 
 ## Implementation Status
 
+**Schema**: 🔴 Not implemented
+
+**Tests**: 🔴 No tests found
+
 ⏳ **Not Started**
 
 ### Required Features
@@ -37,10 +41,10 @@ import { Schema } from 'effect'
 ```typescript
 /**
  * List Webhook Payloads
- *
+ * 
  * Lists the webhook payloads for a given webhook
  */
-export const Automation_action.airtable.list-webhook-payloadsSchema = Schema.Struct({
+export const AutomationActionAirtableListWebhookPayloadsSchema = Schema.Struct({
     name: Schema.String,
     account: Schema.Union(
       Schema.Number,
@@ -59,7 +63,7 @@ export const Automation_action.airtable.list-webhook-payloadsSchema = Schema.Str
     description: "Lists the webhook payloads for a given webhook"
   }))
 
-export type Automation_action.airtable.list-webhook-payloads = Schema.Schema.Type<typeof Automation_action.airtable.list-webhook-payloadsSchema>
+export type AutomationActionAirtableListWebhookPayloads = Schema.Schema.Type<typeof AutomationActionAirtableListWebhookPayloadsSchema>
 ```
 
 ---

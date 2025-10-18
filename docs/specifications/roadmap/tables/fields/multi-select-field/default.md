@@ -6,6 +6,10 @@
 
 ## Implementation Status
 
+**Schema**: 🔴 Not implemented
+
+**Tests**: 🔴 No tests found
+
 ⏳ **Not Started**
 
 ### Required Features
@@ -33,9 +37,9 @@ import { Schema } from 'effect'
 **Implementation**:
 
 ```typescript
-export const Tables.fields.multi-select-field.defaultSchema = Schema.Array(Schema.String)
+export const TablesFieldsMultiSelectFieldDefaultSchema = Schema.Array(Schema.String)
 
-export type Tables.fields.multi-select-field.default = Schema.Schema.Type<typeof Tables.fields.multi-select-field.defaultSchema>
+export type TablesFieldsMultiSelectFieldDefault = Schema.Schema.Type<typeof TablesFieldsMultiSelectFieldDefaultSchema>
 ```
 
 ---

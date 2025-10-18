@@ -6,6 +6,10 @@
 
 ## Implementation Status
 
+**Schema**: 🔴 Not implemented
+
+**Tests**: 🔴 No tests found
+
 ⏳ **Not Started**
 
 ### Required Features
@@ -33,9 +37,9 @@ import { Schema } from 'effect'
 **Implementation**:
 
 ```typescript
-export const Tables.fields.updated-by-field.typeSchema = Schema.Literal("updated-by")
+export const TablesFieldsUpdatedByFieldTypeSchema = Schema.Literal("updated-by")
 
-export type Tables.fields.updated-by-field.type = Schema.Schema.Type<typeof Tables.fields.updated-by-field.typeSchema>
+export type TablesFieldsUpdatedByFieldType = Schema.Schema.Type<typeof TablesFieldsUpdatedByFieldTypeSchema>
 ```
 
 ---

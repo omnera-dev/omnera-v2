@@ -8,6 +8,10 @@ Custom database indexes for query optimization. Indexes improve query performanc
 
 ## Implementation Status
 
+**Schema**: 🔴 Not implemented
+
+**Tests**: 🔴 No tests found
+
 ⏳ **Not Started**
 
 ### Required Features
@@ -34,12 +38,12 @@ import { Schema } from 'effect'
 
 **Implementation**:
 
-````typescript
+```typescript
 /**
  * Database Indexes
- *
+ * 
  * Custom database indexes for query optimization. Indexes improve query performance by creating efficient lookup structures for specified fields.
- *
+ * 
  * @example
  * ```typescript
  * [
@@ -59,7 +63,7 @@ import { Schema } from 'effect'
  * ]
  * ```
  */
-export const Tables.indexesSchema = Schema.Array(Schema.Struct({
+export const TablesIndexesSchema = Schema.Array(Schema.Struct({
     name: Schema.String.pipe(
       Schema.minLength(1, { message: () => 'This field is required' }),
       Schema.pattern(/^[a-z][a-z0-9_]*$/, {
@@ -82,8 +86,8 @@ export const Tables.indexesSchema = Schema.Array(Schema.Struct({
   })
   )
 
-export type Tables.indexes = Schema.Schema.Type<typeof Tables.indexesSchema>
-````
+export type TablesIndexes = Schema.Schema.Type<typeof TablesIndexesSchema>
+```
 
 ---
 

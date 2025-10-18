@@ -6,6 +6,10 @@
 
 ## Implementation Status
 
+**Schema**: 🔴 Not implemented
+
+**Tests**: 🔴 No tests found
+
 ⏳ **Not Started**
 
 ### Required Features
@@ -33,7 +37,7 @@ import { Schema } from 'effect'
 **Implementation**:
 
 ```typescript
-export const Tables.fields.color-field.nameSchema = Schema.String.pipe(
+export const TablesFieldsColorFieldNameSchema = Schema.String.pipe(
     Schema.minLength(1, { message: () => 'This field is required' }),
     Schema.maxLength(63, { message: () => 'Maximum length is 63 characters' }),
     Schema.pattern(/^[a-z][a-z0-9_]*$/, {
@@ -46,7 +50,7 @@ export const Tables.fields.color-field.nameSchema = Schema.String.pipe(
   })
   )
 
-export type Tables.fields.color-field.name = Schema.Schema.Type<typeof Tables.fields.color-field.nameSchema>
+export type TablesFieldsColorFieldName = Schema.Schema.Type<typeof TablesFieldsColorFieldNameSchema>
 ```
 
 ---

@@ -8,6 +8,10 @@ Name of the unique constraint. Use descriptive names like 'uq_tablename_field1_f
 
 ## Implementation Status
 
+**Schema**: 🔴 Not implemented
+
+**Tests**: 🔴 No tests found
+
 ⏳ **Not Started**
 
 ### Required Features
@@ -34,17 +38,17 @@ import { Schema } from 'effect'
 
 **Implementation**:
 
-````typescript
+```typescript
 /**
- *
+ * 
  * Name of the unique constraint. Use descriptive names like 'uq_tablename_field1_field2'
- *
+ * 
  * @example
  * ```typescript
  * "uq_users_email_tenant"
  * ```
  */
-export const Tables.uniqueConstraints.nameSchema = Schema.String.pipe(
+export const TablesUniqueConstraintsNameSchema = Schema.String.pipe(
     Schema.minLength(1, { message: () => 'This field is required' }),
     Schema.pattern(/^[a-z][a-z0-9_]*$/, {
     message: () => 'Name of the unique constraint. Use descriptive names like 'uq_tablename_field1_field2''
@@ -55,8 +59,8 @@ export const Tables.uniqueConstraints.nameSchema = Schema.String.pipe(
   })
   )
 
-export type Tables.uniqueConstraints.name = Schema.Schema.Type<typeof Tables.uniqueConstraints.nameSchema>
-````
+export type TablesUniqueConstraintsName = Schema.Schema.Type<typeof TablesUniqueConstraintsNameSchema>
+```
 
 ---
 

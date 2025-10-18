@@ -6,6 +6,10 @@
 
 ## Implementation Status
 
+**Schema**: 🔴 Not implemented
+
+**Tests**: 🔴 No tests found
+
 ⏳ **Not Started**
 
 ### Required Features
@@ -33,9 +37,9 @@ import { Schema } from 'effect'
 **Implementation**:
 
 ```typescript
-export const Json_schema.multipleOfSchema = Schema.Number
+export const JsonSchemaMultipleOfSchema = Schema.Number
 
-export type Json_schema.multipleOf = Schema.Schema.Type<typeof Json_schema.multipleOfSchema>
+export type JsonSchemaMultipleOf = Schema.Schema.Type<typeof JsonSchemaMultipleOfSchema>
 ```
 
 ---

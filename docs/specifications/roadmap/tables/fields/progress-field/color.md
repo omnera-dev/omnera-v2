@@ -8,6 +8,10 @@ Color of the progress bar
 
 ## Implementation Status
 
+**Schema**: 🔴 Not implemented
+
+**Tests**: 🔴 No tests found
+
 ⏳ **Not Started**
 
 ### Required Features
@@ -36,10 +40,10 @@ import { Schema } from 'effect'
 
 ```typescript
 /**
- *
+ * 
  * Color of the progress bar
  */
-export const Tables.fields.progress-field.colorSchema = Schema.String.pipe(
+export const TablesFieldsProgressFieldColorSchema = Schema.String.pipe(
     Schema.pattern(/^#[0-9a-fA-F]{6}$/, {
     message: () => 'Color of the progress bar'
   }),
@@ -48,7 +52,7 @@ export const Tables.fields.progress-field.colorSchema = Schema.String.pipe(
   })
   )
 
-export type Tables.fields.progress-field.color = Schema.Schema.Type<typeof Tables.fields.progress-field.colorSchema>
+export type TablesFieldsProgressFieldColor = Schema.Schema.Type<typeof TablesFieldsProgressFieldColorSchema>
 ```
 
 ---

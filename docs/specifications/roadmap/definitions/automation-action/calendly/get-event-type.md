@@ -8,6 +8,10 @@ Gets the event type for a given uuid
 
 ## Implementation Status
 
+**Schema**: 🔴 Not implemented
+
+**Tests**: 🔴 No tests found
+
 ⏳ **Not Started**
 
 ### Required Features
@@ -37,10 +41,10 @@ import { Schema } from 'effect'
 ```typescript
 /**
  * Get Event Type
- *
+ * 
  * Gets the event type for a given uuid
  */
-export const Automation_action.calendly.get-event-typeSchema = Schema.Struct({
+export const AutomationActionCalendlyGetEventTypeSchema = Schema.Struct({
     name: Schema.String,
     account: Schema.Union(
       Schema.Number,
@@ -56,7 +60,7 @@ export const Automation_action.calendly.get-event-typeSchema = Schema.Struct({
     description: "Gets the event type for a given uuid"
   }))
 
-export type Automation_action.calendly.get-event-type = Schema.Schema.Type<typeof Automation_action.calendly.get-event-typeSchema>
+export type AutomationActionCalendlyGetEventType = Schema.Schema.Type<typeof AutomationActionCalendlyGetEventTypeSchema>
 ```
 
 ---

@@ -8,6 +8,10 @@ Which table fields to show as columns
 
 ## Implementation Status
 
+**Schema**: 🔴 Not implemented
+
+**Tests**: 🔴 No tests found
+
 ⏳ **Not Started**
 
 ### Required Features
@@ -36,17 +40,17 @@ import { Schema } from 'effect'
 
 ```typescript
 /**
- *
+ * 
  * Which table fields to show as columns
  */
-export const Pages.table-view-page.columnsSchema = Schema.Array(Schema.String).pipe(
+export const PagesTableViewPageColumnsSchema = Schema.Array(Schema.String).pipe(
     Schema.minItems(1),
     Schema.annotations({
     description: "Which table fields to show as columns"
   })
   )
 
-export type Pages.table-view-page.columns = Schema.Schema.Type<typeof Pages.table-view-page.columnsSchema>
+export type PagesTableViewPageColumns = Schema.Schema.Type<typeof PagesTableViewPageColumnsSchema>
 ```
 
 ---

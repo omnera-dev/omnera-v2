@@ -8,6 +8,10 @@ Name of the table to display
 
 ## Implementation Status
 
+**Schema**: 🔴 Not implemented
+
+**Tests**: 🔴 No tests found
+
 ⏳ **Not Started**
 
 ### Required Features
@@ -36,17 +40,17 @@ import { Schema } from 'effect'
 
 ```typescript
 /**
- *
+ * 
  * Name of the table to display
  */
-export const Pages.detail-view-page.tableSchema = Schema.String.pipe(
+export const PagesDetailViewPageTableSchema = Schema.String.pipe(
     Schema.minLength(1, { message: () => 'This field is required' }),
     Schema.annotations({
     description: "Name of the table to display"
   })
   )
 
-export type Pages.detail-view-page.table = Schema.Schema.Type<typeof Pages.detail-view-page.tableSchema>
+export type PagesDetailViewPageTable = Schema.Schema.Type<typeof PagesDetailViewPageTableSchema>
 ```
 
 ---

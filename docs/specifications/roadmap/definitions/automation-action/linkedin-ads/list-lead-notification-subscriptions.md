@@ -8,6 +8,10 @@ Lists LinkedIn lead notification subscriptions for an organization
 
 ## Implementation Status
 
+**Schema**: 🔴 Not implemented
+
+**Tests**: 🔴 No tests found
+
 ⏳ **Not Started**
 
 ### Required Features
@@ -37,10 +41,10 @@ import { Schema } from 'effect'
 ```typescript
 /**
  * List Lead Notification Subscriptions
- *
+ * 
  * Lists LinkedIn lead notification subscriptions for an organization
  */
-export const Automation_action.linkedin-ads.list-lead-notification-subscriptionsSchema = Schema.Struct({
+export const AutomationActionLinkedinAdsListLeadNotificationSubscriptionsSchema = Schema.Struct({
     name: Schema.String,
     account: Schema.Union(
       Schema.Number,
@@ -60,7 +64,7 @@ export const Automation_action.linkedin-ads.list-lead-notification-subscriptions
     description: "Lists LinkedIn lead notification subscriptions for an organization"
   }))
 
-export type Automation_action.linkedin-ads.list-lead-notification-subscriptions = Schema.Schema.Type<typeof Automation_action.linkedin-ads.list-lead-notification-subscriptionsSchema>
+export type AutomationActionLinkedinAdsListLeadNotificationSubscriptions = Schema.Schema.Type<typeof AutomationActionLinkedinAdsListLeadNotificationSubscriptionsSchema>
 ```
 
 ---

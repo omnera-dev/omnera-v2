@@ -6,6 +6,10 @@
 
 ## Implementation Status
 
+**Schema**: 🔴 Not implemented
+
+**Tests**: 🔴 No tests found
+
 ⏳ **Not Started**
 
 ### Required Features
@@ -33,12 +37,12 @@ import { Schema } from 'effect'
 **Implementation**:
 
 ```typescript
-export const Connections.airtable.idSchema = Schema.Int.pipe(
+export const ConnectionsAirtableIdSchema = Schema.Int.pipe(
     Schema.greaterThanOrEqualTo(1),
     Schema.lessThanOrEqualTo(9007199254740991)
   )
 
-export type Connections.airtable.id = Schema.Schema.Type<typeof Connections.airtable.idSchema>
+export type ConnectionsAirtableId = Schema.Schema.Type<typeof ConnectionsAirtableIdSchema>
 ```
 
 ---

@@ -8,6 +8,10 @@ URL path where the page is accessible
 
 ## Implementation Status
 
+**Schema**: 🔴 Not implemented
+
+**Tests**: 🔴 No tests found
+
 ⏳ **Not Started**
 
 ### Required Features
@@ -34,18 +38,18 @@ import { Schema } from 'effect'
 
 **Implementation**:
 
-````typescript
+```typescript
 /**
  * Page Path
- *
+ * 
  * URL path where the page is accessible
- *
+ * 
  * @example
  * ```typescript
  * "/users"
  * ```
  */
-export const Pages.table-view-page.pathSchema = Schema.String.pipe(
+export const PagesTableViewPagePathSchema = Schema.String.pipe(
     Schema.minLength(1, { message: () => 'This field is required' }),
     Schema.pattern(/^/[a-z0-9-/]*$/, {
     message: () => 'URL path for routing and navigation. Must start with forward slash (/), contain only lowercase letters, numbers, hyphens, and forward slashes. Used for page routing, API endpoints, and navigation links. Paths should be hierarchical and descriptive (e.g., /customers/orders, /admin/settings). Nested paths are supported.'
@@ -57,8 +61,8 @@ export const Pages.table-view-page.pathSchema = Schema.String.pipe(
   })
   )
 
-export type Pages.table-view-page.path = Schema.Schema.Type<typeof Pages.table-view-page.pathSchema>
-````
+export type PagesTableViewPagePath = Schema.Schema.Type<typeof PagesTableViewPagePathSchema>
+```
 
 ---
 

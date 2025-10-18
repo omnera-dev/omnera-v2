@@ -6,6 +6,10 @@
 
 ## Implementation Status
 
+**Schema**: 🔴 Not implemented
+
+**Tests**: 🔴 No tests found
+
 ⏳ **Not Started**
 
 ### Required Features
@@ -33,9 +37,9 @@ import { Schema } from 'effect'
 **Implementation**:
 
 ```typescript
-export const Tables.fields.autonumber-field.typeSchema = Schema.Literal("autonumber")
+export const TablesFieldsAutonumberFieldTypeSchema = Schema.Literal("autonumber")
 
-export type Tables.fields.autonumber-field.type = Schema.Schema.Type<typeof Tables.fields.autonumber-field.typeSchema>
+export type TablesFieldsAutonumberFieldType = Schema.Schema.Type<typeof TablesFieldsAutonumberFieldTypeSchema>
 ```
 
 ---

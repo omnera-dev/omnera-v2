@@ -8,6 +8,10 @@ Retrieves a page from Notion
 
 ## Implementation Status
 
+**Schema**: 🔴 Not implemented
+
+**Tests**: 🔴 No tests found
+
 ⏳ **Not Started**
 
 ### Required Features
@@ -37,10 +41,10 @@ import { Schema } from 'effect'
 ```typescript
 /**
  * Get Page
- *
+ * 
  * Retrieves a page from Notion
  */
-export const Automation_action.notion.get-pageSchema = Schema.Struct({
+export const AutomationActionNotionGetPageSchema = Schema.Struct({
     name: Schema.String,
     account: Schema.Union(
       Schema.Number,
@@ -61,7 +65,7 @@ export const Automation_action.notion.get-pageSchema = Schema.Struct({
     description: "Retrieves a page from Notion"
   }))
 
-export type Automation_action.notion.get-page = Schema.Schema.Type<typeof Automation_action.notion.get-pageSchema>
+export type AutomationActionNotionGetPage = Schema.Schema.Type<typeof AutomationActionNotionGetPageSchema>
 ```
 
 ---

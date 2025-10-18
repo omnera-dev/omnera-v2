@@ -6,6 +6,10 @@
 
 ## Implementation Status
 
+**Schema**: 🔴 Not implemented
+
+**Tests**: 🔴 No tests found
+
 ⏳ **Not Started**
 
 ### Required Features
@@ -33,9 +37,9 @@ import { Schema } from 'effect'
 **Implementation**:
 
 ```typescript
-export const Tables.fields.relationship-field.typeSchema = Schema.Literal("relationship")
+export const TablesFieldsRelationshipFieldTypeSchema = Schema.Literal("relationship")
 
-export type Tables.fields.relationship-field.type = Schema.Schema.Type<typeof Tables.fields.relationship-field.typeSchema>
+export type TablesFieldsRelationshipFieldType = Schema.Schema.Type<typeof TablesFieldsRelationshipFieldTypeSchema>
 ```
 
 ---

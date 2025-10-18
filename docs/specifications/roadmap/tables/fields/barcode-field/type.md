@@ -6,6 +6,10 @@
 
 ## Implementation Status
 
+**Schema**: 🔴 Not implemented
+
+**Tests**: 🔴 No tests found
+
 ⏳ **Not Started**
 
 ### Required Features
@@ -33,9 +37,9 @@ import { Schema } from 'effect'
 **Implementation**:
 
 ```typescript
-export const Tables.fields.barcode-field.typeSchema = Schema.Literal("barcode")
+export const TablesFieldsBarcodeFieldTypeSchema = Schema.Literal("barcode")
 
-export type Tables.fields.barcode-field.type = Schema.Schema.Type<typeof Tables.fields.barcode-field.typeSchema>
+export type TablesFieldsBarcodeFieldType = Schema.Schema.Type<typeof TablesFieldsBarcodeFieldTypeSchema>
 ```
 
 ---

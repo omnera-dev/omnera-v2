@@ -6,6 +6,10 @@
 
 ## Implementation Status
 
+**Schema**: 🔴 Not implemented
+
+**Tests**: 🔴 No tests found
+
 ⏳ **Not Started**
 
 ### Required Features
@@ -33,9 +37,9 @@ import { Schema } from 'effect'
 **Implementation**:
 
 ```typescript
-export const Tables.fields.rating-field.typeSchema = Schema.Literal("rating")
+export const TablesFieldsRatingFieldTypeSchema = Schema.Literal("rating")
 
-export type Tables.fields.rating-field.type = Schema.Schema.Type<typeof Tables.fields.rating-field.typeSchema>
+export type TablesFieldsRatingFieldType = Schema.Schema.Type<typeof TablesFieldsRatingFieldTypeSchema>
 ```
 
 ---

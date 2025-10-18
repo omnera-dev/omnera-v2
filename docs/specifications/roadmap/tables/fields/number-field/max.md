@@ -8,6 +8,10 @@ Maximum value
 
 ## Implementation Status
 
+**Schema**: 🔴 Not implemented
+
+**Tests**: 🔴 No tests found
+
 ⏳ **Not Started**
 
 ### Required Features
@@ -36,16 +40,16 @@ import { Schema } from 'effect'
 
 ```typescript
 /**
- *
+ * 
  * Maximum value
  */
-export const Tables.fields.number-field.maxSchema = Schema.Number.pipe(
+export const TablesFieldsNumberFieldMaxSchema = Schema.Number.pipe(
     Schema.annotations({
     description: "Maximum value"
   })
   )
 
-export type Tables.fields.number-field.max = Schema.Schema.Type<typeof Tables.fields.number-field.maxSchema>
+export type TablesFieldsNumberFieldMax = Schema.Schema.Type<typeof TablesFieldsNumberFieldMaxSchema>
 ```
 
 ---

@@ -8,6 +8,10 @@ Type of action to trigger
 
 ## Implementation Status
 
+**Schema**: 🔴 Not implemented
+
+**Tests**: 🔴 No tests found
+
 ⏳ **Not Started**
 
 ### Required Features
@@ -36,14 +40,14 @@ import { Schema } from 'effect'
 
 ```typescript
 /**
- *
+ * 
  * Type of action to trigger
  */
-export const Tables.fields.button-field.actionSchema = Schema.Literal("url", "automation").pipe(Schema.annotations({
+export const TablesFieldsButtonFieldActionSchema = Schema.Literal("url", "automation").pipe(Schema.annotations({
     description: "Type of action to trigger"
   }))
 
-export type Tables.fields.button-field.action = Schema.Schema.Type<typeof Tables.fields.button-field.actionSchema>
+export type TablesFieldsButtonFieldAction = Schema.Schema.Type<typeof TablesFieldsButtonFieldActionSchema>
 ```
 
 ---

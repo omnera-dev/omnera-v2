@@ -6,6 +6,10 @@
 
 ## Implementation Status
 
+**Schema**: 🔴 Not implemented
+
+**Tests**: 🔴 No tests found
+
 ⏳ **Not Started**
 
 ### Required Features
@@ -33,9 +37,9 @@ import { Schema } from 'effect'
 **Implementation**:
 
 ```typescript
-export const Tables.fields.single-select-field.defaultSchema = Schema.String
+export const TablesFieldsSingleSelectFieldDefaultSchema = Schema.String
 
-export type Tables.fields.single-select-field.default = Schema.Schema.Type<typeof Tables.fields.single-select-field.defaultSchema>
+export type TablesFieldsSingleSelectFieldDefault = Schema.Schema.Type<typeof TablesFieldsSingleSelectFieldDefaultSchema>
 ```
 
 ---

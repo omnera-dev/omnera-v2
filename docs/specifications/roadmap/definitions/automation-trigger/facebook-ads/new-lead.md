@@ -8,6 +8,10 @@ Triggered when a new Facebook Lead Ad response is created
 
 ## Implementation Status
 
+**Schema**: 🔴 Not implemented
+
+**Tests**: 🔴 No tests found
+
 ⏳ **Not Started**
 
 ### Required Features
@@ -37,10 +41,10 @@ import { Schema } from 'effect'
 ```typescript
 /**
  * New Lead
- *
+ * 
  * Triggered when a new Facebook Lead Ad response is created
  */
-export const Automation_trigger.facebook-ads.new-leadSchema = Schema.Struct({
+export const AutomationTriggerFacebookAdsNewLeadSchema = Schema.Struct({
     account: Schema.Union(
       Schema.Number,
       Schema.String
@@ -78,7 +82,7 @@ export const Automation_trigger.facebook-ads.new-leadSchema = Schema.Struct({
     description: "Triggered when a new Facebook Lead Ad response is created"
   }))
 
-export type Automation_trigger.facebook-ads.new-lead = Schema.Schema.Type<typeof Automation_trigger.facebook-ads.new-leadSchema>
+export type AutomationTriggerFacebookAdsNewLead = Schema.Schema.Type<typeof AutomationTriggerFacebookAdsNewLeadSchema>
 ```
 
 ---

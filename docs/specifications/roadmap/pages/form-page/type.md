@@ -6,6 +6,10 @@
 
 ## Implementation Status
 
+**Schema**: 🔴 Not implemented
+
+**Tests**: 🔴 No tests found
+
 ⏳ **Not Started**
 
 ### Required Features
@@ -33,9 +37,9 @@ import { Schema } from 'effect'
 **Implementation**:
 
 ```typescript
-export const Pages.form-page.typeSchema = Schema.Literal("form")
+export const PagesFormPageTypeSchema = Schema.Literal("form")
 
-export type Pages.form-page.type = Schema.Schema.Type<typeof Pages.form-page.typeSchema>
+export type PagesFormPageType = Schema.Schema.Type<typeof PagesFormPageTypeSchema>
 ```
 
 ---

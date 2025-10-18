@@ -8,6 +8,10 @@ Triggered when a record is created
 
 ## Implementation Status
 
+**Schema**: 🔴 Not implemented
+
+**Tests**: 🔴 No tests found
+
 ⏳ **Not Started**
 
 ### Required Features
@@ -37,10 +41,10 @@ import { Schema } from 'effect'
 ```typescript
 /**
  * Record Created
- *
+ * 
  * Triggered when a record is created
  */
-export const Automation_trigger.database.record-createdSchema = Schema.Struct({
+export const AutomationTriggerDatabaseRecordCreatedSchema = Schema.Struct({
     service: Schema.String,
     event: Schema.String,
     params: Schema.Struct({
@@ -51,7 +55,7 @@ export const Automation_trigger.database.record-createdSchema = Schema.Struct({
     description: "Triggered when a record is created"
   }))
 
-export type Automation_trigger.database.record-created = Schema.Schema.Type<typeof Automation_trigger.database.record-createdSchema>
+export type AutomationTriggerDatabaseRecordCreated = Schema.Schema.Type<typeof AutomationTriggerDatabaseRecordCreatedSchema>
 ```
 
 ---

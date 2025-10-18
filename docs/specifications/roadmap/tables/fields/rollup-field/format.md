@@ -8,6 +8,10 @@ Display format for the result
 
 ## Implementation Status
 
+**Schema**: 🔴 Not implemented
+
+**Tests**: 🔴 No tests found
+
 ⏳ **Not Started**
 
 ### Required Features
@@ -34,25 +38,25 @@ import { Schema } from 'effect'
 
 **Implementation**:
 
-````typescript
+```typescript
 /**
- *
+ * 
  * Display format for the result
- *
+ * 
  * @example
  * ```typescript
  * "currency"
  * ```
  */
-export const Tables.fields.rollup-field.formatSchema = Schema.String.pipe(
+export const TablesFieldsRollupFieldFormatSchema = Schema.String.pipe(
     Schema.annotations({
     description: "Display format for the result",
     examples: ["currency","number","percentage"]
   })
   )
 
-export type Tables.fields.rollup-field.format = Schema.Schema.Type<typeof Tables.fields.rollup-field.formatSchema>
-````
+export type TablesFieldsRollupFieldFormat = Schema.Schema.Type<typeof TablesFieldsRollupFieldFormatSchema>
+```
 
 ---
 

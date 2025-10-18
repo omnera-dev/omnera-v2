@@ -8,6 +8,10 @@ Appends values to a Google Sheets spreadsheet
 
 ## Implementation Status
 
+**Schema**: 🔴 Not implemented
+
+**Tests**: 🔴 No tests found
+
 ⏳ **Not Started**
 
 ### Required Features
@@ -37,10 +41,10 @@ import { Schema } from 'effect'
 ```typescript
 /**
  * Append Values
- *
+ * 
  * Appends values to a Google Sheets spreadsheet
  */
-export const Automation_action.google-sheets.append-valuesSchema = Schema.Struct({
+export const AutomationActionGoogleSheetsAppendValuesSchema = Schema.Struct({
     name: Schema.String,
     account: Schema.Union(
       Schema.Number,
@@ -58,7 +62,7 @@ export const Automation_action.google-sheets.append-valuesSchema = Schema.Struct
     description: "Appends values to a Google Sheets spreadsheet"
   }))
 
-export type Automation_action.google-sheets.append-values = Schema.Schema.Type<typeof Automation_action.google-sheets.append-valuesSchema>
+export type AutomationActionGoogleSheetsAppendValues = Schema.Schema.Type<typeof AutomationActionGoogleSheetsAppendValuesSchema>
 ```
 
 ---

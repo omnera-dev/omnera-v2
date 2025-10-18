@@ -6,6 +6,10 @@
 
 ## Implementation Status
 
+**Schema**: 🔴 Not implemented
+
+**Tests**: 🔴 No tests found
+
 ⏳ **Not Started**
 
 ### Required Features
@@ -33,9 +37,9 @@ import { Schema } from 'effect'
 **Implementation**:
 
 ```typescript
-export const Connections.notion.clientIdSchema = Schema.String
+export const ConnectionsNotionClientIdSchema = Schema.String
 
-export type Connections.notion.clientId = Schema.Schema.Type<typeof Connections.notion.clientIdSchema>
+export type ConnectionsNotionClientId = Schema.Schema.Type<typeof ConnectionsNotionClientIdSchema>
 ```
 
 ---

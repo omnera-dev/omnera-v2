@@ -8,6 +8,10 @@ Hex color code for the status
 
 ## Implementation Status
 
+**Schema**: 🔴 Not implemented
+
+**Tests**: 🔴 No tests found
+
 ⏳ **Not Started**
 
 ### Required Features
@@ -36,10 +40,10 @@ import { Schema } from 'effect'
 
 ```typescript
 /**
- *
+ * 
  * Hex color code for the status
  */
-export const Tables.fields.status-field.options.colorSchema = Schema.String.pipe(
+export const TablesFieldsStatusFieldOptionsColorSchema = Schema.String.pipe(
     Schema.pattern(/^#[0-9a-fA-F]{6}$/, {
     message: () => 'Hex color code for the status'
   }),
@@ -48,7 +52,7 @@ export const Tables.fields.status-field.options.colorSchema = Schema.String.pipe
   })
   )
 
-export type Tables.fields.status-field.options.color = Schema.Schema.Type<typeof Tables.fields.status-field.options.colorSchema>
+export type TablesFieldsStatusFieldOptionsColor = Schema.Schema.Type<typeof TablesFieldsStatusFieldOptionsColorSchema>
 ```
 
 ---

@@ -6,6 +6,10 @@
 
 ## Implementation Status
 
+**Schema**: 🔴 Not implemented
+
+**Tests**: 🔴 No tests found
+
 ⏳ **Not Started**
 
 ### Required Features
@@ -33,9 +37,9 @@ import { Schema } from 'effect'
 **Implementation**:
 
 ```typescript
-export const Tables.fields.geolocation-field.typeSchema = Schema.Literal("geolocation")
+export const TablesFieldsGeolocationFieldTypeSchema = Schema.Literal("geolocation")
 
-export type Tables.fields.geolocation-field.type = Schema.Schema.Type<typeof Tables.fields.geolocation-field.typeSchema>
+export type TablesFieldsGeolocationFieldType = Schema.Schema.Type<typeof TablesFieldsGeolocationFieldTypeSchema>
 ```
 
 ---

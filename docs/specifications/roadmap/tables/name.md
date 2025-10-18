@@ -8,6 +8,10 @@ Name of the database table
 
 ## Implementation Status
 
+**Schema**: 🔴 Not implemented
+
+**Tests**: 🔴 No tests found
+
 ⏳ **Not Started**
 
 ### Required Features
@@ -34,18 +38,18 @@ import { Schema } from 'effect'
 
 **Implementation**:
 
-````typescript
+```typescript
 /**
  * Table Name
- *
+ * 
  * Name of the database table
- *
+ * 
  * @example
  * ```typescript
  * "users"
  * ```
  */
-export const Tables.nameSchema = Schema.String.pipe(
+export const TablesNameSchema = Schema.String.pipe(
     Schema.minLength(1, { message: () => 'This field is required' }),
     Schema.maxLength(63, { message: () => 'Maximum length is 63 characters' }),
     Schema.pattern(/^[a-z][a-z0-9_]*$/, {
@@ -58,8 +62,8 @@ export const Tables.nameSchema = Schema.String.pipe(
   })
   )
 
-export type Tables.name = Schema.Schema.Type<typeof Tables.nameSchema>
-````
+export type TablesName = Schema.Schema.Type<typeof TablesNameSchema>
+```
 
 ---
 

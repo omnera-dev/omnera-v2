@@ -6,6 +6,10 @@
 
 ## Implementation Status
 
+**Schema**: 🔴 Not implemented
+
+**Tests**: 🔴 No tests found
+
 ⏳ **Not Started**
 
 ### Required Features
@@ -33,9 +37,9 @@ import { Schema } from 'effect'
 **Implementation**:
 
 ```typescript
-export const Json_schema.patternSchema = Schema.String
+export const JsonSchemaPatternSchema = Schema.String
 
-export type Json_schema.pattern = Schema.Schema.Type<typeof Json_schema.patternSchema>
+export type JsonSchemaPattern = Schema.Schema.Type<typeof JsonSchemaPatternSchema>
 ```
 
 ---

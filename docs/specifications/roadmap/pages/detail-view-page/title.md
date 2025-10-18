@@ -8,6 +8,10 @@ Display title for the page
 
 ## Implementation Status
 
+**Schema**: 🔴 Not implemented
+
+**Tests**: 🔴 No tests found
+
 ⏳ **Not Started**
 
 ### Required Features
@@ -36,17 +40,17 @@ import { Schema } from 'effect'
 
 ```typescript
 /**
- *
+ * 
  * Display title for the page
  */
-export const Pages.detail-view-page.titleSchema = Schema.String.pipe(
+export const PagesDetailViewPageTitleSchema = Schema.String.pipe(
     Schema.minLength(1, { message: () => 'This field is required' }),
     Schema.annotations({
     description: "Display title for the page"
   })
   )
 
-export type Pages.detail-view-page.title = Schema.Schema.Type<typeof Pages.detail-view-page.titleSchema>
+export type PagesDetailViewPageTitle = Schema.Schema.Type<typeof PagesDetailViewPageTitleSchema>
 ```
 
 ---

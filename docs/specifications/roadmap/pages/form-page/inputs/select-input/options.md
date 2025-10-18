@@ -6,6 +6,10 @@
 
 ## Implementation Status
 
+**Schema**: 🔴 Not implemented
+
+**Tests**: 🔴 No tests found
+
 ⏳ **Not Started**
 
 ### Required Features
@@ -33,12 +37,12 @@ import { Schema } from 'effect'
 **Implementation**:
 
 ```typescript
-export const Pages.form-page.inputs.select-input.optionsSchema = Schema.Array(Schema.Struct({
+export const PagesFormPageInputsSelectInputOptionsSchema = Schema.Array(Schema.Struct({
     label: Schema.String,
     value: Schema.String,
   }))
 
-export type Pages.form-page.inputs.select-input.options = Schema.Schema.Type<typeof Pages.form-page.inputs.select-input.optionsSchema>
+export type PagesFormPageInputsSelectInputOptions = Schema.Schema.Type<typeof PagesFormPageInputsSelectInputOptionsSchema>
 ```
 
 ---

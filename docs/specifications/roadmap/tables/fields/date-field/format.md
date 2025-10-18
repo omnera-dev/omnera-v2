@@ -8,6 +8,10 @@ Date format string
 
 ## Implementation Status
 
+**Schema**: 🔴 Not implemented
+
+**Tests**: 🔴 No tests found
+
 ⏳ **Not Started**
 
 ### Required Features
@@ -34,25 +38,25 @@ import { Schema } from 'effect'
 
 **Implementation**:
 
-````typescript
+```typescript
 /**
- *
+ * 
  * Date format string
- *
+ * 
  * @example
  * ```typescript
  * "YYYY-MM-DD"
  * ```
  */
-export const Tables.fields.date-field.formatSchema = Schema.String.pipe(
+export const TablesFieldsDateFieldFormatSchema = Schema.String.pipe(
     Schema.annotations({
     description: "Date format string",
     examples: ["YYYY-MM-DD","MM/DD/YYYY","DD-MM-YYYY"]
   })
   )
 
-export type Tables.fields.date-field.format = Schema.Schema.Type<typeof Tables.fields.date-field.formatSchema>
-````
+export type TablesFieldsDateFieldFormat = Schema.Schema.Type<typeof TablesFieldsDateFieldFormatSchema>
+```
 
 ---
 

@@ -6,6 +6,10 @@
 
 ## Implementation Status
 
+**Schema**: 🔴 Not implemented
+
+**Tests**: 🔴 No tests found
+
 ⏳ **Not Started**
 
 ### Required Features
@@ -33,9 +37,9 @@ import { Schema } from 'effect'
 **Implementation**:
 
 ```typescript
-export const Pages.custom-html-page.head.style-element.tagSchema = Schema.Literal("style")
+export const PagesCustomHtmlPageHeadStyleElementTagSchema = Schema.Literal("style")
 
-export type Pages.custom-html-page.head.style-element.tag = Schema.Schema.Type<typeof Pages.custom-html-page.head.style-element.tagSchema>
+export type PagesCustomHtmlPageHeadStyleElementTag = Schema.Schema.Type<typeof PagesCustomHtmlPageHeadStyleElementTagSchema>
 ```
 
 ---

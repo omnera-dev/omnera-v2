@@ -8,6 +8,10 @@ Primary key configuration for the table. The primary key uniquely identifies eac
 
 ## Implementation Status
 
+**Schema**: 🔴 Not implemented
+
+**Tests**: 🔴 No tests found
+
 ⏳ **Not Started**
 
 ### Required Features
@@ -34,12 +38,12 @@ import { Schema } from 'effect'
 
 **Implementation**:
 
-````typescript
+```typescript
 /**
  * Primary Key
- *
+ * 
  * Primary key configuration for the table. The primary key uniquely identifies each row and is automatically indexed.
- *
+ * 
  * @example
  * ```typescript
  * {
@@ -48,7 +52,7 @@ import { Schema } from 'effect'
  * }
  * ```
  */
-export const Tables.primaryKeySchema = Schema.Struct({
+export const TablesPrimaryKeySchema = Schema.Struct({
     type: Schema.String.pipe(
       Schema.annotations({
       description: "Primary key generation strategy. 'auto-increment' uses sequential integers (1, 2, 3...), 'uuid' generates random unique identifiers, 'composite' uses multiple fields together."
@@ -72,8 +76,8 @@ export const Tables.primaryKeySchema = Schema.Struct({
     examples: [{"type":"auto-increment","field":"id"},{"type":"uuid","field":"id"},{"type":"composite","fields":["tenant_id","user_id"]}]
   }))
 
-export type Tables.primaryKey = Schema.Schema.Type<typeof Tables.primaryKeySchema>
-````
+export type TablesPrimaryKey = Schema.Schema.Type<typeof TablesPrimaryKeySchema>
+```
 
 ---
 

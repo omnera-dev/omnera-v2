@@ -6,6 +6,10 @@
 
 ## Implementation Status
 
+**Schema**: 🔴 Not implemented
+
+**Tests**: 🔴 No tests found
+
 ⏳ **Not Started**
 
 ### Required Features
@@ -33,9 +37,9 @@ import { Schema } from 'effect'
 **Implementation**:
 
 ```typescript
-export const Pages.form-page.inputs.select-input.typeSchema = Schema.Literal("single-select")
+export const PagesFormPageInputsSelectInputTypeSchema = Schema.Literal("single-select")
 
-export type Pages.form-page.inputs.select-input.type = Schema.Schema.Type<typeof Pages.form-page.inputs.select-input.typeSchema>
+export type PagesFormPageInputsSelectInputType = Schema.Schema.Type<typeof PagesFormPageInputsSelectInputTypeSchema>
 ```
 
 ---

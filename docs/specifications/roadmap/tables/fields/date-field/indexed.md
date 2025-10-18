@@ -8,6 +8,10 @@ Whether to create a database index on this field for faster queries
 
 ## Implementation Status
 
+**Schema**: 🔴 Not implemented
+
+**Tests**: 🔴 No tests found
+
 ⏳ **Not Started**
 
 ### Required Features
@@ -36,12 +40,12 @@ import { Schema } from 'effect'
 
 ```typescript
 /**
- *
+ * 
  * Whether to create a database index on this field for faster queries
  */
-export const Tables.fields.date-field.indexedSchema = Schema.Boolean
+export const TablesFieldsDateFieldIndexedSchema = Schema.Boolean
 
-export type Tables.fields.date-field.indexed = Schema.Schema.Type<typeof Tables.fields.date-field.indexedSchema>
+export type TablesFieldsDateFieldIndexed = Schema.Schema.Type<typeof TablesFieldsDateFieldIndexedSchema>
 ```
 
 ---

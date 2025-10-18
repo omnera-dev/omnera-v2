@@ -8,6 +8,10 @@ Triggered when a new LinkedIn Lead Gen Form response is created
 
 ## Implementation Status
 
+**Schema**: 🔴 Not implemented
+
+**Tests**: 🔴 No tests found
+
 ⏳ **Not Started**
 
 ### Required Features
@@ -37,10 +41,10 @@ import { Schema } from 'effect'
 ```typescript
 /**
  * New Lead Gen Form Response
- *
+ * 
  * Triggered when a new LinkedIn Lead Gen Form response is created
  */
-export const Automation_trigger.linkedin-ads.new-lead-gen-form-responseSchema = Schema.Struct({
+export const AutomationTriggerLinkedinAdsNewLeadGenFormResponseSchema = Schema.Struct({
     account: Schema.Union(
       Schema.Number,
       Schema.String
@@ -71,7 +75,7 @@ export const Automation_trigger.linkedin-ads.new-lead-gen-form-responseSchema = 
     description: "Triggered when a new LinkedIn Lead Gen Form response is created"
   }))
 
-export type Automation_trigger.linkedin-ads.new-lead-gen-form-response = Schema.Schema.Type<typeof Automation_trigger.linkedin-ads.new-lead-gen-form-responseSchema>
+export type AutomationTriggerLinkedinAdsNewLeadGenFormResponse = Schema.Schema.Type<typeof AutomationTriggerLinkedinAdsNewLeadGenFormResponseSchema>
 ```
 
 ---

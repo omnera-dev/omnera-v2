@@ -6,6 +6,10 @@
 
 ## Implementation Status
 
+**Schema**: 🔴 Not implemented
+
+**Tests**: 🔴 No tests found
+
 ⏳ **Not Started**
 
 ### Required Features
@@ -33,9 +37,9 @@ import { Schema } from 'effect'
 **Implementation**:
 
 ```typescript
-export const Tables.fields.single-attachment-field.requiredSchema = Schema.Boolean
+export const TablesFieldsSingleAttachmentFieldRequiredSchema = Schema.Boolean
 
-export type Tables.fields.single-attachment-field.required = Schema.Schema.Type<typeof Tables.fields.single-attachment-field.requiredSchema>
+export type TablesFieldsSingleAttachmentFieldRequired = Schema.Schema.Type<typeof TablesFieldsSingleAttachmentFieldRequiredSchema>
 ```
 
 ---

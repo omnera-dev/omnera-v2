@@ -8,6 +8,10 @@ Name of the index. Use descriptive names like 'idx_tablename_fieldname'
 
 ## Implementation Status
 
+**Schema**: 🔴 Not implemented
+
+**Tests**: 🔴 No tests found
+
 ⏳ **Not Started**
 
 ### Required Features
@@ -34,17 +38,17 @@ import { Schema } from 'effect'
 
 **Implementation**:
 
-````typescript
+```typescript
 /**
- *
+ * 
  * Name of the index. Use descriptive names like 'idx_tablename_fieldname'
- *
+ * 
  * @example
  * ```typescript
  * "idx_users_email"
  * ```
  */
-export const Tables.indexes.nameSchema = Schema.String.pipe(
+export const TablesIndexesNameSchema = Schema.String.pipe(
     Schema.minLength(1, { message: () => 'This field is required' }),
     Schema.pattern(/^[a-z][a-z0-9_]*$/, {
     message: () => 'Name of the index. Use descriptive names like 'idx_tablename_fieldname''
@@ -55,8 +59,8 @@ export const Tables.indexes.nameSchema = Schema.String.pipe(
   })
   )
 
-export type Tables.indexes.name = Schema.Schema.Type<typeof Tables.indexes.nameSchema>
-````
+export type TablesIndexesName = Schema.Schema.Type<typeof TablesIndexesNameSchema>
+```
 
 ---
 

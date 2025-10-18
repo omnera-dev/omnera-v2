@@ -8,6 +8,10 @@ User interface pages and views that users interact with. Pages can display data 
 
 ## Implementation Status
 
+**Schema**: 🔴 Not implemented
+
+**Tests**: 🔴 No tests found
+
 ⏳ **Not Started**
 
 ### Required Features
@@ -43,170 +47,146 @@ import { Schema } from 'effect'
 ```typescript
 /**
  * Pages
- *
+ * 
  * User interface pages and views that users interact with. Pages can display data from tables (table-view, detail-view), collect input through forms (form), or render custom HTML content. Each page has a unique URL path, navigation visibility settings, and configurable layouts. Pages connect your data model to the user experience.
  */
-export const PagesSchema = Schema.Array(
-  Schema.Union(
+export const PagesSchema = Schema.Array(Schema.Union(
     Schema.Struct({
       type: Schema.String,
       name: Schema.Unknown,
       path: Schema.Unknown,
-      head: Schema.Array(
-        Schema.Union(
-          Schema.Struct({
-            tag: Schema.String,
-            name: Schema.String.pipe(
-              Schema.minLength(1, { message: () => 'This field is required' })
-            ),
-            content: Schema.String.pipe(
-              Schema.minLength(1, { message: () => 'This field is required' })
-            ),
-          }),
-          Schema.Struct({
-            tag: Schema.String,
-            content: Schema.String.pipe(
-              Schema.minLength(1, { message: () => 'This field is required' })
-            ),
-          }),
-          Schema.Struct({
-            tag: Schema.String,
-            src: Schema.optional(Schema.String),
-            content: Schema.optional(Schema.String),
-            type: Schema.optional(Schema.String),
-            async: Schema.optional(Schema.Boolean),
-            defer: Schema.optional(Schema.Boolean),
-          }),
-          Schema.Struct({
-            tag: Schema.String,
-            content: Schema.String.pipe(
-              Schema.minLength(1, { message: () => 'This field is required' })
-            ),
-            type: Schema.optional(Schema.String),
-            media: Schema.optional(Schema.String),
-          }),
-          Schema.Struct({
-            tag: Schema.String,
-            href: Schema.String.pipe(
-              Schema.minLength(1, { message: () => 'This field is required' })
-            ),
-            rel: Schema.String.pipe(
-              Schema.minLength(1, { message: () => 'This field is required' })
-            ),
-            type: Schema.optional(Schema.String),
-            media: Schema.optional(Schema.String),
-            sizes: Schema.optional(Schema.String),
-            crossorigin: Schema.optional(Schema.String),
-          })
-        )
-      ),
-      body: Schema.Array(
-        Schema.Union(
-          Schema.Struct({
-            type: Schema.String,
-            content: Schema.String.pipe(
-              Schema.minLength(1, { message: () => 'This field is required' })
-            ),
-          })
-        )
-      ),
+      head: Schema.Array(Schema.Union(
+        Schema.Struct({
+          tag: Schema.String,
+          name: Schema.String.pipe(
+            Schema.minLength(1, { message: () => 'This field is required' })
+          ),
+          content: Schema.String.pipe(
+            Schema.minLength(1, { message: () => 'This field is required' })
+          ),
+        }),
+        Schema.Struct({
+          tag: Schema.String,
+          content: Schema.String.pipe(
+            Schema.minLength(1, { message: () => 'This field is required' })
+          ),
+        }),
+        Schema.Struct({
+          tag: Schema.String,
+          src: Schema.optional(Schema.String),
+          content: Schema.optional(Schema.String),
+          type: Schema.optional(Schema.String),
+          async: Schema.optional(Schema.Boolean),
+          defer: Schema.optional(Schema.Boolean),
+        }),
+        Schema.Struct({
+          tag: Schema.String,
+          content: Schema.String.pipe(
+            Schema.minLength(1, { message: () => 'This field is required' })
+          ),
+          type: Schema.optional(Schema.String),
+          media: Schema.optional(Schema.String),
+        }),
+        Schema.Struct({
+          tag: Schema.String,
+          href: Schema.String.pipe(
+            Schema.minLength(1, { message: () => 'This field is required' })
+          ),
+          rel: Schema.String.pipe(
+            Schema.minLength(1, { message: () => 'This field is required' })
+          ),
+          type: Schema.optional(Schema.String),
+          media: Schema.optional(Schema.String),
+          sizes: Schema.optional(Schema.String),
+          crossorigin: Schema.optional(Schema.String),
+        })
+      )),
+      body: Schema.Array(Schema.Union(
+        Schema.Struct({
+          type: Schema.String,
+          content: Schema.String.pipe(
+            Schema.minLength(1, { message: () => 'This field is required' })
+          ),
+        })
+      )),
     }),
     Schema.Struct({
       type: Schema.String,
       id: Schema.Unknown,
       name: Schema.Unknown,
       path: Schema.Unknown,
-      title: Schema.optional(
-        Schema.String.pipe(
-          Schema.annotations({
-            title: 'Display Title',
-            description: 'Display title shown to users',
-            examples: ['Contact Us', 'Create Your Account', 'We Value Your Feedback'],
-          })
-        )
-      ),
-      description: Schema.optional(
-        Schema.String.pipe(
-          Schema.annotations({
-            title: 'Form Description',
-            description: 'Help text or instructions for the form',
-            examples: [
-              'Fill out this form to get in touch with our team',
-              'Please provide your details to create an account',
-            ],
-          })
-        )
-      ),
-      inputs: Schema.Array(
-        Schema.Union(
-          Schema.Struct({
-            name: Schema.String,
-            label: Schema.optional(Schema.String),
-            description: Schema.optional(Schema.String),
-            required: Schema.optional(Schema.Boolean),
-            defaultValue: Schema.optional(Schema.String),
-            placeholder: Schema.optional(Schema.String),
-            type: Schema.String,
-          }),
-          Schema.Struct({
-            name: Schema.String,
-            label: Schema.optional(Schema.String),
-            description: Schema.optional(Schema.String),
-            required: Schema.optional(Schema.Boolean),
-            defaultValue: Schema.optional(Schema.Boolean),
-            type: Schema.String,
-          }),
-          Schema.Struct({
-            name: Schema.String,
-            label: Schema.optional(Schema.String),
-            description: Schema.optional(Schema.String),
-            required: Schema.optional(Schema.Boolean),
-            defaultValue: Schema.optional(Schema.String),
-            placeholder: Schema.optional(Schema.String),
-            options: Schema.Array(
-              Schema.Struct({
-                label: Schema.String,
-                value: Schema.String,
-              })
-            ),
-            type: Schema.String,
-          }),
-          Schema.Struct({
-            name: Schema.String,
-            label: Schema.optional(Schema.String),
-            description: Schema.optional(Schema.String),
-            required: Schema.optional(Schema.Boolean),
-            accept: Schema.optional(Schema.String),
-            type: Schema.String,
-          })
-        )
-      ),
+      title: Schema.optional(Schema.String.pipe(
+        Schema.annotations({
+        title: "Display Title",
+        description: "Display title shown to users",
+        examples: ["Contact Us","Create Your Account","We Value Your Feedback"]
+      })
+      )),
+      description: Schema.optional(Schema.String.pipe(
+        Schema.annotations({
+        title: "Form Description",
+        description: "Help text or instructions for the form",
+        examples: ["Fill out this form to get in touch with our team","Please provide your details to create an account"]
+      })
+      )),
+      inputs: Schema.Array(Schema.Union(
+        Schema.Struct({
+          name: Schema.String,
+          label: Schema.optional(Schema.String),
+          description: Schema.optional(Schema.String),
+          required: Schema.optional(Schema.Boolean),
+          defaultValue: Schema.optional(Schema.String),
+          placeholder: Schema.optional(Schema.String),
+          type: Schema.String,
+        }),
+        Schema.Struct({
+          name: Schema.String,
+          label: Schema.optional(Schema.String),
+          description: Schema.optional(Schema.String),
+          required: Schema.optional(Schema.Boolean),
+          defaultValue: Schema.optional(Schema.Boolean),
+          type: Schema.String,
+        }),
+        Schema.Struct({
+          name: Schema.String,
+          label: Schema.optional(Schema.String),
+          description: Schema.optional(Schema.String),
+          required: Schema.optional(Schema.Boolean),
+          defaultValue: Schema.optional(Schema.String),
+          placeholder: Schema.optional(Schema.String),
+          options: Schema.Array(Schema.Struct({
+            label: Schema.String,
+            value: Schema.String,
+          })),
+          type: Schema.String,
+        }),
+        Schema.Struct({
+          name: Schema.String,
+          label: Schema.optional(Schema.String),
+          description: Schema.optional(Schema.String),
+          required: Schema.optional(Schema.Boolean),
+          accept: Schema.optional(Schema.String),
+          type: Schema.String,
+        })
+      )),
       action: Schema.String.pipe(
         Schema.annotations({
-          description: 'What to do with form submission',
-        })
+        description: "What to do with form submission"
+      })
       ),
-      table: Schema.optional(
-        Schema.String.pipe(
-          Schema.minLength(1, { message: () => 'This field is required' }),
-          Schema.annotations({
-            description: 'Table to save form data (required for create-record action)',
-          })
-        )
-      ),
-      successMessage: Schema.optional(
-        Schema.String.pipe(
-          Schema.annotations({
-            title: 'Success Message',
-            description: 'Message displayed after successful form submission',
-            examples: [
-              'Thank you! We will get back to you soon.',
-              'Your account has been created successfully!',
-              'Form submitted successfully.',
-            ],
-          })
-        )
-      ),
+      table: Schema.optional(Schema.String.pipe(
+        Schema.minLength(1, { message: () => 'This field is required' }),
+        Schema.annotations({
+        description: "Table to save form data (required for create-record action)"
+      })
+      )),
+      successMessage: Schema.optional(Schema.String.pipe(
+        Schema.annotations({
+        title: "Success Message",
+        description: "Message displayed after successful form submission",
+        examples: ["Thank you! We will get back to you soon.","Your account has been created successfully!","Form submitted successfully."]
+      })
+      )),
       redirectUrl: Schema.optional(Schema.Unknown),
     }),
     Schema.Struct({
@@ -216,29 +196,25 @@ export const PagesSchema = Schema.Array(
       table: Schema.String.pipe(
         Schema.minLength(1, { message: () => 'This field is required' }),
         Schema.annotations({
-          description: 'Name of the table to display',
-        })
+        description: "Name of the table to display"
+      })
       ),
-      title: Schema.optional(
-        Schema.String.pipe(
-          Schema.minLength(1, { message: () => 'This field is required' }),
-          Schema.annotations({
-            description: 'Display title for the page',
-          })
-        )
-      ),
+      title: Schema.optional(Schema.String.pipe(
+        Schema.minLength(1, { message: () => 'This field is required' }),
+        Schema.annotations({
+        description: "Display title for the page"
+      })
+      )),
       columns: Schema.Array(Schema.String),
       searchable: Schema.optional(Schema.Boolean),
       sortable: Schema.optional(Schema.Boolean),
       filterable: Schema.optional(Schema.Boolean),
-      actions: Schema.optional(
-        Schema.Struct({
-          create: Schema.optional(Schema.Boolean),
-          edit: Schema.optional(Schema.Boolean),
-          delete: Schema.optional(Schema.Boolean),
-          export: Schema.optional(Schema.Boolean),
-        })
-      ),
+      actions: Schema.optional(Schema.Struct({
+        create: Schema.optional(Schema.Boolean),
+        edit: Schema.optional(Schema.Boolean),
+        delete: Schema.optional(Schema.Boolean),
+        export: Schema.optional(Schema.Boolean),
+      })),
     }),
     Schema.Struct({
       type: Schema.String,
@@ -247,45 +223,37 @@ export const PagesSchema = Schema.Array(
       table: Schema.String.pipe(
         Schema.minLength(1, { message: () => 'This field is required' }),
         Schema.annotations({
-          description: 'Name of the table to display',
-        })
+        description: "Name of the table to display"
+      })
       ),
-      title: Schema.optional(
-        Schema.String.pipe(
+      title: Schema.optional(Schema.String.pipe(
+        Schema.minLength(1, { message: () => 'This field is required' }),
+        Schema.annotations({
+        description: "Display title for the page"
+      })
+      )),
+      layout: Schema.optional(Schema.String.pipe(
+        Schema.annotations({
+        description: "Layout style for the detail view"
+      })
+      )),
+      sections: Schema.Array(Schema.Struct({
+        title: Schema.String.pipe(
           Schema.minLength(1, { message: () => 'This field is required' }),
           Schema.annotations({
-            description: 'Display title for the page',
-          })
-        )
-      ),
-      layout: Schema.optional(
-        Schema.String.pipe(
-          Schema.annotations({
-            description: 'Layout style for the detail view',
-          })
-        )
-      ),
-      sections: Schema.Array(
-        Schema.Struct({
-          title: Schema.String.pipe(
-            Schema.minLength(1, { message: () => 'This field is required' }),
-            Schema.annotations({
-              description: 'Section title',
-            })
-          ),
-          fields: Schema.Array(Schema.String),
+          description: "Section title"
         })
-      ),
+        ),
+        fields: Schema.Array(Schema.String),
+      })),
     })
-  )
-).pipe(
-  Schema.minItems(1),
-  Schema.annotations({
-    title: 'Pages',
-    description:
-      'User interface pages and views that users interact with. Pages can display data from tables (table-view, detail-view), collect input through forms (form), or render custom HTML content. Each page has a unique URL path, navigation visibility settings, and configurable layouts. Pages connect your data model to the user experience.',
+  )).pipe(
+    Schema.minItems(1),
+    Schema.annotations({
+    title: "Pages",
+    description: "User interface pages and views that users interact with. Pages can display data from tables (table-view, detail-view), collect input through forms (form), or render custom HTML content. Each page has a unique URL path, navigation visibility settings, and configurable layouts. Pages connect your data model to the user experience."
   })
-)
+  )
 
 export type Pages = Schema.Schema.Type<typeof PagesSchema>
 ```

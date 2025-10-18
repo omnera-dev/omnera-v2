@@ -6,6 +6,10 @@
 
 ## Implementation Status
 
+**Schema**: 🔴 Not implemented
+
+**Tests**: 🔴 No tests found
+
 ⏳ **Not Started**
 
 ### Required Features
@@ -33,7 +37,7 @@ import { Schema } from 'effect'
 **Implementation**:
 
 ```typescript
-export const Tables.fields.duration-field.idSchema = Schema.Int.pipe(
+export const TablesFieldsDurationFieldIdSchema = Schema.Int.pipe(
     Schema.greaterThanOrEqualTo(1),
     Schema.lessThanOrEqualTo(9007199254740991),
     Schema.annotations({
@@ -43,7 +47,7 @@ export const Tables.fields.duration-field.idSchema = Schema.Int.pipe(
   })
   )
 
-export type Tables.fields.duration-field.id = Schema.Schema.Type<typeof Tables.fields.duration-field.idSchema>
+export type TablesFieldsDurationFieldId = Schema.Schema.Type<typeof TablesFieldsDurationFieldIdSchema>
 ```
 
 ---

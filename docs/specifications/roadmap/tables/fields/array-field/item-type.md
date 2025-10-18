@@ -8,6 +8,10 @@ Type of items in the array
 
 ## Implementation Status
 
+**Schema**: 🔴 Not implemented
+
+**Tests**: 🔴 No tests found
+
 ⏳ **Not Started**
 
 ### Required Features
@@ -36,14 +40,14 @@ import { Schema } from 'effect'
 
 ```typescript
 /**
- *
+ * 
  * Type of items in the array
  */
-export const Tables.fields.array-field.itemTypeSchema = Schema.Literal("text", "number").pipe(Schema.annotations({
+export const TablesFieldsArrayFieldItemTypeSchema = Schema.Literal("text", "number").pipe(Schema.annotations({
     description: "Type of items in the array"
   }))
 
-export type Tables.fields.array-field.itemType = Schema.Schema.Type<typeof Tables.fields.array-field.itemTypeSchema>
+export type TablesFieldsArrayFieldItemType = Schema.Schema.Type<typeof TablesFieldsArrayFieldItemTypeSchema>
 ```
 
 ---

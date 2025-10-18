@@ -8,6 +8,10 @@ Minimum value
 
 ## Implementation Status
 
+**Schema**: 🔴 Not implemented
+
+**Tests**: 🔴 No tests found
+
 ⏳ **Not Started**
 
 ### Required Features
@@ -36,16 +40,16 @@ import { Schema } from 'effect'
 
 ```typescript
 /**
- *
+ * 
  * Minimum value
  */
-export const Tables.fields.number-field.minSchema = Schema.Number.pipe(
+export const TablesFieldsNumberFieldMinSchema = Schema.Number.pipe(
     Schema.annotations({
     description: "Minimum value"
   })
   )
 
-export type Tables.fields.number-field.min = Schema.Schema.Type<typeof Tables.fields.number-field.minSchema>
+export type TablesFieldsNumberFieldMin = Schema.Schema.Type<typeof TablesFieldsNumberFieldMinSchema>
 ```
 
 ---

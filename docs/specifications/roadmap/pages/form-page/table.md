@@ -8,6 +8,10 @@ Table to save form data (required for create-record action)
 
 ## Implementation Status
 
+**Schema**: 🔴 Not implemented
+
+**Tests**: 🔴 No tests found
+
 ⏳ **Not Started**
 
 ### Required Features
@@ -36,17 +40,17 @@ import { Schema } from 'effect'
 
 ```typescript
 /**
- *
+ * 
  * Table to save form data (required for create-record action)
  */
-export const Pages.form-page.tableSchema = Schema.String.pipe(
+export const PagesFormPageTableSchema = Schema.String.pipe(
     Schema.minLength(1, { message: () => 'This field is required' }),
     Schema.annotations({
     description: "Table to save form data (required for create-record action)"
   })
   )
 
-export type Pages.form-page.table = Schema.Schema.Type<typeof Pages.form-page.tableSchema>
+export type PagesFormPageTable = Schema.Schema.Type<typeof PagesFormPageTableSchema>
 ```
 
 ---

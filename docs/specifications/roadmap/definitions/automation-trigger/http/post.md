@@ -8,6 +8,10 @@ Triggered by a POST request
 
 ## Implementation Status
 
+**Schema**: 🔴 Not implemented
+
+**Tests**: 🔴 No tests found
+
 ⏳ **Not Started**
 
 ### Required Features
@@ -37,10 +41,10 @@ import { Schema } from 'effect'
 ```typescript
 /**
  * POST Request
- *
+ * 
  * Triggered by a POST request
  */
-export const Automation_trigger.http.postSchema = Schema.Struct({
+export const AutomationTriggerHttpPostSchema = Schema.Struct({
     service: Schema.String,
     event: Schema.String,
     params: Schema.Struct({
@@ -53,7 +57,7 @@ export const Automation_trigger.http.postSchema = Schema.Struct({
     description: "Triggered by a POST request"
   }))
 
-export type Automation_trigger.http.post = Schema.Schema.Type<typeof Automation_trigger.http.postSchema>
+export type AutomationTriggerHttpPost = Schema.Schema.Type<typeof AutomationTriggerHttpPostSchema>
 ```
 
 ---

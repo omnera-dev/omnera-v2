@@ -6,6 +6,10 @@
 
 ## Implementation Status
 
+**Schema**: 🔴 Not implemented
+
+**Tests**: 🔴 No tests found
+
 ⏳ **Not Started**
 
 ### Required Features
@@ -33,9 +37,9 @@ import { Schema } from 'effect'
 **Implementation**:
 
 ```typescript
-export const Connections.airtable.clientIdSchema = Schema.String
+export const ConnectionsAirtableClientIdSchema = Schema.String
 
-export type Connections.airtable.clientId = Schema.Schema.Type<typeof Connections.airtable.clientIdSchema>
+export type ConnectionsAirtableClientId = Schema.Schema.Type<typeof ConnectionsAirtableClientIdSchema>
 ```
 
 ---

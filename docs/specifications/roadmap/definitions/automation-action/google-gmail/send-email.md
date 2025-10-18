@@ -8,6 +8,10 @@ Sends an email
 
 ## Implementation Status
 
+**Schema**: 🔴 Not implemented
+
+**Tests**: 🔴 No tests found
+
 ⏳ **Not Started**
 
 ### Required Features
@@ -37,10 +41,10 @@ import { Schema } from 'effect'
 ```typescript
 /**
  * Send Email
- *
+ * 
  * Sends an email
  */
-export const Automation_action.google-gmail.send-emailSchema = Schema.Struct({
+export const AutomationActionGoogleGmailSendEmailSchema = Schema.Struct({
     name: Schema.String,
     account: Schema.Union(
       Schema.Number,
@@ -72,7 +76,7 @@ export const Automation_action.google-gmail.send-emailSchema = Schema.Struct({
     description: "Sends an email"
   }))
 
-export type Automation_action.google-gmail.send-email = Schema.Schema.Type<typeof Automation_action.google-gmail.send-emailSchema>
+export type AutomationActionGoogleGmailSendEmail = Schema.Schema.Type<typeof AutomationActionGoogleGmailSendEmailSchema>
 ```
 
 ---

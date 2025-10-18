@@ -6,6 +6,10 @@
 
 ## Implementation Status
 
+**Schema**: 🔴 Not implemented
+
+**Tests**: 🔴 No tests found
+
 ⏳ **Not Started**
 
 ### Required Features
@@ -33,9 +37,9 @@ import { Schema } from 'effect'
 **Implementation**:
 
 ```typescript
-export const Tables.fields.updated-by-field.indexedSchema = Schema.Boolean
+export const TablesFieldsUpdatedByFieldIndexedSchema = Schema.Boolean
 
-export type Tables.fields.updated-by-field.indexed = Schema.Schema.Type<typeof Tables.fields.updated-by-field.indexedSchema>
+export type TablesFieldsUpdatedByFieldIndexed = Schema.Schema.Type<typeof TablesFieldsUpdatedByFieldIndexedSchema>
 ```
 
 ---

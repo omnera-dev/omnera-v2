@@ -8,6 +8,10 @@ Maximum number of items allowed
 
 ## Implementation Status
 
+**Schema**: 🔴 Not implemented
+
+**Tests**: 🔴 No tests found
+
 ⏳ **Not Started**
 
 ### Required Features
@@ -36,17 +40,17 @@ import { Schema } from 'effect'
 
 ```typescript
 /**
- *
+ * 
  * Maximum number of items allowed
  */
-export const Tables.fields.array-field.maxItemsSchema = Schema.Int.pipe(
+export const TablesFieldsArrayFieldMaxItemsSchema = Schema.Int.pipe(
     Schema.greaterThanOrEqualTo(1),
     Schema.annotations({
     description: "Maximum number of items allowed"
   })
   )
 
-export type Tables.fields.array-field.maxItems = Schema.Schema.Type<typeof Tables.fields.array-field.maxItemsSchema>
+export type TablesFieldsArrayFieldMaxItems = Schema.Schema.Type<typeof TablesFieldsArrayFieldMaxItemsSchema>
 ```
 
 ---

@@ -8,6 +8,10 @@ What to do with form submission
 
 ## Implementation Status
 
+**Schema**: 🔴 Not implemented
+
+**Tests**: 🔴 No tests found
+
 ⏳ **Not Started**
 
 ### Required Features
@@ -36,14 +40,14 @@ import { Schema } from 'effect'
 
 ```typescript
 /**
- *
+ * 
  * What to do with form submission
  */
-export const Pages.form-page.actionSchema = Schema.Literal("create-record", "send-email", "trigger-automation").pipe(Schema.annotations({
+export const PagesFormPageActionSchema = Schema.Literal("create-record", "send-email", "trigger-automation").pipe(Schema.annotations({
     description: "What to do with form submission"
   }))
 
-export type Pages.form-page.action = Schema.Schema.Type<typeof Pages.form-page.actionSchema>
+export type PagesFormPageAction = Schema.Schema.Type<typeof PagesFormPageActionSchema>
 ```
 
 ---

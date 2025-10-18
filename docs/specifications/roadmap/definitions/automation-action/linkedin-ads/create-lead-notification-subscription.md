@@ -8,6 +8,10 @@ Creates a LinkedIn Lead Notification subscription at owner level
 
 ## Implementation Status
 
+**Schema**: 🔴 Not implemented
+
+**Tests**: 🔴 No tests found
+
 ⏳ **Not Started**
 
 ### Required Features
@@ -37,10 +41,10 @@ import { Schema } from 'effect'
 ```typescript
 /**
  * Create Lead Notification Subscription
- *
+ * 
  * Creates a LinkedIn Lead Notification subscription at owner level
  */
-export const Automation_action.linkedin-ads.create-lead-notification-subscriptionSchema = Schema.Struct({
+export const AutomationActionLinkedinAdsCreateLeadNotificationSubscriptionSchema = Schema.Struct({
     name: Schema.String,
     account: Schema.Union(
       Schema.Number,
@@ -66,7 +70,7 @@ export const Automation_action.linkedin-ads.create-lead-notification-subscriptio
     description: "Creates a LinkedIn Lead Notification subscription at owner level"
   }))
 
-export type Automation_action.linkedin-ads.create-lead-notification-subscription = Schema.Schema.Type<typeof Automation_action.linkedin-ads.create-lead-notification-subscriptionSchema>
+export type AutomationActionLinkedinAdsCreateLeadNotificationSubscription = Schema.Schema.Type<typeof AutomationActionLinkedinAdsCreateLeadNotificationSubscriptionSchema>
 ```
 
 ---

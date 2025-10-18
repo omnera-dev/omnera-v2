@@ -6,6 +6,10 @@
 
 ## Implementation Status
 
+**Schema**: 🔴 Not implemented
+
+**Tests**: 🔴 No tests found
+
 ⏳ **Not Started**
 
 ### Required Features
@@ -33,9 +37,9 @@ import { Schema } from 'effect'
 **Implementation**:
 
 ```typescript
-export const Tables.fields.number-field.typeSchema = Schema.Literal("integer", "decimal", "currency", "percentage")
+export const TablesFieldsNumberFieldTypeSchema = Schema.Literal("integer", "decimal", "currency", "percentage")
 
-export type Tables.fields.number-field.type = Schema.Schema.Type<typeof Tables.fields.number-field.typeSchema>
+export type TablesFieldsNumberFieldType = Schema.Schema.Type<typeof TablesFieldsNumberFieldTypeSchema>
 ```
 
 ---

@@ -6,6 +6,10 @@
 
 ## Implementation Status
 
+**Schema**: 🔴 Not implemented
+
+**Tests**: 🔴 No tests found
+
 ⏳ **Not Started**
 
 ### Required Features
@@ -33,13 +37,13 @@ import { Schema } from 'effect'
 **Implementation**:
 
 ```typescript
-export const Tables.fields.color-field.defaultSchema = Schema.String.pipe(
+export const TablesFieldsColorFieldDefaultSchema = Schema.String.pipe(
     Schema.pattern(/^#[0-9a-fA-F]{6}$/, {
     message: () => 'Invalid format'
   })
   )
 
-export type Tables.fields.color-field.default = Schema.Schema.Type<typeof Tables.fields.color-field.defaultSchema>
+export type TablesFieldsColorFieldDefault = Schema.Schema.Type<typeof TablesFieldsColorFieldDefaultSchema>
 ```
 
 ---

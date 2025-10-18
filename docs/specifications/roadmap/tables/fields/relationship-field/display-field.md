@@ -8,6 +8,10 @@ Field from related table to display in UI
 
 ## Implementation Status
 
+**Schema**: 🔴 Not implemented
+
+**Tests**: 🔴 No tests found
+
 ⏳ **Not Started**
 
 ### Required Features
@@ -36,17 +40,17 @@ import { Schema } from 'effect'
 
 ```typescript
 /**
- *
+ * 
  * Field from related table to display in UI
  */
-export const Tables.fields.relationship-field.displayFieldSchema = Schema.String.pipe(
+export const TablesFieldsRelationshipFieldDisplayFieldSchema = Schema.String.pipe(
     Schema.minLength(1, { message: () => 'This field is required' }),
     Schema.annotations({
     description: "Field from related table to display in UI"
   })
   )
 
-export type Tables.fields.relationship-field.displayField = Schema.Schema.Type<typeof Tables.fields.relationship-field.displayFieldSchema>
+export type TablesFieldsRelationshipFieldDisplayField = Schema.Schema.Type<typeof TablesFieldsRelationshipFieldDisplayFieldSchema>
 ```
 
 ---

@@ -8,6 +8,10 @@ Lists pages from a Notion database
 
 ## Implementation Status
 
+**Schema**: 🔴 Not implemented
+
+**Tests**: 🔴 No tests found
+
 ⏳ **Not Started**
 
 ### Required Features
@@ -37,10 +41,10 @@ import { Schema } from 'effect'
 ```typescript
 /**
  * List Pages
- *
+ * 
  * Lists pages from a Notion database
  */
-export const Automation_action.notion.list-pagesSchema = Schema.Struct({
+export const AutomationActionNotionListPagesSchema = Schema.Struct({
     name: Schema.String,
     account: Schema.Union(
       Schema.Number,
@@ -74,7 +78,7 @@ export const Automation_action.notion.list-pagesSchema = Schema.Struct({
     description: "Lists pages from a Notion database"
   }))
 
-export type Automation_action.notion.list-pages = Schema.Schema.Type<typeof Automation_action.notion.list-pagesSchema>
+export type AutomationActionNotionListPages = Schema.Schema.Type<typeof AutomationActionNotionListPagesSchema>
 ```
 
 ---

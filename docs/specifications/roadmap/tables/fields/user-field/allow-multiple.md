@@ -8,6 +8,10 @@ Whether to allow multiple users to be selected
 
 ## Implementation Status
 
+**Schema**: 🔴 Not implemented
+
+**Tests**: 🔴 No tests found
+
 ⏳ **Not Started**
 
 ### Required Features
@@ -36,12 +40,12 @@ import { Schema } from 'effect'
 
 ```typescript
 /**
- *
+ * 
  * Whether to allow multiple users to be selected
  */
-export const Tables.fields.user-field.allowMultipleSchema = Schema.Boolean
+export const TablesFieldsUserFieldAllowMultipleSchema = Schema.Boolean
 
-export type Tables.fields.user-field.allowMultiple = Schema.Schema.Type<typeof Tables.fields.user-field.allowMultipleSchema>
+export type TablesFieldsUserFieldAllowMultiple = Schema.Schema.Type<typeof TablesFieldsUserFieldAllowMultipleSchema>
 ```
 
 ---

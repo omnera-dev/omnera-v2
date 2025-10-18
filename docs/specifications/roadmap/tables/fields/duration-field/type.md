@@ -6,6 +6,10 @@
 
 ## Implementation Status
 
+**Schema**: 🔴 Not implemented
+
+**Tests**: 🔴 No tests found
+
 ⏳ **Not Started**
 
 ### Required Features
@@ -33,9 +37,9 @@ import { Schema } from 'effect'
 **Implementation**:
 
 ```typescript
-export const Tables.fields.duration-field.typeSchema = Schema.Literal("duration")
+export const TablesFieldsDurationFieldTypeSchema = Schema.Literal("duration")
 
-export type Tables.fields.duration-field.type = Schema.Schema.Type<typeof Tables.fields.duration-field.typeSchema>
+export type TablesFieldsDurationFieldType = Schema.Schema.Type<typeof TablesFieldsDurationFieldTypeSchema>
 ```
 
 ---

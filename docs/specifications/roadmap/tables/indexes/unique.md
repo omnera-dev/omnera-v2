@@ -8,6 +8,10 @@ Whether this index enforces uniqueness. Use this for unique constraints across m
 
 ## Implementation Status
 
+**Schema**: 🔴 Not implemented
+
+**Tests**: 🔴 No tests found
+
 ⏳ **Not Started**
 
 ### Required Features
@@ -36,12 +40,12 @@ import { Schema } from 'effect'
 
 ```typescript
 /**
- *
+ * 
  * Whether this index enforces uniqueness. Use this for unique constraints across multiple fields.
  */
-export const Tables.indexes.uniqueSchema = Schema.Boolean
+export const TablesIndexesUniqueSchema = Schema.Boolean
 
-export type Tables.indexes.unique = Schema.Schema.Type<typeof Tables.indexes.uniqueSchema>
+export type TablesIndexesUnique = Schema.Schema.Type<typeof TablesIndexesUniqueSchema>
 ```
 
 ---

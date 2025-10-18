@@ -6,6 +6,10 @@
 
 ## Implementation Status
 
+**Schema**: 🔴 Not implemented
+
+**Tests**: 🔴 No tests found
+
 ⏳ **Not Started**
 
 ### Required Features
@@ -33,11 +37,11 @@ import { Schema } from 'effect'
 **Implementation**:
 
 ```typescript
-export const Pages.custom-html-page.head.meta-element.contentSchema = Schema.String.pipe(
+export const PagesCustomHtmlPageHeadMetaElementContentSchema = Schema.String.pipe(
     Schema.minLength(1, { message: () => 'This field is required' })
   )
 
-export type Pages.custom-html-page.head.meta-element.content = Schema.Schema.Type<typeof Pages.custom-html-page.head.meta-element.contentSchema>
+export type PagesCustomHtmlPageHeadMetaElementContent = Schema.Schema.Type<typeof PagesCustomHtmlPageHeadMetaElementContentSchema>
 ```
 
 ---

@@ -6,6 +6,10 @@
 
 ## Implementation Status
 
+**Schema**: 🔴 Not implemented
+
+**Tests**: 🔴 No tests found
+
 ⏳ **Not Started**
 
 ### Required Features
@@ -33,9 +37,9 @@ import { Schema } from 'effect'
 **Implementation**:
 
 ```typescript
-export const Tables.fields.text-field.typeSchema = Schema.Literal("single-line-text", "long-text", "phone-number", "email", "url")
+export const TablesFieldsTextFieldTypeSchema = Schema.Literal("single-line-text", "long-text", "phone-number", "email", "url")
 
-export type Tables.fields.text-field.type = Schema.Schema.Type<typeof Tables.fields.text-field.typeSchema>
+export type TablesFieldsTextFieldType = Schema.Schema.Type<typeof TablesFieldsTextFieldTypeSchema>
 ```
 
 ---

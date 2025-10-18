@@ -8,6 +8,10 @@ Name of the relationship field to aggregate from
 
 ## Implementation Status
 
+**Schema**: 🔴 Not implemented
+
+**Tests**: 🔴 No tests found
+
 ⏳ **Not Started**
 
 ### Required Features
@@ -36,17 +40,17 @@ import { Schema } from 'effect'
 
 ```typescript
 /**
- *
+ * 
  * Name of the relationship field to aggregate from
  */
-export const Tables.fields.rollup-field.relationshipFieldSchema = Schema.String.pipe(
+export const TablesFieldsRollupFieldRelationshipFieldSchema = Schema.String.pipe(
     Schema.minLength(1, { message: () => 'This field is required' }),
     Schema.annotations({
     description: "Name of the relationship field to aggregate from"
   })
   )
 
-export type Tables.fields.rollup-field.relationshipField = Schema.Schema.Type<typeof Tables.fields.rollup-field.relationshipFieldSchema>
+export type TablesFieldsRollupFieldRelationshipField = Schema.Schema.Type<typeof TablesFieldsRollupFieldRelationshipFieldSchema>
 ```
 
 ---

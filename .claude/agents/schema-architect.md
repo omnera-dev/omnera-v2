@@ -717,6 +717,51 @@ spec-coherence-guardian (BLUEPRINT)
   codebase-refactor-auditor (REFACTOR)
 ```
 
+## Blueprint Requirement (CRITICAL)
+
+**You MUST ONLY implement schemas that have validated roadmap blueprints.**
+
+Before implementing ANY schema property, follow this mandatory check:
+
+1. **Check for Blueprint**: Verify that `docs/specifications/roadmap/{property}.md` exists
+2. **If Blueprint Missing**: STOP immediately and notify the user:
+   ```
+   ❌ Cannot implement {property}: No roadmap blueprint found.
+
+   Please run the spec-coherence-guardian agent first to generate the blueprint:
+   - Navigate to "Effect Schema Blueprint" section in the roadmap file
+   - Validate user stories before implementation
+   ```
+3. **If Blueprint Exists**: Read the "Effect Schema Blueprint" section and implement exactly as specified
+
+**Why This Matters**:
+- ✅ Ensures all schemas align with validated product requirements
+- ✅ Prevents implementing features without user validation
+- ✅ Maintains single source of truth (roadmap blueprints)
+- ✅ Coordinates work across agents (spec-coherence-guardian → schema-architect)
+
+**Example Blueprint Check**:
+```typescript
+// User requests: "Implement tables schema"
+
+// Step 1: Check for blueprint
+const blueprintPath = 'docs/specifications/roadmap/tables.md'
+if (!exists(blueprintPath)) {
+  throw new Error('Cannot implement tables: No roadmap blueprint found. Run spec-coherence-guardian first.')
+}
+
+// Step 2: Read blueprint
+const blueprint = readFile(blueprintPath)
+const effectSchemaSection = extractSection(blueprint, 'Effect Schema Blueprint')
+
+// Step 3: Implement from blueprint
+implementSchema(effectSchemaSection)
+```
+
+**Never Assume or Invent**: If the blueprint doesn't exist, you must wait for spec-coherence-guardian to create it. Do NOT make assumptions about schema structure.
+
+---
+
 ## Decision-Making Framework
 
 When adding new configuration properties:

@@ -6,6 +6,10 @@
 
 ## Implementation Status
 
+**Schema**: 🔴 Not implemented
+
+**Tests**: 🔴 No tests found
+
 ⏳ **Not Started**
 
 ### Required Features
@@ -33,9 +37,9 @@ import { Schema } from 'effect'
 **Implementation**:
 
 ```typescript
-export const Pages.custom-html-page.head.link-element.sizesSchema = Schema.String
+export const PagesCustomHtmlPageHeadLinkElementSizesSchema = Schema.String
 
-export type Pages.custom-html-page.head.link-element.sizes = Schema.Schema.Type<typeof Pages.custom-html-page.head.link-element.sizesSchema>
+export type PagesCustomHtmlPageHeadLinkElementSizes = Schema.Schema.Type<typeof PagesCustomHtmlPageHeadLinkElementSizesSchema>
 ```
 
 ---

@@ -6,6 +6,10 @@
 
 ## Implementation Status
 
+**Schema**: 🔴 Not implemented
+
+**Tests**: 🔴 No tests found
+
 ⏳ **Not Started**
 
 ### Required Features
@@ -33,9 +37,9 @@ import { Schema } from 'effect'
 **Implementation**:
 
 ```typescript
-export const Tables.fields.json-field.requiredSchema = Schema.Boolean
+export const TablesFieldsJsonFieldRequiredSchema = Schema.Boolean
 
-export type Tables.fields.json-field.required = Schema.Schema.Type<typeof Tables.fields.json-field.requiredSchema>
+export type TablesFieldsJsonFieldRequired = Schema.Schema.Type<typeof TablesFieldsJsonFieldRequiredSchema>
 ```
 
 ---

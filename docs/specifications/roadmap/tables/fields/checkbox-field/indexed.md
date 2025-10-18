@@ -8,6 +8,10 @@ Whether to create a database index on this field for faster queries
 
 ## Implementation Status
 
+**Schema**: 🔴 Not implemented
+
+**Tests**: 🔴 No tests found
+
 ⏳ **Not Started**
 
 ### Required Features
@@ -36,12 +40,12 @@ import { Schema } from 'effect'
 
 ```typescript
 /**
- *
+ * 
  * Whether to create a database index on this field for faster queries
  */
-export const Tables.fields.checkbox-field.indexedSchema = Schema.Boolean
+export const TablesFieldsCheckboxFieldIndexedSchema = Schema.Boolean
 
-export type Tables.fields.checkbox-field.indexed = Schema.Schema.Type<typeof Tables.fields.checkbox-field.indexedSchema>
+export type TablesFieldsCheckboxFieldIndexed = Schema.Schema.Type<typeof TablesFieldsCheckboxFieldIndexedSchema>
 ```
 
 ---

@@ -6,6 +6,10 @@
 
 ## Implementation Status
 
+**Schema**: 🔴 Not implemented
+
+**Tests**: 🔴 No tests found
+
 ⏳ **Not Started**
 
 ### Required Features
@@ -33,7 +37,7 @@ import { Schema } from 'effect'
 **Implementation**:
 
 ```typescript
-export const Tables.fields.single-attachment-field.storageSchema = Schema.Struct({
+export const TablesFieldsSingleAttachmentFieldStorageSchema = Schema.Struct({
     provider: Schema.optional(Schema.String.pipe(
       Schema.annotations({
       description: "Storage provider"
@@ -53,7 +57,7 @@ export const Tables.fields.single-attachment-field.storageSchema = Schema.Struct
     allowedTypes: Schema.optional(Schema.Array(Schema.String)),
   })
 
-export type Tables.fields.single-attachment-field.storage = Schema.Schema.Type<typeof Tables.fields.single-attachment-field.storageSchema>
+export type TablesFieldsSingleAttachmentFieldStorage = Schema.Schema.Type<typeof TablesFieldsSingleAttachmentFieldStorageSchema>
 ```
 
 ---

@@ -6,6 +6,10 @@
 
 ## Implementation Status
 
+**Schema**: 🔴 Not implemented
+
+**Tests**: 🔴 No tests found
+
 ⏳ **Not Started**
 
 ### Required Features
@@ -33,9 +37,9 @@ import { Schema } from 'effect'
 **Implementation**:
 
 ```typescript
-export const Json_schema.maximumSchema = Schema.Number
+export const JsonSchemaMaximumSchema = Schema.Number
 
-export type Json_schema.maximum = Schema.Schema.Type<typeof Json_schema.maximumSchema>
+export type JsonSchemaMaximum = Schema.Schema.Type<typeof JsonSchemaMaximumSchema>
 ```
 
 ---

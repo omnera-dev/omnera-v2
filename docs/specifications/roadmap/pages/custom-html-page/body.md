@@ -8,6 +8,10 @@ List of body elements for page content
 
 ## Implementation Status
 
+**Schema**: 🔴 Not implemented
+
+**Tests**: 🔴 No tests found
+
 ⏳ **Not Started**
 
 ### Required Features
@@ -37,10 +41,10 @@ import { Schema } from 'effect'
 ```typescript
 /**
  * Body Elements
- *
+ * 
  * List of body elements for page content
  */
-export const Pages.custom-html-page.bodySchema = Schema.Array(Schema.Union(
+export const PagesCustomHtmlPageBodySchema = Schema.Array(Schema.Union(
     Schema.Struct({
       type: Schema.String,
       content: Schema.String.pipe(
@@ -55,7 +59,7 @@ export const Pages.custom-html-page.bodySchema = Schema.Array(Schema.Union(
   })
   )
 
-export type Pages.custom-html-page.body = Schema.Schema.Type<typeof Pages.custom-html-page.bodySchema>
+export type PagesCustomHtmlPageBody = Schema.Schema.Type<typeof PagesCustomHtmlPageBodySchema>
 ```
 
 ---

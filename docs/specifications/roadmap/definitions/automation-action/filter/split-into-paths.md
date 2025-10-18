@@ -8,6 +8,10 @@ Branch automation into multiple paths
 
 ## Implementation Status
 
+**Schema**: 🔴 Not implemented
+
+**Tests**: 🔴 No tests found
+
 ⏳ **Not Started**
 
 ### Required Features
@@ -37,10 +41,10 @@ import { Schema } from 'effect'
 ```typescript
 /**
  * Split Into Paths
- *
+ * 
  * Branch automation into multiple paths
  */
-export const Automation_action.filter.split-into-pathsSchema = Schema.Struct({
+export const AutomationActionFilterSplitIntoPathsSchema = Schema.Struct({
     name: Schema.String,
     service: Schema.String,
     action: Schema.String,
@@ -54,7 +58,7 @@ export const Automation_action.filter.split-into-pathsSchema = Schema.Struct({
     description: "Branch automation into multiple paths"
   }))
 
-export type Automation_action.filter.split-into-paths = Schema.Schema.Type<typeof Automation_action.filter.split-into-pathsSchema>
+export type AutomationActionFilterSplitIntoPaths = Schema.Schema.Type<typeof AutomationActionFilterSplitIntoPathsSchema>
 ```
 
 ---

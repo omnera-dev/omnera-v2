@@ -8,6 +8,10 @@ Barcode format
 
 ## Implementation Status
 
+**Schema**: 🔴 Not implemented
+
+**Tests**: 🔴 No tests found
+
 ⏳ **Not Started**
 
 ### Required Features
@@ -36,14 +40,14 @@ import { Schema } from 'effect'
 
 ```typescript
 /**
- *
+ * 
  * Barcode format
  */
-export const Tables.fields.barcode-field.formatSchema = Schema.Literal("qr", "ean13", "code128", "code39").pipe(Schema.annotations({
+export const TablesFieldsBarcodeFieldFormatSchema = Schema.Literal("qr", "ean13", "code128", "code39").pipe(Schema.annotations({
     description: "Barcode format"
   }))
 
-export type Tables.fields.barcode-field.format = Schema.Schema.Type<typeof Tables.fields.barcode-field.formatSchema>
+export type TablesFieldsBarcodeFieldFormat = Schema.Schema.Type<typeof TablesFieldsBarcodeFieldFormatSchema>
 ```
 
 ---

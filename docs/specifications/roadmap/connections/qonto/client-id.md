@@ -6,6 +6,10 @@
 
 ## Implementation Status
 
+**Schema**: 🔴 Not implemented
+
+**Tests**: 🔴 No tests found
+
 ⏳ **Not Started**
 
 ### Required Features
@@ -33,9 +37,9 @@ import { Schema } from 'effect'
 **Implementation**:
 
 ```typescript
-export const Connections.qonto.clientIdSchema = Schema.String
+export const ConnectionsQontoClientIdSchema = Schema.String
 
-export type Connections.qonto.clientId = Schema.Schema.Type<typeof Connections.qonto.clientIdSchema>
+export type ConnectionsQontoClientId = Schema.Schema.Type<typeof ConnectionsQontoClientIdSchema>
 ```
 
 ---

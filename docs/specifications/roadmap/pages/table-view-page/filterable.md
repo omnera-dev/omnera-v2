@@ -8,6 +8,10 @@ Enable column filtering
 
 ## Implementation Status
 
+**Schema**: 🔴 Not implemented
+
+**Tests**: 🔴 No tests found
+
 ⏳ **Not Started**
 
 ### Required Features
@@ -36,12 +40,12 @@ import { Schema } from 'effect'
 
 ```typescript
 /**
- *
+ * 
  * Enable column filtering
  */
-export const Pages.table-view-page.filterableSchema = Schema.Boolean
+export const PagesTableViewPageFilterableSchema = Schema.Boolean
 
-export type Pages.table-view-page.filterable = Schema.Schema.Type<typeof Pages.table-view-page.filterableSchema>
+export type PagesTableViewPageFilterable = Schema.Schema.Type<typeof PagesTableViewPageFilterableSchema>
 ```
 
 ---

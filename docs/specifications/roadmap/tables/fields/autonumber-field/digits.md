@@ -8,6 +8,10 @@ Number of digits with zero padding
 
 ## Implementation Status
 
+**Schema**: 🔴 Not implemented
+
+**Tests**: 🔴 No tests found
+
 ⏳ **Not Started**
 
 ### Required Features
@@ -36,10 +40,10 @@ import { Schema } from 'effect'
 
 ```typescript
 /**
- *
+ * 
  * Number of digits with zero padding
  */
-export const Tables.fields.autonumber-field.digitsSchema = Schema.Int.pipe(
+export const TablesFieldsAutonumberFieldDigitsSchema = Schema.Int.pipe(
     Schema.greaterThanOrEqualTo(1),
     Schema.lessThanOrEqualTo(10),
     Schema.annotations({
@@ -47,7 +51,7 @@ export const Tables.fields.autonumber-field.digitsSchema = Schema.Int.pipe(
   })
   )
 
-export type Tables.fields.autonumber-field.digits = Schema.Schema.Type<typeof Tables.fields.autonumber-field.digitsSchema>
+export type TablesFieldsAutonumberFieldDigits = Schema.Schema.Type<typeof TablesFieldsAutonumberFieldDigitsSchema>
 ```
 
 ---

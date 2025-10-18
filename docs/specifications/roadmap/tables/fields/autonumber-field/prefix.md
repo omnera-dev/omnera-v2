@@ -8,6 +8,10 @@ Optional prefix for the autonumber
 
 ## Implementation Status
 
+**Schema**: 🔴 Not implemented
+
+**Tests**: 🔴 No tests found
+
 ⏳ **Not Started**
 
 ### Required Features
@@ -34,25 +38,25 @@ import { Schema } from 'effect'
 
 **Implementation**:
 
-````typescript
+```typescript
 /**
- *
+ * 
  * Optional prefix for the autonumber
- *
+ * 
  * @example
  * ```typescript
  * "INV-"
  * ```
  */
-export const Tables.fields.autonumber-field.prefixSchema = Schema.String.pipe(
+export const TablesFieldsAutonumberFieldPrefixSchema = Schema.String.pipe(
     Schema.annotations({
     description: "Optional prefix for the autonumber",
     examples: ["INV-","ORD-",""]
   })
   )
 
-export type Tables.fields.autonumber-field.prefix = Schema.Schema.Type<typeof Tables.fields.autonumber-field.prefixSchema>
-````
+export type TablesFieldsAutonumberFieldPrefix = Schema.Schema.Type<typeof TablesFieldsAutonumberFieldPrefixSchema>
+```
 
 ---
 

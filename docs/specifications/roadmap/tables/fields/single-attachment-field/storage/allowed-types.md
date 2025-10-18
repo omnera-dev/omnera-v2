@@ -8,6 +8,10 @@ Allowed MIME types or file extensions
 
 ## Implementation Status
 
+**Schema**: 🔴 Not implemented
+
+**Tests**: 🔴 No tests found
+
 ⏳ **Not Started**
 
 ### Required Features
@@ -34,11 +38,11 @@ import { Schema } from 'effect'
 
 **Implementation**:
 
-````typescript
+```typescript
 /**
- *
+ * 
  * Allowed MIME types or file extensions
- *
+ * 
  * @example
  * ```typescript
  * [
@@ -46,15 +50,15 @@ import { Schema } from 'effect'
  * ]
  * ```
  */
-export const Tables.fields.single-attachment-field.storage.allowedTypesSchema = Schema.Array(Schema.String).pipe(
+export const TablesFieldsSingleAttachmentFieldStorageAllowedTypesSchema = Schema.Array(Schema.String).pipe(
     Schema.annotations({
     description: "Allowed MIME types or file extensions",
     examples: [["image/*"],["application/pdf","application/msword"]]
   })
   )
 
-export type Tables.fields.single-attachment-field.storage.allowedTypes = Schema.Schema.Type<typeof Tables.fields.single-attachment-field.storage.allowedTypesSchema>
-````
+export type TablesFieldsSingleAttachmentFieldStorageAllowedTypes = Schema.Schema.Type<typeof TablesFieldsSingleAttachmentFieldStorageAllowedTypesSchema>
+```
 
 ---
 

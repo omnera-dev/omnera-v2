@@ -8,6 +8,10 @@ Continue only if condition is met
 
 ## Implementation Status
 
+**Schema**: 🔴 Not implemented
+
+**Tests**: 🔴 No tests found
+
 ⏳ **Not Started**
 
 ### Required Features
@@ -37,10 +41,10 @@ import { Schema } from 'effect'
 ```typescript
 /**
  * Only Continue If
- *
+ * 
  * Continue only if condition is met
  */
-export const Automation_action.filter.only-continue-ifSchema = Schema.Struct({
+export const AutomationActionFilterOnlyContinueIfSchema = Schema.Struct({
     name: Schema.String,
     service: Schema.String,
     action: Schema.String,
@@ -50,7 +54,7 @@ export const Automation_action.filter.only-continue-ifSchema = Schema.Struct({
     description: "Continue only if condition is met"
   }))
 
-export type Automation_action.filter.only-continue-if = Schema.Schema.Type<typeof Automation_action.filter.only-continue-ifSchema>
+export type AutomationActionFilterOnlyContinueIf = Schema.Schema.Type<typeof AutomationActionFilterOnlyContinueIfSchema>
 ```
 
 ---

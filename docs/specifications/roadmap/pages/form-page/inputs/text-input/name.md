@@ -6,6 +6,10 @@
 
 ## Implementation Status
 
+**Schema**: 🔴 Not implemented
+
+**Tests**: 🔴 No tests found
+
 ⏳ **Not Started**
 
 ### Required Features
@@ -33,9 +37,9 @@ import { Schema } from 'effect'
 **Implementation**:
 
 ```typescript
-export const Pages.form-page.inputs.text-input.nameSchema = Schema.String
+export const PagesFormPageInputsTextInputNameSchema = Schema.String
 
-export type Pages.form-page.inputs.text-input.name = Schema.Schema.Type<typeof Pages.form-page.inputs.text-input.nameSchema>
+export type PagesFormPageInputsTextInputName = Schema.Schema.Type<typeof PagesFormPageInputsTextInputNameSchema>
 ```
 
 ---

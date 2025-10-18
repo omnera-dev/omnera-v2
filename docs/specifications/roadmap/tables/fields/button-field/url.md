@@ -8,6 +8,10 @@ URL to open (when action is 'url')
 
 ## Implementation Status
 
+**Schema**: 🔴 Not implemented
+
+**Tests**: 🔴 No tests found
+
 ⏳ **Not Started**
 
 ### Required Features
@@ -36,16 +40,16 @@ import { Schema } from 'effect'
 
 ```typescript
 /**
- *
+ * 
  * URL to open (when action is 'url')
  */
-export const Tables.fields.button-field.urlSchema = Schema.String.pipe(
+export const TablesFieldsButtonFieldUrlSchema = Schema.String.pipe(
     Schema.annotations({
     description: "URL to open (when action is 'url')"
   })
   )
 
-export type Tables.fields.button-field.url = Schema.Schema.Type<typeof Tables.fields.button-field.urlSchema>
+export type TablesFieldsButtonFieldUrl = Schema.Schema.Type<typeof TablesFieldsButtonFieldUrlSchema>
 ```
 
 ---

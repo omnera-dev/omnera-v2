@@ -8,6 +8,10 @@ List of head elements (meta tags, scripts, styles, links)
 
 ## Implementation Status
 
+**Schema**: 🔴 Not implemented
+
+**Tests**: 🔴 No tests found
+
 ⏳ **Not Started**
 
 ### Required Features
@@ -37,10 +41,10 @@ import { Schema } from 'effect'
 ```typescript
 /**
  * Head Elements
- *
+ * 
  * List of head elements (meta tags, scripts, styles, links)
  */
-export const Pages.custom-html-page.headSchema = Schema.Array(Schema.Union(
+export const PagesCustomHtmlPageHeadSchema = Schema.Array(Schema.Union(
     Schema.Struct({
       tag: Schema.String,
       name: Schema.String.pipe(
@@ -93,7 +97,7 @@ export const Pages.custom-html-page.headSchema = Schema.Array(Schema.Union(
   })
   )
 
-export type Pages.custom-html-page.head = Schema.Schema.Type<typeof Pages.custom-html-page.headSchema>
+export type PagesCustomHtmlPageHead = Schema.Schema.Type<typeof PagesCustomHtmlPageHeadSchema>
 ```
 
 ---

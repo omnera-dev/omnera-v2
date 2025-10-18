@@ -6,6 +6,10 @@
 
 ## Implementation Status
 
+**Schema**: 🔴 Not implemented
+
+**Tests**: 🔴 No tests found
+
 ⏳ **Not Started**
 
 ### Required Features
@@ -33,9 +37,9 @@ import { Schema } from 'effect'
 **Implementation**:
 
 ```typescript
-export const Tables.fields.geolocation-field.requiredSchema = Schema.Boolean
+export const TablesFieldsGeolocationFieldRequiredSchema = Schema.Boolean
 
-export type Tables.fields.geolocation-field.required = Schema.Schema.Type<typeof Tables.fields.geolocation-field.requiredSchema>
+export type TablesFieldsGeolocationFieldRequired = Schema.Schema.Type<typeof TablesFieldsGeolocationFieldRequiredSchema>
 ```
 
 ---

@@ -8,6 +8,10 @@ Make a POST HTTP request
 
 ## Implementation Status
 
+**Schema**: 🔴 Not implemented
+
+**Tests**: 🔴 No tests found
+
 ⏳ **Not Started**
 
 ### Required Features
@@ -37,10 +41,10 @@ import { Schema } from 'effect'
 ```typescript
 /**
  * POST Request
- *
+ * 
  * Make a POST HTTP request
  */
-export const Automation_action.http.postSchema = Schema.Struct({
+export const AutomationActionHttpPostSchema = Schema.Struct({
     name: Schema.String,
     service: Schema.String,
     action: Schema.String,
@@ -56,7 +60,7 @@ export const Automation_action.http.postSchema = Schema.Struct({
     description: "Make a POST HTTP request"
   }))
 
-export type Automation_action.http.post = Schema.Schema.Type<typeof Automation_action.http.postSchema>
+export type AutomationActionHttpPost = Schema.Schema.Type<typeof AutomationActionHttpPostSchema>
 ```
 
 ---

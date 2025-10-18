@@ -8,6 +8,10 @@ Send an HTTP response
 
 ## Implementation Status
 
+**Schema**: 🔴 Not implemented
+
+**Tests**: 🔴 No tests found
+
 ⏳ **Not Started**
 
 ### Required Features
@@ -37,10 +41,10 @@ import { Schema } from 'effect'
 ```typescript
 /**
  * HTTP Response
- *
+ * 
  * Send an HTTP response
  */
-export const Automation_action.http.responseSchema = Schema.Struct({
+export const AutomationActionHttpResponseSchema = Schema.Struct({
     name: Schema.String,
     service: Schema.String,
     action: Schema.String,
@@ -58,7 +62,7 @@ export const Automation_action.http.responseSchema = Schema.Struct({
     description: "Send an HTTP response"
   }))
 
-export type Automation_action.http.response = Schema.Schema.Type<typeof Automation_action.http.responseSchema>
+export type AutomationActionHttpResponse = Schema.Schema.Type<typeof AutomationActionHttpResponseSchema>
 ```
 
 ---

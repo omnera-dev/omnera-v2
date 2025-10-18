@@ -8,6 +8,10 @@ Storage provider
 
 ## Implementation Status
 
+**Schema**: 🔴 Not implemented
+
+**Tests**: 🔴 No tests found
+
 ⏳ **Not Started**
 
 ### Required Features
@@ -36,14 +40,14 @@ import { Schema } from 'effect'
 
 ```typescript
 /**
- *
+ * 
  * Storage provider
  */
-export const Tables.fields.single-attachment-field.storage.providerSchema = Schema.Literal("local", "s3").pipe(Schema.annotations({
+export const TablesFieldsSingleAttachmentFieldStorageProviderSchema = Schema.Literal("local", "s3").pipe(Schema.annotations({
     description: "Storage provider"
   }))
 
-export type Tables.fields.single-attachment-field.storage.provider = Schema.Schema.Type<typeof Tables.fields.single-attachment-field.storage.providerSchema>
+export type TablesFieldsSingleAttachmentFieldStorageProvider = Schema.Schema.Type<typeof TablesFieldsSingleAttachmentFieldStorageProviderSchema>
 ```
 
 ---

@@ -577,6 +577,66 @@ spec-coherence-guardian (BLUEPRINT)
   codebase-refactor-auditor (REFACTOR)
 ```
 
+## User Story Requirement (CRITICAL)
+
+**You MUST ONLY write tests for user stories defined in validated roadmap blueprints.**
+
+Before writing ANY tests, follow this mandatory check:
+
+1. **Check for Blueprint**: Verify that `docs/specifications/roadmap/{property}.md` exists
+2. **If Blueprint Missing**: STOP immediately and notify the user:
+   ```
+   ❌ Cannot write tests for {property}: No roadmap blueprint found.
+
+   Please run the spec-coherence-guardian agent first to generate the blueprint:
+   - Validate user stories with stakeholders
+   - Ensure "E2E Test Scenarios" section contains GIVEN-WHEN-THEN stories
+   ```
+3. **If Blueprint Exists**: Read the "E2E Test Scenarios" section and write tests ONLY for the user stories listed
+
+**Why This Matters**:
+- ✅ Ensures tests align with validated product requirements
+- ✅ Prevents testing features that haven't been specified
+- ✅ Maintains single source of truth (roadmap blueprints)
+- ✅ Coordinates work across agents (spec-coherence-guardian → e2e-red-test-writer)
+
+**What to Extract from Blueprint**:
+```typescript
+// Read: docs/specifications/roadmap/{property}.md
+
+// Extract from "E2E Test Scenarios" section:
+// 1. @spec user stories (GIVEN-WHEN-THEN format)
+// 2. @regression user story (consolidated workflow)
+// 3. @critical user story (if present)
+// 4. data-testid patterns
+// 5. Expected validation messages
+
+// Write ONLY tests matching these user stories
+// DO NOT invent additional test scenarios
+```
+
+**Example Blueprint Check**:
+```typescript
+// User requests: "Write tests for tables property"
+
+// Step 1: Check for blueprint
+const blueprintPath = 'docs/specifications/roadmap/tables.md'
+if (!exists(blueprintPath)) {
+  throw new Error('Cannot write tests for tables: No roadmap blueprint found. Run spec-coherence-guardian first.')
+}
+
+// Step 2: Read E2E Test Scenarios section
+const blueprint = readFile(blueprintPath)
+const userStories = extractSection(blueprint, 'E2E Test Scenarios')
+
+// Step 3: Write tests ONLY for listed user stories
+writeTestsFromUserStories(userStories)
+```
+
+**Never Invent Tests**: If the blueprint doesn't exist or doesn't contain user stories, you must wait for spec-coherence-guardian to create them. Do NOT create tests based on assumptions.
+
+---
+
 Remember: Your tests are the specification. They define what "done" looks like before any code is written. Your job is to make them fail meaningfully with clear, actionable assertions that guide implementation.
 
 **Key Rule**: EXACTLY ONE @regression test per file. This test consolidates all @spec tests into one comprehensive workflow.

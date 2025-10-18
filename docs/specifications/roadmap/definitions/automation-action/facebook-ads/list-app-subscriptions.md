@@ -8,6 +8,10 @@ Lists subscriptions configured on the Facebook App
 
 ## Implementation Status
 
+**Schema**: 🔴 Not implemented
+
+**Tests**: 🔴 No tests found
+
 ⏳ **Not Started**
 
 ### Required Features
@@ -37,10 +41,10 @@ import { Schema } from 'effect'
 ```typescript
 /**
  * List App Subscriptions
- *
+ * 
  * Lists subscriptions configured on the Facebook App
  */
-export const Automation_action.facebook-ads.list-app-subscriptionsSchema = Schema.Struct({
+export const AutomationActionFacebookAdsListAppSubscriptionsSchema = Schema.Struct({
     name: Schema.String,
     account: Schema.Union(
       Schema.Number,
@@ -65,7 +69,7 @@ export const Automation_action.facebook-ads.list-app-subscriptionsSchema = Schem
     description: "Lists subscriptions configured on the Facebook App"
   }))
 
-export type Automation_action.facebook-ads.list-app-subscriptions = Schema.Schema.Type<typeof Automation_action.facebook-ads.list-app-subscriptionsSchema>
+export type AutomationActionFacebookAdsListAppSubscriptions = Schema.Schema.Type<typeof AutomationActionFacebookAdsListAppSubscriptionsSchema>
 ```
 
 ---

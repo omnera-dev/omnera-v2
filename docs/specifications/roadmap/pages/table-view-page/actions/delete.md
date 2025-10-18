@@ -6,6 +6,10 @@
 
 ## Implementation Status
 
+**Schema**: 🔴 Not implemented
+
+**Tests**: 🔴 No tests found
+
 ⏳ **Not Started**
 
 ### Required Features
@@ -33,9 +37,9 @@ import { Schema } from 'effect'
 **Implementation**:
 
 ```typescript
-export const Pages.table-view-page.actions.deleteSchema = Schema.Boolean
+export const PagesTableViewPageActionsDeleteSchema = Schema.Boolean
 
-export type Pages.table-view-page.actions.delete = Schema.Schema.Type<typeof Pages.table-view-page.actions.deleteSchema>
+export type PagesTableViewPageActionsDelete = Schema.Schema.Type<typeof PagesTableViewPageActionsDeleteSchema>
 ```
 
 ---

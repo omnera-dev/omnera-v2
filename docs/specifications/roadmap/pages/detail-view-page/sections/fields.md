@@ -8,6 +8,10 @@ Fields to display in this section
 
 ## Implementation Status
 
+**Schema**: 🔴 Not implemented
+
+**Tests**: 🔴 No tests found
+
 ⏳ **Not Started**
 
 ### Required Features
@@ -36,17 +40,17 @@ import { Schema } from 'effect'
 
 ```typescript
 /**
- *
+ * 
  * Fields to display in this section
  */
-export const Pages.detail-view-page.sections.fieldsSchema = Schema.Array(Schema.String).pipe(
+export const PagesDetailViewPageSectionsFieldsSchema = Schema.Array(Schema.String).pipe(
     Schema.minItems(1),
     Schema.annotations({
     description: "Fields to display in this section"
   })
   )
 
-export type Pages.detail-view-page.sections.fields = Schema.Schema.Type<typeof Pages.detail-view-page.sections.fieldsSchema>
+export type PagesDetailViewPageSectionsFields = Schema.Schema.Type<typeof PagesDetailViewPageSectionsFieldsSchema>
 ```
 
 ---

@@ -8,6 +8,10 @@ Triggered when a Calendly invite is created
 
 ## Implementation Status
 
+**Schema**: 🔴 Not implemented
+
+**Tests**: 🔴 No tests found
+
 ⏳ **Not Started**
 
 ### Required Features
@@ -37,10 +41,10 @@ import { Schema } from 'effect'
 ```typescript
 /**
  * Invite Created
- *
+ * 
  * Triggered when a Calendly invite is created
  */
-export const Automation_trigger.calendly.invite-createdSchema = Schema.Struct({
+export const AutomationTriggerCalendlyInviteCreatedSchema = Schema.Struct({
     account: Schema.Union(
       Schema.Number,
       Schema.String
@@ -64,7 +68,7 @@ export const Automation_trigger.calendly.invite-createdSchema = Schema.Struct({
     description: "Triggered when a Calendly invite is created"
   }))
 
-export type Automation_trigger.calendly.invite-created = Schema.Schema.Type<typeof Automation_trigger.calendly.invite-createdSchema>
+export type AutomationTriggerCalendlyInviteCreated = Schema.Schema.Type<typeof AutomationTriggerCalendlyInviteCreatedSchema>
 ```
 
 ---

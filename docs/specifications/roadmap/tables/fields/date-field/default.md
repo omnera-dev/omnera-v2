@@ -6,6 +6,10 @@
 
 ## Implementation Status
 
+**Schema**: 🔴 Not implemented
+
+**Tests**: 🔴 No tests found
+
 ⏳ **Not Started**
 
 ### Required Features
@@ -33,9 +37,9 @@ import { Schema } from 'effect'
 **Implementation**:
 
 ```typescript
-export const Tables.fields.date-field.defaultSchema = Schema.String
+export const TablesFieldsDateFieldDefaultSchema = Schema.String
 
-export type Tables.fields.date-field.default = Schema.Schema.Type<typeof Tables.fields.date-field.defaultSchema>
+export type TablesFieldsDateFieldDefault = Schema.Schema.Type<typeof TablesFieldsDateFieldDefaultSchema>
 ```
 
 ---

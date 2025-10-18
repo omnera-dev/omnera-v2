@@ -8,6 +8,10 @@ Expected data type of the formula result
 
 ## Implementation Status
 
+**Schema**: 🔴 Not implemented
+
+**Tests**: 🔴 No tests found
+
 ⏳ **Not Started**
 
 ### Required Features
@@ -36,14 +40,14 @@ import { Schema } from 'effect'
 
 ```typescript
 /**
- *
+ * 
  * Expected data type of the formula result
  */
-export const Tables.fields.formula-field.resultTypeSchema = Schema.Literal("text", "number", "boolean", "date").pipe(Schema.annotations({
+export const TablesFieldsFormulaFieldResultTypeSchema = Schema.Literal("text", "number", "boolean", "date").pipe(Schema.annotations({
     description: "Expected data type of the formula result"
   }))
 
-export type Tables.fields.formula-field.resultType = Schema.Schema.Type<typeof Tables.fields.formula-field.resultTypeSchema>
+export type TablesFieldsFormulaFieldResultType = Schema.Schema.Type<typeof TablesFieldsFormulaFieldResultTypeSchema>
 ```
 
 ---

@@ -8,6 +8,10 @@ Retrieves lead generation data using the leadgen_id from webhook
 
 ## Implementation Status
 
+**Schema**: 🔴 Not implemented
+
+**Tests**: 🔴 No tests found
+
 ⏳ **Not Started**
 
 ### Required Features
@@ -37,10 +41,10 @@ import { Schema } from 'effect'
 ```typescript
 /**
  * Get LeadGen
- *
+ * 
  * Retrieves lead generation data using the leadgen_id from webhook
  */
-export const Automation_action.facebook-ads.get-leadgenSchema = Schema.Struct({
+export const AutomationActionFacebookAdsGetLeadgenSchema = Schema.Struct({
     name: Schema.String,
     account: Schema.Union(
       Schema.Number,
@@ -61,7 +65,7 @@ export const Automation_action.facebook-ads.get-leadgenSchema = Schema.Struct({
     description: "Retrieves lead generation data using the leadgen_id from webhook"
   }))
 
-export type Automation_action.facebook-ads.get-leadgen = Schema.Schema.Type<typeof Automation_action.facebook-ads.get-leadgenSchema>
+export type AutomationActionFacebookAdsGetLeadgen = Schema.Schema.Type<typeof AutomationActionFacebookAdsGetLeadgenSchema>
 ```
 
 ---

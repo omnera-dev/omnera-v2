@@ -8,6 +8,10 @@ Execute TypeScript code
 
 ## Implementation Status
 
+**Schema**: 🔴 Not implemented
+
+**Tests**: 🔴 No tests found
+
 ⏳ **Not Started**
 
 ### Required Features
@@ -37,10 +41,10 @@ import { Schema } from 'effect'
 ```typescript
 /**
  * Run TypeScript
- *
+ * 
  * Execute TypeScript code
  */
-export const Automation_action.code.run-typescriptSchema = Schema.Struct({
+export const AutomationActionCodeRunTypescriptSchema = Schema.Struct({
     name: Schema.String,
     service: Schema.String,
     action: Schema.String,
@@ -54,7 +58,7 @@ export const Automation_action.code.run-typescriptSchema = Schema.Struct({
     description: "Execute TypeScript code"
   }))
 
-export type Automation_action.code.run-typescript = Schema.Schema.Type<typeof Automation_action.code.run-typescriptSchema>
+export type AutomationActionCodeRunTypescript = Schema.Schema.Type<typeof AutomationActionCodeRunTypescriptSchema>
 ```
 
 ---

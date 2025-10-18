@@ -8,6 +8,10 @@ Include time component (for date type)
 
 ## Implementation Status
 
+**Schema**: 🔴 Not implemented
+
+**Tests**: 🔴 No tests found
+
 ⏳ **Not Started**
 
 ### Required Features
@@ -36,12 +40,12 @@ import { Schema } from 'effect'
 
 ```typescript
 /**
- *
+ * 
  * Include time component (for date type)
  */
-export const Tables.fields.date-field.includeTimeSchema = Schema.Boolean
+export const TablesFieldsDateFieldIncludeTimeSchema = Schema.Boolean
 
-export type Tables.fields.date-field.includeTime = Schema.Schema.Type<typeof Tables.fields.date-field.includeTimeSchema>
+export type TablesFieldsDateFieldIncludeTime = Schema.Schema.Type<typeof TablesFieldsDateFieldIncludeTimeSchema>
 ```
 
 ---

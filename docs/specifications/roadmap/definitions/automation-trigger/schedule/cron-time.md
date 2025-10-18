@@ -8,6 +8,10 @@ Triggered by a cron expression
 
 ## Implementation Status
 
+**Schema**: 🔴 Not implemented
+
+**Tests**: 🔴 No tests found
+
 ⏳ **Not Started**
 
 ### Required Features
@@ -37,10 +41,10 @@ import { Schema } from 'effect'
 ```typescript
 /**
  * Cron Time
- *
+ * 
  * Triggered by a cron expression
  */
-export const Automation_trigger.schedule.cron-timeSchema = Schema.Struct({
+export const AutomationTriggerScheduleCronTimeSchema = Schema.Struct({
     service: Schema.String,
     event: Schema.String,
     params: Schema.Struct({
@@ -52,7 +56,7 @@ export const Automation_trigger.schedule.cron-timeSchema = Schema.Struct({
     description: "Triggered by a cron expression"
   }))
 
-export type Automation_trigger.schedule.cron-time = Schema.Schema.Type<typeof Automation_trigger.schedule.cron-timeSchema>
+export type AutomationTriggerScheduleCronTime = Schema.Schema.Type<typeof AutomationTriggerScheduleCronTimeSchema>
 ```
 
 ---

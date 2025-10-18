@@ -8,6 +8,10 @@ Enable search functionality
 
 ## Implementation Status
 
+**Schema**: 🔴 Not implemented
+
+**Tests**: 🔴 No tests found
+
 ⏳ **Not Started**
 
 ### Required Features
@@ -36,12 +40,12 @@ import { Schema } from 'effect'
 
 ```typescript
 /**
- *
+ * 
  * Enable search functionality
  */
-export const Pages.table-view-page.searchableSchema = Schema.Boolean
+export const PagesTableViewPageSearchableSchema = Schema.Boolean
 
-export type Pages.table-view-page.searchable = Schema.Schema.Type<typeof Pages.table-view-page.searchableSchema>
+export type PagesTableViewPageSearchable = Schema.Schema.Type<typeof PagesTableViewPageSearchableSchema>
 ```
 
 ---

@@ -6,6 +6,10 @@
 
 ## Implementation Status
 
+**Schema**: 🔴 Not implemented
+
+**Tests**: 🔴 No tests found
+
 ⏳ **Not Started**
 
 ### Required Features
@@ -33,7 +37,7 @@ import { Schema } from 'effect'
 **Implementation**:
 
 ```typescript
-export const Json_schema.additionalPropertiesSchema = Schema.Union(
+export const JsonSchemaAdditionalPropertiesSchema = Schema.Union(
     Schema.Union(
     Schema.Unknown,
     Schema.Boolean
@@ -41,7 +45,7 @@ export const Json_schema.additionalPropertiesSchema = Schema.Union(
     Schema.Boolean
   )
 
-export type Json_schema.additionalProperties = Schema.Schema.Type<typeof Json_schema.additionalPropertiesSchema>
+export type JsonSchemaAdditionalProperties = Schema.Schema.Type<typeof JsonSchemaAdditionalPropertiesSchema>
 ```
 
 ---

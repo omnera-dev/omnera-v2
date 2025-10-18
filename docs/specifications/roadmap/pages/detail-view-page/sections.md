@@ -8,6 +8,10 @@ Sections grouping related fields
 
 ## Implementation Status
 
+**Schema**: 🔴 Not implemented
+
+**Tests**: 🔴 No tests found
+
 ⏳ **Not Started**
 
 ### Required Features
@@ -36,10 +40,10 @@ import { Schema } from 'effect'
 
 ```typescript
 /**
- *
+ * 
  * Sections grouping related fields
  */
-export const Pages.detail-view-page.sectionsSchema = Schema.Array(Schema.Struct({
+export const PagesDetailViewPageSectionsSchema = Schema.Array(Schema.Struct({
     title: Schema.String.pipe(
       Schema.minLength(1, { message: () => 'This field is required' }),
       Schema.annotations({
@@ -54,7 +58,7 @@ export const Pages.detail-view-page.sectionsSchema = Schema.Array(Schema.Struct(
   })
   )
 
-export type Pages.detail-view-page.sections = Schema.Schema.Type<typeof Pages.detail-view-page.sectionsSchema>
+export type PagesDetailViewPageSections = Schema.Schema.Type<typeof PagesDetailViewPageSectionsSchema>
 ```
 
 ---

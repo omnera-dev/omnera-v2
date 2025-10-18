@@ -8,6 +8,10 @@ Name of the field in the related table to display
 
 ## Implementation Status
 
+**Schema**: 🔴 Not implemented
+
+**Tests**: 🔴 No tests found
+
 ⏳ **Not Started**
 
 ### Required Features
@@ -36,17 +40,17 @@ import { Schema } from 'effect'
 
 ```typescript
 /**
- *
+ * 
  * Name of the field in the related table to display
  */
-export const Tables.fields.lookup-field.relatedFieldSchema = Schema.String.pipe(
+export const TablesFieldsLookupFieldRelatedFieldSchema = Schema.String.pipe(
     Schema.minLength(1, { message: () => 'This field is required' }),
     Schema.annotations({
     description: "Name of the field in the related table to display"
   })
   )
 
-export type Tables.fields.lookup-field.relatedField = Schema.Schema.Type<typeof Tables.fields.lookup-field.relatedFieldSchema>
+export type TablesFieldsLookupFieldRelatedField = Schema.Schema.Type<typeof TablesFieldsLookupFieldRelatedFieldSchema>
 ```
 
 ---

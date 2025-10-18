@@ -8,6 +8,10 @@ Retrieves a single LinkedIn Lead Form Response by its ID
 
 ## Implementation Status
 
+**Schema**: 🔴 Not implemented
+
+**Tests**: 🔴 No tests found
+
 ⏳ **Not Started**
 
 ### Required Features
@@ -37,10 +41,10 @@ import { Schema } from 'effect'
 ```typescript
 /**
  * Get Lead Form Response
- *
+ * 
  * Retrieves a single LinkedIn Lead Form Response by its ID
  */
-export const Automation_action.linkedin-ads.get-lead-form-responseSchema = Schema.Struct({
+export const AutomationActionLinkedinAdsGetLeadFormResponseSchema = Schema.Struct({
     name: Schema.String,
     account: Schema.Union(
       Schema.Number,
@@ -61,7 +65,7 @@ export const Automation_action.linkedin-ads.get-lead-form-responseSchema = Schem
     description: "Retrieves a single LinkedIn Lead Form Response by its ID"
   }))
 
-export type Automation_action.linkedin-ads.get-lead-form-response = Schema.Schema.Type<typeof Automation_action.linkedin-ads.get-lead-form-responseSchema>
+export type AutomationActionLinkedinAdsGetLeadFormResponse = Schema.Schema.Type<typeof AutomationActionLinkedinAdsGetLeadFormResponseSchema>
 ```
 
 ---

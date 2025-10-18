@@ -25,6 +25,33 @@ export function generatePropertyDetailMarkdown(doc: PropertyDocumentation): stri
 
   // Status section
   md += `## Implementation Status\n\n`
+
+  // Schema implementation status
+  if (doc.schemaStatus) {
+    const schemaIcon = doc.schemaStatus.isImplemented ? '✅' : '🔴'
+    md += `**Schema**: ${schemaIcon} ${doc.schemaStatus.isImplemented ? 'Implemented' : 'Not implemented'}`
+    if (doc.schemaStatus.schemaFilePath) {
+      md += ` (\`${doc.schemaStatus.schemaFilePath}\`)`
+    }
+    md += `\n\n`
+  }
+
+  // Test implementation status
+  if (doc.testStatus) {
+    const { testFileExists, totalTests, passingTests, fixmeTests, coveragePercent } = doc.testStatus
+
+    if (!testFileExists || totalTests === 0) {
+      md += `**Tests**: 🔴 No tests found\n\n`
+    } else if (fixmeTests === totalTests) {
+      md += `**Tests**: 🔴 All tests RED (${totalTests} with .fixme)\n\n`
+    } else if (passingTests === totalTests) {
+      md += `**Tests**: ✅ All tests GREEN (${totalTests} passing)\n\n`
+    } else {
+      md += `**Tests**: 🚧 Partial (${passingTests}/${totalTests} passing, ${fixmeTests} with .fixme) - ${coveragePercent}% coverage\n\n`
+    }
+  }
+
+  // Overall status
   if (property.status === 'complete') {
     md += `✅ **Fully Implemented**\n\n`
   } else if (property.status === 'partial') {

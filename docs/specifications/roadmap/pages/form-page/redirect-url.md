@@ -8,6 +8,10 @@ URL to redirect to after successful submission
 
 ## Implementation Status
 
+**Schema**: 🔴 Not implemented
+
+**Tests**: 🔴 No tests found
+
 ⏳ **Not Started**
 
 ### Required Features
@@ -36,10 +40,10 @@ import { Schema } from 'effect'
 
 ```typescript
 /**
- *
+ * 
  * URL to redirect to after successful submission
  */
-export const Pages.form-page.redirectUrlSchema = Schema.String.pipe(
+export const PagesFormPageRedirectUrlSchema = Schema.String.pipe(
     Schema.minLength(1, { message: () => 'This field is required' }),
     Schema.pattern(/^/[a-z0-9-/]*$/, {
     message: () => 'URL path for routing and navigation. Must start with forward slash (/), contain only lowercase letters, numbers, hyphens, and forward slashes. Used for page routing, API endpoints, and navigation links. Paths should be hierarchical and descriptive (e.g., /customers/orders, /admin/settings). Nested paths are supported.'
@@ -51,7 +55,7 @@ export const Pages.form-page.redirectUrlSchema = Schema.String.pipe(
   })
   )
 
-export type Pages.form-page.redirectUrl = Schema.Schema.Type<typeof Pages.form-page.redirectUrlSchema>
+export type PagesFormPageRedirectUrl = Schema.Schema.Type<typeof PagesFormPageRedirectUrlSchema>
 ```
 
 ---

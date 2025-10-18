@@ -6,6 +6,10 @@
 
 ## Implementation Status
 
+**Schema**: 🔴 Not implemented
+
+**Tests**: 🔴 No tests found
+
 ⏳ **Not Started**
 
 ### Required Features
@@ -33,9 +37,9 @@ import { Schema } from 'effect'
 **Implementation**:
 
 ```typescript
-export const Pages.custom-html-page.head.link-element.mediaSchema = Schema.String
+export const PagesCustomHtmlPageHeadLinkElementMediaSchema = Schema.String
 
-export type Pages.custom-html-page.head.link-element.media = Schema.Schema.Type<typeof Pages.custom-html-page.head.link-element.mediaSchema>
+export type PagesCustomHtmlPageHeadLinkElementMedia = Schema.Schema.Type<typeof PagesCustomHtmlPageHeadLinkElementMediaSchema>
 ```
 
 ---

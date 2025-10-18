@@ -8,6 +8,10 @@ Enable column sorting
 
 ## Implementation Status
 
+**Schema**: 🔴 Not implemented
+
+**Tests**: 🔴 No tests found
+
 ⏳ **Not Started**
 
 ### Required Features
@@ -36,12 +40,12 @@ import { Schema } from 'effect'
 
 ```typescript
 /**
- *
+ * 
  * Enable column sorting
  */
-export const Pages.table-view-page.sortableSchema = Schema.Boolean
+export const PagesTableViewPageSortableSchema = Schema.Boolean
 
-export type Pages.table-view-page.sortable = Schema.Schema.Type<typeof Pages.table-view-page.sortableSchema>
+export type PagesTableViewPageSortable = Schema.Schema.Type<typeof PagesTableViewPageSortableSchema>
 ```
 
 ---

@@ -8,6 +8,10 @@ Composite unique constraints ensure that combinations of multiple field values a
 
 ## Implementation Status
 
+**Schema**: 🔴 Not implemented
+
+**Tests**: 🔴 No tests found
+
 ⏳ **Not Started**
 
 ### Required Features
@@ -34,12 +38,12 @@ import { Schema } from 'effect'
 
 **Implementation**:
 
-````typescript
+```typescript
 /**
  * Unique Constraints
- *
+ * 
  * Composite unique constraints ensure that combinations of multiple field values are unique across all rows. Use this when you need uniqueness across multiple fields (e.g., email + tenant_id must be unique together).
- *
+ * 
  * @example
  * ```typescript
  * [
@@ -60,7 +64,7 @@ import { Schema } from 'effect'
  * ]
  * ```
  */
-export const Tables.uniqueConstraintsSchema = Schema.Array(Schema.Struct({
+export const TablesUniqueConstraintsSchema = Schema.Array(Schema.Struct({
     name: Schema.String.pipe(
       Schema.minLength(1, { message: () => 'This field is required' }),
       Schema.pattern(/^[a-z][a-z0-9_]*$/, {
@@ -82,8 +86,8 @@ export const Tables.uniqueConstraintsSchema = Schema.Array(Schema.Struct({
   })
   )
 
-export type Tables.uniqueConstraints = Schema.Schema.Type<typeof Tables.uniqueConstraintsSchema>
-````
+export type TablesUniqueConstraints = Schema.Schema.Type<typeof TablesUniqueConstraintsSchema>
+```
 
 ---
 

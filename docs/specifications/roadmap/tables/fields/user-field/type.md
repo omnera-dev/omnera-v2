@@ -6,6 +6,10 @@
 
 ## Implementation Status
 
+**Schema**: 🔴 Not implemented
+
+**Tests**: 🔴 No tests found
+
 ⏳ **Not Started**
 
 ### Required Features
@@ -33,9 +37,9 @@ import { Schema } from 'effect'
 **Implementation**:
 
 ```typescript
-export const Tables.fields.user-field.typeSchema = Schema.Literal("user")
+export const TablesFieldsUserFieldTypeSchema = Schema.Literal("user")
 
-export type Tables.fields.user-field.type = Schema.Schema.Type<typeof Tables.fields.user-field.typeSchema>
+export type TablesFieldsUserFieldType = Schema.Schema.Type<typeof TablesFieldsUserFieldTypeSchema>
 ```
 
 ---

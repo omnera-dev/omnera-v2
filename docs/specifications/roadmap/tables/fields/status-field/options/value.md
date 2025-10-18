@@ -6,6 +6,10 @@
 
 ## Implementation Status
 
+**Schema**: 🔴 Not implemented
+
+**Tests**: 🔴 No tests found
+
 ⏳ **Not Started**
 
 ### Required Features
@@ -33,11 +37,11 @@ import { Schema } from 'effect'
 **Implementation**:
 
 ```typescript
-export const Tables.fields.status-field.options.valueSchema = Schema.String.pipe(
+export const TablesFieldsStatusFieldOptionsValueSchema = Schema.String.pipe(
     Schema.minLength(1, { message: () => 'This field is required' })
   )
 
-export type Tables.fields.status-field.options.value = Schema.Schema.Type<typeof Tables.fields.status-field.options.valueSchema>
+export type TablesFieldsStatusFieldOptionsValue = Schema.Schema.Type<typeof TablesFieldsStatusFieldOptionsValueSchema>
 ```
 
 ---

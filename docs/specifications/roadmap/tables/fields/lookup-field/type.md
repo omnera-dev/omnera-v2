@@ -6,6 +6,10 @@
 
 ## Implementation Status
 
+**Schema**: 🔴 Not implemented
+
+**Tests**: 🔴 No tests found
+
 ⏳ **Not Started**
 
 ### Required Features
@@ -33,9 +37,9 @@ import { Schema } from 'effect'
 **Implementation**:
 
 ```typescript
-export const Tables.fields.lookup-field.typeSchema = Schema.Literal("lookup")
+export const TablesFieldsLookupFieldTypeSchema = Schema.Literal("lookup")
 
-export type Tables.fields.lookup-field.type = Schema.Schema.Type<typeof Tables.fields.lookup-field.typeSchema>
+export type TablesFieldsLookupFieldType = Schema.Schema.Type<typeof TablesFieldsLookupFieldTypeSchema>
 ```
 
 ---

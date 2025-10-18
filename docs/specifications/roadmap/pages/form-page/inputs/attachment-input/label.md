@@ -6,6 +6,10 @@
 
 ## Implementation Status
 
+**Schema**: 🔴 Not implemented
+
+**Tests**: 🔴 No tests found
+
 ⏳ **Not Started**
 
 ### Required Features
@@ -33,9 +37,9 @@ import { Schema } from 'effect'
 **Implementation**:
 
 ```typescript
-export const Pages.form-page.inputs.attachment-input.labelSchema = Schema.String
+export const PagesFormPageInputsAttachmentInputLabelSchema = Schema.String
 
-export type Pages.form-page.inputs.attachment-input.label = Schema.Schema.Type<typeof Pages.form-page.inputs.attachment-input.labelSchema>
+export type PagesFormPageInputsAttachmentInputLabel = Schema.Schema.Type<typeof PagesFormPageInputsAttachmentInputLabelSchema>
 ```
 
 ---

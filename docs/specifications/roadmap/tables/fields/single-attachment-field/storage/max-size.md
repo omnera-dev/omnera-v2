@@ -8,6 +8,10 @@ Maximum file size in bytes
 
 ## Implementation Status
 
+**Schema**: 🔴 Not implemented
+
+**Tests**: 🔴 No tests found
+
 ⏳ **Not Started**
 
 ### Required Features
@@ -36,17 +40,17 @@ import { Schema } from 'effect'
 
 ```typescript
 /**
- *
+ * 
  * Maximum file size in bytes
  */
-export const Tables.fields.single-attachment-field.storage.maxSizeSchema = Schema.Int.pipe(
+export const TablesFieldsSingleAttachmentFieldStorageMaxSizeSchema = Schema.Int.pipe(
     Schema.greaterThanOrEqualTo(1),
     Schema.annotations({
     description: "Maximum file size in bytes"
   })
   )
 
-export type Tables.fields.single-attachment-field.storage.maxSize = Schema.Schema.Type<typeof Tables.fields.single-attachment-field.storage.maxSizeSchema>
+export type TablesFieldsSingleAttachmentFieldStorageMaxSize = Schema.Schema.Type<typeof TablesFieldsSingleAttachmentFieldStorageMaxSizeSchema>
 ```
 
 ---

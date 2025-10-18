@@ -8,6 +8,10 @@ Primary key generation strategy. 'auto-increment' uses sequential integers (1, 2
 
 ## Implementation Status
 
+**Schema**: 🔴 Not implemented
+
+**Tests**: 🔴 No tests found
+
 ⏳ **Not Started**
 
 ### Required Features
@@ -36,14 +40,14 @@ import { Schema } from 'effect'
 
 ```typescript
 /**
- *
+ * 
  * Primary key generation strategy. 'auto-increment' uses sequential integers (1, 2, 3...), 'uuid' generates random unique identifiers, 'composite' uses multiple fields together.
  */
-export const Tables.primaryKey.typeSchema = Schema.Literal("auto-increment", "uuid", "composite").pipe(Schema.annotations({
+export const TablesPrimaryKeyTypeSchema = Schema.Literal("auto-increment", "uuid", "composite").pipe(Schema.annotations({
     description: "Primary key generation strategy. 'auto-increment' uses sequential integers (1, 2, 3...), 'uuid' generates random unique identifiers, 'composite' uses multiple fields together."
   }))
 
-export type Tables.primaryKey.type = Schema.Schema.Type<typeof Tables.primaryKey.typeSchema>
+export type TablesPrimaryKeyType = Schema.Schema.Type<typeof TablesPrimaryKeyTypeSchema>
 ```
 
 ---

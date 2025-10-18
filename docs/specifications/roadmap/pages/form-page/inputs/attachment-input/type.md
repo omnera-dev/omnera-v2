@@ -6,6 +6,10 @@
 
 ## Implementation Status
 
+**Schema**: 🔴 Not implemented
+
+**Tests**: 🔴 No tests found
+
 ⏳ **Not Started**
 
 ### Required Features
@@ -33,9 +37,9 @@ import { Schema } from 'effect'
 **Implementation**:
 
 ```typescript
-export const Pages.form-page.inputs.attachment-input.typeSchema = Schema.Literal("single-attachment")
+export const PagesFormPageInputsAttachmentInputTypeSchema = Schema.Literal("single-attachment")
 
-export type Pages.form-page.inputs.attachment-input.type = Schema.Schema.Type<typeof Pages.form-page.inputs.attachment-input.typeSchema>
+export type PagesFormPageInputsAttachmentInputType = Schema.Schema.Type<typeof PagesFormPageInputsAttachmentInputTypeSchema>
 ```
 
 ---

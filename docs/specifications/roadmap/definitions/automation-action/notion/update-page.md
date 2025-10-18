@@ -8,6 +8,10 @@ Updates properties, icon, cover, or archived status of a Notion page
 
 ## Implementation Status
 
+**Schema**: 🔴 Not implemented
+
+**Tests**: 🔴 No tests found
+
 ⏳ **Not Started**
 
 ### Required Features
@@ -37,10 +41,10 @@ import { Schema } from 'effect'
 ```typescript
 /**
  * Update Page
- *
+ * 
  * Updates properties, icon, cover, or archived status of a Notion page
  */
-export const Automation_action.notion.update-pageSchema = Schema.Struct({
+export const AutomationActionNotionUpdatePageSchema = Schema.Struct({
     name: Schema.String,
     account: Schema.Union(
       Schema.Number,
@@ -81,7 +85,7 @@ export const Automation_action.notion.update-pageSchema = Schema.Struct({
     description: "Updates properties, icon, cover, or archived status of a Notion page"
   }))
 
-export type Automation_action.notion.update-page = Schema.Schema.Type<typeof Automation_action.notion.update-pageSchema>
+export type AutomationActionNotionUpdatePage = Schema.Schema.Type<typeof AutomationActionNotionUpdatePageSchema>
 ```
 
 ---

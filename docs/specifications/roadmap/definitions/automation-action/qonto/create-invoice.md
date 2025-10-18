@@ -8,6 +8,10 @@ Creates a new invoice in Qonto
 
 ## Implementation Status
 
+**Schema**: 🔴 Not implemented
+
+**Tests**: 🔴 No tests found
+
 ⏳ **Not Started**
 
 ### Required Features
@@ -37,10 +41,10 @@ import { Schema } from 'effect'
 ```typescript
 /**
  * Create Invoice
- *
+ * 
  * Creates a new invoice in Qonto
  */
-export const Automation_action.qonto.create-invoiceSchema = Schema.Struct({
+export const AutomationActionQontoCreateInvoiceSchema = Schema.Struct({
     name: Schema.String,
     account: Schema.Union(
       Schema.Number,
@@ -105,7 +109,7 @@ export const Automation_action.qonto.create-invoiceSchema = Schema.Struct({
     description: "Creates a new invoice in Qonto"
   }))
 
-export type Automation_action.qonto.create-invoice = Schema.Schema.Type<typeof Automation_action.qonto.create-invoiceSchema>
+export type AutomationActionQontoCreateInvoice = Schema.Schema.Type<typeof AutomationActionQontoCreateInvoiceSchema>
 ```
 
 ---

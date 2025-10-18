@@ -8,6 +8,10 @@ Formula expression to compute the value. Supports field references, operators, a
 
 ## Implementation Status
 
+**Schema**: 🔴 Not implemented
+
+**Tests**: 🔴 No tests found
+
 ⏳ **Not Started**
 
 ### Required Features
@@ -34,17 +38,17 @@ import { Schema } from 'effect'
 
 **Implementation**:
 
-````typescript
+```typescript
 /**
- *
+ * 
  * Formula expression to compute the value. Supports field references, operators, and functions.
- *
+ * 
  * @example
  * ```typescript
  * "price * quantity"
  * ```
  */
-export const Tables.fields.formula-field.formulaSchema = Schema.String.pipe(
+export const TablesFieldsFormulaFieldFormulaSchema = Schema.String.pipe(
     Schema.minLength(1, { message: () => 'This field is required' }),
     Schema.annotations({
     description: "Formula expression to compute the value. Supports field references, operators, and functions.",
@@ -52,8 +56,8 @@ export const Tables.fields.formula-field.formulaSchema = Schema.String.pipe(
   })
   )
 
-export type Tables.fields.formula-field.formula = Schema.Schema.Type<typeof Tables.fields.formula-field.formulaSchema>
-````
+export type TablesFieldsFormulaFieldFormula = Schema.Schema.Type<typeof TablesFieldsFormulaFieldFormulaSchema>
+```
 
 ---
 

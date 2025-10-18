@@ -6,6 +6,10 @@
 
 ## Implementation Status
 
+**Schema**: 🔴 Not implemented
+
+**Tests**: 🔴 No tests found
+
 ⏳ **Not Started**
 
 ### Required Features
@@ -33,9 +37,9 @@ import { Schema } from 'effect'
 **Implementation**:
 
 ```typescript
-export const Tables.fields.checkbox-field.defaultSchema = Schema.Boolean
+export const TablesFieldsCheckboxFieldDefaultSchema = Schema.Boolean
 
-export type Tables.fields.checkbox-field.default = Schema.Schema.Type<typeof Tables.fields.checkbox-field.defaultSchema>
+export type TablesFieldsCheckboxFieldDefault = Schema.Schema.Type<typeof TablesFieldsCheckboxFieldDefaultSchema>
 ```
 
 ---

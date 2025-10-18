@@ -6,6 +6,10 @@
 
 ## Implementation Status
 
+**Schema**: 🔴 Not implemented
+
+**Tests**: 🔴 No tests found
+
 ⏳ **Not Started**
 
 ### Required Features
@@ -33,9 +37,9 @@ import { Schema } from 'effect'
 **Implementation**:
 
 ```typescript
-export const Tables.fields.multiple-attachments-field.requiredSchema = Schema.Boolean
+export const TablesFieldsMultipleAttachmentsFieldRequiredSchema = Schema.Boolean
 
-export type Tables.fields.multiple-attachments-field.required = Schema.Schema.Type<typeof Tables.fields.multiple-attachments-field.requiredSchema>
+export type TablesFieldsMultipleAttachmentsFieldRequired = Schema.Schema.Type<typeof TablesFieldsMultipleAttachmentsFieldRequiredSchema>
 ```
 
 ---

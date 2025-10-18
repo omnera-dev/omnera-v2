@@ -8,6 +8,10 @@ Collection of database tables that define the data structure of your application
 
 ## Implementation Status
 
+**Schema**: 🔴 Not implemented
+
+**Tests**: 🔴 No tests found
+
 ⏳ **Not Started**
 
 ### Required Features
@@ -37,7 +41,7 @@ import { Schema } from 'effect'
 ```typescript
 /**
  * Data Tables
- *
+ * 
  * Collection of database tables that define the data structure of your application. Each table represents an entity (e.g., users, products, orders) with fields that define the schema. Tables support relationships, indexes, constraints, and various field types. Tables are the foundation of your application's data model and determine what information can be stored and how it relates.
  */
 export const TablesSchema = Schema.Array(Schema.Struct({

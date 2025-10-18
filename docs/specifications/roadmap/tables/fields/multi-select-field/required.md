@@ -6,6 +6,10 @@
 
 ## Implementation Status
 
+**Schema**: 🔴 Not implemented
+
+**Tests**: 🔴 No tests found
+
 ⏳ **Not Started**
 
 ### Required Features
@@ -33,9 +37,9 @@ import { Schema } from 'effect'
 **Implementation**:
 
 ```typescript
-export const Tables.fields.multi-select-field.requiredSchema = Schema.Boolean
+export const TablesFieldsMultiSelectFieldRequiredSchema = Schema.Boolean
 
-export type Tables.fields.multi-select-field.required = Schema.Schema.Type<typeof Tables.fields.multi-select-field.requiredSchema>
+export type TablesFieldsMultiSelectFieldRequired = Schema.Schema.Type<typeof TablesFieldsMultiSelectFieldRequiredSchema>
 ```
 
 ---

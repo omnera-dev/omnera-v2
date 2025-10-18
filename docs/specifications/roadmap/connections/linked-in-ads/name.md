@@ -6,6 +6,10 @@
 
 ## Implementation Status
 
+**Schema**: 🔴 Not implemented
+
+**Tests**: 🔴 No tests found
+
 ⏳ **Not Started**
 
 ### Required Features
@@ -33,9 +37,9 @@ import { Schema } from 'effect'
 **Implementation**:
 
 ```typescript
-export const Connections.linked-in-ads.nameSchema = Schema.String
+export const ConnectionsLinkedInAdsNameSchema = Schema.String
 
-export type Connections.linked-in-ads.name = Schema.Schema.Type<typeof Connections.linked-in-ads.nameSchema>
+export type ConnectionsLinkedInAdsName = Schema.Schema.Type<typeof ConnectionsLinkedInAdsNameSchema>
 ```
 
 ---

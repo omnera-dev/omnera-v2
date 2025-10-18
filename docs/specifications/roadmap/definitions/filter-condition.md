@@ -8,6 +8,10 @@ Filter conditions for querying and filtering data in table views, automations, a
 
 ## Implementation Status
 
+**Schema**: 🔴 Not implemented
+
+**Tests**: 🔴 No tests found
+
 ⏳ **Not Started**
 
 ### Required Features
@@ -36,28 +40,28 @@ import { Schema } from 'effect'
 
 ```typescript
 /**
- *
+ * 
  * Filter conditions for querying and filtering data in table views, automations, and reports. Specify field to filter on, comparison operator (equals, not equals, contains, greater than, less than, is empty, is not empty), and comparison value. Conditions can be combined with AND/OR logic. Supports dynamic values from other fields, current user, or system variables. Used throughout the application for data filtering and conditional logic.
  */
-export const Filter_conditionSchema = Schema.Union(
-  Schema.Struct({
+export const FilterConditionSchema = Schema.Union(
+    Schema.Struct({
     target: Schema.String,
     operator: Schema.String,
     value: Schema.String,
   }),
-  Schema.Struct({
+    Schema.Struct({
     target: Schema.String,
     operator: Schema.String,
   }),
-  Schema.Struct({
+    Schema.Struct({
     and: Schema.Array(Schema.Unknown),
   }),
-  Schema.Struct({
+    Schema.Struct({
     or: Schema.Array(Schema.Unknown),
   })
-)
+  )
 
-export type Filter_condition = Schema.Schema.Type<typeof Filter_conditionSchema>
+export type FilterCondition = Schema.Schema.Type<typeof FilterConditionSchema>
 ```
 
 ---

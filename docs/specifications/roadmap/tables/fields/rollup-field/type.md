@@ -6,6 +6,10 @@
 
 ## Implementation Status
 
+**Schema**: 🔴 Not implemented
+
+**Tests**: 🔴 No tests found
+
 ⏳ **Not Started**
 
 ### Required Features
@@ -33,9 +37,9 @@ import { Schema } from 'effect'
 **Implementation**:
 
 ```typescript
-export const Tables.fields.rollup-field.typeSchema = Schema.Literal("rollup")
+export const TablesFieldsRollupFieldTypeSchema = Schema.Literal("rollup")
 
-export type Tables.fields.rollup-field.type = Schema.Schema.Type<typeof Tables.fields.rollup-field.typeSchema>
+export type TablesFieldsRollupFieldType = Schema.Schema.Type<typeof TablesFieldsRollupFieldTypeSchema>
 ```
 
 ---

@@ -8,6 +8,10 @@ Creates a new client in Qonto
 
 ## Implementation Status
 
+**Schema**: 🔴 Not implemented
+
+**Tests**: 🔴 No tests found
+
 ⏳ **Not Started**
 
 ### Required Features
@@ -37,10 +41,10 @@ import { Schema } from 'effect'
 ```typescript
 /**
  * Create Client
- *
+ * 
  * Creates a new client in Qonto
  */
-export const Automation_action.qonto.create-clientSchema = Schema.Struct({
+export const AutomationActionQontoCreateClientSchema = Schema.Struct({
     name: Schema.String,
     account: Schema.Union(
       Schema.Number,
@@ -100,7 +104,7 @@ export const Automation_action.qonto.create-clientSchema = Schema.Struct({
     description: "Creates a new client in Qonto"
   }))
 
-export type Automation_action.qonto.create-client = Schema.Schema.Type<typeof Automation_action.qonto.create-clientSchema>
+export type AutomationActionQontoCreateClient = Schema.Schema.Type<typeof AutomationActionQontoCreateClientSchema>
 ```
 
 ---

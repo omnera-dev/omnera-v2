@@ -8,6 +8,10 @@ Button text label
 
 ## Implementation Status
 
+**Schema**: 🔴 Not implemented
+
+**Tests**: 🔴 No tests found
+
 ⏳ **Not Started**
 
 ### Required Features
@@ -36,17 +40,17 @@ import { Schema } from 'effect'
 
 ```typescript
 /**
- *
+ * 
  * Button text label
  */
-export const Tables.fields.button-field.labelSchema = Schema.String.pipe(
+export const TablesFieldsButtonFieldLabelSchema = Schema.String.pipe(
     Schema.minLength(1, { message: () => 'This field is required' }),
     Schema.annotations({
     description: "Button text label"
   })
   )
 
-export type Tables.fields.button-field.label = Schema.Schema.Type<typeof Tables.fields.button-field.labelSchema>
+export type TablesFieldsButtonFieldLabel = Schema.Schema.Type<typeof TablesFieldsButtonFieldLabelSchema>
 ```
 
 ---

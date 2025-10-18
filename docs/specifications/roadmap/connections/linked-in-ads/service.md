@@ -6,6 +6,10 @@
 
 ## Implementation Status
 
+**Schema**: 🔴 Not implemented
+
+**Tests**: 🔴 No tests found
+
 ⏳ **Not Started**
 
 ### Required Features
@@ -33,9 +37,9 @@ import { Schema } from 'effect'
 **Implementation**:
 
 ```typescript
-export const Connections.linked-in-ads.serviceSchema = Schema.Literal("linkedin-ads")
+export const ConnectionsLinkedInAdsServiceSchema = Schema.Literal("linkedin-ads")
 
-export type Connections.linked-in-ads.service = Schema.Schema.Type<typeof Connections.linked-in-ads.serviceSchema>
+export type ConnectionsLinkedInAdsService = Schema.Schema.Type<typeof ConnectionsLinkedInAdsServiceSchema>
 ```
 
 ---

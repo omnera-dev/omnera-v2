@@ -8,6 +8,10 @@ Deletes (archives) a page in Notion
 
 ## Implementation Status
 
+**Schema**: 🔴 Not implemented
+
+**Tests**: 🔴 No tests found
+
 ⏳ **Not Started**
 
 ### Required Features
@@ -37,10 +41,10 @@ import { Schema } from 'effect'
 ```typescript
 /**
  * Delete Page
- *
+ * 
  * Deletes (archives) a page in Notion
  */
-export const Automation_action.notion.delete-pageSchema = Schema.Struct({
+export const AutomationActionNotionDeletePageSchema = Schema.Struct({
     name: Schema.String,
     account: Schema.Union(
       Schema.Number,
@@ -60,7 +64,7 @@ export const Automation_action.notion.delete-pageSchema = Schema.Struct({
     description: "Deletes (archives) a page in Notion"
   }))
 
-export type Automation_action.notion.delete-page = Schema.Schema.Type<typeof Automation_action.notion.delete-pageSchema>
+export type AutomationActionNotionDeletePage = Schema.Schema.Type<typeof AutomationActionNotionDeletePageSchema>
 ```
 
 ---

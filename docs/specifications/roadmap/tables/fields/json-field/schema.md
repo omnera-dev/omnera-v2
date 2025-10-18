@@ -8,6 +8,10 @@ Optional JSON Schema to validate the data
 
 ## Implementation Status
 
+**Schema**: 🔴 Not implemented
+
+**Tests**: 🔴 No tests found
+
 ⏳ **Not Started**
 
 ### Required Features
@@ -36,15 +40,15 @@ import { Schema } from 'effect'
 
 ```typescript
 /**
- *
+ * 
  * Optional JSON Schema to validate the data
  */
-export const Tables.fields.json-field.schemaSchema = Schema.Struct({
+export const TablesFieldsJsonFieldSchemaSchema = Schema.Struct({
   }).pipe(Schema.annotations({
     description: "Optional JSON Schema to validate the data"
   }))
 
-export type Tables.fields.json-field.schema = Schema.Schema.Type<typeof Tables.fields.json-field.schemaSchema>
+export type TablesFieldsJsonFieldSchema = Schema.Schema.Type<typeof TablesFieldsJsonFieldSchemaSchema>
 ```
 
 ---

@@ -8,6 +8,10 @@ Triggered when a record is updated
 
 ## Implementation Status
 
+**Schema**: 🔴 Not implemented
+
+**Tests**: 🔴 No tests found
+
 ⏳ **Not Started**
 
 ### Required Features
@@ -37,10 +41,10 @@ import { Schema } from 'effect'
 ```typescript
 /**
  * Record Updated
- *
+ * 
  * Triggered when a record is updated
  */
-export const Automation_trigger.database.record-updatedSchema = Schema.Struct({
+export const AutomationTriggerDatabaseRecordUpdatedSchema = Schema.Struct({
     service: Schema.String,
     event: Schema.String,
     params: Schema.Struct({
@@ -51,7 +55,7 @@ export const Automation_trigger.database.record-updatedSchema = Schema.Struct({
     description: "Triggered when a record is updated"
   }))
 
-export type Automation_trigger.database.record-updated = Schema.Schema.Type<typeof Automation_trigger.database.record-updatedSchema>
+export type AutomationTriggerDatabaseRecordUpdated = Schema.Schema.Type<typeof AutomationTriggerDatabaseRecordUpdatedSchema>
 ```
 
 ---

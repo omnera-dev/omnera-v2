@@ -6,6 +6,10 @@
 
 ## Implementation Status
 
+**Schema**: 🔴 Not implemented
+
+**Tests**: 🔴 No tests found
+
 ⏳ **Not Started**
 
 ### Required Features
@@ -33,9 +37,9 @@ import { Schema } from 'effect'
 **Implementation**:
 
 ```typescript
-export const Pages.custom-html-page.head.script-element.asyncSchema = Schema.Boolean
+export const PagesCustomHtmlPageHeadScriptElementAsyncSchema = Schema.Boolean
 
-export type Pages.custom-html-page.head.script-element.async = Schema.Schema.Type<typeof Pages.custom-html-page.head.script-element.asyncSchema>
+export type PagesCustomHtmlPageHeadScriptElementAsync = Schema.Schema.Type<typeof PagesCustomHtmlPageHeadScriptElementAsyncSchema>
 ```
 
 ---

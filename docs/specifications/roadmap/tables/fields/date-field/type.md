@@ -6,6 +6,10 @@
 
 ## Implementation Status
 
+**Schema**: 🔴 Not implemented
+
+**Tests**: 🔴 No tests found
+
 ⏳ **Not Started**
 
 ### Required Features
@@ -33,9 +37,9 @@ import { Schema } from 'effect'
 **Implementation**:
 
 ```typescript
-export const Tables.fields.date-field.typeSchema = Schema.Literal("date", "datetime", "time")
+export const TablesFieldsDateFieldTypeSchema = Schema.Literal("date", "datetime", "time")
 
-export type Tables.fields.date-field.type = Schema.Schema.Type<typeof Tables.fields.date-field.typeSchema>
+export type TablesFieldsDateFieldType = Schema.Schema.Type<typeof TablesFieldsDateFieldTypeSchema>
 ```
 
 ---

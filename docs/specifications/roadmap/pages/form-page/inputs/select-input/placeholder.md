@@ -6,6 +6,10 @@
 
 ## Implementation Status
 
+**Schema**: 🔴 Not implemented
+
+**Tests**: 🔴 No tests found
+
 ⏳ **Not Started**
 
 ### Required Features
@@ -33,9 +37,9 @@ import { Schema } from 'effect'
 **Implementation**:
 
 ```typescript
-export const Pages.form-page.inputs.select-input.placeholderSchema = Schema.String
+export const PagesFormPageInputsSelectInputPlaceholderSchema = Schema.String
 
-export type Pages.form-page.inputs.select-input.placeholder = Schema.Schema.Type<typeof Pages.form-page.inputs.select-input.placeholderSchema>
+export type PagesFormPageInputsSelectInputPlaceholder = Schema.Schema.Type<typeof PagesFormPageInputsSelectInputPlaceholderSchema>
 ```
 
 ---

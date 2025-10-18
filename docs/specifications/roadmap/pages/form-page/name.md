@@ -8,6 +8,10 @@ Internal name for the form
 
 ## Implementation Status
 
+**Schema**: 🔴 Not implemented
+
+**Tests**: 🔴 No tests found
+
 ⏳ **Not Started**
 
 ### Required Features
@@ -34,18 +38,18 @@ import { Schema } from 'effect'
 
 **Implementation**:
 
-````typescript
+```typescript
 /**
  * Form Name
- *
+ * 
  * Internal name for the form
- *
+ * 
  * @example
  * ```typescript
  * "Contact Form"
  * ```
  */
-export const Pages.form-page.nameSchema = Schema.String.pipe(
+export const PagesFormPageNameSchema = Schema.String.pipe(
     Schema.minLength(1, { message: () => 'This field is required' }),
     Schema.maxLength(63, { message: () => 'Maximum length is 63 characters' }),
     Schema.pattern(/^[a-z][a-z0-9_]*$/, {
@@ -58,8 +62,8 @@ export const Pages.form-page.nameSchema = Schema.String.pipe(
   })
   )
 
-export type Pages.form-page.name = Schema.Schema.Type<typeof Pages.form-page.nameSchema>
-````
+export type PagesFormPageName = Schema.Schema.Type<typeof PagesFormPageNameSchema>
+```
 
 ---
 

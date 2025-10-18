@@ -6,6 +6,10 @@
 
 ## Implementation Status
 
+**Schema**: 🔴 Not implemented
+
+**Tests**: 🔴 No tests found
+
 ⏳ **Not Started**
 
 ### Required Features
@@ -33,9 +37,9 @@ import { Schema } from 'effect'
 **Implementation**:
 
 ```typescript
-export const Tables.fields.button-field.typeSchema = Schema.Literal("button")
+export const TablesFieldsButtonFieldTypeSchema = Schema.Literal("button")
 
-export type Tables.fields.button-field.type = Schema.Schema.Type<typeof Tables.fields.button-field.typeSchema>
+export type TablesFieldsButtonFieldType = Schema.Schema.Type<typeof TablesFieldsButtonFieldTypeSchema>
 ```
 
 ---

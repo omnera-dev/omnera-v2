@@ -8,6 +8,10 @@ Aggregation function to apply
 
 ## Implementation Status
 
+**Schema**: 🔴 Not implemented
+
+**Tests**: 🔴 No tests found
+
 ⏳ **Not Started**
 
 ### Required Features
@@ -36,14 +40,14 @@ import { Schema } from 'effect'
 
 ```typescript
 /**
- *
+ * 
  * Aggregation function to apply
  */
-export const Tables.fields.rollup-field.aggregationSchema = Schema.Literal("sum", "count", "average", "min", "max", "median", "concat", "unique").pipe(Schema.annotations({
+export const TablesFieldsRollupFieldAggregationSchema = Schema.Literal("sum", "count", "average", "min", "max", "median", "concat", "unique").pipe(Schema.annotations({
     description: "Aggregation function to apply"
   }))
 
-export type Tables.fields.rollup-field.aggregation = Schema.Schema.Type<typeof Tables.fields.rollup-field.aggregationSchema>
+export type TablesFieldsRollupFieldAggregation = Schema.Schema.Type<typeof TablesFieldsRollupFieldAggregationSchema>
 ```
 
 ---

@@ -8,6 +8,10 @@ Type of relationship
 
 ## Implementation Status
 
+**Schema**: 🔴 Not implemented
+
+**Tests**: 🔴 No tests found
+
 ⏳ **Not Started**
 
 ### Required Features
@@ -36,14 +40,14 @@ import { Schema } from 'effect'
 
 ```typescript
 /**
- *
+ * 
  * Type of relationship
  */
-export const Tables.fields.relationship-field.relationTypeSchema = Schema.Literal("one-to-one", "one-to-many", "many-to-many").pipe(Schema.annotations({
+export const TablesFieldsRelationshipFieldRelationTypeSchema = Schema.Literal("one-to-one", "one-to-many", "many-to-many").pipe(Schema.annotations({
     description: "Type of relationship"
   }))
 
-export type Tables.fields.relationship-field.relationType = Schema.Schema.Type<typeof Tables.fields.relationship-field.relationTypeSchema>
+export type TablesFieldsRelationshipFieldRelationType = Schema.Schema.Type<typeof TablesFieldsRelationshipFieldRelationTypeSchema>
 ```
 
 ---

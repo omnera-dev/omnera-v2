@@ -8,6 +8,10 @@ Action to take when the related record is deleted
 
 ## Implementation Status
 
+**Schema**: 🔴 Not implemented
+
+**Tests**: 🔴 No tests found
+
 ⏳ **Not Started**
 
 ### Required Features
@@ -36,14 +40,14 @@ import { Schema } from 'effect'
 
 ```typescript
 /**
- *
+ * 
  * Action to take when the related record is deleted
  */
-export const Tables.fields.relationship-field.onDeleteSchema = Schema.Literal("cascade", "set-null", "restrict", "no-action").pipe(Schema.annotations({
+export const TablesFieldsRelationshipFieldOnDeleteSchema = Schema.Literal("cascade", "set-null", "restrict", "no-action").pipe(Schema.annotations({
     description: "Action to take when the related record is deleted"
   }))
 
-export type Tables.fields.relationship-field.onDelete = Schema.Schema.Type<typeof Tables.fields.relationship-field.onDeleteSchema>
+export type TablesFieldsRelationshipFieldOnDelete = Schema.Schema.Type<typeof TablesFieldsRelationshipFieldOnDeleteSchema>
 ```
 
 ---

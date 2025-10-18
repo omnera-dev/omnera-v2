@@ -6,6 +6,10 @@
 
 ## Implementation Status
 
+**Schema**: 🔴 Not implemented
+
+**Tests**: 🔴 No tests found
+
 ⏳ **Not Started**
 
 ### Required Features
@@ -33,9 +37,9 @@ import { Schema } from 'effect'
 **Implementation**:
 
 ```typescript
-export const Pages.custom-html-page.head.script-element.srcSchema = Schema.String
+export const PagesCustomHtmlPageHeadScriptElementSrcSchema = Schema.String
 
-export type Pages.custom-html-page.head.script-element.src = Schema.Schema.Type<typeof Pages.custom-html-page.head.script-element.srcSchema>
+export type PagesCustomHtmlPageHeadScriptElementSrc = Schema.Schema.Type<typeof PagesCustomHtmlPageHeadScriptElementSrcSchema>
 ```
 
 ---

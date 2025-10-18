@@ -8,6 +8,10 @@ Field name for single-column primary key. Only used with 'auto-increment' or 'uu
 
 ## Implementation Status
 
+**Schema**: 🔴 Not implemented
+
+**Tests**: 🔴 No tests found
+
 ⏳ **Not Started**
 
 ### Required Features
@@ -34,17 +38,17 @@ import { Schema } from 'effect'
 
 **Implementation**:
 
-````typescript
+```typescript
 /**
- *
+ * 
  * Field name for single-column primary key. Only used with 'auto-increment' or 'uuid' type.
- *
+ * 
  * @example
  * ```typescript
  * "id"
  * ```
  */
-export const Tables.primaryKey.fieldSchema = Schema.String.pipe(
+export const TablesPrimaryKeyFieldSchema = Schema.String.pipe(
     Schema.pattern(/^[a-z][a-z0-9_]*$/, {
     message: () => 'Field name for single-column primary key. Only used with 'auto-increment' or 'uuid' type.'
   }),
@@ -54,8 +58,8 @@ export const Tables.primaryKey.fieldSchema = Schema.String.pipe(
   })
   )
 
-export type Tables.primaryKey.field = Schema.Schema.Type<typeof Tables.primaryKey.fieldSchema>
-````
+export type TablesPrimaryKeyField = Schema.Schema.Type<typeof TablesPrimaryKeyFieldSchema>
+```
 
 ---
 

@@ -8,6 +8,10 @@ Internal name for the page
 
 ## Implementation Status
 
+**Schema**: 🔴 Not implemented
+
+**Tests**: 🔴 No tests found
+
 ⏳ **Not Started**
 
 ### Required Features
@@ -34,18 +38,18 @@ import { Schema } from 'effect'
 
 **Implementation**:
 
-````typescript
+```typescript
 /**
  * Page Name
- *
+ * 
  * Internal name for the page
- *
+ * 
  * @example
  * ```typescript
  * "home"
  * ```
  */
-export const Pages.custom-html-page.nameSchema = Schema.String.pipe(
+export const PagesCustomHtmlPageNameSchema = Schema.String.pipe(
     Schema.minLength(1, { message: () => 'This field is required' }),
     Schema.maxLength(63, { message: () => 'Maximum length is 63 characters' }),
     Schema.pattern(/^[a-z][a-z0-9_]*$/, {
@@ -58,8 +62,8 @@ export const Pages.custom-html-page.nameSchema = Schema.String.pipe(
   })
   )
 
-export type Pages.custom-html-page.name = Schema.Schema.Type<typeof Pages.custom-html-page.nameSchema>
-````
+export type PagesCustomHtmlPageName = Schema.Schema.Type<typeof PagesCustomHtmlPageNameSchema>
+```
 
 ---
 

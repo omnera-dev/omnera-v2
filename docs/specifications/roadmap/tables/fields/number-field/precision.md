@@ -8,6 +8,10 @@ Number of decimal places (for decimal type)
 
 ## Implementation Status
 
+**Schema**: 🔴 Not implemented
+
+**Tests**: 🔴 No tests found
+
 ⏳ **Not Started**
 
 ### Required Features
@@ -36,10 +40,10 @@ import { Schema } from 'effect'
 
 ```typescript
 /**
- *
+ * 
  * Number of decimal places (for decimal type)
  */
-export const Tables.fields.number-field.precisionSchema = Schema.Int.pipe(
+export const TablesFieldsNumberFieldPrecisionSchema = Schema.Int.pipe(
     Schema.greaterThanOrEqualTo(0),
     Schema.lessThanOrEqualTo(10),
     Schema.annotations({
@@ -47,7 +51,7 @@ export const Tables.fields.number-field.precisionSchema = Schema.Int.pipe(
   })
   )
 
-export type Tables.fields.number-field.precision = Schema.Schema.Type<typeof Tables.fields.number-field.precisionSchema>
+export type TablesFieldsNumberFieldPrecision = Schema.Schema.Type<typeof TablesFieldsNumberFieldPrecisionSchema>
 ```
 
 ---

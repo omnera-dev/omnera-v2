@@ -8,6 +8,10 @@ Maximum length in characters
 
 ## Implementation Status
 
+**Schema**: 🔴 Not implemented
+
+**Tests**: 🔴 No tests found
+
 ⏳ **Not Started**
 
 ### Required Features
@@ -36,17 +40,17 @@ import { Schema } from 'effect'
 
 ```typescript
 /**
- *
+ * 
  * Maximum length in characters
  */
-export const Tables.fields.rich-text-field.maxLengthSchema = Schema.Int.pipe(
+export const TablesFieldsRichTextFieldMaxLengthSchema = Schema.Int.pipe(
     Schema.greaterThanOrEqualTo(1),
     Schema.annotations({
     description: "Maximum length in characters"
   })
   )
 
-export type Tables.fields.rich-text-field.maxLength = Schema.Schema.Type<typeof Tables.fields.rich-text-field.maxLengthSchema>
+export type TablesFieldsRichTextFieldMaxLength = Schema.Schema.Type<typeof TablesFieldsRichTextFieldMaxLengthSchema>
 ```
 
 ---
