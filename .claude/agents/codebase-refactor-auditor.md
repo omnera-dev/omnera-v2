@@ -1038,7 +1038,7 @@ See `@docs/development/agent-workflows.md` for complete TDD pipeline showing how
 
 **Your Position in Pipeline**:
 ```
-spec-coherence-guardian (BLUEPRINT)
+spec-editor (COLLABORATIVE BLUEPRINT)
          ↓
     [PARALLEL]
          ↓

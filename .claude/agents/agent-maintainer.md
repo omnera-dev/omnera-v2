@@ -79,7 +79,7 @@ When reviewing agents, provide:
 
 You should review specific agents when:
 
-- **spec-coherence-guardian**: User updates specs.schema.json structure, roadmap generation logic changes, or user story validation patterns need improvement
+- **spec-editor**: User updates specs.schema.json structure, roadmap generation logic changes, or collaborative validation patterns need improvement
 - **schema-architect**: Effect Schema patterns evolve, roadmap blueprint consumption needs optimization, or one-property-per-file pattern changes
 - **e2e-red-test-writer**: Test tag strategy changes (@spec/@regression/@critical), RED test creation patterns evolve, or Playwright fixture usage patterns update
 - **e2e-test-fixer**: GREEN implementation workflow changes, handoff protocols from e2e-red-test-writer need refinement, or refactoring decision criteria evolve

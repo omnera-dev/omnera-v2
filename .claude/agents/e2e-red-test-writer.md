@@ -5,6 +5,7 @@ description: Writes failing (RED) end-to-end Playwright tests that serve as exec
 whenToUse: |
   **File Triggers** (automatic):
   - Modified: `docs/specifications/specs.schema.json` (property definition with x-user-stories added/updated)
+  - Modified: `docs/specifications/schemas/**/*.schema.json` (referenced schema files with x-user-stories)
 
   **Command Patterns** (explicit requests):
   - "Write RED tests for {property}"
@@ -17,8 +18,10 @@ whenToUse: |
   - Behavioral phrases: "should validate", "should display", "should handle"
 
   **Status Triggers**:
-  - Property definition validated with x-user-stories → create RED tests
+  - Property definition validated with x-user-stories (inline OR referenced) → create RED tests
   - schema-architect completes schema → coordinate on test data
+
+  **Note**: This agent works with BOTH inline properties (name, version, description) AND referenced properties (tables, pages, automations). Always check for $ref and follow it to the target file.
 
 examples:
   - user: "I need RED tests for the theme property"
@@ -320,6 +323,76 @@ test.describe('AppSchema - {PropertyName}', () => {
    - Given-When-Then structure in all tests
    - Proper tag usage: `{ tag: '@spec' }`, `{ tag: '@regression' }`, `{ tag: '@critical' }`
 
+### Example: Writing Tests for Referenced Property (tables)
+
+**Given**: User requests "Write RED tests for tables property"
+
+**Process**:
+
+1. **Validate Property Definition**:
+   ```typescript
+   // Read root schema
+   const schema = readJSON('docs/specifications/specs.schema.json')
+
+   // Locate property
+   const tablesProperty = schema.properties?.tables
+   // Result: { "$ref": "./schemas/tables/tables.schema.json" }
+
+   // Detect $ref
+   const hasRef = '$ref' in tablesProperty // true
+
+   // Resolve path
+   const absolutePath = 'docs/specifications/schemas/tables/tables.schema.json'
+   const tablesSchema = readJSON(absolutePath)
+
+   // Extract user stories
+   const userStories = tablesSchema['x-user-stories']
+   // Result: 20 user stories from lines 412-431
+   ```
+
+2. **Analyze User Stories**:
+   - Stories 1-18: @spec tests (granular CRUD operations)
+   - Story consolidation: 1 @regression test (complete workflow)
+   - Stories with "critical" operations: 1 @critical test (essential path)
+
+3. **Create Test File**: `tests/app/tables.spec.ts`
+
+4. **Write Tests**:
+   ```typescript
+   import { test, expect } from '../fixtures'
+
+   test.describe('AppSchema - Tables', () => {
+     // @spec tests (18 granular tests)
+     test.fixme('should return admin tables page', { tag: '@spec' }, async ({ page, startServerWithSchema }) => {
+       // GIVEN: User story line 413
+       // Test implementation...
+     })
+
+     test.fixme('should list tables', { tag: '@spec' }, async ({ page, startServerWithSchema }) => {
+       // GIVEN: User story line 414
+       // Test implementation...
+     })
+
+     // ... 16 more @spec tests
+
+     // @regression test (EXACTLY ONE)
+     test.fixme('user can complete full tables workflow', { tag: '@regression' }, async ({ page, startServerWithSchema }) => {
+       // GIVEN: Consolidates all 18 @spec scenarios
+       // Test implementation...
+     })
+
+     // @critical test (Optional - only for essential operations)
+     test.fixme('critical: user can create and read table record', { tag: '@critical' }, async ({ page, startServerWithSchema }) => {
+       // GIVEN: Essential CRUD operations
+       // Test implementation...
+     })
+   })
+   ```
+
+5. **Run Verification**: `CLAUDECODE=1 bun test:e2e`
+   - All tests marked as fixme (skipped)
+   - CI stays green during RED phase
+
 ## Edge Cases and Validation
 
 - **Missing Specifications**: If behavior is ambiguous, ask clarifying questions before writing tests
@@ -327,6 +400,45 @@ test.describe('AppSchema - {PropertyName}', () => {
 - **Async Behavior**: Use Playwright's auto-waiting and proper async/await patterns
 - **Error States**: Write tests for both happy path and error scenarios
 - **Accessibility**: Include tests for ARIA attributes and keyboard navigation when relevant
+
+### Schema Navigation Edge Cases
+
+- **$ref Path Not Found**: If a $ref points to a non-existent file, stop immediately and notify:
+  ```
+  ❌ Cannot resolve $ref: File not found at '{absolutePath}'
+
+  Expected file: docs/specifications/schemas/tables/tables.schema.json
+  Actual $ref: ./schemas/tables/tables.schema.json
+
+  Verify:
+  - File exists at the expected path
+  - No typos in the $ref value in specs.schema.json
+  - Schema files are committed to version control
+  ```
+
+- **Referenced File Has No x-user-stories**: If the referenced file exists but lacks user stories:
+  ```
+  ❌ Cannot write tests: Referenced file has no x-user-stories
+
+  File: docs/specifications/schemas/tables/tables.schema.json
+
+  Please run spec-editor to add user stories to this schema file.
+  ```
+
+- **Nested $ref with JSON Pointer**: If a property uses JSON Pointer syntax (`#/definitions/id`):
+  - Split the $ref on `#` to separate file path and pointer
+  - Read the file, then navigate to the pointer path
+  - Example: `"../common/definitions.schema.json#/definitions/id"` means:
+    - File: `docs/specifications/schemas/common/definitions.schema.json`
+    - Navigate to: `definitions.id`
+    - Extract user stories from that nested object
+
+- **Circular $ref**: If $ref creates a circular reference, stop after 10 iterations and notify:
+  ```
+  ❌ Circular $ref detected: Maximum depth exceeded
+
+  This usually indicates a schema design issue. Review the $ref chain.
+  ```
 
 ## Self-Verification Checklist
 
@@ -336,6 +448,14 @@ Before completing, verify:
 - [ ] Test file is in correct @tests/app/ location
 - [ ] File name mirrors domain model structure (`{property}.spec.ts`)
 - [ ] File imports from '../fixtures' (not '@playwright/test')
+
+**Schema Navigation:**
+- [ ] Property definition located in specs.schema.json
+- [ ] $ref detected and resolved if present
+- [ ] Referenced file read successfully (for referenced properties)
+- [ ] x-user-stories extracted from correct location (inline vs referenced)
+- [ ] All user stories use GIVEN-WHEN-THEN format
+- [ ] Clear error message provided if schema navigation fails
 
 **Test Structure (Three Categories):**
 - [ ] Multiple @spec tests written (5-20 granular tests typical)
@@ -447,17 +567,49 @@ test.fixme('should display badge', { tag: '@spec' }, async () => {
 
 ## Collaboration with Other Agents
 
-**CRITICAL**: This agent CONSUMES blueprints from spec-coherence-guardian and works in PARALLEL with schema-architect.
+**CRITICAL**: This agent CONSUMES blueprints from spec-editor and works in PARALLEL with schema-architect.
 
-### Consumes User Stories from spec-coherence-guardian
+### Consumes User Stories from spec-editor
 
-**When**: After spec-coherence-guardian validates property definitions with x-user-stories in `docs/specifications/specs.schema.json`
+**When**: After spec-editor validates property definitions with x-user-stories in `docs/specifications/specs.schema.json`
 
 **What You Receive** (from specs.schema.json using Triple-Documentation Pattern):
-- **E2E User Stories**: `x-user-stories` array with GIVEN-WHEN-THEN scenarios defining user interactions
-- **Property Constraints**: Validation rules to inform test expectations (minLength, pattern, enum, etc.)
-- **Examples**: Valid configuration values from `examples` field
+- **E2E User Stories**: `x-user-stories` array with GIVEN-WHEN-THEN scenarios
+- **Property Constraints**: Validation rules (minLength, pattern, enum, etc.)
+- **Examples**: Valid configuration values
 - **Description**: Context about what the property does
+
+**CRITICAL: Understanding Inline vs Referenced Properties**:
+
+The schema uses two patterns for property definitions:
+
+1. **Inline Properties** (e.g., name, version, description):
+   - Defined directly in specs.schema.json
+   - x-user-stories are at the property level
+   - Example:
+     ```json
+     "name": {
+       "type": "string",
+       "x-user-stories": [...]  // ← Stories here
+     }
+     ```
+
+2. **Referenced Properties** (e.g., tables, pages, automations):
+   - Use $ref to point to external files
+   - x-user-stories are in the REFERENCED file
+   - Example:
+     ```json
+     // In specs.schema.json:
+     "tables": {
+       "$ref": "./schemas/tables/tables.schema.json"
+     }
+
+     // In schemas/tables/tables.schema.json:
+     {
+       "type": "array",
+       "x-user-stories": [...]  // ← Stories here
+     }
+     ```
 
 **Navigating Multi-File Schema Structure**:
 
@@ -514,20 +666,110 @@ docs/specifications/
 }
 ```
 
-**Handoff Protocol FROM spec-coherence-guardian**:
-1. spec-coherence-guardian validates specs.schema.json structure
-2. spec-coherence-guardian ensures property has `x-user-stories` array
-3. spec-coherence-guardian validates user stories with stakeholders
-4. spec-coherence-guardian notifies: "Property validated in specs.schema.json (properties.{property})"
+**Step-by-Step $ref Navigation Process**:
+
+1. **Read Root Schema**: Start at `docs/specifications/specs.schema.json`
+
+2. **Locate Property**: Navigate to the property in question (e.g., `properties.tables`)
+
+3. **Check for $ref**:
+   ```typescript
+   const property = schema.properties?.tables
+   const hasRef = property && typeof property === 'object' && '$ref' in property
+   ```
+
+4. **Resolve $ref Path**:
+   - Extract ref value: `const refPath = property.$ref` (e.g., `"./schemas/tables/tables.schema.json"`)
+   - Resolve relative to specs.schema.json directory: `docs/specifications/schemas/tables/tables.schema.json`
+   - Handle JSON Pointer syntax if present: `"../common/definitions.schema.json#/definitions/id"`
+     - Split on `#`: `["../common/definitions.schema.json", "/definitions/id"]`
+     - Read file, then navigate to pointer path
+
+5. **Read Referenced File**:
+   ```typescript
+   const referencedSchema = readJSON(absolutePath)
+   ```
+
+6. **Extract User Stories**:
+   - Check root level: `referencedSchema['x-user-stories']`
+   - For nested properties, also check: `referencedSchema.properties?.{field}?.['x-user-stories']`
+
+7. **Validate User Stories**:
+   - Ensure array exists and has length > 0
+   - Verify GIVEN-WHEN-THEN format
+   - If missing, STOP with error message
+
+**Complete Example - Tables Property with $ref**:
+
+```typescript
+// Step 1: Read root schema
+const rootSchema = readJSON('docs/specifications/specs.schema.json')
+
+// Step 2: Locate property
+const tablesProperty = rootSchema.properties?.tables
+// Result: { "$ref": "./schemas/tables/tables.schema.json" }
+
+// Step 3: Check for $ref
+if (tablesProperty.$ref) {
+  // Step 4: Resolve path
+  const refPath = tablesProperty.$ref // "./schemas/tables/tables.schema.json"
+  const absolutePath = path.resolve(
+    'docs/specifications',
+    refPath
+  ) // "docs/specifications/schemas/tables/tables.schema.json"
+
+  // Step 5: Read referenced file
+  const tablesSchema = readJSON(absolutePath)
+
+  // Step 6: Extract user stories
+  const userStories = tablesSchema['x-user-stories']
+  // Result: Array of 20 user stories (lines 412-431 in tables.schema.json)
+
+  // Step 7: Validate
+  if (!userStories || userStories.length === 0) {
+    throw new Error('Referenced file has no x-user-stories')
+  }
+
+  // Success: Write tests from user stories
+  writeTestsFromUserStories(userStories)
+}
+```
+
+**Inline Property Example - Name Property**:
+
+```typescript
+// Step 1-2: Same as above
+const nameProperty = rootSchema.properties?.name
+
+// Step 3: Check for $ref
+if (nameProperty.$ref) {
+  // Handle $ref (same as above)
+} else {
+  // Step 6: Extract directly (inline property)
+  const userStories = nameProperty['x-user-stories']
+  // Result: Array of user stories (lines 21-43 in specs.schema.json)
+
+  // Step 7: Validate (same as above)
+  writeTestsFromUserStories(userStories)
+}
+```
+
+**Handoff Protocol FROM spec-editor**:
+1. spec-editor validates specs.schema.json structure
+2. spec-editor ensures property has `x-user-stories` (inline OR in referenced file)
+3. spec-editor validates user stories with stakeholders
+4. spec-editor notifies: "Property validated in specs.schema.json (properties.{property})"
 5. **YOU (e2e-red-test-writer)**: Read `docs/specifications/specs.schema.json`
-6. **YOU**: Navigate to property using JSON path (e.g., `properties.tables` for top-level)
-7. **YOU**: Extract `x-user-stories` array (GIVEN-WHEN-THEN format)
-8. **YOU**: Analyze stories to determine which are @spec (granular), @regression (consolidated), @critical (essential)
+6. **YOU**: Navigate to property (e.g., `properties.tables`)
+7. **YOU**: Check if property has `$ref`:
+   - **If YES**: Follow $ref to external file → extract x-user-stories from that file
+   - **If NO**: Extract x-user-stories directly from the inline property
+8. **YOU**: Analyze stories to determine @spec (granular), @regression (consolidated), @critical (essential)
 9. **YOU**: Create `tests/app/{property}.spec.ts` with test.fixme() for all RED tests
-10. **YOU**: Write @spec tests (5-20 granular tests), ONE @regression test, zero-or-one @critical test
+10. **YOU**: Write @spec tests (5-20), ONE @regression test, zero-or-one @critical test
 11. **YOU**: Run `CLAUDECODE=1 bun test:e2e` to verify tests are marked as fixme (RED phase)
 
-**Success Criteria**: You can create comprehensive RED tests without asking clarification questions because the user stories are complete and validated.
+**Success Criteria**: You can create comprehensive RED tests without asking clarification questions because the user stories are complete and validated (whether inline or referenced).
 
 ---
 
@@ -590,7 +832,7 @@ docs/specifications/
 - **Focus**: Test specifications (acceptance criteria)
 - **Output**: Failing E2E tests that define "done"
 
-**spec-coherence-guardian**:
+**spec-editor**:
 - **Validates**: `docs/specifications/specs.schema.json` (ensures Triple-Documentation Pattern completeness)
 - **Ensures**: User stories validated with stakeholders before implementation
 - **Focus**: WHAT to build (product specifications)
@@ -616,7 +858,7 @@ See `@docs/development/agent-workflows.md` for complete TDD pipeline showing how
 
 **Your Position in Pipeline**:
 ```
-spec-coherence-guardian (BLUEPRINT)
+spec-editor (BLUEPRINT)
          ↓
     [PARALLEL]
          ↓
@@ -637,74 +879,151 @@ spec-coherence-guardian (BLUEPRINT)
 
 Before writing ANY tests, follow this mandatory check:
 
-1. **Check for Property Definition**: Verify that the property exists in `docs/specifications/specs.schema.json`
-2. **If Property Missing**: STOP immediately and notify the user:
+### Mandatory Validation Process
+
+1. **Check for Property Definition**:
+   ```typescript
+   const schema = readJSON('docs/specifications/specs.schema.json')
+   const property = schema.properties?.{propertyName}
+
+   if (!property) {
+     throw new Error(`❌ Cannot write tests for {propertyName}: No property definition found in specs.schema.json.`)
+   }
    ```
-   ❌ Cannot write tests for {property}: No property definition found in specs.schema.json.
 
-   Please run the spec-coherence-guardian agent first to:
-   - Add the property definition to specs.schema.json
-   - Ensure it has x-user-stories array with GIVEN-WHEN-THEN format
-   - Validate user stories with stakeholders
+2. **Determine Property Type** (Inline vs Referenced):
+   ```typescript
+   const isReferenced = property && typeof property === 'object' && '$ref' in property
    ```
-3. **If Property Exists**: Verify it has `x-user-stories` array:
-   - ✅ Stories in GIVEN-WHEN-THEN format
-   - ✅ Stories validated with stakeholders
-4. **If Complete**: Extract user stories and write tests
 
-**Why This Matters**:
-- ✅ Ensures tests align with validated product requirements
-- ✅ Prevents testing features that haven't been specified
-- ✅ Maintains single source of truth (specs.schema.json)
-- ✅ Coordinates work across agents (spec-coherence-guardian → e2e-red-test-writer)
+3. **If Property Uses $ref** (Referenced):
+   ```typescript
+   // Step 3a: Extract $ref path
+   const refPath = property.$ref // e.g., "./schemas/tables/tables.schema.json"
 
-**What to Extract from specs.schema.json**:
-```typescript
-// Read: docs/specifications/specs.schema.json
+   // Step 3b: Resolve to absolute path
+   const absolutePath = path.resolve('docs/specifications', refPath)
 
-// Navigate to property:
-// - properties.{property} for top-level properties
-// - properties.{parent}.properties.{nested} for nested properties
+   // Step 3c: Read referenced file
+   const referencedSchema = readJSON(absolutePath)
+   if (!referencedSchema) {
+     throw new Error(`❌ Cannot write tests for {propertyName}: $ref path '${refPath}' does not exist.
 
-// Extract from property definition:
-// 1. x-user-stories array (GIVEN-WHEN-THEN format)
-// 2. examples array (valid configuration values)
-// 3. Validation constraints (minLength, pattern, enum, etc.) to inform test expectations
-// 4. description (context about what the property does)
+     Verify:
+     - File exists at: ${absolutePath}
+     - Path in specs.schema.json is correct
+     - No typos in $ref value`)
+   }
 
-// Analyze user stories to determine:
-// - @spec tests (granular behaviors, 5-20 tests typical)
-// - @regression test (EXACTLY ONE consolidated workflow)
-// - @critical test (zero or one essential path only)
+   // Step 3d: Extract user stories from referenced file
+   const userStories = referencedSchema['x-user-stories']
+   ```
 
-// Write tests matching user stories
-// DO NOT invent additional test scenarios
-```
+4. **If Property Is Inline** (No $ref):
+   ```typescript
+   // Step 4a: Extract user stories directly
+   const userStories = property['x-user-stories']
+   ```
 
-**Example Property Check**:
+5. **Validate User Stories** (Both Cases):
+   ```typescript
+   if (!userStories || userStories.length === 0) {
+     throw new Error(`❌ Cannot write tests for {propertyName}: Property definition lacks x-user-stories array.
+
+     Please run spec-editor to:
+     - Add x-user-stories array to the property definition
+     - Ensure stories use GIVEN-WHEN-THEN format
+     - Validate user stories with stakeholders`)
+   }
+
+   // Verify format
+   for (const story of userStories) {
+     if (!story.includes('GIVEN') || !story.includes('WHEN') || !story.includes('THEN')) {
+       throw new Error(`❌ Invalid user story format: "${story}"
+
+       User stories must follow GIVEN-WHEN-THEN format:
+       GIVEN [context] WHEN [action] THEN [expected outcome]`)
+     }
+   }
+   ```
+
+6. **Success: Write Tests**:
+   ```typescript
+   writeTestsFromUserStories(userStories)
+   ```
+
+### Complete Validation Example
+
+**Example 1: Referenced Property (tables)**:
 ```typescript
 // User requests: "Write tests for tables property"
 
-// Step 1: Read specs.schema.json
+// Step 1: Check for property
 const schema = readJSON('docs/specifications/specs.schema.json')
+const tablesProperty = schema.properties?.tables // { "$ref": "./schemas/tables/tables.schema.json" }
 
-// Step 2: Navigate to property
-const property = schema.properties?.tables
-if (!property) {
-  throw new Error('Cannot write tests for tables: Property not found in specs.schema.json. Run spec-coherence-guardian first.')
-}
+// Step 2: Determine type
+const isReferenced = '$ref' in tablesProperty // true
 
-// Step 3: Check for x-user-stories
-const userStories = property['x-user-stories']
-if (!userStories || userStories.length === 0) {
-  throw new Error('Property missing x-user-stories. Run spec-coherence-guardian to add and validate user stories.')
-}
+// Step 3: Follow $ref
+const refPath = tablesProperty.$ref // "./schemas/tables/tables.schema.json"
+const absolutePath = 'docs/specifications/schemas/tables/tables.schema.json'
+const tablesSchema = readJSON(absolutePath)
 
-// Step 4: Write tests from user stories
+// Step 4: Extract user stories
+const userStories = tablesSchema['x-user-stories'] // Array of 20 stories
+
+// Step 5: Validate
+// ✅ Array exists, length > 0, all stories have GIVEN-WHEN-THEN
+
+// Step 6: Write tests
 writeTestsFromUserStories(userStories)
 ```
 
-**Never Invent Tests**: If the property definition doesn't exist or lacks user stories, you must wait for spec-coherence-guardian to validate them. Do NOT create tests based on assumptions.
+**Example 2: Inline Property (name)**:
+```typescript
+// User requests: "Write tests for name property"
+
+// Step 1: Check for property
+const nameProperty = schema.properties?.name // Inline object with x-user-stories
+
+// Step 2: Determine type
+const isReferenced = '$ref' in nameProperty // false
+
+// Step 3: Extract user stories directly
+const userStories = nameProperty['x-user-stories'] // Array of stories (lines 21-43)
+
+// Step 4: Validate
+// ✅ Array exists, length > 0, all stories have GIVEN-WHEN-THEN
+
+// Step 5: Write tests
+writeTestsFromUserStories(userStories)
+```
+
+**Example 3: Missing Property**:
+```typescript
+// User requests: "Write tests for theme property"
+
+// Step 1: Check for property
+const themeProperty = schema.properties?.theme // undefined
+
+// Step 2: STOP immediately
+throw new Error(`❌ Cannot write tests for theme: No property definition found in specs.schema.json.
+
+Please run spec-editor first to:
+- Add the property definition to specs.schema.json
+- Ensure it has x-user-stories array with GIVEN-WHEN-THEN format
+- Validate user stories with stakeholders`)
+```
+
+### Why This Matters
+
+- ✅ Ensures tests align with validated product requirements
+- ✅ Prevents testing features that haven't been specified
+- ✅ Maintains single source of truth (specs.schema.json)
+- ✅ Coordinates work across agents (spec-editor → e2e-red-test-writer)
+- ✅ Handles both inline and referenced properties correctly
+- ✅ Provides clear error messages when validation fails
 
 ---
 

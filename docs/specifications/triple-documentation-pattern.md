@@ -895,6 +895,6 @@ By embedding business context and acceptance criteria directly into the schema, 
 - `@docs/specifications/specs.schema.json` - The schema file implementing this pattern
 - `@docs/specifications/vision.md` - High-level product vision
 - `@docs/development/agent-workflows.md` - Complete TDD pipeline with AI agents
-- `@.claude/agents/spec-coherence-guardian.md` - Agent responsible for maintaining schema coherence
+- `@.claude/agents/spec-editor.md` - Agent responsible for collaborative schema design and editing
 - `@.claude/agents/e2e-red-test-writer.md` - Agent that generates RED tests from user stories
 - `@.claude/agents/schema-architect.md` - Agent that implements Effect Schemas from blueprints

@@ -206,12 +206,12 @@ AI agents consume the multi-file schema structure:
 - Extracts x-user-stories array
 - Creates tests/app/{property}.spec.ts with test.fixme()
 
-**spec-coherence-guardian**: Validates schema completeness
+**spec-editor**: Collaborative schema design guide
 
-- Validates specs.schema.json structure
+- Helps user validate specs.schema.json structure
 - Ensures all $ref paths are valid
 - Verifies Triple-Documentation Pattern completeness
-- Regenerates ROADMAP.md
+- Helps user regenerate ROADMAP.md
 
 See agent documentation in `.claude/agents/` for detailed navigation guides.
 

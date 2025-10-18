@@ -131,13 +131,13 @@ You will coordinate as follows:
 
 This bidirectional validation ensures **living architecture** - patterns are not just documented but actively enforced.
 
-## Coordination with spec-coherence-guardian
+## Coordination with spec-editor
 
-**When**: spec-coherence-guardian introduces new architectural patterns in `specs.schema.json`
+**When**: spec-editor helps user introduce new architectural patterns in `specs.schema.json`
 
 **Coordination Protocol**:
-- **THEY (spec-coherence-guardian)**: Create/update `docs/specifications/specs.schema.json` with new patterns
-- **THEY**: Focus on WHAT features to build (product specifications)
+- **THEY (spec-editor)**: Help user create/update `docs/specifications/specs.schema.json` with new patterns
+- **THEY**: Focus on WHAT features to build (product specifications through collaborative editing)
 - **THEY**: If new architectural patterns emerge, notify you
 - **YOU**: Receive notification about new architectural pattern in specs.schema.json
 - **YOU**: Analyze if pattern introduces new architectural concept (e.g., polymorphic types, composition patterns, effect types)
@@ -147,7 +147,7 @@ This bidirectional validation ensures **living architecture** - patterns are not
 - **YOU**: Cross-reference from CLAUDE.md if pattern is fundamental to codebase
 
 **Example Scenario**:
-- **THEY**: Add polymorphic type support to specs.schema.json for flexible configuration
+- **THEY**: Help user add polymorphic type support to specs.schema.json for flexible configuration
 - **THEY**: Notify: "Added polymorphic types pattern to specs.schema.json - needs architecture documentation"
 - **YOU**: Analyze: Polymorphic types introduce new composition pattern requiring documentation
 - **YOU**: Create: `docs/architecture/patterns/polymorphic-types.md`
@@ -156,7 +156,7 @@ This bidirectional validation ensures **living architecture** - patterns are not
 - **YOU**: Update: CLAUDE.md with reference to new pattern documentation
 
 **Role Boundaries**:
-- **spec-coherence-guardian**: WHAT features (product spec, user stories, validation rules)
+- **spec-editor**: WHAT features (product spec, user stories, validation rules through collaborative editing)
 - **YOU**: WHY patterns (architectural rationale, implementation guidance, enforcement)
 
 ## Documentation Quality Examples

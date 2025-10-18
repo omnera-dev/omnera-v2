@@ -84,13 +84,13 @@ if (!property) {
   REASON: Property 'tables' does not exist in specs.schema.json
 
   REQUIRED ACTION:
-  1. Run spec-coherence-guardian agent to add 'tables' property definition
-  2. Ensure Triple-Documentation Pattern is complete:
+  1. Ask user to run spec-editor agent to add 'tables' property definition
+  2. spec-editor will help user ensure Triple-Documentation Pattern is complete:
      - description (what it does)
      - examples (valid values)
      - x-business-rules (why constraints exist)
      - x-user-stories (GIVEN-WHEN-THEN scenarios)
-  3. Validate user stories with stakeholders
+  3. spec-editor will validate user stories collaboratively with user
   4. Return to schema-architect with validated property definition
 
   YOU CANNOT PROCEED WITHOUT A VALIDATED PROPERTY DEFINITION.
@@ -181,7 +181,7 @@ if (!hasDescription || !hasExamples || !hasBusinessRules || !hasUserStories) {
   ${!hasUserStories ? '- x-user-stories (GIVEN-WHEN-THEN acceptance criteria)' : ''}
 
   REQUIRED ACTION:
-  Run spec-coherence-guardian agent to complete the property definition.
+  Ask user to work with spec-editor agent to complete the property definition.
 
   YOU CANNOT PROCEED WITH INCOMPLETE PROPERTY DEFINITION.
   `
@@ -197,7 +197,9 @@ Only after ALL verifications pass:
 3. Read `x-user-stories` for test case scenarios
 4. Use `examples` for test data
 5. Implement Effect Schema in `src/domain/models/app/{property}.ts`
-6. Create unit tests in `src/domain/models/app/{property}.test.ts`
+6. **AFTER implementation completes**: Create unit tests in `src/domain/models/app/{property}.test.ts` following Test-After pattern
+
+**Test-After Pattern**: Unit tests are written AFTER the Effect Schema implementation is complete. This documents the actual solution and provides fast feedback for refactoring. Tests run automatically via hooks after Edit/Write operations.
 
 ### Complete Implementation Examples
 
@@ -330,11 +332,11 @@ if (!themeProperty) {
   - connections ($ref property - points to ./schemas/connections/connections.schema.json)
 
   TO ADD 'theme' PROPERTY:
-  1. Invoke spec-coherence-guardian agent
-  2. spec-coherence-guardian will add 'theme' to specs.schema.json
-  3. spec-coherence-guardian will ensure Triple-Documentation Pattern completeness
-  4. spec-coherence-guardian will validate user stories with stakeholders
-  5. After validation, spec-coherence-guardian will notify you
+  1. Ask user to work with spec-editor agent
+  2. spec-editor will help user add 'theme' to specs.schema.json
+  3. spec-editor will help user ensure Triple-Documentation Pattern completeness
+  4. spec-editor will validate user stories collaboratively with user
+  5. After user approval, spec-editor will notify you
   6. ONLY THEN can you implement the schema
 
   YOU CANNOT ASSUME OR INVENT SCHEMA STRUCTURE.
@@ -349,7 +351,7 @@ if (!themeProperty) {
 - ✅ Ensures all schemas align with validated product requirements
 - ✅ Prevents implementing features without user validation
 - ✅ Maintains single source of truth (specs.schema.json)
-- ✅ Coordinates work across agents (spec-coherence-guardian → schema-architect)
+- ✅ Coordinates work across agents (spec-editor → schema-architect)
 - ✅ Prevents schema drift and inconsistency
 - ✅ Ensures every schema has complete documentation (Triple-Documentation Pattern)
 
@@ -357,7 +359,7 @@ if (!themeProperty) {
 ```
 User Requirement
     ↓
-spec-coherence-guardian (validates & documents property in specs.schema.json)
+spec-editor (helps user edit & validate property in specs.schema.json)
     ↓
 schema-architect (implements Effect Schema from validated definition)
     ↓
@@ -366,7 +368,7 @@ e2e-red-test-writer (creates RED tests from x-user-stories)
 e2e-test-fixer (implements Presentation/Application layers)
 ```
 
-**Never Bypass This**: If a property definition doesn't exist or is incomplete, you MUST stop and request spec-coherence-guardian validation. Do NOT make assumptions about schema structure.
+**Never Bypass This**: If a property definition doesn't exist or is incomplete, you MUST stop and request user works with spec-editor for validation. Do NOT make assumptions about schema structure.
 
 ## Scope and Schema Namespaces
 
@@ -764,18 +766,18 @@ export const TablesSchema = Schema.Array(
 )
 ```
 
-**Handoff Protocol FROM spec-coherence-guardian**:
-1. spec-coherence-guardian validates specs.schema.json structure
-2. spec-coherence-guardian ensures property has complete Triple-Documentation Pattern
-3. spec-coherence-guardian validates user stories with stakeholders
-4. spec-coherence-guardian notifies: "Property definition validated in specs.schema.json (properties.{property})"
+**Handoff Protocol FROM spec-editor**:
+1. spec-editor helps user validate specs.schema.json structure
+2. spec-editor helps user ensure property has complete Triple-Documentation Pattern
+3. spec-editor validates user stories collaboratively with user
+4. spec-editor notifies: "Property definition validated in specs.schema.json (properties.{property})"
 5. **YOU (schema-architect)**: Read `docs/specifications/specs.schema.json`
 6. **YOU**: Navigate to property using JSON path (e.g., `properties.tables` for top-level, `properties.tables.properties.fields` for nested)
 7. **YOU**: Extract validation constraints from JSON Schema (type, minLength, pattern, etc.)
 8. **YOU**: Read `x-business-rules` to understand WHY each constraint exists
 9. **YOU**: Implement `src/domain/models/app/{property}.ts` using Effect Schema
-10. **YOU**: Create `src/domain/models/app/{property}.test.ts` using `examples` and `x-user-stories` for test cases
-11. **YOU**: Add property to `src/domain/models/app/index.ts` with `Schema.optional`
+10. **YOU**: Add property to `src/domain/models/app/index.ts` with `Schema.optional`
+11. **YOU (Test-After)**: Create `src/domain/models/app/{property}.test.ts` AFTER implementation using `examples` and `x-user-stories` for test cases
 12. **Note**: Tests run automatically via hooks after your Edit/Write operations - no manual execution needed
 
 **Success Criteria**: You can implement the schema without asking clarification questions because the property definition is complete with all Triple-Documentation Pattern fields.
@@ -786,10 +788,9 @@ export const TablesSchema = Schema.Array(
 
 When adding a **new configuration section** (e.g., `tables`):
 
-1. **Create property files**:
+1. **Create property schema file** (implementation FIRST):
    ```bash
    src/domain/models/app/tables.ts
-   src/domain/models/app/tables.test.ts
    ```
 
 2. **Define schema** in `tables.ts` with annotations:
@@ -814,9 +815,7 @@ When adding a **new configuration section** (e.g., `tables`):
    export type Tables = Schema.Schema.Type<typeof TablesSchema>
    ```
 
-3. **Write comprehensive tests** in `tables.test.ts`
-
-4. **Add to main schema** in `index.ts`:
+3. **Add to main schema** in `index.ts`:
    ```typescript
    import { TablesSchema } from './tables'
 
@@ -826,7 +825,13 @@ When adding a **new configuration section** (e.g., `tables`):
    })
    ```
 
-5. **Update integration tests** in `index.test.ts`
+4. **Write comprehensive tests AFTER implementation** (Test-After pattern) in `tables.test.ts`:
+   - Use F.I.R.S.T principles (Fast, Isolated, Repeatable, Self-validating, Timely)
+   - Use Given-When-Then structure with explicit comments
+   - Cover valid values, invalid values, edge cases
+   - Tests run automatically via hooks after Edit/Write operations
+
+5. **Update integration tests** in `index.test.ts` (also after implementation)
 
 ### Phase 2: Refine Existing Property
 
@@ -839,6 +844,26 @@ When modifying validation rules:
 
 ## Testing Requirements
 
+**IMPORTANT**: Unit tests are written AFTER Effect Schema implementation is complete (Test-After pattern). Tests document the actual solution and provide fast feedback for refactoring.
+
+### F.I.R.S.T Principles
+
+All unit tests MUST follow F.I.R.S.T principles:
+
+1. **Fast**: Tests run in milliseconds (pure functions, no I/O)
+2. **Isolated**: Each test is independent (use `beforeEach` for fresh state)
+3. **Repeatable**: Same input always produces same output (deterministic data, mock time-dependent functions)
+4. **Self-Validating**: Tests determine pass/fail automatically (explicit assertions)
+5. **Timely**: Tests written immediately AFTER implementation (Test-After pattern for unit tests)
+
+### Given-When-Then Structure
+
+All tests MUST use Given-When-Then structure with explicit comments:
+
+- **Given**: Setup/preconditions (arrange)
+- **When**: Action/trigger (act)
+- **Then**: Expected outcome (assert)
+
 ### Property Test File (`[property].test.ts`)
 
 Each property test must include:
@@ -848,6 +873,8 @@ Each property test must include:
 3. **Edge cases**: Empty, null, boundary conditions
 4. **Type inference**: Verify TypeScript types work correctly
 
+**Example** (with F.I.R.S.T principles and Given-When-Then structure):
+
 ```typescript
 import { describe, test, expect } from 'bun:test'
 import { Schema } from 'effect'
@@ -855,6 +882,7 @@ import { TablesSchema } from './tables'
 
 describe('TablesSchema', () => {
   test('should accept valid table configuration', () => {
+    // Given: A valid table configuration
     const config = [{
       name: 'users',
       fields: [
@@ -864,27 +892,36 @@ describe('TablesSchema', () => {
       ]
     }]
 
+    // When: Schema validation is performed
     const result = Schema.decodeUnknownSync(TablesSchema)(config)
+
+    // Then: Configuration should be accepted
     expect(result).toEqual(config)
   })
 
   test('should reject invalid field types', () => {
+    // Given: A table configuration with invalid field type
     const config = [{
       name: 'users',
       fields: [{ name: 'foo', type: 'invalid' }]
     }]
 
+    // When: Schema validation is performed
+    // Then: Validation should throw error
     expect(() => {
       Schema.decodeUnknownSync(TablesSchema)(config)
     }).toThrow()
   })
 
   test('should reject empty table names', () => {
+    // Given: A table configuration with empty name
     const config = [{
       name: '',
       fields: []
     }]
 
+    // When: Schema validation is performed
+    // Then: Validation should throw with specific error message
     expect(() => {
       Schema.decodeUnknownSync(TablesSchema)(config)
     }).toThrow('Table name must not be empty')
@@ -894,10 +931,11 @@ describe('TablesSchema', () => {
 
 ### Integration Test File (`index.test.ts`)
 
-Test complete configuration with all properties:
+Test complete configuration with all properties (with Given-When-Then structure):
 
 ```typescript
 test('should accept full app configuration', () => {
+  // Given: A complete app configuration with all properties
   const config = {
     name: 'my-app',
     tables: [{ name: 'users', fields: [/*...*/] }],
@@ -905,7 +943,10 @@ test('should accept full app configuration', () => {
     automations: [{ trigger: {/*...*/}, action: {/*...*/} }],
   }
 
+  // When: Schema validation is performed
   const result = Schema.decodeUnknownSync(AppSchema)(config)
+
+  // Then: Complete configuration should be accepted
   expect(result).toEqual(config)
 })
 ```
@@ -976,7 +1017,10 @@ You MUST verify the following before completing any schema work:
 - ✅ **Triple-Documentation Pattern verified**: description, examples, x-business-rules, x-user-stories (REFUSE if incomplete)
 - ✅ **All validation rules extracted from JSON Schema** (no assumptions, no invented constraints)
 - ✅ **Business rules read and understood** (WHY each constraint exists)
-- ✅ Each property has `[property].ts` and `[property].test.ts`
+- ✅ Each property has `[property].ts` and `[property].test.ts` (co-located in `src/domain/models/app/`)
+- ✅ **Unit tests written AFTER implementation** (Test-After pattern)
+- ✅ **All tests follow F.I.R.S.T principles** (Fast, Isolated, Repeatable, Self-validating, Timely)
+- ✅ **All tests use Given-When-Then structure** (explicit comments in test code)
 - ✅ **All schemas include annotations** with `title`, `description`, and `examples` (NO EXCEPTIONS)
 - ✅ Main schema (`index.ts`) properly composes all properties
 - ✅ All schemas compile without TypeScript errors
@@ -995,15 +1039,15 @@ You MUST verify the following before completing any schema work:
 3. Validation rules extracted correctly (BLOCKING - don't assume)
 4. All other checklist items
 
-If any of the first 3 items fail verification, you must STOP and refuse to implement until spec-coherence-guardian provides validated property definition.
+If any of the first 3 items fail verification, you must STOP and refuse to implement until spec-editor helps user provide validated property definition.
 
 ## Collaboration with Other Agents
 
-**CRITICAL**: This agent CONSUMES blueprints from spec-coherence-guardian and works in PARALLEL with e2e-red-test-writer.
+**CRITICAL**: This agent CONSUMES blueprints from spec-editor and works in PARALLEL with e2e-red-test-writer.
 
-### Consumes Specifications from spec-coherence-guardian
+### Consumes Specifications from spec-editor
 
-**When**: After spec-coherence-guardian validates property definitions in `docs/specifications/specs.schema.json`
+**When**: After spec-editor helps user validate property definitions in `docs/specifications/specs.schema.json`
 
 **What You Receive** (from specs.schema.json using Triple-Documentation Pattern):
 - **Schema Constraints**: Type, validation rules (minLength, maxLength, pattern, enum, etc.)
@@ -1065,11 +1109,11 @@ If any of the first 3 items fail verification, you must STOP and refuse to imple
 - **Focus**: HOW to implement Effect Schemas (technical implementation)
 - **Output**: Working schema with passing unit tests
 
-**spec-coherence-guardian**:
-- **Validates**: `docs/specifications/specs.schema.json` (ensures Triple-Documentation Pattern completeness)
-- **Ensures**: User stories validated with stakeholders before implementation
-- **Focus**: WHAT to build (product specifications)
-- **Output**: Validated property definitions in specs.schema.json
+**spec-editor**:
+- **Guides**: User through editing `docs/specifications/specs.schema.json` (ensures Triple-Documentation Pattern completeness)
+- **Validates**: User stories collaboratively with user before implementation
+- **Focus**: WHAT to build (product specifications) through collaborative editing
+- **Output**: Validated property definitions in specs.schema.json (with user approval)
 
 **e2e-red-test-writer**:
 - **Reads**: `docs/specifications/specs.schema.json` (x-user-stories from property definitions)
@@ -1091,7 +1135,7 @@ See `@docs/development/agent-workflows.md` for complete TDD pipeline showing how
 
 **Your Position in Pipeline**:
 ```
-spec-coherence-guardian (BLUEPRINT)
+spec-editor (COLLABORATIVE BLUEPRINT)
          ↓
     [PARALLEL]
          ↓

@@ -8,7 +8,7 @@ Omnera uses a sophisticated agent ecosystem to implement features through Test-D
 
 **TDD Agents** (Feature Implementation):
 
-- `spec-coherence-guardian` - Product specification architecture
+- `spec-editor` - Collaborative schema design guide
 - `schema-architect` - Effect Schema implementation
 - `e2e-red-test-writer` - RED test creation
 - `e2e-test-fixer` - GREEN implementation
@@ -54,13 +54,13 @@ Omnera uses a sophisticated agent ecosystem to implement features through Test-D
 ```
 User Requirement
       ↓
-1. spec-coherence-guardian
-   • Updates docs/specifications/specs.schema.json
-   • Validates: bun run scripts/validate-schema.ts
-   • Generates roadmap: bun run scripts/generate-roadmap.ts
-   • Validates user stories with user
-   • Creates docs/specifications/roadmap/{property}.md
-      ↓ (HANDOFF: Roadmap file created with VALIDATED status)
+1. spec-editor
+   • Helps user edit docs/specifications/specs.schema.json
+   • Asks permission to validate: bun run scripts/validate-schema.ts
+   • User decides when to generate roadmap
+   • Validates user stories collaboratively
+   • Guides creation of docs/specifications/roadmap/{property}.md
+      ↓ (HANDOFF: Roadmap file created with user approval)
       ↓
 2A. schema-architect (parallel)    |    2B. e2e-red-test-writer (parallel)
     • Reads Effect Schema blueprint |        • Reads E2E user stories
@@ -96,47 +96,50 @@ User Requirement
 
 #### Step 1: Specification & Roadmap Generation
 
-**Agent**: `spec-coherence-guardian`
+**Agent**: `spec-editor`
 
-**Trigger**: User describes new feature or modifies `docs/specifications/specs.schema.json`
+**Trigger**: User requests help editing schema or adding properties to `docs/specifications/specs.schema.json`
 
-**Commands**:
+**Collaborative Commands**:
 
 ```bash
-# After user modifies specs.schema.json
-bun run scripts/validate-schema.ts         # MANDATORY
-bun run scripts/generate-roadmap.ts        # MANDATORY
+# Agent asks permission before running:
+bun run scripts/validate-schema.ts         # Only with user approval
+bun run scripts/generate-roadmap.ts        # User decides when to run
 ```
 
 **Input**:
 
-- User requirements
+- User requirements and schema editing requests
 - docs/specifications/specs.schema.json (source of truth)
 
 **Actions**:
 
-1. User or agent updates specs.schema.json with new property
-2. Agent runs validation script (must pass)
-3. Agent runs roadmap generation script
-4. Agent presents auto-generated user stories to user
-5. Agent asks validation questions (completeness, correctness, clarity)
-6. Agent refines stories based on user feedback
-7. Agent marks stories as VALIDATED in property detail file
+1. Agent helps user understand how to edit specs.schema.json
+2. User makes schema changes (or agent makes them with permission)
+3. Agent asks: "Would you like me to validate the schema now?"
+4. If approved, agent runs validation script
+5. Agent asks: "Should I generate the roadmap with these changes?"
+6. If approved, agent runs roadmap generation script
+7. Agent presents auto-generated user stories to user
+8. Agent asks validation questions (completeness, correctness, clarity)
+9. Agent refines stories based on user feedback
+10. User approves final stories for validation marker
 
 **Output**:
 
-- ROADMAP.md (updated high-level overview)
-- docs/specifications/roadmap/{property}.md (Effect Schema blueprints + E2E user stories)
-- User-validated stories marked with date
+- ROADMAP.md (updated high-level overview, with user approval)
+- docs/specifications/roadmap/{property}.md (Effect Schema blueprints + E2E user stories, with user approval)
+- User-validated stories marked with date (only after explicit approval)
 
 **Completion Criteria**:
 
-- ✅ Schema validation passes
-- ✅ Roadmap files generated
-- ✅ User stories validated by user
-- ✅ VALIDATED marker added to property detail file
+- ✅ Schema validation passes (with user permission)
+- ✅ Roadmap files generated (user chose to generate)
+- ✅ User stories validated collaboratively
+- ✅ User explicitly approves adding VALIDATED marker
 
-**Handoff**: Notify schema-architect and e2e-red-test-writer that roadmap is ready
+**Handoff**: Notify schema-architect and e2e-red-test-writer that roadmap is ready (with user confirmation)
 
 ---
 
@@ -454,19 +457,22 @@ bun test:e2e --grep @regression  # Compare to Phase 0 baseline
 
 **Use Case**: Product requirements change, specs.schema.json needs updates
 
-**Agent**: `spec-coherence-guardian`
+**Agent**: `spec-editor`
 
 **Workflow**:
 
-1. User describes requirement change
-2. Agent updates docs/specifications/specs.schema.json
-3. Agent runs `bun run scripts/validate-schema.ts` (MANDATORY)
-4. If validation passes, agent runs `bun run scripts/generate-roadmap.ts` (MANDATORY)
-5. Agent presents auto-generated user stories to user
-6. Agent validates stories with user (completeness, correctness, clarity)
-7. Agent refines stories based on feedback
-8. Agent marks stories as VALIDATED
-9. Agent commits all changes together
+1. User describes requirement change to spec-editor
+2. Agent helps user edit docs/specifications/specs.schema.json (collaborative editing)
+3. Agent asks: "Would you like me to validate these changes?"
+4. If approved, agent runs `bun run scripts/validate-schema.ts`
+5. Agent asks: "Should I generate a new roadmap with these changes?"
+6. If approved, agent runs `bun run scripts/generate-roadmap.ts`
+7. Agent presents auto-generated user stories to user
+8. Agent validates stories collaboratively (completeness, correctness, clarity)
+9. Agent refines stories based on user feedback
+10. User approves stories, agent marks them as VALIDATED
+11. Agent asks: "Ready to commit these changes?"
+12. If approved, agent commits all changes together
 
 **Preservation Strategy**: If property detail file already exists with validated stories:
 
@@ -510,9 +516,9 @@ bun test:e2e --grep @regression  # Compare to Phase 0 baseline
 
 | Agent                              | Primary Responsibility       | Trigger Example               | Input Files                  | Output Files                        | Collaborates With                                  |
 | ---------------------------------- | ---------------------------- | ----------------------------- | ---------------------------- | ----------------------------------- | -------------------------------------------------- |
-| **spec-coherence-guardian**        | Product spec architecture    | "Update specs.schema.json"    | specs.schema.json, vision.md | ROADMAP.md, roadmap/\*.md           | → schema-architect, e2e-red-test-writer            |
-| **schema-architect**               | Effect Schema implementation | "Implement {property} schema" | roadmap/{property}.md        | src/domain/models/app/{property}.ts | ← spec-coherence-guardian, → e2e-red-test-writer   |
-| **e2e-red-test-writer**            | RED test creation            | "Write tests for {property}"  | roadmap/{property}.md        | tests/app/{property}.spec.ts        | ← spec-coherence-guardian, → e2e-test-fixer        |
+| **spec-editor**                    | Collaborative schema design  | "Help me edit schemas"        | specs.schema.json, vision.md | ROADMAP.md, roadmap/\*.md           | → schema-architect, e2e-red-test-writer            |
+| **schema-architect**               | Effect Schema implementation | "Implement {property} schema" | roadmap/{property}.md        | src/domain/models/app/{property}.ts | ← spec-editor, → e2e-red-test-writer               |
+| **e2e-red-test-writer**            | RED test creation            | "Write tests for {property}"  | roadmap/{property}.md        | tests/app/{property}.spec.ts        | ← spec-editor, → e2e-test-fixer                    |
 | **e2e-test-fixer**                 | GREEN implementation         | "Fix failing E2E test"        | tests/app/{property}.spec.ts | src/ (implementation)               | ← e2e-red-test-writer, → codebase-refactor-auditor |
 | **codebase-refactor-auditor**      | Code optimization            | "Audit and refactor code"     | src/ (working code)          | src/ (refactored)                   | ← e2e-test-fixer, ↔ docs maintainers              |
 | **architecture-docs-maintainer**   | WHY patterns exist           | "Document {pattern}"          | Architectural decision       | docs/architecture/                  | ↔ infrastructure-docs-maintainer                  |
@@ -523,16 +529,17 @@ bun test:e2e --grep @regression  # Compare to Phase 0 baseline
 
 ## Handoff Protocols
 
-### 1. spec-coherence-guardian → schema-architect
+### 1. spec-editor → schema-architect
 
 **Completion Criteria**:
 
-- ✅ specs.schema.json validated (bun run scripts/validate-schema.ts)
-- ✅ Roadmap generated (bun run scripts/generate-roadmap.ts)
-- ✅ User stories validated by user
-- ✅ VALIDATED marker added to docs/specifications/roadmap/{property}.md
+- ✅ specs.schema.json edited collaboratively with user
+- ✅ User approved schema validation (bun run scripts/validate-schema.ts)
+- ✅ User approved roadmap generation (bun run scripts/generate-roadmap.ts)
+- ✅ User stories validated collaboratively
+- ✅ User approved adding VALIDATED marker to docs/specifications/roadmap/{property}.md
 
-**File Artifact**: `docs/specifications/roadmap/{property}.md` with VALIDATED status
+**File Artifact**: `docs/specifications/roadmap/{property}.md` with VALIDATED status (user-approved)
 
 **Handoff Command**: "Implement {property} schema from roadmap blueprint at docs/specifications/roadmap/{property}.md"
 
@@ -547,16 +554,17 @@ bun test:e2e --grep @regression  # Compare to Phase 0 baseline
 
 ---
 
-### 2. spec-coherence-guardian → e2e-red-test-writer
+### 2. spec-editor → e2e-red-test-writer
 
 **Completion Criteria**:
 
-- ✅ specs.schema.json validated
-- ✅ Roadmap generated
-- ✅ User stories validated by user
-- ✅ VALIDATED marker added to docs/specifications/roadmap/{property}.md
+- ✅ specs.schema.json edited collaboratively with user
+- ✅ User approved schema validation
+- ✅ User approved roadmap generation
+- ✅ User stories validated collaboratively
+- ✅ User approved adding VALIDATED marker to docs/specifications/roadmap/{property}.md
 
-**File Artifact**: `docs/specifications/roadmap/{property}.md` with VALIDATED status
+**File Artifact**: `docs/specifications/roadmap/{property}.md` with VALIDATED status (user-approved)
 
 **Handoff Command**: "Write RED tests for {property} from roadmap user stories at docs/specifications/roadmap/{property}.md"
 
@@ -635,7 +643,7 @@ START: User wants to add feature (e.g., "theme" property)
   ↓
 Q1: Does it require schema changes?
   ├─ YES → Use Complete TDD Pipeline
-  │         1. spec-coherence-guardian (specs.schema.json + roadmap)
+  │         1. spec-editor (help user edit schemas collaboratively)
   │         2. schema-architect + e2e-red-test-writer (parallel)
   │         3. e2e-test-fixer (make tests GREEN)
   │         4. codebase-refactor-auditor (optimize after 3+ fixes)
@@ -685,8 +693,8 @@ Q1: What are you documenting?
   │     (WHAT tool configured, version, commands)
   │
   ├─ Product specification/feature
-  │   → spec-coherence-guardian
-  │     (specs.schema.json + roadmap generation)
+  │   → spec-editor
+  │     (help user edit schemas + collaborative validation)
   │
   └─ Agent configuration
       → agent-maintainer
@@ -707,7 +715,7 @@ Q1: What are you documenting?
 
 1. Check completion criteria for previous agent
 2. Verify file artifacts exist:
-   - spec-coherence-guardian: docs/specifications/roadmap/{property}.md with VALIDATED marker
+   - spec-editor: docs/specifications/roadmap/{property}.md with VALIDATED marker (user-approved)
    - e2e-red-test-writer: tests/app/{property}.spec.ts with test.fixme()
    - e2e-test-fixer: All tests GREEN (no test.fixme() remaining)
 3. Explicitly invoke next agent with handoff command
@@ -725,7 +733,7 @@ Q1: What are you documenting?
 
 1. Identify which step was skipped
 2. Common skips:
-   - spec-coherence-guardian: Skipped user story validation → Re-validate with user
+   - spec-editor: Skipped user collaboration → Re-validate with user interactively
    - schema-architect: Skipped unit tests → Create {property}.test.ts
    - e2e-test-fixer: Skipped regression tests → Run bun test:e2e:regression
 3. Complete the missing step
@@ -742,7 +750,7 @@ Q1: What are you documenting?
 **Resolution**:
 
 1. Review agent boundaries:
-   - spec-coherence-guardian: docs/specifications/ only
+   - spec-editor: docs/specifications/ only (collaborative editing with user)
    - schema-architect: src/domain/models/app/ only
    - e2e-red-test-writer: tests/app/ only
    - e2e-test-fixer: src/ (implementation) only
@@ -759,16 +767,16 @@ Q1: What are you documenting?
 
 **Resolution**: Use decision trees above or consult this table:
 
-| User Intent                       | Correct Agent                               |
-| --------------------------------- | ------------------------------------------- |
-| "Add new property to app config"  | spec-coherence-guardian (full TDD pipeline) |
-| "Implement schema for {property}" | schema-architect (if roadmap exists)        |
-| "Write tests for {property}"      | e2e-red-test-writer (if roadmap exists)     |
-| "Fix failing E2E test"            | e2e-test-fixer                              |
-| "Clean up code duplication"       | codebase-refactor-auditor                   |
-| "Document {pattern}"              | architecture-docs-maintainer                |
-| "Document {tool}"                 | infrastructure-docs-maintainer              |
-| "Review agent config"             | agent-maintainer                            |
+| User Intent                       | Correct Agent                              |
+| --------------------------------- | ------------------------------------------ |
+| "Add new property to app config"  | spec-editor (collaborative schema editing) |
+| "Implement schema for {property}" | schema-architect (if roadmap exists)       |
+| "Write tests for {property}"      | e2e-red-test-writer (if roadmap exists)    |
+| "Fix failing E2E test"            | e2e-test-fixer                             |
+| "Clean up code duplication"       | codebase-refactor-auditor                  |
+| "Document {pattern}"              | architecture-docs-maintainer               |
+| "Document {tool}"                 | infrastructure-docs-maintainer             |
+| "Review agent config"             | agent-maintainer                           |
 
 ---
 
@@ -778,51 +786,85 @@ Q1: What are you documenting?
 
 **User Request**: "I want to add a theme property to the app schema that supports light/dark/system modes"
 
-#### Phase 1: Specification (spec-coherence-guardian)
+#### Phase 1: Specification (spec-editor)
+
+**User**: "I want to add a theme property to the app schema that supports light/dark/system modes"
+
+**Agent**: "I'll help you add the theme property to specs.schema.json. Here's what I suggest:
+
+```json
+{
+  "theme": {
+    "type": "string",
+    "enum": ["light", "dark", "system"],
+    "default": "system",
+    "description": "UI theme mode for the application"
+  }
+}
+```
+
+Would you like me to add this to specs.schema.json?"
+
+**User**: "Yes, please add it"
+
+**Agent**: "Added! Would you like me to validate the schema now?"
+
+**User**: "Yes"
 
 ```bash
-# Agent updates specs.schema.json
-# Agent runs validation
+# Agent runs validation with permission
 bun run scripts/validate-schema.ts
 # ✅ Schema validation passed
+```
 
-# Agent generates roadmap
+**Agent**: "Validation passed! Should I generate the roadmap with user stories?"
+
+**User**: "Yes, generate it"
+
+```bash
+# Agent generates roadmap with permission
 bun run scripts/generate-roadmap.ts
 # ✅ Generated docs/specifications/roadmap/theme.md
 ```
 
-**User Story Validation**:
-
-```
-Agent: "I've generated user stories for the theme property. Let me show you:
+**Agent**: "I've generated user stories for the theme property. Let me show you:
 
 Story 1: User views theme configuration
-  GIVEN: App configured with theme: 'dark'
-  WHEN: User loads homepage
-  THEN: Theme badge displays 'Dark Mode'
+GIVEN: App configured with theme: 'dark'
+WHEN: User loads homepage
+THEN: Theme badge displays 'Dark Mode'
 
 Story 2: Invalid theme value rejected
-  GIVEN: App configured with theme: 'invalid'
-  WHEN: Server validates configuration
-  THEN: Display error 'Theme must be light, dark, or system'
+GIVEN: App configured with theme: 'invalid'
+WHEN: Server validates configuration
+THEN: Display error 'Theme must be light, dark, or system'
 
 Do these stories accurately capture how you want theme to work?"
 
-User: "Yes, but add a story for system theme defaulting to user's OS preference"
+**User**: "Yes, but add a story for system theme defaulting to user's OS preference"
 
-Agent: "I'll add that story:
+**Agent**: "I'll add that story:
 
 Story 3: System theme respects OS preference
-  GIVEN: App configured with theme: 'system'
-  WHEN: User's OS is in dark mode
-  THEN: Theme badge displays 'Dark Mode (System)'
+GIVEN: App configured with theme: 'system'
+WHEN: User's OS is in dark mode
+THEN: Theme badge displays 'Dark Mode (System)'
 
 Does this capture what you described?"
 
-User: "Perfect!"
+**User**: "Perfect!"
 
-Agent: "Marking stories as VALIDATED and committing roadmap."
-```
+**Agent**: "Great! Should I mark these stories as VALIDATED?"
+
+**User**: "Yes"
+
+**Agent**: "Marking stories as VALIDATED. Ready to commit these changes?"
+
+**User**: "Yes, commit them"
+
+**Agent**: "Committing roadmap with validated user stories."
+
+````
 
 **Files Created**:
 
@@ -836,7 +878,7 @@ Agent: "Marking stories as VALIDATED and committing roadmap."
 ```bash
 # Agent reads docs/specifications/roadmap/theme.md
 # Agent creates src/domain/models/app/theme.ts
-```
+````
 
 **Code Created**:
 
@@ -1136,7 +1178,7 @@ Metrics:
 
 **Always Validate When**:
 
-- spec-coherence-guardian generates new roadmap files
+- spec-editor helps generate new roadmap files
 - Modifying existing validated user stories
 - User explicitly requests story review
 
@@ -1180,7 +1222,7 @@ Metrics:
 
 This workflow documentation is optimized for Claude Code consumption. When referencing agents, use the @ syntax:
 
-- `@spec-coherence-guardian` - Product specification architecture
+- `@spec-editor` - Collaborative schema design guide
 - `@schema-architect` - Effect Schema implementation
 - `@e2e-red-test-writer` - RED test creation
 - `@e2e-test-fixer` - GREEN implementation
