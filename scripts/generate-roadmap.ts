@@ -21,8 +21,8 @@
  * Usage: bun run scripts/generate-roadmap.ts
  */
 
-import { dirname } from 'node:path'
 import { existsSync as _existsSync } from 'node:fs'
+import { dirname } from 'node:path'
 import { generateRoadmapMarkdown } from './templates/roadmap-template'
 import { getImplementationStatus } from './utils/implementation-checker'
 import {
@@ -30,13 +30,9 @@ import {
   compareSchemas,
   extractAllPropertiesRecursively,
 } from './utils/schema-comparison'
-import {
-  extractAllUserStories,
-  calculateUserStoryStats,
-  groupStoriesByProperty,
-} from './utils/user-story-extractor'
-import { scanAllTests, matchUserStoryToTest, groupTestsByProperty } from './utils/test-scanner'
 import { resolveSchemaRefs, countAllProperties } from './utils/schema-resolver'
+import { scanAllTests, matchUserStoryToTest } from './utils/test-scanner'
+import { extractAllUserStories, calculateUserStoryStats } from './utils/user-story-extractor'
 import type { JSONSchema, RoadmapData, TrackedUserStory } from './types/roadmap'
 
 // Paths

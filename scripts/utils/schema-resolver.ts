@@ -25,7 +25,11 @@ export async function resolveSchemaRefs(
   return resolved
 }
 
-async function resolveRefsRecursive(obj: any, basePath: string, cache: SchemaCache): Promise<void> {
+async function resolveRefsRecursive(
+  obj: JSONSchema | JSONSchemaProperty | Record<string, unknown>,
+  basePath: string,
+  cache: SchemaCache
+): Promise<void> {
   if (!obj || typeof obj !== 'object') {
     return
   }
@@ -57,8 +61,10 @@ async function resolveRefsRecursive(obj: any, basePath: string, cache: SchemaCac
           const newBasePath = dirname(absolutePath)
           await resolveRefsRecursive(content, newBasePath, cache)
 
+          // eslint-disable-next-line drizzle/enforce-delete-with-where
           processingSet.delete(absolutePath)
-        } catch (error) {
+        } catch {
+          // eslint-disable-next-line drizzle/enforce-delete-with-where
           processingSet.delete(absolutePath)
           return
         }
@@ -68,10 +74,16 @@ async function resolveRefsRecursive(obj: any, basePath: string, cache: SchemaCac
 
       if (pointer && pointer.startsWith('/')) {
         const parts = pointer.substring(1).split('/')
-        let target: any = referencedSchema
+        let target: JSONSchema | JSONSchemaProperty | Record<string, unknown> | undefined =
+          referencedSchema
         for (const part of parts) {
-          target = target?.[part]
-          if (!target) {
+          if (target && typeof target === 'object' && part in target) {
+            target = (target as Record<string, unknown>)[part] as
+              | JSONSchema
+              | JSONSchemaProperty
+              | Record<string, unknown>
+              | undefined
+          } else {
             return
           }
         }
@@ -85,43 +97,58 @@ async function resolveRefsRecursive(obj: any, basePath: string, cache: SchemaCac
     }
   }
 
-  if (obj.properties) {
-    for (const key of Object.keys(obj.properties)) {
-      await resolveRefsRecursive(obj.properties[key], basePath, cache)
+  if ('properties' in obj && obj.properties && typeof obj.properties === 'object') {
+    const properties = obj.properties as Record<string, unknown>
+    for (const key of Object.keys(properties)) {
+      const prop = properties[key]
+      if (prop && typeof prop === 'object') {
+        await resolveRefsRecursive(prop as JSONSchema | JSONSchemaProperty, basePath, cache)
+      }
     }
   }
 
-  if (obj.items) {
+  if ('items' in obj && obj.items) {
     if (Array.isArray(obj.items)) {
       for (const item of obj.items) {
-        await resolveRefsRecursive(item, basePath, cache)
+        if (item && typeof item === 'object') {
+          await resolveRefsRecursive(item as JSONSchema | JSONSchemaProperty, basePath, cache)
+        }
       }
-    } else {
-      await resolveRefsRecursive(obj.items, basePath, cache)
+    } else if (typeof obj.items === 'object') {
+      await resolveRefsRecursive(obj.items as JSONSchema | JSONSchemaProperty, basePath, cache)
     }
   }
 
   for (const key of ['anyOf', 'oneOf', 'allOf']) {
-    if (Array.isArray(obj[key])) {
-      for (const variant of obj[key]) {
-        await resolveRefsRecursive(variant, basePath, cache)
+    if (key in obj && Array.isArray(obj[key])) {
+      const variants = obj[key] as unknown[]
+      for (const variant of variants) {
+        if (variant && typeof variant === 'object') {
+          await resolveRefsRecursive(variant as JSONSchema | JSONSchemaProperty, basePath, cache)
+        }
       }
     }
   }
 
-  if (obj.definitions) {
-    for (const key of Object.keys(obj.definitions)) {
-      await resolveRefsRecursive(obj.definitions[key], basePath, cache)
+  if ('definitions' in obj && obj.definitions && typeof obj.definitions === 'object') {
+    const definitions = obj.definitions as Record<string, unknown>
+    for (const key of Object.keys(definitions)) {
+      const def = definitions[key]
+      if (def && typeof def === 'object') {
+        await resolveRefsRecursive(def as JSONSchema | JSONSchemaProperty, basePath, cache)
+      }
     }
   }
 
   for (const key of Object.keys(obj)) {
     if (
-      typeof obj[key] === 'object' &&
-      obj[key] !== null &&
-      !['properties', 'items', 'anyOf', 'oneOf', 'allOf', 'definitions'].includes(key)
+      !['properties', 'items', 'anyOf', 'oneOf', 'allOf', 'definitions', '$ref'].includes(key) &&
+      key in obj
     ) {
-      await resolveRefsRecursive(obj[key], basePath, cache)
+      const value = obj[key]
+      if (value && typeof value === 'object') {
+        await resolveRefsRecursive(value as JSONSchema | JSONSchemaProperty, basePath, cache)
+      }
     }
   }
 }
@@ -146,19 +173,19 @@ export function countAllProperties(schema: JSONSchema | JSONSchemaProperty): num
       for (const item of schema.items) {
         count += countAllProperties(item)
       }
-    } else {
-      count += countAllProperties(schema.items)
+    } else if (typeof schema.items === 'object') {
+      count += countAllProperties(schema.items as JSONSchemaProperty)
     }
   }
 
-  if (schema.anyOf) {
+  if (schema.anyOf && Array.isArray(schema.anyOf)) {
     count += schema.anyOf.length
     for (const variant of schema.anyOf) {
       count += countAllProperties(variant)
     }
   }
 
-  if (schema.oneOf) {
+  if (schema.oneOf && Array.isArray(schema.oneOf)) {
     count += schema.oneOf.length
     for (const variant of schema.oneOf) {
       count += countAllProperties(variant)

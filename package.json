@@ -67,6 +67,7 @@
     "test:e2e:ui": "playwright test --ui",
     "test:all": "bun test:unit && bun test:e2e:ci",
     "license": "bun run scripts/add-license-headers.ts",
+    "generate:roadmap": "bun run scripts/generate-roadmap.ts",
     "export:schema": "bun run scripts/export-schema.ts",
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate",
