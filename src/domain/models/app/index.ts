@@ -8,6 +8,7 @@
 import { Schema } from 'effect'
 import { DescriptionSchema } from './description'
 import { NameSchema } from './name'
+import { TablesSchema } from './tables'
 import { VersionSchema } from './version'
 
 /**
@@ -63,16 +64,36 @@ export const AppSchema = Schema.Struct({
    * - Unicode characters and emojis are supported
    */
   description: Schema.optional(DescriptionSchema),
+
+  /**
+   * Data tables that define the data structure (optional).
+   *
+   * Collection of database tables that define the data structure of your application.
+   * Each table represents an entity (e.g., users, products, orders) with fields that
+   * define the schema. Tables support relationships, indexes, constraints, and various
+   * field types.
+   */
+  tables: Schema.optional(TablesSchema),
 }).pipe(
   Schema.annotations({
     title: 'Application Configuration',
     description:
-      'Complete application configuration including name, version, and description. This is the root schema for Omnera applications.',
+      'Complete application configuration including name, version, description, and data tables. This is the root schema for Omnera applications.',
     examples: [
       {
         name: 'todo-app',
         version: '1.0.0',
         description: 'A simple todo list application',
+        tables: [
+          {
+            id: 1,
+            name: 'tasks',
+            fields: [
+              { id: 1, name: 'title', type: 'single-line-text' as const, required: true },
+              { id: 2, name: 'completed', type: 'checkbox' as const, required: true },
+            ],
+          },
+        ],
       },
       {
         name: '@myorg/dashboard',

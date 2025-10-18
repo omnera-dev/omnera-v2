@@ -1,5 +1,13 @@
 {
+  "$id": "https://omnera.dev/schemas/0.0.1/app.schema.json",
   "$schema": "http://json-schema.org/draft-07/schema#",
+  "$defs": {
+    "Int": {
+      "type": "integer",
+      "description": "an integer",
+      "title": "int"
+    }
+  },
   "type": "object",
   "required": ["name"],
   "properties": {
@@ -40,16 +48,2738 @@
         "Full-featured e-commerce platform with cart, checkout & payment processing"
       ],
       "pattern": "^[^\\r\\n]*$"
+    },
+    "tables": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "name", "fields"],
+        "properties": {
+          "id": {
+            "$ref": "#/$defs/Int",
+            "description": "Unique positive integer identifier for entities. IDs are system-generated, auto-incrementing, and immutable. Must be unique within the parent collection (e.g., field IDs unique within a table, table IDs unique within the application). IDs are read-only and assigned automatically when entities are created. Range: 1 to 9,007,199,254,740,991 (JavaScript MAX_SAFE_INTEGER).",
+            "title": "ID",
+            "minimum": 1,
+            "examples": [1, 2, 3, 100, 1000],
+            "maximum": 9007199254740991
+          },
+          "name": {
+            "type": "string",
+            "description": "Internal identifier name used for database tables, columns, and programmatic references. Must follow database naming conventions: start with a letter, contain only lowercase letters, numbers, and underscores, maximum 63 characters (PostgreSQL limit). This name is used in SQL queries, API endpoints, and code generation. Choose descriptive names that clearly indicate the purpose (e.g., \"email_address\" not \"ea\").",
+            "title": "Name",
+            "minLength": 1,
+            "maxLength": 63,
+            "examples": [
+              "user",
+              "product",
+              "order_item",
+              "customer_email",
+              "shipping_address",
+              "created_at"
+            ],
+            "pattern": "^[a-z][a-z0-9_]*$"
+          },
+          "fields": {
+            "type": "array",
+            "items": {
+              "anyOf": [
+                {
+                  "type": "object",
+                  "required": ["id", "name", "type"],
+                  "properties": {
+                    "id": {
+                      "$ref": "#/$defs/Int",
+                      "description": "Unique positive integer identifier for entities. IDs are system-generated, auto-incrementing, and immutable. Must be unique within the parent collection (e.g., field IDs unique within a table, table IDs unique within the application). IDs are read-only and assigned automatically when entities are created. Range: 1 to 9,007,199,254,740,991 (JavaScript MAX_SAFE_INTEGER).",
+                      "title": "ID",
+                      "minimum": 1,
+                      "examples": [1, 2, 3, 100, 1000],
+                      "maximum": 9007199254740991
+                    },
+                    "name": {
+                      "type": "string",
+                      "description": "Internal identifier name for database columns following PostgreSQL naming conventions. Must start with a letter, contain only lowercase letters, numbers, and underscores, maximum 63 characters.",
+                      "title": "Field Name",
+                      "minLength": 1,
+                      "maxLength": 63,
+                      "examples": [
+                        "email",
+                        "user_status",
+                        "order_item",
+                        "customer_email",
+                        "created_at"
+                      ],
+                      "pattern": "^[a-z][a-z0-9_]*$"
+                    },
+                    "required": {
+                      "type": "boolean"
+                    },
+                    "unique": {
+                      "type": "boolean"
+                    },
+                    "indexed": {
+                      "type": "boolean"
+                    },
+                    "type": {
+                      "type": "string",
+                      "enum": ["single-line-text"],
+                      "description": "Constant value 'single-line-text' for type discrimination in discriminated unions"
+                    },
+                    "default": {
+                      "type": "string",
+                      "description": "Default value for this field when creating new records"
+                    }
+                  },
+                  "additionalProperties": false,
+                  "description": "Short text input limited to a single line. Ideal for names, titles, labels, and brief identifiers. Text is stored as-is without formatting.",
+                  "title": "Single Line Text Field",
+                  "examples": [
+                    {
+                      "id": 1,
+                      "name": "title",
+                      "required": true,
+                      "unique": false,
+                      "indexed": true,
+                      "type": "single-line-text",
+                      "default": "Untitled"
+                    },
+                    {
+                      "id": 2,
+                      "name": "first_name",
+                      "required": true,
+                      "type": "single-line-text"
+                    }
+                  ]
+                },
+                {
+                  "type": "object",
+                  "required": ["id", "name", "type"],
+                  "properties": {
+                    "id": {
+                      "$ref": "#/$defs/Int",
+                      "description": "Unique positive integer identifier for entities. IDs are system-generated, auto-incrementing, and immutable. Must be unique within the parent collection (e.g., field IDs unique within a table, table IDs unique within the application). IDs are read-only and assigned automatically when entities are created. Range: 1 to 9,007,199,254,740,991 (JavaScript MAX_SAFE_INTEGER).",
+                      "title": "ID",
+                      "minimum": 1,
+                      "examples": [1, 2, 3, 100, 1000],
+                      "maximum": 9007199254740991
+                    },
+                    "name": {
+                      "type": "string",
+                      "description": "Internal identifier name for database columns following PostgreSQL naming conventions. Must start with a letter, contain only lowercase letters, numbers, and underscores, maximum 63 characters.",
+                      "title": "Field Name",
+                      "minLength": 1,
+                      "maxLength": 63,
+                      "examples": [
+                        "email",
+                        "user_status",
+                        "order_item",
+                        "customer_email",
+                        "created_at"
+                      ],
+                      "pattern": "^[a-z][a-z0-9_]*$"
+                    },
+                    "required": {
+                      "type": "boolean"
+                    },
+                    "unique": {
+                      "type": "boolean"
+                    },
+                    "indexed": {
+                      "type": "boolean"
+                    },
+                    "type": {
+                      "type": "string",
+                      "enum": ["long-text"],
+                      "description": "Constant value 'long-text' for type discrimination in discriminated unions"
+                    },
+                    "default": {
+                      "type": "string",
+                      "description": "Default value for this field when creating new records"
+                    }
+                  },
+                  "additionalProperties": false,
+                  "description": "Multi-line text input for paragraphs, descriptions, notes, and comments. Supports line breaks and longer content without rich formatting.",
+                  "title": "Long Text Field",
+                  "examples": [
+                    {
+                      "id": 1,
+                      "name": "description",
+                      "required": true,
+                      "indexed": false,
+                      "type": "long-text",
+                      "default": "Enter description here..."
+                    },
+                    {
+                      "id": 2,
+                      "name": "notes",
+                      "required": false,
+                      "type": "long-text"
+                    }
+                  ]
+                },
+                {
+                  "type": "object",
+                  "required": ["id", "name", "type"],
+                  "properties": {
+                    "id": {
+                      "$ref": "#/$defs/Int",
+                      "description": "Unique positive integer identifier for entities. IDs are system-generated, auto-incrementing, and immutable. Must be unique within the parent collection (e.g., field IDs unique within a table, table IDs unique within the application). IDs are read-only and assigned automatically when entities are created. Range: 1 to 9,007,199,254,740,991 (JavaScript MAX_SAFE_INTEGER).",
+                      "title": "ID",
+                      "minimum": 1,
+                      "examples": [1, 2, 3, 100, 1000],
+                      "maximum": 9007199254740991
+                    },
+                    "name": {
+                      "type": "string",
+                      "description": "Internal identifier name for database columns following PostgreSQL naming conventions. Must start with a letter, contain only lowercase letters, numbers, and underscores, maximum 63 characters.",
+                      "title": "Field Name",
+                      "minLength": 1,
+                      "maxLength": 63,
+                      "examples": [
+                        "email",
+                        "user_status",
+                        "order_item",
+                        "customer_email",
+                        "created_at"
+                      ],
+                      "pattern": "^[a-z][a-z0-9_]*$"
+                    },
+                    "required": {
+                      "type": "boolean"
+                    },
+                    "unique": {
+                      "type": "boolean"
+                    },
+                    "indexed": {
+                      "type": "boolean"
+                    },
+                    "type": {
+                      "type": "string",
+                      "enum": ["phone-number"],
+                      "description": "Constant value 'phone-number' for type discrimination in discriminated unions"
+                    },
+                    "default": {
+                      "type": "string",
+                      "description": "Default phone number value when creating new records"
+                    }
+                  },
+                  "additionalProperties": false,
+                  "description": "Text field for storing phone numbers with support for international formats. Numbers are stored as plain text without automatic formatting.",
+                  "title": "Phone Number Field",
+                  "examples": [
+                    {
+                      "id": 1,
+                      "name": "mobile_phone",
+                      "required": true,
+                      "unique": true,
+                      "indexed": true,
+                      "type": "phone-number"
+                    },
+                    {
+                      "id": 2,
+                      "name": "office_phone",
+                      "required": false,
+                      "type": "phone-number",
+                      "default": "+1 (555) 000-0000"
+                    }
+                  ]
+                },
+                {
+                  "type": "object",
+                  "required": ["id", "name", "type"],
+                  "properties": {
+                    "id": {
+                      "$ref": "#/$defs/Int",
+                      "description": "Unique positive integer identifier for entities. IDs are system-generated, auto-incrementing, and immutable. Must be unique within the parent collection (e.g., field IDs unique within a table, table IDs unique within the application). IDs are read-only and assigned automatically when entities are created. Range: 1 to 9,007,199,254,740,991 (JavaScript MAX_SAFE_INTEGER).",
+                      "title": "ID",
+                      "minimum": 1,
+                      "examples": [1, 2, 3, 100, 1000],
+                      "maximum": 9007199254740991
+                    },
+                    "name": {
+                      "type": "string",
+                      "description": "Internal identifier name for database columns following PostgreSQL naming conventions. Must start with a letter, contain only lowercase letters, numbers, and underscores, maximum 63 characters.",
+                      "title": "Field Name",
+                      "minLength": 1,
+                      "maxLength": 63,
+                      "examples": [
+                        "email",
+                        "user_status",
+                        "order_item",
+                        "customer_email",
+                        "created_at"
+                      ],
+                      "pattern": "^[a-z][a-z0-9_]*$"
+                    },
+                    "required": {
+                      "type": "boolean"
+                    },
+                    "unique": {
+                      "type": "boolean"
+                    },
+                    "indexed": {
+                      "type": "boolean"
+                    },
+                    "type": {
+                      "type": "string",
+                      "enum": ["email"],
+                      "description": "Constant value 'email' for type discrimination in discriminated unions"
+                    },
+                    "default": {
+                      "type": "string",
+                      "description": "Default email address when creating new records"
+                    }
+                  },
+                  "additionalProperties": false,
+                  "description": "Text field with email format validation (RFC 5322). Validates email addresses and prevents invalid formats from being stored.",
+                  "title": "Email Field",
+                  "examples": [
+                    {
+                      "id": 1,
+                      "name": "email",
+                      "required": true,
+                      "unique": true,
+                      "indexed": true,
+                      "type": "email"
+                    },
+                    {
+                      "id": 2,
+                      "name": "contact_email",
+                      "required": false,
+                      "type": "email",
+                      "default": "contact@example.com"
+                    }
+                  ]
+                },
+                {
+                  "type": "object",
+                  "required": ["id", "name", "type"],
+                  "properties": {
+                    "id": {
+                      "$ref": "#/$defs/Int",
+                      "description": "Unique positive integer identifier for entities. IDs are system-generated, auto-incrementing, and immutable. Must be unique within the parent collection (e.g., field IDs unique within a table, table IDs unique within the application). IDs are read-only and assigned automatically when entities are created. Range: 1 to 9,007,199,254,740,991 (JavaScript MAX_SAFE_INTEGER).",
+                      "title": "ID",
+                      "minimum": 1,
+                      "examples": [1, 2, 3, 100, 1000],
+                      "maximum": 9007199254740991
+                    },
+                    "name": {
+                      "type": "string",
+                      "description": "Internal identifier name for database columns following PostgreSQL naming conventions. Must start with a letter, contain only lowercase letters, numbers, and underscores, maximum 63 characters.",
+                      "title": "Field Name",
+                      "minLength": 1,
+                      "maxLength": 63,
+                      "examples": [
+                        "email",
+                        "user_status",
+                        "order_item",
+                        "customer_email",
+                        "created_at"
+                      ],
+                      "pattern": "^[a-z][a-z0-9_]*$"
+                    },
+                    "required": {
+                      "type": "boolean"
+                    },
+                    "unique": {
+                      "type": "boolean"
+                    },
+                    "indexed": {
+                      "type": "boolean"
+                    },
+                    "type": {
+                      "type": "string",
+                      "enum": ["url"],
+                      "description": "Constant value 'url' for type discrimination in discriminated unions"
+                    },
+                    "default": {
+                      "type": "string",
+                      "description": "Default URL value when creating new records"
+                    }
+                  },
+                  "additionalProperties": false,
+                  "description": "Text field with URL format validation. Validates web addresses and supports multiple protocols (http://, https://, ftp://, etc.).",
+                  "title": "URL Field",
+                  "examples": [
+                    {
+                      "id": 1,
+                      "name": "website",
+                      "required": true,
+                      "unique": false,
+                      "indexed": true,
+                      "type": "url"
+                    },
+                    {
+                      "id": 2,
+                      "name": "profile_url",
+                      "required": false,
+                      "type": "url",
+                      "default": "https://example.com/profile"
+                    }
+                  ]
+                },
+                {
+                  "type": "object",
+                  "required": ["id", "name", "type"],
+                  "properties": {
+                    "id": {
+                      "$ref": "#/$defs/Int",
+                      "description": "Unique positive integer identifier for entities. IDs are system-generated, auto-incrementing, and immutable. Must be unique within the parent collection (e.g., field IDs unique within a table, table IDs unique within the application). IDs are read-only and assigned automatically when entities are created. Range: 1 to 9,007,199,254,740,991 (JavaScript MAX_SAFE_INTEGER).",
+                      "title": "ID",
+                      "minimum": 1,
+                      "examples": [1, 2, 3, 100, 1000],
+                      "maximum": 9007199254740991
+                    },
+                    "name": {
+                      "type": "string",
+                      "description": "Internal identifier name for database columns following PostgreSQL naming conventions. Must start with a letter, contain only lowercase letters, numbers, and underscores, maximum 63 characters.",
+                      "title": "Field Name",
+                      "minLength": 1,
+                      "maxLength": 63,
+                      "examples": [
+                        "email",
+                        "user_status",
+                        "order_item",
+                        "customer_email",
+                        "created_at"
+                      ],
+                      "pattern": "^[a-z][a-z0-9_]*$"
+                    },
+                    "required": {
+                      "type": "boolean"
+                    },
+                    "unique": {
+                      "type": "boolean"
+                    },
+                    "indexed": {
+                      "type": "boolean"
+                    },
+                    "type": {
+                      "type": "string",
+                      "enum": ["integer"],
+                      "description": "Constant value 'integer' for type discrimination in discriminated unions"
+                    },
+                    "min": {
+                      "type": "number",
+                      "description": "Minimum allowed value (inclusive)"
+                    },
+                    "max": {
+                      "type": "number",
+                      "description": "Maximum allowed value (inclusive)"
+                    },
+                    "default": {
+                      "type": "integer",
+                      "description": "Default integer value when creating new records",
+                      "title": "int"
+                    }
+                  },
+                  "additionalProperties": false,
+                  "description": "Numeric field for whole numbers without decimal places. Supports min/max range validation and is optimized for performance.",
+                  "title": "Integer Field",
+                  "examples": [
+                    {
+                      "id": 1,
+                      "name": "quantity",
+                      "required": true,
+                      "type": "integer",
+                      "min": 0,
+                      "max": 1000,
+                      "default": 1
+                    },
+                    {
+                      "id": 2,
+                      "name": "age",
+                      "required": false,
+                      "type": "integer",
+                      "min": 0,
+                      "max": 150
+                    }
+                  ]
+                },
+                {
+                  "type": "object",
+                  "required": ["id", "name", "type"],
+                  "properties": {
+                    "id": {
+                      "$ref": "#/$defs/Int",
+                      "description": "Unique positive integer identifier for entities. IDs are system-generated, auto-incrementing, and immutable. Must be unique within the parent collection (e.g., field IDs unique within a table, table IDs unique within the application). IDs are read-only and assigned automatically when entities are created. Range: 1 to 9,007,199,254,740,991 (JavaScript MAX_SAFE_INTEGER).",
+                      "title": "ID",
+                      "minimum": 1,
+                      "examples": [1, 2, 3, 100, 1000],
+                      "maximum": 9007199254740991
+                    },
+                    "name": {
+                      "type": "string",
+                      "description": "Internal identifier name for database columns following PostgreSQL naming conventions. Must start with a letter, contain only lowercase letters, numbers, and underscores, maximum 63 characters.",
+                      "title": "Field Name",
+                      "minLength": 1,
+                      "maxLength": 63,
+                      "examples": [
+                        "email",
+                        "user_status",
+                        "order_item",
+                        "customer_email",
+                        "created_at"
+                      ],
+                      "pattern": "^[a-z][a-z0-9_]*$"
+                    },
+                    "required": {
+                      "type": "boolean"
+                    },
+                    "unique": {
+                      "type": "boolean"
+                    },
+                    "indexed": {
+                      "type": "boolean"
+                    },
+                    "type": {
+                      "type": "string",
+                      "enum": ["decimal"],
+                      "description": "Constant value 'decimal' for type discrimination in discriminated unions"
+                    },
+                    "precision": {
+                      "$ref": "#/$defs/Int",
+                      "description": "Number of decimal places (0-10)",
+                      "title": "lessThanOrEqualTo(10)",
+                      "minimum": 0,
+                      "maximum": 10
+                    },
+                    "min": {
+                      "type": "number",
+                      "description": "Minimum allowed value (inclusive)"
+                    },
+                    "max": {
+                      "type": "number",
+                      "description": "Maximum allowed value (inclusive)"
+                    },
+                    "default": {
+                      "type": "number",
+                      "description": "Default decimal value when creating new records"
+                    }
+                  },
+                  "additionalProperties": false,
+                  "description": "Numeric field for numbers with decimal places. Supports configurable precision (0-10 decimal places) and min/max range validation. Uses exact DECIMAL storage.",
+                  "title": "Decimal Field",
+                  "examples": [
+                    {
+                      "id": 1,
+                      "name": "weight",
+                      "required": true,
+                      "type": "decimal",
+                      "precision": 2,
+                      "min": 0.01,
+                      "max": 999.99,
+                      "default": 1
+                    },
+                    {
+                      "id": 2,
+                      "name": "tax_rate",
+                      "required": true,
+                      "type": "decimal",
+                      "precision": 4,
+                      "min": 0,
+                      "max": 1,
+                      "default": 0.0825
+                    }
+                  ]
+                },
+                {
+                  "type": "object",
+                  "required": ["id", "name", "type", "currency"],
+                  "properties": {
+                    "id": {
+                      "$ref": "#/$defs/Int",
+                      "description": "Unique positive integer identifier for entities. IDs are system-generated, auto-incrementing, and immutable. Must be unique within the parent collection (e.g., field IDs unique within a table, table IDs unique within the application). IDs are read-only and assigned automatically when entities are created. Range: 1 to 9,007,199,254,740,991 (JavaScript MAX_SAFE_INTEGER).",
+                      "title": "ID",
+                      "minimum": 1,
+                      "examples": [1, 2, 3, 100, 1000],
+                      "maximum": 9007199254740991
+                    },
+                    "name": {
+                      "type": "string",
+                      "description": "Internal identifier name for database columns following PostgreSQL naming conventions. Must start with a letter, contain only lowercase letters, numbers, and underscores, maximum 63 characters.",
+                      "title": "Field Name",
+                      "minLength": 1,
+                      "maxLength": 63,
+                      "examples": [
+                        "email",
+                        "user_status",
+                        "order_item",
+                        "customer_email",
+                        "created_at"
+                      ],
+                      "pattern": "^[a-z][a-z0-9_]*$"
+                    },
+                    "required": {
+                      "type": "boolean"
+                    },
+                    "unique": {
+                      "type": "boolean"
+                    },
+                    "indexed": {
+                      "type": "boolean"
+                    },
+                    "type": {
+                      "type": "string",
+                      "enum": ["currency"],
+                      "description": "Constant value 'currency' for type discrimination in discriminated unions"
+                    },
+                    "currency": {
+                      "type": "string",
+                      "description": "ISO 4217 three-letter currency code (e.g., USD, EUR, GBP)",
+                      "title": "length(3)",
+                      "minLength": 3,
+                      "maxLength": 3,
+                      "examples": ["USD", "EUR", "GBP", "JPY", "CAD", "AUD"],
+                      "pattern": "^[A-Z]{3}$"
+                    },
+                    "precision": {
+                      "$ref": "#/$defs/Int",
+                      "description": "Number of decimal places (0-10, default: 2 for most currencies)",
+                      "title": "lessThanOrEqualTo(10)",
+                      "minimum": 0,
+                      "maximum": 10
+                    },
+                    "min": {
+                      "type": "number",
+                      "description": "Minimum allowed value (inclusive)"
+                    },
+                    "max": {
+                      "type": "number",
+                      "description": "Maximum allowed value (inclusive)"
+                    },
+                    "default": {
+                      "type": "number",
+                      "description": "Default currency value when creating new records"
+                    }
+                  },
+                  "additionalProperties": false,
+                  "description": "Specialized numeric field for monetary values with currency codes (ISO 4217). Uses exact DECIMAL storage to prevent rounding errors in financial calculations.",
+                  "title": "Currency Field",
+                  "examples": [
+                    {
+                      "id": 1,
+                      "name": "price",
+                      "required": true,
+                      "type": "currency",
+                      "currency": "USD",
+                      "precision": 2,
+                      "min": 0,
+                      "default": 0
+                    },
+                    {
+                      "id": 2,
+                      "name": "total_cost",
+                      "required": true,
+                      "type": "currency",
+                      "currency": "EUR",
+                      "precision": 2
+                    }
+                  ]
+                },
+                {
+                  "type": "object",
+                  "required": ["id", "name", "type"],
+                  "properties": {
+                    "id": {
+                      "$ref": "#/$defs/Int",
+                      "description": "Unique positive integer identifier for entities. IDs are system-generated, auto-incrementing, and immutable. Must be unique within the parent collection (e.g., field IDs unique within a table, table IDs unique within the application). IDs are read-only and assigned automatically when entities are created. Range: 1 to 9,007,199,254,740,991 (JavaScript MAX_SAFE_INTEGER).",
+                      "title": "ID",
+                      "minimum": 1,
+                      "examples": [1, 2, 3, 100, 1000],
+                      "maximum": 9007199254740991
+                    },
+                    "name": {
+                      "type": "string",
+                      "description": "Internal identifier name for database columns following PostgreSQL naming conventions. Must start with a letter, contain only lowercase letters, numbers, and underscores, maximum 63 characters.",
+                      "title": "Field Name",
+                      "minLength": 1,
+                      "maxLength": 63,
+                      "examples": [
+                        "email",
+                        "user_status",
+                        "order_item",
+                        "customer_email",
+                        "created_at"
+                      ],
+                      "pattern": "^[a-z][a-z0-9_]*$"
+                    },
+                    "required": {
+                      "type": "boolean"
+                    },
+                    "unique": {
+                      "type": "boolean"
+                    },
+                    "indexed": {
+                      "type": "boolean"
+                    },
+                    "type": {
+                      "type": "string",
+                      "enum": ["percentage"],
+                      "description": "Constant value 'percentage' for type discrimination in discriminated unions"
+                    },
+                    "precision": {
+                      "$ref": "#/$defs/Int",
+                      "description": "Number of decimal places (0-10, default: 0 for whole percentages)",
+                      "title": "lessThanOrEqualTo(10)",
+                      "minimum": 0,
+                      "maximum": 10
+                    },
+                    "min": {
+                      "type": "number",
+                      "description": "Minimum allowed percentage value (inclusive, typically 0)"
+                    },
+                    "max": {
+                      "type": "number",
+                      "description": "Maximum allowed percentage value (inclusive, typically 100)"
+                    },
+                    "default": {
+                      "type": "number",
+                      "description": "Default percentage value when creating new records"
+                    }
+                  },
+                  "additionalProperties": false,
+                  "description": "Specialized numeric field for percentage values (0-100). Values automatically display with % symbol in UI. Supports configurable decimal precision.",
+                  "title": "Percentage Field",
+                  "examples": [
+                    {
+                      "id": 1,
+                      "name": "discount_rate",
+                      "required": true,
+                      "type": "percentage",
+                      "precision": 1,
+                      "min": 0,
+                      "max": 100,
+                      "default": 10
+                    },
+                    {
+                      "id": 2,
+                      "name": "completion",
+                      "required": true,
+                      "type": "percentage",
+                      "precision": 0,
+                      "min": 0,
+                      "max": 100,
+                      "default": 0
+                    }
+                  ]
+                },
+                {
+                  "type": "object",
+                  "required": ["id", "name", "type"],
+                  "properties": {
+                    "id": {
+                      "$ref": "#/$defs/Int",
+                      "description": "Unique positive integer identifier for entities. IDs are system-generated, auto-incrementing, and immutable. Must be unique within the parent collection (e.g., field IDs unique within a table, table IDs unique within the application). IDs are read-only and assigned automatically when entities are created. Range: 1 to 9,007,199,254,740,991 (JavaScript MAX_SAFE_INTEGER).",
+                      "title": "ID",
+                      "minimum": 1,
+                      "examples": [1, 2, 3, 100, 1000],
+                      "maximum": 9007199254740991
+                    },
+                    "name": {
+                      "type": "string",
+                      "description": "Internal identifier name for database columns following PostgreSQL naming conventions. Must start with a letter, contain only lowercase letters, numbers, and underscores, maximum 63 characters.",
+                      "title": "Field Name",
+                      "minLength": 1,
+                      "maxLength": 63,
+                      "examples": [
+                        "email",
+                        "user_status",
+                        "order_item",
+                        "customer_email",
+                        "created_at"
+                      ],
+                      "pattern": "^[a-z][a-z0-9_]*$"
+                    },
+                    "required": {
+                      "type": "boolean"
+                    },
+                    "unique": {
+                      "type": "boolean"
+                    },
+                    "indexed": {
+                      "type": "boolean"
+                    },
+                    "type": {
+                      "type": "string",
+                      "enum": ["date", "datetime", "time"]
+                    },
+                    "format": {
+                      "type": "string",
+                      "description": "Date format string",
+                      "examples": ["YYYY-MM-DD", "MM/DD/YYYY", "DD-MM-YYYY"]
+                    },
+                    "includeTime": {
+                      "type": "boolean"
+                    },
+                    "timezone": {
+                      "type": "string",
+                      "description": "Timezone for datetime fields",
+                      "examples": ["UTC", "America/New_York", "Europe/London"]
+                    },
+                    "default": {
+                      "type": "string"
+                    }
+                  },
+                  "additionalProperties": false,
+                  "description": "Stores date and optionally time values. Supports custom formats, timezones, and time inclusion.",
+                  "title": "Date Field",
+                  "examples": [
+                    {
+                      "id": 1,
+                      "name": "due_date",
+                      "required": true,
+                      "type": "date",
+                      "format": "YYYY-MM-DD",
+                      "includeTime": false
+                    }
+                  ]
+                },
+                {
+                  "type": "object",
+                  "required": ["id", "name", "type"],
+                  "properties": {
+                    "id": {
+                      "$ref": "#/$defs/Int",
+                      "description": "Unique positive integer identifier for entities. IDs are system-generated, auto-incrementing, and immutable. Must be unique within the parent collection (e.g., field IDs unique within a table, table IDs unique within the application). IDs are read-only and assigned automatically when entities are created. Range: 1 to 9,007,199,254,740,991 (JavaScript MAX_SAFE_INTEGER).",
+                      "title": "ID",
+                      "minimum": 1,
+                      "examples": [1, 2, 3, 100, 1000],
+                      "maximum": 9007199254740991
+                    },
+                    "name": {
+                      "type": "string",
+                      "description": "Internal identifier name for database columns following PostgreSQL naming conventions. Must start with a letter, contain only lowercase letters, numbers, and underscores, maximum 63 characters.",
+                      "title": "Field Name",
+                      "minLength": 1,
+                      "maxLength": 63,
+                      "examples": [
+                        "email",
+                        "user_status",
+                        "order_item",
+                        "customer_email",
+                        "created_at"
+                      ],
+                      "pattern": "^[a-z][a-z0-9_]*$"
+                    },
+                    "required": {
+                      "type": "boolean"
+                    },
+                    "unique": {
+                      "type": "boolean"
+                    },
+                    "indexed": {
+                      "type": "boolean"
+                    },
+                    "type": {
+                      "type": "string",
+                      "enum": ["checkbox"]
+                    },
+                    "default": {
+                      "type": "boolean"
+                    }
+                  },
+                  "additionalProperties": false,
+                  "description": "Boolean field for true/false values. Typically rendered as a checkbox in the UI.",
+                  "title": "Checkbox Field",
+                  "examples": [
+                    {
+                      "id": 1,
+                      "name": "is_active",
+                      "required": true,
+                      "type": "checkbox",
+                      "default": false
+                    }
+                  ]
+                },
+                {
+                  "type": "object",
+                  "required": ["id", "name", "type", "options"],
+                  "properties": {
+                    "id": {
+                      "$ref": "#/$defs/Int",
+                      "description": "Unique positive integer identifier for entities. IDs are system-generated, auto-incrementing, and immutable. Must be unique within the parent collection (e.g., field IDs unique within a table, table IDs unique within the application). IDs are read-only and assigned automatically when entities are created. Range: 1 to 9,007,199,254,740,991 (JavaScript MAX_SAFE_INTEGER).",
+                      "title": "ID",
+                      "minimum": 1,
+                      "examples": [1, 2, 3, 100, 1000],
+                      "maximum": 9007199254740991
+                    },
+                    "name": {
+                      "type": "string",
+                      "description": "Internal identifier name for database columns following PostgreSQL naming conventions. Must start with a letter, contain only lowercase letters, numbers, and underscores, maximum 63 characters.",
+                      "title": "Field Name",
+                      "minLength": 1,
+                      "maxLength": 63,
+                      "examples": [
+                        "email",
+                        "user_status",
+                        "order_item",
+                        "customer_email",
+                        "created_at"
+                      ],
+                      "pattern": "^[a-z][a-z0-9_]*$"
+                    },
+                    "required": {
+                      "type": "boolean"
+                    },
+                    "unique": {
+                      "type": "boolean"
+                    },
+                    "indexed": {
+                      "type": "boolean"
+                    },
+                    "type": {
+                      "type": "string",
+                      "enum": ["single-select"]
+                    },
+                    "options": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "default": {
+                      "type": "string"
+                    }
+                  },
+                  "additionalProperties": false,
+                  "description": "Allows selection of one option from predefined list. Used for categories or enumerated values.",
+                  "title": "Single Select Field",
+                  "examples": [
+                    {
+                      "id": 1,
+                      "name": "category",
+                      "type": "single-select",
+                      "options": ["Electronics", "Clothing", "Food"],
+                      "default": "Electronics"
+                    }
+                  ]
+                },
+                {
+                  "type": "object",
+                  "required": ["id", "name", "type", "options"],
+                  "properties": {
+                    "id": {
+                      "$ref": "#/$defs/Int",
+                      "description": "Unique positive integer identifier for entities. IDs are system-generated, auto-incrementing, and immutable. Must be unique within the parent collection (e.g., field IDs unique within a table, table IDs unique within the application). IDs are read-only and assigned automatically when entities are created. Range: 1 to 9,007,199,254,740,991 (JavaScript MAX_SAFE_INTEGER).",
+                      "title": "ID",
+                      "minimum": 1,
+                      "examples": [1, 2, 3, 100, 1000],
+                      "maximum": 9007199254740991
+                    },
+                    "name": {
+                      "type": "string",
+                      "description": "Internal identifier name for database columns following PostgreSQL naming conventions. Must start with a letter, contain only lowercase letters, numbers, and underscores, maximum 63 characters.",
+                      "title": "Field Name",
+                      "minLength": 1,
+                      "maxLength": 63,
+                      "examples": [
+                        "email",
+                        "user_status",
+                        "order_item",
+                        "customer_email",
+                        "created_at"
+                      ],
+                      "pattern": "^[a-z][a-z0-9_]*$"
+                    },
+                    "required": {
+                      "type": "boolean"
+                    },
+                    "unique": {
+                      "type": "boolean"
+                    },
+                    "indexed": {
+                      "type": "boolean"
+                    },
+                    "type": {
+                      "type": "string",
+                      "enum": ["multi-select"]
+                    },
+                    "options": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "maxSelections": {
+                      "$ref": "#/$defs/Int",
+                      "description": "Maximum number of selections allowed",
+                      "title": "greaterThanOrEqualTo(1)",
+                      "minimum": 1
+                    },
+                    "default": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    }
+                  },
+                  "additionalProperties": false,
+                  "description": "Allows selection of multiple options from predefined list.",
+                  "title": "Multi Select Field",
+                  "examples": [
+                    {
+                      "id": 1,
+                      "name": "tags",
+                      "type": "multi-select",
+                      "options": ["Urgent", "Important", "Review"],
+                      "maxSelections": 3
+                    }
+                  ]
+                },
+                {
+                  "type": "object",
+                  "required": ["id", "name", "type", "relatedTable", "relationType"],
+                  "properties": {
+                    "id": {
+                      "$ref": "#/$defs/Int",
+                      "description": "Unique positive integer identifier for entities. IDs are system-generated, auto-incrementing, and immutable. Must be unique within the parent collection (e.g., field IDs unique within a table, table IDs unique within the application). IDs are read-only and assigned automatically when entities are created. Range: 1 to 9,007,199,254,740,991 (JavaScript MAX_SAFE_INTEGER).",
+                      "title": "ID",
+                      "minimum": 1,
+                      "examples": [1, 2, 3, 100, 1000],
+                      "maximum": 9007199254740991
+                    },
+                    "name": {
+                      "type": "string",
+                      "description": "Internal identifier name for database columns following PostgreSQL naming conventions. Must start with a letter, contain only lowercase letters, numbers, and underscores, maximum 63 characters.",
+                      "title": "Field Name",
+                      "minLength": 1,
+                      "maxLength": 63,
+                      "examples": [
+                        "email",
+                        "user_status",
+                        "order_item",
+                        "customer_email",
+                        "created_at"
+                      ],
+                      "pattern": "^[a-z][a-z0-9_]*$"
+                    },
+                    "required": {
+                      "type": "boolean"
+                    },
+                    "unique": {
+                      "type": "boolean"
+                    },
+                    "indexed": {
+                      "type": "boolean"
+                    },
+                    "type": {
+                      "type": "string",
+                      "enum": ["relationship"]
+                    },
+                    "relatedTable": {
+                      "type": "string",
+                      "description": "Name of the related table",
+                      "title": "minLength(1)",
+                      "minLength": 1
+                    },
+                    "relationType": {
+                      "type": "string",
+                      "description": "Type of relationship"
+                    },
+                    "displayField": {
+                      "type": "string",
+                      "description": "Field from related table to display in UI",
+                      "title": "minLength(1)",
+                      "minLength": 1
+                    },
+                    "onDelete": {
+                      "type": "string",
+                      "description": "Action to take when the related record is deleted"
+                    },
+                    "onUpdate": {
+                      "type": "string",
+                      "description": "Action to take when the related record's key is updated"
+                    }
+                  },
+                  "additionalProperties": false,
+                  "description": "Links records to another table with referential integrity.",
+                  "title": "Relationship Field",
+                  "examples": [
+                    {
+                      "id": 1,
+                      "name": "author",
+                      "type": "relationship",
+                      "relatedTable": "users",
+                      "relationType": "many-to-one"
+                    }
+                  ]
+                },
+                {
+                  "type": "object",
+                  "required": ["id", "name", "type"],
+                  "properties": {
+                    "id": {
+                      "$ref": "#/$defs/Int",
+                      "description": "Unique positive integer identifier for entities. IDs are system-generated, auto-incrementing, and immutable. Must be unique within the parent collection (e.g., field IDs unique within a table, table IDs unique within the application). IDs are read-only and assigned automatically when entities are created. Range: 1 to 9,007,199,254,740,991 (JavaScript MAX_SAFE_INTEGER).",
+                      "title": "ID",
+                      "minimum": 1,
+                      "examples": [1, 2, 3, 100, 1000],
+                      "maximum": 9007199254740991
+                    },
+                    "name": {
+                      "type": "string",
+                      "description": "Internal identifier name for database columns following PostgreSQL naming conventions. Must start with a letter, contain only lowercase letters, numbers, and underscores, maximum 63 characters.",
+                      "title": "Field Name",
+                      "minLength": 1,
+                      "maxLength": 63,
+                      "examples": [
+                        "email",
+                        "user_status",
+                        "order_item",
+                        "customer_email",
+                        "created_at"
+                      ],
+                      "pattern": "^[a-z][a-z0-9_]*$"
+                    },
+                    "required": {
+                      "type": "boolean"
+                    },
+                    "unique": {
+                      "type": "boolean"
+                    },
+                    "indexed": {
+                      "type": "boolean"
+                    },
+                    "type": {
+                      "type": "string",
+                      "enum": ["single-attachment"]
+                    },
+                    "storage": {
+                      "type": "object",
+                      "required": [],
+                      "properties": {
+                        "provider": {
+                          "type": "string",
+                          "description": "Storage provider"
+                        },
+                        "bucket": {
+                          "type": "string",
+                          "description": "S3 bucket name (required for s3 provider)"
+                        },
+                        "maxSize": {
+                          "$ref": "#/$defs/Int",
+                          "description": "Maximum file size in bytes",
+                          "title": "greaterThanOrEqualTo(1)",
+                          "minimum": 1
+                        },
+                        "allowedTypes": {
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          }
+                        }
+                      },
+                      "additionalProperties": false
+                    }
+                  },
+                  "additionalProperties": false,
+                  "description": "Stores a single file attachment with storage configuration.",
+                  "title": "Single Attachment Field",
+                  "examples": [
+                    {
+                      "id": 1,
+                      "name": "profile_pic",
+                      "type": "single-attachment",
+                      "storage": {
+                        "provider": "local",
+                        "maxSize": 5242880
+                      }
+                    }
+                  ]
+                },
+                {
+                  "type": "object",
+                  "required": ["id", "name", "type"],
+                  "properties": {
+                    "id": {
+                      "$ref": "#/$defs/Int",
+                      "description": "Unique positive integer identifier for entities. IDs are system-generated, auto-incrementing, and immutable. Must be unique within the parent collection (e.g., field IDs unique within a table, table IDs unique within the application). IDs are read-only and assigned automatically when entities are created. Range: 1 to 9,007,199,254,740,991 (JavaScript MAX_SAFE_INTEGER).",
+                      "title": "ID",
+                      "minimum": 1,
+                      "examples": [1, 2, 3, 100, 1000],
+                      "maximum": 9007199254740991
+                    },
+                    "name": {
+                      "type": "string",
+                      "description": "Internal identifier name for database columns following PostgreSQL naming conventions. Must start with a letter, contain only lowercase letters, numbers, and underscores, maximum 63 characters.",
+                      "title": "Field Name",
+                      "minLength": 1,
+                      "maxLength": 63,
+                      "examples": [
+                        "email",
+                        "user_status",
+                        "order_item",
+                        "customer_email",
+                        "created_at"
+                      ],
+                      "pattern": "^[a-z][a-z0-9_]*$"
+                    },
+                    "required": {
+                      "type": "boolean"
+                    },
+                    "unique": {
+                      "type": "boolean"
+                    },
+                    "indexed": {
+                      "type": "boolean"
+                    },
+                    "type": {
+                      "type": "string",
+                      "enum": ["multiple-attachments"]
+                    },
+                    "maxFiles": {
+                      "$ref": "#/$defs/Int",
+                      "description": "Maximum number of files allowed",
+                      "title": "greaterThanOrEqualTo(1)",
+                      "minimum": 1
+                    },
+                    "storage": {
+                      "type": "object",
+                      "required": [],
+                      "properties": {
+                        "provider": {
+                          "type": "string",
+                          "description": "Storage provider"
+                        },
+                        "bucket": {
+                          "type": "string",
+                          "description": "S3 bucket name (required for s3 provider)"
+                        },
+                        "maxSize": {
+                          "$ref": "#/$defs/Int",
+                          "description": "Maximum file size in bytes per file",
+                          "title": "greaterThanOrEqualTo(1)",
+                          "minimum": 1
+                        },
+                        "allowedTypes": {
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          }
+                        }
+                      },
+                      "additionalProperties": false
+                    }
+                  },
+                  "additionalProperties": false,
+                  "description": "Stores multiple file attachments with storage configuration.",
+                  "title": "Multiple Attachments Field",
+                  "examples": [
+                    {
+                      "id": 1,
+                      "name": "documents",
+                      "type": "multiple-attachments",
+                      "maxFiles": 10
+                    }
+                  ]
+                },
+                {
+                  "type": "object",
+                  "required": ["id", "name", "type", "formula"],
+                  "properties": {
+                    "id": {
+                      "$ref": "#/$defs/Int",
+                      "description": "Unique positive integer identifier for entities. IDs are system-generated, auto-incrementing, and immutable. Must be unique within the parent collection (e.g., field IDs unique within a table, table IDs unique within the application). IDs are read-only and assigned automatically when entities are created. Range: 1 to 9,007,199,254,740,991 (JavaScript MAX_SAFE_INTEGER).",
+                      "title": "ID",
+                      "minimum": 1,
+                      "examples": [1, 2, 3, 100, 1000],
+                      "maximum": 9007199254740991
+                    },
+                    "name": {
+                      "type": "string",
+                      "description": "Internal identifier name for database columns following PostgreSQL naming conventions. Must start with a letter, contain only lowercase letters, numbers, and underscores, maximum 63 characters.",
+                      "title": "Field Name",
+                      "minLength": 1,
+                      "maxLength": 63,
+                      "examples": [
+                        "email",
+                        "user_status",
+                        "order_item",
+                        "customer_email",
+                        "created_at"
+                      ],
+                      "pattern": "^[a-z][a-z0-9_]*$"
+                    },
+                    "required": {
+                      "type": "boolean"
+                    },
+                    "unique": {
+                      "type": "boolean"
+                    },
+                    "indexed": {
+                      "type": "boolean"
+                    },
+                    "type": {
+                      "type": "string",
+                      "enum": ["formula"]
+                    },
+                    "formula": {
+                      "type": "string",
+                      "description": "Formula expression to compute the value. Supports field references, operators, and functions.",
+                      "title": "minLength(1)",
+                      "examples": [
+                        "price * quantity",
+                        "CONCAT(first_name, ' ', last_name)",
+                        "IF(status = 'active', 'Yes', 'No')",
+                        "ROUND(total * 0.15, 2)"
+                      ],
+                      "minLength": 1
+                    },
+                    "resultType": {
+                      "type": "string",
+                      "description": "Expected data type of the formula result"
+                    },
+                    "format": {
+                      "type": "string",
+                      "description": "Display format for the result (e.g., currency, percentage)",
+                      "examples": ["currency", "percentage", "decimal", "date"]
+                    }
+                  },
+                  "additionalProperties": false,
+                  "description": "Computed field that calculates values based on formula expressions.",
+                  "title": "Formula Field",
+                  "examples": [
+                    {
+                      "id": 1,
+                      "name": "total_price",
+                      "type": "formula",
+                      "formula": "price * quantity",
+                      "resultType": "number"
+                    }
+                  ]
+                },
+                {
+                  "type": "object",
+                  "required": [
+                    "id",
+                    "name",
+                    "type",
+                    "relationshipField",
+                    "relatedField",
+                    "aggregation"
+                  ],
+                  "properties": {
+                    "id": {
+                      "$ref": "#/$defs/Int",
+                      "description": "Unique positive integer identifier for entities. IDs are system-generated, auto-incrementing, and immutable. Must be unique within the parent collection (e.g., field IDs unique within a table, table IDs unique within the application). IDs are read-only and assigned automatically when entities are created. Range: 1 to 9,007,199,254,740,991 (JavaScript MAX_SAFE_INTEGER).",
+                      "title": "ID",
+                      "minimum": 1,
+                      "examples": [1, 2, 3, 100, 1000],
+                      "maximum": 9007199254740991
+                    },
+                    "name": {
+                      "type": "string",
+                      "description": "Internal identifier name for database columns following PostgreSQL naming conventions. Must start with a letter, contain only lowercase letters, numbers, and underscores, maximum 63 characters.",
+                      "title": "Field Name",
+                      "minLength": 1,
+                      "maxLength": 63,
+                      "examples": [
+                        "email",
+                        "user_status",
+                        "order_item",
+                        "customer_email",
+                        "created_at"
+                      ],
+                      "pattern": "^[a-z][a-z0-9_]*$"
+                    },
+                    "required": {
+                      "type": "boolean"
+                    },
+                    "unique": {
+                      "type": "boolean"
+                    },
+                    "indexed": {
+                      "type": "boolean"
+                    },
+                    "type": {
+                      "type": "string",
+                      "enum": ["rollup"]
+                    },
+                    "relationshipField": {
+                      "type": "string",
+                      "description": "Name of the relationship field to aggregate from",
+                      "title": "minLength(1)",
+                      "minLength": 1
+                    },
+                    "relatedField": {
+                      "type": "string",
+                      "description": "Name of the field in the related table to aggregate",
+                      "title": "minLength(1)",
+                      "minLength": 1
+                    },
+                    "aggregation": {
+                      "type": "string",
+                      "description": "Aggregation function to apply"
+                    },
+                    "format": {
+                      "type": "string",
+                      "description": "Display format for the result",
+                      "examples": ["currency", "number", "percentage"]
+                    }
+                  },
+                  "additionalProperties": false,
+                  "description": "Aggregates values from related records using functions like SUM, AVG, COUNT.",
+                  "title": "Rollup Field",
+                  "examples": [
+                    {
+                      "id": 1,
+                      "name": "total_sales",
+                      "type": "rollup",
+                      "relationshipField": "orders",
+                      "relatedField": "amount",
+                      "aggregation": "SUM"
+                    }
+                  ]
+                },
+                {
+                  "type": "object",
+                  "required": ["id", "name", "type", "relationshipField", "relatedField"],
+                  "properties": {
+                    "id": {
+                      "$ref": "#/$defs/Int",
+                      "description": "Unique positive integer identifier for entities. IDs are system-generated, auto-incrementing, and immutable. Must be unique within the parent collection (e.g., field IDs unique within a table, table IDs unique within the application). IDs are read-only and assigned automatically when entities are created. Range: 1 to 9,007,199,254,740,991 (JavaScript MAX_SAFE_INTEGER).",
+                      "title": "ID",
+                      "minimum": 1,
+                      "examples": [1, 2, 3, 100, 1000],
+                      "maximum": 9007199254740991
+                    },
+                    "name": {
+                      "type": "string",
+                      "description": "Internal identifier name for database columns following PostgreSQL naming conventions. Must start with a letter, contain only lowercase letters, numbers, and underscores, maximum 63 characters.",
+                      "title": "Field Name",
+                      "minLength": 1,
+                      "maxLength": 63,
+                      "examples": [
+                        "email",
+                        "user_status",
+                        "order_item",
+                        "customer_email",
+                        "created_at"
+                      ],
+                      "pattern": "^[a-z][a-z0-9_]*$"
+                    },
+                    "required": {
+                      "type": "boolean"
+                    },
+                    "unique": {
+                      "type": "boolean"
+                    },
+                    "indexed": {
+                      "type": "boolean"
+                    },
+                    "type": {
+                      "type": "string",
+                      "enum": ["lookup"]
+                    },
+                    "relationshipField": {
+                      "type": "string",
+                      "description": "Name of the relationship field to lookup from",
+                      "title": "minLength(1)",
+                      "minLength": 1
+                    },
+                    "relatedField": {
+                      "type": "string",
+                      "description": "Name of the field in the related table to display",
+                      "title": "minLength(1)",
+                      "minLength": 1
+                    }
+                  },
+                  "additionalProperties": false,
+                  "description": "Displays values from related records without aggregation.",
+                  "title": "Lookup Field",
+                  "examples": [
+                    {
+                      "id": 1,
+                      "name": "customer_email",
+                      "type": "lookup",
+                      "relationshipField": "customer",
+                      "relatedField": "email"
+                    }
+                  ]
+                },
+                {
+                  "type": "object",
+                  "required": ["id", "name", "type"],
+                  "properties": {
+                    "id": {
+                      "$ref": "#/$defs/Int",
+                      "description": "Unique positive integer identifier for entities. IDs are system-generated, auto-incrementing, and immutable. Must be unique within the parent collection (e.g., field IDs unique within a table, table IDs unique within the application). IDs are read-only and assigned automatically when entities are created. Range: 1 to 9,007,199,254,740,991 (JavaScript MAX_SAFE_INTEGER).",
+                      "title": "ID",
+                      "minimum": 1,
+                      "examples": [1, 2, 3, 100, 1000],
+                      "maximum": 9007199254740991
+                    },
+                    "name": {
+                      "type": "string",
+                      "description": "Internal identifier name for database columns following PostgreSQL naming conventions. Must start with a letter, contain only lowercase letters, numbers, and underscores, maximum 63 characters.",
+                      "title": "Field Name",
+                      "minLength": 1,
+                      "maxLength": 63,
+                      "examples": [
+                        "email",
+                        "user_status",
+                        "order_item",
+                        "customer_email",
+                        "created_at"
+                      ],
+                      "pattern": "^[a-z][a-z0-9_]*$"
+                    },
+                    "required": {
+                      "type": "boolean"
+                    },
+                    "unique": {
+                      "type": "boolean"
+                    },
+                    "indexed": {
+                      "type": "boolean"
+                    },
+                    "type": {
+                      "type": "string",
+                      "enum": ["user"]
+                    },
+                    "allowMultiple": {
+                      "type": "boolean"
+                    }
+                  },
+                  "additionalProperties": false,
+                  "description": "Reference field linking to users from authentication system. Supports single or multiple user selection.",
+                  "title": "User Field",
+                  "examples": [
+                    {
+                      "id": 1,
+                      "name": "assigned_to",
+                      "required": true,
+                      "type": "user",
+                      "allowMultiple": false
+                    }
+                  ]
+                },
+                {
+                  "type": "object",
+                  "required": ["id", "name", "type"],
+                  "properties": {
+                    "id": {
+                      "$ref": "#/$defs/Int",
+                      "description": "Unique positive integer identifier for entities. IDs are system-generated, auto-incrementing, and immutable. Must be unique within the parent collection (e.g., field IDs unique within a table, table IDs unique within the application). IDs are read-only and assigned automatically when entities are created. Range: 1 to 9,007,199,254,740,991 (JavaScript MAX_SAFE_INTEGER).",
+                      "title": "ID",
+                      "minimum": 1,
+                      "examples": [1, 2, 3, 100, 1000],
+                      "maximum": 9007199254740991
+                    },
+                    "name": {
+                      "type": "string",
+                      "description": "Internal identifier name for database columns following PostgreSQL naming conventions. Must start with a letter, contain only lowercase letters, numbers, and underscores, maximum 63 characters.",
+                      "title": "Field Name",
+                      "minLength": 1,
+                      "maxLength": 63,
+                      "examples": [
+                        "email",
+                        "user_status",
+                        "order_item",
+                        "customer_email",
+                        "created_at"
+                      ],
+                      "pattern": "^[a-z][a-z0-9_]*$"
+                    },
+                    "required": {
+                      "type": "boolean"
+                    },
+                    "unique": {
+                      "type": "boolean"
+                    },
+                    "indexed": {
+                      "type": "boolean"
+                    },
+                    "type": {
+                      "type": "string",
+                      "enum": ["created-at"]
+                    }
+                  },
+                  "additionalProperties": false,
+                  "description": "Automatically captures the timestamp when a record is created. System-managed field that cannot be manually edited.",
+                  "title": "Created At Field",
+                  "examples": [
+                    {
+                      "id": 1,
+                      "name": "created_at",
+                      "indexed": true,
+                      "type": "created-at"
+                    }
+                  ]
+                },
+                {
+                  "type": "object",
+                  "required": ["id", "name", "type"],
+                  "properties": {
+                    "id": {
+                      "$ref": "#/$defs/Int",
+                      "description": "Unique positive integer identifier for entities. IDs are system-generated, auto-incrementing, and immutable. Must be unique within the parent collection (e.g., field IDs unique within a table, table IDs unique within the application). IDs are read-only and assigned automatically when entities are created. Range: 1 to 9,007,199,254,740,991 (JavaScript MAX_SAFE_INTEGER).",
+                      "title": "ID",
+                      "minimum": 1,
+                      "examples": [1, 2, 3, 100, 1000],
+                      "maximum": 9007199254740991
+                    },
+                    "name": {
+                      "type": "string",
+                      "description": "Internal identifier name for database columns following PostgreSQL naming conventions. Must start with a letter, contain only lowercase letters, numbers, and underscores, maximum 63 characters.",
+                      "title": "Field Name",
+                      "minLength": 1,
+                      "maxLength": 63,
+                      "examples": [
+                        "email",
+                        "user_status",
+                        "order_item",
+                        "customer_email",
+                        "created_at"
+                      ],
+                      "pattern": "^[a-z][a-z0-9_]*$"
+                    },
+                    "required": {
+                      "type": "boolean"
+                    },
+                    "unique": {
+                      "type": "boolean"
+                    },
+                    "indexed": {
+                      "type": "boolean"
+                    },
+                    "type": {
+                      "type": "string",
+                      "enum": ["created-by"]
+                    }
+                  },
+                  "additionalProperties": false,
+                  "description": "Automatically captures the user who created a record. System-managed field that stores user ID reference.",
+                  "title": "Created By Field",
+                  "examples": [
+                    {
+                      "id": 1,
+                      "name": "created_by",
+                      "indexed": true,
+                      "type": "created-by"
+                    }
+                  ]
+                },
+                {
+                  "type": "object",
+                  "required": ["id", "name", "type"],
+                  "properties": {
+                    "id": {
+                      "$ref": "#/$defs/Int",
+                      "description": "Unique positive integer identifier for entities. IDs are system-generated, auto-incrementing, and immutable. Must be unique within the parent collection (e.g., field IDs unique within a table, table IDs unique within the application). IDs are read-only and assigned automatically when entities are created. Range: 1 to 9,007,199,254,740,991 (JavaScript MAX_SAFE_INTEGER).",
+                      "title": "ID",
+                      "minimum": 1,
+                      "examples": [1, 2, 3, 100, 1000],
+                      "maximum": 9007199254740991
+                    },
+                    "name": {
+                      "type": "string",
+                      "description": "Internal identifier name for database columns following PostgreSQL naming conventions. Must start with a letter, contain only lowercase letters, numbers, and underscores, maximum 63 characters.",
+                      "title": "Field Name",
+                      "minLength": 1,
+                      "maxLength": 63,
+                      "examples": [
+                        "email",
+                        "user_status",
+                        "order_item",
+                        "customer_email",
+                        "created_at"
+                      ],
+                      "pattern": "^[a-z][a-z0-9_]*$"
+                    },
+                    "required": {
+                      "type": "boolean"
+                    },
+                    "unique": {
+                      "type": "boolean"
+                    },
+                    "indexed": {
+                      "type": "boolean"
+                    },
+                    "type": {
+                      "type": "string",
+                      "enum": ["updated-at"]
+                    }
+                  },
+                  "additionalProperties": false,
+                  "description": "Automatically updates the timestamp whenever a record is modified. System-managed field that updates on every change.",
+                  "title": "Updated At Field",
+                  "examples": [
+                    {
+                      "id": 1,
+                      "name": "updated_at",
+                      "indexed": true,
+                      "type": "updated-at"
+                    }
+                  ]
+                },
+                {
+                  "type": "object",
+                  "required": ["id", "name", "type"],
+                  "properties": {
+                    "id": {
+                      "$ref": "#/$defs/Int",
+                      "description": "Unique positive integer identifier for entities. IDs are system-generated, auto-incrementing, and immutable. Must be unique within the parent collection (e.g., field IDs unique within a table, table IDs unique within the application). IDs are read-only and assigned automatically when entities are created. Range: 1 to 9,007,199,254,740,991 (JavaScript MAX_SAFE_INTEGER).",
+                      "title": "ID",
+                      "minimum": 1,
+                      "examples": [1, 2, 3, 100, 1000],
+                      "maximum": 9007199254740991
+                    },
+                    "name": {
+                      "type": "string",
+                      "description": "Internal identifier name for database columns following PostgreSQL naming conventions. Must start with a letter, contain only lowercase letters, numbers, and underscores, maximum 63 characters.",
+                      "title": "Field Name",
+                      "minLength": 1,
+                      "maxLength": 63,
+                      "examples": [
+                        "email",
+                        "user_status",
+                        "order_item",
+                        "customer_email",
+                        "created_at"
+                      ],
+                      "pattern": "^[a-z][a-z0-9_]*$"
+                    },
+                    "required": {
+                      "type": "boolean"
+                    },
+                    "unique": {
+                      "type": "boolean"
+                    },
+                    "indexed": {
+                      "type": "boolean"
+                    },
+                    "type": {
+                      "type": "string",
+                      "enum": ["updated-by"]
+                    }
+                  },
+                  "additionalProperties": false,
+                  "description": "Automatically captures the user who last modified a record. System-managed field that stores user ID reference.",
+                  "title": "Updated By Field",
+                  "examples": [
+                    {
+                      "id": 1,
+                      "name": "updated_by",
+                      "indexed": true,
+                      "type": "updated-by"
+                    }
+                  ]
+                },
+                {
+                  "type": "object",
+                  "required": ["id", "name", "type"],
+                  "properties": {
+                    "id": {
+                      "$ref": "#/$defs/Int",
+                      "description": "Unique positive integer identifier for entities. IDs are system-generated, auto-incrementing, and immutable. Must be unique within the parent collection (e.g., field IDs unique within a table, table IDs unique within the application). IDs are read-only and assigned automatically when entities are created. Range: 1 to 9,007,199,254,740,991 (JavaScript MAX_SAFE_INTEGER).",
+                      "title": "ID",
+                      "minimum": 1,
+                      "examples": [1, 2, 3, 100, 1000],
+                      "maximum": 9007199254740991
+                    },
+                    "name": {
+                      "type": "string",
+                      "description": "Internal identifier name for database columns following PostgreSQL naming conventions. Must start with a letter, contain only lowercase letters, numbers, and underscores, maximum 63 characters.",
+                      "title": "Field Name",
+                      "minLength": 1,
+                      "maxLength": 63,
+                      "examples": [
+                        "email",
+                        "user_status",
+                        "order_item",
+                        "customer_email",
+                        "created_at"
+                      ],
+                      "pattern": "^[a-z][a-z0-9_]*$"
+                    },
+                    "required": {
+                      "type": "boolean"
+                    },
+                    "unique": {
+                      "type": "boolean"
+                    },
+                    "indexed": {
+                      "type": "boolean"
+                    },
+                    "type": {
+                      "type": "string",
+                      "enum": ["rating"]
+                    },
+                    "max": {
+                      "$ref": "#/$defs/Int",
+                      "description": "Maximum rating value",
+                      "title": "lessThanOrEqualTo(10)",
+                      "minimum": 1,
+                      "maximum": 10
+                    },
+                    "style": {
+                      "type": "string",
+                      "description": "Visual style for the rating"
+                    }
+                  },
+                  "additionalProperties": false,
+                  "description": "Allows rating values with configurable maximum. Typically rendered as stars or other indicators.",
+                  "title": "Rating Field",
+                  "examples": [
+                    {
+                      "id": 1,
+                      "name": "product_rating",
+                      "type": "rating",
+                      "max": 5,
+                      "style": "stars"
+                    }
+                  ]
+                },
+                {
+                  "type": "object",
+                  "required": ["id", "name", "type"],
+                  "properties": {
+                    "id": {
+                      "$ref": "#/$defs/Int",
+                      "description": "Unique positive integer identifier for entities. IDs are system-generated, auto-incrementing, and immutable. Must be unique within the parent collection (e.g., field IDs unique within a table, table IDs unique within the application). IDs are read-only and assigned automatically when entities are created. Range: 1 to 9,007,199,254,740,991 (JavaScript MAX_SAFE_INTEGER).",
+                      "title": "ID",
+                      "minimum": 1,
+                      "examples": [1, 2, 3, 100, 1000],
+                      "maximum": 9007199254740991
+                    },
+                    "name": {
+                      "type": "string",
+                      "description": "Internal identifier name for database columns following PostgreSQL naming conventions. Must start with a letter, contain only lowercase letters, numbers, and underscores, maximum 63 characters.",
+                      "title": "Field Name",
+                      "minLength": 1,
+                      "maxLength": 63,
+                      "examples": [
+                        "email",
+                        "user_status",
+                        "order_item",
+                        "customer_email",
+                        "created_at"
+                      ],
+                      "pattern": "^[a-z][a-z0-9_]*$"
+                    },
+                    "required": {
+                      "type": "boolean"
+                    },
+                    "unique": {
+                      "type": "boolean"
+                    },
+                    "indexed": {
+                      "type": "boolean"
+                    },
+                    "type": {
+                      "type": "string",
+                      "enum": ["duration"]
+                    },
+                    "format": {
+                      "type": "string",
+                      "description": "Display format for the duration"
+                    }
+                  },
+                  "additionalProperties": false,
+                  "description": "Stores time duration values. Used for tracking elapsed time or work hours with custom formats.",
+                  "title": "Duration Field",
+                  "examples": [
+                    {
+                      "id": 1,
+                      "name": "work_hours",
+                      "required": true,
+                      "type": "duration",
+                      "format": "h:mm"
+                    }
+                  ]
+                },
+                {
+                  "type": "object",
+                  "required": ["id", "name", "type"],
+                  "properties": {
+                    "id": {
+                      "$ref": "#/$defs/Int",
+                      "description": "Unique positive integer identifier for entities. IDs are system-generated, auto-incrementing, and immutable. Must be unique within the parent collection (e.g., field IDs unique within a table, table IDs unique within the application). IDs are read-only and assigned automatically when entities are created. Range: 1 to 9,007,199,254,740,991 (JavaScript MAX_SAFE_INTEGER).",
+                      "title": "ID",
+                      "minimum": 1,
+                      "examples": [1, 2, 3, 100, 1000],
+                      "maximum": 9007199254740991
+                    },
+                    "name": {
+                      "type": "string",
+                      "description": "Internal identifier name for database columns following PostgreSQL naming conventions. Must start with a letter, contain only lowercase letters, numbers, and underscores, maximum 63 characters.",
+                      "title": "Field Name",
+                      "minLength": 1,
+                      "maxLength": 63,
+                      "examples": [
+                        "email",
+                        "user_status",
+                        "order_item",
+                        "customer_email",
+                        "created_at"
+                      ],
+                      "pattern": "^[a-z][a-z0-9_]*$"
+                    },
+                    "required": {
+                      "type": "boolean"
+                    },
+                    "unique": {
+                      "type": "boolean"
+                    },
+                    "indexed": {
+                      "type": "boolean"
+                    },
+                    "type": {
+                      "type": "string",
+                      "enum": ["rich-text"]
+                    },
+                    "maxLength": {
+                      "$ref": "#/$defs/Int",
+                      "description": "Maximum length in characters",
+                      "title": "greaterThanOrEqualTo(1)",
+                      "minimum": 1
+                    }
+                  },
+                  "additionalProperties": false,
+                  "description": "Stores formatted text with rich formatting support. Rendered with WYSIWYG editor in UI.",
+                  "title": "Rich Text Field",
+                  "examples": [
+                    {
+                      "id": 1,
+                      "name": "article_content",
+                      "required": true,
+                      "type": "rich-text",
+                      "maxLength": 10000
+                    }
+                  ]
+                },
+                {
+                  "type": "object",
+                  "required": ["id", "name", "type", "options"],
+                  "properties": {
+                    "id": {
+                      "$ref": "#/$defs/Int",
+                      "description": "Unique positive integer identifier for entities. IDs are system-generated, auto-incrementing, and immutable. Must be unique within the parent collection (e.g., field IDs unique within a table, table IDs unique within the application). IDs are read-only and assigned automatically when entities are created. Range: 1 to 9,007,199,254,740,991 (JavaScript MAX_SAFE_INTEGER).",
+                      "title": "ID",
+                      "minimum": 1,
+                      "examples": [1, 2, 3, 100, 1000],
+                      "maximum": 9007199254740991
+                    },
+                    "name": {
+                      "type": "string",
+                      "description": "Internal identifier name for database columns following PostgreSQL naming conventions. Must start with a letter, contain only lowercase letters, numbers, and underscores, maximum 63 characters.",
+                      "title": "Field Name",
+                      "minLength": 1,
+                      "maxLength": 63,
+                      "examples": [
+                        "email",
+                        "user_status",
+                        "order_item",
+                        "customer_email",
+                        "created_at"
+                      ],
+                      "pattern": "^[a-z][a-z0-9_]*$"
+                    },
+                    "required": {
+                      "type": "boolean"
+                    },
+                    "unique": {
+                      "type": "boolean"
+                    },
+                    "indexed": {
+                      "type": "boolean"
+                    },
+                    "type": {
+                      "type": "string",
+                      "enum": ["status"]
+                    },
+                    "options": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "required": ["value"],
+                        "properties": {
+                          "value": {
+                            "type": "string",
+                            "description": "a string at least 1 character(s) long",
+                            "title": "minLength(1)",
+                            "minLength": 1
+                          },
+                          "color": {
+                            "type": "string",
+                            "description": "Hex color code for the status",
+                            "pattern": "^#[0-9a-fA-F]{6}$"
+                          }
+                        },
+                        "additionalProperties": false
+                      }
+                    },
+                    "default": {
+                      "type": "string"
+                    }
+                  },
+                  "additionalProperties": false,
+                  "description": "Status field with colored options for workflow states.",
+                  "title": "Status Field",
+                  "examples": [
+                    {
+                      "id": 1,
+                      "name": "status",
+                      "type": "status",
+                      "options": [
+                        {
+                          "value": "todo",
+                          "color": "#94A3B8"
+                        },
+                        {
+                          "value": "in_progress",
+                          "color": "#3B82F6"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "object",
+                  "required": ["id", "name", "type", "label", "action"],
+                  "properties": {
+                    "id": {
+                      "$ref": "#/$defs/Int",
+                      "description": "Unique positive integer identifier for entities. IDs are system-generated, auto-incrementing, and immutable. Must be unique within the parent collection (e.g., field IDs unique within a table, table IDs unique within the application). IDs are read-only and assigned automatically when entities are created. Range: 1 to 9,007,199,254,740,991 (JavaScript MAX_SAFE_INTEGER).",
+                      "title": "ID",
+                      "minimum": 1,
+                      "examples": [1, 2, 3, 100, 1000],
+                      "maximum": 9007199254740991
+                    },
+                    "name": {
+                      "type": "string",
+                      "description": "Internal identifier name for database columns following PostgreSQL naming conventions. Must start with a letter, contain only lowercase letters, numbers, and underscores, maximum 63 characters.",
+                      "title": "Field Name",
+                      "minLength": 1,
+                      "maxLength": 63,
+                      "examples": [
+                        "email",
+                        "user_status",
+                        "order_item",
+                        "customer_email",
+                        "created_at"
+                      ],
+                      "pattern": "^[a-z][a-z0-9_]*$"
+                    },
+                    "required": {
+                      "type": "boolean"
+                    },
+                    "unique": {
+                      "type": "boolean"
+                    },
+                    "indexed": {
+                      "type": "boolean"
+                    },
+                    "type": {
+                      "type": "string",
+                      "enum": ["button"]
+                    },
+                    "label": {
+                      "type": "string",
+                      "description": "Button text label",
+                      "title": "minLength(1)",
+                      "minLength": 1
+                    },
+                    "action": {
+                      "type": "string",
+                      "description": "Type of action to trigger"
+                    },
+                    "url": {
+                      "type": "string",
+                      "description": "URL to open (when action is 'url')"
+                    },
+                    "automation": {
+                      "type": "string",
+                      "description": "Automation name to trigger (when action is 'automation')"
+                    }
+                  },
+                  "additionalProperties": false,
+                  "description": "Interactive button that triggers actions like opening URLs or running automations.",
+                  "title": "Button Field",
+                  "examples": [
+                    {
+                      "id": 1,
+                      "name": "approve",
+                      "type": "button",
+                      "label": "Approve",
+                      "action": "automation",
+                      "automation": "approve_request"
+                    }
+                  ]
+                },
+                {
+                  "type": "object",
+                  "required": ["id", "name", "type"],
+                  "properties": {
+                    "id": {
+                      "$ref": "#/$defs/Int",
+                      "description": "Unique positive integer identifier for entities. IDs are system-generated, auto-incrementing, and immutable. Must be unique within the parent collection (e.g., field IDs unique within a table, table IDs unique within the application). IDs are read-only and assigned automatically when entities are created. Range: 1 to 9,007,199,254,740,991 (JavaScript MAX_SAFE_INTEGER).",
+                      "title": "ID",
+                      "minimum": 1,
+                      "examples": [1, 2, 3, 100, 1000],
+                      "maximum": 9007199254740991
+                    },
+                    "name": {
+                      "type": "string",
+                      "description": "Internal identifier name for database columns following PostgreSQL naming conventions. Must start with a letter, contain only lowercase letters, numbers, and underscores, maximum 63 characters.",
+                      "title": "Field Name",
+                      "minLength": 1,
+                      "maxLength": 63,
+                      "examples": [
+                        "email",
+                        "user_status",
+                        "order_item",
+                        "customer_email",
+                        "created_at"
+                      ],
+                      "pattern": "^[a-z][a-z0-9_]*$"
+                    },
+                    "required": {
+                      "type": "boolean"
+                    },
+                    "unique": {
+                      "type": "boolean"
+                    },
+                    "indexed": {
+                      "type": "boolean"
+                    },
+                    "type": {
+                      "type": "string",
+                      "enum": ["autonumber"]
+                    },
+                    "prefix": {
+                      "type": "string",
+                      "description": "Optional prefix for the autonumber",
+                      "examples": ["INV-", "ORD-", ""]
+                    },
+                    "startFrom": {
+                      "$ref": "#/$defs/Int",
+                      "description": "Starting number",
+                      "title": "greaterThanOrEqualTo(1)",
+                      "minimum": 1
+                    },
+                    "digits": {
+                      "$ref": "#/$defs/Int",
+                      "description": "Number of digits with zero padding",
+                      "title": "lessThanOrEqualTo(10)",
+                      "minimum": 1,
+                      "maximum": 10
+                    }
+                  },
+                  "additionalProperties": false,
+                  "description": "Auto-incrementing number field with optional prefix and zero padding.",
+                  "title": "Autonumber Field",
+                  "examples": [
+                    {
+                      "id": 1,
+                      "name": "invoice_number",
+                      "type": "autonumber",
+                      "prefix": "INV-",
+                      "startFrom": 1000,
+                      "digits": 5
+                    }
+                  ]
+                },
+                {
+                  "type": "object",
+                  "required": ["id", "name", "type"],
+                  "properties": {
+                    "id": {
+                      "$ref": "#/$defs/Int",
+                      "description": "Unique positive integer identifier for entities. IDs are system-generated, auto-incrementing, and immutable. Must be unique within the parent collection (e.g., field IDs unique within a table, table IDs unique within the application). IDs are read-only and assigned automatically when entities are created. Range: 1 to 9,007,199,254,740,991 (JavaScript MAX_SAFE_INTEGER).",
+                      "title": "ID",
+                      "minimum": 1,
+                      "examples": [1, 2, 3, 100, 1000],
+                      "maximum": 9007199254740991
+                    },
+                    "name": {
+                      "type": "string",
+                      "description": "Internal identifier name for database columns following PostgreSQL naming conventions. Must start with a letter, contain only lowercase letters, numbers, and underscores, maximum 63 characters.",
+                      "title": "Field Name",
+                      "minLength": 1,
+                      "maxLength": 63,
+                      "examples": [
+                        "email",
+                        "user_status",
+                        "order_item",
+                        "customer_email",
+                        "created_at"
+                      ],
+                      "pattern": "^[a-z][a-z0-9_]*$"
+                    },
+                    "required": {
+                      "type": "boolean"
+                    },
+                    "unique": {
+                      "type": "boolean"
+                    },
+                    "indexed": {
+                      "type": "boolean"
+                    },
+                    "type": {
+                      "type": "string",
+                      "enum": ["barcode"]
+                    },
+                    "format": {
+                      "type": "string",
+                      "description": "Barcode format"
+                    }
+                  },
+                  "additionalProperties": false,
+                  "description": "Stores barcode values with various format support. Used for product identification and inventory.",
+                  "title": "Barcode Field",
+                  "examples": [
+                    {
+                      "id": 1,
+                      "name": "product_barcode",
+                      "required": true,
+                      "type": "barcode",
+                      "format": "EAN-13"
+                    }
+                  ]
+                },
+                {
+                  "type": "object",
+                  "required": ["id", "name", "type"],
+                  "properties": {
+                    "id": {
+                      "$ref": "#/$defs/Int",
+                      "description": "Unique positive integer identifier for entities. IDs are system-generated, auto-incrementing, and immutable. Must be unique within the parent collection (e.g., field IDs unique within a table, table IDs unique within the application). IDs are read-only and assigned automatically when entities are created. Range: 1 to 9,007,199,254,740,991 (JavaScript MAX_SAFE_INTEGER).",
+                      "title": "ID",
+                      "minimum": 1,
+                      "examples": [1, 2, 3, 100, 1000],
+                      "maximum": 9007199254740991
+                    },
+                    "name": {
+                      "type": "string",
+                      "description": "Internal identifier name for database columns following PostgreSQL naming conventions. Must start with a letter, contain only lowercase letters, numbers, and underscores, maximum 63 characters.",
+                      "title": "Field Name",
+                      "minLength": 1,
+                      "maxLength": 63,
+                      "examples": [
+                        "email",
+                        "user_status",
+                        "order_item",
+                        "customer_email",
+                        "created_at"
+                      ],
+                      "pattern": "^[a-z][a-z0-9_]*$"
+                    },
+                    "required": {
+                      "type": "boolean"
+                    },
+                    "unique": {
+                      "type": "boolean"
+                    },
+                    "indexed": {
+                      "type": "boolean"
+                    },
+                    "type": {
+                      "type": "string",
+                      "enum": ["color"]
+                    },
+                    "default": {
+                      "type": "string",
+                      "description": "a string matching the pattern ^#[0-9a-fA-F]{6}$",
+                      "pattern": "^#[0-9a-fA-F]{6}$"
+                    }
+                  },
+                  "additionalProperties": false,
+                  "description": "Stores color values in hexadecimal format. Rendered with color picker in UI.",
+                  "title": "Color Field",
+                  "examples": [
+                    {
+                      "id": 1,
+                      "name": "brand_color",
+                      "required": true,
+                      "type": "color",
+                      "default": "#3B82F6"
+                    }
+                  ]
+                },
+                {
+                  "type": "object",
+                  "required": ["id", "name", "type"],
+                  "properties": {
+                    "id": {
+                      "$ref": "#/$defs/Int",
+                      "description": "Unique positive integer identifier for entities. IDs are system-generated, auto-incrementing, and immutable. Must be unique within the parent collection (e.g., field IDs unique within a table, table IDs unique within the application). IDs are read-only and assigned automatically when entities are created. Range: 1 to 9,007,199,254,740,991 (JavaScript MAX_SAFE_INTEGER).",
+                      "title": "ID",
+                      "minimum": 1,
+                      "examples": [1, 2, 3, 100, 1000],
+                      "maximum": 9007199254740991
+                    },
+                    "name": {
+                      "type": "string",
+                      "description": "Internal identifier name for database columns following PostgreSQL naming conventions. Must start with a letter, contain only lowercase letters, numbers, and underscores, maximum 63 characters.",
+                      "title": "Field Name",
+                      "minLength": 1,
+                      "maxLength": 63,
+                      "examples": [
+                        "email",
+                        "user_status",
+                        "order_item",
+                        "customer_email",
+                        "created_at"
+                      ],
+                      "pattern": "^[a-z][a-z0-9_]*$"
+                    },
+                    "required": {
+                      "type": "boolean"
+                    },
+                    "unique": {
+                      "type": "boolean"
+                    },
+                    "indexed": {
+                      "type": "boolean"
+                    },
+                    "type": {
+                      "type": "string",
+                      "enum": ["progress"]
+                    },
+                    "color": {
+                      "type": "string",
+                      "description": "Color of the progress bar",
+                      "pattern": "^#[0-9a-fA-F]{6}$"
+                    }
+                  },
+                  "additionalProperties": false,
+                  "description": "Displays percentage value as progress bar. Used for tracking completion status or goals.",
+                  "title": "Progress Field",
+                  "examples": [
+                    {
+                      "id": 1,
+                      "name": "task_completion",
+                      "required": true,
+                      "type": "progress",
+                      "color": "#10B981"
+                    }
+                  ]
+                },
+                {
+                  "type": "object",
+                  "required": ["id", "name", "type"],
+                  "properties": {
+                    "id": {
+                      "$ref": "#/$defs/Int",
+                      "description": "Unique positive integer identifier for entities. IDs are system-generated, auto-incrementing, and immutable. Must be unique within the parent collection (e.g., field IDs unique within a table, table IDs unique within the application). IDs are read-only and assigned automatically when entities are created. Range: 1 to 9,007,199,254,740,991 (JavaScript MAX_SAFE_INTEGER).",
+                      "title": "ID",
+                      "minimum": 1,
+                      "examples": [1, 2, 3, 100, 1000],
+                      "maximum": 9007199254740991
+                    },
+                    "name": {
+                      "type": "string",
+                      "description": "Internal identifier name for database columns following PostgreSQL naming conventions. Must start with a letter, contain only lowercase letters, numbers, and underscores, maximum 63 characters.",
+                      "title": "Field Name",
+                      "minLength": 1,
+                      "maxLength": 63,
+                      "examples": [
+                        "email",
+                        "user_status",
+                        "order_item",
+                        "customer_email",
+                        "created_at"
+                      ],
+                      "pattern": "^[a-z][a-z0-9_]*$"
+                    },
+                    "required": {
+                      "type": "boolean"
+                    },
+                    "unique": {
+                      "type": "boolean"
+                    },
+                    "indexed": {
+                      "type": "boolean"
+                    },
+                    "type": {
+                      "type": "string",
+                      "enum": ["geolocation"]
+                    }
+                  },
+                  "additionalProperties": false,
+                  "description": "Stores geographic coordinates (latitude and longitude). Used for location-based features.",
+                  "title": "Geolocation Field",
+                  "examples": [
+                    {
+                      "id": 1,
+                      "name": "office_location",
+                      "required": true,
+                      "type": "geolocation"
+                    }
+                  ]
+                },
+                {
+                  "type": "object",
+                  "required": ["id", "name", "type"],
+                  "properties": {
+                    "id": {
+                      "$ref": "#/$defs/Int",
+                      "description": "Unique positive integer identifier for entities. IDs are system-generated, auto-incrementing, and immutable. Must be unique within the parent collection (e.g., field IDs unique within a table, table IDs unique within the application). IDs are read-only and assigned automatically when entities are created. Range: 1 to 9,007,199,254,740,991 (JavaScript MAX_SAFE_INTEGER).",
+                      "title": "ID",
+                      "minimum": 1,
+                      "examples": [1, 2, 3, 100, 1000],
+                      "maximum": 9007199254740991
+                    },
+                    "name": {
+                      "type": "string",
+                      "description": "Internal identifier name for database columns following PostgreSQL naming conventions. Must start with a letter, contain only lowercase letters, numbers, and underscores, maximum 63 characters.",
+                      "title": "Field Name",
+                      "minLength": 1,
+                      "maxLength": 63,
+                      "examples": [
+                        "email",
+                        "user_status",
+                        "order_item",
+                        "customer_email",
+                        "created_at"
+                      ],
+                      "pattern": "^[a-z][a-z0-9_]*$"
+                    },
+                    "required": {
+                      "type": "boolean"
+                    },
+                    "unique": {
+                      "type": "boolean"
+                    },
+                    "indexed": {
+                      "type": "boolean"
+                    },
+                    "type": {
+                      "type": "string",
+                      "enum": ["json"]
+                    },
+                    "schema": {
+                      "$id": "/schemas/%7B%7D",
+                      "anyOf": [
+                        {
+                          "type": "object"
+                        },
+                        {
+                          "type": "array"
+                        }
+                      ]
+                    }
+                  },
+                  "additionalProperties": false,
+                  "description": "Stores structured JSON data with optional schema validation.",
+                  "title": "JSON Field",
+                  "examples": [
+                    {
+                      "id": 1,
+                      "name": "metadata",
+                      "required": false,
+                      "type": "json"
+                    }
+                  ]
+                },
+                {
+                  "type": "object",
+                  "required": ["id", "name", "type"],
+                  "properties": {
+                    "id": {
+                      "$ref": "#/$defs/Int",
+                      "description": "Unique positive integer identifier for entities. IDs are system-generated, auto-incrementing, and immutable. Must be unique within the parent collection (e.g., field IDs unique within a table, table IDs unique within the application). IDs are read-only and assigned automatically when entities are created. Range: 1 to 9,007,199,254,740,991 (JavaScript MAX_SAFE_INTEGER).",
+                      "title": "ID",
+                      "minimum": 1,
+                      "examples": [1, 2, 3, 100, 1000],
+                      "maximum": 9007199254740991
+                    },
+                    "name": {
+                      "type": "string",
+                      "description": "Internal identifier name for database columns following PostgreSQL naming conventions. Must start with a letter, contain only lowercase letters, numbers, and underscores, maximum 63 characters.",
+                      "title": "Field Name",
+                      "minLength": 1,
+                      "maxLength": 63,
+                      "examples": [
+                        "email",
+                        "user_status",
+                        "order_item",
+                        "customer_email",
+                        "created_at"
+                      ],
+                      "pattern": "^[a-z][a-z0-9_]*$"
+                    },
+                    "required": {
+                      "type": "boolean"
+                    },
+                    "unique": {
+                      "type": "boolean"
+                    },
+                    "indexed": {
+                      "type": "boolean"
+                    },
+                    "type": {
+                      "type": "string",
+                      "enum": ["array"]
+                    },
+                    "itemType": {
+                      "type": "string",
+                      "description": "Type of items in the array"
+                    },
+                    "maxItems": {
+                      "$ref": "#/$defs/Int",
+                      "description": "Maximum number of items allowed",
+                      "title": "greaterThanOrEqualTo(1)",
+                      "minimum": 1
+                    }
+                  },
+                  "additionalProperties": false,
+                  "description": "Stores arrays of values with optional type and length constraints.",
+                  "title": "Array Field",
+                  "examples": [
+                    {
+                      "id": 1,
+                      "name": "tags",
+                      "type": "array",
+                      "itemType": "string",
+                      "maxItems": 10
+                    }
+                  ]
+                }
+              ]
+            },
+            "description": "Collection of all supported field types. Each field defines a column in the database table with specific validation and behavior.",
+            "title": "Table Fields",
+            "examples": [
+              [
+                {
+                  "id": 1,
+                  "name": "email",
+                  "required": true,
+                  "type": "email"
+                },
+                {
+                  "id": 2,
+                  "name": "age",
+                  "type": "integer",
+                  "min": 0,
+                  "max": 150
+                }
+              ]
+            ],
+            "minItems": 1
+          },
+          "primaryKey": {
+            "type": "object",
+            "required": ["type"],
+            "properties": {
+              "type": {
+                "type": "string",
+                "description": "Primary key generation strategy. 'auto-increment' uses sequential integers (1, 2, 3...), 'uuid' generates random unique identifiers, 'composite' uses multiple fields together.",
+                "title": "minLength(1)",
+                "minLength": 1
+              },
+              "field": {
+                "type": "string",
+                "description": "Field name for single-column primary key. Only used with 'auto-increment' or 'uuid' type.",
+                "examples": ["id", "user_id", "product_id"],
+                "pattern": "^[a-z][a-z0-9_]*$"
+              },
+              "fields": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "description": "a string at least 1 character(s) long",
+                  "title": "minLength(1)",
+                  "minLength": 1
+                }
+              }
+            },
+            "additionalProperties": false,
+            "description": "Primary key configuration for the table. The primary key uniquely identifies each row and is automatically indexed.",
+            "title": "Primary Key",
+            "examples": [
+              {
+                "type": "auto-increment",
+                "field": "id"
+              },
+              {
+                "type": "uuid",
+                "field": "id"
+              },
+              {
+                "type": "composite",
+                "fields": ["tenant_id", "user_id"]
+              }
+            ]
+          },
+          "uniqueConstraints": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["name", "fields"],
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "description": "Name of the unique constraint. Use descriptive names like 'uq_tablename_field1_field2'",
+                  "title": "minLength(1)",
+                  "minLength": 1,
+                  "examples": [
+                    "uq_users_email_tenant",
+                    "uq_products_sku_variant",
+                    "uq_orders_number_year"
+                  ],
+                  "pattern": "^[a-z][a-z0-9_]*$"
+                },
+                "fields": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "description": "a string at least 1 character(s) long",
+                    "title": "minLength(1)",
+                    "minLength": 1
+                  },
+                  "description": "an array of at least 1 item(s)",
+                  "title": "minItems(1)",
+                  "minItems": 1
+                }
+              },
+              "additionalProperties": false
+            },
+            "description": "Composite unique constraints ensure that combinations of multiple field values are unique across all rows. Use this when you need uniqueness across multiple fields (e.g., email + tenant_id must be unique together).",
+            "title": "Unique Constraints",
+            "examples": [
+              [
+                {
+                  "name": "uq_user_email_tenant",
+                  "fields": ["email", "tenant_id"]
+                },
+                {
+                  "name": "uq_product_sku_variant",
+                  "fields": ["sku", "variant_id"]
+                }
+              ]
+            ]
+          },
+          "indexes": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["name", "fields"],
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "description": "Name of the index. Use descriptive names like 'idx_tablename_fieldname'",
+                  "title": "minLength(1)",
+                  "minLength": 1,
+                  "examples": ["idx_users_email", "idx_products_sku", "idx_orders_status"],
+                  "pattern": "^[a-z][a-z0-9_]*$"
+                },
+                "fields": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "description": "a string at least 1 character(s) long",
+                    "title": "minLength(1)",
+                    "minLength": 1
+                  },
+                  "description": "an array of at least 1 item(s)",
+                  "title": "minItems(1)",
+                  "minItems": 1
+                },
+                "unique": {
+                  "type": "boolean"
+                }
+              },
+              "additionalProperties": false
+            },
+            "description": "Custom database indexes for query optimization. Indexes improve query performance by creating efficient lookup structures for specified fields.",
+            "title": "Database Indexes",
+            "examples": [
+              [
+                {
+                  "name": "idx_user_email",
+                  "fields": ["email"]
+                },
+                {
+                  "name": "idx_user_created",
+                  "fields": ["created_at"],
+                  "unique": false
+                }
+              ]
+            ]
+          }
+        },
+        "additionalProperties": false,
+        "description": "A database table that defines the structure of an entity in your application. Contains fields, constraints, and indexes to organize and validate data.",
+        "title": "Table",
+        "examples": [
+          {
+            "id": 1,
+            "name": "users",
+            "fields": [
+              {
+                "id": 1,
+                "name": "email",
+                "required": true,
+                "type": "email"
+              },
+              {
+                "id": 2,
+                "name": "name",
+                "required": true,
+                "type": "single-line-text"
+              }
+            ]
+          }
+        ]
+      },
+      "description": "Collection of database tables that define the data structure of your application. Each table represents an entity (e.g., users, products, orders) with fields that define the schema. Tables support relationships, indexes, constraints, and various field types. Tables are the foundation of your application data model and determine what information can be stored and how it relates.",
+      "title": "Data Tables",
+      "examples": [
+        [
+          {
+            "id": 1,
+            "name": "users",
+            "fields": [
+              {
+                "id": 1,
+                "name": "email",
+                "required": true,
+                "type": "email"
+              },
+              {
+                "id": 2,
+                "name": "name",
+                "required": true,
+                "type": "single-line-text"
+              }
+            ]
+          }
+        ]
+      ]
     }
   },
   "additionalProperties": false,
-  "description": "Complete application configuration including name, version, and description. This is the root schema for Omnera applications.",
+  "description": "Complete application configuration including name, version, description, and data tables. This is the root schema for Omnera applications.",
   "title": "Application Configuration",
   "examples": [
     {
       "name": "todo-app",
       "version": "1.0.0",
-      "description": "A simple todo list application"
+      "description": "A simple todo list application",
+      "tables": [
+        {
+          "id": 1,
+          "name": "tasks",
+          "fields": [
+            {
+              "id": 1,
+              "name": "title",
+              "required": true,
+              "type": "single-line-text"
+            },
+            {
+              "id": 2,
+              "name": "completed",
+              "required": true,
+              "type": "checkbox"
+            }
+          ]
+        }
+      ]
     },
     {
       "name": "@myorg/dashboard",
