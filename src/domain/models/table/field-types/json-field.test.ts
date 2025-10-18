@@ -1,6 +1,6 @@
 import { describe, test, expect } from 'bun:test'
 import { Schema } from 'effect'
-import { JsonFieldSchema } from './json-field.ts'
+import { JsonFieldSchema } from './json-field'
 
 describe('JsonFieldSchema', () => {
   test('should accept valid json field', () => {

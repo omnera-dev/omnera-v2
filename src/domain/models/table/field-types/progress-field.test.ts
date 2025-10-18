@@ -1,6 +1,6 @@
 import { describe, test, expect } from 'bun:test'
 import { Schema } from 'effect'
-import { ProgressFieldSchema } from './progress-field.ts'
+import { ProgressFieldSchema } from './progress-field'
 
 describe('ProgressFieldSchema', () => {
   describe('valid values', () => {

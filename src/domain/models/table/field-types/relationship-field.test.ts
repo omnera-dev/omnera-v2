@@ -1,6 +1,6 @@
 import { describe, test, expect } from 'bun:test'
 import { Schema } from 'effect'
-import { RelationshipFieldSchema } from './relationship-field.ts'
+import { RelationshipFieldSchema } from './relationship-field'
 
 describe('RelationshipFieldSchema', () => {
   describe('valid values', () => {

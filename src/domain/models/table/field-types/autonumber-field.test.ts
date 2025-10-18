@@ -1,6 +1,6 @@
 import { describe, test, expect } from 'bun:test'
 import { Schema } from 'effect'
-import { AutonumberFieldSchema } from './autonumber-field.ts'
+import { AutonumberFieldSchema } from './autonumber-field'
 
 describe('AutonumberFieldSchema', () => {
   test('should accept valid autonumber field', () => {

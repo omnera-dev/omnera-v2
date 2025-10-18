@@ -1,6 +1,6 @@
 import { describe, test, expect } from 'bun:test'
 import { Schema } from 'effect'
-import { SingleSelectFieldSchema } from './single-select-field.ts'
+import { SingleSelectFieldSchema } from './single-select-field'
 
 describe('SingleSelectFieldSchema', () => {
   describe('valid values', () => {

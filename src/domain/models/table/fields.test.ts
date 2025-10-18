@@ -1,6 +1,6 @@
 import { describe, test, expect } from 'bun:test'
 import { Schema } from 'effect'
-import { FieldsSchema } from './fields.ts'
+import { FieldsSchema } from './fields'
 
 describe('FieldsSchema', () => {
   describe('valid values', () => {
@@ -9,9 +9,9 @@ describe('FieldsSchema', () => {
         {
           id: 1,
           name: 'email',
-          type: 'text',
+          type: 'single-line-text',
         },
-      ]
+      ] as const
 
       const result = Schema.decodeUnknownSync(FieldsSchema)(fields)
       expect(result).toEqual(fields)
@@ -22,14 +22,14 @@ describe('FieldsSchema', () => {
         {
           id: 1,
           name: 'email',
-          type: 'text',
+          type: 'email',
         },
         {
           id: 2,
           name: 'name',
-          type: 'text',
+          type: 'single-line-text',
         },
-      ]
+      ] as const
 
       const result = Schema.decodeUnknownSync(FieldsSchema)(fields)
       expect(result).toEqual(fields)
@@ -48,7 +48,7 @@ describe('FieldsSchema', () => {
         Schema.decodeUnknownSync(FieldsSchema)({
           id: 1,
           name: 'email',
-          type: 'text',
+          type: 'single-line-text',
         })
       }).toThrow()
     })
@@ -60,7 +60,7 @@ describe('FieldsSchema', () => {
         {
           id: 1,
           name: 'email',
-          type: 'text',
+          type: 'email' as const,
         },
       ]
       expect(fields).toHaveLength(1)

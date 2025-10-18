@@ -1,5 +1,6 @@
 import { Schema } from 'effect'
-import { IdSchema } from '@/domain/models/table/id.ts'
+import { FieldNameSchema } from '@/domain/models/table/field-name'
+import { IdSchema } from '@/domain/models/table/id'
 
 /**
  * Updated By Field
@@ -22,8 +23,8 @@ import { IdSchema } from '@/domain/models/table/id.ts'
  */
 export const UpdatedByFieldSchema = Schema.Struct({
   id: IdSchema,
-  name: Schema.Unknown,
-  type: Schema.String,
+  name: FieldNameSchema,
+  type: Schema.Literal('updated-by'),
   indexed: Schema.optional(Schema.Boolean),
 }).pipe(
   Schema.annotations({

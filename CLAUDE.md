@@ -40,17 +40,30 @@
 ```bash
 # Development
 bun install                 # Install dependencies
-bun run src/index.ts        # Run application
+bun run start               # Run application via CLI (src/cli.ts)
+bun run src/index.ts        # Run application directly (alternative)
 
 # Scripts (TypeScript utilities)
 bun run scripts/export-schema.ts  # Run a specific script
 bun run export:schema              # Export schema to JSON file
 bun test:unit                      # Test all unit tests (src/ and scripts/)
 
+# Database (Drizzle ORM)
+bun run db:generate         # Generate migration from schema changes
+bun run db:migrate          # Apply migrations to database
+bun run db:push             # Push schema changes directly (dev only)
+bun run db:studio           # Launch Drizzle Studio (database GUI)
+bun run db:check            # Check migration status
+bun run db:drop             # Drop migration
+
 # Code Quality (pre-commit)
-bun run lint                # ESLint
-bun run format              # Prettier
-bun run typecheck           # TypeScript
+bun run lint                # ESLint (check)
+bun run lint:fix            # ESLint (auto-fix)
+bun run format              # Prettier (format all files)
+bun run format:check        # Prettier (check formatting without modifying)
+bun run typecheck           # TypeScript type checking
+bun run clean               # Knip (detect unused code/dependencies)
+bun run clean:fix           # Knip (auto-fix unused exports)
 bun test:unit               # Unit tests (Bun Test - src/ and scripts/)
 bun test:unit:watch         # Unit tests in watch mode
 bun test:e2e                # E2E tests (Playwright - all)
@@ -82,7 +95,7 @@ git push origin main               # Triggers release ONLY with "release:" type
 
 ### Module System
 - **Always ES Modules** (NOT CommonJS)
-- **Include .ts extensions** in imports
+- **Omit file extensions** in imports (extensionless)
 - **Use path aliases** for components (`@/components/ui/button`)
 
 ### UI Components (shadcn/ui Pattern)

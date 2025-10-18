@@ -1,6 +1,6 @@
 import { describe, test, expect } from 'bun:test'
 import { Schema } from 'effect'
-import { FormulaFieldSchema } from './formula-field.ts'
+import { FormulaFieldSchema } from './formula-field'
 
 describe('FormulaFieldSchema', () => {
   test('should accept valid formula field', () => {

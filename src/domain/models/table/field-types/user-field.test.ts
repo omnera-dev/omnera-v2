@@ -1,6 +1,6 @@
 import { describe, test, expect } from 'bun:test'
 import { Schema } from 'effect'
-import { UserFieldSchema } from './user-field.ts'
+import { UserFieldSchema } from './user-field'
 
 describe('UserFieldSchema', () => {
   describe('valid values', () => {

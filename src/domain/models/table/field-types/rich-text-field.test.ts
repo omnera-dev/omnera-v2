@@ -1,6 +1,6 @@
 import { describe, test, expect } from 'bun:test'
 import { Schema } from 'effect'
-import { RichTextFieldSchema } from './rich-text-field.ts'
+import { RichTextFieldSchema } from './rich-text-field'
 
 describe('RichTextFieldSchema', () => {
   describe('valid values', () => {
@@ -21,7 +21,7 @@ describe('RichTextFieldSchema', () => {
         name: 'article_content',
         type: 'rich-text',
         required: true,
-        maxLength: 10000,
+        maxLength: 10_000,
       }
 
       const result = Schema.decodeUnknownSync(RichTextFieldSchema)(field)
@@ -73,7 +73,7 @@ describe('RichTextFieldSchema', () => {
         id: 1,
         name: 'article_content',
         type: 'rich-text',
-        maxLength: 10000,
+        maxLength: 10_000,
       }
       expect(field.id).toBe(1)
     })

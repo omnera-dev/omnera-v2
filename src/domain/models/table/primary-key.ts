@@ -15,6 +15,7 @@ import { Schema } from 'effect'
  */
 export const PrimaryKeySchema = Schema.Struct({
   type: Schema.String.pipe(
+    Schema.minLength(1),
     Schema.annotations({
       description:
         "Primary key generation strategy. 'auto-increment' uses sequential integers (1, 2, 3...), 'uuid' generates random unique identifiers, 'composite' uses multiple fields together.",

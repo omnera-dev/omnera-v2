@@ -1,12 +1,13 @@
 import { Schema } from 'effect'
-import { IdSchema } from '@/domain/models/table/id.ts'
+import { FieldNameSchema } from '@/domain/models/table/field-name'
+import { IdSchema } from '@/domain/models/table/id'
 
 export const MultipleAttachmentsFieldSchema = Schema.Struct({
   id: IdSchema,
-  name: Schema.Unknown,
+  name: FieldNameSchema,
   required: Schema.optional(Schema.Boolean),
   indexed: Schema.optional(Schema.Boolean),
-  type: Schema.String,
+  type: Schema.Literal('multiple-attachments'),
   maxFiles: Schema.optional(
     Schema.Int.pipe(
       Schema.greaterThanOrEqualTo(1),

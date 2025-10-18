@@ -16,6 +16,7 @@
       "initialization_options": {
         "preferences": {
           "importModuleSpecifierPreference": "non-relative",
+          "importModuleSpecifierEnding": "minimal",
           "includeInlayParameterNameHints": "all",
           "includeInlayParameterNameHintsWhenArgumentMatchesName": true,
           "includeInlayFunctionParameterTypeHints": true,

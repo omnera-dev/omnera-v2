@@ -1,12 +1,13 @@
 import { Schema } from 'effect'
-import { IdSchema } from '@/domain/models/table/id.ts'
+import { FieldNameSchema } from '@/domain/models/table/field-name'
+import { IdSchema } from '@/domain/models/table/id'
 
 export const SingleAttachmentFieldSchema = Schema.Struct({
   id: IdSchema,
-  name: Schema.Unknown,
+  name: FieldNameSchema,
   required: Schema.optional(Schema.Boolean),
   indexed: Schema.optional(Schema.Boolean),
-  type: Schema.String,
+  type: Schema.Literal('single-attachment'),
   storage: Schema.optional(
     Schema.Struct({
       provider: Schema.optional(
@@ -35,7 +36,7 @@ export const SingleAttachmentFieldSchema = Schema.Struct({
         id: 1,
         name: 'profile_pic',
         type: 'single-attachment',
-        storage: { provider: 'local', maxSize: 5242880 },
+        storage: { provider: 'local', maxSize: 5_242_880 },
       },
     ],
   })

@@ -1,12 +1,13 @@
 import { Schema } from 'effect'
-import { IdSchema } from '@/domain/models/table/id.ts'
+import { FieldNameSchema } from '@/domain/models/table/field-name'
+import { IdSchema } from '@/domain/models/table/id'
 
 export const StatusFieldSchema = Schema.Struct({
   id: IdSchema,
-  name: Schema.Unknown,
+  name: FieldNameSchema,
   required: Schema.optional(Schema.Boolean),
   indexed: Schema.optional(Schema.Boolean),
-  type: Schema.String,
+  type: Schema.Literal('status'),
   options: Schema.Array(
     Schema.Struct({
       value: Schema.String.pipe(Schema.minLength(1, { message: () => 'This field is required' })),

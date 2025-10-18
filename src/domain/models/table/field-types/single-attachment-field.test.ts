@@ -1,6 +1,6 @@
 import { describe, test, expect } from 'bun:test'
 import { Schema } from 'effect'
-import { SingleAttachmentFieldSchema } from './single-attachment-field.ts'
+import { SingleAttachmentFieldSchema } from './single-attachment-field'
 
 describe('SingleAttachmentFieldSchema', () => {
   test('should accept valid single-attachment field', () => {

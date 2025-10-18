@@ -1,6 +1,6 @@
 import { describe, test, expect } from 'bun:test'
 import { Schema } from 'effect'
-import { RatingFieldSchema } from './rating-field.ts'
+import { RatingFieldSchema } from './rating-field'
 
 describe('RatingFieldSchema', () => {
   describe('valid values', () => {

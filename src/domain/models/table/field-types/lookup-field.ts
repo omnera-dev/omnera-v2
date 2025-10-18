@@ -1,10 +1,11 @@
 import { Schema } from 'effect'
-import { IdSchema } from '@/domain/models/table/id.ts'
+import { FieldNameSchema } from '@/domain/models/table/field-name'
+import { IdSchema } from '@/domain/models/table/id'
 
 export const LookupFieldSchema = Schema.Struct({
   id: IdSchema,
-  name: Schema.Unknown,
-  type: Schema.String,
+  name: FieldNameSchema,
+  type: Schema.Literal('lookup'),
   relationshipField: Schema.String.pipe(
     Schema.minLength(1, { message: () => 'This field is required' }),
     Schema.annotations({ description: 'Name of the relationship field to lookup from' })

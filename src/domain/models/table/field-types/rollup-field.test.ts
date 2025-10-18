@@ -1,6 +1,6 @@
 import { describe, test, expect } from 'bun:test'
 import { Schema } from 'effect'
-import { RollupFieldSchema } from './rollup-field.ts'
+import { RollupFieldSchema } from './rollup-field'
 
 describe('RollupFieldSchema', () => {
   test('should accept valid rollup field', () => {

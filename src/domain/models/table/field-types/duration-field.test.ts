@@ -1,6 +1,6 @@
 import { describe, test, expect } from 'bun:test'
 import { Schema } from 'effect'
-import { DurationFieldSchema } from './duration-field.ts'
+import { DurationFieldSchema } from './duration-field'
 
 describe('DurationFieldSchema', () => {
   describe('valid values', () => {

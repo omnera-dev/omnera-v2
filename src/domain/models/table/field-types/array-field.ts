@@ -1,11 +1,12 @@
 import { Schema } from 'effect'
-import { IdSchema } from '@/domain/models/table/id.ts'
+import { FieldNameSchema } from '@/domain/models/table/field-name'
+import { IdSchema } from '@/domain/models/table/id'
 
 export const ArrayFieldSchema = Schema.Struct({
   id: IdSchema,
-  name: Schema.Unknown,
+  name: FieldNameSchema,
   required: Schema.optional(Schema.Boolean),
-  type: Schema.String,
+  type: Schema.Literal('array'),
   itemType: Schema.optional(
     Schema.String.pipe(Schema.annotations({ description: 'Type of items in the array' }))
   ),

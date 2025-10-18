@@ -1,6 +1,6 @@
 import { describe, test, expect } from 'bun:test'
 import { Schema } from 'effect'
-import { MultiSelectFieldSchema } from './multi-select-field.ts'
+import { MultiSelectFieldSchema } from './multi-select-field'
 
 describe('MultiSelectFieldSchema', () => {
   describe('valid values', () => {

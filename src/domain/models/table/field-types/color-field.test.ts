@@ -1,6 +1,6 @@
 import { describe, test, expect } from 'bun:test'
 import { Schema } from 'effect'
-import { ColorFieldSchema } from './color-field.ts'
+import { ColorFieldSchema } from './color-field'
 
 describe('ColorFieldSchema', () => {
   describe('valid values', () => {

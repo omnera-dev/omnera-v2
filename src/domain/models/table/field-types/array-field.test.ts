@@ -1,6 +1,6 @@
 import { describe, test, expect } from 'bun:test'
 import { Schema } from 'effect'
-import { ArrayFieldSchema } from './array-field.ts'
+import { ArrayFieldSchema } from './array-field'
 
 describe('ArrayFieldSchema', () => {
   test('should accept valid array field', () => {

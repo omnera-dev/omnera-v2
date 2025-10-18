@@ -1,10 +1,11 @@
 import { Schema } from 'effect'
-import { IdSchema } from '@/domain/models/table/id.ts'
+import { FieldNameSchema } from '@/domain/models/table/field-name'
+import { IdSchema } from '@/domain/models/table/id'
 
 export const AutonumberFieldSchema = Schema.Struct({
   id: IdSchema,
-  name: Schema.Unknown,
-  type: Schema.String,
+  name: FieldNameSchema,
+  type: Schema.Literal('autonumber'),
   prefix: Schema.optional(
     Schema.String.pipe(
       Schema.annotations({

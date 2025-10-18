@@ -1,6 +1,6 @@
 import { describe, test, expect } from 'bun:test'
 import { Schema } from 'effect'
-import { UpdatedByFieldSchema } from './updated-by-field.ts'
+import { UpdatedByFieldSchema } from './updated-by-field'
 
 describe('UpdatedByFieldSchema', () => {
   describe('valid values', () => {

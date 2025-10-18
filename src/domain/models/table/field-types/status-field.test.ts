@@ -1,6 +1,6 @@
 import { describe, test, expect } from 'bun:test'
 import { Schema } from 'effect'
-import { StatusFieldSchema } from './status-field.ts'
+import { StatusFieldSchema } from './status-field'
 
 describe('StatusFieldSchema', () => {
   describe('valid values', () => {

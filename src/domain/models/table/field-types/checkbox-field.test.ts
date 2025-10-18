@@ -1,6 +1,6 @@
 import { describe, test, expect } from 'bun:test'
 import { Schema } from 'effect'
-import { CheckboxFieldSchema } from './checkbox-field.ts'
+import { CheckboxFieldSchema } from './checkbox-field'
 
 describe('CheckboxFieldSchema', () => {
   describe('valid values', () => {

@@ -1,6 +1,6 @@
 import { describe, test, expect } from 'bun:test'
 import { Schema } from 'effect'
-import { MultipleAttachmentsFieldSchema } from './multiple-attachments-field.ts'
+import { MultipleAttachmentsFieldSchema } from './multiple-attachments-field'
 
 describe('MultipleAttachmentsFieldSchema', () => {
   test('should accept valid multiple-attachments field', () => {

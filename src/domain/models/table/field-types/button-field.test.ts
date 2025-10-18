@@ -1,6 +1,6 @@
 import { describe, test, expect } from 'bun:test'
 import { Schema } from 'effect'
-import { ButtonFieldSchema } from './button-field.ts'
+import { ButtonFieldSchema } from './button-field'
 
 describe('ButtonFieldSchema', () => {
   test('should accept valid button field', () => {

@@ -1,6 +1,6 @@
 import { describe, test, expect } from 'bun:test'
 import { Schema } from 'effect'
-import { DateFieldSchema } from './date-field.ts'
+import { DateFieldSchema } from './date-field'
 
 describe('DateFieldSchema', () => {
   describe('valid values', () => {
@@ -15,11 +15,39 @@ describe('DateFieldSchema', () => {
       expect(result).toEqual(field)
     })
 
+    test('should accept valid name patterns', () => {
+      const validNames = ['due_date', 'created_at', 'appointment', 'field123', 'a']
+
+      validNames.forEach((name) => {
+        const field = {
+          id: 1,
+          name,
+          type: 'datetime',
+        }
+        const result = Schema.decodeUnknownSync(DateFieldSchema)(field)
+        expect(result.name).toBe(name)
+      })
+    })
+
+    test('should accept all valid date field types', () => {
+      const validTypes = ['date', 'datetime', 'time']
+
+      validTypes.forEach((type) => {
+        const field = {
+          id: 1,
+          name: 'test_field',
+          type,
+        }
+        const result = Schema.decodeUnknownSync(DateFieldSchema)(field)
+        expect(result.type).toBe(type)
+      })
+    })
+
     test('should accept date field with all optional properties', () => {
       const field = {
         id: 1,
         name: 'due_date',
-        type: 'date',
+        type: 'datetime',
         required: true,
         unique: false,
         indexed: true,
@@ -37,7 +65,7 @@ describe('DateFieldSchema', () => {
       const field = {
         id: 1,
         name: 'appointment',
-        type: 'date',
+        type: 'time',
         includeTime: true,
         timezone: 'UTC',
       }
@@ -68,6 +96,54 @@ describe('DateFieldSchema', () => {
       expect(() => {
         Schema.decodeUnknownSync(DateFieldSchema)(field)
       }).toThrow()
+    })
+
+    test('should reject invalid name patterns', () => {
+      const invalidNames = [
+        'DueDate', // uppercase
+        '123date', // starts with number
+        'due-date', // contains hyphen
+        'Due Date', // contains space
+        '', // empty
+      ]
+
+      invalidNames.forEach((name) => {
+        const field = {
+          id: 1,
+          name,
+          type: 'date',
+        }
+        expect(() => {
+          Schema.decodeUnknownSync(DateFieldSchema)(field)
+        }).toThrow()
+      })
+    })
+
+    test('should reject name exceeding 63 characters', () => {
+      const field = {
+        id: 1,
+        name: 'a'.repeat(64),
+        type: 'date',
+      }
+
+      expect(() => {
+        Schema.decodeUnknownSync(DateFieldSchema)(field)
+      }).toThrow()
+    })
+
+    test('should reject invalid type values', () => {
+      const invalidTypes = ['timestamp', 'timestamptz', 'interval', 'invalid']
+
+      invalidTypes.forEach((type) => {
+        const field = {
+          id: 1,
+          name: 'test_field',
+          type,
+        }
+        expect(() => {
+          Schema.decodeUnknownSync(DateFieldSchema)(field)
+        }).toThrow()
+      })
     })
   })
 

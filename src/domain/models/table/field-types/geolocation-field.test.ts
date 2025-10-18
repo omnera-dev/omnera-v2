@@ -1,6 +1,6 @@
 import { describe, test, expect } from 'bun:test'
 import { Schema } from 'effect'
-import { GeolocationFieldSchema } from './geolocation-field.ts'
+import { GeolocationFieldSchema } from './geolocation-field'
 
 describe('GeolocationFieldSchema', () => {
   describe('valid values', () => {

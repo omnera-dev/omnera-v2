@@ -1,5 +1,6 @@
 import { Schema } from 'effect'
-import { IdSchema } from '@/domain/models/table/id.ts'
+import { FieldNameSchema } from '@/domain/models/table/field-name'
+import { IdSchema } from '@/domain/models/table/id'
 
 /**
  * Progress Field
@@ -22,9 +23,9 @@ import { IdSchema } from '@/domain/models/table/id.ts'
  */
 export const ProgressFieldSchema = Schema.Struct({
   id: IdSchema,
-  name: Schema.Unknown,
+  name: FieldNameSchema,
   required: Schema.optional(Schema.Boolean),
-  type: Schema.String,
+  type: Schema.Literal('progress'),
   color: Schema.optional(
     Schema.String.pipe(
       Schema.pattern(/^#[0-9a-fA-F]{6}$/, {

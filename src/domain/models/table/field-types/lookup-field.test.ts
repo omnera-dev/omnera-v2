@@ -1,6 +1,6 @@
 import { describe, test, expect } from 'bun:test'
 import { Schema } from 'effect'
-import { LookupFieldSchema } from './lookup-field.ts'
+import { LookupFieldSchema } from './lookup-field'
 
 describe('LookupFieldSchema', () => {
   test('should accept valid lookup field', () => {

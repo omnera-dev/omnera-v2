@@ -1,6 +1,6 @@
 import { describe, test, expect } from 'bun:test'
 import { Schema } from 'effect'
-import { BarcodeFieldSchema } from './barcode-field.ts'
+import { BarcodeFieldSchema } from './barcode-field'
 
 describe('BarcodeFieldSchema', () => {
   describe('valid values', () => {

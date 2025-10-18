@@ -1,5 +1,6 @@
 import { Schema } from 'effect'
-import { IdSchema } from '@/domain/models/table/id.ts'
+import { FieldNameSchema } from '@/domain/models/table/field-name'
+import { IdSchema } from '@/domain/models/table/id'
 
 /**
  * Rich Text Field
@@ -21,9 +22,9 @@ import { IdSchema } from '@/domain/models/table/id.ts'
  */
 export const RichTextFieldSchema = Schema.Struct({
   id: IdSchema,
-  name: Schema.Unknown,
+  name: FieldNameSchema,
   required: Schema.optional(Schema.Boolean),
-  type: Schema.String,
+  type: Schema.Literal('rich-text'),
   maxLength: Schema.optional(
     Schema.Int.pipe(
       Schema.greaterThanOrEqualTo(1),
@@ -43,7 +44,7 @@ export const RichTextFieldSchema = Schema.Struct({
         name: 'article_content',
         type: 'rich-text',
         required: true,
-        maxLength: 10000,
+        maxLength: 10_000,
       },
     ],
   })

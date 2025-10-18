@@ -1,5 +1,6 @@
 import { Schema } from 'effect'
-import { IdSchema } from '@/domain/models/table/id.ts'
+import { FieldNameSchema } from '@/domain/models/table/field-name'
+import { IdSchema } from '@/domain/models/table/id'
 
 /**
  * Rating Field
@@ -21,9 +22,9 @@ import { IdSchema } from '@/domain/models/table/id.ts'
  */
 export const RatingFieldSchema = Schema.Struct({
   id: IdSchema,
-  name: Schema.Unknown,
+  name: FieldNameSchema,
   required: Schema.optional(Schema.Boolean),
-  type: Schema.String,
+  type: Schema.Literal('rating'),
   max: Schema.optional(
     Schema.Int.pipe(
       Schema.greaterThanOrEqualTo(1),
