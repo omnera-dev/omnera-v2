@@ -107,6 +107,85 @@ src/presentation/components/pages/LoginPage.tsx
 | `.test.tsx` | React component unit tests                               |
 | `.spec.ts`  | E2E tests (Playwright, in `tests/` directory)            |
 
+### Enterprise Edition Files (`.ee.` Marker)
+
+**Pattern**: `{name}.ee.ts` or `{name}.ee.tsx` (enterprise features)
+
+**Purpose**: Mark files that require an Omnera Enterprise License
+
+**Location**: Any layer (domain, application, infrastructure, presentation)
+
+```
+src/infrastructure/auth/
+├── oauth.ts                  # Core: OAuth2 social login (free)
+└── saml.ee.ts                # Enterprise: SAML SSO (paid)
+
+src/domain/services/
+├── permissions.ts            # Core: Basic RBAC (free)
+└── field-permissions.ee.ts   # Enterprise: Field-level permissions (paid)
+
+src/presentation/components/ui/
+├── audit-log.tsx             # Core: Basic audit display (free)
+└── compliance-report.ee.tsx  # Enterprise: SOC2/HIPAA reports (paid)
+```
+
+**Rules:**
+
+- **`.ee.` marker** - Must contain `.ee.` in filename OR be in a directory named `.ee`
+- **Two options**:
+  1. **File marker**: `saml.ee.ts` (preferred for small features)
+  2. **Directory marker**: `auth.ee/saml.ts` (preferred for feature groups)
+- **Dual licensing** - These files are NOT licensed under SUL (see LICENSE_EE.md)
+- **License check** - May include runtime license validation code
+- **Same naming rules** - `.ee.` files follow same kebab-case conventions
+
+**Examples:**
+
+```typescript
+// ✅ CORRECT - Enterprise feature file (file marker)
+src/infrastructure/auth/saml.ee.ts
+export const authenticateViaSAML = (config) => Effect.gen(...)
+
+// ✅ CORRECT - Enterprise feature directory (directory marker)
+src/infrastructure/auth.ee/
+├── saml.ts
+├── ldap.ts
+└── active-directory.ts
+
+// ✅ CORRECT - Enterprise component (React component)
+src/presentation/components/ui/compliance-report.ee.tsx
+export function ComplianceReport({ type }) { /* ... */ }
+
+// ❌ INCORRECT - Missing .ee. marker
+src/infrastructure/auth/saml.ts          // Enterprise features must have .ee. marker
+src/infrastructure/auth/SAML.ee.ts       // Still use kebab-case
+
+// ❌ INCORRECT - Wrong marker position
+src/infrastructure/auth/ee.saml.ts       // .ee. must come BEFORE extension
+src/infrastructure/auth/saml-ee.ts       // Use dot, not hyphen
+```
+
+**Why this pattern:**
+
+- **Legal clarity** - Immediately visible which files require enterprise license
+- **Source transparency** - Enterprise code is public (auditable) but legally protected
+- **Fair-code model** - Aligns with LICENSE.md dual licensing structure
+- **Build flexibility** - Can exclude `.ee.` files from free distribution builds
+- **Simple detection** - Easy to grep for `.ee.` files: `find src -name "*.ee.*"`
+
+**Current status (Phase 0):**
+
+- ❌ No `.ee.` files exist yet
+- ✅ Licensing infrastructure ready (LICENSE.md, LICENSE_EE.md)
+- ✅ File naming convention documented
+- 🔜 First `.ee.` files will be created in Phase 2+ (SSO, advanced RBAC, compliance)
+
+**When to use `.ee.` marker:**
+
+See `@docs/business/enterprise-feature-strategy.md` for guidance on which features should be enterprise.
+
+---
+
 ### Index Files
 
 **Purpose**: Aggregate exports for convenient imports

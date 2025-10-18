@@ -1,243 +1,325 @@
-# Omnera Specifications
+# Omnera Vision & Mission
 
-> **⚠️ Vision Document**: This document describes the **target state** and **product vision** for Omnera. Most features described here are **not yet implemented**. For current capabilities and implementation status, see [ROADMAP.md](../../ROADMAP.md).
+> **⚠️ Vision Document**: This document describes the **purpose, vision, and target state** for Omnera. Most features described here are **not yet implemented**. For current capabilities, see [ROADMAP.md](../../ROADMAP.md).
 
-## Overview
+---
 
-**Omnera is a source-available, self-hosted alternative to no-code/low-code SaaS platforms** like Airtable, Zapier, Retool, Webflow, and Notion.
+## Mission Statement
 
-Instead of visual drag-and-drop interfaces, Omnera uses **JSON/TypeScript configuration** to build full-featured applications. It's delivered as a **Bun package** that runs on your own infrastructure, giving you complete control over your data and deployment.
+**To make every organization sovereign in their information systems—free from SaaS lock-in, in complete control of their data, and empowered to build business applications through simple JSON configuration.**
 
-### The Problem with Traditional No-Code Tools
+---
 
-Traditional no-code platforms (Airtable, Retool, Notion, Webflow, Zapier) have significant limitations:
+## The Problem: SaaS Dependency Crisis
 
-- **Vendor Lock-in**: Your data and applications are trapped in proprietary platforms
-- **SaaS Costs**: Monthly per-user fees that scale exponentially
-- **Limited Control**: Can't customize beyond provided features
-- **Data Privacy**: Your data lives on third-party servers
-- **No Source Access**: Can't inspect, modify, or extend the platform
+Modern organizations are drowning in technological dependencies:
 
-### The Omnera Approach
+### The Cost of Fragmentation
 
-Omnera provides the **power of no-code platforms** with the **freedom of open-source software**:
+- **20+ SaaS subscriptions** per company on average
+- **$10,000+/month** in recurring fees for mid-sized teams
+- **Data scattered** across incompatible platforms (Airtable, Notion, Retool, Zapier, Webflow)
+- **Vendor lock-in** preventing migration or customization
+- **Privacy concerns** with data stored on third-party servers
 
-- ✅ **Self-Hosted**: Run on your own infrastructure (AWS, Vercel, Docker, etc.)
-- ✅ **Source-Available**: Full source code access under Sustainable Use License v1.0
-- ✅ **JSON Configuration**: Define everything in version-controlled JSON/TypeScript files
-- ✅ **npm Package**: Install and deploy like any Node.js/Bun application
-- ✅ **No Visual UI Needed**: Configure via code, not drag-and-drop
-- ✅ **Type-Safe**: Full TypeScript support with compile-time validation
-- ✅ **Complete Control**: Own your data, customize everything, extend as needed
+### The Hidden Costs
 
-### Configuration-as-Code Philosophy
+1. **Loss of Sovereignty**: Your business logic lives in someone else's platform
+2. **Compounding Expenses**: Per-user pricing scales exponentially with growth
+3. **Feature Dependency**: Can't build what you need—only what vendors provide
+4. **Engineering Distraction**: Teams waste time integrating incompatible tools
+5. **Strategic Risk**: Business continuity depends on external companies
 
-Unlike traditional no-code tools with visual builders, Omnera embraces **configuration-as-code**:
+### The Paradox
 
-```typescript
-// config.ts - Your entire application defined in JSON
-export default {
-  name: 'MyApp',
-  tables: [
-    /* database schemas */
-  ],
-  pages: [
-    /* web interfaces */
-  ],
-  automations: [
-    /* workflows */
-  ],
-  connections: [
-    /* external services */
-  ],
-}
-```
+No-code tools promised to make software development accessible, but instead created **a new form of dependency**:
 
-**Benefits of JSON Configuration:**
+- You escape coding complexity but gain **vendor complexity**
+- You avoid infrastructure but lose **control and ownership**
+- You get quick setup but face **long-term lock-in**
 
-- ✅ Version control (Git)
-- ✅ Code review workflows
-- ✅ Type safety and validation
-- ✅ Easy replication and templating
-- ✅ No GUI complexity
-- ✅ Perfect for developers and DevOps teams
+---
 
-Omnera interprets this configuration at runtime to automatically create and serve full-featured web applications without code generation.
+## The Solution: Omnera
 
-## Core Architecture
+**Omnera breaks the SaaS dependency cycle** by providing a **self-hosted, configuration-driven platform** that puts organizations back in control.
 
-```
-Configuration (JSON/TypeScript) → Omnera Runtime → Live Application
-```
+### What Omnera Does
 
-The runtime server:
-
-- Interprets configuration in real-time
-- Auto-configures all features based on specification
-- Handles frontend, backend, database, and APIs
-- Updates live when configuration changes
-
-## Configuration Schema
-
-Omnera applications are defined through JSON configuration files that specify:
-
-- **Tables**: Database schemas and data structures
-- **Pages**: Web interfaces and routing
-- **Automations**: Event-driven workflows and integrations
-- **Connections**: External service integrations
-
-All configuration options, validation rules, field types, and examples are documented in `docs/specifications/specs.schema.json`, which serves as the complete technical specification for the Omnera configuration format.
-
-## Built-in Features
-
-### Automatic Infrastructure
-
-- Web server (Hono)
-- Database (PostgreSQL via Drizzle ORM)
-- Authentication (Better Auth)
-- File storage
-- Email service
-- Background jobs
-- API documentation
-
-### Data Management
-
-- Automatic table creation from schema
-- CRUD operations without coding
-- Data relationships
-- Field validations
-- Export capabilities
-
-### User Interface
-
-- React-based frontend
-- Tailwind CSS styling
-- Responsive design
-- Admin panels
-- Data visualization
-
-## Use Cases
-
-### Static Websites
-
-Marketing sites, landing pages, documentation portals
-
-### Internal Tools
-
-Admin dashboards, data management, employee portals
-
-### Customer Portals
-
-Self-service interfaces, support systems, account management
-
-### APIs
-
-REST endpoints, webhooks, third-party integrations
-
-### Business Applications
-
-CRM systems, inventory management, project tracking
-
-## Technical Implementation
-
-### Installation
-
-```javascript
-import { start } from 'omnera'
-import config from './config.json'
-
-start(config)
-```
-
-### Configuration Example
+Omnera is a **source-available runtime** that interprets JSON configuration files to build and serve full-featured web applications—without code generation, without vendor lock-in, without loss of control.
 
 ```typescript
+// Your entire business application in one JSON file
 {
-  name: "MyApp",
-  tables: [ /* define data structures */ ],
-  pages: [ /* define web pages */ ],
-  automations: [ /* define workflows */ ]
+  "name": "Company CRM",
+  "tables": [ /* your data structures */ ],
+  "pages": [ /* your web interfaces */ ],
+  "automations": [ /* your workflows */ ],
+  "connections": [ /* your integrations */ ]
 }
 ```
 
-> For complete configuration schema and examples, see `docs/specifications/specs.schema.json`
+**One command to run:**
 
-## Performance Metrics
+```bash
+bun run omnera start config.json
+```
 
-- Setup time: 2-3 days vs 2-3 months traditional
-- Cost reduction: 80-90%
-- Time to market: 95% faster
-- Zero maintenance overhead
-- Instant updates without deployment
+**Result**: A complete web application with database, authentication, API, and UI—running on your infrastructure, under your control.
 
-## Limitations
+### How It Works
 
-Not suitable for:
+```
+JSON Configuration → Omnera Runtime → Live Application
+     (Your business logic)  (Our engine)    (Your infrastructure)
+```
 
-- Real-time gaming applications
-- High-frequency trading systems
-- Complex computational workloads
-- Native mobile applications
+1. **You write**: JSON configuration describing your business needs
+2. **Omnera interprets**: Configuration at runtime (no code generation)
+3. **You own**: Full application running on your servers
+4. **You control**: Data, features, deployment, everything
 
-## Key Advantages Over Traditional No-Code Tools
+---
 
-### 1. **Self-Hosted & Source-Available**
+## Core Principles: Why We Build Omnera This Way
 
-- Own your data and infrastructure
-- No vendor lock-in or platform risk
-- Full source code access (Sustainable Use License v1.0)
-- Deploy anywhere: AWS, Vercel, Docker, bare metal
+### 1. **Digital Sovereignty**
 
-### 2. **Configuration-as-Code**
+Organizations should **own** their information systems, not **rent** them.
 
-- JSON/TypeScript instead of visual builders
-- Version control with Git
-- Code review workflows
-- Easy to replicate and template
+- **Your data** lives on your infrastructure
+- **Your features** defined by your business needs
+- **Your control** over deployment, security, and access
+- **Your independence** from vendor decisions
 
-### 3. **Developer-First Design**
+### 2. **Configuration Over Coding**
 
-- TypeScript type safety
-- Bun package installation
-- Familiar development workflows
-- No GUI learning curve
+Business applications should be **configured**, not **programmed**.
 
-### 4. **Zero Ongoing Costs**
+- **JSON/TypeScript** instead of visual drag-and-drop
+- **Version control** (Git) for all configuration
+- **Type safety** with compile-time validation
+- **Reusable templates** as organizational knowledge
 
-- No per-user SaaS fees
-- No monthly subscriptions
-- Free for internal business use
-- Pay only for infrastructure
+### 3. **Minimal Dependencies**
 
-### 5. **Complete Platform**
+Reduce technical dependencies to **only essential infrastructure**.
 
-- Runtime interpretation (no code generation)
-- All infrastructure included (server, database, auth)
-- Live configuration updates
-- No external service dependencies
+- **Depend on**: Commodity compute (AWS/Vercel) + storage (PostgreSQL/S3)
+- **Don't depend on**: Proprietary SaaS platforms, vendor APIs, closed ecosystems
+- **Source-available**: Audit, modify, extend the platform yourself
+- **Self-hosted**: No external service calls, no vendor outages
 
-### 6. **Full Extensibility**
+### 4. **Business Focus**
 
-- Modify and extend the platform
-- Add custom features
-- Integrate with any service
-- No platform limitations
+Engineering teams should focus on **business logic**, not **infrastructure complexity**.
 
-## Competitive Comparison
+- **No DevOps overhead**: Omnera handles server, database, auth, APIs
+- **No integration hell**: One platform, one configuration, one deployment
+- **No vendor research**: Stop evaluating SaaS tools, start building
+- **Instant iteration**: Change configuration, refresh browser, done
 
-| Feature             | Omnera          | Airtable       | Retool         | Zapier         | Webflow        |
-| ------------------- | --------------- | -------------- | -------------- | -------------- | -------------- |
-| **Self-Hosted**     | ✅ Yes          | ❌ No          | ❌ No          | ❌ No          | ❌ No          |
-| **Source Access**   | ✅ SUL-1.0      | ❌ Proprietary | ❌ Proprietary | ❌ Proprietary | ❌ Proprietary |
-| **Configuration**   | JSON/TypeScript | Visual UI      | Visual UI      | Visual UI      | Visual UI      |
-| **Version Control** | ✅ Git-native   | ⚠️ Limited     | ⚠️ Limited     | ❌ No          | ⚠️ Limited     |
-| **Data Ownership**  | ✅ Your servers | ❌ Their cloud | ❌ Their cloud | ❌ Their cloud | ❌ Their cloud |
-| **Monthly Cost**    | $0 (infra only) | $20+/user      | $10+/user      | $20+/user      | $12+/site      |
-| **Customization**   | ✅ Full access  | ⚠️ Limited     | ⚠️ Limited     | ⚠️ Limited     | ⚠️ Limited     |
-| **Type Safety**     | ✅ TypeScript   | ❌ No          | ❌ No          | ❌ No          | ❌ No          |
+### 5. **Configuration Reusability**
 
-## Contact
+JSON templates become **organizational assets** that accelerate development.
 
-- Website: omnera.dev
-- Documentation: docs.omnera.dev
-- NPM: npmjs.com/package/omnera
+```typescript
+// Base template: CRM
+const crmTemplate = { /* customer management logic */ }
+
+// Reuse for different departments
+const salesCRM = { ...crmTemplate, customFields: [...] }
+const supportCRM = { ...crmTemplate, workflows: [...] }
+const partnerCRM = { ...crmTemplate, permissions: [...] }
+
+// Build 3 applications in minutes, not months
+```
+
+**Templates evolve with your organization**, capturing institutional knowledge in version-controlled code.
+
+---
+
+## What Omnera Is (and Isn't)
+
+### ✅ Omnera IS
+
+- **Alternative to**: Airtable, Retool, Notion, Webflow, Zapier (self-hosted, config-driven)
+- **Installation**: Bun package (`npm install omnera`)
+- **Deployment**: Your infrastructure (AWS, Vercel, Docker, bare metal)
+- **Configuration**: JSON/TypeScript files (version-controlled)
+- **Source**: Source-available, fair-code model
+- **Target users**: Developers, DevOps teams, technical organizations
+- **Best for**: Internal tools, customer portals, business applications, APIs
+
+### ❌ Omnera IS NOT
+
+- **Not a SaaS**: No cloud hosting, no vendor servers
+- **Not visual**: No drag-and-drop GUI (configuration-as-code)
+- **Not a framework**: No code generation, runtime interpretation only
+- **Not proprietary**: Source-available, audit and modify freely
+- **Not suitable for**: Real-time gaming, high-frequency trading, native mobile apps
+
+---
+
+## The Omnera Advantage
+
+### vs. Traditional No-Code SaaS
+
+| Aspect              | Omnera                         | Airtable/Retool/Notion        |
+| ------------------- | ------------------------------ | ----------------------------- |
+| **Data Ownership**  | ✅ Your servers                | ❌ Vendor cloud               |
+| **Source Code**     | ✅ Available (fair-code)       | ❌ Proprietary                |
+| **Monthly Cost**    | $0 (infra only)                | $20-50/user/month             |
+| **Vendor Lock-in**  | ✅ None (self-hosted)          | ❌ Complete                   |
+| **Customization**   | ✅ Unlimited (source access)   | ⚠️ Limited to vendor features |
+| **Version Control** | ✅ Git-native JSON             | ⚠️ Limited or none            |
+| **Privacy**         | ✅ 100% your control           | ❌ Third-party servers        |
+| **Dependencies**    | ✅ Minimal (compute + storage) | ❌ Full vendor dependency     |
+
+### vs. Traditional Development
+
+| Aspect               | Omnera                   | Custom Development   |
+| -------------------- | ------------------------ | -------------------- |
+| **Development Time** | Days                     | Months               |
+| **Infrastructure**   | ✅ Included              | Build from scratch   |
+| **Authentication**   | ✅ Included              | Build from scratch   |
+| **Database**         | ✅ Included              | Build from scratch   |
+| **API**              | ✅ Included              | Build from scratch   |
+| **UI**               | ✅ Included              | Build from scratch   |
+| **Maintenance**      | ✅ Zero (config changes) | Ongoing code updates |
+| **Flexibility**      | ⚠️ Config-limited        | ✅ Unlimited         |
+
+**Omnera hits the sweet spot**: **80% faster than custom development**, **100% more control than SaaS**.
+
+---
+
+## Vision: The Future We're Building
+
+### Short-term (2025-2026)
+
+**Phase 1**: Core platform foundation
+
+- Tables, fields, relationships
+- Pages with dynamic routing
+- Basic authentication
+- REST API generation
+- Configuration validation
+
+**Phase 2**: Business application essentials
+
+- Workflows and automations
+- External service integrations
+- Advanced permissions
+- Data visualization
+- Template marketplace
+
+### Long-term (2027+)
+
+**Phase 3**: Ecosystem maturity
+
+- **Template marketplace**: Community-contributed application templates
+- **Plugin system**: Extend Omnera with custom modules
+- **Multi-tenancy**: One Omnera instance, multiple organizations
+- **Enterprise features**: SSO, compliance, advanced RBAC
+- **Developer tools**: CLI, IDE plugins, testing frameworks
+
+### The Ultimate Goal
+
+**Make Omnera the default choice for organizations seeking digital sovereignty.**
+
+When businesses need internal tools, customer portals, or business applications, they should think:
+
+> "Instead of buying another SaaS subscription, let's configure it in Omnera."
+
+---
+
+## Who Omnera Is For
+
+### Primary Audience
+
+- **Technical organizations** with in-house engineering teams
+- **Startups** seeking to minimize SaaS costs
+- **Enterprises** with data sovereignty requirements
+- **DevOps teams** managing internal tools
+- **Consultancies** building client applications
+
+### Use Cases
+
+1. **Internal Tools**: Admin dashboards, employee portals, data management
+2. **Customer Portals**: Self-service interfaces, account management, support systems
+3. **Business Applications**: CRM, inventory management, project tracking
+4. **API Platforms**: REST endpoints, webhooks, third-party integrations
+5. **Static Websites**: Marketing sites, landing pages, documentation
+
+### When to Choose Omnera
+
+✅ **Choose Omnera if you**:
+
+- Value data ownership and privacy
+- Have engineering resources (can write JSON)
+- Want to minimize SaaS subscriptions
+- Need to build multiple internal tools
+- Require customization beyond vendor offerings
+
+❌ **Don't choose Omnera if you**:
+
+- Prefer visual drag-and-drop interfaces
+- Don't have technical staff
+- Need real-time gaming or mobile apps
+- Want zero infrastructure management
+
+---
+
+## Technical Architecture (High-Level)
+
+### The Stack
+
+- **Runtime**: Bun 1.3+ (fast JavaScript runtime)
+- **Server**: Hono (lightweight web framework)
+- **Database**: PostgreSQL via Drizzle ORM
+- **Auth**: Better Auth (session management, OAuth, SSO)
+- **Frontend**: React 19 + Tailwind CSS
+- **API**: Auto-generated REST endpoints
+
+### Configuration Schema
+
+All features are defined in `docs/specifications/specs.schema.json`:
+
+- **Tables**: Database schemas (fields, relationships, validations)
+- **Pages**: Web interfaces (routes, components, layouts)
+- **Automations**: Workflows (triggers, actions, conditions)
+- **Connections**: External services (APIs, webhooks, integrations)
+
+---
+
+## Get Involved
+
+### How to Contribute
+
+- **GitHub**: [github.com/omnera-dev/omnera-v2](https://github.com/omnera-dev/omnera-v2)
+- **Documentation**: Improve docs, write guides, create templates
+- **Code**: Submit PRs for features or bug fixes
+- **Feedback**: Share use cases, report issues, suggest improvements
+
+### Contact
+
+- **Website**: omnera.dev
+- **License inquiries**: license@omnera.dev
+- **General questions**: GitHub Issues
+
+---
+
+## Summary: Why Omnera Exists
+
+**The Problem**: Organizations are trapped in SaaS dependency—paying monthly fees, losing data control, and adapting their business to vendor limitations.
+
+**The Solution**: Omnera gives organizations **digital sovereignty**—own your data, define your features, build your tools, all through simple JSON configuration.
+
+**The Vision**: A world where every organization can build the software they need, without surrendering control to SaaS vendors or drowning in infrastructure complexity.
+
+**The Result**: Organizations become **agile, independent, and focused**—building tools that serve their business, not adapting their business to fit available tools.
+
+---
+
+> **"Own your data. Own your tools. Own your future."**
+> — The Omnera Mission

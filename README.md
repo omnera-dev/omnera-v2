@@ -215,29 +215,31 @@ Releases are **fully automated** via GitHub Actions and semantic-release.
 
 ## License
 
-[![License: SUL-1.0](https://img.shields.io/badge/License-SUL--1.0-blue.svg)](LICENSE.md)
-[![Fair Code](https://img.shields.io/badge/Fair-Code-orange.svg)](https://faircode.io)
+[![License: BSL-1.1](https://img.shields.io/badge/License-BSL--1.1-blue.svg)](LICENSE.md)
+[![Source Available](https://img.shields.io/badge/Source-Available-green.svg)](https://github.com/omnera-dev/omnera-v2)
 
-**Sustainable Use License v1.0 (Fair-Code)**
+**Business Source License 1.1 (BSL 1.1)**
 
-Omnera is **fair-code** distributed under the Sustainable Use License. The source code is public, and you are free to use, modify, and redistribute it with some restrictions.
+Omnera is **source-available** under the Business Source License 1.1. The source code is public, and you are free to use, modify, and redistribute it with some restrictions.
 
 ✅ **Free for**:
 
-- Personal and non-commercial use
-- Internal business operations
-- Development and testing
-- Contributing to the project
+- Personal projects and educational purposes
+- Internal business operations and tools
+- Non-competing client deployments
+- Development, testing, and contributing
 
 ❌ **Commercial license required for**:
 
-- Offering Omnera as a managed service or SaaS to third parties
-- Building commercial products where Omnera provides core functionality
-- Any use that competes with the commercial offering
+- Offering Omnera as a hosted/managed service to third parties
+- Providing Omnera SaaS where it's the primary value
+- Competitive use cases (contact us for licensing)
 
-📧 **Commercial Licensing**: For commercial use cases, contact **license@omnera.dev**
+🕐 **Becomes Open Source**: On **January 1, 2029**, Omnera automatically converts to **Apache License 2.0** with no restrictions.
 
-See [LICENSE.md](LICENSE.md) for full terms and [TRADEMARK.md](TRADEMARK.md) for trademark usage guidelines.
+📧 **Commercial Licensing**: For competitive SaaS/hosting use cases, contact **license@omnera.dev**
+
+See [LICENSE.md](LICENSE.md) for full BSL 1.1 terms and [TRADEMARK.md](TRADEMARK.md) for trademark usage.
 
 **Copyright**: © 2025 ESSENTIAL SERVICES
 **Trademark**: Omnera™ is a trademark of ESSENTIAL SERVICES

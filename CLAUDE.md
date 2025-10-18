@@ -15,7 +15,11 @@
 **Project**: Omnera™ (npm package: "omnera")
 **Legal Entity**: ESSENTIAL SERVICES (copyright holder & trademark owner)
 **Version**: 0.0.1 (managed by semantic-release)
-**License**: Sustainable Use License v1.0 (SUL-1.0)
+**License**: Business Source License 1.1 (BSL 1.1)
+- **Core**: BSL 1.1 - Free for internal/non-commercial use, prevents competitive SaaS hosting
+- **Enterprise**: Enterprise License (files with `.ee.` in filename/dirname) - Paid features
+- **Change Date**: 2029-01-01 (automatically becomes Apache 2.0)
+- **Current status**: No `.ee.` files exist yet (Phase 0 - all code is BSL-licensed)
 **Runtime**: Bun 1.3.0 (NOT Node.js)
 **Entry Points**:
 - Library: `src/index.ts` (module import)
@@ -104,7 +108,7 @@ git push origin main               # Triggers release ONLY with "release:" type
 /**
  * Copyright (c) 2025 ESSENTIAL SERVICES
  *
- * This source code is licensed under the Sustainable Use License
+ * This source code is licensed under the Business Source License 1.1
  * found in the LICENSE.md file in the root directory of this source tree.
  */
 ```
@@ -254,11 +258,12 @@ omnera-v2/
 
 **License & Trademarks**
 
-**License**: Sustainable Use License v1.0 (Fair-Code)
+**License**: Business Source License 1.1 (BSL 1.1)
 - **Copyright**: ESSENTIAL SERVICES (legal entity, owns the code)
 - **Trademark**: Omnera™ is a trademark of ESSENTIAL SERVICES (registered in France)
-- **Free for**: Personal use, internal business purposes, non-commercial distribution
-- **NOT allowed**: Commercial SaaS/managed services to third parties without license
-- **Commercial licensing**: Contact license@omnera.dev for commercial use cases
-- **Philosophy**: Fair-code (source-available, commercially restricted, community-friendly)
-- See `LICENSE.md` for license terms and `TRADEMARK.md` for trademark usage guidelines
+- **Free for**: Internal business use, personal projects, educational purposes, non-competing client deployments
+- **NOT allowed**: Commercial hosted/managed services to third parties (requires commercial license)
+- **Change Date**: 2029-01-01 (automatically becomes Apache License 2.0)
+- **Commercial licensing**: Contact license@omnera.dev for competitive SaaS/hosting use cases
+- **Philosophy**: Source-available with time-based open source conversion
+- See `LICENSE.md` for BSL 1.1 terms and `TRADEMARK.md` for trademark usage guidelines

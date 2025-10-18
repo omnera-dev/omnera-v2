@@ -1,23 +1,15 @@
 #!/usr/bin/env bun
-
 /**
  * Copyright (c) 2025 ESSENTIAL SERVICES
  *
- * This source code is licensed under the Sustainable Use License
+ * This source code is licensed under the Business Source License 1.1
  * found in the LICENSE.md file in the root directory of this source tree.
  */
 
 import { readdirSync, readFileSync, writeFileSync, statSync } from 'node:fs'
 import { join, relative } from 'node:path'
 
-const LICENSE_HEADER = `/**
- * Copyright (c) 2025 ESSENTIAL SERVICES
- *
- * This source code is licensed under the Sustainable Use License
- * found in the LICENSE.md file in the root directory of this source tree.
- */
-
-`
+const LICENSE_HEADER = ``
 
 const SHEBANG_PATTERN = /^#!\/usr\/bin\/env bun\n/
 
