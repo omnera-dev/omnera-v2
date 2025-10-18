@@ -241,7 +241,7 @@ All shadcn/ui related packages are kept in `ignoreDependencies` because:
 **Scripts Directory** (`scripts/**`):
 
 - Contains utility scripts run directly (not imported)
-- Scripts like `update-license-date.js` are executed by semantic-release
+- Scripts are executed directly by build tools or other processes
 - Not part of the main application import graph
 - Would be incorrectly flagged as unused files
 

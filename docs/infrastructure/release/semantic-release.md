@@ -13,9 +13,8 @@ Semantic-release eliminates manual version bumping, changelog writing, and relea
 2. **Changelog Generation** - Auto-generates CHANGELOG.md from commit history
 3. **npm Publishing** - Publishes package "omnera" to npm registry automatically
 4. **GitHub Releases** - Creates GitHub releases with release notes
-5. **License Date Updates** - Custom script updates BSL 1.1 dates in LICENSE.md
-6. **Git Commits** - Commits version bumps and changelog back to repository
-7. **Version Validation** - Ensures semantic versioning (semver) compliance
+5. **Git Commits** - Commits version bumps and changelog back to repository
+6. **Version Validation** - Ensures semantic versioning (semver) compliance
 
 ## Configuration
 
@@ -111,66 +110,42 @@ The release process executes these plugins in sequence (defined in `.releaserc.j
 - Prepends new version section to existing changelog
 - Maintains chronological order (newest first)
 
-### 4. @semantic-release/exec
-
-- Runs custom script: `scripts/update-license-date.js`
-- Updates LICENSE.md with new version and dates
-- See "License Date Update Script" section below
-
-### 5. @semantic-release/npm
+### 4. @semantic-release/npm
 
 - Publishes package "omnera" to npm registry
 - Requires `NPM_TOKEN` secret configured in GitHub
 - Updates package.json version (committed later by git plugin)
 
-### 6. @semantic-release/git
+### 5. @semantic-release/git
 
 - Commits updated files back to repository:
   - `CHANGELOG.md` (updated changelog)
   - `package.json` (bumped version)
-  - `LICENSE.md` (updated dates and version)
 - Commit message: `chore(release): X.X.X [skip ci]`
 - `[skip ci]` prevents infinite release loop
 
-### 7. @semantic-release/github
+### 6. @semantic-release/github
 
 - Creates GitHub release with generated notes
 - Tags repository with version (e.g., `v1.0.0`)
 - Attaches release assets if configured
 
-## License Date Update Script
-
-The custom script `scripts/update-license-date.js` automatically updates LICENSE.md during each release.
-
-### Updates Performed
-
-1. **Version**: Updates "Licensed Work: Omnera X.X.X" with new version
-2. **Copyright Year**: Updates "(c) YYYY ESSENTIAL SERVICES" with current year
-3. **Change Date**: Calculates and updates BSL 1.1 Change Date (4 years from release)
-
-### BSL 1.1 Change Date Calculation
-
-- Business Source License 1.1 requires a "Change Date" (when code becomes open source)
-- Script calculates: Current Date + 4 years
-- Example: Released 2025-01-15 → Change Date: 2029-01-15
-- Automatically maintained for every release
-
-### Script Execution
-
-```bash
-# Called by semantic-release during release process
-node scripts/update-license-date.js 1.2.3
-
-# Output example:
-✓ Updated LICENSE.md:
-  - Version: 1.2.3
-  - Copyright year: 2025
-  - Change Date: 2029-01-15
-```
-
 ## Release Workflow
 
 The automated release process runs after the CI workflow completes successfully (see `docs/infrastructure/cicd/workflows.md` for details).
+
+### Security Protection
+
+The release workflow includes a security check to prevent accidental releases:
+
+```yaml
+if: |
+  github.event.workflow_run.conclusion == 'success' &&
+  !contains(github.event.workflow_run.head_commit.message, '[skip ci]') &&
+  startsWith(github.event.workflow_run.head_commit.message, 'release:')
+```
+
+This ensures releases ONLY occur when you explicitly commit with `release:` prefix.
 
 ### Required GitHub Secrets
 
@@ -190,17 +165,19 @@ permissions:
 ## Release Process Flow
 
 ```
-Developer commits to main
+Developer commits with "release: publish"
+         ↓
+Push to main branch
          ↓
 Test workflow runs (tests must pass)
          ↓ (if successful)
+Release workflow checks commit message
+         ↓ (if starts with "release:")
 Analyze commits for version bump
          ↓
 Generate release notes
          ↓
 Update CHANGELOG.md
-         ↓
-Update LICENSE.md (version + dates)
          ↓
 Publish to npm as "omnera"
          ↓
@@ -227,12 +204,6 @@ Release complete
       }
     ],
     [
-      "@semantic-release/exec",
-      {
-        "prepareCmd": "node scripts/update-license-date.js ${nextRelease.version}"
-      }
-    ],
-    [
       "@semantic-release/npm",
       {
         "npmPublish": true,
@@ -242,7 +213,7 @@ Release complete
     [
       "@semantic-release/git",
       {
-        "assets": ["CHANGELOG.md", "package.json", "LICENSE.md"],
+        "assets": ["CHANGELOG.md", "package.json"],
         "message": "chore(release): ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}"
       }
     ],
@@ -256,11 +227,18 @@ Release complete
 ### Automated Release (Recommended)
 
 ```bash
-# Release happens automatically on push to main
+# Make your changes with regular commits (feat:, fix:, etc.)
 git add .
 git commit -m "feat(api): add new endpoint"
 git push origin main
-# Workflow runs, tests pass, version bumps, publishes to npm
+# Test workflow runs (no release triggered)
+
+# When ready to publish, create explicit release commit
+git commit -m "release: publish" --allow-empty
+git push origin main
+# Test workflow runs, then release workflow triggers
+# Analyzes ALL commits since last release (feat:, fix:, etc.)
+# Determines version bump and publishes to npm
 ```
 
 ### Manual Release (Local Testing Only)
@@ -310,8 +288,14 @@ git commit -m "feat(auth): implement JWT token refresh
 - Implement token rotation
 - Add expiration validation"
 
-# Push to main (triggers release if feat/fix)
+# Push to main (runs tests, but does NOT trigger release)
 git push origin main
+
+# Continue working, making more commits...
+# When ready to publish all changes:
+git commit -m "release: publish" --allow-empty
+git push origin main
+# Now release workflow triggers and publishes
 ```
 
 ## Version Bump Decision Tree
@@ -329,16 +313,17 @@ Does commit include breaking change?
 
 Releases happen ONLY when:
 
-1. Commits are pushed to `main` branch
-2. CI workflow completes successfully
-3. At least one commit since last release uses `feat:` or `fix:` type
+1. Commit message starts with `release:` (e.g., `release: publish`)
+2. Commits are pushed to `main` branch
+3. CI workflow completes successfully
 4. Commit message does not contain `[skip ci]`
+5. semantic-release analyzes all commits since last release to determine version bump
 
 ## When Releases DO NOT Occur
 
 No release when:
 
-- All commits since last release are `docs:`, `chore:`, `style:`, etc.
+- Commit message does NOT start with `release:` (security protection)
 - CI workflow fails (lint, typecheck, or unit tests)
 - Commit contains `[skip ci]`
 - Push is to branch other than `main`
@@ -353,7 +338,6 @@ No release when:
 
 - `package.json` - Version number updated
 - `CHANGELOG.md` - New release section prepended
-- `LICENSE.md` - Version, copyright year, change date updated
 
 ### Committed by semantic-release
 
@@ -400,12 +384,6 @@ No release when:
 - Check npm token has publish permissions
 - Ensure package name "omnera" is available or owned by you
 - Review npm publish logs in workflow
-
-### License Update Failed
-
-- Verify `scripts/update-license-date.js` exists
-- Check LICENSE.md format matches expected patterns
-- Review workflow logs for script errors
 
 ### Workflow Skipped
 

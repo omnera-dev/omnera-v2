@@ -17,12 +17,6 @@
       }
     ],
     [
-      "@semantic-release/exec",
-      {
-        "prepareCmd": "bun run scripts/update-license-date.ts ${nextRelease.version}"
-      }
-    ],
-    [
       "@semantic-release/npm",
       {
         "npmPublish": true,
@@ -32,7 +26,7 @@
     [
       "@semantic-release/git",
       {
-        "assets": ["CHANGELOG.md", "package.json", "LICENSE.md"],
+        "assets": ["CHANGELOG.md", "package.json"],
         "message": "chore(release): ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}"
       }
     ],
