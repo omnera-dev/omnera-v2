@@ -185,15 +185,12 @@ describe('validate-schema.ts', () => {
       })
     })
 
-    test('tables property is an array', () => {
-      expect(schema.properties.tables.type).toBe('array')
-      expect(schema.properties.tables.items).toBeDefined()
+    test('tables property references external schema', () => {
+      expect(schema.properties.tables.$ref).toBe('./schemas/tables/tables.schema.json')
     })
 
-    test('pages property is an array with minItems constraint', () => {
-      expect(schema.properties.pages.type).toBe('array')
-      expect(schema.properties.pages.minItems).toBe(1)
-      expect(schema.properties.pages.items).toBeDefined()
+    test('pages property references external schema', () => {
+      expect(schema.properties.pages.$ref).toBe('./schemas/pages/pages.schema.json')
     })
 
     test('version follows semantic versioning pattern', () => {

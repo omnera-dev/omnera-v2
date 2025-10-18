@@ -5,12 +5,13 @@
  * This provides full metaschema validation against JSON Schema Draft 7
  */
 
-import { readFileSync, existsSync } from 'node:fs'
-import { join } from 'node:path'
-import Ajv, { type ValidateFunction, type ErrorObject } from 'ajv'
+import { readFileSync, existsSync, readdirSync, statSync } from 'node:fs'
+import { join, extname, resolve, dirname } from 'node:path'
+import Ajv, { type ValidateFunction, type ErrorObject, type SchemaObject } from 'ajv'
 import addFormats from 'ajv-formats'
 
 const SCHEMA_PATH = join(__dirname, '..', 'docs', 'specifications', 'specs.schema.json')
+const SCHEMAS_DIR = join(__dirname, '..', 'docs', 'specifications', 'schemas')
 
 // Colors for console output
 const colors = {
@@ -27,6 +28,30 @@ function log(message: string, color: string = colors.reset) {
   console.log(`${color}${message}${colors.reset}`)
 }
 
+function getAllSchemaFiles(dirPath: string): string[] {
+  const files: string[] = []
+
+  function traverse(currentPath: string) {
+    if (!existsSync(currentPath)) return
+
+    const entries = readdirSync(currentPath)
+
+    for (const entry of entries) {
+      const fullPath = join(currentPath, entry)
+      const stat = statSync(fullPath)
+
+      if (stat.isDirectory()) {
+        traverse(fullPath)
+      } else if (extname(entry) === '.json' && entry.endsWith('.schema.json')) {
+        files.push(fullPath)
+      }
+    }
+  }
+
+  traverse(dirPath)
+  return files
+}
+
 async function validateWithAjv() {
   log('🔍 Validating JSON Schema with AJV (Full Metaschema Validation)', colors.cyan)
   console.log()
@@ -37,16 +62,28 @@ async function validateWithAjv() {
   }
 
   try {
-    // Read schema
+    // Read root schema
     const schemaContent = readFileSync(SCHEMA_PATH, 'utf-8')
     const schema = JSON.parse(schemaContent)
 
-    // Create AJV instance with Draft 7 support
+    // Create AJV instance with Draft 7 support and custom loadSchema
     const ajv = new Ajv({
       strict: false, // Allow Draft 7 patterns
       allErrors: true, // Report all errors, not just first
       verbose: true, // Include data in errors
       validateSchema: true, // Validate the schema itself
+      loadSchema: async (uri: string): Promise<SchemaObject> => {
+        // Resolve relative path from specs.schema.json location
+        const schemaDir = dirname(SCHEMA_PATH)
+        const schemaPath = resolve(schemaDir, uri)
+
+        if (!existsSync(schemaPath)) {
+          throw new Error(`Schema not found: ${schemaPath} (uri: ${uri})`)
+        }
+
+        const content = readFileSync(schemaPath, 'utf-8')
+        return JSON.parse(content) as SchemaObject
+      },
     })
 
     // Add format validators (for format keywords like uri, email, etc.)
@@ -56,11 +93,11 @@ async function validateWithAjv() {
     // The metaschema will be used automatically when validating schemas with
     // "$schema": "http://json-schema.org/draft-07/schema#"
 
-    // Compile and validate
-    log('📋 Compiling schema...', colors.blue)
+    // Compile and validate (async to support loadSchema)
+    log('📋 Compiling schema with external $ref resolution...', colors.blue)
     let validate: ValidateFunction
     try {
-      validate = ajv.compile(schema)
+      validate = await ajv.compileAsync(schema)
       log('✓ Schema compiled successfully', colors.green)
     } catch (e) {
       const error = e as Error & { errors?: ErrorObject[] }
