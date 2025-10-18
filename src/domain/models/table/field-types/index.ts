@@ -1,4 +1,23 @@
+/**
+ * Copyright (c) 2025 ESSENTIAL SERVICES
+ *
+ * This source code is licensed under the Sustainable Use License
+ * found in the LICENSE.md file in the root directory of this source tree.
+ */
+
 // Re-export all field type schemas and types for convenient imports
+// Text field types (split from text-field)
+export * from './single-line-text-field'
+export * from './long-text-field'
+export * from './phone-number-field'
+export * from './email-field'
+export * from './url-field'
+// Number field types (split from number-field)
+export * from './integer-field'
+export * from './decimal-field'
+export * from './currency-field'
+export * from './percentage-field'
+// Legacy exports (kept for backward compatibility)
 export * from './text-field'
 export * from './number-field'
 export * from './date-field'
