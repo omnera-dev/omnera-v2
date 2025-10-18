@@ -165,6 +165,11 @@ omnera-v2/
 - `@docs/specifications/vision.md` - Target state and product vision (future capabilities)
 - `@ROADMAP.md` - Implementation roadmap with phases and current development status
 
+### Schema Architecture
+- `@docs/specifications/schema-architecture.md` - Multi-file JSON Schema structure with $ref, validation tools, and best practices
+- `@docs/specifications/specs.schema.json` - Root schema (orchestrator with $ref to feature schemas)
+- `@docs/specifications/triple-documentation-pattern.md` - Schema documentation pattern (What/Why/Who-When)
+
 ### Infrastructure
 - `@docs/infrastructure/runtime/bun.md` - Bun runtime & package manager
 - `@docs/infrastructure/language/typescript.md` - TypeScript configuration
