@@ -8,11 +8,11 @@ Omnera uses a sophisticated agent ecosystem to implement features through Test-D
 
 **TDD Agents** (Feature Implementation):
 
-- `spec-editor` - Collaborative schema design guide
-- `schema-architect` - Effect Schema implementation
-- `e2e-red-test-writer` - RED test creation
-- `e2e-test-fixer` - GREEN implementation
-- `codebase-refactor-auditor` - Code optimization and refactoring
+- `spec-editor` - Collaborative schema design guide (CREATIVE)
+- `effect-schema-translator` - JSON Schema → Effect Schema (MECHANICAL)
+- `e2e-test-translator` - x-user-stories → Playwright tests (MECHANICAL)
+- `e2e-test-fixer` - GREEN implementation (CREATIVE)
+- `codebase-refactor-auditor` - Code optimization and refactoring (CREATIVE)
 
 **Documentation Agents** (Knowledge Management):
 
@@ -22,6 +22,62 @@ Omnera uses a sophisticated agent ecosystem to implement features through Test-D
 **Meta Agent** (Agent Maintenance):
 
 - `agent-maintainer` - Reviews and maintains all agent configurations
+
+### Creative vs Mechanical Agents
+
+The TDD pipeline consists of TWO creative agents and TWO mechanical agents:
+
+**CREATIVE Agents** (Make Decisions):
+
+1. **spec-editor** - Collaborative schema design
+   - Asks user questions about validation rules
+   - Makes architectural decisions with user
+   - Crafts business rules and user stories
+   - Validates constraints collaboratively
+   - **OUTPUT**: Fully designed JSON Schema with Triple-Documentation Pattern
+
+2. **e2e-test-fixer** - Feature implementation
+   - Chooses how to implement features
+   - Makes code structure decisions
+   - Writes actual application logic
+   - **OUTPUT**: Working code that makes tests GREEN
+
+**MECHANICAL Agents** (Follow Patterns):
+
+1. **effect-schema-translator** - JSON Schema → Effect Schema
+   - Reads validated JSON Schema from specs.schema.json
+   - Applies established Effect Schema patterns
+   - Translates Triple-Documentation to JSDoc annotations
+   - Creates unit tests following template
+   - **NO DECISIONS**: Fails if input incomplete, never designs
+   - **INPUT → OUTPUT**: Pure mechanical translation
+
+2. **e2e-test-translator** - x-user-stories → Playwright tests
+   - Reads validated x-user-stories from JSON Schema
+   - Applies established Playwright test patterns
+   - Translates GIVEN-WHEN-THEN to test code
+   - Adds test.fixme() markers automatically
+   - **NO DECISIONS**: Fails if stories incomplete, never creates scenarios
+   - **INPUT → OUTPUT**: Pure mechanical translation
+
+**Understanding This Distinction**:
+
+✅ **Ask design questions to**: `spec-editor` (creative)
+✅ **Ask implementation questions to**: `e2e-test-fixer` (creative)
+❌ **Don't expect translators to make decisions**: They follow patterns exactly
+❌ **Don't ask translators design questions**: They'll fail with "missing input"
+
+**Decision Tree: Which Agent?**
+
+```
+Does the task involve DESIGN decisions?
+├─ YES → Use CREATIVE agent (spec-editor or e2e-test-fixer)
+└─ NO → Use MECHANICAL agent (effect-schema-translator or e2e-test-translator)
+
+Is the JSON Schema already validated and complete?
+├─ YES → Use MECHANICAL translator
+└─ NO → Use spec-editor to complete design first
+```
 
 ### When to Use Agents vs. Direct Tools
 
@@ -54,26 +110,29 @@ Omnera uses a sophisticated agent ecosystem to implement features through Test-D
 ```
 User Requirement
       ↓
-1. spec-editor
+1. spec-editor (CREATIVE: Design & Validation)
    • Helps user edit docs/specifications/specs.schema.json
    • Asks permission to validate: bun run scripts/validate-schema.ts
    • User decides when to generate roadmap
    • Validates user stories collaboratively
    • Guides creation of docs/specifications/roadmap/{property}.md
-      ↓ (HANDOFF: Roadmap file created with user approval)
+      ↓ (HANDOFF: Validated JSON Schema with Triple-Documentation)
       ↓
-2A. schema-architect (parallel)    |    2B. e2e-red-test-writer (parallel)
-    • Reads Effect Schema blueprint |        • Reads E2E user stories
-    • Implements                    |        • Creates tests/app/{property}.spec.ts
-      src/domain/models/app/        |        • Writes multiple @spec tests (test.fixme)
-      {property}.ts                 |        • Writes ONE @regression test (test.fixme)
-    • Creates {property}.test.ts    |        • Optional @critical test (test.fixme)
-    • Runs CLAUDECODE=1 bun         |
-      test:unit                     |
+┌─────┴─────┐
+│ PARALLEL  │
+↓           ↓
+2A. effect-schema-translator          |    2B. e2e-test-translator
+    (MECHANICAL: JSON→Effect)         |         (MECHANICAL: Stories→Tests)
+    • Reads JSON Schema constraints   |         • Reads x-user-stories
+    • Translates to Effect Schema     |         • Translates to Playwright tests
+      src/domain/models/app/          |         • Creates tests/app/{property}.spec.ts
+      {property}.ts                   |         • Applies test.fixme() markers
+    • Creates {property}.test.ts      |         • Multiple @spec + ONE @regression
+    • Runs CLAUDECODE=1 bun test:unit |
       ↓──────────────────────────────↓
-      (HANDOFF: Schema implemented + RED tests exist)
+      (HANDOFF: Schema translated + RED tests translated)
       ↓
-3. e2e-test-fixer
+3. e2e-test-fixer (CREATIVE: Implementation)
    • Removes test.fixme() from first @spec test
    • Implements minimal code to make test GREEN
    • Runs: bun test:e2e -- tests/app/{property}.spec.ts
@@ -83,7 +142,7 @@ User Requirement
    • After N fixes (typically 3+), documents code duplication
       ↓ (HANDOFF: All tests GREEN, duplication noted)
       ↓
-4. codebase-refactor-auditor
+4. codebase-refactor-auditor (CREATIVE: Refactoring)
    • Phase 0: Establishes E2E test baseline (@critical, @regression)
    • Analyzes recent commits (Phase 1.1: >100 lines OR >5 files)
    • Immediately refactors files from recent commits
@@ -139,13 +198,13 @@ bun run scripts/generate-roadmap.ts        # User decides when to run
 - ✅ User stories validated collaboratively
 - ✅ User explicitly approves adding VALIDATED marker
 
-**Handoff**: Notify schema-architect and e2e-red-test-writer that roadmap is ready (with user confirmation)
+**Handoff**: Notify effect-schema-translator and e2e-test-translator that roadmap is ready (with user confirmation)
 
 ---
 
 #### Step 2A: Schema Implementation (Parallel)
 
-**Agent**: `schema-architect`
+**Agent**: `effect-schema-translator`
 
 **Trigger**: Roadmap file exists at `docs/specifications/roadmap/{property}.md` with VALIDATED status
 
@@ -179,13 +238,13 @@ bun run scripts/generate-roadmap.ts        # User decides when to run
 - ✅ Property added to AppSchema
 - ✅ JSON Schema exported successfully
 
-**Parallel Work**: e2e-red-test-writer works simultaneously on tests
+**Parallel Work**: e2e-test-translator works simultaneously on tests
 
 ---
 
 #### Step 2B: RED Test Creation (Parallel)
 
-**Agent**: `e2e-red-test-writer`
+**Agent**: `e2e-test-translator`
 
 **Trigger**: Roadmap file exists at `docs/specifications/roadmap/{property}.md` with VALIDATED status
 
@@ -219,7 +278,7 @@ bun run scripts/generate-roadmap.ts        # User decides when to run
 - ✅ data-testid patterns match roadmap
 - ✅ Error messages match roadmap exactly
 
-**Parallel Work**: schema-architect works simultaneously on Effect Schema
+**Parallel Work**: effect-schema-translator works simultaneously on Effect Schema
 
 **Handoff**: Notify e2e-test-fixer that RED tests are ready
 
@@ -235,7 +294,7 @@ bun run scripts/generate-roadmap.ts        # User decides when to run
 
 - tests/app/{property}.spec.ts (RED tests)
 - Optional: docs/specifications/roadmap/{property}.md (implementation guidance)
-- src/domain/models/app/{property}.ts (schema from schema-architect)
+- src/domain/models/app/{property}.ts (schema from effect-schema-translator)
 
 **Actions**:
 
@@ -482,7 +541,7 @@ bun test:e2e --grep @regression  # Compare to Phase 0 baseline
 4. Keep validation marker intact
 5. Only regenerate Effect Schema blueprint and validation rules
 
-**Handoff**: After validation complete, notify schema-architect and e2e-red-test-writer
+**Handoff**: After validation complete, notify effect-schema-translator and e2e-test-translator
 
 ---
 
@@ -516,10 +575,10 @@ bun test:e2e --grep @regression  # Compare to Phase 0 baseline
 
 | Agent                              | Primary Responsibility       | Trigger Example               | Input Files                  | Output Files                        | Collaborates With                                  |
 | ---------------------------------- | ---------------------------- | ----------------------------- | ---------------------------- | ----------------------------------- | -------------------------------------------------- |
-| **spec-editor**                    | Collaborative schema design  | "Help me edit schemas"        | specs.schema.json, vision.md | ROADMAP.md, roadmap/\*.md           | → schema-architect, e2e-red-test-writer            |
-| **schema-architect**               | Effect Schema implementation | "Implement {property} schema" | roadmap/{property}.md        | src/domain/models/app/{property}.ts | ← spec-editor, → e2e-red-test-writer               |
-| **e2e-red-test-writer**            | RED test creation            | "Write tests for {property}"  | roadmap/{property}.md        | tests/app/{property}.spec.ts        | ← spec-editor, → e2e-test-fixer                    |
-| **e2e-test-fixer**                 | GREEN implementation         | "Fix failing E2E test"        | tests/app/{property}.spec.ts | src/ (implementation)               | ← e2e-red-test-writer, → codebase-refactor-auditor |
+| **spec-editor**                    | Collaborative schema design  | "Help me edit schemas"        | specs.schema.json, vision.md | ROADMAP.md, roadmap/\*.md           | → effect-schema-translator, e2e-test-translator    |
+| **effect-schema-translator**       | Effect Schema implementation | "Implement {property} schema" | roadmap/{property}.md        | src/domain/models/app/{property}.ts | ← spec-editor, → e2e-test-translator               |
+| **e2e-test-translator**            | RED test creation            | "Write tests for {property}"  | roadmap/{property}.md        | tests/app/{property}.spec.ts        | ← spec-editor, → e2e-test-fixer                    |
+| **e2e-test-fixer**                 | GREEN implementation         | "Fix failing E2E test"        | tests/app/{property}.spec.ts | src/ (implementation)               | ← e2e-test-translator, → codebase-refactor-auditor |
 | **codebase-refactor-auditor**      | Code optimization            | "Audit and refactor code"     | src/ (working code)          | src/ (refactored)                   | ← e2e-test-fixer, ↔ docs maintainers              |
 | **architecture-docs-maintainer**   | WHY patterns exist           | "Document {pattern}"          | Architectural decision       | docs/architecture/                  | ↔ infrastructure-docs-maintainer                  |
 | **infrastructure-docs-maintainer** | WHAT tools configured        | "Document {tool} setup"       | Config files                 | docs/infrastructure/                | ↔ architecture-docs-maintainer                    |
@@ -529,7 +588,7 @@ bun test:e2e --grep @regression  # Compare to Phase 0 baseline
 
 ## Handoff Protocols
 
-### 1. spec-editor → schema-architect
+### 1. spec-editor → effect-schema-translator
 
 **Completion Criteria**:
 
@@ -543,18 +602,18 @@ bun test:e2e --grep @regression  # Compare to Phase 0 baseline
 
 **Handoff Command**: "Implement {property} schema from roadmap blueprint at docs/specifications/roadmap/{property}.md"
 
-**What schema-architect Receives**:
+**What effect-schema-translator Receives**:
 
 - Effect Schema Structure (exact code patterns)
 - Validation Rules (with error messages)
 - Annotations (title, description, examples)
 - Valid/Invalid configuration examples
 
-**Success Criteria**: schema-architect can implement without clarification questions
+**Success Criteria**: effect-schema-translator can implement without clarification questions
 
 ---
 
-### 2. spec-editor → e2e-red-test-writer
+### 2. spec-editor → e2e-test-translator
 
 **Completion Criteria**:
 
@@ -568,7 +627,7 @@ bun test:e2e --grep @regression  # Compare to Phase 0 baseline
 
 **Handoff Command**: "Write RED tests for {property} from roadmap user stories at docs/specifications/roadmap/{property}.md"
 
-**What e2e-red-test-writer Receives**:
+**What e2e-test-translator Receives**:
 
 - E2E Test Blueprint (exact Playwright patterns)
 - User Stories (GIVEN-WHEN-THEN format)
@@ -576,11 +635,11 @@ bun test:e2e --grep @regression  # Compare to Phase 0 baseline
 - data-testid Patterns
 - Expected Error Messages
 
-**Success Criteria**: e2e-red-test-writer can create tests without clarification questions
+**Success Criteria**: e2e-test-translator can create tests without clarification questions
 
 ---
 
-### 3. e2e-red-test-writer → e2e-test-fixer
+### 3. e2e-test-translator → e2e-test-fixer
 
 **Completion Criteria**:
 
@@ -644,14 +703,14 @@ START: User wants to add feature (e.g., "theme" property)
 Q1: Does it require schema changes?
   ├─ YES → Use Complete TDD Pipeline
   │         1. spec-editor (help user edit schemas collaboratively)
-  │         2. schema-architect + e2e-red-test-writer (parallel)
+  │         2. effect-schema-translator + e2e-test-translator (parallel)
   │         3. e2e-test-fixer (make tests GREEN)
   │         4. codebase-refactor-auditor (optimize after 3+ fixes)
   │
   └─ NO → Q2: Is it just UI or styling?
            ├─ YES → Direct implementation (no agent needed)
            └─ NO → Q3: Does it require new tests?
-                     ├─ YES → e2e-red-test-writer + e2e-test-fixer
+                     ├─ YES → e2e-test-translator + e2e-test-fixer
                      └─ NO → Direct implementation
 ```
 
@@ -716,7 +775,7 @@ Q1: What are you documenting?
 1. Check completion criteria for previous agent
 2. Verify file artifacts exist:
    - spec-editor: docs/specifications/roadmap/{property}.md with VALIDATED marker (user-approved)
-   - e2e-red-test-writer: tests/app/{property}.spec.ts with test.fixme()
+   - e2e-test-translator: tests/app/{property}.spec.ts with test.fixme()
    - e2e-test-fixer: All tests GREEN (no test.fixme() remaining)
 3. Explicitly invoke next agent with handoff command
 4. Example: "Implement {property} schema from roadmap blueprint"
@@ -734,7 +793,7 @@ Q1: What are you documenting?
 1. Identify which step was skipped
 2. Common skips:
    - spec-editor: Skipped user collaboration → Re-validate with user interactively
-   - schema-architect: Skipped unit tests → Create {property}.test.ts
+   - effect-schema-translator: Skipped unit tests → Create {property}.test.ts
    - e2e-test-fixer: Skipped regression tests → Run bun test:e2e:regression
 3. Complete the missing step
 4. Verify completion criteria before proceeding
@@ -751,8 +810,8 @@ Q1: What are you documenting?
 
 1. Review agent boundaries:
    - spec-editor: docs/specifications/ only (collaborative editing with user)
-   - schema-architect: src/domain/models/app/ only
-   - e2e-red-test-writer: tests/app/ only
+   - effect-schema-translator: src/domain/models/app/ only
+   - e2e-test-translator: tests/app/ only
    - e2e-test-fixer: src/ (implementation) only
    - codebase-refactor-auditor: src/ (refactoring after GREEN) only
 2. Identify which agent should own the file
@@ -767,16 +826,16 @@ Q1: What are you documenting?
 
 **Resolution**: Use decision trees above or consult this table:
 
-| User Intent                       | Correct Agent                              |
-| --------------------------------- | ------------------------------------------ |
-| "Add new property to app config"  | spec-editor (collaborative schema editing) |
-| "Implement schema for {property}" | schema-architect (if roadmap exists)       |
-| "Write tests for {property}"      | e2e-red-test-writer (if roadmap exists)    |
-| "Fix failing E2E test"            | e2e-test-fixer                             |
-| "Clean up code duplication"       | codebase-refactor-auditor                  |
-| "Document {pattern}"              | architecture-docs-maintainer               |
-| "Document {tool}"                 | infrastructure-docs-maintainer             |
-| "Review agent config"             | agent-maintainer                           |
+| User Intent                       | Correct Agent                                |
+| --------------------------------- | -------------------------------------------- |
+| "Add new property to app config"  | spec-editor (collaborative schema editing)   |
+| "Implement schema for {property}" | effect-schema-translator (if roadmap exists) |
+| "Write tests for {property}"      | e2e-test-translator (if roadmap exists)      |
+| "Fix failing E2E test"            | e2e-test-fixer                               |
+| "Clean up code duplication"       | codebase-refactor-auditor                    |
+| "Document {pattern}"              | architecture-docs-maintainer                 |
+| "Document {tool}"                 | infrastructure-docs-maintainer               |
+| "Review agent config"             | agent-maintainer                             |
 
 ---
 
@@ -873,7 +932,7 @@ Does this capture what you described?"
 
 ---
 
-#### Phase 2A: Schema Implementation (schema-architect)
+#### Phase 2A: Schema Implementation (effect-schema-translator)
 
 ```bash
 # Agent reads docs/specifications/roadmap/theme.md
@@ -930,7 +989,7 @@ CLAUDECODE=1 bun test:unit src/domain/models/app/theme.test.ts
 
 ---
 
-#### Phase 2B: RED Test Creation (e2e-red-test-writer, parallel with 2A)
+#### Phase 2B: RED Test Creation (e2e-test-translator, parallel with 2A)
 
 ```bash
 # Agent reads docs/specifications/roadmap/theme.md
@@ -1223,8 +1282,8 @@ Metrics:
 This workflow documentation is optimized for Claude Code consumption. When referencing agents, use the @ syntax:
 
 - `@spec-editor` - Collaborative schema design guide
-- `@schema-architect` - Effect Schema implementation
-- `@e2e-red-test-writer` - RED test creation
+- `@effect-schema-translator` - Effect Schema implementation
+- `@e2e-test-translator` - RED test creation
 - `@e2e-test-fixer` - GREEN implementation
 - `@codebase-refactor-auditor` - Code optimization
 - `@architecture-docs-maintainer` - WHY patterns exist

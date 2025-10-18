@@ -1,7 +1,7 @@
 ---
 name: spec-editor
 description: |
-  Use this agent to collaboratively edit JSON Schema specifications in docs/specifications/schemas/. This agent helps you translate vision.md concepts into concrete schema properties, enforce the Triple-Documentation Pattern (description, examples, x-business-rules, x-user-stories), and prepare validated specifications for downstream implementation agents (schema-architect and e2e-red-test-writer). This is a collaborative, user-driven agent that guides you through schema design decisions.
+  Use this agent to collaboratively edit JSON Schema specifications in docs/specifications/schemas/. This agent helps you translate vision.md concepts into concrete schema properties, enforce the Triple-Documentation Pattern (description, examples, x-business-rules, x-user-stories), and prepare validated specifications for downstream implementation agents (effect-schema-translator and e2e-test-translator). This is a collaborative, user-driven agent that guides you through schema design decisions.
 
   **When to Invoke:**
   1. When adding new properties to docs/specifications/schemas/**/*.schema.json
@@ -273,8 +273,8 @@ Which approach fits your needs better?"
 ### 6. Handoff Preparation for Downstream Agents
 
 **Downstream Agents**:
-- **schema-architect**: Implements Effect Schemas from property definitions
-- **e2e-red-test-writer**: Creates RED Playwright tests from x-user-stories
+- **effect-schema-translator**: Implements Effect Schemas from property definitions
+- **e2e-test-translator**: Creates RED Playwright tests from x-user-stories
 
 **Your Role**:
 - Verify property definitions are complete before handoff
@@ -307,14 +307,14 @@ You: "Let me check the completeness of the theme property definition...
 ✅ No $ref errors
 
 **Downstream Agent Readiness**:
-✅ schema-architect can implement Effect Schema from constraints
-✅ e2e-red-test-writer can generate tests from user stories
+✅ effect-schema-translator can implement Effect Schema from constraints
+✅ e2e-test-translator can generate tests from user stories
 
 **Status**: ✅ READY FOR HANDOFF
 
 The theme property is complete and ready for:
-1. schema-architect to implement src/domain/models/app/theme.ts
-2. e2e-red-test-writer to create tests/app/theme.spec.ts
+1. effect-schema-translator to implement src/domain/models/app/theme.ts
+2. e2e-test-translator to create tests/app/theme.spec.ts
 
 Would you like to proceed with implementation?"
 ```
@@ -784,8 +784,8 @@ Before marking any schema editing task as complete:
 - ✅ User confirmed user stories are testable
 
 **Handoff Readiness**:
-- ✅ schema-architect can implement Effect Schema from definition
-- ✅ e2e-red-test-writer can create tests from user stories
+- ✅ effect-schema-translator can implement Effect Schema from definition
+- ✅ e2e-test-translator can create tests from user stories
 - ✅ User explicitly approved moving to implementation phase
 
 ## Communication Style
@@ -824,7 +824,7 @@ spec-editor (YOU) → Validate schema
 [PARALLEL]
     ↓
 ┌─────────────────────┐    ┌──────────────────────┐
-│ schema-architect    │    │ e2e-red-test-writer  │
+│ effect-schema-translator    │    │ e2e-test-translator  │
 │ (Effect Schemas)    │    │ (RED Playwright tests)│
 └─────────────────────┘    └──────────────────────┘
     ↓
@@ -834,8 +834,8 @@ codebase-refactor-auditor (REFACTOR)
 ```
 
 **Your Output Enables**:
-- schema-architect reads validated property definitions → implements Domain schemas
-- e2e-red-test-writer reads validated user stories → creates RED tests
+- effect-schema-translator reads validated property definitions → implements Domain schemas
+- e2e-test-translator reads validated user stories → creates RED tests
 
 **Critical**: Both downstream agents work in PARALLEL using your validated schema definitions. Your completeness determines their success.
 

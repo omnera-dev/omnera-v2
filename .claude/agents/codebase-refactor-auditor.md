@@ -1042,7 +1042,7 @@ spec-editor (COLLABORATIVE BLUEPRINT)
          ↓
     [PARALLEL]
          ↓
-  schema-architect + e2e-red-test-writer
+  effect-schema-translator + e2e-test-translator
          ↓
   e2e-test-fixer (GREEN - make tests pass)
          ↓

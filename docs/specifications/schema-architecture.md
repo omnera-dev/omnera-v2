@@ -192,14 +192,14 @@ The `#/definitions/id` part uses JSON Pointer syntax to navigate within a schema
 
 AI agents consume the multi-file schema structure:
 
-**schema-architect**: Implements Effect Schemas from property definitions
+**effect-schema-translator**: Implements Effect Schemas from property definitions
 
 - Reads specs.schema.json
 - Follows $ref to feature schemas
 - Extracts constraints + x-business-rules
 - Implements src/domain/models/app/{property}.ts
 
-**e2e-red-test-writer**: Creates RED Playwright tests from user stories
+**e2e-test-translator**: Creates RED Playwright tests from user stories
 
 - Reads specs.schema.json
 - Follows $ref to feature schemas

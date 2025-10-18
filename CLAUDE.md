@@ -182,7 +182,7 @@ omnera-v2/
 - `@ROADMAP.md` - Implementation roadmap with phases and current development status
 
 ### Schema Architecture
-- `@docs/specifications/schema-architecture.md` - Multi-file JSON Schema structure with $ref, validation tools, and best practices
+- `@docs/specifications/effect-schema-translatorure.md` - Multi-file JSON Schema structure with $ref, validation tools, and best practices
 - `@docs/specifications/specs.schema.json` - Root schema (orchestrator with $ref to feature schemas)
 - `@docs/specifications/triple-documentation-pattern.md` - Schema documentation pattern (What/Why/Who-When)
 

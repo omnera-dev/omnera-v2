@@ -6,7 +6,7 @@ whenToUse: |
   **File Triggers** (automatic):
   - Created: `tests/app/{property}.spec.ts` with test.fixme() (RED tests ready)
   - Modified: `src/domain/models/app/{property}.ts` (schema ready for Presentation/Application layers)
-  - Status: Both schema-architect AND e2e-red-test-writer completed their work
+  - Status: Both effect-schema-translator AND e2e-test-translator completed their work
 
   **Command Patterns** (explicit requests):
   - "Make the RED tests GREEN for {property}"
@@ -319,11 +319,11 @@ Ask for human guidance when:
 
 ## Collaboration with Other Agents
 
-**CRITICAL**: This agent CONSUMES work from both e2e-red-test-writer and schema-architect, then PRODUCES work for codebase-refactor-auditor.
+**CRITICAL**: This agent CONSUMES work from both e2e-test-translator and effect-schema-translator, then PRODUCES work for codebase-refactor-auditor.
 
-### Consumes RED Tests from e2e-red-test-writer
+### Consumes RED Tests from e2e-test-translator
 
-**When**: After e2e-red-test-writer creates RED tests in `tests/app/{property}.spec.ts`
+**When**: After e2e-test-translator creates RED tests in `tests/app/{property}.spec.ts`
 
 **What You Receive**:
 - **RED E2E Tests**: Failing tests with `test.fixme()` modifier
@@ -332,11 +332,11 @@ Ask for human guidance when:
 - **data-testid Patterns**: Selectors for UI elements
 - **Expected Behavior**: GIVEN-WHEN-THEN scenarios from test descriptions
 
-**Handoff Protocol FROM e2e-red-test-writer**:
-1. e2e-red-test-writer completes RED test creation
-2. e2e-red-test-writer verifies tests use `test.fixme()` modifier
-3. e2e-red-test-writer notifies: "RED tests complete: tests/app/{property}.spec.ts (X @spec, 1 @regression, Y @critical)"
-4. schema-architect completes Domain schema implementation
+**Handoff Protocol FROM e2e-test-translator**:
+1. e2e-test-translator completes RED test creation
+2. e2e-test-translator verifies tests use `test.fixme()` modifier
+3. e2e-test-translator notifies: "RED tests complete: tests/app/{property}.spec.ts (X @spec, 1 @regression, Y @critical)"
+4. effect-schema-translator completes Domain schema implementation
 5. **YOU (e2e-test-fixer)**: Begin GREEN implementation phase
 6. **YOU**: Read `tests/app/{property}.spec.ts` to understand expectations
 7. **YOU**: Remove `test.fixme()` from tests one at a time
@@ -348,9 +348,9 @@ Ask for human guidance when:
 
 ---
 
-### Consumes Schema from schema-architect
+### Consumes Schema from effect-schema-translator
 
-**When**: schema-architect completes Domain schema implementation (parallel with e2e-red-test-writer)
+**When**: effect-schema-translator completes Domain schema implementation (parallel with e2e-test-translator)
 
 **What You Receive**:
 - **Working Schema**: `src/domain/models/app/{property}.ts` with validation
@@ -359,8 +359,8 @@ Ask for human guidance when:
 - **Unit Test Coverage**: Proves schema works in isolation
 
 **Coordination Protocol**:
-- schema-architect implements Domain layer (data validation)
-- e2e-red-test-writer creates Presentation tests (UI behavior)
+- effect-schema-translator implements Domain layer (data validation)
+- e2e-test-translator creates Presentation tests (UI behavior)
 - **YOU**: Wait for BOTH to complete before starting GREEN implementation
 - **YOU**: Use schema from `src/domain/models/app/{property}.ts` in your Presentation/Application code
 - **YOU**: Rely on schema's validation to handle invalid data
@@ -402,18 +402,18 @@ Ask for human guidance when:
 ### Role Boundaries
 
 **e2e-test-fixer (THIS AGENT)**:
-- **Consumes**: RED tests from e2e-red-test-writer + schemas from schema-architect
+- **Consumes**: RED tests from e2e-test-translator + schemas from effect-schema-translator
 - **Implements**: Presentation/Application layers (UI components, API routes, workflows)
 - **Tests**: Removes `test.fixme()`, runs E2E tests after each fix
 - **Focus**: Making RED tests GREEN with minimal but correct code
 - **Output**: Working features with GREEN E2E tests, documented duplication
 
-**e2e-red-test-writer**:
+**e2e-test-translator**:
 - **Creates**: RED E2E tests in `tests/app/{property}.spec.ts`
 - **Focus**: Test specifications (acceptance criteria)
 - **Output**: Failing E2E tests that define "done"
 
-**schema-architect**:
+**effect-schema-translator**:
 - **Implements**: Domain schemas in `src/domain/models/app/{property}.ts`
 - **Focus**: Data validation and type definitions
 - **Output**: Working schemas with passing unit tests
@@ -436,7 +436,7 @@ spec-editor (COLLABORATIVE BLUEPRINT)
          ↓
     [PARALLEL]
          ↓
-  schema-architect + e2e-red-test-writer
+  effect-schema-translator + e2e-test-translator
          ↓
   ┌──────────────────────┐
   │  e2e-test-fixer      │ ← YOU ARE HERE
