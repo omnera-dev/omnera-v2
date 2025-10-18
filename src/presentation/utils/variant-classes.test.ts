@@ -143,11 +143,7 @@ describe('variant-classes', () => {
     })
 
     test('no classes contain invalid characters', () => {
-      const allClasses = [
-        FOCUS_RING_CLASSES,
-        VALIDATION_RING_CLASSES,
-        COMMON_INTERACTIVE_CLASSES,
-      ]
+      const allClasses = [FOCUS_RING_CLASSES, VALIDATION_RING_CLASSES, COMMON_INTERACTIVE_CLASSES]
 
       allClasses.forEach((classString) => {
         // Should only contain alphanumeric, hyphens, colons, slashes, brackets, and spaces

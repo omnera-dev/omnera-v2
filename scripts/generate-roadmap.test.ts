@@ -1,3 +1,4 @@
+import { randomBytes } from 'node:crypto'
 import { existsSync, mkdirSync, rmSync } from 'node:fs'
 import { join } from 'node:path'
 import { afterEach, beforeEach, describe, expect, test } from 'bun:test'
@@ -10,12 +11,19 @@ function generateProgressBar(percent: number, width: number = 30): string {
 }
 
 describe('generate-roadmap', () => {
-  const TEST_DIR = '.test-roadmap-output'
-  const TEST_SCHEMAS_DIR = join(TEST_DIR, 'schemas')
-  const TEST_CURRENT_SCHEMA = join(TEST_SCHEMAS_DIR, 'current.json')
-  const TEST_VISION_SCHEMA = join(TEST_SCHEMAS_DIR, 'vision.json')
+  // Use a unique directory per test to avoid conflicts in concurrent execution
+  let TEST_DIR: string
+  let TEST_SCHEMAS_DIR: string
+  let TEST_CURRENT_SCHEMA: string
+  let TEST_VISION_SCHEMA: string
 
-  beforeEach(async () => {
+  beforeEach(() => {
+    // Create unique test directory for each test
+    TEST_DIR = `.test-roadmap-output-${randomBytes(8).toString('hex')}`
+    TEST_SCHEMAS_DIR = join(TEST_DIR, 'schemas')
+    TEST_CURRENT_SCHEMA = join(TEST_SCHEMAS_DIR, 'current.json')
+    TEST_VISION_SCHEMA = join(TEST_SCHEMAS_DIR, 'vision.json')
+
     // Create test directory structure
     if (existsSync(TEST_DIR)) {
       rmSync(TEST_DIR, { recursive: true })
@@ -150,6 +158,11 @@ describe('generate-roadmap', () => {
         },
       }
 
+      // Ensure directory exists before writing
+      if (!existsSync(TEST_SCHEMAS_DIR)) {
+        mkdirSync(TEST_SCHEMAS_DIR, { recursive: true })
+      }
+
       await Bun.write(TEST_CURRENT_SCHEMA, JSON.stringify(currentSchema))
       await Bun.write(TEST_VISION_SCHEMA, JSON.stringify(visionSchema))
 
@@ -183,6 +196,11 @@ describe('generate-roadmap', () => {
           description: { type: 'string' },
           icon: { enum: ['user', 'settings'] },
         },
+      }
+
+      // Ensure directory exists before writing
+      if (!existsSync(TEST_SCHEMAS_DIR)) {
+        mkdirSync(TEST_SCHEMAS_DIR, { recursive: true })
       }
 
       await Bun.write(TEST_CURRENT_SCHEMA, JSON.stringify(currentSchema))

@@ -24,18 +24,51 @@ export interface UserStoriesFormatted {
 
 /**
  * Extract and format user stories from schema for a given property path
+ * with inheritance from parent levels
  *
  * Examples:
  *   - "automations" -> extracts from definitions.automation
  *   - "automation_trigger.http.post" -> navigates to HTTP POST trigger definition
  *   - "automation_action.notion.create-page" -> navigates to Notion Create Page action
+ *   - "pages.form-page.inputs.text-input" -> inherits from pages, form-page, inputs, and text-input
  */
 export function extractUserStoriesFromSchema(
   propertyPath: string,
   schema: JSONSchema
 ): UserStoriesFormatted {
-  const rawStories = extractRawUserStoriesFromSchema(propertyPath, schema)
+  const rawStories = extractUserStoriesWithInheritance(propertyPath, schema)
   return parseUserStories(propertyPath, rawStories)
+}
+
+/**
+ * Extract user stories with inheritance from parent levels
+ *
+ * Walks up the property hierarchy from leaf to root, collecting user stories
+ * at each level. This ensures nested properties inherit requirements from
+ * their parent contexts.
+ *
+ * Example: "pages.form-page.inputs.text-input" collects stories from:
+ *   1. pages.form-page.inputs.text-input (specific input requirements)
+ *   2. pages.form-page.inputs (general input requirements)
+ *   3. pages.form-page (form page requirements)
+ *   4. pages (general page requirements)
+ */
+function extractUserStoriesWithInheritance(propertyPath: string, schema: JSONSchema): string[] {
+  const allStories: string[] = []
+  const parts = propertyPath.split('.')
+
+  // Walk from leaf to root, collecting stories at each level
+  for (let i = parts.length; i > 0; i--) {
+    const currentPath = parts.slice(0, i).join('.')
+    const stories = extractRawUserStoriesFromSchema(currentPath, schema)
+
+    if (stories.length > 0) {
+      allStories.push(...stories)
+    }
+  }
+
+  // Deduplicate stories while preserving order (leaf to root)
+  return Array.from(new Set(allStories))
 }
 
 /**

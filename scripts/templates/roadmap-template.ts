@@ -339,7 +339,7 @@ function _renderTreeNode(
   if (depth > 0) {
     const connector = isLast ? '└─' : '├─'
     const icon = node.isDirectory ? '📁' : '📄'
-    const name = node.name
+    const { name } = node
 
     // Add status info for property files
     let statusInfo = ''
@@ -731,13 +731,14 @@ function renderPropertyTable(
 
   properties.forEach((prop) => {
     const impl = prop.implementationStatus
-    const schemaIcon = impl
-      ? impl.schemaExported
-        ? '✅'
-        : impl.schemaFileExists
-          ? '🚧'
-          : '⏳'
-      : '⏳'
+    let schemaIcon = '⏳'
+    if (impl) {
+      if (impl.schemaExported) {
+        schemaIcon = '✅'
+      } else if (impl.schemaFileExists) {
+        schemaIcon = '🚧'
+      }
+    }
     const testStatus =
       impl && impl.expectedTestCount > 0
         ? `${impl.implementedTestCount}/${impl.expectedTestCount}`
@@ -896,13 +897,14 @@ function _flattenTreeForTable(node: TreeNode, basePath: string = ''): TableRow[]
     if (childNode.property) {
       // This is a property file - add a row
       const impl = childNode.property.implementationStatus
-      const schemaIcon = impl
-        ? impl.schemaExported
-          ? '✅'
-          : impl.schemaFileExists
-            ? '🚧'
-            : '⏳'
-        : '⏳'
+      let schemaIcon = '⏳'
+      if (impl) {
+        if (impl.schemaExported) {
+          schemaIcon = '✅'
+        } else if (impl.schemaFileExists) {
+          schemaIcon = '🚧'
+        }
+      }
       const testStatus =
         impl && impl.expectedTestCount > 0
           ? `${impl.implementedTestCount}/${impl.expectedTestCount}`

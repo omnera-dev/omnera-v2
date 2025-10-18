@@ -101,6 +101,6 @@ A single-line description of the application (line breaks not allowed)
 
 ## Generated
 
-This schema was generated automatically on 2025-10-17 from the source schemas in `src/domain/models/app/`.
+This schema was generated automatically on 2025-10-18 from the source schemas in `src/domain/models/app/`.
 
 For the latest schema definitions, please refer to the source code or generate a new export.

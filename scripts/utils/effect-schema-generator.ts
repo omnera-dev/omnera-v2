@@ -5,6 +5,33 @@
 import type { EffectSchemaBlueprint, JSONSchemaProperty } from '../types/roadmap.ts'
 
 /**
+ * Convert property path to valid TypeScript identifier
+ * Example: "pages.form-page.inputs.text-input" → "PagesFormPageInputsTextInput"
+ */
+function toTypeScriptIdentifier(propertyPath: string): string {
+  return propertyPath
+    .split('.')
+    .map((part) =>
+      part
+        .split(/[-_]/)
+        .map((word) => capitalize(word))
+        .join('')
+    )
+    .join('')
+}
+
+/**
+ * Convert property path to kebab-case filename
+ * Example: "pages.form-page.inputs.text-input" → "pages-form-page-inputs-text-input"
+ */
+function toKebabCase(propertyPath: string): string {
+  return propertyPath
+    .split('.')
+    .map((part) => part.toLowerCase())
+    .join('-')
+}
+
+/**
  * Generate Effect Schema code from JSON Schema
  */
 export function generateEffectSchema(
@@ -14,11 +41,15 @@ export function generateEffectSchema(
 ): EffectSchemaBlueprint {
   const imports = new Set<string>(['Schema'])
   const exports = new Set<string>()
+  const sanitizedName = toTypeScriptIdentifier(propertyName)
+  const fileName = toKebabCase(propertyName)
 
   const code = generateSchemaCode(propertyName, schema, definitions, imports, exports, 0)
 
   return {
     propertyName,
+    sanitizedName,
+    fileName,
     code,
     imports: Array.from(imports),
     exports: Array.from(exports),
@@ -37,7 +68,8 @@ function generateSchemaCode(
   depth: number
 ): string {
   const indent = '  '.repeat(depth)
-  const schemaName = capitalize(name) + 'Schema'
+  const sanitizedName = toTypeScriptIdentifier(name)
+  const schemaName = sanitizedName + 'Schema'
 
   let code = ''
 
@@ -87,9 +119,9 @@ function generateSchemaCode(
   code += '\n\n'
 
   // Export type
-  code += `${indent}export type ${capitalize(name)} = Schema.Schema.Type<typeof ${schemaName}>\n`
+  code += `${indent}export type ${sanitizedName} = Schema.Schema.Type<typeof ${schemaName}>\n`
   exports.add(schemaName)
-  exports.add(capitalize(name))
+  exports.add(sanitizedName)
 
   return code
 }
