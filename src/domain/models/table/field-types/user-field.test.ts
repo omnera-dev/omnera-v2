@@ -57,7 +57,7 @@ describe('UserFieldSchema', () => {
       }
 
       expect(() => {
-        // @ts-expect-error
+        // @ts-expect-error - Testing validation with missing required id property
         Schema.decodeSync(UserFieldSchema)(field)
       }).toThrow()
     })
@@ -69,7 +69,7 @@ describe('UserFieldSchema', () => {
       }
 
       expect(() => {
-        // @ts-expect-error
+        // @ts-expect-error - Testing validation with missing required type property
         Schema.decodeSync(UserFieldSchema)(field)
       }).toThrow()
     })

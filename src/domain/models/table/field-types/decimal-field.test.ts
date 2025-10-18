@@ -73,7 +73,7 @@ describe('DecimalFieldSchema', () => {
     }
 
     expect(() => {
-      // @ts-expect-error
+      // @ts-expect-error - Testing validation with wrong type (integer instead of decimal)
       Schema.decodeSync(DecimalFieldSchema)(field)
     }).toThrow()
   })
