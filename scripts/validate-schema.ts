@@ -11,13 +11,12 @@
  * This provides full metaschema validation against JSON Schema Draft 7
  */
 
-import { readFileSync, existsSync, readdirSync, statSync } from 'node:fs'
-import { join, extname, resolve, dirname } from 'node:path'
+import { readFileSync, existsSync } from 'node:fs'
+import { join, resolve, dirname } from 'node:path'
 import Ajv, { type ValidateFunction, type ErrorObject, type SchemaObject } from 'ajv'
 import addFormats from 'ajv-formats'
 
 const SCHEMA_PATH = join(__dirname, '..', 'docs', 'specifications', 'specs.schema.json')
-const _SCHEMAS_DIR = join(__dirname, '..', 'docs', 'specifications', 'schemas')
 
 // Colors for console output
 const colors = {
@@ -32,30 +31,6 @@ const colors = {
 
 function log(message: string, color: string = colors.reset) {
   console.log(`${color}${message}${colors.reset}`)
-}
-
-function _getAllSchemaFiles(dirPath: string): string[] {
-  const files: string[] = []
-
-  function traverse(currentPath: string) {
-    if (!existsSync(currentPath)) return
-
-    const entries = readdirSync(currentPath)
-
-    for (const entry of entries) {
-      const fullPath = join(currentPath, entry)
-      const stat = statSync(fullPath)
-
-      if (stat.isDirectory()) {
-        traverse(fullPath)
-      } else if (extname(entry) === '.json' && entry.endsWith('.schema.json')) {
-        files.push(fullPath)
-      }
-    }
-  }
-
-  traverse(dirPath)
-  return files
 }
 
 async function validateWithAjv() {
