@@ -7,6 +7,7 @@ import { VersionSchema } from './version.ts'
 export * from './name.ts'
 export * from './version.ts'
 export * from './description.ts'
+export * from './tables.ts'
 
 /**
  * AppSchema defines the structure of an application configuration.

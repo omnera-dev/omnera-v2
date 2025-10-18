@@ -639,12 +639,17 @@ export default defineConfig([
             // DOMAIN LAYER - STRICT FEATURE ISOLATION
             // ==========================================
 
-            // App model (root) - Zero dependencies
+            // App model (root) - Can import feature models for composition
             {
               from: ['domain-model-app'],
-              allow: ['domain-model-app'],
+              allow: [
+                'domain-model-app',
+                'domain-model-table',
+                'domain-model-page',
+                'domain-model-automation',
+              ],
               message:
-                'App model violation: Must remain pure with zero external dependencies (can only import from itself).',
+                'App model violation: Can import feature models (table, page, automation) for schema composition.',
             },
 
             // Feature models - ONLY import from app model (NO CROSS-FEATURE IMPORTS)

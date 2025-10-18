@@ -1,0 +1,52 @@
+import { Schema } from 'effect'
+import { IdSchema } from '@/domain/models/table/id.ts'
+
+/**
+ * Rich Text Field
+ *
+ * Stores formatted text with support for bold, italic, links, lists, and other rich formatting.
+ * Typically rendered with a WYSIWYG editor in the UI.
+ * Supports optional maximum length constraints.
+ *
+ * @example
+ * ```typescript
+ * const field = {
+ *   id: 1,
+ *   name: 'article_content',
+ *   type: 'rich-text',
+ *   required: true,
+ *   maxLength: 10000
+ * }
+ * ```
+ */
+export const RichTextFieldSchema = Schema.Struct({
+  id: IdSchema,
+  name: Schema.Unknown,
+  required: Schema.optional(Schema.Boolean),
+  type: Schema.String,
+  maxLength: Schema.optional(
+    Schema.Int.pipe(
+      Schema.greaterThanOrEqualTo(1),
+      Schema.annotations({
+        description: 'Maximum length in characters',
+      })
+    )
+  ),
+}).pipe(
+  Schema.annotations({
+    title: 'Rich Text Field',
+    description:
+      'Stores formatted text with rich formatting support. Rendered with WYSIWYG editor in UI.',
+    examples: [
+      {
+        id: 1,
+        name: 'article_content',
+        type: 'rich-text',
+        required: true,
+        maxLength: 10000,
+      },
+    ],
+  })
+)
+
+export type RichTextField = Schema.Schema.Type<typeof RichTextFieldSchema>

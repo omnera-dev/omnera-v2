@@ -1,0 +1,44 @@
+import { Schema } from 'effect'
+import { IdSchema } from '@/domain/models/table/id.ts'
+
+/**
+ * Updated By Field
+ *
+ * Automatically captures the user who last modified a record.
+ * This field is system-managed and cannot be manually edited.
+ * Stores a reference to the user ID from the authentication system.
+ * Automatically updates on every record update operation.
+ * Commonly used for audit trails and tracking modification history.
+ *
+ * @example
+ * ```typescript
+ * const field = {
+ *   id: 1,
+ *   name: 'updated_by',
+ *   type: 'updated-by',
+ *   indexed: true
+ * }
+ * ```
+ */
+export const UpdatedByFieldSchema = Schema.Struct({
+  id: IdSchema,
+  name: Schema.Unknown,
+  type: Schema.String,
+  indexed: Schema.optional(Schema.Boolean),
+}).pipe(
+  Schema.annotations({
+    title: 'Updated By Field',
+    description:
+      'Automatically captures the user who last modified a record. System-managed field that stores user ID reference.',
+    examples: [
+      {
+        id: 1,
+        name: 'updated_by',
+        type: 'updated-by',
+        indexed: true,
+      },
+    ],
+  })
+)
+
+export type UpdatedByField = Schema.Schema.Type<typeof UpdatedByFieldSchema>

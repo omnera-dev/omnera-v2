@@ -1,0 +1,47 @@
+import { Schema } from 'effect'
+import { IdSchema } from '@/domain/models/table/id.ts'
+
+/**
+ * Single Select Field
+ *
+ * Allows selection of one option from a predefined list.
+ * Commonly used for categories, statuses, or any enumerated values.
+ * Supports optional default value selection.
+ *
+ * @example
+ * ```typescript
+ * const field = {
+ *   id: 1,
+ *   name: 'category',
+ *   type: 'single-select',
+ *   options: ['Electronics', 'Clothing', 'Food'],
+ *   default: 'Electronics'
+ * }
+ * ```
+ */
+export const SingleSelectFieldSchema = Schema.Struct({
+  id: IdSchema,
+  name: Schema.Unknown,
+  required: Schema.optional(Schema.Boolean),
+  indexed: Schema.optional(Schema.Boolean),
+  type: Schema.String,
+  options: Schema.Array(Schema.String),
+  default: Schema.optional(Schema.String),
+}).pipe(
+  Schema.annotations({
+    title: 'Single Select Field',
+    description:
+      'Allows selection of one option from predefined list. Used for categories or enumerated values.',
+    examples: [
+      {
+        id: 1,
+        name: 'category',
+        type: 'single-select',
+        options: ['Electronics', 'Clothing', 'Food'],
+        default: 'Electronics',
+      },
+    ],
+  })
+)
+
+export type SingleSelectField = Schema.Schema.Type<typeof SingleSelectFieldSchema>
