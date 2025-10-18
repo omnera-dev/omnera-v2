@@ -266,30 +266,6 @@ function categorizeProperty(name: string): string | null {
   return null
 }
 
-/**
- * Convert property name to file path parts
- */
-function propertyToPathParts(propertyName: string): string[] {
-  const parts = propertyName.split('.')
-
-  // Check if this is a definition (starts with one of the definition names)
-  const definitionNames = [
-    'automation_trigger',
-    'automation_action',
-    'filter_condition',
-    'json_schema',
-  ]
-
-  const isDefinition = definitionNames.some((defName) => propertyName.startsWith(defName))
-
-  if (isDefinition) {
-    // Definitions go under definitions/ folder
-    return ['definitions', ...parts]
-  }
-
-  return parts
-}
-
 // Tree-based rendering removed - using table-based approach instead
 
 /**
@@ -777,67 +753,4 @@ function formatServiceName(service: string): string {
   return nameMap[service] || service.charAt(0).toUpperCase() + service.slice(1)
 }
 
-/**
- * Flatten tree node into table rows
- */
-interface TableRow {
-  path: string
-  status: string
-  schema: string
-  tests: string
-  quality: string
-  guide: string
-}
-
-function _flattenTreeForTable(node: TreeNode, basePath: string = ''): TableRow[] {
-  const rows: TableRow[] = []
-
-  const children = Array.from(node.children.entries()).sort((a, b) => {
-    const aIsDir = a[1].isDirectory
-    const bIsDir = b[1].isDirectory
-    if (aIsDir !== bIsDir) return aIsDir ? -1 : 1
-    return a[0].localeCompare(b[0])
-  })
-
-  children.forEach(([childName, childNode]) => {
-    const currentPath = basePath ? `${basePath}/${childName}` : childName
-
-    if (childNode.property) {
-      // This is a property file - add a row
-      const impl = childNode.property.implementationStatus
-      let schemaIcon = '⏳'
-      if (impl) {
-        if (impl.schemaExported) {
-          schemaIcon = '✅'
-        } else if (impl.schemaFileExists) {
-          schemaIcon = '🚧'
-        }
-      }
-      const testStatus =
-        impl && impl.expectedTestCount > 0
-          ? `${impl.implementedTestCount}/${impl.expectedTestCount}`
-          : '-'
-      const qualityIcon = impl && impl.hasUnitTests ? '✅' : '⏳'
-
-      const fileName = childNode.property.name.replace(/\./g, '/')
-      const guideLink =
-        childNode.property.status !== 'complete'
-          ? `[📋 Guide](docs/specifications/roadmap/${fileName}.md)`
-          : '-'
-
-      rows.push({
-        path: `**${currentPath}**`,
-        status: getStatusIcon(childNode.property.status),
-        schema: schemaIcon,
-        tests: testStatus,
-        quality: qualityIcon,
-        guide: guideLink,
-      })
-    } else if (childNode.isDirectory) {
-      // This is a directory - recurse
-      rows.push(..._flattenTreeForTable(childNode, currentPath))
-    }
-  })
-
-  return rows
-}
+// Unused tree-flattening utilities removed
