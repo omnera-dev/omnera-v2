@@ -45,3 +45,10 @@ OLD_V1/
 
 # Temporary test files
 /tmp/
+
+# Drizzle local data
+.drizzle
+drizzle-kit.log
+
+# Keep generated migrations
+!drizzle/*.sql

@@ -60,6 +60,12 @@
     "test:e2e:ui": "playwright test --ui",
     "test:all": "bun test:unit && bun test:e2e:ci",
     "export:schema": "bun run scripts/export-schema.ts",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "drizzle-kit migrate",
+    "db:push": "drizzle-kit push",
+    "db:studio": "drizzle-kit studio",
+    "db:drop": "drizzle-kit drop",
+    "db:check": "drizzle-kit check",
     "release": "semantic-release"
   },
   "devDependencies": {
