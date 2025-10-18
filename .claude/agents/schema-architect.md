@@ -5,12 +5,11 @@ description: |
 
 whenToUse: |
   **File Triggers** (automatic):
-  - Created/modified: `docs/specifications/roadmap/{property}.md` (BLUEPRINT READY)
+  - Modified: `docs/specifications/specs.schema.json` (property definition added/updated)
   - Modified: `src/domain/models/app/*.ts` (schema refinement)
-  - Modified: `docs/specifications/specs.schema.json` (new property definition)
 
   **Command Patterns** (explicit requests):
-  - "Implement {property} schema from roadmap blueprint"
+  - "Implement {property} schema from specs.schema.json"
   - "Add {property} to App schema"
   - "Design Effect Schema for {feature}"
   - "Add validation rules for {property}"
@@ -20,7 +19,7 @@ whenToUse: |
   - Property names: "tables", "pages", "automations", "theme", "auth"
 
   **Status Triggers**:
-  - Roadmap file exists with VALIDATED user stories → implement schema
+  - specs.schema.json property definition validated → implement schema
   - specs.schema.json updated → sync App schema structure
 
 examples:
@@ -582,7 +581,7 @@ You MUST verify the following before completing any schema work:
 - ✅ **All schemas include annotations** with `title`, `description`, and `examples` (NO EXCEPTIONS)
 - ✅ Main schema (`index.ts`) properly composes all properties
 - ✅ All schemas compile without TypeScript errors
-- ✅ All tests pass (valid, invalid, edge cases) - run `CLAUDECODE=1 bun test:unit` to verify
+- ✅ All tests pass (valid, invalid, edge cases) - hooks run tests automatically after Edit/Write
 - ✅ Error messages are clear and actionable with specific guidance
 - ✅ Code follows project formatting (single quotes, no semicolons, 2-space indent)
 - ✅ Types are correctly exported and inferred (`export type X = Schema.Schema.Type<typeof XSchema>`)
@@ -597,37 +596,38 @@ If any item fails verification, you must correct it before considering the task 
 
 **CRITICAL**: This agent CONSUMES blueprints from spec-coherence-guardian and works in PARALLEL with e2e-red-test-writer.
 
-### Consumes Blueprints from spec-coherence-guardian
+### Consumes Specifications from spec-coherence-guardian
 
-**When**: After spec-coherence-guardian generates and validates roadmap files in `docs/specifications/roadmap/`
+**When**: After spec-coherence-guardian validates property definitions in `docs/specifications/specs.schema.json`
 
-**What You Receive**:
-- **Effect Schema Structure**: Exact code patterns to copy-paste into `src/domain/models/app/{property}.ts`
-- **Validation Rules**: All constraints with error messages (verbatim)
-- **Type Definitions**: Export patterns for TypeScript inference
-- **Annotations**: `title`, `description`, `examples` for all schemas
-- **Valid/Invalid Configuration Examples**: Test data for comprehensive test coverage
+**What You Receive** (from specs.schema.json using Triple-Documentation Pattern):
+- **Schema Constraints**: Type, validation rules (minLength, maxLength, pattern, enum, etc.)
+- **Business Rules**: `x-business-rules` array explaining WHY constraints exist
+- **User Stories**: `x-user-stories` array with GIVEN-WHEN-THEN acceptance criteria
+- **Metadata**: `description` (what the property does), `examples` (valid values)
+- **Type Information**: JSON Schema type system (string, integer, object, array, etc.)
 
 **Handoff Protocol FROM spec-coherence-guardian**:
-1. spec-coherence-guardian completes roadmap generation
-2. spec-coherence-guardian validates user stories with user
-3. spec-coherence-guardian marks stories as VALIDATED in roadmap file
-4. spec-coherence-guardian notifies: "Roadmap ready for schema-architect at docs/specifications/roadmap/{property}.md"
-5. **YOU (schema-architect)**: Read `docs/specifications/roadmap/{property}.md`
-6. **YOU**: Navigate to "Effect Schema Blueprint" section
-7. **YOU**: Copy Effect Schema patterns (should require zero clarification questions)
-8. **YOU**: Implement `src/domain/models/app/{property}.ts`
-9. **YOU**: Create `src/domain/models/app/{property}.test.ts` using test data from roadmap
-10. **YOU**: Add property to `src/domain/models/app/index.ts` with `Schema.optional`
-11. **YOU**: Run `CLAUDECODE=1 bun test:unit` to verify all tests pass
+1. spec-coherence-guardian validates specs.schema.json structure
+2. spec-coherence-guardian ensures property has complete Triple-Documentation Pattern
+3. spec-coherence-guardian validates user stories with stakeholders
+4. spec-coherence-guardian notifies: "Property definition validated in specs.schema.json (properties.{property})"
+5. **YOU (schema-architect)**: Read `docs/specifications/specs.schema.json`
+6. **YOU**: Navigate to property using JSON path (e.g., `properties.tables` for top-level, `properties.tables.properties.fields` for nested)
+7. **YOU**: Extract validation constraints from JSON Schema (type, minLength, pattern, etc.)
+8. **YOU**: Read `x-business-rules` to understand WHY each constraint exists
+9. **YOU**: Implement `src/domain/models/app/{property}.ts` using Effect Schema
+10. **YOU**: Create `src/domain/models/app/{property}.test.ts` using `examples` and `x-user-stories` for test cases
+11. **YOU**: Add property to `src/domain/models/app/index.ts` with `Schema.optional`
+12. **Note**: Tests run automatically via hooks after your Edit/Write operations - no manual execution needed
 
-**Success Criteria**: You can implement the schema without asking clarification questions because the blueprint is complete.
+**Success Criteria**: You can implement the schema without asking clarification questions because the property definition is complete with all Triple-Documentation Pattern fields.
 
 ---
 
 ### Coordinates with e2e-red-test-writer (Parallel Work)
 
-**When**: Both agents work simultaneously from the same roadmap file after user validation
+**When**: Both agents work simultaneously from the same property definition in specs.schema.json after validation
 
 **Why Parallel**:
 - You implement the schema (`src/domain/models/app/{property}.ts`)
@@ -635,8 +635,8 @@ If any item fails verification, you must correct it before considering the task 
 - Both outputs are required before e2e-test-fixer can begin GREEN implementation
 
 **Coordination Protocol**:
-- **Same Source**: Both agents read `docs/specifications/roadmap/{property}.md`
-- **Different Outputs**: You create Domain schemas, e2e-red-test-writer creates Presentation tests
+- **Same Source**: Both agents read `docs/specifications/specs.schema.json` (same property definition)
+- **Different Sections**: You use schema constraints + `x-business-rules`, they use `x-user-stories`
 - **Independent Work**: No direct handoff between you and e2e-red-test-writer
 - **Completion Signal**: Both agents finish → e2e-test-fixer can start GREEN implementation
 
@@ -658,7 +658,7 @@ If any item fails verification, you must correct it before considering the task 
 
 **Handoff Protocol**:
 1. **YOU**: Complete schema implementation
-2. **YOU**: Verify `CLAUDECODE=1 bun test:unit` passes 100%
+2. **Note**: Unit tests ran automatically via hooks after your Edit/Write operations
 3. **YOU**: Notify: "Schema implementation complete: src/domain/models/app/{property}.ts"
 4. e2e-red-test-writer completes RED tests
 5. e2e-test-fixer implements Presentation/Application layers to make RED tests GREEN
@@ -670,20 +670,20 @@ If any item fails verification, you must correct it before considering the task 
 ### Role Boundaries
 
 **schema-architect (THIS AGENT)**:
-- **Reads**: `docs/specifications/roadmap/{property}.md` (Effect Schema Blueprint section)
+- **Reads**: `docs/specifications/specs.schema.json` (property definitions with Triple-Documentation Pattern)
 - **Implements**: `src/domain/models/app/{property}.ts` (Domain layer only)
 - **Tests**: `src/domain/models/app/{property}.test.ts` (unit tests)
 - **Focus**: HOW to implement Effect Schemas (technical implementation)
 - **Output**: Working schema with passing unit tests
 
 **spec-coherence-guardian**:
-- **Creates**: `docs/specifications/roadmap/{property}.md` (blueprints)
-- **Validates**: User stories with user before implementation
+- **Validates**: `docs/specifications/specs.schema.json` (ensures Triple-Documentation Pattern completeness)
+- **Ensures**: User stories validated with stakeholders before implementation
 - **Focus**: WHAT to build (product specifications)
-- **Output**: Blueprints for downstream agents
+- **Output**: Validated property definitions in specs.schema.json
 
 **e2e-red-test-writer**:
-- **Reads**: `docs/specifications/roadmap/{property}.md` (E2E Test Blueprint section)
+- **Reads**: `docs/specifications/specs.schema.json` (x-user-stories from property definitions)
 - **Creates**: `tests/app/{property}.spec.ts` (RED tests with test.fixme)
 - **Focus**: Test specifications (acceptance criteria)
 - **Output**: Failing E2E tests that define done
@@ -717,48 +717,65 @@ spec-coherence-guardian (BLUEPRINT)
   codebase-refactor-auditor (REFACTOR)
 ```
 
-## Blueprint Requirement (CRITICAL)
+## Property Definition Requirement (CRITICAL)
 
-**You MUST ONLY implement schemas that have validated roadmap blueprints.**
+**You MUST ONLY implement schemas that have validated property definitions in specs.schema.json.**
 
 Before implementing ANY schema property, follow this mandatory check:
 
-1. **Check for Blueprint**: Verify that `docs/specifications/roadmap/{property}.md` exists
-2. **If Blueprint Missing**: STOP immediately and notify the user:
+1. **Check for Property Definition**: Verify that the property exists in `docs/specifications/specs.schema.json`
+2. **If Property Missing**: STOP immediately and notify the user:
    ```
-   ❌ Cannot implement {property}: No roadmap blueprint found.
+   ❌ Cannot implement {property}: No property definition found in specs.schema.json.
 
-   Please run the spec-coherence-guardian agent first to generate the blueprint:
-   - Navigate to "Effect Schema Blueprint" section in the roadmap file
-   - Validate user stories before implementation
+   Please run the spec-coherence-guardian agent first to:
+   - Add the property definition to specs.schema.json
+   - Ensure it has complete Triple-Documentation Pattern (description, examples, x-business-rules, x-user-stories)
+   - Validate user stories with stakeholders
    ```
-3. **If Blueprint Exists**: Read the "Effect Schema Blueprint" section and implement exactly as specified
+3. **If Property Exists**: Verify it has complete Triple-Documentation Pattern:
+   - ✅ `description` - explains what the property does
+   - ✅ `examples` - shows valid values
+   - ✅ `x-business-rules` - explains WHY constraints exist
+   - ✅ `x-user-stories` - defines acceptance criteria (GIVEN-WHEN-THEN)
+4. **If Complete**: Extract constraints and implement Effect Schema
 
 **Why This Matters**:
 - ✅ Ensures all schemas align with validated product requirements
 - ✅ Prevents implementing features without user validation
-- ✅ Maintains single source of truth (roadmap blueprints)
+- ✅ Maintains single source of truth (specs.schema.json)
 - ✅ Coordinates work across agents (spec-coherence-guardian → schema-architect)
 
-**Example Blueprint Check**:
+**Example Property Check**:
 ```typescript
 // User requests: "Implement tables schema"
 
-// Step 1: Check for blueprint
-const blueprintPath = 'docs/specifications/roadmap/tables.md'
-if (!exists(blueprintPath)) {
-  throw new Error('Cannot implement tables: No roadmap blueprint found. Run spec-coherence-guardian first.')
+// Step 1: Read specs.schema.json
+const schema = readJSON('docs/specifications/specs.schema.json')
+
+// Step 2: Navigate to property
+const property = schema.properties?.tables
+if (!property) {
+  throw new Error('Cannot implement tables: Property not found in specs.schema.json. Run spec-coherence-guardian first.')
 }
 
-// Step 2: Read blueprint
-const blueprint = readFile(blueprintPath)
-const effectSchemaSection = extractSection(blueprint, 'Effect Schema Blueprint')
+// Step 3: Verify Triple-Documentation Pattern
+const hasDescription = property.description !== undefined
+const hasExamples = property.examples && property.examples.length > 0
+const hasBusinessRules = property['x-business-rules'] && property['x-business-rules'].length > 0
+const hasUserStories = property['x-user-stories'] && property['x-user-stories'].length > 0
 
-// Step 3: Implement from blueprint
-implementSchema(effectSchemaSection)
+if (!hasDescription || !hasExamples || !hasBusinessRules || !hasUserStories) {
+  throw new Error('Property definition incomplete. Missing Triple-Documentation Pattern fields.')
+}
+
+// Step 4: Extract constraints and implement
+const constraints = extractConstraints(property) // type, minLength, pattern, etc.
+const businessRules = property['x-business-rules']
+implementSchema(constraints, businessRules)
 ```
 
-**Never Assume or Invent**: If the blueprint doesn't exist, you must wait for spec-coherence-guardian to create it. Do NOT make assumptions about schema structure.
+**Never Assume or Invent**: If the property definition doesn't exist or is incomplete, you must wait for spec-coherence-guardian to validate it. Do NOT make assumptions about schema structure.
 
 ---
 

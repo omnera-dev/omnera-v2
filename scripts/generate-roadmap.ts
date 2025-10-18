@@ -4,100 +4,31 @@
  * Roadmap Generation Script
  *
  * Analyzes schema differences between current and vision schemas,
- * generates comprehensive roadmap documentation with:
- * - Main ROADMAP.md with progress tracking
- * - Individual property files with Effect Schema blueprints
- * - E2E user stories in Given-When-Then format
+ * generates ROADMAP.md with progress tracking for all properties.
  *
- * Each schema property gets its own roadmap file, allowing flexible
- * development order without phase constraints.
+ * Detailed specifications (What/Why/Who-When) are maintained in
+ * docs/specifications/specs.schema.json using the Triple-Documentation Pattern:
+ * - description, examples (What)
+ * - x-business-rules (Why)
+ * - x-user-stories (Who/When)
  *
  * Usage: bun run scripts/generate-roadmap.ts
  */
 
-import { existsSync, mkdirSync, readdirSync, statSync, unlinkSync } from 'node:fs'
-import { dirname, join } from 'node:path'
-import {
-  generatePropertyDetailMarkdown,
-  generateSuccessCriteria,
-} from './templates/property-detail-template.ts'
+import { existsSync } from 'node:fs'
 import { generateRoadmapMarkdown } from './templates/roadmap-template.ts'
-import { formatValidationResults, validateBlueprint } from './utils/blueprint-validator.ts'
-import { generateEffectSchema } from './utils/effect-schema-generator.ts'
 import { getImplementationStatus } from './utils/implementation-checker.ts'
 import {
   calculateStats,
   compareSchemas,
   extractAllPropertiesRecursively,
 } from './utils/schema-comparison.ts'
-import { checkPropertyImplementation, runSchemaExport } from './utils/schema-export-runner.ts'
-import { extractUserStoriesFromSchema } from './utils/schema-user-stories-extractor.ts'
-import { checkTestStatus, formatTestStatus } from './utils/test-status-checker.ts'
-import { generateUserStories } from './utils/user-story-generator.ts'
-import type { JSONSchema, PropertyDocumentation, RoadmapData } from './types/roadmap.ts'
+import type { JSONSchema, RoadmapData } from './types/roadmap.ts'
 
 // Paths
 const CURRENT_SCHEMA_PATH = 'schemas/0.0.1/app.schema.json'
 const VISION_SCHEMA_PATH = 'docs/specifications/specs.schema.json'
 const ROADMAP_OUTPUT_PATH = 'ROADMAP.md'
-const PROPERTY_DETAILS_DIR = 'docs/specifications/roadmap'
-
-/**
- * Recursively walk directory and find all .md files
- */
-function walkDirectory(dir: string, fileList: string[] = []): string[] {
-  if (!existsSync(dir)) {
-    return fileList
-  }
-
-  const files = readdirSync(dir)
-
-  for (const file of files) {
-    const filePath = join(dir, file)
-    const stat = statSync(filePath)
-
-    if (stat.isDirectory()) {
-      walkDirectory(filePath, fileList)
-    } else if (file.endsWith('.md')) {
-      fileList.push(filePath)
-    }
-  }
-
-  return fileList
-}
-
-/**
- * Check if file content has changed
- */
-async function hasContentChanged(filePath: string, newContent: string): Promise<boolean> {
-  if (!existsSync(filePath)) {
-    return true // File doesn't exist, so content has "changed"
-  }
-
-  const file = Bun.file(filePath)
-  const existingContent = await file.text()
-
-  return existingContent !== newContent
-}
-
-/**
- * Write file only if content has changed
- */
-async function writeFileIfChanged(
-  filePath: string,
-  content: string
-): Promise<'created' | 'updated' | 'unchanged'> {
-  const changed = await hasContentChanged(filePath, content)
-
-  if (!changed) {
-    return 'unchanged'
-  }
-
-  const existed = existsSync(filePath)
-  await Bun.write(filePath, content)
-
-  return existed ? 'updated' : 'created'
-}
 
 /**
  * Main execution
@@ -118,8 +49,8 @@ async function main() {
   // Extract ALL properties recursively (including nested ones)
   const allProperties = extractAllPropertiesRecursively(currentSchema, visionSchema)
 
-  // Calculate statistics (use top-level for main overview)
-  const stats = calculateStats(topLevelProperties, 'v0.0.1', 'v1.0.0')
+  // Calculate statistics (use all properties including nested for accurate progress)
+  const stats = calculateStats(allProperties, 'v0.0.1', 'v1.0.0')
 
   console.log(
     `✅ Found ${stats.implementedProperties} implemented properties (${Math.round((stats.implementedProperties / stats.totalProperties) * 100)}%)`
@@ -136,19 +67,6 @@ async function main() {
   console.log(`🔍 Checking implementation status...`)
   for (const property of allProperties) {
     property.implementationStatus = getImplementationStatus(property.name)
-  }
-  console.log()
-
-  // Run schema export once to check which properties are actually implemented
-  console.log(`🔍 Running schema export to check implementation...`)
-  let currentSchemaExport: JSONSchema
-  try {
-    currentSchemaExport = await runSchemaExport()
-    console.log(`   ✅ Schema export completed successfully`)
-  } catch (error) {
-    console.warn(`   ⚠️  Could not run schema export, skipping implementation checks`)
-    console.warn(`   Error: ${error}`)
-    currentSchemaExport = currentSchema // Fallback to comparison schema
   }
   console.log()
 
@@ -182,132 +100,6 @@ async function main() {
   await Bun.write(ROADMAP_OUTPUT_PATH, roadmapMarkdown)
   console.log(`✅ Created ${ROADMAP_OUTPUT_PATH}`)
   console.log()
-
-  // Generate property detail files (including nested ones)
-  console.log(`📁 Generating property detail files (recursive)...`)
-
-  // Ensure roadmap directory exists
-  if (!existsSync(PROPERTY_DETAILS_DIR)) {
-    mkdirSync(PROPERTY_DETAILS_DIR, { recursive: true })
-  }
-
-  // Track expected files for cleanup
-  const expectedFiles = new Set<string>()
-
-  for (const property of allProperties) {
-    // Convert dot-notation path to file path (e.g., "tables.fields" → "tables/fields.md")
-    const filePath = propertyPathToFilePath(property.name, PROPERTY_DETAILS_DIR)
-    expectedFiles.add(filePath)
-
-    // Ensure parent directory exists
-    const dirPath = dirname(filePath)
-    if (!existsSync(dirPath)) {
-      mkdirSync(dirPath, { recursive: true })
-    }
-
-    // Generate Effect Schema blueprint
-    const effectSchema = generateEffectSchema(
-      property.name,
-      property.visionVersion,
-      visionSchema.definitions
-    )
-
-    // Validate blueprint before proceeding
-    const validationResult = validateBlueprint(effectSchema, property.visionVersion)
-    if (!validationResult.valid || validationResult.warnings.length > 0) {
-      console.log(formatValidationResults(validationResult, property.name))
-    }
-
-    // Extract user stories from schema x-user-stories key
-    const schemaUserStories = extractUserStoriesFromSchema(property.name, visionSchema)
-
-    // Use schema user stories if available, otherwise generate them
-    const userStories =
-      schemaUserStories.spec.length > 0
-        ? schemaUserStories
-        : generateUserStories(property.name, property.visionVersion)
-
-    // Create property documentation
-    const propertyDoc: PropertyDocumentation = {
-      property,
-      effectSchema,
-      userStories,
-      successCriteria: [],
-    }
-
-    // Check test status for this property
-    const testStatus = await checkTestStatus(property.name)
-    propertyDoc.testStatus = {
-      testFileExists: testStatus.testFileExists,
-      totalTests: testStatus.summary.total,
-      passingTests: testStatus.summary.passing,
-      fixmeTests: testStatus.summary.fixme,
-      coveragePercent: testStatus.coveragePercent,
-    }
-
-    // Check schema implementation status
-    const schemaStatus = checkPropertyImplementation(property.name, currentSchemaExport)
-    propertyDoc.schemaStatus = {
-      isImplemented: schemaStatus.isImplemented,
-      schemaFilePath: schemaStatus.schemaFilePath,
-    }
-
-    // Generate success criteria
-    propertyDoc.successCriteria = generateSuccessCriteria(propertyDoc)
-
-    // Generate markdown
-    const propertyMarkdown = generatePropertyDetailMarkdown(propertyDoc)
-
-    // Write file only if content has changed
-    const result = await writeFileIfChanged(filePath, propertyMarkdown)
-
-    // Status icon for logging
-    let statusIcon: string
-    if (property.status === 'complete') {
-      statusIcon = '✅'
-    } else if (property.status === 'partial') {
-      statusIcon = '🚧'
-    } else {
-      statusIcon = '⏳'
-    }
-
-    // Action icon for logging
-    let actionIcon: string
-    if (result === 'created') {
-      actionIcon = '➕'
-    } else if (result === 'updated') {
-      actionIcon = '✏️'
-    } else {
-      actionIcon = '⏭️'
-    }
-
-    // Format status information
-    const schemaStatusIcon = schemaStatus.isImplemented ? '✅' : '🔴'
-    const testStatusFormatted = formatTestStatus(testStatus)
-
-    console.log(`   ${statusIcon} ${actionIcon} ${filePath}`)
-    console.log(`      Schema: ${schemaStatusIcon} | Tests: ${testStatusFormatted}`)
-  }
-
-  console.log()
-
-  // Cleanup: Remove obsolete files that are no longer in the schema
-  console.log(`🧹 Cleaning up obsolete files...`)
-  const existingFiles = walkDirectory(PROPERTY_DETAILS_DIR)
-  const filesToRemove = existingFiles.filter((file) => !expectedFiles.has(file))
-
-  if (filesToRemove.length > 0) {
-    for (const file of filesToRemove) {
-      unlinkSync(file)
-      console.log(`   🗑️  Removed ${file}`)
-    }
-    console.log()
-    console.log(`✅ Removed ${filesToRemove.length} obsolete file(s)`)
-  } else {
-    console.log(`   ✅ No obsolete files found`)
-  }
-
-  console.log()
   console.log(`✅ Roadmap generation complete!`)
   console.log()
 
@@ -327,59 +119,11 @@ async function main() {
   // Next steps
   const nextProperty = topLevelProperties.find((p) => p.status === 'missing')
   if (nextProperty) {
-    const fileName = nextProperty.name
-      .replace(/([A-Z])/g, '-$1')
-      .toLowerCase()
-      .replace(/^-/, '')
     console.log(`📋 Next Steps:`)
     console.log(`   Work on: ${nextProperty.name}`)
-    console.log(`   Read: docs/specifications/roadmap/${fileName}.md`)
+    console.log(`   Read: docs/specifications/specs.schema.json (properties.${nextProperty.name})`)
     console.log(`   Complexity: ${nextProperty.complexity} points`)
   }
-}
-
-/**
- * Convert property path to file path
- * Examples:
- *   "tables" → "docs/specifications/roadmap/tables.md"
- *   "tables.fields" → "docs/specifications/roadmap/tables/fields.md"
- *   "tables.text-field.value" → "docs/specifications/roadmap/tables/text-field/value.md"
- *   "automation_trigger" → "docs/specifications/roadmap/definitions/automation_trigger.md"
- *   "automation_trigger.http" → "docs/specifications/roadmap/definitions/automation_trigger/http.md"
- */
-function propertyPathToFilePath(propertyPath: string, baseDir: string): string {
-  const parts = propertyPath.split('.')
-  const fileName = kebabCase(parts[parts.length - 1]!)
-  const dirParts = parts.slice(0, -1).map(kebabCase)
-
-  // Check if this is a definition (starts with one of the definition names)
-  const definitionNames = [
-    'automation_trigger',
-    'automation_action',
-    'filter_condition',
-    'json_schema',
-  ]
-
-  const isDefinition = definitionNames.some((defName) => propertyPath.startsWith(defName))
-
-  if (isDefinition) {
-    // Put definitions in a separate folder
-    const fullPath = ['definitions', ...dirParts, `${fileName}.md`]
-    return join(baseDir, ...fullPath)
-  }
-
-  const fullPath = [...dirParts, `${fileName}.md`]
-  return join(baseDir, ...fullPath)
-}
-
-/**
- * Convert string to kebab-case
- */
-function kebabCase(str: string): string {
-  return str
-    .replace(/([a-z])([A-Z])/g, '$1-$2')
-    .replace(/[\s_]+/g, '-')
-    .toLowerCase()
 }
 
 /**

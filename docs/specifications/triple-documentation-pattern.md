@@ -491,27 +491,27 @@ For **all other properties**, stories are generated based on schema analysis:
 
 ### How e2e-red-test-writer Consumes Stories
 
-**Input**: `docs/specifications/roadmap/{property}.md` with user stories
+**Input**: `docs/specifications/specs.schema.json` with property definitions containing `x-user-stories`
 
 **Process**:
 
-1. Reads E2E Test Blueprint section
-2. Extracts GIVEN-WHEN-THEN stories
-3. Maps stories to Playwright test structure
-4. Generates test.fixme() tests (RED phase)
-5. Assigns test tags (@spec, @regression, @critical)
-6. Includes data-testid patterns from roadmap
+1. Reads specs.schema.json
+2. Navigates to property definition (e.g., `properties.description`)
+3. Extracts `x-user-stories` array (GIVEN-WHEN-THEN format)
+4. Maps stories to Playwright test structure
+5. Generates test.fixme() tests (RED phase)
+6. Assigns test tags (@spec, @regression, @critical)
 
 **Output**: `tests/app/{property}.spec.ts` with failing tests
 
 **Example Transformation**:
 
-**Roadmap Story**:
+**specs.schema.json Story** (from `properties.description.x-user-stories`):
 
-```
-GIVEN user provides description with at least 10 characters
-WHEN validating input
-THEN value should be accepted
+```json
+"x-user-stories": [
+  "GIVEN user provides description with at least 10 characters WHEN validating input THEN value should be accepted"
+]
 ```
 
 **Generated Test**:
@@ -540,39 +540,41 @@ test.fixme(
 
 ### How schema-architect Consumes Business Rules
 
-**Input**: `docs/specifications/roadmap/{property}.md` with Effect Schema Blueprint
+**Input**: `docs/specifications/specs.schema.json` with property definitions containing constraints and `x-business-rules`
 
 **Process**:
 
-1. Reads Effect Schema Blueprint section
-2. Copies Effect Schema pattern
-3. Implements validation rules with exact error messages
-4. Adds annotations (title, description, examples)
-5. Creates unit tests based on x-business-rules
+1. Reads specs.schema.json
+2. Navigates to property definition (e.g., `properties.description`)
+3. Extracts JSON Schema constraints (type, minLength, maxLength, pattern, etc.)
+4. Reads `x-business-rules` to understand WHY constraints exist
+5. Implements Effect Schema with validation rules
+6. Adds annotations (title, description, examples) from schema metadata
+7. Creates unit tests based on constraints and x-business-rules
 
 **Output**: `src/domain/models/app/{property}.ts` with working schema
 
 **Example Transformation**:
 
-**Roadmap Blueprint**:
+**specs.schema.json Definition** (from `properties.description`):
 
-```typescript
-export const DescriptionSchema = Schema.String.pipe(
-  Schema.minLength(10, {
-    message: () => 'Description must be at least 10 characters',
-  }),
-  Schema.maxLength(500, {
-    message: () => 'Description must not exceed 500 characters',
-  }),
-  Schema.annotations({
-    title: 'App Description',
-    description: 'Brief explanation of what the application does',
-    examples: [
-      'A task management system for remote teams',
-      'Customer relationship management platform',
+```json
+{
+  "description": {
+    "description": "Brief explanation of what the application does",
+    "type": "string",
+    "minLength": 10,
+    "maxLength": 500,
+    "examples": [
+      "A task management system for remote teams",
+      "Customer relationship management platform"
     ],
-  })
-)
+    "x-business-rules": [
+      "Description must be long enough to be meaningful (10+ chars)",
+      "Description must fit in UI cards (500 char limit)"
+    ]
+  }
+}
 ```
 
 **Implemented Schema**:

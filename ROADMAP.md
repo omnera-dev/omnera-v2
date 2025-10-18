@@ -10,28 +10,28 @@
 
 - **Schema**: `schemas/0.0.1/app.schema.json`
 - **Implemented Properties**: 3 (name, description, version)
-- **Status**: ✅ **3/7 Properties Complete**
+- **Status**: ✅ **3/398 Properties Complete**
 
 ### Vision State (v1.0.0)
 
 - **Schema**: `docs/specifications/specs.schema.json`
-- **Total Properties**: 7 (name, description, version, tables, pages, automations, connections)
-- **Gap**: **~57%** of features not yet implemented
+- **Total Properties**: 398 (name, description, version, tables, pages, automations, connections)
+- **Gap**: **~99%** of features not yet implemented
 
 ---
 
 ## Overall Progress
 
-█████████████░░░░░░░░░░░░░░░░░ 43% Complete
+░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ 1% Complete
 
 ### Status Summary
 
 | Metric               | Count | Percentage |
 | -------------------- | ----- | ---------- |
-| **Total Properties** | 7     | 100%       |
-| **Implemented**      | 3     | 43%        |
+| **Total Properties** | 398   | 100%       |
+| **Implemented**      | 3     | 1%         |
 | **Partial**          | 0     | 0%         |
-| **Missing**          | 4     | 57%        |
+| **Missing**          | 395   | 99%        |
 
 ---
 
@@ -51,7 +51,7 @@
 
 ---
 
-## All Properties (391 total)
+## All Properties (398 total)
 
 Properties organized hierarchically: Automations (Triggers > Actions by service), Connections (by service), Pages (by type), Tables (fields by type).
 
@@ -200,7 +200,7 @@ Properties organized hierarchically: Automations (Triggers > Actions by service)
 | Property Path    | Status | Schema | Tests | Quality | Guide                                                                        |
 | ---------------- | ------ | ------ | ----- | ------- | ---------------------------------------------------------------------------- |
 | **id**           | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/connections/airtable/id.md)           |
-| **name**         | ⏳     | 🚧     | 21/5  | ✅      | [📋 Guide](docs/specifications/roadmap/connections/airtable/name.md)         |
+| **name**         | ⏳     | 🚧     | -     | ✅      | [📋 Guide](docs/specifications/roadmap/connections/airtable/name.md)         |
 | **clientId**     | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/connections/airtable/clientId.md)     |
 | **clientSecret** | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/connections/airtable/clientSecret.md) |
 | **service**      | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/connections/airtable/service.md)      |
@@ -210,7 +210,7 @@ Properties organized hierarchically: Automations (Triggers > Actions by service)
 | Property Path    | Status | Schema | Tests | Quality | Guide                                                                        |
 | ---------------- | ------ | ------ | ----- | ------- | ---------------------------------------------------------------------------- |
 | **id**           | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/connections/calendly/id.md)           |
-| **name**         | ⏳     | 🚧     | 21/5  | ✅      | [📋 Guide](docs/specifications/roadmap/connections/calendly/name.md)         |
+| **name**         | ⏳     | 🚧     | -     | ✅      | [📋 Guide](docs/specifications/roadmap/connections/calendly/name.md)         |
 | **clientId**     | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/connections/calendly/clientId.md)     |
 | **clientSecret** | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/connections/calendly/clientSecret.md) |
 | **service**      | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/connections/calendly/service.md)      |
@@ -220,7 +220,7 @@ Properties organized hierarchically: Automations (Triggers > Actions by service)
 | Property Path    | Status | Schema | Tests | Quality | Guide                                                                            |
 | ---------------- | ------ | ------ | ----- | ------- | -------------------------------------------------------------------------------- |
 | **id**           | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/connections/facebook-ads/id.md)           |
-| **name**         | ⏳     | 🚧     | 21/5  | ✅      | [📋 Guide](docs/specifications/roadmap/connections/facebook-ads/name.md)         |
+| **name**         | ⏳     | 🚧     | -     | ✅      | [📋 Guide](docs/specifications/roadmap/connections/facebook-ads/name.md)         |
 | **clientId**     | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/connections/facebook-ads/clientId.md)     |
 | **clientSecret** | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/connections/facebook-ads/clientSecret.md) |
 | **service**      | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/connections/facebook-ads/service.md)      |
@@ -230,7 +230,7 @@ Properties organized hierarchically: Automations (Triggers > Actions by service)
 | Property Path    | Status | Schema | Tests | Quality | Guide                                                                             |
 | ---------------- | ------ | ------ | ----- | ------- | --------------------------------------------------------------------------------- |
 | **id**           | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/connections/linked-in-ads/id.md)           |
-| **name**         | ⏳     | 🚧     | 21/5  | ✅      | [📋 Guide](docs/specifications/roadmap/connections/linked-in-ads/name.md)         |
+| **name**         | ⏳     | 🚧     | -     | ✅      | [📋 Guide](docs/specifications/roadmap/connections/linked-in-ads/name.md)         |
 | **clientId**     | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/connections/linked-in-ads/clientId.md)     |
 | **clientSecret** | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/connections/linked-in-ads/clientSecret.md) |
 | **service**      | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/connections/linked-in-ads/service.md)      |
@@ -240,7 +240,7 @@ Properties organized hierarchically: Automations (Triggers > Actions by service)
 | Property Path    | Status | Schema | Tests | Quality | Guide                                                                      |
 | ---------------- | ------ | ------ | ----- | ------- | -------------------------------------------------------------------------- |
 | **id**           | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/connections/notion/id.md)           |
-| **name**         | ⏳     | 🚧     | 21/5  | ✅      | [📋 Guide](docs/specifications/roadmap/connections/notion/name.md)         |
+| **name**         | ⏳     | 🚧     | -     | ✅      | [📋 Guide](docs/specifications/roadmap/connections/notion/name.md)         |
 | **clientId**     | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/connections/notion/clientId.md)     |
 | **clientSecret** | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/connections/notion/clientSecret.md) |
 | **service**      | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/connections/notion/service.md)      |
@@ -250,7 +250,7 @@ Properties organized hierarchically: Automations (Triggers > Actions by service)
 | Property Path    | Status | Schema | Tests | Quality | Guide                                                                     |
 | ---------------- | ------ | ------ | ----- | ------- | ------------------------------------------------------------------------- |
 | **id**           | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/connections/qonto/id.md)           |
-| **name**         | ⏳     | 🚧     | 21/5  | ✅      | [📋 Guide](docs/specifications/roadmap/connections/qonto/name.md)         |
+| **name**         | ⏳     | 🚧     | -     | ✅      | [📋 Guide](docs/specifications/roadmap/connections/qonto/name.md)         |
 | **clientId**     | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/connections/qonto/clientId.md)     |
 | **clientSecret** | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/connections/qonto/clientSecret.md) |
 | **service**      | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/connections/qonto/service.md)      |
@@ -262,11 +262,11 @@ Properties organized hierarchically: Automations (Triggers > Actions by service)
 | Property Path                     | Status | Schema | Tests | Quality | Guide                                                                                           |
 | --------------------------------- | ------ | ------ | ----- | ------- | ----------------------------------------------------------------------------------------------- |
 | **type**                          | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/pages/custom-html-page/type.md)                          |
-| **name**                          | ⏳     | 🚧     | 21/5  | ✅      | [📋 Guide](docs/specifications/roadmap/pages/custom-html-page/name.md)                          |
+| **name**                          | ⏳     | 🚧     | -     | ✅      | [📋 Guide](docs/specifications/roadmap/pages/custom-html-page/name.md)                          |
 | **path**                          | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/pages/custom-html-page/path.md)                          |
 | **head**                          | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/pages/custom-html-page/head.md)                          |
 | **head/meta-element/tag**         | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/pages/custom-html-page/head/meta-element/tag.md)         |
-| **head/meta-element/name**        | ⏳     | 🚧     | 21/5  | ✅      | [📋 Guide](docs/specifications/roadmap/pages/custom-html-page/head/meta-element/name.md)        |
+| **head/meta-element/name**        | ⏳     | 🚧     | -     | ✅      | [📋 Guide](docs/specifications/roadmap/pages/custom-html-page/head/meta-element/name.md)        |
 | **head/meta-element/content**     | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/pages/custom-html-page/head/meta-element/content.md)     |
 | **head/title-element/tag**        | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/pages/custom-html-page/head/title-element/tag.md)        |
 | **head/title-element/content**    | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/pages/custom-html-page/head/title-element/content.md)    |
@@ -296,7 +296,7 @@ Properties organized hierarchically: Automations (Triggers > Actions by service)
 | Property Path       | Status | Schema | Tests | Quality | Guide                                                                             |
 | ------------------- | ------ | ------ | ----- | ------- | --------------------------------------------------------------------------------- |
 | **type**            | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/pages/detail-view-page/type.md)            |
-| **name**            | ⏳     | 🚧     | 21/5  | ✅      | [📋 Guide](docs/specifications/roadmap/pages/detail-view-page/name.md)            |
+| **name**            | ⏳     | 🚧     | -     | ✅      | [📋 Guide](docs/specifications/roadmap/pages/detail-view-page/name.md)            |
 | **path**            | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/pages/detail-view-page/path.md)            |
 | **table**           | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/pages/detail-view-page/table.md)           |
 | **title**           | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/pages/detail-view-page/title.md)           |
@@ -313,10 +313,10 @@ Properties organized hierarchically: Automations (Triggers > Actions by service)
 | ------------------ | ------ | ------ | ----- | ------- | ------------------------------------------------------------------------- |
 | **type**           | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/pages/form-page/type.md)           |
 | **id**             | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/pages/form-page/id.md)             |
-| **name**           | ⏳     | 🚧     | 21/5  | ✅      | [📋 Guide](docs/specifications/roadmap/pages/form-page/name.md)           |
+| **name**           | ⏳     | 🚧     | -     | ✅      | [📋 Guide](docs/specifications/roadmap/pages/form-page/name.md)           |
 | **path**           | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/pages/form-page/path.md)           |
 | **title**          | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/pages/form-page/title.md)          |
-| **description**    | ⏳     | 🚧     | 16/3  | ✅      | [📋 Guide](docs/specifications/roadmap/pages/form-page/description.md)    |
+| **description**    | ⏳     | 🚧     | -     | ✅      | [📋 Guide](docs/specifications/roadmap/pages/form-page/description.md)    |
 | **inputs**         | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/pages/form-page/inputs.md)         |
 | **action**         | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/pages/form-page/action.md)         |
 | **table**          | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/pages/form-page/table.md)          |
@@ -327,9 +327,9 @@ Properties organized hierarchically: Automations (Triggers > Actions by service)
 
 | Property Path   | Status | Schema | Tests | Quality | Guide                                                                                          |
 | --------------- | ------ | ------ | ----- | ------- | ---------------------------------------------------------------------------------------------- |
-| **name**        | ⏳     | 🚧     | 21/5  | ✅      | [📋 Guide](docs/specifications/roadmap/pages/form-page/inputs/attachment-input/name.md)        |
+| **name**        | ⏳     | 🚧     | -     | ✅      | [📋 Guide](docs/specifications/roadmap/pages/form-page/inputs/attachment-input/name.md)        |
 | **label**       | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/pages/form-page/inputs/attachment-input/label.md)       |
-| **description** | ⏳     | 🚧     | 16/3  | ✅      | [📋 Guide](docs/specifications/roadmap/pages/form-page/inputs/attachment-input/description.md) |
+| **description** | ⏳     | 🚧     | -     | ✅      | [📋 Guide](docs/specifications/roadmap/pages/form-page/inputs/attachment-input/description.md) |
 | **required**    | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/pages/form-page/inputs/attachment-input/required.md)    |
 | **accept**      | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/pages/form-page/inputs/attachment-input/accept.md)      |
 | **type**        | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/pages/form-page/inputs/attachment-input/type.md)        |
@@ -338,9 +338,9 @@ Properties organized hierarchically: Automations (Triggers > Actions by service)
 
 | Property Path    | Status | Schema | Tests | Quality | Guide                                                                                         |
 | ---------------- | ------ | ------ | ----- | ------- | --------------------------------------------------------------------------------------------- |
-| **name**         | ⏳     | 🚧     | 21/5  | ✅      | [📋 Guide](docs/specifications/roadmap/pages/form-page/inputs/checkbox-input/name.md)         |
+| **name**         | ⏳     | 🚧     | -     | ✅      | [📋 Guide](docs/specifications/roadmap/pages/form-page/inputs/checkbox-input/name.md)         |
 | **label**        | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/pages/form-page/inputs/checkbox-input/label.md)        |
-| **description**  | ⏳     | 🚧     | 16/3  | ✅      | [📋 Guide](docs/specifications/roadmap/pages/form-page/inputs/checkbox-input/description.md)  |
+| **description**  | ⏳     | 🚧     | -     | ✅      | [📋 Guide](docs/specifications/roadmap/pages/form-page/inputs/checkbox-input/description.md)  |
 | **required**     | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/pages/form-page/inputs/checkbox-input/required.md)     |
 | **defaultValue** | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/pages/form-page/inputs/checkbox-input/defaultValue.md) |
 | **type**         | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/pages/form-page/inputs/checkbox-input/type.md)         |
@@ -349,9 +349,9 @@ Properties organized hierarchically: Automations (Triggers > Actions by service)
 
 | Property Path     | Status | Schema | Tests | Quality | Guide                                                                                        |
 | ----------------- | ------ | ------ | ----- | ------- | -------------------------------------------------------------------------------------------- |
-| **name**          | ⏳     | 🚧     | 21/5  | ✅      | [📋 Guide](docs/specifications/roadmap/pages/form-page/inputs/select-input/name.md)          |
+| **name**          | ⏳     | 🚧     | -     | ✅      | [📋 Guide](docs/specifications/roadmap/pages/form-page/inputs/select-input/name.md)          |
 | **label**         | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/pages/form-page/inputs/select-input/label.md)         |
-| **description**   | ⏳     | 🚧     | 16/3  | ✅      | [📋 Guide](docs/specifications/roadmap/pages/form-page/inputs/select-input/description.md)   |
+| **description**   | ⏳     | 🚧     | -     | ✅      | [📋 Guide](docs/specifications/roadmap/pages/form-page/inputs/select-input/description.md)   |
 | **required**      | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/pages/form-page/inputs/select-input/required.md)      |
 | **defaultValue**  | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/pages/form-page/inputs/select-input/defaultValue.md)  |
 | **placeholder**   | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/pages/form-page/inputs/select-input/placeholder.md)   |
@@ -364,9 +364,9 @@ Properties organized hierarchically: Automations (Triggers > Actions by service)
 
 | Property Path    | Status | Schema | Tests | Quality | Guide                                                                                     |
 | ---------------- | ------ | ------ | ----- | ------- | ----------------------------------------------------------------------------------------- |
-| **name**         | ⏳     | 🚧     | 21/5  | ✅      | [📋 Guide](docs/specifications/roadmap/pages/form-page/inputs/text-input/name.md)         |
+| **name**         | ⏳     | 🚧     | -     | ✅      | [📋 Guide](docs/specifications/roadmap/pages/form-page/inputs/text-input/name.md)         |
 | **label**        | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/pages/form-page/inputs/text-input/label.md)        |
-| **description**  | ⏳     | 🚧     | 16/3  | ✅      | [📋 Guide](docs/specifications/roadmap/pages/form-page/inputs/text-input/description.md)  |
+| **description**  | ⏳     | 🚧     | -     | ✅      | [📋 Guide](docs/specifications/roadmap/pages/form-page/inputs/text-input/description.md)  |
 | **required**     | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/pages/form-page/inputs/text-input/required.md)     |
 | **defaultValue** | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/pages/form-page/inputs/text-input/defaultValue.md) |
 | **placeholder**  | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/pages/form-page/inputs/text-input/placeholder.md)  |
@@ -377,7 +377,7 @@ Properties organized hierarchically: Automations (Triggers > Actions by service)
 | Property Path      | Status | Schema | Tests | Quality | Guide                                                                           |
 | ------------------ | ------ | ------ | ----- | ------- | ------------------------------------------------------------------------------- |
 | **type**           | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/pages/table-view-page/type.md)           |
-| **name**           | ⏳     | 🚧     | 21/5  | ✅      | [📋 Guide](docs/specifications/roadmap/pages/table-view-page/name.md)           |
+| **name**           | ⏳     | 🚧     | -     | ✅      | [📋 Guide](docs/specifications/roadmap/pages/table-view-page/name.md)           |
 | **path**           | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/pages/table-view-page/path.md)           |
 | **table**          | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/pages/table-view-page/table.md)          |
 | **title**          | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/pages/table-view-page/title.md)          |
@@ -398,17 +398,17 @@ Properties organized hierarchically: Automations (Triggers > Actions by service)
 | Property Path                | Status | Schema | Tests | Quality | Guide                                                                      |
 | ---------------------------- | ------ | ------ | ----- | ------- | -------------------------------------------------------------------------- |
 | **id**                       | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/tables/id.md)                       |
-| **name**                     | ⏳     | 🚧     | 21/5  | ✅      | [📋 Guide](docs/specifications/roadmap/tables/name.md)                     |
+| **name**                     | ⏳     | 🚧     | -     | ✅      | [📋 Guide](docs/specifications/roadmap/tables/name.md)                     |
 | **fields**                   | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/tables/fields.md)                   |
 | **primaryKey**               | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/tables/primaryKey.md)               |
 | **primaryKey/type**          | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/tables/primaryKey/type.md)          |
 | **primaryKey/field**         | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/tables/primaryKey/field.md)         |
 | **primaryKey/fields**        | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/tables/primaryKey/fields.md)        |
 | **uniqueConstraints**        | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/tables/uniqueConstraints.md)        |
-| **uniqueConstraints/name**   | ⏳     | 🚧     | 21/5  | ✅      | [📋 Guide](docs/specifications/roadmap/tables/uniqueConstraints/name.md)   |
+| **uniqueConstraints/name**   | ⏳     | 🚧     | -     | ✅      | [📋 Guide](docs/specifications/roadmap/tables/uniqueConstraints/name.md)   |
 | **uniqueConstraints/fields** | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/tables/uniqueConstraints/fields.md) |
 | **indexes**                  | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/tables/indexes.md)                  |
-| **indexes/name**             | ⏳     | 🚧     | 21/5  | ✅      | [📋 Guide](docs/specifications/roadmap/tables/indexes/name.md)             |
+| **indexes/name**             | ⏳     | 🚧     | -     | ✅      | [📋 Guide](docs/specifications/roadmap/tables/indexes/name.md)             |
 | **indexes/fields**           | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/tables/indexes/fields.md)           |
 | **indexes/unique**           | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/tables/indexes/unique.md)           |
 
@@ -417,7 +417,7 @@ Properties organized hierarchically: Automations (Triggers > Actions by service)
 | Property Path | Status | Schema | Tests | Quality | Guide                                                                         |
 | ------------- | ------ | ------ | ----- | ------- | ----------------------------------------------------------------------------- |
 | **id**        | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/tables/fields/array-field/id.md)       |
-| **name**      | ⏳     | 🚧     | 21/5  | ✅      | [📋 Guide](docs/specifications/roadmap/tables/fields/array-field/name.md)     |
+| **name**      | ⏳     | 🚧     | -     | ✅      | [📋 Guide](docs/specifications/roadmap/tables/fields/array-field/name.md)     |
 | **required**  | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/tables/fields/array-field/required.md) |
 | **type**      | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/tables/fields/array-field/type.md)     |
 | **itemType**  | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/tables/fields/array-field/itemType.md) |
@@ -428,7 +428,7 @@ Properties organized hierarchically: Automations (Triggers > Actions by service)
 | Property Path | Status | Schema | Tests | Quality | Guide                                                                               |
 | ------------- | ------ | ------ | ----- | ------- | ----------------------------------------------------------------------------------- |
 | **id**        | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/tables/fields/autonumber-field/id.md)        |
-| **name**      | ⏳     | 🚧     | 21/5  | ✅      | [📋 Guide](docs/specifications/roadmap/tables/fields/autonumber-field/name.md)      |
+| **name**      | ⏳     | 🚧     | -     | ✅      | [📋 Guide](docs/specifications/roadmap/tables/fields/autonumber-field/name.md)      |
 | **type**      | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/tables/fields/autonumber-field/type.md)      |
 | **prefix**    | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/tables/fields/autonumber-field/prefix.md)    |
 | **startFrom** | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/tables/fields/autonumber-field/startFrom.md) |
@@ -439,7 +439,7 @@ Properties organized hierarchically: Automations (Triggers > Actions by service)
 | Property Path | Status | Schema | Tests | Quality | Guide                                                                           |
 | ------------- | ------ | ------ | ----- | ------- | ------------------------------------------------------------------------------- |
 | **id**        | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/tables/fields/barcode-field/id.md)       |
-| **name**      | ⏳     | 🚧     | 21/5  | ✅      | [📋 Guide](docs/specifications/roadmap/tables/fields/barcode-field/name.md)     |
+| **name**      | ⏳     | 🚧     | -     | ✅      | [📋 Guide](docs/specifications/roadmap/tables/fields/barcode-field/name.md)     |
 | **required**  | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/tables/fields/barcode-field/required.md) |
 | **type**      | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/tables/fields/barcode-field/type.md)     |
 | **format**    | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/tables/fields/barcode-field/format.md)   |
@@ -449,7 +449,7 @@ Properties organized hierarchically: Automations (Triggers > Actions by service)
 | Property Path  | Status | Schema | Tests | Quality | Guide                                                                            |
 | -------------- | ------ | ------ | ----- | ------- | -------------------------------------------------------------------------------- |
 | **id**         | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/tables/fields/button-field/id.md)         |
-| **name**       | ⏳     | 🚧     | 21/5  | ✅      | [📋 Guide](docs/specifications/roadmap/tables/fields/button-field/name.md)       |
+| **name**       | ⏳     | 🚧     | -     | ✅      | [📋 Guide](docs/specifications/roadmap/tables/fields/button-field/name.md)       |
 | **type**       | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/tables/fields/button-field/type.md)       |
 | **label**      | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/tables/fields/button-field/label.md)      |
 | **action**     | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/tables/fields/button-field/action.md)     |
@@ -461,7 +461,7 @@ Properties organized hierarchically: Automations (Triggers > Actions by service)
 | Property Path | Status | Schema | Tests | Quality | Guide                                                                            |
 | ------------- | ------ | ------ | ----- | ------- | -------------------------------------------------------------------------------- |
 | **id**        | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/tables/fields/checkbox-field/id.md)       |
-| **name**      | ⏳     | 🚧     | 21/5  | ✅      | [📋 Guide](docs/specifications/roadmap/tables/fields/checkbox-field/name.md)     |
+| **name**      | ⏳     | 🚧     | -     | ✅      | [📋 Guide](docs/specifications/roadmap/tables/fields/checkbox-field/name.md)     |
 | **required**  | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/tables/fields/checkbox-field/required.md) |
 | **indexed**   | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/tables/fields/checkbox-field/indexed.md)  |
 | **type**      | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/tables/fields/checkbox-field/type.md)     |
@@ -472,7 +472,7 @@ Properties organized hierarchically: Automations (Triggers > Actions by service)
 | Property Path | Status | Schema | Tests | Quality | Guide                                                                         |
 | ------------- | ------ | ------ | ----- | ------- | ----------------------------------------------------------------------------- |
 | **id**        | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/tables/fields/color-field/id.md)       |
-| **name**      | ⏳     | 🚧     | 21/5  | ✅      | [📋 Guide](docs/specifications/roadmap/tables/fields/color-field/name.md)     |
+| **name**      | ⏳     | 🚧     | -     | ✅      | [📋 Guide](docs/specifications/roadmap/tables/fields/color-field/name.md)     |
 | **required**  | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/tables/fields/color-field/required.md) |
 | **type**      | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/tables/fields/color-field/type.md)     |
 | **default**   | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/tables/fields/color-field/default.md)  |
@@ -482,7 +482,7 @@ Properties organized hierarchically: Automations (Triggers > Actions by service)
 | Property Path | Status | Schema | Tests | Quality | Guide                                                                             |
 | ------------- | ------ | ------ | ----- | ------- | --------------------------------------------------------------------------------- |
 | **id**        | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/tables/fields/created-at-field/id.md)      |
-| **name**      | ⏳     | 🚧     | 21/5  | ✅      | [📋 Guide](docs/specifications/roadmap/tables/fields/created-at-field/name.md)    |
+| **name**      | ⏳     | 🚧     | -     | ✅      | [📋 Guide](docs/specifications/roadmap/tables/fields/created-at-field/name.md)    |
 | **type**      | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/tables/fields/created-at-field/type.md)    |
 | **indexed**   | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/tables/fields/created-at-field/indexed.md) |
 
@@ -491,7 +491,7 @@ Properties organized hierarchically: Automations (Triggers > Actions by service)
 | Property Path | Status | Schema | Tests | Quality | Guide                                                                             |
 | ------------- | ------ | ------ | ----- | ------- | --------------------------------------------------------------------------------- |
 | **id**        | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/tables/fields/created-by-field/id.md)      |
-| **name**      | ⏳     | 🚧     | 21/5  | ✅      | [📋 Guide](docs/specifications/roadmap/tables/fields/created-by-field/name.md)    |
+| **name**      | ⏳     | 🚧     | -     | ✅      | [📋 Guide](docs/specifications/roadmap/tables/fields/created-by-field/name.md)    |
 | **type**      | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/tables/fields/created-by-field/type.md)    |
 | **indexed**   | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/tables/fields/created-by-field/indexed.md) |
 
@@ -500,7 +500,7 @@ Properties organized hierarchically: Automations (Triggers > Actions by service)
 | Property Path   | Status | Schema | Tests | Quality | Guide                                                                           |
 | --------------- | ------ | ------ | ----- | ------- | ------------------------------------------------------------------------------- |
 | **id**          | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/tables/fields/date-field/id.md)          |
-| **name**        | ⏳     | 🚧     | 21/5  | ✅      | [📋 Guide](docs/specifications/roadmap/tables/fields/date-field/name.md)        |
+| **name**        | ⏳     | 🚧     | -     | ✅      | [📋 Guide](docs/specifications/roadmap/tables/fields/date-field/name.md)        |
 | **required**    | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/tables/fields/date-field/required.md)    |
 | **unique**      | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/tables/fields/date-field/unique.md)      |
 | **indexed**     | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/tables/fields/date-field/indexed.md)     |
@@ -515,7 +515,7 @@ Properties organized hierarchically: Automations (Triggers > Actions by service)
 | Property Path | Status | Schema | Tests | Quality | Guide                                                                            |
 | ------------- | ------ | ------ | ----- | ------- | -------------------------------------------------------------------------------- |
 | **id**        | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/tables/fields/duration-field/id.md)       |
-| **name**      | ⏳     | 🚧     | 21/5  | ✅      | [📋 Guide](docs/specifications/roadmap/tables/fields/duration-field/name.md)     |
+| **name**      | ⏳     | 🚧     | -     | ✅      | [📋 Guide](docs/specifications/roadmap/tables/fields/duration-field/name.md)     |
 | **required**  | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/tables/fields/duration-field/required.md) |
 | **type**      | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/tables/fields/duration-field/type.md)     |
 | **format**    | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/tables/fields/duration-field/format.md)   |
@@ -525,7 +525,7 @@ Properties organized hierarchically: Automations (Triggers > Actions by service)
 | Property Path  | Status | Schema | Tests | Quality | Guide                                                                             |
 | -------------- | ------ | ------ | ----- | ------- | --------------------------------------------------------------------------------- |
 | **id**         | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/tables/fields/formula-field/id.md)         |
-| **name**       | ⏳     | 🚧     | 21/5  | ✅      | [📋 Guide](docs/specifications/roadmap/tables/fields/formula-field/name.md)       |
+| **name**       | ⏳     | 🚧     | -     | ✅      | [📋 Guide](docs/specifications/roadmap/tables/fields/formula-field/name.md)       |
 | **type**       | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/tables/fields/formula-field/type.md)       |
 | **formula**    | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/tables/fields/formula-field/formula.md)    |
 | **resultType** | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/tables/fields/formula-field/resultType.md) |
@@ -536,7 +536,7 @@ Properties organized hierarchically: Automations (Triggers > Actions by service)
 | Property Path | Status | Schema | Tests | Quality | Guide                                                                               |
 | ------------- | ------ | ------ | ----- | ------- | ----------------------------------------------------------------------------------- |
 | **id**        | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/tables/fields/geolocation-field/id.md)       |
-| **name**      | ⏳     | 🚧     | 21/5  | ✅      | [📋 Guide](docs/specifications/roadmap/tables/fields/geolocation-field/name.md)     |
+| **name**      | ⏳     | 🚧     | -     | ✅      | [📋 Guide](docs/specifications/roadmap/tables/fields/geolocation-field/name.md)     |
 | **required**  | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/tables/fields/geolocation-field/required.md) |
 | **type**      | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/tables/fields/geolocation-field/type.md)     |
 
@@ -545,7 +545,7 @@ Properties organized hierarchically: Automations (Triggers > Actions by service)
 | Property Path | Status | Schema | Tests | Quality | Guide                                                                        |
 | ------------- | ------ | ------ | ----- | ------- | ---------------------------------------------------------------------------- |
 | **id**        | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/tables/fields/json-field/id.md)       |
-| **name**      | ⏳     | 🚧     | 21/5  | ✅      | [📋 Guide](docs/specifications/roadmap/tables/fields/json-field/name.md)     |
+| **name**      | ⏳     | 🚧     | -     | ✅      | [📋 Guide](docs/specifications/roadmap/tables/fields/json-field/name.md)     |
 | **required**  | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/tables/fields/json-field/required.md) |
 | **type**      | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/tables/fields/json-field/type.md)     |
 | **schema**    | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/tables/fields/json-field/schema.md)   |
@@ -555,7 +555,7 @@ Properties organized hierarchically: Automations (Triggers > Actions by service)
 | Property Path         | Status | Schema | Tests | Quality | Guide                                                                                   |
 | --------------------- | ------ | ------ | ----- | ------- | --------------------------------------------------------------------------------------- |
 | **id**                | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/tables/fields/lookup-field/id.md)                |
-| **name**              | ⏳     | 🚧     | 21/5  | ✅      | [📋 Guide](docs/specifications/roadmap/tables/fields/lookup-field/name.md)              |
+| **name**              | ⏳     | 🚧     | -     | ✅      | [📋 Guide](docs/specifications/roadmap/tables/fields/lookup-field/name.md)              |
 | **type**              | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/tables/fields/lookup-field/type.md)              |
 | **relationshipField** | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/tables/fields/lookup-field/relationshipField.md) |
 | **relatedField**      | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/tables/fields/lookup-field/relatedField.md)      |
@@ -565,7 +565,7 @@ Properties organized hierarchically: Automations (Triggers > Actions by service)
 | Property Path     | Status | Schema | Tests | Quality | Guide                                                                                     |
 | ----------------- | ------ | ------ | ----- | ------- | ----------------------------------------------------------------------------------------- |
 | **id**            | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/tables/fields/multi-select-field/id.md)            |
-| **name**          | ⏳     | 🚧     | 21/5  | ✅      | [📋 Guide](docs/specifications/roadmap/tables/fields/multi-select-field/name.md)          |
+| **name**          | ⏳     | 🚧     | -     | ✅      | [📋 Guide](docs/specifications/roadmap/tables/fields/multi-select-field/name.md)          |
 | **required**      | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/tables/fields/multi-select-field/required.md)      |
 | **indexed**       | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/tables/fields/multi-select-field/indexed.md)       |
 | **type**          | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/tables/fields/multi-select-field/type.md)          |
@@ -578,7 +578,7 @@ Properties organized hierarchically: Automations (Triggers > Actions by service)
 | Property Path            | Status | Schema | Tests | Quality | Guide                                                                                                    |
 | ------------------------ | ------ | ------ | ----- | ------- | -------------------------------------------------------------------------------------------------------- |
 | **id**                   | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/tables/fields/multiple-attachments-field/id.md)                   |
-| **name**                 | ⏳     | 🚧     | 21/5  | ✅      | [📋 Guide](docs/specifications/roadmap/tables/fields/multiple-attachments-field/name.md)                 |
+| **name**                 | ⏳     | 🚧     | -     | ✅      | [📋 Guide](docs/specifications/roadmap/tables/fields/multiple-attachments-field/name.md)                 |
 | **required**             | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/tables/fields/multiple-attachments-field/required.md)             |
 | **indexed**              | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/tables/fields/multiple-attachments-field/indexed.md)              |
 | **type**                 | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/tables/fields/multiple-attachments-field/type.md)                 |
@@ -594,7 +594,7 @@ Properties organized hierarchically: Automations (Triggers > Actions by service)
 | Property Path | Status | Schema | Tests | Quality | Guide                                                                           |
 | ------------- | ------ | ------ | ----- | ------- | ------------------------------------------------------------------------------- |
 | **id**        | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/tables/fields/number-field/id.md)        |
-| **name**      | ⏳     | 🚧     | 21/5  | ✅      | [📋 Guide](docs/specifications/roadmap/tables/fields/number-field/name.md)      |
+| **name**      | ⏳     | 🚧     | -     | ✅      | [📋 Guide](docs/specifications/roadmap/tables/fields/number-field/name.md)      |
 | **required**  | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/tables/fields/number-field/required.md)  |
 | **unique**    | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/tables/fields/number-field/unique.md)    |
 | **indexed**   | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/tables/fields/number-field/indexed.md)   |
@@ -610,7 +610,7 @@ Properties organized hierarchically: Automations (Triggers > Actions by service)
 | Property Path | Status | Schema | Tests | Quality | Guide                                                                            |
 | ------------- | ------ | ------ | ----- | ------- | -------------------------------------------------------------------------------- |
 | **id**        | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/tables/fields/progress-field/id.md)       |
-| **name**      | ⏳     | 🚧     | 21/5  | ✅      | [📋 Guide](docs/specifications/roadmap/tables/fields/progress-field/name.md)     |
+| **name**      | ⏳     | 🚧     | -     | ✅      | [📋 Guide](docs/specifications/roadmap/tables/fields/progress-field/name.md)     |
 | **required**  | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/tables/fields/progress-field/required.md) |
 | **type**      | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/tables/fields/progress-field/type.md)     |
 | **color**     | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/tables/fields/progress-field/color.md)    |
@@ -620,7 +620,7 @@ Properties organized hierarchically: Automations (Triggers > Actions by service)
 | Property Path | Status | Schema | Tests | Quality | Guide                                                                          |
 | ------------- | ------ | ------ | ----- | ------- | ------------------------------------------------------------------------------ |
 | **id**        | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/tables/fields/rating-field/id.md)       |
-| **name**      | ⏳     | 🚧     | 21/5  | ✅      | [📋 Guide](docs/specifications/roadmap/tables/fields/rating-field/name.md)     |
+| **name**      | ⏳     | 🚧     | -     | ✅      | [📋 Guide](docs/specifications/roadmap/tables/fields/rating-field/name.md)     |
 | **required**  | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/tables/fields/rating-field/required.md) |
 | **type**      | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/tables/fields/rating-field/type.md)     |
 | **max**       | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/tables/fields/rating-field/max.md)      |
@@ -631,7 +631,7 @@ Properties organized hierarchically: Automations (Triggers > Actions by service)
 | Property Path    | Status | Schema | Tests | Quality | Guide                                                                                    |
 | ---------------- | ------ | ------ | ----- | ------- | ---------------------------------------------------------------------------------------- |
 | **id**           | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/tables/fields/relationship-field/id.md)           |
-| **name**         | ⏳     | 🚧     | 21/5  | ✅      | [📋 Guide](docs/specifications/roadmap/tables/fields/relationship-field/name.md)         |
+| **name**         | ⏳     | 🚧     | -     | ✅      | [📋 Guide](docs/specifications/roadmap/tables/fields/relationship-field/name.md)         |
 | **required**     | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/tables/fields/relationship-field/required.md)     |
 | **indexed**      | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/tables/fields/relationship-field/indexed.md)      |
 | **type**         | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/tables/fields/relationship-field/type.md)         |
@@ -646,7 +646,7 @@ Properties organized hierarchically: Automations (Triggers > Actions by service)
 | Property Path | Status | Schema | Tests | Quality | Guide                                                                              |
 | ------------- | ------ | ------ | ----- | ------- | ---------------------------------------------------------------------------------- |
 | **id**        | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/tables/fields/rich-text-field/id.md)        |
-| **name**      | ⏳     | 🚧     | 21/5  | ✅      | [📋 Guide](docs/specifications/roadmap/tables/fields/rich-text-field/name.md)      |
+| **name**      | ⏳     | 🚧     | -     | ✅      | [📋 Guide](docs/specifications/roadmap/tables/fields/rich-text-field/name.md)      |
 | **required**  | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/tables/fields/rich-text-field/required.md)  |
 | **type**      | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/tables/fields/rich-text-field/type.md)      |
 | **maxLength** | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/tables/fields/rich-text-field/maxLength.md) |
@@ -656,7 +656,7 @@ Properties organized hierarchically: Automations (Triggers > Actions by service)
 | Property Path         | Status | Schema | Tests | Quality | Guide                                                                                   |
 | --------------------- | ------ | ------ | ----- | ------- | --------------------------------------------------------------------------------------- |
 | **id**                | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/tables/fields/rollup-field/id.md)                |
-| **name**              | ⏳     | 🚧     | 21/5  | ✅      | [📋 Guide](docs/specifications/roadmap/tables/fields/rollup-field/name.md)              |
+| **name**              | ⏳     | 🚧     | -     | ✅      | [📋 Guide](docs/specifications/roadmap/tables/fields/rollup-field/name.md)              |
 | **type**              | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/tables/fields/rollup-field/type.md)              |
 | **relationshipField** | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/tables/fields/rollup-field/relationshipField.md) |
 | **relatedField**      | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/tables/fields/rollup-field/relatedField.md)      |
@@ -668,7 +668,7 @@ Properties organized hierarchically: Automations (Triggers > Actions by service)
 | Property Path            | Status | Schema | Tests | Quality | Guide                                                                                                 |
 | ------------------------ | ------ | ------ | ----- | ------- | ----------------------------------------------------------------------------------------------------- |
 | **id**                   | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/tables/fields/single-attachment-field/id.md)                   |
-| **name**                 | ⏳     | 🚧     | 21/5  | ✅      | [📋 Guide](docs/specifications/roadmap/tables/fields/single-attachment-field/name.md)                 |
+| **name**                 | ⏳     | 🚧     | -     | ✅      | [📋 Guide](docs/specifications/roadmap/tables/fields/single-attachment-field/name.md)                 |
 | **required**             | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/tables/fields/single-attachment-field/required.md)             |
 | **indexed**              | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/tables/fields/single-attachment-field/indexed.md)              |
 | **type**                 | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/tables/fields/single-attachment-field/type.md)                 |
@@ -683,7 +683,7 @@ Properties organized hierarchically: Automations (Triggers > Actions by service)
 | Property Path | Status | Schema | Tests | Quality | Guide                                                                                 |
 | ------------- | ------ | ------ | ----- | ------- | ------------------------------------------------------------------------------------- |
 | **id**        | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/tables/fields/single-select-field/id.md)       |
-| **name**      | ⏳     | 🚧     | 21/5  | ✅      | [📋 Guide](docs/specifications/roadmap/tables/fields/single-select-field/name.md)     |
+| **name**      | ⏳     | 🚧     | -     | ✅      | [📋 Guide](docs/specifications/roadmap/tables/fields/single-select-field/name.md)     |
 | **required**  | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/tables/fields/single-select-field/required.md) |
 | **indexed**   | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/tables/fields/single-select-field/indexed.md)  |
 | **type**      | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/tables/fields/single-select-field/type.md)     |
@@ -695,7 +695,7 @@ Properties organized hierarchically: Automations (Triggers > Actions by service)
 | Property Path     | Status | Schema | Tests | Quality | Guide                                                                               |
 | ----------------- | ------ | ------ | ----- | ------- | ----------------------------------------------------------------------------------- |
 | **id**            | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/tables/fields/status-field/id.md)            |
-| **name**          | ⏳     | 🚧     | 21/5  | ✅      | [📋 Guide](docs/specifications/roadmap/tables/fields/status-field/name.md)          |
+| **name**          | ⏳     | 🚧     | -     | ✅      | [📋 Guide](docs/specifications/roadmap/tables/fields/status-field/name.md)          |
 | **required**      | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/tables/fields/status-field/required.md)      |
 | **indexed**       | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/tables/fields/status-field/indexed.md)       |
 | **type**          | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/tables/fields/status-field/type.md)          |
@@ -709,7 +709,7 @@ Properties organized hierarchically: Automations (Triggers > Actions by service)
 | Property Path | Status | Schema | Tests | Quality | Guide                                                                        |
 | ------------- | ------ | ------ | ----- | ------- | ---------------------------------------------------------------------------- |
 | **id**        | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/tables/fields/text-field/id.md)       |
-| **name**      | ⏳     | 🚧     | 21/5  | ✅      | [📋 Guide](docs/specifications/roadmap/tables/fields/text-field/name.md)     |
+| **name**      | ⏳     | 🚧     | -     | ✅      | [📋 Guide](docs/specifications/roadmap/tables/fields/text-field/name.md)     |
 | **required**  | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/tables/fields/text-field/required.md) |
 | **unique**    | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/tables/fields/text-field/unique.md)   |
 | **indexed**   | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/tables/fields/text-field/indexed.md)  |
@@ -721,7 +721,7 @@ Properties organized hierarchically: Automations (Triggers > Actions by service)
 | Property Path | Status | Schema | Tests | Quality | Guide                                                                             |
 | ------------- | ------ | ------ | ----- | ------- | --------------------------------------------------------------------------------- |
 | **id**        | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/tables/fields/updated-at-field/id.md)      |
-| **name**      | ⏳     | 🚧     | 21/5  | ✅      | [📋 Guide](docs/specifications/roadmap/tables/fields/updated-at-field/name.md)    |
+| **name**      | ⏳     | 🚧     | -     | ✅      | [📋 Guide](docs/specifications/roadmap/tables/fields/updated-at-field/name.md)    |
 | **type**      | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/tables/fields/updated-at-field/type.md)    |
 | **indexed**   | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/tables/fields/updated-at-field/indexed.md) |
 
@@ -730,7 +730,7 @@ Properties organized hierarchically: Automations (Triggers > Actions by service)
 | Property Path | Status | Schema | Tests | Quality | Guide                                                                             |
 | ------------- | ------ | ------ | ----- | ------- | --------------------------------------------------------------------------------- |
 | **id**        | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/tables/fields/updated-by-field/id.md)      |
-| **name**      | ⏳     | 🚧     | 21/5  | ✅      | [📋 Guide](docs/specifications/roadmap/tables/fields/updated-by-field/name.md)    |
+| **name**      | ⏳     | 🚧     | -     | ✅      | [📋 Guide](docs/specifications/roadmap/tables/fields/updated-by-field/name.md)    |
 | **type**      | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/tables/fields/updated-by-field/type.md)    |
 | **indexed**   | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/tables/fields/updated-by-field/indexed.md) |
 
@@ -739,7 +739,7 @@ Properties organized hierarchically: Automations (Triggers > Actions by service)
 | Property Path     | Status | Schema | Tests | Quality | Guide                                                                             |
 | ----------------- | ------ | ------ | ----- | ------- | --------------------------------------------------------------------------------- |
 | **id**            | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/tables/fields/user-field/id.md)            |
-| **name**          | ⏳     | 🚧     | 21/5  | ✅      | [📋 Guide](docs/specifications/roadmap/tables/fields/user-field/name.md)          |
+| **name**          | ⏳     | 🚧     | -     | ✅      | [📋 Guide](docs/specifications/roadmap/tables/fields/user-field/name.md)          |
 | **required**      | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/tables/fields/user-field/required.md)      |
 | **indexed**       | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/tables/fields/user-field/indexed.md)       |
 | **type**          | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/tables/fields/user-field/type.md)          |
@@ -747,40 +747,47 @@ Properties organized hierarchically: Automations (Triggers > Actions by service)
 
 ## Other Properties
 
-| Property Path                        | Status | Schema | Tests | Quality | Guide                                                                       |
-| ------------------------------------ | ------ | ------ | ----- | ------- | --------------------------------------------------------------------------- |
-| **name**                             | ✅     | ✅     | 21/5  | ✅      | -                                                                           |
-| **description**                      | ✅     | ✅     | 16/3  | ✅      | -                                                                           |
-| **version**                          | ✅     | ✅     | 8/4   | ✅      | -                                                                           |
-| **tables**                           | ⏳     | ⏳     | 0/4   | ⏳      | [📋 Guide](docs/specifications/roadmap/tables.md)                           |
-| **pages**                            | ⏳     | ⏳     | 0/5   | ⏳      | [📋 Guide](docs/specifications/roadmap/pages.md)                            |
-| **automations**                      | ⏳     | ⏳     | 0/6   | ⏳      | [📋 Guide](docs/specifications/roadmap/automations.md)                      |
-| **connections**                      | ⏳     | ⏳     | 0/3   | ⏳      | [📋 Guide](docs/specifications/roadmap/connections.md)                      |
-| **filter_condition**                 | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/filter_condition.md)                 |
-| **json_schema**                      | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/json_schema.md)                      |
-| **json_schema/type**                 | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/json_schema/type.md)                 |
-| **json_schema/properties**           | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/json_schema/properties.md)           |
-| **json_schema/required**             | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/json_schema/required.md)             |
-| **json_schema/items**                | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/json_schema/items.md)                |
-| **json_schema/additionalProperties** | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/json_schema/additionalProperties.md) |
-| **json_schema/enum**                 | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/json_schema/enum.md)                 |
-| **json_schema/const**                | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/json_schema/const.md)                |
-| **json_schema/title**                | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/json_schema/title.md)                |
-| **json_schema/description**          | ⏳     | 🚧     | 16/3  | ✅      | [📋 Guide](docs/specifications/roadmap/json_schema/description.md)          |
-| **json_schema/default**              | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/json_schema/default.md)              |
-| **json_schema/minimum**              | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/json_schema/minimum.md)              |
-| **json_schema/maximum**              | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/json_schema/maximum.md)              |
-| **json_schema/multipleOf**           | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/json_schema/multipleOf.md)           |
-| **json_schema/minLength**            | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/json_schema/minLength.md)            |
-| **json_schema/maxLength**            | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/json_schema/maxLength.md)            |
-| **json_schema/pattern**              | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/json_schema/pattern.md)              |
-| **json_schema/minItems**             | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/json_schema/minItems.md)             |
-| **json_schema/maxItems**             | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/json_schema/maxItems.md)             |
-| **json_schema/uniqueItems**          | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/json_schema/uniqueItems.md)          |
-| **json_schema/allOf**                | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/json_schema/allOf.md)                |
-| **json_schema/anyOf**                | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/json_schema/anyOf.md)                |
-| **json_schema/oneOf**                | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/json_schema/oneOf.md)                |
-| **json_schema/not**                  | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/json_schema/not.md)                  |
+| Property Path                                          | Status | Schema | Tests | Quality | Guide                                                                                         |
+| ------------------------------------------------------ | ------ | ------ | ----- | ------- | --------------------------------------------------------------------------------------------- |
+| **name**                                               | ✅     | ✅     | -     | ✅      | -                                                                                             |
+| **description**                                        | ✅     | ✅     | -     | ✅      | -                                                                                             |
+| **version**                                            | ✅     | ✅     | -     | ✅      | -                                                                                             |
+| **tables**                                             | ⏳     | 🚧     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/tables.md)                                             |
+| **pages**                                              | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/pages.md)                                              |
+| **automations**                                        | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/automations.md)                                        |
+| **connections**                                        | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/connections.md)                                        |
+| **filter_condition**                                   | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/filter_condition.md)                                   |
+| **filter_condition/string-comparison-filter/target**   | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/filter_condition/string-comparison-filter/target.md)   |
+| **filter_condition/string-comparison-filter/operator** | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/filter_condition/string-comparison-filter/operator.md) |
+| **filter_condition/string-comparison-filter/value**    | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/filter_condition/string-comparison-filter/value.md)    |
+| **filter_condition/existence/boolean-filter/target**   | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/filter_condition/existence/boolean-filter/target.md)   |
+| **filter_condition/existence/boolean-filter/operator** | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/filter_condition/existence/boolean-filter/operator.md) |
+| **filter_condition/and-filter/and**                    | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/filter_condition/and-filter/and.md)                    |
+| **filter_condition/or-filter/or**                      | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/filter_condition/or-filter/or.md)                      |
+| **json_schema**                                        | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/json_schema.md)                                        |
+| **json_schema/type**                                   | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/json_schema/type.md)                                   |
+| **json_schema/properties**                             | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/json_schema/properties.md)                             |
+| **json_schema/required**                               | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/json_schema/required.md)                               |
+| **json_schema/items**                                  | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/json_schema/items.md)                                  |
+| **json_schema/additionalProperties**                   | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/json_schema/additionalProperties.md)                   |
+| **json_schema/enum**                                   | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/json_schema/enum.md)                                   |
+| **json_schema/const**                                  | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/json_schema/const.md)                                  |
+| **json_schema/title**                                  | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/json_schema/title.md)                                  |
+| **json_schema/description**                            | ⏳     | 🚧     | -     | ✅      | [📋 Guide](docs/specifications/roadmap/json_schema/description.md)                            |
+| **json_schema/default**                                | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/json_schema/default.md)                                |
+| **json_schema/minimum**                                | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/json_schema/minimum.md)                                |
+| **json_schema/maximum**                                | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/json_schema/maximum.md)                                |
+| **json_schema/multipleOf**                             | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/json_schema/multipleOf.md)                             |
+| **json_schema/minLength**                              | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/json_schema/minLength.md)                              |
+| **json_schema/maxLength**                              | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/json_schema/maxLength.md)                              |
+| **json_schema/pattern**                                | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/json_schema/pattern.md)                                |
+| **json_schema/minItems**                               | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/json_schema/minItems.md)                               |
+| **json_schema/maxItems**                               | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/json_schema/maxItems.md)                               |
+| **json_schema/uniqueItems**                            | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/json_schema/uniqueItems.md)                            |
+| **json_schema/allOf**                                  | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/json_schema/allOf.md)                                  |
+| **json_schema/anyOf**                                  | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/json_schema/anyOf.md)                                  |
+| **json_schema/oneOf**                                  | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/json_schema/oneOf.md)                                  |
+| **json_schema/not**                                    | ⏳     | ⏳     | -     | ⏳      | [📋 Guide](docs/specifications/roadmap/json_schema/not.md)                                    |
 
 ---
 

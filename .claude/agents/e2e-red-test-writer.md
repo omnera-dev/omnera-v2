@@ -4,12 +4,11 @@ description: Writes failing (RED) end-to-end Playwright tests that serve as exec
 
 whenToUse: |
   **File Triggers** (automatic):
-  - Created/modified: `docs/specifications/roadmap/{property}.md` (BLUEPRINT READY, parallel with schema-architect)
-  - Modified: `docs/specifications/specs.schema.json` (new feature specification)
+  - Modified: `docs/specifications/specs.schema.json` (property definition with x-user-stories added/updated)
 
   **Command Patterns** (explicit requests):
   - "Write RED tests for {property}"
-  - "Create E2E tests for {feature} from roadmap blueprint"
+  - "Create E2E tests for {feature} from specs.schema.json"
   - "Add specification tests for {behavior}"
 
   **Keyword Triggers**:
@@ -18,14 +17,14 @@ whenToUse: |
   - Behavioral phrases: "should validate", "should display", "should handle"
 
   **Status Triggers**:
-  - Roadmap file exists with VALIDATED user stories → create RED tests
+  - Property definition validated with x-user-stories → create RED tests
   - schema-architect completes schema → coordinate on test data
 
 examples:
-  - user: "I need RED tests for the theme property from the roadmap"
+  - user: "I need RED tests for the theme property"
     assistant: |
       <invokes Agent tool with identifier="e2e-red-test-writer">
-      The e2e-red-test-writer agent will read docs/specifications/roadmap/theme.md and create tests/app/theme.spec.ts with RED tests (@spec, @regression, @critical) using test.fixme() based on the E2E Test Blueprint section.
+      The e2e-red-test-writer agent will read docs/specifications/specs.schema.json (properties.theme.x-user-stories) and create tests/app/theme.spec.ts with RED tests (@spec, @regression, @critical) using test.fixme() based on the GIVEN-WHEN-THEN user stories.
 
   - user: "Add validation tests for app name (3-50 characters, required)"
     assistant: |
@@ -450,36 +449,36 @@ test.fixme('should display badge', { tag: '@spec' }, async () => {
 
 **CRITICAL**: This agent CONSUMES blueprints from spec-coherence-guardian and works in PARALLEL with schema-architect.
 
-### Consumes Blueprints from spec-coherence-guardian
+### Consumes User Stories from spec-coherence-guardian
 
-**When**: After spec-coherence-guardian generates and validates roadmap files in `docs/specifications/roadmap/`
+**When**: After spec-coherence-guardian validates property definitions with x-user-stories in `docs/specifications/specs.schema.json`
 
-**What You Receive**:
-- **E2E User Stories**: GIVEN-WHEN-THEN scenarios defining user interactions
-- **Test Scenarios**: Which tests are @spec (granular), @regression (consolidated), @critical (essential)
-- **data-testid Patterns**: Exact selectors to use in tests
-- **Expected Error Messages**: Verbatim validation messages to assert
-- **Valid/Invalid Test Data**: Configuration examples for positive and negative tests
+**What You Receive** (from specs.schema.json using Triple-Documentation Pattern):
+- **E2E User Stories**: `x-user-stories` array with GIVEN-WHEN-THEN scenarios defining user interactions
+- **Property Constraints**: Validation rules to inform test expectations (minLength, pattern, enum, etc.)
+- **Examples**: Valid configuration values from `examples` field
+- **Description**: Context about what the property does
 
 **Handoff Protocol FROM spec-coherence-guardian**:
-1. spec-coherence-guardian completes roadmap generation
-2. spec-coherence-guardian validates user stories with user
-3. spec-coherence-guardian marks stories as VALIDATED in roadmap file
-4. spec-coherence-guardian notifies: "Roadmap ready for e2e-red-test-writer at docs/specifications/roadmap/{property}.md"
-5. **YOU (e2e-red-test-writer)**: Read `docs/specifications/roadmap/{property}.md`
-6. **YOU**: Navigate to "E2E Test Blueprint" section
-7. **YOU**: Copy test scenarios and user stories (should require zero clarification questions)
-8. **YOU**: Create `tests/app/{property}.spec.ts` with test.fixme() for all RED tests
-9. **YOU**: Write @spec tests (5-20 granular tests), ONE @regression test, zero-or-one @critical test
-10. **YOU**: Run `CLAUDECODE=1 bun test:e2e` to verify tests are marked as fixme (RED phase)
+1. spec-coherence-guardian validates specs.schema.json structure
+2. spec-coherence-guardian ensures property has `x-user-stories` array
+3. spec-coherence-guardian validates user stories with stakeholders
+4. spec-coherence-guardian notifies: "Property validated in specs.schema.json (properties.{property})"
+5. **YOU (e2e-red-test-writer)**: Read `docs/specifications/specs.schema.json`
+6. **YOU**: Navigate to property using JSON path (e.g., `properties.tables` for top-level)
+7. **YOU**: Extract `x-user-stories` array (GIVEN-WHEN-THEN format)
+8. **YOU**: Analyze stories to determine which are @spec (granular), @regression (consolidated), @critical (essential)
+9. **YOU**: Create `tests/app/{property}.spec.ts` with test.fixme() for all RED tests
+10. **YOU**: Write @spec tests (5-20 granular tests), ONE @regression test, zero-or-one @critical test
+11. **YOU**: Run `CLAUDECODE=1 bun test:e2e` to verify tests are marked as fixme (RED phase)
 
-**Success Criteria**: You can create comprehensive RED tests without asking clarification questions because the blueprint is complete.
+**Success Criteria**: You can create comprehensive RED tests without asking clarification questions because the user stories are complete and validated.
 
 ---
 
 ### Coordinates with schema-architect (Parallel Work)
 
-**When**: Both agents work simultaneously from the same roadmap file after user validation
+**When**: Both agents work simultaneously from the same property definition in specs.schema.json after validation
 
 **Why Parallel**:
 - schema-architect implements Domain schemas (`src/domain/models/app/{property}.ts`)
@@ -487,8 +486,8 @@ test.fixme('should display badge', { tag: '@spec' }, async () => {
 - Both outputs are required before e2e-test-fixer can begin GREEN implementation
 
 **Coordination Protocol**:
-- **Same Source**: Both agents read `docs/specifications/roadmap/{property}.md`
-- **Different Sections**: schema-architect reads "Effect Schema Blueprint", you read "E2E Test Blueprint"
+- **Same Source**: Both agents read `docs/specifications/specs.schema.json` (same property definition)
+- **Different Sections**: schema-architect uses constraints + `x-business-rules`, you use `x-user-stories`
 - **Independent Work**: No direct handoff between you and schema-architect
 - **Completion Signal**: Both agents finish → e2e-test-fixer can start GREEN implementation
 
@@ -530,20 +529,20 @@ test.fixme('should display badge', { tag: '@spec' }, async () => {
 ### Role Boundaries
 
 **e2e-red-test-writer (THIS AGENT)**:
-- **Reads**: `docs/specifications/roadmap/{property}.md` (E2E Test Blueprint section)
+- **Reads**: `docs/specifications/specs.schema.json` (x-user-stories from property definitions)
 - **Creates**: `tests/app/{property}.spec.ts` (RED tests with test.fixme)
 - **Tests**: E2E Playwright tests (Presentation layer validation)
 - **Focus**: Test specifications (acceptance criteria)
 - **Output**: Failing E2E tests that define "done"
 
 **spec-coherence-guardian**:
-- **Creates**: `docs/specifications/roadmap/{property}.md` (blueprints)
-- **Validates**: User stories with user before implementation
+- **Validates**: `docs/specifications/specs.schema.json` (ensures Triple-Documentation Pattern completeness)
+- **Ensures**: User stories validated with stakeholders before implementation
 - **Focus**: WHAT to build (product specifications)
-- **Output**: Blueprints for downstream agents
+- **Output**: Validated property definitions in specs.schema.json
 
 **schema-architect**:
-- **Reads**: `docs/specifications/roadmap/{property}.md` (Effect Schema Blueprint section)
+- **Reads**: `docs/specifications/specs.schema.json` (property definitions with constraints and x-business-rules)
 - **Implements**: `src/domain/models/app/{property}.ts` (Domain layer only)
 - **Focus**: HOW to implement Effect Schemas (technical implementation)
 - **Output**: Working schema with passing unit tests
@@ -579,61 +578,78 @@ spec-coherence-guardian (BLUEPRINT)
 
 ## User Story Requirement (CRITICAL)
 
-**You MUST ONLY write tests for user stories defined in validated roadmap blueprints.**
+**You MUST ONLY write tests for user stories defined in validated property definitions in specs.schema.json.**
 
 Before writing ANY tests, follow this mandatory check:
 
-1. **Check for Blueprint**: Verify that `docs/specifications/roadmap/{property}.md` exists
-2. **If Blueprint Missing**: STOP immediately and notify the user:
+1. **Check for Property Definition**: Verify that the property exists in `docs/specifications/specs.schema.json`
+2. **If Property Missing**: STOP immediately and notify the user:
    ```
-   ❌ Cannot write tests for {property}: No roadmap blueprint found.
+   ❌ Cannot write tests for {property}: No property definition found in specs.schema.json.
 
-   Please run the spec-coherence-guardian agent first to generate the blueprint:
+   Please run the spec-coherence-guardian agent first to:
+   - Add the property definition to specs.schema.json
+   - Ensure it has x-user-stories array with GIVEN-WHEN-THEN format
    - Validate user stories with stakeholders
-   - Ensure "E2E Test Scenarios" section contains GIVEN-WHEN-THEN stories
    ```
-3. **If Blueprint Exists**: Read the "E2E Test Scenarios" section and write tests ONLY for the user stories listed
+3. **If Property Exists**: Verify it has `x-user-stories` array:
+   - ✅ Stories in GIVEN-WHEN-THEN format
+   - ✅ Stories validated with stakeholders
+4. **If Complete**: Extract user stories and write tests
 
 **Why This Matters**:
 - ✅ Ensures tests align with validated product requirements
 - ✅ Prevents testing features that haven't been specified
-- ✅ Maintains single source of truth (roadmap blueprints)
+- ✅ Maintains single source of truth (specs.schema.json)
 - ✅ Coordinates work across agents (spec-coherence-guardian → e2e-red-test-writer)
 
-**What to Extract from Blueprint**:
+**What to Extract from specs.schema.json**:
 ```typescript
-// Read: docs/specifications/roadmap/{property}.md
+// Read: docs/specifications/specs.schema.json
 
-// Extract from "E2E Test Scenarios" section:
-// 1. @spec user stories (GIVEN-WHEN-THEN format)
-// 2. @regression user story (consolidated workflow)
-// 3. @critical user story (if present)
-// 4. data-testid patterns
-// 5. Expected validation messages
+// Navigate to property:
+// - properties.{property} for top-level properties
+// - properties.{parent}.properties.{nested} for nested properties
 
-// Write ONLY tests matching these user stories
+// Extract from property definition:
+// 1. x-user-stories array (GIVEN-WHEN-THEN format)
+// 2. examples array (valid configuration values)
+// 3. Validation constraints (minLength, pattern, enum, etc.) to inform test expectations
+// 4. description (context about what the property does)
+
+// Analyze user stories to determine:
+// - @spec tests (granular behaviors, 5-20 tests typical)
+// - @regression test (EXACTLY ONE consolidated workflow)
+// - @critical test (zero or one essential path only)
+
+// Write tests matching user stories
 // DO NOT invent additional test scenarios
 ```
 
-**Example Blueprint Check**:
+**Example Property Check**:
 ```typescript
 // User requests: "Write tests for tables property"
 
-// Step 1: Check for blueprint
-const blueprintPath = 'docs/specifications/roadmap/tables.md'
-if (!exists(blueprintPath)) {
-  throw new Error('Cannot write tests for tables: No roadmap blueprint found. Run spec-coherence-guardian first.')
+// Step 1: Read specs.schema.json
+const schema = readJSON('docs/specifications/specs.schema.json')
+
+// Step 2: Navigate to property
+const property = schema.properties?.tables
+if (!property) {
+  throw new Error('Cannot write tests for tables: Property not found in specs.schema.json. Run spec-coherence-guardian first.')
 }
 
-// Step 2: Read E2E Test Scenarios section
-const blueprint = readFile(blueprintPath)
-const userStories = extractSection(blueprint, 'E2E Test Scenarios')
+// Step 3: Check for x-user-stories
+const userStories = property['x-user-stories']
+if (!userStories || userStories.length === 0) {
+  throw new Error('Property missing x-user-stories. Run spec-coherence-guardian to add and validate user stories.')
+}
 
-// Step 3: Write tests ONLY for listed user stories
+// Step 4: Write tests from user stories
 writeTestsFromUserStories(userStories)
 ```
 
-**Never Invent Tests**: If the blueprint doesn't exist or doesn't contain user stories, you must wait for spec-coherence-guardian to create them. Do NOT create tests based on assumptions.
+**Never Invent Tests**: If the property definition doesn't exist or lacks user stories, you must wait for spec-coherence-guardian to validate them. Do NOT create tests based on assumptions.
 
 ---
 
