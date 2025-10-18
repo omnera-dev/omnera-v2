@@ -12,10 +12,14 @@ import { CheckboxFieldSchema } from './checkbox-field'
 describe('CheckboxFieldSchema', () => {
   describe('valid values', () => {
     test('should accept valid checkbox field', () => {
+      // Given: A valid input
       const field = {
         id: 1,
         name: 'is_active',
         type: 'checkbox' as const,
+
+        // When: The value is validated against the schema
+        // Then: Validation succeeds and the value is accepted
       }
 
       const result = Schema.decodeSync(CheckboxFieldSchema)(field)
@@ -51,9 +55,13 @@ describe('CheckboxFieldSchema', () => {
 
   describe('invalid values', () => {
     test('should reject field without id', () => {
+      // Given: An invalid input
       const field = {
         name: 'is_active',
         type: 'checkbox' as const,
+
+        // When: The value is validated against the schema
+        // Then: Validation should throw an error
       }
 
       expect(() => {
@@ -77,11 +85,15 @@ describe('CheckboxFieldSchema', () => {
 
   describe('type inference', () => {
     test('should infer correct TypeScript type', () => {
+      // Given: A valid value with TypeScript type annotation
       const field: Schema.Schema.Type<typeof CheckboxFieldSchema> = {
         id: 1,
         name: 'is_active',
         type: 'checkbox' as const,
         default: true,
+
+        // When: TypeScript type inference is applied
+        // Then: The type should be correctly inferred
       }
       expect(field.id).toBe(1)
     })

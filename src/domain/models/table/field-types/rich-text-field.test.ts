@@ -12,10 +12,14 @@ import { RichTextFieldSchema } from './rich-text-field'
 describe('RichTextFieldSchema', () => {
   describe('valid values', () => {
     test('should accept valid rich-text field', () => {
+      // Given: A valid input
       const field = {
         id: 1,
         name: 'article_content',
         type: 'rich-text' as const,
+
+        // When: The value is validated against the schema
+        // Then: Validation succeeds and the value is accepted
       }
 
       const result = Schema.decodeSync(RichTextFieldSchema)(field)
@@ -50,9 +54,13 @@ describe('RichTextFieldSchema', () => {
 
   describe('invalid values', () => {
     test('should reject field without id', () => {
+      // Given: An invalid input
       const field = {
         name: 'article_content',
         type: 'rich-text' as const,
+
+        // When: The value is validated against the schema
+        // Then: Validation should throw an error
       }
 
       expect(() => {
@@ -77,11 +85,15 @@ describe('RichTextFieldSchema', () => {
 
   describe('type inference', () => {
     test('should infer correct TypeScript type', () => {
+      // Given: A valid value with TypeScript type annotation
       const field: Schema.Schema.Type<typeof RichTextFieldSchema> = {
         id: 1,
         name: 'article_content',
         type: 'rich-text' as const,
         maxLength: 10_000,
+
+        // When: TypeScript type inference is applied
+        // Then: The type should be correctly inferred
       }
       expect(field.id).toBe(1)
     })

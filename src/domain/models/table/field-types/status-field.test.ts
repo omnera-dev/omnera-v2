@@ -12,11 +12,15 @@ import { StatusFieldSchema } from './status-field'
 describe('StatusFieldSchema', () => {
   describe('valid values', () => {
     test('should accept valid status field', () => {
+      // Given: A valid input
       const field = {
         id: 1,
         name: 'status',
         type: 'status' as const,
         options: [{ value: 'todo', color: '#94A3B8' }],
+
+        // When: The value is validated against the schema
+        // Then: Validation succeeds and the value is accepted
       }
 
       const result = Schema.decodeSync(StatusFieldSchema)(field)
@@ -26,10 +30,14 @@ describe('StatusFieldSchema', () => {
 
   describe('invalid values', () => {
     test('should reject field without id', () => {
+      // Given: An invalid input
       const field = {
         name: 'status',
         type: 'status' as const,
         options: [{ value: 'todo' }],
+
+        // When: The value is validated against the schema
+        // Then: Validation should throw an error
       }
 
       expect(() => {

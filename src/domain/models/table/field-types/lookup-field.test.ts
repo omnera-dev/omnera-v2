@@ -11,12 +11,16 @@ import { LookupFieldSchema } from './lookup-field'
 
 describe('LookupFieldSchema', () => {
   test('should accept valid lookup field', () => {
+    // Given: A valid input
     const field = {
       id: 1,
       name: 'email',
       type: 'lookup' as const,
       relationshipField: 'customer',
       relatedField: 'email',
+
+      // When: The value is validated against the schema
+      // Then: Validation succeeds and the value is accepted
     }
     const result = Schema.decodeSync(LookupFieldSchema)(field)
     expect(result).toEqual(field)

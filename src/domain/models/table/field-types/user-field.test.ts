@@ -12,10 +12,14 @@ import { UserFieldSchema } from './user-field'
 describe('UserFieldSchema', () => {
   describe('valid values', () => {
     test('should accept valid user field', () => {
+      // Given: A valid input
       const field = {
         id: 1,
         name: 'assigned_to',
         type: 'user' as const,
+
+        // When: The value is validated against the schema
+        // Then: Validation succeeds and the value is accepted
       }
 
       const result = Schema.decodeSync(UserFieldSchema)(field)
@@ -51,9 +55,13 @@ describe('UserFieldSchema', () => {
 
   describe('invalid values', () => {
     test('should reject field without id', () => {
+      // Given: An invalid input
       const field = {
         name: 'assigned_to',
         type: 'user' as const,
+
+        // When: The value is validated against the schema
+        // Then: Validation should throw an error
       }
 
       expect(() => {
@@ -77,11 +85,15 @@ describe('UserFieldSchema', () => {
 
   describe('type inference', () => {
     test('should infer correct TypeScript type', () => {
+      // Given: A valid value with TypeScript type annotation
       const field: Schema.Schema.Type<typeof UserFieldSchema> = {
         id: 1,
         name: 'assigned_to',
         type: 'user' as const,
         allowMultiple: true,
+
+        // When: TypeScript type inference is applied
+        // Then: The type should be correctly inferred
       }
       expect(field.id).toBe(1)
     })

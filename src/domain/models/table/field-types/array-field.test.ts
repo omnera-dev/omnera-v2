@@ -11,8 +11,13 @@ import { ArrayFieldSchema } from './array-field'
 
 describe('ArrayFieldSchema', () => {
   test('should accept valid array field', () => {
+    // Given: A valid input
     const field = { id: 1, name: 'tags', type: 'array' as const, itemType: 'string' }
+
+    // When: The value is validated against the schema
     const result = Schema.decodeSync(ArrayFieldSchema)(field)
+
+    // Then: Validation succeeds and the value is accepted
     expect(result).toEqual(field)
   })
 })

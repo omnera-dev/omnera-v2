@@ -11,6 +11,7 @@ import { CurrencyFieldSchema } from './currency-field'
 
 describe('CurrencyFieldSchema', () => {
   test('should accept valid currency field configuration', () => {
+    // Given: A valid input
     const field = {
       id: 1,
       name: 'price',
@@ -20,6 +21,9 @@ describe('CurrencyFieldSchema', () => {
       precision: 2,
       min: 0,
       default: 0.0,
+
+      // When: The value is validated against the schema
+      // Then: Validation succeeds and the value is accepted
     }
 
     const result = Schema.decodeSync(CurrencyFieldSchema)(field)
@@ -27,11 +31,15 @@ describe('CurrencyFieldSchema', () => {
   })
 
   test('should accept currency field without precision (optional)', () => {
+    // Given: A valid configuration
     const field = {
       id: 1,
       name: 'price',
       type: 'currency' as const,
       currency: 'USD',
+
+      // When: The value is validated against the schema
+      // Then: Validation succeeds and the value is accepted
     }
 
     const result = Schema.decodeSync(CurrencyFieldSchema)(field)
@@ -39,6 +47,7 @@ describe('CurrencyFieldSchema', () => {
   })
 
   test('should accept EUR currency', () => {
+    // Given: A valid configuration
     const field = {
       id: 2,
       name: 'total_cost',
@@ -46,6 +55,9 @@ describe('CurrencyFieldSchema', () => {
       required: true,
       currency: 'EUR',
       precision: 2,
+
+      // When: The value is validated against the schema
+      // Then: Validation succeeds and the value is accepted
     }
 
     const result = Schema.decodeSync(CurrencyFieldSchema)(field)
@@ -53,11 +65,15 @@ describe('CurrencyFieldSchema', () => {
   })
 
   test('should accept minimal currency field configuration', () => {
+    // Given: A minimal valid configuration
     const field = {
       id: 1,
       name: 'amount',
       type: 'currency' as const,
       currency: 'GBP',
+
+      // When: The value is validated against the schema
+      // Then: Validation succeeds and the value is accepted
     }
 
     const result = Schema.decodeSync(CurrencyFieldSchema)(field)
@@ -65,10 +81,14 @@ describe('CurrencyFieldSchema', () => {
   })
 
   test('should reject missing currency code', () => {
+    // Given: A configuration missing a required property
     const field = {
       id: 1,
       name: 'price',
       type: 'currency' as const,
+
+      // When: The value is validated against the schema
+      // Then: Validation should throw an error
     }
 
     expect(() => {
@@ -78,11 +98,15 @@ describe('CurrencyFieldSchema', () => {
   })
 
   test('should reject invalid currency code (not 3 letters)', () => {
+    // Given: An invalid input
     const field = {
       id: 1,
       name: 'price',
       type: 'currency' as const,
       currency: 'US',
+
+      // When: The value is validated against the schema
+      // Then: Validation should throw an error
     }
 
     expect(() => {
@@ -91,11 +115,15 @@ describe('CurrencyFieldSchema', () => {
   })
 
   test('should reject lowercase currency code', () => {
+    // Given: An invalid input
     const field = {
       id: 1,
       name: 'price',
       type: 'currency' as const,
       currency: 'usd',
+
+      // When: The value is validated against the schema
+      // Then: Validation should throw an error
     }
 
     expect(() => {
@@ -104,11 +132,15 @@ describe('CurrencyFieldSchema', () => {
   })
 
   test('should reject wrong type value', () => {
+    // Given: A configuration with wrong type
     const field = {
       id: 1,
       name: 'price',
       type: 'decimal' as const,
       currency: 'USD',
+
+      // When: The value is validated against the schema
+      // Then: Validation should throw an error
     }
 
     expect(() => {
@@ -118,6 +150,7 @@ describe('CurrencyFieldSchema', () => {
   })
 
   test('should accept various ISO 4217 currency codes', () => {
+    // Given: A valid configuration
     const currencies = ['USD', 'EUR', 'GBP', 'JPY', 'CAD', 'AUD']
 
     currencies.forEach((currency) => {
@@ -126,6 +159,9 @@ describe('CurrencyFieldSchema', () => {
         name: 'price',
         type: 'currency' as const,
         currency,
+
+        // When: The value is validated against the schema
+        // Then: Validation succeeds and the value is accepted
       }
 
       const result = Schema.decodeSync(CurrencyFieldSchema)(field)
@@ -134,12 +170,16 @@ describe('CurrencyFieldSchema', () => {
   })
 
   test('should reject precision greater than 10', () => {
+    // Given: An invalid input
     const field = {
       id: 1,
       name: 'price',
       type: 'currency' as const,
       currency: 'USD',
       precision: 11,
+
+      // When: The value is validated against the schema
+      // Then: Validation should throw an error
     }
 
     expect(() => {

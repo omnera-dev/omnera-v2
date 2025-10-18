@@ -11,6 +11,7 @@ import { PercentageFieldSchema } from './percentage-field'
 
 describe('PercentageFieldSchema', () => {
   test('should accept valid percentage field configuration', () => {
+    // Given: A valid input
     const field = {
       id: 1,
       name: 'discount_rate',
@@ -20,6 +21,9 @@ describe('PercentageFieldSchema', () => {
       min: 0,
       max: 100,
       default: 10.0,
+
+      // When: The value is validated against the schema
+      // Then: Validation succeeds and the value is accepted
     }
 
     const result = Schema.decodeSync(PercentageFieldSchema)(field)
@@ -27,10 +31,14 @@ describe('PercentageFieldSchema', () => {
   })
 
   test('should accept percentage field without precision (optional)', () => {
+    // Given: A valid configuration
     const field = {
       id: 1,
       name: 'completion',
       type: 'percentage' as const,
+
+      // When: The value is validated against the schema
+      // Then: Validation succeeds and the value is accepted
     }
 
     const result = Schema.decodeSync(PercentageFieldSchema)(field)
@@ -38,6 +46,7 @@ describe('PercentageFieldSchema', () => {
   })
 
   test('should accept completion percentage', () => {
+    // Given: A valid configuration
     const field = {
       id: 2,
       name: 'completion',
@@ -47,6 +56,9 @@ describe('PercentageFieldSchema', () => {
       min: 0,
       max: 100,
       default: 0,
+
+      // When: The value is validated against the schema
+      // Then: Validation succeeds and the value is accepted
     }
 
     const result = Schema.decodeSync(PercentageFieldSchema)(field)
@@ -55,10 +67,14 @@ describe('PercentageFieldSchema', () => {
   })
 
   test('should accept minimal percentage field configuration', () => {
+    // Given: A minimal valid configuration
     const field = {
       id: 1,
       name: 'rate',
       type: 'percentage' as const,
+
+      // When: The value is validated against the schema
+      // Then: Validation succeeds and the value is accepted
     }
 
     const result = Schema.decodeSync(PercentageFieldSchema)(field)
@@ -66,10 +82,14 @@ describe('PercentageFieldSchema', () => {
   })
 
   test('should reject wrong type value', () => {
+    // Given: A configuration with wrong type
     const field = {
       id: 1,
       name: 'discount_rate',
       type: 'decimal' as const,
+
+      // When: The value is validated against the schema
+      // Then: Validation should throw an error
     }
 
     expect(() => {
@@ -79,11 +99,15 @@ describe('PercentageFieldSchema', () => {
   })
 
   test('should reject precision less than 0', () => {
+    // Given: An invalid input
     const field = {
       id: 1,
       name: 'rate',
       type: 'percentage' as const,
       precision: -1,
+
+      // When: The value is validated against the schema
+      // Then: Validation should throw an error
     }
 
     expect(() => {
@@ -92,11 +116,15 @@ describe('PercentageFieldSchema', () => {
   })
 
   test('should reject precision greater than 10', () => {
+    // Given: An invalid input
     const field = {
       id: 1,
       name: 'rate',
       type: 'percentage' as const,
       precision: 11,
+
+      // When: The value is validated against the schema
+      // Then: Validation should throw an error
     }
 
     expect(() => {
@@ -105,12 +133,16 @@ describe('PercentageFieldSchema', () => {
   })
 
   test('should accept percentage with decimal precision', () => {
+    // Given: A valid configuration
     const field = {
       id: 1,
       name: 'tax_rate',
       type: 'percentage' as const,
       precision: 2,
       default: 8.25,
+
+      // When: The value is validated against the schema
+      // Then: Validation succeeds and the value is accepted
     }
 
     const result = Schema.decodeSync(PercentageFieldSchema)(field)
@@ -119,12 +151,16 @@ describe('PercentageFieldSchema', () => {
   })
 
   test('should accept 0-100 range for typical percentages', () => {
+    // Given: A valid configuration
     const field = {
       id: 1,
       name: 'progress',
       type: 'percentage' as const,
       min: 0,
       max: 100,
+
+      // When: The value is validated against the schema
+      // Then: Validation succeeds and the value is accepted
     }
 
     const result = Schema.decodeSync(PercentageFieldSchema)(field)

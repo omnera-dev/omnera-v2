@@ -12,10 +12,14 @@ import { UpdatedByFieldSchema } from './updated-by-field'
 describe('UpdatedByFieldSchema', () => {
   describe('valid values', () => {
     test('should accept valid updated-by field', () => {
+      // Given: A valid input
       const field = {
         id: 1,
         name: 'updated_by',
         type: 'updated-by' as const,
+
+        // When: The value is validated against the schema
+        // Then: Validation succeeds and the value is accepted
       }
 
       const result = Schema.decodeSync(UpdatedByFieldSchema)(field)
@@ -49,9 +53,13 @@ describe('UpdatedByFieldSchema', () => {
 
   describe('invalid values', () => {
     test('should reject field without id', () => {
+      // Given: An invalid input
       const field = {
         name: 'updated_by',
         type: 'updated-by' as const,
+
+        // When: The value is validated against the schema
+        // Then: Validation should throw an error
       }
 
       expect(() => {
@@ -75,11 +83,15 @@ describe('UpdatedByFieldSchema', () => {
 
   describe('type inference', () => {
     test('should infer correct TypeScript type', () => {
+      // Given: A valid value with TypeScript type annotation
       const field: Schema.Schema.Type<typeof UpdatedByFieldSchema> = {
         id: 1,
         name: 'updated_by',
         type: 'updated-by' as const,
         indexed: true,
+
+        // When: TypeScript type inference is applied
+        // Then: The type should be correctly inferred
       }
       expect(field.id).toBe(1)
     })

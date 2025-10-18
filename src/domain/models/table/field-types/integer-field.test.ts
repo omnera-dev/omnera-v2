@@ -11,6 +11,7 @@ import { IntegerFieldSchema } from './integer-field'
 
 describe('IntegerFieldSchema', () => {
   test('should accept valid integer field configuration', () => {
+    // Given: A valid input
     const field = {
       id: 1,
       name: 'quantity',
@@ -19,6 +20,9 @@ describe('IntegerFieldSchema', () => {
       min: 0,
       max: 1000,
       default: 1,
+
+      // When: The value is validated against the schema
+      // Then: Validation succeeds and the value is accepted
     }
 
     const result = Schema.decodeSync(IntegerFieldSchema)(field)
@@ -26,6 +30,7 @@ describe('IntegerFieldSchema', () => {
   })
 
   test('should accept integer field with age constraints', () => {
+    // Given: A valid configuration
     const field = {
       id: 2,
       name: 'age',
@@ -33,6 +38,9 @@ describe('IntegerFieldSchema', () => {
       required: false,
       min: 0,
       max: 150,
+
+      // When: The value is validated against the schema
+      // Then: Validation succeeds and the value is accepted
     }
 
     const result = Schema.decodeSync(IntegerFieldSchema)(field)
@@ -41,10 +49,14 @@ describe('IntegerFieldSchema', () => {
   })
 
   test('should accept minimal integer field configuration', () => {
+    // Given: A minimal valid configuration
     const field = {
       id: 1,
       name: 'count',
       type: 'integer' as const,
+
+      // When: The value is validated against the schema
+      // Then: Validation succeeds and the value is accepted
     }
 
     const result = Schema.decodeSync(IntegerFieldSchema)(field)
@@ -52,10 +64,14 @@ describe('IntegerFieldSchema', () => {
   })
 
   test('should reject wrong type value', () => {
+    // Given: A configuration with wrong type
     const field = {
       id: 1,
       name: 'quantity',
       type: 'decimal' as const,
+
+      // When: The value is validated against the schema
+      // Then: Validation should throw an error
     }
 
     expect(() => {
@@ -65,11 +81,15 @@ describe('IntegerFieldSchema', () => {
   })
 
   test('should reject non-integer default value', () => {
+    // Given: An invalid input
     const field = {
       id: 1,
       name: 'quantity',
       type: 'integer' as const,
       default: 1.5,
+
+      // When: The value is validated against the schema
+      // Then: Validation should throw an error
     }
 
     expect(() => {
@@ -78,12 +98,16 @@ describe('IntegerFieldSchema', () => {
   })
 
   test('should accept negative min value', () => {
+    // Given: A valid configuration
     const field = {
       id: 1,
       name: 'temperature',
       type: 'integer' as const,
       min: -100,
       max: 100,
+
+      // When: The value is validated against the schema
+      // Then: Validation succeeds and the value is accepted
     }
 
     const result = Schema.decodeSync(IntegerFieldSchema)(field)

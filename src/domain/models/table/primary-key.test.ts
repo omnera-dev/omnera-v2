@@ -12,9 +12,13 @@ import { PrimaryKeySchema } from './primary-key'
 describe('PrimaryKeySchema', () => {
   describe('valid values', () => {
     test('should accept auto-increment type with field', () => {
+      // Given: A valid configuration
       const config = {
         type: 'auto-increment',
         field: 'id',
+
+        // When: The value is validated against the schema
+        // Then: Validation succeeds and the value is accepted
       }
 
       const result = Schema.decodeUnknownSync(PrimaryKeySchema)(config)
@@ -76,6 +80,9 @@ describe('PrimaryKeySchema', () => {
 
   describe('invalid values', () => {
     test('should reject missing type field', () => {
+      // Given: A configuration missing the required type field
+      // When: The configuration is validated against the schema
+      // Then: Validation should throw an error
       expect(() => {
         Schema.decodeUnknownSync(PrimaryKeySchema)({
           field: 'id',
@@ -158,10 +165,14 @@ describe('PrimaryKeySchema', () => {
 
   describe('edge cases', () => {
     test('should accept both field and fields (last one wins in union)', () => {
+      // Given: A valid configuration
       const config = {
         type: 'composite',
         field: 'id',
         fields: ['tenant_id', 'user_id'],
+
+        // When: The value is validated against the schema
+        // Then: Validation succeeds and the value is accepted
       }
 
       const result = Schema.decodeUnknownSync(PrimaryKeySchema)(config)
@@ -181,9 +192,13 @@ describe('PrimaryKeySchema', () => {
 
   describe('type inference', () => {
     test('should infer correct TypeScript type', () => {
+      // Given: A valid value with TypeScript type annotation
       const pk: Schema.Schema.Type<typeof PrimaryKeySchema> = {
         type: 'auto-increment',
         field: 'id',
+
+        // When: TypeScript type inference is applied
+        // Then: The type should be correctly inferred
       }
       expect(pk.type).toBe('auto-increment')
       expect(pk.field).toBe('id')

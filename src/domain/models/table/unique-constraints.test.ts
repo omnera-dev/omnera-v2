@@ -12,8 +12,13 @@ import { UniqueConstraintsSchema } from './unique-constraints'
 describe('UniqueConstraintsSchema', () => {
   describe('valid values', () => {
     test('should accept empty array', () => {
+      // Given: A valid configuration
       const constraints: unknown[] = []
+
+      // When: The value is validated against the schema
       const result = Schema.decodeUnknownSync(UniqueConstraintsSchema)(constraints)
+
+      // Then: Validation succeeds and the value is accepted
       expect(result).toEqual([])
     })
 
@@ -88,6 +93,9 @@ describe('UniqueConstraintsSchema', () => {
 
   describe('invalid values', () => {
     test('should reject constraint with empty name', () => {
+      // Given: A constraint with empty name
+      // When: The constraint is validated against the schema
+      // Then: Validation should throw an error with message "This field is required"
       expect(() => {
         Schema.decodeUnknownSync(UniqueConstraintsSchema)([
           {
@@ -196,10 +204,14 @@ describe('UniqueConstraintsSchema', () => {
 
   describe('type inference', () => {
     test('should infer correct TypeScript type', () => {
+      // Given: A valid value with TypeScript type annotation
       const constraints: Schema.Schema.Type<typeof UniqueConstraintsSchema> = [
         {
           name: 'uq_user_email_tenant',
           fields: ['email', 'tenant_id'],
+
+          // When: TypeScript type inference is applied
+          // Then: The type should be correctly inferred
         },
       ]
       expect(constraints[0]?.name).toBe('uq_user_email_tenant')

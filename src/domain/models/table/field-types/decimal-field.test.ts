@@ -11,6 +11,7 @@ import { DecimalFieldSchema } from './decimal-field'
 
 describe('DecimalFieldSchema', () => {
   test('should accept valid decimal field configuration', () => {
+    // Given: A valid input
     const field = {
       id: 1,
       name: 'weight',
@@ -20,6 +21,9 @@ describe('DecimalFieldSchema', () => {
       min: 0.01,
       max: 999.99,
       default: 1.0,
+
+      // When: The value is validated against the schema
+      // Then: Validation succeeds and the value is accepted
     }
 
     const result = Schema.decodeSync(DecimalFieldSchema)(field)
@@ -27,10 +31,14 @@ describe('DecimalFieldSchema', () => {
   })
 
   test('should accept decimal field without precision (optional)', () => {
+    // Given: A valid configuration
     const field = {
       id: 1,
       name: 'weight',
       type: 'decimal' as const,
+
+      // When: The value is validated against the schema
+      // Then: Validation succeeds and the value is accepted
     }
 
     const result = Schema.decodeSync(DecimalFieldSchema)(field)
@@ -38,6 +46,7 @@ describe('DecimalFieldSchema', () => {
   })
 
   test('should accept tax rate with 4 decimal precision', () => {
+    // Given: A valid configuration
     const field = {
       id: 2,
       name: 'tax_rate',
@@ -47,6 +56,9 @@ describe('DecimalFieldSchema', () => {
       min: 0,
       max: 1,
       default: 0.0825,
+
+      // When: The value is validated against the schema
+      // Then: Validation succeeds and the value is accepted
     }
 
     const result = Schema.decodeSync(DecimalFieldSchema)(field)
@@ -55,10 +67,14 @@ describe('DecimalFieldSchema', () => {
   })
 
   test('should accept minimal decimal field configuration', () => {
+    // Given: A minimal valid configuration
     const field = {
       id: 1,
       name: 'amount',
       type: 'decimal' as const,
+
+      // When: The value is validated against the schema
+      // Then: Validation succeeds and the value is accepted
     }
 
     const result = Schema.decodeSync(DecimalFieldSchema)(field)
@@ -66,10 +82,14 @@ describe('DecimalFieldSchema', () => {
   })
 
   test('should reject wrong type value', () => {
+    // Given: A configuration with wrong type
     const field = {
       id: 1,
       name: 'weight',
       type: 'integer',
+
+      // When: The value is validated against the schema
+      // Then: Validation should throw an error
     }
 
     expect(() => {
@@ -79,11 +99,15 @@ describe('DecimalFieldSchema', () => {
   })
 
   test('should reject precision less than 0', () => {
+    // Given: An invalid input
     const field = {
       id: 1,
       name: 'weight',
       type: 'decimal' as const,
       precision: -1,
+
+      // When: The value is validated against the schema
+      // Then: Validation should throw an error
     }
 
     expect(() => {
@@ -92,11 +116,15 @@ describe('DecimalFieldSchema', () => {
   })
 
   test('should reject precision greater than 10', () => {
+    // Given: An invalid input
     const field = {
       id: 1,
       name: 'weight',
       type: 'decimal' as const,
       precision: 11,
+
+      // When: The value is validated against the schema
+      // Then: Validation should throw an error
     }
 
     expect(() => {
@@ -105,11 +133,15 @@ describe('DecimalFieldSchema', () => {
   })
 
   test('should accept precision of 0 for whole numbers', () => {
+    // Given: A valid configuration
     const field = {
       id: 1,
       name: 'rounded_value',
       type: 'decimal' as const,
       precision: 0,
+
+      // When: The value is validated against the schema
+      // Then: Validation succeeds and the value is accepted
     }
 
     const result = Schema.decodeSync(DecimalFieldSchema)(field)

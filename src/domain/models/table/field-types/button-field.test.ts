@@ -11,12 +11,16 @@ import { ButtonFieldSchema } from './button-field'
 
 describe('ButtonFieldSchema', () => {
   test('should accept valid button field', () => {
+    // Given: A valid input
     const field = {
       id: 1,
       name: 'approve',
       type: 'button' as const,
       label: 'Approve',
       action: 'automation',
+
+      // When: The value is validated against the schema
+      // Then: Validation succeeds and the value is accepted
     }
     const result = Schema.decodeSync(ButtonFieldSchema)(field)
     expect(result).toEqual(field)

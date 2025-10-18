@@ -11,6 +11,7 @@ import { RollupFieldSchema } from './rollup-field'
 
 describe('RollupFieldSchema', () => {
   test('should accept valid rollup field', () => {
+    // Given: A valid input
     const field = {
       id: 1,
       name: 'total',
@@ -18,6 +19,9 @@ describe('RollupFieldSchema', () => {
       relationshipField: 'orders',
       relatedField: 'amount',
       aggregation: 'SUM',
+
+      // When: The value is validated against the schema
+      // Then: Validation succeeds and the value is accepted
     }
     const result = Schema.decodeSync(RollupFieldSchema)(field)
     expect(result).toEqual(field)

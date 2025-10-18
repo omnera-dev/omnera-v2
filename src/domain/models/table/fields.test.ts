@@ -12,6 +12,7 @@ import { FieldsSchema } from './fields'
 describe('FieldsSchema', () => {
   describe('valid values', () => {
     test('should accept array with at least one field', () => {
+      // Given: An array with a single valid field
       const fields = [
         {
           id: 1,
@@ -20,11 +21,15 @@ describe('FieldsSchema', () => {
         },
       ] as const
 
+      // When: The fields array is validated against the schema
       const result = Schema.decodeUnknownSync(FieldsSchema)(fields)
+
+      // Then: The fields array should be accepted
       expect(result).toEqual(fields)
     })
 
     test('should accept multiple fields', () => {
+      // Given: An array with multiple valid fields
       const fields = [
         {
           id: 1,
@@ -38,19 +43,28 @@ describe('FieldsSchema', () => {
         },
       ] as const
 
+      // When: The fields array is validated against the schema
       const result = Schema.decodeUnknownSync(FieldsSchema)(fields)
+
+      // Then: The fields array should be accepted
       expect(result).toEqual(fields)
     })
   })
 
   describe('invalid values', () => {
     test('should reject empty array', () => {
+      // Given: An empty fields array
+      // When: The empty array is validated against the schema
+      // Then: Validation should throw an error (at least one field required)
       expect(() => {
         Schema.decodeUnknownSync(FieldsSchema)([])
       }).toThrow()
     })
 
     test('should reject non-array value', () => {
+      // Given: A single object instead of an array
+      // When: The object is validated against the schema
+      // Then: Validation should throw an error
       expect(() => {
         Schema.decodeUnknownSync(FieldsSchema)({
           id: 1,
@@ -63,6 +77,7 @@ describe('FieldsSchema', () => {
 
   describe('type inference', () => {
     test('should infer correct TypeScript type', () => {
+      // Given: A valid fields array with TypeScript type annotation
       const fields = [
         {
           id: 1,
@@ -70,6 +85,9 @@ describe('FieldsSchema', () => {
           type: 'email' as const,
         },
       ] as Schema.Schema.Type<typeof FieldsSchema>
+
+      // When: TypeScript type inference is applied
+      // Then: The type should be correctly inferred
       expect(fields).toHaveLength(1)
     })
   })

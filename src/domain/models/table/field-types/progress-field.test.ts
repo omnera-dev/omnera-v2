@@ -12,10 +12,14 @@ import { ProgressFieldSchema } from './progress-field'
 describe('ProgressFieldSchema', () => {
   describe('valid values', () => {
     test('should accept valid progress field', () => {
+      // Given: A valid input
       const field = {
         id: 1,
         name: 'task_completion',
         type: 'progress' as const,
+
+        // When: The value is validated against the schema
+        // Then: Validation succeeds and the value is accepted
       }
 
       const result = Schema.decodeSync(ProgressFieldSchema)(field)
@@ -50,9 +54,13 @@ describe('ProgressFieldSchema', () => {
 
   describe('invalid values', () => {
     test('should reject field without id', () => {
+      // Given: An invalid input
       const field = {
         name: 'task_completion',
         type: 'progress' as const,
+
+        // When: The value is validated against the schema
+        // Then: Validation should throw an error
       }
 
       expect(() => {
@@ -90,11 +98,15 @@ describe('ProgressFieldSchema', () => {
 
   describe('type inference', () => {
     test('should infer correct TypeScript type', () => {
+      // Given: A valid value with TypeScript type annotation
       const field: Schema.Schema.Type<typeof ProgressFieldSchema> = {
         id: 1,
         name: 'task_completion',
         type: 'progress' as const,
         color: '#10B981',
+
+        // When: TypeScript type inference is applied
+        // Then: The type should be correctly inferred
       }
       expect(field.id).toBe(1)
     })

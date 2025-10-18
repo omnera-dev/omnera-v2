@@ -12,10 +12,14 @@ import { GeolocationFieldSchema } from './geolocation-field'
 describe('GeolocationFieldSchema', () => {
   describe('valid values', () => {
     test('should accept valid geolocation field', () => {
+      // Given: A valid input
       const field = {
         id: 1,
         name: 'office_location',
         type: 'geolocation' as const,
+
+        // When: The value is validated against the schema
+        // Then: Validation succeeds and the value is accepted
       }
 
       const result = Schema.decodeSync(GeolocationFieldSchema)(field)
@@ -49,9 +53,13 @@ describe('GeolocationFieldSchema', () => {
 
   describe('invalid values', () => {
     test('should reject field without id', () => {
+      // Given: An invalid input
       const field = {
         name: 'office_location',
         type: 'geolocation' as const,
+
+        // When: The value is validated against the schema
+        // Then: Validation should throw an error
       }
 
       expect(() => {
@@ -75,11 +83,15 @@ describe('GeolocationFieldSchema', () => {
 
   describe('type inference', () => {
     test('should infer correct TypeScript type', () => {
+      // Given: A valid value with TypeScript type annotation
       const field: Schema.Schema.Type<typeof GeolocationFieldSchema> = {
         id: 1,
         name: 'office_location',
         type: 'geolocation' as const,
         required: true,
+
+        // When: TypeScript type inference is applied
+        // Then: The type should be correctly inferred
       }
       expect(field.id).toBe(1)
     })

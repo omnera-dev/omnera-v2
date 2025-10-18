@@ -11,6 +11,7 @@ import { EmailFieldSchema } from './email-field'
 
 describe('EmailFieldSchema', () => {
   test('should accept valid email field configuration', () => {
+    // Given: A valid input
     const field = {
       id: 1,
       name: 'email',
@@ -18,6 +19,9 @@ describe('EmailFieldSchema', () => {
       required: true,
       unique: true,
       indexed: true,
+
+      // When: The value is validated against the schema
+      // Then: Validation succeeds and the value is accepted
     }
 
     const result = Schema.decodeSync(EmailFieldSchema)(field)
@@ -25,12 +29,16 @@ describe('EmailFieldSchema', () => {
   })
 
   test('should accept email field with default value', () => {
+    // Given: A configuration with default value
     const field = {
       id: 2,
       name: 'contact_email',
       type: 'email' as const,
       required: false,
       default: 'contact@example.com',
+
+      // When: The value is validated against the schema
+      // Then: Validation succeeds and the value is accepted
     }
 
     const result = Schema.decodeSync(EmailFieldSchema)(field)
@@ -38,10 +46,14 @@ describe('EmailFieldSchema', () => {
   })
 
   test('should accept minimal email field configuration', () => {
+    // Given: A minimal valid configuration
     const field = {
       id: 1,
       name: 'email',
       type: 'email' as const,
+
+      // When: The value is validated against the schema
+      // Then: Validation succeeds and the value is accepted
     }
 
     const result = Schema.decodeSync(EmailFieldSchema)(field)
@@ -49,10 +61,14 @@ describe('EmailFieldSchema', () => {
   })
 
   test('should reject wrong type value', () => {
+    // Given: A configuration with wrong type
     const field = {
       id: 1,
       name: 'email',
       type: 'url' as const,
+
+      // When: The value is validated against the schema
+      // Then: Validation should throw an error
     }
 
     expect(() => {
@@ -62,6 +78,7 @@ describe('EmailFieldSchema', () => {
   })
 
   test('should accept email with unique constraint for authentication', () => {
+    // Given: A valid configuration
     const field = {
       id: 1,
       name: 'user_email',
@@ -69,6 +86,9 @@ describe('EmailFieldSchema', () => {
       required: true,
       unique: true,
       indexed: true,
+
+      // When: The value is validated against the schema
+      // Then: Validation succeeds and the value is accepted
     }
 
     const result = Schema.decodeSync(EmailFieldSchema)(field)

@@ -12,8 +12,13 @@ import { IndexesSchema } from './indexes'
 describe('IndexesSchema', () => {
   describe('valid values', () => {
     test('should accept empty array', () => {
+      // Given: A valid configuration
       const indexes: unknown[] = []
+
+      // When: The value is validated against the schema
       const result = Schema.decodeUnknownSync(IndexesSchema)(indexes)
+
+      // Then: Validation succeeds and the value is accepted
       expect(result).toEqual([])
     })
 
@@ -103,6 +108,9 @@ describe('IndexesSchema', () => {
 
   describe('invalid values', () => {
     test('should reject index with empty name', () => {
+      // Given: An index with empty name
+      // When: The index is validated against the schema
+      // Then: Validation should throw an error with message "This field is required"
       expect(() => {
         Schema.decodeUnknownSync(IndexesSchema)([
           {
@@ -211,11 +219,15 @@ describe('IndexesSchema', () => {
 
   describe('type inference', () => {
     test('should infer correct TypeScript type', () => {
+      // Given: A valid value with TypeScript type annotation
       const indexes: Schema.Schema.Type<typeof IndexesSchema> = [
         {
           name: 'idx_user_email',
           fields: ['email'],
           unique: true,
+
+          // When: TypeScript type inference is applied
+          // Then: The type should be correctly inferred
         },
       ]
       expect(indexes[0]?.name).toBe('idx_user_email')

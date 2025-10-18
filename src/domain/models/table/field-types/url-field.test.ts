@@ -11,6 +11,7 @@ import { UrlFieldSchema } from './url-field'
 
 describe('UrlFieldSchema', () => {
   test('should accept valid URL field configuration', () => {
+    // Given: A valid input
     const field = {
       id: 1,
       name: 'website',
@@ -18,6 +19,9 @@ describe('UrlFieldSchema', () => {
       required: true,
       unique: false,
       indexed: true,
+
+      // When: The value is validated against the schema
+      // Then: Validation succeeds and the value is accepted
     }
 
     const result = Schema.decodeSync(UrlFieldSchema)(field)
@@ -25,12 +29,16 @@ describe('UrlFieldSchema', () => {
   })
 
   test('should accept URL field with default value', () => {
+    // Given: A configuration with default value
     const field = {
       id: 2,
       name: 'profile_url',
       type: 'url' as const,
       required: false,
       default: 'https://example.com/profile',
+
+      // When: The value is validated against the schema
+      // Then: Validation succeeds and the value is accepted
     }
 
     const result = Schema.decodeSync(UrlFieldSchema)(field)
@@ -38,10 +46,14 @@ describe('UrlFieldSchema', () => {
   })
 
   test('should accept minimal URL field configuration', () => {
+    // Given: A minimal valid configuration
     const field = {
       id: 1,
       name: 'website',
       type: 'url' as const,
+
+      // When: The value is validated against the schema
+      // Then: Validation succeeds and the value is accepted
     }
 
     const result = Schema.decodeSync(UrlFieldSchema)(field)
@@ -49,10 +61,14 @@ describe('UrlFieldSchema', () => {
   })
 
   test('should reject wrong type value', () => {
+    // Given: A configuration with wrong type
     const field = {
       id: 1,
       name: 'website',
       type: 'email' as const,
+
+      // When: The value is validated against the schema
+      // Then: Validation should throw an error
     }
 
     expect(() => {
@@ -62,11 +78,15 @@ describe('UrlFieldSchema', () => {
   })
 
   test('should accept https URL as default', () => {
+    // Given: A configuration with default value
     const field = {
       id: 1,
       name: 'api_endpoint',
       type: 'url' as const,
       default: 'https://api.example.com/v1',
+
+      // When: The value is validated against the schema
+      // Then: Validation succeeds and the value is accepted
     }
 
     const result = Schema.decodeSync(UrlFieldSchema)(field)

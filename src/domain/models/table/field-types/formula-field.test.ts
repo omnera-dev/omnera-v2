@@ -11,8 +11,13 @@ import { FormulaFieldSchema } from './formula-field'
 
 describe('FormulaFieldSchema', () => {
   test('should accept valid formula field', () => {
+    // Given: A valid input
     const field = { id: 1, name: 'total', type: 'formula' as const, formula: 'price * quantity' }
+
+    // When: The value is validated against the schema
     const result = Schema.decodeSync(FormulaFieldSchema)(field)
+
+    // Then: Validation succeeds and the value is accepted
     expect(result).toEqual(field)
   })
 })

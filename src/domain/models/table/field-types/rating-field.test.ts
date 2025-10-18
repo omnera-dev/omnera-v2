@@ -12,10 +12,14 @@ import { RatingFieldSchema } from './rating-field'
 describe('RatingFieldSchema', () => {
   describe('valid values', () => {
     test('should accept valid rating field', () => {
+      // Given: A valid input
       const field = {
         id: 1,
         name: 'product_rating',
         type: 'rating' as const,
+
+        // When: The value is validated against the schema
+        // Then: Validation succeeds and the value is accepted
       }
 
       const result = Schema.decodeSync(RatingFieldSchema)(field)
@@ -51,9 +55,13 @@ describe('RatingFieldSchema', () => {
 
   describe('invalid values', () => {
     test('should reject field without id', () => {
+      // Given: An invalid input
       const field = {
         name: 'product_rating',
         type: 'rating' as const,
+
+        // When: The value is validated against the schema
+        // Then: Validation should throw an error
       }
 
       expect(() => {
@@ -91,11 +99,15 @@ describe('RatingFieldSchema', () => {
 
   describe('type inference', () => {
     test('should infer correct TypeScript type', () => {
+      // Given: A valid value with TypeScript type annotation
       const field: Schema.Schema.Type<typeof RatingFieldSchema> = {
         id: 1,
         name: 'product_rating',
         type: 'rating' as const,
         max: 5,
+
+        // When: TypeScript type inference is applied
+        // Then: The type should be correctly inferred
       }
       expect(field.id).toBe(1)
     })
