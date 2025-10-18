@@ -26,7 +26,7 @@ examples:
 
   - user: "Translate the tables property schema to Effect from specs.schema.json"
     assistant: |
-      <invokes Agent tool with identifier="effect-schema-translator">
+      <uses Task tool with subagent_type="effect-schema-translator">
       The effect-schema-translator agent will read the validated JSON Schema definition for tables from specs.schema.json and mechanically convert it to Effect Schema at src/domain/models/app/tables.ts following established patterns.
 
 model: sonnet

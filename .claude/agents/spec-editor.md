@@ -14,19 +14,19 @@ description: |
 
   ```
   User: "I want to add a theme property for dark/light mode support"
-  Assistant: <invokes Agent tool with spec-editor>
+  Assistant: <uses Task tool with subagent_type="spec-editor">
   The spec-editor agent will guide you through adding the theme property to specs.schema.json, help define validation rules, business rationale, and user stories, then validate the complete schema structure.
   ```
 
   ```
   User: "Help me define the tables schema following the vision.md requirements"
-  Assistant: <invokes Agent tool with spec-editor>
+  Assistant: <uses Task tool with subagent_type="spec-editor">
   The spec-editor agent will collaborate with you to design the tables property structure, ask about validation constraints, help write business rules and user stories, and ensure Triple-Documentation Pattern completeness.
   ```
 
   ```
   User: "Validate that the pages schema is ready for implementation"
-  Assistant: <invokes Agent tool with spec-editor>
+  Assistant: <uses Task tool with subagent_type="spec-editor">
   The spec-editor agent will check the pages property definition for complete Triple-Documentation Pattern fields and validate the schema structure.
   ```
 

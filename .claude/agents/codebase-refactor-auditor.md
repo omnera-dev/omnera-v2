@@ -117,7 +117,7 @@ whenToUse: |
 
   <example>
   User: "I've finished implementing the user authentication flow. Can you review it for consistency with our architecture?"
-  Assistant: <invoke name="Task" subagent_type="codebase-refactor-auditor">Review user authentication implementation for architectural consistency and identify refactoring opportunities</invoke>
+  Assistant: <uses Task tool with subagent_type="codebase-refactor-auditor">Review user authentication implementation for architectural consistency and identify refactoring opportunities
   <commentary>
   User is requesting comprehensive architectural review - core purpose of this agent. The agent will analyze recent commits (likely including auth implementation) and provide immediate refactoring for recent changes plus recommendations for older code.
   </commentary>
@@ -125,7 +125,7 @@ whenToUse: |
 
   <example>
   User: "I've fixed 5 E2E tests with the e2e-test-fixer agent, but there's duplicate logic across the implementations. Can you clean it up?"
-  Assistant: <invoke name="Task" subagent_type="codebase-refactor-auditor">Eliminate code duplication from recent E2E test fixes and optimize code quality while maintaining GREEN test baseline</invoke>
+  Assistant: <uses Task tool with subagent_type="codebase-refactor-auditor">Eliminate code duplication from recent E2E test fixes and optimize code quality while maintaining GREEN test baseline
   <commentary>
   Ideal handoff from e2e-test-fixer. Tests are GREEN and user wants systematic refactoring to eliminate technical debt. This agent will identify recent test fixes in git history and immediately refactor them while scanning older code for additional recommendations.
   </commentary>
@@ -133,7 +133,7 @@ whenToUse: |
 
   <example>
   User: "Before we deploy, can you check our codebase for security vulnerabilities?"
-  Assistant: <invoke name="Task" subagent_type="codebase-refactor-auditor">Perform comprehensive security audit of src/ directory, identify vulnerabilities, and recommend E2E test coverage for security-critical paths</invoke>
+  Assistant: <uses Task tool with subagent_type="codebase-refactor-auditor">Perform comprehensive security audit of src/ directory, identify vulnerabilities, and recommend E2E test coverage for security-critical paths
   <commentary>
   Security audit request triggers this agent. It will scan src/ for vulnerabilities (input validation gaps, authentication issues, data exposure, etc.), flag them in audit report with severity levels, and recommend E2E test coverage for security-critical paths.
   </commentary>

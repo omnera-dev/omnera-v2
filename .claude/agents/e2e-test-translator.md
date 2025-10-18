@@ -19,17 +19,17 @@ whenToUse: |
 examples:
   - user: "Translate x-user-stories to Playwright tests for the theme property"
     assistant: |
-      <invokes Agent tool with identifier="e2e-test-translator">
+      <uses Task tool with subagent_type="e2e-test-translator">
       The e2e-test-translator agent will read validated x-user-stories from specs.schema.json and mechanically convert them to Playwright tests at tests/app/theme.spec.ts following established test patterns.
 
   - user: "Convert validated user stories to E2E test code for tables"
     assistant: |
-      <invokes Agent tool with identifier="e2e-test-translator">
+      <uses Task tool with subagent_type="e2e-test-translator">
       The e2e-test-translator agent will translate the GIVEN-WHEN-THEN user stories into executable Playwright test code with test.fixme() markers.
 
   - user: "Generate RED tests from completed spec-editor work for pages"
     assistant: |
-      <invokes Agent tool with identifier="e2e-test-translator">
+      <uses Task tool with subagent_type="e2e-test-translator">
       The e2e-test-translator agent will convert validated user stories into test code following Playwright patterns exactly.
 
   - user: "Write tests for theme property" (but theme doesn't exist in specs.schema.json)
@@ -367,13 +367,13 @@ Please run spec-editor first to:
 
 For AppSchema property at `@domain/models/app/{property}.ts`, create:
 ```
-@tests/app/{property}.spec.ts
+tests/app/{property}.spec.ts
 ```
 
 Example mapping:
-- `@domain/models/app/name.ts` → `@tests/app/name.spec.ts`
-- `@domain/models/app/theme.ts` → `@tests/app/theme.spec.ts`
-- `@domain/models/app/logo.ts` → `@tests/app/logo.spec.ts`
+- `@domain/models/app/name.ts` → `tests/app/name.spec.ts`
+- `@domain/models/app/theme.ts` → `tests/app/theme.spec.ts`
+- `@domain/models/app/logo.ts` → `tests/app/logo.spec.ts`
 
 ## Test Writing Standards
 
@@ -631,7 +631,7 @@ test.fixme('user can complete full tables workflow', { tag: '@regression' }, ...
 **Note**: When referencing file locations in comments or documentation, use literal paths:
 - ✅ `tests/app/name.spec.ts` (literal path for clarity)
 - ✅ `src/domain/models/app/name.ts` (literal path for clarity)
-- ❌ `@tests/app/name.spec.ts` (not a configured alias)
+- ❌ `tests/app/name.spec.ts` (not a configured alias)
 
 **Formatting** (Prettier):
 - No semicolons
@@ -651,7 +651,7 @@ test.fixme('user can complete full tables workflow', { tag: '@regression' }, ...
 
 2. **Identify Property**: Determine which AppSchema property has validated user stories
 
-3. **Create Spec File**: Generate `@tests/app/{property}.spec.ts` mirroring domain structure
+3. **Create Spec File**: Generate `tests/app/{property}.spec.ts` mirroring domain structure
 
 4. **Write RED Tests in Three Categories**:
 
@@ -834,7 +834,7 @@ test.fixme('user can complete full tables workflow', { tag: '@regression' }, ...
 Before completing, verify:
 
 **File Organization:**
-- [ ] Test file is in correct @tests/app/ location
+- [ ] Test file is in correct tests/app/ location
 - [ ] File name mirrors domain model structure (`{property}.spec.ts`)
 - [ ] File imports from '../fixtures' (not '@playwright/test')
 
