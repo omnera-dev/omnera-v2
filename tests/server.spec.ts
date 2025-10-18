@@ -448,9 +448,9 @@ test.describe('Server Infrastructure', () => {
         // WHEN: User navigates to multiple unknown routes
         const routes = ['/foo', '/bar/baz', '/api/nonexistent', '/admin/missing']
 
+        // THEN: Each should return 404 (sequential navigation required for single page)
         for (const route of routes) {
           const response = await page.goto(route)
-          // THEN: Each should return 404
           expect(response?.status()).toBe(404)
         }
       }
@@ -641,10 +641,9 @@ test.describe('Server Infrastructure', () => {
       })
 
       // WHEN: User makes multiple sequential requests
+      // THEN: Each request should succeed (sequential navigation required for single page)
       for (let i = 0; i < 5; i++) {
         const response = await page.goto('/health')
-
-        // THEN: Each request should succeed
         expect(response?.status()).toBe(200)
       }
 
