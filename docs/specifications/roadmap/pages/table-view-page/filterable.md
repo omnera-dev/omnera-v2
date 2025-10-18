@@ -40,12 +40,14 @@ import { Schema } from 'effect'
 
 ```typescript
 /**
- * 
+ *
  * Enable column filtering
  */
 export const PagesTableViewPageFilterableSchema = Schema.Boolean
 
-export type PagesTableViewPageFilterable = Schema.Schema.Type<typeof PagesTableViewPageFilterableSchema>
+export type PagesTableViewPageFilterable = Schema.Schema.Type<
+  typeof PagesTableViewPageFilterableSchema
+>
 ```
 
 ---

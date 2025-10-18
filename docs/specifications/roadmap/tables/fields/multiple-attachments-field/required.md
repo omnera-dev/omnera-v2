@@ -39,7 +39,9 @@ import { Schema } from 'effect'
 ```typescript
 export const TablesFieldsMultipleAttachmentsFieldRequiredSchema = Schema.Boolean
 
-export type TablesFieldsMultipleAttachmentsFieldRequired = Schema.Schema.Type<typeof TablesFieldsMultipleAttachmentsFieldRequiredSchema>
+export type TablesFieldsMultipleAttachmentsFieldRequired = Schema.Schema.Type<
+  typeof TablesFieldsMultipleAttachmentsFieldRequiredSchema
+>
 ```
 
 ---

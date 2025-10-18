@@ -41,44 +41,49 @@ import { Schema } from 'effect'
 ```typescript
 /**
  * List Pages
- * 
+ *
  * Lists pages from a Notion database
  */
 export const AutomationActionNotionListPagesSchema = Schema.Struct({
-    name: Schema.String,
-    account: Schema.Union(
-      Schema.Number,
-      Schema.String
+  name: Schema.String,
+  account: Schema.Union(Schema.Number, Schema.String),
+  service: Schema.String,
+  action: Schema.String,
+  params: Schema.Struct({
+    databaseId: Schema.String.pipe(
+      Schema.annotations({
+        description: 'The ID of the database to query',
+      })
     ),
-    service: Schema.String,
-    action: Schema.String,
-    params: Schema.Struct({
-      databaseId: Schema.String.pipe(
+    filter: Schema.optional(Schema.Unknown),
+    sorts: Schema.optional(Schema.Array(Schema.Unknown)),
+    startCursor: Schema.optional(
+      Schema.String.pipe(
         Schema.annotations({
-        description: "The ID of the database to query"
-      })
-      ),
-      filter: Schema.optional(Schema.Unknown),
-      sorts: Schema.optional(Schema.Array(Schema.Unknown)),
-      startCursor: Schema.optional(Schema.String.pipe(
-        Schema.annotations({
-        description: "Pagination cursor"
-      })
-      )),
-      pageSize: Schema.optional(Schema.Number.pipe(
+          description: 'Pagination cursor',
+        })
+      )
+    ),
+    pageSize: Schema.optional(
+      Schema.Number.pipe(
         Schema.greaterThanOrEqualTo(1),
         Schema.lessThanOrEqualTo(100),
         Schema.annotations({
-        description: "Number of results per page"
-      })
-      )),
-    }),
-  }).pipe(Schema.annotations({
-    title: "List Pages",
-    description: "Lists pages from a Notion database"
-  }))
+          description: 'Number of results per page',
+        })
+      )
+    ),
+  }),
+}).pipe(
+  Schema.annotations({
+    title: 'List Pages',
+    description: 'Lists pages from a Notion database',
+  })
+)
 
-export type AutomationActionNotionListPages = Schema.Schema.Type<typeof AutomationActionNotionListPagesSchema>
+export type AutomationActionNotionListPages = Schema.Schema.Type<
+  typeof AutomationActionNotionListPagesSchema
+>
 ```
 
 ---

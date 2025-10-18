@@ -40,14 +40,18 @@ import { Schema } from 'effect'
 
 ```typescript
 /**
- * 
+ *
  * Visual style for the rating
  */
-export const TablesFieldsRatingFieldStyleSchema = Schema.Literal("star", "number", "heart").pipe(Schema.annotations({
-    description: "Visual style for the rating"
-  }))
+export const TablesFieldsRatingFieldStyleSchema = Schema.Literal('star', 'number', 'heart').pipe(
+  Schema.annotations({
+    description: 'Visual style for the rating',
+  })
+)
 
-export type TablesFieldsRatingFieldStyle = Schema.Schema.Type<typeof TablesFieldsRatingFieldStyleSchema>
+export type TablesFieldsRatingFieldStyle = Schema.Schema.Type<
+  typeof TablesFieldsRatingFieldStyleSchema
+>
 ```
 
 ---

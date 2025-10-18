@@ -37,9 +37,11 @@ import { Schema } from 'effect'
 **Implementation**:
 
 ```typescript
-export const PagesCustomHtmlPageHeadScriptElementTagSchema = Schema.Literal("script")
+export const PagesCustomHtmlPageHeadScriptElementTagSchema = Schema.Literal('script')
 
-export type PagesCustomHtmlPageHeadScriptElementTag = Schema.Schema.Type<typeof PagesCustomHtmlPageHeadScriptElementTagSchema>
+export type PagesCustomHtmlPageHeadScriptElementTag = Schema.Schema.Type<
+  typeof PagesCustomHtmlPageHeadScriptElementTagSchema
+>
 ```
 
 ---

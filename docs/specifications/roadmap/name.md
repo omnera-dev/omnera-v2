@@ -34,12 +34,12 @@ import { Schema } from 'effect'
 
 **Implementation**:
 
-```typescript
+````typescript
 /**
  * Application Name
- * 
+ *
  * The name of the application (follows npm package naming conventions)
- * 
+ *
  * @example
  * ```typescript
  * "my-app"
@@ -59,7 +59,7 @@ export const NameSchema = Schema.String.pipe(
   )
 
 export type Name = Schema.Schema.Type<typeof NameSchema>
-```
+````
 
 ---
 
@@ -135,7 +135,6 @@ This property is complete when:
 - [ ] All ESLint checks passing
 - [ ] All Prettier formatting checks passing
 - [ ] JSON schema export updated via `bun run export:schema`
-
 
 ---
 

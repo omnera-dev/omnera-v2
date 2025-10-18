@@ -40,17 +40,19 @@ import { Schema } from 'effect'
 
 ```typescript
 /**
- * 
+ *
  * Maximum number of selections allowed
  */
 export const TablesFieldsMultiSelectFieldMaxSelectionsSchema = Schema.Int.pipe(
-    Schema.greaterThanOrEqualTo(1),
-    Schema.annotations({
-    description: "Maximum number of selections allowed"
+  Schema.greaterThanOrEqualTo(1),
+  Schema.annotations({
+    description: 'Maximum number of selections allowed',
   })
-  )
+)
 
-export type TablesFieldsMultiSelectFieldMaxSelections = Schema.Schema.Type<typeof TablesFieldsMultiSelectFieldMaxSelectionsSchema>
+export type TablesFieldsMultiSelectFieldMaxSelections = Schema.Schema.Type<
+  typeof TablesFieldsMultiSelectFieldMaxSelectionsSchema
+>
 ```
 
 ---

@@ -37,7 +37,7 @@ import { Schema } from 'effect'
 **Implementation**:
 
 ```typescript
-export const ConnectionsQontoServiceSchema = Schema.Literal("qonto")
+export const ConnectionsQontoServiceSchema = Schema.Literal('qonto')
 
 export type ConnectionsQontoService = Schema.Schema.Type<typeof ConnectionsQontoServiceSchema>
 ```

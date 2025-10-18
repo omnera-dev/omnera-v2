@@ -37,10 +37,7 @@ import { Schema } from 'effect'
 **Implementation**:
 
 ```typescript
-export const JsonSchemaTypeSchema = Schema.Union(
-    Schema.String,
-    Schema.Array(Schema.String)
-  )
+export const JsonSchemaTypeSchema = Schema.Union(Schema.String, Schema.Array(Schema.String))
 
 export type JsonSchemaType = Schema.Schema.Type<typeof JsonSchemaTypeSchema>
 ```

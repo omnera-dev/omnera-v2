@@ -40,14 +40,27 @@ import { Schema } from 'effect'
 
 ```typescript
 /**
- * 
+ *
  * Aggregation function to apply
  */
-export const TablesFieldsRollupFieldAggregationSchema = Schema.Literal("sum", "count", "average", "min", "max", "median", "concat", "unique").pipe(Schema.annotations({
-    description: "Aggregation function to apply"
-  }))
+export const TablesFieldsRollupFieldAggregationSchema = Schema.Literal(
+  'sum',
+  'count',
+  'average',
+  'min',
+  'max',
+  'median',
+  'concat',
+  'unique'
+).pipe(
+  Schema.annotations({
+    description: 'Aggregation function to apply',
+  })
+)
 
-export type TablesFieldsRollupFieldAggregation = Schema.Schema.Type<typeof TablesFieldsRollupFieldAggregationSchema>
+export type TablesFieldsRollupFieldAggregation = Schema.Schema.Type<
+  typeof TablesFieldsRollupFieldAggregationSchema
+>
 ```
 
 ---

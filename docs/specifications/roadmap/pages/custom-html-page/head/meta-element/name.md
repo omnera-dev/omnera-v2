@@ -38,10 +38,12 @@ import { Schema } from 'effect'
 
 ```typescript
 export const PagesCustomHtmlPageHeadMetaElementNameSchema = Schema.String.pipe(
-    Schema.minLength(1, { message: () => 'This field is required' })
-  )
+  Schema.minLength(1, { message: () => 'This field is required' })
+)
 
-export type PagesCustomHtmlPageHeadMetaElementName = Schema.Schema.Type<typeof PagesCustomHtmlPageHeadMetaElementNameSchema>
+export type PagesCustomHtmlPageHeadMetaElementName = Schema.Schema.Type<
+  typeof PagesCustomHtmlPageHeadMetaElementNameSchema
+>
 ```
 
 ---

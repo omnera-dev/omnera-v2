@@ -38,10 +38,12 @@ import { Schema } from 'effect'
 
 ```typescript
 export const PagesCustomHtmlPageHeadLinkElementHrefSchema = Schema.String.pipe(
-    Schema.minLength(1, { message: () => 'This field is required' })
-  )
+  Schema.minLength(1, { message: () => 'This field is required' })
+)
 
-export type PagesCustomHtmlPageHeadLinkElementHref = Schema.Schema.Type<typeof PagesCustomHtmlPageHeadLinkElementHrefSchema>
+export type PagesCustomHtmlPageHeadLinkElementHref = Schema.Schema.Type<
+  typeof PagesCustomHtmlPageHeadLinkElementHrefSchema
+>
 ```
 
 ---

@@ -38,11 +38,11 @@ import { Schema } from 'effect'
 
 **Implementation**:
 
-```typescript
+````typescript
 /**
- * 
+ *
  * Field name for single-column primary key. Only used with 'auto-increment' or 'uuid' type.
- * 
+ *
  * @example
  * ```typescript
  * "id"
@@ -59,7 +59,7 @@ export const TablesPrimaryKeyFieldSchema = Schema.String.pipe(
   )
 
 export type TablesPrimaryKeyField = Schema.Schema.Type<typeof TablesPrimaryKeyFieldSchema>
-```
+````
 
 ---
 

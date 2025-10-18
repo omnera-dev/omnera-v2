@@ -40,16 +40,18 @@ import { Schema } from 'effect'
 
 ```typescript
 /**
- * 
+ *
  * S3 bucket name (required for s3 provider)
  */
 export const TablesFieldsMultipleAttachmentsFieldStorageBucketSchema = Schema.String.pipe(
-    Schema.annotations({
-    description: "S3 bucket name (required for s3 provider)"
+  Schema.annotations({
+    description: 'S3 bucket name (required for s3 provider)',
   })
-  )
+)
 
-export type TablesFieldsMultipleAttachmentsFieldStorageBucket = Schema.Schema.Type<typeof TablesFieldsMultipleAttachmentsFieldStorageBucketSchema>
+export type TablesFieldsMultipleAttachmentsFieldStorageBucket = Schema.Schema.Type<
+  typeof TablesFieldsMultipleAttachmentsFieldStorageBucketSchema
+>
 ```
 
 ---

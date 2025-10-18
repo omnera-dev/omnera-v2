@@ -37,9 +37,11 @@ import { Schema } from 'effect'
 **Implementation**:
 
 ```typescript
-export const TablesFieldsProgressFieldTypeSchema = Schema.Literal("progress")
+export const TablesFieldsProgressFieldTypeSchema = Schema.Literal('progress')
 
-export type TablesFieldsProgressFieldType = Schema.Schema.Type<typeof TablesFieldsProgressFieldTypeSchema>
+export type TablesFieldsProgressFieldType = Schema.Schema.Type<
+  typeof TablesFieldsProgressFieldTypeSchema
+>
 ```
 
 ---

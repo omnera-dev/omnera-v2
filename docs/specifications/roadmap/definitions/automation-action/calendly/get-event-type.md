@@ -41,26 +41,27 @@ import { Schema } from 'effect'
 ```typescript
 /**
  * Get Event Type
- * 
+ *
  * Gets the event type for a given uuid
  */
 export const AutomationActionCalendlyGetEventTypeSchema = Schema.Struct({
-    name: Schema.String,
-    account: Schema.Union(
-      Schema.Number,
-      Schema.String
-    ),
-    service: Schema.String,
-    action: Schema.String,
-    params: Schema.Struct({
-      uuid: Schema.String,
-    }),
-  }).pipe(Schema.annotations({
-    title: "Get Event Type",
-    description: "Gets the event type for a given uuid"
-  }))
+  name: Schema.String,
+  account: Schema.Union(Schema.Number, Schema.String),
+  service: Schema.String,
+  action: Schema.String,
+  params: Schema.Struct({
+    uuid: Schema.String,
+  }),
+}).pipe(
+  Schema.annotations({
+    title: 'Get Event Type',
+    description: 'Gets the event type for a given uuid',
+  })
+)
 
-export type AutomationActionCalendlyGetEventType = Schema.Schema.Type<typeof AutomationActionCalendlyGetEventTypeSchema>
+export type AutomationActionCalendlyGetEventType = Schema.Schema.Type<
+  typeof AutomationActionCalendlyGetEventTypeSchema
+>
 ```
 
 ---

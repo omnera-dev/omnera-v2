@@ -37,8 +37,7 @@ import { Schema } from 'effect'
 **Implementation**:
 
 ```typescript
-export const JsonSchemaPropertiesSchema = Schema.Struct({
-  })
+export const JsonSchemaPropertiesSchema = Schema.Struct({})
 
 export type JsonSchemaProperties = Schema.Schema.Type<typeof JsonSchemaPropertiesSchema>
 ```

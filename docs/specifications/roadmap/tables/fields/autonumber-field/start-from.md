@@ -40,17 +40,19 @@ import { Schema } from 'effect'
 
 ```typescript
 /**
- * 
+ *
  * Starting number
  */
 export const TablesFieldsAutonumberFieldStartFromSchema = Schema.Int.pipe(
-    Schema.greaterThanOrEqualTo(1),
-    Schema.annotations({
-    description: "Starting number"
+  Schema.greaterThanOrEqualTo(1),
+  Schema.annotations({
+    description: 'Starting number',
   })
-  )
+)
 
-export type TablesFieldsAutonumberFieldStartFrom = Schema.Schema.Type<typeof TablesFieldsAutonumberFieldStartFromSchema>
+export type TablesFieldsAutonumberFieldStartFrom = Schema.Schema.Type<
+  typeof TablesFieldsAutonumberFieldStartFromSchema
+>
 ```
 
 ---

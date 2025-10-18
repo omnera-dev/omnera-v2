@@ -41,36 +41,37 @@ import { Schema } from 'effect'
 ```typescript
 /**
  * Create Lead Notification Subscription
- * 
+ *
  * Creates a LinkedIn Lead Notification subscription at owner level
  */
 export const AutomationActionLinkedinAdsCreateLeadNotificationSubscriptionSchema = Schema.Struct({
-    name: Schema.String,
-    account: Schema.Union(
-      Schema.Number,
-      Schema.String
+  name: Schema.String,
+  account: Schema.Union(Schema.Number, Schema.String),
+  service: Schema.String,
+  action: Schema.String,
+  params: Schema.Struct({
+    webhook: Schema.String.pipe(
+      Schema.annotations({
+        title: 'Webhook URL',
+      })
     ),
-    service: Schema.String,
-    action: Schema.String,
-    params: Schema.Struct({
-      webhook: Schema.String.pipe(
-        Schema.annotations({
-        title: "Webhook URL"
+    organizationId: Schema.String.pipe(
+      Schema.annotations({
+        title: 'LinkedIn Organization ID',
       })
-      ),
-      organizationId: Schema.String.pipe(
-        Schema.annotations({
-        title: "LinkedIn Organization ID"
-      })
-      ),
-      leadType: Schema.optional(Schema.String),
-    }),
-  }).pipe(Schema.annotations({
-    title: "Create Lead Notification Subscription",
-    description: "Creates a LinkedIn Lead Notification subscription at owner level"
-  }))
+    ),
+    leadType: Schema.optional(Schema.String),
+  }),
+}).pipe(
+  Schema.annotations({
+    title: 'Create Lead Notification Subscription',
+    description: 'Creates a LinkedIn Lead Notification subscription at owner level',
+  })
+)
 
-export type AutomationActionLinkedinAdsCreateLeadNotificationSubscription = Schema.Schema.Type<typeof AutomationActionLinkedinAdsCreateLeadNotificationSubscriptionSchema>
+export type AutomationActionLinkedinAdsCreateLeadNotificationSubscription = Schema.Schema.Type<
+  typeof AutomationActionLinkedinAdsCreateLeadNotificationSubscriptionSchema
+>
 ```
 
 ---

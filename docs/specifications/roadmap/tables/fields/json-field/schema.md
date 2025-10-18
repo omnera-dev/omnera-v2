@@ -40,15 +40,18 @@ import { Schema } from 'effect'
 
 ```typescript
 /**
- * 
+ *
  * Optional JSON Schema to validate the data
  */
-export const TablesFieldsJsonFieldSchemaSchema = Schema.Struct({
-  }).pipe(Schema.annotations({
-    description: "Optional JSON Schema to validate the data"
-  }))
+export const TablesFieldsJsonFieldSchemaSchema = Schema.Struct({}).pipe(
+  Schema.annotations({
+    description: 'Optional JSON Schema to validate the data',
+  })
+)
 
-export type TablesFieldsJsonFieldSchema = Schema.Schema.Type<typeof TablesFieldsJsonFieldSchemaSchema>
+export type TablesFieldsJsonFieldSchema = Schema.Schema.Type<
+  typeof TablesFieldsJsonFieldSchemaSchema
+>
 ```
 
 ---

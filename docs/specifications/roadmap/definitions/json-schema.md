@@ -41,68 +41,47 @@ import { Schema } from 'effect'
 ```typescript
 /**
  * JSON Schema
- * 
+ *
  * JSON Schema definition (Draft 07 compatible) for validating structured data in JSON fields. Define the expected structure, types, required properties, constraints, and validation rules. Used to ensure JSON field data conforms to a specific schema. Supports all JSON Schema features: types, properties, required, patterns, enums, nested objects, arrays, and custom validation. Useful for API configurations, structured metadata, and flexible data models with enforced structure.
  */
 export const JsonSchemaSchema = Schema.Struct({
-    type: Schema.optional(Schema.Union(
-      Schema.String,
-      Schema.Array(Schema.String)
-    )),
-    properties: Schema.optional(Schema.Struct({
-    })),
-    required: Schema.optional(Schema.Array(Schema.String)),
-    items: Schema.optional(Schema.Union(
-      Schema.Union(
-        Schema.Unknown,
-        Schema.Boolean
-      ),
-      Schema.Array(Schema.Union(
-        Schema.Unknown,
-        Schema.Boolean
-      ))
-    )),
-    additionalProperties: Schema.optional(Schema.Union(
-      Schema.Union(
-        Schema.Unknown,
-        Schema.Boolean
-      ),
-      Schema.Boolean
-    )),
-    enum: Schema.optional(Schema.Array(Schema.Unknown)),
-    const: Schema.optional(Schema.Unknown),
-    title: Schema.optional(Schema.String),
-    description: Schema.optional(Schema.String),
-    default: Schema.optional(Schema.Unknown),
-    minimum: Schema.optional(Schema.Number),
-    maximum: Schema.optional(Schema.Number),
-    multipleOf: Schema.optional(Schema.Number),
-    minLength: Schema.optional(Schema.Number),
-    maxLength: Schema.optional(Schema.Number),
-    pattern: Schema.optional(Schema.String),
-    minItems: Schema.optional(Schema.Number),
-    maxItems: Schema.optional(Schema.Number),
-    uniqueItems: Schema.optional(Schema.Boolean),
-    allOf: Schema.optional(Schema.Array(Schema.Union(
-      Schema.Unknown,
-      Schema.Boolean
-    ))),
-    anyOf: Schema.optional(Schema.Array(Schema.Union(
-      Schema.Unknown,
-      Schema.Boolean
-    ))),
-    oneOf: Schema.optional(Schema.Array(Schema.Union(
-      Schema.Unknown,
-      Schema.Boolean
-    ))),
-    not: Schema.optional(Schema.Union(
-      Schema.Unknown,
-      Schema.Boolean
-    )),
-  }).pipe(Schema.annotations({
-    title: "JSON Schema",
-    description: "JSON Schema definition (Draft 07 compatible) for validating structured data in JSON fields. Define the expected structure, types, required properties, constraints, and validation rules. Used to ensure JSON field data conforms to a specific schema. Supports all JSON Schema features: types, properties, required, patterns, enums, nested objects, arrays, and custom validation. Useful for API configurations, structured metadata, and flexible data models with enforced structure."
-  }))
+  type: Schema.optional(Schema.Union(Schema.String, Schema.Array(Schema.String))),
+  properties: Schema.optional(Schema.Struct({})),
+  required: Schema.optional(Schema.Array(Schema.String)),
+  items: Schema.optional(
+    Schema.Union(
+      Schema.Union(Schema.Unknown, Schema.Boolean),
+      Schema.Array(Schema.Union(Schema.Unknown, Schema.Boolean))
+    )
+  ),
+  additionalProperties: Schema.optional(
+    Schema.Union(Schema.Union(Schema.Unknown, Schema.Boolean), Schema.Boolean)
+  ),
+  enum: Schema.optional(Schema.Array(Schema.Unknown)),
+  const: Schema.optional(Schema.Unknown),
+  title: Schema.optional(Schema.String),
+  description: Schema.optional(Schema.String),
+  default: Schema.optional(Schema.Unknown),
+  minimum: Schema.optional(Schema.Number),
+  maximum: Schema.optional(Schema.Number),
+  multipleOf: Schema.optional(Schema.Number),
+  minLength: Schema.optional(Schema.Number),
+  maxLength: Schema.optional(Schema.Number),
+  pattern: Schema.optional(Schema.String),
+  minItems: Schema.optional(Schema.Number),
+  maxItems: Schema.optional(Schema.Number),
+  uniqueItems: Schema.optional(Schema.Boolean),
+  allOf: Schema.optional(Schema.Array(Schema.Union(Schema.Unknown, Schema.Boolean))),
+  anyOf: Schema.optional(Schema.Array(Schema.Union(Schema.Unknown, Schema.Boolean))),
+  oneOf: Schema.optional(Schema.Array(Schema.Union(Schema.Unknown, Schema.Boolean))),
+  not: Schema.optional(Schema.Union(Schema.Unknown, Schema.Boolean)),
+}).pipe(
+  Schema.annotations({
+    title: 'JSON Schema',
+    description:
+      'JSON Schema definition (Draft 07 compatible) for validating structured data in JSON fields. Define the expected structure, types, required properties, constraints, and validation rules. Used to ensure JSON field data conforms to a specific schema. Supports all JSON Schema features: types, properties, required, patterns, enums, nested objects, arrays, and custom validation. Useful for API configurations, structured metadata, and flexible data models with enforced structure.',
+  })
+)
 
 export type JsonSchema = Schema.Schema.Type<typeof JsonSchemaSchema>
 ```

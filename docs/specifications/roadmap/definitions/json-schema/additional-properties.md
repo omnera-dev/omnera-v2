@@ -38,14 +38,13 @@ import { Schema } from 'effect'
 
 ```typescript
 export const JsonSchemaAdditionalPropertiesSchema = Schema.Union(
-    Schema.Union(
-    Schema.Unknown,
-    Schema.Boolean
-  ),
-    Schema.Boolean
-  )
+  Schema.Union(Schema.Unknown, Schema.Boolean),
+  Schema.Boolean
+)
 
-export type JsonSchemaAdditionalProperties = Schema.Schema.Type<typeof JsonSchemaAdditionalPropertiesSchema>
+export type JsonSchemaAdditionalProperties = Schema.Schema.Type<
+  typeof JsonSchemaAdditionalPropertiesSchema
+>
 ```
 
 ---

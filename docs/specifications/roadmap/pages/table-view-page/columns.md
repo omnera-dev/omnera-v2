@@ -40,15 +40,15 @@ import { Schema } from 'effect'
 
 ```typescript
 /**
- * 
+ *
  * Which table fields to show as columns
  */
 export const PagesTableViewPageColumnsSchema = Schema.Array(Schema.String).pipe(
-    Schema.minItems(1),
-    Schema.annotations({
-    description: "Which table fields to show as columns"
+  Schema.minItems(1),
+  Schema.annotations({
+    description: 'Which table fields to show as columns',
   })
-  )
+)
 
 export type PagesTableViewPageColumns = Schema.Schema.Type<typeof PagesTableViewPageColumnsSchema>
 ```

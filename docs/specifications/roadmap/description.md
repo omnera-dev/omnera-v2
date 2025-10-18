@@ -34,30 +34,35 @@ import { Schema } from 'effect'
 
 **Implementation**:
 
-```typescript
+````typescript
 /**
  * Application Description
- * 
+ *
  * A single-line description of the application (line breaks not allowed)
- * 
+ *
  * @example
  * ```typescript
  * "A simple application"
  * ```
  */
 export const DescriptionSchema = Schema.String.pipe(
-    Schema.pattern(/^[^\\r\\n]*$/, {
-    message: () => 'A single-line description of the application (line breaks not allowed)'
+  Schema.pattern(/^[^\\r\\n]*$/, {
+    message: () => 'A single-line description of the application (line breaks not allowed)',
   }),
-    Schema.annotations({
-    title: "Application Description",
-    description: "A single-line description of the application (line breaks not allowed)",
-    examples: ["A simple application","My app - with special characters!@#$%","Très bien! 你好 🎉","Full-featured e-commerce platform with cart, checkout & payment processing"]
+  Schema.annotations({
+    title: 'Application Description',
+    description: 'A single-line description of the application (line breaks not allowed)',
+    examples: [
+      'A simple application',
+      'My app - with special characters!@#$%',
+      'Très bien! 你好 🎉',
+      'Full-featured e-commerce platform with cart, checkout & payment processing',
+    ],
   })
-  )
+)
 
 export type Description = Schema.Schema.Type<typeof DescriptionSchema>
-```
+````
 
 ---
 
@@ -119,7 +124,6 @@ This property is complete when:
 - [ ] All ESLint checks passing
 - [ ] All Prettier formatting checks passing
 - [ ] JSON schema export updated via `bun run export:schema`
-
 
 ---
 

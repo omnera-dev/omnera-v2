@@ -37,23 +37,25 @@ import { Schema } from 'effect'
 **Implementation**:
 
 ```typescript
-export const TablesFieldsStatusFieldOptionsSchema = Schema.Array(Schema.Struct({
-    value: Schema.String.pipe(
-      Schema.minLength(1, { message: () => 'This field is required' })
+export const TablesFieldsStatusFieldOptionsSchema = Schema.Array(
+  Schema.Struct({
+    value: Schema.String.pipe(Schema.minLength(1, { message: () => 'This field is required' })),
+    color: Schema.optional(
+      Schema.String.pipe(
+        Schema.pattern(/^#[0-9a-fA-F]{6}$/, {
+          message: () => 'Hex color code for the status',
+        }),
+        Schema.annotations({
+          description: 'Hex color code for the status',
+        })
+      )
     ),
-    color: Schema.optional(Schema.String.pipe(
-      Schema.pattern(/^#[0-9a-fA-F]{6}$/, {
-      message: () => 'Hex color code for the status'
-    }),
-      Schema.annotations({
-      description: "Hex color code for the status"
-    })
-    )),
-  })).pipe(
-    Schema.minItems(1)
-  )
+  })
+).pipe(Schema.minItems(1))
 
-export type TablesFieldsStatusFieldOptions = Schema.Schema.Type<typeof TablesFieldsStatusFieldOptionsSchema>
+export type TablesFieldsStatusFieldOptions = Schema.Schema.Type<
+  typeof TablesFieldsStatusFieldOptionsSchema
+>
 ```
 
 ---

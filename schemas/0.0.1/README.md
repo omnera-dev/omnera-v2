@@ -29,9 +29,9 @@ You can use the JSON Schema file to validate configurations in any language that
 import type { ApplicationConfiguration } from './types'
 
 const config: ApplicationConfiguration = {
-  "name": "todo-app",
-  "version": "1.0.0",
-  "description": "A simple todo list application"
+  name: 'todo-app',
+  version: '1.0.0',
+  description: 'A simple todo list application',
 }
 ```
 
@@ -44,12 +44,14 @@ const config: ApplicationConfiguration = {
 The name of the application (follows npm package naming conventions)
 
 **Constraints:**
+
 - Type: `string`
 - Minimum length: 1
 - Maximum length: 214
 - Pattern: `^(?:@[a-z0-9-~][a-z0-9-._~]*\/)?[a-z0-9-~][a-z0-9-._~]*$`
 
 **Examples:**
+
 - `"my-app"`
 - `"todo-app"`
 - `"@myorg/my-app"`
@@ -63,11 +65,13 @@ The name of the application (follows npm package naming conventions)
 The version of the application following Semantic Versioning (SemVer) 2.0.0 specification
 
 **Constraints:**
+
 - Type: `string`
 - Minimum length: 5
 - Pattern: `^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-((?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+([0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?$`
 
 **Examples:**
+
 - `"1.0.0"`
 - `"0.0.1"`
 - `"1.2.3"`
@@ -84,10 +88,12 @@ The version of the application following Semantic Versioning (SemVer) 2.0.0 spec
 A single-line description of the application (line breaks not allowed)
 
 **Constraints:**
+
 - Type: `string`
 - Pattern: `^[^\r\n]*$`
 
 **Examples:**
+
 - `"A simple application"`
 - `"My app - with special characters!@#$%"`
 - `"Très bien! 你好 🎉"`

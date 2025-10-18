@@ -38,11 +38,11 @@ import { Schema } from 'effect'
 
 **Implementation**:
 
-```typescript
+````typescript
 /**
- * 
+ *
  * Name of the index. Use descriptive names like 'idx_tablename_fieldname'
- * 
+ *
  * @example
  * ```typescript
  * "idx_users_email"
@@ -60,7 +60,7 @@ export const TablesIndexesNameSchema = Schema.String.pipe(
   )
 
 export type TablesIndexesName = Schema.Schema.Type<typeof TablesIndexesNameSchema>
-```
+````
 
 ---
 

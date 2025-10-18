@@ -40,12 +40,14 @@ import { Schema } from 'effect'
 
 ```typescript
 /**
- * 
+ *
  * Whether to create a database index on this field for faster queries
  */
 export const TablesFieldsCheckboxFieldIndexedSchema = Schema.Boolean
 
-export type TablesFieldsCheckboxFieldIndexed = Schema.Schema.Type<typeof TablesFieldsCheckboxFieldIndexedSchema>
+export type TablesFieldsCheckboxFieldIndexed = Schema.Schema.Type<
+  typeof TablesFieldsCheckboxFieldIndexedSchema
+>
 ```
 
 ---

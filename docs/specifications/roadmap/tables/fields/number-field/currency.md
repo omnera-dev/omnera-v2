@@ -38,25 +38,27 @@ import { Schema } from 'effect'
 
 **Implementation**:
 
-```typescript
+````typescript
 /**
- * 
+ *
  * Currency code (for currency type)
- * 
+ *
  * @example
  * ```typescript
  * "USD"
  * ```
  */
 export const TablesFieldsNumberFieldCurrencySchema = Schema.String.pipe(
-    Schema.annotations({
-    description: "Currency code (for currency type)",
-    examples: ["USD","EUR","GBP"]
+  Schema.annotations({
+    description: 'Currency code (for currency type)',
+    examples: ['USD', 'EUR', 'GBP'],
   })
-  )
+)
 
-export type TablesFieldsNumberFieldCurrency = Schema.Schema.Type<typeof TablesFieldsNumberFieldCurrencySchema>
-```
+export type TablesFieldsNumberFieldCurrency = Schema.Schema.Type<
+  typeof TablesFieldsNumberFieldCurrencySchema
+>
+````
 
 ---
 

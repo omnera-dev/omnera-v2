@@ -40,12 +40,19 @@ import { Schema } from 'effect'
 
 ```typescript
 /**
- * 
+ *
  * Layout style for the detail view
  */
-export const PagesDetailViewPageLayoutSchema = Schema.Literal("single-column", "two-column", "tabs", "accordion").pipe(Schema.annotations({
-    description: "Layout style for the detail view"
-  }))
+export const PagesDetailViewPageLayoutSchema = Schema.Literal(
+  'single-column',
+  'two-column',
+  'tabs',
+  'accordion'
+).pipe(
+  Schema.annotations({
+    description: 'Layout style for the detail view',
+  })
+)
 
 export type PagesDetailViewPageLayout = Schema.Schema.Type<typeof PagesDetailViewPageLayoutSchema>
 ```

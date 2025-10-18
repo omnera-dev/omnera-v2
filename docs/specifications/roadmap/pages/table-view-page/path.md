@@ -38,12 +38,12 @@ import { Schema } from 'effect'
 
 **Implementation**:
 
-```typescript
+````typescript
 /**
  * Page Path
- * 
+ *
  * URL path where the page is accessible
- * 
+ *
  * @example
  * ```typescript
  * "/users"
@@ -62,7 +62,7 @@ export const PagesTableViewPagePathSchema = Schema.String.pipe(
   )
 
 export type PagesTableViewPagePath = Schema.Schema.Type<typeof PagesTableViewPagePathSchema>
-```
+````
 
 ---
 

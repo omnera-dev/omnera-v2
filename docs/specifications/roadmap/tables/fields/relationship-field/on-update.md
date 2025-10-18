@@ -40,14 +40,23 @@ import { Schema } from 'effect'
 
 ```typescript
 /**
- * 
+ *
  * Action to take when the related record's key is updated
  */
-export const TablesFieldsRelationshipFieldOnUpdateSchema = Schema.Literal("cascade", "set-null", "restrict", "no-action").pipe(Schema.annotations({
-    description: "Action to take when the related record's key is updated"
-  }))
+export const TablesFieldsRelationshipFieldOnUpdateSchema = Schema.Literal(
+  'cascade',
+  'set-null',
+  'restrict',
+  'no-action'
+).pipe(
+  Schema.annotations({
+    description: "Action to take when the related record's key is updated",
+  })
+)
 
-export type TablesFieldsRelationshipFieldOnUpdate = Schema.Schema.Type<typeof TablesFieldsRelationshipFieldOnUpdateSchema>
+export type TablesFieldsRelationshipFieldOnUpdate = Schema.Schema.Type<
+  typeof TablesFieldsRelationshipFieldOnUpdateSchema
+>
 ```
 
 ---

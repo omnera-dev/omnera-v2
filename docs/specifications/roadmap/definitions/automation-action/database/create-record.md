@@ -41,27 +41,27 @@ import { Schema } from 'effect'
 ```typescript
 /**
  * Create Record
- * 
+ *
  * Create a record in a database table
  */
 export const AutomationActionDatabaseCreateRecordSchema = Schema.Struct({
-    name: Schema.String,
-    service: Schema.String,
-    action: Schema.String,
-    params: Schema.Struct({
-      table: Schema.Union(
-        Schema.String,
-        Schema.Number
-      ),
-      fields: Schema.Struct({
-      }),
-    }),
-  }).pipe(Schema.annotations({
-    title: "Create Record",
-    description: "Create a record in a database table"
-  }))
+  name: Schema.String,
+  service: Schema.String,
+  action: Schema.String,
+  params: Schema.Struct({
+    table: Schema.Union(Schema.String, Schema.Number),
+    fields: Schema.Struct({}),
+  }),
+}).pipe(
+  Schema.annotations({
+    title: 'Create Record',
+    description: 'Create a record in a database table',
+  })
+)
 
-export type AutomationActionDatabaseCreateRecord = Schema.Schema.Type<typeof AutomationActionDatabaseCreateRecordSchema>
+export type AutomationActionDatabaseCreateRecord = Schema.Schema.Type<
+  typeof AutomationActionDatabaseCreateRecordSchema
+>
 ```
 
 ---

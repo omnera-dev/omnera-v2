@@ -41,30 +41,31 @@ import { Schema } from 'effect'
 ```typescript
 /**
  * List Lead Notification Subscriptions
- * 
+ *
  * Lists LinkedIn lead notification subscriptions for an organization
  */
 export const AutomationActionLinkedinAdsListLeadNotificationSubscriptionsSchema = Schema.Struct({
-    name: Schema.String,
-    account: Schema.Union(
-      Schema.Number,
-      Schema.String
-    ),
-    service: Schema.String,
-    action: Schema.String,
-    params: Schema.Struct({
-      organizationId: Schema.String.pipe(
-        Schema.annotations({
-        title: "LinkedIn Organization ID"
+  name: Schema.String,
+  account: Schema.Union(Schema.Number, Schema.String),
+  service: Schema.String,
+  action: Schema.String,
+  params: Schema.Struct({
+    organizationId: Schema.String.pipe(
+      Schema.annotations({
+        title: 'LinkedIn Organization ID',
       })
-      ),
-    }),
-  }).pipe(Schema.annotations({
-    title: "List Lead Notification Subscriptions",
-    description: "Lists LinkedIn lead notification subscriptions for an organization"
-  }))
+    ),
+  }),
+}).pipe(
+  Schema.annotations({
+    title: 'List Lead Notification Subscriptions',
+    description: 'Lists LinkedIn lead notification subscriptions for an organization',
+  })
+)
 
-export type AutomationActionLinkedinAdsListLeadNotificationSubscriptions = Schema.Schema.Type<typeof AutomationActionLinkedinAdsListLeadNotificationSubscriptionsSchema>
+export type AutomationActionLinkedinAdsListLeadNotificationSubscriptions = Schema.Schema.Type<
+  typeof AutomationActionLinkedinAdsListLeadNotificationSubscriptionsSchema
+>
 ```
 
 ---

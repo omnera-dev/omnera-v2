@@ -39,7 +39,9 @@ import { Schema } from 'effect'
 ```typescript
 export const PagesCustomHtmlPageHeadScriptElementAsyncSchema = Schema.Boolean
 
-export type PagesCustomHtmlPageHeadScriptElementAsync = Schema.Schema.Type<typeof PagesCustomHtmlPageHeadScriptElementAsyncSchema>
+export type PagesCustomHtmlPageHeadScriptElementAsync = Schema.Schema.Type<
+  typeof PagesCustomHtmlPageHeadScriptElementAsyncSchema
+>
 ```
 
 ---

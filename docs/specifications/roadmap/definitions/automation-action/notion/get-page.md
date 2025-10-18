@@ -41,31 +41,32 @@ import { Schema } from 'effect'
 ```typescript
 /**
  * Get Page
- * 
+ *
  * Retrieves a page from Notion
  */
 export const AutomationActionNotionGetPageSchema = Schema.Struct({
-    name: Schema.String,
-    account: Schema.Union(
-      Schema.Number,
-      Schema.String
-    ),
-    service: Schema.String,
-    action: Schema.String,
-    params: Schema.Struct({
-      pageId: Schema.String.pipe(
-        Schema.annotations({
-        description: "The ID of the page to retrieve"
+  name: Schema.String,
+  account: Schema.Union(Schema.Number, Schema.String),
+  service: Schema.String,
+  action: Schema.String,
+  params: Schema.Struct({
+    pageId: Schema.String.pipe(
+      Schema.annotations({
+        description: 'The ID of the page to retrieve',
       })
-      ),
-      filterProperties: Schema.optional(Schema.Array(Schema.String)),
-    }),
-  }).pipe(Schema.annotations({
-    title: "Get Page",
-    description: "Retrieves a page from Notion"
-  }))
+    ),
+    filterProperties: Schema.optional(Schema.Array(Schema.String)),
+  }),
+}).pipe(
+  Schema.annotations({
+    title: 'Get Page',
+    description: 'Retrieves a page from Notion',
+  })
+)
 
-export type AutomationActionNotionGetPage = Schema.Schema.Type<typeof AutomationActionNotionGetPageSchema>
+export type AutomationActionNotionGetPage = Schema.Schema.Type<
+  typeof AutomationActionNotionGetPageSchema
+>
 ```
 
 ---

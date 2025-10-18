@@ -34,31 +34,45 @@ import { Schema } from 'effect'
 
 **Implementation**:
 
-```typescript
+````typescript
 /**
  * Application Version
- * 
+ *
  * The version of the application following Semantic Versioning (SemVer) 2.0.0 specification
- * 
+ *
  * @example
  * ```typescript
  * "1.0.0"
  * ```
  */
 export const VersionSchema = Schema.String.pipe(
-    Schema.minLength(5, { message: () => 'Minimum length is 5 characters' }),
-    Schema.pattern(/^(0|[1-9]\\d*)\\.(0|[1-9]\\d*)\\.(0|[1-9]\\d*)(?:-((?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\\.(?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\\+([0-9a-zA-Z-]+(?:\\.[0-9a-zA-Z-]+)*))?$/, {
-    message: () => 'The version of the application following Semantic Versioning (SemVer) 2.0.0 specification'
-  }),
-    Schema.annotations({
-    title: "Application Version",
-    description: "The version of the application following Semantic Versioning (SemVer) 2.0.0 specification",
-    examples: ["1.0.0","0.0.1","1.2.3","1.0.0-alpha","1.0.0-beta.1","2.0.0-rc.1","1.0.0+build.123","1.0.0-alpha+001"]
+  Schema.minLength(5, { message: () => 'Minimum length is 5 characters' }),
+  Schema.pattern(
+    /^(0|[1-9]\\d*)\\.(0|[1-9]\\d*)\\.(0|[1-9]\\d*)(?:-((?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\\.(?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\\+([0-9a-zA-Z-]+(?:\\.[0-9a-zA-Z-]+)*))?$/,
+    {
+      message: () =>
+        'The version of the application following Semantic Versioning (SemVer) 2.0.0 specification',
+    }
+  ),
+  Schema.annotations({
+    title: 'Application Version',
+    description:
+      'The version of the application following Semantic Versioning (SemVer) 2.0.0 specification',
+    examples: [
+      '1.0.0',
+      '0.0.1',
+      '1.2.3',
+      '1.0.0-alpha',
+      '1.0.0-beta.1',
+      '2.0.0-rc.1',
+      '1.0.0+build.123',
+      '1.0.0-alpha+001',
+    ],
   })
-  )
+)
 
 export type Version = Schema.Schema.Type<typeof VersionSchema>
-```
+````
 
 ---
 
@@ -127,7 +141,6 @@ This property is complete when:
 - [ ] All ESLint checks passing
 - [ ] All Prettier formatting checks passing
 - [ ] JSON schema export updated via `bun run export:schema`
-
 
 ---
 

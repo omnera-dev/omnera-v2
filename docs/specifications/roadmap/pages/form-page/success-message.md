@@ -38,27 +38,33 @@ import { Schema } from 'effect'
 
 **Implementation**:
 
-```typescript
+````typescript
 /**
  * Success Message
- * 
+ *
  * Message displayed after successful form submission
- * 
+ *
  * @example
  * ```typescript
  * "Thank you! We will get back to you soon."
  * ```
  */
 export const PagesFormPageSuccessMessageSchema = Schema.String.pipe(
-    Schema.annotations({
-    title: "Success Message",
-    description: "Message displayed after successful form submission",
-    examples: ["Thank you! We will get back to you soon.","Your account has been created successfully!","Form submitted successfully."]
+  Schema.annotations({
+    title: 'Success Message',
+    description: 'Message displayed after successful form submission',
+    examples: [
+      'Thank you! We will get back to you soon.',
+      'Your account has been created successfully!',
+      'Form submitted successfully.',
+    ],
   })
-  )
+)
 
-export type PagesFormPageSuccessMessage = Schema.Schema.Type<typeof PagesFormPageSuccessMessageSchema>
-```
+export type PagesFormPageSuccessMessage = Schema.Schema.Type<
+  typeof PagesFormPageSuccessMessageSchema
+>
+````
 
 ---
 

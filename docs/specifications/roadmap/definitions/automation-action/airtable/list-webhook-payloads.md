@@ -41,29 +41,30 @@ import { Schema } from 'effect'
 ```typescript
 /**
  * List Webhook Payloads
- * 
+ *
  * Lists the webhook payloads for a given webhook
  */
 export const AutomationActionAirtableListWebhookPayloadsSchema = Schema.Struct({
-    name: Schema.String,
-    account: Schema.Union(
-      Schema.Number,
-      Schema.String
-    ),
-    service: Schema.String,
-    action: Schema.String,
-    params: Schema.Struct({
-      baseId: Schema.String,
-      webhookId: Schema.String,
-      cursor: Schema.optional(Schema.Number),
-      limit: Schema.optional(Schema.Number),
-    }),
-  }).pipe(Schema.annotations({
-    title: "List Webhook Payloads",
-    description: "Lists the webhook payloads for a given webhook"
-  }))
+  name: Schema.String,
+  account: Schema.Union(Schema.Number, Schema.String),
+  service: Schema.String,
+  action: Schema.String,
+  params: Schema.Struct({
+    baseId: Schema.String,
+    webhookId: Schema.String,
+    cursor: Schema.optional(Schema.Number),
+    limit: Schema.optional(Schema.Number),
+  }),
+}).pipe(
+  Schema.annotations({
+    title: 'List Webhook Payloads',
+    description: 'Lists the webhook payloads for a given webhook',
+  })
+)
 
-export type AutomationActionAirtableListWebhookPayloads = Schema.Schema.Type<typeof AutomationActionAirtableListWebhookPayloadsSchema>
+export type AutomationActionAirtableListWebhookPayloads = Schema.Schema.Type<
+  typeof AutomationActionAirtableListWebhookPayloadsSchema
+>
 ```
 
 ---

@@ -37,7 +37,7 @@ import { Schema } from 'effect'
 **Implementation**:
 
 ```typescript
-export const PagesCustomHtmlPageTypeSchema = Schema.Literal("custom-html")
+export const PagesCustomHtmlPageTypeSchema = Schema.Literal('custom-html')
 
 export type PagesCustomHtmlPageType = Schema.Schema.Type<typeof PagesCustomHtmlPageTypeSchema>
 ```

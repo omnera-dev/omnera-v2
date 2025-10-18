@@ -41,22 +41,23 @@ import { Schema } from 'effect'
 ```typescript
 /**
  * GET Request
- * 
+ *
  * Make a GET HTTP request
  */
 export const AutomationActionHttpGetSchema = Schema.Struct({
-    name: Schema.String,
-    service: Schema.String,
-    action: Schema.String,
-    params: Schema.Struct({
-      url: Schema.String,
-      headers: Schema.optional(Schema.Struct({
-      })),
-    }),
-  }).pipe(Schema.annotations({
-    title: "GET Request",
-    description: "Make a GET HTTP request"
-  }))
+  name: Schema.String,
+  service: Schema.String,
+  action: Schema.String,
+  params: Schema.Struct({
+    url: Schema.String,
+    headers: Schema.optional(Schema.Struct({})),
+  }),
+}).pipe(
+  Schema.annotations({
+    title: 'GET Request',
+    description: 'Make a GET HTTP request',
+  })
+)
 
 export type AutomationActionHttpGet = Schema.Schema.Type<typeof AutomationActionHttpGetSchema>
 ```

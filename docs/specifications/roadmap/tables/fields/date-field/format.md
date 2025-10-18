@@ -38,25 +38,27 @@ import { Schema } from 'effect'
 
 **Implementation**:
 
-```typescript
+````typescript
 /**
- * 
+ *
  * Date format string
- * 
+ *
  * @example
  * ```typescript
  * "YYYY-MM-DD"
  * ```
  */
 export const TablesFieldsDateFieldFormatSchema = Schema.String.pipe(
-    Schema.annotations({
-    description: "Date format string",
-    examples: ["YYYY-MM-DD","MM/DD/YYYY","DD-MM-YYYY"]
+  Schema.annotations({
+    description: 'Date format string',
+    examples: ['YYYY-MM-DD', 'MM/DD/YYYY', 'DD-MM-YYYY'],
   })
-  )
+)
 
-export type TablesFieldsDateFieldFormat = Schema.Schema.Type<typeof TablesFieldsDateFieldFormatSchema>
-```
+export type TablesFieldsDateFieldFormat = Schema.Schema.Type<
+  typeof TablesFieldsDateFieldFormatSchema
+>
+````
 
 ---
 

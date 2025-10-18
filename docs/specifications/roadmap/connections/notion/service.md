@@ -37,7 +37,7 @@ import { Schema } from 'effect'
 **Implementation**:
 
 ```typescript
-export const ConnectionsNotionServiceSchema = Schema.Literal("notion")
+export const ConnectionsNotionServiceSchema = Schema.Literal('notion')
 
 export type ConnectionsNotionService = Schema.Schema.Type<typeof ConnectionsNotionServiceSchema>
 ```

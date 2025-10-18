@@ -38,26 +38,34 @@ import { Schema } from 'effect'
 
 ```typescript
 export const TablesFieldsSingleAttachmentFieldStorageSchema = Schema.Struct({
-    provider: Schema.optional(Schema.String.pipe(
+  provider: Schema.optional(
+    Schema.String.pipe(
       Schema.annotations({
-      description: "Storage provider"
-    })
-    )),
-    bucket: Schema.optional(Schema.String.pipe(
+        description: 'Storage provider',
+      })
+    )
+  ),
+  bucket: Schema.optional(
+    Schema.String.pipe(
       Schema.annotations({
-      description: "S3 bucket name (required for s3 provider)"
-    })
-    )),
-    maxSize: Schema.optional(Schema.Int.pipe(
+        description: 'S3 bucket name (required for s3 provider)',
+      })
+    )
+  ),
+  maxSize: Schema.optional(
+    Schema.Int.pipe(
       Schema.greaterThanOrEqualTo(1),
       Schema.annotations({
-      description: "Maximum file size in bytes"
-    })
-    )),
-    allowedTypes: Schema.optional(Schema.Array(Schema.String)),
-  })
+        description: 'Maximum file size in bytes',
+      })
+    )
+  ),
+  allowedTypes: Schema.optional(Schema.Array(Schema.String)),
+})
 
-export type TablesFieldsSingleAttachmentFieldStorage = Schema.Schema.Type<typeof TablesFieldsSingleAttachmentFieldStorageSchema>
+export type TablesFieldsSingleAttachmentFieldStorage = Schema.Schema.Type<
+  typeof TablesFieldsSingleAttachmentFieldStorageSchema
+>
 ```
 
 ---

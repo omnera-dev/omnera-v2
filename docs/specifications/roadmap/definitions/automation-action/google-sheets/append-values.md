@@ -41,28 +41,29 @@ import { Schema } from 'effect'
 ```typescript
 /**
  * Append Values
- * 
+ *
  * Appends values to a Google Sheets spreadsheet
  */
 export const AutomationActionGoogleSheetsAppendValuesSchema = Schema.Struct({
-    name: Schema.String,
-    account: Schema.Union(
-      Schema.Number,
-      Schema.String
-    ),
-    service: Schema.String,
-    action: Schema.String,
-    params: Schema.Struct({
-      spreadsheetId: Schema.String,
-      range: Schema.String,
-      values: Schema.Array(Schema.Array(Schema.String)),
-    }),
-  }).pipe(Schema.annotations({
-    title: "Append Values",
-    description: "Appends values to a Google Sheets spreadsheet"
-  }))
+  name: Schema.String,
+  account: Schema.Union(Schema.Number, Schema.String),
+  service: Schema.String,
+  action: Schema.String,
+  params: Schema.Struct({
+    spreadsheetId: Schema.String,
+    range: Schema.String,
+    values: Schema.Array(Schema.Array(Schema.String)),
+  }),
+}).pipe(
+  Schema.annotations({
+    title: 'Append Values',
+    description: 'Appends values to a Google Sheets spreadsheet',
+  })
+)
 
-export type AutomationActionGoogleSheetsAppendValues = Schema.Schema.Type<typeof AutomationActionGoogleSheetsAppendValuesSchema>
+export type AutomationActionGoogleSheetsAppendValues = Schema.Schema.Type<
+  typeof AutomationActionGoogleSheetsAppendValuesSchema
+>
 ```
 
 ---

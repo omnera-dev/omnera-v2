@@ -38,12 +38,12 @@ import { Schema } from 'effect'
 
 **Implementation**:
 
-```typescript
+````typescript
 /**
  * Unique Constraints
- * 
+ *
  * Composite unique constraints ensure that combinations of multiple field values are unique across all rows. Use this when you need uniqueness across multiple fields (e.g., email + tenant_id must be unique together).
- * 
+ *
  * @example
  * ```typescript
  * [
@@ -87,7 +87,7 @@ export const TablesUniqueConstraintsSchema = Schema.Array(Schema.Struct({
   )
 
 export type TablesUniqueConstraints = Schema.Schema.Type<typeof TablesUniqueConstraintsSchema>
-```
+````
 
 ---
 

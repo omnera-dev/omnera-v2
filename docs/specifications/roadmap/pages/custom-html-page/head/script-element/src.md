@@ -39,7 +39,9 @@ import { Schema } from 'effect'
 ```typescript
 export const PagesCustomHtmlPageHeadScriptElementSrcSchema = Schema.String
 
-export type PagesCustomHtmlPageHeadScriptElementSrc = Schema.Schema.Type<typeof PagesCustomHtmlPageHeadScriptElementSrcSchema>
+export type PagesCustomHtmlPageHeadScriptElementSrc = Schema.Schema.Type<
+  typeof PagesCustomHtmlPageHeadScriptElementSrcSchema
+>
 ```
 
 ---

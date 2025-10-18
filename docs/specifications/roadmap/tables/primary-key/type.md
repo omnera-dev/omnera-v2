@@ -40,12 +40,19 @@ import { Schema } from 'effect'
 
 ```typescript
 /**
- * 
+ *
  * Primary key generation strategy. 'auto-increment' uses sequential integers (1, 2, 3...), 'uuid' generates random unique identifiers, 'composite' uses multiple fields together.
  */
-export const TablesPrimaryKeyTypeSchema = Schema.Literal("auto-increment", "uuid", "composite").pipe(Schema.annotations({
-    description: "Primary key generation strategy. 'auto-increment' uses sequential integers (1, 2, 3...), 'uuid' generates random unique identifiers, 'composite' uses multiple fields together."
-  }))
+export const TablesPrimaryKeyTypeSchema = Schema.Literal(
+  'auto-increment',
+  'uuid',
+  'composite'
+).pipe(
+  Schema.annotations({
+    description:
+      "Primary key generation strategy. 'auto-increment' uses sequential integers (1, 2, 3...), 'uuid' generates random unique identifiers, 'composite' uses multiple fields together.",
+  })
+)
 
 export type TablesPrimaryKeyType = Schema.Schema.Type<typeof TablesPrimaryKeyTypeSchema>
 ```
