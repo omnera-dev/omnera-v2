@@ -1,10 +1,10 @@
 # Name
 
 > **Status**: ✅ DONE
-> **Completion**: 50%
-> **Complexity**: 5 points
+> **Completion**: 100%
+> **Complexity**: 15 points
 
-The internal identifier for your application. Must follow npm package naming conventions: lowercase, hyphens allowed, no spaces or special characters. This name is used in URLs, routing paths, API endpoints, and database prefixes. Choose a name that is descriptive but concise.
+The name of the application (follows npm package naming conventions)
 
 ## Implementation Status
 
@@ -38,7 +38,7 @@ import { Schema } from 'effect'
 /**
  * Application Name
  *
- * The internal identifier for your application. Must follow npm package naming conventions: lowercase, hyphens allowed, no spaces or special characters. This name is used in URLs, routing paths, API endpoints, and database prefixes. Choose a name that is descriptive but concise.
+ * The name of the application (follows npm package naming conventions)
  *
  * @example
  * ```typescript
@@ -46,14 +46,17 @@ import { Schema } from 'effect'
  * ```
  */
 export const NameSchema = Schema.String.pipe(
-  Schema.minLength(3, { message: () => 'Minimum length is 3 characters' }),
-  Schema.annotations({
-    title: 'Application Name',
-    description:
-      'The internal identifier for your application. Must follow npm package naming conventions: lowercase, hyphens allowed, no spaces or special characters. This name is used in URLs, routing paths, API endpoints, and database prefixes. Choose a name that is descriptive but concise.',
-    examples: ['my-app', 'customer-portal', 'inventory-system', 'task-manager', 'crm-platform'],
+    Schema.minLength(1, { message: () => 'This field is required' }),
+    Schema.maxLength(214, { message: () => 'Maximum length is 214 characters' }),
+    Schema.pattern(/^(?:@[a-z0-9-~][a-z0-9-._~]*\\/)?[a-z0-9-~][a-z0-9-._~]*$/, {
+    message: () => 'The name of the application (follows npm package naming conventions)'
+  }),
+    Schema.annotations({
+    title: "Application Name",
+    description: "The name of the application (follows npm package naming conventions)",
+    examples: ["my-app","todo-app","@myorg/my-app","blog-system","dashboard-admin"]
   })
-)
+  )
 
 export type Name = Schema.Schema.Type<typeof NameSchema>
 ````
@@ -75,8 +78,29 @@ These tests define specific acceptance criteria. Each test validates ONE behavio
 **Scenario 1**: Validation Test
 
 - **GIVEN**: user enters Name
-- **WHEN**: input length is less than 3 characters
-- **THEN**: display error "Minimum length is 3 characters"
+- **WHEN**: input length is less than 1 characters
+- **THEN**: display error "Minimum length is 1 characters"
+- **Tag**: `@spec`
+
+**Scenario 2**: Validation Test
+
+- **GIVEN**: user enters Name
+- **WHEN**: input length exceeds 214 characters
+- **THEN**: display error "Maximum length is 214 characters"
+- **Tag**: `@spec`
+
+**Scenario 3**: Validation Test
+
+- **GIVEN**: user enters Name
+- **WHEN**: input does not match required pattern
+- **THEN**: display error "The name of the application (follows npm package naming conventions)"
+- **Tag**: `@spec`
+
+**Scenario 4**: Validation Test
+
+- **GIVEN**: user enters valid Name
+- **WHEN**: input matches required pattern
+- **THEN**: accept input without error
 - **Tag**: `@spec`
 
 ### @regression User Story (Complete Workflow)
@@ -104,7 +128,7 @@ Use these standardized test IDs for reliable selectors:
 This property is complete when:
 
 - [ ] Effect Schema implemented and exported
-- [ ] All 1 @spec E2E tests passing
+- [ ] All 4 @spec E2E tests passing
 - [ ] All 1 @regression E2E tests passing
 - [ ] Unit test coverage >80%
 - [ ] All TypeScript strict mode checks passing

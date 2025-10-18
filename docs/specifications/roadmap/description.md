@@ -1,10 +1,10 @@
 # Description
 
 > **Status**: ✅ DONE
-> **Completion**: 50%
+> **Completion**: 100%
 > **Complexity**: 5 points
 
-A comprehensive description of your application's purpose, features, and intended use. This description helps users understand what the application does and appears in application listings, documentation, and metadata. Use clear, concise language that explains the business value.
+A single-line description of the application (line breaks not allowed)
 
 ## Implementation Status
 
@@ -38,24 +38,25 @@ import { Schema } from 'effect'
 /**
  * Application Description
  *
- * A comprehensive description of your application's purpose, features, and intended use. This description helps users understand what the application does and appears in application listings, documentation, and metadata. Use clear, concise language that explains the business value.
+ * A single-line description of the application (line breaks not allowed)
  *
  * @example
  * ```typescript
- * "A customer relationship management system for tracking sales leads and opportunities"
+ * "A simple application"
  * ```
  */
 export const DescriptionSchema = Schema.String.pipe(
-  Schema.minLength(1, { message: () => 'This field is required' }),
+  Schema.pattern(/^[^\\r\\n]*$/, {
+    message: () => 'A single-line description of the application (line breaks not allowed)',
+  }),
   Schema.annotations({
     title: 'Application Description',
-    description:
-      "A comprehensive description of your application's purpose, features, and intended use. This description helps users understand what the application does and appears in application listings, documentation, and metadata. Use clear, concise language that explains the business value.",
+    description: 'A single-line description of the application (line breaks not allowed)',
     examples: [
-      'A customer relationship management system for tracking sales leads and opportunities',
-      'Internal inventory management platform with automated reordering workflows',
-      'Project management tool for agile teams with sprint planning and kanban boards',
-      'Employee onboarding portal with document management and task tracking',
+      'A simple application',
+      'My app - with special characters!@#$%',
+      'Très bien! 你好 🎉',
+      'Full-featured e-commerce platform with cart, checkout & payment processing',
     ],
   })
 )
@@ -80,8 +81,15 @@ These tests define specific acceptance criteria. Each test validates ONE behavio
 **Scenario 1**: Validation Test
 
 - **GIVEN**: user enters Description
-- **WHEN**: input length is less than 1 characters
-- **THEN**: display error "Minimum length is 1 characters"
+- **WHEN**: input does not match required pattern
+- **THEN**: display error "A single-line description of the application (line breaks not allowed)"
+- **Tag**: `@spec`
+
+**Scenario 2**: Validation Test
+
+- **GIVEN**: user enters valid Description
+- **WHEN**: input matches required pattern
+- **THEN**: accept input without error
 - **Tag**: `@spec`
 
 ### @regression User Story (Complete Workflow)
@@ -109,7 +117,7 @@ Use these standardized test IDs for reliable selectors:
 This property is complete when:
 
 - [ ] Effect Schema implemented and exported
-- [ ] All 1 @spec E2E tests passing
+- [ ] All 2 @spec E2E tests passing
 - [ ] All 1 @regression E2E tests passing
 - [ ] Unit test coverage >80%
 - [ ] All TypeScript strict mode checks passing

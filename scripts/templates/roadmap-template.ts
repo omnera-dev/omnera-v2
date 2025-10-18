@@ -177,7 +177,14 @@ function formatImplementationStatus(property: PropertyStatus): string {
   }
 
   // Schema status
-  const schemaIcon = impl.schemaExported ? '✅' : impl.schemaFileExists ? '🚧' : '⏳'
+  let schemaIcon: string
+  if (impl.schemaExported) {
+    schemaIcon = '✅'
+  } else if (impl.schemaFileExists) {
+    schemaIcon = '🚧'
+  } else {
+    schemaIcon = '⏳'
+  }
 
   // Test status
   const testStatus =
@@ -283,106 +290,7 @@ function propertyToPathParts(propertyName: string): string[] {
   return parts
 }
 
-/**
- * Build tree structure from properties
- */
-interface TreeNode {
-  name: string
-  property?: PropertyStatus
-  children: Map<string, TreeNode>
-  isDirectory: boolean
-}
-
-function _buildTree(allProperties: PropertyStatus[]): TreeNode {
-  const root: TreeNode = {
-    name: 'root',
-    children: new Map(),
-    isDirectory: true,
-  }
-
-  for (const property of allProperties) {
-    const pathParts = propertyToPathParts(property.name)
-    let currentNode = root
-
-    // Build path hierarchy
-    for (let i = 0; i < pathParts.length; i++) {
-      const part = pathParts[i]!
-      const isLast = i === pathParts.length - 1
-
-      if (!currentNode.children.has(part)) {
-        currentNode.children.set(part, {
-          name: part,
-          children: new Map(),
-          isDirectory: !isLast,
-          property: isLast ? property : undefined,
-        })
-      }
-
-      currentNode = currentNode.children.get(part)!
-    }
-  }
-
-  return root
-}
-
-/**
- * Render tree node recursively
- */
-function _renderTreeNode(
-  node: TreeNode,
-  depth: number = 0,
-  prefix: string = '',
-  isLast: boolean = true
-): string {
-  let md = ''
-
-  if (depth > 0) {
-    const connector = isLast ? '└─' : '├─'
-    const icon = node.isDirectory ? '📁' : '📄'
-    const { name } = node
-
-    // Add status info for property files
-    let statusInfo = ''
-    if (node.property) {
-      const status = getStatusIcon(node.property.status)
-      const impl = formatImplementationStatus(node.property)
-      statusInfo = ` ${status} ${impl}`
-
-      // Add link to guide
-      const fileName = node.property.name
-        .replace(/([A-Z])/g, '-$1')
-        .toLowerCase()
-        .replace(/^-/, '')
-        .replace(/\./g, '/')
-
-      const guideLink =
-        node.property.status !== 'complete'
-          ? ` [→ Guide](docs/specifications/roadmap/${fileName}.md)`
-          : ''
-
-      statusInfo += guideLink
-    }
-
-    md += `${prefix}${connector} ${icon} **${name}**${statusInfo}\n`
-  }
-
-  // Render children
-  const children = Array.from(node.children.entries()).sort((a, b) => {
-    // Directories first, then files
-    const aIsDir = a[1].isDirectory
-    const bIsDir = b[1].isDirectory
-    if (aIsDir !== bIsDir) return aIsDir ? -1 : 1
-    return a[0].localeCompare(b[0])
-  })
-
-  children.forEach(([, childNode], index) => {
-    const isLastChild = index === children.length - 1
-    const newPrefix = depth > 0 ? prefix + (isLast ? '   ' : '│  ') : ''
-    md += _renderTreeNode(childNode, depth + 1, newPrefix, isLastChild)
-  })
-
-  return md
-}
+// Tree-based rendering removed - using table-based approach instead
 
 /**
  * Generate table showing all properties with hierarchical organization

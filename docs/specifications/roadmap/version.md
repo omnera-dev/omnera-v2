@@ -1,10 +1,10 @@
 # Version
 
 > **Status**: ✅ DONE
-> **Completion**: 67%
+> **Completion**: 100%
 > **Complexity**: 10 points
 
-Semantic version number following SemVer 2.0.0 specification (MAJOR.MINOR.PATCH). Increment MAJOR for breaking changes, MINOR for new features, PATCH for bug fixes. Optional pre-release identifiers (e.g., -alpha, -beta.1) are supported. This version is used for change tracking, rollback capabilities, and API compatibility.
+The version of the application following Semantic Versioning (SemVer) 2.0.0 specification
 
 ## Implementation Status
 
@@ -36,9 +36,9 @@ import { Schema } from 'effect'
 
 ````typescript
 /**
- * Version
+ * Application Version
  *
- * Semantic version number following SemVer 2.0.0 specification (MAJOR.MINOR.PATCH). Increment MAJOR for breaking changes, MINOR for new features, PATCH for bug fixes. Optional pre-release identifiers (e.g., -alpha, -beta.1) are supported. This version is used for change tracking, rollback capabilities, and API compatibility.
+ * The version of the application following Semantic Versioning (SemVer) 2.0.0 specification
  *
  * @example
  * ```typescript
@@ -47,15 +47,27 @@ import { Schema } from 'effect'
  */
 export const VersionSchema = Schema.String.pipe(
   Schema.minLength(5, { message: () => 'Minimum length is 5 characters' }),
-  Schema.pattern(/^\\d+\\.\\d+\\.\\d+(-[a-zA-Z0-9]+)?$/, {
-    message: () =>
-      'Semantic version number following SemVer 2.0.0 specification (MAJOR.MINOR.PATCH). Increment MAJOR for breaking changes, MINOR for new features, PATCH for bug fixes. Optional pre-release identifiers (e.g., -alpha, -beta.1) are supported. This version is used for change tracking, rollback capabilities, and API compatibility.',
-  }),
+  Schema.pattern(
+    /^(0|[1-9]\\d*)\\.(0|[1-9]\\d*)\\.(0|[1-9]\\d*)(?:-((?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\\.(?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\\+([0-9a-zA-Z-]+(?:\\.[0-9a-zA-Z-]+)*))?$/,
+    {
+      message: () =>
+        'The version of the application following Semantic Versioning (SemVer) 2.0.0 specification',
+    }
+  ),
   Schema.annotations({
-    title: 'Version',
+    title: 'Application Version',
     description:
-      'Semantic version number following SemVer 2.0.0 specification (MAJOR.MINOR.PATCH). Increment MAJOR for breaking changes, MINOR for new features, PATCH for bug fixes. Optional pre-release identifiers (e.g., -alpha, -beta.1) are supported. This version is used for change tracking, rollback capabilities, and API compatibility.',
-    examples: ['1.0.0', '2.1.3', '0.5.0-beta', '1.0.0-alpha.1', '3.2.1'],
+      'The version of the application following Semantic Versioning (SemVer) 2.0.0 specification',
+    examples: [
+      '1.0.0',
+      '0.0.1',
+      '1.2.3',
+      '1.0.0-alpha',
+      '1.0.0-beta.1',
+      '2.0.0-rc.1',
+      '1.0.0+build.123',
+      '1.0.0-alpha+001',
+    ],
   })
 )
 
@@ -87,7 +99,7 @@ These tests define specific acceptance criteria. Each test validates ONE behavio
 
 - **GIVEN**: user enters Version
 - **WHEN**: input does not match required pattern
-- **THEN**: display error "Semantic version number following SemVer 2.0.0 specification (MAJOR.MINOR.PATCH). Increment MAJOR for breaking changes, MINOR for new features, PATCH for bug fixes. Optional pre-release identifiers (e.g., -alpha, -beta.1) are supported. This version is used for change tracking, rollback capabilities, and API compatibility."
+- **THEN**: display error "The version of the application following Semantic Versioning (SemVer) 2.0.0 specification"
 - **Tag**: `@spec`
 
 **Scenario 3**: Validation Test

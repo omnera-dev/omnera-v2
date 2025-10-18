@@ -1,4 +1,4 @@
-import type { ReactElement } from 'react'
+import React, { type ReactElement } from 'react'
 
 /**
  * NotFoundPage component - 404 error page

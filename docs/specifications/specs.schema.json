@@ -2459,41 +2459,42 @@
   },
   "properties": {
     "name": {
-      "description": "The internal identifier for your application. Must follow npm package naming conventions: lowercase, hyphens allowed, no spaces or special characters. This name is used in URLs, routing paths, API endpoints, and database prefixes. Choose a name that is descriptive but concise.",
-      "title": "Application Name",
-      "examples": ["my-app", "customer-portal", "inventory-system", "task-manager", "crm-platform"],
-      "placeholder": "Enter your application name",
-      "default": "My app",
       "type": "string",
-      "minLength": 3
+      "description": "The name of the application (follows npm package naming conventions)",
+      "title": "Application Name",
+      "minLength": 1,
+      "maxLength": 214,
+      "examples": ["my-app", "todo-app", "@myorg/my-app", "blog-system", "dashboard-admin"],
+      "pattern": "^(?:@[a-z0-9-~][a-z0-9-._~]*\\/)?[a-z0-9-~][a-z0-9-._~]*$"
     },
     "description": {
-      "description": "A comprehensive description of your application's purpose, features, and intended use. This description helps users understand what the application does and appears in application listings, documentation, and metadata. Use clear, concise language that explains the business value.",
+      "type": "string",
+      "description": "A single-line description of the application (line breaks not allowed)",
       "title": "Application Description",
       "examples": [
-        "A customer relationship management system for tracking sales leads and opportunities",
-        "Internal inventory management platform with automated reordering workflows",
-        "Project management tool for agile teams with sprint planning and kanban boards",
-        "Employee onboarding portal with document management and task tracking"
+        "A simple application",
+        "My app - with special characters!@#$%",
+        "Très bien! 你好 🎉",
+        "Full-featured e-commerce platform with cart, checkout & payment processing"
       ],
-      "placeholder": "Describe your application purpose",
-      "uiSchema": {
-        "ui:widget": "textarea",
-        "ui:rows": 3
-      },
-      "default": "My app description",
-      "type": "string",
-      "minLength": 1
+      "pattern": "^[^\\r\\n]*$"
     },
     "version": {
-      "description": "Semantic version number following SemVer 2.0.0 specification (MAJOR.MINOR.PATCH). Increment MAJOR for breaking changes, MINOR for new features, PATCH for bug fixes. Optional pre-release identifiers (e.g., -alpha, -beta.1) are supported. This version is used for change tracking, rollback capabilities, and API compatibility.",
-      "title": "Version",
-      "examples": ["1.0.0", "2.1.3", "0.5.0-beta", "1.0.0-alpha.1", "3.2.1"],
-      "placeholder": "1.0.0",
-      "pattern": "^\\d+\\.\\d+\\.\\d+(-[a-zA-Z0-9]+)?$",
-      "default": "1.0.0",
       "type": "string",
-      "minLength": 5
+      "description": "The version of the application following Semantic Versioning (SemVer) 2.0.0 specification",
+      "title": "Application Version",
+      "minLength": 5,
+      "examples": [
+        "1.0.0",
+        "0.0.1",
+        "1.2.3",
+        "1.0.0-alpha",
+        "1.0.0-beta.1",
+        "2.0.0-rc.1",
+        "1.0.0+build.123",
+        "1.0.0-alpha+001"
+      ],
+      "pattern": "^(0|[1-9]\\d*)\\.(0|[1-9]\\d*)\\.(0|[1-9]\\d*)(?:-((?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\\.(?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\\+([0-9a-zA-Z-]+(?:\\.[0-9a-zA-Z-]+)*))?$"
     },
     "tables": {
       "description": "Collection of database tables that define the data structure of your application. Each table represents an entity (e.g., users, products, orders) with fields that define the schema. Tables support relationships, indexes, constraints, and various field types. Tables are the foundation of your application's data model and determine what information can be stored and how it relates.",

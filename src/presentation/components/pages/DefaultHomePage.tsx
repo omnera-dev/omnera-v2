@@ -1,7 +1,7 @@
+import React, { type ReactElement } from 'react'
 import { Badge } from '@/presentation/components/ui/badge'
 import { TypographyH1, TypographyLead } from '@/presentation/components/ui/typography'
 import type { App } from '@/domain/models/app'
-import type { ReactElement } from 'react'
 
 /**
  * DefaultHomePage component - Default home page displaying application information

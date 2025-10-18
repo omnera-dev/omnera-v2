@@ -1,4 +1,4 @@
-import type { ReactElement } from 'react'
+import React, { type ReactElement } from 'react'
 
 /**
  * ErrorPage component - 500 internal server error page

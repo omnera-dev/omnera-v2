@@ -1,5 +1,5 @@
+import React, { type HTMLAttributes, type ReactNode } from 'react'
 import { cn } from '@/presentation/utils/cn'
-import type { HTMLAttributes, ReactNode } from 'react'
 
 // H1 Heading - Extra large, bold heading
 export interface TypographyH1Props extends HTMLAttributes<HTMLHeadingElement> {

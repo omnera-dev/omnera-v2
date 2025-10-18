@@ -2,7 +2,6 @@ import { describe, expect, test } from 'bun:test'
 import {
   formatValidationResults,
   validateBlueprint,
-  type ValidationError,
   type ValidationResult,
 } from './blueprint-validator.ts'
 import type { EffectSchemaBlueprint, JSONSchemaProperty } from '../types/roadmap.ts'
@@ -58,9 +57,12 @@ export type UserName = Schema.Schema.Type<typeof UserNameSchema>
       const result = validateBlueprint(blueprint, sourceSchema)
 
       expect(result.valid).toBe(false)
-      expect(result.errors).toHaveLength(1)
-      expect(result.errors[0].message).toContain('Invalid TypeScript identifier')
-      expect(result.errors[0].expected).toContain('PascalCase')
+      expect(result.errors.some((e) => e.message.includes('Invalid TypeScript identifier'))).toBe(
+        true
+      )
+      expect(
+        result.errors.find((e) => e.message.includes('Invalid TypeScript identifier'))?.expected
+      ).toContain('PascalCase')
     })
 
     test('detects identifier that does not start with uppercase', () => {

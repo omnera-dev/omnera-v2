@@ -28,11 +28,11 @@ export async function runSchemaExport(): Promise<JSONSchema> {
       stdio: ['pipe', 'pipe', 'pipe'],
     })
 
-    let stdout = ''
+    let _stdout = ''
     let stderr = ''
 
     child.stdout.on('data', (data) => {
-      stdout += data.toString()
+      _stdout += data.toString()
     })
 
     child.stderr.on('data', (data) => {
@@ -83,7 +83,7 @@ export function checkPropertyImplementation(
   const parts = propertyPath.split('.')
 
   // Navigate through the schema structure
-  let current: any = currentSchema.properties
+  let current: unknown = currentSchema.properties
   let isImplemented = false
 
   for (const part of parts) {

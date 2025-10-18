@@ -120,9 +120,6 @@ async function parseTestFile(filePath: string): Promise<TestInfo[]> {
     const file = Bun.file(filePath)
     const content = await file.text()
 
-    // Split into lines for line number tracking
-    const lines = content.split('\n')
-
     // Regex patterns to match different test types
     const testPatterns = [
       {

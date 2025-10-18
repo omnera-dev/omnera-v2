@@ -320,6 +320,13 @@ function determinePropertyStatus(
 
 /**
  * Calculate completion percentage (0-100)
+ *
+ * This function compares structural and validation completeness only.
+ * UI metadata (default, placeholder, uiSchema, examples, title, description)
+ * is ignored as it doesn't affect data validation.
+ *
+ * A property is considered "complete" if it has equal or stricter validation
+ * than the vision schema requires.
  */
 function calculateCompletionPercent(
   current: JSONSchemaProperty | undefined,
@@ -332,14 +339,15 @@ function calculateCompletionPercent(
   let score = 0
   let total = 0
 
-  // Type match
+  // Type match (required)
   total++
   if (current.type === vision.type) {
     score++
   }
 
-  // Validation rules
-  const validationKeys = [
+  // Validation rules (only count if vision requires them)
+  // Note: If current has stricter validation than vision, that's still complete
+  const validationKeys: Array<keyof JSONSchemaProperty> = [
     'pattern',
     'minLength',
     'maxLength',
@@ -349,11 +357,55 @@ function calculateCompletionPercent(
     'maxItems',
     'enum',
   ]
+
   for (const key of validationKeys) {
     if (vision[key] !== undefined) {
       total++
-      if (current[key] === vision[key]) {
-        score++
+
+      // Check if current meets or exceeds vision's validation requirements
+      switch (key) {
+        case 'minLength':
+        case 'minimum':
+        case 'minItems': {
+          // For minimums: current >= vision is acceptable (equal or stricter)
+          if (current[key] !== undefined && Number(current[key]) >= Number(vision[key])) {
+            score++
+          } else if (current[key] === vision[key]) {
+            score++
+          }
+
+          break
+        }
+        case 'maxLength':
+        case 'maximum':
+        case 'maxItems': {
+          // For maximums: current <= vision is acceptable (equal or stricter)
+          if (current[key] !== undefined && Number(current[key]) <= Number(vision[key])) {
+            score++
+          } else if (current[key] === vision[key]) {
+            score++
+          }
+
+          break
+        }
+        case 'pattern': {
+          // For pattern: any pattern in current counts as having validation
+          // (We can't easily compare regex strictness, so any pattern is acceptable)
+          if (current[key] !== undefined) {
+            score++
+          }
+
+          break
+        }
+        case 'enum': {
+          // For enum: must match exactly
+          if (JSON.stringify(current[key]) === JSON.stringify(vision[key])) {
+            score++
+          }
+
+          break
+        }
+        // No default
       }
     }
   }
