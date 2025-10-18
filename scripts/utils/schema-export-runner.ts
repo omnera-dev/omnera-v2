@@ -93,7 +93,7 @@ export function checkPropertyImplementation(
 
     // Check if property exists
     if (part in current) {
-      current = current[part]
+      current = (current as Record<string, unknown>)[part]
       isImplemented = true
     } else {
       isImplemented = false
@@ -107,14 +107,15 @@ export function checkPropertyImplementation(
 
   // Determine schema type if implemented
   let schemaType: string | undefined
-  if (isImplemented && current) {
-    if (current.type) {
-      schemaType = Array.isArray(current.type) ? current.type.join(' | ') : current.type
-    } else if (current.anyOf) {
+  if (isImplemented && current && typeof current === 'object') {
+    const schema = current as Record<string, unknown>
+    if (schema.type) {
+      schemaType = Array.isArray(schema.type) ? schema.type.join(' | ') : String(schema.type)
+    } else if (schema.anyOf) {
       schemaType = 'union'
-    } else if (current.oneOf) {
+    } else if (schema.oneOf) {
       schemaType = 'oneOf'
-    } else if (current.allOf) {
+    } else if (schema.allOf) {
       schemaType = 'allOf'
     }
   }

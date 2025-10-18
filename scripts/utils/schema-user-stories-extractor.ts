@@ -138,8 +138,11 @@ function extractUserStoriesFromDefinition(definition: JSONSchemaProperty): strin
   }
 
   // Check in items (for array schemas)
-  if (definition.items && definition.items['x-user-stories']) {
-    return definition.items['x-user-stories']
+  if (definition.items && !Array.isArray(definition.items)) {
+    const itemsUserStories = definition.items['x-user-stories']
+    if (Array.isArray(itemsUserStories)) {
+      return itemsUserStories as string[]
+    }
   }
 
   return []
@@ -169,11 +172,13 @@ function findUserStoriesInAnyOf(
       const nestedItems = item.anyOf || item.oneOf
 
       // Look for the specific event/action in the nested structure
-      for (const nestedItem of nestedItems) {
-        if (matchesServiceAndEvent(nestedItem, service, eventOrAction)) {
-          const userStories = extractUserStoriesFromDefinition(nestedItem)
-          if (userStories.length > 0) {
-            return userStories
+      if (nestedItems) {
+        for (const nestedItem of nestedItems) {
+          if (matchesServiceAndEvent(nestedItem, service, eventOrAction)) {
+            const userStories = extractUserStoriesFromDefinition(nestedItem)
+            if (userStories.length > 0) {
+              return userStories
+            }
           }
         }
       }
@@ -214,14 +219,17 @@ function matchesServiceAndEvent(
 
   // Check if service matches
   const serviceConst = item.properties.service?.const
-  if (serviceConst && normalizeServiceName(serviceConst) === normalizedService) {
+  if (
+    typeof serviceConst === 'string' &&
+    normalizeServiceName(serviceConst) === normalizedService
+  ) {
     // Check if event or action matches
     const eventConst = item.properties.event?.const
     const actionConst = item.properties.action?.const
 
     const eventOrActionConst = eventConst || actionConst
 
-    if (eventOrActionConst) {
+    if (typeof eventOrActionConst === 'string') {
       return normalizeEventOrAction(eventOrActionConst) === normalizeEventOrAction(eventOrAction)
     }
   }

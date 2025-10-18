@@ -22,9 +22,9 @@ describe('schema-comparison', () => {
       const result = compareSchemas(current, vision)
 
       expect(result).toHaveLength(1)
-      expect(result[0].name).toBe('name')
-      expect(result[0].status).toBe('complete')
-      expect(result[0].completionPercent).toBe(100)
+      expect(result[0]?.name).toBe('name')
+      expect(result[0]?.status).toBe('complete')
+      expect(result[0]?.completionPercent).toBe(100)
     })
 
     test('detects missing property when not in current schema', () => {
@@ -43,9 +43,9 @@ describe('schema-comparison', () => {
       const result = compareSchemas(current, vision)
 
       expect(result).toHaveLength(1)
-      expect(result[0].name).toBe('newFeature')
-      expect(result[0].status).toBe('missing')
-      expect(result[0].completionPercent).toBe(0)
+      expect(result[0]?.name).toBe('newFeature')
+      expect(result[0]?.status).toBe('missing')
+      expect(result[0]?.completionPercent).toBe(0)
     })
 
     test('detects partial property when types differ', () => {
@@ -66,10 +66,10 @@ describe('schema-comparison', () => {
       const result = compareSchemas(current, vision)
 
       expect(result).toHaveLength(1)
-      expect(result[0].name).toBe('value')
+      expect(result[0]?.name).toBe('value')
       // Status is 'partial' because current.type exists (line 88: return current.type ? 'partial' : 'missing')
-      expect(result[0].status).toBe('partial')
-      expect(result[0].completionPercent).toBe(0) // Type doesn't match, so 0% completion
+      expect(result[0]?.status).toBe('partial')
+      expect(result[0]?.completionPercent).toBe(0) // Type doesn't match, so 0% completion
     })
 
     test('detects partial property when nested properties are incomplete', () => {
@@ -101,10 +101,10 @@ describe('schema-comparison', () => {
       const result = compareSchemas(current, vision)
 
       expect(result).toHaveLength(1)
-      expect(result[0].name).toBe('config')
-      expect(result[0].status).toBe('partial')
+      expect(result[0]?.name).toBe('config')
+      expect(result[0]?.status).toBe('partial')
       // Completion calculation: type match (1/1) + properties (1/2) = 2/3 = 67%
-      expect(result[0].completionPercent).toBe(67)
+      expect(result[0]?.completionPercent).toBe(67)
     })
 
     test('extracts dependencies for pages referencing tables', () => {
@@ -135,8 +135,8 @@ describe('schema-comparison', () => {
       const result = compareSchemas(current, vision)
 
       expect(result).toHaveLength(1)
-      expect(result[0].name).toBe('pages')
-      expect(result[0].dependencies).toContain('tables')
+      expect(result[0]?.name).toBe('pages')
+      expect(result[0]?.dependencies).toContain('tables')
     })
   })
 

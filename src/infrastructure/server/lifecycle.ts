@@ -48,37 +48,10 @@ export const withGracefulShutdown = (server: ServerInstance): Effect.Effect<neve
       })
     )
 
-    // Keep the process alive indefinitely
-    return yield* Effect.never
-  })
-
-/**
- * Logs server startup information to console
- *
- * This utility logs helpful information about the running server including
- * URLs for the homepage, health check, and compiled CSS.
- *
- * @param server - Server instance with URL
- * @returns Effect that logs server information
- *
- * @example
- * ```typescript
- * import { Effect } from 'effect'
- * import { start } from '@/index'
- * import { logServerInfo } from '@/utils/server-lifecycle'
- *
- * const program = Effect.gen(function* () {
- *   const server = yield* start(myApp)
- *   yield* logServerInfo(server)
- * })
- * ```
- */
-export const logServerInfo = (server: ServerInstance): Effect.Effect<void> =>
-  Effect.gen(function* () {
-    yield* Console.log('✓ Server started successfully!')
-    yield* Console.log(`✓ Homepage: ${server.url}`)
-    yield* Console.log(`✓ Health check: ${server.url}/health`)
-    yield* Console.log(`✓ Compiled CSS: ${server.url}/output.css`)
+    // Log shutdown instructions
     yield* Console.log('')
     yield* Console.log('Press Ctrl+C to stop the server')
+
+    // Keep the process alive indefinitely
+    return yield* Effect.never
   })

@@ -12,7 +12,7 @@
 import { Effect } from 'effect'
 import { startServer } from '@/application/use-cases/server/start-server'
 import { AppLayer } from '@/infrastructure/layers/app-layer'
-import { withGracefulShutdown, logServerInfo } from '@/infrastructure/server/lifecycle'
+import { withGracefulShutdown } from '@/infrastructure/server/lifecycle'
 import type { ServerInstance } from '@/application/models/server'
 import type { StartOptions } from '@/application/use-cases/server/start-server'
 
@@ -95,9 +95,6 @@ export const start = async (app: unknown, options: StartOptions = {}): Promise<S
 
     // Start the server (dependencies injected via AppLayer)
     const server = yield* startServer(app, options)
-
-    // Log server information
-    yield* logServerInfo(server)
 
     // Setup graceful shutdown (keeps process alive)
     yield* withGracefulShutdown(server)

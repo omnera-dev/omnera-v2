@@ -1,4 +1,4 @@
-import React, { type HTMLAttributes, type ReactNode } from 'react'
+import { type HTMLAttributes, type ReactNode } from 'react'
 import { cn } from '@/presentation/utils/cn'
 
 // H1 Heading - Extra large, bold heading

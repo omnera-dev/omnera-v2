@@ -47,7 +47,7 @@ export function compareSchemas(
  * Extract service/event or service/action combinations from automation definitions
  */
 function extractServiceEventCombinations(
-  currentDef: JSONSchemaProperty | undefined,
+  _currentDef: JSONSchemaProperty | undefined,
   visionDef: JSONSchemaProperty,
   eventOrActionKey: 'event' | 'action'
 ): PropertyStatus[] {
@@ -469,7 +469,7 @@ function identifyMissingFeatures(
     for (const prop of missingProps) {
       const propDef = vision.properties![prop]
       missing.push(
-        `Property: ${prop} (${propDef.title || propDef.description || 'no description'})`
+        `Property: ${prop} (${propDef?.title || propDef?.description || 'no description'})`
       )
     }
   }

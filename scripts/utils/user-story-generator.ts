@@ -327,8 +327,8 @@ function generateUnionValidationStories(
  */
 function generateRegressionStory(
   propertyName: string,
-  schema: JSONSchemaProperty,
-  specStories: UserStory[],
+  _schema: JSONSchemaProperty,
+  _specStories: UserStory[],
   regressionStories: UserStory[]
 ): void {
   const fieldName = humanize(propertyName)
@@ -347,7 +347,7 @@ function generateRegressionStory(
  */
 function generateCriticalStory(
   propertyName: string,
-  schema: JSONSchemaProperty,
+  _schema: JSONSchemaProperty,
   criticalStories: UserStory[]
 ): void {
   const fieldName = humanize(propertyName)

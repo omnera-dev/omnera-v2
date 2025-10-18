@@ -151,6 +151,12 @@ export const createServer = (
     const actualPort = server.port
     const url = `http://${hostname}:${actualPort}`
 
+    // Log server startup information
+    yield* Console.log('✓ Server started successfully!')
+    yield* Console.log(`✓ Homepage: ${url}`)
+    yield* Console.log(`✓ Health check: ${url}/health`)
+    yield* Console.log(`✓ Compiled CSS: ${url}/output.css`)
+
     // Create stop effect
     const stop = Effect.gen(function* () {
       yield* Console.log('Stopping server...')

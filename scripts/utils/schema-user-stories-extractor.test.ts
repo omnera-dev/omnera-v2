@@ -27,10 +27,10 @@ describe('schema-user-stories-extractor', () => {
 
       expect(result.propertyName).toBe('automations')
       expect(result.spec).toHaveLength(1)
-      expect(result.spec[0].given).toBe('a user creates an automation')
-      expect(result.spec[0].when).toBe('they save it')
-      expect(result.spec[0].then).toBe('it should be stored in the database')
-      expect(result.spec[0].tag).toBe('@spec')
+      expect(result.spec[0]?.given).toBe('a user creates an automation')
+      expect(result.spec[0]?.when).toBe('they save it')
+      expect(result.spec[0]?.then).toBe('it should be stored in the database')
+      expect(result.spec[0]?.tag).toBe('@spec')
     })
 
     test('extracts user stories from pages definition', () => {
@@ -56,9 +56,9 @@ describe('schema-user-stories-extractor', () => {
 
       expect(result.propertyName).toBe('pages')
       expect(result.spec).toHaveLength(1)
-      expect(result.spec[0].given).toBe('a user navigates to a page')
-      expect(result.spec[0].when).toBe('the page loads')
-      expect(result.spec[0].then).toBe('it should render correctly')
+      expect(result.spec[0]?.given).toBe('a user navigates to a page')
+      expect(result.spec[0]?.when).toBe('the page loads')
+      expect(result.spec[0]?.then).toBe('it should render correctly')
     })
 
     test('extracts user stories from tables definition', () => {
@@ -84,7 +84,7 @@ describe('schema-user-stories-extractor', () => {
 
       expect(result.propertyName).toBe('tables')
       expect(result.spec).toHaveLength(1)
-      expect(result.spec[0].given).toBe('a user creates a table')
+      expect(result.spec[0]?.given).toBe('a user creates a table')
     })
 
     test('extracts user stories from connections definition', () => {
@@ -110,12 +110,13 @@ describe('schema-user-stories-extractor', () => {
 
       expect(result.propertyName).toBe('connections')
       expect(result.spec).toHaveLength(1)
-      expect(result.spec[0].when).toBe('they test it')
+      expect(result.spec[0]?.when).toBe('they test it')
     })
 
     test('extracts user stories from automation trigger definitions', () => {
       const schema: JSONSchema = {
         type: 'object',
+        properties: {},
         definitions: {
           automation_trigger: {
             type: 'object',
@@ -143,14 +144,15 @@ describe('schema-user-stories-extractor', () => {
       const result = extractUserStoriesFromSchema('automation_trigger.http.post', schema)
 
       expect(result.spec).toHaveLength(1)
-      expect(result.spec[0].given).toBe('a webhook is configured')
-      expect(result.spec[0].when).toBe('a POST request is received')
-      expect(result.spec[0].then).toBe('the automation should trigger')
+      expect(result.spec[0]?.given).toBe('a webhook is configured')
+      expect(result.spec[0]?.when).toBe('a POST request is received')
+      expect(result.spec[0]?.then).toBe('the automation should trigger')
     })
 
     test('extracts user stories from automation action definitions', () => {
       const schema: JSONSchema = {
         type: 'object',
+        properties: {},
         definitions: {
           automation_action: {
             type: 'object',
@@ -178,14 +180,15 @@ describe('schema-user-stories-extractor', () => {
       const result = extractUserStoriesFromSchema('automation_action.notion.create-page', schema)
 
       expect(result.spec).toHaveLength(1)
-      expect(result.spec[0].given).toBe('an automation runs')
-      expect(result.spec[0].when).toBe('the Notion create page action executes')
-      expect(result.spec[0].then).toBe('a new page should be created')
+      expect(result.spec[0]?.given).toBe('an automation runs')
+      expect(result.spec[0]?.when).toBe('the Notion create page action executes')
+      expect(result.spec[0]?.then).toBe('a new page should be created')
     })
 
     test('handles service name variations', () => {
       const schema: JSONSchema = {
         type: 'object',
+        properties: {},
         definitions: {
           automation_trigger: {
             type: 'object',
@@ -217,12 +220,13 @@ describe('schema-user-stories-extractor', () => {
       )
 
       expect(result.spec).toHaveLength(1)
-      expect(result.spec[0].given).toBe('a LinkedIn ad form is submitted')
+      expect(result.spec[0]?.given).toBe('a LinkedIn ad form is submitted')
     })
 
     test('handles case-insensitive service matching', () => {
       const schema: JSONSchema = {
         type: 'object',
+        properties: {},
         definitions: {
           automation_trigger: {
             type: 'object',
@@ -324,9 +328,9 @@ describe('schema-user-stories-extractor', () => {
 
       const result = extractUserStoriesFromSchema('automations', schema)
 
-      expect(result.spec[0].given).toBe('a  user')
-      expect(result.spec[0].when).toBe('they  act')
-      expect(result.spec[0].then).toBe('it works')
+      expect(result.spec[0]?.given).toBe('a  user')
+      expect(result.spec[0]?.when).toBe('they  act')
+      expect(result.spec[0]?.then).toBe('it works')
     })
 
     test('skips malformed user stories', () => {
@@ -353,7 +357,7 @@ describe('schema-user-stories-extractor', () => {
 
       // Only the valid story should be parsed
       expect(result.spec).toHaveLength(1)
-      expect(result.spec[0].given).toBe('something')
+      expect(result.spec[0]?.given).toBe('something')
     })
 
     test('handles multiple user stories', () => {
@@ -380,9 +384,9 @@ describe('schema-user-stories-extractor', () => {
       const result = extractUserStoriesFromSchema('automations', schema)
 
       expect(result.spec).toHaveLength(3)
-      expect(result.spec[0].when).toBe('they save it')
-      expect(result.spec[1].when).toBe('a user deletes it')
-      expect(result.spec[2].when).toBe('an error occurs')
+      expect(result.spec[0]?.when).toBe('they save it')
+      expect(result.spec[1]?.when).toBe('a user deletes it')
+      expect(result.spec[2]?.when).toBe('an error occurs')
     })
 
     test('extracts user stories from items property', () => {
@@ -410,12 +414,13 @@ describe('schema-user-stories-extractor', () => {
       const result = extractUserStoriesFromSchema('automations', schema)
 
       expect(result.spec).toHaveLength(1)
-      expect(result.spec[0].when).toBe('it is processed')
+      expect(result.spec[0]?.when).toBe('it is processed')
     })
 
     test('handles definition path with only base definition', () => {
       const schema: JSONSchema = {
         type: 'object',
+        properties: {},
         definitions: {
           automation_trigger: {
             type: 'object',
@@ -429,12 +434,13 @@ describe('schema-user-stories-extractor', () => {
       const result = extractUserStoriesFromSchema('automation_trigger', schema)
 
       expect(result.spec).toHaveLength(1)
-      expect(result.spec[0].given).toBe('a trigger is configured')
+      expect(result.spec[0]?.given).toBe('a trigger is configured')
     })
 
     test('handles oneOf instead of anyOf', () => {
       const schema: JSONSchema = {
         type: 'object',
+        properties: {},
         definitions: {
           automation_action: {
             type: 'object',
@@ -465,12 +471,13 @@ describe('schema-user-stories-extractor', () => {
       )
 
       expect(result.spec).toHaveLength(1)
-      expect(result.spec[0].then).toBe('a record should be created')
+      expect(result.spec[0]?.then).toBe('a record should be created')
     })
 
     test('handles filter_condition definition prefix', () => {
       const schema: JSONSchema = {
         type: 'object',
+        properties: {},
         definitions: {
           filter_condition: {
             type: 'object',
@@ -484,7 +491,7 @@ describe('schema-user-stories-extractor', () => {
       const result = extractUserStoriesFromSchema('filter_condition', schema)
 
       expect(result.spec).toHaveLength(1)
-      expect(result.spec[0].then).toBe('it should return a boolean')
+      expect(result.spec[0]?.then).toBe('it should return a boolean')
     })
 
     test('handles missing definitions gracefully', () => {
@@ -505,6 +512,7 @@ describe('schema-user-stories-extractor', () => {
     test('handles direct match without nested anyOf', () => {
       const schema: JSONSchema = {
         type: 'object',
+        properties: {},
         definitions: {
           automation_trigger: {
             type: 'object',
@@ -525,12 +533,13 @@ describe('schema-user-stories-extractor', () => {
       const result = extractUserStoriesFromSchema('automation_trigger.simple.trigger', schema)
 
       expect(result.spec).toHaveLength(1)
-      expect(result.spec[0].when).toBe('it fires')
+      expect(result.spec[0]?.when).toBe('it fires')
     })
 
     test('extracts from parent level when nested item has no user stories', () => {
       const schema: JSONSchema = {
         type: 'object',
+        properties: {},
         definitions: {
           automation_trigger: {
             type: 'object',
@@ -558,7 +567,7 @@ describe('schema-user-stories-extractor', () => {
       const result = extractUserStoriesFromSchema('automation_trigger.http.post', schema)
 
       expect(result.spec).toHaveLength(1)
-      expect(result.spec[0].given).toBe('an HTTP trigger')
+      expect(result.spec[0]?.given).toBe('an HTTP trigger')
     })
 
     test('handles case-insensitive GIVEN/WHEN/THEN keywords', () => {
@@ -583,9 +592,9 @@ describe('schema-user-stories-extractor', () => {
       const result = extractUserStoriesFromSchema('automations', schema)
 
       expect(result.spec).toHaveLength(1)
-      expect(result.spec[0].given).toBe('a user creates an automation')
-      expect(result.spec[0].when).toBe('they save it')
-      expect(result.spec[0].then).toBe('it should be stored')
+      expect(result.spec[0]?.given).toBe('a user creates an automation')
+      expect(result.spec[0]?.when).toBe('they save it')
+      expect(result.spec[0]?.then).toBe('it should be stored')
     })
 
     test('deduplicates user stories while preserving order', () => {

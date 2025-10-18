@@ -263,8 +263,8 @@ describe('phase-grouping', () => {
       const phases = groupIntoPhases(properties)
 
       expect(phases).toHaveLength(1)
-      expect(phases[0].number).toBe(0)
-      expect(phases[0].status).toBe('✅ DONE')
+      expect(phases[0]?.number).toBe(0)
+      expect(phases[0]?.status).toBe('✅ DONE')
     })
 
     test('assigns meaningful names to phases', () => {

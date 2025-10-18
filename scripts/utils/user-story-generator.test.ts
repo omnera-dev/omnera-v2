@@ -118,7 +118,7 @@ describe('user-story-generator', () => {
 
       expect(result.regression).toHaveLength(1)
 
-      const regressionStory = result.regression[0]
+      const regressionStory = result.regression[0]!
 
       expect(regressionStory.given).toContain('configuring')
       expect(regressionStory.when).toContain('full configuration workflow')
@@ -135,7 +135,7 @@ describe('user-story-generator', () => {
 
       // Critical path should exist for tables (essential feature)
       if (result.critical.length > 0) {
-        const criticalStory = result.critical[0]
+        const criticalStory = result.critical[0]!
 
         expect(criticalStory.given).toContain('use')
         expect(criticalStory.when).toContain('essential')

@@ -30,7 +30,7 @@ export function groupIntoPhases(properties: PropertyStatus[]): Phase[] {
       ? '🚧 IN PROGRESS'
       : '⏳ NOT STARTED'
 
-    const phaseDeps = extractPhaseDependencies(group.properties, groups.slice(0, phaseNumber))
+    const phaseDeps = extractPhaseDependencies(group.properties, phases.slice(0, phaseNumber))
 
     phases.push(createPhase(phaseNumber, version, status, group.name, group.properties, phaseDeps))
     phaseNumber++
@@ -38,7 +38,10 @@ export function groupIntoPhases(properties: PropertyStatus[]): Phase[] {
 
   // Final phase should be v1.0.0
   if (phases.length > 0) {
-    phases[phases.length - 1].version = 'v1.0.0'
+    const lastPhase = phases[phases.length - 1]
+    if (lastPhase) {
+      lastPhase.version = 'v1.0.0'
+    }
   }
 
   return phases
@@ -98,45 +101,60 @@ function buildPropertyGroups(properties: PropertyStatus[]): PropertyGroup[] {
   if (tableProps.length > 0) {
     const table = tableProps[0]
 
-    // Check if tables have advanced field types
-    const hasAdvancedFields = hasAdvancedTableFields(table)
+    if (table) {
+      // Check if tables have advanced field types
+      const hasAdvancedFields = hasAdvancedTableFields(table)
 
-    if (hasAdvancedFields) {
-      // Split into two phases: basic fields and advanced fields
-      groups.push({
-        name: 'Tables Foundation',
-        properties: [
-          {
-            ...table,
-            complexity: Math.round(table.complexity * 0.4), // Basic fields are simpler
-            missingFeatures: table.missingFeatures.filter(
-              (f) =>
-                f.includes('text') ||
-                f.includes('number') ||
-                f.includes('date') ||
-                f.includes('checkbox')
-            ),
-          },
-        ],
-      })
+      if (hasAdvancedFields) {
+        // Split into two phases: basic fields and advanced fields
+        groups.push({
+          name: 'Tables Foundation',
+          properties: [
+            {
+              name: table.name,
+              status: table.status,
+              visionVersion: table.visionVersion,
+              currentVersion: table.currentVersion,
+              completionPercent: table.completionPercent,
+              complexity: Math.round(table.complexity * 0.4), // Basic fields are simpler
+              missingFeatures: table.missingFeatures.filter(
+                (f) =>
+                  f.includes('text') ||
+                  f.includes('number') ||
+                  f.includes('date') ||
+                  f.includes('checkbox')
+              ),
+              dependencies: table.dependencies,
+              implementationStatus: table.implementationStatus,
+            },
+          ],
+        })
 
-      groups.push({
-        name: 'Advanced Fields',
-        properties: [
-          {
-            ...table,
-            complexity: Math.round(table.complexity * 0.6), // Advanced fields more complex
-            missingFeatures: table.missingFeatures.filter(
-              (f) => f.includes('select') || f.includes('relationship') || f.includes('attachment')
-            ),
-          },
-        ],
-      })
-    } else {
-      groups.push({
-        name: 'Tables',
-        properties: tableProps,
-      })
+        groups.push({
+          name: 'Advanced Fields',
+          properties: [
+            {
+              name: table.name,
+              status: table.status,
+              visionVersion: table.visionVersion,
+              currentVersion: table.currentVersion,
+              completionPercent: table.completionPercent,
+              complexity: Math.round(table.complexity * 0.6), // Advanced fields more complex
+              missingFeatures: table.missingFeatures.filter(
+                (f) =>
+                  f.includes('select') || f.includes('relationship') || f.includes('attachment')
+              ),
+              dependencies: table.dependencies,
+              implementationStatus: table.implementationStatus,
+            },
+          ],
+        })
+      } else {
+        groups.push({
+          name: 'Tables',
+          properties: tableProps,
+        })
+      }
     }
   }
 
