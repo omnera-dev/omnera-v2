@@ -39,9 +39,7 @@ import { Schema } from 'effect'
 ```typescript
 export const ConnectionsCalendlyClientSecretSchema = Schema.String
 
-export type ConnectionsCalendlyClientSecret = Schema.Schema.Type<
-  typeof ConnectionsCalendlyClientSecretSchema
->
+export type ConnectionsCalendlyClientSecret = Schema.Schema.Type<typeof ConnectionsCalendlyClientSecretSchema>
 ```
 
 ---

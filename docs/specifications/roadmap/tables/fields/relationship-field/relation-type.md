@@ -40,22 +40,14 @@ import { Schema } from 'effect'
 
 ```typescript
 /**
- *
+ * 
  * Type of relationship
  */
-export const TablesFieldsRelationshipFieldRelationTypeSchema = Schema.Literal(
-  'one-to-one',
-  'one-to-many',
-  'many-to-many'
-).pipe(
-  Schema.annotations({
-    description: 'Type of relationship',
-  })
-)
+export const TablesFieldsRelationshipFieldRelationTypeSchema = Schema.Literal("one-to-one", "one-to-many", "many-to-many").pipe(Schema.annotations({
+    description: "Type of relationship"
+  }))
 
-export type TablesFieldsRelationshipFieldRelationType = Schema.Schema.Type<
-  typeof TablesFieldsRelationshipFieldRelationTypeSchema
->
+export type TablesFieldsRelationshipFieldRelationType = Schema.Schema.Type<typeof TablesFieldsRelationshipFieldRelationTypeSchema>
 ```
 
 ---

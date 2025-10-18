@@ -39,9 +39,7 @@ import { Schema } from 'effect'
 ```typescript
 export const PagesFormPageInputsTextInputPlaceholderSchema = Schema.String
 
-export type PagesFormPageInputsTextInputPlaceholder = Schema.Schema.Type<
-  typeof PagesFormPageInputsTextInputPlaceholderSchema
->
+export type PagesFormPageInputsTextInputPlaceholder = Schema.Schema.Type<typeof PagesFormPageInputsTextInputPlaceholderSchema>
 ```
 
 ---

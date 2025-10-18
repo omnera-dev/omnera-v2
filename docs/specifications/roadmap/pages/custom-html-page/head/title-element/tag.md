@@ -37,11 +37,9 @@ import { Schema } from 'effect'
 **Implementation**:
 
 ```typescript
-export const PagesCustomHtmlPageHeadTitleElementTagSchema = Schema.Literal('title')
+export const PagesCustomHtmlPageHeadTitleElementTagSchema = Schema.Literal("title")
 
-export type PagesCustomHtmlPageHeadTitleElementTag = Schema.Schema.Type<
-  typeof PagesCustomHtmlPageHeadTitleElementTagSchema
->
+export type PagesCustomHtmlPageHeadTitleElementTag = Schema.Schema.Type<typeof PagesCustomHtmlPageHeadTitleElementTagSchema>
 ```
 
 ---

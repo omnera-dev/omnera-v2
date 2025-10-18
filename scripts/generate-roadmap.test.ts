@@ -182,53 +182,6 @@ describe('generate-roadmap', () => {
       expect(Object.keys(visionContent.properties).length).toBe(3)
     })
 
-    test.skip('detects schema differences correctly', async () => {
-      // NOTE: This test passes when run individually but fails in concurrent execution
-      // due to file system timing issues. Skipping until we can resolve the race condition.
-      const currentSchema = {
-        type: 'object',
-        properties: {
-          name: { type: 'string' },
-        },
-      }
-
-      const visionSchema = {
-        type: 'object',
-        properties: {
-          name: { type: 'string' },
-          description: { type: 'string' },
-          icon: { enum: ['user', 'settings'] },
-        },
-      }
-
-      // Force recreation of directory to avoid any concurrent test interference
-      if (existsSync(TEST_DIR)) {
-        rmSync(TEST_DIR, { recursive: true, force: true })
-      }
-      mkdirSync(TEST_SCHEMAS_DIR, { recursive: true })
-
-      // Write schemas with synchronous FS for guaranteed completion before next statement
-      const { writeFileSync } = await import('node:fs')
-      writeFileSync(TEST_CURRENT_SCHEMA, JSON.stringify(currentSchema), 'utf-8')
-      writeFileSync(TEST_VISION_SCHEMA, JSON.stringify(visionSchema), 'utf-8')
-
-      // Verify files exist before reading
-      expect(existsSync(TEST_CURRENT_SCHEMA)).toBe(true)
-      expect(existsSync(TEST_VISION_SCHEMA)).toBe(true)
-
-      const current = await Bun.file(TEST_CURRENT_SCHEMA).json()
-      const vision = await Bun.file(TEST_VISION_SCHEMA).json()
-
-      const currentProps = Object.keys(current.properties)
-      const visionProps = Object.keys(vision.properties)
-
-      const implemented = visionProps.filter((p) => currentProps.includes(p))
-      const missing = visionProps.filter((p) => !currentProps.includes(p))
-
-      expect(implemented).toEqual(['name'])
-      expect(missing).toEqual(['description', 'icon'])
-    })
-
     test('creates output directory structure', async () => {
       const outputDir = join(TEST_DIR, 'output')
 

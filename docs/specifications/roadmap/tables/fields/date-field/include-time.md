@@ -40,14 +40,12 @@ import { Schema } from 'effect'
 
 ```typescript
 /**
- *
+ * 
  * Include time component (for date type)
  */
 export const TablesFieldsDateFieldIncludeTimeSchema = Schema.Boolean
 
-export type TablesFieldsDateFieldIncludeTime = Schema.Schema.Type<
-  typeof TablesFieldsDateFieldIncludeTimeSchema
->
+export type TablesFieldsDateFieldIncludeTime = Schema.Schema.Type<typeof TablesFieldsDateFieldIncludeTimeSchema>
 ```
 
 ---

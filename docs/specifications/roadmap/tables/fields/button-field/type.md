@@ -37,11 +37,9 @@ import { Schema } from 'effect'
 **Implementation**:
 
 ```typescript
-export const TablesFieldsButtonFieldTypeSchema = Schema.Literal('button')
+export const TablesFieldsButtonFieldTypeSchema = Schema.Literal("button")
 
-export type TablesFieldsButtonFieldType = Schema.Schema.Type<
-  typeof TablesFieldsButtonFieldTypeSchema
->
+export type TablesFieldsButtonFieldType = Schema.Schema.Type<typeof TablesFieldsButtonFieldTypeSchema>
 ```
 
 ---

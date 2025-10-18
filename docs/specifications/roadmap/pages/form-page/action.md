@@ -40,18 +40,12 @@ import { Schema } from 'effect'
 
 ```typescript
 /**
- *
+ * 
  * What to do with form submission
  */
-export const PagesFormPageActionSchema = Schema.Literal(
-  'create-record',
-  'send-email',
-  'trigger-automation'
-).pipe(
-  Schema.annotations({
-    description: 'What to do with form submission',
-  })
-)
+export const PagesFormPageActionSchema = Schema.Literal("create-record", "send-email", "trigger-automation").pipe(Schema.annotations({
+    description: "What to do with form submission"
+  }))
 
 export type PagesFormPageAction = Schema.Schema.Type<typeof PagesFormPageActionSchema>
 ```

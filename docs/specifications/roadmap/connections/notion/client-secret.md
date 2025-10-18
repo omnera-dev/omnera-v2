@@ -39,9 +39,7 @@ import { Schema } from 'effect'
 ```typescript
 export const ConnectionsNotionClientSecretSchema = Schema.String
 
-export type ConnectionsNotionClientSecret = Schema.Schema.Type<
-  typeof ConnectionsNotionClientSecretSchema
->
+export type ConnectionsNotionClientSecret = Schema.Schema.Type<typeof ConnectionsNotionClientSecretSchema>
 ```
 
 ---

@@ -40,7 +40,7 @@ import { Schema } from 'effect'
 
 ```typescript
 /**
- *
+ * 
  * Enable column sorting
  */
 export const PagesTableViewPageSortableSchema = Schema.Boolean

@@ -1,7 +1,9 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
   "type": "object",
-  "required": ["name"],
+  "required": [
+    "name"
+  ],
   "properties": {
     "name": {
       "type": "string",
@@ -9,7 +11,13 @@
       "title": "Application Name",
       "minLength": 1,
       "maxLength": 214,
-      "examples": ["my-app", "todo-app", "@myorg/my-app", "blog-system", "dashboard-admin"],
+      "examples": [
+        "my-app",
+        "todo-app",
+        "@myorg/my-app",
+        "blog-system",
+        "dashboard-admin"
+      ],
       "pattern": "^(?:@[a-z0-9-~][a-z0-9-._~]*\\/)?[a-z0-9-~][a-z0-9-._~]*$"
     },
     "version": {

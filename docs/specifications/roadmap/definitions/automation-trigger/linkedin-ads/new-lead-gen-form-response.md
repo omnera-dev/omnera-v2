@@ -41,48 +41,41 @@ import { Schema } from 'effect'
 ```typescript
 /**
  * New Lead Gen Form Response
- *
+ * 
  * Triggered when a new LinkedIn Lead Gen Form response is created
  */
 export const AutomationTriggerLinkedinAdsNewLeadGenFormResponseSchema = Schema.Struct({
-  account: Schema.Union(Schema.Number, Schema.String),
-  service: Schema.String,
-  event: Schema.String,
-  params: Schema.Struct({
-    organizationId: Schema.optional(
-      Schema.String.pipe(
-        Schema.annotations({
-          title: 'LinkedIn Organization ID',
-          description: 'Required for non-sponsored lead forms',
-        })
-      )
+    account: Schema.Union(
+      Schema.Number,
+      Schema.String
     ),
-    sponsoredAccountId: Schema.optional(
-      Schema.String.pipe(
+    service: Schema.String,
+    event: Schema.String,
+    params: Schema.Struct({
+      organizationId: Schema.optional(Schema.String.pipe(
         Schema.annotations({
-          title: 'LinkedIn Sponsored Account ID',
-          description: 'Required for sponsored lead forms (leadType: SPONSORED)',
-        })
-      )
-    ),
-    leadType: Schema.optional(
-      Schema.String.pipe(
+        title: "LinkedIn Organization ID",
+        description: "Required for non-sponsored lead forms"
+      })
+      )),
+      sponsoredAccountId: Schema.optional(Schema.String.pipe(
         Schema.annotations({
-          description: 'Type of lead form. SPONSORED requires sponsoredAccountId',
-        })
-      )
-    ),
-  }),
-}).pipe(
-  Schema.annotations({
-    title: 'New Lead Gen Form Response',
-    description: 'Triggered when a new LinkedIn Lead Gen Form response is created',
-  })
-)
+        title: "LinkedIn Sponsored Account ID",
+        description: "Required for sponsored lead forms (leadType: SPONSORED)"
+      })
+      )),
+      leadType: Schema.optional(Schema.String.pipe(
+        Schema.annotations({
+        description: "Type of lead form. SPONSORED requires sponsoredAccountId"
+      })
+      )),
+    }),
+  }).pipe(Schema.annotations({
+    title: "New Lead Gen Form Response",
+    description: "Triggered when a new LinkedIn Lead Gen Form response is created"
+  }))
 
-export type AutomationTriggerLinkedinAdsNewLeadGenFormResponse = Schema.Schema.Type<
-  typeof AutomationTriggerLinkedinAdsNewLeadGenFormResponseSchema
->
+export type AutomationTriggerLinkedinAdsNewLeadGenFormResponse = Schema.Schema.Type<typeof AutomationTriggerLinkedinAdsNewLeadGenFormResponseSchema>
 ```
 
 ---

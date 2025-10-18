@@ -41,11 +41,10 @@ import { Schema } from 'effect'
 ```typescript
 /**
  * Connections
- *
+ * 
  * External service integrations that connect your application to third-party platforms. Connections enable OAuth authentication, API access, and data synchronization with services like Calendly (scheduling), Airtable (databases), Google (workspace apps), LinkedIn (professional network), and Facebook (social platform). Each connection requires proper credentials and scopes.
  */
-export const ConnectionsSchema = Schema.Array(
-  Schema.Union(
+export const ConnectionsSchema = Schema.Array(Schema.Union(
     Schema.Struct({
       id: Schema.Int.pipe(
         Schema.greaterThanOrEqualTo(1),
@@ -128,14 +127,12 @@ export const ConnectionsSchema = Schema.Array(
       clientSecret: Schema.String,
       service: Schema.String,
     })
-  )
-).pipe(
-  Schema.annotations({
-    title: 'Connections',
-    description:
-      'External service integrations that connect your application to third-party platforms. Connections enable OAuth authentication, API access, and data synchronization with services like Calendly (scheduling), Airtable (databases), Google (workspace apps), LinkedIn (professional network), and Facebook (social platform). Each connection requires proper credentials and scopes.',
+  )).pipe(
+    Schema.annotations({
+    title: "Connections",
+    description: "External service integrations that connect your application to third-party platforms. Connections enable OAuth authentication, API access, and data synchronization with services like Calendly (scheduling), Airtable (databases), Google (workspace apps), LinkedIn (professional network), and Facebook (social platform). Each connection requires proper credentials and scopes."
   })
-)
+  )
 
 export type Connections = Schema.Schema.Type<typeof ConnectionsSchema>
 ```

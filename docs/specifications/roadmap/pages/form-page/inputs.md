@@ -41,11 +41,10 @@ import { Schema } from 'effect'
 ```typescript
 /**
  * Form Fields
- *
+ * 
  * List of form fields for user input
  */
-export const PagesFormPageInputsSchema = Schema.Array(
-  Schema.Union(
+export const PagesFormPageInputsSchema = Schema.Array(Schema.Union(
     Schema.Struct({
       name: Schema.String,
       label: Schema.optional(Schema.String),
@@ -70,12 +69,10 @@ export const PagesFormPageInputsSchema = Schema.Array(
       required: Schema.optional(Schema.Boolean),
       defaultValue: Schema.optional(Schema.String),
       placeholder: Schema.optional(Schema.String),
-      options: Schema.Array(
-        Schema.Struct({
-          label: Schema.String,
-          value: Schema.String,
-        })
-      ),
+      options: Schema.Array(Schema.Struct({
+        label: Schema.String,
+        value: Schema.String,
+      })),
       type: Schema.String,
     }),
     Schema.Struct({
@@ -86,14 +83,13 @@ export const PagesFormPageInputsSchema = Schema.Array(
       accept: Schema.optional(Schema.String),
       type: Schema.String,
     })
-  )
-).pipe(
-  Schema.minItems(1),
-  Schema.annotations({
-    title: 'Form Fields',
-    description: 'List of form fields for user input',
+  )).pipe(
+    Schema.minItems(1),
+    Schema.annotations({
+    title: "Form Fields",
+    description: "List of form fields for user input"
   })
-)
+  )
 
 export type PagesFormPageInputs = Schema.Schema.Type<typeof PagesFormPageInputsSchema>
 ```

@@ -10,7 +10,9 @@ describe('blueprint-validator', () => {
   describe('validateBlueprint', () => {
     test('validates a correct blueprint', () => {
       const blueprint: EffectSchemaBlueprint = {
+        propertyName: 'user-name',
         sanitizedName: 'UserName',
+        fileName: 'user-name',
         code: `import * as Schema from 'effect/Schema'
 
 export const UserNameSchema = Schema.String.pipe(
@@ -44,7 +46,9 @@ export type UserName = Schema.Schema.Type<typeof UserNameSchema>
 
     test('detects invalid TypeScript identifier', () => {
       const blueprint: EffectSchemaBlueprint = {
+        propertyName: 'user-name',
         sanitizedName: 'user-name', // Invalid: contains hyphen
+        fileName: 'user-name',
         code: '',
         exports: [],
         imports: [],
@@ -67,7 +71,9 @@ export type UserName = Schema.Schema.Type<typeof UserNameSchema>
 
     test('detects identifier that does not start with uppercase', () => {
       const blueprint: EffectSchemaBlueprint = {
+        propertyName: 'user-name',
         sanitizedName: 'userName', // Invalid: starts with lowercase
+        fileName: 'user-name',
         code: '',
         exports: [],
         imports: [],
@@ -80,12 +86,14 @@ export type UserName = Schema.Schema.Type<typeof UserNameSchema>
       const result = validateBlueprint(blueprint, sourceSchema)
 
       expect(result.valid).toBe(false)
-      expect(result.errors[0].message).toContain('Invalid TypeScript identifier')
+      expect(result.errors[0]?.message).toContain('Invalid TypeScript identifier')
     })
 
     test('detects missing schema constant export', () => {
       const blueprint: EffectSchemaBlueprint = {
+        propertyName: 'user-name',
         sanitizedName: 'UserName',
+        fileName: 'user-name',
         code: 'export type UserName = string',
         exports: ['UserName'],
         imports: [],
@@ -105,7 +113,9 @@ export type UserName = Schema.Schema.Type<typeof UserNameSchema>
 
     test('detects missing type export', () => {
       const blueprint: EffectSchemaBlueprint = {
+        propertyName: 'user-name',
         sanitizedName: 'UserName',
+        fileName: 'user-name',
         code: 'export const UserNameSchema = Schema.String',
         exports: ['UserNameSchema'],
         imports: [],
@@ -123,7 +133,9 @@ export type UserName = Schema.Schema.Type<typeof UserNameSchema>
 
     test('detects schema constant not in exports array', () => {
       const blueprint: EffectSchemaBlueprint = {
+        propertyName: 'user-name',
         sanitizedName: 'UserName',
+        fileName: 'user-name',
         code: `export const UserNameSchema = Schema.String
 export type UserName = Schema.Schema.Type<typeof UserNameSchema>`,
         exports: ['UserName'], // Missing UserNameSchema
@@ -144,7 +156,9 @@ export type UserName = Schema.Schema.Type<typeof UserNameSchema>`,
 
     test('detects type not in exports array', () => {
       const blueprint: EffectSchemaBlueprint = {
+        propertyName: 'user-name',
         sanitizedName: 'UserName',
+        fileName: 'user-name',
         code: `export const UserNameSchema = Schema.String
 export type UserName = Schema.Schema.Type<typeof UserNameSchema>`,
         exports: ['UserNameSchema'], // Missing UserName
@@ -163,7 +177,9 @@ export type UserName = Schema.Schema.Type<typeof UserNameSchema>`,
 
     test('warns about missing title annotation', () => {
       const blueprint: EffectSchemaBlueprint = {
+        propertyName: 'user-name',
         sanitizedName: 'UserName',
+        fileName: 'user-name',
         code: `export const UserNameSchema = Schema.String
 export type UserName = Schema.Schema.Type<typeof UserNameSchema>`,
         exports: ['UserNameSchema', 'UserName'],
@@ -182,7 +198,9 @@ export type UserName = Schema.Schema.Type<typeof UserNameSchema>`,
 
     test('warns about missing description annotation', () => {
       const blueprint: EffectSchemaBlueprint = {
+        propertyName: 'user-name',
         sanitizedName: 'UserName',
+        fileName: 'user-name',
         code: `export const UserNameSchema = Schema.String
 export type UserName = Schema.Schema.Type<typeof UserNameSchema>`,
         exports: ['UserNameSchema', 'UserName'],
@@ -203,7 +221,9 @@ export type UserName = Schema.Schema.Type<typeof UserNameSchema>`,
 
     test('warns about missing examples annotation', () => {
       const blueprint: EffectSchemaBlueprint = {
+        propertyName: 'user-name',
         sanitizedName: 'UserName',
+        fileName: 'user-name',
         code: `export const UserNameSchema = Schema.String
 export type UserName = Schema.Schema.Type<typeof UserNameSchema>`,
         exports: ['UserNameSchema', 'UserName'],
@@ -226,7 +246,9 @@ export type UserName = Schema.Schema.Type<typeof UserNameSchema>`,
   describe('string validation rules', () => {
     test('detects missing minLength validation', () => {
       const blueprint: EffectSchemaBlueprint = {
+        propertyName: 'user-name',
         sanitizedName: 'UserName',
+        fileName: 'user-name',
         code: `export const UserNameSchema = Schema.String
 export type UserName = Schema.Schema.Type<typeof UserNameSchema>`,
         exports: ['UserNameSchema', 'UserName'],
@@ -248,7 +270,9 @@ export type UserName = Schema.Schema.Type<typeof UserNameSchema>`,
 
     test('detects missing maxLength validation', () => {
       const blueprint: EffectSchemaBlueprint = {
+        propertyName: 'user-name',
         sanitizedName: 'UserName',
+        fileName: 'user-name',
         code: `export const UserNameSchema = Schema.String
 export type UserName = Schema.Schema.Type<typeof UserNameSchema>`,
         exports: ['UserNameSchema', 'UserName'],
@@ -270,7 +294,9 @@ export type UserName = Schema.Schema.Type<typeof UserNameSchema>`,
 
     test('detects missing pattern validation', () => {
       const blueprint: EffectSchemaBlueprint = {
+        propertyName: 'email',
         sanitizedName: 'Email',
+        fileName: 'email',
         code: `export const EmailSchema = Schema.String
 export type Email = Schema.Schema.Type<typeof EmailSchema>`,
         exports: ['EmailSchema', 'Email'],
@@ -290,7 +316,9 @@ export type Email = Schema.Schema.Type<typeof EmailSchema>`,
 
     test('warns about missing error messages for string validations', () => {
       const blueprint: EffectSchemaBlueprint = {
+        propertyName: 'user-name',
         sanitizedName: 'UserName',
+        fileName: 'user-name',
         code: `export const UserNameSchema = Schema.String.pipe(Schema.minLength(1))
 export type UserName = Schema.Schema.Type<typeof UserNameSchema>`,
         exports: ['UserNameSchema', 'UserName'],
@@ -311,7 +339,9 @@ export type UserName = Schema.Schema.Type<typeof UserNameSchema>`,
   describe('number validation rules', () => {
     test('warns about missing minimum validation', () => {
       const blueprint: EffectSchemaBlueprint = {
+        propertyName: 'age',
         sanitizedName: 'Age',
+        fileName: 'age',
         code: `export const AgeSchema = Schema.Number
 export type Age = Schema.Schema.Type<typeof AgeSchema>`,
         exports: ['AgeSchema', 'Age'],
@@ -332,7 +362,9 @@ export type Age = Schema.Schema.Type<typeof AgeSchema>`,
 
     test('warns about missing maximum validation', () => {
       const blueprint: EffectSchemaBlueprint = {
+        propertyName: 'age',
         sanitizedName: 'Age',
+        fileName: 'age',
         code: `export const AgeSchema = Schema.Number
 export type Age = Schema.Schema.Type<typeof AgeSchema>`,
         exports: ['AgeSchema', 'Age'],
@@ -353,7 +385,9 @@ export type Age = Schema.Schema.Type<typeof AgeSchema>`,
 
     test('handles integer type for min/max validation', () => {
       const blueprint: EffectSchemaBlueprint = {
+        propertyName: 'count',
         sanitizedName: 'Count',
+        fileName: 'count',
         code: `export const CountSchema = Schema.Number
 export type Count = Schema.Schema.Type<typeof CountSchema>`,
         exports: ['CountSchema', 'Count'],
@@ -376,7 +410,9 @@ export type Count = Schema.Schema.Type<typeof CountSchema>`,
   describe('array validation rules', () => {
     test('warns about missing minItems validation', () => {
       const blueprint: EffectSchemaBlueprint = {
+        propertyName: 'tags',
         sanitizedName: 'Tags',
+        fileName: 'tags',
         code: `export const TagsSchema = Schema.Array(Schema.String)
 export type Tags = Schema.Schema.Type<typeof TagsSchema>`,
         exports: ['TagsSchema', 'Tags'],
@@ -397,7 +433,9 @@ export type Tags = Schema.Schema.Type<typeof TagsSchema>`,
 
     test('warns about missing maxItems validation', () => {
       const blueprint: EffectSchemaBlueprint = {
+        propertyName: 'tags',
         sanitizedName: 'Tags',
+        fileName: 'tags',
         code: `export const TagsSchema = Schema.Array(Schema.String)
 export type Tags = Schema.Schema.Type<typeof TagsSchema>`,
         exports: ['TagsSchema', 'Tags'],
@@ -520,7 +558,9 @@ export type Tags = Schema.Schema.Type<typeof TagsSchema>`,
   describe('edge cases', () => {
     test('handles blueprint with no code', () => {
       const blueprint: EffectSchemaBlueprint = {
+        propertyName: 'user-name',
         sanitizedName: 'UserName',
+        fileName: 'user-name',
         code: '',
         exports: [],
         imports: [],
@@ -538,7 +578,9 @@ export type Tags = Schema.Schema.Type<typeof TagsSchema>`,
 
     test('handles schema with no validations', () => {
       const blueprint: EffectSchemaBlueprint = {
+        propertyName: 'user-name',
         sanitizedName: 'UserName',
+        fileName: 'user-name',
         code: `export const UserNameSchema = Schema.String
 export type UserName = Schema.Schema.Type<typeof UserNameSchema>`,
         exports: ['UserNameSchema', 'UserName'],
@@ -556,7 +598,9 @@ export type UserName = Schema.Schema.Type<typeof UserNameSchema>`,
 
     test('handles schema with undefined optional fields', () => {
       const blueprint: EffectSchemaBlueprint = {
+        propertyName: 'user-name',
         sanitizedName: 'UserName',
+        fileName: 'user-name',
         code: `export const UserNameSchema = Schema.String
 export type UserName = Schema.Schema.Type<typeof UserNameSchema>`,
         exports: ['UserNameSchema', 'UserName'],

@@ -37,11 +37,9 @@ import { Schema } from 'effect'
 **Implementation**:
 
 ```typescript
-export const PagesFormPageInputsAttachmentInputTypeSchema = Schema.Literal('single-attachment')
+export const PagesFormPageInputsAttachmentInputTypeSchema = Schema.Literal("single-attachment")
 
-export type PagesFormPageInputsAttachmentInputType = Schema.Schema.Type<
-  typeof PagesFormPageInputsAttachmentInputTypeSchema
->
+export type PagesFormPageInputsAttachmentInputType = Schema.Schema.Type<typeof PagesFormPageInputsAttachmentInputTypeSchema>
 ```
 
 ---

@@ -182,7 +182,7 @@ function generateSchemaExpression(
  */
 function generateStringSchema(
   schema: JSONSchemaProperty,
-  imports: Set<string>,
+  _imports: Set<string>,
   indent: string
 ): string {
   const pipes: string[] = []
@@ -226,7 +226,7 @@ function generateStringSchema(
  */
 function generateNumberSchema(
   schema: JSONSchemaProperty,
-  imports: Set<string>,
+  _imports: Set<string>,
   indent: string
 ): string {
   const isInt = schema.type === 'integer'
@@ -270,9 +270,9 @@ function generateNumberSchema(
  */
 function generateObjectSchema(
   schema: JSONSchemaProperty,
-  definitions: Record<string, JSONSchemaProperty> | undefined,
+  _definitions: Record<string, JSONSchemaProperty> | undefined,
   imports: Set<string>,
-  exports: Set<string>,
+  _exports: Set<string>,
   depth: number
 ): string {
   const indent = '  '.repeat(depth + 1)
@@ -337,9 +337,9 @@ function generateObjectSchemaExpression(
  */
 function generateArraySchema(
   schema: JSONSchemaProperty,
-  definitions: Record<string, JSONSchemaProperty> | undefined,
+  _definitions: Record<string, JSONSchemaProperty> | undefined,
   imports: Set<string>,
-  exports: Set<string>,
+  _exports: Set<string>,
   depth: number
 ): string {
   const indent = '  '.repeat(depth + 1)
@@ -414,9 +414,9 @@ function generatePrimitiveSchema(
  */
 function generateUnionSchema(
   variants: JSONSchemaProperty[],
-  definitions: Record<string, JSONSchemaProperty> | undefined,
+  _definitions: Record<string, JSONSchemaProperty> | undefined,
   imports: Set<string>,
-  exports: Set<string>,
+  _exports: Set<string>,
   depth: number
 ): string {
   const indent = '  '.repeat(depth + 1)

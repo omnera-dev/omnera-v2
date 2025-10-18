@@ -40,14 +40,12 @@ import { Schema } from 'effect'
 
 ```typescript
 /**
- *
+ * 
  * Whether to create a database index on this field for faster queries (recommended for foreign keys)
  */
 export const TablesFieldsRelationshipFieldIndexedSchema = Schema.Boolean
 
-export type TablesFieldsRelationshipFieldIndexed = Schema.Schema.Type<
-  typeof TablesFieldsRelationshipFieldIndexedSchema
->
+export type TablesFieldsRelationshipFieldIndexed = Schema.Schema.Type<typeof TablesFieldsRelationshipFieldIndexedSchema>
 ```
 
 ---

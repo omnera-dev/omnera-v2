@@ -39,9 +39,7 @@ import { Schema } from 'effect'
 ```typescript
 export const TablesFieldsDateFieldDefaultSchema = Schema.String
 
-export type TablesFieldsDateFieldDefault = Schema.Schema.Type<
-  typeof TablesFieldsDateFieldDefaultSchema
->
+export type TablesFieldsDateFieldDefault = Schema.Schema.Type<typeof TablesFieldsDateFieldDefaultSchema>
 ```
 
 ---

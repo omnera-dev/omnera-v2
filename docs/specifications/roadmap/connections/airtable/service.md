@@ -37,7 +37,7 @@ import { Schema } from 'effect'
 **Implementation**:
 
 ```typescript
-export const ConnectionsAirtableServiceSchema = Schema.Literal('airtable')
+export const ConnectionsAirtableServiceSchema = Schema.Literal("airtable")
 
 export type ConnectionsAirtableService = Schema.Schema.Type<typeof ConnectionsAirtableServiceSchema>
 ```

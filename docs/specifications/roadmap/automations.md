@@ -47,16 +47,15 @@ import { Schema } from 'effect'
 ```typescript
 /**
  * Automations
- *
+ * 
  * Workflow automations that execute actions when triggered by specific events or conditions. Automations enable business logic such as sending emails when records are created, updating related data when values change, or integrating with external services via webhooks. Each automation consists of a trigger (when to run) and a sequence of actions (what to do).
  */
 export const AutomationsSchema = Schema.Array(Schema.Unknown).pipe(
-  Schema.annotations({
-    title: 'Automations',
-    description:
-      'Workflow automations that execute actions when triggered by specific events or conditions. Automations enable business logic such as sending emails when records are created, updating related data when values change, or integrating with external services via webhooks. Each automation consists of a trigger (when to run) and a sequence of actions (what to do).',
+    Schema.annotations({
+    title: "Automations",
+    description: "Workflow automations that execute actions when triggered by specific events or conditions. Automations enable business logic such as sending emails when records are created, updating related data when values change, or integrating with external services via webhooks. Each automation consists of a trigger (when to run) and a sequence of actions (what to do)."
   })
-)
+  )
 
 export type Automations = Schema.Schema.Type<typeof AutomationsSchema>
 ```

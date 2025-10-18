@@ -41,23 +41,23 @@ import { Schema } from 'effect'
 ```typescript
 /**
  * Body Elements
- *
+ * 
  * List of body elements for page content
  */
-export const PagesCustomHtmlPageBodySchema = Schema.Array(
-  Schema.Union(
+export const PagesCustomHtmlPageBodySchema = Schema.Array(Schema.Union(
     Schema.Struct({
       type: Schema.String,
-      content: Schema.String.pipe(Schema.minLength(1, { message: () => 'This field is required' })),
+      content: Schema.String.pipe(
+        Schema.minLength(1, { message: () => 'This field is required' })
+      ),
     })
-  )
-).pipe(
-  Schema.minItems(1),
-  Schema.annotations({
-    title: 'Body Elements',
-    description: 'List of body elements for page content',
+  )).pipe(
+    Schema.minItems(1),
+    Schema.annotations({
+    title: "Body Elements",
+    description: "List of body elements for page content"
   })
-)
+  )
 
 export type PagesCustomHtmlPageBody = Schema.Schema.Type<typeof PagesCustomHtmlPageBodySchema>
 ```

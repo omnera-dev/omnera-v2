@@ -38,12 +38,10 @@ import { Schema } from 'effect'
 
 ```typescript
 export const PagesCustomHtmlPageBodyHtmlContentContentSchema = Schema.String.pipe(
-  Schema.minLength(1, { message: () => 'This field is required' })
-)
+    Schema.minLength(1, { message: () => 'This field is required' })
+  )
 
-export type PagesCustomHtmlPageBodyHtmlContentContent = Schema.Schema.Type<
-  typeof PagesCustomHtmlPageBodyHtmlContentContentSchema
->
+export type PagesCustomHtmlPageBodyHtmlContentContent = Schema.Schema.Type<typeof PagesCustomHtmlPageBodyHtmlContentContentSchema>
 ```
 
 ---

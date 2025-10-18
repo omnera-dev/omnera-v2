@@ -38,11 +38,11 @@ import { Schema } from 'effect'
 
 **Implementation**:
 
-````typescript
+```typescript
 /**
- *
+ * 
  * Name of the unique constraint. Use descriptive names like 'uq_tablename_field1_field2'
- *
+ * 
  * @example
  * ```typescript
  * "uq_users_email_tenant"
@@ -60,7 +60,7 @@ export const TablesUniqueConstraintsNameSchema = Schema.String.pipe(
   )
 
 export type TablesUniqueConstraintsName = Schema.Schema.Type<typeof TablesUniqueConstraintsNameSchema>
-````
+```
 
 ---
 

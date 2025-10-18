@@ -40,23 +40,14 @@ import { Schema } from 'effect'
 
 ```typescript
 /**
- *
+ * 
  * Expected data type of the formula result
  */
-export const TablesFieldsFormulaFieldResultTypeSchema = Schema.Literal(
-  'text',
-  'number',
-  'boolean',
-  'date'
-).pipe(
-  Schema.annotations({
-    description: 'Expected data type of the formula result',
-  })
-)
+export const TablesFieldsFormulaFieldResultTypeSchema = Schema.Literal("text", "number", "boolean", "date").pipe(Schema.annotations({
+    description: "Expected data type of the formula result"
+  }))
 
-export type TablesFieldsFormulaFieldResultType = Schema.Schema.Type<
-  typeof TablesFieldsFormulaFieldResultTypeSchema
->
+export type TablesFieldsFormulaFieldResultType = Schema.Schema.Type<typeof TablesFieldsFormulaFieldResultTypeSchema>
 ```
 
 ---

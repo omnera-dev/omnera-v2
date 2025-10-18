@@ -40,19 +40,17 @@ import { Schema } from 'effect'
 
 ```typescript
 /**
- *
+ * 
  * Button text label
  */
 export const TablesFieldsButtonFieldLabelSchema = Schema.String.pipe(
-  Schema.minLength(1, { message: () => 'This field is required' }),
-  Schema.annotations({
-    description: 'Button text label',
+    Schema.minLength(1, { message: () => 'This field is required' }),
+    Schema.annotations({
+    description: "Button text label"
   })
-)
+  )
 
-export type TablesFieldsButtonFieldLabel = Schema.Schema.Type<
-  typeof TablesFieldsButtonFieldLabelSchema
->
+export type TablesFieldsButtonFieldLabel = Schema.Schema.Type<typeof TablesFieldsButtonFieldLabelSchema>
 ```
 
 ---

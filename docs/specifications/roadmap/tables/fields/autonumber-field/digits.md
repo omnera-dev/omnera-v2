@@ -40,20 +40,18 @@ import { Schema } from 'effect'
 
 ```typescript
 /**
- *
+ * 
  * Number of digits with zero padding
  */
 export const TablesFieldsAutonumberFieldDigitsSchema = Schema.Int.pipe(
-  Schema.greaterThanOrEqualTo(1),
-  Schema.lessThanOrEqualTo(10),
-  Schema.annotations({
-    description: 'Number of digits with zero padding',
+    Schema.greaterThanOrEqualTo(1),
+    Schema.lessThanOrEqualTo(10),
+    Schema.annotations({
+    description: "Number of digits with zero padding"
   })
-)
+  )
 
-export type TablesFieldsAutonumberFieldDigits = Schema.Schema.Type<
-  typeof TablesFieldsAutonumberFieldDigitsSchema
->
+export type TablesFieldsAutonumberFieldDigits = Schema.Schema.Type<typeof TablesFieldsAutonumberFieldDigitsSchema>
 ```
 
 ---

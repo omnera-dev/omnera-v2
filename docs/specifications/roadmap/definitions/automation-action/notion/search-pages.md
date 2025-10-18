@@ -41,37 +41,34 @@ import { Schema } from 'effect'
 ```typescript
 /**
  * Search Pages
- *
+ * 
  * Searches for pages in Notion
  */
 export const AutomationActionNotionSearchPagesSchema = Schema.Struct({
-  name: Schema.String,
-  account: Schema.Union(Schema.Number, Schema.String),
-  service: Schema.String,
-  action: Schema.String,
-  params: Schema.Struct({
-    query: Schema.String.pipe(
-      Schema.annotations({
-        description: 'Search query text',
-      })
+    name: Schema.String,
+    account: Schema.Union(
+      Schema.Number,
+      Schema.String
     ),
-    filter: Schema.optional(
-      Schema.Struct({
+    service: Schema.String,
+    action: Schema.String,
+    params: Schema.Struct({
+      query: Schema.String.pipe(
+        Schema.annotations({
+        description: "Search query text"
+      })
+      ),
+      filter: Schema.optional(Schema.Struct({
         property: Schema.optional(Schema.String),
         value: Schema.optional(Schema.String),
-      })
-    ),
-  }),
-}).pipe(
-  Schema.annotations({
-    title: 'Search Pages',
-    description: 'Searches for pages in Notion',
-  })
-)
+      })),
+    }),
+  }).pipe(Schema.annotations({
+    title: "Search Pages",
+    description: "Searches for pages in Notion"
+  }))
 
-export type AutomationActionNotionSearchPages = Schema.Schema.Type<
-  typeof AutomationActionNotionSearchPagesSchema
->
+export type AutomationActionNotionSearchPages = Schema.Schema.Type<typeof AutomationActionNotionSearchPagesSchema>
 ```
 
 ---

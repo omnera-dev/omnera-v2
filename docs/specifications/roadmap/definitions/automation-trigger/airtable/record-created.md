@@ -41,27 +41,26 @@ import { Schema } from 'effect'
 ```typescript
 /**
  * Record Created
- *
+ * 
  * Triggered when an Airtable record is created
  */
 export const AutomationTriggerAirtableRecordCreatedSchema = Schema.Struct({
-  account: Schema.Union(Schema.Number, Schema.String),
-  service: Schema.String,
-  event: Schema.String,
-  params: Schema.Struct({
-    baseId: Schema.String,
-    tableId: Schema.String,
-  }),
-}).pipe(
-  Schema.annotations({
-    title: 'Record Created',
-    description: 'Triggered when an Airtable record is created',
-  })
-)
+    account: Schema.Union(
+      Schema.Number,
+      Schema.String
+    ),
+    service: Schema.String,
+    event: Schema.String,
+    params: Schema.Struct({
+      baseId: Schema.String,
+      tableId: Schema.String,
+    }),
+  }).pipe(Schema.annotations({
+    title: "Record Created",
+    description: "Triggered when an Airtable record is created"
+  }))
 
-export type AutomationTriggerAirtableRecordCreated = Schema.Schema.Type<
-  typeof AutomationTriggerAirtableRecordCreatedSchema
->
+export type AutomationTriggerAirtableRecordCreated = Schema.Schema.Type<typeof AutomationTriggerAirtableRecordCreatedSchema>
 ```
 
 ---

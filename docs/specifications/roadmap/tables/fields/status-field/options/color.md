@@ -40,21 +40,19 @@ import { Schema } from 'effect'
 
 ```typescript
 /**
- *
+ * 
  * Hex color code for the status
  */
 export const TablesFieldsStatusFieldOptionsColorSchema = Schema.String.pipe(
-  Schema.pattern(/^#[0-9a-fA-F]{6}$/, {
-    message: () => 'Hex color code for the status',
+    Schema.pattern(/^#[0-9a-fA-F]{6}$/, {
+    message: () => 'Hex color code for the status'
   }),
-  Schema.annotations({
-    description: 'Hex color code for the status',
+    Schema.annotations({
+    description: "Hex color code for the status"
   })
-)
+  )
 
-export type TablesFieldsStatusFieldOptionsColor = Schema.Schema.Type<
-  typeof TablesFieldsStatusFieldOptionsColorSchema
->
+export type TablesFieldsStatusFieldOptionsColor = Schema.Schema.Type<typeof TablesFieldsStatusFieldOptionsColorSchema>
 ```
 
 ---

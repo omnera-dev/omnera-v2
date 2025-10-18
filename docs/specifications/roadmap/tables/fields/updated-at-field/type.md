@@ -37,11 +37,9 @@ import { Schema } from 'effect'
 **Implementation**:
 
 ```typescript
-export const TablesFieldsUpdatedAtFieldTypeSchema = Schema.Literal('updated-at')
+export const TablesFieldsUpdatedAtFieldTypeSchema = Schema.Literal("updated-at")
 
-export type TablesFieldsUpdatedAtFieldType = Schema.Schema.Type<
-  typeof TablesFieldsUpdatedAtFieldTypeSchema
->
+export type TablesFieldsUpdatedAtFieldType = Schema.Schema.Type<typeof TablesFieldsUpdatedAtFieldTypeSchema>
 ```
 
 ---

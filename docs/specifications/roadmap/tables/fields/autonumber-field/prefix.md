@@ -38,27 +38,25 @@ import { Schema } from 'effect'
 
 **Implementation**:
 
-````typescript
+```typescript
 /**
- *
+ * 
  * Optional prefix for the autonumber
- *
+ * 
  * @example
  * ```typescript
  * "INV-"
  * ```
  */
 export const TablesFieldsAutonumberFieldPrefixSchema = Schema.String.pipe(
-  Schema.annotations({
-    description: 'Optional prefix for the autonumber',
-    examples: ['INV-', 'ORD-', ''],
+    Schema.annotations({
+    description: "Optional prefix for the autonumber",
+    examples: ["INV-","ORD-",""]
   })
-)
+  )
 
-export type TablesFieldsAutonumberFieldPrefix = Schema.Schema.Type<
-  typeof TablesFieldsAutonumberFieldPrefixSchema
->
-````
+export type TablesFieldsAutonumberFieldPrefix = Schema.Schema.Type<typeof TablesFieldsAutonumberFieldPrefixSchema>
+```
 
 ---
 

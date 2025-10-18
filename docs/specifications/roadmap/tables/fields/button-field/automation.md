@@ -40,18 +40,16 @@ import { Schema } from 'effect'
 
 ```typescript
 /**
- *
+ * 
  * Automation name to trigger (when action is 'automation')
  */
 export const TablesFieldsButtonFieldAutomationSchema = Schema.String.pipe(
-  Schema.annotations({
-    description: "Automation name to trigger (when action is 'automation')",
+    Schema.annotations({
+    description: "Automation name to trigger (when action is 'automation')"
   })
-)
+  )
 
-export type TablesFieldsButtonFieldAutomation = Schema.Schema.Type<
-  typeof TablesFieldsButtonFieldAutomationSchema
->
+export type TablesFieldsButtonFieldAutomation = Schema.Schema.Type<typeof TablesFieldsButtonFieldAutomationSchema>
 ```
 
 ---

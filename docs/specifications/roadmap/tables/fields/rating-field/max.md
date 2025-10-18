@@ -40,16 +40,16 @@ import { Schema } from 'effect'
 
 ```typescript
 /**
- *
+ * 
  * Maximum rating value
  */
 export const TablesFieldsRatingFieldMaxSchema = Schema.Int.pipe(
-  Schema.greaterThanOrEqualTo(1),
-  Schema.lessThanOrEqualTo(10),
-  Schema.annotations({
-    description: 'Maximum rating value',
+    Schema.greaterThanOrEqualTo(1),
+    Schema.lessThanOrEqualTo(10),
+    Schema.annotations({
+    description: "Maximum rating value"
   })
-)
+  )
 
 export type TablesFieldsRatingFieldMax = Schema.Schema.Type<typeof TablesFieldsRatingFieldMaxSchema>
 ```

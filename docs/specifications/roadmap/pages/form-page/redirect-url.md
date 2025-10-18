@@ -40,7 +40,7 @@ import { Schema } from 'effect'
 
 ```typescript
 /**
- *
+ * 
  * URL to redirect to after successful submission
  */
 export const PagesFormPageRedirectUrlSchema = Schema.String.pipe(

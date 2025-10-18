@@ -41,36 +41,35 @@ import { Schema } from 'effect'
 ```typescript
 /**
  * List App Subscriptions
- *
+ * 
  * Lists subscriptions configured on the Facebook App
  */
 export const AutomationActionFacebookAdsListAppSubscriptionsSchema = Schema.Struct({
-  name: Schema.String,
-  account: Schema.Union(Schema.Number, Schema.String),
-  service: Schema.String,
-  action: Schema.String,
-  params: Schema.Struct({
-    appId: Schema.String.pipe(
-      Schema.annotations({
-        title: 'Facebook App ID',
-      })
+    name: Schema.String,
+    account: Schema.Union(
+      Schema.Number,
+      Schema.String
     ),
-    appSecret: Schema.String.pipe(
-      Schema.annotations({
-        title: 'Facebook App Secret',
+    service: Schema.String,
+    action: Schema.String,
+    params: Schema.Struct({
+      appId: Schema.String.pipe(
+        Schema.annotations({
+        title: "Facebook App ID"
       })
-    ),
-  }),
-}).pipe(
-  Schema.annotations({
-    title: 'List App Subscriptions',
-    description: 'Lists subscriptions configured on the Facebook App',
-  })
-)
+      ),
+      appSecret: Schema.String.pipe(
+        Schema.annotations({
+        title: "Facebook App Secret"
+      })
+      ),
+    }),
+  }).pipe(Schema.annotations({
+    title: "List App Subscriptions",
+    description: "Lists subscriptions configured on the Facebook App"
+  }))
 
-export type AutomationActionFacebookAdsListAppSubscriptions = Schema.Schema.Type<
-  typeof AutomationActionFacebookAdsListAppSubscriptionsSchema
->
+export type AutomationActionFacebookAdsListAppSubscriptions = Schema.Schema.Type<typeof AutomationActionFacebookAdsListAppSubscriptionsSchema>
 ```
 
 ---

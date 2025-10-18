@@ -38,30 +38,27 @@ import { Schema } from 'effect'
 
 **Implementation**:
 
-````typescript
+```typescript
 /**
  * Form Description
- *
+ * 
  * Help text or instructions for the form
- *
+ * 
  * @example
  * ```typescript
  * "Fill out this form to get in touch with our team"
  * ```
  */
 export const PagesFormPageDescriptionSchema = Schema.String.pipe(
-  Schema.annotations({
-    title: 'Form Description',
-    description: 'Help text or instructions for the form',
-    examples: [
-      'Fill out this form to get in touch with our team',
-      'Please provide your details to create an account',
-    ],
+    Schema.annotations({
+    title: "Form Description",
+    description: "Help text or instructions for the form",
+    examples: ["Fill out this form to get in touch with our team","Please provide your details to create an account"]
   })
-)
+  )
 
 export type PagesFormPageDescription = Schema.Schema.Type<typeof PagesFormPageDescriptionSchema>
-````
+```
 
 ---
 

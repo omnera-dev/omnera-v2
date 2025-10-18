@@ -39,9 +39,7 @@ import { Schema } from 'effect'
 ```typescript
 export const ConnectionsLinkedInAdsClientIdSchema = Schema.String
 
-export type ConnectionsLinkedInAdsClientId = Schema.Schema.Type<
-  typeof ConnectionsLinkedInAdsClientIdSchema
->
+export type ConnectionsLinkedInAdsClientId = Schema.Schema.Type<typeof ConnectionsLinkedInAdsClientIdSchema>
 ```
 
 ---

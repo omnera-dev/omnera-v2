@@ -41,23 +41,26 @@ import { Schema } from 'effect'
 ```typescript
 /**
  * Update Page
- *
+ * 
  * Updates properties, icon, cover, or archived status of a Notion page
  */
 export const AutomationActionNotionUpdatePageSchema = Schema.Struct({
-  name: Schema.String,
-  account: Schema.Union(Schema.Number, Schema.String),
-  service: Schema.String,
-  action: Schema.String,
-  params: Schema.Struct({
-    pageId: Schema.String.pipe(
-      Schema.annotations({
-        description: 'The ID of the page to update',
-      })
+    name: Schema.String,
+    account: Schema.Union(
+      Schema.Number,
+      Schema.String
     ),
-    properties: Schema.optional(Schema.Struct({})),
-    icon: Schema.optional(
-      Schema.Union(
+    service: Schema.String,
+    action: Schema.String,
+    params: Schema.Struct({
+      pageId: Schema.String.pipe(
+        Schema.annotations({
+        description: "The ID of the page to update"
+      })
+      ),
+      properties: Schema.optional(Schema.Struct({
+      })),
+      icon: Schema.optional(Schema.Union(
         Schema.Struct({
           type: Schema.String,
           emoji: Schema.String,
@@ -68,28 +71,21 @@ export const AutomationActionNotionUpdatePageSchema = Schema.Struct({
             url: Schema.String,
           }),
         })
-      )
-    ),
-    cover: Schema.optional(
-      Schema.Struct({
+      )),
+      cover: Schema.optional(Schema.Struct({
         type: Schema.String,
         external: Schema.Struct({
           url: Schema.String,
         }),
-      })
-    ),
-    archived: Schema.optional(Schema.Boolean),
-  }),
-}).pipe(
-  Schema.annotations({
-    title: 'Update Page',
-    description: 'Updates properties, icon, cover, or archived status of a Notion page',
-  })
-)
+      })),
+      archived: Schema.optional(Schema.Boolean),
+    }),
+  }).pipe(Schema.annotations({
+    title: "Update Page",
+    description: "Updates properties, icon, cover, or archived status of a Notion page"
+  }))
 
-export type AutomationActionNotionUpdatePage = Schema.Schema.Type<
-  typeof AutomationActionNotionUpdatePageSchema
->
+export type AutomationActionNotionUpdatePage = Schema.Schema.Type<typeof AutomationActionNotionUpdatePageSchema>
 ```
 
 ---

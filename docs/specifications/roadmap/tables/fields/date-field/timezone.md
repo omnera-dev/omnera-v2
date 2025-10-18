@@ -38,27 +38,25 @@ import { Schema } from 'effect'
 
 **Implementation**:
 
-````typescript
+```typescript
 /**
- *
+ * 
  * Timezone for datetime fields
- *
+ * 
  * @example
  * ```typescript
  * "UTC"
  * ```
  */
 export const TablesFieldsDateFieldTimezoneSchema = Schema.String.pipe(
-  Schema.annotations({
-    description: 'Timezone for datetime fields',
-    examples: ['UTC', 'America/New_York', 'Europe/London'],
+    Schema.annotations({
+    description: "Timezone for datetime fields",
+    examples: ["UTC","America/New_York","Europe/London"]
   })
-)
+  )
 
-export type TablesFieldsDateFieldTimezone = Schema.Schema.Type<
-  typeof TablesFieldsDateFieldTimezoneSchema
->
-````
+export type TablesFieldsDateFieldTimezone = Schema.Schema.Type<typeof TablesFieldsDateFieldTimezoneSchema>
+```
 
 ---
 

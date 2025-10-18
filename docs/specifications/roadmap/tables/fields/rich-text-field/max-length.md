@@ -40,19 +40,17 @@ import { Schema } from 'effect'
 
 ```typescript
 /**
- *
+ * 
  * Maximum length in characters
  */
 export const TablesFieldsRichTextFieldMaxLengthSchema = Schema.Int.pipe(
-  Schema.greaterThanOrEqualTo(1),
-  Schema.annotations({
-    description: 'Maximum length in characters',
+    Schema.greaterThanOrEqualTo(1),
+    Schema.annotations({
+    description: "Maximum length in characters"
   })
-)
+  )
 
-export type TablesFieldsRichTextFieldMaxLength = Schema.Schema.Type<
-  typeof TablesFieldsRichTextFieldMaxLengthSchema
->
+export type TablesFieldsRichTextFieldMaxLength = Schema.Schema.Type<typeof TablesFieldsRichTextFieldMaxLengthSchema>
 ```
 
 ---

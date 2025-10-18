@@ -37,7 +37,7 @@ import { Schema } from 'effect'
 **Implementation**:
 
 ```typescript
-export const ConnectionsCalendlyServiceSchema = Schema.Literal('calendly')
+export const ConnectionsCalendlyServiceSchema = Schema.Literal("calendly")
 
 export type ConnectionsCalendlyService = Schema.Schema.Type<typeof ConnectionsCalendlyServiceSchema>
 ```

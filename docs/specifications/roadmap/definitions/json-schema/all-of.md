@@ -37,7 +37,10 @@ import { Schema } from 'effect'
 **Implementation**:
 
 ```typescript
-export const JsonSchemaAllOfSchema = Schema.Array(Schema.Union(Schema.Unknown, Schema.Boolean))
+export const JsonSchemaAllOfSchema = Schema.Array(Schema.Union(
+    Schema.Unknown,
+    Schema.Boolean
+  ))
 
 export type JsonSchemaAllOf = Schema.Schema.Type<typeof JsonSchemaAllOfSchema>
 ```

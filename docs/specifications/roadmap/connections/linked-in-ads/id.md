@@ -38,9 +38,9 @@ import { Schema } from 'effect'
 
 ```typescript
 export const ConnectionsLinkedInAdsIdSchema = Schema.Int.pipe(
-  Schema.greaterThanOrEqualTo(1),
-  Schema.lessThanOrEqualTo(9007199254740991)
-)
+    Schema.greaterThanOrEqualTo(1),
+    Schema.lessThanOrEqualTo(9007199254740991)
+  )
 
 export type ConnectionsLinkedInAdsId = Schema.Schema.Type<typeof ConnectionsLinkedInAdsIdSchema>
 ```

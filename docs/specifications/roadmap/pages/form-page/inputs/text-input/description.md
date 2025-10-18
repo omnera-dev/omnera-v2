@@ -39,9 +39,7 @@ import { Schema } from 'effect'
 ```typescript
 export const PagesFormPageInputsTextInputDescriptionSchema = Schema.String
 
-export type PagesFormPageInputsTextInputDescription = Schema.Schema.Type<
-  typeof PagesFormPageInputsTextInputDescriptionSchema
->
+export type PagesFormPageInputsTextInputDescription = Schema.Schema.Type<typeof PagesFormPageInputsTextInputDescriptionSchema>
 ```
 
 ---

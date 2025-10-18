@@ -37,13 +37,7 @@ import { Schema } from 'effect'
 **Implementation**:
 
 ```typescript
-export const TablesFieldsTextFieldTypeSchema = Schema.Literal(
-  'single-line-text',
-  'long-text',
-  'phone-number',
-  'email',
-  'url'
-)
+export const TablesFieldsTextFieldTypeSchema = Schema.Literal("single-line-text", "long-text", "phone-number", "email", "url")
 
 export type TablesFieldsTextFieldType = Schema.Schema.Type<typeof TablesFieldsTextFieldTypeSchema>
 ```

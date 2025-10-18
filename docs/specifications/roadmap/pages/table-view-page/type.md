@@ -37,7 +37,7 @@ import { Schema } from 'effect'
 **Implementation**:
 
 ```typescript
-export const PagesTableViewPageTypeSchema = Schema.Literal('table-view')
+export const PagesTableViewPageTypeSchema = Schema.Literal("table-view")
 
 export type PagesTableViewPageType = Schema.Schema.Type<typeof PagesTableViewPageTypeSchema>
 ```

@@ -41,82 +41,70 @@ import { Schema } from 'effect'
 ```typescript
 /**
  * Create Client
- *
+ * 
  * Creates a new client in Qonto
  */
 export const AutomationActionQontoCreateClientSchema = Schema.Struct({
-  name: Schema.String,
-  account: Schema.Union(Schema.Number, Schema.String),
-  service: Schema.String,
-  action: Schema.String,
-  params: Schema.Struct({
-    name: Schema.String.pipe(
-      Schema.annotations({
-        description: 'Client name',
+    name: Schema.String,
+    account: Schema.Union(
+      Schema.Number,
+      Schema.String
+    ),
+    service: Schema.String,
+    action: Schema.String,
+    params: Schema.Struct({
+      name: Schema.String.pipe(
+        Schema.annotations({
+        description: "Client name"
       })
-    ),
-    email: Schema.optional(
-      Schema.String.pipe(
-        Schema.pattern(
-          /^(?!\\.)(?!.*\\.\\.)([A-Za-z0-9_'+\\-\\.]*)[A-Za-z0-9_+-]@([A-Za-z0-9][A-Za-z0-9\\-]*\\.)+[A-Za-z]{2,}$/,
-          {
-            message: () => 'Client email',
-          }
-        ),
+      ),
+      email: Schema.optional(Schema.String.pipe(
+        Schema.pattern(/^(?!\\.)(?!.*\\.\\.)([A-Za-z0-9_'+\\-\\.]*)[A-Za-z0-9_+-]@([A-Za-z0-9][A-Za-z0-9\\-]*\\.)+[A-Za-z]{2,}$/, {
+        message: () => 'Client email'
+      }),
         Schema.annotations({
-          description: 'Client email',
-        })
-      )
-    ),
-    phone: Schema.optional(
-      Schema.String.pipe(
+        description: "Client email"
+      })
+      )),
+      phone: Schema.optional(Schema.String.pipe(
         Schema.annotations({
-          description: 'Client phone number',
-        })
-      )
-    ),
-    address: Schema.optional(
-      Schema.Struct({
+        description: "Client phone number"
+      })
+      )),
+      address: Schema.optional(Schema.Struct({
         street: Schema.String.pipe(
           Schema.annotations({
-            description: 'Street address',
-          })
+          description: "Street address"
+        })
         ),
         city: Schema.String.pipe(
           Schema.annotations({
-            description: 'City',
-          })
+          description: "City"
+        })
         ),
         postal_code: Schema.String.pipe(
           Schema.annotations({
-            description: 'Postal code',
-          })
+          description: "Postal code"
+        })
         ),
         country: Schema.String.pipe(
           Schema.annotations({
-            description: 'Country',
-          })
-        ),
-      })
-    ),
-    vat_number: Schema.optional(
-      Schema.String.pipe(
-        Schema.annotations({
-          description: 'VAT number',
+          description: "Country"
         })
-      )
-    ),
-  }),
-}).pipe(
-  Schema.annotations({
-    title: 'Create Client',
-    description: 'Creates a new client in Qonto',
-  })
-)
+        ),
+      })),
+      vat_number: Schema.optional(Schema.String.pipe(
+        Schema.annotations({
+        description: "VAT number"
+      })
+      )),
+    }),
+  }).pipe(Schema.annotations({
+    title: "Create Client",
+    description: "Creates a new client in Qonto"
+  }))
 
-export type AutomationActionQontoCreateClient = Schema.Schema.Type<
-  typeof AutomationActionQontoCreateClientSchema
->
+export type AutomationActionQontoCreateClient = Schema.Schema.Type<typeof AutomationActionQontoCreateClientSchema>
 ```
 
 ---

@@ -41,33 +41,36 @@ import { Schema } from 'effect'
 ```typescript
 /**
  * Create Page
- *
+ * 
  * Creates a new page in Notion
  */
 export const AutomationActionNotionCreatePageSchema = Schema.Struct({
-  name: Schema.String,
-  account: Schema.Union(Schema.Number, Schema.String),
-  service: Schema.String,
-  action: Schema.String,
-  params: Schema.Struct({
-    parent: Schema.Union(
-      Schema.Struct({
-        type: Schema.String,
-        database_id: Schema.String,
-      }),
-      Schema.Struct({
-        type: Schema.String,
-        page_id: Schema.String,
-      }),
-      Schema.Struct({
-        type: Schema.String,
-        workspace: Schema.Boolean,
-      })
+    name: Schema.String,
+    account: Schema.Union(
+      Schema.Number,
+      Schema.String
     ),
-    properties: Schema.Struct({}),
-    children: Schema.optional(Schema.Array(Schema.Unknown)),
-    icon: Schema.optional(
-      Schema.Union(
+    service: Schema.String,
+    action: Schema.String,
+    params: Schema.Struct({
+      parent: Schema.Union(
+        Schema.Struct({
+          type: Schema.String,
+          database_id: Schema.String,
+        }),
+        Schema.Struct({
+          type: Schema.String,
+          page_id: Schema.String,
+        }),
+        Schema.Struct({
+          type: Schema.String,
+          workspace: Schema.Boolean,
+        })
+      ),
+      properties: Schema.Struct({
+      }),
+      children: Schema.optional(Schema.Array(Schema.Unknown)),
+      icon: Schema.optional(Schema.Union(
         Schema.Struct({
           type: Schema.String,
           emoji: Schema.String,
@@ -78,27 +81,20 @@ export const AutomationActionNotionCreatePageSchema = Schema.Struct({
             url: Schema.String,
           }),
         })
-      )
-    ),
-    cover: Schema.optional(
-      Schema.Struct({
+      )),
+      cover: Schema.optional(Schema.Struct({
         type: Schema.String,
         external: Schema.Struct({
           url: Schema.String,
         }),
-      })
-    ),
-  }),
-}).pipe(
-  Schema.annotations({
-    title: 'Create Page',
-    description: 'Creates a new page in Notion',
-  })
-)
+      })),
+    }),
+  }).pipe(Schema.annotations({
+    title: "Create Page",
+    description: "Creates a new page in Notion"
+  }))
 
-export type AutomationActionNotionCreatePage = Schema.Schema.Type<
-  typeof AutomationActionNotionCreatePageSchema
->
+export type AutomationActionNotionCreatePage = Schema.Schema.Type<typeof AutomationActionNotionCreatePageSchema>
 ```
 
 ---

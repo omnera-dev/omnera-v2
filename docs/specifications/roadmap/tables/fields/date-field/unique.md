@@ -40,14 +40,12 @@ import { Schema } from 'effect'
 
 ```typescript
 /**
- *
+ * 
  * Whether this field must contain unique values across all rows
  */
 export const TablesFieldsDateFieldUniqueSchema = Schema.Boolean
 
-export type TablesFieldsDateFieldUnique = Schema.Schema.Type<
-  typeof TablesFieldsDateFieldUniqueSchema
->
+export type TablesFieldsDateFieldUnique = Schema.Schema.Type<typeof TablesFieldsDateFieldUniqueSchema>
 ```
 
 ---

@@ -40,19 +40,17 @@ import { Schema } from 'effect'
 
 ```typescript
 /**
- *
+ * 
  * Maximum file size in bytes
  */
 export const TablesFieldsSingleAttachmentFieldStorageMaxSizeSchema = Schema.Int.pipe(
-  Schema.greaterThanOrEqualTo(1),
-  Schema.annotations({
-    description: 'Maximum file size in bytes',
+    Schema.greaterThanOrEqualTo(1),
+    Schema.annotations({
+    description: "Maximum file size in bytes"
   })
-)
+  )
 
-export type TablesFieldsSingleAttachmentFieldStorageMaxSize = Schema.Schema.Type<
-  typeof TablesFieldsSingleAttachmentFieldStorageMaxSizeSchema
->
+export type TablesFieldsSingleAttachmentFieldStorageMaxSize = Schema.Schema.Type<typeof TablesFieldsSingleAttachmentFieldStorageMaxSizeSchema>
 ```
 
 ---

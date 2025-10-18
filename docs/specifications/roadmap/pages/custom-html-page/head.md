@@ -41,19 +41,24 @@ import { Schema } from 'effect'
 ```typescript
 /**
  * Head Elements
- *
+ * 
  * List of head elements (meta tags, scripts, styles, links)
  */
-export const PagesCustomHtmlPageHeadSchema = Schema.Array(
-  Schema.Union(
+export const PagesCustomHtmlPageHeadSchema = Schema.Array(Schema.Union(
     Schema.Struct({
       tag: Schema.String,
-      name: Schema.String.pipe(Schema.minLength(1, { message: () => 'This field is required' })),
-      content: Schema.String.pipe(Schema.minLength(1, { message: () => 'This field is required' })),
+      name: Schema.String.pipe(
+        Schema.minLength(1, { message: () => 'This field is required' })
+      ),
+      content: Schema.String.pipe(
+        Schema.minLength(1, { message: () => 'This field is required' })
+      ),
     }),
     Schema.Struct({
       tag: Schema.String,
-      content: Schema.String.pipe(Schema.minLength(1, { message: () => 'This field is required' })),
+      content: Schema.String.pipe(
+        Schema.minLength(1, { message: () => 'This field is required' })
+      ),
     }),
     Schema.Struct({
       tag: Schema.String,
@@ -65,27 +70,32 @@ export const PagesCustomHtmlPageHeadSchema = Schema.Array(
     }),
     Schema.Struct({
       tag: Schema.String,
-      content: Schema.String.pipe(Schema.minLength(1, { message: () => 'This field is required' })),
+      content: Schema.String.pipe(
+        Schema.minLength(1, { message: () => 'This field is required' })
+      ),
       type: Schema.optional(Schema.String),
       media: Schema.optional(Schema.String),
     }),
     Schema.Struct({
       tag: Schema.String,
-      href: Schema.String.pipe(Schema.minLength(1, { message: () => 'This field is required' })),
-      rel: Schema.String.pipe(Schema.minLength(1, { message: () => 'This field is required' })),
+      href: Schema.String.pipe(
+        Schema.minLength(1, { message: () => 'This field is required' })
+      ),
+      rel: Schema.String.pipe(
+        Schema.minLength(1, { message: () => 'This field is required' })
+      ),
       type: Schema.optional(Schema.String),
       media: Schema.optional(Schema.String),
       sizes: Schema.optional(Schema.String),
       crossorigin: Schema.optional(Schema.String),
     })
-  )
-).pipe(
-  Schema.minItems(0),
-  Schema.annotations({
-    title: 'Head Elements',
-    description: 'List of head elements (meta tags, scripts, styles, links)',
+  )).pipe(
+    Schema.minItems(0),
+    Schema.annotations({
+    title: "Head Elements",
+    description: "List of head elements (meta tags, scripts, styles, links)"
   })
-)
+  )
 
 export type PagesCustomHtmlPageHead = Schema.Schema.Type<typeof PagesCustomHtmlPageHeadSchema>
 ```

@@ -37,16 +37,12 @@ import { Schema } from 'effect'
 **Implementation**:
 
 ```typescript
-export const PagesFormPageInputsSelectInputOptionsSchema = Schema.Array(
-  Schema.Struct({
+export const PagesFormPageInputsSelectInputOptionsSchema = Schema.Array(Schema.Struct({
     label: Schema.String,
     value: Schema.String,
-  })
-)
+  }))
 
-export type PagesFormPageInputsSelectInputOptions = Schema.Schema.Type<
-  typeof PagesFormPageInputsSelectInputOptionsSchema
->
+export type PagesFormPageInputsSelectInputOptions = Schema.Schema.Type<typeof PagesFormPageInputsSelectInputOptionsSchema>
 ```
 
 ---

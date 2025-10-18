@@ -38,11 +38,11 @@ import { Schema } from 'effect'
 
 **Implementation**:
 
-````typescript
+```typescript
 /**
- *
+ * 
  * Field names to include in the index. Order matters for multi-column indexes.
- *
+ * 
  * @example
  * ```typescript
  * [
@@ -50,18 +50,18 @@ import { Schema } from 'effect'
  * ]
  * ```
  */
-export const TablesIndexesFieldsSchema = Schema.Array(
-  Schema.String.pipe(Schema.minLength(1, { message: () => 'This field is required' }))
-).pipe(
-  Schema.minItems(1),
-  Schema.annotations({
-    description: 'Field names to include in the index. Order matters for multi-column indexes.',
-    examples: [['email'], ['first_name', 'last_name'], ['status', 'created_at']],
+export const TablesIndexesFieldsSchema = Schema.Array(Schema.String.pipe(
+    Schema.minLength(1, { message: () => 'This field is required' })
+  )).pipe(
+    Schema.minItems(1),
+    Schema.annotations({
+    description: "Field names to include in the index. Order matters for multi-column indexes.",
+    examples: [["email"],["first_name","last_name"],["status","created_at"]]
   })
-)
+  )
 
 export type TablesIndexesFields = Schema.Schema.Type<typeof TablesIndexesFieldsSchema>
-````
+```
 
 ---
 

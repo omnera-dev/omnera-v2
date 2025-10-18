@@ -40,19 +40,17 @@ import { Schema } from 'effect'
 
 ```typescript
 /**
- *
+ * 
  * Name of the relationship field to lookup from
  */
 export const TablesFieldsLookupFieldRelationshipFieldSchema = Schema.String.pipe(
-  Schema.minLength(1, { message: () => 'This field is required' }),
-  Schema.annotations({
-    description: 'Name of the relationship field to lookup from',
+    Schema.minLength(1, { message: () => 'This field is required' }),
+    Schema.annotations({
+    description: "Name of the relationship field to lookup from"
   })
-)
+  )
 
-export type TablesFieldsLookupFieldRelationshipField = Schema.Schema.Type<
-  typeof TablesFieldsLookupFieldRelationshipFieldSchema
->
+export type TablesFieldsLookupFieldRelationshipField = Schema.Schema.Type<typeof TablesFieldsLookupFieldRelationshipFieldSchema>
 ```
 
 ---

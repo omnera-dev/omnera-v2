@@ -41,34 +41,42 @@ import { Schema } from 'effect'
 ```typescript
 /**
  * Send Email
- *
+ * 
  * Sends an email
  */
 export const AutomationActionGoogleGmailSendEmailSchema = Schema.Struct({
-  name: Schema.String,
-  account: Schema.Union(Schema.Number, Schema.String),
-  service: Schema.String,
-  action: Schema.String,
-  params: Schema.Struct({
-    from: Schema.optional(Schema.String),
-    name: Schema.optional(Schema.String),
-    to: Schema.Union(Schema.String, Schema.Array(Schema.String)),
-    cc: Schema.optional(Schema.Union(Schema.String, Schema.Array(Schema.String))),
-    bcc: Schema.optional(Schema.Union(Schema.String, Schema.Array(Schema.String))),
-    subject: Schema.String,
-    html: Schema.String,
-    text: Schema.optional(Schema.String),
-  }),
-}).pipe(
-  Schema.annotations({
-    title: 'Send Email',
-    description: 'Sends an email',
-  })
-)
+    name: Schema.String,
+    account: Schema.Union(
+      Schema.Number,
+      Schema.String
+    ),
+    service: Schema.String,
+    action: Schema.String,
+    params: Schema.Struct({
+      from: Schema.optional(Schema.String),
+      name: Schema.optional(Schema.String),
+      to: Schema.Union(
+        Schema.String,
+        Schema.Array(Schema.String)
+      ),
+      cc: Schema.optional(Schema.Union(
+        Schema.String,
+        Schema.Array(Schema.String)
+      )),
+      bcc: Schema.optional(Schema.Union(
+        Schema.String,
+        Schema.Array(Schema.String)
+      )),
+      subject: Schema.String,
+      html: Schema.String,
+      text: Schema.optional(Schema.String),
+    }),
+  }).pipe(Schema.annotations({
+    title: "Send Email",
+    description: "Sends an email"
+  }))
 
-export type AutomationActionGoogleGmailSendEmail = Schema.Schema.Type<
-  typeof AutomationActionGoogleGmailSendEmailSchema
->
+export type AutomationActionGoogleGmailSendEmail = Schema.Schema.Type<typeof AutomationActionGoogleGmailSendEmailSchema>
 ```
 
 ---

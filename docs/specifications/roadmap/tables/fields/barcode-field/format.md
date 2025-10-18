@@ -40,23 +40,14 @@ import { Schema } from 'effect'
 
 ```typescript
 /**
- *
+ * 
  * Barcode format
  */
-export const TablesFieldsBarcodeFieldFormatSchema = Schema.Literal(
-  'qr',
-  'ean13',
-  'code128',
-  'code39'
-).pipe(
-  Schema.annotations({
-    description: 'Barcode format',
-  })
-)
+export const TablesFieldsBarcodeFieldFormatSchema = Schema.Literal("qr", "ean13", "code128", "code39").pipe(Schema.annotations({
+    description: "Barcode format"
+  }))
 
-export type TablesFieldsBarcodeFieldFormat = Schema.Schema.Type<
-  typeof TablesFieldsBarcodeFieldFormatSchema
->
+export type TablesFieldsBarcodeFieldFormat = Schema.Schema.Type<typeof TablesFieldsBarcodeFieldFormatSchema>
 ```
 
 ---

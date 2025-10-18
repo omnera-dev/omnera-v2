@@ -40,21 +40,19 @@ import { Schema } from 'effect'
 
 ```typescript
 /**
- *
+ * 
  * Color of the progress bar
  */
 export const TablesFieldsProgressFieldColorSchema = Schema.String.pipe(
-  Schema.pattern(/^#[0-9a-fA-F]{6}$/, {
-    message: () => 'Color of the progress bar',
+    Schema.pattern(/^#[0-9a-fA-F]{6}$/, {
+    message: () => 'Color of the progress bar'
   }),
-  Schema.annotations({
-    description: 'Color of the progress bar',
+    Schema.annotations({
+    description: "Color of the progress bar"
   })
-)
+  )
 
-export type TablesFieldsProgressFieldColor = Schema.Schema.Type<
-  typeof TablesFieldsProgressFieldColorSchema
->
+export type TablesFieldsProgressFieldColor = Schema.Schema.Type<typeof TablesFieldsProgressFieldColorSchema>
 ```
 
 ---

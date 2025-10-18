@@ -40,20 +40,18 @@ import { Schema } from 'effect'
 
 ```typescript
 /**
- *
+ * 
  * Number of decimal places (for decimal type)
  */
 export const TablesFieldsNumberFieldPrecisionSchema = Schema.Int.pipe(
-  Schema.greaterThanOrEqualTo(0),
-  Schema.lessThanOrEqualTo(10),
-  Schema.annotations({
-    description: 'Number of decimal places (for decimal type)',
+    Schema.greaterThanOrEqualTo(0),
+    Schema.lessThanOrEqualTo(10),
+    Schema.annotations({
+    description: "Number of decimal places (for decimal type)"
   })
-)
+  )
 
-export type TablesFieldsNumberFieldPrecision = Schema.Schema.Type<
-  typeof TablesFieldsNumberFieldPrecisionSchema
->
+export type TablesFieldsNumberFieldPrecision = Schema.Schema.Type<typeof TablesFieldsNumberFieldPrecisionSchema>
 ```
 
 ---

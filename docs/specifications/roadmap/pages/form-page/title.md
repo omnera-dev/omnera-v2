@@ -38,27 +38,27 @@ import { Schema } from 'effect'
 
 **Implementation**:
 
-````typescript
+```typescript
 /**
  * Display Title
- *
+ * 
  * Display title shown to users
- *
+ * 
  * @example
  * ```typescript
  * "Contact Us"
  * ```
  */
 export const PagesFormPageTitleSchema = Schema.String.pipe(
-  Schema.annotations({
-    title: 'Display Title',
-    description: 'Display title shown to users',
-    examples: ['Contact Us', 'Create Your Account', 'We Value Your Feedback'],
+    Schema.annotations({
+    title: "Display Title",
+    description: "Display title shown to users",
+    examples: ["Contact Us","Create Your Account","We Value Your Feedback"]
   })
-)
+  )
 
 export type PagesFormPageTitle = Schema.Schema.Type<typeof PagesFormPageTitleSchema>
-````
+```
 
 ---
 

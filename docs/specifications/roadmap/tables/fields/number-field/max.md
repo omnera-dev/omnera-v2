@@ -40,14 +40,14 @@ import { Schema } from 'effect'
 
 ```typescript
 /**
- *
+ * 
  * Maximum value
  */
 export const TablesFieldsNumberFieldMaxSchema = Schema.Number.pipe(
-  Schema.annotations({
-    description: 'Maximum value',
+    Schema.annotations({
+    description: "Maximum value"
   })
-)
+  )
 
 export type TablesFieldsNumberFieldMax = Schema.Schema.Type<typeof TablesFieldsNumberFieldMaxSchema>
 ```

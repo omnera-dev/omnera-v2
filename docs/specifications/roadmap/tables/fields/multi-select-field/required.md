@@ -39,9 +39,7 @@ import { Schema } from 'effect'
 ```typescript
 export const TablesFieldsMultiSelectFieldRequiredSchema = Schema.Boolean
 
-export type TablesFieldsMultiSelectFieldRequired = Schema.Schema.Type<
-  typeof TablesFieldsMultiSelectFieldRequiredSchema
->
+export type TablesFieldsMultiSelectFieldRequired = Schema.Schema.Type<typeof TablesFieldsMultiSelectFieldRequiredSchema>
 ```
 
 ---

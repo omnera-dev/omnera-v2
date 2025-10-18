@@ -40,14 +40,12 @@ import { Schema } from 'effect'
 
 ```typescript
 /**
- *
+ * 
  * Enable search functionality
  */
 export const PagesTableViewPageSearchableSchema = Schema.Boolean
 
-export type PagesTableViewPageSearchable = Schema.Schema.Type<
-  typeof PagesTableViewPageSearchableSchema
->
+export type PagesTableViewPageSearchable = Schema.Schema.Type<typeof PagesTableViewPageSearchableSchema>
 ```
 
 ---

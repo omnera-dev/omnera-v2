@@ -37,7 +37,7 @@ import { Schema } from 'effect'
 **Implementation**:
 
 ```typescript
-export const PagesFormPageTypeSchema = Schema.Literal('form')
+export const PagesFormPageTypeSchema = Schema.Literal("form")
 
 export type PagesFormPageType = Schema.Schema.Type<typeof PagesFormPageTypeSchema>
 ```

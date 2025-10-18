@@ -41,51 +41,48 @@ import { Schema } from 'effect'
 ```typescript
 /**
  * New Lead
- *
+ * 
  * Triggered when a new Facebook Lead Ad response is created
  */
 export const AutomationTriggerFacebookAdsNewLeadSchema = Schema.Struct({
-  account: Schema.Union(Schema.Number, Schema.String),
-  service: Schema.String,
-  event: Schema.String,
-  params: Schema.Struct({
-    pageId: Schema.String.pipe(
-      Schema.annotations({
-        title: 'Facebook Page ID',
-        description: 'The ID of the Facebook page with lead forms',
-      })
+    account: Schema.Union(
+      Schema.Number,
+      Schema.String
     ),
-    appId: Schema.String.pipe(
-      Schema.annotations({
-        title: 'Facebook App ID',
-        description: 'Your Facebook App ID from the developer console',
-      })
-    ),
-    appSecret: Schema.String.pipe(
-      Schema.annotations({
-        title: 'Facebook App Secret',
-        description: 'Your Facebook App Secret from the developer console',
-      })
-    ),
-    verifyToken: Schema.optional(
-      Schema.String.pipe(
+    service: Schema.String,
+    event: Schema.String,
+    params: Schema.Struct({
+      pageId: Schema.String.pipe(
         Schema.annotations({
-          title: 'Webhook Verify Token',
-          description: 'Security token for webhook verification (auto-generated if not provided)',
-        })
-      )
-    ),
-  }),
-}).pipe(
-  Schema.annotations({
-    title: 'New Lead',
-    description: 'Triggered when a new Facebook Lead Ad response is created',
-  })
-)
+        title: "Facebook Page ID",
+        description: "The ID of the Facebook page with lead forms"
+      })
+      ),
+      appId: Schema.String.pipe(
+        Schema.annotations({
+        title: "Facebook App ID",
+        description: "Your Facebook App ID from the developer console"
+      })
+      ),
+      appSecret: Schema.String.pipe(
+        Schema.annotations({
+        title: "Facebook App Secret",
+        description: "Your Facebook App Secret from the developer console"
+      })
+      ),
+      verifyToken: Schema.optional(Schema.String.pipe(
+        Schema.annotations({
+        title: "Webhook Verify Token",
+        description: "Security token for webhook verification (auto-generated if not provided)"
+      })
+      )),
+    }),
+  }).pipe(Schema.annotations({
+    title: "New Lead",
+    description: "Triggered when a new Facebook Lead Ad response is created"
+  }))
 
-export type AutomationTriggerFacebookAdsNewLead = Schema.Schema.Type<
-  typeof AutomationTriggerFacebookAdsNewLeadSchema
->
+export type AutomationTriggerFacebookAdsNewLead = Schema.Schema.Type<typeof AutomationTriggerFacebookAdsNewLeadSchema>
 ```
 
 ---

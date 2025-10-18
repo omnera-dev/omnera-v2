@@ -37,11 +37,9 @@ import { Schema } from 'effect'
 **Implementation**:
 
 ```typescript
-export const TablesFieldsSingleSelectFieldTypeSchema = Schema.Literal('single-select')
+export const TablesFieldsSingleSelectFieldTypeSchema = Schema.Literal("single-select")
 
-export type TablesFieldsSingleSelectFieldType = Schema.Schema.Type<
-  typeof TablesFieldsSingleSelectFieldTypeSchema
->
+export type TablesFieldsSingleSelectFieldType = Schema.Schema.Type<typeof TablesFieldsSingleSelectFieldTypeSchema>
 ```
 
 ---

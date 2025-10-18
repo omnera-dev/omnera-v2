@@ -41,33 +41,31 @@ import { Schema } from 'effect'
 ```typescript
 /**
  * List Webhook Subscriptions
- *
+ * 
  * Lists the webhook subscriptions for a given organization
  */
 export const AutomationActionCalendlyListWebhookSubscriptionsSchema = Schema.Struct({
-  name: Schema.String,
-  account: Schema.Union(Schema.Number, Schema.String),
-  service: Schema.String,
-  action: Schema.String,
-  params: Schema.optional(
-    Schema.Struct({
+    name: Schema.String,
+    account: Schema.Union(
+      Schema.Number,
+      Schema.String
+    ),
+    service: Schema.String,
+    action: Schema.String,
+    params: Schema.optional(Schema.Struct({
       organization: Schema.optional(Schema.String),
       scope: Schema.optional(Schema.String),
-      count: Schema.optional(
-        Schema.Number.pipe(Schema.greaterThanOrEqualTo(1), Schema.lessThanOrEqualTo(100))
-      ),
-    })
-  ),
-}).pipe(
-  Schema.annotations({
-    title: 'List Webhook Subscriptions',
-    description: 'Lists the webhook subscriptions for a given organization',
-  })
-)
+      count: Schema.optional(Schema.Number.pipe(
+        Schema.greaterThanOrEqualTo(1),
+        Schema.lessThanOrEqualTo(100)
+      )),
+    })),
+  }).pipe(Schema.annotations({
+    title: "List Webhook Subscriptions",
+    description: "Lists the webhook subscriptions for a given organization"
+  }))
 
-export type AutomationActionCalendlyListWebhookSubscriptions = Schema.Schema.Type<
-  typeof AutomationActionCalendlyListWebhookSubscriptionsSchema
->
+export type AutomationActionCalendlyListWebhookSubscriptions = Schema.Schema.Type<typeof AutomationActionCalendlyListWebhookSubscriptionsSchema>
 ```
 
 ---

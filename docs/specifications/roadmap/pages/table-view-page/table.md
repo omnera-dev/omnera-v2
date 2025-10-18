@@ -40,15 +40,15 @@ import { Schema } from 'effect'
 
 ```typescript
 /**
- *
+ * 
  * Name of the table to display
  */
 export const PagesTableViewPageTableSchema = Schema.String.pipe(
-  Schema.minLength(1, { message: () => 'This field is required' }),
-  Schema.annotations({
-    description: 'Name of the table to display',
+    Schema.minLength(1, { message: () => 'This field is required' }),
+    Schema.annotations({
+    description: "Name of the table to display"
   })
-)
+  )
 
 export type PagesTableViewPageTable = Schema.Schema.Type<typeof PagesTableViewPageTableSchema>
 ```

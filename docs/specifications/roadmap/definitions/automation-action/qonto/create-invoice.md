@@ -41,82 +41,75 @@ import { Schema } from 'effect'
 ```typescript
 /**
  * Create Invoice
- *
+ * 
  * Creates a new invoice in Qonto
  */
 export const AutomationActionQontoCreateInvoiceSchema = Schema.Struct({
-  name: Schema.String,
-  account: Schema.Union(Schema.Number, Schema.String),
-  service: Schema.String,
-  action: Schema.String,
-  params: Schema.Struct({
-    client_id: Schema.String.pipe(
-      Schema.annotations({
-        description: 'ID of the client for this invoice',
-      })
+    name: Schema.String,
+    account: Schema.Union(
+      Schema.Number,
+      Schema.String
     ),
-    amount: Schema.Number.pipe(
-      Schema.greaterThan(0),
-      Schema.annotations({
-        description: 'Invoice total amount',
+    service: Schema.String,
+    action: Schema.String,
+    params: Schema.Struct({
+      client_id: Schema.String.pipe(
+        Schema.annotations({
+        description: "ID of the client for this invoice"
       })
-    ),
-    currency: Schema.String.pipe(
-      Schema.annotations({
-        description: 'Invoice currency',
+      ),
+      amount: Schema.Number.pipe(
+        Schema.greaterThan(0),
+        Schema.annotations({
+        description: "Invoice total amount"
       })
-    ),
-    due_date: Schema.String.pipe(
-      Schema.annotations({
-        description: 'Invoice due date (ISO 8601 format)',
+      ),
+      currency: Schema.String.pipe(
+        Schema.annotations({
+        description: "Invoice currency"
       })
-    ),
-    items: Schema.Array(
-      Schema.Struct({
+      ),
+      due_date: Schema.String.pipe(
+        Schema.annotations({
+        description: "Invoice due date (ISO 8601 format)"
+      })
+      ),
+      items: Schema.Array(Schema.Struct({
         description: Schema.String.pipe(
           Schema.annotations({
-            description: 'Item description',
-          })
+          description: "Item description"
+        })
         ),
         quantity: Schema.Number.pipe(
           Schema.greaterThan(0),
           Schema.annotations({
-            description: 'Quantity',
-          })
+          description: "Quantity"
+        })
         ),
         unit_price: Schema.Number.pipe(
           Schema.greaterThan(0),
           Schema.annotations({
-            description: 'Unit price',
-          })
+          description: "Unit price"
+        })
         ),
+      })),
+      reference: Schema.optional(Schema.String.pipe(
+        Schema.annotations({
+        description: "Invoice reference number"
       })
-    ),
-    reference: Schema.optional(
-      Schema.String.pipe(
+      )),
+      notes: Schema.optional(Schema.String.pipe(
         Schema.annotations({
-          description: 'Invoice reference number',
-        })
-      )
-    ),
-    notes: Schema.optional(
-      Schema.String.pipe(
-        Schema.annotations({
-          description: 'Additional notes',
-        })
-      )
-    ),
-  }),
-}).pipe(
-  Schema.annotations({
-    title: 'Create Invoice',
-    description: 'Creates a new invoice in Qonto',
-  })
-)
+        description: "Additional notes"
+      })
+      )),
+    }),
+  }).pipe(Schema.annotations({
+    title: "Create Invoice",
+    description: "Creates a new invoice in Qonto"
+  }))
 
-export type AutomationActionQontoCreateInvoice = Schema.Schema.Type<
-  typeof AutomationActionQontoCreateInvoiceSchema
->
+export type AutomationActionQontoCreateInvoice = Schema.Schema.Type<typeof AutomationActionQontoCreateInvoiceSchema>
 ```
 
 ---

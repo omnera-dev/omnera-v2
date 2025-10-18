@@ -38,12 +38,10 @@ import { Schema } from 'effect'
 
 ```typescript
 export const TablesFieldsStatusFieldOptionsValueSchema = Schema.String.pipe(
-  Schema.minLength(1, { message: () => 'This field is required' })
-)
+    Schema.minLength(1, { message: () => 'This field is required' })
+  )
 
-export type TablesFieldsStatusFieldOptionsValue = Schema.Schema.Type<
-  typeof TablesFieldsStatusFieldOptionsValueSchema
->
+export type TablesFieldsStatusFieldOptionsValue = Schema.Schema.Type<typeof TablesFieldsStatusFieldOptionsValueSchema>
 ```
 
 ---

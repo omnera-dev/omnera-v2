@@ -38,11 +38,11 @@ import { Schema } from 'effect'
 
 **Implementation**:
 
-````typescript
+```typescript
 /**
- *
+ * 
  * Allowed MIME types or file extensions
- *
+ * 
  * @example
  * ```typescript
  * [
@@ -50,19 +50,15 @@ import { Schema } from 'effect'
  * ]
  * ```
  */
-export const TablesFieldsMultipleAttachmentsFieldStorageAllowedTypesSchema = Schema.Array(
-  Schema.String
-).pipe(
-  Schema.annotations({
-    description: 'Allowed MIME types or file extensions',
-    examples: [['image/*'], ['application/pdf', 'application/msword']],
+export const TablesFieldsMultipleAttachmentsFieldStorageAllowedTypesSchema = Schema.Array(Schema.String).pipe(
+    Schema.annotations({
+    description: "Allowed MIME types or file extensions",
+    examples: [["image/*"],["application/pdf","application/msword"]]
   })
-)
+  )
 
-export type TablesFieldsMultipleAttachmentsFieldStorageAllowedTypes = Schema.Schema.Type<
-  typeof TablesFieldsMultipleAttachmentsFieldStorageAllowedTypesSchema
->
-````
+export type TablesFieldsMultipleAttachmentsFieldStorageAllowedTypes = Schema.Schema.Type<typeof TablesFieldsMultipleAttachmentsFieldStorageAllowedTypesSchema>
+```
 
 ---
 

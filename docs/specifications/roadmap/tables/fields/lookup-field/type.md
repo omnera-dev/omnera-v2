@@ -37,11 +37,9 @@ import { Schema } from 'effect'
 **Implementation**:
 
 ```typescript
-export const TablesFieldsLookupFieldTypeSchema = Schema.Literal('lookup')
+export const TablesFieldsLookupFieldTypeSchema = Schema.Literal("lookup")
 
-export type TablesFieldsLookupFieldType = Schema.Schema.Type<
-  typeof TablesFieldsLookupFieldTypeSchema
->
+export type TablesFieldsLookupFieldType = Schema.Schema.Type<typeof TablesFieldsLookupFieldTypeSchema>
 ```
 
 ---

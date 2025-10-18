@@ -29,12 +29,12 @@ describe('phase-grouping', () => {
       const phases = groupIntoPhases(properties)
 
       expect(phases).toHaveLength(1)
-      expect(phases[0].number).toBe(0)
-      expect(phases[0].status).toBe('✅ DONE')
+      expect(phases[0]?.number).toBe(0)
+      expect(phases[0]?.status).toBe('✅ DONE')
       // Final phase is always set to v1.0.0
-      expect(phases[0].version).toBe('v1.0.0')
-      expect(phases[0].properties).toHaveLength(2)
-      expect(phases[0].completionPercent).toBe(100)
+      expect(phases[0]?.version).toBe('v1.0.0')
+      expect(phases[0]?.properties).toHaveLength(2)
+      expect(phases[0]?.completionPercent).toBe(100)
     })
 
     test('groups remaining properties into phases', () => {
@@ -71,11 +71,11 @@ describe('phase-grouping', () => {
       const phases = groupIntoPhases(properties)
 
       expect(phases.length).toBeGreaterThan(1)
-      expect(phases[0].status).toBe('✅ DONE')
+      expect(phases[0]?.status).toBe('✅ DONE')
 
       // Phases after 0 should be NOT STARTED
       for (let i = 1; i < phases.length; i++) {
-        expect(phases[i].status).toBe('⏳ NOT STARTED')
+        expect(phases[i]?.status).toBe('⏳ NOT STARTED')
       }
     })
 
@@ -135,11 +135,11 @@ describe('phase-grouping', () => {
       const phase0 = phases[0]
 
       // Phase 0 only contains complete properties (feature1)
-      expect(phase0.completionPercent).toBe(100)
+      expect(phase0?.completionPercent).toBe(100)
 
       // Phase 1 should contain the partial property
       if (phases.length > 1) {
-        expect(phases[1].completionPercent).toBe(50)
+        expect(phases[1]?.completionPercent).toBe(50)
       }
     })
 

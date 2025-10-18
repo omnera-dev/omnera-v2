@@ -37,11 +37,9 @@ import { Schema } from 'effect'
 **Implementation**:
 
 ```typescript
-export const TablesFieldsRichTextFieldTypeSchema = Schema.Literal('rich-text')
+export const TablesFieldsRichTextFieldTypeSchema = Schema.Literal("rich-text")
 
-export type TablesFieldsRichTextFieldType = Schema.Schema.Type<
-  typeof TablesFieldsRichTextFieldTypeSchema
->
+export type TablesFieldsRichTextFieldType = Schema.Schema.Type<typeof TablesFieldsRichTextFieldTypeSchema>
 ```
 
 ---

@@ -37,17 +37,9 @@ import { Schema } from 'effect'
 **Implementation**:
 
 ```typescript
-export const PagesFormPageInputsTextInputTypeSchema = Schema.Literal(
-  'single-line-text',
-  'long-text',
-  'phone-number',
-  'email',
-  'url'
-)
+export const PagesFormPageInputsTextInputTypeSchema = Schema.Literal("single-line-text", "long-text", "phone-number", "email", "url")
 
-export type PagesFormPageInputsTextInputType = Schema.Schema.Type<
-  typeof PagesFormPageInputsTextInputTypeSchema
->
+export type PagesFormPageInputsTextInputType = Schema.Schema.Type<typeof PagesFormPageInputsTextInputTypeSchema>
 ```
 
 ---

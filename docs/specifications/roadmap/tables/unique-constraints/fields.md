@@ -38,11 +38,11 @@ import { Schema } from 'effect'
 
 **Implementation**:
 
-````typescript
+```typescript
 /**
- *
+ * 
  * Field names that must be unique together. The combination of values in these fields must be unique across all rows.
- *
+ * 
  * @example
  * ```typescript
  * [
@@ -51,24 +51,18 @@ import { Schema } from 'effect'
  * ]
  * ```
  */
-export const TablesUniqueConstraintsFieldsSchema = Schema.Array(
-  Schema.String.pipe(Schema.minLength(1, { message: () => 'This field is required' }))
-).pipe(
-  Schema.minItems(2),
-  Schema.annotations({
-    description:
-      'Field names that must be unique together. The combination of values in these fields must be unique across all rows.',
-    examples: [
-      ['email', 'tenant_id'],
-      ['first_name', 'last_name', 'birth_date'],
-    ],
+export const TablesUniqueConstraintsFieldsSchema = Schema.Array(Schema.String.pipe(
+    Schema.minLength(1, { message: () => 'This field is required' })
+  )).pipe(
+    Schema.minItems(2),
+    Schema.annotations({
+    description: "Field names that must be unique together. The combination of values in these fields must be unique across all rows.",
+    examples: [["email","tenant_id"],["first_name","last_name","birth_date"]]
   })
-)
+  )
 
-export type TablesUniqueConstraintsFields = Schema.Schema.Type<
-  typeof TablesUniqueConstraintsFieldsSchema
->
-````
+export type TablesUniqueConstraintsFields = Schema.Schema.Type<typeof TablesUniqueConstraintsFieldsSchema>
+```
 
 ---
 

@@ -40,23 +40,14 @@ import { Schema } from 'effect'
 
 ```typescript
 /**
- *
+ * 
  * Display format for the duration
  */
-export const TablesFieldsDurationFieldFormatSchema = Schema.Literal(
-  'h:mm',
-  'h:mm:ss',
-  'minutes',
-  'seconds'
-).pipe(
-  Schema.annotations({
-    description: 'Display format for the duration',
-  })
-)
+export const TablesFieldsDurationFieldFormatSchema = Schema.Literal("h:mm", "h:mm:ss", "minutes", "seconds").pipe(Schema.annotations({
+    description: "Display format for the duration"
+  }))
 
-export type TablesFieldsDurationFieldFormat = Schema.Schema.Type<
-  typeof TablesFieldsDurationFieldFormatSchema
->
+export type TablesFieldsDurationFieldFormat = Schema.Schema.Type<typeof TablesFieldsDurationFieldFormatSchema>
 ```
 
 ---

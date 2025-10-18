@@ -40,19 +40,17 @@ import { Schema } from 'effect'
 
 ```typescript
 /**
- *
+ * 
  * Section title
  */
 export const PagesDetailViewPageSectionsTitleSchema = Schema.String.pipe(
-  Schema.minLength(1, { message: () => 'This field is required' }),
-  Schema.annotations({
-    description: 'Section title',
+    Schema.minLength(1, { message: () => 'This field is required' }),
+    Schema.annotations({
+    description: "Section title"
   })
-)
+  )
 
-export type PagesDetailViewPageSectionsTitle = Schema.Schema.Type<
-  typeof PagesDetailViewPageSectionsTitleSchema
->
+export type PagesDetailViewPageSectionsTitle = Schema.Schema.Type<typeof PagesDetailViewPageSectionsTitleSchema>
 ```
 
 ---

@@ -38,27 +38,25 @@ import { Schema } from 'effect'
 
 **Implementation**:
 
-````typescript
+```typescript
 /**
- *
+ * 
  * Display format for the result (e.g., currency, percentage)
- *
+ * 
  * @example
  * ```typescript
  * "currency"
  * ```
  */
 export const TablesFieldsFormulaFieldFormatSchema = Schema.String.pipe(
-  Schema.annotations({
-    description: 'Display format for the result (e.g., currency, percentage)',
-    examples: ['currency', 'percentage', 'decimal', 'date'],
+    Schema.annotations({
+    description: "Display format for the result (e.g., currency, percentage)",
+    examples: ["currency","percentage","decimal","date"]
   })
-)
+  )
 
-export type TablesFieldsFormulaFieldFormat = Schema.Schema.Type<
-  typeof TablesFieldsFormulaFieldFormatSchema
->
-````
+export type TablesFieldsFormulaFieldFormat = Schema.Schema.Type<typeof TablesFieldsFormulaFieldFormatSchema>
+```
 
 ---
 

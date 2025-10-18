@@ -40,15 +40,15 @@ import { Schema } from 'effect'
 
 ```typescript
 /**
- *
+ * 
  * Table to save form data (required for create-record action)
  */
 export const PagesFormPageTableSchema = Schema.String.pipe(
-  Schema.minLength(1, { message: () => 'This field is required' }),
-  Schema.annotations({
-    description: 'Table to save form data (required for create-record action)',
+    Schema.minLength(1, { message: () => 'This field is required' }),
+    Schema.annotations({
+    description: "Table to save form data (required for create-record action)"
   })
-)
+  )
 
 export type PagesFormPageTable = Schema.Schema.Type<typeof PagesFormPageTableSchema>
 ```

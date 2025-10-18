@@ -38,12 +38,12 @@ import { Schema } from 'effect'
 
 **Implementation**:
 
-````typescript
+```typescript
 /**
  * Database Indexes
- *
+ * 
  * Custom database indexes for query optimization. Indexes improve query performance by creating efficient lookup structures for specified fields.
- *
+ * 
  * @example
  * ```typescript
  * [
@@ -87,7 +87,7 @@ export const TablesIndexesSchema = Schema.Array(Schema.Struct({
   )
 
 export type TablesIndexes = Schema.Schema.Type<typeof TablesIndexesSchema>
-````
+```
 
 ---
 

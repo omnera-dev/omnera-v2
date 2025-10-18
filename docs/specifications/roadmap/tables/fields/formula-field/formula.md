@@ -38,34 +38,26 @@ import { Schema } from 'effect'
 
 **Implementation**:
 
-````typescript
+```typescript
 /**
- *
+ * 
  * Formula expression to compute the value. Supports field references, operators, and functions.
- *
+ * 
  * @example
  * ```typescript
  * "price * quantity"
  * ```
  */
 export const TablesFieldsFormulaFieldFormulaSchema = Schema.String.pipe(
-  Schema.minLength(1, { message: () => 'This field is required' }),
-  Schema.annotations({
-    description:
-      'Formula expression to compute the value. Supports field references, operators, and functions.',
-    examples: [
-      'price * quantity',
-      "CONCAT(first_name, ' ', last_name)",
-      "IF(status = 'active', 'Yes', 'No')",
-      'ROUND(total * 0.15, 2)',
-    ],
+    Schema.minLength(1, { message: () => 'This field is required' }),
+    Schema.annotations({
+    description: "Formula expression to compute the value. Supports field references, operators, and functions.",
+    examples: ["price * quantity","CONCAT(first_name, ' ', last_name)","IF(status = 'active', 'Yes', 'No')","ROUND(total * 0.15, 2)"]
   })
-)
+  )
 
-export type TablesFieldsFormulaFieldFormula = Schema.Schema.Type<
-  typeof TablesFieldsFormulaFieldFormulaSchema
->
-````
+export type TablesFieldsFormulaFieldFormula = Schema.Schema.Type<typeof TablesFieldsFormulaFieldFormulaSchema>
+```
 
 ---
 

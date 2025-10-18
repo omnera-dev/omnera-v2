@@ -37,11 +37,9 @@ import { Schema } from 'effect'
 **Implementation**:
 
 ```typescript
-export const TablesFieldsMultiSelectFieldTypeSchema = Schema.Literal('multi-select')
+export const TablesFieldsMultiSelectFieldTypeSchema = Schema.Literal("multi-select")
 
-export type TablesFieldsMultiSelectFieldType = Schema.Schema.Type<
-  typeof TablesFieldsMultiSelectFieldTypeSchema
->
+export type TablesFieldsMultiSelectFieldType = Schema.Schema.Type<typeof TablesFieldsMultiSelectFieldTypeSchema>
 ```
 
 ---

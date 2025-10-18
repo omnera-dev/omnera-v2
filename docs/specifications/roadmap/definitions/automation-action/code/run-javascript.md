@@ -41,27 +41,24 @@ import { Schema } from 'effect'
 ```typescript
 /**
  * Run JavaScript
- *
+ * 
  * Execute JavaScript code
  */
 export const AutomationActionCodeRunJavascriptSchema = Schema.Struct({
-  name: Schema.String,
-  service: Schema.String,
-  action: Schema.String,
-  params: Schema.Struct({
-    inputData: Schema.optional(Schema.Struct({})),
-    code: Schema.String,
-  }),
-}).pipe(
-  Schema.annotations({
-    title: 'Run JavaScript',
-    description: 'Execute JavaScript code',
-  })
-)
+    name: Schema.String,
+    service: Schema.String,
+    action: Schema.String,
+    params: Schema.Struct({
+      inputData: Schema.optional(Schema.Struct({
+      })),
+      code: Schema.String,
+    }),
+  }).pipe(Schema.annotations({
+    title: "Run JavaScript",
+    description: "Execute JavaScript code"
+  }))
 
-export type AutomationActionCodeRunJavascript = Schema.Schema.Type<
-  typeof AutomationActionCodeRunJavascriptSchema
->
+export type AutomationActionCodeRunJavascript = Schema.Schema.Type<typeof AutomationActionCodeRunJavascriptSchema>
 ```
 
 ---

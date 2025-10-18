@@ -40,29 +40,25 @@ import { Schema } from 'effect'
 
 ```typescript
 /**
- *
+ * 
  * Sections grouping related fields
  */
-export const PagesDetailViewPageSectionsSchema = Schema.Array(
-  Schema.Struct({
+export const PagesDetailViewPageSectionsSchema = Schema.Array(Schema.Struct({
     title: Schema.String.pipe(
       Schema.minLength(1, { message: () => 'This field is required' }),
       Schema.annotations({
-        description: 'Section title',
-      })
+      description: "Section title"
+    })
     ),
     fields: Schema.Array(Schema.String),
+  })).pipe(
+    Schema.minItems(1),
+    Schema.annotations({
+    description: "Sections grouping related fields"
   })
-).pipe(
-  Schema.minItems(1),
-  Schema.annotations({
-    description: 'Sections grouping related fields',
-  })
-)
+  )
 
-export type PagesDetailViewPageSections = Schema.Schema.Type<
-  typeof PagesDetailViewPageSectionsSchema
->
+export type PagesDetailViewPageSections = Schema.Schema.Type<typeof PagesDetailViewPageSectionsSchema>
 ```
 
 ---

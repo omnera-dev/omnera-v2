@@ -40,14 +40,14 @@ import { Schema } from 'effect'
 
 ```typescript
 /**
- *
+ * 
  * Minimum value
  */
 export const TablesFieldsNumberFieldMinSchema = Schema.Number.pipe(
-  Schema.annotations({
-    description: 'Minimum value',
+    Schema.annotations({
+    description: "Minimum value"
   })
-)
+  )
 
 export type TablesFieldsNumberFieldMin = Schema.Schema.Type<typeof TablesFieldsNumberFieldMinSchema>
 ```

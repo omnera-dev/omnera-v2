@@ -40,18 +40,14 @@ import { Schema } from 'effect'
 
 ```typescript
 /**
- *
+ * 
  * Type of action to trigger
  */
-export const TablesFieldsButtonFieldActionSchema = Schema.Literal('url', 'automation').pipe(
-  Schema.annotations({
-    description: 'Type of action to trigger',
-  })
-)
+export const TablesFieldsButtonFieldActionSchema = Schema.Literal("url", "automation").pipe(Schema.annotations({
+    description: "Type of action to trigger"
+  }))
 
-export type TablesFieldsButtonFieldAction = Schema.Schema.Type<
-  typeof TablesFieldsButtonFieldActionSchema
->
+export type TablesFieldsButtonFieldAction = Schema.Schema.Type<typeof TablesFieldsButtonFieldActionSchema>
 ```
 
 ---

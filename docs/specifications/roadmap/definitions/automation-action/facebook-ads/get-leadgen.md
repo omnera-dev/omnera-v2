@@ -41,32 +41,31 @@ import { Schema } from 'effect'
 ```typescript
 /**
  * Get LeadGen
- *
+ * 
  * Retrieves lead generation data using the leadgen_id from webhook
  */
 export const AutomationActionFacebookAdsGetLeadgenSchema = Schema.Struct({
-  name: Schema.String,
-  account: Schema.Union(Schema.Number, Schema.String),
-  service: Schema.String,
-  action: Schema.String,
-  params: Schema.Struct({
-    leadgenId: Schema.String.pipe(
-      Schema.annotations({
-        title: 'Leadgen ID',
-        description: 'The leadgen_id from Facebook webhook data',
-      })
+    name: Schema.String,
+    account: Schema.Union(
+      Schema.Number,
+      Schema.String
     ),
-  }),
-}).pipe(
-  Schema.annotations({
-    title: 'Get LeadGen',
-    description: 'Retrieves lead generation data using the leadgen_id from webhook',
-  })
-)
+    service: Schema.String,
+    action: Schema.String,
+    params: Schema.Struct({
+      leadgenId: Schema.String.pipe(
+        Schema.annotations({
+        title: "Leadgen ID",
+        description: "The leadgen_id from Facebook webhook data"
+      })
+      ),
+    }),
+  }).pipe(Schema.annotations({
+    title: "Get LeadGen",
+    description: "Retrieves lead generation data using the leadgen_id from webhook"
+  }))
 
-export type AutomationActionFacebookAdsGetLeadgen = Schema.Schema.Type<
-  typeof AutomationActionFacebookAdsGetLeadgenSchema
->
+export type AutomationActionFacebookAdsGetLeadgen = Schema.Schema.Type<typeof AutomationActionFacebookAdsGetLeadgenSchema>
 ```
 
 ---

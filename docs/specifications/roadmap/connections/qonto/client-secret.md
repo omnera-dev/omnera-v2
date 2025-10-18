@@ -39,9 +39,7 @@ import { Schema } from 'effect'
 ```typescript
 export const ConnectionsQontoClientSecretSchema = Schema.String
 
-export type ConnectionsQontoClientSecret = Schema.Schema.Type<
-  typeof ConnectionsQontoClientSecretSchema
->
+export type ConnectionsQontoClientSecret = Schema.Schema.Type<typeof ConnectionsQontoClientSecretSchema>
 ```
 
 ---

@@ -40,23 +40,14 @@ import { Schema } from 'effect'
 
 ```typescript
 /**
- *
+ * 
  * Action to take when the related record is deleted
  */
-export const TablesFieldsRelationshipFieldOnDeleteSchema = Schema.Literal(
-  'cascade',
-  'set-null',
-  'restrict',
-  'no-action'
-).pipe(
-  Schema.annotations({
-    description: 'Action to take when the related record is deleted',
-  })
-)
+export const TablesFieldsRelationshipFieldOnDeleteSchema = Schema.Literal("cascade", "set-null", "restrict", "no-action").pipe(Schema.annotations({
+    description: "Action to take when the related record is deleted"
+  }))
 
-export type TablesFieldsRelationshipFieldOnDelete = Schema.Schema.Type<
-  typeof TablesFieldsRelationshipFieldOnDeleteSchema
->
+export type TablesFieldsRelationshipFieldOnDelete = Schema.Schema.Type<typeof TablesFieldsRelationshipFieldOnDeleteSchema>
 ```
 
 ---
