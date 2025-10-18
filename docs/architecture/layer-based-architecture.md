@@ -74,8 +74,10 @@ Handle user interactions, render UI, route HTTP requests, present data to users.
 
 ### Example: Hono Route Handler
 
+**Note**: This is an illustrative example showing layer-based patterns. Actual file paths in the codebase may vary (e.g., `src/application/use-cases/server/start-server.ts`), but the layering principles remain consistent.
+
 ```typescript
-// src/presentation/api/users.ts
+// Example: src/presentation/api/users.ts
 import { Hono } from 'hono'
 import { Effect } from 'effect'
 import { GetUserProfile } from '@/application/use-cases/GetUserProfile'
@@ -253,7 +255,10 @@ export function calculateDiscount(subtotal: number, discountPercent: number): nu
 ### Do's and Don'ts
 
 ✅ **DO**: Write pure functions, use immutability, validate business rules, define models
-❌ **DON'T**: Perform I/O, use Effect programs, access external services, depend on other layers
+✅ **ALLOWED**: `Effect.Schema` for type-safe validation (business logic, no side effects)
+❌ **DON'T**: Perform I/O, use Effect runtime (`Effect.gen`, `Effect.runPromise`, `Context`, `Layer`), access external services, depend on other layers
+
+**Note**: Effect.Schema is allowed in Domain layer because it's purely declarative validation (business rules), not runtime effect execution. ESLint enforces this: Schema ✅ | Effect/Context/Layer ❌
 
 ## Layer 4: Infrastructure Layer (External Services)
 

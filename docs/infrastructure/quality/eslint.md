@@ -2,7 +2,7 @@
 
 ## Overview
 
-**Version**: 9.37.0
+**Version**: ^9.38.0
 **Purpose**: Static code analysis tool that identifies and catches potential bugs, code quality issues, and enforces coding standards
 
 ## What ESLint Provides

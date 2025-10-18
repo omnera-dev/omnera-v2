@@ -115,7 +115,7 @@ NOTE: I am a TRANSLATOR, not a designer. I cannot create schemas without validat
 ### Step 1: Read specs.schema.json
 
 ```bash
-file: /Users/thomasjeanneau/Codes/omnera-v2/docs/specifications/specs.schema.json
+file: docs/specifications/specs.schema.json
 ```
 
 ### Step 2: Verify Property Exists (BLOCKING)

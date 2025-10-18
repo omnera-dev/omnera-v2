@@ -6,7 +6,7 @@
 
 **Omnera is a source-available, self-hosted alternative to no-code/low-code SaaS platforms** like Airtable, Zapier, Retool, Webflow, and Notion.
 
-Instead of visual drag-and-drop interfaces, Omnera uses **JSON/TypeScript configuration** to build full-featured applications. It's delivered as an **npm package** that runs on your own infrastructure, giving you complete control over your data and deployment.
+Instead of visual drag-and-drop interfaces, Omnera uses **JSON/TypeScript configuration** to build full-featured applications. It's delivered as a **Bun package** that runs on your own infrastructure, giving you complete control over your data and deployment.
 
 ### The Problem with Traditional No-Code Tools
 
@@ -23,7 +23,7 @@ Traditional no-code platforms (Airtable, Retool, Notion, Webflow, Zapier) have s
 Omnera provides the **power of no-code platforms** with the **freedom of open-source software**:
 
 - ✅ **Self-Hosted**: Run on your own infrastructure (AWS, Vercel, Docker, etc.)
-- ✅ **Source-Available**: Full source code access under BSL 1.1 license
+- ✅ **Source-Available**: Full source code access under Sustainable Use License v1.0
 - ✅ **JSON Configuration**: Define everything in version-controlled JSON/TypeScript files
 - ✅ **npm Package**: Install and deploy like any Node.js/Bun application
 - ✅ **No Visual UI Needed**: Configure via code, not drag-and-drop
@@ -185,7 +185,7 @@ Not suitable for:
 
 - Own your data and infrastructure
 - No vendor lock-in or platform risk
-- Full source code access (BSL 1.1)
+- Full source code access (Sustainable Use License v1.0)
 - Deploy anywhere: AWS, Vercel, Docker, bare metal
 
 ### 2. **Configuration-as-Code**
@@ -198,7 +198,7 @@ Not suitable for:
 ### 3. **Developer-First Design**
 
 - TypeScript type safety
-- npm package installation
+- Bun package installation
 - Familiar development workflows
 - No GUI learning curve
 
@@ -228,7 +228,7 @@ Not suitable for:
 | Feature             | Omnera          | Airtable       | Retool         | Zapier         | Webflow        |
 | ------------------- | --------------- | -------------- | -------------- | -------------- | -------------- |
 | **Self-Hosted**     | ✅ Yes          | ❌ No          | ❌ No          | ❌ No          | ❌ No          |
-| **Source Access**   | ✅ BSL 1.1      | ❌ Proprietary | ❌ Proprietary | ❌ Proprietary | ❌ Proprietary |
+| **Source Access**   | ✅ SUL-1.0      | ❌ Proprietary | ❌ Proprietary | ❌ Proprietary | ❌ Proprietary |
 | **Configuration**   | JSON/TypeScript | Visual UI      | Visual UI      | Visual UI      | Visual UI      |
 | **Version Control** | ✅ Git-native   | ⚠️ Limited     | ⚠️ Limited     | ❌ No          | ⚠️ Limited     |
 | **Data Ownership**  | ✅ Your servers | ❌ Their cloud | ❌ Their cloud | ❌ Their cloud | ❌ Their cloud |

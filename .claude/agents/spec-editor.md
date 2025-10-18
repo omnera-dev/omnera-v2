@@ -31,7 +31,7 @@ description: |
   ```
 
 model: sonnet
-color: purple
+color: indigo
 ---
 
 ## Quick Reference

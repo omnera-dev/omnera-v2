@@ -96,7 +96,7 @@ start(myApp, {
 | **Bun**          | 1.3.0   | Runtime & package manager         |
 | **TypeScript**   | ^5      | Type-safe language                |
 | **Effect**       | 3.18.4  | Functional programming (internal) |
-| **Hono**         | 4.9.12  | Web framework                     |
+| **Hono**         | 4.10.1  | Web framework                     |
 | **React**        | 19.2.0  | UI library (SSR)                  |
 | **Tailwind CSS** | 4.1.14  | Styling                           |
 
@@ -117,9 +117,9 @@ bun run format                   # Run Prettier
 bun run typecheck                # TypeScript check
 
 # Testing
-bun test                         # Unit tests
+bun test:unit                    # Unit tests
 bun test:e2e                     # E2E tests (Playwright)
-bun test --watch                 # Watch mode
+bun test:unit:watch              # Unit tests in watch mode
 
 # Watch Mode
 bun --watch src/index.ts         # Auto-reload on changes
@@ -244,4 +244,4 @@ See [LICENSE.md](LICENSE.md) for full terms and [TRADEMARK.md](TRADEMARK.md) for
 
 ---
 
-**Questions or feedback?** Open an issue on [GitHub](https://github.com/omnera/omnera) or check the [documentation](docs/specifications/vision.md).
+**Questions or feedback?** Open an issue on [GitHub](https://github.com/omnera-dev/omnera-v2) or check the [documentation](docs/specifications/vision.md).

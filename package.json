@@ -1,7 +1,7 @@
 {
   "name": "omnera",
   "version": "0.0.1",
-  "description": "Omnera - Modern TypeScript framework built with Bun",
+  "description": "Configuration-driven web application platform built with Bun, Effect, React, and Tailwind CSS",
   "module": "src/index.ts",
   "bin": {
     "omnera": "./src/cli.ts"

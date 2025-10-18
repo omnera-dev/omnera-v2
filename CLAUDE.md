@@ -15,9 +15,11 @@
 **Project**: Omnera™ (npm package: "omnera")
 **Legal Entity**: ESSENTIAL SERVICES (copyright holder & trademark owner)
 **Version**: 0.0.1 (managed by semantic-release)
-**License**: BSL-1.1
+**License**: Sustainable Use License v1.0 (SUL-1.0)
 **Runtime**: Bun 1.3.0 (NOT Node.js)
-**Entry Point**: src/index.ts
+**Entry Points**:
+- Library: `src/index.ts` (module import)
+- CLI: `src/cli.ts` (binary executable via `bun run start` or `omnera` command)
 
 ## Core Stack
 
@@ -173,7 +175,7 @@ omnera-v2/
 
 ## Detailed Documentation (On-Demand Import)
 
-> **Note on Documentation Links**: This document uses `@docs/` syntax optimized for Claude Code. Human developers should interpret `@docs/` as the `docs/` directory in the project root. Example: `@docs/infrastructure/runtime/bun.md` → `docs/infrastructure/runtime/bun.md`
+> **Note on Documentation Links**: This document uses `@docs/` syntax optimized for Claude Code AI consumption. This is **NOT a TypeScript path alias** (only `@/*` is configured in tsconfig.json). Human developers should interpret `@docs/` as the `docs/` directory in the project root. Example: `@docs/infrastructure/runtime/bun.md` → `docs/infrastructure/runtime/bun.md`
 
 **When you need specific details, import the relevant documentation file:**
 
