@@ -6,8 +6,7 @@
  */
 
 import { Schema } from 'effect'
-import { FieldNameSchema } from '@/domain/models/table/field-name'
-import { IdSchema } from '@/domain/models/table/id'
+import { BaseFieldSchema } from './base-field'
 
 /**
  * Duration Field
@@ -27,19 +26,21 @@ import { IdSchema } from '@/domain/models/table/id'
  * }
  * ```
  */
-export const DurationFieldSchema = Schema.Struct({
-  id: IdSchema,
-  name: FieldNameSchema,
-  required: Schema.optional(Schema.Boolean),
-  type: Schema.Literal('duration'),
-  format: Schema.optional(
-    Schema.String.pipe(
-      Schema.annotations({
-        description: 'Display format for the duration',
-      })
-    )
-  ),
-}).pipe(
+export const DurationFieldSchema = BaseFieldSchema.pipe(
+  Schema.extend(
+    Schema.Struct({
+      required: Schema.optional(Schema.Boolean),
+      type: Schema.Literal('duration'),
+      format: Schema.optional(
+        Schema.String.pipe(
+          Schema.annotations({
+            description: 'Display format for the duration',
+          })
+        )
+      ),
+    })
+  )
+).pipe(
   Schema.annotations({
     title: 'Duration Field',
     description:

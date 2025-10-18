@@ -6,8 +6,7 @@
  */
 
 import { Schema } from 'effect'
-import { FieldNameSchema } from '@/domain/models/table/field-name'
-import { IdSchema } from '@/domain/models/table/id'
+import { BaseFieldSchema } from './base-field'
 
 /**
  * URL Field
@@ -38,37 +37,24 @@ import { IdSchema } from '@/domain/models/table/id'
  * }
  * ```
  */
-export const UrlFieldSchema = Schema.Struct({
-  id: IdSchema,
-  name: FieldNameSchema,
-  type: Schema.Literal('url').pipe(
-    Schema.annotations({
-      description: "Constant value 'url' for type discrimination in discriminated unions",
+export const UrlFieldSchema = BaseFieldSchema.pipe(
+  Schema.extend(
+    Schema.Struct({
+      type: Schema.Literal('url').pipe(
+        Schema.annotations({
+          description: "Constant value 'url' for type discrimination in discriminated unions",
+        })
+      ),
+      default: Schema.optional(
+        Schema.String.pipe(
+          Schema.annotations({
+            description: 'Default URL value when creating new records',
+          })
+        )
+      ),
     })
-  ),
-  required: Schema.optional(Schema.Boolean).pipe(
-    Schema.annotations({
-      description: 'Whether this field is required (cannot be empty)',
-    })
-  ),
-  unique: Schema.optional(Schema.Boolean).pipe(
-    Schema.annotations({
-      description: 'Whether this field must contain unique values across all rows',
-    })
-  ),
-  indexed: Schema.optional(Schema.Boolean).pipe(
-    Schema.annotations({
-      description: 'Whether to create a database index for faster URL lookups and searches',
-    })
-  ),
-  default: Schema.optional(
-    Schema.String.pipe(
-      Schema.annotations({
-        description: 'Default URL value when creating new records',
-      })
-    )
-  ),
-}).pipe(
+  )
+).pipe(
   Schema.annotations({
     title: 'URL Field',
     description:

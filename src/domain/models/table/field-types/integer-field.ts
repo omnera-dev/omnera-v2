@@ -6,8 +6,7 @@
  */
 
 import { Schema } from 'effect'
-import { FieldNameSchema } from '@/domain/models/table/field-name'
-import { IdSchema } from '@/domain/models/table/id'
+import { BaseFieldSchema } from './base-field'
 
 /**
  * Integer Field
@@ -37,51 +36,38 @@ import { IdSchema } from '@/domain/models/table/id'
  * }
  * ```
  */
-export const IntegerFieldSchema = Schema.Struct({
-  id: IdSchema,
-  name: FieldNameSchema,
-  type: Schema.Literal('integer').pipe(
-    Schema.annotations({
-      description: "Constant value 'integer' for type discrimination in discriminated unions",
+export const IntegerFieldSchema = BaseFieldSchema.pipe(
+  Schema.extend(
+    Schema.Struct({
+      type: Schema.Literal('integer').pipe(
+        Schema.annotations({
+          description: "Constant value 'integer' for type discrimination in discriminated unions",
+        })
+      ),
+      min: Schema.optional(
+        Schema.Number.pipe(
+          Schema.annotations({
+            description: 'Minimum allowed value (inclusive)',
+          })
+        )
+      ),
+      max: Schema.optional(
+        Schema.Number.pipe(
+          Schema.annotations({
+            description: 'Maximum allowed value (inclusive)',
+          })
+        )
+      ),
+      default: Schema.optional(
+        Schema.Int.pipe(
+          Schema.annotations({
+            description: 'Default integer value when creating new records',
+          })
+        )
+      ),
     })
-  ),
-  required: Schema.optional(Schema.Boolean).pipe(
-    Schema.annotations({
-      description: 'Whether this field is required (cannot be empty)',
-    })
-  ),
-  unique: Schema.optional(Schema.Boolean).pipe(
-    Schema.annotations({
-      description: 'Whether this field must contain unique values across all rows',
-    })
-  ),
-  indexed: Schema.optional(Schema.Boolean).pipe(
-    Schema.annotations({
-      description: 'Whether to create a database index for faster numeric queries and sorting',
-    })
-  ),
-  min: Schema.optional(
-    Schema.Number.pipe(
-      Schema.annotations({
-        description: 'Minimum allowed value (inclusive)',
-      })
-    )
-  ),
-  max: Schema.optional(
-    Schema.Number.pipe(
-      Schema.annotations({
-        description: 'Maximum allowed value (inclusive)',
-      })
-    )
-  ),
-  default: Schema.optional(
-    Schema.Int.pipe(
-      Schema.annotations({
-        description: 'Default integer value when creating new records',
-      })
-    )
-  ),
-}).pipe(
+  )
+).pipe(
   Schema.annotations({
     title: 'Integer Field',
     description:

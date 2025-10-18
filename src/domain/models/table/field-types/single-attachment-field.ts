@@ -6,35 +6,36 @@
  */
 
 import { Schema } from 'effect'
-import { FieldNameSchema } from '@/domain/models/table/field-name'
-import { IdSchema } from '@/domain/models/table/id'
+import { BaseFieldSchema } from './base-field'
 
-export const SingleAttachmentFieldSchema = Schema.Struct({
-  id: IdSchema,
-  name: FieldNameSchema,
-  required: Schema.optional(Schema.Boolean),
-  indexed: Schema.optional(Schema.Boolean),
-  type: Schema.Literal('single-attachment'),
-  storage: Schema.optional(
+export const SingleAttachmentFieldSchema = BaseFieldSchema.pipe(
+  Schema.extend(
     Schema.Struct({
-      provider: Schema.optional(
-        Schema.String.pipe(Schema.annotations({ description: 'Storage provider' }))
+      required: Schema.optional(Schema.Boolean),
+      indexed: Schema.optional(Schema.Boolean),
+      type: Schema.Literal('single-attachment'),
+      storage: Schema.optional(
+        Schema.Struct({
+          provider: Schema.optional(
+            Schema.String.pipe(Schema.annotations({ description: 'Storage provider' }))
+          ),
+          bucket: Schema.optional(
+            Schema.String.pipe(
+              Schema.annotations({ description: 'S3 bucket name (required for s3 provider)' })
+            )
+          ),
+          maxSize: Schema.optional(
+            Schema.Int.pipe(
+              Schema.greaterThanOrEqualTo(1),
+              Schema.annotations({ description: 'Maximum file size in bytes' })
+            )
+          ),
+          allowedTypes: Schema.optional(Schema.Array(Schema.String)),
+        })
       ),
-      bucket: Schema.optional(
-        Schema.String.pipe(
-          Schema.annotations({ description: 'S3 bucket name (required for s3 provider)' })
-        )
-      ),
-      maxSize: Schema.optional(
-        Schema.Int.pipe(
-          Schema.greaterThanOrEqualTo(1),
-          Schema.annotations({ description: 'Maximum file size in bytes' })
-        )
-      ),
-      allowedTypes: Schema.optional(Schema.Array(Schema.String)),
     })
-  ),
-}).pipe(
+  )
+).pipe(
   Schema.annotations({
     title: 'Single Attachment Field',
     description: 'Stores a single file attachment with storage configuration.',

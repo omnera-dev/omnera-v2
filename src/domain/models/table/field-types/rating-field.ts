@@ -6,8 +6,7 @@
  */
 
 import { Schema } from 'effect'
-import { FieldNameSchema } from '@/domain/models/table/field-name'
-import { IdSchema } from '@/domain/models/table/id'
+import { BaseFieldSchema } from './base-field'
 
 /**
  * Rating Field
@@ -27,28 +26,30 @@ import { IdSchema } from '@/domain/models/table/id'
  * }
  * ```
  */
-export const RatingFieldSchema = Schema.Struct({
-  id: IdSchema,
-  name: FieldNameSchema,
-  required: Schema.optional(Schema.Boolean),
-  type: Schema.Literal('rating'),
-  max: Schema.optional(
-    Schema.Int.pipe(
-      Schema.greaterThanOrEqualTo(1),
-      Schema.lessThanOrEqualTo(10),
-      Schema.annotations({
-        description: 'Maximum rating value',
-      })
-    )
-  ),
-  style: Schema.optional(
-    Schema.String.pipe(
-      Schema.annotations({
-        description: 'Visual style for the rating',
-      })
-    )
-  ),
-}).pipe(
+export const RatingFieldSchema = BaseFieldSchema.pipe(
+  Schema.extend(
+    Schema.Struct({
+      required: Schema.optional(Schema.Boolean),
+      type: Schema.Literal('rating'),
+      max: Schema.optional(
+        Schema.Int.pipe(
+          Schema.greaterThanOrEqualTo(1),
+          Schema.lessThanOrEqualTo(10),
+          Schema.annotations({
+            description: 'Maximum rating value',
+          })
+        )
+      ),
+      style: Schema.optional(
+        Schema.String.pipe(
+          Schema.annotations({
+            description: 'Visual style for the rating',
+          })
+        )
+      ),
+    })
+  )
+).pipe(
   Schema.annotations({
     title: 'Rating Field',
     description:

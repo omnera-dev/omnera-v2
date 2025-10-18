@@ -6,8 +6,7 @@
  */
 
 import { Schema } from 'effect'
-import { FieldNameSchema } from '@/domain/models/table/field-name'
-import { IdSchema } from '@/domain/models/table/id'
+import { BaseFieldSchema } from './base-field'
 
 /**
  * Single Select Field
@@ -27,15 +26,17 @@ import { IdSchema } from '@/domain/models/table/id'
  * }
  * ```
  */
-export const SingleSelectFieldSchema = Schema.Struct({
-  id: IdSchema,
-  name: FieldNameSchema,
-  required: Schema.optional(Schema.Boolean),
-  indexed: Schema.optional(Schema.Boolean),
-  type: Schema.Literal('single-select'),
-  options: Schema.Array(Schema.String),
-  default: Schema.optional(Schema.String),
-}).pipe(
+export const SingleSelectFieldSchema = BaseFieldSchema.pipe(
+  Schema.extend(
+    Schema.Struct({
+      required: Schema.optional(Schema.Boolean),
+      indexed: Schema.optional(Schema.Boolean),
+      type: Schema.Literal('single-select'),
+      options: Schema.Array(Schema.String),
+      default: Schema.optional(Schema.String),
+    })
+  )
+).pipe(
   Schema.annotations({
     title: 'Single Select Field',
     description:

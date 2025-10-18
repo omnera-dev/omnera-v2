@@ -6,40 +6,41 @@
  */
 
 import { Schema } from 'effect'
-import { FieldNameSchema } from '@/domain/models/table/field-name'
-import { IdSchema } from '@/domain/models/table/id'
+import { BaseFieldSchema } from './base-field'
 
-export const FormulaFieldSchema = Schema.Struct({
-  id: IdSchema,
-  name: FieldNameSchema,
-  type: Schema.Literal('formula'),
-  formula: Schema.String.pipe(
-    Schema.minLength(1, { message: () => 'This field is required' }),
-    Schema.annotations({
-      description:
-        'Formula expression to compute the value. Supports field references, operators, and functions.',
-      examples: [
-        'price * quantity',
-        "CONCAT(first_name, ' ', last_name)",
-        "IF(status = 'active', 'Yes', 'No')",
-        'ROUND(total * 0.15, 2)',
-      ],
+export const FormulaFieldSchema = BaseFieldSchema.pipe(
+  Schema.extend(
+    Schema.Struct({
+      type: Schema.Literal('formula'),
+      formula: Schema.String.pipe(
+        Schema.minLength(1, { message: () => 'This field is required' }),
+        Schema.annotations({
+          description:
+            'Formula expression to compute the value. Supports field references, operators, and functions.',
+          examples: [
+            'price * quantity',
+            "CONCAT(first_name, ' ', last_name)",
+            "IF(status = 'active', 'Yes', 'No')",
+            'ROUND(total * 0.15, 2)',
+          ],
+        })
+      ),
+      resultType: Schema.optional(
+        Schema.String.pipe(
+          Schema.annotations({ description: 'Expected data type of the formula result' })
+        )
+      ),
+      format: Schema.optional(
+        Schema.String.pipe(
+          Schema.annotations({
+            description: 'Display format for the result (e.g., currency, percentage)',
+            examples: ['currency', 'percentage', 'decimal', 'date'],
+          })
+        )
+      ),
     })
-  ),
-  resultType: Schema.optional(
-    Schema.String.pipe(
-      Schema.annotations({ description: 'Expected data type of the formula result' })
-    )
-  ),
-  format: Schema.optional(
-    Schema.String.pipe(
-      Schema.annotations({
-        description: 'Display format for the result (e.g., currency, percentage)',
-        examples: ['currency', 'percentage', 'decimal', 'date'],
-      })
-    )
-  ),
-}).pipe(
+  )
+).pipe(
   Schema.annotations({
     title: 'Formula Field',
     description: 'Computed field that calculates values based on formula expressions.',

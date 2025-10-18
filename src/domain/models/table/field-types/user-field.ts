@@ -6,8 +6,7 @@
  */
 
 import { Schema } from 'effect'
-import { FieldNameSchema } from '@/domain/models/table/field-name'
-import { IdSchema } from '@/domain/models/table/id'
+import { BaseFieldSchema } from './base-field'
 
 /**
  * User Field
@@ -27,14 +26,16 @@ import { IdSchema } from '@/domain/models/table/id'
  * }
  * ```
  */
-export const UserFieldSchema = Schema.Struct({
-  id: IdSchema,
-  name: FieldNameSchema,
-  required: Schema.optional(Schema.Boolean),
-  indexed: Schema.optional(Schema.Boolean),
-  type: Schema.Literal('user'),
-  allowMultiple: Schema.optional(Schema.Boolean),
-}).pipe(
+export const UserFieldSchema = BaseFieldSchema.pipe(
+  Schema.extend(
+    Schema.Struct({
+      required: Schema.optional(Schema.Boolean),
+      indexed: Schema.optional(Schema.Boolean),
+      type: Schema.Literal('user'),
+      allowMultiple: Schema.optional(Schema.Boolean),
+    })
+  )
+).pipe(
   Schema.annotations({
     title: 'User Field',
     description:

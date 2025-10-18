@@ -6,41 +6,42 @@
  */
 
 import { Schema } from 'effect'
-import { FieldNameSchema } from '@/domain/models/table/field-name'
-import { IdSchema } from '@/domain/models/table/id'
+import { BaseFieldSchema } from './base-field'
 
-export const MultipleAttachmentsFieldSchema = Schema.Struct({
-  id: IdSchema,
-  name: FieldNameSchema,
-  required: Schema.optional(Schema.Boolean),
-  indexed: Schema.optional(Schema.Boolean),
-  type: Schema.Literal('multiple-attachments'),
-  maxFiles: Schema.optional(
-    Schema.Int.pipe(
-      Schema.greaterThanOrEqualTo(1),
-      Schema.annotations({ description: 'Maximum number of files allowed' })
-    )
-  ),
-  storage: Schema.optional(
+export const MultipleAttachmentsFieldSchema = BaseFieldSchema.pipe(
+  Schema.extend(
     Schema.Struct({
-      provider: Schema.optional(
-        Schema.String.pipe(Schema.annotations({ description: 'Storage provider' }))
-      ),
-      bucket: Schema.optional(
-        Schema.String.pipe(
-          Schema.annotations({ description: 'S3 bucket name (required for s3 provider)' })
-        )
-      ),
-      maxSize: Schema.optional(
+      required: Schema.optional(Schema.Boolean),
+      indexed: Schema.optional(Schema.Boolean),
+      type: Schema.Literal('multiple-attachments'),
+      maxFiles: Schema.optional(
         Schema.Int.pipe(
           Schema.greaterThanOrEqualTo(1),
-          Schema.annotations({ description: 'Maximum file size in bytes per file' })
+          Schema.annotations({ description: 'Maximum number of files allowed' })
         )
       ),
-      allowedTypes: Schema.optional(Schema.Array(Schema.String)),
+      storage: Schema.optional(
+        Schema.Struct({
+          provider: Schema.optional(
+            Schema.String.pipe(Schema.annotations({ description: 'Storage provider' }))
+          ),
+          bucket: Schema.optional(
+            Schema.String.pipe(
+              Schema.annotations({ description: 'S3 bucket name (required for s3 provider)' })
+            )
+          ),
+          maxSize: Schema.optional(
+            Schema.Int.pipe(
+              Schema.greaterThanOrEqualTo(1),
+              Schema.annotations({ description: 'Maximum file size in bytes per file' })
+            )
+          ),
+          allowedTypes: Schema.optional(Schema.Array(Schema.String)),
+        })
+      ),
     })
-  ),
-}).pipe(
+  )
+).pipe(
   Schema.annotations({
     title: 'Multiple Attachments Field',
     description: 'Stores multiple file attachments with storage configuration.',

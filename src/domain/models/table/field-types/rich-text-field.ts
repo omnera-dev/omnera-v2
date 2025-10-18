@@ -6,8 +6,7 @@
  */
 
 import { Schema } from 'effect'
-import { FieldNameSchema } from '@/domain/models/table/field-name'
-import { IdSchema } from '@/domain/models/table/id'
+import { BaseFieldSchema } from './base-field'
 
 /**
  * Rich Text Field
@@ -27,20 +26,22 @@ import { IdSchema } from '@/domain/models/table/id'
  * }
  * ```
  */
-export const RichTextFieldSchema = Schema.Struct({
-  id: IdSchema,
-  name: FieldNameSchema,
-  required: Schema.optional(Schema.Boolean),
-  type: Schema.Literal('rich-text'),
-  maxLength: Schema.optional(
-    Schema.Int.pipe(
-      Schema.greaterThanOrEqualTo(1),
-      Schema.annotations({
-        description: 'Maximum length in characters',
-      })
-    )
-  ),
-}).pipe(
+export const RichTextFieldSchema = BaseFieldSchema.pipe(
+  Schema.extend(
+    Schema.Struct({
+      required: Schema.optional(Schema.Boolean),
+      type: Schema.Literal('rich-text'),
+      maxLength: Schema.optional(
+        Schema.Int.pipe(
+          Schema.greaterThanOrEqualTo(1),
+          Schema.annotations({
+            description: 'Maximum length in characters',
+          })
+        )
+      ),
+    })
+  )
+).pipe(
   Schema.annotations({
     title: 'Rich Text Field',
     description:

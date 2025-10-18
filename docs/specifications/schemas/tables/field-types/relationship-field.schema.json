@@ -1,0 +1,130 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Relationship Field",
+  "description": "Foreign key relationship to another table creating associations between entities. Supports three relationship types: one-to-one (single unique reference), one-to-many (single reference to many records), many-to-many (junction table for bidirectional references). Configure onDelete behavior (cascade deletes related, set-null clears reference, restrict prevents deletion, no-action does nothing). Configure onUpdate behavior for key changes. Specify displayField to show human-readable value from related table. Automatically indexed for query performance.",
+  "type": "object",
+  "properties": {
+    "id": {
+      "$ref": "../../common/definitions.schema.json#/definitions/id",
+      "x-user-stories": [
+        "GIVEN a new entity is created WHEN the system assigns an ID THEN it should be unique within the parent collection",
+        "GIVEN an entity exists WHEN attempting to modify its ID THEN the system should prevent changes (read-only constraint)",
+        "GIVEN a client requests an entity by ID WHEN the ID is valid THEN the entity should be retrieved successfully"
+      ]
+    },
+    "name": {
+      "$ref": "../../common/definitions.schema.json#/definitions/name",
+      "x-user-stories": [
+        "GIVEN new field is created WHEN saving configuration THEN field name should follow database naming conventions",
+        "GIVEN field with duplicate name WHEN validating table schema THEN error should prevent conflicts",
+        "GIVEN field name is set WHEN querying data THEN field should be accessible by its name"
+      ]
+    },
+    "required": {
+      "type": "boolean",
+      "default": false,
+      "x-business-rules": [
+        "Defaults to false when not specified, providing sensible fallback behavior without requiring explicit configuration"
+      ],
+      "x-user-stories": [
+        "GIVEN required is true WHEN processing entity THEN corresponding behavior should be enforced",
+        "GIVEN required is false (default: False) WHEN processing entity THEN corresponding behavior should not be enforced",
+        "GIVEN configuration with required WHEN validating settings THEN boolean value should be accepted"
+      ]
+    },
+    "indexed": {
+      "type": "boolean",
+      "default": true,
+      "description": "Whether to create a database index on this field for faster queries (recommended for foreign keys)",
+      "x-business-rules": [
+        "Defaults to true when not specified, providing sensible fallback behavior without requiring explicit configuration"
+      ],
+      "x-user-stories": [
+        "GIVEN indexed is true WHEN processing entity THEN corresponding behavior should be enforced",
+        "GIVEN indexed is false (default: True) WHEN processing entity THEN corresponding behavior should not be enforced",
+        "GIVEN configuration with indexed WHEN validating settings THEN boolean value should be accepted"
+      ]
+    },
+    "type": {
+      "type": "string",
+      "const": "relationship",
+      "x-business-rules": [
+        "Fixed value (relationship) identifies this specific root.properties.tables.items.properties.fields.items.anyOf.6.properties.type type in discriminated unions and routing logic"
+      ],
+      "x-user-stories": [
+        "GIVEN entity with type='relationship' WHEN processing configuration THEN correct handler should be selected",
+        "GIVEN invalid type value WHEN validating configuration THEN clear error message should identify the issue"
+      ]
+    },
+    "relatedTable": {
+      "type": "string",
+      "description": "Name of the related table",
+      "minLength": 1,
+      "x-business-rules": ["Name of the related table"],
+      "x-user-stories": [
+        "GIVEN user provides relatedTable with at least 1 characters WHEN validating input THEN value should be accepted",
+        "GIVEN user provides relatedTable shorter than 1 chars WHEN validating input THEN error should require minimum length"
+      ]
+    },
+    "relationType": {
+      "type": "string",
+      "enum": ["one-to-one", "one-to-many", "many-to-many"],
+      "default": "one-to-many",
+      "description": "Type of relationship",
+      "x-business-rules": [
+        "Restricted to 3 allowed values (one-to-one, one-to-many, many-to-many) to maintain type safety and enable clear validation error messages",
+        "Defaults to \"one-to-many\" when not specified, providing sensible fallback behavior without requiring explicit configuration"
+      ],
+      "x-user-stories": [
+        "GIVEN user selects relationType from valid options WHEN validating input THEN selection should be accepted",
+        "GIVEN user provides invalid relationType value WHEN validating input THEN error should list valid options: one-to-one, one-to-many, many-to-many",
+        "GIVEN relationType is set to any valid enum value WHEN processing entity THEN appropriate behavior should execute"
+      ]
+    },
+    "displayField": {
+      "type": "string",
+      "description": "Field from related table to display in UI",
+      "minLength": 1,
+      "x-business-rules": ["Field from related table to display in UI"],
+      "x-user-stories": [
+        "GIVEN user provides displayField with at least 1 characters WHEN validating input THEN value should be accepted",
+        "GIVEN user provides displayField shorter than 1 chars WHEN validating input THEN error should require minimum length"
+      ]
+    },
+    "onDelete": {
+      "type": "string",
+      "enum": ["cascade", "set-null", "restrict", "no-action"],
+      "default": "restrict",
+      "description": "Action to take when the related record is deleted",
+      "x-business-rules": [
+        "Restricted to 4 allowed values (cascade, set-null, restrict, ...) to maintain type safety and enable clear validation error messages",
+        "Defaults to \"restrict\" when not specified, providing sensible fallback behavior without requiring explicit configuration"
+      ],
+      "x-user-stories": [
+        "GIVEN user selects onDelete from valid options WHEN validating input THEN selection should be accepted",
+        "GIVEN user provides invalid onDelete value WHEN validating input THEN error should list valid options: cascade, set-null, restrict",
+        "GIVEN onDelete is set to any valid enum value WHEN processing entity THEN appropriate behavior should execute"
+      ]
+    },
+    "onUpdate": {
+      "type": "string",
+      "enum": ["cascade", "set-null", "restrict", "no-action"],
+      "default": "cascade",
+      "description": "Action to take when the related record's key is updated",
+      "x-business-rules": [
+        "Restricted to 4 allowed values (cascade, set-null, restrict, ...) to maintain type safety and enable clear validation error messages",
+        "Defaults to \"cascade\" when not specified, providing sensible fallback behavior without requiring explicit configuration"
+      ],
+      "x-user-stories": [
+        "GIVEN user selects onUpdate from valid options WHEN validating input THEN selection should be accepted",
+        "GIVEN user provides invalid onUpdate value WHEN validating input THEN error should list valid options: cascade, set-null, restrict",
+        "GIVEN onUpdate is set to any valid enum value WHEN processing entity THEN appropriate behavior should execute"
+      ]
+    }
+  },
+  "required": ["id", "name", "type", "relatedTable", "relationType"],
+  "additionalProperties": false,
+  "x-business-rules": [
+    "Uniqueness constraint prevents conflicts and ensures each relationship field can be unambiguously referenced"
+  ]
+}

@@ -1,0 +1,78 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "User Field",
+  "description": "Reference to application users/collaborators for assignments, ownership, and mentions. Links records to user accounts. Set allowMultiple=true to assign multiple users (e.g., project team members), or false for single assignment (e.g., task owner). Automatically indexed for efficient filtering by user. Displays user profile information (name, avatar). Useful for task assignments, record ownership, collaboration, and audit trails.",
+  "type": "object",
+  "properties": {
+    "id": {
+      "$ref": "../../common/definitions.schema.json#/definitions/id",
+      "x-user-stories": [
+        "GIVEN a new entity is created WHEN the system assigns an ID THEN it should be unique within the parent collection",
+        "GIVEN an entity exists WHEN attempting to modify its ID THEN the system should prevent changes (read-only constraint)",
+        "GIVEN a client requests an entity by ID WHEN the ID is valid THEN the entity should be retrieved successfully"
+      ]
+    },
+    "name": {
+      "$ref": "../../common/definitions.schema.json#/definitions/name",
+      "x-user-stories": [
+        "GIVEN new field is created WHEN saving configuration THEN field name should follow database naming conventions",
+        "GIVEN field with duplicate name WHEN validating table schema THEN error should prevent conflicts",
+        "GIVEN field name is set WHEN querying data THEN field should be accessible by its name"
+      ]
+    },
+    "required": {
+      "type": "boolean",
+      "default": false,
+      "x-business-rules": [
+        "Defaults to false when not specified, providing sensible fallback behavior without requiring explicit configuration"
+      ],
+      "x-user-stories": [
+        "GIVEN required is true WHEN processing entity THEN corresponding behavior should be enforced",
+        "GIVEN required is false (default: False) WHEN processing entity THEN corresponding behavior should not be enforced",
+        "GIVEN configuration with required WHEN validating settings THEN boolean value should be accepted"
+      ]
+    },
+    "indexed": {
+      "type": "boolean",
+      "default": true,
+      "description": "Whether to create a database index on this field for faster queries",
+      "x-business-rules": [
+        "Defaults to true when not specified, providing sensible fallback behavior without requiring explicit configuration"
+      ],
+      "x-user-stories": [
+        "GIVEN indexed is true WHEN processing entity THEN corresponding behavior should be enforced",
+        "GIVEN indexed is false (default: True) WHEN processing entity THEN corresponding behavior should not be enforced",
+        "GIVEN configuration with indexed WHEN validating settings THEN boolean value should be accepted"
+      ]
+    },
+    "type": {
+      "type": "string",
+      "const": "user",
+      "x-business-rules": [
+        "Fixed value (user) identifies this specific root.properties.tables.items.properties.fields.items.anyOf.12.properties.type type in discriminated unions and routing logic"
+      ],
+      "x-user-stories": [
+        "GIVEN entity with type='user' WHEN processing configuration THEN correct handler should be selected",
+        "GIVEN invalid type value WHEN validating configuration THEN clear error message should identify the issue"
+      ]
+    },
+    "allowMultiple": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether to allow multiple users to be selected",
+      "x-business-rules": [
+        "Defaults to false when not specified, providing sensible fallback behavior without requiring explicit configuration"
+      ],
+      "x-user-stories": [
+        "GIVEN allowMultiple is true WHEN processing entity THEN corresponding behavior should be enforced",
+        "GIVEN allowMultiple is false (default: False) WHEN processing entity THEN corresponding behavior should not be enforced",
+        "GIVEN configuration with allowMultiple WHEN validating settings THEN boolean value should be accepted"
+      ]
+    }
+  },
+  "required": ["id", "name", "type"],
+  "additionalProperties": false,
+  "x-business-rules": [
+    "Object structure groups related user field properties for better organization and type-safe access"
+  ]
+}

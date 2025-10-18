@@ -6,32 +6,35 @@
  */
 
 import { Schema } from 'effect'
-import { FieldNameSchema } from '@/domain/models/table/field-name'
-import { IdSchema } from '@/domain/models/table/id'
+import { BaseFieldSchema } from './base-field'
 
-export const StatusFieldSchema = Schema.Struct({
-  id: IdSchema,
-  name: FieldNameSchema,
-  required: Schema.optional(Schema.Boolean),
-  indexed: Schema.optional(Schema.Boolean),
-  type: Schema.Literal('status'),
-  options: Schema.Array(
+export const StatusFieldSchema = BaseFieldSchema.pipe(
+  Schema.extend(
     Schema.Struct({
-      value: Schema.String.pipe(Schema.minLength(1, { message: () => 'This field is required' })),
-      color: Schema.optional(
-        Schema.String.pipe(
-          Schema.pattern(/^#[0-9a-fA-F]{6}$/, {
-            message: () => 'Hex color code for the status',
-          }),
-          Schema.annotations({
-            description: 'Hex color code for the status',
-          })
-        )
+      required: Schema.optional(Schema.Boolean),
+      indexed: Schema.optional(Schema.Boolean),
+      type: Schema.Literal('status'),
+      options: Schema.Array(
+        Schema.Struct({
+          value: Schema.String.pipe(
+            Schema.minLength(1, { message: () => 'This field is required' })
+          ),
+          color: Schema.optional(
+            Schema.String.pipe(
+              Schema.pattern(/^#[0-9a-fA-F]{6}$/, {
+                message: () => 'Hex color code for the status',
+              }),
+              Schema.annotations({
+                description: 'Hex color code for the status',
+              })
+            )
+          ),
+        })
       ),
+      default: Schema.optional(Schema.String),
     })
-  ),
-  default: Schema.optional(Schema.String),
-}).pipe(
+  )
+).pipe(
   Schema.annotations({
     title: 'Status Field',
     description: 'Status field with colored options for workflow states.',

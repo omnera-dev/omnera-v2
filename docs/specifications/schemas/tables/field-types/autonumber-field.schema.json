@@ -1,0 +1,80 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Autonumber Field",
+  "description": "Auto-incrementing unique number (read-only)",
+  "type": "object",
+  "properties": {
+    "id": {
+      "$ref": "../../common/definitions.schema.json#/definitions/id",
+      "x-user-stories": [
+        "GIVEN a new entity is created WHEN the system assigns an ID THEN it should be unique within the parent collection",
+        "GIVEN an entity exists WHEN attempting to modify its ID THEN the system should prevent changes (read-only constraint)",
+        "GIVEN a client requests an entity by ID WHEN the ID is valid THEN the entity should be retrieved successfully"
+      ]
+    },
+    "name": {
+      "$ref": "../../common/definitions.schema.json#/definitions/name",
+      "x-user-stories": [
+        "GIVEN new field is created WHEN saving configuration THEN field name should follow database naming conventions",
+        "GIVEN field with duplicate name WHEN validating table schema THEN error should prevent conflicts",
+        "GIVEN field name is set WHEN querying data THEN field should be accessible by its name"
+      ]
+    },
+    "type": {
+      "type": "string",
+      "const": "autonumber",
+      "x-business-rules": [
+        "Fixed value (autonumber) identifies this specific root.properties.tables.items.properties.fields.items.anyOf.22.properties.type type in discriminated unions and routing logic"
+      ],
+      "x-user-stories": [
+        "GIVEN entity with type='autonumber' WHEN processing configuration THEN correct handler should be selected",
+        "GIVEN invalid type value WHEN validating configuration THEN clear error message should identify the issue"
+      ]
+    },
+    "prefix": {
+      "type": "string",
+      "description": "Optional prefix for the autonumber",
+      "examples": ["INV-", "ORD-", ""],
+      "x-business-rules": ["Optional prefix for the autonumber"],
+      "x-user-stories": [
+        "GIVEN user provides prefix WHEN validating input THEN string value should be accepted",
+        "GIVEN prefix is empty string WHEN validating input THEN behavior should follow optional/required rules"
+      ]
+    },
+    "startFrom": {
+      "type": "integer",
+      "minimum": 1,
+      "default": 1,
+      "description": "Starting number",
+      "x-business-rules": [
+        "Defaults to 1 when not specified, providing sensible fallback behavior without requiring explicit configuration"
+      ],
+      "x-user-stories": [
+        "GIVEN user provides startFrom >= 1 WHEN validating input THEN value should be accepted",
+        "GIVEN user provides startFrom < 1 WHEN validating input THEN error should enforce minimum value"
+      ]
+    },
+    "digits": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 10,
+      "default": 3,
+      "description": "Number of digits with zero padding",
+      "x-business-rules": [
+        "Numeric range (1-10) prevents overflow errors and ensures values stay within valid business bounds",
+        "Defaults to 3 when not specified, providing sensible fallback behavior without requiring explicit configuration"
+      ],
+      "x-user-stories": [
+        "GIVEN user provides digits between 1 and 10 WHEN validating input THEN value should be accepted",
+        "GIVEN user provides digits below 1 WHEN validating input THEN error should enforce minimum value",
+        "GIVEN user provides digits above 10 WHEN validating input THEN error should enforce maximum value"
+      ]
+    }
+  },
+  "required": ["id", "name", "type"],
+  "additionalProperties": false,
+  "x-business-rules": [
+    "Autonumber Field is immutable after creation to ensure data integrity and prevent accidental corruption",
+    "Uniqueness constraint prevents conflicts and ensures each autonumber field can be unambiguously referenced"
+  ]
+}

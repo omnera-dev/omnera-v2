@@ -1,0 +1,63 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Record Created",
+  "description": "Triggered when a record is created",
+  "type": "object",
+  "properties": {
+    "service": {
+      "type": "string",
+      "const": "database",
+      "x-business-rules": [
+        "Fixed value (database) identifies this specific root.definitions.automation_trigger.anyOf.1.anyOf.0.properties.service type in discriminated unions and routing logic"
+      ],
+      "x-user-stories": [
+        "GIVEN entity with service='database' WHEN processing configuration THEN correct handler should be selected",
+        "GIVEN invalid service value WHEN validating configuration THEN clear error message should identify the issue"
+      ]
+    },
+    "event": {
+      "type": "string",
+      "const": "record-created",
+      "x-business-rules": [
+        "Fixed value (record-created) identifies this specific root.definitions.automation_trigger.anyOf.1.anyOf.0.properties.event type in discriminated unions and routing logic"
+      ],
+      "x-user-stories": [
+        "GIVEN entity with event='record-created' WHEN processing configuration THEN correct handler should be selected",
+        "GIVEN invalid event value WHEN validating configuration THEN clear error message should identify the issue"
+      ]
+    },
+    "params": {
+      "type": "object",
+      "properties": {
+        "table": {
+          "type": "string",
+          "x-business-rules": [
+            "Table name must match an existing table definition in the application configuration",
+            "Trigger fires immediately after a new record is successfully created in the specified table",
+            "Trigger receives the newly created record data as context for use in automation actions",
+            "Multiple automations can listen to the same table's record-created events"
+          ],
+          "x-user-stories": [
+            "GIVEN user provides table WHEN validating input THEN string value should be accepted",
+            "GIVEN table is empty string WHEN validating input THEN behavior should follow optional/required rules"
+          ]
+        }
+      },
+      "required": ["table"],
+      "additionalProperties": false,
+      "x-business-rules": [
+        "Object structure groups related params properties for better organization and type-safe access"
+      ],
+      "x-user-stories": [
+        "GIVEN user configures params WHEN validating input THEN value should meet schema requirements",
+        "GIVEN params is set WHEN processing configuration THEN value should be used correctly"
+      ]
+    }
+  },
+  "required": ["service", "event", "params"],
+  "additionalProperties": false,
+  "x-user-stories": ["GIVEN a record is created WHEN I run an automation THEN it should succeed"],
+  "x-business-rules": [
+    "Object structure groups related record created properties for better organization and type-safe access"
+  ]
+}

@@ -30,11 +30,7 @@ export const CheckboxFieldSchema = BaseFieldSchema.pipe(
   Schema.extend(
     Schema.Struct({
       type: Schema.Literal('checkbox'),
-      default: Schema.optional(Schema.Boolean).pipe(
-        Schema.annotations({
-          description: 'Default value when creating new records',
-        })
-      ),
+      default: Schema.optional(Schema.Boolean),
     })
   )
 ).pipe(

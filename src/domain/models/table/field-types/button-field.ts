@@ -6,29 +6,32 @@
  */
 
 import { Schema } from 'effect'
-import { FieldNameSchema } from '@/domain/models/table/field-name'
-import { IdSchema } from '@/domain/models/table/id'
+import { BaseFieldSchema } from './base-field'
 
-export const ButtonFieldSchema = Schema.Struct({
-  id: IdSchema,
-  name: FieldNameSchema,
-  type: Schema.Literal('button'),
-  label: Schema.String.pipe(
-    Schema.minLength(1, { message: () => 'This field is required' }),
-    Schema.annotations({ description: 'Button text label' })
-  ),
-  action: Schema.String.pipe(Schema.annotations({ description: 'Type of action to trigger' })),
-  url: Schema.optional(
-    Schema.String.pipe(Schema.annotations({ description: "URL to open (when action is 'url')" }))
-  ),
-  automation: Schema.optional(
-    Schema.String.pipe(
-      Schema.annotations({
-        description: "Automation name to trigger (when action is 'automation')",
-      })
-    )
-  ),
-}).pipe(
+export const ButtonFieldSchema = BaseFieldSchema.pipe(
+  Schema.extend(
+    Schema.Struct({
+      type: Schema.Literal('button'),
+      label: Schema.String.pipe(
+        Schema.minLength(1, { message: () => 'This field is required' }),
+        Schema.annotations({ description: 'Button text label' })
+      ),
+      action: Schema.String.pipe(Schema.annotations({ description: 'Type of action to trigger' })),
+      url: Schema.optional(
+        Schema.String.pipe(
+          Schema.annotations({ description: "URL to open (when action is 'url')" })
+        )
+      ),
+      automation: Schema.optional(
+        Schema.String.pipe(
+          Schema.annotations({
+            description: "Automation name to trigger (when action is 'automation')",
+          })
+        )
+      ),
+    })
+  )
+).pipe(
   Schema.annotations({
     title: 'Button Field',
     description:

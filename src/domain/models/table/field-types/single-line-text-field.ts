@@ -6,8 +6,7 @@
  */
 
 import { Schema } from 'effect'
-import { FieldNameSchema } from '@/domain/models/table/field-name'
-import { IdSchema } from '@/domain/models/table/id'
+import { BaseFieldSchema } from './base-field'
 
 /**
  * Single Line Text Field
@@ -35,38 +34,25 @@ import { IdSchema } from '@/domain/models/table/id'
  * }
  * ```
  */
-export const SingleLineTextFieldSchema = Schema.Struct({
-  id: IdSchema,
-  name: FieldNameSchema,
-  type: Schema.Literal('single-line-text').pipe(
-    Schema.annotations({
-      description:
-        "Constant value 'single-line-text' for type discrimination in discriminated unions",
+export const SingleLineTextFieldSchema = BaseFieldSchema.pipe(
+  Schema.extend(
+    Schema.Struct({
+      type: Schema.Literal('single-line-text').pipe(
+        Schema.annotations({
+          description:
+            "Constant value 'single-line-text' for type discrimination in discriminated unions",
+        })
+      ),
+      default: Schema.optional(
+        Schema.String.pipe(
+          Schema.annotations({
+            description: 'Default value for this field when creating new records',
+          })
+        )
+      ),
     })
-  ),
-  required: Schema.optional(Schema.Boolean).pipe(
-    Schema.annotations({
-      description: 'Whether this field is required (cannot be empty)',
-    })
-  ),
-  unique: Schema.optional(Schema.Boolean).pipe(
-    Schema.annotations({
-      description: 'Whether this field must contain unique values across all rows',
-    })
-  ),
-  indexed: Schema.optional(Schema.Boolean).pipe(
-    Schema.annotations({
-      description: 'Whether to create a database index on this field for faster queries',
-    })
-  ),
-  default: Schema.optional(
-    Schema.String.pipe(
-      Schema.annotations({
-        description: 'Default value for this field when creating new records',
-      })
-    )
-  ),
-}).pipe(
+  )
+).pipe(
   Schema.annotations({
     title: 'Single Line Text Field',
     description:

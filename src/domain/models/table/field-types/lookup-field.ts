@@ -6,22 +6,23 @@
  */
 
 import { Schema } from 'effect'
-import { FieldNameSchema } from '@/domain/models/table/field-name'
-import { IdSchema } from '@/domain/models/table/id'
+import { BaseFieldSchema } from './base-field'
 
-export const LookupFieldSchema = Schema.Struct({
-  id: IdSchema,
-  name: FieldNameSchema,
-  type: Schema.Literal('lookup'),
-  relationshipField: Schema.String.pipe(
-    Schema.minLength(1, { message: () => 'This field is required' }),
-    Schema.annotations({ description: 'Name of the relationship field to lookup from' })
-  ),
-  relatedField: Schema.String.pipe(
-    Schema.minLength(1, { message: () => 'This field is required' }),
-    Schema.annotations({ description: 'Name of the field in the related table to display' })
-  ),
-}).pipe(
+export const LookupFieldSchema = BaseFieldSchema.pipe(
+  Schema.extend(
+    Schema.Struct({
+      type: Schema.Literal('lookup'),
+      relationshipField: Schema.String.pipe(
+        Schema.minLength(1, { message: () => 'This field is required' }),
+        Schema.annotations({ description: 'Name of the relationship field to lookup from' })
+      ),
+      relatedField: Schema.String.pipe(
+        Schema.minLength(1, { message: () => 'This field is required' }),
+        Schema.annotations({ description: 'Name of the field in the related table to display' })
+      ),
+    })
+  )
+).pipe(
   Schema.annotations({
     title: 'Lookup Field',
     description: 'Displays values from related records without aggregation.',

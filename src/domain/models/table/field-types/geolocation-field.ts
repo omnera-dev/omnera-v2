@@ -6,8 +6,7 @@
  */
 
 import { Schema } from 'effect'
-import { FieldNameSchema } from '@/domain/models/table/field-name'
-import { IdSchema } from '@/domain/models/table/id'
+import { BaseFieldSchema } from './base-field'
 
 /**
  * Geolocation Field
@@ -26,12 +25,14 @@ import { IdSchema } from '@/domain/models/table/id'
  * }
  * ```
  */
-export const GeolocationFieldSchema = Schema.Struct({
-  id: IdSchema,
-  name: FieldNameSchema,
-  required: Schema.optional(Schema.Boolean),
-  type: Schema.Literal('geolocation'),
-}).pipe(
+export const GeolocationFieldSchema = BaseFieldSchema.pipe(
+  Schema.extend(
+    Schema.Struct({
+      required: Schema.optional(Schema.Boolean),
+      type: Schema.Literal('geolocation'),
+    })
+  )
+).pipe(
   Schema.annotations({
     title: 'Geolocation Field',
     description:

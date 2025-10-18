@@ -6,8 +6,7 @@
  */
 
 import { Schema } from 'effect'
-import { FieldNameSchema } from '@/domain/models/table/field-name'
-import { IdSchema } from '@/domain/models/table/id'
+import { BaseFieldSchema } from './base-field'
 
 /**
  * Barcode Field
@@ -27,19 +26,21 @@ import { IdSchema } from '@/domain/models/table/id'
  * }
  * ```
  */
-export const BarcodeFieldSchema = Schema.Struct({
-  id: IdSchema,
-  name: FieldNameSchema,
-  required: Schema.optional(Schema.Boolean),
-  type: Schema.Literal('barcode'),
-  format: Schema.optional(
-    Schema.String.pipe(
-      Schema.annotations({
-        description: 'Barcode format',
-      })
-    )
-  ),
-}).pipe(
+export const BarcodeFieldSchema = BaseFieldSchema.pipe(
+  Schema.extend(
+    Schema.Struct({
+      required: Schema.optional(Schema.Boolean),
+      type: Schema.Literal('barcode'),
+      format: Schema.optional(
+        Schema.String.pipe(
+          Schema.annotations({
+            description: 'Barcode format',
+          })
+        )
+      ),
+    })
+  )
+).pipe(
   Schema.annotations({
     title: 'Barcode Field',
     description:

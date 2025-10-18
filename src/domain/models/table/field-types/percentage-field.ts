@@ -6,8 +6,7 @@
  */
 
 import { Schema } from 'effect'
-import { FieldNameSchema } from '@/domain/models/table/field-name'
-import { IdSchema } from '@/domain/models/table/id'
+import { BaseFieldSchema } from './base-field'
 
 /**
  * Percentage Field
@@ -41,60 +40,48 @@ import { IdSchema } from '@/domain/models/table/id'
  * }
  * ```
  */
-export const PercentageFieldSchema = Schema.Struct({
-  id: IdSchema,
-  name: FieldNameSchema,
-  type: Schema.Literal('percentage').pipe(
-    Schema.annotations({
-      description: "Constant value 'percentage' for type discrimination in discriminated unions",
+export const PercentageFieldSchema = BaseFieldSchema.pipe(
+  Schema.extend(
+    Schema.Struct({
+      type: Schema.Literal('percentage').pipe(
+        Schema.annotations({
+          description:
+            "Constant value 'percentage' for type discrimination in discriminated unions",
+        })
+      ),
+      precision: Schema.optional(
+        Schema.Int.pipe(
+          Schema.greaterThanOrEqualTo(0),
+          Schema.lessThanOrEqualTo(10),
+          Schema.annotations({
+            description: 'Number of decimal places (0-10, default: 0 for whole percentages)',
+          })
+        )
+      ),
+      min: Schema.optional(
+        Schema.Number.pipe(
+          Schema.annotations({
+            description: 'Minimum allowed percentage value (inclusive, typically 0)',
+          })
+        )
+      ),
+      max: Schema.optional(
+        Schema.Number.pipe(
+          Schema.annotations({
+            description: 'Maximum allowed percentage value (inclusive, typically 100)',
+          })
+        )
+      ),
+      default: Schema.optional(
+        Schema.Number.pipe(
+          Schema.annotations({
+            description: 'Default percentage value when creating new records',
+          })
+        )
+      ),
     })
-  ),
-  required: Schema.optional(Schema.Boolean).pipe(
-    Schema.annotations({
-      description: 'Whether this field is required (cannot be empty)',
-    })
-  ),
-  unique: Schema.optional(Schema.Boolean).pipe(
-    Schema.annotations({
-      description: 'Whether this field must contain unique values across all rows',
-    })
-  ),
-  indexed: Schema.optional(Schema.Boolean).pipe(
-    Schema.annotations({
-      description: 'Whether to create a database index for faster percentage queries and sorting',
-    })
-  ),
-  precision: Schema.optional(
-    Schema.Int.pipe(
-      Schema.greaterThanOrEqualTo(0),
-      Schema.lessThanOrEqualTo(10),
-      Schema.annotations({
-        description: 'Number of decimal places (0-10, default: 0 for whole percentages)',
-      })
-    )
-  ),
-  min: Schema.optional(
-    Schema.Number.pipe(
-      Schema.annotations({
-        description: 'Minimum allowed percentage value (inclusive, typically 0)',
-      })
-    )
-  ),
-  max: Schema.optional(
-    Schema.Number.pipe(
-      Schema.annotations({
-        description: 'Maximum allowed percentage value (inclusive, typically 100)',
-      })
-    )
-  ),
-  default: Schema.optional(
-    Schema.Number.pipe(
-      Schema.annotations({
-        description: 'Default percentage value when creating new records',
-      })
-    )
-  ),
-}).pipe(
+  )
+).pipe(
   Schema.annotations({
     title: 'Percentage Field',
     description:

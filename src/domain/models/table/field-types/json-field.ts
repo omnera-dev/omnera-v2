@@ -6,16 +6,17 @@
  */
 
 import { Schema } from 'effect'
-import { FieldNameSchema } from '@/domain/models/table/field-name'
-import { IdSchema } from '@/domain/models/table/id'
+import { BaseFieldSchema } from './base-field'
 
-export const JsonFieldSchema = Schema.Struct({
-  id: IdSchema,
-  name: FieldNameSchema,
-  required: Schema.optional(Schema.Boolean),
-  type: Schema.Literal('json'),
-  schema: Schema.optional(Schema.Struct({})),
-}).pipe(
+export const JsonFieldSchema = BaseFieldSchema.pipe(
+  Schema.extend(
+    Schema.Struct({
+      required: Schema.optional(Schema.Boolean),
+      type: Schema.Literal('json'),
+      schema: Schema.optional(Schema.Struct({})),
+    })
+  )
+).pipe(
   Schema.annotations({
     title: 'JSON Field',
     description: 'Stores structured JSON data with optional schema validation.',

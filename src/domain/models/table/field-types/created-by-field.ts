@@ -6,8 +6,7 @@
  */
 
 import { Schema } from 'effect'
-import { FieldNameSchema } from '@/domain/models/table/field-name'
-import { IdSchema } from '@/domain/models/table/id'
+import { BaseFieldSchema } from './base-field'
 
 /**
  * Created By Field
@@ -27,12 +26,14 @@ import { IdSchema } from '@/domain/models/table/id'
  * }
  * ```
  */
-export const CreatedByFieldSchema = Schema.Struct({
-  id: IdSchema,
-  name: FieldNameSchema,
-  type: Schema.Literal('created-by'),
-  indexed: Schema.optional(Schema.Boolean),
-}).pipe(
+export const CreatedByFieldSchema = BaseFieldSchema.pipe(
+  Schema.extend(
+    Schema.Struct({
+      type: Schema.Literal('created-by'),
+      indexed: Schema.optional(Schema.Boolean),
+    })
+  )
+).pipe(
   Schema.annotations({
     title: 'Created By Field',
     description:

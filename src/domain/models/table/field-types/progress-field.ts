@@ -6,8 +6,7 @@
  */
 
 import { Schema } from 'effect'
-import { FieldNameSchema } from '@/domain/models/table/field-name'
-import { IdSchema } from '@/domain/models/table/id'
+import { BaseFieldSchema } from './base-field'
 
 /**
  * Progress Field
@@ -28,22 +27,24 @@ import { IdSchema } from '@/domain/models/table/id'
  * }
  * ```
  */
-export const ProgressFieldSchema = Schema.Struct({
-  id: IdSchema,
-  name: FieldNameSchema,
-  required: Schema.optional(Schema.Boolean),
-  type: Schema.Literal('progress'),
-  color: Schema.optional(
-    Schema.String.pipe(
-      Schema.pattern(/^#[0-9a-fA-F]{6}$/, {
-        message: () => 'Color of the progress bar',
-      }),
-      Schema.annotations({
-        description: 'Color of the progress bar',
-      })
-    )
-  ),
-}).pipe(
+export const ProgressFieldSchema = BaseFieldSchema.pipe(
+  Schema.extend(
+    Schema.Struct({
+      required: Schema.optional(Schema.Boolean),
+      type: Schema.Literal('progress'),
+      color: Schema.optional(
+        Schema.String.pipe(
+          Schema.pattern(/^#[0-9a-fA-F]{6}$/, {
+            message: () => 'Color of the progress bar',
+          }),
+          Schema.annotations({
+            description: 'Color of the progress bar',
+          })
+        )
+      ),
+    })
+  )
+).pipe(
   Schema.annotations({
     title: 'Progress Field',
     description:

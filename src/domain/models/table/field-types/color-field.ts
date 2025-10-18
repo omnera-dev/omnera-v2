@@ -6,8 +6,7 @@
  */
 
 import { Schema } from 'effect'
-import { FieldNameSchema } from '@/domain/models/table/field-name'
-import { IdSchema } from '@/domain/models/table/id'
+import { BaseFieldSchema } from './base-field'
 
 /**
  * Color Field
@@ -27,19 +26,21 @@ import { IdSchema } from '@/domain/models/table/id'
  * }
  * ```
  */
-export const ColorFieldSchema = Schema.Struct({
-  id: IdSchema,
-  name: FieldNameSchema,
-  required: Schema.optional(Schema.Boolean),
-  type: Schema.Literal('color'),
-  default: Schema.optional(
-    Schema.String.pipe(
-      Schema.pattern(/^#[0-9a-fA-F]{6}$/, {
-        message: () => 'Invalid format',
-      })
-    )
-  ),
-}).pipe(
+export const ColorFieldSchema = BaseFieldSchema.pipe(
+  Schema.extend(
+    Schema.Struct({
+      required: Schema.optional(Schema.Boolean),
+      type: Schema.Literal('color'),
+      default: Schema.optional(
+        Schema.String.pipe(
+          Schema.pattern(/^#[0-9a-fA-F]{6}$/, {
+            message: () => 'Invalid format',
+          })
+        )
+      ),
+    })
+  )
+).pipe(
   Schema.annotations({
     title: 'Color Field',
     description: 'Stores color values in hexadecimal format. Rendered with color picker in UI.',

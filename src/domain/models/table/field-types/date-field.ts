@@ -6,8 +6,7 @@
  */
 
 import { Schema } from 'effect'
-import { FieldNameSchema } from '@/domain/models/table/field-name'
-import { IdSchema } from '@/domain/models/table/id'
+import { BaseFieldSchema } from './base-field'
 
 /**
  * Date Field
@@ -28,32 +27,31 @@ import { IdSchema } from '@/domain/models/table/id'
  * }
  * ```
  */
-export const DateFieldSchema = Schema.Struct({
-  id: IdSchema,
-  name: FieldNameSchema,
-  required: Schema.optional(Schema.Boolean),
-  unique: Schema.optional(Schema.Boolean),
-  indexed: Schema.optional(Schema.Boolean),
-  type: Schema.Literal('date', 'datetime', 'time'),
-  format: Schema.optional(
-    Schema.String.pipe(
-      Schema.annotations({
-        description: 'Date format string',
-        examples: ['YYYY-MM-DD', 'MM/DD/YYYY', 'DD-MM-YYYY'],
-      })
-    )
-  ),
-  includeTime: Schema.optional(Schema.Boolean),
-  timezone: Schema.optional(
-    Schema.String.pipe(
-      Schema.annotations({
-        description: 'Timezone for datetime fields',
-        examples: ['UTC', 'America/New_York', 'Europe/London'],
-      })
-    )
-  ),
-  default: Schema.optional(Schema.String),
-}).pipe(
+export const DateFieldSchema = BaseFieldSchema.pipe(
+  Schema.extend(
+    Schema.Struct({
+      type: Schema.Literal('date', 'datetime', 'time'),
+      format: Schema.optional(
+        Schema.String.pipe(
+          Schema.annotations({
+            description: 'Date format string',
+            examples: ['YYYY-MM-DD', 'MM/DD/YYYY', 'DD-MM-YYYY'],
+          })
+        )
+      ),
+      includeTime: Schema.optional(Schema.Boolean),
+      timezone: Schema.optional(
+        Schema.String.pipe(
+          Schema.annotations({
+            description: 'Timezone for datetime fields',
+            examples: ['UTC', 'America/New_York', 'Europe/London'],
+          })
+        )
+      ),
+      default: Schema.optional(Schema.String),
+    })
+  )
+).pipe(
   Schema.annotations({
     title: 'Date Field',
     description:
