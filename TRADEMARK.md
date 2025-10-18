@@ -27,7 +27,7 @@ The copyright notice in all source files:
 Copyright (c) 2025 ESSENTIAL SERVICES
 ```
 
-This protects the **code itself** under the Sustainable Use License (see LICENSE.md).
+This protects the **code itself** under the Business Source License 1.1 (see LICENSE.md).
 
 ### Trademark (Brand Protection)
 

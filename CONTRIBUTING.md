@@ -153,7 +153,7 @@ You grant **ESSENTIAL SERVICES** and recipients of software distributed by ESSEN
    - Make, have made, use, offer to sell, sell, import, and otherwise transfer your contributions
 
 3. **Dual Licensing Rights**: The right to license your contributions under:
-   - The Sustainable Use License v1.0 (current license)
+   - The Business Source License 1.1 (current license)
    - Commercial licenses to third parties
    - Any other license deemed appropriate by ESSENTIAL SERVICES
 
@@ -266,4 +266,4 @@ The CLA allows us to:
 Your contributions help build a sustainable, community-driven project that balances open collaboration with commercial viability.
 
 **Copyright**: © 2025 ESSENTIAL SERVICES
-**License**: Sustainable Use License v1.0 (Fair-Code)
+**License**: Business Source License 1.1 (BSL 1.1)

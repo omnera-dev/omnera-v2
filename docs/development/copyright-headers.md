@@ -10,7 +10,7 @@ All `.ts` and `.tsx` files in `src/`, `scripts/`, and `tests/` must include:
 /**
  * Copyright (c) 2025 ESSENTIAL SERVICES
  *
- * This source code is licensed under the Sustainable Use License
+ * This source code is licensed under the Business Source License 1.1
  * found in the LICENSE.md file in the root directory of this source tree.
  */
 ```
@@ -108,7 +108,7 @@ export default defineConfig([
           '*',
           ' * Copyright (c) 2025 ESSENTIAL SERVICES',
           ' *',
-          ' * This source code is licensed under the Sustainable Use License',
+          ' * This source code is licensed under the Business Source License 1.1',
           ' * found in the LICENSE.md file in the root directory of this source tree.',
           ' ',
         ],
@@ -183,7 +183,7 @@ For scripts with shebang (`#!/usr/bin/env bun`), the header is automatically pla
 /**
  * Copyright (c) 2025 ESSENTIAL SERVICES
  *
- * This source code is licensed under the Sustainable Use License
+ * This source code is licensed under the Business Source License 1.1
  * found in the LICENSE.md file in the root directory of this source tree.
  */
 
