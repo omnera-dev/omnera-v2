@@ -1,10 +1,10 @@
-# CLAUDE.md - Omnera Project Documentation
+# CLAUDE.md - Omnera™ Project Documentation
 
 > **Note**: This is a streamlined version. Detailed documentation is available in `docs/` directory and imported on-demand when needed.
 
 ## Project Context
 
-**Vision**: Omnera aims to be a configuration-driven application platform (see `@docs/specifications/vision.md` for full vision)
+**Vision**: Omnera™ aims to be a configuration-driven application platform (see `@docs/specifications/vision.md` for full vision)
 **Current Status**: Phase 0 - Foundation (minimal schema with metadata only)
 **Implementation Progress**: See `ROADMAP.md` for detailed feature tracking and development phases
 
@@ -12,7 +12,8 @@
 
 ## Quick Reference
 
-**Project**: Omnera (npm package: "omnera")
+**Project**: Omnera™ (npm package: "omnera")
+**Legal Entity**: ESSENTIAL SERVICES (copyright holder & trademark owner)
 **Version**: 0.0.1 (managed by semantic-release)
 **License**: BSL-1.1
 **Runtime**: Bun 1.3.0 (NOT Node.js)
@@ -57,6 +58,7 @@ bun run db:check            # Check migration status
 bun run db:drop             # Drop migration
 
 # Code Quality (pre-commit)
+bun run license             # Add copyright headers to all source files
 bun run lint                # ESLint (check)
 bun run lint:fix            # ESLint (auto-fix)
 bun run format              # Prettier (format all files)
@@ -92,6 +94,20 @@ git push origin main               # Triggers release ONLY with "release:" type
 - **2-space indent** (`tabWidth: 2`)
 - **Trailing commas** (`trailingComma: "es5"`)
 - **One attribute per line** (`singleAttributePerLine: true`)
+
+### Copyright Headers (REQUIRED for all .ts/.tsx files)
+- **All source files** (src/, scripts/, tests/) MUST include copyright header
+- **Header format**:
+```typescript
+/**
+ * Copyright (c) 2025 ESSENTIAL SERVICES
+ *
+ * This source code is licensed under the Sustainable Use License
+ * found in the LICENSE.md file in the root directory of this source tree.
+ */
+```
+- **When creating new files**: Run `bun run license` after creating files to add headers
+- **For agents**: ALWAYS run `bun run license` after creating new .ts/.tsx files
 
 ### Module System
 - **Always ES Modules** (NOT CommonJS)
@@ -234,7 +250,13 @@ omnera-v2/
 
 ---
 
-**License**: Business Source License 1.1 (BSL-1.1)
-- Free for development, testing, personal projects
-- Production use allowed for internal business use
-- NOT allowed: Offering Omnera as managed service/SaaS to third parties
+**License & Trademarks**
+
+**License**: Sustainable Use License v1.0 (Fair-Code)
+- **Copyright**: ESSENTIAL SERVICES (legal entity, owns the code)
+- **Trademark**: Omnera™ is a trademark of ESSENTIAL SERVICES (registered in France)
+- **Free for**: Personal use, internal business purposes, non-commercial distribution
+- **NOT allowed**: Commercial SaaS/managed services to third parties without license
+- **Commercial licensing**: Contact license@omnera.dev for commercial use cases
+- **Philosophy**: Fair-code (source-available, commercially restricted, community-friendly)
+- See `LICENSE.md` for license terms and `TRADEMARK.md` for trademark usage guidelines

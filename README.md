@@ -1,8 +1,10 @@
-# Omnera
+# Omnera™
 
 > **⚠️ Early Development**: Omnera is in Phase 0 (Foundation). See [ROADMAP.md](ROADMAP.md) for implementation progress and [docs/specifications/vision.md](docs/specifications/vision.md) for the full product vision.
 
 A configuration-driven web application platform built with Bun, Effect, React, and Tailwind CSS.
+
+**Note**: Omnera™ is a trademark of ESSENTIAL SERVICES. See [TRADEMARK.md](TRADEMARK.md) for trademark usage guidelines.
 
 **Current Version**: 0.0.1 - Minimal web server with React SSR and dynamic CSS compilation
 
@@ -213,19 +215,32 @@ Releases are **fully automated** via GitHub Actions and semantic-release.
 
 ## License
 
-**Business Source License 1.1 (BSL-1.1)**
+[![License: SUL-1.0](https://img.shields.io/badge/License-SUL--1.0-blue.svg)](LICENSE.md)
+[![Fair Code](https://img.shields.io/badge/Fair-Code-orange.svg)](https://faircode.io)
+
+**Sustainable Use License v1.0 (Fair-Code)**
+
+Omnera is **fair-code** distributed under the Sustainable Use License. The source code is public, and you are free to use, modify, and redistribute it with some restrictions.
 
 ✅ **Free for**:
 
+- Personal and non-commercial use
+- Internal business operations
 - Development and testing
-- Personal projects
-- Internal business use
+- Contributing to the project
 
-❌ **Not allowed**:
+❌ **Commercial license required for**:
 
-- Offering Omnera as a managed service/SaaS to third parties
+- Offering Omnera as a managed service or SaaS to third parties
+- Building commercial products where Omnera provides core functionality
+- Any use that competes with the commercial offering
 
-See [LICENSE.md](LICENSE.md) for full details.
+📧 **Commercial Licensing**: For commercial use cases, contact **license@omnera.dev**
+
+See [LICENSE.md](LICENSE.md) for full terms and [TRADEMARK.md](TRADEMARK.md) for trademark usage guidelines.
+
+**Copyright**: © 2025 ESSENTIAL SERVICES
+**Trademark**: Omnera™ is a trademark of ESSENTIAL SERVICES
 
 ---
 

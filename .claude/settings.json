@@ -1,0 +1,99 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(CLAUDECODE=1 bun test src/domain/models/table/field-types/single-line-text-field.test.ts src/domain/models/table/field-types/long-text-field.test.ts src/domain/models/table/field-types/email-field.test.ts src/domain/models/table/field-types/url-field.test.ts src/domain/models/table/field-types/phone-number-field.test.ts)",
+      "Bash(for file in src/domain/models/table/field-types/{single-line-text,long-text,phone-number,email,url,integer,decimal,currency,percentage}-field.test.ts)",
+      "Bash(do)",
+      "Bash(CLAUDECODE=1 bun test src/domain/models/table/field-types/integer-field.test.ts src/domain/models/table/field-types/decimal-field.test.ts src/domain/models/table/field-types/currency-field.test.ts src/domain/models/table/field-types/percentage-field.test.ts)",
+      "Bash(bun run scripts/add-license-headers.ts)",
+      "Bash(CLAUDECODE=1 bun test src/domain/models/table/field-types/{decimal,currency,percentage}-field.test.ts)",
+      "Bash(CLAUDECODE=1 bun test src/domain/models/table/field-types/decimal-field.test.ts src/domain/models/table/field-types/currency-field.test.ts src/domain/models/table/field-types/percentage-field.test.ts)",
+      "Bash(bun run typecheck)",
+      "Bash(find src/domain/models/table/field-types -name \"*.test.ts\" -exec sed -i '' \"s/type: ''\\([^'']*\\)''/type: ''\\1'' as const/g\" {} ;)",
+      "Bash(bun run lint)",
+      "Bash(bun run license)",
+      "Bash(CLAUDECODE=1 bun test src/domain/models/table/field-types/single-line-text-field.test.ts src/domain/models/table/field-types/long-text-field.test.ts src/domain/models/table/field-types/phone-number-field.test.ts src/domain/models/table/field-types/email-field.test.ts src/domain/models/table/field-types/url-field.test.ts src/domain/models/table/field-types/integer-field.test.ts src/domain/models/table/field-types/decimal-field.test.ts src/domain/models/table/field-types/currency-field.test.ts src/domain/models/table/field-types/percentage-field.test.ts)",
+      "Read(//Users/thomasjeanneau/.config/**)",
+      "Bash(bun run lint tests/fixtures.ts)",
+      "Bash(git add docs/specifications/schemas/tables/tables.schema.json ROADMAP.md src/domain/models/table/field-types/ src/domain/models/table/fields.ts)",
+      "Bash(git reset)",
+      "Bash(git add )",
+      "Bash(docs/specifications/schemas/tables/tables.schema.json )",
+      "Bash(ROADMAP.md )",
+      "Bash(src/domain/models/table/field-types/single-line-text-field.ts )",
+      "Bash(src/domain/models/table/field-types/single-line-text-field.test.ts )",
+      "Bash(src/domain/models/table/field-types/long-text-field.ts )",
+      "Bash(src/domain/models/table/field-types/long-text-field.test.ts )",
+      "Bash(src/domain/models/table/field-types/phone-number-field.ts )",
+      "Bash(src/domain/models/table/field-types/phone-number-field.test.ts )",
+      "Bash(src/domain/models/table/field-types/email-field.ts )",
+      "Bash(src/domain/models/table/field-types/email-field.test.ts )",
+      "Bash(src/domain/models/table/field-types/url-field.ts )",
+      "Bash(src/domain/models/table/field-types/url-field.test.ts )",
+      "Bash(src/domain/models/table/field-types/integer-field.ts )",
+      "Bash(src/domain/models/table/field-types/integer-field.test.ts )",
+      "Bash(src/domain/models/table/field-types/decimal-field.ts )",
+      "Bash(src/domain/models/table/field-types/decimal-field.test.ts )",
+      "Bash(src/domain/models/table/field-types/currency-field.ts )",
+      "Bash(src/domain/models/table/field-types/currency-field.test.ts )",
+      "Bash(src/domain/models/table/field-types/percentage-field.ts )",
+      "Bash(src/domain/models/table/field-types/percentage-field.test.ts )",
+      "Bash(src/domain/models/table/field-types/index.ts )",
+      "Bash(src/domain/models/table/fields.ts)",
+      "Bash(for file in src/domain/models/table/field-types/*.ts)",
+      "Bash(if [ -f \"$file\" ])",
+      "Bash(! [[ \"$file\" =~ .test.ts$ ]])",
+      "Bash(then)",
+      "Bash(if ! grep -q \"unique:\" \"$file\")",
+      "Bash(basename \"$file\")",
+      "Bash(fi)",
+      "Bash(done)",
+      "Bash(git commit -m \"$(cat <<''EOF''\nfeat(tables): split generic field types into specific types with Effect Schemas\n\nSplit generic Number Field and Text Field into 9 specific field types, each with\nconst type discrimination and complete Effect Schema implementations.\n\n**Phase 1: Schema Refinement (spec-coherence-guardian)**\n\nSplit generic field types in tables.schema.json:\n- Text Field (5 enum values) → 5 specific types\n- Number Field (4 enum values) → 4 specific types\n\n**Text Field Types Created**:\n1. Single Line Text Field (type: \"single-line-text\")\n   - Short text for names, titles, labels\n   - Single-line constraint, no formatting\n\n2. Long Text Field (type: \"long-text\")\n   - Multi-line for paragraphs, descriptions\n   - Supports line breaks, plain text only\n\n3. Phone Number Field (type: \"phone-number\")\n   - Automatic country-based formatting\n   - Flexible validation\n\n4. Email Field (type: \"email\")\n   - Email format validation (username@domain)\n   - Lowercase storage for consistency\n\n5. URL Field (type: \"url\")\n   - URL format validation (http/https)\n   - Displays as clickable link\n\n**Number Field Types Created**:\n1. Integer Field (type: \"integer\")\n   - Whole numbers without decimals\n   - For counts, IDs, quantities, ages\n\n2. Decimal Field (type: \"decimal\")\n   - Floating-point with precision (0-10 places)\n   - Default precision: 2 decimal places\n\n3. Currency Field (type: \"currency\")\n   - Monetary values with currency code\n   - Fixed 2 decimal places, ISO 4217 validation\n   - Includes currency property (default: USD)\n\n4. Percentage Field (type: \"percentage\")\n   - Ratio values displayed as percentage\n   - Automatic % symbol, 0-100% range\n\n**Key Changes**:\n- Each field type now uses `const` (not `enum`) for type property\n- All maintain Triple-Documentation Pattern (description, examples, x-business-rules, x-user-stories)\n- Schema validates successfully (105/105 $refs valid)\n- ROADMAP.md regenerated with updated progress\n\n**Phase 2: Effect Schema Implementation (schema-architect)**\n\nImplemented type-safe Effect Schemas for all 9 field types:\n\n**Files Created** (18 files):\n- src/domain/models/table/field-types/single-line-text-field.ts + test\n- src/domain/models/table/field-types/long-text-field.ts + test\n- src/domain/models/table/field-types/phone-number-field.ts + test\n- src/domain/models/table/field-types/email-field.ts + test\n- src/domain/models/table/field-types/url-field.ts + test\n- src/domain/models/table/field-types/integer-field.ts + test\n- src/domain/models/table/field-types/decimal-field.ts + test\n- src/domain/models/table/field-types/currency-field.ts + test\n- src/domain/models/table/field-types/percentage-field.ts + test\n\n**Implementation Features**:\n- Type discrimination via Schema.Literal (e.g., Schema.Literal(''email''))\n- Common properties: id, name, required, unique, indexed\n- Field-specific properties:\n  - Currency: currency code (ISO 4217), precision\n  - Decimal/Percentage: precision (0-10 range)\n  - All number fields: min, max validation\n- Complete Triple-Documentation Pattern annotations\n- Business rules documented in JSDoc comments\n\n**Files Modified**:\n- src/domain/models/table/field-types/index.ts (added 9 exports)\n- src/domain/models/table/fields.ts (updated discriminated union)\n\n**Test Coverage**:\n- 63 new tests across 9 field types\n- All tests passing\n- Test scenarios: valid inputs, invalid inputs, edge cases, type narrowing\n\n**Type Safety Benefits**:\n- Discriminated union enables automatic type narrowing\n- TypeScript knows field-specific properties based on type\n- Compile-time type safety eliminates runtime type checks\n- Perfect IDE autocomplete for field properties\n\n**Example Type Narrowing**:\n```typescript\nif (field.type === ''currency'') {\n  // TypeScript knows: field.currency, field.precision exist\n} else if (field.type === ''email'') {\n  // TypeScript knows: email-specific properties\n}\n```\n\n**Validation**:\n- Schema compiles successfully with AJV\n- All 105 $refs resolve correctly\n- All 63 unit tests pass\n- ROADMAP.md shows updated progress (43% complete)\n\nBenefits:\n- Better type safety with const-based discrimination\n- Clear separation of field type concerns\n- Easier to add new field types (9 examples to follow)\n- Type narrowing eliminates runtime checks\n- Complete test coverage for all field types\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)\n\nCo-Authored-By: Claude <noreply@anthropic.com>\nEOF\n)\")",
+      "Bash(bun run typecheck 2)",
+      "Bash(1)"
+    ],
+    "deny": [],
+    "ask": []
+  },
+  "hooks": {
+    "Notification": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "terminal-notifier -message 'Task completed' -title 'Claude Code' -sound Ping"
+          },
+          {
+            "type": "command",
+            "command": "bun run format"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "if echo \"${CLAUDE_FILE_PATH}\" | grep -E '(src|scripts|tests)/.*\\.tsx?$' > /dev/null 2>&1; then cd ${CLAUDE_PROJECT_DIR} && bun run license 2>&1 | grep -E '(Added header|processed)' || true; fi",
+            "timeout": 30
+          }
+        ]
+      },
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bun ${CLAUDE_PROJECT_DIR}/.claude/hooks/quality-check.ts",
+            "timeout": 90
+          }
+        ]
+      }
+    ]
+  },
+  "outputStyle": "Learning",
+  "defaultMode": "plan"
+}

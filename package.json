@@ -6,8 +6,12 @@
   "bin": {
     "omnera": "./src/cli.ts"
   },
-  "author": "Thomas JEANNEAU",
-  "license": "BSL-1.1",
+  "author": {
+    "name": "Thomas JEANNEAU",
+    "company": "ESSENTIAL SERVICES",
+    "email": "license@omnera.dev"
+  },
+  "license": "SEE LICENSE IN LICENSE.md",
   "type": "module",
   "repository": {
     "type": "git",
@@ -61,6 +65,7 @@
     "test:e2e:ci": "playwright test --grep='@regression|@critical'",
     "test:e2e:ui": "playwright test --ui",
     "test:all": "bun test:unit && bun test:e2e:ci",
+    "license": "bun run scripts/add-license-headers.ts",
     "export:schema": "bun run scripts/export-schema.ts",
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate",
