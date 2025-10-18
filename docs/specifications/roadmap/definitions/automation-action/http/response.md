@@ -41,28 +41,29 @@ import { Schema } from 'effect'
 ```typescript
 /**
  * HTTP Response
- * 
+ *
  * Send an HTTP response
  */
 export const AutomationActionHttpResponseSchema = Schema.Struct({
-    name: Schema.String,
-    service: Schema.String,
-    action: Schema.String,
-    params: Schema.optional(Schema.Struct({
-      headers: Schema.optional(Schema.Struct({
-      })),
-      body: Schema.optional(Schema.Union(
-        Schema.Struct({
-        }),
-        Schema.String
-      )),
-    })),
-  }).pipe(Schema.annotations({
-    title: "HTTP Response",
-    description: "Send an HTTP response"
-  }))
+  name: Schema.String,
+  service: Schema.String,
+  action: Schema.String,
+  params: Schema.optional(
+    Schema.Struct({
+      headers: Schema.optional(Schema.Struct({})),
+      body: Schema.optional(Schema.Union(Schema.Struct({}), Schema.String)),
+    })
+  ),
+}).pipe(
+  Schema.annotations({
+    title: 'HTTP Response',
+    description: 'Send an HTTP response',
+  })
+)
 
-export type AutomationActionHttpResponse = Schema.Schema.Type<typeof AutomationActionHttpResponseSchema>
+export type AutomationActionHttpResponse = Schema.Schema.Type<
+  typeof AutomationActionHttpResponseSchema
+>
 ```
 
 ---

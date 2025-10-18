@@ -40,15 +40,15 @@ import { Schema } from 'effect'
 
 ```typescript
 /**
- * 
+ *
  * Display title for the page
  */
 export const PagesTableViewPageTitleSchema = Schema.String.pipe(
-    Schema.minLength(1, { message: () => 'This field is required' }),
-    Schema.annotations({
-    description: "Display title for the page"
+  Schema.minLength(1, { message: () => 'This field is required' }),
+  Schema.annotations({
+    description: 'Display title for the page',
   })
-  )
+)
 
 export type PagesTableViewPageTitle = Schema.Schema.Type<typeof PagesTableViewPageTitleSchema>
 ```

@@ -40,7 +40,7 @@ import { Schema } from 'effect'
 
 ```typescript
 /**
- * 
+ *
  * Whether this index enforces uniqueness. Use this for unique constraints across multiple fields.
  */
 export const TablesIndexesUniqueSchema = Schema.Boolean

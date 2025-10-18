@@ -39,7 +39,9 @@ import { Schema } from 'effect'
 ```typescript
 export const ConnectionsAirtableClientIdSchema = Schema.String
 
-export type ConnectionsAirtableClientId = Schema.Schema.Type<typeof ConnectionsAirtableClientIdSchema>
+export type ConnectionsAirtableClientId = Schema.Schema.Type<
+  typeof ConnectionsAirtableClientIdSchema
+>
 ```
 
 ---

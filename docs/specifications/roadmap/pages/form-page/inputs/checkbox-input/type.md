@@ -37,9 +37,11 @@ import { Schema } from 'effect'
 **Implementation**:
 
 ```typescript
-export const PagesFormPageInputsCheckboxInputTypeSchema = Schema.Literal("checkbox")
+export const PagesFormPageInputsCheckboxInputTypeSchema = Schema.Literal('checkbox')
 
-export type PagesFormPageInputsCheckboxInputType = Schema.Schema.Type<typeof PagesFormPageInputsCheckboxInputTypeSchema>
+export type PagesFormPageInputsCheckboxInputType = Schema.Schema.Type<
+  typeof PagesFormPageInputsCheckboxInputTypeSchema
+>
 ```
 
 ---

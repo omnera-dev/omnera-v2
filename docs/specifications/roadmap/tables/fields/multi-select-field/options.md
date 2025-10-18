@@ -38,10 +38,12 @@ import { Schema } from 'effect'
 
 ```typescript
 export const TablesFieldsMultiSelectFieldOptionsSchema = Schema.Array(Schema.String).pipe(
-    Schema.minItems(1)
-  )
+  Schema.minItems(1)
+)
 
-export type TablesFieldsMultiSelectFieldOptions = Schema.Schema.Type<typeof TablesFieldsMultiSelectFieldOptionsSchema>
+export type TablesFieldsMultiSelectFieldOptions = Schema.Schema.Type<
+  typeof TablesFieldsMultiSelectFieldOptionsSchema
+>
 ```
 
 ---

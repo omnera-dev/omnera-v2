@@ -40,17 +40,19 @@ import { Schema } from 'effect'
 
 ```typescript
 /**
- * 
+ *
  * Name of the field in the related table to aggregate
  */
 export const TablesFieldsRollupFieldRelatedFieldSchema = Schema.String.pipe(
-    Schema.minLength(1, { message: () => 'This field is required' }),
-    Schema.annotations({
-    description: "Name of the field in the related table to aggregate"
+  Schema.minLength(1, { message: () => 'This field is required' }),
+  Schema.annotations({
+    description: 'Name of the field in the related table to aggregate',
   })
-  )
+)
 
-export type TablesFieldsRollupFieldRelatedField = Schema.Schema.Type<typeof TablesFieldsRollupFieldRelatedFieldSchema>
+export type TablesFieldsRollupFieldRelatedField = Schema.Schema.Type<
+  typeof TablesFieldsRollupFieldRelatedFieldSchema
+>
 ```
 
 ---

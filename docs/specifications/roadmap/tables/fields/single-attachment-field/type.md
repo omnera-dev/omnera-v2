@@ -37,9 +37,11 @@ import { Schema } from 'effect'
 **Implementation**:
 
 ```typescript
-export const TablesFieldsSingleAttachmentFieldTypeSchema = Schema.Literal("single-attachment")
+export const TablesFieldsSingleAttachmentFieldTypeSchema = Schema.Literal('single-attachment')
 
-export type TablesFieldsSingleAttachmentFieldType = Schema.Schema.Type<typeof TablesFieldsSingleAttachmentFieldTypeSchema>
+export type TablesFieldsSingleAttachmentFieldType = Schema.Schema.Type<
+  typeof TablesFieldsSingleAttachmentFieldTypeSchema
+>
 ```
 
 ---

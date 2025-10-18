@@ -40,17 +40,19 @@ import { Schema } from 'effect'
 
 ```typescript
 /**
- * 
+ *
  * Enable CRUD actions
  */
 export const PagesTableViewPageActionsSchema = Schema.Struct({
-    create: Schema.optional(Schema.Boolean),
-    edit: Schema.optional(Schema.Boolean),
-    delete: Schema.optional(Schema.Boolean),
-    export: Schema.optional(Schema.Boolean),
-  }).pipe(Schema.annotations({
-    description: "Enable CRUD actions"
-  }))
+  create: Schema.optional(Schema.Boolean),
+  edit: Schema.optional(Schema.Boolean),
+  delete: Schema.optional(Schema.Boolean),
+  export: Schema.optional(Schema.Boolean),
+}).pipe(
+  Schema.annotations({
+    description: 'Enable CRUD actions',
+  })
+)
 
 export type PagesTableViewPageActions = Schema.Schema.Type<typeof PagesTableViewPageActionsSchema>
 ```

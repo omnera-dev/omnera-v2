@@ -41,20 +41,24 @@ import { Schema } from 'effect'
 ```typescript
 /**
  * Only Continue If
- * 
+ *
  * Continue only if condition is met
  */
 export const AutomationActionFilterOnlyContinueIfSchema = Schema.Struct({
-    name: Schema.String,
-    service: Schema.String,
-    action: Schema.String,
-    params: Schema.Unknown,
-  }).pipe(Schema.annotations({
-    title: "Only Continue If",
-    description: "Continue only if condition is met"
-  }))
+  name: Schema.String,
+  service: Schema.String,
+  action: Schema.String,
+  params: Schema.Unknown,
+}).pipe(
+  Schema.annotations({
+    title: 'Only Continue If',
+    description: 'Continue only if condition is met',
+  })
+)
 
-export type AutomationActionFilterOnlyContinueIf = Schema.Schema.Type<typeof AutomationActionFilterOnlyContinueIfSchema>
+export type AutomationActionFilterOnlyContinueIf = Schema.Schema.Type<
+  typeof AutomationActionFilterOnlyContinueIfSchema
+>
 ```
 
 ---

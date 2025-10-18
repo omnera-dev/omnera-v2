@@ -40,17 +40,19 @@ import { Schema } from 'effect'
 
 ```typescript
 /**
- * 
+ *
  * Maximum number of items allowed
  */
 export const TablesFieldsArrayFieldMaxItemsSchema = Schema.Int.pipe(
-    Schema.greaterThanOrEqualTo(1),
-    Schema.annotations({
-    description: "Maximum number of items allowed"
+  Schema.greaterThanOrEqualTo(1),
+  Schema.annotations({
+    description: 'Maximum number of items allowed',
   })
-  )
+)
 
-export type TablesFieldsArrayFieldMaxItems = Schema.Schema.Type<typeof TablesFieldsArrayFieldMaxItemsSchema>
+export type TablesFieldsArrayFieldMaxItems = Schema.Schema.Type<
+  typeof TablesFieldsArrayFieldMaxItemsSchema
+>
 ```
 
 ---

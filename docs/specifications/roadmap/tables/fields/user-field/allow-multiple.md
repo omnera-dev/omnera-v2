@@ -40,12 +40,14 @@ import { Schema } from 'effect'
 
 ```typescript
 /**
- * 
+ *
  * Whether to allow multiple users to be selected
  */
 export const TablesFieldsUserFieldAllowMultipleSchema = Schema.Boolean
 
-export type TablesFieldsUserFieldAllowMultiple = Schema.Schema.Type<typeof TablesFieldsUserFieldAllowMultipleSchema>
+export type TablesFieldsUserFieldAllowMultiple = Schema.Schema.Type<
+  typeof TablesFieldsUserFieldAllowMultipleSchema
+>
 ```
 
 ---

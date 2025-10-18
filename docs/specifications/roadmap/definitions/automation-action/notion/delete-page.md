@@ -41,30 +41,31 @@ import { Schema } from 'effect'
 ```typescript
 /**
  * Delete Page
- * 
+ *
  * Deletes (archives) a page in Notion
  */
 export const AutomationActionNotionDeletePageSchema = Schema.Struct({
-    name: Schema.String,
-    account: Schema.Union(
-      Schema.Number,
-      Schema.String
-    ),
-    service: Schema.String,
-    action: Schema.String,
-    params: Schema.Struct({
-      pageId: Schema.String.pipe(
-        Schema.annotations({
-        description: "The ID of the page to delete"
+  name: Schema.String,
+  account: Schema.Union(Schema.Number, Schema.String),
+  service: Schema.String,
+  action: Schema.String,
+  params: Schema.Struct({
+    pageId: Schema.String.pipe(
+      Schema.annotations({
+        description: 'The ID of the page to delete',
       })
-      ),
-    }),
-  }).pipe(Schema.annotations({
-    title: "Delete Page",
-    description: "Deletes (archives) a page in Notion"
-  }))
+    ),
+  }),
+}).pipe(
+  Schema.annotations({
+    title: 'Delete Page',
+    description: 'Deletes (archives) a page in Notion',
+  })
+)
 
-export type AutomationActionNotionDeletePage = Schema.Schema.Type<typeof AutomationActionNotionDeletePageSchema>
+export type AutomationActionNotionDeletePage = Schema.Schema.Type<
+  typeof AutomationActionNotionDeletePageSchema
+>
 ```
 
 ---

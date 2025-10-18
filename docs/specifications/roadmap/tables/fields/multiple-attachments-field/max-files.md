@@ -40,17 +40,19 @@ import { Schema } from 'effect'
 
 ```typescript
 /**
- * 
+ *
  * Maximum number of files allowed
  */
 export const TablesFieldsMultipleAttachmentsFieldMaxFilesSchema = Schema.Int.pipe(
-    Schema.greaterThanOrEqualTo(1),
-    Schema.annotations({
-    description: "Maximum number of files allowed"
+  Schema.greaterThanOrEqualTo(1),
+  Schema.annotations({
+    description: 'Maximum number of files allowed',
   })
-  )
+)
 
-export type TablesFieldsMultipleAttachmentsFieldMaxFiles = Schema.Schema.Type<typeof TablesFieldsMultipleAttachmentsFieldMaxFilesSchema>
+export type TablesFieldsMultipleAttachmentsFieldMaxFiles = Schema.Schema.Type<
+  typeof TablesFieldsMultipleAttachmentsFieldMaxFilesSchema
+>
 ```
 
 ---

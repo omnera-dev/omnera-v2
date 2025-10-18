@@ -41,24 +41,30 @@ import { Schema } from 'effect'
 ```typescript
 /**
  * Split Into Paths
- * 
+ *
  * Branch automation into multiple paths
  */
 export const AutomationActionFilterSplitIntoPathsSchema = Schema.Struct({
-    name: Schema.String,
-    service: Schema.String,
-    action: Schema.String,
-    params: Schema.Array(Schema.Struct({
+  name: Schema.String,
+  service: Schema.String,
+  action: Schema.String,
+  params: Schema.Array(
+    Schema.Struct({
       name: Schema.String,
       filter: Schema.Unknown,
       actions: Schema.Array(Schema.Unknown),
-    })),
-  }).pipe(Schema.annotations({
-    title: "Split Into Paths",
-    description: "Branch automation into multiple paths"
-  }))
+    })
+  ),
+}).pipe(
+  Schema.annotations({
+    title: 'Split Into Paths',
+    description: 'Branch automation into multiple paths',
+  })
+)
 
-export type AutomationActionFilterSplitIntoPaths = Schema.Schema.Type<typeof AutomationActionFilterSplitIntoPathsSchema>
+export type AutomationActionFilterSplitIntoPaths = Schema.Schema.Type<
+  typeof AutomationActionFilterSplitIntoPathsSchema
+>
 ```
 
 ---

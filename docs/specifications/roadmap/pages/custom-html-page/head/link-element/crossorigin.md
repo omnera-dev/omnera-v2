@@ -37,9 +37,14 @@ import { Schema } from 'effect'
 **Implementation**:
 
 ```typescript
-export const PagesCustomHtmlPageHeadLinkElementCrossoriginSchema = Schema.Literal("anonymous", "use-credentials")
+export const PagesCustomHtmlPageHeadLinkElementCrossoriginSchema = Schema.Literal(
+  'anonymous',
+  'use-credentials'
+)
 
-export type PagesCustomHtmlPageHeadLinkElementCrossorigin = Schema.Schema.Type<typeof PagesCustomHtmlPageHeadLinkElementCrossoriginSchema>
+export type PagesCustomHtmlPageHeadLinkElementCrossorigin = Schema.Schema.Type<
+  typeof PagesCustomHtmlPageHeadLinkElementCrossoriginSchema
+>
 ```
 
 ---

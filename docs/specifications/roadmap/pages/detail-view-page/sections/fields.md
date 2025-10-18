@@ -40,17 +40,19 @@ import { Schema } from 'effect'
 
 ```typescript
 /**
- * 
+ *
  * Fields to display in this section
  */
 export const PagesDetailViewPageSectionsFieldsSchema = Schema.Array(Schema.String).pipe(
-    Schema.minItems(1),
-    Schema.annotations({
-    description: "Fields to display in this section"
+  Schema.minItems(1),
+  Schema.annotations({
+    description: 'Fields to display in this section',
   })
-  )
+)
 
-export type PagesDetailViewPageSectionsFields = Schema.Schema.Type<typeof PagesDetailViewPageSectionsFieldsSchema>
+export type PagesDetailViewPageSectionsFields = Schema.Schema.Type<
+  typeof PagesDetailViewPageSectionsFieldsSchema
+>
 ```
 
 ---

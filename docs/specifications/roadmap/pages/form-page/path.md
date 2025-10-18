@@ -38,12 +38,12 @@ import { Schema } from 'effect'
 
 **Implementation**:
 
-```typescript
+````typescript
 /**
  * Form Path
- * 
+ *
  * URL path where the form is accessible
- * 
+ *
  * @example
  * ```typescript
  * "/contact"
@@ -62,7 +62,7 @@ export const PagesFormPagePathSchema = Schema.String.pipe(
   )
 
 export type PagesFormPagePath = Schema.Schema.Type<typeof PagesFormPagePathSchema>
-```
+````
 
 ---
 

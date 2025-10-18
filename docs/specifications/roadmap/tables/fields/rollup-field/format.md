@@ -38,25 +38,27 @@ import { Schema } from 'effect'
 
 **Implementation**:
 
-```typescript
+````typescript
 /**
- * 
+ *
  * Display format for the result
- * 
+ *
  * @example
  * ```typescript
  * "currency"
  * ```
  */
 export const TablesFieldsRollupFieldFormatSchema = Schema.String.pipe(
-    Schema.annotations({
-    description: "Display format for the result",
-    examples: ["currency","number","percentage"]
+  Schema.annotations({
+    description: 'Display format for the result',
+    examples: ['currency', 'number', 'percentage'],
   })
-  )
+)
 
-export type TablesFieldsRollupFieldFormat = Schema.Schema.Type<typeof TablesFieldsRollupFieldFormatSchema>
-```
+export type TablesFieldsRollupFieldFormat = Schema.Schema.Type<
+  typeof TablesFieldsRollupFieldFormatSchema
+>
+````
 
 ---
 

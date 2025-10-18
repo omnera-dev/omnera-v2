@@ -37,9 +37,11 @@ import { Schema } from 'effect'
 **Implementation**:
 
 ```typescript
-export const ConnectionsLinkedInAdsServiceSchema = Schema.Literal("linkedin-ads")
+export const ConnectionsLinkedInAdsServiceSchema = Schema.Literal('linkedin-ads')
 
-export type ConnectionsLinkedInAdsService = Schema.Schema.Type<typeof ConnectionsLinkedInAdsServiceSchema>
+export type ConnectionsLinkedInAdsService = Schema.Schema.Type<
+  typeof ConnectionsLinkedInAdsServiceSchema
+>
 ```
 
 ---

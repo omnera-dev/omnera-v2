@@ -41,20 +41,22 @@ import { Schema } from 'effect'
 ```typescript
 /**
  * GET Request
- * 
+ *
  * Triggered by a GET request
  */
 export const AutomationTriggerHttpGetSchema = Schema.Struct({
-    service: Schema.String,
-    event: Schema.String,
-    params: Schema.Struct({
-      path: Schema.String,
-      respondImmediately: Schema.optional(Schema.Boolean),
-    }),
-  }).pipe(Schema.annotations({
-    title: "GET Request",
-    description: "Triggered by a GET request"
-  }))
+  service: Schema.String,
+  event: Schema.String,
+  params: Schema.Struct({
+    path: Schema.String,
+    respondImmediately: Schema.optional(Schema.Boolean),
+  }),
+}).pipe(
+  Schema.annotations({
+    title: 'GET Request',
+    description: 'Triggered by a GET request',
+  })
+)
 
 export type AutomationTriggerHttpGet = Schema.Schema.Type<typeof AutomationTriggerHttpGetSchema>
 ```

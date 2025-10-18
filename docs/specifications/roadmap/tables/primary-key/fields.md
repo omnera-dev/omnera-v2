@@ -38,11 +38,11 @@ import { Schema } from 'effect'
 
 **Implementation**:
 
-```typescript
+````typescript
 /**
- * 
+ *
  * Field names for composite primary key. Only used when type is 'composite'. The combination of these fields must be unique.
- * 
+ *
  * @example
  * ```typescript
  * [
@@ -51,18 +51,22 @@ import { Schema } from 'effect'
  * ]
  * ```
  */
-export const TablesPrimaryKeyFieldsSchema = Schema.Array(Schema.String.pipe(
-    Schema.minLength(1, { message: () => 'This field is required' })
-  )).pipe(
-    Schema.minItems(2),
-    Schema.annotations({
-    description: "Field names for composite primary key. Only used when type is 'composite'. The combination of these fields must be unique.",
-    examples: [["tenant_id","user_id"],["order_id","product_id"]]
+export const TablesPrimaryKeyFieldsSchema = Schema.Array(
+  Schema.String.pipe(Schema.minLength(1, { message: () => 'This field is required' }))
+).pipe(
+  Schema.minItems(2),
+  Schema.annotations({
+    description:
+      "Field names for composite primary key. Only used when type is 'composite'. The combination of these fields must be unique.",
+    examples: [
+      ['tenant_id', 'user_id'],
+      ['order_id', 'product_id'],
+    ],
   })
-  )
+)
 
 export type TablesPrimaryKeyFields = Schema.Schema.Type<typeof TablesPrimaryKeyFieldsSchema>
-```
+````
 
 ---
 

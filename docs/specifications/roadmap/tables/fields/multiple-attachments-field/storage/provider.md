@@ -40,14 +40,21 @@ import { Schema } from 'effect'
 
 ```typescript
 /**
- * 
+ *
  * Storage provider
  */
-export const TablesFieldsMultipleAttachmentsFieldStorageProviderSchema = Schema.Literal("local", "s3").pipe(Schema.annotations({
-    description: "Storage provider"
-  }))
+export const TablesFieldsMultipleAttachmentsFieldStorageProviderSchema = Schema.Literal(
+  'local',
+  's3'
+).pipe(
+  Schema.annotations({
+    description: 'Storage provider',
+  })
+)
 
-export type TablesFieldsMultipleAttachmentsFieldStorageProvider = Schema.Schema.Type<typeof TablesFieldsMultipleAttachmentsFieldStorageProviderSchema>
+export type TablesFieldsMultipleAttachmentsFieldStorageProvider = Schema.Schema.Type<
+  typeof TablesFieldsMultipleAttachmentsFieldStorageProviderSchema
+>
 ```
 
 ---

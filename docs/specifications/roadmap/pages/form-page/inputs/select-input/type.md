@@ -37,9 +37,11 @@ import { Schema } from 'effect'
 **Implementation**:
 
 ```typescript
-export const PagesFormPageInputsSelectInputTypeSchema = Schema.Literal("single-select")
+export const PagesFormPageInputsSelectInputTypeSchema = Schema.Literal('single-select')
 
-export type PagesFormPageInputsSelectInputType = Schema.Schema.Type<typeof PagesFormPageInputsSelectInputTypeSchema>
+export type PagesFormPageInputsSelectInputType = Schema.Schema.Type<
+  typeof PagesFormPageInputsSelectInputTypeSchema
+>
 ```
 
 ---

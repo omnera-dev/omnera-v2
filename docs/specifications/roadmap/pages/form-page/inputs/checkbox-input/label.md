@@ -39,7 +39,9 @@ import { Schema } from 'effect'
 ```typescript
 export const PagesFormPageInputsCheckboxInputLabelSchema = Schema.String
 
-export type PagesFormPageInputsCheckboxInputLabel = Schema.Schema.Type<typeof PagesFormPageInputsCheckboxInputLabelSchema>
+export type PagesFormPageInputsCheckboxInputLabel = Schema.Schema.Type<
+  typeof PagesFormPageInputsCheckboxInputLabelSchema
+>
 ```
 
 ---

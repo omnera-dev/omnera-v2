@@ -41,22 +41,26 @@ import { Schema } from 'effect'
 ```typescript
 /**
  * Cron Time
- * 
+ *
  * Triggered by a cron expression
  */
 export const AutomationTriggerScheduleCronTimeSchema = Schema.Struct({
-    service: Schema.String,
-    event: Schema.String,
-    params: Schema.Struct({
-      expression: Schema.String,
-      timeZone: Schema.String,
-    }),
-  }).pipe(Schema.annotations({
-    title: "Cron Time",
-    description: "Triggered by a cron expression"
-  }))
+  service: Schema.String,
+  event: Schema.String,
+  params: Schema.Struct({
+    expression: Schema.String,
+    timeZone: Schema.String,
+  }),
+}).pipe(
+  Schema.annotations({
+    title: 'Cron Time',
+    description: 'Triggered by a cron expression',
+  })
+)
 
-export type AutomationTriggerScheduleCronTime = Schema.Schema.Type<typeof AutomationTriggerScheduleCronTimeSchema>
+export type AutomationTriggerScheduleCronTime = Schema.Schema.Type<
+  typeof AutomationTriggerScheduleCronTimeSchema
+>
 ```
 
 ---

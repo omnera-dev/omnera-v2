@@ -37,9 +37,11 @@ import { Schema } from 'effect'
 **Implementation**:
 
 ```typescript
-export const TablesFieldsRollupFieldTypeSchema = Schema.Literal("rollup")
+export const TablesFieldsRollupFieldTypeSchema = Schema.Literal('rollup')
 
-export type TablesFieldsRollupFieldType = Schema.Schema.Type<typeof TablesFieldsRollupFieldTypeSchema>
+export type TablesFieldsRollupFieldType = Schema.Schema.Type<
+  typeof TablesFieldsRollupFieldTypeSchema
+>
 ```
 
 ---

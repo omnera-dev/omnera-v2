@@ -39,7 +39,9 @@ import { Schema } from 'effect'
 ```typescript
 export const PagesTableViewPageActionsDeleteSchema = Schema.Boolean
 
-export type PagesTableViewPageActionsDelete = Schema.Schema.Type<typeof PagesTableViewPageActionsDeleteSchema>
+export type PagesTableViewPageActionsDelete = Schema.Schema.Type<
+  typeof PagesTableViewPageActionsDeleteSchema
+>
 ```
 
 ---

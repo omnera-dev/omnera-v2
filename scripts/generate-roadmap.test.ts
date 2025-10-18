@@ -198,13 +198,21 @@ describe('generate-roadmap', () => {
         },
       }
 
-      // Ensure directory exists before writing
+      // Ensure directory exists before writing (defensive check)
+      if (!existsSync(TEST_DIR)) {
+        mkdirSync(TEST_DIR, { recursive: true })
+      }
       if (!existsSync(TEST_SCHEMAS_DIR)) {
         mkdirSync(TEST_SCHEMAS_DIR, { recursive: true })
       }
 
+      // Write schemas and wait for completion
       await Bun.write(TEST_CURRENT_SCHEMA, JSON.stringify(currentSchema))
       await Bun.write(TEST_VISION_SCHEMA, JSON.stringify(visionSchema))
+
+      // Verify files exist before reading
+      expect(existsSync(TEST_CURRENT_SCHEMA)).toBe(true)
+      expect(existsSync(TEST_VISION_SCHEMA)).toBe(true)
 
       const current = await Bun.file(TEST_CURRENT_SCHEMA).json()
       const vision = await Bun.file(TEST_VISION_SCHEMA).json()

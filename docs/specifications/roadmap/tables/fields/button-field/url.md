@@ -40,14 +40,14 @@ import { Schema } from 'effect'
 
 ```typescript
 /**
- * 
+ *
  * URL to open (when action is 'url')
  */
 export const TablesFieldsButtonFieldUrlSchema = Schema.String.pipe(
-    Schema.annotations({
-    description: "URL to open (when action is 'url')"
+  Schema.annotations({
+    description: "URL to open (when action is 'url')",
   })
-  )
+)
 
 export type TablesFieldsButtonFieldUrl = Schema.Schema.Type<typeof TablesFieldsButtonFieldUrlSchema>
 ```

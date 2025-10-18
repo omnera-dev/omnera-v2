@@ -41,21 +41,25 @@ import { Schema } from 'effect'
 ```typescript
 /**
  * Record Created
- * 
+ *
  * Triggered when a record is created
  */
 export const AutomationTriggerDatabaseRecordCreatedSchema = Schema.Struct({
-    service: Schema.String,
-    event: Schema.String,
-    params: Schema.Struct({
-      table: Schema.String,
-    }),
-  }).pipe(Schema.annotations({
-    title: "Record Created",
-    description: "Triggered when a record is created"
-  }))
+  service: Schema.String,
+  event: Schema.String,
+  params: Schema.Struct({
+    table: Schema.String,
+  }),
+}).pipe(
+  Schema.annotations({
+    title: 'Record Created',
+    description: 'Triggered when a record is created',
+  })
+)
 
-export type AutomationTriggerDatabaseRecordCreated = Schema.Schema.Type<typeof AutomationTriggerDatabaseRecordCreatedSchema>
+export type AutomationTriggerDatabaseRecordCreated = Schema.Schema.Type<
+  typeof AutomationTriggerDatabaseRecordCreatedSchema
+>
 ```
 
 ---

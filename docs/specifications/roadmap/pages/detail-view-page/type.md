@@ -37,7 +37,7 @@ import { Schema } from 'effect'
 **Implementation**:
 
 ```typescript
-export const PagesDetailViewPageTypeSchema = Schema.Literal("detail-view")
+export const PagesDetailViewPageTypeSchema = Schema.Literal('detail-view')
 
 export type PagesDetailViewPageType = Schema.Schema.Type<typeof PagesDetailViewPageTypeSchema>
 ```

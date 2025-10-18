@@ -41,31 +41,32 @@ import { Schema } from 'effect'
 ```typescript
 /**
  * Get Lead Form Response
- * 
+ *
  * Retrieves a single LinkedIn Lead Form Response by its ID
  */
 export const AutomationActionLinkedinAdsGetLeadFormResponseSchema = Schema.Struct({
-    name: Schema.String,
-    account: Schema.Union(
-      Schema.Number,
-      Schema.String
-    ),
-    service: Schema.String,
-    action: Schema.String,
-    params: Schema.Struct({
-      leadResponseId: Schema.String.pipe(
-        Schema.annotations({
-        title: "Lead Response ID",
-        description: "The unique identifier for the lead form response"
+  name: Schema.String,
+  account: Schema.Union(Schema.Number, Schema.String),
+  service: Schema.String,
+  action: Schema.String,
+  params: Schema.Struct({
+    leadResponseId: Schema.String.pipe(
+      Schema.annotations({
+        title: 'Lead Response ID',
+        description: 'The unique identifier for the lead form response',
       })
-      ),
-    }),
-  }).pipe(Schema.annotations({
-    title: "Get Lead Form Response",
-    description: "Retrieves a single LinkedIn Lead Form Response by its ID"
-  }))
+    ),
+  }),
+}).pipe(
+  Schema.annotations({
+    title: 'Get Lead Form Response',
+    description: 'Retrieves a single LinkedIn Lead Form Response by its ID',
+  })
+)
 
-export type AutomationActionLinkedinAdsGetLeadFormResponse = Schema.Schema.Type<typeof AutomationActionLinkedinAdsGetLeadFormResponseSchema>
+export type AutomationActionLinkedinAdsGetLeadFormResponse = Schema.Schema.Type<
+  typeof AutomationActionLinkedinAdsGetLeadFormResponseSchema
+>
 ```
 
 ---

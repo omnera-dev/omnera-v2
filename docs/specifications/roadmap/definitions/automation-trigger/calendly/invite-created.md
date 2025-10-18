@@ -41,34 +41,41 @@ import { Schema } from 'effect'
 ```typescript
 /**
  * Invite Created
- * 
+ *
  * Triggered when a Calendly invite is created
  */
 export const AutomationTriggerCalendlyInviteCreatedSchema = Schema.Struct({
-    account: Schema.Union(
-      Schema.Number,
-      Schema.String
-    ),
-    service: Schema.String,
-    event: Schema.String,
-    params: Schema.optional(Schema.Struct({
-      organization: Schema.optional(Schema.String.pipe(
-        Schema.annotations({
-        description: "The organization of the trigger"
-      })
-      )),
-      scope: Schema.optional(Schema.String.pipe(
-        Schema.annotations({
-        description: "The scope of the trigger"
-      })
-      )),
-    })),
-  }).pipe(Schema.annotations({
-    title: "Invite Created",
-    description: "Triggered when a Calendly invite is created"
-  }))
+  account: Schema.Union(Schema.Number, Schema.String),
+  service: Schema.String,
+  event: Schema.String,
+  params: Schema.optional(
+    Schema.Struct({
+      organization: Schema.optional(
+        Schema.String.pipe(
+          Schema.annotations({
+            description: 'The organization of the trigger',
+          })
+        )
+      ),
+      scope: Schema.optional(
+        Schema.String.pipe(
+          Schema.annotations({
+            description: 'The scope of the trigger',
+          })
+        )
+      ),
+    })
+  ),
+}).pipe(
+  Schema.annotations({
+    title: 'Invite Created',
+    description: 'Triggered when a Calendly invite is created',
+  })
+)
 
-export type AutomationTriggerCalendlyInviteCreated = Schema.Schema.Type<typeof AutomationTriggerCalendlyInviteCreatedSchema>
+export type AutomationTriggerCalendlyInviteCreated = Schema.Schema.Type<
+  typeof AutomationTriggerCalendlyInviteCreatedSchema
+>
 ```
 
 ---

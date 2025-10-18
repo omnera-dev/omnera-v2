@@ -38,12 +38,12 @@ import { Schema } from 'effect'
 
 **Implementation**:
 
-```typescript
+````typescript
 /**
  * Page Path
- * 
+ *
  * URL path where the page is accessible
- * 
+ *
  * @example
  * ```typescript
  * "/"
@@ -62,7 +62,7 @@ export const PagesCustomHtmlPagePathSchema = Schema.String.pipe(
   )
 
 export type PagesCustomHtmlPagePath = Schema.Schema.Type<typeof PagesCustomHtmlPagePathSchema>
-```
+````
 
 ---
 

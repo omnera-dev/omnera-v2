@@ -34,31 +34,33 @@ import { Schema } from 'effect'
 
 **Implementation**:
 
-```typescript
+````typescript
 /**
  * Version
- * 
+ *
  * Semantic version number following SemVer 2.0.0 specification (MAJOR.MINOR.PATCH). Increment MAJOR for breaking changes, MINOR for new features, PATCH for bug fixes. Optional pre-release identifiers (e.g., -alpha, -beta.1) are supported. This version is used for change tracking, rollback capabilities, and API compatibility.
- * 
+ *
  * @example
  * ```typescript
  * "1.0.0"
  * ```
  */
 export const VersionSchema = Schema.String.pipe(
-    Schema.minLength(5, { message: () => 'Minimum length is 5 characters' }),
-    Schema.pattern(/^\\d+\\.\\d+\\.\\d+(-[a-zA-Z0-9]+)?$/, {
-    message: () => 'Semantic version number following SemVer 2.0.0 specification (MAJOR.MINOR.PATCH). Increment MAJOR for breaking changes, MINOR for new features, PATCH for bug fixes. Optional pre-release identifiers (e.g., -alpha, -beta.1) are supported. This version is used for change tracking, rollback capabilities, and API compatibility.'
+  Schema.minLength(5, { message: () => 'Minimum length is 5 characters' }),
+  Schema.pattern(/^\\d+\\.\\d+\\.\\d+(-[a-zA-Z0-9]+)?$/, {
+    message: () =>
+      'Semantic version number following SemVer 2.0.0 specification (MAJOR.MINOR.PATCH). Increment MAJOR for breaking changes, MINOR for new features, PATCH for bug fixes. Optional pre-release identifiers (e.g., -alpha, -beta.1) are supported. This version is used for change tracking, rollback capabilities, and API compatibility.',
   }),
-    Schema.annotations({
-    title: "Version",
-    description: "Semantic version number following SemVer 2.0.0 specification (MAJOR.MINOR.PATCH). Increment MAJOR for breaking changes, MINOR for new features, PATCH for bug fixes. Optional pre-release identifiers (e.g., -alpha, -beta.1) are supported. This version is used for change tracking, rollback capabilities, and API compatibility.",
-    examples: ["1.0.0","2.1.3","0.5.0-beta","1.0.0-alpha.1","3.2.1"]
+  Schema.annotations({
+    title: 'Version',
+    description:
+      'Semantic version number following SemVer 2.0.0 specification (MAJOR.MINOR.PATCH). Increment MAJOR for breaking changes, MINOR for new features, PATCH for bug fixes. Optional pre-release identifiers (e.g., -alpha, -beta.1) are supported. This version is used for change tracking, rollback capabilities, and API compatibility.',
+    examples: ['1.0.0', '2.1.3', '0.5.0-beta', '1.0.0-alpha.1', '3.2.1'],
   })
-  )
+)
 
 export type Version = Schema.Schema.Type<typeof VersionSchema>
-```
+````
 
 ---
 
@@ -127,7 +129,6 @@ This property is complete when:
 - [ ] All ESLint checks passing
 - [ ] All Prettier formatting checks passing
 - [ ] JSON schema export updated via `bun run export:schema`
-
 
 ---
 

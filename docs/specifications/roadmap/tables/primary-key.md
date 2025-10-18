@@ -38,12 +38,12 @@ import { Schema } from 'effect'
 
 **Implementation**:
 
-```typescript
+````typescript
 /**
  * Primary Key
- * 
+ *
  * Primary key configuration for the table. The primary key uniquely identifies each row and is automatically indexed.
- * 
+ *
  * @example
  * ```typescript
  * {
@@ -77,7 +77,7 @@ export const TablesPrimaryKeySchema = Schema.Struct({
   }))
 
 export type TablesPrimaryKey = Schema.Schema.Type<typeof TablesPrimaryKeySchema>
-```
+````
 
 ---
 

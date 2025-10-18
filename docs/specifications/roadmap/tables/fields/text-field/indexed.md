@@ -40,12 +40,14 @@ import { Schema } from 'effect'
 
 ```typescript
 /**
- * 
+ *
  * Whether to create a database index on this field for faster queries
  */
 export const TablesFieldsTextFieldIndexedSchema = Schema.Boolean
 
-export type TablesFieldsTextFieldIndexed = Schema.Schema.Type<typeof TablesFieldsTextFieldIndexedSchema>
+export type TablesFieldsTextFieldIndexed = Schema.Schema.Type<
+  typeof TablesFieldsTextFieldIndexedSchema
+>
 ```
 
 ---

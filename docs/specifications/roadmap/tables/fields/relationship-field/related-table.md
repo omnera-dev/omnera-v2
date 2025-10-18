@@ -40,17 +40,19 @@ import { Schema } from 'effect'
 
 ```typescript
 /**
- * 
+ *
  * Name of the related table
  */
 export const TablesFieldsRelationshipFieldRelatedTableSchema = Schema.String.pipe(
-    Schema.minLength(1, { message: () => 'This field is required' }),
-    Schema.annotations({
-    description: "Name of the related table"
+  Schema.minLength(1, { message: () => 'This field is required' }),
+  Schema.annotations({
+    description: 'Name of the related table',
   })
-  )
+)
 
-export type TablesFieldsRelationshipFieldRelatedTable = Schema.Schema.Type<typeof TablesFieldsRelationshipFieldRelatedTableSchema>
+export type TablesFieldsRelationshipFieldRelatedTable = Schema.Schema.Type<
+  typeof TablesFieldsRelationshipFieldRelatedTableSchema
+>
 ```
 
 ---

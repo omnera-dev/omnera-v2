@@ -37,9 +37,16 @@ import { Schema } from 'effect'
 **Implementation**:
 
 ```typescript
-export const TablesFieldsNumberFieldTypeSchema = Schema.Literal("integer", "decimal", "currency", "percentage")
+export const TablesFieldsNumberFieldTypeSchema = Schema.Literal(
+  'integer',
+  'decimal',
+  'currency',
+  'percentage'
+)
 
-export type TablesFieldsNumberFieldType = Schema.Schema.Type<typeof TablesFieldsNumberFieldTypeSchema>
+export type TablesFieldsNumberFieldType = Schema.Schema.Type<
+  typeof TablesFieldsNumberFieldTypeSchema
+>
 ```
 
 ---

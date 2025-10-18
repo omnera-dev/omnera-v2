@@ -41,21 +41,23 @@ import { Schema } from 'effect'
 ```typescript
 /**
  * POST Request
- * 
+ *
  * Triggered by a POST request
  */
 export const AutomationTriggerHttpPostSchema = Schema.Struct({
-    service: Schema.String,
-    event: Schema.String,
-    params: Schema.Struct({
-      path: Schema.String,
-      respondImmediately: Schema.optional(Schema.Boolean),
-      requestBody: Schema.optional(Schema.Unknown),
-    }),
-  }).pipe(Schema.annotations({
-    title: "POST Request",
-    description: "Triggered by a POST request"
-  }))
+  service: Schema.String,
+  event: Schema.String,
+  params: Schema.Struct({
+    path: Schema.String,
+    respondImmediately: Schema.optional(Schema.Boolean),
+    requestBody: Schema.optional(Schema.Unknown),
+  }),
+}).pipe(
+  Schema.annotations({
+    title: 'POST Request',
+    description: 'Triggered by a POST request',
+  })
+)
 
 export type AutomationTriggerHttpPost = Schema.Schema.Type<typeof AutomationTriggerHttpPostSchema>
 ```

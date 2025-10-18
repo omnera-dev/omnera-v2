@@ -40,14 +40,18 @@ import { Schema } from 'effect'
 
 ```typescript
 /**
- * 
+ *
  * Type of items in the array
  */
-export const TablesFieldsArrayFieldItemTypeSchema = Schema.Literal("text", "number").pipe(Schema.annotations({
-    description: "Type of items in the array"
-  }))
+export const TablesFieldsArrayFieldItemTypeSchema = Schema.Literal('text', 'number').pipe(
+  Schema.annotations({
+    description: 'Type of items in the array',
+  })
+)
 
-export type TablesFieldsArrayFieldItemType = Schema.Schema.Type<typeof TablesFieldsArrayFieldItemTypeSchema>
+export type TablesFieldsArrayFieldItemType = Schema.Schema.Type<
+  typeof TablesFieldsArrayFieldItemTypeSchema
+>
 ```
 
 ---

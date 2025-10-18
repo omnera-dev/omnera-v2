@@ -38,29 +38,30 @@ import { Schema } from 'effect'
 
 **Implementation**:
 
-```typescript
+````typescript
 /**
  * Form ID
- * 
+ *
  * Unique identifier for the form
- * 
+ *
  * @example
  * ```typescript
  * 1
  * ```
  */
 export const PagesFormPageIdSchema = Schema.Int.pipe(
-    Schema.greaterThanOrEqualTo(1),
-    Schema.lessThanOrEqualTo(9007199254740991),
-    Schema.annotations({
-    title: "ID",
-    description: "Unique positive integer identifier for entities. IDs are system-generated, auto-incrementing, and immutable. Must be unique within the parent collection (e.g., field IDs unique within a table, table IDs unique within the application). IDs are read-only and assigned automatically when entities are created. Range: 1 to 9,007,199,254,740,991 (JavaScript MAX_SAFE_INTEGER).",
-    examples: [1,2,3,100,1000]
+  Schema.greaterThanOrEqualTo(1),
+  Schema.lessThanOrEqualTo(9007199254740991),
+  Schema.annotations({
+    title: 'ID',
+    description:
+      'Unique positive integer identifier for entities. IDs are system-generated, auto-incrementing, and immutable. Must be unique within the parent collection (e.g., field IDs unique within a table, table IDs unique within the application). IDs are read-only and assigned automatically when entities are created. Range: 1 to 9,007,199,254,740,991 (JavaScript MAX_SAFE_INTEGER).',
+    examples: [1, 2, 3, 100, 1000],
   })
-  )
+)
 
 export type PagesFormPageId = Schema.Schema.Type<typeof PagesFormPageIdSchema>
-```
+````
 
 ---
 

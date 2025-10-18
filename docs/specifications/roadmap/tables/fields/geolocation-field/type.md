@@ -37,9 +37,11 @@ import { Schema } from 'effect'
 **Implementation**:
 
 ```typescript
-export const TablesFieldsGeolocationFieldTypeSchema = Schema.Literal("geolocation")
+export const TablesFieldsGeolocationFieldTypeSchema = Schema.Literal('geolocation')
 
-export type TablesFieldsGeolocationFieldType = Schema.Schema.Type<typeof TablesFieldsGeolocationFieldTypeSchema>
+export type TablesFieldsGeolocationFieldType = Schema.Schema.Type<
+  typeof TablesFieldsGeolocationFieldTypeSchema
+>
 ```
 
 ---

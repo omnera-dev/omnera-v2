@@ -34,28 +34,29 @@ import { Schema } from 'effect'
 
 **Implementation**:
 
-```typescript
+````typescript
 /**
  * Application Name
- * 
+ *
  * The internal identifier for your application. Must follow npm package naming conventions: lowercase, hyphens allowed, no spaces or special characters. This name is used in URLs, routing paths, API endpoints, and database prefixes. Choose a name that is descriptive but concise.
- * 
+ *
  * @example
  * ```typescript
  * "my-app"
  * ```
  */
 export const NameSchema = Schema.String.pipe(
-    Schema.minLength(3, { message: () => 'Minimum length is 3 characters' }),
-    Schema.annotations({
-    title: "Application Name",
-    description: "The internal identifier for your application. Must follow npm package naming conventions: lowercase, hyphens allowed, no spaces or special characters. This name is used in URLs, routing paths, API endpoints, and database prefixes. Choose a name that is descriptive but concise.",
-    examples: ["my-app","customer-portal","inventory-system","task-manager","crm-platform"]
+  Schema.minLength(3, { message: () => 'Minimum length is 3 characters' }),
+  Schema.annotations({
+    title: 'Application Name',
+    description:
+      'The internal identifier for your application. Must follow npm package naming conventions: lowercase, hyphens allowed, no spaces or special characters. This name is used in URLs, routing paths, API endpoints, and database prefixes. Choose a name that is descriptive but concise.',
+    examples: ['my-app', 'customer-portal', 'inventory-system', 'task-manager', 'crm-platform'],
   })
-  )
+)
 
 export type Name = Schema.Schema.Type<typeof NameSchema>
-```
+````
 
 ---
 
@@ -110,7 +111,6 @@ This property is complete when:
 - [ ] All ESLint checks passing
 - [ ] All Prettier formatting checks passing
 - [ ] JSON schema export updated via `bun run export:schema`
-
 
 ---
 

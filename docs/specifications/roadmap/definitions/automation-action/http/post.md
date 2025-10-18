@@ -41,24 +41,24 @@ import { Schema } from 'effect'
 ```typescript
 /**
  * POST Request
- * 
+ *
  * Make a POST HTTP request
  */
 export const AutomationActionHttpPostSchema = Schema.Struct({
-    name: Schema.String,
-    service: Schema.String,
-    action: Schema.String,
-    params: Schema.Struct({
-      url: Schema.String,
-      headers: Schema.optional(Schema.Struct({
-      })),
-      body: Schema.optional(Schema.Struct({
-      })),
-    }),
-  }).pipe(Schema.annotations({
-    title: "POST Request",
-    description: "Make a POST HTTP request"
-  }))
+  name: Schema.String,
+  service: Schema.String,
+  action: Schema.String,
+  params: Schema.Struct({
+    url: Schema.String,
+    headers: Schema.optional(Schema.Struct({})),
+    body: Schema.optional(Schema.Struct({})),
+  }),
+}).pipe(
+  Schema.annotations({
+    title: 'POST Request',
+    description: 'Make a POST HTTP request',
+  })
+)
 
 export type AutomationActionHttpPost = Schema.Schema.Type<typeof AutomationActionHttpPostSchema>
 ```
