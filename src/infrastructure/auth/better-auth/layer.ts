@@ -1,12 +1,17 @@
 import { Context, Effect, Layer } from 'effect'
-import { auth } from './auth.js'
-import { AuthError } from '../../errors/auth-error.js'
+import { AuthError } from '../../errors/auth-error'
+import { auth } from './auth'
+
+// Re-export AuthError for convenience
+export { AuthError }
 
 /**
  * Auth Effect Context
  *
- * Provides Better Auth instance for dependency injection in Effect programs.
+ * Provides authentication service for dependency injection in Effect programs.
  * Use this in Application layer to access authentication without direct imports.
+ *
+ * Implementation uses Better Auth library internally.
  *
  * @example
  * ```typescript
@@ -17,8 +22,8 @@ import { AuthError } from '../../errors/auth-error.js'
  * })
  * ```
  */
-export class BetterAuth extends Context.Tag('Auth')<
-  BetterAuth,
+export class Auth extends Context.Tag('Auth')<
+  Auth,
   {
     readonly api: typeof auth.api
     readonly getSession: (
@@ -33,11 +38,12 @@ export class BetterAuth extends Context.Tag('Auth')<
 /**
  * Live Auth Layer
  *
- * Provides the production Better Auth instance with Effect-wrapped methods.
+ * Provides the production authentication service with Effect-wrapped methods.
+ * Implementation uses Better Auth library internally.
  */
-export const BetterAuthLive = Layer.succeed(
-  BetterAuth,
-  BetterAuth.of({
+export const AuthLive = Layer.succeed(
+  Auth,
+  Auth.of({
     api: auth.api,
 
     getSession: (headers) =>

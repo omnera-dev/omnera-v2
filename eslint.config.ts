@@ -265,6 +265,22 @@ export default defineConfig([
       // Style guide
       'import/first': 'error',
       'import/no-duplicates': 'error',
+      'import/extensions': [
+        'error',
+        'never',
+        {
+          // Forbid file extensions in imports (TypeScript resolves them)
+          // Consistent with project conventions in application/domain layers
+          pattern: {
+            js: 'never',
+            jsx: 'never',
+            ts: 'never',
+            tsx: 'never',
+            mts: 'never',
+            cts: 'never',
+          },
+        },
+      ],
       'import/order': [
         'error',
         {

@@ -1,6 +1,7 @@
 import { Console, Effect } from 'effect'
 import { Hono } from 'hono'
 import { ServerCreationError } from '@/infrastructure/errors/server-creation-error'
+import { auth } from '../auth/better-auth/auth'
 import { compileCSS } from '../css/compiler'
 import type { ServerInstance } from '@/application/models/server'
 import type { App } from '@/domain/models/app'
@@ -26,6 +27,13 @@ export interface ServerConfig {
 /**
  * Creates a Hono application with routes
  *
+ * Mounts the following routes:
+ * - GET /health - Health check endpoint
+ * - POST/GET /api/auth/* - Better Auth authentication endpoints
+ * - GET / - Homepage
+ * - GET /output.css - Compiled Tailwind CSS
+ * - GET /test/error - Test error handler (non-production only)
+ *
  * @param app - Validated application data from AppSchema
  * @param renderHomePage - Function to render the homepage
  * @param renderNotFoundPage - Function to render 404 page
@@ -48,6 +56,7 @@ function createHonoApp(
         },
       })
     )
+    .on(['POST', 'GET'], '/api/auth/*', (c) => auth.handler(c.req.raw))
     .get('/', (c) => {
       const html = renderHomePage(app)
       return c.html(html)
