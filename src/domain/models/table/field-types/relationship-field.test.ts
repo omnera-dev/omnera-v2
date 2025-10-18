@@ -35,6 +35,7 @@ describe('RelationshipFieldSchema', () => {
       }
 
       expect(() => {
+        // @ts-expect-error - Testing missing required property: relatedTable
         Schema.decodeSync(RelationshipFieldSchema)(field)
       }).toThrow()
     })

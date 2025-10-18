@@ -56,6 +56,7 @@ describe('DurationFieldSchema', () => {
       }
 
       expect(() => {
+        // @ts-expect-error - Testing missing required property: id
         Schema.decodeSync(DurationFieldSchema)(field)
       }).toThrow()
     })
@@ -67,6 +68,7 @@ describe('DurationFieldSchema', () => {
       }
 
       expect(() => {
+        // @ts-expect-error - Testing missing required property: type
         Schema.decodeSync(DurationFieldSchema)(field)
       }).toThrow()
     })

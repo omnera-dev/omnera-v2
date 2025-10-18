@@ -56,6 +56,7 @@ describe('PhoneNumberFieldSchema', () => {
     }
 
     expect(() => {
+      // @ts-expect-error - Testing wrong type value
       Schema.decodeSync(PhoneNumberFieldSchema)(field)
     }).toThrow()
   })

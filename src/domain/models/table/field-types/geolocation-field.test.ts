@@ -55,6 +55,7 @@ describe('GeolocationFieldSchema', () => {
       }
 
       expect(() => {
+        // @ts-expect-error - Testing missing required property: id
         Schema.decodeSync(GeolocationFieldSchema)(field)
       }).toThrow()
     })
@@ -66,6 +67,7 @@ describe('GeolocationFieldSchema', () => {
       }
 
       expect(() => {
+        // @ts-expect-error - Testing missing required property: type
         Schema.decodeSync(GeolocationFieldSchema)(field)
       }).toThrow()
     })

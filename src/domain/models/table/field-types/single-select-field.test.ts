@@ -48,6 +48,7 @@ describe('SingleSelectFieldSchema', () => {
       }
 
       expect(() => {
+        // @ts-expect-error - Testing missing required property: id
         Schema.decodeSync(SingleSelectFieldSchema)(field)
       }).toThrow()
     })

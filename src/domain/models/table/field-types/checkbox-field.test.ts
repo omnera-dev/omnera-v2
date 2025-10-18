@@ -57,6 +57,7 @@ describe('CheckboxFieldSchema', () => {
       }
 
       expect(() => {
+        // @ts-expect-error - Testing missing required property: id
         Schema.decodeSync(CheckboxFieldSchema)(field)
       }).toThrow()
     })
@@ -68,6 +69,7 @@ describe('CheckboxFieldSchema', () => {
       }
 
       expect(() => {
+        // @ts-expect-error - Testing missing required property: type
         Schema.decodeSync(CheckboxFieldSchema)(field)
       }).toThrow()
     })

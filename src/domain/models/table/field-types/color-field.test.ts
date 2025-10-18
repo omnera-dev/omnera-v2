@@ -56,6 +56,7 @@ describe('ColorFieldSchema', () => {
       }
 
       expect(() => {
+        // @ts-expect-error - Testing missing required property: id
         Schema.decodeSync(ColorFieldSchema)(field)
       }).toThrow()
     })

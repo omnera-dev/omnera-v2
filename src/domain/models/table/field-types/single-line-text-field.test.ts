@@ -43,6 +43,7 @@ describe('SingleLineTextFieldSchema', () => {
     }
 
     expect(() => {
+      // @ts-expect-error - Testing missing required property: id
       Schema.decodeSync(SingleLineTextFieldSchema)(field)
     }).toThrow()
   })
@@ -54,6 +55,7 @@ describe('SingleLineTextFieldSchema', () => {
     }
 
     expect(() => {
+      // @ts-expect-error - Testing missing required property: name
       Schema.decodeSync(SingleLineTextFieldSchema)(field)
     }).toThrow()
   })
@@ -65,6 +67,7 @@ describe('SingleLineTextFieldSchema', () => {
     }
 
     expect(() => {
+      // @ts-expect-error - Testing missing required property: type
       Schema.decodeSync(SingleLineTextFieldSchema)(field)
     }).toThrow()
   })
@@ -77,6 +80,7 @@ describe('SingleLineTextFieldSchema', () => {
     }
 
     expect(() => {
+      // @ts-expect-error - Testing wrong type value
       Schema.decodeSync(SingleLineTextFieldSchema)(field)
     }).toThrow()
   })

@@ -56,6 +56,7 @@ describe('BarcodeFieldSchema', () => {
       }
 
       expect(() => {
+        // @ts-expect-error - Testing missing required property: id
         Schema.decodeSync(BarcodeFieldSchema)(field)
       }).toThrow()
     })
@@ -67,6 +68,7 @@ describe('BarcodeFieldSchema', () => {
       }
 
       expect(() => {
+        // @ts-expect-error - Testing missing required property: type
         Schema.decodeSync(BarcodeFieldSchema)(field)
       }).toThrow()
     })

@@ -33,6 +33,7 @@ describe('StatusFieldSchema', () => {
       }
 
       expect(() => {
+        // @ts-expect-error - Testing missing required property: id
         Schema.decodeSync(StatusFieldSchema)(field)
       }).toThrow()
     })

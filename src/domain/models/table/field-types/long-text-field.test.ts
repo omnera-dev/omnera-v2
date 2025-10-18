@@ -42,6 +42,7 @@ describe('LongTextFieldSchema', () => {
     }
 
     expect(() => {
+      // @ts-expect-error - Testing missing required property: type
       Schema.decodeSync(LongTextFieldSchema)(field)
     }).toThrow()
   })
@@ -54,6 +55,7 @@ describe('LongTextFieldSchema', () => {
     }
 
     expect(() => {
+      // @ts-expect-error - Testing wrong type value
       Schema.decodeSync(LongTextFieldSchema)(field)
     }).toThrow()
   })

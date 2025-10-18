@@ -56,6 +56,7 @@ describe('RichTextFieldSchema', () => {
       }
 
       expect(() => {
+        // @ts-expect-error - Testing missing required property: id
         Schema.decodeSync(RichTextFieldSchema)(field)
       }).toThrow()
     })

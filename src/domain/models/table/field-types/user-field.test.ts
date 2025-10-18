@@ -57,6 +57,7 @@ describe('UserFieldSchema', () => {
       }
 
       expect(() => {
+        // @ts-expect-error
         Schema.decodeSync(UserFieldSchema)(field)
       }).toThrow()
     })
@@ -68,6 +69,7 @@ describe('UserFieldSchema', () => {
       }
 
       expect(() => {
+        // @ts-expect-error
         Schema.decodeSync(UserFieldSchema)(field)
       }).toThrow()
     })

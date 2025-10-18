@@ -45,7 +45,9 @@ describe('DateFieldSchema', () => {
           name: 'test_field',
           type,
         }
+        // @ts-expect-error - Testing dynamic type from array
         const result = Schema.decodeSync(DateFieldSchema)(field)
+        // @ts-expect-error - TypeScript can't narrow the dynamic type
         expect(result.type).toBe(type)
       })
     })
@@ -90,6 +92,7 @@ describe('DateFieldSchema', () => {
       }
 
       expect(() => {
+        // @ts-expect-error - Testing missing required property: id
         Schema.decodeSync(DateFieldSchema)(field)
       }).toThrow()
     })
@@ -101,6 +104,7 @@ describe('DateFieldSchema', () => {
       }
 
       expect(() => {
+        // @ts-expect-error - Testing missing required property: type
         Schema.decodeSync(DateFieldSchema)(field)
       }).toThrow()
     })
@@ -148,6 +152,7 @@ describe('DateFieldSchema', () => {
           type,
         }
         expect(() => {
+          // @ts-expect-error - Testing invalid type values
           Schema.decodeSync(DateFieldSchema)(field)
         }).toThrow()
       })

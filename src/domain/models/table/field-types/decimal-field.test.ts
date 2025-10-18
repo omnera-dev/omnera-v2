@@ -69,10 +69,11 @@ describe('DecimalFieldSchema', () => {
     const field = {
       id: 1,
       name: 'weight',
-      type: 'integer' as const,
+      type: 'integer',
     }
 
     expect(() => {
+      // @ts-expect-error
       Schema.decodeSync(DecimalFieldSchema)(field)
     }).toThrow()
   })

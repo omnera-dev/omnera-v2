@@ -55,6 +55,7 @@ describe('UpdatedAtFieldSchema', () => {
       }
 
       expect(() => {
+        // @ts-expect-error - Testing missing required property: id
         Schema.decodeSync(UpdatedAtFieldSchema)(field)
       }).toThrow()
     })
@@ -66,6 +67,7 @@ describe('UpdatedAtFieldSchema', () => {
       }
 
       expect(() => {
+        // @ts-expect-error - Testing missing required property: type
         Schema.decodeSync(UpdatedAtFieldSchema)(field)
       }).toThrow()
     })

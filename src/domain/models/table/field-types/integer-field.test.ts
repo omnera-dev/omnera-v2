@@ -59,6 +59,7 @@ describe('IntegerFieldSchema', () => {
     }
 
     expect(() => {
+      // @ts-expect-error - Testing wrong type value
       Schema.decodeSync(IntegerFieldSchema)(field)
     }).toThrow()
   })

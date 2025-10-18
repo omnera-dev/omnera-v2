@@ -33,6 +33,7 @@ describe('MultiSelectFieldSchema', () => {
       }
 
       expect(() => {
+        // @ts-expect-error - Testing missing required property: id
         Schema.decodeSync(MultiSelectFieldSchema)(field)
       }).toThrow()
     })

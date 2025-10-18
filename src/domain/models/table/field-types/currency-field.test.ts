@@ -72,6 +72,7 @@ describe('CurrencyFieldSchema', () => {
     }
 
     expect(() => {
+      // @ts-expect-error - Testing missing required property: currency
       Schema.decodeSync(CurrencyFieldSchema)(field)
     }).toThrow()
   })
@@ -111,6 +112,7 @@ describe('CurrencyFieldSchema', () => {
     }
 
     expect(() => {
+      // @ts-expect-error - Testing wrong type value
       Schema.decodeSync(CurrencyFieldSchema)(field)
     }).toThrow()
   })

@@ -73,6 +73,7 @@ describe('PercentageFieldSchema', () => {
     }
 
     expect(() => {
+      // @ts-expect-error - Testing wrong type value
       Schema.decodeSync(PercentageFieldSchema)(field)
     }).toThrow()
   })

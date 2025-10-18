@@ -56,6 +56,7 @@ describe('UrlFieldSchema', () => {
     }
 
     expect(() => {
+      // @ts-expect-error - Testing wrong type value
       Schema.decodeSync(UrlFieldSchema)(field)
     }).toThrow()
   })
