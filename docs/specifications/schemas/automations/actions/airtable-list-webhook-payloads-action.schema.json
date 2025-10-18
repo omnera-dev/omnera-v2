@@ -1,0 +1,98 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "List Webhook Payloads",
+  "description": "Lists the webhook payloads for a given webhook",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "x-user-stories": [
+        "GIVEN user provides name WHEN validating input THEN string value should be accepted",
+        "GIVEN name is empty string WHEN validating input THEN behavior should follow optional/required rules"
+      ]
+    },
+    "account": {
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "string"
+        }
+      ],
+      "x-user-stories": [
+        "GIVEN user configures account WHEN validating input THEN value should meet schema requirements",
+        "GIVEN account is set WHEN processing configuration THEN value should be used correctly"
+      ]
+    },
+    "service": {
+      "type": "string",
+      "const": "airtable",
+      "x-business-rules": [
+        "Fixed value (airtable) identifies this specific root.definitions.automation_action.anyOf.4.anyOf.1.anyOf.0.properties.service type in discriminated unions and routing logic"
+      ],
+      "x-user-stories": [
+        "GIVEN entity with service='airtable' WHEN processing configuration THEN correct handler should be selected",
+        "GIVEN invalid service value WHEN validating configuration THEN clear error message should identify the issue"
+      ]
+    },
+    "action": {
+      "type": "string",
+      "const": "list-webhook-payloads",
+      "x-business-rules": [
+        "Fixed value (list-webhook-payloads) identifies this specific root.definitions.automation_action.anyOf.4.anyOf.1.anyOf.0.properties.action type in discriminated unions and routing logic"
+      ],
+      "x-user-stories": [
+        "GIVEN entity with action='list-webhook-payloads' WHEN processing configuration THEN correct handler should be selected",
+        "GIVEN invalid action value WHEN validating configuration THEN clear error message should identify the issue"
+      ]
+    },
+    "params": {
+      "type": "object",
+      "properties": {
+        "baseId": {
+          "type": "string",
+          "x-user-stories": [
+            "GIVEN user provides baseId WHEN validating input THEN string value should be accepted",
+            "GIVEN baseId is empty string WHEN validating input THEN behavior should follow optional/required rules"
+          ]
+        },
+        "webhookId": {
+          "type": "string",
+          "x-user-stories": [
+            "GIVEN user provides webhookId WHEN validating input THEN string value should be accepted",
+            "GIVEN webhookId is empty string WHEN validating input THEN behavior should follow optional/required rules"
+          ]
+        },
+        "cursor": {
+          "type": "number",
+          "x-user-stories": [
+            "GIVEN user provides cursor WHEN validating input THEN numeric value should be accepted",
+            "GIVEN user provides non-numeric cursor WHEN validating input THEN error should require number"
+          ]
+        },
+        "limit": {
+          "type": "number",
+          "x-user-stories": [
+            "GIVEN user provides limit WHEN validating input THEN numeric value should be accepted",
+            "GIVEN user provides non-numeric limit WHEN validating input THEN error should require number"
+          ]
+        }
+      },
+      "required": ["baseId", "webhookId"],
+      "additionalProperties": false,
+      "x-business-rules": [
+        "Object structure groups related params properties for better organization and type-safe access"
+      ],
+      "x-user-stories": [
+        "GIVEN user configures params WHEN validating input THEN value should meet schema requirements",
+        "GIVEN params is set WHEN processing configuration THEN value should be used correctly"
+      ]
+    }
+  },
+  "required": ["name", "account", "service", "action", "params"],
+  "additionalProperties": false,
+  "x-business-rules": [
+    "Object structure groups related list webhook payloads properties for better organization and type-safe access"
+  ]
+}

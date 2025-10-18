@@ -1,0 +1,95 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Split Into Paths",
+  "description": "Branch automation into multiple paths",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "x-user-stories": [
+        "GIVEN user provides name WHEN validating input THEN string value should be accepted",
+        "GIVEN name is empty string WHEN validating input THEN behavior should follow optional/required rules"
+      ]
+    },
+    "service": {
+      "type": "string",
+      "const": "filter",
+      "x-business-rules": [
+        "Fixed value (filter) identifies this specific root.definitions.automation_action.anyOf.2.anyOf.1.properties.service type in discriminated unions and routing logic"
+      ],
+      "x-user-stories": [
+        "GIVEN entity with service='filter' WHEN processing configuration THEN correct handler should be selected",
+        "GIVEN invalid service value WHEN validating configuration THEN clear error message should identify the issue"
+      ]
+    },
+    "action": {
+      "type": "string",
+      "const": "split-into-paths",
+      "x-business-rules": [
+        "Fixed value (split-into-paths) identifies this specific root.definitions.automation_action.anyOf.2.anyOf.1.properties.action type in discriminated unions and routing logic"
+      ],
+      "x-user-stories": [
+        "GIVEN entity with action='split-into-paths' WHEN processing configuration THEN correct handler should be selected",
+        "GIVEN invalid action value WHEN validating configuration THEN clear error message should identify the issue"
+      ]
+    },
+    "params": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "x-user-stories": [
+              "GIVEN user provides name WHEN validating input THEN string value should be accepted",
+              "GIVEN name is empty string WHEN validating input THEN behavior should follow optional/required rules"
+            ]
+          },
+          "filter": {
+            "$ref": "../automations.schema.json#/definitions/filter_condition",
+            "x-user-stories": [
+              "GIVEN user configures filter WHEN validating input THEN value should meet schema requirements",
+              "GIVEN filter is set WHEN processing configuration THEN value should be used correctly"
+            ]
+          },
+          "actions": {
+            "type": "array",
+            "items": {
+              "$ref": "../automations.schema.json#/definitions/automation_action"
+            },
+            "x-business-rules": [
+              "Array enables multiple actions to be configured, supporting flexible workflows and batch operations"
+            ],
+            "x-user-stories": [
+              "GIVEN user provides actions array WHEN validating input THEN items should be processed in order",
+              "GIVEN actions array is empty WHEN validating input THEN behavior should follow optional/required rules"
+            ]
+          }
+        },
+        "required": ["name", "filter", "actions"],
+        "additionalProperties": false,
+        "x-business-rules": [
+          "Object structure groups related items properties for better organization and type-safe access"
+        ]
+      },
+      "x-business-rules": [
+        "Array enables multiple params to be configured, supporting flexible workflows and batch operations"
+      ],
+      "x-user-stories": [
+        "GIVEN user provides params array WHEN validating input THEN items should be processed in order",
+        "GIVEN params array is empty WHEN validating input THEN behavior should follow optional/required rules"
+      ]
+    }
+  },
+  "required": ["name", "service", "action", "params"],
+  "additionalProperties": false,
+  "x-user-stories": [
+    "GIVEN the application is running WHEN I run a split into paths paths action THEN it should work correctly",
+    "GIVEN I am working with 2 valid paths WHEN I run a split into paths paths action THEN it should complete successfully",
+    "GIVEN the application is running WHEN I run a split into paths paths action before another action THEN it should work correctly",
+    "GIVEN I am working with an error WHEN I run a split into paths paths action THEN it should complete successfully"
+  ],
+  "x-business-rules": [
+    "Object structure groups related split into paths properties for better organization and type-safe access"
+  ]
+}

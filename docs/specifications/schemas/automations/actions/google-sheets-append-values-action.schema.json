@@ -1,0 +1,103 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Append Values",
+  "description": "Appends values to a Google Sheets spreadsheet",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "x-user-stories": [
+        "GIVEN user provides name WHEN validating input THEN string value should be accepted",
+        "GIVEN name is empty string WHEN validating input THEN behavior should follow optional/required rules"
+      ]
+    },
+    "account": {
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "string"
+        }
+      ],
+      "x-user-stories": [
+        "GIVEN user configures account WHEN validating input THEN value should meet schema requirements",
+        "GIVEN account is set WHEN processing configuration THEN value should be used correctly"
+      ]
+    },
+    "service": {
+      "type": "string",
+      "const": "google-sheets",
+      "x-business-rules": [
+        "Fixed value (google-sheets) identifies this specific root.definitions.automation_action.anyOf.4.anyOf.2.anyOf.0.properties.service type in discriminated unions and routing logic"
+      ],
+      "x-user-stories": [
+        "GIVEN entity with service='google-sheets' WHEN processing configuration THEN correct handler should be selected",
+        "GIVEN invalid service value WHEN validating configuration THEN clear error message should identify the issue"
+      ]
+    },
+    "action": {
+      "type": "string",
+      "const": "append-values",
+      "x-business-rules": [
+        "Fixed value (append-values) identifies this specific root.definitions.automation_action.anyOf.4.anyOf.2.anyOf.0.properties.action type in discriminated unions and routing logic"
+      ],
+      "x-user-stories": [
+        "GIVEN entity with action='append-values' WHEN processing configuration THEN correct handler should be selected",
+        "GIVEN invalid action value WHEN validating configuration THEN clear error message should identify the issue"
+      ]
+    },
+    "params": {
+      "type": "object",
+      "properties": {
+        "spreadsheetId": {
+          "type": "string",
+          "x-user-stories": [
+            "GIVEN user provides spreadsheetId WHEN validating input THEN string value should be accepted",
+            "GIVEN spreadsheetId is empty string WHEN validating input THEN behavior should follow optional/required rules"
+          ]
+        },
+        "range": {
+          "type": "string",
+          "x-user-stories": [
+            "GIVEN user provides range WHEN validating input THEN string value should be accepted",
+            "GIVEN range is empty string WHEN validating input THEN behavior should follow optional/required rules"
+          ]
+        },
+        "values": {
+          "type": "array",
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "x-business-rules": [
+              "Array enables multiple items to be configured, supporting flexible workflows and batch operations"
+            ]
+          },
+          "x-business-rules": [
+            "Array enables multiple values to be configured, supporting flexible workflows and batch operations"
+          ],
+          "x-user-stories": [
+            "GIVEN user provides values array WHEN validating input THEN items should be processed in order",
+            "GIVEN values array is empty WHEN validating input THEN behavior should follow optional/required rules"
+          ]
+        }
+      },
+      "required": ["spreadsheetId", "range", "values"],
+      "additionalProperties": false,
+      "x-business-rules": [
+        "Object structure groups related params properties for better organization and type-safe access"
+      ],
+      "x-user-stories": [
+        "GIVEN user configures params WHEN validating input THEN value should meet schema requirements",
+        "GIVEN params is set WHEN processing configuration THEN value should be used correctly"
+      ]
+    }
+  },
+  "required": ["name", "account", "service", "action", "params"],
+  "additionalProperties": false,
+  "x-business-rules": [
+    "Object structure groups related append values properties for better organization and type-safe access"
+  ]
+}

@@ -1,0 +1,92 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Run TypeScript",
+  "description": "Execute TypeScript code",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "x-user-stories": [
+        "GIVEN user provides name WHEN validating input THEN string value should be accepted",
+        "GIVEN name is empty string WHEN validating input THEN behavior should follow optional/required rules"
+      ]
+    },
+    "service": {
+      "type": "string",
+      "const": "code",
+      "x-business-rules": [
+        "Fixed value (code) identifies this specific root.definitions.automation_action.anyOf.1.anyOf.0.properties.service type in discriminated unions and routing logic"
+      ],
+      "x-user-stories": [
+        "GIVEN entity with service='code' WHEN processing configuration THEN correct handler should be selected",
+        "GIVEN invalid service value WHEN validating configuration THEN clear error message should identify the issue"
+      ]
+    },
+    "action": {
+      "type": "string",
+      "const": "run-typescript",
+      "x-business-rules": [
+        "Fixed value (run-typescript) identifies this specific root.definitions.automation_action.anyOf.1.anyOf.0.properties.action type in discriminated unions and routing logic"
+      ],
+      "x-user-stories": [
+        "GIVEN entity with action='run-typescript' WHEN processing configuration THEN correct handler should be selected",
+        "GIVEN invalid action value WHEN validating configuration THEN clear error message should identify the issue"
+      ]
+    },
+    "params": {
+      "type": "object",
+      "properties": {
+        "inputData": {
+          "default": {},
+          "type": "object",
+          "propertyNames": {
+            "type": "string"
+          },
+          "additionalProperties": {
+            "type": "string"
+          },
+          "x-business-rules": [
+            "Defaults to {} when not specified, providing sensible fallback behavior without requiring explicit configuration"
+          ],
+          "x-user-stories": [
+            "GIVEN user configures inputData WHEN validating input THEN value should meet schema requirements",
+            "GIVEN inputData is set WHEN processing configuration THEN value should be used correctly"
+          ]
+        },
+        "code": {
+          "type": "string",
+          "x-user-stories": [
+            "GIVEN user provides code WHEN validating input THEN string value should be accepted",
+            "GIVEN code is empty string WHEN validating input THEN behavior should follow optional/required rules"
+          ]
+        }
+      },
+      "required": ["code"],
+      "additionalProperties": false,
+      "x-business-rules": [
+        "Object structure groups related params properties for better organization and type-safe access"
+      ],
+      "x-user-stories": [
+        "GIVEN user configures params WHEN validating input THEN value should meet schema requirements",
+        "GIVEN params is set WHEN processing configuration THEN value should be used correctly"
+      ]
+    }
+  },
+  "required": ["name", "service", "action", "params"],
+  "additionalProperties": false,
+  "x-user-stories": [
+    "GIVEN the application is running WHEN I run a TypeScript code THEN it should work correctly",
+    "GIVEN I am working with input data WHEN I run a TypeScript code THEN it should complete successfully",
+    "GIVEN the code throw an error WHEN I return an error THEN it should succeed",
+    "GIVEN I am working with externals WHEN I run a TypeScript code THEN it should complete successfully",
+    "GIVEN I am working with globals variables WHEN I run a TypeScript code THEN it should complete successfully",
+    "GIVEN I am working with tables WHEN I run a TypeScript code THEN it should complete successfully",
+    "GIVEN I am working with buckets WHEN I run a TypeScript code THEN it should complete successfully",
+    "GIVEN the application is running WHEN I run a TypeScript code that return an array THEN it should work correctly",
+    "GIVEN the application is running WHEN I filter a TypeScript code that return an empty array THEN it should work correctly",
+    "GIVEN I am working with actions WHEN I run a TypeScript code THEN it should complete successfully"
+  ],
+  "x-business-rules": [
+    "Object structure groups related run typescript properties for better organization and type-safe access"
+  ]
+}

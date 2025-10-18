@@ -1,0 +1,120 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "List Pages",
+  "description": "Lists pages from a Notion database",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "x-user-stories": [
+        "GIVEN user provides name WHEN validating input THEN string value should be accepted",
+        "GIVEN name is empty string WHEN validating input THEN behavior should follow optional/required rules"
+      ]
+    },
+    "account": {
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "string"
+        }
+      ],
+      "x-user-stories": [
+        "GIVEN user configures account WHEN validating input THEN value should meet schema requirements",
+        "GIVEN account is set WHEN processing configuration THEN value should be used correctly"
+      ]
+    },
+    "service": {
+      "type": "string",
+      "const": "notion",
+      "x-business-rules": [
+        "Fixed value (notion) identifies this specific root.definitions.automation_action.anyOf.4.anyOf.6.anyOf.4.properties.service type in discriminated unions and routing logic"
+      ],
+      "x-user-stories": [
+        "GIVEN entity with service='notion' WHEN processing configuration THEN correct handler should be selected",
+        "GIVEN invalid service value WHEN validating configuration THEN clear error message should identify the issue"
+      ]
+    },
+    "action": {
+      "type": "string",
+      "const": "list-pages",
+      "x-business-rules": [
+        "Fixed value (list-pages) identifies this specific root.definitions.automation_action.anyOf.4.anyOf.6.anyOf.4.properties.action type in discriminated unions and routing logic"
+      ],
+      "x-user-stories": [
+        "GIVEN entity with action='list-pages' WHEN processing configuration THEN correct handler should be selected",
+        "GIVEN invalid action value WHEN validating configuration THEN clear error message should identify the issue"
+      ]
+    },
+    "params": {
+      "type": "object",
+      "properties": {
+        "databaseId": {
+          "description": "The ID of the database to query",
+          "type": "string",
+          "x-business-rules": ["The ID of the database to query"],
+          "x-user-stories": [
+            "GIVEN user provides databaseId WHEN validating input THEN string value should be accepted",
+            "GIVEN databaseId is empty string WHEN validating input THEN behavior should follow optional/required rules"
+          ]
+        },
+        "filter": {
+          "description": "Filter conditions for the query",
+          "x-user-stories": [
+            "GIVEN user configures filter WHEN validating input THEN value should meet schema requirements",
+            "GIVEN filter is set WHEN processing configuration THEN value should be used correctly"
+          ]
+        },
+        "sorts": {
+          "description": "Sort conditions for the query",
+          "type": "array",
+          "items": {},
+          "x-business-rules": [
+            "Array enables multiple sorts to be configured, supporting flexible workflows and batch operations"
+          ],
+          "x-user-stories": [
+            "GIVEN user provides sorts array WHEN validating input THEN items should be processed in order",
+            "GIVEN sorts array is empty WHEN validating input THEN behavior should follow optional/required rules"
+          ]
+        },
+        "startCursor": {
+          "description": "Pagination cursor",
+          "type": "string",
+          "x-user-stories": [
+            "GIVEN user provides startCursor WHEN validating input THEN string value should be accepted",
+            "GIVEN startCursor is empty string WHEN validating input THEN behavior should follow optional/required rules"
+          ]
+        },
+        "pageSize": {
+          "description": "Number of results per page",
+          "type": "number",
+          "minimum": 1,
+          "maximum": 100,
+          "x-business-rules": [
+            "Numeric range (1-100) prevents overflow errors and ensures values stay within valid business bounds"
+          ],
+          "x-user-stories": [
+            "GIVEN user provides pageSize between 1 and 100 WHEN validating input THEN value should be accepted",
+            "GIVEN user provides pageSize below 1 WHEN validating input THEN error should enforce minimum value",
+            "GIVEN user provides pageSize above 100 WHEN validating input THEN error should enforce maximum value"
+          ]
+        }
+      },
+      "required": ["databaseId"],
+      "additionalProperties": false,
+      "x-business-rules": [
+        "Object structure groups related params properties for better organization and type-safe access"
+      ],
+      "x-user-stories": [
+        "GIVEN user configures params WHEN validating input THEN value should meet schema requirements",
+        "GIVEN params is set WHEN processing configuration THEN value should be used correctly"
+      ]
+    }
+  },
+  "required": ["name", "account", "service", "action", "params"],
+  "additionalProperties": false,
+  "x-business-rules": [
+    "Object structure groups related list pages properties for better organization and type-safe access"
+  ]
+}

@@ -1,0 +1,156 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Create Client",
+  "description": "Creates a new client in Qonto",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "x-user-stories": [
+        "GIVEN user provides name WHEN validating input THEN string value should be accepted",
+        "GIVEN name is empty string WHEN validating input THEN behavior should follow optional/required rules"
+      ]
+    },
+    "account": {
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "string"
+        }
+      ],
+      "x-user-stories": [
+        "GIVEN user configures account WHEN validating input THEN value should meet schema requirements",
+        "GIVEN account is set WHEN processing configuration THEN value should be used correctly"
+      ]
+    },
+    "service": {
+      "type": "string",
+      "const": "qonto",
+      "x-business-rules": [
+        "Fixed value (qonto) identifies this specific root.definitions.automation_action.anyOf.4.anyOf.7.anyOf.0.properties.service type in discriminated unions and routing logic"
+      ],
+      "x-user-stories": [
+        "GIVEN entity with service='qonto' WHEN processing configuration THEN correct handler should be selected",
+        "GIVEN invalid service value WHEN validating configuration THEN clear error message should identify the issue"
+      ]
+    },
+    "action": {
+      "type": "string",
+      "const": "create-client",
+      "x-business-rules": [
+        "Fixed value (create-client) identifies this specific root.definitions.automation_action.anyOf.4.anyOf.7.anyOf.0.properties.action type in discriminated unions and routing logic"
+      ],
+      "x-user-stories": [
+        "GIVEN entity with action='create-client' WHEN processing configuration THEN correct handler should be selected",
+        "GIVEN invalid action value WHEN validating configuration THEN clear error message should identify the issue"
+      ]
+    },
+    "params": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "description": "Client name",
+          "type": "string",
+          "x-user-stories": [
+            "GIVEN user provides name WHEN validating input THEN string value should be accepted",
+            "GIVEN name is empty string WHEN validating input THEN behavior should follow optional/required rules"
+          ]
+        },
+        "email": {
+          "description": "Client email",
+          "type": "string",
+          "format": "email",
+          "pattern": "^(?!\\.)(?!.*\\.\\.)([A-Za-z0-9_'+\\-\\.]*)[A-Za-z0-9_+-]@([A-Za-z0-9][A-Za-z0-9\\-]*\\.)+[A-Za-z]{2,}$",
+          "x-business-rules": [
+            "Pattern constraint enforces data format consistency and error prevention, rejecting invalid formats before they cause system errors",
+            "Email format validation prevents delivery failures and ensures communication channels are properly configured"
+          ],
+          "x-user-stories": [
+            "GIVEN user provides email matching pattern WHEN validating input THEN value should be accepted",
+            "GIVEN user provides email not matching pattern WHEN validating input THEN clear error message should explain format requirement",
+            "GIVEN email is stored WHEN retrieved later THEN original format should be preserved"
+          ]
+        },
+        "phone": {
+          "description": "Client phone number",
+          "type": "string",
+          "x-user-stories": [
+            "GIVEN user provides phone WHEN validating input THEN string value should be accepted",
+            "GIVEN phone is empty string WHEN validating input THEN behavior should follow optional/required rules"
+          ]
+        },
+        "address": {
+          "description": "Client address",
+          "type": "object",
+          "properties": {
+            "street": {
+              "description": "Street address",
+              "type": "string",
+              "x-user-stories": [
+                "GIVEN user provides street WHEN validating input THEN string value should be accepted",
+                "GIVEN street is empty string WHEN validating input THEN behavior should follow optional/required rules"
+              ]
+            },
+            "city": {
+              "description": "City",
+              "type": "string",
+              "x-user-stories": [
+                "GIVEN user provides city WHEN validating input THEN string value should be accepted",
+                "GIVEN city is empty string WHEN validating input THEN behavior should follow optional/required rules"
+              ]
+            },
+            "postal_code": {
+              "description": "Postal code",
+              "type": "string",
+              "x-user-stories": [
+                "GIVEN user provides postal_code WHEN validating input THEN string value should be accepted",
+                "GIVEN postal_code is empty string WHEN validating input THEN behavior should follow optional/required rules"
+              ]
+            },
+            "country": {
+              "description": "Country",
+              "type": "string",
+              "x-user-stories": [
+                "GIVEN user provides country WHEN validating input THEN string value should be accepted",
+                "GIVEN country is empty string WHEN validating input THEN behavior should follow optional/required rules"
+              ]
+            }
+          },
+          "required": ["street", "city", "postal_code", "country"],
+          "additionalProperties": false,
+          "x-business-rules": [
+            "Object structure groups related address properties for better organization and type-safe access"
+          ],
+          "x-user-stories": [
+            "GIVEN user configures address WHEN validating input THEN value should meet schema requirements",
+            "GIVEN address is set WHEN processing configuration THEN value should be used correctly"
+          ]
+        },
+        "vat_number": {
+          "description": "VAT number",
+          "type": "string",
+          "x-user-stories": [
+            "GIVEN user provides vat_number WHEN validating input THEN string value should be accepted",
+            "GIVEN vat_number is empty string WHEN validating input THEN behavior should follow optional/required rules"
+          ]
+        }
+      },
+      "required": ["name"],
+      "additionalProperties": false,
+      "x-business-rules": [
+        "Object structure groups related params properties for better organization and type-safe access"
+      ],
+      "x-user-stories": [
+        "GIVEN user configures params WHEN validating input THEN value should meet schema requirements",
+        "GIVEN params is set WHEN processing configuration THEN value should be used correctly"
+      ]
+    }
+  },
+  "required": ["name", "account", "service", "action", "params"],
+  "additionalProperties": false,
+  "x-business-rules": [
+    "Object structure groups related create client properties for better organization and type-safe access"
+  ]
+}

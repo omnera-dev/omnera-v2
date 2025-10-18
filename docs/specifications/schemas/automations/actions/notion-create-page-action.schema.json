@@ -1,0 +1,321 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Create Page",
+  "description": "Creates a new page in Notion",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "x-user-stories": [
+        "GIVEN user provides name WHEN validating input THEN string value should be accepted",
+        "GIVEN name is empty string WHEN validating input THEN behavior should follow optional/required rules"
+      ]
+    },
+    "account": {
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "string"
+        }
+      ],
+      "x-user-stories": [
+        "GIVEN user configures account WHEN validating input THEN value should meet schema requirements",
+        "GIVEN account is set WHEN processing configuration THEN value should be used correctly"
+      ]
+    },
+    "service": {
+      "type": "string",
+      "const": "notion",
+      "x-business-rules": [
+        "Fixed value (notion) identifies this specific root.definitions.automation_action.anyOf.4.anyOf.6.anyOf.0.properties.service type in discriminated unions and routing logic"
+      ],
+      "x-user-stories": [
+        "GIVEN entity with service='notion' WHEN processing configuration THEN correct handler should be selected",
+        "GIVEN invalid service value WHEN validating configuration THEN clear error message should identify the issue"
+      ]
+    },
+    "action": {
+      "type": "string",
+      "const": "create-page",
+      "x-business-rules": [
+        "Fixed value (create-page) identifies this specific root.definitions.automation_action.anyOf.4.anyOf.6.anyOf.0.properties.action type in discriminated unions and routing logic"
+      ],
+      "x-user-stories": [
+        "GIVEN entity with action='create-page' WHEN processing configuration THEN correct handler should be selected",
+        "GIVEN invalid action value WHEN validating configuration THEN clear error message should identify the issue"
+      ]
+    },
+    "params": {
+      "type": "object",
+      "properties": {
+        "parent": {
+          "description": "Parent of the new page",
+          "anyOf": [
+            {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "const": "database_id",
+                  "x-business-rules": [
+                    "Fixed value (database_id) identifies this specific root.definitions.automation_action.anyOf.4.anyOf.6.anyOf.0.properties.params.properties.parent.anyOf.0.properties.type type in discriminated unions and routing logic"
+                  ],
+                  "x-user-stories": [
+                    "GIVEN entity with type='database_id' WHEN processing configuration THEN correct handler should be selected",
+                    "GIVEN invalid type value WHEN validating configuration THEN clear error message should identify the issue"
+                  ]
+                },
+                "database_id": {
+                  "type": "string",
+                  "x-user-stories": [
+                    "GIVEN user provides database_id WHEN validating input THEN string value should be accepted",
+                    "GIVEN database_id is empty string WHEN validating input THEN behavior should follow optional/required rules"
+                  ]
+                }
+              },
+              "required": ["type", "database_id"],
+              "additionalProperties": false,
+              "x-business-rules": [
+                "Object structure groups related 0 properties for better organization and type-safe access"
+              ]
+            },
+            {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "const": "page_id",
+                  "x-business-rules": [
+                    "Fixed value (page_id) identifies this specific root.definitions.automation_action.anyOf.4.anyOf.6.anyOf.0.properties.params.properties.parent.anyOf.1.properties.type type in discriminated unions and routing logic"
+                  ],
+                  "x-user-stories": [
+                    "GIVEN entity with type='page_id' WHEN processing configuration THEN correct handler should be selected",
+                    "GIVEN invalid type value WHEN validating configuration THEN clear error message should identify the issue"
+                  ]
+                },
+                "page_id": {
+                  "type": "string",
+                  "x-user-stories": [
+                    "GIVEN user provides page_id WHEN validating input THEN string value should be accepted",
+                    "GIVEN page_id is empty string WHEN validating input THEN behavior should follow optional/required rules"
+                  ]
+                }
+              },
+              "required": ["type", "page_id"],
+              "additionalProperties": false,
+              "x-business-rules": [
+                "Object structure groups related 1 properties for better organization and type-safe access"
+              ]
+            },
+            {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "const": "workspace",
+                  "x-business-rules": [
+                    "Fixed value (workspace) identifies this specific root.definitions.automation_action.anyOf.4.anyOf.6.anyOf.0.properties.params.properties.parent.anyOf.2.properties.type type in discriminated unions and routing logic"
+                  ],
+                  "x-user-stories": [
+                    "GIVEN entity with type='workspace' WHEN processing configuration THEN correct handler should be selected",
+                    "GIVEN invalid type value WHEN validating configuration THEN clear error message should identify the issue"
+                  ]
+                },
+                "workspace": {
+                  "type": "boolean",
+                  "const": true,
+                  "x-business-rules": [
+                    "Fixed value (true) identifies this specific root.definitions.automation_action.anyOf.4.anyOf.6.anyOf.0.properties.params.properties.parent.anyOf.2.properties.workspace type in discriminated unions and routing logic"
+                  ],
+                  "x-user-stories": [
+                    "GIVEN workspace is true WHEN processing entity THEN corresponding behavior should be enforced",
+                    "GIVEN workspace is false (default: False) WHEN processing entity THEN corresponding behavior should not be enforced",
+                    "GIVEN configuration with workspace WHEN validating settings THEN boolean value should be accepted"
+                  ]
+                }
+              },
+              "required": ["type", "workspace"],
+              "additionalProperties": false,
+              "x-business-rules": [
+                "Object structure groups related 2 properties for better organization and type-safe access"
+              ]
+            }
+          ],
+          "x-user-stories": [
+            "GIVEN user configures parent WHEN validating input THEN value should meet schema requirements",
+            "GIVEN parent is set WHEN processing configuration THEN value should be used correctly"
+          ]
+        },
+        "properties": {
+          "description": "Page properties",
+          "type": "object",
+          "propertyNames": {
+            "type": "string"
+          },
+          "additionalProperties": {},
+          "x-business-rules": [
+            "Object structure groups related properties properties for better organization and type-safe access"
+          ],
+          "x-user-stories": [
+            "GIVEN user configures properties WHEN validating input THEN value should meet schema requirements",
+            "GIVEN properties is set WHEN processing configuration THEN value should be used correctly"
+          ]
+        },
+        "children": {
+          "description": "Page content blocks",
+          "type": "array",
+          "items": {},
+          "x-business-rules": [
+            "Array enables multiple children to be configured, supporting flexible workflows and batch operations"
+          ],
+          "x-user-stories": [
+            "GIVEN user provides children array WHEN validating input THEN items should be processed in order",
+            "GIVEN children array is empty WHEN validating input THEN behavior should follow optional/required rules"
+          ]
+        },
+        "icon": {
+          "description": "Page icon",
+          "anyOf": [
+            {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "const": "emoji",
+                  "x-business-rules": [
+                    "Fixed value (emoji) identifies this specific root.definitions.automation_action.anyOf.4.anyOf.6.anyOf.0.properties.params.properties.icon.anyOf.0.properties.type type in discriminated unions and routing logic"
+                  ],
+                  "x-user-stories": [
+                    "GIVEN entity with type='emoji' WHEN processing configuration THEN correct handler should be selected",
+                    "GIVEN invalid type value WHEN validating configuration THEN clear error message should identify the issue"
+                  ]
+                },
+                "emoji": {
+                  "type": "string",
+                  "x-user-stories": [
+                    "GIVEN user provides emoji WHEN validating input THEN string value should be accepted",
+                    "GIVEN emoji is empty string WHEN validating input THEN behavior should follow optional/required rules"
+                  ]
+                }
+              },
+              "required": ["type", "emoji"],
+              "additionalProperties": false,
+              "x-business-rules": [
+                "Object structure groups related 0 properties for better organization and type-safe access"
+              ]
+            },
+            {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "const": "external",
+                  "x-business-rules": [
+                    "Fixed value (external) identifies this specific root.definitions.automation_action.anyOf.4.anyOf.6.anyOf.0.properties.params.properties.icon.anyOf.1.properties.type type in discriminated unions and routing logic"
+                  ],
+                  "x-user-stories": [
+                    "GIVEN entity with type='external' WHEN processing configuration THEN correct handler should be selected",
+                    "GIVEN invalid type value WHEN validating configuration THEN clear error message should identify the issue"
+                  ]
+                },
+                "external": {
+                  "type": "object",
+                  "properties": {
+                    "url": {
+                      "type": "string",
+                      "x-user-stories": [
+                        "GIVEN user provides url WHEN validating input THEN string value should be accepted",
+                        "GIVEN url is empty string WHEN validating input THEN behavior should follow optional/required rules"
+                      ]
+                    }
+                  },
+                  "required": ["url"],
+                  "additionalProperties": false,
+                  "x-business-rules": [
+                    "Object structure groups related external properties for better organization and type-safe access"
+                  ],
+                  "x-user-stories": [
+                    "GIVEN user configures external WHEN validating input THEN value should meet schema requirements",
+                    "GIVEN external is set WHEN processing configuration THEN value should be used correctly"
+                  ]
+                }
+              },
+              "required": ["type", "external"],
+              "additionalProperties": false,
+              "x-business-rules": [
+                "Object structure groups related 1 properties for better organization and type-safe access"
+              ]
+            }
+          ],
+          "x-user-stories": [
+            "GIVEN user configures icon WHEN validating input THEN value should meet schema requirements",
+            "GIVEN icon is set WHEN processing configuration THEN value should be used correctly"
+          ]
+        },
+        "cover": {
+          "description": "Page cover image",
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "const": "external",
+              "x-business-rules": [
+                "Fixed value (external) identifies this specific root.definitions.automation_action.anyOf.4.anyOf.6.anyOf.0.properties.params.properties.cover.properties.type type in discriminated unions and routing logic"
+              ],
+              "x-user-stories": [
+                "GIVEN entity with type='external' WHEN processing configuration THEN correct handler should be selected",
+                "GIVEN invalid type value WHEN validating configuration THEN clear error message should identify the issue"
+              ]
+            },
+            "external": {
+              "type": "object",
+              "properties": {
+                "url": {
+                  "type": "string",
+                  "x-user-stories": [
+                    "GIVEN user provides url WHEN validating input THEN string value should be accepted",
+                    "GIVEN url is empty string WHEN validating input THEN behavior should follow optional/required rules"
+                  ]
+                }
+              },
+              "required": ["url"],
+              "additionalProperties": false,
+              "x-business-rules": [
+                "Object structure groups related external properties for better organization and type-safe access"
+              ],
+              "x-user-stories": [
+                "GIVEN user configures external WHEN validating input THEN value should meet schema requirements",
+                "GIVEN external is set WHEN processing configuration THEN value should be used correctly"
+              ]
+            }
+          },
+          "required": ["type", "external"],
+          "additionalProperties": false,
+          "x-business-rules": [
+            "Object structure groups related cover properties for better organization and type-safe access"
+          ],
+          "x-user-stories": [
+            "GIVEN user configures cover WHEN validating input THEN value should meet schema requirements",
+            "GIVEN cover is set WHEN processing configuration THEN value should be used correctly"
+          ]
+        }
+      },
+      "required": ["parent", "properties"],
+      "additionalProperties": false,
+      "x-business-rules": [
+        "Object structure groups related params properties for better organization and type-safe access"
+      ],
+      "x-user-stories": [
+        "GIVEN user configures params WHEN validating input THEN value should meet schema requirements",
+        "GIVEN params is set WHEN processing configuration THEN value should be used correctly"
+      ]
+    }
+  },
+  "required": ["name", "account", "service", "action", "params"],
+  "additionalProperties": false,
+  "x-business-rules": [
+    "Object structure groups related create page properties for better organization and type-safe access"
+  ]
+}

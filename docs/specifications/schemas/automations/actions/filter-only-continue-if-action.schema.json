@@ -1,0 +1,69 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Only Continue If",
+  "description": "Continue only if condition is met",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "x-user-stories": [
+        "GIVEN user provides name WHEN validating input THEN string value should be accepted",
+        "GIVEN name is empty string WHEN validating input THEN behavior should follow optional/required rules"
+      ]
+    },
+    "service": {
+      "type": "string",
+      "const": "filter",
+      "x-business-rules": [
+        "Fixed value (filter) identifies this specific root.definitions.automation_action.anyOf.2.anyOf.0.properties.service type in discriminated unions and routing logic"
+      ],
+      "x-user-stories": [
+        "GIVEN entity with service='filter' WHEN processing configuration THEN correct handler should be selected",
+        "GIVEN invalid service value WHEN validating configuration THEN clear error message should identify the issue"
+      ]
+    },
+    "action": {
+      "type": "string",
+      "const": "only-continue-if",
+      "x-business-rules": [
+        "Fixed value (only-continue-if) identifies this specific root.definitions.automation_action.anyOf.2.anyOf.0.properties.action type in discriminated unions and routing logic"
+      ],
+      "x-user-stories": [
+        "GIVEN entity with action='only-continue-if' WHEN processing configuration THEN correct handler should be selected",
+        "GIVEN invalid action value WHEN validating configuration THEN clear error message should identify the issue"
+      ]
+    },
+    "params": {
+      "$ref": "../automations.schema.json#/definitions/filter_condition",
+      "x-user-stories": [
+        "GIVEN user configures params WHEN validating input THEN value should meet schema requirements",
+        "GIVEN params is set WHEN processing configuration THEN value should be used correctly"
+      ]
+    }
+  },
+  "required": ["name", "service", "action", "params"],
+  "additionalProperties": false,
+  "x-user-stories": [
+    "GIVEN the application is running WHEN I not run an action if the filter returns false THEN it should work correctly",
+    "GIVEN the application is running WHEN I run an and filter action that returns true THEN it should work correctly",
+    "GIVEN the application is running WHEN I run an and filter action that returns false THEN it should work correctly",
+    "GIVEN the application is running WHEN I run an or filter action that returns true THEN it should work correctly",
+    "GIVEN the application is running WHEN I run an or filter action that returns false THEN it should work correctly",
+    "GIVEN the application is running WHEN I run an action if the filter returns true THEN it should work correctly",
+    "GIVEN the application is running WHEN I run an exists filter action that returns true THEN it should work correctly",
+    "GIVEN the application is running WHEN I run an exists filter action that returns false THEN it should work correctly",
+    "GIVEN the application is running WHEN I run an does-not-exist filter action that returns true THEN it should work correctly",
+    "GIVEN the application is running WHEN I run an does-not-exist filter action that returns false THEN it should work correctly",
+    "GIVEN the application is running WHEN I run an is-true filter action that returns true THEN it should work correctly",
+    "GIVEN the application is running WHEN I run an is-true filter action that returns false THEN it should work correctly",
+    "GIVEN the application is running WHEN I run an is-false filter action that returns true THEN it should work correctly",
+    "GIVEN the application is running WHEN I run an is-false filter action that returns false THEN it should work correctly",
+    "GIVEN the application is running WHEN I run an contains filter action that returns true THEN it should work correctly",
+    "GIVEN the application is running WHEN I run an contains filter action that returns false THEN it should work correctly",
+    "GIVEN the application is running WHEN I run an does-not-contain filter action that returns true THEN it should work correctly",
+    "GIVEN the application is running WHEN I run an does-not-contain filter action that returns false THEN it should work correctly"
+  ],
+  "x-business-rules": [
+    "Object structure groups related only continue if properties for better organization and type-safe access"
+  ]
+}
