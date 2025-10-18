@@ -175,9 +175,7 @@ export type UserName = Schema.Schema.Type<typeof UserNameSchema>`,
 
       const result = validateBlueprint(blueprint, sourceSchema)
 
-      expect(result.warnings.some((w) => w.message.includes('Missing title annotation'))).toBe(
-        true
-      )
+      expect(result.warnings.some((w) => w.message.includes('Missing title annotation'))).toBe(true)
     })
 
     test('warns about missing description annotation', () => {
@@ -285,9 +283,7 @@ export type Email = Schema.Schema.Type<typeof EmailSchema>`,
       const result = validateBlueprint(blueprint, sourceSchema)
 
       expect(result.valid).toBe(false)
-      expect(result.errors.some((e) => e.message.includes('Missing pattern validation'))).toBe(
-        true
-      )
+      expect(result.errors.some((e) => e.message.includes('Missing pattern validation'))).toBe(true)
     })
 
     test('warns about missing error messages for string validations', () => {
@@ -306,9 +302,7 @@ export type UserName = Schema.Schema.Type<typeof UserNameSchema>`,
 
       const result = validateBlueprint(blueprint, sourceSchema)
 
-      expect(
-        result.warnings.some((w) => w.message.includes('custom error messages'))
-      ).toBe(true)
+      expect(result.warnings.some((w) => w.message.includes('custom error messages'))).toBe(true)
     })
   })
 
