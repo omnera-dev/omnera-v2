@@ -1,3 +1,10 @@
+/**
+ * Copyright (c) 2025 ESSENTIAL SERVICES
+ *
+ * This source code is licensed under the Sustainable Use License
+ * found in the LICENSE.md file in the root directory of this source tree.
+ */
+
 import { describe, test, expect } from 'bun:test'
 import { Schema } from 'effect'
 import { AutonumberFieldSchema } from './autonumber-field'
@@ -7,11 +14,11 @@ describe('AutonumberFieldSchema', () => {
     const field = {
       id: 1,
       name: 'invoice_num',
-      type: 'autonumber',
+      type: 'autonumber' as const,
       prefix: 'INV-',
       startFrom: 1000,
     }
-    const result = Schema.decodeUnknownSync(AutonumberFieldSchema)(field)
+    const result = Schema.decodeSync(AutonumberFieldSchema)(field)
     expect(result).toEqual(field)
   })
 })

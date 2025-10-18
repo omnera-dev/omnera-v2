@@ -1,11 +1,18 @@
 /**
+ * Copyright (c) 2025 ESSENTIAL SERVICES
+ *
+ * This source code is licensed under the Sustainable Use License
+ * found in the LICENSE.md file in the root directory of this source tree.
+ */
+
+/**
  * Blueprint Validator
  *
  * Validates generated Effect Schema blueprints against source JSON Schema
  * to ensure they are complete, correct, and ready for agent consumption.
  */
 
-import type { EffectSchemaBlueprint, JSONSchemaProperty } from '../types/roadmap.ts'
+import type { EffectSchemaBlueprint, JSONSchemaProperty } from '../types/roadmap'
 
 export interface ValidationError {
   severity: 'error' | 'warning'

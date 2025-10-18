@@ -1,3 +1,10 @@
+/**
+ * Copyright (c) 2025 ESSENTIAL SERVICES
+ *
+ * This source code is licensed under the Sustainable Use License
+ * found in the LICENSE.md file in the root directory of this source tree.
+ */
+
 import { describe, test, expect } from 'bun:test'
 import { Schema } from 'effect'
 import { TextFieldSchema } from './text-field'
@@ -8,10 +15,10 @@ describe('TextFieldSchema', () => {
       const field = {
         id: 1,
         name: 'description',
-        type: 'single-line-text',
+        type: 'single-line-text' as const,
       }
 
-      const result = Schema.decodeUnknownSync(TextFieldSchema)(field)
+      const result = Schema.decodeSync(TextFieldSchema)(field)
       expect(result).toEqual(field)
     })
 
@@ -22,9 +29,9 @@ describe('TextFieldSchema', () => {
         const field = {
           id: 1,
           name,
-          type: 'long-text',
+          type: 'long-text' as const,
         }
-        const result = Schema.decodeUnknownSync(TextFieldSchema)(field)
+        const result = Schema.decodeSync(TextFieldSchema)(field)
         expect(result.name).toBe(name)
       })
     })
@@ -38,7 +45,7 @@ describe('TextFieldSchema', () => {
           name: 'test_field',
           type,
         }
-        const result = Schema.decodeUnknownSync(TextFieldSchema)(field)
+        const result = Schema.decodeSync(TextFieldSchema)(field)
         expect(result.type).toBe(type)
       })
     })
@@ -47,14 +54,14 @@ describe('TextFieldSchema', () => {
       const field = {
         id: 1,
         name: 'description',
-        type: 'email',
+        type: 'email' as const,
         required: true,
         unique: true,
         indexed: true,
         default: 'Default text',
       }
 
-      const result = Schema.decodeUnknownSync(TextFieldSchema)(field)
+      const result = Schema.decodeSync(TextFieldSchema)(field)
       expect(result).toEqual(field)
     })
 
@@ -62,11 +69,11 @@ describe('TextFieldSchema', () => {
       const field = {
         id: 1,
         name: 'description',
-        type: 'phone-number',
+        type: 'phone-number' as const,
         default: 'Enter text here',
       }
 
-      const result = Schema.decodeUnknownSync(TextFieldSchema)(field)
+      const result = Schema.decodeSync(TextFieldSchema)(field)
       expect(result).toEqual(field)
     })
   })
@@ -75,11 +82,11 @@ describe('TextFieldSchema', () => {
     test('should reject field without id', () => {
       const field = {
         name: 'description',
-        type: 'single-line-text',
+        type: 'single-line-text' as const,
       }
 
       expect(() => {
-        Schema.decodeUnknownSync(TextFieldSchema)(field)
+        Schema.decodeSync(TextFieldSchema)(field)
       }).toThrow()
     })
 
@@ -90,7 +97,7 @@ describe('TextFieldSchema', () => {
       }
 
       expect(() => {
-        Schema.decodeUnknownSync(TextFieldSchema)(field)
+        Schema.decodeSync(TextFieldSchema)(field)
       }).toThrow()
     })
 
@@ -107,10 +114,10 @@ describe('TextFieldSchema', () => {
         const field = {
           id: 1,
           name,
-          type: 'single-line-text',
+          type: 'single-line-text' as const,
         }
         expect(() => {
-          Schema.decodeUnknownSync(TextFieldSchema)(field)
+          Schema.decodeSync(TextFieldSchema)(field)
         }).toThrow()
       })
     })
@@ -119,11 +126,11 @@ describe('TextFieldSchema', () => {
       const field = {
         id: 1,
         name: 'a'.repeat(64),
-        type: 'single-line-text',
+        type: 'single-line-text' as const,
       }
 
       expect(() => {
-        Schema.decodeUnknownSync(TextFieldSchema)(field)
+        Schema.decodeSync(TextFieldSchema)(field)
       }).toThrow()
     })
 
@@ -137,7 +144,7 @@ describe('TextFieldSchema', () => {
           type,
         }
         expect(() => {
-          Schema.decodeUnknownSync(TextFieldSchema)(field)
+          Schema.decodeSync(TextFieldSchema)(field)
         }).toThrow()
       })
     })
@@ -148,7 +155,7 @@ describe('TextFieldSchema', () => {
       const field: Schema.Schema.Type<typeof TextFieldSchema> = {
         id: 1,
         name: 'description',
-        type: 'single-line-text',
+        type: 'single-line-text' as const,
         required: true,
       }
       expect(field.id).toBe(1)

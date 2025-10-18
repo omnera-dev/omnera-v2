@@ -1,3 +1,10 @@
+/**
+ * Copyright (c) 2025 ESSENTIAL SERVICES
+ *
+ * This source code is licensed under the Sustainable Use License
+ * found in the LICENSE.md file in the root directory of this source tree.
+ */
+
 import { describe, test, expect } from 'bun:test'
 import { Schema } from 'effect'
 import { SingleSelectFieldSchema } from './single-select-field'
@@ -8,11 +15,11 @@ describe('SingleSelectFieldSchema', () => {
       const field = {
         id: 1,
         name: 'category',
-        type: 'single-select',
+        type: 'single-select' as const,
         options: ['Electronics', 'Clothing', 'Food'],
       }
 
-      const result = Schema.decodeUnknownSync(SingleSelectFieldSchema)(field)
+      const result = Schema.decodeSync(SingleSelectFieldSchema)(field)
       expect(result).toEqual(field)
     })
 
@@ -20,14 +27,14 @@ describe('SingleSelectFieldSchema', () => {
       const field = {
         id: 1,
         name: 'category',
-        type: 'single-select',
+        type: 'single-select' as const,
         required: true,
         indexed: true,
         options: ['Electronics', 'Clothing', 'Food'],
         default: 'Electronics',
       }
 
-      const result = Schema.decodeUnknownSync(SingleSelectFieldSchema)(field)
+      const result = Schema.decodeSync(SingleSelectFieldSchema)(field)
       expect(result).toEqual(field)
     })
   })
@@ -36,12 +43,12 @@ describe('SingleSelectFieldSchema', () => {
     test('should reject field without id', () => {
       const field = {
         name: 'category',
-        type: 'single-select',
+        type: 'single-select' as const,
         options: ['A', 'B'],
       }
 
       expect(() => {
-        Schema.decodeUnknownSync(SingleSelectFieldSchema)(field)
+        Schema.decodeSync(SingleSelectFieldSchema)(field)
       }).toThrow()
     })
   })
@@ -51,7 +58,7 @@ describe('SingleSelectFieldSchema', () => {
       const field: Schema.Schema.Type<typeof SingleSelectFieldSchema> = {
         id: 1,
         name: 'category',
-        type: 'single-select',
+        type: 'single-select' as const,
         options: ['A', 'B'],
       }
       expect(field.id).toBe(1)

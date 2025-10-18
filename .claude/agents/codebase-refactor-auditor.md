@@ -112,10 +112,11 @@ color: orange
 <!-- Tool Access: Inherits all tools -->
 <!-- Justification: This agent requires full tool access to:
   - Read documentation (@docs) and source code (@src)
-  - Execute tests (CLAUDECODE=1 bun test:unit, bun test:e2e)
+  - Execute E2E tests (bun test:e2e)
   - Modify files during refactoring (Edit, Write)
   - Search for patterns (Glob, Grep)
-  - Run shell commands for validation (Bash)
+  - Run shell commands for E2E test validation (Bash)
+  - Note: Quality checks (eslint, typecheck, knip) and unit tests run automatically via hooks
 -->
 
 ## Scope Restrictions
@@ -333,7 +334,7 @@ bun test:e2e --grep @critical    # Must pass 100%
 bun test:e2e --grep @regression  # Must pass 100%
 
 # Validate after refactoring (Phase 5)
-CLAUDECODE=1 bun test:unit       # All unit tests
+# Note: Unit tests, eslint, typecheck, and knip run automatically via hooks after Edit/Write
 bun test:e2e --grep @critical    # Compare to baseline
 bun test:e2e --grep @regression  # Compare to baseline
 ```
@@ -369,7 +370,7 @@ Use this template to document test baseline state:
 4. **Abort if any tests fail** - refactoring on broken baseline is forbidden
 
 **Phase 5 (Post-Refactoring)**:
-1. Run all unit tests: `CLAUDECODE=1 bun test:unit`
+1. **Note**: Unit tests, eslint, typecheck, and knip ran automatically via hooks during your Edit/Write operations
 2. Run @critical tests: `bun test:e2e --grep @critical`
 3. Run @regression tests: `bun test:e2e --grep @regression`
 4. Compare results against Phase 0 baseline
@@ -804,7 +805,7 @@ Recommendations are prioritized by benefit-to-effort ratio:
 
 ### Unit Tests
 - ✅ X/X passing (no regressions)
-- Command: `CLAUDECODE=1 bun test:unit`
+- **Automated via hooks**: Unit tests ran automatically after Edit/Write operations
 
 ### Critical E2E Tests (@critical)
 - ✅ X/X passing (baseline maintained)

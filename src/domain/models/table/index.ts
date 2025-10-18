@@ -1,3 +1,10 @@
+/**
+ * Copyright (c) 2025 ESSENTIAL SERVICES
+ *
+ * This source code is licensed under the Sustainable Use License
+ * found in the LICENSE.md file in the root directory of this source tree.
+ */
+
 // Re-export all table model schemas and types for convenient imports
 export * from './id'
 export * from './field-name'

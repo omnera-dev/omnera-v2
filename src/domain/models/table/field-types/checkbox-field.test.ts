@@ -1,3 +1,10 @@
+/**
+ * Copyright (c) 2025 ESSENTIAL SERVICES
+ *
+ * This source code is licensed under the Sustainable Use License
+ * found in the LICENSE.md file in the root directory of this source tree.
+ */
+
 import { describe, test, expect } from 'bun:test'
 import { Schema } from 'effect'
 import { CheckboxFieldSchema } from './checkbox-field'
@@ -8,10 +15,10 @@ describe('CheckboxFieldSchema', () => {
       const field = {
         id: 1,
         name: 'is_active',
-        type: 'checkbox',
+        type: 'checkbox' as const,
       }
 
-      const result = Schema.decodeUnknownSync(CheckboxFieldSchema)(field)
+      const result = Schema.decodeSync(CheckboxFieldSchema)(field)
       expect(result).toEqual(field)
     })
 
@@ -19,13 +26,13 @@ describe('CheckboxFieldSchema', () => {
       const field = {
         id: 1,
         name: 'is_active',
-        type: 'checkbox',
+        type: 'checkbox' as const,
         required: true,
         indexed: true,
         default: false,
       }
 
-      const result = Schema.decodeUnknownSync(CheckboxFieldSchema)(field)
+      const result = Schema.decodeSync(CheckboxFieldSchema)(field)
       expect(result).toEqual(field)
     })
 
@@ -33,11 +40,11 @@ describe('CheckboxFieldSchema', () => {
       const field = {
         id: 1,
         name: 'is_active',
-        type: 'checkbox',
+        type: 'checkbox' as const,
         default: true,
       }
 
-      const result = Schema.decodeUnknownSync(CheckboxFieldSchema)(field)
+      const result = Schema.decodeSync(CheckboxFieldSchema)(field)
       expect(result).toEqual(field)
     })
   })
@@ -46,11 +53,11 @@ describe('CheckboxFieldSchema', () => {
     test('should reject field without id', () => {
       const field = {
         name: 'is_active',
-        type: 'checkbox',
+        type: 'checkbox' as const,
       }
 
       expect(() => {
-        Schema.decodeUnknownSync(CheckboxFieldSchema)(field)
+        Schema.decodeSync(CheckboxFieldSchema)(field)
       }).toThrow()
     })
 
@@ -61,7 +68,7 @@ describe('CheckboxFieldSchema', () => {
       }
 
       expect(() => {
-        Schema.decodeUnknownSync(CheckboxFieldSchema)(field)
+        Schema.decodeSync(CheckboxFieldSchema)(field)
       }).toThrow()
     })
   })
@@ -71,7 +78,7 @@ describe('CheckboxFieldSchema', () => {
       const field: Schema.Schema.Type<typeof CheckboxFieldSchema> = {
         id: 1,
         name: 'is_active',
-        type: 'checkbox',
+        type: 'checkbox' as const,
         default: true,
       }
       expect(field.id).toBe(1)

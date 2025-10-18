@@ -1,4 +1,11 @@
 /**
+ * Copyright (c) 2025 ESSENTIAL SERVICES
+ *
+ * This source code is licensed under the Sustainable Use License
+ * found in the LICENSE.md file in the root directory of this source tree.
+ */
+
+/**
  * Test Status Checker
  *
  * Analyzes E2E test files to determine implementation status.

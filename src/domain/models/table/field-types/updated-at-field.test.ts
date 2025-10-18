@@ -1,3 +1,10 @@
+/**
+ * Copyright (c) 2025 ESSENTIAL SERVICES
+ *
+ * This source code is licensed under the Sustainable Use License
+ * found in the LICENSE.md file in the root directory of this source tree.
+ */
+
 import { describe, test, expect } from 'bun:test'
 import { Schema } from 'effect'
 import { UpdatedAtFieldSchema } from './updated-at-field'
@@ -8,10 +15,10 @@ describe('UpdatedAtFieldSchema', () => {
       const field = {
         id: 1,
         name: 'updated_at',
-        type: 'updated-at',
+        type: 'updated-at' as const,
       }
 
-      const result = Schema.decodeUnknownSync(UpdatedAtFieldSchema)(field)
+      const result = Schema.decodeSync(UpdatedAtFieldSchema)(field)
       expect(result).toEqual(field)
     })
 
@@ -19,11 +26,11 @@ describe('UpdatedAtFieldSchema', () => {
       const field = {
         id: 1,
         name: 'updated_at',
-        type: 'updated-at',
+        type: 'updated-at' as const,
         indexed: true,
       }
 
-      const result = Schema.decodeUnknownSync(UpdatedAtFieldSchema)(field)
+      const result = Schema.decodeSync(UpdatedAtFieldSchema)(field)
       expect(result).toEqual(field)
     })
 
@@ -31,11 +38,11 @@ describe('UpdatedAtFieldSchema', () => {
       const field = {
         id: 1,
         name: 'updated_at',
-        type: 'updated-at',
+        type: 'updated-at' as const,
         indexed: false,
       }
 
-      const result = Schema.decodeUnknownSync(UpdatedAtFieldSchema)(field)
+      const result = Schema.decodeSync(UpdatedAtFieldSchema)(field)
       expect(result).toEqual(field)
     })
   })
@@ -44,11 +51,11 @@ describe('UpdatedAtFieldSchema', () => {
     test('should reject field without id', () => {
       const field = {
         name: 'updated_at',
-        type: 'updated-at',
+        type: 'updated-at' as const,
       }
 
       expect(() => {
-        Schema.decodeUnknownSync(UpdatedAtFieldSchema)(field)
+        Schema.decodeSync(UpdatedAtFieldSchema)(field)
       }).toThrow()
     })
 
@@ -59,7 +66,7 @@ describe('UpdatedAtFieldSchema', () => {
       }
 
       expect(() => {
-        Schema.decodeUnknownSync(UpdatedAtFieldSchema)(field)
+        Schema.decodeSync(UpdatedAtFieldSchema)(field)
       }).toThrow()
     })
   })
@@ -69,7 +76,7 @@ describe('UpdatedAtFieldSchema', () => {
       const field: Schema.Schema.Type<typeof UpdatedAtFieldSchema> = {
         id: 1,
         name: 'updated_at',
-        type: 'updated-at',
+        type: 'updated-at' as const,
         indexed: true,
       }
       expect(field.id).toBe(1)

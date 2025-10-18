@@ -1,4 +1,11 @@
 /**
+ * Copyright (c) 2025 ESSENTIAL SERVICES
+ *
+ * This source code is licensed under the Sustainable Use License
+ * found in the LICENSE.md file in the root directory of this source tree.
+ */
+
+/**
  * Implementation Status Checker
  *
  * Checks actual implementation status by examining the codebase:
@@ -10,7 +17,7 @@
 
 import { existsSync, readFileSync } from 'node:fs'
 import { join } from 'node:path'
-import type { ImplementationStatus } from '../types/roadmap.ts'
+import type { ImplementationStatus } from '../types/roadmap'
 
 /**
  * Convert property name to file name

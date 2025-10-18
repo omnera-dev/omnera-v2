@@ -1,6 +1,13 @@
-import { Pool } from 'pg'
+/**
+ * Copyright (c) 2025 ESSENTIAL SERVICES
+ *
+ * This source code is licensed under the Sustainable Use License
+ * found in the LICENSE.md file in the root directory of this source tree.
+ */
+
 import { drizzle } from 'drizzle-orm/node-postgres'
 import { migrate } from 'drizzle-orm/node-postgres/migrator'
+import { Pool } from 'pg'
 import * as schema from '@/infrastructure/auth/better-auth/schema'
 
 /**

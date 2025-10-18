@@ -1,4 +1,10 @@
 #!/usr/bin/env bun
+/**
+ * Copyright (c) 2025 ESSENTIAL SERVICES
+ *
+ * This source code is licensed under the Sustainable Use License
+ * found in the LICENSE.md file in the root directory of this source tree.
+ */
 
 /**
  * JSON Schema $ref Validator
@@ -147,6 +153,7 @@ function validateRef(ref: string, sourceFilePath: string): RefValidationResult {
   if (ref.startsWith('#/')) {
     const schema = JSON.parse(readFileSync(sourceFilePath, 'utf-8'))
     const path = ref.substring(2).split('/')
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     let current: any = schema
 
     for (const segment of path) {
@@ -188,6 +195,7 @@ function validateRef(ref: string, sourceFilePath: string): RefValidationResult {
     try {
       const targetSchema = JSON.parse(readFileSync(targetFilePath, 'utf-8'))
       const path = jsonPath.substring(1).split('/') // Remove leading '/'
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       let current: any = targetSchema
 
       for (const segment of path) {
@@ -198,7 +206,7 @@ function validateRef(ref: string, sourceFilePath: string): RefValidationResult {
           return result
         }
       }
-    } catch (e) {
+    } catch {
       result.error = `Failed to parse target file: ${targetFilePath}`
       return result
     }
@@ -260,7 +268,7 @@ function main() {
     process.exit(1)
   }
 
-  const inputPath = args[0]
+  const inputPath = args[0]!
 
   if (!existsSync(inputPath)) {
     log(`❌ Path not found: ${inputPath}`, colors.red)

@@ -1,3 +1,10 @@
+/**
+ * Copyright (c) 2025 ESSENTIAL SERVICES
+ *
+ * This source code is licensed under the Sustainable Use License
+ * found in the LICENSE.md file in the root directory of this source tree.
+ */
+
 import { describe, test, expect } from 'bun:test'
 import { Schema } from 'effect'
 import { RatingFieldSchema } from './rating-field'
@@ -8,10 +15,10 @@ describe('RatingFieldSchema', () => {
       const field = {
         id: 1,
         name: 'product_rating',
-        type: 'rating',
+        type: 'rating' as const,
       }
 
-      const result = Schema.decodeUnknownSync(RatingFieldSchema)(field)
+      const result = Schema.decodeSync(RatingFieldSchema)(field)
       expect(result).toEqual(field)
     })
 
@@ -19,13 +26,13 @@ describe('RatingFieldSchema', () => {
       const field = {
         id: 1,
         name: 'product_rating',
-        type: 'rating',
+        type: 'rating' as const,
         required: true,
         max: 5,
         style: 'stars',
       }
 
-      const result = Schema.decodeUnknownSync(RatingFieldSchema)(field)
+      const result = Schema.decodeSync(RatingFieldSchema)(field)
       expect(result).toEqual(field)
     })
 
@@ -33,11 +40,11 @@ describe('RatingFieldSchema', () => {
       const field = {
         id: 1,
         name: 'satisfaction',
-        type: 'rating',
+        type: 'rating' as const,
         max: 10,
       }
 
-      const result = Schema.decodeUnknownSync(RatingFieldSchema)(field)
+      const result = Schema.decodeSync(RatingFieldSchema)(field)
       expect(result).toEqual(field)
     })
   })
@@ -46,11 +53,11 @@ describe('RatingFieldSchema', () => {
     test('should reject field without id', () => {
       const field = {
         name: 'product_rating',
-        type: 'rating',
+        type: 'rating' as const,
       }
 
       expect(() => {
-        Schema.decodeUnknownSync(RatingFieldSchema)(field)
+        Schema.decodeSync(RatingFieldSchema)(field)
       }).toThrow()
     })
 
@@ -58,12 +65,12 @@ describe('RatingFieldSchema', () => {
       const field = {
         id: 1,
         name: 'rating',
-        type: 'rating',
+        type: 'rating' as const,
         max: 15,
       }
 
       expect(() => {
-        Schema.decodeUnknownSync(RatingFieldSchema)(field)
+        Schema.decodeSync(RatingFieldSchema)(field)
       }).toThrow()
     })
 
@@ -71,12 +78,12 @@ describe('RatingFieldSchema', () => {
       const field = {
         id: 1,
         name: 'rating',
-        type: 'rating',
+        type: 'rating' as const,
         max: 0,
       }
 
       expect(() => {
-        Schema.decodeUnknownSync(RatingFieldSchema)(field)
+        Schema.decodeSync(RatingFieldSchema)(field)
       }).toThrow()
     })
   })
@@ -86,7 +93,7 @@ describe('RatingFieldSchema', () => {
       const field: Schema.Schema.Type<typeof RatingFieldSchema> = {
         id: 1,
         name: 'product_rating',
-        type: 'rating',
+        type: 'rating' as const,
         max: 5,
       }
       expect(field.id).toBe(1)

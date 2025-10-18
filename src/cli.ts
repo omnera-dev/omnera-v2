@@ -1,5 +1,12 @@
 #!/usr/bin/env bun
 /**
+ * Copyright (c) 2025 ESSENTIAL SERVICES
+ *
+ * This source code is licensed under the Sustainable Use License
+ * found in the LICENSE.md file in the root directory of this source tree.
+ */
+
+/**
  * Omnera CLI - Command-line interface for starting an Omnera server
  *
  * This script allows running an Omnera server from the command line using

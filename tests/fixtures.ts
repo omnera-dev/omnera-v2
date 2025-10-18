@@ -1,3 +1,10 @@
+/**
+ * Copyright (c) 2025 ESSENTIAL SERVICES
+ *
+ * This source code is licensed under the Sustainable Use License
+ * found in the LICENSE.md file in the root directory of this source tree.
+ */
+
 import { spawn } from 'node:child_process'
 import { test as base } from '@playwright/test'
 import { PostgreSqlContainer } from '@testcontainers/postgresql'
@@ -237,6 +244,7 @@ export const test = base.extend<ServerFixtures>({
       const originalPost = page.request.post.bind(page.request)
       const originalGet = page.request.get.bind(page.request)
       const originalPut = page.request.put.bind(page.request)
+      // eslint-disable-next-line drizzle/enforce-delete-with-where
       const originalDelete = page.request.delete.bind(page.request)
       const originalPatch = page.request.patch.bind(page.request)
 
@@ -258,6 +266,7 @@ export const test = base.extend<ServerFixtures>({
         return originalPut(fullUrl, options)
       }
 
+      // eslint-disable-next-line drizzle/enforce-delete-with-where
       page.request.delete = (urlOrRequest, options?) => {
         const url = typeof urlOrRequest === 'string' ? urlOrRequest : urlOrRequest
         const fullUrl = typeof url === 'string' && url.startsWith('/') ? `${serverUrl}${url}` : url

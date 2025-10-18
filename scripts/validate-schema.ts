@@ -1,4 +1,10 @@
 #!/usr/bin/env bun
+/**
+ * Copyright (c) 2025 ESSENTIAL SERVICES
+ *
+ * This source code is licensed under the Sustainable Use License
+ * found in the LICENSE.md file in the root directory of this source tree.
+ */
 
 /**
  * Validates specs.schema.json using AJV (Another JSON Schema Validator)
@@ -11,7 +17,7 @@ import Ajv, { type ValidateFunction, type ErrorObject, type SchemaObject } from 
 import addFormats from 'ajv-formats'
 
 const SCHEMA_PATH = join(__dirname, '..', 'docs', 'specifications', 'specs.schema.json')
-const SCHEMAS_DIR = join(__dirname, '..', 'docs', 'specifications', 'schemas')
+const _SCHEMAS_DIR = join(__dirname, '..', 'docs', 'specifications', 'schemas')
 
 // Colors for console output
 const colors = {
@@ -28,7 +34,7 @@ function log(message: string, color: string = colors.reset) {
   console.log(`${color}${message}${colors.reset}`)
 }
 
-function getAllSchemaFiles(dirPath: string): string[] {
+function _getAllSchemaFiles(dirPath: string): string[] {
   const files: string[] = []
 
   function traverse(currentPath: string) {

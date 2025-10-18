@@ -1,6 +1,13 @@
+/**
+ * Copyright (c) 2025 ESSENTIAL SERVICES
+ *
+ * This source code is licensed under the Sustainable Use License
+ * found in the LICENSE.md file in the root directory of this source tree.
+ */
+
 import { describe, test, expect } from 'bun:test'
 import { Schema } from 'effect'
-import { IndexesSchema } from './indexes.ts'
+import { IndexesSchema } from './indexes'
 
 describe('IndexesSchema', () => {
   describe('valid values', () => {
@@ -211,9 +218,9 @@ describe('IndexesSchema', () => {
           unique: true,
         },
       ]
-      expect(indexes[0].name).toBe('idx_user_email')
-      expect(indexes[0].fields).toEqual(['email'])
-      expect(indexes[0].unique).toBe(true)
+      expect(indexes[0]?.name).toBe('idx_user_email')
+      expect(indexes[0]?.fields).toEqual(['email'])
+      expect(indexes[0]?.unique).toBe(true)
     })
   })
 })

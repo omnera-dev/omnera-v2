@@ -1,4 +1,17 @@
-import { readFileSync, writeFileSync, existsSync, mkdirSync, rmSync } from 'node:fs'
+/**
+ * Copyright (c) 2025 ESSENTIAL SERVICES
+ *
+ * This source code is licensed under the Sustainable Use License
+ * found in the LICENSE.md file in the root directory of this source tree.
+ */
+
+import {
+  readFileSync as _readFileSync,
+  writeFileSync as _writeFileSync,
+  existsSync as _existsSync,
+  mkdirSync as _mkdirSync,
+  rmSync as _rmSync,
+} from 'node:fs'
 import { join } from 'node:path'
 import { describe, test, expect } from 'bun:test'
 
@@ -427,7 +440,7 @@ describe('updateRefsToCommon', () => {
 
 describe('Integration Tests', () => {
   const TEST_DIR = join(__dirname, 'test-output')
-  const TEST_SCHEMA_PATH = join(TEST_DIR, 'test-schema.json')
+  const _TEST_SCHEMA_PATH = join(TEST_DIR, 'test-schema.json')
 
   test('should split and preserve complete schema structure', () => {
     const originalSchema: JSONSchema = {

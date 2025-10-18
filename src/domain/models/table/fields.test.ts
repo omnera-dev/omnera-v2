@@ -1,3 +1,10 @@
+/**
+ * Copyright (c) 2025 ESSENTIAL SERVICES
+ *
+ * This source code is licensed under the Sustainable Use License
+ * found in the LICENSE.md file in the root directory of this source tree.
+ */
+
 import { describe, test, expect } from 'bun:test'
 import { Schema } from 'effect'
 import { FieldsSchema } from './fields'
@@ -56,13 +63,13 @@ describe('FieldsSchema', () => {
 
   describe('type inference', () => {
     test('should infer correct TypeScript type', () => {
-      const fields: Schema.Schema.Type<typeof FieldsSchema> = [
+      const fields = [
         {
           id: 1,
           name: 'email',
           type: 'email' as const,
         },
-      ]
+      ] as Schema.Schema.Type<typeof FieldsSchema>
       expect(fields).toHaveLength(1)
     })
   })

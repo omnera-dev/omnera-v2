@@ -1,5 +1,16 @@
+/**
+ * Copyright (c) 2025 ESSENTIAL SERVICES
+ *
+ * This source code is licensed under the Sustainable Use License
+ * found in the LICENSE.md file in the root directory of this source tree.
+ */
+
 import { describe, test, expect } from 'bun:test'
-import { generateUserStories, addUserStoriesToProperties } from './add-user-stories.ts'
+import {
+  generateUserStories,
+  addUserStoriesToProperties,
+  type JSONSchema,
+} from './add-user-stories'
 
 describe('generateUserStories', () => {
   describe('root properties with test-extracted stories', () => {
@@ -566,9 +577,9 @@ describe('addUserStoriesToProperties', () => {
       const count = addUserStoriesToProperties(schema)
 
       expect(count).toBe(2)
-      expect(schema.properties.name['x-user-stories']).toBeDefined()
-      expect(schema.properties.age['x-user-stories']).toBeDefined()
-      expect(Array.isArray(schema.properties.name['x-user-stories'])).toBe(true)
+      expect((schema.properties.name as any)['x-user-stories']).toBeDefined()
+      expect((schema.properties.age as any)['x-user-stories']).toBeDefined()
+      expect(Array.isArray((schema.properties.name as any)['x-user-stories'])).toBe(true)
     })
 
     test('should not add stories to properties that already have them', () => {
@@ -586,7 +597,7 @@ describe('addUserStoriesToProperties', () => {
       const count = addUserStoriesToProperties(schema)
 
       expect(count).toBe(0)
-      expect(schema.properties.name['x-user-stories']).toEqual(['Existing story'])
+      expect((schema.properties.name as any)['x-user-stories']).toEqual(['Existing story'])
     })
   })
 
@@ -619,7 +630,7 @@ describe('addUserStoriesToProperties', () => {
       const bioSchema = schema.properties.user.properties?.profile.properties?.bio
       expect(bioSchema).toBeDefined()
       if (bioSchema && typeof bioSchema === 'object') {
-        expect(bioSchema['x-user-stories']).toBeDefined()
+        expect((bioSchema as any)['x-user-stories']).toBeDefined()
       }
     })
   })
@@ -647,7 +658,7 @@ describe('addUserStoriesToProperties', () => {
       const idSchema = schema.items.properties?.id
       expect(idSchema).toBeDefined()
       if (idSchema && typeof idSchema === 'object') {
-        expect(idSchema['x-user-stories']).toBeDefined()
+        expect((idSchema as any)['x-user-stories']).toBeDefined()
       }
     })
   })
@@ -677,7 +688,7 @@ describe('addUserStoriesToProperties', () => {
             },
           },
         ],
-      }
+      } as JSONSchema
 
       const count = addUserStoriesToProperties(schema)
 
@@ -748,8 +759,8 @@ describe('addUserStoriesToProperties', () => {
       const count = addUserStoriesToProperties(schema)
 
       expect(count).toBe(2)
-      expect(schema.definitions.id['x-user-stories']).toBeDefined()
-      expect(schema.definitions.name['x-user-stories']).toBeDefined()
+      expect((schema.definitions.id as any)['x-user-stories']).toBeDefined()
+      expect((schema.definitions.name as any)['x-user-stories']).toBeDefined()
     })
   })
 
@@ -789,7 +800,7 @@ describe('addUserStoriesToProperties', () => {
       const count = addUserStoriesToProperties(schema)
 
       expect(count).toBe(1)
-      expect(schema.properties.valid['x-user-stories']).toBeDefined()
+      expect((schema.properties.valid as any)['x-user-stories']).toBeDefined()
     })
 
     test('should handle null items', () => {
@@ -839,7 +850,7 @@ describe('addUserStoriesToProperties', () => {
       const pathSchema = schema.properties.webhook.properties?.path
       expect(pathSchema).toBeDefined()
       if (pathSchema && typeof pathSchema === 'object') {
-        const stories = pathSchema['x-user-stories'] ?? []
+        const stories = (pathSchema as any)['x-user-stories'] ?? []
         expect(stories[0]).toContain('automation should execute successfully')
       }
     })

@@ -1,4 +1,10 @@
 #!/usr/bin/env bun
+/**
+ * Copyright (c) 2025 ESSENTIAL SERVICES
+ *
+ * This source code is licensed under the Sustainable Use License
+ * found in the LICENSE.md file in the root directory of this source tree.
+ */
 
 /**
  * Roadmap Generation Script
@@ -15,15 +21,15 @@
  * Usage: bun run scripts/generate-roadmap.ts
  */
 
-import { existsSync } from 'node:fs'
-import { generateRoadmapMarkdown } from './templates/roadmap-template.ts'
-import { getImplementationStatus } from './utils/implementation-checker.ts'
+import { existsSync as _existsSync } from 'node:fs'
+import { generateRoadmapMarkdown } from './templates/roadmap-template'
+import { getImplementationStatus } from './utils/implementation-checker'
 import {
   calculateStats,
   compareSchemas,
   extractAllPropertiesRecursively,
-} from './utils/schema-comparison.ts'
-import type { JSONSchema, RoadmapData } from './types/roadmap.ts'
+} from './utils/schema-comparison'
+import type { JSONSchema, RoadmapData } from './types/roadmap'
 
 // Paths
 const CURRENT_SCHEMA_PATH = 'schemas/0.0.1/app.schema.json'

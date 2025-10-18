@@ -1,3 +1,10 @@
+/**
+ * Copyright (c) 2025 ESSENTIAL SERVICES
+ *
+ * This source code is licensed under the Sustainable Use License
+ * found in the LICENSE.md file in the root directory of this source tree.
+ */
+
 import { describe, test, expect } from 'bun:test'
 import { Schema } from 'effect'
 import { ProgressFieldSchema } from './progress-field'
@@ -8,10 +15,10 @@ describe('ProgressFieldSchema', () => {
       const field = {
         id: 1,
         name: 'task_completion',
-        type: 'progress',
+        type: 'progress' as const,
       }
 
-      const result = Schema.decodeUnknownSync(ProgressFieldSchema)(field)
+      const result = Schema.decodeSync(ProgressFieldSchema)(field)
       expect(result).toEqual(field)
     })
 
@@ -19,12 +26,12 @@ describe('ProgressFieldSchema', () => {
       const field = {
         id: 1,
         name: 'task_completion',
-        type: 'progress',
+        type: 'progress' as const,
         required: true,
         color: '#10B981',
       }
 
-      const result = Schema.decodeUnknownSync(ProgressFieldSchema)(field)
+      const result = Schema.decodeSync(ProgressFieldSchema)(field)
       expect(result).toEqual(field)
     })
 
@@ -32,11 +39,11 @@ describe('ProgressFieldSchema', () => {
       const field = {
         id: 1,
         name: 'project_progress',
-        type: 'progress',
+        type: 'progress' as const,
         color: '#3B82F6',
       }
 
-      const result = Schema.decodeUnknownSync(ProgressFieldSchema)(field)
+      const result = Schema.decodeSync(ProgressFieldSchema)(field)
       expect(result).toEqual(field)
     })
   })
@@ -45,11 +52,11 @@ describe('ProgressFieldSchema', () => {
     test('should reject field without id', () => {
       const field = {
         name: 'task_completion',
-        type: 'progress',
+        type: 'progress' as const,
       }
 
       expect(() => {
-        Schema.decodeUnknownSync(ProgressFieldSchema)(field)
+        Schema.decodeSync(ProgressFieldSchema)(field)
       }).toThrow()
     })
 
@@ -57,12 +64,12 @@ describe('ProgressFieldSchema', () => {
       const field = {
         id: 1,
         name: 'progress',
-        type: 'progress',
+        type: 'progress' as const,
         color: 'blue',
       }
 
       expect(() => {
-        Schema.decodeUnknownSync(ProgressFieldSchema)(field)
+        Schema.decodeSync(ProgressFieldSchema)(field)
       }).toThrow()
     })
 
@@ -70,12 +77,12 @@ describe('ProgressFieldSchema', () => {
       const field = {
         id: 1,
         name: 'progress',
-        type: 'progress',
+        type: 'progress' as const,
         color: '#FFF',
       }
 
       expect(() => {
-        Schema.decodeUnknownSync(ProgressFieldSchema)(field)
+        Schema.decodeSync(ProgressFieldSchema)(field)
       }).toThrow()
     })
   })
@@ -85,7 +92,7 @@ describe('ProgressFieldSchema', () => {
       const field: Schema.Schema.Type<typeof ProgressFieldSchema> = {
         id: 1,
         name: 'task_completion',
-        type: 'progress',
+        type: 'progress' as const,
         color: '#10B981',
       }
       expect(field.id).toBe(1)

@@ -28,12 +28,15 @@
 ## Running Knip with Bun
 
 ```bash
-# Auto-fix unused exports (recommended)
+# Detection only (no modifications) - recommended first step
 bun run clean
-bunx knip --fix
 
-# Detection only (no modifications)
-bunx knip
+# Auto-fix unused exports (recommended after reviewing findings)
+bun run clean:fix
+
+# Alternative: Direct bunx commands
+bunx knip                     # Detection only
+bunx knip --fix               # Auto-fix
 
 # Check specific issues
 bunx knip --dependencies      # Only check dependencies
@@ -96,12 +99,13 @@ Unlisted dependencies (1)
 
 1. **Unused Files**: Review and delete if truly unused, or add imports if needed
 2. **Unused Dependencies**: Run `bun remove <package>` to remove from `package.json`
-3. **Unused Exports**: Run `bun run clean` to auto-remove, or keep if part of public API
+3. **Unused Exports**: Run `bun run clean:fix` to auto-remove, or keep if part of public API
 4. **Unlisted Dependencies**: Run `bun add <package>` to add to `package.json`
 
 ## Integration with Bun
 
-- Command: `bun run clean` (runs `knip --fix`)
+- Command: `bun run clean` (runs `knip` - detection only)
+- Command: `bun run clean:fix` (runs `knip --fix` - auto-fix unused exports)
 - Execution: Knip runs via `bunx` (Bun's package executor)
 - Speed: Fast analysis leveraging Bun's performance
 - Compatibility: Works seamlessly with Bun's module resolution
@@ -260,13 +264,14 @@ All shadcn/ui related packages are kept in `ignoreDependencies` because:
 1. **Weekly Maintenance** (recommended):
 
    ```bash
-   bun run clean  # Regular cleanup
+   bun run clean       # Detect unused code/dependencies
+   bun run clean:fix   # Auto-fix unused exports (after review)
    ```
 
 2. **Before Major Releases** (critical):
 
    ```bash
-   bunx knip  # Full report before release
+   bun run clean  # Full report before release
    ```
 
 3. **During Refactoring** (helpful):
@@ -278,12 +283,12 @@ All shadcn/ui related packages are kept in `ignoreDependencies` because:
 4. **After Dependency Updates** (recommended):
 
    ```bash
-   bunx knip  # Verify no unused dependencies
+   bun run clean  # Verify no unused dependencies
    ```
 
 5. **When Bundle Size Matters** (optimization):
    ```bash
-   bunx knip  # Identify code to remove
+   bun run clean  # Identify code to remove
    ```
 
 ## Knip vs Other Tools
@@ -315,7 +320,8 @@ All shadcn/ui related packages are kept in `ignoreDependencies` because:
 
 ```bash
 # You removed a feature and want to clean up leftover code
-bunx knip --fix
+bun run clean           # Detect unused code
+bun run clean:fix       # Auto-fix unused exports
 # Review unused files and dependencies
 # Remove unused dependencies: bun remove <package>
 # Delete unused files manually
@@ -334,7 +340,7 @@ bunx knip --reporter markdown > knip-report.md
 
 ```bash
 # Check if all dependencies are actually used
-bunx knip --dependencies
+bun run clean --dependencies
 # Remove unused ones: bun remove <package>
 # Add missing ones: bun add <package>
 ```
@@ -343,9 +349,10 @@ bunx knip --dependencies
 
 ```bash
 # Full cleanup before shipping
-bunx knip
-# Address all findings
-# Run again to verify: bunx knip
+bun run clean           # Detect all issues
+bun run clean:fix       # Auto-fix what can be fixed
+# Address remaining findings manually
+# Run again to verify: bun run clean
 # Proceed with release if clean
 ```
 

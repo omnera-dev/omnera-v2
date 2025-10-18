@@ -1,6 +1,13 @@
+/**
+ * Copyright (c) 2025 ESSENTIAL SERVICES
+ *
+ * This source code is licensed under the Sustainable Use License
+ * found in the LICENSE.md file in the root directory of this source tree.
+ */
+
 import { describe, expect, test } from 'bun:test'
-import { generateEffectSchema } from './effect-schema-generator.ts'
-import type { JSONSchemaProperty } from '../types/roadmap.ts'
+import { generateEffectSchema } from './effect-schema-generator'
+import type { JSONSchemaProperty } from '../types/roadmap'
 
 describe('effect-schema-generator', () => {
   describe('generateEffectSchema', () => {

@@ -1,8 +1,15 @@
 /**
+ * Copyright (c) 2025 ESSENTIAL SERVICES
+ *
+ * This source code is licensed under the Sustainable Use License
+ * found in the LICENSE.md file in the root directory of this source tree.
+ */
+
+/**
  * Phase grouping algorithm for roadmap generation
  */
 
-import type { Phase, PhaseStatus, PropertyStatus } from '../types/roadmap.ts'
+import type { Phase, PhaseStatus, PropertyStatus } from '../types/roadmap'
 
 /**
  * Group properties into development phases

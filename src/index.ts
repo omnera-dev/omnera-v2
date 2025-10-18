@@ -1,4 +1,11 @@
 /**
+ * Copyright (c) 2025 ESSENTIAL SERVICES
+ *
+ * This source code is licensed under the Sustainable Use License
+ * found in the LICENSE.md file in the root directory of this source tree.
+ */
+
+/**
  * Omnera - A Bun web framework with React SSR and Tailwind CSS
  *
  * This is the main entry point for Omnera applications. It provides a simple

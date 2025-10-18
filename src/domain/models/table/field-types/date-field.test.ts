@@ -1,3 +1,10 @@
+/**
+ * Copyright (c) 2025 ESSENTIAL SERVICES
+ *
+ * This source code is licensed under the Sustainable Use License
+ * found in the LICENSE.md file in the root directory of this source tree.
+ */
+
 import { describe, test, expect } from 'bun:test'
 import { Schema } from 'effect'
 import { DateFieldSchema } from './date-field'
@@ -8,10 +15,10 @@ describe('DateFieldSchema', () => {
       const field = {
         id: 1,
         name: 'due_date',
-        type: 'date',
+        type: 'date' as const,
       }
 
-      const result = Schema.decodeUnknownSync(DateFieldSchema)(field)
+      const result = Schema.decodeSync(DateFieldSchema)(field)
       expect(result).toEqual(field)
     })
 
@@ -22,9 +29,9 @@ describe('DateFieldSchema', () => {
         const field = {
           id: 1,
           name,
-          type: 'datetime',
+          type: 'datetime' as const,
         }
-        const result = Schema.decodeUnknownSync(DateFieldSchema)(field)
+        const result = Schema.decodeSync(DateFieldSchema)(field)
         expect(result.name).toBe(name)
       })
     })
@@ -38,7 +45,7 @@ describe('DateFieldSchema', () => {
           name: 'test_field',
           type,
         }
-        const result = Schema.decodeUnknownSync(DateFieldSchema)(field)
+        const result = Schema.decodeSync(DateFieldSchema)(field)
         expect(result.type).toBe(type)
       })
     })
@@ -47,7 +54,7 @@ describe('DateFieldSchema', () => {
       const field = {
         id: 1,
         name: 'due_date',
-        type: 'datetime',
+        type: 'datetime' as const,
         required: true,
         unique: false,
         indexed: true,
@@ -57,7 +64,7 @@ describe('DateFieldSchema', () => {
         default: '2025-01-01',
       }
 
-      const result = Schema.decodeUnknownSync(DateFieldSchema)(field)
+      const result = Schema.decodeSync(DateFieldSchema)(field)
       expect(result).toEqual(field)
     })
 
@@ -65,12 +72,12 @@ describe('DateFieldSchema', () => {
       const field = {
         id: 1,
         name: 'appointment',
-        type: 'time',
+        type: 'time' as const,
         includeTime: true,
         timezone: 'UTC',
       }
 
-      const result = Schema.decodeUnknownSync(DateFieldSchema)(field)
+      const result = Schema.decodeSync(DateFieldSchema)(field)
       expect(result).toEqual(field)
     })
   })
@@ -79,11 +86,11 @@ describe('DateFieldSchema', () => {
     test('should reject field without id', () => {
       const field = {
         name: 'due_date',
-        type: 'date',
+        type: 'date' as const,
       }
 
       expect(() => {
-        Schema.decodeUnknownSync(DateFieldSchema)(field)
+        Schema.decodeSync(DateFieldSchema)(field)
       }).toThrow()
     })
 
@@ -94,7 +101,7 @@ describe('DateFieldSchema', () => {
       }
 
       expect(() => {
-        Schema.decodeUnknownSync(DateFieldSchema)(field)
+        Schema.decodeSync(DateFieldSchema)(field)
       }).toThrow()
     })
 
@@ -111,10 +118,10 @@ describe('DateFieldSchema', () => {
         const field = {
           id: 1,
           name,
-          type: 'date',
+          type: 'date' as const,
         }
         expect(() => {
-          Schema.decodeUnknownSync(DateFieldSchema)(field)
+          Schema.decodeSync(DateFieldSchema)(field)
         }).toThrow()
       })
     })
@@ -123,11 +130,11 @@ describe('DateFieldSchema', () => {
       const field = {
         id: 1,
         name: 'a'.repeat(64),
-        type: 'date',
+        type: 'date' as const,
       }
 
       expect(() => {
-        Schema.decodeUnknownSync(DateFieldSchema)(field)
+        Schema.decodeSync(DateFieldSchema)(field)
       }).toThrow()
     })
 
@@ -141,7 +148,7 @@ describe('DateFieldSchema', () => {
           type,
         }
         expect(() => {
-          Schema.decodeUnknownSync(DateFieldSchema)(field)
+          Schema.decodeSync(DateFieldSchema)(field)
         }).toThrow()
       })
     })
@@ -152,7 +159,7 @@ describe('DateFieldSchema', () => {
       const field: Schema.Schema.Type<typeof DateFieldSchema> = {
         id: 1,
         name: 'due_date',
-        type: 'date',
+        type: 'date' as const,
         format: 'YYYY-MM-DD',
       }
       expect(field.id).toBe(1)

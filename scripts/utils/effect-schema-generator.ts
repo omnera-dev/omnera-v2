@@ -1,8 +1,15 @@
 /**
+ * Copyright (c) 2025 ESSENTIAL SERVICES
+ *
+ * This source code is licensed under the Sustainable Use License
+ * found in the LICENSE.md file in the root directory of this source tree.
+ */
+
+/**
  * JSON Schema to Effect Schema code generator
  */
 
-import type { EffectSchemaBlueprint, JSONSchemaProperty } from '../types/roadmap.ts'
+import type { EffectSchemaBlueprint, JSONSchemaProperty } from '../types/roadmap'
 
 /**
  * Convert property path to valid TypeScript identifier

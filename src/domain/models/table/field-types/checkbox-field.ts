@@ -1,6 +1,12 @@
+/**
+ * Copyright (c) 2025 ESSENTIAL SERVICES
+ *
+ * This source code is licensed under the Sustainable Use License
+ * found in the LICENSE.md file in the root directory of this source tree.
+ */
+
 import { Schema } from 'effect'
-import { FieldNameSchema } from '@/domain/models/table/field-name'
-import { IdSchema } from '@/domain/models/table/id'
+import { BaseFieldSchema } from './base-field'
 
 /**
  * Checkbox Field
@@ -20,14 +26,18 @@ import { IdSchema } from '@/domain/models/table/id'
  * }
  * ```
  */
-export const CheckboxFieldSchema = Schema.Struct({
-  id: IdSchema,
-  name: FieldNameSchema,
-  required: Schema.optional(Schema.Boolean),
-  indexed: Schema.optional(Schema.Boolean),
-  type: Schema.Literal('checkbox'),
-  default: Schema.optional(Schema.Boolean),
-}).pipe(
+export const CheckboxFieldSchema = BaseFieldSchema.pipe(
+  Schema.extend(
+    Schema.Struct({
+      type: Schema.Literal('checkbox'),
+      default: Schema.optional(Schema.Boolean).pipe(
+        Schema.annotations({
+          description: 'Default value when creating new records',
+        })
+      ),
+    })
+  )
+).pipe(
   Schema.annotations({
     title: 'Checkbox Field',
     description: 'Boolean field for true/false values. Typically rendered as a checkbox in the UI.',

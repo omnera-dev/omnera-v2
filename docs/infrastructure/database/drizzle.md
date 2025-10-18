@@ -432,22 +432,41 @@ export default defineConfig({
 
 ```bash
 # Generate migration from schema changes
-bunx drizzle-kit generate
+bun run db:generate
 
 # Apply migrations to database
-bunx drizzle-kit migrate
+bun run db:migrate
 
-# View database schema in Drizzle Studio
-bunx drizzle-kit studio
+# Push schema changes directly (development only - skips migrations)
+bun run db:push
+
+# View database schema in Drizzle Studio (database GUI)
+bun run db:studio
+
+# Check migration status
+bun run db:check
+
+# Drop migration
+bun run db:drop
 ```
 
 **Migration Workflow**:
 
 1. Define or modify schema in `src/db/schema/*.ts`
-2. Run `bunx drizzle-kit generate` to create migration SQL
+2. Run `bun run db:generate` to create migration SQL
 3. Review generated migration in `drizzle/` directory
-4. Run `bunx drizzle-kit migrate` to apply migration
+4. Run `bun run db:migrate` to apply migration
 5. Commit migration files to version control
+
+**Alternative: Direct Push (Development Only)**:
+
+For rapid iteration in development, you can skip migrations and push schema directly:
+
+```bash
+bun run db:push  # Applies schema changes without generating migration files
+```
+
+⚠️ **Warning**: `db:push` should only be used in development environments. Always use migrations (`db:generate` + `db:migrate`) for production.
 
 ## Better Auth Integration
 

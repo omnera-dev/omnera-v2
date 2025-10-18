@@ -1,6 +1,13 @@
+/**
+ * Copyright (c) 2025 ESSENTIAL SERVICES
+ *
+ * This source code is licensed under the Sustainable Use License
+ * found in the LICENSE.md file in the root directory of this source tree.
+ */
+
 import { describe, expect, test } from 'bun:test'
-import { calculateComplexity, calculateStats, compareSchemas } from './schema-comparison.ts'
-import type { JSONSchema } from '../types/roadmap.ts'
+import { calculateComplexity, calculateStats, compareSchemas } from './schema-comparison'
+import type { JSONSchema } from '../types/roadmap'
 
 describe('schema-comparison', () => {
   describe('compareSchemas', () => {

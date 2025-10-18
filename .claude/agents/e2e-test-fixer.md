@@ -120,8 +120,7 @@ See detailed workflow below for complete step-by-step instructions.
 **After implementation:**
 - Use **Bash** for test execution (`bun test:e2e -- <test-file>`)
 - Use **Bash** for regression tests (`bun test:e2e:regression`)
-- Use **Bash** for quality checks (`bun run lint`, `bun run format`, `bun run typecheck`)
-- Use **Bash** for unit tests (`CLAUDECODE=1 bun test:unit`)
+- **Note**: Quality checks (eslint, typecheck, knip) and unit tests run automatically via hooks - no manual execution needed
 
 ---
 
@@ -161,6 +160,7 @@ For each failing E2E test, follow this exact sequence:
 - Run the specific E2E test: `bun test:e2e -- <test-file>`
 - Ensure the test turns GREEN
 - If still failing, iterate on the implementation
+- **Quality checks run automatically**: After your Edit/Write operations, hooks will automatically run eslint, typecheck, knip, and unit tests
 
 ### Step 4: Run Regression Tests (Tagged Tests Only)
 - Run ONLY regression-tagged E2E tests: `bun test:e2e:regression`
@@ -168,11 +168,11 @@ For each failing E2E test, follow this exact sequence:
 - If regressions occur, fix them before proceeding
 - **NEVER run all E2E tests** - Full suite is reserved for CI/CD only
 
-### Step 5: Write Unit Tests
+### Step 5: Write Unit Tests (If Needed)
 - Create co-located unit tests (src/**/*.test.ts) for the code you wrote
 - Follow F.I.R.S.T principles: Fast, Isolated, Repeatable, Self-validating, Timely
 - Use Bun Test framework
-- Ensure unit tests pass: `CLAUDECODE=1 bun test:unit`
+- **Tests run automatically**: Hooks will automatically run your unit tests after you Edit/Write the test file
 
 ### Step 6: Commit
 - Make a conventional commit with appropriate type:
@@ -254,13 +254,16 @@ For each failing E2E test, follow this exact sequence:
 
 ## Quality Assurance Mechanisms
 
-**Before each commit:**
-- ✅ Specific E2E test passes
+**Automated via Hooks (No Manual Action Needed):**
+- ✅ Code follows all formatting rules (Prettier) - Hook validates
+- ✅ No linting errors (ESLint) - Hook validates with max-warnings 0
+- ✅ TypeScript type-checks successfully - Hook runs tsc --noEmit
+- ✅ No unused code (Knip) - Hook checks for source files
+- ✅ Unit tests passing - Hook runs co-located test files
+
+**Manual Verification Required:**
+- ✅ Specific E2E test passes (`bun test:e2e -- <test-file>`)
 - ✅ Regression-tagged E2E tests pass (`bun test:e2e:regression`)
-- ✅ Unit tests written and passing
-- ✅ Code follows all formatting rules (Prettier)
-- ✅ No linting errors (ESLint)
-- ✅ TypeScript type-checks successfully
 - ✅ Code placed in correct architectural layer
 - ✅ Functional programming principles followed
 - ✅ Infrastructure best practices followed (Effect.ts, React 19, Hono, Drizzle, etc.)
@@ -272,8 +275,6 @@ For each failing E2E test, follow this exact sequence:
 - Are all side effects wrapped in Effect.ts (Effect.gen, pipe)?
 - Is the domain layer still pure?
 - Did I use the correct technology patterns from the stack?
-- Are imports using ES modules with .ts extensions?
-- Does the code match Prettier formatting rules?
 - Is the commit message conventional?
 - Did I avoid refactoring after the test passed GREEN?
 

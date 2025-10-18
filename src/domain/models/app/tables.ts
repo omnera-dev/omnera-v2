@@ -1,10 +1,17 @@
+/**
+ * Copyright (c) 2025 ESSENTIAL SERVICES
+ *
+ * This source code is licensed under the Sustainable Use License
+ * found in the LICENSE.md file in the root directory of this source tree.
+ */
+
 import { Schema } from 'effect'
-import { IdSchema } from '@/domain/models/table/id.ts'
-import { NameSchema } from '@/domain/models/table/name.ts'
-import { FieldsSchema } from '@/domain/models/table/fields.ts'
-import { PrimaryKeySchema } from '@/domain/models/table/primary-key.ts'
-import { UniqueConstraintsSchema } from '@/domain/models/table/unique-constraints.ts'
-import { IndexesSchema } from '@/domain/models/table/indexes.ts'
+import { FieldsSchema } from '@/domain/models/table/fields'
+import { IdSchema } from '@/domain/models/table/id'
+import { IndexesSchema } from '@/domain/models/table/indexes'
+import { NameSchema } from '@/domain/models/table/name'
+import { PrimaryKeySchema } from '@/domain/models/table/primary-key'
+import { UniqueConstraintsSchema } from '@/domain/models/table/unique-constraints'
 
 /**
  * Data Tables
@@ -51,8 +58,8 @@ export const TablesSchema = Schema.Array(
           id: 1,
           name: 'users',
           fields: [
-            { id: 1, name: 'email', type: 'email', required: true },
-            { id: 2, name: 'name', type: 'text', required: true },
+            { id: 1, name: 'email', type: 'email' as const, required: true },
+            { id: 2, name: 'name', type: 'single-line-text' as const, required: true },
           ],
         },
       ],

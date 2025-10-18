@@ -1,3 +1,10 @@
+/**
+ * Copyright (c) 2025 ESSENTIAL SERVICES
+ *
+ * This source code is licensed under the Sustainable Use License
+ * found in the LICENSE.md file in the root directory of this source tree.
+ */
+
 import { Effect, Console } from 'effect'
 import type { AppValidationError } from '@/application/errors/app-validation-error'
 import type { CSSCompilationError } from '@/infrastructure/errors/css-compilation-error'

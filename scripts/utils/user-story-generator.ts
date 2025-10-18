@@ -1,8 +1,15 @@
 /**
+ * Copyright (c) 2025 ESSENTIAL SERVICES
+ *
+ * This source code is licensed under the Sustainable Use License
+ * found in the LICENSE.md file in the root directory of this source tree.
+ */
+
+/**
  * E2E User Story Generator (Given-When-Then format)
  */
 
-import type { JSONSchemaProperty, PropertyUserStories, UserStory } from '../types/roadmap.ts'
+import type { JSONSchemaProperty, PropertyUserStories, UserStory } from '../types/roadmap'
 
 /**
  * Generate E2E user stories from JSON Schema

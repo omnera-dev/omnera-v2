@@ -1,11 +1,18 @@
 /**
+ * Copyright (c) 2025 ESSENTIAL SERVICES
+ *
+ * This source code is licensed under the Sustainable Use License
+ * found in the LICENSE.md file in the root directory of this source tree.
+ */
+
+/**
  * Schema User Stories Extractor
  *
  * Extracts x-user-stories from JSON Schema definitions and converts them
  * to structured format for E2E test generation
  */
 
-import type { JSONSchema, JSONSchemaProperty } from '../types/roadmap.ts'
+import type { JSONSchema, JSONSchemaProperty } from '../types/roadmap'
 
 export interface UserStoryStructured {
   given: string

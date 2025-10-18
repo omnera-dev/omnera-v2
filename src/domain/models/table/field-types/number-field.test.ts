@@ -1,3 +1,10 @@
+/**
+ * Copyright (c) 2025 ESSENTIAL SERVICES
+ *
+ * This source code is licensed under the Sustainable Use License
+ * found in the LICENSE.md file in the root directory of this source tree.
+ */
+
 import { describe, test, expect } from 'bun:test'
 import { Schema } from 'effect'
 import { NumberFieldSchema } from './number-field'
@@ -8,10 +15,10 @@ describe('NumberFieldSchema', () => {
       const field = {
         id: 1,
         name: 'price',
-        type: 'integer',
+        type: 'integer' as const,
       }
 
-      const result = Schema.decodeUnknownSync(NumberFieldSchema)(field)
+      const result = Schema.decodeSync(NumberFieldSchema)(field)
       expect(result).toEqual(field)
     })
 
@@ -22,9 +29,9 @@ describe('NumberFieldSchema', () => {
         const field = {
           id: 1,
           name,
-          type: 'decimal',
+          type: 'decimal' as const,
         }
-        const result = Schema.decodeUnknownSync(NumberFieldSchema)(field)
+        const result = Schema.decodeSync(NumberFieldSchema)(field)
         expect(result.name).toBe(name)
       })
     })
@@ -38,7 +45,7 @@ describe('NumberFieldSchema', () => {
           name: 'test_field',
           type,
         }
-        const result = Schema.decodeUnknownSync(NumberFieldSchema)(field)
+        const result = Schema.decodeSync(NumberFieldSchema)(field)
         expect(result.type).toBe(type)
       })
     })
@@ -47,7 +54,7 @@ describe('NumberFieldSchema', () => {
       const field = {
         id: 1,
         name: 'price',
-        type: 'currency',
+        type: 'currency' as const,
         required: true,
         unique: false,
         indexed: true,
@@ -58,7 +65,7 @@ describe('NumberFieldSchema', () => {
         default: 10.5,
       }
 
-      const result = Schema.decodeUnknownSync(NumberFieldSchema)(field)
+      const result = Schema.decodeSync(NumberFieldSchema)(field)
       expect(result).toEqual(field)
     })
 
@@ -66,12 +73,12 @@ describe('NumberFieldSchema', () => {
       const field = {
         id: 1,
         name: 'price',
-        type: 'currency',
+        type: 'currency' as const,
         currency: 'EUR',
         precision: 2,
       }
 
-      const result = Schema.decodeUnknownSync(NumberFieldSchema)(field)
+      const result = Schema.decodeSync(NumberFieldSchema)(field)
       expect(result).toEqual(field)
     })
 
@@ -79,12 +86,12 @@ describe('NumberFieldSchema', () => {
       const field = {
         id: 1,
         name: 'quantity',
-        type: 'percentage',
+        type: 'percentage' as const,
         min: 1,
         max: 100,
       }
 
-      const result = Schema.decodeUnknownSync(NumberFieldSchema)(field)
+      const result = Schema.decodeSync(NumberFieldSchema)(field)
       expect(result).toEqual(field)
     })
   })
@@ -93,11 +100,11 @@ describe('NumberFieldSchema', () => {
     test('should reject field without id', () => {
       const field = {
         name: 'price',
-        type: 'integer',
+        type: 'integer' as const,
       }
 
       expect(() => {
-        Schema.decodeUnknownSync(NumberFieldSchema)(field)
+        Schema.decodeSync(NumberFieldSchema)(field)
       }).toThrow()
     })
 
@@ -114,10 +121,10 @@ describe('NumberFieldSchema', () => {
         const field = {
           id: 1,
           name,
-          type: 'integer',
+          type: 'integer' as const,
         }
         expect(() => {
-          Schema.decodeUnknownSync(NumberFieldSchema)(field)
+          Schema.decodeSync(NumberFieldSchema)(field)
         }).toThrow()
       })
     })
@@ -126,11 +133,11 @@ describe('NumberFieldSchema', () => {
       const field = {
         id: 1,
         name: 'a'.repeat(64),
-        type: 'integer',
+        type: 'integer' as const,
       }
 
       expect(() => {
-        Schema.decodeUnknownSync(NumberFieldSchema)(field)
+        Schema.decodeSync(NumberFieldSchema)(field)
       }).toThrow()
     })
 
@@ -144,7 +151,7 @@ describe('NumberFieldSchema', () => {
           type,
         }
         expect(() => {
-          Schema.decodeUnknownSync(NumberFieldSchema)(field)
+          Schema.decodeSync(NumberFieldSchema)(field)
         }).toThrow()
       })
     })
@@ -153,12 +160,12 @@ describe('NumberFieldSchema', () => {
       const field = {
         id: 1,
         name: 'price',
-        type: 'decimal',
+        type: 'decimal' as const,
         precision: 15,
       }
 
       expect(() => {
-        Schema.decodeUnknownSync(NumberFieldSchema)(field)
+        Schema.decodeSync(NumberFieldSchema)(field)
       }).toThrow()
     })
 
@@ -166,12 +173,12 @@ describe('NumberFieldSchema', () => {
       const field = {
         id: 1,
         name: 'price',
-        type: 'decimal',
+        type: 'decimal' as const,
         precision: -1,
       }
 
       expect(() => {
-        Schema.decodeUnknownSync(NumberFieldSchema)(field)
+        Schema.decodeSync(NumberFieldSchema)(field)
       }).toThrow()
     })
   })
@@ -181,7 +188,7 @@ describe('NumberFieldSchema', () => {
       const field: Schema.Schema.Type<typeof NumberFieldSchema> = {
         id: 1,
         name: 'price',
-        type: 'decimal',
+        type: 'decimal' as const,
         precision: 2,
       }
       expect(field.id).toBe(1)

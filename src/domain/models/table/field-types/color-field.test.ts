@@ -1,3 +1,10 @@
+/**
+ * Copyright (c) 2025 ESSENTIAL SERVICES
+ *
+ * This source code is licensed under the Sustainable Use License
+ * found in the LICENSE.md file in the root directory of this source tree.
+ */
+
 import { describe, test, expect } from 'bun:test'
 import { Schema } from 'effect'
 import { ColorFieldSchema } from './color-field'
@@ -8,10 +15,10 @@ describe('ColorFieldSchema', () => {
       const field = {
         id: 1,
         name: 'brand_color',
-        type: 'color',
+        type: 'color' as const,
       }
 
-      const result = Schema.decodeUnknownSync(ColorFieldSchema)(field)
+      const result = Schema.decodeSync(ColorFieldSchema)(field)
       expect(result).toEqual(field)
     })
 
@@ -19,12 +26,12 @@ describe('ColorFieldSchema', () => {
       const field = {
         id: 1,
         name: 'brand_color',
-        type: 'color',
+        type: 'color' as const,
         required: true,
         default: '#3B82F6',
       }
 
-      const result = Schema.decodeUnknownSync(ColorFieldSchema)(field)
+      const result = Schema.decodeSync(ColorFieldSchema)(field)
       expect(result).toEqual(field)
     })
 
@@ -32,11 +39,11 @@ describe('ColorFieldSchema', () => {
       const field = {
         id: 1,
         name: 'brand_color',
-        type: 'color',
+        type: 'color' as const,
         default: '#ff0000',
       }
 
-      const result = Schema.decodeUnknownSync(ColorFieldSchema)(field)
+      const result = Schema.decodeSync(ColorFieldSchema)(field)
       expect(result).toEqual(field)
     })
   })
@@ -45,11 +52,11 @@ describe('ColorFieldSchema', () => {
     test('should reject field without id', () => {
       const field = {
         name: 'brand_color',
-        type: 'color',
+        type: 'color' as const,
       }
 
       expect(() => {
-        Schema.decodeUnknownSync(ColorFieldSchema)(field)
+        Schema.decodeSync(ColorFieldSchema)(field)
       }).toThrow()
     })
 
@@ -57,12 +64,12 @@ describe('ColorFieldSchema', () => {
       const field = {
         id: 1,
         name: 'brand_color',
-        type: 'color',
+        type: 'color' as const,
         default: '#ZZZ',
       }
 
       expect(() => {
-        Schema.decodeUnknownSync(ColorFieldSchema)(field)
+        Schema.decodeSync(ColorFieldSchema)(field)
       }).toThrow()
     })
 
@@ -70,12 +77,12 @@ describe('ColorFieldSchema', () => {
       const field = {
         id: 1,
         name: 'brand_color',
-        type: 'color',
+        type: 'color' as const,
         default: '#FFF',
       }
 
       expect(() => {
-        Schema.decodeUnknownSync(ColorFieldSchema)(field)
+        Schema.decodeSync(ColorFieldSchema)(field)
       }).toThrow()
     })
   })
@@ -85,7 +92,7 @@ describe('ColorFieldSchema', () => {
       const field: Schema.Schema.Type<typeof ColorFieldSchema> = {
         id: 1,
         name: 'brand_color',
-        type: 'color',
+        type: 'color' as const,
         default: '#3B82F6',
       }
       expect(field.id).toBe(1)

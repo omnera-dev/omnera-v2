@@ -24,10 +24,14 @@
 
 ```bash
 # Format all files in the project
-bunx prettier --write .
+bun run format
 
-# Check formatting without modifying files
-bunx prettier --check .
+# Check formatting without modifying files (useful for CI/CD)
+bun run format:check
+
+# Alternative: Direct bunx commands
+bunx prettier --write .          # Format all files
+bunx prettier --check .          # Check formatting
 
 # Format specific files or directories
 bunx prettier --write src/
@@ -223,16 +227,17 @@ let g:ale_fix_on_save = 1
 
 ## Integration with Bun
 
-- Command: `bun run format` (runs `prettier --write .`)
-- Command: `bun run format:check` (runs `prettier --check .`)
+- Command: `bun run format` (runs `prettier --write .` - format all files)
+- Command: `bun run format:check` (runs `prettier --check .` - check without modifying)
 - Execution: Prettier runs via `bunx` (Bun's package executor)
 - Speed: Very fast formatting leveraging Bun's performance
 - Compatibility: Works seamlessly with Bun's module resolution
 
 ## Automatic Formatting
 
-- Run `bunx prettier --write .` before committing code
-- Configure your IDE to format on save (recommended)
+- Run `bun run format` before committing code (recommended)
+- Run `bun run format:check` in CI/CD to verify formatting
+- Configure your IDE to format on save (highly recommended)
 - Prettier will automatically fix all formatting issues
 
 ## When to Run Prettier
@@ -252,7 +257,7 @@ let g:ale_fix_on_save = 1
 3. **After Code Changes** (recommended):
 
    ```bash
-   bunx prettier --write .  # Auto-format everything
+   bun run format  # Auto-format everything
    ```
 
 4. **On Save** (highly recommended):

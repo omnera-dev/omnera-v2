@@ -1,13 +1,20 @@
+/**
+ * Copyright (c) 2025 ESSENTIAL SERVICES
+ *
+ * This source code is licensed under the Sustainable Use License
+ * found in the LICENSE.md file in the root directory of this source tree.
+ */
+
 import { Schema } from 'effect'
-import { DescriptionSchema } from './description.ts'
-import { NameSchema } from './name.ts'
-import { VersionSchema } from './version.ts'
+import { DescriptionSchema } from './description'
+import { NameSchema } from './name'
+import { VersionSchema } from './version'
 
 // Re-export all domain model schemas and types for convenient imports
-export * from './name.ts'
-export * from './version.ts'
-export * from './description.ts'
-export * from './tables.ts'
+export * from './name'
+export * from './version'
+export * from './description'
+export * from './tables'
 
 /**
  * AppSchema defines the structure of an application configuration.

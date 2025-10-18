@@ -1,4 +1,11 @@
 /**
+ * Copyright (c) 2025 ESSENTIAL SERVICES
+ *
+ * This source code is licensed under the Sustainable Use License
+ * found in the LICENSE.md file in the root directory of this source tree.
+ */
+
+/**
  * Schema Export Runner
  *
  * Runs the export-schema script and parses the output to check
@@ -6,7 +13,7 @@
  */
 
 import { spawn } from 'node:child_process'
-import type { JSONSchema } from '../types/roadmap.ts'
+import type { JSONSchema } from '../types/roadmap'
 
 export interface SchemaImplementationStatus {
   propertyPath: string

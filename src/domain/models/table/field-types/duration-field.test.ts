@@ -1,3 +1,10 @@
+/**
+ * Copyright (c) 2025 ESSENTIAL SERVICES
+ *
+ * This source code is licensed under the Sustainable Use License
+ * found in the LICENSE.md file in the root directory of this source tree.
+ */
+
 import { describe, test, expect } from 'bun:test'
 import { Schema } from 'effect'
 import { DurationFieldSchema } from './duration-field'
@@ -8,10 +15,10 @@ describe('DurationFieldSchema', () => {
       const field = {
         id: 1,
         name: 'work_hours',
-        type: 'duration',
+        type: 'duration' as const,
       }
 
-      const result = Schema.decodeUnknownSync(DurationFieldSchema)(field)
+      const result = Schema.decodeSync(DurationFieldSchema)(field)
       expect(result).toEqual(field)
     })
 
@@ -19,12 +26,12 @@ describe('DurationFieldSchema', () => {
       const field = {
         id: 1,
         name: 'work_hours',
-        type: 'duration',
+        type: 'duration' as const,
         required: true,
         format: 'h:mm',
       }
 
-      const result = Schema.decodeUnknownSync(DurationFieldSchema)(field)
+      const result = Schema.decodeSync(DurationFieldSchema)(field)
       expect(result).toEqual(field)
     })
 
@@ -32,11 +39,11 @@ describe('DurationFieldSchema', () => {
       const field = {
         id: 1,
         name: 'elapsed_time',
-        type: 'duration',
+        type: 'duration' as const,
         format: 'h:mm:ss',
       }
 
-      const result = Schema.decodeUnknownSync(DurationFieldSchema)(field)
+      const result = Schema.decodeSync(DurationFieldSchema)(field)
       expect(result).toEqual(field)
     })
   })
@@ -45,11 +52,11 @@ describe('DurationFieldSchema', () => {
     test('should reject field without id', () => {
       const field = {
         name: 'work_hours',
-        type: 'duration',
+        type: 'duration' as const,
       }
 
       expect(() => {
-        Schema.decodeUnknownSync(DurationFieldSchema)(field)
+        Schema.decodeSync(DurationFieldSchema)(field)
       }).toThrow()
     })
 
@@ -60,7 +67,7 @@ describe('DurationFieldSchema', () => {
       }
 
       expect(() => {
-        Schema.decodeUnknownSync(DurationFieldSchema)(field)
+        Schema.decodeSync(DurationFieldSchema)(field)
       }).toThrow()
     })
   })
@@ -70,7 +77,7 @@ describe('DurationFieldSchema', () => {
       const field: Schema.Schema.Type<typeof DurationFieldSchema> = {
         id: 1,
         name: 'work_hours',
-        type: 'duration',
+        type: 'duration' as const,
         format: 'h:mm',
       }
       expect(field.id).toBe(1)

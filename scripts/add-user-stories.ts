@@ -1,5 +1,12 @@
 #!/usr/bin/env bun
 /**
+ * Copyright (c) 2025 ESSENTIAL SERVICES
+ *
+ * This source code is licensed under the Sustainable Use License
+ * found in the LICENSE.md file in the root directory of this source tree.
+ */
+
+/**
  * Add x-user-stories to all properties in specs.schema.json
  *
  * This script processes the schema and adds relevant user stories to every property
@@ -12,7 +19,7 @@
 import { join } from 'node:path'
 
 // Type definitions
-interface JSONSchema {
+export interface JSONSchema {
   type?: string | string[]
   title?: string
   description?: string
@@ -35,11 +42,6 @@ interface JSONSchema {
   'x-business-rules'?: string[]
   'x-user-stories'?: string[]
   [key: string]: unknown
-}
-
-interface ProcessingStats {
-  propertiesUpdated: number
-  totalStories: number
 }
 
 // User stories extracted from test files
@@ -260,64 +262,73 @@ export function generateUserStories(
     )
   }
   // Generic string with length constraints
-  else if (propType === 'string') {
-    const minLen = propSchema.minLength
-    const maxLen = propSchema.maxLength
-    if (minLen !== undefined && maxLen !== undefined) {
-      stories.push(
-        `GIVEN user provides ${propName} with ${minLen}-${maxLen} characters WHEN validating input THEN value should be accepted`,
-        `GIVEN user provides ${propName} shorter than ${minLen} chars WHEN validating input THEN error should require minimum length`,
-        `GIVEN user provides ${propName} longer than ${maxLen} chars WHEN validating input THEN error should enforce maximum length`
-      )
-    } else if (minLen !== undefined) {
-      stories.push(
-        `GIVEN user provides ${propName} with at least ${minLen} characters WHEN validating input THEN value should be accepted`,
-        `GIVEN user provides ${propName} shorter than ${minLen} chars WHEN validating input THEN error should require minimum length`
-      )
-    } else {
-      stories.push(
-        `GIVEN user provides ${propName} WHEN validating input THEN string value should be accepted`,
-        `GIVEN ${propName} is empty string WHEN validating input THEN behavior should follow optional/required rules`
-      )
+  else
+    switch (propType) {
+      case 'string': {
+        const minLen = propSchema.minLength
+        const maxLen = propSchema.maxLength
+        if (minLen !== undefined && maxLen !== undefined) {
+          stories.push(
+            `GIVEN user provides ${propName} with ${minLen}-${maxLen} characters WHEN validating input THEN value should be accepted`,
+            `GIVEN user provides ${propName} shorter than ${minLen} chars WHEN validating input THEN error should require minimum length`,
+            `GIVEN user provides ${propName} longer than ${maxLen} chars WHEN validating input THEN error should enforce maximum length`
+          )
+        } else if (minLen !== undefined) {
+          stories.push(
+            `GIVEN user provides ${propName} with at least ${minLen} characters WHEN validating input THEN value should be accepted`,
+            `GIVEN user provides ${propName} shorter than ${minLen} chars WHEN validating input THEN error should require minimum length`
+          )
+        } else {
+          stories.push(
+            `GIVEN user provides ${propName} WHEN validating input THEN string value should be accepted`,
+            `GIVEN ${propName} is empty string WHEN validating input THEN behavior should follow optional/required rules`
+          )
+        }
+
+        break
+      }
+      case 'number':
+      case 'integer': {
+        const minVal = propSchema.minimum
+        const maxVal = propSchema.maximum
+        if (minVal !== undefined && maxVal !== undefined) {
+          stories.push(
+            `GIVEN user provides ${propName} between ${minVal} and ${maxVal} WHEN validating input THEN value should be accepted`,
+            `GIVEN user provides ${propName} below ${minVal} WHEN validating input THEN error should enforce minimum value`,
+            `GIVEN user provides ${propName} above ${maxVal} WHEN validating input THEN error should enforce maximum value`
+          )
+        } else if (minVal !== undefined) {
+          stories.push(
+            `GIVEN user provides ${propName} >= ${minVal} WHEN validating input THEN value should be accepted`,
+            `GIVEN user provides ${propName} < ${minVal} WHEN validating input THEN error should enforce minimum value`
+          )
+        } else {
+          stories.push(
+            `GIVEN user provides ${propName} WHEN validating input THEN numeric value should be accepted`,
+            `GIVEN user provides non-numeric ${propName} WHEN validating input THEN error should require number`
+          )
+        }
+
+        break
+      }
+      case 'array': {
+        const { minItems } = propSchema
+        if (minItems !== undefined) {
+          stories.push(
+            `GIVEN user provides ${propName} with at least ${minItems} items WHEN validating input THEN array should be accepted`,
+            `GIVEN user provides ${propName} with fewer than ${minItems} items WHEN validating input THEN error should enforce minimum items`
+          )
+        } else {
+          stories.push(
+            `GIVEN user provides ${propName} array WHEN validating input THEN items should be processed in order`,
+            `GIVEN ${propName} array is empty WHEN validating input THEN behavior should follow optional/required rules`
+          )
+        }
+
+        break
+      }
+      // No default
     }
-  }
-  // Generic number with min/max
-  else if (propType === 'number' || propType === 'integer') {
-    const minVal = propSchema.minimum
-    const maxVal = propSchema.maximum
-    if (minVal !== undefined && maxVal !== undefined) {
-      stories.push(
-        `GIVEN user provides ${propName} between ${minVal} and ${maxVal} WHEN validating input THEN value should be accepted`,
-        `GIVEN user provides ${propName} below ${minVal} WHEN validating input THEN error should enforce minimum value`,
-        `GIVEN user provides ${propName} above ${maxVal} WHEN validating input THEN error should enforce maximum value`
-      )
-    } else if (minVal !== undefined) {
-      stories.push(
-        `GIVEN user provides ${propName} >= ${minVal} WHEN validating input THEN value should be accepted`,
-        `GIVEN user provides ${propName} < ${minVal} WHEN validating input THEN error should enforce minimum value`
-      )
-    } else {
-      stories.push(
-        `GIVEN user provides ${propName} WHEN validating input THEN numeric value should be accepted`,
-        `GIVEN user provides non-numeric ${propName} WHEN validating input THEN error should require number`
-      )
-    }
-  }
-  // Generic array
-  else if (propType === 'array') {
-    const minItems = propSchema.minItems
-    if (minItems !== undefined) {
-      stories.push(
-        `GIVEN user provides ${propName} with at least ${minItems} items WHEN validating input THEN array should be accepted`,
-        `GIVEN user provides ${propName} with fewer than ${minItems} items WHEN validating input THEN error should enforce minimum items`
-      )
-    } else {
-      stories.push(
-        `GIVEN user provides ${propName} array WHEN validating input THEN items should be processed in order`,
-        `GIVEN ${propName} array is empty WHEN validating input THEN behavior should follow optional/required rules`
-      )
-    }
-  }
 
   // Fallback: generic stories
   if (stories.length === 0) {

@@ -1,3 +1,10 @@
+/**
+ * Copyright (c) 2025 ESSENTIAL SERVICES
+ *
+ * This source code is licensed under the Sustainable Use License
+ * found in the LICENSE.md file in the root directory of this source tree.
+ */
+
 import { describe, test, expect } from 'bun:test'
 import { Schema } from 'effect'
 import { CreatedByFieldSchema } from './created-by-field'
@@ -8,10 +15,10 @@ describe('CreatedByFieldSchema', () => {
       const field = {
         id: 1,
         name: 'created_by',
-        type: 'created-by',
+        type: 'created-by' as const,
       }
 
-      const result = Schema.decodeUnknownSync(CreatedByFieldSchema)(field)
+      const result = Schema.decodeSync(CreatedByFieldSchema)(field)
       expect(result).toEqual(field)
     })
 
@@ -19,11 +26,11 @@ describe('CreatedByFieldSchema', () => {
       const field = {
         id: 1,
         name: 'created_by',
-        type: 'created-by',
+        type: 'created-by' as const,
         indexed: true,
       }
 
-      const result = Schema.decodeUnknownSync(CreatedByFieldSchema)(field)
+      const result = Schema.decodeSync(CreatedByFieldSchema)(field)
       expect(result).toEqual(field)
     })
 
@@ -31,11 +38,11 @@ describe('CreatedByFieldSchema', () => {
       const field = {
         id: 1,
         name: 'created_by',
-        type: 'created-by',
+        type: 'created-by' as const,
         indexed: false,
       }
 
-      const result = Schema.decodeUnknownSync(CreatedByFieldSchema)(field)
+      const result = Schema.decodeSync(CreatedByFieldSchema)(field)
       expect(result).toEqual(field)
     })
   })
@@ -44,11 +51,11 @@ describe('CreatedByFieldSchema', () => {
     test('should reject field without id', () => {
       const field = {
         name: 'created_by',
-        type: 'created-by',
+        type: 'created-by' as const,
       }
 
       expect(() => {
-        Schema.decodeUnknownSync(CreatedByFieldSchema)(field)
+        Schema.decodeSync(CreatedByFieldSchema)(field)
       }).toThrow()
     })
 
@@ -59,7 +66,7 @@ describe('CreatedByFieldSchema', () => {
       }
 
       expect(() => {
-        Schema.decodeUnknownSync(CreatedByFieldSchema)(field)
+        Schema.decodeSync(CreatedByFieldSchema)(field)
       }).toThrow()
     })
   })
@@ -69,7 +76,7 @@ describe('CreatedByFieldSchema', () => {
       const field: Schema.Schema.Type<typeof CreatedByFieldSchema> = {
         id: 1,
         name: 'created_by',
-        type: 'created-by',
+        type: 'created-by' as const,
         indexed: true,
       }
       expect(field.id).toBe(1)

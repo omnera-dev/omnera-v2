@@ -1,3 +1,10 @@
+/**
+ * Copyright (c) 2025 ESSENTIAL SERVICES
+ *
+ * This source code is licensed under the Sustainable Use License
+ * found in the LICENSE.md file in the root directory of this source tree.
+ */
+
 import { describe, test, expect } from 'bun:test'
 import { Schema } from 'effect'
 import { BarcodeFieldSchema } from './barcode-field'
@@ -8,10 +15,10 @@ describe('BarcodeFieldSchema', () => {
       const field = {
         id: 1,
         name: 'product_barcode',
-        type: 'barcode',
+        type: 'barcode' as const,
       }
 
-      const result = Schema.decodeUnknownSync(BarcodeFieldSchema)(field)
+      const result = Schema.decodeSync(BarcodeFieldSchema)(field)
       expect(result).toEqual(field)
     })
 
@@ -19,12 +26,12 @@ describe('BarcodeFieldSchema', () => {
       const field = {
         id: 1,
         name: 'product_barcode',
-        type: 'barcode',
+        type: 'barcode' as const,
         required: true,
         format: 'EAN-13',
       }
 
-      const result = Schema.decodeUnknownSync(BarcodeFieldSchema)(field)
+      const result = Schema.decodeSync(BarcodeFieldSchema)(field)
       expect(result).toEqual(field)
     })
 
@@ -32,11 +39,11 @@ describe('BarcodeFieldSchema', () => {
       const field = {
         id: 1,
         name: 'asset_code',
-        type: 'barcode',
+        type: 'barcode' as const,
         format: 'QR',
       }
 
-      const result = Schema.decodeUnknownSync(BarcodeFieldSchema)(field)
+      const result = Schema.decodeSync(BarcodeFieldSchema)(field)
       expect(result).toEqual(field)
     })
   })
@@ -45,11 +52,11 @@ describe('BarcodeFieldSchema', () => {
     test('should reject field without id', () => {
       const field = {
         name: 'product_barcode',
-        type: 'barcode',
+        type: 'barcode' as const,
       }
 
       expect(() => {
-        Schema.decodeUnknownSync(BarcodeFieldSchema)(field)
+        Schema.decodeSync(BarcodeFieldSchema)(field)
       }).toThrow()
     })
 
@@ -60,7 +67,7 @@ describe('BarcodeFieldSchema', () => {
       }
 
       expect(() => {
-        Schema.decodeUnknownSync(BarcodeFieldSchema)(field)
+        Schema.decodeSync(BarcodeFieldSchema)(field)
       }).toThrow()
     })
   })
@@ -70,7 +77,7 @@ describe('BarcodeFieldSchema', () => {
       const field: Schema.Schema.Type<typeof BarcodeFieldSchema> = {
         id: 1,
         name: 'product_barcode',
-        type: 'barcode',
+        type: 'barcode' as const,
         format: 'EAN-13',
       }
       expect(field.id).toBe(1)

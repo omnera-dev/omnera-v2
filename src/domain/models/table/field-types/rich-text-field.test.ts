@@ -1,3 +1,10 @@
+/**
+ * Copyright (c) 2025 ESSENTIAL SERVICES
+ *
+ * This source code is licensed under the Sustainable Use License
+ * found in the LICENSE.md file in the root directory of this source tree.
+ */
+
 import { describe, test, expect } from 'bun:test'
 import { Schema } from 'effect'
 import { RichTextFieldSchema } from './rich-text-field'
@@ -8,10 +15,10 @@ describe('RichTextFieldSchema', () => {
       const field = {
         id: 1,
         name: 'article_content',
-        type: 'rich-text',
+        type: 'rich-text' as const,
       }
 
-      const result = Schema.decodeUnknownSync(RichTextFieldSchema)(field)
+      const result = Schema.decodeSync(RichTextFieldSchema)(field)
       expect(result).toEqual(field)
     })
 
@@ -19,12 +26,12 @@ describe('RichTextFieldSchema', () => {
       const field = {
         id: 1,
         name: 'article_content',
-        type: 'rich-text',
+        type: 'rich-text' as const,
         required: true,
         maxLength: 10_000,
       }
 
-      const result = Schema.decodeUnknownSync(RichTextFieldSchema)(field)
+      const result = Schema.decodeSync(RichTextFieldSchema)(field)
       expect(result).toEqual(field)
     })
 
@@ -32,11 +39,11 @@ describe('RichTextFieldSchema', () => {
       const field = {
         id: 1,
         name: 'description',
-        type: 'rich-text',
+        type: 'rich-text' as const,
         maxLength: 5000,
       }
 
-      const result = Schema.decodeUnknownSync(RichTextFieldSchema)(field)
+      const result = Schema.decodeSync(RichTextFieldSchema)(field)
       expect(result).toEqual(field)
     })
   })
@@ -45,11 +52,11 @@ describe('RichTextFieldSchema', () => {
     test('should reject field without id', () => {
       const field = {
         name: 'article_content',
-        type: 'rich-text',
+        type: 'rich-text' as const,
       }
 
       expect(() => {
-        Schema.decodeUnknownSync(RichTextFieldSchema)(field)
+        Schema.decodeSync(RichTextFieldSchema)(field)
       }).toThrow()
     })
 
@@ -57,12 +64,12 @@ describe('RichTextFieldSchema', () => {
       const field = {
         id: 1,
         name: 'content',
-        type: 'rich-text',
+        type: 'rich-text' as const,
         maxLength: 0,
       }
 
       expect(() => {
-        Schema.decodeUnknownSync(RichTextFieldSchema)(field)
+        Schema.decodeSync(RichTextFieldSchema)(field)
       }).toThrow()
     })
   })
@@ -72,7 +79,7 @@ describe('RichTextFieldSchema', () => {
       const field: Schema.Schema.Type<typeof RichTextFieldSchema> = {
         id: 1,
         name: 'article_content',
-        type: 'rich-text',
+        type: 'rich-text' as const,
         maxLength: 10_000,
       }
       expect(field.id).toBe(1)

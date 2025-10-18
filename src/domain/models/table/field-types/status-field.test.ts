@@ -1,3 +1,10 @@
+/**
+ * Copyright (c) 2025 ESSENTIAL SERVICES
+ *
+ * This source code is licensed under the Sustainable Use License
+ * found in the LICENSE.md file in the root directory of this source tree.
+ */
+
 import { describe, test, expect } from 'bun:test'
 import { Schema } from 'effect'
 import { StatusFieldSchema } from './status-field'
@@ -8,11 +15,11 @@ describe('StatusFieldSchema', () => {
       const field = {
         id: 1,
         name: 'status',
-        type: 'status',
+        type: 'status' as const,
         options: [{ value: 'todo', color: '#94A3B8' }],
       }
 
-      const result = Schema.decodeUnknownSync(StatusFieldSchema)(field)
+      const result = Schema.decodeSync(StatusFieldSchema)(field)
       expect(result).toEqual(field)
     })
   })
@@ -21,12 +28,12 @@ describe('StatusFieldSchema', () => {
     test('should reject field without id', () => {
       const field = {
         name: 'status',
-        type: 'status',
+        type: 'status' as const,
         options: [{ value: 'todo' }],
       }
 
       expect(() => {
-        Schema.decodeUnknownSync(StatusFieldSchema)(field)
+        Schema.decodeSync(StatusFieldSchema)(field)
       }).toThrow()
     })
   })
