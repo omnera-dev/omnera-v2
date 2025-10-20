@@ -22,7 +22,7 @@ Omnera uses Playwright's tagging system to categorize E2E tests by purpose:
 | ------------- | ------------------------------- | ------------------------------------ | --------- | --------- |
 | `@spec` | Specification tests (TDD) | During development, pre-commit | Fast | Granular |
 | `@regression` | Regression tests (consolidated) | CI/CD, before releases | Medium | Broad |
-| `@critical` | Critical path tests | Every commit, production smoke tests | Very Fast | Essential |
+| `@spec` | Critical path tests | Every commit, production smoke tests | Very Fast | Essential |
 
 ### 1. Specification Tests (`@spec`)
 
@@ -131,7 +131,7 @@ test.describe('Login Flow - Regression', () => {
 
 ````bash
 
-### 3. Critical Path Tests (`@critical`)
+### 3. Critical Path Tests (`@spec`)
 **Purpose:** Validate essential workflows that must always work (authentication, checkout, data loss prevention).
 **Characteristics:**
 - **Essential** - Core functionality only
@@ -148,16 +148,16 @@ test.describe('Login Flow - Regression', () => {
 // tests/critical/critical-paths.spec.ts
 import { test, expect } from '@playwright/test'
 test.describe('Critical Paths', () => {
-  // @critical - Must always work
-  test('user can authenticate', { tag: '@critical' }, async ({ page }) => {
+  // @spec - Must always work
+  test('user can authenticate', { tag: '@spec' }, async ({ page }) => {
     await page.goto('/login')
     await page.getByLabel('Email').fill('user@example.com')
     await page.getByLabel('Password').fill('password123')
     await page.getByRole('button', { name: 'Sign in' }).click()
     await expect(page).toHaveURL('/dashboard')
   })
-  // @critical - Data integrity
-  test('user can save work', { tag: '@critical' }, async ({ page }) => {
+  // @spec - Data integrity
+  test('user can save work', { tag: '@spec' }, async ({ page }) => {
     await page.goto('/editor')
     await page.getByRole('textbox').fill('Important data')
     await page.getByRole('button', { name: 'Save' }).click()
@@ -177,8 +177,8 @@ test.describe('Critical Paths', () => {
 Tests can have multiple tags for flexible execution:
 ```typescript
 // Test is both a spec test AND a critical path
-test('user can authenticate', { tag: ['@spec', '@critical'] }, async ({ page }) => {
-  // This test runs during development (@spec) AND every commit (@critical)
+test('user can authenticate', { tag: ['@spec', '@spec'] }, async ({ page }) => {
+  // This test runs during development (@spec) AND every commit (@spec)
   await page.goto('/login')
   await page.getByLabel('Email').fill('user@example.com')
   await page.getByLabel('Password').fill('password123')
@@ -186,8 +186,8 @@ test('user can authenticate', { tag: ['@spec', '@critical'] }, async ({ page }) 
   await expect(page).toHaveURL('/dashboard')
 })
 // Test is both regression AND critical
-test('complete checkout flow', { tag: ['@regression', '@critical'] }, async ({ page }) => {
-  // This test runs in CI (@regression) AND every commit (@critical)
+test('complete checkout flow', { tag: ['@regression', '@spec'] }, async ({ page }) => {
+  // This test runs in CI (@regression) AND every commit (@spec)
 })
 ````
 
@@ -214,18 +214,18 @@ export default defineConfig({
 **Tag filtering happens via CLI** with `--grep` flag:
 
 - `playwright test --grep='@spec'` - Run spec tests only
-- `playwright test --grep='@critical'` - Run critical tests only
-- `playwright test --grep='@spec|@critical'` - Run spec OR critical tests
+- `playwright test --grep='@spec'` - Run critical tests only
+- `playwright test --grep='@spec|@spec'` - Run spec OR critical tests
 
 ### Execution Strategy by Environment
 
-| Environment                       | Tests to Run                | Command                 | Duration    |
-| --------------------------------- | --------------------------- | ----------------------- | ----------- |
-| **Development** (active coding)   | `@spec`                     | `bun test:e2e:spec`     | ~30 seconds |
-| **Pre-commit** (local validation) | `@spec` + `@critical`       | `bun test:e2e:dev`      | ~1 minute   |
-| **CI/CD** (every push)            | `@regression` + `@critical` | `bun test:e2e:ci`       | ~5 minutes  |
-| **Pre-release** (before deploy)   | All tests                   | `bun test:e2e`          | ~15 minutes |
-| **Production** (smoke test)       | `@critical`                 | `bun test:e2e:critical` | ~30 seconds |
+| Environment                       | Tests to Run            | Command                 | Duration    |
+| --------------------------------- | ----------------------- | ----------------------- | ----------- |
+| **Development** (active coding)   | `@spec`                 | `bun test:e2e:spec`     | ~30 seconds |
+| **Pre-commit** (local validation) | `@spec` + `@spec`       | `bun test:e2e:dev`      | ~1 minute   |
+| **CI/CD** (every push)            | `@regression` + `@spec` | `bun test:e2e:ci`       | ~5 minutes  |
+| **Pre-release** (before deploy)   | All tests               | `bun test:e2e`          | ~15 minutes |
+| **Production** (smoke test)       | `@spec`                 | `bun test:e2e:critical` | ~30 seconds |
 
 ### NPM Scripts Configuration
 
@@ -233,16 +233,16 @@ Omnera uses **grep-based** execution for all test filtering:
 
 - Tag tests with `{ tag: '@spec' }` metadata in test definitions
 - Use `--grep='@tag'` pattern matching for flexible tag combinations
-- Supports OR logic with `|` operator (e.g., `@spec|@critical`)
+- Supports OR logic with `|` operator (e.g., `@spec|@spec`)
 
 ```json
 {
   "scripts": {
     "test:e2e": "playwright test",
     "test:e2e:spec": "playwright test --grep='@spec'",
-    "test:e2e:critical": "playwright test --grep='@critical'",
-    "test:e2e:dev": "playwright test --grep='@spec|@critical'",
-    "test:e2e:ci": "playwright test --grep='@regression|@critical'"
+    "test:e2e:critical": "playwright test --grep='@spec'",
+    "test:e2e:dev": "playwright test --grep='@spec|@spec'",
+    "test:e2e:ci": "playwright test --grep='@regression|@spec'"
   }
 }
 ```
@@ -288,8 +288,8 @@ test('password management workflow', { tag: '@regression' }, async ({ page }) =>
 **Step 4: Promote critical functionality**
 
 ```typescript
-// If password reset is critical, add @critical tag
-test('user can reset password', { tag: ['@spec', '@critical'] }, async ({ page }) => {
+// If password reset is critical, add @spec tag
+test('user can reset password', { tag: ['@spec', '@spec'] }, async ({ page }) => {
   // Now runs during development AND every commit
 })
 ```
@@ -339,10 +339,10 @@ test('user can login', { tag: '@regression' }, async ({ page }) => {
 ### Best Practices for Tagged Tests
 
 1. **Start with `@spec` during TDD** - All new tests begin as specification tests
-2. **Add `@critical` for essential workflows** - Authentication, data persistence, checkout
+2. **Add `@spec` for essential workflows** - Authentication, data persistence, checkout
 3. **Create `@regression` tests once stable** - Consolidate multiple spec tests into one
 4. **Use multiple tags sparingly** - Only when test truly serves both purposes
-5. **Review tag assignments quarterly** - Remove outdated `@spec` tags, add `@critical` as needed
+5. **Review tag assignments quarterly** - Remove outdated `@spec` tags, add `@spec` as needed
 6. **Document tag decisions** - Add comments explaining why test has specific tags
 
 ### Anti-Patterns to Avoid
@@ -357,15 +357,15 @@ test('user can enter email', { tag: '@spec' }, ...) // Keep for debugging
 test('complete login flow', { tag: '@regression' }, ...) // Add regression
 ```
 
-❌ **Don't tag everything as `@critical`**
+❌ **Don't tag everything as `@spec`**
 
 ```typescript
 // BAD - Too many critical tests
-test('user can change theme', { tag: '@critical' }, ...) // Not critical
-test('user can view profile', { tag: '@critical' }, ...) // Not critical
+test('user can change theme', { tag: '@spec' }, ...) // Not critical
+test('user can view profile', { tag: '@spec' }, ...) // Not critical
 // GOOD - Only truly essential workflows
-test('user can authenticate', { tag: '@critical' }, ...) // Critical
-test('user can save work', { tag: '@critical' }, ...) // Critical
+test('user can authenticate', { tag: '@spec' }, ...) // Critical
+test('user can save work', { tag: '@spec' }, ...) // Critical
 ```
 
 ❌ **Don't create duplicate tests**
@@ -397,16 +397,16 @@ test('user can submit form', { tag: '@regression' }, async ({ page }) => {
 })
 ```
 
-**Problem:** Tests tagged `@critical` are flaky
+**Problem:** Tests tagged `@spec` are flaky
 **Solution:** Critical tests must be rock-solid. Add retries or fix flakiness before tagging as critical.
 
 ```typescript
 // BAD - Flaky test tagged as critical
-test('user can login', { tag: '@critical' }, async ({ page }) => {
+test('user can login', { tag: '@spec' }, async ({ page }) => {
   await page.waitForTimeout(3000) // Flaky
 })
 // GOOD - Stable test with auto-waiting
-test('user can login', { tag: '@critical' }, async ({ page }) => {
+test('user can login', { tag: '@spec' }, async ({ page }) => {
   await expect(page.getByRole('button')).toBeEnabled() // Reliable
 })
 ```

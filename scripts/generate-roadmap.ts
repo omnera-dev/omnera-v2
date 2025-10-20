@@ -81,7 +81,7 @@ async function main() {
   const testScanResult = scanAllTests(TESTS_DIR)
   console.log(`   Found ${testScanResult.totalTests} implemented tests`)
   console.log(
-    `   @spec: ${testScanResult.testsByTag.get('@spec') || 0}, @regression: ${testScanResult.testsByTag.get('@regression') || 0}, @critical: ${testScanResult.testsByTag.get('@critical') || 0}`
+    `   @spec: ${testScanResult.testsByTag.get('@spec') || 0}, @regression: ${testScanResult.testsByTag.get('@regression') || 0}, @spec: ${testScanResult.testsByTag.get('@spec') || 0}`
   )
   console.log()
 

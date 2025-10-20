@@ -126,9 +126,9 @@ export function generatePhaseDetailMarkdown(doc: PhaseDocumentation): string {
       }
     }
 
-    // @critical story
+    // @spec story
     if (stories.critical.length > 0) {
-      md += `#### @critical User Story (Essential Path)\n\n`
+      md += `#### @spec User Story (Essential Path)\n\n`
       md += `This test validates the MINIMAL essential path for this feature.\n\n`
 
       for (const story of stories.critical) {
@@ -209,7 +209,7 @@ export function generateSuccessCriteria(doc: PhaseDocumentation): string[] {
   criteria.push(`All @regression E2E tests passing (current: 0/${totalRegressionTests})`)
 
   if (totalCriticalTests > 0) {
-    criteria.push(`All @critical E2E tests passing (current: 0/${totalCriticalTests})`)
+    criteria.push(`All @spec E2E tests passing (current: 0/${totalCriticalTests})`)
   }
 
   // Code quality criteria

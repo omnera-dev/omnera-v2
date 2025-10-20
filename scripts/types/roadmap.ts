@@ -118,7 +118,7 @@ export interface UserStory {
   given: string
   when: string
   then: string
-  tag: '@spec' | '@regression' | '@critical'
+  tag: '@spec' | '@regression' | '@spec'
 }
 
 /**

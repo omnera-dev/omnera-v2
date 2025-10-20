@@ -500,7 +500,7 @@ For **all other properties**, stories are generated based on schema analysis:
 3. Extracts `x-user-stories` array (GIVEN-WHEN-THEN format)
 4. Maps stories to Playwright test structure
 5. Generates test.fixme() tests (RED phase)
-6. Assigns test tags (@spec, @regression, @critical)
+6. Assigns test tags (@spec, @regression, @spec)
 
 **Output**: `tests/app/{property}.spec.ts` with failing tests
 

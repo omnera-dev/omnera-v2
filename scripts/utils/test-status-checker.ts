@@ -17,7 +17,7 @@ import { join } from 'node:path'
 
 export interface TestInfo {
   description: string
-  tag: '@spec' | '@regression' | '@critical' | 'unknown'
+  tag: '@spec' | '@regression' | '@spec' | 'unknown'
   status: 'passing' | 'fixme' | 'skipped'
   lineNumber: number
 }
@@ -82,7 +82,7 @@ export async function checkTestStatus(propertyPath: string): Promise<TestStatus>
     skipped: tests.filter((t) => t.status === 'skipped').length,
     specTests: tests.filter((t) => t.tag === '@spec').length,
     regressionTests: tests.filter((t) => t.tag === '@regression').length,
-    criticalTests: tests.filter((t) => t.tag === '@critical').length,
+    criticalTests: tests.filter((t) => t.tag === '@spec').length,
   }
 
   // Calculate coverage (percentage of passing tests)
@@ -152,7 +152,7 @@ async function parseTestFile(filePath: string): Promise<TestInfo[]> {
 
       for (const match of matches) {
         const description = match[1]!
-        const tag = match[2]! as '@spec' | '@regression' | '@critical'
+        const tag = match[2]! as '@spec' | '@regression' | '@spec'
 
         // Find line number by searching for the match in lines
         const matchIndex = content.indexOf(match[0])

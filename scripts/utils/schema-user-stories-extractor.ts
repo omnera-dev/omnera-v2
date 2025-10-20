@@ -18,7 +18,7 @@ export interface UserStoryStructured {
   given: string
   when: string
   then: string
-  tag: '@spec' | '@regression' | '@critical'
+  tag: '@spec' | '@regression' | '@spec'
 }
 
 export interface UserStoriesFormatted {

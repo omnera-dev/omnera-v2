@@ -102,10 +102,10 @@ function extractExpectedTestCount(propertyName: string): number {
 
   const content = readFileSync(roadmapFilePath, 'utf-8')
 
-  // Count occurrences of "- **Tag**: `@spec`", "@regression", "@critical"
+  // Count occurrences of "- **Tag**: `@spec`", "@regression", "@spec"
   const specMatches = content.match(/- \*\*Tag\*\*: `@spec`/g)
   const regressionMatches = content.match(/- \*\*Tag\*\*: `@regression`/g)
-  const criticalMatches = content.match(/- \*\*Tag\*\*: `@critical`/g)
+  const criticalMatches = content.match(/- \*\*Tag\*\*: `@spec`/g)
 
   const specCount = specMatches?.length || 0
   const regressionCount = regressionMatches?.length || 0

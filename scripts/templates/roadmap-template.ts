@@ -131,7 +131,7 @@ export function generateRoadmapMarkdown(data: RoadmapData): string {
   md += `- Each property file contains **Playwright Test Blueprints**\n`
   md += `- data-testid patterns are standardized\n`
   md += `- Test scenarios use GIVEN-WHEN-THEN structure\n`
-  md += `- @spec, @regression, and @critical tests are clearly separated\n\n`
+  md += `- @spec, @regression, and @spec tests are clearly separated\n\n`
 
   md += `---\n\n`
 

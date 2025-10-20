@@ -76,10 +76,9 @@ bun test:unit               # Unit tests (Bun Test - src/ and scripts/)
 bun test:unit:watch         # Unit tests in watch mode
 bun test:e2e                # E2E tests (Playwright - all)
 bun test:e2e:spec           # E2E spec tests (@spec tag)
-bun test:e2e:critical       # E2E critical tests (@critical tag)
 bun test:e2e:regression     # E2E regression tests (@regression tag)
-bun test:e2e:dev            # E2E dev subset (@spec + @critical)
-bun test:e2e:ci             # E2E CI subset (@regression + @critical)
+bun test:e2e:dev            # E2E dev subset (@spec tag)
+bun test:e2e:ci             # E2E CI subset (@regression tag)
 bun test:e2e:ui             # E2E tests with Playwright UI
 bun test:all                # All tests (unit + E2E)
 

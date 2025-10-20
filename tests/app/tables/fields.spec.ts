@@ -13,7 +13,7 @@ import { test, expect } from '../../fixtures'
  * Test Organization:
  * 1. @spec tests - Granular specification tests (3 tests)
  * 2. @regression test - ONE consolidated workflow test
- * 3. @critical test - Essential fields validation
+ * 3. @spec test - Essential fields validation
  *
  * Source: docs/specifications/schemas/tables/tables.schema.json (lines 160-163)
  */
@@ -201,14 +201,14 @@ test.fixme(
 )
 
 // ============================================================================
-// CRITICAL PATH TEST (@critical)
+// CRITICAL PATH TEST (@spec)
 // Essential fields array validation
 // Run during: Every commit, production smoke tests (bun test:e2e:critical)
 // ============================================================================
 
 test.fixme(
   'critical: table must have at least one field',
-  { tag: '@critical' },
+  { tag: '@spec' },
   async ({ page, startServerWithSchema }) => {
     // GIVEN: A table with minimum required fields (1 field)
     await startServerWithSchema({

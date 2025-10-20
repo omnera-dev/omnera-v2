@@ -779,7 +779,7 @@ The following properties have dependencies:
 - Each property file contains **Playwright Test Blueprints**
 - data-testid patterns are standardized
 - Test scenarios use GIVEN-WHEN-THEN structure
-- @spec, @regression, and @critical tests are clearly separated
+- @spec, @regression, and @spec tests are clearly separated
 
 ---
 

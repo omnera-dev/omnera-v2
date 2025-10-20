@@ -13,7 +13,7 @@ import { test, expect } from '../../fixtures'
  * Test Organization:
  * 1. @spec tests - Granular specification tests (17 tests)
  * 2. @regression test - ONE consolidated workflow test
- * 3. @critical test - Essential primary key operation
+ * 3. @spec test - Essential primary key operation
  *
  * Source: docs/specifications/schemas/tables/tables.schema.json (lines 194-245)
  */
@@ -600,14 +600,14 @@ test.fixme(
 )
 
 // ============================================================================
-// CRITICAL PATH TEST (@critical)
+// CRITICAL PATH TEST (@spec)
 // Essential primary key operation
 // Run during: Every commit, production smoke tests (bun test:e2e:critical)
 // ============================================================================
 
 test.fixme(
   'critical: primary key uniquely identifies records',
-  { tag: '@critical' },
+  { tag: '@spec' },
   async ({ page, startServerWithSchema }) => {
     // GIVEN: A table with auto-increment primary key
     await startServerWithSchema({

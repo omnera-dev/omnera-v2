@@ -1,20 +1,30 @@
 ---
 name: e2e-test-translator
 description: |
-  Use this agent to mechanically translate validated x-user-stories from docs/specifications/specs.schema.json into Playwright E2E test code. This agent is a MECHANICAL TRANSLATOR, not a test designer. It performs deterministic conversion (same user stories → same test code) and REFUSES to proceed if source is incomplete or missing. All test scenarios and user stories are created by spec-editor. This agent follows established patterns to convert GIVEN-WHEN-THEN stories into executable Playwright tests with test.fixme() markers.
+  Use this agent to mechanically translate validated x-user-stories from docs/specifications/app/ (JSON Schemas and OpenAPI spec) into Playwright E2E test code. This agent is a MECHANICAL TRANSLATOR, not a test designer. It performs deterministic conversion (same user stories → same test code) and REFUSES to proceed if source is incomplete or missing. All test scenarios and user stories are created by spec-editor. This agent follows established patterns to convert GIVEN-WHEN-THEN stories into executable Playwright tests with test.fixme() markers.
+
+  **Translation Sources**:
+  - JSON Schema x-user-stories (app.schema.json and $ref files) → tests/app/*.spec.ts
+  - OpenAPI x-user-stories (api.openapi.json operations) → tests/api/*.spec.ts
+  - Admin user stories (admin.spec.md) → tests/admin/*.spec.ts
+  - Infrastructure user stories (infrastructure.spec.md) → tests/infrastructure/*.spec.ts
 
 whenToUse: |
   **Command Patterns** (explicit requests):
   - "Translate x-user-stories to Playwright tests for {property}"
   - "Convert validated user stories to E2E test code for {property}"
   - "Generate RED tests from completed spec-editor work"
+  - "Translate OpenAPI operations to API tests"
+  - "Generate API tests from OpenAPI spec"
 
   **Keyword Triggers**:
   - "translate stories", "convert to tests", "generate Playwright from stories"
   - Test translation phrases: "translate user stories", "convert scenarios to tests"
+  - API test phrases: "translate OpenAPI", "generate API tests", "OpenAPI to Playwright"
 
   **Status Triggers**:
   - Property definition validated with x-user-stories by spec-editor → translate to Playwright tests
+  - OpenAPI operations defined with x-user-stories → translate to API tests
 
 examples:
   - user: "Translate x-user-stories to Playwright tests for the theme property"
@@ -435,7 +445,7 @@ import { test, expect } from '../fixtures'
  * Test Organization:
  * 1. @spec tests - Granular specification tests (multiple per file)
  * 2. @regression test - ONE consolidated workflow test per file
- * 3. @critical test - Essential path validation (if applicable)
+ * 3. @spec test - Essential path validation (if applicable)
  */
 
 test.describe('AppSchema - {PropertyName}', () => {
@@ -485,14 +495,14 @@ test.describe('AppSchema - {PropertyName}', () => {
   )
 
   // ============================================================================
-  // CRITICAL PATH TEST (@critical) - Optional
+  // CRITICAL PATH TEST (@spec) - Optional
   // Only if this feature is essential (auth, data persistence, checkout)
   // Run during: Every commit, production smoke tests (bun test:e2e:critical)
   // ============================================================================
 
   test(
     'critical: {essential behavior}',
-    { tag: '@critical' },
+    { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // Test only the absolutely essential path
       // Must be rock-solid, no flakiness
@@ -519,7 +529,7 @@ test.describe('AppSchema - {PropertyName}', () => {
 - **When to run**: CI/CD pipeline, before releases
 - **Example**: "user can complete full login flow" (email validation + credentials + redirect + session)
 
-**@critical (Critical Path Test)**
+**@spec (Critical Path Test)**
 - **Purpose**: Validate essential workflows that must always work
 - **Quantity**: Zero or one per file (only for truly essential features)
 - **Scope**: Minimal essential path
@@ -546,24 +556,24 @@ AFTER all @spec tests created:
      - Add: test.fixme() marker (RED phase)
      - Tag: { tag: '@regression' }
 
-CHECK for @critical criteria:
+CHECK for @spec criteria:
   3. IF (property name in CRITICAL_PROPERTIES list):
        CRITICAL_PROPERTIES = ['auth', 'data-persistence', 'payment', 'security']
-       → Create ONE @critical test (essential path only)
+       → Create ONE @spec test (essential path only)
        → Add: test.fixme() marker (RED phase)
-       → Tag: { tag: '@critical' }
+       → Tag: { tag: '@spec' }
      ELSE IF (ANY story contains keyword "critical"):
-       → Create ONE @critical test from that story
+       → Create ONE @spec test from that story
        → Add: test.fixme() marker (RED phase)
-       → Tag: { tag: '@critical' }
+       → Tag: { tag: '@spec' }
      ELSE:
-       → SKIP @critical section (not every feature is critical)
+       → SKIP @spec section (not every feature is critical)
 ```
 
 **Result** (Deterministic):
 - N @spec tests (where N = x-user-stories.length)
 - 1 @regression test (consolidates all N stories)
-- 0 or 1 @critical test (based on mechanical criteria above)
+- 0 or 1 @spec test (based on mechanical criteria above)
 
 **Example Application**:
 
@@ -588,23 +598,23 @@ test.fixme('should remove table from list when confirming', { tag: '@spec' }, ..
 // 2. Create 1 @regression test (consolidates all 5):
 test.fixme('user can complete full tables workflow', { tag: '@regression' }, ...)
 
-// 3. Check @critical criteria:
+// 3. Check @spec criteria:
 // - 'tables' NOT in CRITICAL_PROPERTIES list
 // - No story contains "critical" keyword
-// → SKIP @critical test
+// → SKIP @spec test
 ```
 
 **No Interpretation Required**: Category assignment is automatic based on:
 - @spec: 1:1 mapping to user stories (mechanical translation)
 - @regression: Always exactly ONE per file (consolidates all @spec)
-- @critical: Property name match OR keyword match (deterministic check)
+- @spec: Property name match OR keyword match (deterministic check)
 
 ### Naming Conventions
 - **File names**: `{property-name}.spec.ts` (lowercase, hyphenated)
 - **Test descriptions**:
   - @spec: "should {specific behavior}"
   - @regression: "user can complete full {feature} workflow"
-  - @critical: "critical: {essential behavior}" or "{essential action}"
+  - @spec: "critical: {essential behavior}" or "{essential action}"
 - **Test IDs**: Use `data-testid` attributes for reliable selectors
 
 ### Assertion Patterns
@@ -613,7 +623,7 @@ test.fixme('user can complete full tables workflow', { tag: '@regression' }, ...
 - Write descriptive failure messages
 - @spec: Test ONE behavior per test
 - @regression: Test COMPLETE workflow in one test
-- @critical: Test ESSENTIAL path only
+- @spec: Test ESSENTIAL path only
 
 ## Code Quality Standards
 
@@ -669,7 +679,7 @@ test.fixme('user can complete full tables workflow', { tag: '@regression' }, ...
    - This is the ONLY @regression test in the file
    - Mark with `test.fixme()` initially (RED phase)
 
-   **Step 4c: Write @critical test (Zero or One)**
+   **Step 4c: Write @spec test (Zero or One)**
    - Only if feature is truly essential (auth, data persistence, checkout)
    - Test MINIMAL essential path (fastest possible validation)
    - Must be rock-solid with no flakiness
@@ -686,11 +696,11 @@ test.fixme('user can complete full tables workflow', { tag: '@regression' }, ...
 6. **Verify Test Quality**:
    - **@spec tests**: Multiple granular tests, each testing ONE behavior
    - **@regression test**: EXACTLY ONE test consolidating all workflows
-   - **@critical test**: Zero or one test for essential paths only
+   - **@spec test**: Zero or one test for essential paths only
    - All tests use `.fixme()` modifier (RED phase)
    - Tests are independent, fast, repeatable, self-validating
    - Given-When-Then structure in all tests
-   - Proper tag usage: `{ tag: '@spec' }`, `{ tag: '@regression' }`, `{ tag: '@critical' }`
+   - Proper tag usage: `{ tag: '@spec' }`, `{ tag: '@regression' }`, `{ tag: '@spec' }`
 
 ### Example: Writing Tests for Referenced Property (tables)
 
@@ -722,7 +732,7 @@ test.fixme('user can complete full tables workflow', { tag: '@regression' }, ...
 2. **Analyze User Stories**:
    - Stories 1-18: @spec tests (granular CRUD operations)
    - Story consolidation: 1 @regression test (complete workflow)
-   - Stories with "critical" operations: 1 @critical test (essential path)
+   - Stories with "critical" operations: 1 @spec test (essential path)
 
 3. **Create Test File**: `tests/app/tables.spec.ts`
 
@@ -750,8 +760,8 @@ test.fixme('user can complete full tables workflow', { tag: '@regression' }, ...
        // Test implementation...
      })
 
-     // @critical test (Optional - only for essential operations)
-     test.fixme('critical: user can create and read table record', { tag: '@critical' }, async ({ page, startServerWithSchema }) => {
+     // @spec test (Optional - only for essential operations)
+     test.fixme('critical: user can create and read table record', { tag: '@spec' }, async ({ page, startServerWithSchema }) => {
        // GIVEN: Essential CRUD operations
        // Test implementation...
      })
@@ -849,15 +859,15 @@ Before completing, verify:
 **Test Structure (Three Categories):**
 - [ ] Multiple @spec tests written (5-20 granular tests typical)
 - [ ] EXACTLY ONE @regression test written (consolidates all @spec tests)
-- [ ] Zero or one @critical test (only if feature is essential)
+- [ ] Zero or one @spec test (only if feature is essential)
 - [ ] Clear section comments separate spec/regression/critical tests
 
 **Test Quality:**
 - [ ] All tests use `.fixme()` modifier (RED phase - will fail initially)
 - [ ] Each @spec test validates ONE specific behavior
 - [ ] @regression test covers COMPLETE workflow (consolidates all @spec scenarios)
-- [ ] @critical test (if present) validates MINIMAL essential path only
-- [ ] Proper tag usage: `{ tag: '@spec' }`, `{ tag: '@regression' }`, `{ tag: '@critical' }`
+- [ ] @spec test (if present) validates MINIMAL essential path only
+- [ ] Proper tag usage: `{ tag: '@spec' }`, `{ tag: '@regression' }`, `{ tag: '@spec' }`
 
 **F.I.R.S.T Principles:**
 - [ ] Fast: Tests use efficient selectors and minimal setup
@@ -883,7 +893,7 @@ Before completing, verify:
 ## Communication Style
 
 - Be explicit about which specification you're implementing
-- Explain the test organization: "@spec tests for granular behaviors, ONE @regression test for full workflow, @critical test if essential"
+- Explain the test organization: "@spec tests for granular behaviors, ONE @regression test for full workflow, @spec test if essential"
 - Explain why each test category exists and when it runs
 - Provide clear next steps: "These tests specify the desired behavior. Implementation should focus on making each test pass, starting with @spec tests."
 - Ask for clarification if behavioral requirements are unclear
@@ -908,7 +918,7 @@ Reading specs.schema.json...
 Creating tests/app/tables.spec.ts with:
 - 18 @spec tests (one per user story)
 - 1 @regression test (consolidates all workflows)
-- 0 @critical tests (tables not in CRITICAL_PROPERTIES list)
+- 0 @spec tests (tables not in CRITICAL_PROPERTIES list)
 
 Translation complete. All tests marked with test.fixme() for RED phase.
 Next step: e2e-test-fixer will implement features to make these tests pass.
@@ -1042,18 +1052,18 @@ test('user can view complete app info', { tag: '@regression' }, async () => {
 })
 ```
 
-❌ **Don't tag everything as @critical**
+❌ **Don't tag everything as @spec**
 ```typescript
 // BAD - Not critical features
-test('should change theme', { tag: '@critical' }, ...) // Not critical
-test('should show tooltip', { tag: '@critical' }, ...) // Not critical
+test('should change theme', { tag: '@spec' }, ...) // Not critical
+test('should show tooltip', { tag: '@spec' }, ...) // Not critical
 ```
 
-✅ **Do reserve @critical for truly essential features**
+✅ **Do reserve @spec for truly essential features**
 ```typescript
 // GOOD - Only essential paths
-test('user can authenticate', { tag: '@critical' }, ...) // Essential
-test('user can save work', { tag: '@critical' }, ...) // Essential
+test('user can authenticate', { tag: '@spec' }, ...) // Essential
+test('user can save work', { tag: '@spec' }, ...) // Essential
 // Theme changes? Not critical - use @spec only
 ```
 
@@ -1302,7 +1312,7 @@ if (nameProperty.$ref) {
 
 10. **YOU**: Categorize stories mechanically using Mechanical Story Categorization Protocol
 11. **YOU**: Create `tests/app/{property}.spec.ts` with test.fixme() for all RED tests
-12. **YOU**: Translate to @spec tests (N tests, where N = userStories.length), ONE @regression test, zero-or-one @critical test
+12. **YOU**: Translate to @spec tests (N tests, where N = userStories.length), ONE @regression test, zero-or-one @spec test
 13. **YOU**: Run `CLAUDECODE=1 bun test:e2e` to verify tests are marked as fixme (RED phase)
 
 **Success Criteria**: You can translate user stories mechanically without asking clarification questions because the stories are complete and validated (whether inline or referenced).
@@ -1336,7 +1346,7 @@ if (nameProperty.$ref) {
 
 **What e2e-test-fixer Receives from Your Work**:
 - **RED E2E Tests**: Failing tests that define acceptance criteria
-- **Test Scenarios**: @spec (granular), @regression (consolidated workflow), @critical (essential)
+- **Test Scenarios**: @spec (granular), @regression (consolidated workflow), @spec (essential)
 - **Executable Specifications**: Clear assertions showing what "done" looks like
 - **data-testid Patterns**: Selectors that implementation should use
 
@@ -1344,7 +1354,7 @@ if (nameProperty.$ref) {
 1. **YOU**: Complete RED test translation
 2. **YOU**: Verify all tests use `test.fixme()` modifier
 3. **YOU**: Run `CLAUDECODE=1 bun test:e2e` to confirm tests are skipped (RED phase)
-4. **YOU**: Notify: "RED test translation complete: tests/app/{property}.spec.ts (X @spec, 1 @regression, Y @critical)"
+4. **YOU**: Notify: "RED test translation complete: tests/app/{property}.spec.ts (X @spec, 1 @regression, Y @spec)"
 5. effect-schema-translator completes schema translation
 6. e2e-test-fixer begins GREEN implementation
 

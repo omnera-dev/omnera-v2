@@ -13,7 +13,7 @@ import { test, expect } from '../../fixtures'
  * Test Organization:
  * 1. @spec tests - Granular specification tests (13 tests)
  * 2. @regression test - ONE consolidated workflow test
- * 3. @critical test - Essential index functionality
+ * 3. @spec test - Essential index functionality
  *
  * Source: docs/specifications/schemas/tables/tables.schema.json (lines 353-403)
  */
@@ -556,14 +556,14 @@ test.fixme(
 )
 
 // ============================================================================
-// CRITICAL PATH TEST (@critical)
+// CRITICAL PATH TEST (@spec)
 // Essential unique index functionality
 // Run during: Every commit, production smoke tests (bun test:e2e:critical)
 // ============================================================================
 
 test.fixme(
   'critical: unique indexes prevent duplicate values',
-  { tag: '@critical' },
+  { tag: '@spec' },
   async ({ page, startServerWithSchema }) => {
     // GIVEN: Table with unique index
     await startServerWithSchema({

@@ -138,12 +138,12 @@ User Requirement
    • Runs: bun test:e2e -- tests/app/{property}.spec.ts
    • Repeats for each @spec test (one at a time)
    • Makes @regression test GREEN
-   • Makes @critical test GREEN (if exists)
+   • Makes @spec test GREEN (if exists)
    • After N fixes (typically 3+), documents code duplication
       ↓ (HANDOFF: All tests GREEN, duplication noted)
       ↓
 4. codebase-refactor-auditor (CREATIVE: Refactoring)
-   • Phase 0: Establishes E2E test baseline (@critical, @regression)
+   • Phase 0: Establishes E2E test baseline (@spec, @regression)
    • Analyzes recent commits (Phase 1.1: >100 lines OR >5 files)
    • Immediately refactors files from recent commits
    • Analyzes older code (Phase 1.2: recommendations only)
@@ -258,7 +258,7 @@ bun run scripts/generate-roadmap.ts        # User decides when to run
 2. Create tests/app/{property}.spec.ts
 3. Write multiple @spec tests (granular behaviors, each with test.fixme())
 4. Write EXACTLY ONE @regression test (consolidates all @spec tests, with test.fixme())
-5. Write optional @critical test (essential features only, with test.fixme())
+5. Write optional @spec test (essential features only, with test.fixme())
 6. Use data-testid patterns from roadmap
 7. Include exact error messages from roadmap
 
@@ -267,7 +267,7 @@ bun run scripts/generate-roadmap.ts        # User decides when to run
 - tests/app/{property}.spec.ts
   - Multiple @spec tests (all with test.fixme())
   - ONE @regression test (with test.fixme())
-  - Optional @critical test (with test.fixme())
+  - Optional @spec test (with test.fixme())
 
 **Completion Criteria**:
 
@@ -304,7 +304,7 @@ bun run scripts/generate-roadmap.ts        # User decides when to run
 4. Run regression tests: `bun test:e2e:regression`
 5. Repeat steps 1-4 for each remaining @spec test
 6. Remove test.fixme() from @regression test, make it GREEN
-7. Remove test.fixme() from @critical test (if exists), make it GREEN
+7. Remove test.fixme() from @spec test (if exists), make it GREEN
 
 **Output**:
 
@@ -316,7 +316,7 @@ bun run scripts/generate-roadmap.ts        # User decides when to run
 
 - ✅ All @spec tests GREEN
 - ✅ @regression test GREEN
-- ✅ @critical test GREEN (if exists)
+- ✅ @spec test GREEN (if exists)
 - ✅ Regression tests still passing
 - ✅ No test logic modified
 
@@ -364,7 +364,7 @@ Ready for systematic refactoring via codebase-refactor-auditor."
 **Phase 0: Establish Baseline**
 
 ```bash
-bun test:e2e --grep @critical    # Must pass 100%
+bun test:e2e --grep @spec    # Must pass 100%
 bun test:e2e --grep @regression  # Must pass 100%
 # Document baseline results with timestamps
 ```
@@ -399,7 +399,7 @@ git log -10 --stat --oneline
 
 ```bash
 CLAUDECODE=1 bun test:unit       # All unit tests
-bun test:e2e --grep @critical    # Compare to Phase 0 baseline
+bun test:e2e --grep @spec    # Compare to Phase 0 baseline
 bun test:e2e --grep @regression  # Compare to Phase 0 baseline
 ```
 
@@ -631,7 +631,7 @@ bun test:e2e --grep @regression  # Compare to Phase 0 baseline
 
 - E2E Test Blueprint (exact Playwright patterns)
 - User Stories (GIVEN-WHEN-THEN format)
-- Test Scenarios (@spec, @regression, @critical)
+- Test Scenarios (@spec, @regression, @spec)
 - data-testid Patterns
 - Expected Error Messages
 
@@ -646,7 +646,7 @@ bun test:e2e --grep @regression  # Compare to Phase 0 baseline
 - ✅ tests/app/{property}.spec.ts created
 - ✅ Multiple @spec tests written (all with test.fixme())
 - ✅ EXACTLY ONE @regression test written (with test.fixme())
-- ✅ Optional @critical test written (with test.fixme())
+- ✅ Optional @spec test written (with test.fixme())
 - ✅ data-testid patterns consistent
 - ✅ Error messages match roadmap
 
@@ -659,7 +659,7 @@ bun test:e2e --grep @regression  # Compare to Phase 0 baseline
 - Complete test file with clear GIVEN-WHEN-THEN structure
 - Specific data-testid patterns to implement
 - Expected behaviors and error messages
-- Test categorization (@spec, @regression, @critical)
+- Test categorization (@spec, @regression, @spec)
 
 **Success Criteria**: e2e-test-fixer can implement without modifying test logic
 
@@ -1130,7 +1130,7 @@ git commit -m "feat: add theme badge display for dark mode"
 
 ```bash
 # Agent runs Phase 0: Establish baseline
-bun test:e2e --grep @critical    # ✅ 5/5 passing
+bun test:e2e --grep @spec    # ✅ 5/5 passing
 bun test:e2e --grep @regression  # ✅ 4/4 passing (including new theme test)
 
 # Agent analyzes recent commits
@@ -1167,7 +1167,7 @@ import { ThemeBadge } from '@/components/ui/theme-badge'
 ```bash
 # Agent runs Phase 5: Validation
 CLAUDECODE=1 bun test:unit       # ✅ All passing
-bun test:e2e --grep @critical    # ✅ 5/5 passing (baseline maintained)
+bun test:e2e --grep @spec    # ✅ 5/5 passing (baseline maintained)
 bun test:e2e --grep @regression  # ✅ 4/4 passing (baseline maintained)
 
 # Phase 1.2: Recommendations for older code
@@ -1246,7 +1246,7 @@ Metrics:
 1. **Completeness**: Any missing scenarios?
 2. **Correctness**: Do outcomes match your vision?
 3. **Clarity**: Are stories actionable for test writing?
-4. **Prioritization**: Which are @critical vs @spec?
+4. **Prioritization**: Which are @spec vs @spec?
 
 **Never Skip**: User story validation is mandatory in TDD workflow
 

@@ -207,14 +207,14 @@ For each failing E2E test, follow this exact sequence:
   - Code duplication is significant enough to warrant systematic refactoring
 - **Handoff Protocol**:
   1. Verify all fixed tests are GREEN and committed
-  2. Run baseline validation: `bun test:e2e --grep @critical && bun test:e2e --grep @regression`
+  2. Run baseline validation: `bun test:e2e --grep @spec && bun test:e2e --grep @regression`
   3. Document duplication patterns in code comments or commit messages
-  4. Notify: "GREEN phase complete for {feature}. Tests GREEN: X @spec, 1 @regression, Y @critical. Recommend codebase-refactor-auditor for optimization."
+  4. Notify: "GREEN phase complete for {feature}. Tests GREEN: X @spec, 1 @regression, Y @spec. Recommend codebase-refactor-auditor for optimization."
   5. codebase-refactor-auditor begins Phase 1.1 (recent commits) refactoring with baseline protection
 - **What codebase-refactor-auditor Receives**:
   - Working code with GREEN tests
   - Documented duplication/optimization opportunities
-  - Baseline test results (@critical and @regression passing)
+  - Baseline test results (@spec and @regression passing)
   - Your implementation commits for reference
 
 **Path B: User-Requested Handoff** (explicit user instruction):
@@ -397,7 +397,7 @@ For each test fix, provide:
 
 **What You Receive**:
 - **RED E2E Tests**: Failing tests with `test.fixme()` modifier
-- **Test Scenarios**: @spec (granular), @regression (consolidated), @critical (essential)
+- **Test Scenarios**: @spec (granular), @regression (consolidated), @spec (essential)
 - **Executable Specifications**: Clear assertions defining acceptance criteria
 - **data-testid Patterns**: Selectors for UI elements
 - **Expected Behavior**: GIVEN-WHEN-THEN scenarios from test descriptions
@@ -405,7 +405,7 @@ For each test fix, provide:
 **Handoff Protocol FROM e2e-test-translator**:
 1. e2e-test-translator completes RED test creation
 2. e2e-test-translator verifies tests use `test.fixme()` modifier
-3. e2e-test-translator notifies: "RED tests complete: tests/app/{property}.spec.ts (X @spec, 1 @regression, Y @critical)"
+3. e2e-test-translator notifies: "RED tests complete: tests/app/{property}.spec.ts (X @spec, 1 @regression, Y @spec)"
 4. effect-schema-translator completes Domain schema implementation
 5. **YOU (e2e-test-fixer)**: Begin GREEN implementation phase
 6. **YOU**: Read `tests/app/{property}.spec.ts` to understand expectations
@@ -447,19 +447,19 @@ For each test fix, provide:
 - **GREEN Tests**: All E2E tests passing (no test.fixme)
 - **Working Implementation**: Presentation/Application layers with correct patterns
 - **Code Duplication**: Documented duplication across multiple test fixes
-- **Baseline Test Results**: Phase 0 results (@critical and @regression passing)
+- **Baseline Test Results**: Phase 0 results (@spec and @regression passing)
 - **Implementation Commits**: Your commit history showing incremental fixes
 
 **Handoff Protocol**:
 1. **YOU**: Fix 3+ tests OR complete feature's critical/regression tests
 2. **YOU**: Verify all fixed tests are GREEN and committed
-3. **YOU**: Run baseline validation: `bun test:e2e --grep @critical && bun test:e2e --grep @regression`
+3. **YOU**: Run baseline validation: `bun test:e2e --grep @spec && bun test:e2e --grep @regression`
 4. **YOU**: Document duplication/optimization opportunities in code comments or commit messages
-5. **YOU**: Notify: "GREEN phase complete for {property}. Tests GREEN: X @spec, 1 @regression, Y @critical. Recommend codebase-refactor-auditor for optimization."
+5. **YOU**: Notify: "GREEN phase complete for {property}. Tests GREEN: X @spec, 1 @regression, Y @spec. Recommend codebase-refactor-auditor for optimization."
 6. codebase-refactor-auditor begins Phase 1.1 (recent commits) or Phase 1.2 (older code) refactoring
 
 **codebase-refactor-auditor's Process**:
-1. Establishes Phase 0 baseline (runs @critical and @regression tests)
+1. Establishes Phase 0 baseline (runs @spec and @regression tests)
 2. Audits your implementation commits for duplication
 3. Systematically eliminates duplication while keeping tests GREEN
 4. Validates Phase 5 (all baseline tests still pass)

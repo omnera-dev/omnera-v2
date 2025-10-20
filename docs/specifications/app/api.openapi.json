@@ -1,0 +1,772 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Omnera API",
+    "version": "0.0.1",
+    "description": "REST API specification for Omnera application. This OpenAPI schema serves as the single source of truth for all API endpoints, request/response schemas, and API testing scenarios.",
+    "x-business-rules": [
+      "All API endpoints follow RESTful conventions (GET for read, POST for create, PATCH for update, DELETE for delete)",
+      "API responses use consistent JSON structure with typed schemas",
+      "Authentication is handled via Better Auth (not yet implemented)",
+      "All endpoints return appropriate HTTP status codes (200, 201, 400, 404, 500)"
+    ],
+    "x-user-stories": [
+      "GIVEN developer integrates with API WHEN reading OpenAPI spec THEN all endpoints should be documented with examples",
+      "GIVEN API consumer makes request WHEN endpoint exists THEN response should match OpenAPI schema",
+      "GIVEN API consumer makes invalid request WHEN validation fails THEN response should include clear error message"
+    ]
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3000",
+      "description": "Development server"
+    }
+  ],
+  "paths": {
+    "/health": {
+      "get": {
+        "summary": "Health check endpoint",
+        "description": "Returns server health status. Used by monitoring tools and E2E tests to verify server is running.",
+        "operationId": "healthCheck",
+        "tags": ["infrastructure"],
+        "x-user-stories": [
+          "GIVEN server is running WHEN GET /health THEN should return 200 OK",
+          "GIVEN server is starting WHEN GET /health THEN should return health status"
+        ],
+        "responses": {
+          "200": {
+            "description": "Server is healthy",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "enum": ["ok"],
+                      "example": "ok"
+                    }
+                  }
+                },
+                "examples": {
+                  "healthy": {
+                    "value": {
+                      "status": "ok"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/tables": {
+      "get": {
+        "summary": "List all tables",
+        "description": "Returns array of all configured tables from the application schema. Tables define the data structure and fields for storing records.",
+        "operationId": "listTables",
+        "tags": ["tables"],
+        "x-business-rules": [
+          "Returns empty array when no tables configured",
+          "Tables are returned in order defined in configuration",
+          "Each table includes full field definitions"
+        ],
+        "x-user-stories": [
+          "GIVEN application has tables configured WHEN GET /api/tables THEN should return array of all tables",
+          "GIVEN application has no tables WHEN GET /api/tables THEN should return empty array",
+          "GIVEN tables have fields configured WHEN GET /api/tables THEN each table should include field definitions"
+        ],
+        "responses": {
+          "200": {
+            "description": "List of tables",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Table"
+                  }
+                },
+                "examples": {
+                  "multipleTables": {
+                    "value": [
+                      {
+                        "id": 1,
+                        "name": "users",
+                        "fields": [
+                          {
+                            "id": 1,
+                            "name": "email",
+                            "type": "email",
+                            "required": true
+                          }
+                        ]
+                      },
+                      {
+                        "id": 2,
+                        "name": "products",
+                        "fields": [
+                          {
+                            "id": 1,
+                            "name": "title",
+                            "type": "single-line-text"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  "empty": {
+                    "value": []
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/tables/{tableId}": {
+      "get": {
+        "summary": "Get table by ID",
+        "description": "Returns a single table configuration by its ID, including all field definitions, primary key, constraints, and indexes.",
+        "operationId": "getTable",
+        "tags": ["tables"],
+        "x-business-rules": [
+          "Table ID must be a positive integer",
+          "Returns 404 if table not found",
+          "Response includes complete table configuration"
+        ],
+        "x-user-stories": [
+          "GIVEN table exists WHEN GET /api/tables/{id} THEN should return table configuration",
+          "GIVEN table does not exist WHEN GET /api/tables/{id} THEN should return 404 Not Found",
+          "GIVEN table has constraints WHEN GET /api/tables/{id} THEN should include uniqueConstraints and indexes"
+        ],
+        "parameters": [
+          {
+            "name": "tableId",
+            "in": "path",
+            "required": true,
+            "description": "Table ID",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "example": 1
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Table configuration",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Table"
+                },
+                "examples": {
+                  "userTable": {
+                    "value": {
+                      "id": 1,
+                      "name": "users",
+                      "fields": [
+                        {
+                          "id": 1,
+                          "name": "email",
+                          "type": "email",
+                          "required": true
+                        },
+                        {
+                          "id": 2,
+                          "name": "first_name",
+                          "type": "single-line-text"
+                        }
+                      ],
+                      "primaryKey": {
+                        "type": "auto-increment",
+                        "field": "id"
+                      },
+                      "uniqueConstraints": [
+                        {
+                          "name": "uq_users_email",
+                          "fields": ["email"]
+                        }
+                      ],
+                      "indexes": [
+                        {
+                          "name": "idx_users_email",
+                          "fields": ["email"],
+                          "unique": false
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Table not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "examples": {
+                  "notFound": {
+                    "value": {
+                      "error": "Table not found",
+                      "code": "TABLE_NOT_FOUND"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/tables/{tableId}/records": {
+      "get": {
+        "summary": "List records in table",
+        "description": "Returns paginated list of records from the specified table.",
+        "operationId": "listRecords",
+        "tags": ["records"],
+        "x-business-rules": [
+          "Returns empty array when no records exist",
+          "Records include all field values",
+          "Default pagination limit is 100 records"
+        ],
+        "x-user-stories": [
+          "GIVEN table has records WHEN GET /api/tables/{id}/records THEN should return array of records",
+          "GIVEN table is empty WHEN GET /api/tables/{id}/records THEN should return empty array",
+          "GIVEN records exist WHEN GET /api/tables/{id}/records THEN each record should include all fields"
+        ],
+        "parameters": [
+          {
+            "name": "tableId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "minimum": 1
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of records",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "additionalProperties": true
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "$ref": "#/components/responses/TableNotFound"
+          }
+        }
+      },
+      "post": {
+        "summary": "Create new record",
+        "description": "Creates a new record in the specified table with provided field values.",
+        "operationId": "createRecord",
+        "tags": ["records"],
+        "x-business-rules": [
+          "Required fields must be provided",
+          "Field values must match field type validation",
+          "Auto-increment ID is assigned automatically",
+          "Unique constraints are enforced"
+        ],
+        "x-user-stories": [
+          "GIVEN valid record data WHEN POST /api/tables/{id}/records THEN should create record and return 201",
+          "GIVEN missing required field WHEN POST /api/tables/{id}/records THEN should return 400 validation error",
+          "GIVEN duplicate unique field WHEN POST /api/tables/{id}/records THEN should return 409 conflict error",
+          "GIVEN created record WHEN response received THEN should include generated ID"
+        ],
+        "parameters": [
+          {
+            "name": "tableId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "minimum": 1
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "additionalProperties": true
+              },
+              "examples": {
+                "userRecord": {
+                  "value": {
+                    "email": "user@example.com",
+                    "first_name": "John",
+                    "last_name": "Doe"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Record created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true
+                },
+                "examples": {
+                  "created": {
+                    "value": {
+                      "id": 1,
+                      "email": "user@example.com",
+                      "first_name": "John",
+                      "last_name": "Doe"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "404": {
+            "$ref": "#/components/responses/TableNotFound"
+          },
+          "409": {
+            "$ref": "#/components/responses/ConflictError"
+          }
+        }
+      }
+    },
+    "/api/tables/{tableId}/records/{recordId}": {
+      "get": {
+        "summary": "Get record by ID",
+        "description": "Returns a single record from the table by its ID.",
+        "operationId": "getRecord",
+        "tags": ["records"],
+        "x-user-stories": [
+          "GIVEN record exists WHEN GET /api/tables/{tableId}/records/{recordId} THEN should return record data",
+          "GIVEN record does not exist WHEN GET /api/tables/{tableId}/records/{recordId} THEN should return 404"
+        ],
+        "parameters": [
+          {
+            "name": "tableId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "minimum": 1
+            }
+          },
+          {
+            "name": "recordId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "minimum": 1
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Record data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true
+                }
+              }
+            }
+          },
+          "404": {
+            "$ref": "#/components/responses/RecordNotFound"
+          }
+        }
+      },
+      "patch": {
+        "summary": "Update record",
+        "description": "Updates an existing record with provided field values. Only provided fields are updated (partial update).",
+        "operationId": "updateRecord",
+        "tags": ["records"],
+        "x-business-rules": [
+          "Only provided fields are updated (partial update)",
+          "ID field cannot be modified",
+          "Field validation rules are enforced",
+          "Unique constraints are checked"
+        ],
+        "x-user-stories": [
+          "GIVEN valid update data WHEN PATCH /api/tables/{tableId}/records/{recordId} THEN should update record and return 200",
+          "GIVEN attempt to modify ID WHEN PATCH /api/tables/{tableId}/records/{recordId} THEN ID should remain unchanged",
+          "GIVEN invalid field value WHEN PATCH /api/tables/{tableId}/records/{recordId} THEN should return 400 validation error"
+        ],
+        "parameters": [
+          {
+            "name": "tableId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "minimum": 1
+            }
+          },
+          {
+            "name": "recordId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "minimum": 1
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "additionalProperties": true
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Record updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "404": {
+            "$ref": "#/components/responses/RecordNotFound"
+          },
+          "409": {
+            "$ref": "#/components/responses/ConflictError"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete record",
+        "description": "Deletes a record from the table by its ID.",
+        "operationId": "deleteRecord",
+        "tags": ["records"],
+        "x-user-stories": [
+          "GIVEN record exists WHEN DELETE /api/tables/{tableId}/records/{recordId} THEN should delete record and return 204",
+          "GIVEN record does not exist WHEN DELETE /api/tables/{tableId}/records/{recordId} THEN should return 404"
+        ],
+        "parameters": [
+          {
+            "name": "tableId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "minimum": 1
+            }
+          },
+          {
+            "name": "recordId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "minimum": 1
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Record deleted successfully"
+          },
+          "404": {
+            "$ref": "#/components/responses/RecordNotFound"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Table": {
+        "type": "object",
+        "description": "Table configuration with fields, constraints, and indexes",
+        "required": ["id", "name", "fields"],
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "Unique table identifier",
+            "minimum": 1,
+            "example": 1
+          },
+          "name": {
+            "type": "string",
+            "description": "Table name following database naming conventions",
+            "pattern": "^[a-z][a-z0-9_]*$",
+            "example": "users"
+          },
+          "fields": {
+            "type": "array",
+            "description": "Array of field definitions",
+            "minItems": 1,
+            "items": {
+              "$ref": "#/components/schemas/Field"
+            }
+          },
+          "primaryKey": {
+            "$ref": "#/components/schemas/PrimaryKey"
+          },
+          "uniqueConstraints": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/UniqueConstraint"
+            }
+          },
+          "indexes": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Index"
+            }
+          }
+        }
+      },
+      "Field": {
+        "type": "object",
+        "description": "Field definition with type and validation rules",
+        "required": ["id", "name", "type"],
+        "properties": {
+          "id": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "name": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9_]*$"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "single-line-text",
+              "long-text",
+              "email",
+              "url",
+              "phone-number",
+              "integer",
+              "decimal",
+              "currency",
+              "percentage"
+            ]
+          },
+          "required": {
+            "type": "boolean",
+            "default": false
+          },
+          "unique": {
+            "type": "boolean",
+            "default": false
+          }
+        }
+      },
+      "PrimaryKey": {
+        "type": "object",
+        "required": ["type"],
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": ["auto-increment", "uuid", "composite"]
+          },
+          "field": {
+            "type": "string",
+            "description": "Field name for single-column primary key"
+          },
+          "fields": {
+            "type": "array",
+            "description": "Field names for composite primary key",
+            "minItems": 2,
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "UniqueConstraint": {
+        "type": "object",
+        "required": ["name", "fields"],
+        "properties": {
+          "name": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9_]*$"
+          },
+          "fields": {
+            "type": "array",
+            "minItems": 2,
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "Index": {
+        "type": "object",
+        "required": ["name", "fields"],
+        "properties": {
+          "name": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9_]*$"
+          },
+          "fields": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "string"
+            }
+          },
+          "unique": {
+            "type": "boolean",
+            "default": false
+          }
+        }
+      },
+      "Error": {
+        "type": "object",
+        "required": ["error"],
+        "properties": {
+          "error": {
+            "type": "string",
+            "description": "Human-readable error message"
+          },
+          "code": {
+            "type": "string",
+            "description": "Machine-readable error code"
+          },
+          "details": {
+            "type": "object",
+            "description": "Additional error details",
+            "additionalProperties": true
+          }
+        }
+      }
+    },
+    "responses": {
+      "TableNotFound": {
+        "description": "Table not found",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Error"
+            },
+            "examples": {
+              "notFound": {
+                "value": {
+                  "error": "Table not found",
+                  "code": "TABLE_NOT_FOUND"
+                }
+              }
+            }
+          }
+        }
+      },
+      "RecordNotFound": {
+        "description": "Record not found",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Error"
+            },
+            "examples": {
+              "notFound": {
+                "value": {
+                  "error": "Record not found",
+                  "code": "RECORD_NOT_FOUND"
+                }
+              }
+            }
+          }
+        }
+      },
+      "ValidationError": {
+        "description": "Validation error",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Error"
+            },
+            "examples": {
+              "missingRequired": {
+                "value": {
+                  "error": "Validation failed",
+                  "code": "VALIDATION_ERROR",
+                  "details": {
+                    "field": "email",
+                    "message": "Email is required"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "ConflictError": {
+        "description": "Conflict error (e.g., unique constraint violation)",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Error"
+            },
+            "examples": {
+              "uniqueViolation": {
+                "value": {
+                  "error": "Unique constraint violation",
+                  "code": "UNIQUE_CONSTRAINT_VIOLATION",
+                  "details": {
+                    "constraint": "uq_users_email",
+                    "field": "email"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "tags": [
+    {
+      "name": "infrastructure",
+      "description": "Infrastructure endpoints (health, metrics)"
+    },
+    {
+      "name": "tables",
+      "description": "Table configuration endpoints"
+    },
+    {
+      "name": "records",
+      "description": "Record CRUD operations"
+    }
+  ]
+}

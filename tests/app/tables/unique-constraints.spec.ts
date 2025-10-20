@@ -13,7 +13,7 @@ import { test, expect } from '../../fixtures'
  * Test Organization:
  * 1. @spec tests - Granular specification tests (13 tests)
  * 2. @regression test - ONE consolidated workflow test
- * 3. @critical test - Essential unique constraint enforcement
+ * 3. @spec test - Essential unique constraint enforcement
  *
  * Source: docs/specifications/schemas/tables/tables.schema.json (lines 281-321)
  */
@@ -495,14 +495,14 @@ test.fixme(
 )
 
 // ============================================================================
-// CRITICAL PATH TEST (@critical)
+// CRITICAL PATH TEST (@spec)
 // Essential unique constraint enforcement
 // Run during: Every commit, production smoke tests (bun test:e2e:critical)
 // ============================================================================
 
 test.fixme(
   'critical: unique constraints prevent duplicate data',
-  { tag: '@critical' },
+  { tag: '@spec' },
   async ({ page, startServerWithSchema }) => {
     // GIVEN: Table with unique constraint
     await startServerWithSchema({

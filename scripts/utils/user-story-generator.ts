@@ -29,7 +29,7 @@ export function generateUserStories(
   // Generate @regression story (consolidates all spec stories)
   generateRegressionStory(propertyName, schema, spec, regression)
 
-  // Generate @critical story (only for essential features)
+  // Generate @spec story (only for essential features)
   if (isCriticalFeature(propertyName)) {
     generateCriticalStory(propertyName, schema, critical)
   }
@@ -363,7 +363,7 @@ function generateCriticalStory(
     given: `user needs to use ${fieldName} feature`,
     when: `performing essential configuration`,
     then: `minimal viable configuration succeeds`,
-    tag: '@critical',
+    tag: '@spec',
   })
 }
 

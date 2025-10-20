@@ -133,7 +133,7 @@ describe('user-story-generator', () => {
       expect(regressionStory.tag).toBe('@regression')
     })
 
-    test('generates @critical story for essential features', () => {
+    test('generates @spec story for essential features', () => {
       const schema: JSONSchemaProperty = {
         type: 'array',
       }
@@ -147,7 +147,7 @@ describe('user-story-generator', () => {
         expect(criticalStory.given).toContain('use')
         expect(criticalStory.when).toContain('essential')
         expect(criticalStory.then).toContain('succeeds')
-        expect(criticalStory.tag).toBe('@critical')
+        expect(criticalStory.tag).toBe('@spec')
       }
     })
 
@@ -262,7 +262,7 @@ describe('user-story-generator', () => {
         expect(story).toHaveProperty('when')
         expect(story).toHaveProperty('then')
         expect(story).toHaveProperty('tag')
-        expect(['@spec', '@regression', '@critical']).toContain(story.tag)
+        expect(['@spec', '@regression', '@spec']).toContain(story.tag)
       }
     })
   })

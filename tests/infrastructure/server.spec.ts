@@ -636,12 +636,12 @@ test.describe('Server Infrastructure', () => {
    * This critical test validates that the server remains available
    * and responsive under normal operation.
    *
-   * Tagged as @critical because server availability is essential
+   * Tagged as @spec because server availability is essential
    * for production readiness.
    */
   test(
     'should maintain server availability',
-    { tag: '@critical' },
+    { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: A running server
       await startServerWithSchema({

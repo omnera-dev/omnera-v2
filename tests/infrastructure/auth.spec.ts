@@ -232,7 +232,7 @@ test.describe('Better Auth Integration', () => {
      */
     test(
       'should authenticate user with valid credentials',
-      { tag: '@critical' },
+      { tag: '@spec' },
       async ({ page, startServerWithSchema }) => {
         // GIVEN: A running server
         await startServerWithSchema(

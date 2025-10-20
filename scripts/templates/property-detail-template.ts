@@ -148,9 +148,9 @@ export function generatePropertyDetailMarkdown(doc: PropertyDocumentation): stri
     }
   }
 
-  // @critical story
+  // @spec story
   if (userStories.critical.length > 0) {
-    md += `### @critical User Story (Essential Path)\n\n`
+    md += `### @spec User Story (Essential Path)\n\n`
     md += `This test validates the MINIMAL essential path for this feature.\n\n`
 
     for (const story of userStories.critical) {
@@ -234,7 +234,7 @@ export function generateSuccessCriteria(doc: PropertyDocumentation): string[] {
   }
 
   if (totalCriticalTests > 0) {
-    criteria.push(`All ${totalCriticalTests} @critical E2E tests passing`)
+    criteria.push(`All ${totalCriticalTests} @spec E2E tests passing`)
   }
 
   // Code quality criteria

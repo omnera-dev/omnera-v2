@@ -13,7 +13,7 @@ import { test, expect } from '../fixtures'
  * Test Organization:
  * 1. @spec tests - Granular specification tests (multiple per file)
  * 2. @regression test - ONE consolidated workflow test per file
- * 3. @critical test - Not applicable (description is not a critical feature)
+ * 3. @spec test - Not applicable (description is not a critical feature)
  *
  * These tests specify the behavior of displaying the app description on the
  * DefaultHomePage. They are written in the RED phase of TDD and will fail

@@ -13,7 +13,7 @@ import { test, expect } from '../../fixtures'
  * Test Organization:
  * 1. @spec tests - Granular specification tests (5 tests)
  * 2. @regression test - ONE consolidated workflow test
- * 3. @critical test - Essential ID operation
+ * 3. @spec test - Essential ID operation
  *
  * Source: docs/specifications/schemas/tables/tables.schema.json (lines 18-22)
  */
@@ -244,14 +244,14 @@ test.fixme(
 )
 
 // ============================================================================
-// CRITICAL PATH TEST (@critical)
+// CRITICAL PATH TEST (@spec)
 // Essential ID retrieval operation
 // Run during: Every commit, production smoke tests (bun test:e2e:critical)
 // ============================================================================
 
 test.fixme(
   'critical: record ID is assigned and retrievable',
-  { tag: '@critical' },
+  { tag: '@spec' },
   async ({ page, startServerWithSchema }) => {
     // GIVEN: A table exists
     await startServerWithSchema({

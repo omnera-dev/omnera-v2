@@ -13,7 +13,7 @@ import { test, expect } from '../../fixtures'
  * Test Organization:
  * 1. @spec tests - Granular specification tests (4 tests)
  * 2. @regression test - ONE consolidated workflow test
- * 3. @critical test - Essential name validation
+ * 3. @spec test - Essential name validation
  *
  * Source: docs/specifications/schemas/tables/tables.schema.json (lines 32-35)
  */
@@ -217,14 +217,14 @@ test.fixme(
 )
 
 // ============================================================================
-// CRITICAL PATH TEST (@critical)
+// CRITICAL PATH TEST (@spec)
 // Essential name validation and usage
 // Run during: Every commit, production smoke tests (bun test:e2e:critical)
 // ============================================================================
 
 test.fixme(
   'critical: table name is validated and used correctly',
-  { tag: '@critical' },
+  { tag: '@spec' },
   async ({ page, startServerWithSchema, executeQuery }) => {
     // GIVEN: A table with valid name
     await startServerWithSchema({

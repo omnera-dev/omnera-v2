@@ -182,7 +182,7 @@ color: orange
   - NO Edit/Write - recommendations only, awaiting human approval
 
   PHASE 0 & PHASE 5 (Test Validation - Both Phases):
-  - Bash (bun test:e2e --grep @critical/@regression) - safety baseline
+  - Bash (bun test:e2e --grep @spec/@regression) - safety baseline
   - Note: Unit tests, eslint, typecheck, knip run automatically via hooks after Edit/Write
 -->
 
@@ -251,7 +251,7 @@ This agent uses a two-phase strategy to prioritize recent changes over full code
    - **UI Frameworks** (@docs/infrastructure/ui/*.md): React 19 (no manual memoization), TanStack Query/Table integration, shadcn/ui composition, Tailwind utility-first patterns, React Hook Form with Zod
    - **Language & Runtime** (@docs/infrastructure/language/typescript.md, runtime/bun.md): TypeScript strict mode, type inference, branded types, Bun-specific APIs
    - **Code Quality** (@docs/infrastructure/quality/*.md): ESLint functional programming rules, Prettier formatting (no semicolons, single quotes), Knip dead code detection
-   - **Testing** (@docs/infrastructure/testing/*.md): F.I.R.S.T principles (Bun Test), Playwright test tags (@critical, @regression, @spec)
+   - **Testing** (@docs/infrastructure/testing/*.md): F.I.R.S.T principles (Bun Test), Playwright test tags (@spec, @regression, @spec)
 
    **Approach**: For each file audited, check against RELEVANT infrastructure docs (not all categories apply to all files). Reference specific sections when flagging violations (e.g., "@docs/infrastructure/ui/react.md - React 19 Compiler").
 
@@ -327,7 +327,7 @@ Should I proceed with immediate refactoring, or would you like to review the fin
 
 ## Test Validation Framework
 
-**Summary**: Omnera uses a comprehensive quality check script (`scripts/quality.ts`) that runs ESLint, TypeScript, unit tests, and @regression E2E tests in parallel. This agent MUST establish a safety baseline (Phase 0) using the quality script plus @critical tests before refactoring, then validate the baseline is maintained after changes (Phase 5). @spec tests are ignored during refactoring as they may be intentionally failing (TDD red-green-refactor).
+**Summary**: Omnera uses a comprehensive quality check script (`scripts/quality.ts`) that runs ESLint, TypeScript, unit tests, and @regression E2E tests in parallel. This agent MUST establish a safety baseline (Phase 0) using the quality script plus @spec tests before refactoring, then validate the baseline is maintained after changes (Phase 5). @spec tests are ignored during refactoring as they may be intentionally failing (TDD red-green-refactor).
 
 ### Quality Check Script
 The `scripts/quality.ts` command consolidates multiple quality checks:
@@ -346,9 +346,9 @@ The `scripts/quality.ts` command consolidates multiple quality checks:
 ### Understanding Test Tags
 Omnera uses Playwright test tags to categorize E2E tests by criticality:
 
-- **@critical**: Core functionality that MUST work
+- **@spec**: Core functionality that MUST work
   - Examples: Server starts, home page renders, version badge displays
-  - Run with: `bun test:e2e --grep @critical`
+  - Run with: `bun test:e2e --grep @spec`
   - **Failures are blocking** - no refactoring can proceed
   - **Always included** in Phase 0 and Phase 5 validation
   - **NOT included in quality.ts** - must run separately
@@ -362,17 +362,17 @@ Omnera uses Playwright test tags to categorize E2E tests by criticality:
 - **@spec**: Specification tests for new features (TDD red tests)
   - These may be failing during development (red-green-refactor cycle)
   - **NOT included** in safety baseline checks
-  - **Ignored during refactoring** validation - focus on @critical/@regression
+  - **Ignored during refactoring** validation - focus on @spec/@regression
 
 ### Test Execution Strategy
 ```bash
 # Establish baseline (Phase 0)
 bun run scripts/quality.ts      # Runs ESLint, TypeScript, unit tests, @regression E2E (parallel)
-bun test:e2e --grep @critical    # Must pass 100% (not included in quality.ts)
+bun test:e2e --grep @spec    # Must pass 100% (not included in quality.ts)
 
 # Validate after refactoring (Phase 5)
 bun run scripts/quality.ts      # Re-validate all quality checks
-bun test:e2e --grep @critical    # Compare to baseline
+bun test:e2e --grep @spec    # Compare to baseline
 ```
 
 ### Baseline Recording Template
@@ -391,10 +391,10 @@ Use this template to document test baseline state:
   - ✅ Unit Tests (4.2s)
   - ✅ E2E Regression Tests (@regression) (13.9s)
 
-### Critical E2E Tests (@critical)
+### Critical E2E Tests (@spec)
 - ✅ 5/5 passing
 - ⏱️ Execution time: 2.3s
-- Command: `bun test:e2e --grep @critical`
+- Command: `bun test:e2e --grep @spec`
 - Tests: [list test names]
 
 ### Baseline Status
@@ -406,14 +406,14 @@ Use this template to document test baseline state:
 **Phase 0 (Pre-Refactoring)**:
 1. Run quality checks: `bun run scripts/quality.ts` - must pass 100%
    - Validates: ESLint, TypeScript, unit tests, @regression E2E tests
-2. Run @critical tests: `bun test:e2e --grep @critical` - must pass 100%
+2. Run @spec tests: `bun test:e2e --grep @spec` - must pass 100%
 3. Document baseline state using template above
 4. **Abort if any tests fail** - refactoring on broken baseline is forbidden
 
 **Phase 5 (Post-Refactoring)**:
 1. Run quality checks: `bun run scripts/quality.ts`
    - Re-validates: ESLint, TypeScript, unit tests, @regression E2E tests
-2. Run @critical tests: `bun test:e2e --grep @critical`
+2. Run @spec tests: `bun test:e2e --grep @spec`
 3. Compare results against Phase 0 baseline
 4. **All baseline passing tests MUST still pass**
 
@@ -567,7 +567,7 @@ When proposing refactorings:
 4. **Quality Validation (NON-NEGOTIABLE)**:
    - ALWAYS run `bun run scripts/quality.ts` before proposing refactorings (Phase 0)
      - Validates: ESLint, TypeScript, unit tests, @regression E2E tests
-   - ALWAYS run `bun test:e2e --grep @critical` before proposing refactorings (Phase 0)
+   - ALWAYS run `bun test:e2e --grep @spec` before proposing refactorings (Phase 0)
    - ALWAYS run both commands after implementing each refactoring step (Phase 5)
    - If baseline tests fail before refactoring → STOP and report
    - If tests fail after refactoring → immediately rollback or fix
@@ -620,7 +620,7 @@ Before finalizing recommendations:
    - **Language/Runtime** (@docs/infrastructure/language/, runtime/): TypeScript strict mode, Bun APIs
    - **Code Quality** (@docs/infrastructure/quality/): ESLint, Prettier compliance
    - **Testing** (@docs/infrastructure/testing/): Bun Test, Playwright patterns
-5. **E2E Baseline Validation**: Run and pass all @critical and @regression tests
+5. **E2E Baseline Validation**: Run and pass all @spec and @regression tests
 6. **Cross-Reference**: Verify each suggestion against multiple @docs files for consistency
 7. **Impact Analysis**: Consider ripple effects across layers and modules (within src/)
 8. **Test Verification**: Ensure proposed changes won't break existing unit tests unnecessarily
@@ -633,7 +633,7 @@ Before finalizing recommendations:
 Structure your audit reports with these key sections:
 
 **Required Sections**:
-1. **Phase 0: Safety Baseline** - E2E test results (@critical, @regression) before refactoring
+1. **Phase 0: Safety Baseline** - E2E test results (@spec, @regression) before refactoring
 2. **Scope Analysis** - Phase 1.1 (recent changes) vs. Phase 1.2 (older code) file breakdown
 3. **Part A: IMMEDIATE REFACTORINGS** - Phase 1.1 findings with implementation
 4. **Part B: RECOMMENDATIONS FOR APPROVAL** - Phase 1.2 findings awaiting approval
@@ -660,10 +660,10 @@ Adapt this template as needed to best communicate findings for specific contexts
   - ✅ Unit Tests (X.Xs)
   - ✅ E2E Regression Tests (@regression) (X.Xs)
 
-### Critical E2E Tests (@critical)
+### Critical E2E Tests (@spec)
 - ✅ X/X passing
 - ⏱️ Execution time: X.Xs
-- Command: `bun test:e2e --grep @critical`
+- Command: `bun test:e2e --grep @spec`
 - Tests: [list test names]
 
 ### Baseline Status
@@ -878,10 +878,10 @@ Recommendations are prioritized by benefit-to-effort ratio:
 - ✅ X/X passing (no regressions)
 - **Automated via hooks**: Unit tests ran automatically after Edit/Write operations
 
-### Critical E2E Tests (@critical)
+### Critical E2E Tests (@spec)
 - ✅ X/X passing (baseline maintained)
 - ⏱️ Execution time: X.Xs vs X.Xs baseline
-- Command: `bun test:e2e --grep @critical`
+- Command: `bun test:e2e --grep @spec`
 
 ### Regression E2E Tests (@regression)
 - ✅ X/X passing (baseline maintained)
@@ -988,7 +988,7 @@ Track these quantifiable metrics in audit reports to demonstrate impact:
 - **Type safety improvements**: X 'any' types replaced with proper types
 
 **Test Coverage & Safety**:
-- **Test baseline maintained**: 100% of @critical/@regression tests passing (no regressions)
+- **Test baseline maintained**: 100% of @spec/@regression tests passing (no regressions)
 - **Unit test coverage**: X% coverage maintained or improved
 - **Test suite optimization**: Y redundant tests removed, Z tests consolidated
 
@@ -1003,7 +1003,7 @@ Track these quantifiable metrics in audit reports to demonstrate impact:
 - **Code reduction**: 12% fewer lines (450 lines reduced from 3,750 to 3,300)
 - **Duplication eliminated**: 8 instances consolidated into 3 shared utilities
 - **Violations fixed**: 15 total (5 critical, 7 high, 3 medium)
-- **Test baseline**: 100% maintained (8/8 @critical, 5/5 @regression passing)
+- **Test baseline**: 100% maintained (8/8 @spec, 5/5 @regression passing)
 - **Framework improvements**: 3 manual memoizations removed, 4 Effect.gen patterns corrected
 - **Time invested**: 2.5 hours actual vs 3 hours estimated (17% under budget)
 ```
@@ -1019,15 +1019,15 @@ Track these quantifiable metrics in audit reports to demonstrate impact:
 **What You Receive**:
 - **GREEN Implementation**: Working code in Presentation/Application layers with passing E2E tests
 - **Documented Duplication**: Code comments or commit messages noting duplication across test fixes
-- **Baseline Test Results**: Phase 0 results from e2e-test-fixer (@critical and @regression passing)
+- **Baseline Test Results**: Phase 0 results from e2e-test-fixer (@spec and @regression passing)
 - **Implementation Commits**: Commit history showing incremental test fixes
 
 **Handoff Protocol FROM e2e-test-fixer**:
 1. e2e-test-fixer fixes 3+ tests OR completes feature's critical/regression tests
 2. e2e-test-fixer verifies all fixed tests are GREEN and committed
-3. e2e-test-fixer runs baseline validation: `bun test:e2e --grep @critical && bun test:e2e --grep @regression`
+3. e2e-test-fixer runs baseline validation: `bun test:e2e --grep @spec && bun test:e2e --grep @regression`
 4. e2e-test-fixer documents duplication/optimization opportunities in code comments or commit messages
-5. e2e-test-fixer notifies: "GREEN phase complete for {property}. Tests GREEN: X @spec, 1 @regression, Y @critical. Recommend codebase-refactor-auditor for optimization."
+5. e2e-test-fixer notifies: "GREEN phase complete for {property}. Tests GREEN: X @spec, 1 @regression, Y @spec. Recommend codebase-refactor-auditor for optimization."
 6. **YOU (codebase-refactor-auditor)**: Begin Phase 0 baseline validation
 7. **YOU**: Analyze git history to identify recent major commits (Phase 1.1)
 8. **YOU**: Immediately refactor files from recent commits (includes e2e-test-fixer's work)

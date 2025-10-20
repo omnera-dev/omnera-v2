@@ -381,7 +381,7 @@ Omnera uses three test tags for efficient test execution:
 | ------------- | ------------------- | ------------ | -------------------------------------- |
 | `@spec`       | Specification (TDD) | Development  | `playwright test --project=spec`       |
 | `@regression` | Regression (CI/CD)  | Every push   | `playwright test --project=regression` |
-| `@critical`   | Critical paths      | Every commit | `playwright test --project=critical`   |
+| `@spec`       | Critical paths      | Every commit | `playwright test --project=critical`   |
 
 ### Example: Tagged Tests
 
@@ -405,7 +405,7 @@ test('user can complete login flow', { tag: '@regression' }, async ({ page }) =>
 })
 
 // Critical test - Run every commit (essential workflows)
-test('user can authenticate', { tag: '@critical' }, async ({ page }) => {
+test('user can authenticate', { tag: '@spec' }, async ({ page }) => {
   await page.goto('/login')
   await page.getByLabel('Email').fill('user@example.com')
   await page.getByLabel('Password').fill('password123')
@@ -414,7 +414,7 @@ test('user can authenticate', { tag: '@critical' }, async ({ page }) => {
 })
 
 // Multiple tags - Test serves multiple purposes
-test('user can save work', { tag: ['@spec', '@critical'] }, async ({ page }) => {
+test('user can save work', { tag: ['@spec', '@spec'] }, async ({ page }) => {
   // Runs during development AND every commit
   await page.goto('/editor')
   await page.getByRole('textbox').fill('Important data')
@@ -436,13 +436,13 @@ playwright test --grep="@regression"
 
 # Every commit - Critical paths (essential workflows)
 playwright test --project=critical
-playwright test --grep="@critical"
+playwright test --grep="@spec"
 
 # Combined - Spec + Critical (pre-commit)
-playwright test --grep="@spec|@critical"
+playwright test --grep="@spec|@spec"
 
 # Combined - Regression + Critical (CI/CD)
-playwright test --grep="@regression|@critical"
+playwright test --grep="@regression|@spec"
 
 # Full suite - All tests (manual runs)
 playwright test
@@ -468,7 +468,7 @@ export default defineConfig({
     },
     {
       name: 'critical',
-      grep: /@critical/,
+      grep: /@spec/,
       use: { ...devices['Desktop Chrome'] },
     },
   ],
@@ -493,7 +493,7 @@ export default defineConfig({
 - Run in CI/CD pipelines
 - Efficient validation before deployment
 
-**`@critical` - Critical Path Tests:**
+**`@spec` - Critical Path Tests:**
 
 - Essential workflows only (auth, data persistence, checkout)
 - Must always work
@@ -532,8 +532,8 @@ test('password management flow', { tag: '@regression' }, ...)  // Add consolidat
 **Phase 4: Promote Critical Workflows**
 
 ```typescript
-// Add @critical tag if essential
-test('user can reset password', { tag: ['@spec', '@critical'] }, async ({ page }) => {
+// Add @spec tag if essential
+test('user can reset password', { tag: ['@spec', '@spec'] }, async ({ page }) => {
   // Now runs during development AND every commit
 })
 ```

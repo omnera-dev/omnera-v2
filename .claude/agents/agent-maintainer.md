@@ -196,7 +196,7 @@ You should review specific agents when:
   - Triple-Documentation → JSDoc translation rules change
 
 - **e2e-test-translator**:
-  - Test tag strategy changes (@spec/@regression/@critical)
+  - Test tag strategy changes (@spec/@regression/@spec)
   - GIVEN-WHEN-THEN translation patterns evolve
   - Playwright fixture usage patterns update
   - test.fixme() workflow changes
