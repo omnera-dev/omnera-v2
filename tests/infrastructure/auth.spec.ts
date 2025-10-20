@@ -590,6 +590,72 @@ test.describe('Better Auth Integration', () => {
   })
 
   /**
+   * Test Suite: OpenAPI Documentation (/api/auth/openapi.json)
+   *
+   * Validates that BetterAuth's OpenAPI schema is properly exposed and contains
+   * all authentication endpoint definitions for documentation and client generation.
+   */
+  test.describe('OpenAPI documentation', () => {
+    /**
+     * Test Case: OpenAPI endpoint returns valid schema
+     *
+     * GIVEN: A running server with BetterAuth OpenAPI plugin enabled
+     * WHEN: Client requests GET /api/auth/openapi.json
+     * THEN: Response should be valid OpenAPI 3.x schema with auth endpoints
+     *
+     * Validates OpenAPI integration for authentication documentation
+     * Reference: src/infrastructure/auth/better-auth/auth.ts (openAPI plugin)
+     * Reference: src/infrastructure/server/server.ts (auth openapi endpoint)
+     */
+    test(
+      'should return valid OpenAPI schema for auth endpoints',
+      { tag: '@spec' },
+      async ({ page, startServerWithSchema }) => {
+        // GIVEN: A running server
+        await startServerWithSchema(
+          {
+            name: 'auth-openapi-test',
+          },
+          { useDatabase: true }
+        )
+
+        // WHEN: Client requests OpenAPI schema for auth endpoints
+        const response = await page.request.get('/api/auth/openapi.json')
+
+        // THEN: Response should be 200 OK
+        expect(response.status()).toBe(200)
+
+        const openApiDoc = await response.json()
+
+        // AND: Response should be valid OpenAPI document
+        expect(openApiDoc).toHaveProperty('openapi')
+        expect(openApiDoc.openapi).toMatch(/^3\.\d+\.\d+$/) // OpenAPI 3.x.x
+
+        // AND: Should contain OpenAPI required fields
+        expect(openApiDoc).toHaveProperty('info')
+        expect(openApiDoc).toHaveProperty('paths')
+
+        // AND: Should contain authentication endpoints
+        expect(openApiDoc.paths).toBeDefined()
+        expect(Object.keys(openApiDoc.paths).length).toBeGreaterThan(0)
+
+        // AND: Should contain common auth endpoints
+        const paths = Object.keys(openApiDoc.paths)
+        expect(paths).toContain('/sign-up/email')
+        expect(paths).toContain('/sign-in/email')
+        expect(paths).toContain('/sign-out')
+        expect(paths).toContain('/get-session')
+
+        // AND: Should contain component schemas (User, Session, etc.)
+        expect(openApiDoc).toHaveProperty('components')
+        expect(openApiDoc.components).toHaveProperty('schemas')
+        expect(openApiDoc.components.schemas).toHaveProperty('User')
+        expect(openApiDoc.components.schemas).toHaveProperty('Session')
+      }
+    )
+  })
+
+  /**
    * REGRESSION TEST: Complete Authentication Workflow
    *
    * This comprehensive test validates the entire authentication system
