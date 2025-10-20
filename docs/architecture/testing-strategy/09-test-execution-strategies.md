@@ -219,13 +219,13 @@ export default defineConfig({
 
 ### Execution Strategy by Environment
 
-| Environment                       | Tests to Run            | Command                 | Duration    |
-| --------------------------------- | ----------------------- | ----------------------- | ----------- |
-| **Development** (active coding)   | `@spec`                 | `bun test:e2e:spec`     | ~30 seconds |
-| **Pre-commit** (local validation) | `@spec` + `@spec`       | `bun test:e2e:dev`      | ~1 minute   |
-| **CI/CD** (every push)            | `@regression` + `@spec` | `bun test:e2e:ci`       | ~5 minutes  |
-| **Pre-release** (before deploy)   | All tests               | `bun test:e2e`          | ~15 minutes |
-| **Production** (smoke test)       | `@spec`                 | `bun test:e2e:critical` | ~30 seconds |
+| Environment                       | Tests to Run            | Command                   | Duration    |
+| --------------------------------- | ----------------------- | ------------------------- | ----------- |
+| **Development** (active coding)   | `@spec`                 | `bun test:e2e:spec`       | ~30 seconds |
+| **Pre-commit** (local validation) | `@spec` + `@spec`       | `bun test:e2e:spec`       | ~1 minute   |
+| **CI/CD** (every push)            | `@regression` + `@spec` | `bun test:e2e:regression` | ~5 minutes  |
+| **Pre-release** (before deploy)   | All tests               | `bun test:e2e`            | ~15 minutes |
+| **Production** (smoke test)       | `@spec`                 | `bun test:e2e:critical`   | ~30 seconds |
 
 ### NPM Scripts Configuration
 
@@ -241,8 +241,8 @@ Omnera uses **grep-based** execution for all test filtering:
     "test:e2e": "playwright test",
     "test:e2e:spec": "playwright test --grep='@spec'",
     "test:e2e:critical": "playwright test --grep='@spec'",
-    "test:e2e:dev": "playwright test --grep='@spec|@spec'",
-    "test:e2e:ci": "playwright test --grep='@regression|@spec'"
+    "test:e2e:spec": "playwright test --grep='@spec|@spec'",
+    "test:e2e:regression": "playwright test --grep='@regression|@spec'"
   }
 }
 ```

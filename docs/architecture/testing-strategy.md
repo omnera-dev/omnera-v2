@@ -69,13 +69,13 @@ test('should display version badge when app has version', async ({ page }) => {
 
 ### Test Execution Commands
 
-| Environment                     | Tests                   | Command                 | Duration    |
-| ------------------------------- | ----------------------- | ----------------------- | ----------- |
-| **Development** (active coding) | `@spec`                 | `bun test:e2e:spec`     | ~30 seconds |
-| **Pre-commit**                  | `@spec` + `@spec`       | `bun test:e2e:dev`      | ~1 minute   |
-| **CI/CD**                       | `@regression` + `@spec` | `bun test:e2e:ci`       | ~5 minutes  |
-| **Pre-release**                 | All tests               | `bun test:e2e`          | ~15 minutes |
-| **Production**                  | `@spec`                 | `bun test:e2e:critical` | ~30 seconds |
+| Environment                     | Tests                   | Command                   | Duration    |
+| ------------------------------- | ----------------------- | ------------------------- | ----------- |
+| **Development** (active coding) | `@spec`                 | `bun test:e2e:spec`       | ~30 seconds |
+| **Pre-commit**                  | `@spec` + `@spec`       | `bun test:e2e:spec`       | ~1 minute   |
+| **CI/CD**                       | `@regression` + `@spec` | `bun test:e2e:regression` | ~5 minutes  |
+| **Pre-release**                 | All tests               | `bun test:e2e`            | ~15 minutes |
+| **Production**                  | `@spec`                 | `bun test:e2e:critical`   | ~30 seconds |
 
 **Run all tests**: `bun test:all` (unit + E2E)
 
