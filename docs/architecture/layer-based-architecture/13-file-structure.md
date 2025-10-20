@@ -325,8 +325,8 @@ Configuration feature schemas are **strictly isolated**:
 import { AppSchema } from '@/domain/models/app'
 
 // ❌ FORBIDDEN - Cross-feature imports
-import { TableSchema } from '@/domain/models/app/tables' // in pages/index.ts
-import { AutomationSchema } from '@/domain/models/app/automations' // in tables/index.ts
+import { TableSchema } from '@/domain/models/app/table' // in pages/index.ts
+import { AutomationSchema } from '@/domain/models/app/automation' // in tables/index.ts
 ```
 
 Each feature can **only import from the root app schema**, ensuring true separation of concerns.
@@ -338,7 +338,7 @@ Infrastructure **must use dependency inversion**:
 ```typescript
 // ✅ CORRECT - Infrastructure implements port interface
 import type { IDatabase } from '@/application/ports/IDatabase'
-import type { TableSchema } from '@/domain/models/app/tables'
+import type { TableSchema } from '@/domain/models/app/table'
 
 // ❌ FORBIDDEN - Infrastructure importing use cases
 import { CreateTables } from '@/application/use-cases/database/CreateTables'

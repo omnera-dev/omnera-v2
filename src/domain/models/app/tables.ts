@@ -6,12 +6,12 @@
  */
 
 import { Schema } from 'effect'
-import { FieldsSchema } from '@/domain/models/app/tables/fields'
-import { IdSchema } from '@/domain/models/app/tables/id'
-import { IndexesSchema } from '@/domain/models/app/tables/indexes'
-import { NameSchema } from '@/domain/models/app/tables/name'
-import { PrimaryKeySchema } from '@/domain/models/app/tables/primary-key'
-import { UniqueConstraintsSchema } from '@/domain/models/app/tables/unique-constraints'
+import { FieldsSchema } from '@/domain/models/app/table/fields'
+import { IdSchema } from '@/domain/models/app/table/id'
+import { IndexesSchema } from '@/domain/models/app/table/indexes'
+import { NameSchema } from '@/domain/models/app/table/name'
+import { PrimaryKeySchema } from '@/domain/models/app/table/primary-key'
+import { UniqueConstraintsSchema } from '@/domain/models/app/table/unique-constraints'
 
 /**
  * Table Schema

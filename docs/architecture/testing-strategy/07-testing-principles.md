@@ -434,7 +434,7 @@ test('user can create table with validation rules', async ({ page }) => {
   await expect(page).toHaveURL('/tables/customers')
 })
 // 2️⃣ Implement feature until E2E passes
-// src/domain/models/app/tables.ts - Schema
+// src/domain/models/app/table.ts - Schema
 // src/application/table-service.ts - Use case
 // src/presentation/routes/tables.ts - API
 // 3️⃣ Unit Tests AFTER (documents "how" implementation works)

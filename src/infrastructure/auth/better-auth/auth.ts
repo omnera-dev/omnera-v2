@@ -7,6 +7,7 @@
 
 import { betterAuth } from 'better-auth'
 import { drizzleAdapter } from 'better-auth/adapters/drizzle'
+import { openAPI } from 'better-auth/plugins'
 import { db } from '../../database/drizzle/db'
 
 export const auth = betterAuth({
@@ -18,4 +19,9 @@ export const auth = betterAuth({
     enabled: true,
     requireEmailVerification: false, // Allow sign-up without email verification for testing
   },
+  plugins: [
+    openAPI({
+      disableDefaultReference: true, // Use unified Scalar UI instead
+    }),
+  ],
 })

@@ -1,0 +1,103 @@
+# Claude Code Ignore File
+# Excludes files/directories from Claude's context to reduce token usage
+# Pattern syntax: same as .gitignore (globs, negation with !, etc.)
+
+# ============================================================================
+# CRITICAL EXCLUSIONS (Primary token savers)
+# ============================================================================
+
+# Dependencies (56,172 files, 624MB)
+# Claude should NEVER need to read node_modules - TypeScript provides types
+node_modules/
+
+# Infrastructure Documentation (1,058 files, 117,518 lines)
+# CLAUDE.md uses @docs/ on-demand imports - Claude shouldn't scan raw files
+docs/infrastructure/
+
+# ============================================================================
+# BUILD ARTIFACTS & GENERATED FILES
+# ============================================================================
+
+# Build outputs
+out/
+dist/
+*.tgz
+
+# Code coverage
+coverage/
+*.lcov
+
+# TypeScript build info
+*.tsbuildinfo
+.cache/
+
+# ============================================================================
+# TESTING & REPORTS
+# ============================================================================
+
+# Playwright test artifacts
+test-results/
+playwright-report/
+blob-report/
+playwright/.cache/
+playwright/.auth/
+
+# ============================================================================
+# LOGS & TEMPORARY FILES
+# ============================================================================
+
+# Logs
+logs/
+*.log
+drizzle-kit.log
+report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
+
+# Temporary files
+tmp/
+.drizzle/
+
+# ============================================================================
+# ENVIRONMENT & SECRETS
+# ============================================================================
+
+# Environment files (security)
+.env
+.env.development.local
+.env.test.local
+.env.production.local
+.env.local
+
+# ============================================================================
+# IDE & OS FILES
+# ============================================================================
+
+# IntelliJ
+.idea/
+
+# macOS Finder
+.DS_Store
+
+# ESLint cache
+.eslintcache
+
+# ============================================================================
+# LEGACY & ARCHIVES
+# ============================================================================
+
+OLD_V1/
+
+# ============================================================================
+# KEEP THESE (Exceptions)
+# ============================================================================
+
+# Architecture docs (small, frequently referenced)
+!docs/architecture/
+
+# Development workflow docs (small, essential)
+!docs/development/
+
+# Specifications (core product definition)
+!docs/specifications/
+
+# Generated database migrations (version controlled)
+!drizzle/*.sql

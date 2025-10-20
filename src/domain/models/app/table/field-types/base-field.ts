@@ -6,8 +6,8 @@
  */
 
 import { Schema } from 'effect'
-import { FieldNameSchema } from '@/domain/models/app/tables/field-name'
-import { IdSchema } from '@/domain/models/app/tables/id'
+import { FieldNameSchema } from '@/domain/models/app/table/field-name'
+import { IdSchema } from '@/domain/models/app/table/id'
 
 /**
  * Base Field Schema

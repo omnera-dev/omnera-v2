@@ -178,61 +178,18 @@ omnera-v2/
 
 ## Detailed Documentation (On-Demand Import)
 
-> **Note on Documentation Links**: This document uses `@docs/` syntax optimized for Claude Code AI consumption. This is **NOT a TypeScript path alias** (only `@/*` is configured in tsconfig.json). Human developers should interpret `@docs/` as the `docs/` directory in the project root. Example: `@docs/infrastructure/runtime/bun.md` → `docs/infrastructure/runtime/bun.md`
+> **⚠️ IMPORTANT - Token Optimization**: To reduce token usage, documentation files are **NOT automatically loaded**. Import docs ONLY when actively working on related features using the `@docs/` syntax.
 
-**When you need specific details, import the relevant documentation file:**
+**Complete documentation index**: See `@.claude/docs-index.md` for the full list of available documentation files, organized by category.
 
-### Product Vision & Roadmap
-- `@docs/specifications/vision.md` - Target state and product vision (future capabilities)
-- `@ROADMAP.md` - Implementation roadmap with phases and current development status
+**Quick Access Examples**:
+- Authentication: `@docs/infrastructure/framework/better-auth.md`
+- Forms: `@docs/infrastructure/ui/react-hook-form.md`
+- API Routes: `@docs/infrastructure/api/hono-rpc-openapi.md`
+- Database: `@docs/infrastructure/database/drizzle.md`
+- Schemas: `@docs/infrastructure/framework/effect.md`
 
-### Schema Architecture
-- `@docs/specifications/effect-schema-translatorure.md` - Multi-file JSON Schema structure with $ref, validation tools, and best practices
-- `@docs/specifications/specs.schema.json` - Root schema (orchestrator with $ref to feature schemas)
-- `@docs/specifications/spec-to-e2e-pattern.md` - Pattern for translating JSON Schema specs to E2E tests (Triple-Documentation: What/Why/Who-When)
-
-### Infrastructure
-- `@docs/infrastructure/runtime/bun.md` - Bun runtime & package manager
-- `@docs/infrastructure/language/typescript.md` - TypeScript configuration
-- `@docs/infrastructure/framework/effect.md` - Effect.ts patterns (Effect Schema for server validation)
-- `@docs/infrastructure/framework/hono.md` - Hono web framework
-- `@docs/infrastructure/api/hono-rpc-openapi.md` - Hono RPC client + OpenAPI documentation (dual-track pattern)
-- `@docs/infrastructure/api/zod-hono-openapi.md` - Zod + Hono + OpenAPI integration (ESLint enforcement, usage patterns)
-- `@docs/infrastructure/framework/better-auth.md` - Authentication
-- `@docs/infrastructure/database/drizzle.md` - Drizzle ORM
-- `@docs/infrastructure/ui/react.md` - React 19 patterns
-- `@docs/infrastructure/ui/react-hook-form.md` - Form management (client-side, Zod validation)
-- `@docs/infrastructure/ui/radix-ui.md` - Accessible UI primitives (shadcn/ui foundation)
-- `@docs/infrastructure/ui/tailwind.md` - Tailwind CSS
-- `@docs/infrastructure/ui/shadcn.md` - shadcn/ui components
-- `@docs/infrastructure/ui/tanstack-query.md` - TanStack Query
-- `@docs/infrastructure/ui/tanstack-table.md` - TanStack Table
-- `@docs/infrastructure/utility/date-fns.md` - Date utilities (client-side, date-picker)
-- `@docs/infrastructure/quality/eslint.md` - ESLint linting
-- `@docs/infrastructure/quality/prettier.md` - Prettier formatting
-- `@docs/infrastructure/quality/knip.md` - Dead code detection
-- `@docs/infrastructure/testing/bun-test.md` - Unit testing
-- `@docs/infrastructure/testing/playwright.md` - E2E testing
-- `@docs/infrastructure/cicd/workflows.md` - GitHub Actions
-- `@docs/infrastructure/release/semantic-release.md` - Automated releases
-
-### Architecture
-- `@docs/architecture/functional-programming.md` - FP principles
-- `@docs/architecture/layer-based-architecture.md` - Layered architecture
-- `@docs/architecture/naming-conventions.md` - Comprehensive naming conventions (files, variables, functions, classes, types)
-- `@docs/architecture/file-naming-conventions.md` - Detailed file naming guide
-- `@docs/architecture/api-conventions.md` - Convention-based API routing
-- `@docs/architecture/testing-strategy.md` - F.I.R.S.T principles
-- `@docs/architecture/performance-optimization.md` - Performance patterns
-- `@docs/architecture/security-best-practices.md` - Security guidelines
-
-### Development Workflows
-- `@docs/development/agent-workflows.md` - Complete TDD pipeline and agent collaboration guide
-
-**Example**: When working with authentication, import:
-```
-@docs/infrastructure/framework/better-auth.md
-```
+**Slash Command**: Use `/docs` to list all available documentation files
 
 ## Development Workflow
 
@@ -254,6 +211,34 @@ omnera-v2/
 - ✅ **DO use path aliases** - `@/components/ui/button`
 - ✅ **DO validate inputs** - Client: Zod (React Hook Form), Server: Effect Schema
 - ✅ **DO use correct date library** - Client: date-fns (date-picker), Server: Effect.DateTime
+
+## Claude Code Usage Optimization
+
+**Token Cost Management**: This project is optimized to reduce Claude Code token usage by 85-90%.
+
+### What's Excluded (`.claudeignore`)
+- `node_modules/` (56k files, 624MB) - Dependencies
+- `docs/infrastructure/` (1,058 files, 117k lines) - Use on-demand imports instead
+- Build artifacts, logs, test reports, caches
+
+### Best Practices
+1. **Import docs on-demand**: Use `@docs/` syntax ONLY when working on related features
+2. **Start fresh conversations**: Don't reuse threads for unrelated tasks (history accumulates tokens)
+3. **Use `/docs` command**: Lists available documentation without loading it
+4. **Batch edits**: One large diff is cheaper than multiple "please refine" follow-ups
+5. **Choose right model**: Use Haiku for simple tasks, Sonnet 4 for complex reasoning
+
+### Monitoring Usage
+To track your token usage and cost:
+1. Install [Claude Code Usage Monitor](https://github.com/Maciek-roboblog/claude-code-usage-monitor)
+2. Monitor token usage per conversation
+3. Set alerts if approaching weekly limits (Pro: ~40-80 hours/week)
+
+### Expected Token Usage (After Optimization)
+- **Conversation start**: ~20k-30k tokens (vs. 200k+ before)
+- **With doc import**: +5k-15k tokens per doc file
+- **Typical task**: 20k-50k tokens total
+- **Result**: 6-10x more conversations per week
 
 ---
 

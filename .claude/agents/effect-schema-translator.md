@@ -27,7 +27,7 @@ examples:
   - user: "Translate the tables property schema to Effect from specs.schema.json"
     assistant: |
       <uses Task tool with subagent_type="effect-schema-translator">
-      The effect-schema-translator agent will read the validated JSON Schema definition for tables from specs.schema.json and mechanically convert it to Effect Schema at src/domain/models/app/tables.ts following established patterns.
+      The effect-schema-translator agent will read the validated JSON Schema definition for tables from specs.schema.json and mechanically convert it to Effect Schema at src/domain/models/app/table.ts following established patterns.
 
 model: sonnet
 color: yellow
@@ -219,9 +219,9 @@ export const NameSchema = Schema.String.pipe(
 // Read common/definitions.schema.json for id definition
 
 // Step 6: Implement (reuse existing domain schemas)
-import { IdSchema } from '@/domain/models/app/tables/id'
-import { NameSchema } from '@/domain/models/app/tables/name'
-import { FieldsSchema } from '@/domain/models/app/tables/fields'
+import { IdSchema } from '@/domain/models/app/table/id'
+import { NameSchema } from '@/domain/models/app/table/name'
+import { FieldsSchema } from '@/domain/models/app/table/fields'
 
 export const TablesSchema = Schema.Array(
   Schema.Struct({
@@ -284,8 +284,8 @@ When translating App schemas, import EXISTING domain schemas (don't recreate):
 
 ```typescript
 // src/domain/models/app/tables.ts
-import { IdSchema } from '@/domain/models/app/tables/id'        // ← Existing
-import { NameSchema } from '@/domain/models/app/tables/name'    // ← Existing
+import { IdSchema } from '@/domain/models/app/table/id'        // ← Existing
+import { NameSchema } from '@/domain/models/app/table/name'    // ← Existing
 
 export const TablesSchema = Schema.Array(
   Schema.Struct({
@@ -296,9 +296,9 @@ export const TablesSchema = Schema.Array(
 ```
 
 **Available domain namespaces**:
-- `@/domain/models/app/tables/*` - Table domain (id, name, fields, etc.)
-- `@/domain/models/app/pages/*` - Page domain [if exists]
-- `@/domain/models/app/automations/*` - Automation domain [if exists]
+- `@/domain/models/app/table/*` - Table domain (id, name, fields, etc.)
+- `@/domain/models/app/page/*` - Page domain [if exists]
+- `@/domain/models/app/automation/*` - Automation domain [if exists]
 
 **Boundary**: You implement App schemas, you IMPORT domain schemas (never modify them).
 

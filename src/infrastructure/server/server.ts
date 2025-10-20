@@ -68,11 +68,19 @@ function createHonoApp(
       const openApiDoc = getOpenAPIDocument()
       return c.json(openApiDoc)
     })
+    .get('/api/auth/openapi.json', async (c) => {
+      const authOpenApiDoc = await auth.api.generateOpenAPISchema()
+      return c.json(authOpenApiDoc)
+    })
     .get(
       '/api/scalar',
       Scalar({
-        url: '/api/openapi.json',
+        pageTitle: 'Omnera API Documentation',
         theme: 'default',
+        sources: [
+          { url: '/api/openapi.json', title: 'API' },
+          { url: '/api/auth/openapi.json', title: 'Auth' },
+        ],
       })
     )
     .on(['POST', 'GET'], '/api/auth/*', (c) => auth.handler(c.req.raw))
