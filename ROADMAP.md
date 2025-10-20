@@ -2,7 +2,7 @@
 
 > **Flexible Development**: Work on any feature whenever you want. Each property has its own detailed implementation guide in `docs/specifications/roadmap/`.
 >
-> **Last Generated**: 2025-10-18
+> **Last Generated**: 2025-10-20
 
 ## Overview
 

@@ -156,45 +156,22 @@ async function main() {
     const fileName = basename(filePath)
     console.log(`🔍 Running quality checks on ${fileName}...`)
 
-    // Check if file is in src directory for Knip
-    // Only run for source files to keep it fast (Knip analyzes the entire codebase)
-    // Skip test files as they often have intentional "unused" exports
-    const shouldRunKnip = filePath.includes('/src/') &&
-                         !filePath.includes('.test.') &&
-                         !filePath.includes('.spec.')
-
     // Run checks in parallel for maximum speed
-    const checks = [
-      // ESLint
+    // Note: Knip is intentionally excluded from hooks as it analyzes the entire
+    // codebase (slow). Run 'bun run clean' manually or in CI for unused code detection.
+    await Promise.all([
+      // ESLint with cache for faster subsequent runs
       (async () => {
         console.log(`  📝 Linting ${fileName}...`)
-        return await runCommand(`bunx eslint "${filePath}" --max-warnings 0`, 30000)
+        return await runCommand(`bunx eslint "${filePath}" --max-warnings 0 --cache`, 30000)
       })(),
 
-      // TypeScript incremental check
+      // TypeScript with incremental mode for faster checking
       (async () => {
         console.log(`  ✅ Type checking...`)
-        return await runCommand('bunx tsc --noEmit', 60000)
+        return await runCommand('bunx tsc --noEmit --incremental', 60000)
       })(),
-    ]
-
-    // Add Knip for source files only (not tests)
-    if (shouldRunKnip) {
-      checks.push(
-        (async () => {
-          console.log(`  🧹 Checking for unused code with Knip...`)
-          const knipResult = await runCommand('bunx knip --no-progress --reporter compact', 45000)
-          if (!knipResult) {
-            console.log(`  ⚠️  Unused code detected! Run 'bun run clean' to see details`)
-          } else {
-            console.log(`  ✨ No unused code found`)
-          }
-          return knipResult
-        })()
-      )
-    }
-
-    await Promise.all(checks)
+    ])
 
     // Run test if test file exists (sequential since it might depend on formatted code)
     const testFile = findTestFile(filePath)
