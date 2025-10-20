@@ -408,7 +408,7 @@ test.describe('Tables - Property: indexes', () => {
 // ============================================================================
 // REGRESSION TEST (@regression)
 // ONE consolidated test covering complete indexes workflow
-// Run during: CI/CD, pre-release (bun test:e2e:ci)
+// Run during: CI/CD, pre-release (bun test:e2e:regression)
 // ============================================================================
 
 test.fixme(

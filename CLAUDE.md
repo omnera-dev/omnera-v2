@@ -75,12 +75,10 @@ bun run clean:fix           # Knip (auto-fix unused exports)
 bun test:unit               # Unit tests (Bun Test - src/ and scripts/)
 bun test:unit:watch         # Unit tests in watch mode
 bun test:e2e                # E2E tests (Playwright - all)
-bun test:e2e:spec           # E2E spec tests (@spec tag)
-bun test:e2e:regression     # E2E regression tests (@regression tag)
-bun test:e2e:dev            # E2E dev subset (@spec tag)
-bun test:e2e:ci             # E2E CI subset (@regression tag)
+bun test:e2e:spec           # E2E spec tests (@spec tag) - for development
+bun test:e2e:regression     # E2E regression tests (@regression tag) - for CI/pre-merge
 bun test:e2e:ui             # E2E tests with Playwright UI
-bun test:all                # All tests (unit + E2E)
+bun test:all                # All tests (unit + E2E regression)
 
 # Release (manual via GitHub Actions)
 git commit -m "release: publish"   # Explicit release commit

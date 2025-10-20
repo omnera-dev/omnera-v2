@@ -1423,3 +1423,575 @@ codebase-refactor-auditor (CREATIVE: Refactoring)
 Remember: Your tests are the specification. They define what "done" looks like before any code is written. Your job is to make them fail meaningfully with clear, actionable assertions that guide implementation.
 
 **Key Rule**: EXACTLY ONE @regression test per file. This test consolidates all @spec tests into one comprehensive workflow.
+
+---
+
+## OpenAPI Translation: REST API Contract Testing
+
+In addition to translating JSON Schema x-user-stories into App tests, you also translate OpenAPI operations into API tests. This section describes the mechanical process for converting OpenAPI specifications into Playwright API tests.
+
+### OpenAPI as Source of Truth for API Tests
+
+**Source File**: `docs/specifications/app/api.openapi.json`
+**Target Directory**: `tests/api/`
+
+The OpenAPI specification defines the REST API contract. You mechanically translate OpenAPI operations with x-user-stories into Playwright API tests that validate:
+- HTTP request/response contracts
+- Status codes
+- Request/response body schemas
+- Error handling
+- Header validation
+
+### OpenAPI Structure Navigation
+
+OpenAPI 3.1.0 uses a different structure than JSON Schema. Here's how to navigate it:
+
+**Step 1: Read OpenAPI File**
+```typescript
+const openapi = readJSON('docs/specifications/app/api.openapi.json')
+```
+
+**Step 2: Locate Operations by Path**
+```typescript
+// OpenAPI structure:
+{
+  "paths": {
+    "/api/tables": {
+      "get": {
+        "operationId": "listTables",
+        "summary": "List all tables",
+        "x-user-stories": [
+          "GIVEN user has tables configured WHEN GET /api/tables THEN should return 200 with array of tables",
+          "GIVEN user has no tables WHEN GET /api/tables THEN should return 200 with empty array"
+        ],
+        "responses": {
+          "200": { ... }
+        }
+      }
+    },
+    "/api/tables/{tableId}/records": {
+      "post": {
+        "operationId": "createRecord",
+        "summary": "Create new record",
+        "x-user-stories": [
+          "GIVEN valid record data WHEN POST /api/tables/{id}/records THEN should create record and return 201",
+          "GIVEN missing required field WHEN POST THEN should return 400 validation error"
+        ]
+      }
+    }
+  }
+}
+```
+
+**Step 3: Extract User Stories from Operations**
+```typescript
+// Iterate through paths
+for (const [path, pathItem] of Object.entries(openapi.paths)) {
+  // Iterate through methods (get, post, patch, delete, etc.)
+  for (const [method, operation] of Object.entries(pathItem)) {
+    const userStories = operation['x-user-stories']
+
+    if (userStories && userStories.length > 0) {
+      // Translate to API tests
+      translateOperationToTests(path, method, operation)
+    }
+  }
+}
+```
+
+### OpenAPI Validation Protocol
+
+Before translating OpenAPI operations, verify:
+
+**Check 1: OpenAPI File Exists**
+```typescript
+const openapi = readJSON('docs/specifications/app/api.openapi.json')
+
+if (!openapi) {
+  return BLOCKING_ERROR: `
+  ❌ TRANSLATION ERROR: Cannot find OpenAPI specification
+
+  Expected file: docs/specifications/app/api.openapi.json
+
+  REQUIRED ACTION:
+  Work with spec-editor to create OpenAPI specification file.
+
+  YOU CANNOT TRANSLATE API TESTS WITHOUT OPENAPI SOURCE.
+  `
+}
+```
+
+**Check 2: Operation Has User Stories**
+```typescript
+const operation = openapi.paths[path][method]
+const userStories = operation['x-user-stories']
+
+if (!userStories || userStories.length === 0) {
+  return BLOCKING_ERROR: `
+  ❌ TRANSLATION ERROR: Operation lacks x-user-stories
+
+  Operation: ${method.toUpperCase()} ${path}
+  OperationId: ${operation.operationId}
+
+  REQUIRED ACTION:
+  Work with spec-editor to add x-user-stories to this operation.
+
+  YOU CANNOT TRANSLATE OPERATIONS WITHOUT USER STORIES.
+  `
+}
+```
+
+**Check 3: Story Format Validation**
+```typescript
+// Same as JSON Schema validation - GIVEN-WHEN-THEN format required
+for (const story of userStories) {
+  if (!story.includes('GIVEN') || !story.includes('WHEN') || !story.includes('THEN')) {
+    return BLOCKING_ERROR: `Invalid OpenAPI user story format for ${method.toUpperCase()} ${path}`
+  }
+}
+```
+
+### API Test File Structure
+
+API tests mirror OpenAPI structure:
+
+```
+docs/specifications/app/api.openapi.json:
+  /health → tests/api/infrastructure.spec.ts
+  /api/tables → tests/api/tables.spec.ts
+  /api/tables/{tableId}/records → tests/api/records.spec.ts
+```
+
+**File Organization**:
+- Group operations by resource (tables, records, pages, etc.)
+- One test file per resource
+- Include all HTTP methods for that resource (GET, POST, PATCH, DELETE)
+
+### Playwright API Testing Pattern
+
+API tests use `page.request` methods instead of UI interactions:
+
+```typescript
+import { test, expect } from '../fixtures'
+
+test.describe('API - Tables', () => {
+  // @spec tests - One per x-user-story
+  test.fixme(
+    'GET /api/tables should return array of tables',
+    { tag: '@spec' },
+    async ({ page, startServerWithSchema }) => {
+      // GIVEN: Application with tables configured
+      await startServerWithSchema({
+        name: 'test-app',
+        tables: [
+          {
+            id: 1,
+            name: 'users',
+            fields: [
+              { id: 1, name: 'email', type: 'email', required: true }
+            ]
+          }
+        ]
+      })
+
+      // WHEN: GET /api/tables
+      const response = await page.request.get('/api/tables')
+
+      // THEN: Should return 200 with array
+      expect(response.status()).toBe(200)
+      const body = await response.json()
+      expect(Array.isArray(body)).toBe(true)
+      expect(body).toHaveLength(1)
+      expect(body[0].name).toBe('users')
+    }
+  )
+
+  test.fixme(
+    'POST /api/tables/{tableId}/records should create record',
+    { tag: '@spec' },
+    async ({ page, startServerWithSchema }) => {
+      // GIVEN: Table with schema
+      await startServerWithSchema({
+        name: 'test-app',
+        tables: [
+          {
+            id: 1,
+            name: 'users',
+            fields: [
+              { id: 1, name: 'email', type: 'email', required: true }
+            ]
+          }
+        ]
+      })
+
+      // WHEN: POST /api/tables/1/records
+      const response = await page.request.post('/api/tables/1/records', {
+        data: { email: 'user@example.com' }
+      })
+
+      // THEN: Should return 201 with created record
+      expect(response.status()).toBe(201)
+      const body = await response.json()
+      expect(body.email).toBe('user@example.com')
+      expect(body.id).toBeDefined()
+    }
+  )
+
+  test.fixme(
+    'POST /api/tables/{tableId}/records should return 400 for invalid data',
+    { tag: '@spec' },
+    async ({ page, startServerWithSchema }) => {
+      // GIVEN: Table with required field
+      await startServerWithSchema({
+        name: 'test-app',
+        tables: [
+          {
+            id: 1,
+            name: 'users',
+            fields: [
+              { id: 1, name: 'email', type: 'email', required: true }
+            ]
+          }
+        ]
+      })
+
+      // WHEN: POST without required field
+      const response = await page.request.post('/api/tables/1/records', {
+        data: {}
+      })
+
+      // THEN: Should return 400 validation error
+      expect(response.status()).toBe(400)
+      const body = await response.json()
+      expect(body.error).toBeDefined()
+    }
+  )
+
+  // @regression test - ONE per file
+  test.fixme(
+    'user can complete full tables API workflow',
+    { tag: '@regression' },
+    async ({ page, startServerWithSchema }) => {
+      // GIVEN: Application configured
+      await startServerWithSchema({
+        name: 'test-app',
+        tables: [
+          {
+            id: 1,
+            name: 'users',
+            fields: [
+              { id: 1, name: 'email', type: 'email', required: true }
+            ]
+          }
+        ]
+      })
+
+      // WHEN/THEN: Complete workflow
+      // 1. List tables
+      const listResponse = await page.request.get('/api/tables')
+      expect(listResponse.status()).toBe(200)
+
+      // 2. Get specific table
+      const getResponse = await page.request.get('/api/tables/1')
+      expect(getResponse.status()).toBe(200)
+
+      // 3. Create record
+      const createResponse = await page.request.post('/api/tables/1/records', {
+        data: { email: 'user@example.com' }
+      })
+      expect(createResponse.status()).toBe(201)
+      const record = await createResponse.json()
+
+      // 4. Update record
+      const updateResponse = await page.request.patch(
+        `/api/tables/1/records/${record.id}`,
+        { data: { email: 'updated@example.com' } }
+      )
+      expect(updateResponse.status()).toBe(200)
+
+      // 5. Delete record
+      const deleteResponse = await page.request.delete(
+        `/api/tables/1/records/${record.id}`
+      )
+      expect(deleteResponse.status()).toBe(204)
+    }
+  )
+})
+```
+
+### API Test Categorization
+
+Apply the same three-category structure as App tests:
+
+**@spec Tests (Multiple)**:
+- One test per x-user-story in OpenAPI operation
+- Validates specific API behaviors (success cases, error cases, validation)
+- Tests one HTTP method + path combination per test
+- Example: "GET /api/tables should return 200", "POST should return 400 for invalid input"
+
+**@regression Test (ONE per file)**:
+- Consolidates all API operations for a resource
+- Tests complete CRUD workflow (Create → Read → Update → Delete)
+- Validates state persistence across requests
+- Example: "user can complete full tables API workflow"
+
+**@critical Test (Zero or One)**:
+- Only for essential API operations (authentication, data persistence)
+- Tests minimal essential path
+- Example: "user can authenticate via API", "user can persist data"
+
+### Extracting Test Information from OpenAPI
+
+**Operation ID → Test Description**:
+```typescript
+// OpenAPI:
+"operationId": "listTables"
+
+// Test name:
+test.fixme('GET /api/tables should return array of tables', ...)
+```
+
+**HTTP Method + Path → Request**:
+```typescript
+// OpenAPI:
+"paths": {
+  "/api/tables/{tableId}/records": {
+    "post": { ... }
+  }
+}
+
+// Playwright:
+await page.request.post('/api/tables/1/records', { data: {...} })
+```
+
+**Request Schema → Test Data**:
+```typescript
+// OpenAPI:
+"requestBody": {
+  "content": {
+    "application/json": {
+      "schema": {
+        "type": "object",
+        "properties": {
+          "email": { "type": "string", "format": "email" }
+        },
+        "required": ["email"]
+      }
+    }
+  }
+}
+
+// Test data:
+const response = await page.request.post('/api/tables/1/records', {
+  data: { email: 'user@example.com' }  // ← Matches schema
+})
+```
+
+**Response Schema → Assertions**:
+```typescript
+// OpenAPI:
+"responses": {
+  "201": {
+    "content": {
+      "application/json": {
+        "schema": {
+          "type": "object",
+          "properties": {
+            "id": { "type": "integer" },
+            "email": { "type": "string" }
+          }
+        }
+      }
+    }
+  }
+}
+
+// Assertions:
+expect(response.status()).toBe(201)
+const body = await response.json()
+expect(body.id).toBeDefined()
+expect(body.email).toBe('user@example.com')
+```
+
+### Complete OpenAPI Translation Example
+
+**Given**: OpenAPI operation with x-user-stories
+
+```json
+{
+  "paths": {
+    "/api/tables": {
+      "get": {
+        "operationId": "listTables",
+        "summary": "List all tables",
+        "x-user-stories": [
+          "GIVEN user has tables configured WHEN GET /api/tables THEN should return 200 with array of tables",
+          "GIVEN user has no tables WHEN GET /api/tables THEN should return 200 with empty array"
+        ],
+        "responses": {
+          "200": {
+            "description": "List of tables",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": { "$ref": "#/components/schemas/Table" }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+```
+
+**Output**: `tests/api/tables.spec.ts`
+
+```typescript
+import { test, expect } from '../fixtures'
+
+/**
+ * E2E Tests for Tables API
+ *
+ * Source: docs/specifications/app/api.openapi.json
+ * Operations: GET /api/tables, POST /api/tables, etc.
+ */
+
+test.describe('API - Tables', () => {
+  // ============================================================================
+  // SPECIFICATION TESTS (@spec)
+  // One test per x-user-story from OpenAPI operations
+  // ============================================================================
+
+  test.fixme(
+    'GET /api/tables should return 200 with array of tables',
+    { tag: '@spec' },
+    async ({ page, startServerWithSchema }) => {
+      // GIVEN: user has tables configured
+      await startServerWithSchema({
+        name: 'test-app',
+        tables: [
+          { id: 1, name: 'users', fields: [] },
+          { id: 2, name: 'posts', fields: [] }
+        ]
+      })
+
+      // WHEN: GET /api/tables
+      const response = await page.request.get('/api/tables')
+
+      // THEN: should return 200 with array of tables
+      expect(response.status()).toBe(200)
+      const body = await response.json()
+      expect(Array.isArray(body)).toBe(true)
+      expect(body).toHaveLength(2)
+    }
+  )
+
+  test.fixme(
+    'GET /api/tables should return 200 with empty array when no tables',
+    { tag: '@spec' },
+    async ({ page, startServerWithSchema }) => {
+      // GIVEN: user has no tables
+      await startServerWithSchema({
+        name: 'test-app',
+        tables: []
+      })
+
+      // WHEN: GET /api/tables
+      const response = await page.request.get('/api/tables')
+
+      // THEN: should return 200 with empty array
+      expect(response.status()).toBe(200)
+      const body = await response.json()
+      expect(Array.isArray(body)).toBe(true)
+      expect(body).toHaveLength(0)
+    }
+  )
+
+  // ============================================================================
+  // REGRESSION TEST (@regression)
+  // ONE test consolidating all API operations
+  // ============================================================================
+
+  test.fixme(
+    'user can complete full tables API workflow',
+    { tag: '@regression' },
+    async ({ page, startServerWithSchema }) => {
+      // Consolidates all @spec tests into complete CRUD workflow
+      // (implementation similar to example above)
+    }
+  )
+})
+```
+
+### OpenAPI vs JSON Schema: Key Differences
+
+| Aspect | JSON Schema | OpenAPI |
+|--------|-------------|---------|
+| **Source File** | `docs/specifications/app/app.schema.json` + $refs | `docs/specifications/app/api.openapi.json` |
+| **Target Directory** | `tests/app/` | `tests/api/` |
+| **Navigation** | `properties.{property}` or `$ref` | `paths.{path}.{method}` |
+| **User Stories Location** | Property-level or referenced file | Operation-level (per HTTP method) |
+| **Test Type** | UI/App behavior validation | HTTP API contract validation |
+| **Fixture Usage** | `startServerWithSchema` | `startServerWithSchema` + `page.request` |
+| **Selectors** | `page.locator()`, `data-testid` | N/A (API tests) |
+| **Assertions** | UI state, visibility, text content | HTTP status, response body, headers |
+
+### Self-Verification for OpenAPI Translation
+
+Before completing API test translation, verify:
+
+**OpenAPI Navigation:**
+- [ ] OpenAPI file exists at `docs/specifications/app/api.openapi.json`
+- [ ] Path exists in `openapi.paths`
+- [ ] Method exists for path (get, post, patch, delete, etc.)
+- [ ] Operation has x-user-stories array
+- [ ] All stories use GIVEN-WHEN-THEN format
+
+**API Test Structure:**
+- [ ] Test file created in `tests/api/` directory
+- [ ] File name matches resource (tables.spec.ts, records.spec.ts)
+- [ ] Uses `import { test, expect } from '../fixtures'`
+- [ ] Uses `page.request.{method}()` for API calls
+- [ ] No UI interactions (`page.goto()`, `page.locator()`)
+
+**API Test Quality:**
+- [ ] One @spec test per x-user-story
+- [ ] EXACTLY ONE @regression test (consolidates all operations)
+- [ ] Zero or one @critical test (only for essential APIs)
+- [ ] All tests use `test.fixme()` (RED phase)
+- [ ] HTTP status codes validated
+- [ ] Response bodies validated against schema
+- [ ] Error cases tested (400, 404, etc.)
+
+**Example Checklist - GET /api/tables Operation:**
+```typescript
+// ✅ Navigation verified
+const operation = openapi.paths['/api/tables']['get']
+const userStories = operation['x-user-stories'] // 2 stories
+
+// ✅ Test file created
+// File: tests/api/tables.spec.ts
+
+// ✅ Imports correct
+import { test, expect } from '../fixtures'
+
+// ✅ API pattern used (not UI)
+await page.request.get('/api/tables') // ✅ Correct
+await page.goto('/_admin/tables')    // ❌ Wrong (API tests don't use UI)
+
+// ✅ Test categories correct
+// - 2 @spec tests (one per user story)
+// - 1 @regression test (consolidates all table operations)
+// - 0 @critical tests (tables API not critical)
+
+// ✅ All tests use test.fixme()
+test.fixme('GET /api/tables should...', { tag: '@spec' }, ...) // ✅
+
+// ✅ HTTP assertions
+expect(response.status()).toBe(200) // ✅
+const body = await response.json()  // ✅
+expect(Array.isArray(body)).toBe(true) // ✅
+```

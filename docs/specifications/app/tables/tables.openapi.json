@@ -1,19 +1,19 @@
 {
   "openapi": "3.1.0",
   "info": {
-    "title": "Omnera API",
+    "title": "Omnera Tables API",
     "version": "0.0.1",
-    "description": "REST API specification for Omnera application. This OpenAPI schema serves as the single source of truth for all API endpoints, request/response schemas, and API testing scenarios.",
+    "description": "REST API specification for table configuration and record management in Omnera. This OpenAPI schema defines endpoints for CRUD operations on tables and records.",
     "x-business-rules": [
-      "All API endpoints follow RESTful conventions (GET for read, POST for create, PATCH for update, DELETE for delete)",
-      "API responses use consistent JSON structure with typed schemas",
-      "Authentication is handled via Better Auth (not yet implemented)",
-      "All endpoints return appropriate HTTP status codes (200, 201, 400, 404, 500)"
+      "Tables define the schema for storing records with typed fields",
+      "Records must conform to their table's field definitions and validation rules",
+      "Primary keys are automatically managed (auto-increment or UUID)",
+      "Unique constraints and indexes are enforced at database level"
     ],
     "x-user-stories": [
-      "GIVEN developer integrates with API WHEN reading OpenAPI spec THEN all endpoints should be documented with examples",
-      "GIVEN API consumer makes request WHEN endpoint exists THEN response should match OpenAPI schema",
-      "GIVEN API consumer makes invalid request WHEN validation fails THEN response should include clear error message"
+      "GIVEN developer needs table schema WHEN GET /api/tables THEN should return all configured tables with field definitions",
+      "GIVEN user creates record WHEN POST /api/tables/{id}/records THEN record should be validated and persisted",
+      "GIVEN user updates record WHEN PATCH /api/tables/{id}/records/{recordId} THEN only provided fields should be updated"
     ]
   },
   "servers": [
@@ -23,44 +23,6 @@
     }
   ],
   "paths": {
-    "/health": {
-      "get": {
-        "summary": "Health check endpoint",
-        "description": "Returns server health status. Used by monitoring tools and E2E tests to verify server is running.",
-        "operationId": "healthCheck",
-        "tags": ["infrastructure"],
-        "x-user-stories": [
-          "GIVEN server is running WHEN GET /health THEN should return 200 OK",
-          "GIVEN server is starting WHEN GET /health THEN should return health status"
-        ],
-        "responses": {
-          "200": {
-            "description": "Server is healthy",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "status": {
-                      "type": "string",
-                      "enum": ["ok"],
-                      "example": "ok"
-                    }
-                  }
-                },
-                "examples": {
-                  "healthy": {
-                    "value": {
-                      "status": "ok"
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
     "/api/tables": {
       "get": {
         "summary": "List all tables",
@@ -756,10 +718,6 @@
     }
   },
   "tags": [
-    {
-      "name": "infrastructure",
-      "description": "Infrastructure endpoints (health, metrics)"
-    },
     {
       "name": "tables",
       "description": "Table configuration endpoints"

@@ -4,15 +4,20 @@ This directory contains End-to-End tests for the Omnera REST API, automatically 
 
 ## Source of Truth
 
-**API Specification**: `docs/specifications/app/api.openapi.json`
+**API Specifications**: Multi-file OpenAPI structure in `docs/specifications/app/`
 
-All API tests in this directory are generated from the OpenAPI schema, which serves as the single source of truth for:
+- **app.openapi.json**: Infrastructure endpoints (health, metrics)
+- **tables/tables.openapi.json**: Table configuration and record management
+
+All API tests in this directory are generated from these OpenAPI schemas, which serve as the single source of truth for:
 
 - API endpoints and operations
 - Request/response schemas
 - Validation rules
 - Error handling
 - User stories (x-user-stories in OpenAPI spec)
+
+Each domain has its own complete OpenAPI specification that can be used independently.
 
 ## Test Organization
 
@@ -54,7 +59,8 @@ API tests are **automatically generated** by the `e2e-test-translator` agent fro
 
 ```bash
 # Agent translates OpenAPI → API tests
-e2e-test-translator reads: docs/specifications/app/api.openapi.json
+e2e-test-translator reads: docs/specifications/app/app.openapi.json
+e2e-test-translator reads: docs/specifications/app/tables/tables.openapi.json
 e2e-test-translator writes: tests/api/*.spec.ts
 ```
 
@@ -140,13 +146,15 @@ bun test:e2e:critical   # @spec tests only
 
 ## Test Development Workflow
 
-1. **Design API** in `docs/specifications/app/api.openapi.json`
+1. **Design API** in domain-specific OpenAPI files:
+   - **Infrastructure endpoints**: `docs/specifications/app/app.openapi.json`
+   - **Tables/Records endpoints**: `docs/specifications/app/tables/tables.openapi.json`
    - Add operations with x-user-stories
    - Define request/response schemas
    - Include examples
 
 2. **Generate Tests** with `e2e-test-translator` agent
-   - Reads OpenAPI x-user-stories
+   - Reads OpenAPI x-user-stories from all domain specs
    - Generates tests/api/\*.spec.ts
    - All tests start as RED (test.fixme)
 

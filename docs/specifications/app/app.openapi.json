@@ -1,0 +1,101 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Omnera API",
+    "version": "0.0.1",
+    "description": "REST API specification for Omnera application. This is the main OpenAPI schema that serves as the orchestrator for all API domains.\n\n**Multi-File OpenAPI Structure**: This specification is split across multiple domain-specific files:\n- **app.openapi.json** (this file): Infrastructure endpoints (health, metrics)\n- **tables/tables.openapi.json**: Table configuration and record management endpoints\n\nEach domain file is a complete, standalone OpenAPI specification that can be used independently for testing and documentation generation.",
+    "x-business-rules": [
+      "All API endpoints follow RESTful conventions (GET for read, POST for create, PATCH for update, DELETE for delete)",
+      "API responses use consistent JSON structure with typed schemas",
+      "Authentication is handled via Better Auth (not yet implemented)",
+      "All endpoints return appropriate HTTP status codes (200, 201, 400, 404, 500)"
+    ],
+    "x-user-stories": [
+      "GIVEN developer integrates with API WHEN reading OpenAPI spec THEN all endpoints should be documented with examples",
+      "GIVEN API consumer makes request WHEN endpoint exists THEN response should match OpenAPI schema",
+      "GIVEN API consumer makes invalid request WHEN validation fails THEN response should include clear error message"
+    ],
+    "x-related-specs": [
+      {
+        "name": "Tables API",
+        "path": "./tables/tables.openapi.json",
+        "description": "Table configuration and record management endpoints (GET/POST/PATCH/DELETE /api/tables and /api/tables/{id}/records)"
+      }
+    ]
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3000",
+      "description": "Development server"
+    }
+  ],
+  "paths": {
+    "/health": {
+      "get": {
+        "summary": "Health check endpoint",
+        "description": "Returns server health status. Used by monitoring tools and E2E tests to verify server is running.",
+        "operationId": "healthCheck",
+        "tags": ["infrastructure"],
+        "x-user-stories": [
+          "GIVEN server is running WHEN GET /health THEN should return 200 OK",
+          "GIVEN server is starting WHEN GET /health THEN should return health status"
+        ],
+        "responses": {
+          "200": {
+            "description": "Server is healthy",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "enum": ["ok"],
+                      "example": "ok"
+                    }
+                  }
+                },
+                "examples": {
+                  "healthy": {
+                    "value": {
+                      "status": "ok"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Error": {
+        "type": "object",
+        "required": ["error"],
+        "properties": {
+          "error": {
+            "type": "string",
+            "description": "Human-readable error message"
+          },
+          "code": {
+            "type": "string",
+            "description": "Machine-readable error code"
+          },
+          "details": {
+            "type": "object",
+            "description": "Additional error details",
+            "additionalProperties": true
+          }
+        }
+      }
+    }
+  },
+  "tags": [
+    {
+      "name": "infrastructure",
+      "description": "Infrastructure endpoints (health, metrics)"
+    }
+  ]
+}

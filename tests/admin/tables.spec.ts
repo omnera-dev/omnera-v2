@@ -571,7 +571,7 @@ test.describe('Tables - Root Level CRUD Operations', () => {
 // ============================================================================
 // REGRESSION TEST (@regression)
 // ONE consolidated test covering complete workflow
-// Run during: CI/CD, pre-release (bun test:e2e:ci)
+// Run during: CI/CD, pre-release (bun test:e2e:regression)
 // ============================================================================
 
 test.fixme(

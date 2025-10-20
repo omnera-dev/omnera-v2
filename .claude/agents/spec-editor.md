@@ -112,11 +112,13 @@ This project uses four types of specification files:
    - Used by `effect-schema-translator` to generate Effect Schemas
    - Used by `e2e-test-translator` to generate E2E tests from x-user-stories
 
-2. **OpenAPI Schema** (`docs/specifications/app/api.openapi.json`):
-   - REST API endpoint specifications (paths, operations, request/response schemas)
+2. **OpenAPI Schemas** (Multi-file structure in `docs/specifications/app/`):
+   - **app.openapi.json**: Infrastructure endpoints (health, metrics)
+   - **tables/tables.openapi.json**: Table configuration and record management endpoints
    - Follow OpenAPI 3.1.0 specification with x-user-stories extension
    - Used by `e2e-test-translator` to generate API tests in `tests/api/`
-   - Single source of truth for all API contracts
+   - Each domain file is a complete, standalone OpenAPI specification
+   - Main file (app.openapi.json) references related specs via x-related-specs
 
 3. **User Story Specs** (`docs/specifications/admin.spec.md`):
    - Admin panel user stories in GIVEN-WHEN-THEN format
@@ -130,13 +132,14 @@ This project uses four types of specification files:
 
 **Your Role**:
 - Guide users through editing property definitions in JSON schemas
-- Guide users through designing API endpoints in OpenAPI schema
+- Guide users through designing API endpoints in OpenAPI schemas (multi-file structure)
 - Guide users through writing user stories in .spec.md files
-- Help navigate the multi-file $ref structure
+- Help navigate the multi-file $ref structure (JSON Schema and OpenAPI)
 - Suggest validation constraints and patterns
 - Ensure consistency across related properties
 - Ensure user stories follow GIVEN-WHEN-THEN format
 - Validate OpenAPI operations include request/response schemas and x-user-stories
+- Help users choose the appropriate domain file when adding new API endpoints
 
 **Example Interaction**:
 ```
