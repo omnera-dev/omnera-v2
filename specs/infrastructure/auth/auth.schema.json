@@ -1,0 +1,133 @@
+{
+  "$id": "auth.schema.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Authentication Infrastructure",
+  "description": "Authentication system specification including Better Auth integration, database persistence, session management, and OpenAPI documentation for auth endpoints.",
+  "type": "object",
+  "required": ["signUp", "signIn", "session", "database", "openapi"],
+  "properties": {
+    "signUp": {
+      "type": "object",
+      "description": "Sign-up endpoint creates new user accounts with email/password authentication",
+      "x-business-rules": [
+        "BR-AUTH-001: Sign-up endpoint (/api/auth/sign-up/email) must create user record in database",
+        "BR-AUTH-002: Sign-up must create active session and return session token",
+        "BR-AUTH-003: Sign-up must hash passwords securely before storage",
+        "BR-AUTH-004: Sign-up must enforce email uniqueness (reject duplicate emails with 4xx error)",
+        "BR-AUTH-005: Sign-up must validate required fields (email, password, name)",
+        "BR-AUTH-006: Sign-up must validate email format (RFC 5322)",
+        "BR-AUTH-007: Sign-up must return user data (id, email, name, timestamps) on success"
+      ],
+      "x-user-stories": [
+        "US-AUTH-001: As a new user, I want to create an account with email and password, so that I can access the application",
+        "US-AUTH-002: As a user, I want my password to be securely hashed, so that my credentials are protected",
+        "US-AUTH-003: As a system admin, I want duplicate emails to be rejected, so that each email is unique in the system",
+        "US-AUTH-004: As a user, I want immediate feedback if my email is already registered, so that I can use a different email"
+      ],
+      "x-linked-tests": [
+        "specs/infrastructure/auth/auth.spec.ts::should create user account and return session",
+        "specs/infrastructure/auth/auth.spec.ts::should reject duplicate email addresses",
+        "specs/infrastructure/auth/auth.spec.ts::should validate required fields and email format"
+      ]
+    },
+    "signIn": {
+      "type": "object",
+      "description": "Sign-in endpoint authenticates existing users with email/password credentials",
+      "x-business-rules": [
+        "BR-AUTH-008: Sign-in endpoint (/api/auth/sign-in/email) must authenticate users with valid credentials",
+        "BR-AUTH-009: Sign-in must create new session and return session token on success",
+        "BR-AUTH-010: Sign-in must set session cookie for browser authentication",
+        "BR-AUTH-011: Sign-in must reject incorrect password with 4xx authentication error",
+        "BR-AUTH-012: Sign-in must reject non-existent email with 4xx authentication error",
+        "BR-AUTH-013: Sign-in must return user data (id, email, name) on successful authentication"
+      ],
+      "x-user-stories": [
+        "US-AUTH-005: As a registered user, I want to sign in with my email and password, so that I can access my account",
+        "US-AUTH-006: As a user, I want clear error messages for incorrect credentials, so that I know what went wrong",
+        "US-AUTH-007: As a user, I want my session to be maintained across page reloads, so that I don't have to sign in repeatedly"
+      ],
+      "x-linked-tests": [
+        "specs/infrastructure/auth/auth.spec.ts::should authenticate user with valid credentials",
+        "specs/infrastructure/auth/auth.spec.ts::should reject incorrect password",
+        "specs/infrastructure/auth/auth.spec.ts::should reject non-existent email"
+      ]
+    },
+    "session": {
+      "type": "object",
+      "description": "Session management for retrieving current session and signing out",
+      "x-business-rules": [
+        "BR-AUTH-014: Session endpoint (/api/auth/get-session) must return current user session for authenticated users",
+        "BR-AUTH-015: Session endpoint must return null for unauthenticated users (not 4xx error)",
+        "BR-AUTH-016: Sign-out endpoint (/api/auth/sign-out) must invalidate active session",
+        "BR-AUTH-017: Sign-out must clear session cookie from browser",
+        "BR-AUTH-018: After sign-out, session check must return null user"
+      ],
+      "x-user-stories": [
+        "US-AUTH-008: As a signed-in user, I want to check my current session, so that I know if I'm authenticated",
+        "US-AUTH-009: As a user, I want to sign out, so that my session is terminated and my account is secure",
+        "US-AUTH-010: As a developer, I want session endpoint to return null (not error) when not authenticated, so that I can handle unauthenticated state gracefully"
+      ],
+      "x-linked-tests": [
+        "specs/infrastructure/auth/auth.spec.ts::should return current session for authenticated user",
+        "specs/infrastructure/auth/auth.spec.ts::should return null session when not authenticated",
+        "specs/infrastructure/auth/auth.spec.ts::should invalidate session on sign-out"
+      ]
+    },
+    "database": {
+      "type": "object",
+      "description": "Database persistence with Drizzle ORM for user and session data",
+      "x-business-rules": [
+        "BR-AUTH-019: User data must persist in database across sign-in/sign-out cycles",
+        "BR-AUTH-020: User record must include all required fields (id, email, name, emailVerified, createdAt, updatedAt)",
+        "BR-AUTH-021: User ID must remain consistent across authentication cycles (same user = same ID)",
+        "BR-AUTH-022: Database must enforce email uniqueness constraint at schema level"
+      ],
+      "x-user-stories": [
+        "US-AUTH-011: As a user, I want my account data to persist, so that I don't lose my information between sessions",
+        "US-AUTH-012: As a developer, I want database-level email uniqueness, so that duplicate emails are prevented even in edge cases"
+      ],
+      "x-linked-tests": [
+        "specs/infrastructure/auth/auth.spec.ts::should persist user data across authentication cycles",
+        "specs/infrastructure/auth/auth.spec.ts::should handle complete authentication workflow"
+      ]
+    },
+    "openapi": {
+      "type": "object",
+      "description": "OpenAPI schema endpoint for auth API documentation",
+      "x-business-rules": [
+        "BR-AUTH-023: OpenAPI endpoint (/api/auth/openapi.json) must return valid OpenAPI 3.x schema",
+        "BR-AUTH-024: OpenAPI schema must include all Better Auth endpoints (sign-up, sign-in, sign-out, get-session)",
+        "BR-AUTH-025: OpenAPI schema must define component schemas for User and Session types",
+        "BR-AUTH-026: OpenAPI schema must include required OpenAPI fields (openapi, info, paths)"
+      ],
+      "x-user-stories": [
+        "US-AUTH-013: As a developer, I want OpenAPI documentation for auth endpoints, so that I can integrate authentication in my application",
+        "US-AUTH-014: As an API consumer, I want to see available auth endpoints and their parameters, so that I know how to use the authentication system",
+        "US-AUTH-015: As a third-party developer, I want machine-readable API schemas, so that I can generate client code automatically"
+      ],
+      "x-linked-tests": [
+        "specs/infrastructure/auth/auth.spec.ts::should return valid OpenAPI schema for auth endpoints"
+      ]
+    }
+  },
+  "examples": [
+    {
+      "signUp": {
+        "endpoint": "/api/auth/sign-up/email",
+        "method": "POST",
+        "requiredFields": ["email", "password", "name"],
+        "responseFields": ["user", "token"]
+      },
+      "signIn": {
+        "endpoint": "/api/auth/sign-in/email",
+        "method": "POST",
+        "requiredFields": ["email", "password"],
+        "responseFields": ["user", "token"]
+      },
+      "session": {
+        "getEndpoint": "/api/auth/get-session",
+        "signOutEndpoint": "/api/auth/sign-out"
+      }
+    }
+  ]
+}

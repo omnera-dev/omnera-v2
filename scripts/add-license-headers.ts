@@ -14,7 +14,7 @@ const LICENSE_HEADER = ``
 const SHEBANG_PATTERN = /^#!\/usr\/bin\/env bun\n/
 
 const ROOT_DIR = join(import.meta.dir, '..')
-const INCLUDE_DIRS = ['src', 'scripts', 'tests']
+const INCLUDE_DIRS = ['src', 'scripts', 'specs']
 const EXCLUDE_PATTERNS = ['node_modules', '.git', 'dist', 'build', 'coverage', '.next', 'drizzle']
 
 function hasLicenseHeader(content: string): boolean {

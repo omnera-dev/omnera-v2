@@ -1288,7 +1288,7 @@ export default defineConfig([
 
   // Test files - Allow 'any' for testing flexibility
   {
-    files: ['**/*.test.{ts,tsx}', '**/*.spec.{ts,tsx}', 'tests/**/*.{ts,tsx}'],
+    files: ['**/*.test.{ts,tsx}', '**/*.spec.{ts,tsx}', 'specs/**/*.{ts,tsx}'],
     rules: {
       '@typescript-eslint/no-explicit-any': 'off', // Allow 'any' in tests for testing invalid inputs
       '@typescript-eslint/naming-convention': 'off', // Allow flexible naming in tests
@@ -1304,9 +1304,9 @@ export default defineConfig([
   },
 
   // E2E Tests - Must use Playwright (not Bun Test)
-  // Enforces testing strategy: E2E tests in tests/ directory use Playwright
+  // Enforces testing strategy: E2E tests in specs/ directory use Playwright
   {
-    files: ['tests/**/*.{ts,tsx}'],
+    files: ['specs/**/*.{ts,tsx}'],
     rules: {
       'no-restricted-imports': [
         'error',
@@ -1315,7 +1315,7 @@ export default defineConfig([
             {
               name: 'bun:test',
               message:
-                'E2E tests (in tests/ directory) must use Playwright, not Bun Test. Import from @playwright/test instead. See docs/architecture/testing-strategy.md',
+                'E2E tests (in specs/ directory) must use Playwright, not Bun Test. Import from @playwright/test instead. See docs/architecture/testing-strategy.md',
             },
           ],
         },
@@ -1363,7 +1363,7 @@ export default defineConfig([
   // Playwright E2E tests
   {
     ...playwright.configs['flat/recommended'],
-    files: ['tests/**'],
+    files: ['specs/**'],
     rules: {
       ...playwright.configs['flat/recommended'].rules,
       '@typescript-eslint/no-explicit-any': 'off', // Allow 'any' in E2E tests

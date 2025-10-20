@@ -101,7 +101,7 @@ git push origin main               # Triggers release ONLY with "release:" type
 - **One attribute per line** (`singleAttributePerLine: true`)
 
 ### Copyright Headers (REQUIRED for all .ts/.tsx files)
-- **All source files** (src/, scripts/, tests/) MUST include copyright header
+- **All source files** (src/, scripts/, specs/) MUST include copyright header
 - **Header format**:
 ```typescript
 /**
@@ -168,7 +168,8 @@ omnera-v2/
 │   ├── presentation/            # Presentation Layer - UI components, API routes
 │   ├── index.ts                 # Entry point
 │   └── **/*.test.ts             # Unit tests (co-located)
-├── tests/**/*.spec.ts           # E2E tests (Playwright)
+├── specs/**/*.spec.ts           # E2E tests (Playwright) + co-located schemas
+├── specs/**/*.schema.json       # Specification schemas (co-located with tests)
 ├── package.json
 ├── tsconfig.json
 ├── playwright.config.ts

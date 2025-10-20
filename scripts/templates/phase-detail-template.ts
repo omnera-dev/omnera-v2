@@ -180,9 +180,9 @@ export function generatePhaseDetailMarkdown(doc: PhaseDocumentation): string {
 
   // Related documentation
   md += `## Related Documentation\n\n`
-  md += `- **Vision Schema**: [\`docs/specifications/app/app.schema.json\`](../app/app.schema.json)\n`
+  md += `- **Specification Schema**: [\`specs/app.schema.json\`](../../specs/app.schema.json)\n`
   md += `- **Current Schema**: [\`schemas/${phase.version.replace('v', '')}/app.schema.json\`](../../schemas/${phase.version.replace('v', '')}/app.schema.json)\n`
-  md += `- **Testing Strategy**: [\`docs/architecture/testing-strategy.md\`](../../architecture/testing-strategy.md)\n`
+  md += `- **Testing Strategy**: [\`docs/architecture/testing-strategy.md\`](../../docs/architecture/testing-strategy.md)\n`
   md += `- **Main Roadmap**: [\`ROADMAP.md\`](../../../ROADMAP.md)\n`
 
   return md

@@ -57,7 +57,7 @@ test('should display version badge when app has version', async ({ page }) => {
 
 | Test Type      | Timing             | Purpose                                | Location           | Tool       |
 | -------------- | ------------------ | -------------------------------------- | ------------------ | ---------- |
-| **E2E Tests**  | BEFORE (TDD)       | Define feature completion criteria     | `tests/*.spec.ts`  | Playwright |
+| **E2E Tests**  | BEFORE (TDD)       | Define feature completion criteria     | `specs/*.spec.ts`  | Playwright |
 | **Unit Tests** | AFTER (Test-After) | Document implementation and edge cases | `src/**/*.test.ts` | Bun Test   |
 
 ### Test File Naming Convention
@@ -65,7 +65,7 @@ test('should display version badge when app has version', async ({ page }) => {
 | Test Type      | Extension  | Location               | Example                  |
 | -------------- | ---------- | ---------------------- | ------------------------ |
 | **Unit Tests** | `.test.ts` | Co-located with source | `src/calculator.test.ts` |
-| **E2E Tests**  | `.spec.ts` | `tests/` directory     | `tests/login.spec.ts`    |
+| **E2E Tests**  | `.spec.ts` | `specs/` directory     | `specs/login.spec.ts`    |
 
 ### Test Execution Commands
 
@@ -152,8 +152,8 @@ For detailed information, import the relevant documentation file:
 
 **Test Tool Usage** (enforced via `no-restricted-imports` in `eslint.config.ts`):
 
-- **E2E tests in `tests/` must use Playwright** (not Bun Test)
-  - Restricts: `bun:test` imports in `tests/**/*.{ts,tsx}`
+- **E2E tests in `specs/` must use Playwright** (not Bun Test)
+  - Restricts: `bun:test` imports in `specs/**/*.{ts,tsx}`
   - Error: "E2E tests must use Playwright"
 
 - **Unit tests in `src/**/\*.test.ts` must use Bun Test\*\* (not Playwright)

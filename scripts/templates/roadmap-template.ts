@@ -38,8 +38,8 @@ export function generateRoadmapMarkdown(data: RoadmapData): string {
   }
 
   // Vision state
-  md += `### Vision State (v1.0.0)\n\n`
-  md += `- **Schema**: \`docs/specifications/app/app.schema.json\`\n`
+  md += `### Specification State (v1.0.0)\n\n`
+  md += `- **Schema**: \`specs/app.schema.json\`\n`
   md += `- **Total Properties**: ${stats.totalProperties} (${properties.map((p) => p.name).join(', ')})\n`
   md += `- **Gap**: **~${100 - stats.overallCompletion}%** of features not yet implemented\n\n`
 

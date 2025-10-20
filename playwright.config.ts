@@ -12,9 +12,9 @@ import { defineConfig, devices } from '@playwright/test'
  * See https://playwright.dev/docs/test-configuration.
  */
 export default defineConfig({
-  testDir: './tests',
+  testDir: './specs',
   /* Global setup for database testcontainers (teardown handled by setup return value) */
-  globalSetup: './tests/global-setup.ts',
+  globalSetup: './specs/global-setup.ts',
   /* Run tests in files in parallel */
   fullyParallel: true,
   /* Fail the build on CI if you accidentally left test.only in the source code. */

@@ -9,11 +9,11 @@
 /**
  * Roadmap Generation Script
  *
- * Analyzes schema differences between current and vision schemas,
+ * Analyzes schema differences between current and specification schemas,
  * generates ROADMAP.md with progress tracking for all properties.
  *
  * Detailed specifications (What/Why/Who-When) are maintained in
- * docs/specifications/app/app.schema.json using the Triple-Documentation Pattern:
+ * specs/app.schema.json using the Triple-Documentation Pattern:
  * - description, examples (What)
  * - x-business-rules (Why)
  * - x-user-stories (Who/When)
@@ -23,6 +23,7 @@
 
 import { existsSync as _existsSync } from 'node:fs'
 import { dirname } from 'node:path'
+import { compareSchemas as compareSchemasDiff } from './compare-schemas'
 import { generateRoadmapMarkdown } from './templates/roadmap-template'
 import { getImplementationStatus } from './utils/implementation-checker'
 import {
@@ -37,9 +38,9 @@ import type { JSONSchema, RoadmapData, TrackedUserStory } from './types/roadmap'
 
 // Paths
 const CURRENT_SCHEMA_PATH = 'schemas/0.0.1/app.schema.json'
-const VISION_SCHEMA_PATH = 'docs/specifications/app/app.schema.json'
+const SPEC_SCHEMA_PATH = 'specs/app.schema.json'
 const ROADMAP_OUTPUT_PATH = 'ROADMAP.md'
-const TESTS_DIR = 'tests'
+const SPECS_DIR = 'specs'
 
 /**
  * Main execution
@@ -47,38 +48,48 @@ const TESTS_DIR = 'tests'
 async function main() {
   console.log('📊 Analyzing schemas...')
   console.log(`   Current: ${CURRENT_SCHEMA_PATH}`)
-  console.log(`   Vision:  ${VISION_SCHEMA_PATH}`)
+  console.log(`   Spec:    ${SPEC_SCHEMA_PATH}`)
   console.log()
 
   // Load schemas
   const currentSchema = await loadSchema(CURRENT_SCHEMA_PATH)
-  let visionSchema = await loadSchema(VISION_SCHEMA_PATH)
+  let specSchema = await loadSchema(SPEC_SCHEMA_PATH)
 
-  // Resolve $ref in vision schema to load all nested schemas
-  console.log(`📚 Resolving $ref in vision schema...`)
-  const visionSchemaDir = dirname(VISION_SCHEMA_PATH)
-  visionSchema = (await resolveSchemaRefs(visionSchema, visionSchemaDir)) as JSONSchema
-  const totalPropertiesInVision = countAllProperties(visionSchema)
-  console.log(`   Resolved all $ref, found ~${totalPropertiesInVision} total properties`)
+  // Resolve $ref in spec schema to load all nested schemas
+  console.log(`📚 Resolving $ref in spec schema...`)
+  const specSchemaDir = dirname(SPEC_SCHEMA_PATH)
+  specSchema = (await resolveSchemaRefs(specSchema, specSchemaDir)) as JSONSchema
+  const totalPropertiesInSpec = countAllProperties(specSchema)
+  console.log(`   Resolved all $ref, found ~${totalPropertiesInSpec} total properties`)
+  console.log()
+
+  // Deep diff comparison between spec and implementation
+  console.log(`🔍 Performing deep schema comparison...`)
+  const schemaDiff = await compareSchemasDiff()
+  console.log(`   Missing properties: ${schemaDiff.diff.missing.length}`)
+  console.log(`   Mismatched properties: ${schemaDiff.diff.mismatched.length}`)
+  console.log(`   Extra properties: ${schemaDiff.diff.extra.length}`)
+  console.log(`   Coverage: ${schemaDiff.metrics.coverage.percent}%`)
+  console.log(`   Accuracy: ${schemaDiff.metrics.accuracy.percent}%`)
   console.log()
 
   // Compare schemas (top-level for main ROADMAP.md)
-  const topLevelProperties = compareSchemas(currentSchema, visionSchema)
+  const topLevelProperties = compareSchemas(currentSchema, specSchema)
 
   // Extract ALL properties recursively (including nested ones)
-  const allProperties = extractAllPropertiesRecursively(currentSchema, visionSchema)
+  const allProperties = extractAllPropertiesRecursively(currentSchema, specSchema)
 
-  // Extract ALL user stories from vision schema
+  // Extract ALL user stories from spec schema
   console.log(`📖 Extracting user stories from schema...`)
-  const userStories = extractAllUserStories(visionSchema)
+  const userStories = extractAllUserStories(specSchema)
   const userStoryStats = calculateUserStoryStats(userStories)
   console.log(`   Found ${userStoryStats.totalStories} user stories`)
   console.log(`   Across ${userStoryStats.propertiesWithStories} properties`)
   console.log()
 
   // Scan all test files
-  console.log(`🧪 Scanning test files...`)
-  const testScanResult = scanAllTests(TESTS_DIR)
+  console.log(`🧪 Scanning spec files...`)
+  const testScanResult = scanAllTests(SPECS_DIR)
   console.log(`   Found ${testScanResult.totalTests} implemented tests`)
   console.log(
     `   @spec: ${testScanResult.testsByTag.get('@spec') || 0}, @regression: ${testScanResult.testsByTag.get('@regression') || 0}, @spec: ${testScanResult.testsByTag.get('@spec') || 0}`
@@ -202,9 +213,7 @@ async function main() {
   if (nextProperty) {
     console.log(`📋 Next Steps:`)
     console.log(`   Work on: ${nextProperty.name}`)
-    console.log(
-      `   Read: docs/specifications/app/app.schema.json (properties.${nextProperty.name})`
-    )
+    console.log(`   Read: specs/app.schema.json (properties.${nextProperty.name})`)
     console.log(`   Complexity: ${nextProperty.complexity} points`)
   }
 }

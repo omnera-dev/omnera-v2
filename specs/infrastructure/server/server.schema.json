@@ -1,0 +1,204 @@
+{
+  "$id": "server.schema.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Server Infrastructure",
+  "description": "Hono server infrastructure specification including health checks, static assets (CSS), homepage rendering, OpenAPI documentation, Scalar API UI, and error handling (404, 500).",
+  "type": "object",
+  "required": ["health", "css", "homepage", "openapi", "errorHandling"],
+  "properties": {
+    "health": {
+      "type": "object",
+      "description": "Health check endpoint for monitoring, load balancers, and deployment verification",
+      "x-business-rules": [
+        "BR-SRV-001: Health endpoint (/api/health) must return 200 OK status",
+        "BR-SRV-002: Health response must include JSON content-type header",
+        "BR-SRV-003: Health response must include 'status' field with value 'ok'",
+        "BR-SRV-004: Health response must include 'timestamp' field in ISO 8601 format",
+        "BR-SRV-005: Health timestamp must be current (within last 5 seconds, not stale cached value)",
+        "BR-SRV-006: Health response must include 'app' object with 'name' property from schema",
+        "BR-SRV-007: Health endpoint must handle scoped package names (preserve @ and / characters)"
+      ],
+      "x-user-stories": [
+        "US-SRV-001: As a DevOps engineer, I want a health check endpoint, so that I can monitor service availability",
+        "US-SRV-002: As a load balancer, I want to verify service health, so that I route traffic only to healthy instances",
+        "US-SRV-003: As a monitoring system, I want timestamp in health response, so that I can detect stale responses",
+        "US-SRV-004: As a deployment pipeline, I want to verify service started correctly, so that I confirm deployment success"
+      ],
+      "x-linked-tests": [
+        "specs/infrastructure/server/server.spec.ts::should return 200 OK status",
+        "specs/infrastructure/server/server.spec.ts::should return JSON with status, timestamp, and app name",
+        "specs/infrastructure/server/server.spec.ts::should return current timestamp",
+        "specs/infrastructure/server/server.spec.ts::should handle scoped package names in health response"
+      ],
+      "properties": {
+        "endpoint": {
+          "type": "string",
+          "const": "/api/health",
+          "description": "Health check endpoint path"
+        },
+        "method": {
+          "type": "string",
+          "const": "GET",
+          "description": "HTTP method"
+        },
+        "responseStatus": {
+          "type": "integer",
+          "const": 200,
+          "description": "Expected HTTP status code"
+        },
+        "responseSchema": {
+          "type": "object",
+          "required": ["status", "timestamp", "app"],
+          "properties": {
+            "status": {
+              "type": "string",
+              "const": "ok"
+            },
+            "timestamp": {
+              "type": "string",
+              "format": "date-time",
+              "description": "ISO 8601 timestamp"
+            },
+            "app": {
+              "type": "object",
+              "required": ["name"],
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "description": "Application name from schema"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "css": {
+      "type": "object",
+      "description": "CSS endpoint serving compiled Tailwind CSS with caching",
+      "x-business-rules": [
+        "BR-SRV-008: CSS endpoint (/assets/output.css) must return 200 OK status",
+        "BR-SRV-009: CSS response must include text/css content-type header",
+        "BR-SRV-010: CSS response must contain valid compiled Tailwind CSS (includes 'tailwindcss' and '@layer' markers)",
+        "BR-SRV-011: CSS response must be substantial (>1000 characters, not empty or minimal)",
+        "BR-SRV-012: CSS response must include Cache-Control header: 'public, max-age=3600' (1 hour)",
+        "BR-SRV-013: CSS compilation errors must return 500 status with CSS error comment (not HTML error page)"
+      ],
+      "x-user-stories": [
+        "US-SRV-005: As a user, I want CSS to load quickly, so that page styling appears immediately",
+        "US-SRV-006: As a browser, I want CSS cached for 1 hour, so that I don't re-download on every page load",
+        "US-SRV-007: As a developer, I want Tailwind CSS compiled on-demand, so that my styles are always up-to-date",
+        "US-SRV-008: As a user, I want page layout to remain intact even if CSS fails, so that content is still readable"
+      ],
+      "x-linked-tests": [
+        "specs/infrastructure/server/server.spec.ts::should return 200 OK with CSS content",
+        "specs/infrastructure/server/server.spec.ts::should return compiled Tailwind CSS",
+        "specs/infrastructure/server/server.spec.ts::should set cache headers for 1 hour",
+        "specs/infrastructure/server/server.spec.ts::should handle CSS compilation errors with appropriate response"
+      ]
+    },
+    "homepage": {
+      "type": "object",
+      "description": "Homepage rendering with React SSR and app configuration",
+      "x-business-rules": [
+        "BR-SRV-014: Homepage (/) must return 200 OK status",
+        "BR-SRV-015: Homepage response must include text/html content-type header",
+        "BR-SRV-016: Homepage must render app name in h1 heading element",
+        "BR-SRV-017: Homepage must have valid HTML5 document structure (html, head, body elements)",
+        "BR-SRV-018: Homepage title must include app name with format: '{app-name} - Powered by Omnera'"
+      ],
+      "x-user-stories": [
+        "US-SRV-009: As a user, I want to see the app name on homepage, so that I know which application I'm using",
+        "US-SRV-010: As a browser, I want valid HTML structure, so that I can render the page correctly",
+        "US-SRV-011: As a user, I want the page title to show app name, so that I can identify the tab"
+      ],
+      "x-linked-tests": [
+        "specs/infrastructure/server/server.spec.ts::should return 200 OK with HTML content",
+        "specs/infrastructure/server/server.spec.ts::should render app name in h1 heading",
+        "specs/infrastructure/server/server.spec.ts::should have valid HTML document structure"
+      ]
+    },
+    "openapi": {
+      "type": "object",
+      "description": "OpenAPI documentation endpoints (JSON schema + Scalar UI)",
+      "x-business-rules": [
+        "BR-SRV-019: OpenAPI JSON endpoint (/api/openapi.json) must return 200 OK with application/json content-type",
+        "BR-SRV-020: OpenAPI JSON must be valid OpenAPI 3.1.0 specification",
+        "BR-SRV-021: OpenAPI JSON must include required fields (openapi, info, servers, paths)",
+        "BR-SRV-022: OpenAPI JSON must include health endpoint (/api/health) in paths",
+        "BR-SRV-023: OpenAPI JSON must include development server in servers array (localhost URL)",
+        "BR-SRV-024: OpenAPI JSON must include tags array with at least 'infrastructure' tag",
+        "BR-SRV-025: Scalar UI endpoint (/api/scalar) must return 200 OK with text/html content-type",
+        "BR-SRV-026: Scalar UI must render API documentation interface",
+        "BR-SRV-027: Scalar UI must reference OpenAPI spec URL (/api/openapi.json) in HTML"
+      ],
+      "x-user-stories": [
+        "US-SRV-012: As a developer, I want machine-readable OpenAPI spec, so that I can generate client code",
+        "US-SRV-013: As an API consumer, I want interactive API documentation, so that I can explore endpoints visually",
+        "US-SRV-014: As a developer, I want to see all available endpoints, so that I know what the API offers",
+        "US-SRV-015: As a third-party integrator, I want to try API endpoints, so that I can test integration before coding"
+      ],
+      "x-linked-tests": [
+        "specs/infrastructure/server/server.spec.ts::should return 200 OK with JSON content",
+        "specs/infrastructure/server/server.spec.ts::should return valid OpenAPI 3.1.0 specification",
+        "specs/infrastructure/server/server.spec.ts::should include health endpoint in paths",
+        "specs/infrastructure/server/server.spec.ts::should include development server in servers array",
+        "specs/infrastructure/server/server.spec.ts::should include tags for endpoint categorization",
+        "specs/infrastructure/server/server.spec.ts::should return 200 OK with HTML content (Scalar)",
+        "specs/infrastructure/server/server.spec.ts::should render Scalar API documentation UI",
+        "specs/infrastructure/server/server.spec.ts::should load OpenAPI specification URL"
+      ]
+    },
+    "errorHandling": {
+      "type": "object",
+      "description": "Error page rendering for 404 Not Found and 500 Internal Server Error",
+      "x-business-rules": [
+        "BR-SRV-028: Unknown routes must return 404 Not Found status",
+        "BR-SRV-029: 404 page must display custom error page with 'Page not found' message",
+        "BR-SRV-030: 404 page must include visible h1 heading element",
+        "BR-SRV-031: All unknown routes must consistently return 404 (not 500 or other errors)",
+        "BR-SRV-032: Server errors must return 500 Internal Server Error status",
+        "BR-SRV-033: 500 error page must display custom error page with 'Internal Server Error' message",
+        "BR-SRV-034: 500 error page must include visible h1 heading element",
+        "BR-SRV-035: Server must maintain availability under normal operation (consecutive requests succeed)"
+      ],
+      "x-user-stories": [
+        "US-SRV-016: As a user, I want friendly 404 pages, so that I understand the page doesn't exist",
+        "US-SRV-017: As a user, I want clear error messages, so that I know what went wrong",
+        "US-SRV-018: As a developer, I want consistent error handling, so that I can rely on predictable responses",
+        "US-SRV-019: As a user, I want the service to remain available, so that temporary issues don't block my work"
+      ],
+      "x-linked-tests": [
+        "specs/infrastructure/server/server.spec.ts::should return 404 status for unknown routes",
+        "specs/infrastructure/server/server.spec.ts::should render custom 404 page",
+        "specs/infrastructure/server/server.spec.ts::should return 404 for any unknown route",
+        "specs/infrastructure/server/server.spec.ts::should return 500 status and render custom error page",
+        "specs/infrastructure/server/server.spec.ts::should maintain server availability"
+      ]
+    }
+  },
+  "examples": [
+    {
+      "health": {
+        "endpoint": "/api/health",
+        "response": {
+          "status": "ok",
+          "timestamp": "2025-01-20T12:00:00.000Z",
+          "app": { "name": "my-app" }
+        }
+      },
+      "css": {
+        "endpoint": "/assets/output.css",
+        "cacheControl": "public, max-age=3600"
+      },
+      "homepage": {
+        "endpoint": "/",
+        "title": "my-app - Powered by Omnera"
+      },
+      "openapi": {
+        "jsonEndpoint": "/api/openapi.json",
+        "scalarEndpoint": "/api/scalar"
+      }
+    }
+  ]
+}
