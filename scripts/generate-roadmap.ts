@@ -13,7 +13,7 @@
  * generates ROADMAP.md with progress tracking for all properties.
  *
  * Detailed specifications (What/Why/Who-When) are maintained in
- * docs/specifications/specs.schema.json using the Triple-Documentation Pattern:
+ * docs/specifications/app/app.schema.json using the Triple-Documentation Pattern:
  * - description, examples (What)
  * - x-business-rules (Why)
  * - x-user-stories (Who/When)
@@ -37,7 +37,7 @@ import type { JSONSchema, RoadmapData, TrackedUserStory } from './types/roadmap'
 
 // Paths
 const CURRENT_SCHEMA_PATH = 'schemas/0.0.1/app.schema.json'
-const VISION_SCHEMA_PATH = 'docs/specifications/specs.schema.json'
+const VISION_SCHEMA_PATH = 'docs/specifications/app/app.schema.json'
 const ROADMAP_OUTPUT_PATH = 'ROADMAP.md'
 const TESTS_DIR = 'tests'
 
@@ -202,7 +202,9 @@ async function main() {
   if (nextProperty) {
     console.log(`📋 Next Steps:`)
     console.log(`   Work on: ${nextProperty.name}`)
-    console.log(`   Read: docs/specifications/specs.schema.json (properties.${nextProperty.name})`)
+    console.log(
+      `   Read: docs/specifications/app/app.schema.json (properties.${nextProperty.name})`
+    )
     console.log(`   Complexity: ${nextProperty.complexity} points`)
   }
 }

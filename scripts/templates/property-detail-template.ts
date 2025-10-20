@@ -201,7 +201,7 @@ export function generatePropertyDetailMarkdown(doc: PropertyDocumentation): stri
 
   // Related documentation
   md += `## Related Documentation\n\n`
-  md += `- **Vision Schema**: [\`docs/specifications/specs.schema.json\`](../specs.schema.json)\n`
+  md += `- **Vision Schema**: [\`docs/specifications/app/app.schema.json\`](../app/app.schema.json)\n`
   md += `- **Current Schema**: [\`schemas/0.0.1/app.schema.json\`](../../schemas/0.0.1/app.schema.json)\n`
   md += `- **Testing Strategy**: [\`docs/architecture/testing-strategy.md\`](../../architecture/testing-strategy.md)\n`
   md += `- **Main Roadmap**: [\`ROADMAP.md\`](../../../ROADMAP.md)\n`

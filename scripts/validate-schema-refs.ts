@@ -14,8 +14,8 @@
  *
  * Usage:
  *   bun run scripts/validate-schema-refs.ts <schema-file>
- *   bun run scripts/validate-schema-refs.ts docs/specifications/specs.schema.json
- *   bun run scripts/validate-schema-refs.ts docs/specifications/schemas/
+ *   bun run scripts/validate-schema-refs.ts docs/specifications/app/app.schema.json
+ *   bun run scripts/validate-schema-refs.ts docs/specifications/app/
  */
 
 import { readFileSync, existsSync, readdirSync, statSync } from 'node:fs'
@@ -261,10 +261,10 @@ function main() {
     log('  bun run scripts/validate-schema-refs.ts <schema-file-or-directory>', colors.gray)
     log('\nExamples:', colors.cyan)
     log(
-      '  bun run scripts/validate-schema-refs.ts docs/specifications/specs.schema.json',
+      '  bun run scripts/validate-schema-refs.ts docs/specifications/app/app.schema.json',
       colors.gray
     )
-    log('  bun run scripts/validate-schema-refs.ts docs/specifications/schemas/', colors.gray)
+    log('  bun run scripts/validate-schema-refs.ts docs/specifications/app/', colors.gray)
     process.exit(1)
   }
 

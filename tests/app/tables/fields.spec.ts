@@ -11,7 +11,7 @@ import { test, expect } from '../../fixtures'
  * E2E Tests for Tables - Property: fields
  *
  * Test Organization:
- * 1. @spec tests - Granular specification tests (2 tests)
+ * 1. @spec tests - Granular specification tests (3 tests)
  * 2. @regression test - ONE consolidated workflow test
  * 3. @critical test - Essential fields validation
  *
@@ -25,10 +25,10 @@ test.describe('Tables - Property: fields', () => {
   // ============================================================================
 
   test.fixme(
-    'should accept fields array with at least 1 item',
+    'should return table with correct fields via API',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // GIVEN: User provides fields with at least 1 items
+      // GIVEN: User provides fields with at least 1 item
       await startServerWithSchema({
         name: 'test-app',
         description: 'Test application',
@@ -42,11 +42,48 @@ test.describe('Tables - Property: fields', () => {
         ],
       })
 
-      // WHEN: Validating input
-      await page.goto('/_admin/tables/1')
+      // WHEN: Retrieving table via API
+      const response = await page.request.get('/api/tables/1')
 
-      // THEN: Array should be accepted
-      await expect(page.locator('[data-testid="field-item"]')).toHaveCount(1)
+      // THEN: Fields array should be returned correctly
+      expect(response.status()).toBe(200)
+      const body = await response.json()
+      expect(body.fields).toHaveLength(1)
+      expect(body.fields[0].name).toBe('email')
+      expect(body.fields[0].type).toBe('email')
+    }
+  )
+
+  test.fixme(
+    'should create columns in database for each field',
+    { tag: '@spec' },
+    async ({ startServerWithSchema, executeQuery }) => {
+      // GIVEN: User provides fields with at least 1 item
+      await startServerWithSchema({
+        name: 'test-app',
+        description: 'Test application',
+        version: '1.0.0',
+        tables: [
+          {
+            id: 1,
+            name: 'users',
+            fields: [{ id: 1, name: 'email', type: 'email' }],
+          },
+        ],
+      })
+
+      // WHEN: Querying database for columns
+      const result = await executeQuery(`
+        SELECT column_name, data_type
+        FROM information_schema.columns
+        WHERE table_schema = 'public'
+        AND table_name = 'users'
+        AND column_name = 'email'
+      `)
+
+      // THEN: Column should exist in database
+      expect(result.rows.length).toBe(1)
+      expect(result.rows[0].column_name).toBe('email')
     }
   )
 
@@ -90,7 +127,7 @@ test.describe('Tables - Property: fields', () => {
 test.fixme(
   'user can configure and manage table fields',
   { tag: '@regression' },
-  async ({ page, startServerWithSchema }) => {
+  async ({ page, startServerWithSchema, executeQuery }) => {
     // GIVEN: A table with multiple fields
     await startServerWithSchema({
       name: 'test-app',
@@ -111,13 +148,7 @@ test.fixme(
       ],
     })
 
-    // WHEN: User views table configuration
-    await page.goto('/_admin/tables/1')
-
-    // THEN: All fields should be visible
-    await expect(page.locator('[data-testid="field-item"]')).toHaveCount(5)
-
-    // WHEN: User retrieves table via API
+    // WHEN: Retrieving table via API
     const response = await page.request.get('/api/tables/1')
     const table = await response.json()
 
@@ -129,19 +160,34 @@ test.fixme(
     expect(table.fields[3].name).toBe('age')
     expect(table.fields[4].name).toBe('bio')
 
-    // WHEN: User creates a record with all fields
-    await page.locator('[data-testid="create-record-button"]').click()
-    await page.locator('[data-testid="email-field"]').fill('complete@example.com')
-    await page.locator('[data-testid="first_name-field"]').fill('John')
-    await page.locator('[data-testid="last_name-field"]').fill('Doe')
-    await page.locator('[data-testid="age-field"]').fill('30')
-    await page.locator('[data-testid="bio-field"]').fill('A software developer')
-    await page.locator('[data-testid="submit-button"]').click()
+    // WHEN: Querying database for columns
+    const dbResult = await executeQuery(`
+      SELECT column_name
+      FROM information_schema.columns
+      WHERE table_schema = 'public'
+      AND table_name = 'users'
+      AND column_name IN ('email', 'first_name', 'last_name', 'age', 'bio')
+      ORDER BY ordinal_position
+    `)
 
-    // THEN: Record should be created with all field values
-    await expect(page.locator('text=Record created')).toBeVisible()
+    // THEN: All columns should exist in database
+    expect(dbResult.rows.length).toBe(5)
 
-    // WHEN: User retrieves the record
+    // WHEN: Creating a record with all fields via API
+    const createResponse = await page.request.post('/api/tables/1/records', {
+      data: {
+        email: 'complete@example.com',
+        first_name: 'John',
+        last_name: 'Doe',
+        age: 30,
+        bio: 'A software developer',
+      },
+    })
+
+    // THEN: Record should be created successfully
+    expect(createResponse.status()).toBe(201)
+
+    // WHEN: Retrieving the record via API
     const recordResponse = await page.request.get('/api/tables/1/records/1')
     const record = await recordResponse.json()
 

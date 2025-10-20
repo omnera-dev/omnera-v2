@@ -282,13 +282,13 @@ describe('generate-roadmap', () => {
   describe('file paths and constants', () => {
     test('uses correct default paths', () => {
       const CURRENT_SCHEMA_PATH = 'schemas/0.0.1/app.schema.json'
-      const VISION_SCHEMA_PATH = 'docs/specifications/specs.schema.json'
+      const VISION_SCHEMA_PATH = 'docs/specifications/app/app.schema.json'
       const ROADMAP_OUTPUT_PATH = 'ROADMAP.md'
       const ROADMAP_DIR = 'docs/specifications/roadmap'
 
       expect(CURRENT_SCHEMA_PATH).toContain('schemas')
       expect(CURRENT_SCHEMA_PATH).toContain('app.schema.json')
-      expect(VISION_SCHEMA_PATH).toContain('specs.schema.json')
+      expect(VISION_SCHEMA_PATH).toContain('app/app.schema.json')
       expect(ROADMAP_OUTPUT_PATH).toBe('ROADMAP.md')
       expect(ROADMAP_DIR).toContain('roadmap')
     })

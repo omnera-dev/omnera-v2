@@ -201,6 +201,7 @@ async function stopServer(serverProcess: ChildProcess): Promise<void> {
  */
 type ServerFixtures = {
   startServerWithSchema: (appSchema: App, options?: { useDatabase?: boolean }) => Promise<void>
+  executeQuery: (sql: string) => Promise<{ rows: any[]; rowCount: number }>
 }
 
 /**
@@ -222,8 +223,8 @@ export const test = base.extend<ServerFixtures>({
     await use(async (appSchema: App, options?: { useDatabase?: boolean }) => {
       let databaseUrl: string | undefined = undefined
 
-      // Only duplicate database if requested
-      if (options?.useDatabase) {
+      // Enable database by default (can be disabled with useDatabase: false)
+      if (options?.useDatabase !== false) {
         const templateManager = await getTemplateManager()
         testDbName = generateTestDatabaseName(testInfo)
         databaseUrl = await templateManager.duplicateTemplate(testDbName)
@@ -289,6 +290,42 @@ export const test = base.extend<ServerFixtures>({
     if (testDbName) {
       const templateManager = await getTemplateManager()
       await templateManager.dropTestDatabase(testDbName)
+    }
+  },
+
+  // Execute SQL query fixture: Run raw SQL queries against the test database
+  executeQuery: async ({}, use, testInfo) => {
+    let client: any = null
+
+    await use(async (query: string) => {
+      const connectionUrl = process.env.TEST_DATABASE_CONTAINER_URL
+      if (!connectionUrl) {
+        throw new Error('Database not initialized')
+      }
+
+      // Import pg module
+      const { Client } = await import('pg')
+
+      // Generate test database name to connect to the specific test database
+      const testDbName = generateTestDatabaseName(testInfo)
+
+      // Parse the connection URL and replace the database name
+      const url = new URL(connectionUrl)
+      const pathParts = url.pathname.split('/')
+      pathParts[1] = testDbName // Replace database name
+      url.pathname = pathParts.join('/')
+
+      // Create pg client for the test database
+      client = new Client({ connectionString: url.toString() })
+      await client.connect()
+
+      const result = await client.query(query)
+      return { rows: result.rows, rowCount: result.rowCount || 0 }
+    })
+
+    // Cleanup: Close connection
+    if (client) {
+      await client.end()
     }
   },
 })

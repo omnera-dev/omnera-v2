@@ -11,7 +11,7 @@ import { test, expect } from '../../fixtures'
  * E2E Tests for Tables - Property: uniqueConstraints
  *
  * Test Organization:
- * 1. @spec tests - Granular specification tests (8 tests)
+ * 1. @spec tests - Granular specification tests (13 tests)
  * 2. @regression test - ONE consolidated workflow test
  * 3. @critical test - Essential unique constraint enforcement
  *
@@ -26,7 +26,7 @@ test.describe('Tables - Property: uniqueConstraints', () => {
 
   // uniqueConstraints[].name tests (lines 281-285)
   test.fixme(
-    'should accept uniqueConstraints name matching pattern',
+    'should return uniqueConstraints name via API',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: User provides name matching pattern
@@ -47,11 +47,50 @@ test.describe('Tables - Property: uniqueConstraints', () => {
         ],
       })
 
-      // WHEN: Validating input
-      await page.goto('/_admin/tables/1/settings')
+      // WHEN: Retrieving configuration via API
+      const response = await page.request.get('/api/tables/1')
 
-      // THEN: Value should be accepted
-      await expect(page.locator('text=uq_users_email_tenant')).toBeVisible()
+      // THEN: Value should be returned correctly
+      const body = await response.json()
+      expect(body.uniqueConstraints[0].name).toBe('uq_users_email_tenant')
+    }
+  )
+
+  test.fixme(
+    'should create unique constraint in database with correct name',
+    { tag: '@spec' },
+    async ({ startServerWithSchema, executeQuery }) => {
+      // GIVEN: User provides name matching pattern
+      await startServerWithSchema({
+        name: 'test-app',
+        description: 'Test application',
+        version: '1.0.0',
+        tables: [
+          {
+            id: 1,
+            name: 'users',
+            fields: [
+              { id: 1, name: 'email', type: 'email' },
+              { id: 2, name: 'tenant_id', type: 'integer' },
+            ],
+            uniqueConstraints: [{ name: 'uq_users_email_tenant', fields: ['email', 'tenant_id'] }],
+          },
+        ],
+      })
+
+      // WHEN: Querying database for unique constraint
+      const result = await executeQuery(`
+        SELECT constraint_name
+        FROM information_schema.table_constraints
+        WHERE table_schema = 'public'
+        AND table_name = 'users'
+        AND constraint_type = 'UNIQUE'
+        AND constraint_name = 'uq_users_email_tenant'
+      `)
+
+      // THEN: Constraint should exist with correct name
+      expect(result.rows.length).toBe(1)
+      expect(result.rows[0].constraint_name).toBe('uq_users_email_tenant')
     }
   )
 
@@ -122,7 +161,7 @@ test.describe('Tables - Property: uniqueConstraints', () => {
 
   // uniqueConstraints[].fields tests (lines 302-305)
   test.fixme(
-    'should accept uniqueConstraints fields array with at least 2 items',
+    'should return uniqueConstraints fields via API',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: User provides fields with at least 2 items
@@ -143,11 +182,51 @@ test.describe('Tables - Property: uniqueConstraints', () => {
         ],
       })
 
-      // WHEN: Validating input
-      await page.goto('/_admin/tables/1/settings')
+      // WHEN: Retrieving configuration via API
+      const response = await page.request.get('/api/tables/1')
 
-      // THEN: Array should be accepted
-      await expect(page.locator('[data-testid="unique-constraint-fields"]')).toBeVisible()
+      // THEN: Fields should be returned correctly
+      const body = await response.json()
+      expect(body.uniqueConstraints[0].fields).toEqual(['email', 'tenant_id'])
+    }
+  )
+
+  test.fixme(
+    'should create unique constraint on specified fields in database',
+    { tag: '@spec' },
+    async ({ startServerWithSchema, executeQuery }) => {
+      // GIVEN: User provides fields with at least 2 items
+      await startServerWithSchema({
+        name: 'test-app',
+        description: 'Test application',
+        version: '1.0.0',
+        tables: [
+          {
+            id: 1,
+            name: 'users',
+            fields: [
+              { id: 1, name: 'email', type: 'email' },
+              { id: 2, name: 'tenant_id', type: 'integer' },
+            ],
+            uniqueConstraints: [{ name: 'uq_users_email_tenant', fields: ['email', 'tenant_id'] }],
+          },
+        ],
+      })
+
+      // WHEN: Querying database for constraint columns
+      const result = await executeQuery(`
+        SELECT column_name
+        FROM information_schema.key_column_usage
+        WHERE table_schema = 'public'
+        AND table_name = 'users'
+        AND constraint_name = 'uq_users_email_tenant'
+        ORDER BY ordinal_position
+      `)
+
+      // THEN: Both fields should be part of constraint
+      expect(result.rows.length).toBe(2)
+      expect(result.rows[0].column_name).toBe('email')
+      expect(result.rows[1].column_name).toBe('tenant_id')
     }
   )
 
@@ -295,7 +374,7 @@ test.describe('Tables - Property: uniqueConstraints', () => {
 test.fixme(
   'user can configure and enforce unique constraints',
   { tag: '@regression' },
-  async ({ page, startServerWithSchema }) => {
+  async ({ page, startServerWithSchema, executeQuery }) => {
     // GIVEN: Table with multiple unique constraints
     await startServerWithSchema({
       name: 'test-app',
@@ -397,11 +476,21 @@ test.fixme(
     })
     expect(createValid.status()).toBe(201)
 
-    // THEN: UI should display constraints
-    await page.goto('/_admin/tables/1/settings')
-    await expect(page.locator('text=uq_email_tenant')).toBeVisible()
-    await expect(page.locator('text=uq_username_tenant')).toBeVisible()
-    await expect(page.locator('text=uq_external_tenant')).toBeVisible()
+    // WHEN: Verifying constraints exist in database
+    const dbResult = await executeQuery(`
+      SELECT constraint_name
+      FROM information_schema.table_constraints
+      WHERE table_schema = 'public'
+      AND table_name = 'users'
+      AND constraint_type = 'UNIQUE'
+      ORDER BY constraint_name
+    `)
+
+    // THEN: All constraints should exist in database
+    expect(dbResult.rows.length).toBe(3)
+    expect(dbResult.rows[0].constraint_name).toBe('uq_email_tenant')
+    expect(dbResult.rows[1].constraint_name).toBe('uq_external_tenant')
+    expect(dbResult.rows[2].constraint_name).toBe('uq_username_tenant')
   }
 )
 

@@ -11,7 +11,7 @@ import { test, expect } from '../../fixtures'
  * E2E Tests for Tables - Property: indexes
  *
  * Test Organization:
- * 1. @spec tests - Granular specification tests (10 tests)
+ * 1. @spec tests - Granular specification tests (13 tests)
  * 2. @regression test - ONE consolidated workflow test
  * 3. @critical test - Essential index functionality
  *
@@ -26,7 +26,7 @@ test.describe('Tables - Property: indexes', () => {
 
   // indexes[].name tests (lines 353-357)
   test.fixme(
-    'should accept indexes name matching pattern',
+    'should return indexes name via API',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: User provides name matching pattern
@@ -44,11 +44,46 @@ test.describe('Tables - Property: indexes', () => {
         ],
       })
 
-      // WHEN: Validating input
-      await page.goto('/_admin/tables/1/settings')
+      // WHEN: Retrieving configuration via API
+      const response = await page.request.get('/api/tables/1')
 
-      // THEN: Value should be accepted
-      await expect(page.locator('text=idx_users_email')).toBeVisible()
+      // THEN: Value should be returned correctly
+      const body = await response.json()
+      expect(body.indexes[0].name).toBe('idx_users_email')
+    }
+  )
+
+  test.fixme(
+    'should create index in database with correct name',
+    { tag: '@spec' },
+    async ({ startServerWithSchema, executeQuery }) => {
+      // GIVEN: User provides name matching pattern
+      await startServerWithSchema({
+        name: 'test-app',
+        description: 'Test application',
+        version: '1.0.0',
+        tables: [
+          {
+            id: 1,
+            name: 'users',
+            fields: [{ id: 1, name: 'email', type: 'email' }],
+            indexes: [{ name: 'idx_users_email', fields: ['email'] }],
+          },
+        ],
+      })
+
+      // WHEN: Querying database for index
+      const result = await executeQuery(`
+        SELECT indexname, indexdef
+        FROM pg_indexes
+        WHERE schemaname = 'public'
+        AND tablename = 'users'
+        AND indexname = 'idx_users_email'
+      `)
+
+      // THEN: Index should exist with correct name
+      expect(result.rows.length).toBe(1)
+      expect(result.rows[0].indexname).toBe('idx_users_email')
     }
   )
 
@@ -111,10 +146,10 @@ test.describe('Tables - Property: indexes', () => {
 
   // indexes[].fields tests (lines 371-374)
   test.fixme(
-    'should accept indexes fields array with at least 1 item',
+    'should return indexes fields via API',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // GIVEN: User provides fields with at least 1 items
+      // GIVEN: User provides fields with at least 1 item
       await startServerWithSchema({
         name: 'test-app',
         description: 'Test application',
@@ -132,11 +167,50 @@ test.describe('Tables - Property: indexes', () => {
         ],
       })
 
-      // WHEN: Validating input
-      await page.goto('/_admin/tables/1/settings')
+      // WHEN: Retrieving configuration via API
+      const response = await page.request.get('/api/tables/1')
 
-      // THEN: Array should be accepted
-      await expect(page.locator('[data-testid="index-fields"]')).toBeVisible()
+      // THEN: Fields should be returned correctly
+      const body = await response.json()
+      expect(body.indexes[0].fields).toEqual(['first_name', 'last_name'])
+    }
+  )
+
+  test.fixme(
+    'should create index on specified fields in database',
+    { tag: '@spec' },
+    async ({ startServerWithSchema, executeQuery }) => {
+      // GIVEN: User provides fields with at least 1 item
+      await startServerWithSchema({
+        name: 'test-app',
+        description: 'Test application',
+        version: '1.0.0',
+        tables: [
+          {
+            id: 1,
+            name: 'users',
+            fields: [
+              { id: 1, name: 'first_name', type: 'single-line-text' },
+              { id: 2, name: 'last_name', type: 'single-line-text' },
+            ],
+            indexes: [{ name: 'idx_users_name', fields: ['first_name', 'last_name'] }],
+          },
+        ],
+      })
+
+      // WHEN: Querying database for index definition
+      const result = await executeQuery(`
+        SELECT indexname, indexdef
+        FROM pg_indexes
+        WHERE schemaname = 'public'
+        AND tablename = 'users'
+        AND indexname = 'idx_users_name'
+      `)
+
+      // THEN: Index should include both fields
+      expect(result.rows.length).toBe(1)
+      expect(result.rows[0].indexdef).toContain('first_name')
+      expect(result.rows[0].indexdef).toContain('last_name')
     }
   )
 
@@ -340,7 +414,7 @@ test.describe('Tables - Property: indexes', () => {
 test.fixme(
   'user can configure and use database indexes',
   { tag: '@regression' },
-  async ({ page, startServerWithSchema }) => {
+  async ({ page, startServerWithSchema, executeQuery }) => {
     // GIVEN: Table with multiple indexes including unique and composite
     await startServerWithSchema({
       name: 'test-app',
@@ -451,13 +525,23 @@ test.fixme(
     })
     expect(createDupStatus.status()).toBe(201) // Allowed (non-unique)
 
-    // THEN: UI should display all indexes
-    await page.goto('/_admin/tables/1/settings')
-    await expect(page.locator('text=idx_email')).toBeVisible()
-    await expect(page.locator('text=idx_username')).toBeVisible()
-    await expect(page.locator('text=idx_name')).toBeVisible()
-    await expect(page.locator('text=idx_status')).toBeVisible()
-    await expect(page.locator('text=idx_status_created')).toBeVisible()
+    // WHEN: Verifying indexes exist in database
+    const dbResult = await executeQuery(`
+      SELECT indexname
+      FROM pg_indexes
+      WHERE schemaname = 'public'
+      AND tablename = 'users'
+      AND indexname IN ('idx_email', 'idx_username', 'idx_name', 'idx_status', 'idx_status_created')
+      ORDER BY indexname
+    `)
+
+    // THEN: All indexes should exist in database
+    expect(dbResult.rows.length).toBe(5)
+    expect(dbResult.rows[0].indexname).toBe('idx_email')
+    expect(dbResult.rows[1].indexname).toBe('idx_name')
+    expect(dbResult.rows[2].indexname).toBe('idx_status')
+    expect(dbResult.rows[3].indexname).toBe('idx_status_created')
+    expect(dbResult.rows[4].indexname).toBe('idx_username')
 
     // WHEN: Viewing index details
     const emailIndex = table.indexes.find((idx: any) => idx.name === 'idx_email')

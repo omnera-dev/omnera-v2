@@ -11,7 +11,7 @@ import { test, expect } from '../../fixtures'
  * E2E Tests for Tables - Property: id
  *
  * Test Organization:
- * 1. @spec tests - Granular specification tests (3 tests)
+ * 1. @spec tests - Granular specification tests (5 tests)
  * 2. @regression test - ONE consolidated workflow test
  * 3. @critical test - Essential ID operation
  *
@@ -109,6 +109,70 @@ test.describe('Tables - Property: id', () => {
       expect(response.status()).toBe(200)
       const body = await response.json()
       expect(body.id).toBe(1)
+    }
+  )
+
+  test.fixme(
+    'should store ID as primary key column in database',
+    { tag: '@spec' },
+    async ({ startServerWithSchema, executeQuery }) => {
+      // GIVEN: A table with ID field
+      await startServerWithSchema({
+        name: 'test-app',
+        description: 'Test application',
+        version: '1.0.0',
+        tables: [
+          {
+            id: 1,
+            name: 'users',
+            fields: [{ id: 1, name: 'email', type: 'email' }],
+          },
+        ],
+      })
+
+      // WHEN: Querying database schema for primary key
+      const result = await executeQuery(`
+        SELECT constraint_name, column_name
+        FROM information_schema.key_column_usage
+        WHERE table_name = 'users'
+        AND constraint_name LIKE '%_pkey'
+      `)
+
+      // THEN: ID should be defined as primary key
+      expect(result.rows.length).toBeGreaterThan(0)
+      expect(result.rows[0].column_name).toBe('id')
+    }
+  )
+
+  test.fixme(
+    'should create auto-incrementing sequence in database when using auto-increment',
+    { tag: '@spec' },
+    async ({ startServerWithSchema, executeQuery }) => {
+      // GIVEN: A table with auto-increment ID
+      await startServerWithSchema({
+        name: 'test-app',
+        description: 'Test application',
+        version: '1.0.0',
+        tables: [
+          {
+            id: 1,
+            name: 'products',
+            fields: [{ id: 1, name: 'name', type: 'single-line-text' }],
+            primaryKey: { type: 'auto-increment', field: 'id' },
+          },
+        ],
+      })
+
+      // WHEN: Querying database for sequences
+      const result = await executeQuery(`
+        SELECT sequencename
+        FROM pg_sequences
+        WHERE schemaname = 'public'
+        AND sequencename LIKE '%products%'
+      `)
+
+      // THEN: Auto-increment sequence should exist
+      expect(result.rows.length).toBeGreaterThan(0)
     }
   )
 })

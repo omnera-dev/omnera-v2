@@ -13,7 +13,6 @@ import { test, expect } from '../fixtures'
  * Test Organization:
  * 1. @spec tests - Granular specification tests (18 tests from x-user-stories)
  * 2. @regression test - ONE consolidated workflow test
- * 3. @critical test - Essential CRUD operations
  *
  * Source: docs/specifications/schemas/tables/tables.schema.json (lines 412-431)
  */

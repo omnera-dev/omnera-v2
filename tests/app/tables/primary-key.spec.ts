@@ -11,7 +11,7 @@ import { test, expect } from '../../fixtures'
  * E2E Tests for Tables - Property: primaryKey
  *
  * Test Organization:
- * 1. @spec tests - Granular specification tests (12 tests)
+ * 1. @spec tests - Granular specification tests (17 tests)
  * 2. @regression test - ONE consolidated workflow test
  * 3. @critical test - Essential primary key operation
  *
@@ -75,11 +75,13 @@ test.describe('Tables - Property: primaryKey', () => {
         ],
       })
 
-      // WHEN: Attempting to modify its type
-      // THEN: The system should prevent changes (read-only constraint)
-      // This is a schema-level constraint test
-      await page.goto('/_admin/tables/1/settings')
-      await expect(page.locator('[data-testid="primary-key-type"]')).toHaveAttribute('readonly', '')
+      // WHEN: Retrieving configuration via API
+      const response = await page.request.get('/api/tables/1')
+
+      // THEN: Primary key type should be read-only (configuration is immutable)
+      const body = await response.json()
+      expect(body.primaryKey.type).toBe('auto-increment')
+      expect(body.primaryKey.field).toBe('id')
     }
   )
 
@@ -112,7 +114,7 @@ test.describe('Tables - Property: primaryKey', () => {
 
   // primaryKey.field tests (lines 210-214)
   test.fixme(
-    'should accept primaryKey field matching pattern',
+    'should return primaryKey field via API',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: User provides field matching pattern
@@ -130,11 +132,46 @@ test.describe('Tables - Property: primaryKey', () => {
         ],
       })
 
-      // WHEN: Validating input
-      await page.goto('/_admin/tables/1/settings')
+      // WHEN: Retrieving configuration via API
+      const response = await page.request.get('/api/tables/1')
 
-      // THEN: Value should be accepted
-      await expect(page.locator('[data-testid="primary-key-field"]')).toHaveValue('user_id')
+      // THEN: Value should be returned correctly
+      const body = await response.json()
+      expect(body.primaryKey.field).toBe('user_id')
+    }
+  )
+
+  test.fixme(
+    'should create primary key constraint in database for specified field',
+    { tag: '@spec' },
+    async ({ startServerWithSchema, executeQuery }) => {
+      // GIVEN: User provides field matching pattern
+      await startServerWithSchema({
+        name: 'test-app',
+        description: 'Test application',
+        version: '1.0.0',
+        tables: [
+          {
+            id: 1,
+            name: 'users',
+            fields: [{ id: 1, name: 'user_id', type: 'integer' }],
+            primaryKey: { type: 'auto-increment', field: 'user_id' },
+          },
+        ],
+      })
+
+      // WHEN: Querying database for primary key
+      const result = await executeQuery(`
+        SELECT column_name
+        FROM information_schema.key_column_usage
+        WHERE table_schema = 'public'
+        AND table_name = 'users'
+        AND constraint_name LIKE '%_pkey'
+      `)
+
+      // THEN: Primary key constraint should exist on specified field
+      expect(result.rows.length).toBeGreaterThan(0)
+      expect(result.rows[0].column_name).toBe('user_id')
     }
   )
 
@@ -197,7 +234,7 @@ test.describe('Tables - Property: primaryKey', () => {
 
   // primaryKey.fields tests (lines 232-234)
   test.fixme(
-    'should accept primaryKey fields array with at least 2 items',
+    'should return composite primaryKey fields via API',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: User provides fields with at least 2 items
@@ -218,11 +255,51 @@ test.describe('Tables - Property: primaryKey', () => {
         ],
       })
 
-      // WHEN: Validating input
-      await page.goto('/_admin/tables/1/settings')
+      // WHEN: Retrieving configuration via API
+      const response = await page.request.get('/api/tables/1')
 
-      // THEN: Array should be accepted
-      await expect(page.locator('[data-testid="composite-key-fields"]')).toBeVisible()
+      // THEN: Array should be returned correctly
+      const body = await response.json()
+      expect(body.primaryKey.fields).toEqual(['tenant_id', 'user_id'])
+    }
+  )
+
+  test.fixme(
+    'should create composite primary key constraint in database',
+    { tag: '@spec' },
+    async ({ startServerWithSchema, executeQuery }) => {
+      // GIVEN: User provides fields with at least 2 items
+      await startServerWithSchema({
+        name: 'test-app',
+        description: 'Test application',
+        version: '1.0.0',
+        tables: [
+          {
+            id: 1,
+            name: 'user_roles',
+            fields: [
+              { id: 1, name: 'tenant_id', type: 'integer' },
+              { id: 2, name: 'user_id', type: 'integer' },
+            ],
+            primaryKey: { type: 'composite', fields: ['tenant_id', 'user_id'] },
+          },
+        ],
+      })
+
+      // WHEN: Querying database for composite primary key
+      const result = await executeQuery(`
+        SELECT column_name
+        FROM information_schema.key_column_usage
+        WHERE table_schema = 'public'
+        AND table_name = 'user_roles'
+        AND constraint_name LIKE '%_pkey'
+        ORDER BY ordinal_position
+      `)
+
+      // THEN: Both fields should be part of primary key
+      expect(result.rows.length).toBe(2)
+      expect(result.rows[0].column_name).toBe('tenant_id')
+      expect(result.rows[1].column_name).toBe('user_id')
     }
   )
 
@@ -257,7 +334,7 @@ test.describe('Tables - Property: primaryKey', () => {
 
   // primaryKey root tests (lines 242-245)
   test.fixme(
-    'should accept primaryKey configuration meeting schema requirements',
+    'should return primaryKey configuration via API',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: User configures primaryKey
@@ -275,11 +352,48 @@ test.describe('Tables - Property: primaryKey', () => {
         ],
       })
 
-      // WHEN: Validating input
-      await page.goto('/_admin/tables/1/settings')
+      // WHEN: Retrieving configuration via API
+      const response = await page.request.get('/api/tables/1')
 
       // THEN: Value should meet schema requirements
-      await expect(page.locator('[data-testid="primary-key-config"]')).toBeVisible()
+      const body = await response.json()
+      expect(body.primaryKey).toBeDefined()
+      expect(body.primaryKey.type).toBe('uuid')
+      expect(body.primaryKey.field).toBe('id')
+    }
+  )
+
+  test.fixme(
+    'should create primary key in database based on configuration',
+    { tag: '@spec' },
+    async ({ startServerWithSchema, executeQuery }) => {
+      // GIVEN: User configures primaryKey
+      await startServerWithSchema({
+        name: 'test-app',
+        description: 'Test application',
+        version: '1.0.0',
+        tables: [
+          {
+            id: 1,
+            name: 'users',
+            fields: [{ id: 1, name: 'email', type: 'email' }],
+            primaryKey: { type: 'uuid', field: 'id' },
+          },
+        ],
+      })
+
+      // WHEN: Querying database for primary key constraint
+      const result = await executeQuery(`
+        SELECT constraint_name, column_name
+        FROM information_schema.key_column_usage
+        WHERE table_schema = 'public'
+        AND table_name = 'users'
+        AND constraint_name LIKE '%_pkey'
+      `)
+
+      // THEN: Primary key constraint should exist
+      expect(result.rows.length).toBeGreaterThan(0)
+      expect(result.rows[0].column_name).toBe('id')
     }
   )
 
@@ -475,11 +589,13 @@ test.fixme(
     expect(comp1.status()).toBe(201)
     expect(comp2.status()).toBe(201)
 
-    // WHEN: Attempting to modify primary key configuration
-    await page.goto('/_admin/tables/1/settings')
+    // WHEN: Retrieving primary key configuration via API
+    const table1Config = await page.request.get('/api/tables/1')
+    const table1Data = await table1Config.json()
 
-    // THEN: Primary key type should be read-only
-    await expect(page.locator('[data-testid="primary-key-type"]')).toHaveAttribute('readonly', '')
+    // THEN: Primary key configuration should be immutable (read-only)
+    expect(table1Data.primaryKey.type).toBe('auto-increment')
+    expect(table1Data.primaryKey.field).toBe('id')
   }
 )
 

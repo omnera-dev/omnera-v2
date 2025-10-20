@@ -7,7 +7,7 @@
  */
 
 /**
- * Validates specs.schema.json using AJV (Another JSON Schema Validator)
+ * Validates app.schema.json using AJV (Another JSON Schema Validator)
  * This provides full metaschema validation against JSON Schema Draft 7
  */
 
@@ -16,7 +16,7 @@ import { join, resolve, dirname } from 'node:path'
 import Ajv, { type ValidateFunction, type ErrorObject, type SchemaObject } from 'ajv'
 import addFormats from 'ajv-formats'
 
-const SCHEMA_PATH = join(__dirname, '..', 'docs', 'specifications', 'specs.schema.json')
+const SCHEMA_PATH = join(__dirname, '..', 'docs', 'specifications', 'app', 'app.schema.json')
 
 // Colors for console output
 const colors = {
@@ -54,7 +54,7 @@ async function validateWithAjv() {
       verbose: true, // Include data in errors
       validateSchema: true, // Validate the schema itself
       loadSchema: async (uri: string): Promise<SchemaObject> => {
-        // Resolve relative path from specs.schema.json location
+        // Resolve relative path from app.schema.json location
         const schemaDir = dirname(SCHEMA_PATH)
         const schemaPath = resolve(schemaDir, uri)
 

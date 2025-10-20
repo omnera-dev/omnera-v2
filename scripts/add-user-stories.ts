@@ -7,7 +7,7 @@
  */
 
 /**
- * Add x-user-stories to all properties in specs.schema.json
+ * Add x-user-stories to all properties in app.schema.json
  *
  * This script processes the schema and adds relevant user stories to every property
  * based on its type, validation rules, and context.
@@ -430,7 +430,7 @@ export function addUserStoriesToProperties(
  * Main execution function
  */
 async function main(): Promise<number> {
-  const schemaPath = join(import.meta.dir, '..', 'docs', 'specifications', 'specs.schema.json')
+  const schemaPath = join(import.meta.dir, '..', 'docs', 'specifications', 'app', 'app.schema.json')
 
   console.log(`Reading schema from: ${schemaPath}`)
 

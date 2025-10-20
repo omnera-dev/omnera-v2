@@ -15,7 +15,7 @@ import { readFileSync, existsSync } from 'node:fs'
 import { join } from 'node:path'
 import { describe, test, expect, beforeAll } from 'bun:test'
 
-const SCHEMA_PATH = join(__dirname, '..', 'docs', 'specifications', 'specs.schema.json')
+const SCHEMA_PATH = join(__dirname, '..', 'docs', 'specifications', 'app', 'app.schema.json')
 const VALIDATOR_PATH = join(__dirname, 'validate-schema.ts')
 
 describe('validate-schema.ts', () => {

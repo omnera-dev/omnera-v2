@@ -105,16 +105,16 @@
       ]
     },
     "tables": {
-      "$ref": "./schemas/tables/tables.schema.json"
+      "$ref": "./tables/tables.schema.json"
     },
     "pages": {
-      "$ref": "./schemas/pages/pages.schema.json"
+      "$ref": "./pages/pages.schema.json"
     },
     "automations": {
-      "$ref": "./schemas/automations/automations.schema.json"
+      "$ref": "./automations/automations.schema.json"
     },
     "connections": {
-      "$ref": "./schemas/connections/connections.schema.json"
+      "$ref": "./connections/connections.schema.json"
     }
   },
   "required": ["name", "description", "version", "tables", "pages", "automations", "connections"],
