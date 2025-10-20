@@ -3,18 +3,7 @@
   "info": {
     "title": "Omnera Tables API",
     "version": "0.0.1",
-    "description": "REST API specification for table configuration and record management in Omnera. This OpenAPI schema defines endpoints for CRUD operations on tables and records.",
-    "x-business-rules": [
-      "Tables define the schema for storing records with typed fields",
-      "Records must conform to their table's field definitions and validation rules",
-      "Primary keys are automatically managed (auto-increment or UUID)",
-      "Unique constraints and indexes are enforced at database level"
-    ],
-    "x-user-stories": [
-      "GIVEN developer needs table schema WHEN GET /api/tables THEN should return all configured tables with field definitions",
-      "GIVEN user creates record WHEN POST /api/tables/{id}/records THEN record should be validated and persisted",
-      "GIVEN user updates record WHEN PATCH /api/tables/{id}/records/{recordId} THEN only provided fields should be updated"
-    ]
+    "description": "REST API specification for table configuration and record management in Omnera. This OpenAPI schema defines endpoints for CRUD operations on tables and records."
   },
   "servers": [
     {
@@ -29,16 +18,6 @@
         "description": "Returns array of all configured tables from the application schema. Tables define the data structure and fields for storing records.",
         "operationId": "listTables",
         "tags": ["tables"],
-        "x-business-rules": [
-          "Returns empty array when no tables configured",
-          "Tables are returned in order defined in configuration",
-          "Each table includes full field definitions"
-        ],
-        "x-user-stories": [
-          "GIVEN application has tables configured WHEN GET /api/tables THEN should return array of all tables",
-          "GIVEN application has no tables WHEN GET /api/tables THEN should return empty array",
-          "GIVEN tables have fields configured WHEN GET /api/tables THEN each table should include field definitions"
-        ],
         "responses": {
           "200": {
             "description": "List of tables",
@@ -94,16 +73,6 @@
         "description": "Returns a single table configuration by its ID, including all field definitions, primary key, constraints, and indexes.",
         "operationId": "getTable",
         "tags": ["tables"],
-        "x-business-rules": [
-          "Table ID must be a positive integer",
-          "Returns 404 if table not found",
-          "Response includes complete table configuration"
-        ],
-        "x-user-stories": [
-          "GIVEN table exists WHEN GET /api/tables/{id} THEN should return table configuration",
-          "GIVEN table does not exist WHEN GET /api/tables/{id} THEN should return 404 Not Found",
-          "GIVEN table has constraints WHEN GET /api/tables/{id} THEN should include uniqueConstraints and indexes"
-        ],
         "parameters": [
           {
             "name": "tableId",
@@ -193,16 +162,6 @@
         "description": "Returns paginated list of records from the specified table.",
         "operationId": "listRecords",
         "tags": ["records"],
-        "x-business-rules": [
-          "Returns empty array when no records exist",
-          "Records include all field values",
-          "Default pagination limit is 100 records"
-        ],
-        "x-user-stories": [
-          "GIVEN table has records WHEN GET /api/tables/{id}/records THEN should return array of records",
-          "GIVEN table is empty WHEN GET /api/tables/{id}/records THEN should return empty array",
-          "GIVEN records exist WHEN GET /api/tables/{id}/records THEN each record should include all fields"
-        ],
         "parameters": [
           {
             "name": "tableId",
@@ -239,18 +198,6 @@
         "description": "Creates a new record in the specified table with provided field values.",
         "operationId": "createRecord",
         "tags": ["records"],
-        "x-business-rules": [
-          "Required fields must be provided",
-          "Field values must match field type validation",
-          "Auto-increment ID is assigned automatically",
-          "Unique constraints are enforced"
-        ],
-        "x-user-stories": [
-          "GIVEN valid record data WHEN POST /api/tables/{id}/records THEN should create record and return 201",
-          "GIVEN missing required field WHEN POST /api/tables/{id}/records THEN should return 400 validation error",
-          "GIVEN duplicate unique field WHEN POST /api/tables/{id}/records THEN should return 409 conflict error",
-          "GIVEN created record WHEN response received THEN should include generated ID"
-        ],
         "parameters": [
           {
             "name": "tableId",
@@ -322,10 +269,6 @@
         "description": "Returns a single record from the table by its ID.",
         "operationId": "getRecord",
         "tags": ["records"],
-        "x-user-stories": [
-          "GIVEN record exists WHEN GET /api/tables/{tableId}/records/{recordId} THEN should return record data",
-          "GIVEN record does not exist WHEN GET /api/tables/{tableId}/records/{recordId} THEN should return 404"
-        ],
         "parameters": [
           {
             "name": "tableId",
@@ -368,17 +311,6 @@
         "description": "Updates an existing record with provided field values. Only provided fields are updated (partial update).",
         "operationId": "updateRecord",
         "tags": ["records"],
-        "x-business-rules": [
-          "Only provided fields are updated (partial update)",
-          "ID field cannot be modified",
-          "Field validation rules are enforced",
-          "Unique constraints are checked"
-        ],
-        "x-user-stories": [
-          "GIVEN valid update data WHEN PATCH /api/tables/{tableId}/records/{recordId} THEN should update record and return 200",
-          "GIVEN attempt to modify ID WHEN PATCH /api/tables/{tableId}/records/{recordId} THEN ID should remain unchanged",
-          "GIVEN invalid field value WHEN PATCH /api/tables/{tableId}/records/{recordId} THEN should return 400 validation error"
-        ],
         "parameters": [
           {
             "name": "tableId",
@@ -438,10 +370,6 @@
         "description": "Deletes a record from the table by its ID.",
         "operationId": "deleteRecord",
         "tags": ["records"],
-        "x-user-stories": [
-          "GIVEN record exists WHEN DELETE /api/tables/{tableId}/records/{recordId} THEN should delete record and return 204",
-          "GIVEN record does not exist WHEN DELETE /api/tables/{tableId}/records/{recordId} THEN should return 404"
-        ],
         "parameters": [
           {
             "name": "tableId",
