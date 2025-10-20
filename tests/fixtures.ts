@@ -165,7 +165,7 @@ async function startCliServer(
     const url = `http://localhost:${port}`
 
     // Verify server is ready by checking health endpoint
-    const response = await fetch(`${url}/health`)
+    const response = await fetch(`${url}/api/health`)
     if (!response.ok) {
       throw new Error(`Health check failed with status ${response.status}`)
     }

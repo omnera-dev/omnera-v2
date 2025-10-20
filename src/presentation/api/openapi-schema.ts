@@ -57,6 +57,7 @@ const createOpenApiApp = () => {
   })
 
   // Mount route with dummy handler (only for schema generation)
+  // eslint-disable-next-line functional/no-expression-statements
   app.openapi(healthRoute, (c) => {
     return c.json({
       status: 'ok',

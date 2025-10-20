@@ -30,6 +30,9 @@ export default defineConfig([
       '.next/**',
       '.turbo/**',
       'OLD_V1/**', // Legacy codebase - not subject to new architecture rules
+      'test-results/**', // Playwright test results directory
+      'playwright-report/**', // Playwright HTML report directory
+      'schemas/**', // Generated schema exports
     ],
   },
 

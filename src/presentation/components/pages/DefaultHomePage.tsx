@@ -32,7 +32,7 @@ export function DefaultHomePage({ app }: { readonly app: App }): Readonly<ReactE
         <title>{`${app.name} - Powered by Omnera`}</title>
         <link
           rel="stylesheet"
-          href="/output.css"
+          href="/assets/output.css"
         />
       </head>
       <body className="h-screen overflow-hidden bg-gradient-to-br from-gray-50 to-gray-100">

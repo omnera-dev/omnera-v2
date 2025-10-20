@@ -43,7 +43,7 @@ export interface ServerConfig {
  * - GET /api/scalar - Scalar API documentation UI
  * - POST/GET /api/auth/* - Better Auth authentication endpoints
  * - GET / - Homepage
- * - GET /output.css - Compiled Tailwind CSS
+ * - GET /assets/output.css - Compiled Tailwind CSS
  * - GET /test/error - Test error handler (non-production only)
  *
  * @param app - Validated application data from AppSchema
@@ -80,7 +80,7 @@ function createHonoApp(
       const html = renderHomePage(app)
       return c.html(html)
     })
-    .get('/output.css', async (c) => {
+    .get('/assets/output.css', async (c) => {
       try {
         const result = await Effect.runPromise(
           compileCSS().pipe(Effect.tap(() => Console.log('CSS compiled successfully')))
@@ -122,7 +122,7 @@ function createHonoApp(
  *
  * This function:
  * 1. Pre-compiles CSS on startup for faster initial requests
- * 2. Creates a Hono app with routes (/, /output.css, /health)
+ * 2. Creates a Hono app with routes (/, /assets/output.css, /api/*)
  * 3. Starts a Bun HTTP server
  * 4. Returns server instance with stop capability
  *
@@ -185,7 +185,7 @@ export const createServer = (
     yield* Console.log(`✓ Health check: ${url}/api/health`)
     yield* Console.log(`✓ API documentation: ${url}/api/scalar`)
     yield* Console.log(`✓ OpenAPI schema: ${url}/api/openapi.json`)
-    yield* Console.log(`✓ Compiled CSS: ${url}/output.css`)
+    yield* Console.log(`✓ Compiled CSS: ${url}/assets/output.css`)
 
     // Create stop effect
     const stop = Effect.gen(function* () {

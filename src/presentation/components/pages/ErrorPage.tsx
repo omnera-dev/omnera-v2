@@ -27,7 +27,7 @@ export function ErrorPage(): Readonly<ReactElement> {
         <title>500 - Internal Server Error</title>
         <link
           rel="stylesheet"
-          href="/output.css"
+          href="/assets/output.css"
         />
       </head>
       <body className="flex min-h-screen items-center justify-center bg-gray-50">

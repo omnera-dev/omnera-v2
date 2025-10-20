@@ -54,7 +54,7 @@ const toSimpleServer = (server: Readonly<ServerInstance>): SimpleServer => ({
  * 1. Validates the app configuration using Effect Schema
  * 2. Compiles Tailwind CSS dynamically using PostCSS
  * 3. Creates a Hono web server with React SSR
- * 4. Serves the homepage at "/" and compiled CSS at "/output.css"
+ * 4. Serves the homepage at "/" and compiled CSS at "/assets/output.css"
  * 5. Sets up graceful shutdown handlers (SIGINT, SIGTERM)
  * 6. Returns a simple server interface with url and stop method
  *
