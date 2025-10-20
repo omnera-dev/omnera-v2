@@ -4,8 +4,27 @@
   "title": "Omnera Application Specification",
   "description": "Root specification that orchestrates all feature and infrastructure specifications. This schema defines the complete system specification including infrastructure (auth, server), application features (tables, pages, automations), and administrative capabilities. It serves as the single source of truth for what the application SHOULD BE (specification), to be compared against what it IS (implementation in schemas/0.0.1/app.schema.json).",
   "type": "object",
-  "required": ["infrastructure"],
+  "required": ["infrastructure", "app"],
   "properties": {
+    "app": {
+      "type": "object",
+      "description": "Application-level metadata (name, version, description)",
+      "required": ["name", "version", "description"],
+      "properties": {
+        "name": {
+          "$ref": "app/name.schema.json",
+          "description": "Application name following npm package naming conventions"
+        },
+        "version": {
+          "$ref": "app/version.schema.json",
+          "description": "Application version following Semantic Versioning (SemVer) 2.0.0"
+        },
+        "description": {
+          "$ref": "app/description.schema.json",
+          "description": "Single-line description of the application"
+        }
+      }
+    },
     "infrastructure": {
       "type": "object",
       "description": "Core infrastructure components (authentication, server, database)",
@@ -24,6 +43,11 @@
   },
   "examples": [
     {
+      "app": {
+        "name": "my-app",
+        "version": "1.0.0",
+        "description": "A simple application"
+      },
       "infrastructure": {
         "auth": {
           "signUp": { "endpoint": "/api/auth/sign-up/email" },

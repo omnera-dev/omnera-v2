@@ -1,0 +1,41 @@
+{
+  "$id": "version.schema.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Application Version",
+  "description": "The version of the application following Semantic Versioning (SemVer) 2.0.0 specification",
+  "type": "string",
+  "minLength": 5,
+  "pattern": "^(0|[1-9]\\d*)\\.(0|[1-9]\\d*)\\.(0|[1-9]\\d*)(?:-((?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\\.(?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\\+([0-9a-zA-Z-]+(?:\\.[0-9a-zA-Z-]+)*))?$",
+  "examples": [
+    "1.0.0",
+    "0.0.1",
+    "1.2.3",
+    "1.0.0-alpha",
+    "1.0.0-beta.1",
+    "2.0.0-rc.1",
+    "1.0.0+build.123",
+    "1.0.0-alpha+001"
+  ],
+  "x-business-rules": [
+    "BR-VER-001: Pattern constraint enforces data format consistency and error prevention, rejecting invalid formats before they cause system errors",
+    "BR-VER-002: Minimum 5 characters ensures application version is sufficiently descriptive for user identification and debugging"
+  ],
+  "x-user-stories": [
+    "US-VER-001: GIVEN an app with name and simple SemVer version '1.0.0' WHEN user navigates to the homepage THEN version badge should be visible with correct version text",
+    "US-VER-002: GIVEN an app with only name (no version property) WHEN user navigates to the homepage THEN version badge should NOT be rendered",
+    "US-VER-003: GIVEN an app with pre-release version '2.0.0-beta.1' WHEN user navigates to the homepage THEN badge should display pre-release version exactly as specified",
+    "US-VER-004: GIVEN an app with build metadata in version '1.0.0+build.123' WHEN user navigates to the homepage THEN badge should display version with build metadata intact",
+    "US-VER-005: GIVEN an app with both pre-release and build metadata '1.0.0-alpha+001' WHEN user navigates to the homepage THEN badge should display complete version string",
+    "US-VER-006: GIVEN an app with name and version WHEN user navigates to the homepage THEN badge should appear before (above) the app name heading",
+    "US-VER-007: GIVEN an app with version WHEN user navigates to the homepage THEN badge should have proper accessibility attributes (data-testid, data-slot)"
+  ],
+  "x-linked-tests": [
+    "specs/app/version.spec.ts::should display version badge with correct version text",
+    "specs/app/version.spec.ts::should not render version badge when version is undefined",
+    "specs/app/version.spec.ts::should display pre-release version exactly",
+    "specs/app/version.spec.ts::should display version with build metadata",
+    "specs/app/version.spec.ts::should display complete version with pre-release and build metadata",
+    "specs/app/version.spec.ts::should appear before app name heading",
+    "specs/app/version.spec.ts::should have proper accessibility attributes"
+  ]
+}
