@@ -39,8 +39,9 @@ export interface ServerConfig {
  *
  * Mounts the following routes:
  * - GET /api/* - API routes (health, tables, records) with RPC type safety
- * - GET /api/openapi.json - Generated OpenAPI specification
- * - GET /api/scalar - Scalar API documentation UI
+ * - GET /api/openapi.json - Generated OpenAPI specification (application endpoints)
+ * - GET /api/auth/openapi.json - Generated OpenAPI specification (authentication endpoints)
+ * - GET /api/scalar - Unified Scalar API documentation UI (shows both API and Auth tabs)
  * - POST/GET /api/auth/* - Better Auth authentication endpoints
  * - GET / - Homepage
  * - GET /assets/output.css - Compiled Tailwind CSS
