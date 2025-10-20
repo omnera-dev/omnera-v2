@@ -56,7 +56,7 @@ test.describe('Server Infrastructure', () => {
         })
 
         // WHEN: User requests health endpoint
-        const response = await page.goto('/health')
+        const response = await page.goto('/api/health')
 
         // THEN: Response should be 200 OK
         expect(response?.status()).toBe(200)
@@ -87,7 +87,7 @@ test.describe('Server Infrastructure', () => {
         })
 
         // WHEN: User requests health endpoint
-        const response = await page.goto('/health')
+        const response = await page.goto('/api/health')
         const json = await response?.json()
 
         // THEN: JSON should have status field
@@ -123,7 +123,7 @@ test.describe('Server Infrastructure', () => {
 
         // WHEN: User requests health endpoint
         const beforeRequest = new Date()
-        const response = await page.goto('/health')
+        const response = await page.goto('/api/health')
         const afterRequest = new Date()
         const json = await response?.json()
 
@@ -153,7 +153,7 @@ test.describe('Server Infrastructure', () => {
         })
 
         // WHEN: User requests health endpoint
-        const response = await page.goto('/health')
+        const response = await page.goto('/api/health')
         const json = await response?.json()
 
         // THEN: App name should preserve special characters
@@ -190,7 +190,7 @@ test.describe('Server Infrastructure', () => {
         })
 
         // WHEN: User requests CSS endpoint
-        const response = await page.goto('/output.css')
+        const response = await page.goto('/assets/output.css')
 
         // THEN: Response should be 200 OK
         expect(response?.status()).toBe(200)
@@ -221,7 +221,7 @@ test.describe('Server Infrastructure', () => {
         })
 
         // WHEN: User requests CSS endpoint
-        const response = await page.goto('/output.css')
+        const response = await page.goto('/assets/output.css')
         const css = await response?.text()
 
         // THEN: CSS should contain Tailwind CSS markers
@@ -253,7 +253,7 @@ test.describe('Server Infrastructure', () => {
         })
 
         // WHEN: User requests CSS endpoint
-        const response = await page.goto('/output.css')
+        const response = await page.goto('/assets/output.css')
 
         // THEN: Cache-Control header should be set
         const cacheControl = response?.headers()['cache-control']
@@ -367,6 +367,315 @@ test.describe('Server Infrastructure', () => {
   })
 
   /**
+   * Test Suite: OpenAPI Documentation Endpoints
+   *
+   * The OpenAPI documentation endpoints provide API schema and interactive documentation:
+   * - /api/openapi.json: Generated OpenAPI 3.1.0 specification
+   * - /api/scalar: Scalar API documentation UI
+   */
+  test.describe('OpenAPI Documentation', () => {
+    /**
+     * Test Suite: OpenAPI JSON Endpoint (/api/openapi.json)
+     *
+     * The OpenAPI JSON endpoint provides machine-readable API specification:
+     * - OpenAPI 3.1.0 compliant schema
+     * - Generated from runtime implementation
+     * - Used by Scalar UI and external tools
+     */
+    test.describe('/api/openapi.json endpoint', () => {
+      /**
+       * Test Case 16: OpenAPI JSON endpoint returns 200 OK
+       *
+       * GIVEN: A running server
+       * WHEN: User requests GET /api/openapi.json
+       * THEN: Response should be 200 OK with JSON content-type
+       *
+       * Basic OpenAPI endpoint availability
+       * Reference: src/infrastructure/server/server.ts:67-70
+       */
+      test(
+        'should return 200 OK with JSON content',
+        { tag: '@spec' },
+        async ({ page, startServerWithSchema }) => {
+          // GIVEN: A running server
+          await startServerWithSchema({
+            name: 'openapi-test',
+          })
+
+          // WHEN: User requests OpenAPI endpoint
+          const response = await page.goto('/api/openapi.json')
+
+          // THEN: Response should be 200 OK
+          expect(response?.status()).toBe(200)
+
+          // AND: Content-Type should be application/json
+          const contentType = response?.headers()['content-type']
+          expect(contentType).toContain('application/json')
+        }
+      )
+
+      /**
+       * Test Case 17: OpenAPI JSON has valid OpenAPI 3.1.0 structure
+       *
+       * GIVEN: A running server
+       * WHEN: User requests GET /api/openapi.json
+       * THEN: JSON should have openapi, info, paths, and servers properties
+       *
+       * Validates OpenAPI 3.1.0 specification structure
+       * Reference: src/presentation/api/openapi-schema.ts:91-116
+       */
+      test(
+        'should return valid OpenAPI 3.1.0 specification',
+        { tag: '@spec' },
+        async ({ page, startServerWithSchema }) => {
+          // GIVEN: A running server
+          await startServerWithSchema({
+            name: 'openapi-structure-test',
+          })
+
+          // WHEN: User requests OpenAPI endpoint
+          const response = await page.goto('/api/openapi.json')
+          const json = await response?.json()
+
+          // THEN: Should have OpenAPI version
+          expect(json).toHaveProperty('openapi', '3.1.0')
+
+          // AND: Should have info object
+          expect(json).toHaveProperty('info')
+          expect(json.info).toHaveProperty('title')
+          expect(json.info).toHaveProperty('version')
+          expect(json.info).toHaveProperty('description')
+
+          // AND: Should have servers array
+          expect(json).toHaveProperty('servers')
+          expect(Array.isArray(json.servers)).toBe(true)
+          expect(json.servers.length).toBeGreaterThan(0)
+
+          // AND: Should have paths object
+          expect(json).toHaveProperty('paths')
+          expect(typeof json.paths).toBe('object')
+        }
+      )
+
+      /**
+       * Test Case 18: OpenAPI JSON includes health endpoint
+       *
+       * GIVEN: A running server
+       * WHEN: User requests GET /api/openapi.json
+       * THEN: paths should include /api/health endpoint definition
+       *
+       * Validates generated schema includes implemented endpoints
+       * Reference: src/presentation/api/openapi-schema.ts:39-68
+       */
+      test(
+        'should include health endpoint in paths',
+        { tag: '@spec' },
+        async ({ page, startServerWithSchema }) => {
+          // GIVEN: A running server
+          await startServerWithSchema({
+            name: 'openapi-paths-test',
+          })
+
+          // WHEN: User requests OpenAPI endpoint
+          const response = await page.goto('/api/openapi.json')
+          const json = await response?.json()
+
+          // THEN: Should have /api/health path
+          expect(json.paths).toHaveProperty('/api/health')
+
+          // AND: Health path should have GET method
+          expect(json.paths['/api/health']).toHaveProperty('get')
+
+          // AND: GET method should have responses
+          const healthGet = json.paths['/api/health'].get
+          expect(healthGet).toHaveProperty('responses')
+          expect(healthGet.responses).toHaveProperty('200')
+        }
+      )
+
+      /**
+       * Test Case 19: OpenAPI JSON includes server information
+       *
+       * GIVEN: A running server
+       * WHEN: User requests GET /api/openapi.json
+       * THEN: servers array should include development server
+       *
+       * Validates server configuration in OpenAPI spec
+       * Reference: src/presentation/api/openapi-schema.ts:103-108
+       */
+      test(
+        'should include development server in servers array',
+        { tag: '@spec' },
+        async ({ page, startServerWithSchema }) => {
+          // GIVEN: A running server
+          await startServerWithSchema({
+            name: 'openapi-servers-test',
+          })
+
+          // WHEN: User requests OpenAPI endpoint
+          const response = await page.goto('/api/openapi.json')
+          const json = await response?.json()
+
+          // THEN: Servers array should have at least one entry
+          expect(json.servers.length).toBeGreaterThan(0)
+
+          // AND: First server should have URL and description
+          const firstServer = json.servers[0]
+          expect(firstServer).toHaveProperty('url')
+          expect(firstServer).toHaveProperty('description')
+          expect(firstServer.url).toContain('localhost')
+        }
+      )
+
+      /**
+       * Test Case 20: OpenAPI JSON includes tags
+       *
+       * GIVEN: A running server
+       * WHEN: User requests GET /api/openapi.json
+       * THEN: tags array should include infrastructure tag
+       *
+       * Validates endpoint categorization in OpenAPI spec
+       * Reference: src/presentation/api/openapi-schema.ts:109-114
+       */
+      test(
+        'should include tags for endpoint categorization',
+        { tag: '@spec' },
+        async ({ page, startServerWithSchema }) => {
+          // GIVEN: A running server
+          await startServerWithSchema({
+            name: 'openapi-tags-test',
+          })
+
+          // WHEN: User requests OpenAPI endpoint
+          const response = await page.goto('/api/openapi.json')
+          const json = await response?.json()
+
+          // THEN: Should have tags array
+          expect(json).toHaveProperty('tags')
+          expect(Array.isArray(json.tags)).toBe(true)
+
+          // AND: Should include infrastructure tag
+          const infrastructureTag = json.tags.find((tag: any) => tag.name === 'infrastructure')
+          expect(infrastructureTag).toBeDefined()
+          expect(infrastructureTag).toHaveProperty('description')
+        }
+      )
+    })
+
+    /**
+     * Test Suite: Scalar UI Endpoint (/api/scalar)
+     *
+     * The Scalar UI endpoint provides interactive API documentation:
+     * - Visual API explorer
+     * - Request/response examples
+     * - Try-it-out functionality
+     */
+    test.describe('/api/scalar endpoint', () => {
+      /**
+       * Test Case 21: Scalar UI endpoint returns 200 OK
+       *
+       * GIVEN: A running server
+       * WHEN: User navigates to /api/scalar
+       * THEN: Response should be 200 OK with HTML content-type
+       *
+       * Basic Scalar UI endpoint availability
+       * Reference: src/infrastructure/server/server.ts:71-77
+       */
+      test(
+        'should return 200 OK with HTML content',
+        { tag: '@spec' },
+        async ({ page, startServerWithSchema }) => {
+          // GIVEN: A running server
+          await startServerWithSchema({
+            name: 'scalar-test',
+          })
+
+          // WHEN: User navigates to Scalar UI
+          const response = await page.goto('/api/scalar')
+
+          // THEN: Response should be 200 OK
+          expect(response?.status()).toBe(200)
+
+          // AND: Content-Type should be text/html
+          const contentType = response?.headers()['content-type']
+          expect(contentType).toContain('text/html')
+        }
+      )
+
+      /**
+       * Test Case 22: Scalar UI renders API documentation
+       *
+       * GIVEN: A running server
+       * WHEN: User navigates to /api/scalar
+       * THEN: Page should render Scalar API documentation UI
+       *
+       * Validates Scalar UI integration
+       * Reference: @scalar/hono-api-reference package
+       */
+      test(
+        'should render Scalar API documentation UI',
+        { tag: '@spec' },
+        async ({ page, startServerWithSchema }) => {
+          // GIVEN: A running server
+          await startServerWithSchema({
+            name: 'scalar-ui-test',
+          })
+
+          // WHEN: User navigates to Scalar UI
+          await page.goto('/api/scalar')
+
+          // THEN: Page should have Scalar UI elements
+          // Scalar UI uses custom elements and shadow DOM
+          const body = page.locator('body')
+          await expect(body).toBeVisible()
+
+          // AND: Page should reference OpenAPI spec
+          const html = await page.content()
+          expect(html).toContain('/api/openapi.json')
+        }
+      )
+
+      /**
+       * Test Case 23: Scalar UI loads OpenAPI specification
+       *
+       * GIVEN: A running server
+       * WHEN: User navigates to /api/scalar
+       * THEN: Page should load and reference the OpenAPI specification URL
+       *
+       * Validates Scalar UI successfully integrates with OpenAPI endpoint
+       *
+       * NOTE: We don't wait for the full Scalar UI to render because it uses
+       * shadow DOM and custom elements that may take time. Instead, we verify
+       * the integration by checking the HTML references the OpenAPI spec URL.
+       */
+      test(
+        'should load OpenAPI specification URL',
+        { tag: '@spec' },
+        async ({ page, startServerWithSchema }) => {
+          // GIVEN: A running server
+          await startServerWithSchema({
+            name: 'scalar-load-test',
+          })
+
+          // WHEN: User navigates to Scalar UI
+          const response = await page.goto('/api/scalar')
+
+          // THEN: Page should load successfully
+          expect(response?.status()).toBe(200)
+
+          // AND: Page should configure Scalar with OpenAPI spec URL
+          const html = await page.content()
+          expect(html).toContain('/api/openapi.json')
+
+          // NOTE: Full Scalar UI rendering happens in shadow DOM and requires
+          // JavaScript execution. For E2E validation of the interactive UI,
+          // manual testing is recommended as it involves user interactions.
+        }
+      )
+    })
+  })
+
+  /**
    * Test Suite: Not Found (404) Handling
    *
    * The 404 page handles unknown routes with:
@@ -376,7 +685,7 @@ test.describe('Server Infrastructure', () => {
    */
   test.describe('404 Not Found handling', () => {
     /**
-     * Test Case 11: Unknown route returns 404 status
+     * Test Case 24: Unknown route returns 404 status
      *
      * GIVEN: A running server
      * WHEN: User navigates to /nonexistent-page
@@ -403,7 +712,7 @@ test.describe('Server Infrastructure', () => {
     )
 
     /**
-     * Test Case 12: 404 page renders custom error page
+     * Test Case 25: 404 page renders custom error page
      *
      * GIVEN: A running server
      * WHEN: User navigates to /unknown-route
@@ -435,7 +744,7 @@ test.describe('Server Infrastructure', () => {
     )
 
     /**
-     * Test Case 13: Multiple unknown routes all return 404
+     * Test Case 26: Multiple unknown routes all return 404
      *
      * GIVEN: A running server
      * WHEN: User navigates to multiple unknown routes
@@ -476,7 +785,7 @@ test.describe('Server Infrastructure', () => {
    */
   test.describe('500 Internal Server Error handling', () => {
     /**
-     * Test Case 14: Server error triggers 500 error page
+     * Test Case 27: Server error triggers 500 error page
      *
      * GIVEN: A server that encounters an internal error
      * WHEN: User navigates to a route that triggers an error
@@ -511,7 +820,7 @@ test.describe('Server Infrastructure', () => {
     )
 
     /**
-     * Test Case 15: CSS compilation error returns 500 with error message
+     * Test Case 28: CSS compilation error returns 500 with error message
      *
      * GIVEN: A running server
      * WHEN: CSS compilation fails (simulated scenario)
@@ -535,7 +844,7 @@ test.describe('Server Infrastructure', () => {
         })
 
         // WHEN: User requests CSS endpoint
-        const response = await page.goto('/output.css')
+        const response = await page.goto('/assets/output.css')
 
         // THEN: CSS should load successfully (compilation should work)
         expect(response?.status()).toBe(200)
@@ -588,7 +897,7 @@ test.describe('Server Infrastructure', () => {
       })
 
       // WHEN: User requests health endpoint
-      const healthResponse = await page.goto('/health')
+      const healthResponse = await page.goto('/api/health')
       const healthJson = await healthResponse?.json()
 
       // THEN: Health check should be OK
@@ -597,7 +906,7 @@ test.describe('Server Infrastructure', () => {
       expect(healthJson.app.name).toBe('@myorg/production-app')
 
       // WHEN: User requests CSS endpoint
-      const cssResponse = await page.goto('/output.css')
+      const cssResponse = await page.goto('/assets/output.css')
       const css = await cssResponse?.text()
 
       // THEN: CSS should be served with cache headers
@@ -625,7 +934,7 @@ test.describe('Server Infrastructure', () => {
       await expect(body).toContainText('Page not found')
 
       // AND: All endpoints should respond quickly (< 2 seconds)
-      const performanceCheck = await page.goto('/health')
+      const performanceCheck = await page.goto('/api/health')
       expect(performanceCheck?.status()).toBe(200)
     }
   )
@@ -652,7 +961,7 @@ test.describe('Server Infrastructure', () => {
       // THEN: Each request should succeed (sequential navigation required for single page)
       // eslint-disable-next-line functional/no-loop-statements -- Playwright requires sequential page.goto() calls
       for (let i = 0; i < 5; i++) {
-        const response = await page.goto('/health')
+        const response = await page.goto('/api/health')
         expect(response?.status()).toBe(200)
       }
 
