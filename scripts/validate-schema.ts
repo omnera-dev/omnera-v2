@@ -56,7 +56,11 @@ async function validateWithAjv() {
       loadSchema: async (uri: string): Promise<SchemaObject> => {
         // Resolve relative path from app.schema.json location
         const schemaDir = dirname(SCHEMA_PATH)
-        const schemaPath = resolve(schemaDir, uri)
+
+        // Handle both relative paths (./tables/...) and URI-normalized paths (/common/...)
+        // AJV may normalize URIs starting with '/', treat them as relative to schema directory
+        const normalizedUri = uri.startsWith('/') ? uri.substring(1) : uri
+        const schemaPath = resolve(schemaDir, normalizedUri)
 
         if (!existsSync(schemaPath)) {
           throw new Error(`Schema not found: ${schemaPath} (uri: ${uri})`)

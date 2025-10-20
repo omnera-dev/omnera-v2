@@ -1,14 +1,21 @@
-# Triple-Documentation Pattern
+# Spec-to-E2E Pattern: From Specifications to Tests
 
 ## Overview
 
-The `docs/specifications/specs.schema.json` file implements a revolutionary **Triple-Documentation Pattern** that transforms a technical JSON Schema into a living specification serving three distinct audiences:
+The `docs/specifications/app/` directory implements a powerful **Spec-to-E2E Pattern** that transforms specifications into executable tests using two complementary specification types:
+
+1. **JSON Schema** (`.schema.json` files): Define domain models with Triple-Documentation Pattern
+2. **OpenAPI** (`.openapi.json` files): Define REST API contracts with standard OpenAPI properties
+
+### Triple-Documentation Pattern (JSON Schema Only)
+
+JSON Schema files use custom extensions to create three documentation layers:
 
 1. **What** (description + examples): Technical developers understand data structures and formats
 2. **Why** (x-business-rules): Engineers understand constraints, rationale, and system behavior
 3. **Who/When** (x-user-stories): Product teams, QA, and AI agents understand user scenarios and acceptance criteria
 
-This three-lens approach bridges the gap between business requirements, implementation details, and test scenarios, enabling **true Test-Driven Development (TDD) at scale**.
+This approach bridges the gap between business requirements, implementation details, and test scenarios, enabling **true Test-Driven Development (TDD) at scale** with automated test generation from specifications.
 
 ## The Problem This Solves
 
@@ -18,15 +25,76 @@ Traditional JSON Schemas excel at describing data structure but fail to capture:
 - **User Scenarios**: When would users encounter this validation?
 - **Test Acceptance Criteria**: What does "correct behavior" look like in practice?
 
-The Triple-Documentation Pattern solves this by embedding business rules and user stories directly into the schema itself, creating a **single source of truth** that serves developers, engineers, QA teams, product managers, and AI agents simultaneously.
+The Triple-Documentation Pattern solves this by embedding business rules and user stories directly into JSON Schema files using custom extensions (`x-business-rules` and `x-user-stories`), creating a **single source of truth** for domain models and app configuration.
+
+**Note**: This pattern applies to **JSON Schema files only** (`.schema.json`). OpenAPI specifications (`.openapi.json`) use standard OpenAPI properties and serve as API contract definitions without the custom extensions.
+
+## Dual-Source Architecture
+
+### Specification Types
+
+The project uses two complementary specification sources in `docs/specifications/app/`:
+
+```
+docs/specifications/app/
+├── app.schema.json           # Domain model: App configuration structure
+├── api.openapi.json          # API contracts: Infrastructure endpoints
+└── tables/
+    ├── tables.schema.json    # Domain model: Tables data structure
+    └── tables.openapi.json   # API contracts: Tables CRUD operations
+```
+
+**JSON Schema Files** (`.schema.json`):
+
+- **Purpose**: Define domain models, data structures, and app configuration
+- **Target**: Domain layer implementation (`src/domain/`)
+- **Tests**: App behavior and validation logic (`tests/app/`)
+- **Pattern**: Triple-Documentation with `x-user-stories` and `x-business-rules` custom extensions
+
+**OpenAPI Files** (`.openapi.json`):
+
+- **Purpose**: Define REST API contracts, request/response schemas
+- **Target**: API routes and endpoints (`src/presentation/routes/`)
+- **Tests**: HTTP contract validation (`tests/api/`)
+- **Pattern**: Standard OpenAPI 3.1.0 (operationId, summary, description, parameters, requestBody, responses)
+
+### How They Work Together
+
+**Example: Tables Feature**
+
+1. **JSON Schema** (`tables.schema.json`):
+   - Defines `Table` object structure (id, name, fields, primaryKey)
+   - Uses x-business-rules to explain WHY constraints exist
+   - Uses x-user-stories: "GIVEN table with unique name WHEN validating THEN should accept"
+   - Tests generated: `tests/app/tables/name.spec.ts` (domain validation)
+
+2. **OpenAPI** (`tables.openapi.json`):
+   - Defines `GET /api/tables` operation using standard OpenAPI properties
+   - Uses description, summary, parameters, responses (no custom extensions)
+   - Tests generated: `tests/api/tables.spec.ts` (HTTP contract validation)
+
+**Result**: Complete test coverage across both domain logic (from JSON Schema) and API layer (from OpenAPI).
+
+### Test Organization by Spec Type
+
+| Spec Type       | Source File                      | Test Directory                     | Test Focus                                                 |
+| --------------- | -------------------------------- | ---------------------------------- | ---------------------------------------------------------- |
+| **JSON Schema** | `app/tables/tables.schema.json`  | `tests/app/tables/`                | Domain validation, data structures, business rules         |
+| **OpenAPI**     | `app/tables/tables.openapi.json` | `tests/api/`                       | HTTP status codes, request/response schemas, API contracts |
+| **JSON Schema** | `app/app.schema.json`            | `tests/app/`                       | App configuration, root properties                         |
+| **OpenAPI**     | `app/api.openapi.json`           | `tests/api/infrastructure.spec.ts` | Health checks, system endpoints                            |
 
 ## The Three Documentation Layers
+
+The Triple-Documentation Pattern applies to **JSON Schema files only** (`.schema.json`), using custom extensions `x-business-rules` and `x-user-stories` to augment standard JSON Schema properties.
 
 ### Layer 1: What (Technical Structure)
 
 **Purpose**: Describe the data structure, format, and valid values
 
-**Standard JSON Schema Properties**:
+#### JSON Schema Standard Properties
+
+**Standard Properties**:
 
 - `type`: Data type (string, number, boolean, array, object)
 - `description`: Clear explanation of what this property represents
@@ -36,7 +104,7 @@ The Triple-Documentation Pattern solves this by embedding business rules and use
 
 **Audience**: Technical developers implementing schemas and data models
 
-**Example**:
+**Example (JSON Schema)**:
 
 ```json
 {
@@ -64,7 +132,7 @@ The Triple-Documentation Pattern solves this by embedding business rules and use
 
 **Purpose**: Explain the rationale behind validation rules and business constraints
 
-**Custom Property**: `x-business-rules` (array of strings)
+**Custom Property**: `x-business-rules` (array of strings) - **JSON Schema only**
 
 **Content**:
 
@@ -104,9 +172,9 @@ The Triple-Documentation Pattern solves this by embedding business rules and use
 
 ### Layer 3: Who/When (User Stories & Acceptance Criteria)
 
-**Purpose**: Define user scenarios and executable acceptance criteria for testing
+**Purpose**: Define user scenarios and executable acceptance criteria for testing domain behavior
 
-**Custom Property**: `x-user-stories` (array of strings in GIVEN-WHEN-THEN format)
+**Custom Property**: `x-user-stories` (array of strings in GIVEN-WHEN-THEN format) - **JSON Schema only**
 
 **Format**: Behavior-Driven Development (BDD) user stories
 
@@ -120,7 +188,7 @@ THEN {expected outcome/assertion}
 
 - **QA Teams**: Understand test scenarios and acceptance criteria
 - **Product Teams**: Validate that implementation matches user needs
-- **AI Agents** (e2e-test-translator): Automatically generate failing Playwright tests
+- **AI Agents** (e2e-test-translator): Automatically generate failing Playwright tests from JSON Schema
 - **Developers**: Understand real-world usage patterns
 
 **Example**:
@@ -145,7 +213,7 @@ THEN {expected outcome/assertion}
 **What AI Agents Generate** (e2e-test-translator):
 
 ```typescript
-// tests/app/name.spec.ts
+// tests/app/name.spec.ts (Domain validation tests)
 test.fixme(
   'should accept name with at least 3 characters',
   { tag: '@spec' },
@@ -225,7 +293,7 @@ Here's how all three layers combine to create a comprehensive specification:
 | **Backend Engineer**                    | Why (x-business-rules)             | "IDs are auto-generated and immutable - I shouldn't allow manual assignment"                        |
 | **QA Tester**                           | Who/When (x-user-stories)          | "I need to test that IDs remain unchanged after updates"                                            |
 | **Product Manager**                     | All three layers                   | "IDs are auto-generated (What), to ensure uniqueness (Why), and users can't change them (Who/When)" |
-| **AI Agent (e2e-test-translator)**      | Who/When (x-user-stories)          | "Generate a test: GIVEN entity updated WHEN ID checked THEN ID unchanged"                           |
+| **AI Agent (e2e-test-translator)**      | Who/When (x-user-stories)          | "Generate tests from JSON Schema: GIVEN entity updated WHEN ID checked THEN ID unchanged"           |
 | **AI Agent (effect-schema-translator)** | What + Why                         | "Implement Effect Schema with min(1), max(MAX_SAFE_INTEGER), and auto-generation logic"             |
 
 ---
@@ -607,15 +675,15 @@ export type Description = Schema.Schema.Type<typeof DescriptionSchema>
 
 ## Benefits of the Triple-Documentation Pattern
 
-### 1. Single Source of Truth
+### 1. Dual Sources of Truth
 
 **Problem**: Documentation scattered across Jira tickets, Confluence docs, code comments, test files
-**Solution**: Everything in `specs.schema.json` - one file, always in sync
+**Solution**: Everything in specification files - JSON Schemas for domain, OpenAPI for APIs - always in sync
 
 ### 2. Automated Test Generation
 
 **Problem**: Writing E2E tests is manual, time-consuming, and inconsistent
-**Solution**: AI agents auto-generate tests from x-user-stories in GIVEN-WHEN-THEN format
+**Solution**: AI agents auto-generate tests from x-user-stories in both JSON Schemas (domain tests) and OpenAPI (API tests)
 
 ### 3. Business Context in Code
 
@@ -625,12 +693,12 @@ export type Description = Schema.Schema.Type<typeof DescriptionSchema>
 ### 4. Living Specification
 
 **Problem**: Documentation becomes stale as code evolves
-**Solution**: Schema drives code generation → code changes require schema updates → documentation stays current
+**Solution**: Specifications drive code generation → code changes require spec updates → documentation stays current across both domain and API layers
 
 ### 5. Cross-Functional Alignment
 
 **Problem**: Product, engineering, and QA teams work from different documentation
-**Solution**: All teams reference the same schema with layers tailored to their needs
+**Solution**: All teams reference the same specifications (JSON Schema + OpenAPI) with layers tailored to their needs
 
 ### 6. Scalable TDD
 
@@ -835,66 +903,106 @@ GIVEN user provides short description WHEN validating THEN error
 
 ```
 docs/specifications/
-├── specs.schema.json              ← Triple-Documentation source (What + Why + Who/When)
 ├── vision.md                      ← High-level business goals
-├── triple-documentation-pattern.md ← This document
-└── roadmap/
-    ├── name.md                    ← Generated from specs.schema.json
-    ├── version.md
-    ├── description.md
-    └── {property}.md
+├── spec-to-e2e-pattern.md         ← This document (Spec-to-E2E Pattern)
+└── app/
+    ├── app.schema.json            ← JSON Schema: App configuration (What + Why + Who/When)
+    ├── api.openapi.json           ← OpenAPI: Infrastructure API
+    └── tables/
+        ├── tables.schema.json     ← JSON Schema: Tables domain model
+        └── tables.openapi.json    ← OpenAPI: Tables CRUD API
 
 scripts/
-├── validate-schema.ts             ← Validates specs.schema.json structure
-├── add-user-stories.ts            ← Generates x-user-stories for properties
-└── generate-roadmap.ts            ← Creates roadmap/ files from specs.schema.json
+├── validate-schema.ts             ← Validates all .schema.json files
+├── add-user-stories.ts            ← Generates x-user-stories for schema properties
+└── generate-roadmap.ts            ← Creates roadmap/ from schemas
 
-tests/app/
-├── name.spec.ts                   ← Generated by e2e-test-translator from roadmap/name.md
-├── version.spec.ts
-└── {property}.spec.ts
+tests/
+├── app/                           ← Domain tests (from JSON Schema)
+│   ├── name.spec.ts               ← Generated by e2e-test-translator
+│   ├── version.spec.ts
+│   └── tables/
+│       ├── id.spec.ts
+│       ├── name.spec.ts
+│       └── fields.spec.ts
+└── api/                           ← API tests (from OpenAPI)
+    ├── infrastructure.spec.ts     ← Generated by e2e-test-translator
+    ├── tables.spec.ts             ← GET/POST /api/tables
+    └── records.spec.ts            ← CRUD /api/tables/{id}/records
 
-src/domain/models/app/
-├── name.ts                        ← Implemented by effect-schema-translator from roadmap/name.md
-├── version.ts
-└── {property}.ts
+src/
+├── domain/models/app/             ← Domain schemas (from JSON Schema)
+│   ├── name.ts                    ← Implemented by effect-schema-translator
+│   ├── version.ts
+│   └── tables/
+│       ├── table.ts
+│       └── field.ts
+└── presentation/routes/           ← API routes (from OpenAPI)
+    └── api/
+        ├── tables.ts              ← Hono routes for /api/tables
+        └── records.ts             ← Hono routes for /api/tables/{id}/records
 ```
 
 ---
 
 ## Summary
 
-The **Triple-Documentation Pattern** transforms `specs.schema.json` from a simple data structure definition into a comprehensive, living specification that:
+The **Triple-Documentation Pattern** transforms **JSON Schema files** (`.schema.json`) from simple structural definitions into comprehensive, living specifications using custom extensions (`x-business-rules` and `x-user-stories`):
 
-1. **Describes WHAT** (structure) for developers
-2. **Explains WHY** (business rules) for engineers
-3. **Defines WHO/WHEN** (user stories) for QA, product, and AI agents
+1. **Describes WHAT** (structure) using standard JSON Schema properties
+2. **Explains WHY** (business rules) using `x-business-rules` custom extension
+3. **Defines WHO/WHEN** (user stories) using `x-user-stories` custom extension
+
+### Dual-Source Architecture
+
+The project uses two complementary specification types:
+
+**JSON Schema Files** (`*.schema.json`):
+
+- Define domain models and data structures
+- Use Triple-Documentation Pattern (x-business-rules + x-user-stories)
+- Generate domain tests (`tests/app/`)
+- Generate Effect Schemas (`src/domain/`)
+- Focus: Business logic, validation rules, data integrity
+
+**OpenAPI Files** (`*.openapi.json`):
+
+- Define REST API contracts and HTTP operations
+- Use standard OpenAPI 3.1.0 properties (no custom extensions)
+- Generate API tests (`tests/api/`)
+- Generate Hono routes (`src/presentation/routes/`)
+- Focus: HTTP contracts, request/response schemas, status codes
 
 This pattern enables:
 
-- **Automated TDD**: User stories → RED tests → GREEN implementation → REFACTOR
-- **Cross-Functional Alignment**: One source of truth for all teams
-- **Scalable Development**: AI agents generate tests and code from specifications
-- **Living Documentation**: Schema changes cascade to tests and implementation
-- **Onboarding Efficiency**: New developers understand WHAT, WHY, and WHO/WHEN from one file
+- **Automated TDD**: JSON Schema user stories → RED tests → GREEN implementation → REFACTOR
+- **Complete Coverage**: Domain tests (from JSON Schema) + API tests (from OpenAPI) = full stack validation
+- **Cross-Functional Alignment**: JSON Schema serves as single source of truth for domain models
+- **Scalable Development**: AI agents generate tests and code from JSON Schema specifications
+- **Living Documentation**: JSON Schema changes cascade to tests and implementation
+- **Onboarding Efficiency**: New developers understand WHAT, WHY, and WHO/WHEN from JSON Schema files
 
-By embedding business context and acceptance criteria directly into the schema, we create a self-documenting, test-driven system that scales from 3 properties (current) to 691 properties (vision) without manual overhead.
+By embedding business context and acceptance criteria directly into JSON Schema files using custom extensions, we create a self-documenting, test-driven system that scales from 3 properties (current) to 691 properties (vision) without manual overhead.
 
 **Next Steps**:
 
-1. Review `specs.schema.json` to see the pattern in action
-2. Run `bun run scripts/add-user-stories.ts` to generate missing user stories
-3. Run `bun run scripts/generate-roadmap.ts` to create implementation blueprints
-4. Invoke AI agents to generate tests and implement features
-5. See `@docs/development/agent-workflows.md` for complete TDD pipeline
+1. Review `docs/specifications/app/*.schema.json` to see JSON Schema pattern
+2. Review `docs/specifications/app/*.openapi.json` to see OpenAPI pattern
+3. Run `bun run scripts/add-user-stories.ts` to generate missing user stories
+4. Run `bun run scripts/generate-roadmap.ts` to create implementation blueprints
+5. Invoke AI agents to generate tests (both app and API) and implement features
+6. See `@docs/development/agent-workflows.md` for complete TDD pipeline
 
 ---
 
 **Related Documentation**:
 
-- `@docs/specifications/specs.schema.json` - The schema file implementing this pattern
+- `@docs/specifications/app/app.schema.json` - JSON Schema implementing this pattern
+- `@docs/specifications/app/api.openapi.json` - OpenAPI implementing this pattern
+- `@docs/specifications/app/tables/tables.schema.json` - Example domain schema
+- `@docs/specifications/app/tables/tables.openapi.json` - Example API schema
 - `@docs/specifications/vision.md` - High-level product vision
 - `@docs/development/agent-workflows.md` - Complete TDD pipeline with AI agents
-- `@.claude/agents/spec-editor.md` - Agent responsible for collaborative schema design and editing
-- `@.claude/agents/e2e-test-translator.md` - Agent that generates RED tests from user stories
-- `@.claude/agents/effect-schema-translator.md` - Agent that implements Effect Schemas from blueprints
+- `@.claude/agents/spec-editor.md` - Agent for collaborative schema and OpenAPI editing
+- `@.claude/agents/e2e-test-translator.md` - Agent that generates RED tests from both sources
+- `@.claude/agents/effect-schema-translator.md` - Agent that implements Effect Schemas from JSON Schema

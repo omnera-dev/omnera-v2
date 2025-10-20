@@ -399,4 +399,4 @@ AJV detects circular $refs. To fix:
 - [JSON Schema Draft 7 Specification](https://json-schema.org/draft-07/json-schema-core.html)
 - [JSON Schema $ref Guide](https://json-schema.org/understanding-json-schema/structuring.html)
 - [AJV Documentation](https://ajv.js.org/)
-- [Triple-Documentation Pattern](./triple-documentation-pattern.md)
+- [Spec-to-E2E Pattern](./spec-to-e2e-pattern.md)

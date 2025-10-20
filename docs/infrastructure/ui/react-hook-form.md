@@ -44,10 +44,30 @@ React Hook Form manages form state internally and only triggers re-renders when 
 
 ### Why This Split?
 
-1. **Zod** is lightweight and optimized for browser environments
+1. **Zod** is lightweight and optimized for browser environments (9KB minified + gzipped)
 2. **Effect Schema** is part of the Effect.ts ecosystem used on the server
-3. Avoids bundling Effect.ts in client code
+3. Avoids bundling Effect.ts in client code (keeps bundle size small)
 4. Each tool optimized for its environment
+5. Zod integrates seamlessly with React Hook Form via `@hookform/resolvers`
+
+### Architectural Decision: Where Zod is Allowed
+
+**ESLint Enforcement** (eslint.config.ts lines 1096-1147):
+
+Zod is **restricted** in most of `src/` to prevent architectural inconsistency. It's **only allowed** in:
+
+| Location                             | Purpose                           | Why Zod is Allowed            |
+| ------------------------------------ | --------------------------------- | ----------------------------- |
+| `src/domain/models/api/*-schemas.ts` | OpenAPI API contracts             | OpenAPI tooling compatibility |
+| `src/presentation/**/*.{ts,tsx}`     | Client forms + API routes         | React Hook Form + Hono        |
+
+**Key Points**:
+- **Entire presentation layer** (`src/presentation/`) can use Zod
+- This includes: components, hooks, API routes, OpenAPI schema
+- **Everywhere else in `src/`**: Use Effect Schema (project standard)
+- Domain (`src/domain/`), Application (`src/application/`), Infrastructure (`src/infrastructure/`) → Effect Schema
+
+See `@docs/infrastructure/api/zod-hono-openapi.md` for complete Zod usage guidelines and ESLint enforcement details.
 
 ## Installation (Already Installed)
 
@@ -574,6 +594,13 @@ const [email, setEmail] = useState('')
 // GOOD: Let React Hook Form manage state
 <Input {...register('email')} />
 ```
+
+## Related Documentation
+
+- `@docs/infrastructure/api/zod-hono-openapi.md` - Zod usage for server API models and OpenAPI
+- `@docs/infrastructure/framework/effect.md` - Effect Schema for server-side validation
+- `@docs/infrastructure/ui/shadcn.md` - shadcn/ui components (Form component)
+- `@docs/architecture/layer-based-architecture.md` - Layer separation and where to use Zod
 
 ## References
 

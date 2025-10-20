@@ -32,8 +32,9 @@
 | **Bun** | 1.3.0 | Runtime & package manager |
 | **TypeScript** | ^5 | Type-safe language |
 | **Effect** | 3.18.4 | Functional programming, DI, error handling |
-| **Hono** | 4.10.1 | Web framework (API routes) |
-| **Zod** | 4.1.12 | Client-side validation (React Hook Form) |
+| **Effect Schema** | 3.18.4 | Server validation (domain/application/infrastructure) |
+| **Hono** | 4.10.1 | Web framework (API routes, RPC client, OpenAPI) |
+| **Zod** | 4.1.12 | OpenAPI integration ONLY (src/domain/models/api/) + client forms |
 | **Better Auth** | 1.3.27 | Authentication |
 | **Drizzle ORM** | ^0.44.6 | Database (PostgreSQL via bun:sql) |
 | **React** | 19.2.0 | UI library |
@@ -52,7 +53,8 @@ bun run src/index.ts        # Run application directly (alternative)
 
 # Scripts (TypeScript utilities)
 bun run scripts/export-schema.ts  # Run a specific script
-bun run export:schema              # Export schema to JSON file
+bun run export:schema              # Export Effect Schema to JSON files
+bun run export:openapi             # Export OpenAPI schema from runtime API routes
 bun test:unit                      # Test all unit tests (src/ and scripts/)
 
 # Database (Drizzle ORM)
@@ -187,13 +189,15 @@ omnera-v2/
 ### Schema Architecture
 - `@docs/specifications/effect-schema-translatorure.md` - Multi-file JSON Schema structure with $ref, validation tools, and best practices
 - `@docs/specifications/specs.schema.json` - Root schema (orchestrator with $ref to feature schemas)
-- `@docs/specifications/triple-documentation-pattern.md` - Schema documentation pattern (What/Why/Who-When)
+- `@docs/specifications/spec-to-e2e-pattern.md` - Pattern for translating JSON Schema specs to E2E tests (Triple-Documentation: What/Why/Who-When)
 
 ### Infrastructure
 - `@docs/infrastructure/runtime/bun.md` - Bun runtime & package manager
 - `@docs/infrastructure/language/typescript.md` - TypeScript configuration
-- `@docs/infrastructure/framework/effect.md` - Effect.ts patterns
+- `@docs/infrastructure/framework/effect.md` - Effect.ts patterns (Effect Schema for server validation)
 - `@docs/infrastructure/framework/hono.md` - Hono web framework
+- `@docs/infrastructure/api/hono-rpc-openapi.md` - Hono RPC client + OpenAPI documentation (dual-track pattern)
+- `@docs/infrastructure/api/zod-hono-openapi.md` - Zod + Hono + OpenAPI integration (ESLint enforcement, usage patterns)
 - `@docs/infrastructure/framework/better-auth.md` - Authentication
 - `@docs/infrastructure/database/drizzle.md` - Drizzle ORM
 - `@docs/infrastructure/ui/react.md` - React 19 patterns

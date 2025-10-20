@@ -526,12 +526,22 @@ export default defineConfig([
         // ==========================================
         // DOMAIN LAYER - Feature Models (STRICT ISOLATION)
         // ==========================================
-        { type: 'domain-model-app', pattern: 'src/domain/models/app/**/*', mode: 'file' },
-        { type: 'domain-model-table', pattern: 'src/domain/models/table/**/*', mode: 'file' },
-        { type: 'domain-model-page', pattern: 'src/domain/models/page/**/*', mode: 'file' },
+        // App model - Root level only (name.ts, description.ts, version.ts, index.ts, tables.ts)
+        {
+          type: 'domain-model-app',
+          pattern: 'src/domain/models/app/*.{ts,tsx}',
+          mode: 'file',
+        },
+        // Feature models - Nested under app/
+        {
+          type: 'domain-model-table',
+          pattern: 'src/domain/models/app/tables/**/*',
+          mode: 'file',
+        },
+        { type: 'domain-model-page', pattern: 'src/domain/models/app/pages/**/*', mode: 'file' },
         {
           type: 'domain-model-automation',
-          pattern: 'src/domain/models/automation/**/*',
+          pattern: 'src/domain/models/app/automations/**/*',
           mode: 'file',
         },
 
@@ -1080,6 +1090,59 @@ export default defineConfig([
           ],
         },
       ],
+    },
+  },
+
+  // Zod Restriction - Forbid Zod usage in src/ (except API models and presentation layer)
+  // Project standard: Effect Schema for server validation
+  // EXCEPTIONS:
+  // - src/domain/models/api allows Zod for OpenAPI/Hono integration
+  // - src/presentation allows Zod for client forms (React Hook Form)
+  {
+    files: ['src/**/*.{ts,tsx}'],
+    ignores: [
+      'src/domain/models/api/**/*.{ts,tsx}', // Exception for API models
+      'src/presentation/**/*.{ts,tsx}', // Exception for presentation layer (forms, API routes, OpenAPI)
+    ],
+    rules: {
+      'no-restricted-imports': [
+        'error',
+        {
+          paths: [
+            {
+              name: 'zod',
+              message:
+                'Zod is restricted in src/ - use Effect Schema for server validation. EXCEPTIONS: Zod is allowed in src/domain/models/api for OpenAPI/Hono integration AND src/presentation for client forms.',
+            },
+            {
+              name: '@hono/zod-validator',
+              message:
+                'Zod validator is restricted in src/ - use Effect Schema for validation. EXCEPTION: @hono/zod-validator is allowed in src/domain/models/api and src/presentation/api/routes for API validation.',
+            },
+          ],
+        },
+      ],
+    },
+  },
+
+  // Zod Allowed - API models exception
+  // API models in src/domain/models/api can use Zod for OpenAPI/Hono integration
+  {
+    files: ['src/domain/models/api/**/*.{ts,tsx}'],
+    rules: {
+      'no-restricted-imports': 'off', // Allow Zod and @hono/zod-validator imports
+    },
+  },
+
+  // Zod Allowed - Presentation layer exception
+  // Presentation layer can use Zod for:
+  // - Client-side form validation (React Hook Form)
+  // - API route validation (@hono/zod-validator)
+  // - OpenAPI schema generation
+  {
+    files: ['src/presentation/**/*.{ts,tsx}'],
+    rules: {
+      'no-restricted-imports': 'off', // Allow Zod, @hono/zod-validator, @hookform/resolvers
     },
   },
 

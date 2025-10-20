@@ -219,9 +219,9 @@ export const NameSchema = Schema.String.pipe(
 // Read common/definitions.schema.json for id definition
 
 // Step 6: Implement (reuse existing domain schemas)
-import { IdSchema } from '@/domain/models/table/id'
-import { NameSchema } from '@/domain/models/table/name'
-import { FieldsSchema } from '@/domain/models/table/fields'
+import { IdSchema } from '@/domain/models/app/tables/id'
+import { NameSchema } from '@/domain/models/app/tables/name'
+import { FieldsSchema } from '@/domain/models/app/tables/fields'
 
 export const TablesSchema = Schema.Array(
   Schema.Struct({
@@ -284,8 +284,8 @@ When translating App schemas, import EXISTING domain schemas (don't recreate):
 
 ```typescript
 // src/domain/models/app/tables.ts
-import { IdSchema } from '@/domain/models/table/id'        // ← Existing
-import { NameSchema } from '@/domain/models/table/name'    // ← Existing
+import { IdSchema } from '@/domain/models/app/tables/id'        // ← Existing
+import { NameSchema } from '@/domain/models/app/tables/name'    // ← Existing
 
 export const TablesSchema = Schema.Array(
   Schema.Struct({
@@ -296,9 +296,9 @@ export const TablesSchema = Schema.Array(
 ```
 
 **Available domain namespaces**:
-- `@/domain/models/table/*` - Table domain (id, name, fields, etc.)
-- `@/domain/models/page/*` - Page domain [if exists]
-- `@/domain/models/automation/*` - Automation domain [if exists]
+- `@/domain/models/app/tables/*` - Table domain (id, name, fields, etc.)
+- `@/domain/models/app/pages/*` - Page domain [if exists]
+- `@/domain/models/app/automations/*` - Automation domain [if exists]
 
 **Boundary**: You implement App schemas, you IMPORT domain schemas (never modify them).
 

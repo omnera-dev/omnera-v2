@@ -193,11 +193,11 @@ describe('validate-schema.ts', () => {
     })
 
     test('tables property references external schema', () => {
-      expect(schema.properties.tables.$ref).toBe('./schemas/tables/tables.schema.json')
+      expect(schema.properties.tables.$ref).toBe('./tables/tables.schema.json')
     })
 
     test('pages property references external schema', () => {
-      expect(schema.properties.pages.$ref).toBe('./schemas/pages/pages.schema.json')
+      expect(schema.properties.pages.$ref).toBe('./pages/pages.schema.json')
     })
 
     test('version follows semantic versioning pattern', () => {

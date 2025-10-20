@@ -67,6 +67,7 @@
     "license": "bun run scripts/add-license-headers.ts",
     "generate:roadmap": "bun run scripts/generate-roadmap.ts",
     "export:schema": "bun run scripts/export-schema.ts",
+    "export:openapi": "bun run scripts/export-openapi.ts",
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate",
     "db:push": "drizzle-kit push",
@@ -115,6 +116,8 @@
     "typescript": "^5.9.3"
   },
   "dependencies": {
+    "@hono/zod-openapi": "^1.1.4",
+    "@hono/zod-validator": "^0.7.4",
     "@hookform/resolvers": "^5.2.2",
     "@radix-ui/react-accordion": "^1.2.12",
     "@radix-ui/react-alert-dialog": "^1.1.15",
@@ -142,6 +145,7 @@
     "@radix-ui/react-toggle": "^1.1.10",
     "@radix-ui/react-toggle-group": "^1.1.11",
     "@radix-ui/react-tooltip": "^1.2.8",
+    "@scalar/hono-api-reference": "^0.9.22",
     "@tailwindcss/postcss": "^4.1.14",
     "@tanstack/react-query": "^5.90.5",
     "@tanstack/react-query-devtools": "^5.90.2",

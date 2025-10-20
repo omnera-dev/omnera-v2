@@ -5,9 +5,12 @@
  * found in the LICENSE.md file in the root directory of this source tree.
  */
 
+import { Scalar } from '@scalar/hono-api-reference'
 import { Console, Effect } from 'effect'
 import { Hono } from 'hono'
 import { ServerCreationError } from '@/infrastructure/errors/server-creation-error'
+import { createApiRoutes } from '@/presentation/api/app'
+import { getOpenAPIDocument } from '@/presentation/api/openapi-schema'
 import { auth } from '../auth/better-auth/auth'
 import { compileCSS } from '../css/compiler'
 import type { ServerInstance } from '@/application/models/server'
@@ -35,7 +38,9 @@ export interface ServerConfig {
  * Creates a Hono application with routes
  *
  * Mounts the following routes:
- * - GET /health - Health check endpoint
+ * - GET /api/* - API routes (health, tables, records) with RPC type safety
+ * - GET /api/openapi.json - Generated OpenAPI specification
+ * - GET /api/scalar - Scalar API documentation UI
  * - POST/GET /api/auth/* - Better Auth authentication endpoints
  * - GET / - Homepage
  * - GET /output.css - Compiled Tailwind CSS
@@ -53,14 +58,21 @@ function createHonoApp(
   renderNotFoundPage: () => string,
   renderErrorPage: () => string
 ): Readonly<Hono> {
-  return new Hono()
-    .get('/health', (c) =>
-      c.json({
-        status: 'ok',
-        timestamp: new Date().toISOString(),
-        app: {
-          name: app.name,
-        },
+  // Create base Hono app and chain API routes directly
+  // This pattern is required for Hono RPC type inference to work correctly
+  const honoApp = createApiRoutes(app, new Hono())
+
+  // Continue chaining with other routes
+  return honoApp
+    .get('/api/openapi.json', (c) => {
+      const openApiDoc = getOpenAPIDocument()
+      return c.json(openApiDoc)
+    })
+    .get(
+      '/api/scalar',
+      Scalar({
+        url: '/api/openapi.json',
+        theme: 'default',
       })
     )
     .on(['POST', 'GET'], '/api/auth/*', (c) => auth.handler(c.req.raw))
@@ -170,7 +182,9 @@ export const createServer = (
     // Log server startup information
     yield* Console.log('✓ Server started successfully!')
     yield* Console.log(`✓ Homepage: ${url}`)
-    yield* Console.log(`✓ Health check: ${url}/health`)
+    yield* Console.log(`✓ Health check: ${url}/api/health`)
+    yield* Console.log(`✓ API documentation: ${url}/api/scalar`)
+    yield* Console.log(`✓ OpenAPI schema: ${url}/api/openapi.json`)
     yield* Console.log(`✓ Compiled CSS: ${url}/output.css`)
 
     // Create stop effect
