@@ -7,7 +7,7 @@
  */
 
 /**
- * Quality check script - runs linting, type checking, unit tests, and E2E regression tests in parallel
+ * Quality check script - runs linting, type checking, unit tests, and E2E regression tests
  *
  * Usage:
  *   bun run quality                   # Run all checks on entire codebase (ESLint, TypeScript, unit tests, E2E regression)
@@ -15,7 +15,8 @@
  *   bun run quality src/index.ts      # Example: check specific file
  *
  * Performance optimizations:
- * - Runs all checks concurrently using Promise.all()
+ * - Runs fast checks concurrently (ESLint, TypeScript, unit tests)
+ * - Uses fail-fast strategy: E2E tests only run if all fast checks pass
  * - Uses ESLint cache for faster subsequent runs
  * - Uses TypeScript incremental mode for faster type checking
  * - Skips checks for comment-only changes (file mode)
@@ -251,13 +252,28 @@ async function main() {
 
   const overallStart = performance.now()
 
-  // Run all checks in parallel
-  const results = await Promise.all([
+  // Run fast checks first (ESLint, TypeScript, Unit Tests)
+  const fastChecks = await Promise.all([
     runCheck('ESLint', ['bunx', 'eslint', '.', '--max-warnings', '0', '--cache'], 30_000),
     runCheck('TypeScript', ['bunx', 'tsc', '--noEmit', '--incremental'], 60_000),
     runCheck('Unit Tests', ['bun', 'test', '--concurrent', 'src', 'scripts'], 30_000),
-    runCheck('E2E Regression Tests', ['bunx', 'playwright', 'test', '--grep=@regression'], 120_000),
   ])
+
+  const fastChecksPassed = fastChecks.every((r) => r.success)
+
+  // Only run E2E tests if all fast checks passed
+  let results: CheckResult[]
+  if (fastChecksPassed) {
+    const e2eResult = await runCheck(
+      'E2E Regression Tests',
+      ['bunx', 'playwright', 'test', '--grep=@regression'],
+      120_000
+    )
+    results = [...fastChecks, e2eResult]
+  } else {
+    console.log('\n  ⏭️  Skipping E2E regression tests (fast checks failed)')
+    results = fastChecks
+  }
 
   const overallDuration = Math.round(performance.now() - overallStart)
   const allPassed = results.every((r) => r.success)
@@ -286,10 +302,10 @@ async function main() {
       .join(', ')
     console.error(`\n❌ Quality checks failed: ${failedChecks}`)
     console.error('\nRun individual commands to see detailed errors:')
-    if (!results[0].success) console.error('  bun run lint')
-    if (!results[1].success) console.error('  bun run typecheck')
-    if (!results[2].success) console.error('  bun test:unit')
-    if (!results[3].success) console.error('  bun test:e2e:regression')
+    if (results[0] && !results[0].success) console.error('  bun run lint')
+    if (results[1] && !results[1].success) console.error('  bun run typecheck')
+    if (results[2] && !results[2].success) console.error('  bun test:unit')
+    if (results[3] && !results[3].success) console.error('  bun test:e2e:regression')
     process.exit(1)
   }
 }
