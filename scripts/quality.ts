@@ -7,11 +7,11 @@
  */
 
 /**
- * Quality check script - runs linting, type checking, and unit tests in parallel
+ * Quality check script - runs linting, type checking, unit tests, and E2E regression tests in parallel
  *
  * Usage:
- *   bun run quality                   # Run all checks on entire codebase
- *   bun run quality <file>            # Run checks on specific file
+ *   bun run quality                   # Run all checks on entire codebase (ESLint, TypeScript, unit tests, E2E regression)
+ *   bun run quality <file>            # Run checks on specific file (ESLint, TypeScript, unit tests only)
  *   bun run quality src/index.ts      # Example: check specific file
  *
  * Performance optimizations:
@@ -256,6 +256,7 @@ async function main() {
     runCheck('ESLint', ['bunx', 'eslint', '.', '--max-warnings', '0', '--cache'], 30_000),
     runCheck('TypeScript', ['bunx', 'tsc', '--noEmit', '--incremental'], 60_000),
     runCheck('Unit Tests', ['bun', 'test', '--concurrent', 'src', 'scripts'], 30_000),
+    runCheck('E2E Regression Tests', ['bunx', 'playwright', 'test', '--grep=@regression'], 120_000),
   ])
 
   const overallDuration = Math.round(performance.now() - overallStart)
@@ -288,6 +289,7 @@ async function main() {
     if (!results[0].success) console.error('  bun run lint')
     if (!results[1].success) console.error('  bun run typecheck')
     if (!results[2].success) console.error('  bun test:unit')
+    if (!results[3].success) console.error('  bun test:e2e:regression')
     process.exit(1)
   }
 }
