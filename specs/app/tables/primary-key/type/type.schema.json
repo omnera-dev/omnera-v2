@@ -4,11 +4,7 @@
   "title": "Primary Key Type",
   "description": "Primary key generation strategy. 'auto-increment' uses sequential integers (1, 2, 3...), 'uuid' generates random unique identifiers, 'composite' uses multiple fields together.",
   "type": "string",
-  "enum": [
-    "auto-increment",
-    "uuid",
-    "composite"
-  ],
+  "enum": ["auto-increment", "uuid", "composite"],
   "default": "auto-increment",
   "specs": []
 }

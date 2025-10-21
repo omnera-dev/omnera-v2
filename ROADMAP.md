@@ -49,8 +49,8 @@
 
 🧪 **Total Specs**: 1140
 ✅ **DONE**: 51 (4%)
-🚧 **WIP**: 36 (3%)
-⏳ **TODO**: 1053 (92%)
+🚧 **WIP**: 57 (5%)
+⏳ **TODO**: 1032 (91%)
 
 **Next Steps**: Convert TODO specs to WIP, then to DONE
 

@@ -77,7 +77,7 @@ export class DatabaseTemplateManager {
    * Wait for PostgreSQL container to be ready
    * Creates and destroys temporary pools to avoid connection termination issues
    */
-  private async waitForContainerReady(maxAttempts = 15): Promise<void> {
+  private async waitForContainerReady(maxAttempts = 20): Promise<void> {
     console.log(`   🔄 Waiting for PostgreSQL container at ${this.adminConnectionUrl}...`)
 
     // eslint-disable-next-line functional/no-loop-statements
@@ -86,7 +86,7 @@ export class DatabaseTemplateManager {
       const testPool = new Pool({
         connectionString: this.adminConnectionUrl,
         max: 1,
-        connectionTimeoutMillis: 3000,
+        connectionTimeoutMillis: 5000, // Increased from 3000ms to 5000ms
       })
 
       try {
@@ -116,8 +116,11 @@ export class DatabaseTemplateManager {
           )
         }
 
-        // Wait with exponential backoff
-        const backoff = Math.min(1000, 200 * (i + 1))
+        // Improved backoff strategy:
+        // - First 3 attempts: 500ms (container might be starting up)
+        // - Next 3 attempts: 1000ms (PostgreSQL initializing)
+        // - Remaining attempts: 1500ms (extended wait for slow systems)
+        const backoff = i < 3 ? 500 : (i < 6 ? 1000 : 1500)
         await new Promise((resolve) => setTimeout(resolve, backoff))
       }
     }

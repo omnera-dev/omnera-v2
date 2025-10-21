@@ -22,7 +22,7 @@ export default async function globalSetup() {
   console.log('🚀 Initializing global test database...')
 
   // Start PostgreSQL container
-  const container = await new PostgreSqlContainer('postgres:16-alpine').withReuse().start()
+  const container = await new PostgreSqlContainer('postgres:16-alpine').start()
 
   const connectionUrl = container.getConnectionUri()
 
