@@ -5,7 +5,7 @@
  * found in the LICENSE.md file in the root directory of this source tree.
  */
 
-import { writeFile, mkdir, rm } from 'node:fs/promises'
+import { writeFile, mkdir } from 'node:fs/promises'
 import { join } from 'node:path'
 import { describe, test, expect, beforeEach } from 'bun:test'
 import {
@@ -426,16 +426,18 @@ describe('validateSpecToTestMapping', () => {
 // Test File Validation (Integration)
 // ============================================================================
 
-describe('validateTestFile', () => {
-  const testDir = join(process.cwd(), '.test-temp')
-  const testFile = join(testDir, 'test.spec.ts')
+describe.serial('validateTestFile', () => {
+  const baseDir = join(process.cwd(), 'tmp', 'validation-common')
 
+  // Ensure directory exists (will be created on first test run)
   beforeEach(async () => {
-    await rm(testDir, { recursive: true, force: true })
-    await mkdir(testDir, { recursive: true })
+    await mkdir(baseDir, { recursive: true })
   })
 
   test('validates complete valid test file', async () => {
+    const uniqueId = `valid-${Date.now()}-${Math.random().toString(36).slice(2, 9)}`
+    const testFile = join(baseDir, `${uniqueId}.spec.ts`)
+
     const result = createTestResult()
     const specs: Spec[] = [{ id: 'APP-TEST-001', given: 'a', when: 'b', then: 'c' }]
 
@@ -464,6 +466,9 @@ test('regression test', { tag: '@regression' }, async () => {
   })
 
   test('detects missing copyright header', async () => {
+    const uniqueId = `no-copyright-${Date.now()}-${Math.random().toString(36).slice(2, 9)}`
+    const testFile = join(baseDir, `${uniqueId}.spec.ts`)
+
     const result = createTestResult()
     const specs: Spec[] = [{ id: 'APP-TEST-001', given: 'a', when: 'b', then: 'c' }]
 

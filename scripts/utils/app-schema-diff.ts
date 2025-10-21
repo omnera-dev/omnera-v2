@@ -5,19 +5,7 @@
  * found in the LICENSE.md file in the root directory of this source tree.
  */
 
-import { readFile } from 'node:fs/promises'
-
-interface JSONSchema {
-  $schema?: string
-  $id?: string
-  $ref?: string
-  type?: string | string[]
-  properties?: Record<string, JSONSchema>
-  items?: JSONSchema
-  additionalProperties?: boolean | JSONSchema
-  required?: string[]
-  [key: string]: unknown
-}
+import { resolveJsonSchema } from '../lib/schema-resolver.js'
 
 export interface AppSchemaComparison {
   totalProperties: number
@@ -30,15 +18,17 @@ export interface AppSchemaComparison {
 
 /**
  * Compare two app schemas and calculate implementation progress
- * Simplified: only compare top-level required properties
+ *
+ * Resolves all $ref pointers before comparison to ensure accurate diff
+ * calculation between modular goal schemas and flattened current schemas.
  */
 export async function compareAppSchemas(
   goalSchemaPath: string,
   currentSchemaPath: string
 ): Promise<AppSchemaComparison> {
-  // Load schemas
-  const goalSchema = await loadSchema(goalSchemaPath)
-  const currentSchema = await loadSchema(currentSchemaPath)
+  // Load and resolve schemas (dereference all $ref pointers)
+  const goalSchema = await resolveJsonSchema(goalSchemaPath)
+  const currentSchema = await resolveJsonSchema(currentSchemaPath)
 
   // Get top-level required properties from goal schema
   const goalProperties = goalSchema.required || []
@@ -61,12 +51,4 @@ export async function compareAppSchemas(
     missingPropertyPaths: missingPaths.sort(),
     implementedPropertyPaths: implementedPaths.sort(),
   }
-}
-
-/**
- * Load JSON schema from file
- */
-async function loadSchema(path: string): Promise<JSONSchema> {
-  const content = await readFile(path, 'utf-8')
-  return JSON.parse(content) as JSONSchema
 }

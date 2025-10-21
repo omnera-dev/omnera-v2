@@ -5,18 +5,7 @@
  * found in the LICENSE.md file in the root directory of this source tree.
  */
 
-import { readFile } from 'node:fs/promises'
-
-interface OpenAPISpec {
-  openapi: string
-  info: {
-    title: string
-    version: string
-    description?: string
-  }
-  paths: Record<string, Record<string, unknown>>
-  [key: string]: unknown
-}
+import { resolveOpenApiSchema, type OpenAPISpec } from '../lib/schema-resolver.js'
 
 export interface ApiSchemaComparison {
   totalEndpoints: number
@@ -29,14 +18,17 @@ export interface ApiSchemaComparison {
 
 /**
  * Compare two OpenAPI schemas and calculate implementation progress
+ *
+ * Resolves all $ref pointers before comparison to ensure accurate diff
+ * calculation between modular goal schemas and flattened current schemas.
  */
 export async function compareApiSchemas(
   goalSchemaPath: string,
   currentSchemaPath: string
 ): Promise<ApiSchemaComparison> {
-  // Load OpenAPI schemas
-  const goalSchema = await loadOpenApiSchema(goalSchemaPath)
-  const currentSchema = await loadOpenApiSchema(currentSchemaPath)
+  // Load and resolve OpenAPI schemas (dereference all $ref pointers)
+  const goalSchema = await resolveOpenApiSchema(goalSchemaPath)
+  const currentSchema = await resolveOpenApiSchema(currentSchemaPath)
 
   // Extract all endpoint paths with methods from both schemas
   const goalEndpoints = extractEndpoints(goalSchema)
@@ -69,14 +61,6 @@ export async function compareApiSchemas(
       return a.method.localeCompare(b.method)
     }),
   }
-}
-
-/**
- * Load OpenAPI schema from file
- */
-async function loadOpenApiSchema(path: string): Promise<OpenAPISpec> {
-  const content = await readFile(path, 'utf-8')
-  return JSON.parse(content) as OpenAPISpec
 }
 
 /**

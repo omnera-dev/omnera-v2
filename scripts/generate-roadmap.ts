@@ -17,6 +17,7 @@
  * Usage: bun run scripts/generate-roadmap.ts
  */
 
+import { join } from 'node:path'
 import {
   generateSummaryRoadmap,
   generateAppRoadmap,
@@ -28,16 +29,19 @@ import { compareAppSchemas } from './utils/app-schema-diff'
 import { analyzeTestImplementation } from './utils/spec-analyzer'
 import type { NewRoadmapData } from './types/roadmap'
 
-// Paths
-const GOAL_APP_SCHEMA_PATH = 'specs/app/app.schema.json'
-const CURRENT_APP_SCHEMA_PATH = 'schemas/0.0.1/app.schema.json'
-const GOAL_API_SCHEMA_PATH = 'specs/api/app.openapi.json'
-const CURRENT_API_SCHEMA_PATH = 'schemas/0.0.1/app.openapi.json'
-const SPECS_DIR = 'specs'
-const ROADMAP_OUTPUT_PATH = 'ROADMAP.md'
-const APP_ROADMAP_OUTPUT_PATH = 'specs/app/ROADMAP.md'
-const API_ROADMAP_OUTPUT_PATH = 'specs/api/ROADMAP.md'
-const ADMIN_ROADMAP_OUTPUT_PATH = 'specs/admin/ROADMAP.md'
+// Get project root (assuming script is in scripts/ subdirectory)
+const PROJECT_ROOT = join(import.meta.dir, '..')
+
+// Paths (converted to absolute paths for $ref resolution)
+const GOAL_APP_SCHEMA_PATH = join(PROJECT_ROOT, 'specs/app/app.schema.json')
+const CURRENT_APP_SCHEMA_PATH = join(PROJECT_ROOT, 'schemas/0.0.1/app.schema.json')
+const GOAL_API_SCHEMA_PATH = join(PROJECT_ROOT, 'specs/api/app.openapi.json')
+const CURRENT_API_SCHEMA_PATH = join(PROJECT_ROOT, 'schemas/0.0.1/app.openapi.json')
+const SPECS_DIR = join(PROJECT_ROOT, 'specs')
+const ROADMAP_OUTPUT_PATH = join(PROJECT_ROOT, 'ROADMAP.md')
+const APP_ROADMAP_OUTPUT_PATH = join(PROJECT_ROOT, 'specs/app/ROADMAP.md')
+const API_ROADMAP_OUTPUT_PATH = join(PROJECT_ROOT, 'specs/api/ROADMAP.md')
+const ADMIN_ROADMAP_OUTPUT_PATH = join(PROJECT_ROOT, 'specs/admin/ROADMAP.md')
 
 /**
  * Run prerequisite commands to ensure schemas and specs are valid

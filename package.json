@@ -54,9 +54,9 @@
     "typecheck": "tsc --noEmit",
     "clean": "knip",
     "clean:fix": "knip --fix",
-    "quality": "bun run scripts/check-quality.ts",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
+    "quality": "bun run scripts/check-quality.ts",
     "test:unit": "bun test --concurrent src scripts",
     "test:unit:watch": "bun test --concurrent --watch src scripts",
     "test:e2e": "playwright test",
@@ -80,6 +80,7 @@
     "release": "semantic-release"
   },
   "devDependencies": {
+    "@apidevtools/json-schema-ref-parser": "^14.2.1",
     "@eslint/compat": "^1.4.0",
     "@eslint/js": "^9.38.0",
     "@playwright/test": "^1.56.1",
