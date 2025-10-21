@@ -1,0 +1,60 @@
+{
+  "$id": "blocks.schema.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Page Blocks",
+  "description": "Content blocks that stack vertically to build the page",
+  "type": "array",
+  "minItems": 1,
+  "items": {
+    "anyOf": [
+      {
+        "$ref": "./hero-centered/hero-centered.schema.json"
+      },
+      {
+        "$ref": "./hero-split/hero-split.schema.json"
+      },
+      {
+        "$ref": "./features-3-column/features-3-column.schema.json"
+      },
+      {
+        "$ref": "./features-alternating/features-alternating.schema.json"
+      },
+      {
+        "$ref": "./cta-centered/cta-centered.schema.json"
+      },
+      {
+        "$ref": "./cta-split/cta-split.schema.json"
+      },
+      {
+        "$ref": "./pricing-3-tier/pricing-3-tier.schema.json"
+      },
+      {
+        "$ref": "./pricing-comparison/pricing-comparison.schema.json"
+      },
+      {
+        "$ref": "./testimonials-grid/testimonials-grid.schema.json"
+      },
+      {
+        "$ref": "./stats-section/stats-section.schema.json"
+      },
+      {
+        "$ref": "./content-text/content-text.schema.json"
+      },
+      {
+        "$ref": "./content-image/content-image.schema.json"
+      },
+      {
+        "$ref": "./faq-section/faq-section.schema.json"
+      },
+      {
+        "$ref": "./header-nav/header-nav.schema.json"
+      },
+      {
+        "$ref": "./footer/footer.schema.json"
+      },
+      {
+        "$ref": "./contact-form/contact-form.schema.json"
+      }
+    ]
+  }
+}

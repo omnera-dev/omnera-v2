@@ -160,13 +160,13 @@ You will coordinate as follows:
 
 This bidirectional validation ensures **living architecture** - patterns are not just documented but actively enforced.
 
-## Coordination with spec-editor
+## Coordination with json-schema-editor and openapi-editor
 
-**When**: spec-editor helps user design schema properties with validation constraints that introduce new architectural patterns
+**When**: json-schema-editor or openapi-editor helps user design schemas with validation constraints that introduce new architectural patterns
 
 **Coordination Protocol**:
-- **THEY (spec-editor)**: Guide user through schema property design with validation rules, business rules, and user stories
-- **THEY**: Focus on WHAT the property validates (technical constraints, formats, ranges)
+- **THEY (json-schema-editor/openapi-editor)**: Guide user through schema design with validation rules, business rules, and user stories
+- **THEY**: Focus on WHAT the schema validates (technical constraints, formats, ranges, API contracts)
 - **THEY**: If validation constraints introduce new architectural patterns, notify you
 - **YOU**: Receive notification about validation patterns that need architectural documentation
 - **YOU**: Analyze if pattern represents broader architectural concern (e.g., immutability enforcement, type safety patterns)
@@ -186,7 +186,7 @@ This bidirectional validation ensures **living architecture** - patterns are not
 - **YOU**: Validate: TypeScript `readonly` modifier and ESLint `functional/immutable-data` enforce pattern
 
 **Role Boundaries**:
-- **spec-editor**: Schema property design, validation rules (WHAT validates)
+- **json-schema-editor/openapi-editor**: Schema design, validation rules (WHAT validates)
 - **YOU**: Architectural rationale, cross-codebase patterns (WHY architecture)
 
 ## Collaborative Workflow Examples

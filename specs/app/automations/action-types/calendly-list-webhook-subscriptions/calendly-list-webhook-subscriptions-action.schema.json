@@ -1,0 +1,163 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "List Webhook Subscriptions",
+  "description": "Lists the webhook subscriptions for a given organization",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string"
+    },
+    "account": {
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "string"
+        }
+      ]
+    },
+    "service": {
+      "type": "string",
+      "const": "calendly"
+    },
+    "action": {
+      "type": "string",
+      "const": "list-webhook-subscriptions"
+    },
+    "params": {
+      "type": "object",
+      "properties": {
+        "organization": {
+          "default": "Current user organisation",
+          "type": "string"
+        },
+        "scope": {
+          "default": "user",
+          "type": "string",
+          "enum": ["user", "organization", "group"]
+        },
+        "count": {
+          "default": 20,
+          "type": "number",
+          "minimum": 1,
+          "maximum": 100
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "required": ["name", "account", "service", "action"],
+  "additionalProperties": false,
+  "specs": [
+    {
+      "id": "SPEC-001",
+      "given": "user provides name",
+      "when": "validating input",
+      "then": "string value should be accepted"
+    },
+    {
+      "id": "SPEC-002",
+      "given": "name is empty string",
+      "when": "validating input",
+      "then": "behavior should follow optional/required rules"
+    },
+    {
+      "id": "SPEC-003",
+      "given": "user configures account",
+      "when": "validating input",
+      "then": "value should meet schema requirements"
+    },
+    {
+      "id": "SPEC-004",
+      "given": "account is set",
+      "when": "processing configuration",
+      "then": "value should be used correctly"
+    },
+    {
+      "id": "SPEC-005",
+      "given": "entity with service='calendly'",
+      "when": "processing configuration",
+      "then": "correct handler should be selected"
+    },
+    {
+      "id": "SPEC-006",
+      "given": "invalid service value",
+      "when": "validating configuration",
+      "then": "clear error message should identify the issue"
+    },
+    {
+      "id": "SPEC-007",
+      "given": "entity with action='list-webhook-subscriptions'",
+      "when": "processing configuration",
+      "then": "correct handler should be selected"
+    },
+    {
+      "id": "SPEC-008",
+      "given": "invalid action value",
+      "when": "validating configuration",
+      "then": "clear error message should identify the issue"
+    },
+    {
+      "id": "SPEC-009",
+      "given": "user configures params",
+      "when": "validating input",
+      "then": "value should meet schema requirements"
+    },
+    {
+      "id": "SPEC-010",
+      "given": "params is set",
+      "when": "processing configuration",
+      "then": "value should be used correctly"
+    },
+    {
+      "id": "SPEC-011",
+      "given": "user provides organization",
+      "when": "validating input",
+      "then": "string value should be accepted"
+    },
+    {
+      "id": "SPEC-012",
+      "given": "organization is empty string",
+      "when": "validating input",
+      "then": "behavior should follow optional/required rules"
+    },
+    {
+      "id": "SPEC-013",
+      "given": "user selects scope from valid options",
+      "when": "validating input",
+      "then": "selection should be accepted"
+    },
+    {
+      "id": "SPEC-014",
+      "given": "user provides invalid scope value",
+      "when": "validating input",
+      "then": "error should list valid options: user, organization, group"
+    },
+    {
+      "id": "SPEC-015",
+      "given": "scope is set to any valid enum value",
+      "when": "processing entity",
+      "then": "appropriate behavior should execute"
+    },
+    {
+      "id": "SPEC-016",
+      "given": "user provides count between 1 and 100",
+      "when": "validating input",
+      "then": "value should be accepted"
+    },
+    {
+      "id": "SPEC-017",
+      "given": "user provides count below 1",
+      "when": "validating input",
+      "then": "error should enforce minimum value"
+    },
+    {
+      "id": "SPEC-018",
+      "given": "user provides count above 100",
+      "when": "validating input",
+      "then": "error should enforce maximum value"
+    }
+  ],
+  "$id": "calendly-list-webhook-subscriptions-action.schema.json"
+}

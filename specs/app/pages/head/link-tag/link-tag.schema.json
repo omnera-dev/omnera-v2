@@ -1,0 +1,25 @@
+{
+  "$id": "link-tag.schema.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Link Tag",
+  "description": "HTML link element for external resources",
+  "type": "object",
+  "properties": {
+    "tag": {
+      "const": "link"
+    },
+    "href": {
+      "type": "string",
+      "minLength": 1
+    },
+    "rel": {
+      "type": "string",
+      "minLength": 1
+    },
+    "type": {
+      "type": "string"
+    }
+  },
+  "required": ["tag", "href", "rel"],
+  "additionalProperties": false
+}

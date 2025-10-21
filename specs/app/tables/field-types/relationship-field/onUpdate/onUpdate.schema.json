@@ -1,0 +1,29 @@
+{
+  "$id": "onUpdate.schema.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Action to take when the related record's key is updated",
+  "description": "Action to take when the related record's key is updated",
+  "type": "string",
+  "default": "cascade",
+  "enum": ["cascade", "set-null", "restrict", "no-action"],
+  "specs": [
+    {
+      "id": "FIELD-RELATIONSHIP-FIELD-ONUPDATE-001",
+      "given": "user selects onUpdate from valid options",
+      "when": "validating input",
+      "then": "selection should be accepted"
+    },
+    {
+      "id": "FIELD-RELATIONSHIP-FIELD-ONUPDATE-002",
+      "given": "user provides invalid onUpdate value",
+      "when": "validating input",
+      "then": "error should list valid options: cascade, set-null, restrict"
+    },
+    {
+      "id": "FIELD-RELATIONSHIP-FIELD-ONUPDATE-003",
+      "given": "onUpdate is set to any valid enum value",
+      "when": "processing entity",
+      "then": "appropriate behavior should execute"
+    }
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "$id": "maxFiles.schema.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Maximum number of files allowed",
+  "description": "Maximum number of files allowed",
+  "type": "integer",
+  "default": 10,
+  "minimum": 1,
+  "specs": [
+    {
+      "id": "FIELD-MULTIPLE-ATTACHMENTS-FIELD-MAXFILES-001",
+      "given": "user provides maxFiles >= 1",
+      "when": "validating input",
+      "then": "value should be accepted"
+    },
+    {
+      "id": "FIELD-MULTIPLE-ATTACHMENTS-FIELD-MAXFILES-002",
+      "given": "user provides maxFiles < 1",
+      "when": "validating input",
+      "then": "error should enforce minimum value"
+    }
+  ]
+}

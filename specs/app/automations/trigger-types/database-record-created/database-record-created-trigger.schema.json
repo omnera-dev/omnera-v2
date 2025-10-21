@@ -1,0 +1,85 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Record Created",
+  "description": "Triggered when a record is created",
+  "type": "object",
+  "properties": {
+    "service": {
+      "type": "string",
+      "const": "database"
+    },
+    "event": {
+      "type": "string",
+      "const": "record-created"
+    },
+    "params": {
+      "type": "object",
+      "properties": {
+        "table": {
+          "type": "string"
+        }
+      },
+      "required": ["table"],
+      "additionalProperties": false
+    }
+  },
+  "required": ["service", "event", "params"],
+  "additionalProperties": false,
+  "specs": [
+    {
+      "id": "SPEC-001",
+      "given": "a record is created",
+      "when": "I run an automation",
+      "then": "it should succeed"
+    },
+    {
+      "id": "SPEC-002",
+      "given": "entity with service='database'",
+      "when": "processing configuration",
+      "then": "correct handler should be selected"
+    },
+    {
+      "id": "SPEC-003",
+      "given": "invalid service value",
+      "when": "validating configuration",
+      "then": "clear error message should identify the issue"
+    },
+    {
+      "id": "SPEC-004",
+      "given": "entity with event='record-created'",
+      "when": "processing configuration",
+      "then": "correct handler should be selected"
+    },
+    {
+      "id": "SPEC-005",
+      "given": "invalid event value",
+      "when": "validating configuration",
+      "then": "clear error message should identify the issue"
+    },
+    {
+      "id": "SPEC-006",
+      "given": "user configures params",
+      "when": "validating input",
+      "then": "value should meet schema requirements"
+    },
+    {
+      "id": "SPEC-007",
+      "given": "params is set",
+      "when": "processing configuration",
+      "then": "value should be used correctly"
+    },
+    {
+      "id": "SPEC-008",
+      "given": "user provides table",
+      "when": "validating input",
+      "then": "string value should be accepted"
+    },
+    {
+      "id": "SPEC-009",
+      "given": "table is empty string",
+      "when": "validating input",
+      "then": "behavior should follow optional/required rules"
+    }
+  ],
+  "$id": "database-record-created-trigger.schema.json"
+}

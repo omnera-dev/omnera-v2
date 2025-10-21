@@ -1,0 +1,30 @@
+{
+  "$id": "name.schema.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Unique Constraint Name",
+  "description": "Name of the unique constraint. Use descriptive names like 'uq_tablename_field1_field2'",
+  "type": "string",
+  "minLength": 1,
+  "pattern": "^[a-z][a-z0-9_]*$",
+  "examples": ["uq_users_email_tenant", "uq_products_sku_variant", "uq_orders_number_year"],
+  "specs": [
+    {
+      "id": "APP-TABLES-UNIQUECONSTRAINTS-NAME-001",
+      "given": "user provides name matching pattern",
+      "when": "validating input",
+      "then": "value should be accepted"
+    },
+    {
+      "id": "APP-TABLES-UNIQUECONSTRAINTS-NAME-002",
+      "given": "user provides name not matching pattern",
+      "when": "validating input",
+      "then": "clear error message should explain format requirement"
+    },
+    {
+      "id": "APP-TABLES-UNIQUECONSTRAINTS-NAME-003",
+      "given": "name is stored",
+      "when": "retrieved later",
+      "then": "original format should be preserved"
+    }
+  ]
+}

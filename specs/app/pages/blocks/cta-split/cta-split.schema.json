@@ -1,0 +1,35 @@
+{
+  "$id": "cta-split.schema.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "CTA Section - Split",
+  "description": "Two-column CTA with content and action",
+  "type": "object",
+  "properties": {
+    "type": {
+      "const": "cta-split"
+    },
+    "heading": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "primaryCta": {
+      "type": "object",
+      "properties": {
+        "text": {
+          "type": "string"
+        },
+        "href": {
+          "type": "string"
+        }
+      },
+      "required": ["text", "href"]
+    },
+    "condition": {
+      "$ref": "../common/condition.schema.json"
+    }
+  },
+  "required": ["type", "heading", "primaryCta"],
+  "additionalProperties": false
+}

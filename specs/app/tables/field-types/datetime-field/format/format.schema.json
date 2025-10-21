@@ -1,0 +1,45 @@
+{
+  "$id": "format.schema.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "DateTime Display Format",
+  "description": "Display format for datetime values. Controls how datetimes are presented to users, not how they are stored. Storage always uses ISO 8601 (YYYY-MM-DDTHH:mm:ss.sssZ). Common formats: YYYY-MM-DD HH:mm (ISO-like), MM/DD/YYYY hh:mm A (US 12-hour), DD-MM-YYYY HH:mm (European 24-hour).",
+  "type": "string",
+  "default": "YYYY-MM-DD HH:mm",
+  "examples": [
+    "YYYY-MM-DD HH:mm",
+    "MM/DD/YYYY hh:mm A",
+    "DD-MM-YYYY HH:mm:ss",
+    "YYYY-MM-DD HH:mm:ss",
+    "MM/DD/YYYY hh:mm:ss A"
+  ],
+  "specs": [
+    {
+      "id": "FIELD-DATETIME-FORMAT-001",
+      "title": "Accept valid datetime format",
+      "given": "a datetime field configuration",
+      "when": "user sets format to 'MM/DD/YYYY hh:mm A'",
+      "then": "the format is accepted and datetimes display in US 12-hour format"
+    },
+    {
+      "id": "FIELD-DATETIME-FORMAT-002",
+      "title": "Use default format when not specified",
+      "given": "a datetime field configuration without format property",
+      "when": "user views a datetime value",
+      "then": "the datetime is displayed in default format (YYYY-MM-DD HH:mm)"
+    },
+    {
+      "id": "FIELD-DATETIME-FORMAT-003",
+      "title": "Reject invalid format tokens",
+      "given": "a datetime field configuration",
+      "when": "user sets format to 'INVALID-FORMAT'",
+      "then": "validation error is returned with message 'Invalid datetime format pattern'"
+    },
+    {
+      "id": "FIELD-DATETIME-FORMAT-004",
+      "title": "Display with 12-hour format",
+      "given": "a datetime field with format 'hh:mm A'",
+      "when": "user views datetime '2024-12-31T14:30:00.000Z'",
+      "then": "the time is displayed as '02:30 PM'"
+    }
+  ]
+}

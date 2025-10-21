@@ -1,0 +1,199 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "POST Request",
+  "description": "Make a POST HTTP request",
+  "type": "object",
+  "properties": {
+    "name": {
+      "title": "Action Name",
+      "description": "Human-readable name for this action to identify it in automation logs",
+      "type": "string",
+      "minLength": 1,
+      "examples": ["Create user", "Send notification", "Post data to API"]
+    },
+    "service": {
+      "title": "Service Type",
+      "description": "The service this action uses",
+      "type": "string",
+      "const": "http"
+    },
+    "action": {
+      "title": "Action Type",
+      "description": "The specific HTTP action to perform",
+      "type": "string",
+      "const": "post"
+    },
+    "params": {
+      "title": "Action Parameters",
+      "description": "Configuration for the HTTP POST request",
+      "type": "object",
+      "properties": {
+        "url": {
+          "title": "URL",
+          "description": "The URL to send the POST request to (supports template variables like {{env.API_URL}})",
+          "type": "string",
+          "minLength": 1,
+          "examples": [
+            "https://api.example.com/users",
+            "{{env.WEBHOOK_URL}}",
+            "https://api.service.com/events"
+          ]
+        },
+        "headers": {
+          "title": "HTTP Headers",
+          "description": "Custom HTTP headers to include in the request (supports template variables)",
+          "type": "object",
+          "propertyNames": {
+            "type": "string"
+          },
+          "additionalProperties": {
+            "type": "string"
+          },
+          "examples": [
+            {
+              "Authorization": "Bearer {{env.API_TOKEN}}",
+              "Content-Type": "application/json"
+            }
+          ]
+        },
+        "body": {
+          "title": "Request Body",
+          "description": "JSON object to send as the request body (supports template variables)",
+          "type": "object",
+          "propertyNames": {
+            "type": "string"
+          },
+          "additionalProperties": {},
+          "examples": [
+            {
+              "name": "{{trigger.name}}",
+              "email": "{{trigger.email}}",
+              "status": "active"
+            }
+          ]
+        }
+      },
+      "required": ["url"],
+      "additionalProperties": false
+    }
+  },
+  "required": ["name", "service", "action", "params"],
+  "additionalProperties": false,
+  "specs": [
+    {
+      "id": "SPEC-001",
+      "given": "the application is running",
+      "when": "I run a post http action",
+      "then": "it should work correctly"
+    },
+    {
+      "id": "SPEC-002",
+      "given": "I am working with headers",
+      "when": "I run a post http action",
+      "then": "it should complete successfully"
+    },
+    {
+      "id": "SPEC-003",
+      "given": "I am working with env headers",
+      "when": "I run a post http action",
+      "then": "it should complete successfully"
+    },
+    {
+      "id": "SPEC-004",
+      "given": "I am working with default env headers",
+      "when": "I run a post http action",
+      "then": "it should complete successfully"
+    },
+    {
+      "id": "SPEC-005",
+      "given": "I am working with body",
+      "when": "I run a post http action",
+      "then": "it should complete successfully"
+    },
+    {
+      "id": "SPEC-006",
+      "given": "user provides name with at least 1 characters",
+      "when": "validating input",
+      "then": "value should be accepted"
+    },
+    {
+      "id": "SPEC-007",
+      "given": "user provides name shorter than 1 chars",
+      "when": "validating input",
+      "then": "error should require minimum length"
+    },
+    {
+      "id": "SPEC-008",
+      "given": "entity with service='http'",
+      "when": "processing configuration",
+      "then": "correct handler should be selected"
+    },
+    {
+      "id": "SPEC-009",
+      "given": "invalid service value",
+      "when": "validating configuration",
+      "then": "clear error message should identify the issue"
+    },
+    {
+      "id": "SPEC-010",
+      "given": "entity with action='post'",
+      "when": "processing configuration",
+      "then": "correct handler should be selected"
+    },
+    {
+      "id": "SPEC-011",
+      "given": "invalid action value",
+      "when": "validating configuration",
+      "then": "clear error message should identify the issue"
+    },
+    {
+      "id": "SPEC-012",
+      "given": "user configures params",
+      "when": "validating input",
+      "then": "value should meet schema requirements"
+    },
+    {
+      "id": "SPEC-013",
+      "given": "params is set",
+      "when": "processing configuration",
+      "then": "value should be used correctly"
+    },
+    {
+      "id": "SPEC-014",
+      "given": "user provides url with at least 1 characters",
+      "when": "validating input",
+      "then": "value should be accepted"
+    },
+    {
+      "id": "SPEC-015",
+      "given": "user provides url shorter than 1 chars",
+      "when": "validating input",
+      "then": "error should require minimum length"
+    },
+    {
+      "id": "SPEC-016",
+      "given": "user configures headers",
+      "when": "validating input",
+      "then": "value should meet schema requirements"
+    },
+    {
+      "id": "SPEC-017",
+      "given": "headers is set",
+      "when": "processing configuration",
+      "then": "value should be used correctly"
+    },
+    {
+      "id": "SPEC-018",
+      "given": "user configures body",
+      "when": "validating input",
+      "then": "value should meet schema requirements"
+    },
+    {
+      "id": "SPEC-019",
+      "given": "body is set",
+      "when": "processing configuration",
+      "then": "value should be used correctly"
+    }
+  ],
+  "$id": "http-post-action.schema.json"
+}

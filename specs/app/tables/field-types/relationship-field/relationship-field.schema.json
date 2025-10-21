@@ -1,0 +1,56 @@
+{
+  "$id": "relationship-field.schema.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Relationship Field",
+  "type": "object",
+  "properties": {
+    "id": {
+      "$ref": "../../common/definitions.schema.json#/definitions/id"
+    },
+    "name": {
+      "$ref": "../../common/definitions.schema.json#/definitions/name"
+    },
+    "required": {
+      "$ref": "../common/required/required.schema.json"
+    },
+    "indexed": {
+      "$ref": "../common/indexed/indexed.schema.json"
+    },
+    "type": {
+      "type": "string",
+      "const": "relationship"
+    },
+    "relatedTable": {
+      "$ref": "./relatedTable/relatedTable.schema.json"
+    },
+    "relationType": {
+      "$ref": "./relationType/relationType.schema.json"
+    },
+    "displayField": {
+      "$ref": "./displayField/displayField.schema.json"
+    },
+    "onDelete": {
+      "$ref": "./onDelete/onDelete.schema.json"
+    },
+    "onUpdate": {
+      "$ref": "./onUpdate/onUpdate.schema.json"
+    }
+  },
+  "description": "Foreign key relationship to another table creating associations between entities. Supports three relationship types: one-to-one (single unique reference), one-to-many (single reference to many records), many-to-many (junction table for bidirectional references). Configure onDelete behavior (cascade deletes related, set-null clears reference, restrict prevents deletion, no-action does nothing). Configure onUpdate behavior for key changes. Specify displayField to show human-readable value from related table. Automatically indexed for query performance.",
+  "required": ["id", "name", "type", "relatedTable", "relationType"],
+  "additionalProperties": false,
+  "specs": [
+    {
+      "id": "SPEC-001",
+      "given": "entity with type='relationship'",
+      "when": "processing configuration",
+      "then": "correct handler should be selected"
+    },
+    {
+      "id": "SPEC-002",
+      "given": "invalid type value",
+      "when": "validating configuration",
+      "then": "clear error message should identify the issue"
+    }
+  ]
+}

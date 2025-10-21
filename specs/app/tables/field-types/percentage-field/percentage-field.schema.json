@@ -1,0 +1,52 @@
+{
+  "$id": "percentage-field.schema.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Percentage Field",
+  "type": "object",
+  "properties": {
+    "id": {
+      "$ref": "../../common/definitions.schema.json#/definitions/id"
+    },
+    "name": {
+      "$ref": "../../common/definitions.schema.json#/definitions/name"
+    },
+    "required": {
+      "$ref": "../common/required/required.schema.json"
+    },
+    "unique": {
+      "$ref": "../common/unique/unique.schema.json"
+    },
+    "indexed": {
+      "$ref": "../common/indexed/indexed.schema.json"
+    },
+    "type": {
+      "const": "percentage"
+    },
+    "min": {
+      "$ref": "./min/min.schema.json"
+    },
+    "max": {
+      "$ref": "./max/max.schema.json"
+    },
+    "default": {
+      "$ref": "./default/default.schema.json"
+    }
+  },
+  "description": "Ratio field displayed as percentage (0-100%). Stores value as decimal (0.0-1.0 or 0-100 depending on configuration). Display adds % symbol automatically. Supports min/max constraints for range validation (typically 0-100). Required flag makes the field mandatory. Useful for completion rates, discounts, and probability values.",
+  "required": ["id", "name", "type"],
+  "additionalProperties": false,
+  "specs": [
+    {
+      "id": "SPEC-001",
+      "given": "a Percentage Field is configured",
+      "when": "validating schema",
+      "then": "type must be 'percentage'"
+    },
+    {
+      "id": "SPEC-002",
+      "given": "type is set to 'percentage'",
+      "when": "processing field",
+      "then": "it should be treated as a Percentage Field"
+    }
+  ]
+}

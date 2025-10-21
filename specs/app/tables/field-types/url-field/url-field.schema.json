@@ -1,0 +1,64 @@
+{
+  "$id": "url-field.schema.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "URL Field",
+  "type": "object",
+  "properties": {
+    "id": {
+      "$ref": "../../common/definitions.schema.json#/definitions/id"
+    },
+    "name": {
+      "$ref": "../../common/definitions.schema.json#/definitions/name"
+    },
+    "required": {
+      "$ref": "../common/required/required.schema.json"
+    },
+    "unique": {
+      "$ref": "../common/unique/unique.schema.json"
+    },
+    "indexed": {
+      "$ref": "../common/indexed/indexed.schema.json"
+    },
+    "type": {
+      "const": "url"
+    },
+    "default": {
+      "$ref": "./default/default.schema.json"
+    }
+  },
+  "description": "Text field for web links with URL format validation (http:// or https://). Validates URL structure and protocol without checking if the link is reachable. Stores full URL including protocol. Display shows clickable link in the UI. Required flag makes the field mandatory. Unique constraint ensures no duplicate URLs.",
+  "required": ["id", "name", "type"],
+  "additionalProperties": false,
+  "specs": [
+    {
+      "id": "FIELD-URL-FIELD-URL-001",
+      "given": "I create a URL field",
+      "when": "I enter a valid URL with http:// or https://",
+      "then": "it should accept the input"
+    },
+    {
+      "id": "FIELD-URL-FIELD-URL-002",
+      "given": "I create a URL field",
+      "when": "I enter text without protocol",
+      "then": "it should show validation error"
+    },
+    {
+      "id": "FIELD-URL-FIELD-URL-003",
+      "given": "I create a URL field",
+      "when": "I view the record",
+      "then": "the URL should display as a clickable link"
+    },
+    {
+      "id": "SPEC-004",
+      "given": "a URL Field is configured",
+      "when": "validating schema",
+      "then": "type must be 'url'"
+    },
+    {
+      "id": "SPEC-005",
+      "given": "type is set to 'url'",
+      "when": "processing field",
+      "then": "it should be treated as a URL Field"
+    }
+  ]
+}

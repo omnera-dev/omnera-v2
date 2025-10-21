@@ -1,0 +1,29 @@
+{
+  "$id": "style.schema.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Visual style for the rating",
+  "description": "Visual style for the rating",
+  "type": "string",
+  "default": "star",
+  "enum": ["star", "number", "heart"],
+  "specs": [
+    {
+      "id": "FIELD-RATING-FIELD-STYLE-001",
+      "given": "user selects style from valid options",
+      "when": "validating input",
+      "then": "selection should be accepted"
+    },
+    {
+      "id": "FIELD-RATING-FIELD-STYLE-002",
+      "given": "user provides invalid style value",
+      "when": "validating input",
+      "then": "error should list valid options: star, number, heart"
+    },
+    {
+      "id": "FIELD-RATING-FIELD-STYLE-003",
+      "given": "style is set to any valid enum value",
+      "when": "processing entity",
+      "then": "appropriate behavior should execute"
+    }
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "$id": "format.schema.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Display format for the result",
+  "description": "Display format for the result",
+  "type": "string",
+  "examples": ["currency", "number", "percentage"],
+  "specs": [
+    {
+      "id": "FIELD-ROLLUP-FIELD-FORMAT-001",
+      "given": "user provides format",
+      "when": "validating input",
+      "then": "string value should be accepted"
+    },
+    {
+      "id": "FIELD-ROLLUP-FIELD-FORMAT-002",
+      "given": "format is empty string",
+      "when": "validating input",
+      "then": "behavior should follow optional/required rules"
+    }
+  ]
+}

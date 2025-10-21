@@ -1,0 +1,28 @@
+{
+  "$id": "aggregation.schema.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Aggregation function to apply",
+  "description": "Aggregation function to apply",
+  "type": "string",
+  "enum": ["sum", "count", "average", "min", "max", "median", "concat", "unique"],
+  "specs": [
+    {
+      "id": "FIELD-ROLLUP-FIELD-AGGREGATION-001",
+      "given": "user selects aggregation from valid options",
+      "when": "validating input",
+      "then": "selection should be accepted"
+    },
+    {
+      "id": "FIELD-ROLLUP-FIELD-AGGREGATION-002",
+      "given": "user provides invalid aggregation value",
+      "when": "validating input",
+      "then": "error should list valid options: sum, count, average"
+    },
+    {
+      "id": "FIELD-ROLLUP-FIELD-AGGREGATION-003",
+      "given": "aggregation is set to any valid enum value",
+      "when": "processing entity",
+      "then": "appropriate behavior should execute"
+    }
+  ]
+}

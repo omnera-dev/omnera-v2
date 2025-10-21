@@ -1,0 +1,85 @@
+{
+  "$id": "name.schema.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Application Name",
+  "description": "The name of the application (follows npm package naming conventions)",
+  "type": "string",
+  "minLength": 1,
+  "maxLength": 214,
+  "pattern": "^(?:@[a-z0-9-~][a-z0-9-._~]*\\/)?[a-z0-9-~][a-z0-9-._~]*$",
+  "examples": ["my-app", "todo-app", "@myorg/my-app", "blog-system", "dashboard-admin"],
+  "specs": [
+    {
+      "id": "APP-NAME-001",
+      "given": "server with app name 'test-app'",
+      "when": "user navigates to homepage",
+      "then": "app name displays in h1 heading"
+    },
+    {
+      "id": "APP-NAME-002",
+      "given": "server with app name 'my-dashboard'",
+      "when": "user navigates to homepage",
+      "then": "page title shows 'my-dashboard - Powered by Omnera'"
+    },
+    {
+      "id": "APP-NAME-003",
+      "given": "server with single-character name 'a'",
+      "when": "user navigates to homepage",
+      "then": "single character displays in heading"
+    },
+    {
+      "id": "APP-NAME-004",
+      "given": "server with 214-character name 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'",
+      "when": "user navigates to homepage",
+      "then": "full name displays without truncation"
+    },
+    {
+      "id": "APP-NAME-005",
+      "given": "server with app name 'accessibility-test'",
+      "when": "user navigates to homepage",
+      "then": "page has exactly one h1 element"
+    },
+    {
+      "id": "APP-NAME-006",
+      "given": "server with app name 'semantic-html-test'",
+      "when": "user navigates to homepage",
+      "then": "h1 is the first heading level on page"
+    },
+    {
+      "id": "APP-NAME-007",
+      "given": "server with app name 'layout-test'",
+      "when": "user navigates to homepage",
+      "then": "h1 heading is centered horizontally"
+    },
+    {
+      "id": "APP-NAME-008",
+      "given": "server with app name 'visibility-test'",
+      "when": "user navigates to homepage",
+      "then": "h1 heading is visible and not hidden"
+    },
+    {
+      "id": "APP-NAME-009",
+      "given": "server with app name 'my-app-2024'",
+      "when": "user navigates to homepage",
+      "then": "text content exactly matches input"
+    },
+    {
+      "id": "APP-NAME-010",
+      "given": "server with app name 'typography-test'",
+      "when": "user navigates to homepage",
+      "then": "h1 uses TypographyH1 component styling (large font size)"
+    },
+    {
+      "id": "APP-NAME-011",
+      "given": "two different test runs with app names 'first-app' and 'second-app'",
+      "when": "user navigates to each homepage",
+      "then": "each displays its respective app name"
+    },
+    {
+      "id": "APP-NAME-012",
+      "given": "server with complex app name '@myorg-team.test/dashboard_v2.beta-prod'",
+      "when": "user navigates to homepage",
+      "then": "all name display requirements are met (display, metadata, special characters, accessibility, styling)"
+    }
+  ]
+}

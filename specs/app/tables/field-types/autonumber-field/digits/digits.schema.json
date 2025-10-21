@@ -1,0 +1,30 @@
+{
+  "$id": "digits.schema.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Number of digits with zero padding",
+  "description": "Number of digits with zero padding",
+  "type": "integer",
+  "default": 3,
+  "minimum": 1,
+  "maximum": 10,
+  "specs": [
+    {
+      "id": "FIELD-AUTONUMBER-FIELD-DIGITS-001",
+      "given": "user provides digits between 1 and 10",
+      "when": "validating input",
+      "then": "value should be accepted"
+    },
+    {
+      "id": "FIELD-AUTONUMBER-FIELD-DIGITS-002",
+      "given": "user provides digits below 1",
+      "when": "validating input",
+      "then": "error should enforce minimum value"
+    },
+    {
+      "id": "FIELD-AUTONUMBER-FIELD-DIGITS-003",
+      "given": "user provides digits above 10",
+      "when": "validating input",
+      "then": "error should enforce maximum value"
+    }
+  ]
+}

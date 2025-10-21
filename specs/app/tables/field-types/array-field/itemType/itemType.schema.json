@@ -1,0 +1,29 @@
+{
+  "$id": "itemType.schema.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Type of items in the array",
+  "description": "Type of items in the array",
+  "type": "string",
+  "default": "text",
+  "enum": ["text", "number"],
+  "specs": [
+    {
+      "id": "FIELD-ARRAY-FIELD-ITEMTYPE-001",
+      "given": "user selects itemType from valid options",
+      "when": "validating input",
+      "then": "selection should be accepted"
+    },
+    {
+      "id": "FIELD-ARRAY-FIELD-ITEMTYPE-002",
+      "given": "user provides invalid itemType value",
+      "when": "validating input",
+      "then": "error should list valid options: text, number"
+    },
+    {
+      "id": "FIELD-ARRAY-FIELD-ITEMTYPE-003",
+      "given": "itemType is set to any valid enum value",
+      "when": "processing entity",
+      "then": "appropriate behavior should execute"
+    }
+  ]
+}

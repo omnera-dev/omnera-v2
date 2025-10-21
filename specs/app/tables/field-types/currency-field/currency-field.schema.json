@@ -1,0 +1,41 @@
+{
+  "$id": "currency-field.schema.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Currency Field",
+  "description": "Monetary value field with currency code (USD, EUR, GBP, etc.). Stores numeric value with 2 decimal places for cents/pence. Currency code determines display format and symbol ($, €, £). Supports min/max constraints for range validation. Required flag makes the field mandatory. Indexing enables efficient sorting by monetary value.",
+  "type": "object",
+  "properties": {
+    "id": {
+      "$ref": "../../common/definitions.schema.json#/definitions/id"
+    },
+    "name": {
+      "$ref": "../../common/definitions.schema.json#/definitions/name"
+    },
+    "required": {
+      "$ref": "../common/required/required.schema.json"
+    },
+    "unique": {
+      "$ref": "../common/unique/unique.schema.json"
+    },
+    "indexed": {
+      "$ref": "../common/indexed/indexed.schema.json"
+    },
+    "type": {
+      "const": "currency"
+    },
+    "min": {
+      "$ref": "./min/min.schema.json"
+    },
+    "max": {
+      "$ref": "./max/max.schema.json"
+    },
+    "default": {
+      "$ref": "./default/default.schema.json"
+    },
+    "currency": {
+      "$ref": "./currency/currency.schema.json"
+    }
+  },
+  "required": ["id", "name", "type"],
+  "additionalProperties": false
+}

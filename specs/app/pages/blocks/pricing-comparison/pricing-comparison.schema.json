@@ -1,0 +1,64 @@
+{
+  "$id": "pricing-comparison.schema.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Pricing - Comparison Table",
+  "description": "Detailed feature comparison table across pricing tiers",
+  "type": "object",
+  "properties": {
+    "type": {
+      "const": "pricing-comparison"
+    },
+    "heading": {
+      "type": "string"
+    },
+    "tiers": {
+      "type": "array",
+      "minItems": 2,
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "price": {
+            "type": "number"
+          }
+        },
+        "required": ["name", "price"]
+      }
+    },
+    "features": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "category": {
+            "type": "string"
+          },
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "availability": {
+                  "type": "array",
+                  "items": {
+                    "type": "boolean"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "condition": {
+      "$ref": "../common/condition.schema.json"
+    }
+  },
+  "required": ["type", "tiers", "features"],
+  "additionalProperties": false
+}

@@ -1,0 +1,41 @@
+{
+  "$id": "json-field.schema.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "JSON Field",
+  "type": "object",
+  "properties": {
+    "id": {
+      "$ref": "../../common/definitions.schema.json#/definitions/id"
+    },
+    "name": {
+      "$ref": "../../common/definitions.schema.json#/definitions/name"
+    },
+    "required": {
+      "$ref": "../common/required/required.schema.json"
+    },
+    "type": {
+      "type": "string",
+      "const": "json"
+    },
+    "schema": {
+      "$ref": "./schema/schema.schema.json"
+    }
+  },
+  "description": "Flexible JSON field for storing structured data objects. Accepts any valid JSON (objects, arrays, primitives). Optionally provide a JSON Schema for validation to enforce structure and types. Useful for storing configuration objects, API responses, flexible attributes, and dynamic data that doesn't fit rigid schema. Displays with syntax highlighting and formatting in UI. Can be queried using JSON path expressions.",
+  "required": ["id", "name", "type"],
+  "additionalProperties": false,
+  "specs": [
+    {
+      "id": "SPEC-001",
+      "given": "entity with type='json'",
+      "when": "processing configuration",
+      "then": "correct handler should be selected"
+    },
+    {
+      "id": "SPEC-002",
+      "given": "invalid type value",
+      "when": "validating configuration",
+      "then": "clear error message should identify the issue"
+    }
+  ]
+}

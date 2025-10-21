@@ -1,0 +1,52 @@
+{
+  "$id": "email-field.schema.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Email Field",
+  "description": "Text field with email format validation (username@domain). Validates email structure (presence of @ symbol and domain) without sending test emails. Stores email as lowercase for consistent lookups. Required flag makes the field mandatory. Unique constraint ensures no duplicate emails. Indexing enables fast email-based queries.",
+  "type": "object",
+  "properties": {
+    "id": {
+      "$ref": "../../common/definitions.schema.json#/definitions/id"
+    },
+    "name": {
+      "$ref": "../../common/definitions.schema.json#/definitions/name"
+    },
+    "required": {
+      "$ref": "../common/required/required.schema.json"
+    },
+    "unique": {
+      "$ref": "../common/unique/unique.schema.json"
+    },
+    "indexed": {
+      "$ref": "../common/indexed/indexed.schema.json"
+    },
+    "type": {
+      "const": "email"
+    },
+    "default": {
+      "$ref": "./default/default.schema.json"
+    }
+  },
+  "required": ["id", "name", "type"],
+  "additionalProperties": false,
+  "specs": [
+    {
+      "id": "FIELD-EMAIL-001",
+      "given": "I create an email field",
+      "when": "I enter a valid email",
+      "then": "it should accept the input"
+    },
+    {
+      "id": "FIELD-EMAIL-002",
+      "given": "I create an email field",
+      "when": "I enter text without @ symbol",
+      "then": "it should show validation error"
+    },
+    {
+      "id": "FIELD-EMAIL-003",
+      "given": "I create an email field with unique constraint",
+      "when": "I enter a duplicate email",
+      "then": "it should reject the input regardless of case"
+    }
+  ]
+}

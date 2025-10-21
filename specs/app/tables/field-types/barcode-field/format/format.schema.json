@@ -1,0 +1,29 @@
+{
+  "$id": "format.schema.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Barcode format",
+  "description": "Barcode format",
+  "type": "string",
+  "default": "qr",
+  "enum": ["qr", "ean13", "code128", "code39"],
+  "specs": [
+    {
+      "id": "FIELD-BARCODE-FIELD-FORMAT-001",
+      "given": "user selects format from valid options",
+      "when": "validating input",
+      "then": "selection should be accepted"
+    },
+    {
+      "id": "FIELD-BARCODE-FIELD-FORMAT-002",
+      "given": "user provides invalid format value",
+      "when": "validating input",
+      "then": "error should list valid options: qr, ean13, code128"
+    },
+    {
+      "id": "FIELD-BARCODE-FIELD-FORMAT-003",
+      "given": "format is set to any valid enum value",
+      "when": "processing entity",
+      "then": "appropriate behavior should execute"
+    }
+  ]
+}

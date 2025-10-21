@@ -1,0 +1,64 @@
+{
+  "$id": "single-line-text-field.schema.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Single Line Text Field",
+  "type": "object",
+  "properties": {
+    "id": {
+      "$ref": "../../common/definitions.schema.json#/definitions/id"
+    },
+    "name": {
+      "$ref": "../../common/definitions.schema.json#/definitions/name"
+    },
+    "required": {
+      "$ref": "../common/required/required.schema.json"
+    },
+    "unique": {
+      "$ref": "../common/unique/unique.schema.json"
+    },
+    "indexed": {
+      "$ref": "../common/indexed/indexed.schema.json"
+    },
+    "type": {
+      "const": "single-line-text"
+    },
+    "default": {
+      "$ref": "./default/default.schema.json"
+    }
+  },
+  "description": "Short text input limited to a single line. Ideal for names, titles, labels, and brief identifiers. Text is stored as-is without formatting. Required flag makes the field mandatory. Unique constraint ensures no duplicate values across records. Indexing improves search and filter performance on this field.",
+  "required": ["id", "name", "type"],
+  "additionalProperties": false,
+  "specs": [
+    {
+      "id": "FIELD-SINGLE-LINE-TEXT-FIELD-SINGLE-LINE-TEXT-001",
+      "given": "I create a single-line text field",
+      "when": "I add a record",
+      "then": "it should accept text without line breaks"
+    },
+    {
+      "id": "FIELD-SINGLE-LINE-TEXT-FIELD-SINGLE-LINE-TEXT-002",
+      "given": "I create a single-line text field with unique constraint",
+      "when": "I add duplicate text",
+      "then": "it should reject the input"
+    },
+    {
+      "id": "FIELD-SINGLE-LINE-TEXT-FIELD-SINGLE-LINE-TEXT-003",
+      "given": "I create a required single-line text field",
+      "when": "I submit without value",
+      "then": "it should show validation error"
+    },
+    {
+      "id": "SPEC-004",
+      "given": "a Single Line Text Field is configured",
+      "when": "validating schema",
+      "then": "type must be 'single-line-text'"
+    },
+    {
+      "id": "SPEC-005",
+      "given": "type is set to 'single-line-text'",
+      "when": "processing field",
+      "then": "it should be treated as a Single Line Text Field"
+    }
+  ]
+}

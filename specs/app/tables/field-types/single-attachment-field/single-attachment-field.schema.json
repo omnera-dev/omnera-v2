@@ -1,0 +1,44 @@
+{
+  "$id": "single-attachment-field.schema.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Single Attachment Field",
+  "type": "object",
+  "properties": {
+    "id": {
+      "$ref": "../../common/definitions.schema.json#/definitions/id"
+    },
+    "name": {
+      "$ref": "../../common/definitions.schema.json#/definitions/name"
+    },
+    "required": {
+      "$ref": "../common/required/required.schema.json"
+    },
+    "indexed": {
+      "$ref": "../common/indexed/indexed.schema.json"
+    },
+    "type": {
+      "type": "string",
+      "const": "single-attachment"
+    },
+    "storage": {
+      "$ref": "./storage/storage.schema.json"
+    }
+  },
+  "description": "Single file upload field with configurable storage backend. Supports local filesystem or S3-compatible cloud storage. Configure maxSize limit (in bytes, default 10MB), allowedTypes using MIME types or wildcards (e.g., image/*, application/pdf). Useful for profile pictures, documents, invoices, and single-file attachments. For S3 provider, bucket name is required.",
+  "required": ["id", "name", "type"],
+  "additionalProperties": false,
+  "specs": [
+    {
+      "id": "SPEC-001",
+      "given": "entity with type='single-attachment'",
+      "when": "processing configuration",
+      "then": "correct handler should be selected"
+    },
+    {
+      "id": "SPEC-002",
+      "given": "invalid type value",
+      "when": "validating configuration",
+      "then": "clear error message should identify the issue"
+    }
+  ]
+}

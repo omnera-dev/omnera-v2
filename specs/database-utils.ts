@@ -44,9 +44,15 @@ export class DatabaseTemplateManager {
     // Drop template if exists (for clean slate)
     await this.dropDatabase(this.templateDbName)
 
-    // Create fresh template database
-    const adminPool = new Pool({ connectionString: this.adminConnectionUrl })
+    // Create fresh template database with retry logic
+    const adminPool = new Pool({
+      connectionString: this.adminConnectionUrl,
+      max: 1, // Use single connection for admin operations
+      connectionTimeoutMillis: 5000,
+    })
     try {
+      // Wait a bit for container to be fully ready
+      await this.waitForDatabase(adminPool)
       await adminPool.query(`CREATE DATABASE "${this.templateDbName}"`)
     } finally {
       await adminPool.end()
@@ -61,6 +67,21 @@ export class DatabaseTemplateManager {
       await migrate(db, { migrationsFolder: './drizzle' })
     } finally {
       await templatePool.end()
+    }
+  }
+
+  /**
+   * Wait for database to be ready
+   */
+  private async waitForDatabase(pool: Pool, maxAttempts = 10): Promise<void> {
+    for (let i = 0; i < maxAttempts; i++) {
+      try {
+        await pool.query('SELECT 1')
+        return
+      } catch (error) {
+        if (i === maxAttempts - 1) throw error
+        await new Promise((resolve) => setTimeout(resolve, 500))
+      }
     }
   }
 
@@ -130,6 +151,9 @@ export class DatabaseTemplateManager {
       `,
         [dbName]
       )
+    } catch (error) {
+      // Ignore errors during connection termination (database might not exist or no connections)
+      // This is a best-effort operation
     } finally {
       await adminPool.end()
     }

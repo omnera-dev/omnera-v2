@@ -1,0 +1,27 @@
+{
+  "$id": "fields.schema.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Index Fields",
+  "description": "Field names to include in the index. Order matters for multi-column indexes.",
+  "type": "array",
+  "items": {
+    "type": "string",
+    "minLength": 1
+  },
+  "minItems": 1,
+  "examples": [["email"], ["first_name", "last_name"], ["status", "created_at"]],
+  "specs": [
+    {
+      "id": "APP-TABLES-INDEXES-FIELDS-001",
+      "given": "user provides fields with at least 1 items",
+      "when": "validating input",
+      "then": "array should be accepted"
+    },
+    {
+      "id": "APP-TABLES-INDEXES-FIELDS-002",
+      "given": "user provides fields with fewer than 1 items",
+      "when": "validating input",
+      "then": "error should enforce minimum items"
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "$id": "url.schema.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "URL to open (when action is 'url')",
+  "description": "URL to open (when action is 'url')",
+  "type": "string",
+  "specs": [
+    {
+      "id": "FIELD-BUTTON-FIELD-URL-001",
+      "given": "user provides url",
+      "when": "validating input",
+      "then": "string value should be accepted"
+    },
+    {
+      "id": "FIELD-BUTTON-FIELD-URL-002",
+      "given": "url is empty string",
+      "when": "validating input",
+      "then": "behavior should follow optional/required rules"
+    }
+  ]
+}

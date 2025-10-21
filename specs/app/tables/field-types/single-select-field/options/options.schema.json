@@ -1,0 +1,24 @@
+{
+  "$id": "options.schema.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "options",
+  "type": "array",
+  "default": [],
+  "items": {
+    "type": "string"
+  },
+  "specs": [
+    {
+      "id": "FIELD-SINGLE-SELECT-FIELD-OPTIONS-001",
+      "given": "user provides options with at least 1 items",
+      "when": "validating input",
+      "then": "array should be accepted"
+    },
+    {
+      "id": "FIELD-SINGLE-SELECT-FIELD-OPTIONS-002",
+      "given": "user provides options with fewer than 1 items",
+      "when": "validating input",
+      "then": "error should enforce minimum items"
+    }
+  ]
+}

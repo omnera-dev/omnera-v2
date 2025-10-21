@@ -1,0 +1,21 @@
+{
+  "$id": "automation.schema.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Automation name to trigger (when action is 'automation')",
+  "description": "Automation name to trigger (when action is 'automation')",
+  "type": "string",
+  "specs": [
+    {
+      "id": "FIELD-BUTTON-FIELD-AUTOMATION-001",
+      "given": "user provides automation",
+      "when": "validating input",
+      "then": "string value should be accepted"
+    },
+    {
+      "id": "FIELD-BUTTON-FIELD-AUTOMATION-002",
+      "given": "automation is empty string",
+      "when": "validating input",
+      "then": "behavior should follow optional/required rules"
+    }
+  ]
+}

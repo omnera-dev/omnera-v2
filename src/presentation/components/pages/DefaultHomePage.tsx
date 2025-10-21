@@ -42,7 +42,12 @@ export function DefaultHomePage({ app }: { readonly app: App }): Readonly<ReactE
               {/* Version Badge */}
               {app.version && <Badge data-testid="app-version-badge">{app.version}</Badge>}
               {/* App Name */}
-              <TypographyH1 className="text-center">{app.name}</TypographyH1>
+              <TypographyH1
+                className="text-center"
+                data-testid="app-name-heading"
+              >
+                {app.name}
+              </TypographyH1>
               {/* App Description */}
               {app.description && (
                 <TypographyLead

@@ -1,0 +1,36 @@
+{
+  "$id": "pages.schema.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Pages",
+  "description": "Marketing and content pages with server-side rendering support. Pages use a block-based layout system with Tailwind UI-inspired components for building landing pages, about pages, pricing pages, and other public-facing content.",
+  "type": "array",
+  "minItems": 1,
+  "default": [],
+  "items": {
+    "title": "Page",
+    "description": "A server-rendered page with SEO optimization and block-based content",
+    "type": "object",
+    "properties": {
+      "id": {
+        "$ref": "./id/id.schema.json"
+      },
+      "name": {
+        "$ref": "./name/name.schema.json"
+      },
+      "path": {
+        "$ref": "./path/path.schema.json"
+      },
+      "seo": {
+        "$ref": "./seo/seo.schema.json"
+      },
+      "head": {
+        "$ref": "./head/head.schema.json"
+      },
+      "blocks": {
+        "$ref": "./blocks/blocks.schema.json"
+      }
+    },
+    "required": ["name", "path", "blocks"],
+    "additionalProperties": false
+  }
+}

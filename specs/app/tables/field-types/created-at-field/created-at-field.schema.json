@@ -1,0 +1,38 @@
+{
+  "$id": "created-at-field.schema.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Created At Field",
+  "type": "object",
+  "properties": {
+    "id": {
+      "$ref": "../../common/definitions.schema.json#/definitions/id"
+    },
+    "name": {
+      "$ref": "../../common/definitions.schema.json#/definitions/name"
+    },
+    "type": {
+      "type": "string",
+      "const": "created-at"
+    },
+    "indexed": {
+      "$ref": "../common/indexed/indexed.schema.json"
+    }
+  },
+  "description": "Automatically set timestamp when record is created. Read-only field that cannot be modified after creation. Always uses current server time in UTC. Automatically indexed for sorting and filtering by creation time. Useful for audit trails, chronological ordering, and tracking when data was first entered. Displays as formatted datetime in UI.",
+  "required": ["id", "name", "type"],
+  "additionalProperties": false,
+  "specs": [
+    {
+      "id": "SPEC-001",
+      "given": "entity with type='created-at'",
+      "when": "processing configuration",
+      "then": "correct handler should be selected"
+    },
+    {
+      "id": "SPEC-002",
+      "given": "invalid type value",
+      "when": "validating configuration",
+      "then": "clear error message should identify the issue"
+    }
+  ]
+}

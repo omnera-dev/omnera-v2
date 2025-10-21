@@ -1,0 +1,38 @@
+{
+  "$id": "default.schema.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Default Date Value",
+  "description": "Default value for date field when no value is provided. Can be an ISO 8601 date string (YYYY-MM-DD) or a special keyword like 'today' or 'tomorrow'. Applied automatically when creating new records.",
+  "type": "string",
+  "examples": ["2024-12-31", "today", "tomorrow", "2025-01-01"],
+  "specs": [
+    {
+      "id": "FIELD-DATE-DEFAULT-001",
+      "title": "Apply static default date",
+      "given": "a date field with default value '2025-01-01'",
+      "when": "user creates a record without providing a date value",
+      "then": "the field is populated with '2025-01-01'"
+    },
+    {
+      "id": "FIELD-DATE-DEFAULT-002",
+      "title": "Apply dynamic 'today' default",
+      "given": "a date field with default value 'today'",
+      "when": "user creates a record on 2024-12-31 without providing a date value",
+      "then": "the field is populated with '2024-12-31'"
+    },
+    {
+      "id": "FIELD-DATE-DEFAULT-003",
+      "title": "Apply dynamic 'tomorrow' default",
+      "given": "a date field with default value 'tomorrow'",
+      "when": "user creates a record on 2024-12-31 without providing a date value",
+      "then": "the field is populated with '2025-01-01'"
+    },
+    {
+      "id": "FIELD-DATE-DEFAULT-004",
+      "title": "User value overrides default",
+      "given": "a date field with default value 'today'",
+      "when": "user creates a record and provides date value '2025-06-15'",
+      "then": "the field is populated with user-provided value '2025-06-15' (default ignored)"
+    }
+  ]
+}

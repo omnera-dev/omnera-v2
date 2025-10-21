@@ -1,0 +1,27 @@
+{
+  "$id": "content-text.schema.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Content Section - Text",
+  "description": "Rich text content section",
+  "type": "object",
+  "properties": {
+    "type": {
+      "const": "content-text"
+    },
+    "heading": {
+      "type": "string"
+    },
+    "content": {
+      "type": "string",
+      "description": "HTML or Markdown content"
+    },
+    "width": {
+      "enum": ["narrow", "normal", "wide", "full"]
+    },
+    "condition": {
+      "$ref": "../common/condition.schema.json"
+    }
+  },
+  "required": ["type", "content"],
+  "additionalProperties": false
+}

@@ -1,0 +1,38 @@
+{
+  "$id": "created-by-field.schema.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Created By Field",
+  "type": "object",
+  "properties": {
+    "id": {
+      "$ref": "../../common/definitions.schema.json#/definitions/id"
+    },
+    "name": {
+      "$ref": "../../common/definitions.schema.json#/definitions/name"
+    },
+    "type": {
+      "type": "string",
+      "const": "created-by"
+    },
+    "indexed": {
+      "$ref": "../common/indexed/indexed.schema.json"
+    }
+  },
+  "description": "Automatically set reference to the user who created the record. Read-only field that links to user account. Set only once when record is created and never changes. Automatically indexed for filtering by creator. Useful for audit trails, ownership tracking, and permissions. Displays user profile information (name, avatar) in UI.",
+  "required": ["id", "name", "type"],
+  "additionalProperties": false,
+  "specs": [
+    {
+      "id": "SPEC-001",
+      "given": "entity with type='created-by'",
+      "when": "processing configuration",
+      "then": "correct handler should be selected"
+    },
+    {
+      "id": "SPEC-002",
+      "given": "invalid type value",
+      "when": "validating configuration",
+      "then": "clear error message should identify the issue"
+    }
+  ]
+}

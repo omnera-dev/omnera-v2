@@ -1,0 +1,22 @@
+{
+  "$id": "prefix.schema.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Optional prefix for the autonumber",
+  "description": "Optional prefix for the autonumber",
+  "type": "string",
+  "examples": ["INV-", "ORD-", ""],
+  "specs": [
+    {
+      "id": "FIELD-AUTONUMBER-FIELD-PREFIX-001",
+      "given": "user provides prefix",
+      "when": "validating input",
+      "then": "string value should be accepted"
+    },
+    {
+      "id": "FIELD-AUTONUMBER-FIELD-PREFIX-002",
+      "given": "prefix is empty string",
+      "when": "validating input",
+      "then": "behavior should follow optional/required rules"
+    }
+  ]
+}

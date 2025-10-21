@@ -15,7 +15,7 @@
 ### Vision State (v1.0.0)
 
 - **Schema**: `docs/specifications/specs.schema.json`
-- **Total Properties**: 396 (name, description, version, tables, pages, automations, connections)
+- **Total Properties**: 396 (name, description, version, tables, pages, interfaces, automations, connections)
 - **Gap**: **~43%** of features not yet implemented
 
 ---
@@ -44,6 +44,7 @@
 | **version**     | ✅     | 100%       | 10 pts     | -              | -                                                      |
 | **tables**      | 🚧     | 100%       | 5 pts      | -              | [📋 Guide](docs/specifications/roadmap/tables.md)      |
 | **pages**       | ⏳     | 0%         | 10 pts     | -              | [📋 Guide](docs/specifications/roadmap/pages.md)       |
+| **interfaces**  | ⏳     | 0%         | 10 pts     | -              | [📋 Guide](docs/specifications/roadmap/interfaces.md)  |
 | **automations** | ⏳     | 0%         | 5 pts      | -              | [📋 Guide](docs/specifications/roadmap/automations.md) |
 | **connections** | ⏳     | 0%         | 5 pts      | -              | [📋 Guide](docs/specifications/roadmap/connections.md) |
 
@@ -53,7 +54,7 @@
 
 ## All Properties (396 total)
 
-Properties organized hierarchically: Automations (Triggers > Actions by service), Connections (by service), Pages (by type), Tables (fields by type).
+Properties organized hierarchically: Automations (Triggers > Actions by service), Connections (by service), Pages (marketing blocks), Interfaces (application components), Tables (fields by type).
 
 **Legend**: ✅ Complete | 🚧 Partial | ⏳ Not Started
 

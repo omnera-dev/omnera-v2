@@ -1,0 +1,170 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Run JavaScript",
+  "description": "Execute JavaScript code",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string"
+    },
+    "service": {
+      "type": "string",
+      "const": "code"
+    },
+    "action": {
+      "type": "string",
+      "const": "run-javascript"
+    },
+    "params": {
+      "type": "object",
+      "properties": {
+        "inputData": {
+          "default": {},
+          "type": "object",
+          "propertyNames": {
+            "type": "string"
+          },
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "code": {
+          "type": "string"
+        }
+      },
+      "required": ["code"],
+      "additionalProperties": false
+    }
+  },
+  "required": ["name", "service", "action", "params"],
+  "additionalProperties": false,
+  "specs": [
+    {
+      "id": "SPEC-001",
+      "given": "the application is running",
+      "when": "I run a JavaScript code",
+      "then": "it should work correctly"
+    },
+    {
+      "id": "SPEC-002",
+      "given": "I am working with input data",
+      "when": "I run a JavaScript code",
+      "then": "it should complete successfully"
+    },
+    {
+      "id": "SPEC-003",
+      "given": "I am working with externals",
+      "when": "I run a JavaScript code",
+      "then": "it should complete successfully"
+    },
+    {
+      "id": "SPEC-004",
+      "given": "I am working with globals variables",
+      "when": "I run a JavaScript code",
+      "then": "it should complete successfully"
+    },
+    {
+      "id": "SPEC-005",
+      "given": "I am working with tables",
+      "when": "I run a JavaScript code",
+      "then": "it should complete successfully"
+    },
+    {
+      "id": "SPEC-006",
+      "given": "I am working with buckets",
+      "when": "I run a JavaScript code",
+      "then": "it should complete successfully"
+    },
+    {
+      "id": "SPEC-007",
+      "given": "the application is running",
+      "when": "I run a JavaScript code that return an array",
+      "then": "it should work correctly"
+    },
+    {
+      "id": "SPEC-008",
+      "given": "the application is running",
+      "when": "I filter a JavaScript code that return an empty array",
+      "then": "it should work correctly"
+    },
+    {
+      "id": "SPEC-009",
+      "given": "I am working with actions",
+      "when": "I run a JavaScript code",
+      "then": "it should complete successfully"
+    },
+    {
+      "id": "SPEC-010",
+      "given": "user provides name",
+      "when": "validating input",
+      "then": "string value should be accepted"
+    },
+    {
+      "id": "SPEC-011",
+      "given": "name is empty string",
+      "when": "validating input",
+      "then": "behavior should follow optional/required rules"
+    },
+    {
+      "id": "SPEC-012",
+      "given": "entity with service='code'",
+      "when": "processing configuration",
+      "then": "correct handler should be selected"
+    },
+    {
+      "id": "SPEC-013",
+      "given": "invalid service value",
+      "when": "validating configuration",
+      "then": "clear error message should identify the issue"
+    },
+    {
+      "id": "SPEC-014",
+      "given": "entity with action='run-javascript'",
+      "when": "processing configuration",
+      "then": "correct handler should be selected"
+    },
+    {
+      "id": "SPEC-015",
+      "given": "invalid action value",
+      "when": "validating configuration",
+      "then": "clear error message should identify the issue"
+    },
+    {
+      "id": "SPEC-016",
+      "given": "user configures params",
+      "when": "validating input",
+      "then": "value should meet schema requirements"
+    },
+    {
+      "id": "SPEC-017",
+      "given": "params is set",
+      "when": "processing configuration",
+      "then": "value should be used correctly"
+    },
+    {
+      "id": "SPEC-018",
+      "given": "user configures inputData",
+      "when": "validating input",
+      "then": "value should meet schema requirements"
+    },
+    {
+      "id": "SPEC-019",
+      "given": "inputData is set",
+      "when": "processing configuration",
+      "then": "value should be used correctly"
+    },
+    {
+      "id": "SPEC-020",
+      "given": "user provides code",
+      "when": "validating input",
+      "then": "string value should be accepted"
+    },
+    {
+      "id": "SPEC-021",
+      "given": "code is empty string",
+      "when": "validating input",
+      "then": "behavior should follow optional/required rules"
+    }
+  ],
+  "$id": "code-run-javascript-action.schema.json"
+}

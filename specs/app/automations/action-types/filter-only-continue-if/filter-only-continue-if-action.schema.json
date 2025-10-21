@@ -1,0 +1,183 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Only Continue If",
+  "description": "Continue only if condition is met",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string"
+    },
+    "service": {
+      "type": "string",
+      "const": "filter"
+    },
+    "action": {
+      "type": "string",
+      "const": "only-continue-if"
+    },
+    "params": {
+      "$ref": "../../common/filter-condition.schema.json"
+    }
+  },
+  "required": ["name", "service", "action", "params"],
+  "additionalProperties": false,
+  "specs": [
+    {
+      "id": "SPEC-001",
+      "given": "the application is running",
+      "when": "I not run an action if the filter returns false",
+      "then": "it should work correctly"
+    },
+    {
+      "id": "SPEC-002",
+      "given": "the application is running",
+      "when": "I run an and filter action that returns true",
+      "then": "it should work correctly"
+    },
+    {
+      "id": "SPEC-003",
+      "given": "the application is running",
+      "when": "I run an and filter action that returns false",
+      "then": "it should work correctly"
+    },
+    {
+      "id": "SPEC-004",
+      "given": "the application is running",
+      "when": "I run an or filter action that returns true",
+      "then": "it should work correctly"
+    },
+    {
+      "id": "SPEC-005",
+      "given": "the application is running",
+      "when": "I run an or filter action that returns false",
+      "then": "it should work correctly"
+    },
+    {
+      "id": "SPEC-006",
+      "given": "the application is running",
+      "when": "I run an action if the filter returns true",
+      "then": "it should work correctly"
+    },
+    {
+      "id": "SPEC-007",
+      "given": "the application is running",
+      "when": "I run an exists filter action that returns true",
+      "then": "it should work correctly"
+    },
+    {
+      "id": "SPEC-008",
+      "given": "the application is running",
+      "when": "I run an exists filter action that returns false",
+      "then": "it should work correctly"
+    },
+    {
+      "id": "SPEC-009",
+      "given": "the application is running",
+      "when": "I run an does-not-exist filter action that returns true",
+      "then": "it should work correctly"
+    },
+    {
+      "id": "SPEC-010",
+      "given": "the application is running",
+      "when": "I run an does-not-exist filter action that returns false",
+      "then": "it should work correctly"
+    },
+    {
+      "id": "SPEC-011",
+      "given": "the application is running",
+      "when": "I run an is-true filter action that returns true",
+      "then": "it should work correctly"
+    },
+    {
+      "id": "SPEC-012",
+      "given": "the application is running",
+      "when": "I run an is-true filter action that returns false",
+      "then": "it should work correctly"
+    },
+    {
+      "id": "SPEC-013",
+      "given": "the application is running",
+      "when": "I run an is-false filter action that returns true",
+      "then": "it should work correctly"
+    },
+    {
+      "id": "SPEC-014",
+      "given": "the application is running",
+      "when": "I run an is-false filter action that returns false",
+      "then": "it should work correctly"
+    },
+    {
+      "id": "SPEC-015",
+      "given": "the application is running",
+      "when": "I run an contains filter action that returns true",
+      "then": "it should work correctly"
+    },
+    {
+      "id": "SPEC-016",
+      "given": "the application is running",
+      "when": "I run an contains filter action that returns false",
+      "then": "it should work correctly"
+    },
+    {
+      "id": "SPEC-017",
+      "given": "the application is running",
+      "when": "I run an does-not-contain filter action that returns true",
+      "then": "it should work correctly"
+    },
+    {
+      "id": "SPEC-018",
+      "given": "the application is running",
+      "when": "I run an does-not-contain filter action that returns false",
+      "then": "it should work correctly"
+    },
+    {
+      "id": "SPEC-019",
+      "given": "user provides name",
+      "when": "validating input",
+      "then": "string value should be accepted"
+    },
+    {
+      "id": "SPEC-020",
+      "given": "name is empty string",
+      "when": "validating input",
+      "then": "behavior should follow optional/required rules"
+    },
+    {
+      "id": "SPEC-021",
+      "given": "entity with service='filter'",
+      "when": "processing configuration",
+      "then": "correct handler should be selected"
+    },
+    {
+      "id": "SPEC-022",
+      "given": "invalid service value",
+      "when": "validating configuration",
+      "then": "clear error message should identify the issue"
+    },
+    {
+      "id": "SPEC-023",
+      "given": "entity with action='only-continue-if'",
+      "when": "processing configuration",
+      "then": "correct handler should be selected"
+    },
+    {
+      "id": "SPEC-024",
+      "given": "invalid action value",
+      "when": "validating configuration",
+      "then": "clear error message should identify the issue"
+    },
+    {
+      "id": "SPEC-025",
+      "given": "user configures params",
+      "when": "validating input",
+      "then": "value should meet schema requirements"
+    },
+    {
+      "id": "SPEC-026",
+      "given": "params is set",
+      "when": "processing configuration",
+      "then": "value should be used correctly"
+    }
+  ],
+  "$id": "filter-only-continue-if-action.schema.json"
+}

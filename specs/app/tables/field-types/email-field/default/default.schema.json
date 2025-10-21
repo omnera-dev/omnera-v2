@@ -1,0 +1,21 @@
+{
+  "$id": "default.schema.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Email Field Default Value",
+  "description": "Default email value for this field when no value is provided",
+  "type": "string",
+  "specs": [
+    {
+      "id": "FIELD-EMAIL-DEFAULT-001",
+      "given": "user provides default",
+      "when": "validating input",
+      "then": "string value should be accepted"
+    },
+    {
+      "id": "FIELD-EMAIL-DEFAULT-002",
+      "given": "default is empty string",
+      "when": "validating input",
+      "then": "behavior should follow optional/required rules"
+    }
+  ]
+}

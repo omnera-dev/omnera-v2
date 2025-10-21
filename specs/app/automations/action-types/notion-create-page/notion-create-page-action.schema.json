@@ -1,0 +1,458 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Create Page",
+  "description": "Creates a new page in Notion",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string"
+    },
+    "account": {
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "string"
+        }
+      ]
+    },
+    "service": {
+      "type": "string",
+      "const": "notion"
+    },
+    "action": {
+      "type": "string",
+      "const": "create-page"
+    },
+    "params": {
+      "type": "object",
+      "properties": {
+        "parent": {
+          "description": "Parent of the new page",
+          "anyOf": [
+            {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "const": "database_id"
+                },
+                "database_id": {
+                  "type": "string"
+                }
+              },
+              "required": ["type", "database_id"],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "const": "page_id"
+                },
+                "page_id": {
+                  "type": "string"
+                }
+              },
+              "required": ["type", "page_id"],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "const": "workspace"
+                },
+                "workspace": {
+                  "type": "boolean",
+                  "const": true
+                }
+              },
+              "required": ["type", "workspace"],
+              "additionalProperties": false
+            }
+          ]
+        },
+        "properties": {
+          "description": "Page properties",
+          "type": "object",
+          "propertyNames": {
+            "type": "string"
+          },
+          "additionalProperties": {}
+        },
+        "children": {
+          "description": "Page content blocks",
+          "type": "array",
+          "items": {}
+        },
+        "icon": {
+          "description": "Page icon",
+          "anyOf": [
+            {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "const": "emoji"
+                },
+                "emoji": {
+                  "type": "string"
+                }
+              },
+              "required": ["type", "emoji"],
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "const": "external"
+                },
+                "external": {
+                  "type": "object",
+                  "properties": {
+                    "url": {
+                      "type": "string"
+                    }
+                  },
+                  "required": ["url"],
+                  "additionalProperties": false
+                }
+              },
+              "required": ["type", "external"],
+              "additionalProperties": false
+            }
+          ]
+        },
+        "cover": {
+          "description": "Page cover image",
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "const": "external"
+            },
+            "external": {
+              "type": "object",
+              "properties": {
+                "url": {
+                  "type": "string"
+                }
+              },
+              "required": ["url"],
+              "additionalProperties": false
+            }
+          },
+          "required": ["type", "external"],
+          "additionalProperties": false
+        }
+      },
+      "required": ["parent", "properties"],
+      "additionalProperties": false
+    }
+  },
+  "required": ["name", "account", "service", "action", "params"],
+  "additionalProperties": false,
+  "specs": [
+    {
+      "id": "SPEC-001",
+      "given": "user provides name",
+      "when": "validating input",
+      "then": "string value should be accepted"
+    },
+    {
+      "id": "SPEC-002",
+      "given": "name is empty string",
+      "when": "validating input",
+      "then": "behavior should follow optional/required rules"
+    },
+    {
+      "id": "SPEC-003",
+      "given": "user configures account",
+      "when": "validating input",
+      "then": "value should meet schema requirements"
+    },
+    {
+      "id": "SPEC-004",
+      "given": "account is set",
+      "when": "processing configuration",
+      "then": "value should be used correctly"
+    },
+    {
+      "id": "SPEC-005",
+      "given": "entity with service='notion'",
+      "when": "processing configuration",
+      "then": "correct handler should be selected"
+    },
+    {
+      "id": "SPEC-006",
+      "given": "invalid service value",
+      "when": "validating configuration",
+      "then": "clear error message should identify the issue"
+    },
+    {
+      "id": "SPEC-007",
+      "given": "entity with action='create-page'",
+      "when": "processing configuration",
+      "then": "correct handler should be selected"
+    },
+    {
+      "id": "SPEC-008",
+      "given": "invalid action value",
+      "when": "validating configuration",
+      "then": "clear error message should identify the issue"
+    },
+    {
+      "id": "SPEC-009",
+      "given": "user configures params",
+      "when": "validating input",
+      "then": "value should meet schema requirements"
+    },
+    {
+      "id": "SPEC-010",
+      "given": "params is set",
+      "when": "processing configuration",
+      "then": "value should be used correctly"
+    },
+    {
+      "id": "SPEC-011",
+      "given": "user configures parent",
+      "when": "validating input",
+      "then": "value should meet schema requirements"
+    },
+    {
+      "id": "SPEC-012",
+      "given": "parent is set",
+      "when": "processing configuration",
+      "then": "value should be used correctly"
+    },
+    {
+      "id": "SPEC-013",
+      "given": "entity with type='database_id'",
+      "when": "processing configuration",
+      "then": "correct handler should be selected"
+    },
+    {
+      "id": "SPEC-014",
+      "given": "invalid type value",
+      "when": "validating configuration",
+      "then": "clear error message should identify the issue"
+    },
+    {
+      "id": "SPEC-015",
+      "given": "user provides database_id",
+      "when": "validating input",
+      "then": "string value should be accepted"
+    },
+    {
+      "id": "SPEC-016",
+      "given": "database_id is empty string",
+      "when": "validating input",
+      "then": "behavior should follow optional/required rules"
+    },
+    {
+      "id": "SPEC-017",
+      "given": "entity with type='page_id'",
+      "when": "processing configuration",
+      "then": "correct handler should be selected"
+    },
+    {
+      "id": "SPEC-018",
+      "given": "invalid type value",
+      "when": "validating configuration",
+      "then": "clear error message should identify the issue"
+    },
+    {
+      "id": "SPEC-019",
+      "given": "user provides page_id",
+      "when": "validating input",
+      "then": "string value should be accepted"
+    },
+    {
+      "id": "SPEC-020",
+      "given": "page_id is empty string",
+      "when": "validating input",
+      "then": "behavior should follow optional/required rules"
+    },
+    {
+      "id": "SPEC-021",
+      "given": "entity with type='workspace'",
+      "when": "processing configuration",
+      "then": "correct handler should be selected"
+    },
+    {
+      "id": "SPEC-022",
+      "given": "invalid type value",
+      "when": "validating configuration",
+      "then": "clear error message should identify the issue"
+    },
+    {
+      "id": "SPEC-023",
+      "given": "workspace is true",
+      "when": "processing entity",
+      "then": "corresponding behavior should be enforced"
+    },
+    {
+      "id": "SPEC-024",
+      "given": "workspace is false (default: False)",
+      "when": "processing entity",
+      "then": "corresponding behavior should not be enforced"
+    },
+    {
+      "id": "SPEC-025",
+      "given": "configuration with workspace",
+      "when": "validating settings",
+      "then": "boolean value should be accepted"
+    },
+    {
+      "id": "SPEC-026",
+      "given": "user configures properties",
+      "when": "validating input",
+      "then": "value should meet schema requirements"
+    },
+    {
+      "id": "SPEC-027",
+      "given": "properties is set",
+      "when": "processing configuration",
+      "then": "value should be used correctly"
+    },
+    {
+      "id": "SPEC-028",
+      "given": "user provides children array",
+      "when": "validating input",
+      "then": "items should be processed in order"
+    },
+    {
+      "id": "SPEC-029",
+      "given": "children array is empty",
+      "when": "validating input",
+      "then": "behavior should follow optional/required rules"
+    },
+    {
+      "id": "SPEC-030",
+      "given": "user configures icon",
+      "when": "validating input",
+      "then": "value should meet schema requirements"
+    },
+    {
+      "id": "SPEC-031",
+      "given": "icon is set",
+      "when": "processing configuration",
+      "then": "value should be used correctly"
+    },
+    {
+      "id": "SPEC-032",
+      "given": "entity with type='emoji'",
+      "when": "processing configuration",
+      "then": "correct handler should be selected"
+    },
+    {
+      "id": "SPEC-033",
+      "given": "invalid type value",
+      "when": "validating configuration",
+      "then": "clear error message should identify the issue"
+    },
+    {
+      "id": "SPEC-034",
+      "given": "user provides emoji",
+      "when": "validating input",
+      "then": "string value should be accepted"
+    },
+    {
+      "id": "SPEC-035",
+      "given": "emoji is empty string",
+      "when": "validating input",
+      "then": "behavior should follow optional/required rules"
+    },
+    {
+      "id": "SPEC-036",
+      "given": "entity with type='external'",
+      "when": "processing configuration",
+      "then": "correct handler should be selected"
+    },
+    {
+      "id": "SPEC-037",
+      "given": "invalid type value",
+      "when": "validating configuration",
+      "then": "clear error message should identify the issue"
+    },
+    {
+      "id": "SPEC-038",
+      "given": "user configures external",
+      "when": "validating input",
+      "then": "value should meet schema requirements"
+    },
+    {
+      "id": "SPEC-039",
+      "given": "external is set",
+      "when": "processing configuration",
+      "then": "value should be used correctly"
+    },
+    {
+      "id": "SPEC-040",
+      "given": "user provides url",
+      "when": "validating input",
+      "then": "string value should be accepted"
+    },
+    {
+      "id": "SPEC-041",
+      "given": "url is empty string",
+      "when": "validating input",
+      "then": "behavior should follow optional/required rules"
+    },
+    {
+      "id": "SPEC-042",
+      "given": "user configures cover",
+      "when": "validating input",
+      "then": "value should meet schema requirements"
+    },
+    {
+      "id": "SPEC-043",
+      "given": "cover is set",
+      "when": "processing configuration",
+      "then": "value should be used correctly"
+    },
+    {
+      "id": "SPEC-044",
+      "given": "entity with type='external'",
+      "when": "processing configuration",
+      "then": "correct handler should be selected"
+    },
+    {
+      "id": "SPEC-045",
+      "given": "invalid type value",
+      "when": "validating configuration",
+      "then": "clear error message should identify the issue"
+    },
+    {
+      "id": "SPEC-046",
+      "given": "user configures external",
+      "when": "validating input",
+      "then": "value should meet schema requirements"
+    },
+    {
+      "id": "SPEC-047",
+      "given": "external is set",
+      "when": "processing configuration",
+      "then": "value should be used correctly"
+    },
+    {
+      "id": "SPEC-048",
+      "given": "user provides url",
+      "when": "validating input",
+      "then": "string value should be accepted"
+    },
+    {
+      "id": "SPEC-049",
+      "given": "url is empty string",
+      "when": "validating input",
+      "then": "behavior should follow optional/required rules"
+    }
+  ],
+  "$id": "notion-create-page-action.schema.json"
+}

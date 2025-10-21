@@ -1,0 +1,30 @@
+{
+  "$id": "precision.schema.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Number of decimal places",
+  "description": "Number of decimal places",
+  "type": "integer",
+  "default": 2,
+  "minimum": 0,
+  "maximum": 10,
+  "specs": [
+    {
+      "id": "FIELD-DECIMAL-FIELD-PRECISION-001",
+      "given": "user provides precision between 0 and 10",
+      "when": "validating input",
+      "then": "value should be accepted"
+    },
+    {
+      "id": "FIELD-DECIMAL-FIELD-PRECISION-002",
+      "given": "user provides precision below 0",
+      "when": "validating input",
+      "then": "error should enforce minimum value"
+    },
+    {
+      "id": "FIELD-DECIMAL-FIELD-PRECISION-003",
+      "given": "user provides precision above 10",
+      "when": "validating input",
+      "then": "error should enforce maximum value"
+    }
+  ]
+}

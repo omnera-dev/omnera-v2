@@ -1,0 +1,51 @@
+{
+  "$id": "indexes.schema.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Database Indexes",
+  "description": "Custom database indexes for query optimization. Indexes improve query performance by creating efficient lookup structures for specified fields.",
+  "type": "array",
+  "default": [],
+  "examples": [
+    [
+      {
+        "name": "idx_user_email",
+        "fields": ["email"]
+      },
+      {
+        "name": "idx_user_created",
+        "fields": ["created_at"],
+        "unique": false
+      }
+    ]
+  ],
+  "items": {
+    "type": "object",
+    "properties": {
+      "name": {
+        "$ref": "./name/name.schema.json"
+      },
+      "fields": {
+        "$ref": "./fields/fields.schema.json"
+      },
+      "unique": {
+        "$ref": "./unique/unique.schema.json"
+      }
+    },
+    "required": ["name", "fields"],
+    "additionalProperties": false
+  },
+  "specs": [
+    {
+      "id": "APP-TABLES-INDEXES-001",
+      "given": "user provides indexes array",
+      "when": "validating input",
+      "then": "items should be processed in order"
+    },
+    {
+      "id": "APP-TABLES-INDEXES-002",
+      "given": "indexes array is empty",
+      "when": "validating input",
+      "then": "behavior should follow optional/required rules"
+    }
+  ]
+}

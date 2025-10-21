@@ -1,0 +1,45 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Application Configuration",
+  "description": "Complete configuration for your application including metadata, data models, automations, and integrations",
+  "version": "1.0.0",
+  "type": "object",
+  "definitions": {},
+  "properties": {
+    "name": {
+      "$ref": "./name/name.schema.json"
+    },
+    "description": {
+      "$ref": "./description/description.schema.json"
+    },
+    "version": {
+      "$ref": "./version/version.schema.json"
+    },
+    "tables": {
+      "$ref": "./tables/tables.schema.json"
+    },
+    "pages": {
+      "$ref": "./pages/pages.schema.json"
+    },
+    "interfaces": {
+      "$ref": "./interfaces/interfaces.schema.json"
+    },
+    "automations": {
+      "$ref": "./automations/automations.schema.json"
+    },
+    "connections": {
+      "$ref": "./connections/connections.schema.json"
+    }
+  },
+  "required": [
+    "name",
+    "description",
+    "version",
+    "tables",
+    "pages",
+    "interfaces",
+    "automations",
+    "connections"
+  ],
+  "additionalProperties": false
+}

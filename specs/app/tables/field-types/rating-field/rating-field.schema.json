@@ -1,0 +1,44 @@
+{
+  "$id": "rating-field.schema.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Rating Field",
+  "type": "object",
+  "properties": {
+    "id": {
+      "$ref": "../../common/definitions.schema.json#/definitions/id"
+    },
+    "name": {
+      "$ref": "../../common/definitions.schema.json#/definitions/name"
+    },
+    "required": {
+      "$ref": "../common/required/required.schema.json"
+    },
+    "type": {
+      "type": "string",
+      "const": "rating"
+    },
+    "max": {
+      "$ref": "./max/max.schema.json"
+    },
+    "style": {
+      "$ref": "./style/style.schema.json"
+    }
+  },
+  "description": "Star/icon rating field for user feedback and scoring. Configure maxRating (typically 5 or 10), display icon (star, heart, thumbs-up), and whether to allow half-ratings. Stores numeric value (1 to maxRating). Useful for product reviews, satisfaction scores, priority levels, and quality assessments. Displays as interactive icon picker in forms and static icons in tables.",
+  "required": ["id", "name", "type"],
+  "additionalProperties": false,
+  "specs": [
+    {
+      "id": "SPEC-001",
+      "given": "entity with type='rating'",
+      "when": "processing configuration",
+      "then": "correct handler should be selected"
+    },
+    {
+      "id": "SPEC-002",
+      "given": "invalid type value",
+      "when": "validating configuration",
+      "then": "clear error message should identify the issue"
+    }
+  ]
+}

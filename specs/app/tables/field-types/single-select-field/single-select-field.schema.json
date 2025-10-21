@@ -1,0 +1,59 @@
+{
+  "$id": "single-select-field.schema.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Single Select Field",
+  "type": "object",
+  "properties": {
+    "id": {
+      "$ref": "../../common/definitions.schema.json#/definitions/id"
+    },
+    "name": {
+      "$ref": "../../common/definitions.schema.json#/definitions/name"
+    },
+    "required": {
+      "$ref": "../common/required/required.schema.json"
+    },
+    "indexed": {
+      "$ref": "../common/indexed/indexed.schema.json"
+    },
+    "type": {
+      "type": "string",
+      "const": "single-select"
+    },
+    "options": {
+      "$ref": "./options/options.schema.json"
+    },
+    "default": {
+      "$ref": "./default/default.schema.json"
+    }
+  },
+  "description": "Single selection dropdown from predefined options. Users can choose exactly one value from the list. Useful for status fields (Active, Inactive, Pending), categories, priority levels (High, Medium, Low), and enumerated values. Requires at least one option. Supports default value. Indexing improves filtering by option value.",
+  "required": ["id", "name", "type", "options"],
+  "additionalProperties": false,
+  "specs": [
+    {
+      "id": "FIELD-SINGLE-SELECT-FIELD-SINGLE-SELECT-001",
+      "given": "I am working with a single select field",
+      "when": "I create a record",
+      "then": "it should complete successfully"
+    },
+    {
+      "id": "FIELD-SINGLE-SELECT-FIELD-SINGLE-SELECT-002",
+      "given": "I am working with an invalid single select field",
+      "when": "I create a record",
+      "then": "it should fail with validation error"
+    },
+    {
+      "id": "SPEC-003",
+      "given": "entity with type='single-select'",
+      "when": "processing configuration",
+      "then": "correct handler should be selected"
+    },
+    {
+      "id": "SPEC-004",
+      "given": "invalid type value",
+      "when": "validating configuration",
+      "then": "clear error message should identify the issue"
+    }
+  ]
+}

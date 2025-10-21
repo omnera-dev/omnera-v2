@@ -1,0 +1,137 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "GET Request",
+  "description": "Triggered by a GET request",
+  "type": "object",
+  "properties": {
+    "service": {
+      "type": "string",
+      "const": "http"
+    },
+    "event": {
+      "type": "string",
+      "const": "get"
+    },
+    "params": {
+      "type": "object",
+      "properties": {
+        "path": {
+          "type": "string"
+        },
+        "respondImmediately": {
+          "default": false,
+          "type": "boolean"
+        }
+      },
+      "required": ["path"],
+      "additionalProperties": false
+    }
+  },
+  "required": ["service", "event", "params"],
+  "additionalProperties": false,
+  "specs": [
+    {
+      "id": "SPEC-001",
+      "given": "Facebook sends GET validation request",
+      "when": "I respond with hub.challenge",
+      "then": "it should succeed"
+    },
+    {
+      "id": "SPEC-002",
+      "given": "hub.mode is not subscribe",
+      "when": "I not respond with challenge",
+      "then": "it should succeed"
+    },
+    {
+      "id": "SPEC-003",
+      "given": "I am working with a get request",
+      "when": "I not found the automation",
+      "then": "it should complete successfully"
+    },
+    {
+      "id": "SPEC-004",
+      "given": "I am working with a wrong path",
+      "when": "I not found the automation",
+      "then": "it should complete successfully"
+    },
+    {
+      "id": "SPEC-005",
+      "given": "LinkedIn sends GET validation request",
+      "when": "I respond with correctly computed challengeResponse",
+      "then": "it should succeed"
+    },
+    {
+      "id": "SPEC-006",
+      "given": "I am working with correct HMAC computation",
+      "when": "I handle GET validation for HTTP trigger path",
+      "then": "it should complete successfully"
+    },
+    {
+      "id": "SPEC-007",
+      "given": "entity with service='http'",
+      "when": "processing configuration",
+      "then": "correct handler should be selected"
+    },
+    {
+      "id": "SPEC-008",
+      "given": "invalid service value",
+      "when": "validating configuration",
+      "then": "clear error message should identify the issue"
+    },
+    {
+      "id": "SPEC-009",
+      "given": "entity with event='get'",
+      "when": "processing configuration",
+      "then": "correct handler should be selected"
+    },
+    {
+      "id": "SPEC-010",
+      "given": "invalid event value",
+      "when": "validating configuration",
+      "then": "clear error message should identify the issue"
+    },
+    {
+      "id": "SPEC-011",
+      "given": "user configures params",
+      "when": "validating input",
+      "then": "value should meet schema requirements"
+    },
+    {
+      "id": "SPEC-012",
+      "given": "params is set",
+      "when": "processing configuration",
+      "then": "value should be used correctly"
+    },
+    {
+      "id": "SPEC-013",
+      "given": "user provides path",
+      "when": "validating input",
+      "then": "string value should be accepted"
+    },
+    {
+      "id": "SPEC-014",
+      "given": "path is empty string",
+      "when": "validating input",
+      "then": "behavior should follow optional/required rules"
+    },
+    {
+      "id": "SPEC-015",
+      "given": "respondImmediately is true",
+      "when": "processing entity",
+      "then": "corresponding behavior should be enforced"
+    },
+    {
+      "id": "SPEC-016",
+      "given": "respondImmediately is false (default: False)",
+      "when": "processing entity",
+      "then": "corresponding behavior should not be enforced"
+    },
+    {
+      "id": "SPEC-017",
+      "given": "configuration with respondImmediately",
+      "when": "validating settings",
+      "then": "boolean value should be accepted"
+    }
+  ],
+  "$id": "http-get-trigger.schema.json"
+}

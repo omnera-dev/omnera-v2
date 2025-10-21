@@ -1,0 +1,17 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Data Queries",
+  "description": "Named data sources that components can reference",
+  "type": "array",
+  "default": [],
+  "items": {
+    "anyOf": [
+      {
+        "$ref": "./table-query/table-query.schema.json"
+      },
+      {
+        "$ref": "./rest-query/rest-query.schema.json"
+      }
+    ]
+  }
+}

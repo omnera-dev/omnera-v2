@@ -1,0 +1,29 @@
+{
+  "$id": "content-image.schema.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Content Section - Image",
+  "description": "Image section with optional caption",
+  "type": "object",
+  "properties": {
+    "type": {
+      "const": "content-image"
+    },
+    "image": {
+      "type": "string"
+    },
+    "alt": {
+      "type": "string"
+    },
+    "caption": {
+      "type": "string"
+    },
+    "width": {
+      "enum": ["narrow", "normal", "wide", "full"]
+    },
+    "condition": {
+      "$ref": "../common/condition.schema.json"
+    }
+  },
+  "required": ["type", "image", "alt"],
+  "additionalProperties": false
+}

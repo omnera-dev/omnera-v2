@@ -1,0 +1,38 @@
+{
+  "$id": "cta-centered.schema.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "CTA Section - Centered",
+  "description": "Centered call-to-action section",
+  "type": "object",
+  "properties": {
+    "type": {
+      "const": "cta-centered"
+    },
+    "heading": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "primaryCta": {
+      "type": "object",
+      "properties": {
+        "text": {
+          "type": "string"
+        },
+        "href": {
+          "type": "string"
+        }
+      },
+      "required": ["text", "href"]
+    },
+    "backgroundColor": {
+      "type": "string"
+    },
+    "condition": {
+      "$ref": "../common/condition.schema.json"
+    }
+  },
+  "required": ["type", "heading", "primaryCta"],
+  "additionalProperties": false
+}

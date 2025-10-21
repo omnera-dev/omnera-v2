@@ -1,0 +1,151 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Data Tables",
+  "description": "Collection of database tables that define the data structure of your application. Each table represents an entity (e.g., users, products, orders) with fields that define the schema. Tables support relationships, indexes, constraints, and various field types. Tables are the foundation of your application's data model and determine what information can be stored and how it relates.",
+  "default": [],
+  "type": "array",
+  "items": {
+    "title": "Data Table",
+    "description": "A database table definition with its fields and structure",
+    "version": "0.81.0",
+    "type": "object",
+    "properties": {
+      "id": {
+        "$ref": "./id/id.schema.json"
+      },
+      "name": {
+        "$ref": "./name/name.schema.json"
+      },
+      "fields": {
+        "$ref": "./fields/fields.schema.json"
+      },
+      "primaryKey": {
+        "$ref": "./primary-key/primary-key.schema.json"
+      },
+      "uniqueConstraints": {
+        "$ref": "./unique-constraints/unique-constraints.schema.json"
+      },
+      "indexes": {
+        "$ref": "./indexes/indexes.schema.json"
+      }
+    },
+    "required": ["id", "name", "fields"],
+    "additionalProperties": false
+  },
+  "specs": [
+    {
+      "id": "APP-TABLES-001",
+      "given": "the application is running",
+      "when": "I return the admin tables page",
+      "then": "it should work correctly"
+    },
+    {
+      "id": "APP-TABLES-002",
+      "given": "the application is running",
+      "when": "I list tables",
+      "then": "it should work correctly"
+    },
+    {
+      "id": "APP-TABLES-003",
+      "given": "the application is running",
+      "when": "I list table records",
+      "then": "it should work correctly"
+    },
+    {
+      "id": "APP-TABLES-004",
+      "given": "the application is running",
+      "when": "I search table records",
+      "then": "it should work correctly"
+    },
+    {
+      "id": "APP-TABLES-005",
+      "given": "the application is running",
+      "when": "I open and display a table record",
+      "then": "it should work correctly"
+    },
+    {
+      "id": "APP-TABLES-006",
+      "given": "the application is running",
+      "when": "I create a table record",
+      "then": "it should work correctly"
+    },
+    {
+      "id": "APP-TABLES-007",
+      "given": "I am working with required fields",
+      "when": "I create a table record",
+      "then": "it should complete successfully"
+    },
+    {
+      "id": "APP-TABLES-008",
+      "given": "the application is running",
+      "when": "I update a table record",
+      "then": "it should work correctly"
+    },
+    {
+      "id": "APP-TABLES-009",
+      "given": "the application is running",
+      "when": "I delete a table record",
+      "then": "it should work correctly"
+    },
+    {
+      "id": "APP-TABLES-010",
+      "given": "I am working with missing required fields",
+      "when": "I not create a record from a POST request",
+      "then": "it should complete successfully"
+    },
+    {
+      "id": "APP-TABLES-011",
+      "given": "the application is running",
+      "when": "I create a record from a POST request",
+      "then": "it should work correctly"
+    },
+    {
+      "id": "APP-TABLES-012",
+      "given": "I am working with missing required fields",
+      "when": "I not create multiple records from a POST request",
+      "then": "it should complete successfully"
+    },
+    {
+      "id": "APP-TABLES-013",
+      "given": "the application is running",
+      "when": "I create multiple records from a POST request",
+      "then": "it should work correctly"
+    },
+    {
+      "id": "APP-TABLES-014",
+      "given": "the application is running",
+      "when": "I read a record from a GET request",
+      "then": "it should work correctly"
+    },
+    {
+      "id": "APP-TABLES-015",
+      "given": "the application is running",
+      "when": "I list records from a GET request",
+      "then": "it should work correctly"
+    },
+    {
+      "id": "APP-TABLES-016",
+      "given": "the application is running",
+      "when": "I update a record from a PATCH request",
+      "then": "it should work correctly"
+    },
+    {
+      "id": "APP-TABLES-017",
+      "given": "the application is running",
+      "when": "I update multiple records from a PATCH request",
+      "then": "it should work correctly"
+    },
+    {
+      "id": "APP-TABLES-018",
+      "given": "the application is running",
+      "when": "I delete a record from a DELETE request",
+      "then": "it should work correctly"
+    },
+    {
+      "id": "APP-TABLES-019",
+      "given": "the application is running",
+      "when": "I delete multiple records from a DELETE request",
+      "then": "it should work correctly"
+    }
+  ]
+}

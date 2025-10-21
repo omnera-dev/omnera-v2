@@ -1,0 +1,41 @@
+{
+  "$id": "lookup-field.schema.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Lookup Field",
+  "type": "object",
+  "properties": {
+    "id": {
+      "$ref": "../../common/definitions.schema.json#/definitions/id"
+    },
+    "name": {
+      "$ref": "../../common/definitions.schema.json#/definitions/name"
+    },
+    "type": {
+      "type": "string",
+      "const": "lookup"
+    },
+    "relationshipField": {
+      "$ref": "./relationshipField/relationshipField.schema.json"
+    },
+    "relatedField": {
+      "$ref": "./relatedField/relatedField.schema.json"
+    }
+  },
+  "description": "Display field values from related records through a relationship. Specify relationshipField (the relationship field in current table) and relatedField (the field to display from related table). Read-only field that automatically shows current value from linked record. Updates when related record changes. Useful for showing related data without duplicating storage (e.g., showing customer name in order, category name in product). More efficient than copying data.",
+  "required": ["id", "name", "type", "relationshipField", "relatedField"],
+  "additionalProperties": false,
+  "specs": [
+    {
+      "id": "SPEC-001",
+      "given": "entity with type='lookup'",
+      "when": "processing configuration",
+      "then": "correct handler should be selected"
+    },
+    {
+      "id": "SPEC-002",
+      "given": "invalid type value",
+      "when": "validating configuration",
+      "then": "clear error message should identify the issue"
+    }
+  ]
+}

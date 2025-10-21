@@ -1,0 +1,46 @@
+{
+  "$id": "format.schema.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Time Display Format",
+  "description": "Display format for time values. Controls how times are presented to users, not how they are stored. Storage always uses ISO 8601 (HH:mm:ss or HH:mm:ss.sss). Common formats: HH:mm (24-hour), hh:mm A (12-hour with AM/PM), HH:mm:ss (24-hour with seconds).",
+  "type": "string",
+  "default": "HH:mm",
+  "examples": ["HH:mm", "hh:mm A", "HH:mm:ss", "hh:mm:ss A", "HH:mm:ss.SSS"],
+  "specs": [
+    {
+      "id": "FIELD-TIME-FORMAT-001",
+      "title": "Accept valid time format",
+      "given": "a time field configuration",
+      "when": "user sets format to 'hh:mm A'",
+      "then": "the format is accepted and times display in 12-hour format with AM/PM"
+    },
+    {
+      "id": "FIELD-TIME-FORMAT-002",
+      "title": "Use default format when not specified",
+      "given": "a time field configuration without format property",
+      "when": "user views a time value",
+      "then": "the time is displayed in default 24-hour format (HH:mm)"
+    },
+    {
+      "id": "FIELD-TIME-FORMAT-003",
+      "title": "Reject invalid format tokens",
+      "given": "a time field configuration",
+      "when": "user sets format to 'INVALID-FORMAT'",
+      "then": "validation error is returned with message 'Invalid time format pattern'"
+    },
+    {
+      "id": "FIELD-TIME-FORMAT-004",
+      "title": "Display with 12-hour format",
+      "given": "a time field with format 'hh:mm A'",
+      "when": "user views time '14:30:00'",
+      "then": "the time is displayed as '02:30 PM'"
+    },
+    {
+      "id": "FIELD-TIME-FORMAT-005",
+      "title": "Display with milliseconds",
+      "given": "a time field with format 'HH:mm:ss.SSS'",
+      "when": "user views time '14:30:45.123'",
+      "then": "the time is displayed as '14:30:45.123'"
+    }
+  ]
+}

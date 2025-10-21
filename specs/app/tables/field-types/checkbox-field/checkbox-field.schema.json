@@ -1,0 +1,50 @@
+{
+  "$id": "checkbox-field.schema.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Checkbox Field",
+  "type": "object",
+  "properties": {
+    "id": {
+      "$ref": "../../common/definitions.schema.json#/definitions/id"
+    },
+    "name": {
+      "$ref": "../../common/definitions.schema.json#/definitions/name"
+    },
+    "required": {
+      "$ref": "../common/required/required.schema.json"
+    },
+    "indexed": {
+      "$ref": "../common/indexed/indexed.schema.json"
+    },
+    "type": {
+      "type": "string",
+      "const": "checkbox"
+    },
+    "default": {
+      "$ref": "./default/default.schema.json"
+    }
+  },
+  "description": "Boolean checkbox field for true/false values. Displays as a toggleable checkbox in forms and checkmark/cross in tables. Useful for status flags (active/inactive, published/draft), feature toggles, and yes/no questions. Supports default value. Cannot be required (defaults to false).",
+  "required": ["id", "name", "type"],
+  "additionalProperties": false,
+  "specs": [
+    {
+      "id": "FIELD-CHECKBOX-FIELD-CHECKBOX-001",
+      "given": "I am working with a checkbox field",
+      "when": "I create a record",
+      "then": "it should complete successfully"
+    },
+    {
+      "id": "SPEC-002",
+      "given": "entity with type='checkbox'",
+      "when": "processing configuration",
+      "then": "correct handler should be selected"
+    },
+    {
+      "id": "SPEC-003",
+      "given": "invalid type value",
+      "when": "validating configuration",
+      "then": "clear error message should identify the issue"
+    }
+  ]
+}

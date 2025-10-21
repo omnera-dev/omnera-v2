@@ -1,0 +1,29 @@
+{
+  "$id": "format.schema.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Display format for the duration",
+  "description": "Display format for the duration",
+  "type": "string",
+  "default": "h:mm:ss",
+  "enum": ["h:mm", "h:mm:ss", "minutes", "seconds"],
+  "specs": [
+    {
+      "id": "FIELD-DURATION-FIELD-FORMAT-001",
+      "given": "user selects format from valid options",
+      "when": "validating input",
+      "then": "selection should be accepted"
+    },
+    {
+      "id": "FIELD-DURATION-FIELD-FORMAT-002",
+      "given": "user provides invalid format value",
+      "when": "validating input",
+      "then": "error should list valid options: h:mm, h:mm:ss, minutes"
+    },
+    {
+      "id": "FIELD-DURATION-FIELD-FORMAT-003",
+      "given": "format is set to any valid enum value",
+      "when": "processing entity",
+      "then": "appropriate behavior should execute"
+    }
+  ]
+}

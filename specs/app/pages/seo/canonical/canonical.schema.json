@@ -1,0 +1,8 @@
+{
+  "$id": "canonical.schema.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Canonical URL",
+  "description": "Canonical URL to prevent duplicate content issues",
+  "type": "string",
+  "examples": ["https://omnera.com/about"]
+}

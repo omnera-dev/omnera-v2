@@ -1,0 +1,23 @@
+{
+  "$id": "currency.schema.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Currency Code",
+  "description": "Currency code (ISO 4217)",
+  "type": "string",
+  "default": "USD",
+  "examples": ["USD", "EUR", "GBP", "JPY", "CAD"],
+  "specs": [
+    {
+      "id": "FIELD-CURRENCY-CURRENCY-001",
+      "given": "user provides currency",
+      "when": "validating input",
+      "then": "string value should be accepted"
+    },
+    {
+      "id": "FIELD-CURRENCY-CURRENCY-002",
+      "given": "currency is empty string",
+      "when": "validating input",
+      "then": "default to USD"
+    }
+  ]
+}

@@ -1,0 +1,8 @@
+{
+  "$id": "path.schema.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "URL Path",
+  "description": "URL path where the page is accessible",
+  "$ref": "../../common/definitions.schema.json#/definitions/path",
+  "examples": ["/", "/about", "/pricing", "/contact"]
+}

@@ -1,0 +1,137 @@
+{
+  "$id": "fields.schema.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Table Fields",
+  "description": "List of fields/columns in this table",
+  "type": "array",
+  "minItems": 1,
+  "default": [],
+  "items": {
+    "title": "Field",
+    "description": "A field in the table",
+    "anyOf": [
+      {
+        "$ref": "../field-types/array-field.schema.json"
+      },
+      {
+        "$ref": "../field-types/autonumber-field.schema.json"
+      },
+      {
+        "$ref": "../field-types/barcode-field.schema.json"
+      },
+      {
+        "$ref": "../field-types/button-field.schema.json"
+      },
+      {
+        "$ref": "../field-types/checkbox-field.schema.json"
+      },
+      {
+        "$ref": "../field-types/color-field.schema.json"
+      },
+      {
+        "$ref": "../field-types/created-at-field.schema.json"
+      },
+      {
+        "$ref": "../field-types/created-by-field.schema.json"
+      },
+      {
+        "$ref": "../field-types/currency-field.schema.json"
+      },
+      {
+        "$ref": "../field-types/date-field.schema.json"
+      },
+      {
+        "$ref": "../field-types/decimal-field.schema.json"
+      },
+      {
+        "$ref": "../field-types/duration-field.schema.json"
+      },
+      {
+        "$ref": "../field-types/email-field.schema.json"
+      },
+      {
+        "$ref": "../field-types/formula-field.schema.json"
+      },
+      {
+        "$ref": "../field-types/geolocation-field.schema.json"
+      },
+      {
+        "$ref": "../field-types/integer-field.schema.json"
+      },
+      {
+        "$ref": "../field-types/json-field.schema.json"
+      },
+      {
+        "$ref": "../field-types/long-text-field.schema.json"
+      },
+      {
+        "$ref": "../field-types/lookup-field.schema.json"
+      },
+      {
+        "$ref": "../field-types/multi-select-field.schema.json"
+      },
+      {
+        "$ref": "../field-types/multiple-attachments-field.schema.json"
+      },
+      {
+        "$ref": "../field-types/percentage-field.schema.json"
+      },
+      {
+        "$ref": "../field-types/phone-number-field.schema.json"
+      },
+      {
+        "$ref": "../field-types/progress-field.schema.json"
+      },
+      {
+        "$ref": "../field-types/rating-field.schema.json"
+      },
+      {
+        "$ref": "../field-types/relationship-field.schema.json"
+      },
+      {
+        "$ref": "../field-types/rich-text-field.schema.json"
+      },
+      {
+        "$ref": "../field-types/rollup-field.schema.json"
+      },
+      {
+        "$ref": "../field-types/single-attachment-field.schema.json"
+      },
+      {
+        "$ref": "../field-types/single-line-text-field.schema.json"
+      },
+      {
+        "$ref": "../field-types/single-select-field.schema.json"
+      },
+      {
+        "$ref": "../field-types/status-field.schema.json"
+      },
+      {
+        "$ref": "../field-types/updated-at-field.schema.json"
+      },
+      {
+        "$ref": "../field-types/updated-by-field.schema.json"
+      },
+      {
+        "$ref": "../field-types/url-field.schema.json"
+      },
+      {
+        "$ref": "../field-types/user-field.schema.json"
+      }
+    ]
+  },
+  "specs": [
+    {
+      "id": "APP-TABLES-FIELDS-001",
+      "given": "user provides fields with at least 1 items",
+      "when": "validating input",
+      "then": "array should be accepted"
+    },
+    {
+      "id": "APP-TABLES-FIELDS-002",
+      "given": "user provides fields with fewer than 1 items",
+      "when": "validating input",
+      "then": "error should enforce minimum items"
+    }
+  ]
+}

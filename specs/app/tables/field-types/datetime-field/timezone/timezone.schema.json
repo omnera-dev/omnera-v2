@@ -1,0 +1,47 @@
+{
+  "$id": "timezone.schema.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Timezone for DateTime Display",
+  "description": "IANA timezone identifier for datetime display. Controls how UTC timestamps are converted for display to users. Storage is always in UTC to prevent ambiguity. Common timezones: UTC, America/New_York (EST/EDT), Europe/London (GMT/BST), Asia/Tokyo (JST).",
+  "type": "string",
+  "default": "UTC",
+  "examples": [
+    "UTC",
+    "America/New_York",
+    "America/Los_Angeles",
+    "Europe/London",
+    "Europe/Paris",
+    "Asia/Tokyo",
+    "Australia/Sydney"
+  ],
+  "specs": [
+    {
+      "id": "FIELD-DATETIME-TIMEZONE-001",
+      "title": "Display datetime in specified timezone",
+      "given": "a datetime field with timezone 'America/New_York'",
+      "when": "user views datetime '2024-12-31T15:00:00.000Z' (UTC)",
+      "then": "the datetime is displayed as '2024-12-31 10:00' (EST, UTC-5)"
+    },
+    {
+      "id": "FIELD-DATETIME-TIMEZONE-002",
+      "title": "Reject invalid timezone identifier",
+      "given": "a datetime field configuration",
+      "when": "user sets timezone to 'Invalid/Timezone'",
+      "then": "validation error is returned with message 'Invalid IANA timezone identifier'"
+    },
+    {
+      "id": "FIELD-DATETIME-TIMEZONE-003",
+      "title": "Handle DST transition correctly",
+      "given": "a datetime field with timezone 'America/New_York'",
+      "when": "user views datetime during DST transition (March/November)",
+      "then": "the datetime is displayed with correct offset (EST -5 or EDT -4)"
+    },
+    {
+      "id": "FIELD-DATETIME-TIMEZONE-004",
+      "title": "Use UTC as default timezone",
+      "given": "a datetime field without timezone property",
+      "when": "user views a datetime value",
+      "then": "the datetime is displayed in UTC timezone (no conversion)"
+    }
+  ]
+}

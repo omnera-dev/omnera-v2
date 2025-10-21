@@ -1,0 +1,47 @@
+{
+  "$id": "unique-constraints.schema.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Unique Constraints",
+  "description": "Composite unique constraints ensure that combinations of multiple field values are unique across all rows. Use this when you need uniqueness across multiple fields (e.g., email + tenant_id must be unique together).",
+  "type": "array",
+  "default": [],
+  "examples": [
+    [
+      {
+        "name": "uq_user_email_tenant",
+        "fields": ["email", "tenant_id"]
+      },
+      {
+        "name": "uq_product_sku_variant",
+        "fields": ["sku", "variant_id"]
+      }
+    ]
+  ],
+  "items": {
+    "type": "object",
+    "properties": {
+      "name": {
+        "$ref": "./name/name.schema.json"
+      },
+      "fields": {
+        "$ref": "./fields/fields.schema.json"
+      }
+    },
+    "required": ["name", "fields"],
+    "additionalProperties": false
+  },
+  "specs": [
+    {
+      "id": "APP-TABLES-UNIQUECONSTRAINTS-001",
+      "given": "user provides uniqueConstraints array",
+      "when": "validating input",
+      "then": "items should be processed in order"
+    },
+    {
+      "id": "APP-TABLES-UNIQUECONSTRAINTS-002",
+      "given": "uniqueConstraints array is empty",
+      "when": "validating input",
+      "then": "behavior should follow optional/required rules"
+    }
+  ]
+}

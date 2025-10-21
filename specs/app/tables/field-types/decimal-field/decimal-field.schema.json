@@ -1,0 +1,55 @@
+{
+  "$id": "decimal-field.schema.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Decimal Field",
+  "type": "object",
+  "properties": {
+    "id": {
+      "$ref": "../../common/definitions.schema.json#/definitions/id"
+    },
+    "name": {
+      "$ref": "../../common/definitions.schema.json#/definitions/name"
+    },
+    "required": {
+      "$ref": "../common/required/required.schema.json"
+    },
+    "unique": {
+      "$ref": "../common/unique/unique.schema.json"
+    },
+    "indexed": {
+      "$ref": "../common/indexed/indexed.schema.json"
+    },
+    "type": {
+      "const": "decimal"
+    },
+    "min": {
+      "$ref": "./min/min.schema.json"
+    },
+    "max": {
+      "$ref": "./max/max.schema.json"
+    },
+    "default": {
+      "$ref": "./default/default.schema.json"
+    },
+    "precision": {
+      "$ref": "./precision/precision.schema.json"
+    }
+  },
+  "description": "Floating-point number field with configurable decimal precision (0-10 places). Ideal for measurements, scores, ratings, and scientific data. Precision determines how many decimal places are stored and displayed (default: 2). Supports min/max constraints for range validation. Required flag makes the field mandatory.",
+  "required": ["id", "name", "type"],
+  "additionalProperties": false,
+  "specs": [
+    {
+      "id": "SPEC-001",
+      "given": "a Decimal Field is configured",
+      "when": "validating schema",
+      "then": "type must be 'decimal'"
+    },
+    {
+      "id": "SPEC-002",
+      "given": "type is set to 'decimal'",
+      "when": "processing field",
+      "then": "it should be treated as a Decimal Field"
+    }
+  ]
+}

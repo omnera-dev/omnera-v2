@@ -1,0 +1,63 @@
+{
+  "$id": "version.schema.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Application Version",
+  "description": "The version of the application following Semantic Versioning (SemVer) 2.0.0 specification",
+  "type": "string",
+  "minLength": 5,
+  "pattern": "^(0|[1-9]\\d*)\\.(0|[1-9]\\d*)\\.(0|[1-9]\\d*)(?:-((?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\\.(?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\\+([0-9a-zA-Z-]+(?:\\.[0-9a-zA-Z-]+)*))?$",
+  "examples": [
+    "1.0.0",
+    "0.0.1",
+    "1.2.3",
+    "1.0.0-alpha",
+    "1.0.0-beta.1",
+    "2.0.0-rc.1",
+    "1.0.0+build.123",
+    "1.0.0-alpha+001"
+  ],
+  "specs": [
+    {
+      "id": "APP-VERSION-001",
+      "given": "an app with name and simple SemVer version '1.0.0'",
+      "when": "user navigates to the homepage",
+      "then": "version badge should be visible with correct version text"
+    },
+    {
+      "id": "APP-VERSION-002",
+      "given": "an app with only name (no version property)",
+      "when": "user navigates to the homepage",
+      "then": "version badge should NOT be rendered"
+    },
+    {
+      "id": "APP-VERSION-003",
+      "given": "an app with pre-release version '2.0.0-beta.1'",
+      "when": "user navigates to the homepage",
+      "then": "badge should display pre-release version exactly as specified"
+    },
+    {
+      "id": "APP-VERSION-004",
+      "given": "an app with build metadata in version '1.0.0+build.123'",
+      "when": "user navigates to the homepage",
+      "then": "badge should display version with build metadata intact"
+    },
+    {
+      "id": "APP-VERSION-005",
+      "given": "an app with both pre-release and build metadata '1.0.0-alpha+001'",
+      "when": "user navigates to the homepage",
+      "then": "badge should display complete version string"
+    },
+    {
+      "id": "APP-VERSION-006",
+      "given": "an app with name and version",
+      "when": "user navigates to the homepage",
+      "then": "badge should appear before (above) the app name heading"
+    },
+    {
+      "id": "APP-VERSION-007",
+      "given": "an app with version",
+      "when": "user navigates to the homepage",
+      "then": "badge should have proper accessibility attributes (data-testid, data-slot)"
+    }
+  ]
+}

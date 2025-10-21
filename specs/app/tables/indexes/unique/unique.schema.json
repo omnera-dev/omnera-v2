@@ -1,0 +1,28 @@
+{
+  "$id": "unique.schema.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Index Unique Flag",
+  "description": "Whether this index enforces uniqueness. Use this for unique constraints across multiple fields.",
+  "type": "boolean",
+  "default": false,
+  "specs": [
+    {
+      "id": "APP-TABLES-INDEXES-UNIQUE-001",
+      "given": "unique is true",
+      "when": "processing entity",
+      "then": "corresponding behavior should be enforced"
+    },
+    {
+      "id": "APP-TABLES-INDEXES-UNIQUE-002",
+      "given": "unique is false (default: False)",
+      "when": "processing entity",
+      "then": "corresponding behavior should not be enforced"
+    },
+    {
+      "id": "APP-TABLES-INDEXES-UNIQUE-003",
+      "given": "configuration with unique",
+      "when": "validating settings",
+      "then": "boolean value should be accepted"
+    }
+  ]
+}

@@ -1,0 +1,76 @@
+{
+  "$id": "footer.schema.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Footer",
+  "description": "Site footer with links, copyright, and social media",
+  "type": "object",
+  "properties": {
+    "type": {
+      "const": "footer"
+    },
+    "logo": {
+      "type": "object",
+      "properties": {
+        "image": {
+          "type": "string"
+        },
+        "text": {
+          "type": "string"
+        }
+      }
+    },
+    "description": {
+      "type": "string"
+    },
+    "sections": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "heading": {
+            "type": "string"
+          },
+          "links": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "text": {
+                  "type": "string"
+                },
+                "href": {
+                  "type": "string"
+                }
+              },
+              "required": ["text", "href"]
+            }
+          }
+        },
+        "required": ["heading", "links"]
+      }
+    },
+    "social": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "platform": {
+            "enum": ["twitter", "facebook", "linkedin", "github", "youtube", "instagram"]
+          },
+          "href": {
+            "type": "string"
+          }
+        },
+        "required": ["platform", "href"]
+      }
+    },
+    "copyright": {
+      "type": "string"
+    },
+    "condition": {
+      "$ref": "../common/condition.schema.json"
+    }
+  },
+  "required": ["type"],
+  "additionalProperties": false
+}

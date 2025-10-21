@@ -1,0 +1,28 @@
+{
+  "$id": "formula.schema.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Formula expression to compute the value. Supports field references, operators, and functions.",
+  "description": "Formula expression to compute the value. Supports field references, operators, and functions.",
+  "type": "string",
+  "examples": [
+    "price * quantity",
+    "CONCAT(first_name, ' ', last_name)",
+    "IF(status = 'active', 'Yes', 'No')",
+    "ROUND(total * 0.15, 2)"
+  ],
+  "minLength": 1,
+  "specs": [
+    {
+      "id": "FIELD-FORMULA-FIELD-FORMULA-001",
+      "given": "user provides formula with at least 1 characters",
+      "when": "validating input",
+      "then": "value should be accepted"
+    },
+    {
+      "id": "FIELD-FORMULA-FIELD-FORMULA-002",
+      "given": "user provides formula shorter than 1 chars",
+      "when": "validating input",
+      "then": "error should require minimum length"
+    }
+  ]
+}

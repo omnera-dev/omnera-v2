@@ -1,0 +1,27 @@
+{
+  "$id": "script-tag.schema.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Script Tag",
+  "description": "HTML script element for JavaScript inclusion",
+  "type": "object",
+  "properties": {
+    "tag": {
+      "const": "script"
+    },
+    "src": {
+      "type": "string",
+      "format": "uri"
+    },
+    "content": {
+      "type": "string"
+    },
+    "async": {
+      "type": "boolean"
+    },
+    "defer": {
+      "type": "boolean"
+    }
+  },
+  "required": ["tag"],
+  "additionalProperties": false
+}

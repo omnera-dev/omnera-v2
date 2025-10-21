@@ -1,0 +1,178 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Search Pages",
+  "description": "Searches for pages in Notion",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string"
+    },
+    "account": {
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "string"
+        }
+      ]
+    },
+    "service": {
+      "type": "string",
+      "const": "notion"
+    },
+    "action": {
+      "type": "string",
+      "const": "search-pages"
+    },
+    "params": {
+      "type": "object",
+      "properties": {
+        "query": {
+          "description": "Search query text",
+          "type": "string"
+        },
+        "filter": {
+          "description": "Optional filter for search results",
+          "type": "object",
+          "properties": {
+            "property": {
+              "type": "string"
+            },
+            "value": {
+              "type": "string"
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "required": ["query"],
+      "additionalProperties": false
+    }
+  },
+  "required": ["name", "account", "service", "action", "params"],
+  "additionalProperties": false,
+  "specs": [
+    {
+      "id": "SPEC-001",
+      "given": "user provides name",
+      "when": "validating input",
+      "then": "string value should be accepted"
+    },
+    {
+      "id": "SPEC-002",
+      "given": "name is empty string",
+      "when": "validating input",
+      "then": "behavior should follow optional/required rules"
+    },
+    {
+      "id": "SPEC-003",
+      "given": "user configures account",
+      "when": "validating input",
+      "then": "value should meet schema requirements"
+    },
+    {
+      "id": "SPEC-004",
+      "given": "account is set",
+      "when": "processing configuration",
+      "then": "value should be used correctly"
+    },
+    {
+      "id": "SPEC-005",
+      "given": "entity with service='notion'",
+      "when": "processing configuration",
+      "then": "correct handler should be selected"
+    },
+    {
+      "id": "SPEC-006",
+      "given": "invalid service value",
+      "when": "validating configuration",
+      "then": "clear error message should identify the issue"
+    },
+    {
+      "id": "SPEC-007",
+      "given": "entity with action='search-pages'",
+      "when": "processing configuration",
+      "then": "correct handler should be selected"
+    },
+    {
+      "id": "SPEC-008",
+      "given": "invalid action value",
+      "when": "validating configuration",
+      "then": "clear error message should identify the issue"
+    },
+    {
+      "id": "SPEC-009",
+      "given": "user configures params",
+      "when": "validating input",
+      "then": "value should meet schema requirements"
+    },
+    {
+      "id": "SPEC-010",
+      "given": "params is set",
+      "when": "processing configuration",
+      "then": "value should be used correctly"
+    },
+    {
+      "id": "SPEC-011",
+      "given": "user provides query",
+      "when": "validating input",
+      "then": "string value should be accepted"
+    },
+    {
+      "id": "SPEC-012",
+      "given": "query is empty string",
+      "when": "validating input",
+      "then": "behavior should follow optional/required rules"
+    },
+    {
+      "id": "SPEC-013",
+      "given": "user configures filter",
+      "when": "validating input",
+      "then": "value should meet schema requirements"
+    },
+    {
+      "id": "SPEC-014",
+      "given": "filter is set",
+      "when": "processing configuration",
+      "then": "value should be used correctly"
+    },
+    {
+      "id": "SPEC-015",
+      "given": "automation with filter condition",
+      "when": "condition evaluates to true",
+      "then": "subsequent actions should execute"
+    },
+    {
+      "id": "SPEC-016",
+      "given": "automation with filter condition",
+      "when": "condition evaluates to false",
+      "then": "subsequent actions should be skipped"
+    },
+    {
+      "id": "SPEC-017",
+      "given": "filter uses template variables",
+      "when": "evaluating condition",
+      "then": "variables should resolve from trigger context"
+    },
+    {
+      "id": "SPEC-018",
+      "given": "automation with filter condition",
+      "when": "condition evaluates to true",
+      "then": "subsequent actions should execute"
+    },
+    {
+      "id": "SPEC-019",
+      "given": "automation with filter condition",
+      "when": "condition evaluates to false",
+      "then": "subsequent actions should be skipped"
+    },
+    {
+      "id": "SPEC-020",
+      "given": "filter uses template variables",
+      "when": "evaluating condition",
+      "then": "variables should resolve from trigger context"
+    }
+  ],
+  "$id": "notion-search-pages-action.schema.json"
+}

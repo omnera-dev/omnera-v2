@@ -1,0 +1,21 @@
+{
+  "$id": "max.schema.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Maximum value",
+  "description": "Maximum value",
+  "type": "number",
+  "specs": [
+    {
+      "id": "FIELD-INTEGER-FIELD-MAX-001",
+      "given": "user provides max",
+      "when": "validating input",
+      "then": "numeric value should be accepted"
+    },
+    {
+      "id": "FIELD-INTEGER-FIELD-MAX-002",
+      "given": "user provides non-numeric max",
+      "when": "validating input",
+      "then": "error should require number"
+    }
+  ]
+}

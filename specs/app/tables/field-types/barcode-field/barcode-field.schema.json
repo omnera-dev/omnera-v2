@@ -1,0 +1,41 @@
+{
+  "$id": "barcode-field.schema.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Barcode Field",
+  "type": "object",
+  "properties": {
+    "id": {
+      "$ref": "../../common/definitions.schema.json#/definitions/id"
+    },
+    "name": {
+      "$ref": "../../common/definitions.schema.json#/definitions/name"
+    },
+    "required": {
+      "$ref": "../common/required/required.schema.json"
+    },
+    "type": {
+      "type": "string",
+      "const": "barcode"
+    },
+    "format": {
+      "$ref": "./format/format.schema.json"
+    }
+  },
+  "description": "Display and scan barcodes",
+  "required": ["id", "name", "type"],
+  "additionalProperties": false,
+  "specs": [
+    {
+      "id": "SPEC-001",
+      "given": "entity with type='barcode'",
+      "when": "processing configuration",
+      "then": "correct handler should be selected"
+    },
+    {
+      "id": "SPEC-002",
+      "given": "invalid type value",
+      "when": "validating configuration",
+      "then": "clear error message should identify the issue"
+    }
+  ]
+}

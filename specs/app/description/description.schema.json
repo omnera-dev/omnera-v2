@@ -1,0 +1,106 @@
+{
+  "$id": "description.schema.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Application Description",
+  "description": "A single-line description of the application (line breaks not allowed)",
+  "type": "string",
+  "pattern": "^[^\r\n]*$",
+  "examples": [
+    "A simple application",
+    "My app - with special characters!@#$%",
+    "Très bien! 你好 🎉",
+    "Full-featured e-commerce platform with cart, checkout & payment processing"
+  ],
+  "specs": [
+    {
+      "id": "APP-DESCRIPTION-001",
+      "given": "an app with name and description",
+      "when": "user navigates to the homepage",
+      "then": "description should be visible below the app name"
+    },
+    {
+      "id": "APP-DESCRIPTION-002",
+      "given": "an app with only name (no description property)",
+      "when": "user navigates to the homepage",
+      "then": "description element should NOT be rendered"
+    },
+    {
+      "id": "APP-DESCRIPTION-003",
+      "given": "an app with name and description",
+      "when": "user navigates to the homepage",
+      "then": "description MUST appear AFTER the h1 title in DOM order"
+    },
+    {
+      "id": "APP-DESCRIPTION-004",
+      "given": "an app with description containing special characters",
+      "when": "user navigates to the homepage",
+      "then": "special characters should be displayed correctly"
+    },
+    {
+      "id": "APP-DESCRIPTION-005",
+      "given": "an app with description containing Unicode and emojis",
+      "when": "user navigates to the homepage",
+      "then": "Unicode characters and emojis should be displayed correctly"
+    },
+    {
+      "id": "APP-DESCRIPTION-006",
+      "given": "an app with very long description (500+ characters)",
+      "when": "user navigates to the homepage",
+      "then": "description should wrap properly and remain visible"
+    },
+    {
+      "id": "APP-DESCRIPTION-007",
+      "given": "an app with empty string description (not undefined)",
+      "when": "user navigates to the homepage",
+      "then": "description element should NOT be rendered"
+    },
+    {
+      "id": "APP-DESCRIPTION-008",
+      "given": "an app with description",
+      "when": "user navigates to the homepage",
+      "then": "description should be rendered as a paragraph (<p>) element"
+    },
+    {
+      "id": "APP-DESCRIPTION-009",
+      "given": "an app with description",
+      "when": "user navigates to the homepage",
+      "then": "description should be centered horizontally"
+    },
+    {
+      "id": "APP-DESCRIPTION-010",
+      "given": "an app with description",
+      "when": "user navigates to the homepage",
+      "then": "description should be visible and in viewport"
+    },
+    {
+      "id": "APP-DESCRIPTION-011",
+      "given": "an app with description containing mixed case, special chars, and whitespace",
+      "when": "user navigates to the homepage",
+      "then": "text content should exactly match input (no transformation)"
+    },
+    {
+      "id": "APP-DESCRIPTION-012",
+      "given": "an app with version, name, and description",
+      "when": "user navigates to the homepage",
+      "then": "all elements should appear in correct order: version → title → description"
+    },
+    {
+      "id": "APP-DESCRIPTION-013",
+      "given": "an app with very long description (1000+ characters)",
+      "when": "user navigates to the homepage",
+      "then": "full description should be displayed without truncation"
+    },
+    {
+      "id": "APP-DESCRIPTION-014",
+      "given": "an app with description containing HTML-like tags",
+      "when": "user navigates to the homepage",
+      "then": "HTML tags should be escaped and displayed as text (not rendered as HTML)"
+    },
+    {
+      "id": "APP-DESCRIPTION-015",
+      "given": "an app with name and description",
+      "when": "user navigates to the homepage",
+      "then": "there should be appropriate spacing between title and description"
+    }
+  ]
+}

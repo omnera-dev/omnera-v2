@@ -1,0 +1,64 @@
+{
+  "$id": "long-text-field.schema.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Long Text Field",
+  "type": "object",
+  "properties": {
+    "id": {
+      "$ref": "../../common/definitions.schema.json#/definitions/id"
+    },
+    "name": {
+      "$ref": "../../common/definitions.schema.json#/definitions/name"
+    },
+    "required": {
+      "$ref": "../common/required/required.schema.json"
+    },
+    "unique": {
+      "$ref": "../common/unique/unique.schema.json"
+    },
+    "indexed": {
+      "$ref": "../common/indexed/indexed.schema.json"
+    },
+    "type": {
+      "const": "long-text"
+    },
+    "default": {
+      "$ref": "./default/default.schema.json"
+    }
+  },
+  "description": "Multi-line text input for paragraphs, descriptions, notes, and comments. Supports line breaks and longer content. Text is stored as-is without rich formatting (no bold, italics, etc.). Required flag makes the field mandatory. Indexing improves search performance but may be slower for very long content.",
+  "required": ["id", "name", "type"],
+  "additionalProperties": false,
+  "specs": [
+    {
+      "id": "FIELD-LONG-TEXT-FIELD-LONG-TEXT-001",
+      "given": "I create a long text field",
+      "when": "I add a record",
+      "then": "it should accept multi-line text with line breaks"
+    },
+    {
+      "id": "FIELD-LONG-TEXT-FIELD-LONG-TEXT-002",
+      "given": "I create a long text field",
+      "when": "I paste formatted text",
+      "then": "it should strip formatting and preserve plain text"
+    },
+    {
+      "id": "FIELD-LONG-TEXT-FIELD-LONG-TEXT-003",
+      "given": "I create a required long text field",
+      "when": "I submit without value",
+      "then": "it should show validation error"
+    },
+    {
+      "id": "SPEC-004",
+      "given": "a Long Text Field is configured",
+      "when": "validating schema",
+      "then": "type must be 'long-text'"
+    },
+    {
+      "id": "SPEC-005",
+      "given": "type is set to 'long-text'",
+      "when": "processing field",
+      "then": "it should be treated as a Long Text Field"
+    }
+  ]
+}

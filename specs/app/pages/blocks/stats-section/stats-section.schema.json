@@ -1,0 +1,40 @@
+{
+  "$id": "stats-section.schema.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Stats Section",
+  "description": "Display key metrics and statistics",
+  "type": "object",
+  "properties": {
+    "type": {
+      "const": "stats-section"
+    },
+    "heading": {
+      "type": "string"
+    },
+    "stats": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": "string",
+            "description": "Statistic value (e.g., '10k+', '99%')"
+          },
+          "label": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          }
+        },
+        "required": ["value", "label"]
+      }
+    },
+    "condition": {
+      "$ref": "../common/condition.schema.json"
+    }
+  },
+  "required": ["type", "stats"],
+  "additionalProperties": false
+}

@@ -1,0 +1,47 @@
+{
+  "$id": "button-field.schema.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Button Field",
+  "type": "object",
+  "properties": {
+    "id": {
+      "$ref": "../../common/definitions.schema.json#/definitions/id"
+    },
+    "name": {
+      "$ref": "../../common/definitions.schema.json#/definitions/name"
+    },
+    "type": {
+      "type": "string",
+      "const": "button"
+    },
+    "label": {
+      "$ref": "./label/label.schema.json"
+    },
+    "action": {
+      "$ref": "./action/action.schema.json"
+    },
+    "url": {
+      "$ref": "./url/url.schema.json"
+    },
+    "automation": {
+      "$ref": "./automation/automation.schema.json"
+    }
+  },
+  "description": "Trigger actions or open URLs",
+  "required": ["id", "name", "type", "label", "action"],
+  "additionalProperties": false,
+  "specs": [
+    {
+      "id": "SPEC-001",
+      "given": "entity with type='button'",
+      "when": "processing configuration",
+      "then": "correct handler should be selected"
+    },
+    {
+      "id": "SPEC-002",
+      "given": "invalid type value",
+      "when": "validating configuration",
+      "then": "clear error message should identify the issue"
+    }
+  ]
+}

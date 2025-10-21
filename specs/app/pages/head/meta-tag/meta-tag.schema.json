@@ -1,0 +1,22 @@
+{
+  "$id": "meta-tag.schema.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Meta Tag",
+  "description": "HTML meta element for page metadata",
+  "type": "object",
+  "properties": {
+    "tag": {
+      "const": "meta"
+    },
+    "name": {
+      "type": "string",
+      "minLength": 1
+    },
+    "content": {
+      "type": "string",
+      "minLength": 1
+    }
+  },
+  "required": ["tag", "name", "content"],
+  "additionalProperties": false
+}
