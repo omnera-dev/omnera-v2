@@ -5,8 +5,8 @@
  * found in the LICENSE.md file in the root directory of this source tree.
  */
 
-import { describe, test, expect } from 'bun:test'
 import { join } from 'node:path'
+import { describe, test, expect } from 'bun:test'
 import { resolveJsonSchema, resolveOpenApiSchema } from './schema-resolver'
 
 const PROJECT_ROOT = join(import.meta.dir, '..', '..')
@@ -22,7 +22,7 @@ describe('schema-resolver', () => {
       // Should have resolved the $ref to common/definitions.schema.json#/definitions/id
       expect(resolved.type).toBe('integer')
       expect(resolved.minimum).toBe(1)
-      expect(resolved.maximum).toBe(9007199254740991)
+      expect(resolved.maximum).toBe(9_007_199_254_740_991)
       expect(resolved.readOnly).toBe(true)
 
       // Should preserve local properties
@@ -53,9 +53,12 @@ describe('schema-resolver', () => {
       const resolved = await resolveJsonSchema(schemaPath)
 
       expect(Array.isArray(resolved.specs)).toBe(true)
-      expect(resolved.specs.length).toBeGreaterThan(0)
+      expect(resolved.specs).toBeDefined()
 
-      const firstSpec = resolved.specs[0] as Record<string, unknown>
+      const specs = resolved.specs as unknown[]
+      expect(specs.length).toBeGreaterThan(0)
+
+      const firstSpec = specs[0] as Record<string, unknown>
       expect(firstSpec.id).toBeDefined()
       expect(firstSpec.given).toBeDefined()
       expect(firstSpec.when).toBeDefined()

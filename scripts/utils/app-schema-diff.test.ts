@@ -5,13 +5,24 @@
  * found in the LICENSE.md file in the root directory of this source tree.
  */
 
-import { describe, test, expect } from 'bun:test'
 import { join } from 'node:path'
+import { describe, test, expect } from 'bun:test'
 import { compareAppSchemas } from './app-schema-diff'
 
 const PROJECT_ROOT = join(import.meta.dir, '..', '..')
 const GOAL_APP_SCHEMA = join(PROJECT_ROOT, 'specs', 'app', 'app.schema.json')
 const CURRENT_APP_SCHEMA = join(PROJECT_ROOT, 'schemas', '0.0.1', 'app.schema.json')
+
+// Helper function to check if array is sorted
+function isSorted(arr: string[]): boolean {
+  for (let i = 1; i < arr.length; i++) {
+    const prev = arr[i - 1]
+    const curr = arr[i]
+    if (!prev || !curr) continue
+    if (prev > curr) return false
+  }
+  return true
+}
 
 describe('app-schema-diff', () => {
   describe('compareAppSchemas', () => {
@@ -41,13 +52,6 @@ describe('app-schema-diff', () => {
       expect(Array.isArray(result.implementedPropertyPaths)).toBe(true)
 
       // Arrays should be sorted
-      const isSorted = (arr: string[]) => {
-        for (let i = 1; i < arr.length; i++) {
-          if (arr[i - 1] > arr[i]) return false
-        }
-        return true
-      }
-
       expect(isSorted(result.missingPropertyPaths)).toBe(true)
       expect(isSorted(result.implementedPropertyPaths)).toBe(true)
     })

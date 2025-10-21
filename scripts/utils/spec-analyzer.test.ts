@@ -5,8 +5,8 @@
  * found in the LICENSE.md file in the root directory of this source tree.
  */
 
-import { describe, test, expect } from 'bun:test'
 import { join } from 'node:path'
+import { describe, test, expect } from 'bun:test'
 import { analyzeTestImplementation } from './spec-analyzer'
 
 const PROJECT_ROOT = join(import.meta.dir, '..', '..')

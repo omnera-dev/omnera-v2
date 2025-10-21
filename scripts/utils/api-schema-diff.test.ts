@@ -5,8 +5,8 @@
  * found in the LICENSE.md file in the root directory of this source tree.
  */
 
-import { describe, test, expect } from 'bun:test'
 import { join } from 'node:path'
+import { describe, test, expect } from 'bun:test'
 import { compareApiSchemas } from './api-schema-diff'
 
 const PROJECT_ROOT = join(import.meta.dir, '..', '..')
@@ -43,10 +43,12 @@ describe('api-schema-diff', () => {
       // Each endpoint should have path and method
       if (result.missingEndpointPaths.length > 0) {
         const endpoint = result.missingEndpointPaths[0]
-        expect(endpoint.path).toBeDefined()
-        expect(endpoint.method).toBeDefined()
-        expect(typeof endpoint.path).toBe('string')
-        expect(typeof endpoint.method).toBe('string')
+        if (endpoint) {
+          expect(endpoint.path).toBeDefined()
+          expect(endpoint.method).toBeDefined()
+          expect(typeof endpoint.path).toBe('string')
+          expect(typeof endpoint.method).toBe('string')
+        }
       }
 
       // Arrays should be sorted by path then method
@@ -54,6 +56,7 @@ describe('api-schema-diff', () => {
         for (let i = 1; i < arr.length; i++) {
           const prev = arr[i - 1]
           const curr = arr[i]
+          if (!prev || !curr) continue
           if (prev.path > curr.path) return false
           if (prev.path === curr.path && prev.method > curr.method) return false
         }
@@ -79,11 +82,11 @@ describe('api-schema-diff', () => {
 
       const allEndpoints = [...result.implementedEndpointPaths, ...result.missingEndpointPaths]
 
-      const validMethods = ['get', 'post', 'put', 'patch', 'delete', 'options', 'head']
+      const validMethods = new Set(['get', 'post', 'put', 'patch', 'delete', 'options', 'head'])
 
       // All endpoints should have valid HTTP methods (lowercase)
       allEndpoints.forEach((endpoint) => {
-        expect(validMethods.includes(endpoint.method)).toBe(true)
+        expect(validMethods.has(endpoint.method)).toBe(true)
       })
     })
 
