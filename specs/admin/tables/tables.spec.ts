@@ -24,6 +24,7 @@ test.describe('Tables - Root Level CRUD Operations', () => {
   // Run during: Development, pre-commit (bun test:e2e:spec)
   // ============================================================================
 
+  // ADMIN-TABLES-001: application is running → user navigates to admin tables page → page should load correctly
   test.fixme(
     'should return admin tables page correctly',
     { tag: '@spec' },
@@ -45,6 +46,7 @@ test.describe('Tables - Root Level CRUD Operations', () => {
     }
   )
 
+  // ADMIN-TABLES-002: application is running with configured tables → user lists tables → all tables should be displayed
   test.fixme(
     'should list tables correctly',
     { tag: '@spec' },
@@ -78,6 +80,7 @@ test.describe('Tables - Root Level CRUD Operations', () => {
     }
   )
 
+  // ADMIN-TABLES-003: application is running with a table containing records → user navigates to table records page → records should be listed
   test.fixme(
     'should list table records correctly',
     { tag: '@spec' },
@@ -104,6 +107,7 @@ test.describe('Tables - Root Level CRUD Operations', () => {
     }
   )
 
+  // ADMIN-TABLES-004: application is running with a table containing searchable records → user searches for records → search results should be displayed
   test.fixme(
     'should search table records correctly',
     { tag: '@spec' },
@@ -131,6 +135,7 @@ test.describe('Tables - Root Level CRUD Operations', () => {
     }
   )
 
+  // ADMIN-TABLES-005: application is running with a table containing a record → user opens a table record → record details should be displayed
   test.fixme(
     'should open and display a table record correctly',
     { tag: '@spec' },
@@ -157,6 +162,7 @@ test.describe('Tables - Root Level CRUD Operations', () => {
     }
   )
 
+  // ADMIN-TABLES-006: application is running with a table → user creates a new record → record should be created successfully
   test.fixme(
     'should create a table record correctly',
     { tag: '@spec' },
@@ -186,6 +192,7 @@ test.describe('Tables - Root Level CRUD Operations', () => {
     }
   )
 
+  // ADMIN-TABLES-007: user is working with required fields → user creates a table record with all required fields → creation should complete successfully
   test.fixme(
     'should create a table record with required fields successfully',
     { tag: '@spec' },
@@ -215,6 +222,7 @@ test.describe('Tables - Root Level CRUD Operations', () => {
     }
   )
 
+  // ADMIN-TABLES-008: application is running with an existing record → user updates the record → record should be updated successfully
   test.fixme(
     'should update a table record correctly',
     { tag: '@spec' },
@@ -244,6 +252,7 @@ test.describe('Tables - Root Level CRUD Operations', () => {
     }
   )
 
+  // ADMIN-TABLES-009: application is running with an existing record → user deletes the record → record should be deleted successfully
   test.fixme(
     'should delete a table record correctly',
     { tag: '@spec' },
@@ -272,6 +281,7 @@ test.describe('Tables - Root Level CRUD Operations', () => {
     }
   )
 
+  // ADMIN-TABLES-010: user is working with missing required fields → user attempts to create a record via POST without required fields → request should fail with validation error
   test.fixme(
     'should not create a record with missing required fields from POST request',
     { tag: '@spec' },
@@ -302,6 +312,7 @@ test.describe('Tables - Root Level CRUD Operations', () => {
     }
   )
 
+  // ADMIN-TABLES-011: application is running → user creates a record via POST request → record should be created successfully
   test.fixme(
     'should create a record from a POST request correctly',
     { tag: '@spec' },
@@ -332,6 +343,7 @@ test.describe('Tables - Root Level CRUD Operations', () => {
     }
   )
 
+  // ADMIN-TABLES-012: user is working with missing required fields → user attempts to create multiple records via POST without required fields → request should fail with validation error
   test.fixme(
     'should not create multiple records with missing required fields from POST request',
     { tag: '@spec' },
@@ -362,6 +374,7 @@ test.describe('Tables - Root Level CRUD Operations', () => {
     }
   )
 
+  // ADMIN-TABLES-013: application is running → user creates multiple records via POST request → records should be created successfully
   test.fixme(
     'should create multiple records from a POST request correctly',
     { tag: '@spec' },
@@ -392,6 +405,7 @@ test.describe('Tables - Root Level CRUD Operations', () => {
     }
   )
 
+  // ADMIN-TABLES-014: application is running with an existing record → user reads a record via GET request → record should be retrieved successfully
   test.fixme(
     'should read a record from a GET request correctly',
     { tag: '@spec' },
@@ -420,6 +434,7 @@ test.describe('Tables - Root Level CRUD Operations', () => {
     }
   )
 
+  // ADMIN-TABLES-015: application is running with records → user lists records via GET request → records should be listed successfully
   test.fixme(
     'should list records from a GET request correctly',
     { tag: '@spec' },
@@ -448,6 +463,7 @@ test.describe('Tables - Root Level CRUD Operations', () => {
     }
   )
 
+  // ADMIN-TABLES-016: application is running with an existing record → user updates a record via PATCH request → record should be updated successfully
   test.fixme(
     'should update a record from a PATCH request correctly',
     { tag: '@spec' },
@@ -478,6 +494,7 @@ test.describe('Tables - Root Level CRUD Operations', () => {
     }
   )
 
+  // ADMIN-TABLES-017: application is running with multiple records → user updates multiple records via PATCH request → records should be updated successfully
   test.fixme(
     'should update multiple records from a PATCH request correctly',
     { tag: '@spec' },
@@ -511,6 +528,7 @@ test.describe('Tables - Root Level CRUD Operations', () => {
     }
   )
 
+  // ADMIN-TABLES-018: application is running with an existing record → user deletes a record via DELETE request → record should be deleted successfully
   test.fixme(
     'should delete a record from a DELETE request correctly',
     { tag: '@spec' },
@@ -538,6 +556,7 @@ test.describe('Tables - Root Level CRUD Operations', () => {
     }
   )
 
+  // ADMIN-TABLES-019: application is running with multiple records → user deletes multiple records via DELETE request → records should be deleted successfully
   test.fixme(
     'should delete multiple records from a DELETE request correctly',
     { tag: '@spec' },
@@ -574,6 +593,7 @@ test.describe('Tables - Root Level CRUD Operations', () => {
 // Run during: CI/CD, pre-release (bun test:e2e:regression)
 // ============================================================================
 
+// ADMIN-TABLES-WORKFLOW: user is on the admin tables page with a complete table configuration → user performs complete workflow → all expected outcomes are verified
 test.fixme(
   'user can complete full tables workflow',
   { tag: '@regression' },

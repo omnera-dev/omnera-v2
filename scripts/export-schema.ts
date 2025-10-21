@@ -23,7 +23,7 @@ import { mkdir, writeFile } from 'node:fs/promises'
 import { join } from 'node:path'
 import { JSONSchema, type Schema } from 'effect'
 // Import schemas
-import { AppSchema, TableSchema } from '../src/domain/models/app'
+import { AppSchema } from '../src/domain/models/app'
 
 /**
  * Get package version from package.json
@@ -79,16 +79,6 @@ async function exportSchema(): Promise<void> {
   const appSchemaPath = join(outputDir, 'app.schema.json')
   await writeFile(appSchemaPath, JSON.stringify(appJsonSchemaWithId, null, 2))
   console.log('   ✓ app.schema.json')
-
-  // Generate and write Table JSON Schema
-  const tableJsonSchema = generateJsonSchema(TableSchema)
-  const tableJsonSchemaWithId = addSchemaId(tableJsonSchema, version, 'table')
-  const tableSchemaPath = join(outputDir, 'table.schema.json')
-  await writeFile(tableSchemaPath, JSON.stringify(tableJsonSchemaWithId, null, 2))
-  console.log('   ✓ table.schema.json')
-
-  console.log(`\n✨ Schema export completed successfully!`)
-  console.log(`📂 Output location: schemas/${version}/\n`)
 }
 
 // Run the export

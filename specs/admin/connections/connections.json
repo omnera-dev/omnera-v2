@@ -1,33 +1,27 @@
 {
-  "$id": "connections.schema.json",
-  "$schema": "http://json-schema.org/draft-07/schema#",
   "title": "Connection Management (Admin)",
   "description": "Admin-level specifications for connection lifecycle management across all services",
   "specs": [
     {
       "id": "CONN-ADMIN-001",
-      "title": "List all connections for current workspace",
       "given": "user is authenticated in a workspace",
       "when": "user navigates to connections page",
       "then": "system displays list of all configured connections with status"
     },
     {
       "id": "CONN-ADMIN-002",
-      "title": "Connect a connection via OAuth flow",
       "given": "connection exists with valid OAuth credentials but is not connected",
       "when": "user initiates connection via 'Connect' button",
       "then": "OAuth flow completes successfully and connection status becomes 'connected'"
     },
     {
       "id": "CONN-ADMIN-003",
-      "title": "Disconnect an active connection",
       "given": "connection is in 'connected' status with active tokens",
       "when": "user clicks 'Disconnect' button",
       "then": "connection status changes to 'disconnected' and OAuth tokens are revoked"
     },
     {
       "id": "CONN-ADMIN-004",
-      "title": "Copy shareable connection link",
       "given": "connection is configured and shareable feature is enabled",
       "when": "user clicks 'Copy Link' button",
       "then": "shareable connection URL is copied to clipboard"
