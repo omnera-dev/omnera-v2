@@ -154,8 +154,9 @@ test.describe('POST /api/auth/change-password', () => {
         },
       })
 
-      // THEN: Response should be unauthorized (401)
-      expect(response.status()).toBeGreaterThanOrEqual(401)
+      // THEN: Response should be client error (4xx) - Better Auth returns 400 for invalid credentials
+      expect(response.status()).toBeGreaterThanOrEqual(400)
+      expect(response.status()).toBeLessThan(500)
     }
   )
 })

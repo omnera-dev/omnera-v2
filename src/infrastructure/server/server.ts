@@ -8,6 +8,7 @@
 import { Scalar } from '@scalar/hono-api-reference'
 import { Console, Effect } from 'effect'
 import { Hono } from 'hono'
+import { cors } from 'hono/cors'
 import { ServerCreationError } from '@/infrastructure/errors/server-creation-error'
 import { createApiRoutes } from '@/presentation/api/app'
 import { getOpenAPIDocument } from '@/presentation/api/openapi-schema'
@@ -64,66 +65,89 @@ function createHonoApp(
   const honoApp = createApiRoutes(app, new Hono())
 
   // Continue chaining with other routes
-  return honoApp
-    .get('/api/openapi.json', (c) => {
-      const openApiDoc = getOpenAPIDocument()
-      return c.json(openApiDoc)
-    })
-    .get('/api/auth/openapi.json', async (c) => {
-      const authOpenApiDoc = await auth.api.generateOpenAPISchema()
-      return c.json(authOpenApiDoc)
-    })
-    .get(
-      '/api/scalar',
-      Scalar({
-        pageTitle: 'Omnera API Documentation',
-        theme: 'default',
-        sources: [
-          { url: '/api/openapi.json', title: 'API' },
-          { url: '/api/auth/openapi.json', title: 'Auth' },
-        ],
+  return (
+    honoApp
+      .get('/api/openapi.json', (c) => {
+        const openApiDoc = getOpenAPIDocument()
+        return c.json(openApiDoc)
       })
-    )
-    .on(['POST', 'GET'], '/api/auth/*', (c) => auth.handler(c.req.raw))
-    .get('/', (c) => {
-      const html = renderHomePage(app)
-      return c.html(html)
-    })
-    .get('/assets/output.css', async (c) => {
-      try {
-        const result = await Effect.runPromise(
-          compileCSS().pipe(Effect.tap(() => Console.log('CSS compiled successfully')))
-        )
+      .get('/api/auth/openapi.json', async (c) => {
+        const authOpenApiDoc = await auth.api.generateOpenAPISchema()
+        return c.json(authOpenApiDoc)
+      })
+      .get(
+        '/api/scalar',
+        Scalar({
+          pageTitle: 'Omnera API Documentation',
+          theme: 'default',
+          sources: [
+            { url: '/api/openapi.json', title: 'API' },
+            { url: '/api/auth/openapi.json', title: 'Auth' },
+          ],
+        })
+      )
+      // Configure CORS for Better Auth endpoints
+      // IMPORTANT: CORS middleware must be registered BEFORE auth routes
+      // See: https://www.better-auth.com/docs/integrations/hono
+      .use(
+        '/api/auth/*',
+        cors({
+          origin: (origin) => {
+            // Allow all localhost origins for development and testing
+            if (origin.startsWith('http://localhost:') || origin.startsWith('http://127.0.0.1:')) {
+              return origin
+            }
+            // In production, this should be configured with specific allowed origins
+            return origin
+          },
+          allowHeaders: ['Content-Type', 'Authorization'],
+          allowMethods: ['POST', 'GET', 'OPTIONS'],
+          exposeHeaders: ['Content-Length'],
+          maxAge: 600,
+          credentials: true, // Required for cookie-based authentication
+        })
+      )
+      .on(['POST', 'GET'], '/api/auth/*', (c) => auth.handler(c.req.raw))
+      .get('/', (c) => {
+        const html = renderHomePage(app)
+        return c.html(html)
+      })
+      .get('/assets/output.css', async (c) => {
+        try {
+          const result = await Effect.runPromise(
+            compileCSS().pipe(Effect.tap(() => Console.log('CSS compiled successfully')))
+          )
 
-        return c.text(result.css, 200, {
-          'Content-Type': 'text/css',
-          'Cache-Control': `public, max-age=${CSS_CACHE_DURATION_SECONDS}`,
-        })
-      } catch (error) {
-        // Log error - intentional side effect for error tracking
-        // eslint-disable-next-line functional/no-expression-statements
-        await Effect.runPromise(Console.error('CSS compilation failed:', error))
-        return c.text('/* CSS compilation failed */', 500, {
-          'Content-Type': 'text/css',
-        })
-      }
-    })
-    .get('/test/error', (c) => {
-      if (process.env.NODE_ENV === 'production') {
-        return c.html(renderNotFoundPage(), 404)
-      }
-      // Intentionally trigger error handler for testing
-      // eslint-disable-next-line functional/no-throw-statements
-      throw new Error('Test error')
-    })
-    .notFound((c) => c.html(renderNotFoundPage(), 404))
-    .onError((error, c) => {
-      // Fire-and-forget error logging (onError handler is synchronous)
-      Effect.runPromise(Console.error('Server error:', error)).catch(() => {
-        // Silently ignore logging failures to prevent unhandled promise rejections
+          return c.text(result.css, 200, {
+            'Content-Type': 'text/css',
+            'Cache-Control': `public, max-age=${CSS_CACHE_DURATION_SECONDS}`,
+          })
+        } catch (error) {
+          // Log error - intentional side effect for error tracking
+          // eslint-disable-next-line functional/no-expression-statements
+          await Effect.runPromise(Console.error('CSS compilation failed:', error))
+          return c.text('/* CSS compilation failed */', 500, {
+            'Content-Type': 'text/css',
+          })
+        }
       })
-      return c.html(renderErrorPage(), 500)
-    })
+      .get('/test/error', (c) => {
+        if (process.env.NODE_ENV === 'production') {
+          return c.html(renderNotFoundPage(), 404)
+        }
+        // Intentionally trigger error handler for testing
+        // eslint-disable-next-line functional/no-throw-statements
+        throw new Error('Test error')
+      })
+      .notFound((c) => c.html(renderNotFoundPage(), 404))
+      .onError((error, c) => {
+        // Fire-and-forget error logging (onError handler is synchronous)
+        Effect.runPromise(Console.error('Server error:', error)).catch(() => {
+          // Silently ignore logging failures to prevent unhandled promise rejections
+        })
+        return c.html(renderErrorPage(), 500)
+      })
+  )
 }
 
 /**
