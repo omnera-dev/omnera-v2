@@ -117,7 +117,12 @@ async function categorizeSpec(
   spec: Omit<EnrichedSpec, 'status' | 'testFile' | 'confidence'>
 ): Promise<EnrichedSpec> {
   // Get potential test file path (co-located .spec.ts)
-  const testFilePath = spec.sourceFile.replace('.json', '.spec.ts')
+  // Handle both .json and .schema.json files
+  let testFilePath = spec.sourceFile.replace(/\.schema\.json$/, '.spec.ts')
+  if (testFilePath === spec.sourceFile) {
+    // Didn't match .schema.json, try plain .json
+    testFilePath = spec.sourceFile.replace(/\.json$/, '.spec.ts')
+  }
 
   // Check if test file exists
   const testFileExists = await fileExists(testFilePath)
@@ -190,7 +195,17 @@ async function matchSpecToTest(
       continue
     }
 
-    // Try ID matching first (highest confidence)
+    // Extract test description/title (first argument to test())
+    // Match: 'test title' or "test title" or `test title`
+    const titleMatch = content.match(/^\s*['"`]([^'"`]+)['"`]/)
+    const testTitle = titleMatch ? titleMatch[1] : ''
+
+    // Try ID matching in title first (highest confidence)
+    if (testTitle.includes(spec.id)) {
+      return { found: true, testBlock: `${prefix}${content}`, confidence: 'high' }
+    }
+
+    // Try ID matching in content (high confidence)
     if (content.includes(spec.id)) {
       return { found: true, testBlock: `${prefix}${content}`, confidence: 'high' }
     }
