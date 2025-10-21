@@ -1,0 +1,74 @@
+{
+  "summary": "Request password reset",
+  "description": "Sends a password reset email to the user with a reset token. The email contains a link to reset the password.",
+  "operationId": "forgetPassword",
+  "tags": ["authentication"],
+  "security": [
+    {
+      "bearerAuth": []
+    }
+  ],
+  "requestBody": {
+    "required": true,
+    "content": {
+      "application/json": {
+        "schema": {
+          "type": "object",
+          "required": ["email"],
+          "properties": {
+            "email": {
+              "type": "string",
+              "format": "email",
+              "description": "The email address of the user to send a password reset email to",
+              "example": "user@example.com"
+            },
+            "redirectTo": {
+              "type": "string",
+              "format": "uri",
+              "description": "The URL to redirect the user to reset their password. If the token isn't valid or expired, it'll be redirected with `?error=INVALID_TOKEN`. If the token is valid, it'll be redirected with `?token=VALID_TOKEN`",
+              "nullable": true,
+              "example": "https://app.example.com/reset-password"
+            }
+          }
+        }
+      }
+    }
+  },
+  "responses": {
+    "200": {
+      "description": "Success - Password reset email sent",
+      "content": {
+        "application/json": {
+          "schema": {
+            "type": "object",
+            "required": ["status"],
+            "properties": {
+              "status": {
+                "type": "boolean",
+                "enum": [true],
+                "description": "Indicates password reset email was sent"
+              },
+              "message": {
+                "type": "string",
+                "description": "Confirmation message",
+                "example": "Password reset email sent successfully"
+              }
+            }
+          },
+          "examples": {
+            "emailSent": {
+              "summary": "Reset email sent",
+              "value": {
+                "status": true,
+                "message": "Password reset email sent successfully"
+              }
+            }
+          }
+        }
+      }
+    },
+    "400": {
+      "$ref": "../../../components/responses/ValidationError.json"
+    }
+  }
+}

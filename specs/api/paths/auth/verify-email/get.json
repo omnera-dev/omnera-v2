@@ -1,0 +1,98 @@
+{
+  "summary": "Verify email address",
+  "description": "Verifies the user's email address using a verification token sent via email. Marks the email as verified upon success.",
+  "operationId": "verifyEmail",
+  "tags": ["authentication"],
+  "security": [
+    {
+      "bearerAuth": []
+    }
+  ],
+  "parameters": [
+    {
+      "name": "token",
+      "in": "query",
+      "description": "The verification token received via email",
+      "required": true,
+      "schema": {
+        "type": "string",
+        "example": "verify_token_abc123xyz"
+      }
+    },
+    {
+      "name": "callbackURL",
+      "in": "query",
+      "description": "The URL to redirect to after email verification",
+      "required": false,
+      "schema": {
+        "type": "string",
+        "format": "uri",
+        "example": "https://app.example.com/dashboard"
+      }
+    }
+  ],
+  "responses": {
+    "200": {
+      "description": "Success - Email verified successfully",
+      "content": {
+        "application/json": {
+          "schema": {
+            "type": "object",
+            "required": ["user", "status"],
+            "properties": {
+              "user": {
+                "$ref": "../../../components/schemas/User.json"
+              },
+              "status": {
+                "type": "boolean",
+                "enum": [true],
+                "description": "Indicates if the email was verified successfully"
+              }
+            }
+          },
+          "examples": {
+            "emailVerified": {
+              "summary": "Email verified",
+              "value": {
+                "user": {
+                  "id": "user_123abc",
+                  "email": "user@example.com",
+                  "name": "John Doe",
+                  "image": null,
+                  "emailVerified": true,
+                  "createdAt": "2025-01-15T10:30:00Z",
+                  "updatedAt": "2025-01-15T11:00:00Z"
+                },
+                "status": true
+              }
+            }
+          }
+        }
+      }
+    },
+    "400": {
+      "$ref": "../../../components/responses/ValidationError.json"
+    },
+    "401": {
+      "description": "Unauthorized - Invalid or expired verification token",
+      "content": {
+        "application/json": {
+          "schema": {
+            "$ref": "../../../components/schemas/Error.json"
+          },
+          "examples": {
+            "invalidToken": {
+              "value": {
+                "error": "Invalid or expired token",
+                "code": "INVALID_TOKEN",
+                "details": {
+                  "message": "The verification token is invalid or has expired"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

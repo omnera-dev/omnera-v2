@@ -1,0 +1,114 @@
+{
+  "summary": "Sign in with email and password",
+  "description": "Authenticates an existing user using email and password credentials. Returns session token upon successful authentication.",
+  "operationId": "signInEmail",
+  "tags": ["authentication"],
+  "security": [
+    {
+      "bearerAuth": []
+    }
+  ],
+  "requestBody": {
+    "required": true,
+    "content": {
+      "application/json": {
+        "schema": {
+          "type": "object",
+          "required": ["email", "password"],
+          "properties": {
+            "email": {
+              "type": "string",
+              "format": "email",
+              "description": "Email of the user",
+              "example": "user@example.com"
+            },
+            "password": {
+              "type": "string",
+              "format": "password",
+              "description": "Password of the user",
+              "example": "SecurePass123!"
+            },
+            "callbackURL": {
+              "type": "string",
+              "format": "uri",
+              "description": "Callback URL to use as a redirect after sign in",
+              "nullable": true,
+              "example": "https://app.example.com/dashboard"
+            },
+            "rememberMe": {
+              "type": "boolean",
+              "description": "If true, extends session expiration time",
+              "nullable": true,
+              "default": false,
+              "example": true
+            }
+          }
+        }
+      }
+    }
+  },
+  "responses": {
+    "200": {
+      "description": "Success - User authenticated successfully",
+      "content": {
+        "application/json": {
+          "schema": {
+            "type": "object",
+            "required": ["token", "user"],
+            "properties": {
+              "token": {
+                "type": "string",
+                "description": "Session authentication token",
+                "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+              },
+              "user": {
+                "$ref": "../../../../../components/schemas/User.json"
+              }
+            }
+          },
+          "examples": {
+            "authenticated": {
+              "summary": "Successful authentication",
+              "value": {
+                "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+                "user": {
+                  "id": "user_123abc",
+                  "email": "user@example.com",
+                  "name": "John Doe",
+                  "image": "https://avatar.example.com/john.jpg",
+                  "emailVerified": true,
+                  "createdAt": "2025-01-10T08:00:00Z",
+                  "updatedAt": "2025-01-15T10:30:00Z"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "400": {
+      "$ref": "../../../../../components/responses/ValidationError.json"
+    },
+    "401": {
+      "description": "Unauthorized - Invalid credentials",
+      "content": {
+        "application/json": {
+          "schema": {
+            "$ref": "../../../../../components/schemas/Error.json"
+          },
+          "examples": {
+            "invalidCredentials": {
+              "value": {
+                "error": "Invalid credentials",
+                "code": "INVALID_CREDENTIALS",
+                "details": {
+                  "message": "Email or password is incorrect"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

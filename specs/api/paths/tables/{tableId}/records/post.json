@@ -1,0 +1,69 @@
+{
+  "summary": "Create new record",
+  "description": "Creates a new record in the specified table with provided field values.",
+  "operationId": "createRecord",
+  "tags": ["records"],
+  "parameters": [
+    {
+      "name": "tableId",
+      "in": "path",
+      "required": true,
+      "schema": {
+        "type": "integer",
+        "minimum": 1
+      }
+    }
+  ],
+  "requestBody": {
+    "required": true,
+    "content": {
+      "application/json": {
+        "schema": {
+          "type": "object",
+          "additionalProperties": true
+        },
+        "examples": {
+          "userRecord": {
+            "value": {
+              "email": "user@example.com",
+              "first_name": "John",
+              "last_name": "Doe"
+            }
+          }
+        }
+      }
+    }
+  },
+  "responses": {
+    "201": {
+      "description": "Record created successfully",
+      "content": {
+        "application/json": {
+          "schema": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "examples": {
+            "created": {
+              "value": {
+                "id": 1,
+                "email": "user@example.com",
+                "first_name": "John",
+                "last_name": "Doe"
+              }
+            }
+          }
+        }
+      }
+    },
+    "400": {
+      "$ref": "../../../../../components/responses/ValidationError.json"
+    },
+    "404": {
+      "$ref": "../../../../../components/responses/TableNotFound.json"
+    },
+    "409": {
+      "$ref": "../../../../../components/responses/ConflictError.json"
+    }
+  }
+}

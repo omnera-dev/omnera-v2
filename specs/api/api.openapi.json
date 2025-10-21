@@ -1,0 +1,165 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Omnera API",
+    "version": "0.0.1",
+    "description": "REST API specification for Omnera application platform.\n\n**Architecture**: This specification uses a modular structure where paths, schemas, and responses are split into separate files for better maintainability and reusability."
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3000",
+      "description": "Development server"
+    }
+  ],
+  "paths": {
+    "/api/health": {
+      "get": {
+        "$ref": "./paths/health/get.json"
+      }
+    },
+    "/api/auth/sign-in/social": {
+      "post": {
+        "$ref": "./paths/auth/sign-in/social/post.json"
+      }
+    },
+    "/api/auth/sign-in/email": {
+      "post": {
+        "$ref": "./paths/auth/sign-in/email/post.json"
+      }
+    },
+    "/api/auth/sign-up/email": {
+      "post": {
+        "$ref": "./paths/auth/sign-up/email/post.json"
+      }
+    },
+    "/api/auth/sign-out": {
+      "post": {
+        "$ref": "./paths/auth/sign-out/post.json"
+      }
+    },
+    "/api/auth/get-session": {
+      "get": {
+        "$ref": "./paths/auth/get-session/get.json"
+      }
+    },
+    "/api/auth/forget-password": {
+      "post": {
+        "$ref": "./paths/auth/forget-password/post.json"
+      }
+    },
+    "/api/auth/reset-password": {
+      "post": {
+        "$ref": "./paths/auth/reset-password/post.json"
+      }
+    },
+    "/api/auth/verify-email": {
+      "get": {
+        "$ref": "./paths/auth/verify-email/get.json"
+      }
+    },
+    "/api/auth/send-verification-email": {
+      "post": {
+        "$ref": "./paths/auth/send-verification-email/post.json"
+      }
+    },
+    "/api/auth/change-email": {
+      "post": {
+        "$ref": "./paths/auth/change-email/post.json"
+      }
+    },
+    "/api/auth/change-password": {
+      "post": {
+        "$ref": "./paths/auth/change-password/post.json"
+      }
+    },
+    "/api/tables": {
+      "get": {
+        "$ref": "./paths/tables/get.json"
+      }
+    },
+    "/api/tables/{tableId}": {
+      "get": {
+        "$ref": "./paths/tables/{tableId}/get.json"
+      }
+    },
+    "/api/tables/{tableId}/records": {
+      "get": {
+        "$ref": "./paths/tables/{tableId}/records/get.json"
+      },
+      "post": {
+        "$ref": "./paths/tables/{tableId}/records/post.json"
+      }
+    },
+    "/api/tables/{tableId}/records/{recordId}": {
+      "get": {
+        "$ref": "./paths/tables/{tableId}/records/{recordId}/get.json"
+      },
+      "patch": {
+        "$ref": "./paths/tables/{tableId}/records/{recordId}/patch.json"
+      },
+      "delete": {
+        "$ref": "./paths/tables/{tableId}/records/{recordId}/delete.json"
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "User": {
+        "$ref": "./components/schemas/User.json"
+      },
+      "Session": {
+        "$ref": "./components/schemas/Session.json"
+      },
+      "Table": {
+        "$ref": "./components/schemas/Table.json"
+      },
+      "Field": {
+        "$ref": "./components/schemas/Field.json"
+      },
+      "PrimaryKey": {
+        "$ref": "./components/schemas/PrimaryKey.json"
+      },
+      "UniqueConstraint": {
+        "$ref": "./components/schemas/UniqueConstraint.json"
+      },
+      "Index": {
+        "$ref": "./components/schemas/Index.json"
+      },
+      "Error": {
+        "$ref": "./components/schemas/Error.json"
+      }
+    },
+    "responses": {
+      "TableNotFound": {
+        "$ref": "./components/responses/TableNotFound.json"
+      },
+      "RecordNotFound": {
+        "$ref": "./components/responses/RecordNotFound.json"
+      },
+      "ValidationError": {
+        "$ref": "./components/responses/ValidationError.json"
+      },
+      "ConflictError": {
+        "$ref": "./components/responses/ConflictError.json"
+      }
+    }
+  },
+  "tags": [
+    {
+      "name": "infrastructure",
+      "description": "Infrastructure endpoints (health, metrics)"
+    },
+    {
+      "name": "authentication",
+      "description": "User authentication and account management"
+    },
+    {
+      "name": "tables",
+      "description": "Table configuration endpoints"
+    },
+    {
+      "name": "records",
+      "description": "Record CRUD operations"
+    }
+  ]
+}

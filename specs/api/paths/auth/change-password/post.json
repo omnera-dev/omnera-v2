@@ -1,0 +1,124 @@
+{
+  "summary": "Change password",
+  "description": "Changes the user's password. Requires current password for verification. Optionally revokes all other sessions for security.",
+  "operationId": "changePassword",
+  "tags": ["authentication"],
+  "security": [
+    {
+      "bearerAuth": []
+    }
+  ],
+  "requestBody": {
+    "required": true,
+    "content": {
+      "application/json": {
+        "schema": {
+          "type": "object",
+          "required": ["newPassword", "currentPassword"],
+          "properties": {
+            "newPassword": {
+              "type": "string",
+              "format": "password",
+              "description": "The new password to set",
+              "minLength": 8,
+              "example": "NewSecurePass123!"
+            },
+            "currentPassword": {
+              "type": "string",
+              "format": "password",
+              "description": "The current password for verification",
+              "example": "CurrentPass123!"
+            },
+            "revokeOtherSessions": {
+              "type": "boolean",
+              "description": "If true, revokes all other active sessions (recommended for security)",
+              "nullable": true,
+              "default": false,
+              "example": true
+            }
+          }
+        }
+      }
+    }
+  },
+  "responses": {
+    "200": {
+      "description": "Password successfully changed",
+      "content": {
+        "application/json": {
+          "schema": {
+            "type": "object",
+            "required": ["user"],
+            "properties": {
+              "token": {
+                "type": "string",
+                "description": "New session token if other sessions were revoked",
+                "nullable": true,
+                "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+              },
+              "user": {
+                "$ref": "../../../components/schemas/User.json"
+              }
+            }
+          },
+          "examples": {
+            "passwordChanged": {
+              "summary": "Password changed without revoking sessions",
+              "value": {
+                "token": null,
+                "user": {
+                  "id": "user_123abc",
+                  "email": "user@example.com",
+                  "name": "John Doe",
+                  "image": "https://avatar.example.com/john.jpg",
+                  "emailVerified": true,
+                  "createdAt": "2025-01-10T08:00:00Z",
+                  "updatedAt": "2025-01-15T12:00:00Z"
+                }
+              }
+            },
+            "passwordChangedWithNewToken": {
+              "summary": "Password changed and other sessions revoked",
+              "value": {
+                "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+                "user": {
+                  "id": "user_123abc",
+                  "email": "user@example.com",
+                  "name": "John Doe",
+                  "image": "https://avatar.example.com/john.jpg",
+                  "emailVerified": true,
+                  "createdAt": "2025-01-10T08:00:00Z",
+                  "updatedAt": "2025-01-15T12:00:00Z"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "400": {
+      "$ref": "../../../components/responses/ValidationError.json"
+    },
+    "401": {
+      "description": "Unauthorized - Invalid current password or not authenticated",
+      "content": {
+        "application/json": {
+          "schema": {
+            "$ref": "../../../components/schemas/Error.json"
+          },
+          "examples": {
+            "invalidPassword": {
+              "value": {
+                "error": "Invalid current password",
+                "code": "INVALID_PASSWORD",
+                "details": {
+                  "message": "The current password is incorrect"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

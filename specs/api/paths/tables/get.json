@@ -1,0 +1,53 @@
+{
+  "summary": "List all tables",
+  "description": "Returns array of all configured tables from the application schema. Tables define the data structure and fields for storing records.",
+  "operationId": "listTables",
+  "tags": ["tables"],
+  "responses": {
+    "200": {
+      "description": "List of tables",
+      "content": {
+        "application/json": {
+          "schema": {
+            "type": "array",
+            "items": {
+              "$ref": "../../components/schemas/Table.json"
+            }
+          },
+          "examples": {
+            "multipleTables": {
+              "value": [
+                {
+                  "id": 1,
+                  "name": "users",
+                  "fields": [
+                    {
+                      "id": 1,
+                      "name": "email",
+                      "type": "email",
+                      "required": true
+                    }
+                  ]
+                },
+                {
+                  "id": 2,
+                  "name": "products",
+                  "fields": [
+                    {
+                      "id": 1,
+                      "name": "title",
+                      "type": "single-line-text"
+                    }
+                  ]
+                }
+              ]
+            },
+            "empty": {
+              "value": []
+            }
+          }
+        }
+      }
+    }
+  }
+}

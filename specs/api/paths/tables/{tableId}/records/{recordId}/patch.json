@@ -1,0 +1,59 @@
+{
+  "summary": "Update record",
+  "description": "Updates an existing record with provided field values. Only provided fields are updated (partial update).",
+  "operationId": "updateRecord",
+  "tags": ["records"],
+  "parameters": [
+    {
+      "name": "tableId",
+      "in": "path",
+      "required": true,
+      "schema": {
+        "type": "integer",
+        "minimum": 1
+      }
+    },
+    {
+      "name": "recordId",
+      "in": "path",
+      "required": true,
+      "schema": {
+        "type": "integer",
+        "minimum": 1
+      }
+    }
+  ],
+  "requestBody": {
+    "required": true,
+    "content": {
+      "application/json": {
+        "schema": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      }
+    }
+  },
+  "responses": {
+    "200": {
+      "description": "Record updated successfully",
+      "content": {
+        "application/json": {
+          "schema": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        }
+      }
+    },
+    "400": {
+      "$ref": "../../../../components/responses/ValidationError.json"
+    },
+    "404": {
+      "$ref": "../../../../components/responses/RecordNotFound.json"
+    },
+    "409": {
+      "$ref": "../../../../components/responses/ConflictError.json"
+    }
+  }
+}

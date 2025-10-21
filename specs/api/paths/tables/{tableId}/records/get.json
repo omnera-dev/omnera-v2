@@ -1,0 +1,36 @@
+{
+  "summary": "List records in table",
+  "description": "Returns paginated list of records from the specified table.",
+  "operationId": "listRecords",
+  "tags": ["records"],
+  "parameters": [
+    {
+      "name": "tableId",
+      "in": "path",
+      "required": true,
+      "schema": {
+        "type": "integer",
+        "minimum": 1
+      }
+    }
+  ],
+  "responses": {
+    "200": {
+      "description": "List of records",
+      "content": {
+        "application/json": {
+          "schema": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": true
+            }
+          }
+        }
+      }
+    },
+    "404": {
+      "$ref": "../../../../../components/responses/TableNotFound.json"
+    }
+  }
+}

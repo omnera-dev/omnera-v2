@@ -1,0 +1,72 @@
+{
+  "summary": "Get table by ID",
+  "description": "Returns a single table configuration by its ID, including all field definitions, primary key, constraints, and indexes.",
+  "operationId": "getTable",
+  "tags": ["tables"],
+  "parameters": [
+    {
+      "name": "tableId",
+      "in": "path",
+      "required": true,
+      "description": "Table ID",
+      "schema": {
+        "type": "integer",
+        "minimum": 1,
+        "example": 1
+      }
+    }
+  ],
+  "responses": {
+    "200": {
+      "description": "Table configuration",
+      "content": {
+        "application/json": {
+          "schema": {
+            "$ref": "../../../components/schemas/Table.json"
+          },
+          "examples": {
+            "userTable": {
+              "value": {
+                "id": 1,
+                "name": "users",
+                "fields": [
+                  {
+                    "id": 1,
+                    "name": "email",
+                    "type": "email",
+                    "required": true
+                  },
+                  {
+                    "id": 2,
+                    "name": "first_name",
+                    "type": "single-line-text"
+                  }
+                ],
+                "primaryKey": {
+                  "type": "auto-increment",
+                  "field": "id"
+                },
+                "uniqueConstraints": [
+                  {
+                    "name": "uq_users_email",
+                    "fields": ["email"]
+                  }
+                ],
+                "indexes": [
+                  {
+                    "name": "idx_users_email",
+                    "fields": ["email"],
+                    "unique": false
+                  }
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "404": {
+      "$ref": "../../../components/responses/TableNotFound.json"
+    }
+  }
+}

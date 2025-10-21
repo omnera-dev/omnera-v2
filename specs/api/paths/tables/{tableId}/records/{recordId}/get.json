@@ -1,0 +1,42 @@
+{
+  "summary": "Get record by ID",
+  "description": "Returns a single record from the table by its ID.",
+  "operationId": "getRecord",
+  "tags": ["records"],
+  "parameters": [
+    {
+      "name": "tableId",
+      "in": "path",
+      "required": true,
+      "schema": {
+        "type": "integer",
+        "minimum": 1
+      }
+    },
+    {
+      "name": "recordId",
+      "in": "path",
+      "required": true,
+      "schema": {
+        "type": "integer",
+        "minimum": 1
+      }
+    }
+  ],
+  "responses": {
+    "200": {
+      "description": "Record data",
+      "content": {
+        "application/json": {
+          "schema": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        }
+      }
+    },
+    "404": {
+      "$ref": "../../../../components/responses/RecordNotFound.json"
+    }
+  }
+}

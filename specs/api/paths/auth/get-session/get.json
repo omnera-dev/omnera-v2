@@ -1,0 +1,79 @@
+{
+  "summary": "Get current session",
+  "description": "Retrieves the current authenticated user's session and profile information. Requires valid bearer token in Authorization header.",
+  "operationId": "getSession",
+  "tags": ["authentication"],
+  "security": [
+    {
+      "bearerAuth": []
+    }
+  ],
+  "responses": {
+    "200": {
+      "description": "Success - Returns current session and user information",
+      "content": {
+        "application/json": {
+          "schema": {
+            "type": "object",
+            "required": ["session", "user"],
+            "properties": {
+              "session": {
+                "$ref": "../../../components/schemas/Session.json"
+              },
+              "user": {
+                "$ref": "../../../components/schemas/User.json"
+              }
+            }
+          },
+          "examples": {
+            "authenticatedSession": {
+              "summary": "Active user session",
+              "value": {
+                "session": {
+                  "id": "sess_abc123xyz",
+                  "expiresAt": "2025-01-22T10:30:00Z",
+                  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+                  "createdAt": "2025-01-15T10:30:00Z",
+                  "updatedAt": "2025-01-15T10:30:00Z",
+                  "ipAddress": "192.168.1.1",
+                  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)",
+                  "userId": "user_123abc"
+                },
+                "user": {
+                  "id": "user_123abc",
+                  "email": "user@example.com",
+                  "name": "John Doe",
+                  "image": "https://avatar.example.com/john.jpg",
+                  "emailVerified": true,
+                  "createdAt": "2025-01-10T08:00:00Z",
+                  "updatedAt": "2025-01-15T10:30:00Z"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "401": {
+      "description": "Unauthorized - Invalid or expired session token",
+      "content": {
+        "application/json": {
+          "schema": {
+            "$ref": "../../../components/schemas/Error.json"
+          },
+          "examples": {
+            "unauthorized": {
+              "value": {
+                "error": "Unauthorized",
+                "code": "UNAUTHORIZED",
+                "details": {
+                  "message": "Invalid or expired session token"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

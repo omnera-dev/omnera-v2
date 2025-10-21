@@ -1,0 +1,49 @@
+{
+  "summary": "Sign out user",
+  "description": "Signs out the current authenticated user by invalidating their session. The session token will no longer be valid after this operation.",
+  "operationId": "signOut",
+  "tags": ["authentication"],
+  "security": [
+    {
+      "bearerAuth": []
+    }
+  ],
+  "responses": {
+    "200": {
+      "description": "Success - User signed out successfully",
+      "content": {
+        "application/json": {
+          "schema": {
+            "type": "object",
+            "required": ["success"],
+            "properties": {
+              "success": {
+                "type": "boolean",
+                "enum": [true],
+                "description": "Indicates successful sign out"
+              }
+            }
+          },
+          "examples": {
+            "signedOut": {
+              "summary": "Successful sign out",
+              "value": {
+                "success": true
+              }
+            }
+          }
+        }
+      }
+    },
+    "401": {
+      "description": "Unauthorized - Invalid or expired session token",
+      "content": {
+        "application/json": {
+          "schema": {
+            "$ref": "../../../components/schemas/Error.json"
+          }
+        }
+      }
+    }
+  }
+}

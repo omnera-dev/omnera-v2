@@ -1,0 +1,95 @@
+{
+  "summary": "Change email address",
+  "description": "Changes the user's email address. If email verification is enabled, sends a verification email to the new address before updating.",
+  "operationId": "changeEmail",
+  "tags": ["authentication"],
+  "security": [
+    {
+      "bearerAuth": []
+    }
+  ],
+  "requestBody": {
+    "required": true,
+    "content": {
+      "application/json": {
+        "schema": {
+          "type": "object",
+          "required": ["newEmail"],
+          "properties": {
+            "newEmail": {
+              "type": "string",
+              "format": "email",
+              "description": "The new email address to set (must be a valid email address)",
+              "example": "newemail@example.com"
+            },
+            "callbackURL": {
+              "type": "string",
+              "format": "uri",
+              "description": "The URL to redirect to after email verification",
+              "nullable": true,
+              "example": "https://app.example.com/verify-email"
+            }
+          }
+        }
+      }
+    }
+  },
+  "responses": {
+    "200": {
+      "description": "Email change request processed successfully",
+      "content": {
+        "application/json": {
+          "schema": {
+            "type": "object",
+            "required": ["status"],
+            "properties": {
+              "status": {
+                "type": "boolean",
+                "enum": [true],
+                "description": "Indicates if the request was successful"
+              },
+              "message": {
+                "type": "string",
+                "enum": ["Email updated", "Verification email sent"],
+                "description": "Status message of the email change process",
+                "nullable": true
+              }
+            }
+          },
+          "examples": {
+            "emailUpdated": {
+              "summary": "Email updated immediately (no verification required)",
+              "value": {
+                "status": true,
+                "message": "Email updated"
+              }
+            },
+            "verificationSent": {
+              "summary": "Verification email sent (verification required)",
+              "value": {
+                "status": true,
+                "message": "Verification email sent"
+              }
+            }
+          }
+        }
+      }
+    },
+    "400": {
+      "$ref": "../../../components/responses/ValidationError.json"
+    },
+    "401": {
+      "description": "Unauthorized - User not authenticated",
+      "content": {
+        "application/json": {
+          "schema": {
+            "$ref": "../../../components/schemas/Error.json"
+          }
+        }
+      }
+    },
+    "409": {
+      "$ref": "../../../components/responses/ConflictError.json"
+    }
+  }
+}

@@ -1,0 +1,125 @@
+{
+  "summary": "Sign up with email and password",
+  "description": "Creates a new user account using email and password authentication. Optionally sends verification email if email verification is enabled.",
+  "operationId": "signUpEmail",
+  "tags": ["authentication"],
+  "security": [
+    {
+      "bearerAuth": []
+    }
+  ],
+  "requestBody": {
+    "required": true,
+    "content": {
+      "application/json": {
+        "schema": {
+          "type": "object",
+          "required": ["name", "email", "password"],
+          "properties": {
+            "name": {
+              "type": "string",
+              "description": "The name of the user",
+              "minLength": 1,
+              "example": "John Doe"
+            },
+            "email": {
+              "type": "string",
+              "format": "email",
+              "description": "The email of the user",
+              "example": "user@example.com"
+            },
+            "password": {
+              "type": "string",
+              "format": "password",
+              "description": "The password of the user",
+              "minLength": 8,
+              "example": "SecurePass123!"
+            },
+            "image": {
+              "type": "string",
+              "format": "uri",
+              "description": "The profile image URL of the user",
+              "nullable": true,
+              "example": "https://avatar.example.com/user.jpg"
+            },
+            "callbackURL": {
+              "type": "string",
+              "format": "uri",
+              "description": "The URL to use for email verification callback",
+              "nullable": true,
+              "example": "https://app.example.com/verify-email"
+            },
+            "rememberMe": {
+              "type": "boolean",
+              "description": "If this is false, the session will not be remembered. Default is `true`.",
+              "default": true,
+              "example": true
+            }
+          }
+        }
+      }
+    }
+  },
+  "responses": {
+    "200": {
+      "description": "Successfully created user account",
+      "content": {
+        "application/json": {
+          "schema": {
+            "type": "object",
+            "required": ["user"],
+            "properties": {
+              "token": {
+                "type": "string",
+                "description": "Authentication token for the session (null if email verification required)",
+                "nullable": true,
+                "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+              },
+              "user": {
+                "$ref": "../../../../../components/schemas/User.json"
+              }
+            }
+          },
+          "examples": {
+            "withSession": {
+              "summary": "Account created with immediate session",
+              "value": {
+                "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+                "user": {
+                  "id": "user_123abc",
+                  "email": "user@example.com",
+                  "name": "John Doe",
+                  "image": null,
+                  "emailVerified": false,
+                  "createdAt": "2025-01-15T10:30:00Z",
+                  "updatedAt": "2025-01-15T10:30:00Z"
+                }
+              }
+            },
+            "verificationRequired": {
+              "summary": "Account created but verification required",
+              "value": {
+                "token": null,
+                "user": {
+                  "id": "user_123abc",
+                  "email": "user@example.com",
+                  "name": "John Doe",
+                  "image": null,
+                  "emailVerified": false,
+                  "createdAt": "2025-01-15T10:30:00Z",
+                  "updatedAt": "2025-01-15T10:30:00Z"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "400": {
+      "$ref": "../../../../../components/responses/ValidationError.json"
+    },
+    "409": {
+      "$ref": "../../../../../components/responses/ConflictError.json"
+    }
+  }
+}

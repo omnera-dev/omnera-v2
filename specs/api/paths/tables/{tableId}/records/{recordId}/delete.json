@@ -1,0 +1,34 @@
+{
+  "summary": "Delete record",
+  "description": "Deletes a record from the table by its ID.",
+  "operationId": "deleteRecord",
+  "tags": ["records"],
+  "parameters": [
+    {
+      "name": "tableId",
+      "in": "path",
+      "required": true,
+      "schema": {
+        "type": "integer",
+        "minimum": 1
+      }
+    },
+    {
+      "name": "recordId",
+      "in": "path",
+      "required": true,
+      "schema": {
+        "type": "integer",
+        "minimum": 1
+      }
+    }
+  ],
+  "responses": {
+    "204": {
+      "description": "Record deleted successfully"
+    },
+    "404": {
+      "$ref": "../../../../components/responses/RecordNotFound.json"
+    }
+  }
+}

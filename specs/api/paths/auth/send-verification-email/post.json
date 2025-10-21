@@ -1,0 +1,86 @@
+{
+  "summary": "Send verification email",
+  "description": "Sends a verification email to the user's email address. The email contains a link with a verification token to confirm email ownership.",
+  "operationId": "sendVerificationEmail",
+  "tags": ["authentication"],
+  "security": [
+    {
+      "bearerAuth": []
+    }
+  ],
+  "requestBody": {
+    "required": true,
+    "content": {
+      "application/json": {
+        "schema": {
+          "type": "object",
+          "required": ["email"],
+          "properties": {
+            "email": {
+              "type": "string",
+              "format": "email",
+              "description": "The email to send the verification email to",
+              "example": "user@example.com"
+            },
+            "callbackURL": {
+              "type": "string",
+              "format": "uri",
+              "description": "The URL to use for email verification callback",
+              "nullable": true,
+              "example": "https://app.example.com/verify-email"
+            }
+          }
+        }
+      }
+    }
+  },
+  "responses": {
+    "200": {
+      "description": "Success - Verification email sent",
+      "content": {
+        "application/json": {
+          "schema": {
+            "type": "object",
+            "required": ["status"],
+            "properties": {
+              "status": {
+                "type": "boolean",
+                "enum": [true],
+                "description": "Indicates if the email was sent successfully"
+              }
+            }
+          },
+          "examples": {
+            "emailSent": {
+              "summary": "Verification email sent",
+              "value": {
+                "status": true
+              }
+            }
+          }
+        }
+      }
+    },
+    "400": {
+      "description": "Bad Request - Email verification not enabled or invalid email",
+      "content": {
+        "application/json": {
+          "schema": {
+            "$ref": "../../../components/schemas/Error.json"
+          },
+          "examples": {
+            "verificationDisabled": {
+              "value": {
+                "error": "Email verification not enabled",
+                "code": "VERIFICATION_DISABLED",
+                "details": {
+                  "message": "Verification email isn't enabled"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

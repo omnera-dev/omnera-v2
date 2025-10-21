@@ -1,0 +1,89 @@
+{
+  "summary": "Reset password",
+  "description": "Resets the user's password using a valid reset token received via email. The token must not be expired.",
+  "operationId": "resetPassword",
+  "tags": ["authentication"],
+  "security": [
+    {
+      "bearerAuth": []
+    }
+  ],
+  "requestBody": {
+    "required": true,
+    "content": {
+      "application/json": {
+        "schema": {
+          "type": "object",
+          "required": ["newPassword"],
+          "properties": {
+            "newPassword": {
+              "type": "string",
+              "format": "password",
+              "description": "The new password to set",
+              "minLength": 8,
+              "example": "NewSecurePass123!"
+            },
+            "token": {
+              "type": "string",
+              "description": "The reset token received via email",
+              "nullable": true,
+              "example": "reset_token_abc123xyz"
+            }
+          }
+        }
+      }
+    }
+  },
+  "responses": {
+    "200": {
+      "description": "Success - Password reset successfully",
+      "content": {
+        "application/json": {
+          "schema": {
+            "type": "object",
+            "required": ["status"],
+            "properties": {
+              "status": {
+                "type": "boolean",
+                "enum": [true],
+                "description": "Indicates password was reset successfully"
+              }
+            }
+          },
+          "examples": {
+            "passwordReset": {
+              "summary": "Password reset successful",
+              "value": {
+                "status": true
+              }
+            }
+          }
+        }
+      }
+    },
+    "400": {
+      "$ref": "../../../components/responses/ValidationError.json"
+    },
+    "401": {
+      "description": "Unauthorized - Invalid or expired reset token",
+      "content": {
+        "application/json": {
+          "schema": {
+            "$ref": "../../../components/schemas/Error.json"
+          },
+          "examples": {
+            "invalidToken": {
+              "value": {
+                "error": "Invalid or expired token",
+                "code": "INVALID_TOKEN",
+                "details": {
+                  "message": "The reset token is invalid or has expired"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
