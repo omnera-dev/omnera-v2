@@ -17,86 +17,84 @@ import { test, expect } from '@/specs/fixtures'
  * Source: specs/admin/connections/connections.json
  */
 
-test.describe('Connection Management (Admin)', () => {
-  // ADMIN-CONNECTIONS-001: user is authenticated in a workspace → user navigates to connections page → system displays list of all configured connections with status
-  test.fixme(
-    'ADMIN-CONNECTIONS-001: should display list of configured connections with status',
-    { tag: '@spec' },
-    async ({ page, startServerWithSchema }) => {
-      // GIVEN: user is authenticated in a workspace
-      await startServerWithSchema({
-        name: 'connections-list-test',
-      })
+// ADMIN-CONNECTIONS-001: user is authenticated in a workspace → user navigates to connections page → system displays list of all configured connections with status
+test.fixme(
+  'ADMIN-CONNECTIONS-001: should display list of configured connections with status',
+  { tag: '@spec' },
+  async ({ page, startServerWithSchema }) => {
+    // GIVEN: user is authenticated in a workspace
+    await startServerWithSchema({
+      name: 'connections-list-test',
+    })
 
-      // WHEN: user navigates to connections page
-      await page.goto('/admin/connections')
+    // WHEN: user navigates to connections page
+    await page.goto('/admin/connections')
 
-      // THEN: system displays list of all configured connections with status
-      await expect(page.locator('[data-testid="connections-list"]')).toBeVisible()
-    }
-  )
+    // THEN: system displays list of all configured connections with status
+    await expect(page.locator('[data-testid="connections-list"]')).toBeVisible()
+  }
+)
 
-  // ADMIN-CONNECTIONS-002: connection exists with valid OAuth credentials but is not connected → user initiates connection via 'Connect' button → OAuth flow completes successfully and connection status becomes 'connected'
-  test.fixme(
-    'ADMIN-CONNECTIONS-002: should complete OAuth flow when user clicks Connect',
-    { tag: '@spec' },
-    async ({ page, startServerWithSchema }) => {
-      // GIVEN: connection exists with valid OAuth credentials but is not connected
-      await startServerWithSchema({
-        name: 'connections-oauth-test',
-      })
+// ADMIN-CONNECTIONS-002: connection exists with valid OAuth credentials but is not connected → user initiates connection via 'Connect' button → OAuth flow completes successfully and connection status becomes 'connected'
+test.fixme(
+  'ADMIN-CONNECTIONS-002: should complete OAuth flow when user clicks Connect',
+  { tag: '@spec' },
+  async ({ page, startServerWithSchema }) => {
+    // GIVEN: connection exists with valid OAuth credentials but is not connected
+    await startServerWithSchema({
+      name: 'connections-oauth-test',
+    })
 
-      await page.goto('/admin/connections')
+    await page.goto('/admin/connections')
 
-      // WHEN: user initiates connection via 'Connect' button
-      await page.click('[data-testid="connect-button"]')
+    // WHEN: user initiates connection via 'Connect' button
+    await page.click('[data-testid="connect-button"]')
 
-      // THEN: OAuth flow completes successfully and connection status becomes 'connected'
-      await expect(page.locator('[data-testid="connection-status"]')).toHaveText('connected')
-    }
-  )
+    // THEN: OAuth flow completes successfully and connection status becomes 'connected'
+    await expect(page.locator('[data-testid="connection-status"]')).toHaveText('connected')
+  }
+)
 
-  // ADMIN-CONNECTIONS-003: connection is in 'connected' status with active tokens → user clicks 'Disconnect' button → connection status changes to 'disconnected' and OAuth tokens are revoked
-  test.fixme(
-    'ADMIN-CONNECTIONS-003: should disconnect and revoke tokens when user clicks Disconnect',
-    { tag: '@spec' },
-    async ({ page, startServerWithSchema }) => {
-      // GIVEN: connection is in 'connected' status with active tokens
-      await startServerWithSchema({
-        name: 'connections-disconnect-test',
-      })
+// ADMIN-CONNECTIONS-003: connection is in 'connected' status with active tokens → user clicks 'Disconnect' button → connection status changes to 'disconnected' and OAuth tokens are revoked
+test.fixme(
+  'ADMIN-CONNECTIONS-003: should disconnect and revoke tokens when user clicks Disconnect',
+  { tag: '@spec' },
+  async ({ page, startServerWithSchema }) => {
+    // GIVEN: connection is in 'connected' status with active tokens
+    await startServerWithSchema({
+      name: 'connections-disconnect-test',
+    })
 
-      await page.goto('/admin/connections')
+    await page.goto('/admin/connections')
 
-      // WHEN: user clicks 'Disconnect' button
-      await page.click('[data-testid="disconnect-button"]')
+    // WHEN: user clicks 'Disconnect' button
+    await page.click('[data-testid="disconnect-button"]')
 
-      // THEN: connection status changes to 'disconnected' and OAuth tokens are revoked
-      await expect(page.locator('[data-testid="connection-status"]')).toHaveText('disconnected')
-    }
-  )
+    // THEN: connection status changes to 'disconnected' and OAuth tokens are revoked
+    await expect(page.locator('[data-testid="connection-status"]')).toHaveText('disconnected')
+  }
+)
 
-  // ADMIN-CONNECTIONS-004: connection is configured and shareable feature is enabled → user clicks 'Copy Link' button → shareable connection URL is copied to clipboard
-  test.fixme(
-    'ADMIN-CONNECTIONS-004: should copy shareable connection URL to clipboard',
-    { tag: '@spec' },
-    async ({ page, startServerWithSchema }) => {
-      // GIVEN: connection is configured and shareable feature is enabled
-      await startServerWithSchema({
-        name: 'connections-share-test',
-      })
+// ADMIN-CONNECTIONS-004: connection is configured and shareable feature is enabled → user clicks 'Copy Link' button → shareable connection URL is copied to clipboard
+test.fixme(
+  'ADMIN-CONNECTIONS-004: should copy shareable connection URL to clipboard',
+  { tag: '@spec' },
+  async ({ page, startServerWithSchema }) => {
+    // GIVEN: connection is configured and shareable feature is enabled
+    await startServerWithSchema({
+      name: 'connections-share-test',
+    })
 
-      await page.goto('/admin/connections')
+    await page.goto('/admin/connections')
 
-      // WHEN: user clicks 'Copy Link' button
-      await page.click('[data-testid="copy-link-button"]')
+    // WHEN: user clicks 'Copy Link' button
+    await page.click('[data-testid="copy-link-button"]')
 
-      // THEN: shareable connection URL is copied to clipboard
-      const clipboardText = await page.evaluate(() => navigator.clipboard.readText())
-      expect(clipboardText).toContain('/share/')
-    }
-  )
-})
+    // THEN: shareable connection URL is copied to clipboard
+    const clipboardText = await page.evaluate(() => navigator.clipboard.readText())
+    expect(clipboardText).toContain('/share/')
+  }
+)
 
 // ============================================================================
 // REGRESSION TEST (@regression)

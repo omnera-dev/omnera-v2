@@ -27,89 +27,87 @@ const generateTestUser = () => ({
   name: 'Test User',
 })
 
-test.describe('POST /api/auth/forget-password', () => {
-  /**
-   * Test Case 1: Forget password sends reset email
-   *
-   * GIVEN: A user account exists
-   * WHEN: User requests password reset
-   * THEN: Response should indicate email was sent
-   *
-   * NOTE: Actual email delivery depends on email service configuration.
-   * This test validates the endpoint behavior, not email delivery.
-   */
-  // API-AUTH-FORGET-PASSWORD-001: User requests password reset
-  test(
-    'API-AUTH-FORGET-PASSWORD-001: should accept password reset request',
-    { tag: '@regression' },
-    async ({ page, startServerWithSchema }) => {
-      // GIVEN: A running server
-      await startServerWithSchema(
-        {
-          name: 'forget-password-test',
-        },
-        { useDatabase: true }
-      )
+/**
+ * Test Case 1: Forget password sends reset email
+ *
+ * GIVEN: A user account exists
+ * WHEN: User requests password reset
+ * THEN: Response should indicate email was sent
+ *
+ * NOTE: Actual email delivery depends on email service configuration.
+ * This test validates the endpoint behavior, not email delivery.
+ */
+// API-AUTH-FORGET-PASSWORD-001: User requests password reset
+test(
+  'API-AUTH-FORGET-PASSWORD-001: should accept password reset request',
+  { tag: '@regression' },
+  async ({ page, startServerWithSchema }) => {
+    // GIVEN: A running server
+    await startServerWithSchema(
+      {
+        name: 'forget-password-test',
+      },
+      { useDatabase: true }
+    )
 
-      // AND: A user that signed up
-      const testUser = generateTestUser()
-      await page.request.post('/api/auth/sign-up/email', {
-        data: {
-          email: testUser.email,
-          password: testUser.password,
-          name: testUser.name,
-        },
-      })
+    // AND: A user that signed up
+    const testUser = generateTestUser()
+    await page.request.post('/api/auth/sign-up/email', {
+      data: {
+        email: testUser.email,
+        password: testUser.password,
+        name: testUser.name,
+      },
+    })
 
-      // WHEN: User requests password reset
-      const response = await page.request.post('/api/auth/forget-password', {
-        data: {
-          email: testUser.email,
-          redirectTo: 'https://app.example.com/reset-password',
-        },
-      })
+    // WHEN: User requests password reset
+    const response = await page.request.post('/api/auth/forget-password', {
+      data: {
+        email: testUser.email,
+        redirectTo: 'https://app.example.com/reset-password',
+      },
+    })
 
-      // THEN: Response should be 200 OK
-      expect(response.status()).toBe(200)
+    // THEN: Response should be 200 OK
+    expect(response.status()).toBe(200)
 
-      const responseData = await response.json()
+    const responseData = await response.json()
 
-      // AND: Response should indicate success
-      expect(responseData).toHaveProperty('status', true)
-    }
-  )
+    // AND: Response should indicate success
+    expect(responseData).toHaveProperty('status', true)
+  }
+)
 
-  /**
-   * Test Case 2: Forget password validates email format
-   *
-   * GIVEN: A running server
-   * WHEN: User submits invalid email format
-   * THEN: Response should be validation error
-   */
-  // API-AUTH-FORGET-PASSWORD-002: User requests password reset with invalid email
-  test(
-    'API-AUTH-FORGET-PASSWORD-002: should validate email format',
-    { tag: '@spec' },
-    async ({ page, startServerWithSchema }) => {
-      // GIVEN: A running server
-      await startServerWithSchema(
-        {
-          name: 'forget-password-validation-test',
-        },
-        { useDatabase: true }
-      )
+/**
+ * Test Case 2: Forget password validates email format
+ *
+ * GIVEN: A running server
+ * WHEN: User submits invalid email format
+ * THEN: Response should be validation error
+ */
+// API-AUTH-FORGET-PASSWORD-002: User requests password reset with invalid email
+test(
+  'API-AUTH-FORGET-PASSWORD-002: should validate email format',
+  { tag: '@spec' },
+  async ({ page, startServerWithSchema }) => {
+    // GIVEN: A running server
+    await startServerWithSchema(
+      {
+        name: 'forget-password-validation-test',
+      },
+      { useDatabase: true }
+    )
 
-      // WHEN: User requests password reset with invalid email
-      const response = await page.request.post('/api/auth/forget-password', {
-        data: {
-          email: 'not-an-email',
-          redirectTo: 'https://app.example.com/reset-password',
-        },
-      })
+    // WHEN: User requests password reset with invalid email
+    const response = await page.request.post('/api/auth/forget-password', {
+      data: {
+        email: 'not-an-email',
+        redirectTo: 'https://app.example.com/reset-password',
+      },
+    })
 
-      // THEN: Response should be validation error (4xx)
-      expect(response.status()).toBeGreaterThanOrEqual(400)
-      expect(response.status()).toBeLessThan(500)
-    }
-  )
-})
+    // THEN: Response should be validation error (4xx)
+    expect(response.status()).toBeGreaterThanOrEqual(400)
+    expect(response.status()).toBeLessThan(500)
+  }
+)

@@ -18,132 +18,130 @@ import { test, expect } from '@/specs/fixtures'
  * Source: docs/specifications/schemas/tables/tables.schema.json (lines 32-35)
  */
 
-test.describe('Tables - Property: name', () => {
-  // ============================================================================
-  // SPECIFICATION TESTS (@spec) - name property
-  // Source: lines 32-35 in tables.schema.json
-  // ============================================================================
+// ============================================================================
+// SPECIFICATION TESTS (@spec) - name property
+// Source: lines 32-35 in tables.schema.json
+// ============================================================================
 
-  test.fixme(
-    'APP-TABLES-NAME-001: should return table with correct name via API',
-    { tag: '@spec' },
-    async ({ page, startServerWithSchema }) => {
-      // GIVEN: User configures table name
-      await startServerWithSchema({
-        name: 'test-app',
-        description: 'Test application',
-        version: '1.0.0',
-        tables: [
-          {
-            id: 1,
-            name: 'valid_table_name',
-            fields: [{ id: 1, name: 'field1', type: 'single-line-text' }],
-          },
-        ],
-      })
+test.fixme(
+  'APP-TABLES-NAME-001: should return table with correct name via API',
+  { tag: '@spec' },
+  async ({ page, startServerWithSchema }) => {
+    // GIVEN: User configures table name
+    await startServerWithSchema({
+      name: 'test-app',
+      description: 'Test application',
+      version: '1.0.0',
+      tables: [
+        {
+          id: 1,
+          name: 'valid_table_name',
+          fields: [{ id: 1, name: 'field1', type: 'single-line-text' }],
+        },
+      ],
+    })
 
-      // WHEN: Retrieving table via API
-      const response = await page.request.get('/api/tables/1')
+    // WHEN: Retrieving table via API
+    const response = await page.request.get('/api/tables/1')
 
-      // THEN: Name should be returned correctly
-      expect(response.status()).toBe(200)
-      const body = await response.json()
-      expect(body.name).toBe('valid_table_name')
-    }
-  )
+    // THEN: Name should be returned correctly
+    expect(response.status()).toBe(200)
+    const body = await response.json()
+    expect(body.name).toBe('valid_table_name')
+  }
+)
 
-  test.fixme(
-    'APP-TABLES-NAME-002: should create table with correct name in database',
-    { tag: '@spec' },
-    async ({ startServerWithSchema, executeQuery }) => {
-      // GIVEN: User configures table name
-      await startServerWithSchema({
-        name: 'test-app',
-        description: 'Test application',
-        version: '1.0.0',
-        tables: [
-          {
-            id: 1,
-            name: 'valid_table_name',
-            fields: [{ id: 1, name: 'field1', type: 'single-line-text' }],
-          },
-        ],
-      })
+test.fixme(
+  'APP-TABLES-NAME-002: should create table with correct name in database',
+  { tag: '@spec' },
+  async ({ startServerWithSchema, executeQuery }) => {
+    // GIVEN: User configures table name
+    await startServerWithSchema({
+      name: 'test-app',
+      description: 'Test application',
+      version: '1.0.0',
+      tables: [
+        {
+          id: 1,
+          name: 'valid_table_name',
+          fields: [{ id: 1, name: 'field1', type: 'single-line-text' }],
+        },
+      ],
+    })
 
-      // WHEN: Querying database for table
-      const result = await executeQuery(`
-        SELECT table_name
-        FROM information_schema.tables
-        WHERE table_schema = 'public'
-        AND table_name = 'valid_table_name'
-      `)
+    // WHEN: Querying database for table
+    const result = await executeQuery(`
+      SELECT table_name
+      FROM information_schema.tables
+      WHERE table_schema = 'public'
+      AND table_name = 'valid_table_name'
+    `)
 
-      // THEN: Table should exist with correct name
-      expect(result.rows.length).toBe(1)
-      expect(result.rows[0].table_name).toBe('valid_table_name')
-    }
-  )
+    // THEN: Table should exist with correct name
+    expect(result.rows.length).toBe(1)
+    expect(result.rows[0].table_name).toBe('valid_table_name')
+  }
+)
 
-  test.fixme(
-    'should use name value correctly when processing configuration',
-    { tag: '@spec' },
-    async ({ page, startServerWithSchema }) => {
-      // GIVEN: Name is set
-      await startServerWithSchema({
-        name: 'test-app',
-        description: 'Test application',
-        version: '1.0.0',
-        tables: [
-          {
-            id: 1,
-            name: 'products',
-            fields: [{ id: 1, name: 'title', type: 'single-line-text' }],
-          },
-        ],
-      })
+test.fixme(
+  'should use name value correctly when processing configuration',
+  { tag: '@spec' },
+  async ({ page, startServerWithSchema }) => {
+    // GIVEN: Name is set
+    await startServerWithSchema({
+      name: 'test-app',
+      description: 'Test application',
+      version: '1.0.0',
+      tables: [
+        {
+          id: 1,
+          name: 'products',
+          fields: [{ id: 1, name: 'title', type: 'single-line-text' }],
+        },
+      ],
+    })
 
-      // WHEN: Processing configuration
-      const response = await page.request.get('/api/tables/1')
+    // WHEN: Processing configuration
+    const response = await page.request.get('/api/tables/1')
 
-      // THEN: Value should be used correctly
-      expect(response.status()).toBe(200)
-      const body = await response.json()
-      expect(body.name).toBe('products')
-    }
-  )
+    // THEN: Value should be used correctly
+    expect(response.status()).toBe(200)
+    const body = await response.json()
+    expect(body.name).toBe('products')
+  }
+)
 
-  test.fixme(
-    'should preserve name case and format in database',
-    { tag: '@spec' },
-    async ({ startServerWithSchema, executeQuery }) => {
-      // GIVEN: Table name with specific format
-      await startServerWithSchema({
-        name: 'test-app',
-        description: 'Test application',
-        version: '1.0.0',
-        tables: [
-          {
-            id: 1,
-            name: 'user_profiles',
-            fields: [{ id: 1, name: 'bio', type: 'single-line-text' }],
-          },
-        ],
-      })
+test.fixme(
+  'should preserve name case and format in database',
+  { tag: '@spec' },
+  async ({ startServerWithSchema, executeQuery }) => {
+    // GIVEN: Table name with specific format
+    await startServerWithSchema({
+      name: 'test-app',
+      description: 'Test application',
+      version: '1.0.0',
+      tables: [
+        {
+          id: 1,
+          name: 'user_profiles',
+          fields: [{ id: 1, name: 'bio', type: 'single-line-text' }],
+        },
+      ],
+    })
 
-      // WHEN: Querying database for table name
-      const result = await executeQuery(`
-        SELECT table_name
-        FROM information_schema.tables
-        WHERE table_schema = 'public'
-        AND table_name = 'user_profiles'
-      `)
+    // WHEN: Querying database for table name
+    const result = await executeQuery(`
+      SELECT table_name
+      FROM information_schema.tables
+      WHERE table_schema = 'public'
+      AND table_name = 'user_profiles'
+    `)
 
-      // THEN: Name format should be preserved exactly
-      expect(result.rows.length).toBe(1)
-      expect(result.rows[0].table_name).toBe('user_profiles')
-    }
-  )
-})
+    // THEN: Name format should be preserved exactly
+    expect(result.rows.length).toBe(1)
+    expect(result.rows[0].table_name).toBe('user_profiles')
+  }
+)
 
 // ============================================================================
 // REGRESSION TEST (@regression)

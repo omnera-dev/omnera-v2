@@ -2,16 +2,10 @@
   "$id": "https://omnera.dev/schemas/0.0.1/app.schema.json",
   "$schema": "http://json-schema.org/draft-07/schema#",
   "$defs": {
-    "Int": {
-      "type": "integer",
-      "description": "an integer",
-      "title": "int"
-    }
+    "Int": { "type": "integer", "description": "an integer", "title": "int" }
   },
   "type": "object",
-  "required": [
-    "name"
-  ],
+  "required": ["name"],
   "properties": {
     "name": {
       "type": "string",
@@ -61,24 +55,14 @@
       "type": "array",
       "items": {
         "type": "object",
-        "required": [
-          "id",
-          "name",
-          "fields"
-        ],
+        "required": ["id", "name", "fields"],
         "properties": {
           "id": {
             "$ref": "#/$defs/Int",
             "description": "Unique positive integer identifier for entities. IDs are system-generated, auto-incrementing, and immutable. Must be unique within the parent collection (e.g., field IDs unique within a table, table IDs unique within the application). IDs are read-only and assigned automatically when entities are created. Range: 1 to 9,007,199,254,740,991 (JavaScript MAX_SAFE_INTEGER).",
             "title": "ID",
             "minimum": 1,
-            "examples": [
-              1,
-              2,
-              3,
-              100,
-              1000
-            ],
+            "examples": [1, 2, 3, 100, 1000],
             "maximum": 9007199254740991
           },
           "name": {
@@ -103,24 +87,14 @@
               "anyOf": [
                 {
                   "type": "object",
-                  "required": [
-                    "id",
-                    "name",
-                    "type"
-                  ],
+                  "required": ["id", "name", "type"],
                   "properties": {
                     "id": {
                       "$ref": "#/$defs/Int",
                       "description": "Unique positive integer identifier for entities. IDs are system-generated, auto-incrementing, and immutable. Must be unique within the parent collection (e.g., field IDs unique within a table, table IDs unique within the application). IDs are read-only and assigned automatically when entities are created. Range: 1 to 9,007,199,254,740,991 (JavaScript MAX_SAFE_INTEGER).",
                       "title": "ID",
                       "minimum": 1,
-                      "examples": [
-                        1,
-                        2,
-                        3,
-                        100,
-                        1000
-                      ],
+                      "examples": [1, 2, 3, 100, 1000],
                       "maximum": 9007199254740991
                     },
                     "name": {
@@ -138,20 +112,12 @@
                       ],
                       "pattern": "^[a-z][a-z0-9_]*$"
                     },
-                    "required": {
-                      "type": "boolean"
-                    },
-                    "unique": {
-                      "type": "boolean"
-                    },
-                    "indexed": {
-                      "type": "boolean"
-                    },
+                    "required": { "type": "boolean" },
+                    "unique": { "type": "boolean" },
+                    "indexed": { "type": "boolean" },
                     "type": {
                       "type": "string",
-                      "enum": [
-                        "single-line-text"
-                      ],
+                      "enum": ["single-line-text"],
                       "description": "Constant value 'single-line-text' for type discrimination in discriminated unions"
                     },
                     "default": {
@@ -182,24 +148,14 @@
                 },
                 {
                   "type": "object",
-                  "required": [
-                    "id",
-                    "name",
-                    "type"
-                  ],
+                  "required": ["id", "name", "type"],
                   "properties": {
                     "id": {
                       "$ref": "#/$defs/Int",
                       "description": "Unique positive integer identifier for entities. IDs are system-generated, auto-incrementing, and immutable. Must be unique within the parent collection (e.g., field IDs unique within a table, table IDs unique within the application). IDs are read-only and assigned automatically when entities are created. Range: 1 to 9,007,199,254,740,991 (JavaScript MAX_SAFE_INTEGER).",
                       "title": "ID",
                       "minimum": 1,
-                      "examples": [
-                        1,
-                        2,
-                        3,
-                        100,
-                        1000
-                      ],
+                      "examples": [1, 2, 3, 100, 1000],
                       "maximum": 9007199254740991
                     },
                     "name": {
@@ -217,20 +173,12 @@
                       ],
                       "pattern": "^[a-z][a-z0-9_]*$"
                     },
-                    "required": {
-                      "type": "boolean"
-                    },
-                    "unique": {
-                      "type": "boolean"
-                    },
-                    "indexed": {
-                      "type": "boolean"
-                    },
+                    "required": { "type": "boolean" },
+                    "unique": { "type": "boolean" },
+                    "indexed": { "type": "boolean" },
                     "type": {
                       "type": "string",
-                      "enum": [
-                        "long-text"
-                      ],
+                      "enum": ["long-text"],
                       "description": "Constant value 'long-text' for type discrimination in discriminated unions"
                     },
                     "default": {
@@ -260,24 +208,14 @@
                 },
                 {
                   "type": "object",
-                  "required": [
-                    "id",
-                    "name",
-                    "type"
-                  ],
+                  "required": ["id", "name", "type"],
                   "properties": {
                     "id": {
                       "$ref": "#/$defs/Int",
                       "description": "Unique positive integer identifier for entities. IDs are system-generated, auto-incrementing, and immutable. Must be unique within the parent collection (e.g., field IDs unique within a table, table IDs unique within the application). IDs are read-only and assigned automatically when entities are created. Range: 1 to 9,007,199,254,740,991 (JavaScript MAX_SAFE_INTEGER).",
                       "title": "ID",
                       "minimum": 1,
-                      "examples": [
-                        1,
-                        2,
-                        3,
-                        100,
-                        1000
-                      ],
+                      "examples": [1, 2, 3, 100, 1000],
                       "maximum": 9007199254740991
                     },
                     "name": {
@@ -295,20 +233,12 @@
                       ],
                       "pattern": "^[a-z][a-z0-9_]*$"
                     },
-                    "required": {
-                      "type": "boolean"
-                    },
-                    "unique": {
-                      "type": "boolean"
-                    },
-                    "indexed": {
-                      "type": "boolean"
-                    },
+                    "required": { "type": "boolean" },
+                    "unique": { "type": "boolean" },
+                    "indexed": { "type": "boolean" },
                     "type": {
                       "type": "string",
-                      "enum": [
-                        "phone-number"
-                      ],
+                      "enum": ["phone-number"],
                       "description": "Constant value 'phone-number' for type discrimination in discriminated unions"
                     },
                     "default": {
@@ -339,24 +269,14 @@
                 },
                 {
                   "type": "object",
-                  "required": [
-                    "id",
-                    "name",
-                    "type"
-                  ],
+                  "required": ["id", "name", "type"],
                   "properties": {
                     "id": {
                       "$ref": "#/$defs/Int",
                       "description": "Unique positive integer identifier for entities. IDs are system-generated, auto-incrementing, and immutable. Must be unique within the parent collection (e.g., field IDs unique within a table, table IDs unique within the application). IDs are read-only and assigned automatically when entities are created. Range: 1 to 9,007,199,254,740,991 (JavaScript MAX_SAFE_INTEGER).",
                       "title": "ID",
                       "minimum": 1,
-                      "examples": [
-                        1,
-                        2,
-                        3,
-                        100,
-                        1000
-                      ],
+                      "examples": [1, 2, 3, 100, 1000],
                       "maximum": 9007199254740991
                     },
                     "name": {
@@ -374,20 +294,12 @@
                       ],
                       "pattern": "^[a-z][a-z0-9_]*$"
                     },
-                    "required": {
-                      "type": "boolean"
-                    },
-                    "unique": {
-                      "type": "boolean"
-                    },
-                    "indexed": {
-                      "type": "boolean"
-                    },
+                    "required": { "type": "boolean" },
+                    "unique": { "type": "boolean" },
+                    "indexed": { "type": "boolean" },
                     "type": {
                       "type": "string",
-                      "enum": [
-                        "email"
-                      ],
+                      "enum": ["email"],
                       "description": "Constant value 'email' for type discrimination in discriminated unions"
                     },
                     "default": {
@@ -418,24 +330,14 @@
                 },
                 {
                   "type": "object",
-                  "required": [
-                    "id",
-                    "name",
-                    "type"
-                  ],
+                  "required": ["id", "name", "type"],
                   "properties": {
                     "id": {
                       "$ref": "#/$defs/Int",
                       "description": "Unique positive integer identifier for entities. IDs are system-generated, auto-incrementing, and immutable. Must be unique within the parent collection (e.g., field IDs unique within a table, table IDs unique within the application). IDs are read-only and assigned automatically when entities are created. Range: 1 to 9,007,199,254,740,991 (JavaScript MAX_SAFE_INTEGER).",
                       "title": "ID",
                       "minimum": 1,
-                      "examples": [
-                        1,
-                        2,
-                        3,
-                        100,
-                        1000
-                      ],
+                      "examples": [1, 2, 3, 100, 1000],
                       "maximum": 9007199254740991
                     },
                     "name": {
@@ -453,20 +355,12 @@
                       ],
                       "pattern": "^[a-z][a-z0-9_]*$"
                     },
-                    "required": {
-                      "type": "boolean"
-                    },
-                    "unique": {
-                      "type": "boolean"
-                    },
-                    "indexed": {
-                      "type": "boolean"
-                    },
+                    "required": { "type": "boolean" },
+                    "unique": { "type": "boolean" },
+                    "indexed": { "type": "boolean" },
                     "type": {
                       "type": "string",
-                      "enum": [
-                        "url"
-                      ],
+                      "enum": ["url"],
                       "description": "Constant value 'url' for type discrimination in discriminated unions"
                     },
                     "default": {
@@ -497,24 +391,14 @@
                 },
                 {
                   "type": "object",
-                  "required": [
-                    "id",
-                    "name",
-                    "type"
-                  ],
+                  "required": ["id", "name", "type"],
                   "properties": {
                     "id": {
                       "$ref": "#/$defs/Int",
                       "description": "Unique positive integer identifier for entities. IDs are system-generated, auto-incrementing, and immutable. Must be unique within the parent collection (e.g., field IDs unique within a table, table IDs unique within the application). IDs are read-only and assigned automatically when entities are created. Range: 1 to 9,007,199,254,740,991 (JavaScript MAX_SAFE_INTEGER).",
                       "title": "ID",
                       "minimum": 1,
-                      "examples": [
-                        1,
-                        2,
-                        3,
-                        100,
-                        1000
-                      ],
+                      "examples": [1, 2, 3, 100, 1000],
                       "maximum": 9007199254740991
                     },
                     "name": {
@@ -532,20 +416,12 @@
                       ],
                       "pattern": "^[a-z][a-z0-9_]*$"
                     },
-                    "required": {
-                      "type": "boolean"
-                    },
-                    "unique": {
-                      "type": "boolean"
-                    },
-                    "indexed": {
-                      "type": "boolean"
-                    },
+                    "required": { "type": "boolean" },
+                    "unique": { "type": "boolean" },
+                    "indexed": { "type": "boolean" },
                     "type": {
                       "type": "string",
-                      "enum": [
-                        "integer"
-                      ],
+                      "enum": ["integer"],
                       "description": "Constant value 'integer' for type discrimination in discriminated unions"
                     },
                     "min": {
@@ -587,24 +463,14 @@
                 },
                 {
                   "type": "object",
-                  "required": [
-                    "id",
-                    "name",
-                    "type"
-                  ],
+                  "required": ["id", "name", "type"],
                   "properties": {
                     "id": {
                       "$ref": "#/$defs/Int",
                       "description": "Unique positive integer identifier for entities. IDs are system-generated, auto-incrementing, and immutable. Must be unique within the parent collection (e.g., field IDs unique within a table, table IDs unique within the application). IDs are read-only and assigned automatically when entities are created. Range: 1 to 9,007,199,254,740,991 (JavaScript MAX_SAFE_INTEGER).",
                       "title": "ID",
                       "minimum": 1,
-                      "examples": [
-                        1,
-                        2,
-                        3,
-                        100,
-                        1000
-                      ],
+                      "examples": [1, 2, 3, 100, 1000],
                       "maximum": 9007199254740991
                     },
                     "name": {
@@ -622,20 +488,12 @@
                       ],
                       "pattern": "^[a-z][a-z0-9_]*$"
                     },
-                    "required": {
-                      "type": "boolean"
-                    },
-                    "unique": {
-                      "type": "boolean"
-                    },
-                    "indexed": {
-                      "type": "boolean"
-                    },
+                    "required": { "type": "boolean" },
+                    "unique": { "type": "boolean" },
+                    "indexed": { "type": "boolean" },
                     "type": {
                       "type": "string",
-                      "enum": [
-                        "decimal"
-                      ],
+                      "enum": ["decimal"],
                       "description": "Constant value 'decimal' for type discrimination in discriminated unions"
                     },
                     "precision": {
@@ -686,25 +544,14 @@
                 },
                 {
                   "type": "object",
-                  "required": [
-                    "id",
-                    "name",
-                    "type",
-                    "currency"
-                  ],
+                  "required": ["id", "name", "type", "currency"],
                   "properties": {
                     "id": {
                       "$ref": "#/$defs/Int",
                       "description": "Unique positive integer identifier for entities. IDs are system-generated, auto-incrementing, and immutable. Must be unique within the parent collection (e.g., field IDs unique within a table, table IDs unique within the application). IDs are read-only and assigned automatically when entities are created. Range: 1 to 9,007,199,254,740,991 (JavaScript MAX_SAFE_INTEGER).",
                       "title": "ID",
                       "minimum": 1,
-                      "examples": [
-                        1,
-                        2,
-                        3,
-                        100,
-                        1000
-                      ],
+                      "examples": [1, 2, 3, 100, 1000],
                       "maximum": 9007199254740991
                     },
                     "name": {
@@ -722,20 +569,12 @@
                       ],
                       "pattern": "^[a-z][a-z0-9_]*$"
                     },
-                    "required": {
-                      "type": "boolean"
-                    },
-                    "unique": {
-                      "type": "boolean"
-                    },
-                    "indexed": {
-                      "type": "boolean"
-                    },
+                    "required": { "type": "boolean" },
+                    "unique": { "type": "boolean" },
+                    "indexed": { "type": "boolean" },
                     "type": {
                       "type": "string",
-                      "enum": [
-                        "currency"
-                      ],
+                      "enum": ["currency"],
                       "description": "Constant value 'currency' for type discrimination in discriminated unions"
                     },
                     "currency": {
@@ -744,14 +583,7 @@
                       "title": "length(3)",
                       "minLength": 3,
                       "maxLength": 3,
-                      "examples": [
-                        "USD",
-                        "EUR",
-                        "GBP",
-                        "JPY",
-                        "CAD",
-                        "AUD"
-                      ],
+                      "examples": ["USD", "EUR", "GBP", "JPY", "CAD", "AUD"],
                       "pattern": "^[A-Z]{3}$"
                     },
                     "precision": {
@@ -800,24 +632,14 @@
                 },
                 {
                   "type": "object",
-                  "required": [
-                    "id",
-                    "name",
-                    "type"
-                  ],
+                  "required": ["id", "name", "type"],
                   "properties": {
                     "id": {
                       "$ref": "#/$defs/Int",
                       "description": "Unique positive integer identifier for entities. IDs are system-generated, auto-incrementing, and immutable. Must be unique within the parent collection (e.g., field IDs unique within a table, table IDs unique within the application). IDs are read-only and assigned automatically when entities are created. Range: 1 to 9,007,199,254,740,991 (JavaScript MAX_SAFE_INTEGER).",
                       "title": "ID",
                       "minimum": 1,
-                      "examples": [
-                        1,
-                        2,
-                        3,
-                        100,
-                        1000
-                      ],
+                      "examples": [1, 2, 3, 100, 1000],
                       "maximum": 9007199254740991
                     },
                     "name": {
@@ -835,20 +657,12 @@
                       ],
                       "pattern": "^[a-z][a-z0-9_]*$"
                     },
-                    "required": {
-                      "type": "boolean"
-                    },
-                    "unique": {
-                      "type": "boolean"
-                    },
-                    "indexed": {
-                      "type": "boolean"
-                    },
+                    "required": { "type": "boolean" },
+                    "unique": { "type": "boolean" },
+                    "indexed": { "type": "boolean" },
                     "type": {
                       "type": "string",
-                      "enum": [
-                        "percentage"
-                      ],
+                      "enum": ["percentage"],
                       "description": "Constant value 'percentage' for type discrimination in discriminated unions"
                     },
                     "precision": {
@@ -899,24 +713,14 @@
                 },
                 {
                   "type": "object",
-                  "required": [
-                    "id",
-                    "name",
-                    "type"
-                  ],
+                  "required": ["id", "name", "type"],
                   "properties": {
                     "id": {
                       "$ref": "#/$defs/Int",
                       "description": "Unique positive integer identifier for entities. IDs are system-generated, auto-incrementing, and immutable. Must be unique within the parent collection (e.g., field IDs unique within a table, table IDs unique within the application). IDs are read-only and assigned automatically when entities are created. Range: 1 to 9,007,199,254,740,991 (JavaScript MAX_SAFE_INTEGER).",
                       "title": "ID",
                       "minimum": 1,
-                      "examples": [
-                        1,
-                        2,
-                        3,
-                        100,
-                        1000
-                      ],
+                      "examples": [1, 2, 3, 100, 1000],
                       "maximum": 9007199254740991
                     },
                     "name": {
@@ -934,47 +738,25 @@
                       ],
                       "pattern": "^[a-z][a-z0-9_]*$"
                     },
-                    "required": {
-                      "type": "boolean"
-                    },
-                    "unique": {
-                      "type": "boolean"
-                    },
-                    "indexed": {
-                      "type": "boolean"
-                    },
+                    "required": { "type": "boolean" },
+                    "unique": { "type": "boolean" },
+                    "indexed": { "type": "boolean" },
                     "type": {
                       "type": "string",
-                      "enum": [
-                        "date",
-                        "datetime",
-                        "time"
-                      ]
+                      "enum": ["date", "datetime", "time"]
                     },
                     "format": {
                       "type": "string",
                       "description": "Date format string",
-                      "examples": [
-                        "YYYY-MM-DD",
-                        "MM/DD/YYYY",
-                        "DD-MM-YYYY"
-                      ]
+                      "examples": ["YYYY-MM-DD", "MM/DD/YYYY", "DD-MM-YYYY"]
                     },
-                    "includeTime": {
-                      "type": "boolean"
-                    },
+                    "includeTime": { "type": "boolean" },
                     "timezone": {
                       "type": "string",
                       "description": "Timezone for datetime fields",
-                      "examples": [
-                        "UTC",
-                        "America/New_York",
-                        "Europe/London"
-                      ]
+                      "examples": ["UTC", "America/New_York", "Europe/London"]
                     },
-                    "default": {
-                      "type": "string"
-                    }
+                    "default": { "type": "string" }
                   },
                   "additionalProperties": false,
                   "description": "Stores date and optionally time values. Supports custom formats, timezones, and time inclusion.",
@@ -992,24 +774,14 @@
                 },
                 {
                   "type": "object",
-                  "required": [
-                    "id",
-                    "name",
-                    "type"
-                  ],
+                  "required": ["id", "name", "type"],
                   "properties": {
                     "id": {
                       "$ref": "#/$defs/Int",
                       "description": "Unique positive integer identifier for entities. IDs are system-generated, auto-incrementing, and immutable. Must be unique within the parent collection (e.g., field IDs unique within a table, table IDs unique within the application). IDs are read-only and assigned automatically when entities are created. Range: 1 to 9,007,199,254,740,991 (JavaScript MAX_SAFE_INTEGER).",
                       "title": "ID",
                       "minimum": 1,
-                      "examples": [
-                        1,
-                        2,
-                        3,
-                        100,
-                        1000
-                      ],
+                      "examples": [1, 2, 3, 100, 1000],
                       "maximum": 9007199254740991
                     },
                     "name": {
@@ -1027,24 +799,11 @@
                       ],
                       "pattern": "^[a-z][a-z0-9_]*$"
                     },
-                    "required": {
-                      "type": "boolean"
-                    },
-                    "unique": {
-                      "type": "boolean"
-                    },
-                    "indexed": {
-                      "type": "boolean"
-                    },
-                    "type": {
-                      "type": "string",
-                      "enum": [
-                        "checkbox"
-                      ]
-                    },
-                    "default": {
-                      "type": "boolean"
-                    }
+                    "required": { "type": "boolean" },
+                    "unique": { "type": "boolean" },
+                    "indexed": { "type": "boolean" },
+                    "type": { "type": "string", "enum": ["checkbox"] },
+                    "default": { "type": "boolean" }
                   },
                   "additionalProperties": false,
                   "description": "Boolean field for true/false values. Typically rendered as a checkbox in the UI.",
@@ -1061,25 +820,14 @@
                 },
                 {
                   "type": "object",
-                  "required": [
-                    "id",
-                    "name",
-                    "type",
-                    "options"
-                  ],
+                  "required": ["id", "name", "type", "options"],
                   "properties": {
                     "id": {
                       "$ref": "#/$defs/Int",
                       "description": "Unique positive integer identifier for entities. IDs are system-generated, auto-incrementing, and immutable. Must be unique within the parent collection (e.g., field IDs unique within a table, table IDs unique within the application). IDs are read-only and assigned automatically when entities are created. Range: 1 to 9,007,199,254,740,991 (JavaScript MAX_SAFE_INTEGER).",
                       "title": "ID",
                       "minimum": 1,
-                      "examples": [
-                        1,
-                        2,
-                        3,
-                        100,
-                        1000
-                      ],
+                      "examples": [1, 2, 3, 100, 1000],
                       "maximum": 9007199254740991
                     },
                     "name": {
@@ -1097,30 +845,15 @@
                       ],
                       "pattern": "^[a-z][a-z0-9_]*$"
                     },
-                    "required": {
-                      "type": "boolean"
-                    },
-                    "unique": {
-                      "type": "boolean"
-                    },
-                    "indexed": {
-                      "type": "boolean"
-                    },
-                    "type": {
-                      "type": "string",
-                      "enum": [
-                        "single-select"
-                      ]
-                    },
+                    "required": { "type": "boolean" },
+                    "unique": { "type": "boolean" },
+                    "indexed": { "type": "boolean" },
+                    "type": { "type": "string", "enum": ["single-select"] },
                     "options": {
                       "type": "array",
-                      "items": {
-                        "type": "string"
-                      }
+                      "items": { "type": "string" }
                     },
-                    "default": {
-                      "type": "string"
-                    }
+                    "default": { "type": "string" }
                   },
                   "additionalProperties": false,
                   "description": "Allows selection of one option from predefined list. Used for categories or enumerated values.",
@@ -1130,36 +863,21 @@
                       "id": 1,
                       "name": "category",
                       "type": "single-select",
-                      "options": [
-                        "Electronics",
-                        "Clothing",
-                        "Food"
-                      ],
+                      "options": ["Electronics", "Clothing", "Food"],
                       "default": "Electronics"
                     }
                   ]
                 },
                 {
                   "type": "object",
-                  "required": [
-                    "id",
-                    "name",
-                    "type",
-                    "options"
-                  ],
+                  "required": ["id", "name", "type", "options"],
                   "properties": {
                     "id": {
                       "$ref": "#/$defs/Int",
                       "description": "Unique positive integer identifier for entities. IDs are system-generated, auto-incrementing, and immutable. Must be unique within the parent collection (e.g., field IDs unique within a table, table IDs unique within the application). IDs are read-only and assigned automatically when entities are created. Range: 1 to 9,007,199,254,740,991 (JavaScript MAX_SAFE_INTEGER).",
                       "title": "ID",
                       "minimum": 1,
-                      "examples": [
-                        1,
-                        2,
-                        3,
-                        100,
-                        1000
-                      ],
+                      "examples": [1, 2, 3, 100, 1000],
                       "maximum": 9007199254740991
                     },
                     "name": {
@@ -1177,26 +895,13 @@
                       ],
                       "pattern": "^[a-z][a-z0-9_]*$"
                     },
-                    "required": {
-                      "type": "boolean"
-                    },
-                    "unique": {
-                      "type": "boolean"
-                    },
-                    "indexed": {
-                      "type": "boolean"
-                    },
-                    "type": {
-                      "type": "string",
-                      "enum": [
-                        "multi-select"
-                      ]
-                    },
+                    "required": { "type": "boolean" },
+                    "unique": { "type": "boolean" },
+                    "indexed": { "type": "boolean" },
+                    "type": { "type": "string", "enum": ["multi-select"] },
                     "options": {
                       "type": "array",
-                      "items": {
-                        "type": "string"
-                      }
+                      "items": { "type": "string" }
                     },
                     "maxSelections": {
                       "$ref": "#/$defs/Int",
@@ -1206,9 +911,7 @@
                     },
                     "default": {
                       "type": "array",
-                      "items": {
-                        "type": "string"
-                      }
+                      "items": { "type": "string" }
                     }
                   },
                   "additionalProperties": false,
@@ -1219,11 +922,7 @@
                       "id": 1,
                       "name": "tags",
                       "type": "multi-select",
-                      "options": [
-                        "Urgent",
-                        "Important",
-                        "Review"
-                      ],
+                      "options": ["Urgent", "Important", "Review"],
                       "maxSelections": 3
                     }
                   ]
@@ -1243,13 +942,7 @@
                       "description": "Unique positive integer identifier for entities. IDs are system-generated, auto-incrementing, and immutable. Must be unique within the parent collection (e.g., field IDs unique within a table, table IDs unique within the application). IDs are read-only and assigned automatically when entities are created. Range: 1 to 9,007,199,254,740,991 (JavaScript MAX_SAFE_INTEGER).",
                       "title": "ID",
                       "minimum": 1,
-                      "examples": [
-                        1,
-                        2,
-                        3,
-                        100,
-                        1000
-                      ],
+                      "examples": [1, 2, 3, 100, 1000],
                       "maximum": 9007199254740991
                     },
                     "name": {
@@ -1267,21 +960,10 @@
                       ],
                       "pattern": "^[a-z][a-z0-9_]*$"
                     },
-                    "required": {
-                      "type": "boolean"
-                    },
-                    "unique": {
-                      "type": "boolean"
-                    },
-                    "indexed": {
-                      "type": "boolean"
-                    },
-                    "type": {
-                      "type": "string",
-                      "enum": [
-                        "relationship"
-                      ]
-                    },
+                    "required": { "type": "boolean" },
+                    "unique": { "type": "boolean" },
+                    "indexed": { "type": "boolean" },
+                    "type": { "type": "string", "enum": ["relationship"] },
                     "relatedTable": {
                       "type": "string",
                       "description": "Name of the related table",
@@ -1322,24 +1004,14 @@
                 },
                 {
                   "type": "object",
-                  "required": [
-                    "id",
-                    "name",
-                    "type"
-                  ],
+                  "required": ["id", "name", "type"],
                   "properties": {
                     "id": {
                       "$ref": "#/$defs/Int",
                       "description": "Unique positive integer identifier for entities. IDs are system-generated, auto-incrementing, and immutable. Must be unique within the parent collection (e.g., field IDs unique within a table, table IDs unique within the application). IDs are read-only and assigned automatically when entities are created. Range: 1 to 9,007,199,254,740,991 (JavaScript MAX_SAFE_INTEGER).",
                       "title": "ID",
                       "minimum": 1,
-                      "examples": [
-                        1,
-                        2,
-                        3,
-                        100,
-                        1000
-                      ],
+                      "examples": [1, 2, 3, 100, 1000],
                       "maximum": 9007199254740991
                     },
                     "name": {
@@ -1357,21 +1029,10 @@
                       ],
                       "pattern": "^[a-z][a-z0-9_]*$"
                     },
-                    "required": {
-                      "type": "boolean"
-                    },
-                    "unique": {
-                      "type": "boolean"
-                    },
-                    "indexed": {
-                      "type": "boolean"
-                    },
-                    "type": {
-                      "type": "string",
-                      "enum": [
-                        "single-attachment"
-                      ]
-                    },
+                    "required": { "type": "boolean" },
+                    "unique": { "type": "boolean" },
+                    "indexed": { "type": "boolean" },
+                    "type": { "type": "string", "enum": ["single-attachment"] },
                     "storage": {
                       "type": "object",
                       "required": [],
@@ -1392,9 +1053,7 @@
                         },
                         "allowedTypes": {
                           "type": "array",
-                          "items": {
-                            "type": "string"
-                          }
+                          "items": { "type": "string" }
                         }
                       },
                       "additionalProperties": false
@@ -1408,33 +1067,20 @@
                       "id": 1,
                       "name": "profile_pic",
                       "type": "single-attachment",
-                      "storage": {
-                        "provider": "local",
-                        "maxSize": 5242880
-                      }
+                      "storage": { "provider": "local", "maxSize": 5242880 }
                     }
                   ]
                 },
                 {
                   "type": "object",
-                  "required": [
-                    "id",
-                    "name",
-                    "type"
-                  ],
+                  "required": ["id", "name", "type"],
                   "properties": {
                     "id": {
                       "$ref": "#/$defs/Int",
                       "description": "Unique positive integer identifier for entities. IDs are system-generated, auto-incrementing, and immutable. Must be unique within the parent collection (e.g., field IDs unique within a table, table IDs unique within the application). IDs are read-only and assigned automatically when entities are created. Range: 1 to 9,007,199,254,740,991 (JavaScript MAX_SAFE_INTEGER).",
                       "title": "ID",
                       "minimum": 1,
-                      "examples": [
-                        1,
-                        2,
-                        3,
-                        100,
-                        1000
-                      ],
+                      "examples": [1, 2, 3, 100, 1000],
                       "maximum": 9007199254740991
                     },
                     "name": {
@@ -1452,20 +1098,12 @@
                       ],
                       "pattern": "^[a-z][a-z0-9_]*$"
                     },
-                    "required": {
-                      "type": "boolean"
-                    },
-                    "unique": {
-                      "type": "boolean"
-                    },
-                    "indexed": {
-                      "type": "boolean"
-                    },
+                    "required": { "type": "boolean" },
+                    "unique": { "type": "boolean" },
+                    "indexed": { "type": "boolean" },
                     "type": {
                       "type": "string",
-                      "enum": [
-                        "multiple-attachments"
-                      ]
+                      "enum": ["multiple-attachments"]
                     },
                     "maxFiles": {
                       "$ref": "#/$defs/Int",
@@ -1493,9 +1131,7 @@
                         },
                         "allowedTypes": {
                           "type": "array",
-                          "items": {
-                            "type": "string"
-                          }
+                          "items": { "type": "string" }
                         }
                       },
                       "additionalProperties": false
@@ -1515,25 +1151,14 @@
                 },
                 {
                   "type": "object",
-                  "required": [
-                    "id",
-                    "name",
-                    "type",
-                    "formula"
-                  ],
+                  "required": ["id", "name", "type", "formula"],
                   "properties": {
                     "id": {
                       "$ref": "#/$defs/Int",
                       "description": "Unique positive integer identifier for entities. IDs are system-generated, auto-incrementing, and immutable. Must be unique within the parent collection (e.g., field IDs unique within a table, table IDs unique within the application). IDs are read-only and assigned automatically when entities are created. Range: 1 to 9,007,199,254,740,991 (JavaScript MAX_SAFE_INTEGER).",
                       "title": "ID",
                       "minimum": 1,
-                      "examples": [
-                        1,
-                        2,
-                        3,
-                        100,
-                        1000
-                      ],
+                      "examples": [1, 2, 3, 100, 1000],
                       "maximum": 9007199254740991
                     },
                     "name": {
@@ -1551,21 +1176,10 @@
                       ],
                       "pattern": "^[a-z][a-z0-9_]*$"
                     },
-                    "required": {
-                      "type": "boolean"
-                    },
-                    "unique": {
-                      "type": "boolean"
-                    },
-                    "indexed": {
-                      "type": "boolean"
-                    },
-                    "type": {
-                      "type": "string",
-                      "enum": [
-                        "formula"
-                      ]
-                    },
+                    "required": { "type": "boolean" },
+                    "unique": { "type": "boolean" },
+                    "indexed": { "type": "boolean" },
+                    "type": { "type": "string", "enum": ["formula"] },
                     "formula": {
                       "type": "string",
                       "description": "Formula expression to compute the value. Supports field references, operators, and functions.",
@@ -1585,12 +1199,7 @@
                     "format": {
                       "type": "string",
                       "description": "Display format for the result (e.g., currency, percentage)",
-                      "examples": [
-                        "currency",
-                        "percentage",
-                        "decimal",
-                        "date"
-                      ]
+                      "examples": ["currency", "percentage", "decimal", "date"]
                     }
                   },
                   "additionalProperties": false,
@@ -1622,13 +1231,7 @@
                       "description": "Unique positive integer identifier for entities. IDs are system-generated, auto-incrementing, and immutable. Must be unique within the parent collection (e.g., field IDs unique within a table, table IDs unique within the application). IDs are read-only and assigned automatically when entities are created. Range: 1 to 9,007,199,254,740,991 (JavaScript MAX_SAFE_INTEGER).",
                       "title": "ID",
                       "minimum": 1,
-                      "examples": [
-                        1,
-                        2,
-                        3,
-                        100,
-                        1000
-                      ],
+                      "examples": [1, 2, 3, 100, 1000],
                       "maximum": 9007199254740991
                     },
                     "name": {
@@ -1646,21 +1249,10 @@
                       ],
                       "pattern": "^[a-z][a-z0-9_]*$"
                     },
-                    "required": {
-                      "type": "boolean"
-                    },
-                    "unique": {
-                      "type": "boolean"
-                    },
-                    "indexed": {
-                      "type": "boolean"
-                    },
-                    "type": {
-                      "type": "string",
-                      "enum": [
-                        "rollup"
-                      ]
-                    },
+                    "required": { "type": "boolean" },
+                    "unique": { "type": "boolean" },
+                    "indexed": { "type": "boolean" },
+                    "type": { "type": "string", "enum": ["rollup"] },
                     "relationshipField": {
                       "type": "string",
                       "description": "Name of the relationship field to aggregate from",
@@ -1680,11 +1272,7 @@
                     "format": {
                       "type": "string",
                       "description": "Display format for the result",
-                      "examples": [
-                        "currency",
-                        "number",
-                        "percentage"
-                      ]
+                      "examples": ["currency", "number", "percentage"]
                     }
                   },
                   "additionalProperties": false,
@@ -1716,13 +1304,7 @@
                       "description": "Unique positive integer identifier for entities. IDs are system-generated, auto-incrementing, and immutable. Must be unique within the parent collection (e.g., field IDs unique within a table, table IDs unique within the application). IDs are read-only and assigned automatically when entities are created. Range: 1 to 9,007,199,254,740,991 (JavaScript MAX_SAFE_INTEGER).",
                       "title": "ID",
                       "minimum": 1,
-                      "examples": [
-                        1,
-                        2,
-                        3,
-                        100,
-                        1000
-                      ],
+                      "examples": [1, 2, 3, 100, 1000],
                       "maximum": 9007199254740991
                     },
                     "name": {
@@ -1740,21 +1322,10 @@
                       ],
                       "pattern": "^[a-z][a-z0-9_]*$"
                     },
-                    "required": {
-                      "type": "boolean"
-                    },
-                    "unique": {
-                      "type": "boolean"
-                    },
-                    "indexed": {
-                      "type": "boolean"
-                    },
-                    "type": {
-                      "type": "string",
-                      "enum": [
-                        "lookup"
-                      ]
-                    },
+                    "required": { "type": "boolean" },
+                    "unique": { "type": "boolean" },
+                    "indexed": { "type": "boolean" },
+                    "type": { "type": "string", "enum": ["lookup"] },
                     "relationshipField": {
                       "type": "string",
                       "description": "Name of the relationship field to lookup from",
@@ -1783,24 +1354,14 @@
                 },
                 {
                   "type": "object",
-                  "required": [
-                    "id",
-                    "name",
-                    "type"
-                  ],
+                  "required": ["id", "name", "type"],
                   "properties": {
                     "id": {
                       "$ref": "#/$defs/Int",
                       "description": "Unique positive integer identifier for entities. IDs are system-generated, auto-incrementing, and immutable. Must be unique within the parent collection (e.g., field IDs unique within a table, table IDs unique within the application). IDs are read-only and assigned automatically when entities are created. Range: 1 to 9,007,199,254,740,991 (JavaScript MAX_SAFE_INTEGER).",
                       "title": "ID",
                       "minimum": 1,
-                      "examples": [
-                        1,
-                        2,
-                        3,
-                        100,
-                        1000
-                      ],
+                      "examples": [1, 2, 3, 100, 1000],
                       "maximum": 9007199254740991
                     },
                     "name": {
@@ -1818,24 +1379,11 @@
                       ],
                       "pattern": "^[a-z][a-z0-9_]*$"
                     },
-                    "required": {
-                      "type": "boolean"
-                    },
-                    "unique": {
-                      "type": "boolean"
-                    },
-                    "indexed": {
-                      "type": "boolean"
-                    },
-                    "type": {
-                      "type": "string",
-                      "enum": [
-                        "user"
-                      ]
-                    },
-                    "allowMultiple": {
-                      "type": "boolean"
-                    }
+                    "required": { "type": "boolean" },
+                    "unique": { "type": "boolean" },
+                    "indexed": { "type": "boolean" },
+                    "type": { "type": "string", "enum": ["user"] },
+                    "allowMultiple": { "type": "boolean" }
                   },
                   "additionalProperties": false,
                   "description": "Reference field linking to users from authentication system. Supports single or multiple user selection.",
@@ -1852,24 +1400,14 @@
                 },
                 {
                   "type": "object",
-                  "required": [
-                    "id",
-                    "name",
-                    "type"
-                  ],
+                  "required": ["id", "name", "type"],
                   "properties": {
                     "id": {
                       "$ref": "#/$defs/Int",
                       "description": "Unique positive integer identifier for entities. IDs are system-generated, auto-incrementing, and immutable. Must be unique within the parent collection (e.g., field IDs unique within a table, table IDs unique within the application). IDs are read-only and assigned automatically when entities are created. Range: 1 to 9,007,199,254,740,991 (JavaScript MAX_SAFE_INTEGER).",
                       "title": "ID",
                       "minimum": 1,
-                      "examples": [
-                        1,
-                        2,
-                        3,
-                        100,
-                        1000
-                      ],
+                      "examples": [1, 2, 3, 100, 1000],
                       "maximum": 9007199254740991
                     },
                     "name": {
@@ -1887,21 +1425,10 @@
                       ],
                       "pattern": "^[a-z][a-z0-9_]*$"
                     },
-                    "required": {
-                      "type": "boolean"
-                    },
-                    "unique": {
-                      "type": "boolean"
-                    },
-                    "indexed": {
-                      "type": "boolean"
-                    },
-                    "type": {
-                      "type": "string",
-                      "enum": [
-                        "created-at"
-                      ]
-                    }
+                    "required": { "type": "boolean" },
+                    "unique": { "type": "boolean" },
+                    "indexed": { "type": "boolean" },
+                    "type": { "type": "string", "enum": ["created-at"] }
                   },
                   "additionalProperties": false,
                   "description": "Automatically captures the timestamp when a record is created. System-managed field that cannot be manually edited.",
@@ -1917,24 +1444,14 @@
                 },
                 {
                   "type": "object",
-                  "required": [
-                    "id",
-                    "name",
-                    "type"
-                  ],
+                  "required": ["id", "name", "type"],
                   "properties": {
                     "id": {
                       "$ref": "#/$defs/Int",
                       "description": "Unique positive integer identifier for entities. IDs are system-generated, auto-incrementing, and immutable. Must be unique within the parent collection (e.g., field IDs unique within a table, table IDs unique within the application). IDs are read-only and assigned automatically when entities are created. Range: 1 to 9,007,199,254,740,991 (JavaScript MAX_SAFE_INTEGER).",
                       "title": "ID",
                       "minimum": 1,
-                      "examples": [
-                        1,
-                        2,
-                        3,
-                        100,
-                        1000
-                      ],
+                      "examples": [1, 2, 3, 100, 1000],
                       "maximum": 9007199254740991
                     },
                     "name": {
@@ -1952,21 +1469,10 @@
                       ],
                       "pattern": "^[a-z][a-z0-9_]*$"
                     },
-                    "required": {
-                      "type": "boolean"
-                    },
-                    "unique": {
-                      "type": "boolean"
-                    },
-                    "indexed": {
-                      "type": "boolean"
-                    },
-                    "type": {
-                      "type": "string",
-                      "enum": [
-                        "created-by"
-                      ]
-                    }
+                    "required": { "type": "boolean" },
+                    "unique": { "type": "boolean" },
+                    "indexed": { "type": "boolean" },
+                    "type": { "type": "string", "enum": ["created-by"] }
                   },
                   "additionalProperties": false,
                   "description": "Automatically captures the user who created a record. System-managed field that stores user ID reference.",
@@ -1982,24 +1488,14 @@
                 },
                 {
                   "type": "object",
-                  "required": [
-                    "id",
-                    "name",
-                    "type"
-                  ],
+                  "required": ["id", "name", "type"],
                   "properties": {
                     "id": {
                       "$ref": "#/$defs/Int",
                       "description": "Unique positive integer identifier for entities. IDs are system-generated, auto-incrementing, and immutable. Must be unique within the parent collection (e.g., field IDs unique within a table, table IDs unique within the application). IDs are read-only and assigned automatically when entities are created. Range: 1 to 9,007,199,254,740,991 (JavaScript MAX_SAFE_INTEGER).",
                       "title": "ID",
                       "minimum": 1,
-                      "examples": [
-                        1,
-                        2,
-                        3,
-                        100,
-                        1000
-                      ],
+                      "examples": [1, 2, 3, 100, 1000],
                       "maximum": 9007199254740991
                     },
                     "name": {
@@ -2017,21 +1513,10 @@
                       ],
                       "pattern": "^[a-z][a-z0-9_]*$"
                     },
-                    "required": {
-                      "type": "boolean"
-                    },
-                    "unique": {
-                      "type": "boolean"
-                    },
-                    "indexed": {
-                      "type": "boolean"
-                    },
-                    "type": {
-                      "type": "string",
-                      "enum": [
-                        "updated-at"
-                      ]
-                    }
+                    "required": { "type": "boolean" },
+                    "unique": { "type": "boolean" },
+                    "indexed": { "type": "boolean" },
+                    "type": { "type": "string", "enum": ["updated-at"] }
                   },
                   "additionalProperties": false,
                   "description": "Automatically updates the timestamp whenever a record is modified. System-managed field that updates on every change.",
@@ -2047,24 +1532,14 @@
                 },
                 {
                   "type": "object",
-                  "required": [
-                    "id",
-                    "name",
-                    "type"
-                  ],
+                  "required": ["id", "name", "type"],
                   "properties": {
                     "id": {
                       "$ref": "#/$defs/Int",
                       "description": "Unique positive integer identifier for entities. IDs are system-generated, auto-incrementing, and immutable. Must be unique within the parent collection (e.g., field IDs unique within a table, table IDs unique within the application). IDs are read-only and assigned automatically when entities are created. Range: 1 to 9,007,199,254,740,991 (JavaScript MAX_SAFE_INTEGER).",
                       "title": "ID",
                       "minimum": 1,
-                      "examples": [
-                        1,
-                        2,
-                        3,
-                        100,
-                        1000
-                      ],
+                      "examples": [1, 2, 3, 100, 1000],
                       "maximum": 9007199254740991
                     },
                     "name": {
@@ -2082,21 +1557,10 @@
                       ],
                       "pattern": "^[a-z][a-z0-9_]*$"
                     },
-                    "required": {
-                      "type": "boolean"
-                    },
-                    "unique": {
-                      "type": "boolean"
-                    },
-                    "indexed": {
-                      "type": "boolean"
-                    },
-                    "type": {
-                      "type": "string",
-                      "enum": [
-                        "updated-by"
-                      ]
-                    }
+                    "required": { "type": "boolean" },
+                    "unique": { "type": "boolean" },
+                    "indexed": { "type": "boolean" },
+                    "type": { "type": "string", "enum": ["updated-by"] }
                   },
                   "additionalProperties": false,
                   "description": "Automatically captures the user who last modified a record. System-managed field that stores user ID reference.",
@@ -2112,24 +1576,14 @@
                 },
                 {
                   "type": "object",
-                  "required": [
-                    "id",
-                    "name",
-                    "type"
-                  ],
+                  "required": ["id", "name", "type"],
                   "properties": {
                     "id": {
                       "$ref": "#/$defs/Int",
                       "description": "Unique positive integer identifier for entities. IDs are system-generated, auto-incrementing, and immutable. Must be unique within the parent collection (e.g., field IDs unique within a table, table IDs unique within the application). IDs are read-only and assigned automatically when entities are created. Range: 1 to 9,007,199,254,740,991 (JavaScript MAX_SAFE_INTEGER).",
                       "title": "ID",
                       "minimum": 1,
-                      "examples": [
-                        1,
-                        2,
-                        3,
-                        100,
-                        1000
-                      ],
+                      "examples": [1, 2, 3, 100, 1000],
                       "maximum": 9007199254740991
                     },
                     "name": {
@@ -2147,21 +1601,10 @@
                       ],
                       "pattern": "^[a-z][a-z0-9_]*$"
                     },
-                    "required": {
-                      "type": "boolean"
-                    },
-                    "unique": {
-                      "type": "boolean"
-                    },
-                    "indexed": {
-                      "type": "boolean"
-                    },
-                    "type": {
-                      "type": "string",
-                      "enum": [
-                        "rating"
-                      ]
-                    },
+                    "required": { "type": "boolean" },
+                    "unique": { "type": "boolean" },
+                    "indexed": { "type": "boolean" },
+                    "type": { "type": "string", "enum": ["rating"] },
                     "max": {
                       "$ref": "#/$defs/Int",
                       "description": "Maximum rating value",
@@ -2189,24 +1632,14 @@
                 },
                 {
                   "type": "object",
-                  "required": [
-                    "id",
-                    "name",
-                    "type"
-                  ],
+                  "required": ["id", "name", "type"],
                   "properties": {
                     "id": {
                       "$ref": "#/$defs/Int",
                       "description": "Unique positive integer identifier for entities. IDs are system-generated, auto-incrementing, and immutable. Must be unique within the parent collection (e.g., field IDs unique within a table, table IDs unique within the application). IDs are read-only and assigned automatically when entities are created. Range: 1 to 9,007,199,254,740,991 (JavaScript MAX_SAFE_INTEGER).",
                       "title": "ID",
                       "minimum": 1,
-                      "examples": [
-                        1,
-                        2,
-                        3,
-                        100,
-                        1000
-                      ],
+                      "examples": [1, 2, 3, 100, 1000],
                       "maximum": 9007199254740991
                     },
                     "name": {
@@ -2224,21 +1657,10 @@
                       ],
                       "pattern": "^[a-z][a-z0-9_]*$"
                     },
-                    "required": {
-                      "type": "boolean"
-                    },
-                    "unique": {
-                      "type": "boolean"
-                    },
-                    "indexed": {
-                      "type": "boolean"
-                    },
-                    "type": {
-                      "type": "string",
-                      "enum": [
-                        "duration"
-                      ]
-                    },
+                    "required": { "type": "boolean" },
+                    "unique": { "type": "boolean" },
+                    "indexed": { "type": "boolean" },
+                    "type": { "type": "string", "enum": ["duration"] },
                     "format": {
                       "type": "string",
                       "description": "Display format for the duration"
@@ -2259,24 +1681,14 @@
                 },
                 {
                   "type": "object",
-                  "required": [
-                    "id",
-                    "name",
-                    "type"
-                  ],
+                  "required": ["id", "name", "type"],
                   "properties": {
                     "id": {
                       "$ref": "#/$defs/Int",
                       "description": "Unique positive integer identifier for entities. IDs are system-generated, auto-incrementing, and immutable. Must be unique within the parent collection (e.g., field IDs unique within a table, table IDs unique within the application). IDs are read-only and assigned automatically when entities are created. Range: 1 to 9,007,199,254,740,991 (JavaScript MAX_SAFE_INTEGER).",
                       "title": "ID",
                       "minimum": 1,
-                      "examples": [
-                        1,
-                        2,
-                        3,
-                        100,
-                        1000
-                      ],
+                      "examples": [1, 2, 3, 100, 1000],
                       "maximum": 9007199254740991
                     },
                     "name": {
@@ -2294,21 +1706,10 @@
                       ],
                       "pattern": "^[a-z][a-z0-9_]*$"
                     },
-                    "required": {
-                      "type": "boolean"
-                    },
-                    "unique": {
-                      "type": "boolean"
-                    },
-                    "indexed": {
-                      "type": "boolean"
-                    },
-                    "type": {
-                      "type": "string",
-                      "enum": [
-                        "rich-text"
-                      ]
-                    },
+                    "required": { "type": "boolean" },
+                    "unique": { "type": "boolean" },
+                    "indexed": { "type": "boolean" },
+                    "type": { "type": "string", "enum": ["rich-text"] },
                     "maxLength": {
                       "$ref": "#/$defs/Int",
                       "description": "Maximum length in characters",
@@ -2331,25 +1732,14 @@
                 },
                 {
                   "type": "object",
-                  "required": [
-                    "id",
-                    "name",
-                    "type",
-                    "options"
-                  ],
+                  "required": ["id", "name", "type", "options"],
                   "properties": {
                     "id": {
                       "$ref": "#/$defs/Int",
                       "description": "Unique positive integer identifier for entities. IDs are system-generated, auto-incrementing, and immutable. Must be unique within the parent collection (e.g., field IDs unique within a table, table IDs unique within the application). IDs are read-only and assigned automatically when entities are created. Range: 1 to 9,007,199,254,740,991 (JavaScript MAX_SAFE_INTEGER).",
                       "title": "ID",
                       "minimum": 1,
-                      "examples": [
-                        1,
-                        2,
-                        3,
-                        100,
-                        1000
-                      ],
+                      "examples": [1, 2, 3, 100, 1000],
                       "maximum": 9007199254740991
                     },
                     "name": {
@@ -2367,28 +1757,15 @@
                       ],
                       "pattern": "^[a-z][a-z0-9_]*$"
                     },
-                    "required": {
-                      "type": "boolean"
-                    },
-                    "unique": {
-                      "type": "boolean"
-                    },
-                    "indexed": {
-                      "type": "boolean"
-                    },
-                    "type": {
-                      "type": "string",
-                      "enum": [
-                        "status"
-                      ]
-                    },
+                    "required": { "type": "boolean" },
+                    "unique": { "type": "boolean" },
+                    "indexed": { "type": "boolean" },
+                    "type": { "type": "string", "enum": ["status"] },
                     "options": {
                       "type": "array",
                       "items": {
                         "type": "object",
-                        "required": [
-                          "value"
-                        ],
+                        "required": ["value"],
                         "properties": {
                           "value": {
                             "type": "string",
@@ -2405,9 +1782,7 @@
                         "additionalProperties": false
                       }
                     },
-                    "default": {
-                      "type": "string"
-                    }
+                    "default": { "type": "string" }
                   },
                   "additionalProperties": false,
                   "description": "Status field with colored options for workflow states.",
@@ -2418,40 +1793,22 @@
                       "name": "status",
                       "type": "status",
                       "options": [
-                        {
-                          "value": "todo",
-                          "color": "#94A3B8"
-                        },
-                        {
-                          "value": "in_progress",
-                          "color": "#3B82F6"
-                        }
+                        { "value": "todo", "color": "#94A3B8" },
+                        { "value": "in_progress", "color": "#3B82F6" }
                       ]
                     }
                   ]
                 },
                 {
                   "type": "object",
-                  "required": [
-                    "id",
-                    "name",
-                    "type",
-                    "label",
-                    "action"
-                  ],
+                  "required": ["id", "name", "type", "label", "action"],
                   "properties": {
                     "id": {
                       "$ref": "#/$defs/Int",
                       "description": "Unique positive integer identifier for entities. IDs are system-generated, auto-incrementing, and immutable. Must be unique within the parent collection (e.g., field IDs unique within a table, table IDs unique within the application). IDs are read-only and assigned automatically when entities are created. Range: 1 to 9,007,199,254,740,991 (JavaScript MAX_SAFE_INTEGER).",
                       "title": "ID",
                       "minimum": 1,
-                      "examples": [
-                        1,
-                        2,
-                        3,
-                        100,
-                        1000
-                      ],
+                      "examples": [1, 2, 3, 100, 1000],
                       "maximum": 9007199254740991
                     },
                     "name": {
@@ -2469,21 +1826,10 @@
                       ],
                       "pattern": "^[a-z][a-z0-9_]*$"
                     },
-                    "required": {
-                      "type": "boolean"
-                    },
-                    "unique": {
-                      "type": "boolean"
-                    },
-                    "indexed": {
-                      "type": "boolean"
-                    },
-                    "type": {
-                      "type": "string",
-                      "enum": [
-                        "button"
-                      ]
-                    },
+                    "required": { "type": "boolean" },
+                    "unique": { "type": "boolean" },
+                    "indexed": { "type": "boolean" },
+                    "type": { "type": "string", "enum": ["button"] },
                     "label": {
                       "type": "string",
                       "description": "Button text label",
@@ -2519,24 +1865,14 @@
                 },
                 {
                   "type": "object",
-                  "required": [
-                    "id",
-                    "name",
-                    "type"
-                  ],
+                  "required": ["id", "name", "type"],
                   "properties": {
                     "id": {
                       "$ref": "#/$defs/Int",
                       "description": "Unique positive integer identifier for entities. IDs are system-generated, auto-incrementing, and immutable. Must be unique within the parent collection (e.g., field IDs unique within a table, table IDs unique within the application). IDs are read-only and assigned automatically when entities are created. Range: 1 to 9,007,199,254,740,991 (JavaScript MAX_SAFE_INTEGER).",
                       "title": "ID",
                       "minimum": 1,
-                      "examples": [
-                        1,
-                        2,
-                        3,
-                        100,
-                        1000
-                      ],
+                      "examples": [1, 2, 3, 100, 1000],
                       "maximum": 9007199254740991
                     },
                     "name": {
@@ -2554,29 +1890,14 @@
                       ],
                       "pattern": "^[a-z][a-z0-9_]*$"
                     },
-                    "required": {
-                      "type": "boolean"
-                    },
-                    "unique": {
-                      "type": "boolean"
-                    },
-                    "indexed": {
-                      "type": "boolean"
-                    },
-                    "type": {
-                      "type": "string",
-                      "enum": [
-                        "autonumber"
-                      ]
-                    },
+                    "required": { "type": "boolean" },
+                    "unique": { "type": "boolean" },
+                    "indexed": { "type": "boolean" },
+                    "type": { "type": "string", "enum": ["autonumber"] },
                     "prefix": {
                       "type": "string",
                       "description": "Optional prefix for the autonumber",
-                      "examples": [
-                        "INV-",
-                        "ORD-",
-                        ""
-                      ]
+                      "examples": ["INV-", "ORD-", ""]
                     },
                     "startFrom": {
                       "$ref": "#/$defs/Int",
@@ -2608,24 +1929,14 @@
                 },
                 {
                   "type": "object",
-                  "required": [
-                    "id",
-                    "name",
-                    "type"
-                  ],
+                  "required": ["id", "name", "type"],
                   "properties": {
                     "id": {
                       "$ref": "#/$defs/Int",
                       "description": "Unique positive integer identifier for entities. IDs are system-generated, auto-incrementing, and immutable. Must be unique within the parent collection (e.g., field IDs unique within a table, table IDs unique within the application). IDs are read-only and assigned automatically when entities are created. Range: 1 to 9,007,199,254,740,991 (JavaScript MAX_SAFE_INTEGER).",
                       "title": "ID",
                       "minimum": 1,
-                      "examples": [
-                        1,
-                        2,
-                        3,
-                        100,
-                        1000
-                      ],
+                      "examples": [1, 2, 3, 100, 1000],
                       "maximum": 9007199254740991
                     },
                     "name": {
@@ -2643,21 +1954,10 @@
                       ],
                       "pattern": "^[a-z][a-z0-9_]*$"
                     },
-                    "required": {
-                      "type": "boolean"
-                    },
-                    "unique": {
-                      "type": "boolean"
-                    },
-                    "indexed": {
-                      "type": "boolean"
-                    },
-                    "type": {
-                      "type": "string",
-                      "enum": [
-                        "barcode"
-                      ]
-                    },
+                    "required": { "type": "boolean" },
+                    "unique": { "type": "boolean" },
+                    "indexed": { "type": "boolean" },
+                    "type": { "type": "string", "enum": ["barcode"] },
                     "format": {
                       "type": "string",
                       "description": "Barcode format"
@@ -2678,24 +1978,14 @@
                 },
                 {
                   "type": "object",
-                  "required": [
-                    "id",
-                    "name",
-                    "type"
-                  ],
+                  "required": ["id", "name", "type"],
                   "properties": {
                     "id": {
                       "$ref": "#/$defs/Int",
                       "description": "Unique positive integer identifier for entities. IDs are system-generated, auto-incrementing, and immutable. Must be unique within the parent collection (e.g., field IDs unique within a table, table IDs unique within the application). IDs are read-only and assigned automatically when entities are created. Range: 1 to 9,007,199,254,740,991 (JavaScript MAX_SAFE_INTEGER).",
                       "title": "ID",
                       "minimum": 1,
-                      "examples": [
-                        1,
-                        2,
-                        3,
-                        100,
-                        1000
-                      ],
+                      "examples": [1, 2, 3, 100, 1000],
                       "maximum": 9007199254740991
                     },
                     "name": {
@@ -2713,21 +2003,10 @@
                       ],
                       "pattern": "^[a-z][a-z0-9_]*$"
                     },
-                    "required": {
-                      "type": "boolean"
-                    },
-                    "unique": {
-                      "type": "boolean"
-                    },
-                    "indexed": {
-                      "type": "boolean"
-                    },
-                    "type": {
-                      "type": "string",
-                      "enum": [
-                        "color"
-                      ]
-                    },
+                    "required": { "type": "boolean" },
+                    "unique": { "type": "boolean" },
+                    "indexed": { "type": "boolean" },
+                    "type": { "type": "string", "enum": ["color"] },
                     "default": {
                       "type": "string",
                       "description": "a string matching the pattern ^#[0-9a-fA-F]{6}$",
@@ -2749,24 +2028,14 @@
                 },
                 {
                   "type": "object",
-                  "required": [
-                    "id",
-                    "name",
-                    "type"
-                  ],
+                  "required": ["id", "name", "type"],
                   "properties": {
                     "id": {
                       "$ref": "#/$defs/Int",
                       "description": "Unique positive integer identifier for entities. IDs are system-generated, auto-incrementing, and immutable. Must be unique within the parent collection (e.g., field IDs unique within a table, table IDs unique within the application). IDs are read-only and assigned automatically when entities are created. Range: 1 to 9,007,199,254,740,991 (JavaScript MAX_SAFE_INTEGER).",
                       "title": "ID",
                       "minimum": 1,
-                      "examples": [
-                        1,
-                        2,
-                        3,
-                        100,
-                        1000
-                      ],
+                      "examples": [1, 2, 3, 100, 1000],
                       "maximum": 9007199254740991
                     },
                     "name": {
@@ -2784,21 +2053,10 @@
                       ],
                       "pattern": "^[a-z][a-z0-9_]*$"
                     },
-                    "required": {
-                      "type": "boolean"
-                    },
-                    "unique": {
-                      "type": "boolean"
-                    },
-                    "indexed": {
-                      "type": "boolean"
-                    },
-                    "type": {
-                      "type": "string",
-                      "enum": [
-                        "progress"
-                      ]
-                    },
+                    "required": { "type": "boolean" },
+                    "unique": { "type": "boolean" },
+                    "indexed": { "type": "boolean" },
+                    "type": { "type": "string", "enum": ["progress"] },
                     "color": {
                       "type": "string",
                       "description": "Color of the progress bar",
@@ -2820,24 +2078,14 @@
                 },
                 {
                   "type": "object",
-                  "required": [
-                    "id",
-                    "name",
-                    "type"
-                  ],
+                  "required": ["id", "name", "type"],
                   "properties": {
                     "id": {
                       "$ref": "#/$defs/Int",
                       "description": "Unique positive integer identifier for entities. IDs are system-generated, auto-incrementing, and immutable. Must be unique within the parent collection (e.g., field IDs unique within a table, table IDs unique within the application). IDs are read-only and assigned automatically when entities are created. Range: 1 to 9,007,199,254,740,991 (JavaScript MAX_SAFE_INTEGER).",
                       "title": "ID",
                       "minimum": 1,
-                      "examples": [
-                        1,
-                        2,
-                        3,
-                        100,
-                        1000
-                      ],
+                      "examples": [1, 2, 3, 100, 1000],
                       "maximum": 9007199254740991
                     },
                     "name": {
@@ -2855,21 +2103,10 @@
                       ],
                       "pattern": "^[a-z][a-z0-9_]*$"
                     },
-                    "required": {
-                      "type": "boolean"
-                    },
-                    "unique": {
-                      "type": "boolean"
-                    },
-                    "indexed": {
-                      "type": "boolean"
-                    },
-                    "type": {
-                      "type": "string",
-                      "enum": [
-                        "geolocation"
-                      ]
-                    }
+                    "required": { "type": "boolean" },
+                    "unique": { "type": "boolean" },
+                    "indexed": { "type": "boolean" },
+                    "type": { "type": "string", "enum": ["geolocation"] }
                   },
                   "additionalProperties": false,
                   "description": "Stores geographic coordinates (latitude and longitude). Used for location-based features.",
@@ -2885,24 +2122,14 @@
                 },
                 {
                   "type": "object",
-                  "required": [
-                    "id",
-                    "name",
-                    "type"
-                  ],
+                  "required": ["id", "name", "type"],
                   "properties": {
                     "id": {
                       "$ref": "#/$defs/Int",
                       "description": "Unique positive integer identifier for entities. IDs are system-generated, auto-incrementing, and immutable. Must be unique within the parent collection (e.g., field IDs unique within a table, table IDs unique within the application). IDs are read-only and assigned automatically when entities are created. Range: 1 to 9,007,199,254,740,991 (JavaScript MAX_SAFE_INTEGER).",
                       "title": "ID",
                       "minimum": 1,
-                      "examples": [
-                        1,
-                        2,
-                        3,
-                        100,
-                        1000
-                      ],
+                      "examples": [1, 2, 3, 100, 1000],
                       "maximum": 9007199254740991
                     },
                     "name": {
@@ -2920,31 +2147,13 @@
                       ],
                       "pattern": "^[a-z][a-z0-9_]*$"
                     },
-                    "required": {
-                      "type": "boolean"
-                    },
-                    "unique": {
-                      "type": "boolean"
-                    },
-                    "indexed": {
-                      "type": "boolean"
-                    },
-                    "type": {
-                      "type": "string",
-                      "enum": [
-                        "json"
-                      ]
-                    },
+                    "required": { "type": "boolean" },
+                    "unique": { "type": "boolean" },
+                    "indexed": { "type": "boolean" },
+                    "type": { "type": "string", "enum": ["json"] },
                     "schema": {
                       "$id": "/schemas/%7B%7D",
-                      "anyOf": [
-                        {
-                          "type": "object"
-                        },
-                        {
-                          "type": "array"
-                        }
-                      ]
+                      "anyOf": [{ "type": "object" }, { "type": "array" }]
                     }
                   },
                   "additionalProperties": false,
@@ -2961,24 +2170,14 @@
                 },
                 {
                   "type": "object",
-                  "required": [
-                    "id",
-                    "name",
-                    "type"
-                  ],
+                  "required": ["id", "name", "type"],
                   "properties": {
                     "id": {
                       "$ref": "#/$defs/Int",
                       "description": "Unique positive integer identifier for entities. IDs are system-generated, auto-incrementing, and immutable. Must be unique within the parent collection (e.g., field IDs unique within a table, table IDs unique within the application). IDs are read-only and assigned automatically when entities are created. Range: 1 to 9,007,199,254,740,991 (JavaScript MAX_SAFE_INTEGER).",
                       "title": "ID",
                       "minimum": 1,
-                      "examples": [
-                        1,
-                        2,
-                        3,
-                        100,
-                        1000
-                      ],
+                      "examples": [1, 2, 3, 100, 1000],
                       "maximum": 9007199254740991
                     },
                     "name": {
@@ -2996,21 +2195,10 @@
                       ],
                       "pattern": "^[a-z][a-z0-9_]*$"
                     },
-                    "required": {
-                      "type": "boolean"
-                    },
-                    "unique": {
-                      "type": "boolean"
-                    },
-                    "indexed": {
-                      "type": "boolean"
-                    },
-                    "type": {
-                      "type": "string",
-                      "enum": [
-                        "array"
-                      ]
-                    },
+                    "required": { "type": "boolean" },
+                    "unique": { "type": "boolean" },
+                    "indexed": { "type": "boolean" },
+                    "type": { "type": "string", "enum": ["array"] },
                     "itemType": {
                       "type": "string",
                       "description": "Type of items in the array"
@@ -3041,12 +2229,7 @@
             "title": "Table Fields",
             "examples": [
               [
-                {
-                  "id": 1,
-                  "name": "email",
-                  "required": true,
-                  "type": "email"
-                },
+                { "id": 1, "name": "email", "required": true, "type": "email" },
                 {
                   "id": 2,
                   "name": "age",
@@ -3060,9 +2243,7 @@
           },
           "primaryKey": {
             "type": "object",
-            "required": [
-              "type"
-            ],
+            "required": ["type"],
             "properties": {
               "type": {
                 "type": "string",
@@ -3073,11 +2254,7 @@
               "field": {
                 "type": "string",
                 "description": "Field name for single-column primary key. Only used with 'auto-increment' or 'uuid' type.",
-                "examples": [
-                  "id",
-                  "user_id",
-                  "product_id"
-                ],
+                "examples": ["id", "user_id", "product_id"],
                 "pattern": "^[a-z][a-z0-9_]*$"
               },
               "fields": {
@@ -3094,31 +2271,16 @@
             "description": "Primary key configuration for the table. The primary key uniquely identifies each row and is automatically indexed.",
             "title": "Primary Key",
             "examples": [
-              {
-                "type": "auto-increment",
-                "field": "id"
-              },
-              {
-                "type": "uuid",
-                "field": "id"
-              },
-              {
-                "type": "composite",
-                "fields": [
-                  "tenant_id",
-                  "user_id"
-                ]
-              }
+              { "type": "auto-increment", "field": "id" },
+              { "type": "uuid", "field": "id" },
+              { "type": "composite", "fields": ["tenant_id", "user_id"] }
             ]
           },
           "uniqueConstraints": {
             "type": "array",
             "items": {
               "type": "object",
-              "required": [
-                "name",
-                "fields"
-              ],
+              "required": ["name", "fields"],
               "properties": {
                 "name": {
                   "type": "string",
@@ -3153,17 +2315,11 @@
               [
                 {
                   "name": "uq_user_email_tenant",
-                  "fields": [
-                    "email",
-                    "tenant_id"
-                  ]
+                  "fields": ["email", "tenant_id"]
                 },
                 {
                   "name": "uq_product_sku_variant",
-                  "fields": [
-                    "sku",
-                    "variant_id"
-                  ]
+                  "fields": ["sku", "variant_id"]
                 }
               ]
             ]
@@ -3172,10 +2328,7 @@
             "type": "array",
             "items": {
               "type": "object",
-              "required": [
-                "name",
-                "fields"
-              ],
+              "required": ["name", "fields"],
               "properties": {
                 "name": {
                   "type": "string",
@@ -3201,9 +2354,7 @@
                   "title": "minItems(1)",
                   "minItems": 1
                 },
-                "unique": {
-                  "type": "boolean"
-                }
+                "unique": { "type": "boolean" }
               },
               "additionalProperties": false
             },
@@ -3211,17 +2362,10 @@
             "title": "Database Indexes",
             "examples": [
               [
-                {
-                  "name": "idx_user_email",
-                  "fields": [
-                    "email"
-                  ]
-                },
+                { "name": "idx_user_email", "fields": ["email"] },
                 {
                   "name": "idx_user_created",
-                  "fields": [
-                    "created_at"
-                  ],
+                  "fields": ["created_at"],
                   "unique": false
                 }
               ]
@@ -3236,12 +2380,7 @@
             "id": 1,
             "name": "users",
             "fields": [
-              {
-                "id": 1,
-                "name": "email",
-                "required": true,
-                "type": "email"
-              },
+              { "id": 1, "name": "email", "required": true, "type": "email" },
               {
                 "id": 2,
                 "name": "name",
@@ -3274,12 +2413,7 @@
                 "type": "long-text"
               }
             ],
-            "primaryKey": {
-              "type": "composite",
-              "fields": [
-                "id"
-              ]
-            }
+            "primaryKey": { "type": "composite", "fields": ["id"] }
           }
         ]
       },
@@ -3291,12 +2425,7 @@
             "id": 1,
             "name": "users",
             "fields": [
-              {
-                "id": 1,
-                "name": "email",
-                "required": true,
-                "type": "email"
-              },
+              { "id": 1, "name": "email", "required": true, "type": "email" },
               {
                 "id": 2,
                 "name": "name",
@@ -3343,8 +2472,6 @@
       "version": "2.0.0-beta.1",
       "description": "Admin dashboard for analytics and reporting"
     },
-    {
-      "name": "blog-system"
-    }
+    { "name": "blog-system" }
   ]
 }

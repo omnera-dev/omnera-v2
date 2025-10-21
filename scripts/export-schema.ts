@@ -22,6 +22,7 @@ import { existsSync } from 'node:fs'
 import { mkdir, writeFile } from 'node:fs/promises'
 import { join } from 'node:path'
 import { JSONSchema, type Schema } from 'effect'
+import prettier from 'prettier'
 // Import schemas
 import { AppSchema } from '../src/domain/models/app'
 
@@ -53,6 +54,17 @@ function addSchemaId(jsonSchema: unknown, version: string, schemaName: string): 
 }
 
 /**
+ * Format JSON content with Prettier
+ */
+async function formatJson(content: unknown): Promise<string> {
+  const prettierConfig = await prettier.resolveConfig(process.cwd())
+  return prettier.format(JSON.stringify(content), {
+    ...prettierConfig,
+    parser: 'json',
+  })
+}
+
+/**
  * Main export function
  */
 async function exportSchema(): Promise<void> {
@@ -77,7 +89,8 @@ async function exportSchema(): Promise<void> {
   const appJsonSchema = generateJsonSchema(AppSchema)
   const appJsonSchemaWithId = addSchemaId(appJsonSchema, version, 'app')
   const appSchemaPath = join(outputDir, 'app.schema.json')
-  await writeFile(appSchemaPath, JSON.stringify(appJsonSchemaWithId, null, 2))
+  const formattedContent = await formatJson(appJsonSchemaWithId)
+  await writeFile(appSchemaPath, formattedContent)
   console.log('   ✓ app.schema.json')
 }
 

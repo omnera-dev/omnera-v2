@@ -18,392 +18,390 @@ import { test, expect } from '@/specs/fixtures'
  * Source: docs/specifications/schemas/tables/tables.schema.json (lines 353-403)
  */
 
-test.describe('Tables - Property: indexes', () => {
-  // ============================================================================
-  // SPECIFICATION TESTS (@spec) - indexes property
-  // Source: lines 353-403 in tables.schema.json
-  // ============================================================================
+// ============================================================================
+// SPECIFICATION TESTS (@spec) - indexes property
+// Source: lines 353-403 in tables.schema.json
+// ============================================================================
 
-  // indexes[].name tests (lines 353-357)
-  test.fixme(
-    'APP-TABLES-INDEXES-001: should return indexes name via API',
-    { tag: '@spec' },
-    async ({ page, startServerWithSchema }) => {
-      // GIVEN: User provides name matching pattern
-      await startServerWithSchema({
-        name: 'test-app',
-        description: 'Test application',
-        version: '1.0.0',
-        tables: [
-          {
-            id: 1,
-            name: 'users',
-            fields: [{ id: 1, name: 'email', type: 'email' }],
-            indexes: [{ name: 'idx_users_email', fields: ['email'] }],
-          },
-        ],
-      })
+// indexes[].name tests (lines 353-357)
+test.fixme(
+  'APP-TABLES-INDEXES-001: should return indexes name via API',
+  { tag: '@spec' },
+  async ({ page, startServerWithSchema }) => {
+    // GIVEN: User provides name matching pattern
+    await startServerWithSchema({
+      name: 'test-app',
+      description: 'Test application',
+      version: '1.0.0',
+      tables: [
+        {
+          id: 1,
+          name: 'users',
+          fields: [{ id: 1, name: 'email', type: 'email' }],
+          indexes: [{ name: 'idx_users_email', fields: ['email'] }],
+        },
+      ],
+    })
 
-      // WHEN: Retrieving configuration via API
-      const response = await page.request.get('/api/tables/1')
+    // WHEN: Retrieving configuration via API
+    const response = await page.request.get('/api/tables/1')
 
-      // THEN: Value should be returned correctly
-      const body = await response.json()
-      expect(body.indexes[0].name).toBe('idx_users_email')
+    // THEN: Value should be returned correctly
+    const body = await response.json()
+    expect(body.indexes[0].name).toBe('idx_users_email')
+  }
+)
+
+test.fixme(
+  'APP-TABLES-INDEXES-002: should create index in database with correct name',
+  { tag: '@spec' },
+  async ({ startServerWithSchema, executeQuery }) => {
+    // GIVEN: User provides name matching pattern
+    await startServerWithSchema({
+      name: 'test-app',
+      description: 'Test application',
+      version: '1.0.0',
+      tables: [
+        {
+          id: 1,
+          name: 'users',
+          fields: [{ id: 1, name: 'email', type: 'email' }],
+          indexes: [{ name: 'idx_users_email', fields: ['email'] }],
+        },
+      ],
+    })
+
+    // WHEN: Querying database for index
+    const result = await executeQuery(`
+      SELECT indexname, indexdef
+      FROM pg_indexes
+      WHERE schemaname = 'public'
+      AND tablename = 'users'
+      AND indexname = 'idx_users_email'
+    `)
+
+    // THEN: Index should exist with correct name
+    expect(result.rows.length).toBe(1)
+    expect(result.rows[0].indexname).toBe('idx_users_email')
+  }
+)
+
+test.fixme(
+  'should reject indexes name not matching pattern',
+  { tag: '@spec' },
+  async ({ startServerWithSchema }) => {
+    // GIVEN: User provides name not matching pattern
+    // WHEN: Validating input
+    // THEN: Clear error message should explain format requirement
+
+    const invalidConfig = {
+      name: 'test-app',
+      description: 'Test application',
+      version: '1.0.0',
+      tables: [
+        {
+          id: 1,
+          name: 'users',
+          fields: [{ id: 1, name: 'email', type: 'email' }],
+          indexes: [{ name: 'Invalid-Index-Name', fields: ['email'] }],
+        },
+      ],
     }
-  )
 
-  test.fixme(
-    'APP-TABLES-INDEXES-002: should create index in database with correct name',
-    { tag: '@spec' },
-    async ({ startServerWithSchema, executeQuery }) => {
-      // GIVEN: User provides name matching pattern
-      await startServerWithSchema({
-        name: 'test-app',
-        description: 'Test application',
-        version: '1.0.0',
-        tables: [
-          {
-            id: 1,
-            name: 'users',
-            fields: [{ id: 1, name: 'email', type: 'email' }],
-            indexes: [{ name: 'idx_users_email', fields: ['email'] }],
-          },
-        ],
-      })
+    await expect(async () => {
+      // @ts-expect-error - Invalid pattern
+      await startServerWithSchema(invalidConfig)
+    }).rejects.toThrow(/pattern/)
+  }
+)
 
-      // WHEN: Querying database for index
-      const result = await executeQuery(`
-        SELECT indexname, indexdef
-        FROM pg_indexes
-        WHERE schemaname = 'public'
-        AND tablename = 'users'
-        AND indexname = 'idx_users_email'
-      `)
+test.fixme(
+  'should preserve indexes name original format when retrieved',
+  { tag: '@spec' },
+  async ({ page, startServerWithSchema }) => {
+    // GIVEN: Name is stored
+    await startServerWithSchema({
+      name: 'test-app',
+      description: 'Test application',
+      version: '1.0.0',
+      tables: [
+        {
+          id: 1,
+          name: 'users',
+          fields: [{ id: 1, name: 'email', type: 'email' }],
+          indexes: [{ name: 'idx_custom_index', fields: ['email'] }],
+        },
+      ],
+    })
 
-      // THEN: Index should exist with correct name
-      expect(result.rows.length).toBe(1)
-      expect(result.rows[0].indexname).toBe('idx_users_email')
+    // WHEN: Retrieved later
+    const response = await page.request.get('/api/tables/1')
+
+    // THEN: Original format should be preserved
+    const body = await response.json()
+    expect(body.indexes[0].name).toBe('idx_custom_index')
+  }
+)
+
+// indexes[].fields tests (lines 371-374)
+test.fixme(
+  'should return indexes fields via API',
+  { tag: '@spec' },
+  async ({ page, startServerWithSchema }) => {
+    // GIVEN: User provides fields with at least 1 item
+    await startServerWithSchema({
+      name: 'test-app',
+      description: 'Test application',
+      version: '1.0.0',
+      tables: [
+        {
+          id: 1,
+          name: 'users',
+          fields: [
+            { id: 1, name: 'first_name', type: 'single-line-text' },
+            { id: 2, name: 'last_name', type: 'single-line-text' },
+          ],
+          indexes: [{ name: 'idx_users_name', fields: ['first_name', 'last_name'] }],
+        },
+      ],
+    })
+
+    // WHEN: Retrieving configuration via API
+    const response = await page.request.get('/api/tables/1')
+
+    // THEN: Fields should be returned correctly
+    const body = await response.json()
+    expect(body.indexes[0].fields).toEqual(['first_name', 'last_name'])
+  }
+)
+
+test.fixme(
+  'should create index on specified fields in database',
+  { tag: '@spec' },
+  async ({ startServerWithSchema, executeQuery }) => {
+    // GIVEN: User provides fields with at least 1 item
+    await startServerWithSchema({
+      name: 'test-app',
+      description: 'Test application',
+      version: '1.0.0',
+      tables: [
+        {
+          id: 1,
+          name: 'users',
+          fields: [
+            { id: 1, name: 'first_name', type: 'single-line-text' },
+            { id: 2, name: 'last_name', type: 'single-line-text' },
+          ],
+          indexes: [{ name: 'idx_users_name', fields: ['first_name', 'last_name'] }],
+        },
+      ],
+    })
+
+    // WHEN: Querying database for index definition
+    const result = await executeQuery(`
+      SELECT indexname, indexdef
+      FROM pg_indexes
+      WHERE schemaname = 'public'
+      AND tablename = 'users'
+      AND indexname = 'idx_users_name'
+    `)
+
+    // THEN: Index should include both fields
+    expect(result.rows.length).toBe(1)
+    expect(result.rows[0].indexdef).toContain('first_name')
+    expect(result.rows[0].indexdef).toContain('last_name')
+  }
+)
+
+test.fixme(
+  'should reject indexes fields array with fewer than 1 item',
+  { tag: '@spec' },
+  async ({ startServerWithSchema }) => {
+    // GIVEN: User provides fields with fewer than 1 items
+    // WHEN: Validating input
+    // THEN: Error should enforce minimum items
+
+    const invalidConfig = {
+      name: 'test-app',
+      description: 'Test application',
+      version: '1.0.0',
+      tables: [
+        {
+          id: 1,
+          name: 'users',
+          fields: [{ id: 1, name: 'email', type: 'email' }],
+          indexes: [
+            { name: 'idx_users_empty', fields: [] }, // Invalid: empty array
+          ],
+        },
+      ],
     }
-  )
 
-  test.fixme(
-    'should reject indexes name not matching pattern',
-    { tag: '@spec' },
-    async ({ startServerWithSchema }) => {
-      // GIVEN: User provides name not matching pattern
-      // WHEN: Validating input
-      // THEN: Clear error message should explain format requirement
+    await expect(async () => {
+      // @ts-expect-error - Invalid pattern
+      await startServerWithSchema(invalidConfig)
+    }).rejects.toThrow(/minimum/)
+  }
+)
 
-      const invalidConfig = {
-        name: 'test-app',
-        description: 'Test application',
-        version: '1.0.0',
-        tables: [
-          {
-            id: 1,
-            name: 'users',
-            fields: [{ id: 1, name: 'email', type: 'email' }],
-            indexes: [{ name: 'Invalid-Index-Name', fields: ['email'] }],
-          },
-        ],
-      }
+// indexes[].unique tests (lines 384-388)
+test.fixme(
+  'should enforce behavior when indexes unique is true',
+  { tag: '@spec' },
+  async ({ page, startServerWithSchema }) => {
+    // GIVEN: Unique is true
+    await startServerWithSchema({
+      name: 'test-app',
+      description: 'Test application',
+      version: '1.0.0',
+      tables: [
+        {
+          id: 1,
+          name: 'users',
+          fields: [{ id: 1, name: 'email', type: 'email' }],
+          indexes: [{ name: 'idx_users_email_unique', fields: ['email'], unique: true }],
+        },
+      ],
+    })
 
-      await expect(async () => {
-        // @ts-expect-error - Invalid pattern
-        await startServerWithSchema(invalidConfig)
-      }).rejects.toThrow(/pattern/)
-    }
-  )
+    // WHEN: Processing entity
+    // THEN: Corresponding behavior should be enforced (prevent duplicate emails)
+    const response1 = await page.request.post('/api/tables/1/records', {
+      data: { email: 'unique@example.com' },
+    })
+    expect(response1.status()).toBe(201)
 
-  test.fixme(
-    'should preserve indexes name original format when retrieved',
-    { tag: '@spec' },
-    async ({ page, startServerWithSchema }) => {
-      // GIVEN: Name is stored
-      await startServerWithSchema({
-        name: 'test-app',
-        description: 'Test application',
-        version: '1.0.0',
-        tables: [
-          {
-            id: 1,
-            name: 'users',
-            fields: [{ id: 1, name: 'email', type: 'email' }],
-            indexes: [{ name: 'idx_custom_index', fields: ['email'] }],
-          },
-        ],
-      })
+    const response2 = await page.request.post('/api/tables/1/records', {
+      data: { email: 'unique@example.com' },
+    })
+    expect(response2.status()).toBe(409) // Conflict due to unique constraint
+  }
+)
 
-      // WHEN: Retrieved later
-      const response = await page.request.get('/api/tables/1')
+test.fixme(
+  'should not enforce unique behavior when indexes unique is false',
+  { tag: '@spec' },
+  async ({ page, startServerWithSchema }) => {
+    // GIVEN: Unique is false (default: False)
+    await startServerWithSchema({
+      name: 'test-app',
+      description: 'Test application',
+      version: '1.0.0',
+      tables: [
+        {
+          id: 1,
+          name: 'users',
+          fields: [{ id: 1, name: 'email', type: 'email' }],
+          indexes: [{ name: 'idx_users_email', fields: ['email'], unique: false }],
+        },
+      ],
+    })
 
-      // THEN: Original format should be preserved
-      const body = await response.json()
-      expect(body.indexes[0].name).toBe('idx_custom_index')
-    }
-  )
+    // WHEN: Processing entity
+    // THEN: Corresponding behavior should not be enforced (allow duplicate emails)
+    const response1 = await page.request.post('/api/tables/1/records', {
+      data: { email: 'duplicate@example.com' },
+    })
+    expect(response1.status()).toBe(201)
 
-  // indexes[].fields tests (lines 371-374)
-  test.fixme(
-    'should return indexes fields via API',
-    { tag: '@spec' },
-    async ({ page, startServerWithSchema }) => {
-      // GIVEN: User provides fields with at least 1 item
-      await startServerWithSchema({
-        name: 'test-app',
-        description: 'Test application',
-        version: '1.0.0',
-        tables: [
-          {
-            id: 1,
-            name: 'users',
-            fields: [
-              { id: 1, name: 'first_name', type: 'single-line-text' },
-              { id: 2, name: 'last_name', type: 'single-line-text' },
-            ],
-            indexes: [{ name: 'idx_users_name', fields: ['first_name', 'last_name'] }],
-          },
-        ],
-      })
+    const response2 = await page.request.post('/api/tables/1/records', {
+      data: { email: 'duplicate@example.com' },
+    })
+    expect(response2.status()).toBe(201) // Allowed
+  }
+)
 
-      // WHEN: Retrieving configuration via API
-      const response = await page.request.get('/api/tables/1')
+test.fixme(
+  'should accept boolean value for indexes unique',
+  { tag: '@spec' },
+  async ({ page, startServerWithSchema }) => {
+    // GIVEN: Configuration with unique
+    await startServerWithSchema({
+      name: 'test-app',
+      description: 'Test application',
+      version: '1.0.0',
+      tables: [
+        {
+          id: 1,
+          name: 'users',
+          fields: [{ id: 1, name: 'email', type: 'email' }],
+          indexes: [{ name: 'idx_users_email', fields: ['email'], unique: true }],
+        },
+      ],
+    })
 
-      // THEN: Fields should be returned correctly
-      const body = await response.json()
-      expect(body.indexes[0].fields).toEqual(['first_name', 'last_name'])
-    }
-  )
+    // WHEN: Validating settings
+    const response = await page.request.get('/api/tables/1')
 
-  test.fixme(
-    'should create index on specified fields in database',
-    { tag: '@spec' },
-    async ({ startServerWithSchema, executeQuery }) => {
-      // GIVEN: User provides fields with at least 1 item
-      await startServerWithSchema({
-        name: 'test-app',
-        description: 'Test application',
-        version: '1.0.0',
-        tables: [
-          {
-            id: 1,
-            name: 'users',
-            fields: [
-              { id: 1, name: 'first_name', type: 'single-line-text' },
-              { id: 2, name: 'last_name', type: 'single-line-text' },
-            ],
-            indexes: [{ name: 'idx_users_name', fields: ['first_name', 'last_name'] }],
-          },
-        ],
-      })
+    // THEN: Boolean value should be accepted
+    const body = await response.json()
+    expect(typeof body.indexes[0].unique).toBe('boolean')
+  }
+)
 
-      // WHEN: Querying database for index definition
-      const result = await executeQuery(`
-        SELECT indexname, indexdef
-        FROM pg_indexes
-        WHERE schemaname = 'public'
-        AND tablename = 'users'
-        AND indexname = 'idx_users_name'
-      `)
+// indexes root tests (lines 400-403)
+test.fixme(
+  'should process indexes array items in order',
+  { tag: '@spec' },
+  async ({ page, startServerWithSchema }) => {
+    // GIVEN: User provides indexes array
+    await startServerWithSchema({
+      name: 'test-app',
+      description: 'Test application',
+      version: '1.0.0',
+      tables: [
+        {
+          id: 1,
+          name: 'users',
+          fields: [
+            { id: 1, name: 'email', type: 'email' },
+            { id: 2, name: 'status', type: 'single-line-text' },
+          ],
+          indexes: [
+            { name: 'idx_email', fields: ['email'] },
+            { name: 'idx_status', fields: ['status'] },
+          ],
+        },
+      ],
+    })
 
-      // THEN: Index should include both fields
-      expect(result.rows.length).toBe(1)
-      expect(result.rows[0].indexdef).toContain('first_name')
-      expect(result.rows[0].indexdef).toContain('last_name')
-    }
-  )
+    // WHEN: Validating input
+    const response = await page.request.get('/api/tables/1')
 
-  test.fixme(
-    'should reject indexes fields array with fewer than 1 item',
-    { tag: '@spec' },
-    async ({ startServerWithSchema }) => {
-      // GIVEN: User provides fields with fewer than 1 items
-      // WHEN: Validating input
-      // THEN: Error should enforce minimum items
+    // THEN: Items should be processed in order
+    const body = await response.json()
+    expect(body.indexes[0].name).toBe('idx_email')
+    expect(body.indexes[1].name).toBe('idx_status')
+  }
+)
 
-      const invalidConfig = {
-        name: 'test-app',
-        description: 'Test application',
-        version: '1.0.0',
-        tables: [
-          {
-            id: 1,
-            name: 'users',
-            fields: [{ id: 1, name: 'email', type: 'email' }],
-            indexes: [
-              { name: 'idx_users_empty', fields: [] }, // Invalid: empty array
-            ],
-          },
-        ],
-      }
+test.fixme(
+  'should handle empty indexes array correctly',
+  { tag: '@spec' },
+  async ({ page, startServerWithSchema }) => {
+    // GIVEN: Indexes array is empty
+    await startServerWithSchema({
+      name: 'test-app',
+      description: 'Test application',
+      version: '1.0.0',
+      tables: [
+        {
+          id: 1,
+          name: 'users',
+          fields: [{ id: 1, name: 'email', type: 'email' }],
+          indexes: [],
+        },
+      ],
+    })
 
-      await expect(async () => {
-        // @ts-expect-error - Invalid pattern
-        await startServerWithSchema(invalidConfig)
-      }).rejects.toThrow(/minimum/)
-    }
-  )
+    // WHEN: Validating input
+    const response = await page.request.get('/api/tables/1')
 
-  // indexes[].unique tests (lines 384-388)
-  test.fixme(
-    'should enforce behavior when indexes unique is true',
-    { tag: '@spec' },
-    async ({ page, startServerWithSchema }) => {
-      // GIVEN: Unique is true
-      await startServerWithSchema({
-        name: 'test-app',
-        description: 'Test application',
-        version: '1.0.0',
-        tables: [
-          {
-            id: 1,
-            name: 'users',
-            fields: [{ id: 1, name: 'email', type: 'email' }],
-            indexes: [{ name: 'idx_users_email_unique', fields: ['email'], unique: true }],
-          },
-        ],
-      })
-
-      // WHEN: Processing entity
-      // THEN: Corresponding behavior should be enforced (prevent duplicate emails)
-      const response1 = await page.request.post('/api/tables/1/records', {
-        data: { email: 'unique@example.com' },
-      })
-      expect(response1.status()).toBe(201)
-
-      const response2 = await page.request.post('/api/tables/1/records', {
-        data: { email: 'unique@example.com' },
-      })
-      expect(response2.status()).toBe(409) // Conflict due to unique constraint
-    }
-  )
-
-  test.fixme(
-    'should not enforce unique behavior when indexes unique is false',
-    { tag: '@spec' },
-    async ({ page, startServerWithSchema }) => {
-      // GIVEN: Unique is false (default: False)
-      await startServerWithSchema({
-        name: 'test-app',
-        description: 'Test application',
-        version: '1.0.0',
-        tables: [
-          {
-            id: 1,
-            name: 'users',
-            fields: [{ id: 1, name: 'email', type: 'email' }],
-            indexes: [{ name: 'idx_users_email', fields: ['email'], unique: false }],
-          },
-        ],
-      })
-
-      // WHEN: Processing entity
-      // THEN: Corresponding behavior should not be enforced (allow duplicate emails)
-      const response1 = await page.request.post('/api/tables/1/records', {
-        data: { email: 'duplicate@example.com' },
-      })
-      expect(response1.status()).toBe(201)
-
-      const response2 = await page.request.post('/api/tables/1/records', {
-        data: { email: 'duplicate@example.com' },
-      })
-      expect(response2.status()).toBe(201) // Allowed
-    }
-  )
-
-  test.fixme(
-    'should accept boolean value for indexes unique',
-    { tag: '@spec' },
-    async ({ page, startServerWithSchema }) => {
-      // GIVEN: Configuration with unique
-      await startServerWithSchema({
-        name: 'test-app',
-        description: 'Test application',
-        version: '1.0.0',
-        tables: [
-          {
-            id: 1,
-            name: 'users',
-            fields: [{ id: 1, name: 'email', type: 'email' }],
-            indexes: [{ name: 'idx_users_email', fields: ['email'], unique: true }],
-          },
-        ],
-      })
-
-      // WHEN: Validating settings
-      const response = await page.request.get('/api/tables/1')
-
-      // THEN: Boolean value should be accepted
-      const body = await response.json()
-      expect(typeof body.indexes[0].unique).toBe('boolean')
-    }
-  )
-
-  // indexes root tests (lines 400-403)
-  test.fixme(
-    'should process indexes array items in order',
-    { tag: '@spec' },
-    async ({ page, startServerWithSchema }) => {
-      // GIVEN: User provides indexes array
-      await startServerWithSchema({
-        name: 'test-app',
-        description: 'Test application',
-        version: '1.0.0',
-        tables: [
-          {
-            id: 1,
-            name: 'users',
-            fields: [
-              { id: 1, name: 'email', type: 'email' },
-              { id: 2, name: 'status', type: 'single-line-text' },
-            ],
-            indexes: [
-              { name: 'idx_email', fields: ['email'] },
-              { name: 'idx_status', fields: ['status'] },
-            ],
-          },
-        ],
-      })
-
-      // WHEN: Validating input
-      const response = await page.request.get('/api/tables/1')
-
-      // THEN: Items should be processed in order
-      const body = await response.json()
-      expect(body.indexes[0].name).toBe('idx_email')
-      expect(body.indexes[1].name).toBe('idx_status')
-    }
-  )
-
-  test.fixme(
-    'should handle empty indexes array correctly',
-    { tag: '@spec' },
-    async ({ page, startServerWithSchema }) => {
-      // GIVEN: Indexes array is empty
-      await startServerWithSchema({
-        name: 'test-app',
-        description: 'Test application',
-        version: '1.0.0',
-        tables: [
-          {
-            id: 1,
-            name: 'users',
-            fields: [{ id: 1, name: 'email', type: 'email' }],
-            indexes: [],
-          },
-        ],
-      })
-
-      // WHEN: Validating input
-      const response = await page.request.get('/api/tables/1')
-
-      // THEN: Behavior should follow optional/required rules
-      const body = await response.json()
-      expect(body.indexes).toEqual([])
-    }
-  )
-})
+    // THEN: Behavior should follow optional/required rules
+    const body = await response.json()
+    expect(body.indexes).toEqual([])
+  }
+)
 
 // ============================================================================
 // REGRESSION TEST (@regression)

@@ -18,352 +18,350 @@ import { test, expect } from '@/specs/fixtures'
  * Source: docs/specifications/schemas/tables/tables.schema.json (lines 281-321)
  */
 
-test.describe('Tables - Property: uniqueConstraints', () => {
-  // ============================================================================
-  // SPECIFICATION TESTS (@spec) - uniqueConstraints property
-  // Source: lines 281-321 in tables.schema.json
-  // ============================================================================
+// ============================================================================
+// SPECIFICATION TESTS (@spec) - uniqueConstraints property
+// Source: lines 281-321 in tables.schema.json
+// ============================================================================
 
-  // uniqueConstraints[].name tests (lines 281-285)
-  test.fixme(
-    'APP-TABLES-UNIQUECONSTRAINTS-001: should return uniqueConstraints name via API',
-    { tag: '@spec' },
-    async ({ page, startServerWithSchema }) => {
-      // GIVEN: User provides name matching pattern
-      await startServerWithSchema({
-        name: 'test-app',
-        description: 'Test application',
-        version: '1.0.0',
-        tables: [
-          {
-            id: 1,
-            name: 'users',
-            fields: [
-              { id: 1, name: 'email', type: 'email' },
-              { id: 2, name: 'tenant_id', type: 'integer' },
-            ],
-            uniqueConstraints: [{ name: 'uq_users_email_tenant', fields: ['email', 'tenant_id'] }],
-          },
-        ],
-      })
+// uniqueConstraints[].name tests (lines 281-285)
+test.fixme(
+  'APP-TABLES-UNIQUECONSTRAINTS-001: should return uniqueConstraints name via API',
+  { tag: '@spec' },
+  async ({ page, startServerWithSchema }) => {
+    // GIVEN: User provides name matching pattern
+    await startServerWithSchema({
+      name: 'test-app',
+      description: 'Test application',
+      version: '1.0.0',
+      tables: [
+        {
+          id: 1,
+          name: 'users',
+          fields: [
+            { id: 1, name: 'email', type: 'email' },
+            { id: 2, name: 'tenant_id', type: 'integer' },
+          ],
+          uniqueConstraints: [{ name: 'uq_users_email_tenant', fields: ['email', 'tenant_id'] }],
+        },
+      ],
+    })
 
-      // WHEN: Retrieving configuration via API
-      const response = await page.request.get('/api/tables/1')
+    // WHEN: Retrieving configuration via API
+    const response = await page.request.get('/api/tables/1')
 
-      // THEN: Value should be returned correctly
-      const body = await response.json()
-      expect(body.uniqueConstraints[0].name).toBe('uq_users_email_tenant')
+    // THEN: Value should be returned correctly
+    const body = await response.json()
+    expect(body.uniqueConstraints[0].name).toBe('uq_users_email_tenant')
+  }
+)
+
+test.fixme(
+  'APP-TABLES-UNIQUECONSTRAINTS-002: should create unique constraint in database with correct name',
+  { tag: '@spec' },
+  async ({ startServerWithSchema, executeQuery }) => {
+    // GIVEN: User provides name matching pattern
+    await startServerWithSchema({
+      name: 'test-app',
+      description: 'Test application',
+      version: '1.0.0',
+      tables: [
+        {
+          id: 1,
+          name: 'users',
+          fields: [
+            { id: 1, name: 'email', type: 'email' },
+            { id: 2, name: 'tenant_id', type: 'integer' },
+          ],
+          uniqueConstraints: [{ name: 'uq_users_email_tenant', fields: ['email', 'tenant_id'] }],
+        },
+      ],
+    })
+
+    // WHEN: Querying database for unique constraint
+    const result = await executeQuery(`
+      SELECT constraint_name
+      FROM information_schema.table_constraints
+      WHERE table_schema = 'public'
+      AND table_name = 'users'
+      AND constraint_type = 'UNIQUE'
+      AND constraint_name = 'uq_users_email_tenant'
+    `)
+
+    // THEN: Constraint should exist with correct name
+    expect(result.rows.length).toBe(1)
+    expect(result.rows[0].constraint_name).toBe('uq_users_email_tenant')
+  }
+)
+
+test.fixme(
+  'should reject uniqueConstraints name not matching pattern',
+  { tag: '@spec' },
+  async ({ startServerWithSchema }) => {
+    // GIVEN: User provides name not matching pattern
+    // WHEN: Validating input
+    // THEN: Clear error message should explain format requirement
+
+    const invalidConfig = {
+      name: 'test-app',
+      description: 'Test application',
+      version: '1.0.0',
+      tables: [
+        {
+          id: 1,
+          name: 'users',
+          fields: [
+            { id: 1, name: 'email', type: 'email' },
+            { id: 2, name: 'tenant_id', type: 'integer' },
+          ],
+          uniqueConstraints: [
+            { name: 'Invalid-Constraint-Name', fields: ['email', 'tenant_id'] },
+          ],
+        },
+      ],
     }
-  )
 
-  test.fixme(
-    'APP-TABLES-UNIQUECONSTRAINTS-002: should create unique constraint in database with correct name',
-    { tag: '@spec' },
-    async ({ startServerWithSchema, executeQuery }) => {
-      // GIVEN: User provides name matching pattern
-      await startServerWithSchema({
-        name: 'test-app',
-        description: 'Test application',
-        version: '1.0.0',
-        tables: [
-          {
-            id: 1,
-            name: 'users',
-            fields: [
-              { id: 1, name: 'email', type: 'email' },
-              { id: 2, name: 'tenant_id', type: 'integer' },
-            ],
-            uniqueConstraints: [{ name: 'uq_users_email_tenant', fields: ['email', 'tenant_id'] }],
-          },
-        ],
-      })
+    await expect(async () => {
+      // @ts-expect-error - Invalid pattern
+      await startServerWithSchema(invalidConfig)
+    }).rejects.toThrow(/pattern/)
+  }
+)
 
-      // WHEN: Querying database for unique constraint
-      const result = await executeQuery(`
-        SELECT constraint_name
-        FROM information_schema.table_constraints
-        WHERE table_schema = 'public'
-        AND table_name = 'users'
-        AND constraint_type = 'UNIQUE'
-        AND constraint_name = 'uq_users_email_tenant'
-      `)
+test.fixme(
+  'should preserve uniqueConstraints name original format when retrieved',
+  { tag: '@spec' },
+  async ({ page, startServerWithSchema }) => {
+    // GIVEN: Name is stored
+    await startServerWithSchema({
+      name: 'test-app',
+      description: 'Test application',
+      version: '1.0.0',
+      tables: [
+        {
+          id: 1,
+          name: 'users',
+          fields: [
+            { id: 1, name: 'email', type: 'email' },
+            { id: 2, name: 'tenant_id', type: 'integer' },
+          ],
+          uniqueConstraints: [{ name: 'uq_custom_name', fields: ['email', 'tenant_id'] }],
+        },
+      ],
+    })
 
-      // THEN: Constraint should exist with correct name
-      expect(result.rows.length).toBe(1)
-      expect(result.rows[0].constraint_name).toBe('uq_users_email_tenant')
+    // WHEN: Retrieved later
+    const response = await page.request.get('/api/tables/1')
+
+    // THEN: Original format should be preserved
+    const body = await response.json()
+    expect(body.uniqueConstraints[0].name).toBe('uq_custom_name')
+  }
+)
+
+// uniqueConstraints[].fields tests (lines 302-305)
+test.fixme(
+  'should return uniqueConstraints fields via API',
+  { tag: '@spec' },
+  async ({ page, startServerWithSchema }) => {
+    // GIVEN: User provides fields with at least 2 items
+    await startServerWithSchema({
+      name: 'test-app',
+      description: 'Test application',
+      version: '1.0.0',
+      tables: [
+        {
+          id: 1,
+          name: 'users',
+          fields: [
+            { id: 1, name: 'email', type: 'email' },
+            { id: 2, name: 'tenant_id', type: 'integer' },
+          ],
+          uniqueConstraints: [{ name: 'uq_users_email_tenant', fields: ['email', 'tenant_id'] }],
+        },
+      ],
+    })
+
+    // WHEN: Retrieving configuration via API
+    const response = await page.request.get('/api/tables/1')
+
+    // THEN: Fields should be returned correctly
+    const body = await response.json()
+    expect(body.uniqueConstraints[0].fields).toEqual(['email', 'tenant_id'])
+  }
+)
+
+test.fixme(
+  'should create unique constraint on specified fields in database',
+  { tag: '@spec' },
+  async ({ startServerWithSchema, executeQuery }) => {
+    // GIVEN: User provides fields with at least 2 items
+    await startServerWithSchema({
+      name: 'test-app',
+      description: 'Test application',
+      version: '1.0.0',
+      tables: [
+        {
+          id: 1,
+          name: 'users',
+          fields: [
+            { id: 1, name: 'email', type: 'email' },
+            { id: 2, name: 'tenant_id', type: 'integer' },
+          ],
+          uniqueConstraints: [{ name: 'uq_users_email_tenant', fields: ['email', 'tenant_id'] }],
+        },
+      ],
+    })
+
+    // WHEN: Querying database for constraint columns
+    const result = await executeQuery(`
+      SELECT column_name
+      FROM information_schema.key_column_usage
+      WHERE table_schema = 'public'
+      AND table_name = 'users'
+      AND constraint_name = 'uq_users_email_tenant'
+      ORDER BY ordinal_position
+    `)
+
+    // THEN: Both fields should be part of constraint
+    expect(result.rows.length).toBe(2)
+    expect(result.rows[0].column_name).toBe('email')
+    expect(result.rows[1].column_name).toBe('tenant_id')
+  }
+)
+
+test.fixme(
+  'should reject uniqueConstraints fields array with fewer than 2 items',
+  { tag: '@spec' },
+  async ({ startServerWithSchema }) => {
+    // GIVEN: User provides fields with fewer than 2 items
+    // WHEN: Validating input
+    // THEN: Error should enforce minimum items
+
+    const invalidConfig = {
+      name: 'test-app',
+      description: 'Test application',
+      version: '1.0.0',
+      tables: [
+        {
+          id: 1,
+          name: 'users',
+          fields: [{ id: 1, name: 'email', type: 'email' }],
+          uniqueConstraints: [
+            { name: 'uq_users_email', fields: ['email'] }, // Invalid: only 1 field
+          ],
+        },
+      ],
     }
-  )
 
-  test.fixme(
-    'should reject uniqueConstraints name not matching pattern',
-    { tag: '@spec' },
-    async ({ startServerWithSchema }) => {
-      // GIVEN: User provides name not matching pattern
-      // WHEN: Validating input
-      // THEN: Clear error message should explain format requirement
+    await expect(async () => {
+      // @ts-expect-error - Invalid pattern
+      await startServerWithSchema(invalidConfig)
+    }).rejects.toThrow(/minimum/)
+  }
+)
 
-      const invalidConfig = {
-        name: 'test-app',
-        description: 'Test application',
-        version: '1.0.0',
-        tables: [
-          {
-            id: 1,
-            name: 'users',
-            fields: [
-              { id: 1, name: 'email', type: 'email' },
-              { id: 2, name: 'tenant_id', type: 'integer' },
-            ],
-            uniqueConstraints: [
-              { name: 'Invalid-Constraint-Name', fields: ['email', 'tenant_id'] },
-            ],
-          },
-        ],
-      }
+// uniqueConstraints root tests (lines 318-321)
+test.fixme(
+  'should process uniqueConstraints array items in order',
+  { tag: '@spec' },
+  async ({ page, startServerWithSchema }) => {
+    // GIVEN: User provides uniqueConstraints array
+    await startServerWithSchema({
+      name: 'test-app',
+      description: 'Test application',
+      version: '1.0.0',
+      tables: [
+        {
+          id: 1,
+          name: 'users',
+          fields: [
+            { id: 1, name: 'email', type: 'email' },
+            { id: 2, name: 'tenant_id', type: 'integer' },
+            { id: 3, name: 'username', type: 'single-line-text' },
+          ],
+          uniqueConstraints: [
+            { name: 'uq_email_tenant', fields: ['email', 'tenant_id'] },
+            { name: 'uq_username_tenant', fields: ['username', 'tenant_id'] },
+          ],
+        },
+      ],
+    })
 
-      await expect(async () => {
-        // @ts-expect-error - Invalid pattern
-        await startServerWithSchema(invalidConfig)
-      }).rejects.toThrow(/pattern/)
-    }
-  )
+    // WHEN: Validating input
+    const response = await page.request.get('/api/tables/1')
 
-  test.fixme(
-    'should preserve uniqueConstraints name original format when retrieved',
-    { tag: '@spec' },
-    async ({ page, startServerWithSchema }) => {
-      // GIVEN: Name is stored
-      await startServerWithSchema({
-        name: 'test-app',
-        description: 'Test application',
-        version: '1.0.0',
-        tables: [
-          {
-            id: 1,
-            name: 'users',
-            fields: [
-              { id: 1, name: 'email', type: 'email' },
-              { id: 2, name: 'tenant_id', type: 'integer' },
-            ],
-            uniqueConstraints: [{ name: 'uq_custom_name', fields: ['email', 'tenant_id'] }],
-          },
-        ],
-      })
+    // THEN: Items should be processed in order
+    const body = await response.json()
+    expect(body.uniqueConstraints[0].name).toBe('uq_email_tenant')
+    expect(body.uniqueConstraints[1].name).toBe('uq_username_tenant')
+  }
+)
 
-      // WHEN: Retrieved later
-      const response = await page.request.get('/api/tables/1')
+test.fixme(
+  'should handle empty uniqueConstraints array correctly',
+  { tag: '@spec' },
+  async ({ page, startServerWithSchema }) => {
+    // GIVEN: UniqueConstraints array is empty
+    await startServerWithSchema({
+      name: 'test-app',
+      description: 'Test application',
+      version: '1.0.0',
+      tables: [
+        {
+          id: 1,
+          name: 'users',
+          fields: [{ id: 1, name: 'email', type: 'email' }],
+          uniqueConstraints: [],
+        },
+      ],
+    })
 
-      // THEN: Original format should be preserved
-      const body = await response.json()
-      expect(body.uniqueConstraints[0].name).toBe('uq_custom_name')
-    }
-  )
+    // WHEN: Validating input
+    const response = await page.request.get('/api/tables/1')
 
-  // uniqueConstraints[].fields tests (lines 302-305)
-  test.fixme(
-    'should return uniqueConstraints fields via API',
-    { tag: '@spec' },
-    async ({ page, startServerWithSchema }) => {
-      // GIVEN: User provides fields with at least 2 items
-      await startServerWithSchema({
-        name: 'test-app',
-        description: 'Test application',
-        version: '1.0.0',
-        tables: [
-          {
-            id: 1,
-            name: 'users',
-            fields: [
-              { id: 1, name: 'email', type: 'email' },
-              { id: 2, name: 'tenant_id', type: 'integer' },
-            ],
-            uniqueConstraints: [{ name: 'uq_users_email_tenant', fields: ['email', 'tenant_id'] }],
-          },
-        ],
-      })
+    // THEN: Behavior should follow optional/required rules
+    const body = await response.json()
+    expect(body.uniqueConstraints).toEqual([])
+  }
+)
 
-      // WHEN: Retrieving configuration via API
-      const response = await page.request.get('/api/tables/1')
+test.fixme(
+  'should enforce uniqueConstraints on record creation',
+  { tag: '@spec' },
+  async ({ page, startServerWithSchema }) => {
+    // GIVEN: Table with unique constraint
+    await startServerWithSchema({
+      name: 'test-app',
+      description: 'Test application',
+      version: '1.0.0',
+      tables: [
+        {
+          id: 1,
+          name: 'users',
+          fields: [
+            { id: 1, name: 'email', type: 'email' },
+            { id: 2, name: 'tenant_id', type: 'integer' },
+          ],
+          uniqueConstraints: [{ name: 'uq_email_tenant', fields: ['email', 'tenant_id'] }],
+        },
+      ],
+    })
 
-      // THEN: Fields should be returned correctly
-      const body = await response.json()
-      expect(body.uniqueConstraints[0].fields).toEqual(['email', 'tenant_id'])
-    }
-  )
+    // WHEN: Creating first record
+    const response1 = await page.request.post('/api/tables/1/records', {
+      data: { email: 'user@example.com', tenant_id: 1 },
+    })
+    expect(response1.status()).toBe(201)
 
-  test.fixme(
-    'should create unique constraint on specified fields in database',
-    { tag: '@spec' },
-    async ({ startServerWithSchema, executeQuery }) => {
-      // GIVEN: User provides fields with at least 2 items
-      await startServerWithSchema({
-        name: 'test-app',
-        description: 'Test application',
-        version: '1.0.0',
-        tables: [
-          {
-            id: 1,
-            name: 'users',
-            fields: [
-              { id: 1, name: 'email', type: 'email' },
-              { id: 2, name: 'tenant_id', type: 'integer' },
-            ],
-            uniqueConstraints: [{ name: 'uq_users_email_tenant', fields: ['email', 'tenant_id'] }],
-          },
-        ],
-      })
+    // WHEN: Attempting to create duplicate
+    const response2 = await page.request.post('/api/tables/1/records', {
+      data: { email: 'user@example.com', tenant_id: 1 },
+    })
 
-      // WHEN: Querying database for constraint columns
-      const result = await executeQuery(`
-        SELECT column_name
-        FROM information_schema.key_column_usage
-        WHERE table_schema = 'public'
-        AND table_name = 'users'
-        AND constraint_name = 'uq_users_email_tenant'
-        ORDER BY ordinal_position
-      `)
-
-      // THEN: Both fields should be part of constraint
-      expect(result.rows.length).toBe(2)
-      expect(result.rows[0].column_name).toBe('email')
-      expect(result.rows[1].column_name).toBe('tenant_id')
-    }
-  )
-
-  test.fixme(
-    'should reject uniqueConstraints fields array with fewer than 2 items',
-    { tag: '@spec' },
-    async ({ startServerWithSchema }) => {
-      // GIVEN: User provides fields with fewer than 2 items
-      // WHEN: Validating input
-      // THEN: Error should enforce minimum items
-
-      const invalidConfig = {
-        name: 'test-app',
-        description: 'Test application',
-        version: '1.0.0',
-        tables: [
-          {
-            id: 1,
-            name: 'users',
-            fields: [{ id: 1, name: 'email', type: 'email' }],
-            uniqueConstraints: [
-              { name: 'uq_users_email', fields: ['email'] }, // Invalid: only 1 field
-            ],
-          },
-        ],
-      }
-
-      await expect(async () => {
-        // @ts-expect-error - Invalid pattern
-        await startServerWithSchema(invalidConfig)
-      }).rejects.toThrow(/minimum/)
-    }
-  )
-
-  // uniqueConstraints root tests (lines 318-321)
-  test.fixme(
-    'should process uniqueConstraints array items in order',
-    { tag: '@spec' },
-    async ({ page, startServerWithSchema }) => {
-      // GIVEN: User provides uniqueConstraints array
-      await startServerWithSchema({
-        name: 'test-app',
-        description: 'Test application',
-        version: '1.0.0',
-        tables: [
-          {
-            id: 1,
-            name: 'users',
-            fields: [
-              { id: 1, name: 'email', type: 'email' },
-              { id: 2, name: 'tenant_id', type: 'integer' },
-              { id: 3, name: 'username', type: 'single-line-text' },
-            ],
-            uniqueConstraints: [
-              { name: 'uq_email_tenant', fields: ['email', 'tenant_id'] },
-              { name: 'uq_username_tenant', fields: ['username', 'tenant_id'] },
-            ],
-          },
-        ],
-      })
-
-      // WHEN: Validating input
-      const response = await page.request.get('/api/tables/1')
-
-      // THEN: Items should be processed in order
-      const body = await response.json()
-      expect(body.uniqueConstraints[0].name).toBe('uq_email_tenant')
-      expect(body.uniqueConstraints[1].name).toBe('uq_username_tenant')
-    }
-  )
-
-  test.fixme(
-    'should handle empty uniqueConstraints array correctly',
-    { tag: '@spec' },
-    async ({ page, startServerWithSchema }) => {
-      // GIVEN: UniqueConstraints array is empty
-      await startServerWithSchema({
-        name: 'test-app',
-        description: 'Test application',
-        version: '1.0.0',
-        tables: [
-          {
-            id: 1,
-            name: 'users',
-            fields: [{ id: 1, name: 'email', type: 'email' }],
-            uniqueConstraints: [],
-          },
-        ],
-      })
-
-      // WHEN: Validating input
-      const response = await page.request.get('/api/tables/1')
-
-      // THEN: Behavior should follow optional/required rules
-      const body = await response.json()
-      expect(body.uniqueConstraints).toEqual([])
-    }
-  )
-
-  test.fixme(
-    'should enforce uniqueConstraints on record creation',
-    { tag: '@spec' },
-    async ({ page, startServerWithSchema }) => {
-      // GIVEN: Table with unique constraint
-      await startServerWithSchema({
-        name: 'test-app',
-        description: 'Test application',
-        version: '1.0.0',
-        tables: [
-          {
-            id: 1,
-            name: 'users',
-            fields: [
-              { id: 1, name: 'email', type: 'email' },
-              { id: 2, name: 'tenant_id', type: 'integer' },
-            ],
-            uniqueConstraints: [{ name: 'uq_email_tenant', fields: ['email', 'tenant_id'] }],
-          },
-        ],
-      })
-
-      // WHEN: Creating first record
-      const response1 = await page.request.post('/api/tables/1/records', {
-        data: { email: 'user@example.com', tenant_id: 1 },
-      })
-      expect(response1.status()).toBe(201)
-
-      // WHEN: Attempting to create duplicate
-      const response2 = await page.request.post('/api/tables/1/records', {
-        data: { email: 'user@example.com', tenant_id: 1 },
-      })
-
-      // THEN: Should be rejected
-      expect(response2.status()).toBe(409)
-    }
-  )
-})
+    // THEN: Should be rejected
+    expect(response2.status()).toBe(409)
+  }
+)
 
 // ============================================================================
 // REGRESSION TEST (@regression)

@@ -18,105 +18,103 @@ import { test, expect } from '@/specs/fixtures'
  * Source: docs/specifications/schemas/tables/tables.schema.json (lines 160-163)
  */
 
-test.describe('Tables - Property: fields', () => {
-  // ============================================================================
-  // SPECIFICATION TESTS (@spec) - fields property
-  // Source: lines 160-163 in tables.schema.json
-  // ============================================================================
+// ============================================================================
+// SPECIFICATION TESTS (@spec) - fields property
+// Source: lines 160-163 in tables.schema.json
+// ============================================================================
 
-  test.fixme(
-    'APP-TABLES-FIELDS-001: should return table with correct fields via API',
-    { tag: '@spec' },
-    async ({ page, startServerWithSchema }) => {
-      // GIVEN: User provides fields with at least 1 item
-      await startServerWithSchema({
-        name: 'test-app',
-        description: 'Test application',
-        version: '1.0.0',
-        tables: [
-          {
-            id: 1,
-            name: 'users',
-            fields: [{ id: 1, name: 'email', type: 'email' }],
-          },
-        ],
-      })
+test.fixme(
+  'APP-TABLES-FIELDS-001: should return table with correct fields via API',
+  { tag: '@spec' },
+  async ({ page, startServerWithSchema }) => {
+    // GIVEN: User provides fields with at least 1 item
+    await startServerWithSchema({
+      name: 'test-app',
+      description: 'Test application',
+      version: '1.0.0',
+      tables: [
+        {
+          id: 1,
+          name: 'users',
+          fields: [{ id: 1, name: 'email', type: 'email' }],
+        },
+      ],
+    })
 
-      // WHEN: Retrieving table via API
-      const response = await page.request.get('/api/tables/1')
+    // WHEN: Retrieving table via API
+    const response = await page.request.get('/api/tables/1')
 
-      // THEN: Fields array should be returned correctly
-      expect(response.status()).toBe(200)
-      const body = await response.json()
-      expect(body.fields).toHaveLength(1)
-      expect(body.fields[0].name).toBe('email')
-      expect(body.fields[0].type).toBe('email')
+    // THEN: Fields array should be returned correctly
+    expect(response.status()).toBe(200)
+    const body = await response.json()
+    expect(body.fields).toHaveLength(1)
+    expect(body.fields[0].name).toBe('email')
+    expect(body.fields[0].type).toBe('email')
+  }
+)
+
+test.fixme(
+  'APP-TABLES-FIELDS-002: should create columns in database for each field',
+  { tag: '@spec' },
+  async ({ startServerWithSchema, executeQuery }) => {
+    // GIVEN: User provides fields with at least 1 item
+    await startServerWithSchema({
+      name: 'test-app',
+      description: 'Test application',
+      version: '1.0.0',
+      tables: [
+        {
+          id: 1,
+          name: 'users',
+          fields: [{ id: 1, name: 'email', type: 'email' }],
+        },
+      ],
+    })
+
+    // WHEN: Querying database for columns
+    const result = await executeQuery(`
+      SELECT column_name, data_type
+      FROM information_schema.columns
+      WHERE table_schema = 'public'
+      AND table_name = 'users'
+      AND column_name = 'email'
+    `)
+
+    // THEN: Column should exist in database
+    expect(result.rows.length).toBe(1)
+    expect(result.rows[0].column_name).toBe('email')
+  }
+)
+
+test.fixme(
+  'should reject fields array with fewer than 1 item',
+  { tag: '@spec' },
+  async ({ page: _page, startServerWithSchema }) => {
+    // GIVEN: User provides fields with fewer than 1 items
+    // WHEN: Validating input
+    // THEN: Error should enforce minimum items
+
+    // This test will validate schema-level constraint
+    // Implementation will reject empty fields array during configuration
+    const invalidConfig = {
+      name: 'test-app',
+      description: 'Test application',
+      version: '1.0.0',
+      tables: [
+        {
+          id: 1,
+          name: 'users',
+          fields: [], // Invalid: empty array
+        },
+      ],
     }
-  )
 
-  test.fixme(
-    'APP-TABLES-FIELDS-002: should create columns in database for each field',
-    { tag: '@spec' },
-    async ({ startServerWithSchema, executeQuery }) => {
-      // GIVEN: User provides fields with at least 1 item
-      await startServerWithSchema({
-        name: 'test-app',
-        description: 'Test application',
-        version: '1.0.0',
-        tables: [
-          {
-            id: 1,
-            name: 'users',
-            fields: [{ id: 1, name: 'email', type: 'email' }],
-          },
-        ],
-      })
-
-      // WHEN: Querying database for columns
-      const result = await executeQuery(`
-        SELECT column_name, data_type
-        FROM information_schema.columns
-        WHERE table_schema = 'public'
-        AND table_name = 'users'
-        AND column_name = 'email'
-      `)
-
-      // THEN: Column should exist in database
-      expect(result.rows.length).toBe(1)
-      expect(result.rows[0].column_name).toBe('email')
-    }
-  )
-
-  test.fixme(
-    'should reject fields array with fewer than 1 item',
-    { tag: '@spec' },
-    async ({ page: _page, startServerWithSchema }) => {
-      // GIVEN: User provides fields with fewer than 1 items
-      // WHEN: Validating input
-      // THEN: Error should enforce minimum items
-
-      // This test will validate schema-level constraint
-      // Implementation will reject empty fields array during configuration
-      const invalidConfig = {
-        name: 'test-app',
-        description: 'Test application',
-        version: '1.0.0',
-        tables: [
-          {
-            id: 1,
-            name: 'users',
-            fields: [], // Invalid: empty array
-          },
-        ],
-      }
-
-      // Attempt to start server with invalid config should fail
-      await expect(async () => {
-        await startServerWithSchema(invalidConfig)
-      }).rejects.toThrow()
-    }
-  )
-})
+    // Attempt to start server with invalid config should fail
+    await expect(async () => {
+      await startServerWithSchema(invalidConfig)
+    }).rejects.toThrow()
+  }
+)
 
 // ============================================================================
 // REGRESSION TEST (@regression)

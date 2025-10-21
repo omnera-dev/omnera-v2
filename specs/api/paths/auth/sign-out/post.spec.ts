@@ -27,47 +27,45 @@ const generateTestUser = () => ({
   name: 'Test User',
 })
 
-test.describe('POST /api/auth/sign-out', () => {
-  /**
-   * Test Case: Sign-out invalidates session
-   *
-   * GIVEN: A user is authenticated
-   * WHEN: User posts to /api/auth/sign-out
-   * THEN: Session should be cleared and subsequent session check should return null
-   */
-  // API-AUTH-SIGN-OUT-001: User signs out
-  test(
-    'API-AUTH-SIGN-OUT-001: should invalidate session on sign-out',
-    { tag: '@regression' },
-    async ({ page, startServerWithSchema }) => {
-      // GIVEN: A running server
-      await startServerWithSchema(
-        {
-          name: 'signout-test',
-        },
-        { useDatabase: true }
-      )
+/**
+ * Test Case: Sign-out invalidates session
+ *
+ * GIVEN: A user is authenticated
+ * WHEN: User posts to /api/auth/sign-out
+ * THEN: Session should be cleared and subsequent session check should return null
+ */
+// API-AUTH-SIGN-OUT-001: User signs out
+test(
+  'API-AUTH-SIGN-OUT-001: should invalidate session on sign-out',
+  { tag: '@regression' },
+  async ({ page, startServerWithSchema }) => {
+    // GIVEN: A running server
+    await startServerWithSchema(
+      {
+        name: 'signout-test',
+      },
+      { useDatabase: true }
+    )
 
-      // AND: A user that is authenticated
-      const testUser = generateTestUser()
-      await page.request.post('/api/auth/sign-up/email', {
-        data: {
-          email: testUser.email,
-          password: testUser.password,
-          name: testUser.name,
-        },
-      })
+    // AND: A user that is authenticated
+    const testUser = generateTestUser()
+    await page.request.post('/api/auth/sign-up/email', {
+      data: {
+        email: testUser.email,
+        password: testUser.password,
+        name: testUser.name,
+      },
+    })
 
-      // WHEN: User signs out
-      const signOutResponse = await page.request.post('/api/auth/sign-out')
+    // WHEN: User signs out
+    const signOutResponse = await page.request.post('/api/auth/sign-out')
 
-      // THEN: Sign-out should succeed
-      expect(signOutResponse.status()).toBe(200)
+    // THEN: Sign-out should succeed
+    expect(signOutResponse.status()).toBe(200)
 
-      // AND: Subsequent session check should return no user
-      const sessionResponse = await page.request.get('/api/auth/get-session')
-      const sessionData = await sessionResponse.json()
-      expect(sessionData?.user || sessionData).toBeNull()
-    }
-  )
-})
+    // AND: Subsequent session check should return no user
+    const sessionResponse = await page.request.get('/api/auth/get-session')
+    const sessionData = await sessionResponse.json()
+    expect(sessionData?.user || sessionData).toBeNull()
+  }
+)

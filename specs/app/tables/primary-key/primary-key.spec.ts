@@ -18,495 +18,493 @@ import { test, expect } from '@/specs/fixtures'
  * Source: docs/specifications/schemas/tables/tables.schema.json (lines 194-245)
  */
 
-test.describe('Tables - Property: primaryKey', () => {
-  // ============================================================================
-  // SPECIFICATION TESTS (@spec) - primaryKey property and nested properties
-  // Source: lines 194-245 in tables.schema.json
-  // ============================================================================
+// ============================================================================
+// SPECIFICATION TESTS (@spec) - primaryKey property and nested properties
+// Source: lines 194-245 in tables.schema.json
+// ============================================================================
 
-  // primaryKey.type tests (lines 194-198)
-  test.fixme(
-    'APP-TABLES-PRIMARYKEY-001: should assign unique ID when new entity is created for primaryKey type',
-    { tag: '@spec' },
-    async ({ page, startServerWithSchema }) => {
-      // GIVEN: A new entity is created
-      await startServerWithSchema({
-        name: 'test-app',
-        description: 'Test application',
-        version: '1.0.0',
-        tables: [
-          {
-            id: 1,
-            name: 'users',
-            fields: [{ id: 1, name: 'email', type: 'email' }],
-            primaryKey: { type: 'auto-increment', field: 'id' },
-          },
-        ],
-      })
+// primaryKey.type tests (lines 194-198)
+test.fixme(
+  'APP-TABLES-PRIMARYKEY-001: should assign unique ID when new entity is created for primaryKey type',
+  { tag: '@spec' },
+  async ({ page, startServerWithSchema }) => {
+    // GIVEN: A new entity is created
+    await startServerWithSchema({
+      name: 'test-app',
+      description: 'Test application',
+      version: '1.0.0',
+      tables: [
+        {
+          id: 1,
+          name: 'users',
+          fields: [{ id: 1, name: 'email', type: 'email' }],
+          primaryKey: { type: 'auto-increment', field: 'id' },
+        },
+      ],
+    })
 
-      // WHEN: The system assigns an ID
-      const response = await page.request.post('/api/tables/1/records', {
-        data: { email: 'test@example.com' },
-      })
+    // WHEN: The system assigns an ID
+    const response = await page.request.post('/api/tables/1/records', {
+      data: { email: 'test@example.com' },
+    })
 
-      // THEN: It should be unique within the parent collection
-      expect(response.status()).toBe(201)
-      const body = await response.json()
-      expect(body.id).toBeDefined()
+    // THEN: It should be unique within the parent collection
+    expect(response.status()).toBe(201)
+    const body = await response.json()
+    expect(body.id).toBeDefined()
+  }
+)
+
+test.fixme(
+  'APP-TABLES-PRIMARYKEY-002: should prevent primaryKey type modification for existing entity',
+  { tag: '@spec' },
+  async ({ page, startServerWithSchema }) => {
+    // GIVEN: An entity exists with primaryKey type
+    await startServerWithSchema({
+      name: 'test-app',
+      description: 'Test application',
+      version: '1.0.0',
+      tables: [
+        {
+          id: 1,
+          name: 'users',
+          fields: [{ id: 1, name: 'email', type: 'email' }],
+          primaryKey: { type: 'auto-increment', field: 'id' },
+        },
+      ],
+    })
+
+    // WHEN: Retrieving configuration via API
+    const response = await page.request.get('/api/tables/1')
+
+    // THEN: Primary key type should be read-only (configuration is immutable)
+    const body = await response.json()
+    expect(body.primaryKey.type).toBe('auto-increment')
+    expect(body.primaryKey.field).toBe('id')
+  }
+)
+
+test.fixme(
+  'should retrieve entity by primaryKey type when ID is valid',
+  { tag: '@spec' },
+  async ({ page, startServerWithSchema }) => {
+    // GIVEN: A client requests an entity by ID
+    await startServerWithSchema({
+      name: 'test-app',
+      description: 'Test application',
+      version: '1.0.0',
+      tables: [
+        {
+          id: 1,
+          name: 'users',
+          fields: [{ id: 1, name: 'email', type: 'email' }],
+          primaryKey: { type: 'uuid', field: 'id' },
+        },
+      ],
+    })
+
+    // WHEN: The ID is valid
+    const response = await page.request.get('/api/tables/1/records/some-uuid')
+
+    // THEN: The entity should be retrieved successfully
+    expect(response.status()).toBe(200)
+  }
+)
+
+// primaryKey.field tests (lines 210-214)
+test.fixme(
+  'should return primaryKey field via API',
+  { tag: '@spec' },
+  async ({ page, startServerWithSchema }) => {
+    // GIVEN: User provides field matching pattern
+    await startServerWithSchema({
+      name: 'test-app',
+      description: 'Test application',
+      version: '1.0.0',
+      tables: [
+        {
+          id: 1,
+          name: 'users',
+          fields: [{ id: 1, name: 'user_id', type: 'integer' }],
+          primaryKey: { type: 'auto-increment', field: 'user_id' },
+        },
+      ],
+    })
+
+    // WHEN: Retrieving configuration via API
+    const response = await page.request.get('/api/tables/1')
+
+    // THEN: Value should be returned correctly
+    const body = await response.json()
+    expect(body.primaryKey.field).toBe('user_id')
+  }
+)
+
+test.fixme(
+  'should create primary key constraint in database for specified field',
+  { tag: '@spec' },
+  async ({ startServerWithSchema, executeQuery }) => {
+    // GIVEN: User provides field matching pattern
+    await startServerWithSchema({
+      name: 'test-app',
+      description: 'Test application',
+      version: '1.0.0',
+      tables: [
+        {
+          id: 1,
+          name: 'users',
+          fields: [{ id: 1, name: 'user_id', type: 'integer' }],
+          primaryKey: { type: 'auto-increment', field: 'user_id' },
+        },
+      ],
+    })
+
+    // WHEN: Querying database for primary key
+    const result = await executeQuery(`
+      SELECT column_name
+      FROM information_schema.key_column_usage
+      WHERE table_schema = 'public'
+      AND table_name = 'users'
+      AND constraint_name LIKE '%_pkey'
+    `)
+
+    // THEN: Primary key constraint should exist on specified field
+    expect(result.rows.length).toBeGreaterThan(0)
+    expect(result.rows[0].column_name).toBe('user_id')
+  }
+)
+
+test.fixme(
+  'should reject primaryKey field not matching pattern',
+  { tag: '@spec' },
+  async ({ page: _page, startServerWithSchema }) => {
+    // GIVEN: User provides field not matching pattern
+    // WHEN: Validating input
+    // THEN: Clear error message should explain format requirement
+
+    const invalidConfig = {
+      name: 'test-app',
+      description: 'Test application',
+      version: '1.0.0',
+      tables: [
+        {
+          id: 1,
+          name: 'users',
+          fields: [{ id: 1, name: 'email', type: 'email' }],
+          primaryKey: { type: 'auto-increment', field: 'Invalid-Field' }, // Invalid pattern
+        },
+      ],
     }
-  )
 
-  test.fixme(
-    'APP-TABLES-PRIMARYKEY-002: should prevent primaryKey type modification for existing entity',
-    { tag: '@spec' },
-    async ({ page, startServerWithSchema }) => {
-      // GIVEN: An entity exists with primaryKey type
-      await startServerWithSchema({
-        name: 'test-app',
-        description: 'Test application',
-        version: '1.0.0',
-        tables: [
-          {
-            id: 1,
-            name: 'users',
-            fields: [{ id: 1, name: 'email', type: 'email' }],
-            primaryKey: { type: 'auto-increment', field: 'id' },
-          },
-        ],
-      })
+    await expect(async () => {
+      // @ts-expect-error - Invalid pattern
+      await startServerWithSchema(invalidConfig)
+    }).rejects.toThrow(/pattern/)
+  }
+)
 
-      // WHEN: Retrieving configuration via API
-      const response = await page.request.get('/api/tables/1')
+test.fixme(
+  'should preserve primaryKey field original format when retrieved',
+  { tag: '@spec' },
+  async ({ page, startServerWithSchema }) => {
+    // GIVEN: Field is stored
+    await startServerWithSchema({
+      name: 'test-app',
+      description: 'Test application',
+      version: '1.0.0',
+      tables: [
+        {
+          id: 1,
+          name: 'users',
+          fields: [{ id: 1, name: 'custom_id', type: 'integer' }],
+          primaryKey: { type: 'auto-increment', field: 'custom_id' },
+        },
+      ],
+    })
 
-      // THEN: Primary key type should be read-only (configuration is immutable)
-      const body = await response.json()
-      expect(body.primaryKey.type).toBe('auto-increment')
-      expect(body.primaryKey.field).toBe('id')
+    // WHEN: Retrieved later
+    const response = await page.request.get('/api/tables/1')
+
+    // THEN: Original format should be preserved
+    const body = await response.json()
+    expect(body.primaryKey.field).toBe('custom_id')
+  }
+)
+
+// primaryKey.fields tests (lines 232-234)
+test.fixme(
+  'should return composite primaryKey fields via API',
+  { tag: '@spec' },
+  async ({ page, startServerWithSchema }) => {
+    // GIVEN: User provides fields with at least 2 items
+    await startServerWithSchema({
+      name: 'test-app',
+      description: 'Test application',
+      version: '1.0.0',
+      tables: [
+        {
+          id: 1,
+          name: 'user_roles',
+          fields: [
+            { id: 1, name: 'tenant_id', type: 'integer' },
+            { id: 2, name: 'user_id', type: 'integer' },
+          ],
+          primaryKey: { type: 'composite', fields: ['tenant_id', 'user_id'] },
+        },
+      ],
+    })
+
+    // WHEN: Retrieving configuration via API
+    const response = await page.request.get('/api/tables/1')
+
+    // THEN: Array should be returned correctly
+    const body = await response.json()
+    expect(body.primaryKey.fields).toEqual(['tenant_id', 'user_id'])
+  }
+)
+
+test.fixme(
+  'should create composite primary key constraint in database',
+  { tag: '@spec' },
+  async ({ startServerWithSchema, executeQuery }) => {
+    // GIVEN: User provides fields with at least 2 items
+    await startServerWithSchema({
+      name: 'test-app',
+      description: 'Test application',
+      version: '1.0.0',
+      tables: [
+        {
+          id: 1,
+          name: 'user_roles',
+          fields: [
+            { id: 1, name: 'tenant_id', type: 'integer' },
+            { id: 2, name: 'user_id', type: 'integer' },
+          ],
+          primaryKey: { type: 'composite', fields: ['tenant_id', 'user_id'] },
+        },
+      ],
+    })
+
+    // WHEN: Querying database for composite primary key
+    const result = await executeQuery(`
+      SELECT column_name
+      FROM information_schema.key_column_usage
+      WHERE table_schema = 'public'
+      AND table_name = 'user_roles'
+      AND constraint_name LIKE '%_pkey'
+      ORDER BY ordinal_position
+    `)
+
+    // THEN: Both fields should be part of primary key
+    expect(result.rows.length).toBe(2)
+    expect(result.rows[0].column_name).toBe('tenant_id')
+    expect(result.rows[1].column_name).toBe('user_id')
+  }
+)
+
+test.fixme(
+  'should reject primaryKey fields array with fewer than 2 items',
+  { tag: '@spec' },
+  async ({ startServerWithSchema }) => {
+    // GIVEN: User provides fields with fewer than 2 items
+    // WHEN: Validating input
+    // THEN: Error should enforce minimum items
+
+    const invalidConfig = {
+      name: 'test-app',
+      description: 'Test application',
+      version: '1.0.0',
+      tables: [
+        {
+          id: 1,
+          name: 'users',
+          fields: [{ id: 1, name: 'tenant_id', type: 'integer' }],
+          primaryKey: { type: 'composite', fields: ['tenant_id'] }, // Invalid: only 1 field
+        },
+      ],
     }
-  )
 
-  test.fixme(
-    'should retrieve entity by primaryKey type when ID is valid',
-    { tag: '@spec' },
-    async ({ page, startServerWithSchema }) => {
-      // GIVEN: A client requests an entity by ID
-      await startServerWithSchema({
-        name: 'test-app',
-        description: 'Test application',
-        version: '1.0.0',
-        tables: [
-          {
-            id: 1,
-            name: 'users',
-            fields: [{ id: 1, name: 'email', type: 'email' }],
-            primaryKey: { type: 'uuid', field: 'id' },
-          },
-        ],
-      })
+    await expect(async () => {
+      // @ts-expect-error - Invalid pattern
+      await startServerWithSchema(invalidConfig)
+    }).rejects.toThrow(/minimum/)
+  }
+)
 
-      // WHEN: The ID is valid
-      const response = await page.request.get('/api/tables/1/records/some-uuid')
+// primaryKey root tests (lines 242-245)
+test.fixme(
+  'should return primaryKey configuration via API',
+  { tag: '@spec' },
+  async ({ page, startServerWithSchema }) => {
+    // GIVEN: User configures primaryKey
+    await startServerWithSchema({
+      name: 'test-app',
+      description: 'Test application',
+      version: '1.0.0',
+      tables: [
+        {
+          id: 1,
+          name: 'users',
+          fields: [{ id: 1, name: 'email', type: 'email' }],
+          primaryKey: { type: 'uuid', field: 'id' },
+        },
+      ],
+    })
 
-      // THEN: The entity should be retrieved successfully
-      expect(response.status()).toBe(200)
-    }
-  )
+    // WHEN: Retrieving configuration via API
+    const response = await page.request.get('/api/tables/1')
 
-  // primaryKey.field tests (lines 210-214)
-  test.fixme(
-    'should return primaryKey field via API',
-    { tag: '@spec' },
-    async ({ page, startServerWithSchema }) => {
-      // GIVEN: User provides field matching pattern
-      await startServerWithSchema({
-        name: 'test-app',
-        description: 'Test application',
-        version: '1.0.0',
-        tables: [
-          {
-            id: 1,
-            name: 'users',
-            fields: [{ id: 1, name: 'user_id', type: 'integer' }],
-            primaryKey: { type: 'auto-increment', field: 'user_id' },
-          },
-        ],
-      })
+    // THEN: Value should meet schema requirements
+    const body = await response.json()
+    expect(body.primaryKey).toBeDefined()
+    expect(body.primaryKey.type).toBe('uuid')
+    expect(body.primaryKey.field).toBe('id')
+  }
+)
 
-      // WHEN: Retrieving configuration via API
-      const response = await page.request.get('/api/tables/1')
+test.fixme(
+  'should create primary key in database based on configuration',
+  { tag: '@spec' },
+  async ({ startServerWithSchema, executeQuery }) => {
+    // GIVEN: User configures primaryKey
+    await startServerWithSchema({
+      name: 'test-app',
+      description: 'Test application',
+      version: '1.0.0',
+      tables: [
+        {
+          id: 1,
+          name: 'users',
+          fields: [{ id: 1, name: 'email', type: 'email' }],
+          primaryKey: { type: 'uuid', field: 'id' },
+        },
+      ],
+    })
 
-      // THEN: Value should be returned correctly
-      const body = await response.json()
-      expect(body.primaryKey.field).toBe('user_id')
-    }
-  )
+    // WHEN: Querying database for primary key constraint
+    const result = await executeQuery(`
+      SELECT constraint_name, column_name
+      FROM information_schema.key_column_usage
+      WHERE table_schema = 'public'
+      AND table_name = 'users'
+      AND constraint_name LIKE '%_pkey'
+    `)
 
-  test.fixme(
-    'should create primary key constraint in database for specified field',
-    { tag: '@spec' },
-    async ({ startServerWithSchema, executeQuery }) => {
-      // GIVEN: User provides field matching pattern
-      await startServerWithSchema({
-        name: 'test-app',
-        description: 'Test application',
-        version: '1.0.0',
-        tables: [
-          {
-            id: 1,
-            name: 'users',
-            fields: [{ id: 1, name: 'user_id', type: 'integer' }],
-            primaryKey: { type: 'auto-increment', field: 'user_id' },
-          },
-        ],
-      })
+    // THEN: Primary key constraint should exist
+    expect(result.rows.length).toBeGreaterThan(0)
+    expect(result.rows[0].column_name).toBe('id')
+  }
+)
 
-      // WHEN: Querying database for primary key
-      const result = await executeQuery(`
-        SELECT column_name
-        FROM information_schema.key_column_usage
-        WHERE table_schema = 'public'
-        AND table_name = 'users'
-        AND constraint_name LIKE '%_pkey'
-      `)
+test.fixme(
+  'should use primaryKey correctly when processing configuration',
+  { tag: '@spec' },
+  async ({ page, startServerWithSchema }) => {
+    // GIVEN: PrimaryKey is set
+    await startServerWithSchema({
+      name: 'test-app',
+      description: 'Test application',
+      version: '1.0.0',
+      tables: [
+        {
+          id: 1,
+          name: 'users',
+          fields: [{ id: 1, name: 'email', type: 'email' }],
+          primaryKey: { type: 'auto-increment', field: 'id' },
+        },
+      ],
+    })
 
-      // THEN: Primary key constraint should exist on specified field
-      expect(result.rows.length).toBeGreaterThan(0)
-      expect(result.rows[0].column_name).toBe('user_id')
-    }
-  )
+    // WHEN: Processing configuration
+    const response = await page.request.post('/api/tables/1/records', {
+      data: { email: 'test@example.com' },
+    })
 
-  test.fixme(
-    'should reject primaryKey field not matching pattern',
-    { tag: '@spec' },
-    async ({ page: _page, startServerWithSchema }) => {
-      // GIVEN: User provides field not matching pattern
-      // WHEN: Validating input
-      // THEN: Clear error message should explain format requirement
+    // THEN: Value should be used correctly
+    expect(response.status()).toBe(201)
+    const body = await response.json()
+    expect(body.id).toBeDefined()
+  }
+)
 
-      const invalidConfig = {
-        name: 'test-app',
-        description: 'Test application',
-        version: '1.0.0',
-        tables: [
-          {
-            id: 1,
-            name: 'users',
-            fields: [{ id: 1, name: 'email', type: 'email' }],
-            primaryKey: { type: 'auto-increment', field: 'Invalid-Field' }, // Invalid pattern
-          },
-        ],
-      }
+// Additional tests for different primary key types
+test.fixme(
+  'should handle auto-increment primary key correctly',
+  { tag: '@spec' },
+  async ({ page, startServerWithSchema }) => {
+    // GIVEN: Table with auto-increment primary key
+    await startServerWithSchema({
+      name: 'test-app',
+      description: 'Test application',
+      version: '1.0.0',
+      tables: [
+        {
+          id: 1,
+          name: 'products',
+          fields: [{ id: 1, name: 'name', type: 'single-line-text' }],
+          primaryKey: { type: 'auto-increment', field: 'id' },
+        },
+      ],
+    })
 
-      await expect(async () => {
-        // @ts-expect-error - Invalid pattern
-        await startServerWithSchema(invalidConfig)
-      }).rejects.toThrow(/pattern/)
-    }
-  )
+    // WHEN: Creating multiple records
+    const response1 = await page.request.post('/api/tables/1/records', {
+      data: { name: 'Product 1' },
+    })
+    const response2 = await page.request.post('/api/tables/1/records', {
+      data: { name: 'Product 2' },
+    })
 
-  test.fixme(
-    'should preserve primaryKey field original format when retrieved',
-    { tag: '@spec' },
-    async ({ page, startServerWithSchema }) => {
-      // GIVEN: Field is stored
-      await startServerWithSchema({
-        name: 'test-app',
-        description: 'Test application',
-        version: '1.0.0',
-        tables: [
-          {
-            id: 1,
-            name: 'users',
-            fields: [{ id: 1, name: 'custom_id', type: 'integer' }],
-            primaryKey: { type: 'auto-increment', field: 'custom_id' },
-          },
-        ],
-      })
+    // THEN: IDs should auto-increment
+    const record1 = await response1.json()
+    const record2 = await response2.json()
+    expect(record2.id).toBeGreaterThan(record1.id)
+  }
+)
 
-      // WHEN: Retrieved later
-      const response = await page.request.get('/api/tables/1')
+test.fixme(
+  'should handle composite primary key correctly',
+  { tag: '@spec' },
+  async ({ page, startServerWithSchema }) => {
+    // GIVEN: Table with composite primary key
+    await startServerWithSchema({
+      name: 'test-app',
+      description: 'Test application',
+      version: '1.0.0',
+      tables: [
+        {
+          id: 1,
+          name: 'user_roles',
+          fields: [
+            { id: 1, name: 'user_id', type: 'integer' },
+            { id: 2, name: 'role_id', type: 'integer' },
+          ],
+          primaryKey: { type: 'composite', fields: ['user_id', 'role_id'] },
+        },
+      ],
+    })
 
-      // THEN: Original format should be preserved
-      const body = await response.json()
-      expect(body.primaryKey.field).toBe('custom_id')
-    }
-  )
+    // WHEN: Creating records with composite key
+    const response1 = await page.request.post('/api/tables/1/records', {
+      data: { user_id: 1, role_id: 1 },
+    })
+    const response2 = await page.request.post('/api/tables/1/records', {
+      data: { user_id: 1, role_id: 2 },
+    })
 
-  // primaryKey.fields tests (lines 232-234)
-  test.fixme(
-    'should return composite primaryKey fields via API',
-    { tag: '@spec' },
-    async ({ page, startServerWithSchema }) => {
-      // GIVEN: User provides fields with at least 2 items
-      await startServerWithSchema({
-        name: 'test-app',
-        description: 'Test application',
-        version: '1.0.0',
-        tables: [
-          {
-            id: 1,
-            name: 'user_roles',
-            fields: [
-              { id: 1, name: 'tenant_id', type: 'integer' },
-              { id: 2, name: 'user_id', type: 'integer' },
-            ],
-            primaryKey: { type: 'composite', fields: ['tenant_id', 'user_id'] },
-          },
-        ],
-      })
+    // THEN: Different composite keys should be allowed
+    expect(response1.status()).toBe(201)
+    expect(response2.status()).toBe(201)
 
-      // WHEN: Retrieving configuration via API
-      const response = await page.request.get('/api/tables/1')
+    // WHEN: Attempting duplicate composite key
+    const response3 = await page.request.post('/api/tables/1/records', {
+      data: { user_id: 1, role_id: 1 },
+    })
 
-      // THEN: Array should be returned correctly
-      const body = await response.json()
-      expect(body.primaryKey.fields).toEqual(['tenant_id', 'user_id'])
-    }
-  )
-
-  test.fixme(
-    'should create composite primary key constraint in database',
-    { tag: '@spec' },
-    async ({ startServerWithSchema, executeQuery }) => {
-      // GIVEN: User provides fields with at least 2 items
-      await startServerWithSchema({
-        name: 'test-app',
-        description: 'Test application',
-        version: '1.0.0',
-        tables: [
-          {
-            id: 1,
-            name: 'user_roles',
-            fields: [
-              { id: 1, name: 'tenant_id', type: 'integer' },
-              { id: 2, name: 'user_id', type: 'integer' },
-            ],
-            primaryKey: { type: 'composite', fields: ['tenant_id', 'user_id'] },
-          },
-        ],
-      })
-
-      // WHEN: Querying database for composite primary key
-      const result = await executeQuery(`
-        SELECT column_name
-        FROM information_schema.key_column_usage
-        WHERE table_schema = 'public'
-        AND table_name = 'user_roles'
-        AND constraint_name LIKE '%_pkey'
-        ORDER BY ordinal_position
-      `)
-
-      // THEN: Both fields should be part of primary key
-      expect(result.rows.length).toBe(2)
-      expect(result.rows[0].column_name).toBe('tenant_id')
-      expect(result.rows[1].column_name).toBe('user_id')
-    }
-  )
-
-  test.fixme(
-    'should reject primaryKey fields array with fewer than 2 items',
-    { tag: '@spec' },
-    async ({ startServerWithSchema }) => {
-      // GIVEN: User provides fields with fewer than 2 items
-      // WHEN: Validating input
-      // THEN: Error should enforce minimum items
-
-      const invalidConfig = {
-        name: 'test-app',
-        description: 'Test application',
-        version: '1.0.0',
-        tables: [
-          {
-            id: 1,
-            name: 'users',
-            fields: [{ id: 1, name: 'tenant_id', type: 'integer' }],
-            primaryKey: { type: 'composite', fields: ['tenant_id'] }, // Invalid: only 1 field
-          },
-        ],
-      }
-
-      await expect(async () => {
-        // @ts-expect-error - Invalid pattern
-        await startServerWithSchema(invalidConfig)
-      }).rejects.toThrow(/minimum/)
-    }
-  )
-
-  // primaryKey root tests (lines 242-245)
-  test.fixme(
-    'should return primaryKey configuration via API',
-    { tag: '@spec' },
-    async ({ page, startServerWithSchema }) => {
-      // GIVEN: User configures primaryKey
-      await startServerWithSchema({
-        name: 'test-app',
-        description: 'Test application',
-        version: '1.0.0',
-        tables: [
-          {
-            id: 1,
-            name: 'users',
-            fields: [{ id: 1, name: 'email', type: 'email' }],
-            primaryKey: { type: 'uuid', field: 'id' },
-          },
-        ],
-      })
-
-      // WHEN: Retrieving configuration via API
-      const response = await page.request.get('/api/tables/1')
-
-      // THEN: Value should meet schema requirements
-      const body = await response.json()
-      expect(body.primaryKey).toBeDefined()
-      expect(body.primaryKey.type).toBe('uuid')
-      expect(body.primaryKey.field).toBe('id')
-    }
-  )
-
-  test.fixme(
-    'should create primary key in database based on configuration',
-    { tag: '@spec' },
-    async ({ startServerWithSchema, executeQuery }) => {
-      // GIVEN: User configures primaryKey
-      await startServerWithSchema({
-        name: 'test-app',
-        description: 'Test application',
-        version: '1.0.0',
-        tables: [
-          {
-            id: 1,
-            name: 'users',
-            fields: [{ id: 1, name: 'email', type: 'email' }],
-            primaryKey: { type: 'uuid', field: 'id' },
-          },
-        ],
-      })
-
-      // WHEN: Querying database for primary key constraint
-      const result = await executeQuery(`
-        SELECT constraint_name, column_name
-        FROM information_schema.key_column_usage
-        WHERE table_schema = 'public'
-        AND table_name = 'users'
-        AND constraint_name LIKE '%_pkey'
-      `)
-
-      // THEN: Primary key constraint should exist
-      expect(result.rows.length).toBeGreaterThan(0)
-      expect(result.rows[0].column_name).toBe('id')
-    }
-  )
-
-  test.fixme(
-    'should use primaryKey correctly when processing configuration',
-    { tag: '@spec' },
-    async ({ page, startServerWithSchema }) => {
-      // GIVEN: PrimaryKey is set
-      await startServerWithSchema({
-        name: 'test-app',
-        description: 'Test application',
-        version: '1.0.0',
-        tables: [
-          {
-            id: 1,
-            name: 'users',
-            fields: [{ id: 1, name: 'email', type: 'email' }],
-            primaryKey: { type: 'auto-increment', field: 'id' },
-          },
-        ],
-      })
-
-      // WHEN: Processing configuration
-      const response = await page.request.post('/api/tables/1/records', {
-        data: { email: 'test@example.com' },
-      })
-
-      // THEN: Value should be used correctly
-      expect(response.status()).toBe(201)
-      const body = await response.json()
-      expect(body.id).toBeDefined()
-    }
-  )
-
-  // Additional tests for different primary key types
-  test.fixme(
-    'should handle auto-increment primary key correctly',
-    { tag: '@spec' },
-    async ({ page, startServerWithSchema }) => {
-      // GIVEN: Table with auto-increment primary key
-      await startServerWithSchema({
-        name: 'test-app',
-        description: 'Test application',
-        version: '1.0.0',
-        tables: [
-          {
-            id: 1,
-            name: 'products',
-            fields: [{ id: 1, name: 'name', type: 'single-line-text' }],
-            primaryKey: { type: 'auto-increment', field: 'id' },
-          },
-        ],
-      })
-
-      // WHEN: Creating multiple records
-      const response1 = await page.request.post('/api/tables/1/records', {
-        data: { name: 'Product 1' },
-      })
-      const response2 = await page.request.post('/api/tables/1/records', {
-        data: { name: 'Product 2' },
-      })
-
-      // THEN: IDs should auto-increment
-      const record1 = await response1.json()
-      const record2 = await response2.json()
-      expect(record2.id).toBeGreaterThan(record1.id)
-    }
-  )
-
-  test.fixme(
-    'should handle composite primary key correctly',
-    { tag: '@spec' },
-    async ({ page, startServerWithSchema }) => {
-      // GIVEN: Table with composite primary key
-      await startServerWithSchema({
-        name: 'test-app',
-        description: 'Test application',
-        version: '1.0.0',
-        tables: [
-          {
-            id: 1,
-            name: 'user_roles',
-            fields: [
-              { id: 1, name: 'user_id', type: 'integer' },
-              { id: 2, name: 'role_id', type: 'integer' },
-            ],
-            primaryKey: { type: 'composite', fields: ['user_id', 'role_id'] },
-          },
-        ],
-      })
-
-      // WHEN: Creating records with composite key
-      const response1 = await page.request.post('/api/tables/1/records', {
-        data: { user_id: 1, role_id: 1 },
-      })
-      const response2 = await page.request.post('/api/tables/1/records', {
-        data: { user_id: 1, role_id: 2 },
-      })
-
-      // THEN: Different composite keys should be allowed
-      expect(response1.status()).toBe(201)
-      expect(response2.status()).toBe(201)
-
-      // WHEN: Attempting duplicate composite key
-      const response3 = await page.request.post('/api/tables/1/records', {
-        data: { user_id: 1, role_id: 1 },
-      })
-
-      // THEN: Should be rejected
-      expect(response3.status()).toBe(409)
-    }
-  )
-})
+    // THEN: Should be rejected
+    expect(response3.status()).toBe(409)
+  }
+)
 
 // ============================================================================
 // REGRESSION TEST (@regression)

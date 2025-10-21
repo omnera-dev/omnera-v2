@@ -26,6 +26,7 @@
 import { existsSync } from 'node:fs'
 import { mkdir, writeFile } from 'node:fs/promises'
 import { join } from 'node:path'
+import prettier from 'prettier'
 import { auth } from '../src/infrastructure/auth/better-auth/auth'
 import { getOpenAPIDocument } from '../src/presentation/api/openapi-schema'
 
@@ -134,6 +135,17 @@ function mergeOpenAPISchemas(
 }
 
 /**
+ * Format JSON content with Prettier
+ */
+async function formatJson(content: unknown): Promise<string> {
+  const prettierConfig = await prettier.resolveConfig(process.cwd())
+  return prettier.format(JSON.stringify(content), {
+    ...prettierConfig,
+    parser: 'json',
+  })
+}
+
+/**
  * Main export function
  */
 async function exportOpenAPI(): Promise<void> {
@@ -170,7 +182,8 @@ async function exportOpenAPI(): Promise<void> {
 
   // Write full OpenAPI document
   const fullSchemaPath = join(outputDir, 'app.openapi.json')
-  await writeFile(fullSchemaPath, JSON.stringify(mergedOpenApiDoc, null, 2))
+  const formattedContent = await formatJson(mergedOpenApiDoc)
+  await writeFile(fullSchemaPath, formattedContent)
   console.log('\n💾 Written: app.openapi.json')
 
   // Count endpoints by tag for summary

@@ -18,6 +18,7 @@
  */
 
 import { join } from 'node:path'
+import prettier from 'prettier'
 import {
   generateSummaryRoadmap,
   generateAppRoadmap,
@@ -42,6 +43,17 @@ const ROADMAP_OUTPUT_PATH = join(PROJECT_ROOT, 'ROADMAP.md')
 const APP_ROADMAP_OUTPUT_PATH = join(PROJECT_ROOT, 'specs/app/ROADMAP.md')
 const API_ROADMAP_OUTPUT_PATH = join(PROJECT_ROOT, 'specs/api/ROADMAP.md')
 const ADMIN_ROADMAP_OUTPUT_PATH = join(PROJECT_ROOT, 'specs/admin/ROADMAP.md')
+
+/**
+ * Format Markdown content with Prettier
+ */
+async function formatMarkdown(content: string): Promise<string> {
+  const prettierConfig = await prettier.resolveConfig(process.cwd())
+  return prettier.format(content, {
+    ...prettierConfig,
+    parser: 'markdown',
+  })
+}
 
 /**
  * Run prerequisite commands to ensure schemas and specs are valid
@@ -175,22 +187,26 @@ async function main() {
 
   // 6a. Main summary roadmap
   const summaryRoadmap = generateSummaryRoadmap(roadmapData)
-  await Bun.write(ROADMAP_OUTPUT_PATH, summaryRoadmap)
+  const formattedSummary = await formatMarkdown(summaryRoadmap)
+  await Bun.write(ROADMAP_OUTPUT_PATH, formattedSummary)
   console.log(`   ✅ ${ROADMAP_OUTPUT_PATH}`)
 
   // 6b. Detailed app roadmap
   const appRoadmap = generateAppRoadmap(roadmapData)
-  await Bun.write(APP_ROADMAP_OUTPUT_PATH, appRoadmap)
+  const formattedApp = await formatMarkdown(appRoadmap)
+  await Bun.write(APP_ROADMAP_OUTPUT_PATH, formattedApp)
   console.log(`   ✅ ${APP_ROADMAP_OUTPUT_PATH}`)
 
   // 6c. Detailed API roadmap
   const apiRoadmap = generateApiRoadmap(roadmapData)
-  await Bun.write(API_ROADMAP_OUTPUT_PATH, apiRoadmap)
+  const formattedApi = await formatMarkdown(apiRoadmap)
+  await Bun.write(API_ROADMAP_OUTPUT_PATH, formattedApi)
   console.log(`   ✅ ${API_ROADMAP_OUTPUT_PATH}`)
 
   // 6d. Detailed Admin roadmap
   const adminRoadmap = generateAdminRoadmap(roadmapData)
-  await Bun.write(ADMIN_ROADMAP_OUTPUT_PATH, adminRoadmap)
+  const formattedAdmin = await formatMarkdown(adminRoadmap)
+  await Bun.write(ADMIN_ROADMAP_OUTPUT_PATH, formattedAdmin)
   console.log(`   ✅ ${ADMIN_ROADMAP_OUTPUT_PATH}\n`)
 
   // 7. Display progress bar

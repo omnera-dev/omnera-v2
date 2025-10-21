@@ -21,74 +21,72 @@ import { test, expect } from '@/specs/fixtures'
  * - OpenAPI Spec: specs/api/paths/auth/reset-password/post.json
  */
 
-test.describe('POST /api/auth/reset-password', () => {
-  /**
-   * Test Case: Reset password validates new password
-   *
-   * GIVEN: A running server
-   * WHEN: User submits password reset without required fields
-   * THEN: Response should be validation error
-   *
-   * NOTE: Full password reset flow requires email integration.
-   * This test validates endpoint validation behavior.
-   */
-  // API-AUTH-RESET-PASSWORD-001: User submits reset without new password
-  test(
-    'API-AUTH-RESET-PASSWORD-001: should validate required fields',
-    { tag: '@regression' },
-    async ({ page, startServerWithSchema }) => {
-      // GIVEN: A running server
-      await startServerWithSchema(
-        {
-          name: 'reset-password-validation-test',
-        },
-        { useDatabase: true }
-      )
+/**
+ * Test Case: Reset password validates new password
+ *
+ * GIVEN: A running server
+ * WHEN: User submits password reset without required fields
+ * THEN: Response should be validation error
+ *
+ * NOTE: Full password reset flow requires email integration.
+ * This test validates endpoint validation behavior.
+ */
+// API-AUTH-RESET-PASSWORD-001: User submits reset without new password
+test(
+  'API-AUTH-RESET-PASSWORD-001: should validate required fields',
+  { tag: '@regression' },
+  async ({ page, startServerWithSchema }) => {
+    // GIVEN: A running server
+    await startServerWithSchema(
+      {
+        name: 'reset-password-validation-test',
+      },
+      { useDatabase: true }
+    )
 
-      // WHEN: User submits reset without new password
-      const response = await page.request.post('/api/auth/reset-password', {
-        data: {
-          token: 'some-token',
-        },
-      })
+    // WHEN: User submits reset without new password
+    const response = await page.request.post('/api/auth/reset-password', {
+      data: {
+        token: 'some-token',
+      },
+    })
 
-      // THEN: Response should be validation error (4xx)
-      expect(response.status()).toBeGreaterThanOrEqual(400)
-      expect(response.status()).toBeLessThan(500)
-    }
-  )
+    // THEN: Response should be validation error (4xx)
+    expect(response.status()).toBeGreaterThanOrEqual(400)
+    expect(response.status()).toBeLessThan(500)
+  }
+)
 
-  /**
-   * Test Case: Reset password rejects invalid token
-   *
-   * GIVEN: A running server
-   * WHEN: User submits password reset with invalid token
-   * THEN: Response should be unauthorized error
-   */
-  // API-AUTH-RESET-PASSWORD-002: User submits reset with invalid token
-  test(
-    'API-AUTH-RESET-PASSWORD-002: should reject invalid reset token',
-    { tag: '@spec' },
-    async ({ page, startServerWithSchema }) => {
-      // GIVEN: A running server
-      await startServerWithSchema(
-        {
-          name: 'reset-password-invalid-token-test',
-        },
-        { useDatabase: true }
-      )
+/**
+ * Test Case: Reset password rejects invalid token
+ *
+ * GIVEN: A running server
+ * WHEN: User submits password reset with invalid token
+ * THEN: Response should be unauthorized error
+ */
+// API-AUTH-RESET-PASSWORD-002: User submits reset with invalid token
+test(
+  'API-AUTH-RESET-PASSWORD-002: should reject invalid reset token',
+  { tag: '@spec' },
+  async ({ page, startServerWithSchema }) => {
+    // GIVEN: A running server
+    await startServerWithSchema(
+      {
+        name: 'reset-password-invalid-token-test',
+      },
+      { useDatabase: true }
+    )
 
-      // WHEN: User submits reset with invalid token
-      const response = await page.request.post('/api/auth/reset-password', {
-        data: {
-          newPassword: 'NewSecurePass123!',
-          token: 'invalid-token-12345',
-        },
-      })
+    // WHEN: User submits reset with invalid token
+    const response = await page.request.post('/api/auth/reset-password', {
+      data: {
+        newPassword: 'NewSecurePass123!',
+        token: 'invalid-token-12345',
+      },
+    })
 
-      // THEN: Response should be client error (4xx) - Better Auth returns 400 for invalid token
-      expect(response.status()).toBeGreaterThanOrEqual(400)
-      expect(response.status()).toBeLessThan(500)
-    }
-  )
-})
+    // THEN: Response should be client error (4xx) - Better Auth returns 400 for invalid token
+    expect(response.status()).toBeGreaterThanOrEqual(400)
+    expect(response.status()).toBeLessThan(500)
+  }
+)

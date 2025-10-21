@@ -2,7 +2,6 @@
 
 > **Last Generated**: 2025-10-21
 
-
 ## Overall Progress
 
 █████████░░░░░░░░░░░░░░░░░░░░░ 30%
@@ -22,7 +21,6 @@
 
 ---
 
-
 ## 1. App Schema Progress
 
 📋 **Goal**: 277 properties
@@ -34,7 +32,6 @@
 👉 **[View Detailed App Roadmap](specs/app/ROADMAP.md)**
 
 ---
-
 
 ## 2. API Schema Progress
 
@@ -48,7 +45,6 @@
 
 ---
 
-
 ## 3. Test Implementation Status
 
 🧪 **Total Specs**: 1140
@@ -60,7 +56,6 @@
 
 ---
 
-
 ## Detailed Roadmaps
 
 For complete specification listings and implementation details:
@@ -68,4 +63,3 @@ For complete specification listings and implementation details:
 - 📋 **[App Schema Roadmap](specs/app/ROADMAP.md)** - All 1073 app specifications
 - 🌐 **[API Schema Roadmap](specs/api/ROADMAP.md)** - All 43 API specifications
 - ⚙️ **[Admin UI Roadmap](specs/admin/ROADMAP.md)** - All 24 admin specifications
-
