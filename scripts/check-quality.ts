@@ -15,12 +15,12 @@
  *   bun run quality src/index.ts      # Example: check specific file
  *
  * Performance optimizations:
- * - Runs fast checks concurrently (ESLint, TypeScript, unit tests)
- * - Uses fail-fast strategy: E2E tests only run if all fast checks pass
+ * - Runs all 4 checks in parallel (ESLint, TypeScript, unit tests, E2E regression)
+ * - Uses fail-fast strategy: exits immediately on first failure (saves time)
  * - Uses ESLint cache for faster subsequent runs
  * - Uses TypeScript incremental mode for faster type checking
  * - Skips checks for comment-only changes (file mode)
- * - Aggregates results and provides clear success/failure feedback
+ * - Provides clear success/failure feedback
  */
 
 import { existsSync } from 'node:fs'
@@ -248,32 +248,45 @@ async function main() {
   }
 
   // Full codebase mode
-  console.log('🔍 Running quality checks on entire codebase in parallel...\n')
+  console.log('🔍 Running quality checks on entire codebase in parallel (fail-fast)...\n')
 
   const overallStart = performance.now()
 
-  // Run fast checks first (ESLint, TypeScript, Unit Tests)
-  const fastChecks = await Promise.all([
-    runCheck('ESLint', ['bunx', 'eslint', '.', '--max-warnings', '0', '--cache'], 30_000),
-    runCheck('TypeScript', ['bunx', 'tsc', '--noEmit', '--incremental'], 60_000),
-    runCheck('Unit Tests', ['bun', 'test', '--concurrent', 'src', 'scripts'], 30_000),
-  ])
+  // Flag to track if we should exit early
+  let shouldExit = false
+  const completedChecks: CheckResult[] = []
 
-  const fastChecksPassed = fastChecks.every((r) => r.success)
+  // Wrapper to implement fail-fast behavior
+  async function runCheckWithFailFast(
+    name: string,
+    command: string[],
+    timeout: number
+  ): Promise<CheckResult> {
+    const result = await runCheck(name, command, timeout)
 
-  // Only run E2E tests if all fast checks passed
-  let results: CheckResult[]
-  if (fastChecksPassed) {
-    const e2eResult = await runCheck(
+    // If this check failed and no other check has triggered exit yet
+    if (!result.success && !shouldExit) {
+      shouldExit = true
+      console.error(`\n❌ Quality check failed: ${name}`)
+      console.error('   Exiting immediately (fail-fast mode)')
+      process.exit(1)
+    }
+
+    completedChecks.push(result)
+    return result
+  }
+
+  // Run all 4 checks in parallel (fail-fast on first error)
+  const results = await Promise.all([
+    runCheckWithFailFast('ESLint', ['bunx', 'eslint', '.', '--max-warnings', '0', '--cache'], 30_000),
+    runCheckWithFailFast('TypeScript', ['bunx', 'tsc', '--noEmit', '--incremental'], 60_000),
+    runCheckWithFailFast('Unit Tests', ['bun', 'test', '--concurrent', 'src', 'scripts'], 30_000),
+    runCheckWithFailFast(
       'E2E Regression Tests',
       ['bunx', 'playwright', 'test', '--grep=@regression'],
       120_000
-    )
-    results = [...fastChecks, e2eResult]
-  } else {
-    console.log('\n  ⏭️  Skipping E2E regression tests (fast checks failed)')
-    results = fastChecks
-  }
+    ),
+  ])
 
   const overallDuration = Math.round(performance.now() - overallStart)
   const allPassed = results.every((r) => r.success)
