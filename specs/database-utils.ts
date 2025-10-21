@@ -91,12 +91,23 @@ export class DatabaseTemplateManager {
    * Called before each test that needs database access
    */
   async duplicateTemplate(testDbName: string): Promise<string> {
-    // Terminate connections to template (required for duplication)
-    await this.terminateConnections(this.templateDbName)
-
-    // Create new database from template
     const adminPool = new Pool({ connectionString: this.adminConnectionUrl })
     try {
+      // Terminate connections to template (required for duplication)
+      await adminPool.query(
+        `
+        SELECT pg_terminate_backend(pg_stat_activity.pid)
+        FROM pg_stat_activity
+        WHERE pg_stat_activity.datname = $1
+          AND pid <> pg_backend_pid()
+      `,
+        [this.templateDbName]
+      )
+
+      // Small delay to ensure connections are fully terminated
+      await new Promise((resolve) => setTimeout(resolve, 100))
+
+      // Create new database from template
       await adminPool.query(`CREATE DATABASE "${testDbName}" TEMPLATE "${this.templateDbName}"`)
     } finally {
       await adminPool.end()
@@ -138,11 +149,12 @@ export class DatabaseTemplateManager {
   }
 
   /**
-   * Terminate all connections to a database
+   * Drop database if exists
    */
-  private async terminateConnections(dbName: string): Promise<void> {
+  private async dropDatabase(dbName: string): Promise<void> {
     const adminPool = new Pool({ connectionString: this.adminConnectionUrl })
     try {
+      // First, terminate all connections to the target database
       await adminPool.query(
         `
         SELECT pg_terminate_backend(pg_stat_activity.pid)
@@ -152,29 +164,17 @@ export class DatabaseTemplateManager {
       `,
         [dbName]
       )
-    } catch {
-      // Ignore errors during connection termination (database might not exist or no connections)
-      // This is a best-effort operation
-    } finally {
-      await adminPool.end()
-    }
-  }
 
-  /**
-   * Drop database if exists
-   */
-  private async dropDatabase(dbName: string): Promise<void> {
-    try {
-      await this.terminateConnections(dbName)
-      const adminPool = new Pool({ connectionString: this.adminConnectionUrl })
-      try {
-        await adminPool.query(`DROP DATABASE IF EXISTS "${dbName}"`)
-      } finally {
-        await adminPool.end()
-      }
+      // Small delay to ensure connections are fully terminated
+      await new Promise((resolve) => setTimeout(resolve, 100))
+
+      // Then drop the database
+      await adminPool.query(`DROP DATABASE IF EXISTS "${dbName}"`)
     } catch (error) {
       // Ignore errors (database might not exist)
       console.warn(`Warning dropping database ${dbName}:`, error)
+    } finally {
+      await adminPool.end()
     }
   }
 }
