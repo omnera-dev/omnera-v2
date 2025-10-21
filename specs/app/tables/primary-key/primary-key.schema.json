@@ -15,7 +15,10 @@
     },
     {
       "type": "composite",
-      "fields": ["tenant_id", "user_id"]
+      "fields": [
+        "tenant_id",
+        "user_id"
+      ]
     }
   ],
   "properties": {
@@ -29,7 +32,9 @@
       "$ref": "./fields/fields.schema.json"
     }
   },
-  "required": ["type"],
+  "required": [
+    "type"
+  ],
   "additionalProperties": false,
   "specs": [
     {
@@ -43,6 +48,54 @@
       "given": "primaryKey is set",
       "when": "processing configuration",
       "then": "value should be used correctly"
+    },
+    {
+      "id": "APP-TABLES-PRIMARYKEY-FIELD-001",
+      "given": "user provides field matching pattern",
+      "when": "validating input",
+      "then": "value should be accepted"
+    },
+    {
+      "id": "APP-TABLES-PRIMARYKEY-FIELD-002",
+      "given": "user provides field not matching pattern",
+      "when": "validating input",
+      "then": "clear error message should explain format requirement"
+    },
+    {
+      "id": "APP-TABLES-PRIMARYKEY-FIELD-003",
+      "given": "field is stored",
+      "when": "retrieved later",
+      "then": "original format should be preserved"
+    },
+    {
+      "id": "APP-TABLES-PRIMARYKEY-TYPE-001",
+      "given": "a new entity is created",
+      "when": "the system assigns an ID",
+      "then": "it should be unique within the parent collection"
+    },
+    {
+      "id": "APP-TABLES-PRIMARYKEY-TYPE-002",
+      "given": "an entity exists",
+      "when": "attempting to modify its ID",
+      "then": "the system should prevent changes (read-only constraint)"
+    },
+    {
+      "id": "APP-TABLES-PRIMARYKEY-TYPE-003",
+      "given": "a client requests an entity by ID",
+      "when": "the ID is valid",
+      "then": "the entity should be retrieved successfully"
+    },
+    {
+      "id": "APP-TABLES-PRIMARYKEY-FIELDS-001",
+      "given": "user provides fields with at least 2 items",
+      "when": "validating input",
+      "then": "array should be accepted"
+    },
+    {
+      "id": "APP-TABLES-PRIMARYKEY-FIELDS-002",
+      "given": "user provides fields with fewer than 2 items",
+      "when": "validating input",
+      "then": "error should enforce minimum items"
     }
   ]
 }

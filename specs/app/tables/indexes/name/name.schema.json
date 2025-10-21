@@ -6,25 +6,9 @@
   "type": "string",
   "minLength": 1,
   "pattern": "^[a-z][a-z0-9_]*$",
-  "examples": ["idx_users_email", "idx_products_sku", "idx_orders_status"],
-  "specs": [
-    {
-      "id": "APP-TABLES-INDEXES-NAME-001",
-      "given": "user provides name matching pattern",
-      "when": "validating input",
-      "then": "value should be accepted"
-    },
-    {
-      "id": "APP-TABLES-INDEXES-NAME-002",
-      "given": "user provides name not matching pattern",
-      "when": "validating input",
-      "then": "clear error message should explain format requirement"
-    },
-    {
-      "id": "APP-TABLES-INDEXES-NAME-003",
-      "given": "name is stored",
-      "when": "retrieved later",
-      "then": "original format should be preserved"
-    }
+  "examples": [
+    "idx_users_email",
+    "idx_products_sku",
+    "idx_orders_status"
   ]
 }

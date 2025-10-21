@@ -10,21 +10,14 @@
   },
   "minItems": 2,
   "examples": [
-    ["email", "tenant_id"],
-    ["first_name", "last_name", "birth_date"]
-  ],
-  "specs": [
-    {
-      "id": "APP-TABLES-UNIQUECONSTRAINTS-FIELDS-001",
-      "given": "user provides fields with at least 2 items",
-      "when": "validating input",
-      "then": "array should be accepted"
-    },
-    {
-      "id": "APP-TABLES-UNIQUECONSTRAINTS-FIELDS-002",
-      "given": "user provides fields with fewer than 2 items",
-      "when": "validating input",
-      "then": "error should enforce minimum items"
-    }
+    [
+      "email",
+      "tenant_id"
+    ],
+    [
+      "first_name",
+      "last_name",
+      "birth_date"
+    ]
   ]
 }

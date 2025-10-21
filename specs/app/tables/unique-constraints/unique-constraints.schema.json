@@ -9,11 +9,17 @@
     [
       {
         "name": "uq_user_email_tenant",
-        "fields": ["email", "tenant_id"]
+        "fields": [
+          "email",
+          "tenant_id"
+        ]
       },
       {
         "name": "uq_product_sku_variant",
-        "fields": ["sku", "variant_id"]
+        "fields": [
+          "sku",
+          "variant_id"
+        ]
       }
     ]
   ],
@@ -27,7 +33,10 @@
         "$ref": "./fields/fields.schema.json"
       }
     },
-    "required": ["name", "fields"],
+    "required": [
+      "name",
+      "fields"
+    ],
     "additionalProperties": false
   },
   "specs": [
@@ -42,6 +51,36 @@
       "given": "uniqueConstraints array is empty",
       "when": "validating input",
       "then": "behavior should follow optional/required rules"
+    },
+    {
+      "id": "APP-TABLES-UNIQUECONSTRAINTS-FIELDS-001",
+      "given": "user provides fields with at least 2 items",
+      "when": "validating input",
+      "then": "array should be accepted"
+    },
+    {
+      "id": "APP-TABLES-UNIQUECONSTRAINTS-FIELDS-002",
+      "given": "user provides fields with fewer than 2 items",
+      "when": "validating input",
+      "then": "error should enforce minimum items"
+    },
+    {
+      "id": "APP-TABLES-UNIQUECONSTRAINTS-NAME-001",
+      "given": "user provides name matching pattern",
+      "when": "validating input",
+      "then": "value should be accepted"
+    },
+    {
+      "id": "APP-TABLES-UNIQUECONSTRAINTS-NAME-002",
+      "given": "user provides name not matching pattern",
+      "when": "validating input",
+      "then": "clear error message should explain format requirement"
+    },
+    {
+      "id": "APP-TABLES-UNIQUECONSTRAINTS-NAME-003",
+      "given": "name is stored",
+      "when": "retrieved later",
+      "then": "original format should be preserved"
     }
   ]
 }

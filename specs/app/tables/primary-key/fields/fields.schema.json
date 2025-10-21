@@ -10,21 +10,13 @@
   },
   "minItems": 2,
   "examples": [
-    ["tenant_id", "user_id"],
-    ["order_id", "product_id"]
-  ],
-  "specs": [
-    {
-      "id": "APP-TABLES-PRIMARYKEY-FIELDS-001",
-      "given": "user provides fields with at least 2 items",
-      "when": "validating input",
-      "then": "array should be accepted"
-    },
-    {
-      "id": "APP-TABLES-PRIMARYKEY-FIELDS-002",
-      "given": "user provides fields with fewer than 2 items",
-      "when": "validating input",
-      "then": "error should enforce minimum items"
-    }
+    [
+      "tenant_id",
+      "user_id"
+    ],
+    [
+      "order_id",
+      "product_id"
+    ]
   ]
 }

@@ -6,25 +6,9 @@
   "type": "string",
   "default": "id",
   "pattern": "^[a-z][a-z0-9_]*$",
-  "examples": ["id", "user_id", "product_id"],
-  "specs": [
-    {
-      "id": "APP-TABLES-PRIMARYKEY-FIELD-001",
-      "given": "user provides field matching pattern",
-      "when": "validating input",
-      "then": "value should be accepted"
-    },
-    {
-      "id": "APP-TABLES-PRIMARYKEY-FIELD-002",
-      "given": "user provides field not matching pattern",
-      "when": "validating input",
-      "then": "clear error message should explain format requirement"
-    },
-    {
-      "id": "APP-TABLES-PRIMARYKEY-FIELD-003",
-      "given": "field is stored",
-      "when": "retrieved later",
-      "then": "original format should be preserved"
-    }
+  "examples": [
+    "id",
+    "user_id",
+    "product_id"
   ]
 }
