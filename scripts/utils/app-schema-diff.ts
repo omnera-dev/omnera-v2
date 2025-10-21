@@ -30,9 +30,9 @@ export async function compareAppSchemas(
   const goalSchema = await resolveJsonSchema(goalSchemaPath)
   const currentSchema = await resolveJsonSchema(currentSchemaPath)
 
-  // Get top-level required properties from goal schema
-  const goalProperties = goalSchema.required || []
-  const currentProperties = currentSchema.required || []
+  // Get top-level properties from both schemas
+  const goalProperties = Object.keys(goalSchema.properties || {})
+  const currentProperties = Object.keys(currentSchema.properties || {})
 
   // Calculate diff
   const missingPaths = goalProperties.filter((prop) => !currentProperties.includes(prop))
