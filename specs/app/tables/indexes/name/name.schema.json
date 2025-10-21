@@ -6,9 +6,5 @@
   "type": "string",
   "minLength": 1,
   "pattern": "^[a-z][a-z0-9_]*$",
-  "examples": [
-    "idx_users_email",
-    "idx_products_sku",
-    "idx_orders_status"
-  ]
+  "examples": ["idx_users_email", "idx_products_sku", "idx_orders_status"]
 }

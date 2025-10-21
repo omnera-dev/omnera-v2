@@ -10,14 +10,7 @@
   },
   "minItems": 2,
   "examples": [
-    [
-      "email",
-      "tenant_id"
-    ],
-    [
-      "first_name",
-      "last_name",
-      "birth_date"
-    ]
+    ["email", "tenant_id"],
+    ["first_name", "last_name", "birth_date"]
   ]
 }

@@ -113,9 +113,7 @@ test.fixme(
             { id: 1, name: 'email', type: 'email' },
             { id: 2, name: 'tenant_id', type: 'integer' },
           ],
-          uniqueConstraints: [
-            { name: 'Invalid-Constraint-Name', fields: ['email', 'tenant_id'] },
-          ],
+          uniqueConstraints: [{ name: 'Invalid-Constraint-Name', fields: ['email', 'tenant_id'] }],
         },
       ],
     }

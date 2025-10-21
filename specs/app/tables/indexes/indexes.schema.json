@@ -9,15 +9,11 @@
     [
       {
         "name": "idx_user_email",
-        "fields": [
-          "email"
-        ]
+        "fields": ["email"]
       },
       {
         "name": "idx_user_created",
-        "fields": [
-          "created_at"
-        ],
+        "fields": ["created_at"],
         "unique": false
       }
     ]
@@ -35,10 +31,7 @@
         "$ref": "./unique/unique.schema.json"
       }
     },
-    "required": [
-      "name",
-      "fields"
-    ],
+    "required": ["name", "fields"],
     "additionalProperties": false
   },
   "specs": [
