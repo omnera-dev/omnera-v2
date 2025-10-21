@@ -203,11 +203,13 @@ export interface RoadmapData {
 export interface NewRoadmapData {
   appSchema: {
     totalProperties: number
+    currentTotalProperties: number
     implementedProperties: number
     missingProperties: number
     completionPercent: number
     missingPropertyPaths: string[]
     implementedPropertyPaths: string[]
+    currentPropertyPaths: string[]
   }
   apiSchema: {
     totalEndpoints: number

@@ -78,6 +78,8 @@ export class DatabaseTemplateManager {
    * Creates and destroys temporary pools to avoid connection termination issues
    */
   private async waitForContainerReady(maxAttempts = 15): Promise<void> {
+    console.log(`   🔄 Waiting for PostgreSQL container at ${this.adminConnectionUrl}...`)
+
     // eslint-disable-next-line functional/no-loop-statements
     for (let i = 0; i < maxAttempts; i++) {
       // Create a fresh pool for each attempt
@@ -91,6 +93,7 @@ export class DatabaseTemplateManager {
         await testPool.query('SELECT 1')
         await testPool.end()
         // Success! Container is ready
+        console.log(`   ✅ Container ready after ${i + 1} attempt(s)`)
         return
       } catch (error) {
         // Always end the pool, even on error
@@ -103,6 +106,13 @@ export class DatabaseTemplateManager {
         if (i === maxAttempts - 1) {
           throw new Error(
             `PostgreSQL container not ready after ${maxAttempts} attempts: ${error instanceof Error ? error.message : error}`
+          )
+        }
+
+        // Log every few attempts for debugging
+        if (i % 3 === 0) {
+          console.log(
+            `   ⏳ Attempt ${i + 1}/${maxAttempts} failed: ${error instanceof Error ? error.message : error}`
           )
         }
 

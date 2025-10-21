@@ -9,11 +9,13 @@ import { resolveJsonSchema } from '../lib/schema-resolver.js'
 
 export interface AppSchemaComparison {
   totalProperties: number
+  currentTotalProperties: number
   implementedProperties: number
   missingProperties: number
   completionPercent: number
   missingPropertyPaths: string[]
   implementedPropertyPaths: string[]
+  currentPropertyPaths: string[]
 }
 
 /**
@@ -101,10 +103,12 @@ export async function compareAppSchemas(
 
   return {
     totalProperties: goalProperties.length,
+    currentTotalProperties: currentProperties.length,
     implementedProperties: implementedPaths.length,
     missingProperties: missingPaths.length,
     completionPercent,
     missingPropertyPaths: missingPaths.sort(),
     implementedPropertyPaths: implementedPaths.sort(),
+    currentPropertyPaths: currentProperties.sort(),
   }
 }

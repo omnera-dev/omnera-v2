@@ -131,7 +131,7 @@ ${overallBar}
 
 ### Individual Metrics
 
-**📋 App Schema Progress**: ${appPercent}% (${data.appSchema.implementedProperties}/${data.appSchema.totalProperties} properties)
+**📋 App Schema Progress**: ${appPercent}% (${data.appSchema.implementedProperties}/${data.appSchema.totalProperties} properties, ${data.appSchema.currentTotalProperties} current)
 ${appBar}
 
 **🌐 API Schema Progress**: ${apiPercent}% (${data.apiSchema.implementedEndpoints}/${data.apiSchema.totalEndpoints} endpoints, ${data.apiSchema.currentTotalEndpoints} current)
@@ -149,12 +149,18 @@ ${testBar}
  * Generate App Schema section
  */
 function generateAppSchemaSection(appSchema: NewRoadmapData['appSchema']): string {
-  const { totalProperties, implementedProperties, missingProperties, completionPercent } = appSchema
+  const {
+    totalProperties,
+    currentTotalProperties,
+    implementedProperties,
+    missingProperties,
+    completionPercent,
+  } = appSchema
 
   let section = `## 1. App Schema Progress
 
 📋 **Goal**: \`specs/app/app.schema.json\` (${totalProperties} properties)
-📦 **Current**: \`schemas/0.0.1/app.schema.json\` (${implementedProperties} properties)
+📦 **Current**: \`schemas/0.0.1/app.schema.json\` (${currentTotalProperties} properties)
 📊 **Completion**: ${completionPercent}% (${implementedProperties}/${totalProperties} implemented)
 
 `
@@ -217,12 +223,13 @@ function generateApiSchemaSection(apiSchema: NewRoadmapData['apiSchema']): strin
  * Generate App Schema summary section
  */
 function generateAppSchemaSummary(appSchema: NewRoadmapData['appSchema']): string {
-  const { totalProperties, implementedProperties, completionPercent } = appSchema
+  const { totalProperties, currentTotalProperties, implementedProperties, completionPercent } =
+    appSchema
 
   return `## 1. App Schema Progress
 
 📋 **Goal**: ${totalProperties} properties
-📦 **Current**: ${implementedProperties} properties
+📦 **Current**: ${currentTotalProperties} properties
 📊 **Completion**: ${completionPercent}%
 
 **Next Steps**: Implement missing properties (${totalProperties - implementedProperties} remaining)
