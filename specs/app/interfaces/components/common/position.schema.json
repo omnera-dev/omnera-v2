@@ -28,5 +28,6 @@
     }
   },
   "required": ["x", "y", "width", "height"],
-  "additionalProperties": false
+  "additionalProperties": false,
+  "specs": []
 }

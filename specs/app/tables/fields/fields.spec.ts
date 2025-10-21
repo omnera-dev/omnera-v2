@@ -25,7 +25,7 @@ test.describe('Tables - Property: fields', () => {
   // ============================================================================
 
   test.fixme(
-    'should return table with correct fields via API',
+    'APP-TABLES-FIELDS-001: should return table with correct fields via API',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: User provides fields with at least 1 item
@@ -55,7 +55,7 @@ test.describe('Tables - Property: fields', () => {
   )
 
   test.fixme(
-    'should create columns in database for each field',
+    'APP-TABLES-FIELDS-002: should create columns in database for each field',
     { tag: '@spec' },
     async ({ startServerWithSchema, executeQuery }) => {
       // GIVEN: User provides fields with at least 1 item

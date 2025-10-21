@@ -42,7 +42,8 @@ async function fixFixtureImports(filePath: string): Promise<boolean> {
   const content = await readFile(filePath, 'utf-8')
 
   // Match any relative import from fixtures (../../fixtures, ../../../fixtures, etc.)
-  const fixtureImportRegex = /import\s*{\s*test\s*,\s*expect\s*}\s*from\s*['"](\.\.\/)+fixtures['"]/g
+  const fixtureImportRegex =
+    /import\s*{\s*test\s*,\s*expect\s*}\s*from\s*['"](\.\.\/)+fixtures['"]/g
 
   const newContent = content.replace(
     fixtureImportRegex,

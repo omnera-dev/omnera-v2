@@ -3,5 +3,6 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "title": "Block Condition",
   "description": "Template expression for conditional rendering",
-  "type": "string"
+  "type": "string",
+  "specs": []
 }

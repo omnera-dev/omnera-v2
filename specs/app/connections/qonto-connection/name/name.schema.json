@@ -6,5 +6,6 @@
   "type": "string",
   "minLength": 1,
   "maxLength": 100,
-  "examples": ["My Qonto Workspace", "Production Database", "Marketing Team Qonto"]
+  "examples": ["My Qonto Workspace", "Production Database", "Marketing Team Qonto"],
+  "specs": []
 }

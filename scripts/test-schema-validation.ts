@@ -23,10 +23,7 @@ async function runTest() {
 
   // Test 1: Invalid JSON
   console.log('Test 1: Invalid JSON syntax')
-  await writeFile(
-    join(TEST_DIR, 'invalid-json.schema.json'),
-    '{"invalid": json, "missing": quote}'
-  )
+  await writeFile(join(TEST_DIR, 'invalid-json.schema.json'), '{"invalid": json, "missing": quote}')
 
   // Test 2: Missing $schema property
   console.log('Test 2: Missing $schema property')

@@ -23,5 +23,6 @@
     }
   },
   "required": ["type", "content"],
-  "additionalProperties": false
+  "additionalProperties": false,
+  "specs": []
 }

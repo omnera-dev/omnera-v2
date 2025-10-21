@@ -25,5 +25,6 @@
     }
   },
   "required": ["type", "image", "alt"],
-  "additionalProperties": false
+  "additionalProperties": false,
+  "specs": []
 }

@@ -4,5 +4,6 @@
   "title": "Open Graph Image",
   "description": "Open Graph image URL for social media sharing",
   "type": "string",
-  "examples": ["/og-image.png", "https://example.com/og-image.jpg"]
+  "examples": ["/og-image.png", "https://example.com/og-image.jpg"],
+  "specs": []
 }

@@ -4,5 +4,6 @@
   "title": "Canonical URL",
   "description": "Canonical URL to prevent duplicate content issues",
   "type": "string",
-  "examples": ["https://omnera.com/about"]
+  "examples": ["https://omnera.com/about"],
+  "specs": []
 }

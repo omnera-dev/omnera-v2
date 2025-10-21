@@ -4,5 +4,6 @@
   "title": "Airtable Connection Type",
   "description": "Connection type discriminator for Airtable integration",
   "const": "airtable",
-  "examples": ["airtable"]
+  "examples": ["airtable"],
+  "specs": []
 }

@@ -28,5 +28,6 @@
     }
   },
   "required": ["id", "type", "src", "alt", "position"],
-  "additionalProperties": false
+  "additionalProperties": false,
+  "specs": []
 }

@@ -13,5 +13,6 @@
         "$ref": "./rest-query/rest-query.schema.json"
       }
     ]
-  }
+  },
+  "specs": []
 }

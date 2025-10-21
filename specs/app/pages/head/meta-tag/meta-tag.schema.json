@@ -18,5 +18,6 @@
     }
   },
   "required": ["tag", "name", "content"],
-  "additionalProperties": false
+  "additionalProperties": false,
+  "specs": []
 }

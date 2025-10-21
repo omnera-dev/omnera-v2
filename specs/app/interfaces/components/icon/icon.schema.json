@@ -29,5 +29,6 @@
     }
   },
   "required": ["id", "type", "name", "position"],
-  "additionalProperties": false
+  "additionalProperties": false,
+  "specs": []
 }

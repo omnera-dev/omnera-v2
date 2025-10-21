@@ -4,5 +4,6 @@
   "title": "Page Name",
   "description": "Internal name for the page",
   "$ref": "../../common/definitions.schema.json#/definitions/name",
-  "examples": ["home", "about", "pricing", "contact"]
+  "examples": ["home", "about", "pricing", "contact"],
+  "specs": []
 }

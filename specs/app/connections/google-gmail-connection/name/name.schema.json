@@ -6,5 +6,6 @@
   "type": "string",
   "minLength": 1,
   "maxLength": 100,
-  "examples": ["My Google Gmail Workspace", "Production Database", "Marketing Team Google Gmail"]
+  "examples": ["My Google Gmail Workspace", "Production Database", "Marketing Team Google Gmail"],
+  "specs": []
 }

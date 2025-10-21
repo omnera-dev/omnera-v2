@@ -26,7 +26,7 @@ test.describe('Tables - Property: indexes', () => {
 
   // indexes[].name tests (lines 353-357)
   test.fixme(
-    'should return indexes name via API',
+    'APP-TABLES-INDEXES-001: should return indexes name via API',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: User provides name matching pattern
@@ -54,7 +54,7 @@ test.describe('Tables - Property: indexes', () => {
   )
 
   test.fixme(
-    'should create index in database with correct name',
+    'APP-TABLES-INDEXES-002: should create index in database with correct name',
     { tag: '@spec' },
     async ({ startServerWithSchema, executeQuery }) => {
       // GIVEN: User provides name matching pattern

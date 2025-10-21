@@ -93,6 +93,7 @@ async function fixTestTitles(filePath: string): Promise<boolean> {
 
         if (titleLineIndex >= 0 && titleMatch) {
           const currentTitle = titleMatch[1]
+          if (!currentTitle) continue
 
           // Check if title already starts with spec ID
           if (!currentTitle.startsWith(`${specId}:`)) {
@@ -100,6 +101,7 @@ async function fixTestTitles(filePath: string): Promise<boolean> {
 
             // Replace the title in the line
             const oldLine = lines[titleLineIndex]
+            if (!oldLine) continue
             const newLine = oldLine.replace(
               new RegExp(`['"]${currentTitle.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}['"]`),
               `'${newTitle}'`
@@ -133,15 +135,11 @@ async function fixTestTitles(filePath: string): Promise<boolean> {
 }
 
 async function main() {
-  const dirs = [
-    join(process.cwd(), 'specs', 'api', 'paths'),
-    join(process.cwd(), 'specs', 'admin'),
-  ]
+  const dirs = [join(process.cwd(), 'specs', 'api', 'paths'), join(process.cwd(), 'specs', 'admin')]
 
   console.log('🔍 Fixing test titles to include spec ID prefix...\n')
 
   let totalFiles = 0
-  let totalFixes = 0
 
   for (const dir of dirs) {
     const files = await findTestFiles(dir)

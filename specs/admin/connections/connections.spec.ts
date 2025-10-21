@@ -19,7 +19,7 @@ import { test, expect } from '@/specs/fixtures'
 
 test.describe('Connection Management (Admin)', () => {
   // ADMIN-CONNECTIONS-001: user is authenticated in a workspace → user navigates to connections page → system displays list of all configured connections with status
-  test.skip(
+  test.fixme(
     'ADMIN-CONNECTIONS-001: should display list of configured connections with status',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -37,7 +37,7 @@ test.describe('Connection Management (Admin)', () => {
   )
 
   // ADMIN-CONNECTIONS-002: connection exists with valid OAuth credentials but is not connected → user initiates connection via 'Connect' button → OAuth flow completes successfully and connection status becomes 'connected'
-  test.skip(
+  test.fixme(
     'ADMIN-CONNECTIONS-002: should complete OAuth flow when user clicks Connect',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -57,7 +57,7 @@ test.describe('Connection Management (Admin)', () => {
   )
 
   // ADMIN-CONNECTIONS-003: connection is in 'connected' status with active tokens → user clicks 'Disconnect' button → connection status changes to 'disconnected' and OAuth tokens are revoked
-  test.skip(
+  test.fixme(
     'ADMIN-CONNECTIONS-003: should disconnect and revoke tokens when user clicks Disconnect',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -77,7 +77,7 @@ test.describe('Connection Management (Admin)', () => {
   )
 
   // ADMIN-CONNECTIONS-004: connection is configured and shareable feature is enabled → user clicks 'Copy Link' button → shareable connection URL is copied to clipboard
-  test.skip(
+  test.fixme(
     'ADMIN-CONNECTIONS-004: should copy shareable connection URL to clipboard',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -104,7 +104,7 @@ test.describe('Connection Management (Admin)', () => {
 // Run during: CI/CD, pre-release (bun test:e2e:regression)
 // ============================================================================
 
-test.skip(
+test.fixme(
   'user can complete full connection management workflow',
   { tag: '@regression' },
   async ({ page, startServerWithSchema }) => {

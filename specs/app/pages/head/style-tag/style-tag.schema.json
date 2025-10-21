@@ -14,5 +14,6 @@
     }
   },
   "required": ["tag", "content"],
-  "additionalProperties": false
+  "additionalProperties": false,
+  "specs": []
 }

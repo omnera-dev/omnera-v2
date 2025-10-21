@@ -4,5 +4,6 @@
   "title": "URL Path",
   "description": "URL path where the page is accessible",
   "$ref": "../../common/definitions.schema.json#/definitions/path",
-  "examples": ["/", "/about", "/pricing", "/contact"]
+  "examples": ["/", "/about", "/pricing", "/contact"],
+  "specs": []
 }

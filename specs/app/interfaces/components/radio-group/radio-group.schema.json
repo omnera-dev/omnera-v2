@@ -47,5 +47,6 @@
     }
   },
   "required": ["id", "type", "options", "position"],
-  "additionalProperties": false
+  "additionalProperties": false,
+  "specs": []
 }

@@ -26,7 +26,7 @@ test.describe('AppSchema - Version', () => {
   // ============================================================================
 
   test(
-    'should display version badge with correct version text for simple SemVer',
+    'APP-VERSION-001: should display version badge with correct version text for simple SemVer',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // Spec ID: APP-VERSION-001
@@ -50,7 +50,7 @@ test.describe('AppSchema - Version', () => {
   )
 
   test(
-    'should NOT render version badge when version property is missing',
+    'APP-VERSION-002: should NOT render version badge when version property is missing',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // Spec ID: APP-VERSION-002
@@ -73,7 +73,7 @@ test.describe('AppSchema - Version', () => {
   )
 
   test(
-    'should display pre-release version exactly as specified',
+    'APP-VERSION-003: should display pre-release version exactly as specified',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // Spec ID: APP-VERSION-003
@@ -97,7 +97,7 @@ test.describe('AppSchema - Version', () => {
   )
 
   test(
-    'should display version with build metadata intact',
+    'APP-VERSION-004: should display version with build metadata intact',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // Spec ID: APP-VERSION-004
@@ -121,7 +121,7 @@ test.describe('AppSchema - Version', () => {
   )
 
   test(
-    'should display complete version string with pre-release and build metadata',
+    'APP-VERSION-005: should display complete version string with pre-release and build metadata',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // Spec ID: APP-VERSION-005
@@ -145,7 +145,7 @@ test.describe('AppSchema - Version', () => {
   )
 
   test(
-    'should display badge before (above) the app name heading',
+    'APP-VERSION-006: should display badge before (above) the app name heading',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // Spec ID: APP-VERSION-006
@@ -182,7 +182,7 @@ test.describe('AppSchema - Version', () => {
   )
 
   test(
-    'should have proper accessibility attributes',
+    'APP-VERSION-007: should have proper accessibility attributes',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // Spec ID: APP-VERSION-007

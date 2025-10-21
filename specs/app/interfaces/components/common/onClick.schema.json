@@ -2,5 +2,6 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "title": "On Click Action",
   "description": "Action to perform when component is clicked. Can trigger navigation, queries, or custom handlers.",
-  "type": "string"
+  "type": "string",
+  "specs": []
 }

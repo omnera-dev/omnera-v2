@@ -4,5 +4,6 @@
   "title": "Notion Connection Type",
   "description": "Connection type discriminator for Notion integration",
   "const": "notion",
-  "examples": ["notion"]
+  "examples": ["notion"],
+  "specs": []
 }

@@ -25,11 +25,11 @@ export const auth = betterAuth({
       user,
       url,
       token,
-    }: {
-      user: { email: string }
+    }: Readonly<{
+      user: Readonly<{ email: string }>
       url: string
       token: string
-    }) => {
+    }>) => {
       // TODO: Implement email sending in production
       // For now, just log the reset link (for E2E tests to pass)
       console.log(`[TEST] Password reset for ${user.email}: ${url}?token=${token}`)
@@ -39,11 +39,11 @@ export const auth = betterAuth({
       user,
       url,
       token,
-    }: {
-      user: { email: string }
+    }: Readonly<{
+      user: Readonly<{ email: string }>
       url: string
       token: string
-    }) => {
+    }>) => {
       // TODO: Implement email sending in production
       // For now, just log the verification link (for E2E tests to pass)
       console.log(`[TEST] Email verification for ${user.email}: ${url}?token=${token}`)

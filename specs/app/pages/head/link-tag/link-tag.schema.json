@@ -21,5 +21,6 @@
     }
   },
   "required": ["tag", "href", "rel"],
-  "additionalProperties": false
+  "additionalProperties": false,
+  "specs": []
 }

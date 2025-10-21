@@ -26,7 +26,7 @@ test.describe('AppSchema - Description', () => {
   // ============================================================================
 
   test(
-    'should display description below app name',
+    'APP-DESCRIPTION-001: should display description below app name',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: app with name and description
@@ -50,7 +50,7 @@ test.describe('AppSchema - Description', () => {
   )
 
   test(
-    'should NOT render description element when description property is missing',
+    'APP-DESCRIPTION-002: should NOT render description element when description property is missing',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: app with only name (no description property)
@@ -73,7 +73,7 @@ test.describe('AppSchema - Description', () => {
   )
 
   test(
-    'should render description AFTER h1 title in DOM order',
+    'APP-DESCRIPTION-003: should render description AFTER h1 title in DOM order',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: app with name and description
@@ -107,7 +107,7 @@ test.describe('AppSchema - Description', () => {
   )
 
   test(
-    'should display special characters correctly',
+    'APP-DESCRIPTION-004: should display special characters correctly',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: app with description containing special characters
@@ -130,7 +130,7 @@ test.describe('AppSchema - Description', () => {
   )
 
   test(
-    'should display Unicode characters and emojis correctly',
+    'APP-DESCRIPTION-005: should display Unicode characters and emojis correctly',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: app with description containing Unicode and emojis
@@ -153,7 +153,7 @@ test.describe('AppSchema - Description', () => {
   )
 
   test(
-    'should wrap long description properly and remain visible',
+    'APP-DESCRIPTION-006: should wrap long description properly and remain visible',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: app with very long description (500+ characters)
@@ -186,7 +186,7 @@ test.describe('AppSchema - Description', () => {
   )
 
   test(
-    'should NOT render description element when description is empty string',
+    'APP-DESCRIPTION-007: should NOT render description element when description is empty string',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: app with empty string description (not undefined)
@@ -209,7 +209,7 @@ test.describe('AppSchema - Description', () => {
   )
 
   test(
-    'should render description as a paragraph element',
+    'APP-DESCRIPTION-008: should render description as a paragraph element',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: app with description
@@ -232,7 +232,7 @@ test.describe('AppSchema - Description', () => {
   )
 
   test(
-    'should center description horizontally',
+    'APP-DESCRIPTION-009: should center description horizontally',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: app with description
@@ -265,7 +265,7 @@ test.describe('AppSchema - Description', () => {
   )
 
   test(
-    'should display description in viewport',
+    'APP-DESCRIPTION-010: should display description in viewport',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: app with description
@@ -289,7 +289,7 @@ test.describe('AppSchema - Description', () => {
   )
 
   test(
-    'should display text exactly as input without transformation',
+    'APP-DESCRIPTION-011: should display text exactly as input without transformation',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: app with description containing mixed case, special chars, and whitespace
@@ -314,7 +314,7 @@ test.describe('AppSchema - Description', () => {
   )
 
   test(
-    'should display all elements in correct order: version → title → description',
+    'APP-DESCRIPTION-012: should display all elements in correct order: version → title → description',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: app with version, name, and description
@@ -355,7 +355,7 @@ test.describe('AppSchema - Description', () => {
   )
 
   test(
-    'should display full description without truncation for very long text',
+    'APP-DESCRIPTION-013: should display full description without truncation for very long text',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: app with very long description (1000+ characters)
@@ -394,7 +394,7 @@ test.describe('AppSchema - Description', () => {
   )
 
   test(
-    'should escape HTML tags and display as text',
+    'APP-DESCRIPTION-014: should escape HTML tags and display as text',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: app with description containing HTML-like tags
@@ -422,7 +422,7 @@ test.describe('AppSchema - Description', () => {
   )
 
   test(
-    'should have appropriate spacing between title and description',
+    'APP-DESCRIPTION-015: should have appropriate spacing between title and description',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: app with name and description

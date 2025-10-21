@@ -25,7 +25,7 @@ test.describe('Tables - Property: name', () => {
   // ============================================================================
 
   test.fixme(
-    'should return table with correct name via API',
+    'APP-TABLES-NAME-001: should return table with correct name via API',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: User configures table name
@@ -53,7 +53,7 @@ test.describe('Tables - Property: name', () => {
   )
 
   test.fixme(
-    'should create table with correct name in database',
+    'APP-TABLES-NAME-002: should create table with correct name in database',
     { tag: '@spec' },
     async ({ startServerWithSchema, executeQuery }) => {
       // GIVEN: User configures table name

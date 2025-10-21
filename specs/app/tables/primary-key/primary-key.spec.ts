@@ -26,7 +26,7 @@ test.describe('Tables - Property: primaryKey', () => {
 
   // primaryKey.type tests (lines 194-198)
   test.fixme(
-    'should assign unique ID when new entity is created for primaryKey type',
+    'APP-TABLES-PRIMARYKEY-001: should assign unique ID when new entity is created for primaryKey type',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: A new entity is created
@@ -57,7 +57,7 @@ test.describe('Tables - Property: primaryKey', () => {
   )
 
   test.fixme(
-    'should prevent primaryKey type modification for existing entity',
+    'APP-TABLES-PRIMARYKEY-002: should prevent primaryKey type modification for existing entity',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: An entity exists with primaryKey type

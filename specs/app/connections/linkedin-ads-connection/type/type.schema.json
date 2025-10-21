@@ -4,5 +4,6 @@
   "title": "LinkedIn Ads Connection Type",
   "description": "Connection type discriminator for LinkedIn Ads integration",
   "const": "linkedin-ads",
-  "examples": ["linkedin-ads"]
+  "examples": ["linkedin-ads"],
+  "specs": []
 }

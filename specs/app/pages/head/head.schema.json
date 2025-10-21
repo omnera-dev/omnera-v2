@@ -20,5 +20,6 @@
         "$ref": "./style-tag/style-tag.schema.json"
       }
     ]
-  }
+  },
+  "specs": []
 }

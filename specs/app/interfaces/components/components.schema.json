@@ -85,5 +85,6 @@
         "$ref": "./list/list.schema.json"
       }
     ]
-  }
+  },
+  "specs": []
 }

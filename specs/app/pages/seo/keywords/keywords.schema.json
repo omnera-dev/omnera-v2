@@ -8,5 +8,6 @@
     "type": "string",
     "minLength": 1
   },
-  "examples": [["no-code", "internal tools", "database builder"]]
+  "examples": [["no-code", "internal tools", "database builder"]],
+  "specs": []
 }

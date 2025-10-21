@@ -200,7 +200,7 @@ async function matchSpecToTest(
     // Extract test description/title (first argument to test())
     // Match: 'test title' or "test title" or `test title`
     const titleMatch = content.match(/^\s*['"`]([^'"`]+)['"`]/)
-    const testTitle = titleMatch ? titleMatch[1] : ''
+    const testTitle = titleMatch?.[1] || ''
 
     // ONLY match if spec ID is at the START of the test title
     // Examples:

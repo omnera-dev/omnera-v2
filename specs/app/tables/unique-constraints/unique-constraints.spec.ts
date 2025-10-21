@@ -26,7 +26,7 @@ test.describe('Tables - Property: uniqueConstraints', () => {
 
   // uniqueConstraints[].name tests (lines 281-285)
   test.fixme(
-    'should return uniqueConstraints name via API',
+    'APP-TABLES-UNIQUECONSTRAINTS-001: should return uniqueConstraints name via API',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: User provides name matching pattern
@@ -57,7 +57,7 @@ test.describe('Tables - Property: uniqueConstraints', () => {
   )
 
   test.fixme(
-    'should create unique constraint in database with correct name',
+    'APP-TABLES-UNIQUECONSTRAINTS-002: should create unique constraint in database with correct name',
     { tag: '@spec' },
     async ({ startServerWithSchema, executeQuery }) => {
       // GIVEN: User provides name matching pattern

@@ -31,7 +31,8 @@
     // Path aliases
     "baseUrl": ".",
     "paths": {
-      "@/*": ["src/*"]
+      "@/*": ["src/*"],
+      "@/specs/*": ["specs/*"]
     }
   }
 }

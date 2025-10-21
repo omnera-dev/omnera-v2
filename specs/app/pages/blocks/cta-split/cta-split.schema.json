@@ -31,5 +31,6 @@
     }
   },
   "required": ["type", "heading", "primaryCta"],
-  "additionalProperties": false
+  "additionalProperties": false,
+  "specs": []
 }

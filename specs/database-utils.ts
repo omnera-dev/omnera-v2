@@ -74,11 +74,12 @@ export class DatabaseTemplateManager {
    * Wait for database to be ready
    */
   private async waitForDatabase(pool: Pool, maxAttempts = 10): Promise<void> {
+    // eslint-disable-next-line functional/no-loop-statements
     for (let i = 0; i < maxAttempts; i++) {
       try {
         await pool.query('SELECT 1')
         return
-      } catch (_error) {
+      } catch (error) {
         if (i === maxAttempts - 1) throw error
         await new Promise((resolve) => setTimeout(resolve, 500))
       }
@@ -151,7 +152,7 @@ export class DatabaseTemplateManager {
       `,
         [dbName]
       )
-    } catch (_error) {
+    } catch {
       // Ignore errors during connection termination (database might not exist or no connections)
       // This is a best-effort operation
     } finally {
@@ -171,7 +172,7 @@ export class DatabaseTemplateManager {
       } finally {
         await adminPool.end()
       }
-    } catch (_error) {
+    } catch (error) {
       // Ignore errors (database might not exist)
       console.warn(`Warning dropping database ${dbName}:`, error)
     }

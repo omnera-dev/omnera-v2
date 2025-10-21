@@ -3,5 +3,6 @@
   "$ref": "../../common/definitions.schema.json#/definitions/path",
   "title": "URL Path",
   "description": "URL path where the interface is accessible",
-  "examples": ["/dashboard", "/users", "/products", "/analytics"]
+  "examples": ["/dashboard", "/users", "/products", "/analytics"],
+  "specs": []
 }

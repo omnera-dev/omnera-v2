@@ -5,5 +5,6 @@
   "description": "OAuth 2.0 client identifier obtained from Google Gmail developer console",
   "type": "string",
   "minLength": 1,
-  "examples": ["google-gmail_client_xyz789"]
+  "examples": ["google-gmail_client_xyz789"],
+  "specs": []
 }

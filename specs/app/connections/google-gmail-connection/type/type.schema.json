@@ -4,5 +4,6 @@
   "title": "Google Gmail Connection Type",
   "description": "Connection type discriminator for Google Gmail integration",
   "const": "google-gmail",
-  "examples": ["google-gmail"]
+  "examples": ["google-gmail"],
+  "specs": []
 }

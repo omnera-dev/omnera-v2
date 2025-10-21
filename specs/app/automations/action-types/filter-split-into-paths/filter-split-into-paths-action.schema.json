@@ -29,7 +29,7 @@
           "actions": {
             "type": "array",
             "items": {
-              "$ref": "../automations.schema.json#/definitions/automation_action"
+              "$ref": "../../actions/actions.schema.json"
             }
           }
         },

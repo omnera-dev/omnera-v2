@@ -2,5 +2,6 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "$ref": "../../common/definitions.schema.json#/definitions/id",
   "title": "Interface ID",
-  "description": "Unique identifier for the interface"
+  "description": "Unique identifier for the interface",
+  "specs": []
 }

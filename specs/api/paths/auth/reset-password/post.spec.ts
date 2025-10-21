@@ -21,12 +21,6 @@ import { test, expect } from '@/specs/fixtures'
  * - OpenAPI Spec: specs/api/paths/auth/reset-password/post.json
  */
 
-const _generateTestUser = () => ({
-  email: `test-${Date.now()}-${Math.random().toString(36).slice(2)}@example.com`,
-  password: 'SecurePassword123!',
-  name: 'Test User',
-})
-
 test.describe('POST /api/auth/reset-password', () => {
   /**
    * Test Case: Reset password validates new password

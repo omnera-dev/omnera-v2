@@ -6,5 +6,6 @@
   "type": "string",
   "minLength": 1,
   "maxLength": 60,
-  "examples": ["Welcome to Omnera", "About Us - Omnera", "Pricing Plans"]
+  "examples": ["Welcome to Omnera", "About Us - Omnera", "Pricing Plans"],
+  "specs": []
 }

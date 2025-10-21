@@ -27,5 +27,6 @@
     }
   },
   "required": ["id", "type", "level", "text", "position"],
-  "additionalProperties": false
+  "additionalProperties": false,
+  "specs": []
 }

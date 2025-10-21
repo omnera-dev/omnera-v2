@@ -25,7 +25,7 @@ test.describe('Tables - Property: id', () => {
   // ============================================================================
 
   test.fixme(
-    'should assign unique ID when new entity is created',
+    'APP-TABLES-ID-001: should assign unique ID when new entity is created',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: A new entity is created
@@ -56,7 +56,7 @@ test.describe('Tables - Property: id', () => {
   )
 
   test.fixme(
-    'should prevent ID modification for existing entity',
+    'APP-TABLES-ID-002: should prevent ID modification for existing entity',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: An entity exists
@@ -85,7 +85,7 @@ test.describe('Tables - Property: id', () => {
   )
 
   test.fixme(
-    'should retrieve entity successfully when ID is valid',
+    'APP-TABLES-ID-003: should retrieve entity successfully when ID is valid',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: A client requests an entity by ID

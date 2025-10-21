@@ -403,18 +403,22 @@ describe('validateSpecToTestMapping', () => {
     expect(result.passed).toBe(false)
   })
 
-  test('warns about unmapped spec IDs in comments', () => {
+  test('warns about unmapped spec IDs in test titles', () => {
     const result = createTestResult()
     const content = `
       // APP-TEST-001: test description
       test('APP-TEST-001: test 1', { tag: '@spec' }, async () => {})
 
       // APP-TEST-999: unknown spec
-      test('APP-TEST-002: test 2', { tag: '@spec' }, async () => {})
+      test('APP-TEST-999: test 2', { tag: '@spec' }, async () => {})
     `
-    validateSpecToTestMapping(content, [specs[0]], 'test.spec.ts', result)
+    const firstSpec = specs[0]
+    if (!firstSpec) throw new Error('Expected first spec to exist')
+    validateSpecToTestMapping(content, [firstSpec], 'test.spec.ts', result)
     expect(result.warnings.length).toBeGreaterThan(0)
-    expect(result.warnings[0]?.message).toContain('Test references unknown spec ID: APP-TEST-999')
+    expect(result.warnings[0]?.message).toContain(
+      'Test title references unknown spec ID: APP-TEST-999'
+    )
   })
 })
 
@@ -553,7 +557,7 @@ describe('validateTestTitlesStartWithSpecIds', () => {
     `
     validateTestTitlesStartWithSpecIds(content, specs, 'test.spec.ts', result)
     expect(result.errors).toHaveLength(1)
-    expect(result.errors[0]?.message).toContain('Test title must start with spec ID')
+    expect(result.errors[0]?.message).toContain('Missing test for spec APP-NAME-001')
     expect(result.errors[0]?.message).toContain('APP-NAME-001:')
     expect(result.passed).toBe(false)
   })
@@ -566,7 +570,8 @@ describe('validateTestTitlesStartWithSpecIds', () => {
     `
     validateTestTitlesStartWithSpecIds(content, specs, 'test.spec.ts', result)
     expect(result.errors).toHaveLength(1)
-    expect(result.errors[0]?.message).toContain('Expected to start with: "APP-NAME-001:"')
+    expect(result.errors[0]?.message).toContain('Missing test for spec APP-NAME-001')
+    expect(result.errors[0]?.message).toContain('APP-NAME-001:')
   })
 
   test('handles multi-segment spec IDs', () => {
@@ -582,12 +587,12 @@ describe('validateTestTitlesStartWithSpecIds', () => {
     expect(result.errors).toHaveLength(0)
   })
 
-  test('ignores tests without spec ID comments', () => {
+  test('allows tests without spec IDs when no specs are provided', () => {
     const result = createTestResult()
     const content = `
       test('some other test', async () => {})
     `
-    validateTestTitlesStartWithSpecIds(content, specs, 'test.spec.ts', result)
+    validateTestTitlesStartWithSpecIds(content, [], 'test.spec.ts', result)
     expect(result.errors).toHaveLength(0)
   })
 })

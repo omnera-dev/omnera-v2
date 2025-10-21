@@ -32,5 +32,6 @@
     }
   },
   "required": ["id", "type", "content", "position"],
-  "additionalProperties": false
+  "additionalProperties": false,
+  "specs": []
 }

@@ -23,5 +23,6 @@
     }
   },
   "required": ["tag"],
-  "additionalProperties": false
+  "additionalProperties": false,
+  "specs": []
 }

@@ -6,5 +6,6 @@
   "type": "string",
   "minLength": 1,
   "maxLength": 100,
-  "examples": ["My LinkedIn Ads Workspace", "Production Database", "Marketing Team LinkedIn Ads"]
+  "examples": ["My LinkedIn Ads Workspace", "Production Database", "Marketing Team LinkedIn Ads"],
+  "specs": []
 }

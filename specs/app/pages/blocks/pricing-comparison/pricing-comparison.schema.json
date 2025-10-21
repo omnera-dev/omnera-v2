@@ -60,5 +60,6 @@
     }
   },
   "required": ["type", "tiers", "features"],
-  "additionalProperties": false
+  "additionalProperties": false,
+  "specs": []
 }

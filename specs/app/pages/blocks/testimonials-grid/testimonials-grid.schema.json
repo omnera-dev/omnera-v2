@@ -41,5 +41,6 @@
     }
   },
   "required": ["type", "testimonials"],
-  "additionalProperties": false
+  "additionalProperties": false,
+  "specs": []
 }

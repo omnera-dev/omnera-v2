@@ -70,5 +70,6 @@
     }
   },
   "required": ["type"],
-  "additionalProperties": false
+  "additionalProperties": false,
+  "specs": []
 }

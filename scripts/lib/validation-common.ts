@@ -154,7 +154,11 @@ export function validateSpec(
 
   // Check required fields
   for (const field of requiredFields) {
-    if (!(field in specObj) || typeof specObj[field] !== 'string') {
+    if (
+      !(field in specObj) ||
+      typeof specObj[field] !== 'string' ||
+      (specObj[field] as string).trim() === ''
+    ) {
       result.errors.push({
         file: filePath,
         type: 'error',
@@ -385,19 +389,72 @@ export function validateSpecToTestMapping(
   filePath: string,
   result: ValidationResult
 ): void {
-  // Extract all spec ID comments from test file
-  // Pattern matches: // API-AUTH-SIGN-UP-EMAIL-001: or // APP-NAME-001:
-  const specIdCommentPattern = /\/\/\s*([A-Z]+(?:-[A-Z]+)*-\d{3,}):/g
-  const foundSpecIds = new Set<string>()
-  let match
+  // Validate that test titles start with their spec IDs
+  // This replaces the old requirement of having spec ID comments
+  validateTestTitlesStartWithSpecIds(content, specs, filePath, result)
+}
 
-  while ((match = specIdCommentPattern.exec(content)) !== null) {
-    if (match[1]) {
-      foundSpecIds.add(match[1])
+/**
+ * Validates that all specs have corresponding tests with titles starting with spec IDs
+ *
+ * New approach: Extract spec IDs from test titles directly (no comments needed)
+ *
+ * Example:
+ *   test('APP-NAME-001: should validate app name', ...)
+ */
+export function validateTestTitlesStartWithSpecIds(
+  content: string,
+  specs: Spec[],
+  filePath: string,
+  result: ValidationResult
+): void {
+  const lines = content.split('\n')
+  const foundSpecIds = new Set<string>()
+
+  // Extract all spec IDs from test titles
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i]
+    if (!line) continue
+
+    // Match test declarations: test('title', ...) or test.skip('title', ...)
+    const testMatch = line.match(/test(?:\.skip|\.fixme)?\s*\(/)
+    if (testMatch) {
+      let testTitle: string | undefined
+
+      // Check if title is on the same line
+      const inlineTitleMatch = line.match(/test(?:\.skip|\.fixme)?\s*\(\s*['"]([^'"]+)['"]/)
+      if (inlineTitleMatch) {
+        testTitle = inlineTitleMatch[1]
+      } else {
+        // Title might be on next lines (multi-line format)
+        for (let j = i + 1; j < Math.min(i + 5, lines.length); j++) {
+          const titleLine = lines[j]
+          if (!titleLine) continue
+
+          const titleMatch = titleLine.match(/^\s*['"]([^'"]+)['"]/)
+          if (titleMatch) {
+            testTitle = titleMatch[1]
+            break
+          }
+
+          // Stop if we hit opening brace or another test
+          if (titleLine.includes('{') || titleLine.match(/test\s*\(/)) {
+            break
+          }
+        }
+      }
+
+      if (testTitle) {
+        // Extract spec ID from test title (format: SPEC-ID: description)
+        const specIdMatch = testTitle.match(/^([A-Z]+(?:-[A-Z]+)*-\d{3,}):/)
+        if (specIdMatch && specIdMatch[1]) {
+          foundSpecIds.add(specIdMatch[1])
+        }
+      }
     }
   }
 
-  // Check that all specs have corresponding test comments
+  // Check that all specs have corresponding tests
   const expectedSpecIds = new Set(specs.map((s) => s.id))
 
   for (const specId of expectedSpecIds) {
@@ -405,107 +462,20 @@ export function validateSpecToTestMapping(
       result.errors.push({
         file: filePath,
         type: 'error',
-        message: `Missing test for spec ${specId} - no matching comment found (expected: // ${specId}: ...)`,
+        message: `Missing test for spec ${specId} - expected a test with title starting with "${specId}:"`,
       })
       result.passed = false
     }
   }
 
-  // Check for unmapped tests (spec IDs in comments but not in specs array)
+  // Warn about tests that reference unknown spec IDs
   for (const foundId of foundSpecIds) {
     if (!expectedSpecIds.has(foundId)) {
       result.warnings.push({
         file: filePath,
         type: 'warning',
-        message: `Test references unknown spec ID: ${foundId} (not found in co-located .json file)`,
+        message: `Test title references unknown spec ID: ${foundId} (not found in co-located .json file)`,
       })
-    }
-  }
-
-  // Check that test titles start with their spec IDs
-  validateTestTitlesStartWithSpecIds(content, specs, filePath, result)
-}
-
-/**
- * Validates that test titles start with their corresponding spec IDs
- *
- * Example:
- *   // APP-NAME-001: description
- *   test('APP-NAME-001: should validate app name', ...)
- */
-export function validateTestTitlesStartWithSpecIds(
-  content: string,
-  _specs: Spec[],
-  filePath: string,
-  result: ValidationResult
-): void {
-  const lines = content.split('\n')
-
-  for (let i = 0; i < lines.length; i++) {
-    const line = lines[i]
-    if (!line) continue
-
-    // Look for spec ID comment lines: // SPEC-ID: description
-    const commentMatch = line.match(/\/\/\s*([A-Z]+(?:-[A-Z]+)*-\d{3,}):/)
-    if (!commentMatch) continue
-
-    const specId = commentMatch[1]
-
-    // Find the next test() declaration after this comment
-    for (let j = i + 1; j < Math.min(i + 10, lines.length); j++) {
-      const testLine = lines[j]
-      if (!testLine) continue
-
-      // Match test declarations: test('title', ...) or test.skip('title', ...)
-      // Support both inline: test('title') and multi-line: test(\n  'title'
-      const testMatch = testLine.match(/test(?:\.skip|\.fixme)?\s*\(/)
-      if (testMatch) {
-        // Found test( declaration, now look for the title string
-        let testTitle: string | undefined
-
-        // Check if title is on the same line
-        const inlineTitleMatch = testLine.match(/test(?:\.skip|\.fixme)?\s*\(\s*['"]([^'"]+)['"]/)
-        if (inlineTitleMatch) {
-          testTitle = inlineTitleMatch[1]
-        } else {
-          // Title might be on next lines (multi-line format)
-          for (let k = j + 1; k < Math.min(j + 5, lines.length); k++) {
-            const titleLine = lines[k]
-            if (!titleLine) continue
-
-            const titleMatch = titleLine.match(/^\s*['"]([^'"]+)['"]/)
-            if (titleMatch) {
-              testTitle = titleMatch[1]
-              break
-            }
-
-            // Stop if we hit opening brace or another test
-            if (titleLine.includes('{') || titleLine.match(/test\s*\(/)) {
-              break
-            }
-          }
-        }
-
-        if (testTitle) {
-          // Check if test title starts with spec ID
-          if (!testTitle.startsWith(`${specId}:`)) {
-            result.errors.push({
-              file: filePath,
-              type: 'error',
-              message: `Test title must start with spec ID. Found: "${testTitle}", Expected to start with: "${specId}:"`,
-            })
-            result.passed = false
-          }
-        }
-
-        // Found the test for this spec ID, stop searching
-        break
-      }
-
-      // If we hit another spec ID comment, stop searching (this spec has no test)
-      if (testLine.match(/\/\/\s*[A-Z]+(?:-[A-Z]+)*-\d{3,}:/)) {
-        break
-      }
     }
   }
 }

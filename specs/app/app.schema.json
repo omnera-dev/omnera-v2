@@ -41,5 +41,6 @@
     "automations",
     "connections"
   ],
-  "additionalProperties": false
+  "additionalProperties": false,
+  "specs": []
 }

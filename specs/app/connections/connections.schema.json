@@ -33,5 +33,6 @@
         "$ref": "./qonto-connection/qonto-connection.schema.json"
       }
     ]
-  }
+  },
+  "specs": []
 }

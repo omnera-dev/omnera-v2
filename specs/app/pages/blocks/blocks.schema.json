@@ -56,5 +56,6 @@
         "$ref": "./contact-form/contact-form.schema.json"
       }
     ]
-  }
+  },
+  "specs": []
 }

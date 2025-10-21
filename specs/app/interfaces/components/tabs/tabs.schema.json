@@ -41,5 +41,6 @@
     }
   },
   "required": ["id", "type", "tabs", "position"],
-  "additionalProperties": false
+  "additionalProperties": false,
+  "specs": []
 }
