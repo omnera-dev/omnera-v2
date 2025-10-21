@@ -130,7 +130,9 @@ async function main() {
   console.log('1️⃣  Analyzing App Schema...')
   const appSchemaProgress = await compareAppSchemas(GOAL_APP_SCHEMA_PATH, CURRENT_APP_SCHEMA_PATH)
   console.log(`   Goal: ${GOAL_APP_SCHEMA_PATH} (${appSchemaProgress.totalProperties} properties)`)
-  console.log(`   Current: ${CURRENT_APP_SCHEMA_PATH} (${appSchemaProgress.currentTotalProperties} properties)`)
+  console.log(
+    `   Current: ${CURRENT_APP_SCHEMA_PATH} (${appSchemaProgress.currentTotalProperties} properties)`
+  )
   console.log(
     `   Implemented: ${appSchemaProgress.implementedProperties}/${appSchemaProgress.totalProperties} properties matching goal (${appSchemaProgress.completionPercent}%)\n`
   )
