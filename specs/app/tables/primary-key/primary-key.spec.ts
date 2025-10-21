@@ -25,7 +25,7 @@ import { test, expect } from '@/specs/fixtures'
 
 // primaryKey.type tests (lines 194-198)
 test.fixme(
-  'APP-TABLES-PRIMARYKEY-001: should assign unique ID when new entity is created for primaryKey type',
+  'APP-TABLES-PRIMARYKEY-TYPE-001: should assign unique ID when new entity is created for primaryKey type',
   { tag: '@spec' },
   async ({ page, startServerWithSchema }) => {
     // GIVEN: A new entity is created
@@ -56,7 +56,7 @@ test.fixme(
 )
 
 test.fixme(
-  'APP-TABLES-PRIMARYKEY-002: should prevent primaryKey type modification for existing entity',
+  'APP-TABLES-PRIMARYKEY-TYPE-002: should prevent primaryKey type modification for existing entity',
   { tag: '@spec' },
   async ({ page, startServerWithSchema }) => {
     // GIVEN: An entity exists with primaryKey type
@@ -85,7 +85,7 @@ test.fixme(
 )
 
 test.fixme(
-  'should retrieve entity by primaryKey type when ID is valid',
+  'APP-TABLES-PRIMARYKEY-TYPE-003: should retrieve entity by primaryKey type when ID is valid',
   { tag: '@spec' },
   async ({ page, startServerWithSchema }) => {
     // GIVEN: A client requests an entity by ID
@@ -113,7 +113,7 @@ test.fixme(
 
 // primaryKey.field tests (lines 210-214)
 test.fixme(
-  'should return primaryKey field via API',
+  'APP-TABLES-PRIMARYKEY-FIELD-001: should return primaryKey field via API',
   { tag: '@spec' },
   async ({ page, startServerWithSchema }) => {
     // GIVEN: User provides field matching pattern
@@ -175,7 +175,7 @@ test.fixme(
 )
 
 test.fixme(
-  'should reject primaryKey field not matching pattern',
+  'APP-TABLES-PRIMARYKEY-FIELD-002: should reject primaryKey field not matching pattern',
   { tag: '@spec' },
   async ({ page: _page, startServerWithSchema }) => {
     // GIVEN: User provides field not matching pattern
@@ -204,7 +204,7 @@ test.fixme(
 )
 
 test.fixme(
-  'should preserve primaryKey field original format when retrieved',
+  'APP-TABLES-PRIMARYKEY-FIELD-003: should preserve primaryKey field original format when retrieved',
   { tag: '@spec' },
   async ({ page, startServerWithSchema }) => {
     // GIVEN: Field is stored
@@ -233,7 +233,7 @@ test.fixme(
 
 // primaryKey.fields tests (lines 232-234)
 test.fixme(
-  'should return composite primaryKey fields via API',
+  'APP-TABLES-PRIMARYKEY-FIELDS-001: should return composite primaryKey fields via API',
   { tag: '@spec' },
   async ({ page, startServerWithSchema }) => {
     // GIVEN: User provides fields with at least 2 items
@@ -303,7 +303,7 @@ test.fixme(
 )
 
 test.fixme(
-  'should reject primaryKey fields array with fewer than 2 items',
+  'APP-TABLES-PRIMARYKEY-FIELDS-002: should reject primaryKey fields array with fewer than 2 items',
   { tag: '@spec' },
   async ({ startServerWithSchema }) => {
     // GIVEN: User provides fields with fewer than 2 items
@@ -333,7 +333,7 @@ test.fixme(
 
 // primaryKey root tests (lines 242-245)
 test.fixme(
-  'should return primaryKey configuration via API',
+  'APP-TABLES-PRIMARYKEY-001: should return primaryKey configuration via API',
   { tag: '@spec' },
   async ({ page, startServerWithSchema }) => {
     // GIVEN: User configures primaryKey
@@ -397,7 +397,7 @@ test.fixme(
 )
 
 test.fixme(
-  'should use primaryKey correctly when processing configuration',
+  'APP-TABLES-PRIMARYKEY-002: should use primaryKey correctly when processing configuration',
   { tag: '@spec' },
   async ({ page, startServerWithSchema }) => {
     // GIVEN: PrimaryKey is set

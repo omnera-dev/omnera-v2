@@ -25,7 +25,7 @@ import { test, expect } from '@/specs/fixtures'
 
 // uniqueConstraints[].name tests (lines 281-285)
 test.fixme(
-  'APP-TABLES-UNIQUECONSTRAINTS-001: should return uniqueConstraints name via API',
+  'APP-TABLES-UNIQUECONSTRAINTS-NAME-001: should return uniqueConstraints name via API',
   { tag: '@spec' },
   async ({ page, startServerWithSchema }) => {
     // GIVEN: User provides name matching pattern
@@ -94,7 +94,7 @@ test.fixme(
 )
 
 test.fixme(
-  'should reject uniqueConstraints name not matching pattern',
+  'APP-TABLES-UNIQUECONSTRAINTS-NAME-002: should reject uniqueConstraints name not matching pattern',
   { tag: '@spec' },
   async ({ startServerWithSchema }) => {
     // GIVEN: User provides name not matching pattern
@@ -126,7 +126,7 @@ test.fixme(
 )
 
 test.fixme(
-  'should preserve uniqueConstraints name original format when retrieved',
+  'APP-TABLES-UNIQUECONSTRAINTS-NAME-003: should preserve uniqueConstraints name original format when retrieved',
   { tag: '@spec' },
   async ({ page, startServerWithSchema }) => {
     // GIVEN: Name is stored
@@ -158,7 +158,7 @@ test.fixme(
 
 // uniqueConstraints[].fields tests (lines 302-305)
 test.fixme(
-  'should return uniqueConstraints fields via API',
+  'APP-TABLES-UNIQUECONSTRAINTS-FIELDS-001: should return uniqueConstraints fields via API',
   { tag: '@spec' },
   async ({ page, startServerWithSchema }) => {
     // GIVEN: User provides fields with at least 2 items
@@ -228,7 +228,7 @@ test.fixme(
 )
 
 test.fixme(
-  'should reject uniqueConstraints fields array with fewer than 2 items',
+  'APP-TABLES-UNIQUECONSTRAINTS-FIELDS-002: should reject uniqueConstraints fields array with fewer than 2 items',
   { tag: '@spec' },
   async ({ startServerWithSchema }) => {
     // GIVEN: User provides fields with fewer than 2 items
@@ -296,7 +296,7 @@ test.fixme(
 )
 
 test.fixme(
-  'should handle empty uniqueConstraints array correctly',
+  'APP-TABLES-UNIQUECONSTRAINTS-001: should handle empty uniqueConstraints array correctly',
   { tag: '@spec' },
   async ({ page, startServerWithSchema }) => {
     // GIVEN: UniqueConstraints array is empty
@@ -324,7 +324,7 @@ test.fixme(
 )
 
 test.fixme(
-  'should enforce uniqueConstraints on record creation',
+  'APP-TABLES-UNIQUECONSTRAINTS-002: should enforce uniqueConstraints on record creation',
   { tag: '@spec' },
   async ({ page, startServerWithSchema }) => {
     // GIVEN: Table with unique constraint

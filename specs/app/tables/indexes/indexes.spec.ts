@@ -25,7 +25,7 @@ import { test, expect } from '@/specs/fixtures'
 
 // indexes[].name tests (lines 353-357)
 test.fixme(
-  'APP-TABLES-INDEXES-001: should return indexes name via API',
+  'APP-TABLES-INDEXES-NAME-001: should return indexes name via API',
   { tag: '@spec' },
   async ({ page, startServerWithSchema }) => {
     // GIVEN: User provides name matching pattern
@@ -87,7 +87,7 @@ test.fixme(
 )
 
 test.fixme(
-  'should reject indexes name not matching pattern',
+  'APP-TABLES-INDEXES-NAME-002: should reject indexes name not matching pattern',
   { tag: '@spec' },
   async ({ startServerWithSchema }) => {
     // GIVEN: User provides name not matching pattern
@@ -116,7 +116,7 @@ test.fixme(
 )
 
 test.fixme(
-  'should preserve indexes name original format when retrieved',
+  'APP-TABLES-INDEXES-NAME-003: should preserve indexes name original format when retrieved',
   { tag: '@spec' },
   async ({ page, startServerWithSchema }) => {
     // GIVEN: Name is stored
@@ -145,7 +145,7 @@ test.fixme(
 
 // indexes[].fields tests (lines 371-374)
 test.fixme(
-  'should return indexes fields via API',
+  'APP-TABLES-INDEXES-FIELDS-001: should return indexes fields via API',
   { tag: '@spec' },
   async ({ page, startServerWithSchema }) => {
     // GIVEN: User provides fields with at least 1 item
@@ -214,7 +214,7 @@ test.fixme(
 )
 
 test.fixme(
-  'should reject indexes fields array with fewer than 1 item',
+  'APP-TABLES-INDEXES-FIELDS-002: should reject indexes fields array with fewer than 1 item',
   { tag: '@spec' },
   async ({ startServerWithSchema }) => {
     // GIVEN: User provides fields with fewer than 1 items
@@ -246,7 +246,7 @@ test.fixme(
 
 // indexes[].unique tests (lines 384-388)
 test.fixme(
-  'should enforce behavior when indexes unique is true',
+  'APP-TABLES-INDEXES-UNIQUE-001: should enforce behavior when indexes unique is true',
   { tag: '@spec' },
   async ({ page, startServerWithSchema }) => {
     // GIVEN: Unique is true
@@ -279,7 +279,7 @@ test.fixme(
 )
 
 test.fixme(
-  'should not enforce unique behavior when indexes unique is false',
+  'APP-TABLES-INDEXES-UNIQUE-002: should not enforce unique behavior when indexes unique is false',
   { tag: '@spec' },
   async ({ page, startServerWithSchema }) => {
     // GIVEN: Unique is false (default: False)
@@ -312,7 +312,7 @@ test.fixme(
 )
 
 test.fixme(
-  'should accept boolean value for indexes unique',
+  'APP-TABLES-INDEXES-UNIQUE-003: should accept boolean value for indexes unique',
   { tag: '@spec' },
   async ({ page, startServerWithSchema }) => {
     // GIVEN: Configuration with unique
@@ -341,7 +341,7 @@ test.fixme(
 
 // indexes root tests (lines 400-403)
 test.fixme(
-  'should process indexes array items in order',
+  'APP-TABLES-INDEXES-001: should process indexes array items in order',
   { tag: '@spec' },
   async ({ page, startServerWithSchema }) => {
     // GIVEN: User provides indexes array
@@ -376,7 +376,7 @@ test.fixme(
 )
 
 test.fixme(
-  'should handle empty indexes array correctly',
+  'APP-TABLES-INDEXES-002: should handle empty indexes array correctly',
   { tag: '@spec' },
   async ({ page, startServerWithSchema }) => {
     // GIVEN: Indexes array is empty

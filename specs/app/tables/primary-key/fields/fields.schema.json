@@ -10,7 +10,14 @@
   },
   "minItems": 2,
   "examples": [
-    ["tenant_id", "user_id"],
-    ["order_id", "product_id"]
-  ]
+    [
+      "tenant_id",
+      "user_id"
+    ],
+    [
+      "order_id",
+      "product_id"
+    ]
+  ],
+  "specs": []
 }
