@@ -9,14 +9,16 @@
  * Validates specs/app/ folder structure against documented patterns
  *
  * Checks:
- * 1. Co-located pattern: Each property/entity has {name}/{name}.schema.json + optional .spec.ts
- * 2. Schema structure: $id, $schema, title, description, specs array
- * 3. Spec format: id (APP- prefix), given, when, then fields
- * 4. Spec ID conventions: Proper format (APP-*-NNN) and global uniqueness
- * 5. Test file validation: Copyright headers, @spec/@regression tags, spec-to-test mapping
- * 6. $ref paths: Relative paths exist and are valid
- * 7. Type discriminators: const vs enum usage
- * 8. Required arrays: Explicit required fields for objects
+ * 1. Valid JSON: All .schema.json files must be valid JSON
+ * 2. JSON Schema Draft 7: All schemas must have $schema: "http://json-schema.org/draft-07/schema#"
+ * 3. Co-located pattern: Each property/entity has {name}/{name}.schema.json + optional .spec.ts
+ * 4. Schema structure: $id, $schema, title, description, specs array
+ * 5. Spec format: id (APP- prefix), given, when, then fields
+ * 6. Spec ID conventions: Proper format (APP-*-NNN) and global uniqueness
+ * 7. Test file validation: Copyright headers, @spec/@regression tags, spec-to-test mapping
+ * 8. $ref paths: Relative paths exist and are valid
+ * 9. Type discriminators: const vs enum usage
+ * 10. Required arrays: Explicit required fields for objects
  */
 
 import { readdir, readFile, stat } from 'node:fs/promises'
@@ -58,7 +60,7 @@ async function validateSpecsStructure(): Promise<ValidationResult> {
 
   try {
     // Find all .schema.json files
-    const schemaFiles = await findSchemaFiles(SPECS_APP_DIR)
+    const schemaFiles = await findSchemaFiles(SPECS_APP_DIR, result)
     result.totalSchemas = schemaFiles.length
 
     console.log(`📄 Found ${schemaFiles.length} schema files\n`)
@@ -87,7 +89,7 @@ async function validateSpecsStructure(): Promise<ValidationResult> {
 // Schema File Discovery
 // ============================================================================
 
-async function findSchemaFiles(dir: string): Promise<SchemaFile[]> {
+async function findSchemaFiles(dir: string, result: ValidationResult): Promise<SchemaFile[]> {
   const files: SchemaFile[] = []
 
   async function walk(currentDir: string) {
@@ -99,17 +101,24 @@ async function findSchemaFiles(dir: string): Promise<SchemaFile[]> {
       if (entry.isDirectory()) {
         await walk(fullPath)
       } else if (entry.isFile() && entry.name.endsWith('.schema.json')) {
+        const relativePath = relative(SPECS_APP_DIR, fullPath)
         try {
           const content = await readFile(fullPath, 'utf-8')
           const parsed = JSON.parse(content)
 
           files.push({
             path: fullPath,
-            relativePath: relative(SPECS_APP_DIR, fullPath),
+            relativePath,
             content: parsed,
           })
         } catch (error) {
-          console.warn(`⚠️  Failed to parse ${fullPath}:`, error)
+          // Invalid JSON is an error, not a warning
+          result.errors.push({
+            file: relativePath,
+            type: 'error',
+            message: `Invalid JSON: ${error instanceof Error ? error.message : String(error)}`,
+          })
+          result.passed = false
         }
       }
     }
@@ -143,7 +152,14 @@ async function validateSchemaFile(
   validateSpecsArray(content, relativePath, 'APP', result, globalSpecIds)
 
   // 5. Check for co-located test file (optional - warning only)
-  await validateTestFileCoLocation(path, relativePath, content.specs || [], result)
+  const specs =
+    typeof content === 'object' &&
+    content !== null &&
+    'specs' in content &&
+    Array.isArray((content as Record<string, unknown>).specs)
+      ? ((content as Record<string, unknown>).specs as Spec[])
+      : []
+  await validateTestFileCoLocation(path, relativePath, specs, result)
 
   // 6. Check $ref paths exist
   await validateRefs(content, path, relativePath, result)
@@ -163,6 +179,15 @@ function validateColocatedPattern(relativePath: string, result: ValidationResult
   const parts = relativePath.split('/')
   const fileName = parts[parts.length - 1]
   const dirName = parts[parts.length - 2]
+
+  if (!fileName) {
+    result.errors.push({
+      file: relativePath,
+      type: 'error',
+      message: 'Invalid file path',
+    })
+    return
+  }
 
   // Extract base name (remove .schema.json)
   const baseName = fileName.replace('.schema.json', '')
@@ -210,11 +235,21 @@ function validateRootProperties(
   relativePath: string,
   result: ValidationResult
 ): void {
+  if (typeof content !== 'object' || content === null) {
+    result.errors.push({
+      file: relativePath,
+      type: 'error',
+      message: 'Content must be an object',
+    })
+    return
+  }
+
+  const obj = content as Record<string, unknown>
   const requiredProps = ['title', 'specs']
   const recommendedProps = ['description']
 
   for (const prop of requiredProps) {
-    if (!content[prop]) {
+    if (!(prop in obj) || !obj[prop]) {
       result.errors.push({
         file: relativePath,
         type: 'error',
@@ -224,7 +259,7 @@ function validateRootProperties(
   }
 
   for (const prop of recommendedProps) {
-    if (!content[prop]) {
+    if (!(prop in obj) || !obj[prop]) {
       result.warnings.push({
         file: relativePath,
         type: 'warning',
@@ -234,25 +269,53 @@ function validateRootProperties(
   }
 
   // Check for $id (should be just filename)
-  if (content.$id) {
+  if ('$id' in obj && typeof obj.$id === 'string') {
     const fileName = relativePath.split('/').pop()
-    if (content.$id !== fileName) {
+    if (fileName && obj.$id !== fileName) {
       result.warnings.push({
         file: relativePath,
         type: 'warning',
-        message: `$id should be just filename (${fileName}), got: ${content.$id}`,
+        message: `$id should be just filename (${fileName}), got: ${obj.$id}`,
       })
     }
   }
 }
 
-function validateSchemaDraft(content: unknown, relativePath: string, result: ValidationResult): void {
-  if (content.$schema && content.$schema !== VALID_SCHEMA_DRAFT) {
-    result.warnings.push({
+function validateSchemaDraft(
+  content: unknown,
+  relativePath: string,
+  result: ValidationResult
+): void {
+  if (typeof content !== 'object' || content === null) return
+
+  const obj = content as Record<string, unknown>
+
+  // Check if $schema property exists
+  if (!('$schema' in obj)) {
+    result.errors.push({
       file: relativePath,
-      type: 'warning',
-      message: `Expected $schema "${VALID_SCHEMA_DRAFT}", got: ${content.$schema}`,
+      type: 'error',
+      message: `Missing required property: $schema (expected "${VALID_SCHEMA_DRAFT}")`,
     })
+    result.passed = false
+    return
+  }
+
+  // Check if $schema is the correct Draft 7 value
+  if (typeof obj.$schema === 'string' && obj.$schema !== VALID_SCHEMA_DRAFT) {
+    result.errors.push({
+      file: relativePath,
+      type: 'error',
+      message: `Invalid $schema value. Expected "${VALID_SCHEMA_DRAFT}", got: "${obj.$schema}"`,
+    })
+    result.passed = false
+  } else if (typeof obj.$schema !== 'string') {
+    result.errors.push({
+      file: relativePath,
+      type: 'error',
+      message: `Invalid $schema type. Expected string "${VALID_SCHEMA_DRAFT}", got: ${typeof obj.$schema}`,
+    })
+    result.passed = false
   }
 }
 
@@ -299,13 +362,15 @@ function findRefs(obj: unknown, refs: string[] = []): string[] {
     return refs
   }
 
-  if (obj.$ref && typeof obj.$ref === 'string') {
-    refs.push(obj.$ref)
+  const record = obj as Record<string, unknown>
+
+  if ('$ref' in record && typeof record.$ref === 'string') {
+    refs.push(record.$ref)
   }
 
-  for (const key in obj) {
-    if (Object.prototype.hasOwnProperty.call(obj, key)) {
-      findRefs(obj[key], refs)
+  for (const key in record) {
+    if (Object.prototype.hasOwnProperty.call(record, key)) {
+      findRefs(record[key], refs)
     }
   }
 
@@ -330,8 +395,16 @@ function checkForEnumDiscriminators(
     return
   }
 
+  const record = obj as Record<string, unknown>
+
   // Check if this is a type discriminator using enum instead of const
-  if (obj.type === 'string' && Array.isArray(obj.enum) && obj.enum.length === 1) {
+  if (
+    'type' in record &&
+    record.type === 'string' &&
+    'enum' in record &&
+    Array.isArray(record.enum) &&
+    record.enum.length === 1
+  ) {
     result.warnings.push({
       file: relativePath,
       type: 'warning',
@@ -340,9 +413,9 @@ function checkForEnumDiscriminators(
   }
 
   // Recursively check nested objects
-  for (const key in obj) {
-    if (Object.prototype.hasOwnProperty.call(obj, key)) {
-      checkForEnumDiscriminators(obj[key], relativePath, result, path ? `${path}.${key}` : key)
+  for (const key in record) {
+    if (Object.prototype.hasOwnProperty.call(record, key)) {
+      checkForEnumDiscriminators(record[key], relativePath, result, path ? `${path}.${key}` : key)
     }
   }
 }
@@ -365,8 +438,15 @@ function checkObjectsHaveRequired(
     return
   }
 
+  const record = obj as Record<string, unknown>
+
   // If this is an object schema with properties, it should have a required array
-  if (obj.type === 'object' && obj.properties && !obj.required) {
+  if (
+    'type' in record &&
+    record.type === 'object' &&
+    'properties' in record &&
+    !('required' in record)
+  ) {
     result.warnings.push({
       file: relativePath,
       type: 'warning',
@@ -375,9 +455,9 @@ function checkObjectsHaveRequired(
   }
 
   // Recursively check nested objects
-  for (const key in obj) {
-    if (Object.prototype.hasOwnProperty.call(obj, key)) {
-      checkObjectsHaveRequired(obj[key], relativePath, result, path ? `${path}.${key}` : key)
+  for (const key in record) {
+    if (Object.prototype.hasOwnProperty.call(record, key)) {
+      checkObjectsHaveRequired(record[key], relativePath, result, path ? `${path}.${key}` : key)
     }
   }
 }
