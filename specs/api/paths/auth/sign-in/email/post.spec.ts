@@ -37,7 +37,7 @@ test.describe('POST /api/auth/sign-in/email', () => {
    */
   // API-AUTH-SIGN-IN-EMAIL-001: User signs in with correct credentials
   test(
-    'should authenticate user with valid credentials',
+    'API-AUTH-SIGN-IN-EMAIL-001: should authenticate user with valid credentials',
     { tag: '@regression' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: A running server
@@ -98,7 +98,7 @@ test.describe('POST /api/auth/sign-in/email', () => {
    */
   // API-AUTH-SIGN-IN-EMAIL-002: User attempts sign-in with wrong password
   test(
-    'should reject incorrect password',
+    'API-AUTH-SIGN-IN-EMAIL-002: should reject incorrect password',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: A running server
@@ -149,7 +149,7 @@ test.describe('POST /api/auth/sign-in/email', () => {
    */
   // API-AUTH-SIGN-IN-EMAIL-003: User attempts sign-in with non-existent email
   test(
-    'should reject non-existent email',
+    'API-AUTH-SIGN-IN-EMAIL-003: should reject non-existent email',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: A running server

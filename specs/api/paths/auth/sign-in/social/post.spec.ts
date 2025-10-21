@@ -34,7 +34,7 @@ test.describe('POST /api/auth/sign-in/social', () => {
    */
   // API-AUTH-SIGN-IN-SOCIAL-001: User requests social sign-in with Google provider
   test(
-    'should return OAuth redirect URL for provider',
+    'API-AUTH-SIGN-IN-SOCIAL-001: should return OAuth redirect URL for provider',
     { tag: '@regression' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: A running server
@@ -77,7 +77,7 @@ test.describe('POST /api/auth/sign-in/social', () => {
    */
   // API-AUTH-SIGN-IN-SOCIAL-002: User requests social sign-in without provider
   test(
-    'should validate required provider field',
+    'API-AUTH-SIGN-IN-SOCIAL-002: should validate required provider field',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: A running server

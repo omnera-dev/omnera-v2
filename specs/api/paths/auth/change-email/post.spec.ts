@@ -38,7 +38,7 @@ test.describe('POST /api/auth/change-email', () => {
    */
   // API-AUTH-CHANGE-EMAIL-001: User requests email change without newEmail
   test(
-    'should validate required newEmail field',
+    'API-AUTH-CHANGE-EMAIL-001: should validate required newEmail field',
     { tag: '@regression' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: A running server
@@ -81,7 +81,7 @@ test.describe('POST /api/auth/change-email', () => {
    */
   // API-AUTH-CHANGE-EMAIL-002: Unauthenticated user requests email change
   test(
-    'should require authentication',
+    'API-AUTH-CHANGE-EMAIL-002: should require authentication',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: A running server
@@ -116,7 +116,7 @@ test.describe('POST /api/auth/change-email', () => {
    */
   // API-AUTH-CHANGE-EMAIL-003: User submits invalid email format
   test(
-    'should validate email format',
+    'API-AUTH-CHANGE-EMAIL-003: should validate email format',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: A running server

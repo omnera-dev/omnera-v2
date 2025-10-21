@@ -16,7 +16,7 @@ interface JSONSchema {
   items?: JSONSchema
   additionalProperties?: boolean | JSONSchema
   required?: string[]
-  [key: string]: any
+  [key: string]: unknown
 }
 
 export interface AppSchemaComparison {
@@ -70,4 +70,3 @@ async function loadSchema(path: string): Promise<JSONSchema> {
   const content = await readFile(path, 'utf-8')
   return JSON.parse(content) as JSONSchema
 }
-

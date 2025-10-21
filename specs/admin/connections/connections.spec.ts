@@ -5,7 +5,7 @@
  * found in the LICENSE.md file in the root directory of this source tree.
  */
 
-import { test, expect } from '../../fixtures'
+import { test, expect } from '../fixtures'
 
 /**
  * E2E Tests for Connection Management (Admin)
@@ -20,7 +20,7 @@ import { test, expect } from '../../fixtures'
 test.describe('Connection Management (Admin)', () => {
   // ADMIN-CONNECTIONS-001: user is authenticated in a workspace → user navigates to connections page → system displays list of all configured connections with status
   test.skip(
-    'should display list of configured connections with status',
+    'ADMIN-CONNECTIONS-001: should display list of configured connections with status',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: user is authenticated in a workspace
@@ -38,7 +38,7 @@ test.describe('Connection Management (Admin)', () => {
 
   // ADMIN-CONNECTIONS-002: connection exists with valid OAuth credentials but is not connected → user initiates connection via 'Connect' button → OAuth flow completes successfully and connection status becomes 'connected'
   test.skip(
-    'should complete OAuth flow when user clicks Connect',
+    'ADMIN-CONNECTIONS-002: should complete OAuth flow when user clicks Connect',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: connection exists with valid OAuth credentials but is not connected
@@ -58,7 +58,7 @@ test.describe('Connection Management (Admin)', () => {
 
   // ADMIN-CONNECTIONS-003: connection is in 'connected' status with active tokens → user clicks 'Disconnect' button → connection status changes to 'disconnected' and OAuth tokens are revoked
   test.skip(
-    'should disconnect and revoke tokens when user clicks Disconnect',
+    'ADMIN-CONNECTIONS-003: should disconnect and revoke tokens when user clicks Disconnect',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: connection is in 'connected' status with active tokens
@@ -78,7 +78,7 @@ test.describe('Connection Management (Admin)', () => {
 
   // ADMIN-CONNECTIONS-004: connection is configured and shareable feature is enabled → user clicks 'Copy Link' button → shareable connection URL is copied to clipboard
   test.skip(
-    'should copy shareable connection URL to clipboard',
+    'ADMIN-CONNECTIONS-004: should copy shareable connection URL to clipboard',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: connection is configured and shareable feature is enabled

@@ -42,7 +42,7 @@ test.describe('POST /api/auth/sign-up/email', () => {
    */
   // API-AUTH-SIGN-UP-EMAIL-001: User signs up with valid credentials
   test(
-    'should create user account and return session',
+    'API-AUTH-SIGN-UP-EMAIL-001: should create user account and return session',
     { tag: '@regression' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: A running server
@@ -91,7 +91,7 @@ test.describe('POST /api/auth/sign-up/email', () => {
    */
   // API-AUTH-SIGN-UP-EMAIL-002: Another user attempts sign-up with same email
   test(
-    'should reject duplicate email addresses',
+    'API-AUTH-SIGN-UP-EMAIL-002: should reject duplicate email addresses',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: A running server
@@ -141,7 +141,7 @@ test.describe('POST /api/auth/sign-up/email', () => {
    */
   // API-AUTH-SIGN-UP-EMAIL-003: User attempts sign-up without email
   test(
-    'should validate required fields and email format',
+    'API-AUTH-SIGN-UP-EMAIL-003: should validate required fields and email format',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: A running server

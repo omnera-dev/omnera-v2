@@ -99,7 +99,9 @@ async function runPrerequisiteChecks(): Promise<boolean> {
   console.log('')
 
   if (!allPassed) {
-    console.error('❌ Prerequisite checks failed. Please fix the errors before generating the roadmap.\n')
+    console.error(
+      '❌ Prerequisite checks failed. Please fix the errors before generating the roadmap.\n'
+    )
     return false
   }
 

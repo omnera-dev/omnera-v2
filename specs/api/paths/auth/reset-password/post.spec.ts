@@ -40,7 +40,7 @@ test.describe('POST /api/auth/reset-password', () => {
    */
   // API-AUTH-RESET-PASSWORD-001: User submits reset without new password
   test(
-    'should validate required fields',
+    'API-AUTH-RESET-PASSWORD-001: should validate required fields',
     { tag: '@regression' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: A running server
@@ -73,7 +73,7 @@ test.describe('POST /api/auth/reset-password', () => {
    */
   // API-AUTH-RESET-PASSWORD-002: User submits reset with invalid token
   test(
-    'should reject invalid reset token',
+    'API-AUTH-RESET-PASSWORD-002: should reject invalid reset token',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: A running server

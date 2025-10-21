@@ -37,7 +37,7 @@ import {
 interface SchemaFile {
   path: string
   relativePath: string
-  content: any
+  content: unknown
 }
 
 // ============================================================================
@@ -206,7 +206,7 @@ async function validateTestFileCoLocation(
 }
 
 function validateRootProperties(
-  content: any,
+  content: unknown,
   relativePath: string,
   result: ValidationResult
 ): void {
@@ -246,7 +246,7 @@ function validateRootProperties(
   }
 }
 
-function validateSchemaDraft(content: any, relativePath: string, result: ValidationResult): void {
+function validateSchemaDraft(content: unknown, relativePath: string, result: ValidationResult): void {
   if (content.$schema && content.$schema !== VALID_SCHEMA_DRAFT) {
     result.warnings.push({
       file: relativePath,
@@ -257,7 +257,7 @@ function validateSchemaDraft(content: any, relativePath: string, result: Validat
 }
 
 async function validateRefs(
-  content: any,
+  content: unknown,
   filePath: string,
   relativePath: string,
   result: ValidationResult
@@ -294,7 +294,7 @@ async function validateRefs(
   }
 }
 
-function findRefs(obj: any, refs: string[] = []): string[] {
+function findRefs(obj: unknown, refs: string[] = []): string[] {
   if (typeof obj !== 'object' || obj === null) {
     return refs
   }
@@ -313,7 +313,7 @@ function findRefs(obj: any, refs: string[] = []): string[] {
 }
 
 function validateTypeDiscriminators(
-  content: any,
+  content: unknown,
   relativePath: string,
   result: ValidationResult
 ): void {
@@ -321,7 +321,7 @@ function validateTypeDiscriminators(
 }
 
 function checkForEnumDiscriminators(
-  obj: any,
+  obj: unknown,
   relativePath: string,
   result: ValidationResult,
   path: string = ''
@@ -348,7 +348,7 @@ function checkForEnumDiscriminators(
 }
 
 function validateRequiredArrays(
-  content: any,
+  content: unknown,
   relativePath: string,
   result: ValidationResult
 ): void {
@@ -356,7 +356,7 @@ function validateRequiredArrays(
 }
 
 function checkObjectsHaveRequired(
-  obj: any,
+  obj: unknown,
   relativePath: string,
   result: ValidationResult,
   path: string = ''

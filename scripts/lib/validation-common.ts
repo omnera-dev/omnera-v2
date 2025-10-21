@@ -165,34 +165,36 @@ export function validateSpec(
   }
 
   // Validate spec ID format
-  if (spec.id) {
-    validateSpecIdFormat(spec.id, filePath, prefix, result)
-    validateSpecIdUniqueness(spec.id, filePath, globalSpecIds, result)
+  if ('id' in specObj && typeof specObj.id === 'string') {
+    validateSpecIdFormat(specObj.id, filePath, prefix, result)
+    validateSpecIdUniqueness(specObj.id, filePath, globalSpecIds, result)
   }
 
   // Check string lengths (should be concise)
   const maxLength = 200
-  if (spec.given && spec.given.length > maxLength) {
+  const id = 'id' in specObj && typeof specObj.id === 'string' ? specObj.id : 'unknown'
+
+  if ('given' in specObj && typeof specObj.given === 'string' && specObj.given.length > maxLength) {
     result.warnings.push({
       file: filePath,
       type: 'warning',
-      message: `Spec ${spec.id} has overly long "given" clause (${spec.given.length} chars)`,
+      message: `Spec ${id} has overly long "given" clause (${specObj.given.length} chars)`,
     })
   }
 
-  if (spec.when && spec.when.length > maxLength) {
+  if ('when' in specObj && typeof specObj.when === 'string' && specObj.when.length > maxLength) {
     result.warnings.push({
       file: filePath,
       type: 'warning',
-      message: `Spec ${spec.id} has overly long "when" clause (${spec.when.length} chars)`,
+      message: `Spec ${id} has overly long "when" clause (${specObj.when.length} chars)`,
     })
   }
 
-  if (spec.then && spec.then.length > maxLength) {
+  if ('then' in specObj && typeof specObj.then === 'string' && specObj.then.length > maxLength) {
     result.warnings.push({
       file: filePath,
       type: 'warning',
-      message: `Spec ${spec.id} has overly long "then" clause (${spec.then.length} chars)`,
+      message: `Spec ${id} has overly long "then" clause (${specObj.then.length} chars)`,
     })
   }
 }

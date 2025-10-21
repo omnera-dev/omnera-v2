@@ -40,7 +40,7 @@ test.describe('POST /api/auth/forget-password', () => {
    */
   // API-AUTH-FORGET-PASSWORD-001: User requests password reset
   test(
-    'should accept password reset request',
+    'API-AUTH-FORGET-PASSWORD-001: should accept password reset request',
     { tag: '@regression' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: A running server
@@ -88,7 +88,7 @@ test.describe('POST /api/auth/forget-password', () => {
    */
   // API-AUTH-FORGET-PASSWORD-002: User requests password reset with invalid email
   test(
-    'should validate email format',
+    'API-AUTH-FORGET-PASSWORD-002: should validate email format',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: A running server

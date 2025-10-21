@@ -18,6 +18,7 @@ import {
   validateTestTags,
   validateRegressionTest,
   validateSpecToTestMapping,
+  validateTestTitlesStartWithSpecIds,
   createValidationResult,
   type ValidationResult,
   type Spec,
@@ -505,7 +506,6 @@ describe('createValidationResult', () => {
 // ============================================================================
 
 describe('validateTestTitlesStartWithSpecIds', () => {
-  const { validateTestTitlesStartWithSpecIds } = require('./validation-common')
   const specs: Spec[] = [
     {
       id: 'APP-NAME-001',

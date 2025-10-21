@@ -37,7 +37,7 @@ test.describe('POST /api/auth/send-verification-email', () => {
    */
   // API-AUTH-SEND-VERIFICATION-EMAIL-001: User requests verification without email
   test(
-    'should validate required email field',
+    'API-AUTH-SEND-VERIFICATION-EMAIL-001: should validate required email field',
     { tag: '@regression' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: A running server
@@ -72,7 +72,7 @@ test.describe('POST /api/auth/send-verification-email', () => {
    */
   // API-AUTH-SEND-VERIFICATION-EMAIL-002: User requests verification email
   test(
-    'should accept verification email request',
+    'API-AUTH-SEND-VERIFICATION-EMAIL-002: should accept verification email request',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: A running server

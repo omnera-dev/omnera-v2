@@ -38,7 +38,7 @@ test.describe('GET /api/health', () => {
    */
   // API-HEALTH-001: User requests health endpoint
   test(
-    'should return 200 OK status',
+    'API-HEALTH-001: should return 200 OK status',
     { tag: '@regression' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: A running server
@@ -67,7 +67,7 @@ test.describe('GET /api/health', () => {
    */
   // API-HEALTH-002: User requests health endpoint
   test(
-    'should return JSON with status, timestamp, and app name',
+    'API-HEALTH-002: should return JSON with status, timestamp, and app name',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: A server with specific app name
@@ -101,7 +101,7 @@ test.describe('GET /api/health', () => {
    */
   // API-HEALTH-003: User requests health endpoint
   test(
-    'should return current timestamp',
+    'API-HEALTH-003: should return current timestamp',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: A running server
@@ -131,7 +131,7 @@ test.describe('GET /api/health', () => {
    */
   // API-HEALTH-004: User requests health endpoint
   test(
-    'should handle scoped package names in health response',
+    'API-HEALTH-004: should handle scoped package names in health response',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: A server with scoped package name

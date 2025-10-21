@@ -14,8 +14,8 @@ interface OpenAPISpec {
     version: string
     description?: string
   }
-  paths: Record<string, Record<string, any>>
-  [key: string]: any
+  paths: Record<string, Record<string, unknown>>
+  [key: string]: unknown
 }
 
 export interface ApiSchemaComparison {
