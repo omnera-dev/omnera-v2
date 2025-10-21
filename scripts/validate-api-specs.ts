@@ -22,16 +22,18 @@ import {
  * This script validates that the specs/api/ directory follows all patterns
  * documented in specs/api/README.md:
  *
- * 1. Co-location Pattern: Each .json has a .spec.ts (required)
- * 2. URL-Based Organization: Directory structure mirrors URL paths
- * 3. HTTP Method Files: Each method is a separate file (get.json, post.json, etc.)
- * 4. Shared Components: All $ref paths are valid
- * 5. Specs Array: Each endpoint .json has a specs array with API- prefix
- * 6. Global Spec ID Uniqueness: No duplicate spec IDs across all files
- * 7. Test Organization: All tests use @spec tag and Given-When-Then
- * 8. Copyright Headers: Required in all test files
- * 9. Regression Tests: Exactly one @regression test per .spec.ts file
- * 10. Spec-to-Test Mapping: All spec IDs have corresponding test comments
+ * 1. Valid JSON: All .json files must be valid JSON
+ * 2. OpenAPI Structure: All files must be valid OpenAPI 3.x Operation Objects
+ * 3. Co-location Pattern: Each .json has a .spec.ts (required)
+ * 4. URL-Based Organization: Directory structure mirrors URL paths
+ * 5. HTTP Method Files: Each method is a separate file (get.json, post.json, etc.)
+ * 6. Shared Components: All $ref paths are valid
+ * 7. Specs Array: Each endpoint .json has a specs array with API- prefix
+ * 8. Global Spec ID Uniqueness: No duplicate spec IDs across all files
+ * 9. Test Organization: All tests use @spec tag and Given-When-Then
+ * 10. Copyright Headers: Required in all test files
+ * 11. Regression Tests: Exactly one @regression test per .spec.ts file
+ * 12. Spec-to-Test Mapping: All spec IDs have corresponding test comments
  */
 
 interface ApiStats {
@@ -137,14 +139,12 @@ function validateHttpMethodNaming(
  * Validate $ref paths in JSON file
  */
 async function validateRefs(
+  json: unknown,
   jsonPath: string,
   relativePath: string,
   result: ValidationResult,
   stats: ApiStats
 ): Promise<void> {
-  const content = await readFile(jsonPath, 'utf-8')
-  const json = JSON.parse(content)
-
   const refs = extractRefs(json)
   const baseDir = dirname(jsonPath)
 
@@ -178,7 +178,7 @@ async function validateRefs(
 /**
  * Extract all $ref values from a JSON object
  */
-function extractRefs(obj: any, refs: string[] = []): string[] {
+function extractRefs(obj: unknown, refs: string[] = []): string[] {
   if (typeof obj !== 'object' || obj === null) {
     return refs
   }
@@ -201,36 +201,62 @@ function extractRefs(obj: any, refs: string[] = []): string[] {
 }
 
 /**
- * Validate OpenAPI spec structure
+ * Validate OpenAPI Operation Object structure
+ *
+ * Validates that the JSON file is a valid OpenAPI 3.x Operation Object
+ * with required fields for proper API documentation.
  */
-async function validateOpenApiStructure(
-  jsonPath: string,
+function validateOpenApiStructure(
+  json: unknown,
   relativePath: string,
   result: ValidationResult
-): Promise<void> {
-  const content = await readFile(jsonPath, 'utf-8')
-  const json = JSON.parse(content)
+): void {
+  // First, ensure it's an object
+  if (typeof json !== 'object' || json === null) {
+    result.errors.push({
+      file: relativePath,
+      type: 'error',
+      message: 'OpenAPI file must be a JSON object',
+    })
+    result.passed = false
+    return
+  }
 
-  // Check recommended OpenAPI fields
-  const recommendedFields = ['summary', 'operationId', 'responses']
+  const obj = json as Record<string, unknown>
+
+  // Required OpenAPI Operation Object fields
+  const requiredFields = ['responses']
+  for (const field of requiredFields) {
+    if (!(field in obj)) {
+      result.errors.push({
+        file: relativePath,
+        type: 'error',
+        message: `Missing required OpenAPI field: ${field}`,
+      })
+      result.passed = false
+    }
+  }
+
+  // Recommended OpenAPI fields (warnings only)
+  const recommendedFields = ['summary', 'operationId']
   for (const field of recommendedFields) {
-    if (!(field in json)) {
+    if (!(field in obj)) {
       result.warnings.push({
         file: relativePath,
         type: 'warning',
-        message: `Missing recommended OpenAPI field "${field}"`,
+        message: `Missing recommended OpenAPI field: ${field}`,
       })
     }
   }
 
   // Check responses has at least one response
-  if (json.responses && typeof json.responses === 'object') {
-    const responseCodes = Object.keys(json.responses)
+  if ('responses' in obj && typeof obj.responses === 'object' && obj.responses !== null) {
+    const responseCodes = Object.keys(obj.responses)
     if (responseCodes.length === 0) {
       result.warnings.push({
         file: relativePath,
         type: 'warning',
-        message: 'No response codes defined in OpenAPI responses object',
+        message: 'OpenAPI responses object is empty (should have at least one status code)',
       })
     }
   }
@@ -258,12 +284,36 @@ async function validateMainOpenApiFile(
   }
 
   const content = await readFile(mainFile, 'utf-8')
-  const json = JSON.parse(content)
+  let json: unknown
+
+  try {
+    json = JSON.parse(content)
+  } catch (parseError) {
+    result.errors.push({
+      file: 'app.openapi.json',
+      type: 'error',
+      message: `Invalid JSON in main OpenAPI file: ${parseError instanceof Error ? parseError.message : String(parseError)}`,
+    })
+    result.passed = false
+    return
+  }
+
+  if (typeof json !== 'object' || json === null) {
+    result.errors.push({
+      file: 'app.openapi.json',
+      type: 'error',
+      message: 'Main OpenAPI file must be a JSON object',
+    })
+    result.passed = false
+    return
+  }
+
+  const obj = json as Record<string, unknown>
 
   // Extract all path refs from main file
   const pathRefs = new Set<string>()
-  if (json.paths) {
-    for (const [, methods] of Object.entries(json.paths)) {
+  if ('paths' in obj && typeof obj.paths === 'object' && obj.paths !== null) {
+    for (const [, methods] of Object.entries(obj.paths)) {
       if (typeof methods === 'object' && methods !== null) {
         for (const [, operation] of Object.entries(methods)) {
           if (
@@ -336,30 +386,46 @@ async function main() {
     // Read and parse JSON file
     try {
       const content = await readFile(jsonPath, 'utf-8')
-      const json = JSON.parse(content)
+      let json: unknown
+
+      // Parse JSON with specific error handling
+      try {
+        json = JSON.parse(content)
+      } catch (parseError) {
+        result.errors.push({
+          file: relativePath,
+          type: 'error',
+          message: `Invalid JSON: ${parseError instanceof Error ? parseError.message : String(parseError)}`,
+        })
+        result.passed = false
+        continue // Skip further validation for this file
+      }
 
       // 1. Validate specs array (using shared validation)
       validateSpecsArray(json, relativePath, 'API', result, globalSpecIds)
 
       // 2. Co-location: Check for matching .spec.ts
-      const specs: Spec[] = json.specs || []
+      const specs: Spec[] =
+        typeof json === 'object' && json !== null && 'specs' in json && Array.isArray(json.specs)
+          ? json.specs
+          : []
       await validateCoLocation(jsonPath, relativePath, specs, result, stats)
 
       // 3. HTTP method naming
       validateHttpMethodNaming(jsonPath, relativePath, result)
 
       // 4. $ref validation
-      await validateRefs(jsonPath, relativePath, result, stats)
+      await validateRefs(json, jsonPath, relativePath, result, stats)
 
       // 5. OpenAPI structure validation
-      await validateOpenApiStructure(jsonPath, relativePath, result)
+      validateOpenApiStructure(json, relativePath, result)
 
       stats.totalSpecs += specs.length
     } catch (error) {
       result.errors.push({
         file: relativePath,
         type: 'error',
-        message: `Failed to process file: ${error}`,
+        message: `Failed to process file: ${error instanceof Error ? error.message : String(error)}`,
       })
       result.passed = false
     }
