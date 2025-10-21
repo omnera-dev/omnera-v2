@@ -280,6 +280,7 @@ Reusable schemas and responses are stored in `components/` and referenced via `$
 ```
 
 **ID Convention**:
+
 - Pattern: `{ENDPOINT-PATH}-{NUMBER}`
 - Examples:
   - `HEALTH-001`, `HEALTH-002`
@@ -287,12 +288,14 @@ Reusable schemas and responses are stored in `components/` and referenced via `$
   - `AUTH-SIGN-UP-EMAIL-001`, `AUTH-SIGN-UP-EMAIL-002`
 
 **Extraction Process**:
+
 1. The `scripts/add-specs-to-api-json.ts` script parses `.spec.ts` files
 2. It extracts GIVEN/WHEN/THEN comments from each `@spec` test
 3. It generates unique IDs based on endpoint path
 4. It adds the `specs` array to the corresponding `.json` file
 
 **Benefits**:
+
 - **Documentation**: Human-readable BDD scenarios in the OpenAPI spec
 - **Traceability**: Direct link between spec and executable tests
 - **Single Source of Truth**: Specs array mirrors actual test implementation
@@ -683,6 +686,7 @@ Relative path: ../../../../components/schemas/User.json
 | **Total**               | **71** | **~5300** | **33**      |
 
 **Specs Breakdown**:
+
 - Health: 4 specs
 - Authentication: 29 specs (across 11 endpoints)
 - Tables/Records: 0 specs (TODO: add tests and extract specs)

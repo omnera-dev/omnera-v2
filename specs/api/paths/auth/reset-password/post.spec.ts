@@ -21,7 +21,7 @@ import { test, expect } from '../../../../fixtures'
  * - OpenAPI Spec: specs/api/paths/auth/reset-password/post.json
  */
 
-const generateTestUser = () => ({
+const _generateTestUser = () => ({
   email: `test-${Date.now()}-${Math.random().toString(36).slice(2)}@example.com`,
   password: 'SecurePassword123!',
   name: 'Test User',
@@ -38,9 +38,10 @@ test.describe('POST /api/auth/reset-password', () => {
    * NOTE: Full password reset flow requires email integration.
    * This test validates endpoint validation behavior.
    */
+  // API-AUTH-RESET-PASSWORD-001: User submits reset without new password
   test(
     'should validate required fields',
-    { tag: '@spec' },
+    { tag: '@regression' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: A running server
       await startServerWithSchema(
@@ -70,6 +71,7 @@ test.describe('POST /api/auth/reset-password', () => {
    * WHEN: User submits password reset with invalid token
    * THEN: Response should be unauthorized error
    */
+  // API-AUTH-RESET-PASSWORD-002: User submits reset with invalid token
   test(
     'should reject invalid reset token',
     { tag: '@spec' },

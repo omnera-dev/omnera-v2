@@ -6,7 +6,7 @@
  */
 
 import { readdir, readFile, writeFile } from 'node:fs/promises'
-import { join, dirname } from 'node:path'
+import { join } from 'node:path'
 
 /**
  * Script to add "specs" arrays to OpenAPI JSON files in specs/api/
@@ -46,7 +46,7 @@ async function extractSpecsFromTestFile(filePath: string): Promise<SpecEntry[]> 
   for (const block of testBlocks) {
     // Extract test name from first parameter
     const testNameMatch = block.match(/['"`](.+?)['"`]\s*,/)
-    const testName = testNameMatch?.[1] || ''
+    const _testName = testNameMatch?.[1] || ''
 
     // Skip if not a @spec test
     if (!block.includes("{ tag: '@spec' }")) {
@@ -64,19 +64,27 @@ async function extractSpecsFromTestFile(filePath: string): Promise<SpecEntry[]> 
       let idPrefix = 'API'
 
       if (pathMatch) {
-        const [, path, method] = pathMatch
-        const pathParts = path.split('/').filter(Boolean)
-        idPrefix = pathParts.map((p) => p.toUpperCase().replace(/[{}]/g, '')).join('-')
+        const [, path, _method] = pathMatch
+        if (path) {
+          const pathParts = path.split('/').filter(Boolean)
+          idPrefix = pathParts.map((p) => p.toUpperCase().replace(/[{}]/g, '')).join('-')
+        }
       }
 
       const id = `${idPrefix}-${String(specCounter).padStart(3, '0')}`
 
-      specs.push({
-        id,
-        given: givenMatch[1].trim(),
-        when: whenMatch[1].trim(),
-        then: thenMatch[1].trim(),
-      })
+      const givenText = givenMatch?.[1]?.trim()
+      const whenText = whenMatch?.[1]?.trim()
+      const thenText = thenMatch?.[1]?.trim()
+
+      if (givenText && whenText && thenText) {
+        specs.push({
+          id,
+          given: givenText,
+          when: whenText,
+          then: thenText,
+        })
+      }
 
       specCounter++
     }

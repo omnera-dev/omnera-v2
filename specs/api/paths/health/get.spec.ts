@@ -36,22 +36,27 @@ test.describe('GET /api/health', () => {
    * WHEN: User requests GET /api/health
    * THEN: Response should be 200 OK with JSON content-type
    */
-  test('should return 200 OK status', { tag: '@spec' }, async ({ page, startServerWithSchema }) => {
-    // GIVEN: A running server
-    await startServerWithSchema({
-      name: 'health-test-app',
-    })
+  // API-HEALTH-001: User requests health endpoint
+  test(
+    'should return 200 OK status',
+    { tag: '@regression' },
+    async ({ page, startServerWithSchema }) => {
+      // GIVEN: A running server
+      await startServerWithSchema({
+        name: 'health-test-app',
+      })
 
-    // WHEN: User requests health endpoint
-    const response = await page.goto('/api/health')
+      // WHEN: User requests health endpoint
+      const response = await page.goto('/api/health')
 
-    // THEN: Response should be 200 OK
-    expect(response?.status()).toBe(200)
+      // THEN: Response should be 200 OK
+      expect(response?.status()).toBe(200)
 
-    // AND: Content-Type should be application/json
-    const contentType = response?.headers()['content-type']
-    expect(contentType).toContain('application/json')
-  })
+      // AND: Content-Type should be application/json
+      const contentType = response?.headers()['content-type']
+      expect(contentType).toContain('application/json')
+    }
+  )
 
   /**
    * Test Case 2: Health endpoint returns proper JSON structure
@@ -60,6 +65,7 @@ test.describe('GET /api/health', () => {
    * WHEN: User requests GET /api/health
    * THEN: JSON should contain status, timestamp, and app object
    */
+  // API-HEALTH-002: User requests health endpoint
   test(
     'should return JSON with status, timestamp, and app name',
     { tag: '@spec' },
@@ -93,6 +99,7 @@ test.describe('GET /api/health', () => {
    * WHEN: User requests GET /api/health
    * THEN: Timestamp should be within last 5 seconds
    */
+  // API-HEALTH-003: User requests health endpoint
   test(
     'should return current timestamp',
     { tag: '@spec' },
@@ -122,6 +129,7 @@ test.describe('GET /api/health', () => {
    * WHEN: User requests GET /api/health
    * THEN: App name should preserve @ and / characters
    */
+  // API-HEALTH-004: User requests health endpoint
   test(
     'should handle scoped package names in health response',
     { tag: '@spec' },

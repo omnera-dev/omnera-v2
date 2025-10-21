@@ -9,28 +9,30 @@
  * Validates specs/app/ folder structure against documented patterns
  *
  * Checks:
- * 1. Co-located pattern: Each property/entity has {name}/{name}.schema.json
+ * 1. Co-located pattern: Each property/entity has {name}/{name}.schema.json + optional .spec.ts
  * 2. Schema structure: $id, $schema, title, description, specs array
- * 3. Spec format: id, given, when, then fields
- * 4. Spec ID conventions: Proper format and uniqueness
- * 5. $ref paths: Relative paths exist and are valid
- * 6. Type discriminators: const vs enum usage
- * 7. Required arrays: Explicit required fields for objects
+ * 3. Spec format: id (APP- prefix), given, when, then fields
+ * 4. Spec ID conventions: Proper format (APP-*-NNN) and global uniqueness
+ * 5. Test file validation: Copyright headers, @spec/@regression tags, spec-to-test mapping
+ * 6. $ref paths: Relative paths exist and are valid
+ * 7. Type discriminators: const vs enum usage
+ * 8. Required arrays: Explicit required fields for objects
  */
 
 import { readdir, readFile, stat } from 'node:fs/promises'
 import { join, relative, dirname, resolve } from 'node:path'
+import {
+  validateSpecsArray,
+  validateTestFile,
+  createValidationResult,
+  printValidationResults,
+  type ValidationResult,
+  type Spec,
+} from './lib/validation-common'
 
 // ============================================================================
 // Types
 // ============================================================================
-
-interface ValidationError {
-  file: string
-  type: 'error' | 'warning'
-  message: string
-  line?: number
-}
 
 interface SchemaFile {
   path: string
@@ -38,19 +40,11 @@ interface SchemaFile {
   content: any
 }
 
-interface ValidationResult {
-  errors: ValidationError[]
-  warnings: ValidationError[]
-  totalSchemas: number
-  totalSpecs: number
-}
-
 // ============================================================================
 // Configuration
 // ============================================================================
 
 const SPECS_APP_DIR = join(process.cwd(), 'specs', 'app')
-const VALID_SPEC_ID_PATTERN = /^[A-Z][A-Z0-9-]*-[A-Z0-9-]*-\d{3,}$|^[A-Z][A-Z0-9-]*-[A-Z0-9-]*-WORKFLOW$/
 const VALID_SCHEMA_DRAFT = 'http://json-schema.org/draft-07/schema#'
 
 // ============================================================================
@@ -58,12 +52,7 @@ const VALID_SCHEMA_DRAFT = 'http://json-schema.org/draft-07/schema#'
 // ============================================================================
 
 async function validateSpecsStructure(): Promise<ValidationResult> {
-  const result: ValidationResult = {
-    errors: [],
-    warnings: [],
-    totalSchemas: 0,
-    totalSpecs: 0,
-  }
+  const result = createValidationResult()
 
   console.log('🔍 Validating specs/app/ folder structure...\n')
 
@@ -74,18 +63,18 @@ async function validateSpecsStructure(): Promise<ValidationResult> {
 
     console.log(`📄 Found ${schemaFiles.length} schema files\n`)
 
-    // Track spec IDs for uniqueness check
-    const specIds = new Set<string>()
+    // Track spec IDs for global uniqueness check
+    const globalSpecIds = new Set<string>()
 
     // Validate each schema file
     for (const schemaFile of schemaFiles) {
-      await validateSchemaFile(schemaFile, result, specIds)
+      await validateSchemaFile(schemaFile, result, globalSpecIds)
     }
 
-    result.totalSpecs = specIds.size
+    result.totalSpecs = globalSpecIds.size
 
     // Print results
-    printResults(result)
+    printValidationResults(result, 'APP SPECS VALIDATION')
 
     return result
   } catch (error) {
@@ -137,7 +126,7 @@ async function findSchemaFiles(dir: string): Promise<SchemaFile[]> {
 async function validateSchemaFile(
   schemaFile: SchemaFile,
   result: ValidationResult,
-  specIds: Set<string>
+  globalSpecIds: Set<string>
 ): Promise<void> {
   const { path, relativePath, content } = schemaFile
 
@@ -150,16 +139,19 @@ async function validateSchemaFile(
   // 3. Check $schema is Draft-07
   validateSchemaDraft(content, relativePath, result)
 
-  // 4. Check specs array format
-  validateSpecsArray(content, relativePath, result, specIds)
+  // 4. Check specs array format (using shared validation)
+  validateSpecsArray(content, relativePath, 'APP', result, globalSpecIds)
 
-  // 5. Check $ref paths exist
+  // 5. Check for co-located test file (optional - warning only)
+  await validateTestFileCoLocation(path, relativePath, content.specs || [], result)
+
+  // 6. Check $ref paths exist
   await validateRefs(content, path, relativePath, result)
 
-  // 6. Check type discriminators use const (not enum)
+  // 7. Check type discriminators use const (not enum)
   validateTypeDiscriminators(content, relativePath, result)
 
-  // 7. Check required arrays for objects
+  // 8. Check required arrays for objects
   validateRequiredArrays(content, relativePath, result)
 }
 
@@ -185,7 +177,39 @@ function validateColocatedPattern(relativePath: string, result: ValidationResult
   }
 }
 
-function validateRootProperties(content: any, relativePath: string, result: ValidationResult): void {
+/**
+ * Check if co-located test file exists and validate it (optional - warning only)
+ */
+async function validateTestFileCoLocation(
+  schemaPath: string,
+  relativePath: string,
+  specs: Spec[],
+  result: ValidationResult
+): Promise<void> {
+  // Convert .schema.json to .spec.ts
+  const testPath = schemaPath.replace('.schema.json', '.spec.ts')
+
+  try {
+    await stat(testPath)
+    // Test file exists - validate it using shared validation
+    await validateTestFile(testPath, specs, 'APP', result)
+  } catch {
+    // Test file doesn't exist - warning only
+    if (specs.length > 0) {
+      result.warnings.push({
+        file: relativePath,
+        type: 'warning',
+        message: `Missing co-located test file (${relativePath.replace('.schema.json', '.spec.ts')})`,
+      })
+    }
+  }
+}
+
+function validateRootProperties(
+  content: any,
+  relativePath: string,
+  result: ValidationResult
+): void {
   const requiredProps = ['title', 'specs']
   const recommendedProps = ['description']
 
@@ -232,95 +256,6 @@ function validateSchemaDraft(content: any, relativePath: string, result: Validat
   }
 }
 
-function validateSpecsArray(
-  content: any,
-  relativePath: string,
-  result: ValidationResult,
-  specIds: Set<string>
-): void {
-  if (!Array.isArray(content.specs)) {
-    result.errors.push({
-      file: relativePath,
-      type: 'error',
-      message: 'specs must be an array',
-    })
-    return
-  }
-
-  // Validate each spec
-  content.specs.forEach((spec: any, index: number) => {
-    validateSpec(spec, index, relativePath, result, specIds)
-  })
-}
-
-function validateSpec(
-  spec: any,
-  index: number,
-  relativePath: string,
-  result: ValidationResult,
-  specIds: Set<string>
-): void {
-  const requiredFields = ['id', 'given', 'when', 'then']
-
-  // Check required fields
-  for (const field of requiredFields) {
-    if (!spec[field]) {
-      result.errors.push({
-        file: relativePath,
-        type: 'error',
-        message: `Spec at index ${index} missing required field: ${field}`,
-      })
-    }
-  }
-
-  // Validate spec ID format
-  if (spec.id) {
-    if (!VALID_SPEC_ID_PATTERN.test(spec.id)) {
-      result.errors.push({
-        file: relativePath,
-        type: 'error',
-        message: `Invalid spec ID format: ${spec.id}. Expected format: ENTITY-PROPERTY-NNN or ENTITY-PROPERTY-WORKFLOW`,
-      })
-    }
-
-    // Check for duplicate spec IDs
-    if (specIds.has(spec.id)) {
-      result.errors.push({
-        file: relativePath,
-        type: 'error',
-        message: `Duplicate spec ID: ${spec.id}`,
-      })
-    } else {
-      specIds.add(spec.id)
-    }
-  }
-
-  // Check string lengths (should be concise)
-  if (spec.given && spec.given.length > 200) {
-    result.warnings.push({
-      file: relativePath,
-      type: 'warning',
-      message: `Spec ${spec.id} has overly long "given" clause (${spec.given.length} chars)`,
-    })
-  }
-
-  if (spec.when && spec.when.length > 200) {
-    result.warnings.push({
-      file: relativePath,
-      type: 'warning',
-      message: `Spec ${spec.id} has overly long "when" clause (${spec.when.length} chars)`,
-    })
-  }
-
-  if (spec.then && spec.then.length > 200) {
-    result.warnings.push({
-      file: relativePath,
-      type: 'warning',
-      message: `Spec ${spec.id} has overly long "then" clause (${spec.then.length} chars)`,
-    })
-  }
-}
-
 async function validateRefs(
   content: any,
   filePath: string,
@@ -335,9 +270,17 @@ async function validateRefs(
       continue
     }
 
+    // Strip JSON pointer fragment (everything after #)
+    const refWithoutFragment = ref.split('#')[0]
+
+    // Skip if only a fragment (already handled above)
+    if (!refWithoutFragment) {
+      continue
+    }
+
     // Resolve relative path
     const baseDir = dirname(filePath)
-    const refPath = resolve(baseDir, ref)
+    const refPath = resolve(baseDir, refWithoutFragment)
 
     try {
       await stat(refPath)
@@ -369,11 +312,20 @@ function findRefs(obj: any, refs: string[] = []): string[] {
   return refs
 }
 
-function validateTypeDiscriminators(content: any, relativePath: string, result: ValidationResult): void {
+function validateTypeDiscriminators(
+  content: any,
+  relativePath: string,
+  result: ValidationResult
+): void {
   checkForEnumDiscriminators(content, relativePath, result)
 }
 
-function checkForEnumDiscriminators(obj: any, relativePath: string, result: ValidationResult, path: string = ''): void {
+function checkForEnumDiscriminators(
+  obj: any,
+  relativePath: string,
+  result: ValidationResult,
+  path: string = ''
+): void {
   if (typeof obj !== 'object' || obj === null) {
     return
   }
@@ -395,7 +347,11 @@ function checkForEnumDiscriminators(obj: any, relativePath: string, result: Vali
   }
 }
 
-function validateRequiredArrays(content: any, relativePath: string, result: ValidationResult): void {
+function validateRequiredArrays(
+  content: any,
+  relativePath: string,
+  result: ValidationResult
+): void {
   checkObjectsHaveRequired(content, relativePath, result)
 }
 
@@ -427,44 +383,6 @@ function checkObjectsHaveRequired(
 }
 
 // ============================================================================
-// Results Printing
-// ============================================================================
-
-function printResults(result: ValidationResult): void {
-  console.log('\n' + '='.repeat(80))
-  console.log('VALIDATION RESULTS')
-  console.log('='.repeat(80) + '\n')
-
-  console.log(`📊 Total Schemas: ${result.totalSchemas}`)
-  console.log(`📋 Total Specs: ${result.totalSpecs}`)
-  console.log(`❌ Errors: ${result.errors.length}`)
-  console.log(`⚠️  Warnings: ${result.warnings.length}`)
-  console.log()
-
-  if (result.errors.length > 0) {
-    console.log('❌ ERRORS:\n')
-    result.errors.forEach((error) => {
-      console.log(`  ${error.file}`)
-      console.log(`    → ${error.message}\n`)
-    })
-  }
-
-  if (result.warnings.length > 0) {
-    console.log('⚠️  WARNINGS:\n')
-    result.warnings.forEach((warning) => {
-      console.log(`  ${warning.file}`)
-      console.log(`    → ${warning.message}\n`)
-    })
-  }
-
-  if (result.errors.length === 0 && result.warnings.length === 0) {
-    console.log('✅ All schemas pass validation!\n')
-  }
-
-  console.log('='.repeat(80) + '\n')
-}
-
-// ============================================================================
 // Script Execution
 // ============================================================================
 
@@ -489,4 +407,5 @@ if (import.meta.main) {
   main()
 }
 
-export { validateSpecsStructure, ValidationResult }
+export { validateSpecsStructure }
+export type { ValidationResult }

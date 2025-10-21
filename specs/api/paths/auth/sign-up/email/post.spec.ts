@@ -40,9 +40,10 @@ test.describe('POST /api/auth/sign-up/email', () => {
    * WHEN: User posts credentials to /api/auth/sign-up/email
    * THEN: Response should be 200 OK with user data and session token
    */
+  // API-AUTH-SIGN-UP-EMAIL-001: User signs up with valid credentials
   test(
     'should create user account and return session',
-    { tag: '@spec' },
+    { tag: '@regression' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: A running server
       await startServerWithSchema(
@@ -88,6 +89,7 @@ test.describe('POST /api/auth/sign-up/email', () => {
    * WHEN: Another user attempts to sign up with the same email
    * THEN: Response should be 4xx error with error message
    */
+  // API-AUTH-SIGN-UP-EMAIL-002: Another user attempts sign-up with same email
   test(
     'should reject duplicate email addresses',
     { tag: '@spec' },
@@ -137,6 +139,7 @@ test.describe('POST /api/auth/sign-up/email', () => {
    * WHEN: User submits incomplete sign-up data
    * THEN: Response should be 4xx error for each missing/invalid field
    */
+  // API-AUTH-SIGN-UP-EMAIL-003: User attempts sign-up without email
   test(
     'should validate required fields and email format',
     { tag: '@spec' },

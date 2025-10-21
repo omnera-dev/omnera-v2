@@ -35,9 +35,10 @@ test.describe('POST /api/auth/sign-in/email', () => {
    * WHEN: User posts correct credentials to /api/auth/sign-in/email
    * THEN: Response should be 200 OK with user data and session
    */
+  // API-AUTH-SIGN-IN-EMAIL-001: User signs in with correct credentials
   test(
     'should authenticate user with valid credentials',
-    { tag: '@spec' },
+    { tag: '@regression' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: A running server
       await startServerWithSchema(
@@ -95,6 +96,7 @@ test.describe('POST /api/auth/sign-in/email', () => {
    * WHEN: User attempts sign-in with incorrect password
    * THEN: Response should be 4xx error with authentication error
    */
+  // API-AUTH-SIGN-IN-EMAIL-002: User attempts sign-in with wrong password
   test(
     'should reject incorrect password',
     { tag: '@spec' },
@@ -145,6 +147,7 @@ test.describe('POST /api/auth/sign-in/email', () => {
    * WHEN: User attempts sign-in with email that doesn't exist
    * THEN: Response should be 4xx error with authentication error
    */
+  // API-AUTH-SIGN-IN-EMAIL-003: User attempts sign-in with non-existent email
   test(
     'should reject non-existent email',
     { tag: '@spec' },

@@ -94,19 +94,19 @@
   },
   "specs": [
     {
-      "id": "AUTH-CHANGE-EMAIL-001",
+      "id": "API-AUTH-CHANGE-EMAIL-001",
       "given": "A running server",
       "when": "User requests email change without newEmail",
       "then": "Response should be validation error (4xx)"
     },
     {
-      "id": "AUTH-CHANGE-EMAIL-002",
+      "id": "API-AUTH-CHANGE-EMAIL-002",
       "given": "A running server",
       "when": "Unauthenticated user requests email change",
       "then": "Response should be unauthorized (401)"
     },
     {
-      "id": "AUTH-CHANGE-EMAIL-003",
+      "id": "API-AUTH-CHANGE-EMAIL-003",
       "given": "A running server",
       "when": "User submits invalid email format",
       "then": "Response should be validation error (4xx)"

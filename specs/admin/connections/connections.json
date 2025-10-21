@@ -3,25 +3,25 @@
   "description": "Admin-level specifications for connection lifecycle management across all services",
   "specs": [
     {
-      "id": "CONN-ADMIN-001",
+      "id": "ADMIN-CONNECTIONS-001",
       "given": "user is authenticated in a workspace",
       "when": "user navigates to connections page",
       "then": "system displays list of all configured connections with status"
     },
     {
-      "id": "CONN-ADMIN-002",
+      "id": "ADMIN-CONNECTIONS-002",
       "given": "connection exists with valid OAuth credentials but is not connected",
       "when": "user initiates connection via 'Connect' button",
       "then": "OAuth flow completes successfully and connection status becomes 'connected'"
     },
     {
-      "id": "CONN-ADMIN-003",
+      "id": "ADMIN-CONNECTIONS-003",
       "given": "connection is in 'connected' status with active tokens",
       "when": "user clicks 'Disconnect' button",
       "then": "connection status changes to 'disconnected' and OAuth tokens are revoked"
     },
     {
-      "id": "CONN-ADMIN-004",
+      "id": "ADMIN-CONNECTIONS-004",
       "given": "connection is configured and shareable feature is enabled",
       "when": "user clicks 'Copy Link' button",
       "then": "shareable connection URL is copied to clipboard"

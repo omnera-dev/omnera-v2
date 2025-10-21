@@ -117,7 +117,7 @@
       "then": "records should be deleted successfully"
     },
     {
-      "id": "ADMIN-TABLES-WORKFLOW",
+      "id": "ADMIN-TABLES-020",
       "given": "user is on the admin tables page with a complete table configuration",
       "when": "user performs complete workflow",
       "then": "all expected outcomes are verified"

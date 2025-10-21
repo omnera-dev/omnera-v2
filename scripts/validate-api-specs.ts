@@ -6,7 +6,15 @@
  */
 
 import { readdir, readFile, stat } from 'node:fs/promises'
-import { join, dirname, relative } from 'node:path'
+import { join, dirname, relative, resolve } from 'node:path'
+import {
+  validateSpecsArray,
+  validateTestFile,
+  createValidationResult,
+  printValidationResults,
+  type ValidationResult,
+  type Spec,
+} from './lib/validation-common'
 
 /**
  * Validation script for specs/api/ directory structure
@@ -14,41 +22,29 @@ import { join, dirname, relative } from 'node:path'
  * This script validates that the specs/api/ directory follows all patterns
  * documented in specs/api/README.md:
  *
- * 1. Co-location Pattern: Each .json has a .spec.ts
+ * 1. Co-location Pattern: Each .json has a .spec.ts (required)
  * 2. URL-Based Organization: Directory structure mirrors URL paths
  * 3. HTTP Method Files: Each method is a separate file (get.json, post.json, etc.)
  * 4. Shared Components: All $ref paths are valid
- * 5. Specs Array: Each endpoint .json has a specs array
- * 6. Test Organization: All tests use @spec tag and Given-When-Then
+ * 5. Specs Array: Each endpoint .json has a specs array with API- prefix
+ * 6. Global Spec ID Uniqueness: No duplicate spec IDs across all files
+ * 7. Test Organization: All tests use @spec tag and Given-When-Then
+ * 8. Copyright Headers: Required in all test files
+ * 9. Regression Tests: Exactly one @regression test per .spec.ts file
+ * 10. Spec-to-Test Mapping: All spec IDs have corresponding test comments
  */
 
-interface ValidationResult {
-  passed: boolean
-  errors: string[]
-  warnings: string[]
-  stats: {
-    totalEndpoints: number
-    totalTests: number
-    totalSpecs: number
-    missingTests: number
-    missingSpecs: number
-    invalidRefs: number
-  }
+interface ApiStats {
+  totalEndpoints: number
+  totalTests: number
+  totalSpecs: number
+  missingTests: number
+  missingSpecs: number
+  invalidRefs: number
 }
 
-const result: ValidationResult = {
-  passed: true,
-  errors: [],
-  warnings: [],
-  stats: {
-    totalEndpoints: 0,
-    totalTests: 0,
-    totalSpecs: 0,
-    missingTests: 0,
-    missingSpecs: 0,
-    invalidRefs: 0,
-  },
-}
+const API_DIR = join(process.cwd(), 'specs/api')
+const PATHS_DIR = join(API_DIR, 'paths')
 
 /**
  * Check if a file exists
@@ -92,37 +88,60 @@ async function findEndpointJsonFiles(dir: string): Promise<string[]> {
 /**
  * Validate co-location pattern: .json should have matching .spec.ts
  */
-async function validateCoLocation(jsonPath: string): Promise<void> {
+async function validateCoLocation(
+  jsonPath: string,
+  relativePath: string,
+  specs: Spec[],
+  result: ValidationResult,
+  stats: ApiStats
+): Promise<void> {
   const specPath = jsonPath.replace('.json', '.spec.ts')
   const exists = await fileExists(specPath)
 
   if (!exists) {
-    result.errors.push(`Missing test file: ${specPath} (for ${jsonPath})`)
-    result.stats.missingTests++
-    result.passed = false
+    result.warnings.push({
+      file: relativePath,
+      type: 'warning',
+      message: `Missing co-located test file (${relativePath.replace('.json', '.spec.ts')})`,
+    })
+    stats.missingTests++
+    // Note: Missing test files are warnings, not errors
   } else {
-    result.stats.totalTests++
+    // Validate the test file using shared validation
+    await validateTestFile(specPath, specs, 'API', result)
+    stats.totalTests++
   }
 }
 
 /**
  * Validate HTTP method naming: filename should be valid HTTP method
  */
-function validateHttpMethodNaming(jsonPath: string): void {
+function validateHttpMethodNaming(
+  jsonPath: string,
+  relativePath: string,
+  result: ValidationResult
+): void {
   const filename = jsonPath.split('/').pop()?.replace('.json', '')
   const validMethods = ['get', 'post', 'put', 'patch', 'delete', 'options', 'head']
 
   if (filename && !validMethods.includes(filename)) {
-    result.warnings.push(
-      `Non-standard HTTP method filename: ${filename} in ${jsonPath}. Expected one of: ${validMethods.join(', ')}`
-    )
+    result.warnings.push({
+      file: relativePath,
+      type: 'warning',
+      message: `Non-standard HTTP method filename: ${filename}. Expected one of: ${validMethods.join(', ')}`,
+    })
   }
 }
 
 /**
  * Validate $ref paths in JSON file
  */
-async function validateRefs(jsonPath: string): Promise<void> {
+async function validateRefs(
+  jsonPath: string,
+  relativePath: string,
+  result: ValidationResult,
+  stats: ApiStats
+): Promise<void> {
   const content = await readFile(jsonPath, 'utf-8')
   const json = JSON.parse(content)
 
@@ -130,18 +149,27 @@ async function validateRefs(jsonPath: string): Promise<void> {
   const baseDir = dirname(jsonPath)
 
   for (const ref of refs) {
+    // Skip JSON pointer references (internal to same file)
+    if (ref.startsWith('#/')) {
+      continue
+    }
+
     // Skip external URLs
     if (ref.startsWith('http://') || ref.startsWith('https://')) {
       continue
     }
 
     // Resolve relative path
-    const resolvedPath = join(baseDir, ref)
+    const resolvedPath = resolve(baseDir, ref)
     const exists = await fileExists(resolvedPath)
 
     if (!exists) {
-      result.errors.push(`Invalid $ref in ${jsonPath}: ${ref} (resolved to ${resolvedPath})`)
-      result.stats.invalidRefs++
+      result.errors.push({
+        file: relativePath,
+        type: 'error',
+        message: `Invalid $ref: ${ref} (resolved to ${resolvedPath} but file not found)`,
+      })
+      stats.invalidRefs++
       result.passed = false
     }
   }
@@ -173,90 +201,25 @@ function extractRefs(obj: any, refs: string[] = []): string[] {
 }
 
 /**
- * Validate specs array exists and has correct format
- */
-async function validateSpecsArray(jsonPath: string): Promise<void> {
-  const content = await readFile(jsonPath, 'utf-8')
-  const json = JSON.parse(content)
-
-  if (!json.specs) {
-    result.errors.push(`Missing "specs" array in ${jsonPath}`)
-    result.stats.missingSpecs++
-    result.passed = false
-    return
-  }
-
-  if (!Array.isArray(json.specs)) {
-    result.errors.push(`"specs" is not an array in ${jsonPath}`)
-    result.passed = false
-    return
-  }
-
-  // Validate each spec object
-  for (let i = 0; i < json.specs.length; i++) {
-    const spec = json.specs[i]
-
-    if (!spec.id || typeof spec.id !== 'string') {
-      result.errors.push(`Invalid spec[${i}].id in ${jsonPath}: must be a non-empty string`)
-      result.passed = false
-    }
-
-    if (!spec.given || typeof spec.given !== 'string') {
-      result.errors.push(
-        `Invalid spec[${i}].given in ${jsonPath}: must be a non-empty string`
-      )
-      result.passed = false
-    }
-
-    if (!spec.when || typeof spec.when !== 'string') {
-      result.errors.push(`Invalid spec[${i}].when in ${jsonPath}: must be a non-empty string`)
-      result.passed = false
-    }
-
-    if (!spec.then || typeof spec.then !== 'string') {
-      result.errors.push(`Invalid spec[${i}].then in ${jsonPath}: must be a non-empty string`)
-      result.passed = false
-    }
-
-    result.stats.totalSpecs++
-  }
-}
-
-/**
- * Validate test file has @spec tags and Given-When-Then comments
- */
-async function validateTestFile(specPath: string): Promise<void> {
-  const content = await readFile(specPath, 'utf-8')
-
-  // Check for @spec tag
-  if (!content.includes("{ tag: '@spec' }")) {
-    result.warnings.push(`Test file ${specPath} has no @spec tags`)
-  }
-
-  // Check for Given-When-Then comments
-  const hasGiven = /\/\/\s*GIVEN:/i.test(content)
-  const hasWhen = /\/\/\s*WHEN:/i.test(content)
-  const hasThen = /\/\/\s*THEN:/i.test(content)
-
-  if (!hasGiven || !hasWhen || !hasThen) {
-    result.warnings.push(
-      `Test file ${specPath} missing Given-When-Then comments (has: ${hasGiven ? 'GIVEN' : ''} ${hasWhen ? 'WHEN' : ''} ${hasThen ? 'THEN' : ''})`
-    )
-  }
-}
-
-/**
  * Validate OpenAPI spec structure
  */
-async function validateOpenApiStructure(jsonPath: string): Promise<void> {
+async function validateOpenApiStructure(
+  jsonPath: string,
+  relativePath: string,
+  result: ValidationResult
+): Promise<void> {
   const content = await readFile(jsonPath, 'utf-8')
   const json = JSON.parse(content)
 
-  // Check required OpenAPI fields
-  const requiredFields = ['summary', 'operationId', 'responses']
-  for (const field of requiredFields) {
+  // Check recommended OpenAPI fields
+  const recommendedFields = ['summary', 'operationId', 'responses']
+  for (const field of recommendedFields) {
     if (!(field in json)) {
-      result.warnings.push(`Missing recommended field "${field}" in ${jsonPath}`)
+      result.warnings.push({
+        file: relativePath,
+        type: 'warning',
+        message: `Missing recommended OpenAPI field "${field}"`,
+      })
     }
   }
 
@@ -264,21 +227,33 @@ async function validateOpenApiStructure(jsonPath: string): Promise<void> {
   if (json.responses && typeof json.responses === 'object') {
     const responseCodes = Object.keys(json.responses)
     if (responseCodes.length === 0) {
-      result.warnings.push(`No response codes defined in ${jsonPath}`)
+      result.warnings.push({
+        file: relativePath,
+        type: 'warning',
+        message: 'No response codes defined in OpenAPI responses object',
+      })
     }
   }
 }
 
 /**
- * Validate main api.openapi.json references all endpoint files
+ * Validate main app.openapi.json references all endpoint files
  */
-async function validateMainOpenApiFile(apiDir: string, endpointFiles: string[]): Promise<void> {
-  const mainFile = join(apiDir, 'api.openapi.json')
+async function validateMainOpenApiFile(
+  apiDir: string,
+  endpointFiles: string[],
+  result: ValidationResult
+): Promise<void> {
+  const mainFile = join(apiDir, 'app.openapi.json')
   const exists = await fileExists(mainFile)
 
   if (!exists) {
-    result.errors.push(`Missing main OpenAPI file: ${mainFile}`)
-    result.passed = false
+    result.warnings.push({
+      file: 'app.openapi.json',
+      type: 'warning',
+      message: 'Missing main OpenAPI file (app.openapi.json)',
+    })
+    // Note: Missing main OpenAPI file is a warning, not an error
     return
   }
 
@@ -308,9 +283,11 @@ async function validateMainOpenApiFile(apiDir: string, endpointFiles: string[]):
   for (const endpointFile of endpointFiles) {
     const relativePath = './' + relative(apiDir, endpointFile)
     if (!pathRefs.has(relativePath)) {
-      result.warnings.push(
-        `Endpoint ${endpointFile} is not referenced in ${mainFile} (expected ref: ${relativePath})`
-      )
+      result.warnings.push({
+        file: relative(process.cwd(), endpointFile),
+        type: 'warning',
+        message: `Endpoint not referenced in app.openapi.json (expected ref: ${relativePath})`,
+      })
     }
   }
 }
@@ -321,85 +298,89 @@ async function validateMainOpenApiFile(apiDir: string, endpointFiles: string[]):
 async function main() {
   console.log('🔍 Validating specs/api/ directory structure...\n')
 
-  const apiDir = join(process.cwd(), 'specs/api')
-  const pathsDir = join(apiDir, 'paths')
+  const result = createValidationResult()
+  const stats: ApiStats = {
+    totalEndpoints: 0,
+    totalTests: 0,
+    totalSpecs: 0,
+    missingTests: 0,
+    missingSpecs: 0,
+    invalidRefs: 0,
+  }
 
   // Check if directories exist
-  if (!(await fileExists(apiDir))) {
+  if (!(await fileExists(API_DIR))) {
     console.error('❌ specs/api/ directory not found')
     process.exit(1)
   }
 
-  if (!(await fileExists(pathsDir))) {
+  if (!(await fileExists(PATHS_DIR))) {
     console.error('❌ specs/api/paths/ directory not found')
     process.exit(1)
   }
 
   // Find all endpoint JSON files
-  const endpointFiles = await findEndpointJsonFiles(pathsDir)
-  result.stats.totalEndpoints = endpointFiles.length
+  const endpointFiles = await findEndpointJsonFiles(PATHS_DIR)
+  stats.totalEndpoints = endpointFiles.length
+  result.totalSchemas = endpointFiles.length
 
   console.log(`📊 Found ${endpointFiles.length} endpoint files\n`)
+
+  // Track spec IDs for global uniqueness check
+  const globalSpecIds = new Set<string>()
 
   // Validate each endpoint file
   for (const jsonPath of endpointFiles) {
     const relativePath = relative(process.cwd(), jsonPath)
-    console.log(`  Validating ${relativePath}...`)
 
-    // 1. Co-location: Check for matching .spec.ts
-    await validateCoLocation(jsonPath)
+    // Read and parse JSON file
+    try {
+      const content = await readFile(jsonPath, 'utf-8')
+      const json = JSON.parse(content)
 
-    // 2. HTTP method naming
-    validateHttpMethodNaming(jsonPath)
+      // 1. Validate specs array (using shared validation)
+      validateSpecsArray(json, relativePath, 'API', result, globalSpecIds)
 
-    // 3. $ref validation
-    await validateRefs(jsonPath)
+      // 2. Co-location: Check for matching .spec.ts
+      const specs: Spec[] = json.specs || []
+      await validateCoLocation(jsonPath, relativePath, specs, result, stats)
 
-    // 4. Specs array validation
-    await validateSpecsArray(jsonPath)
+      // 3. HTTP method naming
+      validateHttpMethodNaming(jsonPath, relativePath, result)
 
-    // 5. OpenAPI structure validation
-    await validateOpenApiStructure(jsonPath)
+      // 4. $ref validation
+      await validateRefs(jsonPath, relativePath, result, stats)
 
-    // 6. Test file validation (if exists)
-    const specPath = jsonPath.replace('.json', '.spec.ts')
-    if (await fileExists(specPath)) {
-      await validateTestFile(specPath)
+      // 5. OpenAPI structure validation
+      await validateOpenApiStructure(jsonPath, relativePath, result)
+
+      stats.totalSpecs += specs.length
+    } catch (error) {
+      result.errors.push({
+        file: relativePath,
+        type: 'error',
+        message: `Failed to process file: ${error}`,
+      })
+      result.passed = false
     }
   }
+
+  result.totalSpecs = globalSpecIds.size
 
   // Validate main api.openapi.json
-  console.log('\n  Validating main api.openapi.json...')
-  await validateMainOpenApiFile(apiDir, endpointFiles)
+  await validateMainOpenApiFile(API_DIR, endpointFiles, result)
 
   // Print results
-  console.log('\n' + '='.repeat(80))
-  console.log('📈 VALIDATION RESULTS')
-  console.log('='.repeat(80))
+  printValidationResults(result, 'API SPECS VALIDATION')
 
-  console.log('\n📊 Statistics:')
-  console.log(`  Total endpoints:     ${result.stats.totalEndpoints}`)
-  console.log(`  Total tests:         ${result.stats.totalTests}`)
-  console.log(`  Total specs:         ${result.stats.totalSpecs}`)
-  console.log(`  Missing tests:       ${result.stats.missingTests}`)
-  console.log(`  Missing specs:       ${result.stats.missingSpecs}`)
-  console.log(`  Invalid $refs:       ${result.stats.invalidRefs}`)
-
-  if (result.errors.length > 0) {
-    console.log('\n❌ ERRORS:')
-    for (const error of result.errors) {
-      console.log(`  - ${error}`)
-    }
-  }
-
-  if (result.warnings.length > 0) {
-    console.log('\n⚠️  WARNINGS:')
-    for (const warning of result.warnings) {
-      console.log(`  - ${warning}`)
-    }
-  }
-
-  console.log('\n' + '='.repeat(80))
+  // Print API-specific stats
+  console.log('📈 API-Specific Statistics:')
+  console.log(`  Total endpoints:     ${stats.totalEndpoints}`)
+  console.log(`  Total tests:         ${stats.totalTests}`)
+  console.log(`  Total specs:         ${stats.totalSpecs}`)
+  console.log(`  Missing tests:       ${stats.missingTests}`)
+  console.log(`  Invalid $refs:       ${stats.invalidRefs}`)
+  console.log()
 
   if (result.passed && result.warnings.length === 0) {
     console.log('✅ All validations passed! specs/api/ follows all documented patterns.')

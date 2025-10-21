@@ -7,235 +7,137 @@
  */
 
 /**
- * Roadmap Generation Script
+ * Roadmap Generation Script (Rewritten)
  *
- * Analyzes schema differences between current and specification schemas,
- * generates ROADMAP.md with progress tracking for all properties.
- *
- * Detailed specifications (What/Why/Who-When) are maintained in
- * specs/app.schema.json using the Triple-Documentation Pattern:
- * - description, examples (What)
- * - x-business-rules (Why)
- * - x-user-stories (Who/When)
+ * Generates ROADMAP.md based on three progress metrics:
+ * 1. App Schema Progress - Diff between goal and current schemas
+ * 2. API Schema Progress - Diff between goal and current OpenAPI specs
+ * 3. Test Implementation Status - Categorize specs as TODO/WIP/DONE
  *
  * Usage: bun run scripts/generate-roadmap.ts
  */
 
-import { existsSync as _existsSync } from 'node:fs'
-import { dirname } from 'node:path'
-import { compareSchemas as compareSchemasDiff } from './compare-schemas'
-import { generateRoadmapMarkdown } from './templates/roadmap-template'
-import { getImplementationStatus } from './utils/implementation-checker'
 import {
-  calculateStats,
-  compareSchemas,
-  extractAllPropertiesRecursively,
-} from './utils/schema-comparison'
-import { resolveSchemaRefs, countAllProperties } from './utils/schema-resolver'
-import { scanAllTests, matchUserStoryToTest } from './utils/test-scanner'
-import { extractAllUserStories, calculateUserStoryStats } from './utils/user-story-extractor'
-import type { JSONSchema, RoadmapData, TrackedUserStory } from './types/roadmap'
+  generateSummaryRoadmap,
+  generateAppRoadmap,
+  generateApiRoadmap,
+  generateAdminRoadmap,
+} from './templates/new-roadmap-template'
+import { compareApiSchemas } from './utils/api-schema-diff'
+import { compareAppSchemas } from './utils/app-schema-diff'
+import { analyzeTestImplementation } from './utils/spec-analyzer'
+import type { NewRoadmapData } from './types/roadmap'
 
 // Paths
-const CURRENT_SCHEMA_PATH = 'schemas/0.0.1/app.schema.json'
-const SPEC_SCHEMA_PATH = 'specs/app.schema.json'
-const ROADMAP_OUTPUT_PATH = 'ROADMAP.md'
+const GOAL_APP_SCHEMA_PATH = 'specs/app/app.schema.json'
+const CURRENT_APP_SCHEMA_PATH = 'schemas/0.0.1/app.schema.json'
+const GOAL_API_SCHEMA_PATH = 'specs/api/app.openapi.json'
+const CURRENT_API_SCHEMA_PATH = 'schemas/0.0.1/app.openapi.json'
 const SPECS_DIR = 'specs'
+const ROADMAP_OUTPUT_PATH = 'ROADMAP.md'
+const APP_ROADMAP_OUTPUT_PATH = 'specs/app/ROADMAP.md'
+const API_ROADMAP_OUTPUT_PATH = 'specs/api/ROADMAP.md'
+const ADMIN_ROADMAP_OUTPUT_PATH = 'specs/admin/ROADMAP.md'
 
 /**
  * Main execution
  */
 async function main() {
-  console.log('📊 Analyzing schemas...')
-  console.log(`   Current: ${CURRENT_SCHEMA_PATH}`)
-  console.log(`   Spec:    ${SPEC_SCHEMA_PATH}`)
-  console.log()
+  console.log('📊 Generating Roadmap...\n')
 
-  // Load schemas
-  const currentSchema = await loadSchema(CURRENT_SCHEMA_PATH)
-  let specSchema = await loadSchema(SPEC_SCHEMA_PATH)
-
-  // Resolve $ref in spec schema to load all nested schemas
-  console.log(`📚 Resolving $ref in spec schema...`)
-  const specSchemaDir = dirname(SPEC_SCHEMA_PATH)
-  specSchema = (await resolveSchemaRefs(specSchema, specSchemaDir)) as JSONSchema
-  const totalPropertiesInSpec = countAllProperties(specSchema)
-  console.log(`   Resolved all $ref, found ~${totalPropertiesInSpec} total properties`)
-  console.log()
-
-  // Deep diff comparison between spec and implementation
-  console.log(`🔍 Performing deep schema comparison...`)
-  const schemaDiff = await compareSchemasDiff()
-  console.log(`   Missing properties: ${schemaDiff.diff.missing.length}`)
-  console.log(`   Mismatched properties: ${schemaDiff.diff.mismatched.length}`)
-  console.log(`   Extra properties: ${schemaDiff.diff.extra.length}`)
-  console.log(`   Coverage: ${schemaDiff.metrics.coverage.percent}%`)
-  console.log(`   Accuracy: ${schemaDiff.metrics.accuracy.percent}%`)
-  console.log()
-
-  // Compare schemas (top-level for main ROADMAP.md)
-  const topLevelProperties = compareSchemas(currentSchema, specSchema)
-
-  // Extract ALL properties recursively (including nested ones)
-  const allProperties = extractAllPropertiesRecursively(currentSchema, specSchema)
-
-  // Extract ALL user stories from spec schema
-  console.log(`📖 Extracting user stories from schema...`)
-  const userStories = extractAllUserStories(specSchema)
-  const userStoryStats = calculateUserStoryStats(userStories)
-  console.log(`   Found ${userStoryStats.totalStories} user stories`)
-  console.log(`   Across ${userStoryStats.propertiesWithStories} properties`)
-  console.log()
-
-  // Scan all test files
-  console.log(`🧪 Scanning spec files...`)
-  const testScanResult = scanAllTests(SPECS_DIR)
-  console.log(`   Found ${testScanResult.totalTests} implemented tests`)
+  // 1. Analyze App Schema
+  console.log('1️⃣  Analyzing App Schema...')
+  const appSchemaProgress = await compareAppSchemas(GOAL_APP_SCHEMA_PATH, CURRENT_APP_SCHEMA_PATH)
+  console.log(`   Goal: ${GOAL_APP_SCHEMA_PATH} (${appSchemaProgress.totalProperties} properties)`)
   console.log(
-    `   @spec: ${testScanResult.testsByTag.get('@spec') || 0}, @regression: ${testScanResult.testsByTag.get('@regression') || 0}, @spec: ${testScanResult.testsByTag.get('@spec') || 0}`
+    `   Current: ${CURRENT_APP_SCHEMA_PATH} (${appSchemaProgress.implementedProperties} properties)`
   )
-  console.log()
+  console.log(`   Progress: ${appSchemaProgress.completionPercent}% complete\n`)
 
-  // Match user stories to tests
-  console.log(`🔗 Matching user stories to tests...`)
-  const trackedUserStories: TrackedUserStory[] = []
-  let matchedCount = 0
-
-  for (const story of userStories) {
-    let bestMatch: TrackedUserStory = {
-      propertyPath: story.propertyPath,
-      story: story.story,
-      index: story.index,
-      implemented: false,
-    }
-
-    // Try to find matching test
-    for (const test of testScanResult.tests) {
-      const matchResult = matchUserStoryToTest(story.story, test)
-      if (matchResult.matched) {
-        bestMatch = {
-          ...bestMatch,
-          implemented: true,
-          matchedTest: {
-            filePath: test.filePath,
-            testName: test.testName,
-            tag: test.tag,
-            confidence: matchResult.confidence,
-          },
-        }
-        matchedCount++
-        break
-      }
-    }
-
-    trackedUserStories.push(bestMatch)
-  }
-
+  // 2. Analyze API Schema
+  console.log('2️⃣  Analyzing API Schema...')
+  const apiSchemaProgress = await compareApiSchemas(GOAL_API_SCHEMA_PATH, CURRENT_API_SCHEMA_PATH)
+  console.log(`   Goal: ${GOAL_API_SCHEMA_PATH} (${apiSchemaProgress.totalEndpoints} endpoints)`)
   console.log(
-    `   Matched ${matchedCount} user stories to tests (${Math.round((matchedCount / userStories.length) * 100)}%)`
+    `   Current: ${CURRENT_API_SCHEMA_PATH} (${apiSchemaProgress.implementedEndpoints} endpoints)`
   )
-  console.log()
+  console.log(`   Progress: ${apiSchemaProgress.completionPercent}% complete\n`)
 
-  // Calculate statistics (use all properties including nested for accurate progress)
-  const stats = calculateStats(allProperties, 'v0.0.1', 'v1.0.0', trackedUserStories)
+  // 3. Analyze Test Implementation
+  console.log('3️⃣  Analyzing Test Implementation...')
+  const testStatus = await analyzeTestImplementation(SPECS_DIR)
+  console.log(`   Found ${testStatus.totalSpecs} specs across all files`)
+  console.log(`   Categorizing specs...`)
+  console.log(`   ✅ DONE: ${testStatus.doneSpecs} specs (${testStatus.donePercent}%)`)
+  console.log(`   🚧 WIP: ${testStatus.wipSpecs} specs (${testStatus.wipPercent}%)`)
+  console.log(`   ⏳ TODO: ${testStatus.todoSpecs} specs (${testStatus.todoPercent}%)\n`)
 
-  console.log(
-    `✅ Found ${stats.implementedProperties} implemented properties (${Math.round((stats.implementedProperties / stats.totalProperties) * 100)}%)`
-  )
-  console.log(
-    `⏳ Found ${stats.missingProperties} missing properties (${Math.round((stats.missingProperties / stats.totalProperties) * 100)}%)`
-  )
-  console.log(
-    `🚧 Found ${stats.partialProperties} partial properties (${Math.round((stats.partialProperties / stats.totalProperties) * 100)}%)`
-  )
-  console.log()
+  // 4. Calculate Overall Progress
+  const overallProgress = calculateOverallProgress(appSchemaProgress, apiSchemaProgress, testStatus)
+  console.log(`📈 Overall Progress: ${overallProgress.completionPercent}%\n`)
 
-  // Check implementation status for ALL properties (including nested)
-  console.log(`🔍 Checking implementation status...`)
-  for (const property of allProperties) {
-    property.implementationStatus = getImplementationStatus(property.name)
-  }
-  console.log()
-
-  // List properties by status
-  console.log(`📋 Generating ROADMAP.md...`)
-  for (const prop of topLevelProperties) {
-    let statusIcon: string
-    if (prop.status === 'complete') {
-      statusIcon = '✅'
-    } else if (prop.status === 'partial') {
-      statusIcon = '🚧'
-    } else {
-      statusIcon = '⏳'
-    }
-    console.log(`   ${statusIcon} ${prop.name} (${prop.completionPercent}%)`)
-  }
-  console.log()
-
-  console.log(`📊 Total properties (including nested): ${allProperties.length}`)
-  console.log()
-
-  // Generate main ROADMAP.md
-  const roadmapData: RoadmapData = {
-    stats,
-    properties: topLevelProperties,
-    allProperties,
-    userStories: trackedUserStories,
+  // 5. Generate Roadmap Data
+  const roadmapData: NewRoadmapData = {
+    appSchema: appSchemaProgress,
+    apiSchema: apiSchemaProgress,
+    testStatus,
+    overall: overallProgress,
     timestamp: new Date().toISOString().split('T')[0]!,
   }
 
-  const roadmapMarkdown = generateRoadmapMarkdown(roadmapData)
-  await Bun.write(ROADMAP_OUTPUT_PATH, roadmapMarkdown)
-  console.log(`✅ Created ${ROADMAP_OUTPUT_PATH}`)
-  console.log()
-  console.log(`✅ Roadmap generation complete!`)
-  console.log()
+  // 6. Generate All Roadmap Files
+  console.log('📝 Generating roadmap files...')
 
-  // Display progress bar
-  const progressBar = generateProgressBar(stats.overallCompletion)
-  console.log(`Overall Progress: ${progressBar}`)
-  console.log()
+  // 6a. Main summary roadmap
+  const summaryRoadmap = generateSummaryRoadmap(roadmapData)
+  await Bun.write(ROADMAP_OUTPUT_PATH, summaryRoadmap)
+  console.log(`   ✅ ${ROADMAP_OUTPUT_PATH}`)
 
-  // Summary
-  console.log(`📈 Summary:`)
-  console.log(`   - Total Properties: ${stats.totalProperties}`)
-  console.log(`   - Implemented: ${stats.implementedProperties}`)
-  console.log(`   - Missing: ${stats.missingProperties}`)
-  console.log(`   - Schema Completion: ${stats.overallCompletion}%`)
-  console.log()
-  console.log(`   - Total User Stories: ${stats.totalUserStories}`)
-  console.log(`   - Implemented Stories: ${stats.implementedUserStories}`)
-  console.log(`   - Test Coverage: ${stats.testCoverage}%`)
-  console.log()
+  // 6b. Detailed app roadmap
+  const appRoadmap = generateAppRoadmap(roadmapData)
+  await Bun.write(APP_ROADMAP_OUTPUT_PATH, appRoadmap)
+  console.log(`   ✅ ${APP_ROADMAP_OUTPUT_PATH}`)
 
-  // Next steps
-  const nextProperty = topLevelProperties.find((p) => p.status === 'missing')
-  if (nextProperty) {
-    console.log(`📋 Next Steps:`)
-    console.log(`   Work on: ${nextProperty.name}`)
-    console.log(`   Read: specs/app.schema.json (properties.${nextProperty.name})`)
-    console.log(`   Complexity: ${nextProperty.complexity} points`)
-  }
+  // 6c. Detailed API roadmap
+  const apiRoadmap = generateApiRoadmap(roadmapData)
+  await Bun.write(API_ROADMAP_OUTPUT_PATH, apiRoadmap)
+  console.log(`   ✅ ${API_ROADMAP_OUTPUT_PATH}`)
+
+  // 6d. Detailed Admin roadmap
+  const adminRoadmap = generateAdminRoadmap(roadmapData)
+  await Bun.write(ADMIN_ROADMAP_OUTPUT_PATH, adminRoadmap)
+  console.log(`   ✅ ${ADMIN_ROADMAP_OUTPUT_PATH}\n`)
+
+  // 7. Display progress bar
+  const progressBar = generateProgressBar(overallProgress.completionPercent)
+  console.log(`Overall Progress: ${progressBar}\n`)
+
+  // 8. Summary
+  console.log('📋 Summary:')
+  console.log(`   - App Schema: ${appSchemaProgress.completionPercent}%`)
+  console.log(`   - API Schema: ${apiSchemaProgress.completionPercent}%`)
+  console.log(`   - Test Implementation: ${testStatus.donePercent}%`)
+  console.log(`   - Overall: ${overallProgress.completionPercent}%\n`)
+
+  console.log('🎉 All roadmaps generated successfully!')
 }
 
 /**
- * Load JSON Schema from file
+ * Calculate overall progress from all three metrics
  */
-async function loadSchema(path: string): Promise<JSONSchema> {
-  const file = Bun.file(path)
+function calculateOverallProgress(
+  appSchema: { completionPercent: number },
+  apiSchema: { completionPercent: number },
+  testStatus: { donePercent: number }
+): { completionPercent: number } {
+  // Weight all three metrics equally
+  const overall = Math.round(
+    (appSchema.completionPercent + apiSchema.completionPercent + testStatus.donePercent) / 3
+  )
 
-  if (!(await file.exists())) {
-    throw new Error(`Schema file not found: ${path}`)
+  return {
+    completionPercent: overall,
   }
-
-  const content = await file.json()
-
-  // Validate basic structure
-  if (!content.properties) {
-    throw new Error(`Invalid schema: missing 'properties' field in ${path}`)
-  }
-
-  return content as JSONSchema
 }
 
 /**

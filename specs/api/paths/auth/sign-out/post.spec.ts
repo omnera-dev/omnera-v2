@@ -35,9 +35,10 @@ test.describe('POST /api/auth/sign-out', () => {
    * WHEN: User posts to /api/auth/sign-out
    * THEN: Session should be cleared and subsequent session check should return null
    */
+  // API-AUTH-SIGN-OUT-001: User signs out
   test(
     'should invalidate session on sign-out',
-    { tag: '@spec' },
+    { tag: '@regression' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: A running server
       await startServerWithSchema(

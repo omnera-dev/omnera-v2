@@ -66,25 +66,25 @@
   },
   "specs": [
     {
-      "id": "HEALTH-001",
+      "id": "API-HEALTH-001",
       "given": "A running server",
       "when": "User requests health endpoint",
       "then": "Response should be 200 OK"
     },
     {
-      "id": "HEALTH-002",
+      "id": "API-HEALTH-002",
       "given": "A server with specific app name",
       "when": "User requests health endpoint",
       "then": "JSON should have status field"
     },
     {
-      "id": "HEALTH-003",
+      "id": "API-HEALTH-003",
       "given": "A running server",
       "when": "User requests health endpoint",
       "then": "Timestamp should be between request start and end"
     },
     {
-      "id": "HEALTH-004",
+      "id": "API-HEALTH-004",
       "given": "A server with scoped package name",
       "when": "User requests health endpoint",
       "then": "App name should preserve special characters"

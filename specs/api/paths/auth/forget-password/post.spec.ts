@@ -38,9 +38,10 @@ test.describe('POST /api/auth/forget-password', () => {
    * NOTE: Actual email delivery depends on email service configuration.
    * This test validates the endpoint behavior, not email delivery.
    */
+  // API-AUTH-FORGET-PASSWORD-001: User requests password reset
   test(
     'should accept password reset request',
-    { tag: '@spec' },
+    { tag: '@regression' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: A running server
       await startServerWithSchema(
@@ -85,6 +86,7 @@ test.describe('POST /api/auth/forget-password', () => {
    * WHEN: User submits invalid email format
    * THEN: Response should be validation error
    */
+  // API-AUTH-FORGET-PASSWORD-002: User requests password reset with invalid email
   test(
     'should validate email format',
     { tag: '@spec' },

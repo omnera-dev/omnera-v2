@@ -359,7 +359,7 @@ try {
   if (existsSync(oldTriggersDir)) {
     console.log('   ✓ Old triggers/ directory ready for removal (will keep for safety)')
   }
-} catch (error) {
+} catch (_error) {
   console.warn('   ⚠️  Could not remove old directories (may need manual cleanup)')
 }
 

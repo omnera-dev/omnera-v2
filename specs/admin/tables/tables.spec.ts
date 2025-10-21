@@ -593,7 +593,7 @@ test.describe('Tables - Root Level CRUD Operations', () => {
 // Run during: CI/CD, pre-release (bun test:e2e:regression)
 // ============================================================================
 
-// ADMIN-TABLES-WORKFLOW: user is on the admin tables page with a complete table configuration → user performs complete workflow → all expected outcomes are verified
+// ADMIN-TABLES-020: user is on the admin tables page with a complete table configuration → user performs complete workflow → all expected outcomes are verified
 test.fixme(
   'user can complete full tables workflow',
   { tag: '@regression' },

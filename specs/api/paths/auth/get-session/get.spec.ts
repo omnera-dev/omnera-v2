@@ -34,9 +34,10 @@ test.describe('GET /api/auth/get-session', () => {
    * WHEN: User requests GET /api/auth/get-session
    * THEN: Response should contain current user session
    */
+  // API-AUTH-GET-SESSION-001: User requests current session
   test(
     'should return current session for authenticated user',
-    { tag: '@spec' },
+    { tag: '@regression' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: A running server
       await startServerWithSchema(
@@ -78,6 +79,7 @@ test.describe('GET /api/auth/get-session', () => {
    * WHEN: User requests GET /api/auth/get-session
    * THEN: Response should be 200 OK with null user
    */
+  // API-AUTH-GET-SESSION-002: User requests current session
   test(
     'should return null session when not authenticated',
     { tag: '@spec' },

@@ -48,7 +48,7 @@
   },
   "specs": [
     {
-      "id": "AUTH-SIGN-OUT-001",
+      "id": "API-AUTH-SIGN-OUT-001",
       "given": "A running server",
       "when": "User signs out",
       "then": "Sign-out should succeed"

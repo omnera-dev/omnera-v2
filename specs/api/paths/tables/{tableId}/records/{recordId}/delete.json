@@ -28,7 +28,21 @@
       "description": "Record deleted successfully"
     },
     "404": {
-      "$ref": "../../../../components/responses/RecordNotFound.json"
+      "$ref": "../../../../../components/responses/RecordNotFound.json"
     }
-  }
+  },
+  "specs": [
+    {
+      "id": "API-TABLES-RECORDS-DELETE-001",
+      "given": "A running server with existing record",
+      "when": "User deletes record by ID",
+      "then": "Response should be 204 No Content"
+    },
+    {
+      "id": "API-TABLES-RECORDS-DELETE-002",
+      "given": "A running server",
+      "when": "User attempts to delete non-existent record",
+      "then": "Response should be 404 Not Found"
+    }
+  ]
 }

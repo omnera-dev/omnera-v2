@@ -49,5 +49,19 @@
         }
       }
     }
-  }
+  },
+  "specs": [
+    {
+      "id": "API-TABLES-LIST-001",
+      "given": "A running server with tables configured",
+      "when": "User requests list of all tables",
+      "then": "Response should be 200 OK with array of tables"
+    },
+    {
+      "id": "API-TABLES-LIST-002",
+      "given": "A running server with no tables",
+      "when": "User requests list of all tables",
+      "then": "Response should be 200 OK with empty array"
+    }
+  ]
 }

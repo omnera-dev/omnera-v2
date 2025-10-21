@@ -198,6 +198,51 @@ export interface RoadmapData {
 }
 
 /**
+ * New roadmap data structure for rewritten generator
+ */
+export interface NewRoadmapData {
+  appSchema: {
+    totalProperties: number
+    implementedProperties: number
+    missingProperties: number
+    completionPercent: number
+    missingPropertyPaths: string[]
+    implementedPropertyPaths: string[]
+  }
+  apiSchema: {
+    totalEndpoints: number
+    implementedEndpoints: number
+    missingEndpoints: number
+    completionPercent: number
+    missingEndpointPaths: Array<{ path: string; method: string }>
+    implementedEndpointPaths: Array<{ path: string; method: string }>
+  }
+  testStatus: {
+    totalSpecs: number
+    todoSpecs: number
+    wipSpecs: number
+    doneSpecs: number
+    todoPercent: number
+    wipPercent: number
+    donePercent: number
+    allSpecs: Array<{
+      id: string
+      given: string
+      when: string
+      then: string
+      sourceFile: string
+      status: 'TODO' | 'WIP' | 'DONE'
+      testFile?: string
+      confidence?: 'high' | 'medium' | 'low'
+    }>
+  }
+  overall: {
+    completionPercent: number
+  }
+  timestamp: string
+}
+
+/**
  * Property documentation (individual roadmap file)
  */
 export interface PropertyDocumentation {

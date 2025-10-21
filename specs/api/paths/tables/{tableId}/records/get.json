@@ -30,7 +30,21 @@
       }
     },
     "404": {
-      "$ref": "../../../../../components/responses/TableNotFound.json"
+      "$ref": "../../../../components/responses/TableNotFound.json"
     }
-  }
+  },
+  "specs": [
+    {
+      "id": "API-TABLES-RECORDS-LIST-001",
+      "given": "A running server with existing records",
+      "when": "User requests list of records",
+      "then": "Response should be 200 OK with array of records"
+    },
+    {
+      "id": "API-TABLES-RECORDS-LIST-002",
+      "given": "A running server",
+      "when": "User requests records from non-existent table",
+      "then": "Response should be 404 Not Found"
+    }
+  ]
 }

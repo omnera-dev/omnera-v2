@@ -6,52 +6,38 @@
  */
 
 import { readdir, readFile, stat } from 'node:fs/promises'
-import { join, relative, basename } from 'node:path'
+import { join } from 'node:path'
+import {
+  validateSpecsArray,
+  validateTestFile,
+  createValidationResult,
+  printValidationResults,
+  type ValidationResult,
+  type Spec,
+} from './lib/validation-common'
 
 /**
  * Validation Script for specs/admin/ Directory
  *
  * Validates that the admin specs directory follows the established patterns:
  * 1. Directory structure ({feature-name}/{feature-name}.{json,spec.ts})
- * 2. Fixture import paths (from '../fixtures')
- * 3. Copyright headers
- * 4. Test tags (@spec, @regression)
- * 5. Given-When-Then format in specs
- * 6. JSON spec structure (title, description, specs array)
+ * 2. JSON spec structure (title, description, specs array)
+ * 3. Spec ID format (ADMIN- prefix with strict format)
+ * 4. Global spec ID uniqueness
+ * 5. Copyright headers in test files
+ * 6. Test tags (@spec, @regression)
+ * 7. Spec-to-test mapping via ID comments
+ * 8. Exactly one @regression test per file
+ * 9. Given-When-Then format in specs
  */
 
-interface ValidationResult {
-  valid: boolean
-  errors: string[]
-  warnings: string[]
-  info: string[]
-}
-
-interface SpecJson {
-  title: string
-  description: string
-  specs: Array<{
-    id: string
-    given: string
-    when: string
-    then: string
-  }>
-}
-
 const SPECS_ADMIN_DIR = join(process.cwd(), 'specs/admin')
-const EXPECTED_COPYRIGHT = 'Copyright (c) 2025 ESSENTIAL SERVICES'
-const EXPECTED_LICENSE = 'Business Source License 1.1'
 const EXPECTED_FIXTURE_IMPORT = "from '../fixtures'"
 
 async function validateAdminSpecs(): Promise<ValidationResult> {
-  const result: ValidationResult = {
-    valid: true,
-    errors: [],
-    warnings: [],
-    info: [],
-  }
+  const result = createValidationResult()
 
-  result.info.push(`Validating specs/admin/ directory structure...`)
+  console.log('🔍 Validating specs/admin/ directory structure...\n')
 
   try {
     // Read admin directory
@@ -59,68 +45,88 @@ async function validateAdminSpecs(): Promise<ValidationResult> {
     const directories = entries.filter((e) => e.isDirectory() && !e.name.startsWith('.'))
 
     if (directories.length === 0) {
-      result.errors.push('No feature directories found in specs/admin/')
-      result.valid = false
+      result.errors.push({
+        file: 'specs/admin/',
+        type: 'error',
+        message: 'No feature directories found',
+      })
+      result.passed = false
+      printValidationResults(result, 'ADMIN SPECS VALIDATION')
       return result
     }
 
-    result.info.push(`Found ${directories.length} feature directories`)
+    console.log(`📁 Found ${directories.length} feature directories\n`)
+
+    // Track spec IDs for global uniqueness check
+    const globalSpecIds = new Set<string>()
 
     // Validate each feature directory
     for (const dir of directories) {
-      await validateFeatureDirectory(join(SPECS_ADMIN_DIR, dir.name), dir.name, result)
-    }
-
-    // Summary
-    if (result.errors.length === 0 && result.warnings.length === 0) {
-      result.info.push('✅ All validations passed!')
-    } else {
-      result.info.push(
-        `\n📊 Summary: ${result.errors.length} errors, ${result.warnings.length} warnings`
+      await validateFeatureDirectory(
+        join(SPECS_ADMIN_DIR, dir.name),
+        dir.name,
+        result,
+        globalSpecIds
       )
     }
-  } catch (error) {
-    result.errors.push(`Failed to read specs/admin/ directory: ${error}`)
-    result.valid = false
-  }
 
-  return result
+    // Print results
+    printValidationResults(result, 'ADMIN SPECS VALIDATION')
+
+    return result
+  } catch (error) {
+    result.errors.push({
+      file: 'specs/admin/',
+      type: 'error',
+      message: `Failed to read directory: ${error}`,
+    })
+    result.passed = false
+    printValidationResults(result, 'ADMIN SPECS VALIDATION')
+    return result
+  }
 }
 
 async function validateFeatureDirectory(
   dirPath: string,
   featureName: string,
-  result: ValidationResult
+  result: ValidationResult,
+  globalSpecIds: Set<string>
 ): Promise<void> {
-  result.info.push(`\n📁 Validating ${featureName}/`)
-
   const jsonFile = join(dirPath, `${featureName}.json`)
   const specFile = join(dirPath, `${featureName}.spec.ts`)
+  const relativePath = `admin/${featureName}/${featureName}`
 
   // Check if required files exist
-  const [jsonExists, specExists] = await Promise.all([
-    fileExists(jsonFile),
-    fileExists(specFile),
-  ])
+  const [jsonExists, specExists] = await Promise.all([fileExists(jsonFile), fileExists(specFile)])
 
   if (!jsonExists) {
-    result.errors.push(`  ❌ Missing ${featureName}.json`)
-    result.valid = false
+    result.errors.push({
+      file: `${relativePath}.json`,
+      type: 'error',
+      message: 'Required JSON spec file is missing',
+    })
+    result.passed = false
   }
 
   if (!specExists) {
-    result.errors.push(`  ❌ Missing ${featureName}.spec.ts`)
-    result.valid = false
+    result.errors.push({
+      file: `${relativePath}.spec.ts`,
+      type: 'error',
+      message: 'Required test file is missing',
+    })
+    result.passed = false
   }
 
   // Validate JSON file
+  let specs: Spec[] = []
   if (jsonExists) {
-    await validateJsonSpec(jsonFile, featureName, result)
+    specs = await validateJsonSpec(jsonFile, relativePath + '.json', result, globalSpecIds)
+    result.totalSchemas++
   }
 
   // Validate TypeScript spec file
   if (specExists) {
-    await validateSpecFile(specFile, featureName, result)
+    await validateSpecFileContent(specFile, relativePath + '.spec.ts', specs, result)
   }
 
   // Check for extra files
@@ -129,127 +135,103 @@ async function validateFeatureDirectory(
   const extraFiles = files.filter((f) => !expectedFiles.has(f) && !f.startsWith('.'))
 
   if (extraFiles.length > 0) {
-    result.warnings.push(`  ⚠️  Extra files found: ${extraFiles.join(', ')}`)
+    result.warnings.push({
+      file: `${relativePath}/`,
+      type: 'warning',
+      message: `Extra files found: ${extraFiles.join(', ')}`,
+    })
   }
 }
 
 async function validateJsonSpec(
   filePath: string,
-  featureName: string,
-  result: ValidationResult
-): Promise<void> {
+  relativePath: string,
+  result: ValidationResult,
+  globalSpecIds: Set<string>
+): Promise<Spec[]> {
   try {
     const content = await readFile(filePath, 'utf-8')
-    const spec: SpecJson = JSON.parse(content)
+    const json = JSON.parse(content)
 
-    // Validate structure
-    if (!spec.title) {
-      result.errors.push(`  ❌ ${featureName}.json: Missing 'title' field`)
-      result.valid = false
+    // Validate title and description
+    if (!json.title || typeof json.title !== 'string') {
+      result.errors.push({
+        file: relativePath,
+        type: 'error',
+        message: 'Missing or invalid "title" field',
+      })
+      result.passed = false
     }
 
-    if (!spec.description) {
-      result.errors.push(`  ❌ ${featureName}.json: Missing 'description' field`)
-      result.valid = false
+    if (!json.description || typeof json.description !== 'string') {
+      result.errors.push({
+        file: relativePath,
+        type: 'error',
+        message: 'Missing or invalid "description" field',
+      })
+      result.passed = false
     }
 
-    if (!Array.isArray(spec.specs)) {
-      result.errors.push(`  ❌ ${featureName}.json: 'specs' must be an array`)
-      result.valid = false
-      return
-    }
+    // Validate specs array using shared validation
+    validateSpecsArray(json, relativePath, 'ADMIN', result, globalSpecIds)
 
-    if (spec.specs.length === 0) {
-      result.warnings.push(`  ⚠️  ${featureName}.json: No specs defined`)
-    }
-
-    // Validate each spec
-    spec.specs.forEach((s, index) => {
-      if (!s.id) {
-        result.errors.push(`  ❌ ${featureName}.json: Spec ${index} missing 'id'`)
-        result.valid = false
-      } else if (!s.id.startsWith('ADMIN-')) {
-        result.warnings.push(`  ⚠️  ${featureName}.json: Spec ${s.id} should start with 'ADMIN-'`)
-      }
-
-      if (!s.given || !s.when || !s.then) {
-        result.errors.push(`  ❌ ${featureName}.json: Spec ${s.id} incomplete Given-When-Then`)
-        result.valid = false
-      }
-    })
-
-    result.info.push(`  ✓ ${featureName}.json: ${spec.specs.length} specs defined`)
+    return json.specs || []
   } catch (error) {
     if (error instanceof SyntaxError) {
-      result.errors.push(`  ❌ ${featureName}.json: Invalid JSON syntax`)
+      result.errors.push({
+        file: relativePath,
+        type: 'error',
+        message: 'Invalid JSON syntax',
+      })
     } else {
-      result.errors.push(`  ❌ ${featureName}.json: Failed to validate - ${error}`)
+      result.errors.push({
+        file: relativePath,
+        type: 'error',
+        message: `Failed to validate: ${error}`,
+      })
     }
-    result.valid = false
+    result.passed = false
+    return []
   }
 }
 
-async function validateSpecFile(
+async function validateSpecFileContent(
   filePath: string,
-  featureName: string,
+  relativePath: string,
+  specs: Spec[],
   result: ValidationResult
 ): Promise<void> {
   try {
     const content = await readFile(filePath, 'utf-8')
 
-    // Check copyright header
-    if (!content.includes(EXPECTED_COPYRIGHT)) {
-      result.errors.push(`  ❌ ${featureName}.spec.ts: Missing copyright header`)
-      result.valid = false
-    }
+    // Use shared test file validation
+    await validateTestFile(filePath, specs, 'ADMIN', result)
 
-    if (!content.includes(EXPECTED_LICENSE)) {
-      result.errors.push(`  ❌ ${featureName}.spec.ts: Missing BSL 1.1 license reference`)
-      result.valid = false
-    }
-
-    // Check fixture import
+    // Additional admin-specific validation: fixture import
     if (!content.includes(EXPECTED_FIXTURE_IMPORT)) {
-      result.errors.push(`  ❌ ${featureName}.spec.ts: Missing or incorrect fixture import`)
-      result.errors.push(`     Expected: import { test, expect } from '../fixtures'`)
-      result.valid = false
+      result.errors.push({
+        file: relativePath,
+        type: 'error',
+        message: `Missing or incorrect fixture import. Expected: import { test, expect } from '../fixtures'`,
+      })
+      result.passed = false
     }
 
-    // Check for test.describe
+    // Check for test.describe (recommended but not required)
     if (!content.includes('test.describe(')) {
-      result.warnings.push(`  ⚠️  ${featureName}.spec.ts: No test.describe() found`)
+      result.warnings.push({
+        file: relativePath,
+        type: 'warning',
+        message: 'No test.describe() found - consider organizing tests in describe blocks',
+      })
     }
-
-    // Check for test tags
-    const hasSpecTag = content.includes("tag: '@spec'") || content.includes('tag: "@spec"')
-    const hasRegressionTag =
-      content.includes("tag: '@regression'") || content.includes('tag: "@regression"')
-
-    if (!hasSpecTag) {
-      result.warnings.push(`  ⚠️  ${featureName}.spec.ts: No @spec tag found`)
-    }
-
-    if (!hasRegressionTag) {
-      result.warnings.push(`  ⚠️  ${featureName}.spec.ts: No @regression tag found`)
-    }
-
-    // Check for Given-When-Then comments
-    const hasGiven = content.includes('// GIVEN:')
-    const hasWhen = content.includes('// WHEN:')
-    const hasThen = content.includes('// THEN:')
-
-    if (!hasGiven || !hasWhen || !hasThen) {
-      result.warnings.push(
-        `  ⚠️  ${featureName}.spec.ts: Missing Given-When-Then comment structure`
-      )
-    }
-
-    // Count tests
-    const testCount = (content.match(/test\.(fixme|skip)?\(/g) || []).length
-    result.info.push(`  ✓ ${featureName}.spec.ts: ${testCount} tests defined`)
   } catch (error) {
-    result.errors.push(`  ❌ ${featureName}.spec.ts: Failed to validate - ${error}`)
-    result.valid = false
+    result.errors.push({
+      file: relativePath,
+      type: 'error',
+      message: `Failed to validate: ${error}`,
+    })
+    result.passed = false
   }
 }
 
@@ -262,57 +244,22 @@ async function fileExists(path: string): Promise<boolean> {
   }
 }
 
-function formatResults(result: ValidationResult): string {
-  const lines: string[] = []
-
-  lines.push('═'.repeat(80))
-  lines.push('  ADMIN SPECS VALIDATION REPORT')
-  lines.push('═'.repeat(80))
-  lines.push('')
-
-  // Info messages
-  if (result.info.length > 0) {
-    lines.push(...result.info.map((msg) => msg))
-    lines.push('')
-  }
-
-  // Warnings
-  if (result.warnings.length > 0) {
-    lines.push('⚠️  WARNINGS:')
-    lines.push('─'.repeat(80))
-    lines.push(...result.warnings)
-    lines.push('')
-  }
-
-  // Errors
-  if (result.errors.length > 0) {
-    lines.push('❌ ERRORS:')
-    lines.push('─'.repeat(80))
-    lines.push(...result.errors)
-    lines.push('')
-  }
-
-  lines.push('═'.repeat(80))
-
-  return lines.join('\n')
-}
-
 // Run validation
 async function main() {
-  console.log('Starting admin specs validation...\n')
-
   const result = await validateAdminSpecs()
-  const report = formatResults(result)
-
-  console.log(report)
 
   // Exit with appropriate code
-  if (!result.valid) {
+  if (!result.passed || result.errors.length > 0) {
     process.exit(1)
   }
+
+  process.exit(0)
 }
 
-main().catch((error) => {
-  console.error('Validation script failed:', error)
-  process.exit(1)
-})
+// Run if executed directly
+if (import.meta.main) {
+  main()
+}
+
+export { validateAdminSpecs }
+export type { ValidationResult }

@@ -29,9 +29,10 @@ test.describe('GET /api/auth/verify-email', () => {
    * WHEN: User requests email verification without token
    * THEN: Response should be validation error
    */
+  // API-AUTH-VERIFY-EMAIL-001: User requests verification without token
   test(
     'should require verification token',
-    { tag: '@spec' },
+    { tag: '@regression' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: A running server
       await startServerWithSchema(
@@ -57,6 +58,7 @@ test.describe('GET /api/auth/verify-email', () => {
    * WHEN: User submits invalid verification token
    * THEN: Response should be unauthorized error
    */
+  // API-AUTH-VERIFY-EMAIL-002: User submits invalid token
   test(
     'should reject invalid verification token',
     { tag: '@spec' },

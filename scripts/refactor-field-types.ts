@@ -12,7 +12,7 @@ import { join, basename } from 'node:path'
 
 const FIELD_TYPES_DIR = 'specs/app/tables/field-types'
 const COMMON_PROPERTIES = ['required', 'unique', 'indexed']
-const SKIP_PROPERTIES = ['id', 'name', 'type', ...COMMON_PROPERTIES]
+const SKIP_PROPERTIES = new Set(['id', 'name', 'type', ...COMMON_PROPERTIES])
 
 interface UserStory {
   id: string
@@ -124,23 +124,35 @@ async function refactorFieldType(schemaPath: string): Promise<void> {
   const orchestratorProperties: Record<string, any> = {}
 
   for (const [propName, propDef] of Object.entries(schema.properties)) {
-    if (SKIP_PROPERTIES.includes(propName)) {
+    if (SKIP_PROPERTIES.has(propName)) {
       // Keep special properties as-is
-      if (propName === 'id') {
-        orchestratorProperties[propName] = {
-          $ref: '../../common/definitions.schema.json#/definitions/id',
+      switch (propName) {
+        case 'id': {
+          orchestratorProperties[propName] = {
+            $ref: '../../common/definitions.schema.json#/definitions/id',
+          }
+
+          break
         }
-      } else if (propName === 'name') {
-        orchestratorProperties[propName] = {
-          $ref: '../../common/definitions.schema.json#/definitions/name',
+        case 'name': {
+          orchestratorProperties[propName] = {
+            $ref: '../../common/definitions.schema.json#/definitions/name',
+          }
+
+          break
         }
-      } else if (propName === 'type') {
-        orchestratorProperties[propName] = propDef
-      } else if (COMMON_PROPERTIES.includes(propName)) {
-        // Reference common property schemas
-        orchestratorProperties[propName] = {
-          $ref: `../common/${propName}/${propName}.schema.json`,
+        case 'type': {
+          orchestratorProperties[propName] = propDef
+
+          break
         }
+        default:
+          if (COMMON_PROPERTIES.includes(propName)) {
+            // Reference common property schemas
+            orchestratorProperties[propName] = {
+              $ref: `../common/${propName}/${propName}.schema.json`,
+            }
+          }
       }
       continue
     }

@@ -62,7 +62,7 @@
                 "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
               },
               "user": {
-                "$ref": "../../../../../components/schemas/User.json"
+                "$ref": "../../../../components/schemas/User.json"
               }
             }
           },
@@ -87,14 +87,14 @@
       }
     },
     "400": {
-      "$ref": "../../../../../components/responses/ValidationError.json"
+      "$ref": "../../../../components/responses/ValidationError.json"
     },
     "401": {
       "description": "Unauthorized - Invalid credentials",
       "content": {
         "application/json": {
           "schema": {
-            "$ref": "../../../../../components/schemas/Error.json"
+            "$ref": "../../../../components/schemas/Error.json"
           },
           "examples": {
             "invalidCredentials": {
@@ -113,19 +113,19 @@
   },
   "specs": [
     {
-      "id": "AUTH-SIGN-IN-EMAIL-001",
+      "id": "API-AUTH-SIGN-IN-EMAIL-001",
       "given": "A running server",
       "when": "User signs in with correct credentials",
       "then": "Response should be 200 OK"
     },
     {
-      "id": "AUTH-SIGN-IN-EMAIL-002",
+      "id": "API-AUTH-SIGN-IN-EMAIL-002",
       "given": "A running server",
       "when": "User attempts sign-in with wrong password",
       "then": "Response should be authentication error (4xx)"
     },
     {
-      "id": "AUTH-SIGN-IN-EMAIL-003",
+      "id": "API-AUTH-SIGN-IN-EMAIL-003",
       "given": "A running server",
       "when": "User attempts sign-in with non-existent email",
       "then": "Response should be authentication error (4xx)"

@@ -36,9 +36,10 @@ test.describe('POST /api/auth/change-password', () => {
    * WHEN: User requests password change without required fields
    * THEN: Response should be validation error
    */
+  // API-AUTH-CHANGE-PASSWORD-001: User requests password change without newPassword
   test(
     'should validate required fields',
-    { tag: '@spec' },
+    { tag: '@regression' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: A running server
       await startServerWithSchema(
@@ -89,6 +90,7 @@ test.describe('POST /api/auth/change-password', () => {
    * WHEN: Unauthenticated user requests password change
    * THEN: Response should be unauthorized error
    */
+  // API-AUTH-CHANGE-PASSWORD-002: Unauthenticated user requests password change
   test(
     'should require authentication',
     { tag: '@spec' },
@@ -124,6 +126,7 @@ test.describe('POST /api/auth/change-password', () => {
    * WHEN: User submits incorrect current password
    * THEN: Response should be unauthorized error
    */
+  // API-AUTH-CHANGE-PASSWORD-003: User submits wrong current password
   test(
     'should verify current password',
     { tag: '@spec' },
