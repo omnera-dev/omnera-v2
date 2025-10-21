@@ -68,7 +68,7 @@ test.describe('AppSchema - Description', () => {
 
       // THEN: description element is NOT rendered
       const description = page.locator('[data-testid="app-description"]')
-      await expect(description).not.toBeVisible()
+      await expect(description).toBeHidden()
     }
   )
 
@@ -204,7 +204,7 @@ test.describe('AppSchema - Description', () => {
 
       // THEN: description element is NOT rendered
       const description = page.locator('[data-testid="app-description"]')
-      await expect(description).not.toBeVisible()
+      await expect(description).toBeHidden()
     }
   )
 
@@ -537,7 +537,7 @@ test.describe('AppSchema - Description', () => {
 
       // THEN: description element is NOT rendered when missing (002)
       let hiddenDescription = page.locator('[data-testid="app-description"]')
-      await expect(hiddenDescription).not.toBeVisible()
+      await expect(hiddenDescription).toBeHidden()
 
       // Test empty string in same scenario group
       await startServerWithSchema(
@@ -551,7 +551,7 @@ test.describe('AppSchema - Description', () => {
 
       // THEN: description element is NOT rendered when empty string (007)
       hiddenDescription = page.locator('[data-testid="app-description"]')
-      await expect(hiddenDescription).not.toBeVisible()
+      await expect(hiddenDescription).toBeHidden()
 
       // ============================================================================
       // SCENARIO GROUP 3: Long text handling and truncation prevention

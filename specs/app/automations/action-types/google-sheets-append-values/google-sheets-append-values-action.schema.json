@@ -52,97 +52,97 @@
   "additionalProperties": false,
   "specs": [
     {
-      "id": "SPEC-001",
+      "id": "APP-GOOGLE-SHEETS-APPEND-VALUES-001",
       "given": "user provides name",
       "when": "validating input",
       "then": "string value should be accepted"
     },
     {
-      "id": "SPEC-002",
+      "id": "APP-GOOGLE-SHEETS-APPEND-VALUES-002",
       "given": "name is empty string",
       "when": "validating input",
       "then": "behavior should follow optional/required rules"
     },
     {
-      "id": "SPEC-003",
+      "id": "APP-GOOGLE-SHEETS-APPEND-VALUES-003",
       "given": "user configures account",
       "when": "validating input",
       "then": "value should meet schema requirements"
     },
     {
-      "id": "SPEC-004",
+      "id": "APP-GOOGLE-SHEETS-APPEND-VALUES-004",
       "given": "account is set",
       "when": "processing configuration",
       "then": "value should be used correctly"
     },
     {
-      "id": "SPEC-005",
+      "id": "APP-GOOGLE-SHEETS-APPEND-VALUES-005",
       "given": "entity with service='google-sheets'",
       "when": "processing configuration",
       "then": "correct handler should be selected"
     },
     {
-      "id": "SPEC-006",
+      "id": "APP-GOOGLE-SHEETS-APPEND-VALUES-006",
       "given": "invalid service value",
       "when": "validating configuration",
       "then": "clear error message should identify the issue"
     },
     {
-      "id": "SPEC-007",
+      "id": "APP-GOOGLE-SHEETS-APPEND-VALUES-007",
       "given": "entity with action='append-values'",
       "when": "processing configuration",
       "then": "correct handler should be selected"
     },
     {
-      "id": "SPEC-008",
+      "id": "APP-GOOGLE-SHEETS-APPEND-VALUES-008",
       "given": "invalid action value",
       "when": "validating configuration",
       "then": "clear error message should identify the issue"
     },
     {
-      "id": "SPEC-009",
+      "id": "APP-GOOGLE-SHEETS-APPEND-VALUES-009",
       "given": "user configures params",
       "when": "validating input",
       "then": "value should meet schema requirements"
     },
     {
-      "id": "SPEC-010",
+      "id": "APP-GOOGLE-SHEETS-APPEND-VALUES-010",
       "given": "params is set",
       "when": "processing configuration",
       "then": "value should be used correctly"
     },
     {
-      "id": "SPEC-011",
+      "id": "APP-GOOGLE-SHEETS-APPEND-VALUES-011",
       "given": "user provides spreadsheetId",
       "when": "validating input",
       "then": "string value should be accepted"
     },
     {
-      "id": "SPEC-012",
+      "id": "APP-GOOGLE-SHEETS-APPEND-VALUES-012",
       "given": "spreadsheetId is empty string",
       "when": "validating input",
       "then": "behavior should follow optional/required rules"
     },
     {
-      "id": "SPEC-013",
+      "id": "APP-GOOGLE-SHEETS-APPEND-VALUES-013",
       "given": "user provides range",
       "when": "validating input",
       "then": "string value should be accepted"
     },
     {
-      "id": "SPEC-014",
+      "id": "APP-GOOGLE-SHEETS-APPEND-VALUES-014",
       "given": "range is empty string",
       "when": "validating input",
       "then": "behavior should follow optional/required rules"
     },
     {
-      "id": "SPEC-015",
+      "id": "APP-GOOGLE-SHEETS-APPEND-VALUES-015",
       "given": "user provides values array",
       "when": "validating input",
       "then": "items should be processed in order"
     },
     {
-      "id": "SPEC-016",
+      "id": "APP-GOOGLE-SHEETS-APPEND-VALUES-016",
       "given": "values array is empty",
       "when": "validating input",
       "then": "behavior should follow optional/required rules"

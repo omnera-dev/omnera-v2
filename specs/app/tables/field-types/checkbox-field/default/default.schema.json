@@ -5,19 +5,19 @@
   "type": "boolean",
   "specs": [
     {
-      "id": "FIELD-CHECKBOX-FIELD-DEFAULT-001",
+      "id": "APP-FIELD-CHECKBOX-FIELD-DEFAULT-001",
       "given": "default is true",
       "when": "processing entity",
       "then": "corresponding behavior should be enforced"
     },
     {
-      "id": "FIELD-CHECKBOX-FIELD-DEFAULT-002",
+      "id": "APP-FIELD-CHECKBOX-FIELD-DEFAULT-002",
       "given": "default is false (default: False)",
       "when": "processing entity",
       "then": "corresponding behavior should not be enforced"
     },
     {
-      "id": "FIELD-CHECKBOX-FIELD-DEFAULT-003",
+      "id": "APP-FIELD-CHECKBOX-FIELD-DEFAULT-003",
       "given": "configuration with default",
       "when": "validating settings",
       "then": "boolean value should be accepted"

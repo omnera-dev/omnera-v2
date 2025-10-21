@@ -34,49 +34,49 @@
   },
   "specs": [
     {
-      "id": "SPEC-001",
+      "id": "APP-AUTOMATIONS-001",
       "given": "user provides automations array",
       "when": "validating input",
       "then": "items should be processed in order"
     },
     {
-      "id": "SPEC-002",
+      "id": "APP-AUTOMATIONS-002",
       "given": "automations array is empty",
       "when": "validating input",
       "then": "behavior should follow optional/required rules"
     },
     {
-      "id": "SPEC-003",
+      "id": "APP-AUTOMATIONS-003",
       "given": "the application is running",
       "when": "I list automations",
       "then": "it should work correctly"
     },
     {
-      "id": "SPEC-004",
+      "id": "APP-AUTOMATIONS-004",
       "given": "the application is running",
       "when": "I disable an automation",
       "then": "it should work correctly"
     },
     {
-      "id": "SPEC-005",
+      "id": "APP-AUTOMATIONS-005",
       "given": "the application is running",
       "when": "I enable an automation",
       "then": "it should work correctly"
     },
     {
-      "id": "SPEC-006",
+      "id": "APP-AUTOMATIONS-006",
       "given": "the application is running",
       "when": "I open the edit url",
       "then": "it should work correctly"
     },
     {
-      "id": "SPEC-007",
+      "id": "APP-AUTOMATIONS-007",
       "given": "the application is running",
       "when": "I return a list of automations",
       "then": "it should work correctly"
     },
     {
-      "id": "SPEC-008",
+      "id": "APP-AUTOMATIONS-008",
       "given": "I am working with same integration actions in a queue",
       "when": "I run parallel automations",
       "then": "it should complete successfully"

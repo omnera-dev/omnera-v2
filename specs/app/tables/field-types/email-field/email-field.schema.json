@@ -6,10 +6,10 @@
   "type": "object",
   "properties": {
     "id": {
-      "$ref": "../../common/definitions.schema.json#/definitions/id"
+      "$ref": "../../../common/definitions.schema.json#/definitions/id"
     },
     "name": {
-      "$ref": "../../common/definitions.schema.json#/definitions/name"
+      "$ref": "../../../common/definitions.schema.json#/definitions/name"
     },
     "required": {
       "$ref": "../common/required/required.schema.json"
@@ -31,19 +31,19 @@
   "additionalProperties": false,
   "specs": [
     {
-      "id": "FIELD-EMAIL-001",
+      "id": "APP-FIELD-EMAIL-001",
       "given": "I create an email field",
       "when": "I enter a valid email",
       "then": "it should accept the input"
     },
     {
-      "id": "FIELD-EMAIL-002",
+      "id": "APP-FIELD-EMAIL-002",
       "given": "I create an email field",
       "when": "I enter text without @ symbol",
       "then": "it should show validation error"
     },
     {
-      "id": "FIELD-EMAIL-003",
+      "id": "APP-FIELD-EMAIL-003",
       "given": "I create an email field with unique constraint",
       "when": "I enter a duplicate email",
       "then": "it should reject the input regardless of case"

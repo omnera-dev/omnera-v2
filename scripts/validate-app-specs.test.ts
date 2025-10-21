@@ -46,9 +46,9 @@ describe('validate-specs-structure', () => {
       expect(firstError).toHaveProperty('file')
       expect(firstError).toHaveProperty('type')
       expect(firstError).toHaveProperty('message')
-      expect(firstError.type).toBe('error')
-      expect(typeof firstError.file).toBe('string')
-      expect(typeof firstError.message).toBe('string')
+      expect(firstError?.type).toBe('error')
+      expect(typeof firstError?.file).toBe('string')
+      expect(typeof firstError?.message).toBe('string')
     }
   })
 
@@ -61,9 +61,9 @@ describe('validate-specs-structure', () => {
       expect(firstWarning).toHaveProperty('file')
       expect(firstWarning).toHaveProperty('type')
       expect(firstWarning).toHaveProperty('message')
-      expect(firstWarning.type).toBe('warning')
-      expect(typeof firstWarning.file).toBe('string')
-      expect(typeof firstWarning.message).toBe('string')
+      expect(firstWarning?.type).toBe('warning')
+      expect(typeof firstWarning?.file).toBe('string')
+      expect(typeof firstWarning?.message).toBe('string')
     }
   })
 })

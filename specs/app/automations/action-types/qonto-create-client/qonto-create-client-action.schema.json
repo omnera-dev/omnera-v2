@@ -79,175 +79,175 @@
   "additionalProperties": false,
   "specs": [
     {
-      "id": "SPEC-001",
+      "id": "APP-QONTO-CREATE-CLIENT-001",
       "given": "user provides name",
       "when": "validating input",
       "then": "string value should be accepted"
     },
     {
-      "id": "SPEC-002",
+      "id": "APP-QONTO-CREATE-CLIENT-002",
       "given": "name is empty string",
       "when": "validating input",
       "then": "behavior should follow optional/required rules"
     },
     {
-      "id": "SPEC-003",
+      "id": "APP-QONTO-CREATE-CLIENT-003",
       "given": "user configures account",
       "when": "validating input",
       "then": "value should meet schema requirements"
     },
     {
-      "id": "SPEC-004",
+      "id": "APP-QONTO-CREATE-CLIENT-004",
       "given": "account is set",
       "when": "processing configuration",
       "then": "value should be used correctly"
     },
     {
-      "id": "SPEC-005",
+      "id": "APP-QONTO-CREATE-CLIENT-005",
       "given": "entity with service='qonto'",
       "when": "processing configuration",
       "then": "correct handler should be selected"
     },
     {
-      "id": "SPEC-006",
+      "id": "APP-QONTO-CREATE-CLIENT-006",
       "given": "invalid service value",
       "when": "validating configuration",
       "then": "clear error message should identify the issue"
     },
     {
-      "id": "SPEC-007",
+      "id": "APP-QONTO-CREATE-CLIENT-007",
       "given": "entity with action='create-client'",
       "when": "processing configuration",
       "then": "correct handler should be selected"
     },
     {
-      "id": "SPEC-008",
+      "id": "APP-QONTO-CREATE-CLIENT-008",
       "given": "invalid action value",
       "when": "validating configuration",
       "then": "clear error message should identify the issue"
     },
     {
-      "id": "SPEC-009",
+      "id": "APP-QONTO-CREATE-CLIENT-009",
       "given": "user configures params",
       "when": "validating input",
       "then": "value should meet schema requirements"
     },
     {
-      "id": "SPEC-010",
+      "id": "APP-QONTO-CREATE-CLIENT-010",
       "given": "params is set",
       "when": "processing configuration",
       "then": "value should be used correctly"
     },
     {
-      "id": "SPEC-011",
+      "id": "APP-QONTO-CREATE-CLIENT-011",
       "given": "user provides name",
       "when": "validating input",
       "then": "string value should be accepted"
     },
     {
-      "id": "SPEC-012",
+      "id": "APP-QONTO-CREATE-CLIENT-012",
       "given": "name is empty string",
       "when": "validating input",
       "then": "behavior should follow optional/required rules"
     },
     {
-      "id": "SPEC-013",
+      "id": "APP-QONTO-CREATE-CLIENT-013",
       "given": "user provides email matching pattern",
       "when": "validating input",
       "then": "value should be accepted"
     },
     {
-      "id": "SPEC-014",
+      "id": "APP-QONTO-CREATE-CLIENT-014",
       "given": "user provides email not matching pattern",
       "when": "validating input",
       "then": "clear error message should explain format requirement"
     },
     {
-      "id": "SPEC-015",
+      "id": "APP-QONTO-CREATE-CLIENT-015",
       "given": "email is stored",
       "when": "retrieved later",
       "then": "original format should be preserved"
     },
     {
-      "id": "SPEC-016",
+      "id": "APP-QONTO-CREATE-CLIENT-016",
       "given": "user provides phone",
       "when": "validating input",
       "then": "string value should be accepted"
     },
     {
-      "id": "SPEC-017",
+      "id": "APP-QONTO-CREATE-CLIENT-017",
       "given": "phone is empty string",
       "when": "validating input",
       "then": "behavior should follow optional/required rules"
     },
     {
-      "id": "SPEC-018",
+      "id": "APP-QONTO-CREATE-CLIENT-018",
       "given": "user configures address",
       "when": "validating input",
       "then": "value should meet schema requirements"
     },
     {
-      "id": "SPEC-019",
+      "id": "APP-QONTO-CREATE-CLIENT-019",
       "given": "address is set",
       "when": "processing configuration",
       "then": "value should be used correctly"
     },
     {
-      "id": "SPEC-020",
+      "id": "APP-QONTO-CREATE-CLIENT-020",
       "given": "user provides street",
       "when": "validating input",
       "then": "string value should be accepted"
     },
     {
-      "id": "SPEC-021",
+      "id": "APP-QONTO-CREATE-CLIENT-021",
       "given": "street is empty string",
       "when": "validating input",
       "then": "behavior should follow optional/required rules"
     },
     {
-      "id": "SPEC-022",
+      "id": "APP-QONTO-CREATE-CLIENT-022",
       "given": "user provides city",
       "when": "validating input",
       "then": "string value should be accepted"
     },
     {
-      "id": "SPEC-023",
+      "id": "APP-QONTO-CREATE-CLIENT-023",
       "given": "city is empty string",
       "when": "validating input",
       "then": "behavior should follow optional/required rules"
     },
     {
-      "id": "SPEC-024",
+      "id": "APP-QONTO-CREATE-CLIENT-024",
       "given": "user provides postal_code",
       "when": "validating input",
       "then": "string value should be accepted"
     },
     {
-      "id": "SPEC-025",
+      "id": "APP-QONTO-CREATE-CLIENT-025",
       "given": "postal_code is empty string",
       "when": "validating input",
       "then": "behavior should follow optional/required rules"
     },
     {
-      "id": "SPEC-026",
+      "id": "APP-QONTO-CREATE-CLIENT-026",
       "given": "user provides country",
       "when": "validating input",
       "then": "string value should be accepted"
     },
     {
-      "id": "SPEC-027",
+      "id": "APP-QONTO-CREATE-CLIENT-027",
       "given": "country is empty string",
       "when": "validating input",
       "then": "behavior should follow optional/required rules"
     },
     {
-      "id": "SPEC-028",
+      "id": "APP-QONTO-CREATE-CLIENT-028",
       "given": "user provides vat_number",
       "when": "validating input",
       "then": "string value should be accepted"
     },
     {
-      "id": "SPEC-029",
+      "id": "APP-QONTO-CREATE-CLIENT-029",
       "given": "vat_number is empty string",
       "when": "validating input",
       "then": "behavior should follow optional/required rules"

@@ -5,10 +5,10 @@
   "type": "object",
   "properties": {
     "id": {
-      "$ref": "../../common/definitions.schema.json#/definitions/id"
+      "$ref": "../../../common/definitions.schema.json#/definitions/id"
     },
     "name": {
-      "$ref": "../../common/definitions.schema.json#/definitions/name"
+      "$ref": "../../../common/definitions.schema.json#/definitions/name"
     },
     "required": {
       "$ref": "../common/required/required.schema.json"
@@ -54,49 +54,49 @@
   "additionalProperties": false,
   "specs": [
     {
-      "id": "FIELD-TIME-001",
+      "id": "APP-FIELD-TIME-001",
       "title": "Create record with valid time field",
       "given": "a table with a time field",
       "when": "user creates a record with a valid time value (HH:mm:ss)",
       "then": "the record is created successfully with the time stored in ISO 8601 format"
     },
     {
-      "id": "FIELD-TIME-002",
+      "id": "APP-FIELD-TIME-002",
       "title": "Reject invalid time format",
       "given": "a table with a time field",
       "when": "user provides a time in invalid format (e.g., '10:30 AM' instead of '10:30:00')",
       "then": "validation error is returned with message 'Time must be in HH:mm:ss format'"
     },
     {
-      "id": "FIELD-TIME-003",
+      "id": "APP-FIELD-TIME-003",
       "title": "Display time in 12-hour format",
       "given": "a time field with format 'hh:mm A'",
       "when": "user views a record with time '14:30:00'",
       "then": "the time is displayed as '02:30 PM'"
     },
     {
-      "id": "FIELD-TIME-004",
+      "id": "APP-FIELD-TIME-004",
       "title": "Apply default value on record creation",
       "given": "a time field with default value '09:00:00'",
       "when": "user creates a record without providing a time value",
       "then": "the field is populated with '09:00:00'"
     },
     {
-      "id": "FIELD-TIME-005",
+      "id": "APP-FIELD-TIME-005",
       "title": "Enforce required validation",
       "given": "a required time field",
       "when": "user attempts to create a record without providing a time value",
       "then": "validation error is returned with message 'Time is required'"
     },
     {
-      "id": "FIELD-TIME-006",
+      "id": "APP-FIELD-TIME-006",
       "title": "Reject invalid time values",
       "given": "a table with a time field",
       "when": "user provides an invalid time like '25:00:00' (hour > 23)",
       "then": "validation error is returned with message 'Invalid time: hours must be 00-23'"
     },
     {
-      "id": "FIELD-TIME-007",
+      "id": "APP-FIELD-TIME-007",
       "title": "Support millisecond precision",
       "given": "a table with a time field",
       "when": "user creates a record with time '10:30:45.123'",

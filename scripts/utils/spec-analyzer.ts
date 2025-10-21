@@ -163,24 +163,42 @@ async function matchSpecToTest(
   spec: Omit<EnrichedSpec, 'status' | 'testFile' | 'confidence'>,
   testContent: string
 ): Promise<{ found: boolean; testBlock?: string; confidence?: 'high' | 'medium' | 'low' }> {
-  // Split test content into test blocks
-  const testBlocks = testContent.split(/test(?:\.fixme)?\(/g).slice(1)
+  // Find all test blocks with their prefixes preserved
+  const testRegex = /test(\.fixme)?\(/g
+  const matches: Array<{ prefix: string; content: string; startIndex: number }> = []
 
-  for (const block of testBlocks) {
+  let match
+  while ((match = testRegex.exec(testContent)) !== null) {
+    const prefix = match[0] // 'test(' or 'test.fixme('
+    const startIndex = match.index + match[0].length
+    matches.push({ prefix, content: '', startIndex })
+  }
+
+  // Extract content for each test block (from one test to the next)
+  for (let i = 0; i < matches.length; i++) {
+    const start = matches[i]!.startIndex
+    const end =
+      i < matches.length - 1
+        ? matches[i + 1]!.startIndex - matches[i + 1]!.prefix.length
+        : testContent.length
+    matches[i]!.content = testContent.slice(start, end)
+  }
+
+  for (const { prefix, content } of matches) {
     // Check if test has @spec tag
-    if (!block.includes("{ tag: '@spec' }")) {
+    if (!content.includes("{ tag: '@spec' }")) {
       continue
     }
 
     // Try ID matching first (highest confidence)
-    if (block.includes(spec.id)) {
-      return { found: true, testBlock: `test(${block}`, confidence: 'high' }
+    if (content.includes(spec.id)) {
+      return { found: true, testBlock: `${prefix}${content}`, confidence: 'high' }
     }
 
     // Try GIVEN/WHEN/THEN matching (medium confidence)
-    const givenMatch = block.match(/\/\/\s*GIVEN:\s*(.+?)$/m)
-    const whenMatch = block.match(/\/\/\s*WHEN:\s*(.+?)$/m)
-    const thenMatch = block.match(/\/\/\s*THEN:\s*(.+?)$/m)
+    const givenMatch = content.match(/\/\/\s*GIVEN:\s*(.+?)$/m)
+    const whenMatch = content.match(/\/\/\s*WHEN:\s*(.+?)$/m)
+    const thenMatch = content.match(/\/\/\s*THEN:\s*(.+?)$/m)
 
     if (givenMatch && whenMatch && thenMatch) {
       const givenText = givenMatch[1].trim()
@@ -193,13 +211,13 @@ async function matchSpecToTest(
       const thenMatches = normalizeText(thenText) === normalizeText(spec.then)
 
       if (givenMatches && whenMatches && thenMatches) {
-        return { found: true, testBlock: `test(${block}`, confidence: 'high' }
+        return { found: true, testBlock: `${prefix}${content}`, confidence: 'high' }
       }
 
       // Partial match (2 out of 3)
       const matchCount = [givenMatches, whenMatches, thenMatches].filter(Boolean).length
       if (matchCount >= 2) {
-        return { found: true, testBlock: `test(${block}`, confidence: 'medium' }
+        return { found: true, testBlock: `${prefix}${content}`, confidence: 'medium' }
       }
     }
   }

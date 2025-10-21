@@ -51,109 +51,109 @@
   "additionalProperties": false,
   "specs": [
     {
-      "id": "SPEC-001",
+      "id": "APP-CALENDLY-LIST-WEBHOOK-SUBSCRIPTIONS-001",
       "given": "user provides name",
       "when": "validating input",
       "then": "string value should be accepted"
     },
     {
-      "id": "SPEC-002",
+      "id": "APP-CALENDLY-LIST-WEBHOOK-SUBSCRIPTIONS-002",
       "given": "name is empty string",
       "when": "validating input",
       "then": "behavior should follow optional/required rules"
     },
     {
-      "id": "SPEC-003",
+      "id": "APP-CALENDLY-LIST-WEBHOOK-SUBSCRIPTIONS-003",
       "given": "user configures account",
       "when": "validating input",
       "then": "value should meet schema requirements"
     },
     {
-      "id": "SPEC-004",
+      "id": "APP-CALENDLY-LIST-WEBHOOK-SUBSCRIPTIONS-004",
       "given": "account is set",
       "when": "processing configuration",
       "then": "value should be used correctly"
     },
     {
-      "id": "SPEC-005",
+      "id": "APP-CALENDLY-LIST-WEBHOOK-SUBSCRIPTIONS-005",
       "given": "entity with service='calendly'",
       "when": "processing configuration",
       "then": "correct handler should be selected"
     },
     {
-      "id": "SPEC-006",
+      "id": "APP-CALENDLY-LIST-WEBHOOK-SUBSCRIPTIONS-006",
       "given": "invalid service value",
       "when": "validating configuration",
       "then": "clear error message should identify the issue"
     },
     {
-      "id": "SPEC-007",
+      "id": "APP-CALENDLY-LIST-WEBHOOK-SUBSCRIPTIONS-007",
       "given": "entity with action='list-webhook-subscriptions'",
       "when": "processing configuration",
       "then": "correct handler should be selected"
     },
     {
-      "id": "SPEC-008",
+      "id": "APP-CALENDLY-LIST-WEBHOOK-SUBSCRIPTIONS-008",
       "given": "invalid action value",
       "when": "validating configuration",
       "then": "clear error message should identify the issue"
     },
     {
-      "id": "SPEC-009",
+      "id": "APP-CALENDLY-LIST-WEBHOOK-SUBSCRIPTIONS-009",
       "given": "user configures params",
       "when": "validating input",
       "then": "value should meet schema requirements"
     },
     {
-      "id": "SPEC-010",
+      "id": "APP-CALENDLY-LIST-WEBHOOK-SUBSCRIPTIONS-010",
       "given": "params is set",
       "when": "processing configuration",
       "then": "value should be used correctly"
     },
     {
-      "id": "SPEC-011",
+      "id": "APP-CALENDLY-LIST-WEBHOOK-SUBSCRIPTIONS-011",
       "given": "user provides organization",
       "when": "validating input",
       "then": "string value should be accepted"
     },
     {
-      "id": "SPEC-012",
+      "id": "APP-CALENDLY-LIST-WEBHOOK-SUBSCRIPTIONS-012",
       "given": "organization is empty string",
       "when": "validating input",
       "then": "behavior should follow optional/required rules"
     },
     {
-      "id": "SPEC-013",
+      "id": "APP-CALENDLY-LIST-WEBHOOK-SUBSCRIPTIONS-013",
       "given": "user selects scope from valid options",
       "when": "validating input",
       "then": "selection should be accepted"
     },
     {
-      "id": "SPEC-014",
+      "id": "APP-CALENDLY-LIST-WEBHOOK-SUBSCRIPTIONS-014",
       "given": "user provides invalid scope value",
       "when": "validating input",
       "then": "error should list valid options: user, organization, group"
     },
     {
-      "id": "SPEC-015",
+      "id": "APP-CALENDLY-LIST-WEBHOOK-SUBSCRIPTIONS-015",
       "given": "scope is set to any valid enum value",
       "when": "processing entity",
       "then": "appropriate behavior should execute"
     },
     {
-      "id": "SPEC-016",
+      "id": "APP-CALENDLY-LIST-WEBHOOK-SUBSCRIPTIONS-016",
       "given": "user provides count between 1 and 100",
       "when": "validating input",
       "then": "value should be accepted"
     },
     {
-      "id": "SPEC-017",
+      "id": "APP-CALENDLY-LIST-WEBHOOK-SUBSCRIPTIONS-017",
       "given": "user provides count below 1",
       "when": "validating input",
       "then": "error should enforce minimum value"
     },
     {
-      "id": "SPEC-018",
+      "id": "APP-CALENDLY-LIST-WEBHOOK-SUBSCRIPTIONS-018",
       "given": "user provides count above 100",
       "when": "validating input",
       "then": "error should enforce maximum value"

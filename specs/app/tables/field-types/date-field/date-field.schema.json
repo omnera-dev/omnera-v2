@@ -5,10 +5,10 @@
   "type": "object",
   "properties": {
     "id": {
-      "$ref": "../../common/definitions.schema.json#/definitions/id"
+      "$ref": "../../../common/definitions.schema.json#/definitions/id"
     },
     "name": {
-      "$ref": "../../common/definitions.schema.json#/definitions/name"
+      "$ref": "../../../common/definitions.schema.json#/definitions/name"
     },
     "required": {
       "$ref": "../common/required/required.schema.json"
@@ -54,42 +54,42 @@
   "additionalProperties": false,
   "specs": [
     {
-      "id": "FIELD-DATE-001",
+      "id": "APP-FIELD-DATE-001",
       "title": "Create record with valid date field",
       "given": "a table with a date field",
       "when": "user creates a record with a valid date value (YYYY-MM-DD)",
       "then": "the record is created successfully with the date stored in ISO 8601 format"
     },
     {
-      "id": "FIELD-DATE-002",
+      "id": "APP-FIELD-DATE-002",
       "title": "Reject invalid date format",
       "given": "a table with a date field",
       "when": "user provides a date in invalid format (e.g., '12-31-2024' instead of '2024-12-31')",
       "then": "validation error is returned with message 'Date must be in YYYY-MM-DD format'"
     },
     {
-      "id": "FIELD-DATE-003",
+      "id": "APP-FIELD-DATE-003",
       "title": "Display date in custom format",
       "given": "a date field with format 'MM/DD/YYYY'",
       "when": "user views a record with date '2024-12-31'",
       "then": "the date is displayed as '12/31/2024'"
     },
     {
-      "id": "FIELD-DATE-004",
+      "id": "APP-FIELD-DATE-004",
       "title": "Apply default value on record creation",
       "given": "a date field with default value 'today'",
       "when": "user creates a record without providing a date value",
       "then": "the field is populated with today's date in ISO 8601 format"
     },
     {
-      "id": "FIELD-DATE-005",
+      "id": "APP-FIELD-DATE-005",
       "title": "Enforce required validation",
       "given": "a required date field",
       "when": "user attempts to create a record without providing a date value",
       "then": "validation error is returned with message 'Date is required'"
     },
     {
-      "id": "FIELD-DATE-006",
+      "id": "APP-FIELD-DATE-006",
       "title": "Reject invalid calendar dates",
       "given": "a table with a date field",
       "when": "user provides an invalid date like '2024-02-30'",

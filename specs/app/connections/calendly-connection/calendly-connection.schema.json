@@ -34,21 +34,21 @@
   ],
   "specs": [
     {
-      "id": "CONN-CALENDLY-001",
+      "id": "APP-CONN-CALENDLY-001",
       "title": "Create Calendly connection with valid OAuth credentials",
       "given": "valid Calendly OAuth client ID and secret from Calendly developer console",
       "when": "user creates a new Calendly connection",
       "then": "connection is created successfully and OAuth flow can be initiated"
     },
     {
-      "id": "CONN-CALENDLY-002",
+      "id": "APP-CONN-CALENDLY-002",
       "title": "Reject Calendly connection with invalid credentials",
       "given": "invalid or expired OAuth credentials",
       "when": "user attempts to create Calendly connection",
       "then": "system returns validation error indicating credential issue"
     },
     {
-      "id": "CONN-CALENDLY-003",
+      "id": "APP-CONN-CALENDLY-003",
       "title": "Update Calendly connection name",
       "given": "existing Calendly connection",
       "when": "user updates connection name to a valid unique value",

@@ -6,13 +6,13 @@
   "type": "string",
   "specs": [
     {
-      "id": "FIELD-BUTTON-FIELD-AUTOMATION-001",
+      "id": "APP-FIELD-BUTTON-FIELD-AUTOMATION-001",
       "given": "user provides automation",
       "when": "validating input",
       "then": "string value should be accepted"
     },
     {
-      "id": "FIELD-BUTTON-FIELD-AUTOMATION-002",
+      "id": "APP-FIELD-BUTTON-FIELD-AUTOMATION-002",
       "given": "automation is empty string",
       "when": "validating input",
       "then": "behavior should follow optional/required rules"

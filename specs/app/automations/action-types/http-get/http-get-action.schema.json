@@ -65,85 +65,85 @@
   "additionalProperties": false,
   "specs": [
     {
-      "id": "SPEC-001",
+      "id": "APP-HTTP-GET-ACTION-001",
       "given": "the application is running",
       "when": "I run a get http action",
       "then": "it should work correctly"
     },
     {
-      "id": "SPEC-002",
+      "id": "APP-HTTP-GET-ACTION-002",
       "given": "I am working with headers",
       "when": "I run a get http action",
       "then": "it should complete successfully"
     },
     {
-      "id": "SPEC-003",
+      "id": "APP-HTTP-GET-ACTION-003",
       "given": "user provides name with at least 1 characters",
       "when": "validating input",
       "then": "value should be accepted"
     },
     {
-      "id": "SPEC-004",
+      "id": "APP-HTTP-GET-ACTION-004",
       "given": "user provides name shorter than 1 chars",
       "when": "validating input",
       "then": "error should require minimum length"
     },
     {
-      "id": "SPEC-005",
+      "id": "APP-HTTP-GET-ACTION-005",
       "given": "entity with service='http'",
       "when": "processing configuration",
       "then": "correct handler should be selected"
     },
     {
-      "id": "SPEC-006",
+      "id": "APP-HTTP-GET-ACTION-006",
       "given": "invalid service value",
       "when": "validating configuration",
       "then": "clear error message should identify the issue"
     },
     {
-      "id": "SPEC-007",
+      "id": "APP-HTTP-GET-ACTION-007",
       "given": "entity with action='get'",
       "when": "processing configuration",
       "then": "correct handler should be selected"
     },
     {
-      "id": "SPEC-008",
+      "id": "APP-HTTP-GET-ACTION-008",
       "given": "invalid action value",
       "when": "validating configuration",
       "then": "clear error message should identify the issue"
     },
     {
-      "id": "SPEC-009",
+      "id": "APP-HTTP-GET-ACTION-009",
       "given": "user configures params",
       "when": "validating input",
       "then": "value should meet schema requirements"
     },
     {
-      "id": "SPEC-010",
+      "id": "APP-HTTP-GET-ACTION-010",
       "given": "params is set",
       "when": "processing configuration",
       "then": "value should be used correctly"
     },
     {
-      "id": "SPEC-011",
+      "id": "APP-HTTP-GET-ACTION-011",
       "given": "user provides url with at least 1 characters",
       "when": "validating input",
       "then": "value should be accepted"
     },
     {
-      "id": "SPEC-012",
+      "id": "APP-HTTP-GET-ACTION-012",
       "given": "user provides url shorter than 1 chars",
       "when": "validating input",
       "then": "error should require minimum length"
     },
     {
-      "id": "SPEC-013",
+      "id": "APP-HTTP-GET-ACTION-013",
       "given": "user configures headers",
       "when": "validating input",
       "then": "value should meet schema requirements"
     },
     {
-      "id": "SPEC-014",
+      "id": "APP-HTTP-GET-ACTION-014",
       "given": "headers is set",
       "when": "processing configuration",
       "then": "value should be used correctly"

@@ -46,7 +46,6 @@ async function extractSpecsFromTestFile(filePath: string): Promise<SpecEntry[]> 
   for (const block of testBlocks) {
     // Extract test name from first parameter
     const testNameMatch = block.match(/['"`](.+?)['"`]\s*,/)
-    const _testName = testNameMatch?.[1] || ''
 
     // Skip if not a @spec test
     if (!block.includes("{ tag: '@spec' }")) {

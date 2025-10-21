@@ -5,10 +5,10 @@
   "type": "object",
   "properties": {
     "id": {
-      "$ref": "../../common/definitions.schema.json#/definitions/id"
+      "$ref": "../../../common/definitions.schema.json#/definitions/id"
     },
     "name": {
-      "$ref": "../../common/definitions.schema.json#/definitions/name"
+      "$ref": "../../../common/definitions.schema.json#/definitions/name"
     },
     "required": {
       "$ref": "../common/required/required.schema.json"
@@ -40,13 +40,13 @@
   "additionalProperties": false,
   "specs": [
     {
-      "id": "SPEC-001",
+      "id": "APP-DECIMAL-FIELD-001",
       "given": "a Decimal Field is configured",
       "when": "validating schema",
       "then": "type must be 'decimal'"
     },
     {
-      "id": "SPEC-002",
+      "id": "APP-DECIMAL-FIELD-002",
       "given": "type is set to 'decimal'",
       "when": "processing field",
       "then": "it should be treated as a Decimal Field"

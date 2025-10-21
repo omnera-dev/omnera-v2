@@ -5,10 +5,10 @@
   "type": "object",
   "properties": {
     "id": {
-      "$ref": "../../common/definitions.schema.json#/definitions/id"
+      "$ref": "../../../common/definitions.schema.json#/definitions/id"
     },
     "name": {
-      "$ref": "../../common/definitions.schema.json#/definitions/name"
+      "$ref": "../../../common/definitions.schema.json#/definitions/name"
     },
     "required": {
       "$ref": "../common/required/required.schema.json"
@@ -31,31 +31,31 @@
   "additionalProperties": false,
   "specs": [
     {
-      "id": "FIELD-URL-FIELD-URL-001",
+      "id": "APP-FIELD-URL-FIELD-URL-001",
       "given": "I create a URL field",
       "when": "I enter a valid URL with http:// or https://",
       "then": "it should accept the input"
     },
     {
-      "id": "FIELD-URL-FIELD-URL-002",
+      "id": "APP-FIELD-URL-FIELD-URL-002",
       "given": "I create a URL field",
       "when": "I enter text without protocol",
       "then": "it should show validation error"
     },
     {
-      "id": "FIELD-URL-FIELD-URL-003",
+      "id": "APP-FIELD-URL-FIELD-URL-003",
       "given": "I create a URL field",
       "when": "I view the record",
       "then": "the URL should display as a clickable link"
     },
     {
-      "id": "SPEC-004",
+      "id": "APP-URL-FIELD-004",
       "given": "a URL Field is configured",
       "when": "validating schema",
       "then": "type must be 'url'"
     },
     {
-      "id": "SPEC-005",
+      "id": "APP-URL-FIELD-005",
       "given": "type is set to 'url'",
       "when": "processing field",
       "then": "it should be treated as a URL Field"

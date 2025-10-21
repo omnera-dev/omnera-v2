@@ -5,10 +5,10 @@
   "type": "object",
   "properties": {
     "id": {
-      "$ref": "../../common/definitions.schema.json#/definitions/id"
+      "$ref": "../../../common/definitions.schema.json#/definitions/id"
     },
     "name": {
-      "$ref": "../../common/definitions.schema.json#/definitions/name"
+      "$ref": "../../../common/definitions.schema.json#/definitions/name"
     },
     "required": {
       "$ref": "../common/required/required.schema.json"
@@ -31,31 +31,31 @@
   "additionalProperties": false,
   "specs": [
     {
-      "id": "FIELD-LONG-TEXT-FIELD-LONG-TEXT-001",
+      "id": "APP-FIELD-LONG-TEXT-FIELD-LONG-TEXT-001",
       "given": "I create a long text field",
       "when": "I add a record",
       "then": "it should accept multi-line text with line breaks"
     },
     {
-      "id": "FIELD-LONG-TEXT-FIELD-LONG-TEXT-002",
+      "id": "APP-FIELD-LONG-TEXT-FIELD-LONG-TEXT-002",
       "given": "I create a long text field",
       "when": "I paste formatted text",
       "then": "it should strip formatting and preserve plain text"
     },
     {
-      "id": "FIELD-LONG-TEXT-FIELD-LONG-TEXT-003",
+      "id": "APP-FIELD-LONG-TEXT-FIELD-LONG-TEXT-003",
       "given": "I create a required long text field",
       "when": "I submit without value",
       "then": "it should show validation error"
     },
     {
-      "id": "SPEC-004",
+      "id": "APP-LONG-TEXT-FIELD-004",
       "given": "a Long Text Field is configured",
       "when": "validating schema",
       "then": "type must be 'long-text'"
     },
     {
-      "id": "SPEC-005",
+      "id": "APP-LONG-TEXT-FIELD-005",
       "given": "type is set to 'long-text'",
       "when": "processing field",
       "then": "it should be treated as a Long Text Field"

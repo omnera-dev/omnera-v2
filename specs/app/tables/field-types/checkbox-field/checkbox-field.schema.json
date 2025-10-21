@@ -5,10 +5,10 @@
   "type": "object",
   "properties": {
     "id": {
-      "$ref": "../../common/definitions.schema.json#/definitions/id"
+      "$ref": "../../../common/definitions.schema.json#/definitions/id"
     },
     "name": {
-      "$ref": "../../common/definitions.schema.json#/definitions/name"
+      "$ref": "../../../common/definitions.schema.json#/definitions/name"
     },
     "required": {
       "$ref": "../common/required/required.schema.json"
@@ -29,19 +29,19 @@
   "additionalProperties": false,
   "specs": [
     {
-      "id": "FIELD-CHECKBOX-FIELD-CHECKBOX-001",
+      "id": "APP-FIELD-CHECKBOX-FIELD-CHECKBOX-001",
       "given": "I am working with a checkbox field",
       "when": "I create a record",
       "then": "it should complete successfully"
     },
     {
-      "id": "SPEC-002",
+      "id": "APP-CHECKBOX-FIELD-002",
       "given": "entity with type='checkbox'",
       "when": "processing configuration",
       "then": "correct handler should be selected"
     },
     {
-      "id": "SPEC-003",
+      "id": "APP-CHECKBOX-FIELD-003",
       "given": "invalid type value",
       "when": "validating configuration",
       "then": "clear error message should identify the issue"

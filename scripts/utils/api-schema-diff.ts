@@ -43,7 +43,6 @@ export async function compareApiSchemas(
   const currentEndpoints = extractEndpoints(currentSchema)
 
   // Create sets for comparison
-  const _goalSet = new Set(goalEndpoints.map((e) => `${e.method.toUpperCase()} ${e.path}`))
   const currentSet = new Set(currentEndpoints.map((e) => `${e.method.toUpperCase()} ${e.path}`))
 
   // Calculate diff

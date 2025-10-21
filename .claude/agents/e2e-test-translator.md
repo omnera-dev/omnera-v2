@@ -102,13 +102,18 @@ if (!specs || !Array.isArray(specs) || specs.length === 0) {
     "title": "...",
     "specs": [
       {
-        "id": "{PROPERTY}-{NUMBER}",
+        "id": "{PREFIX}-{ENTITY}-{NNN}",
         "given": "context description",
         "when": "action description",
         "then": "expected outcome"
       }
     ]
   }
+
+  WHERE:
+  - PREFIX = APP (specs/app/*), ADMIN (specs/admin/*), or API (specs/api/*)
+  - ENTITY = Property/entity name in UPPERCASE (e.g., NAME, FIELD-TYPE)
+  - NNN = 3+ digit number (001, 002, ..., 123)
 
   YOU CANNOT PROCEED WITHOUT A VALID SPECS ARRAY.
   `
@@ -141,16 +146,34 @@ for (const [index, spec] of specs.entries()) {
     `
   }
 
-  // Validate ID format
-  if (!spec.id.match(/^[A-Z]+-[A-Z]+-\d{3}$/)) {
+  // Validate ID format (strict directory-specific prefix)
+  const filePath = schemaPath
+  let requiredPrefix = 'APP'
+  let pattern = /^APP-[A-Z][A-Z0-9-]*-\d{3,}$/
+
+  if (filePath.includes('/admin/')) {
+    requiredPrefix = 'ADMIN'
+    pattern = /^ADMIN-[A-Z][A-Z0-9-]*-\d{3,}$/
+  } else if (filePath.includes('/api/')) {
+    requiredPrefix = 'API'
+    pattern = /^API-[A-Z][A-Z0-9-]*-\d{3,}$/
+  }
+
+  if (!pattern.test(spec.id)) {
     return BLOCKING_ERROR: `
     ❌ TRANSLATION ERROR: Invalid spec ID format
 
     Spec ID: ${spec.id}
-    Expected format: CATEGORY-PROPERTY-NNN (e.g., APP-NAME-001)
+    Expected format: ${requiredPrefix}-{ENTITY}-{NNN} (e.g., ${requiredPrefix}-NAME-001)
+
+    RULES:
+    - Must start with "${requiredPrefix}-" prefix (based on file location)
+    - Entity name in UPPERCASE with optional hyphens (e.g., FIELD-TYPE)
+    - Ends with 3+ digit number (001, 002, 123, etc.)
+    - Spec IDs must be globally unique across ALL specs
 
     REQUIRED ACTION:
-    Update the spec ID to follow the format: {CATEGORY}-{PROPERTY}-{NUMBER}
+    Update the spec ID to follow the strict format pattern.
 
     YOU CANNOT TRANSLATE SPECS WITH INVALID IDs.
     `

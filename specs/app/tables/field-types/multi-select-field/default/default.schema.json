@@ -8,13 +8,13 @@
   },
   "specs": [
     {
-      "id": "FIELD-MULTI-SELECT-FIELD-DEFAULT-001",
+      "id": "APP-FIELD-MULTI-SELECT-FIELD-DEFAULT-001",
       "given": "user provides default array",
       "when": "validating input",
       "then": "items should be processed in order"
     },
     {
-      "id": "FIELD-MULTI-SELECT-FIELD-DEFAULT-002",
+      "id": "APP-FIELD-MULTI-SELECT-FIELD-DEFAULT-002",
       "given": "default array is empty",
       "when": "validating input",
       "then": "behavior should follow optional/required rules"

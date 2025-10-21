@@ -34,13 +34,13 @@
   ],
   "specs": [
     {
-      "id": "SPEC-019",
+      "id": "APP-TRIGGER-019",
       "given": "user configures trigger",
       "when": "validating input",
       "then": "value should meet schema requirements"
     },
     {
-      "id": "SPEC-020",
+      "id": "APP-TRIGGER-020",
       "given": "trigger is set",
       "when": "processing configuration",
       "then": "value should be used correctly"

@@ -7,13 +7,13 @@
   "minLength": 1,
   "specs": [
     {
-      "id": "FIELD-ROLLUP-FIELD-RELATEDFIELD-001",
+      "id": "APP-FIELD-ROLLUP-FIELD-RELATEDFIELD-001",
       "given": "user provides relatedField with at least 1 characters",
       "when": "validating input",
       "then": "value should be accepted"
     },
     {
-      "id": "FIELD-ROLLUP-FIELD-RELATEDFIELD-002",
+      "id": "APP-FIELD-ROLLUP-FIELD-RELATEDFIELD-002",
       "given": "user provides relatedField shorter than 1 chars",
       "when": "validating input",
       "then": "error should require minimum length"

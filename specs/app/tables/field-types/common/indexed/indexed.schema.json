@@ -7,19 +7,19 @@
   "default": false,
   "specs": [
     {
-      "id": "FIELD-INDEXED-001",
+      "id": "APP-FIELD-INDEXED-001",
       "given": "indexed is true",
       "when": "processing entity",
       "then": "corresponding behavior should be enforced"
     },
     {
-      "id": "FIELD-INDEXED-002",
+      "id": "APP-FIELD-INDEXED-002",
       "given": "indexed is false (default: false)",
       "when": "processing entity",
       "then": "corresponding behavior should not be enforced"
     },
     {
-      "id": "FIELD-INDEXED-003",
+      "id": "APP-FIELD-INDEXED-003",
       "given": "configuration with indexed",
       "when": "validating settings",
       "then": "boolean value should be accepted"

@@ -7,13 +7,13 @@
   "minimum": 1,
   "specs": [
     {
-      "id": "FIELD-MULTI-SELECT-FIELD-MAXSELECTIONS-001",
+      "id": "APP-FIELD-MULTI-SELECT-FIELD-MAXSELECTIONS-001",
       "given": "user provides maxSelections >= 1",
       "when": "validating input",
       "then": "value should be accepted"
     },
     {
-      "id": "FIELD-MULTI-SELECT-FIELD-MAXSELECTIONS-002",
+      "id": "APP-FIELD-MULTI-SELECT-FIELD-MAXSELECTIONS-002",
       "given": "user provides maxSelections < 1",
       "when": "validating input",
       "then": "error should enforce minimum value"

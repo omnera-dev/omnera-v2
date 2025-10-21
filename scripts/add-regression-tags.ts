@@ -58,7 +58,6 @@ async function addRegressionTag(filePath: string): Promise<boolean> {
     // Find the first test( declaration
     if (line.trim().startsWith('test(') || line.trim().startsWith('test.skip(')) {
       // Look for { tag: '@spec' } on the same or next line
-      const _tagLineIndex = i
 
       // Check if tag is on the same line as test(
       if (line.includes('{') && line.includes('tag:')) {

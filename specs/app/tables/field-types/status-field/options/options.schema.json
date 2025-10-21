@@ -20,43 +20,43 @@
   },
   "specs": [
     {
-      "id": "FIELD-STATUS-FIELD-OPTIONS-001",
+      "id": "APP-FIELD-STATUS-FIELD-OPTIONS-001",
       "given": "user provides options with at least 1 items",
       "when": "validating input",
       "then": "array should be accepted"
     },
     {
-      "id": "FIELD-STATUS-FIELD-OPTIONS-002",
+      "id": "APP-FIELD-STATUS-FIELD-OPTIONS-002",
       "given": "user provides options with fewer than 1 items",
       "when": "validating input",
       "then": "error should enforce minimum items"
     },
     {
-      "id": "SPEC-003",
+      "id": "APP-OPTIONS-003",
       "given": "user provides value with at least 1 characters",
       "when": "validating input",
       "then": "value should be accepted"
     },
     {
-      "id": "SPEC-004",
+      "id": "APP-OPTIONS-004",
       "given": "user provides value shorter than 1 chars",
       "when": "validating input",
       "then": "error should require minimum length"
     },
     {
-      "id": "SPEC-005",
+      "id": "APP-OPTIONS-005",
       "given": "user provides color matching pattern",
       "when": "validating input",
       "then": "value should be accepted"
     },
     {
-      "id": "SPEC-006",
+      "id": "APP-OPTIONS-006",
       "given": "user provides color not matching pattern",
       "when": "validating input",
       "then": "clear error message should explain format requirement"
     },
     {
-      "id": "SPEC-007",
+      "id": "APP-OPTIONS-007",
       "given": "color is stored",
       "when": "retrieved later",
       "then": "original format should be preserved"

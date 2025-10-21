@@ -7,28 +7,28 @@
   "examples": ["2024-12-31", "today", "tomorrow", "2025-01-01"],
   "specs": [
     {
-      "id": "FIELD-DATE-DEFAULT-001",
+      "id": "APP-FIELD-DATE-DEFAULT-001",
       "title": "Apply static default date",
       "given": "a date field with default value '2025-01-01'",
       "when": "user creates a record without providing a date value",
       "then": "the field is populated with '2025-01-01'"
     },
     {
-      "id": "FIELD-DATE-DEFAULT-002",
+      "id": "APP-FIELD-DATE-DEFAULT-002",
       "title": "Apply dynamic 'today' default",
       "given": "a date field with default value 'today'",
       "when": "user creates a record on 2024-12-31 without providing a date value",
       "then": "the field is populated with '2024-12-31'"
     },
     {
-      "id": "FIELD-DATE-DEFAULT-003",
+      "id": "APP-FIELD-DATE-DEFAULT-003",
       "title": "Apply dynamic 'tomorrow' default",
       "given": "a date field with default value 'tomorrow'",
       "when": "user creates a record on 2024-12-31 without providing a date value",
       "then": "the field is populated with '2025-01-01'"
     },
     {
-      "id": "FIELD-DATE-DEFAULT-004",
+      "id": "APP-FIELD-DATE-DEFAULT-004",
       "title": "User value overrides default",
       "given": "a date field with default value 'today'",
       "when": "user creates a record and provides date value '2025-06-15'",

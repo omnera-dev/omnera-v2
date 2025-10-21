@@ -5,10 +5,10 @@
   "type": "object",
   "properties": {
     "id": {
-      "$ref": "../../common/definitions.schema.json#/definitions/id"
+      "$ref": "../../../common/definitions.schema.json#/definitions/id"
     },
     "name": {
-      "$ref": "../../common/definitions.schema.json#/definitions/name"
+      "$ref": "../../../common/definitions.schema.json#/definitions/name"
     },
     "required": {
       "$ref": "../common/required/required.schema.json"
@@ -37,13 +37,13 @@
   "additionalProperties": false,
   "specs": [
     {
-      "id": "SPEC-001",
+      "id": "APP-PERCENTAGE-FIELD-001",
       "given": "a Percentage Field is configured",
       "when": "validating schema",
       "then": "type must be 'percentage'"
     },
     {
-      "id": "SPEC-002",
+      "id": "APP-PERCENTAGE-FIELD-002",
       "given": "type is set to 'percentage'",
       "when": "processing field",
       "then": "it should be treated as a Percentage Field"

@@ -44,79 +44,79 @@
   "additionalProperties": false,
   "specs": [
     {
-      "id": "SPEC-001",
+      "id": "APP-CALENDLY-INVITE-CREATED-001",
       "given": "user configures account",
       "when": "validating input",
       "then": "value should meet schema requirements"
     },
     {
-      "id": "SPEC-002",
+      "id": "APP-CALENDLY-INVITE-CREATED-002",
       "given": "account is set",
       "when": "processing configuration",
       "then": "value should be used correctly"
     },
     {
-      "id": "SPEC-003",
+      "id": "APP-CALENDLY-INVITE-CREATED-003",
       "given": "entity with service='calendly'",
       "when": "processing configuration",
       "then": "correct handler should be selected"
     },
     {
-      "id": "SPEC-004",
+      "id": "APP-CALENDLY-INVITE-CREATED-004",
       "given": "invalid service value",
       "when": "validating configuration",
       "then": "clear error message should identify the issue"
     },
     {
-      "id": "SPEC-005",
+      "id": "APP-CALENDLY-INVITE-CREATED-005",
       "given": "entity with event='invite-created'",
       "when": "processing configuration",
       "then": "correct handler should be selected"
     },
     {
-      "id": "SPEC-006",
+      "id": "APP-CALENDLY-INVITE-CREATED-006",
       "given": "invalid event value",
       "when": "validating configuration",
       "then": "clear error message should identify the issue"
     },
     {
-      "id": "SPEC-007",
+      "id": "APP-CALENDLY-INVITE-CREATED-007",
       "given": "user configures params",
       "when": "validating input",
       "then": "value should meet schema requirements"
     },
     {
-      "id": "SPEC-008",
+      "id": "APP-CALENDLY-INVITE-CREATED-008",
       "given": "params is set",
       "when": "processing configuration",
       "then": "value should be used correctly"
     },
     {
-      "id": "SPEC-009",
+      "id": "APP-CALENDLY-INVITE-CREATED-009",
       "given": "user provides organization",
       "when": "validating input",
       "then": "string value should be accepted"
     },
     {
-      "id": "SPEC-010",
+      "id": "APP-CALENDLY-INVITE-CREATED-010",
       "given": "organization is empty string",
       "when": "validating input",
       "then": "behavior should follow optional/required rules"
     },
     {
-      "id": "SPEC-011",
+      "id": "APP-CALENDLY-INVITE-CREATED-011",
       "given": "user selects scope from valid options",
       "when": "validating input",
       "then": "selection should be accepted"
     },
     {
-      "id": "SPEC-012",
+      "id": "APP-CALENDLY-INVITE-CREATED-012",
       "given": "user provides invalid scope value",
       "when": "validating input",
       "then": "error should list valid options: user, organization, group"
     },
     {
-      "id": "SPEC-013",
+      "id": "APP-CALENDLY-INVITE-CREATED-013",
       "given": "scope is set to any valid enum value",
       "when": "processing entity",
       "then": "appropriate behavior should execute"

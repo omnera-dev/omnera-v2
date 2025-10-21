@@ -14,28 +14,28 @@
   ],
   "specs": [
     {
-      "id": "FIELD-DATETIME-FORMAT-001",
+      "id": "APP-FIELD-DATETIME-FORMAT-001",
       "title": "Accept valid datetime format",
       "given": "a datetime field configuration",
       "when": "user sets format to 'MM/DD/YYYY hh:mm A'",
       "then": "the format is accepted and datetimes display in US 12-hour format"
     },
     {
-      "id": "FIELD-DATETIME-FORMAT-002",
+      "id": "APP-FIELD-DATETIME-FORMAT-002",
       "title": "Use default format when not specified",
       "given": "a datetime field configuration without format property",
       "when": "user views a datetime value",
       "then": "the datetime is displayed in default format (YYYY-MM-DD HH:mm)"
     },
     {
-      "id": "FIELD-DATETIME-FORMAT-003",
+      "id": "APP-FIELD-DATETIME-FORMAT-003",
       "title": "Reject invalid format tokens",
       "given": "a datetime field configuration",
       "when": "user sets format to 'INVALID-FORMAT'",
       "then": "validation error is returned with message 'Invalid datetime format pattern'"
     },
     {
-      "id": "FIELD-DATETIME-FORMAT-004",
+      "id": "APP-FIELD-DATETIME-FORMAT-004",
       "title": "Display with 12-hour format",
       "given": "a datetime field with format 'hh:mm A'",
       "when": "user views datetime '2024-12-31T14:30:00.000Z'",

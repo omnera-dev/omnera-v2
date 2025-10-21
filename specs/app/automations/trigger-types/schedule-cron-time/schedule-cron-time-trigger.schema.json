@@ -30,79 +30,79 @@
   "additionalProperties": false,
   "specs": [
     {
-      "id": "SPEC-001",
+      "id": "APP-SCHEDULE-CRON-TIME-001",
       "given": "I am working with a cron time",
       "when": "I trigger the automation",
       "then": "it should complete successfully"
     },
     {
-      "id": "SPEC-002",
+      "id": "APP-SCHEDULE-CRON-TIME-002",
       "given": "entity with service='schedule'",
       "when": "processing configuration",
       "then": "correct handler should be selected"
     },
     {
-      "id": "SPEC-003",
+      "id": "APP-SCHEDULE-CRON-TIME-003",
       "given": "invalid service value",
       "when": "validating configuration",
       "then": "clear error message should identify the issue"
     },
     {
-      "id": "SPEC-004",
+      "id": "APP-SCHEDULE-CRON-TIME-004",
       "given": "entity with event='cron-time'",
       "when": "processing configuration",
       "then": "correct handler should be selected"
     },
     {
-      "id": "SPEC-005",
+      "id": "APP-SCHEDULE-CRON-TIME-005",
       "given": "invalid event value",
       "when": "validating configuration",
       "then": "clear error message should identify the issue"
     },
     {
-      "id": "SPEC-006",
+      "id": "APP-SCHEDULE-CRON-TIME-006",
       "given": "user configures params",
       "when": "validating input",
       "then": "value should meet schema requirements"
     },
     {
-      "id": "SPEC-007",
+      "id": "APP-SCHEDULE-CRON-TIME-007",
       "given": "params is set",
       "when": "processing configuration",
       "then": "value should be used correctly"
     },
     {
-      "id": "SPEC-008",
+      "id": "APP-SCHEDULE-CRON-TIME-008",
       "given": "template with variables",
       "when": "action executes",
       "then": "variables should be substituted with trigger context data"
     },
     {
-      "id": "SPEC-009",
+      "id": "APP-SCHEDULE-CRON-TIME-009",
       "given": "invalid template syntax",
       "when": "validating automation",
       "then": "error should identify syntax issues"
     },
     {
-      "id": "SPEC-010",
+      "id": "APP-SCHEDULE-CRON-TIME-010",
       "given": "template variables reference trigger data",
       "when": "automation runs",
       "then": "correct values should be interpolated"
     },
     {
-      "id": "SPEC-011",
+      "id": "APP-SCHEDULE-CRON-TIME-011",
       "given": "automation with timezone",
       "when": "cron expression evaluates",
       "then": "execution should occur at correct local time"
     },
     {
-      "id": "SPEC-012",
+      "id": "APP-SCHEDULE-CRON-TIME-012",
       "given": "invalid timezone identifier",
       "when": "validating configuration",
       "then": "error should list valid IANA timezones"
     },
     {
-      "id": "SPEC-013",
+      "id": "APP-SCHEDULE-CRON-TIME-013",
       "given": "timezone handles DST transitions",
       "when": "schedule crosses DST boundary",
       "then": "execution should occur at correct wall-clock time"

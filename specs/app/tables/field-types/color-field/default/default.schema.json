@@ -6,19 +6,19 @@
   "pattern": "^#[0-9a-fA-F]{6}$",
   "specs": [
     {
-      "id": "FIELD-COLOR-FIELD-DEFAULT-001",
+      "id": "APP-FIELD-COLOR-FIELD-DEFAULT-001",
       "given": "user provides default matching pattern",
       "when": "validating input",
       "then": "value should be accepted"
     },
     {
-      "id": "FIELD-COLOR-FIELD-DEFAULT-002",
+      "id": "APP-FIELD-COLOR-FIELD-DEFAULT-002",
       "given": "user provides default not matching pattern",
       "when": "validating input",
       "then": "clear error message should explain format requirement"
     },
     {
-      "id": "FIELD-COLOR-FIELD-DEFAULT-003",
+      "id": "APP-FIELD-COLOR-FIELD-DEFAULT-003",
       "given": "default is stored",
       "when": "retrieved later",
       "then": "original format should be preserved"

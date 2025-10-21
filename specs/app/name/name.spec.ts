@@ -181,8 +181,8 @@ test.describe('AppSchema - Name', () => {
 
       // THEN: text content exactly matches input (no modification, no extra whitespace)
       const heading = page.locator('h1')
-      const textContent = await heading.textContent()
-      expect(textContent).toBe('my-app-2024')
+      const textContent = heading
+      await expect(textContent).toHaveText('my-app-2024')
     }
   )
 
@@ -257,8 +257,8 @@ test.describe('AppSchema - Name', () => {
       await expect(page).toHaveTitle(`${complexName} - Powered by Omnera`)
 
       // 3. Special characters rendered correctly
-      const textContent = await heading.textContent()
-      expect(textContent).toBe(complexName)
+      const textContent = heading
+      await expect(textContent).toHaveText(complexName)
       expect(textContent).toContain('@')
       expect(textContent).toContain('/')
       expect(textContent).toContain('_')
@@ -311,8 +311,8 @@ test.describe('AppSchema - Name', () => {
       // 1. Content Display (APP-NAME-001, APP-NAME-009, APP-NAME-012)
       const heading = page.locator('h1')
       await expect(heading).toHaveText(complexName)
-      const textContent = await heading.textContent()
-      expect(textContent).toBe(complexName) // Exact match, no modification
+      const textContent = heading
+      await expect(textContent).toHaveText(complexName) // Exact match, no modification
 
       // 2. Metadata Integration (APP-NAME-002)
       await expect(page).toHaveTitle(`${complexName} - Powered by Omnera`)

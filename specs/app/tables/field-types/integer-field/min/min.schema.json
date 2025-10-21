@@ -6,13 +6,13 @@
   "type": "number",
   "specs": [
     {
-      "id": "FIELD-INTEGER-FIELD-MIN-001",
+      "id": "APP-FIELD-INTEGER-FIELD-MIN-001",
       "given": "user provides min",
       "when": "validating input",
       "then": "numeric value should be accepted"
     },
     {
-      "id": "FIELD-INTEGER-FIELD-MIN-002",
+      "id": "APP-FIELD-INTEGER-FIELD-MIN-002",
       "given": "user provides non-numeric min",
       "when": "validating input",
       "then": "error should require number"

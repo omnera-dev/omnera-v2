@@ -34,21 +34,21 @@
   ],
   "specs": [
     {
-      "id": "CONN-GOOGLE_GMAIL-001",
+      "id": "APP-CONN-GOOGLE-GMAIL-001",
       "title": "Create Google Gmail connection with valid OAuth credentials",
       "given": "valid Google Gmail OAuth client ID and secret from Google Gmail developer console",
       "when": "user creates a new Google Gmail connection",
       "then": "connection is created successfully and OAuth flow can be initiated"
     },
     {
-      "id": "CONN-GOOGLE_GMAIL-002",
+      "id": "APP-CONN-GOOGLE-GMAIL-002",
       "title": "Reject Google Gmail connection with invalid credentials",
       "given": "invalid or expired OAuth credentials",
       "when": "user attempts to create Google Gmail connection",
       "then": "system returns validation error indicating credential issue"
     },
     {
-      "id": "CONN-GOOGLE_GMAIL-003",
+      "id": "APP-CONN-GOOGLE-GMAIL-003",
       "title": "Update Google Gmail connection name",
       "given": "existing Google Gmail connection",
       "when": "user updates connection name to a valid unique value",

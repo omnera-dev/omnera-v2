@@ -34,157 +34,157 @@
   "additionalProperties": false,
   "specs": [
     {
-      "id": "SPEC-001",
+      "id": "APP-HTTP-POST-TRIGGER-001",
       "given": "a airtable record is created",
       "when": "I trigger an automation",
       "then": "it should succeed"
     },
     {
-      "id": "SPEC-002",
+      "id": "APP-HTTP-POST-TRIGGER-002",
       "given": "POST request sent",
       "when": "I process actual lead data",
       "then": "it should succeed"
     },
     {
-      "id": "SPEC-003",
+      "id": "APP-HTTP-POST-TRIGGER-003",
       "given": "the application is running",
       "when": "I handle validation for HTTP trigger path as well",
       "then": "it should work correctly"
     },
     {
-      "id": "SPEC-004",
+      "id": "APP-HTTP-POST-TRIGGER-004",
       "given": "the application is running",
       "when": "I trigger an automation",
       "then": "it should work correctly"
     },
     {
-      "id": "SPEC-005",
+      "id": "APP-HTTP-POST-TRIGGER-005",
       "given": "I am working with immediate response",
       "when": "I trigger an automation",
       "then": "it should complete successfully"
     },
     {
-      "id": "SPEC-006",
+      "id": "APP-HTTP-POST-TRIGGER-006",
       "given": "I am working with a invalid body",
       "when": "I not trigger an automation",
       "then": "it should complete successfully"
     },
     {
-      "id": "SPEC-007",
+      "id": "APP-HTTP-POST-TRIGGER-007",
       "given": "I am working with a valid object body",
       "when": "I trigger an automation",
       "then": "it should complete successfully"
     },
     {
-      "id": "SPEC-008",
+      "id": "APP-HTTP-POST-TRIGGER-008",
       "given": "I am working with a valid array body",
       "when": "I trigger an automation",
       "then": "it should complete successfully"
     },
     {
-      "id": "SPEC-009",
+      "id": "APP-HTTP-POST-TRIGGER-009",
       "given": "I am working with a valid array body and respond immediately",
       "when": "I trigger an automation",
       "then": "it should complete successfully"
     },
     {
-      "id": "SPEC-010",
+      "id": "APP-HTTP-POST-TRIGGER-010",
       "given": "I am working with form data",
       "when": "I trigger an automation",
       "then": "it should complete successfully"
     },
     {
-      "id": "SPEC-011",
+      "id": "APP-HTTP-POST-TRIGGER-011",
       "given": "I am working with a post request",
       "when": "I not found the automation",
       "then": "it should complete successfully"
     },
     {
-      "id": "SPEC-012",
+      "id": "APP-HTTP-POST-TRIGGER-012",
       "given": "a calendly invite is created",
       "when": "I trigger an automation",
       "then": "it should succeed"
     },
     {
-      "id": "SPEC-013",
+      "id": "APP-HTTP-POST-TRIGGER-013",
       "given": "POST request sent",
       "when": "I process actual lead form data",
       "then": "it should succeed"
     },
     {
-      "id": "SPEC-014",
+      "id": "APP-HTTP-POST-TRIGGER-014",
       "given": "entity with service='http'",
       "when": "processing configuration",
       "then": "correct handler should be selected"
     },
     {
-      "id": "SPEC-015",
+      "id": "APP-HTTP-POST-TRIGGER-015",
       "given": "invalid service value",
       "when": "validating configuration",
       "then": "clear error message should identify the issue"
     },
     {
-      "id": "SPEC-016",
+      "id": "APP-HTTP-POST-TRIGGER-016",
       "given": "entity with event='post'",
       "when": "processing configuration",
       "then": "correct handler should be selected"
     },
     {
-      "id": "SPEC-017",
+      "id": "APP-HTTP-POST-TRIGGER-017",
       "given": "invalid event value",
       "when": "validating configuration",
       "then": "clear error message should identify the issue"
     },
     {
-      "id": "SPEC-018",
+      "id": "APP-HTTP-POST-TRIGGER-018",
       "given": "user configures params",
       "when": "validating input",
       "then": "value should meet schema requirements"
     },
     {
-      "id": "SPEC-019",
+      "id": "APP-HTTP-POST-TRIGGER-019",
       "given": "params is set",
       "when": "processing configuration",
       "then": "value should be used correctly"
     },
     {
-      "id": "SPEC-020",
+      "id": "APP-HTTP-POST-TRIGGER-020",
       "given": "user provides path",
       "when": "validating input",
       "then": "string value should be accepted"
     },
     {
-      "id": "SPEC-021",
+      "id": "APP-HTTP-POST-TRIGGER-021",
       "given": "path is empty string",
       "when": "validating input",
       "then": "behavior should follow optional/required rules"
     },
     {
-      "id": "SPEC-022",
+      "id": "APP-HTTP-POST-TRIGGER-022",
       "given": "respondImmediately is true",
       "when": "processing entity",
       "then": "corresponding behavior should be enforced"
     },
     {
-      "id": "SPEC-023",
+      "id": "APP-HTTP-POST-TRIGGER-023",
       "given": "respondImmediately is false (default: False)",
       "when": "processing entity",
       "then": "corresponding behavior should not be enforced"
     },
     {
-      "id": "SPEC-024",
+      "id": "APP-HTTP-POST-TRIGGER-024",
       "given": "configuration with respondImmediately",
       "when": "validating settings",
       "then": "boolean value should be accepted"
     },
     {
-      "id": "SPEC-025",
+      "id": "APP-HTTP-POST-TRIGGER-025",
       "given": "user configures requestBody",
       "when": "validating input",
       "then": "value should meet schema requirements"
     },
     {
-      "id": "SPEC-026",
+      "id": "APP-HTTP-POST-TRIGGER-026",
       "given": "requestBody is set",
       "when": "processing configuration",
       "then": "value should be used correctly"

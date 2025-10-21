@@ -21,18 +21,32 @@ export const auth = betterAuth({
     enabled: true,
     requireEmailVerification: false, // Allow sign-up without email verification for testing
     // Password reset configuration
-    sendResetPassword: async ({ user, url, token }) => {
+    sendResetPassword: async ({
+      user,
+      url,
+      token,
+    }: {
+      user: { email: string }
+      url: string
+      token: string
+    }) => {
       // TODO: Implement email sending in production
       // For now, just log the reset link (for E2E tests to pass)
       console.log(`[TEST] Password reset for ${user.email}: ${url}?token=${token}`)
-      return Promise.resolve()
     },
     // Email verification configuration
-    sendVerificationEmail: async ({ user, url, token }) => {
+    sendVerificationEmail: async ({
+      user,
+      url,
+      token,
+    }: {
+      user: { email: string }
+      url: string
+      token: string
+    }) => {
       // TODO: Implement email sending in production
       // For now, just log the verification link (for E2E tests to pass)
       console.log(`[TEST] Email verification for ${user.email}: ${url}?token=${token}`)
-      return Promise.resolve()
     },
   },
   plugins: [

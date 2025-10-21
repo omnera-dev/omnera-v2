@@ -34,21 +34,21 @@
   ],
   "specs": [
     {
-      "id": "CONN-QONTO-001",
+      "id": "APP-CONN-QONTO-001",
       "title": "Create Qonto connection with valid OAuth credentials",
       "given": "valid Qonto OAuth client ID and secret from Qonto developer console",
       "when": "user creates a new Qonto connection",
       "then": "connection is created successfully and OAuth flow can be initiated"
     },
     {
-      "id": "CONN-QONTO-002",
+      "id": "APP-CONN-QONTO-002",
       "title": "Reject Qonto connection with invalid credentials",
       "given": "invalid or expired OAuth credentials",
       "when": "user attempts to create Qonto connection",
       "then": "system returns validation error indicating credential issue"
     },
     {
-      "id": "CONN-QONTO-003",
+      "id": "APP-CONN-QONTO-003",
       "title": "Update Qonto connection name",
       "given": "existing Qonto connection",
       "when": "user updates connection name to a valid unique value",

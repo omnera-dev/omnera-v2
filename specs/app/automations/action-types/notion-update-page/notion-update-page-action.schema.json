@@ -115,223 +115,223 @@
   "additionalProperties": false,
   "specs": [
     {
-      "id": "SPEC-001",
+      "id": "APP-NOTION-UPDATE-PAGE-001",
       "given": "user provides name",
       "when": "validating input",
       "then": "string value should be accepted"
     },
     {
-      "id": "SPEC-002",
+      "id": "APP-NOTION-UPDATE-PAGE-002",
       "given": "name is empty string",
       "when": "validating input",
       "then": "behavior should follow optional/required rules"
     },
     {
-      "id": "SPEC-003",
+      "id": "APP-NOTION-UPDATE-PAGE-003",
       "given": "user configures account",
       "when": "validating input",
       "then": "value should meet schema requirements"
     },
     {
-      "id": "SPEC-004",
+      "id": "APP-NOTION-UPDATE-PAGE-004",
       "given": "account is set",
       "when": "processing configuration",
       "then": "value should be used correctly"
     },
     {
-      "id": "SPEC-005",
+      "id": "APP-NOTION-UPDATE-PAGE-005",
       "given": "entity with service='notion'",
       "when": "processing configuration",
       "then": "correct handler should be selected"
     },
     {
-      "id": "SPEC-006",
+      "id": "APP-NOTION-UPDATE-PAGE-006",
       "given": "invalid service value",
       "when": "validating configuration",
       "then": "clear error message should identify the issue"
     },
     {
-      "id": "SPEC-007",
+      "id": "APP-NOTION-UPDATE-PAGE-007",
       "given": "entity with action='update-page'",
       "when": "processing configuration",
       "then": "correct handler should be selected"
     },
     {
-      "id": "SPEC-008",
+      "id": "APP-NOTION-UPDATE-PAGE-008",
       "given": "invalid action value",
       "when": "validating configuration",
       "then": "clear error message should identify the issue"
     },
     {
-      "id": "SPEC-009",
+      "id": "APP-NOTION-UPDATE-PAGE-009",
       "given": "user configures params",
       "when": "validating input",
       "then": "value should meet schema requirements"
     },
     {
-      "id": "SPEC-010",
+      "id": "APP-NOTION-UPDATE-PAGE-010",
       "given": "params is set",
       "when": "processing configuration",
       "then": "value should be used correctly"
     },
     {
-      "id": "SPEC-011",
+      "id": "APP-NOTION-UPDATE-PAGE-011",
       "given": "user provides pageId",
       "when": "validating input",
       "then": "string value should be accepted"
     },
     {
-      "id": "SPEC-012",
+      "id": "APP-NOTION-UPDATE-PAGE-012",
       "given": "pageId is empty string",
       "when": "validating input",
       "then": "behavior should follow optional/required rules"
     },
     {
-      "id": "SPEC-013",
+      "id": "APP-NOTION-UPDATE-PAGE-013",
       "given": "user configures properties",
       "when": "validating input",
       "then": "value should meet schema requirements"
     },
     {
-      "id": "SPEC-014",
+      "id": "APP-NOTION-UPDATE-PAGE-014",
       "given": "properties is set",
       "when": "processing configuration",
       "then": "value should be used correctly"
     },
     {
-      "id": "SPEC-015",
+      "id": "APP-NOTION-UPDATE-PAGE-015",
       "given": "user configures icon",
       "when": "validating input",
       "then": "value should meet schema requirements"
     },
     {
-      "id": "SPEC-016",
+      "id": "APP-NOTION-UPDATE-PAGE-016",
       "given": "icon is set",
       "when": "processing configuration",
       "then": "value should be used correctly"
     },
     {
-      "id": "SPEC-017",
+      "id": "APP-NOTION-UPDATE-PAGE-017",
       "given": "entity with type='emoji'",
       "when": "processing configuration",
       "then": "correct handler should be selected"
     },
     {
-      "id": "SPEC-018",
+      "id": "APP-NOTION-UPDATE-PAGE-018",
       "given": "invalid type value",
       "when": "validating configuration",
       "then": "clear error message should identify the issue"
     },
     {
-      "id": "SPEC-019",
+      "id": "APP-NOTION-UPDATE-PAGE-019",
       "given": "user provides emoji",
       "when": "validating input",
       "then": "string value should be accepted"
     },
     {
-      "id": "SPEC-020",
+      "id": "APP-NOTION-UPDATE-PAGE-020",
       "given": "emoji is empty string",
       "when": "validating input",
       "then": "behavior should follow optional/required rules"
     },
     {
-      "id": "SPEC-021",
+      "id": "APP-NOTION-UPDATE-PAGE-021",
       "given": "entity with type='external'",
       "when": "processing configuration",
       "then": "correct handler should be selected"
     },
     {
-      "id": "SPEC-022",
+      "id": "APP-NOTION-UPDATE-PAGE-022",
       "given": "invalid type value",
       "when": "validating configuration",
       "then": "clear error message should identify the issue"
     },
     {
-      "id": "SPEC-023",
+      "id": "APP-NOTION-UPDATE-PAGE-023",
       "given": "user configures external",
       "when": "validating input",
       "then": "value should meet schema requirements"
     },
     {
-      "id": "SPEC-024",
+      "id": "APP-NOTION-UPDATE-PAGE-024",
       "given": "external is set",
       "when": "processing configuration",
       "then": "value should be used correctly"
     },
     {
-      "id": "SPEC-025",
+      "id": "APP-NOTION-UPDATE-PAGE-025",
       "given": "user provides url",
       "when": "validating input",
       "then": "string value should be accepted"
     },
     {
-      "id": "SPEC-026",
+      "id": "APP-NOTION-UPDATE-PAGE-026",
       "given": "url is empty string",
       "when": "validating input",
       "then": "behavior should follow optional/required rules"
     },
     {
-      "id": "SPEC-027",
+      "id": "APP-NOTION-UPDATE-PAGE-027",
       "given": "user configures cover",
       "when": "validating input",
       "then": "value should meet schema requirements"
     },
     {
-      "id": "SPEC-028",
+      "id": "APP-NOTION-UPDATE-PAGE-028",
       "given": "cover is set",
       "when": "processing configuration",
       "then": "value should be used correctly"
     },
     {
-      "id": "SPEC-029",
+      "id": "APP-NOTION-UPDATE-PAGE-029",
       "given": "entity with type='external'",
       "when": "processing configuration",
       "then": "correct handler should be selected"
     },
     {
-      "id": "SPEC-030",
+      "id": "APP-NOTION-UPDATE-PAGE-030",
       "given": "invalid type value",
       "when": "validating configuration",
       "then": "clear error message should identify the issue"
     },
     {
-      "id": "SPEC-031",
+      "id": "APP-NOTION-UPDATE-PAGE-031",
       "given": "user configures external",
       "when": "validating input",
       "then": "value should meet schema requirements"
     },
     {
-      "id": "SPEC-032",
+      "id": "APP-NOTION-UPDATE-PAGE-032",
       "given": "external is set",
       "when": "processing configuration",
       "then": "value should be used correctly"
     },
     {
-      "id": "SPEC-033",
+      "id": "APP-NOTION-UPDATE-PAGE-033",
       "given": "user provides url",
       "when": "validating input",
       "then": "string value should be accepted"
     },
     {
-      "id": "SPEC-034",
+      "id": "APP-NOTION-UPDATE-PAGE-034",
       "given": "url is empty string",
       "when": "validating input",
       "then": "behavior should follow optional/required rules"
     },
     {
-      "id": "SPEC-035",
+      "id": "APP-NOTION-UPDATE-PAGE-035",
       "given": "archived is true",
       "when": "processing entity",
       "then": "corresponding behavior should be enforced"
     },
     {
-      "id": "SPEC-036",
+      "id": "APP-NOTION-UPDATE-PAGE-036",
       "given": "archived is false (default: False)",
       "when": "processing entity",
       "then": "corresponding behavior should not be enforced"
     },
     {
-      "id": "SPEC-037",
+      "id": "APP-NOTION-UPDATE-PAGE-037",
       "given": "configuration with archived",
       "when": "validating settings",
       "then": "boolean value should be accepted"

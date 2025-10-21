@@ -5,10 +5,10 @@
   "type": "object",
   "properties": {
     "id": {
-      "$ref": "../../common/definitions.schema.json#/definitions/id"
+      "$ref": "../../../common/definitions.schema.json#/definitions/id"
     },
     "name": {
-      "$ref": "../../common/definitions.schema.json#/definitions/name"
+      "$ref": "../../../common/definitions.schema.json#/definitions/name"
     },
     "type": {
       "type": "string",
@@ -23,13 +23,13 @@
   "additionalProperties": false,
   "specs": [
     {
-      "id": "SPEC-001",
+      "id": "APP-UPDATED-BY-FIELD-001",
       "given": "entity with type='updated-by'",
       "when": "processing configuration",
       "then": "correct handler should be selected"
     },
     {
-      "id": "SPEC-002",
+      "id": "APP-UPDATED-BY-FIELD-002",
       "given": "invalid type value",
       "when": "validating configuration",
       "then": "clear error message should identify the issue"

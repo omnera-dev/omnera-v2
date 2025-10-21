@@ -34,21 +34,21 @@
   ],
   "specs": [
     {
-      "id": "CONN-AIRTABLE-001",
+      "id": "APP-CONN-AIRTABLE-001",
       "title": "Create Airtable connection with valid OAuth credentials",
       "given": "valid Airtable OAuth client ID and secret from Airtable developer console",
       "when": "user creates a new Airtable connection",
       "then": "connection is created successfully and OAuth flow can be initiated"
     },
     {
-      "id": "CONN-AIRTABLE-002",
+      "id": "APP-CONN-AIRTABLE-002",
       "title": "Reject Airtable connection with invalid credentials",
       "given": "invalid or expired OAuth credentials",
       "when": "user attempts to create Airtable connection",
       "then": "system returns validation error indicating credential issue"
     },
     {
-      "id": "CONN-AIRTABLE-003",
+      "id": "APP-CONN-AIRTABLE-003",
       "title": "Update Airtable connection name",
       "given": "existing Airtable connection",
       "when": "user updates connection name to a valid unique value",

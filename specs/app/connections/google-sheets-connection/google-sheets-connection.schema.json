@@ -34,21 +34,21 @@
   ],
   "specs": [
     {
-      "id": "CONN-GOOGLE_SHEETS-001",
+      "id": "APP-CONN-GOOGLE-SHEETS-001",
       "title": "Create Google Sheets connection with valid OAuth credentials",
       "given": "valid Google Sheets OAuth client ID and secret from Google Sheets developer console",
       "when": "user creates a new Google Sheets connection",
       "then": "connection is created successfully and OAuth flow can be initiated"
     },
     {
-      "id": "CONN-GOOGLE_SHEETS-002",
+      "id": "APP-CONN-GOOGLE-SHEETS-002",
       "title": "Reject Google Sheets connection with invalid credentials",
       "given": "invalid or expired OAuth credentials",
       "when": "user attempts to create Google Sheets connection",
       "then": "system returns validation error indicating credential issue"
     },
     {
-      "id": "CONN-GOOGLE_SHEETS-003",
+      "id": "APP-CONN-GOOGLE-SHEETS-003",
       "title": "Update Google Sheets connection name",
       "given": "existing Google Sheets connection",
       "when": "user updates connection name to a valid unique value",

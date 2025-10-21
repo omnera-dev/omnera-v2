@@ -88,187 +88,187 @@
   "additionalProperties": false,
   "specs": [
     {
-      "id": "SPEC-001",
+      "id": "APP-QONTO-CREATE-INVOICE-001",
       "given": "user provides name",
       "when": "validating input",
       "then": "string value should be accepted"
     },
     {
-      "id": "SPEC-002",
+      "id": "APP-QONTO-CREATE-INVOICE-002",
       "given": "name is empty string",
       "when": "validating input",
       "then": "behavior should follow optional/required rules"
     },
     {
-      "id": "SPEC-003",
+      "id": "APP-QONTO-CREATE-INVOICE-003",
       "given": "user configures account",
       "when": "validating input",
       "then": "value should meet schema requirements"
     },
     {
-      "id": "SPEC-004",
+      "id": "APP-QONTO-CREATE-INVOICE-004",
       "given": "account is set",
       "when": "processing configuration",
       "then": "value should be used correctly"
     },
     {
-      "id": "SPEC-005",
+      "id": "APP-QONTO-CREATE-INVOICE-005",
       "given": "entity with service='qonto'",
       "when": "processing configuration",
       "then": "correct handler should be selected"
     },
     {
-      "id": "SPEC-006",
+      "id": "APP-QONTO-CREATE-INVOICE-006",
       "given": "invalid service value",
       "when": "validating configuration",
       "then": "clear error message should identify the issue"
     },
     {
-      "id": "SPEC-007",
+      "id": "APP-QONTO-CREATE-INVOICE-007",
       "given": "entity with action='create-invoice'",
       "when": "processing configuration",
       "then": "correct handler should be selected"
     },
     {
-      "id": "SPEC-008",
+      "id": "APP-QONTO-CREATE-INVOICE-008",
       "given": "invalid action value",
       "when": "validating configuration",
       "then": "clear error message should identify the issue"
     },
     {
-      "id": "SPEC-009",
+      "id": "APP-QONTO-CREATE-INVOICE-009",
       "given": "user configures params",
       "when": "validating input",
       "then": "value should meet schema requirements"
     },
     {
-      "id": "SPEC-010",
+      "id": "APP-QONTO-CREATE-INVOICE-010",
       "given": "params is set",
       "when": "processing configuration",
       "then": "value should be used correctly"
     },
     {
-      "id": "SPEC-011",
+      "id": "APP-QONTO-CREATE-INVOICE-011",
       "given": "a user connects external service",
       "when": "providing OAuth client ID",
       "then": "authentication should succeed with valid credentials"
     },
     {
-      "id": "SPEC-012",
+      "id": "APP-QONTO-CREATE-INVOICE-012",
       "given": "invalid OAuth client ID",
       "when": "attempting authentication",
       "then": "system should return clear error message"
     },
     {
-      "id": "SPEC-013",
+      "id": "APP-QONTO-CREATE-INVOICE-013",
       "given": "automation needs external API access",
       "when": "executing action",
       "then": "stored OAuth tokens should be used for authentication"
     },
     {
-      "id": "SPEC-014",
+      "id": "APP-QONTO-CREATE-INVOICE-014",
       "given": "user provides amount",
       "when": "validating input",
       "then": "numeric value should be accepted"
     },
     {
-      "id": "SPEC-015",
+      "id": "APP-QONTO-CREATE-INVOICE-015",
       "given": "user provides non-numeric amount",
       "when": "validating input",
       "then": "error should require number"
     },
     {
-      "id": "SPEC-016",
+      "id": "APP-QONTO-CREATE-INVOICE-016",
       "given": "user provides currency",
       "when": "validating input",
       "then": "string value should be accepted"
     },
     {
-      "id": "SPEC-017",
+      "id": "APP-QONTO-CREATE-INVOICE-017",
       "given": "currency is empty string",
       "when": "validating input",
       "then": "behavior should follow optional/required rules"
     },
     {
-      "id": "SPEC-018",
+      "id": "APP-QONTO-CREATE-INVOICE-018",
       "given": "user provides due_date",
       "when": "validating input",
       "then": "string value should be accepted"
     },
     {
-      "id": "SPEC-019",
+      "id": "APP-QONTO-CREATE-INVOICE-019",
       "given": "due_date is empty string",
       "when": "validating input",
       "then": "behavior should follow optional/required rules"
     },
     {
-      "id": "SPEC-020",
+      "id": "APP-QONTO-CREATE-INVOICE-020",
       "given": "user provides items array",
       "when": "validating input",
       "then": "items should be processed in order"
     },
     {
-      "id": "SPEC-021",
+      "id": "APP-QONTO-CREATE-INVOICE-021",
       "given": "items array is empty",
       "when": "validating input",
       "then": "behavior should follow optional/required rules"
     },
     {
-      "id": "SPEC-022",
+      "id": "APP-QONTO-CREATE-INVOICE-022",
       "given": "user provides description",
       "when": "validating input",
       "then": "string value should be accepted"
     },
     {
-      "id": "SPEC-023",
+      "id": "APP-QONTO-CREATE-INVOICE-023",
       "given": "description is empty string",
       "when": "validating input",
       "then": "behavior should follow optional/required rules"
     },
     {
-      "id": "SPEC-024",
+      "id": "APP-QONTO-CREATE-INVOICE-024",
       "given": "user provides quantity",
       "when": "validating input",
       "then": "numeric value should be accepted"
     },
     {
-      "id": "SPEC-025",
+      "id": "APP-QONTO-CREATE-INVOICE-025",
       "given": "user provides non-numeric quantity",
       "when": "validating input",
       "then": "error should require number"
     },
     {
-      "id": "SPEC-026",
+      "id": "APP-QONTO-CREATE-INVOICE-026",
       "given": "user provides unit_price",
       "when": "validating input",
       "then": "numeric value should be accepted"
     },
     {
-      "id": "SPEC-027",
+      "id": "APP-QONTO-CREATE-INVOICE-027",
       "given": "user provides non-numeric unit_price",
       "when": "validating input",
       "then": "error should require number"
     },
     {
-      "id": "SPEC-028",
+      "id": "APP-QONTO-CREATE-INVOICE-028",
       "given": "user provides reference",
       "when": "validating input",
       "then": "string value should be accepted"
     },
     {
-      "id": "SPEC-029",
+      "id": "APP-QONTO-CREATE-INVOICE-029",
       "given": "reference is empty string",
       "when": "validating input",
       "then": "behavior should follow optional/required rules"
     },
     {
-      "id": "SPEC-030",
+      "id": "APP-QONTO-CREATE-INVOICE-030",
       "given": "user provides notes",
       "when": "validating input",
       "then": "string value should be accepted"
     },
     {
-      "id": "SPEC-031",
+      "id": "APP-QONTO-CREATE-INVOICE-031",
       "given": "notes is empty string",
       "when": "validating input",
       "then": "behavior should follow optional/required rules"

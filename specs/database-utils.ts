@@ -78,7 +78,7 @@ export class DatabaseTemplateManager {
       try {
         await pool.query('SELECT 1')
         return
-      } catch (error) {
+      } catch (_error) {
         if (i === maxAttempts - 1) throw error
         await new Promise((resolve) => setTimeout(resolve, 500))
       }
@@ -151,7 +151,7 @@ export class DatabaseTemplateManager {
       `,
         [dbName]
       )
-    } catch (error) {
+    } catch (_error) {
       // Ignore errors during connection termination (database might not exist or no connections)
       // This is a best-effort operation
     } finally {
@@ -171,7 +171,7 @@ export class DatabaseTemplateManager {
       } finally {
         await adminPool.end()
       }
-    } catch (error) {
+    } catch (_error) {
       // Ignore errors (database might not exist)
       console.warn(`Warning dropping database ${dbName}:`, error)
     }

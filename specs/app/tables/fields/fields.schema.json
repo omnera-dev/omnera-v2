@@ -11,112 +11,112 @@
     "description": "A field in the table",
     "anyOf": [
       {
-        "$ref": "../field-types/array-field.schema.json"
+        "$ref": "../field-types/array-field/array-field.schema.json"
       },
       {
-        "$ref": "../field-types/autonumber-field.schema.json"
+        "$ref": "../field-types/autonumber-field/autonumber-field.schema.json"
       },
       {
-        "$ref": "../field-types/barcode-field.schema.json"
+        "$ref": "../field-types/barcode-field/barcode-field.schema.json"
       },
       {
-        "$ref": "../field-types/button-field.schema.json"
+        "$ref": "../field-types/button-field/button-field.schema.json"
       },
       {
-        "$ref": "../field-types/checkbox-field.schema.json"
+        "$ref": "../field-types/checkbox-field/checkbox-field.schema.json"
       },
       {
-        "$ref": "../field-types/color-field.schema.json"
+        "$ref": "../field-types/color-field/color-field.schema.json"
       },
       {
-        "$ref": "../field-types/created-at-field.schema.json"
+        "$ref": "../field-types/created-at-field/created-at-field.schema.json"
       },
       {
-        "$ref": "../field-types/created-by-field.schema.json"
+        "$ref": "../field-types/created-by-field/created-by-field.schema.json"
       },
       {
-        "$ref": "../field-types/currency-field.schema.json"
+        "$ref": "../field-types/currency-field/currency-field.schema.json"
       },
       {
-        "$ref": "../field-types/date-field.schema.json"
+        "$ref": "../field-types/date-field/date-field.schema.json"
       },
       {
-        "$ref": "../field-types/decimal-field.schema.json"
+        "$ref": "../field-types/decimal-field/decimal-field.schema.json"
       },
       {
-        "$ref": "../field-types/duration-field.schema.json"
+        "$ref": "../field-types/duration-field/duration-field.schema.json"
       },
       {
-        "$ref": "../field-types/email-field.schema.json"
+        "$ref": "../field-types/email-field/email-field.schema.json"
       },
       {
-        "$ref": "../field-types/formula-field.schema.json"
+        "$ref": "../field-types/formula-field/formula-field.schema.json"
       },
       {
-        "$ref": "../field-types/geolocation-field.schema.json"
+        "$ref": "../field-types/geolocation-field/geolocation-field.schema.json"
       },
       {
-        "$ref": "../field-types/integer-field.schema.json"
+        "$ref": "../field-types/integer-field/integer-field.schema.json"
       },
       {
-        "$ref": "../field-types/json-field.schema.json"
+        "$ref": "../field-types/json-field/json-field.schema.json"
       },
       {
-        "$ref": "../field-types/long-text-field.schema.json"
+        "$ref": "../field-types/long-text-field/long-text-field.schema.json"
       },
       {
-        "$ref": "../field-types/lookup-field.schema.json"
+        "$ref": "../field-types/lookup-field/lookup-field.schema.json"
       },
       {
-        "$ref": "../field-types/multi-select-field.schema.json"
+        "$ref": "../field-types/multi-select-field/multi-select-field.schema.json"
       },
       {
-        "$ref": "../field-types/multiple-attachments-field.schema.json"
+        "$ref": "../field-types/multiple-attachments-field/multiple-attachments-field.schema.json"
       },
       {
-        "$ref": "../field-types/percentage-field.schema.json"
+        "$ref": "../field-types/percentage-field/percentage-field.schema.json"
       },
       {
-        "$ref": "../field-types/phone-number-field.schema.json"
+        "$ref": "../field-types/phone-number-field/phone-number-field.schema.json"
       },
       {
-        "$ref": "../field-types/progress-field.schema.json"
+        "$ref": "../field-types/progress-field/progress-field.schema.json"
       },
       {
-        "$ref": "../field-types/rating-field.schema.json"
+        "$ref": "../field-types/rating-field/rating-field.schema.json"
       },
       {
-        "$ref": "../field-types/relationship-field.schema.json"
+        "$ref": "../field-types/relationship-field/relationship-field.schema.json"
       },
       {
-        "$ref": "../field-types/rich-text-field.schema.json"
+        "$ref": "../field-types/rich-text-field/rich-text-field.schema.json"
       },
       {
-        "$ref": "../field-types/rollup-field.schema.json"
+        "$ref": "../field-types/rollup-field/rollup-field.schema.json"
       },
       {
-        "$ref": "../field-types/single-attachment-field.schema.json"
+        "$ref": "../field-types/single-attachment-field/single-attachment-field.schema.json"
       },
       {
-        "$ref": "../field-types/single-line-text-field.schema.json"
+        "$ref": "../field-types/single-line-text-field/single-line-text-field.schema.json"
       },
       {
-        "$ref": "../field-types/single-select-field.schema.json"
+        "$ref": "../field-types/single-select-field/single-select-field.schema.json"
       },
       {
-        "$ref": "../field-types/status-field.schema.json"
+        "$ref": "../field-types/status-field/status-field.schema.json"
       },
       {
-        "$ref": "../field-types/updated-at-field.schema.json"
+        "$ref": "../field-types/updated-at-field/updated-at-field.schema.json"
       },
       {
-        "$ref": "../field-types/updated-by-field.schema.json"
+        "$ref": "../field-types/updated-by-field/updated-by-field.schema.json"
       },
       {
-        "$ref": "../field-types/url-field.schema.json"
+        "$ref": "../field-types/url-field/url-field.schema.json"
       },
       {
-        "$ref": "../field-types/user-field.schema.json"
+        "$ref": "../field-types/user-field/user-field.schema.json"
       }
     ]
   },

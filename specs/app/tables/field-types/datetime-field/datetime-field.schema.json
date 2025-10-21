@@ -5,10 +5,10 @@
   "type": "object",
   "properties": {
     "id": {
-      "$ref": "../../common/definitions.schema.json#/definitions/id"
+      "$ref": "../../../common/definitions.schema.json#/definitions/id"
     },
     "name": {
-      "$ref": "../../common/definitions.schema.json#/definitions/name"
+      "$ref": "../../../common/definitions.schema.json#/definitions/name"
     },
     "required": {
       "$ref": "../common/required/required.schema.json"
@@ -59,49 +59,49 @@
   "additionalProperties": false,
   "specs": [
     {
-      "id": "FIELD-DATETIME-001",
+      "id": "APP-FIELD-DATETIME-001",
       "title": "Create record with valid datetime field",
       "given": "a table with a datetime field",
       "when": "user creates a record with a valid datetime value (ISO 8601)",
       "then": "the record is created successfully with the datetime stored in UTC"
     },
     {
-      "id": "FIELD-DATETIME-002",
+      "id": "APP-FIELD-DATETIME-002",
       "title": "Reject invalid datetime format",
       "given": "a table with a datetime field",
       "when": "user provides a datetime in invalid format (e.g., '2024-12-31 10:30:00')",
       "then": "validation error is returned with message 'DateTime must be in ISO 8601 format (YYYY-MM-DDTHH:mm:ss.sssZ)'"
     },
     {
-      "id": "FIELD-DATETIME-003",
+      "id": "APP-FIELD-DATETIME-003",
       "title": "Display datetime in user timezone",
       "given": "a datetime field with timezone 'America/New_York'",
       "when": "user views a record with datetime '2024-12-31T15:00:00.000Z'",
       "then": "the datetime is displayed as '12/31/2024 10:00 AM' (EST conversion)"
     },
     {
-      "id": "FIELD-DATETIME-004",
+      "id": "APP-FIELD-DATETIME-004",
       "title": "Apply default value 'now' on record creation",
       "given": "a datetime field with default value 'now'",
       "when": "user creates a record without providing a datetime value",
       "then": "the field is populated with the current UTC timestamp in ISO 8601 format"
     },
     {
-      "id": "FIELD-DATETIME-005",
+      "id": "APP-FIELD-DATETIME-005",
       "title": "Enforce required validation",
       "given": "a required datetime field",
       "when": "user attempts to create a record without providing a datetime value",
       "then": "validation error is returned with message 'DateTime is required'"
     },
     {
-      "id": "FIELD-DATETIME-006",
+      "id": "APP-FIELD-DATETIME-006",
       "title": "Handle DST transitions correctly",
       "given": "a datetime field with timezone 'America/New_York'",
       "when": "user views datetimes across DST boundary (March/November)",
       "then": "the datetime is displayed with correct offset (EDT vs EST)"
     },
     {
-      "id": "FIELD-DATETIME-007",
+      "id": "APP-FIELD-DATETIME-007",
       "title": "Support millisecond precision",
       "given": "a table with a datetime field",
       "when": "user creates a record with datetime '2024-12-31T15:00:00.123Z'",

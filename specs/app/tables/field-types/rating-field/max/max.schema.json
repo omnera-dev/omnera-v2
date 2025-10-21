@@ -9,19 +9,19 @@
   "maximum": 10,
   "specs": [
     {
-      "id": "FIELD-RATING-FIELD-MAX-001",
+      "id": "APP-FIELD-RATING-FIELD-MAX-001",
       "given": "user provides max between 1 and 10",
       "when": "validating input",
       "then": "value should be accepted"
     },
     {
-      "id": "FIELD-RATING-FIELD-MAX-002",
+      "id": "APP-FIELD-RATING-FIELD-MAX-002",
       "given": "user provides max below 1",
       "when": "validating input",
       "then": "error should enforce minimum value"
     },
     {
-      "id": "FIELD-RATING-FIELD-MAX-003",
+      "id": "APP-FIELD-RATING-FIELD-MAX-003",
       "given": "user provides max above 10",
       "when": "validating input",
       "then": "error should enforce maximum value"

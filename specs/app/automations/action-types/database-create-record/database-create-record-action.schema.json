@@ -59,73 +59,73 @@
   "additionalProperties": false,
   "specs": [
     {
-      "id": "SPEC-001",
+      "id": "APP-DATABASE-CREATE-RECORD-001",
       "given": "user provides name",
       "when": "validating input",
       "then": "string value should be accepted"
     },
     {
-      "id": "SPEC-002",
+      "id": "APP-DATABASE-CREATE-RECORD-002",
       "given": "name is empty string",
       "when": "validating input",
       "then": "behavior should follow optional/required rules"
     },
     {
-      "id": "SPEC-003",
+      "id": "APP-DATABASE-CREATE-RECORD-003",
       "given": "entity with service='database'",
       "when": "processing configuration",
       "then": "correct handler should be selected"
     },
     {
-      "id": "SPEC-004",
+      "id": "APP-DATABASE-CREATE-RECORD-004",
       "given": "invalid service value",
       "when": "validating configuration",
       "then": "clear error message should identify the issue"
     },
     {
-      "id": "SPEC-005",
+      "id": "APP-DATABASE-CREATE-RECORD-005",
       "given": "entity with action='create-record'",
       "when": "processing configuration",
       "then": "correct handler should be selected"
     },
     {
-      "id": "SPEC-006",
+      "id": "APP-DATABASE-CREATE-RECORD-006",
       "given": "invalid action value",
       "when": "validating configuration",
       "then": "clear error message should identify the issue"
     },
     {
-      "id": "SPEC-007",
+      "id": "APP-DATABASE-CREATE-RECORD-007",
       "given": "user configures params",
       "when": "validating input",
       "then": "value should meet schema requirements"
     },
     {
-      "id": "SPEC-008",
+      "id": "APP-DATABASE-CREATE-RECORD-008",
       "given": "params is set",
       "when": "processing configuration",
       "then": "value should be used correctly"
     },
     {
-      "id": "SPEC-009",
+      "id": "APP-DATABASE-CREATE-RECORD-009",
       "given": "user configures table",
       "when": "validating input",
       "then": "value should meet schema requirements"
     },
     {
-      "id": "SPEC-010",
+      "id": "APP-DATABASE-CREATE-RECORD-010",
       "given": "table is set",
       "when": "processing configuration",
       "then": "value should be used correctly"
     },
     {
-      "id": "SPEC-011",
+      "id": "APP-DATABASE-CREATE-RECORD-011",
       "given": "user configures fields",
       "when": "validating input",
       "then": "value should meet schema requirements"
     },
     {
-      "id": "SPEC-012",
+      "id": "APP-DATABASE-CREATE-RECORD-012",
       "given": "fields is set",
       "when": "processing configuration",
       "then": "value should be used correctly"

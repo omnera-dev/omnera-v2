@@ -7,19 +7,19 @@
   "default": false,
   "specs": [
     {
-      "id": "FIELD-USER-FIELD-ALLOWMULTIPLE-001",
+      "id": "APP-FIELD-USER-FIELD-ALLOWMULTIPLE-001",
       "given": "allowMultiple is true",
       "when": "processing entity",
       "then": "corresponding behavior should be enforced"
     },
     {
-      "id": "FIELD-USER-FIELD-ALLOWMULTIPLE-002",
+      "id": "APP-FIELD-USER-FIELD-ALLOWMULTIPLE-002",
       "given": "allowMultiple is false (default: False)",
       "when": "processing entity",
       "then": "corresponding behavior should not be enforced"
     },
     {
-      "id": "FIELD-USER-FIELD-ALLOWMULTIPLE-003",
+      "id": "APP-FIELD-USER-FIELD-ALLOWMULTIPLE-003",
       "given": "configuration with allowMultiple",
       "when": "validating settings",
       "then": "boolean value should be accepted"

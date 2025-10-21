@@ -6,13 +6,13 @@
   "type": "number",
   "specs": [
     {
-      "id": "FIELD-CURRENCY-DEFAULT-001",
+      "id": "APP-FIELD-CURRENCY-DEFAULT-001",
       "given": "user provides default",
       "when": "validating input",
       "then": "numeric value should be accepted"
     },
     {
-      "id": "FIELD-CURRENCY-DEFAULT-002",
+      "id": "APP-FIELD-CURRENCY-DEFAULT-002",
       "given": "user provides non-numeric default",
       "when": "validating input",
       "then": "error should require number"
