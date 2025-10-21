@@ -54,7 +54,7 @@
     "typecheck": "tsc --noEmit",
     "clean": "knip",
     "clean:fix": "knip --fix",
-    "quality": "bun run scripts/quality.ts",
+    "quality": "bun run scripts/check-quality.ts",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "test:unit": "bun test --concurrent src scripts",
