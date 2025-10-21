@@ -267,8 +267,13 @@ async function main() {
     // If this check failed and no other check has triggered exit yet
     if (!result.success && !shouldExit) {
       shouldExit = true
-      console.error(`\n❌ Quality check failed: ${name}`)
-      console.error('   Exiting immediately (fail-fast mode)')
+      console.error(`\n${'─'.repeat(50)}`)
+      console.error(`❌ Quality check failed: ${name}`)
+      if (result.error) {
+        console.error(`\n${result.error}`)
+      }
+      console.error(`${'─'.repeat(50)}`)
+      console.error('⚡ Exiting immediately (fail-fast mode)\n')
       process.exit(1)
     }
 
@@ -278,7 +283,11 @@ async function main() {
 
   // Run all 4 checks in parallel (fail-fast on first error)
   const results = await Promise.all([
-    runCheckWithFailFast('ESLint', ['bunx', 'eslint', '.', '--max-warnings', '0', '--cache'], 30_000),
+    runCheckWithFailFast(
+      'ESLint',
+      ['bunx', 'eslint', '.', '--max-warnings', '0', '--cache'],
+      30_000
+    ),
     runCheckWithFailFast('TypeScript', ['bunx', 'tsc', '--noEmit', '--incremental'], 60_000),
     runCheckWithFailFast('Unit Tests', ['bun', 'test', '--concurrent', 'src', 'scripts'], 30_000),
     runCheckWithFailFast(
