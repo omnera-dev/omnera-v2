@@ -73,14 +73,27 @@ const SPEC_ID_PATTERNS: Record<SpecPrefix, RegExp> = {
  * Validates that a schema has a valid specs array
  */
 export function validateSpecsArray(
-  content: any,
+  content: unknown,
   filePath: string,
   prefix: SpecPrefix,
   result: ValidationResult,
   globalSpecIds: Set<string>
 ): void {
+  // Type guard for content
+  if (typeof content !== 'object' || content === null) {
+    result.errors.push({
+      file: filePath,
+      type: 'error',
+      message: 'Content must be an object',
+    })
+    result.passed = false
+    return
+  }
+
+  const obj = content as Record<string, unknown>
+
   // Check specs array exists
-  if (!content.specs) {
+  if (!('specs' in obj)) {
     result.errors.push({
       file: filePath,
       type: 'error',
@@ -90,7 +103,7 @@ export function validateSpecsArray(
     return
   }
 
-  if (!Array.isArray(content.specs)) {
+  if (!Array.isArray(obj.specs)) {
     result.errors.push({
       file: filePath,
       type: 'error',
@@ -100,7 +113,7 @@ export function validateSpecsArray(
     return
   }
 
-  if (content.specs.length === 0) {
+  if (obj.specs.length === 0) {
     result.warnings.push({
       file: filePath,
       type: 'warning',
@@ -109,7 +122,7 @@ export function validateSpecsArray(
   }
 
   // Validate each spec
-  content.specs.forEach((spec: any, index: number) => {
+  obj.specs.forEach((spec: unknown, index: number) => {
     validateSpec(spec, index, filePath, prefix, result, globalSpecIds)
   })
 }
@@ -118,18 +131,30 @@ export function validateSpecsArray(
  * Validates a single spec object
  */
 export function validateSpec(
-  spec: any,
+  spec: unknown,
   index: number,
   filePath: string,
   prefix: SpecPrefix,
   result: ValidationResult,
   globalSpecIds: Set<string>
 ): void {
+  // Type guard for spec
+  if (typeof spec !== 'object' || spec === null) {
+    result.errors.push({
+      file: filePath,
+      type: 'error',
+      message: `Spec at index ${index} must be an object`,
+    })
+    result.passed = false
+    return
+  }
+
+  const specObj = spec as Record<string, unknown>
   const requiredFields: (keyof Spec)[] = ['id', 'given', 'when', 'then']
 
   // Check required fields
   for (const field of requiredFields) {
-    if (!spec[field] || typeof spec[field] !== 'string') {
+    if (!(field in specObj) || typeof specObj[field] !== 'string') {
       result.errors.push({
         file: filePath,
         type: 'error',
@@ -228,7 +253,7 @@ export function validateSpecIdUniqueness(
 export async function validateTestFile(
   testFilePath: string,
   specs: Spec[],
-  prefix: SpecPrefix,
+  _prefix: SpecPrefix,
   result: ValidationResult
 ): Promise<void> {
   try {
@@ -408,7 +433,7 @@ export function validateSpecToTestMapping(
  */
 export function validateTestTitlesStartWithSpecIds(
   content: string,
-  specs: Spec[],
+  _specs: Spec[],
   filePath: string,
   result: ValidationResult
 ): void {

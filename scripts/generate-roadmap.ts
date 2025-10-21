@@ -40,10 +40,85 @@ const API_ROADMAP_OUTPUT_PATH = 'specs/api/ROADMAP.md'
 const ADMIN_ROADMAP_OUTPUT_PATH = 'specs/admin/ROADMAP.md'
 
 /**
+ * Run prerequisite commands to ensure schemas and specs are valid
+ */
+async function runPrerequisiteChecks(): Promise<boolean> {
+  console.log('🔍 Running prerequisite checks...\n')
+
+  const checks = [
+    {
+      name: 'Validate Admin Specs',
+      command: ['bun', 'run', 'validate:admin-specs'],
+    },
+    {
+      name: 'Validate API Specs',
+      command: ['bun', 'run', 'validate:api-specs'],
+    },
+    {
+      name: 'Validate App Specs',
+      command: ['bun', 'run', 'validate:app-specs'],
+    },
+    {
+      name: 'Export App Schema',
+      command: ['bun', 'run', 'export:schema'],
+    },
+    {
+      name: 'Export OpenAPI Schema',
+      command: ['bun', 'run', 'export:openapi'],
+    },
+  ]
+
+  let allPassed = true
+
+  for (const check of checks) {
+    console.log(`   🔄 ${check.name}...`)
+
+    try {
+      const proc = Bun.spawn(check.command, {
+        stdout: 'pipe',
+        stderr: 'pipe',
+      })
+
+      const exitCode = await proc.exited
+
+      if (exitCode !== 0) {
+        const stderr = await new Response(proc.stderr).text()
+        console.error(`   ❌ ${check.name} failed`)
+        console.error(`      ${stderr.split('\n').slice(0, 5).join('\n      ')}`)
+        console.error(`      Run command manually to see full error: ${check.command.join(' ')}\n`)
+        allPassed = false
+      } else {
+        console.log(`   ✅ ${check.name} passed`)
+      }
+    } catch (error) {
+      console.error(`   ❌ ${check.name} failed: ${error}`)
+      allPassed = false
+    }
+  }
+
+  console.log('')
+
+  if (!allPassed) {
+    console.error('❌ Prerequisite checks failed. Please fix the errors before generating the roadmap.\n')
+    return false
+  }
+
+  console.log('✅ All prerequisite checks passed\n')
+  return true
+}
+
+/**
  * Main execution
  */
 async function main() {
   console.log('📊 Generating Roadmap...\n')
+
+  // 0. Run prerequisite checks
+  const checksPass = await runPrerequisiteChecks()
+  if (!checksPass) {
+    console.error('❌ Roadmap generation aborted due to failing prerequisite checks')
+    process.exit(1)
+  }
 
   // 1. Analyze App Schema
   console.log('1️⃣  Analyzing App Schema...')

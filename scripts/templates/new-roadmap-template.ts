@@ -208,27 +208,6 @@ function generateApiSchemaSection(apiSchema: NewRoadmapData['apiSchema']): strin
 }
 
 /**
- * Generate Test Status section
- */
-function generateTestStatusSection(testStatus: NewRoadmapData['testStatus']): string {
-  const { totalSpecs, todoSpecs, wipSpecs, doneSpecs, todoPercent, wipPercent, donePercent } =
-    testStatus
-
-  return `## 3. Test Implementation Status
-
-### Summary
-
-- **Total Specs**: ${totalSpecs}
-- ✅ **DONE**: ${doneSpecs} (${donePercent}%) - Specs with passing tests
-- 🚧 **WIP**: ${wipSpecs} (${wipPercent}%) - Specs with test.fixme()
-- ⏳ **TODO**: ${todoSpecs} (${todoPercent}%) - Specs without tests
-
----
-
-`
-}
-
-/**
  * Generate App Schema summary section
  */
 function generateAppSchemaSummary(appSchema: NewRoadmapData['appSchema']): string {
