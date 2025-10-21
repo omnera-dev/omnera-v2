@@ -163,6 +163,8 @@ async function categorizeSpec(
 
 /**
  * Match spec to test in test file content
+ * Strategy: Only match tests with spec ID at the start of the test title
+ * Example: test('APP-NAME-001: should validate app name', ...)
  */
 async function matchSpecToTest(
   spec: Omit<EnrichedSpec, 'status' | 'testFile' | 'confidence'>,
@@ -200,51 +202,17 @@ async function matchSpecToTest(
     const titleMatch = content.match(/^\s*['"`]([^'"`]+)['"`]/)
     const testTitle = titleMatch ? titleMatch[1] : ''
 
-    // Try ID matching in title first (highest confidence)
-    if (testTitle.includes(spec.id)) {
+    // ONLY match if spec ID is at the START of the test title
+    // Examples:
+    //   ✅ "APP-NAME-001: should validate app name"
+    //   ✅ "APP-NAME-001 - validates app name"
+    //   ❌ "validates app name (APP-NAME-001)" - ID not at start
+    if (testTitle.startsWith(spec.id)) {
       return { found: true, testBlock: `${prefix}${content}`, confidence: 'high' }
-    }
-
-    // Try ID matching in content (high confidence)
-    if (content.includes(spec.id)) {
-      return { found: true, testBlock: `${prefix}${content}`, confidence: 'high' }
-    }
-
-    // Try GIVEN/WHEN/THEN matching (medium confidence)
-    const givenMatch = content.match(/\/\/\s*GIVEN:\s*(.+?)$/m)
-    const whenMatch = content.match(/\/\/\s*WHEN:\s*(.+?)$/m)
-    const thenMatch = content.match(/\/\/\s*THEN:\s*(.+?)$/m)
-
-    if (givenMatch && whenMatch && thenMatch) {
-      const givenText = givenMatch[1].trim()
-      const whenText = whenMatch[1].trim()
-      const thenText = thenMatch[1].trim()
-
-      // Normalize for comparison (lowercase, trim)
-      const givenMatches = normalizeText(givenText) === normalizeText(spec.given)
-      const whenMatches = normalizeText(whenText) === normalizeText(spec.when)
-      const thenMatches = normalizeText(thenText) === normalizeText(spec.then)
-
-      if (givenMatches && whenMatches && thenMatches) {
-        return { found: true, testBlock: `${prefix}${content}`, confidence: 'high' }
-      }
-
-      // Partial match (2 out of 3)
-      const matchCount = [givenMatches, whenMatches, thenMatches].filter(Boolean).length
-      if (matchCount >= 2) {
-        return { found: true, testBlock: `${prefix}${content}`, confidence: 'medium' }
-      }
     }
   }
 
   return { found: false }
-}
-
-/**
- * Normalize text for comparison
- */
-function normalizeText(text: string): string {
-  return text.toLowerCase().trim().replace(/\s+/g, ' ')
 }
 
 /**

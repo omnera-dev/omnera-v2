@@ -394,6 +394,66 @@ export function validateSpecToTestMapping(
       })
     }
   }
+
+  // Check that test titles start with their spec IDs
+  validateTestTitlesStartWithSpecIds(content, specs, filePath, result)
+}
+
+/**
+ * Validates that test titles start with their corresponding spec IDs
+ *
+ * Example:
+ *   // APP-NAME-001: description
+ *   test('APP-NAME-001: should validate app name', ...)
+ */
+export function validateTestTitlesStartWithSpecIds(
+  content: string,
+  specs: Spec[],
+  filePath: string,
+  result: ValidationResult
+): void {
+  const lines = content.split('\n')
+
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i]
+    if (!line) continue
+
+    // Look for spec ID comment lines: // SPEC-ID: description
+    const commentMatch = line.match(/\/\/\s*([A-Z]+(?:-[A-Z]+)*-\d{3,}):/)
+    if (!commentMatch) continue
+
+    const specId = commentMatch[1]
+
+    // Find the next test() declaration after this comment
+    for (let j = i + 1; j < Math.min(i + 10, lines.length); j++) {
+      const testLine = lines[j]
+      if (!testLine) continue
+
+      // Match test declarations: test('title', ...) or test.skip('title', ...)
+      const testMatch = testLine.match(/test(?:\.skip|\.fixme)?\s*\(\s*['"]([^'"]+)['"]/)
+      if (testMatch) {
+        const testTitle = testMatch[1]
+
+        // Check if test title starts with spec ID
+        if (!testTitle.startsWith(`${specId}:`)) {
+          result.errors.push({
+            file: filePath,
+            type: 'error',
+            message: `Test title must start with spec ID. Found: "${testTitle}", Expected to start with: "${specId}:"`,
+          })
+          result.passed = false
+        }
+
+        // Found the test for this spec ID, stop searching
+        break
+      }
+
+      // If we hit another spec ID comment, stop searching (this spec has no test)
+      if (testLine.match(/\/\/\s*[A-Z]+(?:-[A-Z]+)*-\d{3,}:/)) {
+        break
+      }
+    }
+  }
 }
 
 // ============================================================================

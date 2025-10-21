@@ -299,8 +299,8 @@ describe('validateTestTags', () => {
   test('accepts file with correct number of @spec tags', () => {
     const result = createTestResult()
     const content = `
-      test('test 1', { tag: '@spec' }, async () => {})
-      test('test 2', { tag: '@spec' }, async () => {})
+      test('APP-TEST-001: test 1', { tag: '@spec' }, async () => {})
+      test('APP-TEST-002: test 2', { tag: '@spec' }, async () => {})
     `
     validateTestTags(content, 'test.spec.ts', 2, result)
     const specWarnings = result.warnings.filter((w) => w.message.includes('@spec'))
@@ -316,14 +316,14 @@ describe('validateTestTags', () => {
 
   test('warns about incorrect number of @spec tags', () => {
     const result = createTestResult()
-    const content = `test('test 1', { tag: '@spec' }, async () => {})`
+    const content = `test('APP-TEST-001: test 1', { tag: '@spec' }, async () => {})`
     validateTestTags(content, 'test.spec.ts', 2, result)
     expect(result.warnings.length).toBeGreaterThan(0)
   })
 
   test('warns about missing @regression tag', () => {
     const result = createTestResult()
-    const content = `test('test 1', { tag: '@spec' }, async () => {})`
+    const content = `test('APP-TEST-001: test 1', { tag: '@spec' }, async () => {})`
     validateTestTags(content, 'test.spec.ts', 1, result)
     const regressionWarnings = result.warnings.filter((w) => w.message.includes('@regression'))
     expect(regressionWarnings.length).toBeGreaterThan(0)
@@ -338,7 +338,7 @@ describe('validateRegressionTest', () => {
   test('accepts file with exactly one @regression tag', () => {
     const result = createTestResult()
     const content = `
-      test('spec test', { tag: '@spec' }, async () => {})
+      test('APP-TEST-001: spec test', { tag: '@spec' }, async () => {})
       test('regression test', { tag: '@regression' }, async () => {})
     `
     validateRegressionTest(content, 'test.spec.ts', result)
@@ -347,7 +347,7 @@ describe('validateRegressionTest', () => {
 
   test('rejects file with no @regression tag', () => {
     const result = createTestResult()
-    const content = `test('spec test', { tag: '@spec' }, async () => {})`
+    const content = `test('APP-TEST-001: spec test', { tag: '@spec' }, async () => {})`
     validateRegressionTest(content, 'test.spec.ts', result)
     expect(result.errors).toHaveLength(1)
     expect(result.errors[0]?.message).toContain('Missing @regression test')
@@ -381,10 +381,10 @@ describe('validateSpecToTestMapping', () => {
     const result = createTestResult()
     const content = `
       // APP-TEST-001: test description
-      test('test 1', { tag: '@spec' }, async () => {})
+      test('APP-TEST-001: test 1', { tag: '@spec' }, async () => {})
 
       // APP-TEST-002: test description
-      test('test 2', { tag: '@spec' }, async () => {})
+      test('APP-TEST-002: test 2', { tag: '@spec' }, async () => {})
     `
     validateSpecToTestMapping(content, specs, 'test.spec.ts', result)
     expect(result.errors).toHaveLength(0)
@@ -394,7 +394,7 @@ describe('validateSpecToTestMapping', () => {
     const result = createTestResult()
     const content = `
       // APP-TEST-001: test description
-      test('test 1', { tag: '@spec' }, async () => {})
+      test('APP-TEST-001: test 1', { tag: '@spec' }, async () => {})
     `
     validateSpecToTestMapping(content, specs, 'test.spec.ts', result)
     expect(result.errors).toHaveLength(1)
@@ -406,10 +406,10 @@ describe('validateSpecToTestMapping', () => {
     const result = createTestResult()
     const content = `
       // APP-TEST-001: test description
-      test('test 1', { tag: '@spec' }, async () => {})
+      test('APP-TEST-001: test 1', { tag: '@spec' }, async () => {})
 
       // APP-TEST-999: unknown spec
-      test('test 2', { tag: '@spec' }, async () => {})
+      test('APP-TEST-002: test 2', { tag: '@spec' }, async () => {})
     `
     validateSpecToTestMapping(content, [specs[0]], 'test.spec.ts', result)
     expect(result.warnings.length).toBeGreaterThan(0)
@@ -444,7 +444,7 @@ describe('validateTestFile', () => {
 import { test } from '@playwright/test'
 
 // APP-TEST-001: test description
-test('spec test', { tag: '@spec' }, async () => {
+test('APP-TEST-001: spec test', { tag: '@spec' }, async () => {
   // Test implementation
 })
 
@@ -464,7 +464,7 @@ test('regression test', { tag: '@regression' }, async () => {
 
     const content = `
 // APP-TEST-001: test description
-test('spec test', { tag: '@spec' }, async () => {})
+test('APP-TEST-001: spec test', { tag: '@spec' }, async () => {})
 test('regression test', { tag: '@regression' }, async () => {})`
 
     await writeFile(testFile, content, 'utf-8')
@@ -497,5 +497,97 @@ describe('createValidationResult', () => {
     expect(result.totalSchemas).toBe(0)
     expect(result.totalSpecs).toBe(0)
     expect(result.passed).toBe(true)
+  })
+})
+
+// ============================================================================
+// Test Title Validation
+// ============================================================================
+
+describe('validateTestTitlesStartWithSpecIds', () => {
+  const { validateTestTitlesStartWithSpecIds } = require('./validation-common')
+  const specs: Spec[] = [
+    {
+      id: 'APP-NAME-001',
+      given: 'app is configured',
+      when: 'user provides name',
+      then: 'name is validated',
+    },
+  ]
+
+  test('accepts test title that starts with spec ID', () => {
+    const result = createTestResult()
+    const content = `
+      // APP-NAME-001: description
+      test('APP-NAME-001: should validate app name', { tag: '@spec' }, async () => {})
+    `
+    validateTestTitlesStartWithSpecIds(content, specs, 'test.spec.ts', result)
+    expect(result.errors).toHaveLength(0)
+  })
+
+  test('accepts test with test.skip that starts with spec ID', () => {
+    const result = createTestResult()
+    const content = `
+      // APP-NAME-001: description
+      test.skip('APP-NAME-001: should validate app name', { tag: '@spec' }, async () => {})
+    `
+    validateTestTitlesStartWithSpecIds(content, specs, 'test.spec.ts', result)
+    expect(result.errors).toHaveLength(0)
+  })
+
+  test('accepts test with test.fixme that starts with spec ID', () => {
+    const result = createTestResult()
+    const content = `
+      // APP-NAME-001: description
+      test.fixme('APP-NAME-001: should validate app name', { tag: '@spec' }, async () => {})
+    `
+    validateTestTitlesStartWithSpecIds(content, specs, 'test.spec.ts', result)
+    expect(result.errors).toHaveLength(0)
+  })
+
+  test('rejects test title that does not start with spec ID', () => {
+    const result = createTestResult()
+    const content = `
+      // APP-NAME-001: description
+      test('should validate app name', { tag: '@spec' }, async () => {})
+    `
+    validateTestTitlesStartWithSpecIds(content, specs, 'test.spec.ts', result)
+    expect(result.errors).toHaveLength(1)
+    expect(result.errors[0]?.message).toContain('Test title must start with spec ID')
+    expect(result.errors[0]?.message).toContain('APP-NAME-001:')
+    expect(result.passed).toBe(false)
+  })
+
+  test('rejects test title with wrong spec ID', () => {
+    const result = createTestResult()
+    const content = `
+      // APP-NAME-001: description
+      test('APP-NAME-002: should validate app name', { tag: '@spec' }, async () => {})
+    `
+    validateTestTitlesStartWithSpecIds(content, specs, 'test.spec.ts', result)
+    expect(result.errors).toHaveLength(1)
+    expect(result.errors[0]?.message).toContain('Expected to start with: "APP-NAME-001:"')
+  })
+
+  test('handles multi-segment spec IDs', () => {
+    const result = createTestResult()
+    const multiSegmentSpecs: Spec[] = [
+      { id: 'API-AUTH-SIGN-UP-EMAIL-001', given: 'a', when: 'b', then: 'c' },
+    ]
+    const content = `
+      // API-AUTH-SIGN-UP-EMAIL-001: description
+      test('API-AUTH-SIGN-UP-EMAIL-001: should sign up with email', async () => {})
+    `
+    validateTestTitlesStartWithSpecIds(content, multiSegmentSpecs, 'test.spec.ts', result)
+    expect(result.errors).toHaveLength(0)
+  })
+
+  test('ignores tests without spec ID comments', () => {
+    const result = createTestResult()
+    const content = `
+      test('some other test', async () => {})
+    `
+    validateTestTitlesStartWithSpecIds(content, specs, 'test.spec.ts', result)
+    expect(result.errors).toHaveLength(0)
   })
 })
