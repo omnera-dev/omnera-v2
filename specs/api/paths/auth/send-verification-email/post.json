@@ -82,5 +82,19 @@
         }
       }
     }
-  }
+  },
+  "specs": [
+    {
+      "id": "AUTH-SEND-VERIFICATION-EMAIL-001",
+      "given": "A running server",
+      "when": "User requests verification without email",
+      "then": "Response should be validation error (4xx)"
+    },
+    {
+      "id": "AUTH-SEND-VERIFICATION-EMAIL-002",
+      "given": "A running server",
+      "when": "User requests verification email",
+      "then": "Response should be 200 OK or indicate success"
+    }
+  ]
 }

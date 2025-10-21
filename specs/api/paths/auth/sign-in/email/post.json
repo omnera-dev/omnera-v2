@@ -110,5 +110,25 @@
         }
       }
     }
-  }
+  },
+  "specs": [
+    {
+      "id": "AUTH-SIGN-IN-EMAIL-001",
+      "given": "A running server",
+      "when": "User signs in with correct credentials",
+      "then": "Response should be 200 OK"
+    },
+    {
+      "id": "AUTH-SIGN-IN-EMAIL-002",
+      "given": "A running server",
+      "when": "User attempts sign-in with wrong password",
+      "then": "Response should be authentication error (4xx)"
+    },
+    {
+      "id": "AUTH-SIGN-IN-EMAIL-003",
+      "given": "A running server",
+      "when": "User attempts sign-in with non-existent email",
+      "then": "Response should be authentication error (4xx)"
+    }
+  ]
 }

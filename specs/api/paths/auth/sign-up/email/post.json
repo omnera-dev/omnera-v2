@@ -121,5 +121,25 @@
     "409": {
       "$ref": "../../../../../components/responses/ConflictError.json"
     }
-  }
+  },
+  "specs": [
+    {
+      "id": "AUTH-SIGN-UP-EMAIL-001",
+      "given": "A running server",
+      "when": "User signs up with valid credentials",
+      "then": "Response should be 200 OK"
+    },
+    {
+      "id": "AUTH-SIGN-UP-EMAIL-002",
+      "given": "A running server",
+      "when": "Another user attempts sign-up with same email",
+      "then": "Response should be client error (4xx)"
+    },
+    {
+      "id": "AUTH-SIGN-UP-EMAIL-003",
+      "given": "A running server",
+      "when": "User attempts sign-up without email",
+      "then": "Request should fail"
+    }
+  ]
 }

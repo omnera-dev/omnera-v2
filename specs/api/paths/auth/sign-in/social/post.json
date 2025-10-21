@@ -171,5 +171,19 @@
     "400": {
       "$ref": "../../../components/responses/ValidationError.json"
     }
-  }
+  },
+  "specs": [
+    {
+      "id": "AUTH-SIGN-IN-SOCIAL-001",
+      "given": "A running server",
+      "when": "User requests social sign-in with Google provider",
+      "then": "Response should be successful (200 or redirect) or 404 if provider not configured"
+    },
+    {
+      "id": "AUTH-SIGN-IN-SOCIAL-002",
+      "given": "A running server",
+      "when": "User requests social sign-in without provider",
+      "then": "Response should be validation error (4xx)"
+    }
+  ]
 }

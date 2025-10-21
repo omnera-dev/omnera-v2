@@ -120,5 +120,25 @@
         }
       }
     }
-  }
+  },
+  "specs": [
+    {
+      "id": "AUTH-CHANGE-PASSWORD-001",
+      "given": "A running server",
+      "when": "User requests password change without newPassword",
+      "then": "Response should be validation error (4xx)"
+    },
+    {
+      "id": "AUTH-CHANGE-PASSWORD-002",
+      "given": "A running server",
+      "when": "Unauthenticated user requests password change",
+      "then": "Response should be unauthorized (401)"
+    },
+    {
+      "id": "AUTH-CHANGE-PASSWORD-003",
+      "given": "A running server",
+      "when": "User submits wrong current password",
+      "then": "Response should be client error (4xx) - Better Auth returns 400 for invalid credentials"
+    }
+  ]
 }

@@ -75,5 +75,19 @@
         }
       }
     }
-  }
+  },
+  "specs": [
+    {
+      "id": "AUTH-GET-SESSION-001",
+      "given": "A running server",
+      "when": "User requests current session",
+      "then": "Response should be 200 OK"
+    },
+    {
+      "id": "AUTH-GET-SESSION-002",
+      "given": "A running server",
+      "when": "User requests current session",
+      "then": "Response should be 200 OK"
+    }
+  ]
 }

@@ -85,5 +85,19 @@
         }
       }
     }
-  }
+  },
+  "specs": [
+    {
+      "id": "AUTH-RESET-PASSWORD-001",
+      "given": "A running server",
+      "when": "User submits reset without new password",
+      "then": "Response should be validation error (4xx)"
+    },
+    {
+      "id": "AUTH-RESET-PASSWORD-002",
+      "given": "A running server",
+      "when": "User submits reset with invalid token",
+      "then": "Response should be client error (4xx) - Better Auth returns 400 for invalid token"
+    }
+  ]
 }

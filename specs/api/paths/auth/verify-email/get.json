@@ -94,5 +94,19 @@
         }
       }
     }
-  }
+  },
+  "specs": [
+    {
+      "id": "AUTH-VERIFY-EMAIL-001",
+      "given": "A running server",
+      "when": "User requests verification without token",
+      "then": "Response should be validation error (4xx)"
+    },
+    {
+      "id": "AUTH-VERIFY-EMAIL-002",
+      "given": "A running server",
+      "when": "User submits invalid token",
+      "then": "Response should be unauthorized error (401)"
+    }
+  ]
 }

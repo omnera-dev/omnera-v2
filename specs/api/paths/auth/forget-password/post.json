@@ -70,5 +70,19 @@
     "400": {
       "$ref": "../../../components/responses/ValidationError.json"
     }
-  }
+  },
+  "specs": [
+    {
+      "id": "AUTH-FORGET-PASSWORD-001",
+      "given": "A running server",
+      "when": "User requests password reset",
+      "then": "Response should be 200 OK"
+    },
+    {
+      "id": "AUTH-FORGET-PASSWORD-002",
+      "given": "A running server",
+      "when": "User requests password reset with invalid email",
+      "then": "Response should be validation error (4xx)"
+    }
+  ]
 }
