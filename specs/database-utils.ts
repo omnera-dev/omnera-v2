@@ -152,29 +152,65 @@ export class DatabaseTemplateManager {
    * Drop database if exists
    */
   private async dropDatabase(dbName: string): Promise<void> {
-    const adminPool = new Pool({ connectionString: this.adminConnectionUrl })
-    try {
-      // First, terminate all connections to the target database
-      await adminPool.query(
-        `
-        SELECT pg_terminate_backend(pg_stat_activity.pid)
-        FROM pg_stat_activity
-        WHERE pg_stat_activity.datname = $1
-          AND pid <> pg_backend_pid()
-      `,
-        [dbName]
-      )
+    // Use retry logic to handle transient connection issues
+    const maxRetries = 3
 
-      // Small delay to ensure connections are fully terminated
-      await new Promise((resolve) => setTimeout(resolve, 100))
+    // eslint-disable-next-line functional/no-loop-statements
+    for (let attempt = 1; attempt <= maxRetries; attempt++) {
+      const adminPool = new Pool({
+        connectionString: this.adminConnectionUrl,
+        max: 1,
+        connectionTimeoutMillis: 5000,
+      })
 
-      // Then drop the database
-      await adminPool.query(`DROP DATABASE IF EXISTS "${dbName}"`)
-    } catch (error) {
-      // Ignore errors (database might not exist)
-      console.warn(`Warning dropping database ${dbName}:`, error)
-    } finally {
-      await adminPool.end()
+      try {
+        // First, check if database exists
+        const checkResult = await adminPool.query(
+          `SELECT 1 FROM pg_database WHERE datname = $1`,
+          [dbName]
+        )
+
+        // If database doesn't exist, we're done
+        if (checkResult.rows.length === 0) {
+          await adminPool.end()
+          return
+        }
+
+        // Terminate all connections to the target database (force)
+        await adminPool.query(
+          `
+          SELECT pg_terminate_backend(pid)
+          FROM pg_stat_activity
+          WHERE datname = $1
+            AND pid <> pg_backend_pid()
+        `,
+          [dbName]
+        )
+
+        // Wait for connections to fully terminate
+        await new Promise((resolve) => setTimeout(resolve, 200))
+
+        // Use DROP DATABASE with FORCE (PostgreSQL 13+)
+        // This will forcefully terminate remaining connections
+        await adminPool.query(`DROP DATABASE "${dbName}" WITH (FORCE)`)
+
+        // Success! Break retry loop
+        await adminPool.end()
+        return
+      } catch (error) {
+        await adminPool.end().catch(() => {
+          /* ignore pool.end() errors */
+        })
+
+        // If this was the last attempt, log warning and continue
+        if (attempt === maxRetries) {
+          console.warn(`Warning dropping database ${dbName} after ${maxRetries} attempts:`, error)
+          return
+        }
+
+        // Wait before retry (exponential backoff)
+        await new Promise((resolve) => setTimeout(resolve, attempt * 200))
+      }
     }
   }
 }

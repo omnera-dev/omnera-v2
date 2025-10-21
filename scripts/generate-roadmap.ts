@@ -131,18 +131,16 @@ async function main() {
   const appSchemaProgress = await compareAppSchemas(GOAL_APP_SCHEMA_PATH, CURRENT_APP_SCHEMA_PATH)
   console.log(`   Goal: ${GOAL_APP_SCHEMA_PATH} (${appSchemaProgress.totalProperties} properties)`)
   console.log(
-    `   Current: ${CURRENT_APP_SCHEMA_PATH} (${appSchemaProgress.implementedProperties} properties)`
+    `   Implemented: ${appSchemaProgress.implementedProperties}/${appSchemaProgress.totalProperties} properties (${appSchemaProgress.completionPercent}%)\n`
   )
-  console.log(`   Progress: ${appSchemaProgress.completionPercent}% complete\n`)
 
   // 2. Analyze API Schema
   console.log('2️⃣  Analyzing API Schema...')
   const apiSchemaProgress = await compareApiSchemas(GOAL_API_SCHEMA_PATH, CURRENT_API_SCHEMA_PATH)
   console.log(`   Goal: ${GOAL_API_SCHEMA_PATH} (${apiSchemaProgress.totalEndpoints} endpoints)`)
   console.log(
-    `   Current: ${CURRENT_API_SCHEMA_PATH} (${apiSchemaProgress.implementedEndpoints} endpoints)`
+    `   Implemented: ${apiSchemaProgress.implementedEndpoints}/${apiSchemaProgress.totalEndpoints} endpoints (${apiSchemaProgress.completionPercent}%)\n`
   )
-  console.log(`   Progress: ${apiSchemaProgress.completionPercent}% complete\n`)
 
   // 3. Analyze Test Implementation
   console.log('3️⃣  Analyzing Test Implementation...')
