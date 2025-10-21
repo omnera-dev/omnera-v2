@@ -259,7 +259,7 @@ export default defineConfig([
       'import/namespace': 'error',
       'import/no-absolute-path': 'error',
       'import/no-self-import': 'error',
-      'import/no-cycle': ['error', { maxDepth: 10 }],
+      'import/no-cycle': ['error', { maxDepth: 5 }], // Reduced from 10 to 5 for performance
       'import/no-useless-path-segments': ['error', { noUselessIndex: true }],
 
       // Module systems

@@ -218,7 +218,22 @@ async function main() {
     // Run checks in parallel for specific file
     // Note: TypeScript always checks entire project (incremental makes it fast)
     const checks = [
-      runCheck('ESLint', ['bunx', 'eslint', filePath, '--max-warnings', '0', '--cache'], 30_000),
+      runCheck(
+        'ESLint',
+        [
+          'bunx',
+          'eslint',
+          filePath,
+          '--max-warnings',
+          '0',
+          '--cache',
+          '--cache-location',
+          'node_modules/.cache/eslint',
+          '--cache-strategy',
+          'content',
+        ],
+        30_000
+      ),
       runCheck('TypeScript', ['bunx', 'tsc', '--noEmit', '--incremental'], 60_000),
     ]
 
@@ -285,7 +300,18 @@ async function main() {
   const results = await Promise.all([
     runCheckWithFailFast(
       'ESLint',
-      ['bunx', 'eslint', '.', '--max-warnings', '0', '--cache'],
+      [
+        'bunx',
+        'eslint',
+        '.',
+        '--max-warnings',
+        '0',
+        '--cache',
+        '--cache-location',
+        'node_modules/.cache/eslint',
+        '--cache-strategy',
+        'content',
+      ],
       30_000
     ),
     runCheckWithFailFast('TypeScript', ['bunx', 'tsc', '--noEmit', '--incremental'], 60_000),
