@@ -430,18 +430,45 @@ export function validateTestTitlesStartWithSpecIds(
       if (!testLine) continue
 
       // Match test declarations: test('title', ...) or test.skip('title', ...)
-      const testMatch = testLine.match(/test(?:\.skip|\.fixme)?\s*\(\s*['"]([^'"]+)['"]/)
+      // Support both inline: test('title') and multi-line: test(\n  'title'
+      const testMatch = testLine.match(/test(?:\.skip|\.fixme)?\s*\(/)
       if (testMatch) {
-        const testTitle = testMatch[1]
+        // Found test( declaration, now look for the title string
+        let testTitle: string | undefined
 
-        // Check if test title starts with spec ID
-        if (!testTitle.startsWith(`${specId}:`)) {
-          result.errors.push({
-            file: filePath,
-            type: 'error',
-            message: `Test title must start with spec ID. Found: "${testTitle}", Expected to start with: "${specId}:"`,
-          })
-          result.passed = false
+        // Check if title is on the same line
+        const inlineTitleMatch = testLine.match(/test(?:\.skip|\.fixme)?\s*\(\s*['"]([^'"]+)['"]/)
+        if (inlineTitleMatch) {
+          testTitle = inlineTitleMatch[1]
+        } else {
+          // Title might be on next lines (multi-line format)
+          for (let k = j + 1; k < Math.min(j + 5, lines.length); k++) {
+            const titleLine = lines[k]
+            if (!titleLine) continue
+
+            const titleMatch = titleLine.match(/^\s*['"]([^'"]+)['"]/)
+            if (titleMatch) {
+              testTitle = titleMatch[1]
+              break
+            }
+
+            // Stop if we hit opening brace or another test
+            if (titleLine.includes('{') || titleLine.match(/test\s*\(/)) {
+              break
+            }
+          }
+        }
+
+        if (testTitle) {
+          // Check if test title starts with spec ID
+          if (!testTitle.startsWith(`${specId}:`)) {
+            result.errors.push({
+              file: filePath,
+              type: 'error',
+              message: `Test title must start with spec ID. Found: "${testTitle}", Expected to start with: "${specId}:"`,
+            })
+            result.passed = false
+          }
         }
 
         // Found the test for this spec ID, stop searching
