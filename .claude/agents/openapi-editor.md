@@ -217,19 +217,23 @@ Guide through:
 3. **Error handling** (400, 404, 409, 500 responses)
 4. **Test scenarios** (specs array with GIVEN-WHEN-THEN)
 
-### Step 4: Validate Specification
+### Step 4: Validate API Specification Structure
 
 **Always ask permission first**:
 ```
 You: "OpenAPI spec looks complete! Should I validate it?
 
-I'll run: bun run scripts/validate-openapi.ts
+I'll run: bun run validate:api-specs
 
 This checks:
+- Directory structure (specs/api/paths/{endpoint}/ pattern)
+- File naming (paths follow RESTful conventions)
+- Required OpenAPI fields (openapi, info, paths, components)
+- Operation structure (summary, operationId, responses, specs array)
+- Spec ID format (API-FEATURE-NNN)
+- Given-When-Then structure in specs array
 - OpenAPI 3.1.0 compliance
 - Schema references resolve
-- Operation IDs are unique
-- Response codes are standard
 
 Should I proceed? (yes/no)"
 ```
@@ -237,10 +241,11 @@ Should I proceed? (yes/no)"
 **Interpret errors for users**:
 ```
 [If validation fails]
-You: "Found 2 issues:
+You: "Found 3 issues:
 
-1. Missing operationId for GET /api/tables (line 42)
-2. Invalid response code: 422 (use 400 for validation errors)
+1. Missing operationId for GET /api/tables - required for test generation
+2. No 'specs' array in GET operation - E2E test scenarios are required
+3. Spec ID 'TABLES-001' should follow format 'API-FEATURE-NNN' (e.g., 'API-TABLES-001')
 
 Would you like me to help fix these?"
 ```

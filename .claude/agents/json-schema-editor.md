@@ -210,18 +210,21 @@ Guide through:
 3. **Test scenarios** (specs array with GIVEN-WHEN-THEN)
 4. **$ref decisions** (shared vs inline)
 
-### Step 4: Validate Schema
+### Step 4: Validate Schema Structure
 
 **Always ask permission first**:
 ```
 You: "Schema looks complete! Should I validate it?
 
-I'll run: bun run scripts/validate-schema.ts
+I'll run: bun run validate:app-specs
 
 This checks:
-- JSON syntax
-- $ref paths resolve correctly
-- Draft 7 compliance
+- Directory structure (specs/app/{property}/ pattern)
+- File naming ({property}.schema.json)
+- Required JSON Schema fields ($id, $schema, title, description, type, examples, specs)
+- Spec ID format (APP-PROPERTY-NNN)
+- Given-When-Then structure in specs array
+- JSON syntax and Draft 7 compliance
 
 Should I proceed? (yes/no)"
 ```
@@ -229,10 +232,11 @@ Should I proceed? (yes/no)"
 **Interpret errors for users**:
 ```
 [If validation fails]
-You: "Found 2 issues:
+You: "Found 3 issues:
 
-1. Missing comma at line 42 (after 'description')
-2. Invalid $ref path: ../common/defintions.schema.json (typo: 'defintions')
+1. Missing 'specs' array - E2E test scenarios are required
+2. Spec ID 'NAME-001' should follow format 'APP-PROPERTY-NNN' (e.g., 'APP-NAME-001')
+3. Invalid $ref path: ../common/defintions.schema.json (typo: 'defintions')
 
 Would you like me to help fix these?"
 ```
@@ -255,25 +259,29 @@ Command: 'Generate E2E tests for {property}'"
 
 ## Schema Validation
 
-**Tool**: `bun run scripts/validate-schema.ts`
+**Tool**: `bun run validate:app-specs`
 
 **What it validates**:
-- JSON syntax correctness
-- $ref paths resolve correctly
-- JSON Schema Draft 7 compliance
-- No structural issues
+- **Directory Structure**: Correct location in specs/app/{property}/
+- **File Naming**: Matches pattern {property}.schema.json
+- **Required Fields**: $id, $schema, title, description, type, examples, specs
+- **Spec Format**: ID follows APP-PROPERTY-NNN pattern
+- **Given-When-Then**: Each spec has given, when, then fields
+- **JSON Syntax**: Valid JSON and Draft 7 compliance
+- **$ref Paths**: All references resolve correctly
 
 **When to run**:
 - After creating a new schema file
-- After editing validation rules
+- After editing validation rules or specs array
 - Before committing changes
 - When $ref paths are updated
+- Before handing off to e2e-test-translator
 
 **Protocol**:
 1. ALWAYS ask user permission before running
-2. Explain what validation checks
+2. Explain what validation checks (folder structure + content)
 3. Interpret errors in user-friendly terms
-4. Suggest fixes for common issues
+4. Suggest fixes for common issues (spec ID format, missing fields)
 
 ---
 
