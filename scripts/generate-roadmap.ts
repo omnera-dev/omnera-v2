@@ -48,7 +48,7 @@ const ADMIN_ROADMAP_OUTPUT_PATH = join(PROJECT_ROOT, 'specs/admin/ROADMAP.md')
  * Format Markdown content with Prettier
  */
 async function formatMarkdown(content: string): Promise<string> {
-  const prettierConfig = await prettier.resolveConfig(process.cwd())
+  const prettierConfig = (await prettier.resolveConfig(process.cwd())) || {}
   return prettier.format(content, {
     ...prettierConfig,
     parser: 'markdown',

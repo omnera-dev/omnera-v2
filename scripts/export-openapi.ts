@@ -138,7 +138,7 @@ function mergeOpenAPISchemas(
  * Format JSON content with Prettier
  */
 async function formatJson(content: unknown): Promise<string> {
-  const prettierConfig = await prettier.resolveConfig(process.cwd())
+  const prettierConfig = (await prettier.resolveConfig(process.cwd())) || {}
   return prettier.format(JSON.stringify(content), {
     ...prettierConfig,
     parser: 'json',
