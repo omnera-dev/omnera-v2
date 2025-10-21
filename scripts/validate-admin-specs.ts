@@ -32,7 +32,7 @@ import {
  */
 
 const SPECS_ADMIN_DIR = join(process.cwd(), 'specs/admin')
-const EXPECTED_FIXTURE_IMPORT = "from '../fixtures'"
+const EXPECTED_FIXTURE_IMPORT = "from '@/specs/fixtures'"
 
 async function validateAdminSpecs(): Promise<ValidationResult> {
   const result = createValidationResult()
@@ -212,7 +212,7 @@ async function validateSpecFileContent(
       result.errors.push({
         file: relativePath,
         type: 'error',
-        message: `Missing or incorrect fixture import. Expected: import { test, expect } from '../fixtures'`,
+        message: `Missing or incorrect fixture import. Expected: import { test, expect } from '@/specs/fixtures'`,
       })
       result.passed = false
     }
