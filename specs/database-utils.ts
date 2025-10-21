@@ -41,18 +41,21 @@ export class DatabaseTemplateManager {
    * Called once during global setup
    */
   async createTemplate(): Promise<void> {
-    // Drop template if exists (for clean slate)
-    await this.dropDatabase(this.templateDbName)
+    // Wait for container to be fully ready before creating admin pool
+    await this.waitForContainerReady()
 
-    // Create fresh template database with retry logic
+    // Create admin pool once and reuse for both drop and create
     const adminPool = new Pool({
       connectionString: this.adminConnectionUrl,
-      max: 1, // Use single connection for admin operations
+      max: 1,
       connectionTimeoutMillis: 5000,
     })
+
     try {
-      // Wait a bit for container to be fully ready
-      await this.waitForDatabase(adminPool)
+      // Drop template if exists (for clean slate)
+      await this.dropDatabaseWithPool(adminPool, this.templateDbName)
+
+      // Create fresh template database
       await adminPool.query(`CREATE DATABASE "${this.templateDbName}"`)
     } finally {
       await adminPool.end()
@@ -71,17 +74,41 @@ export class DatabaseTemplateManager {
   }
 
   /**
-   * Wait for database to be ready
+   * Wait for PostgreSQL container to be ready
+   * Creates and destroys temporary pools to avoid connection termination issues
    */
-  private async waitForDatabase(pool: Pool, maxAttempts = 10): Promise<void> {
+  private async waitForContainerReady(maxAttempts = 15): Promise<void> {
     // eslint-disable-next-line functional/no-loop-statements
     for (let i = 0; i < maxAttempts; i++) {
+      // Create a fresh pool for each attempt
+      const testPool = new Pool({
+        connectionString: this.adminConnectionUrl,
+        max: 1,
+        connectionTimeoutMillis: 3000,
+      })
+
       try {
-        await pool.query('SELECT 1')
+        await testPool.query('SELECT 1')
+        await testPool.end()
+        // Success! Container is ready
         return
       } catch (error) {
-        if (i === maxAttempts - 1) throw error
-        await new Promise((resolve) => setTimeout(resolve, 500))
+        // Always end the pool, even on error
+        try {
+          await testPool.end()
+        } catch {
+          // Ignore pool cleanup errors
+        }
+
+        if (i === maxAttempts - 1) {
+          throw new Error(
+            `PostgreSQL container not ready after ${maxAttempts} attempts: ${error instanceof Error ? error.message : error}`
+          )
+        }
+
+        // Wait with exponential backoff
+        const backoff = Math.min(1000, 200 * (i + 1))
+        await new Promise((resolve) => setTimeout(resolve, backoff))
       }
     }
   }
@@ -149,30 +176,39 @@ export class DatabaseTemplateManager {
   }
 
   /**
-   * Drop database if exists
+   * Drop database if exists (creates its own pool)
    */
   private async dropDatabase(dbName: string): Promise<void> {
+    const adminPool = new Pool({
+      connectionString: this.adminConnectionUrl,
+      max: 1,
+      connectionTimeoutMillis: 5000,
+    })
+
+    try {
+      await this.dropDatabaseWithPool(adminPool, dbName)
+    } finally {
+      await adminPool.end()
+    }
+  }
+
+  /**
+   * Drop database if exists (uses provided pool)
+   */
+  private async dropDatabaseWithPool(adminPool: Pool, dbName: string): Promise<void> {
     // Use retry logic to handle transient connection issues
     const maxRetries = 3
 
     // eslint-disable-next-line functional/no-loop-statements
     for (let attempt = 1; attempt <= maxRetries; attempt++) {
-      const adminPool = new Pool({
-        connectionString: this.adminConnectionUrl,
-        max: 1,
-        connectionTimeoutMillis: 5000,
-      })
-
       try {
         // First, check if database exists
-        const checkResult = await adminPool.query(
-          `SELECT 1 FROM pg_database WHERE datname = $1`,
-          [dbName]
-        )
+        const checkResult = await adminPool.query(`SELECT 1 FROM pg_database WHERE datname = $1`, [
+          dbName,
+        ])
 
         // If database doesn't exist, we're done
         if (checkResult.rows.length === 0) {
-          await adminPool.end()
           return
         }
 
@@ -195,18 +231,23 @@ export class DatabaseTemplateManager {
         await adminPool.query(`DROP DATABASE "${dbName}" WITH (FORCE)`)
 
         // Success! Break retry loop
-        await adminPool.end()
         return
       } catch (error) {
-        await adminPool.end().catch(() => {
-          /* ignore pool.end() errors */
-        })
-
         // If this was the last attempt, log warning and continue
         if (attempt === maxRetries) {
-          console.warn(`Warning dropping database ${dbName} after ${maxRetries} attempts:`, error)
+          console.warn(
+            `Warning dropping database ${dbName} after ${maxRetries} attempts:`,
+            error instanceof Error ? error.message : error
+          )
+          // Don't throw, just continue - database drop is best-effort
           return
         }
+
+        // Log retry attempt for debugging
+        console.log(
+          `Retry ${attempt}/${maxRetries} for dropping ${dbName}:`,
+          error instanceof Error ? error.message : error
+        )
 
         // Wait before retry (exponential backoff)
         await new Promise((resolve) => setTimeout(resolve, attempt * 200))

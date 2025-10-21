@@ -33,6 +33,7 @@ export default defineConfig([
       'test-results/**', // Playwright test results directory
       'playwright-report/**', // Playwright HTML report directory
       'schemas/**', // Generated schema exports
+      'tmp/**', // Temporary test files
     ],
   },
 

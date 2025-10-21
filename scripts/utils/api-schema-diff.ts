@@ -9,11 +9,13 @@ import { resolveOpenApiSchema, type OpenAPISpec } from '../lib/schema-resolver.j
 
 export interface ApiSchemaComparison {
   totalEndpoints: number
+  currentTotalEndpoints: number
   implementedEndpoints: number
   missingEndpoints: number
   completionPercent: number
   missingEndpointPaths: Array<{ path: string; method: string }>
   implementedEndpointPaths: Array<{ path: string; method: string }>
+  currentEndpointPaths: Array<{ path: string; method: string }>
 }
 
 /**
@@ -49,6 +51,7 @@ export async function compareApiSchemas(
 
   return {
     totalEndpoints: goalEndpoints.length,
+    currentTotalEndpoints: currentEndpoints.length,
     implementedEndpoints: implementedEndpoints.length,
     missingEndpoints: missingEndpoints.length,
     completionPercent,
@@ -57,6 +60,10 @@ export async function compareApiSchemas(
       return a.method.localeCompare(b.method)
     }),
     implementedEndpointPaths: implementedEndpoints.sort((a, b) => {
+      if (a.path !== b.path) return a.path.localeCompare(b.path)
+      return a.method.localeCompare(b.method)
+    }),
+    currentEndpointPaths: currentEndpoints.sort((a, b) => {
       if (a.path !== b.path) return a.path.localeCompare(b.path)
       return a.method.localeCompare(b.method)
     }),

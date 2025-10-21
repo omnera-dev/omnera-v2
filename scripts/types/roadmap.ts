@@ -211,11 +211,13 @@ export interface NewRoadmapData {
   }
   apiSchema: {
     totalEndpoints: number
+    currentTotalEndpoints: number
     implementedEndpoints: number
     missingEndpoints: number
     completionPercent: number
     missingEndpointPaths: Array<{ path: string; method: string }>
     implementedEndpointPaths: Array<{ path: string; method: string }>
+    currentEndpointPaths: Array<{ path: string; method: string }>
   }
   testStatus: {
     totalSpecs: number

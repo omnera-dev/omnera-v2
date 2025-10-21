@@ -51,7 +51,13 @@
             "default": "Generated at runtime"
           }
         },
-        "required": ["name", "email", "emailVerified", "createdAt", "updatedAt"]
+        "required": [
+          "name",
+          "email",
+          "emailVerified",
+          "createdAt",
+          "updatedAt"
+        ]
       },
       "Session": {
         "type": "object",
@@ -82,7 +88,13 @@
             "type": "string"
           }
         },
-        "required": ["expiresAt", "token", "createdAt", "updatedAt", "userId"]
+        "required": [
+          "expiresAt",
+          "token",
+          "createdAt",
+          "updatedAt",
+          "userId"
+        ]
       },
       "Account": {
         "type": "object",
@@ -128,7 +140,13 @@
             "type": "string"
           }
         },
-        "required": ["accountId", "providerId", "userId", "createdAt", "updatedAt"]
+        "required": [
+          "accountId",
+          "providerId",
+          "userId",
+          "createdAt",
+          "updatedAt"
+        ]
       },
       "Verification": {
         "type": "object",
@@ -154,7 +172,13 @@
             "default": "Generated at runtime"
           }
         },
-        "required": ["identifier", "value", "expiresAt", "createdAt", "updatedAt"]
+        "required": [
+          "identifier",
+          "value",
+          "expiresAt",
+          "createdAt",
+          "updatedAt"
+        ]
       }
     },
     "parameters": {},
@@ -179,7 +203,9 @@
         "summary": "Health check endpoint",
         "description": "Returns server health status. Used by monitoring tools and E2E tests to verify server is running.",
         "operationId": "healthCheck",
-        "tags": ["infrastructure"],
+        "tags": [
+          "infrastructure"
+        ],
         "responses": {
           "200": {
             "description": "Server is healthy",
@@ -190,7 +216,9 @@
                   "properties": {
                     "status": {
                       "type": "string",
-                      "enum": ["ok"],
+                      "enum": [
+                        "ok"
+                      ],
                       "description": "Server health status indicator"
                     },
                     "timestamp": {
@@ -206,11 +234,17 @@
                           "description": "Application name from configuration"
                         }
                       },
-                      "required": ["name"],
+                      "required": [
+                        "name"
+                      ],
                       "description": "Application metadata"
                     }
                   },
-                  "required": ["status", "timestamp", "app"]
+                  "required": [
+                    "status",
+                    "timestamp",
+                    "app"
+                  ]
                 }
               }
             }
@@ -218,9 +252,11 @@
         }
       }
     },
-    "/sign-in/social": {
+    "/api/auth/sign-in/social": {
       "post": {
-        "tags": ["Default"],
+        "tags": [
+          "Default"
+        ],
         "description": "Sign in with a social provider",
         "operationId": "socialSignIn",
         "security": [
@@ -286,7 +322,9 @@
                         "nullable": true
                       }
                     },
-                    "required": ["token"],
+                    "required": [
+                      "token"
+                    ],
                     "nullable": true
                   },
                   "scopes": {
@@ -305,7 +343,9 @@
                     "nullable": true
                   }
                 },
-                "required": ["provider"]
+                "required": [
+                  "provider"
+                ]
               }
             }
           }
@@ -321,7 +361,9 @@
                   "properties": {
                     "redirect": {
                       "type": "boolean",
-                      "enum": [false]
+                      "enum": [
+                        false
+                      ]
                     },
                     "token": {
                       "type": "string",
@@ -359,11 +401,21 @@
                             "format": "date-time"
                           }
                         },
-                        "required": ["id", "email", "emailVerified", "createdAt", "updatedAt"]
+                        "required": [
+                          "id",
+                          "email",
+                          "emailVerified",
+                          "createdAt",
+                          "updatedAt"
+                        ]
                       }
                     }
                   },
-                  "required": ["redirect", "token", "user"]
+                  "required": [
+                    "redirect",
+                    "token",
+                    "user"
+                  ]
                 }
               }
             }
@@ -378,7 +430,9 @@
                       "type": "string"
                     }
                   },
-                  "required": ["message"]
+                  "required": [
+                    "message"
+                  ]
                 }
               }
             },
@@ -394,7 +448,9 @@
                       "type": "string"
                     }
                   },
-                  "required": ["message"]
+                  "required": [
+                    "message"
+                  ]
                 }
               }
             },
@@ -463,9 +519,11 @@
         }
       }
     },
-    "/get-session": {
+    "/api/auth/get-session": {
       "get": {
-        "tags": ["Default"],
+        "tags": [
+          "Default"
+        ],
         "description": "Get the current session",
         "security": [
           {
@@ -488,7 +546,10 @@
                       "$ref": "#/components/schemas/User"
                     }
                   },
-                  "required": ["session", "user"]
+                  "required": [
+                    "session",
+                    "user"
+                  ]
                 }
               }
             }
@@ -503,7 +564,9 @@
                       "type": "string"
                     }
                   },
-                  "required": ["message"]
+                  "required": [
+                    "message"
+                  ]
                 }
               }
             },
@@ -519,7 +582,9 @@
                       "type": "string"
                     }
                   },
-                  "required": ["message"]
+                  "required": [
+                    "message"
+                  ]
                 }
               }
             },
@@ -588,9 +653,11 @@
         }
       }
     },
-    "/sign-out": {
+    "/api/auth/sign-out": {
       "post": {
-        "tags": ["Default"],
+        "tags": [
+          "Default"
+        ],
         "description": "Sign out the current user",
         "security": [
           {
@@ -634,7 +701,9 @@
                       "type": "string"
                     }
                   },
-                  "required": ["message"]
+                  "required": [
+                    "message"
+                  ]
                 }
               }
             },
@@ -650,7 +719,9 @@
                       "type": "string"
                     }
                   },
-                  "required": ["message"]
+                  "required": [
+                    "message"
+                  ]
                 }
               }
             },
@@ -719,9 +790,11 @@
         }
       }
     },
-    "/sign-up/email": {
+    "/api/auth/sign-up/email": {
       "post": {
-        "tags": ["Default"],
+        "tags": [
+          "Default"
+        ],
         "description": "Sign up a user using email and password",
         "security": [
           {
@@ -760,7 +833,11 @@
                     "description": "If this is false, the session will not be remembered. Default is `true`."
                   }
                 },
-                "required": ["name", "email", "password"]
+                "required": [
+                  "name",
+                  "email",
+                  "password"
+                ]
               }
             }
           }
@@ -815,10 +892,19 @@
                           "description": "When the user was last updated"
                         }
                       },
-                      "required": ["id", "email", "name", "emailVerified", "createdAt", "updatedAt"]
+                      "required": [
+                        "id",
+                        "email",
+                        "name",
+                        "emailVerified",
+                        "createdAt",
+                        "updatedAt"
+                      ]
                     }
                   },
-                  "required": ["user"]
+                  "required": [
+                    "user"
+                  ]
                 }
               }
             }
@@ -833,7 +919,9 @@
                       "type": "string"
                     }
                   },
-                  "required": ["message"]
+                  "required": [
+                    "message"
+                  ]
                 }
               }
             },
@@ -849,7 +937,9 @@
                       "type": "string"
                     }
                   },
-                  "required": ["message"]
+                  "required": [
+                    "message"
+                  ]
                 }
               }
             },
@@ -933,9 +1023,11 @@
         }
       }
     },
-    "/sign-in/email": {
+    "/api/auth/sign-in/email": {
       "post": {
-        "tags": ["Default"],
+        "tags": [
+          "Default"
+        ],
         "description": "Sign in with email and password",
         "security": [
           {
@@ -968,7 +1060,10 @@
                     "nullable": true
                   }
                 },
-                "required": ["email", "password"]
+                "required": [
+                  "email",
+                  "password"
+                ]
               }
             }
           }
@@ -984,7 +1079,9 @@
                   "properties": {
                     "redirect": {
                       "type": "boolean",
-                      "enum": [false]
+                      "enum": [
+                        false
+                      ]
                     },
                     "token": {
                       "type": "string",
@@ -1023,10 +1120,20 @@
                           "format": "date-time"
                         }
                       },
-                      "required": ["id", "email", "emailVerified", "createdAt", "updatedAt"]
+                      "required": [
+                        "id",
+                        "email",
+                        "emailVerified",
+                        "createdAt",
+                        "updatedAt"
+                      ]
                     }
                   },
-                  "required": ["redirect", "token", "user"]
+                  "required": [
+                    "redirect",
+                    "token",
+                    "user"
+                  ]
                 }
               }
             }
@@ -1041,7 +1148,9 @@
                       "type": "string"
                     }
                   },
-                  "required": ["message"]
+                  "required": [
+                    "message"
+                  ]
                 }
               }
             },
@@ -1057,7 +1166,9 @@
                       "type": "string"
                     }
                   },
-                  "required": ["message"]
+                  "required": [
+                    "message"
+                  ]
                 }
               }
             },
@@ -1126,9 +1237,11 @@
         }
       }
     },
-    "/forget-password": {
+    "/api/auth/forget-password": {
       "post": {
-        "tags": ["Default"],
+        "tags": [
+          "Default"
+        ],
         "description": "Send a password reset email to the user",
         "security": [
           {
@@ -1153,7 +1266,9 @@
                     "nullable": true
                   }
                 },
-                "required": ["email"]
+                "required": [
+                  "email"
+                ]
               }
             }
           }
@@ -1187,7 +1302,9 @@
                       "type": "string"
                     }
                   },
-                  "required": ["message"]
+                  "required": [
+                    "message"
+                  ]
                 }
               }
             },
@@ -1203,7 +1320,9 @@
                       "type": "string"
                     }
                   },
-                  "required": ["message"]
+                  "required": [
+                    "message"
+                  ]
                 }
               }
             },
@@ -1272,9 +1391,11 @@
         }
       }
     },
-    "/reset-password": {
+    "/api/auth/reset-password": {
       "post": {
-        "tags": ["Default"],
+        "tags": [
+          "Default"
+        ],
         "description": "Reset the password for a user",
         "security": [
           {
@@ -1299,7 +1420,9 @@
                     "nullable": true
                   }
                 },
-                "required": ["newPassword"]
+                "required": [
+                  "newPassword"
+                ]
               }
             }
           }
@@ -1330,7 +1453,9 @@
                       "type": "string"
                     }
                   },
-                  "required": ["message"]
+                  "required": [
+                    "message"
+                  ]
                 }
               }
             },
@@ -1346,7 +1471,9 @@
                       "type": "string"
                     }
                   },
-                  "required": ["message"]
+                  "required": [
+                    "message"
+                  ]
                 }
               }
             },
@@ -1415,9 +1542,11 @@
         }
       }
     },
-    "/verify-email": {
+    "/api/auth/verify-email": {
       "get": {
-        "tags": ["Default"],
+        "tags": [
+          "Default"
+        ],
         "description": "Verify the email of the user",
         "security": [
           {
@@ -1499,7 +1628,10 @@
                       "description": "Indicates if the email was verified successfully"
                     }
                   },
-                  "required": ["user", "status"]
+                  "required": [
+                    "user",
+                    "status"
+                  ]
                 }
               }
             }
@@ -1514,7 +1646,9 @@
                       "type": "string"
                     }
                   },
-                  "required": ["message"]
+                  "required": [
+                    "message"
+                  ]
                 }
               }
             },
@@ -1530,7 +1664,9 @@
                       "type": "string"
                     }
                   },
-                  "required": ["message"]
+                  "required": [
+                    "message"
+                  ]
                 }
               }
             },
@@ -1599,9 +1735,11 @@
         }
       }
     },
-    "/send-verification-email": {
+    "/api/auth/send-verification-email": {
       "post": {
-        "tags": ["Default"],
+        "tags": [
+          "Default"
+        ],
         "description": "Send a verification email to the user",
         "security": [
           {
@@ -1627,7 +1765,9 @@
                     "nullable": true
                   }
                 },
-                "required": ["email"]
+                "required": [
+                  "email"
+                ]
               }
             }
           }
@@ -1677,7 +1817,9 @@
                       "type": "string"
                     }
                   },
-                  "required": ["message"]
+                  "required": [
+                    "message"
+                  ]
                 }
               }
             },
@@ -1746,9 +1888,11 @@
         }
       }
     },
-    "/change-email": {
+    "/api/auth/change-email": {
       "post": {
-        "tags": ["Default"],
+        "tags": [
+          "Default"
+        ],
         "security": [
           {
             "bearerAuth": []
@@ -1772,7 +1916,9 @@
                     "nullable": true
                   }
                 },
-                "required": ["newEmail"]
+                "required": [
+                  "newEmail"
+                ]
               }
             }
           }
@@ -1791,12 +1937,17 @@
                     },
                     "message": {
                       "type": "string",
-                      "enum": ["Email updated", "Verification email sent"],
+                      "enum": [
+                        "Email updated",
+                        "Verification email sent"
+                      ],
                       "description": "Status message of the email change process",
                       "nullable": true
                     }
                   },
-                  "required": ["status"]
+                  "required": [
+                    "status"
+                  ]
                 }
               }
             }
@@ -1811,7 +1962,9 @@
                       "type": "string"
                     }
                   },
-                  "required": ["message"]
+                  "required": [
+                    "message"
+                  ]
                 }
               }
             },
@@ -1827,7 +1980,9 @@
                       "type": "string"
                     }
                   },
-                  "required": ["message"]
+                  "required": [
+                    "message"
+                  ]
                 }
               }
             },
@@ -1911,9 +2066,11 @@
         }
       }
     },
-    "/change-password": {
+    "/api/auth/change-password": {
       "post": {
-        "tags": ["Default"],
+        "tags": [
+          "Default"
+        ],
         "description": "Change the password of the user",
         "security": [
           {
@@ -1942,7 +2099,10 @@
                     "nullable": true
                   }
                 },
-                "required": ["newPassword", "currentPassword"]
+                "required": [
+                  "newPassword",
+                  "currentPassword"
+                ]
               }
             }
           }
@@ -1997,10 +2157,19 @@
                           "description": "When the user was last updated"
                         }
                       },
-                      "required": ["id", "email", "name", "emailVerified", "createdAt", "updatedAt"]
+                      "required": [
+                        "id",
+                        "email",
+                        "name",
+                        "emailVerified",
+                        "createdAt",
+                        "updatedAt"
+                      ]
                     }
                   },
-                  "required": ["user"]
+                  "required": [
+                    "user"
+                  ]
                 }
               }
             }
@@ -2015,7 +2184,9 @@
                       "type": "string"
                     }
                   },
-                  "required": ["message"]
+                  "required": [
+                    "message"
+                  ]
                 }
               }
             },
@@ -2031,7 +2202,9 @@
                       "type": "string"
                     }
                   },
-                  "required": ["message"]
+                  "required": [
+                    "message"
+                  ]
                 }
               }
             },
@@ -2100,9 +2273,11 @@
         }
       }
     },
-    "/update-user": {
+    "/api/auth/update-user": {
       "post": {
-        "tags": ["Default"],
+        "tags": [
+          "Default"
+        ],
         "description": "Update the current user",
         "security": [
           {
@@ -2156,7 +2331,9 @@
                       "type": "string"
                     }
                   },
-                  "required": ["message"]
+                  "required": [
+                    "message"
+                  ]
                 }
               }
             },
@@ -2172,7 +2349,9 @@
                       "type": "string"
                     }
                   },
-                  "required": ["message"]
+                  "required": [
+                    "message"
+                  ]
                 }
               }
             },
@@ -2241,9 +2420,11 @@
         }
       }
     },
-    "/delete-user": {
+    "/api/auth/delete-user": {
       "post": {
-        "tags": ["Default"],
+        "tags": [
+          "Default"
+        ],
         "description": "Delete the user",
         "security": [
           {
@@ -2293,11 +2474,17 @@
                     },
                     "message": {
                       "type": "string",
-                      "enum": ["User deleted", "Verification email sent"],
+                      "enum": [
+                        "User deleted",
+                        "Verification email sent"
+                      ],
                       "description": "Status message of the deletion process"
                     }
                   },
-                  "required": ["success", "message"]
+                  "required": [
+                    "success",
+                    "message"
+                  ]
                 }
               }
             }
@@ -2312,7 +2499,9 @@
                       "type": "string"
                     }
                   },
-                  "required": ["message"]
+                  "required": [
+                    "message"
+                  ]
                 }
               }
             },
@@ -2328,7 +2517,9 @@
                       "type": "string"
                     }
                   },
-                  "required": ["message"]
+                  "required": [
+                    "message"
+                  ]
                 }
               }
             },
@@ -2397,9 +2588,11 @@
         }
       }
     },
-    "/reset-password/{token}": {
+    "/api/auth/reset-password/{token}": {
       "get": {
-        "tags": ["Default"],
+        "tags": [
+          "Default"
+        ],
         "description": "Redirects the user to the callback URL with the token",
         "security": [
           {
@@ -2442,7 +2635,9 @@
                       "type": "string"
                     }
                   },
-                  "required": ["message"]
+                  "required": [
+                    "message"
+                  ]
                 }
               }
             },
@@ -2458,7 +2653,9 @@
                       "type": "string"
                     }
                   },
-                  "required": ["message"]
+                  "required": [
+                    "message"
+                  ]
                 }
               }
             },
@@ -2527,9 +2724,11 @@
         }
       }
     },
-    "/request-password-reset": {
+    "/api/auth/request-password-reset": {
       "post": {
-        "tags": ["Default"],
+        "tags": [
+          "Default"
+        ],
         "description": "Send a password reset email to the user",
         "security": [
           {
@@ -2554,7 +2753,9 @@
                     "nullable": true
                   }
                 },
-                "required": ["email"]
+                "required": [
+                  "email"
+                ]
               }
             }
           }
@@ -2588,7 +2789,9 @@
                       "type": "string"
                     }
                   },
-                  "required": ["message"]
+                  "required": [
+                    "message"
+                  ]
                 }
               }
             },
@@ -2604,7 +2807,9 @@
                       "type": "string"
                     }
                   },
-                  "required": ["message"]
+                  "required": [
+                    "message"
+                  ]
                 }
               }
             },
@@ -2673,9 +2878,11 @@
         }
       }
     },
-    "/list-sessions": {
+    "/api/auth/list-sessions": {
       "get": {
-        "tags": ["Default"],
+        "tags": [
+          "Default"
+        ],
         "description": "List all active sessions for the user",
         "security": [
           {
@@ -2707,7 +2914,9 @@
                       "type": "string"
                     }
                   },
-                  "required": ["message"]
+                  "required": [
+                    "message"
+                  ]
                 }
               }
             },
@@ -2723,7 +2932,9 @@
                       "type": "string"
                     }
                   },
-                  "required": ["message"]
+                  "required": [
+                    "message"
+                  ]
                 }
               }
             },
@@ -2792,9 +3003,11 @@
         }
       }
     },
-    "/revoke-session": {
+    "/api/auth/revoke-session": {
       "post": {
-        "tags": ["Default"],
+        "tags": [
+          "Default"
+        ],
         "description": "Revoke a single session",
         "security": [
           {
@@ -2813,7 +3026,9 @@
                     "description": "The token to revoke"
                   }
                 },
-                "required": ["token"]
+                "required": [
+                  "token"
+                ]
               }
             }
           }
@@ -2831,7 +3046,9 @@
                       "description": "Indicates if the session was revoked successfully"
                     }
                   },
-                  "required": ["status"]
+                  "required": [
+                    "status"
+                  ]
                 }
               }
             }
@@ -2846,7 +3063,9 @@
                       "type": "string"
                     }
                   },
-                  "required": ["message"]
+                  "required": [
+                    "message"
+                  ]
                 }
               }
             },
@@ -2862,7 +3081,9 @@
                       "type": "string"
                     }
                   },
-                  "required": ["message"]
+                  "required": [
+                    "message"
+                  ]
                 }
               }
             },
@@ -2931,9 +3152,11 @@
         }
       }
     },
-    "/revoke-sessions": {
+    "/api/auth/revoke-sessions": {
       "post": {
-        "tags": ["Default"],
+        "tags": [
+          "Default"
+        ],
         "description": "Revoke all sessions for the user",
         "security": [
           {
@@ -2964,7 +3187,9 @@
                       "description": "Indicates if all sessions were revoked successfully"
                     }
                   },
-                  "required": ["status"]
+                  "required": [
+                    "status"
+                  ]
                 }
               }
             }
@@ -2979,7 +3204,9 @@
                       "type": "string"
                     }
                   },
-                  "required": ["message"]
+                  "required": [
+                    "message"
+                  ]
                 }
               }
             },
@@ -2995,7 +3222,9 @@
                       "type": "string"
                     }
                   },
-                  "required": ["message"]
+                  "required": [
+                    "message"
+                  ]
                 }
               }
             },
@@ -3064,9 +3293,11 @@
         }
       }
     },
-    "/revoke-other-sessions": {
+    "/api/auth/revoke-other-sessions": {
       "post": {
-        "tags": ["Default"],
+        "tags": [
+          "Default"
+        ],
         "description": "Revoke all other sessions for the user except the current one",
         "security": [
           {
@@ -3097,7 +3328,9 @@
                       "description": "Indicates if all other sessions were revoked successfully"
                     }
                   },
-                  "required": ["status"]
+                  "required": [
+                    "status"
+                  ]
                 }
               }
             }
@@ -3112,7 +3345,9 @@
                       "type": "string"
                     }
                   },
-                  "required": ["message"]
+                  "required": [
+                    "message"
+                  ]
                 }
               }
             },
@@ -3128,7 +3363,9 @@
                       "type": "string"
                     }
                   },
-                  "required": ["message"]
+                  "required": [
+                    "message"
+                  ]
                 }
               }
             },
@@ -3197,9 +3434,11 @@
         }
       }
     },
-    "/link-social": {
+    "/api/auth/link-social": {
       "post": {
-        "tags": ["Default"],
+        "tags": [
+          "Default"
+        ],
         "description": "Link a social account to the user",
         "security": [
           {
@@ -3245,7 +3484,9 @@
                         "nullable": true
                       }
                     },
-                    "required": ["token"],
+                    "required": [
+                      "token"
+                    ],
                     "nullable": true
                   },
                   "requestSignUp": {
@@ -3268,7 +3509,9 @@
                     "nullable": true
                   }
                 },
-                "required": ["provider"]
+                "required": [
+                  "provider"
+                ]
               }
             }
           }
@@ -3293,7 +3536,9 @@
                       "type": "boolean"
                     }
                   },
-                  "required": ["redirect"]
+                  "required": [
+                    "redirect"
+                  ]
                 }
               }
             }
@@ -3308,7 +3553,9 @@
                       "type": "string"
                     }
                   },
-                  "required": ["message"]
+                  "required": [
+                    "message"
+                  ]
                 }
               }
             },
@@ -3324,7 +3571,9 @@
                       "type": "string"
                     }
                   },
-                  "required": ["message"]
+                  "required": [
+                    "message"
+                  ]
                 }
               }
             },
@@ -3393,9 +3642,11 @@
         }
       }
     },
-    "/list-accounts": {
+    "/api/auth/list-accounts": {
       "get": {
-        "tags": ["Default"],
+        "tags": [
+          "Default"
+        ],
         "description": "List all accounts linked to the user",
         "security": [
           {
@@ -3460,7 +3711,9 @@
                       "type": "string"
                     }
                   },
-                  "required": ["message"]
+                  "required": [
+                    "message"
+                  ]
                 }
               }
             },
@@ -3476,7 +3729,9 @@
                       "type": "string"
                     }
                   },
-                  "required": ["message"]
+                  "required": [
+                    "message"
+                  ]
                 }
               }
             },
@@ -3545,9 +3800,11 @@
         }
       }
     },
-    "/delete-user/callback": {
+    "/api/auth/delete-user/callback": {
       "get": {
-        "tags": ["Default"],
+        "tags": [
+          "Default"
+        ],
         "description": "Callback to complete user deletion with verification token",
         "security": [
           {
@@ -3587,11 +3844,16 @@
                     },
                     "message": {
                       "type": "string",
-                      "enum": ["User deleted"],
+                      "enum": [
+                        "User deleted"
+                      ],
                       "description": "Confirmation message"
                     }
                   },
-                  "required": ["success", "message"]
+                  "required": [
+                    "success",
+                    "message"
+                  ]
                 }
               }
             }
@@ -3606,7 +3868,9 @@
                       "type": "string"
                     }
                   },
-                  "required": ["message"]
+                  "required": [
+                    "message"
+                  ]
                 }
               }
             },
@@ -3622,7 +3886,9 @@
                       "type": "string"
                     }
                   },
-                  "required": ["message"]
+                  "required": [
+                    "message"
+                  ]
                 }
               }
             },
@@ -3691,9 +3957,11 @@
         }
       }
     },
-    "/unlink-account": {
+    "/api/auth/unlink-account": {
       "post": {
-        "tags": ["Default"],
+        "tags": [
+          "Default"
+        ],
         "description": "Unlink an account",
         "security": [
           {
@@ -3716,7 +3984,9 @@
                     "nullable": true
                   }
                 },
-                "required": ["providerId"]
+                "required": [
+                  "providerId"
+                ]
               }
             }
           }
@@ -3747,7 +4017,9 @@
                       "type": "string"
                     }
                   },
-                  "required": ["message"]
+                  "required": [
+                    "message"
+                  ]
                 }
               }
             },
@@ -3763,7 +4035,9 @@
                       "type": "string"
                     }
                   },
-                  "required": ["message"]
+                  "required": [
+                    "message"
+                  ]
                 }
               }
             },
@@ -3832,9 +4106,11 @@
         }
       }
     },
-    "/refresh-token": {
+    "/api/auth/refresh-token": {
       "post": {
-        "tags": ["Default"],
+        "tags": [
+          "Default"
+        ],
         "description": "Refresh the access token using a refresh token",
         "security": [
           {
@@ -3864,7 +4140,9 @@
                     "nullable": true
                   }
                 },
-                "required": ["providerId"]
+                "required": [
+                  "providerId"
+                ]
               }
             }
           }
@@ -3915,7 +4193,9 @@
                       "type": "string"
                     }
                   },
-                  "required": ["message"]
+                  "required": [
+                    "message"
+                  ]
                 }
               }
             },
@@ -3984,9 +4264,11 @@
         }
       }
     },
-    "/get-access-token": {
+    "/api/auth/get-access-token": {
       "post": {
-        "tags": ["Default"],
+        "tags": [
+          "Default"
+        ],
         "description": "Get a valid access token, doing a refresh if needed",
         "security": [
           {
@@ -4016,7 +4298,9 @@
                     "nullable": true
                   }
                 },
-                "required": ["providerId"]
+                "required": [
+                  "providerId"
+                ]
               }
             }
           }
@@ -4067,7 +4351,9 @@
                       "type": "string"
                     }
                   },
-                  "required": ["message"]
+                  "required": [
+                    "message"
+                  ]
                 }
               }
             },
@@ -4136,9 +4422,11 @@
         }
       }
     },
-    "/account-info": {
+    "/api/auth/account-info": {
       "post": {
-        "tags": ["Default"],
+        "tags": [
+          "Default"
+        ],
         "description": "Get the account info provided by the provider",
         "security": [
           {
@@ -4158,7 +4446,9 @@
                     "description": "The provider given account id for which to get the account info"
                   }
                 },
-                "required": ["accountId"]
+                "required": [
+                  "accountId"
+                ]
               }
             }
           }
@@ -4190,7 +4480,10 @@
                           "type": "boolean"
                         }
                       },
-                      "required": ["id", "emailVerified"]
+                      "required": [
+                        "id",
+                        "emailVerified"
+                      ]
                     },
                     "data": {
                       "type": "object",
@@ -4198,7 +4491,10 @@
                       "additionalProperties": true
                     }
                   },
-                  "required": ["user", "data"],
+                  "required": [
+                    "user",
+                    "data"
+                  ],
                   "additionalProperties": false
                 }
               }
@@ -4214,7 +4510,9 @@
                       "type": "string"
                     }
                   },
-                  "required": ["message"]
+                  "required": [
+                    "message"
+                  ]
                 }
               }
             },
@@ -4230,7 +4528,9 @@
                       "type": "string"
                     }
                   },
-                  "required": ["message"]
+                  "required": [
+                    "message"
+                  ]
                 }
               }
             },
@@ -4299,9 +4599,11 @@
         }
       }
     },
-    "/ok": {
+    "/api/auth/ok": {
       "get": {
-        "tags": ["Default"],
+        "tags": [
+          "Default"
+        ],
         "description": "Check if the API is working",
         "security": [
           {
@@ -4322,7 +4624,9 @@
                       "description": "Indicates if the API is working"
                     }
                   },
-                  "required": ["ok"]
+                  "required": [
+                    "ok"
+                  ]
                 }
               }
             }
@@ -4337,7 +4641,9 @@
                       "type": "string"
                     }
                   },
-                  "required": ["message"]
+                  "required": [
+                    "message"
+                  ]
                 }
               }
             },
@@ -4353,7 +4659,9 @@
                       "type": "string"
                     }
                   },
-                  "required": ["message"]
+                  "required": [
+                    "message"
+                  ]
                 }
               }
             },
@@ -4422,9 +4730,11 @@
         }
       }
     },
-    "/error": {
+    "/api/auth/error": {
       "get": {
-        "tags": ["Default"],
+        "tags": [
+          "Default"
+        ],
         "description": "Displays an error page",
         "security": [
           {
@@ -4454,7 +4764,9 @@
                       "type": "string"
                     }
                   },
-                  "required": ["message"]
+                  "required": [
+                    "message"
+                  ]
                 }
               }
             },
@@ -4470,7 +4782,9 @@
                       "type": "string"
                     }
                   },
-                  "required": ["message"]
+                  "required": [
+                    "message"
+                  ]
                 }
               }
             },

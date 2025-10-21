@@ -134,7 +134,7 @@ ${overallBar}
 **📋 App Schema Progress**: ${appPercent}% (${data.appSchema.implementedProperties}/${data.appSchema.totalProperties} properties)
 ${appBar}
 
-**🌐 API Schema Progress**: ${apiPercent}% (${data.apiSchema.implementedEndpoints}/${data.apiSchema.totalEndpoints} endpoints)
+**🌐 API Schema Progress**: ${apiPercent}% (${data.apiSchema.implementedEndpoints}/${data.apiSchema.totalEndpoints} endpoints, ${data.apiSchema.currentTotalEndpoints} current)
 ${apiBar}
 
 **🧪 Test Implementation**: ${testPercent}% (${data.testStatus.doneSpecs}/${data.testStatus.totalSpecs} specs passing)
@@ -182,12 +182,18 @@ function generateAppSchemaSection(appSchema: NewRoadmapData['appSchema']): strin
  * Generate API Schema section
  */
 function generateApiSchemaSection(apiSchema: NewRoadmapData['apiSchema']): string {
-  const { totalEndpoints, implementedEndpoints, missingEndpoints, completionPercent } = apiSchema
+  const {
+    totalEndpoints,
+    currentTotalEndpoints,
+    implementedEndpoints,
+    missingEndpoints,
+    completionPercent,
+  } = apiSchema
 
   let section = `## 2. API Schema Progress
 
 📋 **Goal**: \`specs/api/app.openapi.json\` (${totalEndpoints} endpoints)
-📦 **Current**: \`schemas/0.0.1/app.openapi.json\` (${implementedEndpoints} endpoints)
+📦 **Current**: \`schemas/0.0.1/app.openapi.json\` (${currentTotalEndpoints} endpoints)
 📊 **Completion**: ${completionPercent}% (${implementedEndpoints}/${totalEndpoints} implemented)
 
 `
@@ -232,12 +238,13 @@ function generateAppSchemaSummary(appSchema: NewRoadmapData['appSchema']): strin
  * Generate API Schema summary section
  */
 function generateApiSchemaSummary(apiSchema: NewRoadmapData['apiSchema']): string {
-  const { totalEndpoints, implementedEndpoints, completionPercent } = apiSchema
+  const { totalEndpoints, currentTotalEndpoints, implementedEndpoints, completionPercent } =
+    apiSchema
 
   return `## 2. API Schema Progress
 
 🌐 **Goal**: ${totalEndpoints} endpoints
-📦 **Current**: ${implementedEndpoints} endpoints
+📦 **Current**: ${currentTotalEndpoints} endpoints
 📊 **Completion**: ${completionPercent}%
 
 **Next Steps**: Implement missing endpoints (${totalEndpoints - implementedEndpoints} remaining)

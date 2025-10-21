@@ -139,7 +139,10 @@ async function main() {
   const apiSchemaProgress = await compareApiSchemas(GOAL_API_SCHEMA_PATH, CURRENT_API_SCHEMA_PATH)
   console.log(`   Goal: ${GOAL_API_SCHEMA_PATH} (${apiSchemaProgress.totalEndpoints} endpoints)`)
   console.log(
-    `   Implemented: ${apiSchemaProgress.implementedEndpoints}/${apiSchemaProgress.totalEndpoints} endpoints (${apiSchemaProgress.completionPercent}%)\n`
+    `   Current: ${CURRENT_API_SCHEMA_PATH} (${apiSchemaProgress.currentTotalEndpoints} endpoints)`
+  )
+  console.log(
+    `   Implemented: ${apiSchemaProgress.implementedEndpoints}/${apiSchemaProgress.totalEndpoints} endpoints matching goal (${apiSchemaProgress.completionPercent}%)\n`
   )
 
   // 3. Analyze Test Implementation

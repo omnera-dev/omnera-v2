@@ -54,25 +54,55 @@ interface OpenAPIDocument extends Record<string, unknown> {
 }
 
 /**
+ * Add /api/auth/ prefix to all paths in an OpenAPI schema
+ *
+ * BetterAuth generates paths without the mount prefix (e.g., /sign-in/email).
+ * This function transforms them to match our API structure (e.g., /api/auth/sign-in/email).
+ *
+ * @param schema - OpenAPI schema with unprefixed paths
+ * @returns OpenAPI schema with /api/auth/ prefix added to all paths
+ */
+function addAuthPrefixToPaths(schema: OpenAPIDocument): OpenAPIDocument {
+  if (!schema.paths) {
+    return schema
+  }
+
+  const prefixedPaths: Record<string, unknown> = {}
+  for (const [path, methods] of Object.entries(schema.paths)) {
+    // Add /api/auth prefix to the path
+    const prefixedPath = `/api/auth${path}`
+    prefixedPaths[prefixedPath] = methods
+  }
+
+  return {
+    ...schema,
+    paths: prefixedPaths,
+  }
+}
+
+/**
  * Merge OpenAPI schemas from multiple sources
  *
  * This function merges the main application OpenAPI schema with the
  * BetterAuth authentication schema into a single unified document.
  *
  * @param mainSchema - Main application OpenAPI schema
- * @param authSchema - BetterAuth OpenAPI schema
+ * @param authSchema - BetterAuth OpenAPI schema (paths will be prefixed with /api/auth/)
  * @returns Merged OpenAPI schema
  */
 function mergeOpenAPISchemas(
   mainSchema: OpenAPIDocument,
   authSchema: OpenAPIDocument
 ): OpenAPIDocument {
+  // Add /api/auth/ prefix to all auth paths before merging
+  const prefixedAuthSchema = addAuthPrefixToPaths(authSchema)
+
   return {
     ...mainSchema,
     // Merge paths from both schemas
     paths: {
       ...mainSchema.paths,
-      ...authSchema.paths,
+      ...prefixedAuthSchema.paths,
     },
     // Merge component schemas
     components: {
@@ -156,16 +186,15 @@ async function exportOpenAPI(): Promise<void> {
   }, 0)
 
   // Count auth vs non-auth endpoints
-  // Note: BetterAuth paths don't have /api/auth prefix in the schema (relative paths)
-  const appEndpoints = Object.keys(paths).filter((path) => path.startsWith('/api/')).length
-  const authEndpoints = endpointCount - appEndpoints
+  const authEndpoints = Object.keys(paths).filter((path) => path.startsWith('/api/auth/')).length
+  const appEndpoints = endpointCount - authEndpoints
 
   console.log(`\n✨ OpenAPI export completed successfully!`)
   console.log(`📂 Output location: schemas/${version}/`)
   console.log(`📊 Summary:`)
   console.log(`   - ${endpointCount} total endpoint paths`)
   console.log(`     • ${appEndpoints} application endpoints`)
-  console.log(`     • ${authEndpoints} authentication endpoints (mounted at /api/auth/*)`)
+  console.log(`     • ${authEndpoints} authentication endpoints (/api/auth/*)`)
   console.log(`   - ${methodCount} HTTP methods`)
   console.log(`   - ${(mergedOpenApiDoc.tags || []).length} tags\n`)
 }

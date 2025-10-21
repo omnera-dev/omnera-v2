@@ -45,6 +45,7 @@ OLD_V1/
 
 # Temporary test files
 /tmp/
+/.test-temp/
 
 # Drizzle local data
 .drizzle

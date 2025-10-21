@@ -34,5 +34,6 @@
       "@/*": ["src/*"],
       "@/specs/*": ["specs/*"]
     }
-  }
+  },
+  "exclude": ["node_modules", "dist", "tmp"]
 }
