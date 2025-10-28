@@ -6,7 +6,7 @@
   "type": "string",
   "default": "restrict",
   "enum": ["cascade", "set-null", "restrict", "no-action"],
-  "specs": [
+  "x-specs": [
     {
       "id": "APP-FIELD-RELATIONSHIP-FIELD-ONDELETE-001",
       "given": "user selects onDelete from valid options",

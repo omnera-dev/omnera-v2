@@ -7,5 +7,5 @@
   "minLength": 1,
   "maxLength": 100,
   "examples": ["My Calendly Workspace", "Production Database", "Marketing Team Calendly"],
-  "specs": []
+  "x-specs": []
 }

@@ -28,7 +28,8 @@
   },
   "required": ["service", "event", "params"],
   "additionalProperties": false,
-  "specs": [
+  "$id": "schedule-cron-time-trigger.schema.json",
+  "x-specs": [
     {
       "id": "APP-SCHEDULE-CRON-TIME-001",
       "given": "I am working with a cron time",
@@ -107,6 +108,5 @@
       "when": "schedule crosses DST boundary",
       "then": "execution should occur at correct wall-clock time"
     }
-  ],
-  "$id": "schedule-cron-time-trigger.schema.json"
+  ]
 }

@@ -5,7 +5,7 @@
   "description": "Whether to create a database index on this field for faster queries",
   "type": "boolean",
   "default": false,
-  "specs": [
+  "x-specs": [
     {
       "id": "APP-FIELD-INDEXED-001",
       "given": "indexed is true",

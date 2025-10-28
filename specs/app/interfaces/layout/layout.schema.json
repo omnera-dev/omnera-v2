@@ -16,5 +16,5 @@
   },
   "required": ["type"],
   "additionalProperties": false,
-  "specs": []
+  "x-specs": []
 }

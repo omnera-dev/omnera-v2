@@ -6,7 +6,7 @@
   "type": "string",
   "default": "text",
   "enum": ["text", "number", "boolean", "date"],
-  "specs": [
+  "x-specs": [
     {
       "id": "APP-FIELD-FORMULA-FIELD-RESULTTYPE-001",
       "given": "user selects resultType from valid options",

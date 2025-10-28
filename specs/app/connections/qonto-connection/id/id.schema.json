@@ -3,5 +3,5 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "title": "Qonto Connection ID",
   "$ref": "../../../common/definitions.schema.json#/definitions/id",
-  "specs": []
+  "x-specs": []
 }

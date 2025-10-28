@@ -4,7 +4,7 @@
   "title": "Currency Field Default Value",
   "description": "Default numeric value for this currency field when no value is provided",
   "type": "number",
-  "specs": [
+  "x-specs": [
     {
       "id": "APP-FIELD-CURRENCY-DEFAULT-001",
       "given": "user provides default",

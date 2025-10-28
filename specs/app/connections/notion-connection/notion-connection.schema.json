@@ -32,7 +32,7 @@
       "clientSecret": "secret_notion_abc123"
     }
   ],
-  "specs": [
+  "x-specs": [
     {
       "id": "APP-CONN-NOTION-001",
       "title": "Create Notion connection with valid OAuth credentials",

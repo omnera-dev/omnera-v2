@@ -30,7 +30,7 @@
     "required": ["name", "fields"],
     "additionalProperties": false
   },
-  "specs": [
+  "x-specs": [
     {
       "id": "APP-TABLES-UNIQUECONSTRAINTS-001",
       "given": "user provides uniqueConstraints array",

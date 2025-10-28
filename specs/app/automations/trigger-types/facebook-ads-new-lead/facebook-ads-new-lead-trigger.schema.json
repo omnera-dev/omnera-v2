@@ -52,7 +52,8 @@
   },
   "required": ["account", "service", "event", "params"],
   "additionalProperties": false,
-  "specs": [
+  "$id": "facebook-ads-new-lead-trigger.schema.json",
+  "x-specs": [
     {
       "id": "APP-FACEBOOK-ADS-NEW-LEAD-001",
       "given": "I am working with known test vectors",
@@ -173,6 +174,5 @@
       "when": "validating input",
       "then": "behavior should follow optional/required rules"
     }
-  ],
-  "$id": "facebook-ads-new-lead-trigger.schema.json"
+  ]
 }

@@ -61,18 +61,30 @@
     "appName": {
       "type": "object",
       "properties": {
-        "iPhone": { "type": "string" },
-        "iPad": { "type": "string" },
-        "googlePlay": { "type": "string" }
+        "iPhone": {
+          "type": "string"
+        },
+        "iPad": {
+          "type": "string"
+        },
+        "googlePlay": {
+          "type": "string"
+        }
       },
       "description": "Name of app (for app cards)"
     },
     "appId": {
       "type": "object",
       "properties": {
-        "iPhone": { "type": "string" },
-        "iPad": { "type": "string" },
-        "googlePlay": { "type": "string" }
+        "iPhone": {
+          "type": "string"
+        },
+        "iPad": {
+          "type": "string"
+        },
+        "googlePlay": {
+          "type": "string"
+        }
       },
       "description": "App ID in respective stores"
     }
@@ -89,13 +101,13 @@
       "creator": "@johndoe"
     }
   ],
-  "specs": [
+  "x-specs": [
     {
       "id": "APP-PAGES-TWITTER-001",
       "given": "Twitter Card with required card type",
       "when": "card property specifies card type",
       "then": "it should validate minimal Twitter Card configuration",
-      "x-validation": {
+      "validation": {
         "setup": {
           "twitterCard": {
             "card": "summary_large_image"
@@ -108,7 +120,7 @@
           "Without Twitter Card: falls back to Open Graph or generic"
         ]
       },
-      "x-application": {
+      "application": {
         "twitterCard": {
           "card": "summary_large_image"
         },
@@ -132,7 +144,7 @@
       "given": "Twitter Card with type 'summary'",
       "when": "card is 'summary' for default card",
       "then": "it should display small square image card",
-      "x-validation": {
+      "validation": {
         "setup": {
           "twitterCard": {
             "card": "summary",
@@ -153,7 +165,7 @@
           "Good for brief updates, links"
         ]
       },
-      "x-application": {
+      "application": {
         "twitterCard": {
           "card": "summary",
           "title": "Quick Update",
@@ -181,7 +193,7 @@
       "given": "Twitter Card with type 'summary_large_image'",
       "when": "card is 'summary_large_image' for featured content",
       "then": "it should display large rectangular image card",
-      "x-validation": {
+      "validation": {
         "setup": {
           "twitterCard": {
             "card": "summary_large_image",
@@ -203,7 +215,7 @@
           "Best for: featured content, announcements, visual content"
         ]
       },
-      "x-application": {
+      "application": {
         "twitterCard": {
           "card": "summary_large_image",
           "title": "Major Product Launch",
@@ -233,7 +245,7 @@
       "given": "Twitter Card with type 'app'",
       "when": "card is 'app' with appName and appId",
       "then": "it should promote mobile app downloads",
-      "x-validation": {
+      "validation": {
         "setup": {
           "twitterCard": {
             "card": "app",
@@ -260,7 +272,7 @@
           "Shows install button in card"
         ]
       },
-      "x-application": {
+      "application": {
         "twitterCard": {
           "card": "app",
           "title": "Download Our Mobile App",
@@ -307,7 +319,7 @@
       "given": "Twitter Card with type 'player'",
       "when": "card is 'player' with player URL and dimensions",
       "then": "it should embed video/audio player",
-      "x-validation": {
+      "validation": {
         "setup": {
           "twitterCard": {
             "card": "player",
@@ -332,7 +344,7 @@
           "Twitter embeds player inline"
         ]
       },
-      "x-application": {
+      "application": {
         "twitterCard": {
           "card": "player",
           "title": "Product Demo Video",
@@ -370,7 +382,7 @@
       "given": "Twitter Card title with maxLength",
       "when": "title has 70 characters max",
       "then": "it should enforce title length for Twitter display",
-      "x-validation": {
+      "validation": {
         "setup": {
           "valid": {
             "title": "Transform Your Business with AI-Powered Analytics Platform"
@@ -387,7 +399,7 @@
           "Optimal for Twitter display"
         ]
       },
-      "x-application": {
+      "application": {
         "twitterCard": {
           "title": "Transform Your Business with AI-Powered Analytics Platform"
         },
@@ -408,7 +420,7 @@
       "given": "Twitter Card description with maxLength",
       "when": "description has 200 characters max",
       "then": "it should enforce description length for Twitter cards",
-      "x-validation": {
+      "validation": {
         "setup": {
           "valid": {
             "description": "Discover how our AI-powered platform helps businesses make data-driven decisions. Get real-time insights and automated reporting. Start your free trial today."
@@ -424,7 +436,7 @@
           "Same as Open Graph (200 chars)"
         ]
       },
-      "x-application": {
+      "application": {
         "twitterCard": {
           "description": "Discover how our AI-powered platform helps businesses make data-driven decisions. Get real-time insights and automated reporting. Start your free trial today."
         },
@@ -445,7 +457,7 @@
       "given": "Twitter Card image with size requirements",
       "when": "image is min 144x144px for summary or 300x157px for large",
       "then": "it should provide properly sized social image",
-      "x-validation": {
+      "validation": {
         "setup": {
           "summary": {
             "card": "summary",
@@ -469,7 +481,7 @@
           "Formats: JPG, PNG, WebP, GIF"
         ]
       },
-      "x-application": {
+      "application": {
         "twitterCard": {
           "card": "summary_large_image",
           "title": "Product Launch",
@@ -497,7 +509,7 @@
       "given": "Twitter Card with site @username",
       "when": "site is '@mysite' for website attribution",
       "then": "it should attribute content to website Twitter account",
-      "x-validation": {
+      "validation": {
         "setup": {
           "twitterCard": {
             "card": "summary_large_image",
@@ -520,7 +532,7 @@
           "Builds brand recognition"
         ]
       },
-      "x-application": {
+      "application": {
         "twitterCard": {
           "card": "summary_large_image",
           "title": "10 Ways to Boost Productivity",
@@ -550,7 +562,7 @@
       "given": "Twitter Card with creator @username",
       "when": "creator is '@johndoe' for content author",
       "then": "it should attribute content to author Twitter account",
-      "x-validation": {
+      "validation": {
         "setup": {
           "twitterCard": {
             "card": "summary_large_image",
@@ -569,7 +581,7 @@
           "Shows below site attribution"
         ]
       },
-      "x-application": {
+      "application": {
         "twitterCard": {
           "card": "summary_large_image",
           "title": "How I Built a Successful Startup",
@@ -603,7 +615,7 @@
       "given": "Twitter Card imageAlt with maxLength",
       "when": "imageAlt has 420 characters max",
       "then": "it should provide accessible image description",
-      "x-validation": {
+      "validation": {
         "setup": {
           "twitterCard": {
             "card": "summary_large_image",
@@ -621,7 +633,7 @@
           "Describes image content in detail"
         ]
       },
-      "x-application": {
+      "application": {
         "twitterCard": {
           "card": "summary_large_image",
           "title": "Product Launch",
@@ -648,7 +660,7 @@
       "given": "Twitter Card rich preview",
       "when": "all properties create rich card on Twitter/X",
       "then": "it should display enhanced Twitter sharing card",
-      "x-validation": {
+      "validation": {
         "setup": {
           "twitterCard": {
             "card": "summary_large_image",
@@ -667,7 +679,7 @@
           "Professional Twitter presence"
         ]
       },
-      "x-application": {
+      "application": {
         "twitterCard": {
           "card": "summary_large_image",
           "title": "Transform Your Business with AI-Powered Analytics",

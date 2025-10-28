@@ -29,5 +29,5 @@
   },
   "required": ["x", "y", "width", "height"],
   "additionalProperties": false,
-  "specs": []
+  "x-specs": []
 }

@@ -24,7 +24,7 @@
   "description": "Color picker for hex colors",
   "required": ["id", "name", "type"],
   "additionalProperties": false,
-  "specs": [
+  "x-specs": [
     {
       "id": "APP-COLOR-FIELD-001",
       "given": "entity with type='color'",

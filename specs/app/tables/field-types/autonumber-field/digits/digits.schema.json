@@ -7,7 +7,7 @@
   "default": 3,
   "minimum": 1,
   "maximum": 10,
-  "specs": [
+  "x-specs": [
     {
       "id": "APP-FIELD-AUTONUMBER-FIELD-DIGITS-001",
       "given": "user provides digits between 1 and 10",

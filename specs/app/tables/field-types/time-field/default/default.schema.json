@@ -5,7 +5,7 @@
   "description": "Default value for time field when no value is provided. Can be an ISO 8601 time string (HH:mm:ss or HH:mm:ss.sss) or a special keyword like 'now'. Applied automatically when creating new records. Useful for appointment slots, business hours, recurring schedules.",
   "type": "string",
   "examples": ["09:00:00", "14:30:00", "now", "00:00:00", "23:59:59"],
-  "specs": [
+  "x-specs": [
     {
       "id": "APP-FIELD-TIME-DEFAULT-001",
       "title": "Apply static default time",

@@ -5,7 +5,7 @@
   "description": "Whether this field must have a value (cannot be null or undefined)",
   "type": "boolean",
   "default": false,
-  "specs": [
+  "x-specs": [
     {
       "id": "APP-FIELD-REQUIRED-001",
       "given": "required is true",

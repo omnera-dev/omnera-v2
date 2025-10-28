@@ -12,7 +12,7 @@
     "YYYY-MM-DD HH:mm:ss",
     "MM/DD/YYYY hh:mm:ss A"
   ],
-  "specs": [
+  "x-specs": [
     {
       "id": "APP-FIELD-DATETIME-FORMAT-001",
       "title": "Accept valid datetime format",

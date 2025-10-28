@@ -30,7 +30,7 @@
   "description": "Workflow status with customizable options and colors",
   "required": ["id", "name", "type", "options"],
   "additionalProperties": false,
-  "specs": [
+  "x-specs": [
     {
       "id": "APP-STATUS-FIELD-001",
       "given": "entity with type='status'",

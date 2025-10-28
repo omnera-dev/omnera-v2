@@ -57,7 +57,7 @@
       }
     ]
   ],
-  "specs": [
+  "x-specs": [
     {
       "id": "APP-PAGES-FAVICONSET-001",
       "given": "a favicon with rel 'icon'",

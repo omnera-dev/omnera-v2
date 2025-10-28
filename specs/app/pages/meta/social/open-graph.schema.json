@@ -75,13 +75,13 @@
       "locale": "fr_FR"
     }
   ],
-  "specs": [
+  "x-specs": [
     {
       "id": "APP-PAGES-OG-001",
       "given": "Open Graph with required properties",
       "when": "title, description, type, and url are provided",
       "then": "it should validate minimal Open Graph metadata",
-      "x-validation": {
+      "validation": {
         "setup": {
           "openGraph": {
             "title": "Amazing Product Launch",
@@ -97,7 +97,7 @@
           "Without OG tags: generic unfurl (no image, title from <title>)"
         ]
       },
-      "x-application": {
+      "application": {
         "openGraph": {
           "title": "Amazing Product Launch",
           "description": "Revolutionary new product changing the industry",
@@ -124,7 +124,7 @@
       "given": "Open Graph title with maxLength",
       "when": "title has 90 characters max",
       "then": "it should enforce title length for social display",
-      "x-validation": {
+      "validation": {
         "setup": {
           "valid": {
             "title": "Transform Your Business with AI-Powered Analytics - Start Free Trial Today"
@@ -140,7 +140,7 @@
           "Optimal for Facebook/LinkedIn"
         ]
       },
-      "x-application": {
+      "application": {
         "openGraph": {
           "title": "Transform Your Business with AI-Powered Analytics - Start Free Trial Today"
         },
@@ -161,7 +161,7 @@
       "given": "Open Graph description with maxLength",
       "when": "description has 200 characters max",
       "then": "it should enforce description length for social cards",
-      "x-validation": {
+      "validation": {
         "setup": {
           "valid": {
             "description": "Discover how our AI-powered platform helps businesses make data-driven decisions. Get real-time insights, automated reporting, and predictive analytics. Start your free 14-day trial today."
@@ -177,7 +177,7 @@
           "Optimal for social cards"
         ]
       },
-      "x-application": {
+      "application": {
         "openGraph": {
           "description": "Discover how our AI-powered platform helps businesses make data-driven decisions. Get real-time insights, automated reporting, and predictive analytics. Start your free 14-day trial today."
         },
@@ -198,7 +198,7 @@
       "given": "Open Graph type enum",
       "when": "type is one of: website, article, book, profile, video, music",
       "then": "it should categorize content type for social platforms",
-      "x-validation": {
+      "validation": {
         "setup": {
           "types": [
             {
@@ -235,7 +235,7 @@
           "Type determines additional metadata fields"
         ]
       },
-      "x-application": {
+      "application": {
         "examples": {
           "website": {
             "type": "website",
@@ -268,7 +268,7 @@
       "given": "Open Graph image URL",
       "when": "image is URL with recommended 1200x630px dimensions",
       "then": "it should provide social sharing image",
-      "x-validation": {
+      "validation": {
         "setup": {
           "openGraph": {
             "title": "Product Launch",
@@ -292,7 +292,7 @@
           "Formats: JPG, PNG, WebP"
         ]
       },
-      "x-application": {
+      "application": {
         "openGraph": {
           "title": "Product Launch",
           "description": "Revolutionary product",
@@ -321,7 +321,7 @@
       "given": "Open Graph imageAlt",
       "when": "imageAlt describes image for accessibility",
       "then": "it should provide alternative text for social image",
-      "x-validation": {
+      "validation": {
         "setup": {
           "openGraph": {
             "title": "Product Launch",
@@ -339,7 +339,7 @@
           "Better than no alt text"
         ]
       },
-      "x-application": {
+      "application": {
         "openGraph": {
           "title": "Product Launch",
           "description": "Revolutionary product",
@@ -366,7 +366,7 @@
       "given": "Open Graph siteName",
       "when": "siteName identifies the overall website brand",
       "then": "it should distinguish site from page title",
-      "x-validation": {
+      "validation": {
         "setup": {
           "openGraph": {
             "title": "10 Ways to Boost Productivity",
@@ -383,7 +383,7 @@
           "Helps users recognize source"
         ]
       },
-      "x-application": {
+      "application": {
         "openGraph": {
           "title": "10 Ways to Boost Productivity",
           "description": "Proven strategies for better productivity",
@@ -412,7 +412,7 @@
       "given": "Open Graph locale",
       "when": "locale is format 'en_US', 'fr_FR' (language_TERRITORY)",
       "then": "it should specify content language for social platforms",
-      "x-validation": {
+      "validation": {
         "setup": {
           "openGraph": {
             "title": "Atelier de Consentement",
@@ -433,7 +433,7 @@
           "Helps platforms show content to right audience"
         ]
       },
-      "x-application": {
+      "application": {
         "openGraph": {
           "title": "Atelier de Consentement",
           "description": "Atelier pour apprendre à poser ses limites",
@@ -455,7 +455,7 @@
       "given": "Open Graph determiner",
       "when": "determiner is 'a', 'an', 'the', 'auto', or empty",
       "then": "it should provide grammatical article before title",
-      "x-validation": {
+      "validation": {
         "setup": {
           "examples": [
             {
@@ -488,7 +488,7 @@
           "Improves grammar in share messages"
         ]
       },
-      "x-application": {
+      "application": {
         "openGraph": {
           "title": "Ultimate Guide to SEO",
           "determiner": "the",
@@ -514,7 +514,7 @@
       "given": "Open Graph video URL",
       "when": "video property contains media URL",
       "then": "it should enable video content sharing",
-      "x-validation": {
+      "validation": {
         "setup": {
           "openGraph": {
             "title": "Product Demo Video",
@@ -537,7 +537,7 @@
           "Facebook may embed video in feed"
         ]
       },
-      "x-application": {
+      "application": {
         "openGraph": {
           "title": "Product Demo Video",
           "description": "See our product in action",
@@ -567,7 +567,7 @@
       "given": "Open Graph audio URL",
       "when": "audio property contains media URL",
       "then": "it should enable audio content sharing",
-      "x-validation": {
+      "validation": {
         "setup": {
           "openGraph": {
             "title": "Podcast Episode #42: Marketing Strategies",
@@ -589,7 +589,7 @@
           "Facebook may embed audio player"
         ]
       },
-      "x-application": {
+      "application": {
         "openGraph": {
           "title": "Podcast Episode #42: Marketing Strategies",
           "description": "Learn advanced marketing from industry experts",
@@ -619,7 +619,7 @@
       "given": "Open Graph rich social preview",
       "when": "all properties create rich card on Facebook/LinkedIn",
       "then": "it should display enhanced social sharing card",
-      "x-validation": {
+      "validation": {
         "setup": {
           "openGraph": {
             "title": "Transform Your Business with AI-Powered Analytics",
@@ -639,7 +639,7 @@
           "Professional social presence"
         ]
       },
-      "x-application": {
+      "application": {
         "openGraph": {
           "title": "Transform Your Business with AI-Powered Analytics",
           "description": "Get real-time insights, automated reporting, and predictive analytics. Start your free 14-day trial today with no credit card required.",

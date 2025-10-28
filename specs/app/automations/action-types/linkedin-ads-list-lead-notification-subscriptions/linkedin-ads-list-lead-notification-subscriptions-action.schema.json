@@ -39,7 +39,8 @@
   },
   "required": ["name", "account", "service", "action", "params"],
   "additionalProperties": false,
-  "specs": [
+  "$id": "linkedin-ads-list-lead-notification-subscriptions-action.schema.json",
+  "x-specs": [
     {
       "id": "APP-LINKEDIN-ADS-LIST-LEAD-NOTIFICATION-SUBSCRIPTIONS-001",
       "given": "user provides name",
@@ -118,6 +119,5 @@
       "when": "the ID is valid",
       "then": "the entity should be retrieved successfully"
     }
-  ],
-  "$id": "linkedin-ads-list-lead-notification-subscriptions-action.schema.json"
+  ]
 }

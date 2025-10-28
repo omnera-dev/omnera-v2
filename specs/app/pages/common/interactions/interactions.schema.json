@@ -36,7 +36,7 @@
       }
     }
   ],
-  "specs": [
+  "x-specs": [
     {
       "id": "APP-INTERACTION-MAIN-001",
       "given": "a component with only hover interactions",

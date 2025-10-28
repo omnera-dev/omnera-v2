@@ -57,7 +57,8 @@
   },
   "required": ["name", "account", "service", "action", "params"],
   "additionalProperties": false,
-  "specs": [
+  "$id": "notion-list-pages-action.schema.json",
+  "x-specs": [
     {
       "id": "APP-NOTION-LIST-PAGES-001",
       "given": "user provides name",
@@ -184,6 +185,5 @@
       "when": "validating input",
       "then": "error should enforce maximum value"
     }
-  ],
-  "$id": "notion-list-pages-action.schema.json"
+  ]
 }

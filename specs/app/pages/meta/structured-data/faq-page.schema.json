@@ -68,7 +68,7 @@
       ]
     }
   ],
-  "specs": [
+  "x-specs": [
     {
       "id": "APP-PAGES-FAQPAGE-001",
       "given": "FAQPage with required properties",

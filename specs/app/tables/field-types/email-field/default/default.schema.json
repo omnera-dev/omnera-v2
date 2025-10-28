@@ -4,7 +4,7 @@
   "title": "Email Field Default Value",
   "description": "Default email value for this field when no value is provided",
   "type": "string",
-  "specs": [
+  "x-specs": [
     {
       "id": "APP-FIELD-EMAIL-DEFAULT-001",
       "given": "user provides default",

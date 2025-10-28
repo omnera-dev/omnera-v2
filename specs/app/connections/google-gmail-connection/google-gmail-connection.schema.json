@@ -32,7 +32,7 @@
       "clientSecret": "secret_google-gmail_abc123"
     }
   ],
-  "specs": [
+  "x-specs": [
     {
       "id": "APP-CONN-GOOGLE-GMAIL-001",
       "title": "Create Google Gmail connection with valid OAuth credentials",

@@ -8,7 +8,7 @@
   "maxLength": 214,
   "pattern": "^(?:@[a-z0-9-~][a-z0-9-._~]*\\/)?[a-z0-9-~][a-z0-9-._~]*$",
   "examples": ["my-app", "todo-app", "@myorg/my-app", "blog-system", "dashboard-admin"],
-  "specs": [
+  "x-specs": [
     {
       "id": "APP-NAME-001",
       "given": "server with app name 'test-app'",

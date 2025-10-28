@@ -32,7 +32,7 @@
       "clientSecret": "secret_airtable_abc123"
     }
   ],
-  "specs": [
+  "x-specs": [
     {
       "id": "APP-CONN-AIRTABLE-001",
       "title": "Create Airtable connection with valid OAuth credentials",

@@ -108,13 +108,13 @@
       }
     ]
   ],
-  "specs": [
+  "x-specs": [
     {
       "id": "APP-PAGES-SECTIONS-001",
       "given": "a sections array with direct component",
       "when": "section has type 'section' with props and children",
       "then": "it should render direct component definition",
-      "x-validation": {
+      "validation": {
         "setup": {
           "sections": [
             {
@@ -139,7 +139,7 @@
           "Self-contained section definition"
         ]
       },
-      "x-application": {
+      "application": {
         "sections": [
           {
             "type": "section",
@@ -169,7 +169,7 @@
       "given": "a section with 17 component types",
       "when": "type enum includes section, container, flex, grid, card, text, icon, image, button, link, timeline, accordion, badge, customHTML, video, audio, iframe, form, input",
       "then": "it should support all component types for page building",
-      "x-validation": {
+      "validation": {
         "setup": {
           "componentTypes": [
             "section",
@@ -204,7 +204,7 @@
           "Comprehensive page building toolkit"
         ]
       },
-      "x-application": {
+      "application": {
         "sections": [
           {
             "type": "section",
@@ -316,7 +316,7 @@
       "given": "a section with props",
       "when": "props includes className, id, and other component properties",
       "then": "it should accept generic component properties via props.schema.json",
-      "x-validation": {
+      "validation": {
         "setup": {
           "section": {
             "type": "section",
@@ -337,7 +337,7 @@
           "Generic component properties accepted"
         ]
       },
-      "x-application": {
+      "application": {
         "section": {
           "type": "section",
           "props": {
@@ -365,7 +365,7 @@
       "given": "a section with recursive children",
       "when": "children array contains nested sections",
       "then": "it should support unlimited nesting depth for component tree",
-      "x-validation": {
+      "validation": {
         "setup": {
           "section": {
             "type": "section",
@@ -400,7 +400,7 @@
           "No nesting limit enforced"
         ]
       },
-      "x-application": {
+      "application": {
         "section": {
           "type": "section",
           "children": [
@@ -439,7 +439,7 @@
       "given": "a text component with content property",
       "when": "component type is 'text' with content 'Welcome to Our Platform'",
       "then": "it should render text content",
-      "x-validation": {
+      "validation": {
         "setup": {
           "section": {
             "type": "text",
@@ -457,7 +457,7 @@
           "Text-specific properties"
         ]
       },
-      "x-application": {
+      "application": {
         "section": {
           "type": "text",
           "props": {
@@ -481,7 +481,7 @@
       "given": "a section with interactions",
       "when": "interactions includes hover, click, scroll, entrance",
       "then": "it should apply interactive behaviors from interactions.schema.json",
-      "x-validation": {
+      "validation": {
         "setup": {
           "section": {
             "type": "button",
@@ -509,7 +509,7 @@
           "Multiple interaction types combined"
         ]
       },
-      "x-application": {
+      "application": {
         "section": {
           "type": "button",
           "content": "Click me",
@@ -548,7 +548,7 @@
       "given": "a section with responsive overrides",
       "when": "responsive property defines breakpoint-specific changes",
       "then": "it should adapt component for different screen sizes",
-      "x-validation": {
+      "validation": {
         "setup": {
           "section": {
             "type": "grid",
@@ -577,7 +577,7 @@
           "Progressive enhancement"
         ]
       },
-      "x-application": {
+      "application": {
         "section": {
           "type": "grid",
           "props": {
@@ -616,7 +616,7 @@
       "given": "a section with i18n translations",
       "when": "i18n property defines multi-language content",
       "then": "it should support translated component content",
-      "x-validation": {
+      "validation": {
         "setup": {
           "section": {
             "type": "text",
@@ -639,7 +639,7 @@
           "Multi-language support"
         ]
       },
-      "x-application": {
+      "application": {
         "section": {
           "type": "text",
           "content": "Welcome",
@@ -671,7 +671,7 @@
       "given": "a block reference in sections",
       "when": "section uses $ref with vars for variable substitution",
       "then": "it should reference and instantiate reusable block with variables",
-      "x-validation": {
+      "validation": {
         "setup": {
           "block": {
             "id": "section-header",
@@ -703,7 +703,7 @@
           "Reusable block instantiation"
         ]
       },
-      "x-application": {
+      "application": {
         "block": {
           "id": "section-header",
           "structure": {
@@ -740,7 +740,7 @@
       "given": "sections with mixed direct components and block references",
       "when": "array contains both direct definitions and $ref blocks",
       "then": "it should support hybrid section composition",
-      "x-validation": {
+      "validation": {
         "setup": {
           "sections": [
             {
@@ -780,7 +780,7 @@
           "Hybrid approach: inline + reusable blocks"
         ]
       },
-      "x-application": {
+      "application": {
         "sections": [
           {
             "type": "section",
@@ -825,7 +825,7 @@
       "given": "a complex nested section tree",
       "when": "section → container → flex → grid → card → text hierarchy",
       "then": "it should build complex layouts through component composition",
-      "x-validation": {
+      "validation": {
         "setup": {
           "section": {
             "type": "section",
@@ -880,7 +880,7 @@
           "Complex composition from simple primitives"
         ]
       },
-      "x-application": {
+      "application": {
         "section": {
           "type": "section",
           "props": {
@@ -943,7 +943,7 @@
       "given": "a section with all 3 optional properties",
       "when": "section includes interactions, responsive, and i18n",
       "then": "it should combine interactive, responsive, and multi-language features",
-      "x-validation": {
+      "validation": {
         "setup": {
           "section": {
             "type": "button",
@@ -978,7 +978,7 @@
           "Full-featured component"
         ]
       },
-      "x-application": {
+      "application": {
         "section": {
           "type": "button",
           "content": "Click me",
@@ -1023,7 +1023,7 @@
       "given": "sections with form components",
       "when": "sections include form, input types for user input",
       "then": "it should support form building capabilities",
-      "x-validation": {
+      "validation": {
         "setup": {
           "sections": [
             {
@@ -1069,7 +1069,7 @@
           "Form building capabilities"
         ]
       },
-      "x-application": {
+      "application": {
         "sections": [
           {
             "type": "form",
@@ -1126,7 +1126,7 @@
       "given": "sections with media components",
       "when": "sections include image, video, audio, iframe types",
       "then": "it should support rich media content",
-      "x-validation": {
+      "validation": {
         "setup": {
           "sections": [
             {
@@ -1172,7 +1172,7 @@
           "Rich media support"
         ]
       },
-      "x-application": {
+      "application": {
         "sections": [
           {
             "type": "image",

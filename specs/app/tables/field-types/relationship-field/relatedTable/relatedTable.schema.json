@@ -5,7 +5,7 @@
   "description": "Name of the related table",
   "type": "string",
   "minLength": 1,
-  "specs": [
+  "x-specs": [
     {
       "id": "APP-FIELD-RELATIONSHIP-FIELD-RELATEDTABLE-001",
       "given": "user provides relatedTable with at least 1 characters",

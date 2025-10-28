@@ -67,13 +67,13 @@
       "dismissible": true
     }
   ],
-  "specs": [
+  "x-specs": [
     {
       "id": "APP-PAGES-BANNER-001",
       "given": "a banner with enabled set to true",
       "when": "banner should be visible",
       "then": "it should display banner at top of page",
-      "x-validation": {
+      "validation": {
         "setup": {
           "banner": {
             "enabled": true,
@@ -86,7 +86,7 @@
           "Banner appears above navigation/header"
         ]
       },
-      "x-application": {
+      "application": {
         "banner": {
           "enabled": true,
           "text": "🎉 New product launch tomorrow!",
@@ -106,7 +106,7 @@
       "given": "a banner with text content",
       "when": "text is '🎉 New feature available!'",
       "then": "it should render announcement text",
-      "x-validation": {
+      "validation": {
         "setup": {
           "banner": {
             "enabled": true,
@@ -119,7 +119,7 @@
           "Concise announcement (1-2 sentences)"
         ]
       },
-      "x-application": {
+      "application": {
         "banner": {
           "enabled": true,
           "text": "🎉 We just launched our new AI-powered search! Try it now.",
@@ -140,7 +140,7 @@
       "given": "a banner with link",
       "when": "link has href '/features' and label 'Learn more'",
       "then": "it should add clickable link to banner",
-      "x-validation": {
+      "validation": {
         "setup": {
           "banner": {
             "enabled": true,
@@ -158,7 +158,7 @@
           "Clickable CTA in banner"
         ]
       },
-      "x-application": {
+      "application": {
         "banner": {
           "enabled": true,
           "text": "🎉 Black Friday Sale: 50% off all plans!",
@@ -187,7 +187,7 @@
       "given": "a banner with gradient background",
       "when": "gradient is 'linear-gradient(90deg, #667eea 0%, #764ba2 100%)'",
       "then": "it should apply CSS gradient as background",
-      "x-validation": {
+      "validation": {
         "setup": {
           "banner": {
             "enabled": true,
@@ -201,7 +201,7 @@
           "Common: linear-gradient for brand colors"
         ]
       },
-      "x-application": {
+      "application": {
         "banner": {
           "enabled": true,
           "text": "✨ Join our webinar tomorrow at 2 PM PT",
@@ -226,7 +226,7 @@
       "given": "a banner with solid backgroundColor",
       "when": "backgroundColor is '#FF5733' (hex color)",
       "then": "it should apply solid background color",
-      "x-validation": {
+      "validation": {
         "setup": {
           "banner": {
             "enabled": true,
@@ -240,7 +240,7 @@
           "Solid color (no gradient)"
         ]
       },
-      "x-application": {
+      "application": {
         "banner": {
           "enabled": true,
           "text": "⚠️ Scheduled maintenance tonight 11 PM - 2 AM PST",
@@ -261,7 +261,7 @@
       "given": "a banner with textColor",
       "when": "textColor is '#FFFFFF' for readability",
       "then": "it should apply text color for contrast",
-      "x-validation": {
+      "validation": {
         "setup": {
           "banner": {
             "enabled": true,
@@ -276,7 +276,7 @@
           "Common: white (#FFFFFF) on dark, black (#000000) on light"
         ]
       },
-      "x-application": {
+      "application": {
         "banner": {
           "enabled": true,
           "text": "🎓 New online courses available – Start learning today!",
@@ -305,7 +305,7 @@
       "given": "a dismissible banner",
       "when": "dismissible is true",
       "then": "it should allow users to close banner permanently",
-      "x-validation": {
+      "validation": {
         "setup": {
           "banner": {
             "enabled": true,
@@ -319,7 +319,7 @@
           "Stores dismissal in localStorage"
         ]
       },
-      "x-application": {
+      "application": {
         "banner": {
           "enabled": true,
           "text": "🍪 We use cookies to improve your experience. See our Privacy Policy.",
@@ -351,7 +351,7 @@
       "given": "a sticky banner",
       "when": "sticky is true",
       "then": "it should remain at top during page scroll",
-      "x-validation": {
+      "validation": {
         "setup": {
           "banner": {
             "enabled": true,
@@ -365,7 +365,7 @@
           "Banner follows user on scroll"
         ]
       },
-      "x-application": {
+      "application": {
         "banner": {
           "enabled": true,
           "text": "⏰ Flash Sale: 24 hours only – Use code FLASH50 for 50% off!",
@@ -396,7 +396,7 @@
       "given": "a disabled banner",
       "when": "enabled is false",
       "then": "it should not render banner",
-      "x-validation": {
+      "validation": {
         "setup": {
           "banner": {
             "enabled": false,
@@ -409,7 +409,7 @@
           "Easy toggle without removing config"
         ]
       },
-      "x-application": {
+      "application": {
         "banner": {
           "enabled": false,
           "text": "🎉 Promotion ended – Thanks for participating!",
@@ -429,7 +429,7 @@
       "given": "a banner with emoji in text",
       "when": "text includes '🎉' or other emojis",
       "then": "it should render emojis correctly",
-      "x-validation": {
+      "validation": {
         "setup": {
           "banner": {
             "enabled": true,
@@ -442,7 +442,7 @@
           "Common: celebration (🎉), attention (⚠️), info (ℹ️)"
         ]
       },
-      "x-application": {
+      "application": {
         "banner": {
           "enabled": true,
           "text": "🎉 Congratulations! 🎊 You've unlocked premium features! 🥳",

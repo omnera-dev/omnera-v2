@@ -5,7 +5,7 @@
   "description": "Color of the progress bar",
   "type": "string",
   "pattern": "^#[0-9a-fA-F]{6}$",
-  "specs": [
+  "x-specs": [
     {
       "id": "APP-FIELD-PROGRESS-FIELD-COLOR-001",
       "given": "user provides color matching pattern",

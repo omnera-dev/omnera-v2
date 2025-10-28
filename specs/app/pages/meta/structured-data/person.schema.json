@@ -64,7 +64,7 @@
   },
   "required": ["@context", "@type", "name"],
   "additionalProperties": false,
-  "specs": [
+  "x-specs": [
     {
       "id": "APP-PAGES-PERSON-001",
       "given": "Person with required properties",

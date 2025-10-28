@@ -32,7 +32,7 @@
     "required": ["id", "name", "trigger", "actions"],
     "additionalProperties": false
   },
-  "specs": [
+  "x-specs": [
     {
       "id": "APP-AUTOMATIONS-001",
       "given": "user provides automations array",

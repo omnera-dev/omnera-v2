@@ -44,13 +44,13 @@
       "flag": "🇸🇦"
     }
   ],
-  "specs": [
+  "x-specs": [
     {
       "id": "APP-LANG-CONFIG-001",
       "given": "a language config for English (en-US)",
       "when": "language is defined with code and label",
       "then": "it should be valid with LTR direction by default",
-      "x-validation": {
+      "validation": {
         "setup": {
           "language": {
             "code": "en-US",
@@ -69,7 +69,7 @@
       "given": "a language config for Arabic (ar-SA) with rtl direction",
       "when": "language is defined with RTL direction",
       "then": "it should support right-to-left text rendering",
-      "x-validation": {
+      "validation": {
         "setup": {
           "language": {
             "code": "ar-SA",
@@ -83,7 +83,7 @@
           "Direction: 'rtl' (right-to-left text flow)"
         ]
       },
-      "x-application": {
+      "application": {
         "language": {
           "code": "ar-SA",
           "label": "العربية",
@@ -104,7 +104,7 @@
       "given": "a language config with 2-letter code (en)",
       "when": "language code uses ISO 639-1 format without country",
       "then": "it should be valid",
-      "x-validation": {
+      "validation": {
         "setup": {
           "language": {
             "code": "en",
@@ -123,7 +123,7 @@
       "given": "a language config with 4-letter code (en-US)",
       "when": "language code includes country code",
       "then": "it should be valid with country-specific format",
-      "x-validation": {
+      "validation": {
         "setup": {
           "language": {
             "code": "en-US",
@@ -136,7 +136,7 @@
           "Allows country-specific variants (en-US vs en-GB)"
         ]
       },
-      "x-application": {
+      "application": {
         "language": {
           "code": "en-US",
           "label": "English (US)"
@@ -156,7 +156,7 @@
       "given": "a language config with flag emoji (🇫🇷)",
       "when": "flag is provided as unicode emoji",
       "then": "it should display the flag in language switcher",
-      "x-validation": {
+      "validation": {
         "setup": {
           "language": {
             "code": "fr-FR",
@@ -170,7 +170,7 @@
           "No external images needed"
         ]
       },
-      "x-application": {
+      "application": {
         "language": {
           "code": "fr-FR",
           "label": "Français",
@@ -190,7 +190,7 @@
       "given": "a language config with flag icon path (/flags/es.svg)",
       "when": "flag is provided as file path",
       "then": "it should load the flag image from the path",
-      "x-validation": {
+      "validation": {
         "setup": {
           "language": {
             "code": "es-ES",
@@ -204,7 +204,7 @@
           "Alternative to emoji for consistent design"
         ]
       },
-      "x-application": {
+      "application": {
         "language": {
           "code": "es-ES",
           "label": "Español",
@@ -224,7 +224,7 @@
       "given": "a language config with native language label (Français, Español, العربية)",
       "when": "label uses the language's native name",
       "then": "it should display correctly in all character sets",
-      "x-validation": {
+      "validation": {
         "setup": {
           "languages": [
             {
@@ -248,7 +248,7 @@
           "Native names improve UX for non-English speakers"
         ]
       },
-      "x-application": {
+      "application": {
         "languages": [
           {
             "code": "fr-FR",
@@ -274,7 +274,7 @@
       "given": "a minimal language config with only code and label",
       "when": "direction and flag are omitted",
       "then": "it should use default LTR direction and no flag",
-      "x-validation": {
+      "validation": {
         "setup": {
           "language": {
             "code": "de-DE",
@@ -288,7 +288,7 @@
           "Minimal valid configuration"
         ]
       },
-      "x-application": {
+      "application": {
         "language": {
           "code": "de-DE",
           "label": "Deutsch"

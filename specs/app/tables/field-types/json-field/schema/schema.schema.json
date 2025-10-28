@@ -4,7 +4,7 @@
   "title": "Optional JSON Schema to validate the data",
   "description": "Optional JSON Schema to validate the data",
   "type": "object",
-  "specs": [
+  "x-specs": [
     {
       "id": "APP-FIELD-JSON-FIELD-SCHEMA-001",
       "given": "user configures schema",

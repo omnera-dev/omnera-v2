@@ -63,7 +63,7 @@
       }
     }
   ],
-  "specs": [
+  "x-specs": [
     {
       "id": "APP-I18N-001",
       "given": "a button with English content",

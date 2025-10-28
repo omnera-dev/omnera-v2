@@ -18,7 +18,7 @@
     },
     "required": ["value"]
   },
-  "specs": [
+  "x-specs": [
     {
       "id": "APP-FIELD-STATUS-FIELD-OPTIONS-001",
       "given": "user provides options with at least 1 items",

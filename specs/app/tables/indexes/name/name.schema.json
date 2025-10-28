@@ -7,5 +7,5 @@
   "minLength": 1,
   "pattern": "^[a-z][a-z0-9_]*$",
   "examples": ["idx_users_email", "idx_products_sku", "idx_orders_status"],
-  "specs": []
+  "x-specs": []
 }

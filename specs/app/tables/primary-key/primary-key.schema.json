@@ -31,7 +31,7 @@
   },
   "required": ["type"],
   "additionalProperties": false,
-  "specs": [
+  "x-specs": [
     {
       "id": "APP-TABLES-PRIMARYKEY-001",
       "given": "user configures primaryKey",

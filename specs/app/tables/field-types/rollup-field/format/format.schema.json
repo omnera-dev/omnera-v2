@@ -5,7 +5,7 @@
   "description": "Display format for the result",
   "type": "string",
   "examples": ["currency", "number", "percentage"],
-  "specs": [
+  "x-specs": [
     {
       "id": "APP-FIELD-ROLLUP-FIELD-FORMAT-001",
       "given": "user provides format",

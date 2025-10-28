@@ -11,7 +11,7 @@
     "ROUND(total * 0.15, 2)"
   ],
   "minLength": 1,
-  "specs": [
+  "x-specs": [
     {
       "id": "APP-FIELD-FORMULA-FIELD-FORMULA-001",
       "given": "user provides formula with at least 1 characters",

@@ -29,7 +29,7 @@
   },
   "required": ["id", "name", "type"],
   "additionalProperties": false,
-  "specs": [
+  "x-specs": [
     {
       "id": "APP-FIELD-EMAIL-001",
       "given": "I create an email field",

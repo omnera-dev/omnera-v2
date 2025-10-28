@@ -4,5 +4,5 @@
   "$ref": "../../common/definitions.schema.json#/definitions/id",
   "title": "Automation ID",
   "examples": [1, 2, 100],
-  "specs": []
+  "x-specs": []
 }

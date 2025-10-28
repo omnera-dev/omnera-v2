@@ -5,7 +5,7 @@
   "description": "Default value for date field when no value is provided. Can be an ISO 8601 date string (YYYY-MM-DD) or a special keyword like 'today' or 'tomorrow'. Applied automatically when creating new records.",
   "type": "string",
   "examples": ["2024-12-31", "today", "tomorrow", "2025-01-01"],
-  "specs": [
+  "x-specs": [
     {
       "id": "APP-FIELD-DATE-DEFAULT-001",
       "title": "Apply static default date",

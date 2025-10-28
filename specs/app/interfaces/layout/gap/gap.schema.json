@@ -5,5 +5,5 @@
   "type": "integer",
   "minimum": 0,
   "default": 16,
-  "specs": []
+  "x-specs": []
 }

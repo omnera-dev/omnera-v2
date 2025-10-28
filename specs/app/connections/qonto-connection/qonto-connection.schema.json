@@ -32,7 +32,7 @@
       "clientSecret": "secret_qonto_abc123"
     }
   ],
-  "specs": [
+  "x-specs": [
     {
       "id": "APP-CONN-QONTO-001",
       "title": "Create Qonto connection with valid OAuth credentials",

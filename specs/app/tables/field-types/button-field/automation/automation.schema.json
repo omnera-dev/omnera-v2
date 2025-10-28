@@ -4,7 +4,7 @@
   "title": "Automation name to trigger (when action is 'automation')",
   "description": "Automation name to trigger (when action is 'automation')",
   "type": "string",
-  "specs": [
+  "x-specs": [
     {
       "id": "APP-FIELD-BUTTON-FIELD-AUTOMATION-001",
       "given": "user provides automation",

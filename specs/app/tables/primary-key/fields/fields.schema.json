@@ -13,5 +13,5 @@
     ["tenant_id", "user_id"],
     ["order_id", "product_id"]
   ],
-  "specs": []
+  "x-specs": []
 }

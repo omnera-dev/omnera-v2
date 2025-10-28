@@ -22,13 +22,24 @@
     },
     "image": {
       "oneOf": [
-        { "type": "string", "format": "uri" },
-        { "type": "array", "items": { "type": "string", "format": "uri" } }
+        {
+          "type": "string",
+          "format": "uri"
+        },
+        {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "format": "uri"
+          }
+        }
       ]
     },
     "author": {
       "oneOf": [
-        { "type": "string" },
+        {
+          "type": "string"
+        },
         {
           "type": "object",
           "properties": {
@@ -85,7 +96,7 @@
   },
   "required": ["@context", "@type", "headline"],
   "additionalProperties": false,
-  "specs": [
+  "x-specs": [
     {
       "id": "APP-PAGES-ARTICLE-001",
       "given": "Article with required properties",

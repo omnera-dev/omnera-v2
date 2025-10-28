@@ -24,7 +24,7 @@
   "description": "Visual progress bar (0-100%)",
   "required": ["id", "name", "type"],
   "additionalProperties": false,
-  "specs": [
+  "x-specs": [
     {
       "id": "APP-PROGRESS-FIELD-001",
       "given": "entity with type='progress'",

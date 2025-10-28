@@ -4,7 +4,7 @@
   "title": "default",
   "type": "string",
   "pattern": "^#[0-9a-fA-F]{6}$",
-  "specs": [
+  "x-specs": [
     {
       "id": "APP-FIELD-COLOR-FIELD-DEFAULT-001",
       "given": "user provides default matching pattern",

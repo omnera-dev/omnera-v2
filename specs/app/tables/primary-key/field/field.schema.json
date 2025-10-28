@@ -7,5 +7,5 @@
   "default": "id",
   "pattern": "^[a-z][a-z0-9_]*$",
   "examples": ["id", "user_id", "product_id"],
-  "specs": []
+  "x-specs": []
 }

@@ -32,7 +32,7 @@
       "clientSecret": "secret_facebook-ads_abc123"
     }
   ],
-  "specs": [
+  "x-specs": [
     {
       "id": "APP-CONN-FACEBOOK-ADS-001",
       "title": "Create Facebook Ads connection with valid OAuth credentials",

@@ -22,13 +22,13 @@
       "none": "0 0 #0000"
     }
   ],
-  "specs": [
+  "x-specs": [
     {
       "id": "APP-THEME-SHADOWS-001",
       "given": "shadow scale from sm to 2xl",
       "when": "shadows increase in depth and blur",
       "then": "it should validate elevation system from subtle to dramatic",
-      "x-validation": {
+      "validation": {
         "setup": {
           "shadows": {
             "sm": "0 1px 2px 0 rgb(0 0 0 / 0.05)",
@@ -51,8 +51,12 @@
       "given": "shadow with rgb color and opacity",
       "when": "shadow uses modern CSS color syntax",
       "then": "it should validate rgb(0 0 0 / 0.1) format",
-      "x-validation": {
-        "setup": { "shadows": { "md": "0 4px 6px -1px rgb(0 0 0 / 0.1)" } },
+      "validation": {
+        "setup": {
+          "shadows": {
+            "md": "0 4px 6px -1px rgb(0 0 0 / 0.1)"
+          }
+        },
         "assertions": [
           "Modern syntax: rgb(0 0 0 / 0.1)",
           "Opacity: 0.1 (10%)",
@@ -65,8 +69,12 @@
       "given": "inner shadow for inset effects",
       "when": "shadow creates depth inside element",
       "then": "it should validate inset box-shadow",
-      "x-validation": {
-        "setup": { "shadows": { "inner": "inset 0 2px 4px 0 rgb(0 0 0 / 0.05)" } },
+      "validation": {
+        "setup": {
+          "shadows": {
+            "inner": "inset 0 2px 4px 0 rgb(0 0 0 / 0.05)"
+          }
+        },
         "assertions": [
           "Inset keyword for inner shadow",
           "Creates recessed effect",
@@ -79,8 +87,12 @@
       "given": "shadow 'none' to remove shadows",
       "when": "flat design with no elevation is needed",
       "then": "it should validate shadow removal",
-      "x-validation": {
-        "setup": { "shadows": { "none": "0 0 #0000" } },
+      "validation": {
+        "setup": {
+          "shadows": {
+            "none": "0 0 #0000"
+          }
+        },
         "assertions": ["Value: 0 0 #0000 (no shadow)", "Removes all shadows", "Flat design"]
       }
     },
@@ -89,7 +101,7 @@
       "given": "shadows with kebab-case naming",
       "when": "shadow uses multi-word names",
       "then": "it should validate kebab-case convention",
-      "x-validation": {
+      "validation": {
         "setup": {
           "shadows": {
             "drop-shadow": "0 4px 6px rgb(0 0 0 / 0.1)",
@@ -108,7 +120,7 @@
       "given": "complete shadow system (sm, md, lg, xl, 2xl, inner, none)",
       "when": "all elevation tokens are defined",
       "then": "it should validate complete shadow system",
-      "x-validation": {
+      "validation": {
         "setup": {
           "shadows": {
             "sm": "0 1px 2px",
@@ -132,8 +144,12 @@
       "given": "md shadow applied to card component",
       "when": "card uses theme.shadows.md for moderate elevation",
       "then": "it should render card with medium box-shadow creating depth",
-      "x-application": {
-        "theme": { "shadows": { "md": "0 4px 6px -1px rgb(0 0 0 / 0.1)" } },
+      "application": {
+        "theme": {
+          "shadows": {
+            "md": "0 4px 6px -1px rgb(0 0 0 / 0.1)"
+          }
+        },
         "component": "card",
         "expectedCSS": "box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);",
         "expectedDOM": "<div data-testid=\"product-card\" class=\"shadow-md\" style=\"box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);\">Card content</div>",
@@ -150,8 +166,12 @@
       "given": "xl shadow applied to modal overlay",
       "when": "modal uses theme.shadows.xl for high elevation above content",
       "then": "it should render modal with dramatic shadow emphasizing importance",
-      "x-application": {
-        "theme": { "shadows": { "xl": "0 20px 25px -5px rgb(0 0 0 / 0.1)" } },
+      "application": {
+        "theme": {
+          "shadows": {
+            "xl": "0 20px 25px -5px rgb(0 0 0 / 0.1)"
+          }
+        },
         "component": "modal",
         "expectedCSS": "box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1);",
         "expectedDOM": "<div data-testid=\"confirmation-modal\" class=\"shadow-xl\" style=\"box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1);\">Modal content</div>",
@@ -168,8 +188,12 @@
       "given": "inner shadow applied to input field",
       "when": "input uses theme.shadows.inner for recessed appearance",
       "then": "it should render input with inset shadow creating depth inward",
-      "x-application": {
-        "theme": { "shadows": { "inner": "inset 0 2px 4px 0 rgb(0 0 0 / 0.05)" } },
+      "application": {
+        "theme": {
+          "shadows": {
+            "inner": "inset 0 2px 4px 0 rgb(0 0 0 / 0.05)"
+          }
+        },
         "component": "input",
         "expectedCSS": "box-shadow: inset 0 2px 4px 0 rgb(0 0 0 / 0.05);",
         "expectedDOM": "<input data-testid=\"text-input\" class=\"shadow-inner\" style=\"box-shadow: inset 0 2px 4px 0 rgb(0 0 0 / 0.05);\" />",

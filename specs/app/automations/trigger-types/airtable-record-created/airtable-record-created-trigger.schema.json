@@ -38,7 +38,8 @@
   },
   "required": ["account", "service", "event", "params"],
   "additionalProperties": false,
-  "specs": [
+  "$id": "airtable-record-created-trigger.schema.json",
+  "x-specs": [
     {
       "id": "APP-AIRTABLE-RECORD-CREATED-001",
       "given": "user configures account",
@@ -111,6 +112,5 @@
       "when": "validating input",
       "then": "behavior should follow optional/required rules"
     }
-  ],
-  "$id": "airtable-record-created-trigger.schema.json"
+  ]
 }

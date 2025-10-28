@@ -6,7 +6,7 @@
   "type": "integer",
   "default": 1,
   "minimum": 1,
-  "specs": [
+  "x-specs": [
     {
       "id": "APP-FIELD-AUTONUMBER-FIELD-STARTFROM-001",
       "given": "user provides startFrom >= 1",

@@ -42,7 +42,8 @@
   },
   "required": ["account", "service", "event"],
   "additionalProperties": false,
-  "specs": [
+  "$id": "calendly-invite-created-trigger.schema.json",
+  "x-specs": [
     {
       "id": "APP-CALENDLY-INVITE-CREATED-001",
       "given": "user configures account",
@@ -121,6 +122,5 @@
       "when": "processing entity",
       "then": "appropriate behavior should execute"
     }
-  ],
-  "$id": "calendly-invite-created-trigger.schema.json"
+  ]
 }

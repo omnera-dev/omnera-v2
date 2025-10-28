@@ -83,7 +83,7 @@
       "$ref": "../action-types/qonto-create-invoice/qonto-create-invoice-action.schema.json"
     }
   ],
-  "specs": [
+  "x-specs": [
     {
       "id": "APP-ACTIONS-021",
       "given": "user configures action",

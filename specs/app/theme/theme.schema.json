@@ -48,13 +48,13 @@
       }
     }
   ],
-  "specs": [
+  "x-specs": [
     {
       "id": "APP-THEME-001",
       "given": "a theme with only colors defined",
       "when": "minimal theme configuration is needed",
       "then": "it should validate theme with colors as the only design token category",
-      "x-validation": {
+      "validation": {
         "setup": {
           "theme": {
             "colors": {
@@ -75,7 +75,7 @@
       "given": "a theme with colors and fonts configured",
       "when": "basic branding is defined",
       "then": "it should validate color palette and typography system",
-      "x-validation": {
+      "validation": {
         "setup": {
           "theme": {
             "colors": {
@@ -103,7 +103,7 @@
       "given": "a theme with colors, fonts, and spacing",
       "when": "core design system is configured",
       "then": "it should validate visual identity, typography, and layout tokens",
-      "x-validation": {
+      "validation": {
         "setup": {
           "theme": {
             "colors": {
@@ -134,7 +134,7 @@
       "given": "a complete theme with all 7 design token categories",
       "when": "comprehensive design system is defined",
       "then": "it should validate and orchestrate all design token categories",
-      "x-validation": {
+      "validation": {
         "setup": {
           "theme": {
             "colors": {
@@ -175,7 +175,7 @@
       "given": "a theme with breakpoints matching responsive system",
       "when": "responsive breakpoints are configured",
       "then": "it should ensure consistency between theme.breakpoints and responsive variants",
-      "x-validation": {
+      "validation": {
         "setup": {
           "theme": {
             "breakpoints": {
@@ -201,7 +201,7 @@
       "given": "a theme with animations matching interaction system",
       "when": "animation library is defined",
       "then": "it should provide animations reusable in interactions.schema.json",
-      "x-validation": {
+      "validation": {
         "setup": {
           "theme": {
             "animations": {
@@ -227,7 +227,7 @@
       "given": "a theme following design system best practices",
       "when": "all tokens use semantic naming and progressive scales",
       "then": "it should enable consistent UI across entire application",
-      "x-validation": {
+      "validation": {
         "setup": {
           "theme": {
             "colors": {
@@ -260,7 +260,7 @@
       "given": "a theme with Tailwind-compatible tokens",
       "when": "spacing and other values use Tailwind syntax",
       "then": "it should integrate seamlessly with Tailwind CSS",
-      "x-validation": {
+      "validation": {
         "setup": {
           "theme": {
             "spacing": {
@@ -288,7 +288,7 @@
       "given": "a complete theme with multiple design tokens used in page component",
       "when": "page sections reference theme.colors, theme.fonts, theme.spacing, theme.shadows, theme.borderRadius",
       "then": "it should render cohesive UI with all theme tokens applied together",
-      "x-application": {
+      "application": {
         "theme": {
           "colors": {
             "primary": "#007bff",
@@ -337,7 +337,7 @@
       "given": "a theme used across multiple page sections",
       "when": "different sections (header, hero, features, footer) all reference theme tokens",
       "then": "it should maintain visual consistency across entire page layout",
-      "x-application": {
+      "application": {
         "theme": {
           "colors": {
             "primary": "#007bff",
@@ -370,7 +370,7 @@
       "given": "a theme with responsive breakpoints integrated with component layouts",
       "when": "components use both theme.spacing and theme.breakpoints for responsive design",
       "then": "it should render adaptive layouts that respond to screen size",
-      "x-application": {
+      "application": {
         "theme": {
           "spacing": {
             "section": "2rem",

@@ -44,7 +44,7 @@
       "enabled": true
     }
   ],
-  "specs": [
+  "x-specs": [
     {
       "id": "APP-PAGES-PROPS-001",
       "given": "props with string value",

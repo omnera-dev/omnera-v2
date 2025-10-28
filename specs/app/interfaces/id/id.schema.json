@@ -3,5 +3,5 @@
   "$ref": "../../common/definitions.schema.json#/definitions/id",
   "title": "Interface ID",
   "description": "Unique identifier for the interface",
-  "specs": []
+  "x-specs": []
 }

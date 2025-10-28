@@ -54,7 +54,7 @@
       }
     ]
   ],
-  "specs": [
+  "x-specs": [
     {
       "id": "APP-PAGES-CUSTOM-001",
       "given": "custom element with type meta",

@@ -31,8 +31,17 @@
     },
     "image": {
       "oneOf": [
-        { "type": "string", "format": "uri" },
-        { "type": "array", "items": { "type": "string", "format": "uri" } }
+        {
+          "type": "string",
+          "format": "uri"
+        },
+        {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "format": "uri"
+          }
+        }
       ]
     },
     "email": {
@@ -99,7 +108,7 @@
   },
   "required": ["@context", "@type", "name"],
   "additionalProperties": false,
-  "specs": [
+  "x-specs": [
     {
       "id": "APP-PAGES-LOCALBUSINESS-001",
       "given": "LocalBusiness with required properties",

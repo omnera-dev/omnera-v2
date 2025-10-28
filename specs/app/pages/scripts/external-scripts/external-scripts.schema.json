@@ -64,7 +64,7 @@
       }
     ]
   ],
-  "specs": [
+  "x-specs": [
     {
       "id": "APP-PAGES-EXTERNAL-001",
       "given": "an external script with src URL",

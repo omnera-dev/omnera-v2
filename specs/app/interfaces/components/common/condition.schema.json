@@ -3,5 +3,5 @@
   "title": "Conditional Rendering",
   "description": "Template expression for conditional component rendering. Expression evaluates to boolean to show/hide component.",
   "type": "string",
-  "specs": []
+  "x-specs": []
 }

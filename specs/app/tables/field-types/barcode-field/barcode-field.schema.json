@@ -24,7 +24,7 @@
   "description": "Display and scan barcodes",
   "required": ["id", "name", "type"],
   "additionalProperties": false,
-  "specs": [
+  "x-specs": [
     {
       "id": "APP-BARCODE-FIELD-001",
       "given": "entity with type='barcode'",

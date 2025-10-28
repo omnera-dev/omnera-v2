@@ -4,5 +4,5 @@
   "title": "URL Path",
   "description": "URL path where the interface is accessible",
   "examples": ["/dashboard", "/users", "/products", "/analytics"],
-  "specs": []
+  "x-specs": []
 }

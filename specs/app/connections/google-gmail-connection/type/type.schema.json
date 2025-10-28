@@ -5,5 +5,5 @@
   "description": "Connection type discriminator for Google Gmail integration",
   "const": "google-gmail",
   "examples": ["google-gmail"],
-  "specs": []
+  "x-specs": []
 }

@@ -5,7 +5,7 @@
   "description": "Maximum number of selections allowed",
   "type": "integer",
   "minimum": 1,
-  "specs": [
+  "x-specs": [
     {
       "id": "APP-FIELD-MULTI-SELECT-FIELD-MAXSELECTIONS-001",
       "given": "user provides maxSelections >= 1",

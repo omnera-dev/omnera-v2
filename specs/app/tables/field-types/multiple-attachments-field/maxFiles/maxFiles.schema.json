@@ -6,7 +6,7 @@
   "type": "integer",
   "default": 10,
   "minimum": 1,
-  "specs": [
+  "x-specs": [
     {
       "id": "APP-FIELD-MULTIPLE-ATTACHMENTS-FIELD-MAXFILES-001",
       "given": "user provides maxFiles >= 1",

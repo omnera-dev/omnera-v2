@@ -43,7 +43,8 @@
   },
   "required": ["name", "account", "service", "action", "params"],
   "additionalProperties": false,
-  "specs": [
+  "$id": "facebook-ads-list-app-subscriptions-action.schema.json",
+  "x-specs": [
     {
       "id": "APP-FACEBOOK-ADS-LIST-APP-SUBSCRIPTIONS-001",
       "given": "user provides name",
@@ -134,6 +135,5 @@
       "when": "validating input",
       "then": "behavior should follow optional/required rules"
     }
-  ],
-  "$id": "facebook-ads-list-app-subscriptions-action.schema.json"
+  ]
 }

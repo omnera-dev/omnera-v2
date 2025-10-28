@@ -40,13 +40,13 @@
       }
     }
   ],
-  "specs": [
+  "x-specs": [
     {
       "id": "APP-PAGES-SCRIPTS-001",
       "given": "a scripts configuration with all 4 properties",
       "when": "scripts includes features, externalScripts, inlineScripts, config",
       "then": "it should orchestrate client-side script management",
-      "x-validation": {
+      "validation": {
         "setup": "scripts: { features: { darkMode: true }, externalScripts: [{ src: 'https://cdn.example.com/lib.js', async: true }], inlineScripts: [{ content: 'console.log(\"ready\")' }], config: { apiUrl: 'https://api.example.com' } }",
         "assertions": [
           "scripts is object",
@@ -56,7 +56,7 @@
           "scripts.config exists (client configuration)"
         ]
       },
-      "x-application": {
+      "application": {
         "scripts": {
           "features": {
             "darkMode": true,
@@ -100,7 +100,7 @@
       "given": "scripts with features only",
       "when": "features defines darkMode, animations, analytics",
       "then": "it should enable client-side feature toggles",
-      "x-validation": {
+      "validation": {
         "setup": "scripts: { features: { darkMode: true, animations: true, analytics: false } }",
         "assertions": [
           "scripts.features is object",
@@ -110,7 +110,7 @@
           "Other properties optional (externalScripts, inlineScripts, config)"
         ]
       },
-      "x-application": {
+      "application": {
         "scripts": {
           "features": {
             "darkMode": true,
@@ -146,7 +146,7 @@
       "given": "scripts with externalScripts",
       "when": "externalScripts array loads CDN libraries",
       "then": "it should include external JavaScript dependencies",
-      "x-validation": {
+      "validation": {
         "setup": "scripts: { externalScripts: [{ src: 'https://cdn.example.com/script.js', async: true, defer: false }] }",
         "assertions": [
           "scripts.externalScripts is array",
@@ -156,7 +156,7 @@
           "src must start with https:// (security: no http://)"
         ]
       },
-      "x-application": {
+      "application": {
         "scripts": {
           "externalScripts": [
             {
@@ -205,7 +205,7 @@
       "given": "scripts with inlineScripts",
       "when": "inlineScripts array contains code snippets",
       "then": "it should inject inline JavaScript code",
-      "x-validation": {
+      "validation": {
         "setup": "scripts: { inlineScripts: [{ content: 'console.log(\"Hello\")' }] }",
         "assertions": [
           "scripts.inlineScripts is array",
@@ -214,7 +214,7 @@
           "No <script> tags in content (raw JS only)"
         ]
       },
-      "x-application": {
+      "application": {
         "scripts": {
           "inlineScripts": [
             {
@@ -257,7 +257,7 @@
       "given": "scripts with config object",
       "when": "config has apiUrl and environment properties",
       "then": "it should provide client-side configuration data",
-      "x-validation": {
+      "validation": {
         "setup": "scripts: { config: { apiUrl: 'https://api.example.com', environment: 'production' } }",
         "assertions": [
           "scripts.config is object",
@@ -266,7 +266,7 @@
           "Config available as window.APP_CONFIG in client"
         ]
       },
-      "x-application": {
+      "application": {
         "scripts": {
           "config": {
             "apiUrl": "https://api.example.com",
@@ -314,7 +314,7 @@
       "given": "empty scripts configuration",
       "when": "all properties are omitted",
       "then": "it should allow pages without client-side scripts",
-      "x-validation": {
+      "validation": {
         "setup": "scripts: {}",
         "assertions": [
           "scripts is object (required)",
@@ -323,7 +323,7 @@
           "Useful for static pages (blogs, documentation)"
         ]
       },
-      "x-application": {
+      "application": {
         "scripts": {},
         "expectedDOM": "<head><!-- No scripts injected --></head><body><!-- Pure HTML/CSS page --></body>",
         "useCases": [
@@ -356,7 +356,7 @@
       "given": "scripts config with additionalProperties true",
       "when": "config accepts any custom properties",
       "then": "it should support flexible client configuration",
-      "x-validation": {
+      "validation": {
         "setup": "scripts: { config: { customProp: 'value', anotherProp: 123 } }",
         "assertions": [
           "config has additionalProperties: true",
@@ -365,7 +365,7 @@
           "Use for app-specific configuration"
         ]
       },
-      "x-application": {
+      "application": {
         "scripts": {
           "config": {
             "mapboxToken": "pk.eyJ1...",
@@ -405,7 +405,7 @@
       "given": "scripts combining features and config",
       "when": "features toggle behavior and config provides data",
       "then": "it should enable feature-driven configuration",
-      "x-validation": {
+      "validation": {
         "setup": "scripts: { features: { analytics: true }, config: { analyticsId: 'G-XXXXX' } }",
         "assertions": [
           "features controls behavior (boolean toggles)",
@@ -414,7 +414,7 @@
           "Example: analytics: true → use config.analyticsId"
         ]
       },
-      "x-application": {
+      "application": {
         "scripts": {
           "features": {
             "analytics": true,
@@ -478,7 +478,7 @@
       "given": "scripts at page level",
       "when": "each page can define custom scripts",
       "then": "it should support per-page script customization",
-      "x-validation": {
+      "validation": {
         "setup": "page: { path: '/dashboard', scripts: { features: { analytics: true } } }, page: { path: '/blog', scripts: {} }",
         "assertions": [
           "Each page has optional scripts property",
@@ -487,7 +487,7 @@
           "Per-page scripts override global defaults"
         ]
       },
-      "x-application": {
+      "application": {
         "pages": [
           {
             "path": "/",
@@ -557,7 +557,7 @@
       "given": "scripts referencing sub-schemas",
       "when": "features, externalScripts, inlineScripts use $ref",
       "then": "it should compose scripts from modular schemas",
-      "x-validation": {
+      "validation": {
         "setup": "scripts: { features: { $ref: './features/features.schema.json' }, externalScripts: { $ref: './external-scripts/external-scripts.schema.json' }, inlineScripts: { $ref: './inline-scripts/inline-scripts.schema.json' } }",
         "assertions": [
           "scripts.features references ./features/features.schema.json",
@@ -566,7 +566,7 @@
           "Modular schemas enable reusable script definitions"
         ]
       },
-      "x-application": {
+      "application": {
         "schemas": {
           "scripts.schema.json": {
             "description": "Orchestrator for client-side scripts",

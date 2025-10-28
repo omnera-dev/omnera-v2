@@ -56,7 +56,7 @@
       "openInNewTab": true
     }
   ],
-  "specs": [
+  "x-specs": [
     {
       "id": "APP-INTERACTION-CLICK-001",
       "given": "a button with click animation 'pulse'",

@@ -75,7 +75,8 @@
   },
   "required": ["name", "service", "action"],
   "additionalProperties": false,
-  "specs": [
+  "$id": "http-response-action.schema.json",
+  "x-specs": [
     {
       "id": "APP-HTTP-RESPONSE-001",
       "given": "the application is running",
@@ -184,6 +185,5 @@
       "when": "processing configuration",
       "then": "value should be used correctly"
     }
-  ],
-  "$id": "http-response-action.schema.json"
+  ]
 }

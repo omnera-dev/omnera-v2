@@ -86,7 +86,8 @@
   },
   "required": ["name", "account", "service", "action", "params"],
   "additionalProperties": false,
-  "specs": [
+  "$id": "qonto-create-invoice-action.schema.json",
+  "x-specs": [
     {
       "id": "APP-QONTO-CREATE-INVOICE-001",
       "given": "user provides name",
@@ -273,6 +274,5 @@
       "when": "validating input",
       "then": "behavior should follow optional/required rules"
     }
-  ],
-  "$id": "qonto-create-invoice-action.schema.json"
+  ]
 }

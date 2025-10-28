@@ -5,5 +5,5 @@
   "description": "Connection type discriminator for Facebook Ads integration",
   "const": "facebook-ads",
   "examples": ["facebook-ads"],
-  "specs": []
+  "x-specs": []
 }

@@ -4,7 +4,7 @@
   "title": "Minimum value",
   "description": "Minimum value",
   "type": "number",
-  "specs": [
+  "x-specs": [
     {
       "id": "APP-FIELD-INTEGER-FIELD-MIN-001",
       "given": "user provides min",

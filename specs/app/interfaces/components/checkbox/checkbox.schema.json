@@ -32,5 +32,5 @@
   },
   "required": ["id", "type", "position"],
   "additionalProperties": false,
-  "specs": []
+  "x-specs": []
 }

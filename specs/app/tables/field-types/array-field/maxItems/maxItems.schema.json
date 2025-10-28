@@ -5,7 +5,7 @@
   "description": "Maximum number of items allowed",
   "type": "integer",
   "minimum": 1,
-  "specs": [
+  "x-specs": [
     {
       "id": "APP-FIELD-ARRAY-FIELD-MAXITEMS-001",
       "given": "user provides maxItems >= 1",

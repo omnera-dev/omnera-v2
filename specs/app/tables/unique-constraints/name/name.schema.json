@@ -7,5 +7,5 @@
   "minLength": 1,
   "pattern": "^[a-z][a-z0-9_]*$",
   "examples": ["uq_users_email_tenant", "uq_products_sku_variant", "uq_orders_number_year"],
-  "specs": []
+  "x-specs": []
 }

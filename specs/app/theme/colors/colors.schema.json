@@ -42,13 +42,13 @@
     "Variants can be indicated with suffixes like -hover, -light, -dark",
     "Consider semantic naming (primary, secondary) alongside descriptive naming (red, blue)"
   ],
-  "specs": [
+  "x-specs": [
     {
       "id": "APP-THEME-COLORS-001",
       "given": "a color palette with semantic colors (primary, secondary)",
       "when": "colors are defined with hex values",
       "then": "it should validate 6-digit hex colors at build time",
-      "x-validation": {
+      "validation": {
         "setup": {
           "colors": {
             "primary": "#007bff",
@@ -68,7 +68,7 @@
       "given": "a color with 8-digit hex value for transparency",
       "when": "color includes alpha channel",
       "then": "it should validate 8-digit hex colors with opacity at build time",
-      "x-validation": {
+      "validation": {
         "setup": {
           "colors": {
             "primary-transparent": "#007bff80"
@@ -87,7 +87,7 @@
       "given": "a color with rgb() format",
       "when": "color is defined as rgb(255, 0, 0)",
       "then": "it should validate rgb color format at build time",
-      "x-validation": {
+      "validation": {
         "setup": {
           "colors": {
             "danger": "rgb(255, 0, 0)"
@@ -106,7 +106,7 @@
       "given": "a color with rgba() format for transparency",
       "when": "color is defined as rgba(255, 0, 0, 0.5)",
       "then": "it should validate rgba color format with alpha at build time",
-      "x-validation": {
+      "validation": {
         "setup": {
           "colors": {
             "danger-semi": "rgba(255, 0, 0, 0.5)"
@@ -125,7 +125,7 @@
       "given": "a color with hsl() format",
       "when": "color is defined as hsl(210, 100%, 50%)",
       "then": "it should validate hsl color format at build time",
-      "x-validation": {
+      "validation": {
         "setup": {
           "colors": {
             "primary": "hsl(210, 100%, 50%)"
@@ -145,7 +145,7 @@
       "given": "a color with hsla() format for transparency",
       "when": "color is defined as hsla(210, 100%, 50%, 0.8)",
       "then": "it should validate hsla color format with alpha at build time",
-      "x-validation": {
+      "validation": {
         "setup": {
           "colors": {
             "primary-overlay": "hsla(210, 100%, 50%, 0.8)"
@@ -164,7 +164,7 @@
       "given": "color variants with suffixes (primary-hover, primary-light)",
       "when": "colors use kebab-case variant naming",
       "then": "it should validate color variants for hover states and tints",
-      "x-validation": {
+      "validation": {
         "setup": {
           "colors": {
             "primary": "#007bff",
@@ -187,7 +187,7 @@
       "given": "gray scale with numbered variants (gray-100 to gray-900)",
       "when": "colors use numbered scale system",
       "then": "it should validate numbered color scales for systematic gradients",
-      "x-validation": {
+      "validation": {
         "setup": {
           "colors": {
             "gray-100": "#f8f9fa",
@@ -211,7 +211,7 @@
       "given": "a complete color system with semantic, descriptive, and variant colors",
       "when": "palette includes primary, secondary, success, danger, warning, info, light, dark, grays",
       "then": "it should validate comprehensive color system for all UI needs",
-      "x-validation": {
+      "validation": {
         "setup": {
           "colors": {
             "primary": "#007bff",
@@ -238,7 +238,7 @@
       "given": "color names in kebab-case (primary-color, background-primary)",
       "when": "color names use multi-word kebab-case format",
       "then": "it should validate kebab-case naming convention",
-      "x-validation": {
+      "validation": {
         "setup": {
           "validNames": ["primary", "text-primary", "background-light", "border-subtle"],
           "invalidNames": ["primaryColor", "text_primary", "Background Light", "BORDER"]
@@ -256,7 +256,7 @@
       "given": "primary color used in button component",
       "when": "button applies theme.colors.primary",
       "then": "it should render button with primary background color",
-      "x-application": {
+      "application": {
         "theme": {
           "colors": {
             "primary": "#007bff"
@@ -278,7 +278,7 @@
       "given": "primary-hover color used on button:hover",
       "when": "button hover state applies theme.colors.primary-hover",
       "then": "it should render darker blue on hover",
-      "x-application": {
+      "application": {
         "theme": {
           "colors": {
             "primary": "#007bff",
@@ -300,7 +300,7 @@
       "given": "text color used in typography",
       "when": "heading applies theme.colors.text",
       "then": "it should render text with theme text color",
-      "x-application": {
+      "application": {
         "theme": {
           "colors": {
             "text": "#212529",
@@ -323,7 +323,7 @@
       "given": "success color used in alert",
       "when": "alert applies theme.colors.success",
       "then": "it should render green alert indicating success state",
-      "x-application": {
+      "application": {
         "theme": {
           "colors": {
             "success": "#28a745",
@@ -346,7 +346,7 @@
       "given": "gray scale used in UI hierarchy",
       "when": "components use gray-100 to gray-900 for depth",
       "then": "it should create visual hierarchy through tonal variation",
-      "x-application": {
+      "application": {
         "theme": {
           "colors": {
             "gray-100": "#f8f9fa",

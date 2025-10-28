@@ -42,5 +42,5 @@
   },
   "required": ["id", "type", "tabs", "position"],
   "additionalProperties": false,
-  "specs": []
+  "x-specs": []
 }

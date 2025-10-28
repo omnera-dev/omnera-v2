@@ -5,5 +5,5 @@
   "description": "Connection type discriminator for Qonto integration",
   "const": "qonto",
   "examples": ["qonto"],
-  "specs": []
+  "x-specs": []
 }

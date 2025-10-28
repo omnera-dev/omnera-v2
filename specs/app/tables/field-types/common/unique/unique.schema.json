@@ -5,7 +5,7 @@
   "description": "Whether this field must contain unique values across all rows",
   "type": "boolean",
   "default": false,
-  "specs": [
+  "x-specs": [
     {
       "id": "APP-FIELD-UNIQUE-001",
       "given": "unique is true",

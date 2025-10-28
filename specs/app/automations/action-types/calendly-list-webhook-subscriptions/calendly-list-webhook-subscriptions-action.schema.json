@@ -49,7 +49,8 @@
   },
   "required": ["name", "account", "service", "action"],
   "additionalProperties": false,
-  "specs": [
+  "$id": "calendly-list-webhook-subscriptions-action.schema.json",
+  "x-specs": [
     {
       "id": "APP-CALENDLY-LIST-WEBHOOK-SUBSCRIPTIONS-001",
       "given": "user provides name",
@@ -158,6 +159,5 @@
       "when": "validating input",
       "then": "error should enforce maximum value"
     }
-  ],
-  "$id": "calendly-list-webhook-subscriptions-action.schema.json"
+  ]
 }

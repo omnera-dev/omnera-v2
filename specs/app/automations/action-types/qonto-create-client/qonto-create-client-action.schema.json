@@ -77,7 +77,8 @@
   },
   "required": ["name", "account", "service", "action", "params"],
   "additionalProperties": false,
-  "specs": [
+  "$id": "qonto-create-client-action.schema.json",
+  "x-specs": [
     {
       "id": "APP-QONTO-CREATE-CLIENT-001",
       "given": "user provides name",
@@ -252,6 +253,5 @@
       "when": "validating input",
       "then": "behavior should follow optional/required rules"
     }
-  ],
-  "$id": "qonto-create-client-action.schema.json"
+  ]
 }

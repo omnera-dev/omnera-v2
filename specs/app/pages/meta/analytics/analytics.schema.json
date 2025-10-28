@@ -82,18 +82,24 @@
       ]
     }
   ],
-  "specs": [
+  "x-specs": [
     {
       "id": "APP-PAGES-ANALYTICS-001",
       "given": "analytics with providers array",
       "when": "providers contains analytics configurations",
       "then": "it should support multiple analytics providers",
-      "x-validation": {
+      "validation": {
         "setup": {
           "analytics": {
             "providers": [
-              { "name": "plausible", "enabled": true },
-              { "name": "google", "enabled": true }
+              {
+                "name": "plausible",
+                "enabled": true
+              },
+              {
+                "name": "google",
+                "enabled": true
+              }
             ]
           }
         },
@@ -103,21 +109,31 @@
           "Multiple providers supported simultaneously"
         ]
       },
-      "x-application": {
+      "application": {
         "analytics": {
           "providers": [
             {
               "name": "plausible",
               "enabled": true,
-              "scripts": [{ "src": "https://plausible.io/js/script.js", "async": true }]
+              "scripts": [
+                {
+                  "src": "https://plausible.io/js/script.js",
+                  "async": true
+                }
+              ]
             },
             {
               "name": "google",
               "enabled": true,
               "scripts": [
-                { "src": "https://www.googletagmanager.com/gtag/js?id=G-XXXXX", "async": true }
+                {
+                  "src": "https://www.googletagmanager.com/gtag/js?id=G-XXXXX",
+                  "async": true
+                }
               ],
-              "config": { "trackingId": "G-XXXXX" }
+              "config": {
+                "trackingId": "G-XXXXX"
+              }
             }
           ]
         },
@@ -135,7 +151,7 @@
       "given": "analytics provider with name enum",
       "when": "name is one of: google, plausible, matomo, fathom, posthog, mixpanel",
       "then": "it should support 6 analytics providers",
-      "x-validation": {
+      "validation": {
         "setup": {
           "providers": ["google", "plausible", "matomo", "fathom", "posthog", "mixpanel"]
         },
@@ -145,7 +161,7 @@
           "Mix: privacy-focused + full-featured"
         ]
       },
-      "x-application": {
+      "application": {
         "providerTypes": {
           "google": "Full-featured, free, most popular (60% market share)",
           "plausible": "Privacy-focused, GDPR-compliant, no cookies",
@@ -167,11 +183,17 @@
       "given": "analytics provider with enabled toggle",
       "when": "enabled is true or false",
       "then": "it should allow enabling/disabling provider",
-      "x-validation": {
+      "validation": {
         "setup": {
           "providers": [
-            { "name": "google", "enabled": true },
-            { "name": "plausible", "enabled": false }
+            {
+              "name": "google",
+              "enabled": true
+            },
+            {
+              "name": "plausible",
+              "enabled": false
+            }
           ]
         },
         "assertions": [
@@ -180,18 +202,26 @@
           "Use case: testing, compliance, feature flags"
         ]
       },
-      "x-application": {
+      "application": {
         "analytics": {
           "providers": [
             {
               "name": "google",
               "enabled": true,
-              "scripts": [{ "src": "https://www.googletagmanager.com/gtag/js?id=G-XXXXX" }]
+              "scripts": [
+                {
+                  "src": "https://www.googletagmanager.com/gtag/js?id=G-XXXXX"
+                }
+              ]
             },
             {
               "name": "plausible",
               "enabled": false,
-              "scripts": [{ "src": "https://plausible.io/js/script.js" }]
+              "scripts": [
+                {
+                  "src": "https://plausible.io/js/script.js"
+                }
+              ]
             }
           ]
         },
@@ -209,7 +239,7 @@
       "given": "analytics provider with scripts array",
       "when": "scripts contains external script configurations",
       "then": "it should load provider scripts",
-      "x-validation": {
+      "validation": {
         "setup": {
           "provider": {
             "name": "plausible",
@@ -227,7 +257,7 @@
           "Multiple scripts per provider supported"
         ]
       },
-      "x-application": {
+      "application": {
         "provider": {
           "name": "google",
           "scripts": [
@@ -251,7 +281,7 @@
       "given": "analytics provider script with async",
       "when": "async is true for non-blocking load",
       "then": "it should load script asynchronously",
-      "x-validation": {
+      "validation": {
         "setup": {
           "script": {
             "src": "https://plausible.io/js/script.js",
@@ -264,7 +294,7 @@
           "Best practice: always use async for analytics"
         ]
       },
-      "x-application": {
+      "application": {
         "script": {
           "src": "https://plausible.io/js/script.js",
           "async": true
@@ -288,11 +318,15 @@
       "given": "analytics provider with initScript",
       "when": "initScript contains inline JavaScript for initialization",
       "then": "it should execute provider initialization code",
-      "x-validation": {
+      "validation": {
         "setup": {
           "provider": {
             "name": "google",
-            "scripts": [{ "src": "https://www.googletagmanager.com/gtag/js?id=G-XXXXX" }],
+            "scripts": [
+              {
+                "src": "https://www.googletagmanager.com/gtag/js?id=G-XXXXX"
+              }
+            ],
             "initScript": "window.dataLayer = window.dataLayer || []; function gtag(){dataLayer.push(arguments);} gtag('js', new Date()); gtag('config', 'G-XXXXX');"
           }
         },
@@ -302,14 +336,19 @@
           "Runs after external scripts load"
         ]
       },
-      "x-application": {
+      "application": {
         "provider": {
           "name": "google",
           "scripts": [
-            { "src": "https://www.googletagmanager.com/gtag/js?id=G-XXXXX", "async": true }
+            {
+              "src": "https://www.googletagmanager.com/gtag/js?id=G-XXXXX",
+              "async": true
+            }
           ],
           "initScript": "window.dataLayer = window.dataLayer || []; function gtag(){dataLayer.push(arguments);} gtag('js', new Date()); gtag('config', 'G-XXXXX');",
-          "config": { "trackingId": "G-XXXXX" }
+          "config": {
+            "trackingId": "G-XXXXX"
+          }
         },
         "expectedDOM": "<head><!-- External script --><script data-testid=\"analytics-script\" src=\"https://www.googletagmanager.com/gtag/js?id=G-XXXXX\" async></script><!-- Initialization script --><script data-testid=\"analytics-init\">window.dataLayer = window.dataLayer || []; function gtag(){dataLayer.push(arguments);} gtag('js', new Date()); gtag('config', 'G-XXXXX');</script></head>",
         "execution": {
@@ -330,7 +369,7 @@
       "given": "analytics provider with dnsPrefetch",
       "when": "dnsPrefetch specifies provider domain",
       "then": "it should optimize DNS resolution for provider",
-      "x-validation": {
+      "validation": {
         "setup": {
           "provider": {
             "name": "plausible",
@@ -343,10 +382,15 @@
           "Performance optimization"
         ]
       },
-      "x-application": {
+      "application": {
         "provider": {
           "name": "plausible",
-          "scripts": [{ "src": "https://plausible.io/js/script.js", "async": true }],
+          "scripts": [
+            {
+              "src": "https://plausible.io/js/script.js",
+              "async": true
+            }
+          ],
           "dnsPrefetch": "https://plausible.io"
         },
         "expectedDOM": "<head><!-- DNS Prefetch (before script) --><link data-testid=\"dns-prefetch-plausible\" rel=\"dns-prefetch\" href=\"https://plausible.io\" /><!-- Script tag --><script data-testid=\"analytics-script\" src=\"https://plausible.io/js/script.js\" async></script></head>",
@@ -368,7 +412,7 @@
       "given": "analytics provider with config object",
       "when": "config contains provider-specific settings",
       "then": "it should pass configuration to provider",
-      "x-validation": {
+      "validation": {
         "setup": {
           "provider": {
             "name": "google",
@@ -385,7 +429,7 @@
           "Passed to provider initialization"
         ]
       },
-      "x-application": {
+      "application": {
         "provider": {
           "name": "posthog",
           "config": {
@@ -415,7 +459,7 @@
       "given": "analytics with Google Analytics provider",
       "when": "name is 'google' with tracking ID in config",
       "then": "it should configure Google Analytics",
-      "x-validation": {
+      "validation": {
         "setup": {
           "provider": {
             "name": "google",
@@ -431,12 +475,15 @@
           "Most popular analytics (60% market share)"
         ]
       },
-      "x-application": {
+      "application": {
         "provider": {
           "name": "google",
           "enabled": true,
           "scripts": [
-            { "src": "https://www.googletagmanager.com/gtag/js?id=G-ABC123XYZ", "async": true }
+            {
+              "src": "https://www.googletagmanager.com/gtag/js?id=G-ABC123XYZ",
+              "async": true
+            }
           ],
           "initScript": "window.dataLayer = window.dataLayer || []; function gtag(){dataLayer.push(arguments);} gtag('js', new Date()); gtag('config', 'G-ABC123XYZ');",
           "dnsPrefetch": "https://www.googletagmanager.com",
@@ -464,7 +511,7 @@
       "given": "analytics with Plausible provider",
       "when": "name is 'plausible' with domain config",
       "then": "it should configure privacy-friendly Plausible analytics",
-      "x-validation": {
+      "validation": {
         "setup": {
           "provider": {
             "name": "plausible",
@@ -480,7 +527,7 @@
           "Privacy-focused: GDPR-compliant, no cookies"
         ]
       },
-      "x-application": {
+      "application": {
         "provider": {
           "name": "plausible",
           "enabled": true,
@@ -518,12 +565,18 @@
       "given": "analytics with multiple providers",
       "when": "providers array contains [plausible, google]",
       "then": "it should support multi-provider analytics",
-      "x-validation": {
+      "validation": {
         "setup": {
           "analytics": {
             "providers": [
-              { "name": "plausible", "enabled": true },
-              { "name": "google", "enabled": true }
+              {
+                "name": "plausible",
+                "enabled": true
+              },
+              {
+                "name": "google",
+                "enabled": true
+              }
             ]
           }
         },
@@ -533,23 +586,35 @@
           "Common: privacy + full-featured"
         ]
       },
-      "x-application": {
+      "application": {
         "analytics": {
           "providers": [
             {
               "name": "plausible",
               "enabled": true,
-              "scripts": [{ "src": "https://plausible.io/js/script.js", "async": true }],
-              "config": { "domain": "example.com" }
+              "scripts": [
+                {
+                  "src": "https://plausible.io/js/script.js",
+                  "async": true
+                }
+              ],
+              "config": {
+                "domain": "example.com"
+              }
             },
             {
               "name": "google",
               "enabled": true,
               "scripts": [
-                { "src": "https://www.googletagmanager.com/gtag/js?id=G-XXXXX", "async": true }
+                {
+                  "src": "https://www.googletagmanager.com/gtag/js?id=G-XXXXX",
+                  "async": true
+                }
               ],
               "initScript": "window.dataLayer = window.dataLayer || []; function gtag(){dataLayer.push(arguments);} gtag('js', new Date()); gtag('config', 'G-XXXXX');",
-              "config": { "trackingId": "G-XXXXX" }
+              "config": {
+                "trackingId": "G-XXXXX"
+              }
             }
           ]
         },
@@ -573,7 +638,7 @@
       "given": "analytics provider with PostHog",
       "when": "name is 'posthog' for product analytics",
       "then": "it should configure event tracking and feature flags",
-      "x-validation": {
+      "validation": {
         "setup": {
           "provider": {
             "name": "posthog",
@@ -590,11 +655,16 @@
           "Product analytics: events, funnels, cohorts, session replay"
         ]
       },
-      "x-application": {
+      "application": {
         "provider": {
           "name": "posthog",
           "enabled": true,
-          "scripts": [{ "src": "https://app.posthog.com/static/array.js", "async": true }],
+          "scripts": [
+            {
+              "src": "https://app.posthog.com/static/array.js",
+              "async": true
+            }
+          ],
           "initScript": "!function(t,e){var o,n,p,r;e.__SV||(window.posthog=e,e._i=[],e.init=function(i,s,a){function g(t,e){var o=e.split(\\\".\\\");2==o.length&&(t=t[o[0]],e=o[1]),t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}}(p=t.createElement(\\\"script\\\")).type=\\\"text/javascript\\\",p.async=!0,p.src=s.api_host+\\\"/static/array.js\\\",(r=t.getElementsByTagName(\\\"script\\\")[0]).parentNode.insertBefore(p,r);var u=e;for(void 0!==a?u=e[a]=[]:a=\\\"posthog\\\",u.people=u.people||[],u.toString=function(t){var e=\\\"posthog\\\";return\\\"posthog\\\"!==a&&(e+=\\\".\\\"+a),t||(e+=\\\" (stub)\\\"),e},u.people.toString=function(){return u.toString(1)+\\\".people (stub)\\\"},o=\\\"capture identify alias people.set people.set_once set_config register register_once unregister opt_out_capturing has_opted_out_capturing opt_in_capturing reset isFeatureEnabled onFeatureFlags\\\".split(\\\" \\\"),n=0;n<o.length;n++)g(u,o[n]);e._i.push([i,s,a])},e.__SV=1)}(document,window.posthog||[]); posthog.init('phc_XXXXX',{api_host:'https://app.posthog.com'})",
           "dnsPrefetch": "https://app.posthog.com",
           "config": {

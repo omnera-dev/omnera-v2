@@ -7,7 +7,7 @@
   "items": {
     "type": "string"
   },
-  "specs": [
+  "x-specs": [
     {
       "id": "APP-FIELD-SINGLE-SELECT-FIELD-OPTIONS-001",
       "given": "user provides options with at least 1 items",

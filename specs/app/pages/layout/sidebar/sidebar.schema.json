@@ -114,26 +114,38 @@
       ]
     }
   ],
-  "specs": [
+  "x-specs": [
     {
       "id": "APP-PAGES-SIDEBAR-001",
       "given": "a sidebar with enabled set to true",
       "when": "sidebar should be visible",
       "then": "it should display sidebar navigation",
-      "x-validation": {
-        "setup": { "sidebar": { "enabled": true, "items": [] } },
+      "validation": {
+        "setup": {
+          "sidebar": {
+            "enabled": true,
+            "items": []
+          }
+        },
         "assertions": [
           "enabled: true (sidebar visible)",
           "Default: false (opt-in)",
           "Common for: docs, dashboards, admin panels"
         ]
       },
-      "x-application": {
+      "application": {
         "sidebar": {
           "enabled": true,
           "position": "left",
           "width": "256px",
-          "items": [{ "type": "link", "label": "Dashboard", "href": "/dashboard", "icon": "home" }]
+          "items": [
+            {
+              "type": "link",
+              "label": "Dashboard",
+              "href": "/dashboard",
+              "icon": "home"
+            }
+          ]
         },
         "expectedDOM": "<div data-testid=\"layout-container\" class=\"flex\"><aside data-testid=\"sidebar\" class=\"w-64 h-screen sticky top-0 bg-gray-50 border-r\"><nav class=\"p-4\"><a data-testid=\"sidebar-link-0\" href=\"/dashboard\" class=\"flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-100\"><svg class=\"w-5 h-5\"><!-- home icon --></svg><span>Dashboard</span></a></nav></aside><main class=\"flex-1\"><!-- page content --></main></div>",
         "assertions": [
@@ -149,20 +161,31 @@
       "given": "a sidebar with position 'left'",
       "when": "position is 'left' (default)",
       "then": "it should render sidebar on left side",
-      "x-validation": {
-        "setup": { "sidebar": { "enabled": true, "position": "left" } },
+      "validation": {
+        "setup": {
+          "sidebar": {
+            "enabled": true,
+            "position": "left"
+          }
+        },
         "assertions": [
           "position: enum ['left', 'right']",
           "Default: 'left'",
           "Most common: left (90% of sites)"
         ]
       },
-      "x-application": {
+      "application": {
         "sidebar": {
           "enabled": true,
           "position": "left",
           "width": "256px",
-          "items": [{ "type": "link", "label": "Docs", "href": "/docs" }]
+          "items": [
+            {
+              "type": "link",
+              "label": "Docs",
+              "href": "/docs"
+            }
+          ]
         },
         "expectedDOM": "<div class=\"flex\"><aside data-testid=\"sidebar-left\" class=\"w-64 order-first\"><!-- sidebar content --></aside><main class=\"flex-1\"><!-- main content --></main></div>",
         "assertions": [
@@ -178,20 +201,31 @@
       "given": "a sidebar with position 'right'",
       "when": "position is 'right'",
       "then": "it should render sidebar on right side",
-      "x-validation": {
-        "setup": { "sidebar": { "enabled": true, "position": "right" } },
+      "validation": {
+        "setup": {
+          "sidebar": {
+            "enabled": true,
+            "position": "right"
+          }
+        },
         "assertions": [
           "position: 'right'",
           "Less common (10% of sites)",
           "Use case: table of contents, metadata"
         ]
       },
-      "x-application": {
+      "application": {
         "sidebar": {
           "enabled": true,
           "position": "right",
           "width": "256px",
-          "items": [{ "type": "link", "label": "Table of Contents", "href": "#toc" }]
+          "items": [
+            {
+              "type": "link",
+              "label": "Table of Contents",
+              "href": "#toc"
+            }
+          ]
         },
         "expectedDOM": "<div class=\"flex\"><main class=\"flex-1\"><!-- main content --></main><aside data-testid=\"sidebar-right\" class=\"w-64 order-last\"><!-- sidebar content --></aside></div>",
         "assertions": [
@@ -207,12 +241,21 @@
       "given": "a sidebar with custom width",
       "when": "width is '280px'",
       "then": "it should apply custom sidebar width",
-      "x-validation": {
-        "setup": { "sidebar": { "enabled": true, "width": "280px" } },
+      "validation": {
+        "setup": {
+          "sidebar": {
+            "enabled": true,
+            "width": "280px"
+          }
+        },
         "assertions": ["width: string (CSS value)", "Default: '256px' (16rem)", "Common: 200-320px"]
       },
-      "x-application": {
-        "sidebar": { "enabled": true, "width": "320px", "items": [] },
+      "application": {
+        "sidebar": {
+          "enabled": true,
+          "width": "320px",
+          "items": []
+        },
         "expectedDOM": "<aside data-testid=\"sidebar\" class=\"sticky top-0 h-screen\" style=\"width: 320px;\"><!-- sidebar content --></aside>",
         "widthGuidelines": {
           "narrow": "200-240px (minimal, icon-focused)",
@@ -232,20 +275,31 @@
       "given": "a collapsible sidebar",
       "when": "collapsible is true (default)",
       "then": "it should allow users to collapse/expand sidebar",
-      "x-validation": {
-        "setup": { "sidebar": { "enabled": true, "collapsible": true } },
+      "validation": {
+        "setup": {
+          "sidebar": {
+            "enabled": true,
+            "collapsible": true
+          }
+        },
         "assertions": [
           "collapsible: boolean (default: true)",
           "Toggle button to collapse/expand",
           "Saves state in localStorage"
         ]
       },
-      "x-application": {
+      "application": {
         "sidebar": {
           "enabled": true,
           "collapsible": true,
           "width": "256px",
-          "items": [{ "type": "link", "label": "Dashboard", "href": "/dashboard" }]
+          "items": [
+            {
+              "type": "link",
+              "label": "Dashboard",
+              "href": "/dashboard"
+            }
+          ]
         },
         "expectedDOM": {
           "expanded": "<aside data-testid=\"sidebar\" class=\"w-64 transition-all\"><button data-testid=\"sidebar-toggle\" class=\"absolute top-4 right-4\" aria-label=\"Collapse sidebar\">←</button><nav class=\"p-4\"><!-- navigation items --></nav></aside>",
@@ -271,21 +325,34 @@
       "given": "a sidebar defaulting to collapsed",
       "when": "defaultCollapsed is true",
       "then": "it should start in collapsed state",
-      "x-validation": {
-        "setup": { "sidebar": { "enabled": true, "collapsible": true, "defaultCollapsed": true } },
+      "validation": {
+        "setup": {
+          "sidebar": {
+            "enabled": true,
+            "collapsible": true,
+            "defaultCollapsed": true
+          }
+        },
         "assertions": [
           "defaultCollapsed: boolean (default: false)",
           "Requires collapsible: true",
           "Initial state: collapsed"
         ]
       },
-      "x-application": {
+      "application": {
         "sidebar": {
           "enabled": true,
           "collapsible": true,
           "defaultCollapsed": true,
           "width": "256px",
-          "items": [{ "type": "link", "label": "Dashboard", "href": "/dashboard", "icon": "home" }]
+          "items": [
+            {
+              "type": "link",
+              "label": "Dashboard",
+              "href": "/dashboard",
+              "icon": "home"
+            }
+          ]
         },
         "expectedDOM": "<aside data-testid=\"sidebar\" class=\"w-16\" data-collapsed=\"true\"><button data-testid=\"sidebar-toggle\" aria-label=\"Expand sidebar\">→</button><nav><a href=\"/dashboard\" title=\"Dashboard\"><svg class=\"w-6 h-6\"><!-- home icon --></svg></a></nav></aside>",
         "assertions": [
@@ -301,23 +368,36 @@
       "given": "a sticky sidebar",
       "when": "sticky is true (default)",
       "then": "it should stick during page scroll",
-      "x-validation": {
-        "setup": { "sidebar": { "enabled": true, "sticky": true } },
+      "validation": {
+        "setup": {
+          "sidebar": {
+            "enabled": true,
+            "sticky": true
+          }
+        },
         "assertions": [
           "sticky: boolean (default: true)",
           "CSS: position: sticky, top: 0",
           "Sidebar visible during scroll"
         ]
       },
-      "x-application": {
+      "application": {
         "sidebar": {
           "enabled": true,
           "sticky": true,
           "position": "left",
           "width": "256px",
           "items": [
-            { "type": "link", "label": "Section 1", "href": "#section1" },
-            { "type": "link", "label": "Section 2", "href": "#section2" }
+            {
+              "type": "link",
+              "label": "Section 1",
+              "href": "#section1"
+            },
+            {
+              "type": "link",
+              "label": "Section 2",
+              "href": "#section2"
+            }
           ]
         },
         "expectedDOM": "<aside data-testid=\"sidebar\" class=\"sticky top-0 h-screen overflow-y-auto\"><nav><!-- navigation items --></nav></aside>",
@@ -339,12 +419,17 @@
       "given": "a sidebar with link item",
       "when": "item type is 'link' with label, href, icon",
       "then": "it should render clickable sidebar link",
-      "x-validation": {
+      "validation": {
         "setup": {
           "sidebar": {
             "enabled": true,
             "items": [
-              { "type": "link", "label": "Dashboard", "href": "/dashboard", "icon": "home" }
+              {
+                "type": "link",
+                "label": "Dashboard",
+                "href": "/dashboard",
+                "icon": "home"
+              }
             ]
           }
         },
@@ -354,13 +439,28 @@
           "icon: optional (icon name string)"
         ]
       },
-      "x-application": {
+      "application": {
         "sidebar": {
           "enabled": true,
           "items": [
-            { "type": "link", "label": "Dashboard", "href": "/dashboard", "icon": "home" },
-            { "type": "link", "label": "Analytics", "href": "/analytics", "icon": "chart" },
-            { "type": "link", "label": "Settings", "href": "/settings", "icon": "settings" }
+            {
+              "type": "link",
+              "label": "Dashboard",
+              "href": "/dashboard",
+              "icon": "home"
+            },
+            {
+              "type": "link",
+              "label": "Analytics",
+              "href": "/analytics",
+              "icon": "chart"
+            },
+            {
+              "type": "link",
+              "label": "Settings",
+              "href": "/settings",
+              "icon": "settings"
+            }
           ]
         },
         "expectedDOM": "<aside data-testid=\"sidebar\"><nav><a data-testid=\"sidebar-link-0\" href=\"/dashboard\" class=\"flex items-center gap-3 px-3 py-2 rounded hover:bg-gray-100 active:bg-blue-50\"><svg class=\"w-5 h-5\"><!-- home icon --></svg><span>Dashboard</span></a><a data-testid=\"sidebar-link-1\" href=\"/analytics\" class=\"flex items-center gap-3 px-3 py-2 rounded hover:bg-gray-100\"><svg class=\"w-5 h-5\"><!-- chart icon --></svg><span>Analytics</span></a><a data-testid=\"sidebar-link-2\" href=\"/settings\" class=\"flex items-center gap-3 px-3 py-2 rounded hover:bg-gray-100\"><svg class=\"w-5 h-5\"><!-- settings icon --></svg><span>Settings</span></a></nav></aside>",
@@ -377,7 +477,7 @@
       "given": "a sidebar with group item",
       "when": "item type is 'group' with label and children",
       "then": "it should render collapsible group with nested items",
-      "x-validation": {
+      "validation": {
         "setup": {
           "sidebar": {
             "enabled": true,
@@ -387,8 +487,16 @@
                 "label": "Products",
                 "icon": "package",
                 "children": [
-                  { "type": "link", "label": "All Products", "href": "/products" },
-                  { "type": "link", "label": "Categories", "href": "/categories" }
+                  {
+                    "type": "link",
+                    "label": "All Products",
+                    "href": "/products"
+                  },
+                  {
+                    "type": "link",
+                    "label": "Categories",
+                    "href": "/categories"
+                  }
                 ]
               }
             ]
@@ -401,7 +509,7 @@
           "Collapsible (expand/collapse)"
         ]
       },
-      "x-application": {
+      "application": {
         "sidebar": {
           "enabled": true,
           "items": [
@@ -410,8 +518,16 @@
               "label": "Products",
               "icon": "package",
               "children": [
-                { "type": "link", "label": "All Products", "href": "/products" },
-                { "type": "link", "label": "Add Product", "href": "/products/new" }
+                {
+                  "type": "link",
+                  "label": "All Products",
+                  "href": "/products"
+                },
+                {
+                  "type": "link",
+                  "label": "Add Product",
+                  "href": "/products/new"
+                }
               ]
             },
             {
@@ -419,8 +535,16 @@
               "label": "Analytics",
               "icon": "chart",
               "children": [
-                { "type": "link", "label": "Overview", "href": "/analytics" },
-                { "type": "link", "label": "Reports", "href": "/analytics/reports" }
+                {
+                  "type": "link",
+                  "label": "Overview",
+                  "href": "/analytics"
+                },
+                {
+                  "type": "link",
+                  "label": "Reports",
+                  "href": "/analytics/reports"
+                }
               ]
             }
           ]
@@ -448,28 +572,60 @@
       "given": "a sidebar with divider item",
       "when": "item type is 'divider'",
       "then": "it should render visual separator between sections",
-      "x-validation": {
+      "validation": {
         "setup": {
           "sidebar": {
             "enabled": true,
             "items": [
-              { "type": "link", "label": "Dashboard", "href": "/dashboard" },
-              { "type": "divider" },
-              { "type": "link", "label": "Settings", "href": "/settings" }
+              {
+                "type": "link",
+                "label": "Dashboard",
+                "href": "/dashboard"
+              },
+              {
+                "type": "divider"
+              },
+              {
+                "type": "link",
+                "label": "Settings",
+                "href": "/settings"
+              }
             ]
           }
         },
         "assertions": ["type: 'divider'", "No label, href, or children", "Visual separator only"]
       },
-      "x-application": {
+      "application": {
         "sidebar": {
           "enabled": true,
           "items": [
-            { "type": "link", "label": "Dashboard", "href": "/dashboard", "icon": "home" },
-            { "type": "link", "label": "Analytics", "href": "/analytics", "icon": "chart" },
-            { "type": "divider" },
-            { "type": "link", "label": "Settings", "href": "/settings", "icon": "settings" },
-            { "type": "link", "label": "Logout", "href": "/logout", "icon": "logout" }
+            {
+              "type": "link",
+              "label": "Dashboard",
+              "href": "/dashboard",
+              "icon": "home"
+            },
+            {
+              "type": "link",
+              "label": "Analytics",
+              "href": "/analytics",
+              "icon": "chart"
+            },
+            {
+              "type": "divider"
+            },
+            {
+              "type": "link",
+              "label": "Settings",
+              "href": "/settings",
+              "icon": "settings"
+            },
+            {
+              "type": "link",
+              "label": "Logout",
+              "href": "/logout",
+              "icon": "logout"
+            }
           ]
         },
         "expectedDOM": "<aside data-testid=\"sidebar\"><nav class=\"space-y-1\"><a href=\"/dashboard\">Dashboard</a><a href=\"/analytics\">Analytics</a><hr data-testid=\"sidebar-divider\" class=\"my-4 border-t border-gray-200\" /><a href=\"/settings\">Settings</a><a href=\"/logout\">Logout</a></nav></aside>",
@@ -486,7 +642,7 @@
       "given": "a sidebar with recursive children",
       "when": "groups can contain nested groups or links",
       "then": "it should support unlimited nesting for sidebar hierarchy",
-      "x-validation": {
+      "validation": {
         "setup": {
           "sidebar": {
             "enabled": true,
@@ -499,7 +655,11 @@
                     "type": "group",
                     "label": "Electronics",
                     "children": [
-                      { "type": "link", "label": "Phones", "href": "/products/electronics/phones" },
+                      {
+                        "type": "link",
+                        "label": "Phones",
+                        "href": "/products/electronics/phones"
+                      },
                       {
                         "type": "link",
                         "label": "Laptops",
@@ -518,7 +678,7 @@
           "Unlimited nesting depth"
         ]
       },
-      "x-application": {
+      "application": {
         "sidebar": {
           "enabled": true,
           "items": [
@@ -530,8 +690,16 @@
                   "type": "group",
                   "label": "Getting Started",
                   "children": [
-                    { "type": "link", "label": "Installation", "href": "/docs/installation" },
-                    { "type": "link", "label": "Quick Start", "href": "/docs/quick-start" }
+                    {
+                      "type": "link",
+                      "label": "Installation",
+                      "href": "/docs/installation"
+                    },
+                    {
+                      "type": "link",
+                      "label": "Quick Start",
+                      "href": "/docs/quick-start"
+                    }
                   ]
                 },
                 {
@@ -542,8 +710,16 @@
                       "type": "group",
                       "label": "REST API",
                       "children": [
-                        { "type": "link", "label": "Authentication", "href": "/docs/api/auth" },
-                        { "type": "link", "label": "Endpoints", "href": "/docs/api/endpoints" }
+                        {
+                          "type": "link",
+                          "label": "Authentication",
+                          "href": "/docs/api/auth"
+                        },
+                        {
+                          "type": "link",
+                          "label": "Endpoints",
+                          "href": "/docs/api/endpoints"
+                        }
                       ]
                     }
                   ]
@@ -572,9 +748,14 @@
       "given": "a sidebar for docs/dashboard layouts",
       "when": "sidebar provides persistent navigation",
       "then": "it should enable documentation and admin-style layouts",
-      "x-validation": {
+      "validation": {
         "setup": {
-          "sidebar": { "enabled": true, "sticky": true, "collapsible": true, "items": [] }
+          "sidebar": {
+            "enabled": true,
+            "sticky": true,
+            "collapsible": true,
+            "items": []
+          }
         },
         "assertions": [
           "Common patterns: docs sites, dashboards, admin panels",
@@ -582,7 +763,7 @@
           "sticky + collapsible = optimal UX"
         ]
       },
-      "x-application": {
+      "application": {
         "useCases": {
           "documentation": {
             "example": "Docusaurus, Nextra, GitBook",

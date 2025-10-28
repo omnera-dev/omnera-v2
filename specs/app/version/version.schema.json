@@ -16,7 +16,7 @@
     "1.0.0+build.123",
     "1.0.0-alpha+001"
   ],
-  "specs": [
+  "x-specs": [
     {
       "id": "APP-VERSION-001",
       "given": "an app with name and simple SemVer version '1.0.0'",

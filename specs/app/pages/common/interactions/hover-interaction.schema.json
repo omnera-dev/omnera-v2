@@ -60,7 +60,7 @@
       "color": "#ffffff"
     }
   ],
-  "specs": [
+  "x-specs": [
     {
       "id": "APP-INTERACTION-HOVER-001",
       "given": "a component with hover transform scale(1.05)",

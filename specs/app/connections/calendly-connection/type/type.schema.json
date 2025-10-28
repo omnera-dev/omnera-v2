@@ -5,5 +5,5 @@
   "description": "Connection type discriminator for Calendly integration",
   "const": "calendly",
   "examples": ["calendly"],
-  "specs": []
+  "x-specs": []
 }

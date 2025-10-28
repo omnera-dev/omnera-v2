@@ -22,8 +22,13 @@
       },
       "crossorigin": {
         "oneOf": [
-          { "type": "boolean" },
-          { "type": "string", "enum": ["anonymous", "use-credentials"] }
+          {
+            "type": "boolean"
+          },
+          {
+            "type": "string",
+            "enum": ["anonymous", "use-credentials"]
+          }
         ],
         "description": "CORS setting for the resource"
       },
@@ -49,7 +54,7 @@
       }
     ]
   ],
-  "specs": [
+  "x-specs": [
     {
       "id": "APP-PAGES-PRELOAD-001",
       "given": "preload resource with href and as",

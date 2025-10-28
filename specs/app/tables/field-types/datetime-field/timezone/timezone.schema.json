@@ -14,7 +14,7 @@
     "Asia/Tokyo",
     "Australia/Sydney"
   ],
-  "specs": [
+  "x-specs": [
     {
       "id": "APP-FIELD-DATETIME-TIMEZONE-001",
       "title": "Display datetime in specified timezone",

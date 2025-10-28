@@ -6,7 +6,7 @@
   "type": "string",
   "default": "one-to-many",
   "enum": ["one-to-one", "one-to-many", "many-to-many"],
-  "specs": [
+  "x-specs": [
     {
       "id": "APP-FIELD-RELATIONSHIP-FIELD-RELATIONTYPE-001",
       "given": "user selects relationType from valid options",

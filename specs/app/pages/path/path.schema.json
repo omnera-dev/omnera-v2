@@ -5,19 +5,19 @@
   "description": "URL path where the page is accessible",
   "$ref": "../../common/definitions.schema.json#/definitions/path",
   "examples": ["/", "/about", "/pricing", "/contact"],
-  "specs": [
+  "x-specs": [
     {
       "id": "APP-PAGES-PATH-001",
       "given": "a root path",
       "when": "value is '/'",
       "then": "it should validate as homepage path",
-      "x-validation": {
+      "validation": {
         "setup": {
           "path": "/"
         },
         "assertions": ["Value: '/' (root path)", "Homepage route", "Matches domain root URL"]
       },
-      "x-application": {
+      "application": {
         "path": "/",
         "url": "https://example.com/",
         "routing": {
@@ -36,7 +36,7 @@
       "given": "a path referencing common definition",
       "when": "schema uses $ref to definitions.schema.json#/definitions/path",
       "then": "it should follow shared path pattern from common definitions",
-      "x-validation": {
+      "validation": {
         "setup": {
           "schema": {
             "$ref": "../../common/definitions.schema.json#/definitions/path"
@@ -54,7 +54,7 @@
       "given": "a single-level path",
       "when": "value is '/about' or '/pricing'",
       "then": "it should accept paths with leading slash",
-      "x-validation": {
+      "validation": {
         "setup": {
           "paths": ["/about", "/pricing", "/contact"]
         },
@@ -65,7 +65,7 @@
           "Common website paths"
         ]
       },
-      "x-application": {
+      "application": {
         "path": "/about",
         "url": "https://example.com/about",
         "routing": {
@@ -84,7 +84,7 @@
       "given": "a nested path",
       "when": "value is '/products/pricing' or '/blog/article'",
       "then": "it should accept multi-level URL paths",
-      "x-validation": {
+      "validation": {
         "setup": {
           "paths": ["/products/pricing", "/blog/article", "/docs/api/reference"]
         },
@@ -95,7 +95,7 @@
           "Unlimited nesting depth"
         ]
       },
-      "x-application": {
+      "application": {
         "path": "/products/pricing",
         "url": "https://example.com/products/pricing",
         "routing": {
@@ -116,7 +116,7 @@
       "given": "a path with kebab-case segments",
       "when": "value is '/our-team' or '/contact-us'",
       "then": "it should accept kebab-case URL segments",
-      "x-validation": {
+      "validation": {
         "setup": {
           "paths": ["/our-team", "/contact-us", "/terms-of-service"]
         },
@@ -127,7 +127,7 @@
           "Readable multi-word paths"
         ]
       },
-      "x-application": {
+      "application": {
         "path": "/our-team",
         "url": "https://example.com/our-team",
         "routing": {
@@ -147,7 +147,7 @@
       "given": "common website paths (/, /about, /pricing, /contact)",
       "when": "standard website pages are defined",
       "then": "it should provide examples for typical URL patterns",
-      "x-validation": {
+      "validation": {
         "setup": {
           "paths": ["/", "/about", "/pricing", "/contact"]
         },
@@ -165,7 +165,7 @@
       "given": "path as required field",
       "when": "page is created without path",
       "then": "it should fail validation (path is required)",
-      "x-validation": {
+      "validation": {
         "setup": {
           "page": {
             "name": "About",
@@ -189,7 +189,7 @@
       "given": "paths across multiple pages",
       "when": "each page has unique path",
       "then": "it should ensure unique routing for all pages",
-      "x-validation": {
+      "validation": {
         "setup": {
           "pages": [
             {
@@ -213,7 +213,7 @@
           "Unique routing table"
         ]
       },
-      "x-application": {
+      "application": {
         "pages": [
           {
             "path": "/",
@@ -242,7 +242,7 @@
       "given": "path determining page accessibility",
       "when": "user navigates to path in browser",
       "then": "it should map URL to page configuration for rendering",
-      "x-application": {
+      "application": {
         "page": {
           "path": "/pricing",
           "name": "Pricing",
@@ -275,7 +275,7 @@
       "given": "path with dynamic segments",
       "when": "value is '/blog/:slug' or '/products/:id'",
       "then": "it should support dynamic route parameters (if applicable)",
-      "x-validation": {
+      "validation": {
         "setup": {
           "paths": ["/blog/:slug", "/products/:id", "/users/:userId/posts/:postId"]
         },
@@ -286,7 +286,7 @@
           "Common for dynamic content (blogs, products, users)"
         ]
       },
-      "x-application": {
+      "application": {
         "path": "/blog/:slug",
         "urls": {
           "/blog/hello-world": {

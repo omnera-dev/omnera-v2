@@ -4,7 +4,7 @@
   "title": "Currency Field Maximum Value",
   "description": "Maximum value allowed for this currency field",
   "type": "number",
-  "specs": [
+  "x-specs": [
     {
       "id": "APP-FIELD-CURRENCY-MAX-001",
       "given": "user provides max",

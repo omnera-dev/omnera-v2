@@ -79,13 +79,13 @@
       "persistSelection": true
     }
   ],
-  "specs": [
+  "x-specs": [
     {
       "id": "APP-LANGUAGES-001",
       "given": "an app with default language en-US and one supported language",
       "when": "app is configured with minimal language setup",
       "then": "it should use English as the only available language",
-      "x-validation": {
+      "validation": {
         "setup": {
           "languages": {
             "default": "en-US",
@@ -110,7 +110,7 @@
       "given": "an app with default en-US and supported languages [en-US, fr-FR, es-ES]",
       "when": "app is configured with multiple languages",
       "then": "users should be able to switch between all three languages",
-      "x-validation": {
+      "validation": {
         "setup": {
           "languages": {
             "default": "en-US",
@@ -137,7 +137,7 @@
           "Language switcher enabled"
         ]
       },
-      "x-application": {
+      "application": {
         "languages": {
           "default": "en-US",
           "supported": [
@@ -170,7 +170,7 @@
       "given": "an app with default en-US and fallback en-US",
       "when": "a translation is missing for the current language",
       "then": "it should display the English fallback text",
-      "x-validation": {
+      "validation": {
         "setup": {
           "languages": {
             "default": "en-US",
@@ -194,7 +194,7 @@
           "Graceful degradation"
         ]
       },
-      "x-application": {
+      "application": {
         "languages": {
           "default": "en-US",
           "fallback": "en-US",
@@ -224,7 +224,7 @@
       "given": "an app with detectBrowser set to true",
       "when": "user visits the site for the first time",
       "then": "it should automatically detect and set the browser's preferred language",
-      "x-validation": {
+      "validation": {
         "setup": {
           "languages": {
             "default": "en-US",
@@ -248,7 +248,7 @@
           "Falls back to default if no match"
         ]
       },
-      "x-application": {
+      "application": {
         "languages": {
           "default": "en-US",
           "detectBrowser": true,
@@ -272,7 +272,7 @@
       "given": "an app with detectBrowser set to false",
       "when": "user visits the site",
       "then": "it should use the default language without auto-detection",
-      "x-validation": {
+      "validation": {
         "setup": {
           "languages": {
             "default": "en-US",
@@ -296,7 +296,7 @@
           "Manual language selection required"
         ]
       },
-      "x-application": {
+      "application": {
         "languages": {
           "default": "en-US",
           "detectBrowser": false
@@ -317,7 +317,7 @@
       "given": "an app with persistSelection set to true",
       "when": "user manually selects a language",
       "then": "it should remember the choice in localStorage for future visits",
-      "x-validation": {
+      "validation": {
         "setup": {
           "languages": {
             "default": "en-US",
@@ -341,7 +341,7 @@
           "User preference persisted"
         ]
       },
-      "x-application": {
+      "application": {
         "languages": {
           "default": "en-US",
           "persistSelection": true
@@ -367,7 +367,7 @@
       "given": "an app with persistSelection set to false",
       "when": "user manually selects a language",
       "then": "it should not persist the choice and reset to default on next visit",
-      "x-validation": {
+      "validation": {
         "setup": {
           "languages": {
             "default": "en-US",
@@ -391,7 +391,7 @@
           "Resets to default on reload"
         ]
       },
-      "x-application": {
+      "application": {
         "languages": {
           "default": "en-US",
           "persistSelection": false
@@ -414,7 +414,7 @@
       "given": "an app with supported languages including RTL (ar-SA) and LTR (en-US)",
       "when": "user switches between English and Arabic",
       "then": "the entire app layout should flip between LTR and RTL direction",
-      "x-validation": {
+      "validation": {
         "setup": {
           "languages": {
             "default": "en-US",
@@ -439,7 +439,7 @@
           "RTL mirrors entire UI"
         ]
       },
-      "x-application": {
+      "application": {
         "languages": {
           "default": "en-US",
           "supported": [
@@ -471,7 +471,7 @@
       "given": "an app with 5+ supported languages from different regions",
       "when": "user opens language switcher",
       "then": "all languages should be displayed with their native labels and flags",
-      "x-validation": {
+      "validation": {
         "setup": {
           "languages": {
             "default": "en-US",
@@ -516,7 +516,7 @@
           "Global language support"
         ]
       },
-      "x-application": {
+      "application": {
         "languages": {
           "supported": [
             {
@@ -557,7 +557,7 @@
       "given": "an app with all features enabled (detectBrowser, persistSelection, fallback)",
       "when": "language configuration is fully utilized",
       "then": "it should provide seamless multi-language UX with auto-detection, persistence, and fallback",
-      "x-validation": {
+      "validation": {
         "setup": {
           "languages": {
             "default": "en-US",
@@ -590,7 +590,7 @@
       "given": "an app with default language not in supported array",
       "when": "default is 'en-US' but supported array only contains fr-FR and es-ES",
       "then": "it should fail validation - default language must be in supported array",
-      "x-validation": {
+      "validation": {
         "setup": {
           "languages": {
             "default": "en-US",
@@ -620,7 +620,7 @@
       "given": "an app with fallback not in supported array",
       "when": "fallback is 'de-DE' but supported array doesn't contain it",
       "then": "it should fail validation - fallback language must be in supported array",
-      "x-validation": {
+      "validation": {
         "setup": {
           "languages": {
             "default": "en-US",
@@ -651,7 +651,7 @@
       "given": "an app without explicit fallback",
       "when": "fallback property is omitted",
       "then": "it should automatically use default language as fallback",
-      "x-validation": {
+      "validation": {
         "setup": {
           "languages": {
             "default": "en-US",
@@ -680,7 +680,7 @@
       "given": "an app with fallback different from default",
       "when": "default is 'fr-FR' and fallback is 'en-US'",
       "then": "it should show English text when French translation is missing (useful for French site with English fallback)",
-      "x-validation": {
+      "validation": {
         "setup": {
           "languages": {
             "default": "fr-FR",
@@ -704,7 +704,7 @@
           "Fallback can differ from default"
         ]
       },
-      "x-application": {
+      "application": {
         "languages": {
           "default": "fr-FR",
           "fallback": "en-US",
@@ -735,7 +735,7 @@
       "given": "a multi-language app with theme integration",
       "when": "language direction affects theme spacing and layout",
       "then": "it should apply RTL-aware theme tokens for Arabic/Hebrew while maintaining LTR for English/French",
-      "x-application": {
+      "application": {
         "languages": {
           "default": "en-US",
           "supported": [
@@ -775,7 +775,7 @@
       "given": "a multi-language app with page content",
       "when": "user switches language on a page with translated content",
       "then": "it should update page metadata, HTML attributes, and visible text while maintaining scroll position and component state",
-      "x-application": {
+      "application": {
         "languages": {
           "default": "en-US",
           "persistSelection": true,

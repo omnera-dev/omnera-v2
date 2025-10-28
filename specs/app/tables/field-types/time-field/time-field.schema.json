@@ -52,7 +52,7 @@
   ],
   "required": ["id", "name", "type"],
   "additionalProperties": false,
-  "specs": [
+  "x-specs": [
     {
       "id": "APP-FIELD-TIME-001",
       "title": "Create record with valid time field",

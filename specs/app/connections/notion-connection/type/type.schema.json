@@ -5,5 +5,5 @@
   "description": "Connection type discriminator for Notion integration",
   "const": "notion",
   "examples": ["notion"],
-  "specs": []
+  "x-specs": []
 }

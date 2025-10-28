@@ -5,7 +5,7 @@
   "description": "Name of the field in the related table to display",
   "type": "string",
   "minLength": 1,
-  "specs": [
+  "x-specs": [
     {
       "id": "APP-FIELD-LOOKUP-FIELD-RELATEDFIELD-001",
       "given": "user provides relatedField with at least 1 characters",

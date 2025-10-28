@@ -6,7 +6,7 @@
   "items": {
     "type": "string"
   },
-  "specs": [
+  "x-specs": [
     {
       "id": "APP-FIELD-MULTI-SELECT-FIELD-DEFAULT-001",
       "given": "user provides default array",

@@ -9,7 +9,6 @@ import { spawn } from 'node:child_process'
 import { test as base } from '@playwright/test'
 import { PostgreSqlContainer } from '@testcontainers/postgresql'
 import { DatabaseTemplateManager, generateTestDatabaseName } from './database-utils'
-import type { App } from '@/domain/models/app'
 import type { StartedPostgreSqlContainer } from '@testcontainers/postgresql'
 import type { ChildProcess } from 'node:child_process'
 
@@ -141,7 +140,7 @@ export async function cleanupGlobalDatabase(): Promise<void> {
  * Uses port 0 to let Bun automatically select an available port
  */
 async function startCliServer(
-  appSchema: App,
+  appSchema: object,
   databaseUrl?: string
 ): Promise<{
   process: ChildProcess
@@ -200,7 +199,7 @@ async function stopServer(serverProcess: ChildProcess): Promise<void> {
  * Custom fixtures for CLI server with AppSchema configuration and database isolation
  */
 type ServerFixtures = {
-  startServerWithSchema: (appSchema: App, options?: { useDatabase?: boolean }) => Promise<void>
+  startServerWithSchema: (appSchema: object, options?: { useDatabase?: boolean }) => Promise<void>
   executeQuery: (sql: string) => Promise<{ rows: any[]; rowCount: number }>
 }
 
@@ -220,7 +219,7 @@ export const test = base.extend<ServerFixtures>({
     let testDbName: string | null = null
 
     // Provide function to start server with custom schema
-    await use(async (appSchema: App, options?: { useDatabase?: boolean }) => {
+    await use(async (appSchema: object, options?: { useDatabase?: boolean }) => {
       let databaseUrl: string | undefined = undefined
 
       // Enable database by default (can be disabled with useDatabase: false)

@@ -55,7 +55,7 @@
       "once": true
     }
   ],
-  "specs": [
+  "x-specs": [
     {
       "id": "APP-INTERACTION-SCROLL-001",
       "given": "a component with scroll animation 'fadeInUp'",

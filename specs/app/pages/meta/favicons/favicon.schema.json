@@ -6,7 +6,7 @@
   "type": "string",
   "pattern": "^\\./.*\\.(ico|png|svg)$",
   "examples": ["./public/favicon.ico", "./favicon.png", "./assets/favicon.svg"],
-  "specs": [
+  "x-specs": [
     {
       "id": "APP-PAGES-FAVICON-001",
       "given": "a favicon path string",

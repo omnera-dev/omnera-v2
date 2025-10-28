@@ -32,7 +32,7 @@
     "required": ["id", "name", "fields"],
     "additionalProperties": false
   },
-  "specs": [
+  "x-specs": [
     {
       "id": "APP-TABLES-001",
       "given": "the application is running",

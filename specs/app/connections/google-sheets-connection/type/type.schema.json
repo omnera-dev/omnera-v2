@@ -5,5 +5,5 @@
   "description": "Connection type discriminator for Google Sheets integration",
   "const": "google-sheets",
   "examples": ["google-sheets"],
-  "specs": []
+  "x-specs": []
 }

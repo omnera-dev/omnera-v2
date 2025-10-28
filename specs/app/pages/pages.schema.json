@@ -49,8 +49,14 @@
             "logo": "./logo.svg",
             "links": {
               "desktop": [
-                { "label": "Home", "href": "/" },
-                { "label": "About", "href": "/about" }
+                {
+                  "label": "Home",
+                  "href": "/"
+                },
+                {
+                  "label": "About",
+                  "href": "/about"
+                }
               ]
             }
           }
@@ -58,20 +64,30 @@
         "sections": [
           {
             "type": "section",
-            "props": { "id": "hero" },
+            "props": {
+              "id": "hero"
+            },
             "children": []
           }
         ]
       }
     ]
   },
-  "specs": [
+  "x-notes": [
+    "Pages now support comprehensive metadata beyond basic SEO",
+    "⚠️ Theme is defined at app level (app.theme{}) - NOT in individual pages. See app.schema.json and theme.schema.json",
+    "⚠️ Blocks are defined at app level (app.blocks[]) - NOT in individual pages. See app.schema.json and blocks.schema.json",
+    "Sections can reference blocks using $ref syntax with variable substitution. See sections.schema.json and block-reference.schema.json",
+    "Pages cannot override theme - app.theme{} applies globally to all pages",
+    "For page-specific styling, use sections[].props.className with Tailwind utilities"
+  ],
+  "x-specs": [
     {
       "id": "APP-PAGES-001",
       "given": "a pages array with single page",
       "when": "array contains one complete page configuration",
       "then": "it should validate as pages array with minimum 1 item",
-      "x-validation": {
+      "validation": {
         "setup": {
           "pages": [
             {
@@ -97,7 +113,7 @@
       "given": "a page with required properties only",
       "when": "page has name, path, meta, and sections",
       "then": "it should validate with minimal configuration",
-      "x-validation": {
+      "validation": {
         "setup": {
           "page": {
             "name": "About",
@@ -115,7 +131,7 @@
           "Minimal valid page configuration"
         ]
       },
-      "x-application": {
+      "application": {
         "page": {
           "name": "About",
           "path": "/about",
@@ -142,7 +158,7 @@
       "given": "a page with all optional properties",
       "when": "page includes id, layout, and scripts",
       "then": "it should accept complete page configuration",
-      "x-validation": {
+      "validation": {
         "setup": {
           "page": {
             "id": "homepage",
@@ -177,7 +193,7 @@
       "given": "a page with home path",
       "when": "path is '/'",
       "then": "it should accept root path for homepage",
-      "x-validation": {
+      "validation": {
         "setup": {
           "page": {
             "name": "Home",
@@ -191,7 +207,7 @@
         },
         "assertions": ["Path: '/' (root)", "Homepage route", "Matches domain root URL"]
       },
-      "x-application": {
+      "application": {
         "page": {
           "name": "Home",
           "path": "/",
@@ -218,7 +234,7 @@
       "given": "a page with nested path",
       "when": "path is '/products/pricing'",
       "then": "it should accept nested URL paths",
-      "x-validation": {
+      "validation": {
         "setup": {
           "page": {
             "name": "Pricing",
@@ -236,7 +252,7 @@
           "URL segment structure supported"
         ]
       },
-      "x-application": {
+      "application": {
         "page": {
           "name": "Pricing",
           "path": "/products/pricing",
@@ -263,7 +279,7 @@
       "given": "a page with sections containing direct components",
       "when": "sections has type, props, and children",
       "then": "it should support direct component definitions in sections",
-      "x-validation": {
+      "validation": {
         "setup": {
           "page": {
             "name": "Simple Page",
@@ -301,7 +317,7 @@
       "given": "a page with sections containing block references",
       "when": "sections references blocks with variable substitution",
       "then": "it should support block references with $variable syntax",
-      "x-validation": {
+      "validation": {
         "setup": {
           "page": {
             "name": "Landing",
@@ -326,7 +342,7 @@
           "Reusable blocks via JSON references"
         ]
       },
-      "x-application": {
+      "application": {
         "blocks": {
           "hero": {
             "type": "section",
@@ -366,7 +382,7 @@
       "given": "a page with layout configuration",
       "when": "layout includes navigation, banner, footer, and sidebar",
       "then": "it should orchestrate global layout components",
-      "x-validation": {
+      "validation": {
         "setup": {
           "page": {
             "name": "Full Layout",
@@ -398,7 +414,7 @@
           "All layout properties optional"
         ]
       },
-      "x-application": {
+      "application": {
         "page": {
           "layout": {
             "banner": {
@@ -429,7 +445,7 @@
       "given": "a page with scripts configuration",
       "when": "scripts includes features, external scripts, and config",
       "then": "it should manage client-side scripts and features",
-      "x-validation": {
+      "validation": {
         "setup": {
           "page": {
             "name": "Interactive",
@@ -463,7 +479,7 @@
           "Client-side configuration"
         ]
       },
-      "x-application": {
+      "application": {
         "page": {
           "scripts": {
             "features": {
@@ -492,7 +508,7 @@
       "given": "multiple pages in array",
       "when": "pages array contains [homepage, about, pricing, contact]",
       "then": "it should support multiple page configurations",
-      "x-validation": {
+      "validation": {
         "setup": {
           "pages": [
             {
@@ -540,7 +556,7 @@
           "Array supports any number of pages"
         ]
       },
-      "x-application": {
+      "application": {
         "pages": [
           {
             "path": "/"
@@ -571,7 +587,7 @@
       "given": "a page supporting reusable blocks",
       "when": "blocks are defined at app level and referenced in sections",
       "then": "it should enable block reusability across pages via $ref",
-      "x-validation": {
+      "validation": {
         "setup": {
           "app": {
             "blocks": [
@@ -630,7 +646,7 @@
           "DRY: define once, use everywhere with different content"
         ]
       },
-      "x-application": {
+      "application": {
         "blocks": {
           "cta": {
             "type": "section",
@@ -684,7 +700,7 @@
       "given": "a page with comprehensive metadata",
       "when": "meta includes SEO, social, structured data, and analytics",
       "then": "it should support complete metadata configuration beyond basic SEO",
-      "x-validation": {
+      "validation": {
         "setup": {
           "page": {
             "name": "Product Page",
@@ -726,7 +742,7 @@
           "Comprehensive metadata for discoverability and engagement"
         ]
       },
-      "x-application": {
+      "application": {
         "page": {
           "meta": {
             "title": "Amazing Product",
@@ -757,7 +773,7 @@
       "given": "a page with theme integration",
       "when": "page sections use app.theme colors, typography, and spacing via className",
       "then": "it should apply global theme to page elements without page-level theme config",
-      "x-validation": {
+      "validation": {
         "setup": {
           "app": {
             "theme": {
@@ -816,7 +832,7 @@
           "Page-specific styling via className, not page.theme"
         ]
       },
-      "x-application": {
+      "application": {
         "app": {
           "theme": {
             "colors": {
@@ -882,7 +898,7 @@
       "given": "a page with language integration",
       "when": "page uses app.languages for i18n with meta.lang and locale-specific content",
       "then": "it should adapt page content based on selected language without page-level translations",
-      "x-validation": {
+      "validation": {
         "setup": {
           "app": {
             "languages": {
@@ -943,7 +959,7 @@
           "Translation keys resolve based on meta.lang"
         ]
       },
-      "x-application": {
+      "application": {
         "app": {
           "languages": {
             "default": "en",
@@ -1023,7 +1039,7 @@
       "given": "a page with blocks integration",
       "when": "page sections reference app.blocks[] via $ref with $vars substitution",
       "then": "it should compose pages from reusable blocks without duplicating block definitions",
-      "x-validation": {
+      "validation": {
         "setup": {
           "app": {
             "blocks": [
@@ -1118,7 +1134,7 @@
           "DRY: Define block once, use across multiple pages"
         ]
       },
-      "x-application": {
+      "application": {
         "app": {
           "blocks": [
             {
@@ -1193,7 +1209,7 @@
       "given": "a page with responsive integration",
       "when": "page layout adapts across mobile, tablet, and desktop viewports",
       "then": "it should support responsive design via className utilities without separate mobile pages",
-      "x-validation": {
+      "validation": {
         "setup": {
           "page": {
             "name": "Responsive",
@@ -1258,7 +1274,7 @@
           "Single page adapts to all viewports"
         ]
       },
-      "x-application": {
+      "application": {
         "page": {
           "sections": [
             {
@@ -1329,7 +1345,7 @@
       "given": "a complete app with pages, theme, blocks, languages, and responsive",
       "when": "all systems work together in a full-stack configuration",
       "then": "it should demonstrate end-to-end integration of all page-building features",
-      "x-validation": {
+      "validation": {
         "setup": {
           "app": {
             "theme": {
@@ -1428,7 +1444,7 @@
           "Pages: Same structure, theme applied, translations resolved, responsive"
         ]
       },
-      "x-application": {
+      "application": {
         "app": {
           "theme": {
             "colors": {
@@ -1529,13 +1545,5 @@
         ]
       }
     }
-  ],
-  "x-notes": [
-    "Pages now support comprehensive metadata beyond basic SEO",
-    "⚠️ Theme is defined at app level (app.theme{}) - NOT in individual pages. See app.schema.json and theme.schema.json",
-    "⚠️ Blocks are defined at app level (app.blocks[]) - NOT in individual pages. See app.schema.json and blocks.schema.json",
-    "Sections can reference blocks using $ref syntax with variable substitution. See sections.schema.json and block-reference.schema.json",
-    "Pages cannot override theme - app.theme{} applies globally to all pages",
-    "For page-specific styling, use sections[].props.className with Tailwind utilities"
   ]
 }

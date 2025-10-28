@@ -5,7 +5,7 @@
   "description": "Field from related table to display in UI",
   "type": "string",
   "minLength": 1,
-  "specs": [
+  "x-specs": [
     {
       "id": "APP-FIELD-RELATIONSHIP-FIELD-DISPLAYFIELD-001",
       "given": "user provides displayField with at least 1 characters",

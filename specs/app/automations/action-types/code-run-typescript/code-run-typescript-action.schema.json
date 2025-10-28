@@ -38,7 +38,8 @@
   },
   "required": ["name", "service", "action", "params"],
   "additionalProperties": false,
-  "specs": [
+  "$id": "code-run-typescript-action.schema.json",
+  "x-specs": [
     {
       "id": "APP-CODE-RUN-TYPESCRIPT-001",
       "given": "the application is running",
@@ -171,6 +172,5 @@
       "when": "validating input",
       "then": "behavior should follow optional/required rules"
     }
-  ],
-  "$id": "code-run-typescript-action.schema.json"
+  ]
 }

@@ -33,8 +33,12 @@
             "items": {
               "type": "object",
               "properties": {
-                "label": { "type": "string" },
-                "href": { "type": "string" },
+                "label": {
+                  "type": "string"
+                },
+                "href": {
+                  "type": "string"
+                },
                 "target": {
                   "type": "string",
                   "enum": ["_self", "_blank"],
@@ -120,8 +124,12 @@
       "items": {
         "type": "object",
         "properties": {
-          "label": { "type": "string" },
-          "href": { "type": "string" }
+          "label": {
+            "type": "string"
+          },
+          "href": {
+            "type": "string"
+          }
         },
         "required": ["label", "href"]
       }
@@ -138,38 +146,62 @@
         {
           "title": "Product",
           "links": [
-            { "label": "Features", "href": "/features" },
-            { "label": "Pricing", "href": "/pricing" }
+            {
+              "label": "Features",
+              "href": "/features"
+            },
+            {
+              "label": "Pricing",
+              "href": "/pricing"
+            }
           ]
         },
         {
           "title": "Company",
           "links": [
-            { "label": "About", "href": "/about" },
-            { "label": "Blog", "href": "/blog" }
+            {
+              "label": "About",
+              "href": "/about"
+            },
+            {
+              "label": "Blog",
+              "href": "/blog"
+            }
           ]
         }
       ],
       "social": {
         "links": [
-          { "platform": "twitter", "url": "https://twitter.com/company" },
-          { "platform": "github", "url": "https://github.com/company" }
+          {
+            "platform": "twitter",
+            "url": "https://twitter.com/company"
+          },
+          {
+            "platform": "github",
+            "url": "https://github.com/company"
+          }
         ]
       },
       "copyright": "© 2024 Company Inc. All rights reserved.",
       "legal": [
-        { "label": "Privacy Policy", "href": "/privacy" },
-        { "label": "Terms of Service", "href": "/terms" }
+        {
+          "label": "Privacy Policy",
+          "href": "/privacy"
+        },
+        {
+          "label": "Terms of Service",
+          "href": "/terms"
+        }
       ]
     }
   ],
-  "specs": [
+  "x-specs": [
     {
       "id": "APP-PAGES-FOOTER-001",
       "given": "a footer with enabled set to true",
       "when": "footer should be visible (default)",
       "then": "it should display footer at bottom of page",
-      "x-validation": {
+      "validation": {
         "setup": {
           "footer": {
             "enabled": true
@@ -181,7 +213,7 @@
           "Most common setting (98% of websites)"
         ]
       },
-      "x-application": {
+      "application": {
         "footer": {
           "enabled": true,
           "copyright": "© 2024 Company Inc."
@@ -200,7 +232,7 @@
       "given": "a footer with logo",
       "when": "logo is './logo-footer.svg'",
       "then": "it should display footer logo",
-      "x-validation": {
+      "validation": {
         "setup": {
           "footer": {
             "enabled": true,
@@ -213,7 +245,7 @@
           "Optional property (not required)"
         ]
       },
-      "x-application": {
+      "application": {
         "footer": {
           "enabled": true,
           "logo": "./public/logo-footer.svg",
@@ -232,7 +264,7 @@
       "given": "a footer with description/tagline",
       "when": "description is 'Building the future of web applications'",
       "then": "it should render company description",
-      "x-validation": {
+      "validation": {
         "setup": {
           "footer": {
             "enabled": true,
@@ -245,7 +277,7 @@
           "Best practice: 1-2 sentences"
         ]
       },
-      "x-application": {
+      "application": {
         "footer": {
           "enabled": true,
           "logo": "./logo.svg",
@@ -264,7 +296,7 @@
       "given": "a footer with columns",
       "when": "columns array contains [Product, Company]",
       "then": "it should render multi-column link layout",
-      "x-validation": {
+      "validation": {
         "setup": {
           "footer": {
             "enabled": true,
@@ -272,15 +304,27 @@
               {
                 "title": "Product",
                 "links": [
-                  { "label": "Features", "href": "/features" },
-                  { "label": "Pricing", "href": "/pricing" }
+                  {
+                    "label": "Features",
+                    "href": "/features"
+                  },
+                  {
+                    "label": "Pricing",
+                    "href": "/pricing"
+                  }
                 ]
               },
               {
                 "title": "Company",
                 "links": [
-                  { "label": "About", "href": "/about" },
-                  { "label": "Blog", "href": "/blog" }
+                  {
+                    "label": "About",
+                    "href": "/about"
+                  },
+                  {
+                    "label": "Blog",
+                    "href": "/blog"
+                  }
                 ]
               }
             ]
@@ -292,31 +336,55 @@
           "Typically 2-5 columns"
         ]
       },
-      "x-application": {
+      "application": {
         "footer": {
           "enabled": true,
           "columns": [
             {
               "title": "Product",
               "links": [
-                { "label": "Features", "href": "/features" },
-                { "label": "Pricing", "href": "/pricing" },
-                { "label": "Changelog", "href": "/changelog" }
+                {
+                  "label": "Features",
+                  "href": "/features"
+                },
+                {
+                  "label": "Pricing",
+                  "href": "/pricing"
+                },
+                {
+                  "label": "Changelog",
+                  "href": "/changelog"
+                }
               ]
             },
             {
               "title": "Company",
               "links": [
-                { "label": "About", "href": "/about" },
-                { "label": "Blog", "href": "/blog" },
-                { "label": "Careers", "href": "/careers" }
+                {
+                  "label": "About",
+                  "href": "/about"
+                },
+                {
+                  "label": "Blog",
+                  "href": "/blog"
+                },
+                {
+                  "label": "Careers",
+                  "href": "/careers"
+                }
               ]
             },
             {
               "title": "Resources",
               "links": [
-                { "label": "Documentation", "href": "/docs" },
-                { "label": "API Reference", "href": "/api" }
+                {
+                  "label": "Documentation",
+                  "href": "/docs"
+                },
+                {
+                  "label": "API Reference",
+                  "href": "/api"
+                }
               ]
             }
           ]
@@ -335,13 +403,19 @@
       "given": "a footer column with title and links",
       "when": "column has title 'Product' with links [Features, Pricing]",
       "then": "it should render column heading and link list",
-      "x-validation": {
+      "validation": {
         "setup": {
           "column": {
             "title": "Product",
             "links": [
-              { "label": "Features", "href": "/features" },
-              { "label": "Pricing", "href": "/pricing" }
+              {
+                "label": "Features",
+                "href": "/features"
+              },
+              {
+                "label": "Pricing",
+                "href": "/pricing"
+              }
             ]
           }
         },
@@ -351,13 +425,22 @@
           "Each link: label + href (both required)"
         ]
       },
-      "x-application": {
+      "application": {
         "column": {
           "title": "Product",
           "links": [
-            { "label": "Features", "href": "/features" },
-            { "label": "Pricing", "href": "/pricing" },
-            { "label": "Integrations", "href": "/integrations" }
+            {
+              "label": "Features",
+              "href": "/features"
+            },
+            {
+              "label": "Pricing",
+              "href": "/pricing"
+            },
+            {
+              "label": "Integrations",
+              "href": "/integrations"
+            }
           ]
         },
         "expectedDOM": "<div data-testid=\"footer-column\"><h3 data-testid=\"column-title\" class=\"font-semibold text-white mb-4\">Product</h3><ul data-testid=\"column-links\" class=\"space-y-2\"><li><a href=\"/features\" class=\"text-gray-400 hover:text-white\">Features</a></li><li><a href=\"/pricing\" class=\"text-gray-400 hover:text-white\">Pricing</a></li><li><a href=\"/integrations\" class=\"text-gray-400 hover:text-white\">Integrations</a></li></ul></div>",
@@ -374,7 +457,7 @@
       "given": "a footer link with target _blank",
       "when": "link opens external site in new tab",
       "then": "it should support external link targets",
-      "x-validation": {
+      "validation": {
         "setup": {
           "link": {
             "label": "Documentation",
@@ -388,7 +471,7 @@
           "_blank: new tab (external links)"
         ]
       },
-      "x-application": {
+      "application": {
         "link": {
           "label": "Documentation",
           "href": "https://docs.external.com",
@@ -414,15 +497,21 @@
       "given": "a footer with social links",
       "when": "social has links for [twitter, github]",
       "then": "it should render social media icons",
-      "x-validation": {
+      "validation": {
         "setup": {
           "footer": {
             "enabled": true,
             "social": {
               "title": "Follow Us",
               "links": [
-                { "platform": "twitter", "url": "https://twitter.com/company" },
-                { "platform": "github", "url": "https://github.com/company" }
+                {
+                  "platform": "twitter",
+                  "url": "https://twitter.com/company"
+                },
+                {
+                  "platform": "github",
+                  "url": "https://github.com/company"
+                }
               ]
             }
           }
@@ -433,15 +522,24 @@
           "links: array of platform + url"
         ]
       },
-      "x-application": {
+      "application": {
         "footer": {
           "enabled": true,
           "social": {
             "title": "Follow Us",
             "links": [
-              { "platform": "twitter", "url": "https://twitter.com/acmecorp" },
-              { "platform": "linkedin", "url": "https://linkedin.com/company/acmecorp" },
-              { "platform": "github", "url": "https://github.com/acmecorp" }
+              {
+                "platform": "twitter",
+                "url": "https://twitter.com/acmecorp"
+              },
+              {
+                "platform": "linkedin",
+                "url": "https://linkedin.com/company/acmecorp"
+              },
+              {
+                "platform": "github",
+                "url": "https://github.com/acmecorp"
+              }
             ]
           }
         },
@@ -460,7 +558,7 @@
       "given": "a footer social link with platform",
       "when": "platform enum includes facebook, twitter, instagram, linkedin, youtube, github, tiktok",
       "then": "it should support 7 social platforms with auto icons",
-      "x-validation": {
+      "validation": {
         "setup": {
           "platforms": [
             "facebook",
@@ -478,16 +576,37 @@
           "Most popular social platforms covered"
         ]
       },
-      "x-application": {
+      "application": {
         "social": {
           "links": [
-            { "platform": "facebook", "url": "https://facebook.com/company" },
-            { "platform": "twitter", "url": "https://twitter.com/company" },
-            { "platform": "instagram", "url": "https://instagram.com/company" },
-            { "platform": "linkedin", "url": "https://linkedin.com/company/company" },
-            { "platform": "youtube", "url": "https://youtube.com/@company" },
-            { "platform": "github", "url": "https://github.com/company" },
-            { "platform": "tiktok", "url": "https://tiktok.com/@company" }
+            {
+              "platform": "facebook",
+              "url": "https://facebook.com/company"
+            },
+            {
+              "platform": "twitter",
+              "url": "https://twitter.com/company"
+            },
+            {
+              "platform": "instagram",
+              "url": "https://instagram.com/company"
+            },
+            {
+              "platform": "linkedin",
+              "url": "https://linkedin.com/company/company"
+            },
+            {
+              "platform": "youtube",
+              "url": "https://youtube.com/@company"
+            },
+            {
+              "platform": "github",
+              "url": "https://github.com/company"
+            },
+            {
+              "platform": "tiktok",
+              "url": "https://tiktok.com/@company"
+            }
           ]
         },
         "expectedDOM": "<div data-testid=\"footer-social\" class=\"flex gap-4\"><a data-testid=\"social-facebook\" href=\"https://facebook.com/company\"><svg><!-- Facebook icon --></svg></a><a data-testid=\"social-twitter\" href=\"https://twitter.com/company\"><svg><!-- Twitter/X icon --></svg></a><a data-testid=\"social-instagram\" href=\"https://instagram.com/company\"><svg><!-- Instagram icon --></svg></a><a data-testid=\"social-linkedin\" href=\"https://linkedin.com/company/company\"><svg><!-- LinkedIn icon --></svg></a><a data-testid=\"social-youtube\" href=\"https://youtube.com/@company\"><svg><!-- YouTube icon --></svg></a><a data-testid=\"social-github\" href=\"https://github.com/company\"><svg><!-- GitHub icon --></svg></a><a data-testid=\"social-tiktok\" href=\"https://tiktok.com/@company\"><svg><!-- TikTok icon --></svg></a></div>",
@@ -513,7 +632,7 @@
       "given": "a footer with newsletter subscription",
       "when": "newsletter.enabled is true with title and description",
       "then": "it should render email subscription form",
-      "x-validation": {
+      "validation": {
         "setup": {
           "footer": {
             "enabled": true,
@@ -533,7 +652,7 @@
           "Common footer feature (email capture)"
         ]
       },
-      "x-application": {
+      "application": {
         "footer": {
           "enabled": true,
           "newsletter": {
@@ -564,7 +683,7 @@
       "given": "a footer with copyright text",
       "when": "copyright is '© 2024 Company Inc. All rights reserved.'",
       "then": "it should display copyright notice",
-      "x-validation": {
+      "validation": {
         "setup": {
           "footer": {
             "enabled": true,
@@ -577,7 +696,7 @@
           "Legal protection for content"
         ]
       },
-      "x-application": {
+      "application": {
         "footer": {
           "enabled": true,
           "copyright": "© 2024 Acme Corp. All rights reserved."
@@ -597,13 +716,19 @@
       "given": "a footer with legal links",
       "when": "legal includes [Privacy Policy, Terms of Service]",
       "then": "it should render legal link list",
-      "x-validation": {
+      "validation": {
         "setup": {
           "footer": {
             "enabled": true,
             "legal": [
-              { "label": "Privacy Policy", "href": "/privacy" },
-              { "label": "Terms of Service", "href": "/terms" }
+              {
+                "label": "Privacy Policy",
+                "href": "/privacy"
+              },
+              {
+                "label": "Terms of Service",
+                "href": "/terms"
+              }
             ]
           }
         },
@@ -613,14 +738,23 @@
           "Common: Privacy, Terms, Cookies"
         ]
       },
-      "x-application": {
+      "application": {
         "footer": {
           "enabled": true,
           "copyright": "© 2024 Acme Corp. All rights reserved.",
           "legal": [
-            { "label": "Privacy Policy", "href": "/privacy" },
-            { "label": "Terms of Service", "href": "/terms" },
-            { "label": "Cookie Policy", "href": "/cookies" }
+            {
+              "label": "Privacy Policy",
+              "href": "/privacy"
+            },
+            {
+              "label": "Terms of Service",
+              "href": "/terms"
+            },
+            {
+              "label": "Cookie Policy",
+              "href": "/cookies"
+            }
           ]
         },
         "expectedDOM": "<footer data-testid=\"footer\"><div class=\"border-t border-gray-800 pt-8\"><div class=\"flex flex-col md:flex-row justify-between items-center gap-4\"><p data-testid=\"footer-copyright\" class=\"text-gray-400 text-sm\">© 2024 Acme Corp. All rights reserved.</p><nav data-testid=\"footer-legal\" class=\"flex gap-6\"><a data-testid=\"legal-link-privacy\" href=\"/privacy\" class=\"text-gray-400 hover:text-white text-sm\">Privacy Policy</a><a data-testid=\"legal-link-terms\" href=\"/terms\" class=\"text-gray-400 hover:text-white text-sm\">Terms of Service</a><a data-testid=\"legal-link-cookies\" href=\"/cookies\" class=\"text-gray-400 hover:text-white text-sm\">Cookie Policy</a></nav></div></div></footer>",
@@ -638,7 +772,7 @@
       "given": "a disabled footer",
       "when": "enabled is false",
       "then": "it should not render footer",
-      "x-validation": {
+      "validation": {
         "setup": {
           "footer": {
             "enabled": false
@@ -650,7 +784,7 @@
           "Rare use case (98% of sites have footers)"
         ]
       },
-      "x-application": {
+      "application": {
         "footer": {
           "enabled": false,
           "copyright": "© 2024 Company Inc."
@@ -669,24 +803,42 @@
       "given": "a footer with all 5 sections",
       "when": "footer includes logo, columns, social, newsletter, legal",
       "then": "it should render comprehensive footer layout",
-      "x-validation": {
+      "validation": {
         "setup": {
           "footer": {
             "enabled": true,
             "logo": "./logo.svg",
             "description": "Building the future",
             "columns": [
-              { "title": "Product", "links": [{ "label": "Features", "href": "/features" }] }
+              {
+                "title": "Product",
+                "links": [
+                  {
+                    "label": "Features",
+                    "href": "/features"
+                  }
+                ]
+              }
             ],
             "social": {
-              "links": [{ "platform": "twitter", "url": "https://twitter.com/company" }]
+              "links": [
+                {
+                  "platform": "twitter",
+                  "url": "https://twitter.com/company"
+                }
+              ]
             },
             "newsletter": {
               "enabled": true,
               "title": "Subscribe"
             },
             "copyright": "© 2024 Company Inc.",
-            "legal": [{ "label": "Privacy", "href": "/privacy" }]
+            "legal": [
+              {
+                "label": "Privacy",
+                "href": "/privacy"
+              }
+            ]
           }
         },
         "assertions": [
@@ -698,7 +850,7 @@
           "Legal: compliance"
         ]
       },
-      "x-application": {
+      "application": {
         "footer": {
           "enabled": true,
           "logo": "./public/logo-footer.svg",
@@ -707,23 +859,41 @@
             {
               "title": "Product",
               "links": [
-                { "label": "Features", "href": "/features" },
-                { "label": "Pricing", "href": "/pricing" }
+                {
+                  "label": "Features",
+                  "href": "/features"
+                },
+                {
+                  "label": "Pricing",
+                  "href": "/pricing"
+                }
               ]
             },
             {
               "title": "Company",
               "links": [
-                { "label": "About", "href": "/about" },
-                { "label": "Blog", "href": "/blog" }
+                {
+                  "label": "About",
+                  "href": "/about"
+                },
+                {
+                  "label": "Blog",
+                  "href": "/blog"
+                }
               ]
             }
           ],
           "social": {
             "title": "Follow Us",
             "links": [
-              { "platform": "twitter", "url": "https://twitter.com/acme" },
-              { "platform": "linkedin", "url": "https://linkedin.com/company/acme" }
+              {
+                "platform": "twitter",
+                "url": "https://twitter.com/acme"
+              },
+              {
+                "platform": "linkedin",
+                "url": "https://linkedin.com/company/acme"
+              }
             ]
           },
           "newsletter": {
@@ -735,8 +905,14 @@
           },
           "copyright": "© 2024 Acme Corp. All rights reserved.",
           "legal": [
-            { "label": "Privacy Policy", "href": "/privacy" },
-            { "label": "Terms", "href": "/terms" }
+            {
+              "label": "Privacy Policy",
+              "href": "/privacy"
+            },
+            {
+              "label": "Terms",
+              "href": "/terms"
+            }
           ]
         },
         "expectedDOM": "<footer data-testid=\"footer\" class=\"bg-gray-900 text-white py-12\"><div class=\"container\"><div class=\"grid grid-cols-4 gap-8 mb-8\"><div data-testid=\"footer-brand\"><img src=\"./public/logo-footer.svg\" class=\"h-8 mb-4\" /><p class=\"text-gray-400\">Building the future of web applications with modern technology</p><div data-testid=\"footer-social\" class=\"flex gap-4 mt-4\"><a href=\"https://twitter.com/acme\"><svg><!-- Twitter --></svg></a><a href=\"https://linkedin.com/company/acme\"><svg><!-- LinkedIn --></svg></a></div></div><div data-testid=\"footer-column-0\"><h3 class=\"font-semibold mb-4\">Product</h3><ul><li><a href=\"/features\">Features</a></li><li><a href=\"/pricing\">Pricing</a></li></ul></div><div data-testid=\"footer-column-1\"><h3 class=\"font-semibold mb-4\">Company</h3><ul><li><a href=\"/about\">About</a></li><li><a href=\"/blog\">Blog</a></li></ul></div><div data-testid=\"footer-newsletter\"><h3 class=\"font-semibold mb-4\">Stay updated</h3><p class=\"text-gray-400 mb-4\">Get weekly updates</p><form class=\"flex gap-2\"><input type=\"email\" placeholder=\"your@email.com\" /><button type=\"submit\">Subscribe</button></form></div></div><div class=\"border-t border-gray-800 pt-8 flex justify-between items-center\"><p data-testid=\"footer-copyright\" class=\"text-gray-400 text-sm\">© 2024 Acme Corp. All rights reserved.</p><nav data-testid=\"footer-legal\" class=\"flex gap-6\"><a href=\"/privacy\" class=\"text-gray-400 text-sm\">Privacy Policy</a><a href=\"/terms\" class=\"text-gray-400 text-sm\">Terms</a></nav></div></div></footer>",
@@ -758,7 +934,7 @@
       "given": "a footer with custom social icon",
       "when": "social link has custom icon property",
       "then": "it should override default platform icon",
-      "x-validation": {
+      "validation": {
         "setup": {
           "social": {
             "links": [
@@ -776,7 +952,7 @@
           "Use case: custom brand icons, special designs"
         ]
       },
-      "x-application": {
+      "application": {
         "social": {
           "links": [
             {

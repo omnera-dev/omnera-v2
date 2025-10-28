@@ -6,7 +6,7 @@
   "type": "string",
   "default": "star",
   "enum": ["star", "number", "heart"],
-  "specs": [
+  "x-specs": [
     {
       "id": "APP-FIELD-RATING-FIELD-STYLE-001",
       "given": "user selects style from valid options",

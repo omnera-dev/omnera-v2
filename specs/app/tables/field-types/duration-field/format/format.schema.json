@@ -6,7 +6,7 @@
   "type": "string",
   "default": "h:mm:ss",
   "enum": ["h:mm", "h:mm:ss", "minutes", "seconds"],
-  "specs": [
+  "x-specs": [
     {
       "id": "APP-FIELD-DURATION-FIELD-FORMAT-001",
       "given": "user selects format from valid options",

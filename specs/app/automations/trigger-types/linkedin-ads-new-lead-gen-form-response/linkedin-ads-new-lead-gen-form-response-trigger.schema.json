@@ -47,7 +47,8 @@
   },
   "required": ["account", "service", "event", "params"],
   "additionalProperties": false,
-  "specs": [
+  "$id": "linkedin-ads-new-lead-gen-form-response-trigger.schema.json",
+  "x-specs": [
     {
       "id": "APP-LINKEDIN-ADS-NEW-LEAD-GEN-FORM-RESPONSE-001",
       "given": "the application is running",
@@ -156,6 +157,5 @@
       "when": "processing entity",
       "then": "appropriate behavior should execute"
     }
-  ],
-  "$id": "linkedin-ads-new-lead-gen-form-response-trigger.schema.json"
+  ]
 }

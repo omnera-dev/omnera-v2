@@ -5,7 +5,7 @@
   "description": "Aggregation function to apply",
   "type": "string",
   "enum": ["sum", "count", "average", "min", "max", "median", "concat", "unique"],
-  "specs": [
+  "x-specs": [
     {
       "id": "APP-FIELD-ROLLUP-FIELD-AGGREGATION-001",
       "given": "user selects aggregation from valid options",

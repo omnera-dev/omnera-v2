@@ -35,7 +35,7 @@
   "description": "Whole number field without decimal places. Ideal for counts, IDs, quantities, ages, and rankings. Supports min/max constraints for range validation. Required flag makes the field mandatory. Unique constraint ensures no duplicate values. Indexing enables efficient numerical sorting and filtering.",
   "required": ["id", "name", "type"],
   "additionalProperties": false,
-  "specs": [
+  "x-specs": [
     {
       "id": "APP-INTEGER-FIELD-001",
       "given": "a Integer Field is configured",

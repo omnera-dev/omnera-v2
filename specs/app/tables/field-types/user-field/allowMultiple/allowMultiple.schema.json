@@ -5,7 +5,7 @@
   "description": "Whether to allow multiple users to be selected",
   "type": "boolean",
   "default": false,
-  "specs": [
+  "x-specs": [
     {
       "id": "APP-FIELD-USER-FIELD-ALLOWMULTIPLE-001",
       "given": "allowMultiple is true",

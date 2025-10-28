@@ -7,5 +7,5 @@
   "minLength": 1,
   "maxLength": 100,
   "examples": ["My Airtable Workspace", "Production Database", "Marketing Team Airtable"],
-  "specs": []
+  "x-specs": []
 }

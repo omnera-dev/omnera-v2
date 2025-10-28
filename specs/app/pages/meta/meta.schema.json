@@ -79,13 +79,13 @@
   },
   "required": ["lang", "title", "description"],
   "additionalProperties": false,
-  "specs": [
+  "x-specs": [
     {
       "id": "APP-PAGES-META-001",
       "given": "page metadata with required properties",
       "when": "lang is 'en-US', title is 'My Page', description is 'Page description'",
       "then": "it should validate minimal metadata configuration",
-      "x-validation": {
+      "validation": {
         "setup": {
           "meta": {
             "lang": "en-US",
@@ -101,7 +101,7 @@
           "description: SEO and social sharing"
         ]
       },
-      "x-application": {
+      "application": {
         "meta": {
           "lang": "en-US",
           "title": "My Page",
@@ -121,7 +121,7 @@
       "given": "page metadata with title maxLength",
       "when": "title has 60 characters max for optimal SEO display",
       "then": "it should enforce title length constraint",
-      "x-validation": {
+      "validation": {
         "setup": {
           "valid": {
             "title": "Short Page Title for SEO - Fits in Search Results"
@@ -137,7 +137,7 @@
           "Optimal title length for Google search results"
         ]
       },
-      "x-application": {
+      "application": {
         "meta": {
           "title": "Short Page Title for SEO - Fits in Search Results"
         },
@@ -158,7 +158,7 @@
       "given": "page metadata with description maxLength",
       "when": "description has 160 characters max for SEO snippets",
       "then": "it should enforce description length constraint",
-      "x-validation": {
+      "validation": {
         "setup": {
           "valid": {
             "description": "This is a compelling page description that fits within the 160 character limit recommended for optimal display in search engine result snippets."
@@ -174,7 +174,7 @@
           "Optimal description for Google snippets"
         ]
       },
-      "x-application": {
+      "application": {
         "meta": {
           "description": "This is a compelling page description that fits within the 160 character limit recommended for optimal display in search engine result snippets."
         },
@@ -195,7 +195,7 @@
       "given": "page metadata with keywords",
       "when": "keywords is comma-separated list for SEO",
       "then": "it should accept keyword string",
-      "x-validation": {
+      "validation": {
         "setup": {
           "meta": {
             "keywords": "web development, react, typescript, seo optimization, page builder"
@@ -208,7 +208,7 @@
           "Helps categorize content"
         ]
       },
-      "x-application": {
+      "application": {
         "meta": {
           "keywords": "web development, react, typescript, seo optimization, page builder"
         },
@@ -226,7 +226,7 @@
       "given": "page metadata with canonical URL",
       "when": "canonical prevents duplicate content issues",
       "then": "it should define canonical URL",
-      "x-validation": {
+      "validation": {
         "setup": {
           "meta": {
             "canonical": "https://example.com/products/widget"
@@ -244,7 +244,7 @@
           "Essential for SEO with query parameters"
         ]
       },
-      "x-application": {
+      "application": {
         "meta": {
           "canonical": "https://example.com/products/widget"
         },
@@ -266,7 +266,7 @@
       "given": "page metadata with favicon and favicons",
       "when": "favicon is simple icon, favicons is complete set",
       "then": "it should support both single and multi-favicon configurations",
-      "x-validation": {
+      "validation": {
         "setup": {
           "simple": {
             "favicon": "/favicon.ico"
@@ -295,7 +295,7 @@
           "favicons provides better multi-device support"
         ]
       },
-      "x-application": {
+      "application": {
         "meta": {
           "favicons": {
             "icon": "/icon.svg",
@@ -322,7 +322,7 @@
       "given": "page metadata with stylesheet and googleFonts",
       "when": "stylesheet and font URLs are provided",
       "then": "it should include CSS and font resources",
-      "x-validation": {
+      "validation": {
         "setup": {
           "meta": {
             "stylesheet": "/styles/main.css",
@@ -336,7 +336,7 @@
           "Fonts with display=swap for performance"
         ]
       },
-      "x-application": {
+      "application": {
         "meta": {
           "stylesheet": "/styles/main.css",
           "googleFonts": "https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap"
@@ -355,7 +355,7 @@
       "given": "page metadata with social media integration",
       "when": "openGraph and twitter properties are configured",
       "then": "it should enable rich social sharing",
-      "x-validation": {
+      "validation": {
         "setup": {
           "meta": {
             "openGraph": {
@@ -379,7 +379,7 @@
           "Essential for social media marketing"
         ]
       },
-      "x-application": {
+      "application": {
         "meta": {
           "openGraph": {
             "title": "Amazing Product Launch",
@@ -413,7 +413,7 @@
       "given": "page metadata with structured data",
       "when": "schema property contains Schema.org markup",
       "then": "it should provide search engine understanding",
-      "x-validation": {
+      "validation": {
         "setup": {
           "meta": {
             "schema": {
@@ -432,7 +432,7 @@
           "Rich results in Google (logo, name, etc.)"
         ]
       },
-      "x-application": {
+      "application": {
         "meta": {
           "schema": {
             "@context": "https://schema.org",
@@ -460,7 +460,7 @@
       "given": "page metadata with performance optimizations",
       "when": "preload and dnsPrefetch are configured",
       "then": "it should optimize page load performance",
-      "x-validation": {
+      "validation": {
         "setup": {
           "meta": {
             "preload": [
@@ -481,7 +481,7 @@
           "Critical for web performance"
         ]
       },
-      "x-application": {
+      "application": {
         "meta": {
           "preload": [
             {
@@ -511,7 +511,7 @@
       "given": "page metadata with analytics",
       "when": "analytics property configures tracking providers",
       "then": "it should enable visitor analytics",
-      "x-validation": {
+      "validation": {
         "setup": {
           "meta": {
             "analytics": {
@@ -529,7 +529,7 @@
           "Visitor tracking and conversion measurement"
         ]
       },
-      "x-application": {
+      "application": {
         "meta": {
           "analytics": {
             "googleAnalytics": "G-XXXXXXXXXX",
@@ -554,7 +554,7 @@
       "given": "page metadata orchestrating all sub-schemas",
       "when": "metadata includes SEO, social, structured data, performance, analytics",
       "then": "it should provide comprehensive page metadata management",
-      "x-validation": {
+      "validation": {
         "setup": {
           "meta": {
             "lang": "en-US",
@@ -591,7 +591,7 @@
           "Comprehensive metadata orchestration"
         ]
       },
-      "x-application": {
+      "application": {
         "meta": {
           "lang": "en-US",
           "title": "Complete Page Metadata Example",

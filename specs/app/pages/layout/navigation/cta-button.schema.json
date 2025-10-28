@@ -58,7 +58,7 @@
       "iconPosition": "right"
     }
   ],
-  "specs": [
+  "x-specs": [
     {
       "id": "APP-PAGES-CTA-001",
       "given": "a CTA button with text and href",

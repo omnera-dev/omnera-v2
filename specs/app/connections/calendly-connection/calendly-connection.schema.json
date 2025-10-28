@@ -32,7 +32,7 @@
       "clientSecret": "secret_calendly_abc123"
     }
   ],
-  "specs": [
+  "x-specs": [
     {
       "id": "APP-CONN-CALENDLY-001",
       "title": "Create Calendly connection with valid OAuth credentials",

@@ -38,7 +38,8 @@
   },
   "required": ["name", "account", "service", "action", "params"],
   "additionalProperties": false,
-  "specs": [
+  "$id": "calendly-get-event-type-action.schema.json",
+  "x-specs": [
     {
       "id": "APP-CALENDLY-GET-EVENT-TYPE-001",
       "given": "user provides name",
@@ -111,6 +112,5 @@
       "when": "validating input",
       "then": "behavior should follow optional/required rules"
     }
-  ],
-  "$id": "calendly-get-event-type-action.schema.json"
+  ]
 }

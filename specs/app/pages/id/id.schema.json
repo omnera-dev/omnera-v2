@@ -4,7 +4,7 @@
   "title": "Page ID",
   "description": "Unique identifier for the page",
   "$ref": "../../common/definitions.schema.json#/definitions/id",
-  "specs": [
+  "x-specs": [
     {
       "id": "APP-PAGES-ID-001",
       "given": "a page ID as string",

@@ -6,7 +6,7 @@
   "type": "string",
   "default": "qr",
   "enum": ["qr", "ean13", "code128", "code39"],
-  "specs": [
+  "x-specs": [
     {
       "id": "APP-FIELD-BARCODE-FIELD-FORMAT-001",
       "given": "user selects format from valid options",

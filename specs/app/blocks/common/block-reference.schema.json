@@ -15,7 +15,17 @@
       "description": "Variables to substitute in the block template",
       "patternProperties": {
         "^[a-zA-Z][a-zA-Z0-9]*$": {
-          "oneOf": [{ "type": "string" }, { "type": "number" }, { "type": "boolean" }]
+          "oneOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "number"
+            },
+            {
+              "type": "boolean"
+            }
+          ]
         }
       },
       "additionalProperties": false
@@ -41,19 +51,31 @@
       }
     }
   ],
-  "specs": [
+  "x-specs": [
     {
       "id": "APP-BLOCKS-REFERENCE-001",
       "given": "block reference with required properties",
       "when": "$ref and vars are provided",
       "then": "it should validate minimal block reference structure at build time",
-      "x-validation": {
+      "validation": {
         "setup": {
           "validReference": {
             "$ref": "my-block",
-            "vars": { "color": "blue" }
+            "vars": {
+              "color": "blue"
+            }
           },
-          "invalidReferences": [{ "$ref": "my-block" }, { "vars": { "color": "blue" } }, {}]
+          "invalidReferences": [
+            {
+              "$ref": "my-block"
+            },
+            {
+              "vars": {
+                "color": "blue"
+              }
+            },
+            {}
+          ]
         },
         "assertions": [
           "Valid: Both $ref and vars present",
@@ -71,12 +93,30 @@
       "x-test": {
         "setup": {
           "blocks": [
-            { "name": "icon-badge", "type": "badge", "content": "$text" },
-            { "name": "cta-button", "type": "button", "content": "$label" }
+            {
+              "name": "icon-badge",
+              "type": "badge",
+              "content": "$text"
+            },
+            {
+              "name": "cta-button",
+              "type": "button",
+              "content": "$label"
+            }
           ],
           "references": [
-            { "$ref": "icon-badge", "vars": { "text": "New" } },
-            { "$ref": "cta-button", "vars": { "label": "Click" } }
+            {
+              "$ref": "icon-badge",
+              "vars": {
+                "text": "New"
+              }
+            },
+            {
+              "$ref": "cta-button",
+              "vars": {
+                "label": "Click"
+              }
+            }
           ]
         },
         "expectedDOM": "<div data-testid=\"block-icon-badge\">New</div>\n<button data-testid=\"block-cta-button\">Click</button>",
@@ -93,7 +133,7 @@
       "given": "block reference $ref pattern",
       "when": "$ref matches ^[a-z][a-z0-9-]*$ pattern",
       "then": "it should validate kebab-case naming at build time",
-      "x-validation": {
+      "validation": {
         "setup": {
           "validRefs": ["icon-badge", "cta", "section-header-2", "my-component"],
           "invalidRefs": ["IconBadge", "cta_button", "section header", "2-columns", ""]
@@ -111,11 +151,17 @@
       "given": "block reference $ref validation",
       "when": "$ref value must match existing block name in blocks array",
       "then": "it should fail validation if referenced block doesn't exist",
-      "x-validation": {
+      "validation": {
         "setup": {
           "blocks": [
-            { "name": "icon-badge", "type": "badge" },
-            { "name": "cta-button", "type": "button" }
+            {
+              "name": "icon-badge",
+              "type": "badge"
+            },
+            {
+              "name": "cta-button",
+              "type": "button"
+            }
           ],
           "validReference": {
             "$ref": "icon-badge",
@@ -145,9 +191,21 @@
             "name": "user-card",
             "type": "card",
             "children": [
-              { "type": "text", "props": { "level": "h3" }, "content": "$name" },
-              { "type": "text", "content": "$role" },
-              { "type": "text", "content": "$email" }
+              {
+                "type": "text",
+                "props": {
+                  "level": "h3"
+                },
+                "content": "$name"
+              },
+              {
+                "type": "text",
+                "content": "$role"
+              },
+              {
+                "type": "text",
+                "content": "$email"
+              }
             ]
           },
           "reference": {
@@ -173,7 +231,7 @@
       "given": "vars property names in camelCase",
       "when": "vars property names match ^[a-zA-Z][a-zA-Z0-9]*$ pattern",
       "then": "it should validate JavaScript naming convention for variables",
-      "x-validation": {
+      "validation": {
         "setup": {
           "validVars": {
             "color": "blue",
@@ -205,11 +263,25 @@
           "blockDefinition": {
             "name": "settings-toggle",
             "type": "div",
-            "props": { "className": "setting-$priority" },
+            "props": {
+              "className": "setting-$priority"
+            },
             "children": [
-              { "type": "text", "content": "$label" },
-              { "type": "input", "props": { "type": "checkbox", "checked": "$enabled" } },
-              { "type": "text", "content": "Max: $maxValue" }
+              {
+                "type": "text",
+                "content": "$label"
+              },
+              {
+                "type": "input",
+                "props": {
+                  "type": "checkbox",
+                  "checked": "$enabled"
+                }
+              },
+              {
+                "type": "text",
+                "content": "Max: $maxValue"
+              }
             ]
           },
           "reference": {
@@ -241,10 +313,24 @@
           "blockDefinition": {
             "name": "icon-badge",
             "type": "badge",
-            "props": { "color": "$color" },
+            "props": {
+              "color": "$color"
+            },
             "children": [
-              { "type": "icon", "props": { "name": "$icon", "size": 4 } },
-              { "type": "text", "props": { "level": "span" }, "content": "$text" }
+              {
+                "type": "icon",
+                "props": {
+                  "name": "$icon",
+                  "size": 4
+                }
+              },
+              {
+                "type": "text",
+                "props": {
+                  "level": "span"
+                },
+                "content": "$text"
+              }
             ]
           },
           "reference": {
@@ -275,7 +361,9 @@
           "blockDefinition": {
             "name": "section-header",
             "type": "container",
-            "props": { "className": "text-center mb-12" },
+            "props": {
+              "className": "text-center mb-12"
+            },
             "children": [
               {
                 "type": "text",
@@ -285,7 +373,13 @@
                 },
                 "content": "$title"
               },
-              { "type": "text", "props": { "level": "p" }, "content": "$subtitle" }
+              {
+                "type": "text",
+                "props": {
+                  "level": "p"
+                },
+                "content": "$subtitle"
+              }
             ]
           },
           "reference": {
@@ -317,12 +411,17 @@
           "template": {
             "name": "alert",
             "type": "div",
-            "props": { "className": "alert alert-$variant" },
+            "props": {
+              "className": "alert alert-$variant"
+            },
             "content": "$message"
           },
           "reference": {
             "$ref": "alert",
-            "vars": { "variant": "success", "message": "Saved successfully!" }
+            "vars": {
+              "variant": "success",
+              "message": "Saved successfully!"
+            }
           },
           "substitutionProcess": {
             "step1": "Find all $variable placeholders in template",
@@ -351,19 +450,42 @@
             "name": "team-member",
             "type": "card",
             "children": [
-              { "type": "img", "props": { "src": "$photo", "alt": "$name" } },
-              { "type": "text", "props": { "level": "h4" }, "content": "$name" },
-              { "type": "text", "content": "$position" }
+              {
+                "type": "img",
+                "props": {
+                  "src": "$photo",
+                  "alt": "$name"
+                }
+              },
+              {
+                "type": "text",
+                "props": {
+                  "level": "h4"
+                },
+                "content": "$name"
+              },
+              {
+                "type": "text",
+                "content": "$position"
+              }
             ]
           },
           "references": [
             {
               "$ref": "team-member",
-              "vars": { "photo": "/alice.jpg", "name": "Alice", "position": "CEO" }
+              "vars": {
+                "photo": "/alice.jpg",
+                "name": "Alice",
+                "position": "CEO"
+              }
             },
             {
               "$ref": "team-member",
-              "vars": { "photo": "/bob.jpg", "name": "Bob", "position": "CTO" }
+              "vars": {
+                "photo": "/bob.jpg",
+                "name": "Bob",
+                "position": "CTO"
+              }
             },
             {
               "$ref": "team-member",
@@ -394,14 +516,31 @@
           "blockDefinition": {
             "name": "feature-item",
             "type": "div",
-            "props": { "className": "feature flex gap-4" },
+            "props": {
+              "className": "feature flex gap-4"
+            },
             "children": [
-              { "type": "icon", "props": { "name": "$icon", "color": "blue" } },
+              {
+                "type": "icon",
+                "props": {
+                  "name": "$icon",
+                  "color": "blue"
+                }
+              },
               {
                 "type": "div",
                 "children": [
-                  { "type": "text", "props": { "level": "h5" }, "content": "$title" },
-                  { "type": "text", "content": "$description" }
+                  {
+                    "type": "text",
+                    "props": {
+                      "level": "h5"
+                    },
+                    "content": "$title"
+                  },
+                  {
+                    "type": "text",
+                    "content": "$description"
+                  }
                 ]
               }
             ]

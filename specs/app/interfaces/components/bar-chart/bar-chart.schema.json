@@ -37,5 +37,5 @@
   },
   "required": ["id", "type", "dataSource", "xAxis", "yAxis", "position"],
   "additionalProperties": false,
-  "specs": []
+  "x-specs": []
 }

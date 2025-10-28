@@ -27,7 +27,7 @@
   "description": "List of values (tags, keywords)",
   "required": ["id", "name", "type"],
   "additionalProperties": false,
-  "specs": [
+  "x-specs": [
     {
       "id": "APP-ARRAY-FIELD-001",
       "given": "entity with type='array'",

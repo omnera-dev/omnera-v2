@@ -5,7 +5,7 @@
   "description": "Name of the relationship field to aggregate from",
   "type": "string",
   "minLength": 1,
-  "specs": [
+  "x-specs": [
     {
       "id": "APP-FIELD-ROLLUP-FIELD-RELATIONSHIPFIELD-001",
       "given": "user provides relationshipField with at least 1 characters",

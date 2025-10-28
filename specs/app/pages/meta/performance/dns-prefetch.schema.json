@@ -14,7 +14,7 @@
   "examples": [
     ["https://fonts.googleapis.com", "https://www.google-analytics.com", "https://cdn.example.com"]
   ],
-  "specs": [
+  "x-specs": [
     {
       "id": "APP-PAGES-DNS-001",
       "given": "DNS prefetch array with domains",

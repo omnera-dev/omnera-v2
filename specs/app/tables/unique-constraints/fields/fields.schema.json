@@ -13,5 +13,5 @@
     ["email", "tenant_id"],
     ["first_name", "last_name", "birth_date"]
   ],
-  "specs": []
+  "x-specs": []
 }

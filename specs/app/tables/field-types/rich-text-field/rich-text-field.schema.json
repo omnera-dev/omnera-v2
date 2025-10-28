@@ -24,7 +24,7 @@
   "description": "Formatted text with markdown support",
   "required": ["id", "name", "type"],
   "additionalProperties": false,
-  "specs": [
+  "x-specs": [
     {
       "id": "APP-RICH-TEXT-FIELD-001",
       "given": "entity with type='rich-text'",

@@ -17,7 +17,7 @@
     "Variable names must start with a letter and contain only alphanumeric characters",
     "Multiple variables can appear in the same string"
   ],
-  "specs": [
+  "x-specs": [
     {
       "id": "APP-PAGES-VARREF-001",
       "given": "a simple variable reference",

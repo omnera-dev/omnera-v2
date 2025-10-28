@@ -4,7 +4,7 @@
   "title": "Maximum value",
   "description": "Maximum value",
   "type": "number",
-  "specs": [
+  "x-specs": [
     {
       "id": "APP-FIELD-INTEGER-FIELD-MAX-001",
       "given": "user provides max",

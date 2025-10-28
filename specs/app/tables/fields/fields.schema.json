@@ -120,7 +120,7 @@
       }
     ]
   },
-  "specs": [
+  "x-specs": [
     {
       "id": "APP-TABLES-FIELDS-001",
       "given": "user provides fields with at least 1 items",

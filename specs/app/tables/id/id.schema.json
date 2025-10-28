@@ -5,7 +5,7 @@
   "title": "Table ID",
   "description": "Unique identifier for the table",
   "examples": [1, 2, 100],
-  "specs": [
+  "x-specs": [
     {
       "id": "APP-TABLES-ID-001",
       "given": "a new entity is created",

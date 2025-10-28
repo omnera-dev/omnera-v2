@@ -52,7 +52,8 @@
   },
   "required": ["name", "account", "service", "action", "params"],
   "additionalProperties": false,
-  "specs": [
+  "$id": "notion-search-pages-action.schema.json",
+  "x-specs": [
     {
       "id": "APP-NOTION-SEARCH-PAGES-001",
       "given": "user provides name",
@@ -173,6 +174,5 @@
       "when": "evaluating condition",
       "then": "variables should resolve from trigger context"
     }
-  ],
-  "$id": "notion-search-pages-action.schema.json"
+  ]
 }

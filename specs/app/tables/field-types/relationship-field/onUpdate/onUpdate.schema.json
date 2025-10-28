@@ -6,7 +6,7 @@
   "type": "string",
   "default": "cascade",
   "enum": ["cascade", "set-null", "restrict", "no-action"],
-  "specs": [
+  "x-specs": [
     {
       "id": "APP-FIELD-RELATIONSHIP-FIELD-ONUPDATE-001",
       "given": "user selects onUpdate from valid options",

@@ -79,7 +79,8 @@
   },
   "required": ["name", "service", "action", "params"],
   "additionalProperties": false,
-  "specs": [
+  "$id": "http-post-action.schema.json",
+  "x-specs": [
     {
       "id": "APP-HTTP-POST-ACTION-001",
       "given": "the application is running",
@@ -194,6 +195,5 @@
       "when": "processing configuration",
       "then": "value should be used correctly"
     }
-  ],
-  "$id": "http-post-action.schema.json"
+  ]
 }

@@ -7,7 +7,7 @@
   "default": 2,
   "minimum": 0,
   "maximum": 10,
-  "specs": [
+  "x-specs": [
     {
       "id": "APP-FIELD-DECIMAL-FIELD-PRECISION-001",
       "given": "user provides precision between 0 and 10",

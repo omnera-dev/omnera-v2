@@ -32,7 +32,7 @@
       "$ref": "../trigger-types/facebook-ads-new-lead/facebook-ads-new-lead-trigger.schema.json"
     }
   ],
-  "specs": [
+  "x-specs": [
     {
       "id": "APP-TRIGGER-019",
       "given": "user configures trigger",

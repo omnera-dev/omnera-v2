@@ -21,7 +21,7 @@
   "description": "Geographic coordinates (latitude/longitude)",
   "required": ["id", "name", "type"],
   "additionalProperties": false,
-  "specs": [
+  "x-specs": [
     {
       "id": "APP-GEOLOCATION-FIELD-001",
       "given": "entity with type='geolocation'",

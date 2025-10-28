@@ -40,7 +40,8 @@
   },
   "required": ["name", "service", "action", "params"],
   "additionalProperties": false,
-  "specs": [
+  "$id": "filter-split-into-paths-action.schema.json",
+  "x-specs": [
     {
       "id": "APP-FILTER-SPLIT-INTO-PATHS-001",
       "given": "the application is running",
@@ -149,6 +150,5 @@
       "when": "validating input",
       "then": "behavior should follow optional/required rules"
     }
-  ],
-  "$id": "filter-split-into-paths-action.schema.json"
+  ]
 }

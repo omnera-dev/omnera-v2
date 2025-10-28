@@ -7,5 +7,5 @@
   "minLength": 1,
   "maxLength": 100,
   "examples": ["My Google Sheets Workspace", "Production Database", "Marketing Team Google Sheets"],
-  "specs": []
+  "x-specs": []
 }

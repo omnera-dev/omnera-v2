@@ -85,13 +85,28 @@
       "sticky": true,
       "links": {
         "desktop": [
-          { "label": "Products", "href": "/products" },
-          { "label": "Pricing", "href": "/pricing" },
-          { "label": "About", "href": "/about" }
+          {
+            "label": "Products",
+            "href": "/products"
+          },
+          {
+            "label": "Pricing",
+            "href": "/pricing"
+          },
+          {
+            "label": "About",
+            "href": "/about"
+          }
         ],
         "mobile": [
-          { "label": "Home", "href": "/" },
-          { "label": "Products", "href": "/products" }
+          {
+            "label": "Home",
+            "href": "/"
+          },
+          {
+            "label": "Products",
+            "href": "/products"
+          }
         ]
       },
       "cta": {
@@ -101,13 +116,13 @@
       }
     }
   ],
-  "specs": [
+  "x-specs": [
     {
       "id": "APP-PAGES-NAV-001",
       "given": "a navigation with logo",
       "when": "logo is './public/logo.svg'",
       "then": "it should display logo image",
-      "x-validation": {
+      "validation": {
         "setup": {
           "navigation": {
             "logo": "./public/logo.svg"
@@ -120,7 +135,7 @@
           "Minimal valid navigation"
         ]
       },
-      "x-application": {
+      "application": {
         "navigation": {
           "logo": "./public/logo.svg"
         },
@@ -138,7 +153,7 @@
       "given": "a navigation with logoMobile",
       "when": "logoMobile is './public/logo-mobile.svg'",
       "then": "it should use alternative logo for mobile devices",
-      "x-validation": {
+      "validation": {
         "setup": {
           "navigation": {
             "logo": "./public/logo.svg",
@@ -152,7 +167,7 @@
           "Responsive logo adaptation"
         ]
       },
-      "x-application": {
+      "application": {
         "navigation": {
           "logo": "./public/logo.svg",
           "logoMobile": "./public/logo-mobile.svg"
@@ -174,7 +189,7 @@
       "given": "a navigation with logoAlt",
       "when": "logoAlt is 'Company Logo'",
       "then": "it should provide accessible alt text for logo",
-      "x-validation": {
+      "validation": {
         "setup": {
           "navigation": {
             "logo": "./public/logo.svg",
@@ -188,7 +203,7 @@
           "Better than generic 'Logo'"
         ]
       },
-      "x-application": {
+      "application": {
         "navigation": {
           "logo": "./public/logo.svg",
           "logoAlt": "Acme Inc - Building the Future"
@@ -211,7 +226,7 @@
       "given": "a sticky navigation",
       "when": "sticky is true",
       "then": "it should stick to top on scroll",
-      "x-validation": {
+      "validation": {
         "setup": {
           "navigation": {
             "logo": "./public/logo.svg",
@@ -233,7 +248,7 @@
           "Common for persistent navigation"
         ]
       },
-      "x-application": {
+      "application": {
         "navigation": {
           "logo": "./public/logo.svg",
           "sticky": true,
@@ -265,7 +280,7 @@
       "given": "a transparent navigation",
       "when": "transparent is true initially",
       "then": "it should have transparent background (becomes opaque on scroll)",
-      "x-validation": {
+      "validation": {
         "setup": {
           "navigation": {
             "logo": "./public/logo.svg",
@@ -288,7 +303,7 @@
           "Common for hero sections with full-screen images"
         ]
       },
-      "x-application": {
+      "application": {
         "navigation": {
           "logo": "./public/logo.svg",
           "transparent": true,
@@ -324,7 +339,7 @@
       "given": "navigation with desktop links",
       "when": "links.desktop is array of nav-links",
       "then": "it should render desktop navigation menu",
-      "x-validation": {
+      "validation": {
         "setup": {
           "navigation": {
             "logo": "./public/logo.svg",
@@ -357,7 +372,7 @@
           "Horizontal navigation menu"
         ]
       },
-      "x-application": {
+      "application": {
         "navigation": {
           "logo": "./public/logo.svg",
           "links": {
@@ -391,7 +406,7 @@
       "given": "navigation with mobile links",
       "when": "links.mobile differs from desktop",
       "then": "it should render different links for mobile menu",
-      "x-validation": {
+      "validation": {
         "setup": {
           "navigation": {
             "logo": "./public/logo.svg",
@@ -438,7 +453,7 @@
           "Falls back to desktop links if omitted"
         ]
       },
-      "x-application": {
+      "application": {
         "navigation": {
           "logo": "./public/logo.svg",
           "links": {
@@ -485,7 +500,7 @@
       "given": "navigation with CTA button",
       "when": "cta has text 'Get Started' and href '/signup'",
       "then": "it should render prominent call-to-action button",
-      "x-validation": {
+      "validation": {
         "setup": {
           "navigation": {
             "logo": "./public/logo.svg",
@@ -511,7 +526,7 @@
           "Prominent action in navigation"
         ]
       },
-      "x-application": {
+      "application": {
         "navigation": {
           "logo": "./public/logo.svg",
           "links": {
@@ -547,7 +562,7 @@
       "given": "navigation with search enabled",
       "when": "search.enabled is true with placeholder 'Search...'",
       "then": "it should display search input in navigation",
-      "x-validation": {
+      "validation": {
         "setup": {
           "navigation": {
             "logo": "./public/logo.svg",
@@ -572,7 +587,7 @@
           "Search within navigation for quick access"
         ]
       },
-      "x-application": {
+      "application": {
         "navigation": {
           "logo": "./public/logo.svg",
           "links": {
@@ -607,7 +622,7 @@
       "given": "navigation with user menu enabled",
       "when": "user.enabled is true with loginUrl and signupUrl",
       "then": "it should show user account menu with login/signup links",
-      "x-validation": {
+      "validation": {
         "setup": {
           "navigation": {
             "logo": "./public/logo.svg",
@@ -633,7 +648,7 @@
           "Integrates with authentication system"
         ]
       },
-      "x-application": {
+      "application": {
         "navigation": {
           "logo": "./public/logo.svg",
           "links": {
@@ -667,7 +682,7 @@
       "given": "navigation with required logo only",
       "when": "all other properties are optional",
       "then": "it should render minimal navigation with logo",
-      "x-validation": {
+      "validation": {
         "setup": {
           "navigation": {
             "logo": "./public/logo.svg"
@@ -680,7 +695,7 @@
           "Useful for simple landing pages"
         ]
       },
-      "x-application": {
+      "application": {
         "navigation": {
           "logo": "./public/logo.svg"
         },
@@ -698,7 +713,7 @@
       "given": "navigation referencing sub-schemas",
       "when": "nav-links and cta-button use $ref",
       "then": "it should compose navigation from modular schemas",
-      "x-validation": {
+      "validation": {
         "setup": {
           "navigation": {
             "logo": "./public/logo.svg",
@@ -719,7 +734,7 @@
           "Schema reusability and modularity"
         ]
       },
-      "x-application": {
+      "application": {
         "schemas": {
           "navigation": {
             "logo": "./public/logo.svg",

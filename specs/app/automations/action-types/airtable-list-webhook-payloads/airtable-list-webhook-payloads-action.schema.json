@@ -47,7 +47,8 @@
   },
   "required": ["name", "account", "service", "action", "params"],
   "additionalProperties": false,
-  "specs": [
+  "$id": "airtable-list-webhook-payloads-action.schema.json",
+  "x-specs": [
     {
       "id": "APP-AIRTABLE-LIST-WEBHOOK-PAYLOADS-001",
       "given": "user provides name",
@@ -156,6 +157,5 @@
       "when": "validating input",
       "then": "error should require number"
     }
-  ],
-  "$id": "airtable-list-webhook-payloads-action.schema.json"
+  ]
 }

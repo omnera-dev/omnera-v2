@@ -116,7 +116,7 @@
   },
   "required": ["@type", "name", "startDate"],
   "additionalProperties": false,
-  "specs": [
+  "x-specs": [
     {
       "id": "APP-PAGES-EDUCATIONEVENT-001",
       "given": "EducationEvent with required properties",

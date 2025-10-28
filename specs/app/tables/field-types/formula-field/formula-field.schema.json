@@ -27,7 +27,7 @@
   "description": "Computed field that automatically calculates values using formula expressions. Formulas can reference other fields, use operators (+, -, *, /, =, >, <), and call functions (CONCAT, IF, ROUND, SUM, etc.). Specify resultType (text, number, boolean, date) for proper type handling. Optionally set display format (currency, percentage, decimal, date). Formulas are read-only and recalculate when dependent fields change. Useful for totals, concatenations, conditional logic, and derived values.",
   "required": ["id", "name", "type", "formula"],
   "additionalProperties": false,
-  "specs": [
+  "x-specs": [
     {
       "id": "APP-FORMULA-FIELD-001",
       "given": "entity with type='formula'",

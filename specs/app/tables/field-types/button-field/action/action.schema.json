@@ -5,7 +5,7 @@
   "description": "Type of action to trigger",
   "type": "string",
   "enum": ["url", "automation"],
-  "specs": [
+  "x-specs": [
     {
       "id": "APP-FIELD-BUTTON-FIELD-ACTION-001",
       "given": "user selects action from valid options",

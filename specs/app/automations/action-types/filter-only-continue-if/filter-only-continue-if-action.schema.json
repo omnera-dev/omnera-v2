@@ -21,7 +21,8 @@
   },
   "required": ["name", "service", "action", "params"],
   "additionalProperties": false,
-  "specs": [
+  "$id": "filter-only-continue-if-action.schema.json",
+  "x-specs": [
     {
       "id": "APP-FILTER-ONLY-CONTINUE-IF-001",
       "given": "the application is running",
@@ -178,6 +179,5 @@
       "when": "processing configuration",
       "then": "value should be used correctly"
     }
-  ],
-  "$id": "filter-only-continue-if-action.schema.json"
+  ]
 }

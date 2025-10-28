@@ -152,7 +152,7 @@
       "required": ["width", "height"]
     }
   },
-  "specs": [
+  "x-specs": [
     {
       "id": "APP-PAGES-DEFINITIONS-001",
       "given": "a non-empty string",

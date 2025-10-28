@@ -29,7 +29,10 @@
     [
       {
         "type": "icon",
-        "props": { "name": "$icon", "color": "$color" }
+        "props": {
+          "name": "$icon",
+          "color": "$color"
+        }
       },
       {
         "type": "text",
@@ -37,7 +40,7 @@
       }
     ]
   ],
-  "specs": [
+  "x-specs": [
     {
       "id": "APP-BLOCKS-CHILDREN-001",
       "given": "children array for block templates",
@@ -49,8 +52,18 @@
             "name": "card",
             "type": "div",
             "children": [
-              { "type": "div", "props": { "className": "header" } },
-              { "type": "div", "props": { "className": "body" } }
+              {
+                "type": "div",
+                "props": {
+                  "className": "header"
+                }
+              },
+              {
+                "type": "div",
+                "props": {
+                  "className": "body"
+                }
+              }
             ]
           }
         },
@@ -70,10 +83,18 @@
       "x-test": {
         "setup": {
           "children": [
-            { "type": "div" },
-            { "type": "span" },
-            { "type": "button" },
-            { "type": "text" }
+            {
+              "type": "div"
+            },
+            {
+              "type": "span"
+            },
+            {
+              "type": "button"
+            },
+            {
+              "type": "text"
+            }
           ]
         },
         "expectedDOM": "<div data-testid=\"child-0\"></div>\n<span data-testid=\"child-1\"></span>\n<button data-testid=\"child-2\"></button>\n<p data-testid=\"child-3\"></p>",
@@ -136,7 +157,12 @@
                         "children": [
                           {
                             "type": "ul",
-                            "children": [{ "type": "li", "content": "Level 3" }]
+                            "children": [
+                              {
+                                "type": "li",
+                                "content": "Level 3"
+                              }
+                            ]
                           }
                         ]
                       }
@@ -167,13 +193,27 @@
             "name": "labeled-input",
             "type": "div",
             "children": [
-              { "type": "text", "props": { "level": "label" }, "content": "$label" },
-              { "type": "input", "props": { "placeholder": "$placeholder" } }
+              {
+                "type": "text",
+                "props": {
+                  "level": "label"
+                },
+                "content": "$label"
+              },
+              {
+                "type": "input",
+                "props": {
+                  "placeholder": "$placeholder"
+                }
+              }
             ]
           },
           "reference": {
             "$ref": "labeled-input",
-            "vars": { "label": "Email Address", "placeholder": "Enter your email" }
+            "vars": {
+              "label": "Email Address",
+              "placeholder": "Enter your email"
+            }
           }
         },
         "expectedDOM": "<div data-testid=\"block-labeled-input\">\n  <label>Email Address</label>\n  <input placeholder=\"Enter your email\" />\n</div>",
@@ -197,21 +237,46 @@
             "children": [
               {
                 "type": "div",
-                "props": { "className": "card-header" },
+                "props": {
+                  "className": "card-header"
+                },
                 "children": [
-                  { "type": "text", "props": { "level": "h3" }, "content": "$plan" },
-                  { "type": "text", "props": { "level": "p" }, "content": "$price" }
+                  {
+                    "type": "text",
+                    "props": {
+                      "level": "h3"
+                    },
+                    "content": "$plan"
+                  },
+                  {
+                    "type": "text",
+                    "props": {
+                      "level": "p"
+                    },
+                    "content": "$price"
+                  }
                 ]
               },
               {
                 "type": "ul",
-                "props": { "className": "features" },
+                "props": {
+                  "className": "features"
+                },
                 "children": [
-                  { "type": "li", "content": "$feature1" },
-                  { "type": "li", "content": "$feature2" }
+                  {
+                    "type": "li",
+                    "content": "$feature1"
+                  },
+                  {
+                    "type": "li",
+                    "content": "$feature2"
+                  }
                 ]
               },
-              { "type": "button", "content": "$cta" }
+              {
+                "type": "button",
+                "content": "$cta"
+              }
             ]
           },
           "reference": {
@@ -244,11 +309,22 @@
           "blockDefinition": {
             "name": "badge-with-icon",
             "type": "div",
-            "children": [{ "type": "icon", "props": { "name": "$icon", "color": "$color" } }]
+            "children": [
+              {
+                "type": "icon",
+                "props": {
+                  "name": "$icon",
+                  "color": "$color"
+                }
+              }
+            ]
           },
           "reference": {
             "$ref": "badge-with-icon",
-            "vars": { "icon": "check-circle", "color": "green" }
+            "vars": {
+              "icon": "check-circle",
+              "color": "green"
+            }
           }
         },
         "expectedDOM": "<div data-testid=\"block-badge-with-icon\">\n  <svg data-testid=\"icon-check-circle\" data-color=\"green\"></svg>\n</div>",
@@ -269,11 +345,18 @@
           "blockDefinition": {
             "name": "simple-message",
             "type": "div",
-            "children": [{ "type": "text", "content": "$label" }]
+            "children": [
+              {
+                "type": "text",
+                "content": "$label"
+              }
+            ]
           },
           "reference": {
             "$ref": "simple-message",
-            "vars": { "label": "Welcome back!" }
+            "vars": {
+              "label": "Welcome back!"
+            }
           }
         },
         "expectedDOM": "<div data-testid=\"block-simple-message\">\n  <span>Welcome back!</span>\n</div>",
@@ -294,17 +377,31 @@
           "blockDefinition": {
             "name": "alert-card",
             "type": "div",
-            "props": { "className": "alert-$variant" },
+            "props": {
+              "className": "alert-$variant"
+            },
             "children": [
               {
                 "type": "icon",
-                "props": { "name": "$icon", "className": "text-$iconColor" }
+                "props": {
+                  "name": "$icon",
+                  "className": "text-$iconColor"
+                }
               },
               {
                 "type": "div",
                 "children": [
-                  { "type": "text", "props": { "level": "h4" }, "content": "$title" },
-                  { "type": "text", "content": "$message" }
+                  {
+                    "type": "text",
+                    "props": {
+                      "level": "h4"
+                    },
+                    "content": "$title"
+                  },
+                  {
+                    "type": "text",
+                    "content": "$message"
+                  }
                 ]
               }
             ]
@@ -342,15 +439,21 @@
             "children": [
               {
                 "type": "div",
-                "props": { "className": "container" },
+                "props": {
+                  "className": "container"
+                },
                 "children": [
                   {
                     "type": "div",
-                    "props": { "className": "row" },
+                    "props": {
+                      "className": "row"
+                    },
                     "children": [
                       {
                         "type": "div",
-                        "props": { "className": "col" },
+                        "props": {
+                          "className": "col"
+                        },
                         "content": "$content"
                       }
                     ]
@@ -361,7 +464,9 @@
           },
           "reference": {
             "$ref": "page-section",
-            "vars": { "content": "Content here" }
+            "vars": {
+              "content": "Content here"
+            }
           }
         },
         "expectedDOM": "<section data-testid=\"block-page-section\">\n  <div class=\"container\">\n    <div class=\"row\">\n      <div class=\"col\">Content here</div>\n    </div>\n  </div>\n</section>",

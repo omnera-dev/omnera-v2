@@ -57,7 +57,7 @@
   ],
   "required": ["id", "name", "type"],
   "additionalProperties": false,
-  "specs": [
+  "x-specs": [
     {
       "id": "APP-FIELD-DATETIME-001",
       "title": "Create record with valid datetime field",

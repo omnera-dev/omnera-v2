@@ -25,7 +25,8 @@
   },
   "required": ["service", "event", "params"],
   "additionalProperties": false,
-  "specs": [
+  "$id": "database-record-updated-trigger.schema.json",
+  "x-specs": [
     {
       "id": "APP-DATABASE-RECORD-UPDATED-001",
       "given": "a record is updated",
@@ -80,6 +81,5 @@
       "when": "validating input",
       "then": "behavior should follow optional/required rules"
     }
-  ],
-  "$id": "database-record-updated-trigger.schema.json"
+  ]
 }

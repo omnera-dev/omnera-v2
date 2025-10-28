@@ -46,7 +46,7 @@
       }
     }
   ],
-  "specs": [
+  "x-specs": [
     {
       "id": "APP-PAGES-STRUCTUREDDATA-001",
       "given": "structured data with organization",

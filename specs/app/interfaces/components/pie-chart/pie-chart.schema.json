@@ -35,5 +35,5 @@
   },
   "required": ["id", "type", "dataSource", "labelField", "valueField", "position"],
   "additionalProperties": false,
-  "specs": []
+  "x-specs": []
 }

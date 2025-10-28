@@ -12,15 +12,22 @@
       {
         "name": "icon-badge",
         "type": "badge",
-        "props": { "color": "$color" },
+        "props": {
+          "color": "$color"
+        },
         "children": [
           {
             "type": "icon",
-            "props": { "name": "$icon", "size": 4 }
+            "props": {
+              "name": "$icon",
+              "size": 4
+            }
           },
           {
             "type": "text",
-            "props": { "level": "span" },
+            "props": {
+              "level": "span"
+            },
             "content": "$text"
           }
         ]
@@ -28,7 +35,9 @@
       {
         "name": "section-header",
         "type": "container",
-        "props": { "className": "text-center mb-12" },
+        "props": {
+          "className": "text-center mb-12"
+        },
         "children": [
           {
             "type": "text",
@@ -40,24 +49,32 @@
           },
           {
             "type": "text",
-            "props": { "level": "p" },
+            "props": {
+              "level": "p"
+            },
             "content": "$subtitle"
           }
         ]
       }
     ]
   ],
-  "specs": [
+  "x-specs": [
     {
       "id": "APP-BLOCKS-001",
       "given": "reusable blocks array",
       "when": "array contains block items referencing block.schema.json",
       "then": "it should validate blocks array structure at build time",
-      "x-validation": {
+      "validation": {
         "setup": {
           "blocks": [
-            { "name": "icon-badge", "type": "badge" },
-            { "name": "section-header", "type": "container" }
+            {
+              "name": "icon-badge",
+              "type": "badge"
+            },
+            {
+              "name": "section-header",
+              "type": "container"
+            }
           ]
         },
         "assertions": [
@@ -78,13 +95,27 @@
             {
               "name": "cta-button",
               "type": "button",
-              "props": { "variant": "$variant" },
+              "props": {
+                "variant": "$variant"
+              },
               "content": "$label"
             }
           ],
           "pageReferences": [
-            { "$ref": "cta-button", "vars": { "variant": "primary", "label": "Get Started" } },
-            { "$ref": "cta-button", "vars": { "variant": "secondary", "label": "Learn More" } }
+            {
+              "$ref": "cta-button",
+              "vars": {
+                "variant": "primary",
+                "label": "Get Started"
+              }
+            },
+            {
+              "$ref": "cta-button",
+              "vars": {
+                "variant": "secondary",
+                "label": "Learn More"
+              }
+            }
           ]
         },
         "expectedDOM": "<button data-testid=\"block-cta-button-0\" class=\"btn-primary\">Get Started</button>\n<button data-testid=\"block-cta-button-1\" class=\"btn-secondary\">Learn More</button>",
@@ -106,15 +137,29 @@
           "blockDefinition": {
             "name": "icon-badge",
             "type": "badge",
-            "props": { "className": "badge-$color" },
+            "props": {
+              "className": "badge-$color"
+            },
             "children": [
-              { "type": "icon", "props": { "name": "$icon" } },
-              { "type": "text", "content": "$text" }
+              {
+                "type": "icon",
+                "props": {
+                  "name": "$icon"
+                }
+              },
+              {
+                "type": "text",
+                "content": "$text"
+              }
             ]
           },
           "reference": {
             "$ref": "icon-badge",
-            "vars": { "color": "blue", "icon": "star", "text": "Featured" }
+            "vars": {
+              "color": "blue",
+              "icon": "star",
+              "text": "Featured"
+            }
           }
         },
         "expectedDOM": "<div data-testid=\"block-icon-badge\" class=\"badge-blue\">\n  <svg data-testid=\"icon-star\"></svg>\n  <span>Featured</span>\n</div>",
@@ -136,15 +181,33 @@
           "blockDefinition": {
             "name": "icon-badge",
             "type": "badge",
-            "props": { "color": "$color" },
+            "props": {
+              "color": "$color"
+            },
             "children": [
-              { "type": "icon", "props": { "name": "$icon", "size": 4 } },
-              { "type": "text", "props": { "level": "span" }, "content": "$text" }
+              {
+                "type": "icon",
+                "props": {
+                  "name": "$icon",
+                  "size": 4
+                }
+              },
+              {
+                "type": "text",
+                "props": {
+                  "level": "span"
+                },
+                "content": "$text"
+              }
             ]
           },
           "reference": {
             "$ref": "icon-badge",
-            "vars": { "color": "orange", "icon": "users", "text": "6 à 15 personnes" }
+            "vars": {
+              "color": "orange",
+              "icon": "users",
+              "text": "6 à 15 personnes"
+            }
           }
         },
         "expectedDOM": "<div data-testid=\"block-icon-badge\" data-color=\"orange\">\n  <svg data-testid=\"icon-users\" width=\"16\" height=\"16\"></svg>\n  <span>6 à 15 personnes</span>\n</div>",
@@ -166,7 +229,9 @@
           "blockDefinition": {
             "name": "section-header",
             "type": "container",
-            "props": { "className": "text-center mb-12" },
+            "props": {
+              "className": "text-center mb-12"
+            },
             "children": [
               {
                 "type": "text",
@@ -176,7 +241,13 @@
                 },
                 "content": "$title"
               },
-              { "type": "text", "props": { "level": "p" }, "content": "$subtitle" }
+              {
+                "type": "text",
+                "props": {
+                  "level": "p"
+                },
+                "content": "$subtitle"
+              }
             ]
           },
           "reference": {
@@ -206,14 +277,41 @@
       "x-test": {
         "setup": {
           "blocks": [
-            { "name": "cta-button", "type": "button", "content": "$label" },
-            { "name": "icon-badge", "type": "badge", "props": { "color": "$color" } },
-            { "name": "feature-card", "type": "card", "children": [] }
+            {
+              "name": "cta-button",
+              "type": "button",
+              "content": "$label"
+            },
+            {
+              "name": "icon-badge",
+              "type": "badge",
+              "props": {
+                "color": "$color"
+              }
+            },
+            {
+              "name": "feature-card",
+              "type": "card",
+              "children": []
+            }
           ],
           "pageUsage": [
-            { "$ref": "cta-button", "vars": { "label": "Sign Up" } },
-            { "$ref": "icon-badge", "vars": { "color": "green" } },
-            { "$ref": "feature-card", "vars": {} }
+            {
+              "$ref": "cta-button",
+              "vars": {
+                "label": "Sign Up"
+              }
+            },
+            {
+              "$ref": "icon-badge",
+              "vars": {
+                "color": "green"
+              }
+            },
+            {
+              "$ref": "feature-card",
+              "vars": {}
+            }
           ]
         },
         "expectedDOM": "<button data-testid=\"block-cta-button\">Sign Up</button>\n<div data-testid=\"block-icon-badge\" data-color=\"green\"></div>\n<div data-testid=\"block-feature-card\"></div>",
@@ -234,18 +332,34 @@
           "initialBlockDefinition": {
             "name": "alert-box",
             "type": "div",
-            "props": { "className": "alert alert-$variant" },
+            "props": {
+              "className": "alert alert-$variant"
+            },
             "content": "$message"
           },
           "updatedBlockDefinition": {
             "name": "alert-box",
             "type": "div",
-            "props": { "className": "alert alert-$variant rounded-lg p-4" },
+            "props": {
+              "className": "alert alert-$variant rounded-lg p-4"
+            },
             "content": "$message"
           },
           "references": [
-            { "$ref": "alert-box", "vars": { "variant": "info", "message": "Hello" } },
-            { "$ref": "alert-box", "vars": { "variant": "warning", "message": "Caution" } }
+            {
+              "$ref": "alert-box",
+              "vars": {
+                "variant": "info",
+                "message": "Hello"
+              }
+            },
+            {
+              "$ref": "alert-box",
+              "vars": {
+                "variant": "warning",
+                "message": "Caution"
+              }
+            }
           ]
         },
         "expectedDOM": {
@@ -273,15 +387,31 @@
             "children": [
               {
                 "type": "div",
-                "props": { "className": "card-header" },
+                "props": {
+                  "className": "card-header"
+                },
                 "children": [
-                  { "type": "text", "props": { "level": "h3" }, "content": "$title" },
-                  { "type": "text", "props": { "level": "p" }, "content": "$subtitle" }
+                  {
+                    "type": "text",
+                    "props": {
+                      "level": "h3"
+                    },
+                    "content": "$title"
+                  },
+                  {
+                    "type": "text",
+                    "props": {
+                      "level": "p"
+                    },
+                    "content": "$subtitle"
+                  }
                 ]
               },
               {
                 "type": "div",
-                "props": { "className": "card-body" },
+                "props": {
+                  "className": "card-body"
+                },
                 "content": "$bodyText"
               }
             ]
@@ -340,15 +470,35 @@
       "x-test": {
         "setup": {
           "appConfig": {
-            "blocks": [{ "name": "global-cta", "type": "button", "content": "$label" }],
+            "blocks": [
+              {
+                "name": "global-cta",
+                "type": "button",
+                "content": "$label"
+              }
+            ],
             "pages": [
               {
                 "path": "/home",
-                "sections": [{ "$ref": "global-cta", "vars": { "label": "Home CTA" } }]
+                "sections": [
+                  {
+                    "$ref": "global-cta",
+                    "vars": {
+                      "label": "Home CTA"
+                    }
+                  }
+                ]
               },
               {
                 "path": "/about",
-                "sections": [{ "$ref": "global-cta", "vars": { "label": "About CTA" } }]
+                "sections": [
+                  {
+                    "$ref": "global-cta",
+                    "vars": {
+                      "label": "About CTA"
+                    }
+                  }
+                ]
               }
             ]
           }
@@ -377,7 +527,9 @@
               {
                 "name": "hero-cta",
                 "type": "button",
-                "props": { "className": "btn btn-$variant text-$size" },
+                "props": {
+                  "className": "btn btn-$variant text-$size"
+                },
                 "content": "$ctaText"
               }
             ],

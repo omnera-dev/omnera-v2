@@ -29,5 +29,5 @@
   },
   "required": ["id", "type", "src", "alt", "position"],
   "additionalProperties": false,
-  "specs": []
+  "x-specs": []
 }

@@ -3,5 +3,5 @@
   "title": "On Click Action",
   "description": "Action to perform when component is clicked. Can trigger navigation, queries, or custom handlers.",
   "type": "string",
-  "specs": []
+  "x-specs": []
 }

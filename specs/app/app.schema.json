@@ -51,5 +51,5 @@
     "connections"
   ],
   "additionalProperties": false,
-  "specs": []
+  "x-specs": []
 }

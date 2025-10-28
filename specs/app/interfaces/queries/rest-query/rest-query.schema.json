@@ -29,5 +29,5 @@
   },
   "required": ["id", "type", "method", "url"],
   "additionalProperties": false,
-  "specs": []
+  "x-specs": []
 }

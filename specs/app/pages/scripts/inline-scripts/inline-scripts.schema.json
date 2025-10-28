@@ -38,7 +38,7 @@
       }
     ]
   ],
-  "specs": [
+  "x-specs": [
     {
       "id": "APP-PAGES-INLINE-001",
       "given": "an inline script with code",

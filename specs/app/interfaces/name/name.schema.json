@@ -4,5 +4,5 @@
   "title": "Interface Name",
   "description": "Internal name for the interface",
   "examples": ["users-dashboard", "products-crud", "analytics-view"],
-  "specs": []
+  "x-specs": []
 }

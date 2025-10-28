@@ -34,7 +34,7 @@
     "required": ["name", "fields"],
     "additionalProperties": false
   },
-  "specs": [
+  "x-specs": [
     {
       "id": "APP-TABLES-INDEXES-001",
       "given": "user provides indexes array",

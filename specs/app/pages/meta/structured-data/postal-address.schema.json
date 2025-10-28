@@ -45,7 +45,7 @@
       "addressCountry": "FR"
     }
   ],
-  "specs": [
+  "x-specs": [
     {
       "id": "APP-PAGES-POSTALADDRESS-001",
       "given": "PostalAddress with required @type",

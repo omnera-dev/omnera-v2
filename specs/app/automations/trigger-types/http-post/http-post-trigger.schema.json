@@ -32,7 +32,8 @@
   },
   "required": ["service", "event", "params"],
   "additionalProperties": false,
-  "specs": [
+  "$id": "http-post-trigger.schema.json",
+  "x-specs": [
     {
       "id": "APP-HTTP-POST-TRIGGER-001",
       "given": "a airtable record is created",
@@ -189,6 +190,5 @@
       "when": "processing configuration",
       "then": "value should be used correctly"
     }
-  ],
-  "$id": "http-post-trigger.schema.json"
+  ]
 }

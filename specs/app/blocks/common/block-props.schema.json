@@ -39,13 +39,13 @@
       "maxWidth": "max-w-$width"
     }
   ],
-  "specs": [
+  "x-specs": [
     {
       "id": "APP-BLOCKS-PROPS-001",
       "given": "props as dynamic object",
       "when": "props uses patternProperties for flexible property names",
       "then": "it should validate any valid JavaScript property name at build time",
-      "x-validation": {
+      "validation": {
         "setup": {
           "validProps": {
             "className": "text-blue",
@@ -193,7 +193,10 @@
               "chartConfig": {
                 "type": "bar",
                 "data": [10, 20, 30],
-                "colors": { "primary": "blue", "secondary": "green" }
+                "colors": {
+                  "primary": "blue",
+                  "secondary": "green"
+                }
               }
             }
           }
@@ -279,7 +282,10 @@
           },
           "reference": {
             "$ref": "container",
-            "vars": { "width": "7xl", "padding": "4" }
+            "vars": {
+              "width": "7xl",
+              "padding": "4"
+            }
           }
         },
         "expectedDOM": "<div data-testid=\"block-container\" class=\"container mx-auto max-w-7xl px-4\"></div>",

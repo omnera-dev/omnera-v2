@@ -3,7 +3,7 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "title": "storage",
   "type": "object",
-  "specs": [
+  "x-specs": [
     {
       "id": "APP-FIELD-MULTIPLE-ATTACHMENTS-FIELD-STORAGE-001",
       "given": "user configures storage",

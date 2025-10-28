@@ -5,7 +5,7 @@
   "description": "Display format for the result (e.g., currency, percentage)",
   "type": "string",
   "examples": ["currency", "percentage", "decimal", "date"],
-  "specs": [
+  "x-specs": [
     {
       "id": "APP-FIELD-FORMULA-FIELD-FORMAT-001",
       "given": "user provides format",

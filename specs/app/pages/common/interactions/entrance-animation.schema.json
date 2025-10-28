@@ -42,7 +42,7 @@
       "stagger": "100ms"
     }
   ],
-  "specs": [
+  "x-specs": [
     {
       "id": "APP-INTERACTION-ENTRANCE-001",
       "given": "a component with entrance animation 'fadeIn'",

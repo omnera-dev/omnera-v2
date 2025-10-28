@@ -65,7 +65,7 @@
       ]
     }
   ],
-  "specs": [
+  "x-specs": [
     {
       "id": "APP-PAGES-BREADCRUMB-001",
       "given": "BreadcrumbList with required properties",

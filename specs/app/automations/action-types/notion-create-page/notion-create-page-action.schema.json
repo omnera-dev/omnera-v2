@@ -158,7 +158,8 @@
   },
   "required": ["name", "account", "service", "action", "params"],
   "additionalProperties": false,
-  "specs": [
+  "$id": "notion-create-page-action.schema.json",
+  "x-specs": [
     {
       "id": "APP-NOTION-CREATE-PAGE-001",
       "given": "user provides name",
@@ -453,6 +454,5 @@
       "when": "validating input",
       "then": "behavior should follow optional/required rules"
     }
-  ],
-  "$id": "notion-create-page-action.schema.json"
+  ]
 }

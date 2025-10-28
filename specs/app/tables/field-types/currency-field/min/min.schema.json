@@ -4,7 +4,7 @@
   "title": "Currency Field Minimum Value",
   "description": "Minimum value allowed for this currency field",
   "type": "number",
-  "specs": [
+  "x-specs": [
     {
       "id": "APP-FIELD-CURRENCY-MIN-001",
       "given": "user provides min",

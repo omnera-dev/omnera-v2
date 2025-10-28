@@ -5,7 +5,7 @@
   "description": "Default value for datetime field when no value is provided. Can be an ISO 8601 datetime string (YYYY-MM-DDTHH:mm:ss.sssZ) or a special keyword like 'now'. Applied automatically when creating new records. Useful for timestamps like created_at, updated_at.",
   "type": "string",
   "examples": ["2024-12-31T15:00:00.000Z", "now", "2025-01-01T00:00:00.000Z"],
-  "specs": [
+  "x-specs": [
     {
       "id": "APP-FIELD-DATETIME-DEFAULT-001",
       "title": "Apply static default datetime",

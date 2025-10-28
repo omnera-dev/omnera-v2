@@ -8,7 +8,7 @@
   "examples": ["users", "products", "orders", "customers"],
   "pattern": "^[a-z][a-z0-9_]*$",
   "help": "Use lowercase letters, numbers, and underscores. Must start with a letter.",
-  "specs": [
+  "x-specs": [
     {
       "id": "APP-TABLES-NAME-001",
       "given": "user configures name",

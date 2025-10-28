@@ -29,7 +29,8 @@
   },
   "required": ["service", "event", "params"],
   "additionalProperties": false,
-  "specs": [
+  "$id": "http-get-trigger.schema.json",
+  "x-specs": [
     {
       "id": "APP-HTTP-GET-TRIGGER-001",
       "given": "Facebook sends GET validation request",
@@ -132,6 +133,5 @@
       "when": "validating settings",
       "then": "boolean value should be accepted"
     }
-  ],
-  "$id": "http-get-trigger.schema.json"
+  ]
 }

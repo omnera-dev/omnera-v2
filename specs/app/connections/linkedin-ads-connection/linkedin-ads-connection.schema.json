@@ -32,7 +32,7 @@
       "clientSecret": "secret_linkedin-ads_abc123"
     }
   ],
-  "specs": [
+  "x-specs": [
     {
       "id": "APP-CONN-LINKEDIN-ADS-001",
       "title": "Create LinkedIn Ads connection with valid OAuth credentials",

@@ -3,5 +3,5 @@
   "title": "On Change Action",
   "description": "Action to perform when input value changes. Can trigger queries, update state, or execute custom logic.",
   "type": "string",
-  "specs": []
+  "x-specs": []
 }

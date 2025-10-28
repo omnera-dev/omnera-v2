@@ -57,7 +57,8 @@
   },
   "required": ["name", "service", "action", "params"],
   "additionalProperties": false,
-  "specs": [
+  "$id": "database-create-record-action.schema.json",
+  "x-specs": [
     {
       "id": "APP-DATABASE-CREATE-RECORD-001",
       "given": "user provides name",
@@ -130,6 +131,5 @@
       "when": "processing configuration",
       "then": "value should be used correctly"
     }
-  ],
-  "$id": "database-create-record-action.schema.json"
+  ]
 }

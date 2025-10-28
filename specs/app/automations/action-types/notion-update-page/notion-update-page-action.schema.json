@@ -113,7 +113,8 @@
   },
   "required": ["name", "account", "service", "action", "params"],
   "additionalProperties": false,
-  "specs": [
+  "$id": "notion-update-page-action.schema.json",
+  "x-specs": [
     {
       "id": "APP-NOTION-UPDATE-PAGE-001",
       "given": "user provides name",
@@ -336,6 +337,5 @@
       "when": "validating settings",
       "then": "boolean value should be accepted"
     }
-  ],
-  "$id": "notion-update-page-action.schema.json"
+  ]
 }

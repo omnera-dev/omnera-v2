@@ -40,7 +40,8 @@
   },
   "required": ["name", "account", "service", "action", "params"],
   "additionalProperties": false,
-  "specs": [
+  "$id": "facebook-ads-get-leadgen-action.schema.json",
+  "x-specs": [
     {
       "id": "APP-FACEBOOK-ADS-GET-LEADGEN-001",
       "given": "user provides name",
@@ -119,6 +120,5 @@
       "when": "the ID is valid",
       "then": "the entity should be retrieved successfully"
     }
-  ],
-  "$id": "facebook-ads-get-leadgen-action.schema.json"
+  ]
 }

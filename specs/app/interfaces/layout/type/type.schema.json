@@ -5,5 +5,5 @@
   "type": "string",
   "enum": ["grid", "sidebar", "stacked"],
   "default": "grid",
-  "specs": []
+  "x-specs": []
 }

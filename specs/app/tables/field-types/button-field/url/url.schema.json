@@ -4,7 +4,7 @@
   "title": "URL to open (when action is 'url')",
   "description": "URL to open (when action is 'url')",
   "type": "string",
-  "specs": [
+  "x-specs": [
     {
       "id": "APP-FIELD-BUTTON-FIELD-URL-001",
       "given": "user provides url",

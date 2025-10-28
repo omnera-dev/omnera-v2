@@ -21,8 +21,17 @@
     },
     "image": {
       "oneOf": [
-        { "type": "string", "format": "uri" },
-        { "type": "array", "items": { "type": "string", "format": "uri" } }
+        {
+          "type": "string",
+          "format": "uri"
+        },
+        {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "format": "uri"
+          }
+        }
       ]
     },
     "brand": {
@@ -81,7 +90,7 @@
   },
   "required": ["@context", "@type", "name"],
   "additionalProperties": false,
-  "specs": [
+  "x-specs": [
     {
       "id": "APP-PAGES-PRODUCT-001",
       "given": "Product with required properties",

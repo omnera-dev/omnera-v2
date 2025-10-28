@@ -6,7 +6,7 @@
   "type": "string",
   "default": "HH:mm",
   "examples": ["HH:mm", "hh:mm A", "HH:mm:ss", "hh:mm:ss A", "HH:mm:ss.SSS"],
-  "specs": [
+  "x-specs": [
     {
       "id": "APP-FIELD-TIME-FORMAT-001",
       "title": "Accept valid time format",

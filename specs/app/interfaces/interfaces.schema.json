@@ -32,5 +32,5 @@
     "required": ["name", "path", "layout", "components"],
     "additionalProperties": false
   },
-  "specs": []
+  "x-specs": []
 }

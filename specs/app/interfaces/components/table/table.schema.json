@@ -72,5 +72,5 @@
   },
   "required": ["id", "type", "dataSource", "columns", "position"],
   "additionalProperties": false,
-  "specs": []
+  "x-specs": []
 }

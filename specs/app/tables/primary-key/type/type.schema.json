@@ -6,5 +6,5 @@
   "type": "string",
   "enum": ["auto-increment", "uuid", "composite"],
   "default": "auto-increment",
-  "specs": []
+  "x-specs": []
 }

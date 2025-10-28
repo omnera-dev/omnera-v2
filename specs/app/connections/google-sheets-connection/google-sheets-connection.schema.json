@@ -32,7 +32,7 @@
       "clientSecret": "secret_google-sheets_abc123"
     }
   ],
-  "specs": [
+  "x-specs": [
     {
       "id": "APP-CONN-GOOGLE-SHEETS-001",
       "title": "Create Google Sheets connection with valid OAuth credentials",

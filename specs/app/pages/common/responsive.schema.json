@@ -102,7 +102,7 @@
       }
     }
   ],
-  "specs": [
+  "x-specs": [
     {
       "id": "APP-RESPONSIVE-001",
       "given": "a heading with mobile-specific props",

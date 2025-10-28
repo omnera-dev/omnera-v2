@@ -48,7 +48,7 @@
       }
     }
   ],
-  "specs": [
+  "x-specs": [
     {
       "id": "APP-PAGES-FEATURES-001",
       "given": "a feature with boolean value true",

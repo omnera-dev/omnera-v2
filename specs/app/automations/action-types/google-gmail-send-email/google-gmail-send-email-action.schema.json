@@ -89,7 +89,8 @@
   },
   "required": ["name", "account", "service", "action", "params"],
   "additionalProperties": false,
-  "specs": [
+  "$id": "google-gmail-send-email-action.schema.json",
+  "x-specs": [
     {
       "id": "APP-GOOGLE-GMAIL-SEND-EMAIL-001",
       "given": "user provides name",
@@ -246,6 +247,5 @@
       "when": "validating input",
       "then": "behavior should follow optional/required rules"
     }
-  ],
-  "$id": "google-gmail-send-email-action.schema.json"
+  ]
 }

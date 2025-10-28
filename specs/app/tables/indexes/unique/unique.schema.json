@@ -5,5 +5,5 @@
   "description": "Whether this index enforces uniqueness. Use this for unique constraints across multiple fields.",
   "type": "boolean",
   "default": false,
-  "specs": []
+  "x-specs": []
 }
