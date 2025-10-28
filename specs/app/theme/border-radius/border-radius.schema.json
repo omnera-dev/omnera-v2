@@ -23,5 +23,42 @@
       "full": "9999px"
     }
   ],
-  "specs": []
+  "specs": [
+    {
+      "id": "APP-THEME-RADIUS-001",
+      "given": "border-radius scale from none to 3xl",
+      "when": "radius system defines progressive rounding",
+      "then": "it should provide radius tokens from 0 to 1.5rem"
+    },
+    {
+      "id": "APP-THEME-RADIUS-002",
+      "given": "border-radius 'none' with value '0'",
+      "when": "sharp corners are needed",
+      "then": "it should remove border radius"
+    },
+    {
+      "id": "APP-THEME-RADIUS-003",
+      "given": "border-radius 'full' with value '9999px'",
+      "when": "perfect circles or pills are needed",
+      "then": "it should create fully rounded elements"
+    },
+    {
+      "id": "APP-THEME-RADIUS-004",
+      "given": "border-radius using rem units",
+      "when": "radius scales with font size",
+      "then": "it should accept rem-based radius values"
+    },
+    {
+      "id": "APP-THEME-RADIUS-005",
+      "given": "border-radius with kebab-case naming",
+      "when": "radius uses multi-word names",
+      "then": "it should validate kebab-case convention"
+    },
+    {
+      "id": "APP-THEME-RADIUS-006",
+      "given": "complete radius system (sm, md, lg, xl, 2xl, 3xl, full)",
+      "when": "all radius tokens are defined",
+      "then": "it should cover all common border-radius needs"
+    }
+  ]
 }

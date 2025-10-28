@@ -81,5 +81,66 @@
       }
     }
   ],
-  "specs": []
+  "specs": [
+    {
+      "id": "APP-THEME-FONTS-001",
+      "given": "a font with only family defined",
+      "when": "font uses minimal configuration",
+      "then": "it should accept font family as the only required property"
+    },
+    {
+      "id": "APP-THEME-FONTS-002",
+      "given": "a font with family and fallback stack",
+      "when": "font includes fallback fonts (e.g., 'Inter', 'system-ui, sans-serif')",
+      "then": "it should provide graceful fallback for missing fonts"
+    },
+    {
+      "id": "APP-THEME-FONTS-003",
+      "given": "a font with multiple weights [300, 400, 500, 600, 700]",
+      "when": "font supports various weight options",
+      "then": "it should accept weight values from 100-900 in increments of 100"
+    },
+    {
+      "id": "APP-THEME-FONTS-004",
+      "given": "a font with style set to 'italic'",
+      "when": "font uses italic style",
+      "then": "it should accept normal, italic, or oblique styles"
+    },
+    {
+      "id": "APP-THEME-FONTS-005",
+      "given": "a font with size '16px' and lineHeight '1.5'",
+      "when": "font defines default size and line spacing",
+      "then": "it should set typography metrics for body text"
+    },
+    {
+      "id": "APP-THEME-FONTS-006",
+      "given": "a font with letterSpacing '0.05em'",
+      "when": "font includes letter spacing for display text",
+      "then": "it should apply character spacing for readability"
+    },
+    {
+      "id": "APP-THEME-FONTS-007",
+      "given": "a font with transform 'uppercase'",
+      "when": "font uses text transformation",
+      "then": "it should accept none, uppercase, lowercase, or capitalize"
+    },
+    {
+      "id": "APP-THEME-FONTS-008",
+      "given": "a font with Google Fonts URL",
+      "when": "font is loaded from external source",
+      "then": "it should accept valid font URL for remote loading"
+    },
+    {
+      "id": "APP-THEME-FONTS-009",
+      "given": "a complete font config with all properties (family, fallback, weights, style, size, lineHeight, letterSpacing, transform, url)",
+      "when": "font is fully configured",
+      "then": "it should support comprehensive typography settings"
+    },
+    {
+      "id": "APP-THEME-FONTS-010",
+      "given": "a theme with multiple font categories (title, body, mono)",
+      "when": "different fonts are defined for headings, body text, and code",
+      "then": "it should support semantic font system for all UI contexts"
+    }
+  ]
 }

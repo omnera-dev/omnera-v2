@@ -42,5 +42,66 @@
     "Variants can be indicated with suffixes like -hover, -light, -dark",
     "Consider semantic naming (primary, secondary) alongside descriptive naming (red, blue)"
   ],
-  "specs": []
+  "specs": [
+    {
+      "id": "APP-THEME-COLORS-001",
+      "given": "a color palette with semantic colors (primary, secondary)",
+      "when": "colors are defined with hex values",
+      "then": "it should accept 6-digit hex colors"
+    },
+    {
+      "id": "APP-THEME-COLORS-002",
+      "given": "a color with 8-digit hex value for transparency",
+      "when": "color includes alpha channel",
+      "then": "it should accept 8-digit hex colors with opacity"
+    },
+    {
+      "id": "APP-THEME-COLORS-003",
+      "given": "a color with rgb() format",
+      "when": "color is defined as rgb(255, 0, 0)",
+      "then": "it should accept rgb color format"
+    },
+    {
+      "id": "APP-THEME-COLORS-004",
+      "given": "a color with rgba() format for transparency",
+      "when": "color is defined as rgba(255, 0, 0, 0.5)",
+      "then": "it should accept rgba color format with alpha"
+    },
+    {
+      "id": "APP-THEME-COLORS-005",
+      "given": "a color with hsl() format",
+      "when": "color is defined as hsl(210, 100%, 50%)",
+      "then": "it should accept hsl color format"
+    },
+    {
+      "id": "APP-THEME-COLORS-006",
+      "given": "a color with hsla() format for transparency",
+      "when": "color is defined as hsla(210, 100%, 50%, 0.8)",
+      "then": "it should accept hsla color format with alpha"
+    },
+    {
+      "id": "APP-THEME-COLORS-007",
+      "given": "color variants with suffixes (primary-hover, primary-light)",
+      "when": "colors use kebab-case variant naming",
+      "then": "it should accept color variants for hover states and tints"
+    },
+    {
+      "id": "APP-THEME-COLORS-008",
+      "given": "gray scale with numbered variants (gray-100 to gray-900)",
+      "when": "colors use numbered scale system",
+      "then": "it should accept numbered color scales for systematic gradients"
+    },
+    {
+      "id": "APP-THEME-COLORS-009",
+      "given": "a complete color system with semantic, descriptive, and variant colors",
+      "when": "palette includes primary, secondary, success, danger, warning, info, light, dark, grays",
+      "then": "it should support comprehensive color system for all UI needs"
+    },
+    {
+      "id": "APP-THEME-COLORS-010",
+      "given": "color names in kebab-case (primary-color, background-primary)",
+      "when": "color names use multi-word kebab-case format",
+      "then": "it should validate kebab-case naming convention"
+    }
+  ]
 }

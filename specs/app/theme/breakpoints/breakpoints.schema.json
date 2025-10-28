@@ -21,5 +21,42 @@
       "2xl": "1536px"
     }
   ],
-  "specs": []
+  "specs": [
+    {
+      "id": "APP-THEME-BREAKPOINTS-001",
+      "given": "standard Tailwind breakpoints (sm, md, lg, xl, 2xl)",
+      "when": "responsive system uses common breakpoints",
+      "then": "it should define breakpoints at 640px, 768px, 1024px, 1280px, 1536px"
+    },
+    {
+      "id": "APP-THEME-BREAKPOINTS-002",
+      "given": "breakpoint values in pixels",
+      "when": "breakpoints use px units",
+      "then": "it should accept pixel-based breakpoints"
+    },
+    {
+      "id": "APP-THEME-BREAKPOINTS-003",
+      "given": "mobile-first breakpoint progression",
+      "when": "breakpoints increase from small to large",
+      "then": "it should support progressive enhancement strategy"
+    },
+    {
+      "id": "APP-THEME-BREAKPOINTS-004",
+      "given": "breakpoint with lowercase naming",
+      "when": "breakpoint uses simple names",
+      "then": "it should validate lowercase naming convention"
+    },
+    {
+      "id": "APP-THEME-BREAKPOINTS-005",
+      "given": "custom breakpoints (tablet, desktop, wide)",
+      "when": "project uses semantic breakpoint names",
+      "then": "it should accept custom breakpoint naming"
+    },
+    {
+      "id": "APP-THEME-BREAKPOINTS-006",
+      "given": "breakpoints matching responsive.schema.json",
+      "when": "theme breakpoints align with responsive variants",
+      "then": "it should ensure consistency across responsive system"
+    }
+  ]
 }

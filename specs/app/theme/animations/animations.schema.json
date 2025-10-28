@@ -61,5 +61,54 @@
       "slideIn": "slide-in 0.5s ease-out"
     }
   ],
-  "specs": []
+  "specs": [
+    {
+      "id": "APP-THEME-ANIMATIONS-001",
+      "given": "an animation with boolean value true",
+      "when": "animation is simply enabled/disabled",
+      "then": "it should enable the animation"
+    },
+    {
+      "id": "APP-THEME-ANIMATIONS-002",
+      "given": "an animation with string CSS value",
+      "when": "animation uses CSS shorthand (e.g., 'slide-in 0.5s ease-out')",
+      "then": "it should accept CSS animation string"
+    },
+    {
+      "id": "APP-THEME-ANIMATIONS-003",
+      "given": "an animation with duration and easing object config",
+      "when": "animation has custom duration '300ms' and easing 'ease-in-out'",
+      "then": "it should configure timing properties"
+    },
+    {
+      "id": "APP-THEME-ANIMATIONS-004",
+      "given": "an animation with delay property",
+      "when": "animation should wait before starting",
+      "then": "it should delay animation start"
+    },
+    {
+      "id": "APP-THEME-ANIMATIONS-005",
+      "given": "an animation with keyframes object",
+      "when": "animation uses custom CSS keyframes",
+      "then": "it should define animation frames"
+    },
+    {
+      "id": "APP-THEME-ANIMATIONS-006",
+      "given": "an animation with enabled set to false",
+      "when": "animation is disabled via config",
+      "then": "it should not apply animation"
+    },
+    {
+      "id": "APP-THEME-ANIMATIONS-007",
+      "given": "common animations (fadeIn, fadeInUp, pulse, float)",
+      "when": "theme defines standard animation library",
+      "then": "it should provide reusable animations across components"
+    },
+    {
+      "id": "APP-THEME-ANIMATIONS-008",
+      "given": "transition config with duration and easing",
+      "when": "global transition timing is defined",
+      "then": "it should set default transition behavior"
+    }
+  ]
 }

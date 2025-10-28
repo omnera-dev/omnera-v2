@@ -47,5 +47,54 @@
       }
     }
   ],
-  "specs": []
+  "specs": [
+    {
+      "id": "APP-THEME-001",
+      "given": "a theme with only colors defined",
+      "when": "minimal theme configuration is needed",
+      "then": "it should accept colors as the only design token"
+    },
+    {
+      "id": "APP-THEME-002",
+      "given": "a theme with colors and fonts configured",
+      "when": "basic branding is defined",
+      "then": "it should support color palette and typography system"
+    },
+    {
+      "id": "APP-THEME-003",
+      "given": "a theme with colors, fonts, and spacing",
+      "when": "core design system is configured",
+      "then": "it should provide visual identity, typography, and layout tokens"
+    },
+    {
+      "id": "APP-THEME-004",
+      "given": "a complete theme with all 7 design token categories",
+      "when": "comprehensive design system is defined",
+      "then": "it should orchestrate colors, fonts, spacing, animations, breakpoints, shadows, and borderRadius"
+    },
+    {
+      "id": "APP-THEME-005",
+      "given": "a theme with breakpoints matching responsive system",
+      "when": "responsive breakpoints are configured",
+      "then": "it should ensure consistency between theme and responsive.schema.json"
+    },
+    {
+      "id": "APP-THEME-006",
+      "given": "a theme with animations matching interaction system",
+      "when": "animation library is defined",
+      "then": "it should provide animations reusable in interactions.schema.json"
+    },
+    {
+      "id": "APP-THEME-007",
+      "given": "a theme following design system best practices",
+      "when": "all tokens use semantic naming and progressive scales",
+      "then": "it should enable consistent UI across entire application"
+    },
+    {
+      "id": "APP-THEME-008",
+      "given": "a theme with Tailwind-compatible tokens",
+      "when": "spacing and other values use Tailwind syntax",
+      "then": "it should integrate seamlessly with Tailwind CSS"
+    }
+  ]
 }

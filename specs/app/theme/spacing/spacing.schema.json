@@ -28,5 +28,66 @@
       "marginLarge": "m-8"
     }
   ],
-  "specs": []
+  "specs": [
+    {
+      "id": "APP-THEME-SPACING-001",
+      "given": "spacing using Tailwind utility classes (py-16, px-4)",
+      "when": "spacing is defined with Tailwind syntax",
+      "then": "it should accept Tailwind spacing utilities"
+    },
+    {
+      "id": "APP-THEME-SPACING-002",
+      "given": "spacing with responsive variants (py-16 sm:py-20)",
+      "when": "spacing includes breakpoint-specific values",
+      "then": "it should support responsive spacing with Tailwind breakpoints"
+    },
+    {
+      "id": "APP-THEME-SPACING-003",
+      "given": "container spacing with max-width and auto margins",
+      "when": "spacing defines container constraints (max-w-7xl mx-auto px-4)",
+      "then": "it should center and constrain content width"
+    },
+    {
+      "id": "APP-THEME-SPACING-004",
+      "given": "spacing variants with size modifiers (gap, gapSmall, gapLarge)",
+      "when": "spacing system includes small, medium, and large variants",
+      "then": "it should provide consistent spacing scale across components"
+    },
+    {
+      "id": "APP-THEME-SPACING-005",
+      "given": "section spacing with vertical padding",
+      "when": "spacing defines consistent section padding",
+      "then": "it should create visual rhythm between page sections"
+    },
+    {
+      "id": "APP-THEME-SPACING-006",
+      "given": "multiple container sizes (container, containerSmall, containerXSmall)",
+      "when": "spacing includes different max-widths for various contexts",
+      "then": "it should support hierarchical content width constraints"
+    },
+    {
+      "id": "APP-THEME-SPACING-007",
+      "given": "padding variants (padding, paddingSmall, paddingLarge)",
+      "when": "spacing system provides padding scale",
+      "then": "it should enable consistent internal component spacing"
+    },
+    {
+      "id": "APP-THEME-SPACING-008",
+      "given": "margin variants (margin, marginSmall, marginLarge)",
+      "when": "spacing system provides margin scale",
+      "then": "it should enable consistent external component spacing"
+    },
+    {
+      "id": "APP-THEME-SPACING-009",
+      "given": "spacing using CSS values (2rem, 16px, 1.5em)",
+      "when": "spacing is defined with raw CSS instead of Tailwind",
+      "then": "it should accept custom CSS spacing values"
+    },
+    {
+      "id": "APP-THEME-SPACING-010",
+      "given": "a complete spacing system with sections, containers, gaps, padding, and margins",
+      "when": "all spacing tokens are configured",
+      "then": "it should provide comprehensive spacing system for entire layout"
+    }
+  ]
 }

@@ -22,5 +22,42 @@
       "none": "0 0 #0000"
     }
   ],
-  "specs": []
+  "specs": [
+    {
+      "id": "APP-THEME-SHADOWS-001",
+      "given": "shadow scale from sm to 2xl",
+      "when": "shadows increase in depth and blur",
+      "then": "it should provide elevation system from subtle to dramatic"
+    },
+    {
+      "id": "APP-THEME-SHADOWS-002",
+      "given": "shadow with rgb color and opacity",
+      "when": "shadow uses modern CSS color syntax",
+      "then": "it should accept rgb(0 0 0 / 0.1) format"
+    },
+    {
+      "id": "APP-THEME-SHADOWS-003",
+      "given": "inner shadow for inset effects",
+      "when": "shadow creates depth inside element",
+      "then": "it should apply inset box-shadow"
+    },
+    {
+      "id": "APP-THEME-SHADOWS-004",
+      "given": "shadow 'none' to remove shadows",
+      "when": "flat design with no elevation is needed",
+      "then": "it should remove all shadows"
+    },
+    {
+      "id": "APP-THEME-SHADOWS-005",
+      "given": "shadows with kebab-case naming",
+      "when": "shadow uses multi-word names",
+      "then": "it should validate kebab-case convention"
+    },
+    {
+      "id": "APP-THEME-SHADOWS-006",
+      "given": "complete shadow system (sm, md, lg, xl, 2xl, inner, none)",
+      "when": "all elevation tokens are defined",
+      "then": "it should cover all common shadow needs"
+    }
+  ]
 }
