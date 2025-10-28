@@ -5,5 +5,66 @@
   "description": "URL path where the page is accessible",
   "$ref": "../../common/definitions.schema.json#/definitions/path",
   "examples": ["/", "/about", "/pricing", "/contact"],
-  "specs": []
+  "specs": [
+    {
+      "id": "APP-PAGES-PATH-001",
+      "given": "a root path",
+      "when": "value is '/'",
+      "then": "it should validate as homepage path"
+    },
+    {
+      "id": "APP-PAGES-PATH-002",
+      "given": "a path referencing common definition",
+      "when": "schema uses $ref to definitions.schema.json#/definitions/path",
+      "then": "it should follow shared path pattern from common definitions"
+    },
+    {
+      "id": "APP-PAGES-PATH-003",
+      "given": "a single-level path",
+      "when": "value is '/about' or '/pricing'",
+      "then": "it should accept paths with leading slash"
+    },
+    {
+      "id": "APP-PAGES-PATH-004",
+      "given": "a nested path",
+      "when": "value is '/products/pricing' or '/blog/article'",
+      "then": "it should accept multi-level URL paths"
+    },
+    {
+      "id": "APP-PAGES-PATH-005",
+      "given": "a path with kebab-case segments",
+      "when": "value is '/our-team' or '/contact-us'",
+      "then": "it should accept kebab-case URL segments"
+    },
+    {
+      "id": "APP-PAGES-PATH-006",
+      "given": "common website paths (/, /about, /pricing, /contact)",
+      "when": "standard website pages are defined",
+      "then": "it should provide examples for typical URL patterns"
+    },
+    {
+      "id": "APP-PAGES-PATH-007",
+      "given": "path as required field",
+      "when": "page is created without path",
+      "then": "it should fail validation (path is required)"
+    },
+    {
+      "id": "APP-PAGES-PATH-008",
+      "given": "paths across multiple pages",
+      "when": "each page has unique path",
+      "then": "it should ensure unique routing for all pages"
+    },
+    {
+      "id": "APP-PAGES-PATH-009",
+      "given": "path determining page accessibility",
+      "when": "user navigates to path in browser",
+      "then": "it should map URL to page configuration for rendering"
+    },
+    {
+      "id": "APP-PAGES-PATH-010",
+      "given": "path with dynamic segments",
+      "when": "value is '/blog/:slug' or '/products/:id'",
+      "then": "it should support dynamic route parameters (if applicable)"
+    }
+  ]
 }

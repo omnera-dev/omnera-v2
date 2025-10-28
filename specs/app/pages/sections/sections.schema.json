@@ -108,5 +108,90 @@
       }
     ]
   ],
-  "specs": []
+  "specs": [
+    {
+      "id": "APP-PAGES-SECTIONS-001",
+      "given": "a sections array with direct component",
+      "when": "section has type 'section' with props and children",
+      "then": "it should render direct component definition"
+    },
+    {
+      "id": "APP-PAGES-SECTIONS-002",
+      "given": "a section with 17 component types",
+      "when": "type enum includes section, container, flex, grid, card, text, icon, image, button, link, timeline, accordion, badge, customHTML, video, audio, iframe, form, input",
+      "then": "it should support all component types for page building"
+    },
+    {
+      "id": "APP-PAGES-SECTIONS-003",
+      "given": "a section with props",
+      "when": "props includes className, id, and other component properties",
+      "then": "it should accept generic component properties via props.schema.json"
+    },
+    {
+      "id": "APP-PAGES-SECTIONS-004",
+      "given": "a section with recursive children",
+      "when": "children array contains nested sections",
+      "then": "it should support unlimited nesting depth for component tree"
+    },
+    {
+      "id": "APP-PAGES-SECTIONS-005",
+      "given": "a text component with content property",
+      "when": "component type is 'text' with content 'Welcome to Our Platform'",
+      "then": "it should render text content"
+    },
+    {
+      "id": "APP-PAGES-SECTIONS-006",
+      "given": "a section with interactions",
+      "when": "interactions includes hover, click, scroll, entrance",
+      "then": "it should apply interactive behaviors from interactions.schema.json"
+    },
+    {
+      "id": "APP-PAGES-SECTIONS-007",
+      "given": "a section with responsive overrides",
+      "when": "responsive property defines breakpoint-specific changes",
+      "then": "it should adapt component for different screen sizes"
+    },
+    {
+      "id": "APP-PAGES-SECTIONS-008",
+      "given": "a section with i18n translations",
+      "when": "i18n property defines multi-language content",
+      "then": "it should support translated component content"
+    },
+    {
+      "id": "APP-PAGES-SECTIONS-009",
+      "given": "a block reference in sections",
+      "when": "section uses $ref with vars for variable substitution",
+      "then": "it should reference and instantiate reusable block with variables"
+    },
+    {
+      "id": "APP-PAGES-SECTIONS-010",
+      "given": "sections with mixed direct components and block references",
+      "when": "array contains both direct definitions and $ref blocks",
+      "then": "it should support hybrid section composition"
+    },
+    {
+      "id": "APP-PAGES-SECTIONS-011",
+      "given": "a complex nested section tree",
+      "when": "section → container → flex → grid → card → text hierarchy",
+      "then": "it should build complex layouts through component composition"
+    },
+    {
+      "id": "APP-PAGES-SECTIONS-012",
+      "given": "a section with all 3 optional properties",
+      "when": "section includes interactions, responsive, and i18n",
+      "then": "it should combine interactive, responsive, and multi-language features"
+    },
+    {
+      "id": "APP-PAGES-SECTIONS-013",
+      "given": "sections with form components",
+      "when": "sections include form, input types for user input",
+      "then": "it should support form building capabilities"
+    },
+    {
+      "id": "APP-PAGES-SECTIONS-014",
+      "given": "sections with media components",
+      "when": "sections include image, video, audio, iframe types",
+      "then": "it should support rich media content"
+    }
+  ]
 }

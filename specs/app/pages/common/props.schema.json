@@ -44,5 +44,66 @@
       "enabled": true
     }
   ],
-  "specs": []
+  "specs": [
+    {
+      "id": "APP-PAGES-PROPS-001",
+      "given": "props with string value",
+      "when": "className is 'text-center mb-4'",
+      "then": "it should accept string property"
+    },
+    {
+      "id": "APP-PAGES-PROPS-002",
+      "given": "props with number value",
+      "when": "size is 16",
+      "then": "it should accept numeric property"
+    },
+    {
+      "id": "APP-PAGES-PROPS-003",
+      "given": "props with boolean value",
+      "when": "enabled is true",
+      "then": "it should accept boolean property"
+    },
+    {
+      "id": "APP-PAGES-PROPS-004",
+      "given": "props with object value",
+      "when": "style is { padding: '1rem', margin: '2rem' }",
+      "then": "it should accept nested object property"
+    },
+    {
+      "id": "APP-PAGES-PROPS-005",
+      "given": "props with array value",
+      "when": "items is ['one', 'two', 'three']",
+      "then": "it should accept array property"
+    },
+    {
+      "id": "APP-PAGES-PROPS-006",
+      "given": "props with variable reference",
+      "when": "text is 'Welcome to $siteName'",
+      "then": "it should accept string with $variable syntax"
+    },
+    {
+      "id": "APP-PAGES-PROPS-007",
+      "given": "props with multiple properties of different types",
+      "when": "object has className (string), size (number), enabled (boolean)",
+      "then": "it should support mixed property types"
+    },
+    {
+      "id": "APP-PAGES-PROPS-008",
+      "given": "props with camelCase property names",
+      "when": "properties are maxWidth, minHeight, backgroundColor",
+      "then": "it should validate camelCase naming convention"
+    },
+    {
+      "id": "APP-PAGES-PROPS-009",
+      "given": "props object referencing theme tokens",
+      "when": "color is '$primaryColor' and text is 'Hello $userName'",
+      "then": "it should support multiple variable references across properties"
+    },
+    {
+      "id": "APP-PAGES-PROPS-010",
+      "given": "empty props object",
+      "when": "no properties are provided",
+      "then": "it should accept empty object for components without props"
+    }
+  ]
 }

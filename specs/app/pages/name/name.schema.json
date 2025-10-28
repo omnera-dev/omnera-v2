@@ -5,5 +5,54 @@
   "description": "Internal name for the page",
   "$ref": "../../common/definitions.schema.json#/definitions/name",
   "examples": ["home", "about", "pricing", "contact"],
-  "specs": []
+  "specs": [
+    {
+      "id": "APP-PAGES-NAME-001",
+      "given": "a page name as string",
+      "when": "value is 'home'",
+      "then": "it should validate as internal page name"
+    },
+    {
+      "id": "APP-PAGES-NAME-002",
+      "given": "a page name referencing common definition",
+      "when": "schema uses $ref to definitions.schema.json#/definitions/name",
+      "then": "it should follow shared name pattern from common definitions"
+    },
+    {
+      "id": "APP-PAGES-NAME-003",
+      "given": "a descriptive page name",
+      "when": "value is 'about'",
+      "then": "it should accept simple lowercase names"
+    },
+    {
+      "id": "APP-PAGES-NAME-004",
+      "given": "a multi-word page name",
+      "when": "value is 'pricing' or 'contact'",
+      "then": "it should accept single-word page identifiers"
+    },
+    {
+      "id": "APP-PAGES-NAME-005",
+      "given": "a page name with spaces for display",
+      "when": "value is 'Home Page' or 'About Us'",
+      "then": "it should accept human-readable names with spaces"
+    },
+    {
+      "id": "APP-PAGES-NAME-006",
+      "given": "common page names (home, about, pricing, contact)",
+      "when": "standard website pages are defined",
+      "then": "it should provide examples for typical page names"
+    },
+    {
+      "id": "APP-PAGES-NAME-007",
+      "given": "page name as required field",
+      "when": "page is created without name",
+      "then": "it should fail validation (name is required)"
+    },
+    {
+      "id": "APP-PAGES-NAME-008",
+      "given": "page names across multiple pages",
+      "when": "names describe page purpose internally",
+      "then": "it should serve as internal identifier separate from URL path"
+    }
+  ]
 }

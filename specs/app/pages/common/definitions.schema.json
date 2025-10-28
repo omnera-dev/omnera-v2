@@ -152,5 +152,78 @@
       "required": ["width", "height"]
     }
   },
-  "specs": []
+  "specs": [
+    {
+      "id": "APP-PAGES-DEFINITIONS-001",
+      "given": "a non-empty string",
+      "when": "value is 'hello'",
+      "then": "it should validate as nonEmptyString"
+    },
+    {
+      "id": "APP-PAGES-DEFINITIONS-002",
+      "given": "a kebab-case string",
+      "when": "value is 'my-component-name'",
+      "then": "it should validate as kebabCase pattern"
+    },
+    {
+      "id": "APP-PAGES-DEFINITIONS-003",
+      "given": "a variable name",
+      "when": "value is 'myVariable123'",
+      "then": "it should validate as variableName pattern"
+    },
+    {
+      "id": "APP-PAGES-DEFINITIONS-004",
+      "given": "a string with variable reference",
+      "when": "value is 'Welcome to $siteName'",
+      "then": "it should validate as variableReference pattern"
+    },
+    {
+      "id": "APP-PAGES-DEFINITIONS-005",
+      "given": "a 6-digit hex color",
+      "when": "value is '#FF5733'",
+      "then": "it should validate as hexColor pattern"
+    },
+    {
+      "id": "APP-PAGES-DEFINITIONS-006",
+      "given": "an HTTP URL",
+      "when": "value is 'https://example.com/path'",
+      "then": "it should validate as url with http/https protocol"
+    },
+    {
+      "id": "APP-PAGES-DEFINITIONS-007",
+      "given": "a relative path",
+      "when": "value is './public/logo.svg'",
+      "then": "it should validate as relativePath pattern"
+    },
+    {
+      "id": "APP-PAGES-DEFINITIONS-008",
+      "given": "an email address",
+      "when": "value is 'user@example.com'",
+      "then": "it should validate as emailAddress format"
+    },
+    {
+      "id": "APP-PAGES-DEFINITIONS-009",
+      "given": "Tailwind CSS classes",
+      "when": "value is 'text-center bg-blue-500 p-4'",
+      "then": "it should validate as className"
+    },
+    {
+      "id": "APP-PAGES-DEFINITIONS-010",
+      "given": "an icon from the icon library",
+      "when": "value is 'arrow-right'",
+      "then": "it should validate as iconName enum"
+    },
+    {
+      "id": "APP-PAGES-DEFINITIONS-011",
+      "given": "dimensions with width and height",
+      "when": "value is { width: 800, height: 600 }",
+      "then": "it should validate as dimensions object"
+    },
+    {
+      "id": "APP-PAGES-DEFINITIONS-012",
+      "given": "multiple icon names in the library",
+      "when": "70+ icon names are defined (arrow-right, check, user, star, etc.)",
+      "then": "it should provide comprehensive icon set for all UI needs"
+    }
+  ]
 }
