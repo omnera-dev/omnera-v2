@@ -31,7 +31,7 @@ Claude Code agents fall into two categories requiring different review approache
 | **CREATIVE** | Decision-making guide | Collaborative (ask questions, explain trade-offs) | Seek user input on decisions | Author original docs when guiding |
 
 **Current Agents**:
-- **MECHANICAL**: effect-schema-translator, e2e-test-translator
+- **MECHANICAL**: effect-schema-generator, e2e-test-generator
 - **CREATIVE**: json-schema-editor, openapi-editor, e2e-test-fixer, codebase-refactor-auditor, architecture-docs-maintainer, infrastructure-docs-maintainer
 
 ## Command/Skill Optimization Framework
@@ -102,11 +102,11 @@ Review agents when their core workflows change:
 
 | Agent | Review Triggers |
 |-------|----------------|
-| **json-schema-editor** | JSON Schema Draft 7 patterns change, specs array structure evolves, handoff protocols to e2e-test-translator |
-| **openapi-editor** | OpenAPI 3.1.0 patterns change, API design best practices evolve, handoff protocols to e2e-test-translator |
-| **e2e-test-fixer** | GREEN implementation workflow changes, handoff from e2e-test-translator, refactoring criteria updates |
-| **e2e-test-translator** | Test tag strategy changes, GIVEN-WHEN-THEN patterns evolve, Playwright fixture usage updates |
-| **effect-schema-translator** | Effect Schema patterns evolve, JSON Schema translation rules change, Test-After workflow updates |
+| **json-schema-editor** | JSON Schema Draft 7 patterns change, specs array structure evolves, handoff protocols to e2e-test-generator |
+| **openapi-editor** | OpenAPI 3.1.0 patterns change, API design best practices evolve, handoff protocols to e2e-test-generator |
+| **e2e-test-fixer** | GREEN implementation workflow changes, handoff from e2e-test-generator, refactoring criteria updates |
+| **e2e-test-generator** | Test tag strategy changes, GIVEN-WHEN-THEN patterns evolve, Playwright fixture usage updates |
+| **effect-schema-generator** | Effect Schema patterns evolve, JSON Schema translation rules change, Test-After workflow updates |
 | **codebase-refactor-auditor** | Two-phase approach adjustments, baseline validation changes, audit report format evolves |
 | **architecture-docs-maintainer** | Architectural enforcement patterns change, ESLint/TypeScript validation updates |
 | **infrastructure-docs-maintainer** | Tool documentation standards change, configuration validation updates |

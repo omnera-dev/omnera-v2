@@ -2,7 +2,7 @@
 name: json-schema-editor
 type: creative
 description: |
-  Use this agent to collaboratively create and edit JSON Schema specifications (.schema.json) in the specs/app/ directory. This agent guides you through schema design decisions for application properties, validates specifications, and prepares them for E2E test generation by the e2e-test-translator agent.
+  Use this agent to collaboratively create and edit JSON Schema specifications (.schema.json) in the specs/app/ directory. This agent guides you through schema design decisions for application properties, validates specifications, and prepares them for E2E test generation by the e2e-test-generator agent.
 
   **When to Invoke:**
   1. Creating new property schemas in specs/app/{property}/
@@ -247,7 +247,7 @@ Once schema is validated and complete:
 ```
 You: "✅ Schema is ready for E2E test generation!
 
-The e2e-test-translator can now:
+The e2e-test-generator can now:
 - Read your specs array
 - Generate Playwright tests in specs/app/{property}/{property}.spec.ts
 - Create @spec and @regression tests
@@ -275,7 +275,7 @@ Command: 'Generate E2E tests for {property}'"
 - After editing validation rules or specs array
 - Before committing changes
 - When $ref paths are updated
-- Before handing off to e2e-test-translator
+- Before handing off to e2e-test-generator
 
 **Protocol**:
 1. ALWAYS ask user permission before running
@@ -414,7 +414,7 @@ Command: 'Generate E2E tests for {property}'"
 
 ---
 
-## Handoff to e2e-test-translator
+## Handoff to e2e-test-generator
 
 ### Handoff Checklist
 
@@ -429,10 +429,10 @@ Command: 'Generate E2E tests for {property}'"
 
 ```
 "Generate E2E tests for {property} from validated schema"
-# → Invokes e2e-test-translator
+# → Invokes e2e-test-generator
 ```
 
-### What e2e-test-translator does next
+### What e2e-test-generator does next
 
 - Reads specs array from .schema.json
 - Generates specs/app/{property}/{property}.spec.ts

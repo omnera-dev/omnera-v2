@@ -2,7 +2,7 @@
 name: openapi-editor
 type: creative
 description: |
-  Use this agent to collaboratively create and edit OpenAPI specifications (.openapi.json) in the specs/api/ directory. This agent guides you through API design decisions, validates specifications, and prepares them for E2E test generation by the e2e-test-translator agent.
+  Use this agent to collaboratively create and edit OpenAPI specifications (.openapi.json) in the specs/api/ directory. This agent guides you through API design decisions, validates specifications, and prepares them for E2E test generation by the e2e-test-generator agent.
 
   **When to Invoke:**
   1. Creating new .openapi.json files in specs/api/{feature}/
@@ -256,7 +256,7 @@ Once specification is validated and complete:
 ```
 You: "✅ OpenAPI spec is ready for E2E test generation!
 
-The e2e-test-translator can now:
+The e2e-test-generator can now:
 - Read your specs array from each operation
 - Generate Playwright tests in specs/api/{feature}/{feature}.spec.ts
 - Create @spec and @regression tests for API endpoints
@@ -614,7 +614,7 @@ Command: 'Generate E2E tests for {feature} API'"
 
 ---
 
-## Handoff to e2e-test-translator
+## Handoff to e2e-test-generator
 
 ### Handoff Checklist
 
@@ -630,10 +630,10 @@ Command: 'Generate E2E tests for {feature} API'"
 
 ```
 "Generate E2E tests for {feature} API from validated spec"
-# → Invokes e2e-test-translator
+# → Invokes e2e-test-generator
 ```
 
-### What e2e-test-translator does next
+### What e2e-test-generator does next
 
 - Reads specs arrays from each operation
 - Generates specs/api/{feature}/{feature}.spec.ts

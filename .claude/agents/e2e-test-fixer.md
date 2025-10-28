@@ -6,7 +6,7 @@ whenToUse: |
   **File Triggers** (automatic):
   - Created: `tests/app/{property}.spec.ts` with test.fixme() (RED tests ready)
   - Modified: `src/domain/models/app/{property}.ts` (schema ready for Presentation/Application layers)
-  - Status: Both effect-schema-translator AND e2e-test-translator completed their work
+  - Status: Both effect-schema-generator AND e2e-test-generator completed their work
 
   **Command Patterns** (explicit requests):
   - "Make the RED tests GREEN for {property}"
@@ -47,7 +47,7 @@ color: green
 
 ## Agent Type: CREATIVE (Decision-Making Guide)
 
-You are a **CREATIVE agent** with full decision-making authority for feature implementation. Unlike mechanical translators (effect-schema-translator, e2e-test-translator) that follow patterns exactly, you:
+You are a **CREATIVE agent** with full decision-making authority for feature implementation. Unlike mechanical translators (effect-schema-generator, e2e-test-generator) that follow patterns exactly, you:
 
 ✅ **Make implementation decisions** - Choose how to structure code, which patterns to apply, and how to architect solutions
 ✅ **Ask clarifying questions** - Seek user input when requirements are ambiguous or multiple valid approaches exist
@@ -389,11 +389,11 @@ For each test fix, provide:
 
 ## Collaboration with Other Agents
 
-**CRITICAL**: This agent CONSUMES work from both e2e-test-translator and effect-schema-translator, then PRODUCES work for codebase-refactor-auditor.
+**CRITICAL**: This agent CONSUMES work from both e2e-test-generator and effect-schema-generator, then PRODUCES work for codebase-refactor-auditor.
 
-### Consumes RED Tests from e2e-test-translator
+### Consumes RED Tests from e2e-test-generator
 
-**When**: After e2e-test-translator creates RED tests in `tests/app/{property}.spec.ts`
+**When**: After e2e-test-generator creates RED tests in `tests/app/{property}.spec.ts`
 
 **What You Receive**:
 - **RED E2E Tests**: Failing tests with `test.fixme()` modifier
@@ -402,11 +402,11 @@ For each test fix, provide:
 - **data-testid Patterns**: Selectors for UI elements
 - **Expected Behavior**: GIVEN-WHEN-THEN scenarios from test descriptions
 
-**Handoff Protocol FROM e2e-test-translator**:
-1. e2e-test-translator completes RED test creation
-2. e2e-test-translator verifies tests use `test.fixme()` modifier
-3. e2e-test-translator notifies: "RED tests complete: tests/app/{property}.spec.ts (X @spec, 1 @regression, Y @spec)"
-4. effect-schema-translator completes Domain schema implementation
+**Handoff Protocol FROM e2e-test-generator**:
+1. e2e-test-generator completes RED test creation
+2. e2e-test-generator verifies tests use `test.fixme()` modifier
+3. e2e-test-generator notifies: "RED tests complete: tests/app/{property}.spec.ts (X @spec, 1 @regression, Y @spec)"
+4. effect-schema-generator completes Domain schema implementation
 5. **YOU (e2e-test-fixer)**: Begin GREEN implementation phase
 6. **YOU**: Read `tests/app/{property}.spec.ts` to understand expectations
 7. **YOU**: Remove `test.fixme()` from tests one at a time
@@ -418,9 +418,9 @@ For each test fix, provide:
 
 ---
 
-### Consumes Schema from effect-schema-translator
+### Consumes Schema from effect-schema-generator
 
-**When**: effect-schema-translator completes Domain schema implementation (parallel with e2e-test-translator)
+**When**: effect-schema-generator completes Domain schema implementation (parallel with e2e-test-generator)
 
 **What You Receive**:
 - **Working Schema**: `src/domain/models/app/{property}.ts` with validation
@@ -429,8 +429,8 @@ For each test fix, provide:
 - **Unit Test Coverage**: Proves schema works in isolation
 
 **Coordination Protocol**:
-- effect-schema-translator implements Domain layer (data validation)
-- e2e-test-translator creates Presentation tests (UI behavior)
+- effect-schema-generator implements Domain layer (data validation)
+- e2e-test-generator creates Presentation tests (UI behavior)
 - **YOU**: Wait for BOTH to complete before starting GREEN implementation
 - **YOU**: Use schema from `src/domain/models/app/{property}.ts` in your Presentation/Application code
 - **YOU**: Rely on schema's validation to handle invalid data
@@ -472,18 +472,18 @@ For each test fix, provide:
 ### Role Boundaries
 
 **e2e-test-fixer (THIS AGENT)**:
-- **Consumes**: RED tests from e2e-test-translator + schemas from effect-schema-translator
+- **Consumes**: RED tests from e2e-test-generator + schemas from effect-schema-generator
 - **Implements**: Presentation/Application layers (UI components, API routes, workflows)
 - **Tests**: Removes `test.fixme()`, runs E2E tests after each fix
 - **Focus**: Making RED tests GREEN with minimal but correct code
 - **Output**: Working features with GREEN E2E tests, documented duplication
 
-**e2e-test-translator**:
+**e2e-test-generator**:
 - **Creates**: RED E2E tests in `tests/app/{property}.spec.ts`
 - **Focus**: Test specifications (acceptance criteria)
 - **Output**: Failing E2E tests that define "done"
 
-**effect-schema-translator**:
+**effect-schema-generator**:
 - **Implements**: Domain schemas in `src/domain/models/app/{property}.ts`
 - **Focus**: Data validation and type definitions
 - **Output**: Working schemas with passing unit tests
@@ -506,7 +506,7 @@ json-schema-editor/openapi-editor (COLLABORATIVE BLUEPRINT)
          ↓
     [PARALLEL]
          ↓
-  effect-schema-translator + e2e-test-translator
+  effect-schema-generator + e2e-test-generator
          ↓
   ┌──────────────────────┐
   │  e2e-test-fixer      │ ← YOU ARE HERE

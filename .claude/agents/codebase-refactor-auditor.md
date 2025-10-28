@@ -1119,7 +1119,7 @@ json-schema-editor/openapi-editor (COLLABORATIVE BLUEPRINT)
          ↓
     [PARALLEL]
          ↓
-  effect-schema-translator + e2e-test-translator
+  effect-schema-generator + e2e-test-generator
          ↓
   e2e-test-fixer (GREEN - make tests pass)
          ↓

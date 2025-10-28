@@ -69,7 +69,8 @@
 
 ## Development Workflows
 
-- `@docs/development/agent-workflows.md` - Complete TDD pipeline and agent collaboration guide
+- `@docs/development/agent-workflows.md` - Complete TDD pipeline with agents and skills collaboration guide
+- `@.claude/SKILLS.md` - Skills reference (autonomous utilities for validation, translation, and code quality)
 
 ---
 

@@ -2,34 +2,52 @@
 
 ## Overview
 
-Omnera uses a sophisticated agent ecosystem to implement features through Test-Driven Development (TDD), maintain documentation, and ensure code quality. This guide explains how all 8 agents collaborate to form cohesive development workflows.
+Omnera uses a sophisticated agent and skills ecosystem to implement features through Test-Driven Development (TDD), maintain documentation, and ensure code quality. This guide explains how agents and skills collaborate to form cohesive development workflows.
 
-### Agent Taxonomy
+### Ecosystem Taxonomy
 
-**TDD Agents** (Feature Implementation):
+**Agents (8)** - Collaborative workflows requiring user input and strategic decisions
+**Skills (8)** - Autonomous utilities for deterministic tasks
 
-- `spec-editor` - Collaborative schema design guide (CREATIVE)
-- `effect-schema-translator` - JSON Schema → Effect Schema (MECHANICAL)
-- `e2e-test-translator` - x-user-stories → Playwright tests (MECHANICAL)
-- `e2e-test-fixer` - GREEN implementation (CREATIVE)
-- `codebase-refactor-auditor` - Code optimization and refactoring (CREATIVE)
+#### TDD Pipeline
 
-**Documentation Agents** (Knowledge Management):
+**CREATIVE Agents**:
+
+- `json-schema-editor` - Collaborative schema design guide
+- `e2e-test-fixer` - GREEN implementation
+- `codebase-refactor-auditor` - Code optimization and refactoring
+
+**Skills (Mechanical Translation)**:
+
+- `effect-schema-generator` - JSON Schema → Effect Schema (autonomous)
+- `e2e-test-generator` - specs arrays → Playwright tests (autonomous)
+
+#### Documentation Agents
 
 - `architecture-docs-maintainer` - WHY patterns exist (rationale, enforcement)
 - `infrastructure-docs-maintainer` - WHAT tools are configured (versions, setup)
 
-**Meta Agent** (Agent Maintenance):
+#### Utility Skills
 
-- `agent-maintainer` - Reviews and maintains all agent configurations
+- `config-validator` - Validates eslint.config.ts, tsconfig.json
+- `json-schema-validator` - Validates JSON Schema/OpenAPI compliance
+- `security-scanner` - Identifies security vulnerabilities
+- `code-duplication-detector` - Detects duplicate code patterns
+- `dependency-tracker` - Tracks package.json alignment
+- `best-practices-checker` - Validates framework-specific patterns
 
-### Creative vs Mechanical Agents
+#### Meta Tools
 
-The TDD pipeline consists of TWO creative agents and TWO mechanical agents:
+- `agent-maintainer` (agent) - Reviews and maintains agent configurations
+- `admin-specs-designer` (agent) - Admin dashboard design and specs
 
-**CREATIVE Agents** (Make Decisions):
+### Creative Agents vs. Mechanical Skills
 
-1. **spec-editor** - Collaborative schema design
+The TDD pipeline uses CREATIVE agents for collaborative design and MECHANICAL skills for autonomous translation:
+
+**CREATIVE Agents** (Require User Collaboration):
+
+1. **json-schema-editor** - Collaborative schema design
    - Asks user questions about validation rules
    - Makes architectural decisions with user
    - Crafts business rules and user stories
@@ -42,41 +60,48 @@ The TDD pipeline consists of TWO creative agents and TWO mechanical agents:
    - Writes actual application logic
    - **OUTPUT**: Working code that makes tests GREEN
 
-**MECHANICAL Agents** (Follow Patterns):
+**MECHANICAL Skills** (Autonomous Execution):
 
-1. **effect-schema-translator** - JSON Schema → Effect Schema
+1. **effect-schema-generator** - JSON Schema → Effect Schema
    - Reads validated JSON Schema from specs.schema.json
    - Applies established Effect Schema patterns
    - Translates Triple-Documentation to JSDoc annotations
    - Creates unit tests following template
-   - **NO DECISIONS**: Fails if input incomplete, never designs
+   - **NO DECISIONS**: Refuses if input incomplete, never designs
+   - **AUTONOMOUS**: Claude invokes automatically when appropriate
    - **INPUT → OUTPUT**: Pure mechanical translation
 
-2. **e2e-test-translator** - x-user-stories → Playwright tests
-   - Reads validated x-user-stories from JSON Schema
+2. **e2e-test-generator** - specs arrays → Playwright tests
+   - Reads validated specs arrays from .schema.json files
    - Applies established Playwright test patterns
    - Translates GIVEN-WHEN-THEN to test code
    - Adds test.fixme() markers automatically
-   - **NO DECISIONS**: Fails if stories incomplete, never creates scenarios
+   - **NO DECISIONS**: Refuses if specs incomplete, never creates scenarios
+   - **AUTONOMOUS**: Claude invokes automatically when appropriate
    - **INPUT → OUTPUT**: Pure mechanical translation
 
 **Understanding This Distinction**:
 
-✅ **Ask design questions to**: `spec-editor` (creative)
-✅ **Ask implementation questions to**: `e2e-test-fixer` (creative)
-❌ **Don't expect translators to make decisions**: They follow patterns exactly
-❌ **Don't ask translators design questions**: They'll fail with "missing input"
+✅ **Ask design questions to**: `json-schema-editor` (creative agent)
+✅ **Ask implementation questions to**: `e2e-test-fixer` (creative agent)
+✅ **Request translation**: Claude automatically uses skills (e.g., "translate specs to tests")
+❌ **Don't expect skills to make decisions**: They follow patterns exactly
+❌ **Don't ask skills design questions**: They'll refuse with "missing input"
 
-**Decision Tree: Which Agent?**
+**Key Difference**: Skills are model-invoked (Claude decides when to use them), while agents require explicit invocation or user collaboration.
+
+**Decision Tree: Agent vs. Skill**
 
 ```
-Does the task involve DESIGN decisions?
-├─ YES → Use CREATIVE agent (spec-editor or e2e-test-fixer)
-└─ NO → Use MECHANICAL agent (effect-schema-translator or e2e-test-translator)
+Does the task involve DESIGN or COLLABORATION?
+├─ YES → Use CREATIVE agent (json-schema-editor or e2e-test-fixer)
+└─ NO → Is it deterministic translation?
+          ├─ YES → Claude will use appropriate SKILL automatically
+          └─ NO → Direct tool usage or other agent
 
 Is the JSON Schema already validated and complete?
-├─ YES → Use MECHANICAL translator
-└─ NO → Use spec-editor to complete design first
+├─ YES → Claude uses skills for translation
+└─ NO → Use json-schema-editor to complete design first
 ```
 
 ### When to Use Agents vs. Direct Tools
@@ -110,7 +135,7 @@ Is the JSON Schema already validated and complete?
 ```
 User Requirement
       ↓
-1. spec-editor (CREATIVE: Design & Validation)
+1. json-schema-editor (CREATIVE AGENT: Design & Validation)
    • Helps user edit docs/specifications/specs.schema.json
    • Asks permission to validate: bun run scripts/validate-schema.ts
    • User decides when to generate roadmap
@@ -121,28 +146,29 @@ User Requirement
 ┌─────┴─────┐
 │ PARALLEL  │
 ↓           ↓
-2A. effect-schema-translator          |    2B. e2e-test-translator
-    (MECHANICAL: JSON→Effect)         |         (MECHANICAL: Stories→Tests)
-    • Reads JSON Schema constraints   |         • Reads x-user-stories
+2A. effect-schema-generator           |    2B. e2e-test-generator
+    (MECHANICAL SKILL: JSON→Effect)   |         (MECHANICAL SKILL: specs→Tests)
+    • Claude invokes autonomously     |         • Claude invokes autonomously
+    • Reads JSON Schema constraints   |         • Reads specs arrays
     • Translates to Effect Schema     |         • Translates to Playwright tests
-      src/domain/models/app/          |         • Creates tests/app/{property}.spec.ts
+      src/domain/models/app/          |         • Creates specs/{property}.spec.ts
       {property}.ts                   |         • Applies test.fixme() markers
     • Creates {property}.test.ts      |         • Multiple @spec + ONE @regression
     • Runs CLAUDECODE=1 bun test:unit |
       ↓──────────────────────────────↓
       (HANDOFF: Schema translated + RED tests translated)
       ↓
-3. e2e-test-fixer (CREATIVE: Implementation)
+3. e2e-test-fixer (CREATIVE AGENT: Implementation)
    • Removes test.fixme() from first @spec test
    • Implements minimal code to make test GREEN
-   • Runs: bun test:e2e -- tests/app/{property}.spec.ts
+   • Runs: bun test:e2e -- specs/{property}.spec.ts
    • Repeats for each @spec test (one at a time)
    • Makes @regression test GREEN
    • Makes @spec test GREEN (if exists)
    • After N fixes (typically 3+), documents code duplication
       ↓ (HANDOFF: All tests GREEN, duplication noted)
       ↓
-4. codebase-refactor-auditor (CREATIVE: Refactoring)
+4. codebase-refactor-auditor (CREATIVE AGENT: Refactoring)
    • Phase 0: Establishes E2E test baseline (@spec, @regression)
    • Analyzes recent commits (Phase 1.1: >100 lines OR >5 files)
    • Immediately refactors files from recent commits
@@ -155,7 +181,7 @@ User Requirement
 
 #### Step 1: Specification & Roadmap Generation
 
-**Agent**: `spec-editor`
+**Agent**: `json-schema-editor`
 
 **Trigger**: User requests help editing schema or adding properties to `docs/specifications/specs.schema.json`
 
@@ -198,15 +224,15 @@ bun run scripts/generate-roadmap.ts        # User decides when to run
 - ✅ User stories validated collaboratively
 - ✅ User explicitly approves adding VALIDATED marker
 
-**Handoff**: Notify effect-schema-translator and e2e-test-translator that roadmap is ready (with user confirmation)
+**Handoff**: Claude will autonomously invoke effect-schema-generator and e2e-test-generator skills when roadmap is ready
 
 ---
 
 #### Step 2A: Schema Implementation (Parallel)
 
-**Agent**: `effect-schema-translator`
+**Skill**: `effect-schema-generator` (autonomously invoked by Claude)
 
-**Trigger**: Roadmap file exists at `docs/specifications/roadmap/{property}.md` with VALIDATED status
+**Trigger**: User requests schema translation or Claude detects validated roadmap ready for translation
 
 **Input**:
 
@@ -238,15 +264,15 @@ bun run scripts/generate-roadmap.ts        # User decides when to run
 - ✅ Property added to AppSchema
 - ✅ JSON Schema exported successfully
 
-**Parallel Work**: e2e-test-translator works simultaneously on tests
+**Parallel Work**: e2e-test-generator skill works simultaneously on tests (autonomously invoked)
 
 ---
 
 #### Step 2B: RED Test Creation (Parallel)
 
-**Agent**: `e2e-test-translator`
+**Skill**: `e2e-test-generator` (autonomously invoked by Claude)
 
-**Trigger**: Roadmap file exists at `docs/specifications/roadmap/{property}.md` with VALIDATED status
+**Trigger**: User requests test generation or Claude detects specs array ready for translation
 
 **Input**:
 
@@ -278,9 +304,9 @@ bun run scripts/generate-roadmap.ts        # User decides when to run
 - ✅ data-testid patterns match roadmap
 - ✅ Error messages match roadmap exactly
 
-**Parallel Work**: effect-schema-translator works simultaneously on Effect Schema
+**Parallel Work**: effect-schema-generator skill works simultaneously on Effect Schema (autonomously invoked)
 
-**Handoff**: Notify e2e-test-fixer that RED tests are ready
+**Handoff**: Once tests are created, user can request e2e-test-fixer agent to implement features
 
 ---
 
@@ -294,7 +320,7 @@ bun run scripts/generate-roadmap.ts        # User decides when to run
 
 - tests/app/{property}.spec.ts (RED tests)
 - Optional: docs/specifications/roadmap/{property}.md (implementation guidance)
-- src/domain/models/app/{property}.ts (schema from effect-schema-translator)
+- src/domain/models/app/{property}.ts (schema from effect-schema-generator skill)
 
 **Actions**:
 
@@ -516,11 +542,11 @@ bun test:e2e --grep @regression  # Compare to Phase 0 baseline
 
 **Use Case**: Product requirements change, specs.schema.json needs updates
 
-**Agent**: `spec-editor`
+**Agent**: `json-schema-editor`
 
 **Workflow**:
 
-1. User describes requirement change to spec-editor
+1. User describes requirement change to json-schema-editor
 2. Agent helps user edit docs/specifications/specs.schema.json (collaborative editing)
 3. Agent asks: "Would you like me to validate these changes?"
 4. If approved, agent runs `bun run scripts/validate-schema.ts`
@@ -541,7 +567,7 @@ bun test:e2e --grep @regression  # Compare to Phase 0 baseline
 4. Keep validation marker intact
 5. Only regenerate Effect Schema blueprint and validation rules
 
-**Handoff**: After validation complete, notify effect-schema-translator and e2e-test-translator
+**Handoff**: After validation complete, Claude will autonomously invoke effect-schema-generator and e2e-test-generator skills as needed
 
 ---
 
@@ -573,22 +599,28 @@ bun test:e2e --grep @regression  # Compare to Phase 0 baseline
 
 ### Complete Agent Overview
 
-| Agent                              | Primary Responsibility       | Trigger Example               | Input Files                  | Output Files                        | Collaborates With                                  |
-| ---------------------------------- | ---------------------------- | ----------------------------- | ---------------------------- | ----------------------------------- | -------------------------------------------------- |
-| **spec-editor**                    | Collaborative schema design  | "Help me edit schemas"        | specs.schema.json, vision.md | ROADMAP.md, roadmap/\*.md           | → effect-schema-translator, e2e-test-translator    |
-| **effect-schema-translator**       | Effect Schema implementation | "Implement {property} schema" | roadmap/{property}.md        | src/domain/models/app/{property}.ts | ← spec-editor, → e2e-test-translator               |
-| **e2e-test-translator**            | RED test creation            | "Write tests for {property}"  | roadmap/{property}.md        | tests/app/{property}.spec.ts        | ← spec-editor, → e2e-test-fixer                    |
-| **e2e-test-fixer**                 | GREEN implementation         | "Fix failing E2E test"        | tests/app/{property}.spec.ts | src/ (implementation)               | ← e2e-test-translator, → codebase-refactor-auditor |
-| **codebase-refactor-auditor**      | Code optimization            | "Audit and refactor code"     | src/ (working code)          | src/ (refactored)                   | ← e2e-test-fixer, ↔ docs maintainers              |
-| **architecture-docs-maintainer**   | WHY patterns exist           | "Document {pattern}"          | Architectural decision       | docs/architecture/                  | ↔ infrastructure-docs-maintainer                  |
-| **infrastructure-docs-maintainer** | WHAT tools configured        | "Document {tool} setup"       | Config files                 | docs/infrastructure/                | ↔ architecture-docs-maintainer                    |
-| **agent-maintainer**               | Agent config review          | "Review {agent}"              | .claude/agents/\*.md         | .claude/agents/\*.md                | (meta-level for all)                               |
+| Tool/Agent                         | Type  | Primary Responsibility       | Trigger Example              | Input Files                  | Output Files                        |
+| ---------------------------------- | ----- | ---------------------------- | ---------------------------- | ---------------------------- | ----------------------------------- |
+| **json-schema-editor**             | Agent | Collaborative schema design  | "Help me edit schemas"       | specs.schema.json, vision.md | ROADMAP.md, roadmap/\*.md           |
+| **effect-schema-generator**        | Skill | Effect Schema implementation | "Translate schema to Effect" | roadmap/{property}.md        | src/domain/models/app/{property}.ts |
+| **e2e-test-generator**             | Skill | RED test creation            | "Generate tests from specs"  | specs arrays in .schema.json | specs/{property}.spec.ts            |
+| **e2e-test-fixer**                 | Agent | GREEN implementation         | "Fix failing E2E test"       | specs/{property}.spec.ts     | src/ (implementation)               |
+| **codebase-refactor-auditor**      | Agent | Code optimization            | "Audit and refactor code"    | src/ (working code)          | src/ (refactored)                   |
+| **architecture-docs-maintainer**   | Agent | WHY patterns exist           | "Document {pattern}"         | Architectural decision       | docs/architecture/                  |
+| **infrastructure-docs-maintainer** | Agent | WHAT tools configured        | "Document {tool} setup"      | Config files                 | docs/infrastructure/                |
+| **agent-maintainer**               | Agent | Agent config review          | "Review {agent}"             | .claude/agents/\*.md         | .claude/agents/\*.md                |
+| **config-validator**               | Skill | Config compliance            | "Validate configs"           | eslint.config.ts, tsconfig   | Validation report                   |
+| **json-schema-validator**          | Skill | Schema compliance            | "Validate JSON Schema"       | .schema.json files           | Validation report                   |
+| **security-scanner**               | Skill | Security vulnerabilities     | "Check security"             | src/ files                   | Security report                     |
+| **code-duplication-detector**      | Skill | Duplicate code detection     | "Find duplicates"            | src/ files                   | Duplication report                  |
+| **dependency-tracker**             | Skill | Dependency alignment         | "Check dependencies"         | package.json, docs/          | Dependency report                   |
+| **best-practices-checker**         | Skill | Framework pattern validation | "Check best practices"       | src/ files, docs/            | Best practices report               |
 
 ---
 
 ## Handoff Protocols
 
-### 1. spec-editor → effect-schema-translator
+### 1. json-schema-editor → effect-schema-generator (Skill)
 
 **Completion Criteria**:
 
@@ -600,20 +632,20 @@ bun test:e2e --grep @regression  # Compare to Phase 0 baseline
 
 **File Artifact**: `docs/specifications/roadmap/{property}.md` with VALIDATED status (user-approved)
 
-**Handoff Command**: "Implement {property} schema from roadmap blueprint at docs/specifications/roadmap/{property}.md"
+**Handoff**: User requests "translate schema to Effect" or similar → Claude autonomously invokes skill
 
-**What effect-schema-translator Receives**:
+**What effect-schema-generator Receives**:
 
 - Effect Schema Structure (exact code patterns)
 - Validation Rules (with error messages)
 - Annotations (title, description, examples)
 - Valid/Invalid configuration examples
 
-**Success Criteria**: effect-schema-translator can implement without clarification questions
+**Success Criteria**: Skill can implement without clarification questions (or refuses with clear error message)
 
 ---
 
-### 2. spec-editor → e2e-test-translator
+### 2. json-schema-editor → e2e-test-generator (Skill)
 
 **Completion Criteria**:
 
@@ -623,23 +655,23 @@ bun test:e2e --grep @regression  # Compare to Phase 0 baseline
 - ✅ User stories validated collaboratively
 - ✅ User approved adding VALIDATED marker to docs/specifications/roadmap/{property}.md
 
-**File Artifact**: `docs/specifications/roadmap/{property}.md` with VALIDATED status (user-approved)
+**File Artifact**: `docs/specifications/roadmap/{property}.md` OR `specs arrays` in .schema.json files
 
-**Handoff Command**: "Write RED tests for {property} from roadmap user stories at docs/specifications/roadmap/{property}.md"
+**Handoff**: User requests "generate tests from specs" or similar → Claude autonomously invokes skill
 
-**What e2e-test-translator Receives**:
+**What e2e-test-generator Receives**:
 
-- E2E Test Blueprint (exact Playwright patterns)
+- E2E Test Blueprint OR specs arrays
 - User Stories (GIVEN-WHEN-THEN format)
-- Test Scenarios (@spec, @regression, @spec)
+- Test Scenarios (@spec, @regression)
 - data-testid Patterns
 - Expected Error Messages
 
-**Success Criteria**: e2e-test-translator can create tests without clarification questions
+**Success Criteria**: Skill can create tests without clarification questions (or refuses with clear error message)
 
 ---
 
-### 3. e2e-test-translator → e2e-test-fixer
+### 3. e2e-test-generator (Skill) → e2e-test-fixer (Agent)
 
 **Completion Criteria**:
 
@@ -826,16 +858,20 @@ Q1: What are you documenting?
 
 **Resolution**: Use decision trees above or consult this table:
 
-| User Intent                       | Correct Agent                                |
-| --------------------------------- | -------------------------------------------- |
-| "Add new property to app config"  | spec-editor (collaborative schema editing)   |
-| "Implement schema for {property}" | effect-schema-translator (if roadmap exists) |
-| "Write tests for {property}"      | e2e-test-translator (if roadmap exists)      |
-| "Fix failing E2E test"            | e2e-test-fixer                               |
-| "Clean up code duplication"       | codebase-refactor-auditor                    |
-| "Document {pattern}"              | architecture-docs-maintainer                 |
-| "Document {tool}"                 | infrastructure-docs-maintainer               |
-| "Review agent config"             | agent-maintainer                             |
+| User Intent                      | Correct Tool/Agent                                 |
+| -------------------------------- | -------------------------------------------------- |
+| "Add new property to app config" | json-schema-editor (agent - collaborative editing) |
+| "Translate schema to Effect"     | effect-schema-generator (skill - autonomous)       |
+| "Generate tests from specs"      | e2e-test-generator (skill - autonomous)            |
+| "Fix failing E2E test"           | e2e-test-fixer (agent)                             |
+| "Clean up code duplication"      | codebase-refactor-auditor (agent)                  |
+| "Document {pattern}"             | architecture-docs-maintainer (agent)               |
+| "Document {tool}"                | infrastructure-docs-maintainer (agent)             |
+| "Review agent config"            | agent-maintainer (agent)                           |
+| "Validate configs"               | config-validator (skill - autonomous)              |
+| "Check security"                 | security-scanner (skill - autonomous)              |
+| "Find duplicates"                | code-duplication-detector (skill - autonomous)     |
+| "Check dependencies"             | dependency-tracker (skill - autonomous)            |
 
 ---
 
@@ -1279,18 +1315,29 @@ Metrics:
 
 ## Integration with Claude Code
 
-This workflow documentation is optimized for Claude Code consumption. When referencing agents, use the @ syntax:
+This workflow documentation is optimized for Claude Code consumption.
 
-- `@spec-editor` - Collaborative schema design guide
-- `@effect-schema-translator` - Effect Schema implementation
-- `@e2e-test-translator` - RED test creation
+**Agents (require @ syntax for explicit invocation)**:
+
+- `@json-schema-editor` - Collaborative schema design guide
 - `@e2e-test-fixer` - GREEN implementation
 - `@codebase-refactor-auditor` - Code optimization
 - `@architecture-docs-maintainer` - WHY patterns exist
 - `@infrastructure-docs-maintainer` - WHAT tools configured
 - `@agent-maintainer` - Agent config review
 
-Claude Code will understand these references and invoke the appropriate agents when workflow triggers are met.
+**Skills (autonomously invoked by Claude, no @ needed)**:
+
+- `effect-schema-generator` - Effect Schema implementation
+- `e2e-test-generator` - RED test creation
+- `config-validator` - Configuration validation
+- `json-schema-validator` - Schema compliance checking
+- `security-scanner` - Security vulnerability detection
+- `code-duplication-detector` - Duplicate code detection
+- `dependency-tracker` - Dependency alignment tracking
+- `best-practices-checker` - Framework pattern validation
+
+Claude Code will automatically use skills when appropriate based on user requests.
 
 ---
 
@@ -1298,11 +1345,13 @@ Claude Code will understand these references and invoke the appropriate agents w
 
 The Omnera agent ecosystem implements a complete TDD workflow with clear handoff protocols:
 
-**TDD Pipeline**: spec → schema + tests (parallel) → implement → refactor
+**TDD Pipeline**: json-schema-editor (design) → effect-schema-generator + e2e-test-generator (parallel skills) → e2e-test-fixer (implement) → codebase-refactor-auditor (refactor)
 
-**Documentation**: architecture (WHY) ↔ infrastructure (WHAT)
+**Documentation**: architecture-docs-maintainer (WHY) ↔ infrastructure-docs-maintainer (WHAT)
 
-**Meta**: agent-maintainer reviews all configurations
+**Utilities**: 6 autonomous skills for validation, security, and code quality
+
+**Meta**: agent-maintainer reviews all agent configurations
 
 **Key Principles**:
 
