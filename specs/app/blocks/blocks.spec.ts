@@ -201,6 +201,86 @@ test.describe('Reusable Blocks', () => {
     }
   )
 
+  test.fixme(
+    'APP-BLOCKS-INTEGRATION-001: should render blocks within page layout with full variable substitution',
+    { tag: '@spec' },
+    async ({ page, startServerWithSchema }) => {
+      // GIVEN: blocks integrated with pages via sections
+      // WHEN: page sections reference blocks using $ref and vars
+      // THEN: it should render blocks within page layout with full variable substitution
+      await startServerWithSchema({
+        name: 'test-app',
+        blocks: [
+          {
+            name: 'hero-cta',
+            type: 'button',
+            props: { className: '$buttonClass' },
+            content: '$buttonText',
+          },
+        ],
+        pages: [
+          {
+            path: '/',
+            meta: { lang: 'en-US', title: 'Home', description: 'Home' },
+            sections: [
+              {
+                $ref: 'hero-cta',
+                vars: { buttonClass: 'btn-primary', buttonText: 'Get Started' },
+              },
+            ],
+          },
+        ],
+      })
+      await page.goto('/')
+      const button = page.locator('button:has-text("Get Started")')
+      await expect(button).toBeVisible()
+      await expect(button).toHaveClass(/btn-primary/)
+    }
+  )
+
+  test.fixme(
+    'APP-BLOCKS-INTEGRATION-002: should render with design tokens applied from global theme',
+    { tag: '@spec' },
+    async ({ page, startServerWithSchema }) => {
+      // GIVEN: blocks using theme design tokens
+      // WHEN: block props reference theme colors, spacing, and fonts
+      // THEN: it should render with design tokens applied from global theme
+      await startServerWithSchema({
+        name: 'test-app',
+        theme: {
+          colors: { primary: '#007bff', secondary: '#6c757d' },
+          spacing: { sm: '8px', md: '16px' },
+          fonts: { body: 'Arial, sans-serif' },
+        },
+        blocks: [
+          {
+            name: 'themed-card',
+            type: 'card',
+            props: {
+              style: {
+                backgroundColor: '$theme.colors.primary',
+                padding: '$theme.spacing.md',
+                fontFamily: '$theme.fonts.body',
+              },
+            },
+            content: 'Themed Content',
+          },
+        ],
+        pages: [
+          {
+            path: '/',
+            meta: { lang: 'en-US', title: 'Home', description: 'Home' },
+            sections: [{ $ref: 'themed-card' }],
+          },
+        ],
+      })
+      await page.goto('/')
+      const card = page.locator('[data-block="themed-card"]')
+      await expect(card).toBeVisible()
+      await expect(card).toHaveCSS('background-color', 'rgb(0, 123, 255)') // #007bff
+    }
+  )
+
   // ============================================================================
   // REGRESSION TEST (@regression)
   // ONE OPTIMIZED test verifying components work together efficiently
