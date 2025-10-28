@@ -70,73 +70,687 @@
       "id": "APP-PAGES-001",
       "given": "a pages array with single page",
       "when": "array contains one complete page configuration",
-      "then": "it should validate as pages array with minimum 1 item"
+      "then": "it should validate as pages array with minimum 1 item",
+      "x-validation": {
+        "setup": {
+          "pages": [
+            {
+              "name": "Home",
+              "path": "/",
+              "meta": {
+                "lang": "en-US",
+                "title": "Home Page"
+              },
+              "sections": []
+            }
+          ]
+        },
+        "assertions": [
+          "Array length: 1 page",
+          "minItems: 1 (at least one page required)",
+          "Valid single-page site"
+        ]
+      }
     },
     {
       "id": "APP-PAGES-002",
       "given": "a page with required properties only",
       "when": "page has name, path, meta, and sections",
-      "then": "it should validate with minimal configuration"
+      "then": "it should validate with minimal configuration",
+      "x-validation": {
+        "setup": {
+          "page": {
+            "name": "About",
+            "path": "/about",
+            "meta": {
+              "lang": "en-US",
+              "title": "About Us"
+            },
+            "sections": []
+          }
+        },
+        "assertions": [
+          "Required: name, path, meta, sections",
+          "Optional properties omitted: id, layout, scripts",
+          "Minimal valid page configuration"
+        ]
+      },
+      "x-application": {
+        "page": {
+          "name": "About",
+          "path": "/about",
+          "meta": {
+            "lang": "en-US",
+            "title": "About Us",
+            "description": "Learn about our company"
+          },
+          "sections": []
+        },
+        "component": "page",
+        "expectedDOM": "<html lang=\"en-US\"><head><title>About Us</title><meta name=\"description\" content=\"Learn about our company\" /></head><body><main data-testid=\"page-about\"></main></body></html>",
+        "assertions": [
+          "HTML lang attribute from meta.lang",
+          "Page title in <title> tag",
+          "Meta description in <meta> tag",
+          "Main content area with data-testid",
+          "Empty sections render empty main"
+        ]
+      }
     },
     {
       "id": "APP-PAGES-003",
       "given": "a page with all optional properties",
       "when": "page includes id, layout, and scripts",
-      "then": "it should accept complete page configuration"
+      "then": "it should accept complete page configuration",
+      "x-validation": {
+        "setup": {
+          "page": {
+            "id": "homepage",
+            "name": "Home",
+            "path": "/",
+            "meta": {
+              "lang": "en-US",
+              "title": "Welcome"
+            },
+            "layout": {
+              "navigation": {
+                "logo": "/logo.svg"
+              }
+            },
+            "sections": [],
+            "scripts": {
+              "features": {
+                "analytics": true
+              }
+            }
+          }
+        },
+        "assertions": [
+          "All properties present: id, name, path, meta, layout, sections, scripts",
+          "Complete page configuration",
+          "All optional properties accepted"
+        ]
+      }
     },
     {
       "id": "APP-PAGES-004",
       "given": "a page with home path",
       "when": "path is '/'",
-      "then": "it should accept root path for homepage"
+      "then": "it should accept root path for homepage",
+      "x-validation": {
+        "setup": {
+          "page": {
+            "name": "Home",
+            "path": "/",
+            "meta": {
+              "lang": "en-US",
+              "title": "Home"
+            },
+            "sections": []
+          }
+        },
+        "assertions": ["Path: '/' (root)", "Homepage route", "Matches domain root URL"]
+      },
+      "x-application": {
+        "page": {
+          "name": "Home",
+          "path": "/",
+          "meta": {
+            "lang": "en-US",
+            "title": "Welcome Home"
+          },
+          "sections": []
+        },
+        "routing": {
+          "url": "https://example.com/",
+          "matched": true
+        },
+        "component": "page",
+        "assertions": [
+          "Route: / matches homepage",
+          "URL: https://example.com/ (root)",
+          "Homepage accessible at domain root"
+        ]
+      }
     },
     {
       "id": "APP-PAGES-005",
       "given": "a page with nested path",
       "when": "path is '/products/pricing'",
-      "then": "it should accept nested URL paths"
+      "then": "it should accept nested URL paths",
+      "x-validation": {
+        "setup": {
+          "page": {
+            "name": "Pricing",
+            "path": "/products/pricing",
+            "meta": {
+              "lang": "en-US",
+              "title": "Pricing"
+            },
+            "sections": []
+          }
+        },
+        "assertions": [
+          "Path: '/products/pricing' (nested)",
+          "2 levels deep",
+          "URL segment structure supported"
+        ]
+      },
+      "x-application": {
+        "page": {
+          "name": "Pricing",
+          "path": "/products/pricing",
+          "meta": {
+            "lang": "en-US",
+            "title": "Product Pricing"
+          },
+          "sections": []
+        },
+        "routing": {
+          "url": "https://example.com/products/pricing",
+          "matched": true
+        },
+        "component": "page",
+        "assertions": [
+          "Route: /products/pricing matches page",
+          "URL: https://example.com/products/pricing",
+          "Nested paths support hierarchical structure"
+        ]
+      }
     },
     {
       "id": "APP-PAGES-006",
       "given": "a page with sections containing direct components",
       "when": "sections has type, props, and children",
-      "then": "it should support direct component definitions in sections"
+      "then": "it should support direct component definitions in sections",
+      "x-validation": {
+        "setup": {
+          "page": {
+            "name": "Simple Page",
+            "path": "/simple",
+            "meta": {
+              "lang": "en-US",
+              "title": "Simple"
+            },
+            "sections": [
+              {
+                "type": "section",
+                "props": {
+                  "id": "hero"
+                },
+                "children": [
+                  {
+                    "type": "h1",
+                    "props": {},
+                    "children": ["Welcome"]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "assertions": [
+          "Direct component definition: { type, props, children }",
+          "No block references",
+          "Inline component structure"
+        ]
+      }
     },
     {
       "id": "APP-PAGES-007",
       "given": "a page with sections containing block references",
       "when": "sections references blocks with variable substitution",
-      "then": "it should support block references with $variable syntax"
+      "then": "it should support block references with $variable syntax",
+      "x-validation": {
+        "setup": {
+          "page": {
+            "name": "Landing",
+            "path": "/landing",
+            "meta": {
+              "lang": "en-US",
+              "title": "Landing"
+            },
+            "sections": [
+              {
+                "$ref": "#/blocks/hero",
+                "$vars": {
+                  "title": "Welcome to Our Platform"
+                }
+              }
+            ]
+          }
+        },
+        "assertions": [
+          "Block reference: $ref: '#/blocks/hero'",
+          "Variable substitution: $vars with title",
+          "Reusable blocks via JSON references"
+        ]
+      },
+      "x-application": {
+        "blocks": {
+          "hero": {
+            "type": "section",
+            "props": {
+              "id": "hero"
+            },
+            "children": [
+              {
+                "type": "h1",
+                "children": ["$title"]
+              }
+            ]
+          }
+        },
+        "page": {
+          "sections": [
+            {
+              "$ref": "#/blocks/hero",
+              "$vars": {
+                "title": "Welcome"
+              }
+            }
+          ]
+        },
+        "component": "page",
+        "expectedDOM": "<main><section id=\"hero\"><h1>Welcome</h1></section></main>",
+        "assertions": [
+          "Block reference resolved: hero block inserted",
+          "Variable substitution: $title → 'Welcome'",
+          "Reusable block with dynamic content",
+          "DRY principle: define once, use everywhere"
+        ]
+      }
     },
     {
       "id": "APP-PAGES-008",
       "given": "a page with layout configuration",
       "when": "layout includes navigation, banner, footer, and sidebar",
-      "then": "it should orchestrate global layout components"
+      "then": "it should orchestrate global layout components",
+      "x-validation": {
+        "setup": {
+          "page": {
+            "name": "Full Layout",
+            "path": "/full",
+            "meta": {
+              "lang": "en-US",
+              "title": "Full Layout"
+            },
+            "layout": {
+              "banner": {
+                "message": "New feature available!"
+              },
+              "navigation": {
+                "logo": "/logo.svg"
+              },
+              "footer": {
+                "copyright": "© 2025 Company"
+              },
+              "sidebar": {
+                "position": "left"
+              }
+            },
+            "sections": []
+          }
+        },
+        "assertions": [
+          "Layout orchestrates: banner, navigation, footer, sidebar",
+          "Global layout components",
+          "All layout properties optional"
+        ]
+      },
+      "x-application": {
+        "page": {
+          "layout": {
+            "banner": {
+              "message": "Sale now on!"
+            },
+            "navigation": {
+              "logo": "/logo.svg"
+            },
+            "footer": {
+              "copyright": "© 2025"
+            }
+          },
+          "sections": []
+        },
+        "component": "page",
+        "expectedDOM": "<div data-testid=\"banner\">Sale now on!</div><nav data-testid=\"navigation\"><img src=\"/logo.svg\" /></nav><main>...</main><footer data-testid=\"footer\">© 2025</footer>",
+        "assertions": [
+          "Layout components wrap main content",
+          "Banner appears above navigation",
+          "Navigation above main",
+          "Footer below main",
+          "Consistent layout structure across all pages"
+        ]
+      }
     },
     {
       "id": "APP-PAGES-009",
       "given": "a page with scripts configuration",
       "when": "scripts includes features, external scripts, and config",
-      "then": "it should manage client-side scripts and features"
+      "then": "it should manage client-side scripts and features",
+      "x-validation": {
+        "setup": {
+          "page": {
+            "name": "Interactive",
+            "path": "/interactive",
+            "meta": {
+              "lang": "en-US",
+              "title": "Interactive"
+            },
+            "scripts": {
+              "features": {
+                "analytics": true,
+                "chatWidget": true
+              },
+              "external": [
+                {
+                  "src": "https://cdn.example.com/script.js",
+                  "async": true
+                }
+              ],
+              "config": {
+                "apiKey": "abc123"
+              }
+            },
+            "sections": []
+          }
+        },
+        "assertions": [
+          "Scripts orchestrate: features, external scripts, config",
+          "Feature flags: analytics, chatWidget",
+          "External script loading",
+          "Client-side configuration"
+        ]
+      },
+      "x-application": {
+        "page": {
+          "scripts": {
+            "features": {
+              "analytics": true
+            },
+            "external": [
+              {
+                "src": "https://cdn.example.com/analytics.js",
+                "async": true
+              }
+            ]
+          }
+        },
+        "component": "page",
+        "expectedDOM": "<html><head><script src=\"https://cdn.example.com/analytics.js\" async></script></head><body>...</body></html>",
+        "assertions": [
+          "External script injected in <head>",
+          "async attribute for non-blocking load",
+          "Features control which scripts load",
+          "Client-side functionality management"
+        ]
+      }
     },
     {
       "id": "APP-PAGES-010",
       "given": "multiple pages in array",
       "when": "pages array contains [homepage, about, pricing, contact]",
-      "then": "it should support multiple page configurations"
+      "then": "it should support multiple page configurations",
+      "x-validation": {
+        "setup": {
+          "pages": [
+            {
+              "name": "Home",
+              "path": "/",
+              "meta": {
+                "lang": "en-US",
+                "title": "Home"
+              },
+              "sections": []
+            },
+            {
+              "name": "About",
+              "path": "/about",
+              "meta": {
+                "lang": "en-US",
+                "title": "About"
+              },
+              "sections": []
+            },
+            {
+              "name": "Pricing",
+              "path": "/pricing",
+              "meta": {
+                "lang": "en-US",
+                "title": "Pricing"
+              },
+              "sections": []
+            },
+            {
+              "name": "Contact",
+              "path": "/contact",
+              "meta": {
+                "lang": "en-US",
+                "title": "Contact"
+              },
+              "sections": []
+            }
+          ]
+        },
+        "assertions": [
+          "4 pages defined",
+          "Each page has unique path",
+          "Multi-page site configuration",
+          "Array supports any number of pages"
+        ]
+      },
+      "x-application": {
+        "pages": [
+          {
+            "path": "/"
+          },
+          {
+            "path": "/about"
+          },
+          {
+            "path": "/pricing"
+          }
+        ],
+        "routing": {
+          "/": "matched",
+          "/about": "matched",
+          "/pricing": "matched",
+          "/unknown": "404"
+        },
+        "assertions": [
+          "All defined paths accessible",
+          "Router matches paths to pages",
+          "Undefined paths return 404",
+          "Complete site structure"
+        ]
+      }
     },
     {
       "id": "APP-PAGES-011",
       "given": "a page supporting reusable blocks",
       "when": "blocks are defined at app level and referenced in sections",
-      "then": "it should enable block reusability across pages via $ref"
+      "then": "it should enable block reusability across pages via $ref",
+      "x-validation": {
+        "setup": {
+          "app": {
+            "blocks": [
+              {
+                "id": "cta",
+                "type": "section",
+                "children": [
+                  {
+                    "type": "button",
+                    "children": ["$label"]
+                  }
+                ]
+              }
+            ],
+            "pages": [
+              {
+                "name": "Home",
+                "path": "/",
+                "meta": {
+                  "lang": "en-US",
+                  "title": "Home"
+                },
+                "sections": [
+                  {
+                    "$ref": "#/blocks/cta",
+                    "$vars": {
+                      "label": "Get Started"
+                    }
+                  }
+                ]
+              },
+              {
+                "name": "Pricing",
+                "path": "/pricing",
+                "meta": {
+                  "lang": "en-US",
+                  "title": "Pricing"
+                },
+                "sections": [
+                  {
+                    "$ref": "#/blocks/cta",
+                    "$vars": {
+                      "label": "Buy Now"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "assertions": [
+          "Blocks defined at app.blocks[] (app level)",
+          "Pages reference blocks via $ref",
+          "Block reused across multiple pages (Home, Pricing)",
+          "Variable substitution makes blocks dynamic",
+          "DRY: define once, use everywhere with different content"
+        ]
+      },
+      "x-application": {
+        "blocks": {
+          "cta": {
+            "type": "section",
+            "children": [
+              {
+                "type": "button",
+                "children": ["$label"]
+              }
+            ]
+          }
+        },
+        "pages": [
+          {
+            "path": "/",
+            "sections": [
+              {
+                "$ref": "#/blocks/cta",
+                "$vars": {
+                  "label": "Get Started"
+                }
+              }
+            ]
+          },
+          {
+            "path": "/pricing",
+            "sections": [
+              {
+                "$ref": "#/blocks/cta",
+                "$vars": {
+                  "label": "Buy Now"
+                }
+              }
+            ]
+          }
+        ],
+        "expectedDOM": {
+          "/": "<main><section><button>Get Started</button></section></main>",
+          "/pricing": "<main><section><button>Buy Now</button></section></main>"
+        },
+        "assertions": [
+          "Same block structure on both pages",
+          "Different button labels: 'Get Started' vs 'Buy Now'",
+          "Block reusability reduces duplication",
+          "Consistent design, dynamic content",
+          "Update block once, changes everywhere"
+        ]
+      }
     },
     {
       "id": "APP-PAGES-012",
       "given": "a page with comprehensive metadata",
       "when": "meta includes SEO, social, structured data, and analytics",
-      "then": "it should support complete metadata configuration beyond basic SEO"
+      "then": "it should support complete metadata configuration beyond basic SEO",
+      "x-validation": {
+        "setup": {
+          "page": {
+            "name": "Product Page",
+            "path": "/product",
+            "meta": {
+              "lang": "en-US",
+              "title": "Amazing Product",
+              "description": "The best product ever",
+              "openGraph": {
+                "title": "Amazing Product",
+                "image": "/og-image.jpg"
+              },
+              "twitterCard": {
+                "card": "summary_large_image",
+                "image": "/twitter-image.jpg"
+              },
+              "structuredData": {
+                "@type": "Product",
+                "name": "Amazing Product",
+                "offers": {
+                  "price": "99.99",
+                  "priceCurrency": "USD"
+                }
+              },
+              "analytics": {
+                "googleAnalytics": {
+                  "id": "G-XXXXXXXXXX"
+                }
+              }
+            },
+            "sections": []
+          }
+        },
+        "assertions": [
+          "Basic SEO: title, description",
+          "Social: Open Graph, Twitter Card",
+          "Structured data: Product schema",
+          "Analytics: Google Analytics",
+          "Comprehensive metadata for discoverability and engagement"
+        ]
+      },
+      "x-application": {
+        "page": {
+          "meta": {
+            "title": "Amazing Product",
+            "description": "Best product",
+            "openGraph": {
+              "title": "Amazing Product",
+              "image": "/og.jpg"
+            },
+            "structuredData": {
+              "@type": "Product",
+              "name": "Amazing Product"
+            }
+          }
+        },
+        "component": "page",
+        "expectedDOM": "<html><head><title>Amazing Product</title><meta name=\"description\" content=\"Best product\" /><meta property=\"og:title\" content=\"Amazing Product\" /><meta property=\"og:image\" content=\"/og.jpg\" /><script type=\"application/ld+json\">{\"@type\":\"Product\",\"name\":\"Amazing Product\"}</script></head><body>...</body></html>",
+        "assertions": [
+          "SEO: <title> and <meta name=\"description\">",
+          "Open Graph: <meta property=\"og:...\">",
+          "Structured Data: <script type=\"application/ld+json\">",
+          "Complete <head> metadata for SEO, social sharing, rich snippets",
+          "Search engines and social platforms consume metadata"
+        ]
+      }
     }
   ],
   "x-notes": [
