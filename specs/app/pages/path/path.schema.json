@@ -10,61 +10,306 @@
       "id": "APP-PAGES-PATH-001",
       "given": "a root path",
       "when": "value is '/'",
-      "then": "it should validate as homepage path"
+      "then": "it should validate as homepage path",
+      "x-validation": {
+        "setup": {
+          "path": "/"
+        },
+        "assertions": ["Value: '/' (root path)", "Homepage route", "Matches domain root URL"]
+      },
+      "x-application": {
+        "path": "/",
+        "url": "https://example.com/",
+        "routing": {
+          "matched": true,
+          "page": "homepage"
+        },
+        "assertions": [
+          "URL: https://example.com/ → path: '/'",
+          "Router matches homepage",
+          "Default page at domain root"
+        ]
+      }
     },
     {
       "id": "APP-PAGES-PATH-002",
       "given": "a path referencing common definition",
       "when": "schema uses $ref to definitions.schema.json#/definitions/path",
-      "then": "it should follow shared path pattern from common definitions"
+      "then": "it should follow shared path pattern from common definitions",
+      "x-validation": {
+        "setup": {
+          "schema": {
+            "$ref": "../../common/definitions.schema.json#/definitions/path"
+          }
+        },
+        "assertions": [
+          "Shared definition pattern",
+          "DRY: path validation defined once in definitions.schema.json",
+          "All path schemas reference common definition"
+        ]
+      }
     },
     {
       "id": "APP-PAGES-PATH-003",
       "given": "a single-level path",
       "when": "value is '/about' or '/pricing'",
-      "then": "it should accept paths with leading slash"
+      "then": "it should accept paths with leading slash",
+      "x-validation": {
+        "setup": {
+          "paths": ["/about", "/pricing", "/contact"]
+        },
+        "assertions": [
+          "Pattern: /segment",
+          "Leading slash required",
+          "Single URL segment",
+          "Common website paths"
+        ]
+      },
+      "x-application": {
+        "path": "/about",
+        "url": "https://example.com/about",
+        "routing": {
+          "matched": true,
+          "page": "about"
+        },
+        "assertions": [
+          "URL: https://example.com/about → path: '/about'",
+          "Router matches about page",
+          "Single-level navigation"
+        ]
+      }
     },
     {
       "id": "APP-PAGES-PATH-004",
       "given": "a nested path",
       "when": "value is '/products/pricing' or '/blog/article'",
-      "then": "it should accept multi-level URL paths"
+      "then": "it should accept multi-level URL paths",
+      "x-validation": {
+        "setup": {
+          "paths": ["/products/pricing", "/blog/article", "/docs/api/reference"]
+        },
+        "assertions": [
+          "Pattern: /segment/segment",
+          "Multiple levels supported",
+          "Hierarchical URL structure",
+          "Unlimited nesting depth"
+        ]
+      },
+      "x-application": {
+        "path": "/products/pricing",
+        "url": "https://example.com/products/pricing",
+        "routing": {
+          "matched": true,
+          "page": "pricing"
+        },
+        "breadcrumb": ["Products", "Pricing"],
+        "assertions": [
+          "URL: https://example.com/products/pricing → path: '/products/pricing'",
+          "Router matches nested page",
+          "Breadcrumb navigation: Products > Pricing",
+          "Hierarchical site structure"
+        ]
+      }
     },
     {
       "id": "APP-PAGES-PATH-005",
       "given": "a path with kebab-case segments",
       "when": "value is '/our-team' or '/contact-us'",
-      "then": "it should accept kebab-case URL segments"
+      "then": "it should accept kebab-case URL segments",
+      "x-validation": {
+        "setup": {
+          "paths": ["/our-team", "/contact-us", "/terms-of-service"]
+        },
+        "assertions": [
+          "Pattern: /kebab-case-segment",
+          "Hyphens allowed in segments",
+          "SEO-friendly URLs",
+          "Readable multi-word paths"
+        ]
+      },
+      "x-application": {
+        "path": "/our-team",
+        "url": "https://example.com/our-team",
+        "routing": {
+          "matched": true,
+          "page": "team"
+        },
+        "assertions": [
+          "URL: https://example.com/our-team → path: '/our-team'",
+          "Router matches team page",
+          "Kebab-case improves SEO (vs /ourteam or /our_team)",
+          "Readable URLs for users"
+        ]
+      }
     },
     {
       "id": "APP-PAGES-PATH-006",
       "given": "common website paths (/, /about, /pricing, /contact)",
       "when": "standard website pages are defined",
-      "then": "it should provide examples for typical URL patterns"
+      "then": "it should provide examples for typical URL patterns",
+      "x-validation": {
+        "setup": {
+          "paths": ["/", "/about", "/pricing", "/contact"]
+        },
+        "assertions": [
+          "Homepage: '/'",
+          "About: '/about'",
+          "Pricing: '/pricing'",
+          "Contact: '/contact'",
+          "Standard website structure"
+        ]
+      }
     },
     {
       "id": "APP-PAGES-PATH-007",
       "given": "path as required field",
       "when": "page is created without path",
-      "then": "it should fail validation (path is required)"
+      "then": "it should fail validation (path is required)",
+      "x-validation": {
+        "setup": {
+          "page": {
+            "name": "About",
+            "meta": {
+              "title": "About Us"
+            },
+            "sections": []
+          }
+        },
+        "assertions": [
+          "INVALID: path property missing",
+          "Validation error: path is required",
+          "Every page must have a path",
+          "Cannot route to page without path"
+        ],
+        "expectValidation": "fail"
+      }
     },
     {
       "id": "APP-PAGES-PATH-008",
       "given": "paths across multiple pages",
       "when": "each page has unique path",
-      "then": "it should ensure unique routing for all pages"
+      "then": "it should ensure unique routing for all pages",
+      "x-validation": {
+        "setup": {
+          "pages": [
+            {
+              "path": "/"
+            },
+            {
+              "path": "/about"
+            },
+            {
+              "path": "/pricing"
+            },
+            {
+              "path": "/contact"
+            }
+          ]
+        },
+        "assertions": [
+          "All paths unique",
+          "No duplicate paths",
+          "Each path maps to one page",
+          "Unique routing table"
+        ]
+      },
+      "x-application": {
+        "pages": [
+          {
+            "path": "/",
+            "name": "Home"
+          },
+          {
+            "path": "/about",
+            "name": "About"
+          }
+        ],
+        "routing": {
+          "/": "Home",
+          "/about": "About",
+          "/unknown": "404"
+        },
+        "assertions": [
+          "Router builds path → page mapping",
+          "Each path resolves to unique page",
+          "Undefined paths return 404",
+          "No path collisions"
+        ]
+      }
     },
     {
       "id": "APP-PAGES-PATH-009",
       "given": "path determining page accessibility",
       "when": "user navigates to path in browser",
-      "then": "it should map URL to page configuration for rendering"
+      "then": "it should map URL to page configuration for rendering",
+      "x-application": {
+        "page": {
+          "path": "/pricing",
+          "name": "Pricing",
+          "meta": {
+            "title": "Pricing Plans"
+          },
+          "sections": []
+        },
+        "userAction": "Navigate to https://example.com/pricing",
+        "routing": {
+          "url": "https://example.com/pricing",
+          "matched": true,
+          "page": "Pricing"
+        },
+        "render": {
+          "title": "Pricing Plans",
+          "content": "Pricing page sections..."
+        },
+        "assertions": [
+          "User navigates to https://example.com/pricing",
+          "Router matches path: '/pricing'",
+          "Page configuration loaded: Pricing page",
+          "Page rendered with title 'Pricing Plans'",
+          "Path is the key to page routing"
+        ]
+      }
     },
     {
       "id": "APP-PAGES-PATH-010",
       "given": "path with dynamic segments",
       "when": "value is '/blog/:slug' or '/products/:id'",
-      "then": "it should support dynamic route parameters (if applicable)"
+      "then": "it should support dynamic route parameters (if applicable)",
+      "x-validation": {
+        "setup": {
+          "paths": ["/blog/:slug", "/products/:id", "/users/:userId/posts/:postId"]
+        },
+        "assertions": [
+          "Pattern: /segment/:param",
+          "Dynamic parameters with : prefix",
+          "Multiple parameters supported",
+          "Common for dynamic content (blogs, products, users)"
+        ]
+      },
+      "x-application": {
+        "path": "/blog/:slug",
+        "urls": {
+          "/blog/hello-world": {
+            "matched": true,
+            "params": {
+              "slug": "hello-world"
+            }
+          },
+          "/blog/getting-started": {
+            "matched": true,
+            "params": {
+              "slug": "getting-started"
+            }
+          }
+        },
+        "assertions": [
+          "Path pattern: '/blog/:slug'",
+          "URL: /blog/hello-world → slug = 'hello-world'",
+          "URL: /blog/getting-started → slug = 'getting-started'",
+          "Single path matches infinite URLs",
+          "Dynamic routing for CMS content"
+        ]
+      }
     }
   ]
 }
