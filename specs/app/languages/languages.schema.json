@@ -22,7 +22,7 @@
     "fallback": {
       "type": "string",
       "pattern": "^[a-z]{2}(-[A-Z]{2})?$",
-      "description": "Fallback language when translation is missing"
+      "description": "Fallback language when translation is missing (defaults to 'default' language if not specified)"
     },
     "detectBrowser": {
       "type": "boolean",
@@ -55,6 +55,23 @@
           "code": "ar-SA",
           "label": "العربية",
           "direction": "rtl"
+        }
+      ],
+      "detectBrowser": true,
+      "persistSelection": true
+    },
+    {
+      "default": "fr-FR",
+      "supported": [
+        {
+          "code": "en-US",
+          "label": "English",
+          "direction": "ltr"
+        },
+        {
+          "code": "fr-FR",
+          "label": "Français",
+          "direction": "ltr"
         }
       ],
       "fallback": "en-US",
@@ -122,6 +139,30 @@
       "given": "an app with all features enabled (detectBrowser, persistSelection, fallback)",
       "when": "language configuration is fully utilized",
       "then": "it should provide seamless multi-language UX with auto-detection, persistence, and fallback"
+    },
+    {
+      "id": "APP-LANGUAGES-011",
+      "given": "an app with default language not in supported array",
+      "when": "default is 'en-US' but supported array only contains fr-FR and es-ES",
+      "then": "it should fail validation - default language must be in supported array"
+    },
+    {
+      "id": "APP-LANGUAGES-012",
+      "given": "an app with fallback not in supported array",
+      "when": "fallback is 'de-DE' but supported array doesn't contain it",
+      "then": "it should fail validation - fallback language must be in supported array"
+    },
+    {
+      "id": "APP-LANGUAGES-013",
+      "given": "an app without explicit fallback",
+      "when": "fallback property is omitted",
+      "then": "it should automatically use default language as fallback"
+    },
+    {
+      "id": "APP-LANGUAGES-014",
+      "given": "an app with fallback different from default",
+      "when": "default is 'fr-FR' and fallback is 'en-US'",
+      "then": "it should show English text when French translation is missing (useful for French site with English fallback)"
     }
   ]
 }

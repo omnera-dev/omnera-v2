@@ -42,8 +42,9 @@
         }
       },
       "spacing": {
-        "section": "py-16",
-        "container": "max-w-7xl"
+        "section": "4rem",
+        "container": "80rem",
+        "gap": "1rem"
       }
     }
   ],

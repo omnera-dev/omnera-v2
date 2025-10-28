@@ -44,20 +44,6 @@
           "title": "Welcome to Our Platform",
           "description": "The best platform for your needs"
         },
-        "theme": {
-          "colors": {
-            "primary": "#007bff",
-            "secondary": "#6c757d"
-          }
-        },
-        "blocks": [
-          {
-            "name": "hero-section",
-            "type": "container",
-            "props": { "className": "hero-container" },
-            "children": []
-          }
-        ],
         "layout": {
           "navigation": {
             "logo": "./logo.svg",
@@ -155,8 +141,10 @@
   ],
   "x-notes": [
     "Pages now support comprehensive metadata beyond basic SEO",
-    "Blocks are defined at the app level and can be reused across pages",
-    "Sections support both direct components and block references with variable substitution",
-    "Theme tokens allow consistent design across all pages"
+    "⚠️ Theme is defined at app level (app.theme{}) - NOT in individual pages. See app.schema.json and theme.schema.json",
+    "⚠️ Blocks are defined at app level (app.blocks[]) - NOT in individual pages. See app.schema.json and blocks.schema.json",
+    "Sections can reference blocks using $ref syntax with variable substitution. See sections.schema.json and block-reference.schema.json",
+    "Pages cannot override theme - app.theme{} applies globally to all pages",
+    "For page-specific styling, use sections[].props.className with Tailwind utilities"
   ]
 }
