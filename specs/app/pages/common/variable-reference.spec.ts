@@ -5,7 +5,7 @@
  * found in the LICENSE.md file in the root directory of this source tree.
  */
 
-import { test, expect } from '../../../fixtures.ts'
+import { test, expect } from '@/specs/fixtures.ts'
 
 /**
  * E2E Tests for Variable Reference

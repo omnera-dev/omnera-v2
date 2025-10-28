@@ -5,16 +5,16 @@
  * found in the LICENSE.md file in the root directory of this source tree.
  */
 
-import { test, expect } from '../../fixtures.ts'
+import { test, expect } from '@/specs/fixtures.ts'
 
 /**
  * E2E Tests for Theme Configuration
  *
  * Source: specs/app/theme/theme.schema.json
- * Spec Count: 8
+ * Spec Count: 11
  *
  * Test Organization:
- * 1. @spec tests - One per spec in schema (8 tests) - Exhaustive acceptance criteria
+ * 1. @spec tests - One per spec in schema (11 tests) - Exhaustive acceptance criteria
  * 2. @regression test - ONE optimized integration test - Efficient workflow validation
  */
 
@@ -25,7 +25,7 @@ test.describe('Theme Configuration', () => {
   // ============================================================================
 
   test.fixme(
-    'APP-THEME-001: should accept colors as the only design token',
+    'APP-THEME-001: should validate theme with colors as the only design token category',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // Spec ID: APP-THEME-001
@@ -36,7 +36,6 @@ test.describe('Theme Configuration', () => {
           colors: {
             primary: '#007bff',
             secondary: '#6c757d',
-            success: '#28a745',
           },
         },
       })
@@ -44,7 +43,7 @@ test.describe('Theme Configuration', () => {
       // WHEN: minimal theme configuration is needed
       await page.goto('/')
 
-      // THEN: it should accept colors as the only design token
+      // THEN: it should validate theme with colors as the only design token category
       await expect(page.locator('[data-testid="theme-colors"]')).toBeVisible()
       const primaryColor = await page
         .locator('[data-testid="color-primary"]')
@@ -54,7 +53,7 @@ test.describe('Theme Configuration', () => {
   )
 
   test.fixme(
-    'APP-THEME-002: should support color palette and typography system',
+    'APP-THEME-002: should validate color palette and typography system',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // Spec ID: APP-THEME-002
@@ -64,15 +63,11 @@ test.describe('Theme Configuration', () => {
         theme: {
           colors: {
             primary: '#007bff',
-            secondary: '#6c757d',
+            text: '#212529',
           },
           fonts: {
             body: {
               family: 'Inter',
-              fallback: 'sans-serif',
-            },
-            heading: {
-              family: 'Poppins',
               fallback: 'sans-serif',
             },
           },
@@ -82,9 +77,8 @@ test.describe('Theme Configuration', () => {
       // WHEN: basic branding is defined
       await page.goto('/')
 
-      // THEN: it should support color palette and typography system
+      // THEN: it should validate color palette and typography system
       await expect(page.locator('body')).toHaveCSS('font-family', /Inter/)
-      await expect(page.locator('h1')).toHaveCSS('font-family', /Poppins/)
       const primaryColor = await page
         .locator('[data-testid="color-primary"]')
         .evaluate((el) => window.getComputedStyle(el).backgroundColor)
@@ -93,7 +87,7 @@ test.describe('Theme Configuration', () => {
   )
 
   test.fixme(
-    'APP-THEME-003: should provide visual identity, typography, and layout tokens',
+    'APP-THEME-003: should validate visual identity, typography, and layout tokens',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // Spec ID: APP-THEME-003
@@ -107,12 +101,11 @@ test.describe('Theme Configuration', () => {
           fonts: {
             body: {
               family: 'Inter',
-              fallback: 'sans-serif',
             },
           },
           spacing: {
-            section: 'py-16',
-            container: 'max-w-7xl',
+            section: '4rem',
+            gap: '1rem',
           },
         },
       })
@@ -120,15 +113,14 @@ test.describe('Theme Configuration', () => {
       // WHEN: core design system is configured
       await page.goto('/')
 
-      // THEN: it should provide visual identity, typography, and layout tokens
-      await expect(page.locator('[data-testid="section"]')).toHaveClass(/py-16/)
-      await expect(page.locator('[data-testid="container"]')).toHaveClass(/max-w-7xl/)
+      // THEN: it should validate visual identity, typography, and layout tokens
+      await expect(page.locator('[data-testid="section"]')).toHaveCSS('padding', /4rem/)
       await expect(page.locator('body')).toHaveCSS('font-family', /Inter/)
     }
   )
 
   test.fixme(
-    'APP-THEME-004: should orchestrate colors, fonts, spacing, animations, breakpoints, shadows, and borderRadius',
+    'APP-THEME-004: should validate and orchestrate all design token categories',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // Spec ID: APP-THEME-004
@@ -142,28 +134,22 @@ test.describe('Theme Configuration', () => {
           fonts: {
             body: {
               family: 'Inter',
-              fallback: 'sans-serif',
             },
           },
           spacing: {
-            section: 'py-16',
+            section: '4rem',
           },
           animations: {
-            fadeIn: 'fade-in 0.3s ease-in',
+            fadeIn: true,
           },
           breakpoints: {
-            sm: '640px',
             md: '768px',
-            lg: '1024px',
           },
           shadows: {
-            sm: '0 1px 2px 0 rgba(0, 0, 0, 0.05)',
-            md: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
+            md: '0 4px 6px -1px rgb(0 0 0 / 0.1)',
           },
           borderRadius: {
-            sm: '0.125rem',
             md: '0.375rem',
-            lg: '0.5rem',
           },
         },
       })
@@ -171,7 +157,7 @@ test.describe('Theme Configuration', () => {
       // WHEN: comprehensive design system is defined
       await page.goto('/')
 
-      // THEN: it should orchestrate all 7 design token categories
+      // THEN: it should validate and orchestrate all design token categories
       await expect(page.locator('[data-testid="theme-colors"]')).toBeVisible()
       await expect(page.locator('[data-testid="theme-fonts"]')).toBeVisible()
       await expect(page.locator('[data-testid="theme-spacing"]')).toBeVisible()
@@ -183,7 +169,7 @@ test.describe('Theme Configuration', () => {
   )
 
   test.fixme(
-    'APP-THEME-005: should ensure consistency between theme and responsive.schema.json',
+    'APP-THEME-005: should ensure consistency between theme.breakpoints and responsive variants',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // Spec ID: APP-THEME-005
@@ -195,7 +181,6 @@ test.describe('Theme Configuration', () => {
             sm: '640px',
             md: '768px',
             lg: '1024px',
-            xl: '1280px',
           },
         },
       })
@@ -203,13 +188,12 @@ test.describe('Theme Configuration', () => {
       // WHEN: responsive breakpoints are configured
       await page.goto('/')
 
-      // THEN: it should ensure consistency between theme and responsive.schema.json
+      // THEN: it should ensure consistency between theme.breakpoints and responsive variants
       const breakpoints = await page.evaluate(() => {
         const sm = window.matchMedia('(min-width: 640px)').matches
         const md = window.matchMedia('(min-width: 768px)').matches
         const lg = window.matchMedia('(min-width: 1024px)').matches
-        const xl = window.matchMedia('(min-width: 1280px)').matches
-        return { sm, md, lg, xl }
+        return { sm, md, lg }
       })
       expect(breakpoints).toBeTruthy()
     }
@@ -225,9 +209,12 @@ test.describe('Theme Configuration', () => {
         name: 'test-app',
         theme: {
           animations: {
-            fadeIn: 'fade-in 0.3s ease-in',
-            slideUp: 'slide-up 0.5s ease-out',
-            scaleIn: 'scale-in 0.2s ease-in-out',
+            fadeIn: true,
+            slideIn: 'slide-in 0.5s ease-out',
+            pulse: {
+              duration: '2s',
+              easing: 'ease-in-out',
+            },
           },
         },
       })
@@ -241,7 +228,7 @@ test.describe('Theme Configuration', () => {
       const animationName = await element.evaluate(
         (el) => window.getComputedStyle(el).animationName
       )
-      expect(['fade-in', 'slide-up', 'scale-in']).toContain(animationName)
+      expect(['fade-in', 'slide-in', 'pulse']).toContain(animationName)
     }
   )
 
@@ -256,31 +243,18 @@ test.describe('Theme Configuration', () => {
         theme: {
           colors: {
             primary: '#007bff',
-            'primary-dark': '#0056b3',
-            'primary-light': '#66b3ff',
-            secondary: '#6c757d',
-            success: '#28a745',
-            danger: '#dc3545',
-          },
-          fonts: {
-            body: {
-              family: 'Inter',
-              fallback: 'sans-serif',
-              sizes: {
-                xs: '0.75rem',
-                sm: '0.875rem',
-                base: '1rem',
-                lg: '1.125rem',
-                xl: '1.25rem',
-              },
-            },
+            'primary-hover': '#0056b3',
+            'primary-light': '#e7f1ff',
           },
           spacing: {
-            xs: 'p-1',
-            sm: 'p-2',
-            md: 'p-4',
-            lg: 'p-6',
-            xl: 'p-8',
+            gap: '1rem',
+            gapSmall: '0.5rem',
+            gapLarge: '1.5rem',
+          },
+          shadows: {
+            sm: '0 1px 2px 0 rgb(0 0 0 / 0.05)',
+            md: '0 4px 6px -1px rgb(0 0 0 / 0.1)',
+            lg: '0 10px 15px -3px rgb(0 0 0 / 0.1)',
           },
         },
       })
@@ -291,13 +265,11 @@ test.describe('Theme Configuration', () => {
       // THEN: it should enable consistent UI across entire application
       const buttons = page.locator('[data-testid="button"]')
       await expect(buttons.first()).toBeVisible()
-      // Verify all buttons use consistent theme tokens
       const buttonStyles = await buttons.first().evaluate((el) => ({
         color: window.getComputedStyle(el).color,
         padding: window.getComputedStyle(el).padding,
-        fontFamily: window.getComputedStyle(el).fontFamily,
       }))
-      expect(buttonStyles.fontFamily).toContain('Inter')
+      expect(buttonStyles).toBeTruthy()
     }
   )
 
@@ -311,16 +283,13 @@ test.describe('Theme Configuration', () => {
         name: 'test-app',
         theme: {
           spacing: {
-            section: 'py-16',
-            container: 'max-w-7xl mx-auto px-4',
-            card: 'p-6 rounded-lg shadow-md',
+            section: '4rem',
+            container: '80rem',
           },
-          borderRadius: {
-            sm: '0.125rem',
-            DEFAULT: '0.25rem',
-            md: '0.375rem',
-            lg: '0.5rem',
-            xl: '0.75rem',
+          breakpoints: {
+            sm: '640px',
+            md: '768px',
+            lg: '1024px',
           },
         },
       })
@@ -329,12 +298,185 @@ test.describe('Theme Configuration', () => {
       await page.goto('/')
 
       // THEN: it should integrate seamlessly with Tailwind CSS
-      await expect(page.locator('[data-testid="section"]')).toHaveClass(/py-16/)
-      await expect(page.locator('[data-testid="container"]')).toHaveClass(/max-w-7xl/)
-      await expect(page.locator('[data-testid="container"]')).toHaveClass(/mx-auto/)
-      await expect(page.locator('[data-testid="card"]')).toHaveClass(/p-6/)
-      await expect(page.locator('[data-testid="card"]')).toHaveClass(/rounded-lg/)
-      await expect(page.locator('[data-testid="card"]')).toHaveClass(/shadow-md/)
+      await expect(page.locator('[data-testid="section"]')).toHaveCSS('padding', /4rem/)
+      await expect(page.locator('[data-testid="container"]')).toHaveCSS('max-width', /80rem/)
+    }
+  )
+
+  test.fixme(
+    'APP-THEME-INTEGRATION-001: should render cohesive UI with all theme tokens applied together',
+    { tag: '@spec' },
+    async ({ page, startServerWithSchema }) => {
+      // Spec ID: APP-THEME-INTEGRATION-001
+      // GIVEN: a complete theme with multiple design tokens used in page component
+      await startServerWithSchema({
+        name: 'test-app',
+        theme: {
+          colors: {
+            primary: '#007bff',
+            text: '#212529',
+            background: '#ffffff',
+          },
+          fonts: {
+            title: {
+              family: 'Bely Display',
+              weight: 700,
+              size: '2.5rem',
+            },
+            body: {
+              family: 'Inter',
+              size: '1rem',
+            },
+          },
+          spacing: {
+            section: '4rem',
+            container: '80rem',
+            gap: '1.5rem',
+          },
+          shadows: {
+            md: '0 4px 6px -1px rgb(0 0 0 / 0.1)',
+          },
+          borderRadius: {
+            lg: '0.5rem',
+          },
+        },
+        pages: [
+          {
+            path: '/',
+            sections: [
+              {
+                type: 'hero-section',
+                component: 'hero',
+              },
+            ],
+          },
+        ],
+      })
+
+      // WHEN: page sections reference theme.colors, theme.fonts, theme.spacing, theme.shadows, theme.borderRadius
+      await page.goto('/')
+
+      // THEN: it should render cohesive UI with all theme tokens applied together
+      const heroSection = page.locator('[data-testid="hero-section"]')
+      await expect(heroSection).toBeVisible()
+      await expect(heroSection).toHaveCSS('background-color', /255, 255, 255/)
+      await expect(heroSection).toHaveCSS('padding', /4rem/)
+
+      const heading = heroSection.locator('h1')
+      await expect(heading).toHaveCSS('font-family', /Bely Display/)
+      await expect(heading).toHaveCSS('font-size', '2.5rem')
+      await expect(heading).toHaveCSS('color', /33, 37, 41/)
+
+      const button = heroSection.locator('button')
+      await expect(button).toHaveCSS('background-color', /7, 123, 255/)
+      await expect(button).toHaveCSS('border-radius', '0.5rem')
+      await expect(button).toHaveCSS('font-family', /Inter/)
+    }
+  )
+
+  test.fixme(
+    'APP-THEME-INTEGRATION-002: should maintain visual consistency across entire page layout',
+    { tag: '@spec' },
+    async ({ page, startServerWithSchema }) => {
+      // Spec ID: APP-THEME-INTEGRATION-002
+      // GIVEN: a theme used across multiple page sections
+      await startServerWithSchema({
+        name: 'test-app',
+        theme: {
+          colors: {
+            primary: '#007bff',
+            secondary: '#6c757d',
+            background: '#f8f9fa',
+          },
+          spacing: {
+            section: '4rem',
+            container: '80rem',
+          },
+          shadows: {
+            sm: '0 1px 2px 0 rgb(0 0 0 / 0.05)',
+          },
+        },
+        pages: [
+          {
+            path: '/',
+            sections: [
+              { type: 'header' },
+              { type: 'hero' },
+              { type: 'features' },
+              { type: 'footer' },
+            ],
+          },
+        ],
+      })
+
+      // WHEN: different sections (header, hero, features, footer) all reference theme tokens
+      await page.goto('/')
+
+      // THEN: it should maintain visual consistency across entire page layout
+      const header = page.locator('header')
+      await expect(header).toHaveCSS('background-color', /7, 123, 255/)
+      await expect(header).toHaveCSS('padding', /4rem/)
+
+      const heroSection = page.locator('[data-testid="hero"]')
+      await expect(heroSection).toHaveCSS('background-color', /248, 249, 250/)
+      await expect(heroSection).toHaveCSS('padding', /4rem/)
+
+      const footer = page.locator('footer')
+      await expect(footer).toHaveCSS('background-color', /108, 117, 125/)
+      await expect(footer).toHaveCSS('padding', /4rem/)
+    }
+  )
+
+  test.fixme(
+    'APP-THEME-INTEGRATION-003: should render adaptive layouts that respond to screen size',
+    { tag: '@spec' },
+    async ({ page, startServerWithSchema }) => {
+      // Spec ID: APP-THEME-INTEGRATION-003
+      // GIVEN: a theme with responsive breakpoints integrated with component layouts
+      await startServerWithSchema({
+        name: 'test-app',
+        theme: {
+          spacing: {
+            section: '2rem',
+            sectionMd: '4rem',
+            gap: '1rem',
+            gapLg: '2rem',
+          },
+          breakpoints: {
+            md: '768px',
+            lg: '1024px',
+          },
+        },
+        pages: [
+          {
+            path: '/',
+            sections: [
+              {
+                type: 'responsive-grid',
+              },
+            ],
+          },
+        ],
+      })
+
+      // WHEN: components use both theme.spacing and theme.breakpoints for responsive design
+      await page.setViewportSize({ width: 375, height: 667 })
+      await page.goto('/')
+
+      // THEN: it should render adaptive layouts that respond to screen size
+      const section = page.locator('[data-testid="responsive-section"]')
+      await expect(section).toHaveCSS('padding', /2rem/)
+
+      const grid = section.locator('.grid')
+      await expect(grid).toHaveCSS('gap', /1rem/)
+
+      // Test tablet breakpoint
+      await page.setViewportSize({ width: 768, height: 1024 })
+      await expect(section).toHaveCSS('padding', /4rem/)
+
+      // Test desktop breakpoint
+      await page.setViewportSize({ width: 1024, height: 768 })
+      await expect(grid).toHaveCSS('gap', /2rem/)
     }
   )
 
@@ -354,7 +496,7 @@ test.describe('Theme Configuration', () => {
           colors: {
             primary: '#007bff',
             secondary: '#6c757d',
-            success: '#28a745',
+            background: '#ffffff',
           },
           fonts: {
             body: {
@@ -367,8 +509,8 @@ test.describe('Theme Configuration', () => {
             },
           },
           spacing: {
-            section: 'py-16',
-            container: 'max-w-7xl mx-auto',
+            section: '4rem',
+            container: '80rem',
           },
           borderRadius: {
             DEFAULT: '0.25rem',
@@ -386,10 +528,6 @@ test.describe('Theme Configuration', () => {
       // Verify theme tokens are applied
       await expect(page.locator('body')).toHaveCSS('font-family', /Inter/)
       await expect(page.locator('h1')).toHaveCSS('font-family', /Poppins/)
-
-      // Verify Tailwind integration
-      await expect(page.locator('[data-testid="section"]')).toHaveClass(/py-16/)
-      await expect(page.locator('[data-testid="container"]')).toHaveClass(/max-w-7xl/)
 
       // Verify colors applied
       const primaryElement = page.locator('[data-testid="primary-element"]')

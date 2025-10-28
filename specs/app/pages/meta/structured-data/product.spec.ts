@@ -1,0 +1,520 @@
+/**
+ * Copyright (c) 2025 ESSENTIAL SERVICES
+ *
+ * This source code is licensed under the Business Source License 1.1
+ * found in the LICENSE.md file in the root directory of this source tree.
+ */
+
+import { test, expect } from '@/specs/fixtures.ts'
+
+/**
+ * E2E Tests for Product Schema
+ *
+ * Source: specs/app/pages/meta/structured-data/product.schema.json
+ * Spec Count: 12
+ *
+ * Test Organization:
+ * 1. @spec tests - One per spec in schema (12 tests) - Exhaustive acceptance criteria
+ * 2. @regression test - ONE optimized integration test - Efficient workflow validation
+ */
+
+test.describe('Product Schema', () => {
+  test.fixme(
+    'APP-PAGES-PRODUCT-001: should validate minimal Product structured data',
+    { tag: '@spec' },
+    async ({ page, startServerWithSchema }) => {
+      await startServerWithSchema({
+        name: 'test-app',
+        pages: [
+          {
+            name: 'Test',
+            path: '/',
+            meta: {
+              lang: 'en-US',
+              title: 'Test',
+              description: 'Test',
+              schema: {
+                product: {
+                  '@context': 'https://schema.org',
+                  '@type': 'Product',
+                  name: 'Amazing Widget',
+                },
+              },
+            },
+            sections: [],
+          },
+        ],
+      })
+      await page.goto('/')
+      const scriptContent = await page.locator('script[type="application/ld+json"]').textContent()
+      expect(scriptContent).toContain('"@type":"Product"')
+      expect(scriptContent).toContain('Amazing Widget')
+    }
+  )
+
+  test.fixme(
+    'APP-PAGES-PRODUCT-002: should provide product identity',
+    { tag: '@spec' },
+    async ({ page, startServerWithSchema }) => {
+      await startServerWithSchema({
+        name: 'test-app',
+        pages: [
+          {
+            name: 'Test',
+            path: '/',
+            meta: {
+              lang: 'en-US',
+              title: 'Test',
+              description: 'Test',
+              schema: {
+                product: {
+                  '@context': 'https://schema.org',
+                  '@type': 'Product',
+                  name: 'Premium Headphones',
+                  description: 'High-quality wireless headphones with noise cancellation',
+                },
+              },
+            },
+            sections: [],
+          },
+        ],
+      })
+      await page.goto('/')
+      const scriptContent = await page.locator('script[type="application/ld+json"]').textContent()
+      expect(scriptContent).toContain('Premium Headphones')
+      expect(scriptContent).toContain('noise cancellation')
+    }
+  )
+
+  test.fixme(
+    'APP-PAGES-PRODUCT-003: should support single or multiple product images',
+    { tag: '@spec' },
+    async ({ page, startServerWithSchema }) => {
+      await startServerWithSchema({
+        name: 'test-app',
+        pages: [
+          {
+            name: 'Test',
+            path: '/',
+            meta: {
+              lang: 'en-US',
+              title: 'Test',
+              description: 'Test',
+              schema: {
+                product: {
+                  '@context': 'https://schema.org',
+                  '@type': 'Product',
+                  name: 'Widget',
+                  image: [
+                    'https://example.com/widget-front.jpg',
+                    'https://example.com/widget-back.jpg',
+                    'https://example.com/widget-side.jpg',
+                  ],
+                },
+              },
+            },
+            sections: [],
+          },
+        ],
+      })
+      await page.goto('/')
+      const scriptContent = await page.locator('script[type="application/ld+json"]').textContent()
+      expect(scriptContent).toContain('widget-front.jpg')
+      expect(scriptContent).toContain('widget-back.jpg')
+      expect(scriptContent).toContain('widget-side.jpg')
+    }
+  )
+
+  test.fixme(
+    'APP-PAGES-PRODUCT-004: should identify product manufacturer',
+    { tag: '@spec' },
+    async ({ page, startServerWithSchema }) => {
+      await startServerWithSchema({
+        name: 'test-app',
+        pages: [
+          {
+            name: 'Test',
+            path: '/',
+            meta: {
+              lang: 'en-US',
+              title: 'Test',
+              description: 'Test',
+              schema: {
+                product: {
+                  '@context': 'https://schema.org',
+                  '@type': 'Product',
+                  name: 'Widget',
+                  brand: { '@type': 'Brand', name: 'TechBrand' },
+                },
+              },
+            },
+            sections: [],
+          },
+        ],
+      })
+      await page.goto('/')
+      const scriptContent = await page.locator('script[type="application/ld+json"]').textContent()
+      expect(scriptContent).toContain('"@type":"Brand"')
+      expect(scriptContent).toContain('TechBrand')
+    }
+  )
+
+  test.fixme(
+    'APP-PAGES-PRODUCT-005: should provide stock keeping unit',
+    { tag: '@spec' },
+    async ({ page, startServerWithSchema }) => {
+      await startServerWithSchema({
+        name: 'test-app',
+        pages: [
+          {
+            name: 'Test',
+            path: '/',
+            meta: {
+              lang: 'en-US',
+              title: 'Test',
+              description: 'Test',
+              schema: {
+                product: {
+                  '@context': 'https://schema.org',
+                  '@type': 'Product',
+                  name: 'Widget',
+                  sku: 'WDG-12345-BLU',
+                },
+              },
+            },
+            sections: [],
+          },
+        ],
+      })
+      await page.goto('/')
+      const scriptContent = await page.locator('script[type="application/ld+json"]').textContent()
+      expect(scriptContent).toContain('WDG-12345-BLU')
+    }
+  )
+
+  test.fixme(
+    'APP-PAGES-PRODUCT-006: should provide standardized product identifier',
+    { tag: '@spec' },
+    async ({ page, startServerWithSchema }) => {
+      await startServerWithSchema({
+        name: 'test-app',
+        pages: [
+          {
+            name: 'Test',
+            path: '/',
+            meta: {
+              lang: 'en-US',
+              title: 'Test',
+              description: 'Test',
+              schema: {
+                product: {
+                  '@context': 'https://schema.org',
+                  '@type': 'Product',
+                  name: 'Widget',
+                  gtin: '0123456789012',
+                },
+              },
+            },
+            sections: [],
+          },
+        ],
+      })
+      await page.goto('/')
+      const scriptContent = await page.locator('script[type="application/ld+json"]').textContent()
+      expect(scriptContent).toContain('0123456789012')
+    }
+  )
+
+  test.fixme(
+    'APP-PAGES-PRODUCT-007: should provide pricing information',
+    { tag: '@spec' },
+    async ({ page, startServerWithSchema }) => {
+      await startServerWithSchema({
+        name: 'test-app',
+        pages: [
+          {
+            name: 'Test',
+            path: '/',
+            meta: {
+              lang: 'en-US',
+              title: 'Test',
+              description: 'Test',
+              schema: {
+                product: {
+                  '@context': 'https://schema.org',
+                  '@type': 'Product',
+                  name: 'Widget',
+                  offers: { '@type': 'Offer', price: '149.99', priceCurrency: 'USD' },
+                },
+              },
+            },
+            sections: [],
+          },
+        ],
+      })
+      await page.goto('/')
+      const scriptContent = await page.locator('script[type="application/ld+json"]').textContent()
+      expect(scriptContent).toContain('"@type":"Offer"')
+      expect(scriptContent).toContain('149.99')
+    }
+  )
+
+  test.fixme(
+    'APP-PAGES-PRODUCT-008: should specify product price with currency',
+    { tag: '@spec' },
+    async ({ page, startServerWithSchema }) => {
+      await startServerWithSchema({
+        name: 'test-app',
+        pages: [
+          {
+            name: 'Test',
+            path: '/',
+            meta: {
+              lang: 'en-US',
+              title: 'Test',
+              description: 'Test',
+              schema: {
+                product: {
+                  '@context': 'https://schema.org',
+                  '@type': 'Product',
+                  name: 'Widget',
+                  offers: { '@type': 'Offer', price: '29.99', priceCurrency: 'USD' },
+                },
+              },
+            },
+            sections: [],
+          },
+        ],
+      })
+      await page.goto('/')
+      const scriptContent = await page.locator('script[type="application/ld+json"]').textContent()
+      expect(scriptContent).toContain('29.99')
+      expect(scriptContent).toContain('USD')
+    }
+  )
+
+  test.fixme(
+    'APP-PAGES-PRODUCT-009: should show product availability in search results',
+    { tag: '@spec' },
+    async ({ page, startServerWithSchema }) => {
+      await startServerWithSchema({
+        name: 'test-app',
+        pages: [
+          {
+            name: 'Test',
+            path: '/',
+            meta: {
+              lang: 'en-US',
+              title: 'Test',
+              description: 'Test',
+              schema: {
+                product: {
+                  '@context': 'https://schema.org',
+                  '@type': 'Product',
+                  name: 'Widget',
+                  offers: {
+                    '@type': 'Offer',
+                    price: '99',
+                    priceCurrency: 'USD',
+                    availability: 'https://schema.org/InStock',
+                  },
+                },
+              },
+            },
+            sections: [],
+          },
+        ],
+      })
+      await page.goto('/')
+      const scriptContent = await page.locator('script[type="application/ld+json"]').textContent()
+      expect(scriptContent).toContain('availability')
+      expect(scriptContent).toContain('InStock')
+    }
+  )
+
+  test.fixme(
+    'APP-PAGES-PRODUCT-010: should display star ratings in search results',
+    { tag: '@spec' },
+    async ({ page, startServerWithSchema }) => {
+      await startServerWithSchema({
+        name: 'test-app',
+        pages: [
+          {
+            name: 'Test',
+            path: '/',
+            meta: {
+              lang: 'en-US',
+              title: 'Test',
+              description: 'Test',
+              schema: {
+                product: {
+                  '@context': 'https://schema.org',
+                  '@type': 'Product',
+                  name: 'Widget',
+                  aggregateRating: {
+                    '@type': 'AggregateRating',
+                    ratingValue: 4.5,
+                    reviewCount: 127,
+                  },
+                },
+              },
+            },
+            sections: [],
+          },
+        ],
+      })
+      await page.goto('/')
+      const scriptContent = await page.locator('script[type="application/ld+json"]').textContent()
+      expect(scriptContent).toContain('"@type":"AggregateRating"')
+      expect(scriptContent).toContain('4.5')
+      expect(scriptContent).toContain('127')
+    }
+  )
+
+  test.fixme(
+    'APP-PAGES-PRODUCT-011: should enable Google Shopping rich results',
+    { tag: '@spec' },
+    async ({ page, startServerWithSchema }) => {
+      await startServerWithSchema({
+        name: 'test-app',
+        pages: [
+          {
+            name: 'Test',
+            path: '/',
+            meta: {
+              lang: 'en-US',
+              title: 'Test',
+              description: 'Test',
+              schema: {
+                product: {
+                  '@context': 'https://schema.org',
+                  '@type': 'Product',
+                  name: 'Complete Product',
+                  description: 'Full product details',
+                  image: 'https://example.com/product.jpg',
+                  brand: { '@type': 'Brand', name: 'BrandName' },
+                  offers: {
+                    '@type': 'Offer',
+                    price: '199.99',
+                    priceCurrency: 'USD',
+                    availability: 'https://schema.org/InStock',
+                  },
+                  aggregateRating: {
+                    '@type': 'AggregateRating',
+                    ratingValue: 4.8,
+                    reviewCount: 250,
+                  },
+                },
+              },
+            },
+            sections: [],
+          },
+        ],
+      })
+      await page.goto('/')
+      await expect(page.locator('script[type="application/ld+json"]')).toBeVisible()
+    }
+  )
+
+  test.fixme(
+    'APP-PAGES-PRODUCT-012: should display price, availability, and ratings in SERPs',
+    { tag: '@spec' },
+    async ({ page, startServerWithSchema }) => {
+      await startServerWithSchema({
+        name: 'test-app',
+        pages: [
+          {
+            name: 'Test',
+            path: '/',
+            meta: {
+              lang: 'en-US',
+              title: 'Test',
+              description: 'Test',
+              schema: {
+                product: {
+                  '@context': 'https://schema.org',
+                  '@type': 'Product',
+                  name: 'SERP Optimized Product',
+                  offers: {
+                    '@type': 'Offer',
+                    price: '79.99',
+                    priceCurrency: 'EUR',
+                    availability: 'https://schema.org/InStock',
+                    url: 'https://example.com/buy',
+                  },
+                  aggregateRating: {
+                    '@type': 'AggregateRating',
+                    ratingValue: 4.3,
+                    reviewCount: 89,
+                  },
+                },
+              },
+            },
+            sections: [],
+          },
+        ],
+      })
+      await page.goto('/')
+      const scriptContent = await page.locator('script[type="application/ld+json"]').textContent()
+      expect(scriptContent).toContain('Product')
+      expect(scriptContent).toContain('79.99')
+      expect(scriptContent).toContain('4.3')
+    }
+  )
+
+  test.fixme(
+    'user can complete full Product workflow',
+    { tag: '@regression' },
+    async ({ page, startServerWithSchema }) => {
+      await startServerWithSchema({
+        name: 'test-app',
+        pages: [
+          {
+            name: 'Test',
+            path: '/',
+            meta: {
+              lang: 'en-US',
+              title: 'Test',
+              description: 'Test',
+              schema: {
+                product: {
+                  '@context': 'https://schema.org',
+                  '@type': 'Product',
+                  name: 'Complete Product Test',
+                  description: 'Premium wireless headphones with active noise cancellation',
+                  image: [
+                    'https://example.com/headphones-1.jpg',
+                    'https://example.com/headphones-2.jpg',
+                  ],
+                  brand: { '@type': 'Brand', name: 'AudioTech' },
+                  sku: 'ATP-WH1000-BLK',
+                  gtin: '0123456789012',
+                  offers: {
+                    '@type': 'Offer',
+                    price: '299.99',
+                    priceCurrency: 'USD',
+                    availability: 'https://schema.org/InStock',
+                    url: 'https://example.com/buy/headphones',
+                  },
+                  aggregateRating: {
+                    '@type': 'AggregateRating',
+                    ratingValue: 4.7,
+                    reviewCount: 543,
+                  },
+                },
+              },
+            },
+            sections: [],
+          },
+        ],
+      })
+      await page.goto('/')
+      const scriptContent = await page.locator('script[type="application/ld+json"]').textContent()
+      expect(scriptContent).toContain('"@type":"Product"')
+      expect(scriptContent).toContain('Complete Product Test')
+      expect(scriptContent).toContain('AudioTech')
+      expect(scriptContent).toContain('299.99')
+      expect(scriptContent).toContain('4.7')
+    }
+  )
+})

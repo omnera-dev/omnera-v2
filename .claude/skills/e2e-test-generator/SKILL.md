@@ -188,7 +188,7 @@ const title = schema.title // Used in test descriptions
 Create test file at: `specs/app/{property}/{property}.spec.ts`
 
 ```typescript
-import { test, expect } from '../../fixtures.ts'
+import { test, expect } from '@/specs/fixtures.ts'
 
 /**
  * E2E Tests for {title}
@@ -296,7 +296,7 @@ test.fixme(
 **TypeScript**:
 - Strict mode enabled
 - Include `.ts` extensions in imports
-- Use relative imports: `'../../fixtures.ts'`
+- Use relative imports: `'@/specs/fixtures.ts'`
 
 **Formatting** (Prettier):
 - No semicolons
@@ -349,7 +349,7 @@ Before completing, verify:
 **File Organization**:
 - [ ] Test file created at `specs/app/{property}/{property}.spec.ts`
 - [ ] Test file is co-located with schema file (same directory)
-- [ ] Imports from `'../../fixtures.ts'`
+- [ ] Imports from `'@/specs/fixtures.ts'`
 
 **Test Structure**:
 - [ ] N @spec tests (where N = x-specs.length)
