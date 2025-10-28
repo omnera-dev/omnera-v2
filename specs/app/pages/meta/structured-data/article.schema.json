@@ -85,5 +85,90 @@
   },
   "required": ["@context", "@type", "headline"],
   "additionalProperties": false,
-  "specs": []
+  "specs": [
+    {
+      "id": "APP-PAGES-ARTICLE-001",
+      "given": "Article with required properties",
+      "when": "@context is 'https://schema.org', @type is 'Article', and headline is provided",
+      "then": "it should validate minimal Article structured data"
+    },
+    {
+      "id": "APP-PAGES-ARTICLE-002",
+      "given": "Article with @type enum",
+      "when": "@type is 'Article', 'NewsArticle', or 'BlogPosting'",
+      "then": "it should categorize content type"
+    },
+    {
+      "id": "APP-PAGES-ARTICLE-003",
+      "given": "Article with headline",
+      "when": "headline is article title",
+      "then": "it should provide article title for rich results"
+    },
+    {
+      "id": "APP-PAGES-ARTICLE-004",
+      "given": "Article with description",
+      "when": "description summarizes article content",
+      "then": "it should provide article summary"
+    },
+    {
+      "id": "APP-PAGES-ARTICLE-005",
+      "given": "Article with image",
+      "when": "image is string URL or array of URLs",
+      "then": "it should support single or multiple article images"
+    },
+    {
+      "id": "APP-PAGES-ARTICLE-006",
+      "given": "Article with author as string",
+      "when": "author is 'John Doe'",
+      "then": "it should provide simple author name"
+    },
+    {
+      "id": "APP-PAGES-ARTICLE-007",
+      "given": "Article with author as Person object",
+      "when": "author is object with @type 'Person', name, and url",
+      "then": "it should provide structured author information"
+    },
+    {
+      "id": "APP-PAGES-ARTICLE-008",
+      "given": "Article with author as Organization",
+      "when": "author is object with @type 'Organization' and name",
+      "then": "it should attribute content to organization"
+    },
+    {
+      "id": "APP-PAGES-ARTICLE-009",
+      "given": "Article with datePublished",
+      "when": "datePublished is ISO 8601 date-time",
+      "then": "it should provide publication date"
+    },
+    {
+      "id": "APP-PAGES-ARTICLE-010",
+      "given": "Article with dateModified",
+      "when": "dateModified is ISO 8601 date-time",
+      "then": "it should indicate last update date"
+    },
+    {
+      "id": "APP-PAGES-ARTICLE-011",
+      "given": "Article with publisher",
+      "when": "publisher is object with @type 'Organization', name, and logo (ImageObject)",
+      "then": "it should identify publishing organization"
+    },
+    {
+      "id": "APP-PAGES-ARTICLE-012",
+      "given": "Article with mainEntityOfPage",
+      "when": "mainEntityOfPage is canonical URL",
+      "then": "it should specify article's primary page URL"
+    },
+    {
+      "id": "APP-PAGES-ARTICLE-013",
+      "given": "Article for rich results",
+      "when": "complete article data with author, dates, and publisher is provided",
+      "then": "it should enable Google News and article rich results"
+    },
+    {
+      "id": "APP-PAGES-ARTICLE-014",
+      "given": "Article for content attribution",
+      "when": "Article structured data is included in blog posts",
+      "then": "it should properly attribute content to authors and publishers"
+    }
+  ]
 }

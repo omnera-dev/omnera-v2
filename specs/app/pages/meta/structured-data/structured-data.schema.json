@@ -46,5 +46,66 @@
       }
     }
   ],
-  "specs": []
+  "specs": [
+    {
+      "id": "APP-PAGES-STRUCTUREDDATA-001",
+      "given": "structured data with organization",
+      "when": "organization property references organization.schema.json",
+      "then": "it should include Organization structured data"
+    },
+    {
+      "id": "APP-PAGES-STRUCTUREDDATA-002",
+      "given": "structured data with person",
+      "when": "person property references person.schema.json",
+      "then": "it should include Person structured data"
+    },
+    {
+      "id": "APP-PAGES-STRUCTUREDDATA-003",
+      "given": "structured data with localBusiness",
+      "when": "localBusiness property references local-business.schema.json",
+      "then": "it should include LocalBusiness structured data"
+    },
+    {
+      "id": "APP-PAGES-STRUCTUREDDATA-004",
+      "given": "structured data with product",
+      "when": "product property references product.schema.json",
+      "then": "it should include Product structured data"
+    },
+    {
+      "id": "APP-PAGES-STRUCTUREDDATA-005",
+      "given": "structured data with article",
+      "when": "article property references article.schema.json",
+      "then": "it should include Article structured data"
+    },
+    {
+      "id": "APP-PAGES-STRUCTUREDDATA-006",
+      "given": "structured data with breadcrumb",
+      "when": "breadcrumb property references breadcrumb.schema.json",
+      "then": "it should include BreadcrumbList structured data"
+    },
+    {
+      "id": "APP-PAGES-STRUCTUREDDATA-007",
+      "given": "structured data with faqPage",
+      "when": "faqPage property references faq-page.schema.json",
+      "then": "it should include FAQPage structured data"
+    },
+    {
+      "id": "APP-PAGES-STRUCTUREDDATA-008",
+      "given": "structured data with educationEvent",
+      "when": "educationEvent property references education-event.schema.json",
+      "then": "it should include EducationEvent structured data"
+    },
+    {
+      "id": "APP-PAGES-STRUCTUREDDATA-009",
+      "given": "structured data combining multiple types",
+      "when": "object includes organization, faqPage, and breadcrumb",
+      "then": "it should support multiple Schema.org types on same page"
+    },
+    {
+      "id": "APP-PAGES-STRUCTUREDDATA-010",
+      "given": "structured data for search engine understanding",
+      "when": "Schema.org types are included in page metadata",
+      "then": "it should enable rich search results and enhanced SERP display"
+    }
+  ]
 }

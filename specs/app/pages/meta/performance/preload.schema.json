@@ -49,5 +49,66 @@
       }
     ]
   ],
-  "specs": []
+  "specs": [
+    {
+      "id": "APP-PAGES-PRELOAD-001",
+      "given": "preload resource with href and as",
+      "when": "href is resource URL and as specifies type",
+      "then": "it should preload critical resource"
+    },
+    {
+      "id": "APP-PAGES-PRELOAD-002",
+      "given": "preload with as='style'",
+      "when": "as is 'style' for CSS files",
+      "then": "it should preload critical stylesheet"
+    },
+    {
+      "id": "APP-PAGES-PRELOAD-003",
+      "given": "preload with as='script'",
+      "when": "as is 'script' for JavaScript files",
+      "then": "it should preload critical scripts"
+    },
+    {
+      "id": "APP-PAGES-PRELOAD-004",
+      "given": "preload with as='font'",
+      "when": "as is 'font' with type and crossorigin",
+      "then": "it should preload web fonts"
+    },
+    {
+      "id": "APP-PAGES-PRELOAD-005",
+      "given": "preload with as='image'",
+      "when": "as is 'image' for above-the-fold images",
+      "then": "it should preload hero images"
+    },
+    {
+      "id": "APP-PAGES-PRELOAD-006",
+      "given": "preload with as='fetch'",
+      "when": "as is 'fetch' for API data",
+      "then": "it should prefetch critical API responses"
+    },
+    {
+      "id": "APP-PAGES-PRELOAD-007",
+      "given": "preload with crossorigin for fonts",
+      "when": "crossorigin is true or 'anonymous'",
+      "then": "it should set CORS for cross-origin fonts"
+    },
+    {
+      "id": "APP-PAGES-PRELOAD-008",
+      "given": "preload with type attribute",
+      "when": "type specifies MIME type like 'font/woff2'",
+      "then": "it should help browser prioritize resource"
+    },
+    {
+      "id": "APP-PAGES-PRELOAD-009",
+      "given": "preload with media query",
+      "when": "media specifies conditional loading",
+      "then": "it should preload only when media query matches"
+    },
+    {
+      "id": "APP-PAGES-PRELOAD-010",
+      "given": "preload for critical rendering path",
+      "when": "preloading CSS, fonts, and hero images",
+      "then": "it should optimize First Contentful Paint (FCP)"
+    }
+  ]
 }

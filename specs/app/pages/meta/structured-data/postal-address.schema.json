@@ -45,5 +45,66 @@
       "addressCountry": "FR"
     }
   ],
-  "specs": []
+  "specs": [
+    {
+      "id": "APP-PAGES-POSTALADDRESS-001",
+      "given": "PostalAddress with required @type",
+      "when": "@type is 'PostalAddress' (const)",
+      "then": "it should validate minimal PostalAddress structured data"
+    },
+    {
+      "id": "APP-PAGES-POSTALADDRESS-002",
+      "given": "PostalAddress with streetAddress",
+      "when": "streetAddress is '123 Main St'",
+      "then": "it should provide street address"
+    },
+    {
+      "id": "APP-PAGES-POSTALADDRESS-003",
+      "given": "PostalAddress with addressLocality",
+      "when": "addressLocality is 'Strasbourg' or 'Paris'",
+      "then": "it should provide city or locality name"
+    },
+    {
+      "id": "APP-PAGES-POSTALADDRESS-004",
+      "given": "PostalAddress with addressRegion",
+      "when": "addressRegion is 'Grand Est' or 'California'",
+      "then": "it should provide state or region name"
+    },
+    {
+      "id": "APP-PAGES-POSTALADDRESS-005",
+      "given": "PostalAddress with postalCode",
+      "when": "postalCode is '67000' or '94105'",
+      "then": "it should provide postal or ZIP code"
+    },
+    {
+      "id": "APP-PAGES-POSTALADDRESS-006",
+      "given": "PostalAddress with addressCountry",
+      "when": "addressCountry is 'FR', 'US', 'GB', or 'DE' (ISO 3166-1 alpha-2)",
+      "then": "it should provide country code"
+    },
+    {
+      "id": "APP-PAGES-POSTALADDRESS-007",
+      "given": "PostalAddress with complete address",
+      "when": "all properties (street, locality, region, postal code, country) are provided",
+      "then": "it should provide full mailing address"
+    },
+    {
+      "id": "APP-PAGES-POSTALADDRESS-008",
+      "given": "PostalAddress in Organization",
+      "when": "PostalAddress is referenced by organization.address",
+      "then": "it should provide organization's physical address"
+    },
+    {
+      "id": "APP-PAGES-POSTALADDRESS-009",
+      "given": "PostalAddress in LocalBusiness",
+      "when": "PostalAddress is referenced by localBusiness.address",
+      "then": "it should enable local business map display in search results"
+    },
+    {
+      "id": "APP-PAGES-POSTALADDRESS-010",
+      "given": "PostalAddress for local SEO",
+      "when": "complete address with country code is provided",
+      "then": "it should improve local search ranking and map visibility"
+    }
+  ]
 }

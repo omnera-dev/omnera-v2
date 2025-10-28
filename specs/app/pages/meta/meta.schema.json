@@ -79,5 +79,78 @@
   },
   "required": ["lang", "title", "description"],
   "additionalProperties": false,
-  "specs": []
+  "specs": [
+    {
+      "id": "APP-PAGES-META-001",
+      "given": "page metadata with required properties",
+      "when": "lang is 'en-US', title is 'My Page', description is 'Page description'",
+      "then": "it should validate minimal metadata configuration"
+    },
+    {
+      "id": "APP-PAGES-META-002",
+      "given": "page metadata with title maxLength",
+      "when": "title has 60 characters max for optimal SEO display",
+      "then": "it should enforce title length constraint"
+    },
+    {
+      "id": "APP-PAGES-META-003",
+      "given": "page metadata with description maxLength",
+      "when": "description has 160 characters max for SEO snippets",
+      "then": "it should enforce description length constraint"
+    },
+    {
+      "id": "APP-PAGES-META-004",
+      "given": "page metadata with keywords",
+      "when": "keywords is comma-separated list for SEO",
+      "then": "it should accept keyword string"
+    },
+    {
+      "id": "APP-PAGES-META-005",
+      "given": "page metadata with canonical URL",
+      "when": "canonical prevents duplicate content issues",
+      "then": "it should define canonical URL"
+    },
+    {
+      "id": "APP-PAGES-META-006",
+      "given": "page metadata with favicon and favicons",
+      "when": "favicon is simple icon, favicons is complete set",
+      "then": "it should support both single and multi-favicon configurations"
+    },
+    {
+      "id": "APP-PAGES-META-007",
+      "given": "page metadata with stylesheet and googleFonts",
+      "when": "stylesheet and font URLs are provided",
+      "then": "it should include CSS and font resources"
+    },
+    {
+      "id": "APP-PAGES-META-008",
+      "given": "page metadata with social media integration",
+      "when": "openGraph and twitter properties are configured",
+      "then": "it should enable rich social sharing"
+    },
+    {
+      "id": "APP-PAGES-META-009",
+      "given": "page metadata with structured data",
+      "when": "schema property contains Schema.org markup",
+      "then": "it should provide search engine understanding"
+    },
+    {
+      "id": "APP-PAGES-META-010",
+      "given": "page metadata with performance optimizations",
+      "when": "preload and dnsPrefetch are configured",
+      "then": "it should optimize page load performance"
+    },
+    {
+      "id": "APP-PAGES-META-011",
+      "given": "page metadata with analytics",
+      "when": "analytics property configures tracking providers",
+      "then": "it should enable visitor analytics"
+    },
+    {
+      "id": "APP-PAGES-META-012",
+      "given": "page metadata orchestrating all sub-schemas",
+      "when": "metadata includes SEO, social, structured data, performance, analytics",
+      "then": "it should provide comprehensive page metadata management"
+    }
+  ]
 }

@@ -81,5 +81,78 @@
   },
   "required": ["@context", "@type", "name"],
   "additionalProperties": false,
-  "specs": []
+  "specs": [
+    {
+      "id": "APP-PAGES-PRODUCT-001",
+      "given": "Product with required properties",
+      "when": "@context is 'https://schema.org', @type is 'Product', and name is provided",
+      "then": "it should validate minimal Product structured data"
+    },
+    {
+      "id": "APP-PAGES-PRODUCT-002",
+      "given": "Product with name and description",
+      "when": "name and description describe the product",
+      "then": "it should provide product identity"
+    },
+    {
+      "id": "APP-PAGES-PRODUCT-003",
+      "given": "Product with image",
+      "when": "image is string URL or array of URLs",
+      "then": "it should support single or multiple product images"
+    },
+    {
+      "id": "APP-PAGES-PRODUCT-004",
+      "given": "Product with brand",
+      "when": "brand is object with @type 'Brand' and name",
+      "then": "it should identify product manufacturer"
+    },
+    {
+      "id": "APP-PAGES-PRODUCT-005",
+      "given": "Product with sku",
+      "when": "sku is unique product identifier",
+      "then": "it should provide stock keeping unit"
+    },
+    {
+      "id": "APP-PAGES-PRODUCT-006",
+      "given": "Product with gtin",
+      "when": "gtin is global trade item number (UPC, EAN, ISBN)",
+      "then": "it should provide standardized product identifier"
+    },
+    {
+      "id": "APP-PAGES-PRODUCT-007",
+      "given": "Product with offers",
+      "when": "offers is object with @type 'Offer', price, priceCurrency",
+      "then": "it should provide pricing information"
+    },
+    {
+      "id": "APP-PAGES-PRODUCT-008",
+      "given": "Product with price and priceCurrency",
+      "when": "price is '29.99' and priceCurrency is 'USD' (ISO 4217)",
+      "then": "it should specify product price with currency"
+    },
+    {
+      "id": "APP-PAGES-PRODUCT-009",
+      "given": "Product with availability",
+      "when": "offers.availability indicates stock status",
+      "then": "it should show product availability in search results"
+    },
+    {
+      "id": "APP-PAGES-PRODUCT-010",
+      "given": "Product with aggregateRating",
+      "when": "aggregateRating has @type 'AggregateRating', ratingValue, reviewCount",
+      "then": "it should display star ratings in search results"
+    },
+    {
+      "id": "APP-PAGES-PRODUCT-011",
+      "given": "Product for e-commerce SEO",
+      "when": "complete product data with price, availability, and ratings is provided",
+      "then": "it should enable Google Shopping rich results"
+    },
+    {
+      "id": "APP-PAGES-PRODUCT-012",
+      "given": "Product for rich snippets",
+      "when": "Product structured data is included in page metadata",
+      "then": "it should display price, availability, and ratings in SERPs"
+    }
+  ]
 }

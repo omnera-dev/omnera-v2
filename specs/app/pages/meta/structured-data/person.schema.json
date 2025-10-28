@@ -64,5 +64,78 @@
   },
   "required": ["@context", "@type", "name"],
   "additionalProperties": false,
-  "specs": []
+  "specs": [
+    {
+      "id": "APP-PAGES-PERSON-001",
+      "given": "Person with required properties",
+      "when": "@context is 'https://schema.org', @type is 'Person', and name is provided",
+      "then": "it should validate minimal Person structured data"
+    },
+    {
+      "id": "APP-PAGES-PERSON-002",
+      "given": "Person with full name",
+      "when": "name is 'John Doe'",
+      "then": "it should provide person's full name"
+    },
+    {
+      "id": "APP-PAGES-PERSON-003",
+      "given": "Person with split name",
+      "when": "givenName is 'John' and familyName is 'Doe'",
+      "then": "it should provide structured first and last names"
+    },
+    {
+      "id": "APP-PAGES-PERSON-004",
+      "given": "Person with contact info",
+      "when": "email and telephone are provided",
+      "then": "it should provide person contact information"
+    },
+    {
+      "id": "APP-PAGES-PERSON-005",
+      "given": "Person with url",
+      "when": "url is person's website or profile",
+      "then": "it should link to person's web presence"
+    },
+    {
+      "id": "APP-PAGES-PERSON-006",
+      "given": "Person with image",
+      "when": "image is URL to person's photo",
+      "then": "it should provide visual representation"
+    },
+    {
+      "id": "APP-PAGES-PERSON-007",
+      "given": "Person with jobTitle",
+      "when": "jobTitle is 'CEO' or 'Software Engineer'",
+      "then": "it should indicate person's professional role"
+    },
+    {
+      "id": "APP-PAGES-PERSON-008",
+      "given": "Person with worksFor",
+      "when": "worksFor is object with @type 'Organization' and name",
+      "then": "it should link person to their employer"
+    },
+    {
+      "id": "APP-PAGES-PERSON-009",
+      "given": "Person with social profiles",
+      "when": "sameAs is array of social media URLs",
+      "then": "it should link person to their social profiles"
+    },
+    {
+      "id": "APP-PAGES-PERSON-010",
+      "given": "Person with address",
+      "when": "address references postal-address.schema.json",
+      "then": "it should include PostalAddress structured data"
+    },
+    {
+      "id": "APP-PAGES-PERSON-011",
+      "given": "Person for author attribution",
+      "when": "Person is used in article.author",
+      "then": "it should attribute content to specific author"
+    },
+    {
+      "id": "APP-PAGES-PERSON-012",
+      "given": "Person for knowledge graph",
+      "when": "complete person data is provided",
+      "then": "it should enable Google Knowledge Graph panel for notable persons"
+    }
+  ]
 }

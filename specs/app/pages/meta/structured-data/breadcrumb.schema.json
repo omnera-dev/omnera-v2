@@ -65,5 +65,66 @@
       ]
     }
   ],
-  "specs": []
+  "specs": [
+    {
+      "id": "APP-PAGES-BREADCRUMB-001",
+      "given": "BreadcrumbList with required properties",
+      "when": "@context is 'https://schema.org', @type is 'BreadcrumbList', and itemListElement is provided",
+      "then": "it should validate minimal BreadcrumbList structured data"
+    },
+    {
+      "id": "APP-PAGES-BREADCRUMB-002",
+      "given": "BreadcrumbList with itemListElement array",
+      "when": "itemListElement is array of ListItem objects",
+      "then": "it should define navigation path"
+    },
+    {
+      "id": "APP-PAGES-BREADCRUMB-003",
+      "given": "BreadcrumbList with ListItem",
+      "when": "each item has @type 'ListItem', position, name",
+      "then": "it should define breadcrumb item structure"
+    },
+    {
+      "id": "APP-PAGES-BREADCRUMB-004",
+      "given": "BreadcrumbList with position",
+      "when": "position is integer starting from 1",
+      "then": "it should order breadcrumb trail"
+    },
+    {
+      "id": "APP-PAGES-BREADCRUMB-005",
+      "given": "BreadcrumbList with name",
+      "when": "name is 'Home', 'Products', 'Widget'",
+      "then": "it should provide human-readable breadcrumb label"
+    },
+    {
+      "id": "APP-PAGES-BREADCRUMB-006",
+      "given": "BreadcrumbList with item URL",
+      "when": "item is URL to breadcrumb page",
+      "then": "it should provide clickable breadcrumb link"
+    },
+    {
+      "id": "APP-PAGES-BREADCRUMB-007",
+      "given": "BreadcrumbList with multiple levels",
+      "when": "itemListElement has 3+ items (Home > Products > Widget)",
+      "then": "it should represent multi-level navigation path"
+    },
+    {
+      "id": "APP-PAGES-BREADCRUMB-008",
+      "given": "BreadcrumbList for site hierarchy",
+      "when": "breadcrumb reflects site structure",
+      "then": "it should help search engines understand site architecture"
+    },
+    {
+      "id": "APP-PAGES-BREADCRUMB-009",
+      "given": "BreadcrumbList for rich results",
+      "when": "BreadcrumbList structured data is included in page metadata",
+      "then": "it should display breadcrumb trail in Google search results"
+    },
+    {
+      "id": "APP-PAGES-BREADCRUMB-010",
+      "given": "BreadcrumbList for navigation UX",
+      "when": "breadcrumb shows user's location in site",
+      "then": "it should improve navigation and reduce bounce rate"
+    }
+  ]
 }

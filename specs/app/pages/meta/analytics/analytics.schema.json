@@ -82,5 +82,78 @@
       ]
     }
   ],
-  "specs": []
+  "specs": [
+    {
+      "id": "APP-PAGES-ANALYTICS-001",
+      "given": "analytics with providers array",
+      "when": "providers contains analytics configurations",
+      "then": "it should support multiple analytics providers"
+    },
+    {
+      "id": "APP-PAGES-ANALYTICS-002",
+      "given": "analytics provider with name enum",
+      "when": "name is one of: google, plausible, matomo, fathom, posthog, mixpanel",
+      "then": "it should support 6 analytics providers"
+    },
+    {
+      "id": "APP-PAGES-ANALYTICS-003",
+      "given": "analytics provider with enabled toggle",
+      "when": "enabled is true or false",
+      "then": "it should allow enabling/disabling provider"
+    },
+    {
+      "id": "APP-PAGES-ANALYTICS-004",
+      "given": "analytics provider with scripts array",
+      "when": "scripts contains external script configurations",
+      "then": "it should load provider scripts"
+    },
+    {
+      "id": "APP-PAGES-ANALYTICS-005",
+      "given": "analytics provider script with async",
+      "when": "async is true for non-blocking load",
+      "then": "it should load script asynchronously"
+    },
+    {
+      "id": "APP-PAGES-ANALYTICS-006",
+      "given": "analytics provider with initScript",
+      "when": "initScript contains inline JavaScript for initialization",
+      "then": "it should execute provider initialization code"
+    },
+    {
+      "id": "APP-PAGES-ANALYTICS-007",
+      "given": "analytics provider with dnsPrefetch",
+      "when": "dnsPrefetch specifies provider domain",
+      "then": "it should optimize DNS resolution for provider"
+    },
+    {
+      "id": "APP-PAGES-ANALYTICS-008",
+      "given": "analytics provider with config object",
+      "when": "config contains provider-specific settings",
+      "then": "it should pass configuration to provider"
+    },
+    {
+      "id": "APP-PAGES-ANALYTICS-009",
+      "given": "analytics with Google Analytics provider",
+      "when": "name is 'google' with tracking ID in config",
+      "then": "it should configure Google Analytics"
+    },
+    {
+      "id": "APP-PAGES-ANALYTICS-010",
+      "given": "analytics with Plausible provider",
+      "when": "name is 'plausible' with domain config",
+      "then": "it should configure privacy-friendly Plausible analytics"
+    },
+    {
+      "id": "APP-PAGES-ANALYTICS-011",
+      "given": "analytics with multiple providers",
+      "when": "providers array contains [plausible, google]",
+      "then": "it should support multi-provider analytics"
+    },
+    {
+      "id": "APP-PAGES-ANALYTICS-012",
+      "given": "analytics provider with PostHog",
+      "when": "name is 'posthog' for product analytics",
+      "then": "it should configure event tracking and feature flags"
+    }
+  ]
 }

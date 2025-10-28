@@ -116,5 +116,90 @@
   },
   "required": ["@type", "name", "startDate"],
   "additionalProperties": false,
-  "specs": []
+  "specs": [
+    {
+      "id": "APP-PAGES-EDUCATIONEVENT-001",
+      "given": "EducationEvent with required properties",
+      "when": "@type is 'EducationEvent', name and startDate are provided",
+      "then": "it should validate minimal EducationEvent structured data"
+    },
+    {
+      "id": "APP-PAGES-EDUCATIONEVENT-002",
+      "given": "EducationEvent with name and description",
+      "when": "name and description describe the educational event",
+      "then": "it should provide event identity"
+    },
+    {
+      "id": "APP-PAGES-EDUCATIONEVENT-003",
+      "given": "EducationEvent with startDate",
+      "when": "startDate is ISO 8601 date-time",
+      "then": "it should specify when event begins"
+    },
+    {
+      "id": "APP-PAGES-EDUCATIONEVENT-004",
+      "given": "EducationEvent with endDate",
+      "when": "endDate is ISO 8601 date-time",
+      "then": "it should specify when event ends"
+    },
+    {
+      "id": "APP-PAGES-EDUCATIONEVENT-005",
+      "given": "EducationEvent with eventAttendanceMode",
+      "when": "eventAttendanceMode is OfflineEventAttendanceMode, OnlineEventAttendanceMode, or MixedEventAttendanceMode",
+      "then": "it should specify whether event is in-person, online, or hybrid"
+    },
+    {
+      "id": "APP-PAGES-EDUCATIONEVENT-006",
+      "given": "EducationEvent with eventStatus",
+      "when": "eventStatus is EventScheduled, EventCancelled, EventPostponed, or EventRescheduled",
+      "then": "it should communicate event status"
+    },
+    {
+      "id": "APP-PAGES-EDUCATIONEVENT-007",
+      "given": "EducationEvent with location",
+      "when": "location is object with @type 'Place', name, and address",
+      "then": "it should provide event venue information"
+    },
+    {
+      "id": "APP-PAGES-EDUCATIONEVENT-008",
+      "given": "EducationEvent with organizer",
+      "when": "organizer is object with @type 'Organization' or 'Person', name, and url",
+      "then": "it should identify event organizer"
+    },
+    {
+      "id": "APP-PAGES-EDUCATIONEVENT-009",
+      "given": "EducationEvent with offers",
+      "when": "offers has @type 'Offer', price, priceCurrency, availability, url",
+      "then": "it should provide ticket pricing and availability"
+    },
+    {
+      "id": "APP-PAGES-EDUCATIONEVENT-010",
+      "given": "EducationEvent with price and priceCurrency",
+      "when": "price is '0' or '29.99' and priceCurrency is 'EUR' (ISO 4217)",
+      "then": "it should specify event ticket price"
+    },
+    {
+      "id": "APP-PAGES-EDUCATIONEVENT-011",
+      "given": "EducationEvent with availability enum",
+      "when": "availability is InStock, OutOfStock, PreOrder, or SoldOut",
+      "then": "it should indicate ticket availability status"
+    },
+    {
+      "id": "APP-PAGES-EDUCATIONEVENT-012",
+      "given": "EducationEvent with capacity",
+      "when": "maximumAttendeeCapacity and minimumAttendeeCapacity are integers",
+      "then": "it should specify event capacity limits"
+    },
+    {
+      "id": "APP-PAGES-EDUCATIONEVENT-013",
+      "given": "EducationEvent for rich results",
+      "when": "complete event data with dates, location, and offers is provided",
+      "then": "it should enable Google Events rich results"
+    },
+    {
+      "id": "APP-PAGES-EDUCATIONEVENT-014",
+      "given": "EducationEvent for event discovery",
+      "when": "EducationEvent structured data is included in page metadata",
+      "then": "it should display event in Google Search, Maps, and event discovery features"
+    }
+  ]
 }

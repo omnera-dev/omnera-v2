@@ -99,5 +99,90 @@
   },
   "required": ["@context", "@type", "name"],
   "additionalProperties": false,
-  "specs": []
+  "specs": [
+    {
+      "id": "APP-PAGES-LOCALBUSINESS-001",
+      "given": "LocalBusiness with required properties",
+      "when": "@context is 'https://schema.org', @type is 'LocalBusiness', and name is provided",
+      "then": "it should validate minimal LocalBusiness structured data"
+    },
+    {
+      "id": "APP-PAGES-LOCALBUSINESS-002",
+      "given": "LocalBusiness with name and description",
+      "when": "name and description describe the business",
+      "then": "it should provide business identity"
+    },
+    {
+      "id": "APP-PAGES-LOCALBUSINESS-003",
+      "given": "LocalBusiness with url and logo",
+      "when": "url is website and logo is business logo URL",
+      "then": "it should provide business branding"
+    },
+    {
+      "id": "APP-PAGES-LOCALBUSINESS-004",
+      "given": "LocalBusiness with image",
+      "when": "image is string URL or array of URLs",
+      "then": "it should support single or multiple business images"
+    },
+    {
+      "id": "APP-PAGES-LOCALBUSINESS-005",
+      "given": "LocalBusiness with contact info",
+      "when": "email and telephone are provided",
+      "then": "it should provide business contact information"
+    },
+    {
+      "id": "APP-PAGES-LOCALBUSINESS-006",
+      "given": "LocalBusiness with priceRange",
+      "when": "priceRange is '$', '$$', '$$$', or '$$$$'",
+      "then": "it should indicate business price level"
+    },
+    {
+      "id": "APP-PAGES-LOCALBUSINESS-007",
+      "given": "LocalBusiness with address",
+      "when": "address references postal-address.schema.json",
+      "then": "it should include physical address for maps"
+    },
+    {
+      "id": "APP-PAGES-LOCALBUSINESS-008",
+      "given": "LocalBusiness with geo coordinates",
+      "when": "geo is object with @type 'GeoCoordinates', latitude, and longitude",
+      "then": "it should provide precise map location"
+    },
+    {
+      "id": "APP-PAGES-LOCALBUSINESS-009",
+      "given": "LocalBusiness with social profiles",
+      "when": "sameAs is array of social media URLs",
+      "then": "it should link business to social profiles"
+    },
+    {
+      "id": "APP-PAGES-LOCALBUSINESS-010",
+      "given": "LocalBusiness with opening hours",
+      "when": "openingHoursSpecification is array with @type, dayOfWeek, opens, closes",
+      "then": "it should provide business hours for each day"
+    },
+    {
+      "id": "APP-PAGES-LOCALBUSINESS-011",
+      "given": "LocalBusiness with dayOfWeek enum",
+      "when": "dayOfWeek is array of 'Monday', 'Tuesday', etc.",
+      "then": "it should specify which days hours apply to"
+    },
+    {
+      "id": "APP-PAGES-LOCALBUSINESS-012",
+      "given": "LocalBusiness with opens/closes times",
+      "when": "opens is '09:00' and closes is '18:00' (HH:MM format)",
+      "then": "it should specify daily operating hours"
+    },
+    {
+      "id": "APP-PAGES-LOCALBUSINESS-013",
+      "given": "LocalBusiness for local SEO",
+      "when": "complete business data with address, geo, and hours is provided",
+      "then": "it should enable Google Business Profile rich results"
+    },
+    {
+      "id": "APP-PAGES-LOCALBUSINESS-014",
+      "given": "LocalBusiness for map display",
+      "when": "address and geo coordinates are provided",
+      "then": "it should enable map pin and directions in search results"
+    }
+  ]
 }

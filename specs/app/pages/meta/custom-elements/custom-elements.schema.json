@@ -54,5 +54,54 @@
       }
     ]
   ],
-  "specs": []
+  "specs": [
+    {
+      "id": "APP-PAGES-CUSTOM-001",
+      "given": "custom element with type meta",
+      "when": "type is 'meta' with attrs for name and content",
+      "then": "it should add custom meta tag to head"
+    },
+    {
+      "id": "APP-PAGES-CUSTOM-002",
+      "given": "custom element with type link",
+      "when": "type is 'link' with attrs for rel and href",
+      "then": "it should add custom link element to head"
+    },
+    {
+      "id": "APP-PAGES-CUSTOM-003",
+      "given": "custom element with type script",
+      "when": "type is 'script' with src or content",
+      "then": "it should add custom script to head"
+    },
+    {
+      "id": "APP-PAGES-CUSTOM-004",
+      "given": "custom element with type style",
+      "when": "type is 'style' with CSS content",
+      "then": "it should add inline style to head"
+    },
+    {
+      "id": "APP-PAGES-CUSTOM-005",
+      "given": "custom element with attrs object",
+      "when": "attrs contains element attributes with kebab-case names",
+      "then": "it should apply attributes to element"
+    },
+    {
+      "id": "APP-PAGES-CUSTOM-006",
+      "given": "custom element with content property",
+      "when": "content contains inner HTML for script/style",
+      "then": "it should set element inner content"
+    },
+    {
+      "id": "APP-PAGES-CUSTOM-007",
+      "given": "custom elements for theme-color meta",
+      "when": "meta element sets theme-color for browser UI",
+      "then": "it should customize browser chrome color"
+    },
+    {
+      "id": "APP-PAGES-CUSTOM-008",
+      "given": "custom elements for viewport meta",
+      "when": "meta element sets viewport for responsive design",
+      "then": "it should configure mobile viewport"
+    }
+  ]
 }

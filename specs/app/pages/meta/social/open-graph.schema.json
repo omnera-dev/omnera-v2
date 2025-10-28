@@ -75,5 +75,78 @@
       "locale": "fr_FR"
     }
   ],
-  "specs": []
+  "specs": [
+    {
+      "id": "APP-PAGES-OG-001",
+      "given": "Open Graph with required properties",
+      "when": "title, description, type, and url are provided",
+      "then": "it should validate minimal Open Graph metadata"
+    },
+    {
+      "id": "APP-PAGES-OG-002",
+      "given": "Open Graph title with maxLength",
+      "when": "title has 90 characters max",
+      "then": "it should enforce title length for social display"
+    },
+    {
+      "id": "APP-PAGES-OG-003",
+      "given": "Open Graph description with maxLength",
+      "when": "description has 200 characters max",
+      "then": "it should enforce description length for social cards"
+    },
+    {
+      "id": "APP-PAGES-OG-004",
+      "given": "Open Graph type enum",
+      "when": "type is one of: website, article, book, profile, video, music",
+      "then": "it should categorize content type for social platforms"
+    },
+    {
+      "id": "APP-PAGES-OG-005",
+      "given": "Open Graph image URL",
+      "when": "image is URL with recommended 1200x630px dimensions",
+      "then": "it should provide social sharing image"
+    },
+    {
+      "id": "APP-PAGES-OG-006",
+      "given": "Open Graph imageAlt",
+      "when": "imageAlt describes image for accessibility",
+      "then": "it should provide alternative text for social image"
+    },
+    {
+      "id": "APP-PAGES-OG-007",
+      "given": "Open Graph siteName",
+      "when": "siteName identifies the overall website brand",
+      "then": "it should distinguish site from page title"
+    },
+    {
+      "id": "APP-PAGES-OG-008",
+      "given": "Open Graph locale",
+      "when": "locale is format 'en_US', 'fr_FR' (language_TERRITORY)",
+      "then": "it should specify content language for social platforms"
+    },
+    {
+      "id": "APP-PAGES-OG-009",
+      "given": "Open Graph determiner",
+      "when": "determiner is 'a', 'an', 'the', 'auto', or empty",
+      "then": "it should provide grammatical article before title"
+    },
+    {
+      "id": "APP-PAGES-OG-010",
+      "given": "Open Graph video URL",
+      "when": "video property contains media URL",
+      "then": "it should enable video content sharing"
+    },
+    {
+      "id": "APP-PAGES-OG-011",
+      "given": "Open Graph audio URL",
+      "when": "audio property contains media URL",
+      "then": "it should enable audio content sharing"
+    },
+    {
+      "id": "APP-PAGES-OG-012",
+      "given": "Open Graph rich social preview",
+      "when": "all properties create rich card on Facebook/LinkedIn",
+      "then": "it should display enhanced social sharing card"
+    }
+  ]
 }

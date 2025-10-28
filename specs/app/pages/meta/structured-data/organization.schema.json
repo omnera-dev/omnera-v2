@@ -81,5 +81,90 @@
   },
   "required": ["@context", "@type", "name"],
   "additionalProperties": false,
-  "specs": []
+  "specs": [
+    {
+      "id": "APP-PAGES-ORGANIZATION-001",
+      "given": "Organization with required properties",
+      "when": "@context is 'https://schema.org', @type is 'Organization', and name is provided",
+      "then": "it should validate minimal Organization structured data"
+    },
+    {
+      "id": "APP-PAGES-ORGANIZATION-002",
+      "given": "Organization with @context",
+      "when": "@context is 'https://schema.org' (const)",
+      "then": "it should specify Schema.org vocabulary"
+    },
+    {
+      "id": "APP-PAGES-ORGANIZATION-003",
+      "given": "Organization with @type",
+      "when": "@type is 'Organization' (const)",
+      "then": "it should identify entity as Organization"
+    },
+    {
+      "id": "APP-PAGES-ORGANIZATION-004",
+      "given": "Organization with name",
+      "when": "name is 'My Company'",
+      "then": "it should provide organization name"
+    },
+    {
+      "id": "APP-PAGES-ORGANIZATION-005",
+      "given": "Organization with url",
+      "when": "url is 'https://example.com'",
+      "then": "it should provide organization website URL"
+    },
+    {
+      "id": "APP-PAGES-ORGANIZATION-006",
+      "given": "Organization with logo",
+      "when": "logo is URL to organization logo",
+      "then": "it should provide logo for search results"
+    },
+    {
+      "id": "APP-PAGES-ORGANIZATION-007",
+      "given": "Organization with image",
+      "when": "image is string URL or array of URLs",
+      "then": "it should support single or multiple organization images"
+    },
+    {
+      "id": "APP-PAGES-ORGANIZATION-008",
+      "given": "Organization with contact info",
+      "when": "email and telephone are provided",
+      "then": "it should provide contact information"
+    },
+    {
+      "id": "APP-PAGES-ORGANIZATION-009",
+      "given": "Organization with address",
+      "when": "address references postal-address.schema.json",
+      "then": "it should include PostalAddress structured data"
+    },
+    {
+      "id": "APP-PAGES-ORGANIZATION-010",
+      "given": "Organization with social profiles",
+      "when": "sameAs is array of social media URLs (Facebook, Twitter, LinkedIn)",
+      "then": "it should link organization to social profiles"
+    },
+    {
+      "id": "APP-PAGES-ORGANIZATION-011",
+      "given": "Organization with founder info",
+      "when": "founder name and foundingDate are provided",
+      "then": "it should provide organization history"
+    },
+    {
+      "id": "APP-PAGES-ORGANIZATION-012",
+      "given": "Organization with employees count",
+      "when": "employees is integer minimum 1",
+      "then": "it should indicate organization size"
+    },
+    {
+      "id": "APP-PAGES-ORGANIZATION-013",
+      "given": "Organization with event",
+      "when": "event references education-event.schema.json",
+      "then": "it should link organization to hosted events"
+    },
+    {
+      "id": "APP-PAGES-ORGANIZATION-014",
+      "given": "Organization for knowledge graph",
+      "when": "complete organization data is provided",
+      "then": "it should enable Google Knowledge Graph panel in search results"
+    }
+  ]
 }

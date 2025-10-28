@@ -6,5 +6,54 @@
   "type": "string",
   "pattern": "^\\./.*\\.(ico|png|svg)$",
   "examples": ["./public/favicon.ico", "./favicon.png", "./assets/favicon.svg"],
-  "specs": []
+  "specs": [
+    {
+      "id": "APP-PAGES-FAVICON-001",
+      "given": "a favicon path string",
+      "when": "value is './public/favicon.ico'",
+      "then": "it should reference default favicon file"
+    },
+    {
+      "id": "APP-PAGES-FAVICON-002",
+      "given": "a favicon with .ico extension",
+      "when": "path ends with .ico",
+      "then": "it should support legacy ICO format"
+    },
+    {
+      "id": "APP-PAGES-FAVICON-003",
+      "given": "a favicon with .png extension",
+      "when": "path ends with .png",
+      "then": "it should support PNG format"
+    },
+    {
+      "id": "APP-PAGES-FAVICON-004",
+      "given": "a favicon with .svg extension",
+      "when": "path ends with .svg",
+      "then": "it should support modern SVG format"
+    },
+    {
+      "id": "APP-PAGES-FAVICON-005",
+      "given": "a favicon path starting with ./",
+      "when": "pattern enforces relative path prefix",
+      "then": "it should use relative file paths"
+    },
+    {
+      "id": "APP-PAGES-FAVICON-006",
+      "given": "a simple favicon configuration",
+      "when": "single string path is provided",
+      "then": "it should enable quick favicon setup"
+    },
+    {
+      "id": "APP-PAGES-FAVICON-007",
+      "given": "a favicon for browser tab",
+      "when": "favicon is displayed in browser UI",
+      "then": "it should provide site branding in tabs"
+    },
+    {
+      "id": "APP-PAGES-FAVICON-008",
+      "given": "a favicon versus favicons property",
+      "when": "favicon is simple string, favicons is array of objects",
+      "then": "it should support both simple and complete configurations"
+    }
+  ]
 }

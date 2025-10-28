@@ -89,5 +89,78 @@
       "creator": "@johndoe"
     }
   ],
-  "specs": []
+  "specs": [
+    {
+      "id": "APP-PAGES-TWITTER-001",
+      "given": "Twitter Card with required card type",
+      "when": "card property specifies card type",
+      "then": "it should validate minimal Twitter Card configuration"
+    },
+    {
+      "id": "APP-PAGES-TWITTER-002",
+      "given": "Twitter Card with type 'summary'",
+      "when": "card is 'summary' for default card",
+      "then": "it should display small square image card"
+    },
+    {
+      "id": "APP-PAGES-TWITTER-003",
+      "given": "Twitter Card with type 'summary_large_image'",
+      "when": "card is 'summary_large_image' for featured content",
+      "then": "it should display large rectangular image card"
+    },
+    {
+      "id": "APP-PAGES-TWITTER-004",
+      "given": "Twitter Card with type 'app'",
+      "when": "card is 'app' with appName and appId",
+      "then": "it should promote mobile app downloads"
+    },
+    {
+      "id": "APP-PAGES-TWITTER-005",
+      "given": "Twitter Card with type 'player'",
+      "when": "card is 'player' with player URL and dimensions",
+      "then": "it should embed video/audio player"
+    },
+    {
+      "id": "APP-PAGES-TWITTER-006",
+      "given": "Twitter Card title with maxLength",
+      "when": "title has 70 characters max",
+      "then": "it should enforce title length for Twitter display"
+    },
+    {
+      "id": "APP-PAGES-TWITTER-007",
+      "given": "Twitter Card description with maxLength",
+      "when": "description has 200 characters max",
+      "then": "it should enforce description length for Twitter cards"
+    },
+    {
+      "id": "APP-PAGES-TWITTER-008",
+      "given": "Twitter Card image with size requirements",
+      "when": "image is min 144x144px for summary or 300x157px for large",
+      "then": "it should provide properly sized social image"
+    },
+    {
+      "id": "APP-PAGES-TWITTER-009",
+      "given": "Twitter Card with site @username",
+      "when": "site is '@mysite' for website attribution",
+      "then": "it should attribute content to website Twitter account"
+    },
+    {
+      "id": "APP-PAGES-TWITTER-010",
+      "given": "Twitter Card with creator @username",
+      "when": "creator is '@johndoe' for content author",
+      "then": "it should attribute content to author Twitter account"
+    },
+    {
+      "id": "APP-PAGES-TWITTER-011",
+      "given": "Twitter Card imageAlt with maxLength",
+      "when": "imageAlt has 420 characters max",
+      "then": "it should provide accessible image description"
+    },
+    {
+      "id": "APP-PAGES-TWITTER-012",
+      "given": "Twitter Card rich preview",
+      "when": "all properties create rich card on Twitter/X",
+      "then": "it should display enhanced Twitter sharing card"
+    }
+  ]
 }

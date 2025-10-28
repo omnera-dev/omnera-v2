@@ -57,5 +57,48 @@
       }
     ]
   ],
-  "specs": []
+  "specs": [
+    {
+      "id": "APP-PAGES-FAVICONSET-001",
+      "given": "a favicon with rel 'icon'",
+      "when": "rel is 'icon' for standard favicon",
+      "then": "it should define browser icon"
+    },
+    {
+      "id": "APP-PAGES-FAVICONSET-002",
+      "given": "a favicon with rel 'apple-touch-icon'",
+      "when": "rel is 'apple-touch-icon' for iOS devices",
+      "then": "it should define Apple touch icon"
+    },
+    {
+      "id": "APP-PAGES-FAVICONSET-003",
+      "given": "a favicon with rel 'mask-icon'",
+      "when": "rel is 'mask-icon' for Safari pinned tabs",
+      "then": "it should define Safari mask icon with color"
+    },
+    {
+      "id": "APP-PAGES-FAVICONSET-004",
+      "given": "a favicon with sizes attribute",
+      "when": "sizes is '16x16', '32x32', '180x180', or '192x192'",
+      "then": "it should specify icon dimensions for different contexts"
+    },
+    {
+      "id": "APP-PAGES-FAVICONSET-005",
+      "given": "a favicon with type attribute",
+      "when": "type is 'image/png', 'image/x-icon', or 'image/svg+xml'",
+      "then": "it should specify MIME type"
+    },
+    {
+      "id": "APP-PAGES-FAVICONSET-006",
+      "given": "a favicon with color for mask-icon",
+      "when": "color is hex value like '#FF5733'",
+      "then": "it should define Safari pinned tab color"
+    },
+    {
+      "id": "APP-PAGES-FAVICONSET-007",
+      "given": "a complete favicon set",
+      "when": "array contains icons for all devices (16x16, 32x32, 180x180, 192x192, 512x512, manifest)",
+      "then": "it should provide comprehensive multi-device icon support"
+    }
+  ]
 }

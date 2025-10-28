@@ -14,5 +14,66 @@
   "examples": [
     ["https://fonts.googleapis.com", "https://www.google-analytics.com", "https://cdn.example.com"]
   ],
-  "specs": []
+  "specs": [
+    {
+      "id": "APP-PAGES-DNS-001",
+      "given": "DNS prefetch array with domains",
+      "when": "array contains external domain URLs",
+      "then": "it should prefetch DNS for listed domains"
+    },
+    {
+      "id": "APP-PAGES-DNS-002",
+      "given": "DNS prefetch for font domains",
+      "when": "array includes 'https://fonts.googleapis.com' and 'https://fonts.gstatic.com'",
+      "then": "it should optimize Google Fonts loading"
+    },
+    {
+      "id": "APP-PAGES-DNS-003",
+      "given": "DNS prefetch for analytics domains",
+      "when": "array includes 'https://www.google-analytics.com' or 'https://plausible.io'",
+      "then": "it should optimize analytics script loading"
+    },
+    {
+      "id": "APP-PAGES-DNS-004",
+      "given": "DNS prefetch for CDN domains",
+      "when": "array includes 'https://unpkg.com' or 'https://cdn.jsdelivr.net'",
+      "then": "it should optimize CDN resource loading"
+    },
+    {
+      "id": "APP-PAGES-DNS-005",
+      "given": "DNS prefetch for API domains",
+      "when": "array includes API endpoint domains",
+      "then": "it should optimize API request latency"
+    },
+    {
+      "id": "APP-PAGES-DNS-006",
+      "given": "DNS prefetch with http/https protocol",
+      "when": "URLs start with https:// or http://",
+      "then": "it should validate protocol in URL pattern"
+    },
+    {
+      "id": "APP-PAGES-DNS-007",
+      "given": "DNS prefetch with unique items",
+      "when": "array has uniqueItems constraint",
+      "then": "it should prevent duplicate domain entries"
+    },
+    {
+      "id": "APP-PAGES-DNS-008",
+      "given": "DNS prefetch for multiple third-party services",
+      "when": "array contains [fonts, analytics, CDN, social] domains",
+      "then": "it should optimize multiple external connections"
+    },
+    {
+      "id": "APP-PAGES-DNS-009",
+      "given": "DNS prefetch before resource fetch",
+      "when": "DNS resolution happens early in page load",
+      "then": "it should reduce connection latency"
+    },
+    {
+      "id": "APP-PAGES-DNS-010",
+      "given": "DNS prefetch performance benefit",
+      "when": "domains are resolved before actual requests",
+      "then": "it should improve perceived page load speed"
+    }
+  ]
 }

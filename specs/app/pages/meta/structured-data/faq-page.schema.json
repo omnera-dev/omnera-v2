@@ -68,5 +68,66 @@
       ]
     }
   ],
-  "specs": []
+  "specs": [
+    {
+      "id": "APP-PAGES-FAQPAGE-001",
+      "given": "FAQPage with required properties",
+      "when": "@context is 'https://schema.org', @type is 'FAQPage', and mainEntity is provided",
+      "then": "it should validate minimal FAQPage structured data"
+    },
+    {
+      "id": "APP-PAGES-FAQPAGE-002",
+      "given": "FAQPage with mainEntity array",
+      "when": "mainEntity is array of Question objects",
+      "then": "it should contain list of Q&A pairs"
+    },
+    {
+      "id": "APP-PAGES-FAQPAGE-003",
+      "given": "FAQPage with Question",
+      "when": "each item has @type 'Question', name, and acceptedAnswer",
+      "then": "it should define question structure"
+    },
+    {
+      "id": "APP-PAGES-FAQPAGE-004",
+      "given": "FAQPage with Question name",
+      "when": "name is 'What is the refund policy?'",
+      "then": "it should provide question text"
+    },
+    {
+      "id": "APP-PAGES-FAQPAGE-005",
+      "given": "FAQPage with acceptedAnswer",
+      "when": "acceptedAnswer has @type 'Answer' and text",
+      "then": "it should provide answer structure"
+    },
+    {
+      "id": "APP-PAGES-FAQPAGE-006",
+      "given": "FAQPage with Answer text",
+      "when": "text is 'We offer a 30-day money-back guarantee'",
+      "then": "it should provide answer content"
+    },
+    {
+      "id": "APP-PAGES-FAQPAGE-007",
+      "given": "FAQPage with multiple Q&A pairs",
+      "when": "mainEntity has 5+ Question objects",
+      "then": "it should support comprehensive FAQ section"
+    },
+    {
+      "id": "APP-PAGES-FAQPAGE-008",
+      "given": "FAQPage for rich results",
+      "when": "FAQPage structured data is included in page metadata",
+      "then": "it should display expandable Q&A in Google search results"
+    },
+    {
+      "id": "APP-PAGES-FAQPAGE-009",
+      "given": "FAQPage for support content",
+      "when": "FAQ answers common customer questions",
+      "then": "it should reduce support load by surfacing answers in search"
+    },
+    {
+      "id": "APP-PAGES-FAQPAGE-010",
+      "given": "FAQPage for SERP visibility",
+      "when": "FAQ rich results show in search",
+      "then": "it should increase click-through rate from search results"
+    }
+  ]
 }
