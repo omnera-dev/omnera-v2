@@ -64,5 +64,78 @@
       }
     ]
   ],
-  "specs": []
+  "specs": [
+    {
+      "id": "APP-PAGES-EXTERNAL-001",
+      "given": "an external script with src URL",
+      "when": "src is 'https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js'",
+      "then": "it should load external JavaScript from CDN"
+    },
+    {
+      "id": "APP-PAGES-EXTERNAL-002",
+      "given": "an external script with async true",
+      "when": "async is true",
+      "then": "it should load script asynchronously (non-blocking)"
+    },
+    {
+      "id": "APP-PAGES-EXTERNAL-003",
+      "given": "an external script with defer true",
+      "when": "defer is true",
+      "then": "it should defer script execution until DOM loaded"
+    },
+    {
+      "id": "APP-PAGES-EXTERNAL-004",
+      "given": "an external script as ES module",
+      "when": "module is true",
+      "then": "it should load script with type='module'"
+    },
+    {
+      "id": "APP-PAGES-EXTERNAL-005",
+      "given": "an external script with integrity hash",
+      "when": "integrity is 'sha384-abc123...'",
+      "then": "it should verify subresource integrity for security"
+    },
+    {
+      "id": "APP-PAGES-EXTERNAL-006",
+      "given": "an external script with crossorigin",
+      "when": "crossorigin is 'anonymous' or 'use-credentials'",
+      "then": "it should set CORS policy for script loading"
+    },
+    {
+      "id": "APP-PAGES-EXTERNAL-007",
+      "given": "an external script with position 'head'",
+      "when": "position is 'head'",
+      "then": "it should insert script in document head"
+    },
+    {
+      "id": "APP-PAGES-EXTERNAL-008",
+      "given": "an external script with position 'body-end'",
+      "when": "position is 'body-end' (default)",
+      "then": "it should insert script at end of body"
+    },
+    {
+      "id": "APP-PAGES-EXTERNAL-009",
+      "given": "an external script with position 'body-start'",
+      "when": "position is 'body-start'",
+      "then": "it should insert script at start of body"
+    },
+    {
+      "id": "APP-PAGES-EXTERNAL-010",
+      "given": "external scripts array with multiple libraries",
+      "when": "array includes [AlpineJS, Chart.js, app.js]",
+      "then": "it should load multiple external scripts in order"
+    },
+    {
+      "id": "APP-PAGES-EXTERNAL-011",
+      "given": "external script with relative src",
+      "when": "src is './js/app.js' (relative path)",
+      "then": "it should load local JavaScript file"
+    },
+    {
+      "id": "APP-PAGES-EXTERNAL-012",
+      "given": "external script with required src only",
+      "when": "only src is provided (all other properties optional)",
+      "then": "it should load script with default settings (sync, body-end)"
+    }
+  ]
 }

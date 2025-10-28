@@ -38,5 +38,66 @@
       }
     ]
   ],
-  "specs": []
+  "specs": [
+    {
+      "id": "APP-PAGES-INLINE-001",
+      "given": "an inline script with code",
+      "when": "code is 'console.log('Page loaded');'",
+      "then": "it should inject inline JavaScript code"
+    },
+    {
+      "id": "APP-PAGES-INLINE-002",
+      "given": "an inline script with position 'body-end'",
+      "when": "position is 'body-end' (default)",
+      "then": "it should insert code at end of body"
+    },
+    {
+      "id": "APP-PAGES-INLINE-003",
+      "given": "an inline script with position 'head'",
+      "when": "position is 'head'",
+      "then": "it should insert code in document head"
+    },
+    {
+      "id": "APP-PAGES-INLINE-004",
+      "given": "an inline script with position 'body-start'",
+      "when": "position is 'body-start'",
+      "then": "it should insert code at start of body"
+    },
+    {
+      "id": "APP-PAGES-INLINE-005",
+      "given": "an inline script with async true",
+      "when": "async is true",
+      "then": "it should wrap code in async IIFE (async function)"
+    },
+    {
+      "id": "APP-PAGES-INLINE-006",
+      "given": "an inline script setting window config",
+      "when": "code is 'window.config = { apiUrl: '...' };'",
+      "then": "it should inject global configuration"
+    },
+    {
+      "id": "APP-PAGES-INLINE-007",
+      "given": "inline scripts array with multiple snippets",
+      "when": "array contains [console.log, window.config]",
+      "then": "it should inject multiple inline scripts in order"
+    },
+    {
+      "id": "APP-PAGES-INLINE-008",
+      "given": "an inline script with required code only",
+      "when": "only code is provided (position and async optional)",
+      "then": "it should inject code with default settings (body-end, sync)"
+    },
+    {
+      "id": "APP-PAGES-INLINE-009",
+      "given": "inline scripts for analytics tracking",
+      "when": "code includes analytics initialization",
+      "then": "it should enable custom tracking code"
+    },
+    {
+      "id": "APP-PAGES-INLINE-010",
+      "given": "inline scripts execution order",
+      "when": "scripts have different positions (head, body-start, body-end)",
+      "then": "it should execute scripts in document order"
+    }
+  ]
 }

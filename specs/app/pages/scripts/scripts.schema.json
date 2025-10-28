@@ -40,5 +40,66 @@
       }
     }
   ],
-  "specs": []
+  "specs": [
+    {
+      "id": "APP-PAGES-SCRIPTS-001",
+      "given": "a scripts configuration with all 4 properties",
+      "when": "scripts includes features, externalScripts, inlineScripts, config",
+      "then": "it should orchestrate client-side script management"
+    },
+    {
+      "id": "APP-PAGES-SCRIPTS-002",
+      "given": "scripts with features only",
+      "when": "features defines darkMode, animations, analytics",
+      "then": "it should enable client-side feature toggles"
+    },
+    {
+      "id": "APP-PAGES-SCRIPTS-003",
+      "given": "scripts with externalScripts",
+      "when": "externalScripts array loads CDN libraries",
+      "then": "it should include external JavaScript dependencies"
+    },
+    {
+      "id": "APP-PAGES-SCRIPTS-004",
+      "given": "scripts with inlineScripts",
+      "when": "inlineScripts array contains code snippets",
+      "then": "it should inject inline JavaScript code"
+    },
+    {
+      "id": "APP-PAGES-SCRIPTS-005",
+      "given": "scripts with config object",
+      "when": "config has apiUrl and environment properties",
+      "then": "it should provide client-side configuration data"
+    },
+    {
+      "id": "APP-PAGES-SCRIPTS-006",
+      "given": "empty scripts configuration",
+      "when": "all properties are omitted",
+      "then": "it should allow pages without client-side scripts"
+    },
+    {
+      "id": "APP-PAGES-SCRIPTS-007",
+      "given": "scripts config with additionalProperties true",
+      "when": "config accepts any custom properties",
+      "then": "it should support flexible client configuration"
+    },
+    {
+      "id": "APP-PAGES-SCRIPTS-008",
+      "given": "scripts combining features and config",
+      "when": "features toggle behavior and config provides data",
+      "then": "it should enable feature-driven configuration"
+    },
+    {
+      "id": "APP-PAGES-SCRIPTS-009",
+      "given": "scripts at page level",
+      "when": "each page can define custom scripts",
+      "then": "it should support per-page script customization"
+    },
+    {
+      "id": "APP-PAGES-SCRIPTS-010",
+      "given": "scripts referencing sub-schemas",
+      "when": "features, externalScripts, inlineScripts use $ref",
+      "then": "it should compose scripts from modular schemas"
+    }
+  ]
 }

@@ -48,5 +48,66 @@
       }
     }
   ],
-  "specs": []
+  "specs": [
+    {
+      "id": "APP-PAGES-FEATURES-001",
+      "given": "a feature with boolean value true",
+      "when": "darkMode is true",
+      "then": "it should enable simple feature flag"
+    },
+    {
+      "id": "APP-PAGES-FEATURES-002",
+      "given": "a feature with boolean value false",
+      "when": "cookieConsent is false",
+      "then": "it should disable feature"
+    },
+    {
+      "id": "APP-PAGES-FEATURES-003",
+      "given": "a feature with object config",
+      "when": "animations has enabled: true and config: { duration: 300, easing: 'ease-in-out' }",
+      "then": "it should provide feature with configuration data"
+    },
+    {
+      "id": "APP-PAGES-FEATURES-004",
+      "given": "a feature config with enabled property",
+      "when": "liveChat has enabled: true",
+      "then": "it should toggle feature via enabled boolean"
+    },
+    {
+      "id": "APP-PAGES-FEATURES-005",
+      "given": "a feature config with nested config object",
+      "when": "liveChat.config has provider and appId",
+      "then": "it should pass configuration to feature implementation"
+    },
+    {
+      "id": "APP-PAGES-FEATURES-006",
+      "given": "features with camelCase naming",
+      "when": "feature names are darkMode, liveChat, cookieConsent",
+      "then": "it should validate camelCase naming convention"
+    },
+    {
+      "id": "APP-PAGES-FEATURES-007",
+      "given": "features with oneOf type (boolean or object)",
+      "when": "feature can be true or { enabled: true, config: {...} }",
+      "then": "it should support both simple and complex feature definitions"
+    },
+    {
+      "id": "APP-PAGES-FEATURES-008",
+      "given": "feature config with additionalProperties true",
+      "when": "config accepts any custom properties",
+      "then": "it should support flexible feature configuration"
+    },
+    {
+      "id": "APP-PAGES-FEATURES-009",
+      "given": "common feature flags (darkMode, animations, cookieConsent, liveChat)",
+      "when": "features control client-side behavior",
+      "then": "it should enable/disable UI features dynamically"
+    },
+    {
+      "id": "APP-PAGES-FEATURES-010",
+      "given": "features accessible in client JavaScript",
+      "when": "features are injected into page",
+      "then": "it should provide runtime feature detection"
+    }
+  ]
 }
