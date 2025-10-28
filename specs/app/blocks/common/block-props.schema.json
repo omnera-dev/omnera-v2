@@ -39,5 +39,66 @@
       "maxWidth": "max-w-$width"
     }
   ],
-  "specs": []
+  "specs": [
+    {
+      "id": "APP-BLOCKS-PROPS-001",
+      "given": "props as dynamic object",
+      "when": "props uses patternProperties for flexible property names",
+      "then": "it should support any component property"
+    },
+    {
+      "id": "APP-BLOCKS-PROPS-002",
+      "given": "property names in camelCase",
+      "when": "property names match ^[a-zA-Z][a-zA-Z0-9]*$ pattern",
+      "then": "it should enforce JavaScript naming convention"
+    },
+    {
+      "id": "APP-BLOCKS-PROPS-003",
+      "given": "property value as string",
+      "when": "value is string (may contain $variable)",
+      "then": "it should support string properties with variable substitution"
+    },
+    {
+      "id": "APP-BLOCKS-PROPS-004",
+      "given": "property value as number",
+      "when": "value is number like 4, 12, 300",
+      "then": "it should support numeric properties"
+    },
+    {
+      "id": "APP-BLOCKS-PROPS-005",
+      "given": "property value as boolean",
+      "when": "value is true or false",
+      "then": "it should support boolean properties"
+    },
+    {
+      "id": "APP-BLOCKS-PROPS-006",
+      "given": "property value as object",
+      "when": "value is nested object",
+      "then": "it should support complex property structures"
+    },
+    {
+      "id": "APP-BLOCKS-PROPS-007",
+      "given": "property value as array",
+      "when": "value is array of items",
+      "then": "it should support array properties"
+    },
+    {
+      "id": "APP-BLOCKS-PROPS-008",
+      "given": "className with multiple variables",
+      "when": "className is 'text-$color bg-$bgColor'",
+      "then": "it should support multiple variable substitutions in single property"
+    },
+    {
+      "id": "APP-BLOCKS-PROPS-009",
+      "given": "props mixing variables and literals",
+      "when": "maxWidth is 'max-w-$width' (Tailwind utility with variable)",
+      "then": "it should combine static text with variable placeholders"
+    },
+    {
+      "id": "APP-BLOCKS-PROPS-010",
+      "given": "props for component configuration",
+      "when": "props define component appearance and behavior",
+      "then": "it should provide complete component customization"
+    }
+  ]
 }

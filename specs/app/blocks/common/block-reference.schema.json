@@ -41,5 +41,78 @@
       }
     }
   ],
-  "specs": []
+  "specs": [
+    {
+      "id": "APP-BLOCKS-REFERENCE-001",
+      "given": "block reference with required properties",
+      "when": "$ref and vars are provided",
+      "then": "it should validate minimal block reference"
+    },
+    {
+      "id": "APP-BLOCKS-REFERENCE-002",
+      "given": "block reference $ref property",
+      "when": "$ref is block name in kebab-case",
+      "then": "it should identify which block template to instantiate"
+    },
+    {
+      "id": "APP-BLOCKS-REFERENCE-003",
+      "given": "block reference $ref pattern",
+      "when": "$ref matches ^[a-z][a-z0-9-]*$ pattern",
+      "then": "it should enforce kebab-case naming convention"
+    },
+    {
+      "id": "APP-BLOCKS-REFERENCE-004",
+      "given": "block reference $ref validation",
+      "when": "$ref value must match existing block name in blocks array",
+      "then": "it should ensure referenced block exists"
+    },
+    {
+      "id": "APP-BLOCKS-REFERENCE-005",
+      "given": "block reference vars object",
+      "when": "vars contains variable name-value pairs",
+      "then": "it should provide data for variable substitution"
+    },
+    {
+      "id": "APP-BLOCKS-REFERENCE-006",
+      "given": "vars property names in camelCase",
+      "when": "vars property names match ^[a-zA-Z][a-zA-Z0-9]*$ pattern",
+      "then": "it should enforce JavaScript naming convention"
+    },
+    {
+      "id": "APP-BLOCKS-REFERENCE-007",
+      "given": "vars property values",
+      "when": "values are string, number, or boolean",
+      "then": "it should support primitive data types for substitution"
+    },
+    {
+      "id": "APP-BLOCKS-REFERENCE-008",
+      "given": "icon-badge reference example",
+      "when": "$ref is 'icon-badge' with vars: color='orange', icon='users', text='6 à 15 personnes'",
+      "then": "it should create badge instance with substituted values"
+    },
+    {
+      "id": "APP-BLOCKS-REFERENCE-009",
+      "given": "section-header reference example",
+      "when": "$ref is 'section-header' with vars: titleColor='pourpre', title='notre mission', subtitle='...'",
+      "then": "it should create section header instance with French content"
+    },
+    {
+      "id": "APP-BLOCKS-REFERENCE-010",
+      "given": "variable substitution mechanism",
+      "when": "vars values replace $variable placeholders in block template",
+      "then": "it should transform template into concrete component"
+    },
+    {
+      "id": "APP-BLOCKS-REFERENCE-011",
+      "given": "block reference for template instantiation",
+      "when": "reference creates instance of block with specific data",
+      "then": "it should enable multiple instances with different content"
+    },
+    {
+      "id": "APP-BLOCKS-REFERENCE-012",
+      "given": "block reference for single source of truth",
+      "when": "multiple references point to same block template",
+      "then": "it should maintain consistency while varying data"
+    }
+  ]
 }

@@ -60,5 +60,78 @@
       ]
     }
   ],
-  "specs": []
+  "specs": [
+    {
+      "id": "APP-BLOCKS-BLOCK-001",
+      "given": "block with required properties",
+      "when": "name and type are provided",
+      "then": "it should validate minimal block definition"
+    },
+    {
+      "id": "APP-BLOCKS-BLOCK-002",
+      "given": "block name in kebab-case",
+      "when": "name is 'icon-badge', 'section-header', or 'feature-card'",
+      "then": "it should use URL-friendly naming convention"
+    },
+    {
+      "id": "APP-BLOCKS-BLOCK-003",
+      "given": "block name pattern validation",
+      "when": "name matches ^[a-z][a-z0-9-]*$ (lowercase, hyphens, no spaces)",
+      "then": "it should enforce consistent naming convention"
+    },
+    {
+      "id": "APP-BLOCKS-BLOCK-004",
+      "given": "block type specification",
+      "when": "type is 'container', 'flex', 'grid', 'card', 'text', 'button', etc.",
+      "then": "it should specify component type for rendering"
+    },
+    {
+      "id": "APP-BLOCKS-BLOCK-005",
+      "given": "block with props",
+      "when": "props references block-props.schema.json",
+      "then": "it should support component properties with variable substitution"
+    },
+    {
+      "id": "APP-BLOCKS-BLOCK-006",
+      "given": "block with children",
+      "when": "children references block-children.schema.json",
+      "then": "it should support nested component composition"
+    },
+    {
+      "id": "APP-BLOCKS-BLOCK-007",
+      "given": "block with content",
+      "when": "content is string with $variable references",
+      "then": "it should provide text content with variable placeholders"
+    },
+    {
+      "id": "APP-BLOCKS-BLOCK-008",
+      "given": "simple text block example",
+      "when": "block has type 'text', className with $color, and content with $message",
+      "then": "it should create simple parameterized text component"
+    },
+    {
+      "id": "APP-BLOCKS-BLOCK-009",
+      "given": "feature-list-item block example",
+      "when": "block has type 'flex' with icon and text children using $icon, $iconColor, $text",
+      "then": "it should create reusable list item template"
+    },
+    {
+      "id": "APP-BLOCKS-BLOCK-010",
+      "given": "block as reusable template",
+      "when": "block defines structure with variable placeholders",
+      "then": "it should enable multiple instantiations with different data"
+    },
+    {
+      "id": "APP-BLOCKS-BLOCK-011",
+      "given": "block composition patterns",
+      "when": "block combines layout (type), styling (props), and content (children/content)",
+      "then": "it should provide complete component template"
+    },
+    {
+      "id": "APP-BLOCKS-BLOCK-012",
+      "given": "block template instantiation",
+      "when": "block is referenced via block-reference.schema.json with vars",
+      "then": "it should create component instance with substituted values"
+    }
+  ]
 }

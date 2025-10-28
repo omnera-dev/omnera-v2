@@ -37,5 +37,66 @@
       }
     ]
   ],
-  "specs": []
+  "specs": [
+    {
+      "id": "APP-BLOCKS-CHILDREN-001",
+      "given": "children array for block templates",
+      "when": "array contains child component objects",
+      "then": "it should define nested component structure"
+    },
+    {
+      "id": "APP-BLOCKS-CHILDREN-002",
+      "given": "child with required type",
+      "when": "each child has type property",
+      "then": "it should specify child component type"
+    },
+    {
+      "id": "APP-BLOCKS-CHILDREN-003",
+      "given": "child with props",
+      "when": "child has props referencing block-props.schema.json",
+      "then": "it should provide child component properties"
+    },
+    {
+      "id": "APP-BLOCKS-CHILDREN-004",
+      "given": "child with recursive children",
+      "when": "child has children property with self-reference (#)",
+      "then": "it should support unlimited nesting depth"
+    },
+    {
+      "id": "APP-BLOCKS-CHILDREN-005",
+      "given": "child with content",
+      "when": "child has content string with $variable support",
+      "then": "it should provide text content with variable placeholders"
+    },
+    {
+      "id": "APP-BLOCKS-CHILDREN-006",
+      "given": "children for component composition",
+      "when": "multiple children create complex structure",
+      "then": "it should enable nested UI patterns"
+    },
+    {
+      "id": "APP-BLOCKS-CHILDREN-007",
+      "given": "icon child example",
+      "when": "child has type 'icon' with props containing $icon and $color variables",
+      "then": "it should create parameterized icon component"
+    },
+    {
+      "id": "APP-BLOCKS-CHILDREN-008",
+      "given": "text child example",
+      "when": "child has type 'text' with content containing $label variable",
+      "then": "it should create parameterized text component"
+    },
+    {
+      "id": "APP-BLOCKS-CHILDREN-009",
+      "given": "children with variable references",
+      "when": "children contain $variable placeholders in props and content",
+      "then": "it should support variable substitution in nested components"
+    },
+    {
+      "id": "APP-BLOCKS-CHILDREN-010",
+      "given": "children for UI tree structure",
+      "when": "children array defines parent-child relationships",
+      "then": "it should create hierarchical component tree"
+    }
+  ]
 }

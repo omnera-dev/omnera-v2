@@ -47,5 +47,66 @@
       }
     ]
   ],
-  "specs": []
+  "specs": [
+    {
+      "id": "APP-BLOCKS-001",
+      "given": "reusable blocks array",
+      "when": "array contains block items referencing block.schema.json",
+      "then": "it should define component template library"
+    },
+    {
+      "id": "APP-BLOCKS-002",
+      "given": "blocks for DRY principle",
+      "when": "blocks are defined once and reused multiple times",
+      "then": "it should eliminate code duplication across pages"
+    },
+    {
+      "id": "APP-BLOCKS-003",
+      "given": "block with variable substitution",
+      "when": "block contains $variable placeholders in props and content",
+      "then": "it should enable parameterized component templates"
+    },
+    {
+      "id": "APP-BLOCKS-004",
+      "given": "icon-badge block example",
+      "when": "block has type 'badge' with $color, $icon, and $text variables",
+      "then": "it should create reusable badge component template"
+    },
+    {
+      "id": "APP-BLOCKS-005",
+      "given": "section-header block example",
+      "when": "block has nested children with $title, $subtitle, $titleColor variables",
+      "then": "it should create reusable section header template"
+    },
+    {
+      "id": "APP-BLOCKS-006",
+      "given": "blocks as component library",
+      "when": "multiple blocks define UI patterns",
+      "then": "it should create consistent design system"
+    },
+    {
+      "id": "APP-BLOCKS-007",
+      "given": "blocks with centralized updates",
+      "when": "block definition is modified",
+      "then": "it should update all instances across pages automatically"
+    },
+    {
+      "id": "APP-BLOCKS-008",
+      "given": "blocks for composition",
+      "when": "blocks combine multiple child components",
+      "then": "it should enable complex component patterns"
+    },
+    {
+      "id": "APP-BLOCKS-009",
+      "given": "blocks for maintainability",
+      "when": "blocks encapsulate UI patterns",
+      "then": "it should reduce maintenance overhead"
+    },
+    {
+      "id": "APP-BLOCKS-010",
+      "given": "blocks array at app level",
+      "when": "blocks are defined globally in app configuration",
+      "then": "it should make blocks available across all pages"
+    }
+  ]
 }
