@@ -1,0 +1,68 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "external-scripts.schema.json",
+  "title": "External Scripts",
+  "description": "External JavaScript dependencies",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "src": {
+        "type": "string",
+        "format": "uri",
+        "description": "Script source URL"
+      },
+      "async": {
+        "type": "boolean",
+        "default": false,
+        "description": "Load script asynchronously"
+      },
+      "defer": {
+        "type": "boolean",
+        "default": false,
+        "description": "Defer script execution"
+      },
+      "module": {
+        "type": "boolean",
+        "default": false,
+        "description": "Load as ES module"
+      },
+      "integrity": {
+        "type": "string",
+        "description": "Subresource integrity hash"
+      },
+      "crossorigin": {
+        "type": "string",
+        "enum": ["anonymous", "use-credentials"],
+        "description": "CORS setting"
+      },
+      "position": {
+        "type": "string",
+        "enum": ["head", "body-start", "body-end"],
+        "default": "body-end",
+        "description": "Where to insert the script"
+      }
+    },
+    "required": ["src"],
+    "additionalProperties": false
+  },
+  "examples": [
+    [
+      {
+        "src": "https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js",
+        "defer": true,
+        "position": "head"
+      },
+      {
+        "src": "https://cdn.jsdelivr.net/npm/chart.js",
+        "async": true
+      },
+      {
+        "src": "./js/app.js",
+        "module": true,
+        "position": "body-end"
+      }
+    ]
+  ],
+  "specs": []
+}

@@ -1,0 +1,46 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "colors.schema.json",
+  "title": "Color Palette",
+  "description": "Color design tokens with support for semantic naming and variants",
+  "type": "object",
+  "patternProperties": {
+    "^[a-z]+(-[a-z]+)*$": {
+      "type": "string",
+      "pattern": "^#[0-9A-Fa-f]{6}$|^#[0-9A-Fa-f]{8}$|^rgb\\(|^rgba\\(|^hsl\\(|^hsla\\(",
+      "description": "Color value in hex, rgb, rgba, hsl, or hsla format"
+    }
+  },
+  "additionalProperties": false,
+  "examples": [
+    {
+      "primary": "#007bff",
+      "primary-hover": "#0056b3",
+      "primary-light": "#e7f1ff",
+      "secondary": "#6c757d",
+      "success": "#28a745",
+      "danger": "#dc3545",
+      "warning": "#ffc107",
+      "info": "#17a2b8",
+      "light": "#f8f9fa",
+      "dark": "#343a40",
+      "white": "#ffffff",
+      "black": "#000000",
+      "gray-100": "#f8f9fa",
+      "gray-200": "#e9ecef",
+      "gray-300": "#dee2e6",
+      "gray-400": "#ced4da",
+      "gray-500": "#adb5bd",
+      "gray-600": "#6c757d",
+      "gray-700": "#495057",
+      "gray-800": "#343a40",
+      "gray-900": "#212529"
+    }
+  ],
+  "x-notes": [
+    "Color names should use kebab-case",
+    "Variants can be indicated with suffixes like -hover, -light, -dark",
+    "Consider semantic naming (primary, secondary) alongside descriptive naming (red, blue)"
+  ],
+  "specs": []
+}

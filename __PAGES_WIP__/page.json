@@ -1,0 +1,2233 @@
+{
+  "meta": {
+    "lang": "fr-FR",
+    "title": "Atelier de Consentement Strasbourg - Merci pour ton non",
+    "description": "Atelier de consentement à prix libre à Strasbourg. 3h pour apprendre à dire non et poser ses limites. Participation libre. Inscriptions ouvertes !",
+    "keywords": "atelier consentement, atelier consentement strasbourg, formation consentement, apprendre dire non, poser limites, merci pour ton non, atelier prix libre strasbourg, culture consentement",
+    "author": "Merci pour ton non",
+    "canonical": "https://mercipourtonnon.fr",
+    "favicon": "./public/favicon.ico",
+    "favicons": [
+      {
+        "rel": "apple-touch-icon",
+        "sizes": "180x180",
+        "href": "./public/favicon/apple-touch-icon.png"
+      },
+      {
+        "rel": "icon",
+        "type": "image/png",
+        "sizes": "32x32",
+        "href": "./public/favicon/favicon-32x32.png"
+      },
+      {
+        "rel": "icon",
+        "type": "image/png",
+        "sizes": "16x16",
+        "href": "./public/favicon/favicon-16x16.png"
+      },
+      {
+        "rel": "manifest",
+        "href": "./public/favicon/site.webmanifest"
+      }
+    ],
+    "stylesheet": "./output.css?v=6e6dc5f",
+    "googleFonts": "https://fonts.googleapis.com/css2?family=Archivo+Black&family=Space+Grotesk:wght@300;400;500;600;700;800&display=swap",
+    "socialImage": "https://mercipourtonnon.fr/public/social.png",
+    "openGraph": {
+      "title": "Atelier de Consentement à Prix Libre à Strasbourg | Merci pour ton non",
+      "description": "Atelier de consentement de 3h à Strasbourg. Apprends à dire non, pose tes limites. Formation à prix libre sur la culture du consentement. Inscris-toi !",
+      "type": "website",
+      "url": "https://mercipourtonnon.fr",
+      "siteName": "Merci pour ton non",
+      "locale": "fr-FR"
+    },
+    "twitter": {
+      "card": "summary_large_image",
+      "title": "Atelier de Consentement Strasbourg | Formation à Prix Libre",
+      "description": "Atelier de consentement à prix libre à Strasbourg. 3h de formation pratique pour apprendre à dire non et créer des relations saines. Par Merci pour ton non.",
+      "site": "@mercipourtonnon",
+      "creator": "@mercipourtonnon"
+    },
+    "schema": {
+      "organization": {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "name": "Merci pour ton non",
+        "description": "Organisation d'ateliers de consentement à prix libre à Strasbourg. Formation pratique pour apprendre à dire non et développer des relations saines.",
+        "url": "https://mercipourtonnon.fr",
+        "logo": "https://mercipourtonnon.fr/public/logo.svg",
+        "sameAs": [
+          "https://www.instagram.com/mercipourtonnon/",
+          "https://www.facebook.com/mercipourtonnon",
+          "https://www.linkedin.com/company/merci-pour-ton-non"
+        ],
+        "address": {
+          "@type": "PostalAddress",
+          "addressLocality": "Strasbourg",
+          "addressCountry": "FR"
+        },
+        "event": {
+          "@type": "EducationEvent",
+          "name": "Atelier découverte : Le consentement dans toutes ses dimensions",
+          "description": "Atelier interactif de 3 heures pour explorer ensemble les différentes facettes du consentement",
+          "startDate": "2025-11-16T10:00:00+01:00",
+          "endDate": "2025-11-16T13:00:00+01:00",
+          "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
+          "eventStatus": "https://schema.org/EventScheduled",
+          "location": {
+            "@type": "Place",
+            "name": "Strasbourg",
+            "address": {
+              "@type": "PostalAddress",
+              "addressLocality": "Strasbourg",
+              "addressCountry": "FR"
+            }
+          },
+          "organizer": {
+            "@type": "Organization",
+            "name": "Merci pour ton non",
+            "url": "https://mercipourtonnon.fr"
+          },
+          "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "EUR",
+            "availability": "https://schema.org/InStock",
+            "url": "https://www.billetweb.fr/multi_event.php?multi=43090",
+            "description": "Prix libre - Personne n'est refusé·e par manque d'argent"
+          },
+          "maximumAttendeeCapacity": 15,
+          "minimumAttendeeCapacity": 6
+        }
+      },
+      "faqPage": {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "Je connais déjà le consentement",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Super ! Cet atelier va au-delà de la théorie : tu vas pratiquer concrètement avec des exercices, identifier les biais subtils qui influencent tes choix, et muscler ta capacité à dire \"non\" dans des situations réelles."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Je n'ai pas le temps",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "3 heures, c'est l'équivalent d'un long film. Mais contrairement à un film, tu repars avec des outils pratiques que tu utiliseras toute ta vie pour améliorer toutes tes relations. Un investissement qui vaut le coup !"
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "J'ai peur que ce soit trop intense",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Le cadre est ultra sécurisant : tu n'es jamais obligé·e de partager ton vécu personnel, tu peux juste observer, et tout reste confidentiel. C'est ludique, bienveillant, et 100% respectueux de tes limites."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Je ne peux pas me le permettre",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Prix libre = 0€ si nécessaire. Aucune justification demandée, aucun jugement. L'argent ne doit jamais être un obstacle à ta participation."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Comment fonctionne le prix libre ?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Le prix libre signifie que tu donnes ce que tu veux et peux. Tu peux participer sans rien payer si c'est difficile pour toi. Si tu veux et peux soutenir l'association, ta contribution est bienvenue mais ne sera jamais obligatoire. Chacun·e participe selon ses moyens."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "C'est uniquement sur le consentement sexuel ?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Non ! L'atelier explore le consentement dans toutes les dimensions : amicales, familiales, professionnelles... Le consentement concerne tous nos rapports humains."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Je suis timide, vais-je devoir parler ?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Tu restes souverain·e ! Tu peux choisir de ne pas participer à certains exercices, juste observer, ou partir quand tu veux. Tout dans la bienveillance."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Je peux venir seul·e ?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Bien sûr ! La plupart viennent seul·es. C'est même plus enrichissant pour rencontrer de nouvelles personnes dans un cadre bienveillant."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Je peux annuler ?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Oui, tu peux annuler à tout moment ! Préviens-nous juste pour libérer ta place (6 à 15 personnes maximum)."
+            }
+          }
+        ]
+      },
+      "localBusiness": {
+        "@context": "https://schema.org",
+        "@type": "LocalBusiness",
+        "name": "Merci pour ton non",
+        "description": "Ateliers de consentement à prix libre à Strasbourg. Formation pratique pour apprendre à dire non et développer des relations saines.",
+        "url": "https://mercipourtonnon.fr",
+        "logo": "https://mercipourtonnon.fr/public/logo.svg",
+        "email": "contact@mercipourtonnon.fr",
+        "priceRange": "Prix libre (0€ - participation libre)",
+        "address": {
+          "@type": "PostalAddress",
+          "addressLocality": "Strasbourg",
+          "addressRegion": "Grand Est",
+          "addressCountry": "FR"
+        },
+        "geo": {
+          "@type": "GeoCoordinates",
+          "latitude": "48.5734",
+          "longitude": "7.7521"
+        },
+        "sameAs": [
+          "https://www.instagram.com/mercipourtonnon/",
+          "https://www.facebook.com/mercipourtonnon",
+          "https://www.linkedin.com/company/merci-pour-ton-non"
+        ],
+        "areaServed": {
+          "@type": "GeoCircle",
+          "geoMidpoint": {
+            "@type": "GeoCoordinates",
+            "latitude": "48.5734",
+            "longitude": "7.7521"
+          },
+          "geoRadius": "50000"
+        },
+        "serviceType": "Atelier de consentement",
+        "hasOfferCatalog": {
+          "@type": "OfferCatalog",
+          "name": "Ateliers",
+          "itemListElement": [
+            {
+              "@type": "Offer",
+              "itemOffered": {
+                "@type": "EducationEvent",
+                "name": "Atelier découverte : Le consentement dans toutes ses dimensions",
+                "description": "Atelier interactif de 3 heures pour explorer ensemble les différentes facettes du consentement",
+                "startDate": "2025-11-16T10:00:00+01:00",
+                "endDate": "2025-11-16T13:00:00+01:00",
+                "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
+                "eventStatus": "https://schema.org/EventScheduled",
+                "location": {
+                  "@type": "Place",
+                  "name": "Strasbourg",
+                  "address": {
+                    "@type": "PostalAddress",
+                    "addressLocality": "Strasbourg",
+                    "addressRegion": "Grand Est",
+                    "addressCountry": "FR"
+                  }
+                },
+                "offers": {
+                  "@type": "Offer",
+                  "price": "0",
+                  "priceCurrency": "EUR",
+                  "availability": "https://schema.org/InStock",
+                  "url": "https://mercipourtonnon.fr"
+                }
+              }
+            }
+          ]
+        }
+      }
+    },
+    "preload": [
+      {
+        "href": "./output.css?v=6e6dc5f",
+        "as": "style"
+      },
+      {
+        "href": "./public/fonts/NeueMachina/NeueMachina-Regular.otf",
+        "as": "font",
+        "type": "font/otf",
+        "crossorigin": true
+      },
+      {
+        "href": "./public/fonts/BelyDisplay/BelyDisplay-Regular.woff2",
+        "as": "font",
+        "type": "font/woff2",
+        "crossorigin": true
+      },
+      {
+        "href": "./public/social.png",
+        "as": "image"
+      }
+    ],
+    "dnsPrefetch": ["https://www.billetweb.fr", "https://unpkg.com"],
+    "analytics": {
+      "providers": [
+        {
+          "name": "plausible",
+          "enabled": true,
+          "scripts": [
+            {
+              "src": "https://plausible.io/js/pa-uDEF1f-3lcur3O_VhvsaB.js",
+              "async": true
+            }
+          ],
+          "initScript": "window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init()",
+          "dnsPrefetch": "https://plausible.io"
+        }
+      ]
+    },
+    "customElements": [
+      {
+        "type": "meta",
+        "attrs": {
+          "name": "theme-color",
+          "content": "#FFAF00"
+        }
+      },
+      {
+        "type": "meta",
+        "attrs": {
+          "name": "msapplication-navbutton-color",
+          "content": "#FFAF00"
+        }
+      },
+      {
+        "type": "meta",
+        "attrs": {
+          "name": "apple-mobile-web-app-status-bar-style",
+          "content": "#FFAF00"
+        }
+      }
+    ]
+  },
+  "theme": {
+    "colors": {
+      "pourpre": "#F5004F",
+      "pourpre-hover": "#d10042",
+      "pourpre-light": "#FFF0F5",
+      "pourpre-lighter": "#FFE0EA",
+      "orange": "#FFAF00",
+      "orange-hover": "#E69E00",
+      "orange-light": "#FFF8E6",
+      "orange-lighter": "#FFF0D1",
+      "orange-vif": "#FF7000",
+      "orange-vif-light": "#FFF4E6",
+      "mauve": "#7B01FE",
+      "mauve-hover": "#6A01DB",
+      "mauve-light": "#F3E6FF",
+      "mauve-lighter": "#E6D1FF",
+      "cyan": "#12A19D",
+      "cyan-hover": "#0F8A87",
+      "cyan-light": "#E6F9F8",
+      "cyan-lighter": "#D1F2F0",
+      "bleu-fonce": "#130077",
+      "bleu-fonce-light": "#E6E0FF"
+    },
+    "fonts": {
+      "title": {
+        "family": "Bely Display",
+        "fallback": "Archivo Black, sans-serif",
+        "transform": "lowercase",
+        "letterSpacing": "0.05em"
+      },
+      "body": {
+        "family": "Neue Machina",
+        "fallback": "Space Grotesk, sans-serif",
+        "weights": [300, 400, 800]
+      }
+    },
+    "spacing": {
+      "section": "py-16",
+      "container": "max-w-7xl",
+      "containerSmall": "max-w-5xl",
+      "containerXSmall": "max-w-4xl"
+    },
+    "animations": {
+      "fadeInUp": true,
+      "fadeIn": true,
+      "float": true
+    }
+  },
+  "blocs": [
+    {
+      "name": "icon-badge",
+      "type": "badge",
+      "props": { "color": "$color" },
+      "children": [
+        {
+          "type": "icon",
+          "props": { "name": "$icon", "size": 4, "className": "-mt-0.5" }
+        },
+        { "type": "text", "props": { "level": "span" }, "content": "$text" }
+      ]
+    },
+    {
+      "name": "section-header",
+      "type": "container",
+      "props": { "maxWidth": "max-w-4xl", "className": "text-center mb-12" },
+      "children": [
+        {
+          "type": "text",
+          "props": {
+            "level": "h2",
+            "className": "title-font text-$titleColor text-3xl sm:text-4xl md:text-5xl mb-4"
+          },
+          "content": "$title"
+        },
+        {
+          "type": "text",
+          "props": { "level": "p", "size": "lg", "className": "text-gray-600 max-w-2xl mx-auto" },
+          "content": "$subtitle"
+        }
+      ]
+    },
+    {
+      "name": "feature-list-item",
+      "type": "flex",
+      "props": { "align": "start", "gap": 3, "className": "mb-4" },
+      "children": [
+        {
+          "type": "icon",
+          "props": {
+            "name": "$icon",
+            "size": 6,
+            "color": "$iconColor",
+            "className": "flex-shrink-0 mt-1"
+          }
+        },
+        {
+          "type": "text",
+          "props": { "level": "p", "className": "text-gray-700" },
+          "content": "$text"
+        }
+      ]
+    },
+    {
+      "name": "testimonial-card",
+      "type": "card",
+      "props": {
+        "variant": "default",
+        "padding": 6,
+        "className": "bg-$color-light border-l-4 border-l-$color"
+      },
+      "children": [
+        {
+          "type": "text",
+          "props": { "level": "p", "className": "text-gray-700 italic mb-4 leading-relaxed" },
+          "content": "$quote"
+        },
+        {
+          "type": "text",
+          "props": { "level": "p", "className": "text-$color font-bold" },
+          "content": "$attribution"
+        }
+      ]
+    },
+    {
+      "name": "audience-card",
+      "type": "card",
+      "props": {
+        "variant": "default",
+        "padding": 6,
+        "className": "bg-$color-light text-center hover:shadow-lg transition-shadow duration-300"
+      },
+      "children": [
+        {
+          "type": "flex",
+          "props": { "direction": "col", "align": "center", "gap": 4 },
+          "children": [
+            {
+              "type": "flex",
+              "props": {
+                "align": "center",
+                "justify": "center",
+                "className": "w-16 h-16 bg-white rounded-full"
+              },
+              "children": [
+                { "type": "icon", "props": { "name": "$icon", "size": 8, "color": "$iconColor" } }
+              ]
+            },
+            {
+              "type": "text",
+              "props": { "level": "h3", "className": "title-font text-$titleColor text-xl" },
+              "content": "$title"
+            },
+            {
+              "type": "text",
+              "props": { "level": "p", "className": "text-gray-700 leading-relaxed" },
+              "content": "$description"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "info-card",
+      "type": "card",
+      "props": {
+        "variant": "default",
+        "padding": 6,
+        "className": "bg-white text-center hover:shadow-lg transition-shadow duration-300"
+      },
+      "children": [
+        {
+          "type": "flex",
+          "props": { "direction": "col", "align": "center", "gap": 3 },
+          "children": [
+            {
+              "type": "flex",
+              "props": {
+                "align": "center",
+                "justify": "center",
+                "className": "w-16 h-16 bg-$iconBg rounded-full mb-2"
+              },
+              "children": [
+                { "type": "icon", "props": { "name": "$icon", "size": 8, "color": "$iconColor" } }
+              ]
+            },
+            {
+              "type": "text",
+              "props": { "level": "h3", "className": "title-font text-$titleColor text-lg mb-2" },
+              "content": "$title"
+            },
+            {
+              "type": "text",
+              "props": { "level": "p", "className": "font-bold text-gray-900 mb-1" },
+              "content": "$mainInfo"
+            },
+            {
+              "type": "text",
+              "props": { "level": "p", "size": "sm", "className": "text-gray-600" },
+              "content": "$detail"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "value-card",
+      "type": "card",
+      "props": {
+        "variant": "default",
+        "padding": 6,
+        "className": "bg-white border-t-4 border-t-$borderColor hover:shadow-lg transition-shadow duration-300"
+      },
+      "children": [
+        {
+          "type": "flex",
+          "props": { "direction": "col", "gap": 4 },
+          "children": [
+            {
+              "type": "icon",
+              "props": { "name": "$icon", "size": 10, "color": "$iconColor", "className": "mb-2" }
+            },
+            {
+              "type": "text",
+              "props": { "level": "h3", "className": "title-font text-$titleColor text-xl mb-2" },
+              "content": "$title"
+            },
+            {
+              "type": "text",
+              "props": { "level": "p", "className": "text-gray-700 leading-relaxed" },
+              "content": "$description"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "pillar-card",
+      "type": "card",
+      "props": {
+        "variant": "default",
+        "padding": 6,
+        "className": "bg-white hover:shadow-lg transition-shadow duration-300"
+      },
+      "children": [
+        {
+          "type": "flex",
+          "props": { "direction": "col", "gap": 4 },
+          "children": [
+            {
+              "type": "flex",
+              "props": {
+                "align": "center",
+                "justify": "center",
+                "className": "w-16 h-16 bg-$iconBg rounded-full mb-2"
+              },
+              "children": [
+                { "type": "icon", "props": { "name": "$icon", "size": 8, "color": "$iconColor" } }
+              ]
+            },
+            {
+              "type": "text",
+              "props": { "level": "h3", "className": "title-font text-$titleColor text-xl mb-2" },
+              "content": "$title"
+            },
+            {
+              "type": "text",
+              "props": { "level": "p", "className": "text-gray-700 leading-relaxed" },
+              "content": "$description"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "timeline-item",
+      "type": "timeline",
+      "props": {
+        "title": "$title",
+        "description": "$description",
+        "color": "$color",
+        "time": "$time",
+        "isLast": "$isLast"
+      }
+    },
+    {
+      "name": "trust-item",
+      "type": "flex",
+      "props": { "align": "start", "gap": 3, "className": "mb-3" },
+      "children": [
+        {
+          "type": "icon",
+          "props": {
+            "name": "check-circle",
+            "size": 6,
+            "color": "$color",
+            "className": "flex-shrink-0"
+          }
+        },
+        {
+          "type": "text",
+          "props": { "level": "p", "className": "text-gray-700" },
+          "content": "$text"
+        }
+      ]
+    },
+    {
+      "name": "faq-item",
+      "type": "accordion",
+      "props": { "question": "$question", "answer": "$answer" }
+    },
+    {
+      "name": "teamCard",
+      "type": "card",
+      "props": {
+        "variant": "default",
+        "className": "team-card bg-white hover:shadow-lg transition-shadow duration-300 cursor-pointer"
+      },
+      "children": [
+        {
+          "type": "image",
+          "props": {
+            "src": "$image",
+            "alt": "$name",
+            "className": "w-full h-64 object-cover rounded-t-lg"
+          }
+        },
+        {
+          "type": "container",
+          "props": { "className": "p-6 text-center" },
+          "children": [
+            {
+              "type": "text",
+              "props": { "level": "h3", "className": "title-font text-$color text-xl mb-2" },
+              "content": "$name"
+            },
+            {
+              "type": "text",
+              "props": { "level": "p", "className": "text-gray-600" },
+              "content": "$role"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "layout": {
+    "banner": {
+      "enabled": true,
+      "gradient": "linear-gradient(90deg, #FFAF00 0%, #7B01FE 100%)",
+      "text": "Prochaine session le 16 novembre — 6 à 15 participants"
+    },
+    "navigation": {
+      "logo": "./public/logo-without-marging.svg",
+      "logoMobile": "./public/logo.svg",
+      "logoAlt": "Merci pour ton non",
+      "sticky": true,
+      "links": {
+        "desktop": [
+          { "label": "L'atelier", "href": "#atelier" },
+          { "label": "Témoignages", "href": "#temoignages" },
+          { "label": "Pour qui", "href": "#pour-qui" },
+          { "label": "Programme", "href": "#programme" },
+          { "label": "Infos pratiques", "href": "#infos-pratiques" },
+          { "label": "Mission", "href": "#mission" },
+          { "label": "Valeurs", "href": "#valeurs" },
+          { "label": "Équipe", "href": "#equipe" },
+          { "label": "FAQ", "href": "#faq" }
+        ],
+        "mobile": [
+          { "label": "L'atelier", "href": "#atelier" },
+          { "label": "Témoignages", "href": "#temoignages" },
+          { "label": "Pour qui", "href": "#pour-qui" },
+          { "label": "Programme", "href": "#programme" },
+          { "label": "Infos pratiques", "href": "#infos-pratiques" },
+          { "label": "Mission", "href": "#mission" },
+          { "label": "Valeurs", "href": "#valeurs" },
+          { "label": "Équipe", "href": "#equipe" },
+          { "label": "FAQ", "href": "#faq" }
+        ]
+      },
+      "cta": {
+        "text": "Je réserve ma place",
+        "href": "#events",
+        "color": "orange"
+      }
+    },
+    "footer": {
+      "enabled": false
+    }
+  },
+  "sections": [
+    {
+      "type": "section",
+      "props": {
+        "id": "hero",
+        "className": "min-h-screen relative overflow-hidden",
+        "style": {
+          "background": "linear-gradient(135deg, #FFF8E6 0%, #F3E6FF 100%)"
+        }
+      },
+      "children": [
+        {
+          "type": "customHTML",
+          "props": {
+            "html": "<div class=\"blob w-96 h-96 top-0 left-0 bg-orange\"></div><div class=\"blob w-80 h-80 bottom-0 right-0 bg-mauve\"></div>"
+          }
+        },
+        {
+          "type": "section",
+          "props": {
+            "className": "relative z-10 px-4 pt-24 sm:pt-32 pb-16 sm:pb-24 md:pb-28"
+          },
+          "children": [
+            {
+              "type": "container",
+              "props": { "maxWidth": "max-w-5xl" },
+              "children": [
+                {
+                  "type": "customHTML",
+                  "props": {
+                    "html": "<h1 class=\"hero-title text-4xl sm:text-5xl md:text-6xl lg:text-8xl mb-8 text-center\"><span class=\"title-font text-pourpre\">atelier</span> <span class=\"title-font text-orange\">de</span><br/><span class=\"title-font text-mauve\">consentement</span><br/><span class=\"title-font text-cyan\">à strasbourg</span></h1>"
+                  }
+                },
+                {
+                  "type": "text",
+                  "props": {
+                    "level": "p",
+                    "size": "lg",
+                    "className": "sm:text-xl md:text-2xl text-gray-700 max-w-3xl mx-auto leading-relaxed mb-10 text-center"
+                  },
+                  "content": "Rejoins-nous pour 3 heures d'atelier : apprendre à dire non et faire évoluer tes relations"
+                },
+                {
+                  "type": "flex",
+                  "props": {
+                    "justify": "center",
+                    "wrap": true,
+                    "gap": 3,
+                    "className": "mb-10 max-w-3xl mx-auto"
+                  },
+                  "children": [
+                    {
+                      "$ref": "icon-badge",
+                      "vars": {
+                        "color": "pourpre",
+                        "icon": "users",
+                        "text": "6 à 15 personnes"
+                      }
+                    },
+                    {
+                      "$ref": "icon-badge",
+                      "vars": {
+                        "color": "orange",
+                        "icon": "clock",
+                        "text": "3 heures"
+                      }
+                    },
+                    {
+                      "$ref": "icon-badge",
+                      "vars": {
+                        "color": "mauve",
+                        "icon": "heart",
+                        "text": "Prix libre"
+                      }
+                    },
+                    {
+                      "$ref": "icon-badge",
+                      "vars": {
+                        "color": "cyan",
+                        "icon": "map-pin",
+                        "text": "Strasbourg, Alsace"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "type": "flex",
+                  "props": {
+                    "direction": "col",
+                    "align": "center",
+                    "gap": 4,
+                    "className": "sm:flex-row sm:justify-center"
+                  },
+                  "children": [
+                    {
+                      "type": "button",
+                      "props": {
+                        "href": "#events",
+                        "size": "lg",
+                        "className": "inline-flex items-center gap-2 shadow-lg hover:shadow-xl"
+                      },
+                      "children": [
+                        {
+                          "type": "text",
+                          "props": { "level": "span" },
+                          "content": "Je réserve ma place"
+                        },
+                        {
+                          "type": "icon",
+                          "props": {
+                            "name": "arrow-right",
+                            "size": 5,
+                            "className": "-mt-0.5"
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "type": "text",
+                      "props": {
+                        "level": "p",
+                        "size": "sm",
+                        "color": "gray-600"
+                      },
+                      "children": [
+                        {
+                          "type": "text",
+                          "props": { "level": "span" },
+                          "content": "Prochaine session le "
+                        },
+                        {
+                          "type": "customHTML",
+                          "props": {
+                            "html": "<strong class=\"text-bleu-fonce\" id=\"hero-next-date\">16 novembre</strong>"
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "customHTML",
+          "props": {
+            "html": "<div class=\"absolute top-20 left-10 w-32 h-32 bg-orange-light rounded-full opacity-40 blur-3xl -z-10\"></div><div class=\"absolute bottom-20 right-10 w-40 h-40 bg-mauve-light rounded-full opacity-40 blur-3xl -z-10\"></div><div class=\"absolute top-40 right-20 w-24 h-24 bg-pourpre-light rounded-full opacity-30 blur-2xl -z-10\"></div>"
+          }
+        }
+      ]
+    },
+    {
+      "type": "section",
+      "props": {
+        "id": "atelier",
+        "className": "py-16 sm:py-20 bg-orange-light"
+      },
+      "children": [
+        {
+          "type": "container",
+          "props": { "maxWidth": "max-w-7xl", "className": "px-4" },
+          "children": [
+            {
+              "type": "flex",
+              "props": { "justify": "center", "className": "mb-8" },
+              "children": [
+                {
+                  "$ref": "icon-badge",
+                  "vars": {
+                    "color": "orange",
+                    "icon": "users",
+                    "text": "6 à 15 participants maximum"
+                  }
+                }
+              ]
+            },
+            {
+              "$ref": "section-header",
+              "vars": {
+                "titleColor": "orange",
+                "title": "un atelier de consentement qui fait sens",
+                "subtitle": "Cet atelier t'invite à explorer le consentement dans un cadre bienveillant et participatif."
+              }
+            },
+            {
+              "type": "grid",
+              "props": {
+                "cols": 1,
+                "gap": 8,
+                "className": "md:grid-cols-2 items-start"
+              },
+              "children": [
+                {
+                  "type": "container",
+                  "props": { "className": "space-y-6 bg-white p-8 rounded-lg" },
+                  "children": [
+                    {
+                      "type": "text",
+                      "props": {
+                        "level": "h3",
+                        "className": "title-font text-cyan text-2xl mb-4"
+                      },
+                      "content": "ce qu'on explore ensemble"
+                    },
+                    {
+                      "$ref": "feature-list-item",
+                      "vars": {
+                        "icon": "check-circle",
+                        "iconColor": "cyan",
+                        "text": "Exercices ludiques pour mettre en pratique les notions clés"
+                      }
+                    },
+                    {
+                      "$ref": "feature-list-item",
+                      "vars": {
+                        "icon": "check-circle",
+                        "iconColor": "cyan",
+                        "text": "Jeux de rôle bienveillants pour t'entraîner à dire non"
+                      }
+                    },
+                    {
+                      "$ref": "feature-list-item",
+                      "vars": {
+                        "icon": "check-circle",
+                        "iconColor": "cyan",
+                        "text": "Mises en situation pour comprendre ce qui influence tes décisions"
+                      }
+                    },
+                    {
+                      "$ref": "feature-list-item",
+                      "vars": {
+                        "icon": "check-circle",
+                        "iconColor": "cyan",
+                        "text": "Moments de partage dans un cadre sécurisant"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "type": "container",
+                  "props": { "className": "space-y-6 bg-mauve-light p-8 rounded-lg" },
+                  "children": [
+                    {
+                      "type": "text",
+                      "props": {
+                        "level": "h3",
+                        "className": "title-font text-mauve text-2xl mb-4"
+                      },
+                      "content": "tu pourras emporter"
+                    },
+                    {
+                      "$ref": "feature-list-item",
+                      "vars": {
+                        "icon": "star",
+                        "iconColor": "mauve",
+                        "text": "Une définition claire et mémorisable du consentement"
+                      }
+                    },
+                    {
+                      "$ref": "feature-list-item",
+                      "vars": {
+                        "icon": "star",
+                        "iconColor": "mauve",
+                        "text": "Des clés concrètes pour repérer les situations problématiques"
+                      }
+                    },
+                    {
+                      "$ref": "feature-list-item",
+                      "vars": {
+                        "icon": "star",
+                        "iconColor": "mauve",
+                        "text": "Plus de confiance pour poser tes limites"
+                      }
+                    },
+                    {
+                      "$ref": "feature-list-item",
+                      "vars": {
+                        "icon": "star",
+                        "iconColor": "mauve",
+                        "text": "Des outils pour des relations plus authentiques et respectueuses"
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "section",
+      "props": {
+        "id": "temoignages",
+        "className": "py-16 sm:py-20 bg-white"
+      },
+      "children": [
+        {
+          "type": "container",
+          "props": { "maxWidth": "max-w-7xl", "className": "px-4" },
+          "children": [
+            {
+              "$ref": "section-header",
+              "vars": {
+                "titleColor": "pourpre",
+                "title": "ils ont participé à l'atelier de consentement",
+                "subtitle": "Découvre ce que les participant·es ont vécu et appris lors de nos ateliers"
+              }
+            },
+            {
+              "type": "grid",
+              "props": {
+                "cols": 1,
+                "gap": 6,
+                "className": "md:grid-cols-2"
+              },
+              "children": [
+                {
+                  "$ref": "testimonial-card",
+                  "vars": {
+                    "color": "pourpre",
+                    "quote": "Atelier très intéressant et enrichissant. Le cadre posé a tout de suite été rassurant et bienveillant. Que l'on se sente à l'aise ou non avec les notions de consentement il est très bon de pouvoir participer à ce genre d'atelier afin d'apprendre de nouvelles choses ou de solidifier les acquis !",
+                    "attribution": "Camille"
+                  }
+                },
+                {
+                  "$ref": "testimonial-card",
+                  "vars": {
+                    "color": "mauve",
+                    "quote": "Cet atelier aurait le mérite d'être proposé en milieu professionnel, en milieu associatif, dans les lycées, dans les facs, sur les sites de rencontres amoureux et amicaux, et partout dans le monde en fait. J'ai encore appris de nouvelles choses sur moi-même et sur les relations interpersonnelles en général. Ça fait grandir et c'est inspirant.",
+                    "attribution": "Alex"
+                  }
+                },
+                {
+                  "$ref": "testimonial-card",
+                  "vars": {
+                    "color": "orange",
+                    "quote": "Je recommande cet atelier à tout le monde, que vous ayez déjà des connaissances sur le sujet du consentement (et pas que sexuel) ou non, vous y apprendrez forcément des choses dans un cadre cool et bienveillant ! Je repars avec plein de clés pour m'affirmer et oser dire non.",
+                    "attribution": "Lou"
+                  }
+                },
+                {
+                  "$ref": "testimonial-card",
+                  "vars": {
+                    "color": "cyan",
+                    "quote": "Belle expérience enrichissante. Un collectif motivé, engagé et respectueux qui nous a donné la possibilité de réfléchir et de s'exprimer sur une notion complexe et évolutive, souvent mal comprise dans notre société. Je repars avec des questions, des envies de revenir en discuter et des pistes pour améliorer mes propres relations interpersonnelles.",
+                    "attribution": "Sam"
+                  }
+                },
+                {
+                  "$ref": "testimonial-card",
+                  "vars": {
+                    "color": "pourpre",
+                    "quote": "Je recommande cet atelier à tout le monde ! Les 3h sont passées super vite grâce à une animation de qualité. J'ai hâte de pouvoir pratiquer toute la théorie.",
+                    "attribution": "Juliette"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "section",
+      "props": {
+        "id": "pour-qui",
+        "className": "py-16 sm:py-20 bg-white"
+      },
+      "children": [
+        {
+          "type": "container",
+          "props": { "maxWidth": "max-w-7xl", "className": "px-4" },
+          "children": [
+            {
+              "$ref": "section-header",
+              "vars": {
+                "titleColor": "mauve",
+                "title": "cet atelier est pour toi si...",
+                "subtitle": "Peu importe ton âge, ton parcours ou tes expériences, le consentement te concerne"
+              }
+            },
+            {
+              "type": "grid",
+              "props": {
+                "cols": 1,
+                "gap": 6,
+                "className": "md:grid-cols-2 lg:grid-cols-3"
+              },
+              "children": [
+                {
+                  "$ref": "audience-card",
+                  "vars": {
+                    "color": "orange",
+                    "icon": "users",
+                    "iconColor": "orange",
+                    "titleColor": "orange",
+                    "title": "tu es parent",
+                    "description": "Tu souhaites améliorer la communication avec tes enfants, respecter leurs limites et leur apprendre à poser les leurs dès le plus jeune âge."
+                  }
+                },
+                {
+                  "$ref": "audience-card",
+                  "vars": {
+                    "color": "pourpre",
+                    "icon": "briefcase",
+                    "iconColor": "pourpre",
+                    "titleColor": "pourpre",
+                    "title": "tu es professionnel·le",
+                    "description": "Tu cherches à mieux gérer les relations au travail, poser tes limites professionnelles et créer des interactions plus saines avec collègues et clients."
+                  }
+                },
+                {
+                  "$ref": "audience-card",
+                  "vars": {
+                    "color": "mauve",
+                    "icon": "heart",
+                    "iconColor": "mauve",
+                    "titleColor": "mauve",
+                    "title": "tu es impliqué·e dans une relation",
+                    "description": "Couple, relation ouverte, polyamour ou autre forme relationnelle : tu souhaites mieux communiquer tes besoins et désirs, et construire des relations plus équilibrées et authentiques."
+                  }
+                },
+                {
+                  "$ref": "audience-card",
+                  "vars": {
+                    "color": "cyan",
+                    "icon": "graduation-cap",
+                    "iconColor": "cyan",
+                    "titleColor": "cyan",
+                    "title": "tu es étudiant·e ou jeune actif·ve",
+                    "description": "Tu construis tes relations amicales, amoureuses et professionnelles, et tu aimerais naviguer ces interactions en respectant tes limites."
+                  }
+                },
+                {
+                  "$ref": "audience-card",
+                  "vars": {
+                    "color": "orange",
+                    "icon": "hand",
+                    "iconColor": "orange",
+                    "titleColor": "orange",
+                    "title": "tu as du mal à dire non",
+                    "description": "Tu te sens souvent obligé·e d'accepter des choses qui ne te conviennent pas, et tu cherches à apprendre à t'affirmer sans culpabiliser."
+                  }
+                },
+                {
+                  "$ref": "audience-card",
+                  "vars": {
+                    "color": "pourpre",
+                    "icon": "help-circle",
+                    "iconColor": "pourpre",
+                    "titleColor": "pourpre",
+                    "title": "tu es simplement curieux·se",
+                    "description": "Tu souhaites mieux comprendre le consentement au-delà du contexte sexuel et découvrir comment il s'applique dans toutes tes relations quotidiennes."
+                  }
+                }
+              ]
+            },
+            {
+              "type": "container",
+              "props": { "className": "mt-12 max-w-3xl mx-auto" },
+              "children": [
+                {
+                  "type": "card",
+                  "props": {
+                    "variant": "default",
+                    "padding": 8,
+                    "className": "bg-mauve-light text-center border-2 border-mauve"
+                  },
+                  "children": [
+                    {
+                      "type": "text",
+                      "props": {
+                        "level": "h3",
+                        "className": "title-font text-mauve text-2xl mb-4"
+                      },
+                      "content": "quel que soit ton profil..."
+                    },
+                    {
+                      "type": "text",
+                      "props": {
+                        "level": "p",
+                        "className": "text-gray-700 text-lg leading-relaxed mb-4"
+                      },
+                      "content": "Homme, femme, non-binaire • Jeune ou moins jeune • En relation ou célibataire • Avec ou sans enfants • En questionnement ou déjà sensibilisé·e — cet atelier est fait pour toi."
+                    },
+                    {
+                      "type": "text",
+                      "props": {
+                        "level": "p",
+                        "className": "text-mauve font-bold text-lg"
+                      },
+                      "content": "Le consentement est une compétence relationnelle universelle qui nous concerne tou·te·s."
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "section",
+      "props": {
+        "id": "programme",
+        "className": "py-16 sm:py-20 bg-white"
+      },
+      "children": [
+        {
+          "type": "container",
+          "props": { "maxWidth": "max-w-4xl", "className": "px-4" },
+          "children": [
+            {
+              "$ref": "section-header",
+              "vars": {
+                "titleColor": "mauve",
+                "title": "programme de l'atelier (3h)",
+                "subtitle": "Un parcours progressif pour explorer toutes les dimensions du consentement"
+              }
+            },
+            {
+              "type": "container",
+              "props": { "className": "space-y-0" },
+              "children": [
+                {
+                  "$ref": "timeline-item",
+                  "vars": {
+                    "title": "accueil & cadre",
+                    "description": "Présentation de l'équipe, des objectifs et création d'un cadre sécurisant",
+                    "color": "pourpre",
+                    "time": "10h00 - 10h25",
+                    "isLast": false
+                  }
+                },
+                {
+                  "$ref": "timeline-item",
+                  "vars": {
+                    "title": "les règles du consentement",
+                    "description": "Découvrir l'acronyme RÈGLES (Révocable, Éclairé, Gagnant-Gagnant, Libre, Explicite, Spécifique)",
+                    "color": "orange",
+                    "time": "",
+                    "isLast": false
+                  }
+                },
+                {
+                  "$ref": "timeline-item",
+                  "vars": {
+                    "title": "dire non",
+                    "description": "S'entraîner à poser un \"non\" franc et remercier pour le \"non\" de l'autre",
+                    "color": "mauve",
+                    "time": "",
+                    "isLast": false
+                  }
+                },
+                {
+                  "$ref": "timeline-item",
+                  "vars": {
+                    "title": "repérer les bris",
+                    "description": "Reconnaître les défauts et bris de consentement dans des situations concrètes",
+                    "color": "cyan",
+                    "time": "",
+                    "isLast": false
+                  }
+                },
+                {
+                  "type": "timeline",
+                  "props": {
+                    "title": "pause",
+                    "description": "",
+                    "color": "pourpre",
+                    "time": "11h20 - 11h35",
+                    "isLast": false,
+                    "isPause": true
+                  }
+                },
+                {
+                  "$ref": "timeline-item",
+                  "vars": {
+                    "title": "la négociation gagnant-gagnant",
+                    "description": "Explorer le spectre entre OUI et NON, et négocier pour trouver un accord juste",
+                    "color": "orange",
+                    "time": "",
+                    "isLast": false
+                  }
+                },
+                {
+                  "$ref": "timeline-item",
+                  "vars": {
+                    "title": "changer d'avis (révocable)",
+                    "description": "Pratiquer le retrait du consentement et accueillir le changement d'avis de l'autre",
+                    "color": "mauve",
+                    "time": "",
+                    "isLast": false
+                  }
+                },
+                {
+                  "$ref": "timeline-item",
+                  "vars": {
+                    "title": "identifier les biais",
+                    "description": "Comprendre les pressions sociales, affectives et les biais qui influencent nos choix",
+                    "color": "cyan",
+                    "time": "",
+                    "isLast": false
+                  }
+                },
+                {
+                  "$ref": "timeline-item",
+                  "vars": {
+                    "title": "tenir face à l'insistance",
+                    "description": "Muscler sa capacité à résister aux pressions et tenir un \"non\"",
+                    "color": "pourpre",
+                    "time": "",
+                    "isLast": false
+                  }
+                },
+                {
+                  "$ref": "timeline-item",
+                  "vars": {
+                    "title": "cercle de clôture",
+                    "description": "Partage des apprentissages et distribution des ressources à emporter",
+                    "color": "orange",
+                    "time": "12h45 - 13h00",
+                    "isLast": true
+                  }
+                }
+              ]
+            },
+            {
+              "type": "flex",
+              "props": {
+                "justify": "center",
+                "className": "mt-12"
+              },
+              "children": [
+                {
+                  "type": "button",
+                  "props": {
+                    "href": "#events",
+                    "variant": "primary",
+                    "size": "lg"
+                  },
+                  "content": "Je réserve ma place"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "section",
+      "props": {
+        "id": "infos-pratiques",
+        "className": "py-16 sm:py-20 bg-cyan-light"
+      },
+      "children": [
+        {
+          "type": "container",
+          "props": { "maxWidth": "max-w-7xl", "className": "px-4" },
+          "children": [
+            {
+              "$ref": "section-header",
+              "vars": {
+                "titleColor": "cyan",
+                "title": "infos pratiques",
+                "subtitle": "Tout ce que tu dois savoir avant de t'inscrire"
+              }
+            },
+            {
+              "type": "grid",
+              "props": {
+                "cols": 1,
+                "gap": 6,
+                "className": "md:grid-cols-2 lg:grid-cols-4"
+              },
+              "children": [
+                {
+                  "$ref": "info-card",
+                  "vars": {
+                    "icon": "clock",
+                    "iconColor": "orange",
+                    "iconBg": "orange-light",
+                    "titleColor": "orange",
+                    "title": "horaires",
+                    "mainInfo": "10h à 13h le dimanche",
+                    "detail": "3 heures avec pause"
+                  }
+                },
+                {
+                  "$ref": "info-card",
+                  "vars": {
+                    "icon": "map-pin",
+                    "iconColor": "pourpre",
+                    "iconBg": "pourpre-light",
+                    "titleColor": "pourpre",
+                    "title": "lieu",
+                    "mainInfo": "Strasbourg",
+                    "detail": "Adresse communiquée aux inscrits"
+                  }
+                },
+                {
+                  "$ref": "info-card",
+                  "vars": {
+                    "icon": "users",
+                    "iconColor": "mauve",
+                    "iconBg": "mauve-light",
+                    "titleColor": "mauve",
+                    "title": "groupe",
+                    "mainInfo": "6 à 15 personnes",
+                    "detail": "Intimité préservée"
+                  }
+                },
+                {
+                  "$ref": "info-card",
+                  "vars": {
+                    "icon": "heart",
+                    "iconColor": "cyan",
+                    "iconBg": "cyan-light",
+                    "titleColor": "cyan",
+                    "title": "prix libre",
+                    "mainInfo": "À partir de 0€",
+                    "detail": "Tu donnes ce que tu veux/peux"
+                  }
+                }
+              ]
+            },
+            {
+              "type": "container",
+              "props": { "className": "mt-12 max-w-4xl mx-auto" },
+              "children": [
+                {
+                  "type": "card",
+                  "props": {
+                    "variant": "default",
+                    "padding": 8,
+                    "className": "bg-cyan-light border-l-4 border-l-cyan"
+                  },
+                  "children": [
+                    {
+                      "type": "text",
+                      "props": {
+                        "level": "h3",
+                        "className": "title-font text-cyan text-2xl mb-6"
+                      },
+                      "content": "Bon à savoir"
+                    },
+                    {
+                      "type": "container",
+                      "props": { "className": "space-y-4" },
+                      "children": [
+                        {
+                          "$ref": "trust-item",
+                          "vars": {
+                            "color": "cyan",
+                            "text": "Annulation possible à tout moment (merci de nous prévenir par email pour libérer ta place)"
+                          }
+                        },
+                        {
+                          "$ref": "trust-item",
+                          "vars": {
+                            "color": "cyan",
+                            "text": "Participation aux exercices libre — tu peux juste observer si tu préfères"
+                          }
+                        },
+                        {
+                          "$ref": "trust-item",
+                          "vars": {
+                            "color": "cyan",
+                            "text": "Cadre bienveillant et confidentiel — ce qui se dit en atelier reste en atelier"
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "section",
+      "props": {
+        "id": "mission",
+        "className": "py-16 sm:py-20 bg-orange-light"
+      },
+      "children": [
+        {
+          "type": "container",
+          "props": { "maxWidth": "max-w-7xl", "className": "px-4" },
+          "children": [
+            {
+              "$ref": "section-header",
+              "vars": {
+                "titleColor": "orange",
+                "title": "notre mission",
+                "subtitle": "Rendre la culture du consentement accessible à tou·te·s"
+              }
+            },
+            {
+              "type": "container",
+              "props": { "className": "max-w-3xl mx-auto text-center mb-12" },
+              "children": [
+                {
+                  "type": "text",
+                  "props": {
+                    "level": "h3",
+                    "className": "title-font text-bleu-fonce text-2xl md:text-3xl mb-4"
+                  },
+                  "content": "Diffuser une culture du consentement à Strasbourg et dans le Grand Est"
+                },
+                {
+                  "type": "text",
+                  "props": {
+                    "level": "p",
+                    "className": "text-gray-700 text-lg leading-relaxed"
+                  },
+                  "content": "On crée des espaces sûrs où chacun·e peut apprendre à dire non, poser ses limites et construire des relations plus authentiques — dans tous les contextes de vie."
+                }
+              ]
+            },
+            {
+              "type": "grid",
+              "props": {
+                "cols": 1,
+                "gap": 6,
+                "className": "md:grid-cols-3 mb-16"
+              },
+              "children": [
+                {
+                  "$ref": "pillar-card",
+                  "vars": {
+                    "icon": "target",
+                    "iconColor": "orange",
+                    "iconBg": "orange-light",
+                    "titleColor": "orange",
+                    "title": "apprendre à dire non",
+                    "description": "Écouter ses ressentis, poser ses limites et accueillir le \"non\" de l'autre avec bienveillance"
+                  }
+                },
+                {
+                  "$ref": "pillar-card",
+                  "vars": {
+                    "icon": "globe",
+                    "iconColor": "pourpre",
+                    "iconBg": "pourpre-light",
+                    "titleColor": "pourpre",
+                    "title": "pour tous les contextes",
+                    "description": "Relations amicales, familiales, professionnelles, intimes — le consentement est partout"
+                  }
+                },
+                {
+                  "$ref": "pillar-card",
+                  "vars": {
+                    "icon": "shield",
+                    "iconColor": "mauve",
+                    "iconBg": "mauve-light",
+                    "titleColor": "mauve",
+                    "title": "un enjeu collectif",
+                    "description": "Issu des luttes féministes, le consentement questionne les rapports de pouvoir dans la société"
+                  }
+                }
+              ]
+            },
+            {
+              "type": "container",
+              "props": { "className": "max-w-4xl mx-auto" },
+              "children": [
+                {
+                  "type": "text",
+                  "props": {
+                    "level": "h3",
+                    "className": "title-font text-orange text-2xl mb-8 text-center"
+                  },
+                  "content": "notre approche"
+                },
+                {
+                  "type": "grid",
+                  "props": {
+                    "cols": 1,
+                    "gap": 8,
+                    "className": "md:grid-cols-2 mb-12"
+                  },
+                  "children": [
+                    {
+                      "type": "container",
+                      "props": { "className": "space-y-3" },
+                      "children": [
+                        {
+                          "type": "text",
+                          "props": {
+                            "level": "h4",
+                            "className": "font-bold text-bleu-fonce text-lg"
+                          },
+                          "content": "association à but non lucratif"
+                        },
+                        {
+                          "type": "text",
+                          "props": {
+                            "level": "p",
+                            "className": "text-gray-700 leading-relaxed"
+                          },
+                          "content": "Nos ateliers sont à prix libre — personne n'est refusé·e par manque d'argent. On croit que le consentement doit être accessible à tou·te·s."
+                        }
+                      ]
+                    },
+                    {
+                      "type": "container",
+                      "props": { "className": "space-y-3" },
+                      "children": [
+                        {
+                          "type": "text",
+                          "props": {
+                            "level": "h4",
+                            "className": "font-bold text-bleu-fonce text-lg"
+                          },
+                          "content": "inclusif et accessible"
+                        },
+                        {
+                          "type": "text",
+                          "props": {
+                            "level": "p",
+                            "className": "text-gray-700 leading-relaxed"
+                          },
+                          "content": "On accueille tous les publics dans leur diversité. Nos espaces sont bienveillants et adaptés aux différents vécus et capacités."
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "text",
+                  "props": {
+                    "level": "h4",
+                    "className": "title-font text-orange text-xl mb-6"
+                  },
+                  "content": "pourquoi nous faire confiance ?"
+                },
+                {
+                  "type": "grid",
+                  "props": {
+                    "cols": 1,
+                    "gap": 3,
+                    "className": "md:grid-cols-2"
+                  },
+                  "children": [
+                    {
+                      "$ref": "trust-item",
+                      "vars": {
+                        "color": "orange",
+                        "text": "Formé·es aux pédagogies actives et à la facilitation"
+                      }
+                    },
+                    {
+                      "$ref": "trust-item",
+                      "vars": {
+                        "color": "orange",
+                        "text": "Expertise en violences sexistes et sexuelles"
+                      }
+                    },
+                    {
+                      "$ref": "trust-item",
+                      "vars": {
+                        "color": "orange",
+                        "text": "Bénévoles passionné·es et engagé·es"
+                      }
+                    },
+                    {
+                      "$ref": "trust-item",
+                      "vars": {
+                        "color": "orange",
+                        "text": "Association à but non lucratif reconnue"
+                      }
+                    },
+                    {
+                      "$ref": "trust-item",
+                      "vars": {
+                        "color": "orange",
+                        "text": "Ateliers testés et améliorés en continu"
+                      }
+                    },
+                    {
+                      "$ref": "trust-item",
+                      "vars": {
+                        "color": "orange",
+                        "text": "Cadre sécurisant et bienveillant garanti"
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "section",
+      "props": {
+        "id": "valeurs",
+        "className": "py-16 sm:py-20 bg-white"
+      },
+      "children": [
+        {
+          "type": "container",
+          "props": { "maxWidth": "max-w-7xl", "className": "px-4" },
+          "children": [
+            {
+              "$ref": "section-header",
+              "vars": {
+                "titleColor": "pourpre",
+                "title": "nos valeurs",
+                "subtitle": "Les piliers qui guident notre approche et nos ateliers"
+              }
+            },
+            {
+              "type": "grid",
+              "props": {
+                "cols": 1,
+                "gap": 6,
+                "className": "md:grid-cols-2 lg:grid-cols-3"
+              },
+              "children": [
+                {
+                  "$ref": "value-card",
+                  "vars": {
+                    "icon": "gem",
+                    "iconColor": "pourpre",
+                    "borderColor": "pourpre",
+                    "titleColor": "pourpre",
+                    "title": "intégrité et clarté",
+                    "description": "On encourage l'écoute de soi, l'alignement entre ce que l'on ressent, ce que l'on pense et ce que l'on dit et une expression sincère et transparente."
+                  }
+                },
+                {
+                  "$ref": "value-card",
+                  "vars": {
+                    "icon": "sprout",
+                    "iconColor": "orange",
+                    "borderColor": "orange",
+                    "titleColor": "orange",
+                    "title": "culture du consentement",
+                    "description": "Le respect des limites, des désaccords et des \"non\" est une forme élevée de soin et de reconnaissance de l'autre conduisant à des relations plus authentiques et respectueuses."
+                  }
+                },
+                {
+                  "$ref": "value-card",
+                  "vars": {
+                    "icon": "search",
+                    "iconColor": "mauve",
+                    "borderColor": "mauve",
+                    "titleColor": "mauve",
+                    "title": "réflexivité et doute",
+                    "description": "L'examen de nos croyances, automatismes, biais et privilèges est un levier essentiel pour agir de façon plus juste."
+                  }
+                },
+                {
+                  "$ref": "value-card",
+                  "vars": {
+                    "icon": "users",
+                    "iconColor": "cyan",
+                    "borderColor": "cyan",
+                    "titleColor": "cyan",
+                    "title": "accessibilité et inclusion",
+                    "description": "On travaille activement à rendre nos espaces compréhensibles, accessibles et accueillants à la diversité des vécus, des origines et des capacités."
+                  }
+                },
+                {
+                  "$ref": "value-card",
+                  "vars": {
+                    "icon": "hand",
+                    "iconColor": "pourpre",
+                    "borderColor": "pourpre",
+                    "titleColor": "pourpre",
+                    "title": "responsabilité collective et individuelle",
+                    "description": "Nos choix sont façonnés par nos besoins fondamentaux de liens, des contextes sociaux et des structures de pouvoir qu'on ne peut ignorer, on refuse donc de faire peser l'entière responsabilité sur les individus."
+                  }
+                },
+                {
+                  "$ref": "value-card",
+                  "vars": {
+                    "icon": "vote",
+                    "iconColor": "orange",
+                    "borderColor": "orange",
+                    "titleColor": "orange",
+                    "title": "gouvernance démocratique",
+                    "description": "On aspire à ce que nos modes d'organisation internes incarnent les principes que l'on défend, entre partage du pouvoir, écoute et co-responsabilité."
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "section",
+      "props": {
+        "id": "equipe",
+        "className": "py-16 sm:py-20 bg-mauve-light"
+      },
+      "children": [
+        {
+          "type": "container",
+          "props": { "maxWidth": "max-w-7xl", "className": "px-4" },
+          "children": [
+            {
+              "$ref": "section-header",
+              "vars": {
+                "titleColor": "cyan",
+                "title": "l'équipe",
+                "subtitle": "Rencontre les facilitateur·ices et l'équipe bénévole"
+              }
+            },
+            {
+              "type": "grid",
+              "props": {
+                "cols": 1,
+                "gap": 8,
+                "className": "sm:grid-cols-2 lg:grid-cols-3"
+              },
+              "children": [
+                {
+                  "type": "teamCard",
+                  "props": {
+                    "name": "dilara simsek araiz",
+                    "role": "Facilitatrice",
+                    "roleColor": "pourpre",
+                    "image": "./public/pictures/dilara.jpg",
+                    "bio": "Diplômée en droit international et action humanitaire, je développe mon expertise dans la gestion de projets associatifs, la formation et le partenariat. Je suis particulièrement sensible à toutes les questions liées au genre, la migration et les droits humains. M'engager au sein de Merci pour ton non est l'opportunité pour moi de mettre mes compétences au service d'une cause qui me tient à coeur et en cohérence avec mes valeurs."
+                  }
+                },
+                {
+                  "type": "teamCard",
+                  "props": {
+                    "name": "morgane bourgeais",
+                    "role": "Facilitatrice",
+                    "roleColor": "orange",
+                    "image": "./public/pictures/morgane.jpg",
+                    "bio": "Juriste en droits humains de formation, puis formatrice et animatrice de prévention en santé sexuelle et prévention des violences de genre, également conseillère conjugale et familiale… Bref j'ai plusieurs casquettes mais une même ligne motrice : accompagner et offrir des espaces communs et collectifs d'échanges pour améliorer nos relations intimes, individuelles et collectives et nous permettre de lutter efficacement contre les violences et les discriminations. Facilitatrice pour Merci pour ton non, j'ai rejoint l'asso pour travailler la question du consentement en profondeur et pour partager de beaux moments de réflexion avec l'espoir de faire bouger quelques lignes."
+                  }
+                },
+                {
+                  "type": "teamCard",
+                  "props": {
+                    "name": "mathilde brière",
+                    "role": "Facilitatrice",
+                    "roleColor": "mauve",
+                    "image": "./public/pictures/mathilde.jpg",
+                    "bio": "Psychologue sociale depuis 10 ans, je suis passionnée par les dynamiques de groupe. J'ai co-fondé l'association et je facilite ces ateliers car je crois profondément qu'essaimer une culture plus soucieuse du consentement transforme positivement nos relations et nos manières de faire société."
+                  }
+                },
+                {
+                  "type": "teamCard",
+                  "props": {
+                    "name": "thomas jeanneau",
+                    "role": "Facilitateur",
+                    "roleColor": "cyan",
+                    "image": "./public/pictures/thomas.jpg",
+                    "bio": "En tant que personne ayant un vécu d'homme cisgenre hétéro dans une société patriarcale, j'ai été confronté à mon manque d'éducation au consentement dans mes relations. Co-fondateur de l'association, formé à la facilitation et au consentement par Zohra de Love Experience, je souhaite contribuer à une éducation populaire pour construire des relations plus apaisées dans notre société. Je met mon expérience en entrepreneuriat et en informatique au service des actions de Merci pour ton non."
+                  }
+                },
+                {
+                  "type": "teamCard",
+                  "props": {
+                    "name": "isabelle filin",
+                    "role": "Pédagogie",
+                    "roleColor": "cyan",
+                    "image": "./public/pictures/isabelle.jpg",
+                    "bio": "Travailleuse sociale spécialisée enfance et familles, je suis entrée dans l'association par la porte de la lutte contre les violences sexuelles et sexistes. Comprendre ses besoins, ses limites, et mieux les communiquer sont pour moi des compétences utiles à acquérir dès le plus jeune âge, et tout au long de la vie."
+                  }
+                },
+                {
+                  "type": "teamCard",
+                  "props": {
+                    "name": "elisa garcia",
+                    "role": "Communication",
+                    "roleColor": "orange",
+                    "image": "./public/pictures/elisa.jpg",
+                    "bio": "Professionnelle de la communication depuis 8 ans, mes valeurs personnelles colorent mes créations et guident mes missions. Féministe et queer, je suis aussi engagée au sein du groupe Bipan Strasbourg. J'ai rejoint Merci pour ton non après avoir moi-même participé à un atelier de consentement. Aujourd'hui, je mets mes compétences au service de l'association pour faire rayonner ces valeurs de respect, d'écoute et d'émancipation auxquelles je crois profondément."
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "section",
+      "props": {
+        "id": "faq",
+        "className": "py-16 sm:py-20 bg-pourpre-light"
+      },
+      "children": [
+        {
+          "type": "container",
+          "props": { "maxWidth": "max-w-4xl", "className": "px-4" },
+          "children": [
+            {
+              "$ref": "section-header",
+              "vars": {
+                "titleColor": "mauve",
+                "title": "questions fréquentes",
+                "subtitle": "Les réponses aux questions que tu te poses peut-être"
+              }
+            },
+            {
+              "type": "container",
+              "props": { "className": "space-y-4" },
+              "children": [
+                {
+                  "type": "accordion",
+                  "props": {
+                    "question": "Je connais déjà le consentement",
+                    "answer": "Super ! Cet atelier va au-delà de la théorie : tu vas pratiquer concrètement avec des exercices, identifier les biais subtils qui influencent tes choix, et muscler ta capacité à dire \"non\" dans des situations réelles."
+                  }
+                },
+                {
+                  "type": "accordion",
+                  "props": {
+                    "question": "Je n'ai pas le temps",
+                    "answer": "3 heures, c'est l'équivalent d'un long film. Mais contrairement à un film, tu repars avec des outils pratiques que tu utiliseras toute ta vie pour améliorer toutes tes relations. Un investissement qui vaut le coup !"
+                  }
+                },
+                {
+                  "type": "accordion",
+                  "props": {
+                    "question": "J'ai peur que ce soit trop intense",
+                    "answer": "Le cadre est ultra sécurisant : tu n'es jamais obligé·e de partager ton vécu personnel, tu peux juste observer, et tout reste confidentiel. C'est ludique, bienveillant, et 100% respectueux de tes limites."
+                  }
+                },
+                {
+                  "type": "accordion",
+                  "props": {
+                    "question": "Je ne peux pas me le permettre",
+                    "answer": "Prix libre = 0€ si nécessaire. Aucune justification demandée, aucun jugement. L'argent ne doit jamais être un obstacle à ta participation."
+                  }
+                },
+                {
+                  "type": "accordion",
+                  "props": {
+                    "question": "Comment fonctionne le prix libre ?",
+                    "answer": "Le prix libre signifie que tu donnes ce que tu veux et peux. Tu peux participer sans rien payer si c'est difficile pour toi. Si tu veux et peux soutenir l'association, ta contribution est bienvenue mais ne sera jamais obligatoire. Chacun·e participe selon ses moyens."
+                  }
+                },
+                {
+                  "type": "accordion",
+                  "props": {
+                    "question": "C'est uniquement sur le consentement sexuel ?",
+                    "answer": "Non ! L'atelier explore le consentement dans toutes les dimensions : amicales, familiales, professionnelles... Le consentement concerne tous nos rapports humains."
+                  }
+                },
+                {
+                  "type": "accordion",
+                  "props": {
+                    "question": "Je suis timide, vais-je devoir parler ?",
+                    "answer": "Tu restes souverain·e ! Tu peux choisir de ne pas participer à certains exercices, juste observer, ou partir quand tu veux. Tout dans la bienveillance."
+                  }
+                },
+                {
+                  "type": "accordion",
+                  "props": {
+                    "question": "Je peux venir seul·e ?",
+                    "answer": "Bien sûr ! La plupart viennent seul·es. C'est même plus enrichissant pour rencontrer de nouvelles personnes dans un cadre bienveillant."
+                  }
+                },
+                {
+                  "type": "accordion",
+                  "props": {
+                    "question": "Je peux annuler ma réservation ?",
+                    "answer": "Oui, tu peux annuler à tout moment ! Préviens-nous juste pour libérer ta place (6 à 15 personnes maximum)."
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "section",
+      "props": {
+        "id": "suis-nous",
+        "className": "py-16 bg-pourpre-light"
+      },
+      "children": [
+        {
+          "type": "container",
+          "props": { "maxWidth": "max-w-4xl", "className": "px-4 text-center" },
+          "children": [
+            {
+              "type": "text",
+              "props": {
+                "level": "h2",
+                "className": "title-font text-pourpre text-3xl sm:text-4xl mb-6"
+              },
+              "content": "suis-nous"
+            },
+            {
+              "type": "text",
+              "props": {
+                "level": "p",
+                "size": "lg",
+                "className": "text-gray-600 mb-8"
+              },
+              "content": "Rejoins notre communauté pour des conseils, des ressources et des actualités sur le consentement"
+            },
+            {
+              "type": "flex",
+              "props": {
+                "justify": "center",
+                "gap": 6,
+                "wrap": true
+              },
+              "children": [
+                {
+                  "type": "link",
+                  "props": {
+                    "href": "https://www.instagram.com/mercipourtonnon/",
+                    "target": "_blank",
+                    "className": "flex items-center gap-3 bg-white px-6 py-3 rounded-full hover:shadow-lg transition-shadow"
+                  },
+                  "children": [
+                    {
+                      "type": "icon",
+                      "props": {
+                        "name": "instagram",
+                        "size": 6,
+                        "color": "pourpre"
+                      }
+                    },
+                    {
+                      "type": "text",
+                      "props": {
+                        "level": "span",
+                        "className": "text-gray-900 font-medium"
+                      },
+                      "content": "Instagram"
+                    }
+                  ]
+                },
+                {
+                  "type": "link",
+                  "props": {
+                    "href": "https://www.facebook.com/mercipourtonnon",
+                    "target": "_blank",
+                    "className": "flex items-center gap-3 bg-white px-6 py-3 rounded-full hover:shadow-lg transition-shadow"
+                  },
+                  "children": [
+                    {
+                      "type": "icon",
+                      "props": {
+                        "name": "facebook",
+                        "size": 6,
+                        "color": "mauve"
+                      }
+                    },
+                    {
+                      "type": "text",
+                      "props": {
+                        "level": "span",
+                        "className": "text-gray-900 font-medium"
+                      },
+                      "content": "Facebook"
+                    }
+                  ]
+                },
+                {
+                  "type": "link",
+                  "props": {
+                    "href": "https://www.linkedin.com/company/merci-pour-ton-non",
+                    "target": "_blank",
+                    "className": "flex items-center gap-3 bg-white px-6 py-3 rounded-full hover:shadow-lg transition-shadow"
+                  },
+                  "children": [
+                    {
+                      "type": "icon",
+                      "props": {
+                        "name": "linkedin",
+                        "size": 6,
+                        "color": "cyan"
+                      }
+                    },
+                    {
+                      "type": "text",
+                      "props": {
+                        "level": "span",
+                        "className": "text-gray-900 font-medium"
+                      },
+                      "content": "LinkedIn"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "section",
+      "props": {
+        "id": "events",
+        "className": "py-16 sm:py-20 bg-orange-light"
+      },
+      "children": [
+        {
+          "type": "container",
+          "props": { "maxWidth": "max-w-5xl", "className": "px-4" },
+          "children": [
+            {
+              "$ref": "section-header",
+              "vars": {
+                "titleColor": "orange",
+                "title": "réserve ta place",
+                "subtitle": "Inscris-toi à la prochaine session"
+              }
+            },
+            {
+              "type": "customHTML",
+              "props": {
+                "html": "<div class=\"bg-white rounded-lg p-8 max-w-4xl mx-auto\"><a title=\"Réservation en ligne\" href=\"https://www.billetweb.fr/multi_event.php?multi=43090\" class=\"shop_frame\" target=\"_blank\" data-src=\"https://www.billetweb.fr/multi_event.php?multi=43090\" data-max-width=\"100%\" data-initial-height=\"600\" data-scrolling=\"no\" data-id=\"43090\" data-resize=\"1\">Réservation en ligne</a></div>"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "section",
+      "props": {
+        "tag": "footer",
+        "className": "relative z-10 bg-white py-12"
+      },
+      "children": [
+        {
+          "type": "container",
+          "props": {
+            "className": ""
+          },
+          "children": [
+            {
+              "type": "div",
+              "props": {
+                "className": "text-center mb-8"
+              },
+              "children": [
+                {
+                  "type": "img",
+                  "props": {
+                    "src": "./public/logo.svg",
+                    "alt": "Merci pour ton non",
+                    "className": "h-24 md:h-32 w-auto mx-auto mb-4"
+                  }
+                },
+                {
+                  "type": "text",
+                  "props": {
+                    "level": "p",
+                    "className": "text-gray-600"
+                  },
+                  "content": "Pour des relations humaines authentiques et respectueuses"
+                }
+              ]
+            },
+            {
+              "type": "customHTML",
+              "props": {
+                "html": "<div class=\"flex justify-center space-x-6 mb-8\"><a href=\"https://www.instagram.com/mercipourtonnon/\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"group\" aria-label=\"Instagram\"><div class=\"bg-gray-100 p-3 rounded-full transition-all duration-300 group-hover:bg-gradient-to-br group-hover:from-orange-500 group-hover:to-purple-600\"><svg class=\"w-6 h-6 text-gray-600 group-hover:text-white transition-colors\" fill=\"currentColor\" viewBox=\"0 0 24 24\"><path d=\"M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zM5.838 12c0 3.403 2.759 6.162 6.162 6.162s6.162-2.759 6.162-6.162-2.759-6.162-6.162-6.162-6.162 2.759-6.162 6.162zm8.162 0c0 1.105-.895 2-2 2s-2-.895-2-2 .895-2 2-2 2 .895 2 2zm4.207-6.374c0 .794-.645 1.44-1.44 1.44s-1.44-.646-1.44-1.44.646-1.439 1.44-1.439 1.44.645 1.44 1.439z\"/></svg></div></a><a href=\"https://www.facebook.com/mercipourtonnon\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"group\" aria-label=\"Facebook\"><div class=\"bg-gray-100 p-3 rounded-full transition-all duration-300 group-hover:bg-blue-600\"><svg class=\"w-6 h-6 text-gray-600 group-hover:text-white transition-colors\" fill=\"currentColor\" viewBox=\"0 0 24 24\"><path d=\"M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z\"/></svg></div></a><a href=\"https://www.linkedin.com/company/merci-pour-ton-non\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"group\" aria-label=\"LinkedIn\"><div class=\"bg-gray-100 p-3 rounded-full transition-all duration-300 group-hover:bg-blue-700\"><svg class=\"w-6 h-6 text-gray-600 group-hover:text-white transition-colors\" fill=\"currentColor\" viewBox=\"0 0 24 24\"><path d=\"M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z\"/></svg></div></a><a href=\"https://www.billetweb.fr/pro/mercipourtonnon\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"group\" aria-label=\"Billetweb\"><div class=\"bg-gray-100 p-3 rounded-full transition-all duration-300 group-hover:bg-orange\"><svg class=\"w-6 h-6 text-gray-600 group-hover:text-white transition-colors\" fill=\"currentColor\" viewBox=\"0 0 24 24\"><path d=\"M20 12c0-1.1.9-2 2-2V6c0-1.1-.9-2-2-2H4c-1.1 0-1.99.9-1.99 2v4c1.1 0 1.99.9 1.99 2s-.89 2-2 2v4c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2v-4c-1.1 0-2-.9-2-2zm-4.42 4.8L12 14.5l-3.58 2.3 1.08-4.12-3.29-2.69 4.24-.25L12 5.8l1.54 3.95 4.24.25-3.29 2.69 1.09 4.11z\"/></svg></div></a></div>"
+              }
+            },
+            {
+              "type": "div",
+              "props": {
+                "className": "border-t border-gray-200 pt-8 text-center text-gray-600"
+              },
+              "children": [
+                {
+                  "type": "customHTML",
+                  "props": {
+                    "html": "<p class=\"mb-2\"><a href=\"mailto:mercipourtonnon@gmail.com\" class=\"hover:text-orange transition-colors\">mercipourtonnon@gmail.com</a></p>"
+                  }
+                },
+                {
+                  "type": "text",
+                  "props": {
+                    "level": "p"
+                  },
+                  "content": "© 2025 Merci pour ton non. Tous droits réservés."
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "scripts": {
+    "workshopDates": [
+      "2025-11-16T10:00:00",
+      "2025-12-14T10:00:00",
+      "2026-01-18T10:00:00",
+      "2026-02-22T10:00:00"
+    ],
+    "features": {
+      "mobileMenu": true,
+      "scrollSpy": true,
+      "smoothScroll": true,
+      "teamCardFlip": true,
+      "lucideIcons": true
+    },
+    "externalScripts": [
+      {
+        "src": "https://unpkg.com/lucide@latest",
+        "defer": true
+      },
+      {
+        "src": "https://www.billetweb.fr/js/export.js",
+        "defer": true,
+        "type": "text/javascript"
+      }
+    ]
+  }
+}

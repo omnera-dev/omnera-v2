@@ -1,0 +1,79 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "open-graph.schema.json",
+  "title": "Open Graph Metadata",
+  "description": "Open Graph protocol metadata for rich social media sharing",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string",
+      "maxLength": 90,
+      "description": "Open Graph title (may differ from page title)"
+    },
+    "description": {
+      "type": "string",
+      "maxLength": 200,
+      "description": "Open Graph description"
+    },
+    "type": {
+      "type": "string",
+      "enum": ["website", "article", "book", "profile", "video", "music"],
+      "default": "website",
+      "description": "Open Graph object type"
+    },
+    "url": {
+      "type": "string",
+      "format": "uri",
+      "description": "Canonical URL for this page"
+    },
+    "image": {
+      "type": "string",
+      "format": "uri",
+      "description": "Image URL for social sharing (recommended: 1200x630px)"
+    },
+    "imageAlt": {
+      "type": "string",
+      "description": "Alternative text for the Open Graph image"
+    },
+    "siteName": {
+      "type": "string",
+      "description": "Name of the overall website"
+    },
+    "locale": {
+      "type": "string",
+      "pattern": "^[a-z]{2}_[A-Z]{2}$",
+      "default": "en_US",
+      "description": "Locale in format language_TERRITORY",
+      "examples": ["en_US", "fr_FR", "es_ES"]
+    },
+    "determiner": {
+      "type": "string",
+      "enum": ["a", "an", "the", "auto", ""],
+      "description": "Word that appears before the title"
+    },
+    "video": {
+      "type": "string",
+      "format": "uri",
+      "description": "Video URL if sharing video content"
+    },
+    "audio": {
+      "type": "string",
+      "format": "uri",
+      "description": "Audio URL if sharing audio content"
+    }
+  },
+  "required": ["title", "description", "type", "url"],
+  "additionalProperties": false,
+  "examples": [
+    {
+      "title": "Atelier de Consentement à Prix Libre à Strasbourg",
+      "description": "Atelier de 3h pour apprendre à dire non et poser ses limites",
+      "type": "website",
+      "url": "https://example.com",
+      "image": "https://example.com/social.png",
+      "siteName": "Mon Site",
+      "locale": "fr_FR"
+    }
+  ],
+  "specs": []
+}

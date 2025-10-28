@@ -1,0 +1,52 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "features.schema.json",
+  "title": "Feature Flags",
+  "description": "Client-side feature toggles",
+  "type": "object",
+  "patternProperties": {
+    "^[a-zA-Z][a-zA-Z0-9]*$": {
+      "oneOf": [
+        {
+          "type": "boolean",
+          "description": "Simple feature flag"
+        },
+        {
+          "type": "object",
+          "description": "Feature configuration",
+          "properties": {
+            "enabled": {
+              "type": "boolean"
+            },
+            "config": {
+              "type": "object",
+              "additionalProperties": true
+            }
+          }
+        }
+      ]
+    }
+  },
+  "additionalProperties": false,
+  "examples": [
+    {
+      "darkMode": true,
+      "animations": {
+        "enabled": true,
+        "config": {
+          "duration": 300,
+          "easing": "ease-in-out"
+        }
+      },
+      "cookieConsent": false,
+      "liveChat": {
+        "enabled": true,
+        "config": {
+          "provider": "intercom",
+          "appId": "abc123"
+        }
+      }
+    }
+  ],
+  "specs": []
+}

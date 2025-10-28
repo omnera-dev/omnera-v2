@@ -1,9 +1,0 @@
-{
-  "$id": "ogImage.schema.json",
-  "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "Open Graph Image",
-  "description": "Open Graph image URL for social media sharing",
-  "type": "string",
-  "examples": ["/og-image.png", "https://example.com/og-image.jpg"],
-  "specs": []
-}

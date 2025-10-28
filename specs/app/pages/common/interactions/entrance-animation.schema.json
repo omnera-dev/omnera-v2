@@ -1,0 +1,46 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "entrance-animation.schema.json",
+  "title": "Entrance Animation",
+  "description": "Animation played when page loads",
+  "type": "object",
+  "properties": {
+    "animation": {
+      "type": "string",
+      "enum": ["fadeIn", "fadeInUp", "fadeInDown", "zoomIn", "slideInUp", "slideInDown"],
+      "description": "Animation type"
+    },
+    "delay": {
+      "type": "string",
+      "pattern": "^[0-9]+(ms|s)$",
+      "default": "0ms",
+      "description": "Delay before animation starts"
+    },
+    "duration": {
+      "type": "string",
+      "pattern": "^[0-9]+(ms|s)$",
+      "default": "600ms",
+      "description": "Animation duration"
+    },
+    "stagger": {
+      "type": "string",
+      "pattern": "^[0-9]+(ms|s)$",
+      "description": "Delay between sibling animations",
+      "examples": ["50ms", "100ms"]
+    }
+  },
+  "required": ["animation"],
+  "additionalProperties": false,
+  "examples": [
+    {
+      "animation": "fadeInUp",
+      "delay": "200ms",
+      "duration": "800ms"
+    },
+    {
+      "animation": "fadeIn",
+      "stagger": "100ms"
+    }
+  ],
+  "specs": []
+}

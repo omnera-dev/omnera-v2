@@ -1,0 +1,61 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "favicon-set.schema.json",
+  "title": "Favicon Set",
+  "description": "Multiple favicon sizes and types for different devices",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "rel": {
+        "type": "string",
+        "enum": ["icon", "apple-touch-icon", "manifest", "mask-icon"],
+        "description": "Relationship type"
+      },
+      "type": {
+        "type": "string",
+        "pattern": "^image/",
+        "description": "MIME type",
+        "examples": ["image/png", "image/x-icon", "image/svg+xml"]
+      },
+      "sizes": {
+        "type": "string",
+        "pattern": "^[0-9]+x[0-9]+$",
+        "description": "Icon dimensions",
+        "examples": ["16x16", "32x32", "180x180", "192x192"]
+      },
+      "href": {
+        "type": "string",
+        "pattern": "^\\./",
+        "description": "Path to the favicon file"
+      },
+      "color": {
+        "type": "string",
+        "pattern": "^#[0-9A-Fa-f]{6}$",
+        "description": "Color for mask-icon (Safari pinned tab)"
+      }
+    },
+    "required": ["rel", "href"],
+    "additionalProperties": false
+  },
+  "examples": [
+    [
+      {
+        "rel": "apple-touch-icon",
+        "sizes": "180x180",
+        "href": "./public/favicon/apple-touch-icon.png"
+      },
+      {
+        "rel": "icon",
+        "type": "image/png",
+        "sizes": "32x32",
+        "href": "./public/favicon/favicon-32x32.png"
+      },
+      {
+        "rel": "manifest",
+        "href": "./public/favicon/site.webmanifest"
+      }
+    ]
+  ],
+  "specs": []
+}

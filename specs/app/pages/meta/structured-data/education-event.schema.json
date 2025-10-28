@@ -1,0 +1,120 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "education-event.schema.json",
+  "title": "Education Event Schema",
+  "description": "Schema.org EducationEvent structured data",
+  "type": "object",
+  "properties": {
+    "@type": {
+      "type": "string",
+      "const": "EducationEvent",
+      "description": "Schema.org type"
+    },
+    "name": {
+      "type": "string",
+      "description": "Event name"
+    },
+    "description": {
+      "type": "string",
+      "description": "Event description"
+    },
+    "startDate": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Event start date/time (ISO 8601)"
+    },
+    "endDate": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Event end date/time (ISO 8601)"
+    },
+    "eventAttendanceMode": {
+      "type": "string",
+      "enum": [
+        "https://schema.org/OfflineEventAttendanceMode",
+        "https://schema.org/OnlineEventAttendanceMode",
+        "https://schema.org/MixedEventAttendanceMode"
+      ],
+      "description": "Attendance mode"
+    },
+    "eventStatus": {
+      "type": "string",
+      "enum": [
+        "https://schema.org/EventScheduled",
+        "https://schema.org/EventCancelled",
+        "https://schema.org/EventPostponed",
+        "https://schema.org/EventRescheduled"
+      ],
+      "description": "Event status"
+    },
+    "location": {
+      "type": "object",
+      "properties": {
+        "@type": {
+          "const": "Place"
+        },
+        "name": {
+          "type": "string"
+        },
+        "address": {
+          "$ref": "./postal-address.schema.json"
+        }
+      }
+    },
+    "organizer": {
+      "type": "object",
+      "properties": {
+        "@type": {
+          "type": "string",
+          "enum": ["Organization", "Person"]
+        },
+        "name": {
+          "type": "string"
+        },
+        "url": {
+          "type": "string",
+          "format": "uri"
+        }
+      }
+    },
+    "offers": {
+      "type": "object",
+      "properties": {
+        "@type": {
+          "const": "Offer"
+        },
+        "price": {
+          "type": ["string", "number"]
+        },
+        "priceCurrency": {
+          "type": "string",
+          "pattern": "^[A-Z]{3}$"
+        },
+        "availability": {
+          "type": "string",
+          "enum": [
+            "https://schema.org/InStock",
+            "https://schema.org/OutOfStock",
+            "https://schema.org/PreOrder",
+            "https://schema.org/SoldOut"
+          ]
+        },
+        "url": {
+          "type": "string",
+          "format": "uri"
+        }
+      }
+    },
+    "maximumAttendeeCapacity": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "minimumAttendeeCapacity": {
+      "type": "integer",
+      "minimum": 1
+    }
+  },
+  "required": ["@type", "name", "startDate"],
+  "additionalProperties": false,
+  "specs": []
+}

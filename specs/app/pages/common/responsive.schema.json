@@ -1,0 +1,106 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "responsive.schema.json",
+  "title": "Responsive Variants",
+  "description": "Breakpoint-specific component overrides for responsive design",
+  "type": "object",
+  "properties": {
+    "mobile": {
+      "$ref": "#/definitions/variantOverrides"
+    },
+    "sm": {
+      "$ref": "#/definitions/variantOverrides"
+    },
+    "md": {
+      "$ref": "#/definitions/variantOverrides"
+    },
+    "lg": {
+      "$ref": "#/definitions/variantOverrides"
+    },
+    "xl": {
+      "$ref": "#/definitions/variantOverrides"
+    },
+    "2xl": {
+      "$ref": "#/definitions/variantOverrides"
+    }
+  },
+  "additionalProperties": false,
+  "definitions": {
+    "variantOverrides": {
+      "type": "object",
+      "description": "Component properties to override at this breakpoint",
+      "properties": {
+        "props": {
+          "type": "object",
+          "description": "Props to override",
+          "patternProperties": {
+            "^[a-zA-Z][a-zA-Z0-9]*$": {
+              "oneOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "object"
+                },
+                {
+                  "type": "array"
+                }
+              ]
+            }
+          }
+        },
+        "content": {
+          "type": "string",
+          "description": "Content to display at this breakpoint"
+        },
+        "visible": {
+          "type": "boolean",
+          "description": "Show/hide component at this breakpoint"
+        },
+        "children": {
+          "type": "array",
+          "description": "Different children at this breakpoint"
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "examples": [
+    {
+      "mobile": {
+        "props": {
+          "className": "text-2xl text-center"
+        },
+        "content": "Welcome!",
+        "visible": true
+      },
+      "md": {
+        "props": {
+          "className": "text-4xl text-left"
+        },
+        "content": "Welcome to Our Platform"
+      },
+      "lg": {
+        "props": {
+          "className": "text-6xl text-left font-bold"
+        },
+        "content": "Welcome to Our Amazing Platform"
+      }
+    },
+    {
+      "mobile": {
+        "visible": false
+      },
+      "lg": {
+        "visible": true
+      }
+    }
+  ],
+  "specs": []
+}

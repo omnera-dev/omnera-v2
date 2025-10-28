@@ -1,0 +1,68 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "person.schema.json",
+  "title": "Person Schema",
+  "description": "Schema.org Person structured data",
+  "type": "object",
+  "properties": {
+    "@context": {
+      "type": "string",
+      "const": "https://schema.org"
+    },
+    "@type": {
+      "type": "string",
+      "const": "Person"
+    },
+    "name": {
+      "type": "string"
+    },
+    "givenName": {
+      "type": "string"
+    },
+    "familyName": {
+      "type": "string"
+    },
+    "email": {
+      "type": "string",
+      "format": "email"
+    },
+    "telephone": {
+      "type": "string"
+    },
+    "url": {
+      "type": "string",
+      "format": "uri"
+    },
+    "image": {
+      "type": "string",
+      "format": "uri"
+    },
+    "jobTitle": {
+      "type": "string"
+    },
+    "worksFor": {
+      "type": "object",
+      "properties": {
+        "@type": {
+          "const": "Organization"
+        },
+        "name": {
+          "type": "string"
+        }
+      }
+    },
+    "sameAs": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "format": "uri"
+      }
+    },
+    "address": {
+      "$ref": "./postal-address.schema.json"
+    }
+  },
+  "required": ["@context", "@type", "name"],
+  "additionalProperties": false,
+  "specs": []
+}

@@ -1,0 +1,64 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "hover-interaction.schema.json",
+  "title": "Hover Interaction",
+  "description": "Visual changes when user hovers over component",
+  "type": "object",
+  "properties": {
+    "transform": {
+      "type": "string",
+      "description": "CSS transform (scale, rotate, translate)",
+      "examples": ["scale(1.05)", "translateY(-4px)", "rotate(5deg)"]
+    },
+    "opacity": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1,
+      "description": "Opacity value (0-1)"
+    },
+    "backgroundColor": {
+      "type": "string",
+      "description": "Background color on hover"
+    },
+    "color": {
+      "type": "string",
+      "description": "Text color on hover"
+    },
+    "borderColor": {
+      "type": "string",
+      "description": "Border color on hover"
+    },
+    "shadow": {
+      "type": "string",
+      "description": "Box shadow on hover",
+      "examples": ["0 10px 25px rgba(0,0,0,0.1)"]
+    },
+    "duration": {
+      "type": "string",
+      "default": "200ms",
+      "description": "Transition duration",
+      "pattern": "^[0-9]+(ms|s)$"
+    },
+    "easing": {
+      "type": "string",
+      "default": "ease-out",
+      "description": "Transition timing function",
+      "enum": ["linear", "ease", "ease-in", "ease-out", "ease-in-out"]
+    }
+  },
+  "additionalProperties": false,
+  "examples": [
+    {
+      "transform": "scale(1.05)",
+      "shadow": "0 10px 25px rgba(0,0,0,0.15)",
+      "duration": "200ms",
+      "easing": "ease-out"
+    },
+    {
+      "opacity": 0.8,
+      "backgroundColor": "#007bff",
+      "color": "#ffffff"
+    }
+  ],
+  "specs": []
+}

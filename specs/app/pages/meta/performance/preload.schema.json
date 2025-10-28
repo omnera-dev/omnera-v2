@@ -1,0 +1,53 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "preload.schema.json",
+  "title": "Resource Preloading",
+  "description": "Preload critical resources for performance optimization",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "href": {
+        "type": "string",
+        "description": "Resource URL to preload"
+      },
+      "as": {
+        "type": "string",
+        "enum": ["style", "script", "font", "image", "video", "audio", "document", "fetch"],
+        "description": "Resource type hint"
+      },
+      "type": {
+        "type": "string",
+        "description": "MIME type for the resource"
+      },
+      "crossorigin": {
+        "oneOf": [
+          { "type": "boolean" },
+          { "type": "string", "enum": ["anonymous", "use-credentials"] }
+        ],
+        "description": "CORS setting for the resource"
+      },
+      "media": {
+        "type": "string",
+        "description": "Media query for conditional loading"
+      }
+    },
+    "required": ["href", "as"],
+    "additionalProperties": false
+  },
+  "examples": [
+    [
+      {
+        "href": "./output.css",
+        "as": "style"
+      },
+      {
+        "href": "./fonts/MyFont.woff2",
+        "as": "font",
+        "type": "font/woff2",
+        "crossorigin": true
+      }
+    ]
+  ],
+  "specs": []
+}

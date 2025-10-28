@@ -1,0 +1,56 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "nav-links.schema.json",
+  "title": "Navigation Links",
+  "description": "Array of navigation link items",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "label": {
+        "type": "string",
+        "description": "Link text"
+      },
+      "href": {
+        "type": "string",
+        "description": "Link destination (URL or anchor)"
+      },
+      "target": {
+        "type": "string",
+        "enum": ["_self", "_blank", "_parent", "_top"],
+        "default": "_self",
+        "description": "Link target"
+      },
+      "icon": {
+        "type": "string",
+        "description": "Optional icon name"
+      },
+      "badge": {
+        "type": "string",
+        "description": "Optional badge text (e.g., 'New', 'Beta')"
+      },
+      "children": {
+        "$ref": "#",
+        "description": "Nested submenu items"
+      }
+    },
+    "required": ["label", "href"],
+    "additionalProperties": false
+  },
+  "examples": [
+    [
+      { "label": "Home", "href": "/" },
+      { "label": "About", "href": "/about" },
+      {
+        "label": "Products",
+        "href": "/products",
+        "children": [
+          { "label": "Product A", "href": "/products/a" },
+          { "label": "Product B", "href": "/products/b" }
+        ]
+      },
+      { "label": "Contact", "href": "#contact" }
+    ]
+  ],
+  "specs": []
+}

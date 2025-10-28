@@ -1,0 +1,86 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "analytics.schema.json",
+  "title": "Analytics Configuration",
+  "description": "Configuration for analytics providers",
+  "type": "object",
+  "properties": {
+    "providers": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "enum": ["google", "plausible", "matomo", "fathom", "posthog", "mixpanel"],
+            "description": "Analytics provider name"
+          },
+          "enabled": {
+            "type": "boolean",
+            "default": true,
+            "description": "Whether this provider is enabled"
+          },
+          "scripts": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "src": {
+                  "type": "string",
+                  "format": "uri",
+                  "description": "Script source URL"
+                },
+                "async": {
+                  "type": "boolean",
+                  "default": true,
+                  "description": "Load script asynchronously"
+                },
+                "defer": {
+                  "type": "boolean",
+                  "description": "Defer script execution"
+                }
+              },
+              "required": ["src"]
+            }
+          },
+          "initScript": {
+            "type": "string",
+            "description": "Inline JavaScript to initialize the analytics"
+          },
+          "dnsPrefetch": {
+            "type": "string",
+            "format": "uri",
+            "description": "Domain to DNS prefetch for this provider"
+          },
+          "config": {
+            "type": "object",
+            "description": "Provider-specific configuration",
+            "additionalProperties": true
+          }
+        },
+        "required": ["name"],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": ["providers"],
+  "additionalProperties": false,
+  "examples": [
+    {
+      "providers": [
+        {
+          "name": "plausible",
+          "enabled": true,
+          "scripts": [
+            {
+              "src": "https://plausible.io/js/script.js",
+              "async": true
+            }
+          ],
+          "dnsPrefetch": "https://plausible.io"
+        }
+      ]
+    }
+  ],
+  "specs": []
+}

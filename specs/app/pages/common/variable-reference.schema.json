@@ -1,0 +1,21 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "variable-reference.schema.json",
+  "title": "Variable Reference",
+  "description": "Pattern for referencing variables in bloc templates using $variableName syntax",
+  "type": "string",
+  "pattern": "^.*\\$[a-zA-Z][a-zA-Z0-9]*.*$",
+  "examples": [
+    "$color",
+    "$primaryText",
+    "Welcome to $siteName",
+    "The $productName costs $price",
+    "$icon-$size"
+  ],
+  "x-notes": [
+    "Variables are replaced at runtime with values from the 'vars' object",
+    "Variable names must start with a letter and contain only alphanumeric characters",
+    "Multiple variables can appear in the same string"
+  ],
+  "specs": []
+}

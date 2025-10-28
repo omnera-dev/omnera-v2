@@ -1,0 +1,85 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "organization.schema.json",
+  "title": "Organization Schema",
+  "description": "Schema.org Organization structured data",
+  "type": "object",
+  "properties": {
+    "@context": {
+      "type": "string",
+      "const": "https://schema.org",
+      "description": "Schema.org context"
+    },
+    "@type": {
+      "type": "string",
+      "const": "Organization",
+      "description": "Schema.org type"
+    },
+    "name": {
+      "type": "string",
+      "description": "Organization name"
+    },
+    "description": {
+      "type": "string",
+      "description": "Organization description"
+    },
+    "url": {
+      "type": "string",
+      "format": "uri",
+      "description": "Organization website URL"
+    },
+    "logo": {
+      "type": "string",
+      "format": "uri",
+      "description": "Organization logo URL"
+    },
+    "image": {
+      "oneOf": [
+        { "type": "string", "format": "uri" },
+        { "type": "array", "items": { "type": "string", "format": "uri" } }
+      ],
+      "description": "Organization image(s)"
+    },
+    "email": {
+      "type": "string",
+      "format": "email",
+      "description": "Contact email"
+    },
+    "telephone": {
+      "type": "string",
+      "description": "Contact phone number"
+    },
+    "address": {
+      "$ref": "./postal-address.schema.json"
+    },
+    "sameAs": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "format": "uri"
+      },
+      "description": "Social media profile URLs",
+      "examples": [["https://facebook.com/myorg", "https://twitter.com/myorg"]]
+    },
+    "founder": {
+      "type": "string",
+      "description": "Organization founder name"
+    },
+    "foundingDate": {
+      "type": "string",
+      "format": "date",
+      "description": "Date organization was founded"
+    },
+    "employees": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "Number of employees"
+    },
+    "event": {
+      "$ref": "./education-event.schema.json"
+    }
+  },
+  "required": ["@context", "@type", "name"],
+  "additionalProperties": false,
+  "specs": []
+}

@@ -1,0 +1,40 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "interactions.schema.json",
+  "title": "Component Interactions",
+  "description": "Interactive behaviors triggered by user actions or page events",
+  "type": "object",
+  "properties": {
+    "hover": {
+      "$ref": "./hover-interaction.schema.json"
+    },
+    "click": {
+      "$ref": "./click-interaction.schema.json"
+    },
+    "scroll": {
+      "$ref": "./scroll-interaction.schema.json"
+    },
+    "entrance": {
+      "$ref": "./entrance-animation.schema.json"
+    }
+  },
+  "additionalProperties": false,
+  "examples": [
+    {
+      "hover": {
+        "transform": "scale(1.05)",
+        "duration": "200ms",
+        "easing": "ease-out"
+      },
+      "click": {
+        "animation": "pulse",
+        "navigate": "/contact"
+      },
+      "entrance": {
+        "animation": "fadeInUp",
+        "delay": "100ms"
+      }
+    }
+  ],
+  "specs": []
+}

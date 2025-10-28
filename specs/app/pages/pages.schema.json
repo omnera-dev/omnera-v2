@@ -2,13 +2,13 @@
   "$id": "pages.schema.json",
   "$schema": "http://json-schema.org/draft-07/schema#",
   "title": "Pages",
-  "description": "Marketing and content pages with server-side rendering support. Pages use a block-based layout system with Tailwind UI-inspired components for building landing pages, about pages, pricing pages, and other public-facing content.",
+  "description": "Marketing and content pages with server-side rendering support. Pages use a block-based layout system with reusable components for building landing pages, about pages, pricing pages, and other public-facing content. Supports comprehensive metadata, theming, and structured data for SEO optimization.",
   "type": "array",
   "minItems": 1,
   "default": [],
   "items": {
     "title": "Page",
-    "description": "A server-rendered page with SEO optimization and block-based content",
+    "description": "A complete page configuration with metadata, theme, blocks, layout, and content sections",
     "type": "object",
     "properties": {
       "id": {
@@ -20,18 +20,70 @@
       "path": {
         "$ref": "./path/path.schema.json"
       },
-      "seo": {
-        "$ref": "./seo/seo.schema.json"
+      "meta": {
+        "$ref": "./meta/meta.schema.json"
       },
-      "head": {
-        "$ref": "./head/head.schema.json"
+      "layout": {
+        "$ref": "./layout/layout.schema.json"
       },
-      "blocks": {
-        "$ref": "./blocks/blocks.schema.json"
+      "sections": {
+        "$ref": "./sections/sections.schema.json"
+      },
+      "scripts": {
+        "$ref": "./scripts/scripts.schema.json"
       }
     },
-    "required": ["name", "path", "blocks"],
-    "additionalProperties": false
+    "required": ["name", "path", "meta", "sections"],
+    "additionalProperties": false,
+    "examples": [
+      {
+        "name": "Home Page",
+        "path": "/",
+        "meta": {
+          "lang": "en-US",
+          "title": "Welcome to Our Platform",
+          "description": "The best platform for your needs"
+        },
+        "theme": {
+          "colors": {
+            "primary": "#007bff",
+            "secondary": "#6c757d"
+          }
+        },
+        "blocks": [
+          {
+            "name": "hero-section",
+            "type": "container",
+            "props": { "className": "hero-container" },
+            "children": []
+          }
+        ],
+        "layout": {
+          "navigation": {
+            "logo": "./logo.svg",
+            "links": {
+              "desktop": [
+                { "label": "Home", "href": "/" },
+                { "label": "About", "href": "/about" }
+              ]
+            }
+          }
+        },
+        "sections": [
+          {
+            "type": "section",
+            "props": { "id": "hero" },
+            "children": []
+          }
+        ]
+      }
+    ]
   },
-  "specs": []
+  "specs": [],
+  "x-notes": [
+    "Pages now support comprehensive metadata beyond basic SEO",
+    "Blocks are defined at the app level and can be reused across pages",
+    "Sections support both direct components and block references with variable substitution",
+    "Theme tokens allow consistent design across all pages"
+  ]
 }

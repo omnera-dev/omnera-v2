@@ -1,0 +1,65 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "animations.schema.json",
+  "title": "Animation Configuration",
+  "description": "Animation and transition design tokens",
+  "type": "object",
+  "patternProperties": {
+    "^[a-zA-Z][a-zA-Z0-9]*$": {
+      "oneOf": [
+        {
+          "type": "boolean",
+          "description": "Enable/disable animation"
+        },
+        {
+          "type": "string",
+          "description": "Animation CSS value or class name"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "enabled": {
+              "type": "boolean",
+              "default": true
+            },
+            "duration": {
+              "type": "string",
+              "description": "Animation duration (e.g., '300ms', '0.5s')"
+            },
+            "easing": {
+              "type": "string",
+              "description": "Easing function (e.g., 'ease-in-out', 'cubic-bezier(0.4, 0, 0.2, 1)')"
+            },
+            "delay": {
+              "type": "string",
+              "description": "Animation delay"
+            },
+            "keyframes": {
+              "type": "object",
+              "description": "CSS keyframes definition"
+            }
+          }
+        }
+      ]
+    }
+  },
+  "additionalProperties": false,
+  "examples": [
+    {
+      "fadeIn": true,
+      "fadeInUp": true,
+      "float": true,
+      "pulse": {
+        "enabled": true,
+        "duration": "2s",
+        "easing": "ease-in-out"
+      },
+      "transition": {
+        "duration": "300ms",
+        "easing": "ease-in-out"
+      },
+      "slideIn": "slide-in 0.5s ease-out"
+    }
+  ],
+  "specs": []
+}

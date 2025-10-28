@@ -1,0 +1,118 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "sidebar.schema.json",
+  "title": "Sidebar Configuration",
+  "description": "Sidebar navigation and content configuration",
+  "type": "object",
+  "properties": {
+    "enabled": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether to show the sidebar"
+    },
+    "position": {
+      "type": "string",
+      "enum": ["left", "right"],
+      "default": "left",
+      "description": "Sidebar position"
+    },
+    "width": {
+      "type": "string",
+      "default": "256px",
+      "description": "Sidebar width"
+    },
+    "collapsible": {
+      "type": "boolean",
+      "default": true,
+      "description": "Whether sidebar can be collapsed"
+    },
+    "defaultCollapsed": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether sidebar starts collapsed"
+    },
+    "sticky": {
+      "type": "boolean",
+      "default": true,
+      "description": "Whether sidebar sticks on scroll"
+    },
+    "items": {
+      "type": "array",
+      "description": "Sidebar navigation items",
+      "items": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": ["link", "group", "divider"],
+            "description": "Item type"
+          },
+          "label": {
+            "type": "string",
+            "description": "Item label"
+          },
+          "href": {
+            "type": "string",
+            "description": "Link destination"
+          },
+          "icon": {
+            "type": "string",
+            "description": "Item icon"
+          },
+          "children": {
+            "type": "array",
+            "description": "Nested items for groups",
+            "items": {
+              "$ref": "#/properties/items/items"
+            }
+          }
+        },
+        "required": ["type"]
+      }
+    }
+  },
+  "required": ["enabled"],
+  "additionalProperties": false,
+  "examples": [
+    {
+      "enabled": true,
+      "position": "left",
+      "width": "280px",
+      "items": [
+        {
+          "type": "link",
+          "label": "Dashboard",
+          "href": "/dashboard",
+          "icon": "home"
+        },
+        {
+          "type": "group",
+          "label": "Products",
+          "icon": "package",
+          "children": [
+            {
+              "type": "link",
+              "label": "All Products",
+              "href": "/products"
+            },
+            {
+              "type": "link",
+              "label": "Categories",
+              "href": "/categories"
+            }
+          ]
+        },
+        {
+          "type": "divider"
+        },
+        {
+          "type": "link",
+          "label": "Settings",
+          "href": "/settings",
+          "icon": "settings"
+        }
+      ]
+    }
+  ],
+  "specs": []
+}

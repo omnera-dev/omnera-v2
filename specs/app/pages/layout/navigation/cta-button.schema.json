@@ -1,0 +1,62 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "cta-button.schema.json",
+  "title": "CTA Button",
+  "description": "Call-to-action button configuration",
+  "type": "object",
+  "properties": {
+    "text": {
+      "type": "string",
+      "description": "Button text"
+    },
+    "href": {
+      "type": "string",
+      "description": "Button link destination"
+    },
+    "variant": {
+      "type": "string",
+      "enum": ["primary", "secondary", "outline", "ghost", "link"],
+      "default": "primary",
+      "description": "Button style variant"
+    },
+    "size": {
+      "type": "string",
+      "enum": ["sm", "md", "lg", "xl"],
+      "default": "md",
+      "description": "Button size"
+    },
+    "color": {
+      "type": "string",
+      "description": "Button color (references theme colors)"
+    },
+    "icon": {
+      "type": "string",
+      "description": "Optional icon name"
+    },
+    "iconPosition": {
+      "type": "string",
+      "enum": ["left", "right"],
+      "default": "left",
+      "description": "Icon position relative to text"
+    }
+  },
+  "required": ["text", "href"],
+  "additionalProperties": false,
+  "examples": [
+    {
+      "text": "Get Started",
+      "href": "/signup",
+      "variant": "primary",
+      "size": "lg",
+      "color": "orange"
+    },
+    {
+      "text": "Download",
+      "href": "/download",
+      "variant": "outline",
+      "icon": "download",
+      "iconPosition": "right"
+    }
+  ],
+  "specs": []
+}

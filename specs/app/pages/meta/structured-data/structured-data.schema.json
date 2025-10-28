@@ -1,0 +1,50 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "structured-data.schema.json",
+  "title": "Structured Data",
+  "description": "Schema.org structured data for search engine understanding",
+  "type": "object",
+  "properties": {
+    "organization": {
+      "$ref": "./organization.schema.json"
+    },
+    "faqPage": {
+      "$ref": "./faq-page.schema.json"
+    },
+    "localBusiness": {
+      "$ref": "./local-business.schema.json"
+    },
+    "educationEvent": {
+      "$ref": "./education-event.schema.json"
+    },
+    "breadcrumb": {
+      "$ref": "./breadcrumb.schema.json"
+    },
+    "product": {
+      "$ref": "./product.schema.json"
+    },
+    "article": {
+      "$ref": "./article.schema.json"
+    },
+    "person": {
+      "$ref": "./person.schema.json"
+    }
+  },
+  "additionalProperties": false,
+  "examples": [
+    {
+      "organization": {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "name": "My Company",
+        "url": "https://example.com"
+      },
+      "faqPage": {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": []
+      }
+    }
+  ],
+  "specs": []
+}

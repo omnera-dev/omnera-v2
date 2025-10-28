@@ -1,0 +1,103 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "local-business.schema.json",
+  "title": "Local Business Schema",
+  "description": "Schema.org LocalBusiness structured data",
+  "type": "object",
+  "properties": {
+    "@context": {
+      "type": "string",
+      "const": "https://schema.org"
+    },
+    "@type": {
+      "type": "string",
+      "const": "LocalBusiness"
+    },
+    "name": {
+      "type": "string",
+      "description": "Business name"
+    },
+    "description": {
+      "type": "string",
+      "description": "Business description"
+    },
+    "url": {
+      "type": "string",
+      "format": "uri"
+    },
+    "logo": {
+      "type": "string",
+      "format": "uri"
+    },
+    "image": {
+      "oneOf": [
+        { "type": "string", "format": "uri" },
+        { "type": "array", "items": { "type": "string", "format": "uri" } }
+      ]
+    },
+    "email": {
+      "type": "string",
+      "format": "email"
+    },
+    "telephone": {
+      "type": "string"
+    },
+    "priceRange": {
+      "type": "string",
+      "description": "Price range (e.g., '$-$$$$')"
+    },
+    "address": {
+      "$ref": "./postal-address.schema.json"
+    },
+    "geo": {
+      "type": "object",
+      "properties": {
+        "@type": {
+          "const": "GeoCoordinates"
+        },
+        "latitude": {
+          "type": "string"
+        },
+        "longitude": {
+          "type": "string"
+        }
+      }
+    },
+    "sameAs": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "format": "uri"
+      }
+    },
+    "openingHoursSpecification": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "@type": {
+            "const": "OpeningHoursSpecification"
+          },
+          "dayOfWeek": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
+            }
+          },
+          "opens": {
+            "type": "string",
+            "pattern": "^[0-9]{2}:[0-9]{2}$"
+          },
+          "closes": {
+            "type": "string",
+            "pattern": "^[0-9]{2}:[0-9]{2}$"
+          }
+        }
+      }
+    }
+  },
+  "required": ["@context", "@type", "name"],
+  "additionalProperties": false,
+  "specs": []
+}

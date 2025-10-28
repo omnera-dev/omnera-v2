@@ -1,0 +1,72 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "faq-page.schema.json",
+  "title": "FAQ Page Schema",
+  "description": "Schema.org FAQPage structured data",
+  "type": "object",
+  "properties": {
+    "@context": {
+      "type": "string",
+      "const": "https://schema.org",
+      "description": "Schema.org context"
+    },
+    "@type": {
+      "type": "string",
+      "const": "FAQPage",
+      "description": "Schema.org type"
+    },
+    "mainEntity": {
+      "type": "array",
+      "description": "Array of questions and answers",
+      "items": {
+        "type": "object",
+        "properties": {
+          "@type": {
+            "type": "string",
+            "const": "Question",
+            "description": "Schema.org Question type"
+          },
+          "name": {
+            "type": "string",
+            "description": "The question text"
+          },
+          "acceptedAnswer": {
+            "type": "object",
+            "properties": {
+              "@type": {
+                "type": "string",
+                "const": "Answer",
+                "description": "Schema.org Answer type"
+              },
+              "text": {
+                "type": "string",
+                "description": "The answer text"
+              }
+            },
+            "required": ["@type", "text"]
+          }
+        },
+        "required": ["@type", "name", "acceptedAnswer"]
+      }
+    }
+  },
+  "required": ["@context", "@type", "mainEntity"],
+  "additionalProperties": false,
+  "examples": [
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "What is the refund policy?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "We offer a 30-day money-back guarantee on all purchases."
+          }
+        }
+      ]
+    }
+  ],
+  "specs": []
+}

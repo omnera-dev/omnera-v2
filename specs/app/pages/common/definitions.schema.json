@@ -1,0 +1,156 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "definitions.schema.json",
+  "title": "Common Definitions",
+  "description": "Shared type definitions used across page schemas",
+  "definitions": {
+    "nonEmptyString": {
+      "type": "string",
+      "minLength": 1,
+      "description": "A non-empty string value"
+    },
+    "kebabCase": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9]*(-[a-z0-9]+)*$",
+      "description": "Lowercase kebab-case identifier (e.g., 'my-component')"
+    },
+    "variableName": {
+      "type": "string",
+      "pattern": "^[a-zA-Z][a-zA-Z0-9]*$",
+      "description": "Valid variable name (e.g., 'myVariable')"
+    },
+    "variableReference": {
+      "type": "string",
+      "pattern": ".*\\$[a-zA-Z][a-zA-Z0-9]*.*",
+      "description": "String containing variable references (e.g., 'Text with $variable')"
+    },
+    "hexColor": {
+      "type": "string",
+      "pattern": "^#[0-9A-Fa-f]{6}$",
+      "description": "6-digit hex color code (e.g., '#FF0000')"
+    },
+    "url": {
+      "type": "string",
+      "format": "uri",
+      "pattern": "^https?://",
+      "description": "Valid HTTP or HTTPS URL"
+    },
+    "relativePath": {
+      "type": "string",
+      "pattern": "^\\.{1,2}/",
+      "description": "Relative file path (e.g., './public/logo.svg', '../images/hero.jpg')"
+    },
+    "emailAddress": {
+      "type": "string",
+      "format": "email",
+      "description": "Valid email address"
+    },
+    "className": {
+      "type": "string",
+      "description": "Tailwind CSS class names"
+    },
+    "iconName": {
+      "type": "string",
+      "enum": [
+        "arrow-right",
+        "arrow-left",
+        "arrow-up",
+        "arrow-down",
+        "check",
+        "check-circle",
+        "x",
+        "x-circle",
+        "plus",
+        "minus",
+        "search",
+        "filter",
+        "menu",
+        "settings",
+        "user",
+        "users",
+        "heart",
+        "star",
+        "bookmark",
+        "share",
+        "clock",
+        "calendar",
+        "map-pin",
+        "globe",
+        "mail",
+        "phone",
+        "message",
+        "chat",
+        "home",
+        "building",
+        "briefcase",
+        "shopping-cart",
+        "download",
+        "upload",
+        "file",
+        "folder",
+        "lock",
+        "unlock",
+        "shield",
+        "key",
+        "eye",
+        "eye-off",
+        "edit",
+        "trash",
+        "play",
+        "pause",
+        "stop",
+        "skip",
+        "volume",
+        "mic",
+        "camera",
+        "image",
+        "sun",
+        "moon",
+        "cloud",
+        "lightning",
+        "gift",
+        "trophy",
+        "flag",
+        "bell",
+        "help-circle",
+        "info",
+        "alert-circle",
+        "alert-triangle",
+        "chevron-right",
+        "chevron-left",
+        "chevron-up",
+        "chevron-down",
+        "external-link",
+        "link",
+        "code",
+        "terminal",
+        "graduation-cap",
+        "book",
+        "lightbulb",
+        "target",
+        "hand",
+        "vote",
+        "gem",
+        "sprout"
+      ],
+      "description": "Icon name from the icon library"
+    },
+    "dimensions": {
+      "type": "object",
+      "properties": {
+        "width": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "Width in pixels"
+        },
+        "height": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "Height in pixels"
+        }
+      },
+      "required": ["width", "height"]
+    }
+  },
+  "specs": []
+}

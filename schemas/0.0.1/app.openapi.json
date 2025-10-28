@@ -5,9 +5,7 @@
     "version": "0.0.1",
     "description": "REST API specification for Omnera application.\n\n**Generated Schema**: This schema is automatically generated from the runtime implementation. It reflects the currently implemented endpoints and their schemas.\n\n**Design Specs**: Hand-written OpenAPI specs in `docs/specifications/app/` define the complete API design. Comparing this generated schema with the design specs shows implementation progress."
   },
-  "servers": [
-    { "url": "http://localhost:3000", "description": "Development server" }
-  ],
+  "servers": [{ "url": "http://localhost:3000", "description": "Development server" }],
   "tags": [
     {
       "name": "infrastructure",
@@ -64,13 +62,7 @@
           "createdAt": { "type": "string", "default": "Generated at runtime" },
           "updatedAt": { "type": "string" }
         },
-        "required": [
-          "accountId",
-          "providerId",
-          "userId",
-          "createdAt",
-          "updatedAt"
-        ]
+        "required": ["accountId", "providerId", "userId", "createdAt", "updatedAt"]
       },
       "Verification": {
         "type": "object",
@@ -82,13 +74,7 @@
           "createdAt": { "type": "string", "default": "Generated at runtime" },
           "updatedAt": { "type": "string", "default": "Generated at runtime" }
         },
-        "required": [
-          "identifier",
-          "value",
-          "expiresAt",
-          "createdAt",
-          "updatedAt"
-        ]
+        "required": ["identifier", "value", "expiresAt", "createdAt", "updatedAt"]
       }
     },
     "parameters": {},
@@ -266,13 +252,7 @@
                             "format": "date-time"
                           }
                         },
-                        "required": [
-                          "id",
-                          "email",
-                          "emailVerified",
-                          "createdAt",
-                          "updatedAt"
-                        ]
+                        "required": ["id", "email", "emailVerified", "createdAt", "updatedAt"]
                       }
                     }
                   },
@@ -633,14 +613,7 @@
                           "description": "When the user was last updated"
                         }
                       },
-                      "required": [
-                        "id",
-                        "email",
-                        "name",
-                        "emailVerified",
-                        "createdAt",
-                        "updatedAt"
-                      ]
+                      "required": ["id", "email", "name", "emailVerified", "createdAt", "updatedAt"]
                     }
                   },
                   "required": ["user"]
@@ -792,13 +765,7 @@
                         },
                         "updatedAt": { "type": "string", "format": "date-time" }
                       },
-                      "required": [
-                        "id",
-                        "email",
-                        "emailVerified",
-                        "createdAt",
-                        "updatedAt"
-                      ]
+                      "required": ["id", "email", "emailVerified", "createdAt", "updatedAt"]
                     }
                   },
                   "required": ["redirect", "token", "user"]
@@ -1589,14 +1556,7 @@
                           "description": "When the user was last updated"
                         }
                       },
-                      "required": [
-                        "id",
-                        "email",
-                        "name",
-                        "emailVerified",
-                        "createdAt",
-                        "updatedAt"
-                      ]
+                      "required": ["id", "email", "name", "emailVerified", "createdAt", "updatedAt"]
                     }
                   },
                   "required": ["user"]

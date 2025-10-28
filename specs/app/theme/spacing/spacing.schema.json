@@ -1,0 +1,32 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "spacing.schema.json",
+  "title": "Spacing Configuration",
+  "description": "Spacing design tokens for consistent layout",
+  "type": "object",
+  "patternProperties": {
+    "^[a-zA-Z][a-zA-Z0-9]*$": {
+      "type": "string",
+      "description": "Spacing value (can be Tailwind classes or CSS values)"
+    }
+  },
+  "additionalProperties": false,
+  "examples": [
+    {
+      "section": "py-16 sm:py-20",
+      "container": "max-w-7xl mx-auto px-4",
+      "containerSmall": "max-w-4xl mx-auto px-4",
+      "containerXSmall": "max-w-2xl mx-auto px-4",
+      "gap": "gap-6",
+      "gapSmall": "gap-4",
+      "gapLarge": "gap-8",
+      "padding": "p-6",
+      "paddingSmall": "p-4",
+      "paddingLarge": "p-8",
+      "margin": "m-6",
+      "marginSmall": "m-4",
+      "marginLarge": "m-8"
+    }
+  ],
+  "specs": []
+}

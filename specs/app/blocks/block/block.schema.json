@@ -1,0 +1,64 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "block.schema.json",
+  "title": "Block Template",
+  "description": "A reusable UI component template with variable placeholders",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9-]*$",
+      "description": "Unique block identifier in kebab-case",
+      "examples": ["icon-badge", "section-header", "feature-card"]
+    },
+    "type": {
+      "type": "string",
+      "description": "Component type",
+      "examples": ["container", "flex", "grid", "card", "text", "button"]
+    },
+    "props": {
+      "$ref": "../common/block-props.schema.json"
+    },
+    "children": {
+      "$ref": "../common/block-children.schema.json"
+    },
+    "content": {
+      "type": "string",
+      "description": "Text content (may contain $variable references)"
+    }
+  },
+  "required": ["name", "type"],
+  "additionalProperties": false,
+  "examples": [
+    {
+      "name": "simple-text",
+      "type": "text",
+      "props": {
+        "className": "text-$color text-lg"
+      },
+      "content": "$message"
+    },
+    {
+      "name": "feature-list-item",
+      "type": "flex",
+      "props": {
+        "align": "start",
+        "gap": 3
+      },
+      "children": [
+        {
+          "type": "icon",
+          "props": {
+            "name": "$icon",
+            "color": "$iconColor"
+          }
+        },
+        {
+          "type": "text",
+          "content": "$text"
+        }
+      ]
+    }
+  ],
+  "specs": []
+}

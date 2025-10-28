@@ -1,0 +1,44 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "layout.schema.json",
+  "title": "Page Layout",
+  "description": "Global layout configuration including banner, navigation, and footer",
+  "type": "object",
+  "properties": {
+    "banner": {
+      "$ref": "./banner/banner.schema.json"
+    },
+    "navigation": {
+      "$ref": "./navigation/navigation.schema.json"
+    },
+    "footer": {
+      "$ref": "./footer/footer.schema.json"
+    },
+    "sidebar": {
+      "$ref": "./sidebar/sidebar.schema.json"
+    }
+  },
+  "additionalProperties": false,
+  "examples": [
+    {
+      "banner": {
+        "enabled": true,
+        "gradient": "linear-gradient(90deg, #FF6B6B 0%, #4ECDC4 100%)",
+        "text": "Limited time offer - 50% off!"
+      },
+      "navigation": {
+        "logo": "./logo.svg",
+        "links": {
+          "desktop": [
+            { "label": "Home", "href": "/" },
+            { "label": "About", "href": "/about" }
+          ]
+        }
+      },
+      "footer": {
+        "enabled": true
+      }
+    }
+  ],
+  "specs": []
+}

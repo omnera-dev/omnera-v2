@@ -1,0 +1,48 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "language-config.schema.json",
+  "title": "Language Configuration",
+  "description": "Configuration for a single supported language",
+  "type": "object",
+  "properties": {
+    "code": {
+      "type": "string",
+      "pattern": "^[a-z]{2}(-[A-Z]{2})?$",
+      "description": "Language code (ISO 639-1 with optional country)",
+      "examples": ["en-US", "fr-FR", "es-ES", "ar-SA"]
+    },
+    "label": {
+      "type": "string",
+      "description": "Human-readable language name",
+      "examples": ["English", "Français", "Español", "العربية"]
+    },
+    "direction": {
+      "type": "string",
+      "enum": ["ltr", "rtl"],
+      "default": "ltr",
+      "description": "Text direction (left-to-right or right-to-left)"
+    },
+    "flag": {
+      "type": "string",
+      "description": "Flag emoji or icon path",
+      "examples": ["🇺🇸", "🇫🇷", "🇪🇸", "/flags/us.svg"]
+    }
+  },
+  "required": ["code", "label"],
+  "additionalProperties": false,
+  "examples": [
+    {
+      "code": "en-US",
+      "label": "English",
+      "direction": "ltr",
+      "flag": "🇺🇸"
+    },
+    {
+      "code": "ar-SA",
+      "label": "العربية",
+      "direction": "rtl",
+      "flag": "🇸🇦"
+    }
+  ],
+  "specs": []
+}

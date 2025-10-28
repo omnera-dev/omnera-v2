@@ -1,0 +1,85 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "fonts.schema.json",
+  "title": "Font Configuration",
+  "description": "Typography design tokens for font families and styles",
+  "type": "object",
+  "patternProperties": {
+    "^[a-zA-Z]+$": {
+      "type": "object",
+      "properties": {
+        "family": {
+          "type": "string",
+          "description": "Primary font family name"
+        },
+        "fallback": {
+          "type": "string",
+          "description": "Fallback font stack"
+        },
+        "weights": {
+          "type": "array",
+          "items": {
+            "type": "integer",
+            "enum": [100, 200, 300, 400, 500, 600, 700, 800, 900]
+          },
+          "description": "Available font weights"
+        },
+        "style": {
+          "type": "string",
+          "enum": ["normal", "italic", "oblique"],
+          "default": "normal",
+          "description": "Font style"
+        },
+        "size": {
+          "type": "string",
+          "description": "Default font size"
+        },
+        "lineHeight": {
+          "type": "string",
+          "description": "Default line height"
+        },
+        "letterSpacing": {
+          "type": "string",
+          "description": "Letter spacing"
+        },
+        "transform": {
+          "type": "string",
+          "enum": ["none", "uppercase", "lowercase", "capitalize"],
+          "description": "Text transformation"
+        },
+        "url": {
+          "type": "string",
+          "format": "uri",
+          "description": "Font file URL or Google Fonts URL"
+        }
+      },
+      "required": ["family"],
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false,
+  "examples": [
+    {
+      "title": {
+        "family": "Bely Display",
+        "fallback": "Georgia, serif",
+        "weights": [400, 700],
+        "transform": "lowercase",
+        "letterSpacing": "0.05em"
+      },
+      "body": {
+        "family": "Inter",
+        "fallback": "system-ui, sans-serif",
+        "weights": [300, 400, 500, 600, 700],
+        "size": "16px",
+        "lineHeight": "1.5"
+      },
+      "mono": {
+        "family": "JetBrains Mono",
+        "fallback": "monospace",
+        "weights": [400, 700]
+      }
+    }
+  ],
+  "specs": []
+}

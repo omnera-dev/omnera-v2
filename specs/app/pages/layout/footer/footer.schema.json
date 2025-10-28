@@ -1,0 +1,167 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "footer.schema.json",
+  "title": "Footer Configuration",
+  "description": "Footer layout and content configuration",
+  "type": "object",
+  "properties": {
+    "enabled": {
+      "type": "boolean",
+      "default": true,
+      "description": "Whether to show the footer"
+    },
+    "logo": {
+      "type": "string",
+      "description": "Footer logo path"
+    },
+    "description": {
+      "type": "string",
+      "description": "Company description or tagline"
+    },
+    "columns": {
+      "type": "array",
+      "description": "Footer content columns",
+      "items": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "description": "Column heading"
+          },
+          "links": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "label": { "type": "string" },
+                "href": { "type": "string" },
+                "target": {
+                  "type": "string",
+                  "enum": ["_self", "_blank"],
+                  "default": "_self"
+                }
+              },
+              "required": ["label", "href"]
+            }
+          }
+        },
+        "required": ["title", "links"]
+      }
+    },
+    "social": {
+      "type": "object",
+      "properties": {
+        "title": {
+          "type": "string",
+          "default": "Follow Us"
+        },
+        "links": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "platform": {
+                "type": "string",
+                "enum": [
+                  "facebook",
+                  "twitter",
+                  "instagram",
+                  "linkedin",
+                  "youtube",
+                  "github",
+                  "tiktok"
+                ]
+              },
+              "url": {
+                "type": "string",
+                "format": "uri"
+              },
+              "icon": {
+                "type": "string",
+                "description": "Custom icon name if different from platform"
+              }
+            },
+            "required": ["platform", "url"]
+          }
+        }
+      }
+    },
+    "newsletter": {
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "default": false
+        },
+        "title": {
+          "type": "string",
+          "default": "Subscribe to our newsletter"
+        },
+        "description": {
+          "type": "string"
+        },
+        "placeholder": {
+          "type": "string",
+          "default": "Enter your email"
+        },
+        "buttonText": {
+          "type": "string",
+          "default": "Subscribe"
+        }
+      }
+    },
+    "copyright": {
+      "type": "string",
+      "description": "Copyright text"
+    },
+    "legal": {
+      "type": "array",
+      "description": "Legal links",
+      "items": {
+        "type": "object",
+        "properties": {
+          "label": { "type": "string" },
+          "href": { "type": "string" }
+        },
+        "required": ["label", "href"]
+      }
+    }
+  },
+  "required": ["enabled"],
+  "additionalProperties": false,
+  "examples": [
+    {
+      "enabled": true,
+      "logo": "./logo-footer.svg",
+      "description": "Building the future of web applications",
+      "columns": [
+        {
+          "title": "Product",
+          "links": [
+            { "label": "Features", "href": "/features" },
+            { "label": "Pricing", "href": "/pricing" }
+          ]
+        },
+        {
+          "title": "Company",
+          "links": [
+            { "label": "About", "href": "/about" },
+            { "label": "Blog", "href": "/blog" }
+          ]
+        }
+      ],
+      "social": {
+        "links": [
+          { "platform": "twitter", "url": "https://twitter.com/company" },
+          { "platform": "github", "url": "https://github.com/company" }
+        ]
+      },
+      "copyright": "© 2024 Company Inc. All rights reserved.",
+      "legal": [
+        { "label": "Privacy Policy", "href": "/privacy" },
+        { "label": "Terms of Service", "href": "/terms" }
+      ]
+    }
+  ],
+  "specs": []
+}

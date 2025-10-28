@@ -1,0 +1,71 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "banner.schema.json",
+  "title": "Banner Configuration",
+  "description": "Top banner/announcement bar configuration",
+  "type": "object",
+  "properties": {
+    "enabled": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether to show the banner"
+    },
+    "text": {
+      "type": "string",
+      "description": "Banner text content"
+    },
+    "link": {
+      "type": "object",
+      "properties": {
+        "href": {
+          "type": "string",
+          "description": "Link URL"
+        },
+        "label": {
+          "type": "string",
+          "description": "Link text"
+        }
+      },
+      "required": ["href", "label"]
+    },
+    "gradient": {
+      "type": "string",
+      "description": "CSS gradient background"
+    },
+    "backgroundColor": {
+      "type": "string",
+      "pattern": "^#[0-9A-Fa-f]{6}$",
+      "description": "Solid background color"
+    },
+    "textColor": {
+      "type": "string",
+      "pattern": "^#[0-9A-Fa-f]{6}$",
+      "description": "Text color"
+    },
+    "dismissible": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether users can dismiss the banner"
+    },
+    "sticky": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether the banner sticks to the top on scroll"
+    }
+  },
+  "required": ["enabled"],
+  "additionalProperties": false,
+  "examples": [
+    {
+      "enabled": true,
+      "text": "🎉 New feature available!",
+      "link": {
+        "href": "/features",
+        "label": "Learn more"
+      },
+      "gradient": "linear-gradient(90deg, #667eea 0%, #764ba2 100%)",
+      "dismissible": true
+    }
+  ],
+  "specs": []
+}

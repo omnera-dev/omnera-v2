@@ -1,0 +1,25 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "breakpoints.schema.json",
+  "title": "Breakpoints",
+  "description": "Responsive design breakpoints",
+  "type": "object",
+  "patternProperties": {
+    "^[a-z]+$": {
+      "type": "string",
+      "pattern": "^[0-9]+px$",
+      "description": "Breakpoint value in pixels"
+    }
+  },
+  "additionalProperties": false,
+  "examples": [
+    {
+      "sm": "640px",
+      "md": "768px",
+      "lg": "1024px",
+      "xl": "1280px",
+      "2xl": "1536px"
+    }
+  ],
+  "specs": []
+}

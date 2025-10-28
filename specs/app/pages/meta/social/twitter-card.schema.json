@@ -1,0 +1,93 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "twitter-card.schema.json",
+  "title": "Twitter Card Metadata",
+  "description": "Twitter Card metadata for rich Twitter/X sharing",
+  "type": "object",
+  "properties": {
+    "card": {
+      "type": "string",
+      "enum": ["summary", "summary_large_image", "app", "player"],
+      "default": "summary_large_image",
+      "description": "Type of Twitter Card"
+    },
+    "title": {
+      "type": "string",
+      "maxLength": 70,
+      "description": "Twitter Card title"
+    },
+    "description": {
+      "type": "string",
+      "maxLength": 200,
+      "description": "Twitter Card description"
+    },
+    "image": {
+      "type": "string",
+      "format": "uri",
+      "description": "Image URL (min 144x144px for summary, 300x157px for large)"
+    },
+    "imageAlt": {
+      "type": "string",
+      "maxLength": 420,
+      "description": "Alternative text for the image"
+    },
+    "site": {
+      "type": "string",
+      "pattern": "^@[A-Za-z0-9_]+$",
+      "description": "Twitter @username of website",
+      "examples": ["@mysite"]
+    },
+    "creator": {
+      "type": "string",
+      "pattern": "^@[A-Za-z0-9_]+$",
+      "description": "Twitter @username of content creator",
+      "examples": ["@johndoe"]
+    },
+    "player": {
+      "type": "string",
+      "format": "uri",
+      "description": "HTTPS URL to video player (for player cards)"
+    },
+    "playerWidth": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "Width of video player in pixels"
+    },
+    "playerHeight": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "Height of video player in pixels"
+    },
+    "appName": {
+      "type": "object",
+      "properties": {
+        "iPhone": { "type": "string" },
+        "iPad": { "type": "string" },
+        "googlePlay": { "type": "string" }
+      },
+      "description": "Name of app (for app cards)"
+    },
+    "appId": {
+      "type": "object",
+      "properties": {
+        "iPhone": { "type": "string" },
+        "iPad": { "type": "string" },
+        "googlePlay": { "type": "string" }
+      },
+      "description": "App ID in respective stores"
+    }
+  },
+  "required": ["card"],
+  "additionalProperties": false,
+  "examples": [
+    {
+      "card": "summary_large_image",
+      "title": "Atelier de Consentement Strasbourg",
+      "description": "3h de formation pratique pour apprendre à dire non",
+      "image": "https://example.com/twitter-card.png",
+      "site": "@mysite",
+      "creator": "@johndoe"
+    }
+  ],
+  "specs": []
+}

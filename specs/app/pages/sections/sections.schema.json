@@ -1,0 +1,112 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "sections.schema.json",
+  "title": "Page Sections",
+  "description": "Array of page content sections",
+  "type": "array",
+  "items": {
+    "title": "Section",
+    "description": "A page section that can be either a component or a block reference",
+    "oneOf": [
+      {
+        "type": "object",
+        "description": "Direct component definition",
+        "properties": {
+          "type": {
+            "type": "string",
+            "description": "Component type",
+            "enum": [
+              "section",
+              "container",
+              "flex",
+              "grid",
+              "card",
+              "text",
+              "icon",
+              "image",
+              "button",
+              "link",
+              "timeline",
+              "accordion",
+              "badge",
+              "customHTML",
+              "video",
+              "audio",
+              "iframe",
+              "form",
+              "input"
+            ]
+          },
+          "props": {
+            "$ref": "../common/props.schema.json"
+          },
+          "children": {
+            "type": "array",
+            "items": {
+              "$ref": "#/items"
+            }
+          },
+          "content": {
+            "type": "string",
+            "description": "Text content for text components"
+          },
+          "interactions": {
+            "$ref": "../common/interactions/interactions.schema.json",
+            "description": "Interactive behaviors (hover, click, scroll, entrance)"
+          },
+          "responsive": {
+            "$ref": "../common/responsive.schema.json",
+            "description": "Breakpoint-specific overrides for responsive design"
+          },
+          "i18n": {
+            "$ref": "../common/i18n.schema.json",
+            "description": "Multi-language translations"
+          }
+        },
+        "required": ["type"],
+        "additionalProperties": false
+      },
+      {
+        "$ref": "../../blocks/common/block-reference.schema.json"
+      }
+    ]
+  },
+  "examples": [
+    [
+      {
+        "type": "section",
+        "props": {
+          "id": "hero",
+          "className": "min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100"
+        },
+        "children": [
+          {
+            "type": "container",
+            "props": {
+              "maxWidth": "max-w-7xl"
+            },
+            "children": [
+              {
+                "type": "text",
+                "props": {
+                  "level": "h1",
+                  "className": "text-6xl font-bold"
+                },
+                "content": "Welcome to Our Platform"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "$ref": "section-header",
+        "vars": {
+          "title": "Our Features",
+          "subtitle": "Everything you need to succeed",
+          "titleColor": "blue-600"
+        }
+      }
+    ]
+  ],
+  "specs": []
+}

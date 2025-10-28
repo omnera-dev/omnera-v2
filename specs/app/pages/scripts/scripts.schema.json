@@ -1,0 +1,44 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "scripts.schema.json",
+  "title": "Client Scripts Configuration",
+  "description": "Client-side scripts, features, and external dependencies",
+  "type": "object",
+  "properties": {
+    "features": {
+      "$ref": "./features/features.schema.json"
+    },
+    "externalScripts": {
+      "$ref": "./external-scripts/external-scripts.schema.json"
+    },
+    "inlineScripts": {
+      "$ref": "./inline-scripts/inline-scripts.schema.json"
+    },
+    "config": {
+      "type": "object",
+      "description": "Client-side configuration data",
+      "additionalProperties": true
+    }
+  },
+  "additionalProperties": false,
+  "examples": [
+    {
+      "features": {
+        "darkMode": true,
+        "animations": true,
+        "analytics": false
+      },
+      "externalScripts": [
+        {
+          "src": "https://cdn.example.com/script.js",
+          "async": true
+        }
+      ],
+      "config": {
+        "apiUrl": "https://api.example.com",
+        "environment": "production"
+      }
+    }
+  ],
+  "specs": []
+}

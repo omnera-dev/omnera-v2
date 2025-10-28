@@ -1,0 +1,105 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "navigation.schema.json",
+  "title": "Navigation Configuration",
+  "description": "Main navigation configuration including logo, links, and CTA",
+  "type": "object",
+  "properties": {
+    "logo": {
+      "type": "string",
+      "description": "Path to logo image"
+    },
+    "logoMobile": {
+      "type": "string",
+      "description": "Alternative logo for mobile devices"
+    },
+    "logoAlt": {
+      "type": "string",
+      "description": "Logo alt text for accessibility"
+    },
+    "sticky": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether navigation sticks to top on scroll"
+    },
+    "transparent": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether navigation has transparent background initially"
+    },
+    "links": {
+      "type": "object",
+      "properties": {
+        "desktop": {
+          "$ref": "./nav-links.schema.json"
+        },
+        "mobile": {
+          "$ref": "./nav-links.schema.json"
+        }
+      },
+      "required": ["desktop"],
+      "additionalProperties": false
+    },
+    "cta": {
+      "$ref": "./cta-button.schema.json"
+    },
+    "search": {
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "default": false
+        },
+        "placeholder": {
+          "type": "string",
+          "default": "Search..."
+        }
+      }
+    },
+    "user": {
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "default": false,
+          "description": "Show user account menu"
+        },
+        "loginUrl": {
+          "type": "string",
+          "description": "Login page URL"
+        },
+        "signupUrl": {
+          "type": "string",
+          "description": "Signup page URL"
+        }
+      }
+    }
+  },
+  "required": ["logo"],
+  "additionalProperties": false,
+  "examples": [
+    {
+      "logo": "./public/logo.svg",
+      "logoMobile": "./public/logo-mobile.svg",
+      "logoAlt": "Company Logo",
+      "sticky": true,
+      "links": {
+        "desktop": [
+          { "label": "Products", "href": "/products" },
+          { "label": "Pricing", "href": "/pricing" },
+          { "label": "About", "href": "/about" }
+        ],
+        "mobile": [
+          { "label": "Home", "href": "/" },
+          { "label": "Products", "href": "/products" }
+        ]
+      },
+      "cta": {
+        "text": "Get Started",
+        "href": "/signup",
+        "variant": "primary"
+      }
+    }
+  ],
+  "specs": []
+}

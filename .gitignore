@@ -53,3 +53,5 @@ drizzle-kit.log
 
 # Keep generated migrations
 !drizzle/*.sql
+
+__PAGES_WIP__/

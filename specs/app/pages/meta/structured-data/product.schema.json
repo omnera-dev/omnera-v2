@@ -1,0 +1,85 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "product.schema.json",
+  "title": "Product Schema",
+  "description": "Schema.org Product structured data",
+  "type": "object",
+  "properties": {
+    "@context": {
+      "type": "string",
+      "const": "https://schema.org"
+    },
+    "@type": {
+      "type": "string",
+      "const": "Product"
+    },
+    "name": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "image": {
+      "oneOf": [
+        { "type": "string", "format": "uri" },
+        { "type": "array", "items": { "type": "string", "format": "uri" } }
+      ]
+    },
+    "brand": {
+      "type": "object",
+      "properties": {
+        "@type": {
+          "const": "Brand"
+        },
+        "name": {
+          "type": "string"
+        }
+      }
+    },
+    "sku": {
+      "type": "string"
+    },
+    "gtin": {
+      "type": "string"
+    },
+    "offers": {
+      "type": "object",
+      "properties": {
+        "@type": {
+          "const": "Offer"
+        },
+        "price": {
+          "type": ["string", "number"]
+        },
+        "priceCurrency": {
+          "type": "string",
+          "pattern": "^[A-Z]{3}$"
+        },
+        "availability": {
+          "type": "string"
+        },
+        "url": {
+          "type": "string",
+          "format": "uri"
+        }
+      }
+    },
+    "aggregateRating": {
+      "type": "object",
+      "properties": {
+        "@type": {
+          "const": "AggregateRating"
+        },
+        "ratingValue": {
+          "type": "number"
+        },
+        "reviewCount": {
+          "type": "integer"
+        }
+      }
+    }
+  },
+  "required": ["@context", "@type", "name"],
+  "additionalProperties": false,
+  "specs": []
+}

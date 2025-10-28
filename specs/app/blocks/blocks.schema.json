@@ -1,0 +1,51 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "blocks.schema.json",
+  "title": "Reusable Blocks",
+  "description": "Array of reusable UI component templates with variable substitution for use across pages",
+  "type": "array",
+  "items": {
+    "$ref": "./block/block.schema.json"
+  },
+  "examples": [
+    [
+      {
+        "name": "icon-badge",
+        "type": "badge",
+        "props": { "color": "$color" },
+        "children": [
+          {
+            "type": "icon",
+            "props": { "name": "$icon", "size": 4 }
+          },
+          {
+            "type": "text",
+            "props": { "level": "span" },
+            "content": "$text"
+          }
+        ]
+      },
+      {
+        "name": "section-header",
+        "type": "container",
+        "props": { "className": "text-center mb-12" },
+        "children": [
+          {
+            "type": "text",
+            "props": {
+              "level": "h2",
+              "className": "text-$titleColor text-4xl mb-4"
+            },
+            "content": "$title"
+          },
+          {
+            "type": "text",
+            "props": { "level": "p" },
+            "content": "$subtitle"
+          }
+        ]
+      }
+    ]
+  ],
+  "specs": []
+}

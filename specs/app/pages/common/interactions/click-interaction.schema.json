@@ -1,0 +1,60 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "click-interaction.schema.json",
+  "title": "Click Interaction",
+  "description": "Actions triggered when component is clicked",
+  "type": "object",
+  "properties": {
+    "animation": {
+      "type": "string",
+      "description": "Animation to trigger",
+      "enum": ["pulse", "bounce", "shake", "flash", "ripple", "none"]
+    },
+    "navigate": {
+      "type": "string",
+      "description": "Path to navigate to",
+      "examples": ["/contact", "/pricing", "#section-id"]
+    },
+    "openUrl": {
+      "type": "string",
+      "format": "uri",
+      "description": "External URL to open"
+    },
+    "openInNewTab": {
+      "type": "boolean",
+      "default": false,
+      "description": "Open link in new tab"
+    },
+    "scrollTo": {
+      "type": "string",
+      "description": "Element ID to scroll to",
+      "pattern": "^#[a-zA-Z][a-zA-Z0-9-]*$"
+    },
+    "toggleElement": {
+      "type": "string",
+      "description": "Element ID to show/hide",
+      "pattern": "^#[a-zA-Z][a-zA-Z0-9-]*$"
+    },
+    "submitForm": {
+      "type": "string",
+      "description": "Form ID to submit",
+      "pattern": "^#[a-zA-Z][a-zA-Z0-9-]*$"
+    }
+  },
+  "additionalProperties": false,
+  "examples": [
+    {
+      "animation": "pulse",
+      "navigate": "/contact"
+    },
+    {
+      "animation": "ripple",
+      "scrollTo": "#pricing-section"
+    },
+    {
+      "openUrl": "https://example.com",
+      "openInNewTab": true
+    }
+  ],
+  "specs": []
+}

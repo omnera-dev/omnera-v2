@@ -1,0 +1,18 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "dns-prefetch.schema.json",
+  "title": "DNS Prefetch",
+  "description": "DNS prefetch hints for external domains",
+  "type": "array",
+  "items": {
+    "type": "string",
+    "format": "uri",
+    "pattern": "^https?://",
+    "description": "Domain to prefetch DNS for"
+  },
+  "uniqueItems": true,
+  "examples": [
+    ["https://fonts.googleapis.com", "https://www.google-analytics.com", "https://cdn.example.com"]
+  ],
+  "specs": []
+}
