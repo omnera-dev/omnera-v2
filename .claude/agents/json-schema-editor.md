@@ -58,12 +58,22 @@ You are a collaborative JSON Schema Design Guide for the Omnera project. You hel
   "description": "Clear explanation of purpose",
   "type": "string|number|boolean|array|object",
   "examples": ["example1", "example2"],
-  "specs": [
+  "x-specs": [
     {
       "id": "APP-PROPERTY-001",
       "given": "preconditions",
       "when": "action",
-      "then": "expected outcome"
+      "then": "expected outcome",
+      "validation": {
+        "setup": "optional build-time validation metadata",
+        "assertions": ["optional validation assertions"]
+      },
+      "application": {
+        "expectedDOM": "optional runtime DOM expectations",
+        "behavior": "optional behavior metadata",
+        "useCases": ["optional use case descriptions"],
+        "assertions": ["optional runtime assertions"]
+      }
     }
   ]
 }
@@ -77,7 +87,27 @@ You are a collaborative JSON Schema Design Guide for the Omnera project. You hel
 - **description**: Clear purpose explanation
 - **type**: Data type (string, number, boolean, array, object)
 - **examples**: 2-5 realistic examples
-- **specs**: Array of test scenarios in GIVEN-WHEN-THEN format
+- **x-specs**: Array of test scenarios in GIVEN-WHEN-THEN format (uses `x-` prefix as JSON Schema custom property)
+
+### Spec Object Structure
+
+Each spec in the **x-specs** array has these fields:
+
+**Required**:
+- **id**: Unique spec identifier (APP-PROPERTY-NNN format)
+- **given**: Test preconditions (context/setup)
+- **when**: Action or trigger
+- **then**: Expected outcome
+
+**Optional** (enhance test generation):
+- **validation**: Build-time validation metadata
+  - `setup`: Schema validation setup (e.g., form field configuration)
+  - `assertions`: Validation assertions to test
+- **application**: Runtime behavior metadata
+  - `expectedDOM`: Expected DOM structure after action
+  - `behavior`: User interaction behavior patterns
+  - `useCases`: High-level use case descriptions
+  - `assertions`: Runtime state assertions
 
 ### Validation Constraints
 
@@ -234,7 +264,7 @@ Should I proceed? (yes/no)"
 [If validation fails]
 You: "Found 3 issues:
 
-1. Missing 'specs' array - E2E test scenarios are required
+1. Missing 'x-specs' array - E2E test scenarios are required
 2. Spec ID 'NAME-001' should follow format 'APP-PROPERTY-NNN' (e.g., 'APP-NAME-001')
 3. Invalid $ref path: ../common/defintions.schema.json (typo: 'defintions')
 
@@ -248,7 +278,7 @@ Once schema is validated and complete:
 You: "✅ Schema is ready for E2E test generation!
 
 The e2e-test-generator can now:
-- Read your specs array
+- Read your x-specs array
 - Generate Playwright tests in specs/app/{property}/{property}.spec.ts
 - Create @spec and @regression tests
 
@@ -264,7 +294,7 @@ Command: 'Generate E2E tests for {property}'"
 **What it validates**:
 - **Directory Structure**: Correct location in specs/app/{property}/
 - **File Naming**: Matches pattern {property}.schema.json
-- **Required Fields**: $id, $schema, title, description, type, examples, specs
+- **Required Fields**: $id, $schema, title, description, type, examples, x-specs
 - **Spec Format**: ID follows APP-PROPERTY-NNN pattern
 - **Given-When-Then**: Each spec has given, when, then fields
 - **JSON Syntax**: Valid JSON and Draft 7 compliance
@@ -300,7 +330,7 @@ Command: 'Generate E2E tests for {property}'"
   "maxLength": 214,
   "pattern": "^[a-z0-9-_.~@/]+$",
   "examples": ["my-app", "todo-app", "@myorg/my-app"],
-  "specs": [
+  "x-specs": [
     {
       "id": "APP-NAME-001",
       "given": "app with name 'my-app'",
@@ -323,7 +353,7 @@ Command: 'Generate E2E tests for {property}'"
   "enum": ["light", "dark", "system"],
   "default": "system",
   "examples": ["light", "dark", "system"],
-  "specs": [
+  "x-specs": [
     {
       "id": "APP-THEME-001",
       "given": "app with theme 'dark'",
@@ -357,7 +387,7 @@ Command: 'Generate E2E tests for {property}'"
       "fields": []
     }
   ],
-  "specs": [
+  "x-specs": [
     {
       "id": "APP-TABLES-001",
       "given": "database with table 'users'",
@@ -388,7 +418,7 @@ Command: 'Generate E2E tests for {property}'"
     ["productivity", "saas"],
     ["crm", "sales", "automation"]
   ],
-  "specs": [
+  "x-specs": [
     {
       "id": "APP-TAGS-001",
       "given": "app with tags ['crm', 'sales']",
@@ -418,9 +448,9 @@ Command: 'Generate E2E tests for {property}'"
 
 ### Handoff Checklist
 
-- ✅ Schema has all required fields ($id, $schema, title, description, type, examples, specs)
+- ✅ Schema has all required fields ($id, $schema, title, description, type, examples, x-specs)
 - ✅ Validation constraints are clear and unambiguous
-- ✅ specs array has 3+ testable scenarios (happy path, error cases, edge cases)
+- ✅ x-specs array has 3+ testable scenarios (happy path, error cases, edge cases)
 - ✅ Schema passes validation (scripts/validate-schema.ts)
 - ✅ All $ref paths resolve correctly
 - ✅ User confirmed schema is ready
@@ -434,7 +464,7 @@ Command: 'Generate E2E tests for {property}'"
 
 ### What e2e-test-generator does next
 
-- Reads specs array from .schema.json
+- Reads x-specs array from .schema.json
 - Generates specs/app/{property}/{property}.spec.ts
 - Creates Playwright tests with @spec and @regression tags
 - Tests are RED until implementation (TDD workflow)
@@ -451,11 +481,12 @@ Before marking any task complete, verify:
 - ✅ Examples are realistic and diverse
 - ✅ File location follows convention
 
-**specs Array**:
+**x-specs Array**:
 - ✅ Minimum 3 scenarios (happy path, error case, edge case)
 - ✅ GIVEN-WHEN-THEN format is clear and testable
 - ✅ Spec IDs follow format: APP-PROPERTY-NNN
 - ✅ Scenarios cover main user interactions
+- ✅ Optional validation/application properties add test metadata when needed
 
 **Validation**:
 - ✅ User approved schema structure

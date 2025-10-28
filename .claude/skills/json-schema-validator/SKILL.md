@@ -1,7 +1,7 @@
 ---
 name: json-schema-validator
 description: |
-  Validates JSON Schema (Draft 7) and OpenAPI 3.1.0 files for structure compliance, spec ID format, Triple-Documentation Pattern completeness, and $ref resolution. Checks specs arrays, validates spec IDs follow PREFIX-ENTITY-NNN format, and verifies x-business-rules and x-user-stories. Use when user requests "validate schema", "check JSON Schema", "verify specs", or mentions schema compliance checks.
+  Validates JSON Schema (Draft 7) and OpenAPI 3.1.0 files for structure compliance, spec ID format, and $ref resolution. Checks x-specs arrays, validates spec IDs follow PREFIX-ENTITY-NNN format, and verifies spec object structure (given-when-then + optional validation/application properties). Use when user requests "validate schema", "check JSON Schema", "verify specs", or mentions schema compliance checks.
 allowed-tools: [Read, Bash, Grep]
 ---
 
@@ -36,15 +36,14 @@ You validate JSON Schema (Draft 7) and OpenAPI 3.1.0 specification files for str
   - `title` field exists and is descriptive
   - `type` field is valid
 
-- **Triple-Documentation Pattern**
+- **Documentation Pattern**
   - `description` field exists and is comprehensive
   - `examples` array exists with at least one example
-  - `x-business-rules` array exists with business context
-  - `x-user-stories` array exists with user scenarios
 
-- **Specs Array** (if present)
-  - `specs` is an array
-  - Each spec has: `id`, `given`, `when`, `then`
+- **x-specs Array** (custom property for test specifications)
+  - `x-specs` is an array (uses `x-` prefix per JSON Schema spec)
+  - Each spec has required fields: `id`, `given`, `when`, `then`
+  - Each spec may have optional fields: `validation`, `application`
   - Spec IDs follow format: `{PREFIX}-{ENTITY}-{NNN}`
     - PREFIX: APP, ADMIN, or API (based on file location)
     - ENTITY: Uppercase with optional hyphens (e.g., NAME, FIELD-TYPE)
@@ -74,7 +73,7 @@ You validate JSON Schema (Draft 7) and OpenAPI 3.1.0 specification files for str
   - `paths` object exists
 
 - **Operation Specs**
-  - Each operation has `specs` array in `x-specs` extension
+  - Each operation has `x-specs` array with test specifications
   - Spec IDs follow format: `API-{RESOURCE}-{NNN}`
   - All operations documented with GIVEN-WHEN-THEN
 
@@ -82,7 +81,7 @@ You validate JSON Schema (Draft 7) and OpenAPI 3.1.0 specification files for str
   - Request bodies reference valid schemas
   - Response schemas are valid
   - All components/schemas are well-formed
-  - Triple-Documentation Pattern in schema definitions
+  - Documentation (description, examples) in schema definitions
 
 - **$ref Resolution**
   - All schema references resolve
@@ -125,18 +124,12 @@ if (!parsed.title) {
   errors.push('Missing title field')
 }
 
-// Check Triple-Documentation Pattern
+// Check Documentation
 if (!parsed.description || parsed.description.length < 10) {
   errors.push('Missing or insufficient description')
 }
 if (!parsed.examples || parsed.examples.length === 0) {
   warnings.push('No examples provided')
-}
-if (!parsed['x-business-rules'] || parsed['x-business-rules'].length === 0) {
-  errors.push('Missing x-business-rules')
-}
-if (!parsed['x-user-stories'] || parsed['x-user-stories'].length === 0) {
-  errors.push('Missing x-user-stories')
 }
 ```
 
@@ -157,13 +150,13 @@ if (!parsed.paths || Object.keys(parsed.paths).length === 0) {
 }
 ```
 
-### Step 3: Validate Specs Array
+### Step 3: Validate x-specs Array
 
 ```typescript
-if (parsed.specs && Array.isArray(parsed.specs)) {
+if (parsed['x-specs'] && Array.isArray(parsed['x-specs'])) {
   const specIds = new Set()
 
-  for (const [index, spec] of parsed.specs.entries()) {
+  for (const [index, spec] of parsed['x-specs'].entries()) {
     // Check required fields
     if (!spec.id) {
       errors.push(`Spec at index ${index}: missing id`)
@@ -249,7 +242,7 @@ const report = {
   summary: {
     errors: errors.length,
     warnings: warnings.length,
-    specsValidated: parsed.specs?.length || 0
+    specsValidated: parsed['x-specs']?.length || 0
   },
   checks: {
     metadata: { status: 'PASS' | 'FAIL', issues: [] },
@@ -269,12 +262,11 @@ const report = {
 - [ ] $id field exists and matches filename
 - [ ] title field is descriptive
 - [ ] type field is valid (string, object, array, etc.)
-- [ ] description is comprehensive (Layer 1)
-- [ ] examples array has at least one example (Layer 1)
-- [ ] x-business-rules explains WHY constraints exist (Layer 2)
-- [ ] x-user-stories provides user scenarios (Layer 3)
-- [ ] specs array structure is valid (if present)
-- [ ] All spec objects have id, given, when, then
+- [ ] description is comprehensive
+- [ ] examples array has at least one example
+- [ ] x-specs array structure is valid (if present)
+- [ ] All spec objects have required fields: id, given, when, then
+- [ ] All spec objects may have optional fields: validation, application
 - [ ] Spec IDs follow PREFIX-ENTITY-NNN format
 - [ ] Spec IDs are globally unique
 - [ ] All $refs resolve correctly
@@ -284,10 +276,10 @@ const report = {
 - [ ] openapi: "3.1.0" specified
 - [ ] info object is complete
 - [ ] paths object exists
-- [ ] Each operation has x-specs with specs array
+- [ ] Each operation has x-specs array with test specifications
 - [ ] Spec IDs follow API-RESOURCE-NNN format
 - [ ] Request/response schemas are valid
-- [ ] All component schemas follow Triple-Documentation Pattern
+- [ ] All component schemas have proper documentation
 - [ ] All $refs resolve correctly
 
 ### Spec ID Format
@@ -321,16 +313,14 @@ const report = {
 - ✅ title is descriptive
 - ✅ type is valid
 
-### Triple-Documentation Pattern
-**Status**: ❌ FAIL
+### Documentation
+**Status**: ✅ PASS
 - ✅ description exists
 - ✅ examples provided
-- ❌ x-business-rules missing
-- ❌ x-user-stories missing
 
-### Specs Array
+### x-specs Array
 **Status**: ❌ FAIL
-- ✅ specs array is valid
+- ✅ x-specs array is valid
 - ✅ All specs have required fields
 - ❌ Spec ID 'app-name-01' doesn't match format (needs 3+ digits)
 
@@ -341,30 +331,8 @@ const report = {
 
 ## Errors
 
-1. **Missing x-business-rules**
-   - Location: Root schema object
-   - Severity: ERROR
-   - Remediation: Add x-business-rules array explaining WHY constraints exist
-   - Example:
-     ```json
-     "x-business-rules": [
-       "Name constraint follows npm package naming for consistency"
-     ]
-     ```
-
-2. **Missing x-user-stories**
-   - Location: Root schema object
-   - Severity: ERROR
-   - Remediation: Add x-user-stories array with user scenarios
-   - Example:
-     ```json
-     "x-user-stories": [
-       "As a user, I want to see the app name in the page title"
-     ]
-     ```
-
-3. **Invalid spec ID format**
-   - Location: specs[0].id
+1. **Invalid spec ID format**
+   - Location: x-specs[0].id
    - Current: "app-name-01"
    - Expected: "APP-NAME-001" (3+ digits)
    - Remediation: Update spec ID to use 3+ digit number
@@ -372,15 +340,15 @@ const report = {
 ## Warnings
 
 1. **Spec ID uses lowercase prefix**
-   - Location: specs[0].id
+   - Location: x-specs[0].id
    - Current: "app-name-001"
    - Recommended: "APP-NAME-001" (uppercase prefix for consistency)
 
 ## Recommendations
 
-1. Complete Triple-Documentation Pattern (add x-business-rules, x-user-stories)
-2. Update spec ID to follow strict format: APP-NAME-001
-3. Consider adding more examples for edge cases
+1. Update spec ID to follow strict format: APP-NAME-001
+2. Consider adding more examples for edge cases
+3. Consider adding validation/application properties to specs for enhanced test generation
 
 ## Next Steps
 

@@ -175,7 +175,7 @@ async function validateJsonSpec(
     // Validate specs array using shared validation
     validateSpecsArray(json, relativePath, 'ADMIN', result, globalSpecIds)
 
-    return json.specs || []
+    return json['x-specs'] || []
   } catch (error) {
     if (error instanceof SyntaxError) {
       result.errors.push({

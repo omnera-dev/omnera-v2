@@ -47,6 +47,16 @@ export interface Spec {
   when: string
   then: string
   title?: string
+  validation?: {
+    setup?: unknown
+    assertions?: string[]
+  }
+  application?: {
+    expectedDOM?: string
+    behavior?: unknown
+    useCases?: string[]
+    assertions?: string[]
+  }
 }
 
 export type SpecPrefix = 'APP' | 'ADMIN' | 'API'
@@ -92,37 +102,37 @@ export function validateSpecsArray(
 
   const obj = content as Record<string, unknown>
 
-  // Check specs array exists
-  if (!('specs' in obj)) {
+  // Check x-specs array exists
+  if (!('x-specs' in obj)) {
     result.errors.push({
       file: filePath,
       type: 'error',
-      message: 'Missing required "specs" array',
+      message: 'Missing required "x-specs" array',
     })
     result.passed = false
     return
   }
 
-  if (!Array.isArray(obj.specs)) {
+  if (!Array.isArray(obj['x-specs'])) {
     result.errors.push({
       file: filePath,
       type: 'error',
-      message: '"specs" must be an array',
+      message: '"x-specs" must be an array',
     })
     result.passed = false
     return
   }
 
-  if (obj.specs.length === 0) {
+  if (obj['x-specs'].length === 0) {
     result.warnings.push({
       file: filePath,
       type: 'warning',
-      message: 'Specs array is empty - no specifications defined',
+      message: 'x-specs array is empty - no specifications defined',
     })
   }
 
   // Validate each spec
-  obj.specs.forEach((spec: unknown, index: number) => {
+  obj['x-specs'].forEach((spec: unknown, index: number) => {
     validateSpec(spec, index, filePath, prefix, result, globalSpecIds)
   })
 }
@@ -446,7 +456,8 @@ export function validateTestTitlesStartWithSpecIds(
 
       if (testTitle) {
         // Extract spec ID from test title (format: SPEC-ID: description)
-        const specIdMatch = testTitle.match(/^([A-Z]+(?:-[A-Z]+)*-\d{3,}):/)
+        // Supports alphanumeric entity names like I18N, L10N, etc.
+        const specIdMatch = testTitle.match(/^([A-Z0-9]+(?:-[A-Z0-9]+)*-\d{3,}):/)
         if (specIdMatch && specIdMatch[1]) {
           foundSpecIds.add(specIdMatch[1])
         }

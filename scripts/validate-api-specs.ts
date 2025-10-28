@@ -406,8 +406,11 @@ async function main() {
 
       // 2. Co-location: Check for matching .spec.ts
       const specs: Spec[] =
-        typeof json === 'object' && json !== null && 'specs' in json && Array.isArray(json.specs)
-          ? json.specs
+        typeof json === 'object' &&
+        json !== null &&
+        'x-specs' in json &&
+        Array.isArray((json as Record<string, unknown>)['x-specs'])
+          ? ((json as Record<string, unknown>)['x-specs'] as Spec[])
           : []
       await validateCoLocation(jsonPath, relativePath, specs, result, stats)
 

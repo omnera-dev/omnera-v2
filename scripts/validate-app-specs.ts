@@ -155,9 +155,9 @@ async function validateSchemaFile(
   const specs =
     typeof content === 'object' &&
     content !== null &&
-    'specs' in content &&
-    Array.isArray((content as Record<string, unknown>).specs)
-      ? ((content as Record<string, unknown>).specs as Spec[])
+    'x-specs' in content &&
+    Array.isArray((content as Record<string, unknown>)['x-specs'])
+      ? ((content as Record<string, unknown>)['x-specs'] as Spec[])
       : []
   await validateTestFileCoLocation(path, relativePath, specs, result)
 
@@ -245,7 +245,7 @@ function validateRootProperties(
   }
 
   const obj = content as Record<string, unknown>
-  const requiredProps = ['title', 'specs']
+  const requiredProps = ['title', 'x-specs']
   const recommendedProps = ['description']
 
   for (const prop of requiredProps) {

@@ -85,7 +85,7 @@ specs/app/
   "maxLength": 214,
   "pattern": "^(?:@[a-z0-9-~][a-z0-9-._~]*\\/)?[a-z0-9-~][a-z0-9-._~]*$",
   "examples": ["my-app", "@org/my-app"],
-  "specs": [
+  "x-specs": [
     {
       "id": "APP-NAME-001",
       "given": "server with app name 'test-app'",
@@ -104,7 +104,7 @@ specs/app/
 - `description`: Business context and purpose
 - Validation rules: `type`, `minLength`, `pattern`, etc.
 - `examples`: Valid example values
-- `specs`: Executable specifications (Given-When-Then format)
+- `x-specs`: Executable specifications (Given-When-Then format, uses `x-` prefix per JSON Schema spec)
 
 ### 2. Complex Nested Schema
 
@@ -148,7 +148,7 @@ specs/app/
     },
     "required": ["id", "name", "fields"]
   },
-  "specs": []
+  "x-specs": []
 }
 ```
 
@@ -191,7 +191,7 @@ tables/
     }
     // ... 29 more field types
   ],
-  "specs": []
+  "x-specs": []
 }
 ```
 
@@ -226,7 +226,7 @@ tables/
     }
   },
   "required": ["type", "id", "name"],
-  "specs": [
+  "x-specs": [
     {
       "id": "EMAIL-FIELD-001",
       "given": "table with email field",
@@ -340,9 +340,9 @@ http-post/
 
 Used only within automations schemas.
 
-## Specs Array Format
+## x-specs Array Format
 
-Every schema file includes a `specs` array containing executable specifications in **Given-When-Then** format.
+Every schema file includes an `x-specs` array (custom property using `x-` prefix per JSON Schema spec) containing executable specifications in **Given-When-Then** format.
 
 ### Spec Object Structure
 
@@ -490,7 +490,7 @@ touch specs/app/{entity-name}/{property2}/{property2}.schema.json
     }
   },
   "required": ["property1"],
-  "specs": []
+  "x-specs": []
 }
 ```
 
@@ -525,7 +525,7 @@ touch specs/app/{entity-name}/{entity-name}-types/{variant-name}/{variant-name}.
     }
   },
   "required": ["type", "id"],
-  "specs": []
+  "x-specs": []
 }
 ```
 
@@ -596,10 +596,10 @@ bun run export:openapi
 This schema structure evolved through several refactoring phases:
 
 1. **Phase 1** (Initial): Monolithic schemas with inline definitions
-2. **Phase 2** (x-user-stories → specs): Migrated custom `x-user-stories` to standard `specs` array
-3. **Phase 3** (x-business-rules removal): Removed redundant `x-business-rules` custom extension
-4. **Phase 4** (Co-location): Split monolithic schemas into co-located property directories
-5. **Current**: Fully co-located pattern matching Effect.ts Layer philosophy
+2. **Phase 2** (specs → x-specs): Adopted JSON Schema custom property convention with `x-` prefix
+3. **Phase 3** (Co-location): Split monolithic schemas into co-located property directories
+4. **Phase 4** (Spec Enhancement): Added optional `validation` and `application` properties to spec objects
+5. **Current**: Fully co-located pattern matching Effect.ts Layer philosophy with enhanced spec metadata
 
 ## Architecture Alignment
 
@@ -608,14 +608,14 @@ This schema structure aligns with Omnera™'s core architectural principles:
 - **Layer-based architecture**: Schemas define domain models consumed by all layers
 - **Functional programming**: Schemas are immutable, composable, pure data structures
 - **DRY (Don't Repeat Yourself)**: Single source of truth via `$ref` composition
-- **Specification-driven development**: `specs` array encodes testable business rules
+- **Specification-driven development**: `x-specs` array encodes testable business rules
 - **Effect.ts Layer pattern**: Small, focused schemas compose into complex systems
 
 ## Related Documentation
 
 - **Domain Models**: `src/domain/models/` (TypeScript Effect Schemas generated from these JSON schemas)
 - **API Schemas**: `specs/api/` (OpenAPI specifications derived from these schemas)
-- **E2E Tests**: `specs/**/*.spec.ts` (Playwright tests implementing `specs` array)
+- **E2E Tests**: `specs/**/*.spec.ts` (Playwright tests implementing `x-specs` array)
 - **Architecture**: `docs/architecture/layer-based-architecture.md`
 
 ---

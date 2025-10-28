@@ -51,7 +51,7 @@ Each admin feature (tables, connections, automations, pages) has its own directo
 {
   "title": "Admin Tables",
   "description": "Administrative interface for managing database tables, including CRUD operations on table records. Provides UI for viewing, creating, updating, and deleting records, as well as API endpoints for programmatic access.",
-  "specs": [
+  "x-specs": [
     {
       "id": "ADMIN-TABLES-001",
       "given": "application is running",
@@ -72,7 +72,7 @@ Each admin feature (tables, connections, automations, pages) has its own directo
 
 - `title`: Feature name (e.g., "Admin Tables")
 - `description`: Purpose and scope of the admin feature
-- `specs`: Array of behavioral specifications
+- `x-specs`: Array of behavioral specifications (uses `x-` prefix per JSON Schema spec)
 
 **Spec Object Structure**:
 
@@ -107,7 +107,7 @@ import { test, expect } from '../fixtures'
  * E2E Tests for Tables - Root Level CRUD Operations
  *
  * Test Organization:
- * 1. @spec tests - Granular specification tests (18 tests from x-user-stories)
+ * 1. @spec tests - Granular specification tests (from x-specs array)
  * 2. @regression test - ONE consolidated workflow test
  *
  * Source: specs/admin/tables/tables.json
@@ -283,7 +283,7 @@ touch specs/admin/{feature-name}/{feature-name}.json
 {
   "title": "Feature Title",
   "description": "Description of what this admin feature enables users to do",
-  "specs": [
+  "x-specs": [
     {
       "id": "ADMIN-FEATURE-001",
       "given": "precondition or context",
@@ -424,7 +424,7 @@ Most admin features involve Create, Read, Update, Delete operations:
 
 ```json
 {
-  "specs": [
+  "x-specs": [
     {
       "id": "ADMIN-FEATURE-001",
       "given": "user is on feature page",
@@ -471,7 +471,7 @@ For external service integrations:
 
 ```json
 {
-  "specs": [
+  "x-specs": [
     {
       "id": "CONN-ADMIN-001",
       "given": "user navigates to connections page",
@@ -506,7 +506,7 @@ For data browsing features:
 
 ```json
 {
-  "specs": [
+  "x-specs": [
     {
       "id": "ADMIN-FEATURE-001",
       "given": "user navigates to feature page",
