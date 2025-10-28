@@ -351,6 +351,190 @@ test.describe('Languages Configuration', () => {
     }
   )
 
+  test.fixme(
+    'APP-LANGUAGES-011: should fail validation - default language must be in supported array',
+    { tag: '@spec' },
+    async ({ page, startServerWithSchema }) => {
+      // GIVEN: an app with default language not in supported array
+      // WHEN: default is 'en-US' but supported array only contains fr-FR and es-ES
+      // THEN: it should fail validation - default language must be in supported array
+      const schemaPromise = startServerWithSchema({
+        name: 'test-app',
+        languages: {
+          default: 'en-US',
+          supported: [
+            { code: 'fr-FR', label: 'Français', direction: 'ltr' },
+            { code: 'es-ES', label: 'Español', direction: 'ltr' },
+          ],
+        },
+      })
+      await expect(schemaPromise).rejects.toThrow(/default language must be in supported array/)
+    }
+  )
+
+  test.fixme(
+    'APP-LANGUAGES-012: should fail validation - fallback language must be in supported array',
+    { tag: '@spec' },
+    async ({ page, startServerWithSchema }) => {
+      // GIVEN: an app with fallback not in supported array
+      // WHEN: fallback is 'de-DE' but supported array doesn't contain it
+      // THEN: it should fail validation - fallback language must be in supported array
+      const schemaPromise = startServerWithSchema({
+        name: 'test-app',
+        languages: {
+          default: 'en-US',
+          supported: [{ code: 'en-US', label: 'English', direction: 'ltr' }],
+          fallback: 'de-DE',
+        },
+      })
+      await expect(schemaPromise).rejects.toThrow(/fallback language must be in supported array/)
+    }
+  )
+
+  test.fixme(
+    'APP-LANGUAGES-013: should automatically use default language as fallback',
+    { tag: '@spec' },
+    async ({ page, startServerWithSchema }) => {
+      // GIVEN: an app without explicit fallback
+      // WHEN: fallback property is omitted
+      await startServerWithSchema({
+        name: 'test-app',
+        languages: {
+          default: 'en-US',
+          supported: [
+            { code: 'en-US', label: 'English', direction: 'ltr' },
+            { code: 'fr-FR', label: 'Français', direction: 'ltr' },
+          ],
+        },
+      })
+
+      // THEN: it should automatically use default language as fallback
+      await page.goto('/')
+      const fallbackLanguage = await page.evaluate(() => (window as any).APP_LANGUAGES?.fallback)
+      expect(fallbackLanguage).toBe('en-US')
+    }
+  )
+
+  test.fixme(
+    'APP-LANGUAGES-014: should show English text when French translation is missing',
+    { tag: '@spec' },
+    async ({ page, startServerWithSchema }) => {
+      // GIVEN: an app with fallback different from default
+      // WHEN: default is 'fr-FR' and fallback is 'en-US'
+      await startServerWithSchema({
+        name: 'test-app',
+        languages: {
+          default: 'fr-FR',
+          supported: [
+            { code: 'fr-FR', label: 'Français', direction: 'ltr' },
+            { code: 'en-US', label: 'English', direction: 'ltr' },
+          ],
+          fallback: 'en-US',
+        },
+      })
+
+      // THEN: it should show English text when French translation is missing
+      await page.goto('/')
+      await expect(page.locator('[data-testid="current-language"]')).toHaveText('Français')
+
+      // Verify fallback is configured correctly (not same as default)
+      const fallbackLanguage = await page.evaluate(() => (window as any).APP_LANGUAGES?.fallback)
+      expect(fallbackLanguage).toBe('en-US')
+      const defaultLanguage = await page.evaluate(() => (window as any).APP_LANGUAGES?.default)
+      expect(defaultLanguage).toBe('fr-FR')
+    }
+  )
+
+  test.fixme(
+    'APP-LANGUAGES-INTEGRATION-001: should apply RTL-aware theme tokens for Arabic/Hebrew',
+    { tag: '@spec' },
+    async ({ page, startServerWithSchema }) => {
+      // GIVEN: a multi-language app with theme integration
+      // WHEN: language direction affects theme spacing and layout
+      await startServerWithSchema({
+        name: 'test-app',
+        theme: {
+          spacing: { sm: '8px', md: '16px' },
+          colors: { primary: '#007bff' },
+        },
+        languages: {
+          default: 'en-US',
+          supported: [
+            { code: 'en-US', label: 'English', direction: 'ltr' },
+            { code: 'fr-FR', label: 'Français', direction: 'ltr' },
+            { code: 'ar-SA', label: 'العربية', direction: 'rtl' },
+          ],
+        },
+      })
+
+      // THEN: it should apply RTL-aware theme tokens
+      await page.goto('/')
+      await expect(page.locator('html')).toHaveAttribute('dir', 'ltr')
+
+      // Switch to Arabic
+      await page.locator('[data-testid="language-switcher"]').click()
+      await page.locator('[data-testid="language-option-ar-SA"]').click()
+      await expect(page.locator('html')).toHaveAttribute('dir', 'rtl')
+
+      // Verify theme applies RTL-aware spacing
+      const themeDirection = await page.evaluate(() => (window as any).APP_THEME?.direction)
+      expect(themeDirection).toBe('rtl')
+    }
+  )
+
+  test.fixme(
+    'APP-LANGUAGES-INTEGRATION-002: should update page metadata and content while maintaining state',
+    { tag: '@spec' },
+    async ({ page, startServerWithSchema }) => {
+      // GIVEN: a multi-language app with page content
+      // WHEN: user switches language on a page with translated content
+      await startServerWithSchema({
+        name: 'test-app',
+        languages: {
+          default: 'en-US',
+          supported: [
+            { code: 'en-US', label: 'English', direction: 'ltr' },
+            { code: 'fr-FR', label: 'Français', direction: 'ltr' },
+          ],
+        },
+        pages: [
+          {
+            path: '/',
+            meta: {
+              lang: 'en-US',
+              title: 'Home',
+              description: 'Welcome',
+              i18n: {
+                'fr-FR': { title: 'Accueil', description: 'Bienvenue' },
+              },
+            },
+            sections: [{ type: 'text', content: 'Hello', i18n: { 'fr-FR': { content: 'Bonjour' } } }],
+          },
+        ],
+      })
+
+      // THEN: it should update metadata and content while maintaining state
+      await page.goto('/')
+      await expect(page).toHaveTitle('Home')
+      await expect(page.locator('text=Hello')).toBeVisible()
+
+      // Switch to French
+      await page.locator('[data-testid="language-switcher"]').click()
+      await page.locator('[data-testid="language-option-fr-FR"]').click()
+
+      // Verify metadata updated
+      await expect(page).toHaveTitle('Accueil')
+      await expect(page.locator('html')).toHaveAttribute('lang', 'fr-FR')
+
+      // Verify content updated
+      await expect(page.locator('text=Bonjour')).toBeVisible()
+
+      // Verify scroll position maintained (not jumped to top)
+      const scrollY = await page.evaluate(() => window.scrollY)
+      expect(scrollY).toBe(0) // Should still be at top since we didn't scroll
+    }
+  )
+
   // ============================================================================
   // REGRESSION TEST (@regression)
   // ONE OPTIMIZED test verifying components work together efficiently

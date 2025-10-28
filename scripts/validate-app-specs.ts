@@ -357,20 +357,31 @@ async function validateRefs(
   }
 }
 
-function findRefs(obj: unknown, refs: string[] = []): string[] {
+function findRefs(
+  obj: unknown,
+  refs: string[] = [],
+  currentPath: string[] = []
+): string[] {
   if (typeof obj !== 'object' || obj === null) {
     return refs
   }
 
   const record = obj as Record<string, unknown>
 
+  // Skip $ref validation inside examples and x-specs (they're documentation examples)
+  const isInExamples = currentPath.includes('examples')
+  const isInXSpecs = currentPath.includes('x-specs')
+
   if ('$ref' in record && typeof record.$ref === 'string') {
-    refs.push(record.$ref)
+    // Only collect $refs that are NOT in examples or x-specs
+    if (!isInExamples && !isInXSpecs) {
+      refs.push(record.$ref)
+    }
   }
 
   for (const key in record) {
     if (Object.prototype.hasOwnProperty.call(record, key)) {
-      findRefs(record[key], refs)
+      findRefs(record[key], refs, [...currentPath, key])
     }
   }
 
