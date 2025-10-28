@@ -47,61 +47,329 @@
       "id": "APP-THEME-COLORS-001",
       "given": "a color palette with semantic colors (primary, secondary)",
       "when": "colors are defined with hex values",
-      "then": "it should accept 6-digit hex colors"
+      "then": "it should validate 6-digit hex colors at build time",
+      "x-validation": {
+        "setup": {
+          "colors": {
+            "primary": "#007bff",
+            "secondary": "#6c757d"
+          }
+        },
+        "assertions": [
+          "Hex pattern: #007bff matches ^#[0-9A-Fa-f]{6}$",
+          "6 digits after # symbol",
+          "Case-insensitive (accepts A-F or a-f)",
+          "Standard web color format"
+        ]
+      }
     },
     {
       "id": "APP-THEME-COLORS-002",
       "given": "a color with 8-digit hex value for transparency",
       "when": "color includes alpha channel",
-      "then": "it should accept 8-digit hex colors with opacity"
+      "then": "it should validate 8-digit hex colors with opacity at build time",
+      "x-validation": {
+        "setup": {
+          "colors": {
+            "primary-transparent": "#007bff80"
+          }
+        },
+        "assertions": [
+          "Hex pattern: #007bff80 matches ^#[0-9A-Fa-f]{8}$",
+          "8 digits: 6 for color + 2 for alpha (80 = 50% opacity)",
+          "Alpha range: 00 (transparent) to FF (opaque)",
+          "Modern CSS color with transparency"
+        ]
+      }
     },
     {
       "id": "APP-THEME-COLORS-003",
       "given": "a color with rgb() format",
       "when": "color is defined as rgb(255, 0, 0)",
-      "then": "it should accept rgb color format"
+      "then": "it should validate rgb color format at build time",
+      "x-validation": {
+        "setup": {
+          "colors": {
+            "danger": "rgb(255, 0, 0)"
+          }
+        },
+        "assertions": [
+          "RGB pattern: rgb(255, 0, 0) matches ^rgb\\(",
+          "Three values: red, green, blue (0-255)",
+          "Functional notation for dynamic colors",
+          "Compatible with CSS rgb() function"
+        ]
+      }
     },
     {
       "id": "APP-THEME-COLORS-004",
       "given": "a color with rgba() format for transparency",
       "when": "color is defined as rgba(255, 0, 0, 0.5)",
-      "then": "it should accept rgba color format with alpha"
+      "then": "it should validate rgba color format with alpha at build time",
+      "x-validation": {
+        "setup": {
+          "colors": {
+            "danger-semi": "rgba(255, 0, 0, 0.5)"
+          }
+        },
+        "assertions": [
+          "RGBA pattern: rgba(255, 0, 0, 0.5) matches ^rgba\\(",
+          "Four values: red, green, blue (0-255), alpha (0-1)",
+          "Alpha: 0.5 = 50% opacity",
+          "Legacy format for transparent colors"
+        ]
+      }
     },
     {
       "id": "APP-THEME-COLORS-005",
       "given": "a color with hsl() format",
       "when": "color is defined as hsl(210, 100%, 50%)",
-      "then": "it should accept hsl color format"
+      "then": "it should validate hsl color format at build time",
+      "x-validation": {
+        "setup": {
+          "colors": {
+            "primary": "hsl(210, 100%, 50%)"
+          }
+        },
+        "assertions": [
+          "HSL pattern: hsl(210, 100%, 50%) matches ^hsl\\(",
+          "Hue: 210 degrees (0-360, blue)",
+          "Saturation: 100% (0-100%, fully saturated)",
+          "Lightness: 50% (0-100%, medium)",
+          "Perceptual color format"
+        ]
+      }
     },
     {
       "id": "APP-THEME-COLORS-006",
       "given": "a color with hsla() format for transparency",
       "when": "color is defined as hsla(210, 100%, 50%, 0.8)",
-      "then": "it should accept hsla color format with alpha"
+      "then": "it should validate hsla color format with alpha at build time",
+      "x-validation": {
+        "setup": {
+          "colors": {
+            "primary-overlay": "hsla(210, 100%, 50%, 0.8)"
+          }
+        },
+        "assertions": [
+          "HSLA pattern: hsla(210, 100%, 50%, 0.8) matches ^hsla\\(",
+          "Four values: hue, saturation, lightness, alpha",
+          "Alpha: 0.8 = 80% opacity",
+          "Transparent perceptual colors"
+        ]
+      }
     },
     {
       "id": "APP-THEME-COLORS-007",
       "given": "color variants with suffixes (primary-hover, primary-light)",
       "when": "colors use kebab-case variant naming",
-      "then": "it should accept color variants for hover states and tints"
+      "then": "it should validate color variants for hover states and tints",
+      "x-validation": {
+        "setup": {
+          "colors": {
+            "primary": "#007bff",
+            "primary-hover": "#0056b3",
+            "primary-light": "#e7f1ff",
+            "primary-dark": "#003d7a"
+          }
+        },
+        "assertions": [
+          "Base color: 'primary'",
+          "Hover variant: 'primary-hover' (darker for interaction)",
+          "Light variant: 'primary-light' (tint for backgrounds)",
+          "Dark variant: 'primary-dark' (shade for contrast)",
+          "Naming pattern: {base}-{variant}"
+        ]
+      }
     },
     {
       "id": "APP-THEME-COLORS-008",
       "given": "gray scale with numbered variants (gray-100 to gray-900)",
       "when": "colors use numbered scale system",
-      "then": "it should accept numbered color scales for systematic gradients"
+      "then": "it should validate numbered color scales for systematic gradients",
+      "x-validation": {
+        "setup": {
+          "colors": {
+            "gray-100": "#f8f9fa",
+            "gray-300": "#dee2e6",
+            "gray-500": "#adb5bd",
+            "gray-700": "#495057",
+            "gray-900": "#212529"
+          }
+        },
+        "assertions": [
+          "Scale: 100 (lightest) to 900 (darkest)",
+          "Increments: 100, 200, 300, ..., 900",
+          "Progressive darkening: each step darker than previous",
+          "Systematic scale for consistent grays",
+          "Naming pattern: gray-{number}"
+        ]
+      }
     },
     {
       "id": "APP-THEME-COLORS-009",
       "given": "a complete color system with semantic, descriptive, and variant colors",
       "when": "palette includes primary, secondary, success, danger, warning, info, light, dark, grays",
-      "then": "it should support comprehensive color system for all UI needs"
+      "then": "it should validate comprehensive color system for all UI needs",
+      "x-validation": {
+        "setup": {
+          "colors": {
+            "primary": "#007bff",
+            "secondary": "#6c757d",
+            "success": "#28a745",
+            "danger": "#dc3545",
+            "warning": "#ffc107",
+            "info": "#17a2b8",
+            "light": "#f8f9fa",
+            "dark": "#343a40"
+          }
+        },
+        "assertions": [
+          "Semantic colors: primary, secondary (brand)",
+          "State colors: success, danger, warning, info (feedback)",
+          "Neutral colors: light, dark (backgrounds)",
+          "Complete palette covers all UI color needs",
+          "8 core semantic colors"
+        ]
+      }
     },
     {
       "id": "APP-THEME-COLORS-010",
       "given": "color names in kebab-case (primary-color, background-primary)",
       "when": "color names use multi-word kebab-case format",
-      "then": "it should validate kebab-case naming convention"
+      "then": "it should validate kebab-case naming convention",
+      "x-validation": {
+        "setup": {
+          "validNames": ["primary", "text-primary", "background-light", "border-subtle"],
+          "invalidNames": ["primaryColor", "text_primary", "Background Light", "BORDER"]
+        },
+        "assertions": [
+          "Valid: primary, text-primary, background-light, border-subtle",
+          "Invalid: primaryColor (camelCase), text_primary (underscore)",
+          "Invalid: 'Background Light' (spaces), BORDER (uppercase)",
+          "Pattern: ^[a-z]+(-[a-z]+)*$ enforces kebab-case"
+        ]
+      }
+    },
+    {
+      "id": "APP-THEME-COLORS-APPLICATION-001",
+      "given": "primary color used in button component",
+      "when": "button applies theme.colors.primary",
+      "then": "it should render button with primary background color",
+      "x-application": {
+        "theme": {
+          "colors": {
+            "primary": "#007bff"
+          }
+        },
+        "component": "button",
+        "expectedCSS": "background-color: #007bff;",
+        "expectedDOM": "<button data-testid=\"cta-button\" style=\"background-color: #007bff;\">Click me</button>",
+        "assertions": [
+          "Color token: theme.colors.primary = '#007bff'",
+          "Applied as: style=\"background-color: #007bff;\"",
+          "Visual result: Blue button",
+          "Token-to-CSS transformation"
+        ]
+      }
+    },
+    {
+      "id": "APP-THEME-COLORS-APPLICATION-002",
+      "given": "primary-hover color used on button:hover",
+      "when": "button hover state applies theme.colors.primary-hover",
+      "then": "it should render darker blue on hover",
+      "x-application": {
+        "theme": {
+          "colors": {
+            "primary": "#007bff",
+            "primary-hover": "#0056b3"
+          }
+        },
+        "component": "button",
+        "expectedCSS": "button:hover { background-color: #0056b3; }",
+        "assertions": [
+          "Default: background-color: #007bff",
+          "Hover: background-color: #0056b3 (darker)",
+          "Interactive feedback through color change",
+          "Hover variant provides visual affordance"
+        ]
+      }
+    },
+    {
+      "id": "APP-THEME-COLORS-APPLICATION-003",
+      "given": "text color used in typography",
+      "when": "heading applies theme.colors.text",
+      "then": "it should render text with theme text color",
+      "x-application": {
+        "theme": {
+          "colors": {
+            "text": "#212529",
+            "text-muted": "#6c757d"
+          }
+        },
+        "component": "heading",
+        "expectedCSS": "h1 { color: #212529; }",
+        "expectedDOM": "<h1 style=\"color: #212529;\">Page Title</h1>",
+        "assertions": [
+          "Text color: theme.colors.text = '#212529'",
+          "Applied as: color property",
+          "High contrast dark text",
+          "Muted variant available for secondary text"
+        ]
+      }
+    },
+    {
+      "id": "APP-THEME-COLORS-APPLICATION-004",
+      "given": "success color used in alert",
+      "when": "alert applies theme.colors.success",
+      "then": "it should render green alert indicating success state",
+      "x-application": {
+        "theme": {
+          "colors": {
+            "success": "#28a745",
+            "success-light": "#d4edda"
+          }
+        },
+        "component": "alert",
+        "expectedCSS": "background-color: #d4edda; border-color: #28a745; color: #28a745;",
+        "expectedDOM": "<div data-testid=\"alert-success\" class=\"alert\" style=\"background-color: #d4edda; border-color: #28a745; color: #28a745;\">Success!</div>",
+        "assertions": [
+          "Background: success-light (#d4edda, subtle tint)",
+          "Border: success (#28a745, saturated)",
+          "Text: success (#28a745, saturated)",
+          "Semantic color conveys positive state"
+        ]
+      }
+    },
+    {
+      "id": "APP-THEME-COLORS-APPLICATION-005",
+      "given": "gray scale used in UI hierarchy",
+      "when": "components use gray-100 to gray-900 for depth",
+      "then": "it should create visual hierarchy through tonal variation",
+      "x-application": {
+        "theme": {
+          "colors": {
+            "gray-100": "#f8f9fa",
+            "gray-300": "#dee2e6",
+            "gray-500": "#adb5bd",
+            "gray-900": "#212529"
+          }
+        },
+        "components": {
+          "pageBackground": "background-color: gray-100 (#f8f9fa)",
+          "cardBackground": "background-color: white",
+          "cardBorder": "border-color: gray-300 (#dee2e6)",
+          "placeholderText": "color: gray-500 (#adb5bd)",
+          "headingText": "color: gray-900 (#212529)"
+        },
+        "assertions": [
+          "Lightest (gray-100): page background",
+          "Light (gray-300): borders, dividers",
+          "Medium (gray-500): placeholder, disabled text",
+          "Darkest (gray-900): primary text",
+          "Systematic gray scale creates depth hierarchy"
+        ]
+      }
     }
   ]
 }

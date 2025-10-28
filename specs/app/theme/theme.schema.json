@@ -53,49 +53,235 @@
       "id": "APP-THEME-001",
       "given": "a theme with only colors defined",
       "when": "minimal theme configuration is needed",
-      "then": "it should accept colors as the only design token"
+      "then": "it should validate theme with colors as the only design token category",
+      "x-validation": {
+        "setup": {
+          "theme": {
+            "colors": {
+              "primary": "#007bff",
+              "secondary": "#6c757d"
+            }
+          }
+        },
+        "assertions": [
+          "Theme validates with only colors property",
+          "All other token categories (fonts, spacing, animations, etc.) are optional",
+          "Minimal theme enables color-only design systems"
+        ]
+      }
     },
     {
       "id": "APP-THEME-002",
       "given": "a theme with colors and fonts configured",
       "when": "basic branding is defined",
-      "then": "it should support color palette and typography system"
+      "then": "it should validate color palette and typography system",
+      "x-validation": {
+        "setup": {
+          "theme": {
+            "colors": {
+              "primary": "#007bff",
+              "text": "#212529"
+            },
+            "fonts": {
+              "body": {
+                "family": "Inter",
+                "fallback": "sans-serif"
+              }
+            }
+          }
+        },
+        "assertions": [
+          "Theme validates with colors and fonts",
+          "Colors define visual identity (primary, text)",
+          "Fonts define typography (body font)",
+          "Basic branding system established"
+        ]
+      }
     },
     {
       "id": "APP-THEME-003",
       "given": "a theme with colors, fonts, and spacing",
       "when": "core design system is configured",
-      "then": "it should provide visual identity, typography, and layout tokens"
+      "then": "it should validate visual identity, typography, and layout tokens",
+      "x-validation": {
+        "setup": {
+          "theme": {
+            "colors": {
+              "primary": "#007bff"
+            },
+            "fonts": {
+              "body": {
+                "family": "Inter"
+              }
+            },
+            "spacing": {
+              "section": "4rem",
+              "gap": "1rem"
+            }
+          }
+        },
+        "assertions": [
+          "Theme validates with 3 core token categories",
+          "Colors: visual identity",
+          "Fonts: typography system",
+          "Spacing: layout rhythm",
+          "Core design system complete"
+        ]
+      }
     },
     {
       "id": "APP-THEME-004",
       "given": "a complete theme with all 7 design token categories",
       "when": "comprehensive design system is defined",
-      "then": "it should orchestrate colors, fonts, spacing, animations, breakpoints, shadows, and borderRadius"
+      "then": "it should validate and orchestrate all design token categories",
+      "x-validation": {
+        "setup": {
+          "theme": {
+            "colors": {
+              "primary": "#007bff"
+            },
+            "fonts": {
+              "body": {
+                "family": "Inter"
+              }
+            },
+            "spacing": {
+              "section": "4rem"
+            },
+            "animations": {
+              "fadeIn": true
+            },
+            "breakpoints": {
+              "md": "768px"
+            },
+            "shadows": {
+              "md": "0 4px 6px -1px rgb(0 0 0 / 0.1)"
+            },
+            "borderRadius": {
+              "md": "0.375rem"
+            }
+          }
+        },
+        "assertions": [
+          "Theme validates with all 7 token categories",
+          "Complete design system: colors, fonts, spacing, animations, breakpoints, shadows, borderRadius",
+          "Each category references its sub-schema",
+          "Comprehensive theme enables full UI customization"
+        ]
+      }
     },
     {
       "id": "APP-THEME-005",
       "given": "a theme with breakpoints matching responsive system",
       "when": "responsive breakpoints are configured",
-      "then": "it should ensure consistency between theme and responsive.schema.json"
+      "then": "it should ensure consistency between theme.breakpoints and responsive variants",
+      "x-validation": {
+        "setup": {
+          "theme": {
+            "breakpoints": {
+              "sm": "640px",
+              "md": "768px",
+              "lg": "1024px"
+            }
+          },
+          "responsiveSystem": {
+            "supportedBreakpoints": ["sm", "md", "lg"]
+          }
+        },
+        "assertions": [
+          "Theme breakpoints define responsive system thresholds",
+          "Breakpoint names (sm, md, lg) match responsive.schema.json variants",
+          "Consistency ensures responsive utilities work correctly",
+          "Cross-schema integration validated"
+        ]
+      }
     },
     {
       "id": "APP-THEME-006",
       "given": "a theme with animations matching interaction system",
       "when": "animation library is defined",
-      "then": "it should provide animations reusable in interactions.schema.json"
+      "then": "it should provide animations reusable in interactions.schema.json",
+      "x-validation": {
+        "setup": {
+          "theme": {
+            "animations": {
+              "fadeIn": true,
+              "slideIn": "slide-in 0.5s ease-out",
+              "pulse": {
+                "duration": "2s",
+                "easing": "ease-in-out"
+              }
+            }
+          }
+        },
+        "assertions": [
+          "Theme animations define reusable animation library",
+          "Animations available for interactions.schema.json references",
+          "Animation tokens enable consistent motion design",
+          "Integration point between theme and interactions"
+        ]
+      }
     },
     {
       "id": "APP-THEME-007",
       "given": "a theme following design system best practices",
       "when": "all tokens use semantic naming and progressive scales",
-      "then": "it should enable consistent UI across entire application"
+      "then": "it should enable consistent UI across entire application",
+      "x-validation": {
+        "setup": {
+          "theme": {
+            "colors": {
+              "primary": "#007bff",
+              "primary-hover": "#0056b3",
+              "primary-light": "#e7f1ff"
+            },
+            "spacing": {
+              "gap": "1rem",
+              "gapSmall": "0.5rem",
+              "gapLarge": "1.5rem"
+            },
+            "shadows": {
+              "sm": "0 1px 2px 0 rgb(0 0 0 / 0.05)",
+              "md": "0 4px 6px -1px rgb(0 0 0 / 0.1)",
+              "lg": "0 10px 15px -3px rgb(0 0 0 / 0.1)"
+            }
+          }
+        },
+        "assertions": [
+          "Semantic naming: 'primary' (not 'blue'), 'gap' (not 'space-4')",
+          "Progressive scales: small → medium → large",
+          "Variant naming: -hover, -light for derivatives",
+          "Best practices enable predictable, maintainable design system"
+        ]
+      }
     },
     {
       "id": "APP-THEME-008",
       "given": "a theme with Tailwind-compatible tokens",
       "when": "spacing and other values use Tailwind syntax",
-      "then": "it should integrate seamlessly with Tailwind CSS"
+      "then": "it should integrate seamlessly with Tailwind CSS",
+      "x-validation": {
+        "setup": {
+          "theme": {
+            "spacing": {
+              "section": "4rem",
+              "container": "80rem"
+            },
+            "breakpoints": {
+              "sm": "640px",
+              "md": "768px",
+              "lg": "1024px"
+            }
+          },
+          "tailwindIntegration": "Tokens can be referenced in tailwind.config.js extend.spacing and extend.screens"
+        },
+        "assertions": [
+          "Spacing values use rem units (Tailwind-compatible)",
+          "Breakpoints use px units (Tailwind standard)",
+          "Token structure maps to Tailwind config",
+          "Seamless integration with Tailwind CSS"
+        ]
+      }
     }
   ]
 }
