@@ -101,5 +101,78 @@
       }
     }
   ],
-  "specs": []
+  "specs": [
+    {
+      "id": "APP-PAGES-NAV-001",
+      "given": "a navigation with logo",
+      "when": "logo is './public/logo.svg'",
+      "then": "it should display logo image"
+    },
+    {
+      "id": "APP-PAGES-NAV-002",
+      "given": "a navigation with logoMobile",
+      "when": "logoMobile is './public/logo-mobile.svg'",
+      "then": "it should use alternative logo for mobile devices"
+    },
+    {
+      "id": "APP-PAGES-NAV-003",
+      "given": "a navigation with logoAlt",
+      "when": "logoAlt is 'Company Logo'",
+      "then": "it should provide accessible alt text for logo"
+    },
+    {
+      "id": "APP-PAGES-NAV-004",
+      "given": "a sticky navigation",
+      "when": "sticky is true",
+      "then": "it should stick to top on scroll"
+    },
+    {
+      "id": "APP-PAGES-NAV-005",
+      "given": "a transparent navigation",
+      "when": "transparent is true initially",
+      "then": "it should have transparent background (becomes opaque on scroll)"
+    },
+    {
+      "id": "APP-PAGES-NAV-006",
+      "given": "navigation with desktop links",
+      "when": "links.desktop is array of nav-links",
+      "then": "it should render desktop navigation menu"
+    },
+    {
+      "id": "APP-PAGES-NAV-007",
+      "given": "navigation with mobile links",
+      "when": "links.mobile differs from desktop",
+      "then": "it should render different links for mobile menu"
+    },
+    {
+      "id": "APP-PAGES-NAV-008",
+      "given": "navigation with CTA button",
+      "when": "cta has text 'Get Started' and href '/signup'",
+      "then": "it should render prominent call-to-action button"
+    },
+    {
+      "id": "APP-PAGES-NAV-009",
+      "given": "navigation with search enabled",
+      "when": "search.enabled is true with placeholder 'Search...'",
+      "then": "it should display search input in navigation"
+    },
+    {
+      "id": "APP-PAGES-NAV-010",
+      "given": "navigation with user menu enabled",
+      "when": "user.enabled is true with loginUrl and signupUrl",
+      "then": "it should show user account menu with login/signup links"
+    },
+    {
+      "id": "APP-PAGES-NAV-011",
+      "given": "navigation with required logo only",
+      "when": "all other properties are optional",
+      "then": "it should render minimal navigation with logo"
+    },
+    {
+      "id": "APP-PAGES-NAV-012",
+      "given": "navigation referencing sub-schemas",
+      "when": "nav-links and cta-button use $ref",
+      "then": "it should compose navigation from modular schemas"
+    }
+  ]
 }

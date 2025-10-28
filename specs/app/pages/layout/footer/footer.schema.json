@@ -163,5 +163,90 @@
       ]
     }
   ],
-  "specs": []
+  "specs": [
+    {
+      "id": "APP-PAGES-FOOTER-001",
+      "given": "a footer with enabled set to true",
+      "when": "footer should be visible (default)",
+      "then": "it should display footer at bottom of page"
+    },
+    {
+      "id": "APP-PAGES-FOOTER-002",
+      "given": "a footer with logo",
+      "when": "logo is './logo-footer.svg'",
+      "then": "it should display footer logo"
+    },
+    {
+      "id": "APP-PAGES-FOOTER-003",
+      "given": "a footer with description/tagline",
+      "when": "description is 'Building the future of web applications'",
+      "then": "it should render company description"
+    },
+    {
+      "id": "APP-PAGES-FOOTER-004",
+      "given": "a footer with columns",
+      "when": "columns array contains [Product, Company]",
+      "then": "it should render multi-column link layout"
+    },
+    {
+      "id": "APP-PAGES-FOOTER-005",
+      "given": "a footer column with title and links",
+      "when": "column has title 'Product' with links [Features, Pricing]",
+      "then": "it should render column heading and link list"
+    },
+    {
+      "id": "APP-PAGES-FOOTER-006",
+      "given": "a footer link with target _blank",
+      "when": "link opens external site in new tab",
+      "then": "it should support external link targets"
+    },
+    {
+      "id": "APP-PAGES-FOOTER-007",
+      "given": "a footer with social links",
+      "when": "social has links for [twitter, github]",
+      "then": "it should render social media icons"
+    },
+    {
+      "id": "APP-PAGES-FOOTER-008",
+      "given": "a footer social link with platform",
+      "when": "platform enum includes facebook, twitter, instagram, linkedin, youtube, github, tiktok",
+      "then": "it should support 7 social platforms with auto icons"
+    },
+    {
+      "id": "APP-PAGES-FOOTER-009",
+      "given": "a footer with newsletter subscription",
+      "when": "newsletter.enabled is true with title and description",
+      "then": "it should render email subscription form"
+    },
+    {
+      "id": "APP-PAGES-FOOTER-010",
+      "given": "a footer with copyright text",
+      "when": "copyright is '© 2024 Company Inc. All rights reserved.'",
+      "then": "it should display copyright notice"
+    },
+    {
+      "id": "APP-PAGES-FOOTER-011",
+      "given": "a footer with legal links",
+      "when": "legal includes [Privacy Policy, Terms of Service]",
+      "then": "it should render legal link list"
+    },
+    {
+      "id": "APP-PAGES-FOOTER-012",
+      "given": "a disabled footer",
+      "when": "enabled is false",
+      "then": "it should not render footer"
+    },
+    {
+      "id": "APP-PAGES-FOOTER-013",
+      "given": "a footer with all 5 sections",
+      "when": "footer includes logo, columns, social, newsletter, legal",
+      "then": "it should render comprehensive footer layout"
+    },
+    {
+      "id": "APP-PAGES-FOOTER-014",
+      "given": "a footer with custom social icon",
+      "when": "social link has custom icon property",
+      "then": "it should override default platform icon"
+    }
+  ]
 }

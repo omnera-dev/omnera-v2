@@ -52,5 +52,66 @@
       { "label": "Contact", "href": "#contact" }
     ]
   ],
-  "specs": []
+  "specs": [
+    {
+      "id": "APP-PAGES-NAVLINKS-001",
+      "given": "a nav link with label and href",
+      "when": "link is { label: 'Home', href: '/' }",
+      "then": "it should render navigation link"
+    },
+    {
+      "id": "APP-PAGES-NAVLINKS-002",
+      "given": "a nav link with target _blank",
+      "when": "target is '_blank' for external links",
+      "then": "it should open link in new tab"
+    },
+    {
+      "id": "APP-PAGES-NAVLINKS-003",
+      "given": "a nav link with icon",
+      "when": "icon is 'arrow-right'",
+      "then": "it should display icon alongside label"
+    },
+    {
+      "id": "APP-PAGES-NAVLINKS-004",
+      "given": "a nav link with badge",
+      "when": "badge is 'New' or 'Beta'",
+      "then": "it should display badge to highlight link"
+    },
+    {
+      "id": "APP-PAGES-NAVLINKS-005",
+      "given": "a nav link with children (dropdown/submenu)",
+      "when": "children contains nested nav-links",
+      "then": "it should render dropdown menu on hover/click"
+    },
+    {
+      "id": "APP-PAGES-NAVLINKS-006",
+      "given": "a nav link with anchor href",
+      "when": "href is '#contact' (page anchor)",
+      "then": "it should scroll to anchor on same page"
+    },
+    {
+      "id": "APP-PAGES-NAVLINKS-007",
+      "given": "nav links array with 4+ links",
+      "when": "array contains [Home, About, Products, Contact]",
+      "then": "it should render horizontal navigation menu"
+    },
+    {
+      "id": "APP-PAGES-NAVLINKS-008",
+      "given": "nav links with recursive children",
+      "when": "Products has children (Product A, Product B)",
+      "then": "it should support unlimited nesting depth for menus"
+    },
+    {
+      "id": "APP-PAGES-NAVLINKS-009",
+      "given": "nav links with all 4 target options",
+      "when": "target enum includes _self, _blank, _parent, _top",
+      "then": "it should support all standard HTML link targets"
+    },
+    {
+      "id": "APP-PAGES-NAVLINKS-010",
+      "given": "nav links with label and href as required",
+      "when": "link must have both label and href",
+      "then": "it should enforce required properties for valid links"
+    }
+  ]
 }

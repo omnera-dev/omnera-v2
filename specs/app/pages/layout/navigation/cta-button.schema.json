@@ -58,5 +58,66 @@
       "iconPosition": "right"
     }
   ],
-  "specs": []
+  "specs": [
+    {
+      "id": "APP-PAGES-CTA-001",
+      "given": "a CTA button with text and href",
+      "when": "button is { text: 'Get Started', href: '/signup' }",
+      "then": "it should render call-to-action button"
+    },
+    {
+      "id": "APP-PAGES-CTA-002",
+      "given": "a CTA button with variant 'primary'",
+      "when": "variant is 'primary' (default)",
+      "then": "it should apply primary button styling"
+    },
+    {
+      "id": "APP-PAGES-CTA-003",
+      "given": "a CTA button with 5 variant options",
+      "when": "variant enum includes primary, secondary, outline, ghost, link",
+      "then": "it should support all button style variants"
+    },
+    {
+      "id": "APP-PAGES-CTA-004",
+      "given": "a CTA button with size",
+      "when": "size is 'lg' (sm, md, lg, xl)",
+      "then": "it should apply size styling"
+    },
+    {
+      "id": "APP-PAGES-CTA-005",
+      "given": "a CTA button with theme color",
+      "when": "color is 'orange' (references theme colors)",
+      "then": "it should apply theme-based color"
+    },
+    {
+      "id": "APP-PAGES-CTA-006",
+      "given": "a CTA button with icon",
+      "when": "icon is 'download' with iconPosition 'right'",
+      "then": "it should display icon on right side of text"
+    },
+    {
+      "id": "APP-PAGES-CTA-007",
+      "given": "a CTA button with icon on left",
+      "when": "iconPosition is 'left' (default)",
+      "then": "it should display icon on left side of text"
+    },
+    {
+      "id": "APP-PAGES-CTA-008",
+      "given": "a CTA button in navigation",
+      "when": "used in navigation.cta property",
+      "then": "it should serve as prominent call-to-action in header"
+    },
+    {
+      "id": "APP-PAGES-CTA-009",
+      "given": "a CTA button with required text and href",
+      "when": "both text and href are provided",
+      "then": "it should validate as complete CTA configuration"
+    },
+    {
+      "id": "APP-PAGES-CTA-010",
+      "given": "a CTA button with all optional properties",
+      "when": "variant, size, color, icon, iconPosition are set",
+      "then": "it should support fully customized button appearance"
+    }
+  ]
 }

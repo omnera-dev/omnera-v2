@@ -114,5 +114,78 @@
       ]
     }
   ],
-  "specs": []
+  "specs": [
+    {
+      "id": "APP-PAGES-SIDEBAR-001",
+      "given": "a sidebar with enabled set to true",
+      "when": "sidebar should be visible",
+      "then": "it should display sidebar navigation"
+    },
+    {
+      "id": "APP-PAGES-SIDEBAR-002",
+      "given": "a sidebar with position 'left'",
+      "when": "position is 'left' (default)",
+      "then": "it should render sidebar on left side"
+    },
+    {
+      "id": "APP-PAGES-SIDEBAR-003",
+      "given": "a sidebar with position 'right'",
+      "when": "position is 'right'",
+      "then": "it should render sidebar on right side"
+    },
+    {
+      "id": "APP-PAGES-SIDEBAR-004",
+      "given": "a sidebar with custom width",
+      "when": "width is '280px'",
+      "then": "it should apply custom sidebar width"
+    },
+    {
+      "id": "APP-PAGES-SIDEBAR-005",
+      "given": "a collapsible sidebar",
+      "when": "collapsible is true (default)",
+      "then": "it should allow users to collapse/expand sidebar"
+    },
+    {
+      "id": "APP-PAGES-SIDEBAR-006",
+      "given": "a sidebar defaulting to collapsed",
+      "when": "defaultCollapsed is true",
+      "then": "it should start in collapsed state"
+    },
+    {
+      "id": "APP-PAGES-SIDEBAR-007",
+      "given": "a sticky sidebar",
+      "when": "sticky is true (default)",
+      "then": "it should stick during page scroll"
+    },
+    {
+      "id": "APP-PAGES-SIDEBAR-008",
+      "given": "a sidebar with link item",
+      "when": "item type is 'link' with label, href, icon",
+      "then": "it should render clickable sidebar link"
+    },
+    {
+      "id": "APP-PAGES-SIDEBAR-009",
+      "given": "a sidebar with group item",
+      "when": "item type is 'group' with label and children",
+      "then": "it should render collapsible group with nested items"
+    },
+    {
+      "id": "APP-PAGES-SIDEBAR-010",
+      "given": "a sidebar with divider item",
+      "when": "item type is 'divider'",
+      "then": "it should render visual separator between sections"
+    },
+    {
+      "id": "APP-PAGES-SIDEBAR-011",
+      "given": "a sidebar with recursive children",
+      "when": "groups can contain nested groups or links",
+      "then": "it should support unlimited nesting for sidebar hierarchy"
+    },
+    {
+      "id": "APP-PAGES-SIDEBAR-012",
+      "given": "a sidebar for docs/dashboard layouts",
+      "when": "sidebar provides persistent navigation",
+      "then": "it should enable documentation and admin-style layouts"
+    }
+  ]
 }

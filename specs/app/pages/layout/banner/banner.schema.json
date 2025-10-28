@@ -67,5 +67,66 @@
       "dismissible": true
     }
   ],
-  "specs": []
+  "specs": [
+    {
+      "id": "APP-PAGES-BANNER-001",
+      "given": "a banner with enabled set to true",
+      "when": "banner should be visible",
+      "then": "it should display banner at top of page"
+    },
+    {
+      "id": "APP-PAGES-BANNER-002",
+      "given": "a banner with text content",
+      "when": "text is '🎉 New feature available!'",
+      "then": "it should render announcement text"
+    },
+    {
+      "id": "APP-PAGES-BANNER-003",
+      "given": "a banner with link",
+      "when": "link has href '/features' and label 'Learn more'",
+      "then": "it should add clickable link to banner"
+    },
+    {
+      "id": "APP-PAGES-BANNER-004",
+      "given": "a banner with gradient background",
+      "when": "gradient is 'linear-gradient(90deg, #667eea 0%, #764ba2 100%)'",
+      "then": "it should apply CSS gradient as background"
+    },
+    {
+      "id": "APP-PAGES-BANNER-005",
+      "given": "a banner with solid backgroundColor",
+      "when": "backgroundColor is '#FF5733' (hex color)",
+      "then": "it should apply solid background color"
+    },
+    {
+      "id": "APP-PAGES-BANNER-006",
+      "given": "a banner with textColor",
+      "when": "textColor is '#FFFFFF' for readability",
+      "then": "it should apply text color for contrast"
+    },
+    {
+      "id": "APP-PAGES-BANNER-007",
+      "given": "a dismissible banner",
+      "when": "dismissible is true",
+      "then": "it should allow users to close banner permanently"
+    },
+    {
+      "id": "APP-PAGES-BANNER-008",
+      "given": "a sticky banner",
+      "when": "sticky is true",
+      "then": "it should remain at top during page scroll"
+    },
+    {
+      "id": "APP-PAGES-BANNER-009",
+      "given": "a disabled banner",
+      "when": "enabled is false",
+      "then": "it should not render banner"
+    },
+    {
+      "id": "APP-PAGES-BANNER-010",
+      "given": "a banner with emoji in text",
+      "when": "text includes '🎉' or other emojis",
+      "then": "it should render emojis correctly"
+    }
+  ]
 }
