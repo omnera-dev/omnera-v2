@@ -28,37 +28,157 @@
       "id": "APP-THEME-RADIUS-001",
       "given": "border-radius scale from none to 3xl",
       "when": "radius system defines progressive rounding",
-      "then": "it should provide radius tokens from 0 to 1.5rem"
+      "then": "it should validate radius tokens from 0 to 1.5rem",
+      "x-validation": {
+        "setup": {
+          "borderRadius": {
+            "none": "0",
+            "sm": "0.125rem",
+            "md": "0.375rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "2xl": "1rem",
+            "3xl": "1.5rem"
+          }
+        },
+        "assertions": [
+          "7 radius levels",
+          "none: 0 (sharp)",
+          "3xl: 1.5rem (24px, very round)",
+          "Progressive rounding"
+        ]
+      }
     },
     {
       "id": "APP-THEME-RADIUS-002",
       "given": "border-radius 'none' with value '0'",
       "when": "sharp corners are needed",
-      "then": "it should remove border radius"
+      "then": "it should validate no rounding",
+      "x-validation": {
+        "setup": { "borderRadius": { "none": "0" } },
+        "assertions": [
+          "Value: 0 (no rounding)",
+          "Sharp 90-degree corners",
+          "Minimal/brutalist design"
+        ]
+      }
     },
     {
       "id": "APP-THEME-RADIUS-003",
       "given": "border-radius 'full' with value '9999px'",
       "when": "perfect circles or pills are needed",
-      "then": "it should create fully rounded elements"
+      "then": "it should validate fully rounded elements",
+      "x-validation": {
+        "setup": { "borderRadius": { "full": "9999px" } },
+        "assertions": [
+          "Value: 9999px (maximum rounding)",
+          "Creates perfect circles (square elements)",
+          "Creates pills (rectangular elements)"
+        ]
+      }
     },
     {
       "id": "APP-THEME-RADIUS-004",
       "given": "border-radius using rem units",
       "when": "radius scales with font size",
-      "then": "it should accept rem-based radius values"
+      "then": "it should validate rem-based radius values",
+      "x-validation": {
+        "setup": { "borderRadius": { "sm": "0.125rem", "md": "0.375rem", "lg": "0.5rem" } },
+        "assertions": [
+          "Rem units scale with root font size",
+          "sm: 0.125rem (2px @ 16px base)",
+          "Responsive rounding"
+        ]
+      }
     },
     {
       "id": "APP-THEME-RADIUS-005",
       "given": "border-radius with kebab-case naming",
       "when": "radius uses multi-word names",
-      "then": "it should validate kebab-case convention"
+      "then": "it should validate kebab-case convention",
+      "x-validation": {
+        "setup": { "borderRadius": { "button-radius": "0.5rem", "card-radius": "1rem" } },
+        "assertions": [
+          "Pattern: ^[a-z]+(-[a-z]+)*$",
+          "button-radius, card-radius valid",
+          "Semantic naming allowed"
+        ]
+      }
     },
     {
       "id": "APP-THEME-RADIUS-006",
-      "given": "complete radius system (sm, md, lg, xl, 2xl, 3xl, full)",
+      "given": "complete radius system (none, sm, md, lg, xl, 2xl, 3xl, full)",
       "when": "all radius tokens are defined",
-      "then": "it should cover all common border-radius needs"
+      "then": "it should validate complete rounding system",
+      "x-validation": {
+        "setup": {
+          "borderRadius": {
+            "none": "0",
+            "sm": "0.125rem",
+            "md": "0.375rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "2xl": "1rem",
+            "3xl": "1.5rem",
+            "full": "9999px"
+          }
+        },
+        "assertions": ["8 radius tokens", "none to full range", "Complete rounding system"]
+      }
+    },
+    {
+      "id": "APP-THEME-RADIUS-APPLICATION-001",
+      "given": "md radius applied to button component",
+      "when": "button uses theme.borderRadius.md for moderate rounding",
+      "then": "it should render button with 0.375rem border-radius creating soft corners",
+      "x-application": {
+        "theme": { "borderRadius": { "md": "0.375rem" } },
+        "component": "button",
+        "expectedCSS": "border-radius: 0.375rem;",
+        "expectedDOM": "<button data-testid=\"primary-button\" class=\"rounded-md\" style=\"border-radius: 0.375rem;\">Click me</button>",
+        "assertions": [
+          "Radius token: theme.borderRadius.md = '0.375rem'",
+          "Applied as: style=\"border-radius: 0.375rem;\"",
+          "Visual result: Button with moderately rounded corners (6px)",
+          "Balanced: neither sharp nor pill-shaped"
+        ]
+      }
+    },
+    {
+      "id": "APP-THEME-RADIUS-APPLICATION-002",
+      "given": "full radius applied to avatar image",
+      "when": "avatar uses theme.borderRadius.full for perfect circle",
+      "then": "it should render image as circle with 9999px border-radius",
+      "x-application": {
+        "theme": { "borderRadius": { "full": "9999px" } },
+        "component": "avatar",
+        "expectedCSS": "border-radius: 9999px;",
+        "expectedDOM": "<img data-testid=\"user-avatar\" class=\"rounded-full\" style=\"border-radius: 9999px;\" src=\"avatar.jpg\" alt=\"User\" />",
+        "assertions": [
+          "Radius token: theme.borderRadius.full = '9999px'",
+          "Applied as: style=\"border-radius: 9999px;\"",
+          "Visual result: Square image becomes perfect circle",
+          "9999px ensures full rounding regardless of size"
+        ]
+      }
+    },
+    {
+      "id": "APP-THEME-RADIUS-APPLICATION-003",
+      "given": "lg radius applied to card component",
+      "when": "card uses theme.borderRadius.lg for noticeable rounding",
+      "then": "it should render card with 0.5rem border-radius creating soft edges",
+      "x-application": {
+        "theme": { "borderRadius": { "lg": "0.5rem" } },
+        "component": "card",
+        "expectedCSS": "border-radius: 0.5rem;",
+        "expectedDOM": "<div data-testid=\"content-card\" class=\"rounded-lg\" style=\"border-radius: 0.5rem;\">Card content</div>",
+        "assertions": [
+          "Radius token: theme.borderRadius.lg = '0.5rem'",
+          "Applied as: style=\"border-radius: 0.5rem;\"",
+          "Visual result: Card with noticeable rounded corners (8px)",
+          "Softer appearance than md, more friendly design"
+        ]
+      }
     }
   ]
 }

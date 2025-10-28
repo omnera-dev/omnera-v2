@@ -66,49 +66,175 @@
       "id": "APP-THEME-ANIMATIONS-001",
       "given": "an animation with boolean value true",
       "when": "animation is simply enabled/disabled",
-      "then": "it should enable the animation"
+      "then": "it should validate animation enablement",
+      "x-validation": {
+        "setup": { "animations": { "fadeIn": true } },
+        "assertions": [
+          "Boolean: true enables animation",
+          "Simplest form",
+          "Uses default animation settings"
+        ]
+      }
     },
     {
       "id": "APP-THEME-ANIMATIONS-002",
       "given": "an animation with string CSS value",
       "when": "animation uses CSS shorthand (e.g., 'slide-in 0.5s ease-out')",
-      "then": "it should accept CSS animation string"
+      "then": "it should validate CSS animation string",
+      "x-validation": {
+        "setup": { "animations": { "slideIn": "slide-in 0.5s ease-out" } },
+        "assertions": [
+          "CSS shorthand accepted",
+          "Format: name duration easing",
+          "Direct CSS animation value"
+        ]
+      }
     },
     {
       "id": "APP-THEME-ANIMATIONS-003",
       "given": "an animation with duration and easing object config",
       "when": "animation has custom duration '300ms' and easing 'ease-in-out'",
-      "then": "it should configure timing properties"
+      "then": "it should validate timing properties",
+      "x-validation": {
+        "setup": {
+          "animations": { "transition": { "duration": "300ms", "easing": "ease-in-out" } }
+        },
+        "assertions": [
+          "Duration: 300ms",
+          "Easing: ease-in-out",
+          "Object config for granular control"
+        ]
+      }
     },
     {
       "id": "APP-THEME-ANIMATIONS-004",
       "given": "an animation with delay property",
       "when": "animation should wait before starting",
-      "then": "it should delay animation start"
+      "then": "it should validate animation delay",
+      "x-validation": {
+        "setup": { "animations": { "delayedFade": { "duration": "500ms", "delay": "200ms" } } },
+        "assertions": [
+          "Delay: 200ms before start",
+          "Duration: 500ms animation",
+          "Sequencing control"
+        ]
+      }
     },
     {
       "id": "APP-THEME-ANIMATIONS-005",
       "given": "an animation with keyframes object",
       "when": "animation uses custom CSS keyframes",
-      "then": "it should define animation frames"
+      "then": "it should validate animation frames definition",
+      "x-validation": {
+        "setup": {
+          "animations": {
+            "custom": { "keyframes": { "0%": { "opacity": 0 }, "100%": { "opacity": 1 } } }
+          }
+        },
+        "assertions": ["Keyframes object defines animation", "0%: start state", "100%: end state"]
+      }
     },
     {
       "id": "APP-THEME-ANIMATIONS-006",
       "given": "an animation with enabled set to false",
       "when": "animation is disabled via config",
-      "then": "it should not apply animation"
+      "then": "it should validate disabled state",
+      "x-validation": {
+        "setup": { "animations": { "fadeIn": { "enabled": false } } },
+        "assertions": [
+          "Enabled: false disables animation",
+          "Allows conditional animations",
+          "Useful for reduced-motion preferences"
+        ]
+      }
     },
     {
       "id": "APP-THEME-ANIMATIONS-007",
       "given": "common animations (fadeIn, fadeInUp, pulse, float)",
       "when": "theme defines standard animation library",
-      "then": "it should provide reusable animations across components"
+      "then": "it should validate reusable animation library",
+      "x-validation": {
+        "setup": {
+          "animations": { "fadeIn": true, "fadeInUp": true, "pulse": true, "float": true }
+        },
+        "assertions": [
+          "4 standard animations",
+          "Reusable across components",
+          "Consistent motion design"
+        ]
+      }
     },
     {
       "id": "APP-THEME-ANIMATIONS-008",
       "given": "transition config with duration and easing",
       "when": "global transition timing is defined",
-      "then": "it should set default transition behavior"
+      "then": "it should validate default transition behavior",
+      "x-validation": {
+        "setup": {
+          "animations": { "transition": { "duration": "300ms", "easing": "ease-in-out" } }
+        },
+        "assertions": [
+          "Default transition: 300ms",
+          "Easing: ease-in-out (smooth)",
+          "Applied to all transitions"
+        ]
+      }
+    },
+    {
+      "id": "APP-THEME-ANIMATIONS-APPLICATION-001",
+      "given": "fadeIn animation applied to modal component",
+      "when": "modal uses theme.animations.fadeIn",
+      "then": "it should render modal with fade-in animation on mount",
+      "x-application": {
+        "theme": { "animations": { "fadeIn": { "duration": "300ms", "easing": "ease-in" } } },
+        "component": "modal",
+        "expectedCSS": "animation: fadeIn 300ms ease-in;",
+        "expectedDOM": "<div data-testid=\"modal\" class=\"animate-fade-in\" style=\"animation: fadeIn 300ms ease-in;\">Modal content</div>",
+        "assertions": [
+          "Animation token: theme.animations.fadeIn",
+          "Applied as: style=\"animation: fadeIn 300ms ease-in;\"",
+          "Visual result: Modal fades in over 300ms",
+          "Token-to-CSS transformation"
+        ]
+      }
+    },
+    {
+      "id": "APP-THEME-ANIMATIONS-APPLICATION-002",
+      "given": "pulse animation applied to notification badge",
+      "when": "badge uses theme.animations.pulse",
+      "then": "it should render badge with pulsing animation loop",
+      "x-application": {
+        "theme": { "animations": { "pulse": { "duration": "2s", "easing": "ease-in-out" } } },
+        "component": "badge",
+        "expectedCSS": "animation: pulse 2s ease-in-out infinite;",
+        "expectedDOM": "<span data-testid=\"notification-badge\" class=\"animate-pulse\" style=\"animation: pulse 2s ease-in-out infinite;\">3</span>",
+        "assertions": [
+          "Animation token: theme.animations.pulse",
+          "Applied as: style=\"animation: pulse 2s ease-in-out infinite;\"",
+          "Visual result: Badge pulses continuously (infinite loop)",
+          "Draws user attention to notifications"
+        ]
+      }
+    },
+    {
+      "id": "APP-THEME-ANIMATIONS-APPLICATION-003",
+      "given": "transition animation applied to button hover state",
+      "when": "button uses theme.animations.transition for smooth state changes",
+      "then": "it should render button with CSS transition on hover",
+      "x-application": {
+        "theme": {
+          "animations": { "transition": { "duration": "200ms", "easing": "ease-in-out" } }
+        },
+        "component": "button",
+        "expectedCSS": "transition: all 200ms ease-in-out;",
+        "expectedDOM": "<button data-testid=\"action-button\" style=\"transition: all 200ms ease-in-out;\">Hover me</button>",
+        "assertions": [
+          "Transition token: theme.animations.transition",
+          "Applied as: style=\"transition: all 200ms ease-in-out;\"",
+          "Visual result: Smooth color/transform changes on hover",
+          "Enhances perceived responsiveness"
+        ]
+      }
     }
   ]
 }

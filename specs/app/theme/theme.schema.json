@@ -282,6 +282,119 @@
           "Seamless integration with Tailwind CSS"
         ]
       }
+    },
+    {
+      "id": "APP-THEME-INTEGRATION-001",
+      "given": "a complete theme with multiple design tokens used in page component",
+      "when": "page sections reference theme.colors, theme.fonts, theme.spacing, theme.shadows, theme.borderRadius",
+      "then": "it should render cohesive UI with all theme tokens applied together",
+      "x-application": {
+        "theme": {
+          "colors": {
+            "primary": "#007bff",
+            "text": "#212529",
+            "background": "#ffffff"
+          },
+          "fonts": {
+            "title": {
+              "family": "Bely Display",
+              "weight": 700,
+              "size": "2.5rem"
+            },
+            "body": {
+              "family": "Inter",
+              "size": "1rem"
+            }
+          },
+          "spacing": {
+            "section": "4rem",
+            "container": "80rem",
+            "gap": "1.5rem"
+          },
+          "shadows": {
+            "md": "0 4px 6px -1px rgb(0 0 0 / 0.1)"
+          },
+          "borderRadius": {
+            "lg": "0.5rem"
+          }
+        },
+        "component": "hero-section",
+        "expectedCSS": "background-color: #ffffff; padding: 4rem 0; font-family: 'Bely Display'; color: #212529; box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1); border-radius: 0.5rem; gap: 1.5rem;",
+        "expectedDOM": "<section data-testid=\"hero-section\" style=\"background-color: #ffffff; padding: 4rem 0;\"><div style=\"max-width: 80rem; margin: 0 auto; display: flex; flex-direction: column; gap: 1.5rem;\"><h1 style=\"font-family: 'Bely Display'; font-weight: 700; font-size: 2.5rem; color: #212529;\">Hero Title</h1><button style=\"background-color: #007bff; color: #ffffff; padding: 1rem 2rem; border-radius: 0.5rem; box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1); font-family: 'Inter'; font-size: 1rem;\">Call to Action</button></div></section>",
+        "assertions": [
+          "Color integration: primary (#007bff) button, text (#212529) heading, background (#ffffff) section",
+          "Font integration: Bely Display (title, 700, 2.5rem) heading, Inter (body, 1rem) button",
+          "Spacing integration: section (4rem) vertical padding, container (80rem) max-width, gap (1.5rem) flex spacing",
+          "Shadow integration: md shadow on button creates elevation",
+          "Radius integration: lg (0.5rem) rounded button corners",
+          "Complete design system: all 5 token categories work together cohesively",
+          "Theme enables consistent, branded UI across entire page"
+        ]
+      }
+    },
+    {
+      "id": "APP-THEME-INTEGRATION-002",
+      "given": "a theme used across multiple page sections",
+      "when": "different sections (header, hero, features, footer) all reference theme tokens",
+      "then": "it should maintain visual consistency across entire page layout",
+      "x-application": {
+        "theme": {
+          "colors": {
+            "primary": "#007bff",
+            "secondary": "#6c757d",
+            "background": "#f8f9fa"
+          },
+          "spacing": {
+            "section": "4rem",
+            "container": "80rem"
+          },
+          "shadows": {
+            "sm": "0 1px 2px 0 rgb(0 0 0 / 0.05)"
+          }
+        },
+        "component": "multi-section-page",
+        "expectedCSS": "All sections use: background-color: #f8f9fa; padding: 4rem 0; max-width: 80rem; Header uses primary color, Footer uses secondary color, Cards use sm shadow",
+        "expectedDOM": "<div data-testid=\"full-page\"><header style=\"background-color: #007bff; padding: 4rem 0;\">...</header><section style=\"background-color: #f8f9fa; padding: 4rem 0;\"><div style=\"max-width: 80rem;\">Hero</div></section><section style=\"background-color: #f8f9fa; padding: 4rem 0;\"><div style=\"max-width: 80rem;\">Features</div></section><footer style=\"background-color: #6c757d; padding: 4rem 0;\">...</footer></div>",
+        "assertions": [
+          "Consistent section padding: 4rem vertical spacing across all sections",
+          "Consistent container width: 80rem max-width for all content areas",
+          "Consistent color usage: primary (header), secondary (footer), background (sections)",
+          "Consistent elevation: sm shadow applied uniformly to cards",
+          "Theme creates visual rhythm and coherence across multi-section layout",
+          "Single source of truth: changing one token updates entire page"
+        ]
+      }
+    },
+    {
+      "id": "APP-THEME-INTEGRATION-003",
+      "given": "a theme with responsive breakpoints integrated with component layouts",
+      "when": "components use both theme.spacing and theme.breakpoints for responsive design",
+      "then": "it should render adaptive layouts that respond to screen size",
+      "x-application": {
+        "theme": {
+          "spacing": {
+            "section": "2rem",
+            "sectionMd": "4rem",
+            "gap": "1rem",
+            "gapLg": "2rem"
+          },
+          "breakpoints": {
+            "md": "768px",
+            "lg": "1024px"
+          }
+        },
+        "component": "responsive-grid",
+        "expectedCSS": "gap: 1rem; padding: 2rem 0; @media (min-width: 768px) { padding: 4rem 0; } @media (min-width: 1024px) { gap: 2rem; }",
+        "expectedDOM": "<section data-testid=\"responsive-section\" class=\"py-8 md:py-16\" style=\"padding: 2rem 0;\"><div class=\"grid gap-4 lg:gap-8\" style=\"display: grid; gap: 1rem;\">Grid items</div></section>",
+        "assertions": [
+          "Spacing scales with breakpoints: 2rem mobile → 4rem tablet",
+          "Gap scales with breakpoints: 1rem mobile → 2rem desktop",
+          "Breakpoint integration: theme.breakpoints.md (768px) and theme.breakpoints.lg (1024px) trigger spacing changes",
+          "Mobile-first approach: base spacing is mobile, enhanced at larger breakpoints",
+          "Theme orchestrates responsive design: spacing + breakpoints work together",
+          "Single configuration: theme controls both values and thresholds"
+        ]
+      }
     }
   ]
 }

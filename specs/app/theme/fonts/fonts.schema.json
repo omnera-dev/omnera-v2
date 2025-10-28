@@ -86,61 +86,218 @@
       "id": "APP-THEME-FONTS-001",
       "given": "a font with only family defined",
       "when": "font uses minimal configuration",
-      "then": "it should accept font family as the only required property"
+      "then": "it should validate font family as the only required property",
+      "x-validation": {
+        "setup": { "fonts": { "body": { "family": "Inter" } } },
+        "assertions": ["Only 'family' is required", "All other properties optional"]
+      }
     },
     {
       "id": "APP-THEME-FONTS-002",
       "given": "a font with family and fallback stack",
       "when": "font includes fallback fonts (e.g., 'Inter', 'system-ui, sans-serif')",
-      "then": "it should provide graceful fallback for missing fonts"
+      "then": "it should validate graceful fallback for missing fonts",
+      "x-validation": {
+        "setup": {
+          "fonts": { "body": { "family": "Inter", "fallback": "system-ui, sans-serif" } }
+        },
+        "assertions": [
+          "Primary: Inter",
+          "Fallback: system-ui, sans-serif",
+          "Browser uses fallback if primary unavailable"
+        ]
+      }
     },
     {
       "id": "APP-THEME-FONTS-003",
       "given": "a font with multiple weights [300, 400, 500, 600, 700]",
       "when": "font supports various weight options",
-      "then": "it should accept weight values from 100-900 in increments of 100"
+      "then": "it should validate weight values from 100-900 in increments of 100",
+      "x-validation": {
+        "setup": {
+          "fonts": { "body": { "family": "Inter", "weights": [300, 400, 500, 600, 700] } }
+        },
+        "assertions": [
+          "Weights: 300, 400, 500, 600, 700",
+          "Enum: [100, 200, 300, 400, 500, 600, 700, 800, 900]",
+          "No custom weights allowed"
+        ]
+      }
     },
     {
       "id": "APP-THEME-FONTS-004",
       "given": "a font with style set to 'italic'",
       "when": "font uses italic style",
-      "then": "it should accept normal, italic, or oblique styles"
+      "then": "it should validate normal, italic, or oblique styles",
+      "x-validation": {
+        "setup": { "fonts": { "title": { "family": "Georgia", "style": "italic" } } },
+        "assertions": ["Style: italic", "Enum: normal, italic, oblique", "Default: normal"]
+      }
     },
     {
       "id": "APP-THEME-FONTS-005",
       "given": "a font with size '16px' and lineHeight '1.5'",
       "when": "font defines default size and line spacing",
-      "then": "it should set typography metrics for body text"
+      "then": "it should validate typography metrics for body text",
+      "x-validation": {
+        "setup": {
+          "fonts": { "body": { "family": "Inter", "size": "16px", "lineHeight": "1.5" } }
+        },
+        "assertions": [
+          "Size: 16px (base font size)",
+          "LineHeight: 1.5 (line spacing ratio)",
+          "Establishes baseline typography"
+        ]
+      }
     },
     {
       "id": "APP-THEME-FONTS-006",
       "given": "a font with letterSpacing '0.05em'",
       "when": "font includes letter spacing for display text",
-      "then": "it should apply character spacing for readability"
+      "then": "it should validate character spacing for readability",
+      "x-validation": {
+        "setup": { "fonts": { "title": { "family": "Bely Display", "letterSpacing": "0.05em" } } },
+        "assertions": [
+          "LetterSpacing: 0.05em",
+          "Em-based spacing (relative to font size)",
+          "Increases readability for headings"
+        ]
+      }
     },
     {
       "id": "APP-THEME-FONTS-007",
       "given": "a font with transform 'uppercase'",
       "when": "font uses text transformation",
-      "then": "it should accept none, uppercase, lowercase, or capitalize"
+      "then": "it should validate none, uppercase, lowercase, or capitalize",
+      "x-validation": {
+        "setup": { "fonts": { "label": { "family": "Inter", "transform": "uppercase" } } },
+        "assertions": [
+          "Transform: uppercase",
+          "Enum: none, uppercase, lowercase, capitalize",
+          "Applied via CSS text-transform"
+        ]
+      }
     },
     {
       "id": "APP-THEME-FONTS-008",
       "given": "a font with Google Fonts URL",
       "when": "font is loaded from external source",
-      "then": "it should accept valid font URL for remote loading"
+      "then": "it should validate font URL for remote loading",
+      "x-validation": {
+        "setup": {
+          "fonts": {
+            "body": {
+              "family": "Inter",
+              "url": "https://fonts.googleapis.com/css2?family=Inter:wght@300..700"
+            }
+          }
+        },
+        "assertions": [
+          "URL format validated",
+          "Google Fonts supported",
+          "Self-hosted fonts supported"
+        ]
+      }
     },
     {
       "id": "APP-THEME-FONTS-009",
-      "given": "a complete font config with all properties (family, fallback, weights, style, size, lineHeight, letterSpacing, transform, url)",
+      "given": "a complete font config with all properties",
       "when": "font is fully configured",
-      "then": "it should support comprehensive typography settings"
+      "then": "it should validate comprehensive typography settings",
+      "x-validation": {
+        "setup": {
+          "fonts": {
+            "body": {
+              "family": "Inter",
+              "fallback": "system-ui, sans-serif",
+              "weights": [400, 700],
+              "style": "normal",
+              "size": "16px",
+              "lineHeight": "1.5",
+              "letterSpacing": "0",
+              "transform": "none",
+              "url": "https://fonts.googleapis.com/css2?family=Inter"
+            }
+          }
+        },
+        "assertions": [
+          "All 9 properties defined",
+          "Complete typography configuration",
+          "Production-ready font setup"
+        ]
+      }
     },
     {
       "id": "APP-THEME-FONTS-010",
       "given": "a theme with multiple font categories (title, body, mono)",
       "when": "different fonts are defined for headings, body text, and code",
-      "then": "it should support semantic font system for all UI contexts"
+      "then": "it should validate semantic font system for all UI contexts",
+      "x-validation": {
+        "setup": {
+          "fonts": {
+            "title": { "family": "Bely Display", "fallback": "Georgia, serif" },
+            "body": { "family": "Inter", "fallback": "system-ui, sans-serif" },
+            "mono": { "family": "JetBrains Mono", "fallback": "monospace" }
+          }
+        },
+        "assertions": [
+          "3 font categories: title, body, mono",
+          "Title: serif (display)",
+          "Body: sans-serif (readability)",
+          "Mono: monospace (code)"
+        ]
+      }
+    },
+    {
+      "id": "APP-THEME-FONTS-APPLICATION-001",
+      "given": "body font applied to paragraph",
+      "when": "paragraph uses theme.fonts.body",
+      "then": "it should render with body font family and metrics",
+      "x-application": {
+        "theme": {
+          "fonts": {
+            "body": {
+              "family": "Inter",
+              "fallback": "sans-serif",
+              "size": "16px",
+              "lineHeight": "1.5"
+            }
+          }
+        },
+        "component": "paragraph",
+        "expectedCSS": "font-family: Inter, sans-serif; font-size: 16px; line-height: 1.5;",
+        "expectedDOM": "<p style=\"font-family: Inter, sans-serif; font-size: 16px; line-height: 1.5;\">Body text</p>",
+        "assertions": [
+          "Font: Inter with sans-serif fallback",
+          "Size: 16px",
+          "LineHeight: 1.5 (24px for 16px font)"
+        ]
+      }
+    },
+    {
+      "id": "APP-THEME-FONTS-APPLICATION-002",
+      "given": "title font applied to heading",
+      "when": "heading uses theme.fonts.title with transform",
+      "then": "it should render with title font and text transformation",
+      "x-application": {
+        "theme": {
+          "fonts": {
+            "title": {
+              "family": "Bely Display",
+              "transform": "lowercase",
+              "letterSpacing": "0.05em"
+            }
+          }
+        },
+        "component": "heading",
+        "expectedCSS": "font-family: 'Bely Display', Georgia, serif; text-transform: lowercase; letter-spacing: 0.05em;",
+        "expectedDOM": "<h1 style=\"font-family: 'Bely Display', Georgia, serif; text-transform: lowercase; letter-spacing: 0.05em;\">Our Mission</h1>",
+        "assertions": [
+          "Font: Bely Display",
+          "Transform: lowercase ('Our Mission' → 'our mission')",
+          "LetterSpacing: 0.05em (wider tracking)"
+        ]
+      }
     }
   ]
 }

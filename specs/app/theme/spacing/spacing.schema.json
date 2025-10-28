@@ -33,61 +33,206 @@
       "id": "APP-THEME-SPACING-001",
       "given": "spacing using Tailwind utility classes (py-16, px-4)",
       "when": "spacing is defined with Tailwind syntax",
-      "then": "it should accept Tailwind spacing utilities"
+      "then": "it should validate Tailwind spacing utilities",
+      "x-validation": {
+        "setup": { "spacing": { "section": "py-16", "container": "px-4" } },
+        "assertions": ["Tailwind classes accepted", "py-16: padding-y 4rem", "px-4: padding-x 1rem"]
+      }
     },
     {
       "id": "APP-THEME-SPACING-002",
       "given": "spacing with responsive variants (py-16 sm:py-20)",
       "when": "spacing includes breakpoint-specific values",
-      "then": "it should support responsive spacing with Tailwind breakpoints"
+      "then": "it should validate responsive spacing with Tailwind breakpoints",
+      "x-validation": {
+        "setup": { "spacing": { "section": "py-16 sm:py-20" } },
+        "assertions": [
+          "Base: py-16 (4rem)",
+          "Small screens (640px+): py-20 (5rem)",
+          "Mobile-first responsive spacing"
+        ]
+      }
     },
     {
       "id": "APP-THEME-SPACING-003",
       "given": "container spacing with max-width and auto margins",
       "when": "spacing defines container constraints (max-w-7xl mx-auto px-4)",
-      "then": "it should center and constrain content width"
+      "then": "it should validate centering and width constraints",
+      "x-validation": {
+        "setup": { "spacing": { "container": "max-w-7xl mx-auto px-4" } },
+        "assertions": [
+          "max-w-7xl: 80rem max width",
+          "mx-auto: horizontal centering",
+          "px-4: 1rem horizontal padding"
+        ]
+      }
     },
     {
       "id": "APP-THEME-SPACING-004",
       "given": "spacing variants with size modifiers (gap, gapSmall, gapLarge)",
       "when": "spacing system includes small, medium, and large variants",
-      "then": "it should provide consistent spacing scale across components"
+      "then": "it should validate consistent spacing scale",
+      "x-validation": {
+        "setup": { "spacing": { "gapSmall": "gap-4", "gap": "gap-6", "gapLarge": "gap-8" } },
+        "assertions": [
+          "Small: gap-4 (1rem)",
+          "Medium: gap-6 (1.5rem)",
+          "Large: gap-8 (2rem)",
+          "Progressive scale"
+        ]
+      }
     },
     {
       "id": "APP-THEME-SPACING-005",
       "given": "section spacing with vertical padding",
       "when": "spacing defines consistent section padding",
-      "then": "it should create visual rhythm between page sections"
+      "then": "it should validate visual rhythm between sections",
+      "x-validation": {
+        "setup": { "spacing": { "section": "py-16 sm:py-20" } },
+        "assertions": [
+          "Vertical padding creates breathing room",
+          "Consistent rhythm across page sections",
+          "Responsive: increases on larger screens"
+        ]
+      }
     },
     {
       "id": "APP-THEME-SPACING-006",
       "given": "multiple container sizes (container, containerSmall, containerXSmall)",
       "when": "spacing includes different max-widths for various contexts",
-      "then": "it should support hierarchical content width constraints"
+      "then": "it should validate hierarchical content width constraints",
+      "x-validation": {
+        "setup": {
+          "spacing": {
+            "container": "max-w-7xl mx-auto px-4",
+            "containerSmall": "max-w-4xl mx-auto px-4",
+            "containerXSmall": "max-w-2xl mx-auto px-4"
+          }
+        },
+        "assertions": [
+          "Large: 80rem (full-width content)",
+          "Small: 56rem (articles)",
+          "XSmall: 42rem (narrow text)",
+          "All centered with mx-auto"
+        ]
+      }
     },
     {
       "id": "APP-THEME-SPACING-007",
       "given": "padding variants (padding, paddingSmall, paddingLarge)",
       "when": "spacing system provides padding scale",
-      "then": "it should enable consistent internal component spacing"
+      "then": "it should validate consistent internal component spacing",
+      "x-validation": {
+        "setup": { "spacing": { "paddingSmall": "p-4", "padding": "p-6", "paddingLarge": "p-8" } },
+        "assertions": [
+          "Small: p-4 (1rem)",
+          "Medium: p-6 (1.5rem)",
+          "Large: p-8 (2rem)",
+          "Internal spacing scale"
+        ]
+      }
     },
     {
       "id": "APP-THEME-SPACING-008",
       "given": "margin variants (margin, marginSmall, marginLarge)",
       "when": "spacing system provides margin scale",
-      "then": "it should enable consistent external component spacing"
+      "then": "it should validate consistent external component spacing",
+      "x-validation": {
+        "setup": { "spacing": { "marginSmall": "m-4", "margin": "m-6", "marginLarge": "m-8" } },
+        "assertions": [
+          "Small: m-4 (1rem)",
+          "Medium: m-6 (1.5rem)",
+          "Large: m-8 (2rem)",
+          "External spacing scale"
+        ]
+      }
     },
     {
       "id": "APP-THEME-SPACING-009",
       "given": "spacing using CSS values (2rem, 16px, 1.5em)",
       "when": "spacing is defined with raw CSS instead of Tailwind",
-      "then": "it should accept custom CSS spacing values"
+      "then": "it should validate custom CSS spacing values",
+      "x-validation": {
+        "setup": { "spacing": { "section": "4rem", "gap": "1rem", "padding": "16px" } },
+        "assertions": [
+          "CSS values accepted as strings",
+          "Units: rem, px, em, % supported",
+          "Alternative to Tailwind classes"
+        ]
+      }
     },
     {
       "id": "APP-THEME-SPACING-010",
-      "given": "a complete spacing system with sections, containers, gaps, padding, and margins",
+      "given": "a complete spacing system",
       "when": "all spacing tokens are configured",
-      "then": "it should provide comprehensive spacing system for entire layout"
+      "then": "it should validate comprehensive spacing system",
+      "x-validation": {
+        "setup": {
+          "spacing": {
+            "section": "py-16 sm:py-20",
+            "container": "max-w-7xl mx-auto px-4",
+            "gap": "gap-6",
+            "padding": "p-6",
+            "margin": "m-6"
+          }
+        },
+        "assertions": [
+          "5 token categories",
+          "Covers sections, containers, gaps, padding, margins",
+          "Complete layout system"
+        ]
+      }
+    },
+    {
+      "id": "APP-THEME-SPACING-APPLICATION-001",
+      "given": "section spacing applied to page section",
+      "when": "section uses theme.spacing.section",
+      "then": "it should render with vertical padding creating rhythm",
+      "x-application": {
+        "theme": { "spacing": { "section": "4rem" } },
+        "component": "section",
+        "expectedCSS": "padding-top: 4rem; padding-bottom: 4rem;",
+        "expectedDOM": "<section style=\"padding-top: 4rem; padding-bottom: 4rem;\">Content</section>",
+        "assertions": [
+          "4rem top padding (64px)",
+          "4rem bottom padding (64px)",
+          "Vertical rhythm established"
+        ]
+      }
+    },
+    {
+      "id": "APP-THEME-SPACING-APPLICATION-002",
+      "given": "container spacing applied to content wrapper",
+      "when": "div uses theme.spacing.container",
+      "then": "it should render centered with max-width constraint",
+      "x-application": {
+        "theme": { "spacing": { "container": "80rem" } },
+        "component": "container",
+        "expectedCSS": "max-width: 80rem; margin-left: auto; margin-right: auto; padding-left: 1rem; padding-right: 1rem;",
+        "expectedDOM": "<div class=\"container\" style=\"max-width: 80rem; margin: 0 auto; padding: 0 1rem;\">Content</div>",
+        "assertions": [
+          "Max-width: 80rem (1280px)",
+          "Centered with auto margins",
+          "Horizontal padding for mobile"
+        ]
+      }
+    },
+    {
+      "id": "APP-THEME-SPACING-APPLICATION-003",
+      "given": "gap spacing applied to flex container",
+      "when": "flex container uses theme.spacing.gap",
+      "then": "it should render with spacing between flex items",
+      "x-application": {
+        "theme": { "spacing": { "gap": "1.5rem" } },
+        "component": "flex",
+        "expectedCSS": "display: flex; gap: 1.5rem;",
+        "expectedDOM": "<div class=\"flex\" style=\"display: flex; gap: 1.5rem;\"><div>Item 1</div><div>Item 2</div></div>",
+        "assertions": [
+          "Gap: 1.5rem (24px) between items",
+          "No margin needed on children",
+          "Modern flex gap property"
+        ]
+      }
     }
   ]
 }
