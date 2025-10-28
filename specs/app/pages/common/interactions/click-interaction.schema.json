@@ -56,5 +56,78 @@
       "openInNewTab": true
     }
   ],
-  "specs": []
+  "specs": [
+    {
+      "id": "APP-INTERACTION-CLICK-001",
+      "given": "a button with click animation 'pulse'",
+      "when": "user clicks the button",
+      "then": "it should play a pulse animation"
+    },
+    {
+      "id": "APP-INTERACTION-CLICK-002",
+      "given": "a button with click animation 'ripple'",
+      "when": "user clicks the button",
+      "then": "it should play a ripple animation from the click point"
+    },
+    {
+      "id": "APP-INTERACTION-CLICK-003",
+      "given": "a button with navigate to '/contact'",
+      "when": "user clicks the button",
+      "then": "it should navigate to the contact page"
+    },
+    {
+      "id": "APP-INTERACTION-CLICK-004",
+      "given": "a button with navigate to anchor '#pricing-section'",
+      "when": "user clicks the button",
+      "then": "it should navigate to the pricing section on the same page"
+    },
+    {
+      "id": "APP-INTERACTION-CLICK-005",
+      "given": "a button with openUrl to external site",
+      "when": "user clicks the button",
+      "then": "it should open the URL in the same tab"
+    },
+    {
+      "id": "APP-INTERACTION-CLICK-006",
+      "given": "a button with openUrl and openInNewTab true",
+      "when": "user clicks the button",
+      "then": "it should open the URL in a new tab"
+    },
+    {
+      "id": "APP-INTERACTION-CLICK-007",
+      "given": "a button with scrollTo '#hero-section'",
+      "when": "user clicks the button",
+      "then": "it should smoothly scroll to the hero section"
+    },
+    {
+      "id": "APP-INTERACTION-CLICK-008",
+      "given": "a button with toggleElement '#mobile-menu'",
+      "when": "user clicks the button",
+      "then": "it should show the mobile menu if hidden, or hide it if shown"
+    },
+    {
+      "id": "APP-INTERACTION-CLICK-009",
+      "given": "a button with submitForm '#contact-form'",
+      "when": "user clicks the button",
+      "then": "it should submit the contact form"
+    },
+    {
+      "id": "APP-INTERACTION-CLICK-010",
+      "given": "a button with animation 'pulse' and navigate '/signup'",
+      "when": "user clicks the button",
+      "then": "it should play pulse animation then navigate to signup page"
+    },
+    {
+      "id": "APP-INTERACTION-CLICK-011",
+      "given": "a button with animation 'bounce'",
+      "when": "user clicks the button",
+      "then": "it should play a bounce animation"
+    },
+    {
+      "id": "APP-INTERACTION-CLICK-012",
+      "given": "a button with animation 'none'",
+      "when": "user clicks the button",
+      "then": "it should not play any animation"
+    }
+  ]
 }

@@ -36,5 +36,54 @@
       }
     }
   ],
-  "specs": []
+  "specs": [
+    {
+      "id": "APP-INTERACTION-MAIN-001",
+      "given": "a component with only hover interactions",
+      "when": "component is configured",
+      "then": "it should support hover effects without other interaction types"
+    },
+    {
+      "id": "APP-INTERACTION-MAIN-002",
+      "given": "a component with only click interactions",
+      "when": "component is configured",
+      "then": "it should support click actions without other interaction types"
+    },
+    {
+      "id": "APP-INTERACTION-MAIN-003",
+      "given": "a component with only scroll interactions",
+      "when": "component is configured",
+      "then": "it should support scroll animations without other interaction types"
+    },
+    {
+      "id": "APP-INTERACTION-MAIN-004",
+      "given": "a component with only entrance interactions",
+      "when": "component is configured",
+      "then": "it should support entrance animations without other interaction types"
+    },
+    {
+      "id": "APP-INTERACTION-MAIN-005",
+      "given": "a button with hover and click interactions",
+      "when": "component is configured",
+      "then": "it should support both hover effects and click actions"
+    },
+    {
+      "id": "APP-INTERACTION-MAIN-006",
+      "given": "a component with entrance and scroll interactions",
+      "when": "page loads and user scrolls",
+      "then": "it should play entrance animation on load and scroll animation on viewport entry"
+    },
+    {
+      "id": "APP-INTERACTION-MAIN-007",
+      "given": "a component with all four interaction types (hover, click, scroll, entrance)",
+      "when": "component is fully interactive",
+      "then": "all interactions should work independently and not interfere with each other"
+    },
+    {
+      "id": "APP-INTERACTION-MAIN-008",
+      "given": "a button with hover transform and click navigation",
+      "when": "user hovers then clicks",
+      "then": "hover effect should apply immediately and click should navigate after animation"
+    }
+  ]
 }

@@ -63,5 +63,66 @@
       }
     }
   ],
-  "specs": []
+  "specs": [
+    {
+      "id": "APP-I18N-001",
+      "given": "a button with English content",
+      "when": "language is set to en-US",
+      "then": "it should display English text"
+    },
+    {
+      "id": "APP-I18N-002",
+      "given": "a button with translations for en-US, fr-FR, and es-ES",
+      "when": "language switches between English, French, and Spanish",
+      "then": "content should update to match the selected language"
+    },
+    {
+      "id": "APP-I18N-003",
+      "given": "a button with content and props for multiple languages",
+      "when": "language is set to fr-FR",
+      "then": "both French content and French aria-label should be applied"
+    },
+    {
+      "id": "APP-I18N-004",
+      "given": "a heading with translations for RTL language (ar-SA)",
+      "when": "language is set to Arabic",
+      "then": "it should display Arabic content with RTL-specific props"
+    },
+    {
+      "id": "APP-I18N-005",
+      "given": "a component with translations for German (de-DE)",
+      "when": "language is set to de-DE",
+      "then": "it should display German content"
+    },
+    {
+      "id": "APP-I18N-006",
+      "given": "a button with only content translations (no props)",
+      "when": "language switches",
+      "then": "only content should update while props remain unchanged"
+    },
+    {
+      "id": "APP-I18N-007",
+      "given": "a component with language-specific className in props",
+      "when": "switching between LTR and RTL languages",
+      "then": "className should adjust for text direction (text-left vs text-right)"
+    },
+    {
+      "id": "APP-I18N-008",
+      "given": "a form with translations for labels and placeholders",
+      "when": "language changes",
+      "then": "all form text and accessibility attributes should update"
+    },
+    {
+      "id": "APP-I18N-009",
+      "given": "a component with translations for language codes without country (en, fr)",
+      "when": "language code uses 2-letter format",
+      "then": "it should support both formats (en and en-US)"
+    },
+    {
+      "id": "APP-I18N-010",
+      "given": "a navigation menu with translations for 5+ languages",
+      "when": "user selects from language switcher",
+      "then": "all menu items should update to the selected language instantly"
+    }
+  ]
 }

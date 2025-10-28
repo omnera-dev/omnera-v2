@@ -62,5 +62,66 @@
       "persistSelection": true
     }
   ],
-  "specs": []
+  "specs": [
+    {
+      "id": "APP-LANGUAGES-001",
+      "given": "an app with default language en-US and one supported language",
+      "when": "app is configured with minimal language setup",
+      "then": "it should use English as the only available language"
+    },
+    {
+      "id": "APP-LANGUAGES-002",
+      "given": "an app with default en-US and supported languages [en-US, fr-FR, es-ES]",
+      "when": "app is configured with multiple languages",
+      "then": "users should be able to switch between all three languages"
+    },
+    {
+      "id": "APP-LANGUAGES-003",
+      "given": "an app with default en-US and fallback en-US",
+      "when": "a translation is missing for the current language",
+      "then": "it should display the English fallback text"
+    },
+    {
+      "id": "APP-LANGUAGES-004",
+      "given": "an app with detectBrowser set to true",
+      "when": "user visits the site for the first time",
+      "then": "it should automatically detect and set the browser's preferred language"
+    },
+    {
+      "id": "APP-LANGUAGES-005",
+      "given": "an app with detectBrowser set to false",
+      "when": "user visits the site",
+      "then": "it should use the default language without auto-detection"
+    },
+    {
+      "id": "APP-LANGUAGES-006",
+      "given": "an app with persistSelection set to true",
+      "when": "user manually selects a language",
+      "then": "it should remember the choice in localStorage for future visits"
+    },
+    {
+      "id": "APP-LANGUAGES-007",
+      "given": "an app with persistSelection set to false",
+      "when": "user manually selects a language",
+      "then": "it should not persist the choice and reset to default on next visit"
+    },
+    {
+      "id": "APP-LANGUAGES-008",
+      "given": "an app with supported languages including RTL (ar-SA) and LTR (en-US)",
+      "when": "user switches between English and Arabic",
+      "then": "the entire app layout should flip between LTR and RTL direction"
+    },
+    {
+      "id": "APP-LANGUAGES-009",
+      "given": "an app with 5+ supported languages from different regions",
+      "when": "user opens language switcher",
+      "then": "all languages should be displayed with their native labels and flags"
+    },
+    {
+      "id": "APP-LANGUAGES-010",
+      "given": "an app with all features enabled (detectBrowser, persistSelection, fallback)",
+      "when": "language configuration is fully utilized",
+      "then": "it should provide seamless multi-language UX with auto-detection, persistence, and fallback"
+    }
+  ]
 }

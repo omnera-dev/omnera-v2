@@ -55,5 +55,78 @@
       "once": true
     }
   ],
-  "specs": []
+  "specs": [
+    {
+      "id": "APP-INTERACTION-SCROLL-001",
+      "given": "a component with scroll animation 'fadeInUp'",
+      "when": "component enters the viewport",
+      "then": "it should fade in while moving up"
+    },
+    {
+      "id": "APP-INTERACTION-SCROLL-002",
+      "given": "a component with scroll animation 'fadeIn'",
+      "when": "component enters the viewport",
+      "then": "it should fade in smoothly"
+    },
+    {
+      "id": "APP-INTERACTION-SCROLL-003",
+      "given": "a component with scroll animation 'zoomIn'",
+      "when": "component enters the viewport",
+      "then": "it should zoom in from small to normal size"
+    },
+    {
+      "id": "APP-INTERACTION-SCROLL-004",
+      "given": "a component with scroll animation 'fadeInLeft'",
+      "when": "component enters the viewport",
+      "then": "it should fade in while sliding from the left"
+    },
+    {
+      "id": "APP-INTERACTION-SCROLL-005",
+      "given": "a component with threshold 0.1 (10% visible)",
+      "when": "10% of component becomes visible",
+      "then": "it should trigger the animation"
+    },
+    {
+      "id": "APP-INTERACTION-SCROLL-006",
+      "given": "a component with threshold 0.5 (50% visible)",
+      "when": "50% of component becomes visible",
+      "then": "it should trigger the animation"
+    },
+    {
+      "id": "APP-INTERACTION-SCROLL-007",
+      "given": "a component with threshold 1.0 (fully visible)",
+      "when": "100% of component becomes visible",
+      "then": "it should trigger the animation"
+    },
+    {
+      "id": "APP-INTERACTION-SCROLL-008",
+      "given": "a component with delay '200ms'",
+      "when": "component enters the viewport",
+      "then": "it should wait 200ms before starting the animation"
+    },
+    {
+      "id": "APP-INTERACTION-SCROLL-009",
+      "given": "a component with duration '1000ms'",
+      "when": "animation starts",
+      "then": "it should complete the animation in 1 second"
+    },
+    {
+      "id": "APP-INTERACTION-SCROLL-010",
+      "given": "a component with once set to true",
+      "when": "component enters viewport multiple times",
+      "then": "it should animate only on the first entry"
+    },
+    {
+      "id": "APP-INTERACTION-SCROLL-011",
+      "given": "a component with once set to false",
+      "when": "component enters viewport multiple times",
+      "then": "it should animate every time it enters the viewport"
+    },
+    {
+      "id": "APP-INTERACTION-SCROLL-012",
+      "given": "a component with animation, threshold, delay, and duration all configured",
+      "when": "component reaches the threshold visibility",
+      "then": "it should apply all settings in sequence (wait delay, then animate with duration)"
+    }
+  ]
 }
