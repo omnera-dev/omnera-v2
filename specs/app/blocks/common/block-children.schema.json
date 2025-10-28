@@ -42,61 +42,336 @@
       "id": "APP-BLOCKS-CHILDREN-001",
       "given": "children array for block templates",
       "when": "array contains child component objects",
-      "then": "it should define nested component structure"
+      "then": "it should render nested component structure in DOM",
+      "x-test": {
+        "setup": {
+          "blockDefinition": {
+            "name": "card",
+            "type": "div",
+            "children": [
+              { "type": "div", "props": { "className": "header" } },
+              { "type": "div", "props": { "className": "body" } }
+            ]
+          }
+        },
+        "expectedDOM": "<div data-testid=\"block-card\">\n  <div class=\"header\"></div>\n  <div class=\"body\"></div>\n</div>",
+        "assertions": [
+          "Parent div renders with 2 child divs",
+          "Children array preserves order in DOM",
+          "Each child object becomes a DOM element"
+        ]
+      }
     },
     {
       "id": "APP-BLOCKS-CHILDREN-002",
       "given": "child with required type",
       "when": "each child has type property",
-      "then": "it should specify child component type"
+      "then": "it should render child element based on type",
+      "x-test": {
+        "setup": {
+          "children": [
+            { "type": "div" },
+            { "type": "span" },
+            { "type": "button" },
+            { "type": "text" }
+          ]
+        },
+        "expectedDOM": "<div data-testid=\"child-0\"></div>\n<span data-testid=\"child-1\"></span>\n<button data-testid=\"child-2\"></button>\n<p data-testid=\"child-3\"></p>",
+        "assertions": [
+          "Type 'div' renders <div> element",
+          "Type 'span' renders <span> element",
+          "Type 'button' renders <button> element",
+          "Type 'text' renders <p> element"
+        ]
+      }
     },
     {
       "id": "APP-BLOCKS-CHILDREN-003",
       "given": "child with props",
       "when": "child has props referencing block-props.schema.json",
-      "then": "it should provide child component properties"
+      "then": "it should render child with specified properties and attributes",
+      "x-test": {
+        "setup": {
+          "children": [
+            {
+              "type": "div",
+              "props": {
+                "className": "card-header",
+                "id": "header-1",
+                "ariaLabel": "Card header"
+              }
+            }
+          ]
+        },
+        "expectedDOM": "<div data-testid=\"child-0\" class=\"card-header\" id=\"header-1\" aria-label=\"Card header\"></div>",
+        "assertions": [
+          "Child div has className='card-header'",
+          "Child div has id='header-1'",
+          "Child div has ariaLabel='Card header'",
+          "Props from block-props.schema.json apply to child element"
+        ]
+      }
     },
     {
       "id": "APP-BLOCKS-CHILDREN-004",
       "given": "child with recursive children",
       "when": "child has children property with self-reference (#)",
-      "then": "it should support unlimited nesting depth"
+      "then": "it should render unlimited nesting depth in DOM tree",
+      "x-test": {
+        "setup": {
+          "blockDefinition": {
+            "name": "nested-list",
+            "type": "ul",
+            "children": [
+              {
+                "type": "li",
+                "content": "Level 1",
+                "children": [
+                  {
+                    "type": "ul",
+                    "children": [
+                      {
+                        "type": "li",
+                        "content": "Level 2",
+                        "children": [
+                          {
+                            "type": "ul",
+                            "children": [{ "type": "li", "content": "Level 3" }]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "expectedDOM": "<ul data-testid=\"block-nested-list\">\n  <li>Level 1\n    <ul>\n      <li>Level 2\n        <ul>\n          <li>Level 3</li>\n        </ul>\n      </li>\n    </ul>\n  </li>\n</ul>",
+        "assertions": [
+          "Self-reference (#) enables recursive children property",
+          "DOM tree depth: 3 levels of nested lists",
+          "Each child can have its own children array",
+          "No limit on nesting depth"
+        ]
+      }
     },
     {
       "id": "APP-BLOCKS-CHILDREN-005",
       "given": "child with content",
       "when": "child has content string with $variable support",
-      "then": "it should provide text content with variable placeholders"
+      "then": "it should render child with substituted text content",
+      "x-test": {
+        "setup": {
+          "blockDefinition": {
+            "name": "labeled-input",
+            "type": "div",
+            "children": [
+              { "type": "text", "props": { "level": "label" }, "content": "$label" },
+              { "type": "input", "props": { "placeholder": "$placeholder" } }
+            ]
+          },
+          "reference": {
+            "$ref": "labeled-input",
+            "vars": { "label": "Email Address", "placeholder": "Enter your email" }
+          }
+        },
+        "expectedDOM": "<div data-testid=\"block-labeled-input\">\n  <label>Email Address</label>\n  <input placeholder=\"Enter your email\" />\n</div>",
+        "assertions": [
+          "First child (label) has content 'Email Address' (substituted from $label)",
+          "Second child (input) has placeholder 'Enter your email' (substituted from $placeholder)",
+          "Content property renders as text inside element"
+        ]
+      }
     },
     {
       "id": "APP-BLOCKS-CHILDREN-006",
       "given": "children for component composition",
       "when": "multiple children create complex structure",
-      "then": "it should enable nested UI patterns"
+      "then": "it should render composite UI pattern with all child elements",
+      "x-test": {
+        "setup": {
+          "blockDefinition": {
+            "name": "pricing-card",
+            "type": "card",
+            "children": [
+              {
+                "type": "div",
+                "props": { "className": "card-header" },
+                "children": [
+                  { "type": "text", "props": { "level": "h3" }, "content": "$plan" },
+                  { "type": "text", "props": { "level": "p" }, "content": "$price" }
+                ]
+              },
+              {
+                "type": "ul",
+                "props": { "className": "features" },
+                "children": [
+                  { "type": "li", "content": "$feature1" },
+                  { "type": "li", "content": "$feature2" }
+                ]
+              },
+              { "type": "button", "content": "$cta" }
+            ]
+          },
+          "reference": {
+            "$ref": "pricing-card",
+            "vars": {
+              "plan": "Pro",
+              "price": "$49/mo",
+              "feature1": "Unlimited users",
+              "feature2": "24/7 support",
+              "cta": "Get Started"
+            }
+          }
+        },
+        "expectedDOM": "<div data-testid=\"block-pricing-card\" class=\"card\">\n  <div class=\"card-header\">\n    <h3>Pro</h3>\n    <p>$49/mo</p>\n  </div>\n  <ul class=\"features\">\n    <li>Unlimited users</li>\n    <li>24/7 support</li>\n  </ul>\n  <button>Get Started</button>\n</div>",
+        "assertions": [
+          "Card has 3 top-level children: header div, features ul, button",
+          "Header div has 2 nested children: h3 and p",
+          "Features ul has 2 list items",
+          "Complex 3-level composition renders correctly"
+        ]
+      }
     },
     {
       "id": "APP-BLOCKS-CHILDREN-007",
       "given": "icon child example",
       "when": "child has type 'icon' with props containing $icon and $color variables",
-      "then": "it should create parameterized icon component"
+      "then": "it should render SVG icon with substituted name and color",
+      "x-test": {
+        "setup": {
+          "blockDefinition": {
+            "name": "badge-with-icon",
+            "type": "div",
+            "children": [{ "type": "icon", "props": { "name": "$icon", "color": "$color" } }]
+          },
+          "reference": {
+            "$ref": "badge-with-icon",
+            "vars": { "icon": "check-circle", "color": "green" }
+          }
+        },
+        "expectedDOM": "<div data-testid=\"block-badge-with-icon\">\n  <svg data-testid=\"icon-check-circle\" data-color=\"green\"></svg>\n</div>",
+        "assertions": [
+          "Icon child renders as SVG element",
+          "SVG has data-testid='icon-check-circle' (substituted from $icon)",
+          "SVG has data-color='green' (substituted from $color)"
+        ]
+      }
     },
     {
       "id": "APP-BLOCKS-CHILDREN-008",
       "given": "text child example",
       "when": "child has type 'text' with content containing $label variable",
-      "then": "it should create parameterized text component"
+      "then": "it should render text element with substituted content",
+      "x-test": {
+        "setup": {
+          "blockDefinition": {
+            "name": "simple-message",
+            "type": "div",
+            "children": [{ "type": "text", "content": "$label" }]
+          },
+          "reference": {
+            "$ref": "simple-message",
+            "vars": { "label": "Welcome back!" }
+          }
+        },
+        "expectedDOM": "<div data-testid=\"block-simple-message\">\n  <span>Welcome back!</span>\n</div>",
+        "assertions": [
+          "Text child renders as span element",
+          "Span contains text 'Welcome back!' (substituted from $label)",
+          "Content variable substitution works in children"
+        ]
+      }
     },
     {
       "id": "APP-BLOCKS-CHILDREN-009",
       "given": "children with variable references",
       "when": "children contain $variable placeholders in props and content",
-      "then": "it should support variable substitution in nested components"
+      "then": "it should render all children with substituted values throughout tree",
+      "x-test": {
+        "setup": {
+          "blockDefinition": {
+            "name": "alert-card",
+            "type": "div",
+            "props": { "className": "alert-$variant" },
+            "children": [
+              {
+                "type": "icon",
+                "props": { "name": "$icon", "className": "text-$iconColor" }
+              },
+              {
+                "type": "div",
+                "children": [
+                  { "type": "text", "props": { "level": "h4" }, "content": "$title" },
+                  { "type": "text", "content": "$message" }
+                ]
+              }
+            ]
+          },
+          "reference": {
+            "$ref": "alert-card",
+            "vars": {
+              "variant": "success",
+              "icon": "check",
+              "iconColor": "green",
+              "title": "Success!",
+              "message": "Operation completed"
+            }
+          }
+        },
+        "expectedDOM": "<div data-testid=\"block-alert-card\" class=\"alert-success\">\n  <svg data-testid=\"icon-check\" class=\"text-green\"></svg>\n  <div>\n    <h4>Success!</h4>\n    <span>Operation completed</span>\n  </div>\n</div>",
+        "assertions": [
+          "Parent div: $variant → 'success' in className",
+          "Icon child: $icon → 'check', $iconColor → 'green'",
+          "Nested text children: $title → 'Success!', $message → 'Operation completed'",
+          "All 5 variables substituted correctly throughout nested structure"
+        ]
+      }
     },
     {
       "id": "APP-BLOCKS-CHILDREN-010",
       "given": "children for UI tree structure",
       "when": "children array defines parent-child relationships",
-      "then": "it should create hierarchical component tree"
+      "then": "it should render hierarchical DOM tree with proper nesting",
+      "x-test": {
+        "setup": {
+          "blockDefinition": {
+            "name": "page-section",
+            "type": "section",
+            "children": [
+              {
+                "type": "div",
+                "props": { "className": "container" },
+                "children": [
+                  {
+                    "type": "div",
+                    "props": { "className": "row" },
+                    "children": [
+                      {
+                        "type": "div",
+                        "props": { "className": "col" },
+                        "content": "$content"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          "reference": {
+            "$ref": "page-section",
+            "vars": { "content": "Content here" }
+          }
+        },
+        "expectedDOM": "<section data-testid=\"block-page-section\">\n  <div class=\"container\">\n    <div class=\"row\">\n      <div class=\"col\">Content here</div>\n    </div>\n  </div>\n</section>",
+        "assertions": [
+          "Tree depth: 4 levels (section → container → row → col)",
+          "Parent-child relationships preserved: section contains div, div contains div, div contains text",
+          "Children array creates proper hierarchical DOM tree",
+          "Nesting structure matches Bootstrap-like grid system"
+        ]
+      }
     }
   ]
 }

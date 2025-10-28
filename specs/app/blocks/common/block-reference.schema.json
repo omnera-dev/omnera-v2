@@ -46,73 +46,378 @@
       "id": "APP-BLOCKS-REFERENCE-001",
       "given": "block reference with required properties",
       "when": "$ref and vars are provided",
-      "then": "it should validate minimal block reference"
+      "then": "it should validate minimal block reference structure at build time",
+      "x-validation": {
+        "setup": {
+          "validReference": {
+            "$ref": "my-block",
+            "vars": { "color": "blue" }
+          },
+          "invalidReferences": [{ "$ref": "my-block" }, { "vars": { "color": "blue" } }, {}]
+        },
+        "assertions": [
+          "Valid: Both $ref and vars present",
+          "Invalid: Missing vars (vars is required even if empty)",
+          "Invalid: Missing $ref (cannot instantiate without template name)",
+          "Invalid: Empty object (both properties required)"
+        ]
+      }
     },
     {
       "id": "APP-BLOCKS-REFERENCE-002",
       "given": "block reference $ref property",
       "when": "$ref is block name in kebab-case",
-      "then": "it should identify which block template to instantiate"
+      "then": "it should look up and instantiate matching block template",
+      "x-test": {
+        "setup": {
+          "blocks": [
+            { "name": "icon-badge", "type": "badge", "content": "$text" },
+            { "name": "cta-button", "type": "button", "content": "$label" }
+          ],
+          "references": [
+            { "$ref": "icon-badge", "vars": { "text": "New" } },
+            { "$ref": "cta-button", "vars": { "label": "Click" } }
+          ]
+        },
+        "expectedDOM": "<div data-testid=\"block-icon-badge\">New</div>\n<button data-testid=\"block-cta-button\">Click</button>",
+        "assertions": [
+          "$ref='icon-badge' matches block with name='icon-badge'",
+          "$ref='cta-button' matches block with name='cta-button'",
+          "Each reference instantiates corresponding block template",
+          "$ref property identifies which template to use"
+        ]
+      }
     },
     {
       "id": "APP-BLOCKS-REFERENCE-003",
       "given": "block reference $ref pattern",
       "when": "$ref matches ^[a-z][a-z0-9-]*$ pattern",
-      "then": "it should enforce kebab-case naming convention"
+      "then": "it should validate kebab-case naming at build time",
+      "x-validation": {
+        "setup": {
+          "validRefs": ["icon-badge", "cta", "section-header-2", "my-component"],
+          "invalidRefs": ["IconBadge", "cta_button", "section header", "2-columns", ""]
+        },
+        "assertions": [
+          "Valid: 'icon-badge', 'cta', 'section-header-2', 'my-component'",
+          "Invalid: 'IconBadge' (uppercase), 'cta_button' (underscore)",
+          "Invalid: 'section header' (space), '2-columns' (starts with digit), '' (empty)",
+          "Pattern ensures $ref matches block naming convention"
+        ]
+      }
     },
     {
       "id": "APP-BLOCKS-REFERENCE-004",
       "given": "block reference $ref validation",
       "when": "$ref value must match existing block name in blocks array",
-      "then": "it should ensure referenced block exists"
+      "then": "it should fail validation if referenced block doesn't exist",
+      "x-validation": {
+        "setup": {
+          "blocks": [
+            { "name": "icon-badge", "type": "badge" },
+            { "name": "cta-button", "type": "button" }
+          ],
+          "validReference": {
+            "$ref": "icon-badge",
+            "vars": {}
+          },
+          "invalidReference": {
+            "$ref": "non-existent-block",
+            "vars": {}
+          }
+        },
+        "assertions": [
+          "Valid: $ref='icon-badge' exists in blocks array",
+          "Invalid: $ref='non-existent-block' not found in blocks array",
+          "Build-time validation ensures all references resolve",
+          "Prevents runtime errors from missing block templates"
+        ]
+      }
     },
     {
       "id": "APP-BLOCKS-REFERENCE-005",
       "given": "block reference vars object",
       "when": "vars contains variable name-value pairs",
-      "then": "it should provide data for variable substitution"
+      "then": "it should provide all data needed for template substitution",
+      "x-test": {
+        "setup": {
+          "blockDefinition": {
+            "name": "user-card",
+            "type": "card",
+            "children": [
+              { "type": "text", "props": { "level": "h3" }, "content": "$name" },
+              { "type": "text", "content": "$role" },
+              { "type": "text", "content": "$email" }
+            ]
+          },
+          "reference": {
+            "$ref": "user-card",
+            "vars": {
+              "name": "John Doe",
+              "role": "Developer",
+              "email": "john@example.com"
+            }
+          }
+        },
+        "expectedDOM": "<div data-testid=\"block-user-card\" class=\"card\">\n  <h3>John Doe</h3>\n  <span>Developer</span>\n  <span>john@example.com</span>\n</div>",
+        "assertions": [
+          "vars.name → $name substitution in h3",
+          "vars.role → $role substitution in first span",
+          "vars.email → $email substitution in second span",
+          "vars object provides all data for template variables"
+        ]
+      }
     },
     {
       "id": "APP-BLOCKS-REFERENCE-006",
       "given": "vars property names in camelCase",
       "when": "vars property names match ^[a-zA-Z][a-zA-Z0-9]*$ pattern",
-      "then": "it should enforce JavaScript naming convention"
+      "then": "it should validate JavaScript naming convention for variables",
+      "x-validation": {
+        "setup": {
+          "validVars": {
+            "color": "blue",
+            "iconName": "star",
+            "titleText": "Hello",
+            "isActive": true
+          },
+          "invalidVars": {
+            "text-color": "invalid",
+            "1stValue": "invalid",
+            "": "invalid"
+          }
+        },
+        "assertions": [
+          "Valid: color, iconName, titleText, isActive (camelCase)",
+          "Invalid: 'text-color' (hyphen), '1stValue' (starts with digit), '' (empty)",
+          "Pattern enforces JavaScript variable naming",
+          "Consistent with $variable placeholders in templates"
+        ]
+      }
     },
     {
       "id": "APP-BLOCKS-REFERENCE-007",
       "given": "vars property values",
       "when": "values are string, number, or boolean",
-      "then": "it should support primitive data types for substitution"
+      "then": "it should substitute primitive data types into template",
+      "x-test": {
+        "setup": {
+          "blockDefinition": {
+            "name": "settings-toggle",
+            "type": "div",
+            "props": { "className": "setting-$priority" },
+            "children": [
+              { "type": "text", "content": "$label" },
+              { "type": "input", "props": { "type": "checkbox", "checked": "$enabled" } },
+              { "type": "text", "content": "Max: $maxValue" }
+            ]
+          },
+          "reference": {
+            "$ref": "settings-toggle",
+            "vars": {
+              "priority": "high",
+              "label": "Enable feature",
+              "enabled": true,
+              "maxValue": 100
+            }
+          }
+        },
+        "expectedDOM": "<div data-testid=\"block-settings-toggle\" class=\"setting-high\">\n  <span>Enable feature</span>\n  <input type=\"checkbox\" checked />\n  <span>Max: 100</span>\n</div>",
+        "assertions": [
+          "String var: priority='high' → className='setting-high'",
+          "String var: label='Enable feature' → text content",
+          "Boolean var: enabled=true → checked attribute present",
+          "Number var: maxValue=100 → renders as '100' in text"
+        ]
+      }
     },
     {
       "id": "APP-BLOCKS-REFERENCE-008",
       "given": "icon-badge reference example",
       "when": "$ref is 'icon-badge' with vars: color='orange', icon='users', text='6 à 15 personnes'",
-      "then": "it should create badge instance with substituted values"
+      "then": "it should render badge with orange color, users icon, and French text",
+      "x-test": {
+        "setup": {
+          "blockDefinition": {
+            "name": "icon-badge",
+            "type": "badge",
+            "props": { "color": "$color" },
+            "children": [
+              { "type": "icon", "props": { "name": "$icon", "size": 4 } },
+              { "type": "text", "props": { "level": "span" }, "content": "$text" }
+            ]
+          },
+          "reference": {
+            "$ref": "icon-badge",
+            "vars": {
+              "color": "orange",
+              "icon": "users",
+              "text": "6 à 15 personnes"
+            }
+          }
+        },
+        "expectedDOM": "<div data-testid=\"block-icon-badge\" data-color=\"orange\">\n  <svg data-testid=\"icon-users\" width=\"16\" height=\"16\"></svg>\n  <span>6 à 15 personnes</span>\n</div>",
+        "assertions": [
+          "Badge has data-color='orange' (substituted from vars.color)",
+          "Icon has data-testid='icon-users' (substituted from vars.icon)",
+          "Span contains French text '6 à 15 personnes' (substituted from vars.text)",
+          "All 3 variables substituted correctly"
+        ]
+      }
     },
     {
       "id": "APP-BLOCKS-REFERENCE-009",
       "given": "section-header reference example",
       "when": "$ref is 'section-header' with vars: titleColor='pourpre', title='notre mission', subtitle='...'",
-      "then": "it should create section header instance with French content"
+      "then": "it should render section header with purple title and French content",
+      "x-test": {
+        "setup": {
+          "blockDefinition": {
+            "name": "section-header",
+            "type": "container",
+            "props": { "className": "text-center mb-12" },
+            "children": [
+              {
+                "type": "text",
+                "props": {
+                  "level": "h2",
+                  "className": "text-$titleColor text-4xl mb-4"
+                },
+                "content": "$title"
+              },
+              { "type": "text", "props": { "level": "p" }, "content": "$subtitle" }
+            ]
+          },
+          "reference": {
+            "$ref": "section-header",
+            "vars": {
+              "titleColor": "pourpre",
+              "title": "notre mission",
+              "subtitle": "Rendre la culture du consentement accessible à tous"
+            }
+          }
+        },
+        "expectedDOM": "<div data-testid=\"block-section-header\" class=\"text-center mb-12\">\n  <h2 class=\"text-pourpre text-4xl mb-4\">notre mission</h2>\n  <p>Rendre la culture du consentement accessible à tous</p>\n</div>",
+        "assertions": [
+          "Container has classes 'text-center mb-12'",
+          "H2 has class 'text-pourpre' (purple in French, substituted from vars.titleColor)",
+          "H2 contains lowercase French title 'notre mission'",
+          "Paragraph contains French subtitle about consent culture",
+          "Example demonstrates multi-language support"
+        ]
+      }
     },
     {
       "id": "APP-BLOCKS-REFERENCE-010",
       "given": "variable substitution mechanism",
       "when": "vars values replace $variable placeholders in block template",
-      "then": "it should transform template into concrete component"
+      "then": "it should transform abstract template into concrete rendered component",
+      "x-test": {
+        "setup": {
+          "template": {
+            "name": "alert",
+            "type": "div",
+            "props": { "className": "alert alert-$variant" },
+            "content": "$message"
+          },
+          "reference": {
+            "$ref": "alert",
+            "vars": { "variant": "success", "message": "Saved successfully!" }
+          },
+          "substitutionProcess": {
+            "step1": "Find all $variable placeholders in template",
+            "step2": "Look up each variable name in vars object",
+            "step3": "Replace $variable with corresponding vars value",
+            "step4": "Render final component with concrete values"
+          }
+        },
+        "expectedDOM": "<div data-testid=\"block-alert\" class=\"alert alert-success\">Saved successfully!</div>",
+        "assertions": [
+          "Template placeholder: 'alert-$variant'",
+          "vars lookup: variant='success'",
+          "Substitution: 'alert-$variant' → 'alert-success'",
+          "Final DOM contains no $ placeholders, only concrete values"
+        ]
+      }
     },
     {
       "id": "APP-BLOCKS-REFERENCE-011",
       "given": "block reference for template instantiation",
       "when": "reference creates instance of block with specific data",
-      "then": "it should enable multiple instances with different content"
+      "then": "it should enable same template to generate different instances",
+      "x-test": {
+        "setup": {
+          "blockDefinition": {
+            "name": "team-member",
+            "type": "card",
+            "children": [
+              { "type": "img", "props": { "src": "$photo", "alt": "$name" } },
+              { "type": "text", "props": { "level": "h4" }, "content": "$name" },
+              { "type": "text", "content": "$position" }
+            ]
+          },
+          "references": [
+            {
+              "$ref": "team-member",
+              "vars": { "photo": "/alice.jpg", "name": "Alice", "position": "CEO" }
+            },
+            {
+              "$ref": "team-member",
+              "vars": { "photo": "/bob.jpg", "name": "Bob", "position": "CTO" }
+            },
+            {
+              "$ref": "team-member",
+              "vars": {
+                "photo": "/carol.jpg",
+                "name": "Carol",
+                "position": "Designer"
+              }
+            }
+          ]
+        },
+        "expectedDOM": "<div data-testid=\"block-team-member-0\" class=\"card\">\n  <img src=\"/alice.jpg\" alt=\"Alice\" />\n  <h4>Alice</h4>\n  <span>CEO</span>\n</div>\n<div data-testid=\"block-team-member-1\" class=\"card\">\n  <img src=\"/bob.jpg\" alt=\"Bob\" />\n  <h4>Bob</h4>\n  <span>CTO</span>\n</div>\n<div data-testid=\"block-team-member-2\" class=\"card\">\n  <img src=\"/carol.jpg\" alt=\"Carol\" />\n  <h4>Carol</h4>\n  <span>Designer</span>\n</div>",
+        "assertions": [
+          "1 template definition creates 3 different instances",
+          "Each instance has unique data (photo, name, position)",
+          "Each instance has unique data-testid suffix (-0, -1, -2)",
+          "Template instantiation pattern enables data-driven components"
+        ]
+      }
     },
     {
       "id": "APP-BLOCKS-REFERENCE-012",
       "given": "block reference for single source of truth",
       "when": "multiple references point to same block template",
-      "then": "it should maintain consistency while varying data"
+      "then": "it should maintain structural consistency while varying data",
+      "x-test": {
+        "setup": {
+          "blockDefinition": {
+            "name": "feature-item",
+            "type": "div",
+            "props": { "className": "feature flex gap-4" },
+            "children": [
+              { "type": "icon", "props": { "name": "$icon", "color": "blue" } },
+              {
+                "type": "div",
+                "children": [
+                  { "type": "text", "props": { "level": "h5" }, "content": "$title" },
+                  { "type": "text", "content": "$description" }
+                ]
+              }
+            ]
+          },
+          "usageScenario": "5 references across homepage, pricing page, and about page",
+          "benefit": "Changing block definition updates all 5 instances simultaneously"
+        },
+        "expectedDOM": "<div data-testid=\"block-feature-item\" class=\"feature flex gap-4\">\n  <svg data-testid=\"icon-{name}\" data-color=\"blue\"></svg>\n  <div>\n    <h5>{title}</h5>\n    <span>{description}</span>\n  </div>\n</div>",
+        "assertions": [
+          "All instances share same structure: flex container with icon and text",
+          "All instances share same styling: className='feature flex gap-4'",
+          "Only data varies: icon name, title, description",
+          "Single source of truth: modify 1 template, update all instances",
+          "Consistency guaranteed: impossible for instances to diverge structurally"
+        ]
+      }
     }
   ]
 }

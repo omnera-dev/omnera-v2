@@ -65,73 +65,320 @@
       "id": "APP-BLOCKS-BLOCK-001",
       "given": "block with required properties",
       "when": "name and type are provided",
-      "then": "it should validate minimal block definition"
+      "then": "it should validate minimal block definition at build time",
+      "x-validation": {
+        "setup": {
+          "block": { "name": "simple-block", "type": "div" }
+        },
+        "assertions": [
+          "Block validates with only name and type",
+          "Name and type are required properties",
+          "Props, children, and content are optional"
+        ]
+      }
     },
     {
       "id": "APP-BLOCKS-BLOCK-002",
       "given": "block name in kebab-case",
       "when": "name is 'icon-badge', 'section-header', or 'feature-card'",
-      "then": "it should use URL-friendly naming convention"
+      "then": "it should use URL-friendly naming convention for data-testid",
+      "x-test": {
+        "setup": {
+          "blocks": [
+            { "name": "icon-badge", "type": "badge" },
+            { "name": "section-header", "type": "container" },
+            { "name": "feature-card", "type": "card" }
+          ]
+        },
+        "expectedDOM": "<div data-testid=\"block-icon-badge\"></div>\n<div data-testid=\"block-section-header\"></div>\n<div data-testid=\"block-feature-card\"></div>",
+        "assertions": [
+          "All block names use kebab-case (lowercase with hyphens)",
+          "data-testid attributes directly match block names: 'block-{name}'",
+          "Kebab-case enables clean, predictable CSS selectors"
+        ]
+      }
     },
     {
       "id": "APP-BLOCKS-BLOCK-003",
       "given": "block name pattern validation",
       "when": "name matches ^[a-z][a-z0-9-]*$ (lowercase, hyphens, no spaces)",
-      "then": "it should enforce consistent naming convention"
+      "then": "it should reject invalid names at build time",
+      "x-validation": {
+        "setup": {
+          "validNames": ["icon-badge", "cta", "section-header-2", "feature-list-item"],
+          "invalidNames": ["Icon-Badge", "cta_button", "section header", "2-columns", ""]
+        },
+        "assertions": [
+          "Valid: 'icon-badge', 'cta', 'section-header-2', 'feature-list-item'",
+          "Invalid: 'Icon-Badge' (uppercase), 'cta_button' (underscore), 'section header' (space)",
+          "Invalid: '2-columns' (starts with digit), '' (empty string)",
+          "Pattern enforces: start with lowercase letter, only lowercase/digits/hyphens"
+        ]
+      }
     },
     {
       "id": "APP-BLOCKS-BLOCK-004",
       "given": "block type specification",
       "when": "type is 'container', 'flex', 'grid', 'card', 'text', 'button', etc.",
-      "then": "it should specify component type for rendering"
+      "then": "it should render corresponding HTML element or component",
+      "x-test": {
+        "setup": {
+          "blocks": [
+            { "name": "layout", "type": "container" },
+            { "name": "row", "type": "flex" },
+            { "name": "columns", "type": "grid" },
+            { "name": "panel", "type": "card" },
+            { "name": "heading", "type": "text" },
+            { "name": "cta", "type": "button" }
+          ]
+        },
+        "expectedDOM": "<div data-testid=\"block-layout\" data-type=\"container\"></div>\n<div data-testid=\"block-row\" data-type=\"flex\"></div>\n<div data-testid=\"block-columns\" data-type=\"grid\"></div>\n<div data-testid=\"block-panel\" data-type=\"card\"></div>\n<span data-testid=\"block-heading\" data-type=\"text\"></span>\n<button data-testid=\"block-cta\" data-type=\"button\"></button>",
+        "assertions": [
+          "Each block renders with data-type attribute matching type property",
+          "Type determines base HTML element (div, span, button, etc.)",
+          "Type also controls CSS classes and behavior (flexbox, grid, card styles)"
+        ]
+      }
     },
     {
       "id": "APP-BLOCKS-BLOCK-005",
       "given": "block with props",
       "when": "props references block-props.schema.json",
-      "then": "it should support component properties with variable substitution"
+      "then": "it should render with properties including variable substitution",
+      "x-test": {
+        "setup": {
+          "blockDefinition": {
+            "name": "styled-box",
+            "type": "div",
+            "props": {
+              "className": "box-$variant",
+              "id": "$boxId",
+              "ariaLabel": "$label"
+            }
+          },
+          "reference": {
+            "$ref": "styled-box",
+            "vars": { "variant": "primary", "boxId": "main-box", "label": "Main content" }
+          }
+        },
+        "expectedDOM": "<div data-testid=\"block-styled-box\" class=\"box-primary\" id=\"main-box\" aria-label=\"Main content\"></div>",
+        "assertions": [
+          "className substituted: 'box-$variant' → 'box-primary'",
+          "id substituted: '$boxId' → 'main-box'",
+          "ariaLabel substituted: '$label' → 'Main content'",
+          "All prop values support variable substitution"
+        ]
+      }
     },
     {
       "id": "APP-BLOCKS-BLOCK-006",
       "given": "block with children",
       "when": "children references block-children.schema.json",
-      "then": "it should support nested component composition"
+      "then": "it should render nested child components",
+      "x-test": {
+        "setup": {
+          "blockDefinition": {
+            "name": "card-header",
+            "type": "div",
+            "children": [
+              { "type": "text", "props": { "level": "h3" }, "content": "$title" },
+              { "type": "text", "props": { "level": "p" }, "content": "$subtitle" }
+            ]
+          },
+          "reference": {
+            "$ref": "card-header",
+            "vars": { "title": "Card Title", "subtitle": "Card subtitle" }
+          }
+        },
+        "expectedDOM": "<div data-testid=\"block-card-header\">\n  <h3>Card Title</h3>\n  <p>Card subtitle</p>\n</div>",
+        "assertions": [
+          "Parent div has data-testid='block-card-header'",
+          "Children array renders h3 and p elements",
+          "Child content substituted from vars (title, subtitle)",
+          "Nested structure maintained in DOM"
+        ]
+      }
     },
     {
       "id": "APP-BLOCKS-BLOCK-007",
       "given": "block with content",
       "when": "content is string with $variable references",
-      "then": "it should provide text content with variable placeholders"
+      "then": "it should render text content with substituted variables",
+      "x-test": {
+        "setup": {
+          "blockDefinition": {
+            "name": "alert-message",
+            "type": "div",
+            "props": { "className": "alert" },
+            "content": "$message"
+          },
+          "reference": {
+            "$ref": "alert-message",
+            "vars": { "message": "Operation successful!" }
+          }
+        },
+        "expectedDOM": "<div data-testid=\"block-alert-message\" class=\"alert\">Operation successful!</div>",
+        "assertions": [
+          "Div has data-testid='block-alert-message'",
+          "Content substituted: '$message' → 'Operation successful!'",
+          "Text content rendered inside div element"
+        ]
+      }
     },
     {
       "id": "APP-BLOCKS-BLOCK-008",
       "given": "simple text block example",
       "when": "block has type 'text', className with $color, and content with $message",
-      "then": "it should create simple parameterized text component"
+      "then": "it should render text element with dynamic styling and content",
+      "x-test": {
+        "setup": {
+          "blockDefinition": {
+            "name": "simple-text",
+            "type": "text",
+            "props": { "className": "text-$color text-lg" },
+            "content": "$message"
+          },
+          "reference": {
+            "$ref": "simple-text",
+            "vars": { "color": "blue", "message": "Hello World" }
+          }
+        },
+        "expectedDOM": "<p data-testid=\"block-simple-text\" class=\"text-blue text-lg\">Hello World</p>",
+        "assertions": [
+          "Text element (p tag) has data-testid='block-simple-text'",
+          "className substituted: 'text-$color text-lg' → 'text-blue text-lg'",
+          "Content substituted: '$message' → 'Hello World'"
+        ]
+      }
     },
     {
       "id": "APP-BLOCKS-BLOCK-009",
       "given": "feature-list-item block example",
       "when": "block has type 'flex' with icon and text children using $icon, $iconColor, $text",
-      "then": "it should create reusable list item template"
+      "then": "it should render flex container with icon and text components",
+      "x-test": {
+        "setup": {
+          "blockDefinition": {
+            "name": "feature-list-item",
+            "type": "flex",
+            "props": { "align": "start", "gap": 3 },
+            "children": [
+              { "type": "icon", "props": { "name": "$icon", "color": "$iconColor" } },
+              { "type": "text", "content": "$text" }
+            ]
+          },
+          "reference": {
+            "$ref": "feature-list-item",
+            "vars": {
+              "icon": "check-circle",
+              "iconColor": "green",
+              "text": "Feature enabled"
+            }
+          }
+        },
+        "expectedDOM": "<div data-testid=\"block-feature-list-item\" class=\"flex items-start gap-3\">\n  <svg data-testid=\"icon-check-circle\" data-color=\"green\"></svg>\n  <span>Feature enabled</span>\n</div>",
+        "assertions": [
+          "Flex container has data-testid='block-feature-list-item'",
+          "Flex container has classes 'flex items-start gap-3'",
+          "Icon SVG has data-testid='icon-check-circle' and data-color='green'",
+          "Text span contains 'Feature enabled'"
+        ]
+      }
     },
     {
       "id": "APP-BLOCKS-BLOCK-010",
       "given": "block as reusable template",
       "when": "block defines structure with variable placeholders",
-      "then": "it should enable multiple instantiations with different data"
+      "then": "it should render multiple instances with different data",
+      "x-test": {
+        "setup": {
+          "blockDefinition": {
+            "name": "stat-card",
+            "type": "card",
+            "children": [
+              { "type": "text", "props": { "level": "h4" }, "content": "$value" },
+              { "type": "text", "props": { "level": "p" }, "content": "$label" }
+            ]
+          },
+          "references": [
+            { "$ref": "stat-card", "vars": { "value": "1,234", "label": "Users" } },
+            { "$ref": "stat-card", "vars": { "value": "567", "label": "Projects" } },
+            { "$ref": "stat-card", "vars": { "value": "89%", "label": "Success Rate" } }
+          ]
+        },
+        "expectedDOM": "<div data-testid=\"block-stat-card-0\">\n  <h4>1,234</h4>\n  <p>Users</p>\n</div>\n<div data-testid=\"block-stat-card-1\">\n  <h4>567</h4>\n  <p>Projects</p>\n</div>\n<div data-testid=\"block-stat-card-2\">\n  <h4>89%</h4>\n  <p>Success Rate</p>\n</div>",
+        "assertions": [
+          "Same block definition renders 3 different instances",
+          "Each instance has unique data-testid suffix: -0, -1, -2",
+          "Each instance displays different value and label",
+          "Template reused without code duplication"
+        ]
+      }
     },
     {
       "id": "APP-BLOCKS-BLOCK-011",
       "given": "block composition patterns",
       "when": "block combines layout (type), styling (props), and content (children/content)",
-      "then": "it should provide complete component template"
+      "then": "it should render complete component with all aspects integrated",
+      "x-test": {
+        "setup": {
+          "blockDefinition": {
+            "name": "complete-card",
+            "type": "card",
+            "props": { "className": "card-$variant p-6 rounded-lg" },
+            "children": [
+              {
+                "type": "text",
+                "props": { "level": "h3", "className": "mb-2" },
+                "content": "$title"
+              },
+              { "type": "text", "props": { "level": "p" }, "content": "$description" }
+            ]
+          },
+          "reference": {
+            "$ref": "complete-card",
+            "vars": {
+              "variant": "primary",
+              "title": "Premium Plan",
+              "description": "Best value for teams"
+            }
+          }
+        },
+        "expectedDOM": "<div data-testid=\"block-complete-card\" class=\"card-primary p-6 rounded-lg\">\n  <h3 class=\"mb-2\">Premium Plan</h3>\n  <p>Best value for teams</p>\n</div>",
+        "assertions": [
+          "Layout: type='card' renders as div",
+          "Styling: className combines variant, padding, and border-radius",
+          "Content: children render h3 and p with substituted text",
+          "All 3 aspects (layout, styling, content) work together"
+        ]
+      }
     },
     {
       "id": "APP-BLOCKS-BLOCK-012",
       "given": "block template instantiation",
       "when": "block is referenced via block-reference.schema.json with vars",
-      "then": "it should create component instance with substituted values"
+      "then": "it should transform template placeholders into concrete values in DOM",
+      "x-test": {
+        "setup": {
+          "blockDefinition": {
+            "name": "pricing-badge",
+            "type": "badge",
+            "props": { "className": "badge-$color" },
+            "content": "$price/month"
+          },
+          "reference": {
+            "$ref": "pricing-badge",
+            "vars": { "color": "gold", "price": "49" }
+          }
+        },
+        "expectedDOM": "<div data-testid=\"block-pricing-badge\" class=\"badge-gold\">49/month</div>",
+        "assertions": [
+          "Template: 'badge-$color' → Instance: 'badge-gold'",
+          "Template: '$price/month' → Instance: '49/month'",
+          "All $variable placeholders replaced with vars values",
+          "Final DOM contains no $ symbols or placeholder text"
+        ]
+      }
     }
   ]
 }
