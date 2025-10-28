@@ -72,61 +72,395 @@
       "id": "APP-PAGES-BANNER-001",
       "given": "a banner with enabled set to true",
       "when": "banner should be visible",
-      "then": "it should display banner at top of page"
+      "then": "it should display banner at top of page",
+      "x-validation": {
+        "setup": {
+          "banner": {
+            "enabled": true,
+            "text": "Announcement"
+          }
+        },
+        "assertions": [
+          "enabled: true (banner visible)",
+          "Default: false (opt-in feature)",
+          "Banner appears above navigation/header"
+        ]
+      },
+      "x-application": {
+        "banner": {
+          "enabled": true,
+          "text": "🎉 New product launch tomorrow!",
+          "gradient": "linear-gradient(90deg, #667eea 0%, #764ba2 100%)"
+        },
+        "expectedDOM": "<div data-testid=\"banner\" class=\"banner sticky top-0 z-50 py-3\" style=\"background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);\"><div class=\"container text-center text-white\">🎉 New product launch tomorrow!</div></div>",
+        "assertions": [
+          "Banner displayed at very top of page (z-index: 50)",
+          "Above navigation header",
+          "Common for: announcements, promotions, cookie consent",
+          "Use cases: product launches, sales, important updates"
+        ]
+      }
     },
     {
       "id": "APP-PAGES-BANNER-002",
       "given": "a banner with text content",
       "when": "text is '🎉 New feature available!'",
-      "then": "it should render announcement text"
+      "then": "it should render announcement text",
+      "x-validation": {
+        "setup": {
+          "banner": {
+            "enabled": true,
+            "text": "🎉 New feature available!"
+          }
+        },
+        "assertions": [
+          "text: string (required if enabled)",
+          "Supports emojis (UTF-8)",
+          "Concise announcement (1-2 sentences)"
+        ]
+      },
+      "x-application": {
+        "banner": {
+          "enabled": true,
+          "text": "🎉 We just launched our new AI-powered search! Try it now.",
+          "backgroundColor": "#4F46E5",
+          "textColor": "#FFFFFF"
+        },
+        "expectedDOM": "<div data-testid=\"banner\" class=\"py-3\" style=\"background-color: #4F46E5; color: #FFFFFF;\"><p data-testid=\"banner-text\" class=\"text-center font-medium\">🎉 We just launched our new AI-powered search! Try it now.</p></div>",
+        "assertions": [
+          "Text displayed prominently (center-aligned, medium font)",
+          "Emojis render correctly (UTF-8 support)",
+          "Best practice: 1-2 sentences, action-oriented",
+          "Common pattern: emoji + announcement + CTA"
+        ]
+      }
     },
     {
       "id": "APP-PAGES-BANNER-003",
       "given": "a banner with link",
       "when": "link has href '/features' and label 'Learn more'",
-      "then": "it should add clickable link to banner"
+      "then": "it should add clickable link to banner",
+      "x-validation": {
+        "setup": {
+          "banner": {
+            "enabled": true,
+            "text": "Check out our new features",
+            "link": {
+              "href": "/features",
+              "label": "Learn more"
+            }
+          }
+        },
+        "assertions": [
+          "link: object (optional)",
+          "link.href: string (required)",
+          "link.label: string (required)",
+          "Clickable CTA in banner"
+        ]
+      },
+      "x-application": {
+        "banner": {
+          "enabled": true,
+          "text": "🎉 Black Friday Sale: 50% off all plans!",
+          "link": {
+            "href": "/pricing",
+            "label": "Shop Now →"
+          },
+          "gradient": "linear-gradient(90deg, #F59E0B 0%, #EF4444 100%)"
+        },
+        "expectedDOM": "<div data-testid=\"banner\" class=\"py-3\" style=\"background: linear-gradient(90deg, #F59E0B 0%, #EF4444 100%);\"><div class=\"container flex justify-center items-center gap-4 text-white\"><p data-testid=\"banner-text\">🎉 Black Friday Sale: 50% off all plans!</p><a data-testid=\"banner-link\" href=\"/pricing\" class=\"underline font-semibold hover:opacity-80\">Shop Now →</a></div></div>",
+        "userAction": "User clicks 'Shop Now →' link",
+        "behavior": {
+          "click": "Navigate to /pricing page",
+          "analytics": "Track banner click event"
+        },
+        "assertions": [
+          "Link displayed next to text (inline layout)",
+          "Common: text + CTA link pattern",
+          "Best practice: action-oriented label ('Shop Now', 'Learn More', 'Get Started')",
+          "Drives traffic to target page (pricing, features, signup)"
+        ]
+      }
     },
     {
       "id": "APP-PAGES-BANNER-004",
       "given": "a banner with gradient background",
       "when": "gradient is 'linear-gradient(90deg, #667eea 0%, #764ba2 100%)'",
-      "then": "it should apply CSS gradient as background"
+      "then": "it should apply CSS gradient as background",
+      "x-validation": {
+        "setup": {
+          "banner": {
+            "enabled": true,
+            "text": "Announcement",
+            "gradient": "linear-gradient(90deg, #667eea 0%, #764ba2 100%)"
+          }
+        },
+        "assertions": [
+          "gradient: CSS gradient string (optional)",
+          "Takes precedence over backgroundColor",
+          "Common: linear-gradient for brand colors"
+        ]
+      },
+      "x-application": {
+        "banner": {
+          "enabled": true,
+          "text": "✨ Join our webinar tomorrow at 2 PM PT",
+          "link": {
+            "href": "/webinar",
+            "label": "Register Free"
+          },
+          "gradient": "linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%)",
+          "textColor": "#FFFFFF"
+        },
+        "expectedDOM": "<div data-testid=\"banner\" class=\"py-3\" style=\"background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%); color: #FFFFFF;\"><div class=\"container flex justify-center items-center gap-4\"><p>✨ Join our webinar tomorrow at 2 PM PT</p><a href=\"/webinar\" class=\"underline font-semibold\">Register Free</a></div></div>",
+        "assertions": [
+          "Gradient applied as inline style",
+          "Gradient overrides backgroundColor (if both set)",
+          "Common gradients: brand colors (2-3 color stops)",
+          "Use case: eye-catching announcements"
+        ]
+      }
     },
     {
       "id": "APP-PAGES-BANNER-005",
       "given": "a banner with solid backgroundColor",
       "when": "backgroundColor is '#FF5733' (hex color)",
-      "then": "it should apply solid background color"
+      "then": "it should apply solid background color",
+      "x-validation": {
+        "setup": {
+          "banner": {
+            "enabled": true,
+            "text": "Announcement",
+            "backgroundColor": "#FF5733"
+          }
+        },
+        "assertions": [
+          "backgroundColor: hex color (^#[0-9A-Fa-f]{6}$)",
+          "Pattern validates 6-digit hex",
+          "Solid color (no gradient)"
+        ]
+      },
+      "x-application": {
+        "banner": {
+          "enabled": true,
+          "text": "⚠️ Scheduled maintenance tonight 11 PM - 2 AM PST",
+          "backgroundColor": "#DC2626",
+          "textColor": "#FFFFFF"
+        },
+        "expectedDOM": "<div data-testid=\"banner\" class=\"py-3\" style=\"background-color: #DC2626; color: #FFFFFF;\"><div class=\"container text-center\"><p data-testid=\"banner-text\">⚠️ Scheduled maintenance tonight 11 PM - 2 AM PST</p></div></div>",
+        "assertions": [
+          "Solid background color applied",
+          "Common colors: red (#DC2626) for urgent, green (#10B981) for success, blue (#3B82F6) for info",
+          "Use case: status messages (maintenance, alerts, confirmations)",
+          "Simpler than gradients (better performance)"
+        ]
+      }
     },
     {
       "id": "APP-PAGES-BANNER-006",
       "given": "a banner with textColor",
       "when": "textColor is '#FFFFFF' for readability",
-      "then": "it should apply text color for contrast"
+      "then": "it should apply text color for contrast",
+      "x-validation": {
+        "setup": {
+          "banner": {
+            "enabled": true,
+            "text": "Announcement",
+            "backgroundColor": "#1E40AF",
+            "textColor": "#FFFFFF"
+          }
+        },
+        "assertions": [
+          "textColor: hex color (^#[0-9A-Fa-f]{6}$)",
+          "Ensures readability (contrast with background)",
+          "Common: white (#FFFFFF) on dark, black (#000000) on light"
+        ]
+      },
+      "x-application": {
+        "banner": {
+          "enabled": true,
+          "text": "🎓 New online courses available – Start learning today!",
+          "link": {
+            "href": "/courses",
+            "label": "Browse Courses"
+          },
+          "backgroundColor": "#1E40AF",
+          "textColor": "#FFFFFF"
+        },
+        "expectedDOM": "<div data-testid=\"banner\" class=\"py-3\" style=\"background-color: #1E40AF; color: #FFFFFF;\"><div class=\"container flex justify-center items-center gap-4\"><p>🎓 New online courses available – Start learning today!</p><a href=\"/courses\" class=\"underline font-semibold\">Browse Courses</a></div></div>",
+        "accessibility": {
+          "contrast": "White on dark blue: 7.1:1 (WCAG AAA)",
+          "requirement": "WCAG AA: 4.5:1 minimum for text"
+        },
+        "assertions": [
+          "Text color ensures readability",
+          "WCAG compliance: minimum 4.5:1 contrast ratio",
+          "Common pattern: white on dark, dark on light",
+          "Best practice: test contrast with tools (WebAIM)"
+        ]
+      }
     },
     {
       "id": "APP-PAGES-BANNER-007",
       "given": "a dismissible banner",
       "when": "dismissible is true",
-      "then": "it should allow users to close banner permanently"
+      "then": "it should allow users to close banner permanently",
+      "x-validation": {
+        "setup": {
+          "banner": {
+            "enabled": true,
+            "text": "Announcement",
+            "dismissible": true
+          }
+        },
+        "assertions": [
+          "dismissible: boolean (default: false)",
+          "Adds close button (×) to banner",
+          "Stores dismissal in localStorage"
+        ]
+      },
+      "x-application": {
+        "banner": {
+          "enabled": true,
+          "text": "🍪 We use cookies to improve your experience. See our Privacy Policy.",
+          "link": {
+            "href": "/privacy",
+            "label": "Learn More"
+          },
+          "backgroundColor": "#F3F4F6",
+          "textColor": "#111827",
+          "dismissible": true
+        },
+        "expectedDOM": "<div data-testid=\"banner\" class=\"py-3 relative\" style=\"background-color: #F3F4F6; color: #111827;\"><div class=\"container flex justify-center items-center gap-4\"><p>🍪 We use cookies to improve your experience. See our Privacy Policy.</p><a href=\"/privacy\" class=\"underline\">Learn More</a><button data-testid=\"banner-dismiss\" class=\"absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700\" aria-label=\"Dismiss banner\">×</button></div></div>",
+        "userAction": "User clicks × button",
+        "behavior": {
+          "onClick": "Banner disappears",
+          "localStorage": "Set 'banner-dismissed': 'true'",
+          "persistence": "Banner stays hidden on future visits"
+        },
+        "assertions": [
+          "Close button (×) in top-right corner",
+          "Click dismisses banner permanently (localStorage)",
+          "Common for: cookie consent, one-time announcements",
+          "Respects user preference (doesn't re-appear)"
+        ]
+      }
     },
     {
       "id": "APP-PAGES-BANNER-008",
       "given": "a sticky banner",
       "when": "sticky is true",
-      "then": "it should remain at top during page scroll"
+      "then": "it should remain at top during page scroll",
+      "x-validation": {
+        "setup": {
+          "banner": {
+            "enabled": true,
+            "text": "Announcement",
+            "sticky": true
+          }
+        },
+        "assertions": [
+          "sticky: boolean (default: false)",
+          "CSS: position: sticky, top: 0",
+          "Banner follows user on scroll"
+        ]
+      },
+      "x-application": {
+        "banner": {
+          "enabled": true,
+          "text": "⏰ Flash Sale: 24 hours only – Use code FLASH50 for 50% off!",
+          "link": {
+            "href": "/sale",
+            "label": "Shop Now"
+          },
+          "gradient": "linear-gradient(90deg, #F59E0B 0%, #DC2626 100%)",
+          "textColor": "#FFFFFF",
+          "sticky": true
+        },
+        "expectedDOM": "<div data-testid=\"banner\" class=\"sticky top-0 z-50 py-3\" style=\"background: linear-gradient(90deg, #F59E0B 0%, #DC2626 100%); color: #FFFFFF;\"><div class=\"container flex justify-center items-center gap-4\"><p>⏰ Flash Sale: 24 hours only – Use code FLASH50 for 50% off!</p><a href=\"/sale\" class=\"underline font-semibold\">Shop Now</a></div></div>",
+        "behavior": {
+          "scroll": "Banner stays at top (position: sticky)",
+          "visibility": "Always visible during scroll",
+          "zIndex": "50 (above content, below modals)"
+        },
+        "assertions": [
+          "Sticky banner remains visible during scroll",
+          "High z-index (50) ensures visibility",
+          "Use case: urgent messages (sales, deadlines)",
+          "Best practice: don't overuse (can be annoying)"
+        ]
+      }
     },
     {
       "id": "APP-PAGES-BANNER-009",
       "given": "a disabled banner",
       "when": "enabled is false",
-      "then": "it should not render banner"
+      "then": "it should not render banner",
+      "x-validation": {
+        "setup": {
+          "banner": {
+            "enabled": false,
+            "text": "This banner is disabled"
+          }
+        },
+        "assertions": [
+          "enabled: false → banner not rendered",
+          "Default: false (opt-in)",
+          "Easy toggle without removing config"
+        ]
+      },
+      "x-application": {
+        "banner": {
+          "enabled": false,
+          "text": "🎉 Promotion ended – Thanks for participating!",
+          "backgroundColor": "#10B981"
+        },
+        "expectedDOM": "<!-- No banner rendered -->",
+        "assertions": [
+          "Banner completely hidden when enabled: false",
+          "Use cases: disable after campaign ends, A/B testing",
+          "Keeps configuration (easy to re-enable)",
+          "Most websites: no banner (enabled: false by default)"
+        ]
+      }
     },
     {
       "id": "APP-PAGES-BANNER-010",
       "given": "a banner with emoji in text",
       "when": "text includes '🎉' or other emojis",
-      "then": "it should render emojis correctly"
+      "then": "it should render emojis correctly",
+      "x-validation": {
+        "setup": {
+          "banner": {
+            "enabled": true,
+            "text": "🎉🎊🥳 Triple celebration emojis!"
+          }
+        },
+        "assertions": [
+          "text supports UTF-8 (emojis)",
+          "Emojis render as expected",
+          "Common: celebration (🎉), attention (⚠️), info (ℹ️)"
+        ]
+      },
+      "x-application": {
+        "banner": {
+          "enabled": true,
+          "text": "🎉 Congratulations! 🎊 You've unlocked premium features! 🥳",
+          "link": {
+            "href": "/premium",
+            "label": "Explore Features"
+          },
+          "gradient": "linear-gradient(90deg, #10B981 0%, #059669 100%)",
+          "textColor": "#FFFFFF"
+        },
+        "expectedDOM": "<div data-testid=\"banner\" class=\"py-3\" style=\"background: linear-gradient(90deg, #10B981 0%, #059669 100%); color: #FFFFFF;\"><div class=\"container flex justify-center items-center gap-4\"><p data-testid=\"banner-text\">🎉 Congratulations! 🎊 You've unlocked premium features! 🥳</p><a href=\"/premium\" class=\"underline font-semibold\">Explore Features</a></div></div>",
+        "assertions": [
+          "Emojis render correctly (UTF-8 encoding)",
+          "Common emojis: 🎉 (celebration), ⚠️ (warning), 🍪 (cookies), ✨ (new), 🔥 (hot)",
+          "Best practice: 1-2 emojis (not excessive)",
+          "Adds visual interest and emotion to announcements"
+        ]
+      }
     }
   ]
 }
