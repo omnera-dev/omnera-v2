@@ -102,37 +102,42 @@ export function validateSpecsArray(
 
   const obj = content as Record<string, unknown>
 
-  // Check x-specs array exists
-  if (!('x-specs' in obj)) {
+  // Check for specs array (accept both "x-specs" and "specs" for backward compatibility)
+  // Prefer "x-specs" (OpenAPI extension) over "specs"
+  const specsKey = 'x-specs' in obj ? 'x-specs' : 'specs' in obj ? 'specs' : null
+
+  if (!specsKey) {
     result.errors.push({
       file: filePath,
       type: 'error',
-      message: 'Missing required "x-specs" array',
+      message: 'Missing required "x-specs" or "specs" array',
     })
     result.passed = false
     return
   }
 
-  if (!Array.isArray(obj['x-specs'])) {
+  if (!Array.isArray(obj[specsKey])) {
     result.errors.push({
       file: filePath,
       type: 'error',
-      message: '"x-specs" must be an array',
+      message: `"${specsKey}" must be an array`,
     })
     result.passed = false
     return
   }
 
-  if (obj['x-specs'].length === 0) {
+  const specsArray = obj[specsKey] as unknown[]
+
+  if (specsArray.length === 0) {
     result.warnings.push({
       file: filePath,
       type: 'warning',
-      message: 'x-specs array is empty - no specifications defined',
+      message: `${specsKey} array is empty - no specifications defined`,
     })
   }
 
   // Validate each spec
-  obj['x-specs'].forEach((spec: unknown, index: number) => {
+  specsArray.forEach((spec: unknown, index: number) => {
     validateSpec(spec, index, filePath, prefix, result, globalSpecIds)
   })
 }

@@ -152,13 +152,9 @@ async function validateSchemaFile(
   validateSpecsArray(content, relativePath, 'APP', result, globalSpecIds)
 
   // 5. Check for co-located test file (optional - warning only)
-  const specs =
-    typeof content === 'object' &&
-    content !== null &&
-    'x-specs' in content &&
-    Array.isArray((content as Record<string, unknown>)['x-specs'])
-      ? ((content as Record<string, unknown>)['x-specs'] as Spec[])
-      : []
+  const obj = typeof content === 'object' && content !== null ? (content as Record<string, unknown>) : {}
+  const specsKey = 'x-specs' in obj ? 'x-specs' : 'specs' in obj ? 'specs' : null
+  const specs = specsKey && Array.isArray(obj[specsKey]) ? (obj[specsKey] as Spec[]) : []
   await validateTestFileCoLocation(path, relativePath, specs, result)
 
   // 6. Check $ref paths exist
@@ -245,7 +241,7 @@ function validateRootProperties(
   }
 
   const obj = content as Record<string, unknown>
-  const requiredProps = ['title', 'x-specs']
+  const requiredProps = ['title']
   const recommendedProps = ['description']
 
   for (const prop of requiredProps) {
@@ -256,6 +252,15 @@ function validateRootProperties(
         message: `Missing required property: ${prop}`,
       })
     }
+  }
+
+  // Check for specs array (accept both "x-specs" and "specs")
+  if (!('x-specs' in obj) && !('specs' in obj)) {
+    result.errors.push({
+      file: relativePath,
+      type: 'error',
+      message: 'Missing required property: x-specs or specs',
+    })
   }
 
   for (const prop of recommendedProps) {
@@ -368,13 +373,14 @@ function findRefs(
 
   const record = obj as Record<string, unknown>
 
-  // Skip $ref validation inside examples and x-specs (they're documentation examples)
+  // Skip $ref validation inside examples, x-specs, and specs (they're documentation examples)
   const isInExamples = currentPath.includes('examples')
   const isInXSpecs = currentPath.includes('x-specs')
+  const isInSpecs = currentPath.includes('specs')
 
   if ('$ref' in record && typeof record.$ref === 'string') {
-    // Only collect $refs that are NOT in examples or x-specs
-    if (!isInExamples && !isInXSpecs) {
+    // Only collect $refs that are NOT in examples, x-specs, or specs
+    if (!isInExamples && !isInXSpecs && !isInSpecs) {
       refs.push(record.$ref)
     }
   }

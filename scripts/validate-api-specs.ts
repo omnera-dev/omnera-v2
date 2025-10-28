@@ -405,12 +405,11 @@ async function main() {
       validateSpecsArray(json, relativePath, 'API', result, globalSpecIds)
 
       // 2. Co-location: Check for matching .spec.ts
+      const obj = json as Record<string, unknown>
+      const specsKey = 'x-specs' in obj ? 'x-specs' : 'specs' in obj ? 'specs' : null
       const specs: Spec[] =
-        typeof json === 'object' &&
-        json !== null &&
-        'x-specs' in json &&
-        Array.isArray((json as Record<string, unknown>)['x-specs'])
-          ? ((json as Record<string, unknown>)['x-specs'] as Spec[])
+        typeof json === 'object' && json !== null && specsKey && Array.isArray(obj[specsKey])
+          ? (obj[specsKey] as Spec[])
           : []
       await validateCoLocation(jsonPath, relativePath, specs, result, stats)
 
