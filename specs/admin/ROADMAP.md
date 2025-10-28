@@ -1,6 +1,6 @@
 # Admin UI Roadmap
 
-> **Last Generated**: 2025-10-21
+> **Last Generated**: 2025-10-28
 > **Back to**: [Main Roadmap](../../ROADMAP.md)
 
 ## Admin UI Specifications (24 total)

@@ -51,6 +51,30 @@ export interface OpenAPISpec {
 // ============================================================================
 
 /**
+ * Strips documentation examples and specs from schema before resolution
+ * These contain example $refs that aren't meant to be resolved as files
+ */
+function stripExamplesAndSpecs(obj: unknown): unknown {
+  if (typeof obj !== 'object' || obj === null) {
+    return obj
+  }
+
+  if (Array.isArray(obj)) {
+    return obj.map(stripExamplesAndSpecs)
+  }
+
+  const result: Record<string, unknown> = {}
+  for (const [key, value] of Object.entries(obj)) {
+    // Skip examples, x-specs, and specs arrays - they contain documentation examples
+    if (key === 'examples' || key === 'x-specs' || key === 'specs') {
+      continue
+    }
+    result[key] = stripExamplesAndSpecs(value)
+  }
+  return result
+}
+
+/**
  * Resolves all $ref pointers in a JSON Schema file
  *
  * @param schemaPath - Absolute path to JSON Schema file
@@ -62,10 +86,26 @@ export interface OpenAPISpec {
  */
 export async function resolveJsonSchema(schemaPath: string): Promise<JSONSchema> {
   try {
-    const resolved = await $RefParser.dereference(schemaPath, {
+    // First parse the schema and strip examples/specs to avoid resolving documentation $refs
+    const schema = await $RefParser.parse(schemaPath)
+    const cleanedSchema = stripExamplesAndSpecs(schema)
+
+    // Now resolve with cleaned schema
+    const resolved = await $RefParser.dereference(cleanedSchema as JSONSchema, {
       continueOnError: false,
       dereference: {
         circular: 'ignore', // Handle circular references
+        excludedPathMatcher: (path: string) => {
+          // Extra safety: skip any paths that contain examples or specs
+          return path.includes('/examples/') || path.includes('/x-specs/') || path.includes('/specs/')
+        },
+      },
+      resolve: {
+        file: {
+          // Use the original schema's directory for resolving relative paths
+          order: 1,
+        },
+        external: false, // Don't resolve external URLs
       },
     })
 
