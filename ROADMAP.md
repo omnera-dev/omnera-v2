@@ -4,14 +4,14 @@
 
 ## Overall Progress
 
-████████████░░░░░░░░░░░░░░░░░░ 41%
+███████████░░░░░░░░░░░░░░░░░░░ 36%
 
-**Combined Progress**: 41% Complete
+**Combined Progress**: 36% Complete
 
 ### Individual Metrics
 
-**📋 App Schema Progress**: 36% (4/11 properties, 66 current)
-███████████░░░░░░░░░░░░░░░░░░░ 36%
+**📋 App Schema Progress**: 21% (10/47 properties, 66 current)
+██████░░░░░░░░░░░░░░░░░░░░░░░░ 21%
 
 **🌐 API Schema Progress**: 63% (12/19 endpoints, 29 current)
 ███████████████████░░░░░░░░░░░ 63%
@@ -23,11 +23,11 @@
 
 ## 1. App Schema Progress
 
-📋 **Goal**: 11 properties
+📋 **Goal**: 47 properties
 📦 **Current**: 66 properties
-📊 **Completion**: 36%
+📊 **Completion**: 21%
 
-**Next Steps**: Implement missing properties (7 remaining)
+**Next Steps**: Implement missing properties (37 remaining)
 
 👉 **[View Detailed App Roadmap](specs/app/ROADMAP.md)**
 
