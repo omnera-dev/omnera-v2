@@ -49,49 +49,259 @@
       "id": "APP-LANG-CONFIG-001",
       "given": "a language config for English (en-US)",
       "when": "language is defined with code and label",
-      "then": "it should be valid with LTR direction by default"
+      "then": "it should be valid with LTR direction by default",
+      "x-validation": {
+        "setup": {
+          "language": {
+            "code": "en-US",
+            "label": "English"
+          }
+        },
+        "assertions": [
+          "Code: 'en-US' (ISO 639-1 format with country)",
+          "Label: 'English' (human-readable)",
+          "Direction: defaults to 'ltr' (left-to-right)"
+        ]
+      }
     },
     {
       "id": "APP-LANG-CONFIG-002",
       "given": "a language config for Arabic (ar-SA) with rtl direction",
       "when": "language is defined with RTL direction",
-      "then": "it should support right-to-left text rendering"
+      "then": "it should support right-to-left text rendering",
+      "x-validation": {
+        "setup": {
+          "language": {
+            "code": "ar-SA",
+            "label": "العربية",
+            "direction": "rtl"
+          }
+        },
+        "assertions": [
+          "Code: 'ar-SA' (Arabic - Saudi Arabia)",
+          "Label: 'العربية' (native Arabic script)",
+          "Direction: 'rtl' (right-to-left text flow)"
+        ]
+      },
+      "x-application": {
+        "language": {
+          "code": "ar-SA",
+          "label": "العربية",
+          "direction": "rtl"
+        },
+        "component": "html",
+        "expectedDOM": "<html lang=\"ar-SA\" dir=\"rtl\"><body>...</body></html>",
+        "assertions": [
+          "HTML dir attribute: dir=\"rtl\" flips entire layout",
+          "Text flows right-to-left",
+          "UI elements (menus, buttons) mirror horizontally",
+          "Arabic text renders correctly with native font support"
+        ]
+      }
     },
     {
       "id": "APP-LANG-CONFIG-003",
       "given": "a language config with 2-letter code (en)",
       "when": "language code uses ISO 639-1 format without country",
-      "then": "it should be valid"
+      "then": "it should be valid",
+      "x-validation": {
+        "setup": {
+          "language": {
+            "code": "en",
+            "label": "English"
+          }
+        },
+        "assertions": [
+          "Code: 'en' (ISO 639-1 language-only format)",
+          "Pattern: ^[a-z]{2}$ (2 lowercase letters)",
+          "Valid without country code (-US, -GB, etc.)"
+        ]
+      }
     },
     {
       "id": "APP-LANG-CONFIG-004",
       "given": "a language config with 4-letter code (en-US)",
       "when": "language code includes country code",
-      "then": "it should be valid with country-specific format"
+      "then": "it should be valid with country-specific format",
+      "x-validation": {
+        "setup": {
+          "language": {
+            "code": "en-US",
+            "label": "English (US)"
+          }
+        },
+        "assertions": [
+          "Code: 'en-US' (language + country)",
+          "Pattern: ^[a-z]{2}-[A-Z]{2}$ (lowercase-UPPERCASE)",
+          "Allows country-specific variants (en-US vs en-GB)"
+        ]
+      },
+      "x-application": {
+        "language": {
+          "code": "en-US",
+          "label": "English (US)"
+        },
+        "component": "html",
+        "expectedDOM": "<html lang=\"en-US\"><body>...</body></html>",
+        "assertions": [
+          "HTML lang attribute: lang=\"en-US\"",
+          "Enables locale-specific features (date formats, number formats)",
+          "Helps screen readers use correct pronunciation",
+          "SEO: Search engines recognize regional content"
+        ]
+      }
     },
     {
       "id": "APP-LANG-CONFIG-005",
       "given": "a language config with flag emoji (🇫🇷)",
       "when": "flag is provided as unicode emoji",
-      "then": "it should display the flag in language switcher"
+      "then": "it should display the flag in language switcher",
+      "x-validation": {
+        "setup": {
+          "language": {
+            "code": "fr-FR",
+            "label": "Français",
+            "flag": "🇫🇷"
+          }
+        },
+        "assertions": [
+          "Flag: '🇫🇷' (Unicode emoji)",
+          "Cross-platform emoji support",
+          "No external images needed"
+        ]
+      },
+      "x-application": {
+        "language": {
+          "code": "fr-FR",
+          "label": "Français",
+          "flag": "🇫🇷"
+        },
+        "component": "language-switcher",
+        "expectedDOM": "<button data-testid=\"language-option-fr-FR\"><span class=\"flag\">🇫🇷</span><span class=\"label\">Français</span></button>",
+        "assertions": [
+          "Flag emoji renders in language switcher",
+          "Visual identification of language",
+          "No image loading required (instant display)"
+        ]
+      }
     },
     {
       "id": "APP-LANG-CONFIG-006",
       "given": "a language config with flag icon path (/flags/es.svg)",
       "when": "flag is provided as file path",
-      "then": "it should load the flag image from the path"
+      "then": "it should load the flag image from the path",
+      "x-validation": {
+        "setup": {
+          "language": {
+            "code": "es-ES",
+            "label": "Español",
+            "flag": "/flags/es.svg"
+          }
+        },
+        "assertions": [
+          "Flag: '/flags/es.svg' (file path)",
+          "Custom flag images supported",
+          "Alternative to emoji for consistent design"
+        ]
+      },
+      "x-application": {
+        "language": {
+          "code": "es-ES",
+          "label": "Español",
+          "flag": "/flags/es.svg"
+        },
+        "component": "language-switcher",
+        "expectedDOM": "<button data-testid=\"language-option-es-ES\"><img src=\"/flags/es.svg\" alt=\"Spain flag\" class=\"flag\" /><span class=\"label\">Español</span></button>",
+        "assertions": [
+          "Flag image loads from path: src=\"/flags/es.svg\"",
+          "Custom SVG flags for consistent styling",
+          "Alt text for accessibility"
+        ]
+      }
     },
     {
       "id": "APP-LANG-CONFIG-007",
       "given": "a language config with native language label (Français, Español, العربية)",
       "when": "label uses the language's native name",
-      "then": "it should display correctly in all character sets"
+      "then": "it should display correctly in all character sets",
+      "x-validation": {
+        "setup": {
+          "languages": [
+            {
+              "code": "fr-FR",
+              "label": "Français"
+            },
+            {
+              "code": "es-ES",
+              "label": "Español"
+            },
+            {
+              "code": "ar-SA",
+              "label": "العربية"
+            }
+          ]
+        },
+        "assertions": [
+          "Latin script: 'Français', 'Español' (with accents)",
+          "Arabic script: 'العربية' (right-to-left)",
+          "UTF-8 support for all character sets",
+          "Native names improve UX for non-English speakers"
+        ]
+      },
+      "x-application": {
+        "languages": [
+          {
+            "code": "fr-FR",
+            "label": "Français"
+          },
+          {
+            "code": "ar-SA",
+            "label": "العربية"
+          }
+        ],
+        "component": "language-switcher",
+        "expectedDOM": "<div data-testid=\"language-switcher\"><button data-testid=\"language-option-fr-FR\">Français</button><button data-testid=\"language-option-ar-SA\">العربية</button></div>",
+        "assertions": [
+          "French accents render correctly: 'Français'",
+          "Arabic script renders correctly: 'العربية'",
+          "UTF-8 encoding ensures all characters display",
+          "Users recognize their language immediately"
+        ]
+      }
     },
     {
       "id": "APP-LANG-CONFIG-008",
       "given": "a minimal language config with only code and label",
       "when": "direction and flag are omitted",
-      "then": "it should use default LTR direction and no flag"
+      "then": "it should use default LTR direction and no flag",
+      "x-validation": {
+        "setup": {
+          "language": {
+            "code": "de-DE",
+            "label": "Deutsch"
+          }
+        },
+        "assertions": [
+          "Code and label: required properties",
+          "Direction: defaults to 'ltr' when omitted",
+          "Flag: optional (omitted)",
+          "Minimal valid configuration"
+        ]
+      },
+      "x-application": {
+        "language": {
+          "code": "de-DE",
+          "label": "Deutsch"
+        },
+        "component": "language-switcher",
+        "expectedDOM": "<html lang=\"de-DE\" dir=\"ltr\"><body><button data-testid=\"language-option-de-DE\">Deutsch</button></body></html>",
+        "assertions": [
+          "HTML: lang=\"de-DE\" dir=\"ltr\"",
+          "Direction defaults to LTR",
+          "No flag displayed when omitted",
+          "Minimal configuration works correctly"
+        ]
+      }
     }
   ]
 }

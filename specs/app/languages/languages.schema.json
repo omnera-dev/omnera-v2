@@ -84,85 +84,743 @@
       "id": "APP-LANGUAGES-001",
       "given": "an app with default language en-US and one supported language",
       "when": "app is configured with minimal language setup",
-      "then": "it should use English as the only available language"
+      "then": "it should use English as the only available language",
+      "x-validation": {
+        "setup": {
+          "languages": {
+            "default": "en-US",
+            "supported": [
+              {
+                "code": "en-US",
+                "label": "English"
+              }
+            ]
+          }
+        },
+        "assertions": [
+          "Default: 'en-US'",
+          "Supported: 1 language (en-US only)",
+          "Minimal valid configuration",
+          "Single-language mode"
+        ]
+      }
     },
     {
       "id": "APP-LANGUAGES-002",
       "given": "an app with default en-US and supported languages [en-US, fr-FR, es-ES]",
       "when": "app is configured with multiple languages",
-      "then": "users should be able to switch between all three languages"
+      "then": "users should be able to switch between all three languages",
+      "x-validation": {
+        "setup": {
+          "languages": {
+            "default": "en-US",
+            "supported": [
+              {
+                "code": "en-US",
+                "label": "English"
+              },
+              {
+                "code": "fr-FR",
+                "label": "Français"
+              },
+              {
+                "code": "es-ES",
+                "label": "Español"
+              }
+            ]
+          }
+        },
+        "assertions": [
+          "Default: 'en-US'",
+          "Supported: 3 languages",
+          "Multi-language configuration",
+          "Language switcher enabled"
+        ]
+      },
+      "x-application": {
+        "languages": {
+          "default": "en-US",
+          "supported": [
+            {
+              "code": "en-US",
+              "label": "English"
+            },
+            {
+              "code": "fr-FR",
+              "label": "Français"
+            },
+            {
+              "code": "es-ES",
+              "label": "Español"
+            }
+          ]
+        },
+        "component": "language-switcher",
+        "expectedDOM": "<div data-testid=\"language-switcher\"><button data-testid=\"language-option-en-US\" class=\"active\">English</button><button data-testid=\"language-option-fr-FR\">Français</button><button data-testid=\"language-option-es-ES\">Español</button></div>",
+        "assertions": [
+          "3 language buttons rendered",
+          "English marked as active (default)",
+          "Clicking fr-FR button switches to French",
+          "All supported languages accessible"
+        ]
+      }
     },
     {
       "id": "APP-LANGUAGES-003",
       "given": "an app with default en-US and fallback en-US",
       "when": "a translation is missing for the current language",
-      "then": "it should display the English fallback text"
+      "then": "it should display the English fallback text",
+      "x-validation": {
+        "setup": {
+          "languages": {
+            "default": "en-US",
+            "fallback": "en-US",
+            "supported": [
+              {
+                "code": "en-US",
+                "label": "English"
+              },
+              {
+                "code": "fr-FR",
+                "label": "Français"
+              }
+            ]
+          }
+        },
+        "assertions": [
+          "Fallback: 'en-US'",
+          "Missing translations fall back to English",
+          "Prevents blank/missing text",
+          "Graceful degradation"
+        ]
+      },
+      "x-application": {
+        "languages": {
+          "default": "en-US",
+          "fallback": "en-US",
+          "currentLanguage": "fr-FR"
+        },
+        "translations": {
+          "en-US": {
+            "welcome": "Welcome",
+            "goodbye": "Goodbye"
+          },
+          "fr-FR": {
+            "welcome": "Bienvenue"
+          }
+        },
+        "component": "text",
+        "expectedDOM": "<div><p data-testid=\"welcome-text\">Bienvenue</p><p data-testid=\"goodbye-text\">Goodbye</p></div>",
+        "assertions": [
+          "welcome: 'Bienvenue' (French translation exists)",
+          "goodbye: 'Goodbye' (falls back to English, French translation missing)",
+          "Fallback prevents empty text",
+          "Seamless UX with incomplete translations"
+        ]
+      }
     },
     {
       "id": "APP-LANGUAGES-004",
       "given": "an app with detectBrowser set to true",
       "when": "user visits the site for the first time",
-      "then": "it should automatically detect and set the browser's preferred language"
+      "then": "it should automatically detect and set the browser's preferred language",
+      "x-validation": {
+        "setup": {
+          "languages": {
+            "default": "en-US",
+            "detectBrowser": true,
+            "supported": [
+              {
+                "code": "en-US",
+                "label": "English"
+              },
+              {
+                "code": "fr-FR",
+                "label": "Français"
+              }
+            ]
+          }
+        },
+        "assertions": [
+          "detectBrowser: true",
+          "Auto-detects navigator.language",
+          "Matches browser language to supported array",
+          "Falls back to default if no match"
+        ]
+      },
+      "x-application": {
+        "languages": {
+          "default": "en-US",
+          "detectBrowser": true,
+          "supported": ["en-US", "fr-FR"]
+        },
+        "browserLanguage": "fr-FR",
+        "component": "app",
+        "expectedDOM": "<html lang=\"fr-FR\"><body>...</body></html>",
+        "localStorage": null,
+        "assertions": [
+          "Browser language: navigator.language = 'fr-FR'",
+          "Auto-detects and sets French",
+          "HTML lang=\"fr-FR\"",
+          "No localStorage interaction on first visit",
+          "Smart default based on user's browser"
+        ]
+      }
     },
     {
       "id": "APP-LANGUAGES-005",
       "given": "an app with detectBrowser set to false",
       "when": "user visits the site",
-      "then": "it should use the default language without auto-detection"
+      "then": "it should use the default language without auto-detection",
+      "x-validation": {
+        "setup": {
+          "languages": {
+            "default": "en-US",
+            "detectBrowser": false,
+            "supported": [
+              {
+                "code": "en-US",
+                "label": "English"
+              },
+              {
+                "code": "fr-FR",
+                "label": "Français"
+              }
+            ]
+          }
+        },
+        "assertions": [
+          "detectBrowser: false",
+          "Ignores navigator.language",
+          "Always uses default language",
+          "Manual language selection required"
+        ]
+      },
+      "x-application": {
+        "languages": {
+          "default": "en-US",
+          "detectBrowser": false
+        },
+        "browserLanguage": "fr-FR",
+        "component": "app",
+        "expectedDOM": "<html lang=\"en-US\"><body>...</body></html>",
+        "assertions": [
+          "Browser language: 'fr-FR' (ignored)",
+          "Uses default: 'en-US'",
+          "HTML lang=\"en-US\"",
+          "No auto-detection, explicit control"
+        ]
+      }
     },
     {
       "id": "APP-LANGUAGES-006",
       "given": "an app with persistSelection set to true",
       "when": "user manually selects a language",
-      "then": "it should remember the choice in localStorage for future visits"
+      "then": "it should remember the choice in localStorage for future visits",
+      "x-validation": {
+        "setup": {
+          "languages": {
+            "default": "en-US",
+            "persistSelection": true,
+            "supported": [
+              {
+                "code": "en-US",
+                "label": "English"
+              },
+              {
+                "code": "fr-FR",
+                "label": "Français"
+              }
+            ]
+          }
+        },
+        "assertions": [
+          "persistSelection: true",
+          "Saves language to localStorage",
+          "Remembers choice across sessions",
+          "User preference persisted"
+        ]
+      },
+      "x-application": {
+        "languages": {
+          "default": "en-US",
+          "persistSelection": true
+        },
+        "userAction": "Click fr-FR button",
+        "component": "language-switcher",
+        "localStorage": {
+          "key": "omnera_language",
+          "value": "fr-FR"
+        },
+        "expectedDOM": "<html lang=\"fr-FR\"><body>...</body></html>",
+        "assertions": [
+          "User selects French",
+          "localStorage.setItem('omnera_language', 'fr-FR')",
+          "HTML updates to lang=\"fr-FR\"",
+          "On next visit: reads localStorage and restores French",
+          "Persistent language preference"
+        ]
+      }
     },
     {
       "id": "APP-LANGUAGES-007",
       "given": "an app with persistSelection set to false",
       "when": "user manually selects a language",
-      "then": "it should not persist the choice and reset to default on next visit"
+      "then": "it should not persist the choice and reset to default on next visit",
+      "x-validation": {
+        "setup": {
+          "languages": {
+            "default": "en-US",
+            "persistSelection": false,
+            "supported": [
+              {
+                "code": "en-US",
+                "label": "English"
+              },
+              {
+                "code": "fr-FR",
+                "label": "Français"
+              }
+            ]
+          }
+        },
+        "assertions": [
+          "persistSelection: false",
+          "No localStorage interaction",
+          "Language selection is session-only",
+          "Resets to default on reload"
+        ]
+      },
+      "x-application": {
+        "languages": {
+          "default": "en-US",
+          "persistSelection": false
+        },
+        "userAction": "Click fr-FR button",
+        "component": "language-switcher",
+        "localStorage": null,
+        "expectedDOM": "<html lang=\"fr-FR\"><body>...</body></html>",
+        "assertions": [
+          "User selects French (session only)",
+          "No localStorage write",
+          "HTML updates to lang=\"fr-FR\" (current session)",
+          "On page reload: resets to default 'en-US'",
+          "Session-only language selection"
+        ]
+      }
     },
     {
       "id": "APP-LANGUAGES-008",
       "given": "an app with supported languages including RTL (ar-SA) and LTR (en-US)",
       "when": "user switches between English and Arabic",
-      "then": "the entire app layout should flip between LTR and RTL direction"
+      "then": "the entire app layout should flip between LTR and RTL direction",
+      "x-validation": {
+        "setup": {
+          "languages": {
+            "default": "en-US",
+            "supported": [
+              {
+                "code": "en-US",
+                "label": "English",
+                "direction": "ltr"
+              },
+              {
+                "code": "ar-SA",
+                "label": "العربية",
+                "direction": "rtl"
+              }
+            ]
+          }
+        },
+        "assertions": [
+          "English: direction='ltr'",
+          "Arabic: direction='rtl'",
+          "Supports bidirectional layouts",
+          "RTL mirrors entire UI"
+        ]
+      },
+      "x-application": {
+        "languages": {
+          "default": "en-US",
+          "supported": [
+            {
+              "code": "en-US",
+              "direction": "ltr"
+            },
+            {
+              "code": "ar-SA",
+              "direction": "rtl"
+            }
+          ]
+        },
+        "userAction": "Switch from en-US to ar-SA",
+        "component": "app",
+        "expectedDOM": "<html lang=\"ar-SA\" dir=\"rtl\"><body>...</body></html>",
+        "assertions": [
+          "Before: <html lang=\"en-US\" dir=\"ltr\">",
+          "After: <html lang=\"ar-SA\" dir=\"rtl\">",
+          "Entire layout mirrors horizontally",
+          "Text flows right-to-left",
+          "Menus, buttons, forms flip alignment",
+          "Complete RTL support"
+        ]
+      }
     },
     {
       "id": "APP-LANGUAGES-009",
       "given": "an app with 5+ supported languages from different regions",
       "when": "user opens language switcher",
-      "then": "all languages should be displayed with their native labels and flags"
+      "then": "all languages should be displayed with their native labels and flags",
+      "x-validation": {
+        "setup": {
+          "languages": {
+            "default": "en-US",
+            "supported": [
+              {
+                "code": "en-US",
+                "label": "English",
+                "flag": "🇺🇸"
+              },
+              {
+                "code": "fr-FR",
+                "label": "Français",
+                "flag": "🇫🇷"
+              },
+              {
+                "code": "es-ES",
+                "label": "Español",
+                "flag": "🇪🇸"
+              },
+              {
+                "code": "de-DE",
+                "label": "Deutsch",
+                "flag": "🇩🇪"
+              },
+              {
+                "code": "ja-JP",
+                "label": "日本語",
+                "flag": "🇯🇵"
+              },
+              {
+                "code": "ar-SA",
+                "label": "العربية",
+                "flag": "🇸🇦"
+              }
+            ]
+          }
+        },
+        "assertions": [
+          "6 supported languages",
+          "Native labels for all languages",
+          "Flag emojis for visual identification",
+          "Global language support"
+        ]
+      },
+      "x-application": {
+        "languages": {
+          "supported": [
+            {
+              "code": "en-US",
+              "label": "English",
+              "flag": "🇺🇸"
+            },
+            {
+              "code": "fr-FR",
+              "label": "Français",
+              "flag": "🇫🇷"
+            },
+            {
+              "code": "ja-JP",
+              "label": "日本語",
+              "flag": "🇯🇵"
+            },
+            {
+              "code": "ar-SA",
+              "label": "العربية",
+              "flag": "🇸🇦"
+            }
+          ]
+        },
+        "component": "language-switcher",
+        "expectedDOM": "<div data-testid=\"language-switcher\"><button data-testid=\"language-option-en-US\">🇺🇸 English</button><button data-testid=\"language-option-fr-FR\">🇫🇷 Français</button><button data-testid=\"language-option-ja-JP\">🇯🇵 日本語</button><button data-testid=\"language-option-ar-SA\">🇸🇦 العربية</button></div>",
+        "assertions": [
+          "All languages listed with flags",
+          "Native labels: Français, 日本語, العربية",
+          "UTF-8 support: Latin, Japanese, Arabic scripts",
+          "Visual flags aid recognition",
+          "International UX"
+        ]
+      }
     },
     {
       "id": "APP-LANGUAGES-010",
       "given": "an app with all features enabled (detectBrowser, persistSelection, fallback)",
       "when": "language configuration is fully utilized",
-      "then": "it should provide seamless multi-language UX with auto-detection, persistence, and fallback"
+      "then": "it should provide seamless multi-language UX with auto-detection, persistence, and fallback",
+      "x-validation": {
+        "setup": {
+          "languages": {
+            "default": "en-US",
+            "fallback": "en-US",
+            "detectBrowser": true,
+            "persistSelection": true,
+            "supported": [
+              {
+                "code": "en-US",
+                "label": "English"
+              },
+              {
+                "code": "fr-FR",
+                "label": "Français"
+              }
+            ]
+          }
+        },
+        "assertions": [
+          "All features enabled",
+          "detectBrowser: auto-detection on first visit",
+          "persistSelection: remembers user choice",
+          "fallback: handles missing translations",
+          "Complete multi-language system"
+        ]
+      }
     },
     {
       "id": "APP-LANGUAGES-011",
       "given": "an app with default language not in supported array",
       "when": "default is 'en-US' but supported array only contains fr-FR and es-ES",
-      "then": "it should fail validation - default language must be in supported array"
+      "then": "it should fail validation - default language must be in supported array",
+      "x-validation": {
+        "setup": {
+          "languages": {
+            "default": "en-US",
+            "supported": [
+              {
+                "code": "fr-FR",
+                "label": "Français"
+              },
+              {
+                "code": "es-ES",
+                "label": "Español"
+              }
+            ]
+          }
+        },
+        "assertions": [
+          "INVALID: default 'en-US' not in supported array",
+          "Validation error: default must be one of supported codes",
+          "Prevents configuration errors",
+          "Schema constraint enforced"
+        ],
+        "expectValidation": "fail"
+      }
     },
     {
       "id": "APP-LANGUAGES-012",
       "given": "an app with fallback not in supported array",
       "when": "fallback is 'de-DE' but supported array doesn't contain it",
-      "then": "it should fail validation - fallback language must be in supported array"
+      "then": "it should fail validation - fallback language must be in supported array",
+      "x-validation": {
+        "setup": {
+          "languages": {
+            "default": "en-US",
+            "fallback": "de-DE",
+            "supported": [
+              {
+                "code": "en-US",
+                "label": "English"
+              },
+              {
+                "code": "fr-FR",
+                "label": "Français"
+              }
+            ]
+          }
+        },
+        "assertions": [
+          "INVALID: fallback 'de-DE' not in supported array",
+          "Validation error: fallback must be one of supported codes",
+          "Prevents referencing unavailable language",
+          "Schema constraint enforced"
+        ],
+        "expectValidation": "fail"
+      }
     },
     {
       "id": "APP-LANGUAGES-013",
       "given": "an app without explicit fallback",
       "when": "fallback property is omitted",
-      "then": "it should automatically use default language as fallback"
+      "then": "it should automatically use default language as fallback",
+      "x-validation": {
+        "setup": {
+          "languages": {
+            "default": "en-US",
+            "supported": [
+              {
+                "code": "en-US",
+                "label": "English"
+              },
+              {
+                "code": "fr-FR",
+                "label": "Français"
+              }
+            ]
+          }
+        },
+        "assertions": [
+          "No fallback property",
+          "Fallback defaults to 'default' language",
+          "Fallback = 'en-US' (same as default)",
+          "Simplifies configuration"
+        ]
+      }
     },
     {
       "id": "APP-LANGUAGES-014",
       "given": "an app with fallback different from default",
       "when": "default is 'fr-FR' and fallback is 'en-US'",
-      "then": "it should show English text when French translation is missing (useful for French site with English fallback)"
+      "then": "it should show English text when French translation is missing (useful for French site with English fallback)",
+      "x-validation": {
+        "setup": {
+          "languages": {
+            "default": "fr-FR",
+            "fallback": "en-US",
+            "supported": [
+              {
+                "code": "en-US",
+                "label": "English"
+              },
+              {
+                "code": "fr-FR",
+                "label": "Français"
+              }
+            ]
+          }
+        },
+        "assertions": [
+          "Default: 'fr-FR' (French by default)",
+          "Fallback: 'en-US' (English fallback)",
+          "Useful for non-English default sites",
+          "Fallback can differ from default"
+        ]
+      },
+      "x-application": {
+        "languages": {
+          "default": "fr-FR",
+          "fallback": "en-US",
+          "currentLanguage": "fr-FR"
+        },
+        "translations": {
+          "en-US": {
+            "welcome": "Welcome",
+            "contact": "Contact"
+          },
+          "fr-FR": {
+            "welcome": "Bienvenue"
+          }
+        },
+        "component": "text",
+        "expectedDOM": "<div><p data-testid=\"welcome-text\">Bienvenue</p><p data-testid=\"contact-text\">Contact</p></div>",
+        "assertions": [
+          "Default language: French",
+          "welcome: 'Bienvenue' (French translation)",
+          "contact: 'Contact' (falls back to English, no French translation)",
+          "French-first site with English safety net",
+          "Flexible fallback strategy"
+        ]
+      }
+    },
+    {
+      "id": "APP-LANGUAGES-INTEGRATION-001",
+      "given": "a multi-language app with theme integration",
+      "when": "language direction affects theme spacing and layout",
+      "then": "it should apply RTL-aware theme tokens for Arabic/Hebrew while maintaining LTR for English/French",
+      "x-application": {
+        "languages": {
+          "default": "en-US",
+          "supported": [
+            {
+              "code": "en-US",
+              "direction": "ltr"
+            },
+            {
+              "code": "ar-SA",
+              "direction": "rtl"
+            }
+          ]
+        },
+        "theme": {
+          "spacing": {
+            "section": "4rem",
+            "container": "max-w-7xl mx-auto px-4"
+          }
+        },
+        "component": "page-section",
+        "expectedDOM": {
+          "en-US": "<html lang=\"en-US\" dir=\"ltr\"><section style=\"padding: 4rem 0;\"><div style=\"max-width: 80rem; margin-left: auto; margin-right: auto; padding-left: 1rem; padding-right: 1rem;\">Content</div></section></html>",
+          "ar-SA": "<html lang=\"ar-SA\" dir=\"rtl\"><section style=\"padding: 4rem 0;\"><div style=\"max-width: 80rem; margin-left: auto; margin-right: auto; padding-left: 1rem; padding-right: 1rem;\">Content</div></section></html>"
+        },
+        "assertions": [
+          "Language direction controls HTML dir attribute",
+          "Theme spacing remains consistent across languages",
+          "RTL: margin-left/right automatically flip via dir=\"rtl\"",
+          "Theme + Language integration: consistent design across directions",
+          "CSS logical properties (margin-inline) respect dir attribute",
+          "Unified theme tokens work for both LTR and RTL"
+        ]
+      }
+    },
+    {
+      "id": "APP-LANGUAGES-INTEGRATION-002",
+      "given": "a multi-language app with page content",
+      "when": "user switches language on a page with translated content",
+      "then": "it should update page metadata, HTML attributes, and visible text while maintaining scroll position and component state",
+      "x-application": {
+        "languages": {
+          "default": "en-US",
+          "persistSelection": true,
+          "supported": [
+            {
+              "code": "en-US",
+              "label": "English"
+            },
+            {
+              "code": "fr-FR",
+              "label": "Français"
+            }
+          ]
+        },
+        "page": {
+          "en-US": {
+            "title": "Welcome to Our App",
+            "description": "Discover our features"
+          },
+          "fr-FR": {
+            "title": "Bienvenue sur Notre App",
+            "description": "Découvrez nos fonctionnalités"
+          }
+        },
+        "userAction": "Switch from en-US to fr-FR",
+        "component": "page",
+        "expectedDOM": {
+          "before": "<html lang=\"en-US\"><head><title>Welcome to Our App</title><meta name=\"description\" content=\"Discover our features\" /></head><body><h1>Welcome to Our App</h1></body></html>",
+          "after": "<html lang=\"fr-FR\"><head><title>Bienvenue sur Notre App</title><meta name=\"description\" content=\"Découvrez nos fonctionnalités\" /></head><body><h1>Bienvenue sur Notre App</h1></body></html>"
+        },
+        "localStorage": {
+          "key": "omnera_language",
+          "value": "fr-FR"
+        },
+        "assertions": [
+          "HTML lang attribute updates: en-US → fr-FR",
+          "Page title updates: 'Welcome to Our App' → 'Bienvenue sur Notre App'",
+          "Meta description updates for SEO",
+          "Visible text translates: heading, body content",
+          "localStorage persists language choice",
+          "Scroll position maintained (no page reload)",
+          "Component state preserved during language switch",
+          "Complete language + page integration"
+        ]
+      }
     }
   ]
 }
