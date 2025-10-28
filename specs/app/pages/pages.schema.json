@@ -751,6 +751,783 @@
           "Search engines and social platforms consume metadata"
         ]
       }
+    },
+    {
+      "id": "APP-PAGES-INTEGRATION-001",
+      "given": "a page with theme integration",
+      "when": "page sections use app.theme colors, typography, and spacing via className",
+      "then": "it should apply global theme to page elements without page-level theme config",
+      "x-validation": {
+        "setup": {
+          "app": {
+            "theme": {
+              "colors": {
+                "primary": "#3B82F6",
+                "secondary": "#10B981"
+              },
+              "typography": {
+                "fontFamily": {
+                  "sans": "Inter, system-ui, sans-serif"
+                },
+                "fontSize": {
+                  "h1": "3rem"
+                }
+              },
+              "spacing": {
+                "container": {
+                  "padding": "1rem"
+                }
+              }
+            },
+            "pages": [
+              {
+                "name": "Home",
+                "path": "/",
+                "meta": {
+                  "lang": "en-US",
+                  "title": "Home"
+                },
+                "sections": [
+                  {
+                    "type": "section",
+                    "props": {
+                      "className": "bg-primary text-white py-container-padding"
+                    },
+                    "children": [
+                      {
+                        "type": "h1",
+                        "props": {
+                          "className": "font-sans text-h1"
+                        },
+                        "children": ["Welcome"]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "assertions": [
+          "Theme defined at app level (app.theme{})",
+          "Pages CANNOT define theme property",
+          "Sections use className with theme tokens: bg-primary, text-h1, py-container-padding",
+          "Theme applies globally to all pages",
+          "Page-specific styling via className, not page.theme"
+        ]
+      },
+      "x-application": {
+        "app": {
+          "theme": {
+            "colors": {
+              "primary": "#3B82F6",
+              "background": "#FFFFFF",
+              "text": "#111827"
+            },
+            "typography": {
+              "fontFamily": {
+                "sans": "Inter, system-ui, sans-serif"
+              }
+            }
+          },
+          "pages": [
+            {
+              "path": "/",
+              "sections": [
+                {
+                  "type": "section",
+                  "props": {
+                    "className": "bg-primary text-white"
+                  },
+                  "children": [
+                    {
+                      "type": "h1",
+                      "props": {
+                        "className": "font-sans"
+                      },
+                      "children": ["Welcome"]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "expectedDOM": "<section class=\"bg-primary text-white\" style=\"background-color: #3B82F6; color: #FFFFFF;\"><h1 class=\"font-sans\" style=\"font-family: Inter, system-ui, sans-serif;\">Welcome</h1></section>",
+        "cssVariables": {
+          ":root": {
+            "--color-primary": "#3B82F6",
+            "--color-background": "#FFFFFF",
+            "--color-text": "#111827",
+            "--font-sans": "Inter, system-ui, sans-serif"
+          }
+        },
+        "useCases": [
+          "Global rebrand: Change app.theme.colors.primary → all pages update instantly",
+          "Dark mode: Toggle theme.colors → all pages switch colors",
+          "Typography: Update font → consistent across all pages",
+          "Design system: Theme ensures consistency without per-page config"
+        ],
+        "assertions": [
+          "Theme tokens compiled to CSS variables (--color-primary, --font-sans)",
+          "className utilities reference theme tokens (bg-primary → var(--color-primary))",
+          "Pages consume theme via className, no page.theme property",
+          "Single source of truth: app.theme{} applies to all pages",
+          "Real-world: Stripe uses global theme, pages use utility classes"
+        ]
+      }
+    },
+    {
+      "id": "APP-PAGES-INTEGRATION-002",
+      "given": "a page with language integration",
+      "when": "page uses app.languages for i18n with meta.lang and locale-specific content",
+      "then": "it should adapt page content based on selected language without page-level translations",
+      "x-validation": {
+        "setup": {
+          "app": {
+            "languages": {
+              "default": "en",
+              "supported": ["en", "fr", "es"],
+              "translations": {
+                "en": {
+                  "nav.home": "Home",
+                  "hero.title": "Welcome to Our Platform"
+                },
+                "fr": {
+                  "nav.home": "Accueil",
+                  "hero.title": "Bienvenue sur notre plateforme"
+                },
+                "es": {
+                  "nav.home": "Inicio",
+                  "hero.title": "Bienvenido a nuestra plataforma"
+                }
+              }
+            },
+            "pages": [
+              {
+                "name": "Home",
+                "path": "/",
+                "meta": {
+                  "lang": "en",
+                  "title": "$t:hero.title"
+                },
+                "sections": [
+                  {
+                    "type": "h1",
+                    "children": ["$t:hero.title"]
+                  }
+                ]
+              },
+              {
+                "name": "Home (French)",
+                "path": "/fr",
+                "meta": {
+                  "lang": "fr",
+                  "title": "$t:hero.title"
+                },
+                "sections": [
+                  {
+                    "type": "h1",
+                    "children": ["$t:hero.title"]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "assertions": [
+          "Languages defined at app level (app.languages{})",
+          "Pages reference translations via $t: syntax",
+          "meta.lang specifies page locale (en, fr, es)",
+          "Same page structure, different language content",
+          "Translation keys resolve based on meta.lang"
+        ]
+      },
+      "x-application": {
+        "app": {
+          "languages": {
+            "default": "en",
+            "supported": ["en", "fr"],
+            "translations": {
+              "en": {
+                "hero.title": "Welcome",
+                "hero.cta": "Get Started"
+              },
+              "fr": {
+                "hero.title": "Bienvenue",
+                "hero.cta": "Commencer"
+              }
+            }
+          },
+          "pages": [
+            {
+              "path": "/",
+              "meta": {
+                "lang": "en"
+              },
+              "sections": [
+                {
+                  "type": "h1",
+                  "children": ["$t:hero.title"]
+                },
+                {
+                  "type": "button",
+                  "children": ["$t:hero.cta"]
+                }
+              ]
+            },
+            {
+              "path": "/fr",
+              "meta": {
+                "lang": "fr"
+              },
+              "sections": [
+                {
+                  "type": "h1",
+                  "children": ["$t:hero.title"]
+                },
+                {
+                  "type": "button",
+                  "children": ["$t:hero.cta"]
+                }
+              ]
+            }
+          ]
+        },
+        "expectedDOM": {
+          "/": "<h1>Welcome</h1><button>Get Started</button>",
+          "/fr": "<h1>Bienvenue</h1><button>Commencer</button>"
+        },
+        "routing": {
+          "/": "English (default locale)",
+          "/fr": "French (explicit locale)",
+          "/es": "404 (unsupported locale)"
+        },
+        "useCases": [
+          "Stripe: /en, /fr, /ja pages with same structure, different content",
+          "Vercel: /docs (en), /docs/de (German) with locale switcher",
+          "Notion: Auto-detect browser locale, show appropriate page",
+          "GitHub: /en/about, /ja/about with translated content"
+        ],
+        "assertions": [
+          "$t:key syntax resolves to app.languages.translations[meta.lang][key]",
+          "Same page structure across locales (DRY)",
+          "meta.lang sets HTML lang attribute + translation context",
+          "Language switcher changes meta.lang → content updates",
+          "Real-world: 60% of SaaS apps support 2+ languages"
+        ]
+      }
+    },
+    {
+      "id": "APP-PAGES-INTEGRATION-003",
+      "given": "a page with blocks integration",
+      "when": "page sections reference app.blocks[] via $ref with $vars substitution",
+      "then": "it should compose pages from reusable blocks without duplicating block definitions",
+      "x-validation": {
+        "setup": {
+          "app": {
+            "blocks": [
+              {
+                "id": "hero",
+                "type": "section",
+                "props": {
+                  "className": "py-20"
+                },
+                "children": [
+                  {
+                    "type": "h1",
+                    "children": ["$title"]
+                  },
+                  {
+                    "type": "p",
+                    "children": ["$description"]
+                  },
+                  {
+                    "type": "button",
+                    "children": ["$ctaLabel"]
+                  }
+                ]
+              },
+              {
+                "id": "features",
+                "type": "section",
+                "children": [
+                  {
+                    "type": "div",
+                    "children": ["$feature1"]
+                  },
+                  {
+                    "type": "div",
+                    "children": ["$feature2"]
+                  }
+                ]
+              }
+            ],
+            "pages": [
+              {
+                "name": "Home",
+                "path": "/",
+                "meta": {
+                  "lang": "en-US",
+                  "title": "Home"
+                },
+                "sections": [
+                  {
+                    "$ref": "#/blocks/hero",
+                    "$vars": {
+                      "title": "Welcome Home",
+                      "description": "Your journey starts here",
+                      "ctaLabel": "Get Started"
+                    }
+                  },
+                  {
+                    "$ref": "#/blocks/features",
+                    "$vars": {
+                      "feature1": "Fast",
+                      "feature2": "Secure"
+                    }
+                  }
+                ]
+              },
+              {
+                "name": "Pricing",
+                "path": "/pricing",
+                "meta": {
+                  "lang": "en-US",
+                  "title": "Pricing"
+                },
+                "sections": [
+                  {
+                    "$ref": "#/blocks/hero",
+                    "$vars": {
+                      "title": "Simple Pricing",
+                      "description": "Choose your plan",
+                      "ctaLabel": "Buy Now"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "assertions": [
+          "Blocks defined at app level (app.blocks[])",
+          "Pages reference blocks via $ref: '#/blocks/{id}'",
+          "Variable substitution via $vars object",
+          "Same block structure, different content per page",
+          "DRY: Define block once, use across multiple pages"
+        ]
+      },
+      "x-application": {
+        "app": {
+          "blocks": [
+            {
+              "id": "hero",
+              "type": "section",
+              "children": [
+                {
+                  "type": "h1",
+                  "children": ["$title"]
+                },
+                {
+                  "type": "button",
+                  "children": ["$cta"]
+                }
+              ]
+            }
+          ],
+          "pages": [
+            {
+              "path": "/",
+              "sections": [
+                {
+                  "$ref": "#/blocks/hero",
+                  "$vars": {
+                    "title": "Welcome",
+                    "cta": "Get Started"
+                  }
+                }
+              ]
+            },
+            {
+              "path": "/pricing",
+              "sections": [
+                {
+                  "$ref": "#/blocks/hero",
+                  "$vars": {
+                    "title": "Pricing",
+                    "cta": "Buy Now"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "expectedDOM": {
+          "/": "<section><h1>Welcome</h1><button>Get Started</button></section>",
+          "/pricing": "<section><h1>Pricing</h1><button>Buy Now</button></section>"
+        },
+        "benefits": {
+          "reusability": "Define hero block once → use on 10+ pages",
+          "consistency": "Update block → all pages get changes",
+          "maintenance": "Change button style → updates everywhere",
+          "performance": "Block definitions cached, not duplicated"
+        },
+        "useCases": [
+          "Stripe: hero, pricing-table, faq blocks reused across pages",
+          "Vercel: feature-grid, testimonials blocks on multiple pages",
+          "Linear: cta, stats blocks with different content per page",
+          "GitHub: code-example, feature-showcase reusable blocks"
+        ],
+        "assertions": [
+          "$ref resolves block from app.blocks[] by id",
+          "$vars substitutes $title, $cta in block children",
+          "Same block structure ensures design consistency",
+          "Variable substitution enables dynamic content",
+          "Real-world: 80% of landing pages reuse 5-10 core blocks"
+        ]
+      }
+    },
+    {
+      "id": "APP-PAGES-INTEGRATION-004",
+      "given": "a page with responsive integration",
+      "when": "page layout adapts across mobile, tablet, and desktop viewports",
+      "then": "it should support responsive design via className utilities without separate mobile pages",
+      "x-validation": {
+        "setup": {
+          "page": {
+            "name": "Responsive",
+            "path": "/responsive",
+            "meta": {
+              "lang": "en-US",
+              "title": "Responsive"
+            },
+            "sections": [
+              {
+                "type": "section",
+                "props": {
+                  "className": "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"
+                },
+                "children": [
+                  {
+                    "type": "div",
+                    "props": {
+                      "className": "text-sm md:text-base lg:text-lg"
+                    },
+                    "children": ["Responsive Text"]
+                  }
+                ]
+              }
+            ],
+            "layout": {
+              "navigation": {
+                "logo": "/logo.svg",
+                "links": {
+                  "desktop": [
+                    {
+                      "label": "Home",
+                      "href": "/"
+                    }
+                  ],
+                  "mobile": [
+                    {
+                      "label": "Menu",
+                      "href": "#"
+                    }
+                  ]
+                }
+              },
+              "sidebar": {
+                "enabled": true,
+                "collapsible": true,
+                "defaultCollapsed": false,
+                "responsive": {
+                  "mobile": "collapsed",
+                  "tablet": "collapsed",
+                  "desktop": "expanded"
+                }
+              }
+            }
+          }
+        },
+        "assertions": [
+          "Responsive utilities: grid-cols-1 (mobile), md:grid-cols-2 (tablet), lg:grid-cols-3 (desktop)",
+          "Text sizing: text-sm (mobile) → text-base (tablet) → text-lg (desktop)",
+          "Navigation: Different links for mobile vs desktop",
+          "Sidebar: Responsive behavior (collapsed on mobile/tablet, expanded on desktop)",
+          "Single page adapts to all viewports"
+        ]
+      },
+      "x-application": {
+        "page": {
+          "sections": [
+            {
+              "type": "section",
+              "props": {
+                "className": "flex flex-col md:flex-row gap-4 p-4 md:p-8 lg:p-12"
+              },
+              "children": [
+                {
+                  "type": "div",
+                  "props": {
+                    "className": "w-full md:w-1/2 text-base md:text-lg lg:text-xl"
+                  },
+                  "children": ["Content"]
+                }
+              ]
+            }
+          ],
+          "layout": {
+            "navigation": {
+              "links": {
+                "desktop": ["Home", "About", "Pricing", "Contact"],
+                "mobile": ["Menu"]
+              }
+            }
+          }
+        },
+        "viewports": {
+          "mobile": {
+            "width": "375px",
+            "layout": "flex-col (vertical stack)",
+            "padding": "p-4 (1rem)",
+            "text": "text-base (1rem)",
+            "navigation": "Mobile menu (hamburger icon)"
+          },
+          "tablet": {
+            "width": "768px",
+            "layout": "md:flex-row (horizontal)",
+            "padding": "md:p-8 (2rem)",
+            "text": "md:text-lg (1.125rem)",
+            "navigation": "Full navigation (all links visible)"
+          },
+          "desktop": {
+            "width": "1280px",
+            "layout": "lg:flex-row (horizontal)",
+            "padding": "lg:p-12 (3rem)",
+            "text": "lg:text-xl (1.25rem)",
+            "navigation": "Full navigation + additional links"
+          }
+        },
+        "useCases": [
+          "Stripe: Single pricing page, grid adapts (1 col mobile → 3 cols desktop)",
+          "Vercel: Navigation collapses to hamburger on mobile",
+          "Linear: Sidebar auto-collapses on mobile, expands on desktop",
+          "GitHub: Content stacks vertically on mobile, side-by-side on desktop"
+        ],
+        "assertions": [
+          "Responsive utilities in className (sm:, md:, lg:, xl: prefixes)",
+          "Mobile-first design: base styles for mobile, breakpoints for larger screens",
+          "Single page definition adapts to all viewports",
+          "Layout components (navigation, sidebar) have responsive config",
+          "Real-world: 60% of traffic is mobile, responsive is required"
+        ]
+      }
+    },
+    {
+      "id": "APP-PAGES-INTEGRATION-005",
+      "given": "a complete app with pages, theme, blocks, languages, and responsive",
+      "when": "all systems work together in a full-stack configuration",
+      "then": "it should demonstrate end-to-end integration of all page-building features",
+      "x-validation": {
+        "setup": {
+          "app": {
+            "theme": {
+              "colors": {
+                "primary": "#3B82F6",
+                "secondary": "#10B981"
+              },
+              "typography": {
+                "fontFamily": {
+                  "sans": "Inter, sans-serif"
+                }
+              }
+            },
+            "languages": {
+              "default": "en",
+              "supported": ["en", "fr"],
+              "translations": {
+                "en": {
+                  "hero.title": "Welcome",
+                  "hero.cta": "Get Started"
+                },
+                "fr": {
+                  "hero.title": "Bienvenue",
+                  "hero.cta": "Commencer"
+                }
+              }
+            },
+            "blocks": [
+              {
+                "id": "hero",
+                "type": "section",
+                "props": {
+                  "className": "bg-primary text-white py-12 md:py-20"
+                },
+                "children": [
+                  {
+                    "type": "h1",
+                    "props": {
+                      "className": "font-sans text-2xl md:text-4xl"
+                    },
+                    "children": ["$title"]
+                  },
+                  {
+                    "type": "button",
+                    "props": {
+                      "className": "bg-secondary px-4 py-2 md:px-6 md:py-3"
+                    },
+                    "children": ["$cta"]
+                  }
+                ]
+              }
+            ],
+            "pages": [
+              {
+                "name": "Home (English)",
+                "path": "/",
+                "meta": {
+                  "lang": "en",
+                  "title": "$t:hero.title"
+                },
+                "sections": [
+                  {
+                    "$ref": "#/blocks/hero",
+                    "$vars": {
+                      "title": "$t:hero.title",
+                      "cta": "$t:hero.cta"
+                    }
+                  }
+                ]
+              },
+              {
+                "name": "Home (French)",
+                "path": "/fr",
+                "meta": {
+                  "lang": "fr",
+                  "title": "$t:hero.title"
+                },
+                "sections": [
+                  {
+                    "$ref": "#/blocks/hero",
+                    "$vars": {
+                      "title": "$t:hero.title",
+                      "cta": "$t:hero.cta"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "assertions": [
+          "Theme: Global colors (primary, secondary) and typography (font-sans)",
+          "Languages: English (/), French (/fr) with $t: translations",
+          "Blocks: Reusable hero block with $vars substitution",
+          "Responsive: Adapts spacing (py-12 → py-20) and text (text-2xl → text-4xl)",
+          "Pages: Same structure, theme applied, translations resolved, responsive"
+        ]
+      },
+      "x-application": {
+        "app": {
+          "theme": {
+            "colors": {
+              "primary": "#3B82F6",
+              "secondary": "#10B981"
+            }
+          },
+          "languages": {
+            "translations": {
+              "en": {
+                "hero.title": "Welcome"
+              },
+              "fr": {
+                "hero.title": "Bienvenue"
+              }
+            }
+          },
+          "blocks": [
+            {
+              "id": "hero",
+              "props": {
+                "className": "bg-primary text-2xl md:text-4xl"
+              },
+              "children": [
+                {
+                  "type": "h1",
+                  "children": ["$title"]
+                }
+              ]
+            }
+          ],
+          "pages": [
+            {
+              "path": "/",
+              "meta": {
+                "lang": "en"
+              },
+              "sections": [
+                {
+                  "$ref": "#/blocks/hero",
+                  "$vars": {
+                    "title": "$t:hero.title"
+                  }
+                }
+              ]
+            },
+            {
+              "path": "/fr",
+              "meta": {
+                "lang": "fr"
+              },
+              "sections": [
+                {
+                  "$ref": "#/blocks/hero",
+                  "$vars": {
+                    "title": "$t:hero.title"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "renderPipeline": {
+          "step1": "Resolve page by path (/ or /fr)",
+          "step2": "Resolve $ref to block (hero from app.blocks[])",
+          "step3": "Substitute $vars ($title → $t:hero.title)",
+          "step4": "Resolve $t: translations based on meta.lang",
+          "step5": "Apply theme tokens (bg-primary → #3B82F6)",
+          "step6": "Apply responsive utilities (text-2xl on mobile, text-4xl on desktop)",
+          "step7": "Render final HTML with all integrations"
+        },
+        "expectedDOM": {
+          "/ (mobile)": "<section class=\"bg-primary text-2xl\" style=\"background-color: #3B82F6; font-size: 1.5rem;\"><h1>Welcome</h1></section>",
+          "/ (desktop)": "<section class=\"bg-primary text-4xl\" style=\"background-color: #3B82F6; font-size: 2.25rem;\"><h1>Welcome</h1></section>",
+          "/fr (mobile)": "<section class=\"bg-primary text-2xl\" style=\"background-color: #3B82F6; font-size: 1.5rem;\"><h1>Bienvenue</h1></section>",
+          "/fr (desktop)": "<section class=\"bg-primary text-4xl\" style=\"background-color: #3B82F6; font-size: 2.25rem;\"><h1>Bienvenue</h1></section>"
+        },
+        "benefits": {
+          "theme": "Consistent design across all pages (update theme → all pages change)",
+          "languages": "Multi-locale support without duplicating blocks",
+          "blocks": "Reusable components (define once, use everywhere)",
+          "responsive": "Single source adapts to all devices",
+          "integration": "All systems compose seamlessly"
+        },
+        "realWorld": {
+          "stripe": "app.theme (design system) + app.blocks (hero, pricing) + responsive + i18n",
+          "vercel": "app.blocks (features, testimonials) + app.languages (en, de, ja) + theme",
+          "linear": "app.theme (brand colors) + app.blocks (CTAs, stats) + responsive",
+          "github": "app.blocks (code-example, feature) + app.languages (15+ locales) + theme"
+        },
+        "assertions": [
+          "Full integration: theme + languages + blocks + responsive + pages",
+          "Single source of truth: app.theme{}, app.languages{}, app.blocks[]",
+          "Pages compose from global config without duplication",
+          "Render pipeline resolves: $ref → $vars → $t: → theme → responsive",
+          "Real-world: All major SaaS platforms use this architecture",
+          "Result: Maintainable, scalable, consistent page-building system"
+        ]
+      }
     }
   ],
   "x-notes": [
