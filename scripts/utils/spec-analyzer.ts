@@ -88,9 +88,9 @@ async function findAllSpecs(
         const content = await readFile(fullPath, 'utf-8')
         const json = JSON.parse(content)
 
-        // Check if it has specs array
-        if (Array.isArray(json.specs)) {
-          for (const spec of json.specs) {
+        // Check if it has x-specs array (JSON Schema compliant key)
+        if (Array.isArray(json['x-specs'])) {
+          for (const spec of json['x-specs']) {
             if (spec.id && spec.given && spec.when && spec.then) {
               specs.push({
                 id: spec.id,
