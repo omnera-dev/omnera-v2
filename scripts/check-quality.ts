@@ -232,7 +232,7 @@ async function main() {
           '--cache-strategy',
           'content',
         ],
-        30_000
+        120_000
       ),
       runCheck('TypeScript', ['bunx', 'tsc', '--noEmit', '--incremental'], 60_000),
     ]
@@ -312,7 +312,7 @@ async function main() {
         '--cache-strategy',
         'content',
       ],
-      30_000
+      120_000
     ),
     runCheckWithFailFast('TypeScript', ['bunx', 'tsc', '--noEmit', '--incremental'], 60_000),
     runCheckWithFailFast(
