@@ -327,10 +327,10 @@ Should I proceed with immediate refactoring, or would you like to review the fin
 
 ## Test Validation Framework
 
-**Summary**: Omnera uses a comprehensive quality check script (`scripts/quality.ts`) that runs ESLint, TypeScript, unit tests, and @regression E2E tests in parallel. This agent MUST establish a safety baseline (Phase 0) using the quality script plus @spec tests before refactoring, then validate the baseline is maintained after changes (Phase 5). @spec tests are ignored during refactoring as they may be intentionally failing (TDD red-green-refactor).
+**Summary**: Omnera uses a comprehensive quality check script (`bun run quality`) that runs ESLint, TypeScript, unit tests, and @regression E2E tests in parallel. This agent MUST establish a safety baseline (Phase 0) using the quality script plus @spec tests before refactoring, then validate the baseline is maintained after changes (Phase 5). @spec tests are ignored during refactoring as they may be intentionally failing (TDD red-green-refactor).
 
 ### Quality Check Script
-The `scripts/quality.ts` command consolidates multiple quality checks:
+The `bun run quality` command consolidates multiple quality checks:
 
 - **ESLint**: Linting with max-warnings=0 and caching for performance
 - **TypeScript**: Type checking with incremental mode for speed
@@ -351,13 +351,13 @@ Omnera uses Playwright test tags to categorize E2E tests by criticality:
   - Run with: `bun test:e2e --grep @spec`
   - **Failures are blocking** - no refactoring can proceed
   - **Always included** in Phase 0 and Phase 5 validation
-  - **NOT included in quality.ts** - must run separately
+  - **NOT included in quality script** - must run separately
 
 - **@regression**: Previously broken features that must stay fixed
   - Examples: Features that were broken and subsequently fixed
-  - Run with: `bun test:e2e --grep @regression` (or via `bun run scripts/quality.ts`)
+  - Run with: `bun test:e2e --grep @regression` (or via `bun run quality`)
   - **Failures indicate regression** - immediate rollback required
-  - **Included in quality.ts** - automatic validation
+  - **Included in quality script** - automatic validation
 
 - **@spec**: Specification tests for new features (TDD red tests)
   - These may be failing during development (red-green-refactor cycle)
@@ -367,11 +367,11 @@ Omnera uses Playwright test tags to categorize E2E tests by criticality:
 ### Test Execution Strategy
 ```bash
 # Establish baseline (Phase 0)
-bun run scripts/quality.ts      # Runs ESLint, TypeScript, unit tests, @regression E2E (parallel)
-bun test:e2e --grep @spec    # Must pass 100% (not included in quality.ts)
+bun run quality                 # Runs ESLint, TypeScript, unit tests, @regression E2E (parallel)
+bun test:e2e --grep @spec    # Must pass 100% (not included in quality script)
 
 # Validate after refactoring (Phase 5)
-bun run scripts/quality.ts      # Re-validate all quality checks
+bun run quality                 # Re-validate all quality checks
 bun test:e2e --grep @spec    # Compare to baseline
 ```
 
@@ -381,10 +381,10 @@ Use this template to document test baseline state:
 ```markdown
 ## Phase 0: Safety Baseline (YYYY-MM-DD HH:mm)
 
-### Quality Check (bun run scripts/quality.ts)
+### Quality Check (bun run quality)
 - ✅ All checks passing
 - ⏱️ Execution time: 28.5s
-- Command: `bun run scripts/quality.ts`
+- Command: `bun run quality`
 - Checks:
   - ✅ ESLint (2.1s)
   - ✅ TypeScript (8.3s)
@@ -404,14 +404,14 @@ Use this template to document test baseline state:
 ### Validation Procedures
 
 **Phase 0 (Pre-Refactoring)**:
-1. Run quality checks: `bun run scripts/quality.ts` - must pass 100%
+1. Run quality checks: `bun run quality` - must pass 100%
    - Validates: ESLint, TypeScript, unit tests, @regression E2E tests
 2. Run @spec tests: `bun test:e2e --grep @spec` - must pass 100%
 3. Document baseline state using template above
 4. **Abort if any tests fail** - refactoring on broken baseline is forbidden
 
 **Phase 5 (Post-Refactoring)**:
-1. Run quality checks: `bun run scripts/quality.ts`
+1. Run quality checks: `bun run quality`
    - Re-validates: ESLint, TypeScript, unit tests, @regression E2E tests
 2. Run @spec tests: `bun test:e2e --grep @spec`
 3. Compare results against Phase 0 baseline
@@ -565,7 +565,7 @@ When proposing refactorings:
    - Examples: Missing input validation, unprotected routes, sensitive data exposure
 
 4. **Quality Validation (NON-NEGOTIABLE)**:
-   - ALWAYS run `bun run scripts/quality.ts` before proposing refactorings (Phase 0)
+   - ALWAYS run `bun run quality` before proposing refactorings (Phase 0)
      - Validates: ESLint, TypeScript, unit tests, @regression E2E tests
    - ALWAYS run `bun test:e2e --grep @spec` before proposing refactorings (Phase 0)
    - ALWAYS run both commands after implementing each refactoring step (Phase 5)
@@ -650,10 +650,10 @@ Adapt this template as needed to best communicate findings for specific contexts
 
 ## Phase 0: Safety Baseline (YYYY-MM-DD HH:mm)
 
-### Quality Check (bun run scripts/quality.ts)
+### Quality Check (bun run quality)
 - ✅ All checks passing
 - ⏱️ Execution time: X.Xs
-- Command: `bun run scripts/quality.ts`
+- Command: `bun run quality`
 - Checks:
   - ✅ ESLint (X.Xs)
   - ✅ TypeScript (X.Xs)

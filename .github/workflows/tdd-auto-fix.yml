@@ -1,0 +1,587 @@
+name: TDD Auto-Fix Pipeline
+
+on:
+  # Manual trigger with options
+  workflow_dispatch:
+    inputs:
+      feature_area:
+        description: 'Feature area to process (e.g., app/version, api/health)'
+        required: false
+        default: 'auto'
+        type: choice
+        options:
+          - auto
+          - app/version
+          - app/name
+          - app/description
+          - api/health
+          - api/auth
+          - admin/dashboard
+      max_tests:
+        description: 'Maximum tests to fix per run'
+        required: false
+        default: '3'
+        type: choice
+        options:
+          - '1'
+          - '2'
+          - '3'
+          - '5'
+      dry_run:
+        description: 'Dry run (create draft PR only)'
+        required: false
+        default: false
+        type: boolean
+
+  # Scheduled runs (optional - uncomment to enable)
+  # schedule:
+  #   - cron: '0 2 * * *'  # Daily at 2 AM UTC
+
+# Prevent concurrent runs to avoid conflicts
+concurrency:
+  group: tdd-automation
+  cancel-in-progress: false
+
+env:
+  # Configuration
+  MAX_TESTS_PER_RUN: ${{ github.event.inputs.max_tests || '3' }}
+  FEATURE_AREA: ${{ github.event.inputs.feature_area || 'auto' }}
+  DRY_RUN: ${{ github.event.inputs.dry_run || 'false' }}
+  MAX_DAILY_RUNS: 5
+  COOLDOWN_MINUTES: 30
+
+  # Node/Bun versions
+  NODE_VERSION: '20'
+  BUN_VERSION: '1.3.0'
+
+jobs:
+  # Job 1: Check rate limits and scan for test.fixme patterns
+  scan-tests:
+    name: 🔍 Scan for test.fixme patterns
+    runs-on: ubuntu-latest
+    outputs:
+      has_tests: ${{ steps.scan.outputs.has_tests }}
+      test_file: ${{ steps.scan.outputs.test_file }}
+      test_count: ${{ steps.scan.outputs.test_count }}
+      feature_name: ${{ steps.scan.outputs.feature_name }}
+      should_proceed: ${{ steps.check_limits.outputs.should_proceed }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Need full history for git operations
+
+      - name: Check rate limits
+        id: check_limits
+        run: |
+          echo "🔒 Checking rate limits..."
+
+          # Count today's runs
+          TODAY=$(date -u +%Y-%m-%d)
+          RUNS_TODAY=$(gh run list --workflow=tdd-auto-fix.yml --json createdAt --jq "[.[] | select(.createdAt | startswith(\"$TODAY\"))] | length")
+
+          echo "Runs today: $RUNS_TODAY / $MAX_DAILY_RUNS"
+
+          if [ "$RUNS_TODAY" -ge "$MAX_DAILY_RUNS" ]; then
+            echo "❌ Daily limit reached ($MAX_DAILY_RUNS runs)"
+            echo "should_proceed=false" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+
+          # Check cooldown period
+          LAST_RUN=$(gh run list --workflow=tdd-auto-fix.yml --limit 1 --json createdAt --jq '.[0].createdAt')
+          if [ ! -z "$LAST_RUN" ]; then
+            LAST_RUN_TIMESTAMP=$(date -d "$LAST_RUN" +%s)
+            NOW=$(date +%s)
+            ELAPSED=$((NOW - LAST_RUN_TIMESTAMP))
+            COOLDOWN_SECONDS=$((COOLDOWN_MINUTES * 60))
+
+            if [ "$ELAPSED" -lt "$COOLDOWN_SECONDS" ]; then
+              echo "❌ Cooldown period active (wait $((COOLDOWN_SECONDS - ELAPSED)) seconds)"
+              echo "should_proceed=false" >> $GITHUB_OUTPUT
+              exit 0
+            fi
+          fi
+
+          echo "✅ Rate limits OK"
+          echo "should_proceed=true" >> $GITHUB_OUTPUT
+        env:
+          GH_TOKEN: ${{ github.token }}
+
+      - name: Setup Bun
+        if: steps.check_limits.outputs.should_proceed == 'true'
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: ${{ env.BUN_VERSION }}
+
+      - name: Scan for test.fixme patterns
+        id: scan
+        if: steps.check_limits.outputs.should_proceed == 'true'
+        run: |
+          echo "🔍 Scanning for test.fixme() patterns..."
+
+          # Find all spec files with test.fixme
+          if [ "$FEATURE_AREA" = "auto" ]; then
+            PATTERN="specs/**/*.spec.ts"
+          else
+            PATTERN="specs/$FEATURE_AREA/**/*.spec.ts"
+          fi
+
+          # Find files with test.fixme or it.fixme
+          FILES_WITH_FIXME=$(find specs -name "*.spec.ts" -type f -exec grep -l "test\.fixme\|it\.fixme\|describe\.fixme" {} \; | head -20)
+
+          if [ -z "$FILES_WITH_FIXME" ]; then
+            echo "✅ No test.fixme() patterns found"
+            echo "has_tests=false" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+
+          # Get the first file (processing one at a time)
+          TEST_FILE=$(echo "$FILES_WITH_FIXME" | head -1)
+
+          # Count fixme tests in this file
+          TEST_COUNT=$(grep -c "test\.fixme\|it\.fixme" "$TEST_FILE" || true)
+
+          # Extract feature name from path
+          FEATURE_NAME=$(echo "$TEST_FILE" | sed 's/specs\///' | sed 's/\.spec\.ts$//' | sed 's/\// - /g')
+
+          echo "📋 Found test file: $TEST_FILE"
+          echo "📊 Tests with .fixme: $TEST_COUNT"
+          echo "🏷️ Feature: $FEATURE_NAME"
+
+          echo "has_tests=true" >> $GITHUB_OUTPUT
+          echo "test_file=$TEST_FILE" >> $GITHUB_OUTPUT
+          echo "test_count=$TEST_COUNT" >> $GITHUB_OUTPUT
+          echo "feature_name=$FEATURE_NAME" >> $GITHUB_OUTPUT
+
+  # Job 2: Create feature branch and tracking issue
+  setup-automation:
+    name: 🚀 Setup automation
+    runs-on: ubuntu-latest
+    needs: scan-tests
+    if: needs.scan-tests.outputs.has_tests == 'true' && needs.scan-tests.outputs.should_proceed == 'true'
+    outputs:
+      branch_name: ${{ steps.branch.outputs.branch_name }}
+      issue_number: ${{ steps.issue.outputs.issue_number }}
+      pr_number: ${{ steps.pr.outputs.pr_number }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Create feature branch
+        id: branch
+        run: |
+          TIMESTAMP=$(date +%Y%m%d-%H%M%S)
+          FEATURE_SLUG=$(echo "${{ needs.scan-tests.outputs.feature_name }}" | sed 's/ /-/g' | sed 's/[^a-zA-Z0-9-]//g' | tr '[:upper:]' '[:lower:]')
+          BRANCH_NAME="tdd/auto-fix-${FEATURE_SLUG}-${TIMESTAMP}"
+
+          echo "Creating branch: $BRANCH_NAME"
+
+          git config user.name "TDD Automation Bot"
+          git config user.email "tdd-bot@omnera.dev"
+
+          git checkout -b "$BRANCH_NAME"
+          git push -u origin "$BRANCH_NAME"
+
+          echo "branch_name=$BRANCH_NAME" >> $GITHUB_OUTPUT
+
+      - name: Create tracking issue
+        id: issue
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const testFile = '${{ needs.scan-tests.outputs.test_file }}';
+            const testCount = '${{ needs.scan-tests.outputs.test_count }}';
+            const featureName = '${{ needs.scan-tests.outputs.feature_name }}';
+            const branchName = '${{ steps.branch.outputs.branch_name }}';
+            const maxTests = '${{ env.MAX_TESTS_PER_RUN }}';
+
+            // Check if similar issue already exists
+            const existingIssues = await github.rest.issues.listForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              labels: 'tdd-automation',
+              state: 'open'
+            });
+
+            const issueTitle = `🤖 TDD: Fix tests in ${featureName}`;
+            const exists = existingIssues.data.some(i => i.title === issueTitle);
+
+            if (!exists || true) {  // Always create new issue for each run
+              const issue = await github.rest.issues.create({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                title: issueTitle,
+                body: `## 🤖 Automated TDD Task
+
+                ### Configuration
+                - **Test file:** \`${testFile}\`
+                - **Feature:** ${featureName}
+                - **Tests with .fixme:** ${testCount}
+                - **Max tests this run:** ${maxTests}
+                - **Branch:** \`${branchName}\`
+                - **Triggered by:** @${context.actor}
+                - **Workflow run:** [#${context.runNumber}](${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId})
+
+                ### Instructions for @claude
+
+                Please follow these steps to fix the failing tests:
+
+                1. **Checkout the branch:**
+                   \`\`\`bash
+                   git checkout ${branchName}
+                   \`\`\`
+
+                2. **Run the e2e-test-fixer agent:**
+                   Use the Task tool with \`subagent_type="e2e-test-fixer"\` to:
+                   - Remove test.fixme() from up to ${maxTests} tests
+                   - Implement minimal code to make tests pass
+                   - Follow the Omnera architecture patterns (Effect.ts, layer-based)
+
+                3. **Validate the implementation:**
+                   \`\`\`bash
+                   # Run the specific test file
+                   CLAUDECODE=1 bun test:e2e ${testFile}
+
+                   # Run regression tests
+                   bun test:e2e:regression
+
+                   # Check code quality
+                   bun run lint && bun run typecheck
+                   \`\`\`
+
+                4. **If more than 3 tests were fixed, run refactoring:**
+                   Use the Task tool with \`subagent_type="codebase-refactor-auditor"\` to:
+                   - Eliminate code duplication
+                   - Optimize the implementation
+                   - Ensure tests still pass
+
+                5. **Commit the changes:**
+                   \`\`\`bash
+                   bun run license  # Add copyright headers
+                   git add -A
+                   git commit -m "fix: implement ${featureName} functionality
+
+                   - Fixed ${maxTests} tests in ${testFile}
+                   - Followed Effect.ts patterns and layer architecture
+                   - All E2E and regression tests passing"
+                   \`\`\`
+
+                ### Success Criteria
+                - ✅ Up to ${maxTests} tests fixed (test.fixme removed)
+                - ✅ All modified tests pass
+                - ✅ Regression tests pass
+                - ✅ TypeScript compiles without errors
+                - ✅ ESLint passes
+                - ✅ Implementation follows Omnera patterns
+
+                ### Progress Tracking
+                - [ ] Tests analyzed
+                - [ ] Code implemented
+                - [ ] Tests passing
+                - [ ] Code refactored (if applicable)
+                - [ ] Changes committed
+
+                ---
+                *This issue was created automatically by the TDD pipeline.*`,
+                labels: ['tdd-automation', 'in-progress']
+              });
+
+              core.setOutput('issue_number', issue.data.number);
+              console.log(`Created issue #${issue.data.number}`);
+            }
+
+      - name: Create Pull Request
+        id: pr
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const testFile = '${{ needs.scan-tests.outputs.test_file }}';
+            const testCount = '${{ needs.scan-tests.outputs.test_count }}';
+            const featureName = '${{ needs.scan-tests.outputs.feature_name }}';
+            const branchName = '${{ steps.branch.outputs.branch_name }}';
+            const issueNumber = '${{ steps.issue.outputs.issue_number }}';
+            const maxTests = '${{ env.MAX_TESTS_PER_RUN }}';
+            const isDryRun = '${{ env.DRY_RUN }}' === 'true';
+
+            const pr = await github.rest.pulls.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: `🤖 TDD: Implement ${featureName} (0/${maxTests} tests)`,
+              head: branchName,
+              base: 'main',
+              draft: isDryRun,
+              body: `## 🤖 Automated TDD Implementation
+
+              Fixes #${issueNumber}
+
+              ### 📋 Summary
+
+              This PR implements functionality to make failing tests pass in \`${testFile}\`.
+
+              ### 🎯 Progress
+
+              - [ ] Tests analyzed
+              - [ ] Code implemented
+              - [ ] Tests passing (0/${maxTests})
+              - [ ] Code refactored
+              - [ ] Ready for review
+
+              ### 📊 Metrics
+
+              | Metric | Value |
+              |--------|-------|
+              | Tests in file | ${testCount} |
+              | Tests fixed | 0/${maxTests} |
+              | Implementation time | ⏱️ In progress... |
+              | Lines of code added | 📝 TBD |
+              | Test pass rate | 🧪 TBD |
+
+              ### 🔍 Test Results
+
+              \`\`\`
+              ⏳ Waiting for implementation...
+              \`\`\`
+
+              ### ✅ Checklist
+
+              - [ ] Tests pass locally
+              - [ ] TypeScript compiles without errors
+              - [ ] ESLint passes
+              - [ ] Regression tests pass
+              - [ ] Code follows Omnera patterns (Effect.ts, layer architecture)
+              - [ ] No test logic was modified
+              - [ ] Copyright headers added to new files
+
+              ### 🤖 Automation Details
+
+              - **Triggered by:** @${context.actor}
+              - **Workflow run:** [#${context.runNumber}](${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId})
+              - **Mode:** ${isDryRun ? '🧪 Dry Run (Draft)' : '🚀 Production'}
+              - **Claude Issue:** #${issueNumber}
+
+              ---
+              *This PR was created automatically by the TDD pipeline. Human review required before merge.*`
+            });
+
+            // Add labels
+            await github.rest.issues.addLabels({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: pr.data.number,
+              labels: ['tdd-automation', 'do-not-merge']
+            });
+
+            core.setOutput('pr_number', pr.data.number);
+            console.log(`Created PR #${pr.data.number}`);
+
+  # Job 3: Wait for Claude Code to complete
+  wait-for-claude:
+    name: ⏳ Wait for Claude Code
+    runs-on: ubuntu-latest
+    needs: [scan-tests, setup-automation]
+    if: needs.scan-tests.outputs.has_tests == 'true'
+    timeout-minutes: 60
+
+    steps:
+      - name: Wait for Claude Code implementation
+        run: |
+          echo "⏳ Waiting for Claude Code to process issue #${{ needs.setup-automation.outputs.issue_number }}..."
+          echo ""
+          echo "Claude should:"
+          echo "1. Read the issue instructions"
+          echo "2. Run the e2e-test-fixer agent"
+          echo "3. Implement code to fix tests"
+          echo "4. Commit changes to branch: ${{ needs.setup-automation.outputs.branch_name }}"
+          echo ""
+          echo "Monitoring branch for changes..."
+
+          # Wait for commits from Claude (check every 2 minutes, max 60 minutes)
+          BRANCH="${{ needs.setup-automation.outputs.branch_name }}"
+          MAX_ATTEMPTS=30
+          ATTEMPT=0
+
+          while [ $ATTEMPT -lt $MAX_ATTEMPTS ]; do
+            ATTEMPT=$((ATTEMPT + 1))
+            echo "Check $ATTEMPT/$MAX_ATTEMPTS..."
+
+            # Check if branch has new commits
+            COMMITS=$(gh api repos/${{ github.repository }}/commits?sha=$BRANCH --jq 'length')
+
+            if [ "$COMMITS" -gt "1" ]; then
+              echo "✅ Found $COMMITS commits on branch!"
+
+              # Get latest commit message
+              LATEST_COMMIT=$(gh api repos/${{ github.repository }}/commits/$BRANCH --jq '.commit.message')
+              echo "Latest commit: $LATEST_COMMIT"
+
+              # Check if it's from Claude
+              if [[ "$LATEST_COMMIT" == *"fix:"* ]] || [[ "$LATEST_COMMIT" == *"feat:"* ]]; then
+                echo "✅ Claude has committed changes!"
+                break
+              fi
+            fi
+
+            if [ $ATTEMPT -eq $MAX_ATTEMPTS ]; then
+              echo "⏱️ Timeout waiting for Claude Code"
+              exit 1
+            fi
+
+            echo "Waiting 2 minutes before next check..."
+            sleep 120
+          done
+        env:
+          GH_TOKEN: ${{ github.token }}
+
+  # Job 4: Validate implementation
+  validate:
+    name: ✅ Validate implementation
+    runs-on: ubuntu-latest
+    needs: [scan-tests, setup-automation, wait-for-claude]
+    if: success()
+
+    steps:
+      - name: Checkout branch
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ needs.setup-automation.outputs.branch_name }}
+          fetch-depth: 0
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: ${{ env.BUN_VERSION }}
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Run tests for modified file
+        id: test-specific
+        run: |
+          echo "🧪 Testing ${{ needs.scan-tests.outputs.test_file }}..."
+
+          # Run the specific test file
+          if CLAUDECODE=1 bun test:e2e ${{ needs.scan-tests.outputs.test_file }}; then
+            echo "✅ Tests pass!"
+            echo "success=true" >> $GITHUB_OUTPUT
+
+            # Count how many tests no longer have .fixme
+            REMAINING_FIXME=$(grep -c "test\.fixme\|it\.fixme" "${{ needs.scan-tests.outputs.test_file }}" || echo "0")
+            ORIGINAL_COUNT="${{ needs.scan-tests.outputs.test_count }}"
+            FIXED_COUNT=$((ORIGINAL_COUNT - REMAINING_FIXME))
+
+            echo "📊 Fixed $FIXED_COUNT out of $ORIGINAL_COUNT tests"
+            echo "fixed_count=$FIXED_COUNT" >> $GITHUB_OUTPUT
+          else
+            echo "❌ Tests failed"
+            echo "success=false" >> $GITHUB_OUTPUT
+            exit 1
+          fi
+
+      - name: Run regression tests
+        if: steps.test-specific.outputs.success == 'true'
+        run: |
+          echo "🧪 Running regression tests..."
+          bun test:e2e:regression
+
+      - name: Run code quality checks
+        if: steps.test-specific.outputs.success == 'true'
+        run: |
+          echo "🔍 Running code quality checks..."
+          bun run lint
+          bun run typecheck
+          bun run license
+
+      - name: Update PR with results
+        if: always()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const prNumber = '${{ needs.setup-automation.outputs.pr_number }}';
+            const success = '${{ steps.test-specific.outputs.success }}' === 'true';
+            const fixedCount = '${{ steps.test-specific.outputs.fixed_count }}' || '0';
+            const maxTests = '${{ env.MAX_TESTS_PER_RUN }}';
+
+            // Update PR title
+            const newTitle = success
+              ? `🤖 TDD: Implement ${{ needs.scan-tests.outputs.feature_name }} (${fixedCount}/${maxTests} tests) ✅`
+              : `🤖 TDD: Implement ${{ needs.scan-tests.outputs.feature_name }} ❌ Validation Failed`;
+
+            await github.rest.pulls.update({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: prNumber,
+              title: newTitle
+            });
+
+            // Add comment with results
+            const comment = success
+              ? `## ✅ Validation Successful!
+
+              ### 📊 Results
+              - **Tests fixed:** ${fixedCount}/${maxTests}
+              - **All tests passing:** ✅
+              - **Regression tests:** ✅
+              - **Code quality:** ✅
+
+              This PR is ready for human review.`
+              : `## ❌ Validation Failed
+
+              The implementation did not pass validation. Please review the test results and fix any issues.
+
+              [View workflow logs](${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId})`;
+
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: prNumber,
+              body: comment
+            });
+
+            // Update labels
+            if (success) {
+              await github.rest.issues.removeLabel({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: prNumber,
+                name: 'do-not-merge'
+              });
+
+              await github.rest.issues.addLabels({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: prNumber,
+                labels: ['ready-for-review']
+              });
+            } else {
+              await github.rest.issues.addLabels({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: prNumber,
+                labels: ['needs-fix']
+              });
+            }
+
+      - name: Close tracking issue if successful
+        if: steps.test-specific.outputs.success == 'true'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            await github.rest.issues.update({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: '${{ needs.setup-automation.outputs.issue_number }}',
+              state: 'closed',
+              state_reason: 'completed'
+            });
+
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: '${{ needs.setup-automation.outputs.issue_number }}',
+              body: `✅ Implementation completed successfully! See PR #${{ needs.setup-automation.outputs.pr_number }}`
+            });

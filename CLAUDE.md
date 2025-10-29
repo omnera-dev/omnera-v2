@@ -33,12 +33,12 @@
 | **TypeScript** | ^5 | Type-safe language |
 | **Effect** | 3.18.4 | Functional programming, DI, error handling |
 | **Effect Schema** | 3.18.4 | Server validation (domain/application/infrastructure) |
-| **Hono** | 4.10.1 | Web framework (API routes, RPC client, OpenAPI) |
+| **Hono** | 4.10.3 | Web framework (API routes, RPC client, OpenAPI) |
 | **Zod** | 4.1.12 | OpenAPI integration ONLY (src/domain/models/api/) + client forms |
-| **Better Auth** | 1.3.27 | Authentication |
-| **Drizzle ORM** | ^0.44.6 | Database (PostgreSQL via bun:sql) |
+| **Better Auth** | 1.3.34 | Authentication |
+| **Drizzle ORM** | ^0.44.7 | Database (PostgreSQL via bun:sql) |
 | **React** | 19.2.0 | UI library |
-| **Tailwind CSS** | 4.1.14 | Styling |
+| **Tailwind CSS** | 4.1.16 | Styling |
 | **shadcn/ui** | N/A | Component collection (copy-paste, not npm) |
 | **TanStack Query** | 5.90.5 | Server state management |
 | **TanStack Table** | ^8.21.3 | Data tables |
@@ -56,6 +56,15 @@ bun run scripts/export-schema.ts  # Run a specific script
 bun run export:schema              # Export Effect Schema to JSON files
 bun run export:openapi             # Export OpenAPI schema from runtime API routes
 bun test:unit                      # Unit tests (PATTERN FILTER: .test.ts .test.tsx only)
+
+# Utility Scripts (Additional)
+bun run quality                    # Check code quality comprehensively
+bun run generate:roadmap           # Generate roadmap from specifications
+bun run validate:admin-specs       # Validate admin panel specifications
+bun run validate:api-specs         # Validate API specifications
+bun run validate:app-specs         # Validate application specifications
+bun run validate:docs              # Validate documentation versions match package.json
+bun run release                    # Manually trigger release (semantic-release)
 
 # Database (Drizzle ORM)
 bun run db:generate         # Generate migration from schema changes
@@ -87,7 +96,8 @@ git commit -m "release: publish"   # Explicit release commit
 git push origin main               # Triggers release ONLY with "release:" type
 
 # Agent Workflows (TDD Pipeline)
-# See: @docs/development/agent-workflows.md for complete agent collaboration guide
+# See: @docs/development/tdd-automation-pipeline.md for complete TDD automation guide
+# See: @docs/development/agent-workflows.md for agent collaboration patterns
 ```
 
 ## Coding Standards (Critical Rules)
@@ -213,6 +223,85 @@ omnera-v2/
 3. **Commit**: Use conventional commits (`feat:`, `fix:`, etc.) for regular work
 4. **Push**: GitHub Actions runs tests
 5. **Release**: When ready to publish, use `git commit -m "release: publish"` and push
+
+## TDD Automation Pipeline (For Claude Code)
+
+### Overview
+
+The project has an **automated TDD pipeline** that creates GitHub issues for you to fix failing tests. When you see an issue titled "🤖 TDD: Fix tests in [FEATURE]", follow these specific instructions.
+
+### Recognizing Automated Issues
+
+Look for these indicators:
+- Title starts with "🤖 TDD:"
+- Labels include `tdd-automation`
+- Issue mentions a specific branch like `tdd/auto-fix-*`
+- Instructions mention using the `e2e-test-fixer` agent
+
+### Your Workflow for TDD Issues
+
+When you receive a TDD automation issue:
+
+1. **Check out the specified branch**:
+   ```bash
+   git checkout tdd/auto-fix-{feature}-{timestamp}
+   ```
+
+2. **Use the e2e-test-fixer agent**:
+   ```
+   Task tool with subagent_type="e2e-test-fixer"
+   ```
+   This agent will:
+   - Remove test.fixme() from up to 3 tests
+   - Implement minimal code to pass tests
+   - Follow Omnera patterns automatically
+
+3. **If fixing 3+ tests, run refactoring**:
+   ```
+   Task tool with subagent_type="codebase-refactor-auditor"
+   ```
+   This will optimize and eliminate duplication.
+
+4. **Validate and commit**:
+   ```bash
+   bun run license         # Add copyright headers
+   bun test:e2e {test-file}  # Verify tests pass
+   bun test:e2e:regression   # Check regressions
+   git add -A && git commit -m "fix: implement {feature} functionality"
+   ```
+
+### Important Rules for TDD Automation
+
+- **DO NOT** modify test logic - only remove `.fixme` and implement code
+- **DO NOT** fix more tests than specified in the issue (usually max 3)
+- **DO NOT** skip tests if implementation fails - fix the code instead
+- **ALWAYS** run regression tests before committing
+- **ALWAYS** use the specified agents rather than implementing manually
+
+### Pipeline Configuration
+
+The pipeline is configured in `.github/tdd-automation-config.yml`:
+- Max 3 tests fixed per run
+- Max 5 pipeline runs per day
+- 30-minute cooldown between runs
+- Testing phase uses fixtures in `specs/tdd-automation/fixtures/`
+
+### Current Status
+
+- **Total tests**: 869
+- **Currently passing**: 68 (7.8%)
+- **Tests with .fixme**: 801 (ready for automation)
+- **Pipeline phase**: testing (using fixtures first)
+
+### If Something Goes Wrong
+
+If tests fail after your implementation:
+1. Check the test output for specific failures
+2. Fix your implementation (don't modify the test)
+3. Re-run validation before committing
+4. If unable to fix, comment on the issue with details
+
+The pipeline will automatically validate your changes and update the PR. A human will review before merging.
 
 ## Key Differences from Typical Stacks
 

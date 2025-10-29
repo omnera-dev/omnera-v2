@@ -1,0 +1,334 @@
+# TDD Automation Configuration
+# This file controls the behavior of the automated TDD pipeline
+
+# Pipeline Configuration
+pipeline:
+  # Enable or disable the entire pipeline
+  enabled: true
+
+  # Run mode: 'production' or 'dry-run'
+  # dry-run creates draft PRs and doesn't merge
+  mode: production
+
+  # Maximum tests to fix per pipeline run
+  # Lower values = more controlled, higher values = faster completion
+  max_tests_per_run: 3
+
+  # Maximum pipeline runs per day (rate limiting)
+  max_daily_runs: 5
+
+  # Cooldown period between runs (minutes)
+  cooldown_minutes: 30
+
+  # Maximum time for a single pipeline run (minutes)
+  max_duration_minutes: 60
+
+  # Maximum retries if a test fix fails
+  max_retries: 2
+
+# Feature Areas Configuration
+# Priority order for processing test files
+feature_areas:
+  # Phase 1: Core app configuration (simple, foundational)
+  - pattern: 'app/version/**/*.spec.ts'
+    priority: 1
+    max_tests_per_run: 3
+
+  - pattern: 'app/name/**/*.spec.ts'
+    priority: 2
+    max_tests_per_run: 3
+
+  - pattern: 'app/description/**/*.spec.ts'
+    priority: 3
+    max_tests_per_run: 3
+
+  # Phase 2: API endpoints (moderate complexity)
+  - pattern: 'api/paths/health/**/*.spec.ts'
+    priority: 4
+    max_tests_per_run: 2
+
+  - pattern: 'api/paths/auth/**/*.spec.ts'
+    priority: 5
+    max_tests_per_run: 2
+    require_human_approval: true # Auth is sensitive
+
+  - pattern: 'api/paths/tables/**/*.spec.ts'
+    priority: 6
+    max_tests_per_run: 2
+
+  # Phase 3: Admin features (complex, UI-heavy)
+  - pattern: 'admin/dashboard/**/*.spec.ts'
+    priority: 7
+    max_tests_per_run: 1
+
+  - pattern: 'admin/users/**/*.spec.ts'
+    priority: 8
+    max_tests_per_run: 1
+    require_human_approval: true
+
+  # Phase 4: App pages (most complex)
+  - pattern: 'app/pages/**/*.spec.ts'
+    priority: 9
+    max_tests_per_run: 1
+
+  - pattern: 'app/blocks/**/*.spec.ts'
+    priority: 10
+    max_tests_per_run: 1
+
+# Agent Configuration
+agents:
+  # E2E Test Fixer agent configuration
+  e2e_test_fixer:
+    # Model to use (sonnet, opus, haiku)
+    model: sonnet
+
+    # Timeout for agent execution (minutes)
+    timeout_minutes: 30
+
+    # Maximum retries if agent fails
+    max_retries: 2
+
+    # Instructions override (optional)
+    # custom_instructions: |
+    #   Additional instructions for the agent...
+
+  # Codebase Refactor Auditor agent configuration
+  codebase_refactor_auditor:
+    # Model to use
+    model: sonnet
+
+    # Timeout for agent execution (minutes)
+    timeout_minutes: 45
+
+    # Trigger refactoring after N tests fixed
+    trigger_after_tests: 3
+
+    # Refactoring scope
+    scope: recent_commits # 'recent_commits' or 'full_analysis'
+
+    # Maximum files to refactor in one run
+    max_files: 10
+
+# Safety Mechanisms
+safety:
+  # Require human approval for certain conditions
+  require_human_approval:
+    # After N consecutive failures
+    after_failures: 2
+
+    # For specific file patterns
+    for_patterns:
+      - '**/auth/**'
+      - '**/payment/**'
+      - '**/security/**'
+      - '**/admin/**'
+
+    # For large changes
+    for_changes_exceeding:
+      files: 20
+      lines: 500
+
+  # Automatic rollback conditions
+  rollback_on:
+    # Rollback if any test fails
+    test_failure: true
+
+    # Rollback if regression tests fail
+    regression_failure: true
+
+    # Rollback if code quality checks fail
+    lint_failure: true
+    typecheck_failure: true
+
+  # Branch protection
+  branch_protection:
+    # Prevent direct commits to main
+    protect_main: true
+
+    # Require PR reviews before merge
+    require_pr_review: true
+
+    # Number of required approvals
+    required_approvals: 1
+
+    # Dismiss stale reviews on new commits
+    dismiss_stale_reviews: true
+
+# Validation Configuration
+validation:
+  # Tests to run for validation
+  run_tests:
+    # Run the specific test file being fixed
+    specific_file: true
+
+    # Run regression tests
+    regression: true
+
+    # Run all spec tests
+    all_specs: false # Set to true for thorough validation
+
+  # Code quality checks
+  code_quality:
+    # Run ESLint
+    eslint: true
+
+    # Run TypeScript compiler
+    typecheck: true
+
+    # Run Prettier format check
+    format_check: false # Assuming auto-format is applied
+
+    # Check for copyright headers
+    license_check: true
+
+  # Performance thresholds
+  thresholds:
+    # Maximum test execution time (seconds)
+    max_test_duration: 300
+
+    # Minimum test pass rate
+    min_pass_rate: 100 # Require 100% pass rate
+
+# Monitoring & Reporting
+monitoring:
+  # Enable metrics collection
+  collect_metrics: true
+
+  # Metrics storage location
+  metrics_file: '.github/tdd-metrics.json'
+
+  # Generate progress dashboard
+  generate_dashboard: true
+
+  # Dashboard location
+  dashboard_file: 'TDD-PROGRESS.md'
+
+  # Update frequency (runs)
+  update_every_n_runs: 1
+
+# Notifications (Optional)
+notifications:
+  # Slack notifications
+  slack:
+    enabled: false
+    # webhook_url: ${SLACK_WEBHOOK_URL}  # Set in GitHub Secrets
+    channels:
+      success: '#tdd-success'
+      failure: '#tdd-alerts'
+      daily_summary: '#tdd-summary'
+
+  # Email notifications
+  email:
+    enabled: false
+    recipients:
+      - 'team@omnera.dev'
+    on:
+      failure: true
+      success: false
+      daily_summary: true
+
+  # GitHub notifications
+  github:
+    # Create issues for failures
+    create_failure_issues: true
+
+    # Mention users on failures
+    mention_on_failure:
+      - '@maintainers'
+
+    # Add comments to PRs
+    comment_on_pr: true
+
+# Experimental Features (disabled by default)
+experimental:
+  # Parallel test fixing (multiple files at once)
+  parallel_execution: false
+
+  # Auto-merge PRs without human review (dangerous!)
+  auto_merge: false
+
+  # Use AI to prioritize tests
+  ai_prioritization: false
+
+  # Automatic dependency updates
+  update_dependencies: false
+
+# Schedule Configuration
+schedule:
+  # Enable scheduled runs
+  enabled: false
+
+  # Cron expression (UTC)
+  # Examples:
+  # - "0 2 * * *"    # Daily at 2 AM
+  # - "0 */6 * * *"  # Every 6 hours
+  # - "0 9 * * 1-5"  # Weekdays at 9 AM
+  cron: '0 2 * * *'
+
+  # Maximum tests to fix per scheduled run
+  max_tests_per_scheduled_run: 5
+
+# Rollout Strategy
+rollout:
+  # Current phase: 'testing', 'limited', 'full'
+  phase: testing
+
+  # Testing phase configuration
+  testing:
+    # Use fixture tests only
+    use_fixtures: true
+
+    # Fixture location
+    fixture_path: 'specs/tdd-automation/fixtures'
+
+    # Create draft PRs only
+    draft_prs_only: true
+
+  # Limited rollout configuration
+  limited:
+    # Feature areas to enable
+    enabled_areas:
+      - 'app/version'
+      - 'app/name'
+
+    # Maximum tests per day
+    max_daily_tests: 10
+
+  # Full rollout configuration
+  full:
+    # All feature areas enabled
+    all_areas_enabled: true
+
+    # Maximum tests per day
+    max_daily_tests: 30
+
+# Debug Configuration
+debug:
+  # Enable verbose logging
+  verbose: false
+
+  # Save agent interactions
+  save_agent_logs: true
+
+  # Log file location
+  log_directory: '.github/tdd-logs'
+
+  # Keep logs for N days
+  retention_days: 30
+
+# Cost Management
+cost_management:
+  # Track API costs
+  track_costs: true
+
+  # Maximum cost per day (USD)
+  max_daily_cost: 50
+
+  # Alert threshold (percentage of max)
+  alert_threshold: 80
+
+  # Cost per model (estimated)
+  model_costs:
+    sonnet: 0.003 # per 1K tokens
+    opus: 0.015 # per 1K tokens
+    haiku: 0.00025 # per 1K tokens

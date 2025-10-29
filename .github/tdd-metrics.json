@@ -1,0 +1,728 @@
+{
+  "timestamp": "2025-10-29T21:01:59.685Z",
+  "overall": {
+    "totalTests": 869,
+    "passingTests": 68,
+    "fixmeTests": 801,
+    "todoTests": 0,
+    "progressPercentage": 7.825086306098965
+  },
+  "byFeature": [
+    {
+      "feature": "tdd-automation/fixtures",
+      "metrics": {
+        "totalTests": 10,
+        "passingTests": 2,
+        "fixmeTests": 8,
+        "todoTests": 0,
+        "progressPercentage": 20
+      },
+      "lastUpdated": "2025-10-29T21:01:59.680Z",
+      "status": "in-progress"
+    },
+    {
+      "feature": "app/name",
+      "metrics": {
+        "totalTests": 14,
+        "passingTests": 13,
+        "fixmeTests": 1,
+        "todoTests": 0,
+        "progressPercentage": 92.85714285714286
+      },
+      "lastUpdated": "2025-10-29T21:01:59.678Z",
+      "status": "in-progress"
+    },
+    {
+      "feature": "app/pages/meta/structured-data",
+      "metrics": {
+        "totalTests": 130,
+        "passingTests": 0,
+        "fixmeTests": 130,
+        "todoTests": 0,
+        "progressPercentage": 0
+      },
+      "lastUpdated": "2025-10-29T21:01:59.685Z",
+      "status": "not-started"
+    },
+    {
+      "feature": "app/pages/common/interactions",
+      "metrics": {
+        "totalTests": 55,
+        "passingTests": 0,
+        "fixmeTests": 55,
+        "todoTests": 0,
+        "progressPercentage": 0
+      },
+      "lastUpdated": "2025-10-29T21:01:59.684Z",
+      "status": "not-started"
+    },
+    {
+      "feature": "app/pages/common",
+      "metrics": {
+        "totalTests": 44,
+        "passingTests": 0,
+        "fixmeTests": 44,
+        "todoTests": 0,
+        "progressPercentage": 0
+      },
+      "lastUpdated": "2025-10-29T21:01:59.681Z",
+      "status": "not-started"
+    },
+    {
+      "feature": "app/blocks/common",
+      "metrics": {
+        "totalTests": 35,
+        "passingTests": 0,
+        "fixmeTests": 35,
+        "todoTests": 0,
+        "progressPercentage": 0
+      },
+      "lastUpdated": "2025-10-29T21:01:59.683Z",
+      "status": "not-started"
+    },
+    {
+      "feature": "app/pages/layout/navigation",
+      "metrics": {
+        "totalTests": 35,
+        "passingTests": 0,
+        "fixmeTests": 35,
+        "todoTests": 0,
+        "progressPercentage": 0
+      },
+      "lastUpdated": "2025-10-29T21:01:59.684Z",
+      "status": "not-started"
+    },
+    {
+      "feature": "app/languages",
+      "metrics": {
+        "totalTests": 29,
+        "passingTests": 0,
+        "fixmeTests": 29,
+        "todoTests": 0,
+        "progressPercentage": 0
+      },
+      "lastUpdated": "2025-10-29T21:01:59.680Z",
+      "status": "not-started"
+    },
+    {
+      "feature": "app/pages/meta/social",
+      "metrics": {
+        "totalTests": 26,
+        "passingTests": 0,
+        "fixmeTests": 26,
+        "todoTests": 0,
+        "progressPercentage": 0
+      },
+      "lastUpdated": "2025-10-29T21:01:59.685Z",
+      "status": "not-started"
+    },
+    {
+      "feature": "app/pages/meta/performance",
+      "metrics": {
+        "totalTests": 22,
+        "passingTests": 0,
+        "fixmeTests": 22,
+        "todoTests": 0,
+        "progressPercentage": 0
+      },
+      "lastUpdated": "2025-10-29T21:01:59.685Z",
+      "status": "not-started"
+    },
+    {
+      "feature": "admin/tables",
+      "metrics": {
+        "totalTests": 20,
+        "passingTests": 0,
+        "fixmeTests": 20,
+        "todoTests": 0,
+        "progressPercentage": 0
+      },
+      "lastUpdated": "2025-10-29T21:01:59.678Z",
+      "status": "not-started"
+    },
+    {
+      "feature": "app/pages",
+      "metrics": {
+        "totalTests": 18,
+        "passingTests": 0,
+        "fixmeTests": 18,
+        "todoTests": 0,
+        "progressPercentage": 0
+      },
+      "lastUpdated": "2025-10-29T21:01:59.678Z",
+      "status": "not-started"
+    },
+    {
+      "feature": "app/tables/primary-key",
+      "metrics": {
+        "totalTests": 17,
+        "passingTests": 0,
+        "fixmeTests": 17,
+        "todoTests": 0,
+        "progressPercentage": 0
+      },
+      "lastUpdated": "2025-10-29T21:01:59.684Z",
+      "status": "not-started"
+    },
+    {
+      "feature": "app/pages/meta/favicons",
+      "metrics": {
+        "totalTests": 17,
+        "passingTests": 0,
+        "fixmeTests": 17,
+        "todoTests": 0,
+        "progressPercentage": 0
+      },
+      "lastUpdated": "2025-10-29T21:01:59.685Z",
+      "status": "not-started"
+    },
+    {
+      "feature": "app/theme/colors",
+      "metrics": {
+        "totalTests": 16,
+        "passingTests": 0,
+        "fixmeTests": 16,
+        "todoTests": 0,
+        "progressPercentage": 0
+      },
+      "lastUpdated": "2025-10-29T21:01:59.682Z",
+      "status": "not-started"
+    },
+    {
+      "feature": "app/blocks",
+      "metrics": {
+        "totalTests": 15,
+        "passingTests": 0,
+        "fixmeTests": 15,
+        "todoTests": 0,
+        "progressPercentage": 0
+      },
+      "lastUpdated": "2025-10-29T21:01:59.680Z",
+      "status": "not-started"
+    },
+    {
+      "feature": "app/pages/layout/footer",
+      "metrics": {
+        "totalTests": 15,
+        "passingTests": 0,
+        "fixmeTests": 15,
+        "todoTests": 0,
+        "progressPercentage": 0
+      },
+      "lastUpdated": "2025-10-29T21:01:59.685Z",
+      "status": "not-started"
+    },
+    {
+      "feature": "app/pages/sections",
+      "metrics": {
+        "totalTests": 14,
+        "passingTests": 0,
+        "fixmeTests": 14,
+        "todoTests": 0,
+        "progressPercentage": 0
+      },
+      "lastUpdated": "2025-10-29T21:01:59.681Z",
+      "status": "not-started"
+    },
+    {
+      "feature": "app/theme/spacing",
+      "metrics": {
+        "totalTests": 14,
+        "passingTests": 0,
+        "fixmeTests": 14,
+        "todoTests": 0,
+        "progressPercentage": 0
+      },
+      "lastUpdated": "2025-10-29T21:01:59.683Z",
+      "status": "not-started"
+    },
+    {
+      "feature": "app/tables/indexes",
+      "metrics": {
+        "totalTests": 14,
+        "passingTests": 0,
+        "fixmeTests": 14,
+        "todoTests": 0,
+        "progressPercentage": 0
+      },
+      "lastUpdated": "2025-10-29T21:01:59.683Z",
+      "status": "not-started"
+    },
+    {
+      "feature": "app/pages/meta",
+      "metrics": {
+        "totalTests": 13,
+        "passingTests": 0,
+        "fixmeTests": 13,
+        "todoTests": 0,
+        "progressPercentage": 0
+      },
+      "lastUpdated": "2025-10-29T21:01:59.681Z",
+      "status": "not-started"
+    },
+    {
+      "feature": "app/theme/fonts",
+      "metrics": {
+        "totalTests": 13,
+        "passingTests": 0,
+        "fixmeTests": 13,
+        "todoTests": 0,
+        "progressPercentage": 0
+      },
+      "lastUpdated": "2025-10-29T21:01:59.682Z",
+      "status": "not-started"
+    },
+    {
+      "feature": "app/blocks/block",
+      "metrics": {
+        "totalTests": 13,
+        "passingTests": 0,
+        "fixmeTests": 13,
+        "todoTests": 0,
+        "progressPercentage": 0
+      },
+      "lastUpdated": "2025-10-29T21:01:59.683Z",
+      "status": "not-started"
+    },
+    {
+      "feature": "app/pages/meta/analytics",
+      "metrics": {
+        "totalTests": 13,
+        "passingTests": 0,
+        "fixmeTests": 13,
+        "todoTests": 0,
+        "progressPercentage": 0
+      },
+      "lastUpdated": "2025-10-29T21:01:59.685Z",
+      "status": "not-started"
+    },
+    {
+      "feature": "app/pages/layout/sidebar",
+      "metrics": {
+        "totalTests": 13,
+        "passingTests": 0,
+        "fixmeTests": 13,
+        "todoTests": 0,
+        "progressPercentage": 0
+      },
+      "lastUpdated": "2025-10-29T21:01:59.685Z",
+      "status": "not-started"
+    },
+    {
+      "feature": "app/pages/scripts/external-scripts",
+      "metrics": {
+        "totalTests": 13,
+        "passingTests": 0,
+        "fixmeTests": 13,
+        "todoTests": 0,
+        "progressPercentage": 0
+      },
+      "lastUpdated": "2025-10-29T21:01:59.685Z",
+      "status": "not-started"
+    },
+    {
+      "feature": "app/theme",
+      "metrics": {
+        "totalTests": 12,
+        "passingTests": 0,
+        "fixmeTests": 12,
+        "todoTests": 0,
+        "progressPercentage": 0
+      },
+      "lastUpdated": "2025-10-29T21:01:59.679Z",
+      "status": "not-started"
+    },
+    {
+      "feature": "app/theme/animations",
+      "metrics": {
+        "totalTests": 12,
+        "passingTests": 0,
+        "fixmeTests": 12,
+        "todoTests": 0,
+        "progressPercentage": 0
+      },
+      "lastUpdated": "2025-10-29T21:01:59.682Z",
+      "status": "not-started"
+    },
+    {
+      "feature": "app/tables/unique-constraints",
+      "metrics": {
+        "totalTests": 12,
+        "passingTests": 0,
+        "fixmeTests": 12,
+        "todoTests": 0,
+        "progressPercentage": 0
+      },
+      "lastUpdated": "2025-10-29T21:01:59.683Z",
+      "status": "not-started"
+    },
+    {
+      "feature": "app/pages/scripts",
+      "metrics": {
+        "totalTests": 11,
+        "passingTests": 0,
+        "fixmeTests": 11,
+        "todoTests": 0,
+        "progressPercentage": 0
+      },
+      "lastUpdated": "2025-10-29T21:01:59.682Z",
+      "status": "not-started"
+    },
+    {
+      "feature": "app/pages/path",
+      "metrics": {
+        "totalTests": 11,
+        "passingTests": 0,
+        "fixmeTests": 11,
+        "todoTests": 0,
+        "progressPercentage": 0
+      },
+      "lastUpdated": "2025-10-29T21:01:59.682Z",
+      "status": "not-started"
+    },
+    {
+      "feature": "app/pages/layout/banner",
+      "metrics": {
+        "totalTests": 11,
+        "passingTests": 0,
+        "fixmeTests": 11,
+        "todoTests": 0,
+        "progressPercentage": 0
+      },
+      "lastUpdated": "2025-10-29T21:01:59.684Z",
+      "status": "not-started"
+    },
+    {
+      "feature": "app/pages/scripts/features",
+      "metrics": {
+        "totalTests": 11,
+        "passingTests": 0,
+        "fixmeTests": 11,
+        "todoTests": 0,
+        "progressPercentage": 0
+      },
+      "lastUpdated": "2025-10-29T21:01:59.685Z",
+      "status": "not-started"
+    },
+    {
+      "feature": "app/pages/scripts/inline-scripts",
+      "metrics": {
+        "totalTests": 11,
+        "passingTests": 0,
+        "fixmeTests": 11,
+        "todoTests": 0,
+        "progressPercentage": 0
+      },
+      "lastUpdated": "2025-10-29T21:01:59.685Z",
+      "status": "not-started"
+    },
+    {
+      "feature": "app/theme/border-radius",
+      "metrics": {
+        "totalTests": 10,
+        "passingTests": 0,
+        "fixmeTests": 10,
+        "todoTests": 0,
+        "progressPercentage": 0
+      },
+      "lastUpdated": "2025-10-29T21:01:59.682Z",
+      "status": "not-started"
+    },
+    {
+      "feature": "app/theme/breakpoints",
+      "metrics": {
+        "totalTests": 10,
+        "passingTests": 0,
+        "fixmeTests": 10,
+        "todoTests": 0,
+        "progressPercentage": 0
+      },
+      "lastUpdated": "2025-10-29T21:01:59.682Z",
+      "status": "not-started"
+    },
+    {
+      "feature": "app/theme/shadows",
+      "metrics": {
+        "totalTests": 10,
+        "passingTests": 0,
+        "fixmeTests": 10,
+        "todoTests": 0,
+        "progressPercentage": 0
+      },
+      "lastUpdated": "2025-10-29T21:01:59.683Z",
+      "status": "not-started"
+    },
+    {
+      "feature": "app/pages/name",
+      "metrics": {
+        "totalTests": 9,
+        "passingTests": 0,
+        "fixmeTests": 9,
+        "todoTests": 0,
+        "progressPercentage": 0
+      },
+      "lastUpdated": "2025-10-29T21:01:59.681Z",
+      "status": "not-started"
+    },
+    {
+      "feature": "app/pages/layout",
+      "metrics": {
+        "totalTests": 9,
+        "passingTests": 0,
+        "fixmeTests": 9,
+        "todoTests": 0,
+        "progressPercentage": 0
+      },
+      "lastUpdated": "2025-10-29T21:01:59.681Z",
+      "status": "not-started"
+    },
+    {
+      "feature": "app/pages/meta/custom-elements",
+      "metrics": {
+        "totalTests": 9,
+        "passingTests": 0,
+        "fixmeTests": 9,
+        "todoTests": 0,
+        "progressPercentage": 0
+      },
+      "lastUpdated": "2025-10-29T21:01:59.684Z",
+      "status": "not-started"
+    },
+    {
+      "feature": "app/pages/id",
+      "metrics": {
+        "totalTests": 7,
+        "passingTests": 0,
+        "fixmeTests": 7,
+        "todoTests": 0,
+        "progressPercentage": 0
+      },
+      "lastUpdated": "2025-10-29T21:01:59.681Z",
+      "status": "not-started"
+    },
+    {
+      "feature": "app/tables/id",
+      "metrics": {
+        "totalTests": 7,
+        "passingTests": 0,
+        "fixmeTests": 7,
+        "todoTests": 0,
+        "progressPercentage": 0
+      },
+      "lastUpdated": "2025-10-29T21:01:59.683Z",
+      "status": "not-started"
+    },
+    {
+      "feature": "app/tables/name",
+      "metrics": {
+        "totalTests": 6,
+        "passingTests": 0,
+        "fixmeTests": 6,
+        "todoTests": 0,
+        "progressPercentage": 0
+      },
+      "lastUpdated": "2025-10-29T21:01:59.683Z",
+      "status": "not-started"
+    },
+    {
+      "feature": "admin/connections",
+      "metrics": {
+        "totalTests": 5,
+        "passingTests": 0,
+        "fixmeTests": 5,
+        "todoTests": 0,
+        "progressPercentage": 0
+      },
+      "lastUpdated": "2025-10-29T21:01:59.677Z",
+      "status": "not-started"
+    },
+    {
+      "feature": "app/tables/fields",
+      "metrics": {
+        "totalTests": 5,
+        "passingTests": 0,
+        "fixmeTests": 5,
+        "todoTests": 0,
+        "progressPercentage": 0
+      },
+      "lastUpdated": "2025-10-29T21:01:59.684Z",
+      "status": "not-started"
+    },
+    {
+      "feature": "app/description",
+      "metrics": {
+        "totalTests": 16,
+        "passingTests": 16,
+        "fixmeTests": 0,
+        "todoTests": 0,
+        "progressPercentage": 100
+      },
+      "lastUpdated": "2025-10-29T21:01:59.679Z",
+      "status": "completed"
+    },
+    {
+      "feature": "app/version",
+      "metrics": {
+        "totalTests": 8,
+        "passingTests": 8,
+        "fixmeTests": 0,
+        "todoTests": 0,
+        "progressPercentage": 100
+      },
+      "lastUpdated": "2025-10-29T21:01:59.680Z",
+      "status": "completed"
+    },
+    {
+      "feature": "api/paths/health",
+      "metrics": {
+        "totalTests": 4,
+        "passingTests": 4,
+        "fixmeTests": 0,
+        "todoTests": 0,
+        "progressPercentage": 100
+      },
+      "lastUpdated": "2025-10-29T21:01:59.681Z",
+      "status": "completed"
+    },
+    {
+      "feature": "api/paths/auth/send-verification-email",
+      "metrics": {
+        "totalTests": 2,
+        "passingTests": 2,
+        "fixmeTests": 0,
+        "todoTests": 0,
+        "progressPercentage": 100
+      },
+      "lastUpdated": "2025-10-29T21:01:59.684Z",
+      "status": "completed"
+    },
+    {
+      "feature": "api/paths/auth/change-password",
+      "metrics": {
+        "totalTests": 3,
+        "passingTests": 3,
+        "fixmeTests": 0,
+        "todoTests": 0,
+        "progressPercentage": 100
+      },
+      "lastUpdated": "2025-10-29T21:01:59.684Z",
+      "status": "completed"
+    },
+    {
+      "feature": "api/paths/auth/sign-out",
+      "metrics": {
+        "totalTests": 1,
+        "passingTests": 1,
+        "fixmeTests": 0,
+        "todoTests": 0,
+        "progressPercentage": 100
+      },
+      "lastUpdated": "2025-10-29T21:01:59.684Z",
+      "status": "completed"
+    },
+    {
+      "feature": "api/paths/auth/change-email",
+      "metrics": {
+        "totalTests": 3,
+        "passingTests": 3,
+        "fixmeTests": 0,
+        "todoTests": 0,
+        "progressPercentage": 100
+      },
+      "lastUpdated": "2025-10-29T21:01:59.684Z",
+      "status": "completed"
+    },
+    {
+      "feature": "api/paths/auth/reset-password",
+      "metrics": {
+        "totalTests": 2,
+        "passingTests": 2,
+        "fixmeTests": 0,
+        "todoTests": 0,
+        "progressPercentage": 100
+      },
+      "lastUpdated": "2025-10-29T21:01:59.684Z",
+      "status": "completed"
+    },
+    {
+      "feature": "api/paths/auth/verify-email",
+      "metrics": {
+        "totalTests": 2,
+        "passingTests": 2,
+        "fixmeTests": 0,
+        "todoTests": 0,
+        "progressPercentage": 100
+      },
+      "lastUpdated": "2025-10-29T21:01:59.684Z",
+      "status": "completed"
+    },
+    {
+      "feature": "api/paths/auth/forget-password",
+      "metrics": {
+        "totalTests": 2,
+        "passingTests": 2,
+        "fixmeTests": 0,
+        "todoTests": 0,
+        "progressPercentage": 100
+      },
+      "lastUpdated": "2025-10-29T21:01:59.684Z",
+      "status": "completed"
+    },
+    {
+      "feature": "api/paths/auth/get-session",
+      "metrics": {
+        "totalTests": 2,
+        "passingTests": 2,
+        "fixmeTests": 0,
+        "todoTests": 0,
+        "progressPercentage": 100
+      },
+      "lastUpdated": "2025-10-29T21:01:59.684Z",
+      "status": "completed"
+    },
+    {
+      "feature": "api/paths/auth/sign-up/email",
+      "metrics": {
+        "totalTests": 3,
+        "passingTests": 3,
+        "fixmeTests": 0,
+        "todoTests": 0,
+        "progressPercentage": 100
+      },
+      "lastUpdated": "2025-10-29T21:01:59.685Z",
+      "status": "completed"
+    },
+    {
+      "feature": "api/paths/auth/sign-in/social",
+      "metrics": {
+        "totalTests": 2,
+        "passingTests": 2,
+        "fixmeTests": 0,
+        "todoTests": 0,
+        "progressPercentage": 100
+      },
+      "lastUpdated": "2025-10-29T21:01:59.685Z",
+      "status": "completed"
+    },
+    {
+      "feature": "api/paths/auth/sign-in/email",
+      "metrics": {
+        "totalTests": 3,
+        "passingTests": 3,
+        "fixmeTests": 0,
+        "todoTests": 0,
+        "progressPercentage": 100
+      },
+      "lastUpdated": "2025-10-29T21:01:59.685Z",
+      "status": "completed"
+    }
+  ],
+  "recentActivity": [],
+  "nextUp": [
+    "tdd-automation/fixtures",
+    "app/name",
+    "app/pages/meta/structured-data",
+    "app/pages/common/interactions",
+    "app/pages/common"
+  ]
+}
