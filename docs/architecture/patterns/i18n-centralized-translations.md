@@ -2,13 +2,17 @@
 
 ## Overview
 
-Omnera™ uses a **hybrid i18n approach** with centralized translations as the PRIMARY pattern and per-component overrides as a fallback. This aligns with industry-standard i18n libraries (i18next, vue-i18n, react-intl, next-intl) and provides better reusability, maintainability, and translator workflow.
+> **⚠️ BREAKING CHANGE NOTICE (v0.2.0)**
+>
+> Per-component `i18n` overrides are **DEPRECATED** and will be removed in v0.2.0. This documentation now reflects the pure centralized pattern that aligns with industry standards (i18next, vue-i18n, react-intl, next-intl).
 
-## Pattern Comparison
+Omnera™ uses a **pure centralized i18n approach** with all translations defined in `languages.translations`. This provides better reusability, maintainability, and translator workflow by maintaining a single source of truth for all translations.
 
-### PRIMARY: Centralized Translations (`$t:` references)
+## The Centralized Pattern
 
-**✅ Recommended for 90% of use cases**
+### How It Works
+
+**✅ The ONLY supported pattern (per-component i18n deprecated)**
 
 ```json
 {
@@ -52,61 +56,14 @@ Omnera™ uses a **hybrid i18n approach** with centralized translations as the P
 
 - Common UI strings (Save, Cancel, Submit, etc.)
 - Navigation items
-- Page content that's reused across sections
+- Page content (all content, including context-specific variations)
 - Error messages
 - Form labels
+- All text content in the application
 
-### FALLBACK: Per-Component i18n
-
-**⚠️ Use only for truly unique context-specific translations**
-
-```json
-{
-  "type": "button",
-  "i18n": {
-    "en-US": { "content": "Submit Tax Return" },
-    "fr-FR": { "content": "Soumettre Déclaration Fiscale" }
-  }
-}
-```
-
-**When to use:**
-
-- Translation is truly unique and won't be reused
-- Context-specific variation needed (e.g., "Submit Payment" vs generic "Submit")
-- Component-specific props need translation (aria-label, placeholder)
-
-## Translation Resolution (Precedence Order)
-
-1. **Per-component i18n** (highest priority)
-2. **Centralized `$t:` reference**
-3. **Fallback language** (configured in `languages.fallback`)
-
-```json
-{
-  "languages": {
-    "translations": {
-      "en-US": { "common.submit": "Submit" },
-      "fr-FR": { "common.submit": "Soumettre" }
-    }
-  },
-  "pages": [
-    {
-      "sections": [
-        {
-          "type": "button",
-          "children": ["$t:common.submit"],
-          "i18n": {
-            "en-US": { "content": "Submit Payment" }
-          }
-        }
-      ]
-    }
-  ]
-}
-```
-
-**Result:** Button displays "Submit Payment" (per-component wins) in English, "Soumettre" (centralized fallback) in French.
+**For context-specific variations**, use more specific translation keys:
+- ❌ Bad: `common.submit` with per-component override for "Submit Payment"
+- ✅ Good: Create `payment.submit` key with value "Submit Payment"
 
 ## Namespace Organization
 
@@ -179,28 +136,45 @@ Use flat keys with dot notation to organize translations by feature:
 
 **Benefit:** Change translation once, updates everywhere.
 
-### Hybrid: Centralized + Override
+### Context-Specific Variations
+
+For context-specific text, use more specific translation keys instead of overrides:
 
 ```json
 {
-  "sections": [
-    { "type": "button", "children": ["$t:common.submit"] },
-    {
-      "type": "button",
-      "children": ["$t:common.submit"],
-      "i18n": {
-        "en-US": { "content": "Submit Payment" },
-        "fr-FR": { "content": "Soumettre Paiement" }
+  "languages": {
+    "translations": {
+      "en-US": {
+        "common.submit": "Submit",
+        "payment.submit": "Submit Payment",
+        "form.submit": "Submit Form"
+      },
+      "fr-FR": {
+        "common.submit": "Soumettre",
+        "payment.submit": "Soumettre Paiement",
+        "form.submit": "Soumettre Formulaire"
       }
     }
+  },
+  "sections": [
+    { "type": "button", "children": ["$t:common.submit"] },
+    { "type": "button", "children": ["$t:payment.submit"] },
+    { "type": "button", "children": ["$t:form.submit"] }
   ]
 }
 ```
 
 **Renders:**
 
-- Button 1: "Submit" / "Soumettre" (uses centralized)
-- Button 2: "Submit Payment" / "Soumettre Paiement" (per-component override)
+- Button 1: "Submit" / "Soumettre"
+- Button 2: "Submit Payment" / "Soumettre Paiement"
+- Button 3: "Submit Form" / "Soumettre Formulaire"
+
+**Benefits:**
+- All translations in one place
+- Easy to audit and update
+- Translator sees all variations together
+- No precedence rules to remember
 
 ### Fallback Behavior
 
@@ -225,65 +199,82 @@ Use flat keys with dot notation to organize translations by feature:
 
 **Result:** French page shows "Enregistrer" (French) and "Cancel" (English fallback).
 
-## Migration Guide
+## Migration Guide (v0.1.x → v0.2.0)
 
-### From Per-Component to Centralized
+> **Migration Timeline:**
+> - v0.1.1: Per-component `i18n` property marked as deprecated (warnings emitted)
+> - v0.2.0: Per-component `i18n` property removed entirely (breaking change)
 
-**Before (Per-Component):**
+### Automated Migration
 
-```json
-{
-  "pages": [
-    {
-      "sections": [
-        {
-          "type": "button",
-          "i18n": {
-            "en-US": { "content": "Save" },
-            "fr-FR": { "content": "Enregistrer" }
-          }
-        },
-        {
-          "type": "button",
-          "i18n": {
-            "en-US": { "content": "Save" },
-            "fr-FR": { "content": "Enregistrer" }
-          }
-        }
-      ]
-    }
-  ]
-}
+Use the automated migration script to convert per-component translations to centralized:
+
+```bash
+bun run scripts/migrate-i18n-to-centralized.ts
 ```
 
-**After (Centralized):**
+This script will:
+1. Extract all per-component `i18n` translations
+2. Generate centralized translation keys
+3. Replace per-component i18n with `$t:` references
+4. Update `languages.translations` dictionary
+
+### Manual Migration Steps
+
+If migrating manually, follow these steps:
+
+**Step 1: Identify all per-component translations**
+
+```bash
+# Find all components using per-component i18n
+grep -r '"i18n"' specs/app/pages/ specs/app/blocks/
+```
+
+**Step 2: Extract translations to centralized dictionary**
 
 ```json
 {
   "languages": {
     "translations": {
-      "en-US": { "common.save": "Save" },
-      "fr-FR": { "common.save": "Enregistrer" }
+      "en-US": {
+        "common.save": "Save",
+        "common.cancel": "Cancel"
+      },
+      "fr-FR": {
+        "common.save": "Enregistrer",
+        "common.cancel": "Annuler"
+      }
     }
-  },
-  "pages": [
-    {
-      "sections": [
-        { "type": "button", "children": ["$t:common.save"] },
-        { "type": "button", "children": ["$t:common.save"] }
-      ]
-    }
-  ]
+  }
 }
 ```
 
-**Benefits:** 2 lines of translation → 1 line, update once affects both.
+**Step 3: Replace per-component i18n with $t: references**
+
+```json
+// Before
+{
+  "type": "button",
+  "i18n": {
+    "en-US": { "content": "Save" },
+    "fr-FR": { "content": "Enregistrer" }
+  }
+}
+
+// After
+{
+  "type": "button",
+  "children": ["$t:common.save"]
+}
+```
+
+**Benefits:** Eliminates duplication, single source of truth, easier maintenance.
 
 ## Best Practices
 
-### 1. Start Centralized
+### 1. Always Use Centralized Translations
 
-Always define translations in `languages.translations` first:
+Define ALL translations in `languages.translations`:
 
 ```json
 {
@@ -292,21 +283,22 @@ Always define translations in `languages.translations` first:
       "en-US": {
         "common.save": "Save",
         "common.cancel": "Cancel",
-        "nav.home": "Home"
+        "nav.home": "Home",
+        "payment.submit": "Submit Payment"
       }
     }
   }
 }
 ```
 
-Then reference with `$t:key` in components.
+Then reference with `$t:key` in ALL components - no exceptions.
 
-### 2. Use Per-Component Sparingly
+### 2. Use Specific Keys for Context-Specific Text
 
-Only add per-component `i18n` when you need:
+Instead of generic keys with overrides, create specific keys:
 
-- Context-specific variation
-- Component-specific prop translation (aria-label)
+- ✅ Good: `payment.submit`, `form.submit`, `order.submit`
+- ❌ Bad: `common.submit` (reused with different meanings)
 
 ### 3. Organize by Feature, Not Component
 
@@ -422,15 +414,17 @@ Keys must match: `^[a-zA-Z0-9._-]+$`
 ## Related Documentation
 
 - **Language Configuration**: `specs/app/languages/languages.schema.json`
-- **Per-Component i18n**: `specs/app/pages/common/i18n.schema.json`
+- **Per-Component i18n (DEPRECATED)**: `specs/app/pages/common/i18n.schema.json`
 - **Test Examples**: `specs/app/languages/languages.spec.ts`, `specs/app/pages/common/i18n.spec.ts`
+- **Migration Script**: `scripts/migrate-i18n-to-centralized.ts` (coming in v0.1.1)
 
 ## Summary
 
-✅ **Use centralized `$t:` references** for 90% of translations
-⚠️ **Use per-component `i18n`** only for context-specific overrides
-🌍 **Organize by feature** (common._, nav._, [page].\*)
+✅ **Use centralized `$t:` references** for ALL translations (100%)
+🚫 **Per-component `i18n` is deprecated** and will be removed in v0.2.0
+🌍 **Organize by feature** (common._, nav._, [page]._)
 📦 **Export/import** one file for translator workflow
 🔍 **Audit easily** - all translations in one place
+🎯 **Context-specific text** - Use specific keys, not overrides
 
-This pattern scales from small apps to large multi-language applications with hundreds of translation keys.
+This pattern aligns with industry standards (i18next, vue-i18n, react-intl, next-intl) and scales from small apps to large multi-language applications with thousands of translation keys.

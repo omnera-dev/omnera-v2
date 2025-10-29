@@ -45,11 +45,11 @@
             }
           },
           "additionalProperties": false,
-          "description": "Translation dictionary with flat keys (e.g., 'common.save', 'homepage.hero.title')"
+          "description": "Translation dictionary with flat keys (e.g., 'common.save', 'homepage.hero.title'). Organized by feature/page for better maintainability. Use semantic keys that describe meaning, not location."
         }
       },
       "additionalProperties": false,
-      "description": "Centralized translation dictionaries for all supported languages. Use $t:key syntax in components to reference translations (e.g., children: ['$t:common.save']). Recommended as PRIMARY approach for better reusability and maintainability."
+      "description": "Centralized translation dictionaries for all supported languages. Use $t:key syntax in ANY string property to reference translations: children arrays (['$t:common.save']), component props ({ 'aria-label': '$t:common.close', placeholder: '$t:forms.email.placeholder' }), meta properties ({ title: '$t:page.title' }), etc. This is the ONLY supported i18n pattern (per-component i18n deprecated in v0.2.0)."
     }
   },
   "required": ["default", "supported"],
@@ -137,7 +137,12 @@
           "forms.email.label": "Email Address",
           "forms.email.placeholder": "Enter your email",
           "forms.password.label": "Password",
-          "forms.password.placeholder": "Enter your password"
+          "forms.password.placeholder": "Enter your password",
+          "a11y.close": "Close",
+          "a11y.open-menu": "Open menu",
+          "a11y.search": "Search",
+          "images.logo.alt": "Company logo",
+          "images.hero.alt": "Hero banner image"
         },
         "fr-FR": {
           "common.save": "Enregistrer",
@@ -164,8 +169,83 @@
           "forms.email.label": "Adresse e-mail",
           "forms.email.placeholder": "Entrez votre e-mail",
           "forms.password.label": "Mot de passe",
-          "forms.password.placeholder": "Entrez votre mot de passe"
+          "forms.password.placeholder": "Entrez votre mot de passe",
+          "a11y.close": "Fermer",
+          "a11y.open-menu": "Ouvrir le menu",
+          "a11y.search": "Rechercher",
+          "images.logo.alt": "Logo de l'entreprise",
+          "images.hero.alt": "Image de bannière héros"
         }
+      }
+    },
+    {
+      "_comment": "Example showing $t: usage in ALL string properties (children, props, meta)",
+      "default": "en-US",
+      "supported": [
+        {
+          "code": "en-US",
+          "label": "English",
+          "direction": "ltr"
+        },
+        {
+          "code": "fr-FR",
+          "label": "Français",
+          "direction": "ltr"
+        }
+      ],
+      "translations": {
+        "en-US": {
+          "page.home.title": "Home - My App",
+          "page.home.description": "Welcome to my application",
+          "button.close": "Close",
+          "button.save": "Save",
+          "input.search.placeholder": "Search...",
+          "input.search.label": "Search",
+          "image.logo.alt": "Application logo"
+        },
+        "fr-FR": {
+          "page.home.title": "Accueil - Mon App",
+          "page.home.description": "Bienvenue sur mon application",
+          "button.close": "Fermer",
+          "button.save": "Enregistrer",
+          "input.search.placeholder": "Rechercher...",
+          "input.search.label": "Rechercher",
+          "image.logo.alt": "Logo de l'application"
+        }
+      },
+      "x-usage-examples": {
+        "children": {
+          "type": "button",
+          "children": ["$t:button.save"]
+        },
+        "props": {
+          "type": "button",
+          "props": {
+            "aria-label": "$t:button.close"
+          },
+          "children": ["×"]
+        },
+        "meta": {
+          "type": "page",
+          "meta": {
+            "title": "$t:page.home.title",
+            "description": "$t:page.home.description"
+          }
+        },
+        "input": {
+          "type": "input",
+          "props": {
+            "placeholder": "$t:input.search.placeholder",
+            "aria-label": "$t:input.search.label"
+          }
+        },
+        "image": {
+          "type": "img",
+          "props": {
+            "alt": "$t:image.logo.alt"
+          }
+        },
+        "note": "$t: syntax works in ANY string property - not limited to children arrays"
       }
     }
   ],
@@ -1049,84 +1129,6 @@
           "No blank buttons or errors",
           "Seamless UX with incomplete translations",
           "Translation coverage can be partial"
-        ]
-      }
-    },
-    {
-      "id": "APP-LANGUAGES-017",
-      "given": "a component with $t: reference and per-component i18n override",
-      "when": "both centralized and per-component translations exist",
-      "then": "per-component i18n should override centralized $t: translation",
-      "validation": {
-        "setup": {
-          "languages": {
-            "default": "en-US",
-            "supported": [
-              {
-                "code": "en-US",
-                "label": "English"
-              },
-              {
-                "code": "fr-FR",
-                "label": "Français"
-              }
-            ],
-            "translations": {
-              "en-US": {
-                "common.submit": "Submit"
-              },
-              "fr-FR": {
-                "common.submit": "Soumettre"
-              }
-            }
-          }
-        },
-        "assertions": [
-          "Centralized: 'common.submit' = 'Submit' / 'Soumettre'",
-          "Component override: context-specific translation",
-          "Hybrid approach: centralized + override",
-          "Per-component wins when both exist"
-        ]
-      },
-      "application": {
-        "languages": {
-          "translations": {
-            "en-US": {
-              "common.submit": "Submit"
-            },
-            "fr-FR": {
-              "common.submit": "Soumettre"
-            }
-          }
-        },
-        "components": [
-          {
-            "type": "button",
-            "children": ["$t:common.submit"]
-          },
-          {
-            "type": "button",
-            "children": ["$t:common.submit"],
-            "i18n": {
-              "en-US": {
-                "content": "Submit Payment"
-              },
-              "fr-FR": {
-                "content": "Soumettre Paiement"
-              }
-            }
-          }
-        ],
-        "expectedDOM": {
-          "en-US": "<div><button>Submit</button><button>Submit Payment</button></div>",
-          "fr-FR": "<div><button>Soumettre</button><button>Soumettre Paiement</button></div>"
-        },
-        "assertions": [
-          "First button: uses centralized $t:common.submit",
-          "Second button: per-component i18n overrides centralized",
-          "Hybrid flexibility: general + specific",
-          "Use override for context-specific variations",
-          "Fallback chain: per-component → centralized → fallback language"
         ]
       }
     },

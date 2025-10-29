@@ -617,60 +617,6 @@ test.describe('Languages Configuration', () => {
   )
 
   test.fixme(
-    'APP-LANGUAGES-017: per-component i18n should override centralized $t: translation',
-    { tag: '@spec' },
-    async ({ page, startServerWithSchema }) => {
-      // GIVEN: a component with $t: reference and per-component i18n override
-      await startServerWithSchema({
-        name: 'test-app',
-        languages: {
-          default: 'en-US',
-          supported: [
-            { code: 'en-US', label: 'English' },
-            { code: 'fr-FR', label: 'Français' },
-          ],
-          translations: {
-            'en-US': { 'common.submit': 'Submit' },
-            'fr-FR': { 'common.submit': 'Soumettre' },
-          },
-        },
-        pages: [
-          {
-            name: 'Test',
-            path: '/',
-            meta: { lang: 'en-US', title: 'Test' },
-            sections: [
-              { type: 'button', children: ['$t:common.submit'] },
-              {
-                type: 'button',
-                children: ['$t:common.submit'],
-                i18n: {
-                  'en-US': { content: 'Submit Payment' },
-                  'fr-FR': { content: 'Soumettre Paiement' },
-                },
-              },
-            ],
-          },
-        ],
-      })
-
-      // WHEN: both centralized and per-component translations exist
-      await page.goto('/')
-
-      // THEN: per-component i18n should override centralized $t: translation
-      const buttons = page.locator('button')
-      await expect(buttons.nth(0)).toHaveText('Submit') // Uses centralized
-      await expect(buttons.nth(1)).toHaveText('Submit Payment') // Per-component override
-
-      // Switch to French
-      await page.locator('[data-testid="language-switcher"]').click()
-      await page.locator('[data-testid="language-option-fr-FR"]').click()
-      await expect(buttons.nth(0)).toHaveText('Soumettre') // Uses centralized
-      await expect(buttons.nth(1)).toHaveText('Soumettre Paiement') // Per-component override
-    }
-  )
-
-  test.fixme(
     'APP-LANGUAGES-018: should organize translations by feature and improve maintainability',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {

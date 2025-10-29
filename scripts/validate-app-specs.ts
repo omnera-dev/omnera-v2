@@ -19,6 +19,7 @@
  * 8. $ref paths: Relative paths exist and are valid
  * 9. Type discriminators: const vs enum usage
  * 10. Required arrays: Explicit required fields for objects
+ * 11. Deprecated patterns: Per-component i18n usage (deprecated in v0.1.1, removed in v0.2.0)
  */
 
 import { readdir, readFile, stat } from 'node:fs/promises'
@@ -166,6 +167,9 @@ async function validateSchemaFile(
 
   // 8. Check required arrays for objects
   validateRequiredArrays(content, relativePath, result)
+
+  // 9. Check for deprecated i18n usage
+  validateDeprecatedI18n(content, relativePath, result)
 }
 
 // ============================================================================
@@ -472,6 +476,50 @@ function checkObjectsHaveRequired(
   for (const key in record) {
     if (Object.prototype.hasOwnProperty.call(record, key)) {
       checkObjectsHaveRequired(record[key], relativePath, result, path ? `${path}.${key}` : key)
+    }
+  }
+}
+
+function validateDeprecatedI18n(
+  content: unknown,
+  relativePath: string,
+  result: ValidationResult
+): void {
+  checkForDeprecatedI18n(content, relativePath, result)
+}
+
+function checkForDeprecatedI18n(
+  obj: unknown,
+  relativePath: string,
+  result: ValidationResult,
+  path: string[] = []
+): void {
+  if (typeof obj !== 'object' || obj === null) {
+    return
+  }
+
+  const record = obj as Record<string, unknown>
+
+  // Skip checking inside examples, x-specs, and specs (they're documentation)
+  const isInExamples = path.includes('examples')
+  const isInXSpecs = path.includes('x-specs')
+  const isInSpecs = path.includes('specs')
+
+  // Check if this object has an 'i18n' property (per-component i18n pattern)
+  // Only warn if we're not in examples/x-specs/specs
+  if ('i18n' in record && !isInExamples && !isInXSpecs && !isInSpecs) {
+    const pathStr = path.length > 0 ? path.join('.') : 'root'
+    result.warnings.push({
+      file: relativePath,
+      type: 'warning',
+      message: `DEPRECATED: Per-component i18n at ${pathStr}. Use centralized translations with $t: references instead. See docs/architecture/patterns/i18n-centralized-translations.md for migration guide. This pattern will be removed in v0.2.0.`,
+    })
+  }
+
+  // Recursively check nested objects
+  for (const key in record) {
+    if (Object.prototype.hasOwnProperty.call(record, key)) {
+      checkForDeprecatedI18n(record[key], relativePath, result, [...path, key])
     }
   }
 }

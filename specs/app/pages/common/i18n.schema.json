@@ -1,8 +1,9 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
   "$id": "i18n.schema.json",
-  "title": "Component Internationalization",
-  "description": "Component-level translation overrides for multi-language support. PRIMARY APPROACH: Use $t:key syntax in content/children to reference centralized translations (defined in languages.translations). FALLBACK APPROACH: Use this i18n object only for component-specific overrides that differ from centralized translations. Precedence: per-component i18n → centralized $t: → fallback language.",
+  "title": "Component Internationalization (DEPRECATED)",
+  "description": "⚠️ DEPRECATED: Per-component i18n overrides will be removed in v0.2.0. Use centralized translations with $t:key references instead. Per-component i18n adds unnecessary complexity and prevents centralized translation management. For context-specific variations, use more specific centralized keys (e.g., payment.submit instead of common.submit with override).",
+  "deprecated": true,
   "type": "object",
   "patternProperties": {
     "^[a-z]{2}(-[A-Z]{2})?$": {
@@ -124,76 +125,11 @@
   ],
   "x-specs": [
     {
-      "id": "APP-I18N-001",
-      "given": "a button with English content",
-      "when": "language is set to en-US",
-      "then": "it should display English text"
-    },
-    {
-      "id": "APP-I18N-002",
-      "given": "a button with translations for en-US, fr-FR, and es-ES",
-      "when": "language switches between English, French, and Spanish",
-      "then": "content should update to match the selected language"
-    },
-    {
-      "id": "APP-I18N-003",
-      "given": "a button with content and props for multiple languages",
-      "when": "language is set to fr-FR",
-      "then": "both French content and French aria-label should be applied"
-    },
-    {
-      "id": "APP-I18N-004",
-      "given": "a heading with translations for RTL language (ar-SA)",
-      "when": "language is set to Arabic",
-      "then": "it should display Arabic content with RTL-specific props"
-    },
-    {
-      "id": "APP-I18N-005",
-      "given": "a component with translations for German (de-DE)",
-      "when": "language is set to de-DE",
-      "then": "it should display German content"
-    },
-    {
-      "id": "APP-I18N-006",
-      "given": "a button with only content translations (no props)",
-      "when": "language switches",
-      "then": "only content should update while props remain unchanged"
-    },
-    {
-      "id": "APP-I18N-007",
-      "given": "a component with language-specific className in props",
-      "when": "switching between LTR and RTL languages",
-      "then": "className should adjust for text direction (text-left vs text-right)"
-    },
-    {
-      "id": "APP-I18N-008",
-      "given": "a form with translations for labels and placeholders",
-      "when": "language changes",
-      "then": "all form text and accessibility attributes should update"
-    },
-    {
-      "id": "APP-I18N-009",
-      "given": "a component with translations for language codes without country (en, fr)",
-      "when": "language code uses 2-letter format",
-      "then": "it should support both formats (en and en-US)"
-    },
-    {
-      "id": "APP-I18N-010",
-      "given": "a navigation menu with translations for 5+ languages",
-      "when": "user selects from language switcher",
-      "then": "all menu items should update to the selected language instantly"
-    },
-    {
       "id": "APP-I18N-011",
       "given": "multiple components using the same $t: reference key",
       "when": "components share common translations (e.g., $t:common.save)",
-      "then": "all components should display the same translated text without duplication"
-    },
-    {
-      "id": "APP-I18N-012",
-      "given": "a component with $t: reference and per-component i18n override",
-      "when": "per-component i18n provides different translation than centralized",
-      "then": "per-component i18n should take precedence over $t: reference"
+      "then": "all components should display the same translated text without duplication",
+      "note": "Per-component i18n is DEPRECATED in v0.1.1 and will be removed in v0.2.0. Use centralized translations with $t: references instead. Other i18n specs (APP-I18N-001 through APP-I18N-010, APP-I18N-012) removed as they tested deprecated per-component pattern."
     }
   ]
 }
