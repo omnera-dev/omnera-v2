@@ -318,6 +318,7 @@ jobs:
         with:
           ref: ${{ needs.check-trigger.outputs.branch_name }}
           fetch-depth: 0
+          persist-credentials: false  # Security: Prevent credential access from untrusted PR code
 
       - name: Setup Bun
         uses: oven-sh/setup-bun@v2
