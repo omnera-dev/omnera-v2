@@ -62,6 +62,7 @@ Omnera™ uses a **pure centralized i18n approach** with all translations define
 - All text content in the application
 
 **For context-specific variations**, use more specific translation keys:
+
 - ❌ Bad: `common.submit` with per-component override for "Submit Payment"
 - ✅ Good: Create `payment.submit` key with value "Submit Payment"
 
@@ -171,6 +172,7 @@ For context-specific text, use more specific translation keys instead of overrid
 - Button 3: "Submit Form" / "Soumettre Formulaire"
 
 **Benefits:**
+
 - All translations in one place
 - Easy to audit and update
 - Translator sees all variations together
@@ -202,6 +204,7 @@ For context-specific text, use more specific translation keys instead of overrid
 ## Migration Guide (v0.1.x → v0.2.0)
 
 > **Migration Timeline:**
+>
 > - v0.1.1: Per-component `i18n` property marked as deprecated (warnings emitted)
 > - v0.2.0: Per-component `i18n` property removed entirely (breaking change)
 
@@ -214,6 +217,7 @@ bun run scripts/migrate-i18n-to-centralized.ts
 ```
 
 This script will:
+
 1. Extract all per-component `i18n` translations
 2. Generate centralized translation keys
 3. Replace per-component i18n with `$t:` references
@@ -422,7 +426,7 @@ Keys must match: `^[a-zA-Z0-9._-]+$`
 
 ✅ **Use centralized `$t:` references** for ALL translations (100%)
 🚫 **Per-component `i18n` is deprecated** and will be removed in v0.2.0
-🌍 **Organize by feature** (common._, nav._, [page]._)
+🌍 **Organize by feature** (common._, nav._, [page].\_)
 📦 **Export/import** one file for translator workflow
 🔍 **Audit easily** - all translations in one place
 🎯 **Context-specific text** - Use specific keys, not overrides

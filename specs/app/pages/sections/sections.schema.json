@@ -57,10 +57,6 @@
           "responsive": {
             "$ref": "../common/responsive.schema.json",
             "description": "Breakpoint-specific overrides for responsive design"
-          },
-          "i18n": {
-            "$ref": "../common/i18n.schema.json",
-            "description": "Multi-language translations"
           }
         },
         "required": ["type"],
@@ -612,61 +608,6 @@
       }
     },
     {
-      "id": "APP-PAGES-SECTIONS-008",
-      "given": "a section with i18n translations",
-      "when": "i18n property defines multi-language content",
-      "then": "it should support translated component content",
-      "validation": {
-        "setup": {
-          "section": {
-            "type": "text",
-            "content": "Welcome",
-            "i18n": {
-              "fr": {
-                "content": "Bienvenue"
-              },
-              "es": {
-                "content": "Bienvenido"
-              }
-            }
-          }
-        },
-        "assertions": [
-          "i18n reference: i18n.schema.json",
-          "Default: 'Welcome' (en)",
-          "fr translation: 'Bienvenue'",
-          "es translation: 'Bienvenido'",
-          "Multi-language support"
-        ]
-      },
-      "application": {
-        "section": {
-          "type": "text",
-          "content": "Welcome",
-          "i18n": {
-            "fr": {
-              "content": "Bienvenue"
-            },
-            "es": {
-              "content": "Bienvenido"
-            }
-          }
-        },
-        "expectedDOM": {
-          "en": "<p data-testid=\"text-element\">Welcome</p>",
-          "fr": "<p data-testid=\"text-element\" lang=\"fr\">Bienvenue</p>",
-          "es": "<p data-testid=\"text-element\" lang=\"es\">Bienvenido</p>"
-        },
-        "assertions": [
-          "Default language: 'Welcome' (en)",
-          "French: 'Bienvenue' with lang='fr'",
-          "Spanish: 'Bienvenido' with lang='es'",
-          "Content switches based on active language",
-          "i18n enables multi-language pages"
-        ]
-      }
-    },
-    {
       "id": "APP-PAGES-SECTIONS-009",
       "given": "a block reference in sections",
       "when": "section uses $ref with vars for variable substitution",
@@ -940,9 +881,9 @@
     },
     {
       "id": "APP-PAGES-SECTIONS-012",
-      "given": "a section with all 3 optional properties",
-      "when": "section includes interactions, responsive, and i18n",
-      "then": "it should combine interactive, responsive, and multi-language features",
+      "given": "a section with multiple optional properties",
+      "when": "section includes interactions and responsive design",
+      "then": "it should combine interactive and responsive features",
       "validation": {
         "setup": {
           "section": {
@@ -962,19 +903,13 @@
                   "className": "px-8 py-4"
                 }
               }
-            },
-            "i18n": {
-              "fr": {
-                "content": "Cliquez-moi"
-              }
             }
           }
         },
         "assertions": [
-          "All 3 optional properties combined",
+          "Multiple optional properties combined",
           "interactions: hover scale",
           "responsive: larger padding on md+",
-          "i18n: French translation",
           "Full-featured component"
         ]
       },
@@ -996,25 +931,17 @@
                 "className": "px-8 py-4"
               }
             }
-          },
-          "i18n": {
-            "fr": {
-              "content": "Cliquez-moi"
-            }
           }
         },
         "expectedDOM": {
-          "en-mobile": "<button data-testid=\"button\" class=\"px-6 py-3\" data-hover-scale=\"1.05\">Click me</button>",
-          "en-desktop": "<button data-testid=\"button\" class=\"px-8 py-4\" data-hover-scale=\"1.05\">Click me</button>",
-          "fr-mobile": "<button data-testid=\"button\" class=\"px-6 py-3\" data-hover-scale=\"1.05\" lang=\"fr\">Cliquez-moi</button>",
-          "fr-desktop": "<button data-testid=\"button\" class=\"px-8 py-4\" data-hover-scale=\"1.05\" lang=\"fr\">Cliquez-moi</button>"
+          "mobile": "<button data-testid=\"button\" class=\"px-6 py-3\" data-hover-scale=\"1.05\">Click me</button>",
+          "desktop": "<button data-testid=\"button\" class=\"px-8 py-4\" data-hover-scale=\"1.05\">Click me</button>"
         },
         "assertions": [
-          "interactions: Scale 1.05 on hover (all sizes, all languages)",
+          "interactions: Scale 1.05 on hover (all viewport sizes)",
           "responsive: px-6 py-3 (mobile), px-8 py-4 (md+)",
-          "i18n: 'Click me' (en), 'Cliquez-moi' (fr)",
           "All features work together seamlessly",
-          "Fully internationalized, responsive, interactive component"
+          "Fully responsive, interactive component"
         ]
       }
     },

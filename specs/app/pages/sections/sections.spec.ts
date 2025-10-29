@@ -256,32 +256,6 @@ test.describe('Page Sections', () => {
   )
 
   test.fixme(
-    'APP-PAGES-SECTIONS-008: should support translated component content',
-    { tag: '@spec' },
-    async ({ page, startServerWithSchema }) => {
-      await startServerWithSchema({
-        name: 'test-app',
-        pages: [
-          {
-            name: 'Test',
-            path: '/',
-            meta: { lang: 'en-US', title: 'Test', description: 'Test' },
-            sections: [
-              {
-                type: 'text',
-                content: 'Welcome',
-                i18n: { fr: { content: 'Bienvenue' }, es: { content: 'Bienvenido' } },
-              },
-            ],
-          },
-        ],
-      })
-      await page.goto('/')
-      await expect(page.locator('text=Welcome')).toBeVisible()
-    }
-  )
-
-  test.fixme(
     'APP-PAGES-SECTIONS-009: should reference and instantiate reusable block with variables',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -405,7 +379,7 @@ test.describe('Page Sections', () => {
   )
 
   test.fixme(
-    'APP-PAGES-SECTIONS-012: should combine interactive, responsive, and multi-language features',
+    'APP-PAGES-SECTIONS-012: should combine interactive and responsive features',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       await startServerWithSchema({
@@ -422,7 +396,6 @@ test.describe('Page Sections', () => {
                 props: { className: 'px-6 py-3' },
                 interactions: { hover: { scale: 1.05 } },
                 responsive: { md: { props: { className: 'px-8 py-4' } } },
-                i18n: { fr: { content: 'Cliquez-moi' } },
               },
             ],
           },
