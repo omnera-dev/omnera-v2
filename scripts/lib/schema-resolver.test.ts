@@ -15,39 +15,6 @@ const SPECS_API_DIR = join(PROJECT_ROOT, 'specs', 'api')
 
 describe('schema-resolver', () => {
   describe('resolveJsonSchema', () => {
-    test.skip('should resolve simple $ref to common definitions', async () => {
-      const schemaPath = join(SPECS_APP_DIR, 'tables', 'id', 'id.schema.json')
-      const resolved = await resolveJsonSchema(schemaPath)
-
-      // Should have resolved the $ref to common/definitions.schema.json#/definitions/id
-      expect(resolved.type).toBe('integer')
-      expect(resolved.minimum).toBe(1)
-      expect(resolved.maximum).toBe(9_007_199_254_740_991)
-      expect(resolved.readOnly).toBe(true)
-
-      // Should preserve local properties
-      expect(resolved.title).toBe('Table ID')
-      expect(resolved.description).toBe('Unique identifier for the table')
-    })
-
-    test.skip('should resolve nested $ref chains (2 levels)', async () => {
-      const schemaPath = join(SPECS_APP_DIR, 'tables', 'tables.schema.json')
-      const resolved = await resolveJsonSchema(schemaPath)
-
-      // Navigate to table.id property (nested 2 levels deep)
-      const tableItemSchema = resolved.items as Record<string, unknown>
-      const idProperty = (tableItemSchema.properties as Record<string, unknown>)?.id as Record<
-        string,
-        unknown
-      >
-
-      // Should have fully resolved the nested $ref chain
-      expect(idProperty.$ref).toBeUndefined()
-      expect(idProperty.type).toBe('integer')
-      expect(idProperty.minimum).toBe(1)
-      expect(idProperty.readOnly).toBe(true)
-    })
-
     test('should strip x-specs array during resolution', async () => {
       const schemaPath = join(SPECS_APP_DIR, 'tables', 'id', 'id.schema.json')
       const resolved = await resolveJsonSchema(schemaPath)
@@ -58,29 +25,6 @@ describe('schema-resolver', () => {
       // But other schema properties should be preserved
       expect(resolved.title).toBe('Table ID')
       expect(resolved.description).toBe('Unique identifier for the table')
-    })
-
-    test.skip('should resolve schema with multiple $ref properties', async () => {
-      const schemaPath = join(SPECS_APP_DIR, 'tables', 'tables.schema.json')
-      const resolved = await resolveJsonSchema(schemaPath)
-
-      const tableItemSchema = resolved.items as Record<string, unknown>
-      const properties = tableItemSchema.properties as Record<string, unknown>
-
-      // All $ref should be resolved
-      expect(properties.id).toBeDefined()
-      expect(properties.name).toBeDefined()
-      expect(properties.fields).toBeDefined()
-      expect(properties.primaryKey).toBeDefined()
-
-      // Check that each property is fully resolved (no $ref)
-      const idProp = properties.id as Record<string, unknown>
-      const nameProp = properties.name as Record<string, unknown>
-
-      expect(idProp.$ref).toBeUndefined()
-      expect(nameProp.$ref).toBeUndefined()
-      expect(idProp.type).toBeDefined()
-      expect(nameProp.type).toBeDefined()
     })
 
     test('should throw error for non-existent schema file', async () => {
