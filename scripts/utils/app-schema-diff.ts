@@ -82,70 +82,84 @@ function stripExamplesAndSpecs(obj: unknown): unknown {
 }
 
 /**
- * Recursively count all properties across all schema files (including duplicates from anyOf/oneOf)
+ * Recursively extract all property paths and count properties across all schema files
  *
- * This counts total schema complexity rather than unique property paths.
- * For anyOf with 30 field types, we count properties from ALL field types, not just unique names.
+ * This collects full property paths like "pages.blocks.button.label" while also
+ * counting total properties from ALL anyOf/oneOf branches.
  */
-async function countSchemaProperties(
+async function extractSchemaProperties(
   schema: unknown,
   baseDir: string,
-  visited: Set<string> = new Set()
-): Promise<number> {
+  visited: Set<string> = new Set(),
+  currentPath: string = ''
+): Promise<{ count: number; paths: string[] }> {
   if (typeof schema !== 'object' || schema === null) {
-    return 0
+    return { count: 0, paths: [] }
   }
 
   const obj = schema as Record<string, unknown>
   let count = 0
+  const paths: string[] = []
 
-  // Handle $ref - resolve it and count properties from the referenced schema
+  // Handle $ref - resolve it and extract properties from the referenced schema
   if ('$ref' in obj && typeof obj.$ref === 'string') {
     const resolved = await resolveRef(obj.$ref, baseDir, visited)
     if (resolved) {
       // Update baseDir to the directory of the resolved file
       const refWithoutFragment = obj.$ref.split('#')[0]
       const newBaseDir = dirname(resolve(baseDir, refWithoutFragment))
-      count += await countSchemaProperties(resolved, newBaseDir, visited)
+      const result = await extractSchemaProperties(resolved, newBaseDir, visited, currentPath)
+      count += result.count
+      paths.push(...result.paths)
     }
     // Don't continue processing this object - the $ref is the only thing that matters
-    return count
+    return { count, paths }
   }
 
-  // Count object properties
+  // Extract object properties
   if ('properties' in obj && typeof obj.properties === 'object' && obj.properties !== null) {
     const properties = obj.properties as Record<string, unknown>
 
-    for (const [, value] of Object.entries(properties)) {
+    for (const [propName, value] of Object.entries(properties)) {
       count++ // Count this property
-      // Recursively count nested properties
-      count += await countSchemaProperties(value, baseDir, visited)
+      const propPath = currentPath ? `${currentPath}.${propName}` : propName
+      paths.push(propPath)
+
+      // Recursively extract nested properties
+      const result = await extractSchemaProperties(value, baseDir, visited, propPath)
+      count += result.count
+      paths.push(...result.paths)
     }
   }
 
   // Handle array items
   if ('items' in obj && typeof obj.items === 'object' && obj.items !== null) {
-    count += await countSchemaProperties(obj.items, baseDir, visited)
+    const result = await extractSchemaProperties(obj.items, baseDir, visited, currentPath + '[]')
+    count += result.count
+    paths.push(...result.paths)
   }
 
-  // Handle oneOf/anyOf/allOf schemas - count properties from ALL branches
+  // Handle oneOf/anyOf/allOf schemas - extract properties from ALL branches
   for (const combiner of ['oneOf', 'anyOf', 'allOf']) {
     if (combiner in obj && Array.isArray(obj[combiner])) {
       const schemas = obj[combiner] as unknown[]
-      for (const subSchema of schemas) {
-        count += await countSchemaProperties(subSchema, baseDir, visited)
+      for (let i = 0; i < schemas.length; i++) {
+        const branchPath = currentPath ? `${currentPath}[${combiner}:${i}]` : `[${combiner}:${i}]`
+        const result = await extractSchemaProperties(schemas[i], baseDir, visited, branchPath)
+        count += result.count
+        paths.push(...result.paths)
       }
     }
   }
 
-  return count
+  return { count, paths }
 }
 
 /**
  * Compare two app schemas and calculate implementation progress
  *
- * Counts total properties across all schema files (including anyOf/oneOf branches).
- * This measures total schema complexity rather than unique property paths.
+ * Extracts all property paths across all schema files (including anyOf/oneOf branches).
+ * This provides detailed tracking of which properties are implemented vs missing.
  */
 export async function compareAppSchemas(
   goalSchemaPath: string,
@@ -166,27 +180,40 @@ export async function compareAppSchemas(
   const goalBaseDir = dirname(goalSchemaPath)
   const currentBaseDir = dirname(currentSchemaPath)
 
-  // Count all properties across all schema files (including duplicates from anyOf)
-  const goalPropertyCount = await countSchemaProperties(goalSchemaClean, goalBaseDir)
-  const currentPropertyCount = await countSchemaProperties(currentSchemaClean, currentBaseDir)
+  // Extract all property paths and counts from both schemas
+  const goalResult = await extractSchemaProperties(goalSchemaClean, goalBaseDir)
+  const currentResult = await extractSchemaProperties(currentSchemaClean, currentBaseDir)
 
-  // For now, we can't do a precise diff of which properties are missing
-  // because we're counting total complexity rather than tracking unique paths.
-  // We can only estimate based on property counts.
-  const implementedCount = Math.min(currentPropertyCount, goalPropertyCount)
-  const missingCount = Math.max(0, goalPropertyCount - currentPropertyCount)
+  // Convert paths to Sets for efficient comparison
+  const goalPathsSet = new Set(goalResult.paths)
+  const currentPathsSet = new Set(currentResult.paths)
 
+  // Find implemented and missing paths
+  const implementedPaths: string[] = []
+  const missingPaths: string[] = []
+
+  for (const path of goalResult.paths) {
+    if (currentPathsSet.has(path)) {
+      implementedPaths.push(path)
+    } else {
+      missingPaths.push(path)
+    }
+  }
+
+  // Calculate completion percentage based on property counts
+  const implementedCount = Math.min(currentResult.count, goalResult.count)
+  const missingCount = Math.max(0, goalResult.count - currentResult.count)
   const completionPercent =
-    goalPropertyCount > 0 ? Math.round((implementedCount / goalPropertyCount) * 100) : 0
+    goalResult.count > 0 ? Math.round((implementedCount / goalResult.count) * 100) : 0
 
   return {
-    totalProperties: goalPropertyCount,
-    currentTotalProperties: currentPropertyCount,
+    totalProperties: goalResult.count,
+    currentTotalProperties: currentResult.count,
     implementedProperties: implementedCount,
     missingProperties: missingCount,
     completionPercent,
-    missingPropertyPaths: [], // Not applicable with count-based approach
-    implementedPropertyPaths: [], // Not applicable with count-based approach
-    currentPropertyPaths: [], // Not applicable with count-based approach
+    missingPropertyPaths: missingPaths.sort(),
+    implementedPropertyPaths: implementedPaths.sort(),
+    currentPropertyPaths: currentResult.paths.sort(),
   }
 }

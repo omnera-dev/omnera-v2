@@ -9,10 +9,112 @@
 📦 **Current**: `schemas/0.0.1/app.schema.json` (312 properties)
 📊 **Completion**: 25% (312/1236 implemented)
 
-### Missing Properties (924)
+### Missing Property Paths (1036)
 
-| Property Path |
-| ------------- |
+| Property Path                                                          |
+| ---------------------------------------------------------------------- |
+| `automations`                                                          |
+| `automations[].actions`                                                |
+| `automations[].actions[][anyOf:0].action`                              |
+| `automations[].actions[][anyOf:0].name`                                |
+| `automations[].actions[][anyOf:0].params`                              |
+| `automations[].actions[][anyOf:0].params.headers`                      |
+| `automations[].actions[][anyOf:0].params.url`                          |
+| `automations[].actions[][anyOf:0].service`                             |
+| `automations[].actions[][anyOf:10].account`                            |
+| `automations[].actions[][anyOf:10].action`                             |
+| `automations[].actions[][anyOf:10].name`                               |
+| `automations[].actions[][anyOf:10].params`                             |
+| `automations[].actions[][anyOf:10].params.baseId`                      |
+| `automations[].actions[][anyOf:10].params.cursor`                      |
+| `automations[].actions[][anyOf:10].params.limit`                       |
+| `automations[].actions[][anyOf:10].params.webhookId`                   |
+| `automations[].actions[][anyOf:10].service`                            |
+| `automations[].actions[][anyOf:11].account`                            |
+| `automations[].actions[][anyOf:11].action`                             |
+| `automations[].actions[][anyOf:11].name`                               |
+| `automations[].actions[][anyOf:11].params`                             |
+| `automations[].actions[][anyOf:11].params.range`                       |
+| `automations[].actions[][anyOf:11].params.spreadsheetId`               |
+| `automations[].actions[][anyOf:11].params.values`                      |
+| `automations[].actions[][anyOf:11].service`                            |
+| `automations[].actions[][anyOf:12].account`                            |
+| `automations[].actions[][anyOf:12].action`                             |
+| `automations[].actions[][anyOf:12].name`                               |
+| `automations[].actions[][anyOf:12].params`                             |
+| `automations[].actions[][anyOf:12].params.bcc`                         |
+| `automations[].actions[][anyOf:12].params.cc`                          |
+| `automations[].actions[][anyOf:12].params.from`                        |
+| `automations[].actions[][anyOf:12].params.html`                        |
+| `automations[].actions[][anyOf:12].params.name`                        |
+| `automations[].actions[][anyOf:12].params.subject`                     |
+| `automations[].actions[][anyOf:12].params.text`                        |
+| `automations[].actions[][anyOf:12].params.to`                          |
+| `automations[].actions[][anyOf:12].service`                            |
+| `automations[].actions[][anyOf:13].account`                            |
+| `automations[].actions[][anyOf:13].action`                             |
+| `automations[].actions[][anyOf:13].name`                               |
+| `automations[].actions[][anyOf:13].params`                             |
+| `automations[].actions[][anyOf:13].params.leadType`                    |
+| `automations[].actions[][anyOf:13].params.organizationId`              |
+| `automations[].actions[][anyOf:13].params.webhook`                     |
+| `automations[].actions[][anyOf:13].service`                            |
+| `automations[].actions[][anyOf:14].account`                            |
+| `automations[].actions[][anyOf:14].action`                             |
+| `automations[].actions[][anyOf:14].name`                               |
+| `automations[].actions[][anyOf:14].params`                             |
+| `automations[].actions[][anyOf:14].params.organizationId`              |
+| `automations[].actions[][anyOf:14].service`                            |
+| `automations[].actions[][anyOf:15].account`                            |
+| `automations[].actions[][anyOf:15].action`                             |
+| `automations[].actions[][anyOf:15].name`                               |
+| `automations[].actions[][anyOf:15].params`                             |
+| `automations[].actions[][anyOf:15].params.leadResponseId`              |
+| `automations[].actions[][anyOf:15].service`                            |
+| `automations[].actions[][anyOf:16].account`                            |
+| `automations[].actions[][anyOf:16].action`                             |
+| `automations[].actions[][anyOf:16].name`                               |
+| `automations[].actions[][anyOf:16].params`                             |
+| `automations[].actions[][anyOf:16].params.appId`                       |
+| `automations[].actions[][anyOf:16].params.appSecret`                   |
+| `automations[].actions[][anyOf:16].service`                            |
+| `automations[].actions[][anyOf:17].account`                            |
+| `automations[].actions[][anyOf:17].action`                             |
+| `automations[].actions[][anyOf:17].name`                               |
+| `automations[].actions[][anyOf:17].params`                             |
+| `automations[].actions[][anyOf:17].params.leadgenId`                   |
+| `automations[].actions[][anyOf:17].service`                            |
+| `automations[].actions[][anyOf:18].account`                            |
+| `automations[].actions[][anyOf:18].action`                             |
+| `automations[].actions[][anyOf:18].name`                               |
+| `automations[].actions[][anyOf:18].params`                             |
+| `automations[].actions[][anyOf:18].params.children`                    |
+| `automations[].actions[][anyOf:18].params.cover`                       |
+| `automations[].actions[][anyOf:18].params.cover.external`              |
+| `automations[].actions[][anyOf:18].params.cover.external.url`          |
+| `automations[].actions[][anyOf:18].params.cover.type`                  |
+| `automations[].actions[][anyOf:18].params.icon`                        |
+| `automations[].actions[][anyOf:18].params.icon[anyOf:0].emoji`         |
+| `automations[].actions[][anyOf:18].params.icon[anyOf:0].type`          |
+| `automations[].actions[][anyOf:18].params.icon[anyOf:1].external`      |
+| `automations[].actions[][anyOf:18].params.icon[anyOf:1].external.url`  |
+| `automations[].actions[][anyOf:18].params.icon[anyOf:1].type`          |
+| `automations[].actions[][anyOf:18].params.parent`                      |
+| `automations[].actions[][anyOf:18].params.parent[anyOf:0].database_id` |
+| `automations[].actions[][anyOf:18].params.parent[anyOf:0].type`        |
+| `automations[].actions[][anyOf:18].params.parent[anyOf:1].page_id`     |
+| `automations[].actions[][anyOf:18].params.parent[anyOf:1].type`        |
+| `automations[].actions[][anyOf:18].params.parent[anyOf:2].type`        |
+| `automations[].actions[][anyOf:18].params.parent[anyOf:2].workspace`   |
+| `automations[].actions[][anyOf:18].params.properties`                  |
+| `automations[].actions[][anyOf:18].service`                            |
+| `automations[].actions[][anyOf:19].account`                            |
+| `automations[].actions[][anyOf:19].action`                             |
+| `automations[].actions[][anyOf:19].name`                               |
+| `automations[].actions[][anyOf:19].params`                             |
+| `automations[].actions[][anyOf:19].params.filterProperties`            |
+
+_...and 936 more property paths_
 
 ---
 
