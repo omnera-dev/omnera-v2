@@ -97,7 +97,6 @@ git push origin main               # Triggers release ONLY with "release:" type
 
 # Agent Workflows (TDD Pipeline)
 # See: @docs/development/tdd-automation-pipeline.md for complete TDD automation guide
-# See: @docs/development/agent-workflows.md for agent collaboration patterns
 ```
 
 ## Coding Standards (Critical Rules)

@@ -70,7 +70,7 @@
 ## Development Workflows
 
 - `@docs/development/tdd-automation-pipeline.md` - **TDD Automation Pipeline** - Automated test fixing via GitHub Actions + Claude Code
-- `@docs/development/agent-workflows.md` - Complete TDD pipeline with agents and skills collaboration guide
+- `@docs/development/copyright-headers.md` - Copyright header automation and management
 - `@.claude/SKILLS.md` - Skills reference (autonomous utilities for validation, translation, and code quality)
 
 ---

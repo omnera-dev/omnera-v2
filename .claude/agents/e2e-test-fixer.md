@@ -653,7 +653,7 @@ import { ThemeSchema } from '@/domain/models/app/theme'
 
 ### Workflow Reference
 
-See `@docs/development/agent-workflows.md` for complete TDD pipeline showing how all agents collaborate from specification to refactoring.
+See `@docs/development/tdd-automation-pipeline.md` for complete TDD automation pipeline documentation.
 
 **Your Position in Pipeline**:
 ```
