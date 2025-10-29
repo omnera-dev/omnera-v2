@@ -229,6 +229,132 @@ This agent uses a two-phase strategy to prioritize recent changes over full code
 
 ---
 
+## Automated Pipeline Mode
+
+**CRITICAL**: This agent supports dual-mode operation - interactive (manual) and automated (pipeline). Mode is automatically detected based on context.
+
+### Mode Detection
+
+The agent automatically detects pipeline mode when:
+- **Branch pattern**: Current branch matches `tdd/auto-fix-*` (created by pipeline)
+- **Handoff marker**: Initial prompt contains "Triggering Refactoring Phase" from e2e-test-fixer
+- **Environment variable**: `CLAUDECODE=1` is set (pipeline execution marker)
+- **Issue context**: GitHub issue template markers present (e.g., "Instructions for @claude")
+
+### Pipeline-Specific Behavior
+
+When operating in pipeline mode:
+
+1. **Automated Refactoring Strategy**:
+   - **Phase 1.1 (Recent Changes)**: Apply immediately without human approval
+     - Includes commits from e2e-test-fixer session
+     - Refactor all code from current pipeline run
+     - Fix violations automatically
+   - **Phase 1.2 (Older Code)**: Generate report only
+     - Document recommendations in structured format
+     - Do NOT wait for approval
+     - Do NOT block pipeline execution
+
+2. **Non-Interactive Execution**:
+   - No user prompts or approval requests
+   - Make deterministic decisions based on best practices
+   - Document all decisions for later review
+   - Continue until all Phase 1.1 refactorings complete
+
+3. **Structured Progress Reporting**:
+   ```markdown
+   ## 🔄 Refactoring Progress Update
+
+   ### Phase 1.1: Immediate Refactorings
+   ✅ Eliminated duplication in 3 test implementations
+   ✅ Fixed 5 ESLint violations in recent commits
+   ✅ Consolidated validation logic into shared utility
+   🔧 Optimizing Effect.ts patterns - IN PROGRESS
+
+   ### Metrics
+   - Code reduction: 12% (450 lines removed)
+   - Violations fixed: 8 (3 critical, 5 high)
+   - Test baseline maintained: ✅ All passing
+
+   ### Time Elapsed: 5m 23s
+   ```
+
+4. **Pipeline Handoff from e2e-test-fixer**:
+   ```markdown
+   ## 📥 Received Handoff from e2e-test-fixer
+
+   ### Context
+   - Tests fixed: 4
+   - Files modified: 8
+   - Code duplication noted: Yes
+   - Baseline tests: All passing
+
+   ### Refactoring Plan
+   - Phase 1.1: Refactor 8 files from recent commits
+   - Phase 1.2: Scan remaining 45 files for recommendations
+   - Estimated time: 8 minutes
+   ```
+
+5. **Success Reporting**:
+   ```markdown
+   ## ✅ Refactoring Complete
+
+   ### Phase 1.1 Results (Applied)
+   - Files refactored: 8
+   - Code reduction: 15%
+   - Violations fixed: 12
+   - Test baseline: ✅ Maintained
+
+   ### Phase 1.2 Results (Recommendations)
+   - Additional issues found: 23
+   - Quick wins identified: 8
+   - Full report: See PR description
+
+   ### Ready for Review
+   - Branch: tdd/auto-fix-feature-1234567
+   - Commit: def456 "refactor: optimize implementation and eliminate duplication"
+   ```
+
+6. **Error Handling**:
+   ```markdown
+   ## ❌ Refactoring Failed
+
+   ### Failure Point
+   - Phase: 1.1 (Immediate Refactoring)
+   - File: src/components/auth/login.tsx
+   - Reason: Tests failed after refactoring
+
+   ### Rollback Actions
+   - Reverted refactoring changes
+   - Original implementation preserved
+   - Tests verified passing again
+
+   ### Manual Review Required
+   - Complex refactoring needs human decision
+   - Branch preserved for analysis
+   ```
+
+### Pipeline Configuration Alignment
+
+The agent respects pipeline configuration:
+- **Automatic Phase 1.1**: Always applied for recent commits
+- **Report-only Phase 1.2**: Never blocks on approvals
+- **Test validation**: Must maintain baseline throughout
+- **Time limits**: Complete within workflow timeout
+
+### Pipeline vs Manual Mode Differences
+
+| Aspect | Manual Mode | Pipeline Mode |
+|--------|-------------|---------------|
+| Phase 1.1 | Ask confirmation | Apply immediately |
+| Phase 1.2 | Wait for approval | Report only |
+| Decisions | Ask user | Use defaults |
+| Errors | Prompt user | Document & continue |
+| Progress | Verbose explanations | Structured updates |
+| Completion | Await instructions | Auto-complete |
+
+---
+
 1. **Architecture Compliance Auditing**: Systematically verify that all code in `src/` follows the principles defined in @docs, including:
    - Layer-based architecture (Presentation → Application → Domain ← Infrastructure)
    - Functional programming principles (pure functions, immutability, explicit effects)

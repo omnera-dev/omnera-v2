@@ -53,3 +53,4 @@ drizzle-kit.log
 
 # Keep generated migrations
 !drizzle/*.sql
+test-output.log

@@ -1,7 +1,7 @@
 {
-  "timestamp": "2025-10-29T21:00:04.411Z",
-  "totalFiles": 69,
-  "totalFixmeTests": 801,
+  "timestamp": "2025-10-29T21:57:59.735Z",
+  "totalFiles": 68,
+  "totalFixmeTests": 793,
   "files": [
     {
       "path": "specs/app/name/name.spec.ts",
@@ -32,6 +32,14 @@
       "feature": "app/pages/pages",
       "fixmeCount": 18,
       "totalTests": 18,
+      "priority": 8,
+      "tags": ["@spec", "@regression"]
+    },
+    {
+      "path": "specs/app/pages/layout/footer/footer.spec.ts",
+      "feature": "app/pages/layout/footer/footer",
+      "fixmeCount": 15,
+      "totalTests": 15,
       "priority": 8,
       "tags": ["@spec", "@regression"]
     },
@@ -68,18 +76,18 @@
       "tags": ["@spec", "@regression"]
     },
     {
-      "path": "specs/app/pages/layout/footer/footer.spec.ts",
-      "feature": "app/pages/layout/footer/footer",
-      "fixmeCount": 15,
-      "totalTests": 15,
-      "priority": 8,
-      "tags": ["@spec", "@regression"]
-    },
-    {
       "path": "specs/app/pages/sections/sections.spec.ts",
       "feature": "app/pages/sections/sections",
       "fixmeCount": 14,
       "totalTests": 14,
+      "priority": 8,
+      "tags": ["@spec", "@regression"]
+    },
+    {
+      "path": "specs/app/pages/meta/meta.spec.ts",
+      "feature": "app/pages/meta/meta",
+      "fixmeCount": 13,
+      "totalTests": 13,
       "priority": 8,
       "tags": ["@spec", "@regression"]
     },
@@ -92,8 +100,8 @@
       "tags": ["@spec", "@regression"]
     },
     {
-      "path": "specs/app/pages/meta/meta.spec.ts",
-      "feature": "app/pages/meta/meta",
+      "path": "specs/app/pages/meta/analytics/analytics.spec.ts",
+      "feature": "app/pages/meta/analytics/analytics",
       "fixmeCount": 13,
       "totalTests": 13,
       "priority": 8,
@@ -110,14 +118,6 @@
     {
       "path": "specs/app/pages/common/interactions/click-interaction.spec.ts",
       "feature": "app/pages/common/interactions/click-interaction",
-      "fixmeCount": 13,
-      "totalTests": 13,
-      "priority": 8,
-      "tags": ["@spec", "@regression"]
-    },
-    {
-      "path": "specs/app/pages/meta/analytics/analytics.spec.ts",
-      "feature": "app/pages/meta/analytics/analytics",
       "fixmeCount": 13,
       "totalTests": 13,
       "priority": 8,
@@ -148,6 +148,22 @@
       "tags": ["@spec", "@regression"]
     },
     {
+      "path": "specs/app/pages/layout/navigation/navigation.spec.ts",
+      "feature": "app/pages/layout/navigation/navigation",
+      "fixmeCount": 13,
+      "totalTests": 13,
+      "priority": 8,
+      "tags": ["@spec", "@regression"]
+    },
+    {
+      "path": "specs/app/pages/layout/sidebar/sidebar.spec.ts",
+      "feature": "app/pages/layout/sidebar/sidebar",
+      "fixmeCount": 13,
+      "totalTests": 13,
+      "priority": 8,
+      "tags": ["@spec", "@regression"]
+    },
+    {
       "path": "specs/app/pages/meta/structured-data/product.spec.ts",
       "feature": "app/pages/meta/structured-data/product",
       "fixmeCount": 13,
@@ -164,24 +180,16 @@
       "tags": ["@spec", "@regression"]
     },
     {
-      "path": "specs/app/pages/layout/sidebar/sidebar.spec.ts",
-      "feature": "app/pages/layout/sidebar/sidebar",
-      "fixmeCount": 13,
-      "totalTests": 13,
-      "priority": 8,
-      "tags": ["@spec", "@regression"]
-    },
-    {
-      "path": "specs/app/pages/layout/navigation/navigation.spec.ts",
-      "feature": "app/pages/layout/navigation/navigation",
-      "fixmeCount": 13,
-      "totalTests": 13,
-      "priority": 8,
-      "tags": ["@spec", "@regression"]
-    },
-    {
       "path": "specs/app/pages/scripts/scripts.spec.ts",
       "feature": "app/pages/scripts/scripts",
+      "fixmeCount": 11,
+      "totalTests": 11,
+      "priority": 8,
+      "tags": ["@spec", "@regression"]
+    },
+    {
+      "path": "specs/app/pages/path/path.spec.ts",
+      "feature": "app/pages/path/path",
       "fixmeCount": 11,
       "totalTests": 11,
       "priority": 8,
@@ -204,24 +212,16 @@
       "tags": ["@spec", "@regression"]
     },
     {
-      "path": "specs/app/pages/path/path.spec.ts",
-      "feature": "app/pages/path/path",
+      "path": "specs/app/pages/scripts/features/features.spec.ts",
+      "feature": "app/pages/scripts/features/features",
       "fixmeCount": 11,
       "totalTests": 11,
       "priority": 8,
       "tags": ["@spec", "@regression"]
     },
     {
-      "path": "specs/app/pages/scripts/inline-scripts/inline-scripts.spec.ts",
-      "feature": "app/pages/scripts/inline-scripts/inline-scripts",
-      "fixmeCount": 11,
-      "totalTests": 11,
-      "priority": 8,
-      "tags": ["@spec", "@regression"]
-    },
-    {
-      "path": "specs/app/pages/layout/banner/banner.spec.ts",
-      "feature": "app/pages/layout/banner/banner",
+      "path": "specs/app/pages/common/interactions/hover-interaction.spec.ts",
+      "feature": "app/pages/common/interactions/hover-interaction",
       "fixmeCount": 11,
       "totalTests": 11,
       "priority": 8,
@@ -244,8 +244,32 @@
       "tags": ["@spec", "@regression"]
     },
     {
-      "path": "specs/app/pages/common/interactions/hover-interaction.spec.ts",
-      "feature": "app/pages/common/interactions/hover-interaction",
+      "path": "specs/app/pages/scripts/inline-scripts/inline-scripts.spec.ts",
+      "feature": "app/pages/scripts/inline-scripts/inline-scripts",
+      "fixmeCount": 11,
+      "totalTests": 11,
+      "priority": 8,
+      "tags": ["@spec", "@regression"]
+    },
+    {
+      "path": "specs/app/pages/layout/navigation/cta-button.spec.ts",
+      "feature": "app/pages/layout/navigation/cta-button",
+      "fixmeCount": 11,
+      "totalTests": 11,
+      "priority": 8,
+      "tags": ["@spec", "@regression"]
+    },
+    {
+      "path": "specs/app/pages/layout/navigation/nav-links.spec.ts",
+      "feature": "app/pages/layout/navigation/nav-links",
+      "fixmeCount": 11,
+      "totalTests": 11,
+      "priority": 8,
+      "tags": ["@spec", "@regression"]
+    },
+    {
+      "path": "specs/app/pages/layout/banner/banner.spec.ts",
+      "feature": "app/pages/layout/banner/banner",
       "fixmeCount": 11,
       "totalTests": 11,
       "priority": 8,
@@ -278,30 +302,6 @@
     {
       "path": "specs/app/pages/meta/structured-data/faq-page.spec.ts",
       "feature": "app/pages/meta/structured-data/faq-page",
-      "fixmeCount": 11,
-      "totalTests": 11,
-      "priority": 8,
-      "tags": ["@spec", "@regression"]
-    },
-    {
-      "path": "specs/app/pages/scripts/features/features.spec.ts",
-      "feature": "app/pages/scripts/features/features",
-      "fixmeCount": 11,
-      "totalTests": 11,
-      "priority": 8,
-      "tags": ["@spec", "@regression"]
-    },
-    {
-      "path": "specs/app/pages/layout/navigation/cta-button.spec.ts",
-      "feature": "app/pages/layout/navigation/cta-button",
-      "fixmeCount": 11,
-      "totalTests": 11,
-      "priority": 8,
-      "tags": ["@spec", "@regression"]
-    },
-    {
-      "path": "specs/app/pages/layout/navigation/nav-links.spec.ts",
-      "feature": "app/pages/layout/navigation/nav-links",
       "fixmeCount": 11,
       "totalTests": 11,
       "priority": 8,
@@ -520,14 +520,6 @@
       "feature": "app/languages/language-config",
       "fixmeCount": 9,
       "totalTests": 9,
-      "priority": 10,
-      "tags": ["@spec", "@regression"]
-    },
-    {
-      "path": "specs/tdd-automation/fixtures/simple-feature.spec.ts",
-      "feature": "tdd-automation/fixtures/simple-feature",
-      "fixmeCount": 8,
-      "totalTests": 10,
       "priority": 10,
       "tags": ["@spec", "@regression"]
     },
