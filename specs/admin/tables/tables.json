@@ -1,7 +1,7 @@
 {
   "title": "Admin Tables",
   "description": "Administrative interface for managing database tables, including CRUD operations on table records. Provides UI for viewing, creating, updating, and deleting records, as well as API endpoints for programmatic access.",
-  "specs": [
+  "x-specs": [
     {
       "id": "ADMIN-TABLES-001",
       "given": "application is running",

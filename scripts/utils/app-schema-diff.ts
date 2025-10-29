@@ -6,7 +6,7 @@
  */
 
 import { readFile } from 'node:fs/promises'
-import { dirname, join, resolve } from 'node:path'
+import { dirname, resolve, relative } from 'node:path'
 
 export interface AppSchemaComparison {
   totalProperties: number
@@ -82,74 +82,70 @@ function stripExamplesAndSpecs(obj: unknown): unknown {
 }
 
 /**
- * Recursively extract all property paths from a JSON Schema
+ * Recursively count all properties across all schema files (including duplicates from anyOf/oneOf)
  *
- * Returns an array of dot-notation paths like:
- * - "name"
- * - "tables"
- * - "tables.items.id"
- * - "tables.items.fields.items.type"
+ * This counts total schema complexity rather than unique property paths.
+ * For anyOf with 30 field types, we count properties from ALL field types, not just unique names.
  */
-async function extractPropertyPaths(
+async function countSchemaProperties(
   schema: unknown,
   baseDir: string,
-  prefix = '',
   visited: Set<string> = new Set()
-): Promise<string[]> {
+): Promise<number> {
   if (typeof schema !== 'object' || schema === null) {
-    return []
+    return 0
   }
 
   const obj = schema as Record<string, unknown>
-  const paths: string[] = []
+  let count = 0
 
-  // Handle $ref - resolve it and extract paths from the referenced schema
+  // Handle $ref - resolve it and count properties from the referenced schema
   if ('$ref' in obj && typeof obj.$ref === 'string') {
     const resolved = await resolveRef(obj.$ref, baseDir, visited)
     if (resolved) {
-      paths.push(...(await extractPropertyPaths(resolved, baseDir, prefix, visited)))
+      // Update baseDir to the directory of the resolved file
+      const refWithoutFragment = obj.$ref.split('#')[0]
+      const newBaseDir = dirname(resolve(baseDir, refWithoutFragment))
+      count += await countSchemaProperties(resolved, newBaseDir, visited)
     }
     // Don't continue processing this object - the $ref is the only thing that matters
-    return paths
+    return count
   }
 
-  // Handle object properties
+  // Count object properties
   if ('properties' in obj && typeof obj.properties === 'object' && obj.properties !== null) {
     const properties = obj.properties as Record<string, unknown>
 
-    for (const [key, value] of Object.entries(properties)) {
-      const path = prefix ? `${prefix}.${key}` : key
-      paths.push(path)
-
-      // Recursively extract nested properties
-      paths.push(...(await extractPropertyPaths(value, baseDir, path, visited)))
+    for (const [, value] of Object.entries(properties)) {
+      count++ // Count this property
+      // Recursively count nested properties
+      count += await countSchemaProperties(value, baseDir, visited)
     }
   }
 
   // Handle array items
   if ('items' in obj && typeof obj.items === 'object' && obj.items !== null) {
-    const itemPath = prefix ? `${prefix}.items` : 'items'
-    paths.push(...(await extractPropertyPaths(obj.items, baseDir, itemPath, visited)))
+    count += await countSchemaProperties(obj.items, baseDir, visited)
   }
 
-  // Handle oneOf/anyOf/allOf schemas
+  // Handle oneOf/anyOf/allOf schemas - count properties from ALL branches
   for (const combiner of ['oneOf', 'anyOf', 'allOf']) {
     if (combiner in obj && Array.isArray(obj[combiner])) {
       const schemas = obj[combiner] as unknown[]
       for (const subSchema of schemas) {
-        paths.push(...(await extractPropertyPaths(subSchema, baseDir, prefix, visited)))
+        count += await countSchemaProperties(subSchema, baseDir, visited)
       }
     }
   }
 
-  return paths
+  return count
 }
 
 /**
  * Compare two app schemas and calculate implementation progress
  *
- * Manually resolves $ref pointers while skipping documentation examples (x-specs, specs, x-test).
- * This ensures accurate diff calculation between modular goal schemas and flattened current schemas.
+ * Counts total properties across all schema files (including anyOf/oneOf branches).
+ * This measures total schema complexity rather than unique property paths.
  */
 export async function compareAppSchemas(
   goalSchemaPath: string,
@@ -170,34 +166,27 @@ export async function compareAppSchemas(
   const goalBaseDir = dirname(goalSchemaPath)
   const currentBaseDir = dirname(currentSchemaPath)
 
-  // Extract all property paths recursively (resolving $refs manually)
-  const goalPropertiesRaw = await extractPropertyPaths(goalSchemaClean, goalBaseDir)
-  const currentPropertiesRaw = await extractPropertyPaths(currentSchemaClean, currentBaseDir)
+  // Count all properties across all schema files (including duplicates from anyOf)
+  const goalPropertyCount = await countSchemaProperties(goalSchemaClean, goalBaseDir)
+  const currentPropertyCount = await countSchemaProperties(currentSchemaClean, currentBaseDir)
 
-  // Deduplicate paths (oneOf/anyOf can create duplicates)
-  const goalProperties = Array.from(new Set(goalPropertiesRaw))
-  const currentProperties = Array.from(new Set(currentPropertiesRaw))
-
-  // Create sets for efficient lookup
-  const currentPropsSet = new Set(currentProperties)
-
-  // Calculate diff
-  const missingPaths = goalProperties.filter((prop) => !currentPropsSet.has(prop))
-  const implementedPaths = goalProperties.filter((prop) => currentPropsSet.has(prop))
+  // For now, we can't do a precise diff of which properties are missing
+  // because we're counting total complexity rather than tracking unique paths.
+  // We can only estimate based on property counts.
+  const implementedCount = Math.min(currentPropertyCount, goalPropertyCount)
+  const missingCount = Math.max(0, goalPropertyCount - currentPropertyCount)
 
   const completionPercent =
-    goalProperties.length > 0
-      ? Math.round((implementedPaths.length / goalProperties.length) * 100)
-      : 0
+    goalPropertyCount > 0 ? Math.round((implementedCount / goalPropertyCount) * 100) : 0
 
   return {
-    totalProperties: goalProperties.length,
-    currentTotalProperties: currentProperties.length,
-    implementedProperties: implementedPaths.length,
-    missingProperties: missingPaths.length,
+    totalProperties: goalPropertyCount,
+    currentTotalProperties: currentPropertyCount,
+    implementedProperties: implementedCount,
+    missingProperties: missingCount,
     completionPercent,
-    missingPropertyPaths: missingPaths.sort(),
-    implementedPropertyPaths: implementedPaths.sort(),
-    currentPropertyPaths: currentProperties.sort(),
+    missingPropertyPaths: [], // Not applicable with count-based approach
+    implementedPropertyPaths: [], // Not applicable with count-based approach
+    currentPropertyPaths: [], // Not applicable with count-based approach
   }
 }

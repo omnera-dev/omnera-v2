@@ -1,7 +1,7 @@
 {
   "title": "Connection Management (Admin)",
   "description": "Admin-level specifications for connection lifecycle management across all services",
-  "specs": [
+  "x-specs": [
     {
       "id": "ADMIN-CONNECTIONS-001",
       "given": "user is authenticated in a workspace",
