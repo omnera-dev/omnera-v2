@@ -73,8 +73,8 @@ test.describe('Client Scripts Configuration', () => {
         ],
       })
       await page.goto('/')
-      const html = await page.locator('html').getAttribute('data-features')
-      expect(html).toBeTruthy()
+      const html = page.locator('html')
+      await expect(html).toHaveAttribute('data-features', )
     }
   )
 
@@ -262,11 +262,11 @@ test.describe('Client Scripts Configuration', () => {
         ],
       })
       await page.goto('/')
-      const homeHtml = await page.locator('html').getAttribute('data-features')
-      expect(homeHtml).toBeTruthy()
+      const homeHtml = page.locator('html')
+      await expect(homeHtml).toHaveAttribute('data-features', )
       await page.goto('/blog')
-      const blogHtml = await page.locator('html').getAttribute('data-features')
-      expect(blogHtml).toBeFalsy()
+      const blogHtml = page.locator('html')
+      await expect(blogHtml).toHaveAttribute('data-features', )
     }
   )
 

@@ -109,7 +109,6 @@ test.fixme(
     }
 
     await expect(async () => {
-      // @ts-expect-error - Invalid pattern
       await startServerWithSchema(invalidConfig)
     }).rejects.toThrow(/pattern/)
   }
@@ -238,7 +237,6 @@ test.fixme(
     }
 
     await expect(async () => {
-      // @ts-expect-error - Invalid pattern
       await startServerWithSchema(invalidConfig)
     }).rejects.toThrow(/minimum/)
   }

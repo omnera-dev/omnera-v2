@@ -87,7 +87,7 @@ test.describe('Page Sections', () => {
       await page.goto('/')
       for (const type of componentTypes) {
         const element = page.locator(`[data-component-type="${type}"]`).first()
-        await expect(element).toBeTruthy()
+        expect(element).toBeTruthy()
       }
     }
   )

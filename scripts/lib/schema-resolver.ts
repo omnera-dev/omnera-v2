@@ -97,7 +97,9 @@ export async function resolveJsonSchema(schemaPath: string): Promise<JSONSchema>
         circular: 'ignore', // Handle circular references
         excludedPathMatcher: (path: string) => {
           // Extra safety: skip any paths that contain examples or specs
-          return path.includes('/examples/') || path.includes('/x-specs/') || path.includes('/specs/')
+          return (
+            path.includes('/examples/') || path.includes('/x-specs/') || path.includes('/specs/')
+          )
         },
       },
       resolve: {

@@ -403,7 +403,7 @@ test.describe('Footer Configuration', () => {
         ],
       })
       await page.goto('/')
-      await expect(page.locator('[data-testid="footer"]')).not.toBeVisible()
+      await expect(page.locator('[data-testid="footer"]')).toBeHidden()
     }
   )
 

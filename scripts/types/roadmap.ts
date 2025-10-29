@@ -198,6 +198,16 @@ export interface RoadmapData {
 }
 
 /**
+ * Property group by root property
+ */
+export interface PropertyGroup {
+  rootProperty: string
+  totalProperties: number
+  implementedProperties: number
+  completionPercent: number
+}
+
+/**
  * New roadmap data structure for rewritten generator
  */
 export interface NewRoadmapData {
@@ -210,6 +220,7 @@ export interface NewRoadmapData {
     missingPropertyPaths: string[]
     implementedPropertyPaths: string[]
     currentPropertyPaths: string[]
+    propertyGroups: PropertyGroup[]
   }
   apiSchema: {
     totalEndpoints: number

@@ -149,13 +149,8 @@ ${testBar}
  * Generate App Schema section
  */
 function generateAppSchemaSection(appSchema: NewRoadmapData['appSchema']): string {
-  const {
-    totalProperties,
-    currentTotalProperties,
-    implementedProperties,
-    missingProperties,
-    completionPercent,
-  } = appSchema
+  const { totalProperties, currentTotalProperties, implementedProperties, completionPercent } =
+    appSchema
 
   let section = `## 1. App Schema Progress
 

@@ -83,9 +83,9 @@ test.describe('Page Layout', () => {
 
       // THEN: it should support minimal layout with navigation only
       await expect(page.locator('[data-testid="navigation"]')).toBeVisible()
-      await expect(page.locator('[data-testid="banner"]')).not.toBeVisible()
-      await expect(page.locator('[data-testid="footer"]')).not.toBeVisible()
-      await expect(page.locator('[data-testid="sidebar"]')).not.toBeVisible()
+      await expect(page.locator('[data-testid="banner"]')).toBeHidden()
+      await expect(page.locator('[data-testid="footer"]')).toBeHidden()
+      await expect(page.locator('[data-testid="sidebar"]')).toBeHidden()
     }
   )
 
@@ -238,10 +238,10 @@ test.describe('Page Layout', () => {
       await page.goto('/')
 
       // THEN: it should allow pages without global layout (blank page)
-      await expect(page.locator('[data-testid="banner"]')).not.toBeVisible()
-      await expect(page.locator('[data-testid="navigation"]')).not.toBeVisible()
-      await expect(page.locator('[data-testid="footer"]')).not.toBeVisible()
-      await expect(page.locator('[data-testid="sidebar"]')).not.toBeVisible()
+      await expect(page.locator('[data-testid="banner"]')).toBeHidden()
+      await expect(page.locator('[data-testid="navigation"]')).toBeHidden()
+      await expect(page.locator('[data-testid="footer"]')).toBeHidden()
+      await expect(page.locator('[data-testid="sidebar"]')).toBeHidden()
       await expect(page.locator('[data-testid="page-content"]')).toContainText('Content Only')
     }
   )
@@ -327,13 +327,13 @@ test.describe('Page Layout', () => {
 
       // Home page: no layout
       await page.goto('/')
-      await expect(page.locator('[data-testid="navigation"]')).not.toBeVisible()
-      await expect(page.locator('[data-testid="footer"]')).not.toBeVisible()
+      await expect(page.locator('[data-testid="navigation"]')).toBeHidden()
+      await expect(page.locator('[data-testid="footer"]')).toBeHidden()
 
       // About page: navigation only
       await page.goto('/about')
       await expect(page.locator('[data-testid="navigation"]')).toBeVisible()
-      await expect(page.locator('[data-testid="footer"]')).not.toBeVisible()
+      await expect(page.locator('[data-testid="footer"]')).toBeHidden()
 
       // Docs page: extends default + sidebar
       await page.goto('/docs')
@@ -396,7 +396,7 @@ test.describe('Page Layout', () => {
       // Navigate to about (different layout)
       await page.click('a[href="/about"]')
       await expect(page).toHaveURL('/about')
-      await expect(page.locator('[data-testid="banner"]')).not.toBeVisible()
+      await expect(page.locator('[data-testid="banner"]')).toBeHidden()
       await expect(page.locator('[data-testid="navigation"]')).toBeVisible()
 
       // Focus on workflow continuity, not exhaustive coverage

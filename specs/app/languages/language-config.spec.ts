@@ -254,7 +254,7 @@ test.describe('Language Configuration', () => {
 
       // THEN: it should use default LTR direction and no flag
       await expect(page.locator('html')).toHaveAttribute('dir', 'ltr')
-      await expect(page.locator('[data-testid="language-flag"]')).not.toBeVisible()
+      await expect(page.locator('[data-testid="language-flag"]')).toBeHidden()
       await expect(page.locator('[data-testid="language-option-en-US"]')).toContainText('English')
     }
   )

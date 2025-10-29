@@ -242,11 +242,11 @@ test.describe('Banner Configuration', () => {
       await dismissButton.click()
 
       // THEN: it should allow users to close banner permanently
-      await expect(banner).not.toBeVisible()
+      await expect(banner).toBeHidden()
 
       // Verify persistence
       await page.reload()
-      await expect(banner).not.toBeVisible()
+      await expect(banner).toBeHidden()
     }
   )
 
@@ -306,7 +306,7 @@ test.describe('Banner Configuration', () => {
       await page.goto('/')
 
       // THEN: it should not render banner
-      await expect(page.locator('[data-testid="banner"]')).not.toBeVisible()
+      await expect(page.locator('[data-testid="banner"]')).toBeHidden()
     }
   )
 
@@ -395,7 +395,7 @@ test.describe('Banner Configuration', () => {
       // Navigate back and dismiss
       await page.goto('/')
       await page.click('[data-testid="banner-dismiss"]')
-      await expect(banner).not.toBeVisible()
+      await expect(banner).toBeHidden()
 
       // Focus on workflow continuity, not exhaustive coverage
     }

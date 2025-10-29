@@ -215,7 +215,7 @@ describe('validateSpecsArray', () => {
     const content = {}
     validateSpecsArray(content, 'test.json', 'APP', result, globalIds)
     expect(result.errors).toHaveLength(1)
-    expect(result.errors[0]?.message).toContain('Missing required "specs" array')
+    expect(result.errors[0]?.message).toContain('Missing required "x-specs" or "specs" array')
     expect(result.passed).toBe(false)
   })
 
@@ -239,7 +239,9 @@ describe('validateSpecsArray', () => {
     }
     validateSpecsArray(content, 'test.json', 'APP', result, globalIds)
     expect(result.warnings).toHaveLength(1)
-    expect(result.warnings[0]?.message).toContain('Specs array is empty')
+    expect(result.warnings[0]?.message).toContain(
+      'specs array is empty - no specifications defined'
+    )
   })
 
   test('validates multiple specs', () => {

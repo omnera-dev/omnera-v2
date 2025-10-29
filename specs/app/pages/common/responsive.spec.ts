@@ -138,7 +138,7 @@ test.describe('Responsive Variants', () => {
       // WHEN: viewport changes from mobile to desktop
       await page.setViewportSize({ width: 375, height: 667 })
       await page.goto('/')
-      await expect(page.locator('[data-testid="text"]')).not.toBeVisible()
+      await expect(page.locator('[data-testid="text"]')).toBeHidden()
 
       await page.setViewportSize({ width: 1024, height: 768 })
 

@@ -152,7 +152,8 @@ async function validateSchemaFile(
   validateSpecsArray(content, relativePath, 'APP', result, globalSpecIds)
 
   // 5. Check for co-located test file (optional - warning only)
-  const obj = typeof content === 'object' && content !== null ? (content as Record<string, unknown>) : {}
+  const obj =
+    typeof content === 'object' && content !== null ? (content as Record<string, unknown>) : {}
   const specsKey = 'x-specs' in obj ? 'x-specs' : 'specs' in obj ? 'specs' : null
   const specs = specsKey && Array.isArray(obj[specsKey]) ? (obj[specsKey] as Spec[]) : []
   await validateTestFileCoLocation(path, relativePath, specs, result)
@@ -362,11 +363,7 @@ async function validateRefs(
   }
 }
 
-function findRefs(
-  obj: unknown,
-  refs: string[] = [],
-  currentPath: string[] = []
-): string[] {
+function findRefs(obj: unknown, refs: string[] = [], currentPath: string[] = []): string[] {
   if (typeof obj !== 'object' || obj === null) {
     return refs
   }

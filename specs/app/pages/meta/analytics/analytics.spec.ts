@@ -7,6 +7,12 @@
 
 import { test, expect } from '@/specs/fixtures.ts'
 
+declare global {
+  interface Window {
+    dataLayer: unknown[]
+  }
+}
+
 /**
  * E2E Tests for Analytics Configuration
  *
@@ -110,7 +116,7 @@ test.describe('Analytics Configuration', () => {
       })
       await page.goto('/')
       await expect(page.locator('[data-testid="analytics-google"]')).toBeVisible()
-      await expect(page.locator('[data-testid="analytics-plausible"]')).not.toBeVisible()
+      await expect(page.locator('[data-testid="analytics-plausible"]')).toBeHidden()
     }
   )
 

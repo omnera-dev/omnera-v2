@@ -48,14 +48,14 @@ describe('schema-resolver', () => {
       expect(idProperty.readOnly).toBe(true)
     })
 
-    test('should preserve specs array from original schema', async () => {
+    test('should preserve x-specs array from original schema', async () => {
       const schemaPath = join(SPECS_APP_DIR, 'tables', 'id', 'id.schema.json')
       const resolved = await resolveJsonSchema(schemaPath)
 
-      expect(Array.isArray(resolved.specs)).toBe(true)
-      expect(resolved.specs).toBeDefined()
+      expect(Array.isArray(resolved['x-specs'])).toBe(true)
+      expect(resolved['x-specs']).toBeDefined()
 
-      const specs = resolved.specs as unknown[]
+      const specs = resolved['x-specs'] as unknown[]
       expect(specs.length).toBeGreaterThan(0)
 
       const firstSpec = specs[0] as Record<string, unknown>

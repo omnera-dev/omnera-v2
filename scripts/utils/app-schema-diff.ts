@@ -114,7 +114,7 @@ async function extractSchemaProperties(
     const resolved = await resolveRef(obj.$ref, baseDir, visited)
     if (resolved) {
       // Update baseDir to the directory of the resolved file
-      const refWithoutFragment = obj.$ref.split('#')[0]
+      const refWithoutFragment = obj.$ref.split('#')[0] || ''
       const newBaseDir = dirname(resolve(baseDir, refWithoutFragment))
       const result = await extractSchemaProperties(resolved, newBaseDir, visited, currentPath)
       count += result.count
@@ -170,7 +170,7 @@ function groupPropertiesByRoot(goalPaths: string[], implementedPaths: string[]):
   // Get unique root properties from goal paths
   const rootProperties = new Set<string>()
   for (const path of goalPaths) {
-    const root = path.split('.')[0]!.split('[')[0]! // Get root before . or [
+    const root = (path.split('.')[0] || path).split('[')[0] || path // Get root before . or [
     rootProperties.add(root)
   }
 
@@ -230,8 +230,7 @@ export async function compareAppSchemas(
   const goalResult = await extractSchemaProperties(goalSchemaClean, goalBaseDir)
   const currentResult = await extractSchemaProperties(currentSchemaClean, currentBaseDir)
 
-  // Convert paths to Sets for efficient comparison
-  const goalPathsSet = new Set(goalResult.paths)
+  // Convert current paths to Set for efficient lookup
   const currentPathsSet = new Set(currentResult.paths)
 
   // Find implemented and missing paths
