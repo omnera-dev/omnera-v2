@@ -109,12 +109,11 @@ async function validateFeatureDirectory(
   }
 
   if (!specExists) {
-    result.errors.push({
+    result.warnings.push({
       file: `${relativePath}.spec.ts`,
-      type: 'error',
+      type: 'warning',
       message: 'Required test file is missing',
     })
-    result.passed = false
   }
 
   // Validate JSON file

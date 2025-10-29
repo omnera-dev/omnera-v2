@@ -5,6 +5,9 @@
  * found in the LICENSE.md file in the root directory of this source tree.
  */
 
+import { mkdtempSync, writeFileSync } from 'node:fs'
+import { tmpdir } from 'node:os'
+import { join } from 'node:path'
 import { PostgreSqlContainer } from '@testcontainers/postgresql'
 import { DatabaseTemplateManager } from './database-utils'
 
@@ -20,6 +23,16 @@ import { DatabaseTemplateManager } from './database-utils'
  */
 export default async function globalSetup() {
   console.log('🚀 Initializing global test database...')
+
+  // Fix Docker credential provider issues by creating a temporary Docker config without credential helpers
+  // This prevents "spawn docker-credential-desktop ENOENT" errors when pulling public images
+  const tempDockerConfigDir = mkdtempSync(join(tmpdir(), 'docker-config-'))
+  const tempDockerConfig = join(tempDockerConfigDir, 'config.json')
+  writeFileSync(tempDockerConfig, JSON.stringify({ auths: {} }))
+  process.env.DOCKER_CONFIG = tempDockerConfigDir
+
+  // Also ensure testcontainers uses the correct Docker socket
+  process.env.TESTCONTAINERS_DOCKER_SOCKET_OVERRIDE = '/var/run/docker.sock'
 
   // Start PostgreSQL container
   const container = await new PostgreSqlContainer('postgres:16-alpine').start()
@@ -40,6 +53,15 @@ export default async function globalSetup() {
     console.log('🧹 Cleaning up global test database...')
     await templateManager.cleanup()
     await container.stop()
+
+    // Clean up temporary Docker config directory
+    try {
+      const { rmSync } = await import('node:fs')
+      rmSync(tempDockerConfigDir, { recursive: true, force: true })
+    } catch {
+      // Ignore cleanup errors
+    }
+
     console.log('✅ Global test database cleaned up')
   }
 }
