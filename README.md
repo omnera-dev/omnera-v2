@@ -96,9 +96,9 @@ start(myApp, {
 | **Bun**          | 1.3.0   | Runtime & package manager         |
 | **TypeScript**   | ^5      | Type-safe language                |
 | **Effect**       | 3.18.4  | Functional programming (internal) |
-| **Hono**         | 4.10.1  | Web framework                     |
+| **Hono**         | 4.10.3  | Web framework                     |
 | **React**        | 19.2.0  | UI library (SSR)                  |
-| **Tailwind CSS** | 4.1.14  | Styling                           |
+| **Tailwind CSS** | 4.1.16  | Styling                           |
 
 Full stack details in [CLAUDE.md](CLAUDE.md#core-stack)
 
@@ -130,9 +130,7 @@ bun --watch src/index.ts         # Auto-reload on changes
 ```
 omnera-v2/
 ├── docs/                           # Detailed documentation
-│   ├── specifications/             # Product vision & roadmap
-│   │   ├── vision.md               # Target state and product vision
-│   │   └── roadmap/                # Generated implementation roadmap
+│   ├── specifications/             # Product vision
 │   ├── architecture/               # Architecture patterns
 │   ├── development/                # Development workflows
 │   └── infrastructure/             # Tech stack docs
@@ -145,7 +143,7 @@ omnera-v2/
 ├── scripts/                        # Build & utility scripts (TypeScript)
 ├── templates/                      # Example applications
 │   └── landing-page.ts             # Minimal landing page template
-├── tests/                          # E2E tests (Playwright)
+├── specs/                          # E2E tests (Playwright)
 ├── ROADMAP.md                      # Implementation progress tracker
 ├── CLAUDE.md                       # Technical documentation (for AI/developers)
 └── README.md                       # This file (for humans on GitHub)

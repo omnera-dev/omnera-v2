@@ -28,11 +28,11 @@ Drizzle is already installed in Omnera:
 ```json
 {
   "dependencies": {
-    "drizzle-orm": "^0.44.6",
+    "drizzle-orm": "^0.44.7",
     "@types/bun": "latest"
   },
   "devDependencies": {
-    "drizzle-kit": "^0.31.5"
+    "drizzle-kit": "^0.31.6"
   }
 }
 ```

@@ -541,13 +541,13 @@ export default defineConfig([
         // Feature models - Nested under app/
         {
           type: 'domain-model-table',
-          pattern: 'src/domain/models/app/tables/**/*',
+          pattern: 'src/domain/models/app/table/**/*',
           mode: 'file',
         },
-        { type: 'domain-model-page', pattern: 'src/domain/models/app/pages/**/*', mode: 'file' },
+        { type: 'domain-model-page', pattern: 'src/domain/models/app/page/**/*', mode: 'file' },
         {
           type: 'domain-model-automation',
-          pattern: 'src/domain/models/app/automations/**/*',
+          pattern: 'src/domain/models/app/automation/**/*',
           mode: 'file',
         },
 

@@ -2,10 +2,10 @@
 
 ## Overview
 
-**Version**: 4.1.14
-**PostCSS Integration**: @tailwindcss/postcss 4.1.14
+**Version**: 4.1.16
+**PostCSS Integration**: @tailwindcss/postcss 4.1.16
 **PostCSS Version**: ^8.5.6 (flexible range, minimum 8.5.6)
-**Prettier Plugin**: prettier-plugin-tailwindcss 0.7.0
+**Prettier Plugin**: prettier-plugin-tailwindcss 0.7.1
 **Purpose**: Modern utility-first CSS framework for rapidly building custom user interfaces with exceptional performance
 
 Tailwind CSS is a highly customizable, low-level CSS framework that provides utility classes for building designs directly in HTML/JSX. Version 4 represents a complete rewrite with a new engine, CSS-first configuration, and significantly improved performance.

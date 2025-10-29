@@ -100,8 +100,8 @@ const scanForFixmeTests = Effect.gen(function* () {
   const sortedFiles = pipe(
     filesWithFixme,
     Array.sortBy(
-      (a, b) => a.priority - b.priority,
-      (a, b) => b.fixmeCount - a.fixmeCount
+      (a, b) => (a.priority < b.priority ? -1 : a.priority > b.priority ? 1 : 0),
+      (a, b) => (b.fixmeCount < a.fixmeCount ? -1 : b.fixmeCount > a.fixmeCount ? 1 : 0)
     )
   )
 

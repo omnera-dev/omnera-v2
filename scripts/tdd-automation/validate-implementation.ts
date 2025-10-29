@@ -36,7 +36,7 @@ const runCommand = (command: string, description: string): Effect.Effect<boolean
       execSync(command, { stdio: 'inherit' })
       yield* Console.log(`  ✅ ${description} passed`)
       return true
-    } catch (_error) {
+    } catch {
       yield* Console.log(`  ❌ ${description} failed`)
       return false
     }
@@ -140,7 +140,7 @@ const validateImplementation = (testFile: string) =>
 fixed_count=${fixedCount}
 remaining_fixme=${currentFixme}`
 
-      require('node:fs').appendFileSync(process.env.GITHUB_OUTPUT, output)
+      appendFileSync(process.env.GITHUB_OUTPUT, output)
       yield* Console.log('')
       yield* Console.log('✅ GitHub Actions output set')
     }

@@ -206,6 +206,39 @@ Contain pure business logic, domain models, validation rules, core algorithms.
 
 - **TypeScript** - Pure functions, interfaces
 - **Functional Programming** - Immutability, pure functions
+- **Effect Schema** - Declarative validation for domain models (app/ directory)
+- **Zod** - OpenAPI schema validation (api/ directory)
+
+### Domain Models Organization
+
+The Domain layer has a specific structure with strict feature isolation:
+
+```
+src/domain/models/
+├── app/                    # Effect Schema models (server-side domain validation)
+│   ├── *.ts               # Root aggregation files (tables.ts, pages.ts, etc.)
+│   ├── table/             # Table feature models (isolated)
+│   ├── page/              # Page feature models (isolated)
+│   ├── automation/        # Automation feature models (isolated)
+│   ├── block/             # Block models
+│   ├── common/            # Shared models across features
+│   ├── language/          # Language/i18n models
+│   └── theme/             # Theme models
+└── api/                    # Zod models (OpenAPI/HTTP contracts)
+    └── health-schemas.ts   # API health check schemas
+```
+
+**Feature Isolation Rules** (enforced by ESLint boundaries):
+
+- `table/` cannot import from `page/` or `automation/`
+- `page/` cannot import from `table/` or `automation/`
+- `automation/` cannot import from `table/` or `page/`
+- Root files (tables.ts, pages.ts) aggregate and re-export from features
+
+**Validation Library Split**:
+
+- **app/ models**: Use Effect Schema for type-safe domain validation
+- **api/ models**: Use Zod for OpenAPI schema generation and HTTP contracts
 
 ### Example: Domain Validator
 
@@ -352,21 +385,28 @@ export const AppLayer = Layer.mergeAll(UserRepositoryLive, LoggerLive, EmailServ
 
 ## Enforcement
 
-> **✅ ACTIVE**: Layer-based architecture enforcement is **CURRENTLY ACTIVE** via `eslint-plugin-boundaries`. The 4-layer structure (`domain/`, `application/`, `infrastructure/`, `presentation/`) is implemented and layer boundaries are automatically enforced at lint time.
+> **✅ ACTIVE**: Layer-based architecture enforcement is **CURRENTLY ACTIVE** via `eslint-plugin-boundaries`. The 4-layer structure (`domain/`, `application/`, `infrastructure/`, `presentation/`) is implemented with additional feature isolation within the Domain layer.
 
 ### ESLint Boundary Enforcement (Active)
 
-The **eslint-plugin-boundaries** plugin automatically enforces layer dependencies at lint time. Run `bun run lint` to verify layer boundaries are not violated.
+The **eslint-plugin-boundaries** plugin automatically enforces both layer dependencies and feature isolation at lint time. Run `bun run lint` to verify boundaries are not violated.
 
 **Active Rules** (currently enforced):
 
 ```typescript
 // eslint.config.ts
 'boundaries/elements': [
+  // Layer boundaries
   { type: 'domain', pattern: 'src/domain/**/*' },
   { type: 'application', pattern: 'src/application/**/*' },
   { type: 'infrastructure', pattern: 'src/infrastructure/**/*' },
-  { type: 'presentation', pattern: 'src/presentation/**/*' }
+  { type: 'presentation', pattern: 'src/presentation/**/*' },
+
+  // Domain feature isolation (within domain/models/app/)
+  { type: 'domain-model-app', pattern: 'src/domain/models/app/*.{ts,tsx}' }, // Root files
+  { type: 'domain-model-table', pattern: 'src/domain/models/app/table/**/*' },
+  { type: 'domain-model-page', pattern: 'src/domain/models/app/page/**/*' },
+  { type: 'domain-model-automation', pattern: 'src/domain/models/app/automation/**/*' }
 ]
 ```
 
@@ -378,6 +418,15 @@ The **eslint-plugin-boundaries** plugin automatically enforces layer dependencie
 | **Application**    | Domain, Infrastructure | Presentation              | "Application layer violation: Can only import from Domain and Infrastructure layers" |
 | **Domain**         | NOTHING                | All layers                | "Domain layer violation: Domain must remain pure with zero external dependencies"    |
 | **Infrastructure** | Domain                 | Application, Presentation | "Infrastructure layer violation: Can only import from Domain layer"                  |
+
+**Domain Feature Isolation Rules** (within `domain/models/app/`):
+
+| From Feature    | Allowed Imports        | Blocked Imports     | Error Message                                                                      |
+| --------------- | ---------------------- | ------------------- | ---------------------------------------------------------------------------------- |
+| **table/**      | domain-model-app, self | page/, automation/  | "FORBIDDEN: Cannot import from page/automation models (strict feature isolation)"  |
+| **page/**       | domain-model-app, self | table/, automation/ | "FORBIDDEN: Cannot import from table/automation models (strict feature isolation)" |
+| **automation/** | domain-model-app, self | table/, page/       | "FORBIDDEN: Cannot import from table/page models (strict feature isolation)"       |
+| **Root files**  | All features           | None                | Root aggregation files can import from any feature                                 |
 
 ### What Is Enforced
 

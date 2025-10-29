@@ -232,7 +232,6 @@ const progressBar = (percentage: number) => {
 // Generate markdown dashboard
 const generateDashboard = (report: ProgressReport) =>
   Effect.gen(function* () {
-
     const markdown = `# 🤖 TDD Automation Progress
 
 **Last Updated**: ${new Date(report.timestamp).toLocaleString()}

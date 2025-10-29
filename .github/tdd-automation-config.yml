@@ -12,16 +12,16 @@ pipeline:
 
   # Maximum tests to fix per pipeline run
   # Lower values = more controlled, higher values = faster completion
-  max_tests_per_run: 5  # AGGRESSIVE: Increased from 3
+  max_tests_per_run: 5 # AGGRESSIVE: Increased from 3
 
   # Maximum pipeline runs per day (rate limiting)
-  max_daily_runs: 10  # AGGRESSIVE: Doubled from 5
+  max_daily_runs: 10 # AGGRESSIVE: Doubled from 5
 
   # Cooldown period between runs (minutes)
-  cooldown_minutes: 15  # AGGRESSIVE: Reduced from 30
+  cooldown_minutes: 15 # AGGRESSIVE: Reduced from 30
 
   # Maximum time for a single pipeline run (minutes)
-  max_duration_minutes: 90  # AGGRESSIVE: Increased for complex tests
+  max_duration_minutes: 90 # AGGRESSIVE: Increased for complex tests
 
   # Maximum retries if a test fix fails
   max_retries: 2
@@ -256,22 +256,22 @@ experimental:
 # Schedule Configuration
 schedule:
   # Enable scheduled runs
-  enabled: true  # AGGRESSIVE: Enabled for 24/7 operation
+  enabled: true # AGGRESSIVE: Enabled for 24/7 operation
 
   # Cron expression (UTC)
   # Examples:
   # - "0 2 * * *"    # Daily at 2 AM
   # - "0 */6 * * *"  # Every 6 hours
   # - "0 9 * * 1-5"  # Weekdays at 9 AM
-  cron: '0 */4 * * *'  # AGGRESSIVE: Every 4 hours (6 times per day)
+  cron: '0 */4 * * *' # AGGRESSIVE: Every 4 hours (6 times per day)
 
   # Maximum tests to fix per scheduled run
-  max_tests_per_scheduled_run: 5  # Same as max_tests_per_run
+  max_tests_per_scheduled_run: 5 # Same as max_tests_per_run
 
 # Rollout Strategy
 rollout:
   # Current phase: 'testing', 'limited', 'full'
-  phase: full  # AGGRESSIVE: Skip testing, go straight to production
+  phase: full # AGGRESSIVE: Skip testing, go straight to production
 
   # Testing phase configuration
   testing:
@@ -300,7 +300,7 @@ rollout:
     all_areas_enabled: true
 
     # Maximum tests per day
-    max_daily_tests: 50  # AGGRESSIVE: 5 tests × 10 runs/day
+    max_daily_tests: 50 # AGGRESSIVE: 5 tests × 10 runs/day
 
 # Debug Configuration
 debug:
@@ -322,7 +322,7 @@ cost_management:
   track_costs: true
 
   # Maximum cost per day (USD)
-  max_daily_cost: 100  # AGGRESSIVE: Increased budget for 50 tests/day
+  max_daily_cost: 100 # AGGRESSIVE: Increased budget for 50 tests/day
 
   # Alert threshold (percentage of max)
   alert_threshold: 80
