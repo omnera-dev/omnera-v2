@@ -55,7 +55,7 @@ bun run src/index.ts        # Run application directly (alternative)
 bun run scripts/export-schema.ts  # Run a specific script
 bun run export:schema              # Export Effect Schema to JSON files
 bun run export:openapi             # Export OpenAPI schema from runtime API routes
-bun test:unit                      # Test all unit tests (src/ and scripts/)
+bun test:unit                      # Unit tests (PATTERN FILTER: .test.ts .test.tsx only)
 
 # Database (Drizzle ORM)
 bun run db:generate         # Generate migration from schema changes
@@ -125,6 +125,13 @@ git push origin main               # Triggers release ONLY with "release:" type
 - **className merging**: Always use `cn()` from `@/lib/utils`
 - **Exports**: Export both component and props interface
 
+### Test File Naming Convention (CRITICAL - Pattern-Based)
+- **Unit Tests**: `*.test.ts` (co-located in `src/` and `scripts/`)
+- **E2E Tests**: `*.spec.ts` (in `specs/` directory)
+- **Why pattern-based**: Bun test runner uses filename patterns (`bun test .test.ts .test.tsx`) to filter test files
+- **Enforcement**: ESLint prevents wrong test runner imports (Playwright in unit tests, Bun Test in E2E tests)
+- **See**: `@docs/architecture/testing-strategy/06-test-file-naming-convention.md` for enforcement details
+
 ### Commit Messages (Conventional Commits - REQUIRED)
 - `release:` → Publish new version (patch bump 0.0.X) - **ONLY this triggers releases**
 - `feat:`, `fix:`, `docs:`, `style:`, `refactor:`, `test:`, `chore:` → No version bump
@@ -151,6 +158,12 @@ git push origin main               # Triggers release ONLY with "release:" type
 
 **Layer Enforcement**: Layer-based architecture (domain/, application/, infrastructure/, presentation/) is actively enforced via `eslint-plugin-boundaries`. See `@docs/architecture/layer-based-architecture.md#enforcement` for details.
 
+**Test Naming Convention (Cross-Layer Pattern)**: Test separation by file extension, not directory structure:
+- **Unit tests**: `*.test.ts` (Bun Test) - Co-located with source in src/ and scripts/
+- **E2E tests**: `*.spec.ts` (Playwright) - Located in specs/ directory
+- **Pattern-based filtering**: `bun test .test.ts .test.tsx` excludes `.spec.ts` files automatically
+- **ESLint enforcement**: Prevents wrong test runner usage (see `@docs/architecture/testing-strategy/06-test-file-naming-convention.md`)
+
 ## File Structure
 
 ```
@@ -160,14 +173,14 @@ omnera-v2/
 │   └── architecture/            # Architecture patterns
 ├── scripts/                     # Build & utility scripts (TypeScript, run by Bun)
 │   ├── **/*.ts                  # TypeScript scripts (executable with Bun)
-│   └── **/*.test.ts             # Script unit tests (co-located)
+│   └── **/*.test.ts             # Script unit tests (co-located, Bun Test)
 ├── src/                         # Layer-based architecture (see @docs/architecture/layer-based-architecture.md)
 │   ├── domain/                  # Domain Layer - Pure business logic
 │   ├── application/             # Application Layer - Use cases, orchestration
 │   ├── infrastructure/          # Infrastructure Layer - External services, I/O
 │   ├── presentation/            # Presentation Layer - UI components, API routes
 │   ├── index.ts                 # Entry point
-│   └── **/*.test.ts             # Unit tests (co-located)
+│   └── **/*.test.ts             # Unit tests (co-located, Bun Test)
 ├── specs/**/*.spec.ts           # E2E tests (Playwright) + co-located schemas
 ├── specs/**/*.schema.json       # Specification schemas (co-located with tests)
 ├── package.json

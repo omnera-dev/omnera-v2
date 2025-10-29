@@ -317,15 +317,7 @@ async function main() {
     runCheckWithFailFast('TypeScript', ['bunx', 'tsc', '--noEmit', '--incremental'], 60_000),
     runCheckWithFailFast(
       'Unit Tests',
-      [
-        'bun',
-        'test',
-        '--concurrent',
-        'src/**/*.test.ts',
-        'src/**/*.test.tsx',
-        'scripts/**/*.test.ts',
-        'scripts/**/*.test.tsx',
-      ],
+      ['bun', 'test', '--concurrent', '.test.ts', '.test.tsx'],
       30_000
     ),
     runCheckWithFailFast(

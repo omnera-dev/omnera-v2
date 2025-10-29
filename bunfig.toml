@@ -2,29 +2,30 @@
 # https://bun.sh/docs/runtime/bunfig
 
 [test]
-# ⚠️ KNOWN LIMITATION IN BUN 1.3.0
-# These exclude patterns do NOT work - Bun test discovers ALL .spec.ts files
-# in the project tree regardless of these exclude patterns or directory filters.
+# ℹ️ PATTERN FILTER APPROACH (NO EXCLUDE NEEDED)
+# The project uses pattern filters to run unit tests without conflicts:
+#   Command: bun test --concurrent .test.ts .test.tsx
+#   Result: ONLY files matching .test.ts or .test.tsx are executed
 #
-# IMPACT: Running `bun test:unit` (which targets src/ scripts/ directories) will
-# still discover 4 Playwright E2E spec files that cause test failures:
-#   - specs/app/pages/scripts/scripts.spec.ts
-#   - specs/app/pages/scripts/external-scripts/external-scripts.spec.ts
-#   - specs/app/pages/scripts/inline-scripts/inline-scripts.spec.ts
-#   - specs/app/pages/scripts/features/features.spec.ts
+# PATTERN MATCHING BEHAVIOR:
+# - `.test.ts` and `.test.tsx` are treated as PATTERN FILTERS (NOT file paths)
+# - Bun searches the entire project and matches ONLY files containing these patterns
+# - `.spec.ts` files (Playwright E2E tests) are automatically excluded
+# - No need for exclude patterns when using pattern filters
 #
-# ERROR: "Playwright Test did not expect test.describe() to be called here"
-# (Bun test runner is incompatible with Playwright's test.describe() API)
+# RESULT:
+# - ✅ 681 unit tests pass
+# - ✅ 0 Playwright spec files loaded
+# - ✅ No "test.describe is not a function" errors
+# - ✅ Clean separation: .test.ts = unit tests, .spec.ts = E2E tests
 #
-# CURRENT WORKAROUND: Accept the 4 failures when running bun test:unit
-# - 681 unit tests pass correctly
-# - 4 Playwright specs fail (expected, can be ignored)
-# - CI/quality checks should use `bun run quality` which handles this properly
+# WHY EXCLUDE PATTERNS ARE NOT USED:
+# Pattern filters (bun test .test.ts .test.tsx) provide better isolation than
+# exclude patterns. This approach is more explicit and prevents accidental
+# discovery of incompatible test files.
 #
-# FUTURE FIX: When Bun fixes exclude support, or rename the 4 spec files to
-# use a non-colliding pattern (e.g., *.e2e.ts instead of *.spec.ts)
-#
-# These patterns are kept for documentation and future Bun versions:
+# DOCUMENTATION: These exclude patterns are kept for reference only
+# and are NOT relied upon for test isolation:
 exclude = [
   "specs/**/*.spec.ts",
   "specs/**/*.spec.tsx",

@@ -6,86 +6,101 @@
 
 ## Test File Patterns (Unit Tests)
 
-- `*.test.ts`, `*.test.tsx`
-- `*.spec.ts`, `*.spec.tsx` (outside `tests/` directory)
+Bun Test supports multiple test file patterns:
+
+- `*.test.ts`, `*.test.tsx` (RECOMMENDED for unit tests)
+- `*.spec.ts`, `*.spec.tsx`
 - `*_test.ts`, `*_test.tsx`
 - Files in `__tests__` directories
 
 ## IMPORTANT: Test File Location
 
-- **Unit Tests (Bun)**: Place `*.test.ts` or `*.spec.ts` files alongside source code (e.g., `src/utils.test.ts`)
-- **E2E Tests (Playwright)**: Place `*.spec.ts` files in `tests/` directory (e.g., `tests/login.spec.ts`)
+- **Unit Tests (Bun)**: Place `*.test.ts` or `*.test.tsx` files alongside source code (e.g., `src/calculator.test.ts`)
+- **E2E Tests (Playwright)**: Place `*.spec.ts` files in `specs/` directory (e.g., `specs/login.spec.ts`)
 - **Script Tests (Bun)**: Place `*.test.ts` files alongside scripts (e.g., `scripts/export-schema.test.ts`)
 
 ## Test File Naming Convention
 
-**Recommended convention for clarity and consistency**:
+**File naming convention is CRITICAL for avoiding test runner conflicts**:
 
 | Test Type        | Extension  | Location               | Example                         |
 | ---------------- | ---------- | ---------------------- | ------------------------------- |
 | **Unit Tests**   | `.test.ts` | Co-located with source | `src/calculator.test.ts`        |
 | **Script Tests** | `.test.ts` | Co-located with script | `scripts/export-schema.test.ts` |
-| **E2E Tests**    | `.spec.ts` | `tests/` directory     | `tests/login.spec.ts`           |
+| **E2E Tests**    | `.spec.ts` | `specs/` directory     | `specs/login.spec.ts`           |
 
-**Why this convention**:
+**Why this convention is REQUIRED**:
 
-- **Clear Separation**: `.test.ts` = unit, `.spec.ts` = E2E (visual distinction)
-- **Tool Compatibility**: Bun recognizes both, Playwright defaults to `.spec.ts`
+- **Pattern Filtering**: Bun test command uses `.test.ts` as a **pattern filter** (NOT a file path)
+- **Automatic Separation**: `.test.ts` matches ONLY unit tests, `.spec.ts` matches ONLY E2E tests
+- **No Conflicts**: Playwright spec files (`.spec.ts`) are automatically excluded from Bun test runs
+- **Tool Compatibility**: Bun recognizes both patterns, Playwright defaults to `.spec.ts`
 - **Industry Standard**: Matches patterns used by Jest, Vitest, Playwright
-- **Searchability**: Easy to find all unit tests (`**/*.test.ts`) or E2E tests (`tests/**/*.spec.ts`)
+- **Searchability**: Easy to find all unit tests (`**/*.test.ts`) or E2E tests (`specs/**/*.spec.ts`)
 
-**Alternative (also valid)**:
-You can use `.spec.ts` for both unit and E2E tests, relying on location for distinction:
-
-- Unit: `src/calculator.spec.ts` (co-located)
-- E2E: `tests/login.spec.ts` (in tests/ directory)
+**DO NOT use `.spec.ts` for unit tests** - This will cause Bun to discover Playwright E2E test files and fail with "test.describe is not a function" errors.
 
 ## Test Commands
 
-### ⚠️ CRITICAL: Unit Test Command Requirements
+### ✅ Pattern Filter Approach (RECOMMENDED)
 
-**DO NOT use `bun test` without directory filters** - It will incorrectly discover Playwright E2E spec files (`.spec.ts` in `specs/` directory) which causes errors because Bun's test runner is incompatible with Playwright's API.
+**CORRECT - Use pattern filters to match only unit test files:**
 
-**✅ CORRECT - Use npm script with directory filters:**
 ```bash
-bun test:unit                        # Runs unit tests in src/ and scripts/ only
+bun test:unit                        # Runs ONLY .test.ts and .test.tsx files (project-wide)
 bun test:unit:watch                  # Watch mode for unit tests
 CLAUDECODE=1 bun test:unit           # AI-optimized output (failures only)
 ```
 
-**❌ WRONG - Raw `bun test` discovers ALL test files:**
+**Why this works**: The command `bun test .test.ts .test.tsx` uses `.test.ts` and `.test.tsx` as **pattern filters** (NOT file paths or directory paths). Bun searches the entire project and ONLY runs files whose names contain these patterns.
+
+**Pattern Matching Behavior**:
+
+- `bun test .test.ts` → Matches `calculator.test.ts`, `utils.test.ts`, etc.
+- Pattern filters exclude `.spec.ts` files → No Playwright conflicts ✅
+- Searches entire project → Finds tests in src/, scripts/, and subdirectories automatically
+- Automatic separation → Unit tests (`.test.ts`) vs E2E tests (`.spec.ts`)
+- Clean results → 681 unit tests pass, 0 Playwright spec files loaded
+
+**Alternative approaches (also safe):**
+
 ```bash
-bun test                             # ❌ Discovers specs/**/*.spec.ts (Playwright files)
-                                     # ❌ Causes: "test.describe is not a function"
+bun test src/calculator.test.ts      # ✅ Specific file path (safe)
+bun test --concurrent .test.ts .test.tsx  # ✅ Pattern filters with concurrency (safe)
+bun test scripts/                    # ✅ Specific directory (safe if no .spec.ts files)
 ```
 
-**Why this happens**: Bun's test runner auto-discovers ALL `.test.ts` AND `.spec.ts` files in the project, regardless of `bunfig.toml` exclude patterns (known limitation in Bun 1.3.0). Playwright E2E tests use `.spec.ts` extension and Playwright's test API, which is incompatible with Bun's test runner.
+**❌ AVOID - Using `bun test` without pattern filters:**
 
-**When raw `bun test` IS safe** (specific file/directory):
 ```bash
-bun test src/calculator.test.ts      # ✅ Specific file
-bun test src/                        # ✅ Specific directory
-bun test scripts/                    # ✅ Specific directory
-bun test --concurrent src/ scripts/  # ✅ Multiple directories (same as test:unit)
+bun test                             # ❌ Discovers ALL test files including .spec.ts
+                                     # ❌ Result: "test.describe is not a function" errors
 ```
 
 ### Native Command vs Script Wrapper
 
-`bun test` is a **native Bun command** that directly invokes Bun's built-in test runner. However, **always use the `bun test:unit` script wrapper** to ensure correct directory filtering.
+`bun test` is a **native Bun command** that directly invokes Bun's built-in test runner. The `bun test:unit` script wrapper uses pattern filters to ensure ONLY unit test files are discovered.
+
+**Pattern Filter Command (Recommended)**:
+
+```bash
+bun test --concurrent .test.ts .test.tsx   # Pattern filters (NOT directory paths)
+```
 
 **Additional commands:**
+
 ```bash
-# Coverage
+# Coverage (with pattern filters)
 bun test:unit:coverage               # Generate coverage report
 
-# Filtering by test name
-bun test --grep "pattern" src/       # Must specify directory when filtering
+# Filtering by test name (with pattern filters)
+bun test --grep "calculator" .test.ts .test.tsx
 
 # Bail on first failure (built into test:unit via check-quality.ts)
-bun test --bail src/ scripts/
+bun test --bail --concurrent .test.ts .test.tsx
 
-# Timeout
-bun test --timeout 5000 src/         # 5 seconds (must specify directory)
+# Timeout (with pattern filters)
+bun test --timeout 5000 .test.ts .test.tsx
 ```
 
 ## AI-Assisted Development Optimization
@@ -104,15 +119,15 @@ CLAUDECODE=1 bun test:unit
 bun test:unit
 ```
 
-These commands use a package.json script that automatically runs tests in both `src/` and `scripts/` directories with optimized flags (`--concurrent` for parallel execution).
+These commands use a package.json script that automatically runs tests with pattern filters (`bun test .test.ts .test.tsx`) with optimized flags (`--concurrent` for parallel execution).
 
-**Why use a script instead of raw `bun test`?**
+**Why use pattern filters instead of directory paths?**
 
-1. **Prevents Playwright conflicts** - Raw `bun test` discovers `.spec.ts` files in `specs/` directory, causing errors
-2. **Directory filtering required** - Must explicitly specify `src/` and `scripts/` directories
+1. **Automatic separation** - `.test.ts` pattern matches ONLY unit tests, excludes `.spec.ts` (Playwright E2E)
+2. **No Playwright conflicts** - Pattern filters prevent Bun from discovering Playwright spec files
 3. **Consistent behavior** - Same command works everywhere (development, CI/CD)
 4. **Future-proof** - Easy to update flags globally without changing every command
-5. **Known Bun limitation** - `bunfig.toml` exclude patterns don't work in Bun 1.3.0
+5. **Simpler command** - No need to list all directories (`src/`, `scripts/`, etc.)
 
 ### `--concurrent` Flag
 
@@ -129,13 +144,13 @@ These commands use a package.json script that automatically runs tests in both `
 
 ```bash
 # Sequential (default) - manual command
-bun test src/ scripts/              # ~5 seconds for 50 tests
+bun test .test.ts .test.tsx              # ~5 seconds for 50 tests
 
 # Concurrent - manual command
-bun test --concurrent src/ scripts/ # ~1.5 seconds for 50 tests
+bun test --concurrent .test.ts .test.tsx # ~1.5 seconds for 50 tests
 
-# With script (handles directories automatically)
-bun test:unit                       # ~1.5 seconds for 50 tests
+# With script (includes --concurrent automatically)
+bun test:unit                            # ~1.5 seconds for 50 tests
 ```
 
 **When to Use**:
@@ -232,25 +247,26 @@ bun test:unit:watch
 
 ### Required package.json Scripts
 
-The project uses explicit glob patterns to ensure ONLY unit test files are discovered:
+The project uses **pattern filters** to ensure ONLY unit test files are discovered:
 
 ```json
 {
   "scripts": {
-    "test:unit": "bun test --concurrent src/**/*.test.ts src/**/*.test.tsx scripts/**/*.test.ts scripts/**/*.test.tsx",
-    "test:unit:watch": "bun test --concurrent --watch src/**/*.test.ts src/**/*.test.tsx scripts/**/*.test.ts scripts/**/*.test.tsx",
-    "test:unit:coverage": "bun test --concurrent --coverage src/**/*.test.ts src/**/*.test.tsx scripts/**/*.test.ts scripts/**/*.test.tsx"
+    "test:unit": "bun test --concurrent .test.ts .test.tsx",
+    "test:unit:watch": "bun test --concurrent --watch .test.ts .test.tsx",
+    "test:unit:coverage": "bun test --concurrent --coverage .test.ts .test.tsx"
   }
 }
 ```
 
-**Why explicit glob patterns instead of directories?**
+**Why pattern filters instead of directory paths or glob patterns?**
 
-- **Maximum specificity** - Only matches `.test.ts` and `.test.tsx` extensions
-- **Prevents Playwright conflicts** - Excludes `.spec.ts` files (Playwright E2E tests)
-- **Clear separation** - Unit tests (`.test.ts`) vs E2E tests (`.spec.ts`)
-- **Bun limitation workaround** - `bunfig.toml` exclude patterns don't work in Bun 1.3.0
-- **Future-proof** - Works even if `.spec.ts` files are added to `src/` or `scripts/` directories
+- **Pattern matching** - `.test.ts` and `.test.tsx` are treated as **pattern filters**, NOT file paths
+- **Automatic separation** - Matches ONLY files containing `.test.ts` or `.test.tsx` in their names
+- **Excludes .spec.ts** - Playwright spec files automatically excluded (no conflicts) ✅
+- **Simpler syntax** - No need to list all directories or use glob patterns
+- **Project-wide search** - Finds tests in src/, scripts/, and all subdirectories
+- **Future-proof** - Works even if new directories are added
 
 **For AI-assisted development**, Claude Code will use:
 
@@ -282,8 +298,8 @@ bun test:unit
 # Specific directory without script
 bun test --concurrent src/
 
-# CI/CD (full verbosity)
-bun test --concurrent --verbose src/ scripts/
+# Pattern filters with full verbosity
+bun test --concurrent --verbose .test.ts .test.tsx
 ```
 
 ## Test Structure
@@ -371,7 +387,7 @@ spy.mockRejectedValue(new Error('error'))
 
 ## Test Execution Approach
 
-- **`bun test:unit`**: Script that runs unit tests in `src/` and `scripts/` (uses explicit glob patterns)
+- **`bun test:unit`**: Script that runs unit tests using pattern filters (`.test.ts` and `.test.tsx`)
 - **`bun test:e2e`**: Script that runs Playwright E2E tests in `specs/` directory
 - **`bun test:all`**: Script that runs both unit and E2E tests sequentially
 
@@ -379,8 +395,8 @@ spy.mockRejectedValue(new Error('error'))
 
 ```bash
 # Unit tests only (fast, run frequently) - ALWAYS USE SCRIPT
-bun test:unit                        # ✅ CORRECT (filters to src/ and scripts/)
-bun test                             # ❌ WRONG (discovers Playwright .spec.ts files)
+bun test:unit                        # ✅ CORRECT (pattern filters: .test.ts .test.tsx)
+bun test                             # ❌ WRONG (discovers ALL test files including .spec.ts)
 
 # E2E tests only (slow, run before commits)
 bun test:e2e                         # Playwright tests in specs/
@@ -391,16 +407,38 @@ bun test:e2e:regression              # Regression tests (@regression tag) - CI/C
 bun test:all                         # Unit tests THEN E2E regression tests
 ```
 
-### Why Unit Tests Use Script Instead of Raw Command
+### Why Pattern Filters Are the Correct Approach
 
-**The Problem**: `bun test` without directory filters discovers ALL test files including:
-- ✅ `src/**/*.test.ts` (Bun unit tests)
-- ✅ `scripts/**/*.test.ts` (Bun unit tests)
-- ❌ `specs/**/*.spec.ts` (Playwright E2E tests - INCOMPATIBLE with Bun test runner)
+**The Problem with `bun test` (no filters)**: Discovers ALL test files in the project, including:
 
-**The Solution**: Always use `bun test:unit` which explicitly filters to unit test files only.
+- ✅ `**/*.test.ts` (Bun unit tests) ✅
+- ✅ `**/*.test.tsx` (Bun unit tests) ✅
+- ❌ `**/*.spec.ts` (Playwright E2E tests - INCOMPATIBLE with Bun test runner) ❌
 
-**Known Limitation**: `bunfig.toml` exclude patterns don't work in Bun 1.3.0, so directory/glob filtering is the only reliable way to avoid Playwright conflicts.
+**Error when mixing test runners**:
+
+```
+Playwright Test did not expect test.describe() to be called here
+```
+
+This happens because Bun Test tries to run Playwright spec files, which use incompatible APIs.
+
+**The Solution - Pattern Filters**: Use `.test.ts` and `.test.tsx` as pattern filters (NOT directory paths).
+
+**How Pattern Filters Work**:
+
+- Command: `bun test .test.ts .test.tsx`
+- Bun treats these as **pattern filters** (NOT file paths or directories)
+- Searches entire project tree (all directories)
+- ONLY runs files whose names contain `.test.ts` or `.test.tsx`
+- Automatically excludes `.spec.ts` files (Playwright E2E tests)
+
+**Result**:
+
+- ✅ 681 unit tests pass
+- ✅ 0 Playwright spec files loaded
+- ✅ No "test.describe is not a function" errors
+- ✅ Clean separation between unit and E2E tests
 
 ## When to Use Unit Tests (Bun Test)
 
@@ -414,18 +452,18 @@ bun test:all                         # Unit tests THEN E2E regression tests
 
 ## Unit Tests vs E2E Tests
 
-| Aspect              | Bun Test (Unit)                               | Playwright (E2E)                                      |
-| ------------------- | --------------------------------------------- | ----------------------------------------------------- |
-| **Purpose**         | Test isolated functions, classes, utilities   | Test complete user workflows, UI, full app behavior   |
-| **Speed**           | Very fast (milliseconds)                      | Slower (seconds to minutes)                           |
-| **Scope**           | Single units of code                          | Entire application stack                              |
-| **Browser**         | No browser required                           | Real browsers (Chromium, Firefox, WebKit)             |
-| **Dependencies**    | Tests pure logic, mocked dependencies         | Tests real integrations, actual dependencies          |
-| **When to Run**     | Frequently (every change)                     | Less frequently (before commits, in CI/CD)            |
-| **Test Files**      | `*.test.ts` (in src/ and scripts/)            | `*.spec.ts` (in specs/ directory)                     |
-| **Command**         | `bun test:unit` (script with directory filter)| `playwright test` or `bun test:e2e`                   |
-| **Feedback Loop**   | Immediate (watch mode)                        | Slower (full app startup)                             |
-| **What It Catches** | Logic bugs, function correctness              | UI bugs, integration issues, user experience problems |
+| Aspect              | Bun Test (Unit)                                | Playwright (E2E)                                      |
+| ------------------- | ---------------------------------------------- | ----------------------------------------------------- |
+| **Purpose**         | Test isolated functions, classes, utilities    | Test complete user workflows, UI, full app behavior   |
+| **Speed**           | Very fast (milliseconds)                       | Slower (seconds to minutes)                           |
+| **Scope**           | Single units of code                           | Entire application stack                              |
+| **Browser**         | No browser required                            | Real browsers (Chromium, Firefox, WebKit)             |
+| **Dependencies**    | Tests pure logic, mocked dependencies          | Tests real integrations, actual dependencies          |
+| **When to Run**     | Frequently (every change)                      | Less frequently (before commits, in CI/CD)            |
+| **Test Files**      | `*.test.ts` (in src/ and scripts/)             | `*.spec.ts` (in specs/ directory)                     |
+| **Command**         | `bun test:unit` (script with directory filter) | `playwright test` or `bun test:e2e`                   |
+| **Feedback Loop**   | Immediate (watch mode)                         | Slower (full app startup)                             |
+| **What It Catches** | Logic bugs, function correctness               | UI bugs, integration issues, user experience problems |
 
 ## Why Both Test Types Are Needed
 
@@ -536,20 +574,20 @@ describe('string-utils', () => {
 
 ```bash
 # Run all unit tests (including scripts)
-bun test:unit                        # ✅ CORRECT (uses script wrapper)
+bun test:unit                        # ✅ CORRECT (pattern filters: .test.ts .test.tsx)
 
-# Run only script tests
+# Run only script tests (specific directory if needed)
 bun test scripts/                    # ✅ Safe (specific directory)
 
 # Run specific script test
 bun test scripts/export-schema.test.ts  # ✅ Safe (specific file)
 
 # Watch mode for script development
-bun test:unit:watch                  # ✅ CORRECT (watches src/ and scripts/)
+bun test:unit:watch                  # ✅ CORRECT (pattern filters with watch mode)
 bun test --watch scripts/            # ✅ Safe (specific directory)
 ```
 
-**⚠️ WARNING**: Do NOT use `bun test` without directory filters - use `bun test:unit` instead to avoid discovering Playwright spec files.
+**Note**: The `bun test:unit` command automatically discovers script tests (`.test.ts` files in `scripts/` directory) using pattern filters, so you don't need to specify directories.
 
 ### Mocking File System Operations
 
@@ -621,14 +659,14 @@ describe('build-helpers', () => {
 
 ```bash
 # Watch mode (auto-runs tests on file changes)
-bun test:unit:watch                  # ✅ CORRECT (filters to src/ and scripts/)
+bun test:unit:watch                  # ✅ CORRECT (pattern filters: .test.ts .test.tsx)
 CLAUDECODE=1 bun test:unit:watch     # AI-optimized output (failures only)
 
-# Raw watch command with directory filter
-bun test --watch src/ scripts/       # ✅ Safe (specific directories)
+# Raw watch command with pattern filters
+bun test --watch --concurrent .test.ts .test.tsx  # ✅ Safe (pattern filters)
 ```
 
-**⚠️ NEVER use `bun test --watch` without directory filters** - Always use `bun test:unit:watch` to avoid Playwright conflicts.
+**Note**: The `bun test:unit:watch` command uses pattern filters (`.test.ts` and `.test.tsx`) to automatically discover ONLY unit tests, preventing Playwright conflicts.
 
 Watch mode is perfect for TDD (Test-Driven Development):
 
@@ -643,10 +681,10 @@ Watch mode is perfect for TDD (Test-Driven Development):
 
 ```bash
 # Generate coverage report
-bun test:unit:coverage               # ✅ CORRECT (uses script wrapper)
+bun test:unit:coverage               # ✅ CORRECT (pattern filters: .test.ts .test.tsx)
 
-# Raw coverage command (if needed)
-bun test --coverage src/ scripts/    # ✅ Safe (specific directories)
+# Raw coverage command with pattern filters
+bun test --coverage --concurrent .test.ts .test.tsx  # ✅ Safe (pattern filters)
 
 # Coverage output shows:
 # - % of statements covered
@@ -655,7 +693,7 @@ bun test --coverage src/ scripts/    # ✅ Safe (specific directories)
 # - % of lines covered
 ```
 
-**⚠️ WARNING**: Do NOT use `bun test --coverage` without directory filters.
+**Note**: Coverage reports use pattern filters to ensure ONLY unit tests are included in coverage metrics.
 
 ## Performance Benefits
 
@@ -698,28 +736,28 @@ bun test --coverage src/ scripts/    # ✅ Safe (specific directories)
 1. **During Development** (continuous):
 
    ```bash
-   bun test:unit:watch              # Auto-run on file changes
+   bun test:unit:watch              # Auto-run on file changes (pattern filters)
    CLAUDECODE=1 bun test:unit:watch # AI-optimized output
    ```
 
 2. **Before Committing** (critical):
 
    ```bash
-   bun test:unit                    # Ensure all tests pass
+   bun test:unit                    # Ensure all tests pass (pattern filters)
    ```
 
 3. **In CI/CD Pipeline** (critical):
 
    ```bash
-   bun test:unit                    # Fail builds if tests fail
+   bun test:unit                    # Fail builds if tests fail (pattern filters)
    ```
 
 4. **After Refactoring** (recommended):
    ```bash
-   bun test:unit                    # Verify behavior unchanged
+   bun test:unit                    # Verify behavior unchanged (pattern filters)
    ```
 
-**⚠️ NEVER use raw `bun test` without directory filters** - Always use `bun test:unit` script to avoid Playwright conflicts.
+**Note**: All `bun test:unit` commands use pattern filters (`.test.ts` and `.test.tsx`) to automatically discover ONLY unit tests and prevent Playwright conflicts.
 
 ## References
 

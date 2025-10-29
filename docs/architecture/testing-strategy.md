@@ -60,12 +60,26 @@ test('should display version badge when app has version', async ({ page }) => {
 | **E2E Tests**  | BEFORE (TDD)       | Define feature completion criteria     | `specs/*.spec.ts`  | Playwright |
 | **Unit Tests** | AFTER (Test-After) | Document implementation and edge cases | `src/**/*.test.ts` | Bun Test   |
 
-### Test File Naming Convention
+### Test File Naming Convention (Pattern-Based)
 
 | Test Type      | Extension  | Location               | Example                  |
 | -------------- | ---------- | ---------------------- | ------------------------ |
 | **Unit Tests** | `.test.ts` | Co-located with source | `src/calculator.test.ts` |
 | **E2E Tests**  | `.spec.ts` | `specs/` directory     | `specs/login.spec.ts`    |
+
+**CRITICAL - Architectural Pattern**: Test separation is enforced via **filename pattern filtering**, not directory structure:
+
+- **Unit tests run with**: `bun test --concurrent .test.ts .test.tsx` (pattern-based filtering)
+- **E2E tests run with**: `playwright test` (discovers `*.spec.ts` in `specs/`)
+- **ESLint enforcement**: Prevents wrong test runner usage (Playwright in unit tests, Bun Test in E2E tests)
+
+**Why This Matters Architecturally**:
+
+- **Separation by file extension** enables co-location without conflicts (unit tests next to source, E2E tests with schemas)
+- **Simple pattern filtering** makes test execution robust: `bun test .test.ts .test.tsx` excludes `.spec.ts` files automatically
+- **Cross-layer convention** applies consistently across Domain, Application, Infrastructure, and Presentation layers
+
+See `@docs/architecture/testing-strategy/06-test-file-naming-convention.md` for complete architectural rationale and enforcement details.
 
 ### Test Execution Commands
 
