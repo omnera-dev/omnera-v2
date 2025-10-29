@@ -40,14 +40,14 @@ async function resolveRef(
   if (ref.startsWith('#/')) {
     // Navigate through the schema using the JSON pointer path
     const path = ref.slice(2).split('/') // Remove '#/' and split by '/'
-    let current: any = rootSchema
+    let current: unknown = rootSchema
 
     for (const segment of path) {
       // Decode URI components (e.g., ~1 becomes /, ~0 becomes ~)
       const decodedSegment = segment.replace(/~1/g, '/').replace(/~0/g, '~')
 
       if (current && typeof current === 'object' && decodedSegment in current) {
-        current = current[decodedSegment]
+        current = (current as Record<string, unknown>)[decodedSegment]
       } else {
         // Path not found
         return null
