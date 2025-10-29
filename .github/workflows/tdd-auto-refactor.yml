@@ -17,6 +17,12 @@ on:
   issue_comment:
     types: [created]
 
+# Security: Define minimal required permissions
+permissions:
+  contents: read
+  pull-requests: write
+  issues: write
+
 # Prevent concurrent refactoring
 concurrency:
   group: tdd-refactor
@@ -378,13 +384,19 @@ jobs:
       - name: Update PR with refactoring results
         if: always()
         uses: actions/github-script@v7
+        env:
+          PR_NUMBER: ${{ needs.check-trigger.outputs.pr_number }}
+          TEST_SUCCESS: ${{ steps.tests.outputs.success }}
+          INSERTIONS: ${{ steps.metrics.outputs.insertions }}
+          DELETIONS: ${{ steps.metrics.outputs.deletions }}
+          REDUCTION: ${{ steps.metrics.outputs.reduction }}
         with:
           script: |
-            const prNumber = '${{ needs.check-trigger.outputs.pr_number }}';
-            const success = '${{ steps.tests.outputs.success }}' === 'true';
-            const insertions = '${{ steps.metrics.outputs.insertions }}' || '0';
-            const deletions = '${{ steps.metrics.outputs.deletions }}' || '0';
-            const reduction = '${{ steps.metrics.outputs.reduction }}' || '0';
+            const prNumber = process.env.PR_NUMBER;
+            const success = process.env.TEST_SUCCESS === 'true';
+            const insertions = process.env.INSERTIONS || '0';
+            const deletions = process.env.DELETIONS || '0';
+            const reduction = process.env.REDUCTION || '0';
 
             const comment = success
               ? `## ✅ Refactoring Complete!

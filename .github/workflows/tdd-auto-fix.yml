@@ -37,6 +37,12 @@ on:
   schedule:
     - cron: '0 */4 * * *' # Every 4 hours (0:00, 4:00, 8:00, 12:00, 16:00, 20:00 UTC)
 
+# Security: Define minimal required permissions
+permissions:
+  contents: write
+  pull-requests: write
+  issues: write
+
 # Prevent concurrent runs to avoid conflicts
 concurrency:
   group: tdd-automation
