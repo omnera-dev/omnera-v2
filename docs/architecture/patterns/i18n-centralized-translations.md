@@ -2,10 +2,6 @@
 
 ## Overview
 
-> **⚠️ BREAKING CHANGE (Completed)**
->
-> Per-component `i18n` overrides have been **REMOVED**. This documentation reflects the pure centralized pattern that aligns with industry standards (i18next, vue-i18n, react-intl, next-intl).
-
 Omnera™ uses a **pure centralized i18n approach** with all translations defined in `languages.translations`. This provides better reusability, maintainability, and translator workflow by maintaining a single source of truth for all translations.
 
 ## The Centralized Pattern
@@ -201,77 +197,6 @@ For context-specific text, use more specific translation keys instead of overrid
 
 **Result:** French page shows "Enregistrer" (French) and "Cancel" (English fallback).
 
-## Migration Guide
-
-> **BREAKING CHANGE COMPLETED:**
-> Per-component `i18n` property has been removed entirely. All translations must use centralized pattern.
-
-### Automated Migration
-
-Use the automated migration script to convert per-component translations to centralized:
-
-```bash
-bun run scripts/migrate-i18n-to-centralized.ts
-```
-
-This script will:
-
-1. Extract all per-component `i18n` translations
-2. Generate centralized translation keys
-3. Replace per-component i18n with `$t:` references
-4. Update `languages.translations` dictionary
-
-### Manual Migration Steps
-
-If migrating manually, follow these steps:
-
-**Step 1: Identify all per-component translations**
-
-```bash
-# Find all components using per-component i18n
-grep -r '"i18n"' specs/app/pages/ specs/app/blocks/
-```
-
-**Step 2: Extract translations to centralized dictionary**
-
-```json
-{
-  "languages": {
-    "translations": {
-      "en-US": {
-        "common.save": "Save",
-        "common.cancel": "Cancel"
-      },
-      "fr-FR": {
-        "common.save": "Enregistrer",
-        "common.cancel": "Annuler"
-      }
-    }
-  }
-}
-```
-
-**Step 3: Replace per-component i18n with $t: references**
-
-```json
-// Before
-{
-  "type": "button",
-  "i18n": {
-    "en-US": { "content": "Save" },
-    "fr-FR": { "content": "Enregistrer" }
-  }
-}
-
-// After
-{
-  "type": "button",
-  "children": ["$t:common.save"]
-}
-```
-
-**Benefits:** Eliminates duplication, single source of truth, easier maintenance.
-
 ## Best Practices
 
 ### 1. Always Use Centralized Translations
@@ -421,10 +346,9 @@ Keys must match: `^[a-zA-Z0-9._-]+$`
 ## Summary
 
 ✅ **Use centralized `$t:` references** for ALL translations (100%)
-🚫 **Per-component `i18n` has been removed - pure centralized only
 🌍 **Organize by feature** (common._, nav._, [page].\_)
 📦 **Export/import** one file for translator workflow
 🔍 **Audit easily** - all translations in one place
-🎯 **Context-specific text** - Use specific keys, not overrides
+🎯 \*\*Context-specific text\*\* - Use specific keys, not overrides
 
 This pattern aligns with industry standards (i18next, vue-i18n, react-intl, next-intl) and scales from small apps to large multi-language applications with thousands of translation keys.

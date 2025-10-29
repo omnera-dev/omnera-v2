@@ -19,8 +19,8 @@ export const auth = betterAuth({
   trustedOrigins: ['*'],
   // Disable CSRF protection for testing (should be enabled in production)
   advanced: {
-    useSecureCookies: false,
-    disableCSRFCheck: true,
+    useSecureCookies: process.env.NODE_ENV === 'production',
+    disableCSRFCheck: process.env.NODE_ENV !== 'production',
   },
   emailAndPassword: {
     enabled: true,

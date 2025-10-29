@@ -104,7 +104,7 @@ export function validateSpecsArray(
 
   // Check for specs array (accept both "x-specs" and "specs" for backward compatibility)
   // Prefer "x-specs" (OpenAPI extension) over "specs"
-  const specsKey = 'x-specs' in obj ? 'x-specs' : ('specs' in obj ? 'specs' : null)
+  const specsKey = 'x-specs' in obj ? 'x-specs' : 'specs' in obj ? 'specs' : null
 
   if (!specsKey) {
     result.errors.push({

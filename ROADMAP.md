@@ -16,7 +16,7 @@
 **🌐 API Schema Progress**: 63% (12/19 endpoints, 29 current)
 ███████████████████░░░░░░░░░░░ 63%
 
-**🧪 Test Implementation**: 3% (51/1793 specs passing)
+**🧪 Test Implementation**: 3% (51/1785 specs passing)
 █░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ 3%
 
 ---
@@ -47,9 +47,9 @@
 
 ## 3. Test Implementation Status
 
-🧪 **Total Specs**: 1793
+🧪 **Total Specs**: 1785
 ✅ **DONE**: 51 (3%)
-🚧 **WIP**: 710 (40%)
+🚧 **WIP**: 702 (39%)
 ⏳ **TODO**: 1032 (58%)
 
 **Next Steps**: Convert TODO specs to WIP, then to DONE
@@ -60,6 +60,6 @@
 
 For complete specification listings and implementation details:
 
-- 📋 **[App Schema Roadmap](specs/app/ROADMAP.md)** - All 1726 app specifications
+- 📋 **[App Schema Roadmap](specs/app/ROADMAP.md)** - All 1718 app specifications
 - 🌐 **[API Schema Roadmap](specs/api/ROADMAP.md)** - All 43 API specifications
 - ⚙️ **[Admin UI Roadmap](specs/admin/ROADMAP.md)** - All 24 admin specifications
