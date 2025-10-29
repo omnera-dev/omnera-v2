@@ -48,21 +48,16 @@ describe('schema-resolver', () => {
       expect(idProperty.readOnly).toBe(true)
     })
 
-    test('should preserve x-specs array from original schema', async () => {
+    test('should strip x-specs array during resolution', async () => {
       const schemaPath = join(SPECS_APP_DIR, 'tables', 'id', 'id.schema.json')
       const resolved = await resolveJsonSchema(schemaPath)
 
-      expect(Array.isArray(resolved['x-specs'])).toBe(true)
-      expect(resolved['x-specs']).toBeDefined()
+      // x-specs should be stripped to avoid resolving documentation examples
+      expect(resolved['x-specs']).toBeUndefined()
 
-      const specs = resolved['x-specs'] as unknown[]
-      expect(specs.length).toBeGreaterThan(0)
-
-      const firstSpec = specs[0] as Record<string, unknown>
-      expect(firstSpec.id).toBeDefined()
-      expect(firstSpec.given).toBeDefined()
-      expect(firstSpec.when).toBeDefined()
-      expect(firstSpec.then).toBeDefined()
+      // But other schema properties should be preserved
+      expect(resolved.title).toBe('Table ID')
+      expect(resolved.description).toBe('Unique identifier for the table')
     })
 
     test.skip('should resolve schema with multiple $ref properties', async () => {
