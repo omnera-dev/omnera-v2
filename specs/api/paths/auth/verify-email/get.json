@@ -95,7 +95,7 @@
       }
     }
   },
-  "specs": [
+  "x-specs": [
     {
       "id": "API-AUTH-VERIFY-EMAIL-001",
       "given": "A running server",

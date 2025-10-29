@@ -46,7 +46,7 @@
       }
     }
   },
-  "specs": [
+  "x-specs": [
     {
       "id": "API-AUTH-SIGN-OUT-001",
       "given": "A running server",

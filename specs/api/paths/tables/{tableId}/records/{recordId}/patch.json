@@ -56,7 +56,7 @@
       "$ref": "../../../../../components/responses/ConflictError.json"
     }
   },
-  "specs": [
+  "x-specs": [
     {
       "id": "API-TABLES-RECORDS-UPDATE-001",
       "given": "A running server with existing record",

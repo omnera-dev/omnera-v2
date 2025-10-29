@@ -50,7 +50,7 @@
       }
     }
   },
-  "specs": [
+  "x-specs": [
     {
       "id": "API-TABLES-LIST-001",
       "given": "A running server with tables configured",

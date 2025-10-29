@@ -69,7 +69,7 @@
       "$ref": "../../../components/responses/TableNotFound.json"
     }
   },
-  "specs": [
+  "x-specs": [
     {
       "id": "API-TABLES-GET-001",
       "given": "A running server with existing table",

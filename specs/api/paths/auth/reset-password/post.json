@@ -86,7 +86,7 @@
       }
     }
   },
-  "specs": [
+  "x-specs": [
     {
       "id": "API-AUTH-RESET-PASSWORD-001",
       "given": "A running server",

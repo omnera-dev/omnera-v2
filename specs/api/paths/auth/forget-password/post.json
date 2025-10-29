@@ -71,7 +71,7 @@
       "$ref": "../../../components/responses/ValidationError.json"
     }
   },
-  "specs": [
+  "x-specs": [
     {
       "id": "API-AUTH-FORGET-PASSWORD-001",
       "given": "A running server",

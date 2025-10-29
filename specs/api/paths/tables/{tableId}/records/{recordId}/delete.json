@@ -31,7 +31,7 @@
       "$ref": "../../../../../components/responses/RecordNotFound.json"
     }
   },
-  "specs": [
+  "x-specs": [
     {
       "id": "API-TABLES-RECORDS-DELETE-001",
       "given": "A running server with existing record",

@@ -76,7 +76,7 @@
       }
     }
   },
-  "specs": [
+  "x-specs": [
     {
       "id": "API-AUTH-GET-SESSION-001",
       "given": "A running server",

@@ -121,7 +121,7 @@
       }
     }
   },
-  "specs": [
+  "x-specs": [
     {
       "id": "API-AUTH-CHANGE-PASSWORD-001",
       "given": "A running server",

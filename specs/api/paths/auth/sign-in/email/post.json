@@ -111,7 +111,7 @@
       }
     }
   },
-  "specs": [
+  "x-specs": [
     {
       "id": "API-AUTH-SIGN-IN-EMAIL-001",
       "given": "A running server",

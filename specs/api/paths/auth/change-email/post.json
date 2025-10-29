@@ -92,7 +92,7 @@
       "$ref": "../../../components/responses/ConflictError.json"
     }
   },
-  "specs": [
+  "x-specs": [
     {
       "id": "API-AUTH-CHANGE-EMAIL-001",
       "given": "A running server",

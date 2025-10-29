@@ -33,7 +33,7 @@
       "$ref": "../../../../components/responses/TableNotFound.json"
     }
   },
-  "specs": [
+  "x-specs": [
     {
       "id": "API-TABLES-RECORDS-LIST-001",
       "given": "A running server with existing records",

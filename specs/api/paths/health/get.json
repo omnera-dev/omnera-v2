@@ -64,7 +64,7 @@
       }
     }
   },
-  "specs": [
+  "x-specs": [
     {
       "id": "API-HEALTH-001",
       "given": "A running server",

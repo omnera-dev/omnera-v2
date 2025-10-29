@@ -83,7 +83,7 @@
       }
     }
   },
-  "specs": [
+  "x-specs": [
     {
       "id": "API-AUTH-SEND-VERIFICATION-EMAIL-001",
       "given": "A running server",
