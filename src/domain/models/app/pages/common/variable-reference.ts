@@ -38,8 +38,7 @@ export const VariableReferenceSchema = Schema.String.pipe(
   }),
   Schema.annotations({
     title: 'Variable Reference',
-    description:
-      'Pattern for referencing variables in block templates using $variableName syntax',
+    description: 'Pattern for referencing variables in block templates using $variableName syntax',
     examples: [
       '$color',
       '$primaryText',

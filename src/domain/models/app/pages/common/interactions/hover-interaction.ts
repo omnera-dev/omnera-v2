@@ -30,7 +30,7 @@ export const EasingFunctionSchema = Schema.Literal(
 /**
  * CSS duration pattern (ms or s)
  *
- * Must be a number followed by 'ms' (milliseconds) or 's' (seconds).
+ * Must be a number (integer or decimal) followed by 'ms' (milliseconds) or 's' (seconds).
  *
  * @example
  * ```typescript
@@ -38,7 +38,7 @@ export const EasingFunctionSchema = Schema.Literal(
  * ```
  */
 export const DurationSchema = Schema.String.pipe(
-  Schema.pattern(/^[0-9]+(ms|s)$/, {
+  Schema.pattern(/^[0-9]+(\.[0-9]+)?(ms|s)$/, {
     message: () => 'Duration must be a number followed by ms or s (e.g., 200ms, 0.5s)',
   })
 )
