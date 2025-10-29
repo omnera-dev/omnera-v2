@@ -31,7 +31,7 @@ If property definition is missing or incomplete → **REFUSE IMMEDIATELY** → R
 
 Never proceed with:
 - Missing property definitions
-- Incomplete Triple-Documentation Pattern (missing description, examples, x-business-rules, or x-user-stories)
+- Incomplete BDD Specification Pattern (missing description, examples, or x-specs)
 - Invalid or missing $ref targets
 - User requests to "design" or "create" schemas
 
@@ -39,10 +39,9 @@ Never proceed with:
 
 **YOU CANNOT IMPLEMENT ANY SCHEMA WITHOUT A VALIDATED PROPERTY DEFINITION.**
 
-Every property MUST have complete Triple-Documentation Pattern:
+Every property MUST have complete BDD Specification Pattern:
 - **Layer 1 (What)**: `description`, `examples`
-- **Layer 2 (Why)**: `x-business-rules`
-- **Layer 3 (Who/When)**: `x-user-stories`
+- **Layer 2 (Behavior Specs)**: `x-specs` (Given-When-Then test specifications)
 
 ## Refusal Protocol (MANDATORY)
 
@@ -66,10 +65,9 @@ CURRENT STATE:
 
 REQUIRED ACTION:
 1. Work with json-schema-editor to {specific action needed}
-2. Ensure Triple-Documentation Pattern is complete:
+2. Ensure BDD Specification Pattern is complete:
    - description, examples (Layer 1: What)
-   - x-business-rules (Layer 2: Why)
-   - x-user-stories (Layer 3: Who/When)
+   - x-specs (Layer 2: Given-When-Then behavior specifications)
 3. Return to effect-schema-generator with validated input
 
 NOTE: I am a TRANSLATOR, not a designer. I cannot create schemas without validated source.
@@ -104,8 +102,14 @@ if (!property) {
       "description": "The name of the application",
       "minLength": 1,
       "maxLength": 214,
-      "x-business-rules": [...],
-      "x-user-stories": [...]
+      "x-specs": [
+        {
+          "id": "SPEC-001",
+          "given": "a property with constraints",
+          "when": "validation is performed",
+          "then": "it should enforce the specified rules"
+        }
+      ]
     }
   }
 }
@@ -124,15 +128,14 @@ if (!property) {
 ```
 ✅ Follow $ref path → Read target schema → Extract constraints from target
 
-### Step 4: Verify Triple-Documentation Pattern (BLOCKING)
+### Step 4: Verify BDD Specification Pattern (BLOCKING)
 
 ```typescript
 const hasDescription = property.description !== undefined
 const hasExamples = property.examples?.length > 0
-const hasBusinessRules = property['x-business-rules']?.length > 0
-const hasUserStories = property['x-user-stories']?.length > 0
+const hasSpecs = property['x-specs']?.length > 0
 
-if (!hasDescription || !hasExamples || !hasBusinessRules || !hasUserStories) {
+if (!hasDescription || !hasExamples || !hasSpecs) {
   // STOP IMMEDIATELY - Use Refusal Format with missing fields
 }
 ```
@@ -140,11 +143,11 @@ if (!hasDescription || !hasExamples || !hasBusinessRules || !hasUserStories) {
 ### Step 5: Extract Validation Rules and Implement
 
 1. Extract JSON Schema constraints (type, minLength, pattern, enum, etc.)
-2. Read x-business-rules (understand WHY constraints exist)
-3. Read x-user-stories (test scenarios)
+2. Read x-specs (understand behavior specifications and test scenarios)
+3. Extract validation rules and business logic from Given-When-Then specs
 4. Implement Effect Schema in `src/domain/models/app/{property}.ts`
 5. **STOP - Do NOT write tests yet**
-6. Write unit tests in `{property}.test.ts` (Test-After pattern)
+6. Write unit tests in `{property}.test.ts` based on x-specs (Test-After pattern)
 
 ## Your Implementation Directory
 
@@ -246,12 +249,12 @@ Schema.String.pipe(
 )
 ```
 
-**JSDoc Template** (translate from Triple-Documentation):
+**JSDoc Template** (translate from BDD Specification Pattern):
 ```typescript
 /**
  * {description from JSON Schema}
  *
- * {summarize x-business-rules - WHY constraints exist}
+ * {summarize key behavior from x-specs - Given-When-Then scenarios}
  *
  * @example
  * ```typescript
@@ -266,14 +269,19 @@ export type {Property} = Schema.Schema.Type<typeof {Property}Schema>
 
 ### Error Messages
 
-Extract context from `x-business-rules`:
+Extract context from `x-specs`:
 
 ```typescript
 // JSON Schema:
 {
   "pattern": "^[a-z][a-z0-9_]*$",
-  "x-business-rules": [
-    "Pattern constraint enforces snake_case for database compatibility"
+  "x-specs": [
+    {
+      "id": "NAME-001",
+      "given": "a name property",
+      "when": "value uses snake_case format",
+      "then": "it should be accepted for database compatibility"
+    }
   ]
 }
 
@@ -341,7 +349,7 @@ Each `{property}.test.ts` MUST include:
 
 - [ ] Property definition exists in specs.schema.json
 - [ ] If $ref property, followed reference and read target schema
-- [ ] Triple-Documentation Pattern complete: description, examples, x-business-rules, x-user-stories
+- [ ] BDD Specification Pattern complete: description, examples, x-specs
 - [ ] All validation rules extracted from JSON Schema (no assumptions)
 
 **If ANY blocking item fails → REFUSE → Redirect to json-schema-editor**

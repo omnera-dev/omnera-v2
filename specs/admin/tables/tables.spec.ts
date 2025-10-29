@@ -11,7 +11,7 @@ import { test, expect } from '@/specs/fixtures'
  * E2E Tests for Tables - Root Level CRUD Operations
  *
  * Test Organization:
- * 1. @spec tests - Granular specification tests (18 tests from x-user-stories)
+ * 1. @spec tests - Granular specification tests (18 tests from x-specs)
  * 2. @regression test - ONE consolidated workflow test
  *
  * Source: docs/specifications/schemas/tables/tables.schema.json (lines 412-431)
