@@ -7,11 +7,7 @@
 
 import { describe, test, expect } from 'bun:test'
 import { Schema } from 'effect'
-import {
-  BlockReferenceNameSchema,
-  BlockVarsSchema,
-  BlockReferenceSchema,
-} from './block-reference'
+import { BlockReferenceNameSchema, BlockVarsSchema, BlockReferenceSchema } from './block-reference'
 
 describe('BlockReferenceNameSchema', () => {
   test('should accept kebab-case names', () => {

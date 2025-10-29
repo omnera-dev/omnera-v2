@@ -6,9 +6,13 @@
  */
 
 import { Schema } from 'effect'
+import { BlocksSchema } from './blocks'
 import { DescriptionSchema } from './description'
+import { LanguagesSchema } from './languages'
 import { NameSchema } from './name'
+import { PagesSchema } from './pages'
 import { TablesSchema } from './tables'
+import { ThemeSchema } from './theme'
 import { VersionSchema } from './version'
 
 /**
@@ -74,6 +78,41 @@ export const AppSchema = Schema.Struct({
    * field types.
    */
   tables: Schema.optional(TablesSchema),
+
+  /**
+   * Design system configuration (optional).
+   *
+   * Unified design tokens for colors, typography, spacing, animations, breakpoints,
+   * shadows, and border radius. Theme applies globally to all pages via className
+   * utilities and CSS variables.
+   */
+  theme: Schema.optional(ThemeSchema),
+
+  /**
+   * Multi-language support configuration (optional).
+   *
+   * Defines supported languages, default language, translations, and i18n behavior
+   * (browser detection, persistence). Pages reference translations using $t: syntax.
+   */
+  languages: Schema.optional(LanguagesSchema),
+
+  /**
+   * Reusable UI component blocks (optional).
+   *
+   * Array of reusable component templates with variable substitution. Blocks are
+   * defined once at app level and referenced across pages using $ref syntax with
+   * $vars for dynamic content.
+   */
+  blocks: Schema.optional(BlocksSchema),
+
+  /**
+   * Marketing and content pages (optional).
+   *
+   * Array of page configurations with server-side rendering support. Pages use a
+   * block-based layout system with comprehensive metadata, theming, and i18n support.
+   * Minimum of 1 page required when pages property is present.
+   */
+  pages: Schema.optional(PagesSchema),
 }).pipe(
   Schema.annotations({
     title: 'Application Configuration',
@@ -133,3 +172,7 @@ export * from './name'
 export * from './version'
 export * from './description'
 export * from './tables'
+export * from './theme'
+export * from './languages'
+export * from './blocks'
+export * from './pages'

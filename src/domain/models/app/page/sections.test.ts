@@ -7,12 +7,7 @@
 
 import { describe, test, expect } from 'bun:test'
 import { Schema } from 'effect'
-import {
-  ComponentTypeSchema,
-  ComponentSchema,
-  SectionItemSchema,
-  SectionsSchema,
-} from './sections'
+import { ComponentTypeSchema, ComponentSchema, SectionItemSchema, SectionsSchema } from './sections'
 
 describe('ComponentTypeSchema', () => {
   test('should accept all layout component types', () => {
@@ -55,9 +50,7 @@ describe('ComponentTypeSchema', () => {
     const groupingTypes = ['card', 'badge', 'timeline'] as const
 
     // WHEN: Schema validation is performed on each
-    const results = groupingTypes.map((type) =>
-      Schema.decodeUnknownSync(ComponentTypeSchema)(type)
-    )
+    const results = groupingTypes.map((type) => Schema.decodeUnknownSync(ComponentTypeSchema)(type))
 
     // THEN: All grouping types should be accepted
     expect(results).toEqual([...groupingTypes])

@@ -6,7 +6,7 @@
  */
 
 import { Schema } from 'effect'
-import { BlockSchema } from './block'
+import { BlockSchema } from './block/block'
 
 /**
  * Array of reusable UI component templates
@@ -46,10 +46,12 @@ import { BlockSchema } from './block'
  *
  * @see specs/app/blocks/blocks.schema.json
  */
-export const BlocksSchema = Schema.Array(BlockSchema).annotations({
-  title: 'Reusable Blocks',
-  description:
-    'Array of reusable UI component templates with variable substitution for use across pages',
-})
+export const BlocksSchema = Schema.Array(BlockSchema).pipe(
+  Schema.annotations({
+    title: 'Reusable Blocks',
+    description:
+      'Array of reusable UI component templates with variable substitution for use across pages',
+  })
+)
 
 export type Blocks = Schema.Schema.Type<typeof BlocksSchema>

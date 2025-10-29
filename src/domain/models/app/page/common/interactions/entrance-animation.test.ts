@@ -12,7 +12,14 @@ import { EntranceAnimationTypeSchema, EntranceAnimationSchema } from './entrance
 describe('EntranceAnimationTypeSchema', () => {
   test('should accept all entrance animation types', () => {
     // GIVEN: All valid entrance animations
-    const animations = ['fadeIn', 'fadeInUp', 'fadeInDown', 'zoomIn', 'slideInUp', 'slideInDown'] as const
+    const animations = [
+      'fadeIn',
+      'fadeInUp',
+      'fadeInDown',
+      'zoomIn',
+      'slideInUp',
+      'slideInDown',
+    ] as const
 
     // WHEN: Schema validation is performed on each
     const results = animations.map((anim) =>

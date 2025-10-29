@@ -187,7 +187,7 @@ export const TablesSchema = Schema.Array(
 
 **Boundary**: You implement App schemas, you IMPORT domain schemas (never modify them).
 
-## Translation Workflow (Two-Phase Process)
+## Translation Workflow (Three-Phase Process)
 
 ### Phase 1: Implementation (Effect Schema Code)
 
@@ -215,6 +215,23 @@ export const TablesSchema = Schema.Array(
 **Phase 2 Output**: `src/domain/models/app/{property}.test.ts`
 
 **Why Two Phases?**: Test-After documents actual solution and provides fast refactoring feedback.
+
+---
+
+### Phase 3: Quality Verification (Automated Checks)
+
+11. Run quality checks: `bun quality`
+12. Verify all checks pass:
+    - License headers added automatically
+    - Code formatting (Prettier)
+    - Linting rules (ESLint)
+    - Type checking (TypeScript)
+13. Fix any issues reported by quality checks
+14. Re-run `bun quality` until all checks pass
+
+**Phase 3 Output**: Quality-verified implementation ready for commit
+
+**Why Quality Checks?**: Ensures generated code meets project standards before committing.
 
 ## Translation Patterns
 
@@ -373,6 +390,15 @@ Each `{property}.test.ts` MUST include:
 - [ ] Tests cover: valid values, invalid values, edge cases
 - [ ] Error messages are clear and actionable
 - [ ] Tests pass (run automatically via hooks)
+
+### Quality Verification Phase
+
+- [ ] `bun quality` command executed after creating files
+- [ ] License headers present (copyright notice)
+- [ ] Code formatting passes (Prettier)
+- [ ] Linting rules pass (ESLint)
+- [ ] Type checking passes (TypeScript)
+- [ ] All quality issues fixed before completion
 
 ### Integration
 

@@ -24,9 +24,7 @@ describe('ScrollAnimationSchema', () => {
     ] as const
 
     // WHEN: Schema validation is performed on each
-    const results = animations.map((anim) =>
-      Schema.decodeUnknownSync(ScrollAnimationSchema)(anim)
-    )
+    const results = animations.map((anim) => Schema.decodeUnknownSync(ScrollAnimationSchema)(anim))
 
     // THEN: All animations should be accepted
     expect(results).toEqual([...animations])

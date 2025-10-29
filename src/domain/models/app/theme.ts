@@ -6,13 +6,13 @@
  */
 
 import { Schema } from 'effect'
-import { AnimationsConfigSchema } from './animations'
-import { BorderRadiusConfigSchema } from './border-radius'
-import { BreakpointsConfigSchema } from './breakpoints'
-import { ColorsConfigSchema } from './colors'
-import { FontsConfigSchema } from './fonts'
-import { ShadowsConfigSchema } from './shadows'
-import { SpacingConfigSchema } from './spacing'
+import { AnimationsConfigSchema } from './theme/animations'
+import { BorderRadiusConfigSchema } from './theme/border-radius'
+import { BreakpointsConfigSchema } from './theme/breakpoints'
+import { ColorsConfigSchema } from './theme/colors'
+import { FontsConfigSchema } from './theme/fonts'
+import { ShadowsConfigSchema } from './theme/shadows'
+import { SpacingConfigSchema } from './theme/spacing'
 
 /**
  * Theme configuration orchestrating all design token categories
@@ -56,9 +56,11 @@ export const ThemeSchema = Schema.Struct({
   breakpoints: Schema.optional(BreakpointsConfigSchema),
   shadows: Schema.optional(ShadowsConfigSchema),
   borderRadius: Schema.optional(BorderRadiusConfigSchema),
-}).annotations({
-  title: 'Theme Configuration',
-  description: 'Design tokens for colors, typography, spacing, and animations',
-})
+}).pipe(
+  Schema.annotations({
+    title: 'Theme Configuration',
+    description: 'Design tokens for colors, typography, spacing, and animations',
+  })
+)
 
 export type Theme = Schema.Schema.Type<typeof ThemeSchema>

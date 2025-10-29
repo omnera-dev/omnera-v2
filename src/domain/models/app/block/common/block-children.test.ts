@@ -167,12 +167,7 @@ describe('BlockChildrenSchema', () => {
 
   test('should accept children with various component types', () => {
     // GIVEN: Children with different types
-    const children = [
-      { type: 'button' },
-      { type: 'input' },
-      { type: 'span' },
-      { type: 'div' },
-    ]
+    const children = [{ type: 'button' }, { type: 'input' }, { type: 'span' }, { type: 'div' }]
 
     // WHEN: Schema validation is performed
     const result = Schema.decodeUnknownSync(BlockChildrenSchema)(children)

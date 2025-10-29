@@ -147,7 +147,7 @@ describe('InlineScriptsSchema', () => {
     // GIVEN: Analytics initialization code
     const inlineScripts = [
       {
-        code: "window.dataLayer = window.dataLayer || []; function gtag(){dataLayer.push(arguments);}",
+        code: 'window.dataLayer = window.dataLayer || []; function gtag(){dataLayer.push(arguments);}',
         position: 'head' as const,
       },
     ]

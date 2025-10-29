@@ -7,7 +7,11 @@
 
 import { describe, test, expect } from 'bun:test'
 import { Schema } from 'effect'
-import { ClickAnimationSchema, ElementIdSelectorSchema, ClickInteractionSchema } from './click-interaction'
+import {
+  ClickAnimationSchema,
+  ElementIdSelectorSchema,
+  ClickInteractionSchema,
+} from './click-interaction'
 
 describe('ClickAnimationSchema', () => {
   test('should accept all animation types', () => {

@@ -6,13 +6,13 @@
  */
 
 import { Schema } from 'effect'
-import { PageIdSchema } from './id'
-import { LayoutSchema } from './layout'
-import { MetaSchema } from './meta'
-import { PageNameSchema } from './name'
-import { PagePathSchema } from './path'
-import { ScriptsSchema } from './scripts/scripts'
-import { SectionsSchema } from './sections'
+import { PageIdSchema } from './page/id'
+import { LayoutSchema } from './page/layout'
+import { MetaSchema } from './page/meta'
+import { PageNameSchema } from './page/name'
+import { PagePathSchema } from './page/path'
+import { ScriptsSchema } from './page/scripts/scripts'
+import { SectionsSchema } from './page/sections'
 
 /**
  * Page Schema

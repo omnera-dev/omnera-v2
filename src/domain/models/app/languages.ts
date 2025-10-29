@@ -6,7 +6,7 @@
  */
 
 import { Schema } from 'effect'
-import { LanguageConfigSchema } from './language-config'
+import { LanguageConfigSchema } from './language/language-config'
 
 /**
  * ISO 639-1 language code with optional region
@@ -77,10 +77,12 @@ export const TranslationKeySchema = Schema.String.pipe(
 export const TranslationDictionarySchema = Schema.Record({
   key: TranslationKeySchema,
   value: Schema.String,
-}).annotations({
-  title: 'Translation Dictionary',
-  description: 'Maps translation keys to localized strings for a single language',
-})
+}).pipe(
+  Schema.annotations({
+    title: 'Translation Dictionary',
+    description: 'Maps translation keys to localized strings for a single language',
+  })
+)
 
 /**
  * Centralized translations for all supported languages
@@ -108,11 +110,13 @@ export const TranslationDictionarySchema = Schema.Record({
 export const TranslationsSchema = Schema.Record({
   key: LanguageCodeSchema,
   value: TranslationDictionarySchema,
-}).annotations({
-  title: 'Centralized Translations',
-  description:
-    'Translation dictionaries for all supported languages. Use $t:key syntax to reference translations.',
-})
+}).pipe(
+  Schema.annotations({
+    title: 'Centralized Translations',
+    description:
+      'Translation dictionaries for all supported languages. Use $t:key syntax to reference translations.',
+  })
+)
 
 /**
  * Multi-language support configuration for the entire application
@@ -156,10 +160,12 @@ export const LanguagesSchema = Schema.Struct({
   detectBrowser: Schema.optional(Schema.Boolean),
   persistSelection: Schema.optional(Schema.Boolean),
   translations: Schema.optional(TranslationsSchema),
-}).annotations({
-  title: 'Languages Configuration',
-  description: 'Multi-language support configuration for the entire application',
-})
+}).pipe(
+  Schema.annotations({
+    title: 'Languages Configuration',
+    description: 'Multi-language support configuration for the entire application',
+  })
+)
 
 export type LanguageCode = Schema.Schema.Type<typeof LanguageCodeSchema>
 export type TranslationKey = Schema.Schema.Type<typeof TranslationKeySchema>
