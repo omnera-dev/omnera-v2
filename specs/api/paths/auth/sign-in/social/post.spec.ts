@@ -60,10 +60,9 @@ test(
     // Note: Actual redirect URL structure depends on Better Auth OAuth configuration
     const responseData = await response.json().catch(() => null)
 
-     
     if (responseData && response.status() !== 404) {
       // If JSON response and not 404, should contain url property
-       
+
       expect(responseData).toHaveProperty('url')
     }
   }

@@ -17,6 +17,11 @@ export const auth = betterAuth({
   }),
   // Allow any redirect URL for testing (should be restricted in production)
   trustedOrigins: ['*'],
+  // Disable CSRF protection for testing (should be enabled in production)
+  advanced: {
+    useSecureCookies: false,
+    disableCSRFCheck: true,
+  },
   emailAndPassword: {
     enabled: true,
     requireEmailVerification: false, // Allow sign-up without email verification for testing

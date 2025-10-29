@@ -80,7 +80,6 @@ export class DatabaseTemplateManager {
   private async waitForContainerReady(maxAttempts = 20): Promise<void> {
     console.log(`   🔄 Waiting for PostgreSQL container at ${this.adminConnectionUrl}...`)
 
-     
     for (let i = 0; i < maxAttempts; i++) {
       // Create a fresh pool for each attempt
       const testPool = new Pool({
@@ -120,7 +119,7 @@ export class DatabaseTemplateManager {
         // - First 3 attempts: 500ms (container might be starting up)
         // - Next 3 attempts: 1000ms (PostgreSQL initializing)
         // - Remaining attempts: 1500ms (extended wait for slow systems)
-        const backoff = i < 3 ? 500 : (i < 6 ? 1000 : 1500)
+        const backoff = i < 3 ? 500 : i < 6 ? 1000 : 1500
         await new Promise((resolve) => setTimeout(resolve, backoff))
       }
     }
@@ -212,7 +211,6 @@ export class DatabaseTemplateManager {
     // Use retry logic to handle transient connection issues
     const maxRetries = 3
 
-     
     for (let attempt = 1; attempt <= maxRetries; attempt++) {
       try {
         // First, check if database exists

@@ -406,7 +406,7 @@ async function main() {
 
       // 2. Co-location: Check for matching .spec.ts
       const obj = json as Record<string, unknown>
-      const specsKey = 'x-specs' in obj ? 'x-specs' : ('specs' in obj ? 'specs' : null)
+      const specsKey = 'x-specs' in obj ? 'x-specs' : 'specs' in obj ? 'specs' : null
       const specs: Spec[] =
         typeof json === 'object' && json !== null && specsKey && Array.isArray(obj[specsKey])
           ? (obj[specsKey] as Spec[])
