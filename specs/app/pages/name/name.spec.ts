@@ -28,7 +28,6 @@ test.describe('Page Name', () => {
     'APP-PAGES-NAME-001: should validate as internal page name',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // Spec ID: APP-PAGES-NAME-001
       // GIVEN: a page name as string
       await startServerWithSchema({
         name: 'test-app',
@@ -47,7 +46,6 @@ test.describe('Page Name', () => {
     'APP-PAGES-NAME-002: should follow shared name pattern from common definitions',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // Spec ID: APP-PAGES-NAME-002
       // GIVEN: a page name referencing common definition
       // WHEN: schema uses $ref to definitions.schema.json#/definitions/name
       // THEN: it should follow shared name pattern from common definitions
@@ -66,7 +64,6 @@ test.describe('Page Name', () => {
     'APP-PAGES-NAME-003: should accept simple lowercase names',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // Spec ID: APP-PAGES-NAME-003
       // GIVEN: a descriptive page name
       await startServerWithSchema({
         name: 'test-app',
@@ -87,7 +84,6 @@ test.describe('Page Name', () => {
     'APP-PAGES-NAME-004: should accept single-word page identifiers',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // Spec ID: APP-PAGES-NAME-004
       // GIVEN: a multi-word page name
       await startServerWithSchema({
         name: 'test-app',
@@ -121,7 +117,6 @@ test.describe('Page Name', () => {
     'APP-PAGES-NAME-005: should accept human-readable names with spaces',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // Spec ID: APP-PAGES-NAME-005
       // GIVEN: a page name with spaces for display
       await startServerWithSchema({
         name: 'test-app',
@@ -150,7 +145,6 @@ test.describe('Page Name', () => {
     'APP-PAGES-NAME-006: should provide examples for typical page names',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // Spec ID: APP-PAGES-NAME-006
       // GIVEN: common page names (home, about, pricing, contact)
       await startServerWithSchema({
         name: 'test-app',
@@ -184,7 +178,6 @@ test.describe('Page Name', () => {
     'APP-PAGES-NAME-007: should fail validation (name is required)',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // Spec ID: APP-PAGES-NAME-007
       // GIVEN: page name as required field
       // WHEN: page is created without name
       // THEN: it should fail validation (name is required)
@@ -202,7 +195,6 @@ test.describe('Page Name', () => {
     'APP-PAGES-NAME-008: should serve as internal identifier separate from URL path',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // Spec ID: APP-PAGES-NAME-008
       // GIVEN: page names across multiple pages
       await startServerWithSchema({
         name: 'test-app',

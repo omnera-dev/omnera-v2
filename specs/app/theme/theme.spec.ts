@@ -28,7 +28,6 @@ test.describe('Theme Configuration', () => {
     'APP-THEME-001: should validate theme with colors as the only design token category',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // Spec ID: APP-THEME-001
       // GIVEN: a theme with only colors defined
       await startServerWithSchema({
         name: 'test-app',
@@ -56,7 +55,6 @@ test.describe('Theme Configuration', () => {
     'APP-THEME-002: should validate color palette and typography system',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // Spec ID: APP-THEME-002
       // GIVEN: a theme with colors and fonts configured
       await startServerWithSchema({
         name: 'test-app',
@@ -90,7 +88,6 @@ test.describe('Theme Configuration', () => {
     'APP-THEME-003: should validate visual identity, typography, and layout tokens',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // Spec ID: APP-THEME-003
       // GIVEN: a theme with colors, fonts, and spacing
       await startServerWithSchema({
         name: 'test-app',
@@ -123,7 +120,6 @@ test.describe('Theme Configuration', () => {
     'APP-THEME-004: should validate and orchestrate all design token categories',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // Spec ID: APP-THEME-004
       // GIVEN: a complete theme with all 7 design token categories
       await startServerWithSchema({
         name: 'test-app',
@@ -172,7 +168,6 @@ test.describe('Theme Configuration', () => {
     'APP-THEME-005: should ensure consistency between theme.breakpoints and responsive variants',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // Spec ID: APP-THEME-005
       // GIVEN: a theme with breakpoints matching responsive system
       await startServerWithSchema({
         name: 'test-app',
@@ -203,7 +198,6 @@ test.describe('Theme Configuration', () => {
     'APP-THEME-006: should provide animations reusable in interactions.schema.json',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // Spec ID: APP-THEME-006
       // GIVEN: a theme with animations matching interaction system
       await startServerWithSchema({
         name: 'test-app',
@@ -236,7 +230,6 @@ test.describe('Theme Configuration', () => {
     'APP-THEME-007: should enable consistent UI across entire application',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // Spec ID: APP-THEME-007
       // GIVEN: a theme following design system best practices
       await startServerWithSchema({
         name: 'test-app',
@@ -277,7 +270,6 @@ test.describe('Theme Configuration', () => {
     'APP-THEME-008: should integrate seamlessly with Tailwind CSS',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // Spec ID: APP-THEME-008
       // GIVEN: a theme with Tailwind-compatible tokens
       await startServerWithSchema({
         name: 'test-app',
@@ -307,7 +299,6 @@ test.describe('Theme Configuration', () => {
     'APP-THEME-INTEGRATION-001: should render cohesive UI with all theme tokens applied together',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // Spec ID: APP-THEME-INTEGRATION-001
       // GIVEN: a complete theme with multiple design tokens used in page component
       await startServerWithSchema({
         name: 'test-app',
@@ -378,7 +369,6 @@ test.describe('Theme Configuration', () => {
     'APP-THEME-INTEGRATION-002: should maintain visual consistency across entire page layout',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // Spec ID: APP-THEME-INTEGRATION-002
       // GIVEN: a theme used across multiple page sections
       await startServerWithSchema({
         name: 'test-app',
@@ -431,7 +421,6 @@ test.describe('Theme Configuration', () => {
     'APP-THEME-INTEGRATION-003: should render adaptive layouts that respond to screen size',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // Spec ID: APP-THEME-INTEGRATION-003
       // GIVEN: a theme with responsive breakpoints integrated with component layouts
       await startServerWithSchema({
         name: 'test-app',

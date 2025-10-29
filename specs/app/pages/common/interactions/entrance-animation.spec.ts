@@ -28,7 +28,6 @@ test.describe('Entrance Animation', () => {
     'APP-INTERACTION-ENTRANCE-001: should fade in smoothly',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // Spec ID: APP-INTERACTION-ENTRANCE-001
       // GIVEN: a component with entrance animation 'fadeIn'
       await startServerWithSchema({
         name: 'test-app',
@@ -62,7 +61,6 @@ test.describe('Entrance Animation', () => {
     'APP-INTERACTION-ENTRANCE-002: should fade in while moving up from below',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // Spec ID: APP-INTERACTION-ENTRANCE-002
       // GIVEN: a component with entrance animation 'fadeInUp'
       await startServerWithSchema({
         name: 'test-app',
@@ -96,7 +94,6 @@ test.describe('Entrance Animation', () => {
     'APP-INTERACTION-ENTRANCE-003: should zoom in from small to normal size',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // Spec ID: APP-INTERACTION-ENTRANCE-003
       // GIVEN: a component with entrance animation 'zoomIn'
       await startServerWithSchema({
         name: 'test-app',
@@ -130,7 +127,6 @@ test.describe('Entrance Animation', () => {
     'APP-INTERACTION-ENTRANCE-004: should wait 500ms before starting the entrance animation',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // Spec ID: APP-INTERACTION-ENTRANCE-004
       // GIVEN: a component with entrance delay '500ms'
       await startServerWithSchema({
         name: 'test-app',
@@ -164,7 +160,6 @@ test.describe('Entrance Animation', () => {
     'APP-INTERACTION-ENTRANCE-005: should complete the entrance animation in 1 second',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // Spec ID: APP-INTERACTION-ENTRANCE-005
       // GIVEN: a component with entrance duration '1000ms'
       await startServerWithSchema({
         name: 'test-app',
@@ -198,7 +193,6 @@ test.describe('Entrance Animation', () => {
     'APP-INTERACTION-ENTRANCE-006: each component should animate 100ms after the previous sibling',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // Spec ID: APP-INTERACTION-ENTRANCE-006
       // GIVEN: multiple sibling components with stagger '100ms'
       await startServerWithSchema({
         name: 'test-app',
@@ -252,7 +246,6 @@ test.describe('Entrance Animation', () => {
     'APP-INTERACTION-ENTRANCE-007: should wait 200ms base delay plus 50ms per sibling index before animating',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // Spec ID: APP-INTERACTION-ENTRANCE-007
       // GIVEN: a component with delay '200ms' and stagger '50ms'
       await startServerWithSchema({
         name: 'test-app',
@@ -303,7 +296,6 @@ test.describe('Entrance Animation', () => {
     'APP-INTERACTION-ENTRANCE-008: should wait the delay period then animate for the specified duration',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // Spec ID: APP-INTERACTION-ENTRANCE-008
       // GIVEN: a component with animation, delay, and duration all configured
       await startServerWithSchema({
         name: 'test-app',

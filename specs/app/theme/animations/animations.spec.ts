@@ -28,7 +28,6 @@ test.describe('Animation Configuration', () => {
     'APP-THEME-ANIMATIONS-001: should validate animation enablement',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // Spec ID: APP-THEME-ANIMATIONS-001
       // GIVEN: an animation with boolean value true
       await startServerWithSchema({
         name: 'test-app',
@@ -51,7 +50,6 @@ test.describe('Animation Configuration', () => {
     'APP-THEME-ANIMATIONS-002: should validate CSS animation string',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // Spec ID: APP-THEME-ANIMATIONS-002
       // GIVEN: an animation with string CSS value
       await startServerWithSchema({
         name: 'test-app',
@@ -77,7 +75,6 @@ test.describe('Animation Configuration', () => {
     'APP-THEME-ANIMATIONS-003: should validate timing properties',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // Spec ID: APP-THEME-ANIMATIONS-003
       // GIVEN: an animation with duration and easing object config
       await startServerWithSchema({
         name: 'test-app',
@@ -103,7 +100,6 @@ test.describe('Animation Configuration', () => {
     'APP-THEME-ANIMATIONS-004: should validate animation delay',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // Spec ID: APP-THEME-ANIMATIONS-004
       // GIVEN: an animation with delay property
       await startServerWithSchema({
         name: 'test-app',
@@ -129,7 +125,6 @@ test.describe('Animation Configuration', () => {
     'APP-THEME-ANIMATIONS-005: should validate animation frames definition',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // Spec ID: APP-THEME-ANIMATIONS-005
       // GIVEN: an animation with keyframes object
       await startServerWithSchema({
         name: 'test-app',
@@ -161,7 +156,6 @@ test.describe('Animation Configuration', () => {
     'APP-THEME-ANIMATIONS-006: should validate disabled state',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // Spec ID: APP-THEME-ANIMATIONS-006
       // GIVEN: an animation with enabled set to false
       await startServerWithSchema({
         name: 'test-app',
@@ -188,7 +182,6 @@ test.describe('Animation Configuration', () => {
     'APP-THEME-ANIMATIONS-007: should validate reusable animation library',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // Spec ID: APP-THEME-ANIMATIONS-007
       // GIVEN: common animations (fadeIn, fadeInUp, pulse, float)
       await startServerWithSchema({
         name: 'test-app',
@@ -215,7 +208,6 @@ test.describe('Animation Configuration', () => {
     'APP-THEME-ANIMATIONS-008: should validate default transition behavior',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // Spec ID: APP-THEME-ANIMATIONS-008
       // GIVEN: transition config with duration and easing
       await startServerWithSchema({
         name: 'test-app',
@@ -241,7 +233,6 @@ test.describe('Animation Configuration', () => {
     'APP-THEME-ANIMATIONS-APPLICATION-001: should render modal with fade-in animation on mount',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // Spec ID: APP-THEME-ANIMATIONS-APPLICATION-001
       // GIVEN: fadeIn animation applied to modal component
       await startServerWithSchema({
         name: 'test-app',
@@ -284,7 +275,6 @@ test.describe('Animation Configuration', () => {
     'APP-THEME-ANIMATIONS-APPLICATION-002: should render badge with pulsing animation loop',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // Spec ID: APP-THEME-ANIMATIONS-APPLICATION-002
       // GIVEN: pulse animation applied to notification badge
       await startServerWithSchema({
         name: 'test-app',
@@ -327,7 +317,6 @@ test.describe('Animation Configuration', () => {
     'APP-THEME-ANIMATIONS-APPLICATION-003: should render button with CSS transition on hover',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // Spec ID: APP-THEME-ANIMATIONS-APPLICATION-003
       // GIVEN: transition animation applied to button hover state
       await startServerWithSchema({
         name: 'test-app',

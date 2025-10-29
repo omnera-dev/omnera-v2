@@ -28,7 +28,6 @@ test.describe('Pages', () => {
     'APP-PAGES-001: should validate as pages array with minimum 1 item',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // Spec ID: APP-PAGES-001
       // GIVEN: a pages array with single page
       await startServerWithSchema({
         name: 'test-app',
@@ -49,7 +48,6 @@ test.describe('Pages', () => {
     'APP-PAGES-002: should validate with minimal configuration',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // Spec ID: APP-PAGES-002
       // GIVEN: a page with required properties only
       await startServerWithSchema({
         name: 'test-app',
@@ -76,7 +74,6 @@ test.describe('Pages', () => {
     'APP-PAGES-003: should accept complete page configuration',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // Spec ID: APP-PAGES-003
       // GIVEN: a page with all optional properties
       await startServerWithSchema({
         name: 'test-app',
@@ -106,7 +103,6 @@ test.describe('Pages', () => {
     'APP-PAGES-004: should accept root path for homepage',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // Spec ID: APP-PAGES-004
       // GIVEN: a page with home path
       await startServerWithSchema({
         name: 'test-app',
@@ -126,7 +122,6 @@ test.describe('Pages', () => {
     'APP-PAGES-005: should accept nested URL paths',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // Spec ID: APP-PAGES-005
       // GIVEN: a page with nested path
       await startServerWithSchema({
         name: 'test-app',
@@ -153,7 +148,6 @@ test.describe('Pages', () => {
     'APP-PAGES-006: should support direct component definitions in sections',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // Spec ID: APP-PAGES-006
       // GIVEN: a page with sections containing direct components
       await startServerWithSchema({
         name: 'test-app',
@@ -185,7 +179,6 @@ test.describe('Pages', () => {
     'APP-PAGES-007: should support block references with $variable syntax',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // Spec ID: APP-PAGES-007
       // GIVEN: a page with sections containing block references
       await startServerWithSchema({
         name: 'test-app',
@@ -219,7 +212,6 @@ test.describe('Pages', () => {
     'APP-PAGES-008: should orchestrate global layout components',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // Spec ID: APP-PAGES-008
       // GIVEN: a page with layout configuration
       await startServerWithSchema({
         name: 'test-app',
@@ -253,7 +245,6 @@ test.describe('Pages', () => {
     'APP-PAGES-009: should manage client-side scripts and features',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // Spec ID: APP-PAGES-009
       // GIVEN: a page with scripts configuration
       await startServerWithSchema({
         name: 'test-app',
@@ -284,7 +275,6 @@ test.describe('Pages', () => {
     'APP-PAGES-010: should support multiple page configurations',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // Spec ID: APP-PAGES-010
       // GIVEN: multiple pages in array
       await startServerWithSchema({
         name: 'test-app',
@@ -322,7 +312,6 @@ test.describe('Pages', () => {
     'APP-PAGES-011: should enable block reusability across pages via $ref',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // Spec ID: APP-PAGES-011
       // GIVEN: a page supporting reusable blocks
       await startServerWithSchema({
         name: 'test-app',
@@ -359,7 +348,6 @@ test.describe('Pages', () => {
     'APP-PAGES-012: should support complete metadata configuration beyond basic SEO',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // Spec ID: APP-PAGES-012
       // GIVEN: a page with comprehensive metadata
       await startServerWithSchema({
         name: 'test-app',
@@ -405,7 +393,6 @@ test.describe('Pages', () => {
     'APP-PAGES-INTEGRATION-001: should apply global theme to page elements without page-level theme config',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // Spec ID: APP-PAGES-INTEGRATION-001
       // GIVEN: a page with theme integration
       await startServerWithSchema({
         name: 'test-app',
@@ -442,7 +429,6 @@ test.describe('Pages', () => {
     'APP-PAGES-INTEGRATION-002: should adapt page content based on selected language without page-level translations',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // Spec ID: APP-PAGES-INTEGRATION-002
       // GIVEN: a page with language integration
       await startServerWithSchema({
         name: 'test-app',
@@ -481,7 +467,6 @@ test.describe('Pages', () => {
     'APP-PAGES-INTEGRATION-003: should compose pages from reusable blocks without duplicating block definitions',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // Spec ID: APP-PAGES-INTEGRATION-003
       // GIVEN: a page with blocks integration
       await startServerWithSchema({
         name: 'test-app',
@@ -527,7 +512,6 @@ test.describe('Pages', () => {
     'APP-PAGES-INTEGRATION-004: should support responsive design via className utilities without separate mobile pages',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // Spec ID: APP-PAGES-INTEGRATION-004
       // GIVEN: a page with responsive integration
       await startServerWithSchema({
         name: 'test-app',
@@ -568,7 +552,6 @@ test.describe('Pages', () => {
     'APP-PAGES-INTEGRATION-005: should demonstrate end-to-end integration of all page-building features',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // Spec ID: APP-PAGES-INTEGRATION-005
       // GIVEN: a complete app with pages, theme, blocks, languages, and responsive
       await startServerWithSchema({
         name: 'test-app',

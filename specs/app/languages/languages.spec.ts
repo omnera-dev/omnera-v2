@@ -28,7 +28,6 @@ test.describe('Languages Configuration', () => {
     'APP-LANGUAGES-001: should use English as the only available language',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // Spec ID: APP-LANGUAGES-001
       // GIVEN: an app with default language en-US and one supported language
       await startServerWithSchema({
         name: 'test-app',
@@ -57,7 +56,6 @@ test.describe('Languages Configuration', () => {
     'APP-LANGUAGES-002: should be able to switch between all three languages',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // Spec ID: APP-LANGUAGES-002
       // GIVEN: an app with default en-US and supported languages [en-US, fr-FR, es-ES]
       await startServerWithSchema({
         name: 'test-app',
@@ -89,7 +87,6 @@ test.describe('Languages Configuration', () => {
     'APP-LANGUAGES-003: should display the English fallback text',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // Spec ID: APP-LANGUAGES-003
       // GIVEN: an app with default en-US and fallback en-US
       await startServerWithSchema({
         name: 'test-app',
@@ -119,7 +116,6 @@ test.describe('Languages Configuration', () => {
     "APP-LANGUAGES-004: should automatically detect and set the browser's preferred language",
     { tag: '@spec' },
     async ({ page, startServerWithSchema, context }) => {
-      // Spec ID: APP-LANGUAGES-004
       // GIVEN: an app with detectBrowser set to true
       await startServerWithSchema({
         name: 'test-app',
@@ -150,7 +146,6 @@ test.describe('Languages Configuration', () => {
     'APP-LANGUAGES-005: should use the default language without auto-detection',
     { tag: '@spec' },
     async ({ page, startServerWithSchema, context }) => {
-      // Spec ID: APP-LANGUAGES-005
       // GIVEN: an app with detectBrowser set to false
       await startServerWithSchema({
         name: 'test-app',
@@ -181,7 +176,6 @@ test.describe('Languages Configuration', () => {
     'APP-LANGUAGES-006: should remember the choice in localStorage for future visits',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // Spec ID: APP-LANGUAGES-006
       // GIVEN: an app with persistSelection set to true
       await startServerWithSchema({
         name: 'test-app',
@@ -214,7 +208,6 @@ test.describe('Languages Configuration', () => {
     'APP-LANGUAGES-007: should not persist the choice and reset to default on next visit',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // Spec ID: APP-LANGUAGES-007
       // GIVEN: an app with persistSelection set to false
       await startServerWithSchema({
         name: 'test-app',
@@ -243,7 +236,6 @@ test.describe('Languages Configuration', () => {
     'APP-LANGUAGES-008: should flip between LTR and RTL direction',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // Spec ID: APP-LANGUAGES-008
       // GIVEN: an app with supported languages including RTL (ar-SA) and LTR (en-US)
       await startServerWithSchema({
         name: 'test-app',
@@ -273,7 +265,6 @@ test.describe('Languages Configuration', () => {
     'APP-LANGUAGES-009: should display all languages with their native labels and flags',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // Spec ID: APP-LANGUAGES-009
       // GIVEN: an app with 5+ supported languages from different regions
       await startServerWithSchema({
         name: 'test-app',
@@ -307,7 +298,6 @@ test.describe('Languages Configuration', () => {
     'APP-LANGUAGES-010: should provide seamless multi-language UX with auto-detection, persistence, and fallback',
     { tag: '@spec' },
     async ({ page, startServerWithSchema, context }) => {
-      // Spec ID: APP-LANGUAGES-010
       // GIVEN: an app with all features enabled (detectBrowser, persistSelection, fallback)
       await startServerWithSchema({
         name: 'test-app',
@@ -354,7 +344,7 @@ test.describe('Languages Configuration', () => {
   test.fixme(
     'APP-LANGUAGES-011: should fail validation - default language must be in supported array',
     { tag: '@spec' },
-    async ({ page, startServerWithSchema }) => {
+    async ({ startServerWithSchema }) => {
       // GIVEN: an app with default language not in supported array
       // WHEN: default is 'en-US' but supported array only contains fr-FR and es-ES
       // THEN: it should fail validation - default language must be in supported array
@@ -375,7 +365,7 @@ test.describe('Languages Configuration', () => {
   test.fixme(
     'APP-LANGUAGES-012: should fail validation - fallback language must be in supported array',
     { tag: '@spec' },
-    async ({ page, startServerWithSchema }) => {
+    async ({ startServerWithSchema }) => {
       // GIVEN: an app with fallback not in supported array
       // WHEN: fallback is 'de-DE' but supported array doesn't contain it
       // THEN: it should fail validation - fallback language must be in supported array
@@ -508,7 +498,9 @@ test.describe('Languages Configuration', () => {
                 'fr-FR': { title: 'Accueil', description: 'Bienvenue' },
               },
             },
-            sections: [{ type: 'text', content: 'Hello', i18n: { 'fr-FR': { content: 'Bonjour' } } }],
+            sections: [
+              { type: 'text', content: 'Hello', i18n: { 'fr-FR': { content: 'Bonjour' } } },
+            ],
           },
         ],
       })

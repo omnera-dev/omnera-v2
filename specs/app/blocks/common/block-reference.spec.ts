@@ -28,7 +28,6 @@ test.describe('Block Reference', () => {
     'APP-BLOCKS-REFERENCE-001: should validate minimal block reference structure at build time',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // Spec ID: APP-BLOCKS-REFERENCE-001
       // GIVEN: block reference with required properties
       await startServerWithSchema({
         name: 'test-app',
@@ -48,7 +47,6 @@ test.describe('Block Reference', () => {
     'APP-BLOCKS-REFERENCE-002: should look up and instantiate matching block template',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // Spec ID: APP-BLOCKS-REFERENCE-002
       // GIVEN: block reference $ref property
       await startServerWithSchema({
         name: 'test-app',
@@ -80,7 +78,6 @@ test.describe('Block Reference', () => {
     'APP-BLOCKS-REFERENCE-003: should validate kebab-case naming at build time',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // Spec ID: APP-BLOCKS-REFERENCE-003
       // GIVEN: block reference $ref pattern
       // WHEN: $ref matches ^[a-z][a-z0-9-]*$ pattern
       // THEN: it should validate kebab-case naming at build time
@@ -104,7 +101,6 @@ test.describe('Block Reference', () => {
     "APP-BLOCKS-REFERENCE-004: should fail validation if referenced block doesn't exist",
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // Spec ID: APP-BLOCKS-REFERENCE-004
       // GIVEN: block reference $ref validation
       // WHEN: $ref value must match existing block name in blocks array
       // THEN: it should fail validation if referenced block doesn't exist
@@ -122,7 +118,6 @@ test.describe('Block Reference', () => {
     'APP-BLOCKS-REFERENCE-005: should provide all data needed for template substitution',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // Spec ID: APP-BLOCKS-REFERENCE-005
       // GIVEN: block reference vars object
       await startServerWithSchema({
         name: 'test-app',
@@ -165,7 +160,6 @@ test.describe('Block Reference', () => {
     'APP-BLOCKS-REFERENCE-006: should validate JavaScript naming convention for variables',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // Spec ID: APP-BLOCKS-REFERENCE-006
       // GIVEN: vars property names in camelCase
       // WHEN: vars property names match ^[a-zA-Z][a-zA-Z0-9]*$ pattern
       // THEN: it should validate JavaScript naming convention for variables
@@ -197,7 +191,6 @@ test.describe('Block Reference', () => {
     'APP-BLOCKS-REFERENCE-007: should substitute primitive data types into template',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // Spec ID: APP-BLOCKS-REFERENCE-007
       // GIVEN: vars property values
       await startServerWithSchema({
         name: 'test-app',
@@ -242,7 +235,6 @@ test.describe('Block Reference', () => {
     'APP-BLOCKS-REFERENCE-008: should render badge with orange color, users icon, and French text',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // Spec ID: APP-BLOCKS-REFERENCE-008
       // GIVEN: icon-badge reference example
       await startServerWithSchema({
         name: 'test-app',
@@ -285,7 +277,6 @@ test.describe('Block Reference', () => {
     'APP-BLOCKS-REFERENCE-009: should render section header with purple title and French content',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // Spec ID: APP-BLOCKS-REFERENCE-009
       // GIVEN: section-header reference example
       await startServerWithSchema({
         name: 'test-app',
@@ -339,7 +330,6 @@ test.describe('Block Reference', () => {
     'APP-BLOCKS-REFERENCE-010: should transform abstract template into concrete rendered component',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // Spec ID: APP-BLOCKS-REFERENCE-010
       // GIVEN: variable substitution mechanism
       await startServerWithSchema({
         name: 'test-app',
@@ -377,7 +367,6 @@ test.describe('Block Reference', () => {
     'APP-BLOCKS-REFERENCE-011: should enable same template to generate different instances',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // Spec ID: APP-BLOCKS-REFERENCE-011
       // GIVEN: block reference for template instantiation
       await startServerWithSchema({
         name: 'test-app',
@@ -428,7 +417,6 @@ test.describe('Block Reference', () => {
     'APP-BLOCKS-REFERENCE-012: should maintain structural consistency while varying data',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // Spec ID: APP-BLOCKS-REFERENCE-012
       // GIVEN: block reference for single source of truth
       await startServerWithSchema({
         name: 'test-app',

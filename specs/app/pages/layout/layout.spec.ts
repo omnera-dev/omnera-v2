@@ -28,7 +28,6 @@ test.describe('Page Layout', () => {
     'APP-PAGES-LAYOUT-001: should orchestrate global page layout',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // Spec ID: APP-PAGES-LAYOUT-001
       // GIVEN: a layout configuration with all 4 components
       await startServerWithSchema({
         name: 'test-app',
@@ -63,7 +62,6 @@ test.describe('Page Layout', () => {
     'APP-PAGES-LAYOUT-002: should support minimal layout with navigation only',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // Spec ID: APP-PAGES-LAYOUT-002
       // GIVEN: a layout with only navigation
       await startServerWithSchema({
         name: 'test-app',
@@ -95,7 +93,6 @@ test.describe('Page Layout', () => {
     'APP-PAGES-LAYOUT-003: should provide header and footer structure',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // Spec ID: APP-PAGES-LAYOUT-003
       // GIVEN: a layout with navigation and footer
       await startServerWithSchema({
         name: 'test-app',
@@ -136,7 +133,6 @@ test.describe('Page Layout', () => {
     'APP-PAGES-LAYOUT-004: should support sidebar-based layouts',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // Spec ID: APP-PAGES-LAYOUT-004
       // GIVEN: a layout with sidebar for docs/dashboard
       await startServerWithSchema({
         name: 'test-app',
@@ -180,7 +176,6 @@ test.describe('Page Layout', () => {
     'APP-PAGES-LAYOUT-005: should display top banner above navigation',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // Spec ID: APP-PAGES-LAYOUT-005
       // GIVEN: a layout with banner for announcements
       await startServerWithSchema({
         name: 'test-app',
@@ -225,7 +220,6 @@ test.describe('Page Layout', () => {
     'APP-PAGES-LAYOUT-006: should allow pages without global layout (blank page)',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // Spec ID: APP-PAGES-LAYOUT-006
       // GIVEN: an empty layout configuration
       await startServerWithSchema({
         name: 'test-app',
@@ -256,7 +250,6 @@ test.describe('Page Layout', () => {
     'APP-PAGES-LAYOUT-007: should enable cohesive visual design across layout',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // Spec ID: APP-PAGES-LAYOUT-007
       // GIVEN: layout components sharing consistent styling
       await startServerWithSchema({
         name: 'test-app',
@@ -298,7 +291,6 @@ test.describe('Page Layout', () => {
     'APP-PAGES-LAYOUT-008: should override or extend default layout per page',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // Spec ID: APP-PAGES-LAYOUT-008
       // GIVEN: layout configuration at page level
       await startServerWithSchema({
         name: 'test-app',

@@ -28,7 +28,6 @@ test.describe('Footer Configuration', () => {
     'APP-PAGES-FOOTER-001: should display footer at bottom of page',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // Spec ID: APP-PAGES-FOOTER-001
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -50,7 +49,6 @@ test.describe('Footer Configuration', () => {
     'APP-PAGES-FOOTER-002: should display footer logo',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // Spec ID: APP-PAGES-FOOTER-002
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -75,7 +73,6 @@ test.describe('Footer Configuration', () => {
     'APP-PAGES-FOOTER-003: should render company description',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // Spec ID: APP-PAGES-FOOTER-003
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -101,7 +98,6 @@ test.describe('Footer Configuration', () => {
     'APP-PAGES-FOOTER-004: should render multi-column link layout',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // Spec ID: APP-PAGES-FOOTER-004
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -146,7 +142,6 @@ test.describe('Footer Configuration', () => {
     'APP-PAGES-FOOTER-005: should render column heading and link list',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // Spec ID: APP-PAGES-FOOTER-005
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -183,7 +178,6 @@ test.describe('Footer Configuration', () => {
     'APP-PAGES-FOOTER-006: should support external link targets',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // Spec ID: APP-PAGES-FOOTER-006
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -223,7 +217,6 @@ test.describe('Footer Configuration', () => {
     'APP-PAGES-FOOTER-007: should render social media icons',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // Spec ID: APP-PAGES-FOOTER-007
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -264,7 +257,6 @@ test.describe('Footer Configuration', () => {
     'APP-PAGES-FOOTER-008: should support 7 social platforms with auto icons',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // Spec ID: APP-PAGES-FOOTER-008
       const platforms = [
         'facebook',
         'twitter',
@@ -301,7 +293,6 @@ test.describe('Footer Configuration', () => {
     'APP-PAGES-FOOTER-009: should render email subscription form',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // Spec ID: APP-PAGES-FOOTER-009
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -341,7 +332,6 @@ test.describe('Footer Configuration', () => {
     'APP-PAGES-FOOTER-010: should display copyright notice',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // Spec ID: APP-PAGES-FOOTER-010
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -367,7 +357,6 @@ test.describe('Footer Configuration', () => {
     'APP-PAGES-FOOTER-011: should render legal link list',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // Spec ID: APP-PAGES-FOOTER-011
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -401,7 +390,6 @@ test.describe('Footer Configuration', () => {
     'APP-PAGES-FOOTER-012: should not render footer',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // Spec ID: APP-PAGES-FOOTER-012
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -423,7 +411,6 @@ test.describe('Footer Configuration', () => {
     'APP-PAGES-FOOTER-013: should render comprehensive footer layout',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // Spec ID: APP-PAGES-FOOTER-013
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -462,7 +449,6 @@ test.describe('Footer Configuration', () => {
     'APP-PAGES-FOOTER-014: should override default platform icon',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // Spec ID: APP-PAGES-FOOTER-014
       await startServerWithSchema({
         name: 'test-app',
         pages: [

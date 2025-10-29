@@ -28,7 +28,6 @@ test(
   'APP-VERSION-001: should display version badge with correct version text for simple SemVer',
   { tag: '@spec' },
   async ({ page, startServerWithSchema }) => {
-    // Spec ID: APP-VERSION-001
     // GIVEN: app with name and simple SemVer version '1.0.0'
     await startServerWithSchema(
       {
@@ -52,7 +51,6 @@ test(
   'APP-VERSION-002: should NOT render version badge when version property is missing',
   { tag: '@spec' },
   async ({ page, startServerWithSchema }) => {
-    // Spec ID: APP-VERSION-002
     // GIVEN: app with only name (no version property)
     await startServerWithSchema(
       {
@@ -75,7 +73,6 @@ test(
   'APP-VERSION-003: should display pre-release version exactly as specified',
   { tag: '@spec' },
   async ({ page, startServerWithSchema }) => {
-    // Spec ID: APP-VERSION-003
     // GIVEN: app with pre-release version '2.0.0-beta.1'
     await startServerWithSchema(
       {
@@ -99,7 +96,6 @@ test(
   'APP-VERSION-004: should display version with build metadata intact',
   { tag: '@spec' },
   async ({ page, startServerWithSchema }) => {
-    // Spec ID: APP-VERSION-004
     // GIVEN: app with build metadata in version '1.0.0+build.123'
     await startServerWithSchema(
       {
@@ -123,7 +119,6 @@ test(
   'APP-VERSION-005: should display complete version string with pre-release and build metadata',
   { tag: '@spec' },
   async ({ page, startServerWithSchema }) => {
-    // Spec ID: APP-VERSION-005
     // GIVEN: app with both pre-release and build metadata '1.0.0-alpha+001'
     await startServerWithSchema(
       {
@@ -147,7 +142,6 @@ test(
   'APP-VERSION-006: should display badge before (above) the app name heading',
   { tag: '@spec' },
   async ({ page, startServerWithSchema }) => {
-    // Spec ID: APP-VERSION-006
     // GIVEN: app with name and version
     await startServerWithSchema(
       {
@@ -184,7 +178,6 @@ test(
   'APP-VERSION-007: should have proper accessibility attributes',
   { tag: '@spec' },
   async ({ page, startServerWithSchema }) => {
-    // Spec ID: APP-VERSION-007
     // GIVEN: app with version
     await startServerWithSchema(
       {

@@ -28,7 +28,6 @@ test.describe('Shadows', () => {
     'APP-THEME-SHADOWS-001: should validate elevation system from subtle to dramatic',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // Spec ID: APP-THEME-SHADOWS-001
       // GIVEN: shadow scale from sm to 2xl
       await startServerWithSchema({
         name: 'test-app',
@@ -56,7 +55,6 @@ test.describe('Shadows', () => {
     'APP-THEME-SHADOWS-002: should validate rgb(0 0 0 / 0.1) format',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // Spec ID: APP-THEME-SHADOWS-002
       // GIVEN: shadow with rgb color and opacity
       await startServerWithSchema({
         name: 'test-app',
@@ -81,7 +79,6 @@ test.describe('Shadows', () => {
     'APP-THEME-SHADOWS-003: should validate inset box-shadow',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // Spec ID: APP-THEME-SHADOWS-003
       // GIVEN: inner shadow for inset effects
       await startServerWithSchema({
         name: 'test-app',
@@ -106,7 +103,6 @@ test.describe('Shadows', () => {
     'APP-THEME-SHADOWS-004: should validate shadow removal',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // Spec ID: APP-THEME-SHADOWS-004
       // GIVEN: shadow 'none' to remove shadows
       await startServerWithSchema({
         name: 'test-app',
@@ -131,7 +127,6 @@ test.describe('Shadows', () => {
     'APP-THEME-SHADOWS-005: should validate kebab-case convention',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // Spec ID: APP-THEME-SHADOWS-005
       // GIVEN: shadows with kebab-case naming
       await startServerWithSchema({
         name: 'test-app',
@@ -156,7 +151,6 @@ test.describe('Shadows', () => {
     'APP-THEME-SHADOWS-006: should validate complete shadow system',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // Spec ID: APP-THEME-SHADOWS-006
       // GIVEN: complete shadow system (sm, md, lg, xl, 2xl, inner, none)
       await startServerWithSchema({
         name: 'test-app',
@@ -186,7 +180,6 @@ test.describe('Shadows', () => {
     'APP-THEME-SHADOWS-APPLICATION-001: should render card with medium box-shadow creating depth',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // Spec ID: APP-THEME-SHADOWS-APPLICATION-001
       // GIVEN: md shadow applied to card component
       await startServerWithSchema({
         name: 'test-app',
@@ -226,7 +219,6 @@ test.describe('Shadows', () => {
     'APP-THEME-SHADOWS-APPLICATION-002: should render modal with dramatic shadow emphasizing importance',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // Spec ID: APP-THEME-SHADOWS-APPLICATION-002
       // GIVEN: xl shadow applied to modal overlay
       await startServerWithSchema({
         name: 'test-app',
@@ -266,7 +258,6 @@ test.describe('Shadows', () => {
     'APP-THEME-SHADOWS-APPLICATION-003: should render input with inset shadow creating depth inward',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // Spec ID: APP-THEME-SHADOWS-APPLICATION-003
       // GIVEN: inner shadow applied to input field
       await startServerWithSchema({
         name: 'test-app',

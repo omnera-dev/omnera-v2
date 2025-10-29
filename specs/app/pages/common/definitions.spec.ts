@@ -28,7 +28,6 @@ test.describe('Common Definitions', () => {
     'APP-PAGES-DEFINITIONS-001: should validate as nonEmptyString',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // Spec ID: APP-PAGES-DEFINITIONS-001
       // GIVEN: a non-empty string
       // WHEN: value is 'hello'
       // THEN: it should validate as nonEmptyString
@@ -45,7 +44,6 @@ test.describe('Common Definitions', () => {
     'APP-PAGES-DEFINITIONS-002: should validate as kebabCase pattern',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // Spec ID: APP-PAGES-DEFINITIONS-002
       // GIVEN: a kebab-case string
       // WHEN: value is 'my-component-name'
       // THEN: it should validate as kebabCase pattern
@@ -70,7 +68,6 @@ test.describe('Common Definitions', () => {
     'APP-PAGES-DEFINITIONS-003: should validate as variableName pattern',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // Spec ID: APP-PAGES-DEFINITIONS-003
       // GIVEN: a variable name
       // WHEN: value is 'myVariable123'
       // THEN: it should validate as variableName pattern
@@ -95,7 +92,6 @@ test.describe('Common Definitions', () => {
     'APP-PAGES-DEFINITIONS-004: should validate as variableReference pattern',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // Spec ID: APP-PAGES-DEFINITIONS-004
       // GIVEN: a string with variable reference
       // WHEN: value is 'Welcome to $siteName'
       // THEN: it should validate as variableReference pattern
@@ -120,7 +116,6 @@ test.describe('Common Definitions', () => {
     'APP-PAGES-DEFINITIONS-005: should validate as hexColor pattern',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // Spec ID: APP-PAGES-DEFINITIONS-005
       // GIVEN: a 6-digit hex color
       // WHEN: value is '#FF5733'
       // THEN: it should validate as hexColor pattern
@@ -146,7 +141,6 @@ test.describe('Common Definitions', () => {
     'APP-PAGES-DEFINITIONS-006: should validate as url with http/https protocol',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // Spec ID: APP-PAGES-DEFINITIONS-006
       // GIVEN: an HTTP URL
       // WHEN: value is 'https://example.com/path'
       // THEN: it should validate as url with http/https protocol
@@ -177,7 +171,6 @@ test.describe('Common Definitions', () => {
     'APP-PAGES-DEFINITIONS-007: should validate as relativePath pattern',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // Spec ID: APP-PAGES-DEFINITIONS-007
       // GIVEN: a relative path
       // WHEN: value is './public/logo.svg'
       // THEN: it should validate as relativePath pattern
@@ -202,7 +195,6 @@ test.describe('Common Definitions', () => {
     'APP-PAGES-DEFINITIONS-008: should validate as emailAddress format',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // Spec ID: APP-PAGES-DEFINITIONS-008
       // GIVEN: an email address
       // WHEN: value is 'user@example.com'
       // THEN: it should validate as emailAddress format
@@ -227,7 +219,6 @@ test.describe('Common Definitions', () => {
     'APP-PAGES-DEFINITIONS-009: should validate as className',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // Spec ID: APP-PAGES-DEFINITIONS-009
       // GIVEN: Tailwind CSS classes
       // WHEN: value is 'text-center bg-blue-500 p-4'
       // THEN: it should validate as className
@@ -260,7 +251,6 @@ test.describe('Common Definitions', () => {
     'APP-PAGES-DEFINITIONS-010: should validate as iconName enum',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // Spec ID: APP-PAGES-DEFINITIONS-010
       // GIVEN: an icon from the icon library
       // WHEN: value is 'arrow-right'
       // THEN: it should validate as iconName enum
@@ -291,7 +281,6 @@ test.describe('Common Definitions', () => {
     'APP-PAGES-DEFINITIONS-011: should validate as dimensions object',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // Spec ID: APP-PAGES-DEFINITIONS-011
       // GIVEN: dimensions with width and height
       // WHEN: value is { width: 800, height: 600 }
       // THEN: it should validate as dimensions object
@@ -319,7 +308,6 @@ test.describe('Common Definitions', () => {
     'APP-PAGES-DEFINITIONS-012: should provide comprehensive icon set for all UI needs',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // Spec ID: APP-PAGES-DEFINITIONS-012
       // GIVEN: multiple icon names in the library
       // WHEN: 70+ icon names are defined (arrow-right, check, user, star, etc.)
       // THEN: it should provide comprehensive icon set for all UI needs

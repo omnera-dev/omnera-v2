@@ -28,7 +28,6 @@ test.describe('Block Props', () => {
     'APP-BLOCKS-PROPS-001: should validate any valid JavaScript property name at build time',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // Spec ID: APP-BLOCKS-PROPS-001
       // GIVEN: props as dynamic object
       await startServerWithSchema({
         name: 'test-app',
@@ -62,7 +61,6 @@ test.describe('Block Props', () => {
     'APP-BLOCKS-PROPS-002: should render as HTML attributes following camelCase convention',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // Spec ID: APP-BLOCKS-PROPS-002
       // GIVEN: property names in camelCase
       await startServerWithSchema({
         name: 'test-app',
@@ -91,7 +89,6 @@ test.describe('Block Props', () => {
     'APP-BLOCKS-PROPS-003: should render string value with variable substitution',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // Spec ID: APP-BLOCKS-PROPS-003
       // GIVEN: property value as string
       await startServerWithSchema({
         name: 'test-app',
@@ -130,7 +127,6 @@ test.describe('Block Props', () => {
     'APP-BLOCKS-PROPS-004: should render numeric value as HTML attribute',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // Spec ID: APP-BLOCKS-PROPS-004
       // GIVEN: property value as number
       await startServerWithSchema({
         name: 'test-app',
@@ -159,7 +155,6 @@ test.describe('Block Props', () => {
     'APP-BLOCKS-PROPS-005: should render boolean as HTML boolean attribute',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // Spec ID: APP-BLOCKS-PROPS-005
       // GIVEN: property value as boolean
       await startServerWithSchema({
         name: 'test-app',
@@ -188,7 +183,6 @@ test.describe('Block Props', () => {
     'APP-BLOCKS-PROPS-006: should render object as JSON data attribute',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // Spec ID: APP-BLOCKS-PROPS-006
       // GIVEN: property value as object
       await startServerWithSchema({
         name: 'test-app',
@@ -225,7 +219,6 @@ test.describe('Block Props', () => {
     'APP-BLOCKS-PROPS-007: should render array as JSON data attribute',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // Spec ID: APP-BLOCKS-PROPS-007
       // GIVEN: property value as array
       await startServerWithSchema({
         name: 'test-app',
@@ -255,7 +248,6 @@ test.describe('Block Props', () => {
     'APP-BLOCKS-PROPS-008: should render with all variables substituted in className',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // Spec ID: APP-BLOCKS-PROPS-008
       // GIVEN: className with multiple variables
       await startServerWithSchema({
         name: 'test-app',
@@ -294,7 +286,6 @@ test.describe('Block Props', () => {
     'APP-BLOCKS-PROPS-009: should render combined static and dynamic className parts',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // Spec ID: APP-BLOCKS-PROPS-009
       // GIVEN: props mixing variables and literals
       await startServerWithSchema({
         name: 'test-app',
@@ -326,7 +317,6 @@ test.describe('Block Props', () => {
     'APP-BLOCKS-PROPS-010: should render complete component with all configuration applied',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // Spec ID: APP-BLOCKS-PROPS-010
       // GIVEN: props for component configuration
       await startServerWithSchema({
         name: 'test-app',

@@ -28,7 +28,6 @@ test.describe('Spacing Configuration', () => {
     'APP-THEME-SPACING-001: should validate Tailwind spacing utilities',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // Spec ID: APP-THEME-SPACING-001
       // GIVEN: spacing using Tailwind utility classes (py-16, px-4)
       await startServerWithSchema({
         name: 'test-app',
@@ -52,7 +51,6 @@ test.describe('Spacing Configuration', () => {
     'APP-THEME-SPACING-002: should validate responsive spacing with Tailwind breakpoints',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // Spec ID: APP-THEME-SPACING-002
       // GIVEN: spacing with responsive variants (py-16 sm:py-20)
       await startServerWithSchema({
         name: 'test-app',
@@ -75,7 +73,6 @@ test.describe('Spacing Configuration', () => {
     'APP-THEME-SPACING-003: should validate centering and width constraints',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // Spec ID: APP-THEME-SPACING-003
       // GIVEN: container spacing with max-width and auto margins
       await startServerWithSchema({
         name: 'test-app',
@@ -100,7 +97,6 @@ test.describe('Spacing Configuration', () => {
     'APP-THEME-SPACING-004: should validate consistent spacing scale',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // Spec ID: APP-THEME-SPACING-004
       // GIVEN: spacing variants with size modifiers (gap, gapSmall, gapLarge)
       await startServerWithSchema({
         name: 'test-app',
@@ -126,7 +122,6 @@ test.describe('Spacing Configuration', () => {
     'APP-THEME-SPACING-005: should validate visual rhythm between sections',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // Spec ID: APP-THEME-SPACING-005
       // GIVEN: section spacing with vertical padding
       await startServerWithSchema({
         name: 'test-app',
@@ -149,7 +144,6 @@ test.describe('Spacing Configuration', () => {
     'APP-THEME-SPACING-006: should validate hierarchical content width constraints',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // Spec ID: APP-THEME-SPACING-006
       // GIVEN: multiple container sizes (container, containerSmall, containerXSmall)
       await startServerWithSchema({
         name: 'test-app',
@@ -176,7 +170,6 @@ test.describe('Spacing Configuration', () => {
     'APP-THEME-SPACING-007: should validate consistent internal component spacing',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // Spec ID: APP-THEME-SPACING-007
       // GIVEN: padding variants (padding, paddingSmall, paddingLarge)
       await startServerWithSchema({
         name: 'test-app',
@@ -202,7 +195,6 @@ test.describe('Spacing Configuration', () => {
     'APP-THEME-SPACING-008: should validate consistent external component spacing',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // Spec ID: APP-THEME-SPACING-008
       // GIVEN: margin variants (margin, marginSmall, marginLarge)
       await startServerWithSchema({
         name: 'test-app',
@@ -228,7 +220,6 @@ test.describe('Spacing Configuration', () => {
     'APP-THEME-SPACING-009: should validate custom CSS spacing values',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // Spec ID: APP-THEME-SPACING-009
       // GIVEN: spacing using CSS values (2rem, 16px, 1.5em)
       await startServerWithSchema({
         name: 'test-app',
@@ -253,7 +244,6 @@ test.describe('Spacing Configuration', () => {
     'APP-THEME-SPACING-010: should validate comprehensive spacing system',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // Spec ID: APP-THEME-SPACING-010
       // GIVEN: a complete spacing system
       await startServerWithSchema({
         name: 'test-app',
@@ -281,7 +271,6 @@ test.describe('Spacing Configuration', () => {
     'APP-THEME-SPACING-APPLICATION-001: should render with vertical padding creating rhythm',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // Spec ID: APP-THEME-SPACING-APPLICATION-001
       // GIVEN: section spacing applied to page section
       await startServerWithSchema({
         name: 'test-app',
@@ -317,7 +306,6 @@ test.describe('Spacing Configuration', () => {
     'APP-THEME-SPACING-APPLICATION-002: should render centered with max-width constraint',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // Spec ID: APP-THEME-SPACING-APPLICATION-002
       // GIVEN: container spacing applied to content wrapper
       await startServerWithSchema({
         name: 'test-app',
@@ -352,7 +340,6 @@ test.describe('Spacing Configuration', () => {
     'APP-THEME-SPACING-APPLICATION-003: should render with spacing between flex items',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // Spec ID: APP-THEME-SPACING-APPLICATION-003
       // GIVEN: gap spacing applied to flex container
       await startServerWithSchema({
         name: 'test-app',

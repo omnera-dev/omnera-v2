@@ -28,7 +28,6 @@ test.describe('Color Palette', () => {
     'APP-THEME-COLORS-001: should validate 6-digit hex colors at build time',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // Spec ID: APP-THEME-COLORS-001
       // GIVEN: a color palette with semantic colors (primary, secondary)
       await startServerWithSchema({
         name: 'test-app',
@@ -55,7 +54,6 @@ test.describe('Color Palette', () => {
     'APP-THEME-COLORS-002: should validate 8-digit hex colors with opacity at build time',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // Spec ID: APP-THEME-COLORS-002
       // GIVEN: a color with 8-digit hex value for transparency
       await startServerWithSchema({
         name: 'test-app',
@@ -83,7 +81,6 @@ test.describe('Color Palette', () => {
     'APP-THEME-COLORS-003: should validate rgb color format at build time',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // Spec ID: APP-THEME-COLORS-003
       // GIVEN: a color with rgb() format
       await startServerWithSchema({
         name: 'test-app',
@@ -109,7 +106,6 @@ test.describe('Color Palette', () => {
     'APP-THEME-COLORS-004: should validate rgba color format with alpha at build time',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // Spec ID: APP-THEME-COLORS-004
       // GIVEN: a color with rgba() format for transparency
       await startServerWithSchema({
         name: 'test-app',
@@ -135,7 +131,6 @@ test.describe('Color Palette', () => {
     'APP-THEME-COLORS-005: should validate hsl color format at build time',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // Spec ID: APP-THEME-COLORS-005
       // GIVEN: a color with hsl() format
       await startServerWithSchema({
         name: 'test-app',
@@ -161,7 +156,6 @@ test.describe('Color Palette', () => {
     'APP-THEME-COLORS-006: should validate hsla color format with alpha at build time',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // Spec ID: APP-THEME-COLORS-006
       // GIVEN: a color with hsla() format for transparency
       await startServerWithSchema({
         name: 'test-app',
@@ -187,7 +181,6 @@ test.describe('Color Palette', () => {
     'APP-THEME-COLORS-007: should validate color variants for hover states and tints',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // Spec ID: APP-THEME-COLORS-007
       // GIVEN: color variants with suffixes (primary-hover, primary-light)
       await startServerWithSchema({
         name: 'test-app',
@@ -216,7 +209,6 @@ test.describe('Color Palette', () => {
     'APP-THEME-COLORS-008: should validate numbered color scales for systematic gradients',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // Spec ID: APP-THEME-COLORS-008
       // GIVEN: gray scale with numbered variants (gray-100 to gray-900)
       await startServerWithSchema({
         name: 'test-app',
@@ -244,7 +236,6 @@ test.describe('Color Palette', () => {
     'APP-THEME-COLORS-009: should validate comprehensive color system for all UI needs',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // Spec ID: APP-THEME-COLORS-009
       // GIVEN: a complete color system with semantic, descriptive, and variant colors
       await startServerWithSchema({
         name: 'test-app',
@@ -277,7 +268,6 @@ test.describe('Color Palette', () => {
     'APP-THEME-COLORS-010: should validate kebab-case naming convention',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // Spec ID: APP-THEME-COLORS-010
       // GIVEN: color names in kebab-case (primary-color, background-primary)
       await startServerWithSchema({
         name: 'test-app',
@@ -305,7 +295,6 @@ test.describe('Color Palette', () => {
     'APP-THEME-COLORS-APPLICATION-001: should render button with primary background color',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // Spec ID: APP-THEME-COLORS-APPLICATION-001
       // GIVEN: primary color used in button component
       await startServerWithSchema({
         name: 'test-app',
@@ -345,7 +334,6 @@ test.describe('Color Palette', () => {
     'APP-THEME-COLORS-APPLICATION-002: should render darker blue on hover',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // Spec ID: APP-THEME-COLORS-APPLICATION-002
       // GIVEN: primary-hover color used on button:hover
       await startServerWithSchema({
         name: 'test-app',
@@ -383,7 +371,6 @@ test.describe('Color Palette', () => {
     'APP-THEME-COLORS-APPLICATION-003: should render text with theme text color',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // Spec ID: APP-THEME-COLORS-APPLICATION-003
       // GIVEN: text color used in typography
       await startServerWithSchema({
         name: 'test-app',
@@ -421,7 +408,6 @@ test.describe('Color Palette', () => {
     'APP-THEME-COLORS-APPLICATION-004: should render green alert indicating success state',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // Spec ID: APP-THEME-COLORS-APPLICATION-004
       // GIVEN: success color used in alert
       await startServerWithSchema({
         name: 'test-app',
@@ -463,7 +449,6 @@ test.describe('Color Palette', () => {
     'APP-THEME-COLORS-APPLICATION-005: should create visual hierarchy through tonal variation',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // Spec ID: APP-THEME-COLORS-APPLICATION-005
       // GIVEN: gray scale used in UI hierarchy
       await startServerWithSchema({
         name: 'test-app',

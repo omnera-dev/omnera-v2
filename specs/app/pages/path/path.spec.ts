@@ -28,7 +28,6 @@ test.describe('URL Path', () => {
     'APP-PAGES-PATH-001: should validate as homepage path',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // Spec ID: APP-PAGES-PATH-001
       // GIVEN: a root path
       await startServerWithSchema({
         name: 'test-app',
@@ -48,7 +47,6 @@ test.describe('URL Path', () => {
     'APP-PAGES-PATH-002: should follow shared path pattern from common definitions',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // Spec ID: APP-PAGES-PATH-002
       // GIVEN: a path referencing common definition
       // WHEN: schema uses $ref to definitions.schema.json#/definitions/path
       // THEN: it should follow shared path pattern from common definitions
@@ -67,7 +65,6 @@ test.describe('URL Path', () => {
     'APP-PAGES-PATH-003: should accept paths with leading slash',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // Spec ID: APP-PAGES-PATH-003
       // GIVEN: a single-level path
       await startServerWithSchema({
         name: 'test-app',
@@ -102,7 +99,6 @@ test.describe('URL Path', () => {
     'APP-PAGES-PATH-004: should accept multi-level URL paths',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // Spec ID: APP-PAGES-PATH-004
       // GIVEN: a nested path
       await startServerWithSchema({
         name: 'test-app',
@@ -136,7 +132,6 @@ test.describe('URL Path', () => {
     'APP-PAGES-PATH-005: should accept kebab-case URL segments',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // Spec ID: APP-PAGES-PATH-005
       // GIVEN: a path with kebab-case segments
       await startServerWithSchema({
         name: 'test-app',
@@ -170,7 +165,6 @@ test.describe('URL Path', () => {
     'APP-PAGES-PATH-006: should provide examples for typical URL patterns',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // Spec ID: APP-PAGES-PATH-006
       // GIVEN: common website paths (/, /about, /pricing, /contact)
       await startServerWithSchema({
         name: 'test-app',
@@ -206,7 +200,6 @@ test.describe('URL Path', () => {
     'APP-PAGES-PATH-007: should fail validation (path is required)',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // Spec ID: APP-PAGES-PATH-007
       // GIVEN: path as required field
       // WHEN: page is created without path
       // THEN: it should fail validation (path is required)
@@ -224,7 +217,6 @@ test.describe('URL Path', () => {
     'APP-PAGES-PATH-008: should ensure unique routing for all pages',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // Spec ID: APP-PAGES-PATH-008
       // GIVEN: paths across multiple pages
       await startServerWithSchema({
         name: 'test-app',
@@ -260,7 +252,6 @@ test.describe('URL Path', () => {
     'APP-PAGES-PATH-009: should map URL to page configuration for rendering',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // Spec ID: APP-PAGES-PATH-009
       // GIVEN: path determining page accessibility
       await startServerWithSchema({
         name: 'test-app',
@@ -288,7 +279,6 @@ test.describe('URL Path', () => {
     'APP-PAGES-PATH-010: should support dynamic route parameters (if applicable)',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // Spec ID: APP-PAGES-PATH-010
       // GIVEN: path with dynamic segments
       await startServerWithSchema({
         name: 'test-app',

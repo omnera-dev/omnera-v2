@@ -216,7 +216,6 @@ test.fixme(
   '{spec.id}: should {extract from "then" clause}',
   { tag: '@spec' },
   async ({ page, startServerWithSchema }) => {
-    // Spec ID: {spec.id}
     // GIVEN: {spec.given}
     await startServerWithSchema({
       name: 'test-app',
@@ -237,7 +236,7 @@ test.fixme(
 **Key Rules**:
 - Test name: `'{spec.id}: should {extract from "then" clause}'` - MUST start with spec ID followed by colon
 - Format: `APP-NAME-001: should validate name` (NO square brackets, colon after ID)
-- Test body: Follow GIVEN-WHEN-THEN structure with spec ID comment
+- Test body: Follow GIVEN-WHEN-THEN structure (no need to repeat spec ID in comments - it's in the test name)
 - Tag: `{ tag: '@spec' }`
 - Modifier: `test.fixme()` (RED phase)
 
@@ -363,7 +362,7 @@ Before completing, verify:
 - [ ] @regression test is OPTIMIZED (not duplicating all @spec assertions)
 - [ ] @regression test uses representative scenarios and combined assertions
 - [ ] All tests tagged correctly: `{ tag: '@spec' }` or `{ tag: '@regression' }`
-- [ ] Spec IDs included in comments for traceability
+- [ ] Spec IDs included in test names for traceability (not in comments - avoid redundancy)
 
 **Code Quality**:
 - [ ] Test titles start with spec ID and colon (e.g., `APP-NAME-001: should...`)

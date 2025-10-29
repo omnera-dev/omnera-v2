@@ -28,7 +28,6 @@ test.describe('Component Internationalization', () => {
     'APP-I18N-001: should display English text',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // Spec ID: APP-I18N-001
       // GIVEN: a button with English content
       await startServerWithSchema({
         name: 'test-app',
@@ -65,7 +64,6 @@ test.describe('Component Internationalization', () => {
     'APP-I18N-002: content should update to match the selected language',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // Spec ID: APP-I18N-002
       // GIVEN: a button with translations for en-US, fr-FR, and es-ES
       await startServerWithSchema({
         name: 'test-app',
@@ -114,7 +112,6 @@ test.describe('Component Internationalization', () => {
     'APP-I18N-003: both French content and French aria-label should be applied',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // Spec ID: APP-I18N-003
       // GIVEN: a button with content and props for multiple languages
       await startServerWithSchema({
         name: 'test-app',
@@ -162,7 +159,6 @@ test.describe('Component Internationalization', () => {
     'APP-I18N-004: should display Arabic content with RTL-specific props',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // Spec ID: APP-I18N-004
       // GIVEN: a heading with translations for RTL language (ar-SA)
       await startServerWithSchema({
         name: 'test-app',
@@ -208,7 +204,6 @@ test.describe('Component Internationalization', () => {
     'APP-I18N-005: should display German content',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // Spec ID: APP-I18N-005
       // GIVEN: a component with translations for German (de-DE)
       await startServerWithSchema({
         name: 'test-app',
@@ -249,7 +244,6 @@ test.describe('Component Internationalization', () => {
     'APP-I18N-006: only content should update while props remain unchanged',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // Spec ID: APP-I18N-006
       // GIVEN: a button with only content translations (no props)
       await startServerWithSchema({
         name: 'test-app',
@@ -301,7 +295,6 @@ test.describe('Component Internationalization', () => {
     'APP-I18N-007: className should adjust for text direction (text-left vs text-right)',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // Spec ID: APP-I18N-007
       // GIVEN: a component with language-specific className in props
       await startServerWithSchema({
         name: 'test-app',
@@ -350,7 +343,6 @@ test.describe('Component Internationalization', () => {
     'APP-I18N-008: all form text and accessibility attributes should update',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // Spec ID: APP-I18N-008
       // GIVEN: a form with translations for labels and placeholders
       await startServerWithSchema({
         name: 'test-app',
@@ -413,7 +405,6 @@ test.describe('Component Internationalization', () => {
     'APP-I18N-009: should support both formats (en and en-US)',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // Spec ID: APP-I18N-009
       // GIVEN: a component with translations for language codes without country (en, fr)
       await startServerWithSchema({
         name: 'test-app',
@@ -464,7 +455,6 @@ test.describe('Component Internationalization', () => {
     'APP-I18N-010: all menu items should update to the selected language instantly',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // Spec ID: APP-I18N-010
       // GIVEN: a navigation menu with translations for 5+ languages
       await startServerWithSchema({
         name: 'test-app',
