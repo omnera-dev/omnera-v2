@@ -88,7 +88,13 @@ export const SidebarItemSchema: Schema.Schema<any, any, never> = Schema.Struct({
       description: 'Item icon',
     })
   ),
-  children: Schema.optional(Schema.suspend(() => SidebarItemsSchema)),
+  children: Schema.optional(
+    Schema.suspend(() => SidebarItemsSchema).pipe(
+      Schema.annotations({
+        identifier: 'SidebarItems',
+      })
+    )
+  ),
 }).annotations({
   description: 'Sidebar item',
 })

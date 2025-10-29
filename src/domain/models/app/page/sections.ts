@@ -94,7 +94,13 @@ export const ComponentTypeSchema = Schema.Literal(
 export const ComponentSchema: Schema.Schema<any, any, never> = Schema.Struct({
   type: ComponentTypeSchema,
   props: Schema.optional(PropsSchema),
-  children: Schema.optional(Schema.suspend(() => SectionsSchema)),
+  children: Schema.optional(
+    Schema.suspend(() => SectionsSchema).pipe(
+      Schema.annotations({
+        identifier: 'Sections',
+      })
+    )
+  ),
   content: Schema.optional(
     Schema.String.annotations({
       description: 'Text content for text components',

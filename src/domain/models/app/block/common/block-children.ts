@@ -53,7 +53,13 @@ export const BlockChildElementSchema: Schema.Schema<any, any, never> = Schema.St
     })
   ),
   props: Schema.optional(BlockPropsSchema),
-  children: Schema.optional(Schema.suspend(() => BlockChildrenSchema)),
+  children: Schema.optional(
+    Schema.suspend(() => BlockChildrenSchema).pipe(
+      Schema.annotations({
+        identifier: 'BlockChildren',
+      })
+    )
+  ),
   content: Schema.optional(
     Schema.String.pipe(
       Schema.annotations({

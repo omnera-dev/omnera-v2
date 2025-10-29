@@ -100,7 +100,13 @@ export const NavLinkSchema: Schema.Schema<any, any, never> = Schema.Struct({
       description: "Optional badge text (e.g., 'New', 'Beta')",
     })
   ),
-  children: Schema.optional(Schema.suspend(() => NavLinksSchema)),
+  children: Schema.optional(
+    Schema.suspend(() => NavLinksSchema).pipe(
+      Schema.annotations({
+        identifier: 'NavLinks',
+      })
+    )
+  ),
 }).annotations({
   description: 'Navigation link item',
 })
