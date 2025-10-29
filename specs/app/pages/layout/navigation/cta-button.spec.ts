@@ -5,7 +5,7 @@
  * found in the LICENSE.md file in the root directory of this source tree.
  */
 
-import { test, expect } from '@/specs/fixtures.ts'
+import { test, expect } from '@/specs/fixtures'
 
 /**
  * E2E Tests for CTA Button
@@ -190,9 +190,9 @@ test.describe('CTA Button', () => {
         const text = el.textContent?.trim()
         const icon = el.querySelector('[data-testid="icon"]')
         return icon && text
-          ? (Array.from(el.childNodes).indexOf(icon) > 0
+          ? Array.from(el.childNodes).indexOf(icon) > 0
             ? 'right'
-            : 'left')
+            : 'left'
           : null
       })
       expect(iconPosition).toBe('right')

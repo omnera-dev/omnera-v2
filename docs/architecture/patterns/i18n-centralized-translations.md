@@ -40,6 +40,7 @@ Omnera™ uses a **hybrid i18n approach** with centralized translations as the P
 ```
 
 **Benefits:**
+
 - ✅ **Single source of truth** - All translations in one place
 - ✅ **Reusability** - `$t:common.save` used everywhere
 - ✅ **Translator-friendly** - Export one file, translate, import back
@@ -48,6 +49,7 @@ Omnera™ uses a **hybrid i18n approach** with centralized translations as the P
 - ✅ **Industry standard** - Same pattern as major i18n libraries
 
 **Use cases:**
+
 - Common UI strings (Save, Cancel, Submit, etc.)
 - Navigation items
 - Page content that's reused across sections
@@ -69,6 +71,7 @@ Omnera™ uses a **hybrid i18n approach** with centralized translations as the P
 ```
 
 **When to use:**
+
 - Translation is truly unique and won't be reused
 - Context-specific variation needed (e.g., "Submit Payment" vs generic "Submit")
 - Component-specific props need translation (aria-label, placeholder)
@@ -111,18 +114,19 @@ Use flat keys with dot notation to organize translations by feature:
 
 ### Recommended Namespaces
 
-| Namespace | Purpose | Examples |
-|-----------|---------|----------|
-| `common.*` | Reusable UI strings across entire app | `common.save`, `common.cancel`, `common.delete` |
-| `nav.*` | Navigation menu items | `nav.home`, `nav.about`, `nav.contact` |
-| `[page].*` | Page-specific content | `homepage.hero.title`, `about.mission`, `contact.email.label` |
-| `errors.*` | Error messages | `errors.404`, `errors.500`, `errors.generic` |
-| `forms.*` | Form labels, placeholders, validation | `forms.email.label`, `forms.password.placeholder` |
-| `auth.*` | Authentication flows | `auth.login.title`, `auth.signup.cta` |
+| Namespace  | Purpose                               | Examples                                                      |
+| ---------- | ------------------------------------- | ------------------------------------------------------------- |
+| `common.*` | Reusable UI strings across entire app | `common.save`, `common.cancel`, `common.delete`               |
+| `nav.*`    | Navigation menu items                 | `nav.home`, `nav.about`, `nav.contact`                        |
+| `[page].*` | Page-specific content                 | `homepage.hero.title`, `about.mission`, `contact.email.label` |
+| `errors.*` | Error messages                        | `errors.404`, `errors.500`, `errors.generic`                  |
+| `forms.*`  | Form labels, placeholders, validation | `forms.email.label`, `forms.password.placeholder`             |
+| `auth.*`   | Authentication flows                  | `auth.login.title`, `auth.signup.cta`                         |
 
 ### Naming Conventions
 
 **✅ Good (Semantic):**
+
 ```json
 {
   "common.save": "Save",
@@ -132,6 +136,7 @@ Use flat keys with dot notation to organize translations by feature:
 ```
 
 **❌ Bad (Positional/Technical):**
+
 ```json
 {
   "button1": "Save",
@@ -141,7 +146,8 @@ Use flat keys with dot notation to organize translations by feature:
 ```
 
 **Key Principles:**
-- Use **semantic names** that describe *what*, not *where*
+
+- Use **semantic names** that describe _what_, not _where_
 - Include **feature context** (homepage, auth, nav)
 - Avoid **component types** in keys (button, div, span)
 - Avoid **positional names** (button1, text2)
@@ -192,6 +198,7 @@ Use flat keys with dot notation to organize translations by feature:
 ```
 
 **Renders:**
+
 - Button 1: "Submit" / "Soumettre" (uses centralized)
 - Button 2: "Submit Payment" / "Soumettre Paiement" (per-component override)
 
@@ -223,6 +230,7 @@ Use flat keys with dot notation to organize translations by feature:
 ### From Per-Component to Centralized
 
 **Before (Per-Component):**
+
 ```json
 {
   "pages": [
@@ -249,6 +257,7 @@ Use flat keys with dot notation to organize translations by feature:
 ```
 
 **After (Centralized):**
+
 ```json
 {
   "languages": {
@@ -295,6 +304,7 @@ Then reference with `$t:key` in components.
 ### 2. Use Per-Component Sparingly
 
 Only add per-component `i18n` when you need:
+
 - Context-specific variation
 - Component-specific prop translation (aria-label)
 
@@ -306,6 +316,7 @@ Only add per-component `i18n` when you need:
 ### 4. Keep Keys Consistent
 
 Use a consistent prefix structure:
+
 - `common.*` - Reusable
 - `nav.*` - Navigation
 - `[page].*` - Page-specific
@@ -315,6 +326,7 @@ Use a consistent prefix structure:
 ### 5. Document Missing Translations
 
 When a translation key is missing in a language, it falls back to the default language. This is intentional - you can:
+
 - Deploy with partial translations
 - Add translations incrementally
 - See which keys need translation (audit centralized file)
@@ -331,6 +343,7 @@ cat specs/app/languages/languages.schema.json | jq '.examples[2].translations["e
 ### Translate
 
 Translator receives `en-US.json`:
+
 ```json
 {
   "common.save": "Save",
@@ -340,6 +353,7 @@ Translator receives `en-US.json`:
 ```
 
 Returns `fr-FR.json`:
+
 ```json
 {
   "common.save": "Enregistrer",
@@ -380,6 +394,7 @@ Returns `fr-FR.json`:
 ```
 
 **Properties:**
+
 - `translations`: Centralized translation dictionaries (flat keys with dot notation)
 - `default`: Default language code (required)
 - `fallback`: Fallback when translation missing (optional, defaults to `default`)
@@ -392,12 +407,14 @@ Returns `fr-FR.json`:
 Keys must match: `^[a-zA-Z0-9._-]+$`
 
 **Valid:**
+
 - `common.save`
 - `homepage.hero.title`
 - `nav_home` (underscore allowed)
 - `errors.404`
 
 **Invalid:**
+
 - `common save` (no spaces)
 - `common:save` (no colons)
 - `common/save` (no slashes)
@@ -412,7 +429,7 @@ Keys must match: `^[a-zA-Z0-9._-]+$`
 
 ✅ **Use centralized `$t:` references** for 90% of translations
 ⚠️ **Use per-component `i18n`** only for context-specific overrides
-🌍 **Organize by feature** (common.*, nav.*, [page].*)
+🌍 **Organize by feature** (common._, nav._, [page].\*)
 📦 **Export/import** one file for translator workflow
 🔍 **Audit easily** - all translations in one place
 

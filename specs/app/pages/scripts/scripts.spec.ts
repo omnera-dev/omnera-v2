@@ -5,7 +5,7 @@
  * found in the LICENSE.md file in the root directory of this source tree.
  */
 
-import { test, expect } from '@/specs/fixtures.ts'
+import { test, expect } from '@/specs/fixtures'
 
 /**
  * E2E Tests for Client Scripts Configuration
@@ -74,7 +74,7 @@ test.describe('Client Scripts Configuration', () => {
       })
       await page.goto('/')
       const html = page.locator('html')
-      await expect(html).toHaveAttribute('data-features', )
+      await expect(html).toHaveAttribute('data-features')
     }
   )
 
@@ -263,10 +263,10 @@ test.describe('Client Scripts Configuration', () => {
       })
       await page.goto('/')
       const homeHtml = page.locator('html')
-      await expect(homeHtml).toHaveAttribute('data-features', )
+      await expect(homeHtml).toHaveAttribute('data-features')
       await page.goto('/blog')
       const blogHtml = page.locator('html')
-      await expect(blogHtml).toHaveAttribute('data-features', )
+      await expect(blogHtml).toHaveAttribute('data-features')
     }
   )
 
