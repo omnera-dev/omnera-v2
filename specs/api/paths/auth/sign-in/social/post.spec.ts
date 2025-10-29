@@ -60,10 +60,10 @@ test(
     // Note: Actual redirect URL structure depends on Better Auth OAuth configuration
     const responseData = await response.json().catch(() => null)
 
-    // eslint-disable-next-line playwright/no-conditional-in-test
+     
     if (responseData && response.status() !== 404) {
       // If JSON response and not 404, should contain url property
-      // eslint-disable-next-line playwright/no-conditional-expect
+       
       expect(responseData).toHaveProperty('url')
     }
   }

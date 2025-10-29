@@ -63,6 +63,7 @@ export default defineConfig([
     files: ['**/*.{tsx,jsx}'],
     plugins: {
       react,
+      // @ts-expect-error - react-hooks plugin has incompatible types with ESLint flat config
       'react-hooks': reactHooks,
       'react-refresh': reactRefresh,
     },
@@ -1368,6 +1369,12 @@ export default defineConfig([
     rules: {
       ...playwright.configs['flat/recommended'].rules,
       '@typescript-eslint/no-explicit-any': 'off', // Allow 'any' in E2E tests
+      'functional/no-loop-statements': 'off', // Allow loops in E2E tests
+      'functional/no-expression-statements': 'off', // Allow expression statements in E2E tests
+      'playwright/no-conditional-in-test': 'off', // Allow conditionals in E2E tests (e.g., checking element existence)
+      'playwright/no-conditional-expect': 'off', // Allow conditional expects in E2E tests
+      'playwright/expect-expect': 'off', // Allow tests without explicit expects (e.g., testing for no errors)
+      'playwright/no-wait-for-timeout': 'off', // Allow waitForTimeout in E2E tests (sometimes needed for animations)
     },
   },
 ])

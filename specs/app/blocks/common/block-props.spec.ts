@@ -207,8 +207,8 @@ test.describe('Block Props', () => {
 
       // THEN: it should render object as JSON data attribute
       const widget = page.locator('[data-testid="block-chart-widget"]')
-      const configAttr = widget
-      await expect(configAttr).toHaveAttribute('data-chart-config')
+      await expect(widget).toHaveAttribute('data-chart-config')
+      const configAttr = await widget.getAttribute('data-chart-config')
       const config = JSON.parse(configAttr!)
       expect(config.type).toBe('bar')
       expect(config.data).toEqual([10, 20, 30])
@@ -237,8 +237,8 @@ test.describe('Block Props', () => {
 
       // THEN: it should render array as JSON data attribute
       const list = page.locator('[data-testid="block-tag-list"]')
-      const tagsAttr = list
-      await expect(tagsAttr).toHaveAttribute('data-tags')
+      await expect(list).toHaveAttribute('data-tags')
+      const tagsAttr = await list.getAttribute('data-tags')
       const tags = JSON.parse(tagsAttr!)
       expect(tags).toEqual(['react', 'typescript', 'tailwind'])
     }

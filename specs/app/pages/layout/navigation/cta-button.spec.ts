@@ -190,9 +190,9 @@ test.describe('CTA Button', () => {
         const text = el.textContent?.trim()
         const icon = el.querySelector('[data-testid="icon"]')
         return icon && text
-          ? Array.from(el.childNodes).indexOf(icon) > 0
+          ? (Array.from(el.childNodes).indexOf(icon) > 0
             ? 'right'
-            : 'left'
+            : 'left')
           : null
       })
       expect(iconPosition).toBe('right')
