@@ -119,7 +119,7 @@ export class DatabaseTemplateManager {
         // - First 3 attempts: 500ms (container might be starting up)
         // - Next 3 attempts: 1000ms (PostgreSQL initializing)
         // - Remaining attempts: 1500ms (extended wait for slow systems)
-        const backoff = i < 3 ? 500 : i < 6 ? 1000 : 1500
+        const backoff = i < 3 ? 500 : (i < 6 ? 1000 : 1500)
         await new Promise((resolve) => setTimeout(resolve, backoff))
       }
     }
