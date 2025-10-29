@@ -35,7 +35,7 @@ on:
 
   # Scheduled runs - AGGRESSIVE: Every 4 hours for 24/7 operation
   schedule:
-    - cron: '0 */4 * * *'  # Every 4 hours (0:00, 4:00, 8:00, 12:00, 16:00, 20:00 UTC)
+    - cron: '0 */4 * * *' # Every 4 hours (0:00, 4:00, 8:00, 12:00, 16:00, 20:00 UTC)
 
 # Prevent concurrent runs to avoid conflicts
 concurrency:
@@ -555,8 +555,11 @@ jobs:
                 owner: context.repo.owner,
                 repo: context.repo.repo,
                 issue_number: prNumber,
-                labels: ['ready-for-review']
+                labels: ['ready-for-review', 'auto-merge-candidate']
               });
+
+              // Trigger auto-merge workflow
+              console.log(`PR #${prNumber} is ready for auto-merge`);
             } else {
               await github.rest.issues.addLabels({
                 owner: context.repo.owner,
