@@ -526,6 +526,109 @@ test.describe('Component Internationalization', () => {
     }
   )
 
+  test.fixme(
+    'APP-I18N-011: all components should display the same translated text without duplication',
+    { tag: '@spec' },
+    async ({ page, startServerWithSchema }) => {
+      // GIVEN: multiple components using the same $t: reference key
+      await startServerWithSchema({
+        name: 'test-app',
+        languages: {
+          default: 'en-US',
+          supported: [
+            { code: 'en-US', label: 'English' },
+            { code: 'fr-FR', label: 'Français' },
+          ],
+          translations: {
+            'en-US': { 'common.save': 'Save' },
+            'fr-FR': { 'common.save': 'Enregistrer' },
+          },
+        },
+        pages: [
+          {
+            path: '/',
+            sections: [
+              { type: 'button', children: ['$t:common.save'], props: { id: 'btn1' } },
+              { type: 'button', children: ['$t:common.save'], props: { id: 'btn2' } },
+              { type: 'button', children: ['$t:common.save'], props: { id: 'btn3' } },
+            ],
+          },
+        ],
+      })
+
+      // WHEN: components share common translations (e.g., $t:common.save)
+      await page.goto('/')
+
+      // THEN: all components should display the same translated text without duplication
+      await expect(page.locator('#btn1')).toHaveText('Save')
+      await expect(page.locator('#btn2')).toHaveText('Save')
+      await expect(page.locator('#btn3')).toHaveText('Save')
+
+      // Switch to French - all buttons update
+      await page.locator('[data-testid="language-switcher"]').click()
+      await page.locator('[data-testid="language-option-fr-FR"]').click()
+      await expect(page.locator('#btn1')).toHaveText('Enregistrer')
+      await expect(page.locator('#btn2')).toHaveText('Enregistrer')
+      await expect(page.locator('#btn3')).toHaveText('Enregistrer')
+    }
+  )
+
+  test.fixme(
+    'APP-I18N-012: per-component i18n should take precedence over $t: reference',
+    { tag: '@spec' },
+    async ({ page, startServerWithSchema }) => {
+      // GIVEN: a component with $t: reference and per-component i18n override
+      await startServerWithSchema({
+        name: 'test-app',
+        languages: {
+          default: 'en-US',
+          supported: [
+            { code: 'en-US', label: 'English' },
+            { code: 'fr-FR', label: 'Français' },
+          ],
+          translations: {
+            'en-US': { 'common.submit': 'Submit' },
+            'fr-FR': { 'common.submit': 'Soumettre' },
+          },
+        },
+        pages: [
+          {
+            path: '/',
+            sections: [
+              {
+                type: 'button',
+                children: ['$t:common.submit'],
+                props: { id: 'generic' },
+              },
+              {
+                type: 'button',
+                children: ['$t:common.submit'],
+                props: { id: 'payment' },
+                i18n: {
+                  'en-US': { content: 'Submit Payment' },
+                  'fr-FR': { content: 'Soumettre Paiement' },
+                },
+              },
+            ],
+          },
+        ],
+      })
+
+      // WHEN: per-component i18n provides different translation than centralized
+      await page.goto('/')
+
+      // THEN: per-component i18n should take precedence over $t: reference
+      await expect(page.locator('#generic')).toHaveText('Submit')
+      await expect(page.locator('#payment')).toHaveText('Submit Payment')
+
+      // Switch to French
+      await page.locator('[data-testid="language-switcher"]').click()
+      await page.locator('[data-testid="language-option-fr-FR"]').click()
+      await expect(page.locator('#generic')).toHaveText('Soumettre')
+      await expect(page.locator('#payment')).toHaveText('Soumettre Paiement')
+    }
+  )
+
   // ============================================================================
   // REGRESSION TEST (@regression)
   // ONE OPTIMIZED test verifying components work together efficiently

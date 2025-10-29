@@ -2,7 +2,7 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "$id": "i18n.schema.json",
   "title": "Component Internationalization",
-  "description": "Component-level translations for multi-language support",
+  "description": "Component-level translation overrides for multi-language support. PRIMARY APPROACH: Use $t:key syntax in content/children to reference centralized translations (defined in languages.translations). FALLBACK APPROACH: Use this i18n object only for component-specific overrides that differ from centralized translations. Precedence: per-component i18n → centralized $t: → fallback language.",
   "type": "object",
   "patternProperties": {
     "^[a-z]{2}(-[A-Z]{2})?$": {
@@ -61,6 +61,65 @@
           "aria-label": "Commencez votre voyage"
         }
       }
+    },
+    {
+      "_comment": "PRIMARY APPROACH: Centralized translations with $t: references",
+      "component": {
+        "type": "button",
+        "children": ["$t:common.save"]
+      },
+      "languages": {
+        "translations": {
+          "en-US": {
+            "common.save": "Save"
+          },
+          "fr-FR": {
+            "common.save": "Enregistrer"
+          }
+        }
+      },
+      "result": "Button displays 'Save' in English, 'Enregistrer' in French - translations come from centralized dictionary, no per-component i18n needed"
+    },
+    {
+      "_comment": "HYBRID APPROACH: $t: reference with per-component override",
+      "component": {
+        "type": "button",
+        "children": ["$t:common.submit"],
+        "i18n": {
+          "en-US": {
+            "content": "Submit Payment"
+          },
+          "fr-FR": {
+            "content": "Soumettre Paiement"
+          }
+        }
+      },
+      "languages": {
+        "translations": {
+          "en-US": {
+            "common.submit": "Submit"
+          },
+          "fr-FR": {
+            "common.submit": "Soumettre"
+          }
+        }
+      },
+      "result": "Per-component i18n overrides centralized translation - displays 'Submit Payment' instead of generic 'Submit'. Use for context-specific variations."
+    },
+    {
+      "_comment": "FALLBACK APPROACH: Per-component i18n only (legacy pattern, avoid for new code)",
+      "component": {
+        "type": "button",
+        "i18n": {
+          "en-US": {
+            "content": "Legacy Button"
+          },
+          "fr-FR": {
+            "content": "Bouton Hérité"
+          }
+        }
+      },
+      "result": "Only use per-component i18n when translation is truly unique and won't be reused. Prefer $t: for better maintainability."
     }
   ],
   "x-specs": [
@@ -123,6 +182,18 @@
       "given": "a navigation menu with translations for 5+ languages",
       "when": "user selects from language switcher",
       "then": "all menu items should update to the selected language instantly"
+    },
+    {
+      "id": "APP-I18N-011",
+      "given": "multiple components using the same $t: reference key",
+      "when": "components share common translations (e.g., $t:common.save)",
+      "then": "all components should display the same translated text without duplication"
+    },
+    {
+      "id": "APP-I18N-012",
+      "given": "a component with $t: reference and per-component i18n override",
+      "when": "per-component i18n provides different translation than centralized",
+      "then": "per-component i18n should take precedence over $t: reference"
     }
   ]
 }

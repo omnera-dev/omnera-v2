@@ -33,6 +33,23 @@
       "type": "boolean",
       "default": true,
       "description": "Remember user's language choice in localStorage"
+    },
+    "translations": {
+      "type": "object",
+      "patternProperties": {
+        "^[a-z]{2}(-[A-Z]{2})?$": {
+          "type": "object",
+          "patternProperties": {
+            "^[a-zA-Z0-9._-]+$": {
+              "type": "string"
+            }
+          },
+          "additionalProperties": false,
+          "description": "Translation dictionary with flat keys (e.g., 'common.save', 'homepage.hero.title')"
+        }
+      },
+      "additionalProperties": false,
+      "description": "Centralized translation dictionaries for all supported languages. Use $t:key syntax in components to reference translations (e.g., children: ['$t:common.save']). Recommended as PRIMARY approach for better reusability and maintainability."
     }
   },
   "required": ["default", "supported"],
@@ -77,6 +94,79 @@
       "fallback": "en-US",
       "detectBrowser": true,
       "persistSelection": true
+    },
+    {
+      "default": "en-US",
+      "supported": [
+        {
+          "code": "en-US",
+          "label": "English",
+          "direction": "ltr"
+        },
+        {
+          "code": "fr-FR",
+          "label": "Français",
+          "direction": "ltr"
+        }
+      ],
+      "detectBrowser": true,
+      "persistSelection": true,
+      "translations": {
+        "en-US": {
+          "common.save": "Save",
+          "common.cancel": "Cancel",
+          "common.delete": "Delete",
+          "common.edit": "Edit",
+          "common.back": "Back",
+          "common.next": "Next",
+          "common.previous": "Previous",
+          "common.submit": "Submit",
+          "nav.home": "Home",
+          "nav.about": "About",
+          "nav.contact": "Contact",
+          "nav.login": "Login",
+          "nav.logout": "Logout",
+          "homepage.hero.title": "Welcome to Omnera",
+          "homepage.hero.subtitle": "Build your app with configuration",
+          "homepage.hero.cta": "Get Started",
+          "homepage.features.title": "Features",
+          "homepage.features.subtitle": "Everything you need to build amazing apps",
+          "errors.404": "Page not found",
+          "errors.500": "Server error",
+          "errors.generic": "Something went wrong",
+          "forms.email.label": "Email Address",
+          "forms.email.placeholder": "Enter your email",
+          "forms.password.label": "Password",
+          "forms.password.placeholder": "Enter your password"
+        },
+        "fr-FR": {
+          "common.save": "Enregistrer",
+          "common.cancel": "Annuler",
+          "common.delete": "Supprimer",
+          "common.edit": "Modifier",
+          "common.back": "Retour",
+          "common.next": "Suivant",
+          "common.previous": "Précédent",
+          "common.submit": "Soumettre",
+          "nav.home": "Accueil",
+          "nav.about": "À propos",
+          "nav.contact": "Contact",
+          "nav.login": "Connexion",
+          "nav.logout": "Déconnexion",
+          "homepage.hero.title": "Bienvenue sur Omnera",
+          "homepage.hero.subtitle": "Créez votre application avec configuration",
+          "homepage.hero.cta": "Commencer",
+          "homepage.features.title": "Fonctionnalités",
+          "homepage.features.subtitle": "Tout ce dont vous avez besoin pour créer des applications incroyables",
+          "errors.404": "Page non trouvée",
+          "errors.500": "Erreur serveur",
+          "errors.generic": "Quelque chose s'est mal passé",
+          "forms.email.label": "Adresse e-mail",
+          "forms.email.placeholder": "Entrez votre e-mail",
+          "forms.password.label": "Mot de passe",
+          "forms.password.placeholder": "Entrez votre mot de passe"
+        }
+      }
     }
   ],
   "x-specs": [
@@ -819,6 +909,297 @@
           "Scroll position maintained (no page reload)",
           "Component state preserved during language switch",
           "Complete language + page integration"
+        ]
+      }
+    },
+    {
+      "id": "APP-LANGUAGES-015",
+      "given": "an app with centralized translations and components using $t: references",
+      "when": "component content uses $t:key syntax",
+      "then": "it should resolve translation keys from centralized translations dictionary",
+      "validation": {
+        "setup": {
+          "languages": {
+            "default": "en-US",
+            "supported": [
+              {
+                "code": "en-US",
+                "label": "English"
+              },
+              {
+                "code": "fr-FR",
+                "label": "Français"
+              }
+            ],
+            "translations": {
+              "en-US": {
+                "common.save": "Save"
+              },
+              "fr-FR": {
+                "common.save": "Enregistrer"
+              }
+            }
+          }
+        },
+        "assertions": [
+          "$t:common.save resolves to 'Save' in English",
+          "$t:common.save resolves to 'Enregistrer' in French",
+          "Centralized approach (PRIMARY pattern)",
+          "Reusable across all components"
+        ]
+      },
+      "application": {
+        "languages": {
+          "translations": {
+            "en-US": {
+              "common.save": "Save"
+            },
+            "fr-FR": {
+              "common.save": "Enregistrer"
+            }
+          }
+        },
+        "page": {
+          "sections": [
+            {
+              "type": "button",
+              "children": ["$t:common.save"]
+            }
+          ]
+        },
+        "expectedDOM": {
+          "en-US": "<button>Save</button>",
+          "fr-FR": "<button>Enregistrer</button>"
+        },
+        "assertions": [
+          "$t: prefix indicates centralized translation reference",
+          "Key 'common.save' looked up in translations[currentLanguage]",
+          "Single translation key used across multiple components",
+          "DRY principle: no duplication of 'Save' translations"
+        ]
+      }
+    },
+    {
+      "id": "APP-LANGUAGES-016",
+      "given": "an app with centralized translations and a missing translation key",
+      "when": "$t:key reference doesn't exist in current language",
+      "then": "it should fall back to default language translation",
+      "validation": {
+        "setup": {
+          "languages": {
+            "default": "en-US",
+            "fallback": "en-US",
+            "supported": [
+              {
+                "code": "en-US",
+                "label": "English"
+              },
+              {
+                "code": "fr-FR",
+                "label": "Français"
+              }
+            ],
+            "translations": {
+              "en-US": {
+                "common.save": "Save",
+                "common.cancel": "Cancel"
+              },
+              "fr-FR": {
+                "common.save": "Enregistrer"
+              }
+            }
+          }
+        },
+        "assertions": [
+          "French has 'common.save' translation",
+          "French missing 'common.cancel' translation",
+          "Fallback to English for missing keys",
+          "Graceful degradation prevents blank text"
+        ]
+      },
+      "application": {
+        "languages": {
+          "currentLanguage": "fr-FR",
+          "translations": {
+            "en-US": {
+              "common.save": "Save",
+              "common.cancel": "Cancel"
+            },
+            "fr-FR": {
+              "common.save": "Enregistrer"
+            }
+          }
+        },
+        "page": {
+          "sections": [
+            {
+              "type": "button",
+              "children": ["$t:common.save"]
+            },
+            {
+              "type": "button",
+              "children": ["$t:common.cancel"]
+            }
+          ]
+        },
+        "expectedDOM": "<div><button>Enregistrer</button><button>Cancel</button></div>",
+        "assertions": [
+          "common.save: French translation exists → 'Enregistrer'",
+          "common.cancel: French translation missing → fallback to English 'Cancel'",
+          "No blank buttons or errors",
+          "Seamless UX with incomplete translations",
+          "Translation coverage can be partial"
+        ]
+      }
+    },
+    {
+      "id": "APP-LANGUAGES-017",
+      "given": "a component with $t: reference and per-component i18n override",
+      "when": "both centralized and per-component translations exist",
+      "then": "per-component i18n should override centralized $t: translation",
+      "validation": {
+        "setup": {
+          "languages": {
+            "default": "en-US",
+            "supported": [
+              {
+                "code": "en-US",
+                "label": "English"
+              },
+              {
+                "code": "fr-FR",
+                "label": "Français"
+              }
+            ],
+            "translations": {
+              "en-US": {
+                "common.submit": "Submit"
+              },
+              "fr-FR": {
+                "common.submit": "Soumettre"
+              }
+            }
+          }
+        },
+        "assertions": [
+          "Centralized: 'common.submit' = 'Submit' / 'Soumettre'",
+          "Component override: context-specific translation",
+          "Hybrid approach: centralized + override",
+          "Per-component wins when both exist"
+        ]
+      },
+      "application": {
+        "languages": {
+          "translations": {
+            "en-US": {
+              "common.submit": "Submit"
+            },
+            "fr-FR": {
+              "common.submit": "Soumettre"
+            }
+          }
+        },
+        "components": [
+          {
+            "type": "button",
+            "children": ["$t:common.submit"]
+          },
+          {
+            "type": "button",
+            "children": ["$t:common.submit"],
+            "i18n": {
+              "en-US": {
+                "content": "Submit Payment"
+              },
+              "fr-FR": {
+                "content": "Soumettre Paiement"
+              }
+            }
+          }
+        ],
+        "expectedDOM": {
+          "en-US": "<div><button>Submit</button><button>Submit Payment</button></div>",
+          "fr-FR": "<div><button>Soumettre</button><button>Soumettre Paiement</button></div>"
+        },
+        "assertions": [
+          "First button: uses centralized $t:common.submit",
+          "Second button: per-component i18n overrides centralized",
+          "Hybrid flexibility: general + specific",
+          "Use override for context-specific variations",
+          "Fallback chain: per-component → centralized → fallback language"
+        ]
+      }
+    },
+    {
+      "id": "APP-LANGUAGES-018",
+      "given": "an app with organized namespace structure in centralized translations",
+      "when": "translations use namespaces (common.*, nav.*, homepage.*, errors.*)",
+      "then": "it should organize translations by feature and improve maintainability",
+      "validation": {
+        "setup": {
+          "languages": {
+            "default": "en-US",
+            "supported": [
+              {
+                "code": "en-US",
+                "label": "English"
+              }
+            ],
+            "translations": {
+              "en-US": {
+                "common.save": "Save",
+                "common.cancel": "Cancel",
+                "nav.home": "Home",
+                "nav.about": "About",
+                "homepage.hero.title": "Welcome",
+                "homepage.hero.cta": "Get Started",
+                "errors.404": "Not Found",
+                "errors.500": "Server Error"
+              }
+            }
+          }
+        },
+        "assertions": [
+          "common.*: Reusable UI strings across app",
+          "nav.*: Navigation-specific translations",
+          "homepage.*: Homepage-specific content",
+          "errors.*: Error messages",
+          "Organized by feature, not by component type",
+          "Semantic naming improves maintainability"
+        ]
+      },
+      "application": {
+        "languages": {
+          "translations": {
+            "en-US": {
+              "common.save": "Save",
+              "common.cancel": "Cancel",
+              "nav.home": "Home",
+              "nav.about": "About",
+              "homepage.hero.title": "Welcome to Omnera",
+              "homepage.hero.cta": "Get Started",
+              "errors.404": "Page not found",
+              "errors.500": "Server error"
+            }
+          }
+        },
+        "namespaceOrganization": {
+          "common.*": "Reusable UI strings (buttons, labels, actions)",
+          "nav.*": "Navigation menu items",
+          "[page].*": "Page-specific content (homepage.*, about.*, contact.*)",
+          "errors.*": "Error messages",
+          "forms.*": "Form labels, placeholders, validation",
+          "auth.*": "Authentication flows"
+        },
+        "bestPractices": [
+          "✅ Semantic keys: common.save (not button1, btn_save)",
+          "✅ Feature-based: homepage.hero.title (not just hero.title)",
+          "✅ Consistent prefixes: all nav items under nav.*",
+          "❌ Avoid: component-type prefixes (button.save, div.content)",
+          "❌ Avoid: positional names (homepage.section1.text1)",
+          "Translation file can be easily audited: 'Show all homepage.* keys'",
+          "Translators understand context from namespace",
+          "Scale to hundreds of translations without chaos"
         ]
       }
     }

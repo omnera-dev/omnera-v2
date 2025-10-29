@@ -527,6 +527,198 @@ test.describe('Languages Configuration', () => {
     }
   )
 
+  test.fixme(
+    'APP-LANGUAGES-015: should resolve translation keys from centralized translations dictionary',
+    { tag: '@spec' },
+    async ({ page, startServerWithSchema }) => {
+      // GIVEN: an app with centralized translations and components using $t: references
+      await startServerWithSchema({
+        name: 'test-app',
+        languages: {
+          default: 'en-US',
+          supported: [
+            { code: 'en-US', label: 'English' },
+            { code: 'fr-FR', label: 'Français' },
+          ],
+          translations: {
+            'en-US': { 'common.save': 'Save' },
+            'fr-FR': { 'common.save': 'Enregistrer' },
+          },
+        },
+        pages: [
+          {
+            name: 'Test',
+            path: '/',
+            meta: { lang: 'en-US', title: 'Test' },
+            sections: [{ type: 'button', children: ['$t:common.save'] }],
+          },
+        ],
+      })
+
+      // WHEN: component content uses $t:key syntax
+      await page.goto('/')
+
+      // THEN: it should resolve translation keys from centralized translations dictionary
+      await expect(page.locator('button')).toHaveText('Save')
+
+      // Switch to French
+      await page.locator('[data-testid="language-switcher"]').click()
+      await page.locator('[data-testid="language-option-fr-FR"]').click()
+      await expect(page.locator('button')).toHaveText('Enregistrer')
+    }
+  )
+
+  test.fixme(
+    'APP-LANGUAGES-016: should fall back to default language translation',
+    { tag: '@spec' },
+    async ({ page, startServerWithSchema }) => {
+      // GIVEN: an app with centralized translations and a missing translation key
+      await startServerWithSchema({
+        name: 'test-app',
+        languages: {
+          default: 'en-US',
+          fallback: 'en-US',
+          supported: [
+            { code: 'en-US', label: 'English' },
+            { code: 'fr-FR', label: 'Français' },
+          ],
+          translations: {
+            'en-US': {
+              'common.save': 'Save',
+              'common.cancel': 'Cancel',
+            },
+            'fr-FR': {
+              'common.save': 'Enregistrer',
+              // 'common.cancel' is missing - will fall back to English
+            },
+          },
+        },
+        pages: [
+          {
+            name: 'Test',
+            path: '/',
+            meta: { lang: 'fr-FR', title: 'Test' },
+            sections: [
+              { type: 'button', children: ['$t:common.save'] },
+              { type: 'button', children: ['$t:common.cancel'] },
+            ],
+          },
+        ],
+      })
+
+      // WHEN: $t:key reference doesn't exist in current language
+      await page.goto('/')
+
+      // THEN: it should fall back to default language translation
+      const buttons = page.locator('button')
+      await expect(buttons.nth(0)).toHaveText('Enregistrer') // French exists
+      await expect(buttons.nth(1)).toHaveText('Cancel') // Falls back to English
+    }
+  )
+
+  test.fixme(
+    'APP-LANGUAGES-017: per-component i18n should override centralized $t: translation',
+    { tag: '@spec' },
+    async ({ page, startServerWithSchema }) => {
+      // GIVEN: a component with $t: reference and per-component i18n override
+      await startServerWithSchema({
+        name: 'test-app',
+        languages: {
+          default: 'en-US',
+          supported: [
+            { code: 'en-US', label: 'English' },
+            { code: 'fr-FR', label: 'Français' },
+          ],
+          translations: {
+            'en-US': { 'common.submit': 'Submit' },
+            'fr-FR': { 'common.submit': 'Soumettre' },
+          },
+        },
+        pages: [
+          {
+            name: 'Test',
+            path: '/',
+            meta: { lang: 'en-US', title: 'Test' },
+            sections: [
+              { type: 'button', children: ['$t:common.submit'] },
+              {
+                type: 'button',
+                children: ['$t:common.submit'],
+                i18n: {
+                  'en-US': { content: 'Submit Payment' },
+                  'fr-FR': { content: 'Soumettre Paiement' },
+                },
+              },
+            ],
+          },
+        ],
+      })
+
+      // WHEN: both centralized and per-component translations exist
+      await page.goto('/')
+
+      // THEN: per-component i18n should override centralized $t: translation
+      const buttons = page.locator('button')
+      await expect(buttons.nth(0)).toHaveText('Submit') // Uses centralized
+      await expect(buttons.nth(1)).toHaveText('Submit Payment') // Per-component override
+
+      // Switch to French
+      await page.locator('[data-testid="language-switcher"]').click()
+      await page.locator('[data-testid="language-option-fr-FR"]').click()
+      await expect(buttons.nth(0)).toHaveText('Soumettre') // Uses centralized
+      await expect(buttons.nth(1)).toHaveText('Soumettre Paiement') // Per-component override
+    }
+  )
+
+  test.fixme(
+    'APP-LANGUAGES-018: should organize translations by feature and improve maintainability',
+    { tag: '@spec' },
+    async ({ page, startServerWithSchema }) => {
+      // GIVEN: an app with organized namespace structure in centralized translations
+      await startServerWithSchema({
+        name: 'test-app',
+        languages: {
+          default: 'en-US',
+          supported: [{ code: 'en-US', label: 'English' }],
+          translations: {
+            'en-US': {
+              'common.save': 'Save',
+              'common.cancel': 'Cancel',
+              'nav.home': 'Home',
+              'nav.about': 'About',
+              'homepage.hero.title': 'Welcome',
+              'homepage.hero.cta': 'Get Started',
+              'errors.404': 'Not Found',
+              'errors.500': 'Server Error',
+            },
+          },
+        },
+        pages: [
+          {
+            name: 'Homepage',
+            path: '/',
+            meta: { lang: 'en-US', title: 'Test' },
+            sections: [
+              { type: 'nav', children: [{ type: 'a', children: ['$t:nav.home'] }] },
+              { type: 'h1', children: ['$t:homepage.hero.title'] },
+              { type: 'button', children: ['$t:common.save'] },
+              { type: 'div', children: ['$t:errors.404'] },
+            ],
+          },
+        ],
+      })
+
+      // WHEN: translations use namespaces (common.*, nav.*, homepage.*, errors.*)
+      await page.goto('/')
+
+      // THEN: it should organize translations by feature and improve maintainability
+      await expect(page.locator('nav a')).toHaveText('Home')
+      await expect(page.locator('h1')).toHaveText('Welcome')
+      await expect(page.locator('button')).toHaveText('Save')
+      await expect(page.locator('div').filter({ hasText: 'Not Found' })).toBeVisible()
+    }
+  )
+
   // ============================================================================
   // REGRESSION TEST (@regression)
   // ONE OPTIMIZED test verifying components work together efficiently

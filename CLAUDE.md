@@ -189,6 +189,7 @@ omnera-v2/
 - API Routes: `@docs/infrastructure/api/hono-rpc-openapi.md`
 - Database: `@docs/infrastructure/database/drizzle.md`
 - Schemas: `@docs/infrastructure/framework/effect.md`
+- **Internationalization (i18n)**: `@docs/architecture/patterns/i18n-centralized-translations.md`
 
 **Slash Command**: Use `/docs` to list all available documentation files
 
