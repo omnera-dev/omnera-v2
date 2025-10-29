@@ -339,8 +339,9 @@ export default defineConfig([
       // Consistent function scoping for better organization
       'unicorn/consistent-function-scoping': 'error',
 
-      // Prevent deeply nested ternaries (readability)
-      'unicorn/no-nested-ternary': 'warn',
+      // Disable nested ternary rule - conflicts with Prettier formatting
+      // Prettier removes parentheses that this rule requires, creating an infinite loop
+      'unicorn/no-nested-ternary': 'off',
 
       // Prefer switch over multiple if/else (readability)
       'unicorn/prefer-switch': ['warn', { minimumCases: 3 }],
