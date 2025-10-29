@@ -31,13 +31,13 @@ import { Schema } from 'effect'
  */
 export const BorderRadiusConfigSchema = Schema.Record({
   key: Schema.String.pipe(
-    Schema.pattern(/^[a-z]+(-[a-z]+)*$/, {
-      message: () => 'Border radius key must use kebab-case format',
+    Schema.pattern(/^[a-z0-9]+(-[a-z0-9]+)*$/, {
+      message: () => 'Border radius key must use kebab-case format (lowercase letters/numbers)',
     }),
     Schema.annotations({
       title: 'Border Radius Key',
-      description: 'Semantic radius name (kebab-case)',
-      examples: ['none', 'sm', 'md', 'lg', 'full', 'button-radius'],
+      description: 'Semantic radius name (kebab-case with numbers)',
+      examples: ['none', 'sm', 'md', 'lg', '2xl', '3xl', 'full'],
     })
   ),
   value: Schema.String.pipe(

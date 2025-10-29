@@ -31,12 +31,12 @@ import { Schema } from 'effect'
  */
 export const ShadowsConfigSchema = Schema.Record({
   key: Schema.String.pipe(
-    Schema.pattern(/^[a-z]+(-[a-z]+)*$/, {
-      message: () => 'Shadow key must use kebab-case format',
+    Schema.pattern(/^[a-z0-9]+(-[a-z0-9]+)*$/, {
+      message: () => 'Shadow key must use kebab-case format (lowercase letters/numbers)',
     }),
     Schema.annotations({
       title: 'Shadow Key',
-      description: 'Semantic shadow name (kebab-case)',
+      description: 'Semantic shadow name (kebab-case with numbers)',
       examples: ['sm', 'md', 'lg', 'xl', '2xl', 'inner', 'none'],
     })
   ),

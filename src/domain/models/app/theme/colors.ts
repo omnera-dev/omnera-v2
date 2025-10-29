@@ -25,9 +25,9 @@ import { Schema } from 'effect'
  * @see specs/app/theme/colors/colors.schema.json#/patternProperties
  */
 export const ColorNameSchema = Schema.String.pipe(
-  Schema.pattern(/^[a-z]+(-[a-z]+)*$/, {
+  Schema.pattern(/^[a-z]+[a-z0-9]*(-[a-z0-9]+)*$/, {
     message: () =>
-      'Color name must use kebab-case format: lowercase letters separated by hyphens (e.g., "primary", "text-muted", "gray-500")',
+      'Color name must use kebab-case format: lowercase letters and numbers separated by hyphens (e.g., "primary", "text-muted", "gray-500")',
   }),
   Schema.annotations({
     title: 'Color Name',
