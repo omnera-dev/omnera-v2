@@ -28,16 +28,33 @@ export interface AppSchemaComparison {
 }
 
 /**
- * Resolve a $ref by loading the referenced file
+ * Resolve a $ref by loading the referenced file or navigating internal JSON pointers
  */
 async function resolveRef(
   ref: string,
   baseDir: string,
+  rootSchema: unknown,
   visited: Set<string> = new Set()
 ): Promise<unknown> {
   // Handle JSON pointer references (internal to same file)
   if (ref.startsWith('#/')) {
-    return null // We don't handle internal refs for now
+    // Navigate through the schema using the JSON pointer path
+    const path = ref.slice(2).split('/') // Remove '#/' and split by '/'
+    let current: any = rootSchema
+
+    for (const segment of path) {
+      // Decode URI components (e.g., ~1 becomes /, ~0 becomes ~)
+      const decodedSegment = segment.replace(/~1/g, '/').replace(/~0/g, '~')
+
+      if (current && typeof current === 'object' && decodedSegment in current) {
+        current = current[decodedSegment]
+      } else {
+        // Path not found
+        return null
+      }
+    }
+
+    return stripExamplesAndSpecs(current)
   }
 
   // Strip fragment
@@ -98,8 +115,10 @@ function stripExamplesAndSpecs(obj: unknown): unknown {
 async function extractSchemaProperties(
   schema: unknown,
   baseDir: string,
+  rootSchema: unknown,
   visited: Set<string> = new Set(),
-  currentPath: string = ''
+  currentPath: string = '',
+  refStack: Set<string> = new Set()
 ): Promise<{ count: number; paths: string[] }> {
   if (typeof schema !== 'object' || schema === null) {
     return { count: 0, paths: [] }
@@ -111,12 +130,34 @@ async function extractSchemaProperties(
 
   // Handle $ref - resolve it and extract properties from the referenced schema
   if ('$ref' in obj && typeof obj.$ref === 'string') {
-    const resolved = await resolveRef(obj.$ref, baseDir, visited)
+    // Check for circular references within internal $defs (e.g., NavLinks -> NavLinks)
+    // Only check internal refs (starting with #/)
+    if (obj.$ref.startsWith('#/')) {
+      if (refStack.has(obj.$ref)) {
+        // Circular reference detected, skip to avoid infinite loop
+        return { count, paths }
+      }
+    }
+
+    const resolved = await resolveRef(obj.$ref, baseDir, rootSchema, visited)
     if (resolved) {
-      // Update baseDir to the directory of the resolved file
+      // Update baseDir to the directory of the resolved file (only for external refs)
       const refWithoutFragment = obj.$ref.split('#')[0] || ''
-      const newBaseDir = dirname(resolve(baseDir, refWithoutFragment))
-      const result = await extractSchemaProperties(resolved, newBaseDir, visited, currentPath)
+      const newBaseDir = refWithoutFragment
+        ? dirname(resolve(baseDir, refWithoutFragment))
+        : baseDir
+
+      // Create a new refStack with this ref added (for internal refs only)
+      const newRefStack = obj.$ref.startsWith('#/') ? new Set([...refStack, obj.$ref]) : refStack
+
+      const result = await extractSchemaProperties(
+        resolved,
+        newBaseDir,
+        rootSchema,
+        visited,
+        currentPath,
+        newRefStack
+      )
       count += result.count
       paths.push(...result.paths)
     }
@@ -134,7 +175,14 @@ async function extractSchemaProperties(
       paths.push(propPath)
 
       // Recursively extract nested properties
-      const result = await extractSchemaProperties(value, baseDir, visited, propPath)
+      const result = await extractSchemaProperties(
+        value,
+        baseDir,
+        rootSchema,
+        visited,
+        propPath,
+        refStack
+      )
       count += result.count
       paths.push(...result.paths)
     }
@@ -142,7 +190,14 @@ async function extractSchemaProperties(
 
   // Handle array items
   if ('items' in obj && typeof obj.items === 'object' && obj.items !== null) {
-    const result = await extractSchemaProperties(obj.items, baseDir, visited, currentPath + '[]')
+    const result = await extractSchemaProperties(
+      obj.items,
+      baseDir,
+      rootSchema,
+      visited,
+      currentPath + '[]',
+      refStack
+    )
     count += result.count
     paths.push(...result.paths)
   }
@@ -153,7 +208,14 @@ async function extractSchemaProperties(
       const schemas = obj[combiner] as unknown[]
       for (let i = 0; i < schemas.length; i++) {
         const branchPath = currentPath ? `${currentPath}[${combiner}:${i}]` : `[${combiner}:${i}]`
-        const result = await extractSchemaProperties(schemas[i], baseDir, visited, branchPath)
+        const result = await extractSchemaProperties(
+          schemas[i],
+          baseDir,
+          rootSchema,
+          visited,
+          branchPath,
+          refStack
+        )
         count += result.count
         paths.push(...result.paths)
       }
@@ -227,8 +289,12 @@ export async function compareAppSchemas(
   const currentBaseDir = dirname(currentSchemaPath)
 
   // Extract all property paths and counts from both schemas
-  const goalResult = await extractSchemaProperties(goalSchemaClean, goalBaseDir)
-  const currentResult = await extractSchemaProperties(currentSchemaClean, currentBaseDir)
+  const goalResult = await extractSchemaProperties(goalSchemaClean, goalBaseDir, goalSchemaClean)
+  const currentResult = await extractSchemaProperties(
+    currentSchemaClean,
+    currentBaseDir,
+    currentSchemaClean
+  )
 
   // Convert current paths to Set for efficient lookup
   const currentPathsSet = new Set(currentResult.paths)
