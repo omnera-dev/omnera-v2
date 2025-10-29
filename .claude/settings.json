@@ -13,7 +13,7 @@
       "Bash(bun run lint)",
       "Bash(bun run license)",
       "Bash(CLAUDECODE=1 bun test src/domain/models/table/field-types/single-line-text-field.test.ts src/domain/models/table/field-types/long-text-field.test.ts src/domain/models/table/field-types/phone-number-field.test.ts src/domain/models/table/field-types/email-field.test.ts src/domain/models/table/field-types/url-field.test.ts src/domain/models/table/field-types/integer-field.test.ts src/domain/models/table/field-types/decimal-field.test.ts src/domain/models/table/field-types/currency-field.test.ts src/domain/models/table/field-types/percentage-field.test.ts)",
-      "Read(//Users/thomasjeanneau/.config/**)",
+      "Read(//$HOME/.config/**)",
       "Bash(bun run lint tests/fixtures.ts)",
       "Bash(git add docs/specifications/schemas/tables/tables.schema.json ROADMAP.md src/domain/models/table/field-types/ src/domain/models/table/fields.ts)",
       "Bash(git reset)",

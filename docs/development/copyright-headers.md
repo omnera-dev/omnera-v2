@@ -47,7 +47,7 @@ See [`claude-code-hooks.md`](./claude-code-hooks.md) for complete setup guide.
 ```json
 {
   "hooks": {
-    "post-write-hook": "if echo \"$CLAUDE_FILE_PATH\" | grep -E '(src|scripts|tests)/.*\\.tsx?$' > /dev/null 2>&1; then cd /Users/thomasjeanneau/Codes/omnera-v2 && bun run license 2>&1 | grep 'Added header' || true; else true; fi"
+    "post-write-hook": "if echo \"$CLAUDE_FILE_PATH\" | grep -E '(src|scripts|tests)/.*\\.tsx?$' > /dev/null 2>&1; then cd \"$CLAUDE_CWD\" && bun run license 2>&1 | grep 'Added header' || true; else true; fi"
   }
 }
 ```

@@ -25,7 +25,7 @@ This hook runs `bun run license` after any file write operation.
 ```json
 {
   "hooks": {
-    "post-write-hook": "cd /Users/thomasjeanneau/Codes/omnera-v2 && bun run license 2>&1 | grep -v 'Files already with headers' || true"
+    "post-write-hook": "cd \"$CLAUDE_CWD\" && bun run license 2>&1 | grep -v 'Files already with headers' || true"
   }
 }
 ```
@@ -45,7 +45,7 @@ Only run the license script when TypeScript files are created:
 ```json
 {
   "hooks": {
-    "post-write-hook": "if echo \"$CLAUDE_FILE_PATH\" | grep -q '\\.tsx\\?$'; then cd /Users/thomasjeanneau/Codes/omnera-v2 && bun run license --quiet 2>&1 | head -5; fi || true"
+    "post-write-hook": "if echo \"$CLAUDE_FILE_PATH\" | grep -q '\\.tsx\\?$'; then cd \"$CLAUDE_CWD\" && bun run license --quiet 2>&1 | head -5; fi || true"
   }
 }
 ```
@@ -149,7 +149,7 @@ Here's a complete Claude Code settings configuration:
 ```json
 {
   "hooks": {
-    "post-write-hook": "if echo \"$CLAUDE_FILE_PATH\" | grep -E '(src|scripts|tests)/.*\\.tsx?$' > /dev/null 2>&1; then cd /Users/thomasjeanneau/Codes/omnera-v2 && bun run license 2>&1 | grep 'Added header' || true; else true; fi"
+    "post-write-hook": "if echo \"$CLAUDE_FILE_PATH\" | grep -E '(src|scripts|tests)/.*\\.tsx?$' > /dev/null 2>&1; then cd \"$CLAUDE_CWD\" && bun run license 2>&1 | grep 'Added header' || true; else true; fi"
   },
   "terminal": {
     "shell": "/bin/bash"
