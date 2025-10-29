@@ -49,7 +49,7 @@
         }
       },
       "additionalProperties": false,
-      "description": "Centralized translation dictionaries for all supported languages. Use $t:key syntax in ANY string property to reference translations: children arrays (['$t:common.save']), component props ({ 'aria-label': '$t:common.close', placeholder: '$t:forms.email.placeholder' }), meta properties ({ title: '$t:page.title' }), etc. This is the ONLY supported i18n pattern (per-component i18n deprecated in v0.2.0)."
+      "description": "Centralized translation dictionaries for all supported languages. Use $t:key syntax in ANY string property to reference translations: children arrays (['$t:common.save']), component props ({ 'aria-label': '$t:common.close', placeholder: '$t:forms.email.placeholder' }), meta properties ({ title: '$t:page.title' }), etc. This is the ONLY supported i18n pattern."
     }
   },
   "required": ["default", "supported"],

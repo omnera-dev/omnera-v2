@@ -19,7 +19,7 @@
  * 8. $ref paths: Relative paths exist and are valid
  * 9. Type discriminators: const vs enum usage
  * 10. Required arrays: Explicit required fields for objects
- * 11. Deprecated patterns: Per-component i18n usage (deprecated in v0.1.1, removed in v0.2.0)
+ * 11. Removed patterns: Per-component i18n usage (removed - errors emitted)
  */
 
 import { readdir, readFile, stat } from 'node:fs/promises'
@@ -505,15 +505,16 @@ function checkForDeprecatedI18n(
   const isInXSpecs = path.includes('x-specs')
   const isInSpecs = path.includes('specs')
 
-  // Check if this object has an 'i18n' property (per-component i18n pattern)
+  // Check if this object has an 'i18n' property (per-component i18n pattern - REMOVED)
   // Only warn if we're not in examples/x-specs/specs
   if ('i18n' in record && !isInExamples && !isInXSpecs && !isInSpecs) {
     const pathStr = path.length > 0 ? path.join('.') : 'root'
-    result.warnings.push({
+    result.errors.push({
       file: relativePath,
-      type: 'warning',
-      message: `DEPRECATED: Per-component i18n at ${pathStr}. Use centralized translations with $t: references instead. See docs/architecture/patterns/i18n-centralized-translations.md for migration guide. This pattern will be removed in v0.2.0.`,
+      type: 'error',
+      message: `REMOVED: Per-component i18n at ${pathStr} is no longer supported. Use centralized translations with $t: references instead. See docs/architecture/patterns/i18n-centralized-translations.md for migration guide.`,
     })
+    result.passed = false
   }
 
   // Recursively check nested objects

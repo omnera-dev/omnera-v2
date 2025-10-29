@@ -315,7 +315,19 @@ async function main() {
       30_000
     ),
     runCheckWithFailFast('TypeScript', ['bunx', 'tsc', '--noEmit', '--incremental'], 60_000),
-    runCheckWithFailFast('Unit Tests', ['bun', 'test', '--concurrent', 'src/', 'scripts/'], 30_000),
+    runCheckWithFailFast(
+      'Unit Tests',
+      [
+        'bun',
+        'test',
+        '--concurrent',
+        'src/**/*.test.ts',
+        'src/**/*.test.tsx',
+        'scripts/**/*.test.ts',
+        'scripts/**/*.test.tsx',
+      ],
+      30_000
+    ),
     runCheckWithFailFast(
       'E2E Regression Tests',
       ['bunx', 'playwright', 'test', '--grep=@regression'],

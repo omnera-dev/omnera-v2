@@ -2,9 +2,9 @@
 
 ## Overview
 
-> **⚠️ BREAKING CHANGE NOTICE (v0.2.0)**
+> **⚠️ BREAKING CHANGE (Completed)**
 >
-> Per-component `i18n` overrides are **DEPRECATED** and will be removed in v0.2.0. This documentation now reflects the pure centralized pattern that aligns with industry standards (i18next, vue-i18n, react-intl, next-intl).
+> Per-component `i18n` overrides have been **REMOVED**. This documentation reflects the pure centralized pattern that aligns with industry standards (i18next, vue-i18n, react-intl, next-intl).
 
 Omnera™ uses a **pure centralized i18n approach** with all translations defined in `languages.translations`. This provides better reusability, maintainability, and translator workflow by maintaining a single source of truth for all translations.
 
@@ -201,12 +201,10 @@ For context-specific text, use more specific translation keys instead of overrid
 
 **Result:** French page shows "Enregistrer" (French) and "Cancel" (English fallback).
 
-## Migration Guide (v0.1.x → v0.2.0)
+## Migration Guide
 
-> **Migration Timeline:**
->
-> - v0.1.1: Per-component `i18n` property marked as deprecated (warnings emitted)
-> - v0.2.0: Per-component `i18n` property removed entirely (breaking change)
+> **BREAKING CHANGE COMPLETED:**
+> Per-component `i18n` property has been removed entirely. All translations must use centralized pattern.
 
 ### Automated Migration
 
@@ -418,14 +416,12 @@ Keys must match: `^[a-zA-Z0-9._-]+$`
 ## Related Documentation
 
 - **Language Configuration**: `specs/app/languages/languages.schema.json`
-- **Per-Component i18n (DEPRECATED)**: `specs/app/pages/common/i18n.schema.json`
 - **Test Examples**: `specs/app/languages/languages.spec.ts`, `specs/app/pages/common/i18n.spec.ts`
-- **Migration Script**: `scripts/migrate-i18n-to-centralized.ts` (coming in v0.1.1)
 
 ## Summary
 
 ✅ **Use centralized `$t:` references** for ALL translations (100%)
-🚫 **Per-component `i18n` is deprecated** and will be removed in v0.2.0
+🚫 **Per-component `i18n` has been removed - pure centralized only
 🌍 **Organize by feature** (common._, nav._, [page].\_)
 📦 **Export/import** one file for translator workflow
 🔍 **Audit easily** - all translations in one place
