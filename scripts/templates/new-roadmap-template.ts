@@ -165,18 +165,16 @@ function generateAppSchemaSection(appSchema: NewRoadmapData['appSchema']): strin
 
 `
 
-  if (appSchema.missingPropertyPaths.length > 0) {
-    section += `### Missing Property Paths (${appSchema.missingPropertyPaths.length})
+  // Display progress by root property
+  if (appSchema.propertyGroups && appSchema.propertyGroups.length > 0) {
+    section += `### Progress by Root Property
 
-| Property Path |
-|---------------|
+| Root Property | Implemented | Total | Progress |
+|---------------|-------------|-------|----------|
 `
-    for (const path of appSchema.missingPropertyPaths.slice(0, 100)) {
-      section += `| \`${path}\` |\n`
-    }
-
-    if (appSchema.missingPropertyPaths.length > 100) {
-      section += `\n*...and ${appSchema.missingPropertyPaths.length - 100} more property paths*\n`
+    for (const group of appSchema.propertyGroups) {
+      const progressBar = generateProgressBar(group.completionPercent, 20)
+      section += `| \`${group.rootProperty}\` | ${group.implementedProperties} | ${group.totalProperties} | ${progressBar} |\n`
     }
   }
 

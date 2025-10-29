@@ -6,7 +6,14 @@
  */
 
 import { readFile } from 'node:fs/promises'
-import { dirname, resolve, relative } from 'node:path'
+import { dirname, resolve } from 'node:path'
+
+export interface PropertyGroup {
+  rootProperty: string
+  totalProperties: number
+  implementedProperties: number
+  completionPercent: number
+}
 
 export interface AppSchemaComparison {
   totalProperties: number
@@ -17,6 +24,7 @@ export interface AppSchemaComparison {
   missingPropertyPaths: string[]
   implementedPropertyPaths: string[]
   currentPropertyPaths: string[]
+  propertyGroups: PropertyGroup[]
 }
 
 /**
@@ -156,6 +164,44 @@ async function extractSchemaProperties(
 }
 
 /**
+ * Group property paths by root property and calculate progress for each
+ */
+function groupPropertiesByRoot(goalPaths: string[], implementedPaths: string[]): PropertyGroup[] {
+  // Get unique root properties from goal paths
+  const rootProperties = new Set<string>()
+  for (const path of goalPaths) {
+    const root = path.split('.')[0]!.split('[')[0]! // Get root before . or [
+    rootProperties.add(root)
+  }
+
+  // Calculate stats for each root property
+  const groups: PropertyGroup[] = []
+  const implementedSet = new Set(implementedPaths)
+
+  for (const root of Array.from(rootProperties).sort()) {
+    // Find all paths that start with this root
+    const rootGoalPaths = goalPaths.filter(
+      (p) => p === root || p.startsWith(`${root}.`) || p.startsWith(`${root}[`)
+    )
+    const rootImplementedPaths = rootGoalPaths.filter((p) => implementedSet.has(p))
+
+    const totalProperties = rootGoalPaths.length
+    const implementedProperties = rootImplementedPaths.length
+    const completionPercent =
+      totalProperties > 0 ? Math.round((implementedProperties / totalProperties) * 100) : 0
+
+    groups.push({
+      rootProperty: root,
+      totalProperties,
+      implementedProperties,
+      completionPercent,
+    })
+  }
+
+  return groups
+}
+
+/**
  * Compare two app schemas and calculate implementation progress
  *
  * Extracts all property paths across all schema files (including anyOf/oneOf branches).
@@ -206,6 +252,9 @@ export async function compareAppSchemas(
   const completionPercent =
     goalResult.count > 0 ? Math.round((implementedCount / goalResult.count) * 100) : 0
 
+  // Group properties by root for detailed progress tracking
+  const propertyGroups = groupPropertiesByRoot(goalResult.paths, implementedPaths)
+
   return {
     totalProperties: goalResult.count,
     currentTotalProperties: currentResult.count,
@@ -215,5 +264,6 @@ export async function compareAppSchemas(
     missingPropertyPaths: missingPaths.sort(),
     implementedPropertyPaths: implementedPaths.sort(),
     currentPropertyPaths: currentResult.paths.sort(),
+    propertyGroups,
   }
 }
