@@ -308,6 +308,9 @@ jobs:
     runs-on: ubuntu-latest
     needs: [check-trigger, setup-refactoring, wait-for-refactoring]
     if: success()
+    # Security: Read-only permissions for untrusted PR code
+    permissions:
+      contents: read
 
     steps:
       - name: Checkout branch
