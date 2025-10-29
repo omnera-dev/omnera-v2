@@ -281,10 +281,12 @@ When you receive a TDD automation issue:
 ### Pipeline Configuration
 
 The pipeline is configured in `.github/tdd-automation-config.yml`:
-- Max 3 tests fixed per run
-- Max 5 pipeline runs per day
-- 30-minute cooldown between runs
-- Testing phase uses fixtures in `specs/tdd-automation/fixtures/`
+- **AGGRESSIVE MODE ACTIVE**
+- Max 5 tests fixed per run (increased from 3)
+- Max 10 pipeline runs per day (doubled from 5)
+- 15-minute cooldown between runs (reduced from 30)
+- Scheduled runs every 4 hours (24/7 operation)
+- Full rollout phase (all features enabled)
 
 ### Current Status
 

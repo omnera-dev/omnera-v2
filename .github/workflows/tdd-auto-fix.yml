@@ -33,9 +33,9 @@ on:
         default: false
         type: boolean
 
-  # Scheduled runs (optional - uncomment to enable)
-  # schedule:
-  #   - cron: '0 2 * * *'  # Daily at 2 AM UTC
+  # Scheduled runs - AGGRESSIVE: Every 4 hours for 24/7 operation
+  schedule:
+    - cron: '0 */4 * * *'  # Every 4 hours (0:00, 4:00, 8:00, 12:00, 16:00, 20:00 UTC)
 
 # Prevent concurrent runs to avoid conflicts
 concurrency:
