@@ -4,8 +4,8 @@ on:
   # Trigger on push to spec branches (TDD queue or Claude Code)
   push:
     branches:
-      - 'tdd/spec-*'      # TDD queue branches
-      - 'claude/issue-*'  # Claude Code branches for TDD issues
+      - 'tdd/spec-*' # TDD queue branches
+      - 'claude/issue-*' # Claude Code branches for TDD issues
 
 # Security: Define minimal required permissions
 permissions:
@@ -262,12 +262,55 @@ jobs:
             echo "❌ Validation failed"
           fi
 
+      - name: Merge to main and delete branch
+        if: steps.result.outputs.success == 'true'
+        run: |
+          BRANCH_NAME="${{ github.ref_name }}"
+          SPEC_ID="${{ steps.spec.outputs.spec_id }}"
+
+          echo "🔀 Merging $BRANCH_NAME to main..."
+
+          # Configure git
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          # Fetch latest main
+          git fetch origin main
+
+          # Switch to main
+          git checkout main
+          git pull origin main
+
+          # Merge spec branch to main (no-ff to preserve history)
+          git merge "$BRANCH_NAME" --no-ff -m "feat: implement spec $SPEC_ID
+
+          Spec validation passed all checks:
+          - ✅ Spec test
+          - ✅ Regression tests
+          - ✅ Code quality checks
+          - ✅ Security scan
+
+          Co-authored-by: github-actions[bot] <github-actions[bot]@users.noreply.github.com>"
+
+          # Push to main
+          git push origin main
+
+          echo "✅ Merged $BRANCH_NAME to main"
+
+          # Delete the branch
+          git push origin --delete "$BRANCH_NAME"
+
+          echo "✅ Deleted branch $BRANCH_NAME"
+        env:
+          GH_TOKEN: ${{ github.token }}
+
       - name: Mark spec as completed (on success)
         if: steps.result.outputs.success == 'true' && steps.issue.outputs.has_issue == 'true'
         run: |
           ISSUE_NUMBER="${{ steps.issue.outputs.issue_number }}"
           SPEC_ID="${{ steps.spec.outputs.spec_id }}"
           ROADMAP_UPDATED="${{ steps.roadmap.outputs.roadmap_updated }}"
+          BRANCH_NAME="${{ github.ref_name }}"
           RUN_URL="${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
 
           echo "✅ Marking spec as completed..."
@@ -295,8 +338,9 @@ jobs:
           fi
 
           MESSAGE="${MESSAGE}
+          - 🔀 Merged to \`main\` and deleted branch \`$BRANCH_NAME\`
 
-          Spec $SPEC_ID is now completed. This issue is closed.
+          Spec $SPEC_ID is now completed and deployed to main. This issue is closed.
 
           📊 [View validation run]($RUN_URL)"
 
@@ -336,33 +380,6 @@ jobs:
           *Automated request from TDD validation workflow - This is a proactive quality improvement step.*"
 
           echo "✅ Refactoring review comment posted to issue #$ISSUE_NUMBER"
-        env:
-          GH_TOKEN: ${{ github.token }}
-
-      # Note: This step is OPTIONAL and only applies if a PR was manually created
-      # The TDD queue processor does NOT create PRs (GitHub Actions limitation)
-      # If a PR exists, this enables auto-merge for automatic cleanup
-      # If no PR exists, validation still succeeds (branch-based workflow)
-      - name: Enable auto-merge (optional, only if PR exists)
-        if: steps.result.outputs.success == 'true'
-        run: |
-          echo "🔀 Checking for PR to enable auto-merge..."
-
-          # Find PR for current branch
-          BRANCH_NAME="${{ github.ref_name }}"
-          PR_NUMBER=$(gh pr list --head "$BRANCH_NAME" --json number --jq '.[0].number')
-
-          if [ ! -z "$PR_NUMBER" ] && [ "$PR_NUMBER" != "null" ]; then
-            # Mark PR as ready
-            gh pr ready "$PR_NUMBER"
-
-            # Enable auto-merge
-            gh pr merge "$PR_NUMBER" --auto --squash
-
-            echo "✅ Auto-merge enabled for PR #$PR_NUMBER"
-          else
-            echo "ℹ️  No PR found - using branch-based workflow (normal for TDD queue)"
-          fi
         env:
           GH_TOKEN: ${{ github.token }}
 
