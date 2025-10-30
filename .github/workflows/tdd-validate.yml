@@ -261,10 +261,14 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
 
-      - name: Enable auto-merge (on success)
+      # Note: This step is OPTIONAL and only applies if a PR was manually created
+      # The TDD queue processor does NOT create PRs (GitHub Actions limitation)
+      # If a PR exists, this enables auto-merge for automatic cleanup
+      # If no PR exists, validation still succeeds (branch-based workflow)
+      - name: Enable auto-merge (optional, only if PR exists)
         if: steps.result.outputs.success == 'true'
         run: |
-          echo "🔀 Enabling auto-merge for PR..."
+          echo "🔀 Checking for PR to enable auto-merge..."
 
           # Find PR for current branch
           BRANCH_NAME="${{ github.ref_name }}"
@@ -279,7 +283,7 @@ jobs:
 
             echo "✅ Auto-merge enabled for PR #$PR_NUMBER"
           else
-            echo "⚠️  No PR found for branch $BRANCH_NAME"
+            echo "ℹ️  No PR found - using branch-based workflow (normal for TDD queue)"
           fi
         env:
           GH_TOKEN: ${{ github.token }}

@@ -56,7 +56,7 @@ Create a GitHub PAT with `repo` scope and add it as a repository secret:
 
 ```yaml
 env:
-  GH_TOKEN: ${{ secrets.TDD_PAT }}  # Instead of github.token
+  GH_TOKEN: ${{ secrets.TDD_PAT }} # Instead of github.token
 ```
 
 **Pros**: Full PR creation capability
@@ -92,11 +92,31 @@ gh pr create --title "fix: implement APP-VERSION-001" --body "Closes #123"
 
 The queue runs automatically every 15 minutes. No action needed.
 
+### Optional: Manual PR Creation
+
+While the system works branch-based by default, you can **optionally create PRs manually** for better code review:
+
+```bash
+# After implementing spec on branch
+git checkout tdd/spec-APP-VERSION-001
+# ... implement and commit ...
+gh pr create --title "fix: implement APP-VERSION-001" --body "Closes #123"
+```
+
+**Benefits**:
+
+- ✅ **Auto-merge enabled**: Validation workflow automatically enables squash merge when tests pass
+- ✅ **Code review**: Reviewers can comment on specific lines
+- ✅ **GitHub UI**: View changes in familiar PR interface
+
+**Note**: PRs are purely optional - the validation workflow works with or without them.
+
 ### For Claude Code
 
 When mentioned in an issue:
 
 1. **Checkout branch**:
+
    ```bash
    git checkout tdd/spec-APP-VERSION-001
    ```
@@ -104,6 +124,7 @@ When mentioned in an issue:
 2. **Implement the spec** (remove `.fixme()`, add code)
 
 3. **Push changes**:
+
    ```bash
    bun run license
    git add -A
@@ -146,13 +167,13 @@ Settings in `.github/tdd-automation-config.yml`:
 
 ```yaml
 processor:
-  interval: "*/15 * * * *"  # Every 15 minutes
-  max_concurrent: 1         # Process one spec at a time
-  auto_merge: true          # (Not used without PRs)
+  interval: '*/15 * * * *' # Every 15 minutes
+  max_concurrent: 1 # Process one spec at a time
+  auto_merge: true # (Not used without PRs)
 
 validation:
-  timeout: 120000           # 2 minutes
-  retry_on_failure: false   # Keep in-progress for manual retry
+  timeout: 120000 # 2 minutes
+  retry_on_failure: false # Keep in-progress for manual retry
 ```
 
 ## Monitoring
@@ -195,6 +216,7 @@ bun run scripts/tdd-automation/track-progress.ts
 **Symptom**: Issue has `tdd-spec:in-progress` label but no activity
 
 **Possible causes**:
+
 1. Claude Code hasn't implemented yet (expected)
 2. Validation failed (check workflow logs)
 3. Branch deleted accidentally
@@ -206,6 +228,7 @@ bun run scripts/tdd-automation/track-progress.ts
 **Symptom**: Pushed to branch but no validation workflow triggered
 
 **Check**:
+
 1. Branch name matches pattern `tdd/spec-*`
 2. Workflow enabled in Actions tab
 3. Check workflow logs for errors
@@ -237,9 +260,9 @@ The processor workflow has minimal permissions:
 
 ```yaml
 permissions:
-  contents: write   # For branch creation
-  issues: write     # For issue comments
-  pull-requests: write  # (Not used without PRs)
+  contents: write # For branch creation
+  issues: write # For issue comments
+  pull-requests: write # (Not used without PRs)
 ```
 
 **Note**: `pull-requests: write` doesn't allow PR creation from workflows - this is intentional GitHub security.
@@ -254,4 +277,4 @@ permissions:
 
 ---
 
-*Last Updated: 2025-01-30*
+_Last Updated: 2025-01-30_
