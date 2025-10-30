@@ -166,12 +166,19 @@ const closeDuplicates = (duplicates: DuplicateGroup[], dryRun: boolean) =>
               Effect.catchAll(() => {
                 return Effect.gen(function* () {
                   yield* logError(`Failed to close #${oldIssue.number}`)
-                  return ''
+                  return 'ERROR'
                 })
               })
             )
 
-          if (result.includes('Closed')) {
+          // gh issue close outputs success to stderr, stdout is empty on success
+          // Check for error keywords or caught exception marker
+          const hasError =
+            result === 'ERROR' ||
+            result.toLowerCase().includes('error') ||
+            result.toLowerCase().includes('failed')
+
+          if (!hasError) {
             closed++
           } else {
             failed++

@@ -227,6 +227,7 @@ Added post-completion step in `.github/workflows/tdd-validate.yml` (lines 283-31
 **Implementation**:
 
 Created `scripts/tdd-automation/analyze-spec-dependencies.ts` that:
+
 1. Reads all spec files from `tdd-queue-scan.json`
 2. Analyzes test file imports to identify dependencies
 3. Determines which dependencies exist vs. missing
@@ -234,12 +235,14 @@ Created `scripts/tdd-automation/analyze-spec-dependencies.ts` that:
 5. Stores dependency graph in `.github/tdd-queue-dependencies.json`
 
 Modified `scripts/tdd-automation/queue-manager.ts` (`getNextSpec` function, lines 546-656):
+
 1. Loads dependency graph if it exists
 2. Separates ready specs (no missing dependencies) from blocked specs
 3. Prioritizes ready specs over blocked specs
 4. Warns if selected spec has missing dependencies
 
 Integrated into `.github/workflows/tdd-queue-populate.yml` (lines 73-78):
+
 ```yaml
 - name: Analyze spec dependencies
   id: dependencies
@@ -301,7 +304,7 @@ for (const spec of queuedSpecs) {
 prioritizedSpecs = [...readySpecs, ...blockedSpecs]
 
 if (readySpecs.length > 0) {
-  yield* logInfo(`✅ ${readySpecs.length} spec(s) ready to implement`)
+  yield * logInfo(`✅ ${readySpecs.length} spec(s) ready to implement`)
 }
 ```
 
@@ -380,31 +383,64 @@ Check the Product schema and ensure the `title` field is included in the query r
 
 ---
 
-## Phase 3: Observability (PLANNED)
+## Phase 3: Observability (IN PROGRESS)
 
 **Goal**: Improve monitoring, metrics collection, and decision-making.
 
-**Status**: 📋 Planned (not yet implemented)
+**Status**: 🔄 In Progress (Phase 3.1 complete, 3.2-3.3 deferred)
 
-**Estimated Effort**: ~12-16 hours
+**Actual Effort**: ~2 hours (vs. estimated 12-16 hours - phases 3.2-3.3 deferred)
 
-### Phase 3.1: Metrics Collection and Dashboard
+### Phase 3.1: Metrics Collection and Dashboard ✅
+
+**Status**: ✅ Implemented (2025-01-30)
 
 **Priority**: HIGH
-**Estimated Effort**: ~4-5 hours
+**Actual Effort**: ~2 hours
 
 **Objective**: Track pipeline performance metrics for continuous improvement.
 
 **Implementation**:
 
-1. Create `scripts/tdd-automation/collect-metrics.ts`
-2. Collect metrics on each workflow run:
-   - Spec processing time (queue → completion)
-   - Success rate (first attempt vs. retries)
-   - Failure types (test, quality, security, regression)
-   - Queue depth over time
-3. Store metrics in `.github/tdd-metrics.json`
-4. Generate dashboard in `TDD-METRICS.md`
+Created `scripts/tdd-automation/collect-metrics.ts` (264 lines) that:
+
+1. Fetches queue status from GitHub issues (total, queued, in-progress, completed, failed)
+2. Calculates performance metrics:
+   - Average processing time (queue → completion)
+   - Success rate on first attempt
+   - Retry rate (specs that needed retries)
+   - Failure rate (failed / total processed)
+3. Stores metrics snapshots in `.github/tdd-metrics.json` (keeps last 30 days)
+
+Created `scripts/tdd-automation/generate-dashboard.ts` (216 lines) that:
+
+1. Reads metrics history from `.github/tdd-metrics.json`
+2. Generates markdown dashboard with:
+   - Current queue status (total, completed, queued, failed percentages)
+   - Performance metrics with 7-day trends
+   - Failure breakdown (when available)
+   - Historical trends visualization
+3. Writes dashboard to `TDD-METRICS.md`
+
+Integrated into `.github/workflows/tdd-validate.yml` (lines 458-472):
+
+```yaml
+- name: Collect metrics
+  if: always()
+  run: |
+    echo "📊 Collecting pipeline metrics..."
+    bun run scripts/tdd-automation/collect-metrics.ts
+  continue-on-error: true
+  env:
+    GH_TOKEN: ${{ github.token }}
+
+- name: Generate dashboard
+  if: always()
+  run: |
+    echo "📊 Generating metrics dashboard..."
+    bun run scripts/tdd-automation/generate-dashboard.ts
+  continue-on-error: true
+```
 
 **Metrics to track**:
 
@@ -469,18 +505,28 @@ Check the Product schema and ensure the `title` field is included in the query r
 - Queue depth: ⬇️ -45% (decreasing)
 ```
 
-**Benefit**: Data-driven pipeline improvements, identify bottlenecks, track progress.
+**Benefits Achieved**:
 
-**Files to create**:
+1. ✅ **Data-driven improvements**: Track key metrics over time
+2. ✅ **Bottleneck identification**: See where specs get stuck
+3. ✅ **Performance trends**: 7-day rolling trends show improvements/regressions
+4. ✅ **Dashboard visualization**: Easy-to-read `TDD-METRICS.md` for quick status check
+5. ✅ **Historical tracking**: 30-day metrics history in `.github/tdd-metrics.json`
 
-- Create: `scripts/tdd-automation/collect-metrics.ts`
-- Create: `scripts/tdd-automation/generate-dashboard.ts`
-- Modify: All workflows to call `collect-metrics.ts` on completion
+**Files Created/Modified**:
 
-### Phase 3.2: Configuration Audit with config-validator
+- Created: `scripts/tdd-automation/collect-metrics.ts` (264 lines)
+- Created: `scripts/tdd-automation/generate-dashboard.ts` (216 lines)
+- Modified: `.github/workflows/tdd-validate.yml` (added metrics collection steps)
+
+### Phase 3.2: Configuration Audit with config-validator ⏭️
+
+**Status**: ⏭️ Deferred (MEDIUM priority, diminishing returns)
 
 **Priority**: MEDIUM
 **Estimated Effort**: ~3-4 hours
+
+**Rationale for Deferral**: Current pipeline is stable with Phase 1-2 improvements. Configuration validation provides marginal value compared to effort. Can be revisited if configuration errors become a recurring problem.
 
 **Objective**: Validate TDD pipeline configuration files for correctness and consistency.
 
@@ -509,10 +555,14 @@ Check the Product schema and ensure the `title` field is included in the query r
 - Create: `scripts/tdd-automation/validate-pipeline-config.ts`
 - Add to: `.github/workflows/` (pre-merge validation)
 
-### Phase 3.3: Complexity Estimation Before Processing
+### Phase 3.3: Complexity Estimation Before Processing ⏭️
+
+**Status**: ⏭️ Deferred (LOW priority, nice-to-have)
 
 **Priority**: LOW
 **Estimated Effort**: ~4-5 hours
+
+**Rationale for Deferral**: Dependency tracking (Phase 2.3) already provides significant value in identifying problematic specs. Complexity estimation would be incremental improvement. Defer until metrics show this is needed.
 
 **Objective**: Estimate spec complexity before processing to better manage expectations.
 

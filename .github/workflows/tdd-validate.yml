@@ -455,6 +455,22 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
 
+      - name: Collect metrics
+        if: always()
+        run: |
+          echo "📊 Collecting pipeline metrics..."
+          bun run scripts/tdd-automation/collect-metrics.ts
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ github.token }}
+
+      - name: Generate dashboard
+        if: always()
+        run: |
+          echo "📊 Generating metrics dashboard..."
+          bun run scripts/tdd-automation/generate-dashboard.ts
+        continue-on-error: true
+
       - name: Upload test results
         if: always()
         uses: actions/upload-artifact@v4
