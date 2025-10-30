@@ -182,3 +182,26 @@ jobs:
           echo "✅ Auto-comment posted to issue #$ISSUE_NUMBER"
         env:
           GH_TOKEN: ${{ github.token }}
+
+      - name: Post workflow run link
+        if: steps.check.outputs.should_process == 'true'
+        run: |
+          ISSUE_NUMBER="${{ steps.next.outputs.issue_number }}"
+          SPEC_ID="${{ steps.next.outputs.spec_id }}"
+          RUN_URL="${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+
+          echo "📎 Posting workflow run link to issue #$ISSUE_NUMBER..."
+
+          gh issue comment "$ISSUE_NUMBER" --body "🤖 **TDD Queue Processor**
+
+          Claude Code has been invoked for spec **$SPEC_ID**.
+
+          📊 **Monitor progress**: [View workflow run]($RUN_URL)
+
+          ---
+
+          *Automated comment from TDD queue processor*"
+
+          echo "✅ Workflow run link posted"
+        env:
+          GH_TOKEN: ${{ github.token }}

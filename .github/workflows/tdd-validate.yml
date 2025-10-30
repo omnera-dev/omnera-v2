@@ -226,6 +226,7 @@ jobs:
           ISSUE_NUMBER="${{ steps.issue.outputs.issue_number }}"
           SPEC_ID="${{ steps.spec.outputs.spec_id }}"
           ROADMAP_UPDATED="${{ steps.roadmap.outputs.roadmap_updated }}"
+          RUN_URL="${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
 
           echo "✅ Marking spec as completed..."
 
@@ -252,7 +253,9 @@ jobs:
 
           MESSAGE="${MESSAGE}
 
-          Spec $SPEC_ID is now completed. This issue is closed."
+          Spec $SPEC_ID is now completed. This issue is closed.
+
+          📊 [View validation run]($RUN_URL)"
 
           # Add success comment
           gh issue comment "$ISSUE_NUMBER" --body "$MESSAGE"
