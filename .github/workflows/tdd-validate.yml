@@ -1,10 +1,11 @@
 name: TDD Queue - Validate
 
 on:
-  # Trigger on push to spec branches
+  # Trigger on push to spec branches (TDD queue or Claude Code)
   push:
     branches:
-      - 'tdd/spec-*'
+      - 'tdd/spec-*'      # TDD queue branches
+      - 'claude/issue-*'  # Claude Code branches for TDD issues
 
 # Security: Define minimal required permissions
 permissions:
@@ -47,13 +48,39 @@ jobs:
       - name: Install Playwright browsers
         run: bunx playwright install --with-deps chromium
 
-      - name: Extract spec ID from branch
+      - name: Extract spec ID from branch or issue
         id: spec
         run: |
           BRANCH_NAME="${{ github.ref_name }}"
-          SPEC_ID=$(echo "$BRANCH_NAME" | sed 's/tdd\/spec-//')
+
+          # Extract spec ID based on branch pattern
+          if [[ "$BRANCH_NAME" == tdd/spec-* ]]; then
+            # TDD queue branch: tdd/spec-APP-THEME-RADIUS-001
+            SPEC_ID=$(echo "$BRANCH_NAME" | sed 's/tdd\/spec-//')
+            echo "✅ Extracted from TDD branch: $SPEC_ID"
+          elif [[ "$BRANCH_NAME" == claude/issue-* ]]; then
+            # Claude Code branch: claude/issue-1454-20251030-2202
+            # Extract issue number and find spec ID from issue title
+            ISSUE_NUM=$(echo "$BRANCH_NAME" | grep -oP 'issue-\K\d+' | head -1)
+            echo "📝 Claude branch detected, finding spec from issue #$ISSUE_NUM"
+
+            ISSUE_TITLE=$(gh issue view "$ISSUE_NUM" --json title --jq '.title')
+            SPEC_ID=$(echo "$ISSUE_TITLE" | grep -oP '🤖 \K[A-Z]+-[A-Z0-9-]+-\d+' | head -1)
+
+            if [ -z "$SPEC_ID" ]; then
+              echo "❌ Could not extract spec ID from issue title: $ISSUE_TITLE"
+              exit 1
+            fi
+            echo "✅ Extracted from issue title: $SPEC_ID"
+          else
+            echo "❌ Unknown branch pattern: $BRANCH_NAME"
+            exit 1
+          fi
+
           echo "spec_id=$SPEC_ID" >> $GITHUB_OUTPUT
           echo "✅ Spec ID: $SPEC_ID"
+        env:
+          GH_TOKEN: ${{ github.token }}
 
       - name: Find issue for spec
         id: issue
