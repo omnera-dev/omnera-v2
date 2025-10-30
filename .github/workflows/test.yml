@@ -39,11 +39,10 @@ jobs:
         uses: actions/cache@v4
         with:
           path: .eslintcache
-          key: ${{ runner.os }}-eslint-${{ hashFiles('**/bun.lockb') }}-${{ hashFiles('eslint.config.ts') }}-${{ hashFiles('src/**', 'scripts/**', 'specs/**') }}
+          key: ${{ runner.os }}-eslint-${{ hashFiles('**/bun.lockb') }}-${{ hashFiles('eslint.config.ts', '.eslintrc*', '.eslintignore') }}-${{ github.run_id }}
           restore-keys: |
-            ${{ runner.os }}-eslint-${{ hashFiles('**/bun.lockb') }}-${{ hashFiles('eslint.config.ts') }}-
+            ${{ runner.os }}-eslint-${{ hashFiles('**/bun.lockb') }}-${{ hashFiles('eslint.config.ts', '.eslintrc*', '.eslintignore') }}-
             ${{ runner.os }}-eslint-${{ hashFiles('**/bun.lockb') }}-
-            ${{ runner.os }}-eslint-
 
       - name: Lint code
         run: bun run lint
