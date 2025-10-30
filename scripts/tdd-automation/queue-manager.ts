@@ -680,7 +680,9 @@ export const getNextSpec = Effect.gen(function* () {
     return null
   }
 
-  yield* success(`Next spec: ${nextSpec.specId} (#${nextSpec.number}) [Priority: ${nextSpec.priority}]`)
+  yield* success(
+    `Next spec: ${nextSpec.specId} (#${nextSpec.number}) [Priority: ${nextSpec.priority}]`
+  )
 
   if (dependencyGraph && dependencyGraph[nextSpec.specId]) {
     const depInfo = dependencyGraph[nextSpec.specId]
