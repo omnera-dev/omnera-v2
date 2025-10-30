@@ -380,6 +380,9 @@ export const getInProgressSpecs = Effect.gen(function* () {
 /**
  * Get all existing spec issues from GitHub (all states: open and closed)
  * Used for bulk deduplication before creating new issues
+ *
+ * IMPORTANT: Uses --limit 2000 to handle project growth
+ * WARNING: If total spec issues exceed 2000, duplicates may be created
  */
 export const getAllExistingSpecs = Effect.gen(function* () {
   const cmd = yield* CommandService
@@ -387,8 +390,9 @@ export const getAllExistingSpecs = Effect.gen(function* () {
   yield* logInfo('Fetching all existing spec issues (bulk deduplication)...', '🔍')
 
   // Fetch ALL spec issues (open + closed) in one query
+  // Using limit 2000 (3x current 647 specs) for growth headroom
   const output = yield* cmd
-    .exec('gh issue list --label "tdd-spec" --state all --json number,title,state --limit 1000', {
+    .exec('gh issue list --label "tdd-spec" --state all --json number,title,state --limit 2000', {
       throwOnError: false,
     })
     .pipe(
@@ -418,6 +422,18 @@ export const getAllExistingSpecs = Effect.gen(function* () {
     }
 
     yield* logInfo(`  Found ${existingSpecIds.size} existing spec issues`)
+
+    // WARNING: Detect if we're approaching the limit (may miss older issues)
+    if (issues.length >= 1900) {
+      yield* logError(
+        `⚠️  WARNING: Approaching limit (${issues.length}/2000 issues fetched)`
+      )
+      yield* logError(
+        '   Risk of duplicate creation for specs with older issues beyond limit'
+      )
+      yield* logError('   Consider implementing pagination or archiving old issues')
+    }
+
     return existingSpecIds
   } catch {
     yield* logError('Failed to parse GitHub issue response')
@@ -452,6 +468,11 @@ export const specHasOpenIssue = (specId: string): Effect.Effect<boolean, never, 
  *
  * @param spec - The spec item to create an issue for
  * @param skipExistenceCheck - Skip individual existence check (used when bulk deduplication is done)
+ *
+ * DUPLICATE PREVENTION:
+ * - When skipExistenceCheck=false: Performs individual API check before creation
+ * - When skipExistenceCheck=true: Relies on caller's bulk deduplication
+ * - Race condition window: ~1-2 seconds between check and creation
  */
 export const createSpecIssue = (
   spec: SpecItem,
@@ -460,7 +481,7 @@ export const createSpecIssue = (
   Effect.gen(function* () {
     const cmd = yield* CommandService
 
-    // Check if issue already exists (unless bulk deduplication was done)
+    // SAFETY CHECK: Verify issue doesn't exist (unless bulk deduplication was done)
     if (!skipExistenceCheck) {
       const hasIssue = yield* specHasOpenIssue(spec.specId)
       if (hasIssue) {
@@ -494,9 +515,9 @@ EOFBODY`,
         { throwOnError: false }
       )
       .pipe(
-        Effect.catchAll(() => {
+        Effect.catchAll((error) => {
           return Effect.gen(function* () {
-            yield* logError(`Failed to create issue for ${spec.specId}`)
+            yield* logError(`Failed to create issue for ${spec.specId}: ${error}`)
             return ''
           })
         })
