@@ -14,6 +14,7 @@
  */
 
 import { execSync } from 'node:child_process'
+import * as readline from 'node:readline'
 
 interface Issue {
   number: number
@@ -48,7 +49,6 @@ if (!forceMode) {
   console.log('⚠️  Type "DELETE" to confirm deletion:\n')
 
   // Read user input
-  const readline = require('node:readline')
   const rl = readline.createInterface({
     input: process.stdin,
     output: process.stdout,
