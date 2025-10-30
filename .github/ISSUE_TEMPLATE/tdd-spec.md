@@ -24,13 +24,35 @@ The TDD queue system will automatically post implementation instructions as a co
 4. Agent checks out the branch and implements the test
 5. Agent commits and pushes (triggers validation workflow)
 6. Validation workflow runs tests and quality checks
-7. On success: Issue closed, PR auto-merged to main
-8. On failure: Comment posted, agent retries
+7. **On success**: Issue closed, PR auto-merged to main
+8. **On failure**: Spec automatically re-queued (up to 3 retries)
+9. **After 3 failures**: Marked as `failed` for human review
+10. **Queue continues**: Other specs processed while this one waits/retries
 
-**Manual intervention** (if needed):
+**Failure Handling & Retries**:
 
-- If automation fails, you can manually invoke Claude Code by replying: `@claude - Please implement spec [SPEC-ID] following the instructions above`
-- Or manually checkout the branch: `git checkout tdd/spec-[SPEC-ID]`
+- Specs automatically retry up to **3 times** if validation fails
+- Labels show retry count: `retry:1`, `retry:2`, `retry:3`
+- After max retries, spec marked as `tdd-spec:failed` (requires human intervention)
+- **Queue never blocks**: Failed specs don't stop other specs from being processed
+
+**Manual Intervention Options**:
+
+1. **Skip automation** (if too complex):
+   - Add label: `skip-automated`
+   - Queue will skip this spec automatically
+   - Implement manually on the branch
+   - Push to trigger validation
+
+2. **Manual retry** (after reviewing failure):
+   - Change label from `failed` back to `queued`
+   - Remove retry labels to reset counter
+   - Queue will pick it up again
+
+3. **Direct implementation**:
+   - Checkout branch: `git checkout tdd/spec-[SPEC-ID]`
+   - Implement code manually
+   - Push to trigger validation
 
 Validation runs automatically on every push to the spec branch.
 

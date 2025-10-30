@@ -7,7 +7,7 @@
  */
 
 /**
- * Roadmap Generation Script (Rewritten)
+ * Roadmap Generation Script (Rewritten with Effect)
  *
  * Generates ROADMAP.md based on three progress metrics:
  * 1. App Schema Progress - Diff between goal and current schemas
@@ -18,7 +18,20 @@
  */
 
 import { join } from 'node:path'
-import prettier from 'prettier'
+import * as Data from 'effect/Data'
+import * as Effect from 'effect/Effect'
+import * as Layer from 'effect/Layer'
+import {
+  FileSystemService,
+  FileSystemServiceLive,
+  CommandService,
+  CommandServiceLive,
+  LoggerServiceLive,
+  progress,
+  success,
+  logError,
+  section,
+} from './lib/effect'
 import {
   generateSummaryRoadmap,
   generateAppRoadmap,
@@ -29,6 +42,13 @@ import { compareApiSchemas } from './utils/api-schema-diff'
 import { compareAppSchemas } from './utils/app-schema-diff'
 import { analyzeTestImplementation } from './utils/spec-analyzer'
 import type { NewRoadmapData } from './types/roadmap'
+
+/**
+ * Roadmap generation failed error
+ */
+class RoadmapGenerationFailedError extends Data.TaggedError('RoadmapGenerationFailedError')<{
+  readonly reason: string
+}> {}
 
 // Get project root (assuming script is in scripts/ subdirectory)
 const PROJECT_ROOT = join(import.meta.dir, '..')
@@ -45,23 +65,43 @@ const API_ROADMAP_OUTPUT_PATH = join(PROJECT_ROOT, 'specs/api/ROADMAP.md')
 const ADMIN_ROADMAP_OUTPUT_PATH = join(PROJECT_ROOT, 'specs/admin/ROADMAP.md')
 
 /**
- * Format Markdown content with Prettier
+ * Prerequisite check definition
  */
-async function formatMarkdown(content: string): Promise<string> {
-  const prettierConfig = (await prettier.resolveConfig(process.cwd())) || {}
-  return prettier.format(content, {
-    ...prettierConfig,
-    parser: 'markdown',
-  })
+interface PrerequisiteCheck {
+  readonly name: string
+  readonly command: readonly string[]
 }
 
 /**
- * Run prerequisite commands to ensure schemas and specs are valid
+ * Run a single prerequisite check
  */
-async function runPrerequisiteChecks(): Promise<boolean> {
-  console.log('🔍 Running prerequisite checks...\n')
+const runPrerequisiteCheck = (check: PrerequisiteCheck) =>
+  Effect.gen(function* () {
+    const cmd = yield* CommandService
 
-  const checks = [
+    yield* progress(`${check.name}...`)
+
+    const result = yield* cmd.spawn(check.command, { timeout: 120_000, throwOnError: false })
+
+    if (result.exitCode !== 0) {
+      const errorPreview = result.stderr.split('\n').slice(0, 5).join('\n      ')
+      yield* logError(`${check.name} failed`)
+      yield* Effect.log(`      ${errorPreview}`)
+      yield* Effect.log(`      Run command manually: ${check.command.join(' ')}`)
+      return false
+    }
+
+    yield* success(`${check.name} passed`)
+    return true
+  })
+
+/**
+ * Run all prerequisite checks sequentially
+ */
+const runPrerequisiteChecks = Effect.gen(function* () {
+  yield* section('Running prerequisite checks')
+
+  const checks: readonly PrerequisiteCheck[] = [
     {
       name: 'Validate Admin Specs',
       command: ['bun', 'run', 'validate:admin-specs'],
@@ -84,153 +124,104 @@ async function runPrerequisiteChecks(): Promise<boolean> {
     },
   ]
 
-  let allPassed = true
-
+  // Run checks sequentially and collect results
+  const results: boolean[] = []
   for (const check of checks) {
-    console.log(`   🔄 ${check.name}...`)
-
-    try {
-      const proc = Bun.spawn(check.command, {
-        stdout: 'pipe',
-        stderr: 'pipe',
-      })
-
-      const exitCode = await proc.exited
-
-      if (exitCode !== 0) {
-        const stderr = await new Response(proc.stderr).text()
-        console.error(`   ❌ ${check.name} failed`)
-        console.error(`      ${stderr.split('\n').slice(0, 5).join('\n      ')}`)
-        console.error(`      Run command manually to see full error: ${check.command.join(' ')}\n`)
-        allPassed = false
-      } else {
-        console.log(`   ✅ ${check.name} passed`)
-      }
-    } catch (error) {
-      console.error(`   ❌ ${check.name} failed: ${error}`)
-      allPassed = false
-    }
+    const result = yield* runPrerequisiteCheck(check)
+    results.push(result)
   }
 
-  console.log('')
+  const allPassed = results.every((r) => r)
+
+  yield* Effect.log('')
 
   if (!allPassed) {
-    console.error(
-      '❌ Prerequisite checks failed. Please fix the errors before generating the roadmap.\n'
+    yield* logError('Prerequisite checks failed. Please fix the errors before generating roadmap.')
+    return yield* Effect.fail(
+      new RoadmapGenerationFailedError({ reason: 'Prerequisite checks failed' })
     )
-    return false
   }
 
-  console.log('✅ All prerequisite checks passed\n')
+  yield* success('All prerequisite checks passed')
+  yield* Effect.log('')
+
   return true
-}
+})
 
 /**
- * Main execution
+ * Analyze app schema progress
  */
-async function main() {
-  console.log('📊 Generating Roadmap...\n')
+const analyzeAppSchema = Effect.gen(function* () {
+  yield* Effect.log('1️⃣  Analyzing App Schema...')
 
-  // 0. Run prerequisite checks
-  const checksPass = await runPrerequisiteChecks()
-  if (!checksPass) {
-    console.error('❌ Roadmap generation aborted due to failing prerequisite checks')
-    process.exit(1)
-  }
+  const appSchemaProgress = yield* Effect.promise(() =>
+    compareAppSchemas(GOAL_APP_SCHEMA_PATH, CURRENT_APP_SCHEMA_PATH)
+  )
 
-  // 1. Analyze App Schema
-  console.log('1️⃣  Analyzing App Schema...')
-  const appSchemaProgress = await compareAppSchemas(GOAL_APP_SCHEMA_PATH, CURRENT_APP_SCHEMA_PATH)
-  console.log(`   Goal: ${GOAL_APP_SCHEMA_PATH} (${appSchemaProgress.totalProperties} properties)`)
-  console.log(
+  yield* Effect.log(
+    `   Goal: ${GOAL_APP_SCHEMA_PATH} (${appSchemaProgress.totalProperties} properties)`
+  )
+  yield* Effect.log(
     `   Current: ${CURRENT_APP_SCHEMA_PATH} (${appSchemaProgress.currentTotalProperties} properties)`
   )
-  console.log(
-    `   Implemented: ${appSchemaProgress.implementedProperties}/${appSchemaProgress.totalProperties} properties matching goal (${appSchemaProgress.completionPercent}%)\n`
+  yield* Effect.log(
+    `   Implemented: ${appSchemaProgress.implementedProperties}/${appSchemaProgress.totalProperties} properties matching goal (${appSchemaProgress.completionPercent}%)`
+  )
+  yield* Effect.log('')
+
+  return appSchemaProgress
+})
+
+/**
+ * Analyze API schema progress
+ */
+const analyzeApiSchema = Effect.gen(function* () {
+  yield* Effect.log('2️⃣  Analyzing API Schema...')
+
+  const apiSchemaProgress = yield* Effect.promise(() =>
+    compareApiSchemas(GOAL_API_SCHEMA_PATH, CURRENT_API_SCHEMA_PATH)
   )
 
-  // 2. Analyze API Schema
-  console.log('2️⃣  Analyzing API Schema...')
-  const apiSchemaProgress = await compareApiSchemas(GOAL_API_SCHEMA_PATH, CURRENT_API_SCHEMA_PATH)
-  console.log(`   Goal: ${GOAL_API_SCHEMA_PATH} (${apiSchemaProgress.totalEndpoints} endpoints)`)
-  console.log(
+  yield* Effect.log(
+    `   Goal: ${GOAL_API_SCHEMA_PATH} (${apiSchemaProgress.totalEndpoints} endpoints)`
+  )
+  yield* Effect.log(
     `   Current: ${CURRENT_API_SCHEMA_PATH} (${apiSchemaProgress.currentTotalEndpoints} endpoints)`
   )
-  console.log(
-    `   Implemented: ${apiSchemaProgress.implementedEndpoints}/${apiSchemaProgress.totalEndpoints} endpoints matching goal (${apiSchemaProgress.completionPercent}%)\n`
+  yield* Effect.log(
+    `   Implemented: ${apiSchemaProgress.implementedEndpoints}/${apiSchemaProgress.totalEndpoints} endpoints matching goal (${apiSchemaProgress.completionPercent}%)`
   )
+  yield* Effect.log('')
 
-  // 3. Analyze Test Implementation
-  console.log('3️⃣  Analyzing Test Implementation...')
-  const testStatus = await analyzeTestImplementation(SPECS_DIR)
-  console.log(`   Found ${testStatus.totalSpecs} specs across all files`)
-  console.log(`   Categorizing specs...`)
-  console.log(`   ✅ DONE: ${testStatus.doneSpecs} specs (${testStatus.donePercent}%)`)
-  console.log(`   🚧 WIP: ${testStatus.wipSpecs} specs (${testStatus.wipPercent}%)`)
-  console.log(`   ⏳ TODO: ${testStatus.todoSpecs} specs (${testStatus.todoPercent}%)\n`)
+  return apiSchemaProgress
+})
 
-  // 4. Calculate Overall Progress
-  const overallProgress = calculateOverallProgress(appSchemaProgress, apiSchemaProgress, testStatus)
-  console.log(`📈 Overall Progress: ${overallProgress.completionPercent}%\n`)
+/**
+ * Analyze test implementation status
+ */
+const analyzeTestStatus = Effect.gen(function* () {
+  yield* Effect.log('3️⃣  Analyzing Test Implementation...')
 
-  // 5. Generate Roadmap Data
-  const roadmapData: NewRoadmapData = {
-    appSchema: appSchemaProgress,
-    apiSchema: apiSchemaProgress,
-    testStatus,
-    overall: overallProgress,
-    timestamp: new Date().toISOString().split('T')[0]!,
-  }
+  const testStatus = yield* Effect.promise(() => analyzeTestImplementation(SPECS_DIR))
 
-  // 6. Generate All Roadmap Files
-  console.log('📝 Generating roadmap files...')
+  yield* Effect.log(`   Found ${testStatus.totalSpecs} specs across all files`)
+  yield* Effect.log(`   Categorizing specs...`)
+  yield* Effect.log(`   ✅ DONE: ${testStatus.doneSpecs} specs (${testStatus.donePercent}%)`)
+  yield* Effect.log(`   🚧 WIP: ${testStatus.wipSpecs} specs (${testStatus.wipPercent}%)`)
+  yield* Effect.log(`   ⏳ TODO: ${testStatus.todoSpecs} specs (${testStatus.todoPercent}%)`)
+  yield* Effect.log('')
 
-  // 6a. Main summary roadmap
-  const summaryRoadmap = generateSummaryRoadmap(roadmapData)
-  const formattedSummary = await formatMarkdown(summaryRoadmap)
-  await Bun.write(ROADMAP_OUTPUT_PATH, formattedSummary)
-  console.log(`   ✅ ${ROADMAP_OUTPUT_PATH}`)
-
-  // 6b. Detailed app roadmap
-  const appRoadmap = generateAppRoadmap(roadmapData)
-  const formattedApp = await formatMarkdown(appRoadmap)
-  await Bun.write(APP_ROADMAP_OUTPUT_PATH, formattedApp)
-  console.log(`   ✅ ${APP_ROADMAP_OUTPUT_PATH}`)
-
-  // 6c. Detailed API roadmap
-  const apiRoadmap = generateApiRoadmap(roadmapData)
-  const formattedApi = await formatMarkdown(apiRoadmap)
-  await Bun.write(API_ROADMAP_OUTPUT_PATH, formattedApi)
-  console.log(`   ✅ ${API_ROADMAP_OUTPUT_PATH}`)
-
-  // 6d. Detailed Admin roadmap
-  const adminRoadmap = generateAdminRoadmap(roadmapData)
-  const formattedAdmin = await formatMarkdown(adminRoadmap)
-  await Bun.write(ADMIN_ROADMAP_OUTPUT_PATH, formattedAdmin)
-  console.log(`   ✅ ${ADMIN_ROADMAP_OUTPUT_PATH}\n`)
-
-  // 7. Display progress bar
-  const progressBar = generateProgressBar(overallProgress.completionPercent)
-  console.log(`Overall Progress: ${progressBar}\n`)
-
-  // 8. Summary
-  console.log('📋 Summary:')
-  console.log(`   - App Schema: ${appSchemaProgress.completionPercent}%`)
-  console.log(`   - API Schema: ${apiSchemaProgress.completionPercent}%`)
-  console.log(`   - Test Implementation: ${testStatus.donePercent}%`)
-  console.log(`   - Overall: ${overallProgress.completionPercent}%\n`)
-
-  console.log('🎉 All roadmaps generated successfully!')
-}
+  return testStatus
+})
 
 /**
  * Calculate overall progress from all three metrics
  */
-function calculateOverallProgress(
+const calculateOverallProgress = (
   appSchema: { completionPercent: number },
   apiSchema: { completionPercent: number },
   testStatus: { donePercent: number }
-): { completionPercent: number } {
+): { completionPercent: number } => {
   // Weight all three metrics equally
   const overall = Math.round(
     (appSchema.completionPercent + apiSchema.completionPercent + testStatus.donePercent) / 3
@@ -244,14 +235,98 @@ function calculateOverallProgress(
 /**
  * Generate progress bar for console output
  */
-function generateProgressBar(percent: number, width: number = 30): string {
+const generateProgressBar = (percent: number, width: number = 30): string => {
   const filled = Math.round((percent / 100) * width)
   const empty = width - filled
   return `${'█'.repeat(filled)}${'░'.repeat(empty)} ${percent}%`
 }
 
-// Run main function
-main().catch((error) => {
-  console.error('❌ Error generating roadmap:', error)
-  process.exit(1)
+/**
+ * Write roadmap file with formatting
+ */
+const writeRoadmap = (path: string, content: string) =>
+  Effect.gen(function* () {
+    const fs = yield* FileSystemService
+    yield* fs.writeFormatted(path, content, { parser: 'markdown' })
+    yield* success(path)
+  })
+
+/**
+ * Main roadmap generation program
+ */
+const main = Effect.gen(function* () {
+  yield* section('Generating Roadmap')
+
+  // 0. Run prerequisite checks
+  yield* runPrerequisiteChecks
+
+  // 1-3. Run schema and test analysis in parallel
+  const [appSchemaProgress, apiSchemaProgress, testStatus] = yield* Effect.all(
+    [analyzeAppSchema, analyzeApiSchema, analyzeTestStatus],
+    { concurrency: 'unbounded' }
+  )
+
+  // 4. Calculate Overall Progress
+  const overallProgress = calculateOverallProgress(appSchemaProgress, apiSchemaProgress, testStatus)
+  yield* Effect.log(`📈 Overall Progress: ${overallProgress.completionPercent}%`)
+  yield* Effect.log('')
+
+  // 5. Generate Roadmap Data
+  const roadmapData: NewRoadmapData = {
+    appSchema: appSchemaProgress,
+    apiSchema: apiSchemaProgress,
+    testStatus,
+    overall: overallProgress,
+    timestamp: new Date().toISOString().split('T')[0]!,
+  }
+
+  // 6. Generate All Roadmap Files
+  yield* Effect.log('📝 Generating roadmap files...')
+
+  // Generate all roadmap content
+  const summaryRoadmap = generateSummaryRoadmap(roadmapData)
+  const appRoadmap = generateAppRoadmap(roadmapData)
+  const apiRoadmap = generateApiRoadmap(roadmapData)
+  const adminRoadmap = generateAdminRoadmap(roadmapData)
+
+  // Write all roadmap files in parallel
+  yield* Effect.all(
+    [
+      writeRoadmap(ROADMAP_OUTPUT_PATH, summaryRoadmap),
+      writeRoadmap(APP_ROADMAP_OUTPUT_PATH, appRoadmap),
+      writeRoadmap(API_ROADMAP_OUTPUT_PATH, apiRoadmap),
+      writeRoadmap(ADMIN_ROADMAP_OUTPUT_PATH, adminRoadmap),
+    ],
+    { concurrency: 'unbounded' }
+  )
+
+  yield* Effect.log('')
+
+  // 7. Display progress bar
+  const progressBar = generateProgressBar(overallProgress.completionPercent)
+  yield* Effect.log(`Overall Progress: ${progressBar}`)
+  yield* Effect.log('')
+
+  // 8. Summary
+  yield* Effect.log('📋 Summary:')
+  yield* Effect.log(`   - App Schema: ${appSchemaProgress.completionPercent}%`)
+  yield* Effect.log(`   - API Schema: ${apiSchemaProgress.completionPercent}%`)
+  yield* Effect.log(`   - Test Implementation: ${testStatus.donePercent}%`)
+  yield* Effect.log(`   - Overall: ${overallProgress.completionPercent}%`)
+  yield* Effect.log('')
+
+  yield* success('All roadmaps generated successfully!')
 })
+
+// Main layer combining all services
+const MainLayer = Layer.mergeAll(FileSystemServiceLive, CommandServiceLive, LoggerServiceLive())
+
+// Run the script
+const program = main.pipe(Effect.provide(MainLayer))
+
+Effect.runPromise(program)
+  .then(() => process.exit(0))
+  .catch((error) => {
+    console.error('❌ Error generating roadmap:', error)
+    process.exit(1)
+  })

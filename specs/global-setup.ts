@@ -10,19 +10,32 @@ import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { PostgreSqlContainer } from '@testcontainers/postgresql'
 import { DatabaseTemplateManager } from './database-utils'
+import { ensureDockerRunning } from './docker-utils'
 
 /**
  * Playwright Global Setup
  *
  * Initializes shared resources before all tests run:
+ * - Ensures Docker daemon is running (auto-installs Colima on macOS if needed)
  * - Starts PostgreSQL testcontainer
  * - Creates database template with all migrations applied
  * - Stores container connection URL in environment for test workers
+ *
+ * **Note:** Docker Desktop is NOT required. This works with any Docker-compatible runtime:
+ * - Colima (macOS) - auto-installed if missing
+ * - Docker Engine (Linux)
+ * - Podman (all platforms)
+ * - Docker Desktop (all platforms) - if already installed
  *
  * This runs once per test run, not per worker.
  */
 export default async function globalSetup() {
   console.log('🚀 Initializing global test database...')
+
+  // Ensure Docker daemon is running (auto-install/start if needed)
+  // On macOS: auto-installs Colima if no Docker found
+  // On Linux/Windows: starts existing Docker installation
+  await ensureDockerRunning()
 
   // Fix Docker credential provider issues by creating a temporary Docker config without credential helpers
   // This prevents "spawn docker-credential-desktop ENOENT" errors when pulling public images

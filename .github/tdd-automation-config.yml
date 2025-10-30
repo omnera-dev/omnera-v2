@@ -37,6 +37,14 @@ queue:
       - in-progress
       - completed
       - failed
+      - skip-automated # Human marks spec as too complex for automation
+
+    # Retry tracking
+    max_retries: 3 # Maximum retry attempts before marking as failed
+    retry_labels:
+      - 'retry:1'
+      - 'retry:2'
+      - 'retry:3'
 
     # Auto-close completed specs
     auto_close_completed: true

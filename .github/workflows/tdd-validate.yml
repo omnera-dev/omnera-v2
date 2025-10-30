@@ -283,6 +283,71 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
 
+      - name: Handle validation failure with retry
+        if: steps.result.outputs.success != 'true' && steps.issue.outputs.has_issue == 'true'
+        run: |
+          ISSUE_NUMBER="${{ steps.issue.outputs.issue_number }}"
+          SPEC_ID="${{ steps.spec.outputs.spec_id }}"
+          MAX_RETRIES=3
+
+          echo "🔄 Handling validation failure for spec $SPEC_ID..."
+
+          # Get current retry count from labels
+          LABELS=$(gh issue view "$ISSUE_NUMBER" --json labels --jq '.labels[].name' || echo "")
+          CURRENT_RETRY=$(echo "$LABELS" | grep -oP 'retry:\K\d+' | head -1 || echo "0")
+          NEXT_RETRY=$((CURRENT_RETRY + 1))
+
+          echo "Current retry: $CURRENT_RETRY"
+          echo "Next retry: $NEXT_RETRY"
+
+          if [ "$NEXT_RETRY" -le "$MAX_RETRIES" ]; then
+            echo "📝 Retry $NEXT_RETRY/$MAX_RETRIES - Re-queueing spec..."
+
+            # Remove old retry label if exists
+            if [ "$CURRENT_RETRY" -gt 0 ]; then
+              gh issue edit "$ISSUE_NUMBER" --remove-label "retry:$CURRENT_RETRY" || true
+            fi
+
+            # Add new retry label and re-queue
+            gh issue edit "$ISSUE_NUMBER" --add-label "retry:$NEXT_RETRY"
+            gh issue edit "$ISSUE_NUMBER" --remove-label "tdd-spec:in-progress"
+            gh issue edit "$ISSUE_NUMBER" --add-label "tdd-spec:queued"
+
+            # Add retry comment
+            gh issue comment "$ISSUE_NUMBER" --body "🔄 **Retry $NEXT_RETRY/$MAX_RETRIES**
+
+          Validation failed. Spec has been automatically re-queued for another attempt.
+
+          The queue will continue processing other specs while this one waits for retry."
+
+            echo "✅ Re-queued with retry label: retry:$NEXT_RETRY"
+          else
+            echo "❌ Max retries ($MAX_RETRIES) exceeded - Marking as failed"
+
+            # Remove retry label
+            gh issue edit "$ISSUE_NUMBER" --remove-label "retry:$CURRENT_RETRY" || true
+
+            # Mark as permanently failed
+            gh issue edit "$ISSUE_NUMBER" --remove-label "tdd-spec:in-progress"
+            gh issue edit "$ISSUE_NUMBER" --add-label "tdd-spec:failed"
+
+            # Add final failure comment
+            gh issue comment "$ISSUE_NUMBER" --body "❌ **Maximum retries exceeded**
+
+          This spec failed validation after $MAX_RETRIES attempts and has been marked as \`failed\`.
+
+          **Manual intervention required**:
+          1. Review the implementation complexity
+          2. Consider adding \`skip-automated\` label if too complex for automation
+          3. Or manually implement and push to the branch
+
+          **The queue will continue processing other specs** - this failure does not block the pipeline."
+
+            echo "✅ Marked as failed (max retries exceeded)"
+          fi
+        env:
+          GH_TOKEN: ${{ github.token }}
+
       - name: Upload test results
         if: always()
         uses: actions/upload-artifact@v4

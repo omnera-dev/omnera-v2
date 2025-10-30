@@ -117,7 +117,27 @@ bun run scripts/tdd-automation/queue-manager.ts status
    - Enable auto-merge for PR
 7. **On Failure**:
    - Comment on issue with details
-   - Keep issue in-progress for retry
+   - Check retry count from labels
+   - If retries remaining: Re-queue spec (change to `queued` state)
+   - If max retries exceeded: Mark as `failed`
+   - **Queue continues**: Never blocks other specs
+
+#### **tdd-queue-recovery.yml** (Timeout Recovery) - NEW
+
+**Triggers**:
+
+- Schedule (every 30 minutes)
+- Manual dispatch
+
+**Purpose**: Detects and recovers specs stuck in-progress with no activity
+
+**Key Steps**:
+
+1. Scan for specs `in-progress` > 2 hours with no updates
+2. Re-queue stuck specs (change to `queued` state)
+3. Preserve retry count labels
+4. Comment on issue about timeout recovery
+5. **Result**: Prevents permanent pipeline blocks from stuck specs
 
 ### 3. Configuration (`.github/tdd-automation-config.yml`)
 
@@ -218,10 +238,37 @@ On every push to `tdd/spec-*` branch:
 4. **Run spec test**: `bun test:e2e {file} --grep "APP-VERSION-001"`
 5. **Run regression**: `bun test:e2e:regression`
 6. **Run quality checks**: `bun run license && bun run lint && bun run typecheck`
-7. **Update issue**: Mark as completed (success) or comment failure (fail)
+7. **Update issue**: Mark as completed (success) or handle failure with retry (fail)
 8. **Auto-merge**: If all pass, enable auto-merge and mark PR as ready
 
-### Step 5: Completion
+### Step 5: Failure Handling & Retry (NEW)
+
+**When validation fails** (non-blocking queue):
+
+1. **Comment failure details**: Post failure details to issue
+2. **Check retry count**: Read `retry:N` label from issue
+3. **If retries remaining** (< 3 attempts):
+   - Increment retry counter: Add `retry:N+1` label
+   - Reset state: Change `tdd-spec:in-progress` → `tdd-spec:queued`
+   - Post retry comment: Notify about automatic re-queue
+   - **Queue continues**: Processor picks next spec (doesn't block)
+4. **If max retries exceeded** (3 attempts):
+   - Mark as failed: Change `tdd-spec:in-progress` → `tdd-spec:failed`
+   - Post failure comment: Notify about manual intervention needed
+   - **Queue continues**: Processor picks next spec (doesn't block)
+
+**Result**: Failed specs never block the queue - they're either retried or marked for human review while other specs continue processing.
+
+### Step 6: Timeout Recovery (NEW)
+
+**Recovery workflow runs every 30 minutes**:
+
+1. **Scan for stuck specs**: Find specs `in-progress` with no updates > 2 hours
+2. **Automatic re-queue**: Reset stuck specs to `queued` state (preserve retry count)
+3. **Post recovery comment**: Notify about timeout and re-queue
+4. **Queue continues**: Stuck specs don't permanently block the pipeline
+
+### Step 7: Completion
 
 When validation passes:
 
@@ -231,13 +278,15 @@ When validation passes:
 
 ## Labels & States
 
-| Label                  | State       | Description                             |
-| ---------------------- | ----------- | --------------------------------------- |
-| `tdd-spec:queued`      | Queued      | Spec waiting to be processed            |
-| `tdd-spec:in-progress` | In Progress | Spec being implemented (branch created) |
-| `tdd-spec:completed`   | Completed   | Spec passed validation (issue closed)   |
-| `tdd-spec:failed`      | Failed      | Spec failed validation (needs review)   |
-| `tdd-automation`       | (always)    | All TDD automation issues               |
+| Label                   | State        | Description                                      |
+| ----------------------- | ------------ | ------------------------------------------------ |
+| `tdd-spec:queued`       | Queued       | Spec waiting to be processed                     |
+| `tdd-spec:in-progress`  | In Progress  | Spec being implemented (branch created)          |
+| `tdd-spec:completed`    | Completed    | Spec passed validation (issue closed)            |
+| `tdd-spec:failed`       | Failed       | Spec failed after 3 retries (needs human review) |
+| `skip-automated`        | Skipped      | Human marked as too complex (queue skips it)     |
+| `retry:1`, `retry:2`, `retry:3` | Retry Count | Tracks automatic retry attempts (max 3)  |
+| `tdd-automation`        | (always)     | All TDD automation issues                        |
 
 ## CLI Commands
 

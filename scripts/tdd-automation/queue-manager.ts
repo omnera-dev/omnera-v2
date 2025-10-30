@@ -1,5 +1,12 @@
 #!/usr/bin/env bun
 /**
+ * Copyright (c) 2025 ESSENTIAL SERVICES
+ *
+ * This source code is licensed under the Business Source License 1.1
+ * found in the LICENSE.md file in the root directory of this source tree.
+ */
+
+/**
  * TDD Queue Manager
  *
  * Manages the TDD automation queue:
@@ -9,10 +16,22 @@
  * - Provides queue operations (get next, mark in-progress, mark completed)
  */
 
-import { execSync } from 'node:child_process'
-import { readFileSync, writeFileSync } from 'node:fs'
-import { Effect, Console, Array as EffectArray, pipe } from 'effect'
-import { glob } from 'glob'
+import { Array as EffectArray, pipe } from 'effect'
+import * as Effect from 'effect/Effect'
+import * as Layer from 'effect/Layer'
+import {
+  FileSystemService,
+  FileSystemServiceLive,
+  CommandService,
+  CommandServiceLive,
+  LoggerServiceLive,
+  success,
+  progress,
+  logInfo,
+  skip,
+  logError,
+} from '../lib/effect'
+import type { LoggerService } from '../lib/effect'
 
 /**
  * Represents a single spec with fixme
@@ -76,10 +95,13 @@ const calculatePriority = (feature: string): number => {
 /**
  * Parse a test file and extract all specs with fixme
  */
-const parseTestFileForSpecs = (filePath: string): Effect.Effect<SpecItem[]> =>
-  // eslint-disable-next-line require-yield
+const parseTestFileForSpecs = (
+  filePath: string
+): Effect.Effect<SpecItem[], never, FileSystemService> =>
   Effect.gen(function* () {
-    const content = readFileSync(filePath, 'utf-8')
+    const fs = yield* FileSystemService
+    const content = yield* fs.readFile(filePath).pipe(Effect.catchAll(() => Effect.succeed('')))
+
     const lines = content.split('\n')
     const specs: SpecItem[] = []
 
@@ -137,16 +159,16 @@ const parseTestFileForSpecs = (filePath: string): Effect.Effect<SpecItem[]> =>
  * Scan all spec files for fixme tests and extract spec IDs
  */
 export const scanForFixmeSpecs = Effect.gen(function* () {
-  yield* Console.log('🔍 Scanning for test.fixme() patterns and extracting spec IDs...')
+  const fs = yield* FileSystemService
+
+  yield* progress('Scanning for test.fixme() patterns and extracting spec IDs...')
 
   // Find all spec files
-  const specFiles = yield* Effect.promise(() => glob('specs/**/*.spec.ts'))
-  yield* Console.log(`Found ${specFiles.length} spec files`)
+  const specFiles = yield* fs.glob('specs/**/*.spec.ts')
+  yield* logInfo(`Found ${specFiles.length} spec files`)
 
   // Parse each file in parallel
-  const allSpecs = yield* Effect.all(specFiles.map(parseTestFileForSpecs), {
-    concurrency: 10,
-  })
+  const allSpecs = yield* Effect.all(specFiles.map(parseTestFileForSpecs), { concurrency: 10 })
 
   // Flatten array of arrays
   const specs = allSpecs.flat()
@@ -167,13 +189,13 @@ export const scanForFixmeSpecs = Effect.gen(function* () {
   }
 
   // Output results
-  yield* Console.log('')
-  yield* Console.log('📊 Scan Results:')
-  yield* Console.log(`  Total specs with fixme: ${result.totalSpecs}`)
-  yield* Console.log('')
+  yield* logInfo('')
+  yield* logInfo('Scan Results:', '📊')
+  yield* logInfo(`  Total specs with fixme: ${result.totalSpecs}`)
+  yield* logInfo('')
 
   if (sortedSpecs.length > 0) {
-    yield* Console.log('📋 First 10 specs:')
+    yield* logInfo('First 10 specs:', '📋')
     sortedSpecs.slice(0, 10).forEach((spec, index) => {
       console.log(`  ${index + 1}. ${spec.specId}: ${spec.description}`)
       console.log(`     ${spec.file}:${spec.line}`)
@@ -187,14 +209,25 @@ export const scanForFixmeSpecs = Effect.gen(function* () {
  * Get all queued spec issues from GitHub
  */
 export const getQueuedSpecs = Effect.gen(function* () {
-  yield* Console.log('📋 Fetching queued specs from GitHub...')
+  const cmd = yield* CommandService
 
-  try {
-    const output = execSync(
-      'gh issue list --label "tdd-spec:queued" --json number,title,url,createdAt,updatedAt --limit 1000',
-      { encoding: 'utf-8' }
+  yield* logInfo('Fetching queued specs from GitHub (excluding skip-automated)...', '📋')
+
+  const output = yield* cmd
+    .exec(
+      'gh issue list --label "tdd-spec:queued" --search "-label:skip-automated" --json number,title,url,createdAt,updatedAt --limit 1000',
+      { throwOnError: false }
+    )
+    .pipe(
+      Effect.catchAll(() => {
+        return Effect.gen(function* () {
+          yield* logError('Failed to fetch queued specs')
+          return '[]'
+        })
+      })
     )
 
+  try {
     const issues = JSON.parse(output) as Array<{
       number: number
       title: string
@@ -222,10 +255,10 @@ export const getQueuedSpecs = Effect.gen(function* () {
       })
       .filter((issue): issue is SpecIssue => issue !== null)
 
-    yield* Console.log(`  Found ${specIssues.length} queued specs`)
+    yield* logInfo(`  Found ${specIssues.length} queued specs`)
     return specIssues
-  } catch (error) {
-    yield* Console.error('❌ Failed to fetch queued specs:', error)
+  } catch {
+    yield* logError('Failed to parse GitHub issue response')
     return []
   }
 })
@@ -234,12 +267,23 @@ export const getQueuedSpecs = Effect.gen(function* () {
  * Get all in-progress spec issues from GitHub
  */
 export const getInProgressSpecs = Effect.gen(function* () {
-  try {
-    const output = execSync(
+  const cmd = yield* CommandService
+
+  const output = yield* cmd
+    .exec(
       'gh issue list --label "tdd-spec:in-progress" --json number,title,url,createdAt,updatedAt --limit 100',
-      { encoding: 'utf-8' }
+      { throwOnError: false }
+    )
+    .pipe(
+      Effect.catchAll(() => {
+        return Effect.gen(function* () {
+          yield* logError('Failed to fetch in-progress specs')
+          return '[]'
+        })
+      })
     )
 
+  try {
     const issues = JSON.parse(output) as Array<{
       number: number
       title: string
@@ -267,8 +311,8 @@ export const getInProgressSpecs = Effect.gen(function* () {
       .filter((issue): issue is SpecIssue => issue !== null)
 
     return specIssues
-  } catch (error) {
-    yield* Console.error('❌ Failed to fetch in-progress specs:', error)
+  } catch {
+    yield* logError('Failed to parse GitHub issue response')
     return []
   }
 })
@@ -276,15 +320,18 @@ export const getInProgressSpecs = Effect.gen(function* () {
 /**
  * Check if a spec already has an open issue
  */
-export const specHasOpenIssue = (specId: string): Effect.Effect<boolean> =>
-  // eslint-disable-next-line require-yield
+export const specHasOpenIssue = (specId: string): Effect.Effect<boolean, never, CommandService> =>
   Effect.gen(function* () {
-    try {
-      const output = execSync(
-        `gh issue list --label "tdd-spec" --search "${specId}" --json number,state --limit 10`,
-        { encoding: 'utf-8' }
-      )
+    const cmd = yield* CommandService
 
+    const output = yield* cmd
+      .exec(
+        `gh issue list --label "tdd-spec" --search "${specId}" --json number,state --limit 10`,
+        { throwOnError: false }
+      )
+      .pipe(Effect.catchAll(() => Effect.succeed('[]')))
+
+    try {
       const issues = JSON.parse(output) as Array<{ number: number; state: string }>
       return issues.some((issue) => issue.state === 'OPEN')
     } catch {
@@ -295,14 +342,18 @@ export const specHasOpenIssue = (specId: string): Effect.Effect<boolean> =>
 /**
  * Create a minimal spec issue on GitHub
  */
-export const createSpecIssue = (spec: SpecItem): Effect.Effect<number> =>
+export const createSpecIssue = (
+  spec: SpecItem
+): Effect.Effect<number, never, CommandService | LoggerService> =>
   Effect.gen(function* () {
-    yield* Console.log(`📝 Creating issue for ${spec.specId}...`)
+    const cmd = yield* CommandService
+
+    yield* logInfo(`Creating issue for ${spec.specId}...`, '📝')
 
     // Check if issue already exists
     const hasIssue = yield* specHasOpenIssue(spec.specId)
     if (hasIssue) {
-      yield* Console.log(`  ⏭️  Issue already exists for ${spec.specId}, skipping`)
+      yield* skip(`Issue already exists for ${spec.specId}, skipping`)
       return -1
     }
 
@@ -322,34 +373,41 @@ export const createSpecIssue = (spec: SpecItem): Effect.Effect<number> =>
 
 Validation runs automatically on push.`
 
-    try {
-      const output = execSync(
+    const output = yield* cmd
+      .exec(
         `gh issue create --title ${JSON.stringify(title)} --body ${JSON.stringify(bodyText)} --label "tdd-spec:queued,tdd-automation"`,
-        { encoding: 'utf-8' }
+        { throwOnError: false }
+      )
+      .pipe(
+        Effect.catchAll(() => {
+          return Effect.gen(function* () {
+            yield* logError(`Failed to create issue for ${spec.specId}`)
+            return ''
+          })
+        })
       )
 
-      // Extract issue number from URL (gh outputs the URL)
-      const issueMatch = output.match(/\/issues\/(\d+)/)
-      const issueNumber = issueMatch?.[1] ? parseInt(issueMatch[1], 10) : -1
+    // Extract issue number from URL (gh outputs the URL)
+    const issueMatch = output.match(/\/issues\/(\d+)/)
+    const issueNumber = issueMatch?.[1] ? parseInt(issueMatch[1], 10) : -1
 
-      yield* Console.log(`  ✅ Created issue #${issueNumber}`)
-      return issueNumber
-    } catch (error) {
-      yield* Console.error(`  ❌ Failed to create issue for ${spec.specId}:`, error)
-      return -1
+    if (issueNumber > 0) {
+      yield* success(`Created issue #${issueNumber}`)
     }
+
+    return issueNumber
   })
 
 /**
  * Get the next spec to process (oldest queued spec if no specs in-progress)
  */
 export const getNextSpec = Effect.gen(function* () {
-  yield* Console.log('🔍 Looking for next spec to process...')
+  yield* progress('Looking for next spec to process...')
 
   // Check if any specs are in-progress
   const inProgressSpecs = yield* getInProgressSpecs
   if (inProgressSpecs.length > 0) {
-    yield* Console.log(`  ⏸️  ${inProgressSpecs.length} spec(s) already in-progress:`)
+    yield* logInfo(`${inProgressSpecs.length} spec(s) already in-progress:`, '⏸️')
     inProgressSpecs.forEach((spec) => {
       console.log(`     - ${spec.specId} (#${spec.number})`)
     })
@@ -359,104 +417,130 @@ export const getNextSpec = Effect.gen(function* () {
   // Get queued specs (oldest first)
   const queuedSpecs = yield* getQueuedSpecs
   if (queuedSpecs.length === 0) {
-    yield* Console.log('  📭 Queue is empty')
+    yield* logInfo('Queue is empty', '📭')
     return null
   }
 
   // Return oldest queued spec
   const nextSpec = queuedSpecs[0]
   if (!nextSpec) {
-    yield* Console.log('  📭 No queued specs found')
+    yield* logInfo('No queued specs found', '📭')
     return null
   }
 
-  yield* Console.log(`  ✅ Next spec: ${nextSpec.specId} (#${nextSpec.number})`)
+  yield* success(`Next spec: ${nextSpec.specId} (#${nextSpec.number})`)
   return nextSpec
 })
 
 /**
  * Mark a spec as in-progress
  */
-export const markInProgress = (issueNumber: number): Effect.Effect<void> =>
+export const markInProgress = (
+  issueNumber: number
+): Effect.Effect<void, never, CommandService | LoggerService> =>
   Effect.gen(function* () {
-    yield* Console.log(`🏃 Marking issue #${issueNumber} as in-progress...`)
+    const cmd = yield* CommandService
 
-    try {
-      execSync(`gh issue edit ${issueNumber} --remove-label "tdd-spec:queued"`, {
-        encoding: 'utf-8',
+    yield* progress(`Marking issue #${issueNumber} as in-progress...`)
+
+    yield* cmd
+      .exec(`gh issue edit ${issueNumber} --remove-label "tdd-spec:queued"`, {
+        throwOnError: false,
       })
-      execSync(`gh issue edit ${issueNumber} --add-label "tdd-spec:in-progress"`, {
-        encoding: 'utf-8',
+      .pipe(Effect.catchAll(() => Effect.void))
+
+    yield* cmd
+      .exec(`gh issue edit ${issueNumber} --add-label "tdd-spec:in-progress"`, {
+        throwOnError: false,
       })
-      yield* Console.log(`  ✅ Updated labels`)
-    } catch (error) {
-      yield* Console.error(`  ❌ Failed to update labels:`, error)
-    }
+      .pipe(Effect.catchAll(() => Effect.void))
+
+    yield* success('Updated labels')
   })
 
 /**
  * Mark a spec as completed
  */
-export const markCompleted = (issueNumber: number): Effect.Effect<void> =>
+export const markCompleted = (
+  issueNumber: number
+): Effect.Effect<void, never, CommandService | LoggerService> =>
   Effect.gen(function* () {
-    yield* Console.log(`✅ Marking issue #${issueNumber} as completed...`)
+    const cmd = yield* CommandService
 
-    try {
-      execSync(`gh issue edit ${issueNumber} --remove-label "tdd-spec:in-progress"`, {
-        encoding: 'utf-8',
+    yield* progress(`Marking issue #${issueNumber} as completed...`)
+
+    yield* cmd
+      .exec(`gh issue edit ${issueNumber} --remove-label "tdd-spec:in-progress"`, {
+        throwOnError: false,
       })
-      execSync(`gh issue edit ${issueNumber} --add-label "tdd-spec:completed"`, {
-        encoding: 'utf-8',
+      .pipe(Effect.catchAll(() => Effect.void))
+
+    yield* cmd
+      .exec(`gh issue edit ${issueNumber} --add-label "tdd-spec:completed"`, {
+        throwOnError: false,
       })
-      execSync(`gh issue close ${issueNumber} --reason completed`, {
-        encoding: 'utf-8',
+      .pipe(Effect.catchAll(() => Effect.void))
+
+    yield* cmd
+      .exec(`gh issue close ${issueNumber} --reason completed`, {
+        throwOnError: false,
       })
-      yield* Console.log(`  ✅ Issue closed and marked as completed`)
-    } catch (error) {
-      yield* Console.error(`  ❌ Failed to close issue:`, error)
-    }
+      .pipe(Effect.catchAll(() => Effect.void))
+
+    yield* success('Issue closed and marked as completed')
   })
 
 /**
  * Mark a spec as failed
  */
-export const markFailed = (issueNumber: number, reason: string): Effect.Effect<void> =>
+export const markFailed = (
+  issueNumber: number,
+  reason: string
+): Effect.Effect<void, never, CommandService | LoggerService> =>
   Effect.gen(function* () {
-    yield* Console.log(`❌ Marking issue #${issueNumber} as failed...`)
+    const cmd = yield* CommandService
 
-    try {
-      execSync(`gh issue edit ${issueNumber} --remove-label "tdd-spec:in-progress"`, {
-        encoding: 'utf-8',
+    yield* logError(`Marking issue #${issueNumber} as failed...`)
+
+    yield* cmd
+      .exec(`gh issue edit ${issueNumber} --remove-label "tdd-spec:in-progress"`, {
+        throwOnError: false,
       })
-      execSync(`gh issue edit ${issueNumber} --add-label "tdd-spec:failed"`, {
-        encoding: 'utf-8',
+      .pipe(Effect.catchAll(() => Effect.void))
+
+    yield* cmd
+      .exec(`gh issue edit ${issueNumber} --add-label "tdd-spec:failed"`, {
+        throwOnError: false,
       })
-      execSync(
+      .pipe(Effect.catchAll(() => Effect.void))
+
+    yield* cmd
+      .exec(
         `gh issue comment ${issueNumber} --body "❌ Validation failed:\n\n${reason}\n\nPlease review the implementation and push fixes to retry."`,
-        { encoding: 'utf-8' }
+        { throwOnError: false }
       )
-      yield* Console.log(`  ✅ Issue marked as failed with comment`)
-    } catch (error) {
-      yield* Console.error(`  ❌ Failed to mark as failed:`, error)
-    }
+      .pipe(Effect.catchAll(() => Effect.void))
+
+    yield* success('Issue marked as failed with comment')
   })
 
 /**
  * CLI: Scan and display results
  */
 const commandScan = Effect.gen(function* () {
+  const fs = yield* FileSystemService
   const result = yield* scanForFixmeSpecs
 
   // Save to file
   const outputPath = '.github/tdd-queue-scan.json'
-  writeFileSync(outputPath, JSON.stringify(result, null, 2))
-  yield* Console.log('')
-  yield* Console.log(`💾 Results saved to ${outputPath}`)
+  yield* fs.writeFile(outputPath, JSON.stringify(result, null, 2))
+  yield* logInfo('')
+  yield* success(`Results saved to ${outputPath}`)
 
   // Output for GitHub Actions
   if (process.env.GITHUB_OUTPUT) {
     const output = `total_specs=${result.totalSpecs}\n`
-    writeFileSync(process.env.GITHUB_OUTPUT, output, { flag: 'a' })
+    yield* fs.writeFile(process.env.GITHUB_OUTPUT, output).pipe(Effect.catchAll(() => Effect.void))
   }
 })
 
@@ -467,12 +551,12 @@ const commandPopulate = Effect.gen(function* () {
   const result = yield* scanForFixmeSpecs
 
   if (result.totalSpecs === 0) {
-    yield* Console.log('📭 No specs with fixme found')
+    yield* logInfo('No specs with fixme found', '📭')
     return
   }
 
-  yield* Console.log('')
-  yield* Console.log(`📝 Creating issues for ${result.totalSpecs} specs...`)
+  yield* logInfo('')
+  yield* logInfo(`Creating issues for ${result.totalSpecs} specs...`, '📝')
 
   // Create issues in sequence (avoid rate limiting)
   let created = 0
@@ -487,22 +571,35 @@ const commandPopulate = Effect.gen(function* () {
     }
   }
 
-  yield* Console.log('')
-  yield* Console.log(`✅ Created ${created} issues, skipped ${skipped} (already exist)`)
+  yield* logInfo('')
+  yield* success(`Created ${created} issues, skipped ${skipped} (already exist)`)
 })
 
 /**
  * CLI: Get next spec from queue
  */
 const commandNext = Effect.gen(function* () {
+  const fs = yield* FileSystemService
+  const cmd = yield* CommandService
   const nextSpec = yield* getNextSpec
 
   if (!nextSpec) {
     if (process.env.GITHUB_OUTPUT) {
-      writeFileSync(process.env.GITHUB_OUTPUT, 'has_next=false\n', { flag: 'a' })
+      yield* fs
+        .writeFile(process.env.GITHUB_OUTPUT, 'has_next=false\n')
+        .pipe(Effect.catchAll(() => Effect.void))
     }
     return
   }
+
+  // Find test file for this spec
+  const testFileOutput = yield* cmd
+    .exec(`grep -rl "${nextSpec.specId}" specs/ | grep "\\.spec\\.ts$" | head -1`, {
+      throwOnError: false,
+    })
+    .pipe(Effect.catchAll(() => Effect.succeed('')))
+
+  const testFile = testFileOutput.trim()
 
   // Output for GitHub Actions
   if (process.env.GITHUB_OUTPUT && nextSpec) {
@@ -510,8 +607,9 @@ const commandNext = Effect.gen(function* () {
 issue_number=${nextSpec.number}
 spec_id=${nextSpec.specId}
 issue_url=${nextSpec.url}
+test_file=${testFile}
 `
-    writeFileSync(process.env.GITHUB_OUTPUT, output, { flag: 'a' })
+    yield* fs.writeFile(process.env.GITHUB_OUTPUT, output).pipe(Effect.catchAll(() => Effect.void))
   }
 })
 
@@ -519,13 +617,13 @@ issue_url=${nextSpec.url}
  * CLI: List queue status
  */
 const commandStatus = Effect.gen(function* () {
-  yield* Console.log('📊 Queue Status')
-  yield* Console.log('')
+  yield* logInfo('Queue Status', '📊')
+  yield* logInfo('')
 
   const queued = yield* getQueuedSpecs
   const inProgress = yield* getInProgressSpecs
 
-  yield* Console.log(`🟡 Queued: ${queued.length}`)
+  yield* logInfo(`Queued: ${queued.length}`, '🟡')
   queued.slice(0, 5).forEach((spec) => {
     console.log(`   - ${spec.specId} (#${spec.number})`)
   })
@@ -533,8 +631,8 @@ const commandStatus = Effect.gen(function* () {
     console.log(`   ... and ${queued.length - 5} more`)
   }
 
-  yield* Console.log('')
-  yield* Console.log(`🔵 In Progress: ${inProgress.length}`)
+  yield* logInfo('')
+  yield* logInfo(`In Progress: ${inProgress.length}`, '🔵')
   inProgress.forEach((spec) => {
     console.log(`   - ${spec.specId} (#${spec.number})`)
   })
@@ -560,21 +658,34 @@ const main = Effect.gen(function* () {
       yield* commandStatus
       break
     default:
-      yield* Console.log('TDD Queue Manager')
-      yield* Console.log('')
-      yield* Console.log('Usage:')
-      yield* Console.log('  bun run scripts/tdd-automation/queue-manager.ts <command>')
-      yield* Console.log('')
-      yield* Console.log('Commands:')
-      yield* Console.log('  scan      - Scan for fixme specs and display results')
-      yield* Console.log('  populate  - Create issues for all fixme specs (skip duplicates)')
-      yield* Console.log('  next      - Get next spec from queue (for GitHub Actions)')
-      yield* Console.log('  status    - Display queue status')
+      yield* logInfo('TDD Queue Manager')
+      yield* logInfo('')
+      yield* logInfo('Usage:')
+      yield* logInfo('  bun run scripts/tdd-automation/queue-manager.ts <command>')
+      yield* logInfo('')
+      yield* logInfo('Commands:')
+      yield* logInfo('  scan      - Scan for fixme specs and display results')
+      yield* logInfo('  populate  - Create issues for all fixme specs (skip duplicates)')
+      yield* logInfo('  next      - Get next spec from queue (for GitHub Actions)')
+      yield* logInfo('  status    - Display queue status')
   }
 })
 
+// Main layer combining all services
+const MainLayer = Layer.mergeAll(FileSystemServiceLive, CommandServiceLive, LoggerServiceLive())
+
 // Run CLI
-Effect.runPromise(main).catch((error) => {
+const program = main.pipe(
+  Effect.provide(MainLayer),
+  Effect.catchAll((error) =>
+    Effect.gen(function* () {
+      console.error('❌ Error:', error)
+      yield* Effect.fail(error)
+    })
+  )
+)
+
+Effect.runPromise(program).catch((error) => {
   console.error('❌ Error:', error)
   process.exit(1)
 })

@@ -23,21 +23,44 @@
  * - Provides clear success/failure feedback
  */
 
-import { existsSync } from 'node:fs'
 import { basename, dirname, extname, join } from 'node:path'
-import { $ } from 'bun'
+import * as Data from 'effect/Data'
+import * as Effect from 'effect/Effect'
+import * as Layer from 'effect/Layer'
+import {
+  FileSystemService,
+  FileSystemServiceLive,
+  CommandService,
+  CommandServiceLive,
+  LoggerServiceLive,
+  progress,
+  success,
+  logError,
+  skip,
+  section,
+} from './lib/effect'
 
+/**
+ * Check result with timing information
+ */
 interface CheckResult {
-  name: string
-  success: boolean
-  duration: number
-  error?: string
+  readonly name: string
+  readonly success: boolean
+  readonly duration: number
+  readonly error?: string
 }
+
+/**
+ * Quality check failed error
+ */
+class QualityCheckFailedError extends Data.TaggedError('QualityCheckFailedError')<{
+  readonly checks: readonly CheckResult[]
+}> {}
 
 /**
  * Check if file is a TypeScript file
  */
-function isTypeScriptFile(filePath: string): boolean {
+const isTypeScriptFile = (filePath: string): boolean => {
   const ext = extname(filePath)
   return ext === '.ts' || ext === '.tsx'
 }
@@ -45,7 +68,7 @@ function isTypeScriptFile(filePath: string): boolean {
 /**
  * Remove all comments from TypeScript code
  */
-function stripComments(code: string): string {
+const stripComments = (code: string): string => {
   // Remove single-line comments
   let stripped = code.replace(/\/\/.*$/gm, '')
 
@@ -61,25 +84,41 @@ function stripComments(code: string): string {
 /**
  * Check if only comments changed in a file using git diff
  */
-async function isCommentOnlyChange(filePath: string): Promise<boolean> {
-  try {
+const isCommentOnlyChange = (filePath: string) =>
+  Effect.gen(function* () {
+    const cmd = yield* CommandService
+    const fs = yield* FileSystemService
+
     // Check if file is tracked by git
-    const statusResult = await $`git ls-files --error-unmatch "${filePath}"`.quiet()
-    if (statusResult.exitCode !== 0) {
+    const tracked = yield* cmd
+      .exec(`git ls-files --error-unmatch "${filePath}"`, { throwOnError: false })
+      .pipe(
+        Effect.map((output) => output.trim().length > 0),
+        Effect.catchAll(() => Effect.succeed(false))
+      )
+
+    if (!tracked) {
       // New file, not tracked - run checks
       return false
     }
 
-    // Get the current staged/working version
-    const currentContent = await Bun.file(filePath).text()
+    // Get the current version
+    const currentContent = yield* fs
+      .readFile(filePath)
+      .pipe(Effect.catchAll(() => Effect.succeed('')))
 
     // Get the HEAD version
-    const headResult = await $`git show HEAD:"${filePath}"`.quiet()
-    if (headResult.exitCode !== 0) {
+    const headContent = yield* cmd
+      .exec(`git show HEAD:"${filePath}"`, { throwOnError: false })
+      .pipe(
+        Effect.map((output) => output.trim()),
+        Effect.catchAll(() => Effect.succeed(''))
+      )
+
+    if (headContent.length === 0) {
       // File doesn't exist in HEAD (newly added) - run checks
       return false
     }
-    const headContent = headResult.stdout.toString()
 
     // Strip comments from both versions
     const currentStripped = stripComments(currentContent).trim()
@@ -87,133 +126,124 @@ async function isCommentOnlyChange(filePath: string): Promise<boolean> {
 
     // If stripped versions are identical, only comments changed
     return currentStripped === headStripped
-  } catch {
+  }).pipe(
     // On any error, assume it's not a comment-only change (safer to run checks)
-    return false
-  }
-}
+    Effect.catchAll(() => Effect.succeed(false))
+  )
 
 /**
  * Find test file for a given source file
  */
-function findTestFile(filePath: string): string | null {
-  const dir = dirname(filePath)
-  const base = basename(filePath).replace(/\.(ts|tsx)$/, '')
+const findTestFile = (filePath: string) =>
+  Effect.gen(function* () {
+    const fs = yield* FileSystemService
+    const dir = dirname(filePath)
+    const base = basename(filePath).replace(/\.(ts|tsx)$/, '')
 
-  const testPatterns = [
-    `${filePath.replace(/\.(ts|tsx)$/, '.test.ts')}`,
-    `${filePath.replace(/\.(ts|tsx)$/, '.test.tsx')}`,
-    join(dir, `${base}.test.ts`),
-    join(dir, `${base}.test.tsx`),
-  ]
+    const testPatterns = [
+      filePath.replace(/\.(ts|tsx)$/, '.test.ts'),
+      filePath.replace(/\.(ts|tsx)$/, '.test.tsx'),
+      join(dir, `${base}.test.ts`),
+      join(dir, `${base}.test.tsx`),
+    ]
 
-  for (const pattern of testPatterns) {
-    if (existsSync(pattern)) {
-      return pattern
+    for (const pattern of testPatterns) {
+      const exists = yield* fs.exists(pattern)
+      if (exists) {
+        return pattern
+      }
     }
-  }
 
-  return null
-}
+    return null
+  })
 
 /**
  * Run a single quality check command
  */
-async function runCheck(
-  name: string,
-  command: string[],
-  timeoutMs: number = 60_000
-): Promise<CheckResult> {
-  const startTime = performance.now()
+const runCheck = (name: string, command: readonly string[], timeoutMs: number = 60_000) =>
+  Effect.gen(function* () {
+    const cmd = yield* CommandService
+    const startTime = Date.now()
 
-  try {
-    console.log(`  🔄 ${name}...`)
+    yield* progress(`${name}...`)
 
-    // Create timeout promise
-    const timeoutPromise = new Promise<never>((_, reject) => {
-      setTimeout(() => reject(new Error(`${name} timed out after ${timeoutMs}ms`)), timeoutMs)
-    })
+    const result = yield* cmd.spawn(command, { timeout: timeoutMs, throwOnError: false }).pipe(
+      Effect.catchTag('CommandTimeoutError', (_) =>
+        Effect.fail({
+          exitCode: 1,
+          stdout: '',
+          stderr: `${name} timed out after ${timeoutMs}ms`,
+          duration: Date.now() - startTime,
+        })
+      ),
+      Effect.catchTag('CommandSpawnError', (e) =>
+        Effect.fail({
+          exitCode: 1,
+          stdout: '',
+          stderr: e.cause ? String(e.cause) : `Failed to spawn command`,
+          duration: Date.now() - startTime,
+        })
+      ),
+      Effect.catchTag('CommandFailedError', (e) =>
+        Effect.fail({
+          exitCode: e.exitCode,
+          stdout: e.stdout,
+          stderr: e.stderr,
+          duration: Date.now() - startTime,
+        })
+      )
+    )
 
-    // Execute command with proper argument splitting
-    const proc = Bun.spawn(command, {
-      stdout: 'pipe',
-      stderr: 'pipe',
-    })
+    const duration = Date.now() - startTime
+    const isSuccess = result.exitCode === 0
 
-    // Race between command completion and timeout
-    const result = await Promise.race([
-      (async () => {
-        const exitCode = await proc.exited
-        const stderr = await new Response(proc.stderr).text()
-        const stdout = await new Response(proc.stdout).text()
-        return { exitCode, stderr, stdout }
-      })(),
-      timeoutPromise,
-    ])
+    const checkResult: CheckResult = {
+      name,
+      success: isSuccess,
+      duration,
+      error: isSuccess ? undefined : result.stderr,
+    }
 
-    const duration = Math.round(performance.now() - startTime)
-    const success = result.exitCode === 0
-
-    if (success) {
-      console.log(`  ✅ ${name} passed (${duration}ms)`)
+    if (isSuccess) {
+      yield* success(`${name} passed (${duration}ms)`)
     } else {
-      console.error(`  ❌ ${name} failed (${duration}ms)`)
+      yield* logError(`${name} failed (${duration}ms)`)
       if (result.stderr.length > 0) {
         console.error(result.stderr)
       }
     }
 
-    return {
-      name,
-      success,
-      duration,
-      error: success ? undefined : result.stderr,
-    }
-  } catch (error) {
-    const duration = Math.round(performance.now() - startTime)
-    const errorMessage = error instanceof Error ? error.message : String(error)
+    return checkResult
+  })
 
-    console.error(`  ❌ ${name} failed (${duration}ms)`)
-    console.error(`     ${errorMessage}`)
+/**
+ * Run quality checks for a specific file
+ */
+const runFileChecks = (filePath: string) =>
+  Effect.gen(function* () {
+    const fs = yield* FileSystemService
 
-    return {
-      name,
-      success: false,
-      duration,
-      error: errorMessage,
-    }
-  }
-}
-
-async function main() {
-  // Parse command line arguments
-  const args = process.argv.slice(2)
-  const filePath = args[0]
-
-  // Single file mode
-  if (filePath) {
     // Validate file exists and is TypeScript
-    if (!existsSync(filePath)) {
-      console.error(`❌ File not found: ${filePath}`)
-      process.exit(1)
+    const exists = yield* fs.exists(filePath)
+    if (!exists) {
+      yield* logError(`File not found: ${filePath}`)
+      return yield* Effect.fail(new QualityCheckFailedError({ checks: [] }))
     }
 
     if (!isTypeScriptFile(filePath)) {
-      console.log(`⏭️  Skipping checks for ${basename(filePath)} (not a TypeScript file)`)
-      process.exit(0)
+      yield* skip(`Skipping checks for ${basename(filePath)} (not a TypeScript file)`)
+      return []
     }
 
     // Check if only comments changed
-    const commentOnly = await isCommentOnlyChange(filePath)
+    const commentOnly = yield* isCommentOnlyChange(filePath)
     if (commentOnly) {
-      console.log(`⏭️  Skipping checks for ${basename(filePath)} (comment-only change)`)
-      process.exit(0)
+      yield* skip(`Skipping checks for ${basename(filePath)} (comment-only change)`)
+      return []
     }
 
     const fileName = basename(filePath)
-    console.log(`🔍 Running quality checks on ${fileName}...\n`)
-
-    const overallStart = performance.now()
+    yield* section(`Running quality checks on ${fileName}`)
 
     // Run checks in parallel for specific file
     // Note: TypeScript always checks entire project (incremental makes it fast)
@@ -238,7 +268,7 @@ async function main() {
     ]
 
     // Add test file check if it exists
-    const testFile = findTestFile(filePath)
+    const testFile = yield* findTestFile(filePath)
     if (testFile) {
       const testFileName = basename(testFile)
       checks.push(
@@ -250,55 +280,20 @@ async function main() {
       )
     }
 
-    const results = await Promise.all(checks)
-    const overallDuration = Math.round(performance.now() - overallStart)
-    const allPassed = results.every((r) => r.success)
+    const results = yield* Effect.all(checks, { concurrency: 'unbounded' })
 
-    console.log(`\n✨ Quality checks completed in ${overallDuration}ms`)
+    return results
+  })
 
-    if (!allPassed) {
-      process.exit(1)
-    }
-    process.exit(0)
-  }
+/**
+ * Run quality checks for entire codebase with fail-fast
+ */
+const runFullChecks = Effect.gen(function* () {
+  yield* section('Running quality checks on entire codebase (fail-fast)')
 
-  // Full codebase mode
-  console.log('🔍 Running quality checks on entire codebase in parallel (fail-fast)...\n')
-
-  const overallStart = performance.now()
-
-  // Flag to track if we should exit early
-  let shouldExit = false
-  const completedChecks: CheckResult[] = []
-
-  // Wrapper to implement fail-fast behavior
-  async function runCheckWithFailFast(
-    name: string,
-    command: string[],
-    timeout: number
-  ): Promise<CheckResult> {
-    const result = await runCheck(name, command, timeout)
-
-    // If this check failed and no other check has triggered exit yet
-    if (!result.success && !shouldExit) {
-      shouldExit = true
-      console.error(`\n${'─'.repeat(50)}`)
-      console.error(`❌ Quality check failed: ${name}`)
-      if (result.error) {
-        console.error(`\n${result.error}`)
-      }
-      console.error(`${'─'.repeat(50)}`)
-      console.error('⚡ Exiting immediately (fail-fast mode)\n')
-      process.exit(1)
-    }
-
-    completedChecks.push(result)
-    return result
-  }
-
-  // Run all 4 checks in parallel (fail-fast on first error)
-  const results = await Promise.all([
-    runCheckWithFailFast(
+  // Run all 4 checks in parallel, but fail immediately on first failure
+  const checks = [
+    runCheck(
       'ESLint',
       [
         'bunx',
@@ -314,56 +309,102 @@ async function main() {
       ],
       120_000
     ),
-    runCheckWithFailFast('TypeScript', ['bunx', 'tsc', '--noEmit', '--incremental'], 60_000),
-    runCheckWithFailFast(
-      'Unit Tests',
-      ['bun', 'test', '--concurrent', '.test.ts', '.test.tsx'],
-      30_000
-    ),
-    runCheckWithFailFast(
-      'E2E Regression Tests',
-      ['bunx', 'playwright', 'test', '--grep=@regression'],
-      120_000
-    ),
-  ])
+    runCheck('TypeScript', ['bunx', 'tsc', '--noEmit', '--incremental'], 60_000),
+    runCheck('Unit Tests', ['bun', 'test', '--concurrent', '.test.ts', '.test.tsx'], 30_000),
+    runCheck('E2E Regression Tests', ['bunx', 'playwright', 'test', '--grep=@regression'], 120_000),
+  ]
 
-  const overallDuration = Math.round(performance.now() - overallStart)
-  const allPassed = results.every((r) => r.success)
+  // Use Effect.validateAll to run all checks but collect all failures
+  const results = yield* Effect.all(checks, { concurrency: 'unbounded' })
 
-  // Print summary
-  console.log('\n' + '─'.repeat(50))
-  console.log('📊 Quality Check Summary')
-  console.log('─'.repeat(50))
+  return results
+})
 
-  for (const result of results) {
-    const status = result.success ? '✅' : '❌'
-    console.log(`${status} ${result.name.padEnd(20)} ${result.duration}ms`)
-  }
+/**
+ * Print summary of check results
+ */
+const printSummary = (results: readonly CheckResult[], overallDuration: number) =>
+  Effect.gen(function* () {
+    const sep = '─'.repeat(50)
+    yield* Effect.log('')
+    yield* Effect.log(sep)
+    yield* Effect.log('📊 Quality Check Summary')
+    yield* Effect.log(sep)
 
-  console.log('─'.repeat(50))
-  console.log(`Total time: ${overallDuration}ms`)
-  console.log('─'.repeat(50))
+    for (const result of results) {
+      const status = result.success ? '✅' : '❌'
+      yield* Effect.log(`${status} ${result.name.padEnd(20)} ${result.duration}ms`)
+    }
 
-  if (allPassed) {
-    console.log('✨ All quality checks passed!')
-    process.exit(0)
+    yield* Effect.log(sep)
+    yield* Effect.log(`Total time: ${overallDuration}ms`)
+    yield* Effect.log(sep)
+
+    const allPassed = results.every((r) => r.success)
+
+    if (allPassed) {
+      yield* success('All quality checks passed!')
+    } else {
+      const failedChecks = results
+        .filter((r) => !r.success)
+        .map((r) => r.name)
+        .join(', ')
+      yield* logError(`Quality checks failed: ${failedChecks}`)
+      yield* Effect.log('')
+      yield* Effect.log('Run individual commands to see detailed errors:')
+      if (results[0] && !results[0].success) yield* Effect.log('  bun run lint')
+      if (results[1] && !results[1].success) yield* Effect.log('  bun run typecheck')
+      if (results[2] && !results[2].success) yield* Effect.log('  bun test:unit')
+      if (results[3] && !results[3].success) yield* Effect.log('  bun test:e2e:regression')
+
+      return yield* Effect.fail(new QualityCheckFailedError({ checks: results }))
+    }
+  })
+
+/**
+ * Main quality check program
+ */
+const main = Effect.gen(function* () {
+  // Parse command line arguments
+  const args = process.argv.slice(2)
+  const filePath = args[0]
+
+  const overallStart = Date.now()
+
+  let results: readonly CheckResult[]
+
+  if (filePath) {
+    // Single file mode
+    results = yield* runFileChecks(filePath)
   } else {
-    const failedChecks = results
-      .filter((r) => !r.success)
-      .map((r) => r.name)
-      .join(', ')
-    console.error(`\n❌ Quality checks failed: ${failedChecks}`)
-    console.error('\nRun individual commands to see detailed errors:')
-    if (results[0] && !results[0].success) console.error('  bun run lint')
-    if (results[1] && !results[1].success) console.error('  bun run typecheck')
-    if (results[2] && !results[2].success) console.error('  bun test:unit')
-    if (results[3] && !results[3].success) console.error('  bun test:e2e:regression')
-    process.exit(1)
+    // Full codebase mode
+    results = yield* runFullChecks
   }
-}
+
+  const overallDuration = Date.now() - overallStart
+
+  // Skip summary if no checks were run (comment-only change)
+  if (results.length === 0) {
+    return
+  }
+
+  yield* printSummary(results, overallDuration)
+})
+
+// Main layer combining all services
+const MainLayer = Layer.mergeAll(FileSystemServiceLive, CommandServiceLive, LoggerServiceLive())
 
 // Run the script
-main().catch((error) => {
-  console.error('Failed to run quality checks:', error)
-  process.exit(1)
-})
+const program = main.pipe(
+  Effect.provide(MainLayer),
+  Effect.catchAll((error) =>
+    Effect.gen(function* () {
+      console.error('❌ Failed to run quality checks:', error)
+      return yield* Effect.fail(error)
+    })
+  )
+)
+
+Effect.runPromise(program)
+  .then(() => process.exit(0))
+  .catch(() => process.exit(1))

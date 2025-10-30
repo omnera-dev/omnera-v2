@@ -1,0 +1,136 @@
+name: TDD Queue - Recovery
+
+on:
+  # Run every 30 minutes to detect and recover stuck specs
+  schedule:
+    - cron: '*/30 * * * *'
+
+  # Manual trigger for testing
+  workflow_dispatch:
+
+# Security: Define minimal required permissions
+permissions:
+  contents: read
+  issues: write
+
+env:
+  TIMEOUT_HOURS: 2 # Consider spec stuck if no activity for 2 hours
+
+jobs:
+  recover-stuck-specs:
+    name: 🔄 Recover Stuck Specs
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Find stuck specs
+        id: stuck
+        run: |
+          echo "🔍 Looking for specs stuck in-progress > $TIMEOUT_HOURS hours..."
+
+          # Get all in-progress specs
+          ISSUES=$(gh issue list \
+            --repo ${{ github.repository }} \
+            --label "tdd-spec:in-progress" \
+            --json number,title,updatedAt \
+            --limit 100)
+
+          echo "Found in-progress specs:"
+          echo "$ISSUES" | jq -r '.[] | "\(.number): \(.title)"'
+
+          # Current time (epoch seconds)
+          NOW=$(date +%s)
+          TIMEOUT_SECONDS=$(($TIMEOUT_HOURS * 60 * 60))
+
+          STUCK_ISSUES=""
+          STUCK_COUNT=0
+
+          # Check each issue for timeout
+          echo "$ISSUES" | jq -r '.[] | @json' | while read -r issue; do
+            ISSUE_NUMBER=$(echo "$issue" | jq -r '.number')
+            TITLE=$(echo "$issue" | jq -r '.title')
+            UPDATED_AT=$(echo "$issue" | jq -r '.updatedAt')
+
+            # Convert ISO timestamp to epoch (handle both Linux and macOS date)
+            UPDATED_EPOCH=$(date -d "$UPDATED_AT" +%s 2>/dev/null || date -j -f "%Y-%m-%dT%H:%M:%SZ" "$UPDATED_AT" +%s 2>/dev/null || echo "0")
+
+            # Calculate age in seconds
+            AGE=$((NOW - UPDATED_EPOCH))
+            AGE_HOURS=$((AGE / 3600))
+
+            echo "  Issue #$ISSUE_NUMBER: age ${AGE_HOURS}h"
+
+            if [ "$AGE" -gt "$TIMEOUT_SECONDS" ]; then
+              echo "  ⏱️  STUCK: Issue #$ISSUE_NUMBER (${AGE_HOURS}h old)"
+              STUCK_ISSUES="$STUCK_ISSUES $ISSUE_NUMBER"
+              STUCK_COUNT=$((STUCK_COUNT + 1))
+            fi
+          done
+
+          echo ""
+          if [ "$STUCK_COUNT" -eq 0 ]; then
+            echo "✅ No stuck specs found"
+            echo "has_stuck=false" >> $GITHUB_OUTPUT
+            echo "count=0" >> $GITHUB_OUTPUT
+          else
+            echo "⚠️  Found $STUCK_COUNT stuck spec(s)"
+            echo "has_stuck=true" >> $GITHUB_OUTPUT
+            echo "count=$STUCK_COUNT" >> $GITHUB_OUTPUT
+            echo "stuck_issues=$STUCK_ISSUES" >> $GITHUB_OUTPUT
+          fi
+        env:
+          GH_TOKEN: ${{ github.token }}
+
+      - name: Re-queue stuck specs
+        if: steps.stuck.outputs.has_stuck == 'true'
+        run: |
+          STUCK_ISSUES="${{ steps.stuck.outputs.stuck_issues }}"
+          COUNT="${{ steps.stuck.outputs.count }}"
+
+          echo "🔄 Re-queueing $COUNT stuck spec(s)..."
+
+          for ISSUE_NUMBER in $STUCK_ISSUES; do
+            echo ""
+            echo "Processing issue #$ISSUE_NUMBER..."
+
+            # Get current labels to preserve retry count
+            LABELS=$(gh issue view "$ISSUE_NUMBER" --json labels --jq '.labels[].name' || echo "")
+            RETRY_LABEL=$(echo "$LABELS" | grep "retry:" || echo "")
+
+            echo "  Current labels: $LABELS"
+            echo "  Retry label: $RETRY_LABEL"
+
+            # Reset to queued state (preserve retry label if exists)
+            gh issue edit "$ISSUE_NUMBER" --remove-label "tdd-spec:in-progress"
+            gh issue edit "$ISSUE_NUMBER" --add-label "tdd-spec:queued"
+
+            # Add timeout recovery comment
+            gh issue comment "$ISSUE_NUMBER" --body "⏱️ **Timeout recovery**
+
+          This spec was stuck in-progress for > $TIMEOUT_HOURS hours with no activity.
+
+          **Automatically re-queued** - the spec will be retried by the queue processor.
+
+          If this spec continues to timeout repeatedly:
+          - It may be too complex for automation
+          - Consider adding \`skip-automated\` label
+          - Or manually implement and push to the branch
+
+          The queue will continue processing other specs."
+
+            echo "  ✅ Re-queued spec #$ISSUE_NUMBER"
+          done
+
+          echo ""
+          echo "✅ Successfully recovered $COUNT stuck spec(s)"
+        env:
+          GH_TOKEN: ${{ github.token }}
+
+      - name: Summary
+        if: always()
+        run: |
+          if [ "${{ steps.stuck.outputs.has_stuck }}" == "true" ]; then
+            COUNT="${{ steps.stuck.outputs.count }}"
+            echo "📊 Recovery Summary: Re-queued $COUNT stuck spec(s)"
+          else
+            echo "📊 Recovery Summary: No action needed, all specs progressing normally"
+          fi
