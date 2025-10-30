@@ -1,7 +1,8 @@
 name: Claude Code
 
 # Security & Rate Limiting Strategy:
-# - Only OWNER/MEMBER/COLLABORATOR and github-actions[bot] can invoke @claude
+# - Only OWNER/MEMBER/COLLABORATOR and github-actions bot can invoke @claude
+# - GitHub Actions bot accepted in multiple formats: github-actions[bot], github-actions, app/github-actions
 # - Concurrency control prevents duplicate runs on same issue/PR
 # - Queue system (TDD automation) processes ~96 specs/day (every 15 min)
 # - No artificial rate limits - concurrency groups provide natural throttling
@@ -48,10 +49,13 @@ jobs:
         github.event.review.author_association == 'COLLABORATOR' ||
         github.event.sender.login == 'github-actions[bot]' ||
         github.event.sender.login == 'github-actions' ||
+        github.event.sender.login == 'app/github-actions' ||
         github.event.issue.user.login == 'github-actions[bot]' ||
         github.event.issue.user.login == 'github-actions' ||
+        github.event.issue.user.login == 'app/github-actions' ||
         github.event.comment.user.login == 'github-actions[bot]' ||
-        github.event.comment.user.login == 'github-actions'
+        github.event.comment.user.login == 'github-actions' ||
+        github.event.comment.user.login == 'app/github-actions'
       ) && (
         github.event.sender.login != 'claude[bot]'
       )
