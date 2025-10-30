@@ -386,9 +386,12 @@ export const createSpecIssue = (
 
 Validation runs automatically on push.`
 
+    // Use heredoc to avoid shell escaping issues with backticks and special characters
     const output = yield* cmd
       .exec(
-        `gh issue create --title ${JSON.stringify(title)} --body ${JSON.stringify(bodyText)} --label "tdd-spec:queued,tdd-automation"`,
+        `gh issue create --title ${JSON.stringify(title)} --body-file - --label "tdd-spec:queued,tdd-automation" <<'EOFBODY'
+${bodyText}
+EOFBODY`,
         { throwOnError: false }
       )
       .pipe(
