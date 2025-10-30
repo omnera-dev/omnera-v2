@@ -37,9 +37,9 @@ import {
 
 interface SpecScanResult {
   specId: string
-  testFile: string
+  file: string
   feature: string
-  lineNumber: number
+  line: number
 }
 
 interface QueueScanData {
@@ -56,7 +56,7 @@ interface FileDependency {
 
 interface SpecDependencyInfo {
   specId: string
-  testFile: string
+  file: string
   dependencies: FileDependency[]
   missingDependencies: string[]
   canImplement: boolean
@@ -143,12 +143,12 @@ const getLayerFromPath = (
  * Analyze dependencies for a single spec
  */
 const analyzeSpecDependenciesForSpec = (spec: SpecScanResult): SpecDependencyInfo => {
-  const imports = extractImports(spec.testFile)
+  const imports = extractImports(spec.file)
   const dependencies: FileDependency[] = []
   const missingDependencies: string[] = []
 
   for (const importPath of imports) {
-    const resolvedPath = resolveImportPath(importPath, spec.testFile)
+    const resolvedPath = resolveImportPath(importPath, spec.file)
     if (!resolvedPath) continue // Skip external packages
 
     const exists = fs.existsSync(resolvedPath)
@@ -169,7 +169,7 @@ const analyzeSpecDependenciesForSpec = (spec: SpecScanResult): SpecDependencyInf
 
   return {
     specId: spec.specId,
-    testFile: spec.testFile,
+    file: spec.file,
     dependencies,
     missingDependencies,
     canImplement,
