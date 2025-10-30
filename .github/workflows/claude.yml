@@ -42,7 +42,8 @@ jobs:
         github.event.review.author_association == 'OWNER' ||
         github.event.review.author_association == 'MEMBER' ||
         github.event.review.author_association == 'COLLABORATOR' ||
-        github.event.sender.login == 'github-actions[bot]'
+        github.event.sender.login == 'github-actions[bot]' ||
+        github.event.sender.login == 'github-actions'
       )
     runs-on: ubuntu-latest
     permissions:
