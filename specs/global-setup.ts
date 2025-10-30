@@ -5,12 +5,9 @@
  * found in the LICENSE.md file in the root directory of this source tree.
  */
 
-import { mkdtempSync, writeFileSync } from 'node:fs'
-import { tmpdir } from 'node:os'
-import { join } from 'node:path'
-import { PostgreSqlContainer } from '@testcontainers/postgresql'
+import { execSync } from 'node:child_process'
 import { DatabaseTemplateManager } from './database-utils'
-import { ensureDockerRunning } from './docker-utils'
+import { ensureDockerRunning, setupDockerConfig } from './docker-utils'
 
 /**
  * Playwright Global Setup
@@ -32,20 +29,38 @@ import { ensureDockerRunning } from './docker-utils'
 export default async function globalSetup() {
   console.log('🚀 Initializing global test database...')
 
+  // Fix Docker credential issues BEFORE importing testcontainers
+  const dockerConfigCleanup = setupDockerConfig()
+
   // Ensure Docker daemon is running (auto-install/start if needed)
   // On macOS: auto-installs Colima if no Docker found
   // On Linux/Windows: starts existing Docker installation
   await ensureDockerRunning()
 
-  // Fix Docker credential provider issues by creating a temporary Docker config without credential helpers
-  // This prevents "spawn docker-credential-desktop ENOENT" errors when pulling public images
-  const tempDockerConfigDir = mkdtempSync(join(tmpdir(), 'docker-config-'))
-  const tempDockerConfig = join(tempDockerConfigDir, 'config.json')
-  writeFileSync(tempDockerConfig, JSON.stringify({ auths: {} }))
-  process.env.DOCKER_CONFIG = tempDockerConfigDir
+  // Configure testcontainers for Colima
+  // Colima maps the socket to the standard Docker path inside the VM
+  // Find docker executable
+  const dockerPath =
+    ['/opt/homebrew/bin/docker', '/usr/local/bin/docker', '/usr/bin/docker'].find((path) => {
+      try {
+        execSync(`test -x ${path}`, { stdio: 'ignore' })
+        return true
+      } catch {
+        return false
+      }
+    }) || 'docker'
 
-  // Also ensure testcontainers uses the correct Docker socket
-  process.env.TESTCONTAINERS_DOCKER_SOCKET_OVERRIDE = '/var/run/docker.sock'
+  const currentContext = execSync(`${dockerPath} context show`, { encoding: 'utf-8' }).trim()
+  if (currentContext === 'colima') {
+    // Use the host socket for DOCKER_HOST
+    process.env.DOCKER_HOST = `unix://${process.env.HOME}/.colima/docker.sock`
+    // But tell testcontainers to mount the VM's socket path
+    process.env.TESTCONTAINERS_DOCKER_SOCKET_OVERRIDE = '/var/run/docker.sock'
+    console.log(`🔗 Using Colima with Docker socket mapping`)
+  }
+
+  // Dynamic import of testcontainers AFTER Docker config is fixed
+  const { PostgreSqlContainer } = await import('@testcontainers/postgresql')
 
   // Start PostgreSQL container
   const container = await new PostgreSqlContainer('postgres:16-alpine').start()
@@ -67,13 +82,8 @@ export default async function globalSetup() {
     await templateManager.cleanup()
     await container.stop()
 
-    // Clean up temporary Docker config directory
-    try {
-      const { rmSync } = await import('node:fs')
-      rmSync(tempDockerConfigDir, { recursive: true, force: true })
-    } catch {
-      // Ignore cleanup errors
-    }
+    // Restore original Docker config
+    dockerConfigCleanup.cleanup()
 
     console.log('✅ Global test database cleaned up')
   }

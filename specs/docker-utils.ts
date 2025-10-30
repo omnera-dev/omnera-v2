@@ -6,7 +6,9 @@
  */
 
 import { execSync } from 'node:child_process'
-import { platform } from 'node:os'
+import { existsSync, readFileSync, writeFileSync } from 'node:fs'
+import { homedir, platform } from 'node:os'
+import { join } from 'node:path'
 
 /**
  * Docker Service Management Utilities
@@ -38,10 +40,22 @@ export type DockerInstallation =
 /**
  * Check if Docker daemon is running and accessible
  * Works with any Docker-compatible runtime (Docker, Colima, Podman, etc.)
+ * Uses explicit paths to avoid PATH issues
  */
 export function isDockerRunning(): boolean {
+  // Find docker executable
+  const dockerPath =
+    ['/opt/homebrew/bin/docker', '/usr/local/bin/docker', '/usr/bin/docker'].find((path) => {
+      try {
+        execSync(`test -x ${path}`, { stdio: 'ignore' })
+        return true
+      } catch {
+        return false
+      }
+    }) || 'docker' // Fallback to PATH
+
   try {
-    execSync('docker info', { stdio: 'ignore', timeout: 5000 })
+    execSync(`${dockerPath} info`, { stdio: 'ignore', timeout: 5000 })
     return true
   } catch {
     return false
@@ -50,10 +64,27 @@ export function isDockerRunning(): boolean {
 
 /**
  * Check if Homebrew is installed (macOS package manager)
+ * Checks common installation paths for both Apple Silicon and Intel Macs
  */
 function isHomebrewInstalled(): boolean {
+  const brewPaths = [
+    '/opt/homebrew/bin/brew', // Apple Silicon (M1/M2/M3)
+    '/usr/local/bin/brew', // Intel Macs
+  ]
+
+  // Try common paths first
+  for (const brewPath of brewPaths) {
+    try {
+      execSync(`test -x ${brewPath}`, { stdio: 'ignore' })
+      return true
+    } catch {
+      // Continue checking other paths
+    }
+  }
+
+  // Fallback to PATH-based detection
   try {
-    execSync('which brew', { stdio: 'ignore' })
+    execSync('which brew', { stdio: 'ignore', env: { ...process.env, PATH: process.env.PATH } })
     return true
   } catch {
     return false
@@ -76,9 +107,20 @@ async function installColima(): Promise<void> {
   console.log('📦 Installing Colima (open-source Docker alternative) via Homebrew...')
   console.log('   This may take a few minutes...')
 
+  // Find brew executable
+  const brewPath =
+    ['/opt/homebrew/bin/brew', '/usr/local/bin/brew'].find((path) => {
+      try {
+        execSync(`test -x ${path}`, { stdio: 'ignore' })
+        return true
+      } catch {
+        return false
+      }
+    }) || 'brew' // Fallback to PATH
+
   try {
     // Install both Colima and Docker CLI
-    execSync('brew install colima docker', { stdio: 'inherit' })
+    execSync(`${brewPath} install colima docker`, { stdio: 'inherit' })
     console.log('✅ Colima installed successfully')
   } catch (error) {
     throw new Error('Failed to install Colima. Please install Docker manually.', {
@@ -90,22 +132,38 @@ async function installColima(): Promise<void> {
 /**
  * Detect which Docker installation is available on the system
  * Checks for common Docker runtimes in order of preference
+ * Uses explicit paths to avoid PATH issues in subprocess environments
  */
 export function detectDockerInstallation(): DockerInstallation | null {
   const os = platform()
 
   // Check for Colima (macOS alternative to Docker Desktop)
   if (os === 'darwin') {
+    const colimaPaths = [
+      '/opt/homebrew/bin/colima', // Apple Silicon
+      '/usr/local/bin/colima', // Intel Mac
+    ]
+
+    for (const colimaPath of colimaPaths) {
+      try {
+        execSync(`test -x ${colimaPath}`, { stdio: 'ignore' })
+        // Colima binary exists, check if it's running
+        try {
+          execSync(`${colimaPath} status`, { stdio: 'ignore' })
+          return 'colima'
+        } catch {
+          // Colima installed but not running
+          return 'colima'
+        }
+      } catch {
+        // Try next path
+      }
+    }
+
+    // Fallback to PATH-based detection
     try {
       execSync('which colima', { stdio: 'ignore' })
-      // Check if Colima is actually running
-      try {
-        execSync('colima status', { stdio: 'ignore' })
-        return 'colima'
-      } catch {
-        // Colima installed but not running
-        return 'colima'
-      }
+      return 'colima'
     } catch {
       // Colima not installed, continue checking
     }
@@ -189,21 +247,44 @@ export async function startDockerService(): Promise<void> {
 
   try {
     switch (installation) {
-      case 'colima':
+      case 'colima': {
+        // Find colima executable
+        const colimaPath =
+          ['/opt/homebrew/bin/colima', '/usr/local/bin/colima'].find((path) => {
+            try {
+              execSync(`test -x ${path}`, { stdio: 'ignore' })
+              return true
+            } catch {
+              return false
+            }
+          }) || 'colima' // Fallback to PATH
+
+        // Find docker executable
+        const dockerPath =
+          ['/opt/homebrew/bin/docker', '/usr/local/bin/docker'].find((path) => {
+            try {
+              execSync(`test -x ${path}`, { stdio: 'ignore' })
+              return true
+            } catch {
+              return false
+            }
+          }) || 'docker' // Fallback to PATH
+
         // Start Colima on macOS
-        execSync('colima start --runtime docker', { stdio: 'inherit' })
+        execSync(`${colimaPath} start --runtime docker`, { stdio: 'inherit' })
         // Create/activate Colima Docker context
         try {
-          execSync('docker context use colima', { stdio: 'ignore' })
+          execSync(`${dockerPath} context use colima`, { stdio: 'ignore' })
         } catch {
           // Context might not exist yet, create it
           execSync(
-            `docker context create colima --docker "host=unix://${process.env.HOME}/.colima/docker.sock"`,
+            `${dockerPath} context create colima --docker "host=unix://${process.env.HOME}/.colima/docker.sock"`,
             { stdio: 'ignore' }
           )
-          execSync('docker context use colima', { stdio: 'ignore' })
+          execSync(`${dockerPath} context use colima`, { stdio: 'ignore' })
         }
         break
+      }
 
       case 'docker-desktop':
         switch (os) {
@@ -276,6 +357,44 @@ async function waitForDocker(timeoutMs: number = 60_000): Promise<void> {
 }
 
 /**
+ * Fix Docker credential provider issues BEFORE any Docker client initialization
+ * This MUST run before testcontainers or any Docker client code is imported
+ *
+ * Temporarily disables credsStore and credHelpers in ~/.docker/config.json
+ * to prevent authentication errors with testcontainers
+ */
+export function setupDockerConfig(): { cleanup: () => void } {
+  const dockerConfigPath = join(homedir(), '.docker', 'config.json')
+  let originalDockerConfig: string | null = null
+
+  if (existsSync(dockerConfigPath)) {
+    // Backup original config
+    originalDockerConfig = readFileSync(dockerConfigPath, 'utf-8')
+
+    // Modify config to remove credential helpers
+    const config = JSON.parse(originalDockerConfig)
+    delete config.credsStore
+    delete config.credHelpers
+    writeFileSync(dockerConfigPath, JSON.stringify(config, null, '\t'))
+    console.log('🔧 Temporarily disabled Docker credential helpers')
+  }
+
+  // Return cleanup function
+  return {
+    cleanup: () => {
+      if (originalDockerConfig) {
+        try {
+          writeFileSync(dockerConfigPath, originalDockerConfig)
+          console.log('🔧 Restored original Docker config')
+        } catch (error) {
+          console.warn('⚠️  Could not restore Docker config:', error)
+        }
+      }
+    },
+  }
+}
+
+/**
  * Ensure Docker is running, starting it automatically if needed
  * This is the main entry point for E2E test setup
  *
@@ -289,10 +408,21 @@ async function waitForDocker(timeoutMs: number = 60_000): Promise<void> {
 export async function ensureDockerRunning(): Promise<void> {
   const installation = detectDockerInstallation()
 
+  // Find docker executable for context commands
+  const dockerPath =
+    ['/opt/homebrew/bin/docker', '/usr/local/bin/docker', '/usr/bin/docker'].find((path) => {
+      try {
+        execSync(`test -x ${path}`, { stdio: 'ignore' })
+        return true
+      } catch {
+        return false
+      }
+    }) || 'docker'
+
   // Special handling for Colima: ensure Docker context is set correctly
   if (installation === 'colima') {
     try {
-      execSync('docker context use colima', { stdio: 'ignore' })
+      execSync(`${dockerPath} context use colima`, { stdio: 'ignore' })
     } catch {
       // Context doesn't exist, will be created when we start Colima
     }

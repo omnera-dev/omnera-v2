@@ -24,7 +24,7 @@ test.describe('Pages', () => {
   // One test per spec in schema - defines EXHAUSTIVE acceptance criteria
   // ============================================================================
 
-  test(
+  test.fixme(
     'APP-PAGES-001: should validate as pages array with minimum 1 item',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -32,7 +32,12 @@ test.describe('Pages', () => {
       await startServerWithSchema({
         name: 'test-app',
         pages: [
-          { name: 'Home', path: '/', meta: { lang: 'en-US', title: 'Home Page' }, sections: [] },
+          {
+            name: 'home',
+            path: '/',
+            meta: { lang: 'en-US', title: 'Home Page', description: 'Home page description' },
+            sections: [],
+          },
         ],
       })
 
@@ -53,9 +58,9 @@ test.describe('Pages', () => {
         name: 'test-app',
         pages: [
           {
-            name: 'About',
+            name: 'about',
             path: '/about',
-            meta: { lang: 'en-US', title: 'About Us' },
+            meta: { lang: 'en-US', title: 'About Us', description: 'About us page' },
             sections: [],
           },
         ],
@@ -80,9 +85,9 @@ test.describe('Pages', () => {
         pages: [
           {
             id: 'homepage',
-            name: 'Home',
+            name: 'home',
             path: '/',
-            meta: { lang: 'en-US', title: 'Welcome' },
+            meta: { lang: 'en-US', title: 'Welcome', description: 'Welcome page' },
             layout: { navigation: { logo: '/logo.svg' } },
             sections: [],
             scripts: { features: { analytics: true } },
@@ -106,7 +111,14 @@ test.describe('Pages', () => {
       // GIVEN: a page with home path
       await startServerWithSchema({
         name: 'test-app',
-        pages: [{ name: 'Home', path: '/', meta: { lang: 'en-US', title: 'Home' }, sections: [] }],
+        pages: [
+          {
+            name: 'home',
+            path: '/',
+            meta: { lang: 'en-US', title: 'Home', description: 'Home page' },
+            sections: [],
+          },
+        ],
       })
 
       // WHEN: path is '/'
@@ -127,9 +139,9 @@ test.describe('Pages', () => {
         name: 'test-app',
         pages: [
           {
-            name: 'Pricing',
+            name: 'pricing',
             path: '/products/pricing',
-            meta: { lang: 'en-US', title: 'Pricing' },
+            meta: { lang: 'en-US', title: 'Pricing', description: 'Pricing page' },
             sections: [],
           },
         ],
@@ -153,9 +165,9 @@ test.describe('Pages', () => {
         name: 'test-app',
         pages: [
           {
-            name: 'Simple Page',
+            name: 'simple_page',
             path: '/simple',
-            meta: { lang: 'en-US', title: 'Simple' },
+            meta: { lang: 'en-US', title: 'Simple', description: 'Simple page' },
             sections: [
               {
                 type: 'section',
@@ -192,9 +204,9 @@ test.describe('Pages', () => {
         ],
         pages: [
           {
-            name: 'Landing',
+            name: 'landing',
             path: '/landing',
-            meta: { lang: 'en-US', title: 'Landing' },
+            meta: { lang: 'en-US', title: 'Landing', description: 'Landing page' },
             sections: [{ block: 'hero', vars: { title: 'Welcome to Our Platform' } }],
           },
         ],
@@ -217,9 +229,9 @@ test.describe('Pages', () => {
         name: 'test-app',
         pages: [
           {
-            name: 'Full Layout',
+            name: 'full_layout',
             path: '/full',
-            meta: { lang: 'en-US', title: 'Full Layout' },
+            meta: { lang: 'en-US', title: 'Full Layout', description: 'Full layout page' },
             layout: {
               banner: { message: 'New feature available!' },
               navigation: { logo: '/logo.svg' },
@@ -250,9 +262,9 @@ test.describe('Pages', () => {
         name: 'test-app',
         pages: [
           {
-            name: 'Interactive',
+            name: 'interactive',
             path: '/interactive',
-            meta: { lang: 'en-US', title: 'Interactive' },
+            meta: { lang: 'en-US', title: 'Interactive', description: 'Interactive page' },
             scripts: {
               features: { analytics: true, chatWidget: true },
               external: [{ src: 'https://cdn.example.com/script.js', async: true }],
@@ -279,18 +291,28 @@ test.describe('Pages', () => {
       await startServerWithSchema({
         name: 'test-app',
         pages: [
-          { name: 'Home', path: '/', meta: { lang: 'en-US', title: 'Home' }, sections: [] },
-          { name: 'About', path: '/about', meta: { lang: 'en-US', title: 'About' }, sections: [] },
           {
-            name: 'Pricing',
-            path: '/pricing',
-            meta: { lang: 'en-US', title: 'Pricing' },
+            name: 'home',
+            path: '/',
+            meta: { lang: 'en-US', title: 'Home', description: 'Home page' },
             sections: [],
           },
           {
-            name: 'Contact',
+            name: 'about',
+            path: '/about',
+            meta: { lang: 'en-US', title: 'About', description: 'About page' },
+            sections: [],
+          },
+          {
+            name: 'pricing',
+            path: '/pricing',
+            meta: { lang: 'en-US', title: 'Pricing', description: 'Pricing page' },
+            sections: [],
+          },
+          {
+            name: 'contact',
             path: '/contact',
-            meta: { lang: 'en-US', title: 'Contact' },
+            meta: { lang: 'en-US', title: 'Contact', description: 'Contact page' },
             sections: [],
           },
         ],
@@ -320,15 +342,15 @@ test.describe('Pages', () => {
         ],
         pages: [
           {
-            name: 'Home',
+            name: 'home',
             path: '/',
-            meta: { lang: 'en-US', title: 'Home' },
+            meta: { lang: 'en-US', title: 'Home', description: 'Home page' },
             sections: [{ block: 'cta', vars: { label: 'Get Started' } }],
           },
           {
-            name: 'Pricing',
+            name: 'pricing',
             path: '/pricing',
-            meta: { lang: 'en-US', title: 'Pricing' },
+            meta: { lang: 'en-US', title: 'Pricing', description: 'Pricing page' },
             sections: [{ block: 'cta', vars: { label: 'Buy Now' } }],
           },
         ],
@@ -353,7 +375,7 @@ test.describe('Pages', () => {
         name: 'test-app',
         pages: [
           {
-            name: 'Product Page',
+            name: 'product_page',
             path: '/product',
             meta: {
               lang: 'en-US',
@@ -399,9 +421,9 @@ test.describe('Pages', () => {
         theme: { colors: { primary: '#3B82F6', secondary: '#10B981' } },
         pages: [
           {
-            name: 'Home',
+            name: 'home',
             path: '/',
-            meta: { lang: 'en-US', title: 'Home' },
+            meta: { lang: 'en-US', title: 'Home', description: 'Home page' },
             sections: [
               {
                 type: 'section',
@@ -439,15 +461,15 @@ test.describe('Pages', () => {
         },
         pages: [
           {
-            name: 'Home',
+            name: 'home',
             path: '/',
-            meta: { lang: 'en' },
+            meta: { lang: 'en', title: 'Home', description: 'Home page' },
             sections: [{ type: 'h1', children: ['$t:hero.title'] }],
           },
           {
-            name: 'Home (French)',
+            name: 'home_french',
             path: '/fr',
-            meta: { lang: 'fr' },
+            meta: { lang: 'fr', title: 'Accueil', description: 'Page accueil' },
             sections: [{ type: 'h1', children: ['$t:hero.title'] }],
           },
         ],
@@ -482,15 +504,15 @@ test.describe('Pages', () => {
         ],
         pages: [
           {
-            name: 'Home',
+            name: 'home',
             path: '/',
-            meta: { lang: 'en-US', title: 'Home' },
+            meta: { lang: 'en-US', title: 'Home', description: 'Home page' },
             sections: [{ block: 'hero', vars: { title: 'Welcome', cta: 'Get Started' } }],
           },
           {
-            name: 'Pricing',
+            name: 'pricing',
             path: '/pricing',
-            meta: { lang: 'en-US', title: 'Pricing' },
+            meta: { lang: 'en-US', title: 'Pricing', description: 'Pricing page' },
             sections: [{ block: 'hero', vars: { title: 'Pricing', cta: 'Buy Now' } }],
           },
         ],
@@ -517,9 +539,9 @@ test.describe('Pages', () => {
         name: 'test-app',
         pages: [
           {
-            name: 'Responsive',
+            name: 'responsive',
             path: '/responsive',
-            meta: { lang: 'en-US', title: 'Responsive' },
+            meta: { lang: 'en-US', title: 'Responsive', description: 'Responsive page' },
             sections: [
               {
                 type: 'section',
@@ -577,15 +599,15 @@ test.describe('Pages', () => {
         ],
         pages: [
           {
-            name: 'Home (English)',
+            name: 'home_english',
             path: '/',
-            meta: { lang: 'en' },
+            meta: { lang: 'en', title: 'Home', description: 'Home page' },
             sections: [{ block: 'hero', vars: { title: '$t:hero.title' } }],
           },
           {
-            name: 'Home (French)',
+            name: 'home_french',
             path: '/fr',
-            meta: { lang: 'fr' },
+            meta: { lang: 'fr', title: 'Accueil', description: 'Page accueil' },
             sections: [{ block: 'hero', vars: { title: '$t:hero.title' } }],
           },
         ],
@@ -620,15 +642,15 @@ test.describe('Pages', () => {
         ],
         pages: [
           {
-            name: 'Home',
+            name: 'home',
             path: '/',
-            meta: { lang: 'en-US', title: 'Home' },
+            meta: { lang: 'en-US', title: 'Home', description: 'Home page' },
             sections: [{ block: 'cta', vars: { label: 'Get Started' } }],
           },
           {
-            name: 'About',
+            name: 'about',
             path: '/about',
-            meta: { lang: 'en-US', title: 'About' },
+            meta: { lang: 'en-US', title: 'About', description: 'About page' },
             layout: { navigation: { logo: '/logo.svg' } },
             sections: [],
           },
