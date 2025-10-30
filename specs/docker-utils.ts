@@ -191,7 +191,18 @@ export async function startDockerService(): Promise<void> {
     switch (installation) {
       case 'colima':
         // Start Colima on macOS
-        execSync('colima start', { stdio: 'inherit' })
+        execSync('colima start --runtime docker', { stdio: 'inherit' })
+        // Create/activate Colima Docker context
+        try {
+          execSync('docker context use colima', { stdio: 'ignore' })
+        } catch {
+          // Context might not exist yet, create it
+          execSync(
+            `docker context create colima --docker "host=unix://${process.env.HOME}/.colima/docker.sock"`,
+            { stdio: 'ignore' }
+          )
+          execSync('docker context use colima', { stdio: 'ignore' })
+        }
         break
 
       case 'docker-desktop':
@@ -276,8 +287,18 @@ async function waitForDocker(timeoutMs: number = 60_000): Promise<void> {
  * **Docker Desktop is NOT required** - this works with any Docker-compatible runtime
  */
 export async function ensureDockerRunning(): Promise<void> {
+  const installation = detectDockerInstallation()
+
+  // Special handling for Colima: ensure Docker context is set correctly
+  if (installation === 'colima') {
+    try {
+      execSync('docker context use colima', { stdio: 'ignore' })
+    } catch {
+      // Context doesn't exist, will be created when we start Colima
+    }
+  }
+
   if (isDockerRunning()) {
-    const installation = detectDockerInstallation()
     if (installation && installation !== 'unknown') {
       console.log(`✅ Docker daemon is already running (${installation})`)
     } else {

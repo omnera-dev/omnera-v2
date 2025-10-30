@@ -4,6 +4,8 @@
 
 The TDD Automation Queue System is a GitHub Actions-based pipeline that automatically implements code to make failing E2E tests pass. It uses a **queue-based architecture** where specs are processed asynchronously, one at a time, without polling or timeouts.
 
+**Important**: The system **only processes RED tests** marked with `test.fixme()` or `it.fixme()`. Passing tests (GREEN) and skipped tests (`test.skip()`) are automatically excluded from the queue.
+
 ## Architecture
 
 ```mermaid
@@ -59,7 +61,7 @@ bun run scripts/tdd-automation/queue-manager.ts status
 
 ### 2. Workflows
 
-#### **tdd-queue-populate.yml** (Scan & Queue)
+#### **tdd-queue-populate.yml** (Scan & Queue RED Tests)
 
 **Triggers**:
 
@@ -67,11 +69,16 @@ bun run scripts/tdd-automation/queue-manager.ts status
 - Schedule (every 15 minutes)
 - Manual dispatch
 
-**Purpose**: Scans for `test.fixme()` patterns and creates spec issues
+**Purpose**: Scans for RED tests with `test.fixme()` patterns and creates spec issues
+
+**Important Filtering**:
+- ✅ **Includes**: Tests with `test.fixme()` or `it.fixme()` (RED tests needing implementation)
+- ❌ **Excludes**: Passing tests without `.fixme()` (GREEN tests already working)
+- ❌ **Excludes**: Skipped tests with `test.skip()` (intentionally skipped)
 
 **Key Steps**:
 
-1. Scan for fixme specs
+1. Scan for RED tests with `.fixme()` only
 2. Check if specs need queueing
 3. Create issues (skip duplicates)
 4. Display queue status

@@ -94,6 +94,11 @@ const calculatePriority = (feature: string): number => {
 
 /**
  * Parse a test file and extract all specs with fixme
+ *
+ * IMPORTANT: This function ONLY extracts tests marked with test.fixme() or it.fixme()
+ * - Passing tests (test() without fixme) are EXCLUDED
+ * - Skipped tests (test.skip()) are EXCLUDED
+ * - Only RED tests with .fixme are included for automation
  */
 const parseTestFileForSpecs = (
   filePath: string
@@ -115,11 +120,12 @@ const parseTestFileForSpecs = (
 
     const priority = calculatePriority(feature)
 
-    // Find all test.fixme() or test.only() patterns and extract spec IDs
+    // Find ONLY test.fixme() or it.fixme() patterns (RED tests that need implementation)
+    // EXCLUDES: test() without fixme (passing tests), test.skip() (skipped tests)
     for (let i = 0; i < lines.length; i++) {
       const line = lines[i]
 
-      // Check if line contains test.fixme or it.fixme
+      // Check if line contains test.fixme or it.fixme (ONLY RED TESTS)
       if (line?.includes('test.fixme(') || line?.includes('it.fixme(')) {
         // Look for spec ID in current line or next few lines (title might span multiple lines)
         let specId: string | undefined
@@ -157,15 +163,21 @@ const parseTestFileForSpecs = (
 
 /**
  * Scan all spec files for fixme tests and extract spec IDs
+ *
+ * IMPORTANT: This function scans for RED tests marked with test.fixme() ONLY
+ * - GREEN tests (passing tests without .fixme) are NOT included
+ * - SKIPPED tests (test.skip()) are NOT included
+ * - Only creates issues for tests that need implementation
  */
 export const scanForFixmeSpecs = Effect.gen(function* () {
   const fs = yield* FileSystemService
 
-  yield* progress('Scanning for test.fixme() patterns and extracting spec IDs...')
+  yield* progress('Scanning for test.fixme() patterns (RED tests only)...')
 
   // Find all spec files
   const specFiles = yield* fs.glob('specs/**/*.spec.ts')
-  yield* logInfo(`Found ${specFiles.length} spec files`)
+  yield* logInfo(`Found ${specFiles.length} spec files to scan`)
+  yield* logInfo('Note: Only tests with .fixme() will be queued (GREEN and SKIP tests excluded)')
 
   // Parse each file in parallel
   const allSpecs = yield* Effect.all(specFiles.map(parseTestFileForSpecs), { concurrency: 10 })
@@ -191,11 +203,12 @@ export const scanForFixmeSpecs = Effect.gen(function* () {
   // Output results
   yield* logInfo('')
   yield* logInfo('Scan Results:', '📊')
-  yield* logInfo(`  Total specs with fixme: ${result.totalSpecs}`)
+  yield* logInfo(`  Total RED tests with .fixme(): ${result.totalSpecs}`)
+  yield* logInfo(`  (Passing tests and test.skip() excluded from queue)`)
   yield* logInfo('')
 
   if (sortedSpecs.length > 0) {
-    yield* logInfo('First 10 specs:', '📋')
+    yield* logInfo('First 10 RED tests to be queued:', '📋')
     sortedSpecs.slice(0, 10).forEach((spec, index) => {
       console.log(`  ${index + 1}. ${spec.specId}: ${spec.description}`)
       console.log(`     ${spec.file}:${spec.line}`)

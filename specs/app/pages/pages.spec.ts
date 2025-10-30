@@ -24,7 +24,7 @@ test.describe('Pages', () => {
   // One test per spec in schema - defines EXHAUSTIVE acceptance criteria
   // ============================================================================
 
-  test.fixme(
+  test(
     'APP-PAGES-001: should validate as pages array with minimum 1 item',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
