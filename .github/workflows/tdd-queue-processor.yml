@@ -104,15 +104,17 @@ jobs:
           # Post single combined comment
           gh issue comment "$ISSUE_NUMBER" --body "🚀 **Processing started** - @claude please implement this spec using the **e2e-test-fixer** agent.
 
-          **Branch**: \`$BRANCH_NAME\` (already created and checked out)
+          **Branch**: \`$BRANCH_NAME\` (already created - use this exact branch name)
           **Test File**: \`$TEST_FILE\`
           **Spec ID**: \`$SPEC_ID\`
 
+          **IMPORTANT**: Work on the existing branch \`$BRANCH_NAME\`. Do NOT create a new branch.
+
           **Quick Start**:
-          1. Checkout branch: \`git checkout $BRANCH_NAME\`
-          2. Remove \`.fixme()\` from test \`$SPEC_ID\`
+          1. Checkout: \`git checkout $BRANCH_NAME\`
+          2. Remove \`.fixme()\` from test \`$SPEC_ID\` in \`$TEST_FILE\`
           3. Implement minimal code following Omnera architecture
-          4. Commit and push (validation runs automatically)
+          4. Push to \`$BRANCH_NAME\` (validation runs automatically)
 
           **Complete workflow**: See \`@docs/development/tdd-automation-pipeline.md\`
 
