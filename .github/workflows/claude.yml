@@ -49,7 +49,9 @@ jobs:
         github.event.sender.login == 'github-actions[bot]' ||
         github.event.sender.login == 'github-actions' ||
         github.event.issue.user.login == 'github-actions[bot]' ||
-        github.event.issue.user.login == 'github-actions'
+        github.event.issue.user.login == 'github-actions' ||
+        github.event.comment.user.login == 'github-actions[bot]' ||
+        github.event.comment.user.login == 'github-actions'
       ) && (
         github.event.sender.login != 'claude[bot]'
       )
