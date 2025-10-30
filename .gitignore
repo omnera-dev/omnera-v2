@@ -40,9 +40,6 @@ report.[0-9]_.[0-9]_.[0-9]_.[0-9]_.json
 /playwright/.cache/
 /playwright/.auth/
 
-# OLD
-OLD_V1/
-
 # Temporary test files
 /tmp/
 /.test-temp/

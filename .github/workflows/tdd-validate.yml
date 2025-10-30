@@ -63,7 +63,7 @@ jobs:
 
           # Search for issue with spec ID in title
           ISSUE_JSON=$(gh issue list \
-            --label "tdd-spec" \
+            --label "tdd-automation" \
             --search "$SPEC_ID" \
             --json number,title \
             --limit 1)
