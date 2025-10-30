@@ -132,7 +132,8 @@ const SECURITY_PATTERNS = [
     severity: 'MEDIUM' as const,
     category: 'Code Injection',
     description: 'Use of eval() detected',
-    remediation: 'Avoid eval() - use safe alternatives like JSON.parse() or Function constructor with validation',
+    remediation:
+      'Avoid eval() - use safe alternatives like JSON.parse() or Function constructor with validation',
   },
 
   // Low: Sensitive data in logs
@@ -317,13 +318,20 @@ const securityScan = Effect.gen(function* () {
     yield* success('Security scan passed (low-severity issues only)')
   }
 
-  return Effect.succeed({ critical: critical.length, high: high.length, medium: medium.length, low: low.length })
+  return Effect.succeed({
+    critical: critical.length,
+    high: high.length,
+    medium: medium.length,
+    low: low.length,
+  })
 })
 
 // Run scan
 const program = securityScan
 
-const runnable = program.pipe(Effect.provide(Layer.merge(CommandServiceLive, LoggerServicePretty())))
+const runnable = program.pipe(
+  Effect.provide(Layer.merge(CommandServiceLive, LoggerServicePretty()))
+)
 
 Effect.runPromise(runnable)
   .then(() => {

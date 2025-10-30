@@ -35,11 +35,11 @@ interface DuplicateGroup {
 const findDuplicates = Effect.gen(function* () {
   const cmd = yield* CommandService
 
-  yield* progress('Fetching all spec issues...')
+  yield* progress('Fetching open spec issues...')
 
   const output = yield* cmd
     .exec(
-      'gh issue list --label "tdd-automation" --state all --json number,title,state --limit 2000',
+      'gh issue list --label "tdd-automation" --state open --json number,title,state --limit 2000',
       {
         throwOnError: false,
       }
@@ -104,7 +104,7 @@ const closeDuplicates = (duplicates: DuplicateGroup[], dryRun: boolean) =>
     yield* logInfo('')
     yield* logInfo(`Found ${duplicates.length} specs with duplicates`, '📊')
 
-    // Count how many issues need closing (only OPEN issues)
+    // Count how many issues need closing (all issues should be OPEN since we only fetch open issues)
     let totalToClose = 0
     let alreadyClosed = 0
     for (const dup of duplicates) {

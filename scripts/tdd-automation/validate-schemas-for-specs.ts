@@ -309,7 +309,9 @@ const validateSchemasForSpecs = Effect.gen(function* () {
 // Run validation
 const program = validateSchemasForSpecs
 
-const runnable = program.pipe(Effect.provide(Layer.merge(CommandServiceLive, LoggerServicePretty())))
+const runnable = program.pipe(
+  Effect.provide(Layer.merge(CommandServiceLive, LoggerServicePretty()))
+)
 
 Effect.runPromise(runnable)
   .then(() => {

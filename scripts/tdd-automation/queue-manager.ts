@@ -30,6 +30,7 @@ import {
   logInfo,
   skip,
   logError,
+  logWarn,
 } from '../lib/effect'
 import type { LoggerService } from '../lib/effect'
 
@@ -570,18 +571,22 @@ export const getNextSpec = Effect.gen(function* () {
 
   // Load dependency graph if it exists
   const dependencyGraphPath = '.github/tdd-queue-dependencies.json'
-  let dependencyGraph: Record<string, { canImplement: boolean; missingDependencies: string[] }> | null = null
+  let dependencyGraph: Record<
+    string,
+    { canImplement: boolean; missingDependencies: string[] }
+  > | null = null
 
   const dependencyGraphExists = yield* fs
     .exists(dependencyGraphPath)
     .pipe(Effect.catchAll(() => Effect.succeed(false)))
 
   if (dependencyGraphExists) {
-    const graphContent = yield* fs
-      .readFileText(dependencyGraphPath)
-      .pipe(Effect.catchAll(() => Effect.succeed('{}')))
+    const graphBuffer = yield* fs
+      .readFile(dependencyGraphPath)
+      .pipe(Effect.catchAll(() => Effect.succeed(Buffer.from('{}'))))
 
     try {
+      const graphContent = graphBuffer.toString('utf-8')
       dependencyGraph = JSON.parse(graphContent)
       yield* logInfo('Using dependency graph for prioritization', '🔗')
     } catch {
@@ -613,15 +618,11 @@ export const getNextSpec = Effect.gen(function* () {
     prioritizedSpecs = [...readySpecs, ...blockedSpecs]
 
     if (readySpecs.length < queuedSpecs.length) {
-      yield* logWarn(
-        `⚠️  ${blockedSpecs.length} spec(s) blocked by missing dependencies`
-      )
+      yield* logWarn(`⚠️  ${blockedSpecs.length} spec(s) blocked by missing dependencies`)
       for (const spec of blockedSpecs.slice(0, 3)) {
         const depInfo = dependencyGraph[spec.specId]
         if (depInfo) {
-          yield* logInfo(
-            `   ${spec.specId}: ${depInfo.missingDependencies.length} missing file(s)`
-          )
+          yield* logInfo(`   ${spec.specId}: ${depInfo.missingDependencies.length} missing file(s)`)
         }
       }
       if (blockedSpecs.length > 3) {
@@ -644,7 +645,7 @@ export const getNextSpec = Effect.gen(function* () {
   yield* success(`Next spec: ${nextSpec.specId} (#${nextSpec.number})`)
   if (dependencyGraph && dependencyGraph[nextSpec.specId]) {
     const depInfo = dependencyGraph[nextSpec.specId]
-    if (!depInfo.canImplement) {
+    if (depInfo && !depInfo.canImplement) {
       yield* logWarn(
         `⚠️  Warning: This spec has ${depInfo.missingDependencies.length} missing dependencies`
       )
@@ -932,12 +933,10 @@ const MainLayer = Layer.mergeAll(FileSystemServiceLive, CommandServiceLive, Logg
 // Run CLI
 const program = main.pipe(
   Effect.provide(MainLayer),
-  Effect.catchAll((error) =>
-    Effect.gen(function* () {
-      console.error('❌ Error:', error)
-      yield* Effect.fail(error)
-    })
-  )
+  Effect.catchAll((error) => {
+    console.error('❌ Error:', error)
+    return Effect.fail(error)
+  })
 )
 
 Effect.runPromise(program).catch((error) => {
