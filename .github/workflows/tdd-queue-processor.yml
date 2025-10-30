@@ -183,10 +183,3 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
 
-      - name: Display queue status
-        if: always()
-        run: |
-          echo "📊 Current queue status:"
-          bun run scripts/tdd-automation/queue-manager.ts status
-        env:
-          GH_TOKEN: ${{ github.token }}

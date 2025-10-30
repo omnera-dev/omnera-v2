@@ -219,10 +219,50 @@ export const scanForFixmeSpecs = Effect.gen(function* () {
 })
 
 /**
+ * Check GitHub API rate limit before making calls
+ */
+export const checkRateLimit = Effect.gen(function* () {
+  const cmd = yield* CommandService
+
+  const output = yield* cmd
+    .exec('gh api rate_limit --jq ".rate.remaining,.rate.limit,.rate.reset"', {
+      throwOnError: false,
+    })
+    .pipe(Effect.catchAll(() => Effect.succeed('')))
+
+  const lines = output.trim().split('\n')
+  if (lines.length >= 3) {
+    const remaining = parseInt(lines[0] ?? '0', 10)
+    const limit = parseInt(lines[1] ?? '0', 10)
+    const resetTimestamp = parseInt(lines[2] ?? '0', 10)
+    const resetDate = new Date(resetTimestamp * 1000)
+
+    yield* logInfo(`GitHub API: ${remaining}/${limit} requests remaining`, '⏱️')
+
+    if (remaining < 10) {
+      yield* logError(`Rate limit low! Resets at ${resetDate.toISOString()}`)
+      return false
+    }
+
+    return true
+  }
+
+  // If we can't check, assume it's OK
+  return true
+})
+
+/**
  * Get all queued spec issues from GitHub
  */
 export const getQueuedSpecs = Effect.gen(function* () {
   const cmd = yield* CommandService
+
+  // Check rate limit first
+  const hasCapacity = yield* checkRateLimit
+  if (!hasCapacity) {
+    yield* logError('Rate limit too low, skipping API call')
+    return []
+  }
 
   yield* logInfo('Fetching queued specs from GitHub (excluding skip-automated)...', '📋')
 
@@ -281,6 +321,13 @@ export const getQueuedSpecs = Effect.gen(function* () {
  */
 export const getInProgressSpecs = Effect.gen(function* () {
   const cmd = yield* CommandService
+
+  // Check rate limit first
+  const hasCapacity = yield* checkRateLimit
+  if (!hasCapacity) {
+    yield* logError('Rate limit too low, skipping API call')
+    return []
+  }
 
   const output = yield* cmd
     .exec(
