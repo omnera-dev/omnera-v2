@@ -114,7 +114,7 @@ const generateDashboard = (history: MetricsHistory): string => {
 `
 
   // Queue status table
-  const {queue} = latest
+  const { queue } = latest
   const queueTotal = queue.total
   const completedPct = queueTotal > 0 ? ((queue.completed / queueTotal) * 100).toFixed(0) : '0'
   const queuedPct = queueTotal > 0 ? ((queue.queued / queueTotal) * 100).toFixed(0) : '0'
@@ -164,7 +164,7 @@ const generateDashboard = (history: MetricsHistory): string => {
   }
 
   // Failure breakdown (if available)
-  const {failures} = latest
+  const { failures } = latest
   const totalFailures =
     failures.specTest + failures.regression + failures.quality + failures.security
 
