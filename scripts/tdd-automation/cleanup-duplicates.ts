@@ -26,7 +26,7 @@ import {
 
 interface DuplicateGroup {
   specId: string
-  issues: Array<{ number: number; state: string }>
+  issues: Array<{ number: number; state: string; title: string }>
 }
 
 /**
@@ -63,7 +63,10 @@ const findDuplicates = Effect.gen(function* () {
     yield* logInfo(`  Fetched ${issues.length} issues`)
 
     // Group issues by spec ID
-    const specIdToIssues = new Map<string, Array<{ number: number; state: string }>>()
+    const specIdToIssues = new Map<
+      string,
+      Array<{ number: number; state: string; title: string }>
+    >()
 
     for (const issue of issues) {
       const specIdMatch = issue.title.match(/🤖\s+([A-Z]+-[A-Z-]+-\d{3}):/)
@@ -71,7 +74,7 @@ const findDuplicates = Effect.gen(function* () {
 
       if (specId) {
         const existing = specIdToIssues.get(specId) || []
-        existing.push({ number: issue.number, state: issue.state })
+        existing.push({ number: issue.number, state: issue.state, title: issue.title })
         specIdToIssues.set(specId, existing)
       }
     }
@@ -152,12 +155,42 @@ const closeDuplicates = (duplicates: DuplicateGroup[], dryRun: boolean) =>
 
         if (dryRun) {
           console.log(
-            `  Would close #${oldIssue.number} (${dup.specId}) - keeping #${newestIssue.number}`
+            `  Would rename & close #${oldIssue.number} (${dup.specId}) - keeping #${newestIssue.number}`
           )
         } else {
-          yield* progress(`Closing #${oldIssue.number} (${dup.specId})...`)
+          yield* progress(`Renaming & closing #${oldIssue.number} (${dup.specId})...`)
 
-          const result = yield* cmd
+          // Extract description from title (remove SPEC ID)
+          const description = oldIssue.title.replace(/🤖\s+[A-Z]+-[A-Z-]+-\d{3}:\s*/, '')
+          const newTitle = `🤖 [DUPLICATE]: ${description}`
+
+          // First, rename the issue to remove SPEC ID
+          const renameResult = yield* cmd
+            .exec(`gh issue edit ${oldIssue.number} --title "${newTitle.replace(/"/g, '\\"')}"`, {
+              throwOnError: false,
+            })
+            .pipe(
+              Effect.catchAll(() => {
+                return Effect.gen(function* () {
+                  yield* logError(`Failed to rename #${oldIssue.number}`)
+                  return 'ERROR'
+                })
+              })
+            )
+
+          const renameError =
+            renameResult === 'ERROR' ||
+            renameResult.toLowerCase().includes('error') ||
+            renameResult.toLowerCase().includes('failed')
+
+          if (renameError) {
+            yield* logError(`Failed to rename #${oldIssue.number}, skipping close`)
+            failed++
+            continue
+          }
+
+          // Then close the issue
+          const closeResult = yield* cmd
             .exec(
               `gh issue close ${oldIssue.number} --reason "not planned" --comment "🤖 **Duplicate Issue**\n\nThis is a duplicate of issue #${newestIssue.number} (keeping the newer one).\n\nThis duplicate was created due to a bug in the TDD queue populate workflow (now fixed). Closing as 'not planned' since the work will be tracked in the newer issue."`,
               { throwOnError: false }
@@ -173,12 +206,12 @@ const closeDuplicates = (duplicates: DuplicateGroup[], dryRun: boolean) =>
 
           // gh issue close outputs success to stderr, stdout is empty on success
           // Check for error keywords or caught exception marker
-          const hasError =
-            result === 'ERROR' ||
-            result.toLowerCase().includes('error') ||
-            result.toLowerCase().includes('failed')
+          const closeError =
+            closeResult === 'ERROR' ||
+            closeResult.toLowerCase().includes('error') ||
+            closeResult.toLowerCase().includes('failed')
 
-          if (!hasError) {
+          if (!closeError) {
             closed++
           } else {
             failed++
