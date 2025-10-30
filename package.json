@@ -76,7 +76,7 @@
     "validate:docs": "bun run scripts/validate-docs-versions.ts",
     "tdd:cleanup-duplicates": "bun run scripts/tdd-automation/cleanup-duplicates.ts",
     "tdd:remove-spec-ids": "bun run scripts/tdd-automation/remove-spec-ids-from-closed.ts",
-    "tdd:delete-closed-issues": "bun run scripts/tdd-automation/delete-closed-issues.ts",
+    "tdd:delete-closed-issues": "bun run scripts/tdd-automation/delete-closed-issues-simple.ts",
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate",
     "db:push": "drizzle-kit push",
