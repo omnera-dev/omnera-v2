@@ -170,6 +170,40 @@ jobs:
             echo "  Typecheck: $TYPECHECK_PASS"
           fi
 
+      - name: Generate and commit roadmap
+        id: roadmap
+        if: steps.quality.outputs.quality_pass == 'true'
+        run: |
+          echo "📊 Generating updated roadmap..."
+
+          # Generate roadmap
+          if bun run generate:roadmap; then
+            echo "✅ Roadmap generated successfully"
+
+            # Check if roadmap changed
+            if ! git diff --quiet ROADMAP.md; then
+              echo "📝 Roadmap has changes, committing..."
+
+              # Configure git
+              git config user.name "github-actions[bot]"
+              git config user.email "github-actions[bot]@users.noreply.github.com"
+
+              # Commit and push
+              git add ROADMAP.md
+              git commit -m "docs: update roadmap after spec implementation"
+              git push
+
+              echo "✅ Roadmap committed and pushed"
+              echo "roadmap_updated=true" >> $GITHUB_OUTPUT
+            else
+              echo "ℹ️  No changes to roadmap"
+              echo "roadmap_updated=false" >> $GITHUB_OUTPUT
+            fi
+          else
+            echo "⚠️  Roadmap generation failed (non-blocking)"
+            echo "roadmap_updated=false" >> $GITHUB_OUTPUT
+          fi
+
       - name: Check overall result
         id: result
         if: always()
@@ -191,6 +225,7 @@ jobs:
         run: |
           ISSUE_NUMBER="${{ steps.issue.outputs.issue_number }}"
           SPEC_ID="${{ steps.spec.outputs.spec_id }}"
+          ROADMAP_UPDATED="${{ steps.roadmap.outputs.roadmap_updated }}"
 
           echo "✅ Marking spec as completed..."
 
@@ -201,16 +236,26 @@ jobs:
           # Close issue
           gh issue close "$ISSUE_NUMBER" --reason completed
 
-          # Add success comment
-          gh issue comment "$ISSUE_NUMBER" --body "✅ **Validation passed**
+          # Build success message with roadmap status
+          MESSAGE="✅ **Validation passed**
 
           All tests and quality checks passed successfully!
 
           - ✅ Spec test passed
           - ✅ Regression tests passed
-          - ✅ Code quality checks passed
+          - ✅ Code quality checks passed"
+
+          if [ "$ROADMAP_UPDATED" = "true" ]; then
+            MESSAGE="${MESSAGE}
+          - 📊 Roadmap updated and committed"
+          fi
+
+          MESSAGE="${MESSAGE}
 
           Spec $SPEC_ID is now completed. This issue is closed."
+
+          # Add success comment
+          gh issue comment "$ISSUE_NUMBER" --body "$MESSAGE"
 
           echo "✅ Issue #$ISSUE_NUMBER marked as completed"
         env:

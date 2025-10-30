@@ -26,10 +26,11 @@ graph TD
     N --> O[Push to Branch]
     O --> P[Validation Workflow]
     P --> Q{Tests Pass?}
-    Q -->|Yes| R[Mark Completed & Merge]
-    Q -->|No| S[Comment Failure]
-    S --> M
-    R --> T[Next Iteration]
+    Q -->|Yes| R[Generate & Commit Roadmap]
+    R --> S[Mark Completed & Merge]
+    Q -->|No| T[Comment Failure]
+    T --> M
+    S --> U[Next Iteration]
 ```
 
 ## Components
@@ -72,6 +73,7 @@ bun run scripts/tdd-automation/queue-manager.ts status
 **Purpose**: Scans for RED tests with `test.fixme()` patterns and creates spec issues
 
 **Important Filtering**:
+
 - ✅ **Includes**: Tests with `test.fixme()` or `it.fixme()` (RED tests needing implementation)
 - ❌ **Excludes**: Passing tests without `.fixme()` (GREEN tests already working)
 - ❌ **Excludes**: Skipped tests with `test.skip()` (intentionally skipped)
@@ -118,11 +120,15 @@ bun run scripts/tdd-automation/queue-manager.ts status
 3. Run specific spec test (using grep to filter)
 4. Run regression tests
 5. Run code quality checks (license, lint, typecheck)
-6. **On Success**:
+6. **Generate and commit roadmap** (if quality checks pass)
+   - Run `bun generate:roadmap`
+   - Commit updated roadmap if changes detected
+   - Push to spec branch
+7. **On Success**:
    - Mark issue as completed
    - Close issue
    - Enable auto-merge for PR
-7. **On Failure**:
+8. **On Failure**:
    - Comment on issue with details
    - Check retry count from labels
    - If retries remaining: Re-queue spec (change to `queued` state)
@@ -245,8 +251,9 @@ On every push to `tdd/spec-*` branch:
 4. **Run spec test**: `bun test:e2e {file} --grep "APP-VERSION-001"`
 5. **Run regression**: `bun test:e2e:regression`
 6. **Run quality checks**: `bun run license && bun run lint && bun run typecheck`
-7. **Update issue**: Mark as completed (success) or handle failure with retry (fail)
-8. **Auto-merge**: If all pass, enable auto-merge and mark PR as ready
+7. **Generate roadmap**: `bun generate:roadmap` and commit if changes detected
+8. **Update issue**: Mark as completed (success) or handle failure with retry (fail)
+9. **Auto-merge**: If all pass, enable auto-merge and mark PR as ready
 
 ### Step 5: Failure Handling & Retry (NEW)
 
@@ -279,9 +286,10 @@ On every push to `tdd/spec-*` branch:
 
 When validation passes:
 
-1. **Issue closed**: Labeled `tdd-spec:completed`
-2. **PR merged**: Auto-merged to main (squash merge)
-3. **Queue progresses**: Processor picks next spec on next run (15 min)
+1. **Roadmap updated**: `ROADMAP.md` regenerated and committed to branch
+2. **Issue closed**: Labeled `tdd-spec:completed`
+3. **PR merged**: Auto-merged to main (squash merge)
+4. **Queue progresses**: Processor picks next spec on next run (15 min)
 
 ## Labels & States
 
