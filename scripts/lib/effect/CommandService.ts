@@ -119,12 +119,38 @@ export interface CommandService {
 export const CommandService = Context.GenericTag<CommandService>('CommandService')
 
 /**
+ * Get environment with PATH extended to include common tool locations
+ * Ensures commands like 'gh' (GitHub CLI) can be found
+ */
+const getExtendedEnv = (): Record<string, string> => {
+  const env = { ...process.env } as Record<string, string>
+  const currentPath = env.PATH || ''
+
+  // Add common tool locations to PATH if not already present
+  const additionalPaths = [
+    '/opt/homebrew/bin', // Homebrew on Apple Silicon
+    '/usr/local/bin', // Homebrew on Intel
+    '/usr/bin',
+    '/bin',
+  ]
+
+  const pathParts = currentPath.split(':')
+  const missingPaths = additionalPaths.filter((p) => !pathParts.includes(p))
+
+  if (missingPaths.length > 0) {
+    env.PATH = [...missingPaths, currentPath].filter(Boolean).join(':')
+  }
+
+  return env
+}
+
+/**
  * Default command options
  */
 const defaultOptions: Required<CommandOptions> = {
   timeout: 60_000, // 60 seconds
   cwd: process.cwd(),
-  env: process.env as Record<string, string>,
+  env: getExtendedEnv(),
   retry: Schedule.once, // No retry by default
   throwOnError: true,
   verbose: false,
