@@ -154,6 +154,12 @@ jobs:
              - Remove \`.fixme()\` from the test
              - Check if Domain schemas exist (invoke **effect-schema-generator** skill if missing)
              - Implement minimal code in correct architectural layer
+             - **Validate framework patterns**: Use **best-practices-checker** skill to ensure:
+               - Effect.gen for Application layer workflows
+               - Typed errors (Data.TaggedError) in Domain layer
+               - Drizzle query builder (not raw SQL)
+               - React 19 patterns (no manual useMemo)
+               - Hono RPC with Zod validation
              - Verify test passes: \`bun test:e2e \"$TEST_FILE\" --grep \"$SPEC_ID\"\`
              - Run regression tests: \`bun test:e2e:regression\`
 
@@ -177,6 +183,7 @@ jobs:
           ### Skills Available
 
           - **effect-schema-generator**: Invoke automatically if Domain schemas are missing
+          - **best-practices-checker**: Validate framework patterns before committing
           - See \`@.claude/agents/e2e-test-fixer.md\` for complete workflow
 
           ### Validation
@@ -185,6 +192,7 @@ jobs:
           - Specific spec test must pass
           - Regression tests must pass
           - Code quality checks must pass
+          - Security scan must pass (no critical issues)
           - Auto-merge on success
 
           ---

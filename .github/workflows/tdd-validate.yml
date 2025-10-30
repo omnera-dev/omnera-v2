@@ -170,9 +170,23 @@ jobs:
             echo "  Typecheck: $TYPECHECK_PASS"
           fi
 
+      - name: Run security scan
+        id: security
+        if: steps.quality.outputs.quality_pass == 'true'
+        run: |
+          echo "🔒 Running security scan on changed files..."
+
+          if bun run scripts/tdd-automation/security-scan.ts; then
+            echo "security_pass=true" >> $GITHUB_OUTPUT
+            echo "✅ Security scan passed"
+          else
+            echo "security_pass=false" >> $GITHUB_OUTPUT
+            echo "❌ Security scan failed (critical issues found)"
+          fi
+
       - name: Generate and commit roadmap
         id: roadmap
-        if: steps.quality.outputs.quality_pass == 'true'
+        if: steps.quality.outputs.quality_pass == 'true' && steps.security.outputs.security_pass == 'true'
         run: |
           echo "📊 Generating updated roadmap..."
 
@@ -211,8 +225,9 @@ jobs:
           SPEC_PASS="${{ steps.spec_test.outputs.spec_pass }}"
           REGRESSION_PASS="${{ steps.regression.outputs.regression_pass }}"
           QUALITY_PASS="${{ steps.quality.outputs.quality_pass }}"
+          SECURITY_PASS="${{ steps.security.outputs.security_pass }}"
 
-          if [ "$SPEC_PASS" = "true" ] && [ "$REGRESSION_PASS" = "true" ] && [ "$QUALITY_PASS" = "true" ]; then
+          if [ "$SPEC_PASS" = "true" ] && [ "$REGRESSION_PASS" = "true" ] && [ "$QUALITY_PASS" = "true" ] && [ "$SECURITY_PASS" = "true" ]; then
             echo "success=true" >> $GITHUB_OUTPUT
             echo "✅ All validation passed"
           else
@@ -240,11 +255,12 @@ jobs:
           # Build success message with roadmap status
           MESSAGE="✅ **Validation passed**
 
-          All tests and quality checks passed successfully!
+          All tests, quality checks, and security scans passed successfully!
 
           - ✅ Spec test passed
           - ✅ Regression tests passed
-          - ✅ Code quality checks passed"
+          - ✅ Code quality checks passed
+          - ✅ Security scan passed"
 
           if [ "$ROADMAP_UPDATED" = "true" ]; then
             MESSAGE="${MESSAGE}
@@ -300,6 +316,7 @@ jobs:
           SPEC_PASS="${{ steps.spec_test.outputs.spec_pass }}"
           REGRESSION_PASS="${{ steps.regression.outputs.regression_pass }}"
           QUALITY_PASS="${{ steps.quality.outputs.quality_pass }}"
+          SECURITY_PASS="${{ steps.security.outputs.security_pass }}"
 
           echo "❌ Commenting failure on issue..."
 
@@ -324,6 +341,12 @@ jobs:
             MESSAGE="${MESSAGE}- ❌ Code quality checks failed\n"
           else
             MESSAGE="${MESSAGE}- ✅ Code quality checks passed\n"
+          fi
+
+          if [ "$SECURITY_PASS" != "true" ]; then
+            MESSAGE="${MESSAGE}- ❌ Security scan failed (critical issues)\n"
+          else
+            MESSAGE="${MESSAGE}- ✅ Security scan passed\n"
           fi
 
           MESSAGE="${MESSAGE}
