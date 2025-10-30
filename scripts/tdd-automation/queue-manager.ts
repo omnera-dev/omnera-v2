@@ -509,6 +509,8 @@ export const createSpecIssue = (
 
 ### For Claude Code
 
+@claude Please implement this spec:
+
 1. Checkout branch: \`git checkout tdd/spec-${spec.specId}\`
 2. Remove \`.fixme()\` from test ${spec.specId}
 3. Implement minimal code to pass test
