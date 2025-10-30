@@ -17,10 +17,13 @@ on:
   pull_request_review:
     types: [submitted]
 
-# Concurrency control: Prevent duplicate runs for the same issue/PR
-# Each issue/PR gets its own concurrency group - allows queue system to process multiple specs in parallel
+# Concurrency control: Prevent duplicate runs for the same issue/PR + sender
+# Each issue/PR + sender gets its own concurrency group to prevent:
+# - User-triggered workflows from being canceled by bot-triggered workflows
+# - Multiple bot comments from canceling each other
+# This allows queue system to process multiple specs in parallel without interference
 concurrency:
-  group: claude-${{ github.event.issue.number || github.event.pull_request.number || github.run_id }}
+  group: claude-${{ github.event.issue.number || github.event.pull_request.number || github.run_id }}-${{ github.event.sender.login || github.event.sender.type || 'unknown' }}
   cancel-in-progress: true
 
 jobs:
