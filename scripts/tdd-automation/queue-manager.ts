@@ -32,7 +32,10 @@ import {
   logError,
   logWarn,
 } from '../lib/effect'
-import { createSchemaPriorityCalculator } from './schema-priority-calculator'
+import {
+  createSchemaPriorityCalculator,
+  getFeaturePathFromSpecId,
+} from './schema-priority-calculator'
 import type { LoggerService } from '../lib/effect'
 
 /**
@@ -541,8 +544,11 @@ EOFBODY`,
   })
 
 /**
- * Get the next spec to process (oldest queued spec if no specs in-progress)
- * Uses dependency graph to prioritize specs with no missing dependencies
+ * Get the next spec to process (highest priority, then lowest spec ID number)
+ * Prioritization:
+ * 1. Schema-based priority (root before nested, required before optional)
+ * 2. Spec ID numerical order (001, 002, 003, etc.)
+ * 3. Dependency graph (ready specs before blocked specs)
  */
 export const getNextSpec = Effect.gen(function* () {
   const fs = yield* FileSystemService
@@ -558,12 +564,32 @@ export const getNextSpec = Effect.gen(function* () {
     return null
   }
 
-  // Get queued specs (oldest first)
+  // Get queued specs
   const queuedSpecs = yield* getQueuedSpecs
   if (queuedSpecs.length === 0) {
     yield* logInfo('Queue is empty', '📭')
     return null
   }
+
+  // Load schema-based priority calculator
+  yield* logInfo('Loading schema hierarchy for priority calculation...', '🔗')
+  const calculatePriority = createSchemaPriorityCalculator('specs/app/app.schema.json')
+
+  // Calculate priority for each spec based on spec ID
+  interface SpecWithPriority extends SpecIssue {
+    priority: number
+  }
+
+  const specsWithPriority: SpecWithPriority[] = queuedSpecs.map((spec) => {
+    // Extract feature path from spec ID (e.g., APP-BLOCKS-001 → app/blocks)
+    const feature = getFeaturePathFromSpecId(spec.specId)
+    const priority = calculatePriority(feature)
+
+    return {
+      ...spec,
+      priority,
+    }
+  })
 
   // Load dependency graph if it exists
   const dependencyGraphPath = '.github/tdd-queue-dependencies.json'
@@ -584,21 +610,18 @@ export const getNextSpec = Effect.gen(function* () {
     try {
       const graphContent = graphBuffer.toString('utf-8')
       dependencyGraph = JSON.parse(graphContent)
-      yield* logInfo('Using dependency graph for prioritization', '🔗')
+      yield* logInfo('Using dependency graph for blocking detection', '🔗')
     } catch {
-      yield* logWarn('Failed to parse dependency graph, using FIFO order')
+      yield* logWarn('Failed to parse dependency graph')
     }
   }
 
-  // Prioritize specs based on dependency graph
-  let prioritizedSpecs = [...queuedSpecs]
+  // Separate ready specs from blocked specs based on dependency graph
+  let readySpecs: SpecWithPriority[] = []
+  const blockedSpecs: SpecWithPriority[] = []
 
   if (dependencyGraph) {
-    // Separate ready specs from blocked specs
-    const readySpecs: typeof queuedSpecs = []
-    const blockedSpecs: typeof queuedSpecs = []
-
-    for (const spec of queuedSpecs) {
+    for (const spec of specsWithPriority) {
       const depInfo = dependencyGraph[spec.specId]
       if (depInfo && depInfo.canImplement) {
         readySpecs.push(spec)
@@ -610,10 +633,7 @@ export const getNextSpec = Effect.gen(function* () {
       }
     }
 
-    // Prioritize ready specs
-    prioritizedSpecs = [...readySpecs, ...blockedSpecs]
-
-    if (readySpecs.length < queuedSpecs.length) {
+    if (blockedSpecs.length > 0) {
       yield* logWarn(`⚠️  ${blockedSpecs.length} spec(s) blocked by missing dependencies`)
       for (const spec of blockedSpecs.slice(0, 3)) {
         const depInfo = dependencyGraph[spec.specId]
@@ -629,16 +649,39 @@ export const getNextSpec = Effect.gen(function* () {
     if (readySpecs.length > 0) {
       yield* logInfo(`✅ ${readySpecs.length} spec(s) ready to implement`)
     }
+  } else {
+    // No dependency graph, all specs are ready
+    readySpecs = specsWithPriority
   }
 
-  // Return highest priority spec
-  const nextSpec = prioritizedSpecs[0]
+  // Sort ready specs by priority, then by spec ID (ensures 001, 002, 003 order)
+  const sortedReadySpecs = pipe(
+    readySpecs,
+    EffectArray.sortBy(
+      (a, b) => (a.priority < b.priority ? -1 : a.priority > b.priority ? 1 : 0),
+      (a, b) => (a.specId < b.specId ? -1 : a.specId > b.specId ? 1 : 0)
+    )
+  )
+
+  // If no ready specs, try blocked specs (sorted by priority)
+  const nextSpec =
+    sortedReadySpecs.length > 0
+      ? sortedReadySpecs[0]
+      : pipe(
+          blockedSpecs,
+          EffectArray.sortBy(
+            (a, b) => (a.priority < b.priority ? -1 : a.priority > b.priority ? 1 : 0),
+            (a, b) => (a.specId < b.specId ? -1 : a.specId > b.specId ? 1 : 0)
+          )
+        )[0]
+
   if (!nextSpec) {
     yield* logInfo('No queued specs found', '📭')
     return null
   }
 
-  yield* success(`Next spec: ${nextSpec.specId} (#${nextSpec.number})`)
+  yield* success(`Next spec: ${nextSpec.specId} (#${nextSpec.number}) [Priority: ${nextSpec.priority}]`)
+
   if (dependencyGraph && dependencyGraph[nextSpec.specId]) {
     const depInfo = dependencyGraph[nextSpec.specId]
     if (depInfo && !depInfo.canImplement) {
