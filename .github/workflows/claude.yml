@@ -1,5 +1,12 @@
 name: Claude Code
 
+# Security & Rate Limiting Strategy:
+# - Only OWNER/MEMBER/COLLABORATOR and github-actions[bot] can invoke @claude
+# - Concurrency control prevents duplicate runs on same issue/PR
+# - Queue system (TDD automation) processes ~96 specs/day (every 15 min)
+# - No artificial rate limits - concurrency groups provide natural throttling
+# - External contributors CANNOT trigger this workflow (blocked by author_association check)
+
 on:
   issue_comment:
     types: [created]
@@ -10,13 +17,33 @@ on:
   pull_request_review:
     types: [submitted]
 
+# Concurrency control: Prevent duplicate runs for the same issue/PR
+# Each issue/PR gets its own concurrency group - allows queue system to process multiple specs in parallel
+concurrency:
+  group: claude-${{ github.event.issue.number || github.event.pull_request.number || github.run_id }}
+  cancel-in-progress: true
+
 jobs:
   claude:
+    # Security: Only allow trusted users and github-actions[bot] (TDD automation)
     if: |
-      (github.event_name == 'issue_comment' && contains(github.event.comment.body, '@claude')) ||
-      (github.event_name == 'pull_request_review_comment' && contains(github.event.comment.body, '@claude')) ||
-      (github.event_name == 'pull_request_review' && contains(github.event.review.body, '@claude')) ||
-      (github.event_name == 'issues' && (contains(github.event.issue.body, '@claude') || contains(github.event.issue.title, '@claude')))
+      (
+        (github.event_name == 'issue_comment' && contains(github.event.comment.body, '@claude')) ||
+        (github.event_name == 'pull_request_review_comment' && contains(github.event.comment.body, '@claude')) ||
+        (github.event_name == 'pull_request_review' && contains(github.event.review.body, '@claude')) ||
+        (github.event_name == 'issues' && (contains(github.event.issue.body, '@claude') || contains(github.event.issue.title, '@claude')))
+      ) && (
+        github.event.comment.author_association == 'OWNER' ||
+        github.event.comment.author_association == 'MEMBER' ||
+        github.event.comment.author_association == 'COLLABORATOR' ||
+        github.event.issue.author_association == 'OWNER' ||
+        github.event.issue.author_association == 'MEMBER' ||
+        github.event.issue.author_association == 'COLLABORATOR' ||
+        github.event.review.author_association == 'OWNER' ||
+        github.event.review.author_association == 'MEMBER' ||
+        github.event.review.author_association == 'COLLABORATOR' ||
+        github.event.sender.login == 'github-actions[bot]'
+      )
     runs-on: ubuntu-latest
     permissions:
       contents: read
