@@ -425,12 +425,8 @@ export const getAllExistingSpecs = Effect.gen(function* () {
 
     // WARNING: Detect if we're approaching the limit (may miss older issues)
     if (issues.length >= 1900) {
-      yield* logError(
-        `⚠️  WARNING: Approaching limit (${issues.length}/2000 issues fetched)`
-      )
-      yield* logError(
-        '   Risk of duplicate creation for specs with older issues beyond limit'
-      )
+      yield* logError(`⚠️  WARNING: Approaching limit (${issues.length}/2000 issues fetched)`)
+      yield* logError('   Risk of duplicate creation for specs with older issues beyond limit')
       yield* logError('   Consider implementing pagination or archiving old issues')
     }
 

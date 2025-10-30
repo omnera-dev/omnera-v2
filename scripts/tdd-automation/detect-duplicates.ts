@@ -99,9 +99,7 @@ const detectDuplicates = Effect.gen(function* () {
       }
 
       yield* logInfo('Recommended action:')
-      yield* logInfo(
-        '  1. Manually close duplicate issues (keep the oldest or most active one)'
-      )
+      yield* logInfo('  1. Manually close duplicate issues (keep the oldest or most active one)')
       yield* logInfo('  2. Investigate what caused the duplicates')
       yield* logInfo('  3. Review populate workflow logs around duplicate creation time')
     }
