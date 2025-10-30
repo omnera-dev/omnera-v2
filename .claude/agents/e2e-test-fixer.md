@@ -88,8 +88,8 @@ See detailed workflow below for complete step-by-step instructions.
 ### Mode Detection
 
 The agent automatically detects pipeline mode when:
-- **Branch pattern**: Current branch matches `tdd/auto-fix-*`
-- **Issue context**: Initial prompt contains GitHub issue template markers (e.g., "Instructions for @claude")
+- **Branch pattern**: Current branch matches `tdd/spec-*` (TDD spec queue pattern)
+- **Issue context**: Initial prompt contains GitHub issue template markers (e.g., "Instructions for @claude" or "Implementation Instructions for @claude") indicating automated issue comment invocation
 - **Environment variable**: `CLAUDECODE=1` is set (pipeline execution marker)
 - **Test file path**: Specified test file path from pipeline configuration
 

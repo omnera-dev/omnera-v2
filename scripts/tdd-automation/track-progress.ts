@@ -6,9 +6,19 @@
  * found in the LICENSE.md file in the root directory of this source tree.
  */
 
-import { readFileSync, writeFileSync, existsSync } from 'node:fs'
-import { Effect, Console } from 'effect'
-import { glob } from 'glob'
+import * as Effect from 'effect/Effect'
+import * as Layer from 'effect/Layer'
+import {
+  FileSystemService,
+  FileSystemServiceLive,
+  CommandService,
+  CommandServiceLive,
+  LoggerService,
+  LoggerServiceLive,
+  success,
+  progress,
+  logInfo,
+} from '../lib/effect'
 
 /**
  * Tracks TDD automation pipeline progress and generates metrics
@@ -35,6 +45,7 @@ interface ProgressReport {
   byFeature: FeatureProgress[]
   recentActivity: ActivityEntry[]
   nextUp: string[]
+  queueStatus: QueueStatus
 }
 
 interface ActivityEntry {
@@ -45,10 +56,16 @@ interface ActivityEntry {
   prNumber?: number
 }
 
-// Count tests in a file
-const countTestsInFile = (filePath: string): TestMetrics => {
-  const content = readFileSync(filePath, 'utf-8')
+interface QueueStatus {
+  queued: number
+  inProgress: number
+  completed: number
+  failed: number
+  total: number
+}
 
+// Count tests in a file
+const countTestsInFile = (content: string): TestMetrics => {
   // Count different test types
   const fixmeTests = (content.match(/test\.fixme\(|it\.fixme\(/g) || []).length
   const todoTests = (content.match(/test\.todo\(|it\.todo\(/g) || []).length
@@ -68,25 +85,86 @@ const countTestsInFile = (filePath: string): TestMetrics => {
 }
 
 // Load existing metrics file
-const loadMetricsHistory = (): ActivityEntry[] => {
+const loadMetricsHistory = Effect.gen(function* () {
+  const fs = yield* FileSystemService
   const metricsPath = '.github/tdd-metrics.json'
-  if (existsSync(metricsPath)) {
-    try {
-      const data = JSON.parse(readFileSync(metricsPath, 'utf-8'))
-      return data.recentActivity || []
-    } catch {
-      return []
-    }
+
+  const fileExists = yield* fs.exists(metricsPath)
+  if (!fileExists) {
+    return []
   }
-  return []
-}
+
+  const content = yield* fs.readFile(metricsPath).pipe(Effect.catchAll(() => Effect.succeed('{}')))
+
+  try {
+    const data = JSON.parse(content)
+    return (data.recentActivity || []) as ActivityEntry[]
+  } catch {
+    return []
+  }
+})
+
+// Fetch queue status from GitHub issues
+const fetchQueueStatus = Effect.gen(function* () {
+  const cmd = yield* CommandService
+  const logger = yield* LoggerService
+
+  const fetchCount = (label: string) =>
+    cmd
+      .exec(`gh issue list --label "${label}" --json number --limit 1000`, {
+        throwOnError: false,
+      })
+      .pipe(
+        Effect.map((output) => {
+          try {
+            return JSON.parse(output).length
+          } catch {
+            return 0
+          }
+        }),
+        Effect.catchAll(() => Effect.succeed(0))
+      )
+
+  // Try to fetch counts, but don't fail if gh CLI is unavailable
+  const result = yield* Effect.all(
+    {
+      queued: fetchCount('tdd-spec:queued'),
+      inProgress: fetchCount('tdd-spec:in-progress'),
+      completed: fetchCount('tdd-spec:completed'),
+      failed: fetchCount('tdd-spec:failed'),
+    },
+    { concurrency: 4 }
+  ).pipe(
+    Effect.catchAll(() =>
+      Effect.gen(function* () {
+        yield* logger.warn(
+          'Failed to fetch queue status from GitHub (gh CLI may not be available)',
+          '⚠️'
+        )
+        return {
+          queued: 0,
+          inProgress: 0,
+          completed: 0,
+          failed: 0,
+        }
+      })
+    )
+  )
+
+  return {
+    ...result,
+    total: result.queued + result.inProgress + result.completed + result.failed,
+  }
+})
 
 // Main progress tracking logic
 const trackProgress = Effect.gen(function* () {
-  yield* Console.log('📊 Tracking TDD Pipeline Progress...')
+  const fs = yield* FileSystemService
+
+  yield* progress('Tracking TDD Pipeline Progress...')
 
   // Find all spec files
-  const specFiles = yield* Effect.promise(() => glob('specs/**/*.spec.ts'))
+  const specFiles = yield* fs.glob('specs/**/*.spec.ts')
 
   // Group by feature area
   const featureMap = new Map<string, string[]>()
@@ -111,10 +189,25 @@ const trackProgress = Effect.gen(function* () {
     progressPercentage: 0,
   }
 
+  // Read all files in parallel for better performance
+  const fileContents = yield* Effect.all(
+    specFiles.map((file) =>
+      fs.readFile(file).pipe(
+        Effect.map((content) => ({ file, content })),
+        Effect.catchAll(() => Effect.succeed({ file, content: '' }))
+      )
+    ),
+    { concurrency: 'unbounded' }
+  )
+
+  // Create a map for quick lookup
+  const contentMap = new Map(fileContents.map((fc) => [fc.file, fc.content]))
+
   for (const [feature, files] of featureMap) {
     const featureMetrics = files.reduce(
       (acc, file) => {
-        const metrics = countTestsInFile(file)
+        const content = contentMap.get(file) || ''
+        const metrics = countTestsInFile(content)
         return {
           totalTests: acc.totalTests + metrics.totalTests,
           passingTests: acc.passingTests + metrics.passingTests,
@@ -176,7 +269,10 @@ const trackProgress = Effect.gen(function* () {
   })
 
   // Load recent activity
-  const recentActivity = loadMetricsHistory()
+  const recentActivity = yield* loadMetricsHistory
+
+  // Fetch queue status from GitHub
+  const queueStatus = yield* fetchQueueStatus
 
   // Determine next features to work on
   const nextUp = byFeature
@@ -190,19 +286,28 @@ const trackProgress = Effect.gen(function* () {
     byFeature,
     recentActivity: recentActivity.slice(0, 10), // Keep last 10 entries
     nextUp,
+    queueStatus,
   }
 
   // Output summary
-  yield* Console.log('')
-  yield* Console.log('📈 Overall Progress:')
-  yield* Console.log(`  Total tests: ${overallMetrics.totalTests}`)
-  yield* Console.log(`  Passing tests: ${overallMetrics.passingTests}`)
-  yield* Console.log(`  Tests with fixme: ${overallMetrics.fixmeTests}`)
-  yield* Console.log(`  Tests todo: ${overallMetrics.todoTests}`)
-  yield* Console.log(`  Progress: ${overallMetrics.progressPercentage.toFixed(1)}%`)
+  yield* logInfo('')
+  yield* logInfo('Overall Progress:', '📈')
+  yield* logInfo(`  Total tests: ${overallMetrics.totalTests}`)
+  yield* logInfo(`  Passing tests: ${overallMetrics.passingTests}`)
+  yield* logInfo(`  Tests with fixme: ${overallMetrics.fixmeTests}`)
+  yield* logInfo(`  Tests todo: ${overallMetrics.todoTests}`)
+  yield* logInfo(`  Progress: ${overallMetrics.progressPercentage.toFixed(1)}%`)
 
-  yield* Console.log('')
-  yield* Console.log('🎯 Top Features to Fix:')
+  yield* logInfo('')
+  yield* logInfo('Queue Status:', '📊')
+  yield* logInfo(`  Queued: ${queueStatus.queued}`)
+  yield* logInfo(`  In Progress: ${queueStatus.inProgress}`)
+  yield* logInfo(`  Completed: ${queueStatus.completed}`)
+  yield* logInfo(`  Failed: ${queueStatus.failed}`)
+  yield* logInfo(`  Total: ${queueStatus.total}`)
+
+  yield* logInfo('')
+  yield* logInfo('Top Features to Fix:', '🎯')
   nextUp.forEach((feature, index) => {
     const data = byFeature.find((f) => f.feature === feature)
     if (data) {
@@ -212,9 +317,9 @@ const trackProgress = Effect.gen(function* () {
 
   // Save metrics
   const metricsPath = '.github/tdd-metrics.json'
-  writeFileSync(metricsPath, JSON.stringify(report, null, 2))
-  yield* Console.log('')
-  yield* Console.log(`💾 Metrics saved to ${metricsPath}`)
+  yield* fs.writeFile(metricsPath, JSON.stringify(report, null, 2))
+  yield* logInfo('')
+  yield* logInfo(`Metrics saved to ${metricsPath}`, '💾')
 
   // Generate progress dashboard
   yield* generateDashboard(report)
@@ -232,6 +337,8 @@ const progressBar = (percentage: number) => {
 // Generate markdown dashboard
 const generateDashboard = (report: ProgressReport) =>
   Effect.gen(function* () {
+    const fs = yield* FileSystemService
+
     const markdown = `# 🤖 TDD Automation Progress
 
 **Last Updated**: ${new Date(report.timestamp).toLocaleString()}
@@ -282,12 +389,22 @@ The following features are prioritized for automation:
 
 ${report.nextUp.map((f, i) => `${i + 1}. **${f}**`).join('\n')}
 
+## 📊 Queue Status
+
+| Status | Count | Description |
+|--------|-------|-------------|
+| 🟡 Queued | ${report.queueStatus.queued} | Specs waiting to be processed |
+| 🔵 In Progress | ${report.queueStatus.inProgress} | Specs currently being implemented |
+| ✅ Completed | ${report.queueStatus.completed} | Specs successfully implemented |
+| ❌ Failed | ${report.queueStatus.failed} | Specs that failed validation |
+| **Total** | **${report.queueStatus.total}** | **Total specs in queue** |
+
 ## 🤖 Automation Status
 
-- **Pipeline**: ${report.overall.fixmeTests > 0 ? '🟢 Enabled' : '🔴 No tests to fix'}
-- **Mode**: Production
-- **Max tests per run**: 3
-- **Daily limit**: 5 runs
+- **Queue System**: ${report.queueStatus.total > 0 ? '🟢 Active' : '🔴 Empty'}
+- **Processing Mode**: ${report.queueStatus.inProgress > 0 ? '🔄 Processing' : '⏸️  Idle'}
+- **Processing Interval**: Every 15 minutes
+- **Max Concurrent**: 1 spec at a time (strict serial)
 
 ---
 
@@ -296,12 +413,25 @@ ${report.nextUp.map((f, i) => `${i + 1}. **${f}**`).join('\n')}
 `
 
     const dashboardPath = 'TDD-PROGRESS.md'
-    writeFileSync(dashboardPath, markdown)
-    yield* Console.log(`📄 Dashboard generated at ${dashboardPath}`)
+    yield* fs.writeFile(dashboardPath, markdown)
+    yield* success(`Dashboard generated at ${dashboardPath}`)
   })
 
+// Main layer combining all services
+const MainLayer = Layer.mergeAll(FileSystemServiceLive, CommandServiceLive, LoggerServiceLive())
+
 // Run the tracker
-Effect.runPromise(trackProgress).catch((error) => {
+const program = trackProgress.pipe(
+  Effect.provide(MainLayer),
+  Effect.catchAll((error) =>
+    Effect.gen(function* () {
+      console.error('❌ Error tracking progress:', error)
+      yield* Effect.fail(error)
+    })
+  )
+)
+
+Effect.runPromise(program).catch((error) => {
   console.error('❌ Error tracking progress:', error)
   process.exit(1)
 })

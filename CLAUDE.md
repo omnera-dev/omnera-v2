@@ -223,86 +223,143 @@ omnera-v2/
 4. **Push**: GitHub Actions runs tests
 5. **Release**: When ready to publish, use `git commit -m "release: publish"` and push
 
-## TDD Automation Pipeline (For Claude Code)
+## TDD Automation Queue System (For Claude Code)
 
 ### Overview
 
-The project has an **automated TDD pipeline** that creates GitHub issues for you to fix failing tests. When you see an issue titled "🤖 TDD: Fix tests in [FEATURE]", follow these specific instructions.
+The project uses a **queue-based TDD automation system** that creates GitHub issues for individual test specs. When you see an issue titled "🤖 [SPEC-ID]: [description]", follow these instructions.
 
-### Recognizing Automated Issues
+**Full Documentation**: See `@docs/development/tdd-automation-pipeline.md` for complete details.
+
+### Recognizing Queue Spec Issues
 
 Look for these indicators:
-- Title starts with "🤖 TDD:"
-- Labels include `tdd-automation`
-- Issue mentions a specific branch like `tdd/auto-fix-*`
-- Instructions mention using the `e2e-test-fixer` agent
+- Title starts with "🤖" and contains a spec ID (e.g., `APP-VERSION-001`)
+- Labels include `tdd-spec:queued` or `tdd-spec:in-progress`
+- Issue provides a branch name: `tdd/spec-{SPEC-ID}`
+- Instructions are minimal and clear
 
-### Your Workflow for TDD Issues
+### Your Workflow for Spec Issues
 
-When you receive a TDD automation issue:
+When you receive a spec issue (e.g., `🤖 APP-VERSION-001: should display version badge...`):
 
-1. **Check out the specified branch**:
+1. **Checkout the branch** (exact command provided in issue):
    ```bash
-   git checkout tdd/auto-fix-{feature}-{timestamp}
+   git checkout tdd/spec-APP-VERSION-001
    ```
 
-2. **Use the e2e-test-fixer agent**:
-   ```
-   Task tool with subagent_type="e2e-test-fixer"
-   ```
-   This agent will:
-   - Remove test.fixme() from up to 3 tests
-   - Implement minimal code to pass tests
-   - Follow Omnera patterns automatically
+2. **Locate the test** using the spec ID:
+   - File path is provided in the issue
+   - Search for spec ID in the test file (e.g., `APP-VERSION-001`)
+   - Only ONE test needs to be fixed per issue
 
-3. **If fixing 3+ tests, run refactoring**:
-   ```
-   Task tool with subagent_type="codebase-refactor-auditor"
-   ```
-   This will optimize and eliminate duplication.
+3. **Remove .fixme() and implement**:
+   - Remove `.fixme()` from that ONE specific test
+   - Implement minimal code to pass the test
+   - Follow Omnera architecture patterns
 
-4. **Validate and commit**:
+4. **Commit and push** (triggers automatic validation):
    ```bash
-   bun run license         # Add copyright headers
-   bun test:e2e {test-file}  # Verify tests pass
-   bun test:e2e:regression   # Check regressions
-   git add -A && git commit -m "fix: implement {feature} functionality"
+   bun run license  # Add copyright headers
+   git add -A
+   git commit -m "fix: implement APP-VERSION-001"
+   git push
    ```
 
-### Important Rules for TDD Automation
+### Automatic Validation
 
-- **DO NOT** modify test logic - only remove `.fixme` and implement code
-- **DO NOT** fix more tests than specified in the issue (usually max 3)
-- **DO NOT** skip tests if implementation fails - fix the code instead
-- **ALWAYS** run regression tests before committing
-- **ALWAYS** use the specified agents rather than implementing manually
+When you push, the system automatically:
+1. ✅ Runs the specific spec test (using grep to filter)
+2. ✅ Runs all regression tests
+3. ✅ Runs code quality checks (license, lint, typecheck)
+4. ✅ Comments on issue with results
+5. ✅ If all pass: Marks issue as completed, closes it, enables auto-merge
+6. ❌ If any fail: Comments failure details, keeps issue in-progress for retry
 
-### Pipeline Configuration
+**No manual validation needed** - just push and wait for the workflow results.
 
-The pipeline is configured in `.github/tdd-automation-config.yml`:
-- **AGGRESSIVE MODE ACTIVE**
-- Max 5 tests fixed per run (increased from 3)
-- Max 10 pipeline runs per day (doubled from 5)
-- 15-minute cooldown between runs (reduced from 30)
-- Scheduled runs every 4 hours (24/7 operation)
-- Full rollout phase (all features enabled)
+### Important Rules
 
-### Current Status
+- **DO NOT** modify multiple specs at once (one spec = one issue)
+- **DO NOT** modify test logic - only remove `.fixme()` and implement code
+- **DO NOT** skip validation - it runs automatically on push
+- **DO** commit with the format: `fix: implement {SPEC-ID}`
+- **DO** push as soon as ready - validation is automatic
 
-- **Total tests**: 869
-- **Currently passing**: 68 (7.8%)
-- **Tests with .fixme**: 801 (ready for automation)
-- **Pipeline phase**: testing (using fixtures first)
+### Queue System Architecture
+
+```
+Push new tests → Scan → Create spec issues → Queue
+                                               ↓
+                      ← ← ← ← ← ← ←   Processor picks oldest spec (every 15 min)
+                                               ↓
+                                          Creates branch
+                                               ↓
+                                          You implement
+                                               ↓
+                                          Push to branch
+                                               ↓
+                                      Auto-validation runs
+                                               ↓
+                                   Pass → Auto-merge → Next spec
+                                   Fail → Comment → Retry
+```
+
+### Queue Status & Monitoring
+
+Check queue status anytime:
+```bash
+# View queue status
+bun run scripts/tdd-automation/queue-manager.ts status
+
+# View queued specs
+gh issue list --label "tdd-spec:queued"
+
+# View specs in-progress
+gh issue list --label "tdd-spec:in-progress"
+
+# View progress dashboard
+cat TDD-PROGRESS.md
+```
 
 ### If Something Goes Wrong
 
-If tests fail after your implementation:
-1. Check the test output for specific failures
-2. Fix your implementation (don't modify the test)
-3. Re-run validation before committing
-4. If unable to fix, comment on the issue with details
+**Validation fails**:
+1. Check the failure comment on the issue
+2. Review the validation workflow logs (link in comment)
+3. Fix the implementation
+4. Push again (re-triggers validation)
 
-The pipeline will automatically validate your changes and update the PR. A human will review before merging.
+**Spec stuck in-progress**:
+1. Check if you pushed to the correct branch
+2. Check if the validation workflow ran: `gh run list --workflow=tdd-validate.yml`
+3. If stuck > 2 hours with no activity, comment on the issue
+
+**Queue not processing**:
+1. Check if another spec is in-progress: `gh issue list --label "tdd-spec:in-progress"`
+2. The system processes one spec at a time (strict serial)
+3. Wait up to 15 minutes for the processor to pick the next spec
+
+### Configuration
+
+The queue system is configured in `.github/tdd-automation-config.yml`:
+- **Processing interval**: Every 15 minutes
+- **Max concurrent**: 1 spec at a time (strict serial)
+- **Auto-validation**: Enabled (on push to spec branches)
+- **Auto-merge**: Enabled (after validation passes)
+
+### Current Status
+
+View current progress:
+```bash
+bun run scripts/tdd-automation/track-progress.ts
+```
+
+This generates:
+- Overall test progress (passing vs fixme)
+- Queue status (queued, in-progress, completed, failed)
+- Progress by feature area
+- Next specs to implement
 
 ## Key Differences from Typical Stacks
 

@@ -236,10 +236,10 @@ This agent uses a two-phase strategy to prioritize recent changes over full code
 ### Mode Detection
 
 The agent automatically detects pipeline mode when:
-- **Branch pattern**: Current branch matches `tdd/auto-fix-*` (created by pipeline)
-- **Handoff marker**: Initial prompt contains "Triggering Refactoring Phase" from e2e-test-fixer
+- **Branch pattern**: Current branch matches `tdd/spec-*` (TDD spec queue pattern)
+- **Handoff marker**: Initial prompt contains "Triggering Refactoring Phase" from e2e-test-fixer OR "Implementation Instructions for @claude" from issue auto-comment
 - **Environment variable**: `CLAUDECODE=1` is set (pipeline execution marker)
-- **Issue context**: GitHub issue template markers present (e.g., "Instructions for @claude")
+- **Issue context**: GitHub issue template markers present (e.g., "Instructions for @claude" or "Implementation Instructions for @claude") indicating automated handoff
 
 ### Pipeline-Specific Behavior
 

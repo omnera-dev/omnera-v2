@@ -1,434 +1,562 @@
-# TDD Automation Pipeline Documentation
+# TDD Automation Queue System Documentation
 
 ## Overview
 
-The TDD Automation Pipeline is a GitHub Actions-based system that automatically implements code to make failing E2E tests pass. It uses Claude Code's GitHub integration to invoke specialized agents that fix tests, refactor code, and create pull requests.
+The TDD Automation Queue System is a GitHub Actions-based pipeline that automatically implements code to make failing E2E tests pass. It uses a **queue-based architecture** where specs are processed asynchronously, one at a time, without polling or timeouts.
+
+## Architecture
+
+```mermaid
+graph TD
+    A[Push with new tests] --> B[Queue Populate]
+    B --> C[Scan for .fixme]
+    C --> D[Create Spec Issues]
+    D --> E[Queue]
+    F[Scheduled/Manual] --> G[Queue Processor]
+    G --> H{Any in-progress?}
+    H -->|Yes| I[Exit]
+    H -->|No| J[Pick Oldest Spec]
+    J --> K[Create Branch & PR]
+    K --> L[Mark In-Progress]
+    L --> LA[Auto-Comment @claude]
+    LA --> M[Claude Code Triggers]
+    M --> N[Agent Implements]
+    N --> O[Push to Branch]
+    O --> P[Validation Workflow]
+    P --> Q{Tests Pass?}
+    Q -->|Yes| R[Mark Completed & Merge]
+    Q -->|No| S[Comment Failure]
+    S --> M
+    R --> T[Next Iteration]
+```
+
+## Components
+
+### 1. Queue Manager (`scripts/tdd-automation/queue-manager.ts`)
+
+Core CLI tool for managing the queue:
+
+```bash
+# Scan for fixme specs and display results
+bun run scripts/tdd-automation/queue-manager.ts scan
+
+# Create issues for all fixme specs (skip duplicates)
+bun run scripts/tdd-automation/queue-manager.ts populate
+
+# Get next spec from queue (for workflows)
+bun run scripts/tdd-automation/queue-manager.ts next
+
+# Display queue status
+bun run scripts/tdd-automation/queue-manager.ts status
+```
+
+**Features**:
+
+- Extracts spec IDs from test titles (e.g., `APP-VERSION-001`)
+- Checks for duplicate issues before creating
+- Integrates with GitHub CLI (`gh`)
+- Supports queue state management (queued, in-progress, completed, failed)
+
+### 2. Workflows
+
+#### **tdd-queue-populate.yml** (Scan & Queue)
+
+**Triggers**:
+
+- Push to main (when new tests are added)
+- Schedule (every 15 minutes)
+- Manual dispatch
+
+**Purpose**: Scans for `test.fixme()` patterns and creates spec issues
+
+**Key Steps**:
+
+1. Scan for fixme specs
+2. Check if specs need queueing
+3. Create issues (skip duplicates)
+4. Display queue status
+
+#### **tdd-queue-processor.yml** (Pick & Process)
+
+**Triggers**:
+
+- Schedule (every 15 minutes)
+- Manual dispatch
+
+**Purpose**: Picks the next spec from the queue and prepares it for implementation
+
+**Key Steps**:
+
+1. Check if any spec is in-progress
+2. If none, pick oldest queued spec
+3. Create branch (`tdd/spec-{SPEC-ID}`)
+4. Create draft PR
+5. Mark issue as in-progress
+6. Exit (no waiting)
+
+**Concurrency**: Strict serial - only one spec can be in-progress at a time
+
+#### **tdd-validate.yml** (Auto-Validation)
+
+**Triggers**:
+
+- Push to branches matching `tdd/spec-*`
+
+**Purpose**: Automatically validates implementations when Claude (or anyone) pushes
+
+**Key Steps**:
+
+1. Extract spec ID from branch name
+2. Find corresponding issue and test file
+3. Run specific spec test (using grep to filter)
+4. Run regression tests
+5. Run code quality checks (license, lint, typecheck)
+6. **On Success**:
+   - Mark issue as completed
+   - Close issue
+   - Enable auto-merge for PR
+7. **On Failure**:
+   - Comment on issue with details
+   - Keep issue in-progress for retry
+
+### 3. Configuration (`.github/tdd-automation-config.yml`)
+
+```yaml
+queue:
+  enabled: true
+  processing_interval: 15 # minutes
+  max_concurrent: 1 # strict serial processing
+
+  populate:
+    on_push: true
+    on_schedule: true
+    schedule_cron: '*/15 * * * *'
+
+  issues:
+    label_prefix: 'tdd-spec'
+    states: [queued, in-progress, completed, failed]
+    auto_close_completed: true
+
+  validation:
+    auto_validate: true
+    auto_merge: true
+    merge_strategy: squash
+```
 
 ## How It Works
 
-```mermaid
-graph LR
-    A[Push with test.fixme] --> B[Workflow Triggered]
-    B --> C[Scan for Tests]
-    C --> D[Create Issue for Claude]
-    D --> E[Claude Fixes Tests]
-    E --> F[Validate Implementation]
-    F --> G{Tests Pass?}
-    G -->|Yes| H[Create/Update PR]
-    G -->|No| I[Rollback & Report]
-    H --> J[Human Review]
-    J --> K[Merge to Main]
-```
+### Step 1: Queue Population
 
-## Quick Start
+When you push new tests with `.fixme()`:
 
-### 1. Manual Trigger (Recommended for Testing)
+1. **Workflow triggers**: `tdd-queue-populate.yml`
+2. **Scan**: `queue-manager.ts scan` finds all specs with `.fixme()`
+3. **Create issues**: One minimal issue per spec ID (e.g., `APP-VERSION-001`)
+4. **Skip duplicates**: Checks if issue already exists
+5. **Label**: `tdd-spec:queued` + `tdd-automation`
 
-```bash
-# Trigger the pipeline manually via GitHub UI
-1. Go to Actions tab
-2. Select "TDD Auto-Fix Pipeline"
-3. Click "Run workflow"
-4. Configure options:
-   - Feature area: auto (or specific like app/version)
-   - Max tests: 3 (start small)
-   - Dry run: true (for testing)
-```
-
-### 2. Scheduled Runs (Production)
-
-Uncomment the schedule in `.github/workflows/tdd-auto-fix.yml`:
-
-```yaml
-on:
-  schedule:
-    - cron: '0 2 * * *' # Daily at 2 AM UTC
-```
-
-## Pipeline Components
-
-### Workflows
-
-1. **`.github/workflows/tdd-auto-fix.yml`**
-   - Main orchestrator workflow
-   - Scans for test.fixme patterns
-   - Creates issues and PRs for Claude Code
-   - Validates implementations
-
-2. **`.github/workflows/tdd-auto-refactor.yml`**
-   - Triggered after tests are fixed
-   - Invokes codebase-refactor-auditor agent
-   - Optimizes and cleans up code
-
-### Configuration
-
-**`.github/tdd-automation-config.yml`**
-
-Key settings:
-
-- `max_tests_per_run`: 3 (default)
-- `max_daily_runs`: 5
-- `cooldown_minutes`: 30
-- `rollout.phase`: testing/limited/full
-
-### Utility Scripts
-
-Located in `scripts/tdd-automation/`:
-
-- **`scan-fixme-tests.ts`** - Finds and prioritizes test.fixme patterns
-- **`track-progress.ts`** - Generates metrics and progress dashboard
-- **`validate-implementation.ts`** - Runs tests and quality checks
-
-### Agent Prompts
-
-Located in `scripts/tdd-automation/prompts/`:
-
-- **`e2e-test-fixer.md`** - Instructions for test fixing agent
-- **`codebase-refactor-auditor.md`** - Instructions for refactoring agent
-
-## Testing the Pipeline
-
-### Step 1: Test with Fixture
-
-We've created a simple fixture for testing:
-
-```bash
-# Location: specs/tdd-automation/fixtures/simple-feature.spec.ts
-# Contains: 8 simple test.fixme patterns (calculator and todo list)
-
-# Run scan to verify detection
-bun run scripts/tdd-automation/scan-fixme-tests.ts
-
-# Should show the fixture tests in results
-```
-
-### Step 2: Dry Run Mode
-
-1. Set `dry_run: true` in workflow dispatch
-2. This creates draft PRs only
-3. Claude Code will still process the issue
-4. No auto-merge occurs
-
-### Step 3: Monitor Progress
-
-```bash
-# Check scan results
-cat .github/tdd-scan-results.json
-
-# Track progress
-bun run scripts/tdd-automation/track-progress.ts
-
-# View dashboard
-cat TDD-PROGRESS.md
-```
-
-## How Claude Code Integration Works
-
-### Issue Creation
-
-The workflow creates an issue with `@claude` mention:
+**Issue Format**:
 
 ```markdown
-## Instructions for @claude
+## 🤖 APP-VERSION-001: should display version badge...
 
-Please follow these steps to fix the failing tests:
+**File**: `specs/app/version/version.spec.ts:28`
+**Branch**: `tdd/spec-APP-VERSION-001`
 
-1. Checkout the branch: `git checkout tdd/auto-fix-{feature}`
-2. Run the e2e-test-fixer agent (Task tool with subagent_type="e2e-test-fixer")
-3. Validate implementation
-4. Commit changes
+### For Claude Code
+
+1. Checkout branch: `git checkout tdd/spec-APP-VERSION-001`
+2. Remove `.fixme()` from test APP-VERSION-001
+3. Implement minimal code to pass test
+4. Commit: `fix: implement APP-VERSION-001`
+
+Validation runs automatically on push.
 ```
 
-### Agent Invocation
+### Step 2: Queue Processing
 
-Claude Code reads the issue and:
+Every 15 minutes (or manual):
 
-1. Checks out the specified branch
-2. Invokes the e2e-test-fixer agent
-3. Implements minimal code to pass tests
-4. Commits with conventional message
-5. Reports progress in the issue
+1. **Workflow triggers**: `tdd-queue-processor.yml`
+2. **Check in-progress**: Query issues with `tdd-spec:in-progress` label
+3. **If any exist**: Exit (strict serial - one at a time)
+4. **If none**: Pick oldest issue with `tdd-spec:queued` label
+5. **Create branch**: `tdd/spec-{SPEC-ID}` from main
+6. **Create PR**: Draft PR linking to issue
+7. **Mark in-progress**: Change label to `tdd-spec:in-progress`
+8. **Auto-invoke Claude**: Post comment with `@claude` mention and implementation instructions
+9. **Exit**: No waiting, queue processor is done
 
-### PR Management
+### Step 3: Automated Implementation (Claude Code)
 
-The workflow:
+**Fully automated** - triggered by `@claude` mention in auto-comment:
 
-1. Creates a PR with detailed instructions
-2. Waits for Claude to commit changes
-3. Validates the implementation
-4. Updates PR with results
-5. Applies appropriate labels
+1. **Claude Code workflow triggers**: Detects `@claude` mention in issue comment
+2. **Agent initializes**: Recognizes `tdd/spec-*` branch pattern for pipeline mode
+3. **Checkout branch**: `git checkout tdd/spec-APP-VERSION-001`
+4. **Read test file**: Understands requirements from test with spec ID
+5. **Remove `.fixme()`**: Makes test active
+6. **Implement minimal code**: Follows domain/application/infrastructure architecture
+7. **Run license headers**: `bun run license`
+8. **Commit changes**: `fix: implement APP-VERSION-001`
+9. **Push to branch**: Triggers validation workflow automatically
 
-## Safety Mechanisms
+**Pipeline Mode Behavior**:
 
-### Rate Limiting
+- Non-interactive (no questions to user)
+- Automatic decision-making following Omnera patterns
+- Minimal implementation (just enough to pass test)
+- Uses Effect.ts for side effects, proper type safety
 
-- Max 5 runs per day
-- 30-minute cooldown between runs
-- Max 3 tests fixed per run
+### Step 4: Auto-Validation
 
-### Validation Gates
+On every push to `tdd/spec-*` branch:
 
-- All modified tests must pass
-- Regression tests must pass
-- ESLint and TypeScript must pass
-- Human review required for merge
+1. **Workflow triggers**: `tdd-validate.yml`
+2. **Extract spec ID**: From branch name (`tdd/spec-APP-VERSION-001` → `APP-VERSION-001`)
+3. **Find test file**: Grep for spec ID in `specs/`
+4. **Run spec test**: `bun test:e2e {file} --grep "APP-VERSION-001"`
+5. **Run regression**: `bun test:e2e:regression`
+6. **Run quality checks**: `bun run license && bun run lint && bun run typecheck`
+7. **Update issue**: Mark as completed (success) or comment failure (fail)
+8. **Auto-merge**: If all pass, enable auto-merge and mark PR as ready
 
-### Rollback on Failure
+### Step 5: Completion
 
-- Automatic rollback if tests fail
-- Creates issue documenting failure
-- Preserves failed branch for analysis
+When validation passes:
 
-### Branch Protection
+1. **Issue closed**: Labeled `tdd-spec:completed`
+2. **PR merged**: Auto-merged to main (squash merge)
+3. **Queue progresses**: Processor picks next spec on next run (15 min)
 
-- No direct commits to main
-- All changes via PR
-- Required reviews before merge
+## Labels & States
+
+| Label                  | State       | Description                             |
+| ---------------------- | ----------- | --------------------------------------- |
+| `tdd-spec:queued`      | Queued      | Spec waiting to be processed            |
+| `tdd-spec:in-progress` | In Progress | Spec being implemented (branch created) |
+| `tdd-spec:completed`   | Completed   | Spec passed validation (issue closed)   |
+| `tdd-spec:failed`      | Failed      | Spec failed validation (needs review)   |
+| `tdd-automation`       | (always)    | All TDD automation issues               |
+
+## CLI Commands
+
+```bash
+# Queue Management
+bun run scripts/tdd-automation/queue-manager.ts scan       # Scan for fixme specs
+bun run scripts/tdd-automation/queue-manager.ts populate   # Create issues
+bun run scripts/tdd-automation/queue-manager.ts next       # Get next spec
+bun run scripts/tdd-automation/queue-manager.ts status     # Show queue status
+
+# Progress Tracking
+bun run scripts/tdd-automation/track-progress.ts           # Generate progress dashboard
+
+# Manual Workflow Triggers
+gh workflow run tdd-queue-populate.yml                     # Populate queue
+gh workflow run tdd-queue-processor.yml                    # Process next spec
+
+# View Queue (GitHub CLI)
+gh issue list --label "tdd-spec:queued"                    # Show queued specs
+gh issue list --label "tdd-spec:in-progress"               # Show in-progress specs
+gh issue list --label "tdd-spec:completed" --state closed  # Show completed specs
+```
 
 ## Monitoring
 
-### Progress Dashboard
+### Progress Dashboard (`TDD-PROGRESS.md`)
 
-Generated at `TDD-PROGRESS.md`:
+Auto-generated by `track-progress.ts`:
 
-```markdown
-## 📊 Overall Progress
+- Overall progress (tests passing vs fixme)
+- Progress by feature area
+- **Queue status** (queued, in-progress, completed, failed)
+- Recent activity
+- Next features to fix
 
-Progress: ████████░░░░░░░░░░░░ 40% (714/1785 tests)
+### Metrics File (`.github/tdd-metrics.json`)
 
-## 📈 Progress by Feature Area
+Stores historical data:
 
-| Feature     | Progress | Tests Fixed | Remaining |
-| ----------- | -------- | ----------- | --------- |
-| app/version | 100%     | 3/3         | 0         |
-| app/name    | 67%      | 2/3         | 1         |
-```
-
-### Metrics Collection
-
-Stored in `.github/tdd-metrics.json`:
-
-- Run history
-- Success rates
-- Average time per test
-- Cost tracking (estimated)
-
-## Troubleshooting
-
-### Pipeline Not Starting
-
-```bash
-# Check rate limits
-gh run list --workflow=tdd-auto-fix.yml --json createdAt
-
-# Check for existing PRs
-gh pr list --label tdd-automation
-```
-
-### Claude Not Processing Issue
-
-1. Verify `CLAUDE_CODE_OAUTH_TOKEN` is set in secrets
-2. Check Claude Code app is installed on repo
-3. Ensure issue has `@claude` mention
-4. Check Claude Code dashboard for quota
-
-### Tests Failing After Implementation
-
-1. Check workflow logs for details
-2. Review generated code in PR
-3. Manually run tests locally:
-   ```bash
-   git checkout tdd/auto-fix-{branch}
-   bun test:e2e {test-file}
-   ```
-
-### Rollback Occurred
-
-1. Check issue created by rollback
-2. Review branch `tdd/failed-{feature}`
-3. Manually fix and retry
+- Test counts over time
+- Queue status history
+- Feature-level progress
+- Recent activity log
 
 ## Best Practices
 
-### Start Small
+### For Manual Triggering
 
-1. Begin with simple features (app/version, app/name)
-2. Use dry run mode initially
-3. Fix 1-3 tests per run maximum
+```bash
+# Populate queue with all specs
+gh workflow run tdd-queue-populate.yml
 
-### Monitor Closely
+# Wait 1 minute, then process first spec
+sleep 60
+gh workflow run tdd-queue-processor.yml
 
-1. Watch first few runs carefully
-2. Review generated code quality
-3. Track metrics and adjust parameters
-
-### Progressive Rollout
-
-1. **Testing Phase**: Use fixtures, dry run
-2. **Limited Phase**: 1-2 feature areas
-3. **Full Phase**: All features, scheduled runs
-
-## Configuration Examples
-
-### Conservative Settings
-
-```yaml
-pipeline:
-  max_tests_per_run: 1
-  max_daily_runs: 2
-  cooldown_minutes: 60
-
-rollout:
-  phase: testing
+# Check queue status
+bun run scripts/tdd-automation/queue-manager.ts status
 ```
 
-### Aggressive Settings
+### For Claude Code (Automated)
 
-```yaml
-pipeline:
-  max_tests_per_run: 5
-  max_daily_runs: 10
-  cooldown_minutes: 15
+**The system is fully automated** - Claude Code agents are invoked automatically via `@claude` mentions in issue comments.
 
-rollout:
-  phase: full
+**How automation works**:
+
+1. **Queue processor creates issue**: New spec issue with `tdd-spec:queued` label
+2. **Auto-comment posted**: Issue receives comment with `@claude` mention and implementation instructions
+3. **Claude Code workflow triggers**: Detects `@claude` mention, starts agent
+4. **Agent operates in pipeline mode**: Recognizes `tdd/spec-*` branch pattern
+5. **Agent implements test**: Removes `.fixme()`, writes minimal code, commits, pushes
+6. **Validation runs**: Automatic validation on push
+7. **Auto-merge on success**: PR merged to main if all tests pass
+
+**Manual intervention** (only if automation fails):
+
+If the automated system fails or needs human review:
+
+1. **Check the issue comments**: Look for error messages from validation
+2. **Manual invocation**: Reply to issue with `@claude - Please implement spec {SPEC-ID} following the instructions above`
+3. **Manual implementation**: Checkout branch `tdd/spec-{SPEC-ID}` and implement manually
+
+**Pipeline Mode Rules** (for agents):
+
+- ✅ **DO**: Remove `.fixme()` from single spec only
+- ✅ **DO**: Implement minimal code to pass test
+- ✅ **DO**: Follow domain/application/infrastructure architecture
+- ✅ **DO**: Use Effect.ts for side effects
+- ✅ **DO**: Run `bun run license` before committing
+- ✅ **DO**: Commit with format: `fix: implement {SPEC-ID}`
+- ❌ **DO NOT**: Modify multiple specs at once
+- ❌ **DO NOT**: Change test logic
+- ❌ **DO NOT**: Skip validation steps
+- ❌ **DO NOT**: Force push
+
+### For Debugging
+
+```bash
+# Check queue status
+bun run scripts/tdd-automation/queue-manager.ts status
+
+# View recent workflow runs
+gh run list --workflow=tdd-queue-processor.yml --limit 5
+
+# View specific spec issue
+gh issue view {issue-number}
+
+# Check validation results
+gh run list --workflow=tdd-validate.yml --limit 5
+
+# View PR for spec
+gh pr list --label "tdd-automation"
 ```
 
-### Feature-Specific Settings
+## Troubleshooting
+
+### No specs being processed
+
+**Check**:
+
+1. Are there any issues with `tdd-spec:queued`?
+   ```bash
+   gh issue list --label "tdd-spec:queued"
+   ```
+2. Is there already a spec in-progress?
+   ```bash
+   gh issue list --label "tdd-spec:in-progress"
+   ```
+3. Are workflows running?
+   ```bash
+   gh run list --workflow=tdd-queue-processor.yml
+   ```
+
+### Spec stuck in-progress
+
+If a spec has been in-progress for > 2 hours with no activity:
+
+1. Check if PR has commits:
+   ```bash
+   gh pr view {pr-number} --json commits
+   ```
+2. Check if validation ran:
+   ```bash
+   gh run list --workflow=tdd-validate.yml --branch "tdd/spec-{SPEC-ID}"
+   ```
+3. Manually retry or reset:
+   ```bash
+   # Reset to queued
+   gh issue edit {issue-number} --remove-label "tdd-spec:in-progress"
+   gh issue edit {issue-number} --add-label "tdd-spec:queued"
+   ```
+
+### Validation failing repeatedly
+
+1. Check validation logs:
+   ```bash
+   gh run view {run-id} --log
+   ```
+2. Clone and test locally:
+   ```bash
+   git checkout tdd/spec-{SPEC-ID}
+   bun test:e2e {file} --grep "{SPEC-ID}"
+   bun test:e2e:regression
+   ```
+3. Fix and push:
+   ```bash
+   # Make fixes
+   git add -A
+   git commit -m "fix: address validation failures for {SPEC-ID}"
+   git push
+   ```
+
+### Queue not populating
+
+1. Check if scan finds specs:
+   ```bash
+   bun run scripts/tdd-automation/queue-manager.ts scan
+   ```
+2. Check if test files have `.fixme()`:
+   ```bash
+   grep -r "test.fixme" specs/
+   ```
+3. Manually populate:
+   ```bash
+   bun run scripts/tdd-automation/queue-manager.ts populate
+   ```
+
+## Safety Features
+
+### Rate Limiting
+
+- **No rate limits**: Queue is stateless, no artificial limits needed
+- **Natural throttling**: 15-minute processor interval + strict serial processing
+
+### Validation Gates
+
+- All spec tests must pass
+- All regression tests must pass
+- All code quality checks must pass (license, lint, typecheck)
+- Human review still possible (PRs are created as draft first)
+
+### Error Recovery
+
+- Failed specs are labeled `tdd-spec:failed`
+- Issues remain open for manual review
+- No automatic retries (prevents infinite loops)
+- Easy to reset: Change label back to `queued`
+
+### Branch Protection
+
+- All changes via PR (never direct to main)
+- Auto-merge only after validation passes
+- Squash merge (clean commit history)
+
+## Configuration Options
+
+### Adjust Processing Interval
+
+Edit `.github/workflows/tdd-queue-processor.yml`:
 
 ```yaml
-feature_areas:
-  - pattern: 'api/paths/auth/**/*.spec.ts'
-    priority: 5
-    max_tests_per_run: 1 # Auth is sensitive
-    require_human_approval: true
+schedule:
+  - cron: '*/15 * * * *' # Every 15 min (current)
+  # - cron: '*/30 * * * *'  # Every 30 min (slower)
+  # - cron: '*/5 * * * *'   # Every 5 min (faster)
 ```
+
+### Change Concurrency
+
+Edit `.github/tdd-automation-config.yml`:
+
+```yaml
+queue:
+  max_concurrent: 1 # Strict serial (current)
+  # max_concurrent: 3  # Allow 3 specs in parallel
+```
+
+Then update processor workflow to check count instead of boolean:
+
+```yaml
+# In tdd-queue-processor.yml
+if [ "$IN_PROGRESS_COUNT" -lt "$MAX_CONCURRENT" ]; then
+  # Process next spec
+fi
+```
+
+### Disable Auto-Merge
+
+Edit `.github/workflows/tdd-validate.yml`:
+
+Remove or comment out the "Enable auto-merge" step.
 
 ## Cost Estimation
 
-Based on Claude API usage:
+| Workflow        | Runs/Day           | Duration       | Cost/Day            |
+| --------------- | ------------------ | -------------- | ------------------- |
+| Queue Populate  | 96 (every 15 min)  | ~1 min         | $0.08               |
+| Queue Processor | 96 (every 15 min)  | ~1 min         | $0.08               |
+| Validation      | 10-50 (per commit) | ~5 min         | $0.40-$2.00         |
+| **Total**       | **~200**           | **~10-50 min** | **$0.56-$2.16/day** |
 
-| Tests/Day | Estimated Cost/Day | Cost/Month |
-| --------- | ------------------ | ---------- |
-| 5         | $2-3               | $60-90     |
-| 15        | $6-9               | $180-270   |
-| 30        | $12-18             | $360-540   |
+**Note**: This excludes Claude API costs (variable, depends on implementation complexity)
 
-Factors affecting cost:
+## Comparison with Old System
 
-- Complexity of tests
-- Amount of code needed
-- Number of retries
-- Refactoring frequency
+| Metric            | Old System           | Queue System          | Improvement           |
+| ----------------- | -------------------- | --------------------- | --------------------- |
+| Workflow duration | 60+ min (polling)    | 1-5 min (no polling)  | **12x faster**        |
+| Granularity       | Per file (~10 specs) | Per spec (1 spec)     | **10x more granular** |
+| Concurrency       | Blocked by polling   | Population concurrent | **Scalable**          |
+| Failure recovery  | Manual restart       | Automatic retry       | **Resilient**         |
+| Cost per run      | High (long runs)     | Low (short runs)      | **10x cheaper**       |
+| Visibility        | One issue per file   | One issue per spec    | **More transparent**  |
 
 ## Future Enhancements
 
-### Planned Features
+### Planned
 
-1. Parallel test fixing (multiple files)
-2. ML-based test prioritization
-3. Auto-merge on high confidence
-4. Cross-repository support
+- [ ] Parallel processing (2-3 specs at once)
+- [ ] Priority queue (high-priority specs first)
+- [ ] Automatic retries (with exponential backoff)
+- [ ] Slack notifications
+- [ ] Cost tracking dashboard
 
-### Integration Ideas
+### Experimental
 
-1. Slack notifications
-2. JIRA ticket creation
-3. Automatic release notes
-4. Performance tracking
+- [ ] AI-powered test prioritization
+- [ ] Batch processing (multiple specs in one commit)
+- [ ] Cross-repository support
+- [ ] Performance benchmarking
 
-## Security Considerations
+## Contributing
 
-### Token Management
+When updating the queue system:
 
-- Rotate `CLAUDE_CODE_OAUTH_TOKEN` monthly
-- Use repository secrets (never commit)
-- Limit token scope to minimum required
-
-### Code Review
-
-- Always require human review
-- Use CODEOWNERS for sensitive areas
-- Enable branch protection rules
-
-### Audit Trail
-
-- All changes tracked in git
-- Issues document agent interactions
-- PR descriptions include full context
+1. Test with fixture tests first
+2. Run manual dispatch to verify workflows
+3. Monitor queue status with `status` command
+4. Update this documentation
+5. Update CLAUDE.md for Claude Code users
 
 ## Support
 
-### Getting Help
+### Issues with Queue System
 
-1. Check this documentation
-2. Review workflow logs
-3. Check Claude Code status
-4. Open issue in repo
+1. Check workflow logs: `gh run list --workflow=tdd-queue-*`
+2. Check queue status: `bun run scripts/tdd-automation/queue-manager.ts status`
+3. Review recent changes to workflows or scripts
+4. Open issue in repo with logs and context
 
-### Contributing
+### Issues with Specific Spec
 
-1. Test changes with fixtures first
-2. Update documentation
-3. Follow conventional commits
-4. Add tests for new features
+1. Check issue comments: `gh issue view {issue-number}`
+2. Check PR status: `gh pr view {pr-number}`
+3. Check validation logs: `gh run view {run-id}`
+4. Test locally: `git checkout tdd/spec-{SPEC-ID} && bun test:e2e ...`
 
-## Quick Reference
+---
 
-### Commands
-
-```bash
-# Manual scan for tests
-bun run scripts/tdd-automation/scan-fixme-tests.ts
-
-# Track progress
-bun run scripts/tdd-automation/track-progress.ts
-
-# Validate specific test file
-bun run scripts/tdd-automation/validate-implementation.ts specs/app/version/version.spec.ts
-
-# Trigger workflow via CLI
-gh workflow run tdd-auto-fix.yml \
-  -f feature_area=app/version \
-  -f max_tests=3 \
-  -f dry_run=true
-
-# View recent runs
-gh run list --workflow=tdd-auto-fix.yml
-
-# Check PR status
-gh pr list --label tdd-automation
-```
-
-### File Locations
-
-```
-.github/
-├── workflows/
-│   ├── tdd-auto-fix.yml          # Main pipeline
-│   └── tdd-auto-refactor.yml     # Refactoring pipeline
-├── tdd-automation-config.yml     # Configuration
-├── tdd-scan-results.json         # Latest scan results
-├── tdd-metrics.json              # Historical metrics
-└── ISSUE_TEMPLATE/
-    └── tdd-auto-fix.md           # Issue template
-
-scripts/tdd-automation/
-├── scan-fixme-tests.ts           # Scanner utility
-├── track-progress.ts             # Progress tracker
-├── validate-implementation.ts    # Validator
-└── prompts/
-    ├── e2e-test-fixer.md        # Agent prompt
-    └── codebase-refactor-auditor.md
-
-specs/tdd-automation/
-└── fixtures/
-    └── simple-feature.spec.ts    # Test fixture
-
-TDD-PROGRESS.md                    # Progress dashboard
-```
-
-## Conclusion
-
-The TDD Automation Pipeline transforms your development workflow by automatically implementing code to pass failing tests. Start with the test fixtures, gradually expand to real features, and monitor the results. With proper configuration and monitoring, you can achieve continuous automated development while maintaining code quality and safety.
+**Last Updated**: 2025-10-30
+**Version**: 2.0.0 (Queue System)
+**Status**: Active

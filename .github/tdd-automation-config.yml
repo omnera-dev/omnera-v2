@@ -1,7 +1,61 @@
 # TDD Automation Configuration
-# This file controls the behavior of the automated TDD pipeline
+# This file controls the behavior of the automated TDD queue system
 
-# Pipeline Configuration
+# Queue Configuration
+queue:
+  # Enable or disable the queue system
+  enabled: true
+
+  # Queue processing interval (minutes)
+  # How often the processor checks for new specs to process
+  processing_interval: 15
+
+  # Maximum concurrent specs in-progress
+  # Set to 1 for strict serial processing (one spec at a time)
+  max_concurrent: 1
+
+  # Queue population frequency
+  # How often to scan for new fixme specs and populate the queue
+  populate:
+    # On push to main (when new tests are added)
+    on_push: true
+
+    # Scheduled scans (every 15 minutes)
+    on_schedule: true
+
+    # Schedule cron expression (UTC)
+    schedule_cron: '*/15 * * * *'
+
+  # Issue management
+  issues:
+    # Issue label prefix
+    label_prefix: 'tdd-spec'
+
+    # Available states
+    states:
+      - queued
+      - in-progress
+      - completed
+      - failed
+
+    # Auto-close completed specs
+    auto_close_completed: true
+
+    # Keep failed specs open for manual review
+    keep_failed_open: true
+
+  # Validation configuration
+  validation:
+    # Auto-validate on commit to spec branches
+    auto_validate: true
+
+    # Enable auto-merge when validation passes
+    auto_merge: true
+
+    # Merge strategy
+    merge_strategy: squash # squash, merge, rebase
+
+# Pipeline Configuration (Legacy - for reference)
 pipeline:
   # Enable or disable the entire pipeline
   enabled: true
