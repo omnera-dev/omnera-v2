@@ -6,9 +6,7 @@
  */
 
 import { execSync } from 'node:child_process'
-import { existsSync, readFileSync, writeFileSync } from 'node:fs'
-import { homedir, platform } from 'node:os'
-import { join } from 'node:path'
+import { platform } from 'node:os'
 
 /**
  * Docker Service Management Utilities
@@ -354,44 +352,6 @@ async function waitForDocker(timeoutMs: number = 60_000): Promise<void> {
     `Docker daemon failed to start within ${timeoutMs / 1000} seconds. ` +
       `Please check your Docker installation and try again.`
   )
-}
-
-/**
- * Fix Docker credential provider issues BEFORE any Docker client initialization
- * This MUST run before testcontainers or any Docker client code is imported
- *
- * Temporarily disables credsStore and credHelpers in ~/.docker/config.json
- * to prevent authentication errors with testcontainers
- */
-export function setupDockerConfig(): { cleanup: () => void } {
-  const dockerConfigPath = join(homedir(), '.docker', 'config.json')
-  let originalDockerConfig: string | null = null
-
-  if (existsSync(dockerConfigPath)) {
-    // Backup original config
-    originalDockerConfig = readFileSync(dockerConfigPath, 'utf-8')
-
-    // Modify config to remove credential helpers
-    const config = JSON.parse(originalDockerConfig)
-    delete config.credsStore
-    delete config.credHelpers
-    writeFileSync(dockerConfigPath, JSON.stringify(config, null, '\t'))
-    console.log('🔧 Temporarily disabled Docker credential helpers')
-  }
-
-  // Return cleanup function
-  return {
-    cleanup: () => {
-      if (originalDockerConfig) {
-        try {
-          writeFileSync(dockerConfigPath, originalDockerConfig)
-          console.log('🔧 Restored original Docker config')
-        } catch (error) {
-          console.warn('⚠️  Could not restore Docker config:', error)
-        }
-      }
-    },
-  }
 }
 
 /**

@@ -7,7 +7,7 @@
 
 import { execSync } from 'node:child_process'
 import { DatabaseTemplateManager } from './database-utils'
-import { ensureDockerRunning, setupDockerConfig } from './docker-utils'
+import { ensureDockerRunning } from './docker-utils'
 
 /**
  * Playwright Global Setup
@@ -28,9 +28,6 @@ import { ensureDockerRunning, setupDockerConfig } from './docker-utils'
  */
 export default async function globalSetup() {
   console.log('🚀 Initializing global test database...')
-
-  // Fix Docker credential issues BEFORE importing testcontainers
-  const dockerConfigCleanup = setupDockerConfig()
 
   // Ensure Docker daemon is running (auto-install/start if needed)
   // On macOS: auto-installs Colima if no Docker found
@@ -81,10 +78,6 @@ export default async function globalSetup() {
     console.log('🧹 Cleaning up global test database...')
     await templateManager.cleanup()
     await container.stop()
-
-    // Restore original Docker config
-    dockerConfigCleanup.cleanup()
-
     console.log('✅ Global test database cleaned up')
   }
 }
