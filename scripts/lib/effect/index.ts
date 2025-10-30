@@ -118,6 +118,7 @@ export type {
 export {
   LoggerService,
   LoggerServiceLive,
+  LoggerServicePretty,
   defaultLoggerConfig,
   trace,
   debug,

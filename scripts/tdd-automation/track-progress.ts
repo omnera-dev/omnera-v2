@@ -14,7 +14,7 @@ import {
   CommandService,
   CommandServiceLive,
   LoggerService,
-  LoggerServiceLive,
+  LoggerServicePretty,
   success,
   progress,
   logInfo,
@@ -418,7 +418,7 @@ ${report.nextUp.map((f, i) => `${i + 1}. **${f}**`).join('\n')}
   })
 
 // Main layer combining all services
-const MainLayer = Layer.mergeAll(FileSystemServiceLive, CommandServiceLive, LoggerServiceLive())
+const MainLayer = Layer.mergeAll(FileSystemServiceLive, CommandServiceLive, LoggerServicePretty())
 
 // Run the tracker
 const program = trackProgress.pipe(

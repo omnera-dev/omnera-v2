@@ -32,7 +32,7 @@ import {
   FileSystemServiceLive,
   CommandService,
   CommandServiceLive,
-  LoggerServiceLive,
+  LoggerServicePretty,
   progress,
   success,
   logError,
@@ -392,7 +392,7 @@ const main = Effect.gen(function* () {
 })
 
 // Main layer combining all services
-const MainLayer = Layer.mergeAll(FileSystemServiceLive, CommandServiceLive, LoggerServiceLive())
+const MainLayer = Layer.mergeAll(FileSystemServiceLive, CommandServiceLive, LoggerServicePretty())
 
 // Run the script
 const program = main.pipe(

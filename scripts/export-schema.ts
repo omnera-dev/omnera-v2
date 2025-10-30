@@ -19,19 +19,19 @@
  */
 
 import { join } from 'node:path'
+import { JSONSchema, type Schema } from 'effect'
 import * as Effect from 'effect/Effect'
 import * as Layer from 'effect/Layer'
-import { JSONSchema, type Schema } from 'effect'
+import { AppSchema } from '../src/domain/models/app'
 import {
   FileSystemService,
   FileSystemServiceLive,
-  LoggerServiceLive,
+  LoggerServicePretty,
   progress,
   success,
   section,
 } from './lib/effect'
 // Import schemas
-import { AppSchema } from '../src/domain/models/app'
 
 /**
  * Get package version from package.json
@@ -105,7 +105,7 @@ const exportSchema = Effect.gen(function* () {
 })
 
 // Main layer combining all services
-const MainLayer = Layer.mergeAll(FileSystemServiceLive, LoggerServiceLive())
+const MainLayer = Layer.mergeAll(FileSystemServiceLive, LoggerServicePretty())
 
 // Run the export
 const program = exportSchema.pipe(Effect.provide(MainLayer))

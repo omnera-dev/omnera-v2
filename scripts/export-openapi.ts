@@ -26,16 +26,16 @@
 import { join } from 'node:path'
 import * as Effect from 'effect/Effect'
 import * as Layer from 'effect/Layer'
+import { auth } from '../src/infrastructure/auth/better-auth/auth'
+import { getOpenAPIDocument } from '../src/presentation/api/openapi-schema'
 import {
   FileSystemService,
   FileSystemServiceLive,
-  LoggerServiceLive,
+  LoggerServicePretty,
   progress,
   success,
   section,
 } from './lib/effect'
-import { auth } from '../src/infrastructure/auth/better-auth/auth'
-import { getOpenAPIDocument } from '../src/presentation/api/openapi-schema'
 
 /**
  * OpenAPI Document type (simplified for merging)
@@ -229,7 +229,7 @@ const exportOpenAPI = Effect.gen(function* () {
 })
 
 // Main layer combining all services
-const MainLayer = Layer.mergeAll(FileSystemServiceLive, LoggerServiceLive())
+const MainLayer = Layer.mergeAll(FileSystemServiceLive, LoggerServicePretty())
 
 // Run the export
 const program = exportOpenAPI.pipe(Effect.provide(MainLayer))

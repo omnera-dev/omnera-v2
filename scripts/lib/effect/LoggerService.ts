@@ -377,3 +377,18 @@ export const configureEffectLogger = (config: LoggerConfig = defaultLoggerConfig
       globalThis.console.log(formatted)
     })
   )
+
+/**
+ * Pretty Logger Layer - Removes timestamps and fiber IDs for cleaner script output
+ */
+export const LoggerServicePretty = (config: LoggerConfig = defaultLoggerConfig) =>
+  Layer.merge(
+    LoggerServiceLive(config),
+    Logger.replace(
+      Logger.defaultLogger,
+      Logger.make(({ message }) => {
+        // Simple output without timestamps and fiber IDs
+        globalThis.console.log(String(message))
+      })
+    )
+  )

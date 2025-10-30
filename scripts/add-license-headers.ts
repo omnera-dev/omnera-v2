@@ -12,7 +12,7 @@ import * as Layer from 'effect/Layer'
 import {
   FileSystemService,
   FileSystemServiceLive,
-  LoggerServiceLive,
+  LoggerServicePretty,
   progress,
   success,
   section,
@@ -94,9 +94,9 @@ const main = Effect.gen(function* () {
 
   const allFiles = yield* Effect.all(
     INCLUDE_DIRS.map((dir) =>
-      fs.glob(`${dir}/**/*.{ts,tsx}`).pipe(
-        Effect.catchAll(() => Effect.succeed([] as readonly string[]))
-      )
+      fs
+        .glob(`${dir}/**/*.{ts,tsx}`)
+        .pipe(Effect.catchAll(() => Effect.succeed([] as readonly string[])))
     ),
     { concurrency: 'unbounded' }
   )
@@ -147,7 +147,7 @@ const main = Effect.gen(function* () {
 })
 
 // Main layer combining all services
-const MainLayer = Layer.mergeAll(FileSystemServiceLive, LoggerServiceLive())
+const MainLayer = Layer.mergeAll(FileSystemServiceLive, LoggerServicePretty())
 
 // Run the script
 const program = main.pipe(Effect.provide(MainLayer))
