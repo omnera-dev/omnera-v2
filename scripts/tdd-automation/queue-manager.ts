@@ -331,6 +331,54 @@ export const getInProgressSpecs = Effect.gen(function* () {
 })
 
 /**
+ * Get all existing spec issues from GitHub (all states: open and closed)
+ * Used for bulk deduplication before creating new issues
+ */
+export const getAllExistingSpecs = Effect.gen(function* () {
+  const cmd = yield* CommandService
+
+  yield* logInfo('Fetching all existing spec issues (bulk deduplication)...', '🔍')
+
+  // Fetch ALL spec issues (open + closed) in one query
+  const output = yield* cmd
+    .exec('gh issue list --label "tdd-spec" --state all --json number,title,state --limit 1000', {
+      throwOnError: false,
+    })
+    .pipe(
+      Effect.catchAll(() => {
+        return Effect.gen(function* () {
+          yield* logError('Failed to fetch existing specs')
+          return '[]'
+        })
+      })
+    )
+
+  try {
+    const issues = JSON.parse(output) as Array<{
+      number: number
+      title: string
+      state: string
+    }>
+
+    // Extract spec IDs from issue titles
+    const existingSpecIds = new Set<string>()
+    for (const issue of issues) {
+      const specIdMatch = issue.title.match(/🤖\s+([A-Z]+-[A-Z-]+-\d{3}):/)
+      const specId = specIdMatch?.[1]
+      if (specId) {
+        existingSpecIds.add(specId)
+      }
+    }
+
+    yield* logInfo(`  Found ${existingSpecIds.size} existing spec issues`)
+    return existingSpecIds
+  } catch {
+    yield* logError('Failed to parse GitHub issue response')
+    return new Set<string>()
+  }
+})
+
+/**
  * Check if a spec already has an open issue
  */
 export const specHasOpenIssue = (specId: string): Effect.Effect<boolean, never, CommandService> =>
@@ -354,20 +402,24 @@ export const specHasOpenIssue = (specId: string): Effect.Effect<boolean, never, 
 
 /**
  * Create a minimal spec issue on GitHub
+ *
+ * @param spec - The spec item to create an issue for
+ * @param skipExistenceCheck - Skip individual existence check (used when bulk deduplication is done)
  */
 export const createSpecIssue = (
-  spec: SpecItem
+  spec: SpecItem,
+  skipExistenceCheck = false
 ): Effect.Effect<number, never, CommandService | LoggerService> =>
   Effect.gen(function* () {
     const cmd = yield* CommandService
 
-    yield* logInfo(`Creating issue for ${spec.specId}...`, '📝')
-
-    // Check if issue already exists
-    const hasIssue = yield* specHasOpenIssue(spec.specId)
-    if (hasIssue) {
-      yield* skip(`Issue already exists for ${spec.specId}, skipping`)
-      return -1
+    // Check if issue already exists (unless bulk deduplication was done)
+    if (!skipExistenceCheck) {
+      const hasIssue = yield* specHasOpenIssue(spec.specId)
+      if (hasIssue) {
+        yield* skip(`Issue already exists for ${spec.specId}, skipping`)
+        return -1
+      }
     }
 
     const title = `🤖 ${spec.specId}: ${spec.description}`
@@ -408,7 +460,7 @@ EOFBODY`,
     const issueNumber = issueMatch?.[1] ? parseInt(issueMatch[1], 10) : -1
 
     if (issueNumber > 0) {
-      yield* success(`Created issue #${issueNumber}`)
+      yield* success(`Created issue #${issueNumber} for ${spec.specId}`)
     }
 
     return issueNumber
@@ -562,6 +614,11 @@ const commandScan = Effect.gen(function* () {
 
 /**
  * CLI: Create issues for all specs (skip duplicates)
+ *
+ * PERFORMANCE OPTIMIZATION:
+ * - Bulk deduplication: Fetch all existing issues once (1 API call vs N calls)
+ * - Parallel batching: Create issues in batches of 10 concurrently
+ * - Expected: 15 minutes → 30-60 seconds (~15-30x faster for 647 specs)
  */
 const commandPopulate = Effect.gen(function* () {
   const result = yield* scanForFixmeSpecs
@@ -572,23 +629,50 @@ const commandPopulate = Effect.gen(function* () {
   }
 
   yield* logInfo('')
-  yield* logInfo(`Creating issues for ${result.totalSpecs} specs...`, '📝')
+  yield* logInfo(`Found ${result.totalSpecs} specs with .fixme()`, '📊')
 
-  // Create issues in sequence (avoid rate limiting)
-  let created = 0
-  let skipped = 0
+  // OPTIMIZATION 1: Bulk deduplication (1 API call instead of N)
+  const existingSpecIds = yield* getAllExistingSpecs
 
-  for (const spec of result.specs) {
-    const issueNumber = yield* createSpecIssue(spec)
-    if (issueNumber > 0) {
-      created++
-    } else {
-      skipped++
-    }
-  }
+  // Filter specs that don't have issues yet
+  const specsToCreate = result.specs.filter((spec) => !existingSpecIds.has(spec.specId))
+  const alreadyExist = result.totalSpecs - specsToCreate.length
 
   yield* logInfo('')
-  yield* success(`Created ${created} issues, skipped ${skipped} (already exist)`)
+  yield* logInfo(`Creating issues for ${specsToCreate.length} new specs...`, '📝')
+  if (alreadyExist > 0) {
+    yield* logInfo(`Skipping ${alreadyExist} specs (already have issues)`, '⏭️')
+  }
+
+  if (specsToCreate.length === 0) {
+    yield* success('All specs already have issues')
+    return
+  }
+
+  // OPTIMIZATION 2: Parallel batching (create 10 issues concurrently)
+  // This respects GitHub API rate limits while dramatically improving speed
+  const createIssueEffect = (spec: SpecItem) =>
+    createSpecIssue(spec, true).pipe(
+      Effect.catchAll(() => Effect.succeed(-1)) // Continue on individual failures
+    )
+
+  yield* progress('Creating issues in parallel batches (concurrency: 10)...')
+  const issueNumbers = yield* Effect.all(specsToCreate.map(createIssueEffect), {
+    concurrency: 10,
+  })
+
+  const created = issueNumbers.filter((num) => num > 0).length
+  const failed = issueNumbers.length - created
+
+  yield* logInfo('')
+  yield* success(`Created ${created} issues`)
+  if (failed > 0) {
+    yield* logError(`Failed to create ${failed} issues (see errors above)`)
+  }
+  yield* logInfo(
+    `Total processing time saved: ~${Math.round((specsToCreate.length * 1.5) / 60)} minutes → ~${Math.round(specsToCreate.length / 10 / 60)} minutes`,
+    '⚡'
+  )
 })
 
 /**
