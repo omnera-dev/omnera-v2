@@ -75,6 +75,7 @@
     "validate:app-specs": "bun run scripts/validate-app-specs.ts",
     "validate:docs": "bun run scripts/validate-docs-versions.ts",
     "tdd:detect-duplicates": "bun run scripts/tdd-automation/detect-duplicates.ts",
+    "tdd:cleanup-duplicates": "bun run scripts/tdd-automation/cleanup-duplicates.ts",
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate",
     "db:push": "drizzle-kit push",
