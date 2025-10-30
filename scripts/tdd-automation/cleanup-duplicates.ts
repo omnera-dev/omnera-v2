@@ -104,12 +104,23 @@ const closeDuplicates = (duplicates: DuplicateGroup[], dryRun: boolean) =>
     yield* logInfo('')
     yield* logInfo(`Found ${duplicates.length} specs with duplicates`, '📊')
 
+    // Count how many issues need closing (only OPEN issues)
     let totalToClose = 0
+    let alreadyClosed = 0
     for (const dup of duplicates) {
-      totalToClose += dup.issues.length - 1 // Keep newest, close others
+      for (let i = 1; i < dup.issues.length; i++) {
+        if (dup.issues[i]?.state === 'OPEN') {
+          totalToClose++
+        } else {
+          alreadyClosed++
+        }
+      }
     }
 
-    yield* logInfo(`Total issues to close: ${totalToClose}`)
+    yield* logInfo(`Total open issues to close: ${totalToClose}`)
+    if (alreadyClosed > 0) {
+      yield* logInfo(`Already closed issues (skipped): ${alreadyClosed}`)
+    }
     yield* logInfo('')
 
     if (dryRun) {
@@ -119,6 +130,7 @@ const closeDuplicates = (duplicates: DuplicateGroup[], dryRun: boolean) =>
     }
 
     let closed = 0
+    let skipped = 0
     let failed = 0
 
     for (const dup of duplicates) {
@@ -127,6 +139,17 @@ const closeDuplicates = (duplicates: DuplicateGroup[], dryRun: boolean) =>
       if (!newestIssue) continue
 
       for (const oldIssue of olderIssues) {
+        // Skip if already closed
+        if (oldIssue.state !== 'OPEN') {
+          if (dryRun) {
+            console.log(
+              `  Skipping #${oldIssue.number} (${dup.specId}) - already ${oldIssue.state}`
+            )
+          }
+          skipped++
+          continue
+        }
+
         if (dryRun) {
           console.log(
             `  Would close #${oldIssue.number} (${dup.specId}) - keeping #${newestIssue.number}`
@@ -160,8 +183,14 @@ const closeDuplicates = (duplicates: DuplicateGroup[], dryRun: boolean) =>
     yield* logInfo('')
     if (dryRun) {
       yield* success(`Dry run completed - ${totalToClose} issues would be closed`)
+      if (skipped > 0) {
+        yield* logInfo(`${skipped} issues already closed (skipped)`)
+      }
     } else {
       yield* success(`Closed ${closed} duplicate issues`)
+      if (skipped > 0) {
+        yield* logInfo(`Skipped ${skipped} already closed issues`)
+      }
       if (failed > 0) {
         yield* logError(`Failed to close ${failed} issues`)
       }

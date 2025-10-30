@@ -120,64 +120,76 @@ jobs:
           TEST_FILE="${{ steps.next.outputs.test_file }}"
           BRANCH_NAME="tdd/spec-$SPEC_ID"
 
-          echo "🤖 Auto-invoking Claude Code for spec $SPEC_ID..."
+          echo "🤖 Auto-invoking Claude Code with e2e-test-fixer agent for spec $SPEC_ID..."
 
-          gh issue comment "$ISSUE_NUMBER" --body "@claude
+          gh issue comment "$ISSUE_NUMBER" --body "@claude Please use the **e2e-test-fixer** agent to implement this spec.
 
-          ## Implementation Instructions for @claude
+          ## 🤖 TDD Pipeline - Automated Implementation Request
 
-          Please implement this E2E test spec following the TDD pipeline workflow:
+          **Spec ID**: \`$SPEC_ID\`
+          **Test File**: \`$TEST_FILE\`
+          **Branch**: \`$BRANCH_NAME\`
 
-          ### Steps
+          ### Agent Context
+
+          The **e2e-test-fixer** agent provides:
+          - ✅ Complete TDD workflow with RED→GREEN cycle
+          - ✅ Autonomous schema creation via **effect-schema-generator** skill
+          - ✅ Pipeline mode support (non-interactive execution)
+          - ✅ Minimal but correct implementation following Omnera architecture
+          - ✅ Layer-based architecture compliance (Domain/Application/Infrastructure)
+          - ✅ Effect.ts patterns for side effects
+          - ✅ Automatic quality checks and validation
+
+          ### Implementation Steps
 
           1. **Checkout the branch**:
              \`\`\`bash
              git checkout $BRANCH_NAME
              \`\`\`
 
-          2. **Read the test file** to understand requirements:
-             - Test file: \`$TEST_FILE\`
-             - Find the test with spec ID: \`$SPEC_ID\`
+          2. **Implement the spec** following e2e-test-fixer workflow:
+             - Read test file: \`$TEST_FILE\`
+             - Find test with spec ID: \`$SPEC_ID\`
+             - Remove \`.fixme()\` from the test
+             - Check if Domain schemas exist (invoke **effect-schema-generator** skill if missing)
+             - Implement minimal code in correct architectural layer
+             - Verify test passes: \`bun test:e2e \"$TEST_FILE\" --grep \"$SPEC_ID\"\`
+             - Run regression tests: \`bun test:e2e:regression\`
 
-          3. **Remove \`.fixme()\`** from the test (make it active)
-
-          4. **Implement minimal code** to make the test pass:
-             - Follow the domain/application/infrastructure layer architecture
-             - Use Effect.ts for side effects
-             - Add proper type safety
-
-          5. **Verify locally** (optional but recommended):
-             \`\`\`bash
-             bun test:e2e \"$TEST_FILE\" --grep \"$SPEC_ID\"
-             \`\`\`
-
-          6. **Commit your changes**:
+          3. **Commit and push**:
              \`\`\`bash
              bun run license  # Add copyright headers
              git add -A
              git commit -m \"fix: implement $SPEC_ID\"
-             \`\`\`
-
-          7. **Push to trigger validation**:
-             \`\`\`bash
              git push
              \`\`\`
 
-          ### Pipeline Mode
+          ### Pipeline Mode Indicators
 
-          You are operating in **automated pipeline mode** (\`CLAUDECODE=1\`). This means:
-          - Non-interactive execution (no questions)
-          - Automatic decision-making following Omnera patterns
-          - Minimal implementation (just enough to pass the test)
-          - Validation runs automatically on push
+          You are operating in **automated pipeline mode**:
+          - Branch pattern: \`tdd/spec-*\` ✓
+          - Environment: \`CLAUDECODE=1\` ✓
+          - Issue template: TDD automation ✓
 
-          ### After Implementation
+          **Behavior**: Non-interactive execution, autonomous decisions, minimal implementation.
 
-          If 3+ tests have been fixed, the \`codebase-refactor-auditor\` agent will be triggered automatically for refactoring.
+          ### Skills Available
+
+          - **effect-schema-generator**: Invoke automatically if Domain schemas are missing
+          - See \`@.claude/agents/e2e-test-fixer.md\` for complete workflow
+
+          ### Validation
+
+          Push triggers automatic validation:
+          - Specific spec test must pass
+          - Regression tests must pass
+          - Code quality checks must pass
+          - Auto-merge on success
 
           ---
 
-          *This is an automated comment from the TDD queue system.*"
+          *Automated request from TDD queue processor. See workflow: [View run](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})*"
 
           echo "✅ Auto-comment posted to issue #$ISSUE_NUMBER"
         env:
