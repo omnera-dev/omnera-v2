@@ -159,7 +159,7 @@ const closeDuplicates = (duplicates: DuplicateGroup[], dryRun: boolean) =>
 
           const result = yield* cmd
             .exec(
-              `gh issue close ${oldIssue.number} --reason "duplicate" --comment "🤖 Duplicate issue - keeping newer issue #${newestIssue.number}\n\nThis duplicate was created due to a bug in the TDD queue populate workflow (now fixed)."`,
+              `gh issue close ${oldIssue.number} --reason "not planned" --comment "🤖 **Duplicate Issue**\n\nThis is a duplicate of issue #${newestIssue.number} (keeping the newer one).\n\nThis duplicate was created due to a bug in the TDD queue populate workflow (now fixed). Closing as 'not planned' since the work will be tracked in the newer issue."`,
               { throwOnError: false }
             )
             .pipe(
