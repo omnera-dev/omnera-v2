@@ -342,44 +342,15 @@ jobs:
 
           Spec $SPEC_ID is now completed and deployed to main. This issue is closed.
 
+          **Optional**: To request refactoring review, comment:
+          \`@claude Please review for refactoring opportunities using codebase-refactor-auditor\`
+
           📊 [View validation run]($RUN_URL)"
 
           # Add success comment
           gh issue comment "$ISSUE_NUMBER" --body "$MESSAGE"
 
           echo "✅ Issue #$ISSUE_NUMBER marked as completed"
-        env:
-          GH_TOKEN: ${{ github.token }}
-
-      - name: Trigger refactoring review
-        if: steps.result.outputs.success == 'true' && steps.issue.outputs.has_issue == 'true'
-        run: |
-          ISSUE_NUMBER="${{ steps.issue.outputs.issue_number }}"
-          SPEC_ID="${{ steps.spec.outputs.spec_id }}"
-          TEST_FILE="${{ steps.test_file.outputs.test_file }}"
-
-          echo "🔄 Triggering post-implementation refactoring review..."
-
-          gh issue comment "$ISSUE_NUMBER" --body "@claude
-
-          ## 🔄 Post-Implementation Refactoring Review
-
-          The spec **$SPEC_ID** has been implemented successfully. Please use the **codebase-refactor-auditor** agent to:
-
-          1. Analyze changed files for code duplication
-          2. Identify opportunities to extract shared logic
-          3. Suggest refactoring to improve maintainability
-
-          **Scope**: Files changed in this spec implementation
-          **Goal**: Eliminate duplication, improve code quality
-
-          Use the **code-duplication-detector** skill to identify duplicate patterns.
-
-          ---
-
-          *Automated request from TDD validation workflow - This is a proactive quality improvement step.*"
-
-          echo "✅ Refactoring review comment posted to issue #$ISSUE_NUMBER"
         env:
           GH_TOKEN: ${{ github.token }}
 

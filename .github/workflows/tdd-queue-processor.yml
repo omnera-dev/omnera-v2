@@ -87,32 +87,7 @@ jobs:
       # GitHub Actions cannot create PRs with default GITHUB_TOKEN
       # Claude Code will create PR when implementing, or validation runs on branch directly
 
-      - name: Mark spec as in-progress
-        if: steps.check.outputs.should_process == 'true'
-        run: |
-          ISSUE_NUMBER="${{ steps.next.outputs.issue_number }}"
-          SPEC_ID="${{ steps.next.outputs.spec_id }}"
-          BRANCH_NAME="tdd/spec-$SPEC_ID"
-
-          echo "🏃 Marking issue #$ISSUE_NUMBER as in-progress..."
-
-          # Update labels
-          gh issue edit "$ISSUE_NUMBER" --remove-label "tdd-spec:queued"
-          gh issue edit "$ISSUE_NUMBER" --add-label "tdd-spec:in-progress"
-
-          # Add comment with branch info
-          gh issue comment "$ISSUE_NUMBER" --body "🚀 **Processing started**
-
-          - **Branch**: \`$BRANCH_NAME\`
-          - **Checkout**: \`git checkout $BRANCH_NAME\`
-
-          Waiting for implementation. Validation will run automatically on commit to this branch."
-
-          echo "✅ Issue updated"
-        env:
-          GH_TOKEN: ${{ github.token }}
-
-      - name: Auto-invoke Claude Code
+      - name: Mark spec as in-progress and invoke Claude Code
         if: steps.check.outputs.should_process == 'true'
         run: |
           ISSUE_NUMBER="${{ steps.next.outputs.issue_number }}"
@@ -120,85 +95,30 @@ jobs:
           TEST_FILE="${{ steps.next.outputs.test_file }}"
           BRANCH_NAME="tdd/spec-$SPEC_ID"
 
-          echo "🤖 Auto-invoking Claude Code with e2e-test-fixer agent for spec $SPEC_ID..."
+          echo "🏃 Marking issue #$ISSUE_NUMBER as in-progress and invoking Claude Code..."
 
-          gh issue comment "$ISSUE_NUMBER" --body "@claude Please use the **e2e-test-fixer** agent to implement this spec.
+          # Update labels
+          gh issue edit "$ISSUE_NUMBER" --remove-label "tdd-spec:queued"
+          gh issue edit "$ISSUE_NUMBER" --add-label "tdd-spec:in-progress"
 
-          ## 🤖 TDD Pipeline - Automated Implementation Request
+          # Post single combined comment
+          gh issue comment "$ISSUE_NUMBER" --body "🚀 **Processing started** - @claude please implement this spec using the **e2e-test-fixer** agent.
 
-          **Spec ID**: \`$SPEC_ID\`
+          **Branch**: \`$BRANCH_NAME\` (already created and checked out)
           **Test File**: \`$TEST_FILE\`
-          **Branch**: \`$BRANCH_NAME\`
+          **Spec ID**: \`$SPEC_ID\`
 
-          ### Agent Context
+          **Quick Start**:
+          1. Checkout branch: \`git checkout $BRANCH_NAME\`
+          2. Remove \`.fixme()\` from test \`$SPEC_ID\`
+          3. Implement minimal code following Omnera architecture
+          4. Commit and push (validation runs automatically)
 
-          The **e2e-test-fixer** agent provides:
-          - ✅ Complete TDD workflow with RED→GREEN cycle
-          - ✅ Autonomous schema creation via **effect-schema-generator** skill
-          - ✅ Pipeline mode support (non-interactive execution)
-          - ✅ Minimal but correct implementation following Omnera architecture
-          - ✅ Layer-based architecture compliance (Domain/Application/Infrastructure)
-          - ✅ Effect.ts patterns for side effects
-          - ✅ Automatic quality checks and validation
-
-          ### Implementation Steps
-
-          1. **Checkout the branch**:
-             \`\`\`bash
-             git checkout $BRANCH_NAME
-             \`\`\`
-
-          2. **Implement the spec** following e2e-test-fixer workflow:
-             - Read test file: \`$TEST_FILE\`
-             - Find test with spec ID: \`$SPEC_ID\`
-             - Remove \`.fixme()\` from the test
-             - Check if Domain schemas exist (invoke **effect-schema-generator** skill if missing)
-             - Implement minimal code in correct architectural layer
-             - **Validate framework patterns**: Use **best-practices-checker** skill to ensure:
-               - Effect.gen for Application layer workflows
-               - Typed errors (Data.TaggedError) in Domain layer
-               - Drizzle query builder (not raw SQL)
-               - React 19 patterns (no manual useMemo)
-               - Hono RPC with Zod validation
-             - Verify test passes: \`bun test:e2e \"$TEST_FILE\" --grep \"$SPEC_ID\"\`
-             - Run regression tests: \`bun test:e2e:regression\`
-
-          3. **Commit and push**:
-             \`\`\`bash
-             bun run license  # Add copyright headers
-             git add -A
-             git commit -m \"fix: implement $SPEC_ID\"
-             git push
-             \`\`\`
-
-          ### Pipeline Mode Indicators
-
-          You are operating in **automated pipeline mode**:
-          - Branch pattern: \`tdd/spec-*\` ✓
-          - Environment: \`CLAUDECODE=1\` ✓
-          - Issue template: TDD automation ✓
-
-          **Behavior**: Non-interactive execution, autonomous decisions, minimal implementation.
-
-          ### Skills Available
-
-          - **effect-schema-generator**: Invoke automatically if Domain schemas are missing
-          - **best-practices-checker**: Validate framework patterns before committing
-          - See \`@.claude/agents/e2e-test-fixer.md\` for complete workflow
-
-          ### Validation
-
-          Push triggers automatic validation:
-          - Specific spec test must pass
-          - Regression tests must pass
-          - Code quality checks must pass
-          - Security scan must pass (no critical issues)
-          - Auto-merge on success
+          **Complete workflow**: See \`@docs/development/tdd-automation-pipeline.md\`
 
           ---
+          *Automated from TDD queue processor • [View run](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})*"
 
-          *Automated request from TDD queue processor. See workflow: [View run](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})*"
-
-          echo "✅ Auto-comment posted to issue #$ISSUE_NUMBER"
+          echo "✅ Issue updated and Claude Code invoked"
         env:
           GH_TOKEN: ${{ github.token }}
