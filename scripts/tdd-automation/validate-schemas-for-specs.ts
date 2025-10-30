@@ -30,9 +30,9 @@ import {
 
 interface SpecScanResult {
   specId: string
-  testFile: string
+  file: string
   feature: string
-  lineNumber: number
+  line: number
 }
 
 interface QueueScanData {
@@ -248,7 +248,7 @@ const validateSchemasForSpecs = Effect.gen(function* () {
   const validationWarnings: SchemaValidationError[] = []
 
   for (const spec of scanData.specs) {
-    const schemaPath = getSchemaPath(spec.testFile)
+    const schemaPath = getSchemaPath(spec.file)
     const result = yield* validateSchema(schemaPath, spec.specId)
 
     if (result) {
