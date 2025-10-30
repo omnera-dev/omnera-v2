@@ -249,7 +249,7 @@ const collectMetrics = Effect.gen(function* () {
   }
 
   // Load history, add snapshot, save
-  const metricsFilePath = '.github/tdd-metrics.json'
+  const metricsFilePath = '.github/tdd-pipeline-metrics.json'
   const history = loadMetricsHistory(metricsFilePath)
   const updatedHistory = addSnapshot(history, snapshot)
   saveMetricsHistory(updatedHistory, metricsFilePath)
