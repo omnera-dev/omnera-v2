@@ -44,6 +44,10 @@ jobs:
     timeout-minutes: 10 # Prevent 6-hour hangs (scan + validation + bulk issue creation)
 
     steps:
+      - name: Record start time
+        id: start_time
+        run: echo "timestamp=$(date +%s)" >> $GITHUB_OUTPUT
+
       - name: Checkout code
         uses: actions/checkout@v4
 
@@ -126,3 +130,15 @@ jobs:
           bun run scripts/tdd-automation/queue-manager.ts status
         env:
           GH_TOKEN: ${{ github.token }}
+
+      - name: Record workflow duration
+        if: always()
+        run: |
+          START_TIME="${{ steps.start_time.outputs.timestamp }}"
+          END_TIME=$(date +%s)
+          DURATION=$((END_TIME - START_TIME))
+
+          echo "⏱️  Workflow duration: ${DURATION}s ($((DURATION / 60))m $((DURATION % 60))s)"
+
+          # Log for metrics collection (future enhancement)
+          echo "WORKFLOW=tdd-queue-populate DURATION=${DURATION}s" >> $GITHUB_STEP_SUMMARY
