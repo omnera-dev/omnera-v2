@@ -56,6 +56,7 @@ jobs:
         github.event.sender.login != 'claude[bot]'
       )
     runs-on: ubuntu-latest
+    timeout-minutes: 45 # Claude Code implementation can take time (complex specs)
     permissions:
       contents: read
       pull-requests: read
@@ -84,4 +85,6 @@ jobs:
           # Optional: Add claude_args to customize behavior and configuration
           # See https://github.com/anthropics/claude-code-action/blob/main/docs/usage.md
           # or https://docs.claude.com/en/docs/claude-code/cli-reference for available options
-          # claude_args: '--allowed-tools Bash(gh pr:*)'
+          # NOTE: Explicit agent specification ensures e2e-test-fixer agent is used for TDD automation
+          # If --agent flag is not supported, Claude Code will rely on convention (branch pattern tdd/spec-*)
+          claude_args: '--agent e2e-test-fixer'

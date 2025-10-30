@@ -26,6 +26,7 @@ jobs:
   validate:
     name: 🧪 Validate Spec Implementation
     runs-on: ubuntu-latest
+    timeout-minutes: 30 # Longer timeout: E2E tests + regression + quality + security
 
     steps:
       - name: Checkout code

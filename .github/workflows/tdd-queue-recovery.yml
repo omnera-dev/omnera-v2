@@ -20,8 +20,27 @@ jobs:
   recover-stuck-specs:
     name: 🔄 Recover Stuck Specs
     runs-on: ubuntu-latest
+    timeout-minutes: 5 # Quick operation: find stuck specs, re-queue them
 
     steps:
+      - name: Check GitHub API rate limit
+        id: rate_limit
+        run: |
+          REMAINING=$(gh api rate_limit --jq '.rate.remaining')
+          LIMIT=$(gh api rate_limit --jq '.rate.limit')
+
+          echo "⏱️  GitHub API: $REMAINING/$LIMIT requests remaining"
+
+          if [ "$REMAINING" -lt 30 ]; then
+            echo "::warning::Rate limit low: $REMAINING requests remaining"
+            echo "::warning::Skipping recovery to preserve API quota"
+            exit 0  # Exit gracefully, will retry on next scheduled run
+          fi
+
+          echo "✅ Rate limit OK for recovery operations"
+        env:
+          GH_TOKEN: ${{ github.token }}
+
       - name: Find stuck specs
         id: stuck
         run: |
@@ -131,6 +150,13 @@ jobs:
           if [ "${{ steps.stuck.outputs.has_stuck }}" == "true" ]; then
             COUNT="${{ steps.stuck.outputs.count }}"
             echo "📊 Recovery Summary: Re-queued $COUNT stuck spec(s)"
+
+            # Health alert: High recovery rate may indicate issues
+            if [ "$COUNT" -gt 5 ]; then
+              echo "::warning::High recovery rate: $COUNT specs recovered"
+              echo "::warning::This may indicate Claude Code or validation issues"
+              echo "::warning::Consider checking recent workflow runs for patterns"
+            fi
           else
             echo "📊 Recovery Summary: No action needed, all specs progressing normally"
           fi

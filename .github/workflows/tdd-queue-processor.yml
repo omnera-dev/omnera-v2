@@ -26,6 +26,7 @@ jobs:
   process-queue:
     name: 🔄 Process TDD Queue
     runs-on: ubuntu-latest
+    timeout-minutes: 5 # Quick operation: fetch queue, create branch, post comment
 
     steps:
       - name: Checkout code
@@ -40,6 +41,24 @@ jobs:
 
       - name: Install dependencies
         run: bun install --frozen-lockfile
+
+      - name: Check GitHub API rate limit
+        id: rate_limit
+        run: |
+          REMAINING=$(gh api rate_limit --jq '.rate.remaining')
+          LIMIT=$(gh api rate_limit --jq '.rate.limit')
+
+          echo "⏱️  GitHub API: $REMAINING/$LIMIT requests remaining"
+
+          if [ "$REMAINING" -lt 50 ]; then
+            echo "::warning::Rate limit low: $REMAINING requests remaining"
+            echo "::warning::Skipping queue processing to preserve API quota"
+            exit 0  # Exit gracefully, will retry on next scheduled run
+          fi
+
+          echo "✅ Rate limit OK for queue processing"
+        env:
+          GH_TOKEN: ${{ github.token }}
 
       - name: Get next spec from queue
         id: next
@@ -122,5 +141,31 @@ jobs:
           *Automated from TDD queue processor • [View run](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})*"
 
           echo "✅ Issue updated and Claude Code invoked"
+        env:
+          GH_TOKEN: ${{ github.token }}
+
+      - name: Pipeline health check
+        if: always()
+        run: |
+          echo "🏥 Checking pipeline health..."
+
+          QUEUED=$(gh issue list --label "tdd-spec:queued" --json number --jq 'length')
+          IN_PROGRESS=$(gh issue list --label "tdd-spec:in-progress" --json number --jq 'length')
+
+          echo "📊 Queue Status: $QUEUED queued, $IN_PROGRESS in-progress"
+
+          # Alert if queue appears stuck (many queued, none in-progress)
+          if [ "$QUEUED" -gt 50 ] && [ "$IN_PROGRESS" -eq 0 ]; then
+            echo "::warning::Queue appears stuck: $QUEUED queued specs but none in-progress"
+            echo "::warning::This may indicate Claude Code integration issues"
+          fi
+
+          # Alert if multiple specs in-progress (should only be 1)
+          if [ "$IN_PROGRESS" -gt 1 ]; then
+            echo "::warning::Multiple specs in-progress: $IN_PROGRESS (expected max 1)"
+            echo "::warning::Concurrency control may not be working correctly"
+          fi
+
+          echo "✅ Health check complete"
         env:
           GH_TOKEN: ${{ github.token }}

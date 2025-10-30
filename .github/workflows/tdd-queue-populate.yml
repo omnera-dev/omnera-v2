@@ -41,6 +41,7 @@ jobs:
   populate-queue:
     name: 📝 Populate TDD Queue (RED tests only)
     runs-on: ubuntu-latest
+    timeout-minutes: 10 # Prevent 6-hour hangs (scan + validation + bulk issue creation)
 
     steps:
       - name: Checkout code
@@ -90,6 +91,25 @@ jobs:
             echo "📊 Found $TOTAL_SPECS specs with fixme"
             echo "should_populate=true" >> $GITHUB_OUTPUT
           fi
+
+      - name: Check GitHub API rate limit
+        if: steps.check.outputs.should_populate == 'true'
+        id: rate_limit
+        run: |
+          REMAINING=$(gh api rate_limit --jq '.rate.remaining')
+          LIMIT=$(gh api rate_limit --jq '.rate.limit')
+          echo "remaining=$REMAINING" >> $GITHUB_OUTPUT
+
+          echo "⏱️  GitHub API: $REMAINING/$LIMIT requests remaining"
+
+          if [ "$REMAINING" -lt 100 ]; then
+            echo "::error::Rate limit too low: $REMAINING requests remaining (need 100+ for bulk operations)"
+            exit 1
+          fi
+
+          echo "✅ Rate limit OK for bulk issue creation"
+        env:
+          GH_TOKEN: ${{ github.token }}
 
       - name: Populate queue with spec issues
         if: steps.check.outputs.should_populate == 'true'
