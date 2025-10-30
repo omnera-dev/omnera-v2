@@ -278,15 +278,15 @@ When validation passes:
 
 ## Labels & States
 
-| Label                   | State        | Description                                      |
-| ----------------------- | ------------ | ------------------------------------------------ |
-| `tdd-spec:queued`       | Queued       | Spec waiting to be processed                     |
-| `tdd-spec:in-progress`  | In Progress  | Spec being implemented (branch created)          |
-| `tdd-spec:completed`    | Completed    | Spec passed validation (issue closed)            |
-| `tdd-spec:failed`       | Failed       | Spec failed after 3 retries (needs human review) |
-| `skip-automated`        | Skipped      | Human marked as too complex (queue skips it)     |
-| `retry:1`, `retry:2`, `retry:3` | Retry Count | Tracks automatic retry attempts (max 3)  |
-| `tdd-automation`        | (always)     | All TDD automation issues                        |
+| Label                           | State       | Description                                      |
+| ------------------------------- | ----------- | ------------------------------------------------ |
+| `tdd-spec:queued`               | Queued      | Spec waiting to be processed                     |
+| `tdd-spec:in-progress`          | In Progress | Spec being implemented (branch created)          |
+| `tdd-spec:completed`            | Completed   | Spec passed validation (issue closed)            |
+| `tdd-spec:failed`               | Failed      | Spec failed after 3 retries (needs human review) |
+| `skip-automated`                | Skipped     | Human marked as too complex (queue skips it)     |
+| `retry:1`, `retry:2`, `retry:3` | Retry Count | Tracks automatic retry attempts (max 3)          |
+| `tdd-automation`                | (always)    | All TDD automation issues                        |
 
 ## CLI Commands
 

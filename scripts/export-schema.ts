@@ -7,7 +7,7 @@
  */
 
 /**
- * Export Schema Script
+ * Export Schema Script (Effect-based)
  *
  * This script exports the AppSchema to a versioned schema folder at the root of the project.
  * It generates:
@@ -18,33 +18,46 @@
  * Usage: bun run scripts/export-schema.ts
  */
 
-import { existsSync } from 'node:fs'
-import { mkdir, writeFile } from 'node:fs/promises'
 import { join } from 'node:path'
+import * as Effect from 'effect/Effect'
+import * as Layer from 'effect/Layer'
 import { JSONSchema, type Schema } from 'effect'
-import prettier from 'prettier'
+import {
+  FileSystemService,
+  FileSystemServiceLive,
+  LoggerServiceLive,
+  progress,
+  success,
+  section,
+} from './lib/effect'
 // Import schemas
 import { AppSchema } from '../src/domain/models/app'
 
 /**
  * Get package version from package.json
  */
-async function getPackageVersion(): Promise<string> {
-  const packageJson = await Bun.file('package.json').json()
-  return packageJson.version
-}
+const getPackageVersion = Effect.gen(function* () {
+  const fs = yield* FileSystemService
+  const content = yield* fs.readFile('package.json')
+  const packageJson = JSON.parse(content)
+  return packageJson.version as string
+})
 
 /**
  * Generate JSON Schema from Effect Schema
  */
-function generateJsonSchema(schema: Schema.Schema.Any): unknown {
+const generateJsonSchema = (schema: Schema.Schema.Any): unknown => {
   return JSONSchema.make(schema)
 }
 
 /**
  * Add $id field to JSON Schema
  */
-function addSchemaId(jsonSchema: unknown, version: string, schemaName: string): unknown {
+const addSchemaId = (
+  jsonSchema: unknown,
+  version: string,
+  schemaName: string
+): Record<string, unknown> => {
   const schema = jsonSchema as Record<string, unknown>
   const { $id: _existingId, ...rest } = schema
   return {
@@ -54,48 +67,52 @@ function addSchemaId(jsonSchema: unknown, version: string, schemaName: string): 
 }
 
 /**
- * Format JSON content with Prettier
- */
-async function formatJson(content: unknown): Promise<string> {
-  const prettierConfig = (await prettier.resolveConfig(process.cwd())) || {}
-  return prettier.format(JSON.stringify(content), {
-    ...prettierConfig,
-    parser: 'json',
-  })
-}
-
-/**
  * Main export function
  */
-async function exportSchema(): Promise<void> {
-  console.log('🚀 Starting schema export...\n')
+const exportSchema = Effect.gen(function* () {
+  const fs = yield* FileSystemService
+
+  yield* section('Starting schema export')
 
   // Get package version
-  const version = await getPackageVersion()
-  console.log(`📦 Package version: ${version}`)
+  const version = yield* getPackageVersion
+  yield* Effect.log(`📦 Package version: ${version}`)
 
   // Create output directory
   const outputDir = join(process.cwd(), 'schemas', version)
-  if (!existsSync(outputDir)) {
-    await mkdir(outputDir, { recursive: true })
-    console.log(`✅ Created directory: schemas/${version}/`)
+  const dirExists = yield* fs.exists(outputDir)
+
+  if (!dirExists) {
+    yield* fs.mkdir(outputDir)
+    yield* success(`Created directory: schemas/${version}/`)
   } else {
-    console.log(`📁 Directory already exists: schemas/${version}/`)
+    yield* Effect.log(`📁 Directory already exists: schemas/${version}/`)
   }
 
   // Generate and write App JSON Schema
-  console.log('\n📝 Generating JSON Schemas...')
+  yield* Effect.log('')
+  yield* progress('Generating JSON Schemas...')
 
   const appJsonSchema = generateJsonSchema(AppSchema)
   const appJsonSchemaWithId = addSchemaId(appJsonSchema, version, 'app')
   const appSchemaPath = join(outputDir, 'app.schema.json')
-  const formattedContent = await formatJson(appJsonSchemaWithId)
-  await writeFile(appSchemaPath, formattedContent)
-  console.log('   ✓ app.schema.json')
-}
+
+  // Write formatted JSON
+  yield* fs.writeFormatted(appSchemaPath, JSON.stringify(appJsonSchemaWithId), {
+    parser: 'json',
+  })
+  yield* success('app.schema.json')
+})
+
+// Main layer combining all services
+const MainLayer = Layer.mergeAll(FileSystemServiceLive, LoggerServiceLive())
 
 // Run the export
-exportSchema().catch((error) => {
-  console.error('❌ Error exporting schema:', error)
-  process.exit(1)
-})
+const program = exportSchema.pipe(Effect.provide(MainLayer))
+
+Effect.runPromise(program)
+  .then(() => process.exit(0))
+  .catch((error) => {
+    console.error('❌ Error exporting schema:', error)
+    process.exit(1)
+  })

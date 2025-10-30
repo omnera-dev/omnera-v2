@@ -6,18 +6,36 @@
  * found in the LICENSE.md file in the root directory of this source tree.
  */
 
-import { readdirSync, readFileSync, writeFileSync, statSync } from 'node:fs'
-import { join, relative } from 'node:path'
+import { relative } from 'node:path'
+import * as Effect from 'effect/Effect'
+import * as Layer from 'effect/Layer'
+import {
+  FileSystemService,
+  FileSystemServiceLive,
+  LoggerServiceLive,
+  progress,
+  success,
+  section,
+} from './lib/effect'
 
-const LICENSE_HEADER = ``
+const LICENSE_HEADER = `/**
+ * Copyright (c) 2025 ESSENTIAL SERVICES
+ *
+ * This source code is licensed under the Business Source License 1.1
+ * found in the LICENSE.md file in the root directory of this source tree.
+ */
+
+`
 
 const SHEBANG_PATTERN = /^#!\/usr\/bin\/env bun\n/
 
-const ROOT_DIR = join(import.meta.dir, '..')
+const ROOT_DIR = process.cwd()
 const INCLUDE_DIRS = ['src', 'scripts', 'specs']
-const EXCLUDE_PATTERNS = ['node_modules', '.git', 'dist', 'build', 'coverage', '.next', 'drizzle']
 
-function hasLicenseHeader(content: string): boolean {
+/**
+ * Check if content has license header
+ */
+const hasLicenseHeader = (content: string): boolean => {
   const normalizedContent = content.replace(/\r\n/g, '\n')
   const normalizedHeader = LICENSE_HEADER.replace(/\r\n/g, '\n')
 
@@ -32,13 +50,19 @@ function hasLicenseHeader(content: string): boolean {
   return normalizedContent.trim().startsWith(normalizedHeader.trim())
 }
 
-function addLicenseHeader(filePath: string): boolean {
-  try {
-    const content = readFileSync(filePath, 'utf-8')
+/**
+ * Add license header to a single file
+ * Returns true if header was added, false if already present
+ */
+const addLicenseHeaderToFile = (filePath: string) =>
+  Effect.gen(function* () {
+    const fs = yield* FileSystemService
+
+    const content = yield* fs.readFile(filePath)
 
     // Skip if already has license header
     if (hasLicenseHeader(content)) {
-      return false
+      return { filePath, added: false }
     }
 
     let newContent: string
@@ -52,66 +76,85 @@ function addLicenseHeader(filePath: string): boolean {
       newContent = LICENSE_HEADER + content
     }
 
-    writeFileSync(filePath, newContent, 'utf-8')
-    return true
-  } catch (error) {
-    console.error(`Error processing ${filePath}:`, error)
-    return false
-  }
-}
+    yield* fs.writeFile(filePath, newContent)
 
-function shouldProcessFile(filePath: string): boolean {
-  const ext = filePath.split('.').pop()
-  return ext === 'ts' || ext === 'tsx'
-}
+    return { filePath, added: true }
+  })
 
-function shouldSkipDirectory(dirName: string): boolean {
-  return EXCLUDE_PATTERNS.some((pattern) => dirName.includes(pattern))
-}
+/**
+ * Main license header addition program
+ */
+const main = Effect.gen(function* () {
+  const fs = yield* FileSystemService
 
-function processDirectory(dirPath: string, stats: { processed: number; skipped: number }): void {
-  const entries = readdirSync(dirPath)
+  yield* section('Adding license headers to source files')
 
-  for (const entry of entries) {
-    const fullPath = join(dirPath, entry)
-    const stat = statSync(fullPath)
+  // Find all TypeScript files in included directories
+  yield* progress('Finding TypeScript files...')
 
-    if (stat.isDirectory()) {
-      if (!shouldSkipDirectory(entry)) {
-        processDirectory(fullPath, stats)
-      }
-    } else if (stat.isFile() && shouldProcessFile(fullPath)) {
-      const wasAdded = addLicenseHeader(fullPath)
-      if (wasAdded) {
-        const relativePath = relative(ROOT_DIR, fullPath)
-        console.log(`✓ Added header to: ${relativePath}`)
-        stats.processed++
-      } else {
-        stats.skipped++
-      }
+  const allFiles = yield* Effect.all(
+    INCLUDE_DIRS.map((dir) =>
+      fs.glob(`${dir}/**/*.{ts,tsx}`).pipe(
+        Effect.catchAll(() => Effect.succeed([] as readonly string[]))
+      )
+    ),
+    { concurrency: 'unbounded' }
+  )
+
+  const files = allFiles.flat()
+  yield* success(`Found ${files.length} TypeScript files`)
+
+  // Process all files in parallel
+  yield* Effect.log('')
+  yield* progress('Processing files in parallel...')
+
+  const results = yield* Effect.all(
+    files.map((file) =>
+      addLicenseHeaderToFile(file).pipe(
+        Effect.catchAll((error) => {
+          // Log error but continue processing other files
+          return Effect.succeed({ filePath: file, added: false, error: String(error) })
+        })
+      )
+    ),
+    { concurrency: 10 } // Process 10 files at a time
+  )
+
+  // Calculate statistics
+  const processed = results.filter((r) => r.added).length
+  const skipped = results.filter((r) => !r.added && !('error' in r)).length
+  const errors = results.filter((r) => 'error' in r).length
+
+  // Log processed files
+  for (const result of results) {
+    if (result.added) {
+      const relativePath = relative(ROOT_DIR, result.filePath)
+      yield* success(`Added header to: ${relativePath}`)
     }
   }
-}
 
-function main(): void {
-  console.log('Adding license headers to source files...\n')
-
-  const stats = { processed: 0, skipped: 0 }
-
-  for (const dir of INCLUDE_DIRS) {
-    const dirPath = join(ROOT_DIR, dir)
-    try {
-      processDirectory(dirPath, stats)
-    } catch (error) {
-      console.error(`Error processing directory ${dir}:`, error)
-    }
+  // Display summary
+  yield* Effect.log('')
+  yield* Effect.log('='.repeat(50))
+  yield* Effect.log(`Total files processed: ${processed}`)
+  yield* Effect.log(`Files already with headers: ${skipped}`)
+  if (errors > 0) {
+    yield* Effect.log(`Files with errors: ${errors}`)
   }
+  yield* Effect.log('='.repeat(50))
+  yield* Effect.log('')
+  yield* success('License headers added successfully!')
+})
 
-  console.log('\n' + '='.repeat(50))
-  console.log(`Total files processed: ${stats.processed}`)
-  console.log(`Files already with headers: ${stats.skipped}`)
-  console.log('='.repeat(50))
-  console.log('\n✅ License headers added successfully!')
-}
+// Main layer combining all services
+const MainLayer = Layer.mergeAll(FileSystemServiceLive, LoggerServiceLive())
 
-main()
+// Run the script
+const program = main.pipe(Effect.provide(MainLayer))
+
+Effect.runPromise(program)
+  .then(() => process.exit(0))
+  .catch((error) => {
+    console.error('❌ Error adding license headers:', error)
+    process.exit(1)
+  })
