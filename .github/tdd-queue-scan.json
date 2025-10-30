@@ -1,6 +1,6 @@
 {
-  "timestamp": "2025-10-30T09:27:30.448Z",
-  "totalSpecs": 647,
+  "timestamp": "2025-10-30T10:01:38.269Z",
+  "totalSpecs": 646,
   "specs": [
     {
       "specId": "APP-INTERACTION-CLICK-001",
@@ -400,14 +400,6 @@
       "line": 418,
       "description": "should apply all settings in sequence (wait delay, then animate with duration)",
       "feature": "app/pages/common/interactions/scroll-interaction",
-      "priority": 8
-    },
-    {
-      "specId": "APP-PAGES-001",
-      "file": "specs/app/pages/pages.spec.ts",
-      "line": 27,
-      "description": "should validate as pages array with minimum 1 item",
-      "feature": "app/pages/pages",
       "priority": 8
     },
     {

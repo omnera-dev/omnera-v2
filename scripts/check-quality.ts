@@ -15,11 +15,11 @@
  *   bun run quality src/index.ts      # Example: check specific file
  *
  * Performance optimizations:
- * - Runs all 4 checks in parallel (ESLint, TypeScript, unit tests, E2E regression)
- * - Uses fail-fast strategy: exits immediately on first failure (saves time)
+ * - Uses fail-fast strategy: runs checks sequentially, stops immediately on first failure (saves time)
  * - Uses ESLint cache for faster subsequent runs
  * - Uses TypeScript incremental mode for faster type checking
  * - Skips checks for comment-only changes (file mode)
+ * - For file mode: runs ESLint, TypeScript, and unit tests in parallel
  * - Provides clear success/failure feedback
  */
 
@@ -287,35 +287,67 @@ const runFileChecks = (filePath: string) =>
 
 /**
  * Run quality checks for entire codebase with fail-fast
+ * Runs checks sequentially and stops immediately on first failure
  */
 const runFullChecks = Effect.gen(function* () {
   yield* section('Running quality checks on entire codebase (fail-fast)')
 
-  // Run all 4 checks in parallel, but fail immediately on first failure
+  const results: CheckResult[] = []
+
+  // Run checks sequentially - stop immediately on first failure
   const checks = [
-    runCheck(
-      'ESLint',
-      [
-        'bunx',
-        'eslint',
-        '.',
-        '--max-warnings',
-        '0',
-        '--cache',
-        '--cache-location',
-        'node_modules/.cache/eslint',
-        '--cache-strategy',
-        'content',
-      ],
-      120_000
-    ),
-    runCheck('TypeScript', ['bunx', 'tsc', '--noEmit', '--incremental'], 60_000),
-    runCheck('Unit Tests', ['bun', 'test', '--concurrent', '.test.ts', '.test.tsx'], 30_000),
-    runCheck('E2E Regression Tests', ['bunx', 'playwright', 'test', '--grep=@regression'], 120_000),
+    {
+      name: 'ESLint',
+      effect: runCheck(
+        'ESLint',
+        [
+          'bunx',
+          'eslint',
+          '.',
+          '--max-warnings',
+          '0',
+          '--cache',
+          '--cache-location',
+          'node_modules/.cache/eslint',
+          '--cache-strategy',
+          'content',
+        ],
+        120_000
+      ),
+    },
+    {
+      name: 'TypeScript',
+      effect: runCheck('TypeScript', ['bunx', 'tsc', '--noEmit', '--incremental'], 60_000),
+    },
+    {
+      name: 'Unit Tests',
+      effect: runCheck(
+        'Unit Tests',
+        ['bun', 'test', '--concurrent', '.test.ts', '.test.tsx'],
+        30_000
+      ),
+    },
+    {
+      name: 'E2E Regression Tests',
+      effect: runCheck(
+        'E2E Regression Tests',
+        ['bunx', 'playwright', 'test', '--grep=@regression'],
+        120_000
+      ),
+    },
   ]
 
-  // Use Effect.validateAll to run all checks but collect all failures
-  const results = yield* Effect.all(checks, { concurrency: 'unbounded' })
+  // Run sequentially, fail immediately on first failure
+  for (const check of checks) {
+    const result = yield* check.effect
+    results.push(result)
+
+    if (!result.success) {
+      // First failure - stop immediately
+      yield* logError(`\n⚠️  Stopping checks due to ${check.name} failure (fail-fast mode)`)
+      return results
+    }
+  }
 
   return results
 })
