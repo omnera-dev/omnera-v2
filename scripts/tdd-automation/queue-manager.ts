@@ -32,6 +32,7 @@ import {
   logError,
   logWarn,
 } from '../lib/effect'
+import { createSchemaPriorityCalculator } from './schema-priority-calculator'
 import type { LoggerService } from '../lib/effect'
 
 /**
@@ -78,22 +79,6 @@ const extractSpecId = (line: string): string | undefined => {
 }
 
 /**
- * Calculate priority based on feature area
- */
-const calculatePriority = (feature: string): number => {
-  if (feature.startsWith('app/version')) return 1
-  if (feature.startsWith('app/name')) return 2
-  if (feature.startsWith('app/description')) return 3
-  if (feature.startsWith('api/paths/health')) return 4
-  if (feature.startsWith('api/paths/auth')) return 5
-  if (feature.startsWith('api/paths/tables')) return 6
-  if (feature.startsWith('admin/')) return 7
-  if (feature.startsWith('app/pages/')) return 8
-  if (feature.startsWith('app/blocks/')) return 9
-  return 10
-}
-
-/**
  * Parse a test file and extract all specs with fixme
  *
  * IMPORTANT: This function ONLY extracts tests marked with test.fixme() or it.fixme()
@@ -102,7 +87,8 @@ const calculatePriority = (feature: string): number => {
  * - Only RED tests with .fixme are included for automation
  */
 const parseTestFileForSpecs = (
-  filePath: string
+  filePath: string,
+  calculatePriority: (feature: string) => number
 ): Effect.Effect<SpecItem[], never, FileSystemService> =>
   Effect.gen(function* () {
     const fs = yield* FileSystemService
@@ -175,13 +161,21 @@ export const scanForFixmeSpecs = Effect.gen(function* () {
 
   yield* progress('Scanning for test.fixme() patterns (RED tests only)...')
 
+  // Create schema-based priority calculator
+  yield* logInfo('Loading schema hierarchy for priority calculation...', '🔗')
+  const calculatePriority = createSchemaPriorityCalculator('specs/app/app.schema.json')
+  yield* logInfo('Schema hierarchy loaded - specs will be prioritized by dependencies')
+
   // Find all spec files
   const specFiles = yield* fs.glob('specs/**/*.spec.ts')
   yield* logInfo(`Found ${specFiles.length} spec files to scan`)
   yield* logInfo('Note: Only tests with .fixme() will be queued (GREEN and SKIP tests excluded)')
 
-  // Parse each file in parallel
-  const allSpecs = yield* Effect.all(specFiles.map(parseTestFileForSpecs), { concurrency: 10 })
+  // Parse each file in parallel (pass priority calculator to each)
+  const allSpecs = yield* Effect.all(
+    specFiles.map((file) => parseTestFileForSpecs(file, calculatePriority)),
+    { concurrency: 10 }
+  )
 
   // Flatten array of arrays
   const specs = allSpecs.flat()
