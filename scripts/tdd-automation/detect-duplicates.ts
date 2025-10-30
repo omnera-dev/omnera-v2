@@ -33,10 +33,14 @@ const detectDuplicates = Effect.gen(function* () {
   yield* logInfo('Scanning for duplicate spec issues...', '🔍')
 
   // Fetch ALL spec issues (open + closed)
+  // IMPORTANT: Use "tdd-automation" label (the actual label used by the pipeline)
   const output = yield* cmd
-    .exec('gh issue list --label "tdd-spec" --state all --json number,title,state --limit 2000', {
-      throwOnError: false,
-    })
+    .exec(
+      'gh issue list --label "tdd-automation" --state all --json number,title,state --limit 2000',
+      {
+        throwOnError: false,
+      }
+    )
     .pipe(
       Effect.catchAll(() => {
         return Effect.gen(function* () {

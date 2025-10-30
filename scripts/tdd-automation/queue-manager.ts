@@ -391,10 +391,14 @@ export const getAllExistingSpecs = Effect.gen(function* () {
 
   // Fetch ALL spec issues (open + closed) in one query
   // Using limit 2000 (3x current 647 specs) for growth headroom
+  // IMPORTANT: Use "tdd-automation" label (not "tdd-spec" which doesn't exist)
   const output = yield* cmd
-    .exec('gh issue list --label "tdd-spec" --state all --json number,title,state --limit 2000', {
-      throwOnError: false,
-    })
+    .exec(
+      'gh issue list --label "tdd-automation" --state all --json number,title,state --limit 2000',
+      {
+        throwOnError: false,
+      }
+    )
     .pipe(
       Effect.catchAll(() => {
         return Effect.gen(function* () {
@@ -439,6 +443,7 @@ export const getAllExistingSpecs = Effect.gen(function* () {
 
 /**
  * Check if a spec already has an open issue
+ * IMPORTANT: Uses "tdd-automation" label (the actual label used by the pipeline)
  */
 export const specHasOpenIssue = (specId: string): Effect.Effect<boolean, never, CommandService> =>
   Effect.gen(function* () {
@@ -446,7 +451,7 @@ export const specHasOpenIssue = (specId: string): Effect.Effect<boolean, never, 
 
     const output = yield* cmd
       .exec(
-        `gh issue list --label "tdd-spec" --search "${specId}" --json number,state --limit 10`,
+        `gh issue list --label "tdd-automation" --search "${specId}" --json number,state --limit 10`,
         { throwOnError: false }
       )
       .pipe(Effect.catchAll(() => Effect.succeed('[]')))
