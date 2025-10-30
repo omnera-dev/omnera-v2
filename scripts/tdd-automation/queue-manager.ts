@@ -442,27 +442,34 @@ export const getAllExistingSpecs = Effect.gen(function* () {
 })
 
 /**
- * Check if a spec already has an open issue
+ * Check if a spec already has an issue (open or closed)
  * IMPORTANT: Uses "tdd-automation" label (the actual label used by the pipeline)
+ * IMPORTANT: Checks ALL states (open + closed) to prevent duplicates
  */
-export const specHasOpenIssue = (specId: string): Effect.Effect<boolean, never, CommandService> =>
+export const specHasIssue = (specId: string): Effect.Effect<boolean, never, CommandService> =>
   Effect.gen(function* () {
     const cmd = yield* CommandService
 
     const output = yield* cmd
       .exec(
-        `gh issue list --label "tdd-automation" --search "${specId}" --json number,state --limit 10`,
+        `gh issue list --label "tdd-automation" --search "${specId}" --state all --json number,state --limit 10`,
         { throwOnError: false }
       )
       .pipe(Effect.catchAll(() => Effect.succeed('[]')))
 
     try {
       const issues = JSON.parse(output) as Array<{ number: number; state: string }>
-      return issues.some((issue) => issue.state === 'OPEN')
+      return issues.length > 0 // Returns true if ANY issue exists (open or closed)
     } catch {
       return false
     }
   })
+
+/**
+ * @deprecated Use specHasIssue() instead - this function only checks OPEN issues
+ * Kept for backwards compatibility
+ */
+export const specHasOpenIssue = specHasIssue
 
 /**
  * Create a minimal spec issue on GitHub
@@ -483,8 +490,9 @@ export const createSpecIssue = (
     const cmd = yield* CommandService
 
     // SAFETY CHECK: Verify issue doesn't exist (unless bulk deduplication was done)
+    // Checks ALL states (open + closed) to prevent duplicates
     if (!skipExistenceCheck) {
-      const hasIssue = yield* specHasOpenIssue(spec.specId)
+      const hasIssue = yield* specHasIssue(spec.specId)
       if (hasIssue) {
         yield* skip(`Issue already exists for ${spec.specId}, skipping`)
         return -1
@@ -537,8 +545,10 @@ EOFBODY`,
 
 /**
  * Get the next spec to process (oldest queued spec if no specs in-progress)
+ * Uses dependency graph to prioritize specs with no missing dependencies
  */
 export const getNextSpec = Effect.gen(function* () {
+  const fs = yield* FileSystemService
   yield* progress('Looking for next spec to process...')
 
   // Check if any specs are in-progress
@@ -558,14 +568,90 @@ export const getNextSpec = Effect.gen(function* () {
     return null
   }
 
-  // Return oldest queued spec
-  const nextSpec = queuedSpecs[0]
+  // Load dependency graph if it exists
+  const dependencyGraphPath = '.github/tdd-queue-dependencies.json'
+  let dependencyGraph: Record<string, { canImplement: boolean; missingDependencies: string[] }> | null = null
+
+  const dependencyGraphExists = yield* fs
+    .exists(dependencyGraphPath)
+    .pipe(Effect.catchAll(() => Effect.succeed(false)))
+
+  if (dependencyGraphExists) {
+    const graphContent = yield* fs
+      .readFileText(dependencyGraphPath)
+      .pipe(Effect.catchAll(() => Effect.succeed('{}')))
+
+    try {
+      dependencyGraph = JSON.parse(graphContent)
+      yield* logInfo('Using dependency graph for prioritization', '🔗')
+    } catch {
+      yield* logWarn('Failed to parse dependency graph, using FIFO order')
+    }
+  }
+
+  // Prioritize specs based on dependency graph
+  let prioritizedSpecs = [...queuedSpecs]
+
+  if (dependencyGraph) {
+    // Separate ready specs from blocked specs
+    const readySpecs: typeof queuedSpecs = []
+    const blockedSpecs: typeof queuedSpecs = []
+
+    for (const spec of queuedSpecs) {
+      const depInfo = dependencyGraph[spec.specId]
+      if (depInfo && depInfo.canImplement) {
+        readySpecs.push(spec)
+      } else if (depInfo && !depInfo.canImplement) {
+        blockedSpecs.push(spec)
+      } else {
+        // If not in dependency graph, treat as ready (backward compatibility)
+        readySpecs.push(spec)
+      }
+    }
+
+    // Prioritize ready specs
+    prioritizedSpecs = [...readySpecs, ...blockedSpecs]
+
+    if (readySpecs.length < queuedSpecs.length) {
+      yield* logWarn(
+        `⚠️  ${blockedSpecs.length} spec(s) blocked by missing dependencies`
+      )
+      for (const spec of blockedSpecs.slice(0, 3)) {
+        const depInfo = dependencyGraph[spec.specId]
+        if (depInfo) {
+          yield* logInfo(
+            `   ${spec.specId}: ${depInfo.missingDependencies.length} missing file(s)`
+          )
+        }
+      }
+      if (blockedSpecs.length > 3) {
+        yield* logInfo(`   ... and ${blockedSpecs.length - 3} more blocked specs`)
+      }
+    }
+
+    if (readySpecs.length > 0) {
+      yield* logInfo(`✅ ${readySpecs.length} spec(s) ready to implement`)
+    }
+  }
+
+  // Return highest priority spec
+  const nextSpec = prioritizedSpecs[0]
   if (!nextSpec) {
     yield* logInfo('No queued specs found', '📭')
     return null
   }
 
   yield* success(`Next spec: ${nextSpec.specId} (#${nextSpec.number})`)
+  if (dependencyGraph && dependencyGraph[nextSpec.specId]) {
+    const depInfo = dependencyGraph[nextSpec.specId]
+    if (!depInfo.canImplement) {
+      yield* logWarn(
+        `⚠️  Warning: This spec has ${depInfo.missingDependencies.length} missing dependencies`
+      )
+      yield* logInfo('Implementation may fail. Consider implementing dependencies first.')
+    }
+  }
+
   return nextSpec
 })
 
