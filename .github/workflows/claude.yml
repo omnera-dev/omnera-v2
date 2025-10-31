@@ -137,18 +137,16 @@ jobs:
           additional_permissions: |
             actions: read
 
-          # No custom prompt - let the e2e-test-fixer agent handle the workflow naturally
-          # The agent already has complete TDD automation instructions including:
+          # For workflow_dispatch: Add minimal prompt to trigger action
+          # For other events: Let e2e-test-fixer agent handle naturally (no prompt)
+          prompt: ${{ github.event_name == 'workflow_dispatch' && format('Please work on issue #{0}. The TDD branch is already checked out. Follow the e2e-test-fixer agent workflow.', github.event.inputs.issue_number) || '' }}
+
+          # Explicit agent specification ensures e2e-test-fixer agent is used for TDD automation
+          # The agent has complete TDD instructions:
           # - Test-first approach (run spec test to see what fails)
           # - Minimal implementation following best practices
           # - Validation (spec test → regression → quality checks)
           # - Git operations (commit and push when all tests pass)
-          # Custom prompts interfere with the agent's natural workflow
-
-          # Optional: Add claude_args to customize behavior and configuration
-          # See https://github.com/anthropics/claude-code-action/blob/main/docs/usage.md
-          # or https://docs.claude.com/en/docs/claude-code/cli-reference for available options
-          # NOTE: Explicit agent specification ensures e2e-test-fixer agent is used for TDD automation
           claude_args: '--agents e2e-test-fixer'
 
       - name: Record workflow duration
