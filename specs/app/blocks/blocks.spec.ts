@@ -57,7 +57,7 @@ test.describe('Reusable Blocks', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-BLOCKS-004: should validate multiple blocks in array',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
