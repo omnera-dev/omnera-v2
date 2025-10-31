@@ -165,7 +165,7 @@ jobs:
 
           # For workflow_run: Provide prompt to trigger action
           # For comment-triggered events: Action uses @claude mention (prompt ignored)
-          prompt: ${{ github.event_name == 'workflow_run' && 'Please implement the spec in this issue. The TDD branch is already checked out. Follow the e2e-test-fixer agent workflow run the test to see what fails implement minimal code validate all tests pass then commit and push.' || 'default' }}
+          prompt: ${{ github.event_name == 'workflow_run' && 'Please implement the spec in this issue. The TDD branch is already checked out. Follow the e2e-test-fixer agent workflow: run the test to see what fails, implement minimal code, validate all tests pass, then commit and push.' || 'default' }}
 
           # Explicit agent specification ensures e2e-test-fixer agent is used for TDD automation
           # The agent has complete TDD instructions:
