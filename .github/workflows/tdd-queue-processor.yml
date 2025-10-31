@@ -13,6 +13,7 @@ permissions:
   contents: write
   issues: write
   pull-requests: write
+  actions: write # Required to trigger Claude Code workflow via workflow_dispatch
 
 # Prevent concurrent processing (strict serial: one spec at a time)
 concurrency:
