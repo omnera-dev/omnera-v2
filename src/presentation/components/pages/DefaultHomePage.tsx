@@ -57,6 +57,16 @@ export function DefaultHomePage({ app }: { readonly app: App }): Readonly<ReactE
                   {app.description}
                 </TypographyLead>
               )}
+              {/* Blocks */}
+              {app.blocks?.map((block) => (
+                <div
+                  key={block.name}
+                  data-block={block.name}
+                  style={{ minHeight: '1px' }}
+                >
+                  {block.content || '\u00A0'}
+                </div>
+              ))}
             </div>
           </div>
         </div>
