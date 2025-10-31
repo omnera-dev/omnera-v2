@@ -121,8 +121,46 @@ jobs:
           additional_permissions: |
             actions: read
 
-          # Optional: Give a custom prompt to Claude. If this is not specified, Claude will perform the instructions specified in the comment that tagged it.
-          # prompt: 'Update the pull request description to include a summary of changes.'
+          # Custom prompt for TDD automation - ensures validation before pushing
+          prompt: |
+            You are working on TDD automation. Follow this workflow EXACTLY:
+
+            1. **Read the issue** to identify:
+               - Spec ID (e.g., APP-BLOCKS-001)
+               - Test file path (e.g., specs/app/blocks/blocks.spec.ts)
+               - TDD branch name (e.g., tdd/spec-APP-BLOCKS-001)
+
+            2. **Run the spec test FIRST** to see what fails:
+               ```bash
+               CLAUDECODE=1 bun test:e2e "<test-file>" --grep "<SPEC-ID>"
+               ```
+
+            3. **Implement minimal code** following the e2e-test-fixer agent workflow:
+               - Remove test.fixme() from the specific test
+               - Check if domain schemas exist (create via effect-schema-generator skill if needed)
+               - Write minimal but correct code in src/
+               - Follow all architectural and infrastructure best practices
+
+            4. **Run the spec test AGAIN** to verify it passes:
+               ```bash
+               CLAUDECODE=1 bun test:e2e "<test-file>" --grep "<SPEC-ID>"
+               ```
+
+            5. **If test still fails**, iterate steps 3-4 until GREEN
+
+            6. **Run regression tests** to ensure no breaking changes:
+               ```bash
+               CLAUDECODE=1 bun test:e2e:regression
+               ```
+
+            7. **Quality checks run automatically** via hooks (no manual action needed)
+
+            8. **Only commit and push when**:
+               - ✅ Spec test passes
+               - ✅ Regression tests pass
+               - ✅ Quality checks pass (eslint, typecheck, prettier)
+
+            **CRITICAL**: DO NOT push changes until ALL validation passes. Iterate on implementation until everything is GREEN.
 
           # Optional: Add claude_args to customize behavior and configuration
           # See https://github.com/anthropics/claude-code-action/blob/main/docs/usage.md
