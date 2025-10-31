@@ -190,8 +190,8 @@ jobs:
           # - Minimal implementation following best practices
           # - Validation (spec test → regression → quality checks)
           # - Git operations (commit and push when all tests pass)
-          # --auto-approve: Auto-approve all tool uses (required for GitHub Actions automation)
-          claude_args: '--agents e2e-test-fixer --auto-approve'
+          # --dangerously-skip-permissions: Bypass permission checks (required for GitHub Actions automation)
+          claude_args: '--agents e2e-test-fixer --dangerously-skip-permissions'
 
       - name: Record workflow duration
         if: always()
