@@ -1,14 +1,19 @@
 name: Claude Code TDD
 
-# Security & Rate Limiting Strategy (Updated for TDD Automation):
-# - Only OWNER/MEMBER/COLLABORATOR and github-actions bot can invoke @claude
-# - GitHub Actions bot accepted in multiple formats: github-actions[bot], github-actions, app/github-actions
-# - Concurrency control prevents duplicate runs on same issue/PR
-# - Queue system (TDD automation) processes ~96 specs/day (every 15 min)
-# - No artificial rate limits - concurrency groups provide natural throttling
-# - External contributors CANNOT trigger this workflow (blocked by author_association check)
+# Trigger Strategy:
+# - workflow_run: Automatically triggers when TDD Queue Processor completes
+# - issue_comment/PR review: Manual @claude mentions for interactive use
+# - Uses label query to find the in-progress spec (no workflow_dispatch dependency)
+# - Fully automatic TDD automation with zero API calls for triggering
 
 on:
+  # Automatic trigger: When queue processor completes, find in-progress spec
+  workflow_run:
+    workflows: ["TDD Queue - Processor"]
+    types: [completed]
+    branches: [main]
+
+  # Manual triggers: @claude mentions in issues/PRs (interactive use)
   issue_comment:
     types: [created]
   pull_request_review_comment:
@@ -17,12 +22,6 @@ on:
     types: [opened, assigned]
   pull_request_review:
     types: [submitted]
-  workflow_dispatch:
-    inputs:
-      issue_number:
-        description: 'Issue number to process'
-        required: true
-        type: number
 
 # Concurrency control: Prevent duplicate runs for the same issue/PR + sender
 # Each issue/PR + sender gets its own concurrency group to prevent:
@@ -35,7 +34,7 @@ concurrency:
 
 jobs:
   claude:
-    # Security: Only allow trusted users and github-actions[bot] (TDD automation)
+    # Security: Only allow trusted users and automatic workflow_run trigger
     # Exclude claude[bot] to prevent self-triggering and cancellation loops
     if: |
       (
@@ -43,9 +42,9 @@ jobs:
         (github.event_name == 'pull_request_review_comment' && contains(github.event.comment.body, '@claude')) ||
         (github.event_name == 'pull_request_review' && contains(github.event.review.body, '@claude')) ||
         (github.event_name == 'issues' && (contains(github.event.issue.body, '@claude') || contains(github.event.issue.title, '@claude'))) ||
-        (github.event_name == 'workflow_dispatch')
+        (github.event_name == 'workflow_run')
       ) && (
-        github.event_name == 'workflow_dispatch' ||
+        github.event_name == 'workflow_run' ||
         github.event.comment.author_association == 'OWNER' ||
         github.event.comment.author_association == 'MEMBER' ||
         github.event.comment.author_association == 'COLLABORATOR' ||
@@ -85,19 +84,46 @@ jobs:
         with:
           fetch-depth: 0 # Need full history to checkout branches
 
-      - name: Extract and checkout TDD branch if specified
-        id: branch
-        if: github.event_name == 'issue_comment' || github.event_name == 'issues' || github.event_name == 'workflow_dispatch'
+      - name: Query for in-progress spec (workflow_run trigger)
+        id: query_spec
+        if: github.event_name == 'workflow_run'
         env:
-          ISSUE_BODY: ${{ github.event.issue.body }}
-          COMMENT_BODY: ${{ github.event.comment.body }}
-          ISSUE_NUMBER: ${{ github.event.inputs.issue_number || github.event.issue.number }}
           GH_TOKEN: ${{ github.token }}
         run: |
-          # For workflow_dispatch, fetch issue body via gh CLI
-          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
-            ISSUE_BODY=$(gh issue view "$ISSUE_NUMBER" --json body --jq '.body')
-            COMMENT_BODY=""
+          echo "🔍 Querying for in-progress spec..."
+
+          # Find the single in-progress spec (strict serial processing)
+          ISSUE_JSON=$(gh issue list --label "tdd-spec:in-progress" --json number,body --limit 1 --jq '.[0]')
+
+          if [ -z "$ISSUE_JSON" ] || [ "$ISSUE_JSON" = "null" ]; then
+            echo "⚠️  No in-progress spec found - queue processor may have completed without processing"
+            echo "found=false" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+
+          ISSUE_NUMBER=$(echo "$ISSUE_JSON" | jq -r '.number')
+          ISSUE_BODY=$(echo "$ISSUE_JSON" | jq -r '.body')
+
+          echo "✅ Found in-progress spec: #$ISSUE_NUMBER"
+          echo "found=true" >> $GITHUB_OUTPUT
+          echo "issue_number=$ISSUE_NUMBER" >> $GITHUB_OUTPUT
+          echo "issue_body<<EOF" >> $GITHUB_OUTPUT
+          echo "$ISSUE_BODY" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+
+      - name: Extract and checkout TDD branch if specified
+        id: branch
+        if: github.event_name == 'issue_comment' || github.event_name == 'issues' || github.event_name == 'workflow_run'
+        env:
+          ISSUE_BODY: ${{ github.event_name == 'workflow_run' && steps.query_spec.outputs.issue_body || github.event.issue.body }}
+          COMMENT_BODY: ${{ github.event.comment.body }}
+          ISSUE_NUMBER: ${{ github.event_name == 'workflow_run' && steps.query_spec.outputs.issue_number || github.event.issue.number }}
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          # Skip if workflow_run didn't find a spec
+          if [ "${{ github.event_name }}" = "workflow_run" ] && [ "${{ steps.query_spec.outputs.found }}" != "true" ]; then
+            echo "Skipping: no in-progress spec found"
+            exit 0
           fi
 
           # Extract TDD branch from issue body or comment using env vars to avoid bash expansion
@@ -137,9 +163,9 @@ jobs:
           additional_permissions: |
             actions: read
 
-          # For workflow_dispatch: Provide prompt to trigger action
+          # For workflow_run: Provide prompt to trigger action
           # For comment-triggered events: Action uses @claude mention (prompt ignored)
-          prompt: ${{ github.event_name == 'workflow_dispatch' && 'Please implement the spec in this issue. The TDD branch is already checked out. Follow the e2e-test-fixer agent workflow: run the test to see what fails, implement minimal code, validate all tests pass, then commit and push.' || 'default' }}
+          prompt: ${{ github.event_name == 'workflow_run' && 'Please implement the spec in this issue. The TDD branch is already checked out. Follow the e2e-test-fixer agent workflow: run the test to see what fails, implement minimal code, validate all tests pass, then commit and push.' || 'default' }}
 
           # Explicit agent specification ensures e2e-test-fixer agent is used for TDD automation
           # The agent has complete TDD instructions:

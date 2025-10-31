@@ -113,7 +113,7 @@ jobs:
       # GitHub Actions cannot create PRs with default GITHUB_TOKEN
       # Claude Code will create PR when implementing, or validation runs on branch directly
 
-      - name: Mark spec as in-progress and invoke Claude Code
+      - name: Mark spec as in-progress (Claude Code will auto-trigger)
         if: steps.check.outputs.should_process == 'true'
         run: |
           ISSUE_NUMBER="${{ steps.next.outputs.issue_number }}"
@@ -121,20 +121,14 @@ jobs:
           TEST_FILE="${{ steps.next.outputs.test_file }}"
           BRANCH_NAME="tdd/spec-$SPEC_ID"
 
-          echo "🏃 Marking issue #$ISSUE_NUMBER as in-progress and invoking Claude Code..."
+          echo "🏃 Marking issue #$ISSUE_NUMBER as in-progress..."
 
-          # Update labels
+          # Update labels - Claude Code workflow listens for "in-progress" label
           gh issue edit "$ISSUE_NUMBER" --remove-label "tdd-spec:queued"
           gh issue edit "$ISSUE_NUMBER" --add-label "tdd-spec:in-progress"
 
-          # Trigger Claude Code via workflow_dispatch
-          # NOTE: Requires GH_PAT_WORKFLOW with 'repo' and 'workflow' scopes
-          # GITHUB_TOKEN cannot trigger workflow_dispatch (GitHub Actions security limitation)
-          echo "🤖 Triggering Claude Code workflow for issue #$ISSUE_NUMBER..."
-          gh workflow run claude-tdd.yml --ref main --field issue_number="$ISSUE_NUMBER"
-
           # Post status comment
-          gh issue comment "$ISSUE_NUMBER" --body "🚀 **Processing started** - Claude Code triggered automatically.
+          gh issue comment "$ISSUE_NUMBER" --body "🚀 **Processing started** - Claude Code will trigger automatically.
 
           **Branch**: \`$BRANCH_NAME\` ← Work on this existing branch
           **Test File**: \`$TEST_FILE\`
@@ -153,45 +147,9 @@ jobs:
           ---
           *🤖 Automated • [Queue run](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}) • [Claude Code runs](https://github.com/${{ github.repository }}/actions/workflows/claude-tdd.yml)*"
 
-          echo "✅ Issue updated and Claude Code invoked"
+          echo "✅ Issue updated - Claude Code will start automatically via workflow_run trigger"
         env:
-          GH_TOKEN: ${{ secrets.GH_PAT_WORKFLOW || github.token }}
-
-      - name: Verify Claude Code started
-        if: steps.check.outputs.should_process == 'true'
-        run: |
-          ISSUE_NUMBER="${{ steps.next.outputs.issue_number }}"
-
-          echo "⏳ Waiting 30 seconds for Claude Code to start..."
-          sleep 30
-
-          # Check if Claude Code workflow was triggered
-          CLAUDE_RUN=$(gh run list --workflow=claude-tdd.yml --limit 1 --json status,conclusion,createdAt --jq '.[0]')
-          CLAUDE_STATUS=$(echo "$CLAUDE_RUN" | jq -r '.status')
-          CLAUDE_CONCLUSION=$(echo "$CLAUDE_RUN" | jq -r '.conclusion')
-          CLAUDE_CREATED=$(echo "$CLAUDE_RUN" | jq -r '.createdAt')
-
-          echo "Latest Claude Code run: status=$CLAUDE_STATUS, conclusion=$CLAUDE_CONCLUSION, created=$CLAUDE_CREATED"
-
-          # Warn if Claude completed too quickly (< 30s = likely did no work)
-          if [ "$CLAUDE_STATUS" = "completed" ]; then
-            CREATED_TS=$(date -j -f "%Y-%m-%dT%H:%M:%SZ" "$CLAUDE_CREATED" "+%s" 2>/dev/null || date -d "$CLAUDE_CREATED" "+%s" 2>/dev/null || echo "0")
-            NOW_TS=$(date "+%s")
-            DURATION=$((NOW_TS - CREATED_TS))
-
-            if [ "$DURATION" -lt 45 ]; then
-              echo "::warning::Claude Code completed in ${DURATION}s - may not have done any work"
-              echo "::warning::Check workflow logs: https://github.com/${{ github.repository }}/actions/workflows/claude-tdd.yml"
-            else
-              echo "✅ Claude Code ran for ${DURATION}s - appears to have worked"
-            fi
-          elif [ "$CLAUDE_STATUS" = "in_progress" ]; then
-            echo "✅ Claude Code is in_progress - working on issue #$ISSUE_NUMBER"
-          else
-            echo "::warning::Claude Code status: $CLAUDE_STATUS - may not have started"
-          fi
-        env:
-          GH_TOKEN: ${{ secrets.GH_PAT_WORKFLOW || github.token }}
+          GH_TOKEN: ${{ github.token }}
 
       - name: Pipeline health check
         if: always()
