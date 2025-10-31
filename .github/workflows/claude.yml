@@ -139,7 +139,7 @@ jobs:
 
           # For workflow_dispatch: Add minimal prompt to trigger action
           # For other events: Let e2e-test-fixer agent handle naturally (no prompt)
-          prompt: ${{ github.event_name == 'workflow_dispatch' && format('Please work on issue #{0}. The TDD branch is already checked out. Follow the e2e-test-fixer agent workflow.', github.event.inputs.issue_number) || '' }}
+          prompt: ${{ github.event_name == 'workflow_dispatch' && 'Please work on this issue. The TDD branch is already checked out. Follow the e2e-test-fixer agent workflow.' || '' }}
 
           # Explicit agent specification ensures e2e-test-fixer agent is used for TDD automation
           # The agent has complete TDD instructions:
