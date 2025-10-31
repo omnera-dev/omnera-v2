@@ -80,16 +80,16 @@ jobs:
       - name: Extract and checkout TDD branch if specified
         id: branch
         if: github.event_name == 'issue_comment' || github.event_name == 'issues'
+        env:
+          ISSUE_BODY: ${{ github.event.issue.body }}
+          COMMENT_BODY: ${{ github.event.comment.body }}
         run: |
-          # Extract TDD branch from issue body or comment
-          ISSUE_BODY="${{ github.event.issue.body }}"
-          COMMENT_BODY="${{ github.event.comment.body }}"
-
+          # Extract TDD branch from issue body or comment using env vars to avoid bash expansion
           # Look for tdd/spec-* pattern in issue body first, then comment
-          BRANCH=$(echo "$ISSUE_BODY" | grep -o 'tdd/spec-[A-Z-]*[0-9]*' | head -1)
+          BRANCH=$(echo "$ISSUE_BODY" | grep -o 'tdd/spec-[A-Z-]*[0-9]*' | head -1 || true)
 
           if [ -z "$BRANCH" ]; then
-            BRANCH=$(echo "$COMMENT_BODY" | grep -o 'tdd/spec-[A-Z-]*[0-9]*' | head -1)
+            BRANCH=$(echo "$COMMENT_BODY" | grep -o 'tdd/spec-[A-Z-]*[0-9]*' | head -1 || true)
           fi
 
           if [ -n "$BRANCH" ]; then
