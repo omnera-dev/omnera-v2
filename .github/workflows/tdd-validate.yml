@@ -289,7 +289,7 @@ jobs:
           echo "✅ Auto-merge enabled - PR will merge when checks pass"
           echo "pr_url=$PR_URL" >> $GITHUB_OUTPUT
         env:
-          GH_TOKEN: ${{ github.token }}
+          GH_TOKEN: ${{ secrets.GH_PAT_WORKFLOW }}
 
       - name: Mark spec as completed (on success)
         if: steps.result.outputs.success == 'true' && steps.issue.outputs.has_issue == 'true'
