@@ -62,7 +62,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 45 # Claude Code implementation can take time (complex specs)
     permissions:
-      contents: read
+      contents: write # Need write to push to TDD branches
       pull-requests: read
       issues: read
       id-token: write
@@ -75,7 +75,41 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          fetch-depth: 1
+          fetch-depth: 0 # Need full history to checkout branches
+
+      - name: Extract and checkout TDD branch if specified
+        id: branch
+        if: github.event_name == 'issue_comment' || github.event_name == 'issues'
+        run: |
+          # Extract TDD branch from issue body or comment
+          ISSUE_BODY="${{ github.event.issue.body }}"
+          COMMENT_BODY="${{ github.event.comment.body }}"
+
+          # Look for tdd/spec-* pattern in issue body first, then comment
+          BRANCH=$(echo "$ISSUE_BODY" | grep -o 'tdd/spec-[A-Z-]*[0-9]*' | head -1)
+
+          if [ -z "$BRANCH" ]; then
+            BRANCH=$(echo "$COMMENT_BODY" | grep -o 'tdd/spec-[A-Z-]*[0-9]*' | head -1)
+          fi
+
+          if [ -n "$BRANCH" ]; then
+            echo "Found TDD branch: $BRANCH"
+
+            # Check if branch exists remotely
+            if git ls-remote --heads origin "$BRANCH" | grep -q "$BRANCH"; then
+              echo "✅ Branch $BRANCH exists, checking out..."
+              git fetch origin "$BRANCH"
+              git checkout "$BRANCH"
+              echo "tdd_branch=$BRANCH" >> $GITHUB_OUTPUT
+              echo "using_tdd_branch=true" >> $GITHUB_OUTPUT
+            else
+              echo "⚠️  Branch $BRANCH does not exist remotely, staying on main"
+              echo "using_tdd_branch=false" >> $GITHUB_OUTPUT
+            fi
+          else
+            echo "No TDD branch found in issue, staying on main"
+            echo "using_tdd_branch=false" >> $GITHUB_OUTPUT
+          fi
 
       - name: Run Claude Code
         id: claude
