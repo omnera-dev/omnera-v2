@@ -404,6 +404,12 @@ jobs:
           # Get current retry count from labels
           LABELS=$(gh issue view "$ISSUE_NUMBER" --json labels --jq '.labels[].name' || echo "")
           CURRENT_RETRY=$(echo "$LABELS" | grep -oP 'retry:\K\d+' | head -1 || echo "0")
+
+          # Ensure CURRENT_RETRY is numeric (default to 0 if empty)
+          if [ -z "$CURRENT_RETRY" ]; then
+            CURRENT_RETRY=0
+          fi
+
           NEXT_RETRY=$((CURRENT_RETRY + 1))
 
           echo "Current retry: $CURRENT_RETRY"
@@ -413,7 +419,7 @@ jobs:
             echo "📝 Retry $NEXT_RETRY/$MAX_RETRIES - Re-queueing spec..."
 
             # Remove old retry label if exists
-            if [ "$CURRENT_RETRY" -gt 0 ]; then
+            if [ "$CURRENT_RETRY" -gt "0" ]; then
               gh issue edit "$ISSUE_NUMBER" --remove-label "retry:$CURRENT_RETRY" || true
             fi
 
