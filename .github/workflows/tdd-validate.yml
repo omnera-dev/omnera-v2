@@ -279,9 +279,7 @@ jobs:
 
           🤖 Generated with [Claude Code](https://claude.com/claude-code)
 
-          Co-authored-by: github-actions[bot] <github-actions[bot]@users.noreply.github.com>" \
-            --label "tdd-automation" \
-            --label "automated-pr")
+          Co-authored-by: github-actions[bot] <github-actions[bot]@users.noreply.github.com>")
 
           echo "✅ PR created: $PR_URL"
 
