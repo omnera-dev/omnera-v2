@@ -57,6 +57,17 @@ export function DefaultHomePage({ app }: { readonly app: App }): Readonly<ReactE
                   {app.description}
                 </TypographyLead>
               )}
+              {/* Blocks */}
+              {app.blocks &&
+                app.blocks.map((block) => {
+                  const elementProps = {
+                    key: block.name,
+                    'data-block': block.name,
+                    style: { display: 'block' as const, minHeight: '1px' },
+                    children: block.content || '\u200B',
+                  }
+                  return <div {...elementProps} />
+                })}
             </div>
           </div>
         </div>
