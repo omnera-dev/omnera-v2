@@ -9,8 +9,9 @@ on:
   workflow_dispatch:
 
 # Security: Define minimal required permissions
-# NOTE: actions:write on GITHUB_TOKEN is insufficient for workflow_dispatch
-# Requires GH_PAT_WORKFLOW secret with 'repo' and 'workflow' scopes
+# NOTE: Requires GH_PAT_WORKFLOW secret with 'repo' scope to post @claude mentions
+# Comments posted with PAT appear from token owner's account (not github-actions bot)
+# This triggers Claude Code workflow via issue_comment event
 permissions:
   contents: write
   issues: write
@@ -113,7 +114,7 @@ jobs:
       # GitHub Actions cannot create PRs with default GITHUB_TOKEN
       # Claude Code will create PR when implementing, or validation runs on branch directly
 
-      - name: Mark spec as in-progress (Claude Code will auto-trigger)
+      - name: Mark spec as in-progress and trigger Claude Code via @mention
         if: steps.check.outputs.should_process == 'true'
         run: |
           ISSUE_NUMBER="${{ steps.next.outputs.issue_number }}"
@@ -123,18 +124,20 @@ jobs:
 
           echo "🏃 Marking issue #$ISSUE_NUMBER as in-progress..."
 
-          # Update labels - Claude Code workflow listens for "in-progress" label
+          # Update labels
           gh issue edit "$ISSUE_NUMBER" --remove-label "tdd-spec:queued"
           gh issue edit "$ISSUE_NUMBER" --add-label "tdd-spec:in-progress"
 
-          # Post status comment
-          gh issue comment "$ISSUE_NUMBER" --body "🚀 **Processing started** - Claude Code will trigger automatically.
+          # Trigger Claude Code via @claude mention (using user's PAT)
+          # This posts a comment from the token owner's account, which triggers the workflow
+          echo "🤖 Triggering Claude Code via @claude mention..."
+          gh issue comment "$ISSUE_NUMBER" --body "@claude please implement this spec.
 
           **Branch**: \`$BRANCH_NAME\` ← Work on this existing branch
           **Test File**: \`$TEST_FILE\`
           **Spec ID**: \`$SPEC_ID\`
 
-          Claude Code will:
+          Follow the e2e-test-fixer agent workflow:
           1. Checkout branch \`$BRANCH_NAME\`
           2. Remove \`.fixme()\` from test \`$SPEC_ID\`
           3. Run tests to see what fails
@@ -145,11 +148,11 @@ jobs:
           Validation runs automatically on push.
 
           ---
-          *🤖 Automated • [Queue run](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}) • [Claude Code runs](https://github.com/${{ github.repository }}/actions/workflows/claude-tdd.yml)*"
+          *🤖 Automated via [Queue Processor](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})*"
 
-          echo "✅ Issue updated - Claude Code will start automatically via workflow_run trigger"
+          echo "✅ Issue updated and @claude mentioned - Claude Code will trigger automatically"
         env:
-          GH_TOKEN: ${{ github.token }}
+          GH_TOKEN: ${{ secrets.GH_PAT_WORKFLOW || github.token }}
 
       - name: Pipeline health check
         if: always()
