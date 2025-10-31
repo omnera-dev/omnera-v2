@@ -268,8 +268,8 @@ jobs:
           git checkout -b main origin/main 2>/dev/null || git checkout main
           git reset --hard origin/main
 
-          # Merge spec branch to main (no-ff to preserve history)
-          git merge "$BRANCH_NAME" --no-ff -m "feat: implement spec $SPEC_ID
+          # Merge spec branch to main (allow unrelated histories since we reset to origin/main)
+          git merge "$BRANCH_NAME" --no-ff --allow-unrelated-histories -m "feat: implement spec $SPEC_ID
 
           Spec validation passed all checks:
           - ✅ Spec test
