@@ -5,7 +5,7 @@
  * found in the LICENSE.md file in the root directory of this source tree.
  */
 
-import { type ReactElement } from 'react'
+import { type ReactElement, createElement } from 'react'
 import { Badge } from '@/presentation/components/ui/badge'
 import { TypographyH1, TypographyLead } from '@/presentation/components/ui/typography'
 import type { App } from '@/domain/models/app'
@@ -58,16 +58,17 @@ export function DefaultHomePage({ app }: { readonly app: App }): Readonly<ReactE
                 </TypographyLead>
               )}
               {/* Blocks */}
-              {app.blocks &&
-                app.blocks.map((block) => {
-                  const elementProps = {
+              {app.blocks?.map((block) =>
+                createElement(
+                  block.type,
+                  {
                     key: block.name,
                     'data-block': block.name,
-                    style: { display: 'block' as const, minHeight: '1px' },
-                    children: block.content || '\u200B',
-                  }
-                  return <div {...elementProps} />
-                })}
+                    style: { display: 'block', minHeight: '1px', minWidth: '1px' },
+                  },
+                  block.content || '\u00A0'
+                )
+              )}
             </div>
           </div>
         </div>
