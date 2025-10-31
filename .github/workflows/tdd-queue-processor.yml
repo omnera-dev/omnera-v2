@@ -9,11 +9,13 @@ on:
   workflow_dispatch:
 
 # Security: Define minimal required permissions
+# NOTE: actions:write on GITHUB_TOKEN is insufficient for workflow_dispatch
+# Requires GH_PAT_WORKFLOW secret with 'repo' and 'workflow' scopes
 permissions:
   contents: write
   issues: write
   pull-requests: write
-  actions: write # Required to trigger Claude Code workflow via workflow_dispatch
+  actions: write
 
 # Prevent concurrent processing (strict serial: one spec at a time)
 concurrency:
@@ -63,7 +65,7 @@ jobs:
 
           echo "✅ Rate limit OK for queue processing"
         env:
-          GH_TOKEN: ${{ github.token }}
+          GH_TOKEN: ${{ secrets.GH_PAT_WORKFLOW || github.token }}
 
       - name: Get next spec from queue
         id: next
@@ -72,7 +74,7 @@ jobs:
           bun run scripts/tdd-automation/queue-manager.ts next
         env:
           GITHUB_OUTPUT: ${{ github.output }}
-          GH_TOKEN: ${{ github.token }}
+          GH_TOKEN: ${{ secrets.GH_PAT_WORKFLOW || github.token }}
 
       - name: Check if spec available
         id: check
@@ -125,30 +127,35 @@ jobs:
           gh issue edit "$ISSUE_NUMBER" --remove-label "tdd-spec:queued"
           gh issue edit "$ISSUE_NUMBER" --add-label "tdd-spec:in-progress"
 
-          # Trigger Claude Code via @claude mention in issue comment
-          echo "🤖 Triggering Claude Code for issue #$ISSUE_NUMBER via @claude comment..."
-          gh issue comment "$ISSUE_NUMBER" --body "@claude Please implement this spec.
+          # Trigger Claude Code via workflow_dispatch
+          # NOTE: Requires GH_PAT_WORKFLOW with 'repo' and 'workflow' scopes
+          # GITHUB_TOKEN cannot trigger workflow_dispatch (GitHub Actions security limitation)
+          echo "🤖 Triggering Claude Code workflow for issue #$ISSUE_NUMBER..."
+          gh workflow run claude.yml --ref main --field issue_number="$ISSUE_NUMBER"
 
-          **Branch**: \`$BRANCH_NAME\` ← **IMPORTANT: Work on this existing branch**
+          # Post status comment
+          gh issue comment "$ISSUE_NUMBER" --body "🚀 **Processing started** - Claude Code triggered automatically.
+
+          **Branch**: \`$BRANCH_NAME\` ← Work on this existing branch
           **Test File**: \`$TEST_FILE\`
           **Spec ID**: \`$SPEC_ID\`
 
-          The branch \`$BRANCH_NAME\` has already been created and is ready. Please:
-          1. Checkout the branch: \`git checkout $BRANCH_NAME\`
-          2. Remove \`.fixme()\` from test \`$SPEC_ID\` in \`$TEST_FILE\`
-          3. Run the test to see what fails
-          4. Implement minimal code following Omnera architecture
-          5. Validate all tests pass (spec + regression + quality checks)
-          6. Commit and push to \`$BRANCH_NAME\` when all GREEN
+          Claude Code will:
+          1. Checkout branch \`$BRANCH_NAME\`
+          2. Remove \`.fixme()\` from test \`$SPEC_ID\`
+          3. Run tests to see what fails
+          4. Implement minimal code
+          5. Validate all tests pass
+          6. Commit and push when GREEN
 
-          Follow the e2e-test-fixer agent workflow. Validation runs automatically on push.
+          Validation runs automatically on push.
 
           ---
-          *🤖 Automated from TDD queue processor • [View run](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})*"
+          *🤖 Automated • [Queue run](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}) • [Claude Code runs](https://github.com/${{ github.repository }}/actions/workflows/claude.yml)*"
 
           echo "✅ Issue updated and Claude Code invoked"
         env:
-          GH_TOKEN: ${{ github.token }}
+          GH_TOKEN: ${{ secrets.GH_PAT_WORKFLOW || github.token }}
 
       - name: Verify Claude Code started
         if: steps.check.outputs.should_process == 'true'
@@ -184,7 +191,7 @@ jobs:
             echo "::warning::Claude Code status: $CLAUDE_STATUS - may not have started"
           fi
         env:
-          GH_TOKEN: ${{ github.token }}
+          GH_TOKEN: ${{ secrets.GH_PAT_WORKFLOW || github.token }}
 
       - name: Pipeline health check
         if: always()
@@ -210,7 +217,7 @@ jobs:
 
           echo "✅ Health check complete"
         env:
-          GH_TOKEN: ${{ github.token }}
+          GH_TOKEN: ${{ secrets.GH_PAT_WORKFLOW || github.token }}
 
       - name: Record workflow duration
         if: always()
