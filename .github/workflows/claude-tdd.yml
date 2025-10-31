@@ -1,4 +1,4 @@
-name: Claude Code
+name: Claude Code TDD
 
 # Security & Rate Limiting Strategy (Updated for TDD Automation):
 # - Only OWNER/MEMBER/COLLABORATOR and github-actions bot can invoke @claude
