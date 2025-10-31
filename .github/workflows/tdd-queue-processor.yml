@@ -131,7 +131,7 @@ jobs:
           # NOTE: Requires GH_PAT_WORKFLOW with 'repo' and 'workflow' scopes
           # GITHUB_TOKEN cannot trigger workflow_dispatch (GitHub Actions security limitation)
           echo "🤖 Triggering Claude Code workflow for issue #$ISSUE_NUMBER..."
-          gh workflow run claude.yml --ref main --field issue_number="$ISSUE_NUMBER"
+          gh workflow run claude-tdd.yml --ref main --field issue_number="$ISSUE_NUMBER"
 
           # Post status comment
           gh issue comment "$ISSUE_NUMBER" --body "🚀 **Processing started** - Claude Code triggered automatically.
@@ -151,7 +151,7 @@ jobs:
           Validation runs automatically on push.
 
           ---
-          *🤖 Automated • [Queue run](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}) • [Claude Code runs](https://github.com/${{ github.repository }}/actions/workflows/claude.yml)*"
+          *🤖 Automated • [Queue run](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}) • [Claude Code runs](https://github.com/${{ github.repository }}/actions/workflows/claude-tdd.yml)*"
 
           echo "✅ Issue updated and Claude Code invoked"
         env:
@@ -166,7 +166,7 @@ jobs:
           sleep 30
 
           # Check if Claude Code workflow was triggered
-          CLAUDE_RUN=$(gh run list --workflow=claude.yml --limit 1 --json status,conclusion,createdAt --jq '.[0]')
+          CLAUDE_RUN=$(gh run list --workflow=claude-tdd.yml --limit 1 --json status,conclusion,createdAt --jq '.[0]')
           CLAUDE_STATUS=$(echo "$CLAUDE_RUN" | jq -r '.status')
           CLAUDE_CONCLUSION=$(echo "$CLAUDE_RUN" | jq -r '.conclusion')
           CLAUDE_CREATED=$(echo "$CLAUDE_RUN" | jq -r '.createdAt')
@@ -181,7 +181,7 @@ jobs:
 
             if [ "$DURATION" -lt 45 ]; then
               echo "::warning::Claude Code completed in ${DURATION}s - may not have done any work"
-              echo "::warning::Check workflow logs: https://github.com/${{ github.repository }}/actions/workflows/claude.yml"
+              echo "::warning::Check workflow logs: https://github.com/${{ github.repository }}/actions/workflows/claude-tdd.yml"
             else
               echo "✅ Claude Code ran for ${DURATION}s - appears to have worked"
             fi
