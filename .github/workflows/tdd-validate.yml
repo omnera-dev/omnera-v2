@@ -403,10 +403,10 @@ jobs:
 
           # Get current retry count from labels
           LABELS=$(gh issue view "$ISSUE_NUMBER" --json labels --jq '.labels[].name' || echo "")
-          CURRENT_RETRY=$(echo "$LABELS" | grep -oP 'retry:\K\d+' | head -1 || echo "0")
+          CURRENT_RETRY=$(echo "$LABELS" | grep -oP 'retry:\K\d+' | head -1)
 
-          # Ensure CURRENT_RETRY is numeric (default to 0 if empty)
-          if [ -z "$CURRENT_RETRY" ]; then
+          # Ensure CURRENT_RETRY is numeric IMMEDIATELY (default to 0 if empty)
+          if [ -z "$CURRENT_RETRY" ] || [ "$CURRENT_RETRY" = "" ]; then
             CURRENT_RETRY=0
           fi
 
@@ -418,9 +418,9 @@ jobs:
           if [ "$NEXT_RETRY" -le "$MAX_RETRIES" ]; then
             echo "📝 Retry $NEXT_RETRY/$MAX_RETRIES - Re-queueing spec..."
 
-            # Remove old retry label if exists
-            if [ "$CURRENT_RETRY" -gt "0" ]; then
-              gh issue edit "$ISSUE_NUMBER" --remove-label "retry:$CURRENT_RETRY" || true
+            # Remove old retry label if exists (suppress errors if label doesn't exist)
+            if [ "$CURRENT_RETRY" -gt 0 ]; then
+              gh issue edit "$ISSUE_NUMBER" --remove-label "retry:$CURRENT_RETRY" 2>/dev/null || true
             fi
 
             # Add new retry label and re-queue
@@ -439,8 +439,10 @@ jobs:
           else
             echo "❌ Max retries ($MAX_RETRIES) exceeded - Marking as failed"
 
-            # Remove retry label
-            gh issue edit "$ISSUE_NUMBER" --remove-label "retry:$CURRENT_RETRY" || true
+            # Remove retry label (suppress errors if label doesn't exist)
+            if [ "$CURRENT_RETRY" -gt 0 ]; then
+              gh issue edit "$ISSUE_NUMBER" --remove-label "retry:$CURRENT_RETRY" 2>/dev/null || true
+            fi
 
             # Mark as permanently failed
             gh issue edit "$ISSUE_NUMBER" --remove-label "tdd-spec:in-progress"
