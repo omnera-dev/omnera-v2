@@ -1,6 +1,6 @@
 name: Claude Code
 
-# Security & Rate Limiting Strategy:
+# Security & Rate Limiting Strategy (Updated for TDD Automation):
 # - Only OWNER/MEMBER/COLLABORATOR and github-actions bot can invoke @claude
 # - GitHub Actions bot accepted in multiple formats: github-actions[bot], github-actions, app/github-actions
 # - Concurrency control prevents duplicate runs on same issue/PR
