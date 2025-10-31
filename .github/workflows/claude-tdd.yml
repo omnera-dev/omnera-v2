@@ -9,7 +9,7 @@ name: Claude Code TDD
 on:
   # Automatic trigger: When queue processor completes, find in-progress spec
   workflow_run:
-    workflows: ["TDD Queue - Processor"]
+    workflows: ["tdd-queue-processor.yml"]
     types: [completed]
     branches: [main]
 
