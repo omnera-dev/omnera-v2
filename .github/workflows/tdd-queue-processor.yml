@@ -124,8 +124,12 @@ jobs:
           gh issue edit "$ISSUE_NUMBER" --remove-label "tdd-spec:queued"
           gh issue edit "$ISSUE_NUMBER" --add-label "tdd-spec:in-progress"
 
-          # Post single combined comment
-          gh issue comment "$ISSUE_NUMBER" --body "🚀 **Processing started** - @claude please implement this spec using the **e2e-test-fixer** agent.
+          # Trigger Claude Code via workflow_dispatch (bot comments don't trigger workflows)
+          echo "🤖 Triggering Claude Code workflow for issue #$ISSUE_NUMBER..."
+          gh workflow run claude.yml --ref main --field issue_number="$ISSUE_NUMBER"
+
+          # Post status comment
+          gh issue comment "$ISSUE_NUMBER" --body "🚀 **Processing started** - Claude Code triggered via workflow_dispatch.
 
           **Branch**: \`$BRANCH_NAME\` (already created - use this exact branch name)
           **Test File**: \`$TEST_FILE\`
@@ -142,7 +146,8 @@ jobs:
           **Complete workflow**: See \`@docs/development/tdd-automation-pipeline.md\`
 
           ---
-          *Automated from TDD queue processor • [View run](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})*"
+          *Automated from TDD queue processor • [View run](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})*
+          *Claude Code workflow: Check [Actions tab](https://github.com/${{ github.repository }}/actions/workflows/claude.yml) for progress*"
 
           echo "✅ Issue updated and Claude Code invoked"
         env:
