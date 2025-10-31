@@ -261,11 +261,12 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
-          # Fetch latest main and checkout from remote
+          # Fetch latest main
           git fetch origin main
 
-          # Switch to main (force checkout from remote to avoid unrelated histories)
-          git checkout -B main origin/main
+          # Create/checkout main branch and reset to match origin/main exactly
+          git checkout -b main origin/main 2>/dev/null || git checkout main
+          git reset --hard origin/main
 
           # Merge spec branch to main (no-ff to preserve history)
           git merge "$BRANCH_NAME" --no-ff -m "feat: implement spec $SPEC_ID
