@@ -504,16 +504,21 @@ export const createSpecIssue = (
 **Feature**: ${spec.feature}
 **Branch**: \`tdd/spec-${spec.specId}\`
 
-### For Claude Code
+### Implementation Instructions
 
-@claude Please implement this spec:
+This spec will be automatically picked up by the TDD queue processor and implemented by Claude Code via \`workflow_dispatch\`.
 
-1. Checkout branch: \`git checkout tdd/spec-${spec.specId}\`
-2. Remove \`.fixme()\` from test ${spec.specId}
-3. Implement minimal code to pass test
-4. Commit: \`fix: implement ${spec.specId}\`
+**What happens automatically**:
+1. Queue processor marks issue as in-progress
+2. Triggers Claude Code workflow via workflow_dispatch
+3. Claude Code checks out branch \`tdd/spec-${spec.specId}\`
+4. Removes \`.fixme()\` from test ${spec.specId}
+5. Implements minimal code to pass test
+6. Runs validation before pushing
+7. Commits: \`fix: implement ${spec.specId}\`
+8. Auto-merge to main if validation passes
 
-Validation runs automatically on push.`
+**Validation runs automatically**: Spec test → Regression tests → Quality checks`
 
     // Use heredoc to avoid shell escaping issues with backticks and special characters
     const output = yield* cmd
