@@ -74,7 +74,7 @@ test.describe('Reusable Blocks', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-BLOCKS-005: should validate block library organization',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
