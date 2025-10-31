@@ -19,7 +19,7 @@ import { test, expect } from '@/specs/fixtures'
  */
 
 test.describe('Page Sections', () => {
-  test.fixme(
+  test(
     'APP-PAGES-SECTIONS-001: should render direct component definition',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -27,7 +27,7 @@ test.describe('Page Sections', () => {
         name: 'test-app',
         pages: [
           {
-            name: 'Test',
+            name: 'test',
             path: '/',
             meta: { lang: 'en-US', title: 'Test', description: 'Test' },
             sections: [
