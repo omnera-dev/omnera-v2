@@ -44,10 +44,6 @@ jobs:
     timeout-minutes: 10 # Prevent 6-hour hangs (scan + validation + bulk issue creation)
 
     steps:
-      - name: Record start time
-        id: start_time
-        run: echo "timestamp=$(date +%s)" >> $GITHUB_OUTPUT
-
       - name: Checkout code
         uses: actions/checkout@v4
 
@@ -96,25 +92,6 @@ jobs:
             echo "should_populate=true" >> $GITHUB_OUTPUT
           fi
 
-      - name: Check GitHub API rate limit
-        if: steps.check.outputs.should_populate == 'true'
-        id: rate_limit
-        run: |
-          REMAINING=$(gh api rate_limit --jq '.rate.remaining')
-          LIMIT=$(gh api rate_limit --jq '.rate.limit')
-          echo "remaining=$REMAINING" >> $GITHUB_OUTPUT
-
-          echo "⏱️  GitHub API: $REMAINING/$LIMIT requests remaining"
-
-          if [ "$REMAINING" -lt 100 ]; then
-            echo "::error::Rate limit too low: $REMAINING requests remaining (need 100+ for bulk operations)"
-            exit 1
-          fi
-
-          echo "✅ Rate limit OK for bulk issue creation"
-        env:
-          GH_TOKEN: ${{ github.token }}
-
       - name: Populate queue with spec issues
         if: steps.check.outputs.should_populate == 'true'
         run: |
@@ -130,15 +107,3 @@ jobs:
           bun run scripts/tdd-automation/queue-manager.ts status
         env:
           GH_TOKEN: ${{ github.token }}
-
-      - name: Record workflow duration
-        if: always()
-        run: |
-          START_TIME="${{ steps.start_time.outputs.timestamp }}"
-          END_TIME=$(date +%s)
-          DURATION=$((END_TIME - START_TIME))
-
-          echo "⏱️  Workflow duration: ${DURATION}s ($((DURATION / 60))m $((DURATION % 60))s)"
-
-          # Log for metrics collection (future enhancement)
-          echo "WORKFLOW=tdd-queue-populate DURATION=${DURATION}s" >> $GITHUB_STEP_SUMMARY

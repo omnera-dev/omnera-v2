@@ -6,11 +6,13 @@ on:
   push:
     branches: [main]
   pull_request:
+    types: [opened, synchronize, reopened, closed]
     branches: [main]
 
 jobs:
   test:
     name: Test
+    if: github.event_name == 'push' || github.event.action != 'closed'
     runs-on: ubuntu-latest
     timeout-minutes: 15
 
@@ -86,3 +88,42 @@ jobs:
           name: test-results
           path: test-results/
           retention-days: 30
+
+  close-tdd-issue:
+    name: Close TDD Issue on PR Merge
+    if: |
+      github.event_name == 'pull_request' &&
+      github.event.action == 'closed' &&
+      github.event.pull_request.merged == true &&
+      contains(github.event.pull_request.labels.*.name, 'tdd-automation')
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+    steps:
+      - name: Extract issue number from PR body
+        id: issue
+        run: |
+          PR_BODY="${{ github.event.pull_request.body }}"
+          ISSUE_NUMBER=$(echo "$PR_BODY" | grep -oP 'Closes #\K\d+' || echo "")
+
+          if [ -z "$ISSUE_NUMBER" ]; then
+            echo "⚠️ No issue number found in PR body"
+            echo "has_issue=false" >> $GITHUB_OUTPUT
+          else
+            echo "✅ Found issue #$ISSUE_NUMBER"
+            echo "has_issue=true" >> $GITHUB_OUTPUT
+            echo "issue_number=$ISSUE_NUMBER" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Close issue
+        if: steps.issue.outputs.has_issue == 'true'
+        run: |
+          ISSUE_NUMBER="${{ steps.issue.outputs.issue_number }}"
+
+          gh issue close "$ISSUE_NUMBER" --reason completed
+          gh issue edit "$ISSUE_NUMBER" --add-label "tdd-spec:completed"
+          gh issue edit "$ISSUE_NUMBER" --remove-label "tdd-spec:in-progress"
+
+          echo "✅ Closed issue #$ISSUE_NUMBER"
+        env:
+          GH_TOKEN: ${{ github.token }}

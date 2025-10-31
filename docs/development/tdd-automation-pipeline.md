@@ -105,37 +105,62 @@ bun run scripts/tdd-automation/queue-manager.ts status
 
 **Concurrency**: Strict serial - only one spec can be in-progress at a time
 
-#### **tdd-validate.yml** (Auto-Validation)
+#### **claude-tdd.yml** (Claude Code Implementation)
 
 **Triggers**:
 
-- Push to branches matching `tdd/spec-*`
+- @claude mention in issue comments (posted by queue processor every 15 min)
+- Manual @claude mentions by project owner
+- Manual workflow_dispatch for specific issues
 
-**Purpose**: Automatically validates implementations when Claude (or anyone) pushes
+**Purpose**: Automatically implements specs using dual-agent workflow with retry logic
 
 **Key Steps**:
 
-1. Extract spec ID from branch name
-2. Find corresponding issue and test file
-3. Run specific spec test (using grep to filter)
-4. Run regression tests
-5. Run code quality checks (license, lint, typecheck)
-6. **Generate and commit roadmap** (if quality checks pass)
-   - Run `bun generate:roadmap`
-   - Commit updated roadmap if changes detected
-   - Push to spec branch
-7. **On Success**:
-   - Mark issue as completed
-   - Close issue
-   - Enable auto-merge for PR
-8. **On Failure**:
-   - Comment on issue with details
-   - Check retry count from labels
-   - If retries remaining: Re-queue spec (change to `queued` state)
-   - If max retries exceeded: Mark as `failed`
-   - **Queue continues**: Never blocks other specs
+1. Checkout existing branch (created by queue processor)
+2. **Run @agent-e2e-test-fixer**: Remove `.fixme()`, implement minimal code
+3. **Run @agent-codebase-refactor-auditor**: Review quality, refactor (ALWAYS)
+4. Commit changes (Claude Code account) - includes `bun run license`
+5. Create PR to main with `tdd-automation` label
+6. **Monitor test.yml validation** with retry loop (max 3 attempts):
+   - Check test.yml CI status
+   - On failure: Analyze errors, fix code, push again
+   - Track retry count with labels (retry:1, retry:2, retry:3)
+   - After 3 failures: Mark issue `tdd-spec:failed`, comment, exit
+   - On success: Enable PR auto-merge with --squash
+7. **Issue closes automatically** when PR merges to main (handled by test.yml)
 
-#### **tdd-queue-recovery.yml** (Timeout Recovery) - NEW
+**Retry Logic**:
+
+- Max 3 attempts per spec
+- Automatic error analysis and fixing
+- Pipeline continues even if spec fails (doesn't block queue)
+
+#### **test.yml** (PR Validation & Issue Closure)
+
+**Triggers**:
+
+- Pull request events (opened, synchronize, reopened, closed)
+- Push to main branch
+
+**Purpose**: Validates PRs and closes TDD issues when PRs merge
+
+**Key Steps**:
+
+1. **test job** (skip if PR closed):
+   - Lint code (`bun run lint`)
+   - Type check (`bun run typecheck`)
+   - Run unit tests (`bun test:unit`)
+   - Run E2E regression tests (`bun test:e2e:regression`)
+
+2. **close-tdd-issue job** (only on PR merge):
+   - Triggers when PR with `tdd-automation` label merges
+   - Extracts issue number from PR body
+   - Closes issue with reason "completed"
+   - Adds label `tdd-spec:completed`
+   - Removes label `tdd-spec:in-progress`
+
+#### **tdd-queue-recovery.yml** (Timeout Recovery)
 
 **Triggers**:
 
@@ -224,15 +249,25 @@ Every 15 minutes (or manual):
 
 **Fully automated** - triggered by `@claude` mention in auto-comment:
 
-1. **Claude Code workflow triggers**: Detects `@claude` mention in issue comment
-2. **Agent initializes**: Recognizes `tdd/spec-*` branch pattern for pipeline mode
-3. **Checkout branch**: `git checkout tdd/spec-APP-VERSION-001`
-4. **Read test file**: Understands requirements from test with spec ID
-5. **Remove `.fixme()`**: Makes test active
-6. **Implement minimal code**: Follows domain/application/infrastructure architecture
-7. **Run license headers**: `bun run license`
-8. **Commit changes**: `fix: implement APP-VERSION-001`
-9. **Push to branch**: Triggers validation workflow automatically
+1. **Claude Code workflow triggers**: `claude-tdd.yml` detects `@claude` mention
+2. **Checkout existing branch**: `git checkout tdd/spec-APP-VERSION-001` (already created)
+3. **Run @agent-e2e-test-fixer**:
+   - Read test file with spec ID
+   - Remove `.fixme()` from specific test
+   - Implement minimal code following architecture patterns
+4. **Run @agent-codebase-refactor-auditor** (ALWAYS):
+   - Review implementation quality
+   - Check for code duplication
+   - Ensure architectural compliance
+   - Refactor and optimize as needed
+5. **Commit changes**:
+   - Run `bun run license` (add copyright headers)
+   - Commit: `fix: implement APP-VERSION-001`
+   - Push to branch
+6. **Create PR**: To main with `tdd-automation` label
+7. **Monitor validation**: Watch test.yml CI checks (retry up to 3 times)
+8. **On success**: Enable PR auto-merge
+9. **On 3 failures**: Mark issue `tdd-spec:failed`, exit
 
 **Pipeline Mode Behavior**:
 
@@ -241,39 +276,48 @@ Every 15 minutes (or manual):
 - Minimal implementation (just enough to pass test)
 - Uses Effect.ts for side effects, proper type safety
 
-### Step 4: Auto-Validation
+### Step 4: PR Validation & Retry
 
-On every push to `tdd/spec-*` branch:
+**After PR creation**, Claude Code monitors test.yml validation:
 
-1. **Workflow triggers**: `tdd-validate.yml`
-2. **Extract spec ID**: From branch name (`tdd/spec-APP-VERSION-001` → `APP-VERSION-001`)
-3. **Find test file**: Grep for spec ID in `specs/`
-4. **Run spec test**: `bun test:e2e {file} --grep "APP-VERSION-001"`
-5. **Run regression**: `bun test:e2e:regression`
-6. **Run quality checks**: `bun run license && bun run lint && bun run typecheck`
-7. **Generate roadmap**: `bun generate:roadmap` and commit if changes detected
-8. **Update issue**: Mark as completed (success) or handle failure with retry (fail)
-9. **Auto-merge**: If all pass, enable auto-merge and mark PR as ready
+1. **Workflow triggers**: `test.yml` on pull_request events
+2. **Run validations**:
+   - Lint: `bun run lint`
+   - Type check: `bun run typecheck`
+   - Unit tests: `bun test:unit`
+   - E2E regression: `bun test:e2e:regression`
+3. **Claude monitors CI status**: Checks test.yml results via GitHub API
+4. **On validation failure** (retry up to 3 times):
+   - Claude analyzes error logs
+   - Identifies root cause
+   - Fixes code
+   - Commits and pushes
+   - Adds retry label (retry:1, retry:2, or retry:3)
+   - Waits for next test.yml run
+5. **On 3rd failure**:
+   - Updates issue labels: remove `tdd-spec:in-progress`, add `tdd-spec:failed`
+   - Comments on issue with failure summary
+   - Exits (allows pipeline to continue with next spec)
+6. **On success**:
+   - Enables PR auto-merge: `gh pr merge --auto --squash`
+   - Exits
 
-### Step 5: Failure Handling & Retry (NEW)
+**Result**: Failed specs (after 3 attempts) are marked but don't block the queue.
 
-**When validation fails** (non-blocking queue):
+### Step 5: PR Merge & Issue Closure
 
-1. **Comment failure details**: Post failure details to issue
-2. **Check retry count**: Read `retry:N` label from issue
-3. **If retries remaining** (< 3 attempts):
-   - Increment retry counter: Add `retry:N+1` label
-   - Reset state: Change `tdd-spec:in-progress` → `tdd-spec:queued`
-   - Post retry comment: Notify about automatic re-queue
-   - **Queue continues**: Processor picks next spec (doesn't block)
-4. **If max retries exceeded** (3 attempts):
-   - Mark as failed: Change `tdd-spec:in-progress` → `tdd-spec:failed`
-   - Post failure comment: Notify about manual intervention needed
-   - **Queue continues**: Processor picks next spec (doesn't block)
+**When PR merges to main**:
 
-**Result**: Failed specs never block the queue - they're either retried or marked for human review while other specs continue processing.
+1. **test.yml close-tdd-issue job triggers**
+2. **Extracts issue number** from PR body
+3. **Closes issue** with reason "completed"
+4. **Updates labels**:
+   - Adds: `tdd-spec:completed`
+   - Removes: `tdd-spec:in-progress`
 
-### Step 6: Timeout Recovery (NEW)
+**Result**: Issues only close when code actually merges to main.
+
+### Step 6: Timeout Recovery
 
 **Recovery workflow runs every 30 minutes**:
 
@@ -282,14 +326,16 @@ On every push to `tdd/spec-*` branch:
 3. **Post recovery comment**: Notify about timeout and re-queue
 4. **Queue continues**: Stuck specs don't permanently block the pipeline
 
-### Step 7: Completion
+### Step 7: Completion & Queue Progression
 
-When validation passes:
+When validation passes and PR merges:
 
-1. **Roadmap updated**: `ROADMAP.md` regenerated and committed to branch
-2. **Issue closed**: Labeled `tdd-spec:completed`
-3. **PR merged**: Auto-merged to main (squash merge)
+1. **Auto-merge enabled**: PR automatically merges to main (squash merge)
+2. **Issue auto-closes**: test.yml workflow closes issue on PR merge
+3. **Labels updated**: `tdd-spec:completed` added
 4. **Queue progresses**: Processor picks next spec on next run (15 min)
+
+**Timeline**: From queue → implementation → PR → merge typically 10-30 minutes per spec (depending on complexity and retry attempts)
 
 ## Labels & States
 

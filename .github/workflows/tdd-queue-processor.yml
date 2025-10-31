@@ -33,10 +33,6 @@ jobs:
     timeout-minutes: 5 # Quick operation: fetch queue, create branch, post comment
 
     steps:
-      - name: Record start time
-        id: start_time
-        run: echo "timestamp=$(date +%s)" >> $GITHUB_OUTPUT
-
       - name: Checkout code
         uses: actions/checkout@v4
         with:
@@ -50,23 +46,15 @@ jobs:
       - name: Install dependencies
         run: bun install --frozen-lockfile
 
-      - name: Check GitHub API rate limit
-        id: rate_limit
+      - name: Configure git with token user
         run: |
-          REMAINING=$(gh api rate_limit --jq '.rate.remaining')
-          LIMIT=$(gh api rate_limit --jq '.rate.limit')
-
-          echo "⏱️  GitHub API: $REMAINING/$LIMIT requests remaining"
-
-          if [ "$REMAINING" -lt 50 ]; then
-            echo "::warning::Rate limit low: $REMAINING requests remaining"
-            echo "::warning::Skipping queue processing to preserve API quota"
-            exit 0  # Exit gracefully, will retry on next scheduled run
-          fi
-
-          echo "✅ Rate limit OK for queue processing"
+          USER_NAME=$(gh api user --jq '.login')
+          USER_EMAIL=$(gh api user --jq '.email')
+          git config user.name "$USER_NAME"
+          git config user.email "$USER_EMAIL"
+          echo "✅ Git configured as $USER_NAME <$USER_EMAIL>"
         env:
-          GH_TOKEN: ${{ secrets.GH_PAT_WORKFLOW || github.token }}
+          GH_TOKEN: ${{ secrets.GH_PAT_WORKFLOW }}
 
       - name: Get next spec from queue
         id: next
@@ -153,41 +141,3 @@ jobs:
           echo "✅ Issue updated and @claude mentioned - Claude Code will trigger automatically"
         env:
           GH_TOKEN: ${{ secrets.GH_PAT_WORKFLOW || github.token }}
-
-      - name: Pipeline health check
-        if: always()
-        run: |
-          echo "🏥 Checking pipeline health..."
-
-          QUEUED=$(gh issue list --label "tdd-spec:queued" --json number --jq 'length')
-          IN_PROGRESS=$(gh issue list --label "tdd-spec:in-progress" --json number --jq 'length')
-
-          echo "📊 Queue Status: $QUEUED queued, $IN_PROGRESS in-progress"
-
-          # Alert if queue appears stuck (many queued, none in-progress)
-          if [ "$QUEUED" -gt 50 ] && [ "$IN_PROGRESS" -eq 0 ]; then
-            echo "::warning::Queue appears stuck: $QUEUED queued specs but none in-progress"
-            echo "::warning::This may indicate Claude Code integration issues"
-          fi
-
-          # Alert if multiple specs in-progress (should only be 1)
-          if [ "$IN_PROGRESS" -gt 1 ]; then
-            echo "::warning::Multiple specs in-progress: $IN_PROGRESS (expected max 1)"
-            echo "::warning::Concurrency control may not be working correctly"
-          fi
-
-          echo "✅ Health check complete"
-        env:
-          GH_TOKEN: ${{ secrets.GH_PAT_WORKFLOW || github.token }}
-
-      - name: Record workflow duration
-        if: always()
-        run: |
-          START_TIME="${{ steps.start_time.outputs.timestamp }}"
-          END_TIME=$(date +%s)
-          DURATION=$((END_TIME - START_TIME))
-
-          echo "⏱️  Workflow duration: ${DURATION}s ($((DURATION / 60))m $((DURATION % 60))s)"
-
-          # Log for metrics collection (future enhancement)
-          echo "WORKFLOW=tdd-queue-processor DURATION=${DURATION}s" >> $GITHUB_STEP_SUMMARY

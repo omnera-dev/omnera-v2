@@ -78,18 +78,14 @@ jobs:
         github.event.sender.login != 'claude[bot]'
       )
     runs-on: ubuntu-latest
-    timeout-minutes: 45 # Claude Code implementation can take time (complex specs)
+    timeout-minutes: 60 # Claude Code implementation + refactoring + retry can take time
     permissions:
       contents: write # Need write to push to TDD branches
-      pull-requests: read
-      issues: read
+      pull-requests: write # Need write to create PRs
+      issues: write # Need write to update issue labels
       id-token: write
       actions: read # Required for Claude to read CI results on PRs
     steps:
-      - name: Record start time
-        id: start_time
-        run: echo "timestamp=$(date +%s)" >> $GITHUB_OUTPUT
-
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
@@ -182,25 +178,14 @@ jobs:
 
           # For workflow_run/workflow_dispatch: Provide explicit prompt to trigger action
           # For comment-triggered events: Omit prompt so action extracts from @claude comment
-          prompt: ${{ (github.event_name == 'workflow_run' || github.event_name == 'workflow_dispatch') && 'Please implement the spec in this issue. The TDD branch is already checked out. Follow the e2e-test-fixer agent workflow - run the test to see what fails, implement minimal code, validate all tests pass, then commit and push.' || '' }}
+          prompt: >-
+            ${{ (github.event_name == 'workflow_run' || github.event_name == 'workflow_dispatch') &&
+            'Implement TDD spec with 6-step workflow: 1) Run @agent-e2e-test-fixer to fix the test 2) Run @agent-codebase-refactor-auditor to refactor code (ALWAYS) 3) Commit changes (bun run license first) 4) Create PR to main with tdd-automation label 5) Monitor test.yml validation - if fails, analyze errors, fix, push, retry (max 3 attempts with retry:N labels) - if 3 failures, mark issue tdd-spec:failed and exit - if passes, enable PR auto-merge with --squash 6) DO NOT close issue (closes on PR merge). Branch already exists and is checked out.' || '' }}
 
-          # Explicit agent specification ensures e2e-test-fixer agent is used for TDD automation
-          # The agent has complete TDD instructions:
-          # - Test-first approach (run spec test to see what fails)
-          # - Minimal implementation following best practices
-          # - Validation (spec test → regression → quality checks)
-          # - Git operations (commit and push when all tests pass)
+          # Multi-agent workflow: e2e-test-fixer for implementation, codebase-refactor-auditor for quality
+          # Both agents run sequentially on every spec (ALWAYS)
+          # - e2e-test-fixer: Test-first implementation with minimal code
+          # - codebase-refactor-auditor: Code quality review and refactoring
+          # Retry logic: Monitor test.yml, fix errors up to 3 times, mark as failed if still failing
           # --dangerously-skip-permissions: Bypass permission checks (required for GitHub Actions automation)
-          claude_args: '--agents e2e-test-fixer --dangerously-skip-permissions'
-
-      - name: Record workflow duration
-        if: always()
-        run: |
-          START_TIME="${{ steps.start_time.outputs.timestamp }}"
-          END_TIME=$(date +%s)
-          DURATION=$((END_TIME - START_TIME))
-
-          echo "⏱️  Workflow duration: ${DURATION}s ($((DURATION / 60))m $((DURATION % 60))s)"
-
-          # Log for metrics collection (future enhancement)
-          echo "WORKFLOW=claude DURATION=${DURATION}s" >> $GITHUB_STEP_SUMMARY
+          claude_args: '--agents e2e-test-fixer codebase-refactor-auditor --dangerously-skip-permissions'

@@ -23,28 +23,6 @@ jobs:
     timeout-minutes: 5 # Quick operation: find stuck specs, re-queue them
 
     steps:
-      - name: Record start time
-        id: start_time
-        run: echo "timestamp=$(date +%s)" >> $GITHUB_OUTPUT
-
-      - name: Check GitHub API rate limit
-        id: rate_limit
-        run: |
-          REMAINING=$(gh api rate_limit --jq '.rate.remaining')
-          LIMIT=$(gh api rate_limit --jq '.rate.limit')
-
-          echo "⏱️  GitHub API: $REMAINING/$LIMIT requests remaining"
-
-          if [ "$REMAINING" -lt 30 ]; then
-            echo "::warning::Rate limit low: $REMAINING requests remaining"
-            echo "::warning::Skipping recovery to preserve API quota"
-            exit 0  # Exit gracefully, will retry on next scheduled run
-          fi
-
-          echo "✅ Rate limit OK for recovery operations"
-        env:
-          GH_TOKEN: ${{ github.token }}
-
       - name: Find stuck specs
         id: stuck
         run: |
@@ -164,15 +142,3 @@ jobs:
           else
             echo "📊 Recovery Summary: No action needed, all specs progressing normally"
           fi
-
-      - name: Record workflow duration
-        if: always()
-        run: |
-          START_TIME="${{ steps.start_time.outputs.timestamp }}"
-          END_TIME=$(date +%s)
-          DURATION=$((END_TIME - START_TIME))
-
-          echo "⏱️  Workflow duration: ${DURATION}s ($((DURATION / 60))m $((DURATION % 60))s)"
-
-          # Log for metrics collection (future enhancement)
-          echo "WORKFLOW=tdd-queue-recovery DURATION=${DURATION}s" >> $GITHUB_STEP_SUMMARY

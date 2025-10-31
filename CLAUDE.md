@@ -241,24 +241,26 @@ Look for these indicators:
 
 ### Your Workflow for Spec Issues
 
-When you receive a spec issue (e.g., `🤖 APP-VERSION-001: should display version badge...`):
+When triggered by @claude mention (posted by queue processor every 15 min):
 
-1. **Checkout the branch** (exact command provided in issue):
+1. **Branch already exists** - queue processor created it:
    ```bash
-   git checkout tdd/spec-APP-VERSION-001
+   git checkout tdd/spec-APP-VERSION-001  # Already done automatically
    ```
 
-2. **Locate the test** using the spec ID:
-   - File path is provided in the issue
-   - Search for spec ID in the test file (e.g., `APP-VERSION-001`)
-   - Only ONE test needs to be fixed per issue
-
-3. **Remove .fixme() and implement**:
-   - Remove `.fixme()` from that ONE specific test
-   - Implement minimal code to pass the test
+2. **Run @agent-e2e-test-fixer**:
+   - Locate test using spec ID (file path in issue)
+   - Remove `.fixme()` from ONE specific test
+   - Implement minimal code to pass test
    - Follow Omnera architecture patterns
 
-4. **Commit and push** (triggers automatic validation):
+3. **Run @agent-codebase-refactor-auditor** (ALWAYS):
+   - Review implementation for code quality
+   - Check for duplication
+   - Ensure architectural compliance
+   - Refactor and optimize as needed
+
+4. **Commit changes**:
    ```bash
    bun run license  # Add copyright headers
    git add -A
@@ -266,43 +268,53 @@ When you receive a spec issue (e.g., `🤖 APP-VERSION-001: should display versi
    git push
    ```
 
-### Automatic Validation
+5. **Create PR** with `tdd-automation` label
 
-When you push, the system automatically:
-1. ✅ Runs the specific spec test (using grep to filter)
-2. ✅ Runs all regression tests
-3. ✅ Runs code quality checks (license, lint, typecheck)
-4. ✅ Comments on issue with results
-5. ✅ If all pass: Marks issue as completed, closes it, enables auto-merge
-6. ❌ If any fail: Comments failure details, keeps issue in-progress for retry
+6. **Monitor validation** (test.yml CI checks):
+   - If fails: Analyze errors, fix, push (retry up to 3 times)
+   - Track retries with labels (retry:1, retry:2, retry:3)
+   - After 3 failures: Mark issue `tdd-spec:failed`, exit (allow pipeline to continue)
+   - If passes: Enable PR auto-merge with --squash
 
-**No manual validation needed** - just push and wait for the workflow results.
+7. **Issue closes automatically** when PR merges to main (NOT before)
+
+### Retry Logic
+
+The system implements automatic error recovery:
+- **Max 3 retry attempts** per spec
+- **Tracks retries** with labels (retry:1, retry:2, retry:3)
+- **On 3rd failure**: Marks issue as `tdd-spec:failed`, adds explanatory comment
+- **Pipeline continues**: Failed specs don't block queue processing
 
 ### Important Rules
 
+- **ALWAYS** run both agents (e2e-test-fixer then refactor-auditor)
 - **DO NOT** modify multiple specs at once (one spec = one issue)
 - **DO NOT** modify test logic - only remove `.fixme()` and implement code
-- **DO NOT** skip validation - it runs automatically on push
-- **DO** commit with the format: `fix: implement {SPEC-ID}`
-- **DO** push as soon as ready - validation is automatic
+- **DO NOT** close issues manually - they close automatically on PR merge
+- **DO** commit with format: `fix: implement {SPEC-ID}`
+- **DO** create PR with `tdd-automation` label
+- **DO** retry up to 3 times on validation failures
 
 ### Queue System Architecture
 
 ```
 Push new tests → Scan → Create spec issues → Queue
                                                ↓
-                      ← ← ← ← ← ← ←   Processor picks oldest spec (every 15 min)
+         Processor picks oldest spec (every 15 min, thomas-jeanneau account)
                                                ↓
-                                          Creates branch
+                              Creates branch + Posts @claude mention
                                                ↓
-                                          You implement
+                    Claude Code triggered (dual-agent workflow)
                                                ↓
-                                          Push to branch
+                              e2e-test-fixer → refactor-auditor
                                                ↓
-                                      Auto-validation runs
+                                      Commit → Create PR
                                                ↓
-                                   Pass → Auto-merge → Next spec
-                                   Fail → Comment → Retry
+                                test.yml validation (retry up to 3x)
+                                               ↓
+                        Pass → Auto-merge → Issue closes → Next spec
+                        Fail (3x) → Mark failed → Next spec
 ```
 
 ### Queue Status & Monitoring
@@ -324,29 +336,33 @@ cat TDD-PROGRESS.md
 
 ### If Something Goes Wrong
 
-**Validation fails**:
-1. Check the failure comment on the issue
-2. Review the validation workflow logs (link in comment)
-3. Fix the implementation
-4. Push again (re-triggers validation)
+**PR validation fails**:
+1. Claude Code automatically retries (up to 3 attempts)
+2. Check PR for test.yml CI status
+3. After 3 failures, issue marked as `tdd-spec:failed`
+4. Manual intervention required for failed specs
 
 **Spec stuck in-progress**:
-1. Check if you pushed to the correct branch
-2. Check if the validation workflow ran: `gh run list --workflow=tdd-validate.yml`
-3. If stuck > 2 hours with no activity, comment on the issue
+1. Check if PR was created: `gh pr list --label "tdd-automation"`
+2. Check if test.yml workflow ran on PR
+3. If stuck > 2 hours, recovery workflow re-queues automatically
 
 **Queue not processing**:
 1. Check if another spec is in-progress: `gh issue list --label "tdd-spec:in-progress"`
 2. The system processes one spec at a time (strict serial)
 3. Wait up to 15 minutes for the processor to pick the next spec
+4. Check processor workflow: `gh run list --workflow="TDD Queue - Processor"`
 
 ### Configuration
 
-The queue system is configured in `.github/tdd-automation-config.yml`:
-- **Processing interval**: Every 15 minutes
+Key workflow settings:
+- **Queue Processor**: Every 15 minutes (thomas-jeanneau account)
 - **Max concurrent**: 1 spec at a time (strict serial)
-- **Auto-validation**: Enabled (on push to spec branches)
-- **Auto-merge**: Enabled (after validation passes)
+- **Dual agents**: e2e-test-fixer + codebase-refactor-auditor (ALWAYS both)
+- **Retry attempts**: Max 3 per spec
+- **PR validation**: test.yml (lint, typecheck, unit tests, E2E regression)
+- **Auto-merge**: Enabled after validation passes
+- **Issue closure**: Automatic on PR merge to main
 
 ### Current Status
 
