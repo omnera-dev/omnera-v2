@@ -5,7 +5,7 @@
  * found in the LICENSE.md file in the root directory of this source tree.
  */
 
-import { type ReactElement, createElement } from 'react'
+import { type ReactElement } from 'react'
 import { Badge } from '@/presentation/components/ui/badge'
 import { TypographyH1, TypographyLead } from '@/presentation/components/ui/typography'
 import type { App } from '@/domain/models/app'
@@ -35,7 +35,7 @@ export function DefaultHomePage({ app }: { readonly app: App }): Readonly<ReactE
           href="/assets/output.css"
         />
       </head>
-      <body className="h-screen overflow-hidden bg-gradient-to-br from-gray-50 to-gray-100">
+      <body className="h-screen overflow-hidden bg-linear-to-br from-gray-50 to-gray-100">
         <div className="container-page h-full">
           <div className="flex h-full flex-col items-center justify-center">
             <div className="w-full max-w-2xl space-y-6 text-center">
@@ -56,18 +56,6 @@ export function DefaultHomePage({ app }: { readonly app: App }): Readonly<ReactE
                 >
                   {app.description}
                 </TypographyLead>
-              )}
-              {/* Blocks */}
-              {app.blocks?.map((block) =>
-                createElement(
-                  block.type,
-                  {
-                    key: block.name,
-                    'data-block': block.name,
-                    style: { display: 'block', minHeight: '1px', minWidth: '1px' },
-                  },
-                  block.content || '\u00A0'
-                )
               )}
             </div>
           </div>
