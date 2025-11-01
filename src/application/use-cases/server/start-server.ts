@@ -79,6 +79,7 @@ export const startServer = (
       port: options.port,
       hostname: options.hostname,
       renderHomePage: pageRenderer.renderHome,
+      renderPage: pageRenderer.renderPage,
       renderNotFoundPage: pageRenderer.renderNotFound,
       renderErrorPage: pageRenderer.renderError,
     })

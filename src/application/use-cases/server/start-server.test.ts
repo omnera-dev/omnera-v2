@@ -29,6 +29,7 @@ const MockServerFactory = Layer.succeed(ServerFactory, {
  */
 const MockPageRenderer = Layer.succeed(PageRenderer, {
   renderHome: (app) => `<html><body><h1>${app.name}</h1></body></html>`,
+  renderPage: (app, path) => `<html><body><h1>${app.name} - ${path}</h1></body></html>`,
   renderNotFound: () => '<html><body><h1>404 Not Found</h1></body></html>',
   renderError: () => '<html><body><h1>500 Error</h1></body></html>',
 })

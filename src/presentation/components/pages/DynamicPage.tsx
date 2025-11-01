@@ -7,8 +7,46 @@
 
 import { type ReactElement } from 'react'
 import { ComponentRenderer } from '@/presentation/components/sections/component-renderer'
-import type { Component } from '@/domain/models/app/page/sections'
+import type { Block, Blocks } from '@/domain/models/app/blocks'
+import type { Component, SectionItem } from '@/domain/models/app/page/sections'
 import type { Page } from '@/domain/models/app/pages'
+
+/**
+ * Check if a section is a block reference
+ */
+function isBlockReference(
+  section: SectionItem
+): section is { block: string } | { $ref: string; vars: Record<string, string | number | boolean> } {
+  return 'block' in section || '$ref' in section
+}
+
+/**
+ * Resolve a block reference to a component
+ */
+function resolveBlockReference(
+  section: SectionItem,
+  blocks?: Blocks
+): { component: Component; blockName: string } | undefined {
+  if (!isBlockReference(section) || !blocks) {
+    return undefined
+  }
+
+  // Extract block name from either shorthand or full syntax
+  const blockName = 'block' in section ? section.block : section.$ref
+
+  // Find the block definition
+  const block = blocks.find((b: Block) => b.name === blockName)
+  if (!block) {
+    return undefined
+  }
+
+  // For now, return the block as a component
+  // TODO: Implement variable substitution when vars are provided
+  return {
+    component: block as unknown as Component,
+    blockName,
+  }
+}
 
 /**
  * DynamicPage component - Renders a custom page from configuration
@@ -18,22 +56,36 @@ import type { Page } from '@/domain/models/app/pages'
  *
  * @param props - Component props
  * @param props.page - Page configuration from app schema
+ * @param props.blocks - Optional blocks array for resolving block references
  * @returns React element with complete page structure
  */
-export function DynamicPage({ page }: { readonly page: Page }): Readonly<ReactElement> {
+export function DynamicPage({
+  page,
+  blocks,
+}: {
+  readonly page: Page
+  readonly blocks?: Blocks
+}): Readonly<ReactElement> {
+  // Use default metadata if not provided
+  const lang = page.meta?.lang || 'en-US'
+  const title = page.meta?.title || page.name || page.path
+  const description = page.meta?.description || ''
+
   return (
-    <html lang={page.meta.lang}>
+    <html lang={lang}>
       <head>
         <meta charSet="UTF-8" />
         <meta
           name="viewport"
           content="width=device-width, initial-scale=1.0"
         />
-        <title>{page.meta.title}</title>
-        <meta
-          name="description"
-          content={page.meta.description}
-        />
+        <title>{title}</title>
+        {description && (
+          <meta
+            name="description"
+            content={description}
+          />
+        )}
         <link
           rel="stylesheet"
           href="/assets/output.css"
@@ -41,12 +93,29 @@ export function DynamicPage({ page }: { readonly page: Page }): Readonly<ReactEl
       </head>
       <body>
         <main>
-          {page.sections.map((section, index) => (
-            <ComponentRenderer
-              key={index}
-              component={section as Component}
-            />
-          ))}
+          {page.sections.map((section, index) => {
+            // Check if this is a block reference
+            const resolved = resolveBlockReference(section, blocks)
+
+            if (resolved) {
+              // Render block with data-block attribute
+              return (
+                <ComponentRenderer
+                  key={index}
+                  component={resolved.component}
+                  blockName={resolved.blockName}
+                />
+              )
+            }
+
+            // Render as normal component
+            return (
+              <ComponentRenderer
+                key={index}
+                component={section as Component}
+              />
+            )
+          })}
         </main>
       </body>
     </html>

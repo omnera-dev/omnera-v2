@@ -8,7 +8,7 @@
 import { Layer } from 'effect'
 import { PageRenderer } from '@/application/ports/page-renderer'
 import { renderErrorPage, renderNotFoundPage } from '@/presentation/utils/render-error-pages'
-import { renderHomePage } from '@/presentation/utils/render-homepage'
+import { renderHomePage, renderPage } from '@/presentation/utils/render-homepage'
 
 /**
  * Live implementation of PageRenderer using React SSR
@@ -33,6 +33,7 @@ import { renderHomePage } from '@/presentation/utils/render-homepage'
  */
 export const PageRendererLive = Layer.succeed(PageRenderer, {
   renderHome: renderHomePage,
+  renderPage,
   renderNotFound: renderNotFoundPage,
   renderError: renderErrorPage,
 })

@@ -54,4 +54,5 @@ export const BlocksSchema = Schema.Array(BlockSchema).pipe(
   })
 )
 
+export type Block = Schema.Schema.Type<typeof BlockSchema>
 export type Blocks = Schema.Schema.Type<typeof BlocksSchema>
