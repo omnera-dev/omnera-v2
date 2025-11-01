@@ -49,6 +49,19 @@ export function renderHomePage(app: App): string {
   if (customHomePage) {
     return customHomePage
   }
+  
+  // Check if app has custom pages configured
+  const homePage = app.pages?.find((page) => page.path === '/')
+
+  // Render custom page if it exists, otherwise render default homepage
+  const html = homePage
+    ? renderToString(
+        <DynamicPage
+          page={homePage}
+          theme={app.theme}
+        />
+      )
+    : renderToString(<DefaultHomePage app={app} />)
 
   // Fallback to default homepage
   const html = renderToString(<DefaultHomePage app={app} />)

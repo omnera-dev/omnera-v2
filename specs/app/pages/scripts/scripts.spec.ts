@@ -41,7 +41,11 @@ test.describe('Client Scripts Configuration', () => {
           },
         ],
       })
+
+      // WHEN: scripts includes features, externalScripts, inlineScripts, config
       await page.goto('/')
+
+      // THEN: it should orchestrate client-side script management
       await expect(page.locator('script[src="https://cdn.example.com/lib.js"]')).toBeVisible()
       const inlineScript = await page
         .locator('script')
@@ -68,7 +72,11 @@ test.describe('Client Scripts Configuration', () => {
           },
         ],
       })
+
+      // WHEN: features defines darkMode, animations, analytics
       await page.goto('/')
+
+      // THEN: it should enable client-side feature toggles
       const html = page.locator('html')
       await expect(html).toHaveAttribute('data-features')
     }
@@ -95,7 +103,11 @@ test.describe('Client Scripts Configuration', () => {
           },
         ],
       })
+
+      // WHEN: externalScripts array loads CDN libraries
       await page.goto('/')
+
+      // THEN: it should include external JavaScript dependencies
       await expect(page.locator('script[src="https://cdn.example.com/script.js"]')).toBeVisible()
     }
   )
@@ -117,7 +129,11 @@ test.describe('Client Scripts Configuration', () => {
           },
         ],
       })
+
+      // WHEN: inlineScripts array contains code snippets
       await page.goto('/')
+
+      // THEN: it should inject inline JavaScript code
       const inlineScript = await page
         .locator('script')
         .filter({ hasText: 'console.log("Hello")' })
@@ -143,7 +159,11 @@ test.describe('Client Scripts Configuration', () => {
           },
         ],
       })
+
+      // WHEN: config has apiUrl and environment properties
       await page.goto('/')
+
+      // THEN: it should provide client-side configuration data
       const config = await page.evaluate(() => (window as any).APP_CONFIG)
       expect(config).toBeTruthy()
     }
@@ -166,7 +186,11 @@ test.describe('Client Scripts Configuration', () => {
           },
         ],
       })
+
+      // WHEN: all properties are omitted
       await page.goto('/')
+
+      // THEN: it should allow pages without client-side scripts
       const scriptTags = await page.locator('script[src]').count()
       expect(scriptTags).toBe(0)
     }
@@ -189,7 +213,11 @@ test.describe('Client Scripts Configuration', () => {
           },
         ],
       })
+
+      // WHEN: config accepts any custom properties
       await page.goto('/')
+
+      // THEN: it should support flexible client configuration
       const config = await page.evaluate(() => (window as any).APP_CONFIG)
       expect(config?.customProp).toBe('value')
       expect(config?.anotherProp).toBe(123)
@@ -213,7 +241,11 @@ test.describe('Client Scripts Configuration', () => {
           },
         ],
       })
+
+      // WHEN: features toggle behavior and config provides data
       await page.goto('/')
+
+      // THEN: it should enable feature-driven configuration
       const config = await page.evaluate(() => (window as any).APP_CONFIG)
       expect(config?.analyticsId).toBe('G-XXXXX')
     }
@@ -243,7 +275,11 @@ test.describe('Client Scripts Configuration', () => {
           },
         ],
       })
+
+      // WHEN: each page can define custom scripts
       await page.goto('/')
+
+      // THEN: it should support per-page script customization
       const homeHtml = page.locator('html')
       await expect(homeHtml).toHaveAttribute('data-features')
       await page.goto('/blog')
@@ -273,7 +309,11 @@ test.describe('Client Scripts Configuration', () => {
           },
         ],
       })
+
+      // WHEN: features, externalScripts, inlineScripts use $ref
       await page.goto('/')
+
+      // THEN: it should compose scripts from modular schemas
       await expect(page.locator('script[src="https://cdn.example.com/lib.js"]')).toBeVisible()
     }
   )

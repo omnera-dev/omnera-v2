@@ -461,7 +461,7 @@ test.describe('Color Palette', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-THEME-COLORS-APPLICATION-005: should create visual hierarchy through tonal variation',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -482,7 +482,13 @@ test.describe('Color Palette', () => {
         },
         pages: [
           {
+            name: 'home',
             path: '/',
+            meta: {
+              lang: 'en-US',
+              title: 'Test Page',
+              description: 'Test page for color hierarchy',
+            },
             sections: [
               {
                 type: 'container',

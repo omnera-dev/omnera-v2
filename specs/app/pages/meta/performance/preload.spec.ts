@@ -40,7 +40,11 @@ test.describe('Resource Preloading', () => {
           },
         ],
       })
+
+      // WHEN: href is resource URL and as specifies type
       await page.goto('/')
+
+      // THEN: it should preload critical resource
       await expect(
         page.locator('link[rel="preload"][href="./output.css"][as="style"]')
       ).toBeVisible()
@@ -68,7 +72,11 @@ test.describe('Resource Preloading', () => {
           },
         ],
       })
+
+      // WHEN: as is 'style' for CSS files
       await page.goto('/')
+
+      // THEN: it should preload critical stylesheet
       await expect(page.locator('link[rel="preload"][as="style"]')).toBeVisible()
     }
   )
@@ -94,7 +102,11 @@ test.describe('Resource Preloading', () => {
           },
         ],
       })
+
+      // WHEN: as is 'script' for JavaScript files
       await page.goto('/')
+
+      // THEN: it should preload critical scripts
       await expect(page.locator('link[rel="preload"][as="script"]')).toBeVisible()
     }
   )
@@ -122,7 +134,11 @@ test.describe('Resource Preloading', () => {
           },
         ],
       })
+
+      // WHEN: as is 'font' with type and crossorigin
       await page.goto('/')
+
+      // THEN: it should preload web fonts
       const preload = page.locator('link[rel="preload"][as="font"]')
       await expect(preload).toHaveAttribute('type', 'font/woff2')
       await expect(preload).toHaveAttribute('crossorigin', '')
@@ -150,7 +166,11 @@ test.describe('Resource Preloading', () => {
           },
         ],
       })
+
+      // WHEN: as is 'image' for above-the-fold images
       await page.goto('/')
+
+      // THEN: it should preload hero images
       await expect(page.locator('link[rel="preload"][as="image"]')).toBeVisible()
     }
   )
@@ -176,7 +196,11 @@ test.describe('Resource Preloading', () => {
           },
         ],
       })
+
+      // WHEN: as is 'fetch' for API data
       await page.goto('/')
+
+      // THEN: it should prefetch critical API responses
       await expect(page.locator('link[rel="preload"][as="fetch"]')).toBeVisible()
     }
   )
@@ -209,7 +233,11 @@ test.describe('Resource Preloading', () => {
           },
         ],
       })
+
+      // WHEN: crossorigin is true or 'anonymous'
       await page.goto('/')
+
+      // THEN: it should set CORS for cross-origin fonts
       await expect(page.locator('link[rel="preload"][as="font"]')).toHaveAttribute(
         'crossorigin',
         'anonymous'
@@ -238,7 +266,11 @@ test.describe('Resource Preloading', () => {
           },
         ],
       })
+
+      // WHEN: type specifies MIME type like 'font/woff2'
       await page.goto('/')
+
+      // THEN: it should help browser prioritize resource
       await expect(page.locator('link[rel="preload"][type="font/woff2"]')).toBeVisible()
     }
   )
@@ -266,7 +298,11 @@ test.describe('Resource Preloading', () => {
           },
         ],
       })
+
+      // WHEN: media specifies conditional loading
       await page.goto('/')
+
+      // THEN: it should preload only when media query matches
       await expect(page.locator('link[rel="preload"][media="(max-width: 768px)"]')).toBeVisible()
     }
   )
@@ -296,7 +332,11 @@ test.describe('Resource Preloading', () => {
           },
         ],
       })
+
+      // WHEN: preloading CSS, fonts, and hero images
       await page.goto('/')
+
+      // THEN: it should optimize First Contentful Paint (FCP)
       await expect(page.locator('link[rel="preload"]')).toHaveCount(3)
     }
   )

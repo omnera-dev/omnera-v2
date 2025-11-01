@@ -46,7 +46,11 @@ test.describe('Local Business Schema', () => {
           },
         ],
       })
+
+      // WHEN: @context is 'https://schema.org', @type is 'LocalBusiness', and name is provided
       await page.goto('/')
+
+      // THEN: it should validate minimal LocalBusiness structured data
       const scriptContent = await page.locator('script[type="application/ld+json"]').textContent()
       expect(scriptContent).toContain('"@type":"LocalBusiness"')
       expect(scriptContent).toContain('Coffee Shop')
@@ -81,7 +85,11 @@ test.describe('Local Business Schema', () => {
           },
         ],
       })
+
+      // WHEN: name and description describe the business
       await page.goto('/')
+
+      // THEN: it should provide business identity
       const scriptContent = await page.locator('script[type="application/ld+json"]').textContent()
       expect(scriptContent).toContain('Best Coffee Shop')
       expect(scriptContent).toContain('Artisanal coffee and pastries')
@@ -117,7 +125,11 @@ test.describe('Local Business Schema', () => {
           },
         ],
       })
+
+      // WHEN: url is website and logo is business logo URL
       await page.goto('/')
+
+      // THEN: it should provide business branding
       const scriptContent = await page.locator('script[type="application/ld+json"]').textContent()
       expect(scriptContent).toContain('https://example.com')
       expect(scriptContent).toContain('logo.png')
@@ -152,7 +164,11 @@ test.describe('Local Business Schema', () => {
           },
         ],
       })
+
+      // WHEN: image is string URL or array of URLs
       await page.goto('/')
+
+      // THEN: it should support single or multiple business images
       const scriptContent = await page.locator('script[type="application/ld+json"]').textContent()
       expect(scriptContent).toContain('interior.jpg')
       expect(scriptContent).toContain('exterior.jpg')
@@ -188,7 +204,11 @@ test.describe('Local Business Schema', () => {
           },
         ],
       })
+
+      // WHEN: email and telephone are provided
       await page.goto('/')
+
+      // THEN: it should provide business contact information
       const scriptContent = await page.locator('script[type="application/ld+json"]').textContent()
       expect(scriptContent).toContain('contact@example.com')
       expect(scriptContent).toContain('+1-555-123-4567')
@@ -265,7 +285,11 @@ test.describe('Local Business Schema', () => {
           },
         ],
       })
+
+      // WHEN: priceRange is '$', '$$', '$$$', or '$$$$'
       await page.goto('/')
+
+      // THEN: it should indicate business price level
       const scriptContent = await page.locator('script[type="application/ld+json"]').textContent()
       expect(scriptContent).toContain('PostalAddress')
       expect(scriptContent).toContain('123 Main St')
@@ -300,7 +324,11 @@ test.describe('Local Business Schema', () => {
           },
         ],
       })
+
+      // WHEN: address references postal-address.schema.json
       await page.goto('/')
+
+      // THEN: it should include physical address for maps
       const scriptContent = await page.locator('script[type="application/ld+json"]').textContent()
       expect(scriptContent).toContain('GeoCoordinates')
       expect(scriptContent).toContain('48.5734')
@@ -340,7 +368,11 @@ test.describe('Local Business Schema', () => {
           },
         ],
       })
+
+      // WHEN: geo is object with @type 'GeoCoordinates', latitude, and longitude
       await page.goto('/')
+
+      // THEN: it should provide precise map location
       const scriptContent = await page.locator('script[type="application/ld+json"]').textContent()
       expect(scriptContent).toContain('facebook.com/shop')
       expect(scriptContent).toContain('twitter.com/shop')
@@ -382,7 +414,11 @@ test.describe('Local Business Schema', () => {
           },
         ],
       })
+
+      // WHEN: sameAs is array of social media URLs
       await page.goto('/')
+
+      // THEN: it should link business to social profiles
       const scriptContent = await page.locator('script[type="application/ld+json"]').textContent()
       expect(scriptContent).toContain('OpeningHoursSpecification')
       expect(scriptContent).toContain('09:00')
@@ -425,7 +461,11 @@ test.describe('Local Business Schema', () => {
           },
         ],
       })
+
+      // WHEN: openingHoursSpecification is array with @type, dayOfWeek, opens, closes
       await page.goto('/')
+
+      // THEN: it should provide business hours for each day
       const scriptContent = await page.locator('script[type="application/ld+json"]').textContent()
       expect(scriptContent).toContain('Monday')
       expect(scriptContent).toContain('Tuesday')
@@ -468,7 +508,11 @@ test.describe('Local Business Schema', () => {
           },
         ],
       })
+
+      // WHEN: dayOfWeek is array of 'Monday', 'Tuesday', etc.
       await page.goto('/')
+
+      // THEN: it should specify which days hours apply to
       const scriptContent = await page.locator('script[type="application/ld+json"]').textContent()
       expect(scriptContent).toMatch(/"opens":\s*"09:00"/)
       expect(scriptContent).toMatch(/"closes":\s*"18:00"/)
@@ -512,7 +556,11 @@ test.describe('Local Business Schema', () => {
           },
         ],
       })
+
+      // WHEN: opens is '09:00' and closes is '18:00' (HH:MM format)
       await page.goto('/')
+
+      // THEN: it should specify daily operating hours
       await expect(page.locator('script[type="application/ld+json"]')).toBeVisible()
     }
   )
@@ -550,7 +598,11 @@ test.describe('Local Business Schema', () => {
           },
         ],
       })
+
+      // WHEN: complete business data with address, geo, and hours is provided
       await page.goto('/')
+
+      // THEN: it should enable Google Business Profile rich results
       const scriptContent = await page.locator('script[type="application/ld+json"]').textContent()
       expect(scriptContent).toContain('GeoCoordinates')
       expect(scriptContent).toContain('PostalAddress')
@@ -603,7 +655,11 @@ test.describe('Local Business Schema', () => {
           },
         ],
       })
+
+      // WHEN: address and geo coordinates are provided
       await page.goto('/')
+
+      // THEN: it should enable map pin and directions in search results
       const scriptContent = await page.locator('script[type="application/ld+json"]').textContent()
       expect(scriptContent).toContain('"@type":"LocalBusiness"')
       expect(scriptContent).toContain('Complete Coffee Shop')

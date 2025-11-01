@@ -41,7 +41,11 @@ test.describe('Footer Configuration', () => {
           },
         ],
       })
+
+      // WHEN: footer should be visible (default)
       await page.goto('/')
+
+      // THEN: it should display footer at bottom of page
       await expect(page.locator('[data-testid="footer"]')).toBeVisible()
     }
   )
@@ -63,7 +67,11 @@ test.describe('Footer Configuration', () => {
           },
         ],
       })
+
+      // WHEN: logo is './logo-footer.svg'
       await page.goto('/')
+
+      // THEN: it should display footer logo
       await expect(page.locator('[data-testid="footer-logo"]')).toHaveAttribute(
         'src',
         './logo-footer.svg'
@@ -90,7 +98,11 @@ test.describe('Footer Configuration', () => {
           },
         ],
       })
+
+      // WHEN: description is 'Building the future of web applications'
       await page.goto('/')
+
+      // THEN: it should render company description
       await expect(page.locator('[data-testid="footer-description"]')).toContainText(
         'Building the future of web applications'
       )
@@ -134,7 +146,11 @@ test.describe('Footer Configuration', () => {
           },
         ],
       })
+
+      // WHEN: columns array contains [Product, Company]
       await page.goto('/')
+
+      // THEN: it should render multi-column link layout
       const columns = page.locator('[data-testid^="footer-column"]')
       await expect(columns).toHaveCount(2)
       await expect(page.locator('[data-testid="footer-column-0"]')).toContainText('Product')
@@ -172,7 +188,11 @@ test.describe('Footer Configuration', () => {
           },
         ],
       })
+
+      // WHEN: column has title 'Product' with links [Features, Pricing]
       await page.goto('/')
+
+      // THEN: it should render column heading and link list
       await expect(page.locator('[data-testid="column-title"]')).toContainText('Product')
       const links = page.locator('[data-testid="column-links"] a')
       await expect(links).toHaveCount(2)
@@ -212,7 +232,11 @@ test.describe('Footer Configuration', () => {
           },
         ],
       })
+
+      // WHEN: link opens external site in new tab
       await page.goto('/')
+
+      // THEN: it should support external link targets
       const link = page.locator('[data-testid="footer-link-external"]')
       await expect(link).toHaveAttribute('target', '_blank')
       await expect(link).toHaveAttribute('rel', 'noopener noreferrer')
@@ -247,7 +271,11 @@ test.describe('Footer Configuration', () => {
           },
         ],
       })
+
+      // WHEN: social has links for [twitter, github]
       await page.goto('/')
+
+      // THEN: it should render social media icons
       await expect(page.locator('[data-testid="footer-social"]')).toContainText('Follow Us')
       await expect(page.locator('[data-testid="social-link-twitter"]')).toHaveAttribute(
         'href',
@@ -290,7 +318,11 @@ test.describe('Footer Configuration', () => {
           },
         ],
       })
+
+      // WHEN: platform enum includes facebook, twitter, instagram, linkedin, youtube, github, tiktok
       await page.goto('/')
+
+      // THEN: it should support 7 social platforms with auto icons
       for (const platform of platforms) {
         await expect(page.locator(`[data-testid="social-${platform}"]`)).toBeVisible()
       }
@@ -325,7 +357,11 @@ test.describe('Footer Configuration', () => {
           },
         ],
       })
+
+      // WHEN: newsletter.enabled is true with title and description
       await page.goto('/')
+
+      // THEN: it should render email subscription form
       await expect(page.locator('[data-testid="newsletter-title"]')).toContainText(
         'Subscribe to our newsletter'
       )
@@ -356,7 +392,11 @@ test.describe('Footer Configuration', () => {
           },
         ],
       })
+
+      // WHEN: copyright is '© 2024 Company Inc. All rights reserved.'
       await page.goto('/')
+
+      // THEN: it should display copyright notice
       await expect(page.locator('[data-testid="footer-copyright"]')).toContainText(
         '© 2024 Company Inc. All rights reserved.'
       )
@@ -389,7 +429,11 @@ test.describe('Footer Configuration', () => {
           },
         ],
       })
+
+      // WHEN: legal includes [Privacy Policy, Terms of Service]
       await page.goto('/')
+
+      // THEN: it should render legal link list
       const legalLinks = page.locator('[data-testid="footer-legal"] a')
       await expect(legalLinks).toHaveCount(2)
       await expect(legalLinks.nth(0)).toHaveText('Privacy Policy')
@@ -414,7 +458,11 @@ test.describe('Footer Configuration', () => {
           },
         ],
       })
+
+      // WHEN: enabled is false
       await page.goto('/')
+
+      // THEN: it should not render footer
       await expect(page.locator('[data-testid="footer"]')).toBeHidden()
     }
   )
@@ -447,7 +495,11 @@ test.describe('Footer Configuration', () => {
           },
         ],
       })
+
+      // WHEN: footer includes logo, columns, social, newsletter, legal
       await page.goto('/')
+
+      // THEN: it should render comprehensive footer layout
       await expect(page.locator('[data-testid="footer-logo"]')).toBeVisible()
       await expect(page.locator('[data-testid="footer-description"]')).toBeVisible()
       await expect(page.locator('[data-testid="footer-column-0"]')).toBeVisible()
@@ -489,7 +541,11 @@ test.describe('Footer Configuration', () => {
           },
         ],
       })
+
+      // WHEN: social link has custom icon property
       await page.goto('/')
+
+      // THEN: it should override default platform icon
       await expect(page.locator('[data-testid="custom-icon-custom-twitter-brand"]')).toBeVisible()
       await expect(page.locator('[data-testid="default-icon-github"]')).toBeVisible()
     }

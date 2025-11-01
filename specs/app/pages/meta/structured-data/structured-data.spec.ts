@@ -47,7 +47,11 @@ test.describe('Structured Data', () => {
           },
         ],
       })
+
+      // WHEN: organization property references organization.schema.json
       await page.goto('/')
+
+      // THEN: it should include Organization structured data
       const scriptContent = await page.locator('script[type="application/ld+json"]').textContent()
       expect(scriptContent).toContain('"@type":"Organization"')
     }
@@ -80,7 +84,11 @@ test.describe('Structured Data', () => {
           },
         ],
       })
+
+      // WHEN: person property references person.schema.json
       await page.goto('/')
+
+      // THEN: it should include Person structured data
       const scriptContent = await page.locator('script[type="application/ld+json"]').textContent()
       expect(scriptContent).toContain('"@type":"Person"')
     }
@@ -113,7 +121,11 @@ test.describe('Structured Data', () => {
           },
         ],
       })
+
+      // WHEN: localBusiness property references local-business.schema.json
       await page.goto('/')
+
+      // THEN: it should include LocalBusiness structured data
       const scriptContent = await page.locator('script[type="application/ld+json"]').textContent()
       expect(scriptContent).toContain('"@type":"LocalBusiness"')
     }
@@ -146,7 +158,11 @@ test.describe('Structured Data', () => {
           },
         ],
       })
+
+      // WHEN: product property references product.schema.json
       await page.goto('/')
+
+      // THEN: it should include Product structured data
       const scriptContent = await page.locator('script[type="application/ld+json"]').textContent()
       expect(scriptContent).toContain('"@type":"Product"')
     }
@@ -179,7 +195,11 @@ test.describe('Structured Data', () => {
           },
         ],
       })
+
+      // WHEN: article property references article.schema.json
       await page.goto('/')
+
+      // THEN: it should include Article structured data
       const scriptContent = await page.locator('script[type="application/ld+json"]').textContent()
       expect(scriptContent).toContain('"@type":"Article"')
     }
@@ -219,7 +239,11 @@ test.describe('Structured Data', () => {
           },
         ],
       })
+
+      // WHEN: breadcrumb property references breadcrumb.schema.json
       await page.goto('/')
+
+      // THEN: it should include BreadcrumbList structured data
       const scriptContent = await page.locator('script[type="application/ld+json"]').textContent()
       expect(scriptContent).toContain('"@type":"BreadcrumbList"')
     }
@@ -252,7 +276,11 @@ test.describe('Structured Data', () => {
           },
         ],
       })
+
+      // WHEN: faqPage property references faq-page.schema.json
       await page.goto('/')
+
+      // THEN: it should include FAQPage structured data
       const scriptContent = await page.locator('script[type="application/ld+json"]').textContent()
       expect(scriptContent).toContain('"@type":"FAQPage"')
     }
@@ -285,7 +313,11 @@ test.describe('Structured Data', () => {
           },
         ],
       })
+
+      // WHEN: educationEvent property references education-event.schema.json
       await page.goto('/')
+
+      // THEN: it should include EducationEvent structured data
       const scriptContent = await page.locator('script[type="application/ld+json"]').textContent()
       expect(scriptContent).toContain('"@type":"EducationEvent"')
     }
@@ -329,7 +361,11 @@ test.describe('Structured Data', () => {
           },
         ],
       })
+
+      // WHEN: object includes organization, faqPage, and breadcrumb
       await page.goto('/')
+
+      // THEN: it should support multiple Schema.org types on same page
       const scriptCount = await page.locator('script[type="application/ld+json"]').count()
       expect(scriptCount).toBeGreaterThanOrEqual(3)
     }
@@ -364,7 +400,11 @@ test.describe('Structured Data', () => {
           },
         ],
       })
+
+      // WHEN: Schema.org types are included in page metadata
       await page.goto('/')
+
+      // THEN: it should enable rich search results and enhanced SERP display
       await expect(page.locator('script[type="application/ld+json"]')).toBeVisible()
     }
   )

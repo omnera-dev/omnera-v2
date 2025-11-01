@@ -38,7 +38,11 @@ test.describe('External Scripts', () => {
           },
         ],
       })
+
+      // WHEN: src is 'https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js'
       await page.goto('/')
+
+      // THEN: it should load external JavaScript from CDN
       await expect(
         page.locator('script[src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"]')
       ).toBeVisible()
@@ -64,7 +68,11 @@ test.describe('External Scripts', () => {
           },
         ],
       })
+
+      // WHEN: async is true
       await page.goto('/')
+
+      // THEN: it should load script asynchronously (non-blocking)
       const script = page.locator('script[src="https://cdn.example.com/script.js"]')
       await expect(script).toHaveAttribute('async', '')
     }
@@ -89,7 +97,11 @@ test.describe('External Scripts', () => {
           },
         ],
       })
+
+      // WHEN: defer is true
       await page.goto('/')
+
+      // THEN: it should defer script execution until DOM loaded
       const script = page.locator('script[src="https://cdn.example.com/script.js"]')
       await expect(script).toHaveAttribute('defer', '')
     }
@@ -138,7 +150,11 @@ test.describe('External Scripts', () => {
           },
         ],
       })
+
+      // WHEN: integrity is 'sha384-abc123...'
       await page.goto('/')
+
+      // THEN: it should verify subresource integrity for security
       const script = page.locator('script[src="https://cdn.example.com/lib.js"]')
       await expect(script).toHaveAttribute('integrity', 'sha384-abc123')
     }
@@ -193,7 +209,11 @@ test.describe('External Scripts', () => {
           },
         ],
       })
+
+      // WHEN: crossorigin is 'anonymous' or 'use-credentials'
       await page.goto('/')
+
+      // THEN: it should set CORS policy for script loading
       const script = page.locator('head script[src="https://cdn.example.com/head-script.js"]')
       await expect(script).toBeVisible()
     }
@@ -220,7 +240,11 @@ test.describe('External Scripts', () => {
           },
         ],
       })
+
+      // WHEN: position is 'head'
       await page.goto('/')
+
+      // THEN: it should insert script in document head
       const script = page.locator('body script[src="https://cdn.example.com/body-script.js"]')
       await expect(script).toBeVisible()
     }
@@ -247,7 +271,11 @@ test.describe('External Scripts', () => {
           },
         ],
       })
+
+      // WHEN: position is 'body-end' (default)
       await page.goto('/')
+
+      // THEN: it should insert script at end of body
       const script = page.locator('body script[src="https://cdn.example.com/body-start-script.js"]')
       await expect(script).toBeVisible()
     }
@@ -276,7 +304,11 @@ test.describe('External Scripts', () => {
           },
         ],
       })
+
+      // WHEN: position is 'body-start'
       await page.goto('/')
+
+      // THEN: it should insert script at start of body
       await expect(
         page.locator('script[src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"]')
       ).toBeVisible()
@@ -304,7 +336,11 @@ test.describe('External Scripts', () => {
           },
         ],
       })
+
+      // WHEN: array includes [AlpineJS, Chart.js, app.js]
       await page.goto('/')
+
+      // THEN: it should load multiple external scripts in order
       await expect(page.locator('script[src="./js/app.js"]')).toBeVisible()
     }
   )
@@ -326,7 +362,11 @@ test.describe('External Scripts', () => {
           },
         ],
       })
+
+      // WHEN: src is './js/app.js' (relative path)
       await page.goto('/')
+
+      // THEN: it should load local JavaScript file
       const script = page.locator('script[src="https://cdn.example.com/script.js"]')
       await expect(script).toBeVisible()
       await expect(script).not.toHaveAttribute('async')
@@ -360,7 +400,11 @@ test.describe('External Scripts', () => {
           },
         ],
       })
+
+      // WHEN: only src is provided (all other properties optional)
       await page.goto('/')
+
+      // THEN: it should load script with default settings (sync, body-end)
       await expect(page.locator('head script[src*="alpinejs"]')).toBeVisible()
       await expect(page.locator('script[src*="chart.js"]')).toBeVisible()
       await expect(page.locator('script[src="./js/app.js"][type="module"]')).toBeVisible()

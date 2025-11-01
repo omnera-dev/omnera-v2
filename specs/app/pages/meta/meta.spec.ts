@@ -40,7 +40,11 @@ test.describe('Page Metadata', () => {
           },
         ],
       })
+
+      // WHEN: lang is 'en-US', title is 'My Page', description is 'Page description'
       await page.goto('/')
+
+      // THEN: it should validate minimal metadata configuration
       await expect(page.locator('html')).toHaveAttribute('lang', 'en-US')
       await expect(page).toHaveTitle('My Page')
       await expect(page.locator('meta[name="description"]')).toHaveAttribute(
@@ -70,7 +74,11 @@ test.describe('Page Metadata', () => {
           },
         ],
       })
+
+      // WHEN: title has 60 characters max for optimal SEO display
       await page.goto('/')
+
+      // THEN: it should enforce title length constraint
       const title = await page.title()
       expect(title.length).toBeLessThanOrEqual(60)
     }
@@ -97,7 +105,11 @@ test.describe('Page Metadata', () => {
           },
         ],
       })
+
+      // WHEN: description has 160 characters max for SEO snippets
       await page.goto('/')
+
+      // THEN: it should enforce description length constraint
       const description = await page.locator('meta[name="description"]').getAttribute('content')
       expect(description?.length).toBeLessThanOrEqual(160)
     }
@@ -124,7 +136,11 @@ test.describe('Page Metadata', () => {
           },
         ],
       })
+
+      // WHEN: keywords is comma-separated list for SEO
       await page.goto('/')
+
+      // THEN: it should accept keyword string
       await expect(page.locator('meta[name="keywords"]')).toHaveAttribute(
         'content',
         'web development, react, typescript, seo optimization, page builder'
@@ -153,7 +169,11 @@ test.describe('Page Metadata', () => {
           },
         ],
       })
+
+      // WHEN: canonical prevents duplicate content issues
       await page.goto('/')
+
+      // THEN: it should define canonical URL
       await expect(page.locator('link[rel="canonical"]')).toHaveAttribute(
         'href',
         'https://example.com/products/widget'
@@ -186,7 +206,11 @@ test.describe('Page Metadata', () => {
           },
         ],
       })
+
+      // WHEN: favicon is simple icon, favicons is complete set
       await page.goto('/')
+
+      // THEN: it should support both single and multi-favicon configurations
       await expect(page.locator('link[rel="icon"][type="image/svg+xml"]')).toHaveAttribute(
         'href',
         '/icon.svg'
@@ -221,7 +245,11 @@ test.describe('Page Metadata', () => {
           },
         ],
       })
+
+      // WHEN: stylesheet and font URLs are provided
       await page.goto('/')
+
+      // THEN: it should include CSS and font resources
       await expect(page.locator('link[rel="stylesheet"][href="/styles/main.css"]')).toBeVisible()
       await expect(
         page.locator('link[rel="preconnect"][href="https://fonts.googleapis.com"]')
@@ -261,7 +289,11 @@ test.describe('Page Metadata', () => {
           },
         ],
       })
+
+      // WHEN: openGraph and twitter properties are configured
       await page.goto('/')
+
+      // THEN: it should enable rich social sharing
       await expect(page.locator('meta[property="og:title"]')).toHaveAttribute(
         'content',
         'Amazing Product Launch'
@@ -300,7 +332,11 @@ test.describe('Page Metadata', () => {
           },
         ],
       })
+
+      // WHEN: schema property contains Schema.org markup
       await page.goto('/')
+
+      // THEN: it should provide search engine understanding
       const jsonLd = await page.locator('script[type="application/ld+json"]').textContent()
       expect(jsonLd).toContain('"@type":"Organization"')
       expect(jsonLd).toContain('"name":"Acme Inc"')
@@ -336,7 +372,11 @@ test.describe('Page Metadata', () => {
           },
         ],
       })
+
+      // WHEN: preload and dnsPrefetch are configured
       await page.goto('/')
+
+      // THEN: it should optimize page load performance
       await expect(page.locator('link[rel="preload"][as="font"]')).toBeVisible()
       await expect(
         page.locator('link[rel="dns-prefetch"][href="https://fonts.googleapis.com"]')
@@ -365,7 +405,11 @@ test.describe('Page Metadata', () => {
           },
         ],
       })
+
+      // WHEN: analytics property configures tracking providers
       await page.goto('/')
+
+      // THEN: it should enable visitor analytics
       await expect(page.locator('script[src*="googletagmanager.com"]')).toBeVisible()
     }
   )
@@ -399,7 +443,11 @@ test.describe('Page Metadata', () => {
           },
         ],
       })
+
+      // WHEN: metadata includes SEO, social, structured data, performance, analytics
       await page.goto('/')
+
+      // THEN: it should provide comprehensive page metadata management
       await expect(page.locator('html')).toHaveAttribute('lang', 'en-US')
       await expect(page).toHaveTitle('Complete Page Metadata Example')
       await expect(page.locator('link[rel="canonical"]')).toBeVisible()

@@ -56,7 +56,11 @@ test.describe('Analytics Configuration', () => {
           },
         ],
       })
+
+      // WHEN: providers contains analytics configurations
       await page.goto('/')
+
+      // THEN: it should support multiple analytics providers
       await expect(page.locator('[data-testid="analytics-plausible"]')).toBeVisible()
       await expect(page.locator('[data-testid="analytics-google"]')).toBeVisible()
     }
@@ -117,7 +121,11 @@ test.describe('Analytics Configuration', () => {
           },
         ],
       })
+
+      // WHEN: name is one of: google, plausible, matomo, fathom, posthog, mixpanel
       await page.goto('/')
+
+      // THEN: it should support 6 analytics providers
       await expect(page.locator('[data-testid="analytics-google"]')).toBeVisible()
       await expect(page.locator('[data-testid="analytics-plausible"]')).toBeHidden()
     }
@@ -151,7 +159,11 @@ test.describe('Analytics Configuration', () => {
           },
         ],
       })
+
+      // WHEN: enabled is true or false
       await page.goto('/')
+
+      // THEN: it should allow enabling/disabling provider
       await expect(page.locator('script[src="https://plausible.io/js/script.js"]')).toBeVisible()
     }
   )
@@ -184,7 +196,11 @@ test.describe('Analytics Configuration', () => {
           },
         ],
       })
+
+      // WHEN: scripts contains external script configurations
       await page.goto('/')
+
+      // THEN: it should load provider scripts
       const script = page.locator('script[src="https://plausible.io/js/script.js"]')
       await expect(script).toHaveAttribute('async', '')
     }
@@ -219,7 +235,11 @@ test.describe('Analytics Configuration', () => {
           },
         ],
       })
+
+      // WHEN: async is true for non-blocking load
       await page.goto('/')
+
+      // THEN: it should load script asynchronously
       const dataLayer = await page.evaluate(() => window.dataLayer)
       expect(dataLayer).toBeDefined()
     }
@@ -248,7 +268,11 @@ test.describe('Analytics Configuration', () => {
           },
         ],
       })
+
+      // WHEN: initScript contains inline JavaScript for initialization
       await page.goto('/')
+
+      // THEN: it should execute provider initialization code
       await expect(
         page.locator('link[rel="dns-prefetch"][href="https://plausible.io"]')
       ).toBeVisible()
@@ -280,7 +304,11 @@ test.describe('Analytics Configuration', () => {
           },
         ],
       })
+
+      // WHEN: dnsPrefetch specifies provider domain
       await page.goto('/')
+
+      // THEN: it should optimize DNS resolution for provider
       const config = await page.locator('[data-testid="analytics-google-config"]').textContent()
       expect(config).toContain('G-XXXXX')
     }
@@ -321,7 +349,11 @@ test.describe('Analytics Configuration', () => {
           },
         ],
       })
+
+      // WHEN: config contains provider-specific settings
       await page.goto('/')
+
+      // THEN: it should pass configuration to provider
       await expect(page.locator('script[src*="googletagmanager.com"]')).toBeVisible()
     }
   )
@@ -356,7 +388,11 @@ test.describe('Analytics Configuration', () => {
           },
         ],
       })
+
+      // WHEN: name is 'google' with tracking ID in config
       await page.goto('/')
+
+      // THEN: it should configure Google Analytics
       await expect(page.locator('script[src="https://plausible.io/js/script.js"]')).toBeVisible()
     }
   )
@@ -397,7 +433,11 @@ test.describe('Analytics Configuration', () => {
           },
         ],
       })
+
+      // WHEN: name is 'plausible' with domain config
       await page.goto('/')
+
+      // THEN: it should configure privacy-friendly Plausible analytics
       await expect(page.locator('script[src="https://plausible.io/js/script.js"]')).toBeVisible()
       await expect(page.locator('script[src*="googletagmanager.com"]')).toBeVisible()
     }
@@ -433,7 +473,11 @@ test.describe('Analytics Configuration', () => {
           },
         ],
       })
+
+      // WHEN: providers array contains [plausible, google]
       await page.goto('/')
+
+      // THEN: it should support multi-provider analytics
       await expect(page.locator('script[src*="posthog.com"]')).toBeVisible()
     }
   )

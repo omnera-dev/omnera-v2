@@ -46,7 +46,11 @@ test.describe('Navigation Links', () => {
           },
         ],
       })
+
+      // WHEN: link is { label: 'Home', href: '/' }
       await page.goto('/')
+
+      // THEN: it should render navigation link
       const link = page.locator('[data-testid="nav-link"]').first()
       await expect(link).toContainText('Home')
       await expect(link).toHaveAttribute('href', '/')
@@ -77,7 +81,11 @@ test.describe('Navigation Links', () => {
           },
         ],
       })
+
+      // WHEN: target is '_blank' for external links
       await page.goto('/')
+
+      // THEN: it should open link in new tab
       const link = page.locator('[data-testid="nav-link"]').first()
       await expect(link).toHaveAttribute('target', '_blank')
     }
@@ -105,7 +113,11 @@ test.describe('Navigation Links', () => {
           },
         ],
       })
+
+      // WHEN: icon is 'arrow-right'
       await page.goto('/')
+
+      // THEN: it should display icon alongside label
       const link = page.locator('[data-testid="nav-link"]').first()
       await expect(link).toContainText('Products')
       await expect(link.locator('[data-testid="icon"]')).toBeVisible()
@@ -134,7 +146,11 @@ test.describe('Navigation Links', () => {
           },
         ],
       })
+
+      // WHEN: badge is 'New' or 'Beta'
       await page.goto('/')
+
+      // THEN: it should display badge to highlight link
       const link = page.locator('[data-testid="nav-link"]').first()
       await expect(link.locator('[data-testid="badge"]')).toContainText('New')
     }
@@ -173,7 +189,11 @@ test.describe('Navigation Links', () => {
           },
         ],
       })
+
+      // WHEN: children contains nested nav-links
       await page.goto('/')
+
+      // THEN: it should render dropdown menu on hover/click
       const parentLink = page.locator('[data-testid="nav-link"]').filter({ hasText: 'Products' })
       await parentLink.hover()
       const dropdown = page.locator('[data-testid="nav-dropdown"]')
@@ -207,7 +227,11 @@ test.describe('Navigation Links', () => {
           },
         ],
       })
+
+      // WHEN: href is '#contact' (page anchor)
       await page.goto('/')
+
+      // THEN: it should scroll to anchor on same page
       await page.click('[data-testid="nav-link"]')
       await expect(page.locator('#contact')).toBeInViewport()
     }
@@ -242,7 +266,11 @@ test.describe('Navigation Links', () => {
           },
         ],
       })
+
+      // WHEN: array contains [Home, About, Products, Contact]
       await page.goto('/')
+
+      // THEN: it should render horizontal navigation menu
       const links = page.locator('[data-testid="nav-link"]')
       await expect(links).toHaveCount(4)
       const navLinks = page.locator('[data-testid="nav-links"]')
@@ -286,7 +314,11 @@ test.describe('Navigation Links', () => {
           },
         ],
       })
+
+      // WHEN: Products has children (Product A, Product B)
       await page.goto('/')
+
+      // THEN: it should support unlimited nesting depth for menus
       const parentLink = page.locator('[data-testid="nav-link"]').filter({ hasText: 'Products' })
       await parentLink.hover()
       await expect(page.locator('[data-testid="nav-dropdown"]')).toBeVisible()
@@ -351,7 +383,11 @@ test.describe('Navigation Links', () => {
           },
         ],
       })
+
+      // WHEN: target enum includes _self, _blank, _parent, _top
       await page.goto('/')
+
+      // THEN: it should support all standard HTML link targets
       const link = page.locator('[data-testid="nav-link"]').first()
       await expect(link).toContainText('Home')
       await expect(link).toHaveAttribute('href', '/')

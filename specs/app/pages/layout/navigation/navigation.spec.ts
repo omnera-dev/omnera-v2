@@ -41,7 +41,11 @@ test.describe('Navigation Configuration', () => {
           },
         ],
       })
+
+      // WHEN: logo is './public/logo.svg'
       await page.goto('/')
+
+      // THEN: it should display logo image
       await expect(page.locator('[data-testid="nav-logo"]')).toHaveAttribute(
         'src',
         './public/logo.svg'
@@ -69,7 +73,11 @@ test.describe('Navigation Configuration', () => {
           },
         ],
       })
+
+      // WHEN: logoMobile is './public/logo-mobile.svg'
       await page.goto('/')
+
+      // THEN: it should use alternative logo for mobile devices
       await page.setViewportSize({ width: 375, height: 667 })
       await expect(page.locator('[data-testid="nav-logo-mobile"]')).toHaveAttribute(
         'src',
@@ -102,7 +110,11 @@ test.describe('Navigation Configuration', () => {
           },
         ],
       })
+
+      // WHEN: logoAlt is 'Company Logo'
       await page.goto('/')
+
+      // THEN: it should provide accessible alt text for logo
       await expect(page.locator('[data-testid="nav-logo"]')).toHaveAttribute(
         'alt',
         'Acme Inc - Building the Future'
@@ -133,7 +145,11 @@ test.describe('Navigation Configuration', () => {
           },
         ],
       })
+
+      // WHEN: sticky is true
       await page.goto('/')
+
+      // THEN: it should stick to top on scroll
       const nav = page.locator('[data-testid="navigation"]')
       await expect(nav).toHaveCSS('position', 'sticky')
       await page.evaluate(() => window.scrollTo(0, 1000))
@@ -165,7 +181,11 @@ test.describe('Navigation Configuration', () => {
           },
         ],
       })
+
+      // WHEN: transparent is true initially
       await page.goto('/')
+
+      // THEN: it should have transparent background (becomes opaque on scroll)
       const nav = page.locator('[data-testid="navigation"]')
       const initialBg = await nav.evaluate((el) => window.getComputedStyle(el).backgroundColor)
       expect(initialBg).toMatch(/rgba?\(.*,\s*0\)|transparent/)
@@ -204,7 +224,11 @@ test.describe('Navigation Configuration', () => {
           },
         ],
       })
+
+      // WHEN: links.desktop is array of nav-links
       await page.goto('/')
+
+      // THEN: it should render desktop navigation menu
       const links = page.locator('[data-testid="nav-link"]')
       await expect(links).toHaveCount(3)
       await expect(links.nth(0)).toContainText('Products')
@@ -245,7 +269,11 @@ test.describe('Navigation Configuration', () => {
           },
         ],
       })
+
+      // WHEN: links.mobile differs from desktop
       await page.goto('/')
+
+      // THEN: it should render different links for mobile menu
       await page.setViewportSize({ width: 375, height: 667 })
       await page.click('[data-testid="mobile-menu-toggle"]')
       const mobileLinks = page.locator('[data-testid="mobile-menu"] a')
@@ -283,7 +311,11 @@ test.describe('Navigation Configuration', () => {
           },
         ],
       })
+
+      // WHEN: cta has text 'Get Started' and href '/signup'
       await page.goto('/')
+
+      // THEN: it should render prominent call-to-action button
       const cta = page.locator('[data-testid="nav-cta"]')
       await expect(cta).toContainText('Get Started')
       await expect(cta).toHaveAttribute('href', '/signup')
@@ -314,7 +346,11 @@ test.describe('Navigation Configuration', () => {
           },
         ],
       })
+
+      // WHEN: search.enabled is true with placeholder 'Search...'
       await page.goto('/')
+
+      // THEN: it should display search input in navigation
       const search = page.locator('[data-testid="nav-search"] input')
       await expect(search).toBeVisible()
       await expect(search).toHaveAttribute('placeholder', 'Search documentation...')
@@ -344,7 +380,11 @@ test.describe('Navigation Configuration', () => {
           },
         ],
       })
+
+      // WHEN: user.enabled is true with loginUrl and signupUrl
       await page.goto('/')
+
+      // THEN: it should show user account menu with login/signup links
       await expect(page.locator('[data-testid="login-link"]')).toHaveAttribute('href', '/login')
       await expect(page.locator('[data-testid="signup-link"]')).toHaveAttribute('href', '/signup')
     }
@@ -367,7 +407,11 @@ test.describe('Navigation Configuration', () => {
           },
         ],
       })
+
+      // WHEN: all other properties are optional
       await page.goto('/')
+
+      // THEN: it should render minimal navigation with logo
       await expect(page.locator('[data-testid="navigation"]')).toBeVisible()
       await expect(page.locator('[data-testid="nav-logo"]')).toBeVisible()
       await expect(page.locator('[data-testid="nav-link"]')).toHaveCount(0)
@@ -397,7 +441,11 @@ test.describe('Navigation Configuration', () => {
           },
         ],
       })
+
+      // WHEN: nav-links and cta-button use $ref
       await page.goto('/')
+
+      // THEN: it should compose navigation from modular schemas
       await expect(page.locator('[data-testid="nav-link"]')).toContainText('Products')
       await expect(page.locator('[data-testid="nav-cta"]')).toContainText('Get Started')
     }

@@ -40,7 +40,11 @@ test.describe('Favicon Set', () => {
           },
         ],
       })
+
+      // WHEN: rel is 'icon' for standard favicon
       await page.goto('/')
+
+      // THEN: it should define browser icon
       await expect(page.locator('link[rel="icon"]')).toBeVisible()
     }
   )
@@ -68,7 +72,11 @@ test.describe('Favicon Set', () => {
           },
         ],
       })
+
+      // WHEN: rel is 'apple-touch-icon' for iOS devices
       await page.goto('/')
+
+      // THEN: it should define Apple touch icon
       await expect(page.locator('link[rel="apple-touch-icon"]')).toHaveAttribute('sizes', '180x180')
     }
   )
@@ -94,7 +102,11 @@ test.describe('Favicon Set', () => {
           },
         ],
       })
+
+      // WHEN: rel is 'mask-icon' for Safari pinned tabs
       await page.goto('/')
+
+      // THEN: it should define Safari mask icon with color
       await expect(page.locator('link[rel="mask-icon"]')).toHaveAttribute('color', '#FF5733')
     }
   )
@@ -123,7 +135,11 @@ test.describe('Favicon Set', () => {
           },
         ],
       })
+
+      // WHEN: sizes is '16x16', '32x32', '180x180', or '192x192'
       await page.goto('/')
+
+      // THEN: it should specify icon dimensions for different contexts
       await expect(page.locator('link[rel="icon"][sizes="16x16"]')).toBeVisible()
       await expect(page.locator('link[rel="icon"][sizes="32x32"]')).toBeVisible()
     }
@@ -150,7 +166,11 @@ test.describe('Favicon Set', () => {
           },
         ],
       })
+
+      // WHEN: type is 'image/png', 'image/x-icon', or 'image/svg+xml'
       await page.goto('/')
+
+      // THEN: it should specify MIME type
       await expect(page.locator('link[rel="icon"][type="image/svg+xml"]')).toBeVisible()
     }
   )
@@ -176,7 +196,11 @@ test.describe('Favicon Set', () => {
           },
         ],
       })
+
+      // WHEN: color is hex value like '#FF5733'
       await page.goto('/')
+
+      // THEN: it should define Safari pinned tab color
       const color = await page.locator('link[rel="mask-icon"]').getAttribute('color')
       expect(color).toMatch(/^#[0-9A-Fa-f]{6}$/)
     }
@@ -208,7 +232,11 @@ test.describe('Favicon Set', () => {
           },
         ],
       })
+
+      // WHEN: array contains icons for all devices (16x16, 32x32, 180x180, 192x192, 512x512, manifest)
       await page.goto('/')
+
+      // THEN: it should provide comprehensive multi-device icon support
       await expect(page.locator('link[rel="icon"]')).toHaveCount(2)
       await expect(page.locator('link[rel="apple-touch-icon"]')).toBeVisible()
       await expect(page.locator('link[rel="manifest"]')).toBeVisible()

@@ -42,7 +42,11 @@ test.describe('FAQ Page Schema', () => {
           },
         ],
       })
+
+      // WHEN: @context is 'https://schema.org', @type is 'FAQPage', and mainEntity is provided
       await page.goto('/')
+
+      // THEN: it should validate minimal FAQPage structured data
       const scriptContent = await page.locator('script[type="application/ld+json"]').textContent()
       expect(scriptContent).toContain('"@type":"FAQPage"')
     }
@@ -81,7 +85,11 @@ test.describe('FAQ Page Schema', () => {
           },
         ],
       })
+
+      // WHEN: mainEntity is array of Question objects
       await page.goto('/')
+
+      // THEN: it should contain list of Q&A pairs
       const scriptContent = await page.locator('script[type="application/ld+json"]').textContent()
       expect(scriptContent).toContain('mainEntity')
     }
@@ -120,7 +128,11 @@ test.describe('FAQ Page Schema', () => {
           },
         ],
       })
+
+      // WHEN: each item has @type 'Question', name, and acceptedAnswer
       await page.goto('/')
+
+      // THEN: it should define question structure
       const scriptContent = await page.locator('script[type="application/ld+json"]').textContent()
       expect(scriptContent).toContain('"@type":"Question"')
       expect(scriptContent).toContain('name')
@@ -161,7 +173,11 @@ test.describe('FAQ Page Schema', () => {
           },
         ],
       })
+
+      // WHEN: name is 'What is the refund policy?'
       await page.goto('/')
+
+      // THEN: it should provide question text
       const scriptContent = await page.locator('script[type="application/ld+json"]').textContent()
       expect(scriptContent).toContain('What is the refund policy?')
     }
@@ -200,7 +216,11 @@ test.describe('FAQ Page Schema', () => {
           },
         ],
       })
+
+      // WHEN: acceptedAnswer has @type 'Answer' and text
       await page.goto('/')
+
+      // THEN: it should provide answer structure
       const scriptContent = await page.locator('script[type="application/ld+json"]').textContent()
       expect(scriptContent).toContain('"@type":"Answer"')
       expect(scriptContent).toContain('text')
@@ -243,7 +263,11 @@ test.describe('FAQ Page Schema', () => {
           },
         ],
       })
+
+      // WHEN: text is 'We offer a 30-day money-back guarantee'
       await page.goto('/')
+
+      // THEN: it should provide answer content
       const scriptContent = await page.locator('script[type="application/ld+json"]').textContent()
       expect(scriptContent).toContain('30-day money-back guarantee')
     }
@@ -302,7 +326,11 @@ test.describe('FAQ Page Schema', () => {
           },
         ],
       })
+
+      // WHEN: mainEntity has 5+ Question objects
       await page.goto('/')
+
+      // THEN: it should support comprehensive FAQ section
       const scriptContent = await page.locator('script[type="application/ld+json"]').textContent()
       const questionCount = (scriptContent?.match(/"@type":"Question"/g) || []).length
       expect(questionCount).toBeGreaterThanOrEqual(5)
@@ -345,7 +373,11 @@ test.describe('FAQ Page Schema', () => {
           },
         ],
       })
+
+      // WHEN: FAQPage structured data is included in page metadata
       await page.goto('/')
+
+      // THEN: it should display expandable Q&A in Google search results
       await expect(page.locator('script[type="application/ld+json"]')).toBeVisible()
     }
   )
@@ -386,7 +418,11 @@ test.describe('FAQ Page Schema', () => {
           },
         ],
       })
+
+      // WHEN: FAQ answers common customer questions
       await page.goto('/')
+
+      // THEN: it should reduce support load by surfacing answers in search
       await expect(page.locator('script[type="application/ld+json"]')).toBeVisible()
     }
   )
@@ -427,7 +463,11 @@ test.describe('FAQ Page Schema', () => {
           },
         ],
       })
+
+      // WHEN: FAQ rich results show in search
       await page.goto('/')
+
+      // THEN: it should increase click-through rate from search results
       const scriptContent = await page.locator('script[type="application/ld+json"]').textContent()
       expect(scriptContent).toContain('FAQPage')
     }

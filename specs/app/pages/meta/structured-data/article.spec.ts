@@ -46,7 +46,11 @@ test.describe('Article Schema', () => {
           },
         ],
       })
+
+      // WHEN: @context is 'https://schema.org', @type is 'Article', and headline is provided
       await page.goto('/')
+
+      // THEN: it should validate minimal Article structured data
       const scriptContent = await page.locator('script[type="application/ld+json"]').textContent()
       expect(scriptContent).toContain('"@type":"Article"')
       expect(scriptContent).toContain('Amazing Article Title')
@@ -116,7 +120,11 @@ test.describe('Article Schema', () => {
           },
         ],
       })
+
+      // WHEN: @type is 'Article', 'NewsArticle', or 'BlogPosting'
       await page.goto('/')
+
+      // THEN: it should categorize content type
       const scriptContent = await page.locator('script[type="application/ld+json"]').textContent()
       expect(scriptContent).toContain('10 Tips for Better Productivity')
     }
@@ -151,7 +159,11 @@ test.describe('Article Schema', () => {
           },
         ],
       })
+
+      // WHEN: headline is article title
       await page.goto('/')
+
+      // THEN: it should provide article title for rich results
       const scriptContent = await page.locator('script[type="application/ld+json"]').textContent()
       expect(scriptContent).toContain('proven strategies for improving daily productivity')
     }
@@ -185,7 +197,11 @@ test.describe('Article Schema', () => {
           },
         ],
       })
+
+      // WHEN: description summarizes article content
       await page.goto('/')
+
+      // THEN: it should provide article summary
       const scriptContent = await page.locator('script[type="application/ld+json"]').textContent()
       expect(scriptContent).toContain('image1.jpg')
       expect(scriptContent).toContain('image2.jpg')
@@ -220,7 +236,11 @@ test.describe('Article Schema', () => {
           },
         ],
       })
+
+      // WHEN: image is string URL or array of URLs
       await page.goto('/')
+
+      // THEN: it should support single or multiple article images
       const scriptContent = await page.locator('script[type="application/ld+json"]').textContent()
       expect(scriptContent).toContain('John Doe')
     }
@@ -258,7 +278,11 @@ test.describe('Article Schema', () => {
           },
         ],
       })
+
+      // WHEN: author is 'John Doe'
       await page.goto('/')
+
+      // THEN: it should provide simple author name
       const scriptContent = await page.locator('script[type="application/ld+json"]').textContent()
       expect(scriptContent).toContain('"@type":"Person"')
       expect(scriptContent).toContain('Jane Smith')
@@ -293,7 +317,11 @@ test.describe('Article Schema', () => {
           },
         ],
       })
+
+      // WHEN: author is object with @type 'Person', name, and url
       await page.goto('/')
+
+      // THEN: it should provide structured author information
       const scriptContent = await page.locator('script[type="application/ld+json"]').textContent()
       expect(scriptContent).toContain('"@type":"Organization"')
       expect(scriptContent).toContain('Tech Blog')
@@ -328,7 +356,11 @@ test.describe('Article Schema', () => {
           },
         ],
       })
+
+      // WHEN: author is object with @type 'Organization' and name
       await page.goto('/')
+
+      // THEN: it should attribute content to organization
       const scriptContent = await page.locator('script[type="application/ld+json"]').textContent()
       expect(scriptContent).toContain('2025-01-15T09:00:00Z')
     }
@@ -363,7 +395,11 @@ test.describe('Article Schema', () => {
           },
         ],
       })
+
+      // WHEN: datePublished is ISO 8601 date-time
       await page.goto('/')
+
+      // THEN: it should provide publication date
       const scriptContent = await page.locator('script[type="application/ld+json"]').textContent()
       expect(scriptContent).toContain('2025-01-20T14:30:00Z')
     }
@@ -401,7 +437,11 @@ test.describe('Article Schema', () => {
           },
         ],
       })
+
+      // WHEN: dateModified is ISO 8601 date-time
       await page.goto('/')
+
+      // THEN: it should indicate last update date
       const scriptContent = await page.locator('script[type="application/ld+json"]').textContent()
       expect(scriptContent).toContain('Tech Media')
       expect(scriptContent).toContain('logo.png')
@@ -435,7 +475,11 @@ test.describe('Article Schema', () => {
           },
         ],
       })
+
+      // WHEN: publisher is object with @type 'Organization', name, and logo (ImageObject)
       await page.goto('/')
+
+      // THEN: it should identify publishing organization
       const scriptContent = await page.locator('script[type="application/ld+json"]').textContent()
       expect(scriptContent).toContain('https://example.com/articles/productivity-tips')
     }
@@ -475,7 +519,11 @@ test.describe('Article Schema', () => {
           },
         ],
       })
+
+      // WHEN: complete article data with author, dates, and publisher is provided
       await page.goto('/')
+
+      // THEN: it should enable Google News and article rich results
       await expect(page.locator('script[type="application/ld+json"]')).toBeVisible()
     }
   )
@@ -511,7 +559,11 @@ test.describe('Article Schema', () => {
           },
         ],
       })
+
+      // WHEN: Article structured data is included in blog posts
       await page.goto('/')
+
+      // THEN: it should properly attribute content to authors and publishers
       const scriptContent = await page.locator('script[type="application/ld+json"]').textContent()
       expect(scriptContent).toContain('John Doe')
       expect(scriptContent).toContain('Blog Network')

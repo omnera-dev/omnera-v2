@@ -45,7 +45,11 @@ test.describe('Favicon', () => {
           },
         ],
       })
+
+      // WHEN: value is './public/favicon.ico'
       await page.goto('/')
+
+      // THEN: it should reference default favicon file
       await expect(page.locator('link[rel="icon"][href="./public/favicon.ico"]')).toBeVisible()
     }
   )
@@ -66,7 +70,11 @@ test.describe('Favicon', () => {
           },
         ],
       })
+
+      // WHEN: path ends with .ico
       await page.goto('/')
+
+      // THEN: it should support legacy ICO format
       const href = await page.locator('link[rel="icon"]').getAttribute('href')
       expect(href).toMatch(/\.ico$/)
     }
@@ -88,7 +96,11 @@ test.describe('Favicon', () => {
           },
         ],
       })
+
+      // WHEN: path ends with .png
       await page.goto('/')
+
+      // THEN: it should support PNG format
       const href = await page.locator('link[rel="icon"]').getAttribute('href')
       expect(href).toMatch(/\.png$/)
     }
@@ -115,7 +127,11 @@ test.describe('Favicon', () => {
           },
         ],
       })
+
+      // WHEN: path ends with .svg
       await page.goto('/')
+
+      // THEN: it should support modern SVG format
       const href = await page.locator('link[rel="icon"]').getAttribute('href')
       expect(href).toMatch(/\.svg$/)
     }
@@ -142,7 +158,11 @@ test.describe('Favicon', () => {
           },
         ],
       })
+
+      // WHEN: pattern enforces relative path prefix
       await page.goto('/')
+
+      // THEN: it should use relative file paths
       const href = await page.locator('link[rel="icon"]').getAttribute('href')
       expect(href).toMatch(/^\.\//)
     }
@@ -164,7 +184,11 @@ test.describe('Favicon', () => {
           },
         ],
       })
+
+      // WHEN: single string path is provided
       await page.goto('/')
+
+      // THEN: it should enable quick favicon setup
       await expect(page.locator('link[rel="icon"]')).toBeVisible()
     }
   )
@@ -190,7 +214,11 @@ test.describe('Favicon', () => {
           },
         ],
       })
+
+      // WHEN: favicon is displayed in browser UI
       await page.goto('/')
+
+      // THEN: it should provide site branding in tabs
       await expect(page.locator('link[rel="icon"]')).toBeVisible()
     }
   )
@@ -211,7 +239,11 @@ test.describe('Favicon', () => {
           },
         ],
       })
+
+      // WHEN: favicon is simple string, favicons is array of objects
       await page.goto('/')
+
+      // THEN: it should support both simple and complete configurations
       const iconCount = await page.locator('link[rel="icon"]').count()
       expect(iconCount).toBeGreaterThan(0)
     }

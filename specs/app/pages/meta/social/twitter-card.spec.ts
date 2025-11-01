@@ -40,7 +40,11 @@ test.describe('Twitter Card Metadata', () => {
           },
         ],
       })
+
+      // WHEN: card property specifies card type
       await page.goto('/')
+
+      // THEN: it should validate minimal Twitter Card configuration
       await expect(page.locator('meta[name="twitter:card"]')).toHaveAttribute(
         'content',
         'summary_large_image'
@@ -74,7 +78,11 @@ test.describe('Twitter Card Metadata', () => {
           },
         ],
       })
+
+      // WHEN: card is 'summary' for default card
       await page.goto('/')
+
+      // THEN: it should display small square image card
       await expect(page.locator('meta[name="twitter:card"]')).toHaveAttribute('content', 'summary')
     }
   )
@@ -105,7 +113,11 @@ test.describe('Twitter Card Metadata', () => {
           },
         ],
       })
+
+      // WHEN: card is 'summary_large_image' for featured content
       await page.goto('/')
+
+      // THEN: it should display large rectangular image card
       await expect(page.locator('meta[name="twitter:card"]')).toHaveAttribute(
         'content',
         'summary_large_image'
@@ -141,7 +153,11 @@ test.describe('Twitter Card Metadata', () => {
           },
         ],
       })
+
+      // WHEN: card is 'app' with appName and appId
       await page.goto('/')
+
+      // THEN: it should promote mobile app downloads
       await expect(page.locator('meta[name="twitter:card"]')).toHaveAttribute('content', 'app')
     }
   )
@@ -175,7 +191,11 @@ test.describe('Twitter Card Metadata', () => {
           },
         ],
       })
+
+      // WHEN: card is 'player' with player URL and dimensions
       await page.goto('/')
+
+      // THEN: it should embed video/audio player
       await expect(page.locator('meta[name="twitter:card"]')).toHaveAttribute('content', 'player')
       await expect(page.locator('meta[name="twitter:player"]')).toHaveAttribute(
         'content',
@@ -208,7 +228,11 @@ test.describe('Twitter Card Metadata', () => {
           },
         ],
       })
+
+      // WHEN: title has 70 characters max
       await page.goto('/')
+
+      // THEN: it should enforce title length for Twitter display
       const twitterTitle = await page.locator('meta[name="twitter:title"]').getAttribute('content')
       expect(twitterTitle?.length).toBeLessThanOrEqual(70)
     }
@@ -239,7 +263,11 @@ test.describe('Twitter Card Metadata', () => {
           },
         ],
       })
+
+      // WHEN: description has 200 characters max
       await page.goto('/')
+
+      // THEN: it should enforce description length for Twitter cards
       const twitterDesc = await page
         .locator('meta[name="twitter:description"]')
         .getAttribute('content')
@@ -273,7 +301,11 @@ test.describe('Twitter Card Metadata', () => {
           },
         ],
       })
+
+      // WHEN: image is min 144x144px for summary or 300x157px for large
       await page.goto('/')
+
+      // THEN: it should provide properly sized social image
       await expect(page.locator('meta[name="twitter:image"]')).toHaveAttribute(
         'content',
         'https://example.com/twitter-800x418.jpg'
@@ -308,7 +340,11 @@ test.describe('Twitter Card Metadata', () => {
           },
         ],
       })
+
+      // WHEN: site is '@mysite' for website attribution
       await page.goto('/')
+
+      // THEN: it should attribute content to website Twitter account
       const site = await page.locator('meta[name="twitter:site"]').getAttribute('content')
       expect(site).toMatch(/^@[A-Za-z0-9_]+$/)
     }
@@ -342,7 +378,11 @@ test.describe('Twitter Card Metadata', () => {
           },
         ],
       })
+
+      // WHEN: creator is '@johndoe' for content author
       await page.goto('/')
+
+      // THEN: it should attribute content to author Twitter account
       const creator = await page.locator('meta[name="twitter:creator"]').getAttribute('content')
       expect(creator).toMatch(/^@[A-Za-z0-9_]+$/)
     }
@@ -376,7 +416,11 @@ test.describe('Twitter Card Metadata', () => {
           },
         ],
       })
+
+      // WHEN: imageAlt has 420 characters max
       await page.goto('/')
+
+      // THEN: it should provide accessible image description
       const imageAlt = await page.locator('meta[name="twitter:image:alt"]').getAttribute('content')
       expect(imageAlt?.length).toBeLessThanOrEqual(420)
     }
@@ -412,7 +456,11 @@ test.describe('Twitter Card Metadata', () => {
           },
         ],
       })
+
+      // WHEN: all properties create rich card on Twitter/X
       await page.goto('/')
+
+      // THEN: it should display enhanced Twitter sharing card
       await expect(page.locator('meta[name="twitter:card"]')).toHaveAttribute(
         'content',
         'summary_large_image'

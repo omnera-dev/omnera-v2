@@ -163,6 +163,12 @@ export function ComponentRenderer({
       return <p {...elementProps}>{content}</p>
     }
 
+    case 'heading':
+      return <h1 {...elementProps}>{content}</h1>
+
+    case 'paragraph':
+      return <p {...elementProps}>{content}</p>
+
     case 'image':
       return (
         <img
