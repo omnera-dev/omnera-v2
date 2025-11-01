@@ -29,13 +29,15 @@ test.describe('Common Definitions', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: a non-empty string
-      // WHEN: value is 'hello'
-      // THEN: it should validate as nonEmptyString
       await startServerWithSchema({
         name: 'test-app',
         pages: [{ name: 'hello', path: '/', meta: { lang: 'en-US', title: 'Test' }, sections: [] }],
       })
+
+      // WHEN: value is 'hello'
       await page.goto('/')
+
+      // THEN: it should validate as nonEmptyString
       await expect(page.locator('[data-testid="page-hello"]')).toBeVisible()
     }
   )
@@ -45,8 +47,6 @@ test.describe('Common Definitions', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: a kebab-case string
-      // WHEN: value is 'my-component-name'
-      // THEN: it should validate as kebabCase pattern
       await startServerWithSchema({
         name: 'test-app',
         blocks: [{ name: 'my-component-name', type: 'div' }],
@@ -59,7 +59,11 @@ test.describe('Common Definitions', () => {
           },
         ],
       })
+
+      // WHEN: value is 'my-component-name'
       await page.goto('/')
+
+      // THEN: it should validate as kebabCase pattern
       await expect(page.locator('[data-testid="block-my-component-name"]')).toBeVisible()
     }
   )
@@ -69,8 +73,6 @@ test.describe('Common Definitions', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: a variable name
-      // WHEN: value is 'myVariable123'
-      // THEN: it should validate as variableName pattern
       await startServerWithSchema({
         name: 'test-app',
         blocks: [{ name: 'test-block', type: 'div', content: '$myVariable123' }],
@@ -83,7 +85,11 @@ test.describe('Common Definitions', () => {
           },
         ],
       })
+
+      // WHEN: value is 'myVariable123'
       await page.goto('/')
+
+      // THEN: it should validate as variableName pattern
       await expect(page.locator('[data-testid="block-test-block"]')).toHaveText('Hello')
     }
   )
@@ -93,8 +99,6 @@ test.describe('Common Definitions', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: a string with variable reference
-      // WHEN: value is 'Welcome to $siteName'
-      // THEN: it should validate as variableReference pattern
       await startServerWithSchema({
         name: 'test-app',
         blocks: [{ name: 'welcome', type: 'div', content: 'Welcome to $siteName' }],
@@ -107,7 +111,11 @@ test.describe('Common Definitions', () => {
           },
         ],
       })
+
+      // WHEN: value is 'Welcome to $siteName'
       await page.goto('/')
+
+      // THEN: it should validate as variableReference pattern
       await expect(page.locator('[data-testid="block-welcome"]')).toHaveText('Welcome to My Site')
     }
   )
@@ -117,8 +125,6 @@ test.describe('Common Definitions', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: a 6-digit hex color
-      // WHEN: value is '#FF5733'
-      // THEN: it should validate as hexColor pattern
       await startServerWithSchema({
         name: 'test-app',
         theme: { colors: { custom: '#FF5733' } },
@@ -131,7 +137,11 @@ test.describe('Common Definitions', () => {
           },
         ],
       })
+
+      // WHEN: value is '#FF5733'
       await page.goto('/')
+
+      // THEN: it should validate as hexColor pattern
       const element = page.locator('div.bg-custom')
       await expect(element).toHaveCSS('background-color', 'rgb(255, 87, 51)')
     }
@@ -142,8 +152,6 @@ test.describe('Common Definitions', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: an HTTP URL
-      // WHEN: value is 'https://example.com/path'
-      // THEN: it should validate as url with http/https protocol
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -159,7 +167,11 @@ test.describe('Common Definitions', () => {
           },
         ],
       })
+
+      // WHEN: value is 'https://example.com/path'
       await page.goto('/')
+
+      // THEN: it should validate as url with http/https protocol
       await expect(page.locator('meta[property="og:image"]')).toHaveAttribute(
         'content',
         'https://example.com/image.jpg'
@@ -172,8 +184,6 @@ test.describe('Common Definitions', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: a relative path
-      // WHEN: value is './public/logo.svg'
-      // THEN: it should validate as relativePath pattern
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -186,7 +196,11 @@ test.describe('Common Definitions', () => {
           },
         ],
       })
+
+      // WHEN: value is './public/logo.svg'
       await page.goto('/')
+
+      // THEN: it should validate as relativePath pattern
       await expect(page.locator('img[src="./public/logo.svg"]')).toBeVisible()
     }
   )
@@ -196,8 +210,6 @@ test.describe('Common Definitions', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: an email address
-      // WHEN: value is 'user@example.com'
-      // THEN: it should validate as emailAddress format
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -210,7 +222,11 @@ test.describe('Common Definitions', () => {
           },
         ],
       })
+
+      // WHEN: value is 'user@example.com'
       await page.goto('/')
+
+      // THEN: it should validate as emailAddress format
       await expect(page.locator('a[href="mailto:user@example.com"]')).toBeVisible()
     }
   )
@@ -220,8 +236,6 @@ test.describe('Common Definitions', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: Tailwind CSS classes
-      // WHEN: value is 'text-center bg-blue-500 p-4'
-      // THEN: it should validate as className
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -239,7 +253,11 @@ test.describe('Common Definitions', () => {
           },
         ],
       })
+
+      // WHEN: value is 'text-center bg-blue-500 p-4'
       await page.goto('/')
+
+      // THEN: it should validate as className
       const element = page.locator('div.text-center')
       await expect(element).toHaveClass(/text-center/)
       await expect(element).toHaveClass(/bg-blue-500/)
@@ -252,8 +270,6 @@ test.describe('Common Definitions', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: an icon from the icon library
-      // WHEN: value is 'arrow-right'
-      // THEN: it should validate as iconName enum
       await startServerWithSchema({
         name: 'test-app',
         blocks: [
@@ -272,7 +288,11 @@ test.describe('Common Definitions', () => {
           },
         ],
       })
+
+      // WHEN: value is 'arrow-right'
       await page.goto('/')
+
+      // THEN: it should validate as iconName enum
       await expect(page.locator('[data-testid="icon-arrow-right"]')).toBeVisible()
     }
   )
@@ -282,8 +302,6 @@ test.describe('Common Definitions', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: dimensions with width and height
-      // WHEN: value is { width: 800, height: 600 }
-      // THEN: it should validate as dimensions object
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -297,7 +315,11 @@ test.describe('Common Definitions', () => {
           },
         ],
       })
+
+      // WHEN: value is { width: 800, height: 600 }
       await page.goto('/')
+
+      // THEN: it should validate as dimensions object
       const img = page.locator('img[src="/image.jpg"]')
       await expect(img).toHaveAttribute('width', '800')
       await expect(img).toHaveAttribute('height', '600')
@@ -309,8 +331,6 @@ test.describe('Common Definitions', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: multiple icon names in the library
-      // WHEN: 70+ icon names are defined (arrow-right, check, user, star, etc.)
-      // THEN: it should provide comprehensive icon set for all UI needs
       await startServerWithSchema({
         name: 'test-app',
         blocks: [
@@ -335,7 +355,11 @@ test.describe('Common Definitions', () => {
           },
         ],
       })
+
+      // WHEN: 70+ icon names are defined (arrow-right, check, user, star, etc.)
       await page.goto('/')
+
+      // THEN: it should provide comprehensive icon set for all UI needs
       await expect(page.locator('[data-testid="icon-arrow-right"]')).toBeVisible()
       await expect(page.locator('[data-testid="icon-check"]')).toBeVisible()
       await expect(page.locator('[data-testid="icon-user"]')).toBeVisible()
