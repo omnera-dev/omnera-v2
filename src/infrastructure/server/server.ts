@@ -120,27 +120,10 @@ function createHonoApp(
           return c.html(html)
         } catch (error) {
           // Log rendering error
-           
+
           console.error('Error rendering homepage:', error)
           return c.html(renderErrorPage(), 500)
         }
-      })
-      .get('*', (c) => {
-        // Handle dynamic pages based on path
-        const {path} = c.req
-
-        // Skip asset routes
-        if (path.startsWith('/assets/') || path.startsWith('/api/') || path === '/test/error') {
-          return c.notFound()
-        }
-
-        // Render dynamic page
-        const html = renderPage(app, path)
-        if (!html) {
-          return c.html(renderNotFoundPage(), 404)
-        }
-
-        return c.html(html)
       })
       .get('/assets/output.css', async (c) => {
         try {
@@ -171,26 +154,15 @@ function createHonoApp(
       })
       // Dynamic page routes - catch-all for custom pages
       .get('*', (c) => {
-        const {path} = c.req
+        const { path } = c.req
 
-        // Find matching page in app configuration
-        const page = app.pages?.find((p) => p.path === path)
-
-        if (page) {
-          try {
-            // Render the page using DynamicPage component
-            const html = renderToString(createElement(DynamicPage, { page, blocks: app.blocks }))
-            return c.html(`<!DOCTYPE html>\n${html}`)
-          } catch (error) {
-            // Log rendering error
-             
-            console.error('Error rendering dynamic page:', error)
-            return c.html(renderErrorPage(), 500)
-          }
+        // Render dynamic page
+        const html = renderPage(app, path)
+        if (!html) {
+          return c.html(renderNotFoundPage(), 404)
         }
 
-        // No matching page found, fall through to 404
-        return c.html(renderNotFoundPage(), 404)
+        return c.html(html)
       })
       .notFound((c) => c.html(renderNotFoundPage(), 404))
       .onError((error, c) => {
