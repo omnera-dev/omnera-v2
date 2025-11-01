@@ -195,7 +195,7 @@ test.describe('Reusable Blocks', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-BLOCKS-010: should make blocks available for reference in all page sections',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
