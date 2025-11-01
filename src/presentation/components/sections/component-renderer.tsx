@@ -12,6 +12,36 @@ import type { Blocks } from '@/domain/models/app/blocks'
 import type { Component } from '@/domain/models/app/page/sections'
 
 /**
+ * Renders an error message for a block that could not be found
+ *
+ * @param blockName - Name of the missing block
+ * @param blocks - Array of available blocks (for listing alternatives)
+ * @returns React element displaying the error
+ */
+function BlockNotFoundError({
+  blockName,
+  blocks,
+}: {
+  readonly blockName: string
+  readonly blocks?: Blocks
+}): Readonly<ReactElement> {
+  return (
+    <div
+      style={{
+        padding: '1rem',
+        border: '2px dashed red',
+        color: 'red',
+        fontFamily: 'monospace',
+      }}
+    >
+      Block not found: &quot;{blockName}&quot;
+      <br />
+      <small>Available blocks: {blocks?.map((b) => b.name).join(', ') || 'none'}</small>
+    </div>
+  )
+}
+
+/**
  * Resolves a block reference to a component
  *
  * Pure function that finds a block by name and converts it to a Component.
@@ -68,18 +98,10 @@ export function ComponentRenderer({
     const resolved = resolveBlock(component.block, blocks)
     if (!resolved) {
       return (
-        <div
-          style={{
-            padding: '1rem',
-            border: '2px dashed red',
-            color: 'red',
-            fontFamily: 'monospace',
-          }}
-        >
-          Block not found: &quot;{component.block}&quot;
-          <br />
-          <small>Available blocks: {blocks?.map((b) => b.name).join(', ') || 'none'}</small>
-        </div>
+        <BlockNotFoundError
+          blockName={component.block}
+          blocks={blocks}
+        />
       )
     }
     return (
@@ -97,18 +119,10 @@ export function ComponentRenderer({
     const resolved = resolveBlock(component.$ref, blocks)
     if (!resolved) {
       return (
-        <div
-          style={{
-            padding: '1rem',
-            border: '2px dashed red',
-            color: 'red',
-            fontFamily: 'monospace',
-          }}
-        >
-          Block not found: &quot;{component.$ref}&quot;
-          <br />
-          <small>Available blocks: {blocks?.map((b) => b.name).join(', ') || 'none'}</small>
-        </div>
+        <BlockNotFoundError
+          blockName={component.$ref}
+          blocks={blocks}
+        />
       )
     }
     return (
