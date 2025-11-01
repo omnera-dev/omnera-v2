@@ -363,7 +363,7 @@ test.describe('URL Path', () => {
       await expect(page.locator('[data-testid="app-description"]')).toHaveText('My app description')
 
       // CRITICAL: Blocks should NOT be rendered (bug fix verification)
-      await expect(page.locator('[data-block="hero"]')).not.toBeVisible()
+      await expect(page.locator('[data-block="hero"]')).toBeHidden()
     }
   )
 
@@ -429,7 +429,7 @@ test.describe('URL Path', () => {
       await expect(page.locator('section#hero h1')).toHaveText('Custom Homepage')
 
       // Verify DefaultHomePage is NOT rendered
-      await expect(page.locator('[data-testid="app-name-heading"]')).not.toBeVisible()
+      await expect(page.locator('[data-testid="app-name-heading"]')).toBeHidden()
     }
   )
 
@@ -465,10 +465,10 @@ test.describe('URL Path', () => {
       await expect(page.locator('[data-testid="app-description"]')).toHaveText('App with blocks')
 
       // CRITICAL: Verify blocks are NOT rendered (bug fix)
-      await expect(page.locator('[data-block="hero"]')).not.toBeVisible()
-      await expect(page.locator('[data-block="cta"]')).not.toBeVisible()
-      await expect(page.locator('h1').filter({ hasText: 'Hero Block' })).not.toBeVisible()
-      await expect(page.locator('button').filter({ hasText: 'CTA Button' })).not.toBeVisible()
+      await expect(page.locator('[data-block="hero"]')).toBeHidden()
+      await expect(page.locator('[data-block="cta"]')).toBeHidden()
+      await expect(page.locator('h1').filter({ hasText: 'Hero Block' })).toBeHidden()
+      await expect(page.locator('button').filter({ hasText: 'CTA Button' })).toBeHidden()
     }
   )
 
@@ -507,7 +507,7 @@ test.describe('URL Path', () => {
       await expect(page.locator('h1')).toHaveText('Welcome Home')
 
       // Verify DefaultHomePage is NOT rendered
-      await expect(page.locator('[data-testid="app-name-heading"]')).not.toBeVisible()
+      await expect(page.locator('[data-testid="app-name-heading"]')).toBeHidden()
 
       // Verify block rendered via sections (NOT from DefaultHomePage)
       await expect(page.locator('[data-block="hero"]')).toBeVisible()
