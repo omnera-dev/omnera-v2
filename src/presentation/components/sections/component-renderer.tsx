@@ -37,18 +37,17 @@ function substituteThemeTokens(value: unknown, theme?: Theme): unknown {
   // Extract the path: $theme.colors.primary → ['colors', 'primary']
   const path = value.slice(7).split('.')
 
-  // Navigate through the theme object
-  let result: unknown = theme
-  for (const key of path) {
-    if (result && typeof result === 'object' && key in result) {
-      result = (result as Record<string, unknown>)[key]
-    } else {
-      // Token not found in theme, return original value
-      return value
+  // Navigate through the theme object using functional reduce
+  const result = path.reduce<unknown>((acc, key) => {
+    if (acc && typeof acc === 'object' && key in acc) {
+      return (acc as Record<string, unknown>)[key]
     }
-  }
+    // Return a sentinel to indicate path not found
+    return undefined
+  }, theme as unknown)
 
-  return result
+  // If path navigation failed, return original value
+  return result !== undefined ? result : value
 }
 
 /**
@@ -66,18 +65,17 @@ function substitutePropsThemeTokens(
     return props
   }
 
-  const result: Record<string, unknown> = {}
-  for (const [key, value] of Object.entries(props)) {
+  // Use functional Object.entries + reduce for immutable transformation
+  return Object.entries(props).reduce<Record<string, unknown>>((acc, [key, value]) => {
     if (typeof value === 'string') {
-      result[key] = substituteThemeTokens(value, theme)
+      return { ...acc, [key]: substituteThemeTokens(value, theme) }
     } else if (value && typeof value === 'object' && !Array.isArray(value)) {
       // Recursively handle nested objects (like style props)
-      result[key] = substitutePropsThemeTokens(value as Record<string, unknown>, theme)
+      return { ...acc, [key]: substitutePropsThemeTokens(value as Record<string, unknown>, theme) }
     } else {
-      result[key] = value
+      return { ...acc, [key]: value }
     }
-  }
-  return result
+  }, {})
 }
 
 /**
@@ -215,12 +213,12 @@ export function ComponentRenderer({
   const hasContent = Boolean(content || children?.length)
   const elementProps = {
     ...substitutedProps,
-    className: substitutedProps?.className,
+    className: substitutedProps?.className as string | undefined,
     ...(blockName && { 'data-block': blockName }),
     ...(blockName &&
       !hasContent && {
         style: {
-          ...substitutedProps?.style,
+          ...(substitutedProps?.style as Record<string, unknown> | undefined),
           minHeight: '1px',
           minWidth: '1px',
           display: 'inline-block',
@@ -256,7 +254,7 @@ export function ComponentRenderer({
       return (
         <img
           {...elementProps}
-          alt={substitutedProps?.alt || ''}
+          alt={(substitutedProps?.alt as string | undefined) || ''}
         />
       )
 
@@ -276,7 +274,9 @@ export function ComponentRenderer({
       // SECURITY: Sanitize HTML to prevent XSS attacks
       // DOMPurify removes malicious scripts, event handlers, and dangerous attributes
       // This is critical for user-generated content or external HTML sources
-      const sanitizedHTML = DOMPurify.sanitize(substitutedProps?.html || '')
+      const sanitizedHTML = DOMPurify.sanitize(
+        (substitutedProps?.html as string | undefined) || ''
+      )
       return (
         <div
           {...elementProps}
