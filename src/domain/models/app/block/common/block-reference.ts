@@ -74,6 +74,28 @@ export const BlockVarsSchema = Schema.Record({
 )
 
 /**
+ * Simple Block Reference (reference to a block by name without variables)
+ *
+ * Simplified syntax for referencing blocks that don't require variable substitution.
+ * Uses the `block` property to identify the block by name.
+ *
+ * @example
+ * ```typescript
+ * const simpleReference = {
+ *   block: 'shared-block'
+ * }
+ * ```
+ */
+export const SimpleBlockReferenceSchema = Schema.Struct({
+  block: BlockReferenceNameSchema,
+}).pipe(
+  Schema.annotations({
+    title: 'Simple Block Reference',
+    description: 'Reference to a block by name without variable substitution',
+  })
+)
+
+/**
  * Block Reference (reference to a reusable block template with variable substitution)
  *
  * Allows referencing and customizing predefined block templates.
@@ -133,4 +155,5 @@ export const BlockReferenceSchema = Schema.Union(
 
 export type BlockReferenceName = Schema.Schema.Type<typeof BlockReferenceNameSchema>
 export type BlockVars = Schema.Schema.Type<typeof BlockVarsSchema>
+export type SimpleBlockReference = Schema.Schema.Type<typeof SimpleBlockReferenceSchema>
 export type BlockReference = Schema.Schema.Type<typeof BlockReferenceSchema>

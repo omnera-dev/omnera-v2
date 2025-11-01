@@ -7,33 +7,132 @@
 
 import DOMPurify from 'dompurify'
 import { type ReactElement } from 'react'
+import type { BlockReference, SimpleBlockReference } from '@/domain/models/app/block/common/block-reference'
+import type { Blocks } from '@/domain/models/app/blocks'
 import type { Component } from '@/domain/models/app/page/sections'
+
+/**
+ * Resolves a block reference to a component
+ *
+ * Pure function that finds a block by name and converts it to a Component.
+ * Supports variable substitution for future implementation.
+ *
+ * @param blockName - Name of the block to resolve
+ * @param blocks - Array of available blocks
+ * @param vars - Optional variables for substitution (not yet implemented)
+ * @returns Resolved component and block name, or undefined if not found
+ */
+function resolveBlock(
+  blockName: string,
+  blocks?: Blocks,
+  _vars?: Record<string, string | number | boolean>
+): { readonly component: Component; readonly name: string } | undefined {
+  const block = blocks?.find((b) => b.name === blockName)
+  if (!block) {
+    console.warn(`Block not found: ${blockName}`)
+    return undefined
+  }
+
+  // TODO(future): Implement variable substitution when _vars are provided
+  // This will require string replacement in props, content, and children
+  const component: Component = {
+    type: block.type,
+    props: block.props,
+    children: block.children,
+    content: block.content,
+  }
+
+  return { component, name: block.name }
+}
 
 /**
  * ComponentRenderer - Renders a dynamic component based on its type
  *
  * This component handles the recursive rendering of sections, converting
  * the declarative component configuration into React elements.
+ * Supports block references for reusable components.
  *
  * @param props - Component props
- * @param props.component - Component configuration from sections schema
+ * @param props.component - Component configuration from sections schema (can be a direct component or block reference)
  * @param props.blockName - Optional block name for data-block attribute
+ * @param props.blocks - Optional blocks array for resolving block references
  * @returns React element matching the component type
  */
 export function ComponentRenderer({
   component,
   blockName,
+  blocks,
 }: {
-  readonly component: Component
+  readonly component: Component | SimpleBlockReference | BlockReference
   readonly blockName?: string
+  readonly blocks?: Blocks
 }): Readonly<ReactElement | null> {
-  const { type, props, children, content } = component
+  // Handle block references
+  if ('block' in component) {
+    // Simple block reference: { block: 'name' }
+    const resolved = resolveBlock(component.block, blocks)
+    if (!resolved) {
+      return (
+        <div
+          style={{
+            padding: '1rem',
+            border: '2px dashed red',
+            color: 'red',
+            fontFamily: 'monospace',
+          }}
+        >
+          Block not found: &quot;{component.block}&quot;
+          <br />
+          <small>Available blocks: {blocks?.map((b) => b.name).join(', ') || 'none'}</small>
+        </div>
+      )
+    }
+    return (
+      <ComponentRenderer
+        component={resolved.component}
+        blockName={resolved.name}
+        blocks={blocks}
+      />
+    )
+  }
+
+  if ('$ref' in component) {
+    // Block reference with vars: { $ref: 'name', vars: {} }
+    const resolved = resolveBlock(component.$ref, blocks, component.vars)
+    if (!resolved) {
+      return (
+        <div
+          style={{
+            padding: '1rem',
+            border: '2px dashed red',
+            color: 'red',
+            fontFamily: 'monospace',
+          }}
+        >
+          Block not found: &quot;{component.$ref}&quot;
+          <br />
+          <small>Available blocks: {blocks?.map((b) => b.name).join(', ') || 'none'}</small>
+        </div>
+      )
+    }
+    return (
+      <ComponentRenderer
+        component={resolved.component}
+        blockName={resolved.name}
+        blocks={blocks}
+      />
+    )
+  }
+
+  // Direct component rendering
+  const { type, props, children, content } = component as Component
 
   // Render children recursively
   const renderedChildren = children?.map((child: Component, index: number) => (
     <ComponentRenderer
       key={index}
       component={child}
+      blocks={blocks}
     />
   ))
 

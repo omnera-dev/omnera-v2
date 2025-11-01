@@ -9,9 +9,12 @@ import { Scalar } from '@scalar/hono-api-reference'
 import { Console, Effect } from 'effect'
 import { Hono } from 'hono'
 import { cors } from 'hono/cors'
+import { createElement } from 'react'
+import { renderToString } from 'react-dom/server'
 import { ServerCreationError } from '@/infrastructure/errors/server-creation-error'
 import { createApiRoutes } from '@/presentation/api/app'
 import { getOpenAPIDocument } from '@/presentation/api/openapi-schema'
+import { DynamicPage } from '@/presentation/components/pages/DynamicPage'
 import { auth } from '../auth/better-auth/auth'
 import { compileCSS } from '../css/compiler'
 import type { ServerInstance } from '@/application/models/server'
@@ -112,8 +115,15 @@ function createHonoApp(
       )
       .on(['POST', 'GET'], '/api/auth/*', (c) => auth.handler(c.req.raw))
       .get('/', (c) => {
-        const html = renderHomePage(app)
-        return c.html(html)
+        try {
+          const html = renderHomePage(app)
+          return c.html(html)
+        } catch (error) {
+          // Log rendering error
+           
+          console.error('Error rendering homepage:', error)
+          return c.html(renderErrorPage(), 500)
+        }
       })
       .get('*', (c) => {
         // Handle dynamic pages based on path
@@ -158,6 +168,29 @@ function createHonoApp(
         // Intentionally trigger error handler for testing
         // eslint-disable-next-line functional/no-throw-statements
         throw new Error('Test error')
+      })
+      // Dynamic page routes - catch-all for custom pages
+      .get('*', (c) => {
+        const {path} = c.req
+
+        // Find matching page in app configuration
+        const page = app.pages?.find((p) => p.path === path)
+
+        if (page) {
+          try {
+            // Render the page using DynamicPage component
+            const html = renderToString(createElement(DynamicPage, { page, blocks: app.blocks }))
+            return c.html(`<!DOCTYPE html>\n${html}`)
+          } catch (error) {
+            // Log rendering error
+             
+            console.error('Error rendering dynamic page:', error)
+            return c.html(renderErrorPage(), 500)
+          }
+        }
+
+        // No matching page found, fall through to 404
+        return c.html(renderNotFoundPage(), 404)
       })
       .notFound((c) => c.html(renderNotFoundPage(), 404))
       .onError((error, c) => {
