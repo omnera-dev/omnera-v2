@@ -50,9 +50,7 @@ export const BlocksSchema = Schema.Array(BlockSchema).pipe(
   Schema.filter((blocks) => {
     const names = blocks.map((block) => block.name)
     const uniqueNames = new Set(names)
-    return (
-      names.length === uniqueNames.size || 'Block names must be unique within the blocks array'
-    )
+    return names.length === uniqueNames.size || 'Block names must be unique within the blocks array'
   }),
   Schema.annotations({
     title: 'Reusable Blocks',
