@@ -171,7 +171,7 @@ bun run scripts/tdd-automation/queue-manager.ts status
 
 **Key Steps**:
 
-1. Scan for specs `in-progress` > 2 hours with no updates
+1. Scan for specs `in-progress` > 90 minutes with no updates
 2. Re-queue stuck specs (change to `queued` state)
 3. Preserve retry count labels
 4. Comment on issue about timeout recovery
@@ -321,7 +321,7 @@ Every 15 minutes (or manual):
 
 **Recovery workflow runs every 30 minutes**:
 
-1. **Scan for stuck specs**: Find specs `in-progress` with no updates > 2 hours
+1. **Scan for stuck specs**: Find specs `in-progress` with no updates > 90 minutes
 2. **Automatic re-queue**: Reset stuck specs to `queued` state (preserve retry count)
 3. **Post recovery comment**: Notify about timeout and re-queue
 4. **Queue continues**: Stuck specs don't permanently block the pipeline
@@ -483,7 +483,7 @@ gh pr list --label "tdd-automation"
 
 ### Spec stuck in-progress
 
-If a spec has been in-progress for > 2 hours with no activity:
+If a spec has been in-progress for > 90 minutes with no activity:
 
 1. Check if PR has commits:
    ```bash

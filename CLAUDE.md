@@ -345,7 +345,7 @@ cat TDD-PROGRESS.md
 **Spec stuck in-progress**:
 1. Check if PR was created: `gh pr list --label "tdd-automation"`
 2. Check if test.yml workflow ran on PR
-3. If stuck > 2 hours, recovery workflow re-queues automatically
+3. If stuck > 90 minutes, recovery workflow re-queues automatically
 
 **Queue not processing**:
 1. Check if another spec is in-progress: `gh issue list --label "tdd-spec:in-progress"`

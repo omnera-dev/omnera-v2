@@ -14,7 +14,7 @@ permissions:
   issues: write
 
 env:
-  TIMEOUT_HOURS: 2 # Consider spec stuck if no activity for 2 hours
+  TIMEOUT_HOURS: 1.5 # Consider spec stuck if no activity for 90 minutes (Claude timeout 60 min + buffer)
 
 jobs:
   recover-stuck-specs:
@@ -26,7 +26,7 @@ jobs:
       - name: Find stuck specs
         id: stuck
         run: |
-          echo "🔍 Looking for specs stuck in-progress > $TIMEOUT_HOURS hours..."
+          echo "🔍 Looking for specs stuck in-progress > 90 minutes..."
 
           # Get all in-progress specs
           ISSUES=$(gh issue list \
