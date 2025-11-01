@@ -24,9 +24,6 @@ test.describe('Page Sections', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: a sections array with direct component
-      // WHEN: section has type 'section' with props and children
-      // THEN: it should render direct component definition
-
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -44,7 +41,11 @@ test.describe('Page Sections', () => {
           },
         ],
       })
+
+      // WHEN: section has type 'section' with props and children
       await page.goto('/')
+
+      // THEN: it should render direct component definition
       const section = page.locator('section[id="hero"]')
       await expect(section).toBeVisible()
       await expect(section).toHaveClass(/min-h-screen/)
@@ -57,9 +58,6 @@ test.describe('Page Sections', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: a section with 17 component types
-      // WHEN: type enum includes section, container, flex, grid, card, text, icon, image, button, link, timeline, accordion, badge, customHTML, video, audio, iframe, form, input
-      // THEN: it should support all component types for page building
-
       const componentTypes = [
         'section',
         'container',
@@ -81,6 +79,8 @@ test.describe('Page Sections', () => {
         'form',
         'input',
       ]
+
+      // WHEN: type enum includes section, container, flex, grid, card, text, icon, image, button, link, timeline, accordion, badge, customHTML, video, audio, iframe, form, input
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -93,6 +93,8 @@ test.describe('Page Sections', () => {
         ],
       })
       await page.goto('/')
+
+      // THEN: it should support all component types for page building
       for (const type of componentTypes) {
         const element = page.locator(`[data-component-type="${type}"]`).first()
         expect(element).toBeTruthy()
@@ -105,9 +107,6 @@ test.describe('Page Sections', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: a section with props
-      // WHEN: props includes className, id, and other component properties
-      // THEN: it should accept generic component properties via props.schema.json
-
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -129,7 +128,11 @@ test.describe('Page Sections', () => {
           },
         ],
       })
+
+      // WHEN: props includes className, id, and other component properties
       await page.goto('/')
+
+      // THEN: it should accept generic component properties via props.schema.json
       const section = page.locator('#hero-section')
       await expect(section).toHaveAttribute('data-analytics', 'hero')
       await expect(section).toHaveClass(/min-h-screen/)
@@ -141,9 +144,6 @@ test.describe('Page Sections', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: a section with recursive children
-      // WHEN: children array contains nested sections
-      // THEN: it should support unlimited nesting depth for component tree
-
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -175,7 +175,11 @@ test.describe('Page Sections', () => {
           },
         ],
       })
+
+      // WHEN: children array contains nested sections
       await page.goto('/')
+
+      // THEN: it should support unlimited nesting depth for component tree
       await expect(page.locator('text=Deeply nested')).toBeVisible()
     }
   )
@@ -185,9 +189,6 @@ test.describe('Page Sections', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: a text component with content property
-      // WHEN: component type is 'text' with content 'Welcome to Our Platform'
-      // THEN: it should render text content
-
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -205,7 +206,11 @@ test.describe('Page Sections', () => {
           },
         ],
       })
+
+      // WHEN: component type is 'text' with content 'Welcome to Our Platform'
       await page.goto('/')
+
+      // THEN: it should render text content
       const heading = page.locator('h1')
       await expect(heading).toHaveText('Welcome to Our Platform')
       await expect(heading).toHaveClass(/text-6xl/)
@@ -217,9 +222,6 @@ test.describe('Page Sections', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: a section with interactions
-      // WHEN: interactions includes hover, click, scroll, entrance
-      // THEN: it should apply interactive behaviors from interactions.schema.json
-
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -241,7 +243,11 @@ test.describe('Page Sections', () => {
           },
         ],
       })
+
+      // WHEN: interactions includes hover, click, scroll, entrance
       await page.goto('/')
+
+      // THEN: it should apply interactive behaviors from interactions.schema.json
       const button = page.locator('button:has-text("Click me")')
       await expect(button).toBeVisible()
       await button.hover()
@@ -254,9 +260,6 @@ test.describe('Page Sections', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: a section with responsive overrides
-      // WHEN: responsive property defines breakpoint-specific changes
-      // THEN: it should adapt component for different screen sizes
-
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -277,7 +280,11 @@ test.describe('Page Sections', () => {
           },
         ],
       })
+
+      // WHEN: responsive property defines breakpoint-specific changes
       await page.goto('/')
+
+      // THEN: it should adapt component for different screen sizes
       const grid = page.locator('[data-component-type="grid"]')
       await expect(grid).toBeVisible()
     }
@@ -288,9 +295,6 @@ test.describe('Page Sections', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: a block reference in sections
-      // WHEN: section uses $ref with vars for variable substitution
-      // THEN: it should reference and instantiate reusable block with variables
-
       await startServerWithSchema({
         name: 'test-app',
         blocks: [
@@ -311,7 +315,11 @@ test.describe('Page Sections', () => {
           },
         ],
       })
+
+      // WHEN: section uses $ref with vars for variable substitution
       await page.goto('/')
+
+      // THEN: it should reference and instantiate reusable block with variables
       await expect(page.locator('h2:has-text("Our Features")')).toBeVisible()
     }
   )
@@ -321,9 +329,6 @@ test.describe('Page Sections', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: sections with mixed direct components and block references
-      // WHEN: array contains both direct definitions and $ref blocks
-      // THEN: it should support hybrid section composition
-
       await startServerWithSchema({
         name: 'test-app',
         blocks: [
@@ -352,7 +357,11 @@ test.describe('Page Sections', () => {
           },
         ],
       })
+
+      // WHEN: array contains both direct definitions and $ref blocks
       await page.goto('/')
+
+      // THEN: it should support hybrid section composition
       await expect(page.locator('text=Welcome')).toBeVisible()
       await expect(page.locator('button:has-text("Get Started")')).toBeVisible()
       await expect(page.locator('text=Features')).toBeVisible()
@@ -364,9 +373,6 @@ test.describe('Page Sections', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: a complex nested section tree
-      // WHEN: section → container → flex → grid → card → text hierarchy
-      // THEN: it should build complex layouts through component composition
-
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -413,7 +419,11 @@ test.describe('Page Sections', () => {
           },
         ],
       })
+
+      // WHEN: section → container → flex → grid → card → text hierarchy
       await page.goto('/')
+
+      // THEN: it should build complex layouts through component composition
       await expect(page.locator('h3:has-text("Feature 1")')).toBeVisible()
     }
   )
@@ -423,9 +433,6 @@ test.describe('Page Sections', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: a section with multiple optional properties
-      // WHEN: section includes interactions and responsive design
-      // THEN: it should combine interactive and responsive features
-
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -445,7 +452,11 @@ test.describe('Page Sections', () => {
           },
         ],
       })
+
+      // WHEN: section includes interactions and responsive design
       await page.goto('/')
+
+      // THEN: it should combine interactive and responsive features
       await expect(page.locator('button:has-text("Click me")')).toBeVisible()
     }
   )
@@ -455,9 +466,6 @@ test.describe('Page Sections', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: sections with form components
-      // WHEN: sections include form, input types for user input
-      // THEN: it should support form building capabilities
-
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -490,7 +498,11 @@ test.describe('Page Sections', () => {
           },
         ],
       })
+
+      // WHEN: sections include form, input types for user input
       await page.goto('/')
+
+      // THEN: it should support form building capabilities
       const form = page.locator('form[action="/api/contact"]')
       await expect(form).toBeVisible()
       await expect(form.locator('input[name="name"]')).toBeVisible()
@@ -504,9 +516,6 @@ test.describe('Page Sections', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: sections with media components
-      // WHEN: sections include image, video, audio, iframe types
-      // THEN: it should support rich media content
-
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -533,7 +542,11 @@ test.describe('Page Sections', () => {
           },
         ],
       })
+
+      // WHEN: sections include image, video, audio, iframe types
       await page.goto('/')
+
+      // THEN: it should support rich media content
       await expect(page.locator('img[src="/hero.jpg"]')).toBeVisible()
       await expect(page.locator('video[src="/demo.mp4"]')).toBeVisible()
       await expect(page.locator('audio[src="/podcast.mp3"]')).toBeVisible()
