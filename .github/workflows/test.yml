@@ -128,3 +128,4 @@ jobs:
           echo "✅ Closed issue #$ISSUE_NUMBER"
         env:
           GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
