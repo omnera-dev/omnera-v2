@@ -102,9 +102,10 @@ jobs:
     steps:
       - name: Extract issue number from PR body
         id: issue
+        env:
+          PR_BODY: ${{ github.event.pull_request.body }}
         run: |
-          PR_BODY="${{ github.event.pull_request.body }}"
-          ISSUE_NUMBER=$(echo "$PR_BODY" | grep -oP 'Closes #\K\d+' || echo "")
+          ISSUE_NUMBER=$(echo "$PR_BODY" | grep -o 'Closes #[0-9]*' | head -1 | grep -o '[0-9]*' || echo "")
 
           if [ -z "$ISSUE_NUMBER" ]; then
             echo "⚠️ No issue number found in PR body"
