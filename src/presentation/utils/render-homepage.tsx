@@ -26,7 +26,12 @@ export function renderHomePage(app: App): string {
 
   // Render custom page if it exists, otherwise render default homepage
   const html = homePage
-    ? renderToString(<DynamicPage page={homePage} />)
+    ? renderToString(
+        <DynamicPage
+          page={homePage}
+          theme={app.theme}
+        />
+      )
     : renderToString(<DefaultHomePage app={app} />)
 
   return `<!DOCTYPE html>\n${html}`
