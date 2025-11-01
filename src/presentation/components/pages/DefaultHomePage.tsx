@@ -6,9 +6,9 @@
  */
 
 import { type ReactElement } from 'react'
+import { ComponentRenderer } from '@/presentation/components/sections/component-renderer'
 import { Badge } from '@/presentation/components/ui/badge'
 import { TypographyH1, TypographyLead } from '@/presentation/components/ui/typography'
-import { ComponentRenderer } from '@/presentation/components/sections/component-renderer'
 import type { App } from '@/domain/models/app'
 import type { Component } from '@/domain/models/app/page/sections'
 
