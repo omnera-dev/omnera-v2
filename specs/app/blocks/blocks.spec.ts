@@ -299,6 +299,25 @@ test.describe('Reusable Blocks', () => {
     }
   )
 
+  test(
+    'APP-BLOCKS-011: should validate block naming uniqueness',
+    { tag: '@spec' },
+    async ({ startServerWithSchema }) => {
+      // GIVEN: blocks array with duplicate block names
+      // WHEN: multiple blocks have the same name value
+      // THEN: it should validate block naming uniqueness at build time
+      await expect(async () => {
+        await startServerWithSchema({
+          name: 'test-app',
+          blocks: [
+            { name: 'duplicate-name', type: 'div' },
+            { name: 'duplicate-name', type: 'span' },
+          ],
+        })
+      }).rejects.toThrow(/duplicate.*name|unique/i)
+    }
+  )
+
   test.fixme(
     'APP-BLOCKS-INTEGRATION-001: should render blocks within page layout with full variable substitution',
     { tag: '@spec' },
