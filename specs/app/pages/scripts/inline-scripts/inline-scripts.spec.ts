@@ -36,7 +36,11 @@ test.describe('Inline Scripts', () => {
           },
         ],
       })
+
+      // WHEN: code is 'console.log('Page loaded');'
       await page.goto('/')
+
+      // THEN: it should inject inline JavaScript code
       const script = await page.locator('script').filter({ hasText: 'Page loaded' }).textContent()
       expect(script).toContain("console.log('Page loaded');")
     }
@@ -61,7 +65,11 @@ test.describe('Inline Scripts', () => {
           },
         ],
       })
+
+      // WHEN: position is 'body-end' (default)
       await page.goto('/')
+
+      // THEN: it should insert code at end of body
       const bodyScript = await page
         .locator('body script')
         .filter({ hasText: 'body-end' })
@@ -87,7 +95,11 @@ test.describe('Inline Scripts', () => {
           },
         ],
       })
+
+      // WHEN: position is 'head'
       await page.goto('/')
+
+      // THEN: it should insert code in document head
       const headScript = await page.locator('head script').filter({ hasText: 'head' }).textContent()
       expect(headScript).toContain("console.log('head');")
     }
@@ -112,7 +124,11 @@ test.describe('Inline Scripts', () => {
           },
         ],
       })
+
+      // WHEN: position is 'body-start'
       await page.goto('/')
+
+      // THEN: it should insert code at start of body
       const bodyScript = await page
         .locator('body script')
         .filter({ hasText: 'body-start' })
@@ -138,7 +154,11 @@ test.describe('Inline Scripts', () => {
           },
         ],
       })
+
+      // WHEN: async is true
       await page.goto('/')
+
+      // THEN: it should wrap code in async IIFE (async function)
       const script = await page.locator('script').filter({ hasText: 'await fetch' }).textContent()
       expect(script).toContain('async')
     }
@@ -163,7 +183,11 @@ test.describe('Inline Scripts', () => {
           },
         ],
       })
+
+      // WHEN: code is 'window.config = { apiUrl: '...' };'
       await page.goto('/')
+
+      // THEN: it should inject global configuration
       const config = await page.evaluate(() => (window as any).config)
       expect(config?.apiUrl).toBe('https://api.example.com')
     }
@@ -191,7 +215,11 @@ test.describe('Inline Scripts', () => {
           },
         ],
       })
+
+      // WHEN: array contains [console.log, window.config]
       await page.goto('/')
+
+      // THEN: it should inject multiple inline scripts in order
       const firstScript = await page.locator('script').filter({ hasText: 'first' }).textContent()
       expect(firstScript).toContain("console.log('first');")
       const config = await page.evaluate(() => (window as any).config)
@@ -216,7 +244,11 @@ test.describe('Inline Scripts', () => {
           },
         ],
       })
+
+      // WHEN: only code is provided (position and async optional)
       await page.goto('/')
+
+      // THEN: it should inject code with default settings (body-end, sync)
       const script = await page.locator('body script').filter({ hasText: 'default' }).textContent()
       expect(script).toContain("console.log('default');")
     }
@@ -245,7 +277,11 @@ test.describe('Inline Scripts', () => {
           },
         ],
       })
+
+      // WHEN: code includes analytics initialization
       await page.goto('/')
+
+      // THEN: it should enable custom tracking code
       const gtag = await page.evaluate(() => typeof (window as any).gtag)
       expect(gtag).toBe('function')
     }
@@ -274,7 +310,11 @@ test.describe('Inline Scripts', () => {
           },
         ],
       })
+
+      // WHEN: scripts have different positions (head, body-start, body-end)
       await page.goto('/')
+
+      // THEN: it should execute scripts in document order
       const order = await page.evaluate(() => (window as any).order)
       expect(order).toEqual(['body-start', 'body-end'])
     }

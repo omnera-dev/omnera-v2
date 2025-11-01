@@ -46,7 +46,11 @@ test.describe('Education Event Schema', () => {
           },
         ],
       })
+
+      // WHEN: @type is 'EducationEvent', name and startDate are provided
       await page.goto('/')
+
+      // THEN: it should validate minimal EducationEvent structured data
       const scriptContent = await page.locator('script[type="application/ld+json"]').textContent()
       expect(scriptContent).toContain('"@type":"EducationEvent"')
     }
@@ -80,7 +84,11 @@ test.describe('Education Event Schema', () => {
           },
         ],
       })
+
+      // WHEN: name and description describe the educational event
       await page.goto('/')
+
+      // THEN: it should provide event identity
       const scriptContent = await page.locator('script[type="application/ld+json"]').textContent()
       expect(scriptContent).toContain('Advanced TypeScript Course')
       expect(scriptContent).toContain('Learn advanced TypeScript patterns')
@@ -114,7 +122,11 @@ test.describe('Education Event Schema', () => {
           },
         ],
       })
+
+      // WHEN: startDate is ISO 8601 date-time
       await page.goto('/')
+
+      // THEN: it should specify when event begins
       const scriptContent = await page.locator('script[type="application/ld+json"]').textContent()
       expect(scriptContent).toContain('2025-06-15T14:00:00Z')
     }
@@ -148,7 +160,11 @@ test.describe('Education Event Schema', () => {
           },
         ],
       })
+
+      // WHEN: endDate is ISO 8601 date-time
       await page.goto('/')
+
+      // THEN: it should specify when event ends
       const scriptContent = await page.locator('script[type="application/ld+json"]').textContent()
       expect(scriptContent).toContain('2025-06-15T17:00:00Z')
     }
@@ -269,7 +285,11 @@ test.describe('Education Event Schema', () => {
           },
         ],
       })
+
+      // WHEN: eventAttendanceMode is OfflineEventAttendanceMode, OnlineEventAttendanceMode, or MixedEventAttendanceMode
       await page.goto('/')
+
+      // THEN: it should specify whether event is in-person, online, or hybrid
       const scriptContent = await page.locator('script[type="application/ld+json"]').textContent()
       expect(scriptContent).toContain('Place')
       expect(scriptContent).toContain('Convention Center')
@@ -308,7 +328,11 @@ test.describe('Education Event Schema', () => {
           },
         ],
       })
+
+      // WHEN: eventStatus is EventScheduled, EventCancelled, EventPostponed, or EventRescheduled
       await page.goto('/')
+
+      // THEN: it should communicate event status
       const scriptContent = await page.locator('script[type="application/ld+json"]').textContent()
       expect(scriptContent).toContain('Education Corp')
     }
@@ -348,7 +372,11 @@ test.describe('Education Event Schema', () => {
           },
         ],
       })
+
+      // WHEN: location is object with @type 'Place', name, and address
       await page.goto('/')
+
+      // THEN: it should provide event venue information
       const scriptContent = await page.locator('script[type="application/ld+json"]').textContent()
       expect(scriptContent).toContain('29.99')
       expect(scriptContent).toContain('EUR')
@@ -383,7 +411,11 @@ test.describe('Education Event Schema', () => {
           },
         ],
       })
+
+      // WHEN: organizer is object with @type 'Organization' or 'Person', name, and url
       await page.goto('/')
+
+      // THEN: it should identify event organizer
       const scriptContent = await page.locator('script[type="application/ld+json"]').textContent()
       expect(scriptContent).toMatch(/"price":\s*"0"/)
       expect(scriptContent).toContain('EUR')
@@ -461,7 +493,11 @@ test.describe('Education Event Schema', () => {
           },
         ],
       })
+
+      // WHEN: offers has @type 'Offer', price, priceCurrency, availability, url
       await page.goto('/')
+
+      // THEN: it should provide ticket pricing and availability
       const scriptContent = await page.locator('script[type="application/ld+json"]').textContent()
       expect(scriptContent).toContain('50')
       expect(scriptContent).toContain('10')
@@ -499,7 +535,11 @@ test.describe('Education Event Schema', () => {
           },
         ],
       })
+
+      // WHEN: price is '0' or '29.99' and priceCurrency is 'EUR' (ISO 4217)
       await page.goto('/')
+
+      // THEN: it should specify event ticket price
       await expect(page.locator('script[type="application/ld+json"]')).toBeVisible()
     }
   )
@@ -533,7 +573,11 @@ test.describe('Education Event Schema', () => {
           },
         ],
       })
+
+      // WHEN: availability is InStock, OutOfStock, PreOrder, or SoldOut
       await page.goto('/')
+
+      // THEN: it should indicate ticket availability status
       const scriptContent = await page.locator('script[type="application/ld+json"]').textContent()
       expect(scriptContent).toContain('EducationEvent')
     }
@@ -578,7 +622,11 @@ test.describe('Education Event Schema', () => {
           },
         ],
       })
+
+      // WHEN: maximumAttendeeCapacity and minimumAttendeeCapacity are integers
       await page.goto('/')
+
+      // THEN: it should specify event capacity limits
       const scriptContent = await page.locator('script[type="application/ld+json"]').textContent()
       expect(scriptContent).toContain('"@type":"EducationEvent"')
       expect(scriptContent).toContain('Advanced React Workshop')

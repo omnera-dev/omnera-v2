@@ -46,7 +46,11 @@ test.describe('Breadcrumb Schema', () => {
           },
         ],
       })
+
+      // WHEN: @context is 'https://schema.org', @type is 'BreadcrumbList', and itemListElement is provided
       await page.goto('/')
+
+      // THEN: it should validate minimal BreadcrumbList structured data
       const scriptContent = await page.locator('script[type="application/ld+json"]').textContent()
       expect(scriptContent).toContain('"@type":"BreadcrumbList"')
     }
@@ -82,7 +86,11 @@ test.describe('Breadcrumb Schema', () => {
           },
         ],
       })
+
+      // WHEN: itemListElement is array of ListItem objects
       await page.goto('/')
+
+      // THEN: it should define navigation path
       const scriptContent = await page.locator('script[type="application/ld+json"]').textContent()
       expect(scriptContent).toContain('itemListElement')
     }
@@ -115,7 +123,11 @@ test.describe('Breadcrumb Schema', () => {
           },
         ],
       })
+
+      // WHEN: each item has @type 'ListItem', position, name
       await page.goto('/')
+
+      // THEN: it should define breadcrumb item structure
       const scriptContent = await page.locator('script[type="application/ld+json"]').textContent()
       expect(scriptContent).toContain('"@type":"ListItem"')
       expect(scriptContent).toContain('position')
@@ -154,7 +166,11 @@ test.describe('Breadcrumb Schema', () => {
           },
         ],
       })
+
+      // WHEN: position is integer starting from 1
       await page.goto('/')
+
+      // THEN: it should order breadcrumb trail
       const scriptContent = await page.locator('script[type="application/ld+json"]').textContent()
       expect(scriptContent).toMatch(/"position":\s*1/)
       expect(scriptContent).toMatch(/"position":\s*2/)
@@ -193,7 +209,11 @@ test.describe('Breadcrumb Schema', () => {
           },
         ],
       })
+
+      // WHEN: name is 'Home', 'Products', 'Widget'
       await page.goto('/')
+
+      // THEN: it should provide human-readable breadcrumb label
       const scriptContent = await page.locator('script[type="application/ld+json"]').textContent()
       expect(scriptContent).toContain('Home')
       expect(scriptContent).toContain('Products')
@@ -236,7 +256,11 @@ test.describe('Breadcrumb Schema', () => {
           },
         ],
       })
+
+      // WHEN: item is URL to breadcrumb page
       await page.goto('/')
+
+      // THEN: it should provide clickable breadcrumb link
       const scriptContent = await page.locator('script[type="application/ld+json"]').textContent()
       expect(scriptContent).toContain('https://example.com/products')
     }
@@ -289,7 +313,11 @@ test.describe('Breadcrumb Schema', () => {
           },
         ],
       })
+
+      // WHEN: itemListElement has 3+ items (Home > Products > Widget)
       await page.goto('/')
+
+      // THEN: it should represent multi-level navigation path
       const scriptContent = await page.locator('script[type="application/ld+json"]').textContent()
       const positions = (scriptContent?.match(/"position":\s*\d+/g) || []).length
       expect(positions).toBeGreaterThanOrEqual(3)
@@ -331,7 +359,11 @@ test.describe('Breadcrumb Schema', () => {
           },
         ],
       })
+
+      // WHEN: breadcrumb reflects site structure
       await page.goto('/')
+
+      // THEN: it should help search engines understand site architecture
       await expect(page.locator('script[type="application/ld+json"]')).toBeVisible()
     }
   )
@@ -371,7 +403,11 @@ test.describe('Breadcrumb Schema', () => {
           },
         ],
       })
+
+      // WHEN: BreadcrumbList structured data is included in page metadata
       await page.goto('/')
+
+      // THEN: it should display breadcrumb trail in Google search results
       const scriptContent = await page.locator('script[type="application/ld+json"]').textContent()
       expect(scriptContent).toContain('schema.org')
     }
@@ -407,7 +443,11 @@ test.describe('Breadcrumb Schema', () => {
           },
         ],
       })
+
+      // WHEN: breadcrumb shows user's location in site
       await page.goto('/')
+
+      // THEN: it should improve navigation and reduce bounce rate
       await expect(page.locator('script[type="application/ld+json"]')).toBeVisible()
     }
   )

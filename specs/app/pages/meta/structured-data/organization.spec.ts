@@ -46,7 +46,11 @@ test.describe('Organization Schema', () => {
           },
         ],
       })
+
+      // WHEN: @context is 'https://schema.org', @type is 'Organization', and name is provided
       await page.goto('/')
+
+      // THEN: it should validate minimal Organization structured data
       const scriptContent = await page.locator('script[type="application/ld+json"]').textContent()
       expect(scriptContent).toContain('"@type":"Organization"')
       expect(scriptContent).toContain('My Company')
@@ -80,7 +84,11 @@ test.describe('Organization Schema', () => {
           },
         ],
       })
+
+      // WHEN: @context is 'https://schema.org' (const)
       await page.goto('/')
+
+      // THEN: it should specify Schema.org vocabulary
       const scriptContent = await page.locator('script[type="application/ld+json"]').textContent()
       expect(scriptContent).toContain('"@context":"https://schema.org"')
     }
@@ -113,7 +121,11 @@ test.describe('Organization Schema', () => {
           },
         ],
       })
+
+      // WHEN: @type is 'Organization' (const)
       await page.goto('/')
+
+      // THEN: it should identify entity as Organization
       const scriptContent = await page.locator('script[type="application/ld+json"]').textContent()
       expect(scriptContent).toContain('"@type":"Organization"')
     }
@@ -146,7 +158,11 @@ test.describe('Organization Schema', () => {
           },
         ],
       })
+
+      // WHEN: name is 'My Company'
       await page.goto('/')
+
+      // THEN: it should provide organization name
       const scriptContent = await page.locator('script[type="application/ld+json"]').textContent()
       expect(scriptContent).toContain('My Company')
     }
@@ -180,7 +196,11 @@ test.describe('Organization Schema', () => {
           },
         ],
       })
+
+      // WHEN: url is 'https://example.com'
       await page.goto('/')
+
+      // THEN: it should provide organization website URL
       const scriptContent = await page.locator('script[type="application/ld+json"]').textContent()
       expect(scriptContent).toContain('https://example.com')
     }
@@ -214,7 +234,11 @@ test.describe('Organization Schema', () => {
           },
         ],
       })
+
+      // WHEN: logo is URL to organization logo
       await page.goto('/')
+
+      // THEN: it should provide logo for search results
       const scriptContent = await page.locator('script[type="application/ld+json"]').textContent()
       expect(scriptContent).toContain('logo.png')
     }
@@ -248,7 +272,11 @@ test.describe('Organization Schema', () => {
           },
         ],
       })
+
+      // WHEN: image is string URL or array of URLs
       await page.goto('/')
+
+      // THEN: it should support single or multiple organization images
       const scriptContent = await page.locator('script[type="application/ld+json"]').textContent()
       expect(scriptContent).toContain('office1.jpg')
       expect(scriptContent).toContain('office2.jpg')
@@ -284,7 +312,11 @@ test.describe('Organization Schema', () => {
           },
         ],
       })
+
+      // WHEN: email and telephone are provided
       await page.goto('/')
+
+      // THEN: it should provide contact information
       const scriptContent = await page.locator('script[type="application/ld+json"]').textContent()
       expect(scriptContent).toContain('info@example.com')
       expect(scriptContent).toContain('+1-800-555-1234')
@@ -326,7 +358,11 @@ test.describe('Organization Schema', () => {
           },
         ],
       })
+
+      // WHEN: address references postal-address.schema.json
       await page.goto('/')
+
+      // THEN: it should include PostalAddress structured data
       const scriptContent = await page.locator('script[type="application/ld+json"]').textContent()
       expect(scriptContent).toContain('PostalAddress')
       expect(scriptContent).toContain('San Francisco')
@@ -365,7 +401,11 @@ test.describe('Organization Schema', () => {
           },
         ],
       })
+
+      // WHEN: sameAs is array of social media URLs (Facebook, Twitter, LinkedIn)
       await page.goto('/')
+
+      // THEN: it should link organization to social profiles
       const scriptContent = await page.locator('script[type="application/ld+json"]').textContent()
       expect(scriptContent).toContain('facebook.com')
       expect(scriptContent).toContain('twitter.com')
@@ -402,7 +442,11 @@ test.describe('Organization Schema', () => {
           },
         ],
       })
+
+      // WHEN: founder name and foundingDate are provided
       await page.goto('/')
+
+      // THEN: it should provide organization history
       const scriptContent = await page.locator('script[type="application/ld+json"]').textContent()
       expect(scriptContent).toContain('Jane Doe')
       expect(scriptContent).toContain('2020-03-15')
@@ -437,7 +481,11 @@ test.describe('Organization Schema', () => {
           },
         ],
       })
+
+      // WHEN: employees is integer minimum 1
       await page.goto('/')
+
+      // THEN: it should indicate organization size
       const scriptContent = await page.locator('script[type="application/ld+json"]').textContent()
       expect(scriptContent).toContain('50')
     }
@@ -475,7 +523,11 @@ test.describe('Organization Schema', () => {
           },
         ],
       })
+
+      // WHEN: event references education-event.schema.json
       await page.goto('/')
+
+      // THEN: it should link organization to hosted events
       const scriptContent = await page.locator('script[type="application/ld+json"]').textContent()
       expect(scriptContent).toContain('EducationEvent')
       expect(scriptContent).toContain('Annual Conference')
@@ -513,7 +565,11 @@ test.describe('Organization Schema', () => {
           },
         ],
       })
+
+      // WHEN: complete organization data is provided
       await page.goto('/')
+
+      // THEN: it should enable Google Knowledge Graph panel in search results
       await expect(page.locator('script[type="application/ld+json"]')).toBeVisible()
     }
   )

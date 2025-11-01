@@ -47,7 +47,11 @@ test.describe('Custom Head Elements', () => {
           },
         ],
       })
+
+      // WHEN: type is 'meta' with attrs for name and content
       await page.goto('/')
+
+      // THEN: it should add custom meta tag to head
       await expect(page.locator('meta[name="theme-color"]')).toHaveAttribute('content', '#FFAF00')
     }
   )
@@ -75,7 +79,11 @@ test.describe('Custom Head Elements', () => {
           },
         ],
       })
+
+      // WHEN: type is 'link' with attrs for rel and href
       await page.goto('/')
+
+      // THEN: it should add custom link element to head
       await expect(
         page.locator('link[rel="preconnect"][href="https://fonts.gstatic.com"]')
       ).toBeVisible()
@@ -105,7 +113,11 @@ test.describe('Custom Head Elements', () => {
           },
         ],
       })
+
+      // WHEN: type is 'script' with src or content
       await page.goto('/')
+
+      // THEN: it should add custom script to head
       await expect(page.locator('script[src="https://example.com/script.js"]')).toBeVisible()
     }
   )
@@ -131,7 +143,11 @@ test.describe('Custom Head Elements', () => {
           },
         ],
       })
+
+      // WHEN: type is 'style' with CSS content
       await page.goto('/')
+
+      // THEN: it should add inline style to head
       const styleContent = await page.locator('style').textContent()
       expect(styleContent).toContain('body { background-color: red; }')
     }
@@ -167,7 +183,11 @@ test.describe('Custom Head Elements', () => {
           },
         ],
       })
+
+      // WHEN: attrs contains element attributes with kebab-case names
       await page.goto('/')
+
+      // THEN: it should apply attributes to element
       await expect(page.locator('[data-testid="robots-meta"]')).toHaveAttribute('name', 'robots')
       await expect(page.locator('[data-testid="robots-meta"]')).toHaveAttribute(
         'content',
@@ -199,7 +219,11 @@ test.describe('Custom Head Elements', () => {
           },
         ],
       })
+
+      // WHEN: content contains inner HTML for script/style
       await page.goto('/')
+
+      // THEN: it should set element inner content
       const scriptContent = await page.locator('script:not([src])').first().textContent()
       expect(scriptContent).toContain('console.log("Hello from inline script");')
     }
@@ -228,7 +252,11 @@ test.describe('Custom Head Elements', () => {
           },
         ],
       })
+
+      // WHEN: meta element sets theme-color for browser UI
       await page.goto('/')
+
+      // THEN: it should customize browser chrome color
       await expect(page.locator('meta[name="theme-color"]')).toHaveAttribute('content', '#4285f4')
     }
   )
@@ -259,7 +287,11 @@ test.describe('Custom Head Elements', () => {
           },
         ],
       })
+
+      // WHEN: meta element sets viewport for responsive design
       await page.goto('/')
+
+      // THEN: it should configure mobile viewport
       await expect(page.locator('meta[name="viewport"]')).toHaveAttribute(
         'content',
         'width=device-width, initial-scale=1'

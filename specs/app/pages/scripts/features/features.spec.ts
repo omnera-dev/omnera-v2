@@ -36,7 +36,11 @@ test.describe('Feature Flags', () => {
           },
         ],
       })
+
+      // WHEN: darkMode is true
       await page.goto('/')
+
+      // THEN: it should enable simple feature flag
       const features = await page.evaluate(() => (window as any).FEATURES)
       expect(features?.darkMode).toBe(true)
     }
@@ -59,7 +63,11 @@ test.describe('Feature Flags', () => {
           },
         ],
       })
+
+      // WHEN: cookieConsent is false
       await page.goto('/')
+
+      // THEN: it should disable feature
       const features = await page.evaluate(() => (window as any).FEATURES)
       expect(features?.cookieConsent).toBe(false)
     }
@@ -86,7 +94,11 @@ test.describe('Feature Flags', () => {
           },
         ],
       })
+
+      // WHEN: animations has enabled: true and config: { duration: 300, easing: 'ease-in-out' }
       await page.goto('/')
+
+      // THEN: it should provide feature with configuration data
       const features = await page.evaluate(() => (window as any).FEATURES)
       expect(features?.animations?.enabled).toBe(true)
       expect(features?.animations?.config?.duration).toBe(300)
@@ -111,7 +123,11 @@ test.describe('Feature Flags', () => {
           },
         ],
       })
+
+      // WHEN: liveChat has enabled: true
       await page.goto('/')
+
+      // THEN: it should toggle feature via enabled boolean
       const features = await page.evaluate(() => (window as any).FEATURES)
       expect(features?.liveChat?.enabled).toBe(true)
     }
@@ -138,7 +154,11 @@ test.describe('Feature Flags', () => {
           },
         ],
       })
+
+      // WHEN: liveChat.config has provider and appId
       await page.goto('/')
+
+      // THEN: it should pass configuration to feature implementation
       const features = await page.evaluate(() => (window as any).FEATURES)
       expect(features?.liveChat?.config?.provider).toBe('intercom')
       expect(features?.liveChat?.config?.appId).toBe('abc123')
@@ -162,7 +182,11 @@ test.describe('Feature Flags', () => {
           },
         ],
       })
+
+      // WHEN: feature names are darkMode, liveChat, cookieConsent
       await page.goto('/')
+
+      // THEN: it should validate camelCase naming convention
       const features = await page.evaluate(() => (window as any).FEATURES)
       expect(features).toHaveProperty('darkMode')
       expect(features).toHaveProperty('liveChat')
@@ -192,7 +216,11 @@ test.describe('Feature Flags', () => {
           },
         ],
       })
+
+      // WHEN: feature can be true or { enabled: true, config: {...} }
       await page.goto('/')
+
+      // THEN: it should support both simple and complex feature definitions
       const features = await page.evaluate(() => (window as any).FEATURES)
       expect(typeof features?.darkMode).toBe('boolean')
       expect(typeof features?.animations).toBe('object')
@@ -220,7 +248,11 @@ test.describe('Feature Flags', () => {
           },
         ],
       })
+
+      // WHEN: config accepts any custom properties
       await page.goto('/')
+
+      // THEN: it should support flexible feature configuration
       const features = await page.evaluate(() => (window as any).FEATURES)
       expect(features?.analytics?.config?.customProp).toBe('value')
       expect(features?.analytics?.config?.anotherProp).toBe(123)
@@ -251,7 +283,11 @@ test.describe('Feature Flags', () => {
           },
         ],
       })
+
+      // WHEN: features control client-side behavior
       await page.goto('/')
+
+      // THEN: it should enable/disable UI features dynamically
       const features = await page.evaluate(() => (window as any).FEATURES)
       expect(features?.darkMode).toBe(true)
       expect(features?.animations?.enabled).toBe(true)
@@ -277,7 +313,11 @@ test.describe('Feature Flags', () => {
           },
         ],
       })
+
+      // WHEN: features are injected into page
       await page.goto('/')
+
+      // THEN: it should provide runtime feature detection
       const hasFeatures = await page.evaluate(() => typeof (window as any).FEATURES === 'object')
       expect(hasFeatures).toBe(true)
     }

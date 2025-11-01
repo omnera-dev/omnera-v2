@@ -47,7 +47,11 @@ test.describe('Postal Address', () => {
           },
         ],
       })
+
+      // WHEN: @type is 'PostalAddress' (const)
       await page.goto('/')
+
+      // THEN: it should validate minimal PostalAddress structured data
       const scriptContent = await page.locator('script[type="application/ld+json"]').textContent()
       expect(scriptContent).toContain('"@type":"PostalAddress"')
     }
@@ -81,7 +85,11 @@ test.describe('Postal Address', () => {
           },
         ],
       })
+
+      // WHEN: streetAddress is '123 Main St'
       await page.goto('/')
+
+      // THEN: it should provide street address
       const scriptContent = await page.locator('script[type="application/ld+json"]').textContent()
       expect(scriptContent).toContain('123 Main St')
     }
@@ -270,7 +278,11 @@ test.describe('Postal Address', () => {
           },
         ],
       })
+
+      // WHEN: addressLocality is 'Strasbourg' or 'Paris'
       await page.goto('/')
+
+      // THEN: it should provide city or locality name
       const scriptContent = await page.locator('script[type="application/ld+json"]').textContent()
       expect(scriptContent).toContain('123 Main St')
       expect(scriptContent).toContain('Strasbourg')
@@ -312,7 +324,11 @@ test.describe('Postal Address', () => {
           },
         ],
       })
+
+      // WHEN: addressRegion is 'Grand Est' or 'California'
       await page.goto('/')
+
+      // THEN: it should provide state or region name
       const scriptContent = await page.locator('script[type="application/ld+json"]').textContent()
       expect(scriptContent).toContain('456 Innovation Dr')
       expect(scriptContent).toContain('San Francisco')
@@ -354,7 +370,11 @@ test.describe('Postal Address', () => {
           },
         ],
       })
+
+      // WHEN: postalCode is '67000' or '94105'
       await page.goto('/')
+
+      // THEN: it should provide postal or ZIP code
       const scriptContent = await page.locator('script[type="application/ld+json"]').textContent()
       expect(scriptContent).toContain('789 Commerce St')
       expect(scriptContent).toContain('Chicago')
@@ -396,7 +416,11 @@ test.describe('Postal Address', () => {
           },
         ],
       })
+
+      // WHEN: addressCountry is 'FR', 'US', 'GB', or 'DE' (ISO 3166-1 alpha-2)
       await page.goto('/')
+
+      // THEN: it should provide country code
       await expect(page.locator('script[type="application/ld+json"]')).toBeVisible()
     }
   )
@@ -435,7 +459,11 @@ test.describe('Postal Address', () => {
           },
         ],
       })
+
+      // WHEN: all properties (street, locality, region, postal code, country) are provided
       await page.goto('/')
+
+      // THEN: it should provide full mailing address
       const scriptContent = await page.locator('script[type="application/ld+json"]').textContent()
       expect(scriptContent).toContain('"@type":"PostalAddress"')
       expect(scriptContent).toContain('100 Business Blvd')

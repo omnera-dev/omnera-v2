@@ -46,7 +46,11 @@ test.describe('Product Schema', () => {
           },
         ],
       })
+
+      // WHEN: @context is 'https://schema.org', @type is 'Product', and name is provided
       await page.goto('/')
+
+      // THEN: it should validate minimal Product structured data
       const scriptContent = await page.locator('script[type="application/ld+json"]').textContent()
       expect(scriptContent).toContain('"@type":"Product"')
       expect(scriptContent).toContain('Amazing Widget')
@@ -81,7 +85,11 @@ test.describe('Product Schema', () => {
           },
         ],
       })
+
+      // WHEN: name and description describe the product
       await page.goto('/')
+
+      // THEN: it should provide product identity
       const scriptContent = await page.locator('script[type="application/ld+json"]').textContent()
       expect(scriptContent).toContain('Premium Headphones')
       expect(scriptContent).toContain('noise cancellation')
@@ -120,7 +128,11 @@ test.describe('Product Schema', () => {
           },
         ],
       })
+
+      // WHEN: image is string URL or array of URLs
       await page.goto('/')
+
+      // THEN: it should support single or multiple product images
       const scriptContent = await page.locator('script[type="application/ld+json"]').textContent()
       expect(scriptContent).toContain('widget-front.jpg')
       expect(scriptContent).toContain('widget-back.jpg')
@@ -156,7 +168,11 @@ test.describe('Product Schema', () => {
           },
         ],
       })
+
+      // WHEN: brand is object with @type 'Brand' and name
       await page.goto('/')
+
+      // THEN: it should identify product manufacturer
       const scriptContent = await page.locator('script[type="application/ld+json"]').textContent()
       expect(scriptContent).toContain('"@type":"Brand"')
       expect(scriptContent).toContain('TechBrand')
@@ -191,7 +207,11 @@ test.describe('Product Schema', () => {
           },
         ],
       })
+
+      // WHEN: sku is unique product identifier
       await page.goto('/')
+
+      // THEN: it should provide stock keeping unit
       const scriptContent = await page.locator('script[type="application/ld+json"]').textContent()
       expect(scriptContent).toContain('WDG-12345-BLU')
     }
@@ -225,7 +245,11 @@ test.describe('Product Schema', () => {
           },
         ],
       })
+
+      // WHEN: gtin is global trade item number (UPC, EAN, ISBN)
       await page.goto('/')
+
+      // THEN: it should provide standardized product identifier
       const scriptContent = await page.locator('script[type="application/ld+json"]').textContent()
       expect(scriptContent).toContain('0123456789012')
     }
@@ -259,7 +283,11 @@ test.describe('Product Schema', () => {
           },
         ],
       })
+
+      // WHEN: offers is object with @type 'Offer', price, priceCurrency
       await page.goto('/')
+
+      // THEN: it should provide pricing information
       const scriptContent = await page.locator('script[type="application/ld+json"]').textContent()
       expect(scriptContent).toContain('"@type":"Offer"')
       expect(scriptContent).toContain('149.99')
@@ -294,7 +322,11 @@ test.describe('Product Schema', () => {
           },
         ],
       })
+
+      // WHEN: price is '29.99' and priceCurrency is 'USD' (ISO 4217)
       await page.goto('/')
+
+      // THEN: it should specify product price with currency
       const scriptContent = await page.locator('script[type="application/ld+json"]').textContent()
       expect(scriptContent).toContain('29.99')
       expect(scriptContent).toContain('USD')
@@ -334,7 +366,11 @@ test.describe('Product Schema', () => {
           },
         ],
       })
+
+      // WHEN: offers.availability indicates stock status
       await page.goto('/')
+
+      // THEN: it should show product availability in search results
       const scriptContent = await page.locator('script[type="application/ld+json"]').textContent()
       expect(scriptContent).toContain('availability')
       expect(scriptContent).toContain('InStock')
@@ -373,7 +409,11 @@ test.describe('Product Schema', () => {
           },
         ],
       })
+
+      // WHEN: aggregateRating has @type 'AggregateRating', ratingValue, reviewCount
       await page.goto('/')
+
+      // THEN: it should display star ratings in search results
       const scriptContent = await page.locator('script[type="application/ld+json"]').textContent()
       expect(scriptContent).toContain('"@type":"AggregateRating"')
       expect(scriptContent).toContain('4.5')
@@ -422,7 +462,11 @@ test.describe('Product Schema', () => {
           },
         ],
       })
+
+      // WHEN: complete product data with price, availability, and ratings is provided
       await page.goto('/')
+
+      // THEN: it should enable Google Shopping rich results
       await expect(page.locator('script[type="application/ld+json"]')).toBeVisible()
     }
   )
@@ -466,7 +510,11 @@ test.describe('Product Schema', () => {
           },
         ],
       })
+
+      // WHEN: Product structured data is included in page metadata
       await page.goto('/')
+
+      // THEN: it should display price, availability, and ratings in SERPs
       const scriptContent = await page.locator('script[type="application/ld+json"]').textContent()
       expect(scriptContent).toContain('Product')
       expect(scriptContent).toContain('79.99')

@@ -45,7 +45,11 @@ test.describe('Open Graph Metadata', () => {
           },
         ],
       })
+
+      // WHEN: title, description, type, and url are provided
       await page.goto('/')
+
+      // THEN: it should validate minimal Open Graph metadata
       await expect(page.locator('meta[property="og:title"]')).toHaveAttribute(
         'content',
         'Amazing Product Launch'
@@ -88,7 +92,11 @@ test.describe('Open Graph Metadata', () => {
           },
         ],
       })
+
+      // WHEN: title has 90 characters max
       await page.goto('/')
+
+      // THEN: it should enforce title length for social display
       const ogTitle = await page.locator('meta[property="og:title"]').getAttribute('content')
       expect(ogTitle?.length).toBeLessThanOrEqual(90)
     }
@@ -121,7 +129,11 @@ test.describe('Open Graph Metadata', () => {
           },
         ],
       })
+
+      // WHEN: description has 200 characters max
       await page.goto('/')
+
+      // THEN: it should enforce description length for social cards
       const ogDesc = await page.locator('meta[property="og:description"]').getAttribute('content')
       expect(ogDesc?.length).toBeLessThanOrEqual(200)
     }
@@ -183,7 +195,11 @@ test.describe('Open Graph Metadata', () => {
           },
         ],
       })
+
+      // WHEN: type is one of: website, article, book, profile, video, music
       await page.goto('/')
+
+      // THEN: it should categorize content type for social platforms
       await expect(page.locator('meta[property="og:image"]')).toHaveAttribute(
         'content',
         'https://example.com/og-image-1200x630.jpg'
@@ -219,7 +235,11 @@ test.describe('Open Graph Metadata', () => {
           },
         ],
       })
+
+      // WHEN: image is URL with recommended 1200x630px dimensions
       await page.goto('/')
+
+      // THEN: it should provide social sharing image
       await expect(page.locator('meta[property="og:image:alt"]')).toHaveAttribute(
         'content',
         'Product screenshot showing dashboard with analytics graphs and metrics'
@@ -254,7 +274,11 @@ test.describe('Open Graph Metadata', () => {
           },
         ],
       })
+
+      // WHEN: imageAlt describes image for accessibility
       await page.goto('/')
+
+      // THEN: it should provide alternative text for social image
       await expect(page.locator('meta[property="og:site_name"]')).toHaveAttribute(
         'content',
         'Acme Blog'
@@ -289,7 +313,11 @@ test.describe('Open Graph Metadata', () => {
           },
         ],
       })
+
+      // WHEN: siteName identifies the overall website brand
       await page.goto('/')
+
+      // THEN: it should distinguish site from page title
       const locale = await page.locator('meta[property="og:locale"]').getAttribute('content')
       expect(locale).toMatch(/^[a-z]{2}_[A-Z]{2}$/)
     }
@@ -322,7 +350,11 @@ test.describe('Open Graph Metadata', () => {
           },
         ],
       })
+
+      // WHEN: locale is format 'en_US', 'fr_FR' (language_TERRITORY)
       await page.goto('/')
+
+      // THEN: it should specify content language for social platforms
       await expect(page.locator('meta[property="og:determiner"]')).toHaveAttribute('content', 'the')
     }
   )
@@ -355,7 +387,11 @@ test.describe('Open Graph Metadata', () => {
           },
         ],
       })
+
+      // WHEN: determiner is 'a', 'an', 'the', 'auto', or empty
       await page.goto('/')
+
+      // THEN: it should provide grammatical article before title
       await expect(page.locator('meta[property="og:video"]')).toHaveAttribute(
         'content',
         'https://example.com/demo.mp4'
@@ -391,7 +427,11 @@ test.describe('Open Graph Metadata', () => {
           },
         ],
       })
+
+      // WHEN: video property contains media URL
       await page.goto('/')
+
+      // THEN: it should enable video content sharing
       await expect(page.locator('meta[property="og:audio"]')).toHaveAttribute(
         'content',
         'https://example.com/podcast-42.mp3'
@@ -430,7 +470,11 @@ test.describe('Open Graph Metadata', () => {
           },
         ],
       })
+
+      // WHEN: audio property contains media URL
       await page.goto('/')
+
+      // THEN: it should enable audio content sharing
       await expect(page.locator('meta[property="og:title"]')).toBeVisible()
       await expect(page.locator('meta[property="og:description"]')).toBeVisible()
       await expect(page.locator('meta[property="og:image"]')).toBeVisible()

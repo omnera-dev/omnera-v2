@@ -40,7 +40,11 @@ test.describe('DNS Prefetch', () => {
           },
         ],
       })
+
+      // WHEN: array contains external domain URLs
       await page.goto('/')
+
+      // THEN: it should prefetch DNS for listed domains
       await expect(
         page.locator('link[rel="dns-prefetch"][href="https://fonts.googleapis.com"]')
       ).toBeVisible()
@@ -71,7 +75,11 @@ test.describe('DNS Prefetch', () => {
           },
         ],
       })
+
+      // WHEN: array includes 'https://fonts.googleapis.com' and 'https://fonts.gstatic.com'
       await page.goto('/')
+
+      // THEN: it should optimize Google Fonts loading
       await expect(
         page.locator('link[rel="dns-prefetch"][href="https://fonts.googleapis.com"]')
       ).toBeVisible()
@@ -102,7 +110,11 @@ test.describe('DNS Prefetch', () => {
           },
         ],
       })
+
+      // WHEN: array includes 'https://www.google-analytics.com' or 'https://plausible.io'
       await page.goto('/')
+
+      // THEN: it should optimize analytics script loading
       await expect(
         page.locator('link[rel="dns-prefetch"][href="https://www.google-analytics.com"]')
       ).toBeVisible()
@@ -130,7 +142,11 @@ test.describe('DNS Prefetch', () => {
           },
         ],
       })
+
+      // WHEN: array includes 'https://unpkg.com' or 'https://cdn.jsdelivr.net'
       await page.goto('/')
+
+      // THEN: it should optimize CDN resource loading
       await expect(page.locator('link[rel="dns-prefetch"][href="https://unpkg.com"]')).toBeVisible()
       await expect(
         page.locator('link[rel="dns-prefetch"][href="https://cdn.jsdelivr.net"]')
@@ -159,7 +175,11 @@ test.describe('DNS Prefetch', () => {
           },
         ],
       })
+
+      // WHEN: array includes API endpoint domains
       await page.goto('/')
+
+      // THEN: it should optimize API request latency
       await expect(
         page.locator('link[rel="dns-prefetch"][href="https://api.example.com"]')
       ).toBeVisible()
@@ -187,7 +207,11 @@ test.describe('DNS Prefetch', () => {
           },
         ],
       })
+
+      // WHEN: URLs start with https:// or http://
       await page.goto('/')
+
+      // THEN: it should validate protocol in URL pattern
       const prefetchLinks = await page.locator('link[rel="dns-prefetch"]').all()
       for (const link of prefetchLinks) {
         const href = await link.getAttribute('href')
@@ -217,7 +241,11 @@ test.describe('DNS Prefetch', () => {
           },
         ],
       })
+
+      // WHEN: array has uniqueItems constraint
       await page.goto('/')
+
+      // THEN: it should prevent duplicate domain entries
       const count = await page
         .locator('link[rel="dns-prefetch"][href="https://fonts.googleapis.com"]')
         .count()
@@ -251,7 +279,11 @@ test.describe('DNS Prefetch', () => {
           },
         ],
       })
+
+      // WHEN: array contains [fonts, analytics, CDN, social] domains
       await page.goto('/')
+
+      // THEN: it should optimize multiple external connections
       await expect(page.locator('link[rel="dns-prefetch"]')).toHaveCount(4)
     }
   )
@@ -277,7 +309,11 @@ test.describe('DNS Prefetch', () => {
           },
         ],
       })
+
+      // WHEN: DNS resolution happens early in page load
       await page.goto('/')
+
+      // THEN: it should reduce connection latency
       await expect(
         page.locator('link[rel="dns-prefetch"][href="https://fonts.googleapis.com"]')
       ).toBeVisible()
@@ -305,7 +341,11 @@ test.describe('DNS Prefetch', () => {
           },
         ],
       })
+
+      // WHEN: domains are resolved before actual requests
       await page.goto('/')
+
+      // THEN: it should improve perceived page load speed
       const prefetchCount = await page.locator('link[rel="dns-prefetch"]').count()
       expect(prefetchCount).toBeGreaterThan(0)
     }

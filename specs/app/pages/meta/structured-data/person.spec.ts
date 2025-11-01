@@ -42,7 +42,11 @@ test.describe('Person Schema', () => {
           },
         ],
       })
+
+      // WHEN: @context is 'https://schema.org', @type is 'Person', and name is provided
       await page.goto('/')
+
+      // THEN: it should validate minimal Person structured data
       const scriptContent = await page.locator('script[type="application/ld+json"]').textContent()
       expect(scriptContent).toContain('"@type":"Person"')
       expect(scriptContent).toContain('John Doe')
@@ -106,7 +110,11 @@ test.describe('Person Schema', () => {
           },
         ],
       })
+
+      // WHEN: givenName is 'John' and familyName is 'Doe'
       await page.goto('/')
+
+      // THEN: it should provide structured first and last names
       const scriptContent = await page.locator('script[type="application/ld+json"]').textContent()
       expect(scriptContent).toContain('givenName')
       expect(scriptContent).toContain('John')
@@ -144,7 +152,11 @@ test.describe('Person Schema', () => {
           },
         ],
       })
+
+      // WHEN: email and telephone are provided
       await page.goto('/')
+
+      // THEN: it should provide person contact information
       const scriptContent = await page.locator('script[type="application/ld+json"]').textContent()
       expect(scriptContent).toContain('john@example.com')
       expect(scriptContent).toContain('+1-555-123-4567')
@@ -212,7 +224,11 @@ test.describe('Person Schema', () => {
           },
         ],
       })
+
+      // WHEN: image is URL to person's photo
       await page.goto('/')
+
+      // THEN: it should provide visual representation
       const scriptContent = await page.locator('script[type="application/ld+json"]').textContent()
       expect(scriptContent).toContain('john-photo.jpg')
     }
@@ -282,7 +298,11 @@ test.describe('Person Schema', () => {
           },
         ],
       })
+
+      // WHEN: worksFor is object with @type 'Organization' and name
       await page.goto('/')
+
+      // THEN: it should link person to their employer
       const scriptContent = await page.locator('script[type="application/ld+json"]').textContent()
       expect(scriptContent).toContain('"@type":"Organization"')
       expect(scriptContent).toContain('Tech Corp')
@@ -321,7 +341,11 @@ test.describe('Person Schema', () => {
           },
         ],
       })
+
+      // WHEN: sameAs is array of social media URLs
       await page.goto('/')
+
+      // THEN: it should link person to their social profiles
       const scriptContent = await page.locator('script[type="application/ld+json"]').textContent()
       expect(scriptContent).toContain('twitter.com/johndoe')
       expect(scriptContent).toContain('linkedin.com/in/johndoe')
@@ -362,7 +386,11 @@ test.describe('Person Schema', () => {
           },
         ],
       })
+
+      // WHEN: address references postal-address.schema.json
       await page.goto('/')
+
+      // THEN: it should include PostalAddress structured data
       const scriptContent = await page.locator('script[type="application/ld+json"]').textContent()
       expect(scriptContent).toContain('PostalAddress')
       expect(scriptContent).toContain('New York')
@@ -398,7 +426,11 @@ test.describe('Person Schema', () => {
           },
         ],
       })
+
+      // WHEN: Person is used in article.author
       await page.goto('/')
+
+      // THEN: it should attribute content to specific author
       const scriptContent = await page.locator('script[type="application/ld+json"]').textContent()
       expect(scriptContent).toContain('Jane Author')
       expect(scriptContent).toContain('Writer')
@@ -436,7 +468,11 @@ test.describe('Person Schema', () => {
           },
         ],
       })
+
+      // WHEN: complete person data is provided
       await page.goto('/')
+
+      // THEN: it should enable Google Knowledge Graph panel for notable persons
       await expect(page.locator('script[type="application/ld+json"]')).toBeVisible()
     }
   )

@@ -43,7 +43,11 @@ test.describe('CTA Button', () => {
           },
         ],
       })
+
+      // WHEN: button is { text: 'Get Started', href: '/signup' }
       await page.goto('/')
+
+      // THEN: it should render call-to-action button
       const cta = page.locator('[data-testid="nav-cta"]')
       await expect(cta).toContainText('Get Started')
       await expect(cta).toHaveAttribute('href', '/signup')
@@ -72,7 +76,11 @@ test.describe('CTA Button', () => {
           },
         ],
       })
+
+      // WHEN: variant is 'primary' (default)
       await page.goto('/')
+
+      // THEN: it should apply primary button styling
       await expect(page.locator('[data-testid="nav-cta"]')).toHaveClass(/btn-primary/)
     }
   )
@@ -155,7 +163,11 @@ test.describe('CTA Button', () => {
           },
         ],
       })
+
+      // WHEN: variant enum includes primary, secondary, outline, ghost, link
       await page.goto('/')
+
+      // THEN: it should support all button style variants
       const cta = page.locator('[data-testid="nav-cta"]')
       const bgColor = await cta.evaluate((el) => window.getComputedStyle(el).backgroundColor)
       expect(bgColor).toMatch(/rgb/)
@@ -189,7 +201,11 @@ test.describe('CTA Button', () => {
           },
         ],
       })
+
+      // WHEN: size is 'lg' (sm, md, lg, xl)
       await page.goto('/')
+
+      // THEN: it should apply size styling
       const cta = page.locator('[data-testid="nav-cta"]')
       await expect(cta.locator('[data-testid="icon"]')).toBeVisible()
       const iconPosition = await cta.evaluate((el) => {
@@ -227,7 +243,11 @@ test.describe('CTA Button', () => {
           },
         ],
       })
+
+      // WHEN: color is 'orange' (references theme colors)
       await page.goto('/')
+
+      // THEN: it should apply theme-based color
       const cta = page.locator('[data-testid="nav-cta"]')
       await expect(cta.locator('[data-testid="icon"]')).toBeVisible()
     }
@@ -256,7 +276,11 @@ test.describe('CTA Button', () => {
           },
         ],
       })
+
+      // WHEN: icon is 'download' with iconPosition 'right'
       await page.goto('/')
+
+      // THEN: it should display icon on right side of text
       const nav = page.locator('[data-testid="navigation"]')
       const cta = nav.locator('[data-testid="nav-cta"]')
       await expect(cta).toBeVisible()
@@ -283,7 +307,11 @@ test.describe('CTA Button', () => {
           },
         ],
       })
+
+      // WHEN: iconPosition is 'left' (default)
       await page.goto('/')
+
+      // THEN: it should display icon on left side of text
       const cta = page.locator('[data-testid="nav-cta"]')
       await expect(cta).toContainText('Get Started')
       await expect(cta).toHaveAttribute('href', '/signup')
@@ -320,7 +348,11 @@ test.describe('CTA Button', () => {
           },
         ],
       })
+
+      // WHEN: used in navigation.cta property
       await page.goto('/')
+
+      // THEN: it should serve as prominent call-to-action in header
       const cta = page.locator('[data-testid="nav-cta"]')
       await expect(cta).toContainText('Download')
       await expect(cta).toHaveClass(/btn-outline/)

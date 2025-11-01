@@ -41,7 +41,11 @@ test.describe('Sidebar Configuration', () => {
           },
         ],
       })
+
+      // WHEN: sidebar is enabled
       await page.goto('/')
+
+      // THEN: it should display sidebar navigation
       await expect(page.locator('[data-testid="sidebar"]')).toBeVisible()
     }
   )
@@ -63,7 +67,11 @@ test.describe('Sidebar Configuration', () => {
           },
         ],
       })
+
+      // WHEN: sidebar should be visible
       await page.goto('/')
+
+      // THEN: it should display sidebar navigation
       const sidebar = page.locator('[data-testid="sidebar-left"]')
       await expect(sidebar).toBeVisible()
     }
@@ -86,7 +94,11 @@ test.describe('Sidebar Configuration', () => {
           },
         ],
       })
+
+      // WHEN: position is 'left' (default)
       await page.goto('/')
+
+      // THEN: it should render sidebar on left side
       const sidebar = page.locator('[data-testid="sidebar-right"]')
       await expect(sidebar).toBeVisible()
     }
@@ -109,7 +121,11 @@ test.describe('Sidebar Configuration', () => {
           },
         ],
       })
+
+      // WHEN: position is 'right'
       await page.goto('/')
+
+      // THEN: it should render sidebar on right side
       const sidebar = page.locator('[data-testid="sidebar"]')
       await expect(sidebar).toHaveCSS('width', '320px')
     }
@@ -139,7 +155,11 @@ test.describe('Sidebar Configuration', () => {
           },
         ],
       })
+
+      // WHEN: width is '280px'
       await page.goto('/')
+
+      // THEN: it should apply custom sidebar width
       const sidebar = page.locator('[data-testid="sidebar"]')
       const toggleButton = page.locator('[data-testid="sidebar-toggle"]')
       await expect(sidebar).toHaveCSS('width', '256px')
@@ -173,7 +193,11 @@ test.describe('Sidebar Configuration', () => {
           },
         ],
       })
+
+      // WHEN: collapsible is true (default)
       await page.goto('/')
+
+      // THEN: it should allow users to collapse/expand sidebar
       const sidebar = page.locator('[data-testid="sidebar"]')
       await expect(sidebar).toHaveAttribute('data-collapsed', 'true')
       await expect(sidebar).toHaveCSS('width', '64px')
@@ -205,7 +229,11 @@ test.describe('Sidebar Configuration', () => {
           },
         ],
       })
+
+      // WHEN: defaultCollapsed is true
       await page.goto('/')
+
+      // THEN: it should start in collapsed state
       const sidebar = page.locator('[data-testid="sidebar"]')
       await expect(sidebar).toHaveCSS('position', 'sticky')
       await page.evaluate(() => window.scrollTo(0, 1000))
@@ -238,7 +266,11 @@ test.describe('Sidebar Configuration', () => {
           },
         ],
       })
+
+      // WHEN: sticky is true (default)
       await page.goto('/')
+
+      // THEN: it should stick during page scroll
       const links = page.locator('[data-testid^="sidebar-link"]')
       await expect(links).toHaveCount(2)
       await expect(links.nth(0)).toContainText('Dashboard')
@@ -278,7 +310,11 @@ test.describe('Sidebar Configuration', () => {
           },
         ],
       })
+
+      // WHEN: item type is 'link' with label, href, icon
       await page.goto('/')
+
+      // THEN: it should render clickable sidebar link
       const group = page.locator('[data-testid="sidebar-group-0"]')
       await expect(group).toContainText('Products')
       await group.click()
@@ -314,7 +350,11 @@ test.describe('Sidebar Configuration', () => {
           },
         ],
       })
+
+      // WHEN: item type is 'group' with label and children
       await page.goto('/')
+
+      // THEN: it should render collapsible group with nested items
       const divider = page.locator('[data-testid="sidebar-divider"]')
       await expect(divider).toBeVisible()
     }
@@ -357,7 +397,11 @@ test.describe('Sidebar Configuration', () => {
           },
         ],
       })
+
+      // WHEN: item type is 'divider'
       await page.goto('/')
+
+      // THEN: it should render visual separator between sections
       const topGroup = page.locator('[data-testid="sidebar-group-0"]')
       await topGroup.click()
       const nestedGroup = page
@@ -391,7 +435,11 @@ test.describe('Sidebar Configuration', () => {
           },
         ],
       })
+
+      // WHEN: groups can contain nested groups or links
       await page.goto('/')
+
+      // THEN: it should support unlimited nesting for sidebar hierarchy
       const sidebar = page.locator('[data-testid="sidebar"]')
       await expect(sidebar).toBeVisible()
       await expect(sidebar).toHaveCSS('position', 'sticky')
