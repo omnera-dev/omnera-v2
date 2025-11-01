@@ -72,7 +72,7 @@ test.describe('Reusable Blocks', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-BLOCKS-004: should render badge with icon and text using substituted values',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
