@@ -55,13 +55,24 @@ test.describe('Reusable Blocks', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: blocks for DRY principle
-      await startServerWithSchema({ name: 'test-app', blocks: [] })
+      await startServerWithSchema({
+        name: 'test-app',
+        blocks: [{ name: 'reusable', type: 'div', content: 'Reusable block' }],
+        pages: [
+          {
+            name: 'home',
+            path: '/',
+            meta: { lang: 'en-US', title: 'Test Page', description: 'Test page' },
+            sections: [{ block: 'reusable' }, { block: 'reusable' }],
+          },
+        ],
+      })
 
       // WHEN: blocks are defined once and reused multiple times
       await page.goto('/')
 
       // THEN: it should render same block definition across multiple page locations
-      await expect(page.locator('body')).toBeVisible()
+      await expect(page.locator('[data-block="reusable"]')).toHaveCount(2)
     }
   )
 
@@ -70,13 +81,25 @@ test.describe('Reusable Blocks', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: block with variable substitution
-      await startServerWithSchema({ name: 'test-app', blocks: [{ name: 'single', type: 'div' }] })
+      await startServerWithSchema({
+        name: 'test-app',
+        blocks: [{ name: 'single', type: 'div', content: '$message' }],
+        pages: [
+          {
+            name: 'home',
+            path: '/',
+            meta: { lang: 'en-US', title: 'Test Page', description: 'Test page' },
+            sections: [{ block: 'single', vars: { message: 'Hello World' } }],
+          },
+        ],
+      })
 
       // WHEN: block contains $variable placeholders in props and content
       await page.goto('/')
 
       // THEN: it should render concrete component with substituted values
       await expect(page.locator('[data-block="single"]')).toBeVisible()
+      await expect(page.locator('[data-block="single"]')).toHaveText('Hello World')
     }
   )
 
@@ -258,6 +281,14 @@ test.describe('Reusable Blocks', () => {
             children: [{ type: 'text', content: 'Nested' }],
           },
         ],
+        pages: [
+          {
+            name: 'home',
+            path: '/',
+            meta: { lang: 'en-US', title: 'Test Page', description: 'Test page' },
+            sections: [{ block: 'complex' }],
+          },
+        ],
       })
 
       // WHEN: blocks are defined globally in app configuration
@@ -285,6 +316,7 @@ test.describe('Reusable Blocks', () => {
         ],
         pages: [
           {
+            name: 'home',
             path: '/',
             meta: { lang: 'en-US', title: 'Home', description: 'Home' },
             sections: [
@@ -335,6 +367,7 @@ test.describe('Reusable Blocks', () => {
         ],
         pages: [
           {
+            name: 'home',
             path: '/',
             meta: { lang: 'en-US', title: 'Home', description: 'Home' },
             sections: [{ $ref: 'themed-card' }],
@@ -384,7 +417,9 @@ test.describe('Reusable Blocks', () => {
         ],
         pages: [
           {
+            name: 'home',
             path: '/',
+            meta: { lang: 'en-US', title: 'Test Page', description: 'Test page' },
             sections: [
               { block: 'icon-badge', vars: { color: 'blue', icon: 'check', text: 'Success' } },
               { block: 'feature-card', vars: { title: 'Feature', description: 'Description' } },
