@@ -50,7 +50,7 @@ test.describe('Reusable Blocks', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-BLOCKS-002: should render same block definition across multiple page locations',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
