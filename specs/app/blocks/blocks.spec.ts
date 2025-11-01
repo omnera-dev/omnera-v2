@@ -32,6 +32,14 @@ test.describe('Reusable Blocks', () => {
       await startServerWithSchema({
         name: 'test-app',
         blocks: [{ name: 'test-block', type: 'div' }],
+        pages: [
+          {
+            name: 'home',
+            path: '/',
+            meta: { lang: 'en-US', title: 'Test Page', description: 'Test page' },
+            sections: [{ block: 'test-block' }],
+          },
+        ],
       })
 
       // WHEN: array contains block items referencing block.schema.json
@@ -83,6 +91,14 @@ test.describe('Reusable Blocks', () => {
           { name: 'block1', type: 'div' },
           { name: 'block2', type: 'span' },
         ],
+        pages: [
+          {
+            name: 'home',
+            path: '/',
+            meta: { lang: 'en-US', title: 'Test Page', description: 'Test page' },
+            sections: [{ block: 'block1' }, { block: 'block2' }],
+          },
+        ],
       })
 
       // WHEN: block has type 'badge' with $color, $icon, and $text variables
@@ -104,6 +120,14 @@ test.describe('Reusable Blocks', () => {
         blocks: [
           { name: 'icon-badge', type: 'badge' },
           { name: 'section-header', type: 'container' },
+        ],
+        pages: [
+          {
+            name: 'home',
+            path: '/',
+            meta: { lang: 'en-US', title: 'Test Page', description: 'Test page' },
+            sections: [{ block: 'icon-badge' }, { block: 'section-header' }],
+          },
         ],
       })
 
@@ -147,6 +171,14 @@ test.describe('Reusable Blocks', () => {
       await startServerWithSchema({
         name: 'test-app',
         blocks: [{ name: 'var-block', type: 'text', content: '$message' }],
+        pages: [
+          {
+            name: 'home',
+            path: '/',
+            meta: { lang: 'en-US', title: 'Test Page', description: 'Test page' },
+            sections: [{ block: 'var-block' }],
+          },
+        ],
       })
 
       // WHEN: block definition is modified
