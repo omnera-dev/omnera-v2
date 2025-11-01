@@ -38,13 +38,16 @@ export function ComponentRenderer({
   ))
 
   // Merge className with other props and add data-block attribute if blockName is provided
-  // For blocks without content, add min-height to ensure visibility
+  // For blocks without content, add min-height and display to ensure visibility
   const hasContent = Boolean(content || children?.length)
   const elementProps = {
     ...props,
     className: props?.className,
     ...(blockName && { 'data-block': blockName }),
-    ...(blockName && !hasContent && { style: { ...props?.style, minHeight: '1px', minWidth: '1px' } }),
+    ...(blockName &&
+      !hasContent && {
+        style: { ...props?.style, minHeight: '1px', minWidth: '1px', display: 'inline-block' },
+      }),
   }
 
   // Render based on component type
