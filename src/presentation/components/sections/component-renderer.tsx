@@ -228,7 +228,11 @@ export function ComponentRenderer({
     case 'card':
     case 'timeline':
     case 'accordion':
-      return <div {...elementProps}>{renderedChildren}</div>
+    case 'div':
+      return <div {...elementProps}>{content || renderedChildren}</div>
+
+    case 'span':
+      return <span {...elementProps}>{content || renderedChildren}</span>
 
     default:
       // Fallback for unknown types - render as generic div
