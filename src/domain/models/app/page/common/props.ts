@@ -17,7 +17,10 @@ import { Schema } from 'effect'
  * - Object: style, config, nested properties
  * - Array: items, options, children data
  *
- * Property keys must be camelCase starting with a letter.
+ * Property keys can be:
+ * - camelCase: className, maxWidth, isEnabled
+ * - kebab-case with data- or aria- prefix: data-testid, aria-label
+ *
  * String values support $variable references for runtime substitution.
  *
  * @example
@@ -26,6 +29,8 @@ import { Schema } from 'effect'
  *   className: 'text-center mb-4',
  *   id: 'hero-section',
  *   maxWidth: 'max-w-7xl',
+ *   'data-testid': 'my-component',
+ *   'aria-label': 'Navigation menu',
  *   size: 16,
  *   enabled: true,
  *   style: { padding: '1rem', margin: '2rem' },
@@ -42,9 +47,9 @@ import { Schema } from 'effect'
  */
 export const PropsSchema = Schema.Record({
   key: Schema.String.pipe(
-    Schema.pattern(/^[a-zA-Z][a-zA-Z0-9]*$/, {
+    Schema.pattern(/^([a-zA-Z][a-zA-Z0-9]*|data-[a-z]+(-[a-z]+)*|aria-[a-z]+(-[a-z]+)*)$/, {
       message: () =>
-        'Property key must be camelCase starting with a letter (e.g., className, maxWidth, isEnabled)',
+        'Property key must be camelCase (e.g., className, maxWidth) or kebab-case with data-/aria- prefix (e.g., data-testid, aria-label)',
     })
   ),
   value: Schema.Union(

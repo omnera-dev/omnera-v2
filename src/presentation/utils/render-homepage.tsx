@@ -27,6 +27,7 @@ function renderPageByPath(app: App, path: string): string | undefined {
     <DynamicPage
       page={page}
       blocks={app.blocks}
+      theme={app.theme}
     />
   )
 
