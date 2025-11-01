@@ -1,32 +1,32 @@
 # 🤖 TDD Automation Progress
 
-**Last Updated**: 10/30/2025, 10:22:36 AM
+**Last Updated**: 11/1/2025, 10:16:46 PM
 **Status**: ✅ Active
 
 ## 📊 Overall Progress
 
-**Progress**: ██░░░░░░░░░░░░░░░░░░ 8.5% (66/773 tests)
+**Progress**: ██░░░░░░░░░░░░░░░░░░ 9.5% (73/771 tests)
 
-| Metric               | Count | Percentage |
-| -------------------- | ----- | ---------- |
-| ✅ Passing Tests     | 66    | 8.5%       |
-| 🔴 Tests with .fixme | 707   | 91.5%      |
-| 📝 Tests todo        | 0     | 0.0%       |
+| Metric | Count | Percentage |
+|--------|-------|------------|
+| ✅ Passing Tests | 73 | 9.5% |
+| 🔴 Tests with .fixme | 698 | 90.5% |
+| 📝 Tests todo | 0 | 0.0% |
 
 ## 📈 Progress by Feature Area
 
-| Feature                        | Progress                 | Tests Fixed | Remaining | Status |
-| ------------------------------ | ------------------------ | ----------- | --------- | ------ |
-| app/name                       | ███████████████████░ 93% | 13/14       | 1         | 🔄     |
-| app/pages/meta/structured-data | ░░░░░░░░░░░░░░░░░░░░ 0%  | 0/130       | 130       | ⏳     |
-| app/pages/common/interactions  | ░░░░░░░░░░░░░░░░░░░░ 0%  | 0/55        | 55        | ⏳     |
-| app/pages/common               | ░░░░░░░░░░░░░░░░░░░░ 0%  | 0/44        | 44        | ⏳     |
-| app/blocks/common              | ░░░░░░░░░░░░░░░░░░░░ 0%  | 0/35        | 35        | ⏳     |
-| app/pages/layout/navigation    | ░░░░░░░░░░░░░░░░░░░░ 0%  | 0/35        | 35        | ⏳     |
-| app/languages                  | ░░░░░░░░░░░░░░░░░░░░ 0%  | 0/29        | 29        | ⏳     |
-| app/pages/meta/social          | ░░░░░░░░░░░░░░░░░░░░ 0%  | 0/26        | 26        | ⏳     |
-| app/pages/meta/performance     | ░░░░░░░░░░░░░░░░░░░░ 0%  | 0/22        | 22        | ⏳     |
-| app/pages                      | ░░░░░░░░░░░░░░░░░░░░ 0%  | 0/18        | 18        | ⏳     |
+| Feature | Progress | Tests Fixed | Remaining | Status |
+|---------|----------|-------------|-----------|---------|
+| app/theme/colors | █░░░░░░░░░░░░░░░░░░░ 6% | 1/16 | 15 | 🔄 |
+| app/pages/sections | █░░░░░░░░░░░░░░░░░░░ 7% | 1/14 | 13 | 🔄 |
+| app/blocks | ████████░░░░░░░░░░░░ 38% | 5/13 | 8 | 🔄 |
+| app/name | ███████████████████░ 93% | 13/14 | 1 | 🔄 |
+| app/pages/meta/structured-data | ░░░░░░░░░░░░░░░░░░░░ 0% | 0/130 | 130 | ⏳ |
+| app/pages/common/interactions | ░░░░░░░░░░░░░░░░░░░░ 0% | 0/55 | 55 | ⏳ |
+| app/pages/common | ░░░░░░░░░░░░░░░░░░░░ 0% | 0/44 | 44 | ⏳ |
+| app/blocks/common | ░░░░░░░░░░░░░░░░░░░░ 0% | 0/35 | 35 | ⏳ |
+| app/pages/layout/navigation | ░░░░░░░░░░░░░░░░░░░░ 0% | 0/35 | 35 | ⏳ |
+| app/languages | ░░░░░░░░░░░░░░░░░░░░ 0% | 0/29 | 29 | ⏳ |
 
 ## 📅 Recent Activity
 
@@ -36,30 +36,30 @@
 
 The following features are prioritized for automation:
 
-1. **app/name**
-2. **app/pages/meta/structured-data**
-3. **app/pages/common/interactions**
-4. **app/pages/common**
-5. **app/blocks/common**
+1. **app/theme/colors**
+2. **app/pages/sections**
+3. **app/blocks**
+4. **app/name**
+5. **app/pages/meta/structured-data**
 
 ## 📊 Queue Status
 
-| Status         | Count | Description                       |
-| -------------- | ----- | --------------------------------- |
-| 🟡 Queued      | 0     | Specs waiting to be processed     |
-| 🔵 In Progress | 0     | Specs currently being implemented |
-| ✅ Completed   | 0     | Specs successfully implemented    |
-| ❌ Failed      | 0     | Specs that failed validation      |
-| **Total**      | **0** | **Total specs in queue**          |
+| Status | Count | Description |
+|--------|-------|-------------|
+| 🟡 Queued | 639 | Specs waiting to be processed |
+| 🔵 In Progress | 0 | Specs currently being implemented |
+| ✅ Completed | 0 | Specs successfully implemented |
+| ❌ Failed | 2 | Specs that failed validation |
+| **Total** | **641** | **Total specs in queue** |
 
 ## 🤖 Automation Status
 
-- **Queue System**: 🔴 Empty
-- **Processing Mode**: ⏸️ Idle
+- **Queue System**: 🟢 Active
+- **Processing Mode**: ⏸️  Idle
 - **Processing Interval**: Every 15 minutes
 - **Max Concurrent**: 1 spec at a time (strict serial)
 
 ---
 
-_This dashboard is automatically generated by the TDD automation pipeline._
-_Last generated: 2025-10-30T09:22:36.277Z_
+*This dashboard is automatically generated by the TDD automation pipeline.*
+*Last generated: 2025-11-01T21:16:46.829Z*
