@@ -74,14 +74,39 @@ export const BlockVarsSchema = Schema.Record({
 )
 
 /**
- * Block Reference (reference to a reusable block template with variable substitution)
+ * Simple Block Reference (reference to a block by name without variables)
  *
- * Allows referencing and customizing predefined block templates.
- * The $ref property identifies the block, vars provides customization values.
+ * Simplified syntax for referencing blocks that don't require variable substitution.
+ * Uses the `block` property to identify the block by name.
  *
  * @example
  * ```typescript
- * const reference = {
+ * const simpleReference = {
+ *   block: 'shared-block'
+ * }
+ * ```
+ */
+export const SimpleBlockReferenceSchema = Schema.Struct({
+  block: BlockReferenceNameSchema,
+}).pipe(
+  Schema.annotations({
+    title: 'Simple Block Reference',
+    description: 'Reference to a block by name without variable substitution',
+  })
+)
+
+/**
+ * Block Reference (reference to a reusable block template with variable substitution)
+ *
+ * Allows referencing and customizing predefined block templates.
+ * Supports two syntaxes:
+ * 1. Full syntax: { $ref: 'block-name', vars: {...} }
+ * 2. Shorthand syntax: { block: 'block-name' } (vars default to empty object)
+ *
+ * @example
+ * ```typescript
+ * // Full syntax
+ * const reference1 = {
  *   $ref: 'icon-badge',
  *   vars: {
  *     color: 'orange',
@@ -89,20 +114,46 @@ export const BlockVarsSchema = Schema.Record({
  *     text: '6 à 15 personnes',
  *   },
  * }
+ *
+ * // Shorthand syntax
+ * const reference2 = {
+ *   block: 'shared-block',
+ * }
  * ```
  *
  * @see specs/app/blocks/common/block-reference.schema.json
  */
-export const BlockReferenceSchema = Schema.Struct({
+const FullBlockReferenceSchema = Schema.Struct({
   $ref: BlockReferenceNameSchema,
   vars: BlockVarsSchema,
 }).pipe(
   Schema.annotations({
-    title: 'Block Reference',
+    title: 'Block Reference (Full Syntax)',
     description: 'Reference to a reusable block template with variable substitution',
+  })
+)
+
+const ShorthandBlockReferenceSchema = Schema.Struct({
+  block: BlockReferenceNameSchema,
+}).pipe(
+  Schema.annotations({
+    title: 'Block Reference (Shorthand)',
+    description: 'Shorthand reference to a reusable block without variables',
+  })
+)
+
+export const BlockReferenceSchema = Schema.Union(
+  FullBlockReferenceSchema,
+  ShorthandBlockReferenceSchema
+).pipe(
+  Schema.annotations({
+    title: 'Block Reference',
+    description:
+      'Reference to a reusable block template. Supports full syntax ($ref + vars) or shorthand (block name only).',
   })
 )
 
 export type BlockReferenceName = Schema.Schema.Type<typeof BlockReferenceNameSchema>
 export type BlockVars = Schema.Schema.Type<typeof BlockVarsSchema>
+export type SimpleBlockReference = Schema.Schema.Type<typeof SimpleBlockReferenceSchema>
 export type BlockReference = Schema.Schema.Type<typeof BlockReferenceSchema>

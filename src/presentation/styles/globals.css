@@ -56,6 +56,11 @@
   .text-balance {
     text-wrap: balance;
   }
+
+  /* Safelist: Ensure critical utility classes are always included */
+  .text-center {
+    text-align: center;
+  }
 }
 /*---break---
  */

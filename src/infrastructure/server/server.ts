@@ -31,6 +31,7 @@ export interface ServerConfig {
   readonly port?: number
   readonly hostname?: string
   readonly renderHomePage: (app: App) => string
+  readonly renderPage: (app: App, path: string) => string | undefined
   readonly renderNotFoundPage: () => string
   readonly renderErrorPage: () => string
 }
@@ -50,6 +51,7 @@ export interface ServerConfig {
  *
  * @param app - Validated application data from AppSchema
  * @param renderHomePage - Function to render the homepage
+ * @param renderPage - Function to render any page by path
  * @param renderNotFoundPage - Function to render 404 page
  * @param renderErrorPage - Function to render error page
  * @returns Configured Hono app instance
@@ -57,6 +59,7 @@ export interface ServerConfig {
 function createHonoApp(
   app: App,
   renderHomePage: (app: App) => string,
+  renderPage: (app: App, path: string) => string | undefined,
   renderNotFoundPage: () => string,
   renderErrorPage: () => string
 ): Readonly<Hono> {
@@ -109,8 +112,15 @@ function createHonoApp(
       )
       .on(['POST', 'GET'], '/api/auth/*', (c) => auth.handler(c.req.raw))
       .get('/', (c) => {
-        const html = renderHomePage(app)
-        return c.html(html)
+        try {
+          const html = renderHomePage(app)
+          return c.html(html)
+        } catch (error) {
+          // Log rendering error
+
+          console.error('Error rendering homepage:', error)
+          return c.html(renderErrorPage(), 500)
+        }
       })
       .get('/assets/output.css', async (c) => {
         try {
@@ -138,6 +148,18 @@ function createHonoApp(
         // Intentionally trigger error handler for testing
         // eslint-disable-next-line functional/no-throw-statements
         throw new Error('Test error')
+      })
+      // Dynamic page routes - catch-all for custom pages
+      .get('*', (c) => {
+        const { path } = c.req
+
+        // Render dynamic page
+        const html = renderPage(app, path)
+        if (!html) {
+          return c.html(renderNotFoundPage(), 404)
+        }
+
+        return c.html(html)
       })
       .notFound((c) => c.html(renderNotFoundPage(), 404))
       .onError((error, c) => {
@@ -185,6 +207,7 @@ export const createServer = (
       port = 3000,
       hostname = 'localhost',
       renderHomePage,
+      renderPage,
       renderNotFoundPage,
       renderErrorPage,
     } = config
@@ -195,7 +218,7 @@ export const createServer = (
     yield* Console.log(`CSS compiled: ${cssResult.css.length} bytes`)
 
     // Create Hono app
-    const honoApp = createHonoApp(app, renderHomePage, renderNotFoundPage, renderErrorPage)
+    const honoApp = createHonoApp(app, renderHomePage, renderPage, renderNotFoundPage, renderErrorPage)
 
     // Start Bun server
     const server = yield* Effect.try({

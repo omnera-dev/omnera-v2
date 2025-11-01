@@ -6,7 +6,7 @@
  */
 
 import { Schema } from 'effect'
-import { BlockReferenceSchema } from '../block/common/block-reference'
+import { BlockReferenceSchema, SimpleBlockReferenceSchema } from '../block/common/block-reference'
 import { InteractionsSchema } from './common/interactions/interactions'
 import { PropsSchema } from './common/props'
 import { ResponsiveSchema } from './common/responsive'
@@ -117,14 +117,15 @@ export const ComponentSchema: Schema.Schema<any, any, never> = Schema.Struct({
 /**
  * Section item - either a direct component or a block reference
  *
- * Sections support two patterns:
+ * Sections support three patterns:
  * 1. Direct component: Inline definition with type, props, children, etc.
- * 2. Block reference: Reference to reusable block with $ref and vars
+ * 2. Simple block reference: Reference by name with { block: 'name' }
+ * 3. Block reference with vars: Reference with variable substitution { $ref: 'name', vars: {} }
  *
  * This hybrid approach enables:
  * - Quick prototyping with inline components
  * - Reusability through block references
- * - Flexibility to mix both patterns
+ * - Flexibility to mix all patterns
  *
  * @example
  * ```typescript
@@ -137,7 +138,11 @@ export const ComponentSchema: Schema.Schema<any, any, never> = Schema.Struct({
  *       { type: 'text', content: 'Welcome' }
  *     ]
  *   },
- *   // Block reference
+ *   // Simple block reference
+ *   {
+ *     block: 'shared-block'
+ *   },
+ *   // Block reference with variables
  *   {
  *     $ref: 'section-header',
  *     vars: {
@@ -148,8 +153,13 @@ export const ComponentSchema: Schema.Schema<any, any, never> = Schema.Struct({
  * ]
  * ```
  */
-export const SectionItemSchema = Schema.Union(ComponentSchema, BlockReferenceSchema).annotations({
-  description: 'A page section that can be either a component or a block reference',
+export const SectionItemSchema = Schema.Union(
+  ComponentSchema,
+  SimpleBlockReferenceSchema,
+  BlockReferenceSchema
+).annotations({
+  description:
+    'A page section that can be either a component, simple block reference, or block reference with variables',
 })
 
 /**

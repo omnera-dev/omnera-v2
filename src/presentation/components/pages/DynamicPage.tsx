@@ -7,7 +7,7 @@
 
 import { type ReactElement } from 'react'
 import { ComponentRenderer } from '@/presentation/components/sections/component-renderer'
-import type { Component } from '@/domain/models/app/page/sections'
+import type { Blocks } from '@/domain/models/app/blocks'
 import type { Page } from '@/domain/models/app/pages'
 import type { Theme } from '@/domain/models/app/theme'
 
@@ -43,31 +43,40 @@ function generateThemeStyles(theme?: Theme): string {
  *
  * @param props - Component props
  * @param props.page - Page configuration from app schema
+ * @param props.blocks - Optional blocks array for resolving block references
  * @param props.theme - Optional theme configuration for styling
  * @returns React element with complete page structure
  */
 export function DynamicPage({
   page,
+  blocks,
   theme,
 }: {
   readonly page: Page
+  readonly blocks?: Blocks
   readonly theme?: Theme
 }): Readonly<ReactElement> {
+    // Use default metadata if not provided
+  const lang = page.meta?.lang || 'en-US'
+  const title = page.meta?.title || page.name || page.path
+  const description = page.meta?.description || ''
   const themeStyles = generateThemeStyles(theme)
 
   return (
-    <html lang={page.meta.lang}>
+    <html lang={lang}>
       <head>
         <meta charSet="UTF-8" />
         <meta
           name="viewport"
           content="width=device-width, initial-scale=1.0"
         />
-        <title>{page.meta.title}</title>
-        <meta
-          name="description"
-          content={page.meta.description}
-        />
+        <title>{title}</title>
+        {description && (
+          <meta
+            name="description"
+            content={description}
+          />
+        )}
         <link
           rel="stylesheet"
           href="/assets/output.css"
@@ -79,7 +88,8 @@ export function DynamicPage({
           {page.sections.map((section, index) => (
             <ComponentRenderer
               key={index}
-              component={section as Component}
+              component={section}
+              blocks={blocks}
             />
           ))}
         </main>

@@ -115,7 +115,7 @@ test.describe('Reusable Blocks', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-BLOCKS-006: should provide consistent, reusable components across pages',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {

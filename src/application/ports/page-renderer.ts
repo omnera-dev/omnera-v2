@@ -52,6 +52,15 @@ export class PageRenderer extends Context.Tag('PageRenderer')<
     readonly renderHome: (app: App) => string
 
     /**
+     * Renders any page by path
+     *
+     * @param app - Validated application data from AppSchema
+     * @param path - Page path to render (e.g., '/', '/about')
+     * @returns Complete HTML document as string, or undefined if page not found
+     */
+    readonly renderPage: (app: App, path: string) => string | undefined
+
+    /**
      * Renders the 404 Not Found page
      *
      * @returns Complete HTML document as string with 404 error message

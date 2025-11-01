@@ -99,7 +99,6 @@ import { SectionsSchema } from './page/sections'
  * ```typescript
  * // Minimal page with required properties
  * const minimalPage: Page = {
- *   name: 'Home',
  *   path: '/',
  *   meta: {
  *     lang: 'en-US',
@@ -171,11 +170,12 @@ export const PageSchema = Schema.Struct({
    * Human-readable name for the page
    *
    * Used for identification in admin interfaces, not displayed to users
+   * Optional - if not provided, derived from the path
    *
    * @example "Home Page"
    * @example "About Us"
    */
-  name: PageNameSchema,
+  name: Schema.optional(PageNameSchema),
 
   /**
    * URL path where the page is accessible
@@ -192,6 +192,8 @@ export const PageSchema = Schema.Struct({
   /**
    * Page metadata for SEO, social sharing, and analytics
    *
+   * Optional - if not provided, uses default metadata based on page name/path
+   *
    * Includes:
    * - Basic SEO (title, description, keywords)
    * - Social media (Open Graph, Twitter Card)
@@ -199,7 +201,7 @@ export const PageSchema = Schema.Struct({
    * - Performance hints (preload, DNS prefetch)
    * - Analytics configuration
    */
-  meta: MetaSchema,
+  meta: Schema.optional(MetaSchema),
 
   /**
    * Optional layout configuration
@@ -253,13 +255,11 @@ export const PageSchema = Schema.Struct({
  * ```typescript
  * const pages: Pages = [
  *   {
- *     name: 'Home',
  *     path: '/',
  *     meta: { lang: 'en-US', title: 'Home', description: 'Welcome' },
  *     sections: []
  *   },
  *   {
- *     name: 'About',
  *     path: '/about',
  *     meta: { lang: 'en-US', title: 'About', description: 'About us' },
  *     sections: []

@@ -149,12 +149,16 @@ describe('BlockReferenceSchema', () => {
     const result = Schema.decodeUnknownSync(BlockReferenceSchema)(reference)
 
     // THEN: Reference should be accepted
-    expect(result.$ref).toBe('icon-badge')
-    expect(result.vars).toEqual({
-      color: 'orange',
-      icon: 'users',
-      text: '6 à 15 personnes',
-    })
+    if ('$ref' in result) {
+      expect(result.$ref).toBe('icon-badge')
+      expect(result.vars).toEqual({
+        color: 'orange',
+        icon: 'users',
+        text: '6 à 15 personnes',
+      })
+    } else {
+      throw new Error('Expected full block reference')
+    }
   })
 
   test('should accept reference with mixed variable types', () => {
@@ -172,9 +176,13 @@ describe('BlockReferenceSchema', () => {
     const result = Schema.decodeUnknownSync(BlockReferenceSchema)(reference)
 
     // THEN: All variable types should be accepted
-    expect(result.vars.titleColor).toBe('purple')
-    expect(result.vars.count).toBe(10)
-    expect(result.vars.visible).toBe(true)
+    if ('$ref' in result) {
+      expect(result.vars.titleColor).toBe('purple')
+      expect(result.vars.count).toBe(10)
+      expect(result.vars.visible).toBe(true)
+    } else {
+      throw new Error('Expected full block reference')
+    }
   })
 
   test('should accept reference with empty vars', () => {
@@ -188,8 +196,12 @@ describe('BlockReferenceSchema', () => {
     const result = Schema.decodeUnknownSync(BlockReferenceSchema)(reference)
 
     // THEN: Reference with empty vars should be accepted
-    expect(result.$ref).toBe('simple-block')
-    expect(result.vars).toEqual({})
+    if ('$ref' in result) {
+      expect(result.$ref).toBe('simple-block')
+      expect(result.vars).toEqual({})
+    } else {
+      throw new Error('Expected full block reference')
+    }
   })
 
   test('should reject reference missing $ref', () => {
