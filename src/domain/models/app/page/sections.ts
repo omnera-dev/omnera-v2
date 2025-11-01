@@ -14,9 +14,9 @@ import { ResponsiveSchema } from './common/responsive'
 /**
  * Component type enum for page sections
  *
- * Comprehensive set of 19 component types for building pages:
- * - Layout: section, container, flex, grid
- * - Content: text, heading, paragraph, icon, image, customHTML
+ * Comprehensive set of 21 component types for building pages:
+ * - Layout: section, container, flex, grid, div
+ * - Content: text, heading, paragraph, icon, image, customHTML, span
  * - Interactive: button, link, accordion
  * - Grouping: card, badge, timeline
  * - Media: video, audio, iframe
@@ -43,7 +43,9 @@ export const ComponentTypeSchema = Schema.Literal(
   'audio',
   'iframe',
   'form',
-  'input'
+  'input',
+  'div',
+  'span'
 ).annotations({
   description: 'Component type for page building',
 })
