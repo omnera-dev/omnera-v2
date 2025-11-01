@@ -157,7 +157,7 @@ test.describe('Reusable Blocks', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-BLOCKS-008: should render complex nested component structures',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
