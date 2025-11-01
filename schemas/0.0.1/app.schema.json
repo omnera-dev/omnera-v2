@@ -43,10 +43,17 @@
             },
             "propertyNames": {
               "type": "string",
-              "description": "Valid JavaScript property name (alphanumeric)",
+              "description": "Valid JavaScript property name (camelCase) or HTML data-*/aria-* attribute (kebab-case)",
               "title": "Block Prop Key",
-              "examples": ["className", "size", "enabled", "maxWidth"],
-              "pattern": "^[a-zA-Z][a-zA-Z0-9]*$"
+              "examples": [
+                "className",
+                "size",
+                "enabled",
+                "maxWidth",
+                "data-testid",
+                "aria-label"
+              ],
+              "pattern": "^([a-zA-Z][a-zA-Z0-9]*|data-[a-z]+(-[a-z]+)*|aria-[a-z]+(-[a-z]+)*)$"
             },
             "description": "Properties for block templates, supporting variable references",
             "title": "Block Props"
@@ -70,7 +77,7 @@
       "type": "array",
       "items": {
         "type": "object",
-        "required": ["name", "path", "meta", "sections"],
+        "required": ["path", "sections"],
         "properties": {
           "id": {
             "$ref": "#/$defs/Int",
@@ -158,13 +165,22 @@
                   "properties": {
                     "rel": {
                       "type": "string",
-                      "enum": ["icon", "apple-touch-icon", "manifest", "mask-icon"],
+                      "enum": [
+                        "icon",
+                        "apple-touch-icon",
+                        "manifest",
+                        "mask-icon"
+                      ],
                       "description": "Favicon relationship type"
                     },
                     "type": {
                       "type": "string",
                       "description": "MIME type",
-                      "examples": ["image/png", "image/x-icon", "image/svg+xml"],
+                      "examples": [
+                        "image/png",
+                        "image/x-icon",
+                        "image/svg+xml"
+                      ],
                       "pattern": "^image\\/"
                     },
                     "sizes": {
@@ -220,7 +236,14 @@
                   },
                   "type": {
                     "type": "string",
-                    "enum": ["website", "article", "book", "profile", "video", "music"],
+                    "enum": [
+                      "website",
+                      "article",
+                      "book",
+                      "profile",
+                      "video",
+                      "music"
+                    ],
                     "description": "Open Graph object type"
                   },
                   "url": {
@@ -468,7 +491,12 @@
                           "description": "Social media profile URL"
                         },
                         "description": "Social media profile URLs",
-                        "examples": [["https://facebook.com/myorg", "https://twitter.com/myorg"]]
+                        "examples": [
+                          [
+                            "https://facebook.com/myorg",
+                            "https://twitter.com/myorg"
+                          ]
+                        ]
                       },
                       "founder": {
                         "type": "string",
@@ -848,7 +876,10 @@
                             "description": "Schema.org type"
                           },
                           "price": {
-                            "anyOf": [{ "type": "string" }, { "type": "number" }],
+                            "anyOf": [
+                              { "type": "string" },
+                              { "type": "number" }
+                            ],
                             "description": "Product price"
                           },
                           "priceCurrency": {
@@ -1243,7 +1274,10 @@
                             "description": "Schema.org type"
                           },
                           "price": {
-                            "anyOf": [{ "type": "string" }, { "type": "number" }],
+                            "anyOf": [
+                              { "type": "string" },
+                              { "type": "number" }
+                            ],
                             "description": "Ticket price"
                           },
                           "priceCurrency": {
@@ -1643,7 +1677,13 @@
                       },
                       "variant": {
                         "type": "string",
-                        "enum": ["primary", "secondary", "outline", "ghost", "link"],
+                        "enum": [
+                          "primary",
+                          "secondary",
+                          "outline",
+                          "ghost",
+                          "link"
+                        ],
                         "description": "Button style variant"
                       },
                       "size": {
@@ -2018,8 +2058,8 @@
                       },
                       "propertyNames": {
                         "type": "string",
-                        "description": "a string matching the pattern ^[a-zA-Z][a-zA-Z0-9]*$",
-                        "pattern": "^[a-zA-Z][a-zA-Z0-9]*$"
+                        "description": "a string matching the pattern ^([a-zA-Z][a-zA-Z0-9]*|data-[a-z]+(-[a-z]+)*|aria-[a-z]+(-[a-z]+)*)$",
+                        "pattern": "^([a-zA-Z][a-zA-Z0-9]*|data-[a-z]+(-[a-z]+)*|aria-[a-z]+(-[a-z]+)*)$"
                       },
                       "description": "Generic properties object for components, supporting both static values and variable references",
                       "title": "Component Props"
@@ -2040,7 +2080,11 @@
                             "transform": {
                               "type": "string",
                               "description": "CSS transform (scale, rotate, translate)",
-                              "examples": ["scale(1.05)", "translateY(-4px)", "rotate(5deg)"]
+                              "examples": [
+                                "scale(1.05)",
+                                "translateY(-4px)",
+                                "rotate(5deg)"
+                              ]
                             },
                             "opacity": {
                               "type": "number",
@@ -2073,7 +2117,13 @@
                             },
                             "easing": {
                               "type": "string",
-                              "enum": ["linear", "ease", "ease-in", "ease-out", "ease-in-out"],
+                              "enum": [
+                                "linear",
+                                "ease",
+                                "ease-in",
+                                "ease-out",
+                                "ease-in-out"
+                              ],
                               "description": "Transition timing function"
                             }
                           },
@@ -2087,13 +2137,24 @@
                           "properties": {
                             "animation": {
                               "type": "string",
-                              "enum": ["pulse", "bounce", "shake", "flash", "ripple", "none"],
+                              "enum": [
+                                "pulse",
+                                "bounce",
+                                "shake",
+                                "flash",
+                                "ripple",
+                                "none"
+                              ],
                               "description": "Animation to trigger on click"
                             },
                             "navigate": {
                               "type": "string",
                               "description": "Path to navigate to",
-                              "examples": ["/contact", "/pricing", "#section-id"]
+                              "examples": [
+                                "/contact",
+                                "/pricing",
+                                "#section-id"
+                              ]
                             },
                             "openUrl": {
                               "type": "string",
@@ -2582,45 +2643,95 @@
                 },
                 {
                   "type": "object",
-                  "required": ["$ref", "vars"],
+                  "required": ["block"],
                   "properties": {
-                    "$ref": {
+                    "block": {
                       "type": "string",
                       "description": "Name of the block to reference (kebab-case)",
                       "title": "Block Reference Name",
-                      "examples": ["icon-badge", "section-header", "call-to-action"],
+                      "examples": [
+                        "icon-badge",
+                        "section-header",
+                        "call-to-action"
+                      ],
                       "pattern": "^[a-z][a-z0-9-]*$"
-                    },
-                    "vars": {
-                      "type": "object",
-                      "required": [],
-                      "properties": {},
-                      "patternProperties": {
-                        "": {
-                          "anyOf": [
-                            { "type": "string" },
-                            { "type": "number" },
-                            { "type": "boolean" }
-                          ]
-                        }
-                      },
-                      "propertyNames": {
-                        "type": "string",
-                        "description": "Variable name (alphanumeric)",
-                        "title": "Block Variable Key",
-                        "examples": ["color", "icon", "text", "titleColor"],
-                        "pattern": "^[a-zA-Z][a-zA-Z0-9]*$"
-                      },
-                      "description": "Variables to substitute in the block template",
-                      "title": "Block Variables"
                     }
                   },
                   "additionalProperties": false,
-                  "description": "Reference to a reusable block template with variable substitution",
+                  "description": "Reference to a block by name without variable substitution",
+                  "title": "Simple Block Reference"
+                },
+                {
+                  "anyOf": [
+                    {
+                      "type": "object",
+                      "required": ["$ref", "vars"],
+                      "properties": {
+                        "$ref": {
+                          "type": "string",
+                          "description": "Name of the block to reference (kebab-case)",
+                          "title": "Block Reference Name",
+                          "examples": [
+                            "icon-badge",
+                            "section-header",
+                            "call-to-action"
+                          ],
+                          "pattern": "^[a-z][a-z0-9-]*$"
+                        },
+                        "vars": {
+                          "type": "object",
+                          "required": [],
+                          "properties": {},
+                          "patternProperties": {
+                            "": {
+                              "anyOf": [
+                                { "type": "string" },
+                                { "type": "number" },
+                                { "type": "boolean" }
+                              ]
+                            }
+                          },
+                          "propertyNames": {
+                            "type": "string",
+                            "description": "Variable name (alphanumeric)",
+                            "title": "Block Variable Key",
+                            "examples": ["color", "icon", "text", "titleColor"],
+                            "pattern": "^[a-zA-Z][a-zA-Z0-9]*$"
+                          },
+                          "description": "Variables to substitute in the block template",
+                          "title": "Block Variables"
+                        }
+                      },
+                      "additionalProperties": false,
+                      "description": "Reference to a reusable block template with variable substitution",
+                      "title": "Block Reference (Full Syntax)"
+                    },
+                    {
+                      "type": "object",
+                      "required": ["block"],
+                      "properties": {
+                        "block": {
+                          "type": "string",
+                          "description": "Name of the block to reference (kebab-case)",
+                          "title": "Block Reference Name",
+                          "examples": [
+                            "icon-badge",
+                            "section-header",
+                            "call-to-action"
+                          ],
+                          "pattern": "^[a-z][a-z0-9-]*$"
+                        }
+                      },
+                      "additionalProperties": false,
+                      "description": "Shorthand reference to a reusable block without variables",
+                      "title": "Block Reference (Shorthand)"
+                    }
+                  ],
+                  "description": "Reference to a reusable block template. Supports full syntax ($ref + vars) or shorthand (block name only).",
                   "title": "Block Reference"
                 }
               ],
-              "description": "A page section that can be either a component or a block reference"
+              "description": "A page section that can be either a component, simple block reference, or block reference with variables"
             },
             "description": "Array of page content sections",
             "title": "Page Sections"
@@ -2890,8 +3001,8 @@
                 },
                 "propertyNames": {
                   "type": "string",
-                  "description": "a string matching the pattern ^[a-zA-Z][a-zA-Z0-9]*$",
-                  "pattern": "^[a-zA-Z][a-zA-Z0-9]*$"
+                  "description": "a string matching the pattern ^([a-zA-Z][a-zA-Z0-9]*|data-[a-z]+(-[a-z]+)*|aria-[a-z]+(-[a-z]+)*)$",
+                  "pattern": "^([a-zA-Z][a-zA-Z0-9]*|data-[a-z]+(-[a-z]+)*|aria-[a-z]+(-[a-z]+)*)$"
                 },
                 "description": "Generic properties object for components, supporting both static values and variable references",
                 "title": "Component Props"
@@ -2912,7 +3023,11 @@
                       "transform": {
                         "type": "string",
                         "description": "CSS transform (scale, rotate, translate)",
-                        "examples": ["scale(1.05)", "translateY(-4px)", "rotate(5deg)"]
+                        "examples": [
+                          "scale(1.05)",
+                          "translateY(-4px)",
+                          "rotate(5deg)"
+                        ]
                       },
                       "opacity": {
                         "type": "number",
@@ -2945,7 +3060,13 @@
                       },
                       "easing": {
                         "type": "string",
-                        "enum": ["linear", "ease", "ease-in", "ease-out", "ease-in-out"],
+                        "enum": [
+                          "linear",
+                          "ease",
+                          "ease-in",
+                          "ease-out",
+                          "ease-in-out"
+                        ],
                         "description": "Transition timing function"
                       }
                     },
@@ -2959,7 +3080,14 @@
                     "properties": {
                       "animation": {
                         "type": "string",
-                        "enum": ["pulse", "bounce", "shake", "flash", "ripple", "none"],
+                        "enum": [
+                          "pulse",
+                          "bounce",
+                          "shake",
+                          "flash",
+                          "ripple",
+                          "none"
+                        ],
                         "description": "Animation to trigger on click"
                       },
                       "navigate": {
@@ -3454,41 +3582,91 @@
           },
           {
             "type": "object",
-            "required": ["$ref", "vars"],
+            "required": ["block"],
             "properties": {
-              "$ref": {
+              "block": {
                 "type": "string",
                 "description": "Name of the block to reference (kebab-case)",
                 "title": "Block Reference Name",
                 "examples": ["icon-badge", "section-header", "call-to-action"],
                 "pattern": "^[a-z][a-z0-9-]*$"
-              },
-              "vars": {
-                "type": "object",
-                "required": [],
-                "properties": {},
-                "patternProperties": {
-                  "": {
-                    "anyOf": [{ "type": "string" }, { "type": "number" }, { "type": "boolean" }]
-                  }
-                },
-                "propertyNames": {
-                  "type": "string",
-                  "description": "Variable name (alphanumeric)",
-                  "title": "Block Variable Key",
-                  "examples": ["color", "icon", "text", "titleColor"],
-                  "pattern": "^[a-zA-Z][a-zA-Z0-9]*$"
-                },
-                "description": "Variables to substitute in the block template",
-                "title": "Block Variables"
               }
             },
             "additionalProperties": false,
-            "description": "Reference to a reusable block template with variable substitution",
+            "description": "Reference to a block by name without variable substitution",
+            "title": "Simple Block Reference"
+          },
+          {
+            "anyOf": [
+              {
+                "type": "object",
+                "required": ["$ref", "vars"],
+                "properties": {
+                  "$ref": {
+                    "type": "string",
+                    "description": "Name of the block to reference (kebab-case)",
+                    "title": "Block Reference Name",
+                    "examples": [
+                      "icon-badge",
+                      "section-header",
+                      "call-to-action"
+                    ],
+                    "pattern": "^[a-z][a-z0-9-]*$"
+                  },
+                  "vars": {
+                    "type": "object",
+                    "required": [],
+                    "properties": {},
+                    "patternProperties": {
+                      "": {
+                        "anyOf": [
+                          { "type": "string" },
+                          { "type": "number" },
+                          { "type": "boolean" }
+                        ]
+                      }
+                    },
+                    "propertyNames": {
+                      "type": "string",
+                      "description": "Variable name (alphanumeric)",
+                      "title": "Block Variable Key",
+                      "examples": ["color", "icon", "text", "titleColor"],
+                      "pattern": "^[a-zA-Z][a-zA-Z0-9]*$"
+                    },
+                    "description": "Variables to substitute in the block template",
+                    "title": "Block Variables"
+                  }
+                },
+                "additionalProperties": false,
+                "description": "Reference to a reusable block template with variable substitution",
+                "title": "Block Reference (Full Syntax)"
+              },
+              {
+                "type": "object",
+                "required": ["block"],
+                "properties": {
+                  "block": {
+                    "type": "string",
+                    "description": "Name of the block to reference (kebab-case)",
+                    "title": "Block Reference Name",
+                    "examples": [
+                      "icon-badge",
+                      "section-header",
+                      "call-to-action"
+                    ],
+                    "pattern": "^[a-z][a-z0-9-]*$"
+                  }
+                },
+                "additionalProperties": false,
+                "description": "Shorthand reference to a reusable block without variables",
+                "title": "Block Reference (Shorthand)"
+              }
+            ],
+            "description": "Reference to a reusable block template. Supports full syntax ($ref + vars) or shorthand (block name only).",
             "title": "Block Reference"
           }
         ],
-        "description": "A page section that can be either a component or a block reference"
+        "description": "A page section that can be either a component, simple block reference, or block reference with variables"
       },
       "description": "Array of page content sections",
       "title": "Page Sections"
@@ -3503,7 +3681,13 @@
       "title": "Application Name",
       "minLength": 1,
       "maxLength": 214,
-      "examples": ["my-app", "todo-app", "@myorg/my-app", "blog-system", "dashboard-admin"],
+      "examples": [
+        "my-app",
+        "todo-app",
+        "@myorg/my-app",
+        "blog-system",
+        "dashboard-admin"
+      ],
       "pattern": "^(?:@[a-z0-9-~][a-z0-9-._~]*\\/)?[a-z0-9-~][a-z0-9-._~]*$"
     },
     "version": {
@@ -4413,7 +4597,13 @@
                 },
                 {
                   "type": "object",
-                  "required": ["id", "name", "type", "relatedTable", "relationType"],
+                  "required": [
+                    "id",
+                    "name",
+                    "type",
+                    "relatedTable",
+                    "relationType"
+                  ],
                   "properties": {
                     "id": {
                       "$ref": "#/$defs/Int",
@@ -4769,7 +4959,13 @@
                 },
                 {
                   "type": "object",
-                  "required": ["id", "name", "type", "relationshipField", "relatedField"],
+                  "required": [
+                    "id",
+                    "name",
+                    "type",
+                    "relationshipField",
+                    "relatedField"
+                  ],
                   "properties": {
                     "id": {
                       "$ref": "#/$defs/Int",
@@ -5807,7 +6003,11 @@
                   "description": "Name of the index. Use descriptive names like 'idx_tablename_fieldname'",
                   "title": "minLength(1)",
                   "minLength": 1,
-                  "examples": ["idx_users_email", "idx_products_sku", "idx_orders_status"],
+                  "examples": [
+                    "idx_users_email",
+                    "idx_products_sku",
+                    "idx_orders_status"
+                  ],
                   "pattern": "^[a-z][a-z0-9_]*$"
                 },
                 "fields": {
@@ -5918,7 +6118,12 @@
               "type": "string",
               "description": "Color value in hex, rgb, rgba, hsl, or hsla format",
               "title": "Color Value",
-              "examples": ["#007bff", "#007bff80", "rgb(0, 123, 255)", "hsl(210, 100%, 50%)"],
+              "examples": [
+                "#007bff",
+                "#007bff80",
+                "rgb(0, 123, 255)",
+                "hsl(210, 100%, 50%)"
+              ],
               "pattern": "^#[0-9A-Fa-f]{6}$|^#[0-9A-Fa-f]{8}$|^rgb\\(|^rgba\\(|^hsl\\(|^hsla\\("
             }
           },
@@ -5950,7 +6155,11 @@
                   "type": "string",
                   "description": "Fallback font stack",
                   "title": "Fallback Font Stack",
-                  "examples": ["system-ui, sans-serif", "Georgia, serif", "monospace"]
+                  "examples": [
+                    "system-ui, sans-serif",
+                    "Georgia, serif",
+                    "monospace"
+                  ]
                 },
                 "weights": {
                   "type": "array",
@@ -6032,7 +6241,12 @@
               "type": "string",
               "description": "Spacing value (Tailwind classes or CSS values)",
               "title": "Spacing Value",
-              "examples": ["py-16 sm:py-20", "max-w-7xl mx-auto px-4", "2rem", "16px"]
+              "examples": [
+                "py-16 sm:py-20",
+                "max-w-7xl mx-auto px-4",
+                "2rem",
+                "16px"
+              ]
             }
           },
           "propertyNames": {
@@ -6241,7 +6455,12 @@
                 "type": "string",
                 "description": "Key for centralized translations dictionary",
                 "title": "Translation Key",
-                "examples": ["common.save", "nav.home", "homepage.hero.title", "errors.404"],
+                "examples": [
+                  "common.save",
+                  "nav.home",
+                  "homepage.hero.title",
+                  "errors.404"
+                ],
                 "pattern": "^[a-zA-Z0-9._-]+$"
               },
               "description": "Maps translation keys to localized strings for a single language",
@@ -6273,7 +6492,12 @@
             "type": "string",
             "description": "Unique block identifier in kebab-case",
             "title": "Block Name",
-            "examples": ["icon-badge", "section-header", "feature-card", "cta-button-2"],
+            "examples": [
+              "icon-badge",
+              "section-header",
+              "feature-card",
+              "cta-button-2"
+            ],
             "pattern": "^[a-z][a-z0-9-]*$"
           },
           "type": {
@@ -6309,10 +6533,17 @@
             },
             "propertyNames": {
               "type": "string",
-              "description": "Valid JavaScript property name (alphanumeric)",
+              "description": "Valid JavaScript property name (camelCase) or HTML data-*/aria-* attribute (kebab-case)",
               "title": "Block Prop Key",
-              "examples": ["className", "size", "enabled", "maxWidth"],
-              "pattern": "^[a-zA-Z][a-zA-Z0-9]*$"
+              "examples": [
+                "className",
+                "size",
+                "enabled",
+                "maxWidth",
+                "data-testid",
+                "aria-label"
+              ],
+              "pattern": "^([a-zA-Z][a-zA-Z0-9]*|data-[a-z]+(-[a-z]+)*|aria-[a-z]+(-[a-z]+)*)$"
             },
             "description": "Properties for block templates, supporting variable references",
             "title": "Block Props"
@@ -6360,10 +6591,17 @@
                   },
                   "propertyNames": {
                     "type": "string",
-                    "description": "Valid JavaScript property name (alphanumeric)",
+                    "description": "Valid JavaScript property name (camelCase) or HTML data-*/aria-* attribute (kebab-case)",
                     "title": "Block Prop Key",
-                    "examples": ["className", "size", "enabled", "maxWidth"],
-                    "pattern": "^[a-zA-Z][a-zA-Z0-9]*$"
+                    "examples": [
+                      "className",
+                      "size",
+                      "enabled",
+                      "maxWidth",
+                      "data-testid",
+                      "aria-label"
+                    ],
+                    "pattern": "^([a-zA-Z][a-zA-Z0-9]*|data-[a-z]+(-[a-z]+)*|aria-[a-z]+(-[a-z]+)*)$"
                   },
                   "description": "Properties for block templates, supporting variable references",
                   "title": "Block Props"
