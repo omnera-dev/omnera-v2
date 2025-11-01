@@ -428,7 +428,7 @@ describe('validateSpecToTestMapping', () => {
 // Test File Validation (Integration)
 // ============================================================================
 
-describe.serial('validateTestFile', () => {
+describe('validateTestFile', () => {
   const baseDir = join(process.cwd(), 'tmp', 'validation-common')
 
   // Ensure directory exists (will be created on first test run)
