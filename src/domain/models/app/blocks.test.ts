@@ -306,4 +306,46 @@ describe('BlocksSchema', () => {
     expect(result[0]?.children).toHaveLength(2)
     expect(result[0]?.children?.[0]?.children).toHaveLength(2)
   })
+
+  test('should reject blocks with duplicate names', () => {
+    // GIVEN: Blocks array with duplicate block names
+    const blocks = [
+      {
+        name: 'duplicate-name',
+        type: 'div',
+      },
+      {
+        name: 'duplicate-name',
+        type: 'span',
+      },
+    ]
+
+    // WHEN: Schema validation is performed
+    // THEN: Validation should fail with uniqueness error
+    expect(() => {
+      Schema.decodeUnknownSync(BlocksSchema)(blocks)
+    }).toThrow(/unique/i)
+  })
+
+  test('should accept blocks with unique names', () => {
+    // GIVEN: Blocks array with unique names
+    const blocks = [
+      {
+        name: 'block-1',
+        type: 'div',
+      },
+      {
+        name: 'block-2',
+        type: 'span',
+      },
+    ]
+
+    // WHEN: Schema validation is performed
+    const result = Schema.decodeUnknownSync(BlocksSchema)(blocks)
+
+    // THEN: All blocks should be accepted
+    expect(result).toHaveLength(2)
+    expect(result[0]?.name).toBe('block-1')
+    expect(result[1]?.name).toBe('block-2')
+  })
 })
