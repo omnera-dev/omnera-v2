@@ -29,10 +29,6 @@ test.describe('Click Interaction', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: a button with click animation 'pulse'
-      // WHEN: user clicks the button
-      // THEN: it should play a pulse animation
-
-      // GIVEN: a button with click animation 'pulse'
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -67,10 +63,6 @@ test.describe('Click Interaction', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: a button with click animation 'ripple'
-      // WHEN: user clicks the button
-      // THEN: it should play a ripple animation from the click point
-
-      // GIVEN: a button with click animation 'ripple'
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -104,10 +96,6 @@ test.describe('Click Interaction', () => {
     'APP-INTERACTION-CLICK-003: should navigate to the contact page',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // GIVEN: a button with navigate to '/contact'
-      // WHEN: user clicks the button
-      // THEN: it should navigate to the contact page
-
       // GIVEN: a button with navigate to '/contact'
       await startServerWithSchema({
         name: 'test-app',
@@ -149,10 +137,6 @@ test.describe('Click Interaction', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: a button with navigate to anchor '#pricing-section'
-      // WHEN: user clicks the button
-      // THEN: it should navigate to the pricing section on the same page
-
-      // GIVEN: a button with navigate to anchor '#pricing-section'
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -190,10 +174,6 @@ test.describe('Click Interaction', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: a button with openUrl to external site
-      // WHEN: user clicks the button
-      // THEN: it should open the URL in the same tab
-
-      // GIVEN: a button with openUrl to external site
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -230,10 +210,6 @@ test.describe('Click Interaction', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema, context }) => {
       // GIVEN: a button with openUrl and openInNewTab true
-      // WHEN: user clicks the button
-      // THEN: it should open the URL in a new tab
-
-      // GIVEN: a button with openUrl and openInNewTab true
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -269,10 +245,6 @@ test.describe('Click Interaction', () => {
     'APP-INTERACTION-CLICK-007: should smoothly scroll to the hero section',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // GIVEN: a button with scrollTo '#hero-section'
-      // WHEN: user clicks the button
-      // THEN: it should smoothly scroll to the hero section
-
       // GIVEN: a button with scrollTo '#hero-section'
       await startServerWithSchema({
         name: 'test-app',
@@ -313,10 +285,6 @@ test.describe('Click Interaction', () => {
     'APP-INTERACTION-CLICK-008: should show the mobile menu if hidden, or hide it if shown',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // GIVEN: a button with toggleElement '#mobile-menu'
-      // WHEN: user clicks the button
-      // THEN: it should show the mobile menu if hidden, or hide it if shown
-
       // GIVEN: a button with toggleElement '#mobile-menu'
       await startServerWithSchema({
         name: 'test-app',
@@ -361,10 +329,6 @@ test.describe('Click Interaction', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: a button with submitForm '#contact-form'
-      // WHEN: user clicks the button
-      // THEN: it should submit the contact form
-
-      // GIVEN: a button with submitForm '#contact-form'
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -407,10 +371,6 @@ test.describe('Click Interaction', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: a button with animation 'pulse' and navigate '/signup'
-      // WHEN: user clicks the button
-      // THEN: it should play pulse animation then navigate to signup page
-
-      // GIVEN: a button with animation 'pulse' and navigate '/signup'
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -452,10 +412,6 @@ test.describe('Click Interaction', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: a button with animation 'bounce'
-      // WHEN: user clicks the button
-      // THEN: it should play a bounce animation
-
-      // GIVEN: a button with animation 'bounce'
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -489,10 +445,6 @@ test.describe('Click Interaction', () => {
     'APP-INTERACTION-CLICK-012: should not play any animation',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // GIVEN: a button with animation 'none'
-      // WHEN: user clicks the button
-      // THEN: it should not play any animation
-
       // GIVEN: a button with animation 'none'
       await startServerWithSchema({
         name: 'test-app',

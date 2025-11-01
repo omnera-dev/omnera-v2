@@ -126,10 +126,6 @@ test.describe('Animation Configuration', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: an animation with keyframes object
-      // WHEN: animation uses custom CSS keyframes
-      // THEN: it should validate animation frames definition
-
-      // GIVEN: an animation with keyframes object
       await startServerWithSchema({
         name: 'test-app',
         theme: {
@@ -238,10 +234,6 @@ test.describe('Animation Configuration', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: fadeIn animation applied to modal component
-      // WHEN: modal uses theme.animations.fadeIn
-      // THEN: it should render modal with fade-in animation on mount
-
-      // GIVEN: fadeIn animation applied to modal component
       await startServerWithSchema({
         name: 'test-app',
         theme: {
@@ -284,10 +276,6 @@ test.describe('Animation Configuration', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: pulse animation applied to notification badge
-      // WHEN: badge uses theme.animations.pulse
-      // THEN: it should render badge with pulsing animation loop
-
-      // GIVEN: pulse animation applied to notification badge
       await startServerWithSchema({
         name: 'test-app',
         theme: {
@@ -329,10 +317,6 @@ test.describe('Animation Configuration', () => {
     'APP-THEME-ANIMATIONS-APPLICATION-003: should render button with CSS transition on hover',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // GIVEN: transition animation applied to button hover state
-      // WHEN: button uses theme.animations.transition for smooth state changes
-      // THEN: it should render button with CSS transition on hover
-
       // GIVEN: transition animation applied to button hover state
       await startServerWithSchema({
         name: 'test-app',

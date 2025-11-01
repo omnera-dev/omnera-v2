@@ -156,10 +156,6 @@ test.describe('Shadows', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: complete shadow system (sm, md, lg, xl, 2xl, inner, none)
-      // WHEN: all elevation tokens are defined
-      // THEN: it should validate complete shadow system
-
-      // GIVEN: complete shadow system (sm, md, lg, xl, 2xl, inner, none)
       await startServerWithSchema({
         name: 'test-app',
         theme: {

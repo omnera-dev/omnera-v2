@@ -300,10 +300,6 @@ test.describe('URL Path', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: path with dynamic segments
-      // WHEN: value is '/blog/:slug' or '/products/:id'
-      // THEN: it should support dynamic route parameters (if applicable)
-
-      // GIVEN: path with dynamic segments
       await startServerWithSchema({
         name: 'test-app',
         pages: [

@@ -57,10 +57,6 @@ test.describe('Languages Configuration', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: an app with default en-US and supported languages [en-US, fr-FR, es-ES]
-      // WHEN: app is configured with multiple languages
-      // THEN: users should be able to switch between all three languages
-
-      // GIVEN: an app with default en-US and supported languages [en-US, fr-FR, es-ES]
       await startServerWithSchema({
         name: 'test-app',
         languages: {
@@ -91,10 +87,6 @@ test.describe('Languages Configuration', () => {
     'APP-LANGUAGES-003: should display the English fallback text',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // GIVEN: an app with default en-US and fallback en-US
-      // WHEN: a translation is missing for the current language
-      // THEN: it should display the English fallback text
-
       // GIVEN: an app with default en-US and fallback en-US
       await startServerWithSchema({
         name: 'test-app',
@@ -155,10 +147,6 @@ test.describe('Languages Configuration', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema, context }) => {
       // GIVEN: an app with detectBrowser set to false
-      // WHEN: user visits the site
-      // THEN: it should use the default language without auto-detection
-
-      // GIVEN: an app with detectBrowser set to false
       await startServerWithSchema({
         name: 'test-app',
         languages: {
@@ -188,10 +176,6 @@ test.describe('Languages Configuration', () => {
     'APP-LANGUAGES-006: should remember the choice in localStorage for future visits',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // GIVEN: an app with persistSelection set to true
-      // WHEN: user manually selects a language
-      // THEN: it should remember the choice in localStorage for future visits
-
       // GIVEN: an app with persistSelection set to true
       await startServerWithSchema({
         name: 'test-app',
@@ -225,10 +209,6 @@ test.describe('Languages Configuration', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: an app with persistSelection set to false
-      // WHEN: user manually selects a language
-      // THEN: it should not persist the choice and reset to default on next visit
-
-      // GIVEN: an app with persistSelection set to false
       await startServerWithSchema({
         name: 'test-app',
         languages: {
@@ -256,10 +236,6 @@ test.describe('Languages Configuration', () => {
     'APP-LANGUAGES-008: should flip between LTR and RTL direction',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // GIVEN: an app with supported languages including RTL (ar-SA) and LTR (en-US)
-      // WHEN: user switches between English and Arabic
-      // THEN: the entire app layout should flip between LTR and RTL direction
-
       // GIVEN: an app with supported languages including RTL (ar-SA) and LTR (en-US)
       await startServerWithSchema({
         name: 'test-app',
@@ -289,10 +265,6 @@ test.describe('Languages Configuration', () => {
     'APP-LANGUAGES-009: should display all languages with their native labels and flags',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // GIVEN: an app with 5+ supported languages from different regions
-      // WHEN: user opens language switcher
-      // THEN: all languages should be displayed with their native labels and flags
-
       // GIVEN: an app with 5+ supported languages from different regions
       await startServerWithSchema({
         name: 'test-app',
@@ -326,10 +298,6 @@ test.describe('Languages Configuration', () => {
     'APP-LANGUAGES-010: should provide seamless multi-language UX with auto-detection, persistence, and fallback',
     { tag: '@spec' },
     async ({ page, startServerWithSchema, context }) => {
-      // GIVEN: an app with all features enabled (detectBrowser, persistSelection, fallback)
-      // WHEN: language configuration is fully utilized
-      // THEN: it should provide seamless multi-language UX with auto-detection, persistence, and fallback
-
       // GIVEN: an app with all features enabled (detectBrowser, persistSelection, fallback)
       await startServerWithSchema({
         name: 'test-app',
@@ -472,11 +440,6 @@ test.describe('Languages Configuration', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: a multi-language app with theme integration
-      // WHEN: language direction affects theme spacing and layout
-      // THEN: it should apply RTL-aware theme tokens for Arabic/Hebrew while maintaining LTR for English/French
-
-      // GIVEN: a multi-language app with theme integration
-      // WHEN: language direction affects theme spacing and layout
       await startServerWithSchema({
         name: 'test-app',
         theme: {
@@ -513,11 +476,6 @@ test.describe('Languages Configuration', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: a multi-language app with page content
-      // WHEN: user switches language on a page with translated content
-      // THEN: it should update page metadata, HTML attributes, and visible text while maintaining scroll position and component state
-
-      // GIVEN: a multi-language app with page content
-      // WHEN: user switches language on a page with translated content
       await startServerWithSchema({
         name: 'test-app',
         languages: {
@@ -572,10 +530,6 @@ test.describe('Languages Configuration', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: an app with centralized translations and components using $t: references
-      // WHEN: component content uses $t:key syntax
-      // THEN: it should resolve translation keys from centralized translations dictionary
-
-      // GIVEN: an app with centralized translations and components using $t: references
       await startServerWithSchema({
         name: 'test-app',
         languages: {
@@ -616,10 +570,6 @@ test.describe('Languages Configuration', () => {
     'APP-LANGUAGES-016: should fall back to default language translation',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // GIVEN: an app with centralized translations and a missing translation key
-      // WHEN: $t:key reference doesn't exist in current language
-      // THEN: it should fall back to default language translation
-
       // GIVEN: an app with centralized translations and a missing translation key
       await startServerWithSchema({
         name: 'test-app',
@@ -668,10 +618,6 @@ test.describe('Languages Configuration', () => {
     'APP-LANGUAGES-018: should organize translations by feature and improve maintainability',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // GIVEN: an app with organized namespace structure in centralized translations
-      // WHEN: translations use namespaces (common.*, nav.*, homepage.*, errors.*)
-      // THEN: it should organize translations by feature and improve maintainability
-
       // GIVEN: an app with organized namespace structure in centralized translations
       await startServerWithSchema({
         name: 'test-app',

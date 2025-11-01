@@ -139,10 +139,6 @@ test.describe('Language Configuration', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: a language config with flag emoji (🇫🇷)
-      // WHEN: flag is provided as unicode emoji
-      // THEN: it should display the flag in language switcher
-
-      // GIVEN: a language config with flag emoji (🇫🇷)
       await startServerWithSchema({
         name: 'test-app',
         languages: {
@@ -172,10 +168,6 @@ test.describe('Language Configuration', () => {
     'APP-LANG-CONFIG-006: should load the flag image from the path',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // GIVEN: a language config with flag icon path (/flags/es.svg)
-      // WHEN: flag is provided as file path
-      // THEN: it should load the flag image from the path
-
       // GIVEN: a language config with flag icon path (/flags/es.svg)
       await startServerWithSchema({
         name: 'test-app',
@@ -209,10 +201,6 @@ test.describe('Language Configuration', () => {
     'APP-LANG-CONFIG-007: should display correctly in all character sets',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // GIVEN: a language config with native language label (Français, Español, العربية)
-      // WHEN: label uses the language's native name
-      // THEN: it should display correctly in all character sets
-
       // GIVEN: a language config with native language label (Français, Español, العربية)
       await startServerWithSchema({
         name: 'test-app',

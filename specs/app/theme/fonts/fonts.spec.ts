@@ -234,10 +234,6 @@ test.describe('Font Configuration', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: a complete font config with all properties
-      // WHEN: font is fully configured
-      // THEN: it should validate comprehensive typography settings
-
-      // GIVEN: a complete font config with all properties
       await startServerWithSchema({
         name: 'test-app',
         theme: {

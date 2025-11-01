@@ -29,10 +29,6 @@ test.describe('Scroll Interaction', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: a component with scroll animation 'fadeInUp'
-      // WHEN: component enters the viewport
-      // THEN: it should fade in while moving up
-
-      // GIVEN: a component with scroll animation 'fadeInUp'
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -66,10 +62,6 @@ test.describe('Scroll Interaction', () => {
     'APP-INTERACTION-SCROLL-002: should fade in smoothly',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // GIVEN: a component with scroll animation 'fadeIn'
-      // WHEN: component enters the viewport
-      // THEN: it should fade in smoothly
-
       // GIVEN: a component with scroll animation 'fadeIn'
       await startServerWithSchema({
         name: 'test-app',
@@ -105,10 +97,6 @@ test.describe('Scroll Interaction', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: a component with scroll animation 'zoomIn'
-      // WHEN: component enters the viewport
-      // THEN: it should zoom in from small to normal size
-
-      // GIVEN: a component with scroll animation 'zoomIn'
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -142,10 +130,6 @@ test.describe('Scroll Interaction', () => {
     'APP-INTERACTION-SCROLL-004: should fade in while sliding from the left',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // GIVEN: a component with scroll animation 'fadeInLeft'
-      // WHEN: component enters the viewport
-      // THEN: it should fade in while sliding from the left
-
       // GIVEN: a component with scroll animation 'fadeInLeft'
       await startServerWithSchema({
         name: 'test-app',
@@ -181,10 +165,6 @@ test.describe('Scroll Interaction', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: a component with threshold 0.1 (10% visible)
-      // WHEN: 10% of component becomes visible
-      // THEN: it should trigger the animation
-
-      // GIVEN: a component with threshold 0.1 (10% visible)
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -218,10 +198,6 @@ test.describe('Scroll Interaction', () => {
     'APP-INTERACTION-SCROLL-006: should trigger the animation',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // GIVEN: a component with threshold 0.5 (50% visible)
-      // WHEN: 50% of component becomes visible
-      // THEN: it should trigger the animation
-
       // GIVEN: a component with threshold 0.5 (50% visible)
       await startServerWithSchema({
         name: 'test-app',
@@ -257,10 +233,6 @@ test.describe('Scroll Interaction', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: a component with threshold 1.0 (fully visible)
-      // WHEN: 100% of component becomes visible
-      // THEN: it should trigger the animation
-
-      // GIVEN: a component with threshold 1.0 (fully visible)
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -294,10 +266,6 @@ test.describe('Scroll Interaction', () => {
     'APP-INTERACTION-SCROLL-008: should wait 200ms before starting the animation',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // GIVEN: a component with delay '200ms'
-      // WHEN: component enters the viewport
-      // THEN: it should wait 200ms before starting the animation
-
       // GIVEN: a component with delay '200ms'
       await startServerWithSchema({
         name: 'test-app',
@@ -333,10 +301,6 @@ test.describe('Scroll Interaction', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: a component with duration '1000ms'
-      // WHEN: animation starts
-      // THEN: it should complete the animation in 1 second
-
-      // GIVEN: a component with duration '1000ms'
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -370,10 +334,6 @@ test.describe('Scroll Interaction', () => {
     'APP-INTERACTION-SCROLL-010: should animate only on the first entry',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // GIVEN: a component with once set to true
-      // WHEN: component enters viewport multiple times
-      // THEN: it should animate only on the first entry
-
       // GIVEN: a component with once set to true
       await startServerWithSchema({
         name: 'test-app',
@@ -417,10 +377,6 @@ test.describe('Scroll Interaction', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: a component with once set to false
-      // WHEN: component enters viewport multiple times
-      // THEN: it should animate every time it enters the viewport
-
-      // GIVEN: a component with once set to false
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -463,10 +419,6 @@ test.describe('Scroll Interaction', () => {
     'APP-INTERACTION-SCROLL-012: should apply all settings in sequence (wait delay, then animate with duration)',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // GIVEN: a component with animation, threshold, delay, and duration all configured
-      // WHEN: component reaches the threshold visibility
-      // THEN: it should apply all settings in sequence (wait delay, then animate with duration)
-
       // GIVEN: a component with animation, threshold, delay, and duration all configured
       await startServerWithSchema({
         name: 'test-app',

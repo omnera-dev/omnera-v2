@@ -237,10 +237,6 @@ test.describe('Color Palette', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: a complete color system with semantic, descriptive, and variant colors
-      // WHEN: palette includes primary, secondary, success, danger, warning, info, light, dark, grays
-      // THEN: it should validate comprehensive color system for all UI needs
-
-      // GIVEN: a complete color system with semantic, descriptive, and variant colors
       await startServerWithSchema({
         name: 'test-app',
         theme: {

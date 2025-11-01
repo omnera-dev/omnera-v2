@@ -272,10 +272,6 @@ test.describe('Spacing Configuration', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: section spacing applied to page section
-      // WHEN: section uses theme.spacing.section
-      // THEN: it should render with vertical padding creating rhythm
-
-      // GIVEN: section spacing applied to page section
       await startServerWithSchema({
         name: 'test-app',
         theme: {

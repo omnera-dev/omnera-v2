@@ -187,10 +187,6 @@ test.describe('Border Radius', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: md radius applied to button component
-      // WHEN: button uses theme.borderRadius.md for moderate rounding
-      // THEN: it should render button with 0.375rem border-radius creating soft corners
-
-      // GIVEN: md radius applied to button component
       await startServerWithSchema({
         name: 'test-app',
         theme: {
@@ -228,10 +224,6 @@ test.describe('Border Radius', () => {
     'APP-THEME-RADIUS-APPLICATION-002: should render image as circle with 9999px border-radius',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // GIVEN: full radius applied to avatar image
-      // WHEN: avatar uses theme.borderRadius.full for perfect circle
-      // THEN: it should render image as circle with 9999px border-radius
-
       // GIVEN: full radius applied to avatar image
       await startServerWithSchema({
         name: 'test-app',
@@ -271,10 +263,6 @@ test.describe('Border Radius', () => {
     'APP-THEME-RADIUS-APPLICATION-003: should render card with 0.5rem border-radius creating soft edges',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // GIVEN: lg radius applied to card component
-      // WHEN: card uses theme.borderRadius.lg for noticeable rounding
-      // THEN: it should render card with 0.5rem border-radius creating soft edges
-
       // GIVEN: lg radius applied to card component
       await startServerWithSchema({
         name: 'test-app',

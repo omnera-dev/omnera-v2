@@ -208,10 +208,6 @@ test.describe('Page Name', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: page names across multiple pages
-      // WHEN: names describe page purpose internally
-      // THEN: it should serve as internal identifier separate from URL path
-
-      // GIVEN: page names across multiple pages
       await startServerWithSchema({
         name: 'test-app',
         pages: [
