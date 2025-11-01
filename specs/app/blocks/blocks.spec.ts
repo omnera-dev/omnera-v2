@@ -24,7 +24,7 @@ test.describe('Reusable Blocks', () => {
   // One test per spec in schema - defines EXHAUSTIVE acceptance criteria
   // ============================================================================
 
-  test.fixme(
+  test(
     'APP-BLOCKS-001: should validate blocks array structure',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {

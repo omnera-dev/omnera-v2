@@ -17,12 +17,15 @@ import type { Component } from '@/domain/models/app/page/sections'
  *
  * @param props - Component props
  * @param props.component - Component configuration from sections schema
+ * @param props.blockName - Optional block name for data-block attribute
  * @returns React element matching the component type
  */
 export function ComponentRenderer({
   component,
+  blockName,
 }: {
   readonly component: Component
+  readonly blockName?: string
 }): Readonly<ReactElement | null> {
   const { type, props, children, content } = component
 
@@ -34,10 +37,14 @@ export function ComponentRenderer({
     />
   ))
 
-  // Merge className with other props
+  // Merge className with other props and add data-block attribute if blockName is provided
+  // For blocks without content, add min-height to ensure visibility
+  const hasContent = Boolean(content || children?.length)
   const elementProps = {
     ...props,
     className: props?.className,
+    ...(blockName && { 'data-block': blockName }),
+    ...(blockName && !hasContent && { style: { ...props?.style, minHeight: '1px', minWidth: '1px' } }),
   }
 
   // Render based on component type
@@ -79,11 +86,14 @@ export function ComponentRenderer({
       return <span {...elementProps}>{renderedChildren}</span>
 
     case 'customHTML': {
-      // Sanitize HTML to prevent XSS attacks using DOMPurify
+      // SECURITY: Sanitize HTML to prevent XSS attacks
+      // DOMPurify removes malicious scripts, event handlers, and dangerous attributes
+      // This is critical for user-generated content or external HTML sources
       const sanitizedHTML = DOMPurify.sanitize(props?.html || '')
       return (
         <div
           {...elementProps}
+          // Safe to use dangerouslySetInnerHTML after DOMPurify sanitization
           dangerouslySetInnerHTML={{ __html: sanitizedHTML }}
         />
       )
@@ -114,8 +124,7 @@ export function ComponentRenderer({
       return <div {...elementProps}>{renderedChildren}</div>
 
     default:
-      // Fallback for unknown types
-      // eslint-disable-next-line unicorn/no-null -- React components conventionally return null for no render
-      return null
+      // Fallback for unknown types - render as generic div
+      return <div {...elementProps}>{content || renderedChildren}</div>
   }
 }
