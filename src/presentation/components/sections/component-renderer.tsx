@@ -13,6 +13,70 @@ import type {
 } from '@/domain/models/app/block/common/block-reference'
 import type { Blocks } from '@/domain/models/app/blocks'
 import type { Component } from '@/domain/models/app/page/sections'
+import type { Theme } from '@/domain/models/app/theme'
+
+/**
+ * Substitutes theme tokens in a value
+ *
+ * Replaces `$theme.category.key` patterns with actual theme values.
+ * Example: `$theme.colors.primary` → `#007bff`
+ *
+ * @param value - Value that may contain theme tokens
+ * @param theme - Theme configuration
+ * @returns Value with theme tokens replaced
+ */
+function substituteThemeTokens(value: unknown, theme?: Theme): unknown {
+  if (typeof value !== 'string') {
+    return value
+  }
+
+  if (!theme || !value.startsWith('$theme.')) {
+    return value
+  }
+
+  // Extract the path: $theme.colors.primary → ['colors', 'primary']
+  const path = value.slice(7).split('.')
+
+  // Navigate through the theme object using functional reduce
+  const result = path.reduce<unknown>((acc, key) => {
+    if (acc && typeof acc === 'object' && key in acc) {
+      return (acc as Record<string, unknown>)[key]
+    }
+    // Return a sentinel to indicate path not found
+    return undefined
+  }, theme as unknown)
+
+  // If path navigation failed, return original value
+  return result !== undefined ? result : value
+}
+
+/**
+ * Substitutes theme tokens in props recursively
+ *
+ * @param props - Component props that may contain theme tokens
+ * @param theme - Theme configuration
+ * @returns Props with theme tokens replaced
+ */
+function substitutePropsThemeTokens(
+  props: Record<string, unknown> | undefined,
+  theme?: Theme
+): Record<string, unknown> | undefined {
+  if (!props || !theme) {
+    return props
+  }
+
+  // Use functional Object.entries + reduce for immutable transformation
+  return Object.entries(props).reduce<Record<string, unknown>>((acc, [key, value]) => {
+    if (typeof value === 'string') {
+      return { ...acc, [key]: substituteThemeTokens(value, theme) }
+    } else if (value && typeof value === 'object' && !Array.isArray(value)) {
+      // Recursively handle nested objects (like style props)
+      return { ...acc, [key]: substitutePropsThemeTokens(value as Record<string, unknown>, theme) }
+    } else {
+      return { ...acc, [key]: value }
+    }
+  }, {})
+}
 
 /**
  * Resolves a block reference to a component
@@ -48,22 +112,25 @@ function resolveBlock(
  *
  * This component handles the recursive rendering of sections, converting
  * the declarative component configuration into React elements.
- * Supports block references for reusable components.
+ * Supports block references for reusable components and theme token substitution.
  *
  * @param props - Component props
  * @param props.component - Component configuration from sections schema (can be a direct component or block reference)
  * @param props.blockName - Optional block name for data-block attribute
  * @param props.blocks - Optional blocks array for resolving block references
+ * @param props.theme - Optional theme configuration for token substitution
  * @returns React element matching the component type
  */
 export function ComponentRenderer({
   component,
   blockName,
   blocks,
+  theme,
 }: {
   readonly component: Component | SimpleBlockReference | BlockReference
   readonly blockName?: string
   readonly blocks?: Blocks
+  readonly theme?: Theme
 }): Readonly<ReactElement | null> {
   // Handle block references
   if ('block' in component) {
@@ -90,6 +157,7 @@ export function ComponentRenderer({
         component={resolved.component}
         blockName={resolved.name}
         blocks={blocks}
+        theme={theme}
       />
     )
   }
@@ -119,6 +187,7 @@ export function ComponentRenderer({
         component={resolved.component}
         blockName={resolved.name}
         blocks={blocks}
+        theme={theme}
       />
     )
   }
@@ -126,12 +195,16 @@ export function ComponentRenderer({
   // Direct component rendering
   const { type, props, children, content } = component as Component
 
+  // Apply theme token substitution to props
+  const substitutedProps = substitutePropsThemeTokens(props, theme)
+
   // Render children recursively
   const renderedChildren = children?.map((child: Component, index: number) => (
     <ComponentRenderer
       key={index}
       component={child}
       blocks={blocks}
+      theme={theme}
     />
   ))
 
@@ -139,12 +212,17 @@ export function ComponentRenderer({
   // For blocks without content, add min-height and display to ensure visibility
   const hasContent = Boolean(content || children?.length)
   const elementProps = {
-    ...props,
-    className: props?.className,
+    ...substitutedProps,
+    className: substitutedProps?.className as string | undefined,
     ...(blockName && { 'data-block': blockName }),
     ...(blockName &&
       !hasContent && {
-        style: { ...props?.style, minHeight: '1px', minWidth: '1px', display: 'inline-block' },
+        style: {
+          ...(substitutedProps?.style as Record<string, unknown> | undefined),
+          minHeight: '1px',
+          minWidth: '1px',
+          display: 'inline-block',
+        },
       }),
   }
 
@@ -155,7 +233,7 @@ export function ComponentRenderer({
 
     case 'text': {
       // Determine the HTML tag based on the level prop
-      const level = props?.level
+      const level = substitutedProps?.level
       if (level === 'h1') return <h1 {...elementProps}>{content}</h1>
       if (level === 'h2') return <h2 {...elementProps}>{content}</h2>
       if (level === 'h3') return <h3 {...elementProps}>{content}</h3>
@@ -176,7 +254,7 @@ export function ComponentRenderer({
       return (
         <img
           {...elementProps}
-          alt={props?.alt || ''}
+          alt={(substitutedProps?.alt as string | undefined) || ''}
         />
       )
 
@@ -196,7 +274,9 @@ export function ComponentRenderer({
       // SECURITY: Sanitize HTML to prevent XSS attacks
       // DOMPurify removes malicious scripts, event handlers, and dangerous attributes
       // This is critical for user-generated content or external HTML sources
-      const sanitizedHTML = DOMPurify.sanitize(props?.html || '')
+      const sanitizedHTML = DOMPurify.sanitize(
+        (substitutedProps?.html as string | undefined) || ''
+      )
       return (
         <div
           {...elementProps}

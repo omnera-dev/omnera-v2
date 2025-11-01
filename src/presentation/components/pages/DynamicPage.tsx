@@ -90,6 +90,7 @@ export function DynamicPage({
               key={index}
               component={section}
               blocks={blocks}
+              theme={theme}
             />
           ))}
         </main>

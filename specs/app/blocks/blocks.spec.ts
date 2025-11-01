@@ -50,7 +50,7 @@ test.describe('Reusable Blocks', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-BLOCKS-002: should render same block definition across multiple page locations',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -358,7 +358,7 @@ test.describe('Reusable Blocks', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-BLOCKS-INTEGRATION-002: should render with design tokens applied from global theme',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -368,7 +368,7 @@ test.describe('Reusable Blocks', () => {
         theme: {
           colors: { primary: '#007bff', secondary: '#6c757d' },
           spacing: { sm: '8px', md: '16px' },
-          fonts: { body: 'Arial, sans-serif' },
+          fonts: { body: { family: 'Arial', fallback: 'sans-serif' } },
         },
         blocks: [
           {
@@ -378,7 +378,7 @@ test.describe('Reusable Blocks', () => {
               style: {
                 backgroundColor: '$theme.colors.primary',
                 padding: '$theme.spacing.md',
-                fontFamily: '$theme.fonts.body',
+                fontFamily: '$theme.fonts.body.family',
               },
             },
             content: 'Themed Content',
@@ -389,7 +389,7 @@ test.describe('Reusable Blocks', () => {
             name: 'home',
             path: '/',
             meta: { lang: 'en-US', title: 'Home', description: 'Home' },
-            sections: [{ $ref: 'themed-card' }],
+            sections: [{ block: 'themed-card' }],
           },
         ],
       })
