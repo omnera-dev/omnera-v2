@@ -15,17 +15,14 @@ import type { Component } from '@/domain/models/app/page/sections'
  * Resolves a block reference to a component
  *
  * Pure function that finds a block by name and converts it to a Component.
- * Supports variable substitution for future implementation.
  *
  * @param blockName - Name of the block to resolve
  * @param blocks - Array of available blocks
- * @param vars - Optional variables for substitution (not yet implemented)
  * @returns Resolved component and block name, or undefined if not found
  */
 function resolveBlock(
   blockName: string,
-  blocks?: Blocks,
-  _vars?: Record<string, string | number | boolean>
+  blocks?: Blocks
 ): { readonly component: Component; readonly name: string } | undefined {
   const block = blocks?.find((b) => b.name === blockName)
   if (!block) {
@@ -33,8 +30,6 @@ function resolveBlock(
     return undefined
   }
 
-  // TODO(future): Implement variable substitution when _vars are provided
-  // This will require string replacement in props, content, and children
   const component: Component = {
     type: block.type,
     props: block.props,
@@ -98,7 +93,8 @@ export function ComponentRenderer({
 
   if ('$ref' in component) {
     // Block reference with vars: { $ref: 'name', vars: {} }
-    const resolved = resolveBlock(component.$ref, blocks, component.vars)
+    // Note: Variable substitution not yet implemented
+    const resolved = resolveBlock(component.$ref, blocks)
     if (!resolved) {
       return (
         <div
