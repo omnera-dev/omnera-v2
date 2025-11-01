@@ -94,7 +94,7 @@ test.describe('Reusable Blocks', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-BLOCKS-005: should render section header with styled title and subtitle',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
