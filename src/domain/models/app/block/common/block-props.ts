@@ -41,9 +41,12 @@ export const BlockPropValueSchema: Schema.Schema<
 /**
  * Block Props (properties for block templates with variable references)
  *
- * Dynamic object supporting any valid JavaScript property name.
- * Properties can be strings (with $variable), numbers, booleans, objects, or arrays.
+ * Dynamic object supporting:
+ * - JavaScript property names (camelCase): className, maxWidth, isEnabled
+ * - HTML data-* attributes (kebab-case): data-testid, data-user-id
+ * - HTML aria-* attributes (kebab-case): aria-label, aria-describedby
  *
+ * Properties can be strings (with $variable), numbers, booleans, objects, or arrays.
  * Used for template customization and variable substitution.
  *
  * @example
@@ -54,6 +57,8 @@ export const BlockPropValueSchema: Schema.Schema<
  *   enabled: true,
  *   maxWidth: 'max-w-$width',
  *   count: 10,
+ *   'data-testid': 'my-component',
+ *   'aria-label': 'Interactive button',
  * }
  * ```
  *
@@ -61,14 +66,15 @@ export const BlockPropValueSchema: Schema.Schema<
  */
 export const BlockPropsSchema = Schema.Record({
   key: Schema.String.pipe(
-    Schema.pattern(/^[a-zA-Z][a-zA-Z0-9]*$/, {
+    Schema.pattern(/^([a-zA-Z][a-zA-Z0-9]*|data-[a-z]+(-[a-z]+)*|aria-[a-z]+(-[a-z]+)*)$/, {
       message: () =>
-        'Block prop key must start with a letter and contain only alphanumeric characters',
+        'Property key must be camelCase (e.g., className, maxWidth) or kebab-case with data-/aria- prefix (e.g., data-testid, aria-label)',
     }),
     Schema.annotations({
       title: 'Block Prop Key',
-      description: 'Valid JavaScript property name (alphanumeric)',
-      examples: ['className', 'size', 'enabled', 'maxWidth'],
+      description:
+        'Valid JavaScript property name (camelCase) or HTML data-*/aria-* attribute (kebab-case)',
+      examples: ['className', 'size', 'enabled', 'maxWidth', 'data-testid', 'aria-label'],
     })
   ),
   value: BlockPropValueSchema,
