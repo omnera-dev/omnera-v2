@@ -29,6 +29,10 @@ test.describe('Block Props', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: props as dynamic object
+      // WHEN: props uses patternProperties for flexible property names
+      // THEN: it should validate any valid JavaScript property name at build time
+
+      // GIVEN: props as dynamic object
       await startServerWithSchema({
         name: 'test-app',
         blocks: [
@@ -62,6 +66,10 @@ test.describe('Block Props', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: property names in camelCase
+      // WHEN: property names match ^[a-zA-Z][a-zA-Z0-9]*$ pattern
+      // THEN: it should render as HTML attributes following camelCase convention
+
+      // GIVEN: property names in camelCase
       await startServerWithSchema({
         name: 'test-app',
         blocks: [
@@ -89,6 +97,10 @@ test.describe('Block Props', () => {
     'APP-BLOCKS-PROPS-003: should render string value with variable substitution',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
+      // GIVEN: property value as string
+      // WHEN: value is string (may contain $variable)
+      // THEN: it should render string value with variable substitution
+
       // GIVEN: property value as string
       await startServerWithSchema({
         name: 'test-app',
@@ -184,6 +196,10 @@ test.describe('Block Props', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: property value as object
+      // WHEN: value is nested object
+      // THEN: it should render object as JSON data attribute
+
+      // GIVEN: property value as object
       await startServerWithSchema({
         name: 'test-app',
         blocks: [
@@ -249,6 +265,10 @@ test.describe('Block Props', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: className with multiple variables
+      // WHEN: className is 'text-$color bg-$bgColor'
+      // THEN: it should render with all variables substituted in className
+
+      // GIVEN: className with multiple variables
       await startServerWithSchema({
         name: 'test-app',
         blocks: [
@@ -287,6 +307,10 @@ test.describe('Block Props', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: props mixing variables and literals
+      // WHEN: maxWidth is 'max-w-$width' (Tailwind utility with variable)
+      // THEN: it should render combined static and dynamic className parts
+
+      // GIVEN: props mixing variables and literals
       await startServerWithSchema({
         name: 'test-app',
         blocks: [
@@ -317,6 +341,10 @@ test.describe('Block Props', () => {
     'APP-BLOCKS-PROPS-010: should render complete component with all configuration applied',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
+      // GIVEN: props for component configuration
+      // WHEN: props define component appearance and behavior
+      // THEN: it should render complete component with all configuration applied
+
       // GIVEN: props for component configuration
       await startServerWithSchema({
         name: 'test-app',

@@ -71,8 +71,6 @@ test.describe('Block Template', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: block name pattern validation
-      // WHEN: name matches ^[a-z][a-z0-9-]*$ (lowercase, hyphens, no spaces)
-      // THEN: it should reject invalid names at build time
       const validBlocks = [
         { name: 'icon-badge', type: 'div' },
         { name: 'cta', type: 'div' },
@@ -80,7 +78,11 @@ test.describe('Block Template', () => {
         { name: 'feature-list-item', type: 'div' },
       ]
       await startServerWithSchema({ name: 'test-app', blocks: validBlocks })
+
+      // WHEN: name matches ^[a-z][a-z0-9-]*$ (lowercase, hyphens, no spaces)
       await page.goto('/')
+
+      // THEN: it should reject invalid names at build time
       await expect(page.locator('[data-block="icon-badge"]')).toBeVisible()
     }
   )

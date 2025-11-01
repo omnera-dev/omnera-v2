@@ -272,6 +272,10 @@ test.describe('Spacing Configuration', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: section spacing applied to page section
+      // WHEN: section uses theme.spacing.section
+      // THEN: it should render with vertical padding creating rhythm
+
+      // GIVEN: section spacing applied to page section
       await startServerWithSchema({
         name: 'test-app',
         theme: {
@@ -307,6 +311,10 @@ test.describe('Spacing Configuration', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: container spacing applied to content wrapper
+      // WHEN: div uses theme.spacing.container
+      // THEN: it should render centered with max-width constraint
+
+      // GIVEN: container spacing applied to content wrapper
       await startServerWithSchema({
         name: 'test-app',
         theme: {
@@ -340,6 +348,10 @@ test.describe('Spacing Configuration', () => {
     'APP-THEME-SPACING-APPLICATION-003: should render with spacing between flex items',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
+      // GIVEN: gap spacing applied to flex container
+      // WHEN: flex container uses theme.spacing.gap
+      // THEN: it should render with spacing between flex items
+
       // GIVEN: gap spacing applied to flex container
       await startServerWithSchema({
         name: 'test-app',

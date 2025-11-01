@@ -85,6 +85,10 @@ test.describe('Page Name', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: a multi-word page name
+      // WHEN: value is 'pricing' or 'contact'
+      // THEN: it should accept single-word page identifiers
+
+      // GIVEN: a multi-word page name
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -118,6 +122,10 @@ test.describe('Page Name', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: a page name with spaces for display
+      // WHEN: value is 'Home Page' or 'About Us'
+      // THEN: it should accept human-readable names with spaces
+
+      // GIVEN: a page name with spaces for display
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -145,6 +153,10 @@ test.describe('Page Name', () => {
     'APP-PAGES-NAME-006: should provide examples for typical page names',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
+      // GIVEN: common page names (home, about, pricing, contact)
+      // WHEN: standard website pages are defined
+      // THEN: it should provide examples for typical page names
+
       // GIVEN: common page names (home, about, pricing, contact)
       await startServerWithSchema({
         name: 'test-app',
@@ -195,6 +207,10 @@ test.describe('Page Name', () => {
     'APP-PAGES-NAME-008: should serve as internal identifier separate from URL path',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
+      // GIVEN: page names across multiple pages
+      // WHEN: names describe page purpose internally
+      // THEN: it should serve as internal identifier separate from URL path
+
       // GIVEN: page names across multiple pages
       await startServerWithSchema({
         name: 'test-app',

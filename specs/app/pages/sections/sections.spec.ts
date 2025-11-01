@@ -23,6 +23,10 @@ test.describe('Page Sections', () => {
     'APP-PAGES-SECTIONS-001: should render direct component definition',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
+      // GIVEN: a sections array with direct component
+      // WHEN: section has type 'section' with props and children
+      // THEN: it should render direct component definition
+
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -52,6 +56,10 @@ test.describe('Page Sections', () => {
     'APP-PAGES-SECTIONS-002: should support all component types for page building',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
+      // GIVEN: a section with 17 component types
+      // WHEN: type enum includes section, container, flex, grid, card, text, icon, image, button, link, timeline, accordion, badge, customHTML, video, audio, iframe, form, input
+      // THEN: it should support all component types for page building
+
       const componentTypes = [
         'section',
         'container',
@@ -96,6 +104,10 @@ test.describe('Page Sections', () => {
     'APP-PAGES-SECTIONS-003: should accept generic component properties via props.schema.json',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
+      // GIVEN: a section with props
+      // WHEN: props includes className, id, and other component properties
+      // THEN: it should accept generic component properties via props.schema.json
+
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -128,6 +140,10 @@ test.describe('Page Sections', () => {
     'APP-PAGES-SECTIONS-004: should support unlimited nesting depth for component tree',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
+      // GIVEN: a section with recursive children
+      // WHEN: children array contains nested sections
+      // THEN: it should support unlimited nesting depth for component tree
+
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -168,6 +184,10 @@ test.describe('Page Sections', () => {
     'APP-PAGES-SECTIONS-005: should render text content',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
+      // GIVEN: a text component with content property
+      // WHEN: component type is 'text' with content 'Welcome to Our Platform'
+      // THEN: it should render text content
+
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -196,6 +216,10 @@ test.describe('Page Sections', () => {
     'APP-PAGES-SECTIONS-006: should apply interactive behaviors from interactions.schema.json',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
+      // GIVEN: a section with interactions
+      // WHEN: interactions includes hover, click, scroll, entrance
+      // THEN: it should apply interactive behaviors from interactions.schema.json
+
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -229,6 +253,10 @@ test.describe('Page Sections', () => {
     'APP-PAGES-SECTIONS-007: should adapt component for different screen sizes',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
+      // GIVEN: a section with responsive overrides
+      // WHEN: responsive property defines breakpoint-specific changes
+      // THEN: it should adapt component for different screen sizes
+
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -259,6 +287,10 @@ test.describe('Page Sections', () => {
     'APP-PAGES-SECTIONS-009: should reference and instantiate reusable block with variables',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
+      // GIVEN: a block reference in sections
+      // WHEN: section uses $ref with vars for variable substitution
+      // THEN: it should reference and instantiate reusable block with variables
+
       await startServerWithSchema({
         name: 'test-app',
         blocks: [
@@ -288,6 +320,10 @@ test.describe('Page Sections', () => {
     'APP-PAGES-SECTIONS-010: should support hybrid section composition',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
+      // GIVEN: sections with mixed direct components and block references
+      // WHEN: array contains both direct definitions and $ref blocks
+      // THEN: it should support hybrid section composition
+
       await startServerWithSchema({
         name: 'test-app',
         blocks: [
@@ -327,6 +363,10 @@ test.describe('Page Sections', () => {
     'APP-PAGES-SECTIONS-011: should build complex layouts through component composition',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
+      // GIVEN: a complex nested section tree
+      // WHEN: section → container → flex → grid → card → text hierarchy
+      // THEN: it should build complex layouts through component composition
+
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -382,6 +422,10 @@ test.describe('Page Sections', () => {
     'APP-PAGES-SECTIONS-012: should combine interactive and responsive features',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
+      // GIVEN: a section with multiple optional properties
+      // WHEN: section includes interactions and responsive design
+      // THEN: it should combine interactive and responsive features
+
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -410,6 +454,10 @@ test.describe('Page Sections', () => {
     'APP-PAGES-SECTIONS-013: should support form building capabilities',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
+      // GIVEN: sections with form components
+      // WHEN: sections include form, input types for user input
+      // THEN: it should support form building capabilities
+
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -455,6 +503,10 @@ test.describe('Page Sections', () => {
     'APP-PAGES-SECTIONS-014: should support rich media content',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
+      // GIVEN: sections with media components
+      // WHEN: sections include image, video, audio, iframe types
+      // THEN: it should support rich media content
+
       await startServerWithSchema({
         name: 'test-app',
         pages: [

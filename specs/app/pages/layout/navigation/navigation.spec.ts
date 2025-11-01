@@ -28,6 +28,10 @@ test.describe('Navigation Configuration', () => {
     'APP-PAGES-NAV-001: should display logo image',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
+      // GIVEN: a navigation with logo
+      // WHEN: logo is './public/logo.svg'
+      // THEN: it should display logo image
+
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -53,6 +57,10 @@ test.describe('Navigation Configuration', () => {
     'APP-PAGES-NAV-002: should use alternative logo for mobile devices',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
+      // GIVEN: a navigation with logoMobile
+      // WHEN: logoMobile is './public/logo-mobile.svg'
+      // THEN: it should use alternative logo for mobile devices
+
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -85,6 +93,10 @@ test.describe('Navigation Configuration', () => {
     'APP-PAGES-NAV-003: should provide accessible alt text for logo',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
+      // GIVEN: a navigation with logoAlt
+      // WHEN: logoAlt is 'Company Logo'
+      // THEN: it should provide accessible alt text for logo
+
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -111,6 +123,10 @@ test.describe('Navigation Configuration', () => {
     'APP-PAGES-NAV-004: should stick to top on scroll',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
+      // GIVEN: a sticky navigation
+      // WHEN: sticky is true
+      // THEN: it should stick to top on scroll
+
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -141,6 +157,10 @@ test.describe('Navigation Configuration', () => {
     'APP-PAGES-NAV-005: should have transparent background (becomes opaque on scroll)',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
+      // GIVEN: a transparent navigation
+      // WHEN: transparent is true initially
+      // THEN: it should have transparent background (becomes opaque on scroll)
+
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -175,6 +195,10 @@ test.describe('Navigation Configuration', () => {
     'APP-PAGES-NAV-006: should render desktop navigation menu',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
+      // GIVEN: navigation with desktop links
+      // WHEN: links.desktop is array of nav-links
+      // THEN: it should render desktop navigation menu
+
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -211,6 +235,10 @@ test.describe('Navigation Configuration', () => {
     'APP-PAGES-NAV-007: should render different links for mobile menu',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
+      // GIVEN: navigation with mobile links
+      // WHEN: links.mobile differs from desktop
+      // THEN: it should render different links for mobile menu
+
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -252,6 +280,10 @@ test.describe('Navigation Configuration', () => {
     'APP-PAGES-NAV-008: should render prominent call-to-action button',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
+      // GIVEN: navigation with CTA button
+      // WHEN: cta has text 'Get Started' and href '/signup'
+      // THEN: it should render prominent call-to-action button
+
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -287,6 +319,10 @@ test.describe('Navigation Configuration', () => {
     'APP-PAGES-NAV-009: should display search input in navigation',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
+      // GIVEN: navigation with search enabled
+      // WHEN: search.enabled is true with placeholder 'Search...'
+      // THEN: it should display search input in navigation
+
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -316,6 +352,10 @@ test.describe('Navigation Configuration', () => {
     'APP-PAGES-NAV-010: should show user account menu with login/signup links',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
+      // GIVEN: navigation with user menu enabled
+      // WHEN: user.enabled is true with loginUrl and signupUrl
+      // THEN: it should show user account menu with login/signup links
+
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -344,6 +384,10 @@ test.describe('Navigation Configuration', () => {
     'APP-PAGES-NAV-011: should render minimal navigation with logo',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
+      // GIVEN: navigation with required logo only
+      // WHEN: all other properties are optional
+      // THEN: it should render minimal navigation with logo
+
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -367,6 +411,10 @@ test.describe('Navigation Configuration', () => {
     'APP-PAGES-NAV-012: should compose navigation from modular schemas',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
+      // GIVEN: navigation referencing sub-schemas
+      // WHEN: nav-links and cta-button use $ref
+      // THEN: it should compose navigation from modular schemas
+
       await startServerWithSchema({
         name: 'test-app',
         pages: [

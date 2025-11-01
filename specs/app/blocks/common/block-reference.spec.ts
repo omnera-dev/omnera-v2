@@ -79,8 +79,6 @@ test.describe('Block Reference', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: block reference $ref pattern
-      // WHEN: $ref matches ^[a-z][a-z0-9-]*$ pattern
-      // THEN: it should validate kebab-case naming at build time
       const validBlocks = [
         { name: 'icon-badge', type: 'div' },
         { name: 'cta', type: 'div' },
@@ -92,7 +90,11 @@ test.describe('Block Reference', () => {
         blocks: validBlocks,
         pages: [{ path: '/', sections: validBlocks.map((b) => ({ block: b.name, vars: {} })) }],
       })
+
+      // WHEN: $ref matches ^[a-z][a-z0-9-]*$ pattern
       await page.goto('/')
+
+      // THEN: it should validate kebab-case naming at build time
       await expect(page.locator('[data-testid="block-icon-badge"]')).toBeVisible()
     }
   )
@@ -102,14 +104,16 @@ test.describe('Block Reference', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: block reference $ref validation
-      // WHEN: $ref value must match existing block name in blocks array
-      // THEN: it should fail validation if referenced block doesn't exist
       await startServerWithSchema({
         name: 'test-app',
         blocks: [{ name: 'icon-badge', type: 'badge' }],
         pages: [{ path: '/', sections: [{ block: 'icon-badge', vars: {} }] }],
       })
+
+      // WHEN: $ref value must match existing block name in blocks array
       await page.goto('/')
+
+      // THEN: it should fail validation if referenced block doesn't exist
       await expect(page.locator('[data-testid="block-icon-badge"]')).toBeVisible()
     }
   )
@@ -161,8 +165,6 @@ test.describe('Block Reference', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: vars property names in camelCase
-      // WHEN: vars property names match ^[a-zA-Z][a-zA-Z0-9]*$ pattern
-      // THEN: it should validate JavaScript naming convention for variables
       await startServerWithSchema({
         name: 'test-app',
         blocks: [
@@ -182,7 +184,11 @@ test.describe('Block Reference', () => {
           },
         ],
       })
+
+      // WHEN: vars property names match ^[a-zA-Z][a-zA-Z0-9]*$ pattern
       await page.goto('/')
+
+      // THEN: it should validate JavaScript naming convention for variables
       await expect(page.locator('[data-testid="block-test-block"]')).toBeVisible()
     }
   )

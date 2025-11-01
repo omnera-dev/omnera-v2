@@ -29,6 +29,10 @@ test.describe('Page Layout', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: a layout configuration with all 4 components
+      // WHEN: layout includes banner, navigation, footer, and sidebar
+      // THEN: it should orchestrate global page layout
+
+      // GIVEN: a layout configuration with all 4 components
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -63,6 +67,10 @@ test.describe('Page Layout', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: a layout with only navigation
+      // WHEN: banner, footer, sidebar are omitted
+      // THEN: it should support minimal layout with navigation only
+
+      // GIVEN: a layout with only navigation
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -93,6 +101,10 @@ test.describe('Page Layout', () => {
     'APP-PAGES-LAYOUT-003: should provide header and footer structure',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
+      // GIVEN: a layout with navigation and footer
+      // WHEN: standard website layout is needed
+      // THEN: it should provide header and footer structure
+
       // GIVEN: a layout with navigation and footer
       await startServerWithSchema({
         name: 'test-app',
@@ -133,6 +145,10 @@ test.describe('Page Layout', () => {
     'APP-PAGES-LAYOUT-004: should support sidebar-based layouts',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
+      // GIVEN: a layout with sidebar for docs/dashboard
+      // WHEN: sidebar navigation is enabled
+      // THEN: it should support sidebar-based layouts
+
       // GIVEN: a layout with sidebar for docs/dashboard
       await startServerWithSchema({
         name: 'test-app',
@@ -176,6 +192,10 @@ test.describe('Page Layout', () => {
     'APP-PAGES-LAYOUT-005: should display top banner above navigation',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
+      // GIVEN: a layout with banner for announcements
+      // WHEN: banner is enabled with promotional message
+      // THEN: it should display top banner above navigation
+
       // GIVEN: a layout with banner for announcements
       await startServerWithSchema({
         name: 'test-app',
@@ -251,6 +271,10 @@ test.describe('Page Layout', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: layout components sharing consistent styling
+      // WHEN: banner gradient matches navigation theme
+      // THEN: it should enable cohesive visual design across layout
+
+      // GIVEN: layout components sharing consistent styling
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -291,6 +315,10 @@ test.describe('Page Layout', () => {
     'APP-PAGES-LAYOUT-008: should override or extend default layout per page',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
+      // GIVEN: layout configuration at page level
+      // WHEN: each page can define custom layout
+      // THEN: it should override or extend default layout per page
+
       // GIVEN: layout configuration at page level
       await startServerWithSchema({
         name: 'test-app',

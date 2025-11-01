@@ -29,6 +29,10 @@ test.describe('Hover Interaction', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: a component with hover transform scale(1.05)
+      // WHEN: user hovers over the component
+      // THEN: it should smoothly scale up by 5%
+
+      // GIVEN: a component with hover transform scale(1.05)
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -63,6 +67,10 @@ test.describe('Hover Interaction', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: a component with hover opacity 0.8
+      // WHEN: user hovers over the component
+      // THEN: it should fade to 80% opacity
+
+      // GIVEN: a component with hover opacity 0.8
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -96,6 +104,10 @@ test.describe('Hover Interaction', () => {
     'APP-INTERACTION-HOVER-003: should change background and text colors',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
+      // GIVEN: a component with hover backgroundColor and color
+      // WHEN: user hovers over the component
+      // THEN: it should change background and text colors
+
       // GIVEN: a component with hover backgroundColor and color
       await startServerWithSchema({
         name: 'test-app',
@@ -132,6 +144,10 @@ test.describe('Hover Interaction', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: a component with hover shadow
+      // WHEN: user hovers over the component
+      // THEN: it should apply box shadow effect
+
+      // GIVEN: a component with hover shadow
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -165,6 +181,10 @@ test.describe('Hover Interaction', () => {
     'APP-INTERACTION-HOVER-005: should transition using specified duration and easing function',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
+      // GIVEN: a component with custom duration and easing
+      // WHEN: user hovers over the component
+      // THEN: it should transition using specified duration and easing function
+
       // GIVEN: a component with custom duration and easing
       await startServerWithSchema({
         name: 'test-app',
@@ -202,6 +222,10 @@ test.describe('Hover Interaction', () => {
     'APP-INTERACTION-HOVER-006: all effects should apply simultaneously with coordinated timing',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
+      // GIVEN: a component with multiple hover effects (transform, shadow, duration)
+      // WHEN: user hovers over the component
+      // THEN: all effects should apply simultaneously with coordinated timing
+
       // GIVEN: a component with multiple hover effects (transform, shadow, duration)
       await startServerWithSchema({
         name: 'test-app',
@@ -245,6 +269,10 @@ test.describe('Hover Interaction', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: a component with hover borderColor
+      // WHEN: user hovers over the component
+      // THEN: it should change border color smoothly
+
+      // GIVEN: a component with hover borderColor
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -278,6 +306,10 @@ test.describe('Hover Interaction', () => {
     'APP-INTERACTION-HOVER-008: should apply effects instantly without transition',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
+      // GIVEN: a component with hover duration set to 0ms
+      // WHEN: user hovers over the component
+      // THEN: it should apply effects instantly without transition
+
       // GIVEN: a component with hover duration set to 0ms
       await startServerWithSchema({
         name: 'test-app',
@@ -314,6 +346,10 @@ test.describe('Hover Interaction', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: a component with hover opacity set to maximum (1.0)
+      // WHEN: user hovers over the component
+      // THEN: it should display at full opacity
+
+      // GIVEN: a component with hover opacity set to maximum (1.0)
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -347,6 +383,10 @@ test.describe('Hover Interaction', () => {
     'APP-INTERACTION-HOVER-010: should become completely transparent',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
+      // GIVEN: a component with hover opacity set to minimum (0.0)
+      // WHEN: user hovers over the component
+      // THEN: it should become completely transparent
+
       // GIVEN: a component with hover opacity set to minimum (0.0)
       await startServerWithSchema({
         name: 'test-app',

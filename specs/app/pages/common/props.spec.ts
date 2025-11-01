@@ -107,6 +107,10 @@ test.describe('Component Props', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: props with object value
+      // WHEN: style is { padding: '1rem', margin: '2rem' }
+      // THEN: it should accept nested object property
+
+      // GIVEN: props with object value
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -168,6 +172,10 @@ test.describe('Component Props', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: props with variable reference
+      // WHEN: text is 'Welcome to $siteName'
+      // THEN: it should accept string with $variable syntax
+
+      // GIVEN: props with variable reference
       await startServerWithSchema({
         name: 'test-app',
         blocks: [
@@ -195,6 +203,10 @@ test.describe('Component Props', () => {
     'APP-PAGES-PROPS-007: should support mixed property types',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
+      // GIVEN: props with multiple properties of different types
+      // WHEN: object has className (string), size (number), enabled (boolean)
+      // THEN: it should support mixed property types
+
       // GIVEN: props with multiple properties of different types
       await startServerWithSchema({
         name: 'test-app',
@@ -230,6 +242,10 @@ test.describe('Component Props', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: props with camelCase property names
+      // WHEN: properties are maxWidth, minHeight, backgroundColor
+      // THEN: it should validate camelCase naming convention
+
+      // GIVEN: props with camelCase property names
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -263,6 +279,10 @@ test.describe('Component Props', () => {
     'APP-PAGES-PROPS-009: should support multiple variable references across properties',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
+      // GIVEN: props object referencing theme tokens
+      // WHEN: color is '$primaryColor' and text is 'Hello $userName'
+      // THEN: it should support multiple variable references across properties
+
       // GIVEN: props object referencing theme tokens
       await startServerWithSchema({
         name: 'test-app',

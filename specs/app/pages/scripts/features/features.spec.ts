@@ -23,6 +23,10 @@ test.describe('Feature Flags', () => {
     'APP-PAGES-FEATURES-001: should enable simple feature flag',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
+      // GIVEN: a feature with boolean value true
+      // WHEN: darkMode is true
+      // THEN: it should enable simple feature flag
+
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -45,6 +49,10 @@ test.describe('Feature Flags', () => {
     'APP-PAGES-FEATURES-002: should disable feature',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
+      // GIVEN: a feature with boolean value false
+      // WHEN: cookieConsent is false
+      // THEN: it should disable feature
+
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -67,6 +75,10 @@ test.describe('Feature Flags', () => {
     'APP-PAGES-FEATURES-003: should provide feature with configuration data',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
+      // GIVEN: a feature with object config
+      // WHEN: animations has enabled: true and config: { duration: 300, easing: 'ease-in-out' }
+      // THEN: it should provide feature with configuration data
+
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -95,6 +107,10 @@ test.describe('Feature Flags', () => {
     'APP-PAGES-FEATURES-004: should toggle feature via enabled boolean',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
+      // GIVEN: a feature config with enabled property
+      // WHEN: liveChat has enabled: true
+      // THEN: it should toggle feature via enabled boolean
+
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -117,6 +133,10 @@ test.describe('Feature Flags', () => {
     'APP-PAGES-FEATURES-005: should pass configuration to feature implementation',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
+      // GIVEN: a feature config with nested config object
+      // WHEN: liveChat.config has provider and appId
+      // THEN: it should pass configuration to feature implementation
+
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -144,6 +164,10 @@ test.describe('Feature Flags', () => {
     'APP-PAGES-FEATURES-006: should validate camelCase naming convention',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
+      // GIVEN: features with camelCase naming
+      // WHEN: feature names are darkMode, liveChat, cookieConsent
+      // THEN: it should validate camelCase naming convention
+
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -168,6 +192,10 @@ test.describe('Feature Flags', () => {
     'APP-PAGES-FEATURES-007: should support both simple and complex feature definitions',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
+      // GIVEN: features with oneOf type (boolean or object)
+      // WHEN: feature can be true or { enabled: true, config: {...} }
+      // THEN: it should support both simple and complex feature definitions
+
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -196,6 +224,10 @@ test.describe('Feature Flags', () => {
     'APP-PAGES-FEATURES-008: should support flexible feature configuration',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
+      // GIVEN: feature config with additionalProperties true
+      // WHEN: config accepts any custom properties
+      // THEN: it should support flexible feature configuration
+
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -223,6 +255,10 @@ test.describe('Feature Flags', () => {
     'APP-PAGES-FEATURES-009: should enable/disable UI features dynamically',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
+      // GIVEN: common feature flags (darkMode, animations, cookieConsent, liveChat)
+      // WHEN: features control client-side behavior
+      // THEN: it should enable/disable UI features dynamically
+
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -255,6 +291,10 @@ test.describe('Feature Flags', () => {
     'APP-PAGES-FEATURES-010: should provide runtime feature detection',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
+      // GIVEN: features accessible in client JavaScript
+      // WHEN: features are injected into page
+      // THEN: it should provide runtime feature detection
+
       await startServerWithSchema({
         name: 'test-app',
         pages: [

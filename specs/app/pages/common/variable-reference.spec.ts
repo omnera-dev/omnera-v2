@@ -60,6 +60,10 @@ test.describe('Variable Reference', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: a variable reference with camelCase name
+      // WHEN: value is '$primaryText'
+      // THEN: it should accept camelCase variable names
+
+      // GIVEN: a variable reference with camelCase name
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -90,6 +94,10 @@ test.describe('Variable Reference', () => {
     'APP-PAGES-VARREF-003: should accept variable at start of string',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
+      // GIVEN: a string with variable at the start
+      // WHEN: value is '$siteName is the best'
+      // THEN: it should accept variable at start of string
+
       // GIVEN: a string with variable at the start
       await startServerWithSchema({
         name: 'test-app',
@@ -122,6 +130,10 @@ test.describe('Variable Reference', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: a string with variable in the middle
+      // WHEN: value is 'Welcome to $siteName today'
+      // THEN: it should accept variable in middle of string
+
+      // GIVEN: a string with variable in the middle
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -153,6 +165,10 @@ test.describe('Variable Reference', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: a string with variable at the end
+      // WHEN: value is 'The color is $primaryColor'
+      // THEN: it should accept variable at end of string
+
+      // GIVEN: a string with variable at the end
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -183,6 +199,10 @@ test.describe('Variable Reference', () => {
     'APP-PAGES-VARREF-006: should accept multiple $variable references',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
+      // GIVEN: a string with multiple variables
+      // WHEN: value is 'The $productName costs $price'
+      // THEN: it should accept multiple $variable references
+
       // GIVEN: a string with multiple variables
       await startServerWithSchema({
         name: 'test-app',
@@ -216,6 +236,10 @@ test.describe('Variable Reference', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: a variable reference with numbers in name
+      // WHEN: value is '$color1' or '$size2x'
+      // THEN: it should accept alphanumeric variable names
+
+      // GIVEN: a variable reference with numbers in name
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -247,6 +271,10 @@ test.describe('Variable Reference', () => {
     'APP-PAGES-VARREF-008: should support variable composition patterns',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
+      // GIVEN: complex variable combination
+      // WHEN: value is '$icon-$size' for dynamic icon sizing
+      // THEN: it should support variable composition patterns
+
       // GIVEN: complex variable combination
       await startServerWithSchema({
         name: 'test-app',

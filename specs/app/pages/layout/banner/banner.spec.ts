@@ -84,6 +84,10 @@ test.describe('Banner Configuration', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: a banner with link
+      // WHEN: link has href '/features' and label 'Learn more'
+      // THEN: it should add clickable link to banner
+
+      // GIVEN: a banner with link
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -126,6 +130,10 @@ test.describe('Banner Configuration', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: a banner with gradient background
+      // WHEN: gradient is 'linear-gradient(90deg, #667eea 0%, #764ba2 100%)'
+      // THEN: it should apply CSS gradient as background
+
+      // GIVEN: a banner with gradient background
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -159,6 +167,10 @@ test.describe('Banner Configuration', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: a banner with solid backgroundColor
+      // WHEN: backgroundColor is '#FF5733' (hex color)
+      // THEN: it should apply solid background color
+
+      // GIVEN: a banner with solid backgroundColor
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -185,6 +197,10 @@ test.describe('Banner Configuration', () => {
     'APP-PAGES-BANNER-006: should apply text color for contrast',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
+      // GIVEN: a banner with textColor
+      // WHEN: textColor is '#FFFFFF' for readability
+      // THEN: it should apply text color for contrast
+
       // GIVEN: a banner with textColor
       await startServerWithSchema({
         name: 'test-app',
@@ -220,6 +236,10 @@ test.describe('Banner Configuration', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: a dismissible banner
+      // WHEN: dismissible is true
+      // THEN: it should allow users to close banner permanently
+
+      // GIVEN: a dismissible banner
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -254,6 +274,10 @@ test.describe('Banner Configuration', () => {
     'APP-PAGES-BANNER-008: should remain at top during page scroll',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
+      // GIVEN: a sticky banner
+      // WHEN: sticky is true
+      // THEN: it should remain at top during page scroll
+
       // GIVEN: a sticky banner
       await startServerWithSchema({
         name: 'test-app',

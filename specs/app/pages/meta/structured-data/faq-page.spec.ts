@@ -23,6 +23,10 @@ test.describe('FAQ Page Schema', () => {
     'APP-PAGES-FAQPAGE-001: should validate minimal FAQPage structured data',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
+      // GIVEN: FAQPage with required properties
+      // WHEN: @context is 'https://schema.org', @type is 'FAQPage', and mainEntity is provided
+      // THEN: it should validate minimal FAQPage structured data
+
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -51,6 +55,10 @@ test.describe('FAQ Page Schema', () => {
     'APP-PAGES-FAQPAGE-002: should contain list of Q&A pairs',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
+      // GIVEN: FAQPage with mainEntity array
+      // WHEN: mainEntity is array of Question objects
+      // THEN: it should contain list of Q&A pairs
+
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -89,6 +97,10 @@ test.describe('FAQ Page Schema', () => {
     'APP-PAGES-FAQPAGE-003: should define question structure',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
+      // GIVEN: FAQPage with Question
+      // WHEN: each item has @type 'Question', name, and acceptedAnswer
+      // THEN: it should define question structure
+
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -129,6 +141,10 @@ test.describe('FAQ Page Schema', () => {
     'APP-PAGES-FAQPAGE-004: should provide question text',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
+      // GIVEN: FAQPage with Question name
+      // WHEN: name is 'What is the refund policy?'
+      // THEN: it should provide question text
+
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -167,6 +183,10 @@ test.describe('FAQ Page Schema', () => {
     'APP-PAGES-FAQPAGE-005: should provide answer structure',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
+      // GIVEN: FAQPage with acceptedAnswer
+      // WHEN: acceptedAnswer has @type 'Answer' and text
+      // THEN: it should provide answer structure
+
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -206,6 +226,10 @@ test.describe('FAQ Page Schema', () => {
     'APP-PAGES-FAQPAGE-006: should provide answer content',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
+      // GIVEN: FAQPage with Answer text
+      // WHEN: text is 'We offer a 30-day money-back guarantee'
+      // THEN: it should provide answer content
+
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -247,6 +271,10 @@ test.describe('FAQ Page Schema', () => {
     'APP-PAGES-FAQPAGE-007: should support comprehensive FAQ section',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
+      // GIVEN: FAQPage with multiple Q&A pairs
+      // WHEN: mainEntity has 5+ Question objects
+      // THEN: it should support comprehensive FAQ section
+
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -306,6 +334,10 @@ test.describe('FAQ Page Schema', () => {
     'APP-PAGES-FAQPAGE-008: should display expandable Q&A in Google search results',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
+      // GIVEN: FAQPage for rich results
+      // WHEN: FAQPage structured data is included in page metadata
+      // THEN: it should display expandable Q&A in Google search results
+
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -346,6 +378,10 @@ test.describe('FAQ Page Schema', () => {
     'APP-PAGES-FAQPAGE-009: should reduce support load by surfacing answers in search',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
+      // GIVEN: FAQPage for support content
+      // WHEN: FAQ answers common customer questions
+      // THEN: it should reduce support load by surfacing answers in search
+
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -386,6 +422,10 @@ test.describe('FAQ Page Schema', () => {
     'APP-PAGES-FAQPAGE-010: should increase click-through rate from search results',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
+      // GIVEN: FAQPage for SERP visibility
+      // WHEN: FAQ rich results show in search
+      // THEN: it should increase click-through rate from search results
+
       await startServerWithSchema({
         name: 'test-app',
         pages: [

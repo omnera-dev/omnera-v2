@@ -29,6 +29,10 @@ test.describe('Shadows', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: shadow scale from sm to 2xl
+      // WHEN: shadows increase in depth and blur
+      // THEN: it should validate elevation system from subtle to dramatic
+
+      // GIVEN: shadow scale from sm to 2xl
       await startServerWithSchema({
         name: 'test-app',
         theme: {
@@ -152,6 +156,10 @@ test.describe('Shadows', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: complete shadow system (sm, md, lg, xl, 2xl, inner, none)
+      // WHEN: all elevation tokens are defined
+      // THEN: it should validate complete shadow system
+
+      // GIVEN: complete shadow system (sm, md, lg, xl, 2xl, inner, none)
       await startServerWithSchema({
         name: 'test-app',
         theme: {
@@ -180,6 +188,10 @@ test.describe('Shadows', () => {
     'APP-THEME-SHADOWS-APPLICATION-001: should render card with medium box-shadow creating depth',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
+      // GIVEN: md shadow applied to card component
+      // WHEN: card uses theme.shadows.md for moderate elevation
+      // THEN: it should render card with medium box-shadow creating depth
+
       // GIVEN: md shadow applied to card component
       await startServerWithSchema({
         name: 'test-app',
@@ -220,6 +232,10 @@ test.describe('Shadows', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: xl shadow applied to modal overlay
+      // WHEN: modal uses theme.shadows.xl for high elevation above content
+      // THEN: it should render modal with dramatic shadow emphasizing importance
+
+      // GIVEN: xl shadow applied to modal overlay
       await startServerWithSchema({
         name: 'test-app',
         theme: {
@@ -258,6 +274,10 @@ test.describe('Shadows', () => {
     'APP-THEME-SHADOWS-APPLICATION-003: should render input with inset shadow creating depth inward',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
+      // GIVEN: inner shadow applied to input field
+      // WHEN: input uses theme.shadows.inner for recessed appearance
+      // THEN: it should render input with inset shadow creating depth inward
+
       // GIVEN: inner shadow applied to input field
       await startServerWithSchema({
         name: 'test-app',

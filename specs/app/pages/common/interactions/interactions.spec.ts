@@ -29,6 +29,10 @@ test.describe('Component Interactions', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: a component with only hover interactions
+      // WHEN: component is configured
+      // THEN: it should support hover effects without other interaction types
+
+      // GIVEN: a component with only hover interactions
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -62,6 +66,10 @@ test.describe('Component Interactions', () => {
     'APP-INTERACTION-MAIN-002: should support click actions without other interaction types',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
+      // GIVEN: a component with only click interactions
+      // WHEN: component is configured
+      // THEN: it should support click actions without other interaction types
+
       // GIVEN: a component with only click interactions
       await startServerWithSchema({
         name: 'test-app',
@@ -97,6 +105,10 @@ test.describe('Component Interactions', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: a component with only scroll interactions
+      // WHEN: component is configured
+      // THEN: it should support scroll animations without other interaction types
+
+      // GIVEN: a component with only scroll interactions
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -131,6 +143,10 @@ test.describe('Component Interactions', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: a component with only entrance interactions
+      // WHEN: component is configured
+      // THEN: it should support entrance animations without other interaction types
+
+      // GIVEN: a component with only entrance interactions
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -163,6 +179,10 @@ test.describe('Component Interactions', () => {
     'APP-INTERACTION-MAIN-005: should support both hover effects and click actions',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
+      // GIVEN: a button with hover and click interactions
+      // WHEN: component is configured
+      // THEN: it should support both hover effects and click actions
+
       // GIVEN: a button with hover and click interactions
       await startServerWithSchema({
         name: 'test-app',
@@ -203,6 +223,10 @@ test.describe('Component Interactions', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: a component with entrance and scroll interactions
+      // WHEN: page loads and user scrolls
+      // THEN: it should play entrance animation on load and scroll animation on viewport entry
+
+      // GIVEN: a component with entrance and scroll interactions
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -240,6 +264,10 @@ test.describe('Component Interactions', () => {
     'APP-INTERACTION-MAIN-007: all interactions should work independently and not interfere with each other',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
+      // GIVEN: a component with all four interaction types (hover, click, scroll, entrance)
+      // WHEN: component is fully interactive
+      // THEN: all interactions should work independently and not interfere with each other
+
       // GIVEN: a component with all four interaction types (hover, click, scroll, entrance)
       await startServerWithSchema({
         name: 'test-app',
@@ -282,6 +310,10 @@ test.describe('Component Interactions', () => {
     'APP-INTERACTION-MAIN-008: hover effect should apply immediately and click should navigate after animation',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
+      // GIVEN: a button with hover transform and click navigation
+      // WHEN: user hovers then clicks
+      // THEN: hover effect should apply immediately and click should navigate after animation
+
       // GIVEN: a button with hover transform and click navigation
       await startServerWithSchema({
         name: 'test-app',

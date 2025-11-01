@@ -151,6 +151,10 @@ test.describe('Page ID', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: page IDs across multiple pages
+      // WHEN: each page has unique ID
+      // THEN: it should ensure uniqueness across all pages in array
+
+      // GIVEN: page IDs across multiple pages
       await startServerWithSchema({
         name: 'test-app',
         pages: [

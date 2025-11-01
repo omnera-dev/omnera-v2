@@ -23,6 +23,10 @@ test.describe('Article Schema', () => {
     'APP-PAGES-ARTICLE-001: should validate minimal Article structured data',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
+      // GIVEN: Article with required properties
+      // WHEN: @context is 'https://schema.org', @type is 'Article', and headline is provided
+      // THEN: it should validate minimal Article structured data
+
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -56,6 +60,10 @@ test.describe('Article Schema', () => {
     'APP-PAGES-ARTICLE-002: should categorize content type',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
+      // GIVEN: Article with @type enum
+      // WHEN: @type is 'Article', 'NewsArticle', or 'BlogPosting'
+      // THEN: it should categorize content type
+
       const types = ['Article', 'NewsArticle', 'BlogPosting']
       for (const type of types) {
         await startServerWithSchema({
@@ -91,6 +99,10 @@ test.describe('Article Schema', () => {
     'APP-PAGES-ARTICLE-003: should provide article title for rich results',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
+      // GIVEN: Article with headline
+      // WHEN: headline is article title
+      // THEN: it should provide article title for rich results
+
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -123,6 +135,10 @@ test.describe('Article Schema', () => {
     'APP-PAGES-ARTICLE-004: should provide article summary',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
+      // GIVEN: Article with description
+      // WHEN: description summarizes article content
+      // THEN: it should provide article summary
+
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -157,6 +173,10 @@ test.describe('Article Schema', () => {
     'APP-PAGES-ARTICLE-005: should support single or multiple article images',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
+      // GIVEN: Article with image
+      // WHEN: image is string URL or array of URLs
+      // THEN: it should support single or multiple article images
+
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -191,6 +211,10 @@ test.describe('Article Schema', () => {
     'APP-PAGES-ARTICLE-006: should provide simple author name',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
+      // GIVEN: Article with author as string
+      // WHEN: author is 'John Doe'
+      // THEN: it should provide simple author name
+
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -224,6 +248,10 @@ test.describe('Article Schema', () => {
     'APP-PAGES-ARTICLE-007: should provide structured author information',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
+      // GIVEN: Article with author as Person object
+      // WHEN: author is object with @type 'Person', name, and url
+      // THEN: it should provide structured author information
+
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -262,6 +290,10 @@ test.describe('Article Schema', () => {
     'APP-PAGES-ARTICLE-008: should attribute content to organization',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
+      // GIVEN: Article with author as Organization
+      // WHEN: author is object with @type 'Organization' and name
+      // THEN: it should attribute content to organization
+
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -296,6 +328,10 @@ test.describe('Article Schema', () => {
     'APP-PAGES-ARTICLE-009: should provide publication date',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
+      // GIVEN: Article with datePublished
+      // WHEN: datePublished is ISO 8601 date-time
+      // THEN: it should provide publication date
+
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -329,6 +365,10 @@ test.describe('Article Schema', () => {
     'APP-PAGES-ARTICLE-010: should indicate last update date',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
+      // GIVEN: Article with dateModified
+      // WHEN: dateModified is ISO 8601 date-time
+      // THEN: it should indicate last update date
+
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -363,6 +403,10 @@ test.describe('Article Schema', () => {
     'APP-PAGES-ARTICLE-011: should identify publishing organization',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
+      // GIVEN: Article with publisher
+      // WHEN: publisher is object with @type 'Organization', name, and logo (ImageObject)
+      // THEN: it should identify publishing organization
+
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -434,6 +478,10 @@ test.describe('Article Schema', () => {
     'APP-PAGES-ARTICLE-013: should enable Google News and article rich results',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
+      // GIVEN: Article for rich results
+      // WHEN: complete article data with author, dates, and publisher is provided
+      // THEN: it should enable Google News and article rich results
+
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -472,6 +520,10 @@ test.describe('Article Schema', () => {
     'APP-PAGES-ARTICLE-014: should properly attribute content to authors and publishers',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
+      // GIVEN: Article for content attribution
+      // WHEN: Article structured data is included in blog posts
+      // THEN: it should properly attribute content to authors and publishers
+
       await startServerWithSchema({
         name: 'test-app',
         pages: [

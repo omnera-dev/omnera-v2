@@ -80,6 +80,10 @@ test.describe('Pages', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: a page with all optional properties
+      // WHEN: page includes id, layout, and scripts
+      // THEN: it should accept complete page configuration
+
+      // GIVEN: a page with all optional properties
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -161,6 +165,10 @@ test.describe('Pages', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: a page with sections containing direct components
+      // WHEN: sections has type, props, and children
+      // THEN: it should support direct component definitions in sections
+
+      // GIVEN: a page with sections containing direct components
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -191,6 +199,10 @@ test.describe('Pages', () => {
     'APP-PAGES-007: should support block references with $variable syntax',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
+      // GIVEN: a page with sections containing block references
+      // WHEN: sections references blocks with variable substitution
+      // THEN: it should support block references with $variable syntax
+
       // GIVEN: a page with sections containing block references
       await startServerWithSchema({
         name: 'test-app',
@@ -225,6 +237,10 @@ test.describe('Pages', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: a page with layout configuration
+      // WHEN: layout includes navigation, banner, footer, and sidebar
+      // THEN: it should orchestrate global layout components
+
+      // GIVEN: a page with layout configuration
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -258,6 +274,10 @@ test.describe('Pages', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: a page with scripts configuration
+      // WHEN: scripts includes features, external scripts, and config
+      // THEN: it should manage client-side scripts and features
+
+      // GIVEN: a page with scripts configuration
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -287,6 +307,10 @@ test.describe('Pages', () => {
     'APP-PAGES-010: should support multiple page configurations',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
+      // GIVEN: multiple pages in array
+      // WHEN: pages array contains [homepage, about, pricing, contact]
+      // THEN: it should support multiple page configurations
+
       // GIVEN: multiple pages in array
       await startServerWithSchema({
         name: 'test-app',
@@ -335,6 +359,10 @@ test.describe('Pages', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: a page supporting reusable blocks
+      // WHEN: blocks are defined at app level and referenced in sections
+      // THEN: it should enable block reusability across pages via $ref
+
+      // GIVEN: a page supporting reusable blocks
       await startServerWithSchema({
         name: 'test-app',
         blocks: [
@@ -370,6 +398,10 @@ test.describe('Pages', () => {
     'APP-PAGES-012: should support complete metadata configuration beyond basic SEO',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
+      // GIVEN: a page with comprehensive metadata
+      // WHEN: meta includes SEO, social, structured data, and analytics
+      // THEN: it should support complete metadata configuration beyond basic SEO
+
       // GIVEN: a page with comprehensive metadata
       await startServerWithSchema({
         name: 'test-app',
@@ -416,6 +448,10 @@ test.describe('Pages', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: a page with theme integration
+      // WHEN: page sections use app.theme colors, typography, and spacing via className
+      // THEN: it should apply global theme to page elements without page-level theme config
+
+      // GIVEN: a page with theme integration
       await startServerWithSchema({
         name: 'test-app',
         theme: { colors: { primary: '#3B82F6', secondary: '#10B981' } },
@@ -451,6 +487,10 @@ test.describe('Pages', () => {
     'APP-PAGES-INTEGRATION-002: should adapt page content based on selected language without page-level translations',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
+      // GIVEN: a page with language integration
+      // WHEN: page uses app.languages for i18n with meta.lang and locale-specific content
+      // THEN: it should adapt page content based on selected language without page-level translations
+
       // GIVEN: a page with language integration
       await startServerWithSchema({
         name: 'test-app',
@@ -489,6 +529,10 @@ test.describe('Pages', () => {
     'APP-PAGES-INTEGRATION-003: should compose pages from reusable blocks without duplicating block definitions',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
+      // GIVEN: a page with blocks integration
+      // WHEN: page sections reference app.blocks[] via $ref with $vars substitution
+      // THEN: it should compose pages from reusable blocks without duplicating block definitions
+
       // GIVEN: a page with blocks integration
       await startServerWithSchema({
         name: 'test-app',
@@ -535,6 +579,10 @@ test.describe('Pages', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: a page with responsive integration
+      // WHEN: page layout adapts across mobile, tablet, and desktop viewports
+      // THEN: it should support responsive design via className utilities without separate mobile pages
+
+      // GIVEN: a page with responsive integration
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -574,6 +622,10 @@ test.describe('Pages', () => {
     'APP-PAGES-INTEGRATION-005: should demonstrate end-to-end integration of all page-building features',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
+      // GIVEN: a complete app with pages, theme, blocks, languages, and responsive
+      // WHEN: all systems work together in a full-stack configuration
+      // THEN: it should demonstrate end-to-end integration of all page-building features
+
       // GIVEN: a complete app with pages, theme, blocks, languages, and responsive
       await startServerWithSchema({
         name: 'test-app',

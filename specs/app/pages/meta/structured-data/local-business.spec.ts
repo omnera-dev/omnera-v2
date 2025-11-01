@@ -23,6 +23,10 @@ test.describe('Local Business Schema', () => {
     'APP-PAGES-LOCALBUSINESS-001: should validate minimal LocalBusiness structured data',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
+      // GIVEN: LocalBusiness with required properties
+      // WHEN: @context is 'https://schema.org', @type is 'LocalBusiness', and name is provided
+      // THEN: it should validate minimal LocalBusiness structured data
+
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -56,6 +60,10 @@ test.describe('Local Business Schema', () => {
     'APP-PAGES-LOCALBUSINESS-002: should provide business identity',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
+      // GIVEN: LocalBusiness with name and description
+      // WHEN: name and description describe the business
+      // THEN: it should provide business identity
+
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -90,6 +98,10 @@ test.describe('Local Business Schema', () => {
     'APP-PAGES-LOCALBUSINESS-003: should provide business branding',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
+      // GIVEN: LocalBusiness with url and logo
+      // WHEN: url is website and logo is business logo URL
+      // THEN: it should provide business branding
+
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -125,6 +137,10 @@ test.describe('Local Business Schema', () => {
     'APP-PAGES-LOCALBUSINESS-004: should support single or multiple business images',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
+      // GIVEN: LocalBusiness with image
+      // WHEN: image is string URL or array of URLs
+      // THEN: it should support single or multiple business images
+
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -159,6 +175,10 @@ test.describe('Local Business Schema', () => {
     'APP-PAGES-LOCALBUSINESS-005: should provide business contact information',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
+      // GIVEN: LocalBusiness with contact info
+      // WHEN: email and telephone are provided
+      // THEN: it should provide business contact information
+
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -194,6 +214,10 @@ test.describe('Local Business Schema', () => {
     'APP-PAGES-LOCALBUSINESS-006: should indicate business price level',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
+      // GIVEN: LocalBusiness with priceRange
+      // WHEN: priceRange is '$', '$$', '$$$', or '$$$$'
+      // THEN: it should indicate business price level
+
       const priceRanges = ['$', '$$', '$$$', '$$$$']
       for (const priceRange of priceRanges) {
         await startServerWithSchema({
@@ -230,6 +254,10 @@ test.describe('Local Business Schema', () => {
     'APP-PAGES-LOCALBUSINESS-007: should include physical address for maps',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
+      // GIVEN: LocalBusiness with address
+      // WHEN: address references postal-address.schema.json
+      // THEN: it should include physical address for maps
+
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -269,6 +297,10 @@ test.describe('Local Business Schema', () => {
     'APP-PAGES-LOCALBUSINESS-008: should provide precise map location',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
+      // GIVEN: LocalBusiness with geo coordinates
+      // WHEN: geo is object with @type 'GeoCoordinates', latitude, and longitude
+      // THEN: it should provide precise map location
+
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -304,6 +336,10 @@ test.describe('Local Business Schema', () => {
     'APP-PAGES-LOCALBUSINESS-009: should link business to social profiles',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
+      // GIVEN: LocalBusiness with social profiles
+      // WHEN: sameAs is array of social media URLs
+      // THEN: it should link business to social profiles
+
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -342,6 +378,10 @@ test.describe('Local Business Schema', () => {
     'APP-PAGES-LOCALBUSINESS-010: should provide business hours for each day',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
+      // GIVEN: LocalBusiness with opening hours
+      // WHEN: openingHoursSpecification is array with @type, dayOfWeek, opens, closes
+      // THEN: it should provide business hours for each day
+
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -384,6 +424,10 @@ test.describe('Local Business Schema', () => {
     'APP-PAGES-LOCALBUSINESS-011: should specify which days hours apply to',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
+      // GIVEN: LocalBusiness with dayOfWeek enum
+      // WHEN: dayOfWeek is array of 'Monday', 'Tuesday', etc.
+      // THEN: it should specify which days hours apply to
+
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -426,6 +470,10 @@ test.describe('Local Business Schema', () => {
     'APP-PAGES-LOCALBUSINESS-012: should specify daily operating hours',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
+      // GIVEN: LocalBusiness with opens/closes times
+      // WHEN: opens is '09:00' and closes is '18:00' (HH:MM format)
+      // THEN: it should specify daily operating hours
+
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -467,6 +515,10 @@ test.describe('Local Business Schema', () => {
     'APP-PAGES-LOCALBUSINESS-013: should enable Google Business Profile rich results',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
+      // GIVEN: LocalBusiness for local SEO
+      // WHEN: complete business data with address, geo, and hours is provided
+      // THEN: it should enable Google Business Profile rich results
+
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -508,6 +560,10 @@ test.describe('Local Business Schema', () => {
     'APP-PAGES-LOCALBUSINESS-014: should enable map pin and directions in search results',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
+      // GIVEN: LocalBusiness for map display
+      // WHEN: address and geo coordinates are provided
+      // THEN: it should enable map pin and directions in search results
+
       await startServerWithSchema({
         name: 'test-app',
         pages: [

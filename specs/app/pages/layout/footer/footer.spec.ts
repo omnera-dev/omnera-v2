@@ -28,6 +28,10 @@ test.describe('Footer Configuration', () => {
     'APP-PAGES-FOOTER-001: should display footer at bottom of page',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
+      // GIVEN: a footer with enabled set to true
+      // WHEN: footer should be visible (default)
+      // THEN: it should display footer at bottom of page
+
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -49,6 +53,10 @@ test.describe('Footer Configuration', () => {
     'APP-PAGES-FOOTER-002: should display footer logo',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
+      // GIVEN: a footer with logo
+      // WHEN: logo is './logo-footer.svg'
+      // THEN: it should display footer logo
+
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -73,6 +81,10 @@ test.describe('Footer Configuration', () => {
     'APP-PAGES-FOOTER-003: should render company description',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
+      // GIVEN: a footer with description/tagline
+      // WHEN: description is 'Building the future of web applications'
+      // THEN: it should render company description
+
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -98,6 +110,10 @@ test.describe('Footer Configuration', () => {
     'APP-PAGES-FOOTER-004: should render multi-column link layout',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
+      // GIVEN: a footer with columns
+      // WHEN: columns array contains [Product, Company]
+      // THEN: it should render multi-column link layout
+
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -142,6 +158,10 @@ test.describe('Footer Configuration', () => {
     'APP-PAGES-FOOTER-005: should render column heading and link list',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
+      // GIVEN: a footer column with title and links
+      // WHEN: column has title 'Product' with links [Features, Pricing]
+      // THEN: it should render column heading and link list
+
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -178,6 +198,10 @@ test.describe('Footer Configuration', () => {
     'APP-PAGES-FOOTER-006: should support external link targets',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
+      // GIVEN: a footer link with target _blank
+      // WHEN: link opens external site in new tab
+      // THEN: it should support external link targets
+
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -217,6 +241,10 @@ test.describe('Footer Configuration', () => {
     'APP-PAGES-FOOTER-007: should render social media icons',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
+      // GIVEN: a footer with social links
+      // WHEN: social has links for [twitter, github]
+      // THEN: it should render social media icons
+
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -257,6 +285,10 @@ test.describe('Footer Configuration', () => {
     'APP-PAGES-FOOTER-008: should support 7 social platforms with auto icons',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
+      // GIVEN: a footer social link with platform
+      // WHEN: platform enum includes facebook, twitter, instagram, linkedin, youtube, github, tiktok
+      // THEN: it should support 7 social platforms with auto icons
+
       const platforms = [
         'facebook',
         'twitter',
@@ -293,6 +325,10 @@ test.describe('Footer Configuration', () => {
     'APP-PAGES-FOOTER-009: should render email subscription form',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
+      // GIVEN: a footer with newsletter subscription
+      // WHEN: newsletter.enabled is true with title and description
+      // THEN: it should render email subscription form
+
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -332,6 +368,10 @@ test.describe('Footer Configuration', () => {
     'APP-PAGES-FOOTER-010: should display copyright notice',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
+      // GIVEN: a footer with copyright text
+      // WHEN: copyright is '© 2024 Company Inc. All rights reserved.'
+      // THEN: it should display copyright notice
+
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -357,6 +397,10 @@ test.describe('Footer Configuration', () => {
     'APP-PAGES-FOOTER-011: should render legal link list',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
+      // GIVEN: a footer with legal links
+      // WHEN: legal includes [Privacy Policy, Terms of Service]
+      // THEN: it should render legal link list
+
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -390,6 +434,10 @@ test.describe('Footer Configuration', () => {
     'APP-PAGES-FOOTER-012: should not render footer',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
+      // GIVEN: a disabled footer
+      // WHEN: enabled is false
+      // THEN: it should not render footer
+
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -411,6 +459,10 @@ test.describe('Footer Configuration', () => {
     'APP-PAGES-FOOTER-013: should render comprehensive footer layout',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
+      // GIVEN: a footer with all 5 sections
+      // WHEN: footer includes logo, columns, social, newsletter, legal
+      // THEN: it should render comprehensive footer layout
+
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -449,6 +501,10 @@ test.describe('Footer Configuration', () => {
     'APP-PAGES-FOOTER-014: should override default platform icon',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
+      // GIVEN: a footer with custom social icon
+      // WHEN: social link has custom icon property
+      // THEN: it should override default platform icon
+
       await startServerWithSchema({
         name: 'test-app',
         pages: [

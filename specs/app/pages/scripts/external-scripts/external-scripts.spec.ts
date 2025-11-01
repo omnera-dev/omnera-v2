@@ -23,6 +23,10 @@ test.describe('External Scripts', () => {
     'APP-PAGES-EXTERNAL-001: should load external JavaScript from CDN',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
+      // GIVEN: an external script with src URL
+      // WHEN: src is 'https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js'
+      // THEN: it should load external JavaScript from CDN
+
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -48,6 +52,10 @@ test.describe('External Scripts', () => {
     'APP-PAGES-EXTERNAL-002: should load script asynchronously (non-blocking)',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
+      // GIVEN: an external script with async true
+      // WHEN: async is true
+      // THEN: it should load script asynchronously (non-blocking)
+
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -72,6 +80,10 @@ test.describe('External Scripts', () => {
     'APP-PAGES-EXTERNAL-003: should defer script execution until DOM loaded',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
+      // GIVEN: an external script with defer true
+      // WHEN: defer is true
+      // THEN: it should defer script execution until DOM loaded
+
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -118,6 +130,10 @@ test.describe('External Scripts', () => {
     'APP-PAGES-EXTERNAL-005: should verify subresource integrity for security',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
+      // GIVEN: an external script with integrity hash
+      // WHEN: integrity is 'sha384-abc123...'
+      // THEN: it should verify subresource integrity for security
+
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -144,6 +160,10 @@ test.describe('External Scripts', () => {
     'APP-PAGES-EXTERNAL-006: should set CORS policy for script loading',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
+      // GIVEN: an external script with crossorigin
+      // WHEN: crossorigin is 'anonymous' or 'use-credentials'
+      // THEN: it should set CORS policy for script loading
+
       const crossorigins = ['anonymous', 'use-credentials']
       for (const crossorigin of crossorigins) {
         await startServerWithSchema({
@@ -171,6 +191,10 @@ test.describe('External Scripts', () => {
     'APP-PAGES-EXTERNAL-007: should insert script in document head',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
+      // GIVEN: an external script with position 'head'
+      // WHEN: position is 'head'
+      // THEN: it should insert script in document head
+
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -197,6 +221,10 @@ test.describe('External Scripts', () => {
     'APP-PAGES-EXTERNAL-008: should insert script at end of body',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
+      // GIVEN: an external script with position 'body-end'
+      // WHEN: position is 'body-end' (default)
+      // THEN: it should insert script at end of body
+
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -223,6 +251,10 @@ test.describe('External Scripts', () => {
     'APP-PAGES-EXTERNAL-009: should insert script at start of body',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
+      // GIVEN: an external script with position 'body-start'
+      // WHEN: position is 'body-start'
+      // THEN: it should insert script at start of body
+
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -249,6 +281,10 @@ test.describe('External Scripts', () => {
     'APP-PAGES-EXTERNAL-010: should load multiple external scripts in order',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
+      // GIVEN: external scripts array with multiple libraries
+      // WHEN: array includes [AlpineJS, Chart.js, app.js]
+      // THEN: it should load multiple external scripts in order
+
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -282,6 +318,10 @@ test.describe('External Scripts', () => {
     'APP-PAGES-EXTERNAL-011: should load local JavaScript file',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
+      // GIVEN: external script with relative src
+      // WHEN: src is './js/app.js' (relative path)
+      // THEN: it should load local JavaScript file
+
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -303,6 +343,10 @@ test.describe('External Scripts', () => {
     'APP-PAGES-EXTERNAL-012: should load script with default settings (sync, body-end)',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
+      // GIVEN: external script with required src only
+      // WHEN: only src is provided (all other properties optional)
+      // THEN: it should load script with default settings (sync, body-end)
+
       await startServerWithSchema({
         name: 'test-app',
         pages: [

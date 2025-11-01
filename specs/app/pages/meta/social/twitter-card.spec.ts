@@ -23,6 +23,10 @@ test.describe('Twitter Card Metadata', () => {
     'APP-PAGES-TWITTER-001: should validate minimal Twitter Card configuration',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
+      // GIVEN: Twitter Card with required card type
+      // WHEN: card property specifies card type
+      // THEN: it should validate minimal Twitter Card configuration
+
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -51,6 +55,10 @@ test.describe('Twitter Card Metadata', () => {
     'APP-PAGES-TWITTER-002: should display small square image card',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
+      // GIVEN: Twitter Card with type 'summary'
+      // WHEN: card is 'summary' for default card
+      // THEN: it should display small square image card
+
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -81,6 +89,10 @@ test.describe('Twitter Card Metadata', () => {
     'APP-PAGES-TWITTER-003: should display large rectangular image card',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
+      // GIVEN: Twitter Card with type 'summary_large_image'
+      // WHEN: card is 'summary_large_image' for featured content
+      // THEN: it should display large rectangular image card
+
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -114,6 +126,10 @@ test.describe('Twitter Card Metadata', () => {
     'APP-PAGES-TWITTER-004: should promote mobile app downloads',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
+      // GIVEN: Twitter Card with type 'app'
+      // WHEN: card is 'app' with appName and appId
+      // THEN: it should promote mobile app downloads
+
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -146,6 +162,10 @@ test.describe('Twitter Card Metadata', () => {
     'APP-PAGES-TWITTER-005: should embed video/audio player',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
+      // GIVEN: Twitter Card with type 'player'
+      // WHEN: card is 'player' with player URL and dimensions
+      // THEN: it should embed video/audio player
+
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -183,6 +203,10 @@ test.describe('Twitter Card Metadata', () => {
     'APP-PAGES-TWITTER-006: should enforce title length for Twitter display',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
+      // GIVEN: Twitter Card title with maxLength
+      // WHEN: title has 70 characters max
+      // THEN: it should enforce title length for Twitter display
+
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -212,6 +236,10 @@ test.describe('Twitter Card Metadata', () => {
     'APP-PAGES-TWITTER-007: should enforce description length for Twitter cards',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
+      // GIVEN: Twitter Card description with maxLength
+      // WHEN: description has 200 characters max
+      // THEN: it should enforce description length for Twitter cards
+
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -244,6 +272,10 @@ test.describe('Twitter Card Metadata', () => {
     'APP-PAGES-TWITTER-008: should provide properly sized social image',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
+      // GIVEN: Twitter Card image with size requirements
+      // WHEN: image is min 144x144px for summary or 300x157px for large
+      // THEN: it should provide properly sized social image
+
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -277,6 +309,10 @@ test.describe('Twitter Card Metadata', () => {
     'APP-PAGES-TWITTER-009: should attribute content to website Twitter account',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
+      // GIVEN: Twitter Card with site @username
+      // WHEN: site is '@mysite' for website attribution
+      // THEN: it should attribute content to website Twitter account
+
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -309,6 +345,10 @@ test.describe('Twitter Card Metadata', () => {
     'APP-PAGES-TWITTER-010: should attribute content to author Twitter account',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
+      // GIVEN: Twitter Card with creator @username
+      // WHEN: creator is '@johndoe' for content author
+      // THEN: it should attribute content to author Twitter account
+
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -342,6 +382,10 @@ test.describe('Twitter Card Metadata', () => {
     'APP-PAGES-TWITTER-011: should provide accessible image description',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
+      // GIVEN: Twitter Card imageAlt with maxLength
+      // WHEN: imageAlt has 420 characters max
+      // THEN: it should provide accessible image description
+
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -375,6 +419,10 @@ test.describe('Twitter Card Metadata', () => {
     'APP-PAGES-TWITTER-012: should display enhanced Twitter sharing card',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
+      // GIVEN: Twitter Card rich preview
+      // WHEN: all properties create rich card on Twitter/X
+      // THEN: it should display enhanced Twitter sharing card
+
       await startServerWithSchema({
         name: 'test-app',
         pages: [

@@ -237,6 +237,10 @@ test.describe('Color Palette', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: a complete color system with semantic, descriptive, and variant colors
+      // WHEN: palette includes primary, secondary, success, danger, warning, info, light, dark, grays
+      // THEN: it should validate comprehensive color system for all UI needs
+
+      // GIVEN: a complete color system with semantic, descriptive, and variant colors
       await startServerWithSchema({
         name: 'test-app',
         theme: {
@@ -296,6 +300,10 @@ test.describe('Color Palette', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: primary color used in button component
+      // WHEN: button applies theme.colors.primary
+      // THEN: it should render button with primary background color
+
+      // GIVEN: primary color used in button component
       await startServerWithSchema({
         name: 'test-app',
         theme: {
@@ -335,6 +343,10 @@ test.describe('Color Palette', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: primary-hover color used on button:hover
+      // WHEN: button hover state applies theme.colors.primary-hover
+      // THEN: it should render darker blue on hover
+
+      // GIVEN: primary-hover color used on button:hover
       await startServerWithSchema({
         name: 'test-app',
         theme: {
@@ -372,6 +384,10 @@ test.describe('Color Palette', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: text color used in typography
+      // WHEN: heading applies theme.colors.text
+      // THEN: it should render text with theme text color
+
+      // GIVEN: text color used in typography
       await startServerWithSchema({
         name: 'test-app',
         theme: {
@@ -408,6 +424,10 @@ test.describe('Color Palette', () => {
     'APP-THEME-COLORS-APPLICATION-004: should render green alert indicating success state',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
+      // GIVEN: success color used in alert
+      // WHEN: alert applies theme.colors.success
+      // THEN: it should render green alert indicating success state
+
       // GIVEN: success color used in alert
       await startServerWithSchema({
         name: 'test-app',
@@ -449,6 +469,10 @@ test.describe('Color Palette', () => {
     'APP-THEME-COLORS-APPLICATION-005: should create visual hierarchy through tonal variation',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
+      // GIVEN: gray scale used in UI hierarchy
+      // WHEN: components use gray-100 to gray-900 for depth
+      // THEN: it should create visual hierarchy through tonal variation
+
       // GIVEN: gray scale used in UI hierarchy
       await startServerWithSchema({
         name: 'test-app',

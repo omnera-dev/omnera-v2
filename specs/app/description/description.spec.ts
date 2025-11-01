@@ -155,6 +155,10 @@ test(
   'APP-DESCRIPTION-006: should wrap long description properly and remain visible',
   { tag: '@spec' },
   async ({ page, startServerWithSchema }) => {
+    // GIVEN: an app with very long description (500+ characters)
+    // WHEN: user navigates to the homepage
+    // THEN: description should wrap properly and remain visible
+
     // GIVEN: app with very long description (500+ characters)
     // Spec: APP-DESCRIPTION-006
     const longDescription =
@@ -357,6 +361,10 @@ test(
   'APP-DESCRIPTION-013: should display full description without truncation for very long text',
   { tag: '@spec' },
   async ({ page, startServerWithSchema }) => {
+    // GIVEN: an app with very long description (1000+ characters)
+    // WHEN: user navigates to the homepage
+    // THEN: full description should be displayed without truncation
+
     // GIVEN: app with very long description (1000+ characters)
     // Spec: APP-DESCRIPTION-013
     const veryLongDescription =
