@@ -139,7 +139,7 @@ test.describe('Reusable Blocks', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-BLOCKS-007: should reflect changes across all block instances on page rebuild',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
