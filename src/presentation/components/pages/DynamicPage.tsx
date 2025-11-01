@@ -84,7 +84,7 @@ export function DynamicPage({
         {themeStyles && <style dangerouslySetInnerHTML={{ __html: themeStyles }} />}
       </head>
       <body>
-        <main>
+        <main data-testid={page.name ? `page-${page.name}` : undefined}>
           {page.sections.map((section, index) => (
             <ComponentRenderer
               key={index}

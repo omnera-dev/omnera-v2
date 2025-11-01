@@ -6,11 +6,9 @@
  */
 
 import { type ReactElement } from 'react'
-import { ComponentRenderer } from '@/presentation/components/sections/component-renderer'
 import { Badge } from '@/presentation/components/ui/badge'
 import { TypographyH1, TypographyLead } from '@/presentation/components/ui/typography'
 import type { App } from '@/domain/models/app'
-import type { Component } from '@/domain/models/app/page/sections'
 
 /**
  * DefaultHomePage component - Default home page displaying application information
@@ -37,13 +35,7 @@ export function DefaultHomePage({ app }: { readonly app: App }): Readonly<ReactE
           href="/assets/output.css"
         />
       </head>
-      <body
-        className={
-          app.blocks
-            ? 'min-h-screen bg-linear-to-br from-gray-50 to-gray-100'
-            : 'h-screen overflow-hidden bg-linear-to-br from-gray-50 to-gray-100'
-        }
-      >
+      <body className="h-screen overflow-hidden bg-linear-to-br from-gray-50 to-gray-100">
         <div className="container-page h-full">
           <div className="flex h-full flex-col items-center justify-center">
             <div className="w-full max-w-2xl space-y-6 text-center">
@@ -65,18 +57,6 @@ export function DefaultHomePage({ app }: { readonly app: App }): Readonly<ReactE
                   {app.description}
                 </TypographyLead>
               )}
-              {/* Blocks - Render reusable UI components with data-block attributes */}
-              <div className="w-full space-y-4">
-                {app.blocks?.map((block) => (
-                  <ComponentRenderer
-                    key={block.name}
-                    // SAFETY: Block and Component have compatible structures (type, props, children, content)
-                    // Type assertion is required until domain models are unified or renderer supports both types
-                    component={block as unknown as Component}
-                    blockName={block.name}
-                  />
-                ))}
-              </div>
             </div>
           </div>
         </div>

@@ -336,7 +336,7 @@ test.describe('URL Path', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-PATH-011: DefaultHomePage displays app name, version, description (NO blocks)',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -349,7 +349,7 @@ test.describe('URL Path', () => {
           {
             name: 'hero',
             type: 'section',
-            children: [{ type: 'h1', children: ['Hero Block'] }],
+            children: [{ type: 'h1', content: 'Hero Block' }],
           },
         ],
       })
@@ -367,7 +367,7 @@ test.describe('URL Path', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-PATH-012: DefaultHomePage displays when pages exist but no "/" path',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -379,7 +379,7 @@ test.describe('URL Path', () => {
             name: 'about',
             path: '/about',
             meta: { lang: 'en-US', title: 'About Us', description: 'About page' },
-            sections: [{ type: 'section', children: [{ type: 'h1', children: ['About Us'] }] }],
+            sections: [{ type: 'section', children: [{ type: 'heading', content: 'About Us' }] }],
           },
         ],
       })
@@ -397,7 +397,7 @@ test.describe('URL Path', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-PATH-013: Custom page renders when "/" path exists',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -413,7 +413,7 @@ test.describe('URL Path', () => {
               {
                 type: 'section',
                 props: { id: 'hero' },
-                children: [{ type: 'h1', children: ['Custom Homepage'] }],
+                children: [{ type: 'heading', content: 'Custom Homepage' }],
               },
             ],
           },
@@ -433,7 +433,7 @@ test.describe('URL Path', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-PATH-014: DefaultHomePage does NOT render blocks',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -446,12 +446,12 @@ test.describe('URL Path', () => {
           {
             name: 'hero',
             type: 'section',
-            children: [{ type: 'h1', children: ['Hero Block'] }],
+            children: [{ type: 'h1', content: 'Hero Block' }],
           },
           {
             name: 'cta',
             type: 'section',
-            children: [{ type: 'button', children: ['CTA Button'] }],
+            children: [{ type: 'button', content: 'CTA Button' }],
           },
         ],
       })
@@ -476,6 +476,8 @@ test.describe('URL Path', () => {
     'APP-PAGES-PATH-015: Custom "/" page renders blocks from sections',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
+      // NOTE: This test requires block variable substitution which is not yet implemented
+      // See: src/presentation/components/sections/component-renderer.tsx:99
       // GIVEN: app with pages=[{path: '/', sections: [{block: 'hero'}]}]
       await startServerWithSchema({
         name: 'my-app',
@@ -483,7 +485,7 @@ test.describe('URL Path', () => {
           {
             name: 'hero',
             type: 'section',
-            children: [{ type: 'h1', children: ['$title'] }],
+            children: [{ type: 'heading', content: '$title' }],
           },
         ],
         pages: [
