@@ -6,6 +6,52 @@
   "type": "array",
   "minItems": 1,
   "default": [],
+  "blocks": {
+    "hero": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "const": "section"
+        },
+        "props": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "const": "hero"
+            },
+            "className": {
+              "type": "string"
+            }
+          }
+        },
+        "children": {
+          "type": "array"
+        }
+      }
+    },
+    "cta": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "const": "section"
+        },
+        "children": {
+          "type": "array"
+        }
+      }
+    },
+    "features": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "const": "section"
+        },
+        "children": {
+          "type": "array"
+        }
+      }
+    }
+  },
   "items": {
     "title": "Page",
     "description": "A complete page configuration with metadata, theme, blocks, layout, and content sections",
