@@ -24,9 +24,6 @@ test.describe('Education Event Schema', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: EducationEvent with required properties
-      // WHEN: @type is 'EducationEvent', name and startDate are provided
-      // THEN: it should validate minimal EducationEvent structured data
-
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -60,9 +57,6 @@ test.describe('Education Event Schema', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: EducationEvent with name and description
-      // WHEN: name and description describe the educational event
-      // THEN: it should provide event identity
-
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -98,9 +92,6 @@ test.describe('Education Event Schema', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: EducationEvent with startDate
-      // WHEN: startDate is ISO 8601 date-time
-      // THEN: it should specify when event begins
-
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -134,9 +125,6 @@ test.describe('Education Event Schema', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: EducationEvent with endDate
-      // WHEN: endDate is ISO 8601 date-time
-      // THEN: it should specify when event ends
-
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -171,9 +159,6 @@ test.describe('Education Event Schema', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: EducationEvent with eventAttendanceMode
-      // WHEN: eventAttendanceMode is OfflineEventAttendanceMode, OnlineEventAttendanceMode, or MixedEventAttendanceMode
-      // THEN: it should specify whether event is in-person, online, or hybrid
-
       const modes = [
         'https://schema.org/OfflineEventAttendanceMode',
         'https://schema.org/OnlineEventAttendanceMode',
@@ -215,9 +200,6 @@ test.describe('Education Event Schema', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: EducationEvent with eventStatus
-      // WHEN: eventStatus is EventScheduled, EventCancelled, EventPostponed, or EventRescheduled
-      // THEN: it should communicate event status
-
       const statuses = [
         'https://schema.org/EventScheduled',
         'https://schema.org/EventCancelled',
@@ -260,9 +242,6 @@ test.describe('Education Event Schema', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: EducationEvent with location
-      // WHEN: location is object with @type 'Place', name, and address
-      // THEN: it should provide event venue information
-
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -302,9 +281,6 @@ test.describe('Education Event Schema', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: EducationEvent with organizer
-      // WHEN: organizer is object with @type 'Organization' or 'Person', name, and url
-      // THEN: it should identify event organizer
-
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -343,9 +319,6 @@ test.describe('Education Event Schema', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: EducationEvent with offers
-      // WHEN: offers has @type 'Offer', price, priceCurrency, availability, url
-      // THEN: it should provide ticket pricing and availability
-
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -387,9 +360,6 @@ test.describe('Education Event Schema', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: EducationEvent with price and priceCurrency
-      // WHEN: price is '0' or '29.99' and priceCurrency is 'EUR' (ISO 4217)
-      // THEN: it should specify event ticket price
-
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -425,9 +395,6 @@ test.describe('Education Event Schema', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: EducationEvent with availability enum
-      // WHEN: availability is InStock, OutOfStock, PreOrder, or SoldOut
-      // THEN: it should indicate ticket availability status
-
       const availabilities = [
         'https://schema.org/InStock',
         'https://schema.org/OutOfStock',
@@ -470,9 +437,6 @@ test.describe('Education Event Schema', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: EducationEvent with capacity
-      // WHEN: maximumAttendeeCapacity and minimumAttendeeCapacity are integers
-      // THEN: it should specify event capacity limits
-
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -509,9 +473,6 @@ test.describe('Education Event Schema', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: EducationEvent for rich results
-      // WHEN: complete event data with dates, location, and offers is provided
-      // THEN: it should enable Google Events rich results
-
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -548,9 +509,6 @@ test.describe('Education Event Schema', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: EducationEvent for event discovery
-      // WHEN: EducationEvent structured data is included in page metadata
-      // THEN: it should display event in Google Search, Maps, and event discovery features
-
       await startServerWithSchema({
         name: 'test-app',
         pages: [

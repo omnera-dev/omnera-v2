@@ -29,9 +29,6 @@ test.describe('Custom Head Elements', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: custom element with type meta
-      // WHEN: type is 'meta' with attrs for name and content
-      // THEN: it should add custom meta tag to head
-
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -60,9 +57,6 @@ test.describe('Custom Head Elements', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: custom element with type link
-      // WHEN: type is 'link' with attrs for rel and href
-      // THEN: it should add custom link element to head
-
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -93,9 +87,6 @@ test.describe('Custom Head Elements', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: custom element with type script
-      // WHEN: type is 'script' with src or content
-      // THEN: it should add custom script to head
-
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -124,9 +115,6 @@ test.describe('Custom Head Elements', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: custom element with type style
-      // WHEN: type is 'style' with CSS content
-      // THEN: it should add inline style to head
-
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -154,9 +142,6 @@ test.describe('Custom Head Elements', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: custom element with attrs object
-      // WHEN: attrs contains element attributes with kebab-case names
-      // THEN: it should apply attributes to element
-
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -196,9 +181,6 @@ test.describe('Custom Head Elements', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: custom element with content property
-      // WHEN: content contains inner HTML for script/style
-      // THEN: it should set element inner content
-
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -228,9 +210,6 @@ test.describe('Custom Head Elements', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: custom elements for theme-color meta
-      // WHEN: meta element sets theme-color for browser UI
-      // THEN: it should customize browser chrome color
-
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -259,9 +238,6 @@ test.describe('Custom Head Elements', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: custom elements for viewport meta
-      // WHEN: meta element sets viewport for responsive design
-      // THEN: it should configure mobile viewport
-
       await startServerWithSchema({
         name: 'test-app',
         pages: [

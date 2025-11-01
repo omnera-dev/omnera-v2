@@ -29,9 +29,6 @@ test.describe('Navigation Links', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: a nav link with label and href
-      // WHEN: link is { label: 'Home', href: '/' }
-      // THEN: it should render navigation link
-
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -61,9 +58,6 @@ test.describe('Navigation Links', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: a nav link with target _blank
-      // WHEN: target is '_blank' for external links
-      // THEN: it should open link in new tab
-
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -94,9 +88,6 @@ test.describe('Navigation Links', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: a nav link with icon
-      // WHEN: icon is 'arrow-right'
-      // THEN: it should display icon alongside label
-
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -126,9 +117,6 @@ test.describe('Navigation Links', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: a nav link with badge
-      // WHEN: badge is 'New' or 'Beta'
-      // THEN: it should display badge to highlight link
-
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -157,9 +145,6 @@ test.describe('Navigation Links', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: a nav link with children (dropdown/submenu)
-      // WHEN: children contains nested nav-links
-      // THEN: it should render dropdown menu on hover/click
-
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -202,9 +187,6 @@ test.describe('Navigation Links', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: a nav link with anchor href
-      // WHEN: href is '#contact' (page anchor)
-      // THEN: it should scroll to anchor on same page
-
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -236,9 +218,6 @@ test.describe('Navigation Links', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: nav links array with 4+ links
-      // WHEN: array contains [Home, About, Products, Contact]
-      // THEN: it should render horizontal navigation menu
-
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -276,9 +255,6 @@ test.describe('Navigation Links', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: nav links with recursive children
-      // WHEN: Products has children (Product A, Product B)
-      // THEN: it should support unlimited nesting depth for menus
-
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -325,9 +301,6 @@ test.describe('Navigation Links', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: nav links with all 4 target options
-      // WHEN: target enum includes _self, _blank, _parent, _top
-      // THEN: it should support all standard HTML link targets
-
       const targets = ['_self', '_blank', '_parent', '_top']
       for (const target of targets) {
         await startServerWithSchema({
@@ -361,9 +334,6 @@ test.describe('Navigation Links', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: nav links with label and href as required
-      // WHEN: link must have both label and href
-      // THEN: it should enforce required properties for valid links
-
       await startServerWithSchema({
         name: 'test-app',
         pages: [

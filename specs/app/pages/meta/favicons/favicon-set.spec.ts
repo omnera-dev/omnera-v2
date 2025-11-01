@@ -24,9 +24,6 @@ test.describe('Favicon Set', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: a favicon with rel 'icon'
-      // WHEN: rel is 'icon' for standard favicon
-      // THEN: it should define browser icon
-
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -53,9 +50,6 @@ test.describe('Favicon Set', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: a favicon with rel 'apple-touch-icon'
-      // WHEN: rel is 'apple-touch-icon' for iOS devices
-      // THEN: it should define Apple touch icon
-
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -84,9 +78,6 @@ test.describe('Favicon Set', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: a favicon with rel 'mask-icon'
-      // WHEN: rel is 'mask-icon' for Safari pinned tabs
-      // THEN: it should define Safari mask icon with color
-
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -113,9 +104,6 @@ test.describe('Favicon Set', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: a favicon with sizes attribute
-      // WHEN: sizes is '16x16', '32x32', '180x180', or '192x192'
-      // THEN: it should specify icon dimensions for different contexts
-
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -146,9 +134,6 @@ test.describe('Favicon Set', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: a favicon with type attribute
-      // WHEN: type is 'image/png', 'image/x-icon', or 'image/svg+xml'
-      // THEN: it should specify MIME type
-
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -175,9 +160,6 @@ test.describe('Favicon Set', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: a favicon with color for mask-icon
-      // WHEN: color is hex value like '#FF5733'
-      // THEN: it should define Safari pinned tab color
-
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -205,9 +187,6 @@ test.describe('Favicon Set', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: a complete favicon set
-      // WHEN: array contains icons for all devices (16x16, 32x32, 180x180, 192x192, 512x512, manifest)
-      // THEN: it should provide comprehensive multi-device icon support
-
       await startServerWithSchema({
         name: 'test-app',
         pages: [

@@ -29,9 +29,6 @@ test.describe('Footer Configuration', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: a footer with enabled set to true
-      // WHEN: footer should be visible (default)
-      // THEN: it should display footer at bottom of page
-
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -54,9 +51,6 @@ test.describe('Footer Configuration', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: a footer with logo
-      // WHEN: logo is './logo-footer.svg'
-      // THEN: it should display footer logo
-
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -82,9 +76,6 @@ test.describe('Footer Configuration', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: a footer with description/tagline
-      // WHEN: description is 'Building the future of web applications'
-      // THEN: it should render company description
-
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -111,9 +102,6 @@ test.describe('Footer Configuration', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: a footer with columns
-      // WHEN: columns array contains [Product, Company]
-      // THEN: it should render multi-column link layout
-
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -159,9 +147,6 @@ test.describe('Footer Configuration', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: a footer column with title and links
-      // WHEN: column has title 'Product' with links [Features, Pricing]
-      // THEN: it should render column heading and link list
-
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -199,9 +184,6 @@ test.describe('Footer Configuration', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: a footer link with target _blank
-      // WHEN: link opens external site in new tab
-      // THEN: it should support external link targets
-
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -242,9 +224,6 @@ test.describe('Footer Configuration', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: a footer with social links
-      // WHEN: social has links for [twitter, github]
-      // THEN: it should render social media icons
-
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -286,9 +265,6 @@ test.describe('Footer Configuration', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: a footer social link with platform
-      // WHEN: platform enum includes facebook, twitter, instagram, linkedin, youtube, github, tiktok
-      // THEN: it should support 7 social platforms with auto icons
-
       const platforms = [
         'facebook',
         'twitter',
@@ -326,9 +302,6 @@ test.describe('Footer Configuration', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: a footer with newsletter subscription
-      // WHEN: newsletter.enabled is true with title and description
-      // THEN: it should render email subscription form
-
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -369,9 +342,6 @@ test.describe('Footer Configuration', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: a footer with copyright text
-      // WHEN: copyright is '© 2024 Company Inc. All rights reserved.'
-      // THEN: it should display copyright notice
-
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -398,9 +368,6 @@ test.describe('Footer Configuration', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: a footer with legal links
-      // WHEN: legal includes [Privacy Policy, Terms of Service]
-      // THEN: it should render legal link list
-
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -435,9 +402,6 @@ test.describe('Footer Configuration', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: a disabled footer
-      // WHEN: enabled is false
-      // THEN: it should not render footer
-
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -460,9 +424,6 @@ test.describe('Footer Configuration', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: a footer with all 5 sections
-      // WHEN: footer includes logo, columns, social, newsletter, legal
-      // THEN: it should render comprehensive footer layout
-
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -502,9 +463,6 @@ test.describe('Footer Configuration', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: a footer with custom social icon
-      // WHEN: social link has custom icon property
-      // THEN: it should override default platform icon
-
       await startServerWithSchema({
         name: 'test-app',
         pages: [

@@ -29,9 +29,6 @@ test.describe('Favicon', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: a favicon path string
-      // WHEN: value is './public/favicon.ico'
-      // THEN: it should reference default favicon file
-
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -58,9 +55,6 @@ test.describe('Favicon', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: a favicon with .ico extension
-      // WHEN: path ends with .ico
-      // THEN: it should support legacy ICO format
-
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -83,9 +77,6 @@ test.describe('Favicon', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: a favicon with .png extension
-      // WHEN: path ends with .png
-      // THEN: it should support PNG format
-
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -108,9 +99,6 @@ test.describe('Favicon', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: a favicon with .svg extension
-      // WHEN: path ends with .svg
-      // THEN: it should support modern SVG format
-
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -138,9 +126,6 @@ test.describe('Favicon', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: a favicon path starting with ./
-      // WHEN: pattern enforces relative path prefix
-      // THEN: it should use relative file paths
-
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -168,9 +153,6 @@ test.describe('Favicon', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: a simple favicon configuration
-      // WHEN: single string path is provided
-      // THEN: it should enable quick favicon setup
-
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -192,9 +174,6 @@ test.describe('Favicon', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: a favicon for browser tab
-      // WHEN: favicon is displayed in browser UI
-      // THEN: it should provide site branding in tabs
-
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -221,9 +200,6 @@ test.describe('Favicon', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: a favicon versus favicons property
-      // WHEN: favicon is simple string, favicons is array of objects
-      // THEN: it should support both simple and complete configurations
-
       await startServerWithSchema({
         name: 'test-app',
         pages: [

@@ -24,9 +24,6 @@ test.describe('Person Schema', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: Person with required properties
-      // WHEN: @context is 'https://schema.org', @type is 'Person', and name is provided
-      // THEN: it should validate minimal Person structured data
-
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -85,9 +82,6 @@ test.describe('Person Schema', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: Person with split name
-      // WHEN: givenName is 'John' and familyName is 'Doe'
-      // THEN: it should provide structured first and last names
-
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -126,9 +120,6 @@ test.describe('Person Schema', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: Person with contact info
-      // WHEN: email and telephone are provided
-      // THEN: it should provide person contact information
-
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -198,9 +189,6 @@ test.describe('Person Schema', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: Person with image
-      // WHEN: image is URL to person's photo
-      // THEN: it should provide visual representation
-
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -271,9 +259,6 @@ test.describe('Person Schema', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: Person with worksFor
-      // WHEN: worksFor is object with @type 'Organization' and name
-      // THEN: it should link person to their employer
-
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -309,9 +294,6 @@ test.describe('Person Schema', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: Person with social profiles
-      // WHEN: sameAs is array of social media URLs
-      // THEN: it should link person to their social profiles
-
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -352,9 +334,6 @@ test.describe('Person Schema', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: Person with address
-      // WHEN: address references postal-address.schema.json
-      // THEN: it should include PostalAddress structured data
-
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -395,9 +374,6 @@ test.describe('Person Schema', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: Person for author attribution
-      // WHEN: Person is used in article.author
-      // THEN: it should attribute content to specific author
-
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -434,9 +410,6 @@ test.describe('Person Schema', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: Person for knowledge graph
-      // WHEN: complete person data is provided
-      // THEN: it should enable Google Knowledge Graph panel for notable persons
-
       await startServerWithSchema({
         name: 'test-app',
         pages: [

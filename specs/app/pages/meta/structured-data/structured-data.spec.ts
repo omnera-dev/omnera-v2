@@ -24,9 +24,6 @@ test.describe('Structured Data', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: structured data with organization
-      // WHEN: organization property references organization.schema.json
-      // THEN: it should include Organization structured data
-
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -61,9 +58,6 @@ test.describe('Structured Data', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: structured data with person
-      // WHEN: person property references person.schema.json
-      // THEN: it should include Person structured data
-
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -97,9 +91,6 @@ test.describe('Structured Data', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: structured data with localBusiness
-      // WHEN: localBusiness property references local-business.schema.json
-      // THEN: it should include LocalBusiness structured data
-
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -133,9 +124,6 @@ test.describe('Structured Data', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: structured data with product
-      // WHEN: product property references product.schema.json
-      // THEN: it should include Product structured data
-
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -169,9 +157,6 @@ test.describe('Structured Data', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: structured data with article
-      // WHEN: article property references article.schema.json
-      // THEN: it should include Article structured data
-
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -205,9 +190,6 @@ test.describe('Structured Data', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: structured data with breadcrumb
-      // WHEN: breadcrumb property references breadcrumb.schema.json
-      // THEN: it should include BreadcrumbList structured data
-
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -248,9 +230,6 @@ test.describe('Structured Data', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: structured data with faqPage
-      // WHEN: faqPage property references faq-page.schema.json
-      // THEN: it should include FAQPage structured data
-
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -284,9 +263,6 @@ test.describe('Structured Data', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: structured data with educationEvent
-      // WHEN: educationEvent property references education-event.schema.json
-      // THEN: it should include EducationEvent structured data
-
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -320,9 +296,6 @@ test.describe('Structured Data', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: structured data combining multiple types
-      // WHEN: object includes organization, faqPage, and breadcrumb
-      // THEN: it should support multiple Schema.org types on same page
-
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -367,9 +340,6 @@ test.describe('Structured Data', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: structured data for search engine understanding
-      // WHEN: Schema.org types are included in page metadata
-      // THEN: it should enable rich search results and enhanced SERP display
-
       await startServerWithSchema({
         name: 'test-app',
         pages: [

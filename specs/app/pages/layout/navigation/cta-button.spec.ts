@@ -29,9 +29,6 @@ test.describe('CTA Button', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: a CTA button with text and href
-      // WHEN: button is { text: 'Get Started', href: '/signup' }
-      // THEN: it should render call-to-action button
-
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -58,9 +55,6 @@ test.describe('CTA Button', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: a CTA button with variant 'primary'
-      // WHEN: variant is 'primary' (default)
-      // THEN: it should apply primary button styling
-
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -88,9 +82,6 @@ test.describe('CTA Button', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: a CTA button with 5 variant options
-      // WHEN: variant enum includes primary, secondary, outline, ghost, link
-      // THEN: it should support all button style variants
-
       const variants = ['primary', 'secondary', 'outline', 'ghost', 'link']
       for (const variant of variants) {
         await startServerWithSchema({
@@ -120,9 +111,6 @@ test.describe('CTA Button', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: a CTA button with size
-      // WHEN: size is 'lg' (sm, md, lg, xl)
-      // THEN: it should apply size styling
-
       const sizes = ['sm', 'md', 'lg', 'xl']
       for (const size of sizes) {
         await startServerWithSchema({
@@ -150,9 +138,6 @@ test.describe('CTA Button', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: a CTA button with theme color
-      // WHEN: color is 'orange' (references theme colors)
-      // THEN: it should apply theme-based color
-
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -182,9 +167,6 @@ test.describe('CTA Button', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: a CTA button with icon
-      // WHEN: icon is 'download' with iconPosition 'right'
-      // THEN: it should display icon on right side of text
-
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -228,9 +210,6 @@ test.describe('CTA Button', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: a CTA button with icon on left
-      // WHEN: iconPosition is 'left' (default)
-      // THEN: it should display icon on left side of text
-
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -259,9 +238,6 @@ test.describe('CTA Button', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: a CTA button in navigation
-      // WHEN: used in navigation.cta property
-      // THEN: it should serve as prominent call-to-action in header
-
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -293,9 +269,6 @@ test.describe('CTA Button', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: a CTA button with required text and href
-      // WHEN: both text and href are provided
-      // THEN: it should validate as complete CTA configuration
-
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -322,9 +295,6 @@ test.describe('CTA Button', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: a CTA button with all optional properties
-      // WHEN: variant, size, color, icon, iconPosition are set
-      // THEN: it should support fully customized button appearance
-
       await startServerWithSchema({
         name: 'test-app',
         pages: [

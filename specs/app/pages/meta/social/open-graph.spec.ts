@@ -24,9 +24,6 @@ test.describe('Open Graph Metadata', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: Open Graph with required properties
-      // WHEN: title, description, type, and url are provided
-      // THEN: it should validate minimal Open Graph metadata
-
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -70,9 +67,6 @@ test.describe('Open Graph Metadata', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: Open Graph title with maxLength
-      // WHEN: title has 90 characters max
-      // THEN: it should enforce title length for social display
-
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -105,9 +99,6 @@ test.describe('Open Graph Metadata', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: Open Graph description with maxLength
-      // WHEN: description has 200 characters max
-      // THEN: it should enforce description length for social cards
-
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -141,9 +132,6 @@ test.describe('Open Graph Metadata', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: Open Graph type enum
-      // WHEN: type is one of: website, article, book, profile, video, music
-      // THEN: it should categorize content type for social platforms
-
       const types = ['website', 'article', 'book', 'profile', 'video', 'music']
       for (const type of types) {
         await startServerWithSchema({
@@ -173,9 +161,6 @@ test.describe('Open Graph Metadata', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: Open Graph image URL
-      // WHEN: image is URL with recommended 1200x630px dimensions
-      // THEN: it should provide social sharing image
-
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -211,9 +196,6 @@ test.describe('Open Graph Metadata', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: Open Graph imageAlt
-      // WHEN: imageAlt describes image for accessibility
-      // THEN: it should provide alternative text for social image
-
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -250,9 +232,6 @@ test.describe('Open Graph Metadata', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: Open Graph siteName
-      // WHEN: siteName identifies the overall website brand
-      // THEN: it should distinguish site from page title
-
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -288,9 +267,6 @@ test.describe('Open Graph Metadata', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: Open Graph locale
-      // WHEN: locale is format 'en_US', 'fr_FR' (language_TERRITORY)
-      // THEN: it should specify content language for social platforms
-
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -324,9 +300,6 @@ test.describe('Open Graph Metadata', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: Open Graph determiner
-      // WHEN: determiner is 'a', 'an', 'the', 'auto', or empty
-      // THEN: it should provide grammatical article before title
-
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -359,9 +332,6 @@ test.describe('Open Graph Metadata', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: Open Graph video URL
-      // WHEN: video property contains media URL
-      // THEN: it should enable video content sharing
-
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -398,9 +368,6 @@ test.describe('Open Graph Metadata', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: Open Graph audio URL
-      // WHEN: audio property contains media URL
-      // THEN: it should enable audio content sharing
-
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -437,9 +404,6 @@ test.describe('Open Graph Metadata', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: Open Graph rich social preview
-      // WHEN: all properties create rich card on Facebook/LinkedIn
-      // THEN: it should display enhanced social sharing card
-
       await startServerWithSchema({
         name: 'test-app',
         pages: [

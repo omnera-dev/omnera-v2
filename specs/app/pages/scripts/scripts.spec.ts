@@ -24,8 +24,6 @@ test.describe('Client Scripts Configuration', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: a scripts configuration with all 4 properties
-      // WHEN: scripts includes features, externalScripts, inlineScripts, config
-      // THEN: it should orchestrate client-side script management
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -58,8 +56,6 @@ test.describe('Client Scripts Configuration', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: scripts with features only
-      // WHEN: features defines darkMode, animations, analytics
-      // THEN: it should enable client-side feature toggles
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -83,8 +79,6 @@ test.describe('Client Scripts Configuration', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: scripts with externalScripts
-      // WHEN: externalScripts array loads CDN libraries
-      // THEN: it should include external JavaScript dependencies
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -111,8 +105,6 @@ test.describe('Client Scripts Configuration', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: scripts with inlineScripts
-      // WHEN: inlineScripts array contains code snippets
-      // THEN: it should inject inline JavaScript code
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -139,8 +131,6 @@ test.describe('Client Scripts Configuration', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: scripts with config object
-      // WHEN: config has apiUrl and environment properties
-      // THEN: it should provide client-side configuration data
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -164,8 +154,6 @@ test.describe('Client Scripts Configuration', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: empty scripts configuration
-      // WHEN: all properties are omitted
-      // THEN: it should allow pages without client-side scripts
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -189,8 +177,6 @@ test.describe('Client Scripts Configuration', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: scripts config with additionalProperties true
-      // WHEN: config accepts any custom properties
-      // THEN: it should support flexible client configuration
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -215,8 +201,6 @@ test.describe('Client Scripts Configuration', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: scripts combining features and config
-      // WHEN: features toggle behavior and config provides data
-      // THEN: it should enable feature-driven configuration
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -240,8 +224,6 @@ test.describe('Client Scripts Configuration', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: scripts at page level
-      // WHEN: each page can define custom scripts
-      // THEN: it should support per-page script customization
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -275,8 +257,6 @@ test.describe('Client Scripts Configuration', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: scripts referencing sub-schemas
-      // WHEN: features, externalScripts, inlineScripts use $ref
-      // THEN: it should compose scripts from modular schemas
       await startServerWithSchema({
         name: 'test-app',
         pages: [

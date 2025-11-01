@@ -24,9 +24,6 @@ test.describe('DNS Prefetch', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: DNS prefetch array with domains
-      // WHEN: array contains external domain URLs
-      // THEN: it should prefetch DNS for listed domains
-
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -58,9 +55,6 @@ test.describe('DNS Prefetch', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: DNS prefetch for font domains
-      // WHEN: array includes 'https://fonts.googleapis.com' and 'https://fonts.gstatic.com'
-      // THEN: it should optimize Google Fonts loading
-
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -92,9 +86,6 @@ test.describe('DNS Prefetch', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: DNS prefetch for analytics domains
-      // WHEN: array includes 'https://www.google-analytics.com' or 'https://plausible.io'
-      // THEN: it should optimize analytics script loading
-
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -123,9 +114,6 @@ test.describe('DNS Prefetch', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: DNS prefetch for CDN domains
-      // WHEN: array includes 'https://unpkg.com' or 'https://cdn.jsdelivr.net'
-      // THEN: it should optimize CDN resource loading
-
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -155,9 +143,6 @@ test.describe('DNS Prefetch', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: DNS prefetch for API domains
-      // WHEN: array includes API endpoint domains
-      // THEN: it should optimize API request latency
-
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -186,9 +171,6 @@ test.describe('DNS Prefetch', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: DNS prefetch with http/https protocol
-      // WHEN: URLs start with https:// or http://
-      // THEN: it should validate protocol in URL pattern
-
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -219,9 +201,6 @@ test.describe('DNS Prefetch', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: DNS prefetch with unique items
-      // WHEN: array has uniqueItems constraint
-      // THEN: it should prevent duplicate domain entries
-
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -251,9 +230,6 @@ test.describe('DNS Prefetch', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: DNS prefetch for multiple third-party services
-      // WHEN: array contains [fonts, analytics, CDN, social] domains
-      // THEN: it should optimize multiple external connections
-
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -285,9 +261,6 @@ test.describe('DNS Prefetch', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: DNS prefetch before resource fetch
-      // WHEN: DNS resolution happens early in page load
-      // THEN: it should reduce connection latency
-
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -316,9 +289,6 @@ test.describe('DNS Prefetch', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: DNS prefetch performance benefit
-      // WHEN: domains are resolved before actual requests
-      // THEN: it should improve perceived page load speed
-
       await startServerWithSchema({
         name: 'test-app',
         pages: [

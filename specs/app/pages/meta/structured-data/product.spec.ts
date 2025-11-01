@@ -24,9 +24,6 @@ test.describe('Product Schema', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: Product with required properties
-      // WHEN: @context is 'https://schema.org', @type is 'Product', and name is provided
-      // THEN: it should validate minimal Product structured data
-
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -61,9 +58,6 @@ test.describe('Product Schema', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: Product with name and description
-      // WHEN: name and description describe the product
-      // THEN: it should provide product identity
-
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -99,9 +93,6 @@ test.describe('Product Schema', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: Product with image
-      // WHEN: image is string URL or array of URLs
-      // THEN: it should support single or multiple product images
-
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -142,9 +133,6 @@ test.describe('Product Schema', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: Product with brand
-      // WHEN: brand is object with @type 'Brand' and name
-      // THEN: it should identify product manufacturer
-
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -180,9 +168,6 @@ test.describe('Product Schema', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: Product with sku
-      // WHEN: sku is unique product identifier
-      // THEN: it should provide stock keeping unit
-
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -217,9 +202,6 @@ test.describe('Product Schema', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: Product with gtin
-      // WHEN: gtin is global trade item number (UPC, EAN, ISBN)
-      // THEN: it should provide standardized product identifier
-
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -254,9 +236,6 @@ test.describe('Product Schema', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: Product with offers
-      // WHEN: offers is object with @type 'Offer', price, priceCurrency
-      // THEN: it should provide pricing information
-
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -292,9 +271,6 @@ test.describe('Product Schema', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: Product with price and priceCurrency
-      // WHEN: price is '29.99' and priceCurrency is 'USD' (ISO 4217)
-      // THEN: it should specify product price with currency
-
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -330,9 +306,6 @@ test.describe('Product Schema', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: Product with availability
-      // WHEN: offers.availability indicates stock status
-      // THEN: it should show product availability in search results
-
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -373,9 +346,6 @@ test.describe('Product Schema', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: Product with aggregateRating
-      // WHEN: aggregateRating has @type 'AggregateRating', ratingValue, reviewCount
-      // THEN: it should display star ratings in search results
-
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -416,9 +386,6 @@ test.describe('Product Schema', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: Product for e-commerce SEO
-      // WHEN: complete product data with price, availability, and ratings is provided
-      // THEN: it should enable Google Shopping rich results
-
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -465,9 +432,6 @@ test.describe('Product Schema', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: Product for rich snippets
-      // WHEN: Product structured data is included in page metadata
-      // THEN: it should display price, availability, and ratings in SERPs
-
       await startServerWithSchema({
         name: 'test-app',
         pages: [

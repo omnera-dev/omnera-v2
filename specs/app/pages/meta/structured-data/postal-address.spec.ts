@@ -24,9 +24,6 @@ test.describe('Postal Address', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: PostalAddress with required @type
-      // WHEN: @type is 'PostalAddress' (const)
-      // THEN: it should validate minimal PostalAddress structured data
-
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -61,9 +58,6 @@ test.describe('Postal Address', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: PostalAddress with streetAddress
-      // WHEN: streetAddress is '123 Main St'
-      // THEN: it should provide street address
-
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -98,9 +92,6 @@ test.describe('Postal Address', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: PostalAddress with addressLocality
-      // WHEN: addressLocality is 'Strasbourg' or 'Paris'
-      // THEN: it should provide city or locality name
-
       const localities = ['Strasbourg', 'Paris', 'New York', 'Tokyo']
       for (const locality of localities) {
         await startServerWithSchema({
@@ -138,9 +129,6 @@ test.describe('Postal Address', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: PostalAddress with addressRegion
-      // WHEN: addressRegion is 'Grand Est' or 'California'
-      // THEN: it should provide state or region name
-
       const regions = ['Grand Est', 'California', 'New York', 'Tokyo']
       for (const region of regions) {
         await startServerWithSchema({
@@ -178,9 +166,6 @@ test.describe('Postal Address', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: PostalAddress with postalCode
-      // WHEN: postalCode is '67000' or '94105'
-      // THEN: it should provide postal or ZIP code
-
       const postalCodes = ['67000', '94105', '10001', '75001']
       for (const postalCode of postalCodes) {
         await startServerWithSchema({
@@ -218,9 +203,6 @@ test.describe('Postal Address', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: PostalAddress with addressCountry
-      // WHEN: addressCountry is 'FR', 'US', 'GB', or 'DE' (ISO 3166-1 alpha-2)
-      // THEN: it should provide country code
-
       const countryCodes = ['FR', 'US', 'GB', 'DE']
       for (const country of countryCodes) {
         await startServerWithSchema({
@@ -258,9 +240,6 @@ test.describe('Postal Address', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: PostalAddress with complete address
-      // WHEN: all properties (street, locality, region, postal code, country) are provided
-      // THEN: it should provide full mailing address
-
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -345,9 +324,6 @@ test.describe('Postal Address', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: PostalAddress in LocalBusiness
-      // WHEN: PostalAddress is referenced by localBusiness.address
-      // THEN: it should enable local business map display in search results
-
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -390,9 +366,6 @@ test.describe('Postal Address', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: PostalAddress for local SEO
-      // WHEN: complete address with country code is provided
-      // THEN: it should improve local search ranking and map visibility
-
       await startServerWithSchema({
         name: 'test-app',
         pages: [

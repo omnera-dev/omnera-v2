@@ -29,9 +29,6 @@ test.describe('Page Metadata', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: page metadata with required properties
-      // WHEN: lang is 'en-US', title is 'My Page', description is 'Page description'
-      // THEN: it should validate minimal metadata configuration
-
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -58,9 +55,6 @@ test.describe('Page Metadata', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: page metadata with title maxLength
-      // WHEN: title has 60 characters max for optimal SEO display
-      // THEN: it should enforce title length constraint
-
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -87,9 +81,6 @@ test.describe('Page Metadata', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: page metadata with description maxLength
-      // WHEN: description has 160 characters max for SEO snippets
-      // THEN: it should enforce description length constraint
-
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -117,9 +108,6 @@ test.describe('Page Metadata', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: page metadata with keywords
-      // WHEN: keywords is comma-separated list for SEO
-      // THEN: it should accept keyword string
-
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -149,9 +137,6 @@ test.describe('Page Metadata', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: page metadata with canonical URL
-      // WHEN: canonical prevents duplicate content issues
-      // THEN: it should define canonical URL
-
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -181,9 +166,6 @@ test.describe('Page Metadata', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: page metadata with favicon and favicons
-      // WHEN: favicon is simple icon, favicons is complete set
-      // THEN: it should support both single and multi-favicon configurations
-
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -221,9 +203,6 @@ test.describe('Page Metadata', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: page metadata with stylesheet and googleFonts
-      // WHEN: stylesheet and font URLs are provided
-      // THEN: it should include CSS and font resources
-
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -255,9 +234,6 @@ test.describe('Page Metadata', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: page metadata with social media integration
-      // WHEN: openGraph and twitter properties are configured
-      // THEN: it should enable rich social sharing
-
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -302,9 +278,6 @@ test.describe('Page Metadata', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: page metadata with structured data
-      // WHEN: schema property contains Schema.org markup
-      // THEN: it should provide search engine understanding
-
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -339,9 +312,6 @@ test.describe('Page Metadata', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: page metadata with performance optimizations
-      // WHEN: preload and dnsPrefetch are configured
-      // THEN: it should optimize page load performance
-
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -379,9 +349,6 @@ test.describe('Page Metadata', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: page metadata with analytics
-      // WHEN: analytics property configures tracking providers
-      // THEN: it should enable visitor analytics
-
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -408,9 +375,6 @@ test.describe('Page Metadata', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: page metadata orchestrating all sub-schemas
-      // WHEN: metadata includes SEO, social, structured data, performance, analytics
-      // THEN: it should provide comprehensive page metadata management
-
       await startServerWithSchema({
         name: 'test-app',
         pages: [
