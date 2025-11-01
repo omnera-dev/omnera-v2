@@ -197,6 +197,14 @@ test.describe('Reusable Blocks', () => {
       await startServerWithSchema({
         name: 'test-app',
         blocks: [{ name: 'props-block', type: 'div', props: { className: 'test-class' } }],
+        pages: [
+          {
+            name: 'home',
+            path: '/',
+            meta: { lang: 'en-US', title: 'Test Page', description: 'Test page' },
+            sections: [{ block: 'props-block' }],
+          },
+        ],
       })
 
       // WHEN: blocks combine multiple child components
@@ -216,6 +224,14 @@ test.describe('Reusable Blocks', () => {
         name: 'test-app',
         blocks: [
           { name: 'parent-block', type: 'div', children: [{ type: 'span', content: 'child' }] },
+        ],
+        pages: [
+          {
+            name: 'home',
+            path: '/',
+            meta: { lang: 'en-US', title: 'Test Page', description: 'Test page' },
+            sections: [{ block: 'parent-block' }],
+          },
         ],
       })
 
