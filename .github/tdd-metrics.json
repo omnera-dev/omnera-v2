@@ -1,13 +1,49 @@
 {
-  "timestamp": "2025-10-30T09:22:36.265Z",
+  "timestamp": "2025-11-01T21:16:46.818Z",
   "overall": {
-    "totalTests": 773,
-    "passingTests": 66,
-    "fixmeTests": 707,
+    "totalTests": 771,
+    "passingTests": 73,
+    "fixmeTests": 698,
     "todoTests": 0,
-    "progressPercentage": 8.538163001293661
+    "progressPercentage": 9.46822308690013
   },
   "byFeature": [
+    {
+      "feature": "app/theme/colors",
+      "metrics": {
+        "totalTests": 16,
+        "passingTests": 1,
+        "fixmeTests": 15,
+        "todoTests": 0,
+        "progressPercentage": 6.25
+      },
+      "lastUpdated": "2025-11-01T21:16:41.342Z",
+      "status": "in-progress"
+    },
+    {
+      "feature": "app/pages/sections",
+      "metrics": {
+        "totalTests": 14,
+        "passingTests": 1,
+        "fixmeTests": 13,
+        "todoTests": 0,
+        "progressPercentage": 7.142857142857142
+      },
+      "lastUpdated": "2025-11-01T21:16:41.342Z",
+      "status": "in-progress"
+    },
+    {
+      "feature": "app/blocks",
+      "metrics": {
+        "totalTests": 13,
+        "passingTests": 5,
+        "fixmeTests": 8,
+        "todoTests": 0,
+        "progressPercentage": 38.46153846153847
+      },
+      "lastUpdated": "2025-11-01T21:16:41.341Z",
+      "status": "in-progress"
+    },
     {
       "feature": "app/name",
       "metrics": {
@@ -17,7 +53,7 @@
         "todoTests": 0,
         "progressPercentage": 92.85714285714286
       },
-      "lastUpdated": "2025-10-30T09:22:33.692Z",
+      "lastUpdated": "2025-11-01T21:16:41.341Z",
       "status": "in-progress"
     },
     {
@@ -29,7 +65,7 @@
         "todoTests": 0,
         "progressPercentage": 0
       },
-      "lastUpdated": "2025-10-30T09:22:33.693Z",
+      "lastUpdated": "2025-11-01T21:16:41.342Z",
       "status": "not-started"
     },
     {
@@ -41,7 +77,7 @@
         "todoTests": 0,
         "progressPercentage": 0
       },
-      "lastUpdated": "2025-10-30T09:22:33.693Z",
+      "lastUpdated": "2025-11-01T21:16:41.342Z",
       "status": "not-started"
     },
     {
@@ -53,7 +89,7 @@
         "todoTests": 0,
         "progressPercentage": 0
       },
-      "lastUpdated": "2025-10-30T09:22:33.693Z",
+      "lastUpdated": "2025-11-01T21:16:41.341Z",
       "status": "not-started"
     },
     {
@@ -65,7 +101,7 @@
         "todoTests": 0,
         "progressPercentage": 0
       },
-      "lastUpdated": "2025-10-30T09:22:33.693Z",
+      "lastUpdated": "2025-11-01T21:16:41.342Z",
       "status": "not-started"
     },
     {
@@ -77,7 +113,7 @@
         "todoTests": 0,
         "progressPercentage": 0
       },
-      "lastUpdated": "2025-10-30T09:22:33.693Z",
+      "lastUpdated": "2025-11-01T21:16:41.342Z",
       "status": "not-started"
     },
     {
@@ -89,7 +125,7 @@
         "todoTests": 0,
         "progressPercentage": 0
       },
-      "lastUpdated": "2025-10-30T09:22:33.693Z",
+      "lastUpdated": "2025-11-01T21:16:41.341Z",
       "status": "not-started"
     },
     {
@@ -101,7 +137,7 @@
         "todoTests": 0,
         "progressPercentage": 0
       },
-      "lastUpdated": "2025-10-30T09:22:33.693Z",
+      "lastUpdated": "2025-11-01T21:16:41.342Z",
       "status": "not-started"
     },
     {
@@ -113,7 +149,7 @@
         "todoTests": 0,
         "progressPercentage": 0
       },
-      "lastUpdated": "2025-10-30T09:22:33.693Z",
+      "lastUpdated": "2025-11-01T21:16:41.343Z",
       "status": "not-started"
     },
     {
@@ -125,7 +161,7 @@
         "todoTests": 0,
         "progressPercentage": 0
       },
-      "lastUpdated": "2025-10-30T09:22:33.692Z",
+      "lastUpdated": "2025-11-01T21:16:41.341Z",
       "status": "not-started"
     },
     {
@@ -137,31 +173,7 @@
         "todoTests": 0,
         "progressPercentage": 0
       },
-      "lastUpdated": "2025-10-30T09:22:33.693Z",
-      "status": "not-started"
-    },
-    {
-      "feature": "app/theme/colors",
-      "metrics": {
-        "totalTests": 16,
-        "passingTests": 0,
-        "fixmeTests": 16,
-        "todoTests": 0,
-        "progressPercentage": 0
-      },
-      "lastUpdated": "2025-10-30T09:22:33.693Z",
-      "status": "not-started"
-    },
-    {
-      "feature": "app/blocks",
-      "metrics": {
-        "totalTests": 15,
-        "passingTests": 0,
-        "fixmeTests": 15,
-        "todoTests": 0,
-        "progressPercentage": 0
-      },
-      "lastUpdated": "2025-10-30T09:22:33.693Z",
+      "lastUpdated": "2025-11-01T21:16:41.343Z",
       "status": "not-started"
     },
     {
@@ -173,19 +185,7 @@
         "todoTests": 0,
         "progressPercentage": 0
       },
-      "lastUpdated": "2025-10-30T09:22:33.693Z",
-      "status": "not-started"
-    },
-    {
-      "feature": "app/pages/sections",
-      "metrics": {
-        "totalTests": 14,
-        "passingTests": 0,
-        "fixmeTests": 14,
-        "todoTests": 0,
-        "progressPercentage": 0
-      },
-      "lastUpdated": "2025-10-30T09:22:33.693Z",
+      "lastUpdated": "2025-11-01T21:16:41.343Z",
       "status": "not-started"
     },
     {
@@ -197,7 +197,7 @@
         "todoTests": 0,
         "progressPercentage": 0
       },
-      "lastUpdated": "2025-10-30T09:22:33.693Z",
+      "lastUpdated": "2025-11-01T21:16:41.342Z",
       "status": "not-started"
     },
     {
@@ -209,7 +209,7 @@
         "todoTests": 0,
         "progressPercentage": 0
       },
-      "lastUpdated": "2025-10-30T09:22:33.693Z",
+      "lastUpdated": "2025-11-01T21:16:41.342Z",
       "status": "not-started"
     },
     {
@@ -221,7 +221,7 @@
         "todoTests": 0,
         "progressPercentage": 0
       },
-      "lastUpdated": "2025-10-30T09:22:33.693Z",
+      "lastUpdated": "2025-11-01T21:16:41.342Z",
       "status": "not-started"
     },
     {
@@ -233,7 +233,7 @@
         "todoTests": 0,
         "progressPercentage": 0
       },
-      "lastUpdated": "2025-10-30T09:22:33.693Z",
+      "lastUpdated": "2025-11-01T21:16:41.342Z",
       "status": "not-started"
     },
     {
@@ -245,19 +245,7 @@
         "todoTests": 0,
         "progressPercentage": 0
       },
-      "lastUpdated": "2025-10-30T09:22:33.693Z",
-      "status": "not-started"
-    },
-    {
-      "feature": "app/pages/meta/analytics",
-      "metrics": {
-        "totalTests": 13,
-        "passingTests": 0,
-        "fixmeTests": 13,
-        "todoTests": 0,
-        "progressPercentage": 0
-      },
-      "lastUpdated": "2025-10-30T09:22:33.693Z",
+      "lastUpdated": "2025-11-01T21:16:41.342Z",
       "status": "not-started"
     },
     {
@@ -269,7 +257,19 @@
         "todoTests": 0,
         "progressPercentage": 0
       },
-      "lastUpdated": "2025-10-30T09:22:33.693Z",
+      "lastUpdated": "2025-11-01T21:16:41.342Z",
+      "status": "not-started"
+    },
+    {
+      "feature": "app/pages/meta/analytics",
+      "metrics": {
+        "totalTests": 13,
+        "passingTests": 0,
+        "fixmeTests": 13,
+        "todoTests": 0,
+        "progressPercentage": 0
+      },
+      "lastUpdated": "2025-11-01T21:16:41.343Z",
       "status": "not-started"
     },
     {
@@ -281,7 +281,7 @@
         "todoTests": 0,
         "progressPercentage": 0
       },
-      "lastUpdated": "2025-10-30T09:22:33.692Z",
+      "lastUpdated": "2025-11-01T21:16:41.341Z",
       "status": "not-started"
     },
     {
@@ -293,7 +293,7 @@
         "todoTests": 0,
         "progressPercentage": 0
       },
-      "lastUpdated": "2025-10-30T09:22:33.693Z",
+      "lastUpdated": "2025-11-01T21:16:41.342Z",
       "status": "not-started"
     },
     {
@@ -305,7 +305,7 @@
         "todoTests": 0,
         "progressPercentage": 0
       },
-      "lastUpdated": "2025-10-30T09:22:33.693Z",
+      "lastUpdated": "2025-11-01T21:16:41.341Z",
       "status": "not-started"
     },
     {
@@ -317,7 +317,7 @@
         "todoTests": 0,
         "progressPercentage": 0
       },
-      "lastUpdated": "2025-10-30T09:22:33.693Z",
+      "lastUpdated": "2025-11-01T21:16:41.342Z",
       "status": "not-started"
     },
     {
@@ -329,7 +329,7 @@
         "todoTests": 0,
         "progressPercentage": 0
       },
-      "lastUpdated": "2025-10-30T09:22:33.693Z",
+      "lastUpdated": "2025-11-01T21:16:41.342Z",
       "status": "not-started"
     },
     {
@@ -341,7 +341,7 @@
         "todoTests": 0,
         "progressPercentage": 0
       },
-      "lastUpdated": "2025-10-30T09:22:33.693Z",
+      "lastUpdated": "2025-11-01T21:16:41.342Z",
       "status": "not-started"
     },
     {
@@ -353,7 +353,7 @@
         "todoTests": 0,
         "progressPercentage": 0
       },
-      "lastUpdated": "2025-10-30T09:22:33.693Z",
+      "lastUpdated": "2025-11-01T21:16:41.343Z",
       "status": "not-started"
     },
     {
@@ -365,7 +365,7 @@
         "todoTests": 0,
         "progressPercentage": 0
       },
-      "lastUpdated": "2025-10-30T09:22:33.693Z",
+      "lastUpdated": "2025-11-01T21:16:41.342Z",
       "status": "not-started"
     },
     {
@@ -377,7 +377,7 @@
         "todoTests": 0,
         "progressPercentage": 0
       },
-      "lastUpdated": "2025-10-30T09:22:33.693Z",
+      "lastUpdated": "2025-11-01T21:16:41.342Z",
       "status": "not-started"
     },
     {
@@ -389,7 +389,7 @@
         "todoTests": 0,
         "progressPercentage": 0
       },
-      "lastUpdated": "2025-10-30T09:22:33.693Z",
+      "lastUpdated": "2025-11-01T21:16:41.342Z",
       "status": "not-started"
     },
     {
@@ -401,7 +401,7 @@
         "todoTests": 0,
         "progressPercentage": 0
       },
-      "lastUpdated": "2025-10-30T09:22:33.693Z",
+      "lastUpdated": "2025-11-01T21:16:41.341Z",
       "status": "not-started"
     },
     {
@@ -413,7 +413,7 @@
         "todoTests": 0,
         "progressPercentage": 0
       },
-      "lastUpdated": "2025-10-30T09:22:33.693Z",
+      "lastUpdated": "2025-11-01T21:16:41.342Z",
       "status": "not-started"
     },
     {
@@ -425,7 +425,7 @@
         "todoTests": 0,
         "progressPercentage": 0
       },
-      "lastUpdated": "2025-10-30T09:22:33.693Z",
+      "lastUpdated": "2025-11-01T21:16:41.343Z",
       "status": "not-started"
     },
     {
@@ -437,7 +437,7 @@
         "todoTests": 0,
         "progressPercentage": 0
       },
-      "lastUpdated": "2025-10-30T09:22:33.693Z",
+      "lastUpdated": "2025-11-01T21:16:41.341Z",
       "status": "not-started"
     },
     {
@@ -449,7 +449,7 @@
         "todoTests": 0,
         "progressPercentage": 100
       },
-      "lastUpdated": "2025-10-30T09:22:33.692Z",
+      "lastUpdated": "2025-11-01T21:16:41.341Z",
       "status": "completed"
     },
     {
@@ -461,7 +461,7 @@
         "todoTests": 0,
         "progressPercentage": 100
       },
-      "lastUpdated": "2025-10-30T09:22:33.692Z",
+      "lastUpdated": "2025-11-01T21:16:41.341Z",
       "status": "completed"
     },
     {
@@ -473,19 +473,7 @@
         "todoTests": 0,
         "progressPercentage": 100
       },
-      "lastUpdated": "2025-10-30T09:22:33.693Z",
-      "status": "completed"
-    },
-    {
-      "feature": "api/paths/auth/send-verification-email",
-      "metrics": {
-        "totalTests": 2,
-        "passingTests": 2,
-        "fixmeTests": 0,
-        "todoTests": 0,
-        "progressPercentage": 100
-      },
-      "lastUpdated": "2025-10-30T09:22:33.693Z",
+      "lastUpdated": "2025-11-01T21:16:41.341Z",
       "status": "completed"
     },
     {
@@ -497,19 +485,7 @@
         "todoTests": 0,
         "progressPercentage": 100
       },
-      "lastUpdated": "2025-10-30T09:22:33.693Z",
-      "status": "completed"
-    },
-    {
-      "feature": "api/paths/auth/forget-password",
-      "metrics": {
-        "totalTests": 2,
-        "passingTests": 2,
-        "fixmeTests": 0,
-        "todoTests": 0,
-        "progressPercentage": 100
-      },
-      "lastUpdated": "2025-10-30T09:22:33.693Z",
+      "lastUpdated": "2025-11-01T21:16:41.342Z",
       "status": "completed"
     },
     {
@@ -521,7 +497,31 @@
         "todoTests": 0,
         "progressPercentage": 100
       },
-      "lastUpdated": "2025-10-30T09:22:33.693Z",
+      "lastUpdated": "2025-11-01T21:16:41.342Z",
+      "status": "completed"
+    },
+    {
+      "feature": "api/paths/auth/send-verification-email",
+      "metrics": {
+        "totalTests": 2,
+        "passingTests": 2,
+        "fixmeTests": 0,
+        "todoTests": 0,
+        "progressPercentage": 100
+      },
+      "lastUpdated": "2025-11-01T21:16:41.342Z",
+      "status": "completed"
+    },
+    {
+      "feature": "api/paths/auth/forget-password",
+      "metrics": {
+        "totalTests": 2,
+        "passingTests": 2,
+        "fixmeTests": 0,
+        "todoTests": 0,
+        "progressPercentage": 100
+      },
+      "lastUpdated": "2025-11-01T21:16:41.342Z",
       "status": "completed"
     },
     {
@@ -533,19 +533,7 @@
         "todoTests": 0,
         "progressPercentage": 100
       },
-      "lastUpdated": "2025-10-30T09:22:33.693Z",
-      "status": "completed"
-    },
-    {
-      "feature": "api/paths/auth/verify-email",
-      "metrics": {
-        "totalTests": 2,
-        "passingTests": 2,
-        "fixmeTests": 0,
-        "todoTests": 0,
-        "progressPercentage": 100
-      },
-      "lastUpdated": "2025-10-30T09:22:33.693Z",
+      "lastUpdated": "2025-11-01T21:16:41.342Z",
       "status": "completed"
     },
     {
@@ -557,7 +545,19 @@
         "todoTests": 0,
         "progressPercentage": 100
       },
-      "lastUpdated": "2025-10-30T09:22:33.693Z",
+      "lastUpdated": "2025-11-01T21:16:41.342Z",
+      "status": "completed"
+    },
+    {
+      "feature": "api/paths/auth/verify-email",
+      "metrics": {
+        "totalTests": 2,
+        "passingTests": 2,
+        "fixmeTests": 0,
+        "todoTests": 0,
+        "progressPercentage": 100
+      },
+      "lastUpdated": "2025-11-01T21:16:41.342Z",
       "status": "completed"
     },
     {
@@ -569,19 +569,7 @@
         "todoTests": 0,
         "progressPercentage": 100
       },
-      "lastUpdated": "2025-10-30T09:22:33.693Z",
-      "status": "completed"
-    },
-    {
-      "feature": "api/paths/auth/sign-in/social",
-      "metrics": {
-        "totalTests": 2,
-        "passingTests": 2,
-        "fixmeTests": 0,
-        "todoTests": 0,
-        "progressPercentage": 100
-      },
-      "lastUpdated": "2025-10-30T09:22:33.693Z",
+      "lastUpdated": "2025-11-01T21:16:41.342Z",
       "status": "completed"
     },
     {
@@ -593,7 +581,7 @@
         "todoTests": 0,
         "progressPercentage": 100
       },
-      "lastUpdated": "2025-10-30T09:22:33.693Z",
+      "lastUpdated": "2025-11-01T21:16:41.343Z",
       "status": "completed"
     },
     {
@@ -605,23 +593,35 @@
         "todoTests": 0,
         "progressPercentage": 100
       },
-      "lastUpdated": "2025-10-30T09:22:33.693Z",
+      "lastUpdated": "2025-11-01T21:16:41.343Z",
+      "status": "completed"
+    },
+    {
+      "feature": "api/paths/auth/sign-in/social",
+      "metrics": {
+        "totalTests": 2,
+        "passingTests": 2,
+        "fixmeTests": 0,
+        "todoTests": 0,
+        "progressPercentage": 100
+      },
+      "lastUpdated": "2025-11-01T21:16:41.343Z",
       "status": "completed"
     }
   ],
   "recentActivity": [],
   "nextUp": [
+    "app/theme/colors",
+    "app/pages/sections",
+    "app/blocks",
     "app/name",
-    "app/pages/meta/structured-data",
-    "app/pages/common/interactions",
-    "app/pages/common",
-    "app/blocks/common"
+    "app/pages/meta/structured-data"
   ],
   "queueStatus": {
-    "queued": 0,
+    "queued": 639,
     "inProgress": 0,
     "completed": 0,
-    "failed": 0,
-    "total": 0
+    "failed": 2,
+    "total": 641
   }
 }
