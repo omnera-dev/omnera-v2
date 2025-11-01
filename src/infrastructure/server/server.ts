@@ -218,7 +218,13 @@ export const createServer = (
     yield* Console.log(`CSS compiled: ${cssResult.css.length} bytes`)
 
     // Create Hono app
-    const honoApp = createHonoApp(app, renderHomePage, renderPage, renderNotFoundPage, renderErrorPage)
+    const honoApp = createHonoApp(
+      app,
+      renderHomePage,
+      renderPage,
+      renderNotFoundPage,
+      renderErrorPage
+    )
 
     // Start Bun server
     const server = yield* Effect.try({

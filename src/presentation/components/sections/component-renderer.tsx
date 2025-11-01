@@ -7,7 +7,10 @@
 
 import DOMPurify from 'dompurify'
 import { type ReactElement } from 'react'
-import type { BlockReference, SimpleBlockReference } from '@/domain/models/app/block/common/block-reference'
+import type {
+  BlockReference,
+  SimpleBlockReference,
+} from '@/domain/models/app/block/common/block-reference'
 import type { Blocks } from '@/domain/models/app/blocks'
 import type { Component } from '@/domain/models/app/page/sections'
 

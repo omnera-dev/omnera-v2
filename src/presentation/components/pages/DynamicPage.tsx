@@ -56,7 +56,7 @@ export function DynamicPage({
   readonly blocks?: Blocks
   readonly theme?: Theme
 }): Readonly<ReactElement> {
-    // Use default metadata if not provided
+  // Use default metadata if not provided
   const lang = page.meta?.lang || 'en-US'
   const title = page.meta?.title || page.name || page.path
   const description = page.meta?.description || ''
