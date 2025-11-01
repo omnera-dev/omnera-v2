@@ -11,11 +11,16 @@ import { test, expect } from '@/specs/fixtures'
  * E2E Tests for URL Path
  *
  * Source: specs/app/pages/path/path.schema.json
- * Spec Count: 10
+ * Spec Count: 15
  *
  * Test Organization:
- * 1. @spec tests - One per spec in schema (10 tests) - Exhaustive acceptance criteria
+ * 1. @spec tests - One per spec in schema (15 tests) - Exhaustive acceptance criteria
  * 2. @regression test - ONE optimized integration test - Efficient workflow validation
+ *
+ * Routing Behavior (APP-PAGES-PATH-011 to APP-PAGES-PATH-015):
+ * DefaultHomePage.tsx should ONLY be rendered when NO page exists at '/' path.
+ * It should NOT render blocks - only app name, version, and description.
+ * Bug: Lines 68-79 in DefaultHomePage.tsx incorrectly render app.blocks.
  */
 
 test.describe('URL Path', () => {
@@ -328,6 +333,182 @@ test.describe('URL Path', () => {
       await expect(page.locator('[data-product-id="123"]')).toBeVisible()
 
       // THEN: it should support dynamic route parameters (if applicable)
+    }
+  )
+
+  test.fixme(
+    'APP-PAGES-PATH-011: DefaultHomePage displays app name, version, description (NO blocks)',
+    { tag: '@spec' },
+    async ({ page, startServerWithSchema }) => {
+      // GIVEN: app with NO pages array
+      await startServerWithSchema({
+        name: 'my-app',
+        version: '1.0.0',
+        description: 'My app description',
+        blocks: [
+          {
+            name: 'hero',
+            type: 'section',
+            children: [{ type: 'h1', children: ['Hero Block'] }],
+          },
+        ],
+      })
+
+      // WHEN: user navigates to '/'
+      await page.goto('/')
+
+      // THEN: DefaultHomePage displays app name, version, description (NO blocks)
+      await expect(page.locator('[data-testid="app-name-heading"]')).toHaveText('my-app')
+      await expect(page.locator('[data-testid="app-version-badge"]')).toHaveText('1.0.0')
+      await expect(page.locator('[data-testid="app-description"]')).toHaveText('My app description')
+
+      // CRITICAL: Blocks should NOT be rendered (bug fix verification)
+      await expect(page.locator('[data-block="hero"]')).not.toBeVisible()
+    }
+  )
+
+  test.fixme(
+    'APP-PAGES-PATH-012: DefaultHomePage displays when pages exist but no "/" path',
+    { tag: '@spec' },
+    async ({ page, startServerWithSchema }) => {
+      // GIVEN: app with pages=[{path: '/about'}] (no '/' page)
+      await startServerWithSchema({
+        name: 'my-app',
+        pages: [
+          {
+            name: 'about',
+            path: '/about',
+            meta: { lang: 'en-US', title: 'About Us', description: 'About page' },
+            sections: [{ type: 'section', children: [{ type: 'h1', children: ['About Us'] }] }],
+          },
+        ],
+      })
+
+      // WHEN: user navigates to '/'
+      await page.goto('/')
+
+      // THEN: DefaultHomePage displays (fallback behavior)
+      await expect(page.locator('[data-testid="app-name-heading"]')).toHaveText('my-app')
+
+      // Verify /about route works
+      await page.goto('/about')
+      await expect(page).toHaveTitle('About Us')
+      await expect(page.locator('h1')).toHaveText('About Us')
+    }
+  )
+
+  test.fixme(
+    'APP-PAGES-PATH-013: Custom page renders when "/" path exists',
+    { tag: '@spec' },
+    async ({ page, startServerWithSchema }) => {
+      // GIVEN: app with pages=[{path: '/', sections: [...]}]
+      await startServerWithSchema({
+        name: 'my-app',
+        pages: [
+          {
+            name: 'custom_home',
+            path: '/',
+            meta: { lang: 'en-US', title: 'Custom Home', description: 'Custom home page' },
+            sections: [
+              {
+                type: 'section',
+                props: { id: 'hero' },
+                children: [{ type: 'h1', children: ['Custom Homepage'] }],
+              },
+            ],
+          },
+        ],
+      })
+
+      // WHEN: user navigates to '/'
+      await page.goto('/')
+
+      // THEN: custom page renders (NOT DefaultHomePage)
+      await expect(page).toHaveTitle('Custom Home')
+      await expect(page.locator('[data-testid="page-custom_home"]')).toBeVisible()
+      await expect(page.locator('section#hero h1')).toHaveText('Custom Homepage')
+
+      // Verify DefaultHomePage is NOT rendered
+      await expect(page.locator('[data-testid="app-name-heading"]')).not.toBeVisible()
+    }
+  )
+
+  test.fixme(
+    'APP-PAGES-PATH-014: DefaultHomePage does NOT render blocks',
+    { tag: '@spec' },
+    async ({ page, startServerWithSchema }) => {
+      // GIVEN: app with blocks=[...] and NO '/' page
+      await startServerWithSchema({
+        name: 'my-app',
+        version: '1.0.0',
+        description: 'App with blocks',
+        blocks: [
+          {
+            name: 'hero',
+            type: 'section',
+            children: [{ type: 'h1', children: ['Hero Block'] }],
+          },
+          {
+            name: 'cta',
+            type: 'section',
+            children: [{ type: 'button', children: ['CTA Button'] }],
+          },
+        ],
+      })
+
+      // WHEN: DefaultHomePage is rendered
+      await page.goto('/')
+
+      // THEN: blocks are NOT rendered (only name/version/description shown)
+      await expect(page.locator('[data-testid="app-name-heading"]')).toHaveText('my-app')
+      await expect(page.locator('[data-testid="app-version-badge"]')).toHaveText('1.0.0')
+      await expect(page.locator('[data-testid="app-description"]')).toHaveText('App with blocks')
+
+      // CRITICAL: Verify blocks are NOT rendered (bug fix)
+      await expect(page.locator('[data-block="hero"]')).not.toBeVisible()
+      await expect(page.locator('[data-block="cta"]')).not.toBeVisible()
+      await expect(page.locator('h1').filter({ hasText: 'Hero Block' })).not.toBeVisible()
+      await expect(page.locator('button').filter({ hasText: 'CTA Button' })).not.toBeVisible()
+    }
+  )
+
+  test.fixme(
+    'APP-PAGES-PATH-015: Custom "/" page renders blocks from sections',
+    { tag: '@spec' },
+    async ({ page, startServerWithSchema }) => {
+      // GIVEN: app with pages=[{path: '/', sections: [{block: 'hero'}]}]
+      await startServerWithSchema({
+        name: 'my-app',
+        blocks: [
+          {
+            name: 'hero',
+            type: 'section',
+            children: [{ type: 'h1', children: ['$title'] }],
+          },
+        ],
+        pages: [
+          {
+            name: 'custom_home',
+            path: '/',
+            meta: { lang: 'en-US', title: 'Home', description: 'Home page' },
+            sections: [{ block: 'hero', vars: { title: 'Welcome Home' } }],
+          },
+        ],
+      })
+
+      // WHEN: user navigates to '/'
+      await page.goto('/')
+
+      // THEN: custom page renders blocks from sections
+      await expect(page).toHaveTitle('Home')
+      await expect(page.locator('[data-testid="page-custom_home"]')).toBeVisible()
+      await expect(page.locator('h1')).toHaveText('Welcome Home')
+
+      // Verify DefaultHomePage is NOT rendered
+      await expect(page.locator('[data-testid="app-name-heading"]')).not.toBeVisible()
+
+      // Verify block rendered via sections (NOT from DefaultHomePage)
+      await expect(page.locator('[data-block="hero"]')).toBeVisible()
     }
   )
 

@@ -310,6 +310,267 @@
           "Dynamic routing for CMS content"
         ]
       }
+    },
+    {
+      "id": "APP-PAGES-PATH-011",
+      "given": "app with NO pages array",
+      "when": "user navigates to '/'",
+      "then": "DefaultHomePage displays app name, version, description (NO blocks)",
+      "validation": {
+        "setup": {
+          "app": {
+            "name": "My App",
+            "version": "1.0.0",
+            "description": "My app description",
+            "blocks": [
+              {
+                "name": "hero",
+                "type": "section",
+                "children": []
+              }
+            ]
+          }
+        },
+        "assertions": [
+          "app.pages is undefined/empty",
+          "No '/' page exists",
+          "DefaultHomePage should render",
+          "app.name displayed",
+          "app.version displayed",
+          "app.description displayed",
+          "app.blocks NOT rendered (bug fix verification)"
+        ]
+      },
+      "application": {
+        "expectedDOM": "App name visible, version badge visible, description visible, NO blocks rendered",
+        "behavior": "DefaultHomePage acts as fallback when pages array is missing",
+        "useCases": [
+          "New app with no pages configured",
+          "Minimal app setup with only app-level properties"
+        ],
+        "assertions": [
+          "data-testid='app-name-heading' exists",
+          "data-testid='app-version-badge' exists (if version present)",
+          "data-testid='app-description' exists (if description present)",
+          "NO elements with data-block attribute",
+          "Blocks should NOT be rendered in DefaultHomePage"
+        ]
+      }
+    },
+    {
+      "id": "APP-PAGES-PATH-012",
+      "given": "app with pages=[{path: '/about'}] (no '/' page)",
+      "when": "user navigates to '/'",
+      "then": "DefaultHomePage displays (fallback behavior)",
+      "validation": {
+        "setup": {
+          "app": {
+            "name": "My App",
+            "pages": [
+              {
+                "path": "/about",
+                "sections": []
+              }
+            ]
+          }
+        },
+        "assertions": [
+          "app.pages exists but no page with path='/'",
+          "DefaultHomePage should render as fallback",
+          "app.name displayed",
+          "app.blocks NOT rendered"
+        ]
+      },
+      "application": {
+        "expectedDOM": "DefaultHomePage rendered with app name, NO blocks",
+        "behavior": "When pages array exists but no '/' path defined, fallback to DefaultHomePage",
+        "useCases": [
+          "App with only non-root pages (/about, /contact, etc.)",
+          "Missing homepage configuration"
+        ],
+        "assertions": [
+          "data-testid='app-name-heading' exists",
+          "NO elements with data-block attribute",
+          "URL shows '/' but DefaultHomePage renders"
+        ]
+      }
+    },
+    {
+      "id": "APP-PAGES-PATH-013",
+      "given": "app with pages=[{path: '/', sections: [...]}]",
+      "when": "user navigates to '/'",
+      "then": "custom page renders (NOT DefaultHomePage)",
+      "validation": {
+        "setup": {
+          "app": {
+            "name": "My App",
+            "pages": [
+              {
+                "name": "custom_home",
+                "path": "/",
+                "meta": {
+                  "lang": "en-US",
+                  "title": "Custom Home"
+                },
+                "sections": [
+                  {
+                    "type": "section",
+                    "props": {
+                      "id": "hero"
+                    },
+                    "children": [
+                      {
+                        "type": "h1",
+                        "children": ["Custom Homepage"]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "assertions": [
+          "app.pages contains page with path='/'",
+          "Custom page should render",
+          "DefaultHomePage should NOT render",
+          "Custom sections rendered from page.sections"
+        ]
+      },
+      "application": {
+        "expectedDOM": "Custom page sections rendered, NOT DefaultHomePage",
+        "behavior": "Custom '/' page takes precedence over DefaultHomePage",
+        "useCases": ["App with custom homepage design", "Marketing page with specific layout"],
+        "assertions": [
+          "data-testid='page-custom_home' exists",
+          "Custom sections with id='hero' rendered",
+          "NO data-testid='app-name-heading' (DefaultHomePage not rendered)",
+          "Page title shows custom meta.title"
+        ]
+      }
+    },
+    {
+      "id": "APP-PAGES-PATH-014",
+      "given": "app with blocks=[...] and NO '/' page",
+      "when": "DefaultHomePage is rendered",
+      "then": "blocks are NOT rendered (only name/version/description shown)",
+      "validation": {
+        "setup": {
+          "app": {
+            "name": "My App",
+            "version": "1.0.0",
+            "description": "App with blocks",
+            "blocks": [
+              {
+                "name": "hero",
+                "type": "section",
+                "children": [
+                  {
+                    "type": "h1",
+                    "children": ["Hero Block"]
+                  }
+                ]
+              },
+              {
+                "name": "cta",
+                "type": "section",
+                "children": [
+                  {
+                    "type": "button",
+                    "children": ["CTA Button"]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "assertions": [
+          "app.blocks exists with multiple blocks",
+          "No '/' page exists",
+          "DefaultHomePage renders",
+          "app.blocks should NOT be rendered (BUG FIX)",
+          "Only app.name, app.version, app.description displayed"
+        ]
+      },
+      "application": {
+        "expectedDOM": "App name, version, description visible; blocks NOT rendered",
+        "behavior": "DefaultHomePage NEVER renders app.blocks - this is the core bug to fix",
+        "useCases": [
+          "App with reusable blocks defined but no homepage",
+          "Blocks should only render in custom pages, not DefaultHomePage"
+        ],
+        "assertions": [
+          "data-testid='app-name-heading' exists",
+          "data-testid='app-version-badge' exists",
+          "data-testid='app-description' exists",
+          "NO elements with [data-block='hero']",
+          "NO elements with [data-block='cta']",
+          "NO ComponentRenderer rendered for blocks",
+          "Lines 68-79 in DefaultHomePage.tsx should be removed"
+        ]
+      }
+    },
+    {
+      "id": "APP-PAGES-PATH-015",
+      "given": "app with pages=[{path: '/', sections: [{block: 'hero'}]}]",
+      "when": "user navigates to '/'",
+      "then": "custom page renders blocks from sections",
+      "validation": {
+        "setup": {
+          "app": {
+            "name": "My App",
+            "blocks": [
+              {
+                "name": "hero",
+                "type": "section",
+                "children": [
+                  {
+                    "type": "h1",
+                    "children": ["$title"]
+                  }
+                ]
+              }
+            ],
+            "pages": [
+              {
+                "name": "custom_home",
+                "path": "/",
+                "meta": {
+                  "lang": "en-US",
+                  "title": "Home"
+                },
+                "sections": [
+                  {
+                    "block": "hero",
+                    "vars": {
+                      "title": "Welcome Home"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "assertions": [
+          "Custom '/' page exists",
+          "Page sections reference blocks",
+          "Custom page renders (NOT DefaultHomePage)",
+          "Blocks rendered from page.sections (NOT from app.blocks directly)",
+          "Block variables substituted correctly"
+        ]
+      },
+      "application": {
+        "expectedDOM": "Custom page with hero block rendered from sections",
+        "behavior": "Custom pages CAN render blocks via sections, but DefaultHomePage CANNOT",
+        "useCases": ["Custom homepage using reusable blocks", "Block-based page composition"],
+        "assertions": [
+          "data-testid='page-custom_home' exists",
+          "Hero block rendered via section reference",
+          "h1 contains 'Welcome Home' (variable substituted)",
+          "DefaultHomePage NOT rendered",
+          "Blocks rendered because custom page sections reference them, NOT because of DefaultHomePage"
+        ]
+      }
     }
   ]
 }
