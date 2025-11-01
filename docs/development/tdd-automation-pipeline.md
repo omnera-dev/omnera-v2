@@ -121,14 +121,14 @@ bun run scripts/tdd-automation/queue-manager.ts status
 2. **Run @agent-e2e-test-fixer**: Remove `.fixme()`, implement minimal code
 3. **Run @agent-codebase-refactor-auditor**: Review quality, refactor (ALWAYS)
 4. Commit changes (Claude Code account) - includes `bun run license`
-5. Create PR to main with `tdd-automation` label
+5. Create PR to main with `tdd-automation` label and **include `Closes #<issue_number>` in PR body**
 6. **Monitor test.yml validation** with retry loop (max 3 attempts):
    - Check test.yml CI status
    - On failure: Analyze errors, fix code, push again
    - Track retry count with labels (retry:1, retry:2, retry:3)
    - After 3 failures: Mark issue `tdd-spec:failed`, comment, exit
    - On success: Enable PR auto-merge with --squash
-7. **Issue closes automatically** when PR merges to main (handled by test.yml)
+7. **Issue closes automatically** when PR merges to main (handled by test.yml via `Closes #` syntax)
 
 **Retry Logic**:
 
@@ -155,10 +155,11 @@ bun run scripts/tdd-automation/queue-manager.ts status
 
 2. **close-tdd-issue job** (only on PR merge):
    - Triggers when PR with `tdd-automation` label merges
-   - Extracts issue number from PR body
+   - Extracts issue number from PR body using `Closes #<number>` pattern
    - Closes issue with reason "completed"
    - Adds label `tdd-spec:completed`
    - Removes label `tdd-spec:in-progress`
+   - **Note**: PR body MUST include `Closes #<issue_number>` for automatic closure
 
 #### **tdd-queue-recovery.yml** (Timeout Recovery)
 
@@ -264,7 +265,7 @@ Every 15 minutes (or manual):
    - Run `bun run license` (add copyright headers)
    - Commit: `fix: implement APP-VERSION-001`
    - Push to branch
-6. **Create PR**: To main with `tdd-automation` label
+6. **Create PR**: To main with `tdd-automation` label and **include `Closes #<issue_number>` in PR body**
 7. **Monitor validation**: Watch test.yml CI checks (retry up to 3 times)
 8. **On success**: Enable PR auto-merge
 9. **On 3 failures**: Mark issue `tdd-spec:failed`, exit
@@ -309,11 +310,13 @@ Every 15 minutes (or manual):
 **When PR merges to main**:
 
 1. **test.yml close-tdd-issue job triggers**
-2. **Extracts issue number** from PR body
+2. **Extracts issue number** from PR body using `Closes #<number>` pattern
 3. **Closes issue** with reason "completed"
 4. **Updates labels**:
    - Adds: `tdd-spec:completed`
    - Removes: `tdd-spec:in-progress`
+
+**Important**: PR body MUST include `Closes #<issue_number>` for automatic closure (workflow provides this to Claude Code automatically).
 
 **Result**: Issues only close when code actually merges to main.
 

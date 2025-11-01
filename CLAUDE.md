@@ -268,7 +268,7 @@ When triggered by @claude mention (posted by queue processor every 15 min):
    git push
    ```
 
-5. **Create PR** with `tdd-automation` label
+5. **Create PR** with `tdd-automation` label and **include `Closes #<issue_number>` in PR body**
 
 6. **Monitor validation** (test.yml CI checks):
    - If fails: Analyze errors, fix, push (retry up to 3 times)
@@ -276,7 +276,7 @@ When triggered by @claude mention (posted by queue processor every 15 min):
    - After 3 failures: Mark issue `tdd-spec:failed`, exit (allow pipeline to continue)
    - If passes: Enable PR auto-merge with --squash
 
-7. **Issue closes automatically** when PR merges to main (NOT before)
+7. **Issue closes automatically** when PR merges to main (via `Closes #` syntax in PR body)
 
 ### Retry Logic
 
@@ -293,7 +293,7 @@ The system implements automatic error recovery:
 - **DO NOT** modify test logic - only remove `.fixme()` and implement code
 - **DO NOT** close issues manually - they close automatically on PR merge
 - **DO** commit with format: `fix: implement {SPEC-ID}`
-- **DO** create PR with `tdd-automation` label
+- **DO** create PR with `tdd-automation` label and include `Closes #<issue_number>` in PR body
 - **DO** retry up to 3 times on validation failures
 
 ### Queue System Architecture

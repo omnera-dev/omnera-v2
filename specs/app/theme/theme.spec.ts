@@ -121,10 +121,6 @@ test.describe('Theme Configuration', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: a complete theme with all 7 design token categories
-      // WHEN: comprehensive design system is defined
-      // THEN: it should validate and orchestrate all design token categories
-
-      // GIVEN: a complete theme with all 7 design token categories
       await startServerWithSchema({
         name: 'test-app',
         theme: {
@@ -235,10 +231,6 @@ test.describe('Theme Configuration', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: a theme following design system best practices
-      // WHEN: all tokens use semantic naming and progressive scales
-      // THEN: it should enable consistent UI across entire application
-
-      // GIVEN: a theme following design system best practices
       await startServerWithSchema({
         name: 'test-app',
         theme: {
@@ -307,10 +299,6 @@ test.describe('Theme Configuration', () => {
     'APP-THEME-INTEGRATION-001: should render cohesive UI with all theme tokens applied together',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // GIVEN: a complete theme with multiple design tokens used in page component
-      // WHEN: page sections reference theme.colors, theme.fonts, theme.spacing, theme.shadows, theme.borderRadius
-      // THEN: it should render cohesive UI with all theme tokens applied together
-
       // GIVEN: a complete theme with multiple design tokens used in page component
       await startServerWithSchema({
         name: 'test-app',
@@ -382,10 +370,6 @@ test.describe('Theme Configuration', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: a theme used across multiple page sections
-      // WHEN: different sections (header, hero, features, footer) all reference theme tokens
-      // THEN: it should maintain visual consistency across entire page layout
-
-      // GIVEN: a theme used across multiple page sections
       await startServerWithSchema({
         name: 'test-app',
         theme: {
@@ -437,10 +421,6 @@ test.describe('Theme Configuration', () => {
     'APP-THEME-INTEGRATION-003: should render adaptive layouts that respond to screen size',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // GIVEN: a theme with responsive breakpoints integrated with component layouts
-      // WHEN: components use both theme.spacing and theme.breakpoints for responsive design
-      // THEN: it should render adaptive layouts that respond to screen size
-
       // GIVEN: a theme with responsive breakpoints integrated with component layouts
       await startServerWithSchema({
         name: 'test-app',

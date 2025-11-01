@@ -185,10 +185,6 @@ test.describe('Breakpoints', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: md breakpoint applied to responsive grid
-      // WHEN: grid uses theme.breakpoints.md for tablet layout
-      // THEN: it should render grid with media query at 768px
-
-      // GIVEN: md breakpoint applied to responsive grid
       await startServerWithSchema({
         name: 'test-app',
         theme: {
@@ -229,10 +225,6 @@ test.describe('Breakpoints', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: lg breakpoint applied to navigation menu
-      // WHEN: navigation switches from mobile to desktop at theme.breakpoints.lg
-      // THEN: it should render hamburger menu below 1024px and full menu above
-
-      // GIVEN: lg breakpoint applied to navigation menu
       await startServerWithSchema({
         name: 'test-app',
         theme: {
@@ -271,10 +263,6 @@ test.describe('Breakpoints', () => {
     'APP-THEME-BREAKPOINTS-APPLICATION-003: should render with increasing padding at each breakpoint',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // GIVEN: multiple breakpoints applied to hero section
-      // WHEN: hero section uses sm, md, lg for responsive padding
-      // THEN: it should render with increasing padding at each breakpoint
-
       // GIVEN: multiple breakpoints applied to hero section
       await startServerWithSchema({
         name: 'test-app',

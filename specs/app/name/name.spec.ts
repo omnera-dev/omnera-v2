@@ -211,10 +211,6 @@ test(
   { tag: '@spec' },
   async ({ page, startServerWithSchema }) => {
     // GIVEN: two different test runs with app names 'first-app' and 'second-app'
-    // WHEN: user navigates to each homepage
-    // THEN: each displays its respective app name
-
-    // GIVEN: two different test runs with app names 'first-app' and 'second-app'
 
     // First test run: 'first-app'
     await startServerWithSchema({ name: 'first-app' }, { useDatabase: false })

@@ -139,6 +139,9 @@ jobs:
             COMMENT_BODY=""
           fi
 
+          # Output issue number for later steps
+          echo "issue_number=$ISSUE_NUMBER" >> $GITHUB_OUTPUT
+
           # Extract TDD branch from issue body or comment using env vars to avoid bash expansion
           # Look for tdd/spec-* pattern in issue body first, then comment
           BRANCH=$(echo "$ISSUE_BODY" | grep -o 'tdd/spec-[A-Z-]*[0-9]*' | head -1 || true)
@@ -180,7 +183,7 @@ jobs:
           # For comment-triggered events: Omit prompt so action extracts from @claude comment
           prompt: >-
             ${{ (github.event_name == 'workflow_run' || github.event_name == 'workflow_dispatch') &&
-            'Implement TDD spec with 6-step workflow: 1) Run @agent-e2e-test-fixer to fix the test 2) Run @agent-codebase-refactor-auditor to refactor code (ALWAYS) 3) Commit changes (bun run license first) 4) Create PR to main with tdd-automation label 5) Monitor test.yml validation - if fails, analyze errors, fix, push, retry (max 3 attempts with retry:N labels) - if 3 failures, mark issue tdd-spec:failed and exit - if passes, enable PR auto-merge with --squash 6) DO NOT close issue (closes on PR merge). Branch already exists and is checked out.' || '' }}
+            format('Implement TDD spec with 6-step workflow: 1) Run @agent-e2e-test-fixer to fix the test 2) Run @agent-codebase-refactor-auditor to refactor code (ALWAYS) 3) Commit changes (bun run license first) 4) Create PR to main with tdd-automation label and include "Closes #{0}" in PR body 5) Monitor test.yml validation - if fails, analyze errors, fix, push, retry (max 3 attempts with retry:N labels) - if 3 failures, mark issue tdd-spec:failed and exit - if passes, enable PR auto-merge with --squash 6) DO NOT close issue manually (closes automatically on PR merge). Branch already exists and is checked out.', steps.branch.outputs.issue_number) || '' }}
 
           # Multi-agent workflow: e2e-test-fixer for implementation, codebase-refactor-auditor for quality
           # Both agents run sequentially on every spec (ALWAYS)

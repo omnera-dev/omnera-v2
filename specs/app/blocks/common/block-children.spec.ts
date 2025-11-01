@@ -29,10 +29,6 @@ test.describe('Block Children', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: children array for block templates
-      // WHEN: array contains child component objects
-      // THEN: it should render nested component structure in DOM
-
-      // GIVEN: children array for block templates
       await startServerWithSchema({
         name: 'test-app',
         blocks: [
@@ -92,10 +88,6 @@ test.describe('Block Children', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: child with props
-      // WHEN: child has props referencing block-props.schema.json
-      // THEN: it should render child with specified properties and attributes
-
-      // GIVEN: child with props
       await startServerWithSchema({
         name: 'test-app',
         blocks: [
@@ -128,10 +120,6 @@ test.describe('Block Children', () => {
     'APP-BLOCKS-CHILDREN-004: should render unlimited nesting depth in DOM tree',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // GIVEN: child with recursive children
-      // WHEN: child has children property with self-reference (#)
-      // THEN: it should render unlimited nesting depth in DOM tree
-
       // GIVEN: child with recursive children
       await startServerWithSchema({
         name: 'test-app',
@@ -183,10 +171,6 @@ test.describe('Block Children', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: child with content
-      // WHEN: child has content string with $variable support
-      // THEN: it should render child with substituted text content
-
-      // GIVEN: child with content
       await startServerWithSchema({
         name: 'test-app',
         blocks: [
@@ -225,10 +209,6 @@ test.describe('Block Children', () => {
     'APP-BLOCKS-CHILDREN-006: should render composite UI pattern with all child elements',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // GIVEN: children for component composition
-      // WHEN: multiple children create complex structure
-      // THEN: it should render composite UI pattern with all child elements
-
       // GIVEN: children for component composition
       await startServerWithSchema({
         name: 'test-app',
@@ -293,10 +273,6 @@ test.describe('Block Children', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: icon child example
-      // WHEN: child has type 'icon' with props containing $icon and $color variables
-      // THEN: it should render SVG icon with substituted name and color
-
-      // GIVEN: icon child example
       await startServerWithSchema({
         name: 'test-app',
         blocks: [
@@ -333,10 +309,6 @@ test.describe('Block Children', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: text child example
-      // WHEN: child has type 'text' with content containing $label variable
-      // THEN: it should render text element with substituted content
-
-      // GIVEN: text child example
       await startServerWithSchema({
         name: 'test-app',
         blocks: [
@@ -365,10 +337,6 @@ test.describe('Block Children', () => {
     'APP-BLOCKS-CHILDREN-009: should render all children with substituted values throughout tree',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // GIVEN: children with variable references
-      // WHEN: children contain $variable placeholders in props and content
-      // THEN: it should render all children with substituted values throughout tree
-
       // GIVEN: children with variable references
       await startServerWithSchema({
         name: 'test-app',
@@ -424,10 +392,6 @@ test.describe('Block Children', () => {
     'APP-BLOCKS-CHILDREN-010: should render hierarchical DOM tree with proper nesting',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // GIVEN: children for UI tree structure
-      // WHEN: children array defines parent-child relationships
-      // THEN: it should render hierarchical DOM tree with proper nesting
-
       // GIVEN: children for UI tree structure
       await startServerWithSchema({
         name: 'test-app',
