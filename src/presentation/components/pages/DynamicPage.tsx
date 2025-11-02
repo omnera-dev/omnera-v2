@@ -13,8 +13,8 @@ import { ComponentRenderer } from '@/presentation/components/sections/component-
 import { generateLanguageSwitcherScript } from '@/presentation/scripts/language-switcher-client'
 import type { Blocks } from '@/domain/models/app/blocks'
 import type { Languages } from '@/domain/models/app/languages'
-import type { Component } from '@/domain/models/app/page/sections'
 import type { OpenGraph } from '@/domain/models/app/page/meta/open-graph'
+import type { Component } from '@/domain/models/app/page/sections'
 import type { Page } from '@/domain/models/app/pages'
 import type { Theme } from '@/domain/models/app/theme'
 
@@ -28,10 +28,7 @@ import type { Theme } from '@/domain/models/app/theme'
  * @param blocks - Available blocks for reference resolution
  * @returns true if page uses language-switcher, false otherwise
  */
-function hasLanguageSwitcher(
-  sections: readonly Component[],
-  blocks?: Blocks
-): boolean {
+function hasLanguageSwitcher(sections: readonly Component[], blocks?: Blocks): boolean {
   const checkComponent = (component: Component): boolean => {
     // Direct type check
     if (component.type === 'language-switcher') {
@@ -54,8 +51,8 @@ function hasLanguageSwitcher(
 
     // Check component children
     if (component.children) {
-      return component.children.some((child: Component | string) =>
-        typeof child !== 'string' && checkComponent(child)
+      return component.children.some(
+        (child: Component | string) => typeof child !== 'string' && checkComponent(child)
       )
     }
 

@@ -51,11 +51,8 @@ export function renderHeading(
  * The text element supports a 'level' prop to determine the HTML tag.
  * If level is h1-h6, renders as heading. Otherwise renders as paragraph.
  */
-export function renderTextElement(
-  props: ElementProps,
-  content: string | undefined
-): ReactElement {
-  const level = props.level
+export function renderTextElement(props: ElementProps, content: string | undefined): ReactElement {
+  const { level } = props
 
   if (level === 'h1') return <h1 {...props}>{content}</h1>
   if (level === 'h2') return <h2 {...props}>{content}</h2>
@@ -71,19 +68,14 @@ export function renderTextElement(
 /**
  * Renders paragraph element
  */
-export function renderParagraph(
-  props: ElementProps,
-  content: string | undefined
-): ReactElement {
+export function renderParagraph(props: ElementProps, content: string | undefined): ReactElement {
   return <p {...props}>{content}</p>
 }
 
 /**
  * Renders image element
  */
-export function renderImage(
-  props: ElementProps
-): ReactElement {
+export function renderImage(props: ElementProps): ReactElement {
   return (
     <img
       {...props}
@@ -157,19 +149,14 @@ export function renderForm(
 /**
  * Renders input element
  */
-export function renderInput(
-  props: ElementProps
-): ReactElement {
+export function renderInput(props: ElementProps): ReactElement {
   return <input {...props} />
 }
 
 /**
  * Renders badge (styled span) element
  */
-export function renderBadge(
-  props: ElementProps,
-  content: string | undefined
-): ReactElement {
+export function renderBadge(props: ElementProps, content: string | undefined): ReactElement {
   return <span {...props}>{content}</span>
 }
 
@@ -190,9 +177,7 @@ export function renderIcon(
  * DOMPurify removes malicious scripts, event handlers, and dangerous attributes.
  * Critical for user-generated content or external HTML sources.
  */
-export function renderCustomHTML(
-  props: ElementProps
-): ReactElement {
+export function renderCustomHTML(props: ElementProps): ReactElement {
   const sanitizedHTML = DOMPurify.sanitize((props.html as string | undefined) || '')
   return (
     <div
@@ -212,10 +197,7 @@ export function renderCustomHTML(
  * Note: Props like variant, showFlags, and position are currently not used but may
  * be supported in future versions of the LanguageSwitcher component.
  */
-export function renderLanguageSwitcher(
-  _props: ElementProps,
-  languages?: Languages
-): ReactElement {
+export function renderLanguageSwitcher(_props: ElementProps, languages?: Languages): ReactElement {
   if (!languages) {
     console.warn('language-switcher block requires languages configuration')
     return (
