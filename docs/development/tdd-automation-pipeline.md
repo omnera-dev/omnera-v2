@@ -163,7 +163,15 @@ bun run scripts/tdd-automation/queue-manager.ts status
    - Removes label `tdd-spec:in-progress`
    - **Note**: PR body MUST include `Closes #<issue_number>` for automatic closure
 
-3. **delete-tdd-branch job** (cleanup unmerged branches):
+3. **verify-issue-closed job** (safeguard after PR merge):
+   - Runs after `close-tdd-issue` completes (even if it fails)
+   - Verifies issue is actually closed and has correct labels
+   - **Critical safeguard**: Force-closes issue if closure failed
+   - **Prevents queue blocking**: Without this, failed closures block the entire pipeline (like issue #1317)
+   - Ensures `tdd-spec:in-progress` is removed and `tdd-spec:completed` is added
+   - Returns error if force-close fails (alerts for manual intervention)
+
+4. **delete-tdd-branch job** (cleanup unmerged branches):
    - Triggers when PR is closed **without merging** for `tdd/*` or `claude/*` branches
    - Automatically deletes the branch to prevent stale branches
    - Complements GitHub's auto-delete setting (which only handles merged PRs)
@@ -571,6 +579,55 @@ If a spec has been in-progress for > 90 minutes with no activity:
    gh issue edit {issue-number} --remove-label "tdd-spec:in-progress"
    gh issue edit {issue-number} --add-label "tdd-spec:queued"
    ```
+
+### PR merged but issue still open (CRITICAL)
+
+**Issue**: PR merged successfully but issue remains `tdd-spec:in-progress` → **blocks entire queue**
+
+**Automatic Protection** (Since commit 93b5c04):
+
+- `verify-issue-closed` job runs after every PR merge
+- Force-closes issue if `close-tdd-issue` fails
+- **This prevents queue blocking** (like issue #1317 incident)
+
+**If automatic protection fails**:
+
+1. Check issue state:
+
+   ```bash
+   gh issue view {issue-number} --json state,labels
+   ```
+
+2. Check if PR was merged:
+
+   ```bash
+   gh pr view {pr-number} --json state,mergedAt
+   ```
+
+3. If PR merged but issue open, force-close manually:
+
+   ```bash
+   gh issue close {issue-number} --reason completed
+   gh issue edit {issue-number} --add-label "tdd-spec:completed"
+   gh issue edit {issue-number} --remove-label "tdd-spec:in-progress"
+   ```
+
+4. Check verify-issue-closed job logs:
+   ```bash
+   gh run list --workflow=test.yml | grep "merged"
+   gh run view {run-id} --log | grep "verify-issue-closed"
+   ```
+
+**Root Causes**:
+
+- GitHub auto-close keyword format incorrect (e.g., `Closes #1234 - description`)
+- GitHub API rate limit during issue closure
+- Network issue during issue update
+
+**Prevention**:
+
+- Always use `Closes #<number>` format (no extra text after number)
+- Verify-issue-closed job provides automatic recovery
 
 ### Validation failing repeatedly
 

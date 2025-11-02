@@ -130,6 +130,99 @@ jobs:
           GH_TOKEN: ${{ github.token }}
           GH_REPO: ${{ github.repository }}
 
+  verify-issue-closed:
+    name: Verify TDD Issue Closed After Merge
+    needs: close-tdd-issue
+    # Run after close-tdd-issue completes (even if it fails)
+    # This ensures we catch cases where GitHub's auto-close or manual close fails
+    if: |
+      always() &&
+      github.event_name == 'pull_request' &&
+      github.event.action == 'closed' &&
+      github.event.pull_request.merged == true &&
+      contains(github.event.pull_request.labels.*.name, 'tdd-automation')
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+    steps:
+      - name: Extract issue number from PR body
+        id: issue
+        env:
+          PR_BODY: ${{ github.event.pull_request.body }}
+        run: |
+          ISSUE_NUMBER=$(echo "$PR_BODY" | grep -o 'Closes #[0-9]*' | head -1 | grep -o '[0-9]*' || echo "")
+
+          if [ -z "$ISSUE_NUMBER" ]; then
+            echo "⚠️ No issue number found in PR body - skipping verification"
+            echo "has_issue=false" >> $GITHUB_OUTPUT
+          else
+            echo "🔍 Found issue #$ISSUE_NUMBER - verifying closure"
+            echo "has_issue=true" >> $GITHUB_OUTPUT
+            echo "issue_number=$ISSUE_NUMBER" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Verify issue is closed
+        if: steps.issue.outputs.has_issue == 'true'
+        run: |
+          ISSUE_NUMBER="${{ steps.issue.outputs.issue_number }}"
+
+          echo "🔍 Checking if issue #$ISSUE_NUMBER is closed..."
+
+          # Get issue state and labels
+          ISSUE_DATA=$(gh issue view "$ISSUE_NUMBER" --json state,labels --jq '{state: .state, labels: [.labels[].name]}')
+          STATE=$(echo "$ISSUE_DATA" | jq -r '.state')
+          LABELS=$(echo "$ISSUE_DATA" | jq -r '.labels | join(", ")')
+
+          echo "  Current state: $STATE"
+          echo "  Current labels: $LABELS"
+
+          # Check if issue is properly closed
+          if [ "$STATE" = "CLOSED" ]; then
+            # Verify labels are correct
+            HAS_COMPLETED=$(echo "$LABELS" | grep -c "tdd-spec:completed" || echo "0")
+            HAS_IN_PROGRESS=$(echo "$LABELS" | grep -c "tdd-spec:in-progress" || echo "0")
+
+            if [ "$HAS_COMPLETED" -eq 1 ] && [ "$HAS_IN_PROGRESS" -eq 0 ]; then
+              echo "✅ Issue #$ISSUE_NUMBER is properly closed with correct labels"
+            else
+              echo "⚠️ Issue #$ISSUE_NUMBER is closed but has incorrect labels - fixing..."
+              gh issue edit "$ISSUE_NUMBER" --add-label "tdd-spec:completed" || true
+              gh issue edit "$ISSUE_NUMBER" --remove-label "tdd-spec:in-progress" || true
+              echo "✅ Fixed labels on issue #$ISSUE_NUMBER"
+            fi
+          else
+            echo "❌ CRITICAL: Issue #$ISSUE_NUMBER failed to close - forcing closure"
+            echo ""
+            echo "This is the safeguard that prevents queue blocking when issue closure fails."
+            echo "Without this, the queue would be blocked indefinitely (like issue #1317)."
+            echo ""
+
+            # Force close the issue with correct labels
+            gh issue close "$ISSUE_NUMBER" --reason completed || {
+              echo "❌ Failed to close issue - retrying with gh api..."
+              gh api --method PATCH "/repos/${{ github.repository }}/issues/$ISSUE_NUMBER" \
+                -f state='closed' \
+                -f state_reason='completed'
+            }
+
+            gh issue edit "$ISSUE_NUMBER" --add-label "tdd-spec:completed" || true
+            gh issue edit "$ISSUE_NUMBER" --remove-label "tdd-spec:in-progress" || true
+
+            # Verify it worked
+            NEW_STATE=$(gh issue view "$ISSUE_NUMBER" --json state --jq '.state')
+            if [ "$NEW_STATE" = "CLOSED" ]; then
+              echo "✅ Successfully force-closed issue #$ISSUE_NUMBER"
+              echo "🔓 Queue unblocked - processor can continue with next spec"
+            else
+              echo "❌ FAILED to close issue #$ISSUE_NUMBER - manual intervention required"
+              echo "::error::Failed to close issue #$ISSUE_NUMBER after PR merge - queue may be blocked"
+              exit 1
+            fi
+          fi
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+
   delete-tdd-branch:
     name: Delete TDD Branch on PR Close
     if: |
