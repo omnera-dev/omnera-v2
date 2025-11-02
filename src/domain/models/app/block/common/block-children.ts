@@ -79,8 +79,10 @@ export const BlockChildElementSchema: Schema.Schema<any, any, never> = Schema.St
 /**
  * Block Children (child elements array for block templates)
  *
- * Array of component elements that can be nested recursively.
- * Each child has a type, optional props, optional nested children, and optional content.
+ * Array of component elements or strings that can be nested recursively.
+ * Each child can be:
+ * - BlockChildElement: Component with type, optional props, optional nested children, and optional content
+ * - String: Direct text content or variable placeholder (e.g., '$title', 'Static text')
  *
  * This enables building complex component hierarchies with variable substitution.
  *
@@ -98,15 +100,18 @@ export const BlockChildElementSchema: Schema.Schema<any, any, never> = Schema.St
  *     type: 'text',
  *     content: '$label',
  *   },
+ *   '$title', // Direct string (can be variable or static text)
  * ]
  * ```
  *
  * @see specs/app/blocks/common/block-children.schema.json
  */
-export const BlockChildrenSchema = Schema.Array(BlockChildElementSchema).pipe(
+export const BlockChildrenSchema = Schema.Array(
+  Schema.Union(BlockChildElementSchema, Schema.String)
+).pipe(
   Schema.annotations({
     title: 'Block Children',
-    description: 'Child elements array for block templates',
+    description: 'Child elements array for block templates (components or strings)',
   })
 )
 
