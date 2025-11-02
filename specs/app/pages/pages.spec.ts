@@ -108,7 +108,7 @@ test.describe('Pages', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-004: should accept root path for homepage',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -129,7 +129,7 @@ test.describe('Pages', () => {
       await page.goto('/')
 
       // THEN: it should accept root path for homepage
-      await expect(page).toHaveURL('/')
+      await expect(page).toHaveURL(/\/$/)
       await expect(page).toHaveTitle('Home')
     }
   )
