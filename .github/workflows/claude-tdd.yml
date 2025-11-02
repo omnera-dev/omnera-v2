@@ -208,7 +208,7 @@ jobs:
           # For comment-triggered events: Omit prompt so action extracts from @claude comment
           prompt: >-
             ${{ github.event_name == 'workflow_dispatch' &&
-            format('Implement TDD spec with 7-step workflow: 1) Run @agent-e2e-test-fixer to fix the test 2) Run @agent-codebase-refactor-auditor to refactor code (ALWAYS) 3) Commit changes (bun run license first) 4) Create PR to main with tdd-automation label and include "Closes #{0}" in PR body 5) Monitor test.yml validation - if fails, analyze errors, fix, push, retry (max 3 attempts with retry:N labels) - if 3 failures, mark issue tdd-spec:failed and exit 6) BEFORE enabling auto-merge, check for conflicts: fetch latest main and attempt rebase - if conflicts exist, resolve intelligently by merging both changes (e.g. add both props, combine logic), then re-run validation - use git push --force-with-lease after rebase 7) After validation passes, enable PR auto-merge with --squash 8) DO NOT close issue manually (closes automatically on PR merge).', needs.validate-context.outputs.issue_number) || '' }}
+            format('Implement TDD spec with 7-step workflow: 1) Run @agent-e2e-test-fixer to fix the test 2) Run @agent-codebase-refactor-auditor to refactor code (ALWAYS) 3) Commit changes (bun run license first) 4) ALWAYS create PR to main with tdd-automation label and include "Closes #{0}" in PR body - REQUIRED even if only .fixme() removal, NO EXCEPTIONS 5) Monitor test.yml validation - if fails, analyze errors, fix, push, retry (max 3 attempts with retry:N labels) - if 3 failures, mark issue tdd-spec:failed and exit 6) BEFORE enabling auto-merge, check for conflicts: fetch latest main and attempt rebase - if conflicts exist, resolve intelligently by merging both changes (e.g. add both props, combine logic), then re-run validation - use git push --force-with-lease after rebase 7) After validation passes, enable PR auto-merge with --squash 8) DO NOT close issue manually (closes automatically on PR merge).', needs.validate-context.outputs.issue_number) || '' }}
 
           # Multi-agent workflow: e2e-test-fixer for implementation, codebase-refactor-auditor for quality
           # Both agents run sequentially on every spec (ALWAYS)
@@ -217,3 +217,59 @@ jobs:
           # Retry logic: Monitor test.yml, fix errors up to 3 times, mark as failed if still failing
           # --dangerously-skip-permissions: Bypass permission checks (required for GitHub Actions automation)
           claude_args: '--agents e2e-test-fixer codebase-refactor-auditor --dangerously-skip-permissions'
+
+      - name: Verify PR was created
+        id: verify_pr
+        if: steps.claude.outcome == 'success'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          ISSUE_NUMBER: ${{ needs.validate-context.outputs.issue_number }}
+        run: |
+          echo "🔍 Verifying PR was created for issue #$ISSUE_NUMBER..."
+
+          # Wait up to 2 minutes for PR to appear (Claude may need time to push and create PR)
+          PR_FOUND=false
+          for i in {1..12}; do
+            # Search for PRs from branches matching claude/* or tdd/* patterns
+            PR_COUNT=$(gh pr list --json number,headRefName --jq "[.[] | select(.headRefName | test(\"^(claude|tdd)/.*$ISSUE_NUMBER.*\"))] | length")
+
+            if [ "$PR_COUNT" -gt 0 ]; then
+              PR_NUMBER=$(gh pr list --json number,headRefName --jq "[.[] | select(.headRefName | test(\"^(claude|tdd)/.*$ISSUE_NUMBER.*\"))][0].number")
+              echo "✅ PR #$PR_NUMBER found!"
+              echo "pr_created=true" >> $GITHUB_OUTPUT
+              echo "pr_number=$PR_NUMBER" >> $GITHUB_OUTPUT
+              PR_FOUND=true
+              break
+            fi
+
+            echo "Attempt $i/12: PR not found yet, waiting 10 seconds..."
+            sleep 10
+          done
+
+          if [ "$PR_FOUND" = false ]; then
+            echo "❌ No PR found after 2 minutes - marking issue as failed"
+            echo "pr_created=false" >> $GITHUB_OUTPUT
+
+            # Mark issue as failed (same as retry exhaustion)
+            gh issue edit "$ISSUE_NUMBER" \
+              --remove-label "tdd-spec:in-progress" \
+              --add-label "tdd-spec:failed"
+
+            gh issue comment "$ISSUE_NUMBER" \
+              --body "❌ **TDD Automation Failed: PR Not Created**
+
+            Claude Code finished successfully but did not create a pull request. This is required for the TDD automation workflow to complete.
+
+            **Next Steps**:
+            1. Review Claude Code's work in the branch (if created)
+            2. Manually create PR if changes exist
+            3. Or re-run this spec if needed
+
+            **Issue Status**: Marked as \`tdd-spec:failed\` - requires manual intervention.
+            **Pipeline Status**: Queue processor will continue with next spec (this issue does not block the pipeline).
+
+            ---
+            *🤖 Automated via [TDD Workflow](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})*"
+
+            exit 1
+          fi

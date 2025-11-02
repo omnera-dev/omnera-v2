@@ -268,15 +268,19 @@ When triggered by @claude mention (posted by queue processor every 15 min):
    git push
    ```
 
-5. **Create PR** with `tdd-automation` label and **include `Closes #<issue_number>` in PR body**
+5. **ALWAYS create PR** with `tdd-automation` label and **include `Closes #<issue_number>` in PR body** - REQUIRED even if only `.fixme()` removal, NO EXCEPTIONS
 
-6. **Monitor validation** (test.yml CI checks):
+6. **PR verification**: Workflow automatically verifies PR was created within 2 minutes
+   - If no PR found: Issue marked as `tdd-spec:failed`, pipeline continues with next spec
+   - This prevents pipeline from blocking on "no PR created" scenarios
+
+7. **Monitor validation** (test.yml CI checks):
    - If fails: Analyze errors, fix, push (retry up to 3 times)
    - Track retries with labels (retry:1, retry:2, retry:3)
    - After 3 failures: Mark issue `tdd-spec:failed`, exit (allow pipeline to continue)
    - If passes: Enable PR auto-merge with --squash
 
-7. **Issue closes automatically** when PR merges to main (via `Closes #` syntax in PR body)
+8. **Issue closes automatically** when PR merges to main (via `Closes #` syntax in PR body)
 
 ### Retry Logic
 
@@ -289,6 +293,7 @@ The system implements automatic error recovery:
 ### Important Rules
 
 - **ALWAYS** run both agents (e2e-test-fixer then refactor-auditor)
+- **ALWAYS** create PR - REQUIRED even if only `.fixme()` removal, NO EXCEPTIONS
 - **DO NOT** modify multiple specs at once (one spec = one issue)
 - **DO NOT** modify test logic - only remove `.fixme()` and implement code
 - **DO NOT** close issues manually - they close automatically on PR merge

@@ -120,14 +120,17 @@ bun run scripts/tdd-automation/queue-manager.ts status
 2. **Run @agent-e2e-test-fixer**: Remove `.fixme()`, implement minimal code
 3. **Run @agent-codebase-refactor-auditor**: Review quality, refactor (ALWAYS)
 4. Commit changes (Claude Code account) - includes `bun run license`
-5. Create PR to main with `tdd-automation` label and **include `Closes #<issue_number>` in PR body**
-6. **Monitor test.yml validation** with retry loop (max 3 attempts):
+5. **ALWAYS create PR** to main with `tdd-automation` label and **include `Closes #<issue_number>` in PR body** - REQUIRED even if only `.fixme()` removal, NO EXCEPTIONS
+6. **Verify PR creation**: Wait up to 2 minutes for PR to appear
+   - If PR created: Continue to validation
+   - If no PR after 2 minutes: Mark issue `tdd-spec:failed`, comment, exit (pipeline continues with next spec)
+7. **Monitor test.yml validation** with retry loop (max 3 attempts):
    - Check test.yml CI status
    - On failure: Analyze errors, fix code, push again
    - Track retry count with labels (retry:1, retry:2, retry:3)
    - After 3 failures: Mark issue `tdd-spec:failed`, comment, exit
    - On success: Enable PR auto-merge with --squash
-7. **Issue closes automatically** when PR merges to main (handled by test.yml via `Closes #` syntax)
+8. **Issue closes automatically** when PR merges to main (handled by test.yml via `Closes #` syntax)
 
 **Retry Logic**:
 
@@ -256,10 +259,12 @@ Every 15 minutes (or manual):
    - Run `bun run license` (add copyright headers)
    - Commit: `fix: implement APP-VERSION-001`
    - Push to branch
-6. **Create PR**: To main with `tdd-automation` label and **include `Closes #<issue_number>` in PR body**
-7. **Monitor validation**: Watch test.yml CI checks (retry up to 3 times)
-8. **On success**: Enable PR auto-merge
-9. **On 3 failures**: Mark issue `tdd-spec:failed`, exit
+6. **ALWAYS create PR**: To main with `tdd-automation` label and **include `Closes #<issue_number>` in PR body** - REQUIRED in all cases (even if only `.fixme()` removal)
+7. **PR verification**: Workflow verifies PR was created within 2 minutes
+8. **On PR verification failure**: Mark issue `tdd-spec:failed`, exit (pipeline continues)
+9. **Monitor validation**: Watch test.yml CI checks (retry up to 3 times)
+10. **On success**: Enable PR auto-merge
+11. **On 3 failures**: Mark issue `tdd-spec:failed`, exit
 
 **Pipeline Mode Behavior**:
 
@@ -474,6 +479,44 @@ gh pr list --label "tdd-automation"
    ```bash
    gh run list --workflow=tdd-queue-processor.yml
    ```
+
+### PR not created (spec marked as failed)
+
+If a spec finishes successfully but no PR is created within 2 minutes:
+
+**What happens automatically**:
+
+1. Workflow marks issue as `tdd-spec:failed`
+2. Workflow posts comment explaining PR verification failure
+3. Pipeline continues with next spec (doesn't block)
+
+**Manual intervention**:
+
+1. Check if branch exists with changes:
+   ```bash
+   git fetch origin
+   git log origin/claude/issue-{issue-number}-* --oneline
+   ```
+2. If branch has valid changes, manually create PR:
+   ```bash
+   gh pr create --base main --head "claude/issue-{issue-number}-{timestamp}" \
+     --title "fix: implement {SPEC-ID}" \
+     --body "Closes #{issue-number}" \
+     --label "tdd-automation"
+   ```
+3. If no valid changes, re-queue issue:
+   ```bash
+   gh issue edit {issue-number} --remove-label "tdd-spec:failed"
+   gh issue edit {issue-number} --add-label "tdd-spec:queued"
+   ```
+
+**Root causes**:
+
+- Claude Code determined no changes needed (test already passes)
+- API rate limit or GitHub connectivity issue
+- Branch push failed silently
+
+**Prevention**: Workflow now enforces PR creation in ALL cases (even if only `.fixme()` removal).
 
 ### Spec stuck in-progress
 
