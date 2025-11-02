@@ -6,6 +6,7 @@
  */
 
 import { type ReactElement } from 'react'
+import { Navigation } from '@/presentation/components/layout/navigation'
 import { ComponentRenderer } from '@/presentation/components/sections/component-renderer'
 import type { Blocks } from '@/domain/models/app/blocks'
 import type { Page } from '@/domain/models/app/pages'
@@ -84,8 +85,10 @@ export function DynamicPage({
         {themeStyles && <style dangerouslySetInnerHTML={{ __html: themeStyles }} />}
       </head>
       <body>
+        {page.layout?.navigation && <Navigation {...page.layout.navigation} />}
         <main
           data-testid={page.name ? `page-${page.name}` : undefined}
+          data-page-id={page.id}
           style={{ minHeight: '1px' }}
         >
           {page.sections.map((section, index) => (

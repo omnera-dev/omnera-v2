@@ -38,7 +38,7 @@ describe('PageSchema', () => {
   test('should accept page with all optional properties', () => {
     // GIVEN: Complete page with id, layout, and scripts
     const page = {
-      id: 1,
+      id: 'home-page',
       name: 'home',
       path: '/',
       meta: {
@@ -71,7 +71,7 @@ describe('PageSchema', () => {
     const result = Schema.decodeUnknownSync(PageSchema)(page)
 
     // THEN: Complete page should be accepted
-    expect(result.id).toBe(1)
+    expect(result.id).toBe('home-page')
     expect(result.layout.navigation.logo).toBe('/logo.svg')
     expect(result.scripts.features.analytics).toBe(true)
   })
@@ -422,7 +422,7 @@ describe('PagesSchema', () => {
         sections: [],
       },
       {
-        id: 1,
+        id: 'about-page',
         name: 'about',
         path: '/about',
         meta: {
@@ -463,7 +463,7 @@ describe('PagesSchema', () => {
     // THEN: Mixed configurations should be accepted
     expect(result).toHaveLength(3)
     expect(result[0].id).toBeUndefined()
-    expect(result[1].id).toBe(1)
+    expect(result[1].id).toBe('about-page')
     expect(result[1].layout).toBeDefined()
     expect(result[2].scripts).toBeDefined()
   })
