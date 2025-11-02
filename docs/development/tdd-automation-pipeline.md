@@ -521,12 +521,24 @@ If a spec finishes successfully but no PR is created within 2 minutes:
    git log origin/claude/issue-{issue-number}-* --oneline
    ```
 2. If branch has valid changes, manually create PR:
+
    ```bash
    gh pr create --base main --head "claude/issue-{issue-number}-{timestamp}" \
      --title "fix: implement {SPEC-ID}" \
      --body "Closes #{issue-number}" \
      --label "tdd-automation"
    ```
+
+   **⚠️ CRITICAL - PR Body Format**:
+   - GitHub's auto-close keywords are **format-sensitive**
+   - ✅ **Correct**: `Closes #1234` (issue number only, no extra text)
+   - ❌ **Wrong**: `Closes #1234 - description here` (extra text breaks auto-close)
+   - If multiple issues: Use separate lines
+     ```
+     Closes #1234
+     Closes #5678
+     ```
+
 3. If no valid changes, re-queue issue:
    ```bash
    gh issue edit {issue-number} --remove-label "tdd-spec:failed"

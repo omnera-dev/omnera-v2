@@ -270,6 +270,11 @@ When triggered by @claude mention (posted by queue processor every 15 min):
 
 5. **ALWAYS create PR** with `tdd-automation` label and **include `Closes #<issue_number>` in PR body** - REQUIRED even if only `.fixme()` removal, NO EXCEPTIONS
 
+   **⚠️ CRITICAL - PR Body Format**: GitHub's auto-close keywords are format-sensitive
+   - ✅ **Correct**: `Closes #1234` (issue number only, no extra text after number)
+   - ❌ **Wrong**: `Closes #1234 - description` (extra text breaks auto-close)
+   - Multiple issues: Use separate lines (`Closes #1234\nCloses #5678`)
+
 6. **PR verification**: Workflow automatically verifies PR was created within 2 minutes
    - If no PR found: Issue marked as `tdd-spec:failed`, pipeline continues with next spec
    - This prevents pipeline from blocking on "no PR created" scenarios
@@ -298,7 +303,7 @@ The system implements automatic error recovery:
 - **DO NOT** modify test logic - only remove `.fixme()` and implement code
 - **DO NOT** close issues manually - they close automatically on PR merge
 - **DO** commit with format: `fix: implement {SPEC-ID}`
-- **DO** create PR with `tdd-automation` label and include `Closes #<issue_number>` in PR body
+- **DO** create PR with `tdd-automation` label and include `Closes #<issue_number>` in PR body (⚠️ no extra text after number)
 - **DO** retry up to 3 times on validation failures
 
 ### Queue System Architecture
