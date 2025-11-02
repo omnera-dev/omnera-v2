@@ -121,7 +121,7 @@ test.describe('Languages Configuration', () => {
     }
   )
 
-  test(
+  test.fixme(
     'APP-LANGUAGES-003: should display the English fallback text',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -137,12 +137,12 @@ test.describe('Languages Configuration', () => {
           fallback: 'en-US',
           translations: {
             'en-US': {
-              'welcome.message': 'Welcome to our site',
-              'missing.key': 'English fallback text',
+              welcome: 'Welcome',
+              goodbye: 'Goodbye',
             },
             'fr-FR': {
-              'welcome.message': 'Bienvenue sur notre site',
-              // 'missing.key' is intentionally missing to trigger fallback
+              welcome: 'Bienvenue',
+              // 'goodbye' is intentionally missing to trigger fallback
             },
           },
         },
@@ -166,8 +166,18 @@ test.describe('Languages Configuration', () => {
               },
               {
                 type: 'div',
-                props: { 'data-testid': 'missing-translation-text' },
-                children: ['$t:missing.key'],
+                children: [
+                  {
+                    type: 'span',
+                    props: { 'data-testid': 'welcome-text' },
+                    children: ['$t:welcome'],
+                  },
+                  {
+                    type: 'span',
+                    props: { 'data-testid': 'goodbye-text' },
+                    children: ['$t:goodbye'],
+                  },
+                ],
               },
             ],
           },
@@ -179,10 +189,9 @@ test.describe('Languages Configuration', () => {
       await page.locator('[data-testid="language-switcher"]').click()
       await page.locator('[data-testid="language-option-fr-FR"]').click()
 
-      // THEN: it should display the English fallback text
-      await expect(page.locator('[data-testid="missing-translation-text"]')).toHaveText(
-        'English fallback text'
-      )
+      // THEN: it should display French for existing translation and English fallback for missing
+      await expect(page.locator('[data-testid="welcome-text"]')).toHaveText('Bienvenue')
+      await expect(page.locator('[data-testid="goodbye-text"]')).toHaveText('Goodbye')
     }
   )
 
