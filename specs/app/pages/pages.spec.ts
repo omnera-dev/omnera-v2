@@ -134,7 +134,7 @@ test.describe('Pages', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-005: should accept nested URL paths',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
