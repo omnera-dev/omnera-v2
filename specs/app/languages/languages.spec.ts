@@ -674,7 +674,7 @@ test.describe('Languages Configuration', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-LANGUAGES-014: should show English text when French translation is missing',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -689,6 +689,7 @@ test.describe('Languages Configuration', () => {
             { code: 'en-US', label: 'English', direction: 'ltr' },
           ],
           fallback: 'en-US',
+          detectBrowser: false,
         },
         blocks: [
           {
