@@ -60,7 +60,7 @@ describe('OpenGraphSchema', () => {
     const result = Schema.decodeUnknownSync(OpenGraphSchema)(openGraph)
 
     // THEN: 90-character title should be accepted
-    expect(result.title.length).toBe(90)
+    expect(result.title?.length).toBe(90)
   })
 
   test('should reject title exceeding 90 characters', () => {
@@ -90,7 +90,7 @@ describe('OpenGraphSchema', () => {
     const result = Schema.decodeUnknownSync(OpenGraphSchema)(openGraph)
 
     // THEN: 200-character description should be accepted
-    expect(result.description.length).toBe(200)
+    expect(result.description?.length).toBe(200)
   })
 
   test('should accept Open Graph with image', () => {
