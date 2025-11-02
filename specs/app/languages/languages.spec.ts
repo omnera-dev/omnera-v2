@@ -121,7 +121,7 @@ test.describe('Languages Configuration', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-LANGUAGES-003: should display the English fallback text',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {

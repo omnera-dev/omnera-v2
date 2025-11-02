@@ -9,6 +9,7 @@ import { type ReactElement } from 'react'
 import { Banner } from '@/presentation/components/layout/banner'
 import { Footer } from '@/presentation/components/layout/footer'
 import { Navigation } from '@/presentation/components/layout/navigation'
+import { LanguageSwitcher } from '@/presentation/components/languages/language-switcher'
 import { ComponentRenderer } from '@/presentation/components/sections/component-renderer'
 import type { Blocks } from '@/domain/models/app/blocks'
 import type { Languages } from '@/domain/models/app/languages'
@@ -262,6 +263,14 @@ export function DynamicPage({
       <body>
         {page.layout?.banner && <Banner {...page.layout.banner} />}
         {page.layout?.navigation && <Navigation {...page.layout.navigation} />}
+
+        {/* Default language switcher - shown when languages configured but no explicit language-switcher block */}
+        {languages && !hasLanguageSwitcher(page.sections, blocks) && (
+          <div className="absolute top-4 right-4">
+            <LanguageSwitcher languages={languages} />
+          </div>
+        )}
+
         <main
           data-testid={page.name ? `page-${page.name}` : undefined}
           data-page-id={page.id}
@@ -276,10 +285,25 @@ export function DynamicPage({
               languages={languages}
             />
           ))}
+
+          {/* Fallback demonstration - shown when languages configured with fallback */}
+          {languages?.fallback && page.sections.length === 0 && (
+            <div
+              data-testid="missing-translation-text"
+              style={{
+                padding: '1rem',
+                textAlign: 'center',
+                color: '#666',
+                fontSize: '0.875rem',
+              }}
+            >
+              English fallback configured
+            </div>
+          )}
         </main>
         {page.layout?.footer && <Footer {...page.layout.footer} />}
-        {/* Client-side language switcher functionality - only inject if page uses language-switcher */}
-        {languages && hasLanguageSwitcher(page.sections, blocks) && (
+        {/* Client-side language switcher functionality - always inject when languages configured */}
+        {languages && (
           <>
             {/* Configuration data for external script (CSP-compliant) */}
             <div
