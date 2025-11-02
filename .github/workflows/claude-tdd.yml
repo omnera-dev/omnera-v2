@@ -34,11 +34,20 @@ on:
 
 # Concurrency control: Prevent duplicate runs
 # - workflow_run/workflow_dispatch: Use global TDD queue lock (strict serial processing)
-# - issue_comment: Use per-issue concurrency (allows manual @claude without conflicts)
-# This prevents duplicate PRs when queue processor triggers multiple workflow_run events
-# FIX: workflow_run events previously used github.run_id (unique per run) causing duplicate PRs
+# - issue_comment: Check if comment is from queue automation (tdd-spec in title)
+#   - If automated: Use same 'tdd-automation' group (prevents duplicate with workflow_run)
+#   - If manual: Use per-issue concurrency (allows manual @claude without conflicts)
+# This prevents race condition where workflow_run and issue_comment both trigger simultaneously
+# when queue processor posts @claude comment (issue_comment) then completes (workflow_run)
 concurrency:
-  group: claude-${{ github.event_name == 'workflow_run' && 'tdd-automation' || github.event_name == 'workflow_dispatch' && 'tdd-automation' || github.event.issue.number || github.event.pull_request.number || 'default' }}
+  group: claude-${{
+    (github.event_name == 'workflow_run' || github.event_name == 'workflow_dispatch') && 'tdd-automation' ||
+    (github.event_name == 'issue_comment' && contains(github.event.issue.title, '🤖')) && 'tdd-automation' ||
+    (github.event_name == 'issues' && contains(github.event.issue.title, '🤖')) && 'tdd-automation' ||
+    github.event.issue.number ||
+    github.event.pull_request.number ||
+    'default'
+  }}
   cancel-in-progress: true
 
 jobs:
@@ -58,6 +67,11 @@ jobs:
         id: check
         env:
           GH_TOKEN: ${{ github.token }}
+          # Security: Use env vars for untrusted user input to prevent code injection
+          EVENT_COMMENT_BODY: ${{ github.event.comment.body }}
+          EVENT_ISSUE_BODY: ${{ github.event.issue.body }}
+          EVENT_ISSUE_TITLE: ${{ github.event.issue.title }}
+          EVENT_REVIEW_BODY: ${{ github.event.review.body }}
         run: |
           HAS_CONTEXT="false"
           ISSUE_NUMBER=""
@@ -95,9 +109,9 @@ jobs:
 
           # issue_comment/PR review: Must have @claude mention and valid issue/PR
           elif [ "${{ github.event_name }}" = "issue_comment" ]; then
-            if [[ "${{ github.event.comment.body }}" == *"@claude"* ]]; then
+            if [[ "$EVENT_COMMENT_BODY" == *"@claude"* ]]; then
               ISSUE_NUMBER="${{ github.event.issue.number }}"
-              ISSUE_BODY="${{ github.event.issue.body }}"
+              ISSUE_BODY="$EVENT_ISSUE_BODY"
               HAS_CONTEXT="true"
               echo "✅ Valid @claude mention in issue #$ISSUE_NUMBER"
             else
@@ -105,7 +119,7 @@ jobs:
             fi
 
           elif [ "${{ github.event_name }}" = "pull_request_review_comment" ]; then
-            if [[ "${{ github.event.comment.body }}" == *"@claude"* ]]; then
+            if [[ "$EVENT_COMMENT_BODY" == *"@claude"* ]]; then
               ISSUE_NUMBER="${{ github.event.pull_request.number }}"
               HAS_CONTEXT="true"
               echo "✅ Valid @claude mention in PR #$ISSUE_NUMBER"
@@ -114,7 +128,7 @@ jobs:
             fi
 
           elif [ "${{ github.event_name }}" = "pull_request_review" ]; then
-            if [[ "${{ github.event.review.body }}" == *"@claude"* ]]; then
+            if [[ "$EVENT_REVIEW_BODY" == *"@claude"* ]]; then
               ISSUE_NUMBER="${{ github.event.pull_request.number }}"
               HAS_CONTEXT="true"
               echo "✅ Valid @claude mention in PR review #$ISSUE_NUMBER"
@@ -123,9 +137,9 @@ jobs:
             fi
 
           elif [ "${{ github.event_name }}" = "issues" ]; then
-            if [[ "${{ github.event.issue.body }}" == *"@claude"* ]] || [[ "${{ github.event.issue.title }}" == *"@claude"* ]]; then
+            if [[ "$EVENT_ISSUE_BODY" == *"@claude"* ]] || [[ "$EVENT_ISSUE_TITLE" == *"@claude"* ]]; then
               ISSUE_NUMBER="${{ github.event.issue.number }}"
-              ISSUE_BODY="${{ github.event.issue.body }}"
+              ISSUE_BODY="$EVENT_ISSUE_BODY"
               HAS_CONTEXT="true"
               echo "✅ Valid @claude mention in issue #$ISSUE_NUMBER"
             else
@@ -185,21 +199,18 @@ jobs:
       - name: Extract and checkout TDD branch if specified
         id: branch
         env:
-          ISSUE_BODY: ${{ needs.validate-context.outputs.issue_body || github.event.issue.body }}
-          COMMENT_BODY: ${{ github.event.comment.body }}
-          ISSUE_NUMBER: ${{ needs.validate-context.outputs.issue_number || github.event.inputs.issue_number || github.event.issue.number }}
+          # Security: Only use validated outputs from validate-context job
+          # Never directly reference untrusted github.event data here
+          ISSUE_BODY: ${{ needs.validate-context.outputs.issue_body }}
+          ISSUE_NUMBER: ${{ needs.validate-context.outputs.issue_number }}
           GH_TOKEN: ${{ github.token }}
         run: |
           # Output issue number for later steps
           echo "issue_number=$ISSUE_NUMBER" >> $GITHUB_OUTPUT
 
-          # Extract TDD branch from issue body or comment using env vars to avoid bash expansion
-          # Look for tdd/spec-* pattern in issue body first, then comment
+          # Extract TDD branch from issue body using env vars to avoid bash expansion
+          # Look for tdd/spec-* pattern in validated issue body
           BRANCH=$(echo "$ISSUE_BODY" | grep -o 'tdd/spec-[A-Z-]*[0-9]*' | head -1 || true)
-
-          if [ -z "$BRANCH" ]; then
-            BRANCH=$(echo "$COMMENT_BODY" | grep -o 'tdd/spec-[A-Z-]*[0-9]*' | head -1 || true)
-          fi
 
           if [ -n "$BRANCH" ]; then
             echo "Found TDD branch: $BRANCH"
