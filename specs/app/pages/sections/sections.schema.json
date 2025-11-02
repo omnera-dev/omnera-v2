@@ -22,6 +22,12 @@
               "grid",
               "card",
               "text",
+              "h1",
+              "h2",
+              "h3",
+              "h4",
+              "h5",
+              "h6",
               "icon",
               "image",
               "button",
@@ -43,7 +49,14 @@
           "children": {
             "type": "array",
             "items": {
-              "$ref": "#/items"
+              "oneOf": [
+                {
+                  "$ref": "#/items"
+                },
+                {
+                  "type": "string"
+                }
+              ]
             }
           },
           "content": {

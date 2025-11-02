@@ -160,7 +160,7 @@ test.describe('Pages', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-006: should support direct component definitions in sections',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
