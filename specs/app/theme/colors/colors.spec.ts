@@ -47,7 +47,10 @@ test.describe('Color Palette', () => {
                 type: 'div',
                 props: {
                   'data-testid': 'color-primary',
-                  style: '--color-primary: #007bff;',
+                  style: {
+                    backgroundColor: '$theme.colors.primary',
+                    color: '$theme.colors.secondary',
+                  },
                 },
                 children: ['Primary'],
               },
@@ -60,10 +63,16 @@ test.describe('Color Palette', () => {
       await page.goto('/')
 
       // THEN: it should validate 6-digit hex colors at build time
-      const primaryColor = await page
-        .locator('[data-testid="color-primary"]')
-        .evaluate((el) => window.getComputedStyle(el).getPropertyValue('--color-primary'))
-      expect(primaryColor).toMatch(/#[0-9A-Fa-f]{6}/)
+      // Theme system substitutes $theme.colors.primary → #007bff in backgroundColor
+      const element = page.locator('[data-testid="color-primary"]')
+      const backgroundColor = await element.evaluate(
+        (el) => window.getComputedStyle(el).backgroundColor
+      )
+      const color = await element.evaluate((el) => window.getComputedStyle(el).color)
+
+      // Verify theme colors were applied (RGB values of #007bff and #6c757d)
+      expect(backgroundColor).toBe('rgb(0, 123, 255)') // #007bff
+      expect(color).toBe('rgb(108, 117, 125)') // #6c757d
     }
   )
 
@@ -89,7 +98,9 @@ test.describe('Color Palette', () => {
                 type: 'div',
                 props: {
                   'data-testid': 'color-primary-transparent',
-                  style: '--color-primary-transparent: #007bff80;',
+                  style: {
+                    backgroundColor: '$theme.colors.primary-transparent',
+                  },
                 },
                 children: ['Primary Transparent'],
               },
@@ -102,12 +113,15 @@ test.describe('Color Palette', () => {
       await page.goto('/')
 
       // THEN: it should validate 8-digit hex colors with opacity at build time
-      const colorValue = await page
-        .locator('[data-testid="color-primary-transparent"]')
-        .evaluate((el) =>
-          window.getComputedStyle(el).getPropertyValue('--color-primary-transparent')
-        )
-      expect(colorValue).toMatch(/#[0-9A-Fa-f]{8}/)
+      // Theme system substitutes $theme.colors.primary-transparent → #007bff80
+      const element = page.locator('[data-testid="color-primary-transparent"]')
+      const backgroundColor = await element.evaluate(
+        (el) => window.getComputedStyle(el).backgroundColor
+      )
+
+      // Verify 8-digit hex with alpha (80 = 50% opacity) was applied
+      // #007bff80 → rgba(0, 123, 255, 0.5)
+      expect(backgroundColor).toBe('rgba(0, 123, 255, 0.5)')
     }
   )
 
@@ -569,18 +583,48 @@ test.describe('Color Palette', () => {
             },
             sections: [
               {
-                type: 'container',
+                type: 'div',
+                props: {
+                  'data-testid': 'page-background',
+                  style: {
+                    backgroundColor: '$theme.colors.gray-100',
+                    padding: '20px',
+                  },
+                },
                 children: [
                   {
-                    type: 'heading',
-                    content: 'Main Heading',
-                  },
-                  {
-                    type: 'text',
-                    content: 'Placeholder text',
+                    type: 'div',
                     props: {
-                      'data-testid': 'placeholder',
+                      'data-testid': 'card',
+                      style: {
+                        backgroundColor: '#ffffff',
+                        border: '1px solid',
+                        borderColor: '$theme.colors.gray-300',
+                        padding: '16px',
+                      },
                     },
+                    children: [
+                      {
+                        type: 'heading',
+                        content: 'Main Heading',
+                        props: {
+                          'data-testid': 'heading',
+                          style: {
+                            color: '$theme.colors.gray-900',
+                          },
+                        },
+                      },
+                      {
+                        type: 'span',
+                        children: ['Placeholder text'],
+                        props: {
+                          'data-testid': 'placeholder',
+                          style: {
+                            color: '$theme.colors.gray-500',
+                          },
+                        },
+                      },
+                    ],
                   },
                 ],
               },
@@ -593,14 +637,27 @@ test.describe('Color Palette', () => {
       await page.goto('/')
 
       // THEN: it should create visual hierarchy through tonal variation
-      const heading = page.locator('h1')
+      // 1. Page background: gray-100 (#f8f9fa)
+      const pageBackground = page.locator('[data-testid="page-background"]')
+      const pageBgColor = await pageBackground.evaluate(
+        (el) => window.getComputedStyle(el).backgroundColor
+      )
+      expect(pageBgColor).toBe('rgb(248, 249, 250)') // gray-100
+
+      // 2. Card border: gray-300 (#dee2e6)
+      const card = page.locator('[data-testid="card"]')
+      const cardBorderColor = await card.evaluate((el) => window.getComputedStyle(el).borderColor)
+      expect(cardBorderColor).toBe('rgb(222, 226, 230)') // gray-300
+
+      // 3. Placeholder text: gray-500 (#adb5bd)
       const placeholder = page.locator('[data-testid="placeholder"]')
-
-      const headingColor = await heading.evaluate((el) => window.getComputedStyle(el).color)
       const placeholderColor = await placeholder.evaluate((el) => window.getComputedStyle(el).color)
+      expect(placeholderColor).toBe('rgb(173, 181, 189)') // gray-500
 
-      expect(headingColor).toContain('33, 37, 41') // gray-900
-      expect(placeholderColor).toContain('173, 181, 189') // gray-500
+      // 4. Heading text: gray-900 (#212529)
+      const heading = page.locator('[data-testid="heading"]')
+      const headingColor = await heading.evaluate((el) => window.getComputedStyle(el).color)
+      expect(headingColor).toBe('rgb(33, 37, 41)') // gray-900
     }
   )
 
