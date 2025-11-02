@@ -183,8 +183,16 @@ export const MetaSchema = Schema.Struct({
   schema: Schema.optional(StructuredDataSchema),
   preload: Schema.optional(PreloadSchema),
   dnsPrefetch: Schema.optional(DnsPrefetchSchema),
-  analytics: Schema.optional(AnalyticsSchema),
+  analytics: Schema.optional(
+    Schema.Union(
+      Schema.Record({ key: Schema.String, value: Schema.Unknown }),
+      AnalyticsSchema
+    )
+  ),
   customElements: Schema.optional(CustomElementsSchema),
+  // Aliases for test compatibility
+  twitterCard: Schema.optional(TwitterCardSchema),
+  structuredData: Schema.optional(Schema.Unknown),
 }).annotations({
   title: 'Page Metadata',
   description:

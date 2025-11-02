@@ -11,6 +11,7 @@ import { Footer } from '@/presentation/components/layout/footer'
 import { Navigation } from '@/presentation/components/layout/navigation'
 import { ComponentRenderer } from '@/presentation/components/sections/component-renderer'
 import type { Blocks } from '@/domain/models/app/blocks'
+import type { OpenGraph } from '@/domain/models/app/page/meta/open-graph'
 import type { Page } from '@/domain/models/app/pages'
 import type { Theme } from '@/domain/models/app/theme'
 
@@ -36,6 +37,105 @@ function generateThemeStyles(theme?: Theme): string {
   const textStyles = gray500 ? `p { color: ${gray500}; }\n` : ''
 
   return headingStyles + textStyles
+}
+
+/**
+ * Render Open Graph metadata tags
+ * Generates <meta property="og:*"> tags for Facebook/LinkedIn sharing
+ *
+ * @param openGraph - Open Graph configuration from page.meta
+ * @returns React fragment with OG meta tags
+ */
+function OpenGraphMeta({ openGraph }: { readonly openGraph?: OpenGraph }): Readonly<ReactElement | undefined> {
+  if (!openGraph) {
+    return undefined
+  }
+
+  const fields: ReadonlyArray<{ readonly key: string; readonly value?: string }> = [
+    { key: 'title', value: openGraph.title },
+    { key: 'description', value: openGraph.description },
+    { key: 'image', value: openGraph.image },
+    { key: 'url', value: openGraph.url },
+    { key: 'type', value: openGraph.type },
+  ]
+
+  return (
+    <>
+      {fields.map(
+        ({ key, value }) =>
+          value && (
+            <meta
+              key={key}
+              property={`og:${key}`}
+              content={value}
+            />
+          )
+      )}
+    </>
+  )
+}
+
+/**
+ * Render Twitter Card metadata tags
+ * Generates <meta name="twitter:*"> tags for Twitter/X sharing
+ * Supports both 'twitter' and 'twitterCard' field names for compatibility
+ *
+ * @param page - Page configuration
+ * @returns React fragment with Twitter meta tags
+ */
+function TwitterCardMeta({ page }: { readonly page: Page }): Readonly<ReactElement | undefined> {
+  // Support both 'twitter' (canonical) and 'twitterCard' (test alias)
+  const twitterCard = page.meta?.twitter || page.meta?.twitterCard
+  if (!twitterCard) {
+    return undefined
+  }
+
+  const fields: ReadonlyArray<{ readonly key: string; readonly value?: string }> = [
+    { key: 'card', value: twitterCard.card },
+    { key: 'title', value: twitterCard.title },
+    { key: 'description', value: twitterCard.description },
+    { key: 'image', value: twitterCard.image },
+  ]
+
+  return (
+    <>
+      {fields.map(
+        ({ key, value }) =>
+          value && (
+            <meta
+              key={key}
+              name={`twitter:${key}`}
+              content={value}
+            />
+          )
+      )}
+    </>
+  )
+}
+
+/**
+ * Render structured data as JSON-LD script tag
+ * Generates Schema.org structured data for rich search results
+ * Supports both 'schema' (canonical) and 'structuredData' (test alias)
+ *
+ * @param page - Page configuration
+ * @returns Script tag with JSON-LD or undefined
+ */
+function StructuredDataScript({ page }: { readonly page: Page }): Readonly<ReactElement | undefined> {
+  // Support both 'schema' (canonical) and 'structuredData' (test alias)
+  const structuredData = page.meta?.schema || page.meta?.structuredData
+  if (!structuredData) {
+    return undefined
+  }
+
+  return (
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{
+        __html: JSON.stringify(structuredData),
+      }}
+    />
+  )
 }
 
 /**
@@ -85,6 +185,9 @@ export function DynamicPage({
             content={description}
           />
         )}
+        <OpenGraphMeta openGraph={page.meta?.openGraph} />
+        <TwitterCardMeta page={page} />
+        <StructuredDataScript page={page} />
         <link
           rel="stylesheet"
           href="/assets/output.css"
