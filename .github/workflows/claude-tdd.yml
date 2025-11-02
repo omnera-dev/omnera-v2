@@ -42,18 +42,109 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  # Pre-check job: Validate context exists before running Claude Code
+  # Prevents wasted resources when there's no spec to process
+  validate-context:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      issues: read
+    outputs:
+      has_context: ${{ steps.check.outputs.has_context }}
+      issue_number: ${{ steps.check.outputs.issue_number }}
+      issue_body: ${{ steps.check.outputs.issue_body }}
+    steps:
+      - name: Check for valid context
+        id: check
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          HAS_CONTEXT="false"
+          ISSUE_NUMBER=""
+          ISSUE_BODY=""
+
+          # workflow_run: Must have in-progress spec
+          if [ "${{ github.event_name }}" = "workflow_run" ]; then
+            echo "🔍 Checking for in-progress spec (workflow_run trigger)..."
+            ISSUE_JSON=$(gh issue list --label "tdd-spec:in-progress" --json number,body --limit 1 --jq '.[0]')
+
+            if [ -n "$ISSUE_JSON" ] && [ "$ISSUE_JSON" != "null" ]; then
+              ISSUE_NUMBER=$(echo "$ISSUE_JSON" | jq -r '.number')
+              ISSUE_BODY=$(echo "$ISSUE_JSON" | jq -r '.body')
+              HAS_CONTEXT="true"
+              echo "✅ Found in-progress spec: #$ISSUE_NUMBER"
+            else
+              echo "⚠️  No in-progress spec found - skipping workflow"
+            fi
+
+          # workflow_dispatch: Must have valid issue number
+          elif [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            ISSUE_NUMBER="${{ github.event.inputs.issue_number }}"
+            if [ -n "$ISSUE_NUMBER" ]; then
+              echo "🔍 Validating issue #$ISSUE_NUMBER (workflow_dispatch trigger)..."
+              if gh issue view "$ISSUE_NUMBER" &>/dev/null; then
+                ISSUE_BODY=$(gh issue view "$ISSUE_NUMBER" --json body --jq '.body')
+                HAS_CONTEXT="true"
+                echo "✅ Valid issue found: #$ISSUE_NUMBER"
+              else
+                echo "❌ Issue #$ISSUE_NUMBER not found - skipping workflow"
+              fi
+            else
+              echo "❌ No issue number provided - skipping workflow"
+            fi
+
+          # issue_comment/PR review: Must have @claude mention and valid issue/PR
+          elif [ "${{ github.event_name }}" = "issue_comment" ]; then
+            if [[ "${{ github.event.comment.body }}" == *"@claude"* ]]; then
+              ISSUE_NUMBER="${{ github.event.issue.number }}"
+              ISSUE_BODY="${{ github.event.issue.body }}"
+              HAS_CONTEXT="true"
+              echo "✅ Valid @claude mention in issue #$ISSUE_NUMBER"
+            else
+              echo "⚠️  No @claude mention found - skipping workflow"
+            fi
+
+          elif [ "${{ github.event_name }}" = "pull_request_review_comment" ]; then
+            if [[ "${{ github.event.comment.body }}" == *"@claude"* ]]; then
+              ISSUE_NUMBER="${{ github.event.pull_request.number }}"
+              HAS_CONTEXT="true"
+              echo "✅ Valid @claude mention in PR #$ISSUE_NUMBER"
+            else
+              echo "⚠️  No @claude mention found - skipping workflow"
+            fi
+
+          elif [ "${{ github.event_name }}" = "pull_request_review" ]; then
+            if [[ "${{ github.event.review.body }}" == *"@claude"* ]]; then
+              ISSUE_NUMBER="${{ github.event.pull_request.number }}"
+              HAS_CONTEXT="true"
+              echo "✅ Valid @claude mention in PR review #$ISSUE_NUMBER"
+            else
+              echo "⚠️  No @claude mention found - skipping workflow"
+            fi
+
+          elif [ "${{ github.event_name }}" = "issues" ]; then
+            if [[ "${{ github.event.issue.body }}" == *"@claude"* ]] || [[ "${{ github.event.issue.title }}" == *"@claude"* ]]; then
+              ISSUE_NUMBER="${{ github.event.issue.number }}"
+              ISSUE_BODY="${{ github.event.issue.body }}"
+              HAS_CONTEXT="true"
+              echo "✅ Valid @claude mention in issue #$ISSUE_NUMBER"
+            else
+              echo "⚠️  No @claude mention found - skipping workflow"
+            fi
+          fi
+
+          # Output results
+          echo "has_context=$HAS_CONTEXT" >> $GITHUB_OUTPUT
+          echo "issue_number=$ISSUE_NUMBER" >> $GITHUB_OUTPUT
+          echo "issue_body<<EOF" >> $GITHUB_OUTPUT
+          echo "$ISSUE_BODY" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+
   claude:
-    # Security: Only allow trusted users, automatic workflow_run trigger, and workflow_dispatch
-    # Exclude claude[bot] to prevent self-triggering and cancellation loops
+    needs: validate-context
+    # Only run if context validation passed
     if: |
-      (
-        (github.event_name == 'issue_comment' && contains(github.event.comment.body, '@claude')) ||
-        (github.event_name == 'pull_request_review_comment' && contains(github.event.comment.body, '@claude')) ||
-        (github.event_name == 'pull_request_review' && contains(github.event.review.body, '@claude')) ||
-        (github.event_name == 'issues' && (contains(github.event.issue.body, '@claude') || contains(github.event.issue.title, '@claude'))) ||
-        (github.event_name == 'workflow_run') ||
-        (github.event_name == 'workflow_dispatch')
-      ) && (
+      needs.validate-context.outputs.has_context == 'true' && (
         github.event_name == 'workflow_run' ||
         github.event_name == 'workflow_dispatch' ||
         github.event.comment.author_association == 'OWNER' ||
@@ -91,54 +182,14 @@ jobs:
         with:
           fetch-depth: 0 # Need full history to checkout branches
 
-      - name: Query for in-progress spec (workflow_run trigger)
-        id: query_spec
-        if: github.event_name == 'workflow_run'
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          echo "🔍 Querying for in-progress spec..."
-
-          # Find the single in-progress spec (strict serial processing)
-          ISSUE_JSON=$(gh issue list --label "tdd-spec:in-progress" --json number,body --limit 1 --jq '.[0]')
-
-          if [ -z "$ISSUE_JSON" ] || [ "$ISSUE_JSON" = "null" ]; then
-            echo "⚠️  No in-progress spec found - queue processor may have completed without processing"
-            echo "found=false" >> $GITHUB_OUTPUT
-            exit 0
-          fi
-
-          ISSUE_NUMBER=$(echo "$ISSUE_JSON" | jq -r '.number')
-          ISSUE_BODY=$(echo "$ISSUE_JSON" | jq -r '.body')
-
-          echo "✅ Found in-progress spec: #$ISSUE_NUMBER"
-          echo "found=true" >> $GITHUB_OUTPUT
-          echo "issue_number=$ISSUE_NUMBER" >> $GITHUB_OUTPUT
-          echo "issue_body<<EOF" >> $GITHUB_OUTPUT
-          echo "$ISSUE_BODY" >> $GITHUB_OUTPUT
-          echo "EOF" >> $GITHUB_OUTPUT
-
       - name: Extract and checkout TDD branch if specified
         id: branch
-        if: github.event_name == 'issue_comment' || github.event_name == 'issues' || github.event_name == 'workflow_run' || github.event_name == 'workflow_dispatch'
         env:
-          ISSUE_BODY: ${{ github.event_name == 'workflow_run' && steps.query_spec.outputs.issue_body || github.event.issue.body }}
+          ISSUE_BODY: ${{ needs.validate-context.outputs.issue_body || github.event.issue.body }}
           COMMENT_BODY: ${{ github.event.comment.body }}
-          ISSUE_NUMBER: ${{ github.event_name == 'workflow_run' && steps.query_spec.outputs.issue_number || github.event.inputs.issue_number || github.event.issue.number }}
+          ISSUE_NUMBER: ${{ needs.validate-context.outputs.issue_number || github.event.inputs.issue_number || github.event.issue.number }}
           GH_TOKEN: ${{ github.token }}
         run: |
-          # Skip if workflow_run didn't find a spec
-          if [ "${{ github.event_name }}" = "workflow_run" ] && [ "${{ steps.query_spec.outputs.found }}" != "true" ]; then
-            echo "Skipping: no in-progress spec found"
-            exit 0
-          fi
-
-          # For workflow_dispatch, fetch issue body via gh CLI
-          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
-            ISSUE_BODY=$(gh issue view "$ISSUE_NUMBER" --json body --jq '.body')
-            COMMENT_BODY=""
-          fi
-
           # Output issue number for later steps
           echo "issue_number=$ISSUE_NUMBER" >> $GITHUB_OUTPUT
 
