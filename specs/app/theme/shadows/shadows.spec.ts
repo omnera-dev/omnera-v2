@@ -40,6 +40,14 @@ test.describe('Shadows', () => {
             '2xl': '0 25px 50px -12px rgb(0 0 0 / 0.25)',
           },
         },
+        pages: [
+          {
+            name: 'home',
+            path: '/',
+            meta: { lang: 'en-US', title: 'Test', description: 'Test page' },
+            sections: [],
+          },
+        ],
       })
 
       // WHEN: shadows increase in depth and blur
@@ -63,6 +71,14 @@ test.describe('Shadows', () => {
             md: '0 4px 6px -1px rgb(0 0 0 / 0.1)',
           },
         },
+        pages: [
+          {
+            name: 'home',
+            path: '/',
+            meta: { lang: 'en-US', title: 'Test', description: 'Test page' },
+            sections: [],
+          },
+        ],
       })
 
       // WHEN: shadow uses modern CSS color syntax
@@ -87,6 +103,14 @@ test.describe('Shadows', () => {
             inner: 'inset 0 2px 4px 0 rgb(0 0 0 / 0.05)',
           },
         },
+        pages: [
+          {
+            name: 'home',
+            path: '/',
+            meta: { lang: 'en-US', title: 'Test', description: 'Test page' },
+            sections: [],
+          },
+        ],
       })
 
       // WHEN: shadow creates depth inside element
@@ -111,6 +135,14 @@ test.describe('Shadows', () => {
             none: '0 0 #0000',
           },
         },
+        pages: [
+          {
+            name: 'home',
+            path: '/',
+            meta: { lang: 'en-US', title: 'Test', description: 'Test page' },
+            sections: [],
+          },
+        ],
       })
 
       // WHEN: flat design with no elevation is needed
@@ -136,6 +168,14 @@ test.describe('Shadows', () => {
             'card-shadow': '0 2px 4px rgb(0 0 0 / 0.05)',
           },
         },
+        pages: [
+          {
+            name: 'home',
+            path: '/',
+            meta: { lang: 'en-US', title: 'Test', description: 'Test page' },
+            sections: [],
+          },
+        ],
       })
 
       // WHEN: shadow uses multi-word names
@@ -165,6 +205,14 @@ test.describe('Shadows', () => {
             none: '0 0 #0000',
           },
         },
+        pages: [
+          {
+            name: 'home',
+            path: '/',
+            meta: { lang: 'en-US', title: 'Test', description: 'Test page' },
+            sections: [],
+          },
+        ],
       })
 
       // WHEN: all elevation tokens are defined

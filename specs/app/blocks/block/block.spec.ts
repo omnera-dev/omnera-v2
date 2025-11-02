@@ -32,6 +32,14 @@ test.describe('Block Template', () => {
       await startServerWithSchema({
         name: 'test-app',
         blocks: [{ name: 'simple-block', type: 'div' }],
+        pages: [
+          {
+            name: 'home',
+            path: '/',
+            meta: { lang: 'en-US', title: 'Test', description: 'Test page' },
+            sections: [],
+          },
+        ],
       })
 
       // WHEN: name and type are provided
@@ -53,6 +61,14 @@ test.describe('Block Template', () => {
           { name: 'icon-badge', type: 'badge' },
           { name: 'section-header', type: 'container' },
           { name: 'feature-card', type: 'card' },
+        ],
+        pages: [
+          {
+            name: 'home',
+            path: '/',
+            meta: { lang: 'en-US', title: 'Test', description: 'Test page' },
+            sections: [],
+          },
         ],
       })
 
@@ -101,6 +117,14 @@ test.describe('Block Template', () => {
           { name: 'panel', type: 'card' },
           { name: 'heading', type: 'text' },
           { name: 'cta', type: 'button' },
+        ],
+        pages: [
+          {
+            name: 'home',
+            path: '/',
+            meta: { lang: 'en-US', title: 'Test', description: 'Test page' },
+            sections: [],
+          },
         ],
       })
 

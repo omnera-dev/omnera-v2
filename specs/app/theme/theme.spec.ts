@@ -37,6 +37,14 @@ test.describe('Theme Configuration', () => {
             secondary: '#6c757d',
           },
         },
+        pages: [
+          {
+            name: 'home',
+            path: '/',
+            meta: { lang: 'en-US', title: 'Test', description: 'Test page' },
+            sections: [],
+          },
+        ],
       })
 
       // WHEN: minimal theme configuration is needed
@@ -70,6 +78,14 @@ test.describe('Theme Configuration', () => {
             },
           },
         },
+        pages: [
+          {
+            name: 'home',
+            path: '/',
+            meta: { lang: 'en-US', title: 'Test', description: 'Test page' },
+            sections: [],
+          },
+        ],
       })
 
       // WHEN: basic branding is defined
@@ -105,6 +121,14 @@ test.describe('Theme Configuration', () => {
             gap: '1rem',
           },
         },
+        pages: [
+          {
+            name: 'home',
+            path: '/',
+            meta: { lang: 'en-US', title: 'Test', description: 'Test page' },
+            sections: [],
+          },
+        ],
       })
 
       // WHEN: core design system is configured
@@ -148,6 +172,14 @@ test.describe('Theme Configuration', () => {
             md: '0.375rem',
           },
         },
+        pages: [
+          {
+            name: 'home',
+            path: '/',
+            meta: { lang: 'en-US', title: 'Test', description: 'Test page' },
+            sections: [],
+          },
+        ],
       })
 
       // WHEN: comprehensive design system is defined
@@ -178,6 +210,14 @@ test.describe('Theme Configuration', () => {
             lg: '1024px',
           },
         },
+        pages: [
+          {
+            name: 'home',
+            path: '/',
+            meta: { lang: 'en-US', title: 'Test', description: 'Test page' },
+            sections: [],
+          },
+        ],
       })
 
       // WHEN: responsive breakpoints are configured
@@ -211,6 +251,14 @@ test.describe('Theme Configuration', () => {
             },
           },
         },
+        pages: [
+          {
+            name: 'home',
+            path: '/',
+            meta: { lang: 'en-US', title: 'Test', description: 'Test page' },
+            sections: [],
+          },
+        ],
       })
 
       // WHEN: animation library is defined
@@ -250,6 +298,14 @@ test.describe('Theme Configuration', () => {
             lg: '0 10px 15px -3px rgb(0 0 0 / 0.1)',
           },
         },
+        pages: [
+          {
+            name: 'home',
+            path: '/',
+            meta: { lang: 'en-US', title: 'Test', description: 'Test page' },
+            sections: [],
+          },
+        ],
       })
 
       // WHEN: all tokens use semantic naming and progressive scales
@@ -284,6 +340,14 @@ test.describe('Theme Configuration', () => {
             lg: '1024px',
           },
         },
+        pages: [
+          {
+            name: 'home',
+            path: '/',
+            meta: { lang: 'en-US', title: 'Test', description: 'Test page' },
+            sections: [],
+          },
+        ],
       })
 
       // WHEN: spacing and other values use Tailwind syntax
@@ -509,6 +573,14 @@ test.describe('Theme Configuration', () => {
             md: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
           },
         },
+        pages: [
+          {
+            name: 'home',
+            path: '/',
+            meta: { lang: 'en-US', title: 'Test', description: 'Test page' },
+            sections: [],
+          },
+        ],
       })
 
       // WHEN/THEN: Streamlined workflow testing integration points

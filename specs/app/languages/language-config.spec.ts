@@ -40,6 +40,14 @@ test.describe('Language Configuration', () => {
             },
           ],
         },
+        pages: [
+          {
+            name: 'home',
+            path: '/',
+            meta: { lang: 'en-US', title: 'Test', description: 'Test page' },
+            sections: [],
+          },
+        ],
       })
 
       // WHEN: language is defined with code and label
@@ -68,6 +76,14 @@ test.describe('Language Configuration', () => {
             },
           ],
         },
+        pages: [
+          {
+            name: 'home',
+            path: '/',
+            meta: { lang: 'en-US', title: 'Test', description: 'Test page' },
+            sections: [],
+          },
+        ],
       })
 
       // WHEN: language is defined with RTL direction
@@ -96,6 +112,14 @@ test.describe('Language Configuration', () => {
             },
           ],
         },
+        pages: [
+          {
+            name: 'home',
+            path: '/',
+            meta: { lang: 'en-US', title: 'Test', description: 'Test page' },
+            sections: [],
+          },
+        ],
       })
 
       // WHEN: language code uses ISO 639-1 format without country
@@ -123,6 +147,14 @@ test.describe('Language Configuration', () => {
             },
           ],
         },
+        pages: [
+          {
+            name: 'home',
+            path: '/',
+            meta: { lang: 'en-US', title: 'Test', description: 'Test page' },
+            sections: [],
+          },
+        ],
       })
 
       // WHEN: language code includes country code
@@ -152,6 +184,14 @@ test.describe('Language Configuration', () => {
             },
           ],
         },
+        pages: [
+          {
+            name: 'home',
+            path: '/',
+            meta: { lang: 'en-US', title: 'Test', description: 'Test page' },
+            sections: [],
+          },
+        ],
       })
 
       // WHEN: flag is provided as unicode emoji
@@ -182,6 +222,14 @@ test.describe('Language Configuration', () => {
             },
           ],
         },
+        pages: [
+          {
+            name: 'home',
+            path: '/',
+            meta: { lang: 'en-US', title: 'Test', description: 'Test page' },
+            sections: [],
+          },
+        ],
       })
 
       // WHEN: flag is provided as file path
@@ -215,6 +263,14 @@ test.describe('Language Configuration', () => {
             { code: 'ja-JP', label: '日本語' },
           ],
         },
+        pages: [
+          {
+            name: 'home',
+            path: '/',
+            meta: { lang: 'en-US', title: 'Test', description: 'Test page' },
+            sections: [],
+          },
+        ],
       })
 
       // WHEN: label uses the language's native name
@@ -246,6 +302,14 @@ test.describe('Language Configuration', () => {
             },
           ],
         },
+        pages: [
+          {
+            name: 'home',
+            path: '/',
+            meta: { lang: 'en-US', title: 'Test', description: 'Test page' },
+            sections: [],
+          },
+        ],
       })
 
       // WHEN: direction and flag are omitted
@@ -294,6 +358,14 @@ test.describe('Language Configuration', () => {
             },
           ],
         },
+        pages: [
+          {
+            name: 'home',
+            path: '/',
+            meta: { lang: 'en-US', title: 'Test', description: 'Test page' },
+            sections: [],
+          },
+        ],
       })
 
       // WHEN/THEN: Streamlined workflow testing integration points

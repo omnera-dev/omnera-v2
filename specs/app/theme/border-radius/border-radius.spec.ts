@@ -42,6 +42,14 @@ test.describe('Border Radius', () => {
             '3xl': '1.5rem',
           },
         },
+        pages: [
+          {
+            name: 'home',
+            path: '/',
+            meta: { lang: 'en-US', title: 'Test', description: 'Test page' },
+            sections: [],
+          },
+        ],
       })
 
       // WHEN: radius system defines progressive rounding
@@ -65,6 +73,14 @@ test.describe('Border Radius', () => {
             none: '0',
           },
         },
+        pages: [
+          {
+            name: 'home',
+            path: '/',
+            meta: { lang: 'en-US', title: 'Test', description: 'Test page' },
+            sections: [],
+          },
+        ],
       })
 
       // WHEN: sharp corners are needed
@@ -88,6 +104,14 @@ test.describe('Border Radius', () => {
             full: '9999px',
           },
         },
+        pages: [
+          {
+            name: 'home',
+            path: '/',
+            meta: { lang: 'en-US', title: 'Test', description: 'Test page' },
+            sections: [],
+          },
+        ],
       })
 
       // WHEN: perfect circles or pills are needed
@@ -113,6 +137,14 @@ test.describe('Border Radius', () => {
             lg: '0.5rem',
           },
         },
+        pages: [
+          {
+            name: 'home',
+            path: '/',
+            meta: { lang: 'en-US', title: 'Test', description: 'Test page' },
+            sections: [],
+          },
+        ],
       })
 
       // WHEN: radius scales with font size
@@ -137,6 +169,14 @@ test.describe('Border Radius', () => {
             'card-radius': '1rem',
           },
         },
+        pages: [
+          {
+            name: 'home',
+            path: '/',
+            meta: { lang: 'en-US', title: 'Test', description: 'Test page' },
+            sections: [],
+          },
+        ],
       })
 
       // WHEN: radius uses multi-word names
@@ -167,6 +207,14 @@ test.describe('Border Radius', () => {
             full: '9999px',
           },
         },
+        pages: [
+          {
+            name: 'home',
+            path: '/',
+            meta: { lang: 'en-US', title: 'Test', description: 'Test page' },
+            sections: [],
+          },
+        ],
       })
 
       // WHEN: all radius tokens are defined

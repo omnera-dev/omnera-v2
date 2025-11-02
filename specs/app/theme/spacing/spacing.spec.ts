@@ -37,6 +37,14 @@ test.describe('Spacing Configuration', () => {
             container: 'px-4',
           },
         },
+        pages: [
+          {
+            name: 'home',
+            path: '/',
+            meta: { lang: 'en-US', title: 'Test', description: 'Test page' },
+            sections: [],
+          },
+        ],
       })
 
       // WHEN: spacing is defined with Tailwind syntax
@@ -59,6 +67,14 @@ test.describe('Spacing Configuration', () => {
             section: 'py-16 sm:py-20',
           },
         },
+        pages: [
+          {
+            name: 'home',
+            path: '/',
+            meta: { lang: 'en-US', title: 'Test', description: 'Test page' },
+            sections: [],
+          },
+        ],
       })
 
       // WHEN: spacing includes breakpoint-specific values
@@ -81,6 +97,14 @@ test.describe('Spacing Configuration', () => {
             container: 'max-w-7xl mx-auto px-4',
           },
         },
+        pages: [
+          {
+            name: 'home',
+            path: '/',
+            meta: { lang: 'en-US', title: 'Test', description: 'Test page' },
+            sections: [],
+          },
+        ],
       })
 
       // WHEN: spacing defines container constraints (max-w-7xl mx-auto px-4)
@@ -107,6 +131,14 @@ test.describe('Spacing Configuration', () => {
             gapLarge: 'gap-8',
           },
         },
+        pages: [
+          {
+            name: 'home',
+            path: '/',
+            meta: { lang: 'en-US', title: 'Test', description: 'Test page' },
+            sections: [],
+          },
+        ],
       })
 
       // WHEN: spacing system includes small, medium, and large variants
@@ -130,6 +162,14 @@ test.describe('Spacing Configuration', () => {
             section: 'py-16 sm:py-20',
           },
         },
+        pages: [
+          {
+            name: 'home',
+            path: '/',
+            meta: { lang: 'en-US', title: 'Test', description: 'Test page' },
+            sections: [],
+          },
+        ],
       })
 
       // WHEN: spacing defines consistent section padding
@@ -154,6 +194,14 @@ test.describe('Spacing Configuration', () => {
             containerXSmall: 'max-w-2xl mx-auto px-4',
           },
         },
+        pages: [
+          {
+            name: 'home',
+            path: '/',
+            meta: { lang: 'en-US', title: 'Test', description: 'Test page' },
+            sections: [],
+          },
+        ],
       })
 
       // WHEN: spacing includes different max-widths for various contexts
@@ -180,6 +228,14 @@ test.describe('Spacing Configuration', () => {
             paddingLarge: 'p-8',
           },
         },
+        pages: [
+          {
+            name: 'home',
+            path: '/',
+            meta: { lang: 'en-US', title: 'Test', description: 'Test page' },
+            sections: [],
+          },
+        ],
       })
 
       // WHEN: spacing system provides padding scale
@@ -205,6 +261,14 @@ test.describe('Spacing Configuration', () => {
             marginLarge: 'm-8',
           },
         },
+        pages: [
+          {
+            name: 'home',
+            path: '/',
+            meta: { lang: 'en-US', title: 'Test', description: 'Test page' },
+            sections: [],
+          },
+        ],
       })
 
       // WHEN: spacing system provides margin scale
@@ -230,6 +294,14 @@ test.describe('Spacing Configuration', () => {
             padding: '16px',
           },
         },
+        pages: [
+          {
+            name: 'home',
+            path: '/',
+            meta: { lang: 'en-US', title: 'Test', description: 'Test page' },
+            sections: [],
+          },
+        ],
       })
 
       // WHEN: spacing is defined with raw CSS instead of Tailwind
@@ -256,6 +328,14 @@ test.describe('Spacing Configuration', () => {
             margin: 'm-6',
           },
         },
+        pages: [
+          {
+            name: 'home',
+            path: '/',
+            meta: { lang: 'en-US', title: 'Test', description: 'Test page' },
+            sections: [],
+          },
+        ],
       })
 
       // WHEN: all spacing tokens are configured

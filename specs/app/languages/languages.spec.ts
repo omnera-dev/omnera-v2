@@ -136,6 +136,14 @@ test.describe('Languages Configuration', () => {
           ],
           fallback: 'en-US',
         },
+        pages: [
+          {
+            name: 'home',
+            path: '/',
+            meta: { lang: 'en-US', title: 'Test', description: 'Test page' },
+            sections: [],
+          },
+        ],
       })
 
       // WHEN: a translation is missing for the current language
@@ -165,6 +173,14 @@ test.describe('Languages Configuration', () => {
           ],
           detectBrowser: true,
         },
+        pages: [
+          {
+            name: 'home',
+            path: '/',
+            meta: { lang: 'en-US', title: 'Test', description: 'Test page' },
+            sections: [],
+          },
+        ],
       })
 
       // Set browser language preference
@@ -195,6 +211,14 @@ test.describe('Languages Configuration', () => {
           ],
           detectBrowser: false,
         },
+        pages: [
+          {
+            name: 'home',
+            path: '/',
+            meta: { lang: 'en-US', title: 'Test', description: 'Test page' },
+            sections: [],
+          },
+        ],
       })
 
       // Set browser language preference to French
@@ -225,6 +249,14 @@ test.describe('Languages Configuration', () => {
           ],
           persistSelection: true,
         },
+        pages: [
+          {
+            name: 'home',
+            path: '/',
+            meta: { lang: 'en-US', title: 'Test', description: 'Test page' },
+            sections: [],
+          },
+        ],
       })
 
       // WHEN: user manually selects a language
@@ -257,6 +289,14 @@ test.describe('Languages Configuration', () => {
           ],
           persistSelection: false,
         },
+        pages: [
+          {
+            name: 'home',
+            path: '/',
+            meta: { lang: 'en-US', title: 'Test', description: 'Test page' },
+            sections: [],
+          },
+        ],
       })
 
       // WHEN: user manually selects a language
@@ -284,6 +324,14 @@ test.describe('Languages Configuration', () => {
             { code: 'ar-SA', label: 'العربية', direction: 'rtl' },
           ],
         },
+        pages: [
+          {
+            name: 'home',
+            path: '/',
+            meta: { lang: 'en-US', title: 'Test', description: 'Test page' },
+            sections: [],
+          },
+        ],
       })
 
       // WHEN: user switches between English and Arabic
@@ -317,6 +365,14 @@ test.describe('Languages Configuration', () => {
             { code: 'ja-JP', label: '日本語', direction: 'ltr', flag: '🇯🇵' },
           ],
         },
+        pages: [
+          {
+            name: 'home',
+            path: '/',
+            meta: { lang: 'en-US', title: 'Test', description: 'Test page' },
+            sections: [],
+          },
+        ],
       })
 
       // WHEN: user opens language switcher
@@ -350,6 +406,14 @@ test.describe('Languages Configuration', () => {
           detectBrowser: true,
           persistSelection: true,
         },
+        pages: [
+          {
+            name: 'home',
+            path: '/',
+            meta: { lang: 'en-US', title: 'Test', description: 'Test page' },
+            sections: [],
+          },
+        ],
       })
 
       // Set browser language to French
@@ -395,6 +459,14 @@ test.describe('Languages Configuration', () => {
             { code: 'es-ES', label: 'Español', direction: 'ltr' },
           ],
         },
+        pages: [
+          {
+            name: 'home',
+            path: '/',
+            meta: { lang: 'en-US', title: 'Test', description: 'Test page' },
+            sections: [],
+          },
+        ],
       })
       await expect(schemaPromise).rejects.toThrow(/default language must be in supported array/)
     }
@@ -414,6 +486,14 @@ test.describe('Languages Configuration', () => {
           supported: [{ code: 'en-US', label: 'English', direction: 'ltr' }],
           fallback: 'de-DE',
         },
+        pages: [
+          {
+            name: 'home',
+            path: '/',
+            meta: { lang: 'en-US', title: 'Test', description: 'Test page' },
+            sections: [],
+          },
+        ],
       })
       await expect(schemaPromise).rejects.toThrow(/fallback language must be in supported array/)
     }
@@ -434,6 +514,14 @@ test.describe('Languages Configuration', () => {
             { code: 'fr-FR', label: 'Français', direction: 'ltr' },
           ],
         },
+        pages: [
+          {
+            name: 'home',
+            path: '/',
+            meta: { lang: 'en-US', title: 'Test', description: 'Test page' },
+            sections: [],
+          },
+        ],
       })
 
       // THEN: it should automatically use default language as fallback
@@ -459,6 +547,14 @@ test.describe('Languages Configuration', () => {
           ],
           fallback: 'en-US',
         },
+        pages: [
+          {
+            name: 'home',
+            path: '/',
+            meta: { lang: 'en-US', title: 'Test', description: 'Test page' },
+            sections: [],
+          },
+        ],
       })
 
       // THEN: it should show English text when French translation is missing
@@ -492,6 +588,14 @@ test.describe('Languages Configuration', () => {
             { code: 'ar-SA', label: 'العربية', direction: 'rtl' },
           ],
         },
+        pages: [
+          {
+            name: 'home',
+            path: '/',
+            meta: { lang: 'en-US', title: 'Test', description: 'Test page' },
+            sections: [],
+          },
+        ],
       })
 
       // THEN: it should apply RTL-aware theme tokens
@@ -724,6 +828,14 @@ test.describe('Languages Configuration', () => {
           detectBrowser: false,
           persistSelection: true,
         },
+        pages: [
+          {
+            name: 'home',
+            path: '/',
+            meta: { lang: 'en-US', title: 'Test', description: 'Test page' },
+            sections: [],
+          },
+        ],
       })
 
       // WHEN/THEN: Streamlined workflow testing integration points
