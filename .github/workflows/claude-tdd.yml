@@ -32,13 +32,13 @@ on:
   pull_request_review:
     types: [submitted]
 
-# Concurrency control: Prevent duplicate runs for the same issue/PR + sender
-# Each issue/PR + sender gets its own concurrency group to prevent:
-# - User-triggered workflows from being canceled by bot-triggered workflows
-# - Multiple bot comments from canceling each other
-# This allows queue system to process multiple specs in parallel without interference
+# Concurrency control: Prevent duplicate runs
+# - workflow_run/workflow_dispatch: Use global TDD queue lock (strict serial processing)
+# - issue_comment: Use per-issue concurrency (allows manual @claude without conflicts)
+# This prevents duplicate PRs when queue processor triggers multiple workflow_run events
+# FIX: workflow_run events previously used github.run_id (unique per run) causing duplicate PRs
 concurrency:
-  group: claude-${{ github.event.issue.number || github.event.pull_request.number || github.run_id }}-${{ github.event.sender.login || github.event.sender.type || 'unknown' }}
+  group: claude-${{ github.event_name == 'workflow_run' && 'tdd-automation' || github.event_name == 'workflow_dispatch' && 'tdd-automation' || github.event.issue.number || github.event.pull_request.number || 'default' }}
   cancel-in-progress: true
 
 jobs:
