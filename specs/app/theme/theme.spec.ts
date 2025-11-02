@@ -42,7 +42,24 @@ test.describe('Theme Configuration', () => {
             name: 'home',
             path: '/',
             meta: { lang: 'en-US', title: 'Test', description: 'Test page' },
-            sections: [],
+            sections: [
+              {
+                type: 'div',
+                props: {
+                  'data-testid': 'theme-colors',
+                },
+                children: [
+                  {
+                    type: 'div',
+                    props: {
+                      'data-testid': 'color-primary',
+                      style: '--color-primary: #007bff;',
+                    },
+                    children: ['Primary'],
+                  },
+                ],
+              },
+            ],
           },
         ],
       })
@@ -83,7 +100,16 @@ test.describe('Theme Configuration', () => {
             name: 'home',
             path: '/',
             meta: { lang: 'en-US', title: 'Test', description: 'Test page' },
-            sections: [],
+            sections: [
+              {
+                type: 'div',
+                props: {
+                  'data-testid': 'color-primary',
+                  style: 'background-color: #007bff; padding: 1rem;',
+                },
+                children: ['Primary Color'],
+              },
+            ],
           },
         ],
       })
