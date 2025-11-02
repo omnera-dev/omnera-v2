@@ -243,9 +243,9 @@ Look for these indicators:
 
 When triggered by @claude mention (posted by queue processor every 15 min):
 
-1. **Branch already exists** - queue processor created it:
+1. **Create branch** - you create it automatically:
    ```bash
-   git checkout tdd/spec-APP-VERSION-001  # Already done automatically
+   git checkout -b tdd/spec-APP-VERSION-001
    ```
 
 2. **Run @agent-e2e-test-fixer**:
@@ -301,13 +301,13 @@ The system implements automatic error recovery:
 ```
 Push new tests → Scan → Create spec issues → Queue
                                                ↓
-         Processor picks oldest spec (every 15 min, thomas-jeanneau account)
+         Processor picks oldest spec (every 15 min, configured PAT account)
                                                ↓
-                              Creates branch + Posts @claude mention
+                              Mark in-progress + Post @claude mention
                                                ↓
                     Claude Code triggered (dual-agent workflow)
                                                ↓
-                              e2e-test-fixer → refactor-auditor
+                              Create branch + e2e-test-fixer → refactor-auditor
                                                ↓
                                       Commit → Create PR
                                                ↓
@@ -356,7 +356,7 @@ cat TDD-PROGRESS.md
 ### Configuration
 
 Key workflow settings:
-- **Queue Processor**: Every 15 minutes (thomas-jeanneau account)
+- **Queue Processor**: Every 15 minutes (configured PAT account)
 - **Max concurrent**: 1 spec at a time (strict serial)
 - **Dual agents**: e2e-test-fixer + codebase-refactor-auditor (ALWAYS both)
 - **Retry attempts**: Max 3 per spec

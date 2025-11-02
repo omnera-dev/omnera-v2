@@ -18,19 +18,19 @@ graph TD
     G --> H{Any in-progress?}
     H -->|Yes| I[Exit]
     H -->|No| J[Pick Oldest Spec]
-    J --> K[Create Branch & PR]
-    K --> L[Mark In-Progress]
-    L --> LA[Auto-Comment @claude]
-    LA --> M[Claude Code Triggers]
-    M --> N[Agent Implements]
-    N --> O[Push to Branch]
-    O --> P[Validation Workflow]
-    P --> Q{Tests Pass?}
-    Q -->|Yes| R[Generate & Commit Roadmap]
-    R --> S[Mark Completed & Merge]
-    Q -->|No| T[Comment Failure]
-    T --> M
-    S --> U[Next Iteration]
+    J --> K[Mark In-Progress]
+    K --> L[Auto-Comment @claude]
+    L --> M[Claude Code Triggers]
+    M --> N[Create Branch & PR]
+    N --> O[Agent Implements]
+    O --> P[Push to Branch]
+    P --> Q[Validation Workflow]
+    Q --> R{Tests Pass?}
+    R -->|Yes| S[Generate & Commit Roadmap]
+    S --> T[Mark Completed & Merge]
+    R -->|No| U[Comment Failure]
+    U --> O
+    T --> V[Next Iteration]
 ```
 
 ## Components
@@ -98,10 +98,9 @@ bun run scripts/tdd-automation/queue-manager.ts status
 
 1. Check if any spec is in-progress
 2. If none, pick oldest queued spec
-3. Create branch (`tdd/spec-{SPEC-ID}`)
-4. Create draft PR
-5. Mark issue as in-progress
-6. Exit (no waiting)
+3. Mark issue as in-progress
+4. Post @claude comment with implementation instructions
+5. Exit (no waiting - branch and PR created by Claude Code later)
 
 **Concurrency**: Strict serial - only one spec can be in-progress at a time
 
@@ -109,7 +108,7 @@ bun run scripts/tdd-automation/queue-manager.ts status
 
 **Triggers**:
 
-- @claude mention in issue comments (posted by queue processor every 15 min)
+- issue_comment event when @claude mentioned (posted by queue processor every 15 min)
 - Manual @claude mentions by project owner
 - Manual workflow_dispatch for specific issues
 
@@ -117,7 +116,7 @@ bun run scripts/tdd-automation/queue-manager.ts status
 
 **Key Steps**:
 
-1. Checkout existing branch (created by queue processor)
+1. Create and checkout branch `tdd/spec-{SPEC-ID}` from main
 2. **Run @agent-e2e-test-fixer**: Remove `.fixme()`, implement minimal code
 3. **Run @agent-codebase-refactor-auditor**: Review quality, refactor (ALWAYS)
 4. Commit changes (Claude Code account) - includes `bun run license`
@@ -240,18 +239,16 @@ Every 15 minutes (or manual):
 2. **Check in-progress**: Query issues with `tdd-spec:in-progress` label
 3. **If any exist**: Exit (strict serial - one at a time)
 4. **If none**: Pick oldest issue with `tdd-spec:queued` label
-5. **Create branch**: `tdd/spec-{SPEC-ID}` from main
-6. **Create PR**: Draft PR linking to issue
-7. **Mark in-progress**: Change label to `tdd-spec:in-progress`
-8. **Auto-invoke Claude**: Post comment with `@claude` mention and implementation instructions
-9. **Exit**: No waiting, queue processor is done
+5. **Mark in-progress**: Change label to `tdd-spec:in-progress`
+6. **Auto-invoke Claude**: Post comment with `@claude` mention and implementation instructions
+7. **Exit**: No waiting, queue processor is done (branch and PR created by Claude Code next)
 
 ### Step 3: Automated Implementation (Claude Code)
 
 **Fully automated** - triggered by `@claude` mention in auto-comment:
 
-1. **Claude Code workflow triggers**: `claude-tdd.yml` detects `@claude` mention
-2. **Checkout existing branch**: `git checkout tdd/spec-APP-VERSION-001` (already created)
+1. **Claude Code workflow triggers**: `claude-tdd.yml` detects `@claude` mention via issue_comment event
+2. **Create and checkout branch**: `git checkout -b tdd/spec-APP-VERSION-001`
 3. **Run @agent-e2e-test-fixer**:
    - Read test file with spec ID
    - Remove `.fixme()` from specific test

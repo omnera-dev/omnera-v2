@@ -506,12 +506,12 @@ export const createSpecIssue = (
 
 ### Implementation Instructions
 
-This spec will be automatically picked up by the TDD queue processor and implemented by Claude Code via \`workflow_dispatch\`.
+This spec will be automatically picked up by the TDD queue processor and implemented by Claude Code.
 
 **What happens automatically**:
 1. Queue processor marks issue as in-progress
-2. Triggers Claude Code workflow via workflow_dispatch
-3. Claude Code checks out branch \`tdd/spec-${spec.specId}\`
+2. Queue processor posts @claude comment to trigger Claude Code workflow
+3. Claude Code creates and checks out branch \`tdd/spec-${spec.specId}\`
 4. Removes \`.fixme()\` from test ${spec.specId}
 5. Implements minimal code to pass test
 6. Runs validation before pushing

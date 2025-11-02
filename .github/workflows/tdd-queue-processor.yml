@@ -32,7 +32,7 @@ jobs:
   process-queue:
     name: 🔄 Process TDD Queue
     runs-on: ubuntu-latest
-    timeout-minutes: 5 # Quick operation: fetch queue, create branch, post comment
+    timeout-minutes: 5 # Quick operation: fetch queue, update labels, post @claude comment
 
     steps:
       - name: Checkout code
