@@ -303,7 +303,7 @@ test.describe('Pages', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-010: should support multiple page configurations',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
