@@ -67,6 +67,25 @@ test.describe('Languages Configuration', () => {
             { code: 'es-ES', label: 'Español', direction: 'ltr' },
           ],
         },
+        blocks: [
+          {
+            name: 'language-switcher',
+            type: 'language-switcher',
+            props: {
+              variant: 'dropdown',
+            },
+          },
+        ],
+        pages: [
+          {
+            path: '/',
+            sections: [
+              {
+                block: 'language-switcher',
+              },
+            ],
+          },
+        ],
       })
 
       // WHEN: app is configured with multiple languages
