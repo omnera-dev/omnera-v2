@@ -42,7 +42,16 @@ test.describe('Color Palette', () => {
             name: 'home',
             path: '/',
             meta: { lang: 'en-US', title: 'Test', description: 'Test page' },
-            sections: [],
+            sections: [
+              {
+                type: 'div',
+                props: {
+                  'data-testid': 'color-primary',
+                  style: '--color-primary: #007bff;',
+                },
+                children: ['Primary'],
+              },
+            ],
           },
         ],
       })
@@ -75,7 +84,16 @@ test.describe('Color Palette', () => {
             name: 'home',
             path: '/',
             meta: { lang: 'en-US', title: 'Test', description: 'Test page' },
-            sections: [],
+            sections: [
+              {
+                type: 'div',
+                props: {
+                  'data-testid': 'color-primary-transparent',
+                  style: '--color-primary-transparent: #007bff80;',
+                },
+                children: ['Primary Transparent'],
+              },
+            ],
           },
         ],
       })
