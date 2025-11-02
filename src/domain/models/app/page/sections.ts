@@ -6,7 +6,7 @@
  */
 
 import { Schema } from 'effect'
-import { BlockReferenceSchema, SimpleBlockReferenceSchema } from '../block/common/block-reference'
+import { BlockReferenceSchema } from '../block/common/block-reference'
 import { InteractionsSchema } from './common/interactions/interactions'
 import { PropsSchema } from './common/props'
 import { ResponsiveSchema } from './common/responsive'
