@@ -94,50 +94,43 @@
   let currentLanguageEl, dropdown, switcherButton
 
   /**
-   * Resolve translation key with fallback support
-   * Implements the $t:key pattern for centralized translations
-   *
-   * @param {string} key - Translation key
-   * @param {string} currentLang - Current language code
-   * @returns {string} Translated string or key if not found
-   */
-  function resolveTranslation(key, currentLang) {
-    if (!languagesConfig.translations) {
-      return key
-    }
-
-    const { translations, fallback } = languagesConfig
-
-    // Try current language first
-    const currentTranslations = translations[currentLang]
-    if (currentTranslations && currentTranslations[key]) {
-      return currentTranslations[key]
-    }
-
-    // Try fallback language (defaults to default language)
-    const fallbackLang = fallback || languagesConfig.default
-    if (fallbackLang !== currentLang) {
-      const fallbackTranslations = translations[fallbackLang]
-      if (fallbackTranslations && fallbackTranslations[key]) {
-        return fallbackTranslations[key]
-      }
-    }
-
-    // Translation not found - return key
-    return key
-  }
-
-  /**
    * Updates all elements with translation keys
-   * Finds elements with data-translation-key attribute and updates their text
+   * Reads pre-resolved translations from data-translations attribute and updates text
+   *
+   * NOTE: Translation resolution logic has been moved to server-side to eliminate duplication.
+   * Server pre-resolves all translations for all languages and injects them via data-translations.
+   * Client only needs to lookup the appropriate translation, not re-implement fallback logic.
    */
   function updateTranslations() {
     const translatedElements = document.querySelectorAll('[data-translation-key]')
     translatedElements.forEach((element) => {
       const key = element.getAttribute('data-translation-key')
-      if (key) {
-        const translation = resolveTranslation(key, currentLanguage)
-        element.textContent = translation
+      const translationsJson = element.getAttribute('data-translations')
+
+      if (key && translationsJson) {
+        try {
+          const translations = JSON.parse(translationsJson)
+
+          // Try current language first
+          let translation = translations[currentLanguage]
+
+          // Try fallback language if missing
+          if (!translation && languagesConfig.fallback) {
+            translation = translations[languagesConfig.fallback]
+          }
+
+          // Try default language if still missing
+          if (!translation) {
+            translation = translations[languagesConfig.default]
+          }
+
+          // Use translation or key as final fallback
+          element.textContent = translation || key
+        } catch (error) {
+          console.error('Failed to parse translations for key:', key, error)
+          // Fallback to key if JSON parsing fails
+          element.textContent = key
+        }
       }
     })
   }

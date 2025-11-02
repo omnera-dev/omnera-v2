@@ -89,3 +89,42 @@ export function resolveTranslationPattern(
   // No pattern found - return text as-is
   return text
 }
+
+/**
+ * Collect all available translations for a key across all languages
+ *
+ * Used for pre-resolving translations on the server side, allowing client-side
+ * code to simply lookup translations without re-implementing fallback logic.
+ *
+ * @param key - Translation key (e.g., 'welcome', 'common.save')
+ * @param languages - Languages configuration from app schema
+ * @returns Object mapping language codes to translated strings, or undefined if no translations
+ *
+ * @example
+ * ```typescript
+ * collectTranslationsForKey('welcome', languages)
+ * // Returns: { 'en-US': 'Welcome', 'fr-FR': 'Bienvenue', 'es-ES': 'Bienvenido' }
+ * ```
+ */
+export function collectTranslationsForKey(
+  key: string,
+  languages?: Languages
+): Record<string, string> | undefined {
+  if (!languages?.translations) {
+    return undefined
+  }
+
+  // Collect translation for this key from all available languages (functional approach)
+  const result = Object.entries(languages.translations).reduce(
+    (acc, [lang, translations]) => {
+      if (translations[key]) {
+        return { ...acc, [lang]: translations[key] }
+      }
+      return acc
+    },
+    {} as Record<string, string>
+  )
+
+  // Return undefined if no translations found (key doesn't exist in any language)
+  return Object.keys(result).length > 0 ? result : undefined
+}

@@ -6,10 +6,13 @@
  */
 
 import { type ReactElement } from 'react'
+import {
+  collectTranslationsForKey,
+  resolveTranslationPattern,
+} from '@/presentation/utils/translation-resolver'
 import * as Renderers from './renderers/element-renderers'
 import { resolveBlock } from './utils/block-resolution'
 import { substitutePropsThemeTokens } from './utils/theme-tokens'
-import { resolveTranslationPattern } from '@/presentation/utils/translation-resolver'
 import type {
   BlockReference,
   SimpleBlockReference,
@@ -87,10 +90,13 @@ export function ComponentRenderer({
   // Apply theme token substitution to props
   const substitutedProps = substitutePropsThemeTokens(props, theme)
 
-  // Check if children contain translation patterns
-  const translationKeys = children
-    ?.filter((child): child is string => typeof child === 'string' && child.startsWith('$t:'))
-    .map((child) => child.slice(3)) // Remove '$t:' prefix
+  // Find first translation key (if any) for data-translation-key attribute
+  const firstTranslationKey = children
+    ?.find(
+      (child: Component | string): child is string =>
+        typeof child === 'string' && child.startsWith('$t:')
+    )
+    ?.slice(3) // Remove '$t:' prefix
 
   // Render children recursively - children can be Component objects or strings
   const renderedChildren = children?.map((child: Component | string, index: number) => {
@@ -111,17 +117,24 @@ export function ComponentRenderer({
     )
   })
 
+  // Collect all translations for the key if present (eliminates client-side duplication)
+  const translationData = firstTranslationKey
+    ? collectTranslationsForKey(firstTranslationKey, languages)
+    : undefined
+
   // Merge className with other props and add data-block attribute if blockName is provided
   // For blocks without content, add min-height and display to ensure visibility
   // Add translation key data attribute if children contain $t: patterns
+  // Include pre-resolved translations to eliminate client-side resolution logic duplication
   const hasContent = Boolean(content || children?.length)
   const elementProps = {
     ...substitutedProps,
     className: substitutedProps?.className as string | undefined,
     ...(blockName && { 'data-block': blockName }),
-    ...(translationKeys &&
-      translationKeys.length > 0 && {
-        'data-translation-key': translationKeys[0],
+    ...(firstTranslationKey &&
+      translationData && {
+        'data-translation-key': firstTranslationKey,
+        'data-translations': JSON.stringify(translationData),
       }),
     ...(blockName &&
       !hasContent && {
