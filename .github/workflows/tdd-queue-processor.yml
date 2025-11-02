@@ -116,7 +116,7 @@ jobs:
           ## ✅ Success Criteria (Verify Before Finishing)
 
           **Task is NOT complete until ALL boxes are checked**:
-          - [ ] Branch created: \`tdd/spec-$SPEC_ID\` (or with -clean/-v2 suffix if exists)
+          - [ ] Branch created automatically by Claude Code (pattern: \`claude/issue-$ISSUE_NUMBER-timestamp\`)
           - [ ] \`.fixme()\` removed from test \`$SPEC_ID\` ONLY (not other tests)
           - [ ] Both agents invoked: e2e-test-fixer → codebase-refactor-auditor
           - [ ] Code follows layer-based architecture (Domain/Application/Infrastructure/Presentation)
@@ -133,15 +133,11 @@ jobs:
 
           ---
 
-          ## 🔄 Implementation Workflow (5 Steps - ALL REQUIRED)
+          ## 🔄 Implementation Workflow (4 Steps - ALL REQUIRED)
 
-          ### Step 1: Create Branch
-          \`\`\`bash
-          git checkout -b tdd/spec-$SPEC_ID
-          # If branch exists, use: tdd/spec-$SPEC_ID-clean or tdd/spec-$SPEC_ID-v2
-          \`\`\`
+          **Note**: Branch is created automatically by Claude Code with pattern \`claude/issue-$ISSUE_NUMBER-{timestamp}\`. No manual branch creation needed.
 
-          ### Step 2: Invoke e2e-test-fixer Agent
+          ### Step 1: Invoke e2e-test-fixer Agent
 
           **Use the Task tool** to invoke the **e2e-test-fixer** agent:
           - Agent autonomously locates test \`$SPEC_ID\` in \`$TEST_FILE\`
@@ -159,7 +155,7 @@ jobs:
           - Keep Domain layer pure (no side effects)
           - Follow functional programming patterns (immutability, pure functions)
 
-          ### Step 3: Invoke codebase-refactor-auditor Agent (MANDATORY)
+          ### Step 2: Invoke codebase-refactor-auditor Agent (MANDATORY)
 
           **Use the Task tool** to invoke the **codebase-refactor-auditor** agent:
           - Agent reviews implementation for code quality
@@ -168,9 +164,9 @@ jobs:
           - Agent refactors and optimizes as needed
           - Agent validates against Omnera best practices
 
-          **IMPORTANT**: This step is MANDATORY even if Step 2 code seems clean.
+          **IMPORTANT**: This step is MANDATORY even if Step 1 code seems clean.
 
-          ### Step 4: Quality Checks & Commit
+          ### Step 3: Quality Checks & Commit
           \`\`\`bash
           bun run license           # Add copyright headers (REQUIRED - fails if missing)
           git add -A
@@ -178,7 +174,7 @@ jobs:
           git push -u origin HEAD
           \`\`\`
 
-          ### Step 5: ⚠️ CREATE PULL REQUEST (MANDATORY - NOT OPTIONAL)
+          ### Step 4: ⚠️ CREATE PULL REQUEST (MANDATORY - NOT OPTIONAL)
 
           **THIS IS THE MOST CRITICAL STEP. THE WORKFLOW FAILS WITHOUT IT.**
 
