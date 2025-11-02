@@ -69,9 +69,24 @@
 
   /**
    * Detect initial language based on configuration
-   * Respects browser language detection setting
+   * Respects browser language detection setting and localStorage persistence
    */
   function getInitialLanguage() {
+    // Check if persistence is enabled (defaults to true)
+    const persistSelection = languagesConfig.persistSelection ?? true
+
+    if (persistSelection) {
+      // Check localStorage for previously saved language
+      const savedLanguage = localStorage.getItem('language')
+      if (savedLanguage) {
+        // Verify saved language is in supported languages
+        const isSupported = languagesConfig.supported.some((lang) => lang.code === savedLanguage)
+        if (isSupported) {
+          return savedLanguage
+        }
+      }
+    }
+
     // Check if browser detection is enabled (defaults to true)
     const detectBrowser = languagesConfig.detectBrowser ?? true
 
@@ -164,10 +179,18 @@
 
   /**
    * Selects a new language and updates the UI
+   * Saves to localStorage if persistSelection is enabled
    * @param {string} code - ISO 639-1 language code (e.g., 'en-US', 'fr-FR')
    */
   function selectLanguage(code) {
     currentLanguage = code
+
+    // Save to localStorage if persistence is enabled (defaults to true)
+    const persistSelection = languagesConfig.persistSelection ?? true
+    if (persistSelection) {
+      localStorage.setItem('language', code)
+    }
+
     isOpen = false
     updateUI()
     if (dropdown) {

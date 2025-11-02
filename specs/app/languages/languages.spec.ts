@@ -299,7 +299,7 @@ test.describe('Languages Configuration', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-LANGUAGES-006: should remember the choice in localStorage for future visits',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
