@@ -24,7 +24,7 @@ test.describe('Languages Configuration', () => {
   // One test per spec in schema - defines EXHAUSTIVE acceptance criteria
   // ============================================================================
 
-  test.fixme(
+  test(
     'APP-LANGUAGES-001: should use English as the only available language',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {

@@ -28,6 +28,7 @@ function renderPageByPath(app: App, path: string): string | undefined {
       page={page}
       blocks={app.blocks}
       theme={app.theme}
+      languages={app.languages}
     />
   )
 

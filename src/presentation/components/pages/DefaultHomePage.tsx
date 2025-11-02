@@ -8,6 +8,7 @@
 import { type ReactElement } from 'react'
 import { Badge } from '@/presentation/components/ui/badge'
 import { TypographyH1, TypographyLead } from '@/presentation/components/ui/typography'
+import { LanguageSwitcher } from '@/presentation/components/language-switcher'
 import type { App } from '@/domain/models/app'
 
 /**
@@ -36,6 +37,7 @@ export function DefaultHomePage({ app }: { readonly app: App }): Readonly<ReactE
         />
       </head>
       <body className="h-screen overflow-hidden bg-linear-to-br from-gray-50 to-gray-100">
+        <LanguageSwitcher languages={app.languages} />
         <div className="container-page h-full">
           <div className="flex h-full flex-col items-center justify-center">
             <div className="w-full max-w-2xl space-y-6 text-center">
