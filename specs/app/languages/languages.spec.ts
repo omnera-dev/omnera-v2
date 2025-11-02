@@ -856,8 +856,8 @@ test.describe('Languages Configuration', () => {
         languages: {
           default: 'en-US',
           supported: [
-            { code: 'en-US', label: 'English' },
-            { code: 'fr-FR', label: 'Français' },
+            { code: 'en-US', label: 'English', direction: 'ltr' },
+            { code: 'fr-FR', label: 'Français', direction: 'ltr' },
           ],
           translations: {
             'en-US': { 'common.save': 'Save' },
@@ -898,8 +898,8 @@ test.describe('Languages Configuration', () => {
           default: 'en-US',
           fallback: 'en-US',
           supported: [
-            { code: 'en-US', label: 'English' },
-            { code: 'fr-FR', label: 'Français' },
+            { code: 'en-US', label: 'English', direction: 'ltr' },
+            { code: 'fr-FR', label: 'Français', direction: 'ltr' },
           ],
           translations: {
             'en-US': {
@@ -944,7 +944,7 @@ test.describe('Languages Configuration', () => {
         name: 'test-app',
         languages: {
           default: 'en-US',
-          supported: [{ code: 'en-US', label: 'English' }],
+          supported: [{ code: 'en-US', label: 'English', direction: 'ltr' }],
           translations: {
             'en-US': {
               'common.save': 'Save',
