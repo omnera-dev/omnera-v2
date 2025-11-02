@@ -75,7 +75,7 @@ test.describe('Pages', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-003: should accept complete page configuration',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
