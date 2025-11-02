@@ -87,7 +87,10 @@ export function LanguageSwitcher({
             data-language-code={lang.code}
             type="button"
           >
-            <span data-testid="language-option">{lang.label}</span>
+            <span data-testid="language-option">
+              {lang.flag ? `${lang.flag} ` : ''}
+              {lang.label}
+            </span>
           </button>
         ))}
       </div>
