@@ -5,8 +5,8 @@
  * found in the LICENSE.md file in the root directory of this source tree.
  */
 
-import type { ReactElement } from 'react'
 import type { Navigation as NavigationProps } from '@/domain/models/app/page/layout/navigation'
+import type { ReactElement } from 'react'
 
 /**
  * Navigation Component

@@ -6,8 +6,8 @@
  */
 
 import { type ReactElement } from 'react'
+import { Navigation } from '@/presentation/components/layout/navigation'
 import { ComponentRenderer } from '@/presentation/components/sections/component-renderer'
-import { Navigation } from '@/presentation/components/layout/Navigation'
 import type { Blocks } from '@/domain/models/app/blocks'
 import type { Page } from '@/domain/models/app/pages'
 import type { Theme } from '@/domain/models/app/theme'
