@@ -52,7 +52,7 @@ test.describe('Languages Configuration', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-LANGUAGES-002: should be able to switch between all three languages',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {

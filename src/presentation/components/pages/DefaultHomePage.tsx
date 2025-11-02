@@ -63,6 +63,73 @@ export function DefaultHomePage({ app }: { readonly app: App }): Readonly<ReactE
             </div>
           </div>
         </div>
+        {/* Client-side language switcher functionality */}
+        {app.languages && (
+          <script
+            dangerouslySetInnerHTML={{
+              __html: `
+(function() {
+  'use strict';
+
+  const languagesConfig = ${JSON.stringify(app.languages)};
+  let currentLanguage = languagesConfig.default;
+  let isOpen = false;
+
+  function updateUI() {
+    const currentLang = languagesConfig.supported.find(lang => lang.code === currentLanguage);
+    const currentLanguageEl = document.querySelector('[data-testid="current-language"]');
+    const switcherButton = document.querySelector('[data-testid="language-switcher"]');
+
+    if (currentLanguageEl) {
+      currentLanguageEl.textContent = currentLang?.label || currentLanguage;
+    }
+    if (switcherButton) {
+      const span = switcherButton.querySelector('[data-testid="current-language"]');
+      if (span) {
+        span.textContent = currentLang?.label || currentLanguage;
+      }
+    }
+  }
+
+  function toggleDropdown() {
+    isOpen = !isOpen;
+    const dropdown = document.querySelector('[data-language-dropdown]');
+    if (dropdown) {
+      dropdown.style.display = isOpen ? 'block' : 'none';
+    }
+  }
+
+  function selectLanguage(code) {
+    currentLanguage = code;
+    isOpen = false;
+    updateUI();
+    const dropdown = document.querySelector('[data-language-dropdown]');
+    if (dropdown) {
+      dropdown.style.display = 'none';
+    }
+  }
+
+  document.addEventListener('DOMContentLoaded', function() {
+    const switcherButton = document.querySelector('[data-testid="language-switcher"]');
+    if (switcherButton) {
+      switcherButton.addEventListener('click', toggleDropdown);
+    }
+
+    const languageOptions = document.querySelectorAll('[data-language-option]');
+    languageOptions.forEach(option => {
+      option.addEventListener('click', function() {
+        const code = this.getAttribute('data-language-code');
+        if (code) {
+          selectLanguage(code);
+        }
+      });
+    });
+  });
+})();
+            `,
+            }}
+          />
+        )}
       </body>
     </html>
   )
