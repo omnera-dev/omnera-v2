@@ -269,7 +269,7 @@ test.describe('Pages', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-009: should manage client-side scripts and features',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {

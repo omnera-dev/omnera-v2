@@ -6,71 +6,79 @@
     "BlockChildren": {
       "type": "array",
       "items": {
-        "type": "object",
-        "required": ["type"],
-        "properties": {
-          "type": {
-            "type": "string",
-            "description": "Component type identifier",
-            "title": "Component Type",
-            "examples": ["icon", "text", "div", "button"]
-          },
-          "props": {
+        "anyOf": [
+          {
             "type": "object",
-            "required": [],
-            "properties": {},
-            "patternProperties": {
-              "": {
-                "anyOf": [
-                  { "type": "string" },
-                  { "type": "number" },
-                  { "type": "boolean" },
-                  {
-                    "type": "object",
-                    "required": [],
-                    "properties": {},
-                    "additionalProperties": {
-                      "$id": "/schemas/unknown",
-                      "title": "unknown"
-                    }
-                  },
-                  {
-                    "type": "array",
-                    "items": { "$id": "/schemas/unknown", "title": "unknown" }
+            "required": ["type"],
+            "properties": {
+              "type": {
+                "type": "string",
+                "description": "Component type identifier",
+                "title": "Component Type",
+                "examples": ["icon", "text", "div", "button"]
+              },
+              "props": {
+                "type": "object",
+                "required": [],
+                "properties": {},
+                "patternProperties": {
+                  "": {
+                    "anyOf": [
+                      { "type": "string" },
+                      { "type": "number" },
+                      { "type": "boolean" },
+                      {
+                        "type": "object",
+                        "required": [],
+                        "properties": {},
+                        "additionalProperties": {
+                          "$id": "/schemas/unknown",
+                          "title": "unknown"
+                        }
+                      },
+                      {
+                        "type": "array",
+                        "items": {
+                          "$id": "/schemas/unknown",
+                          "title": "unknown"
+                        }
+                      }
+                    ]
                   }
-                ]
+                },
+                "propertyNames": {
+                  "type": "string",
+                  "description": "Valid JavaScript property name (camelCase) or HTML data-*/aria-* attribute (kebab-case)",
+                  "title": "Block Prop Key",
+                  "examples": [
+                    "className",
+                    "size",
+                    "enabled",
+                    "maxWidth",
+                    "data-testid",
+                    "aria-label"
+                  ],
+                  "pattern": "^([a-zA-Z][a-zA-Z0-9]*|data-[a-z]+(-[a-z]+)*|aria-[a-z]+(-[a-z]+)*)$"
+                },
+                "description": "Properties for block templates, supporting variable references",
+                "title": "Block Props"
+              },
+              "children": { "$ref": "#/$defs/BlockChildren" },
+              "content": {
+                "type": "string",
+                "description": "Text content (may contain $variable)",
+                "title": "Text Content",
+                "examples": ["$label", "$title", "Static text"]
               }
             },
-            "propertyNames": {
-              "type": "string",
-              "description": "Valid JavaScript property name (camelCase) or HTML data-*/aria-* attribute (kebab-case)",
-              "title": "Block Prop Key",
-              "examples": [
-                "className",
-                "size",
-                "enabled",
-                "maxWidth",
-                "data-testid",
-                "aria-label"
-              ],
-              "pattern": "^([a-zA-Z][a-zA-Z0-9]*|data-[a-z]+(-[a-z]+)*|aria-[a-z]+(-[a-z]+)*)$"
-            },
-            "description": "Properties for block templates, supporting variable references",
-            "title": "Block Props"
+            "additionalProperties": false,
+            "description": "Component element in a block template",
+            "title": "Block Child Element"
           },
-          "children": { "$ref": "#/$defs/BlockChildren" },
-          "content": {
-            "type": "string",
-            "description": "Text content (may contain $variable)",
-            "title": "Text Content",
-            "examples": ["$label", "$title", "Static text"]
-          }
-        },
-        "additionalProperties": false,
-        "description": "Component element in a block template",
-        "title": "Block Child Element"
+          { "type": "string" }
+        ]
       },
-      "description": "Child elements array for block templates",
+      "description": "Child elements array for block templates (components or strings)",
       "title": "Block Children"
     },
     "Pages": {
@@ -1502,12 +1510,16 @@
             "properties": {
               "banner": {
                 "type": "object",
-                "required": ["enabled"],
+                "required": [],
                 "properties": {
                   "enabled": {
                     "type": "boolean",
                     "description": "Whether to show the banner",
                     "default": false
+                  },
+                  "message": {
+                    "type": "string",
+                    "description": "Banner message content"
                   },
                   "text": {
                     "type": "string",
@@ -1748,7 +1760,7 @@
               },
               "footer": {
                 "type": "object",
-                "required": ["enabled"],
+                "required": [],
                 "properties": {
                   "enabled": {
                     "type": "boolean",
@@ -1902,7 +1914,7 @@
               },
               "sidebar": {
                 "type": "object",
-                "required": ["enabled"],
+                "required": [],
                 "properties": {
                   "enabled": {
                     "type": "boolean",
@@ -1993,6 +2005,12 @@
                         "text",
                         "heading",
                         "paragraph",
+                        "h1",
+                        "h2",
+                        "h3",
+                        "h4",
+                        "h5",
+                        "h6",
                         "icon",
                         "image",
                         "button",
@@ -2057,7 +2075,7 @@
                       "description": "Properties for block templates, supporting variable references",
                       "title": "Block Props"
                     },
-                    "children": { "$ref": "#/$defs/Sections" },
+                    "children": { "$ref": "#/$defs/Children" },
                     "content": {
                       "type": "string",
                       "description": "Text content for text components"
@@ -2635,26 +2653,6 @@
                   "description": "Direct component definition"
                 },
                 {
-                  "type": "object",
-                  "required": ["block"],
-                  "properties": {
-                    "block": {
-                      "type": "string",
-                      "description": "Name of the block to reference (kebab-case)",
-                      "title": "Block Reference Name",
-                      "examples": [
-                        "icon-badge",
-                        "section-header",
-                        "call-to-action"
-                      ],
-                      "pattern": "^[a-z][a-z0-9-]*$"
-                    }
-                  },
-                  "additionalProperties": false,
-                  "description": "Reference to a block by name without variable substitution",
-                  "title": "Simple Block Reference"
-                },
-                {
                   "anyOf": [
                     {
                       "type": "object",
@@ -2701,6 +2699,49 @@
                     },
                     {
                       "type": "object",
+                      "required": ["block", "vars"],
+                      "properties": {
+                        "block": {
+                          "type": "string",
+                          "description": "Name of the block to reference (kebab-case)",
+                          "title": "Block Reference Name",
+                          "examples": [
+                            "icon-badge",
+                            "section-header",
+                            "call-to-action"
+                          ],
+                          "pattern": "^[a-z][a-z0-9-]*$"
+                        },
+                        "vars": {
+                          "type": "object",
+                          "required": [],
+                          "properties": {},
+                          "patternProperties": {
+                            "": {
+                              "anyOf": [
+                                { "type": "string" },
+                                { "type": "number" },
+                                { "type": "boolean" }
+                              ]
+                            }
+                          },
+                          "propertyNames": {
+                            "type": "string",
+                            "description": "Variable name (alphanumeric)",
+                            "title": "Block Variable Key",
+                            "examples": ["color", "icon", "text", "titleColor"],
+                            "pattern": "^[a-zA-Z][a-zA-Z0-9]*$"
+                          },
+                          "description": "Variables to substitute in the block template",
+                          "title": "Block Variables"
+                        }
+                      },
+                      "additionalProperties": false,
+                      "description": "Shorthand block reference with variable substitution",
+                      "title": "Block Reference (Hybrid)"
+                    },
+                    {
+                      "type": "object",
                       "required": ["block"],
                       "properties": {
                         "block": {
@@ -2720,11 +2761,11 @@
                       "title": "Block Reference (Shorthand)"
                     }
                   ],
-                  "description": "Reference to a reusable block template. Supports full syntax ($ref + vars) or shorthand (block name only).",
+                  "description": "Reference to a reusable block template. Supports full syntax ($ref + vars), hybrid syntax (block + vars), or shorthand (block name only).",
                   "title": "Block Reference"
                 }
               ],
-              "description": "A page section that can be either a component, simple block reference, or block reference with variables"
+              "description": "A page section that can be either a component or block reference (with optional variables)"
             },
             "description": "Array of page content sections",
             "title": "Page Sections"
@@ -2779,6 +2820,52 @@
                 "title": "Feature Flags"
               },
               "externalScripts": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "required": ["src"],
+                  "properties": {
+                    "src": {
+                      "type": "string",
+                      "description": "Script source URL"
+                    },
+                    "async": {
+                      "type": "boolean",
+                      "description": "Load script asynchronously",
+                      "default": false
+                    },
+                    "defer": {
+                      "type": "boolean",
+                      "description": "Defer script execution",
+                      "default": false
+                    },
+                    "module": {
+                      "type": "boolean",
+                      "description": "Load as ES module",
+                      "default": false
+                    },
+                    "integrity": {
+                      "type": "string",
+                      "description": "Subresource integrity hash"
+                    },
+                    "crossorigin": {
+                      "type": "string",
+                      "enum": ["anonymous", "use-credentials"],
+                      "description": "CORS setting for cross-origin scripts"
+                    },
+                    "position": {
+                      "type": "string",
+                      "enum": ["head", "body-start", "body-end"],
+                      "description": "Where to insert the script in the document"
+                    }
+                  },
+                  "additionalProperties": false,
+                  "description": "External JavaScript dependency"
+                },
+                "description": "External JavaScript dependencies",
+                "title": "External Scripts"
+              },
+              "external": {
                 "type": "array",
                 "items": {
                   "type": "object",
@@ -2935,752 +3022,784 @@
       },
       "description": "Sidebar items array"
     },
-    "Sections": {
+    "Children": {
       "type": "array",
       "items": {
-        "anyOf": [
-          {
-            "type": "object",
-            "required": ["type"],
-            "properties": {
-              "type": {
-                "type": "string",
-                "enum": [
-                  "section",
-                  "container",
-                  "flex",
-                  "grid",
-                  "card",
-                  "text",
-                  "heading",
-                  "paragraph",
-                  "icon",
-                  "image",
-                  "button",
-                  "link",
-                  "timeline",
-                  "accordion",
-                  "badge",
-                  "customHTML",
-                  "video",
-                  "audio",
-                  "iframe",
-                  "form",
-                  "input",
-                  "div",
-                  "span"
-                ],
-                "description": "Component type for page building"
-              },
-              "props": {
-                "type": "object",
-                "required": [],
-                "properties": {},
-                "patternProperties": {
-                  "": {
-                    "anyOf": [
-                      { "type": "string" },
-                      { "type": "number" },
-                      { "type": "boolean" },
-                      {
-                        "type": "object",
-                        "required": [],
-                        "properties": {},
-                        "additionalProperties": {
-                          "$id": "/schemas/unknown",
-                          "title": "unknown"
-                        }
-                      },
-                      {
-                        "type": "array",
-                        "items": {
-                          "$id": "/schemas/unknown",
-                          "title": "unknown"
-                        }
-                      }
-                    ]
-                  }
-                },
-                "propertyNames": {
-                  "type": "string",
-                  "description": "Valid JavaScript property name (camelCase) or HTML data-*/aria-* attribute (kebab-case)",
-                  "title": "Block Prop Key",
-                  "examples": [
-                    "className",
-                    "size",
-                    "enabled",
-                    "maxWidth",
-                    "data-testid",
-                    "aria-label"
-                  ],
-                  "pattern": "^([a-zA-Z][a-zA-Z0-9]*|data-[a-z]+(-[a-z]+)*|aria-[a-z]+(-[a-z]+)*)$"
-                },
-                "description": "Properties for block templates, supporting variable references",
-                "title": "Block Props"
-              },
-              "children": { "$ref": "#/$defs/Sections" },
-              "content": {
-                "type": "string",
-                "description": "Text content for text components"
-              },
-              "interactions": {
-                "type": "object",
-                "required": [],
-                "properties": {
-                  "hover": {
-                    "type": "object",
-                    "required": [],
-                    "properties": {
-                      "transform": {
-                        "type": "string",
-                        "description": "CSS transform (scale, rotate, translate)",
-                        "examples": [
-                          "scale(1.05)",
-                          "translateY(-4px)",
-                          "rotate(5deg)"
-                        ]
-                      },
-                      "opacity": {
-                        "type": "number",
-                        "description": "Opacity value (0-1)",
-                        "title": "between(0, 1)",
-                        "minimum": 0,
-                        "maximum": 1
-                      },
-                      "backgroundColor": {
-                        "type": "string",
-                        "description": "Background color on hover"
-                      },
-                      "color": {
-                        "type": "string",
-                        "description": "Text color on hover"
-                      },
-                      "borderColor": {
-                        "type": "string",
-                        "description": "Border color on hover"
-                      },
-                      "shadow": {
-                        "type": "string",
-                        "description": "Box shadow on hover",
-                        "examples": ["0 10px 25px rgba(0,0,0,0.1)"]
-                      },
-                      "duration": {
-                        "type": "string",
-                        "description": "a string matching the pattern ^[0-9]+(\\.[0-9]+)?(ms|s)$",
-                        "pattern": "^[0-9]+(\\.[0-9]+)?(ms|s)$"
-                      },
-                      "easing": {
-                        "type": "string",
-                        "enum": [
-                          "linear",
-                          "ease",
-                          "ease-in",
-                          "ease-out",
-                          "ease-in-out"
-                        ],
-                        "description": "Transition timing function"
-                      }
-                    },
-                    "additionalProperties": false,
-                    "description": "Visual changes when user hovers over component",
-                    "title": "Hover Interaction"
-                  },
-                  "click": {
-                    "type": "object",
-                    "required": [],
-                    "properties": {
-                      "animation": {
-                        "type": "string",
-                        "enum": [
-                          "pulse",
-                          "bounce",
-                          "shake",
-                          "flash",
-                          "ripple",
-                          "none"
-                        ],
-                        "description": "Animation to trigger on click"
-                      },
-                      "navigate": {
-                        "type": "string",
-                        "description": "Path to navigate to",
-                        "examples": ["/contact", "/pricing", "#section-id"]
-                      },
-                      "openUrl": {
-                        "type": "string",
-                        "description": "External URL to open"
-                      },
-                      "openInNewTab": { "type": "boolean" },
-                      "scrollTo": {
-                        "type": "string",
-                        "description": "a string matching the pattern ^#[a-zA-Z][a-zA-Z0-9-]*$",
-                        "pattern": "^#[a-zA-Z][a-zA-Z0-9-]*$"
-                      },
-                      "toggleElement": {
-                        "type": "string",
-                        "description": "Element ID to show/hide",
-                        "pattern": "^#[a-zA-Z][a-zA-Z0-9-]*$"
-                      },
-                      "submitForm": {
-                        "type": "string",
-                        "description": "Form ID to submit",
-                        "pattern": "^#[a-zA-Z][a-zA-Z0-9-]*$"
-                      }
-                    },
-                    "additionalProperties": false,
-                    "description": "Actions triggered when component is clicked",
-                    "title": "Click Interaction"
-                  },
-                  "scroll": {
-                    "type": "object",
-                    "required": ["animation"],
-                    "properties": {
-                      "animation": {
-                        "type": "string",
-                        "enum": [
-                          "fadeIn",
-                          "fadeInUp",
-                          "fadeInDown",
-                          "fadeInLeft",
-                          "fadeInRight",
-                          "zoomIn",
-                          "slideInUp",
-                          "slideInDown"
-                        ],
-                        "description": "Animation type triggered on scroll"
-                      },
-                      "threshold": {
-                        "type": "number",
-                        "description": "Percentage of element visible before triggering (0-1)",
-                        "title": "between(0, 1)",
-                        "minimum": 0,
-                        "maximum": 1
-                      },
-                      "delay": {
-                        "type": "string",
-                        "description": "Delay before animation starts",
-                        "examples": ["0ms", "100ms", "0.5s"],
-                        "pattern": "^[0-9]+(\\.[0-9]+)?(ms|s)$"
-                      },
-                      "duration": {
-                        "type": "string",
-                        "description": "a string matching the pattern ^[0-9]+(\\.[0-9]+)?(ms|s)$",
-                        "pattern": "^[0-9]+(\\.[0-9]+)?(ms|s)$"
-                      },
-                      "once": {
-                        "type": "boolean",
-                        "description": "Trigger animation only once"
-                      }
-                    },
-                    "additionalProperties": false,
-                    "description": "Animations triggered when component enters viewport",
-                    "title": "Scroll Interaction"
-                  },
-                  "entrance": {
-                    "type": "object",
-                    "required": ["animation"],
-                    "properties": {
-                      "animation": {
-                        "type": "string",
-                        "enum": [
-                          "fadeIn",
-                          "fadeInUp",
-                          "fadeInDown",
-                          "zoomIn",
-                          "slideInUp",
-                          "slideInDown"
-                        ],
-                        "description": "Animation type for page load"
-                      },
-                      "delay": {
-                        "type": "string",
-                        "description": "Delay before animation starts",
-                        "pattern": "^[0-9]+(\\.[0-9]+)?(ms|s)$"
-                      },
-                      "duration": {
-                        "type": "string",
-                        "description": "a string matching the pattern ^[0-9]+(\\.[0-9]+)?(ms|s)$",
-                        "pattern": "^[0-9]+(\\.[0-9]+)?(ms|s)$"
-                      },
-                      "stagger": {
-                        "type": "string",
-                        "description": "Delay between sibling animations",
-                        "examples": ["50ms", "100ms"],
-                        "pattern": "^[0-9]+(\\.[0-9]+)?(ms|s)$"
-                      }
-                    },
-                    "additionalProperties": false,
-                    "description": "Animation played when page loads",
-                    "title": "Entrance Animation"
-                  }
-                },
-                "additionalProperties": false,
-                "description": "Interactive behaviors triggered by user actions or page events",
-                "title": "Component Interactions"
-              },
-              "responsive": {
-                "type": "object",
-                "required": [],
-                "properties": {
-                  "mobile": {
-                    "type": "object",
-                    "required": [],
-                    "properties": {
-                      "props": {
-                        "type": "object",
-                        "required": [],
-                        "properties": {},
-                        "patternProperties": {
-                          "": {
-                            "anyOf": [
-                              { "type": "string" },
-                              { "type": "number" },
-                              { "type": "boolean" },
-                              {
-                                "type": "object",
-                                "required": [],
-                                "properties": {},
-                                "additionalProperties": {
-                                  "$id": "/schemas/unknown",
-                                  "title": "unknown"
-                                }
-                              },
-                              {
-                                "type": "array",
-                                "items": {
-                                  "$id": "/schemas/unknown",
-                                  "title": "unknown"
-                                }
-                              }
-                            ]
-                          }
-                        },
-                        "propertyNames": {
-                          "type": "string",
-                          "description": "a string matching the pattern ^[a-zA-Z][a-zA-Z0-9]*$",
-                          "pattern": "^[a-zA-Z][a-zA-Z0-9]*$"
-                        },
-                        "description": "Props to override"
-                      },
-                      "content": {
-                        "type": "string",
-                        "description": "Content to display at this breakpoint"
-                      },
-                      "visible": {
-                        "type": "boolean",
-                        "description": "Show/hide component at this breakpoint"
-                      },
-                      "children": {
-                        "type": "array",
-                        "items": {
-                          "$id": "/schemas/unknown",
-                          "title": "unknown"
-                        },
-                        "description": "Different children at this breakpoint"
-                      }
-                    },
-                    "additionalProperties": false,
-                    "description": "Component properties to override at this breakpoint"
-                  },
-                  "sm": {
-                    "type": "object",
-                    "required": [],
-                    "properties": {
-                      "props": {
-                        "type": "object",
-                        "required": [],
-                        "properties": {},
-                        "patternProperties": {
-                          "": {
-                            "anyOf": [
-                              { "type": "string" },
-                              { "type": "number" },
-                              { "type": "boolean" },
-                              {
-                                "type": "object",
-                                "required": [],
-                                "properties": {},
-                                "additionalProperties": {
-                                  "$id": "/schemas/unknown",
-                                  "title": "unknown"
-                                }
-                              },
-                              {
-                                "type": "array",
-                                "items": {
-                                  "$id": "/schemas/unknown",
-                                  "title": "unknown"
-                                }
-                              }
-                            ]
-                          }
-                        },
-                        "propertyNames": {
-                          "type": "string",
-                          "description": "a string matching the pattern ^[a-zA-Z][a-zA-Z0-9]*$",
-                          "pattern": "^[a-zA-Z][a-zA-Z0-9]*$"
-                        },
-                        "description": "Props to override"
-                      },
-                      "content": {
-                        "type": "string",
-                        "description": "Content to display at this breakpoint"
-                      },
-                      "visible": {
-                        "type": "boolean",
-                        "description": "Show/hide component at this breakpoint"
-                      },
-                      "children": {
-                        "type": "array",
-                        "items": {
-                          "$id": "/schemas/unknown",
-                          "title": "unknown"
-                        },
-                        "description": "Different children at this breakpoint"
-                      }
-                    },
-                    "additionalProperties": false,
-                    "description": "Component properties to override at this breakpoint"
-                  },
-                  "md": {
-                    "type": "object",
-                    "required": [],
-                    "properties": {
-                      "props": {
-                        "type": "object",
-                        "required": [],
-                        "properties": {},
-                        "patternProperties": {
-                          "": {
-                            "anyOf": [
-                              { "type": "string" },
-                              { "type": "number" },
-                              { "type": "boolean" },
-                              {
-                                "type": "object",
-                                "required": [],
-                                "properties": {},
-                                "additionalProperties": {
-                                  "$id": "/schemas/unknown",
-                                  "title": "unknown"
-                                }
-                              },
-                              {
-                                "type": "array",
-                                "items": {
-                                  "$id": "/schemas/unknown",
-                                  "title": "unknown"
-                                }
-                              }
-                            ]
-                          }
-                        },
-                        "propertyNames": {
-                          "type": "string",
-                          "description": "a string matching the pattern ^[a-zA-Z][a-zA-Z0-9]*$",
-                          "pattern": "^[a-zA-Z][a-zA-Z0-9]*$"
-                        },
-                        "description": "Props to override"
-                      },
-                      "content": {
-                        "type": "string",
-                        "description": "Content to display at this breakpoint"
-                      },
-                      "visible": {
-                        "type": "boolean",
-                        "description": "Show/hide component at this breakpoint"
-                      },
-                      "children": {
-                        "type": "array",
-                        "items": {
-                          "$id": "/schemas/unknown",
-                          "title": "unknown"
-                        },
-                        "description": "Different children at this breakpoint"
-                      }
-                    },
-                    "additionalProperties": false,
-                    "description": "Component properties to override at this breakpoint"
-                  },
-                  "lg": {
-                    "type": "object",
-                    "required": [],
-                    "properties": {
-                      "props": {
-                        "type": "object",
-                        "required": [],
-                        "properties": {},
-                        "patternProperties": {
-                          "": {
-                            "anyOf": [
-                              { "type": "string" },
-                              { "type": "number" },
-                              { "type": "boolean" },
-                              {
-                                "type": "object",
-                                "required": [],
-                                "properties": {},
-                                "additionalProperties": {
-                                  "$id": "/schemas/unknown",
-                                  "title": "unknown"
-                                }
-                              },
-                              {
-                                "type": "array",
-                                "items": {
-                                  "$id": "/schemas/unknown",
-                                  "title": "unknown"
-                                }
-                              }
-                            ]
-                          }
-                        },
-                        "propertyNames": {
-                          "type": "string",
-                          "description": "a string matching the pattern ^[a-zA-Z][a-zA-Z0-9]*$",
-                          "pattern": "^[a-zA-Z][a-zA-Z0-9]*$"
-                        },
-                        "description": "Props to override"
-                      },
-                      "content": {
-                        "type": "string",
-                        "description": "Content to display at this breakpoint"
-                      },
-                      "visible": {
-                        "type": "boolean",
-                        "description": "Show/hide component at this breakpoint"
-                      },
-                      "children": {
-                        "type": "array",
-                        "items": {
-                          "$id": "/schemas/unknown",
-                          "title": "unknown"
-                        },
-                        "description": "Different children at this breakpoint"
-                      }
-                    },
-                    "additionalProperties": false,
-                    "description": "Component properties to override at this breakpoint"
-                  },
-                  "xl": {
-                    "type": "object",
-                    "required": [],
-                    "properties": {
-                      "props": {
-                        "type": "object",
-                        "required": [],
-                        "properties": {},
-                        "patternProperties": {
-                          "": {
-                            "anyOf": [
-                              { "type": "string" },
-                              { "type": "number" },
-                              { "type": "boolean" },
-                              {
-                                "type": "object",
-                                "required": [],
-                                "properties": {},
-                                "additionalProperties": {
-                                  "$id": "/schemas/unknown",
-                                  "title": "unknown"
-                                }
-                              },
-                              {
-                                "type": "array",
-                                "items": {
-                                  "$id": "/schemas/unknown",
-                                  "title": "unknown"
-                                }
-                              }
-                            ]
-                          }
-                        },
-                        "propertyNames": {
-                          "type": "string",
-                          "description": "a string matching the pattern ^[a-zA-Z][a-zA-Z0-9]*$",
-                          "pattern": "^[a-zA-Z][a-zA-Z0-9]*$"
-                        },
-                        "description": "Props to override"
-                      },
-                      "content": {
-                        "type": "string",
-                        "description": "Content to display at this breakpoint"
-                      },
-                      "visible": {
-                        "type": "boolean",
-                        "description": "Show/hide component at this breakpoint"
-                      },
-                      "children": {
-                        "type": "array",
-                        "items": {
-                          "$id": "/schemas/unknown",
-                          "title": "unknown"
-                        },
-                        "description": "Different children at this breakpoint"
-                      }
-                    },
-                    "additionalProperties": false,
-                    "description": "Component properties to override at this breakpoint"
-                  },
-                  "2xl": {
-                    "type": "object",
-                    "required": [],
-                    "properties": {
-                      "props": {
-                        "type": "object",
-                        "required": [],
-                        "properties": {},
-                        "patternProperties": {
-                          "": {
-                            "anyOf": [
-                              { "type": "string" },
-                              { "type": "number" },
-                              { "type": "boolean" },
-                              {
-                                "type": "object",
-                                "required": [],
-                                "properties": {},
-                                "additionalProperties": {
-                                  "$id": "/schemas/unknown",
-                                  "title": "unknown"
-                                }
-                              },
-                              {
-                                "type": "array",
-                                "items": {
-                                  "$id": "/schemas/unknown",
-                                  "title": "unknown"
-                                }
-                              }
-                            ]
-                          }
-                        },
-                        "propertyNames": {
-                          "type": "string",
-                          "description": "a string matching the pattern ^[a-zA-Z][a-zA-Z0-9]*$",
-                          "pattern": "^[a-zA-Z][a-zA-Z0-9]*$"
-                        },
-                        "description": "Props to override"
-                      },
-                      "content": {
-                        "type": "string",
-                        "description": "Content to display at this breakpoint"
-                      },
-                      "visible": {
-                        "type": "boolean",
-                        "description": "Show/hide component at this breakpoint"
-                      },
-                      "children": {
-                        "type": "array",
-                        "items": {
-                          "$id": "/schemas/unknown",
-                          "title": "unknown"
-                        },
-                        "description": "Different children at this breakpoint"
-                      }
-                    },
-                    "additionalProperties": false,
-                    "description": "Component properties to override at this breakpoint"
-                  }
-                },
-                "additionalProperties": false,
-                "description": "Breakpoint-specific component overrides for responsive design",
-                "title": "Responsive Variants"
-              }
-            },
-            "additionalProperties": false,
-            "description": "Direct component definition"
-          },
-          {
-            "type": "object",
-            "required": ["block"],
-            "properties": {
-              "block": {
-                "type": "string",
-                "description": "Name of the block to reference (kebab-case)",
-                "title": "Block Reference Name",
-                "examples": ["icon-badge", "section-header", "call-to-action"],
-                "pattern": "^[a-z][a-z0-9-]*$"
-              }
-            },
-            "additionalProperties": false,
-            "description": "Reference to a block by name without variable substitution",
-            "title": "Simple Block Reference"
-          },
-          {
-            "anyOf": [
-              {
-                "type": "object",
-                "required": ["$ref", "vars"],
-                "properties": {
-                  "$ref": {
-                    "type": "string",
-                    "description": "Name of the block to reference (kebab-case)",
-                    "title": "Block Reference Name",
-                    "examples": [
-                      "icon-badge",
-                      "section-header",
-                      "call-to-action"
-                    ],
-                    "pattern": "^[a-z][a-z0-9-]*$"
-                  },
-                  "vars": {
-                    "type": "object",
-                    "required": [],
-                    "properties": {},
-                    "patternProperties": {
-                      "": {
-                        "anyOf": [
-                          { "type": "string" },
-                          { "type": "number" },
-                          { "type": "boolean" }
-                        ]
-                      }
-                    },
-                    "propertyNames": {
-                      "type": "string",
-                      "description": "Variable name (alphanumeric)",
-                      "title": "Block Variable Key",
-                      "examples": ["color", "icon", "text", "titleColor"],
-                      "pattern": "^[a-zA-Z][a-zA-Z0-9]*$"
-                    },
-                    "description": "Variables to substitute in the block template",
-                    "title": "Block Variables"
-                  }
-                },
-                "additionalProperties": false,
-                "description": "Reference to a reusable block template with variable substitution",
-                "title": "Block Reference (Full Syntax)"
-              },
-              {
-                "type": "object",
-                "required": ["block"],
-                "properties": {
-                  "block": {
-                    "type": "string",
-                    "description": "Name of the block to reference (kebab-case)",
-                    "title": "Block Reference Name",
-                    "examples": [
-                      "icon-badge",
-                      "section-header",
-                      "call-to-action"
-                    ],
-                    "pattern": "^[a-z][a-z0-9-]*$"
-                  }
-                },
-                "additionalProperties": false,
-                "description": "Shorthand reference to a reusable block without variables",
-                "title": "Block Reference (Shorthand)"
-              }
-            ],
-            "description": "Reference to a reusable block template. Supports full syntax ($ref + vars) or shorthand (block name only).",
-            "title": "Block Reference"
-          }
-        ],
-        "description": "A page section that can be either a component, simple block reference, or block reference with variables"
+        "anyOf": [{ "$ref": "#/$defs/SectionItem" }, { "type": "string" }]
       },
-      "description": "Array of page content sections",
-      "title": "Page Sections"
+      "description": "Array of child components or text strings"
+    },
+    "SectionItem": {
+      "anyOf": [
+        {
+          "type": "object",
+          "required": ["type"],
+          "properties": {
+            "type": {
+              "type": "string",
+              "enum": [
+                "section",
+                "container",
+                "flex",
+                "grid",
+                "card",
+                "text",
+                "heading",
+                "paragraph",
+                "h1",
+                "h2",
+                "h3",
+                "h4",
+                "h5",
+                "h6",
+                "icon",
+                "image",
+                "button",
+                "link",
+                "timeline",
+                "accordion",
+                "badge",
+                "customHTML",
+                "video",
+                "audio",
+                "iframe",
+                "form",
+                "input",
+                "div",
+                "span"
+              ],
+              "description": "Component type for page building"
+            },
+            "props": {
+              "type": "object",
+              "required": [],
+              "properties": {},
+              "patternProperties": {
+                "": {
+                  "anyOf": [
+                    { "type": "string" },
+                    { "type": "number" },
+                    { "type": "boolean" },
+                    {
+                      "type": "object",
+                      "required": [],
+                      "properties": {},
+                      "additionalProperties": {
+                        "$id": "/schemas/unknown",
+                        "title": "unknown"
+                      }
+                    },
+                    {
+                      "type": "array",
+                      "items": { "$id": "/schemas/unknown", "title": "unknown" }
+                    }
+                  ]
+                }
+              },
+              "propertyNames": {
+                "type": "string",
+                "description": "Valid JavaScript property name (camelCase) or HTML data-*/aria-* attribute (kebab-case)",
+                "title": "Block Prop Key",
+                "examples": [
+                  "className",
+                  "size",
+                  "enabled",
+                  "maxWidth",
+                  "data-testid",
+                  "aria-label"
+                ],
+                "pattern": "^([a-zA-Z][a-zA-Z0-9]*|data-[a-z]+(-[a-z]+)*|aria-[a-z]+(-[a-z]+)*)$"
+              },
+              "description": "Properties for block templates, supporting variable references",
+              "title": "Block Props"
+            },
+            "children": { "$ref": "#/$defs/Children" },
+            "content": {
+              "type": "string",
+              "description": "Text content for text components"
+            },
+            "interactions": {
+              "type": "object",
+              "required": [],
+              "properties": {
+                "hover": {
+                  "type": "object",
+                  "required": [],
+                  "properties": {
+                    "transform": {
+                      "type": "string",
+                      "description": "CSS transform (scale, rotate, translate)",
+                      "examples": [
+                        "scale(1.05)",
+                        "translateY(-4px)",
+                        "rotate(5deg)"
+                      ]
+                    },
+                    "opacity": {
+                      "type": "number",
+                      "description": "Opacity value (0-1)",
+                      "title": "between(0, 1)",
+                      "minimum": 0,
+                      "maximum": 1
+                    },
+                    "backgroundColor": {
+                      "type": "string",
+                      "description": "Background color on hover"
+                    },
+                    "color": {
+                      "type": "string",
+                      "description": "Text color on hover"
+                    },
+                    "borderColor": {
+                      "type": "string",
+                      "description": "Border color on hover"
+                    },
+                    "shadow": {
+                      "type": "string",
+                      "description": "Box shadow on hover",
+                      "examples": ["0 10px 25px rgba(0,0,0,0.1)"]
+                    },
+                    "duration": {
+                      "type": "string",
+                      "description": "a string matching the pattern ^[0-9]+(\\.[0-9]+)?(ms|s)$",
+                      "pattern": "^[0-9]+(\\.[0-9]+)?(ms|s)$"
+                    },
+                    "easing": {
+                      "type": "string",
+                      "enum": [
+                        "linear",
+                        "ease",
+                        "ease-in",
+                        "ease-out",
+                        "ease-in-out"
+                      ],
+                      "description": "Transition timing function"
+                    }
+                  },
+                  "additionalProperties": false,
+                  "description": "Visual changes when user hovers over component",
+                  "title": "Hover Interaction"
+                },
+                "click": {
+                  "type": "object",
+                  "required": [],
+                  "properties": {
+                    "animation": {
+                      "type": "string",
+                      "enum": [
+                        "pulse",
+                        "bounce",
+                        "shake",
+                        "flash",
+                        "ripple",
+                        "none"
+                      ],
+                      "description": "Animation to trigger on click"
+                    },
+                    "navigate": {
+                      "type": "string",
+                      "description": "Path to navigate to",
+                      "examples": ["/contact", "/pricing", "#section-id"]
+                    },
+                    "openUrl": {
+                      "type": "string",
+                      "description": "External URL to open"
+                    },
+                    "openInNewTab": { "type": "boolean" },
+                    "scrollTo": {
+                      "type": "string",
+                      "description": "a string matching the pattern ^#[a-zA-Z][a-zA-Z0-9-]*$",
+                      "pattern": "^#[a-zA-Z][a-zA-Z0-9-]*$"
+                    },
+                    "toggleElement": {
+                      "type": "string",
+                      "description": "Element ID to show/hide",
+                      "pattern": "^#[a-zA-Z][a-zA-Z0-9-]*$"
+                    },
+                    "submitForm": {
+                      "type": "string",
+                      "description": "Form ID to submit",
+                      "pattern": "^#[a-zA-Z][a-zA-Z0-9-]*$"
+                    }
+                  },
+                  "additionalProperties": false,
+                  "description": "Actions triggered when component is clicked",
+                  "title": "Click Interaction"
+                },
+                "scroll": {
+                  "type": "object",
+                  "required": ["animation"],
+                  "properties": {
+                    "animation": {
+                      "type": "string",
+                      "enum": [
+                        "fadeIn",
+                        "fadeInUp",
+                        "fadeInDown",
+                        "fadeInLeft",
+                        "fadeInRight",
+                        "zoomIn",
+                        "slideInUp",
+                        "slideInDown"
+                      ],
+                      "description": "Animation type triggered on scroll"
+                    },
+                    "threshold": {
+                      "type": "number",
+                      "description": "Percentage of element visible before triggering (0-1)",
+                      "title": "between(0, 1)",
+                      "minimum": 0,
+                      "maximum": 1
+                    },
+                    "delay": {
+                      "type": "string",
+                      "description": "Delay before animation starts",
+                      "examples": ["0ms", "100ms", "0.5s"],
+                      "pattern": "^[0-9]+(\\.[0-9]+)?(ms|s)$"
+                    },
+                    "duration": {
+                      "type": "string",
+                      "description": "a string matching the pattern ^[0-9]+(\\.[0-9]+)?(ms|s)$",
+                      "pattern": "^[0-9]+(\\.[0-9]+)?(ms|s)$"
+                    },
+                    "once": {
+                      "type": "boolean",
+                      "description": "Trigger animation only once"
+                    }
+                  },
+                  "additionalProperties": false,
+                  "description": "Animations triggered when component enters viewport",
+                  "title": "Scroll Interaction"
+                },
+                "entrance": {
+                  "type": "object",
+                  "required": ["animation"],
+                  "properties": {
+                    "animation": {
+                      "type": "string",
+                      "enum": [
+                        "fadeIn",
+                        "fadeInUp",
+                        "fadeInDown",
+                        "zoomIn",
+                        "slideInUp",
+                        "slideInDown"
+                      ],
+                      "description": "Animation type for page load"
+                    },
+                    "delay": {
+                      "type": "string",
+                      "description": "Delay before animation starts",
+                      "pattern": "^[0-9]+(\\.[0-9]+)?(ms|s)$"
+                    },
+                    "duration": {
+                      "type": "string",
+                      "description": "a string matching the pattern ^[0-9]+(\\.[0-9]+)?(ms|s)$",
+                      "pattern": "^[0-9]+(\\.[0-9]+)?(ms|s)$"
+                    },
+                    "stagger": {
+                      "type": "string",
+                      "description": "Delay between sibling animations",
+                      "examples": ["50ms", "100ms"],
+                      "pattern": "^[0-9]+(\\.[0-9]+)?(ms|s)$"
+                    }
+                  },
+                  "additionalProperties": false,
+                  "description": "Animation played when page loads",
+                  "title": "Entrance Animation"
+                }
+              },
+              "additionalProperties": false,
+              "description": "Interactive behaviors triggered by user actions or page events",
+              "title": "Component Interactions"
+            },
+            "responsive": {
+              "type": "object",
+              "required": [],
+              "properties": {
+                "mobile": {
+                  "type": "object",
+                  "required": [],
+                  "properties": {
+                    "props": {
+                      "type": "object",
+                      "required": [],
+                      "properties": {},
+                      "patternProperties": {
+                        "": {
+                          "anyOf": [
+                            { "type": "string" },
+                            { "type": "number" },
+                            { "type": "boolean" },
+                            {
+                              "type": "object",
+                              "required": [],
+                              "properties": {},
+                              "additionalProperties": {
+                                "$id": "/schemas/unknown",
+                                "title": "unknown"
+                              }
+                            },
+                            {
+                              "type": "array",
+                              "items": {
+                                "$id": "/schemas/unknown",
+                                "title": "unknown"
+                              }
+                            }
+                          ]
+                        }
+                      },
+                      "propertyNames": {
+                        "type": "string",
+                        "description": "a string matching the pattern ^[a-zA-Z][a-zA-Z0-9]*$",
+                        "pattern": "^[a-zA-Z][a-zA-Z0-9]*$"
+                      },
+                      "description": "Props to override"
+                    },
+                    "content": {
+                      "type": "string",
+                      "description": "Content to display at this breakpoint"
+                    },
+                    "visible": {
+                      "type": "boolean",
+                      "description": "Show/hide component at this breakpoint"
+                    },
+                    "children": {
+                      "type": "array",
+                      "items": {
+                        "$id": "/schemas/unknown",
+                        "title": "unknown"
+                      },
+                      "description": "Different children at this breakpoint"
+                    }
+                  },
+                  "additionalProperties": false,
+                  "description": "Component properties to override at this breakpoint"
+                },
+                "sm": {
+                  "type": "object",
+                  "required": [],
+                  "properties": {
+                    "props": {
+                      "type": "object",
+                      "required": [],
+                      "properties": {},
+                      "patternProperties": {
+                        "": {
+                          "anyOf": [
+                            { "type": "string" },
+                            { "type": "number" },
+                            { "type": "boolean" },
+                            {
+                              "type": "object",
+                              "required": [],
+                              "properties": {},
+                              "additionalProperties": {
+                                "$id": "/schemas/unknown",
+                                "title": "unknown"
+                              }
+                            },
+                            {
+                              "type": "array",
+                              "items": {
+                                "$id": "/schemas/unknown",
+                                "title": "unknown"
+                              }
+                            }
+                          ]
+                        }
+                      },
+                      "propertyNames": {
+                        "type": "string",
+                        "description": "a string matching the pattern ^[a-zA-Z][a-zA-Z0-9]*$",
+                        "pattern": "^[a-zA-Z][a-zA-Z0-9]*$"
+                      },
+                      "description": "Props to override"
+                    },
+                    "content": {
+                      "type": "string",
+                      "description": "Content to display at this breakpoint"
+                    },
+                    "visible": {
+                      "type": "boolean",
+                      "description": "Show/hide component at this breakpoint"
+                    },
+                    "children": {
+                      "type": "array",
+                      "items": {
+                        "$id": "/schemas/unknown",
+                        "title": "unknown"
+                      },
+                      "description": "Different children at this breakpoint"
+                    }
+                  },
+                  "additionalProperties": false,
+                  "description": "Component properties to override at this breakpoint"
+                },
+                "md": {
+                  "type": "object",
+                  "required": [],
+                  "properties": {
+                    "props": {
+                      "type": "object",
+                      "required": [],
+                      "properties": {},
+                      "patternProperties": {
+                        "": {
+                          "anyOf": [
+                            { "type": "string" },
+                            { "type": "number" },
+                            { "type": "boolean" },
+                            {
+                              "type": "object",
+                              "required": [],
+                              "properties": {},
+                              "additionalProperties": {
+                                "$id": "/schemas/unknown",
+                                "title": "unknown"
+                              }
+                            },
+                            {
+                              "type": "array",
+                              "items": {
+                                "$id": "/schemas/unknown",
+                                "title": "unknown"
+                              }
+                            }
+                          ]
+                        }
+                      },
+                      "propertyNames": {
+                        "type": "string",
+                        "description": "a string matching the pattern ^[a-zA-Z][a-zA-Z0-9]*$",
+                        "pattern": "^[a-zA-Z][a-zA-Z0-9]*$"
+                      },
+                      "description": "Props to override"
+                    },
+                    "content": {
+                      "type": "string",
+                      "description": "Content to display at this breakpoint"
+                    },
+                    "visible": {
+                      "type": "boolean",
+                      "description": "Show/hide component at this breakpoint"
+                    },
+                    "children": {
+                      "type": "array",
+                      "items": {
+                        "$id": "/schemas/unknown",
+                        "title": "unknown"
+                      },
+                      "description": "Different children at this breakpoint"
+                    }
+                  },
+                  "additionalProperties": false,
+                  "description": "Component properties to override at this breakpoint"
+                },
+                "lg": {
+                  "type": "object",
+                  "required": [],
+                  "properties": {
+                    "props": {
+                      "type": "object",
+                      "required": [],
+                      "properties": {},
+                      "patternProperties": {
+                        "": {
+                          "anyOf": [
+                            { "type": "string" },
+                            { "type": "number" },
+                            { "type": "boolean" },
+                            {
+                              "type": "object",
+                              "required": [],
+                              "properties": {},
+                              "additionalProperties": {
+                                "$id": "/schemas/unknown",
+                                "title": "unknown"
+                              }
+                            },
+                            {
+                              "type": "array",
+                              "items": {
+                                "$id": "/schemas/unknown",
+                                "title": "unknown"
+                              }
+                            }
+                          ]
+                        }
+                      },
+                      "propertyNames": {
+                        "type": "string",
+                        "description": "a string matching the pattern ^[a-zA-Z][a-zA-Z0-9]*$",
+                        "pattern": "^[a-zA-Z][a-zA-Z0-9]*$"
+                      },
+                      "description": "Props to override"
+                    },
+                    "content": {
+                      "type": "string",
+                      "description": "Content to display at this breakpoint"
+                    },
+                    "visible": {
+                      "type": "boolean",
+                      "description": "Show/hide component at this breakpoint"
+                    },
+                    "children": {
+                      "type": "array",
+                      "items": {
+                        "$id": "/schemas/unknown",
+                        "title": "unknown"
+                      },
+                      "description": "Different children at this breakpoint"
+                    }
+                  },
+                  "additionalProperties": false,
+                  "description": "Component properties to override at this breakpoint"
+                },
+                "xl": {
+                  "type": "object",
+                  "required": [],
+                  "properties": {
+                    "props": {
+                      "type": "object",
+                      "required": [],
+                      "properties": {},
+                      "patternProperties": {
+                        "": {
+                          "anyOf": [
+                            { "type": "string" },
+                            { "type": "number" },
+                            { "type": "boolean" },
+                            {
+                              "type": "object",
+                              "required": [],
+                              "properties": {},
+                              "additionalProperties": {
+                                "$id": "/schemas/unknown",
+                                "title": "unknown"
+                              }
+                            },
+                            {
+                              "type": "array",
+                              "items": {
+                                "$id": "/schemas/unknown",
+                                "title": "unknown"
+                              }
+                            }
+                          ]
+                        }
+                      },
+                      "propertyNames": {
+                        "type": "string",
+                        "description": "a string matching the pattern ^[a-zA-Z][a-zA-Z0-9]*$",
+                        "pattern": "^[a-zA-Z][a-zA-Z0-9]*$"
+                      },
+                      "description": "Props to override"
+                    },
+                    "content": {
+                      "type": "string",
+                      "description": "Content to display at this breakpoint"
+                    },
+                    "visible": {
+                      "type": "boolean",
+                      "description": "Show/hide component at this breakpoint"
+                    },
+                    "children": {
+                      "type": "array",
+                      "items": {
+                        "$id": "/schemas/unknown",
+                        "title": "unknown"
+                      },
+                      "description": "Different children at this breakpoint"
+                    }
+                  },
+                  "additionalProperties": false,
+                  "description": "Component properties to override at this breakpoint"
+                },
+                "2xl": {
+                  "type": "object",
+                  "required": [],
+                  "properties": {
+                    "props": {
+                      "type": "object",
+                      "required": [],
+                      "properties": {},
+                      "patternProperties": {
+                        "": {
+                          "anyOf": [
+                            { "type": "string" },
+                            { "type": "number" },
+                            { "type": "boolean" },
+                            {
+                              "type": "object",
+                              "required": [],
+                              "properties": {},
+                              "additionalProperties": {
+                                "$id": "/schemas/unknown",
+                                "title": "unknown"
+                              }
+                            },
+                            {
+                              "type": "array",
+                              "items": {
+                                "$id": "/schemas/unknown",
+                                "title": "unknown"
+                              }
+                            }
+                          ]
+                        }
+                      },
+                      "propertyNames": {
+                        "type": "string",
+                        "description": "a string matching the pattern ^[a-zA-Z][a-zA-Z0-9]*$",
+                        "pattern": "^[a-zA-Z][a-zA-Z0-9]*$"
+                      },
+                      "description": "Props to override"
+                    },
+                    "content": {
+                      "type": "string",
+                      "description": "Content to display at this breakpoint"
+                    },
+                    "visible": {
+                      "type": "boolean",
+                      "description": "Show/hide component at this breakpoint"
+                    },
+                    "children": {
+                      "type": "array",
+                      "items": {
+                        "$id": "/schemas/unknown",
+                        "title": "unknown"
+                      },
+                      "description": "Different children at this breakpoint"
+                    }
+                  },
+                  "additionalProperties": false,
+                  "description": "Component properties to override at this breakpoint"
+                }
+              },
+              "additionalProperties": false,
+              "description": "Breakpoint-specific component overrides for responsive design",
+              "title": "Responsive Variants"
+            }
+          },
+          "additionalProperties": false,
+          "description": "Direct component definition"
+        },
+        {
+          "anyOf": [
+            {
+              "type": "object",
+              "required": ["$ref", "vars"],
+              "properties": {
+                "$ref": {
+                  "type": "string",
+                  "description": "Name of the block to reference (kebab-case)",
+                  "title": "Block Reference Name",
+                  "examples": [
+                    "icon-badge",
+                    "section-header",
+                    "call-to-action"
+                  ],
+                  "pattern": "^[a-z][a-z0-9-]*$"
+                },
+                "vars": {
+                  "type": "object",
+                  "required": [],
+                  "properties": {},
+                  "patternProperties": {
+                    "": {
+                      "anyOf": [
+                        { "type": "string" },
+                        { "type": "number" },
+                        { "type": "boolean" }
+                      ]
+                    }
+                  },
+                  "propertyNames": {
+                    "type": "string",
+                    "description": "Variable name (alphanumeric)",
+                    "title": "Block Variable Key",
+                    "examples": ["color", "icon", "text", "titleColor"],
+                    "pattern": "^[a-zA-Z][a-zA-Z0-9]*$"
+                  },
+                  "description": "Variables to substitute in the block template",
+                  "title": "Block Variables"
+                }
+              },
+              "additionalProperties": false,
+              "description": "Reference to a reusable block template with variable substitution",
+              "title": "Block Reference (Full Syntax)"
+            },
+            {
+              "type": "object",
+              "required": ["block", "vars"],
+              "properties": {
+                "block": {
+                  "type": "string",
+                  "description": "Name of the block to reference (kebab-case)",
+                  "title": "Block Reference Name",
+                  "examples": [
+                    "icon-badge",
+                    "section-header",
+                    "call-to-action"
+                  ],
+                  "pattern": "^[a-z][a-z0-9-]*$"
+                },
+                "vars": {
+                  "type": "object",
+                  "required": [],
+                  "properties": {},
+                  "patternProperties": {
+                    "": {
+                      "anyOf": [
+                        { "type": "string" },
+                        { "type": "number" },
+                        { "type": "boolean" }
+                      ]
+                    }
+                  },
+                  "propertyNames": {
+                    "type": "string",
+                    "description": "Variable name (alphanumeric)",
+                    "title": "Block Variable Key",
+                    "examples": ["color", "icon", "text", "titleColor"],
+                    "pattern": "^[a-zA-Z][a-zA-Z0-9]*$"
+                  },
+                  "description": "Variables to substitute in the block template",
+                  "title": "Block Variables"
+                }
+              },
+              "additionalProperties": false,
+              "description": "Shorthand block reference with variable substitution",
+              "title": "Block Reference (Hybrid)"
+            },
+            {
+              "type": "object",
+              "required": ["block"],
+              "properties": {
+                "block": {
+                  "type": "string",
+                  "description": "Name of the block to reference (kebab-case)",
+                  "title": "Block Reference Name",
+                  "examples": [
+                    "icon-badge",
+                    "section-header",
+                    "call-to-action"
+                  ],
+                  "pattern": "^[a-z][a-z0-9-]*$"
+                }
+              },
+              "additionalProperties": false,
+              "description": "Shorthand reference to a reusable block without variables",
+              "title": "Block Reference (Shorthand)"
+            }
+          ],
+          "description": "Reference to a reusable block template. Supports full syntax ($ref + vars), hybrid syntax (block + vars), or shorthand (block name only).",
+          "title": "Block Reference"
+        }
+      ],
+      "description": "A page section that can be either a component or block reference (with optional variables)"
     }
   },
   "type": "object",
@@ -6562,74 +6681,79 @@
           "children": {
             "type": "array",
             "items": {
-              "type": "object",
-              "required": ["type"],
-              "properties": {
-                "type": {
-                  "type": "string",
-                  "description": "Component type identifier",
-                  "title": "Component Type",
-                  "examples": ["icon", "text", "div", "button"]
-                },
-                "props": {
+              "anyOf": [
+                {
                   "type": "object",
-                  "required": [],
-                  "properties": {},
-                  "patternProperties": {
-                    "": {
-                      "anyOf": [
-                        { "type": "string" },
-                        { "type": "number" },
-                        { "type": "boolean" },
-                        {
-                          "type": "object",
-                          "required": [],
-                          "properties": {},
-                          "additionalProperties": {
-                            "$id": "/schemas/unknown",
-                            "title": "unknown"
-                          }
-                        },
-                        {
-                          "type": "array",
-                          "items": {
-                            "$id": "/schemas/unknown",
-                            "title": "unknown"
-                          }
+                  "required": ["type"],
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "description": "Component type identifier",
+                      "title": "Component Type",
+                      "examples": ["icon", "text", "div", "button"]
+                    },
+                    "props": {
+                      "type": "object",
+                      "required": [],
+                      "properties": {},
+                      "patternProperties": {
+                        "": {
+                          "anyOf": [
+                            { "type": "string" },
+                            { "type": "number" },
+                            { "type": "boolean" },
+                            {
+                              "type": "object",
+                              "required": [],
+                              "properties": {},
+                              "additionalProperties": {
+                                "$id": "/schemas/unknown",
+                                "title": "unknown"
+                              }
+                            },
+                            {
+                              "type": "array",
+                              "items": {
+                                "$id": "/schemas/unknown",
+                                "title": "unknown"
+                              }
+                            }
+                          ]
                         }
-                      ]
+                      },
+                      "propertyNames": {
+                        "type": "string",
+                        "description": "Valid JavaScript property name (camelCase) or HTML data-*/aria-* attribute (kebab-case)",
+                        "title": "Block Prop Key",
+                        "examples": [
+                          "className",
+                          "size",
+                          "enabled",
+                          "maxWidth",
+                          "data-testid",
+                          "aria-label"
+                        ],
+                        "pattern": "^([a-zA-Z][a-zA-Z0-9]*|data-[a-z]+(-[a-z]+)*|aria-[a-z]+(-[a-z]+)*)$"
+                      },
+                      "description": "Properties for block templates, supporting variable references",
+                      "title": "Block Props"
+                    },
+                    "children": { "$ref": "#/$defs/BlockChildren" },
+                    "content": {
+                      "type": "string",
+                      "description": "Text content (may contain $variable)",
+                      "title": "Text Content",
+                      "examples": ["$label", "$title", "Static text"]
                     }
                   },
-                  "propertyNames": {
-                    "type": "string",
-                    "description": "Valid JavaScript property name (camelCase) or HTML data-*/aria-* attribute (kebab-case)",
-                    "title": "Block Prop Key",
-                    "examples": [
-                      "className",
-                      "size",
-                      "enabled",
-                      "maxWidth",
-                      "data-testid",
-                      "aria-label"
-                    ],
-                    "pattern": "^([a-zA-Z][a-zA-Z0-9]*|data-[a-z]+(-[a-z]+)*|aria-[a-z]+(-[a-z]+)*)$"
-                  },
-                  "description": "Properties for block templates, supporting variable references",
-                  "title": "Block Props"
+                  "additionalProperties": false,
+                  "description": "Component element in a block template",
+                  "title": "Block Child Element"
                 },
-                "children": { "$ref": "#/$defs/BlockChildren" },
-                "content": {
-                  "type": "string",
-                  "description": "Text content (may contain $variable)",
-                  "title": "Text Content",
-                  "examples": ["$label", "$title", "Static text"]
-                }
-              },
-              "additionalProperties": false,
-              "description": "Component element in a block template",
-              "title": "Block Child Element"
+                { "type": "string" }
+              ]
             },
-            "description": "Child elements array for block templates",
+            "description": "Child elements array for block templates (components or strings)",
             "title": "Block Children"
           },
           "content": {

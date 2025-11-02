@@ -65,6 +65,11 @@ export function DynamicPage({
   const description = page.meta?.description || ''
   const themeStyles = generateThemeStyles(theme)
 
+  // Extract external scripts from page.scripts
+  // Support both 'external' (test shorthand) and 'externalScripts' (schema property)
+  // Prefer 'externalScripts' if both are present (canonical property)
+  const externalScripts = page.scripts?.externalScripts || page.scripts?.external || []
+
   return (
     <html lang={lang}>
       <head>
@@ -85,6 +90,14 @@ export function DynamicPage({
           href="/assets/output.css"
         />
         {themeStyles && <style dangerouslySetInnerHTML={{ __html: themeStyles }} />}
+        {externalScripts.map((script, index) => (
+          <script
+            key={index}
+            src={script.src}
+            {...(script.async && { async: true })}
+            {...(script.defer && { defer: true })}
+          />
+        ))}
       </head>
       <body>
         {page.layout?.banner && <Banner {...page.layout.banner} />}
