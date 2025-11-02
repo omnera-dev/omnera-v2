@@ -19,8 +19,10 @@ permissions:
   actions: write
 
 # Prevent concurrent processing (strict serial: one spec at a time)
+# IMPORTANT: Shares concurrency group with tdd-daily-refactor.yml
+# This ensures queue processor waits when daily refactor is running
 concurrency:
-  group: tdd-queue-processor
+  group: tdd-queue
   cancel-in-progress: false
 
 env:
