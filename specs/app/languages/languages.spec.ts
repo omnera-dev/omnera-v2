@@ -158,7 +158,7 @@ test.describe('Languages Configuration', () => {
     }
   )
 
-  test.fixme(
+  test(
     "APP-LANGUAGES-004: should automatically detect and set the browser's preferred language",
     { tag: '@spec' },
     async ({ page, startServerWithSchema, context }) => {
