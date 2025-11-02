@@ -317,10 +317,12 @@ export const NewsletterSchema = Schema.Struct({
  * @see specs/app/pages/layout/footer/footer.schema.json
  */
 export const FooterSchema = Schema.Struct({
-  enabled: Schema.Boolean.annotations({
-    description: 'Whether to show the footer',
-    default: true,
-  }),
+  enabled: Schema.optional(
+    Schema.Boolean.annotations({
+      description: 'Whether to show the footer',
+      default: true,
+    })
+  ),
   logo: Schema.optional(
     Schema.String.annotations({
       description: 'Footer logo path',

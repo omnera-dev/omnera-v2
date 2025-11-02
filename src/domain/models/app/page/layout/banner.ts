@@ -107,10 +107,17 @@ export const BannerLinkSchema = Schema.Struct({
  * @see specs/app/pages/layout/banner/banner.schema.json
  */
 export const BannerSchema = Schema.Struct({
-  enabled: Schema.Boolean.annotations({
-    description: 'Whether to show the banner',
-    default: false,
-  }),
+  enabled: Schema.optional(
+    Schema.Boolean.annotations({
+      description: 'Whether to show the banner',
+      default: false,
+    })
+  ),
+  message: Schema.optional(
+    Schema.String.annotations({
+      description: 'Banner message content',
+    })
+  ),
   text: Schema.optional(
     Schema.String.annotations({
       description: 'Banner text content',
