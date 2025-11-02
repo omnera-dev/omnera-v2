@@ -70,13 +70,23 @@ jobs:
           ISSUE_BODY=""
 
           # Skip if comment is from Claude bot (prevents race condition with error comments)
-          if [ "${{ github.event_name }}" = "issue_comment" ] && [ "$COMMENT_USER" = "claude[bot]" ]; then
-            echo "⚠️  Comment from Claude bot - skipping to prevent cancellation race"
-            echo "has_context=false" >> $GITHUB_OUTPUT
-            echo "issue_number=" >> $GITHUB_OUTPUT
-            echo "issue_body<<EOF" >> $GITHUB_OUTPUT
-            echo "EOF" >> $GITHUB_OUTPUT
-            exit 0
+          # Also skip "Claude Code is working" status comments (prevents self-cancellation)
+          if [ "${{ github.event_name }}" = "issue_comment" ]; then
+            if [ "$COMMENT_USER" = "claude[bot]" ]; then
+              echo "⚠️  Comment from Claude bot - skipping to prevent cancellation race"
+              echo "has_context=false" >> $GITHUB_OUTPUT
+              echo "issue_number=" >> $GITHUB_OUTPUT
+              echo "issue_body<<EOF" >> $GITHUB_OUTPUT
+              echo "EOF" >> $GITHUB_OUTPUT
+              exit 0
+            elif [[ "$EVENT_COMMENT_BODY" == *"Claude Code is working"* ]]; then
+              echo "⚠️  Claude Code status comment - skipping to prevent self-cancellation"
+              echo "has_context=false" >> $GITHUB_OUTPUT
+              echo "issue_number=" >> $GITHUB_OUTPUT
+              echo "issue_body<<EOF" >> $GITHUB_OUTPUT
+              echo "EOF" >> $GITHUB_OUTPUT
+              exit 0
+            fi
           fi
 
           # workflow_dispatch: Must have valid issue number
