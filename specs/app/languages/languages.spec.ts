@@ -237,12 +237,25 @@ test.describe('Languages Configuration', () => {
           ],
           detectBrowser: false,
         },
+        blocks: [
+          {
+            name: 'language-switcher',
+            type: 'language-switcher',
+            props: {
+              variant: 'dropdown',
+            },
+          },
+        ],
         pages: [
           {
             name: 'home',
             path: '/',
             meta: { lang: 'en-US', title: 'Test', description: 'Test page' },
-            sections: [],
+            sections: [
+              {
+                block: 'language-switcher',
+              },
+            ],
           },
         ],
       })
@@ -275,12 +288,25 @@ test.describe('Languages Configuration', () => {
           ],
           persistSelection: true,
         },
+        blocks: [
+          {
+            name: 'language-switcher',
+            type: 'language-switcher',
+            props: {
+              variant: 'dropdown',
+            },
+          },
+        ],
         pages: [
           {
             name: 'home',
             path: '/',
             meta: { lang: 'en-US', title: 'Test', description: 'Test page' },
-            sections: [],
+            sections: [
+              {
+                block: 'language-switcher',
+              },
+            ],
           },
         ],
       })
@@ -315,12 +341,25 @@ test.describe('Languages Configuration', () => {
           ],
           persistSelection: false,
         },
+        blocks: [
+          {
+            name: 'language-switcher',
+            type: 'language-switcher',
+            props: {
+              variant: 'dropdown',
+            },
+          },
+        ],
         pages: [
           {
             name: 'home',
             path: '/',
             meta: { lang: 'en-US', title: 'Test', description: 'Test page' },
-            sections: [],
+            sections: [
+              {
+                block: 'language-switcher',
+              },
+            ],
           },
         ],
       })
@@ -350,12 +389,25 @@ test.describe('Languages Configuration', () => {
             { code: 'ar-SA', label: 'العربية', direction: 'rtl' },
           ],
         },
+        blocks: [
+          {
+            name: 'language-switcher',
+            type: 'language-switcher',
+            props: {
+              variant: 'dropdown',
+            },
+          },
+        ],
         pages: [
           {
             name: 'home',
             path: '/',
             meta: { lang: 'en-US', title: 'Test', description: 'Test page' },
-            sections: [],
+            sections: [
+              {
+                block: 'language-switcher',
+              },
+            ],
           },
         ],
       })
