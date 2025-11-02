@@ -213,40 +213,13 @@ export function ComponentRenderer({
   readonly blocks?: Blocks
   readonly theme?: Theme
 }): Readonly<ReactElement | null> {
-  // Handle block references
-  if ('block' in component) {
-    // Block reference with optional vars: { block: 'name', vars?: {...} }
-    const vars = 'vars' in component ? (component as { vars?: Record<string, string | number | boolean> }).vars : undefined
-    const resolved = resolveBlock(component.block, blocks, vars)
-    if (!resolved) {
-      return (
-        <div
-          style={{
-            padding: '1rem',
-            border: '2px dashed red',
-            color: 'red',
-            fontFamily: 'monospace',
-          }}
-        >
-          Block not found: &quot;{component.block}&quot;
-          <br />
-          <small>Available blocks: {blocks?.map((b) => b.name).join(', ') || 'none'}</small>
-        </div>
-      )
-    }
-    return (
-      <ComponentRenderer
-        component={resolved.component}
-        blockName={resolved.name}
-        blocks={blocks}
-        theme={theme}
-      />
-    )
-  }
+  // Handle block references - supports both { block: 'name' } and { $ref: 'name' } syntaxes
+  if ('block' in component || '$ref' in component) {
+    // Extract reference name and vars based on syntax used
+    const refName = 'block' in component ? component.block : component.$ref
+    const vars = 'vars' in component ? component.vars : undefined
 
-  if ('$ref' in component) {
-    // Block reference with vars: { $ref: 'name', vars: {} }
-    const resolved = resolveBlock(component.$ref, blocks, component.vars)
+    const resolved = resolveBlock(refName, blocks, vars)
     if (!resolved) {
       return (
         <div
@@ -257,7 +230,7 @@ export function ComponentRenderer({
             fontFamily: 'monospace',
           }}
         >
-          Block not found: &quot;{component.$ref}&quot;
+          Block not found: &quot;{refName}&quot;
           <br />
           <small>Available blocks: {blocks?.map((b) => b.name).join(', ') || 'none'}</small>
         </div>

@@ -10,6 +10,11 @@
       "pattern": "^[a-z][a-z0-9-]*$",
       "description": "Name of the block to reference (must match a block name in the blocks array)"
     },
+    "block": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9-]*$",
+      "description": "Name of the block to reference (must match a block name in the blocks array) - alternative to $ref"
+    },
     "vars": {
       "type": "object",
       "description": "Variables to substitute in the block template",
@@ -31,7 +36,14 @@
       "additionalProperties": false
     }
   },
-  "required": ["$ref", "vars"],
+  "oneOf": [
+    {
+      "required": ["$ref", "vars"]
+    },
+    {
+      "required": ["block", "vars"]
+    }
+  ],
   "additionalProperties": false,
   "examples": [
     {
@@ -40,6 +52,13 @@
         "color": "orange",
         "icon": "users",
         "text": "6 à 15 personnes"
+      }
+    },
+    {
+      "block": "cta-button",
+      "vars": {
+        "label": "Get Started",
+        "variant": "primary"
       }
     },
     {

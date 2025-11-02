@@ -354,7 +354,7 @@ test.describe('Pages', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-011: should enable block reusability across pages via $ref',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
