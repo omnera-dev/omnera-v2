@@ -191,42 +191,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0 # Need full history to checkout branches
-
-      - name: Extract and checkout TDD branch if specified
-        id: branch
-        env:
-          # Security: Only use validated outputs from validate-context job
-          # Never directly reference untrusted github.event data here
-          ISSUE_BODY: ${{ needs.validate-context.outputs.issue_body }}
-          ISSUE_NUMBER: ${{ needs.validate-context.outputs.issue_number }}
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          # Output issue number for later steps
-          echo "issue_number=$ISSUE_NUMBER" >> $GITHUB_OUTPUT
-
-          # Extract TDD branch from issue body using env vars to avoid bash expansion
-          # Look for tdd/spec-* pattern in validated issue body
-          BRANCH=$(echo "$ISSUE_BODY" | grep -o 'tdd/spec-[A-Z-]*[0-9]*' | head -1 || true)
-
-          if [ -n "$BRANCH" ]; then
-            echo "Found TDD branch: $BRANCH"
-
-            # Check if branch exists remotely
-            if git ls-remote --heads origin "$BRANCH" | grep -q "$BRANCH"; then
-              echo "✅ Branch $BRANCH exists, checking out..."
-              git fetch origin "$BRANCH"
-              git checkout "$BRANCH"
-              echo "tdd_branch=$BRANCH" >> $GITHUB_OUTPUT
-              echo "using_tdd_branch=true" >> $GITHUB_OUTPUT
-            else
-              echo "⚠️  Branch $BRANCH does not exist remotely, staying on main"
-              echo "using_tdd_branch=false" >> $GITHUB_OUTPUT
-            fi
-          else
-            echo "No TDD branch found in issue, staying on main"
-            echo "using_tdd_branch=false" >> $GITHUB_OUTPUT
-          fi
+          fetch-depth: 0 # Need full history for Claude Code action
 
       - name: Run Claude Code
         id: claude
@@ -242,7 +207,7 @@ jobs:
           # For comment-triggered events: Omit prompt so action extracts from @claude comment
           prompt: >-
             ${{ github.event_name == 'workflow_dispatch' &&
-            format('Implement TDD spec with 7-step workflow: 1) Run @agent-e2e-test-fixer to fix the test 2) Run @agent-codebase-refactor-auditor to refactor code (ALWAYS) 3) Commit changes (bun run license first) 4) Create PR to main with tdd-automation label and include "Closes #{0}" in PR body 5) Monitor test.yml validation - if fails, analyze errors, fix, push, retry (max 3 attempts with retry:N labels) - if 3 failures, mark issue tdd-spec:failed and exit 6) BEFORE enabling auto-merge, check for conflicts: fetch latest main and attempt rebase - if conflicts exist, resolve intelligently by merging both changes (e.g. add both props, combine logic), then re-run validation - use git push --force-with-lease after rebase 7) After validation passes, enable PR auto-merge with --squash 8) DO NOT close issue manually (closes automatically on PR merge). Branch already exists and is checked out.', steps.branch.outputs.issue_number) || '' }}
+            format('Implement TDD spec with 7-step workflow: 1) Run @agent-e2e-test-fixer to fix the test 2) Run @agent-codebase-refactor-auditor to refactor code (ALWAYS) 3) Commit changes (bun run license first) 4) Create PR to main with tdd-automation label and include "Closes #{0}" in PR body 5) Monitor test.yml validation - if fails, analyze errors, fix, push, retry (max 3 attempts with retry:N labels) - if 3 failures, mark issue tdd-spec:failed and exit 6) BEFORE enabling auto-merge, check for conflicts: fetch latest main and attempt rebase - if conflicts exist, resolve intelligently by merging both changes (e.g. add both props, combine logic), then re-run validation - use git push --force-with-lease after rebase 7) After validation passes, enable PR auto-merge with --squash 8) DO NOT close issue manually (closes automatically on PR merge).', needs.validate-context.outputs.issue_number) || '' }}
 
           # Multi-agent workflow: e2e-test-fixer for implementation, codebase-refactor-auditor for quality
           # Both agents run sequentially on every spec (ALWAYS)
