@@ -85,6 +85,17 @@ export function DynamicPage({
           href="/assets/output.css"
         />
         {themeStyles && <style dangerouslySetInnerHTML={{ __html: themeStyles }} />}
+        {page.scripts?.externalScripts?.map((script, index) => (
+          <script
+            key={index}
+            src={script.src}
+            async={script.async}
+            defer={script.defer}
+            type={script.module ? 'module' : undefined}
+            integrity={script.integrity}
+            crossOrigin={script.crossorigin}
+          />
+        ))}
       </head>
       <body>
         {page.layout?.banner && <Banner {...page.layout.banner} />}
