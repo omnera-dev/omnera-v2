@@ -94,6 +94,55 @@
   let currentLanguageEl, dropdown, switcherButton
 
   /**
+   * Resolve translation key with fallback support
+   * Implements the $t:key pattern for centralized translations
+   *
+   * @param {string} key - Translation key
+   * @param {string} currentLang - Current language code
+   * @returns {string} Translated string or key if not found
+   */
+  function resolveTranslation(key, currentLang) {
+    if (!languagesConfig.translations) {
+      return key
+    }
+
+    const { translations, fallback } = languagesConfig
+
+    // Try current language first
+    const currentTranslations = translations[currentLang]
+    if (currentTranslations && currentTranslations[key]) {
+      return currentTranslations[key]
+    }
+
+    // Try fallback language (defaults to default language)
+    const fallbackLang = fallback || languagesConfig.default
+    if (fallbackLang !== currentLang) {
+      const fallbackTranslations = translations[fallbackLang]
+      if (fallbackTranslations && fallbackTranslations[key]) {
+        return fallbackTranslations[key]
+      }
+    }
+
+    // Translation not found - return key
+    return key
+  }
+
+  /**
+   * Updates all elements with translation keys
+   * Finds elements with data-translation-key attribute and updates their text
+   */
+  function updateTranslations() {
+    const translatedElements = document.querySelectorAll('[data-translation-key]')
+    translatedElements.forEach((element) => {
+      const key = element.getAttribute('data-translation-key')
+      if (key) {
+        const translation = resolveTranslation(key, currentLanguage)
+        element.textContent = translation
+      }
+    })
+  }
+
+  /**
    * Updates the language switcher UI to reflect current language
    * Finds the label for currentLanguage and updates DOM element
    */
@@ -104,6 +153,9 @@
     if (currentLanguageEl) {
       currentLanguageEl.textContent = label
     }
+
+    // Update all translated text when language changes
+    updateTranslations()
   }
 
   /**

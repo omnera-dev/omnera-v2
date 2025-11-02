@@ -9,6 +9,7 @@ import { type ReactElement } from 'react'
 import * as Renderers from './renderers/element-renderers'
 import { resolveBlock } from './utils/block-resolution'
 import { substitutePropsThemeTokens } from './utils/theme-tokens'
+import { resolveTranslationPattern } from '@/presentation/utils/translation-resolver'
 import type {
   BlockReference,
   SimpleBlockReference,
@@ -86,10 +87,18 @@ export function ComponentRenderer({
   // Apply theme token substitution to props
   const substitutedProps = substitutePropsThemeTokens(props, theme)
 
+  // Check if children contain translation patterns
+  const translationKeys = children
+    ?.filter((child): child is string => typeof child === 'string' && child.startsWith('$t:'))
+    .map((child) => child.slice(3)) // Remove '$t:' prefix
+
   // Render children recursively - children can be Component objects or strings
   const renderedChildren = children?.map((child: Component | string, index: number) => {
     if (typeof child === 'string') {
-      return child
+      // Resolve translation patterns ($t:key) to default language for SSR
+      // Client-side script will update when language changes
+      const defaultLang = languages?.default || 'en-US'
+      return resolveTranslationPattern(child, defaultLang, languages)
     }
     return (
       <ComponentRenderer
@@ -104,11 +113,16 @@ export function ComponentRenderer({
 
   // Merge className with other props and add data-block attribute if blockName is provided
   // For blocks without content, add min-height and display to ensure visibility
+  // Add translation key data attribute if children contain $t: patterns
   const hasContent = Boolean(content || children?.length)
   const elementProps = {
     ...substitutedProps,
     className: substitutedProps?.className as string | undefined,
     ...(blockName && { 'data-block': blockName }),
+    ...(translationKeys &&
+      translationKeys.length > 0 && {
+        'data-translation-key': translationKeys[0],
+      }),
     ...(blockName &&
       !hasContent && {
         style: {
