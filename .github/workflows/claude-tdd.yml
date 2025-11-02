@@ -33,6 +33,7 @@ on:
 concurrency:
   group: claude-${{
     github.event_name == 'workflow_dispatch' && 'tdd-automation' ||
+    (github.event_name == 'issue_comment' && github.event.comment.user.login == 'claude[bot]') && format('skip-bot-{0}', github.run_id) ||
     (github.event_name == 'issue_comment' && contains(github.event.issue.title, '🤖')) && 'tdd-automation' ||
     (github.event_name == 'issues' && contains(github.event.issue.title, '🤖')) && 'tdd-automation' ||
     github.event.issue.number ||
