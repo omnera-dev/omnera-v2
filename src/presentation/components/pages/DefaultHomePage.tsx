@@ -6,9 +6,9 @@
  */
 
 import { type ReactElement } from 'react'
+import { LanguageSwitcher } from '@/presentation/components/language-switcher'
 import { Badge } from '@/presentation/components/ui/badge'
 import { TypographyH1, TypographyLead } from '@/presentation/components/ui/typography'
-import { LanguageSwitcher } from '@/presentation/components/language-switcher'
 import type { App } from '@/domain/models/app'
 
 /**

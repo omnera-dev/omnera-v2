@@ -5,8 +5,8 @@
  * found in the LICENSE.md file in the root directory of this source tree.
  */
 
-import type { ReactElement } from 'react'
 import type { Languages } from '@/domain/models/app/languages'
+import type { ReactElement } from 'react'
 
 /**
  * Language Switcher Component
@@ -22,25 +22,26 @@ export function LanguageSwitcher({
   languages,
 }: {
   readonly languages?: Languages
-}): Readonly<ReactElement | null> {
+}): Readonly<ReactElement | undefined> {
   // If no languages config, don't render anything
   if (!languages || !languages.supported || languages.supported.length === 0) {
-    return null
+    return undefined
   }
 
   // Find the current language (use default or first supported)
-  const currentLanguageCode = languages.default || languages.supported[0].code
+  // Note: languages.supported[0] is safe because we already checked length > 0
+  const currentLanguageCode = languages.default || languages.supported[0]!.code
   const currentLanguage = languages.supported.find((lang) => lang.code === currentLanguageCode)
 
   // If no current language found, don't render
   if (!currentLanguage) {
-    return null
+    return undefined
   }
 
   return (
     <div data-testid="language-switcher">
       {currentLanguage.label}
-      {/* Hidden element for test assertions - counts available languages */}
+      {/* Hidden elements for test assertions - one per available language */}
       {languages.supported.map((lang) => (
         <div
           key={lang.code}

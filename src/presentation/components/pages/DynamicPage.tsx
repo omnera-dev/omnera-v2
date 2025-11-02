@@ -6,16 +6,16 @@
  */
 
 import { type ReactElement } from 'react'
+import { LanguageSwitcher } from '@/presentation/components/language-switcher'
 import { Banner } from '@/presentation/components/layout/banner'
 import { Footer } from '@/presentation/components/layout/footer'
 import { Navigation } from '@/presentation/components/layout/navigation'
 import { ComponentRenderer } from '@/presentation/components/sections/component-renderer'
-import { LanguageSwitcher } from '@/presentation/components/language-switcher'
 import type { Blocks } from '@/domain/models/app/blocks'
+import type { Languages } from '@/domain/models/app/languages'
 import type { OpenGraph } from '@/domain/models/app/page/meta/open-graph'
 import type { Page } from '@/domain/models/app/pages'
 import type { Theme } from '@/domain/models/app/theme'
-import type { Languages } from '@/domain/models/app/languages'
 
 /**
  * Generate CSS from theme colors
