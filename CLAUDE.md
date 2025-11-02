@@ -271,7 +271,29 @@ When triggered by @claude mention (posted by queue processor every 15 min):
    git push
    ```
 
-5. **ALWAYS create PR** with `tdd-automation` label and **include `Closes #<issue_number>` in PR body** - REQUIRED even if only `.fixme()` removal, NO EXCEPTIONS
+5. **⚠️ MANDATORY: CREATE PULL REQUEST ⚠️**
+
+   **THIS IS NOT OPTIONAL. THE WORKFLOW IS NOT COMPLETE WITHOUT A PR.**
+
+   You MUST create a PR with `tdd-automation` label and `Closes #<issue_number>` in PR body.
+
+   **WHY THIS IS CRITICAL**:
+   - ❌ No PR = Spec marked as `tdd-spec:failed` after 2 minutes
+   - ❌ No PR = Pipeline cannot validate your changes
+   - ❌ No PR = Issue cannot auto-close
+   - ✅ PR required EVEN IF you only removed `.fixme()` and made no other changes
+
+   **Example of what NOT to do** (Issue #1319):
+   - Claude removed `.fixme()`, committed, pushed
+   - Did NOT create PR → Marked as failed → Required manual intervention
+
+   **How to create PR**:
+   ```bash
+   gh pr create \
+     --title "fix: implement APP-VERSION-001" \
+     --body "Closes #1234" \
+     --label "tdd-automation"
+   ```
 
    **⚠️ CRITICAL - PR Body Format**: GitHub's auto-close keywords are format-sensitive
    - ✅ **Correct**: `Closes #1234` (issue number only, no extra text after number)
@@ -305,9 +327,31 @@ The system implements automatic error recovery:
 - **DO NOT** modify multiple specs at once (one spec = one issue)
 - **DO NOT** modify test logic - only remove `.fixme()` and implement code
 - **DO NOT** close issues manually - they close automatically on PR merge
+- **DO NOT** consider the task complete until PR is created
 - **DO** commit with format: `fix: implement {SPEC-ID}`
 - **DO** create PR with `tdd-automation` label and include `Closes #<issue_number>` in PR body (⚠️ no extra text after number)
 - **DO** retry up to 3 times on validation failures
+
+### Completion Checklist (Verify Before Finishing)
+
+Before considering a TDD spec issue complete, verify ALL of these:
+
+- [ ] Branch created (e.g., `tdd/spec-APP-VERSION-001`)
+- [ ] `.fixme()` removed from the ONE specific test
+- [ ] Code implemented to pass the test
+- [ ] Both agents run (e2e-test-fixer + codebase-refactor-auditor)
+- [ ] Copyright headers added (`bun run license`)
+- [ ] Changes committed with `fix: implement {SPEC-ID}` message
+- [ ] Changes pushed to remote branch
+- [ ] **⚠️ CRITICAL: Pull Request created** with:
+  - `tdd-automation` label
+  - `Closes #<issue_number>` in PR body (no extra text after number)
+  - Proper title: `fix: implement {SPEC-ID}`
+- [ ] PR URL verified (check `gh pr list --label tdd-automation`)
+
+**If ANY checkbox is unchecked, the task is NOT complete.**
+
+**Remember**: Issue #1319 failed because PR was not created. Don't repeat this mistake.
 
 ### Queue System Architecture
 
