@@ -37,6 +37,14 @@ test.describe('Color Palette', () => {
             secondary: '#6c757d',
           },
         },
+        pages: [
+          {
+            name: 'home',
+            path: '/',
+            meta: { lang: 'en-US', title: 'Test', description: 'Test page' },
+            sections: [],
+          },
+        ],
       })
 
       // WHEN: colors are defined with hex values
@@ -62,6 +70,14 @@ test.describe('Color Palette', () => {
             'primary-transparent': '#007bff80',
           },
         },
+        pages: [
+          {
+            name: 'home',
+            path: '/',
+            meta: { lang: 'en-US', title: 'Test', description: 'Test page' },
+            sections: [],
+          },
+        ],
       })
 
       // WHEN: color includes alpha channel
@@ -89,6 +105,14 @@ test.describe('Color Palette', () => {
             danger: 'rgb(255, 0, 0)',
           },
         },
+        pages: [
+          {
+            name: 'home',
+            path: '/',
+            meta: { lang: 'en-US', title: 'Test', description: 'Test page' },
+            sections: [],
+          },
+        ],
       })
 
       // WHEN: color is defined as rgb(255, 0, 0)
@@ -114,6 +138,14 @@ test.describe('Color Palette', () => {
             'danger-semi': 'rgba(255, 0, 0, 0.5)',
           },
         },
+        pages: [
+          {
+            name: 'home',
+            path: '/',
+            meta: { lang: 'en-US', title: 'Test', description: 'Test page' },
+            sections: [],
+          },
+        ],
       })
 
       // WHEN: color is defined as rgba(255, 0, 0, 0.5)
@@ -139,6 +171,14 @@ test.describe('Color Palette', () => {
             primary: 'hsl(210, 100%, 50%)',
           },
         },
+        pages: [
+          {
+            name: 'home',
+            path: '/',
+            meta: { lang: 'en-US', title: 'Test', description: 'Test page' },
+            sections: [],
+          },
+        ],
       })
 
       // WHEN: color is defined as hsl(210, 100%, 50%)
@@ -164,6 +204,14 @@ test.describe('Color Palette', () => {
             'primary-overlay': 'hsla(210, 100%, 50%, 0.8)',
           },
         },
+        pages: [
+          {
+            name: 'home',
+            path: '/',
+            meta: { lang: 'en-US', title: 'Test', description: 'Test page' },
+            sections: [],
+          },
+        ],
       })
 
       // WHEN: color is defined as hsla(210, 100%, 50%, 0.8)
@@ -192,6 +240,14 @@ test.describe('Color Palette', () => {
             'primary-dark': '#003d7a',
           },
         },
+        pages: [
+          {
+            name: 'home',
+            path: '/',
+            meta: { lang: 'en-US', title: 'Test', description: 'Test page' },
+            sections: [],
+          },
+        ],
       })
 
       // WHEN: colors use kebab-case variant naming
@@ -221,6 +277,14 @@ test.describe('Color Palette', () => {
             'gray-900': '#212529',
           },
         },
+        pages: [
+          {
+            name: 'home',
+            path: '/',
+            meta: { lang: 'en-US', title: 'Test', description: 'Test page' },
+            sections: [],
+          },
+        ],
       })
 
       // WHEN: colors use numbered scale system
@@ -251,6 +315,14 @@ test.describe('Color Palette', () => {
             dark: '#343a40',
           },
         },
+        pages: [
+          {
+            name: 'home',
+            path: '/',
+            meta: { lang: 'en-US', title: 'Test', description: 'Test page' },
+            sections: [],
+          },
+        ],
       })
 
       // WHEN: palette includes primary, secondary, success, danger, warning, info, light, dark, grays
@@ -279,6 +351,14 @@ test.describe('Color Palette', () => {
             'border-subtle': '#dee2e6',
           },
         },
+        pages: [
+          {
+            name: 'home',
+            path: '/',
+            meta: { lang: 'en-US', title: 'Test', description: 'Test page' },
+            sections: [],
+          },
+        ],
       })
 
       // WHEN: color names use multi-word kebab-case format

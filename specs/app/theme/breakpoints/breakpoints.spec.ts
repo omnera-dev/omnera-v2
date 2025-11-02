@@ -40,6 +40,14 @@ test.describe('Breakpoints', () => {
             '2xl': '1536px',
           },
         },
+        pages: [
+          {
+            name: 'home',
+            path: '/',
+            meta: { lang: 'en-US', title: 'Test', description: 'Test page' },
+            sections: [],
+          },
+        ],
       })
 
       // WHEN: responsive system uses common breakpoints
@@ -63,6 +71,14 @@ test.describe('Breakpoints', () => {
             tablet: '768px',
           },
         },
+        pages: [
+          {
+            name: 'home',
+            path: '/',
+            meta: { lang: 'en-US', title: 'Test', description: 'Test page' },
+            sections: [],
+          },
+        ],
       })
 
       // WHEN: breakpoints use px units
@@ -87,6 +103,14 @@ test.describe('Breakpoints', () => {
             lg: '1024px',
           },
         },
+        pages: [
+          {
+            name: 'home',
+            path: '/',
+            meta: { lang: 'en-US', title: 'Test', description: 'Test page' },
+            sections: [],
+          },
+        ],
       })
 
       // WHEN: breakpoints increase from small to large
@@ -116,6 +140,14 @@ test.describe('Breakpoints', () => {
             md: '768px',
           },
         },
+        pages: [
+          {
+            name: 'home',
+            path: '/',
+            meta: { lang: 'en-US', title: 'Test', description: 'Test page' },
+            sections: [],
+          },
+        ],
       })
 
       // WHEN: breakpoint uses simple names
@@ -140,6 +172,14 @@ test.describe('Breakpoints', () => {
             wide: '1920px',
           },
         },
+        pages: [
+          {
+            name: 'home',
+            path: '/',
+            meta: { lang: 'en-US', title: 'Test', description: 'Test page' },
+            sections: [],
+          },
+        ],
       })
 
       // WHEN: project uses semantic breakpoint names
@@ -164,6 +204,14 @@ test.describe('Breakpoints', () => {
             lg: '1024px',
           },
         },
+        pages: [
+          {
+            name: 'home',
+            path: '/',
+            meta: { lang: 'en-US', title: 'Test', description: 'Test page' },
+            sections: [],
+          },
+        ],
       })
 
       // WHEN: theme breakpoints align with responsive variants

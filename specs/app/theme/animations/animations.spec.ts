@@ -36,6 +36,14 @@ test.describe('Animation Configuration', () => {
             fadeIn: true,
           },
         },
+        pages: [
+          {
+            name: 'home',
+            path: '/',
+            meta: { lang: 'en-US', title: 'Test', description: 'Test page' },
+            sections: [],
+          },
+        ],
       })
 
       // WHEN: animation is simply enabled/disabled
@@ -58,6 +66,14 @@ test.describe('Animation Configuration', () => {
             slideIn: 'slide-in 0.5s ease-out',
           },
         },
+        pages: [
+          {
+            name: 'home',
+            path: '/',
+            meta: { lang: 'en-US', title: 'Test', description: 'Test page' },
+            sections: [],
+          },
+        ],
       })
 
       // WHEN: animation uses CSS shorthand (e.g., 'slide-in 0.5s ease-out')
@@ -86,6 +102,14 @@ test.describe('Animation Configuration', () => {
             },
           },
         },
+        pages: [
+          {
+            name: 'home',
+            path: '/',
+            meta: { lang: 'en-US', title: 'Test', description: 'Test page' },
+            sections: [],
+          },
+        ],
       })
 
       // WHEN: animation has custom duration '300ms' and easing 'ease-in-out'
@@ -111,6 +135,14 @@ test.describe('Animation Configuration', () => {
             },
           },
         },
+        pages: [
+          {
+            name: 'home',
+            path: '/',
+            meta: { lang: 'en-US', title: 'Test', description: 'Test page' },
+            sections: [],
+          },
+        ],
       })
 
       // WHEN: animation should wait before starting
@@ -142,6 +174,14 @@ test.describe('Animation Configuration', () => {
             },
           },
         },
+        pages: [
+          {
+            name: 'home',
+            path: '/',
+            meta: { lang: 'en-US', title: 'Test', description: 'Test page' },
+            sections: [],
+          },
+        ],
       })
 
       // WHEN: animation uses custom CSS keyframes
@@ -166,6 +206,14 @@ test.describe('Animation Configuration', () => {
             },
           },
         },
+        pages: [
+          {
+            name: 'home',
+            path: '/',
+            meta: { lang: 'en-US', title: 'Test', description: 'Test page' },
+            sections: [],
+          },
+        ],
       })
 
       // WHEN: animation is disabled via config
@@ -193,6 +241,14 @@ test.describe('Animation Configuration', () => {
             float: true,
           },
         },
+        pages: [
+          {
+            name: 'home',
+            path: '/',
+            meta: { lang: 'en-US', title: 'Test', description: 'Test page' },
+            sections: [],
+          },
+        ],
       })
 
       // WHEN: theme defines standard animation library
@@ -219,6 +275,14 @@ test.describe('Animation Configuration', () => {
             },
           },
         },
+        pages: [
+          {
+            name: 'home',
+            path: '/',
+            meta: { lang: 'en-US', title: 'Test', description: 'Test page' },
+            sections: [],
+          },
+        ],
       })
 
       // WHEN: global transition timing is defined

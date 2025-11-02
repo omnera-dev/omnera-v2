@@ -38,6 +38,14 @@ test.describe('Font Configuration', () => {
             },
           },
         },
+        pages: [
+          {
+            name: 'home',
+            path: '/',
+            meta: { lang: 'en-US', title: 'Test', description: 'Test page' },
+            sections: [],
+          },
+        ],
       })
 
       // WHEN: font uses minimal configuration
@@ -63,6 +71,14 @@ test.describe('Font Configuration', () => {
             },
           },
         },
+        pages: [
+          {
+            name: 'home',
+            path: '/',
+            meta: { lang: 'en-US', title: 'Test', description: 'Test page' },
+            sections: [],
+          },
+        ],
       })
 
       // WHEN: font includes fallback fonts (e.g., 'Inter', 'system-ui, sans-serif')
@@ -91,6 +107,14 @@ test.describe('Font Configuration', () => {
             },
           },
         },
+        pages: [
+          {
+            name: 'home',
+            path: '/',
+            meta: { lang: 'en-US', title: 'Test', description: 'Test page' },
+            sections: [],
+          },
+        ],
       })
 
       // WHEN: font supports various weight options
@@ -116,6 +140,14 @@ test.describe('Font Configuration', () => {
             },
           },
         },
+        pages: [
+          {
+            name: 'home',
+            path: '/',
+            meta: { lang: 'en-US', title: 'Test', description: 'Test page' },
+            sections: [],
+          },
+        ],
       })
 
       // WHEN: font uses italic style
@@ -142,6 +174,14 @@ test.describe('Font Configuration', () => {
             },
           },
         },
+        pages: [
+          {
+            name: 'home',
+            path: '/',
+            meta: { lang: 'en-US', title: 'Test', description: 'Test page' },
+            sections: [],
+          },
+        ],
       })
 
       // WHEN: font defines default size and line spacing
@@ -168,6 +208,14 @@ test.describe('Font Configuration', () => {
             },
           },
         },
+        pages: [
+          {
+            name: 'home',
+            path: '/',
+            meta: { lang: 'en-US', title: 'Test', description: 'Test page' },
+            sections: [],
+          },
+        ],
       })
 
       // WHEN: font includes letter spacing for display text
@@ -193,6 +241,14 @@ test.describe('Font Configuration', () => {
             },
           },
         },
+        pages: [
+          {
+            name: 'home',
+            path: '/',
+            meta: { lang: 'en-US', title: 'Test', description: 'Test page' },
+            sections: [],
+          },
+        ],
       })
 
       // WHEN: font uses text transformation
@@ -218,6 +274,14 @@ test.describe('Font Configuration', () => {
             },
           },
         },
+        pages: [
+          {
+            name: 'home',
+            path: '/',
+            meta: { lang: 'en-US', title: 'Test', description: 'Test page' },
+            sections: [],
+          },
+        ],
       })
 
       // WHEN: font is loaded from external source
@@ -251,6 +315,14 @@ test.describe('Font Configuration', () => {
             },
           },
         },
+        pages: [
+          {
+            name: 'home',
+            path: '/',
+            meta: { lang: 'en-US', title: 'Test', description: 'Test page' },
+            sections: [],
+          },
+        ],
       })
 
       // WHEN: font is fully configured
@@ -285,6 +357,14 @@ test.describe('Font Configuration', () => {
             },
           },
         },
+        pages: [
+          {
+            name: 'home',
+            path: '/',
+            meta: { lang: 'en-US', title: 'Test', description: 'Test page' },
+            sections: [],
+          },
+        ],
       })
 
       // WHEN: different fonts are defined for headings, body text, and code

@@ -313,6 +313,14 @@ test.describe('Reusable Blocks', () => {
             { name: 'duplicate-name', type: 'div' },
             { name: 'duplicate-name', type: 'span' },
           ],
+          pages: [
+            {
+              name: 'home',
+              path: '/',
+              meta: { lang: 'en-US', title: 'Test', description: 'Test page' },
+              sections: [],
+            },
+          ],
         })
       }).rejects.toThrow(/duplicate.*name|unique/i)
     }
