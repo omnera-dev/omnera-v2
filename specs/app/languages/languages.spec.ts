@@ -41,6 +41,25 @@ test.describe('Languages Configuration', () => {
             },
           ],
         },
+        blocks: [
+          {
+            name: 'language-switcher',
+            type: 'language-switcher',
+            props: {
+              variant: 'dropdown',
+            },
+          },
+        ],
+        pages: [
+          {
+            path: '/',
+            sections: [
+              {
+                block: 'language-switcher',
+              },
+            ],
+          },
+        ],
       })
 
       // WHEN: app is configured with minimal language setup
