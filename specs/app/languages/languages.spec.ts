@@ -451,7 +451,7 @@ test.describe('Languages Configuration', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-LANGUAGES-009: should display all languages with their native labels and flags',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
