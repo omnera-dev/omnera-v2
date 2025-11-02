@@ -248,7 +248,7 @@ test.describe('Languages Configuration', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-LANGUAGES-005: should use the default language without auto-detection',
     { tag: '@spec' },
     async ({ page, startServerWithSchema, context }) => {
