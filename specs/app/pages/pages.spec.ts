@@ -49,7 +49,7 @@ test.describe('Pages', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-002: should validate with minimal configuration',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
