@@ -221,7 +221,7 @@
               },
               "openGraph": {
                 "type": "object",
-                "required": ["title", "description", "type", "url"],
+                "required": [],
                 "properties": {
                   "title": {
                     "type": "string",
@@ -1387,83 +1387,96 @@
                 "title": "DNS Prefetch"
               },
               "analytics": {
-                "type": "object",
-                "required": ["providers"],
-                "properties": {
-                  "providers": {
-                    "type": "array",
-                    "items": {
-                      "type": "object",
-                      "required": ["name"],
-                      "properties": {
-                        "name": {
-                          "type": "string",
-                          "enum": [
-                            "google",
-                            "plausible",
-                            "matomo",
-                            "fathom",
-                            "posthog",
-                            "mixpanel"
-                          ],
-                          "description": "Analytics provider name"
-                        },
-                        "enabled": {
-                          "type": "boolean",
-                          "description": "Whether this provider is enabled",
-                          "default": true
-                        },
-                        "scripts": {
-                          "type": "array",
-                          "items": {
-                            "type": "object",
-                            "required": ["src"],
-                            "properties": {
-                              "src": {
-                                "type": "string",
-                                "description": "Script source URL"
-                              },
-                              "async": {
-                                "type": "boolean",
-                                "description": "Load script asynchronously",
-                                "default": true
-                              },
-                              "defer": {
-                                "type": "boolean",
-                                "description": "Defer script execution"
+                "anyOf": [
+                  {
+                    "type": "object",
+                    "required": [],
+                    "properties": {},
+                    "additionalProperties": {
+                      "$id": "/schemas/unknown",
+                      "title": "unknown"
+                    }
+                  },
+                  {
+                    "type": "object",
+                    "required": ["providers"],
+                    "properties": {
+                      "providers": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "required": ["name"],
+                          "properties": {
+                            "name": {
+                              "type": "string",
+                              "enum": [
+                                "google",
+                                "plausible",
+                                "matomo",
+                                "fathom",
+                                "posthog",
+                                "mixpanel"
+                              ],
+                              "description": "Analytics provider name"
+                            },
+                            "enabled": {
+                              "type": "boolean",
+                              "description": "Whether this provider is enabled",
+                              "default": true
+                            },
+                            "scripts": {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "required": ["src"],
+                                "properties": {
+                                  "src": {
+                                    "type": "string",
+                                    "description": "Script source URL"
+                                  },
+                                  "async": {
+                                    "type": "boolean",
+                                    "description": "Load script asynchronously",
+                                    "default": true
+                                  },
+                                  "defer": {
+                                    "type": "boolean",
+                                    "description": "Defer script execution"
+                                  }
+                                },
+                                "additionalProperties": false,
+                                "description": "Analytics script"
                               }
                             },
-                            "additionalProperties": false,
-                            "description": "Analytics script"
-                          }
-                        },
-                        "initScript": {
-                          "type": "string",
-                          "description": "Inline JavaScript to initialize the analytics"
-                        },
-                        "dnsPrefetch": {
-                          "type": "string",
-                          "description": "Domain to DNS prefetch for this provider"
-                        },
-                        "config": {
-                          "type": "object",
-                          "required": [],
-                          "properties": {},
-                          "additionalProperties": {
-                            "$id": "/schemas/unknown",
-                            "title": "unknown"
+                            "initScript": {
+                              "type": "string",
+                              "description": "Inline JavaScript to initialize the analytics"
+                            },
+                            "dnsPrefetch": {
+                              "type": "string",
+                              "description": "Domain to DNS prefetch for this provider"
+                            },
+                            "config": {
+                              "type": "object",
+                              "required": [],
+                              "properties": {},
+                              "additionalProperties": {
+                                "$id": "/schemas/unknown",
+                                "title": "unknown"
+                              },
+                              "description": "Provider-specific configuration"
+                            }
                           },
-                          "description": "Provider-specific configuration"
+                          "additionalProperties": false,
+                          "description": "Analytics provider"
                         }
-                      },
-                      "additionalProperties": false,
-                      "description": "Analytics provider"
-                    }
+                      }
+                    },
+                    "additionalProperties": false,
+                    "description": "Configuration for analytics providers",
+                    "title": "Analytics Configuration"
                   }
-                },
-                "additionalProperties": false,
-                "description": "Configuration for analytics providers",
-                "title": "Analytics Configuration"
+                ]
               },
               "customElements": {
                 "type": "array",
@@ -1498,6 +1511,114 @@
                 },
                 "description": "Additional custom elements to add to the page head",
                 "title": "Custom Head Elements"
+              },
+              "twitterCard": {
+                "type": "object",
+                "required": ["card"],
+                "properties": {
+                  "card": {
+                    "type": "string",
+                    "enum": ["summary", "summary_large_image", "app", "player"],
+                    "description": "Type of Twitter Card"
+                  },
+                  "title": {
+                    "type": "string",
+                    "description": "Twitter Card title",
+                    "title": "maxLength(70)",
+                    "maxLength": 70
+                  },
+                  "description": {
+                    "type": "string",
+                    "description": "Twitter Card description",
+                    "title": "maxLength(200)",
+                    "maxLength": 200
+                  },
+                  "image": {
+                    "type": "string",
+                    "description": "Image URL (min 144x144px for summary, 300x157px for large)"
+                  },
+                  "imageAlt": {
+                    "type": "string",
+                    "description": "Alternative text for the image",
+                    "title": "maxLength(420)",
+                    "maxLength": 420
+                  },
+                  "site": {
+                    "type": "string",
+                    "description": "Twitter @username of website",
+                    "examples": ["@mysite", "@johndoe"],
+                    "pattern": "^@[A-Za-z0-9_]+$"
+                  },
+                  "creator": {
+                    "type": "string",
+                    "description": "Twitter @username of content creator",
+                    "examples": ["@mysite", "@johndoe"],
+                    "pattern": "^@[A-Za-z0-9_]+$"
+                  },
+                  "player": {
+                    "type": "string",
+                    "description": "HTTPS URL to video player (for player cards)"
+                  },
+                  "playerWidth": {
+                    "$ref": "#/$defs/Int",
+                    "description": "Width of video player in pixels",
+                    "title": "greaterThanOrEqualTo(1)",
+                    "minimum": 1
+                  },
+                  "playerHeight": {
+                    "$ref": "#/$defs/Int",
+                    "description": "Height of video player in pixels",
+                    "title": "greaterThanOrEqualTo(1)",
+                    "minimum": 1
+                  },
+                  "appName": {
+                    "type": "object",
+                    "required": [],
+                    "properties": {
+                      "iPhone": {
+                        "type": "string",
+                        "description": "App name for iPhone"
+                      },
+                      "iPad": {
+                        "type": "string",
+                        "description": "App name for iPad"
+                      },
+                      "googlePlay": {
+                        "type": "string",
+                        "description": "App name for Google Play"
+                      }
+                    },
+                    "additionalProperties": false,
+                    "description": "Name of app (for app cards)"
+                  },
+                  "appId": {
+                    "type": "object",
+                    "required": [],
+                    "properties": {
+                      "iPhone": {
+                        "type": "string",
+                        "description": "App Store ID for iPhone"
+                      },
+                      "iPad": {
+                        "type": "string",
+                        "description": "App Store ID for iPad"
+                      },
+                      "googlePlay": {
+                        "type": "string",
+                        "description": "Google Play package name (e.g., com.example.myapp)"
+                      }
+                    },
+                    "additionalProperties": false,
+                    "description": "App ID in respective stores"
+                  }
+                },
+                "additionalProperties": false,
+                "description": "Twitter Card metadata for rich Twitter/X sharing",
+                "title": "Twitter Card Metadata"
+              },
+              "structuredData": {
+                "$id": "/schemas/unknown",
+                "title": "unknown"
               }
             },
             "additionalProperties": false,

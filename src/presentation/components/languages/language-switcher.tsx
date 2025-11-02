@@ -50,7 +50,7 @@ export function LanguageSwitcher({
       {/* Dropdown menu - hidden by default, shown by client-side script */}
       <div
         data-language-dropdown
-        className="absolute left-0 top-full z-10 hidden"
+        className="absolute top-full left-0 z-10 hidden"
       >
         {languages.supported.map((lang) => (
           <button

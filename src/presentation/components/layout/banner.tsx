@@ -19,9 +19,5 @@ import type { ReactElement } from 'react'
 export function Banner({ message, text }: Readonly<BannerProps>): Readonly<ReactElement> {
   const content = message || text
 
-  return (
-    <div data-testid="banner">
-      {content && <span>{content}</span>}
-    </div>
-  )
+  return <div data-testid="banner">{content && <span>{content}</span>}</div>
 }
