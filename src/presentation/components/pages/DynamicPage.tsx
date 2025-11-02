@@ -67,8 +67,8 @@ export function DynamicPage({
 
   // Extract external scripts from page.scripts
   // Support both 'external' (test shorthand) and 'externalScripts' (schema property)
-  const externalScripts =
-    (page.scripts as any)?.external || page.scripts?.externalScripts || []
+  // Prefer 'externalScripts' if both are present (canonical property)
+  const externalScripts = page.scripts?.externalScripts || page.scripts?.external || []
 
   return (
     <html lang={lang}>
@@ -90,7 +90,7 @@ export function DynamicPage({
           href="/assets/output.css"
         />
         {themeStyles && <style dangerouslySetInnerHTML={{ __html: themeStyles }} />}
-        {externalScripts.map((script: any, index: number) => (
+        {externalScripts.map((script, index) => (
           <script
             key={index}
             src={script.src}
