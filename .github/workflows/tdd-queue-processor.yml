@@ -125,8 +125,11 @@ jobs:
           - [ ] Changes pushed to remote branch
           - [ ] **⚠️ CRITICAL: Pull Request created** (verify: \`gh pr list --label tdd-automation\`)
           - [ ] PR has correct format (title, body with \`Closes #$ISSUE_NUMBER\`, label)
+          - [ ] **⚠️ CRITICAL: Auto-merge enabled** after validation passes (command: \`gh pr merge --auto --squash\`)
 
-          **⚠️ MOST COMMON FAILURE**: Missing PR creation (see issue #1319) → spec marked failed after 2 min
+          **⚠️ MOST COMMON FAILURES**:
+          1. Missing PR creation (issue #1319) → spec marked failed after 2 min
+          2. Missing auto-merge → PR sits open, never merges, issue never closes
 
           ---
 
@@ -201,18 +204,45 @@ jobs:
 
           ---
 
-          ## 🔍 What Happens Next (Automatic - No Action Needed)
+          ## 🔄 Validation & Auto-Merge (Your Responsibility)
 
-          After you create the PR:
-          1. **Verification** (2 min): Workflow verifies PR exists
-             - ✅ PR found → Continue to validation
-             - ❌ No PR → Issue marked \`tdd-spec:failed\`, you exit
-          2. **Validation** (test.yml CI): Runs lint, typecheck, unit tests, E2E regression
-             - ✅ Pass → PR auto-merges with squash, issue auto-closes
-             - ❌ Fail → You fix code, push again (max 3 retries total)
-          3. **Final State**:
-             - Success: Issue closed with \`tdd-spec:completed\` label
-             - Failure (3 retries): Issue marked \`tdd-spec:failed\`, requires human review
+          After PR creation, you MUST monitor validation and enable auto-merge:
+
+          ### Phase 1: Monitor Validation
+          - test.yml CI runs: lint, typecheck, unit tests, E2E regression
+          - Check status: \`gh pr checks --watch\`
+
+          ### Phase 2A: If Validation PASSES ✅
+          **YOU MUST enable auto-merge**:
+          \`\`\`bash
+          gh pr merge --auto --squash
+          \`\`\`
+          - PR will auto-merge when ready
+          - Issue will auto-close (via \`Closes #$ISSUE_NUMBER\`)
+          - Exit successfully
+
+          ### Phase 2B: If Validation FAILS ❌
+          **Retry loop** (max 3 attempts):
+          1. Analyze test.yml error logs
+          2. Fix code issues
+          3. Add retry label: \`gh issue edit $ISSUE_NUMBER --add-label retry:N\` (N=1,2,3)
+          4. Commit and push fixes
+          5. Wait for next validation
+          6. If passes → Enable auto-merge (Phase 2A)
+          7. If 3rd failure → Mark \`tdd-spec:failed\` and exit
+
+          **After 3 failures**:
+          \`\`\`bash
+          gh issue edit $ISSUE_NUMBER \\
+            --remove-label tdd-spec:in-progress \\
+            --add-label tdd-spec:failed
+          gh issue comment $ISSUE_NUMBER \\
+            --body \"❌ Failed after 3 attempts. Manual review required.\"
+          \`\`\`
+
+          ---
+
+          **Detailed Documentation**: If you need additional context, see \`@docs/development/tdd-automation-pipeline.md\`
 
           ---
           *🤖 Automated via [Queue Processor](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})*"
