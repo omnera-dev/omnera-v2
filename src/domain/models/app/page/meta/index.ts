@@ -184,10 +184,7 @@ export const MetaSchema = Schema.Struct({
   preload: Schema.optional(PreloadSchema),
   dnsPrefetch: Schema.optional(DnsPrefetchSchema),
   analytics: Schema.optional(
-    Schema.Union(
-      Schema.Record({ key: Schema.String, value: Schema.Unknown }),
-      AnalyticsSchema
-    )
+    Schema.Union(Schema.Record({ key: Schema.String, value: Schema.Unknown }), AnalyticsSchema)
   ),
   customElements: Schema.optional(CustomElementsSchema),
   // Aliases for test compatibility

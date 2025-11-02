@@ -1,33 +1,33 @@
 # Omnera Development Roadmap
 
-> **Last Generated**: 2025-11-01
+> **Last Generated**: 2025-11-02
 
 ## Overall Progress
 
-██████████████░░░░░░░░░░░░░░░░ 45%
+██████████████░░░░░░░░░░░░░░░░ 46%
 
-**Combined Progress**: 45% Complete
+**Combined Progress**: 46% Complete
 
 ### Individual Metrics
 
-**📋 App Schema Progress**: 68% (835/1236 properties, 835 current)
-████████████████████░░░░░░░░░░ 68%
+**📋 App Schema Progress**: 70% (866/1237 properties, 866 current)
+█████████████████████░░░░░░░░░ 70%
 
 **🌐 API Schema Progress**: 63% (12/19 endpoints, 29 current)
 ███████████████████░░░░░░░░░░░ 63%
 
-**🧪 Test Implementation**: 3% (58/1785 specs passing)
-█░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ 3%
+**🧪 Test Implementation**: 5% (82/1791 specs passing)
+██░░░░░░░░░░░░░░░░░░░░░░░░░░░░ 5%
 
 ---
 
 ## 1. App Schema Progress
 
-📋 **Goal**: 1236 properties
-📦 **Current**: 835 properties
-📊 **Completion**: 68%
+📋 **Goal**: 1237 properties
+📦 **Current**: 866 properties
+📊 **Completion**: 70%
 
-**Next Steps**: Implement missing properties (401 remaining)
+**Next Steps**: Implement missing properties (371 remaining)
 
 👉 **[View Detailed App Roadmap](specs/app/ROADMAP.md)**
 
@@ -47,9 +47,9 @@
 
 ## 3. Test Implementation Status
 
-🧪 **Total Specs**: 1785
-✅ **DONE**: 58 (3%)
-🚧 **WIP**: 638 (36%)
+🧪 **Total Specs**: 1791
+✅ **DONE**: 82 (5%)
+🚧 **WIP**: 620 (35%)
 ⏳ **TODO**: 1089 (61%)
 
 **Next Steps**: Convert TODO specs to WIP, then to DONE
@@ -60,6 +60,6 @@
 
 For complete specification listings and implementation details:
 
-- 📋 **[App Schema Roadmap](specs/app/ROADMAP.md)** - All 1718 app specifications
+- 📋 **[App Schema Roadmap](specs/app/ROADMAP.md)** - All 1724 app specifications
 - 🌐 **[API Schema Roadmap](specs/api/ROADMAP.md)** - All 43 API specifications
 - ⚙️ **[Admin UI Roadmap](specs/admin/ROADMAP.md)** - All 24 admin specifications

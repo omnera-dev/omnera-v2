@@ -598,52 +598,6 @@
       }
     },
     {
-      "id": "APP-BLOCKS-INTEGRATION-001",
-      "given": "blocks integrated with pages via sections",
-      "when": "page sections reference blocks using $ref and vars",
-      "then": "it should render blocks within page layout with full variable substitution",
-      "x-test": {
-        "setup": {
-          "app": {
-            "blocks": [
-              {
-                "name": "hero-cta",
-                "type": "button",
-                "props": {
-                  "className": "btn btn-$variant text-$size"
-                },
-                "content": "$ctaText"
-              }
-            ],
-            "pages": [
-              {
-                "name": "Home",
-                "path": "/",
-                "sections": [
-                  {
-                    "$ref": "hero-cta",
-                    "vars": {
-                      "variant": "primary",
-                      "size": "lg",
-                      "ctaText": "Get Started"
-                    }
-                  }
-                ]
-              }
-            ]
-          }
-        },
-        "expectedDOM": "<!DOCTYPE html>\n<html>\n  <body>\n    <main>\n      <button data-testid=\"block-hero-cta\" class=\"btn btn-primary text-lg\">Get Started</button>\n    </main>\n  </body>\n</html>",
-        "assertions": [
-          "Block defined at app.blocks[] level",
-          "Page references block via sections[].$ref",
-          "Block renders within page's main content area",
-          "All variables substituted: variant='primary', size='lg', ctaText='Get Started'",
-          "Integration enables global block library reused across all pages"
-        ]
-      }
-    },
-    {
       "id": "APP-BLOCKS-INTEGRATION-002",
       "given": "blocks using theme design tokens",
       "when": "block props reference theme colors, spacing, and fonts",

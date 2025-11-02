@@ -17,9 +17,5 @@ import type { ReactElement } from 'react'
  * @returns Footer element
  */
 export function Footer({ copyright }: Readonly<FooterProps>): Readonly<ReactElement> {
-  return (
-    <footer data-testid="footer">
-      {copyright && <span>{copyright}</span>}
-    </footer>
-  )
+  return <footer data-testid="footer">{copyright && <span>{copyright}</span>}</footer>
 }

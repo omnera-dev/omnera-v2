@@ -351,9 +351,7 @@ export function ComponentRenderer({
       // SECURITY: Sanitize HTML to prevent XSS attacks
       // DOMPurify removes malicious scripts, event handlers, and dangerous attributes
       // This is critical for user-generated content or external HTML sources
-      const sanitizedHTML = DOMPurify.sanitize(
-        (substitutedProps?.html as string | undefined) || ''
-      )
+      const sanitizedHTML = DOMPurify.sanitize((substitutedProps?.html as string | undefined) || '')
       return (
         <div
           {...elementProps}

@@ -46,7 +46,11 @@ function generateThemeStyles(theme?: Theme): string {
  * @param openGraph - Open Graph configuration from page.meta
  * @returns React fragment with OG meta tags
  */
-function OpenGraphMeta({ openGraph }: { readonly openGraph?: OpenGraph }): Readonly<ReactElement | undefined> {
+function OpenGraphMeta({
+  openGraph,
+}: {
+  readonly openGraph?: OpenGraph
+}): Readonly<ReactElement | undefined> {
   if (!openGraph) {
     return undefined
   }
@@ -121,7 +125,11 @@ function TwitterCardMeta({ page }: { readonly page: Page }): Readonly<ReactEleme
  * @param page - Page configuration
  * @returns Script tag with JSON-LD or undefined
  */
-function StructuredDataScript({ page }: { readonly page: Page }): Readonly<ReactElement | undefined> {
+function StructuredDataScript({
+  page,
+}: {
+  readonly page: Page
+}): Readonly<ReactElement | undefined> {
   // Support both 'schema' (canonical) and 'structuredData' (test alias)
   const structuredData = page.meta?.schema || page.meta?.structuredData
   if (!structuredData) {
