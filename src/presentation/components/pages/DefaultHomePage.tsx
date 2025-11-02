@@ -63,6 +63,71 @@ export function DefaultHomePage({ app }: { readonly app: App }): Readonly<ReactE
             </div>
           </div>
         </div>
+        {/* Client-side language switcher functionality */}
+        {app.languages && (
+          <script
+            dangerouslySetInnerHTML={{
+              __html: `
+(function() {
+  'use strict';
+
+  const languagesConfig = ${JSON.stringify(app.languages)};
+  let currentLanguage = languagesConfig.default;
+  let isOpen = false;
+
+  // Cache DOM elements to avoid repeated queries
+  let currentLanguageEl, dropdown, switcherButton;
+
+  function updateUI() {
+    const currentLang = languagesConfig.supported.find(lang => lang.code === currentLanguage);
+    const label = currentLang?.label || currentLanguage;
+
+    if (currentLanguageEl) {
+      currentLanguageEl.textContent = label;
+    }
+  }
+
+  function toggleDropdown() {
+    isOpen = !isOpen;
+    if (dropdown) {
+      dropdown.classList.toggle('hidden', !isOpen);
+    }
+  }
+
+  function selectLanguage(code) {
+    currentLanguage = code;
+    isOpen = false;
+    updateUI();
+    if (dropdown) {
+      dropdown.classList.add('hidden');
+    }
+  }
+
+  document.addEventListener('DOMContentLoaded', function() {
+    // Cache DOM elements once
+    currentLanguageEl = document.querySelector('[data-testid="current-language"]');
+    dropdown = document.querySelector('[data-language-dropdown]');
+    switcherButton = document.querySelector('[data-testid="language-switcher"]');
+
+    if (switcherButton) {
+      switcherButton.addEventListener('click', toggleDropdown);
+    }
+
+    const languageOptions = document.querySelectorAll('[data-language-option]');
+    languageOptions.forEach(option => {
+      option.addEventListener('click', function() {
+        const code = this.getAttribute('data-language-code');
+        if (code) {
+          selectLanguage(code);
+        }
+      });
+    });
+  });
+})();
+            `,
+            }}
+          />
+        )}
       </body>
     </html>
   )
