@@ -401,7 +401,7 @@ test.describe('Languages Configuration', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-LANGUAGES-008: should flip between LTR and RTL direction',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {

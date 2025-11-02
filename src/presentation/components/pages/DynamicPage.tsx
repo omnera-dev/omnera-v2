@@ -177,13 +177,21 @@ export function DynamicPage({
   const description = page.meta?.description || ''
   const themeStyles = generateThemeStyles(theme)
 
+  // Determine text direction from language configuration
+  // Find the direction for the default language, fallback to 'ltr'
+  const defaultLangConfig = languages?.supported.find((l) => l.code === languages.default)
+  const direction = defaultLangConfig?.direction || 'ltr'
+
   // Extract external scripts from page.scripts
   // Support both 'external' (test shorthand) and 'externalScripts' (schema property)
   // Prefer 'externalScripts' if both are present (canonical property)
   const externalScripts = page.scripts?.externalScripts || page.scripts?.external || []
 
   return (
-    <html lang={lang}>
+    <html
+      lang={lang}
+      dir={direction}
+    >
       <head>
         <meta charSet="UTF-8" />
         <meta
