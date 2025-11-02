@@ -208,9 +208,12 @@ export function renderCustomHTML(
  *
  * This is a special block that requires languages configuration from app schema.
  * If languages is not provided, renders a warning message.
+ *
+ * Note: Props like variant, showFlags, and position are currently not used but may
+ * be supported in future versions of the LanguageSwitcher component.
  */
 export function renderLanguageSwitcher(
-  props: ElementProps,
+  _props: ElementProps,
   languages?: Languages
 ): ReactElement {
   if (!languages) {
@@ -229,12 +232,5 @@ export function renderLanguageSwitcher(
     )
   }
 
-  return (
-    <LanguageSwitcher
-      languages={languages}
-      variant={(props.variant as 'dropdown' | 'inline' | 'tabs') || 'dropdown'}
-      showFlags={(props.showFlags as boolean) || false}
-      position={props.position as string | undefined}
-    />
-  )
+  return <LanguageSwitcher languages={languages} />
 }

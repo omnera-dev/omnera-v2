@@ -13,9 +13,57 @@ import { ComponentRenderer } from '@/presentation/components/sections/component-
 import { generateLanguageSwitcherScript } from '@/presentation/scripts/language-switcher-client'
 import type { Blocks } from '@/domain/models/app/blocks'
 import type { Languages } from '@/domain/models/app/languages'
+import type { Component } from '@/domain/models/app/page/sections'
 import type { OpenGraph } from '@/domain/models/app/page/meta/open-graph'
 import type { Page } from '@/domain/models/app/pages'
 import type { Theme } from '@/domain/models/app/theme'
+
+/**
+ * Checks if page uses language-switcher block
+ *
+ * Recursively walks through page sections and block references to determine
+ * if the language-switcher block is used anywhere on the page.
+ *
+ * @param sections - Page sections array
+ * @param blocks - Available blocks for reference resolution
+ * @returns true if page uses language-switcher, false otherwise
+ */
+function hasLanguageSwitcher(
+  sections: readonly Component[],
+  blocks?: Blocks
+): boolean {
+  const checkComponent = (component: Component): boolean => {
+    // Direct type check
+    if (component.type === 'language-switcher') {
+      return true
+    }
+
+    // Check block references
+    if ('block' in component || '$ref' in component) {
+      const blockName = 'block' in component ? component.block : component.$ref
+      const block = blocks?.find((b) => b.name === blockName)
+      if (block?.type === 'language-switcher') {
+        return true
+      }
+      // Recursively check block children
+      if (block?.children) {
+        const blockChildren = block.children as readonly Component[]
+        return blockChildren.some(checkComponent)
+      }
+    }
+
+    // Check component children
+    if (component.children) {
+      return component.children.some((child: Component | string) =>
+        typeof child !== 'string' && checkComponent(child)
+      )
+    }
+
+    return false
+  }
+
+  return sections.some(checkComponent)
+}
 
 /**
  * Generate CSS from theme colors
@@ -234,8 +282,8 @@ export function DynamicPage({
           ))}
         </main>
         {page.layout?.footer && <Footer {...page.layout.footer} />}
-        {/* Client-side language switcher functionality */}
-        {languages && (
+        {/* Client-side language switcher functionality - only inject if page uses language-switcher */}
+        {languages && hasLanguageSwitcher(page.sections, blocks) && (
           <script
             dangerouslySetInnerHTML={{
               __html: generateLanguageSwitcherScript(languages),

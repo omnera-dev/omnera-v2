@@ -14,23 +14,19 @@ import type { Languages } from '@/domain/models/app/languages'
  * Shows the current language label and allows switching between supported languages.
  * This component is rendered via the language-switcher block type in ComponentRenderer.
  *
+ * Currently renders as a simple dropdown. Future enhancements may include:
+ * - variant prop for different display modes (inline, tabs)
+ * - showFlags prop to display country flags
+ * - position prop for styling hints
+ *
  * @param props - Component props
  * @param props.languages - Languages configuration from AppSchema
- * @param props.variant - Display variant (dropdown, inline, tabs) - defaults to dropdown
- * @param props.showFlags - Whether to show country flags - defaults to false
- * @param props.position - Positioning hint (e.g., top-right, header, footer) - for styling
  * @returns React element with language switcher UI
  */
 export function LanguageSwitcher({
   languages,
-  variant: _variant = 'dropdown',
-  showFlags: _showFlags = false,
-  position: _position,
 }: {
   readonly languages: Languages
-  readonly variant?: 'dropdown' | 'inline' | 'tabs'
-  readonly showFlags?: boolean
-  readonly position?: string
 }): Readonly<ReactElement> {
   // Find default language config for initial render
   const currentLanguage = languages.supported.find((lang) => lang.code === languages.default)
