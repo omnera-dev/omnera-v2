@@ -149,9 +149,9 @@ Use GitHub labels to coordinate parallel work.
 For PR #1481, manually resolve conflicts:
 
 ```bash
-# Checkout PR branch
-git checkout tdd/spec-APP-BLOCKS-006
-git pull origin tdd/spec-APP-BLOCKS-006
+# Find and checkout Claude-created branch
+git fetch origin
+git checkout claude/issue-1481-{timestamp}
 
 # Rebase on latest main
 git fetch origin main
