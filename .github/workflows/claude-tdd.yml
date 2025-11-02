@@ -63,10 +63,21 @@ jobs:
           EVENT_ISSUE_BODY: ${{ github.event.issue.body }}
           EVENT_ISSUE_TITLE: ${{ github.event.issue.title }}
           EVENT_REVIEW_BODY: ${{ github.event.review.body }}
+          COMMENT_USER: ${{ github.event.comment.user.login }}
         run: |
           HAS_CONTEXT="false"
           ISSUE_NUMBER=""
           ISSUE_BODY=""
+
+          # Skip if comment is from Claude bot (prevents race condition with error comments)
+          if [ "${{ github.event_name }}" = "issue_comment" ] && [ "$COMMENT_USER" = "claude[bot]" ]; then
+            echo "⚠️  Comment from Claude bot - skipping to prevent cancellation race"
+            echo "has_context=false" >> $GITHUB_OUTPUT
+            echo "issue_number=" >> $GITHUB_OUTPUT
+            echo "issue_body<<EOF" >> $GITHUB_OUTPUT
+            echo "EOF" >> $GITHUB_OUTPUT
+            exit 0
+          fi
 
           # workflow_dispatch: Must have valid issue number
           if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
