@@ -198,15 +198,20 @@ export function ComponentRenderer({
   // Apply theme token substitution to props
   const substitutedProps = substitutePropsThemeTokens(props, theme)
 
-  // Render children recursively
-  const renderedChildren = children?.map((child: Component, index: number) => (
-    <ComponentRenderer
-      key={index}
-      component={child}
-      blocks={blocks}
-      theme={theme}
-    />
-  ))
+  // Render children recursively - children can be Component objects or strings
+  const renderedChildren = children?.map((child: Component | string, index: number) => {
+    if (typeof child === 'string') {
+      return child
+    }
+    return (
+      <ComponentRenderer
+        key={index}
+        component={child}
+        blocks={blocks}
+        theme={theme}
+      />
+    )
+  })
 
   // Merge className with other props and add data-block attribute if blockName is provided
   // For blocks without content, add min-height and display to ensure visibility
@@ -230,6 +235,24 @@ export function ComponentRenderer({
   switch (type) {
     case 'section':
       return <section {...elementProps}>{renderedChildren}</section>
+
+    case 'h1':
+      return <h1 {...elementProps}>{content || renderedChildren}</h1>
+
+    case 'h2':
+      return <h2 {...elementProps}>{content || renderedChildren}</h2>
+
+    case 'h3':
+      return <h3 {...elementProps}>{content || renderedChildren}</h3>
+
+    case 'h4':
+      return <h4 {...elementProps}>{content || renderedChildren}</h4>
+
+    case 'h5':
+      return <h5 {...elementProps}>{content || renderedChildren}</h5>
+
+    case 'h6':
+      return <h6 {...elementProps}>{content || renderedChildren}</h6>
 
     case 'text': {
       // Determine the HTML tag based on the level prop

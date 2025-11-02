@@ -14,9 +14,9 @@ import { ResponsiveSchema } from './common/responsive'
 /**
  * Component type enum for page sections
  *
- * Comprehensive set of 21 component types for building pages:
+ * Comprehensive set of 27 component types for building pages:
  * - Layout: section, container, flex, grid, div
- * - Content: text, heading, paragraph, icon, image, customHTML, span
+ * - Content: text, heading, paragraph, h1, h2, h3, h4, h5, h6, icon, image, customHTML, span
  * - Interactive: button, link, accordion
  * - Grouping: card, badge, timeline
  * - Media: video, audio, iframe
@@ -29,6 +29,12 @@ export const ComponentTypeSchema = Schema.Literal(
   'grid',
   'card',
   'text',
+  'h1',
+  'h2',
+  'h3',
+  'h4',
+  'h5',
+  'h6',
   'heading',
   'paragraph',
   'icon',
@@ -99,9 +105,18 @@ export const ComponentSchema: Schema.Schema<any, any, never> = Schema.Struct({
   type: ComponentTypeSchema,
   props: Schema.optional(PropsSchema),
   children: Schema.optional(
-    Schema.suspend(() => SectionsSchema).pipe(
+    Schema.Array(
+      Schema.Union(
+        Schema.suspend(() => SectionItemSchema).pipe(
+          Schema.annotations({
+            identifier: 'SectionItem',
+          })
+        ),
+        Schema.String
+      )
+    ).pipe(
       Schema.annotations({
-        identifier: 'Sections',
+        identifier: 'Children',
       })
     )
   ),
