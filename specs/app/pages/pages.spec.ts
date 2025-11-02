@@ -195,7 +195,7 @@ test.describe('Pages', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-007: should support block references with $variable syntax',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {

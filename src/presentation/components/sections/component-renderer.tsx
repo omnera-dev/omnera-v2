@@ -16,6 +16,38 @@ import type { Component } from '@/domain/models/app/page/sections'
 import type { Theme } from '@/domain/models/app/theme'
 
 /**
+ * Substitutes block variables in a value
+ *
+ * Replaces `$variableName` patterns with actual variable values.
+ * Example: `$title` → `'Welcome to Our Platform'`
+ *
+ * @param value - Value that may contain variable placeholders
+ * @param vars - Block variables for substitution
+ * @returns Value with variables replaced
+ */
+function substituteBlockVariables(
+  value: unknown,
+  vars?: Record<string, string | number | boolean>
+): unknown {
+  if (typeof value !== 'string') {
+    return value
+  }
+
+  if (!vars || !value.startsWith('$')) {
+    return value
+  }
+
+  // Extract variable name: $title → 'title'
+  const varName = value.slice(1)
+
+  // Look up the variable in the vars object
+  const result = vars[varName]
+
+  // If variable not found, return original value
+  return result !== undefined ? result : value
+}
+
+/**
  * Substitutes theme tokens in a value
  *
  * Replaces `$theme.category.key` patterns with actual theme values.
@@ -79,17 +111,60 @@ function substitutePropsThemeTokens(
 }
 
 /**
- * Resolves a block reference to a component
+ * Substitutes variables in component children recursively
  *
- * Pure function that finds a block by name and converts it to a Component.
+ * Pure function that walks through the children tree and replaces $variable
+ * placeholders with actual values from the vars object.
+ *
+ * @param children - Array of children (can be strings or components)
+ * @param vars - Variables for substitution
+ * @returns Children with variables substituted
+ */
+function substituteChildrenVariables(
+  children: ReadonlyArray<Component | string> | undefined,
+  vars?: Record<string, string | number | boolean>
+): ReadonlyArray<Component | string> | undefined {
+  if (!children || !vars) {
+    return children
+  }
+
+  return children.map((child) => {
+    // If child is a string, apply variable substitution
+    if (typeof child === 'string') {
+      const substituted = substituteBlockVariables(child, vars)
+      return substituted as string
+    }
+
+    // If child is a component, recursively substitute in its children and content
+    const substitutedChildren = substituteChildrenVariables(child.children, vars)
+    const substitutedContent =
+      typeof child.content === 'string'
+        ? (substituteBlockVariables(child.content, vars) as string)
+        : child.content
+
+    return {
+      ...child,
+      children: substitutedChildren,
+      content: substitutedContent,
+    }
+  })
+}
+
+/**
+ * Resolves a block reference to a component with optional variable substitution
+ *
+ * Pure function that finds a block by name, converts it to a Component,
+ * and applies variable substitution if vars are provided.
  *
  * @param blockName - Name of the block to resolve
  * @param blocks - Array of available blocks
+ * @param vars - Optional variables for substitution
  * @returns Resolved component and block name, or undefined if not found
  */
 function resolveBlock(
   blockName: string,
-  blocks?: Blocks
+  blocks?: Blocks,
+  vars?: Record<string, string | number | boolean>
 ): { readonly component: Component; readonly name: string } | undefined {
   const block = blocks?.find((b) => b.name === blockName)
   if (!block) {
@@ -97,11 +172,17 @@ function resolveBlock(
     return undefined
   }
 
+  // Cast block.children to Component children type for type compatibility
+  const blockChildren = block.children as ReadonlyArray<Component | string> | undefined
+
   const component: Component = {
     type: block.type,
     props: block.props,
-    children: block.children,
-    content: block.content,
+    children: substituteChildrenVariables(blockChildren, vars),
+    content:
+      typeof block.content === 'string'
+        ? (substituteBlockVariables(block.content, vars) as string)
+        : block.content,
   }
 
   return { component, name: block.name }
@@ -134,8 +215,9 @@ export function ComponentRenderer({
 }): Readonly<ReactElement | null> {
   // Handle block references
   if ('block' in component) {
-    // Simple block reference: { block: 'name' }
-    const resolved = resolveBlock(component.block, blocks)
+    // Block reference with optional vars: { block: 'name', vars?: {...} }
+    const vars = 'vars' in component ? (component as { vars?: Record<string, string | number | boolean> }).vars : undefined
+    const resolved = resolveBlock(component.block, blocks, vars)
     if (!resolved) {
       return (
         <div
@@ -164,8 +246,7 @@ export function ComponentRenderer({
 
   if ('$ref' in component) {
     // Block reference with vars: { $ref: 'name', vars: {} }
-    // Note: Variable substitution not yet implemented
-    const resolved = resolveBlock(component.$ref, blocks)
+    const resolved = resolveBlock(component.$ref, blocks, component.vars)
     if (!resolved) {
       return (
         <div

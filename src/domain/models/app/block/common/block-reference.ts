@@ -142,14 +142,25 @@ const ShorthandBlockReferenceSchema = Schema.Struct({
   })
 )
 
+const HybridBlockReferenceSchema = Schema.Struct({
+  block: BlockReferenceNameSchema,
+  vars: BlockVarsSchema,
+}).pipe(
+  Schema.annotations({
+    title: 'Block Reference (Hybrid)',
+    description: 'Shorthand block reference with variable substitution',
+  })
+)
+
 export const BlockReferenceSchema = Schema.Union(
   FullBlockReferenceSchema,
+  HybridBlockReferenceSchema,
   ShorthandBlockReferenceSchema
 ).pipe(
   Schema.annotations({
     title: 'Block Reference',
     description:
-      'Reference to a reusable block template. Supports full syntax ($ref + vars) or shorthand (block name only).',
+      'Reference to a reusable block template. Supports full syntax ($ref + vars), hybrid syntax (block + vars), or shorthand (block name only).',
   })
 )
 

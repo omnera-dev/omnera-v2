@@ -171,13 +171,9 @@ export const ComponentSchema: Schema.Schema<any, any, never> = Schema.Struct({
  * ]
  * ```
  */
-export const SectionItemSchema = Schema.Union(
-  ComponentSchema,
-  SimpleBlockReferenceSchema,
-  BlockReferenceSchema
-).annotations({
+export const SectionItemSchema = Schema.Union(ComponentSchema, BlockReferenceSchema).annotations({
   description:
-    'A page section that can be either a component, simple block reference, or block reference with variables',
+    'A page section that can be either a component or block reference (with optional variables)',
 })
 
 /**
