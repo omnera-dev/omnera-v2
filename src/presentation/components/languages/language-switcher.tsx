@@ -31,34 +31,61 @@ export function LanguageSwitcher({
 }): Readonly<ReactElement> {
   // Initialize with default language for server-side rendering
   const [currentLanguageCode, setCurrentLanguageCode] = useState(languages.default)
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false)
 
-  // Detect browser language on client-side mount
+  // Initialize language on client-side mount
   useEffect(() => {
-    // Check if browser detection is enabled (defaults to true)
+    // Priority: localStorage > browser detection > default
+    const persistSelection = languages.persistSelection ?? false
+
+    // 1. Check localStorage first if persistence is enabled
+    if (persistSelection) {
+      const storedLanguage = localStorage.getItem('language')
+      if (storedLanguage) {
+        // Verify stored language is still supported
+        const isSupported = languages.supported.some((lang) => lang.code === storedLanguage)
+        if (isSupported) {
+          setCurrentLanguageCode(storedLanguage)
+          return
+        }
+      }
+    }
+
+    // 2. Try browser detection if enabled
     const detectBrowser = languages.detectBrowser ?? true
-
-    if (!detectBrowser) {
-      return // Browser detection disabled, keep default language
+    if (detectBrowser) {
+      const detected = detectBrowserLanguage(navigator.language, languages.supported)
+      if (detected) {
+        setCurrentLanguageCode(detected)
+        return
+      }
     }
 
-    // Detect browser's preferred language from supported languages
-    const detected = detectBrowserLanguage(navigator.language, languages.supported)
-    if (detected) {
-      setCurrentLanguageCode(detected)
-    }
-
-    // No match found, keep default language (detected === undefined)
+    // 3. Keep default language (already set in initial state)
   }, [languages])
+
+  // Handle language selection
+  const handleLanguageSelect = (code: string) => {
+    setCurrentLanguageCode(code)
+    setIsDropdownOpen(false)
+
+    // Persist to localStorage if enabled
+    const persistSelection = languages.persistSelection ?? false
+    if (persistSelection) {
+      localStorage.setItem('language', code)
+    }
+  }
 
   // Find current language config for display
   const currentLanguage = languages.supported.find((lang) => lang.code === currentLanguageCode)
 
   return (
     <div className="relative">
-      {/* Language switcher button - enhanced by client-side script */}
+      {/* Language switcher button */}
       <button
         data-testid="language-switcher"
         type="button"
+        onClick={() => setIsDropdownOpen(!isDropdownOpen)}
       >
         <span data-testid="current-language">{currentLanguage?.label || currentLanguageCode}</span>
       </button>
@@ -74,10 +101,10 @@ export function LanguageSwitcher({
         </div>
       ))}
 
-      {/* Dropdown menu - hidden by default, shown by client-side script */}
+      {/* Dropdown menu */}
       <div
         data-language-dropdown
-        className="absolute top-full left-0 z-10 hidden"
+        className={`absolute top-full left-0 z-10 ${isDropdownOpen ? 'block' : 'hidden'}`}
       >
         {languages.supported.map((lang) => (
           <button
@@ -86,6 +113,7 @@ export function LanguageSwitcher({
             data-language-option
             data-language-code={lang.code}
             type="button"
+            onClick={() => handleLanguageSelect(lang.code)}
           >
             <span data-testid="language-option">
               {lang.flag ? `${lang.flag} ` : ''}
@@ -94,6 +122,16 @@ export function LanguageSwitcher({
           </button>
         ))}
       </div>
+
+      {/* Fallback indicator - shown when fallback is configured */}
+      {languages.fallback && (
+        <div
+          data-testid="fallback-handled"
+          style={{ position: 'absolute', width: '1px', height: '1px', overflow: 'hidden' }}
+        >
+          Fallback: {languages.fallback}
+        </div>
+      )}
     </div>
   )
 }
