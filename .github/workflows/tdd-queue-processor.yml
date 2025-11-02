@@ -105,8 +105,17 @@ jobs:
           3. Implement minimal code
           4. Validate all tests pass
           5. Commit and push when GREEN
+          6. **⚠️ MANDATORY: CREATE PULL REQUEST** with:
+             - Title: \`fix: implement $SPEC_ID\`
+             - Body: \`Closes #$ISSUE_NUMBER\` (exact format, no extra text after number)
+             - Label: \`tdd-automation\`
+             - Command: \`gh pr create --title \"fix: implement $SPEC_ID\" --body \"Closes #$ISSUE_NUMBER\" --label \"tdd-automation\"\`
 
-          Validation runs automatically on push.
+          **CRITICAL**: Step 6 is NOT optional. No PR = spec marked as failed after 2 minutes.
+
+          Example of what NOT to do: Issue #1319 (removed .fixme, committed, but didn't create PR → failed).
+
+          Validation runs automatically after PR creation.
 
           ---
           *🤖 Automated via [Queue Processor](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})*"
