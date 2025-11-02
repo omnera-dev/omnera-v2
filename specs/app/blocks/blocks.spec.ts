@@ -57,7 +57,7 @@ test.describe('Reusable Blocks', () => {
       // GIVEN: blocks for DRY principle
       await startServerWithSchema({
         name: 'test-app',
-        blocks: [{ name: 'reusable', type: 'div', content: 'Reusable block' }],
+        blocks: [{ name: 'reusable', type: 'div', children: ['Reusable block'] }],
         pages: [
           {
             name: 'home',
