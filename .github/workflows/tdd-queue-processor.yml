@@ -96,45 +96,80 @@ jobs:
           echo "🤖 Triggering Claude Code via @claude mention..."
           gh issue comment "$ISSUE_NUMBER" --body "@claude implement this spec using the TDD automation workflow.
 
+          ## 🤖 AUTOMATION MODE - OPERATE NON-INTERACTIVELY
+
+          You are in **pipeline/automation mode**:
+          - ✅ Make autonomous decisions following Omnera architectural patterns
+          - ✅ Implement minimal code to pass the test
+          - ✅ Use Effect.ts for side effects in Application/Infrastructure layers
+          - ❌ DO NOT ask clarifying questions - proceed with best judgment
+          - ❌ DO NOT wait for user approval - implement and commit
+
+          ---
+
           ## 📋 Spec Details
 
           - **Test File**: \`$TEST_FILE\`
           - **Spec ID**: \`$SPEC_ID\`
           - **Issue**: #$ISSUE_NUMBER
 
-          ## 🔄 Complete Workflow (Follow ALL Steps)
+          ## ✅ Success Criteria (Verify Before Finishing)
 
-          ### Step 1: Branch Creation
+          **Task is NOT complete until ALL boxes are checked**:
+          - [ ] Branch created: \`tdd/spec-$SPEC_ID\` (or with -clean/-v2 suffix if exists)
+          - [ ] \`.fixme()\` removed from test \`$SPEC_ID\` ONLY (not other tests)
+          - [ ] Both agents invoked: e2e-test-fixer → codebase-refactor-auditor
+          - [ ] Code follows layer-based architecture (Domain/Application/Infrastructure/Presentation)
+          - [ ] Copyright headers added: \`bun run license\`
+          - [ ] Changes committed: \`fix: implement $SPEC_ID\`
+          - [ ] Changes pushed to remote branch
+          - [ ] **⚠️ CRITICAL: Pull Request created** (verify: \`gh pr list --label tdd-automation\`)
+          - [ ] PR has correct format (title, body with \`Closes #$ISSUE_NUMBER\`, label)
+
+          **⚠️ MOST COMMON FAILURE**: Missing PR creation (see issue #1319) → spec marked failed after 2 min
+
+          ---
+
+          ## 🔄 Implementation Workflow (5 Steps - ALL REQUIRED)
+
+          ### Step 1: Create Branch
           \`\`\`bash
           git checkout -b tdd/spec-$SPEC_ID
-          # Note: Add suffixes like -clean or -v2 if branch exists
+          # If branch exists, use: tdd/spec-$SPEC_ID-clean or tdd/spec-$SPEC_ID-v2
           \`\`\`
 
-          ### Step 2: Run @agent-e2e-test-fixer
-          **Agent Responsibilities**:
-          - Locate test \`$SPEC_ID\` in \`$TEST_FILE\`
-          - Remove \`.fixme()\` from ONE specific test only
-          - Run test to see what fails: \`bun test:e2e -- $TEST_FILE\`
-          - Implement minimal code following Omnera architecture:
-            - Domain schemas in \`src/domain/models/\`
-            - Application logic in \`src/application/\`
-            - Infrastructure in \`src/infrastructure/\`
-            - UI components in \`src/components/\`
-          - Use Effect.ts for side effects
-          - Follow functional programming patterns
-          - Run regression tests: \`bun test:e2e:regression\`
+          ### Step 2: Invoke e2e-test-fixer Agent
 
-          ### Step 3: Run @agent-codebase-refactor-auditor (MANDATORY)
-          **Agent Responsibilities**:
-          - Review implementation for code quality
-          - Check for code duplication
-          - Ensure architectural compliance
-          - Refactor and optimize as needed
-          - Validate against Omnera best practices
+          **Use the Task tool** to invoke the **e2e-test-fixer** agent:
+          - Agent autonomously locates test \`$SPEC_ID\` in \`$TEST_FILE\`
+          - Agent removes \`.fixme()\` from ONE specific test only
+          - Agent implements minimal code following architecture:
+            - **Domain Layer**: Schemas in \`src/domain/models/\` (Effect Schema)
+            - **Application Layer**: Business logic in \`src/application/\` (Effect.ts workflows)
+            - **Infrastructure Layer**: External services in \`src/infrastructure/\` (Effect.ts)
+            - **Presentation Layer**: UI components in \`src/presentation/components/\` (React)
+          - Agent runs specific test: \`bun test:e2e -- $TEST_FILE --grep \"$SPEC_ID\"\`
+          - Agent runs regression tests: \`bun test:e2e:regression\`
 
-          ### Step 4: Quality & Commit
+          **Architecture Notes**:
+          - Use Effect.ts (\`Effect.gen\`, \`pipe\`) for side effects in Application/Infrastructure layers
+          - Keep Domain layer pure (no side effects)
+          - Follow functional programming patterns (immutability, pure functions)
+
+          ### Step 3: Invoke codebase-refactor-auditor Agent (MANDATORY)
+
+          **Use the Task tool** to invoke the **codebase-refactor-auditor** agent:
+          - Agent reviews implementation for code quality
+          - Agent checks for code duplication
+          - Agent ensures architectural compliance
+          - Agent refactors and optimizes as needed
+          - Agent validates against Omnera best practices
+
+          **IMPORTANT**: This step is MANDATORY even if Step 2 code seems clean.
+
+          ### Step 4: Quality Checks & Commit
           \`\`\`bash
-          bun run license           # Add copyright headers (REQUIRED)
+          bun run license           # Add copyright headers (REQUIRED - fails if missing)
           git add -A
           git commit -m \"fix: implement $SPEC_ID\"
           git push -u origin HEAD
@@ -142,7 +177,7 @@ jobs:
 
           ### Step 5: ⚠️ CREATE PULL REQUEST (MANDATORY - NOT OPTIONAL)
 
-          **THIS STEP IS REQUIRED. THE WORKFLOW FAILS WITHOUT IT.**
+          **THIS IS THE MOST CRITICAL STEP. THE WORKFLOW FAILS WITHOUT IT.**
 
           \`\`\`bash
           gh pr create \\
@@ -151,37 +186,33 @@ jobs:
             --label \"tdd-automation\"
           \`\`\`
 
-          **Critical Requirements**:
-          - ✅ PR body MUST be exactly: \`Closes #$ISSUE_NUMBER\` (no extra text after number)
-          - ✅ PR MUST have \`tdd-automation\` label
-          - ✅ PR required even if only \`.fixme()\` was removed
-          - ❌ No PR = Spec marked \`tdd-spec:failed\` after 2 minutes
+          **PR Requirements (ALL REQUIRED)**:
+          - ✅ Title: Exactly \`fix: implement $SPEC_ID\`
+          - ✅ Body: Exactly \`Closes #$ISSUE_NUMBER\` (NO extra text after number - breaks auto-close)
+          - ✅ Label: \`tdd-automation\`
+          - ✅ Required even if only \`.fixme()\` was removed (no code changes)
 
-          **Failure Example**: Issue #1319 removed .fixme, committed, pushed, but didn't create PR → marked as failed
+          **Failure Example**: Issue #1319 - Claude removed \`.fixme()\`, committed, pushed, but **skipped PR creation** → marked as failed → required manual intervention
 
-          ### Step 6: Verification & Retry
+          **Verify PR was created**:
+          \`\`\`bash
+          gh pr list --label tdd-automation | grep \"$SPEC_ID\"
+          \`\`\`
 
-          After PR creation:
-          - Workflow automatically verifies PR exists (2 min timeout)
-          - test.yml CI runs validation (lint, typecheck, unit tests, E2E regression)
-          - If validation fails: Fix code, push again (max 3 retries)
-          - If validation passes: PR auto-merges with squash
-          - If 3 failures: Issue marked \`tdd-spec:failed\`
+          ---
 
-          ## ✅ Completion Checklist
+          ## 🔍 What Happens Next (Automatic - No Action Needed)
 
-          Before finishing, verify ALL of these:
-          - [ ] Branch created from main
-          - [ ] \`.fixme()\` removed from test $SPEC_ID only
-          - [ ] Code implemented following Omnera architecture
-          - [ ] Both agents run (e2e-test-fixer + codebase-refactor-auditor)
-          - [ ] Copyright headers added (\`bun run license\`)
-          - [ ] Changes committed with \`fix: implement $SPEC_ID\`
-          - [ ] Changes pushed to remote branch
-          - [ ] **Pull Request created** (check: \`gh pr list --label tdd-automation\`)
-          - [ ] PR has correct title and body format
-
-          **If any checkbox is unchecked, the task is NOT complete.**
+          After you create the PR:
+          1. **Verification** (2 min): Workflow verifies PR exists
+             - ✅ PR found → Continue to validation
+             - ❌ No PR → Issue marked \`tdd-spec:failed\`, you exit
+          2. **Validation** (test.yml CI): Runs lint, typecheck, unit tests, E2E regression
+             - ✅ Pass → PR auto-merges with squash, issue auto-closes
+             - ❌ Fail → You fix code, push again (max 3 retries total)
+          3. **Final State**:
+             - Success: Issue closed with \`tdd-spec:completed\` label
+             - Failure (3 retries): Issue marked \`tdd-spec:failed\`, requires human review
 
           ---
           *🤖 Automated via [Queue Processor](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})*"
