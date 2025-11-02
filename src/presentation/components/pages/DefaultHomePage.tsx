@@ -75,27 +75,22 @@ export function DefaultHomePage({ app }: { readonly app: App }): Readonly<ReactE
   let currentLanguage = languagesConfig.default;
   let isOpen = false;
 
+  // Cache DOM elements to avoid repeated queries
+  let currentLanguageEl, dropdown, switcherButton;
+
   function updateUI() {
     const currentLang = languagesConfig.supported.find(lang => lang.code === currentLanguage);
-    const currentLanguageEl = document.querySelector('[data-testid="current-language"]');
-    const switcherButton = document.querySelector('[data-testid="language-switcher"]');
+    const label = currentLang?.label || currentLanguage;
 
     if (currentLanguageEl) {
-      currentLanguageEl.textContent = currentLang?.label || currentLanguage;
-    }
-    if (switcherButton) {
-      const span = switcherButton.querySelector('[data-testid="current-language"]');
-      if (span) {
-        span.textContent = currentLang?.label || currentLanguage;
-      }
+      currentLanguageEl.textContent = label;
     }
   }
 
   function toggleDropdown() {
     isOpen = !isOpen;
-    const dropdown = document.querySelector('[data-language-dropdown]');
     if (dropdown) {
-      dropdown.style.display = isOpen ? 'block' : 'none';
+      dropdown.classList.toggle('hidden', !isOpen);
     }
   }
 
@@ -103,14 +98,17 @@ export function DefaultHomePage({ app }: { readonly app: App }): Readonly<ReactE
     currentLanguage = code;
     isOpen = false;
     updateUI();
-    const dropdown = document.querySelector('[data-language-dropdown]');
     if (dropdown) {
-      dropdown.style.display = 'none';
+      dropdown.classList.add('hidden');
     }
   }
 
   document.addEventListener('DOMContentLoaded', function() {
-    const switcherButton = document.querySelector('[data-testid="language-switcher"]');
+    // Cache DOM elements once
+    currentLanguageEl = document.querySelector('[data-testid="current-language"]');
+    dropdown = document.querySelector('[data-language-dropdown]');
+    switcherButton = document.querySelector('[data-testid="language-switcher"]');
+
     if (switcherButton) {
       switcherButton.addEventListener('click', toggleDropdown);
     }

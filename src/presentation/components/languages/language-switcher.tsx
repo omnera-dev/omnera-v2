@@ -27,7 +27,7 @@ export function LanguageSwitcher({
   const currentLanguage = languages.supported.find((lang) => lang.code === languages.default)
 
   return (
-    <div style={{ position: 'relative' }}>
+    <div className="relative">
       {/* Language switcher button - enhanced by client-side script */}
       <button
         data-testid="language-switcher"
@@ -41,7 +41,7 @@ export function LanguageSwitcher({
         <div
           key={lang.code}
           data-testid="available-languages"
-          style={{ display: 'none' }}
+          className="hidden"
         >
           {lang.label}
         </div>
@@ -50,7 +50,7 @@ export function LanguageSwitcher({
       {/* Dropdown menu - hidden by default, shown by client-side script */}
       <div
         data-language-dropdown
-        style={{ display: 'none', position: 'absolute', top: '100%', left: 0, zIndex: 10 }}
+        className="absolute left-0 top-full z-10 hidden"
       >
         {languages.supported.map((lang) => (
           <button
