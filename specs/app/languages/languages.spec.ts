@@ -352,7 +352,7 @@ test.describe('Languages Configuration', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-LANGUAGES-007: should not persist the choice and reset to default on next visit',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
