@@ -443,12 +443,25 @@ test.describe('Languages Configuration', () => {
             { code: 'ja-JP', label: '日本語', direction: 'ltr', flag: '🇯🇵' },
           ],
         },
+        blocks: [
+          {
+            name: 'language-switcher',
+            type: 'language-switcher',
+            props: {
+              variant: 'dropdown',
+            },
+          },
+        ],
         pages: [
           {
             name: 'home',
             path: '/',
             meta: { lang: 'en-US', title: 'Test', description: 'Test page' },
-            sections: [],
+            sections: [
+              {
+                block: 'language-switcher',
+              },
+            ],
           },
         ],
       })
@@ -484,12 +497,25 @@ test.describe('Languages Configuration', () => {
           detectBrowser: true,
           persistSelection: true,
         },
+        blocks: [
+          {
+            name: 'language-switcher',
+            type: 'language-switcher',
+            props: {
+              variant: 'dropdown',
+            },
+          },
+        ],
         pages: [
           {
             name: 'home',
             path: '/',
             meta: { lang: 'en-US', title: 'Test', description: 'Test page' },
-            sections: [],
+            sections: [
+              {
+                block: 'language-switcher',
+              },
+            ],
           },
         ],
       })
@@ -625,12 +651,25 @@ test.describe('Languages Configuration', () => {
           ],
           fallback: 'en-US',
         },
+        blocks: [
+          {
+            name: 'language-switcher',
+            type: 'language-switcher',
+            props: {
+              variant: 'dropdown',
+            },
+          },
+        ],
         pages: [
           {
             name: 'home',
             path: '/',
             meta: { lang: 'en-US', title: 'Test', description: 'Test page' },
-            sections: [],
+            sections: [
+              {
+                block: 'language-switcher',
+              },
+            ],
           },
         ],
       })
@@ -666,12 +705,25 @@ test.describe('Languages Configuration', () => {
             { code: 'ar-SA', label: 'العربية', direction: 'rtl' },
           ],
         },
+        blocks: [
+          {
+            name: 'language-switcher',
+            type: 'language-switcher',
+            props: {
+              variant: 'dropdown',
+            },
+          },
+        ],
         pages: [
           {
             name: 'home',
             path: '/',
             meta: { lang: 'en-US', title: 'Test', description: 'Test page' },
-            sections: [],
+            sections: [
+              {
+                block: 'language-switcher',
+              },
+            ],
           },
         ],
       })
@@ -705,6 +757,15 @@ test.describe('Languages Configuration', () => {
             { code: 'fr-FR', label: 'Français', direction: 'ltr' },
           ],
         },
+        blocks: [
+          {
+            name: 'language-switcher',
+            type: 'language-switcher',
+            props: {
+              variant: 'dropdown',
+            },
+          },
+        ],
         pages: [
           {
             path: '/',
@@ -717,6 +778,9 @@ test.describe('Languages Configuration', () => {
               },
             },
             sections: [
+              {
+                block: 'language-switcher',
+              },
               { type: 'text', content: 'Hello', i18n: { 'fr-FR': { content: 'Bonjour' } } },
             ],
           },
@@ -906,12 +970,25 @@ test.describe('Languages Configuration', () => {
           detectBrowser: false,
           persistSelection: true,
         },
+        blocks: [
+          {
+            name: 'language-switcher',
+            type: 'language-switcher',
+            props: {
+              variant: 'dropdown',
+            },
+          },
+        ],
         pages: [
           {
             name: 'home',
             path: '/',
             meta: { lang: 'en-US', title: 'Test', description: 'Test page' },
-            sections: [],
+            sections: [
+              {
+                block: 'language-switcher',
+              },
+            ],
           },
         ],
       })
