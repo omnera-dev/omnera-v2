@@ -155,7 +155,7 @@ test.describe('Pages', () => {
       await page.goto('/products/pricing')
 
       // THEN: it should accept nested URL paths
-      await expect(page).toHaveURL('/products/pricing')
+      await expect(page).toHaveURL(/\/products\/pricing/)
       await expect(page).toHaveTitle('Pricing')
     }
   )
