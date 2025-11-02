@@ -233,6 +233,12 @@ export const test = base.extend<ServerFixtures>({
       serverProcess = server.process
       serverUrl = server.url
 
+      // Set baseURL for page assertions (toHaveURL with relative paths)
+      // This needs to be done by navigating with baseURL or by creating a new page with baseURL
+      // Since we can't modify the context after creation, we'll override the page object
+      // @ts-expect-error - We need to set baseURL for relative URL assertions
+      page._browserContext._options.baseURL = serverUrl
+
       // Override page.goto to prepend baseURL for relative paths
       const originalGoto = page.goto.bind(page)
       page.goto = (url: string, options?: Parameters<typeof page.goto>[1]) => {
