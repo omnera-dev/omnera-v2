@@ -60,9 +60,7 @@ export function LanguageSwitcher({
         data-testid="language-switcher"
         type="button"
       >
-        <span data-testid="current-language">
-          {currentLanguage?.label || currentLanguageCode}
-        </span>
+        <span data-testid="current-language">{currentLanguage?.label || currentLanguageCode}</span>
       </button>
 
       {/* Available languages count (for test assertions) */}
