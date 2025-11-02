@@ -22,7 +22,10 @@ import type { App } from '@/domain/models/app'
  */
 export function DefaultHomePage({ app }: { readonly app: App }): Readonly<ReactElement> {
   return (
-    <html lang="en">
+    <html
+      lang="en"
+      dir="ltr"
+    >
       <head>
         <meta charSet="UTF-8" />
         <meta

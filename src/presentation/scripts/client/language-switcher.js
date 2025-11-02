@@ -153,6 +153,7 @@
   /**
    * Updates the language switcher UI to reflect current language
    * Finds the label for currentLanguage and updates DOM element
+   * Also updates the HTML dir attribute for RTL/LTR text direction
    */
   function updateUI() {
     const currentLang = languagesConfig.supported.find((lang) => lang.code === currentLanguage)
@@ -161,6 +162,10 @@
     if (currentLanguageEl) {
       currentLanguageEl.textContent = label
     }
+
+    // Update HTML dir attribute based on language direction
+    const direction = currentLang?.direction || 'ltr'
+    document.documentElement.setAttribute('dir', direction)
 
     // Update all translated text when language changes
     updateTranslations()
