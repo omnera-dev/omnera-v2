@@ -13,7 +13,6 @@ import { ComponentRenderer } from '@/presentation/components/sections/component-
 import type { Blocks } from '@/domain/models/app/blocks'
 import type { Languages } from '@/domain/models/app/languages'
 import type { OpenGraph } from '@/domain/models/app/page/meta/open-graph'
-import type { Component } from '@/domain/models/app/page/sections'
 import type { Page } from '@/domain/models/app/pages'
 import type { Theme } from '@/domain/models/app/theme'
 
