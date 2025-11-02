@@ -163,9 +163,13 @@ export const LanguagesSchema = Schema.Struct({
 }).pipe(
   Schema.filter((input) => {
     const supportedCodes = input.supported.map((lang) => lang.code)
-    return supportedCodes.includes(input.default)
-      ? undefined
-      : 'default language must be in supported array'
+    if (!supportedCodes.includes(input.default)) {
+      return 'default language must be in supported array'
+    }
+    if (input.fallback && !supportedCodes.includes(input.fallback)) {
+      return 'fallback language must be in supported array'
+    }
+    return undefined
   }),
   Schema.annotations({
     title: 'Languages Configuration',

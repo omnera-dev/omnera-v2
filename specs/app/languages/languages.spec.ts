@@ -602,7 +602,7 @@ test.describe('Languages Configuration', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-LANGUAGES-012: should fail validation - fallback language must be in supported array',
     { tag: '@spec' },
     async ({ startServerWithSchema }) => {
