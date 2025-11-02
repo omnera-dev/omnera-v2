@@ -11,6 +11,7 @@ import { Footer } from '@/presentation/components/layout/footer'
 import { Navigation } from '@/presentation/components/layout/navigation'
 import { ComponentRenderer } from '@/presentation/components/sections/component-renderer'
 import type { Blocks } from '@/domain/models/app/blocks'
+import type { Languages } from '@/domain/models/app/languages'
 import type { OpenGraph } from '@/domain/models/app/page/meta/open-graph'
 import type { Page } from '@/domain/models/app/pages'
 import type { Theme } from '@/domain/models/app/theme'
@@ -156,16 +157,19 @@ function StructuredDataScript({
  * @param props.page - Page configuration from app schema
  * @param props.blocks - Optional blocks array for resolving block references
  * @param props.theme - Optional theme configuration for styling
+ * @param props.languages - Optional languages configuration for language-switcher blocks
  * @returns React element with complete page structure
  */
 export function DynamicPage({
   page,
   blocks,
   theme,
+  languages,
 }: {
   readonly page: Page
   readonly blocks?: Blocks
   readonly theme?: Theme
+  readonly languages?: Languages
 }): Readonly<ReactElement> {
   // Use default metadata if not provided
   const lang = page.meta?.lang || 'en-US'
@@ -224,10 +228,76 @@ export function DynamicPage({
               component={section}
               blocks={blocks}
               theme={theme}
+              languages={languages}
             />
           ))}
         </main>
         {page.layout?.footer && <Footer {...page.layout.footer} />}
+        {/* Client-side language switcher functionality */}
+        {languages && (
+          <script
+            dangerouslySetInnerHTML={{
+              __html: `
+(function() {
+  'use strict';
+
+  const languagesConfig = ${JSON.stringify(languages)};
+  let currentLanguage = languagesConfig.default;
+  let isOpen = false;
+
+  // Cache DOM elements to avoid repeated queries
+  let currentLanguageEl, dropdown, switcherButton;
+
+  function updateUI() {
+    const currentLang = languagesConfig.supported.find(lang => lang.code === currentLanguage);
+    const label = currentLang?.label || currentLanguage;
+
+    if (currentLanguageEl) {
+      currentLanguageEl.textContent = label;
+    }
+  }
+
+  function toggleDropdown() {
+    isOpen = !isOpen;
+    if (dropdown) {
+      dropdown.classList.toggle('hidden', !isOpen);
+    }
+  }
+
+  function selectLanguage(code) {
+    currentLanguage = code;
+    isOpen = false;
+    updateUI();
+    if (dropdown) {
+      dropdown.classList.add('hidden');
+    }
+  }
+
+  document.addEventListener('DOMContentLoaded', function() {
+    // Cache DOM elements once
+    currentLanguageEl = document.querySelector('[data-testid="current-language"]');
+    dropdown = document.querySelector('[data-language-dropdown]');
+    switcherButton = document.querySelector('[data-testid="language-switcher"]');
+
+    if (switcherButton) {
+      switcherButton.addEventListener('click', toggleDropdown);
+    }
+
+    const languageOptions = document.querySelectorAll('[data-language-option]');
+    languageOptions.forEach(option => {
+      option.addEventListener('click', function() {
+        const code = this.getAttribute('data-language-code');
+        if (code) {
+          selectLanguage(code);
+        }
+      });
+    });
+  });
+})();
+            `,
+            }}
+          />
+        )}
       </body>
     </html>
   )

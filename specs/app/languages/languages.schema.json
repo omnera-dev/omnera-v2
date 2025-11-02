@@ -1205,5 +1205,85 @@
         ]
       }
     }
-  ]
+  ],
+  "x-block-architecture-example": {
+    "_comment": "Example demonstrating block-based architecture for language-switcher UI component",
+    "configuration": {
+      "default": "en-US",
+      "supported": [
+        {
+          "code": "en-US",
+          "label": "English",
+          "direction": "ltr"
+        },
+        {
+          "code": "fr-FR",
+          "label": "Français",
+          "direction": "ltr"
+        },
+        {
+          "code": "es-ES",
+          "label": "Español",
+          "direction": "ltr"
+        }
+      ],
+      "detectBrowser": true,
+      "persistSelection": true
+    },
+    "block-reference": {
+      "description": "This example shows how language-switcher is implemented as a reusable block that references app.languages configuration",
+      "blockDefinition": {
+        "name": "language-switcher",
+        "type": "language-switcher",
+        "props": {
+          "variant": "$variant",
+          "showFlags": "$showFlags",
+          "position": "$position"
+        },
+        "description": "Reusable language-switcher block that displays languages from app.languages"
+      },
+      "pageUsage": {
+        "path": "/",
+        "sections": [
+          {
+            "$ref": "language-switcher",
+            "vars": {
+              "variant": "dropdown",
+              "showFlags": false,
+              "position": "top-right"
+            }
+          }
+        ],
+        "description": "Homepage references language-switcher block with specific props"
+      },
+      "architecture": {
+        "dataLayer": "app.languages - Configures available languages (default, supported, detectBrowser, persistSelection)",
+        "templateLayer": "blocks[language-switcher] - Defines reusable UI component template with variable placeholders",
+        "usageLayer": "pages[].sections[] - References block with concrete variable values",
+        "benefits": [
+          "Separation of concerns: languages config (data) vs UI presentation (block)",
+          "Reusability: Same block can be used across multiple pages with different props",
+          "Flexibility: Different pages can position switcher differently (header, footer, sidebar)",
+          "Variants: Supports dropdown, inline, tabs display modes",
+          "DRY: Single block definition, multiple references"
+        ]
+      },
+      "props": {
+        "variant": {
+          "type": "string",
+          "options": ["dropdown", "inline", "tabs"],
+          "description": "Display variant for language switcher UI"
+        },
+        "showFlags": {
+          "type": "boolean",
+          "description": "Show flag icons next to language labels"
+        },
+        "position": {
+          "type": "string",
+          "examples": ["top-right", "header", "footer", "sidebar"],
+          "description": "Position on page where switcher should appear"
+        }
+      }
+    }
+  }
 }
