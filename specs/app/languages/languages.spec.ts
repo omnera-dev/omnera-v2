@@ -629,7 +629,7 @@ test.describe('Languages Configuration', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-LANGUAGES-013: should automatically use default language as fallback',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
