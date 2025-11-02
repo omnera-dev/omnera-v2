@@ -10,7 +10,6 @@ import { Banner } from '@/presentation/components/layout/banner'
 import { Footer } from '@/presentation/components/layout/footer'
 import { Navigation } from '@/presentation/components/layout/navigation'
 import { ComponentRenderer } from '@/presentation/components/sections/component-renderer'
-import { generateLanguageSwitcherScript } from '@/presentation/scripts/language-switcher-client'
 import type { Blocks } from '@/domain/models/app/blocks'
 import type { Languages } from '@/domain/models/app/languages'
 import type { OpenGraph } from '@/domain/models/app/page/meta/open-graph'
@@ -281,11 +280,18 @@ export function DynamicPage({
         {page.layout?.footer && <Footer {...page.layout.footer} />}
         {/* Client-side language switcher functionality - only inject if page uses language-switcher */}
         {languages && hasLanguageSwitcher(page.sections, blocks) && (
-          <script
-            dangerouslySetInnerHTML={{
-              __html: generateLanguageSwitcherScript(languages),
-            }}
-          />
+          <>
+            {/* Configuration data for external script (CSP-compliant) */}
+            <div
+              data-language-switcher-config={JSON.stringify(languages)}
+              style={{ display: 'none' }}
+            />
+            {/* External script file loaded only when needed (defer ensures DOM is ready) */}
+            <script
+              src="/assets/language-switcher.js"
+              defer={true}
+            />
+          </>
         )}
       </body>
     </html>

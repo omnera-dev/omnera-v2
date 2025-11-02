@@ -141,6 +141,26 @@ function createHonoApp(
           })
         }
       })
+      .get('/assets/language-switcher.js', async (c) => {
+        try {
+          // Resolve path from project root (where Bun is executed)
+          const scriptPath = './src/presentation/scripts/client/language-switcher.js'
+          const file = Bun.file(scriptPath)
+          const content = await file.text()
+
+          return c.text(content, 200, {
+            'Content-Type': 'application/javascript',
+            'Cache-Control': `public, max-age=${CSS_CACHE_DURATION_SECONDS}`,
+          })
+        } catch (error) {
+          // Log error - intentional side effect for error tracking
+          // eslint-disable-next-line functional/no-expression-statements
+          await Effect.runPromise(Console.error('Failed to load language-switcher.js:', error))
+          return c.text('/* Language switcher script failed to load */', 500, {
+            'Content-Type': 'application/javascript',
+          })
+        }
+      })
       .get('/test/error', (c) => {
         if (process.env.NODE_ENV === 'production') {
           return c.html(renderNotFoundPage(), 404)
