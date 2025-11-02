@@ -125,7 +125,7 @@ test.describe('Languages Configuration', () => {
     'APP-LANGUAGES-003: should display the English fallback text',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // GIVEN: an app with default en-US and fallback en-US
+      // GIVEN: an app with translations where French is missing a key
       await startServerWithSchema({
         name: 'test-app',
         languages: {
@@ -135,6 +135,16 @@ test.describe('Languages Configuration', () => {
             { code: 'fr-FR', label: 'Français', direction: 'ltr' },
           ],
           fallback: 'en-US',
+          translations: {
+            'en-US': {
+              'welcome.message': 'Welcome to our site',
+              'missing.key': 'English fallback text',
+            },
+            'fr-FR': {
+              'welcome.message': 'Bienvenue sur notre site',
+              // 'missing.key' is intentionally missing to trigger fallback
+            },
+          },
         },
         blocks: [
           {
@@ -154,6 +164,11 @@ test.describe('Languages Configuration', () => {
               {
                 block: 'language-switcher',
               },
+              {
+                type: 'div',
+                props: { 'data-testid': 'missing-translation-text' },
+                children: ['$t:missing.key'],
+              },
             ],
           },
         ],
@@ -166,7 +181,7 @@ test.describe('Languages Configuration', () => {
 
       // THEN: it should display the English fallback text
       await expect(page.locator('[data-testid="missing-translation-text"]')).toHaveText(
-        /English fallback/
+        'English fallback text'
       )
     }
   )
@@ -618,12 +633,25 @@ test.describe('Languages Configuration', () => {
             { code: 'fr-FR', label: 'Français', direction: 'ltr' },
           ],
         },
+        blocks: [
+          {
+            name: 'language-switcher',
+            type: 'language-switcher',
+            props: {
+              variant: 'dropdown',
+            },
+          },
+        ],
         pages: [
           {
             name: 'home',
             path: '/',
             meta: { lang: 'en-US', title: 'Test', description: 'Test page' },
-            sections: [],
+            sections: [
+              {
+                block: 'language-switcher',
+              },
+            ],
           },
         ],
       })

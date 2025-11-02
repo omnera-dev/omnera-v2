@@ -273,6 +273,40 @@
           "Minimal valid configuration",
           "Single-language mode"
         ]
+      },
+      "application": {
+        "blocks": [
+          {
+            "name": "language-switcher",
+            "type": "language-switcher",
+            "props": {
+              "variant": "dropdown"
+            }
+          }
+        ],
+        "pages": [
+          {
+            "name": "Home",
+            "path": "/",
+            "meta": {
+              "lang": "en-US",
+              "title": "Test",
+              "description": "Test"
+            },
+            "sections": [
+              {
+                "block": "language-switcher"
+              }
+            ]
+          }
+        ],
+        "expectedBehavior": [
+          "Language switcher renders on the page",
+          "Dropdown displays 'English' as the only option",
+          "Default language (en-US) is pre-selected",
+          "Single-language mode (no actual switching possible)",
+          "Page lang attribute set to en-US"
+        ]
       }
     },
     {
@@ -753,6 +787,42 @@
           "fallback: handles missing translations",
           "Complete multi-language system"
         ]
+      },
+      "application": {
+        "blocks": [
+          {
+            "name": "language-switcher",
+            "type": "language-switcher",
+            "props": {
+              "variant": "dropdown"
+            }
+          }
+        ],
+        "pages": [
+          {
+            "name": "Home",
+            "path": "/",
+            "meta": {
+              "lang": "en-US",
+              "title": "Test",
+              "description": "Test"
+            },
+            "sections": [
+              {
+                "block": "language-switcher"
+              }
+            ]
+          }
+        ],
+        "expectedBehavior": [
+          "On first visit: automatically detects browser language (detectBrowser: true)",
+          "If browser is French and fr-FR supported, auto-selects French",
+          "User can manually switch languages via dropdown",
+          "Language choice persisted in localStorage (persistSelection: true)",
+          "On subsequent visits, loads saved language from localStorage",
+          "If translation key missing, falls back to English (fallback: en-US)",
+          "Complete language experience with all features working together"
+        ]
       }
     },
     {
@@ -783,6 +853,15 @@
           "Schema constraint enforced"
         ],
         "expectValidation": "fail"
+      },
+      "application": {
+        "expectedBehavior": [
+          "Build-time validation fails with clear error message",
+          "Error: 'Default language en-US not found in supported languages'",
+          "Prevents app from starting with invalid configuration",
+          "Forces developer to fix configuration before deployment",
+          "No runtime errors - caught early in build process"
+        ]
       }
     },
     {
@@ -814,6 +893,15 @@
           "Schema constraint enforced"
         ],
         "expectValidation": "fail"
+      },
+      "application": {
+        "expectedBehavior": [
+          "Build-time validation fails with clear error message",
+          "Error: 'Fallback language de-DE not found in supported languages'",
+          "Prevents runtime errors when fallback is needed",
+          "Ensures fallback translations actually exist",
+          "Configuration must be fixed before app can build"
+        ]
       }
     },
     {
@@ -842,6 +930,40 @@
           "Fallback defaults to 'default' language",
           "Fallback = 'en-US' (same as default)",
           "Simplifies configuration"
+        ]
+      },
+      "application": {
+        "blocks": [
+          {
+            "name": "language-switcher",
+            "type": "language-switcher",
+            "props": {
+              "variant": "dropdown"
+            }
+          }
+        ],
+        "pages": [
+          {
+            "name": "Home",
+            "path": "/",
+            "meta": {
+              "lang": "en-US",
+              "title": "Test",
+              "description": "Test"
+            },
+            "sections": [
+              {
+                "block": "language-switcher"
+              }
+            ]
+          }
+        ],
+        "expectedBehavior": [
+          "Fallback automatically set to default language (en-US)",
+          "When French translation missing, shows English text",
+          "No need to explicitly configure fallback for simple cases",
+          "Sensible default: fallback to the default language",
+          "Simplifies configuration for most common use case"
         ]
       }
     },
