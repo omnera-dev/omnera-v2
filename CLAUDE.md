@@ -236,20 +236,20 @@ The project uses a **queue-based TDD automation system** that creates GitHub iss
 Look for these indicators:
 - Title starts with "🤖" and contains a spec ID (e.g., `APP-VERSION-001`)
 - Labels include `tdd-spec:queued` or `tdd-spec:in-progress`
-- Issue body suggests a branch name: `tdd/spec-{SPEC-ID}` (this is a suggestion, not a requirement)
+- Instructions in @claude mention comment
 - Instructions are minimal and clear
 
 ### Your Workflow for Spec Issues
 
 When triggered by @claude mention (posted by queue processor every 15 min):
 
-1. **Create branch** - you create it automatically (choose your own branch name):
+1. **Branch creation** - Claude Code automatically creates branches with pattern: `claude/issue-{ISSUE_NUMBER}-{timestamp}`
    ```bash
-   # Suggested name from issue: tdd/spec-APP-VERSION-001
-   # You may use this OR add suffixes to avoid conflicts
-   git checkout -b tdd/spec-APP-VERSION-001  # or tdd/spec-APP-VERSION-001-clean
+   # Example: claude/issue-1319-20251102-2026
+   # Timestamp ensures uniqueness (no conflicts)
+   # Branch created automatically - no manual git checkout needed
    ```
-   **Note**: The queue processor does NOT create branches. You create the branch. If conflicts exist, add suffixes like `-clean`, `-v2`, etc.
+   **Note**: Claude Code creates the branch automatically. Do NOT manually create `tdd/spec-*` branches.
 
 2. **Run @agent-e2e-test-fixer**:
    - Locate test using spec ID (file path in issue)
@@ -336,7 +336,7 @@ The system implements automatic error recovery:
 
 Before considering a TDD spec issue complete, verify ALL of these:
 
-- [ ] Branch created (e.g., `tdd/spec-APP-VERSION-001`)
+- [ ] Branch created automatically by Claude Code (pattern: `claude/issue-{ISSUE_NUMBER}-{timestamp}`)
 - [ ] `.fixme()` removed from the ONE specific test
 - [ ] Code implemented to pass the test
 - [ ] Both agents run (e2e-test-fixer + codebase-refactor-auditor)
@@ -347,6 +347,7 @@ Before considering a TDD spec issue complete, verify ALL of these:
   - `tdd-automation` label
   - `Closes #<issue_number>` in PR body (no extra text after number)
   - Proper title: `fix: implement {SPEC-ID}`
+- [ ] **⚠️ CRITICAL: Auto-merge enabled** after validation passes (command: `gh pr merge --auto --squash`)
 - [ ] PR URL verified (check `gh pr list --label tdd-automation`)
 
 **If ANY checkbox is unchecked, the task is NOT complete.**

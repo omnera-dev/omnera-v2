@@ -10,7 +10,6 @@ assignees: ''
 
 **File**: `specs/path/to/test.spec.ts:123`
 **Feature**: feature/path
-**Branch**: `tdd/spec-[SPEC-ID]`
 
 ### Automated Implementation
 
@@ -18,16 +17,17 @@ The TDD queue system will automatically post implementation instructions as a co
 
 **What happens automatically**:
 
-1. Queue processor creates this issue and branch
-2. Queue processor posts a comment with `@claude` mention and detailed instructions
-3. Claude Code workflow triggers from the mention
-4. Agent checks out the branch and implements the test
-5. Agent commits and pushes (triggers validation workflow)
-6. Validation workflow runs tests and quality checks
-7. **On success**: Issue closed, PR auto-merged to main
-8. **On failure**: Spec automatically re-queued (up to 3 retries)
-9. **After 3 failures**: Marked as `failed` for human review
-10. **Queue continues**: Other specs processed while this one waits/retries
+1. Queue processor posts a comment with `@claude` mention and detailed instructions
+2. Claude Code workflow triggers from the mention
+3. Claude Code creates branch automatically: `claude/issue-{ISSUE_NUMBER}-{timestamp}`
+4. Agent invokes e2e-test-fixer to implement test
+5. Agent invokes codebase-refactor-auditor for quality review
+6. Agent commits and pushes (triggers validation workflow)
+7. Validation workflow runs tests and quality checks
+8. **On success**: Agent enables auto-merge, PR merges, issue closes
+9. **On failure**: Agent retries (up to 3 attempts total)
+10. **After 3 failures**: Marked as `tdd-spec:failed` for human review
+11. **Queue continues**: Other specs processed while this one waits/retries
 
 **Failure Handling & Retries**:
 
@@ -41,8 +41,8 @@ The TDD queue system will automatically post implementation instructions as a co
 1. **Skip automation** (if too complex):
    - Add label: `skip-automated`
    - Queue will skip this spec automatically
-   - Implement manually on the branch
-   - Push to trigger validation
+   - Implement manually (create your own branch)
+   - Create PR with `tdd-automation` label
 
 2. **Manual retry** (after reviewing failure):
    - Change label from `failed` back to `queued`
@@ -50,11 +50,12 @@ The TDD queue system will automatically post implementation instructions as a co
    - Queue will pick it up again
 
 3. **Direct implementation**:
-   - Checkout branch: `git checkout tdd/spec-[SPEC-ID]`
+   - Find Claude-created branch: `git fetch && git branch -r | grep "claude/issue-{ISSUE_NUMBER}"`
+   - Checkout branch: `git checkout <branch-name>`
    - Implement code manually
    - Push to trigger validation
 
-Validation runs automatically on every push to the spec branch.
+Validation runs automatically on every push.
 
 ---
 

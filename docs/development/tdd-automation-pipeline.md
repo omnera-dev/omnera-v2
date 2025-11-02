@@ -99,10 +99,10 @@ bun run scripts/tdd-automation/queue-manager.ts status
 1. Check if any spec is in-progress
 2. If none, pick oldest queued spec
 3. Mark issue as in-progress
-4. Post @claude comment with implementation instructions (suggests branch name `tdd/spec-{SPEC-ID}`)
+4. Post @claude comment with complete workflow instructions
 5. Exit (no waiting - **Claude Code creates branch and PR later**)
 
-**Note**: The queue processor **does NOT create any branches**. It only suggests a branch name in the issue body. Claude Code creates the actual branch when it starts working.
+**Note**: The queue processor **does NOT create any branches**. Claude Code automatically creates branches with pattern `claude/issue-{ISSUE_NUMBER}-{timestamp}` when it starts working.
 
 **Concurrency**: Strict serial - only one spec can be in-progress at a time
 
@@ -118,10 +118,10 @@ bun run scripts/tdd-automation/queue-manager.ts status
 
 **Key Steps**:
 
-1. **Create and checkout branch** from main (Claude Code creates its own branch)
-   - Queue processor suggests: `tdd/spec-{SPEC-ID}` in the issue body
-   - **Claude Code decides actual branch name** (may add suffixes like `-clean` to avoid conflicts)
-   - Example: Queue suggests `tdd/spec-APP-LANGUAGES-004`, Claude creates `tdd/spec-APP-LANGUAGES-004-clean`
+1. **Create branch automatically** (Claude Code creates branch with pattern `claude/issue-{ISSUE_NUMBER}-{timestamp}`)
+   - Example: `claude/issue-1319-20251102-2026`
+   - Timestamp ensures uniqueness (no conflicts)
+   - No manual `git checkout -b` needed
 2. **Run @agent-e2e-test-fixer**: Remove `.fixme()`, implement minimal code
 3. **Run @agent-codebase-refactor-auditor**: Review quality, refactor (ALWAYS)
 4. Commit changes (Claude Code account) - includes `bun run license`
@@ -252,16 +252,19 @@ When you push new tests with `.fixme()`:
 ## 🤖 APP-VERSION-001: should display version badge...
 
 **File**: `specs/app/version/version.spec.ts:28`
-**Branch**: `tdd/spec-APP-VERSION-001`
+**Feature**: app/version/version
 
 ### For Claude Code
 
-1. Checkout branch: `git checkout tdd/spec-APP-VERSION-001`
-2. Remove `.fixme()` from test APP-VERSION-001
-3. Implement minimal code to pass test
-4. Commit: `fix: implement APP-VERSION-001`
+@claude Please implement this spec:
+
+1. Remove `.fixme()` from test APP-VERSION-001
+2. Implement minimal code to pass test
+3. Commit: `fix: implement APP-VERSION-001`
 
 Validation runs automatically on push.
+
+**Note**: Branch is created automatically by Claude Code with pattern `claude/issue-{ISSUE_NUMBER}-{timestamp}`.
 ```
 
 ### Step 2: Queue Processing
@@ -281,7 +284,7 @@ Every 15 minutes (or manual):
 **Fully automated** - triggered by `@claude` mention in auto-comment:
 
 1. **Claude Code workflow triggers**: `claude-tdd.yml` detects `@claude` mention via issue_comment event
-2. **Create and checkout branch**: `git checkout -b tdd/spec-APP-VERSION-001`
+2. **Branch created automatically**: Claude Code creates branch with pattern `claude/issue-{ISSUE_NUMBER}-{timestamp}` (e.g., `claude/issue-1319-20251102-2026`)
 3. **Run @agent-e2e-test-fixer**:
    - Read test file with spec ID
    - Remove `.fixme()` from specific test
@@ -452,10 +455,11 @@ bun run scripts/tdd-automation/queue-manager.ts status
 1. **Queue processor creates issue**: New spec issue with `tdd-spec:queued` label
 2. **Auto-comment posted**: Issue receives comment with `@claude` mention and implementation instructions
 3. **Claude Code workflow triggers**: Detects `@claude` mention, starts agent
-4. **Agent operates in pipeline mode**: Recognizes `tdd/spec-*` branch pattern
+4. **Agent operates in pipeline mode**: Creates branch automatically with pattern `claude/issue-{ISSUE_NUMBER}-{timestamp}`
 5. **Agent implements test**: Removes `.fixme()`, writes minimal code, commits, pushes
 6. **Validation runs**: Automatic validation on push
-7. **Auto-merge on success**: PR merged to main if all tests pass
+7. **Auto-merge enabled**: Claude Code runs `gh pr merge --auto --squash` after validation passes
+8. **PR merges automatically**: When all checks pass, issue auto-closes
 
 **Manual intervention** (only if automation fails):
 
@@ -463,7 +467,7 @@ If the automated system fails or needs human review:
 
 1. **Check the issue comments**: Look for error messages from validation
 2. **Manual invocation**: Reply to issue with `@claude - Please implement spec {SPEC-ID} following the instructions above`
-3. **Manual implementation**: Checkout branch `tdd/spec-{SPEC-ID}` and implement manually
+3. **Manual implementation**: Find the Claude-created branch (`claude/issue-{ISSUE_NUMBER}-*`) or create a new one and implement manually
 
 **Pipeline Mode Rules** (for agents):
 
@@ -576,7 +580,7 @@ If a spec has been in-progress for > 90 minutes with no activity:
    ```
 2. Check if validation ran:
    ```bash
-   gh run list --workflow=tdd-validate.yml --branch "tdd/spec-{SPEC-ID}"
+   gh run list --workflow=test.yml --branch "claude/issue-{ISSUE_NUMBER}-*"
    ```
 3. Manually retry or reset:
    ```bash
@@ -642,7 +646,9 @@ If a spec has been in-progress for > 90 minutes with no activity:
    ```
 2. Clone and test locally:
    ```bash
-   git checkout tdd/spec-{SPEC-ID}
+   # Find the Claude-created branch for the issue
+   git fetch origin
+   git checkout claude/issue-{ISSUE_NUMBER}-{timestamp}
    bun test:e2e {file} --grep "{SPEC-ID}"
    bun test:e2e:regression
    ```
