@@ -6,6 +6,8 @@
  */
 
 import { type ReactElement } from 'react'
+import { Banner } from '@/presentation/components/layout/banner'
+import { Footer } from '@/presentation/components/layout/footer'
 import { Navigation } from '@/presentation/components/layout/navigation'
 import { ComponentRenderer } from '@/presentation/components/sections/component-renderer'
 import type { Blocks } from '@/domain/models/app/blocks'
@@ -85,6 +87,7 @@ export function DynamicPage({
         {themeStyles && <style dangerouslySetInnerHTML={{ __html: themeStyles }} />}
       </head>
       <body>
+        {page.layout?.banner && <Banner {...page.layout.banner} />}
         {page.layout?.navigation && <Navigation {...page.layout.navigation} />}
         <main
           data-testid={page.name ? `page-${page.name}` : undefined}
@@ -100,6 +103,7 @@ export function DynamicPage({
             />
           ))}
         </main>
+        {page.layout?.footer && <Footer {...page.layout.footer} />}
       </body>
     </html>
   )

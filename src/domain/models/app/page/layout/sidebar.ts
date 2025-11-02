@@ -200,10 +200,12 @@ export const SidebarItemsSchema = Schema.Array(SidebarItemSchema).annotations({
  * @see specs/app/pages/layout/sidebar/sidebar.schema.json
  */
 export const SidebarSchema = Schema.Struct({
-  enabled: Schema.Boolean.annotations({
-    description: 'Whether to show the sidebar',
-    default: false,
-  }),
+  enabled: Schema.optional(
+    Schema.Boolean.annotations({
+      description: 'Whether to show the sidebar',
+      default: false,
+    })
+  ),
   position: Schema.optional(SidebarPositionSchema),
   width: Schema.optional(
     Schema.String.annotations({

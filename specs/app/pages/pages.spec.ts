@@ -232,7 +232,7 @@ test.describe('Pages', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-008: should orchestrate global layout components',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
