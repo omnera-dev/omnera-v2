@@ -10,6 +10,7 @@ import { Banner } from '@/presentation/components/layout/banner'
 import { Footer } from '@/presentation/components/layout/footer'
 import { Navigation } from '@/presentation/components/layout/navigation'
 import { ComponentRenderer } from '@/presentation/components/sections/component-renderer'
+import { generateLanguageSwitcherScript } from '@/presentation/scripts/language-switcher-client'
 import type { Blocks } from '@/domain/models/app/blocks'
 import type { Languages } from '@/domain/models/app/languages'
 import type { OpenGraph } from '@/domain/models/app/page/meta/open-graph'
@@ -237,64 +238,7 @@ export function DynamicPage({
         {languages && (
           <script
             dangerouslySetInnerHTML={{
-              __html: `
-(function() {
-  'use strict';
-
-  const languagesConfig = ${JSON.stringify(languages)};
-  let currentLanguage = languagesConfig.default;
-  let isOpen = false;
-
-  // Cache DOM elements to avoid repeated queries
-  let currentLanguageEl, dropdown, switcherButton;
-
-  function updateUI() {
-    const currentLang = languagesConfig.supported.find(lang => lang.code === currentLanguage);
-    const label = currentLang?.label || currentLanguage;
-
-    if (currentLanguageEl) {
-      currentLanguageEl.textContent = label;
-    }
-  }
-
-  function toggleDropdown() {
-    isOpen = !isOpen;
-    if (dropdown) {
-      dropdown.classList.toggle('hidden', !isOpen);
-    }
-  }
-
-  function selectLanguage(code) {
-    currentLanguage = code;
-    isOpen = false;
-    updateUI();
-    if (dropdown) {
-      dropdown.classList.add('hidden');
-    }
-  }
-
-  document.addEventListener('DOMContentLoaded', function() {
-    // Cache DOM elements once
-    currentLanguageEl = document.querySelector('[data-testid="current-language"]');
-    dropdown = document.querySelector('[data-language-dropdown]');
-    switcherButton = document.querySelector('[data-testid="language-switcher"]');
-
-    if (switcherButton) {
-      switcherButton.addEventListener('click', toggleDropdown);
-    }
-
-    const languageOptions = document.querySelectorAll('[data-language-option]');
-    languageOptions.forEach(option => {
-      option.addEventListener('click', function() {
-        const code = this.getAttribute('data-language-code');
-        if (code) {
-          selectLanguage(code);
-        }
-      });
-    });
-  });
-})();
-            `,
+              __html: generateLanguageSwitcherScript(languages),
             }}
           />
         )}
