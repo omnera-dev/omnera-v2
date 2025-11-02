@@ -1,24 +1,12 @@
 name: Claude Code TDD
 
 # Trigger Strategy:
-# - workflow_run: Automatically triggers when TDD Queue Processor completes
-#   - Provides fallback if comment posting fails
-#   - Discovers spec by querying tdd-spec:in-progress label
 # - workflow_dispatch: Manual trigger with specific issue number (for debugging/retry)
 # - issue_comment/PR review: Triggered by @claude mentions
 #   - Automated: Queue processor posts @claude comment (primary automation path)
 #   - Manual: Human posts @claude for interactive use
-#
-# Note: workflow_run and issue_comment both fire for automation (intentional redundancy)
-# Concurrency groups prevent duplicate runs - second trigger cancels first
 
 on:
-  # Automatic trigger: When queue processor completes, find in-progress spec
-  workflow_run:
-    workflows: ['TDD Queue - Processor']
-    types: [completed]
-    branches: [main]
-
   # Manual trigger: Process specific issue number
   workflow_dispatch:
     inputs:
@@ -38,15 +26,13 @@ on:
     types: [submitted]
 
 # Concurrency control: Prevent duplicate runs
-# - workflow_run/workflow_dispatch: Use global TDD queue lock (strict serial processing)
-# - issue_comment: Check if comment is from queue automation (tdd-spec in title)
-#   - If automated: Use same 'tdd-automation' group (prevents duplicate with workflow_run)
+# - workflow_dispatch: Use global TDD queue lock (strict serial processing)
+# - issue_comment: Check if comment is from queue automation (🤖 in title)
+#   - If automated: Use same 'tdd-automation' group (serial queue processing)
 #   - If manual: Use per-issue concurrency (allows manual @claude without conflicts)
-# This prevents race condition where workflow_run and issue_comment both trigger simultaneously
-# when queue processor posts @claude comment (issue_comment) then completes (workflow_run)
 concurrency:
   group: claude-${{
-    (github.event_name == 'workflow_run' || github.event_name == 'workflow_dispatch') && 'tdd-automation' ||
+    github.event_name == 'workflow_dispatch' && 'tdd-automation' ||
     (github.event_name == 'issue_comment' && contains(github.event.issue.title, '🤖')) && 'tdd-automation' ||
     (github.event_name == 'issues' && contains(github.event.issue.title, '🤖')) && 'tdd-automation' ||
     github.event.issue.number ||
@@ -82,22 +68,8 @@ jobs:
           ISSUE_NUMBER=""
           ISSUE_BODY=""
 
-          # workflow_run: Must have in-progress spec
-          if [ "${{ github.event_name }}" = "workflow_run" ]; then
-            echo "🔍 Checking for in-progress spec (workflow_run trigger)..."
-            ISSUE_JSON=$(gh issue list --label "tdd-spec:in-progress" --json number,body --limit 1 --jq '.[0]')
-
-            if [ -n "$ISSUE_JSON" ] && [ "$ISSUE_JSON" != "null" ]; then
-              ISSUE_NUMBER=$(echo "$ISSUE_JSON" | jq -r '.number')
-              ISSUE_BODY=$(echo "$ISSUE_JSON" | jq -r '.body')
-              HAS_CONTEXT="true"
-              echo "✅ Found in-progress spec: #$ISSUE_NUMBER"
-            else
-              echo "⚠️  No in-progress spec found - skipping workflow"
-            fi
-
           # workflow_dispatch: Must have valid issue number
-          elif [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
             ISSUE_NUMBER="${{ github.event.inputs.issue_number }}"
             if [ -n "$ISSUE_NUMBER" ]; then
               echo "🔍 Validating issue #$ISSUE_NUMBER (workflow_dispatch trigger)..."
@@ -164,7 +136,6 @@ jobs:
     # Only run if context validation passed
     if: |
       needs.validate-context.outputs.has_context == 'true' && (
-        github.event_name == 'workflow_run' ||
         github.event_name == 'workflow_dispatch' ||
         github.event.comment.author_association == 'OWNER' ||
         github.event.comment.author_association == 'MEMBER' ||
@@ -246,10 +217,10 @@ jobs:
           additional_permissions: |
             actions: read
 
-          # For workflow_run/workflow_dispatch: Provide explicit prompt to trigger action
+          # For workflow_dispatch: Provide explicit prompt to trigger action
           # For comment-triggered events: Omit prompt so action extracts from @claude comment
           prompt: >-
-            ${{ (github.event_name == 'workflow_run' || github.event_name == 'workflow_dispatch') &&
+            ${{ github.event_name == 'workflow_dispatch' &&
             format('Implement TDD spec with 7-step workflow: 1) Run @agent-e2e-test-fixer to fix the test 2) Run @agent-codebase-refactor-auditor to refactor code (ALWAYS) 3) Commit changes (bun run license first) 4) Create PR to main with tdd-automation label and include "Closes #{0}" in PR body 5) Monitor test.yml validation - if fails, analyze errors, fix, push, retry (max 3 attempts with retry:N labels) - if 3 failures, mark issue tdd-spec:failed and exit 6) BEFORE enabling auto-merge, check for conflicts: fetch latest main and attempt rebase - if conflicts exist, resolve intelligently by merging both changes (e.g. add both props, combine logic), then re-run validation - use git push --force-with-lease after rebase 7) After validation passes, enable PR auto-merge with --squash 8) DO NOT close issue manually (closes automatically on PR merge). Branch already exists and is checked out.', steps.branch.outputs.issue_number) || '' }}
 
           # Multi-agent workflow: e2e-test-fixer for implementation, codebase-refactor-auditor for quality
