@@ -99,8 +99,10 @@ bun run scripts/tdd-automation/queue-manager.ts status
 1. Check if any spec is in-progress
 2. If none, pick oldest queued spec
 3. Mark issue as in-progress
-4. Post @claude comment with implementation instructions
-5. Exit (no waiting - branch and PR created by Claude Code later)
+4. Post @claude comment with implementation instructions (suggests branch name `tdd/spec-{SPEC-ID}`)
+5. Exit (no waiting - **Claude Code creates branch and PR later**)
+
+**Note**: The queue processor **does NOT create any branches**. It only suggests a branch name in the issue body. Claude Code creates the actual branch when it starts working.
 
 **Concurrency**: Strict serial - only one spec can be in-progress at a time
 
@@ -116,7 +118,10 @@ bun run scripts/tdd-automation/queue-manager.ts status
 
 **Key Steps**:
 
-1. Create and checkout branch `tdd/spec-{SPEC-ID}` from main
+1. **Create and checkout branch** from main (Claude Code creates its own branch)
+   - Queue processor suggests: `tdd/spec-{SPEC-ID}` in the issue body
+   - **Claude Code decides actual branch name** (may add suffixes like `-clean` to avoid conflicts)
+   - Example: Queue suggests `tdd/spec-APP-LANGUAGES-004`, Claude creates `tdd/spec-APP-LANGUAGES-004-clean`
 2. **Run @agent-e2e-test-fixer**: Remove `.fixme()`, implement minimal code
 3. **Run @agent-codebase-refactor-auditor**: Review quality, refactor (ALWAYS)
 4. Commit changes (Claude Code account) - includes `bun run license`

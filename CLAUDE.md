@@ -236,17 +236,20 @@ The project uses a **queue-based TDD automation system** that creates GitHub iss
 Look for these indicators:
 - Title starts with "🤖" and contains a spec ID (e.g., `APP-VERSION-001`)
 - Labels include `tdd-spec:queued` or `tdd-spec:in-progress`
-- Issue provides a branch name: `tdd/spec-{SPEC-ID}`
+- Issue body suggests a branch name: `tdd/spec-{SPEC-ID}` (this is a suggestion, not a requirement)
 - Instructions are minimal and clear
 
 ### Your Workflow for Spec Issues
 
 When triggered by @claude mention (posted by queue processor every 15 min):
 
-1. **Create branch** - you create it automatically:
+1. **Create branch** - you create it automatically (choose your own branch name):
    ```bash
-   git checkout -b tdd/spec-APP-VERSION-001
+   # Suggested name from issue: tdd/spec-APP-VERSION-001
+   # You may use this OR add suffixes to avoid conflicts
+   git checkout -b tdd/spec-APP-VERSION-001  # or tdd/spec-APP-VERSION-001-clean
    ```
+   **Note**: The queue processor does NOT create branches. You create the branch. If conflicts exist, add suffixes like `-clean`, `-v2`, etc.
 
 2. **Run @agent-e2e-test-fixer**:
    - Locate test using spec ID (file path in issue)
