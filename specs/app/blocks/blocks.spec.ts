@@ -348,7 +348,7 @@ test.describe('Reusable Blocks', () => {
             meta: { lang: 'en-US', title: 'Home', description: 'Home' },
             sections: [
               {
-                $ref: 'hero-cta',
+                block: 'hero-cta',
                 vars: { buttonClass: 'btn-primary', buttonText: 'Get Started' },
               },
             ],
@@ -356,7 +356,7 @@ test.describe('Reusable Blocks', () => {
         ],
       })
 
-      // WHEN: page sections reference blocks using $ref and vars
+      // WHEN: page sections reference blocks using block property and vars
       await page.goto('/')
 
       // THEN: it should render blocks within page layout with full variable substitution
