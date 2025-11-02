@@ -53,7 +53,10 @@ test.describe('Theme Configuration', () => {
                     type: 'div',
                     props: {
                       'data-testid': 'color-primary',
-                      style: '--color-primary: #007bff;',
+                      style: {
+                        backgroundColor: '$theme.colors.primary',
+                        color: '$theme.colors.secondary',
+                      },
                     },
                     children: ['Primary'],
                   },
@@ -69,10 +72,15 @@ test.describe('Theme Configuration', () => {
 
       // THEN: it should validate theme with colors as the only design token category
       await expect(page.locator('[data-testid="theme-colors"]')).toBeVisible()
-      const primaryColor = await page
-        .locator('[data-testid="color-primary"]')
-        .evaluate((el) => window.getComputedStyle(el).getPropertyValue('--color-primary'))
-      expect(primaryColor).toBe('#007bff')
+      const element = page.locator('[data-testid="color-primary"]')
+      const backgroundColor = await element.evaluate(
+        (el) => window.getComputedStyle(el).backgroundColor
+      )
+      const color = await element.evaluate((el) => window.getComputedStyle(el).color)
+
+      // Verify theme colors were applied via token substitution
+      expect(backgroundColor).toBe('rgb(0, 123, 255)') // #007bff
+      expect(color).toBe('rgb(108, 117, 125)') // #6c757d
     }
   )
 
@@ -203,7 +211,58 @@ test.describe('Theme Configuration', () => {
             name: 'home',
             path: '/',
             meta: { lang: 'en-US', title: 'Test', description: 'Test page' },
-            sections: [],
+            sections: [
+              {
+                type: 'div',
+                props: {
+                  'data-testid': 'theme-colors',
+                  style: { backgroundColor: '$theme.colors.primary', padding: '16px' },
+                },
+                children: ['Colors'],
+              },
+              {
+                type: 'div',
+                props: {
+                  'data-testid': 'theme-fonts',
+                  style: { fontFamily: '$theme.fonts.body.family' },
+                },
+                children: ['Fonts'],
+              },
+              {
+                type: 'div',
+                props: {
+                  'data-testid': 'theme-spacing',
+                  style: { padding: '$theme.spacing.section' },
+                },
+                children: ['Spacing'],
+              },
+              {
+                type: 'div',
+                props: { 'data-testid': 'theme-animations' },
+                children: ['Animations'],
+              },
+              {
+                type: 'div',
+                props: { 'data-testid': 'theme-breakpoints' },
+                children: ['Breakpoints'],
+              },
+              {
+                type: 'div',
+                props: {
+                  'data-testid': 'theme-shadows',
+                  style: { boxShadow: '$theme.shadows.md' },
+                },
+                children: ['Shadows'],
+              },
+              {
+                type: 'div',
+                props: {
+                  'data-testid': 'theme-border-radius',
+                  style: { borderRadius: '$theme.borderRadius.md', border: '1px solid' },
+                },
+                children: ['Border Radius'],
+              },
+            ],
           },
         ],
       })
@@ -282,7 +341,18 @@ test.describe('Theme Configuration', () => {
             name: 'home',
             path: '/',
             meta: { lang: 'en-US', title: 'Test', description: 'Test page' },
-            sections: [],
+            sections: [
+              {
+                type: 'div',
+                props: {
+                  'data-testid': 'animated-element',
+                  style: {
+                    animation: 'fadeIn 1s ease-in-out',
+                  },
+                },
+                children: ['Animated Content'],
+              },
+            ],
           },
         ],
       })
