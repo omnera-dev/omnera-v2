@@ -85,6 +85,79 @@ export function DynamicPage({
             content={description}
           />
         )}
+        {/* Open Graph metadata */}
+        {page.meta?.openGraph && (
+          <>
+            {page.meta.openGraph.title && (
+              <meta
+                property="og:title"
+                content={page.meta.openGraph.title}
+              />
+            )}
+            {page.meta.openGraph.description && (
+              <meta
+                property="og:description"
+                content={page.meta.openGraph.description}
+              />
+            )}
+            {page.meta.openGraph.image && (
+              <meta
+                property="og:image"
+                content={page.meta.openGraph.image}
+              />
+            )}
+            {page.meta.openGraph.url && (
+              <meta
+                property="og:url"
+                content={page.meta.openGraph.url}
+              />
+            )}
+            {page.meta.openGraph.type && (
+              <meta
+                property="og:type"
+                content={page.meta.openGraph.type}
+              />
+            )}
+          </>
+        )}
+        {/* Twitter Card metadata */}
+        {(page.meta?.twitter || page.meta?.twitterCard) && (
+          <>
+            {((page.meta.twitter || page.meta.twitterCard)?.card) && (
+              <meta
+                name="twitter:card"
+                content={(page.meta.twitter || page.meta.twitterCard)!.card}
+              />
+            )}
+            {((page.meta.twitter || page.meta.twitterCard)?.title) && (
+              <meta
+                name="twitter:title"
+                content={(page.meta.twitter || page.meta.twitterCard)!.title}
+              />
+            )}
+            {((page.meta.twitter || page.meta.twitterCard)?.description) && (
+              <meta
+                name="twitter:description"
+                content={(page.meta.twitter || page.meta.twitterCard)!.description}
+              />
+            )}
+            {((page.meta.twitter || page.meta.twitterCard)?.image) && (
+              <meta
+                name="twitter:image"
+                content={(page.meta.twitter || page.meta.twitterCard)!.image}
+              />
+            )}
+          </>
+        )}
+        {/* Structured Data (JSON-LD) */}
+        {(page.meta?.schema || page.meta?.structuredData) && (
+          <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{
+              __html: JSON.stringify(page.meta.schema || page.meta.structuredData),
+            }}
+          />
+        )}
         <link
           rel="stylesheet"
           href="/assets/output.css"

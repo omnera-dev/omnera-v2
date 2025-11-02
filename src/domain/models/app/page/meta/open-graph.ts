@@ -111,17 +111,23 @@ export const OpenGraphDeterminerSchema = Schema.Literal('a', 'an', 'the', 'auto'
  * @see specs/app/pages/meta/social/open-graph.schema.json
  */
 export const OpenGraphSchema = Schema.Struct({
-  title: Schema.String.pipe(Schema.maxLength(90)).annotations({
-    description: 'Open Graph title (may differ from page title)',
-  }),
-  description: Schema.String.pipe(Schema.maxLength(200)).annotations({
-    description: 'Open Graph description',
-  }),
-  type: OpenGraphTypeSchema,
-  url: Schema.String.annotations({
-    description: 'Canonical URL for this page',
-    format: 'uri',
-  }),
+  title: Schema.optional(
+    Schema.String.pipe(Schema.maxLength(90)).annotations({
+      description: 'Open Graph title (may differ from page title)',
+    })
+  ),
+  description: Schema.optional(
+    Schema.String.pipe(Schema.maxLength(200)).annotations({
+      description: 'Open Graph description',
+    })
+  ),
+  type: Schema.optional(OpenGraphTypeSchema),
+  url: Schema.optional(
+    Schema.String.annotations({
+      description: 'Canonical URL for this page',
+      format: 'uri',
+    })
+  ),
   image: Schema.optional(
     Schema.String.annotations({
       description: 'Image URL for social sharing (recommended: 1200x630px)',

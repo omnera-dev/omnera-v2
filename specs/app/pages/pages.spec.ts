@@ -394,7 +394,7 @@ test.describe('Pages', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-012: should support complete metadata configuration beyond basic SEO',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
