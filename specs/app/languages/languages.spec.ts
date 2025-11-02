@@ -505,7 +505,7 @@ test.describe('Languages Configuration', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-LANGUAGES-010: should provide seamless multi-language UX with auto-detection, persistence, and fallback',
     { tag: '@spec' },
     async ({ page, startServerWithSchema, context }) => {
