@@ -129,3 +129,28 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
           GH_REPO: ${{ github.repository }}
+
+  delete-tdd-branch:
+    name: Delete TDD Branch on PR Close
+    if: |
+      github.event_name == 'pull_request' &&
+      github.event.action == 'closed' &&
+      github.event.pull_request.merged == false &&
+      (startsWith(github.event.pull_request.head.ref, 'tdd/') ||
+       startsWith(github.event.pull_request.head.ref, 'claude/'))
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Delete branch
+        run: |
+          BRANCH="${{ github.event.pull_request.head.ref }}"
+          echo "🗑️  Deleting unmerged branch: $BRANCH"
+
+          gh api \
+            --method DELETE \
+            /repos/${{ github.repository }}/git/refs/heads/$BRANCH \
+            && echo "✅ Branch deleted successfully" \
+            || echo "⚠️  Branch may already be deleted"
+        env:
+          GH_TOKEN: ${{ github.token }}

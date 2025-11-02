@@ -163,6 +163,29 @@ bun run scripts/tdd-automation/queue-manager.ts status
    - Removes label `tdd-spec:in-progress`
    - **Note**: PR body MUST include `Closes #<issue_number>` for automatic closure
 
+3. **delete-tdd-branch job** (cleanup unmerged branches):
+   - Triggers when PR is closed **without merging** for `tdd/*` or `claude/*` branches
+   - Automatically deletes the branch to prevent stale branches
+   - Complements GitHub's auto-delete setting (which only handles merged PRs)
+   - **Note**: Merged PR branches are auto-deleted by GitHub repository setting
+
+#### **cleanup-stale-branches.yml** (Periodic Cleanup)
+
+**Triggers**:
+
+- Schedule (weekly on Sundays at 2 AM UTC)
+- Manual dispatch
+
+**Purpose**: Safety net to clean up any stale branches missed by automatic deletion
+
+**Key Steps**:
+
+1. Scan for all `tdd/*` and `claude/*` branches
+2. Check if each branch has an open, closed, or merged PR
+3. Delete branches with closed/merged PRs
+4. Delete orphaned branches (>7 days old, no PR)
+5. Keep branches with open PRs or recent activity
+
 #### **tdd-queue-recovery.yml** (Timeout Recovery)
 
 **Triggers**:
@@ -598,6 +621,14 @@ If a spec has been in-progress for > 90 minutes with no activity:
 - All changes via PR (never direct to main)
 - Auto-merge only after validation passes
 - Squash merge (clean commit history)
+
+### Automatic Branch Cleanup
+
+- **Merged PRs**: Branches automatically deleted by GitHub repository setting
+- **Closed (unmerged) PRs**: Branches deleted by `delete-tdd-branch` job in test.yml
+- **Periodic cleanup**: Weekly safety net removes any missed stale branches
+- **Orphaned branches**: Deleted if >7 days old with no associated PR
+- **Result**: No manual branch cleanup needed, prevents repository clutter
 
 ## Configuration Options
 
