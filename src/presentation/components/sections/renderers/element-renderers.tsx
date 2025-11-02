@@ -6,9 +6,8 @@
  */
 
 import DOMPurify from 'dompurify'
-import { Schema } from 'effect'
 import { type ReactElement } from 'react'
-import { LanguagesSchema, type Languages } from '@/domain/models/app/languages'
+import { type Languages } from '@/domain/models/app/languages'
 import { LanguageSwitcher } from '@/presentation/components/languages/language-switcher'
 
 /**
@@ -193,9 +192,10 @@ export function renderCustomHTML(props: ElementProps): ReactElement {
  * Renders language switcher block
  *
  * This is a special block that requires languages configuration from app schema.
- * If languages is not provided or invalid, renders a warning message.
+ * If languages is not provided, renders a warning message.
  *
- * Runtime validation with Effect Schema ensures languages configuration is valid.
+ * Note: Languages are already validated at server startup via AppSchema validation.
+ * No need to re-validate here since the data comes from the validated app config.
  *
  * Note: Props like variant, showFlags, and position are currently not used but may
  * be supported in future versions of the LanguageSwitcher component.
@@ -217,25 +217,6 @@ export function renderLanguageSwitcher(_props: ElementProps, languages?: Languag
     )
   }
 
-  // Runtime validation with Effect Schema
-  try {
-    const validatedLanguages = Schema.decodeUnknownSync(LanguagesSchema)(languages)
-    return <LanguageSwitcher languages={validatedLanguages} />
-  } catch (error) {
-    console.error('language-switcher: invalid languages configuration', error)
-    return (
-      <div
-        style={{
-          padding: '1rem',
-          border: '2px dashed red',
-          color: 'red',
-          fontFamily: 'monospace',
-        }}
-      >
-        language-switcher: invalid app.languages configuration
-        <br />
-        <small>{String(error)}</small>
-      </div>
-    )
-  }
+  // Languages already validated at server startup (start-server.ts)
+  return <LanguageSwitcher languages={languages} />
 }
