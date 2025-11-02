@@ -2,10 +2,15 @@ name: Claude Code TDD
 
 # Trigger Strategy:
 # - workflow_run: Automatically triggers when TDD Queue Processor completes
+#   - Provides fallback if comment posting fails
+#   - Discovers spec by querying tdd-spec:in-progress label
 # - workflow_dispatch: Manual trigger with specific issue number (for debugging/retry)
-# - issue_comment/PR review: Manual @claude mentions for interactive use
-# - Uses label query to find the in-progress spec (workflow_run only)
-# - Fully automatic TDD automation with zero API calls for triggering
+# - issue_comment/PR review: Triggered by @claude mentions
+#   - Automated: Queue processor posts @claude comment (primary automation path)
+#   - Manual: Human posts @claude for interactive use
+#
+# Note: workflow_run and issue_comment both fire for automation (intentional redundancy)
+# Concurrency groups prevent duplicate runs - second trigger cancels first
 
 on:
   # Automatic trigger: When queue processor completes, find in-progress spec
