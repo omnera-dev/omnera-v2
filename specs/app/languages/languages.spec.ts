@@ -170,11 +170,13 @@ test.describe('Languages Configuration', () => {
                   {
                     type: 'span',
                     props: { 'data-testid': 'welcome-text' },
+                    // '$t:welcome' resolves to translations['fr-FR']['welcome'] = 'Bienvenue'
                     children: ['$t:welcome'],
                   },
                   {
                     type: 'span',
                     props: { 'data-testid': 'goodbye-text' },
+                    // '$t:goodbye' missing in fr-FR, falls back to translations['en-US']['goodbye'] = 'Goodbye'
                     children: ['$t:goodbye'],
                   },
                 ],
