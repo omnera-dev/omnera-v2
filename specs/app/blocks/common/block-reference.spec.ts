@@ -35,7 +35,7 @@ test.describe('Block Reference', () => {
         pages: [{ path: '/', sections: [{ block: 'my-block', vars: { color: 'blue' } }] }],
       })
 
-      // WHEN: $ref and vars are provided
+      // WHEN: block and vars are provided
       await page.goto('/')
 
       // THEN: it should validate minimal block reference structure at build time
@@ -47,7 +47,7 @@ test.describe('Block Reference', () => {
     'APP-BLOCKS-REFERENCE-002: should look up and instantiate matching block template',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // GIVEN: block reference $ref property
+      // GIVEN: block reference block property
       await startServerWithSchema({
         name: 'test-app',
         blocks: [
@@ -65,7 +65,7 @@ test.describe('Block Reference', () => {
         ],
       })
 
-      // WHEN: $ref is block name in kebab-case
+      // WHEN: block is block name in kebab-case
       await page.goto('/')
 
       // THEN: it should look up and instantiate matching block template
@@ -78,7 +78,7 @@ test.describe('Block Reference', () => {
     'APP-BLOCKS-REFERENCE-003: should validate kebab-case naming at build time',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // GIVEN: block reference $ref pattern
+      // GIVEN: block reference block pattern
       const validBlocks = [
         { name: 'icon-badge', type: 'div' },
         { name: 'cta', type: 'div' },
@@ -91,7 +91,7 @@ test.describe('Block Reference', () => {
         pages: [{ path: '/', sections: validBlocks.map((b) => ({ block: b.name, vars: {} })) }],
       })
 
-      // WHEN: $ref matches ^[a-z][a-z0-9-]*$ pattern
+      // WHEN: block matches ^[a-z][a-z0-9-]*$ pattern
       await page.goto('/')
 
       // THEN: it should validate kebab-case naming at build time
@@ -103,14 +103,14 @@ test.describe('Block Reference', () => {
     "APP-BLOCKS-REFERENCE-004: should fail validation if referenced block doesn't exist",
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // GIVEN: block reference $ref validation
+      // GIVEN: block reference block validation
       await startServerWithSchema({
         name: 'test-app',
         blocks: [{ name: 'icon-badge', type: 'badge' }],
         pages: [{ path: '/', sections: [{ block: 'icon-badge', vars: {} }] }],
       })
 
-      // WHEN: $ref value must match existing block name in blocks array
+      // WHEN: block value must match existing block name in blocks array
       await page.goto('/')
 
       // THEN: it should fail validation if referenced block doesn't exist
@@ -268,7 +268,7 @@ test.describe('Block Reference', () => {
         ],
       })
 
-      // WHEN: $ref is 'icon-badge' with vars: color='orange', icon='users', text='6 à 15 personnes'
+      // WHEN: block is 'icon-badge' with vars: color='orange', icon='users', text='6 à 15 personnes'
       await page.goto('/')
 
       // THEN: it should render badge with orange color, users icon, and French text
@@ -318,7 +318,7 @@ test.describe('Block Reference', () => {
         ],
       })
 
-      // WHEN: $ref is 'section-header' with vars: titleColor='pourpre', title='notre mission', subtitle='...'
+      // WHEN: block is 'section-header' with vars: titleColor='pourpre', title='notre mission', subtitle='...'
       await page.goto('/')
 
       // THEN: it should render section header with purple title and French content

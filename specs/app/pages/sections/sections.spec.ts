@@ -311,12 +311,12 @@ test.describe('Page Sections', () => {
             name: 'Test',
             path: '/',
             meta: { lang: 'en-US', title: 'Test', description: 'Test' },
-            sections: [{ $ref: 'section-header', vars: { title: 'Our Features' } }],
+            sections: [{ block: 'section-header', vars: { title: 'Our Features' } }],
           },
         ],
       })
 
-      // WHEN: section uses $ref with vars for variable substitution
+      // WHEN: section uses block with vars for variable substitution
       await page.goto('/')
 
       // THEN: it should reference and instantiate reusable block with variables
@@ -351,14 +351,14 @@ test.describe('Page Sections', () => {
                 props: { id: 'hero' },
                 children: [{ type: 'text', content: 'Welcome' }],
               },
-              { $ref: 'cta-section', vars: { buttonLabel: 'Get Started' } },
+              { block: 'cta-section', vars: { buttonLabel: 'Get Started' } },
               { type: 'container', children: [{ type: 'text', content: 'Features' }] },
             ],
           },
         ],
       })
 
-      // WHEN: array contains both direct definitions and $ref blocks
+      // WHEN: array contains both direct definitions and block references
       await page.goto('/')
 
       // THEN: it should support hybrid section composition
@@ -610,7 +610,7 @@ test.describe('Page Sections', () => {
                     responsive: { md: { props: { columns: 2 } }, lg: { props: { columns: 3 } } },
                     children: [
                       {
-                        $ref: 'feature-card',
+                        block: 'feature-card',
                         vars: {
                           iconName: 'rocket',
                           title: 'Fast',
@@ -618,7 +618,7 @@ test.describe('Page Sections', () => {
                         },
                       },
                       {
-                        $ref: 'feature-card',
+                        block: 'feature-card',
                         vars: {
                           iconName: 'lock',
                           title: 'Secure',
@@ -626,7 +626,7 @@ test.describe('Page Sections', () => {
                         },
                       },
                       {
-                        $ref: 'feature-card',
+                        block: 'feature-card',
                         vars: {
                           iconName: 'puzzle',
                           title: 'Flexible',

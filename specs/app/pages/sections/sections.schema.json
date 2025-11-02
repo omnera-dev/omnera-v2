@@ -108,7 +108,7 @@
         ]
       },
       {
-        "$ref": "section-header",
+        "block": "section-header",
         "vars": {
           "title": "Our Features",
           "subtitle": "Everything you need to succeed",
@@ -643,15 +643,15 @@
             }
           },
           "section": {
-            "$ref": "section-header",
+            "block": "section-header",
             "vars": {
               "title": "Our Features"
             }
           }
         },
         "assertions": [
-          "Block reference: $ref + vars",
-          "$ref: 'section-header' (block ID)",
+          "Block reference: block + vars",
+          "block: 'section-header' (block ID)",
           "vars: { title: 'Our Features' }",
           "Variable substitution: $title → 'Our Features'",
           "Reusable block instantiation"
@@ -674,7 +674,7 @@
           }
         },
         "section": {
-          "$ref": "section-header",
+          "block": "section-header",
           "vars": {
             "title": "Our Features"
           }
@@ -692,7 +692,7 @@
     {
       "id": "APP-PAGES-SECTIONS-010",
       "given": "sections with mixed direct components and block references",
-      "when": "array contains both direct definitions and $ref blocks",
+      "when": "array contains both direct definitions and block references",
       "then": "it should support hybrid section composition",
       "validation": {
         "setup": {
@@ -710,7 +710,7 @@
               ]
             },
             {
-              "$ref": "cta-section",
+              "block": "cta-section",
               "vars": {
                 "buttonLabel": "Get Started"
               }

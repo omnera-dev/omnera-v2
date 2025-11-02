@@ -5,15 +5,10 @@
   "description": "Reference to a reusable block template with variable substitution",
   "type": "object",
   "properties": {
-    "$ref": {
-      "type": "string",
-      "pattern": "^[a-z][a-z0-9-]*$",
-      "description": "Name of the block to reference (must match a block name in the blocks array)"
-    },
     "block": {
       "type": "string",
       "pattern": "^[a-z][a-z0-9-]*$",
-      "description": "Name of the block to reference (must match a block name in the blocks array) - alternative to $ref"
+      "description": "Name of the block template to reference (must match a block name in the blocks array)"
     },
     "vars": {
       "type": "object",
@@ -36,18 +31,11 @@
       "additionalProperties": false
     }
   },
-  "oneOf": [
-    {
-      "required": ["$ref", "vars"]
-    },
-    {
-      "required": ["block", "vars"]
-    }
-  ],
+  "required": ["block", "vars"],
   "additionalProperties": false,
   "examples": [
     {
-      "$ref": "icon-badge",
+      "block": "icon-badge",
       "vars": {
         "color": "orange",
         "icon": "users",
@@ -62,7 +50,7 @@
       }
     },
     {
-      "$ref": "section-header",
+      "block": "section-header",
       "vars": {
         "titleColor": "pourpre",
         "title": "notre mission",
@@ -74,19 +62,19 @@
     {
       "id": "APP-BLOCKS-REFERENCE-001",
       "given": "block reference with required properties",
-      "when": "$ref and vars are provided",
+      "when": "block and vars are provided",
       "then": "it should validate minimal block reference structure at build time",
       "validation": {
         "setup": {
           "validReference": {
-            "$ref": "my-block",
+            "block": "my-block",
             "vars": {
               "color": "blue"
             }
           },
           "invalidReferences": [
             {
-              "$ref": "my-block"
+              "block": "my-block"
             },
             {
               "vars": {
@@ -97,17 +85,17 @@
           ]
         },
         "assertions": [
-          "Valid: Both $ref and vars present",
+          "Valid: Both block and vars present",
           "Invalid: Missing vars (vars is required even if empty)",
-          "Invalid: Missing $ref (cannot instantiate without template name)",
+          "Invalid: Missing block (cannot instantiate without template name)",
           "Invalid: Empty object (both properties required)"
         ]
       }
     },
     {
       "id": "APP-BLOCKS-REFERENCE-002",
-      "given": "block reference $ref property",
-      "when": "$ref is block name in kebab-case",
+      "given": "block reference block property",
+      "when": "block is block name in kebab-case",
       "then": "it should look up and instantiate matching block template",
       "x-test": {
         "setup": {
@@ -125,13 +113,13 @@
           ],
           "references": [
             {
-              "$ref": "icon-badge",
+              "block": "icon-badge",
               "vars": {
                 "text": "New"
               }
             },
             {
-              "$ref": "cta-button",
+              "block": "cta-button",
               "vars": {
                 "label": "Click"
               }
@@ -140,17 +128,17 @@
         },
         "expectedDOM": "<div data-testid=\"block-icon-badge\">New</div>\n<button data-testid=\"block-cta-button\">Click</button>",
         "assertions": [
-          "$ref='icon-badge' matches block with name='icon-badge'",
-          "$ref='cta-button' matches block with name='cta-button'",
+          "block='icon-badge' matches block with name='icon-badge'",
+          "block='cta-button' matches block with name='cta-button'",
           "Each reference instantiates corresponding block template",
-          "$ref property identifies which template to use"
+          "block property identifies which template to use"
         ]
       }
     },
     {
       "id": "APP-BLOCKS-REFERENCE-003",
-      "given": "block reference $ref pattern",
-      "when": "$ref matches ^[a-z][a-z0-9-]*$ pattern",
+      "given": "block reference block pattern",
+      "when": "block matches ^[a-z][a-z0-9-]*$ pattern",
       "then": "it should validate kebab-case naming at build time",
       "validation": {
         "setup": {
@@ -161,14 +149,14 @@
           "Valid: 'icon-badge', 'cta', 'section-header-2', 'my-component'",
           "Invalid: 'IconBadge' (uppercase), 'cta_button' (underscore)",
           "Invalid: 'section header' (space), '2-columns' (starts with digit), '' (empty)",
-          "Pattern ensures $ref matches block naming convention"
+          "Pattern ensures block matches block naming convention"
         ]
       }
     },
     {
       "id": "APP-BLOCKS-REFERENCE-004",
-      "given": "block reference $ref validation",
-      "when": "$ref value must match existing block name in blocks array",
+      "given": "block reference block validation",
+      "when": "block value must match existing block name in blocks array",
       "then": "it should fail validation if referenced block doesn't exist",
       "validation": {
         "setup": {
@@ -183,17 +171,17 @@
             }
           ],
           "validReference": {
-            "$ref": "icon-badge",
+            "block": "icon-badge",
             "vars": {}
           },
           "invalidReference": {
-            "$ref": "non-existent-block",
+            "block": "non-existent-block",
             "vars": {}
           }
         },
         "assertions": [
-          "Valid: $ref='icon-badge' exists in blocks array",
-          "Invalid: $ref='non-existent-block' not found in blocks array",
+          "Valid: block='icon-badge' exists in blocks array",
+          "Invalid: block='non-existent-block' not found in blocks array",
           "Build-time validation ensures all references resolve",
           "Prevents runtime errors from missing block templates"
         ]
@@ -228,7 +216,7 @@
             ]
           },
           "reference": {
-            "$ref": "user-card",
+            "block": "user-card",
             "vars": {
               "name": "John Doe",
               "role": "Developer",
@@ -304,7 +292,7 @@
             ]
           },
           "reference": {
-            "$ref": "settings-toggle",
+            "block": "settings-toggle",
             "vars": {
               "priority": "high",
               "label": "Enable feature",
@@ -325,7 +313,7 @@
     {
       "id": "APP-BLOCKS-REFERENCE-008",
       "given": "icon-badge reference example",
-      "when": "$ref is 'icon-badge' with vars: color='orange', icon='users', text='6 à 15 personnes'",
+      "when": "block is 'icon-badge' with vars: color='orange', icon='users', text='6 à 15 personnes'",
       "then": "it should render badge with orange color, users icon, and French text",
       "x-test": {
         "setup": {
@@ -353,7 +341,7 @@
             ]
           },
           "reference": {
-            "$ref": "icon-badge",
+            "block": "icon-badge",
             "vars": {
               "color": "orange",
               "icon": "users",
@@ -373,7 +361,7 @@
     {
       "id": "APP-BLOCKS-REFERENCE-009",
       "given": "section-header reference example",
-      "when": "$ref is 'section-header' with vars: titleColor='pourpre', title='notre mission', subtitle='...'",
+      "when": "block is 'section-header' with vars: titleColor='pourpre', title='notre mission', subtitle='...'",
       "then": "it should render section header with purple title and French content",
       "x-test": {
         "setup": {
@@ -402,7 +390,7 @@
             ]
           },
           "reference": {
-            "$ref": "section-header",
+            "block": "section-header",
             "vars": {
               "titleColor": "pourpre",
               "title": "notre mission",
@@ -436,7 +424,7 @@
             "content": "$message"
           },
           "reference": {
-            "$ref": "alert",
+            "block": "alert",
             "vars": {
               "variant": "success",
               "message": "Saved successfully!"
@@ -491,7 +479,7 @@
           },
           "references": [
             {
-              "$ref": "team-member",
+              "block": "team-member",
               "vars": {
                 "photo": "/alice.jpg",
                 "name": "Alice",
@@ -499,7 +487,7 @@
               }
             },
             {
-              "$ref": "team-member",
+              "block": "team-member",
               "vars": {
                 "photo": "/bob.jpg",
                 "name": "Bob",
@@ -507,7 +495,7 @@
               }
             },
             {
-              "$ref": "team-member",
+              "block": "team-member",
               "vars": {
                 "photo": "/carol.jpg",
                 "name": "Carol",
