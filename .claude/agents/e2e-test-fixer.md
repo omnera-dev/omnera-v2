@@ -165,10 +165,11 @@ When operating in pipeline mode:
 
 ### Pipeline Configuration Alignment
 
-The agent respects pipeline configuration from `.github/tdd-automation-config.yml`:
-- **max_tests_per_run**: Stop after fixing 5 tests (or configured limit)
-- **Test priorities**: Fix tests in priority order from scan results
+The agent respects pipeline configuration (hardcoded in workflows):
+- **max_concurrent**: 1 spec at a time (strict serial processing)
+- **max_retries**: 3 retry attempts before marking spec as failed
 - **Validation requirements**: Must pass regression tests before committing
+- **Auto-merge**: Enabled with squash merge after validation passes
 
 ### Handoff to codebase-refactor-auditor
 

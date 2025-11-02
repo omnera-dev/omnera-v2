@@ -177,29 +177,23 @@ bun run scripts/tdd-automation/queue-manager.ts status
 4. Comment on issue about timeout recovery
 5. **Result**: Prevents permanent pipeline blocks from stuck specs
 
-### 3. Configuration (`.github/tdd-automation-config.yml`)
+### 3. Configuration
 
-```yaml
-queue:
-  enabled: true
-  processing_interval: 15 # minutes
-  max_concurrent: 1 # strict serial processing
+All configuration is hardcoded in workflow files (no central config file):
 
-  populate:
-    on_push: true
-    on_schedule: true
-    schedule_cron: '*/15 * * * *'
+**Key Settings**:
 
-  issues:
-    label_prefix: 'tdd-spec'
-    states: [queued, in-progress, completed, failed]
-    auto_close_completed: true
+- **Processing interval**: 15 minutes (`.github/workflows/tdd-queue-processor.yml` cron)
+- **Max concurrent**: 1 spec at a time - strict serial (hardcoded in processor logic)
+- **Issue labels**: `tdd-spec:queued`, `tdd-spec:in-progress`, `tdd-spec:completed`, `tdd-spec:failed`
+- **Auto-validation**: Enabled (`.github/workflows/test.yml`)
+- **Auto-merge**: Enabled with squash merge (hardcoded in `claude-tdd.yml` prompt)
+- **Max retries**: 3 attempts (hardcoded in `claude-tdd.yml` prompt)
 
-  validation:
-    auto_validate: true
-    auto_merge: true
-    merge_strategy: squash
-```
+**Metrics Storage**:
+
+- Metrics file: `.github/tdd-metrics.json` (hardcoded in `track-progress.ts`)
+- Dashboard file: `TDD-PROGRESS.md` (hardcoded in `track-progress.ts`)
 
 ## How It Works
 
@@ -577,21 +571,17 @@ schedule:
 
 ### Change Concurrency
 
-Edit `.github/tdd-automation-config.yml`:
+Edit `.github/workflows/tdd-queue-processor.yml`:
 
-```yaml
-queue:
-  max_concurrent: 1 # Strict serial (current)
-  # max_concurrent: 3  # Allow 3 specs in parallel
-```
+```bash
+# Current (line ~70): Check if ANY spec is in-progress
+IN_PROGRESS=$(gh issue list --label "tdd-spec:in-progress" --json number --jq 'length')
+if [ "$IN_PROGRESS" -gt 0 ]; then exit 0; fi
 
-Then update processor workflow to check count instead of boolean:
-
-```yaml
-# In tdd-queue-processor.yml
-if [ "$IN_PROGRESS_COUNT" -lt "$MAX_CONCURRENT" ]; then
-  # Process next spec
-fi
+# To allow 3 concurrent specs:
+MAX_CONCURRENT=3
+IN_PROGRESS=$(gh issue list --label "tdd-spec:in-progress" --json number --jq 'length')
+if [ "$IN_PROGRESS" -ge "$MAX_CONCURRENT" ]; then exit 0; fi
 ```
 
 ### Disable Auto-Merge
