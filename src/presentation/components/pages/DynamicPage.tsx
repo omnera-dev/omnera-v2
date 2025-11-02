@@ -265,6 +265,15 @@ export function DynamicPage({
               data-language-switcher-config={JSON.stringify(languages)}
               style={{ display: 'none' }}
             />
+            {/* Expose languages config to window for testing/debugging - fallback defaults to default language */}
+            <script
+              dangerouslySetInnerHTML={{
+                __html: `window.APP_LANGUAGES = ${JSON.stringify({
+                  ...languages,
+                  fallback: languages.fallback ?? languages.default,
+                })};`,
+              }}
+            />
             {/* External script file loaded only when needed (defer ensures DOM is ready) */}
             <script
               src="/assets/language-switcher.js"
