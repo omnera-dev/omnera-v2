@@ -71,10 +71,6 @@ test.describe('URL Path', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: a single-level path
-      // WHEN: value is '/about' or '/pricing'
-      // THEN: it should accept paths with leading slash
-
-      // GIVEN: a single-level path
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -109,10 +105,6 @@ test.describe('URL Path', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: a nested path
-      // WHEN: value is '/products/pricing' or '/blog/article'
-      // THEN: it should accept multi-level URL paths
-
-      // GIVEN: a nested path
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -146,10 +138,6 @@ test.describe('URL Path', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: a path with kebab-case segments
-      // WHEN: value is '/our-team' or '/contact-us'
-      // THEN: it should accept kebab-case URL segments
-
-      // GIVEN: a path with kebab-case segments
       await startServerWithSchema({
         name: 'test-app',
         pages: [
@@ -182,10 +170,6 @@ test.describe('URL Path', () => {
     'APP-PAGES-PATH-006: should provide examples for typical URL patterns',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // GIVEN: common website paths (/, /about, /pricing, /contact)
-      // WHEN: standard website pages are defined
-      // THEN: it should provide examples for typical URL patterns
-
       // GIVEN: common website paths (/, /about, /pricing, /contact)
       await startServerWithSchema({
         name: 'test-app',
@@ -238,10 +222,6 @@ test.describe('URL Path', () => {
     'APP-PAGES-PATH-008: should ensure unique routing for all pages',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // GIVEN: paths across multiple pages
-      // WHEN: each page has unique path
-      // THEN: it should ensure unique routing for all pages
-
       // GIVEN: paths across multiple pages
       await startServerWithSchema({
         name: 'test-app',

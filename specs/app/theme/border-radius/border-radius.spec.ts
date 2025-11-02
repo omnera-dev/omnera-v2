@@ -153,10 +153,6 @@ test.describe('Border Radius', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: complete radius system (none, sm, md, lg, xl, 2xl, 3xl, full)
-      // WHEN: all radius tokens are defined
-      // THEN: it should validate complete rounding system
-
-      // GIVEN: complete radius system (none, sm, md, lg, xl, 2xl, 3xl, full)
       await startServerWithSchema({
         name: 'test-app',
         theme: {

@@ -267,10 +267,6 @@ test.describe('Font Configuration', () => {
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: a theme with multiple font categories (title, body, mono)
-      // WHEN: different fonts are defined for headings, body text, and code
-      // THEN: it should validate semantic font system for all UI contexts
-
-      // GIVEN: a theme with multiple font categories (title, body, mono)
       await startServerWithSchema({
         name: 'test-app',
         theme: {
@@ -305,10 +301,6 @@ test.describe('Font Configuration', () => {
     'APP-THEME-FONTS-APPLICATION-001: should render with body font family and metrics',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // GIVEN: body font applied to paragraph
-      // WHEN: paragraph uses theme.fonts.body
-      // THEN: it should render with body font family and metrics
-
       // GIVEN: body font applied to paragraph
       await startServerWithSchema({
         name: 'test-app',
@@ -350,10 +342,6 @@ test.describe('Font Configuration', () => {
     'APP-THEME-FONTS-APPLICATION-002: should render with title font and text transformation',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // GIVEN: title font applied to heading
-      // WHEN: heading uses theme.fonts.title with transform
-      // THEN: it should render with title font and text transformation
-
       // GIVEN: title font applied to heading
       await startServerWithSchema({
         name: 'test-app',
