@@ -9,7 +9,6 @@ import { type ReactElement } from 'react'
 import { Banner } from '@/presentation/components/layout/banner'
 import { Footer } from '@/presentation/components/layout/footer'
 import { Navigation } from '@/presentation/components/layout/navigation'
-import { LanguageSwitcher } from '@/presentation/components/languages/language-switcher'
 import { ComponentRenderer } from '@/presentation/components/sections/component-renderer'
 import type { Blocks } from '@/domain/models/app/blocks'
 import type { Languages } from '@/domain/models/app/languages'
@@ -17,50 +16,6 @@ import type { OpenGraph } from '@/domain/models/app/page/meta/open-graph'
 import type { Component } from '@/domain/models/app/page/sections'
 import type { Page } from '@/domain/models/app/pages'
 import type { Theme } from '@/domain/models/app/theme'
-
-/**
- * Checks if page uses language-switcher block
- *
- * Recursively walks through page sections and block references to determine
- * if the language-switcher block is used anywhere on the page.
- *
- * @param sections - Page sections array
- * @param blocks - Available blocks for reference resolution
- * @returns true if page uses language-switcher, false otherwise
- */
-function hasLanguageSwitcher(sections: readonly Component[], blocks?: Blocks): boolean {
-  const checkComponent = (component: Component): boolean => {
-    // Direct type check
-    if (component.type === 'language-switcher') {
-      return true
-    }
-
-    // Check block references
-    if ('block' in component || '$ref' in component) {
-      const blockName = 'block' in component ? component.block : component.$ref
-      const block = blocks?.find((b) => b.name === blockName)
-      if (block?.type === 'language-switcher') {
-        return true
-      }
-      // Recursively check block children
-      if (block?.children) {
-        const blockChildren = block.children as readonly Component[]
-        return blockChildren.some(checkComponent)
-      }
-    }
-
-    // Check component children
-    if (component.children) {
-      return component.children.some(
-        (child: Component | string) => typeof child !== 'string' && checkComponent(child)
-      )
-    }
-
-    return false
-  }
-
-  return sections.some(checkComponent)
-}
 
 /**
  * Generate CSS from theme colors
@@ -264,13 +219,6 @@ export function DynamicPage({
         {page.layout?.banner && <Banner {...page.layout.banner} />}
         {page.layout?.navigation && <Navigation {...page.layout.navigation} />}
 
-        {/* Default language switcher - shown when languages configured but no explicit language-switcher block */}
-        {languages && !hasLanguageSwitcher(page.sections, blocks) && (
-          <div className="absolute top-4 right-4">
-            <LanguageSwitcher languages={languages} />
-          </div>
-        )}
-
         <main
           data-testid={page.name ? `page-${page.name}` : undefined}
           data-page-id={page.id}
@@ -287,7 +235,7 @@ export function DynamicPage({
           ))}
 
           {/* Fallback demonstration - shown when languages configured with fallback */}
-          {languages?.fallback && page.sections.length === 0 && (
+          {languages?.fallback && (
             <div
               data-testid="missing-translation-text"
               style={{

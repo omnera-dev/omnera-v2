@@ -136,12 +136,25 @@ test.describe('Languages Configuration', () => {
           ],
           fallback: 'en-US',
         },
+        blocks: [
+          {
+            name: 'language-switcher',
+            type: 'language-switcher',
+            props: {
+              variant: 'dropdown',
+            },
+          },
+        ],
         pages: [
           {
             name: 'home',
             path: '/',
             meta: { lang: 'en-US', title: 'Test', description: 'Test page' },
-            sections: [],
+            sections: [
+              {
+                block: 'language-switcher',
+              },
+            ],
           },
         ],
       })
@@ -173,12 +186,25 @@ test.describe('Languages Configuration', () => {
           ],
           detectBrowser: true,
         },
+        blocks: [
+          {
+            name: 'language-switcher',
+            type: 'language-switcher',
+            props: {
+              variant: 'dropdown',
+            },
+          },
+        ],
         pages: [
           {
             name: 'home',
             path: '/',
             meta: { lang: 'en-US', title: 'Test', description: 'Test page' },
-            sections: [],
+            sections: [
+              {
+                block: 'language-switcher',
+              },
+            ],
           },
         ],
       })
