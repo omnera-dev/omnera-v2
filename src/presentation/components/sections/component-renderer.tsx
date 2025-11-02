@@ -79,6 +79,33 @@ function substitutePropsThemeTokens(
 }
 
 /**
+ * Substitutes variables in a value
+ *
+ * Replaces `$variableName` patterns with values from the vars object.
+ * Example: `$title` with vars: { title: 'Hello' } → `Hello`
+ *
+ * @param value - Value that may contain variable placeholders
+ * @param vars - Variables object with substitution values
+ * @returns Value with variables replaced
+ */
+function substituteVariables(
+  value: unknown,
+  vars?: Record<string, unknown>
+): unknown {
+  if (typeof value !== 'string' || !vars) {
+    return value
+  }
+
+  // Check if the entire value is a single variable (e.g., '$title')
+  if (value.startsWith('$')) {
+    const varName = value.slice(1)
+    return vars[varName] !== undefined ? vars[varName] : value
+  }
+
+  return value
+}
+
+/**
  * Resolves a block reference to a component
  *
  * Pure function that finds a block by name and converts it to a Component.
@@ -112,13 +139,14 @@ function resolveBlock(
  *
  * This component handles the recursive rendering of sections, converting
  * the declarative component configuration into React elements.
- * Supports block references for reusable components and theme token substitution.
+ * Supports block references for reusable components, variable substitution, and theme token substitution.
  *
  * @param props - Component props
  * @param props.component - Component configuration from sections schema (can be a direct component or block reference)
  * @param props.blockName - Optional block name for data-block attribute
  * @param props.blocks - Optional blocks array for resolving block references
  * @param props.theme - Optional theme configuration for token substitution
+ * @param props.vars - Optional variables for $variable substitution in children
  * @returns React element matching the component type
  */
 export function ComponentRenderer({
@@ -126,15 +154,17 @@ export function ComponentRenderer({
   blockName,
   blocks,
   theme,
+  vars,
 }: {
   readonly component: Component | SimpleBlockReference | BlockReference
   readonly blockName?: string
   readonly blocks?: Blocks
   readonly theme?: Theme
+  readonly vars?: Record<string, unknown>
 }): Readonly<ReactElement | null> {
   // Handle block references
   if ('block' in component) {
-    // Simple block reference: { block: 'name' }
+    // Block reference with vars: { block: 'name', vars: {} }
     const resolved = resolveBlock(component.block, blocks)
     if (!resolved) {
       return (
@@ -158,13 +188,13 @@ export function ComponentRenderer({
         blockName={resolved.name}
         blocks={blocks}
         theme={theme}
+        vars={component.vars}
       />
     )
   }
 
   if ('$ref' in component) {
     // Block reference with vars: { $ref: 'name', vars: {} }
-    // Note: Variable substitution not yet implemented
     const resolved = resolveBlock(component.$ref, blocks)
     if (!resolved) {
       return (
@@ -188,6 +218,7 @@ export function ComponentRenderer({
         blockName={resolved.name}
         blocks={blocks}
         theme={theme}
+        vars={component.vars}
       />
     )
   }
@@ -201,7 +232,9 @@ export function ComponentRenderer({
   // Render children recursively - children can be Component objects or strings
   const renderedChildren = children?.map((child: Component | string, index: number) => {
     if (typeof child === 'string') {
-      return child
+      // Apply variable substitution to string children
+      const substituted = substituteVariables(child, vars)
+      return typeof substituted === 'string' ? substituted : String(substituted)
     }
     return (
       <ComponentRenderer
@@ -209,6 +242,7 @@ export function ComponentRenderer({
         component={child}
         blocks={blocks}
         theme={theme}
+        vars={vars}
       />
     )
   })
