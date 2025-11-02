@@ -83,6 +83,8 @@ import { InlineScriptsSchema } from './inline-scripts'
 export const ScriptsSchema = Schema.Struct({
   features: Schema.optional(FeaturesSchema),
   externalScripts: Schema.optional(ExternalScriptsSchema),
+  // Support 'external' as an alias for 'externalScripts' (test shorthand)
+  external: Schema.optional(ExternalScriptsSchema),
   inlineScripts: Schema.optional(InlineScriptsSchema),
   config: Schema.optional(
     Schema.Record({
