@@ -573,7 +573,7 @@ test.describe('Languages Configuration', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-LANGUAGES-011: should fail validation - default language must be in supported array',
     { tag: '@spec' },
     async ({ startServerWithSchema }) => {

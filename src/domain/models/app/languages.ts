@@ -161,6 +161,12 @@ export const LanguagesSchema = Schema.Struct({
   persistSelection: Schema.optional(Schema.Boolean),
   translations: Schema.optional(TranslationsSchema),
 }).pipe(
+  Schema.filter((input) => {
+    const supportedCodes = input.supported.map((lang) => lang.code)
+    return supportedCodes.includes(input.default)
+      ? undefined
+      : 'default language must be in supported array'
+  }),
   Schema.annotations({
     title: 'Languages Configuration',
     description: 'Multi-language support configuration for the entire application',
