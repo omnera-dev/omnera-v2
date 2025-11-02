@@ -38,7 +38,7 @@ describe('PageSchema', () => {
   test('should accept page with all optional properties', () => {
     // GIVEN: Complete page with id, layout, and scripts
     const page = {
-      id: 'homepage',
+      id: 'home-page',
       name: 'home',
       path: '/',
       meta: {
@@ -71,7 +71,7 @@ describe('PageSchema', () => {
     const result = Schema.decodeUnknownSync(PageSchema)(page)
 
     // THEN: Complete page should be accepted
-    expect(result.id).toBe('homepage')
+    expect(result.id).toBe('home-page')
     expect(result.layout.navigation.logo).toBe('/logo.svg')
     expect(result.scripts.features.analytics).toBe(true)
   })

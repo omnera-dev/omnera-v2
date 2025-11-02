@@ -10,18 +10,24 @@ import { Schema } from 'effect'
 /**
  * Page ID (unique identifier for the page)
  *
- * Unlike database entity IDs (integers), page IDs are string-based identifiers
- * that can be:
- * - Descriptive slugs: 'home-page-123', 'about-us'
+ * Unlike database entity IDs which are auto-incrementing integers, page IDs are
+ * user-defined strings for human-readable identification and routing purposes.
+ *
+ * Valid formats:
+ * - Kebab-case: 'home-page', 'about-us'
+ * - Simple: 'homepage', 'contact'
  * - UUIDs: '550e8400-e29b-41d4-a716-446655440000'
  * - Numeric strings: '12345'
  *
- * Page IDs are optional - if omitted, the system can auto-generate them.
- * They must be unique within the pages array.
+ * Page IDs must be unique within the pages array.
  *
- * @example "homepage"
- * @example "home-page-123"
- * @example "550e8400-e29b-41d4-a716-446655440000"
+ * @example
+ * ```typescript
+ * const pageId1 = 'homepage'
+ * const pageId2 = 'about-us'
+ * const pageId3 = 'contact-form-123'
+ * const pageId4 = '550e8400-e29b-41d4-a716-446655440000' // UUID
+ * ```
  *
  * @see specs/app/pages/id/id.schema.json
  */
@@ -31,6 +37,7 @@ export const PageIdSchema = Schema.String.pipe(
     identifier: 'PageId',
     title: 'Page ID',
     description: 'Unique identifier for the page',
+    examples: ['homepage', 'about-us', 'contact-form-123', '550e8400-e29b-41d4-a716-446655440000'],
   })
 )
 
