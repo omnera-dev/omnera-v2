@@ -6,6 +6,7 @@
  */
 
 import { type ReactElement } from 'react'
+import { LanguageSwitcher } from '@/presentation/components/languages/language-switcher'
 import { Badge } from '@/presentation/components/ui/badge'
 import { TypographyH1, TypographyLead } from '@/presentation/components/ui/typography'
 import type { App } from '@/domain/models/app'
@@ -15,7 +16,7 @@ import type { App } from '@/domain/models/app'
  *
  * This is the fallback home page shown when no custom page configuration is provided.
  * Displays the app name, optional version badge, and optional description in a centered layout.
- * Language switching should be configured via blocks in custom pages, not in this fallback.
+ * When languages are configured, automatically includes a language switcher in the top-right.
  *
  * @param props - Component props
  * @param props.app - Validated application data from AppSchema
@@ -38,6 +39,13 @@ export function DefaultHomePage({ app }: { readonly app: App }): Readonly<ReactE
       </head>
       <body className="h-screen overflow-hidden bg-linear-to-br from-gray-50 to-gray-100">
         <div className="container-page h-full">
+          {/* Language Switcher - shown when languages are configured */}
+          {app.languages && (
+            <div className="absolute top-4 right-4">
+              <LanguageSwitcher languages={app.languages} />
+            </div>
+          )}
+
           <div className="flex h-full flex-col items-center justify-center">
             <div className="w-full max-w-2xl space-y-6 text-center">
               {/* Version Badge */}
@@ -61,6 +69,22 @@ export function DefaultHomePage({ app }: { readonly app: App }): Readonly<ReactE
             </div>
           </div>
         </div>
+
+        {/* Client-side language switcher functionality - only inject if languages configured */}
+        {app.languages && (
+          <>
+            {/* Configuration data for external script (CSP-compliant) */}
+            <div
+              data-language-switcher-config={JSON.stringify(app.languages)}
+              style={{ display: 'none' }}
+            />
+            {/* External script file loaded only when needed (defer ensures DOM is ready) */}
+            <script
+              src="/assets/language-switcher.js"
+              defer={true}
+            />
+          </>
+        )}
       </body>
     </html>
   )
