@@ -23,9 +23,9 @@ export function AnimationsRenderer({
   animations,
 }: {
   readonly animations?: AnimationsConfig
-}): Readonly<ReactElement | null> {
+}): Readonly<ReactElement> | undefined {
   if (!animations || Object.keys(animations).length === 0) {
-    return null
+    return undefined
   }
 
   return (
