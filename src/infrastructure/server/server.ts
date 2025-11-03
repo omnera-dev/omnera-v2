@@ -252,9 +252,27 @@ function createHonoApp(
           const supportedCodes = app.languages?.supported.map((l) => l.code) || []
           const urlLanguage = extractLanguageFromPath(c.req.path, supportedCodes)
 
-          // If language is invalid, return 404
+          // If language is invalid, fall back to rendering as regular page path
+          // This handles paths like /products/pricing that shouldn't be treated as language subdirectories
           if (!urlLanguage) {
-            return c.html(renderNotFoundPage(), 404)
+            const { path } = c.req
+
+            // Detect language from Accept-Language header for SSR
+            const detectedLanguage =
+              app.languages?.detectBrowser !== false
+                ? detectLanguageFromHeader(
+                    c.req.header('Accept-Language'),
+                    app.languages?.supported.map((l) => l.code) || []
+                  )
+                : undefined
+
+            // Render dynamic page
+            const html = renderPage(app, path, detectedLanguage)
+            if (!html) {
+              return c.html(renderNotFoundPage(), 404)
+            }
+
+            return c.html(html)
           }
 
           // Remove language prefix from path to get actual page path
