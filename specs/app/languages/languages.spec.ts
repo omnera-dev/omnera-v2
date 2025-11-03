@@ -1124,10 +1124,10 @@ test.describe('Languages Configuration', () => {
   // ============================================================================
 
   test(
-    'APP-LANGUAGES-SUBDIRECTORY-001: should serve / with detected/default language (hybrid approach)',
+    'APP-LANGUAGES-SUBDIRECTORY-001: should serve / with default language (cacheable)',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // GIVEN: an app with languages configured
+      // GIVEN: an app with detectBrowser disabled
       await startServerWithSchema({
         name: 'test-app',
         languages: {
@@ -1136,7 +1136,7 @@ test.describe('Languages Configuration', () => {
             { code: 'en-US', label: 'English', direction: 'ltr' },
             { code: 'fr-FR', label: 'Français', direction: 'ltr' },
           ],
-          detectBrowser: true,
+          detectBrowser: false,
         },
         blocks: [
           {
@@ -1155,15 +1155,61 @@ test.describe('Languages Configuration', () => {
         ],
       })
 
-      // WHEN: user visits / without language subdirectory
+      // WHEN: user visits /
       await page.goto('/')
 
-      // THEN: should serve content at / (no redirect) with detected/default language
+      // THEN: should serve default language at / (no redirect, cacheable)
       await expect(page).toHaveURL('/')
-      await expect(page.locator('html')).toHaveAttribute('lang', /en-US|fr-FR/)
-      await expect(page.locator('[data-testid="current-language"]')).toBeVisible()
+      await expect(page.locator('html')).toHaveAttribute('lang', 'en-US')
+      await expect(page.locator('[data-testid="current-language"]')).toHaveText('English')
     }
   )
+
+  test.describe('with French browser locale (non-default)', () => {
+    test.use({ browserLocale: 'fr-FR' })
+
+    test(
+      'APP-LANGUAGES-SUBDIRECTORY-001b: should redirect from / to /:lang/ when detected language differs from default',
+      { tag: '@spec' },
+      async ({ page, startServerWithSchema }) => {
+        // GIVEN: an app with detectBrowser enabled and default 'en-US'
+        await startServerWithSchema({
+          name: 'test-app',
+          languages: {
+            default: 'en-US',
+            supported: [
+              { code: 'en-US', label: 'English', direction: 'ltr' },
+              { code: 'fr-FR', label: 'Français', direction: 'ltr' },
+            ],
+            detectBrowser: true,
+          },
+          blocks: [
+            {
+              name: 'language-switcher',
+              type: 'language-switcher',
+              props: { variant: 'dropdown' },
+            },
+          ],
+          pages: [
+            {
+              name: 'home',
+              path: '/',
+              meta: { title: 'Home', description: 'Homepage' },
+              sections: [{ block: 'language-switcher' }],
+            },
+          ],
+        })
+
+        // WHEN: user with French browser visits /
+        await page.goto('/')
+
+        // THEN: should redirect to /fr-FR/ (detected language differs from default)
+        await expect(page).toHaveURL('/fr-FR/')
+        await expect(page.locator('html')).toHaveAttribute('lang', 'fr-FR')
+        await expect(page.locator('[data-testid="current-language"]')).toHaveText('Français')
+      }
+    )
+  })
 
   test(
     'APP-LANGUAGES-SUBDIRECTORY-002: should render homepage at /:lang/ with correct language',
