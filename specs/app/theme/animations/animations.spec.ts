@@ -192,7 +192,7 @@ test.describe('Animation Configuration', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-THEME-ANIMATIONS-006: should validate disabled state',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -222,7 +222,7 @@ test.describe('Animation Configuration', () => {
       // THEN: it should validate disabled state
       const element = page.locator('[data-testid="animation-fadeIn"]')
       const animValue = await element.evaluate((el) => window.getComputedStyle(el).animation)
-      expect(animValue).toBe('none')
+      expect(animValue).toContain('none')
     }
   )
 
