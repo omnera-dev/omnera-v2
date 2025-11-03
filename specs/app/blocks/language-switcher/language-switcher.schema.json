@@ -88,6 +88,43 @@
           "Variant is one of: dropdown, inline, tabs",
           "Props are optional with sensible defaults"
         ]
+      },
+      "application": {
+        "app": {
+          "languages": {
+            "supported": ["en", "fr", "es"]
+          }
+        },
+        "blocks": [
+          {
+            "name": "language-switcher",
+            "type": "language-switcher",
+            "props": {
+              "variant": "dropdown"
+            }
+          }
+        ],
+        "pages": [
+          {
+            "name": "Home",
+            "path": "/",
+            "sections": [
+              {
+                "block": "language-switcher",
+                "vars": {}
+              }
+            ]
+          }
+        ],
+        "expectedDOM": "<div data-testid=\"block-language-switcher\" class=\"language-switcher-dropdown\"><button>EN</button><ul class=\"dropdown-menu\"><li><a href=\"/en\">English</a></li><li><a href=\"/fr\">Français</a></li><li><a href=\"/es\">Español</a></li></ul></div>",
+        "assertions": [
+          "Dropdown variant: Compact dropdown menu for 3+ languages",
+          "Data source: Reads from app.languages.supported: ['en', 'fr', 'es']",
+          "Current language button: 'EN' (active language)",
+          "Dropdown menu: All 3 languages listed with localized labels",
+          "Navigation: Each language links to language-specific URL (/en, /fr, /es)",
+          "Default variant: dropdown used when variant prop specified"
+        ]
       }
     },
     {
@@ -111,6 +148,44 @@
           "ShowFlags is a boolean prop",
           "Flags enhance visual recognition of languages"
         ]
+      },
+      "application": {
+        "app": {
+          "languages": {
+            "supported": ["en", "fr"]
+          }
+        },
+        "blocks": [
+          {
+            "name": "language-switcher",
+            "type": "language-switcher",
+            "props": {
+              "variant": "inline",
+              "showFlags": true
+            }
+          }
+        ],
+        "pages": [
+          {
+            "name": "About",
+            "path": "/about",
+            "sections": [
+              {
+                "block": "language-switcher",
+                "vars": {}
+              }
+            ]
+          }
+        ],
+        "expectedDOM": "<div data-testid=\"block-language-switcher\" class=\"language-switcher-inline\"><a href=\"/en\" class=\"active\">🇬🇧 English</a><a href=\"/fr\">🇫🇷 Français</a></div>",
+        "assertions": [
+          "Inline variant: Horizontal button list for 2-3 languages",
+          "showFlags: true → Flag emojis displayed (🇬🇧, 🇫🇷)",
+          "Flag placement: Before language label ('🇬🇧 English')",
+          "Visual recognition: Flags help users identify languages quickly",
+          "Current language: 'en' marked with 'active' class",
+          "Inline layout: Both language links displayed side-by-side"
+        ]
       }
     },
     {
@@ -130,6 +205,40 @@
           "Default variant: dropdown",
           "Default showFlags: false",
           "Props are entirely optional"
+        ]
+      },
+      "application": {
+        "app": {
+          "languages": {
+            "supported": ["en", "de", "ja"]
+          }
+        },
+        "blocks": [
+          {
+            "name": "language-switcher",
+            "type": "language-switcher"
+          }
+        ],
+        "pages": [
+          {
+            "name": "Products",
+            "path": "/products",
+            "sections": [
+              {
+                "block": "language-switcher",
+                "vars": {}
+              }
+            ]
+          }
+        ],
+        "expectedDOM": "<div data-testid=\"block-language-switcher\" class=\"language-switcher-dropdown\"><button>EN</button><ul class=\"dropdown-menu\"><li><a href=\"/en\">English</a></li><li><a href=\"/de\">Deutsch</a></li><li><a href=\"/ja\">日本語</a></li></ul></div>",
+        "assertions": [
+          "Minimal configuration: Only name and type required",
+          "Props omitted: No props object provided",
+          "Default variant: 'dropdown' used automatically",
+          "Default showFlags: false (no flag emojis displayed)",
+          "Languages: All 3 from app.languages.supported rendered",
+          "Sensible defaults: Works out-of-the-box with zero configuration"
         ]
       }
     },
