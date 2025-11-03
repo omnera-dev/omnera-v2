@@ -146,26 +146,17 @@ function createHonoApp(
       .on(['POST', 'GET'], '/api/auth/*', (c) => auth.handler(c.req.raw))
       .get('/', (c) => {
         try {
-          // If languages are configured, redirect to language subdirectory
-          if (app.languages) {
-            // Detect language from Accept-Language header
-            const detectedLanguage =
-              app.languages.detectBrowser !== false
-                ? detectLanguageFromHeader(
-                    c.req.header('Accept-Language'),
-                    app.languages.supported.map((l) => l.code)
-                  )
-                : undefined
+          // Detect language from Accept-Language header for SSR (no redirect)
+          const detectedLanguage =
+            app.languages?.detectBrowser !== false
+              ? detectLanguageFromHeader(
+                  c.req.header('Accept-Language'),
+                  app.languages?.supported.map((l) => l.code) || []
+                )
+              : undefined
 
-            // Use detected language or default
-            const targetLanguage = detectedLanguage || app.languages.default
-
-            // Redirect to /:lang/
-            return c.redirect(`/${targetLanguage}/`, 302)
-          }
-
-          // No languages configured - render homepage without language subdirectory
-          const html = renderHomePage(app, undefined)
+          // Render homepage with detected or default language (hybrid approach)
+          const html = renderHomePage(app, detectedLanguage)
           return c.html(html)
         } catch (error) {
           // Log rendering error

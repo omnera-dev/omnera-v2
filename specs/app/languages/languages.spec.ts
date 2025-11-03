@@ -1124,7 +1124,7 @@ test.describe('Languages Configuration', () => {
   // ============================================================================
 
   test(
-    'APP-LANGUAGES-SUBDIRECTORY-001: should redirect from / to /:lang/ based on Accept-Language',
+    'APP-LANGUAGES-SUBDIRECTORY-001: should serve / with detected/default language (hybrid approach)',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: an app with languages configured
@@ -1158,10 +1158,9 @@ test.describe('Languages Configuration', () => {
       // WHEN: user visits / without language subdirectory
       await page.goto('/')
 
-      // THEN: should redirect to /:lang/ (using default language since no Accept-Language header in test)
-      await expect(page).toHaveURL(/\/(en-US|fr-FR)\/$/)
-
-      // Verify page renders correctly at subdirectory URL
+      // THEN: should serve content at / (no redirect) with detected/default language
+      await expect(page).toHaveURL('/')
+      await expect(page.locator('html')).toHaveAttribute('lang', /en-US|fr-FR/)
       await expect(page.locator('[data-testid="current-language"]')).toBeVisible()
     }
   )
