@@ -308,10 +308,13 @@ jobs:
 
       - name: Set issue context
         id: issue
+        env:
+          # Security: Use env var to prevent code injection from untrusted issue body
+          ISSUE_BODY_INPUT: ${{ needs.validate-context.outputs.issue_body }}
         run: |
           echo "issue_number=${{ needs.validate-context.outputs.issue_number }}" >> $GITHUB_OUTPUT
           echo "issue_body<<EOF" >> $GITHUB_OUTPUT
-          echo "${{ needs.validate-context.outputs.issue_body }}" >> $GITHUB_OUTPUT
+          echo "$ISSUE_BODY_INPUT" >> $GITHUB_OUTPUT
           echo "EOF" >> $GITHUB_OUTPUT
 
       - name: Run Claude Code
