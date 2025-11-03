@@ -40,7 +40,7 @@ describe('AnimationValueSchema', () => {
     const config = {
       enabled: true,
       duration: '300ms',
-      easing: 'ease-in-out',
+      easing: 'ease-in-out' as const,
       delay: '0ms',
     }
 
