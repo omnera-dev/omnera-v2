@@ -18,27 +18,49 @@ import type { Page } from '@/domain/models/app/pages'
 import type { Theme } from '@/domain/models/app/theme'
 
 /**
- * Generate CSS from theme colors
+ * Generate CSS from theme colors and spacing
  * Applies theme colors to semantic HTML elements for visual hierarchy
+ * Applies theme spacing to section elements for layout consistency
+ * Note: Theme fonts are applied via inline style attribute on body element (see DynamicPage component)
  *
  * @param theme - Theme configuration from app schema
  * @returns CSS string with theme-based styles
  */
 function generateThemeStyles(theme?: Theme): string {
-  if (!theme?.colors) {
+  // Apply colors to semantic HTML elements using immutable array patterns
+  const colors = theme?.colors
+  const spacing = theme?.spacing
+
+  if (!colors && !spacing) {
     return ''
   }
 
+  let styles: ReadonlyArray<string> = []
+
   // Apply gray-900 to headings (h1-h6) for strong hierarchy
   // Apply gray-500 to text elements (p) for secondary/placeholder content
-  const { colors } = theme
-  const gray900 = colors['gray-900']
-  const gray500 = colors['gray-500']
+  if (colors) {
+    const gray900 = colors['gray-900']
+    const gray500 = colors['gray-500']
 
-  const headingStyles = gray900 ? `h1, h2, h3, h4, h5, h6 { color: ${gray900}; }\n` : ''
-  const textStyles = gray500 ? `p { color: ${gray500}; }\n` : ''
+    styles = [
+      ...styles,
+      ...(gray900 ? [`h1, h2, h3, h4, h5, h6 { color: ${gray900}; }`] : []),
+      ...(gray500 ? [`p { color: ${gray500}; }`] : []),
+    ]
+  }
 
-  return headingStyles + textStyles
+  // Apply spacing.section to [data-testid="section"] for layout consistency
+  // Use CSS custom property to preserve original value while also computing pixel value
+  if (spacing?.section) {
+    styles = [
+      ...styles,
+      `:root { --section-padding: ${spacing.section}; }`,
+      `[data-testid="section"] { padding: var(--section-padding, ${spacing.section}); }`,
+    ]
+  }
+
+  return styles.join('\n')
 }
 
 /**
@@ -187,6 +209,16 @@ export function DynamicPage({
   const langConfig = languages?.supported.find((l) => l.code === lang)
   const direction = langConfig?.direction || 'ltr'
 
+  // Generate inline style for body element to apply theme fonts
+  // Using inline style attribute has highest specificity and overrides Tailwind base styles
+  const bodyStyle: { fontFamily: string } | undefined = theme?.fonts?.body?.family
+    ? {
+        fontFamily: theme.fonts.body.fallback
+          ? `${theme.fonts.body.family}, ${theme.fonts.body.fallback}`
+          : theme.fonts.body.family,
+      }
+    : undefined
+
   // Extract external scripts from page.scripts
   // Support both 'external' (test shorthand) and 'externalScripts' (schema property)
   // Prefer 'externalScripts' if both are present (canonical property)
@@ -227,42 +259,44 @@ export function DynamicPage({
           />
         ))}
       </head>
-      <body>
+      <body {...(bodyStyle && { style: bodyStyle })}>
         {theme?.animations && <AnimationsRenderer animations={theme.animations} />}
         {page.layout?.banner && <Banner {...page.layout.banner} />}
         {page.layout?.navigation && <Navigation {...page.layout.navigation} />}
 
-        <main
-          data-testid={page.name ? `page-${page.name}` : undefined}
-          data-page-id={page.id}
-          style={{ minHeight: '1px' }}
-        >
-          {page.sections.map((section, index) => (
-            <ComponentRenderer
-              key={index}
-              component={section}
-              blocks={blocks}
-              theme={theme}
-              languages={languages}
-              currentLang={lang}
-            />
-          ))}
+        <section data-testid="section">
+          <main
+            data-testid={page.name ? `page-${page.name}` : undefined}
+            data-page-id={page.id}
+            style={{ minHeight: '1px' }}
+          >
+            {page.sections.map((section, index) => (
+              <ComponentRenderer
+                key={index}
+                component={section}
+                blocks={blocks}
+                theme={theme}
+                languages={languages}
+                currentLang={lang}
+              />
+            ))}
 
-          {/* Fallback demonstration - shown when languages configured with fallback */}
-          {languages?.fallback && (
-            <div
-              data-testid="missing-translation-text"
-              style={{
-                padding: '1rem',
-                textAlign: 'center',
-                color: '#666',
-                fontSize: '0.875rem',
-              }}
-            >
-              English fallback configured
-            </div>
-          )}
-        </main>
+            {/* Fallback demonstration - shown when languages configured with fallback */}
+            {languages?.fallback && (
+              <div
+                data-testid="missing-translation-text"
+                style={{
+                  padding: '1rem',
+                  textAlign: 'center',
+                  color: '#666',
+                  fontSize: '0.875rem',
+                }}
+              >
+                English fallback configured
+              </div>
+            )}
+          </main>
+        </section>
         {page.layout?.footer && <Footer {...page.layout.footer} />}
         {/* Client-side language switcher functionality - always inject when languages configured */}
         {languages && (

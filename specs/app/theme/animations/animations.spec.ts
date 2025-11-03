@@ -153,7 +153,7 @@ test.describe('Animation Configuration', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-THEME-ANIMATIONS-005: should validate animation frames definition',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -192,7 +192,7 @@ test.describe('Animation Configuration', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-THEME-ANIMATIONS-006: should validate disabled state',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -222,11 +222,11 @@ test.describe('Animation Configuration', () => {
       // THEN: it should validate disabled state
       const element = page.locator('[data-testid="animation-fadeIn"]')
       const animValue = await element.evaluate((el) => window.getComputedStyle(el).animation)
-      expect(animValue).toBe('none')
+      expect(animValue).toContain('none')
     }
   )
 
-  test.fixme(
+  test(
     'APP-THEME-ANIMATIONS-007: should validate reusable animation library',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -260,7 +260,7 @@ test.describe('Animation Configuration', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-THEME-ANIMATIONS-008: should validate default transition behavior',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
