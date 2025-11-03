@@ -51,11 +51,17 @@ export function AnimationsRenderer({
           )
         }
 
+        // Apply CSS animation string directly
+        const animationStyle: React.CSSProperties =
+          typeof config === 'string'
+            ? { animation: config, width: '1px', height: '1px' }
+            : { width: '1px', height: '1px' }
+
         return (
           <div
             key={name}
             data-testid={`animation-${name}`}
-            style={{ width: '1px', height: '1px' }}
+            style={animationStyle}
           />
         )
       })}
