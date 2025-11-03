@@ -10,6 +10,7 @@ import {
   collectTranslationsForKey,
   resolveTranslationPattern,
 } from '@/presentation/utils/translation-resolver'
+import { parseStyle } from '@/presentation/utils/parse-style'
 import * as Renderers from './renderers/element-renderers'
 import { resolveBlock } from './utils/block-resolution'
 import { substitutePropsThemeTokens } from './utils/theme-tokens'
@@ -127,6 +128,14 @@ export function ComponentRenderer({
     ? collectTranslationsForKey(firstTranslationKey, languages)
     : undefined
 
+  // Parse style if it's a string (convert CSS string to React style object)
+  // React requires style to be an object, but our schema allows CSS strings for convenience
+  const styleValue = substitutedProps?.style
+  const parsedStyle =
+    typeof styleValue === 'string'
+      ? parseStyle(styleValue)
+      : (styleValue as Record<string, unknown> | undefined)
+
   // Merge className with other props and add data-block attribute if blockName is provided
   // For blocks without content, add min-height and display to ensure visibility
   // Add translation key data attribute if children contain $t: patterns
@@ -135,6 +144,7 @@ export function ComponentRenderer({
   const elementProps = {
     ...substitutedProps,
     className: substitutedProps?.className as string | undefined,
+    ...(parsedStyle && { style: parsedStyle }),
     ...(blockName && { 'data-block': blockName }),
     ...(firstTranslationKey &&
       translationData && {
@@ -144,7 +154,7 @@ export function ComponentRenderer({
     ...(blockName &&
       !hasContent && {
         style: {
-          ...(substitutedProps?.style as Record<string, unknown> | undefined),
+          ...parsedStyle,
           minHeight: '1px',
           minWidth: '1px',
           display: 'inline-block',

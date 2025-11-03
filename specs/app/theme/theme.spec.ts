@@ -84,7 +84,7 @@ test.describe('Theme Configuration', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-THEME-002: should validate color palette and typography system',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -130,7 +130,7 @@ test.describe('Theme Configuration', () => {
       const primaryColor = await page
         .locator('[data-testid="color-primary"]')
         .evaluate((el) => window.getComputedStyle(el).backgroundColor)
-      expect(primaryColor).toContain('7, 123, 255') // rgb(7, 123, 255) = #007bff
+      expect(primaryColor).toContain('0, 123, 255') // rgb(0, 123, 255) = #007bff
     }
   )
 
