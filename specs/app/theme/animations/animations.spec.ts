@@ -54,7 +54,7 @@ test.describe('Animation Configuration', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-THEME-ANIMATIONS-002: should validate CSS animation string',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
