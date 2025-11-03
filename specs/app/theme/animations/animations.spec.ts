@@ -153,7 +153,7 @@ test.describe('Animation Configuration', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-THEME-ANIMATIONS-005: should validate animation frames definition',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
