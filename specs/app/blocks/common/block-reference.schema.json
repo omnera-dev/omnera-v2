@@ -90,6 +90,40 @@
           "Invalid: Missing block (cannot instantiate without template name)",
           "Invalid: Empty object (both properties required)"
         ]
+      },
+      "application": {
+        "blocks": [
+          {
+            "name": "my-block",
+            "type": "div",
+            "props": {
+              "className": "block-$color"
+            },
+            "content": "Block content"
+          }
+        ],
+        "pages": [
+          {
+            "name": "Demo",
+            "path": "/demo",
+            "sections": [
+              {
+                "block": "my-block",
+                "vars": {
+                  "color": "blue"
+                }
+              }
+            ]
+          }
+        ],
+        "expectedDOM": "<div data-testid=\"block-my-block\" class=\"block-blue\">Block content</div>",
+        "assertions": [
+          "Required properties: BOTH 'block' and 'vars' must be present",
+          "block='my-block': Template name to instantiate",
+          "vars={'color': 'blue'}: Data for variable substitution",
+          "vars is REQUIRED even if empty (vars: {})",
+          "Missing either property fails validation at build time"
+        ]
       }
     },
     {
