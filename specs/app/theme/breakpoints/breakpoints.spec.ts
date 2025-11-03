@@ -58,7 +58,7 @@ test.describe('Breakpoints', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-THEME-BREAKPOINTS-002: should validate pixel-based breakpoints',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
