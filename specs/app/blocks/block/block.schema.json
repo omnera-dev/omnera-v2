@@ -78,6 +78,32 @@
           "Name and type are required properties",
           "Props, children, and content are optional"
         ]
+      },
+      "application": {
+        "blocks": [
+          {
+            "name": "simple-block",
+            "type": "div"
+          }
+        ],
+        "pages": [
+          {
+            "name": "Home",
+            "path": "/",
+            "sections": [
+              {
+                "block": "simple-block"
+              }
+            ]
+          }
+        ],
+        "expectedDOM": "<div data-testid=\"block-simple-block\"></div>",
+        "assertions": [
+          "Minimal block renders as div element",
+          "Block has data-testid attribute: data-testid=\"block-simple-block\"",
+          "No props, children, or content needed",
+          "Block definition: name + type = minimal viable block"
+        ]
       }
     },
     {
