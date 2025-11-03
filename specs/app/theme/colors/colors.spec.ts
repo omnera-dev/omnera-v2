@@ -293,7 +293,7 @@ test.describe('Color Palette', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-THEME-COLORS-008: should validate numbered color scales for systematic gradients',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
