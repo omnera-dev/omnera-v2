@@ -89,7 +89,7 @@ test.describe('Breakpoints', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-THEME-BREAKPOINTS-003: should validate progressive enhancement strategy',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
