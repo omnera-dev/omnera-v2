@@ -5,21 +5,7 @@
  * found in the LICENSE.md file in the root directory of this source tree.
  */
 
-/**
- * Convert camelCase to kebab-case
- *
- * @param str - String in camelCase
- * @returns String in kebab-case
- *
- * @example
- * ```typescript
- * toKebabCase('fadeIn') // 'fade-in'
- * toKebabCase('slideInUp') // 'slide-in-up'
- * ```
- */
-function toKebabCase(str: string): string {
-  return str.replace(/([a-z0-9])([A-Z])/g, '$1-$2').toLowerCase()
-}
+import { toKebabCase } from '@/presentation/utils/string-utils'
 
 /**
  * Normalize animation names in CSS value to kebab-case
@@ -42,6 +28,7 @@ function normalizeAnimationValue(animationValue: string): string {
 
   // First part is the animation name, convert to kebab-case
   const animationName = parts[0]
+  if (!animationName) return animationValue
   const normalizedName = toKebabCase(animationName)
 
   // Rejoin with other parts (duration, easing, etc.)

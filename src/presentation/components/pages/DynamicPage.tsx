@@ -12,21 +12,12 @@ import { Navigation } from '@/presentation/components/layout/navigation'
 import { ComponentRenderer } from '@/presentation/components/sections/component-renderer'
 import { AnimationsRenderer } from '@/presentation/components/theme/animations-renderer'
 import { BreakpointsRenderer } from '@/presentation/components/theme/breakpoints-renderer'
+import { toKebabCase } from '@/presentation/utils/string-utils'
 import type { Blocks } from '@/domain/models/app/blocks'
 import type { Languages } from '@/domain/models/app/languages'
 import type { OpenGraph } from '@/domain/models/app/page/meta/open-graph'
 import type { Page } from '@/domain/models/app/pages'
 import type { Theme } from '@/domain/models/app/theme'
-
-/**
- * Convert camelCase to kebab-case
- *
- * @param str - String in camelCase
- * @returns String in kebab-case
- */
-function toKebabCase(str: string): string {
-  return str.replace(/([a-z0-9])([A-Z])/g, '$1-$2').toLowerCase()
-}
 
 /**
  * Generate CSS keyframes for theme animations
@@ -42,7 +33,7 @@ function generateAnimationKeyframes(
     return []
   }
 
-  return Object.entries(animations).flatMap(([name, config]) => {
+  return Object.entries(animations).flatMap<string>(([name, config]) => {
     // Skip disabled animations
     if (typeof config === 'object' && 'enabled' in config && config.enabled === false) {
       return []
@@ -73,8 +64,9 @@ function generateAnimationKeyframes(
     }
 
     // Use default keyframes if available
-    if (kebabName in defaultKeyframes) {
-      return [defaultKeyframes[kebabName]]
+    const defaultKeyframe = defaultKeyframes[kebabName]
+    if (defaultKeyframe) {
+      return [defaultKeyframe]
     }
 
     // If config has custom keyframes, generate them
