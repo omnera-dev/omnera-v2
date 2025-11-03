@@ -103,6 +103,40 @@
           "All other token categories (fonts, spacing, animations, etc.) are optional",
           "Minimal theme enables color-only design systems"
         ]
+      },
+      "application": {
+        "theme": {
+          "colors": {
+            "primary": "#007bff",
+            "secondary": "#6c757d"
+          }
+        },
+        "pages": [
+          {
+            "name": "Home",
+            "path": "/",
+            "sections": [
+              {
+                "type": "button",
+                "props": {
+                  "style": {
+                    "backgroundColor": "theme.colors.primary",
+                    "color": "#ffffff"
+                  }
+                },
+                "children": ["Click me"]
+              }
+            ]
+          }
+        ],
+        "expectedDOM": "<button style=\"background-color: #007bff; color: #ffffff;\">Click me</button>",
+        "expectedCSS": "background-color: #007bff;",
+        "assertions": [
+          "Color token theme.colors.primary resolves to #007bff",
+          "Minimal theme (colors only) is sufficient for basic styling",
+          "No fonts, spacing, or other tokens needed for simple color application",
+          "Theme validates and renders with partial configuration"
+        ]
       }
     },
     {
@@ -130,6 +164,59 @@
           "Colors define visual identity (primary, text)",
           "Fonts define typography (body font)",
           "Basic branding system established"
+        ]
+      },
+      "application": {
+        "theme": {
+          "colors": {
+            "primary": "#007bff",
+            "text": "#212529"
+          },
+          "fonts": {
+            "body": {
+              "family": "Inter",
+              "fallback": "sans-serif"
+            }
+          }
+        },
+        "pages": [
+          {
+            "name": "Home",
+            "path": "/",
+            "sections": [
+              {
+                "type": "div",
+                "props": {
+                  "style": {
+                    "fontFamily": "theme.fonts.body.family",
+                    "color": "theme.colors.text"
+                  }
+                },
+                "children": [
+                  {
+                    "type": "button",
+                    "props": {
+                      "style": {
+                        "backgroundColor": "theme.colors.primary",
+                        "color": "#ffffff",
+                        "fontFamily": "theme.fonts.body.family"
+                      }
+                    },
+                    "children": ["Call to Action"]
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "expectedDOM": "<div style=\"font-family: 'Inter', sans-serif; color: #212529;\"><button style=\"background-color: #007bff; color: #ffffff; font-family: 'Inter', sans-serif;\">Call to Action</button></div>",
+        "expectedCSS": "font-family: 'Inter', sans-serif; color: #212529; background-color: #007bff;",
+        "assertions": [
+          "Font token theme.fonts.body.family resolves to 'Inter', sans-serif",
+          "Color tokens resolve: theme.colors.primary → #007bff, theme.colors.text → #212529",
+          "Basic branding applied: brand color + brand font",
+          "2-token theme (colors + fonts) sufficient for branded UI",
+          "Typography and color work together for visual identity"
         ]
       }
     },
@@ -161,6 +248,77 @@
           "Fonts: typography system",
           "Spacing: layout rhythm",
           "Core design system complete"
+        ]
+      },
+      "application": {
+        "theme": {
+          "colors": {
+            "primary": "#007bff"
+          },
+          "fonts": {
+            "body": {
+              "family": "Inter"
+            }
+          },
+          "spacing": {
+            "section": "4rem",
+            "gap": "1rem"
+          }
+        },
+        "pages": [
+          {
+            "name": "Home",
+            "path": "/",
+            "sections": [
+              {
+                "type": "section",
+                "props": {
+                  "style": {
+                    "padding": "theme.spacing.section 0"
+                  }
+                },
+                "children": [
+                  {
+                    "type": "div",
+                    "props": {
+                      "style": {
+                        "display": "flex",
+                        "flexDirection": "column",
+                        "gap": "theme.spacing.gap",
+                        "fontFamily": "theme.fonts.body.family"
+                      }
+                    },
+                    "children": [
+                      {
+                        "type": "h1",
+                        "children": ["Welcome"]
+                      },
+                      {
+                        "type": "button",
+                        "props": {
+                          "style": {
+                            "backgroundColor": "theme.colors.primary",
+                            "color": "#ffffff"
+                          }
+                        },
+                        "children": ["Get Started"]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "expectedDOM": "<section style=\"padding: 4rem 0;\"><div style=\"display: flex; flex-direction: column; gap: 1rem; font-family: 'Inter';\"><h1>Welcome</h1><button style=\"background-color: #007bff; color: #ffffff;\">Get Started</button></div></section>",
+        "expectedCSS": "padding: 4rem 0; gap: 1rem; font-family: 'Inter'; background-color: #007bff;",
+        "assertions": [
+          "Spacing token theme.spacing.section resolves to 4rem (vertical rhythm)",
+          "Spacing token theme.spacing.gap resolves to 1rem (flex spacing)",
+          "Font token theme.fonts.body.family resolves to 'Inter'",
+          "Color token theme.colors.primary resolves to #007bff",
+          "3-token theme (colors + fonts + spacing) creates cohesive design system",
+          "Core design tokens work together: spacing creates rhythm, fonts define typography, colors provide visual identity"
         ]
       }
     },
@@ -203,6 +361,72 @@
           "Each category references its sub-schema",
           "Comprehensive theme enables full UI customization"
         ]
+      },
+      "application": {
+        "theme": {
+          "colors": {
+            "primary": "#007bff"
+          },
+          "fonts": {
+            "body": {
+              "family": "Inter"
+            }
+          },
+          "spacing": {
+            "section": "4rem"
+          },
+          "animations": {
+            "fadeIn": {
+              "duration": "300ms",
+              "easing": "ease-in"
+            }
+          },
+          "breakpoints": {
+            "md": "768px"
+          },
+          "shadows": {
+            "md": "0 4px 6px -1px rgb(0 0 0 / 0.1)"
+          },
+          "borderRadius": {
+            "md": "0.375rem"
+          }
+        },
+        "pages": [
+          {
+            "name": "Home",
+            "path": "/",
+            "sections": [
+              {
+                "type": "button",
+                "props": {
+                  "style": {
+                    "backgroundColor": "theme.colors.primary",
+                    "fontFamily": "theme.fonts.body.family",
+                    "padding": "theme.spacing.section",
+                    "animation": "theme.animations.fadeIn.duration theme.animations.fadeIn.easing",
+                    "boxShadow": "theme.shadows.md",
+                    "borderRadius": "theme.borderRadius.md"
+                  }
+                },
+                "children": ["Complete Theme Button"]
+              }
+            ]
+          }
+        ],
+        "expectedDOM": "<button style=\"background-color: #007bff; font-family: 'Inter'; padding: 4rem; animation: 300ms ease-in; box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1); border-radius: 0.375rem;\">Complete Theme Button</button>",
+        "expectedCSS": "background-color: #007bff; font-family: 'Inter'; padding: 4rem; animation: 300ms ease-in; box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1); border-radius: 0.375rem;",
+        "assertions": [
+          "All 7 token categories resolve correctly",
+          "Colors: theme.colors.primary → #007bff",
+          "Fonts: theme.fonts.body.family → 'Inter'",
+          "Spacing: theme.spacing.section → 4rem",
+          "Animations: theme.animations.fadeIn → 300ms ease-in",
+          "Shadows: theme.shadows.md → 0 4px 6px -1px rgb(0 0 0 / 0.1)",
+          "BorderRadius: theme.borderRadius.md → 0.375rem",
+          "Breakpoints: Available for responsive utilities (not shown in inline styles)",
+          "Complete theme orchestrates all design token categories together",
+          "Single button demonstrates all 7 token types working in harmony"
+        ]
       }
     },
     {
@@ -228,6 +452,59 @@
           "Breakpoint names (sm, md, lg) match responsive.schema.json variants",
           "Consistency ensures responsive utilities work correctly",
           "Cross-schema integration validated"
+        ]
+      },
+      "application": {
+        "theme": {
+          "breakpoints": {
+            "sm": "640px",
+            "md": "768px",
+            "lg": "1024px"
+          },
+          "spacing": {
+            "gap": "1rem",
+            "gap-md": "1.5rem",
+            "gap-lg": "2rem"
+          }
+        },
+        "pages": [
+          {
+            "name": "Home",
+            "path": "/",
+            "sections": [
+              {
+                "type": "div",
+                "props": {
+                  "style": {
+                    "gap": "theme.spacing.gap"
+                  },
+                  "responsive": {
+                    "md": {
+                      "style": {
+                        "gap": "theme.spacing.gap-md"
+                      }
+                    },
+                    "lg": {
+                      "style": {
+                        "gap": "theme.spacing.gap-lg"
+                      }
+                    }
+                  }
+                },
+                "children": ["Responsive content"]
+              }
+            ]
+          }
+        ],
+        "expectedCSS": "gap: 1rem; @media (min-width: 768px) { gap: 1.5rem; } @media (min-width: 1024px) { gap: 2rem; }",
+        "assertions": [
+          "Breakpoints define responsive thresholds: sm (640px), md (768px), lg (1024px)",
+          "Base style uses theme.spacing.gap → 1rem (mobile-first)",
+          "At md breakpoint (768px+): gap increases to theme.spacing.gap-md → 1.5rem",
+          "At lg breakpoint (1024px+): gap increases to theme.spacing.gap-lg → 2rem",
+          "Theme breakpoints integrate with responsive prop system",
+          "Consistent breakpoint names across theme and responsive utilities",
+          "Mobile-first approach: base → sm → md → lg progression"
         ]
       }
     },
@@ -255,6 +532,63 @@
           "Animation tokens enable consistent motion design",
           "Integration point between theme and interactions"
         ]
+      },
+      "application": {
+        "theme": {
+          "animations": {
+            "fadeIn": {
+              "duration": "300ms",
+              "easing": "ease-in"
+            },
+            "slideIn": "slide-in 0.5s ease-out",
+            "pulse": {
+              "duration": "2s",
+              "easing": "ease-in-out"
+            }
+          }
+        },
+        "pages": [
+          {
+            "name": "Home",
+            "path": "/",
+            "sections": [
+              {
+                "type": "div",
+                "props": {
+                  "className": "modal",
+                  "interactions": {
+                    "onMount": {
+                      "animation": "theme.animations.fadeIn"
+                    }
+                  }
+                },
+                "children": [
+                  {
+                    "type": "span",
+                    "props": {
+                      "className": "badge",
+                      "style": {
+                        "animation": "theme.animations.pulse.duration theme.animations.pulse.easing infinite"
+                      }
+                    },
+                    "children": ["3"]
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "expectedDOM": "<div class=\"modal\" style=\"animation: 300ms ease-in;\"><span class=\"badge\" style=\"animation: 2s ease-in-out infinite;\">3</span></div>",
+        "expectedCSS": "animation: 300ms ease-in; animation: 2s ease-in-out infinite;",
+        "assertions": [
+          "Animation library defined in theme: fadeIn, slideIn, pulse",
+          "Modal uses theme.animations.fadeIn for entrance: 300ms ease-in",
+          "Badge uses theme.animations.pulse for attention: 2s ease-in-out infinite",
+          "Animation tokens referenced in interactions (onMount) and inline styles",
+          "Consistent motion design across components via shared animation library",
+          "Theme provides reusable animations for interactions.schema.json",
+          "Single source of truth for all motion design"
+        ]
       }
     },
     {
@@ -272,8 +606,8 @@
             },
             "spacing": {
               "gap": "1rem",
-              "gapSmall": "0.5rem",
-              "gapLarge": "1.5rem"
+              "gap-small": "0.5rem",
+              "gap-large": "1.5rem"
             },
             "shadows": {
               "sm": "0 1px 2px 0 rgb(0 0 0 / 0.05)",
@@ -287,6 +621,87 @@
           "Progressive scales: small → medium → large",
           "Variant naming: -hover, -light for derivatives",
           "Best practices enable predictable, maintainable design system"
+        ]
+      },
+      "application": {
+        "theme": {
+          "colors": {
+            "primary": "#007bff",
+            "primary-hover": "#0056b3",
+            "primary-light": "#e7f1ff"
+          },
+          "spacing": {
+            "gap": "1rem",
+            "gap-small": "0.5rem",
+            "gap-large": "1.5rem"
+          },
+          "shadows": {
+            "sm": "0 1px 2px 0 rgb(0 0 0 / 0.05)",
+            "md": "0 4px 6px -1px rgb(0 0 0 / 0.1)",
+            "lg": "0 10px 15px -3px rgb(0 0 0 / 0.1)"
+          }
+        },
+        "pages": [
+          {
+            "name": "Home",
+            "path": "/",
+            "sections": [
+              {
+                "type": "div",
+                "props": {
+                  "style": {
+                    "display": "flex",
+                    "flexDirection": "column",
+                    "gap": "theme.spacing.gap"
+                  }
+                },
+                "children": [
+                  {
+                    "type": "div",
+                    "props": {
+                      "style": {
+                        "backgroundColor": "theme.colors.primary-light",
+                        "padding": "theme.spacing.gap-small",
+                        "boxShadow": "theme.shadows.sm"
+                      }
+                    },
+                    "children": ["Small card"]
+                  },
+                  {
+                    "type": "button",
+                    "props": {
+                      "style": {
+                        "backgroundColor": "theme.colors.primary",
+                        "boxShadow": "theme.shadows.md"
+                      },
+                      "interactions": {
+                        "onHover": {
+                          "style": {
+                            "backgroundColor": "theme.colors.primary-hover",
+                            "boxShadow": "theme.shadows.lg"
+                          }
+                        }
+                      }
+                    },
+                    "children": ["Hover me"]
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "expectedDOM": "<div style=\"display: flex; flex-direction: column; gap: 1rem;\"><div style=\"background-color: #e7f1ff; padding: 0.5rem; box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);\">Small card</div><button style=\"background-color: #007bff; box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);\">Hover me</button></div>",
+        "expectedCSS": "gap: 1rem; background-color: #e7f1ff; padding: 0.5rem; box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05); button:hover { background-color: #0056b3; box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1); }",
+        "assertions": [
+          "Semantic naming in action: 'primary' not 'blue', 'gap' not 'space-4'",
+          "Progressive scales demonstrated: gap-small (0.5rem) → gap (1rem) → gap-large (1.5rem)",
+          "Progressive scales demonstrated: shadows sm → md → lg (increasing elevation)",
+          "Variant naming: primary-light (tint), primary (base), primary-hover (shade)",
+          "Color variant on hover: primary (#007bff) → primary-hover (#0056b3)",
+          "Shadow variant on hover: md → lg (increased elevation)",
+          "Predictable API: Developers know 'primary-hover' exists if 'primary' exists",
+          "Maintainable: Change 'primary' color once, all variants update automatically",
+          "Design system best practices enable consistent, scalable UI"
         ]
       }
     },
@@ -315,6 +730,67 @@
           "Breakpoints use px units (Tailwind standard)",
           "Token structure maps to Tailwind config",
           "Seamless integration with Tailwind CSS"
+        ]
+      },
+      "application": {
+        "theme": {
+          "spacing": {
+            "section": "4rem",
+            "container": "80rem"
+          },
+          "breakpoints": {
+            "sm": "640px",
+            "md": "768px",
+            "lg": "1024px"
+          }
+        },
+        "tailwindConfig": {
+          "extend": {
+            "spacing": {
+              "section": "theme.spacing.section",
+              "container": "theme.spacing.container"
+            },
+            "screens": {
+              "sm": "theme.breakpoints.sm",
+              "md": "theme.breakpoints.md",
+              "lg": "theme.breakpoints.lg"
+            }
+          }
+        },
+        "pages": [
+          {
+            "name": "Home",
+            "path": "/",
+            "sections": [
+              {
+                "type": "section",
+                "props": {
+                  "className": "py-section"
+                },
+                "children": [
+                  {
+                    "type": "div",
+                    "props": {
+                      "className": "max-w-container mx-auto"
+                    },
+                    "children": ["Content"]
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "expectedCSS": ".py-section { padding-top: 4rem; padding-bottom: 4rem; } .max-w-container { max-width: 80rem; } @media (min-width: 640px) { /* sm */ } @media (min-width: 768px) { /* md */ } @media (min-width: 1024px) { /* lg */ }",
+        "assertions": [
+          "Theme spacing tokens map to Tailwind config: spacing.section → 4rem",
+          "Theme breakpoints map to Tailwind screens: breakpoints.md → 768px",
+          "Tailwind utilities use theme values: py-section applies 4rem padding",
+          "Tailwind utilities use theme values: max-w-container applies 80rem max-width",
+          "Responsive breakpoints: sm (640px), md (768px), lg (1024px) match Tailwind standard",
+          "Token structure compatible: flat key-value pairs map to Tailwind extend config",
+          "rem units for spacing: Tailwind-compatible (4rem = 64px at default font-size)",
+          "px units for breakpoints: Tailwind standard convention",
+          "Seamless integration: Theme tokens → Tailwind config → Utility classes → CSS output"
         ]
       }
     },
