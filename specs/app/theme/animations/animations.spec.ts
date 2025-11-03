@@ -87,7 +87,7 @@ test.describe('Animation Configuration', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-THEME-ANIMATIONS-003: should validate timing properties',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
