@@ -24,7 +24,7 @@ test.describe('Theme Configuration', () => {
   // One test per spec in schema - defines EXHAUSTIVE acceptance criteria
   // ============================================================================
 
-  test.fixme(
+  test(
     'APP-THEME-001: should validate theme with colors as the only design token category',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
