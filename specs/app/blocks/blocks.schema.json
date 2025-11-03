@@ -82,6 +82,63 @@
           "Each block item references block.schema.json",
           "Array can contain 0+ block definitions"
         ]
+      },
+      "application": {
+        "blocks": [
+          {
+            "name": "icon-badge",
+            "type": "badge",
+            "props": {
+              "className": "badge-$color"
+            },
+            "content": "$label"
+          },
+          {
+            "name": "section-header",
+            "type": "container",
+            "props": {
+              "className": "text-center mb-8"
+            },
+            "children": [
+              {
+                "type": "text",
+                "props": {
+                  "level": "h2"
+                },
+                "content": "$title"
+              }
+            ]
+          }
+        ],
+        "pages": [
+          {
+            "name": "Home",
+            "path": "/",
+            "sections": [
+              {
+                "block": "section-header",
+                "vars": {
+                  "title": "Welcome"
+                }
+              },
+              {
+                "block": "icon-badge",
+                "vars": {
+                  "color": "blue",
+                  "label": "New"
+                }
+              }
+            ]
+          }
+        ],
+        "expectedDOM": "<div data-testid=\"block-section-header\" class=\"text-center mb-8\"><h2>Welcome</h2></div><div data-testid=\"block-icon-badge\" class=\"badge-blue\">New</div>",
+        "assertions": [
+          "Blocks array contains 2 definitions (icon-badge, section-header)",
+          "Each block follows block.schema.json structure (name, type, props/children/content)",
+          "Both blocks can be referenced from page sections",
+          "Array structure is validated at build time (JSON Schema validation)",
+          "Empty blocks array [] is also valid (0+ blocks allowed)"
+        ]
       }
     },
     {
@@ -89,41 +146,46 @@
       "given": "blocks for DRY principle",
       "when": "blocks are defined once and reused multiple times",
       "then": "it should render same block definition across multiple page locations",
-      "x-test": {
-        "setup": {
-          "blocks": [
-            {
-              "name": "cta-button",
-              "type": "button",
-              "props": {
-                "variant": "$variant"
-              },
-              "content": "$label"
-            }
-          ],
-          "pageReferences": [
-            {
-              "$ref": "cta-button",
-              "vars": {
-                "variant": "primary",
-                "label": "Get Started"
-              }
+      "application": {
+        "blocks": [
+          {
+            "name": "cta-button",
+            "type": "button",
+            "props": {
+              "className": "btn-$variant"
             },
-            {
-              "$ref": "cta-button",
-              "vars": {
-                "variant": "secondary",
-                "label": "Learn More"
+            "content": "$label"
+          }
+        ],
+        "pages": [
+          {
+            "name": "Home",
+            "path": "/",
+            "sections": [
+              {
+                "block": "cta-button",
+                "vars": {
+                  "variant": "primary",
+                  "label": "Get Started"
+                }
+              },
+              {
+                "block": "cta-button",
+                "vars": {
+                  "variant": "secondary",
+                  "label": "Learn More"
+                }
               }
-            }
-          ]
-        },
-        "expectedDOM": "<button data-testid=\"block-cta-button-0\" class=\"btn-primary\">Get Started</button>\n<button data-testid=\"block-cta-button-1\" class=\"btn-secondary\">Learn More</button>",
+            ]
+          }
+        ],
+        "expectedDOM": "<button data-testid=\"block-cta-button-0\" class=\"btn-primary\">Get Started</button><button data-testid=\"block-cta-button-1\" class=\"btn-secondary\">Learn More</button>",
         "assertions": [
-          "Both buttons use same block definition (cta-button)",
-          "First button has data-testid='block-cta-button-0'",
-          "Second button has data-testid='block-cta-button-1'",
-          "Both buttons render without duplicating block definition code"
+          "DRY principle: ONE block definition (cta-button) used TWICE",
+          "First instance: data-testid='block-cta-button-0', class='btn-primary', label='Get Started'",
+          "Second instance: data-testid='block-cta-button-1', class='btn-secondary', label='Learn More'",
+          "Both render from same template WITHOUT code duplication",
+          "Updating block definition updates ALL instances automatically"
         ]
       }
     },
@@ -132,9 +194,9 @@
       "given": "block with variable substitution",
       "when": "block contains $variable placeholders in props and content",
       "then": "it should render concrete component with substituted values",
-      "x-test": {
-        "setup": {
-          "blockDefinition": {
+      "application": {
+        "blocks": [
+          {
             "name": "icon-badge",
             "type": "badge",
             "props": {
@@ -152,22 +214,33 @@
                 "content": "$text"
               }
             ]
-          },
-          "reference": {
-            "$ref": "icon-badge",
-            "vars": {
-              "color": "blue",
-              "icon": "star",
-              "text": "Featured"
-            }
           }
-        },
-        "expectedDOM": "<div data-testid=\"block-icon-badge\" class=\"badge-blue\">\n  <svg data-testid=\"icon-star\"></svg>\n  <span>Featured</span>\n</div>",
+        ],
+        "pages": [
+          {
+            "name": "Features",
+            "path": "/features",
+            "sections": [
+              {
+                "block": "icon-badge",
+                "vars": {
+                  "color": "blue",
+                  "icon": "star",
+                  "text": "Featured"
+                }
+              }
+            ]
+          }
+        ],
+        "expectedDOM": "<div data-testid=\"block-icon-badge\" class=\"badge-blue\"><svg data-testid=\"icon-star\"></svg><span>Featured</span></div>",
         "assertions": [
-          "Badge element has data-testid='block-icon-badge'",
-          "Badge has class 'badge-blue' (substituted $color='blue')",
-          "Icon has data-testid='icon-star' (substituted $icon='star')",
-          "Text content is 'Featured' (substituted $text='Featured')"
+          "Variable substitution in 3 locations:",
+          "  1. Props: className 'badge-$color' → 'badge-blue'",
+          "  2. Child icon props: name '$icon' → 'star'",
+          "  3. Child text content: '$text' → 'Featured'",
+          "Badge element: data-testid='block-icon-badge'",
+          "Icon element: data-testid='icon-star' (from substituted name)",
+          "All $variable placeholders replaced with actual values at render time"
         ]
       }
     },
@@ -176,9 +249,9 @@
       "given": "icon-badge block example",
       "when": "block has type 'badge' with $color, $icon, and $text variables",
       "then": "it should render badge with icon and text using substituted values",
-      "x-test": {
-        "setup": {
-          "blockDefinition": {
+      "application": {
+        "blocks": [
+          {
             "name": "icon-badge",
             "type": "badge",
             "props": {
@@ -200,22 +273,31 @@
                 "content": "$text"
               }
             ]
-          },
-          "reference": {
-            "$ref": "icon-badge",
-            "vars": {
-              "color": "orange",
-              "icon": "users",
-              "text": "6 à 15 personnes"
-            }
           }
-        },
-        "expectedDOM": "<div data-testid=\"block-icon-badge\" data-color=\"orange\">\n  <svg data-testid=\"icon-users\" width=\"16\" height=\"16\"></svg>\n  <span>6 à 15 personnes</span>\n</div>",
+        ],
+        "pages": [
+          {
+            "name": "Workshop",
+            "path": "/workshop",
+            "sections": [
+              {
+                "block": "icon-badge",
+                "vars": {
+                  "color": "orange",
+                  "icon": "users",
+                  "text": "6 à 15 personnes"
+                }
+              }
+            ]
+          }
+        ],
+        "expectedDOM": "<div data-testid=\"block-icon-badge\" data-color=\"orange\"><svg data-testid=\"icon-users\" width=\"16\" height=\"16\"></svg><span>6 à 15 personnes</span></div>",
         "assertions": [
-          "Badge has data-testid='block-icon-badge'",
-          "Badge has data-color='orange' attribute",
-          "Icon SVG has data-testid='icon-users' with size 16x16 (4 * 4px)",
-          "Span contains text '6 à 15 personnes'"
+          "Real-world icon-badge example from workshop page",
+          "Badge: data-testid='block-icon-badge', data-color='orange'",
+          "Icon: data-testid='icon-users', size=4 (renders as 16x16px)",
+          "Text: '6 à 15 personnes' (French UTF-8 content with 'à')",
+          "Demonstrates practical use case for group size indicators"
         ]
       }
     },
@@ -224,9 +306,9 @@
       "given": "section-header block example",
       "when": "block has nested children with $title, $subtitle, $titleColor variables",
       "then": "it should render section header with styled title and subtitle",
-      "x-test": {
-        "setup": {
-          "blockDefinition": {
+      "application": {
+        "blocks": [
+          {
             "name": "section-header",
             "type": "container",
             "props": {
@@ -249,23 +331,31 @@
                 "content": "$subtitle"
               }
             ]
-          },
-          "reference": {
-            "$ref": "section-header",
-            "vars": {
-              "titleColor": "purple",
-              "title": "Notre Mission",
-              "subtitle": "Rendre la culture du consentement accessible à tous"
-            }
           }
-        },
-        "expectedDOM": "<div data-testid=\"block-section-header\" class=\"text-center mb-12\">\n  <h2 class=\"text-purple text-4xl mb-4\">Notre Mission</h2>\n  <p>Rendre la culture du consentement accessible à tous</p>\n</div>",
+        ],
+        "pages": [
+          {
+            "name": "Mission",
+            "path": "/mission",
+            "sections": [
+              {
+                "block": "section-header",
+                "vars": {
+                  "titleColor": "purple",
+                  "title": "Notre Mission",
+                  "subtitle": "Rendre la culture du consentement accessible à tous"
+                }
+              }
+            ]
+          }
+        ],
+        "expectedDOM": "<div data-testid=\"block-section-header\" class=\"text-center mb-12\"><h2 class=\"text-purple text-4xl mb-4\">Notre Mission</h2><p>Rendre la culture du consentement accessible à tous</p></div>",
         "assertions": [
-          "Container has data-testid='block-section-header'",
-          "Container has classes 'text-center mb-12'",
-          "H2 has class 'text-purple' (substituted $titleColor='purple')",
-          "H2 contains text 'Notre Mission'",
-          "Paragraph contains subtitle text"
+          "Real-world section header from mission page (French content)",
+          "Container: data-testid='block-section-header', class='text-center mb-12'",
+          "H2: class includes 'text-purple' (substituted $titleColor), text='Notre Mission'",
+          "Paragraph: subtitle with French text (UTF-8 support)",
+          "Nested children pattern: container → h2 + p"
         ]
       }
     },
@@ -274,51 +364,58 @@
       "given": "blocks as component library",
       "when": "multiple blocks define UI patterns",
       "then": "it should provide consistent, reusable components across pages",
-      "x-test": {
-        "setup": {
-          "blocks": [
-            {
-              "name": "cta-button",
-              "type": "button",
-              "content": "$label"
-            },
-            {
-              "name": "icon-badge",
-              "type": "badge",
-              "props": {
-                "color": "$color"
-              }
-            },
-            {
-              "name": "feature-card",
-              "type": "card",
-              "children": []
+      "application": {
+        "blocks": [
+          {
+            "name": "cta-button",
+            "type": "button",
+            "content": "$label"
+          },
+          {
+            "name": "icon-badge",
+            "type": "badge",
+            "props": {
+              "color": "$color"
             }
-          ],
-          "pageUsage": [
-            {
-              "$ref": "cta-button",
-              "vars": {
-                "label": "Sign Up"
+          },
+          {
+            "name": "feature-card",
+            "type": "card",
+            "children": []
+          }
+        ],
+        "pages": [
+          {
+            "name": "Marketing",
+            "path": "/marketing",
+            "sections": [
+              {
+                "block": "cta-button",
+                "vars": {
+                  "label": "Sign Up"
+                }
+              },
+              {
+                "block": "icon-badge",
+                "vars": {
+                  "color": "green"
+                }
+              },
+              {
+                "block": "feature-card",
+                "vars": {}
               }
-            },
-            {
-              "$ref": "icon-badge",
-              "vars": {
-                "color": "green"
-              }
-            },
-            {
-              "$ref": "feature-card",
-              "vars": {}
-            }
-          ]
-        },
-        "expectedDOM": "<button data-testid=\"block-cta-button\">Sign Up</button>\n<div data-testid=\"block-icon-badge\" data-color=\"green\"></div>\n<div data-testid=\"block-feature-card\"></div>",
+            ]
+          }
+        ],
+        "expectedDOM": "<button data-testid=\"block-cta-button\">Sign Up</button><div data-testid=\"block-icon-badge\" data-color=\"green\"></div><div data-testid=\"block-feature-card\"></div>",
         "assertions": [
-          "All 3 blocks render with consistent data-testid pattern",
-          "Each block follows naming convention: data-testid='block-{name}'",
-          "Blocks maintain design system consistency across page"
+          "Component library: 3 blocks define reusable UI patterns",
+          "Consistent naming: ALL blocks follow 'block-{name}' testid pattern",
+          "cta-button: Generic button pattern for calls-to-action",
+          "icon-badge: Badge pattern with color customization",
+          "feature-card: Card pattern for feature displays",
+          "Design system consistency maintained across all components"
         ]
       }
     },
@@ -327,50 +424,48 @@
       "given": "blocks with centralized updates",
       "when": "block definition is modified",
       "then": "it should reflect changes across all block instances on page rebuild",
-      "x-test": {
-        "setup": {
-          "initialBlockDefinition": {
-            "name": "alert-box",
-            "type": "div",
-            "props": {
-              "className": "alert alert-$variant"
-            },
-            "content": "$message"
-          },
-          "updatedBlockDefinition": {
+      "application": {
+        "blocks": [
+          {
             "name": "alert-box",
             "type": "div",
             "props": {
               "className": "alert alert-$variant rounded-lg p-4"
             },
             "content": "$message"
-          },
-          "references": [
-            {
-              "$ref": "alert-box",
-              "vars": {
-                "variant": "info",
-                "message": "Hello"
+          }
+        ],
+        "pages": [
+          {
+            "name": "Alerts Demo",
+            "path": "/alerts",
+            "sections": [
+              {
+                "block": "alert-box",
+                "vars": {
+                  "variant": "info",
+                  "message": "Hello"
+                }
+              },
+              {
+                "block": "alert-box",
+                "vars": {
+                  "variant": "warning",
+                  "message": "Caution"
+                }
               }
-            },
-            {
-              "$ref": "alert-box",
-              "vars": {
-                "variant": "warning",
-                "message": "Caution"
-              }
-            }
-          ]
-        },
-        "expectedDOM": {
-          "before": "<div data-testid=\"block-alert-box-0\" class=\"alert alert-info\">Hello</div>\n<div data-testid=\"block-alert-box-1\" class=\"alert alert-warning\">Caution</div>",
-          "after": "<div data-testid=\"block-alert-box-0\" class=\"alert alert-info rounded-lg p-4\">Hello</div>\n<div data-testid=\"block-alert-box-1\" class=\"alert alert-warning rounded-lg p-4\">Caution</div>"
-        },
+            ]
+          }
+        ],
+        "expectedDOM": "<div data-testid=\"block-alert-box-0\" class=\"alert alert-info rounded-lg p-4\">Hello</div><div data-testid=\"block-alert-box-1\" class=\"alert alert-warning rounded-lg p-4\">Caution</div>",
         "assertions": [
-          "Before update: both instances have classes 'alert alert-{variant}' only",
-          "After update: both instances automatically include 'rounded-lg p-4'",
-          "All instances updated by modifying single block definition",
-          "No manual changes needed in page configurations"
+          "Centralized updates: ONE block definition change affects ALL instances",
+          "Scenario: Developer adds 'rounded-lg p-4' to alert-box className",
+          "Result: BOTH instances (info + warning) automatically get new classes",
+          "Instance 0: class='alert alert-info rounded-lg p-4'",
+          "Instance 1: class='alert alert-warning rounded-lg p-4'",
+          "No manual updates needed in pages (DRY principle in action)",
+          "Single source of truth enables consistent design system updates"
         ]
       }
     },
@@ -379,9 +474,9 @@
       "given": "blocks for composition",
       "when": "blocks combine multiple child components",
       "then": "it should render complex nested component structures",
-      "x-test": {
-        "setup": {
-          "blockDefinition": {
+      "application": {
+        "blocks": [
+          {
             "name": "card-with-header",
             "type": "card",
             "children": [
@@ -415,22 +510,33 @@
                 "content": "$bodyText"
               }
             ]
-          },
-          "reference": {
-            "$ref": "card-with-header",
-            "vars": {
-              "title": "Feature",
-              "subtitle": "New",
-              "bodyText": "Description text"
-            }
           }
-        },
-        "expectedDOM": "<div data-testid=\"block-card-with-header\" class=\"card\">\n  <div class=\"card-header\">\n    <h3>Feature</h3>\n    <p>New</p>\n  </div>\n  <div class=\"card-body\">Description text</div>\n</div>",
+        ],
+        "pages": [
+          {
+            "name": "Features",
+            "path": "/features",
+            "sections": [
+              {
+                "block": "card-with-header",
+                "vars": {
+                  "title": "Feature",
+                  "subtitle": "New",
+                  "bodyText": "Description text"
+                }
+              }
+            ]
+          }
+        ],
+        "expectedDOM": "<div data-testid=\"block-card-with-header\" class=\"card\"><div class=\"card-header\"><h3>Feature</h3><p>New</p></div><div class=\"card-body\">Description text</div></div>",
         "assertions": [
-          "Card container has data-testid='block-card-with-header'",
-          "Card has nested header div with h3 and p elements",
-          "Card has nested body div with text content",
-          "All 3 levels of nesting render correctly"
+          "Composition: Complex nested structure built from simple components",
+          "Level 1 (card): data-testid='block-card-with-header', class='card'",
+          "Level 2 (header div): contains h3 + p elements",
+          "Level 3 (h3 + p): title='Feature', subtitle='New'",
+          "Level 2 (body div): contains body text='Description text'",
+          "3 levels of nesting demonstrate component composition power",
+          "Single block definition encapsulates complex structure"
         ]
       }
     },
@@ -439,26 +545,76 @@
       "given": "blocks for maintainability",
       "when": "blocks encapsulate UI patterns",
       "then": "it should reduce code duplication and simplify pattern updates",
-      "x-test": {
-        "setup": {
-          "scenario": "Same button pattern used 5 times across 3 pages",
-          "withoutBlocks": {
-            "linesOfCode": 50,
-            "description": "Each button fully defined inline: 10 lines × 5 instances"
-          },
-          "withBlocks": {
-            "blockDefinition": 10,
-            "references": 10,
-            "totalLinesOfCode": 20,
-            "description": "1 block definition (10 lines) + 5 references (2 lines each)"
+      "application": {
+        "blocks": [
+          {
+            "name": "primary-cta",
+            "type": "button",
+            "props": {
+              "className": "btn-primary btn-lg px-8 py-3 rounded-full shadow-lg hover:shadow-xl transition-shadow"
+            },
+            "content": "$label"
           }
-        },
-        "expectedDOM": "<button data-testid=\"block-primary-cta\">Action 1</button>",
+        ],
+        "pages": [
+          {
+            "name": "Home",
+            "path": "/",
+            "sections": [
+              {
+                "block": "primary-cta",
+                "vars": {
+                  "label": "Get Started"
+                }
+              }
+            ]
+          },
+          {
+            "name": "Pricing",
+            "path": "/pricing",
+            "sections": [
+              {
+                "block": "primary-cta",
+                "vars": {
+                  "label": "Start Free Trial"
+                }
+              },
+              {
+                "block": "primary-cta",
+                "vars": {
+                  "label": "Contact Sales"
+                }
+              }
+            ]
+          },
+          {
+            "name": "About",
+            "path": "/about",
+            "sections": [
+              {
+                "block": "primary-cta",
+                "vars": {
+                  "label": "Join Our Team"
+                }
+              },
+              {
+                "block": "primary-cta",
+                "vars": {
+                  "label": "Learn More"
+                }
+              }
+            ]
+          }
+        ],
+        "expectedDOM": "<button data-testid=\"block-primary-cta\" class=\"btn-primary btn-lg px-8 py-3 rounded-full shadow-lg hover:shadow-xl transition-shadow\">Get Started</button>",
         "assertions": [
-          "Code reduction: 50 lines → 20 lines (60% reduction)",
-          "Single source of truth for button pattern",
-          "Pattern updates require changing 1 location vs 5",
-          "Maintenance overhead reduced proportionally to reuse count"
+          "Maintainability: Same button pattern used 5 times across 3 pages",
+          "Without blocks: ~50 lines (10 lines × 5 inline definitions)",
+          "With blocks: ~20 lines (1 definition + 5 references at 2 lines each)",
+          "Code reduction: 60% fewer lines to maintain",
+          "Pattern updates: Change 1 location vs 5 locations",
+          "Single source of truth reduces bugs and inconsistencies",
+          "Maintenance overhead scales inversely with reuse count"
         ]
       }
     },
@@ -467,97 +623,95 @@
       "given": "blocks array at app level",
       "when": "blocks are defined globally in app configuration",
       "then": "it should make blocks available for reference in all page sections",
-      "x-test": {
-        "setup": {
-          "appConfig": {
-            "blocks": [
+      "application": {
+        "blocks": [
+          {
+            "name": "global-cta",
+            "type": "button",
+            "props": {
+              "className": "btn-primary"
+            },
+            "content": "$label"
+          }
+        ],
+        "pages": [
+          {
+            "name": "Home",
+            "path": "/home",
+            "sections": [
               {
-                "name": "global-cta",
-                "type": "button",
-                "content": "$label"
+                "block": "global-cta",
+                "vars": {
+                  "label": "Home CTA"
+                }
               }
-            ],
-            "pages": [
+            ]
+          },
+          {
+            "name": "About",
+            "path": "/about",
+            "sections": [
               {
-                "path": "/home",
-                "sections": [
-                  {
-                    "$ref": "global-cta",
-                    "vars": {
-                      "label": "Home CTA"
-                    }
-                  }
-                ]
-              },
-              {
-                "path": "/about",
-                "sections": [
-                  {
-                    "$ref": "global-cta",
-                    "vars": {
-                      "label": "About CTA"
-                    }
-                  }
-                ]
+                "block": "global-cta",
+                "vars": {
+                  "label": "About CTA"
+                }
               }
             ]
           }
-        },
-        "expectedDOM": {
-          "homePage": "<button data-testid=\"block-global-cta\">Home CTA</button>",
-          "aboutPage": "<button data-testid=\"block-global-cta\">About CTA</button>"
-        },
+        ],
+        "expectedDOM": "<button data-testid=\"block-global-cta\" class=\"btn-primary\">Home CTA</button>",
         "assertions": [
+          "Global scope: Blocks defined at app.blocks[] level",
+          "Available everywhere: ALL pages can reference global blocks",
           "Same block 'global-cta' used in /home and /about pages",
-          "Both pages can reference block defined at app.blocks[] level",
+          "Both pages use identical data-testid='block-global-cta'",
           "Block availability is global, not page-scoped",
-          "Both instances have same data-testid structure"
+          "Enables shared component library across entire app"
         ]
       }
     },
     {
       "id": "APP-BLOCKS-INTEGRATION-001",
       "given": "blocks integrated with pages via sections",
-      "when": "page sections reference blocks using $ref and vars",
+      "when": "page sections reference blocks using block and vars",
       "then": "it should render blocks within page layout with full variable substitution",
-      "x-test": {
-        "setup": {
-          "app": {
-            "blocks": [
+      "application": {
+        "blocks": [
+          {
+            "name": "hero-cta",
+            "type": "button",
+            "props": {
+              "className": "btn btn-$variant text-$size"
+            },
+            "content": "$ctaText"
+          }
+        ],
+        "pages": [
+          {
+            "name": "Home",
+            "path": "/",
+            "sections": [
               {
-                "name": "hero-cta",
-                "type": "button",
-                "props": {
-                  "className": "btn btn-$variant text-$size"
-                },
-                "content": "$ctaText"
-              }
-            ],
-            "pages": [
-              {
-                "name": "Home",
-                "path": "/",
-                "sections": [
-                  {
-                    "$ref": "hero-cta",
-                    "vars": {
-                      "variant": "primary",
-                      "size": "lg",
-                      "ctaText": "Get Started"
-                    }
-                  }
-                ]
+                "block": "hero-cta",
+                "vars": {
+                  "variant": "primary",
+                  "size": "lg",
+                  "ctaText": "Get Started"
+                }
               }
             ]
           }
-        },
-        "expectedDOM": "<!DOCTYPE html>\n<html>\n  <body>\n    <main>\n      <button data-testid=\"block-hero-cta\" class=\"btn btn-primary text-lg\">Get Started</button>\n    </main>\n  </body>\n</html>",
+        ],
+        "expectedDOM": "<!DOCTYPE html><html><body><main><button data-testid=\"block-hero-cta\" class=\"btn btn-primary text-lg\">Get Started</button></main></body></html>",
         "assertions": [
-          "Block defined at app.blocks[] level",
-          "Page references block via sections[].$ref",
-          "Block renders within page's main content area",
-          "All variables substituted: variant='primary', size='lg', ctaText='Get Started'",
-          "Integration enables global block library reused across all pages"
+          "Integration: Blocks → Pages → Sections flow",
+          "Step 1: Block defined at app.blocks[] (global library)",
+          "Step 2: Page references block via sections[].block='hero-cta'",
+          "Step 3: Block renders within page's <main> content area",
+          "Variable substitution: variant → 'primary', size → 'lg', ctaText → 'Get Started'",
+          "Result: className='btn btn-primary text-lg', content='Get Started'",
+          "Global block library enables component reuse across all pages"
         ]
       }
     },
@@ -595,6 +749,45 @@
           "Each block must have a unique name within the blocks array",
           "Uniqueness constraint prevents naming conflicts"
         ]
+      },
+      "application": {
+        "blocks": [
+          {
+            "name": "block-1",
+            "type": "div",
+            "content": "First block"
+          },
+          {
+            "name": "block-2",
+            "type": "span",
+            "content": "Second block"
+          }
+        ],
+        "pages": [
+          {
+            "name": "Validation Demo",
+            "path": "/validation",
+            "sections": [
+              {
+                "block": "block-1",
+                "vars": {}
+              },
+              {
+                "block": "block-2",
+                "vars": {}
+              }
+            ]
+          }
+        ],
+        "expectedDOM": "<div data-testid=\"block-block-1\">First block</div><span data-testid=\"block-block-2\">Second block</span>",
+        "assertions": [
+          "Uniqueness validation: Each block name MUST be unique",
+          "Valid: ['block-1', 'block-2'] → Different names ✓",
+          "Invalid: ['duplicate-name', 'duplicate-name'] → Same name ✗",
+          "Build-time validation prevents duplicate block names",
+          "Uniqueness constraint ensures no naming conflicts",
+          "Page references rely on unique block names for lookup"
+        ]
       }
     },
     {
@@ -602,62 +795,68 @@
       "given": "blocks using theme design tokens",
       "when": "block props reference theme colors, spacing, and fonts",
       "then": "it should render with design tokens applied from global theme",
-      "x-test": {
-        "setup": {
-          "app": {
-            "theme": {
-              "colors": {
-                "primary": "#007bff",
-                "secondary": "#6c757d"
-              },
-              "spacing": {
-                "section": "4rem",
-                "gap": "1rem"
-              },
-              "fonts": {
-                "heading": {
-                  "family": "Inter",
-                  "weight": 700
-                }
-              }
-            },
-            "blocks": [
-              {
-                "name": "themed-section",
-                "type": "section",
-                "props": {
-                  "className": "bg-$bgColor py-[theme.spacing.section]",
-                  "style": "gap: theme.spacing.gap"
-                },
-                "children": [
-                  {
-                    "type": "text",
-                    "props": {
-                      "level": "h2",
-                      "style": "color: theme.colors.primary; font-family: theme.fonts.heading.family"
-                    },
-                    "content": "$title"
-                  }
-                ]
-              }
-            ]
+      "application": {
+        "theme": {
+          "colors": {
+            "primary": "#007bff",
+            "secondary": "#6c757d"
           },
-          "reference": {
-            "$ref": "themed-section",
-            "vars": {
-              "bgColor": "gray-100",
-              "title": "Our Services"
+          "spacing": {
+            "section": "4rem",
+            "gap": "1rem"
+          },
+          "fonts": {
+            "heading": {
+              "family": "Inter",
+              "weight": 700
             }
           }
         },
-        "expectedDOM": "<section data-testid=\"block-themed-section\" class=\"bg-gray-100 py-[4rem]\" style=\"gap: 1rem\">\n  <h2 style=\"color: #007bff; font-family: Inter\">Our Services</h2>\n</section>",
+        "blocks": [
+          {
+            "name": "themed-section",
+            "type": "section",
+            "props": {
+              "className": "bg-$bgColor py-[theme.spacing.section]",
+              "style": "gap: theme.spacing.gap"
+            },
+            "children": [
+              {
+                "type": "text",
+                "props": {
+                  "level": "h2",
+                  "style": "color: theme.colors.primary; font-family: theme.fonts.heading.family"
+                },
+                "content": "$title"
+              }
+            ]
+          }
+        ],
+        "pages": [
+          {
+            "name": "Services",
+            "path": "/services",
+            "sections": [
+              {
+                "block": "themed-section",
+                "vars": {
+                  "bgColor": "gray-100",
+                  "title": "Our Services"
+                }
+              }
+            ]
+          }
+        ],
+        "expectedDOM": "<section data-testid=\"block-themed-section\" class=\"bg-gray-100 py-[4rem]\" style=\"gap: 1rem\"><h2 style=\"color: #007bff; font-family: Inter\">Our Services</h2></section>",
         "assertions": [
-          "Block references theme.spacing.section (4rem) in padding",
-          "Block references theme.spacing.gap (1rem) in gap style",
-          "H2 references theme.colors.primary (#007bff)",
-          "H2 references theme.fonts.heading.family (Inter)",
-          "Integration enables blocks to use consistent design tokens from global theme",
-          "Changing theme values updates all blocks using those tokens"
+          "Theme integration: Blocks use global design tokens",
+          "Section props: className uses theme.spacing.section (4rem) → 'py-[4rem]'",
+          "Section style: gap uses theme.spacing.gap (1rem) → 'gap: 1rem'",
+          "H2 style: color uses theme.colors.primary (#007bff) → 'color: #007bff'",
+          "H2 style: font-family uses theme.fonts.heading.family (Inter)",
+          "Consistent design: ALL blocks reference same theme tokens",
+          "Maintainability: Changing theme updates ALL blocks automatically",
+          "Design system integration: Theme → Blocks → Pages flow"
         ]
       }
     },
