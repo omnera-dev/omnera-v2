@@ -122,9 +122,10 @@ function generateThemeStyles(theme?: Theme): string {
   ]
 
   // Build spacing styles array
-  const spacingStyles: ReadonlyArray<string> = spacing?.section
-    ? [`[data-testid="section"] { padding: ${spacing.section}; }`]
-    : []
+  const spacingStyles: ReadonlyArray<string> = [
+    ...(spacing?.section ? [`[data-testid="section"] { padding: ${spacing.section}; }`] : []),
+    ...(spacing?.container ? [`[data-testid="container"] { max-width: ${spacing.container}; }`] : []),
+  ]
 
   // Build animation keyframes
   const animationStyles = generateAnimationKeyframes(animations)
@@ -341,11 +342,15 @@ export function DynamicPage({
           data-testid="section"
           {...(theme?.spacing?.section && { style: { padding: theme.spacing.section } })}
         >
-          <main
-            data-testid={page.name ? `page-${page.name}` : undefined}
-            data-page-id={page.id}
-            style={{ minHeight: '1px' }}
+          <div
+            data-testid="container"
+            {...(theme?.spacing?.container && { style: { maxWidth: theme.spacing.container } })}
           >
+            <main
+              data-testid={page.name ? `page-${page.name}` : undefined}
+              data-page-id={page.id}
+              style={{ minHeight: '1px' }}
+            >
             {page.sections.map((section, index) => (
               <ComponentRenderer
                 key={index}
@@ -402,6 +407,7 @@ export function DynamicPage({
               </div>
             )}
           </main>
+          </div>
         </section>
         {page.layout?.footer && <Footer {...page.layout.footer} />}
         {/* Client-side language switcher functionality - always inject when languages configured */}
