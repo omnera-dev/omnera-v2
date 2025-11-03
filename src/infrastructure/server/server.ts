@@ -25,6 +25,38 @@ import type { CSSCompilationError } from '@/infrastructure/errors/css-compilatio
 const CSS_CACHE_DURATION_SECONDS = 3600
 
 /**
+ * Extract and validate language code from URL path
+ *
+ * @param path - URL path (e.g., '/fr-FR/', '/en-US/about')
+ * @param supportedLanguages - Array of supported language codes
+ * @returns Language code if valid, undefined otherwise
+ *
+ * @example
+ * extractLanguageFromPath('/fr-FR/', ['en-US', 'fr-FR']) // => 'fr-FR'
+ * extractLanguageFromPath('/fr-FR/about', ['en-US', 'fr-FR']) // => 'fr-FR'
+ * extractLanguageFromPath('/invalid/', ['en-US', 'fr-FR']) // => undefined
+ * extractLanguageFromPath('/', ['en-US', 'fr-FR']) // => undefined
+ */
+function extractLanguageFromPath(
+  path: string,
+  supportedLanguages: ReadonlyArray<string>
+): string | undefined {
+  // Extract first path segment (e.g., '/fr-FR/about' => 'fr-FR')
+  const segments = path.split('/').filter(Boolean)
+  if (segments.length === 0) {
+    return undefined
+  }
+
+  const potentialLang = segments[0]
+  if (!potentialLang) {
+    return undefined
+  }
+
+  // Validate against supported languages
+  return supportedLanguages.includes(potentialLang) ? potentialLang : undefined
+}
+
+/**
  * Server configuration options
  */
 export interface ServerConfig {
@@ -114,19 +146,28 @@ function createHonoApp(
       .on(['POST', 'GET'], '/api/auth/*', (c) => auth.handler(c.req.raw))
       .get('/', (c) => {
         try {
-          // Detect language from Accept-Language header for SSR
-          let detectedLanguage: string | undefined = undefined
-          if (app.languages?.detectBrowser !== false) {
-            const acceptLanguage = c.req.header('Accept-Language')
-            const supportedCodes = app.languages?.supported.map((l) => l.code) || []
-            detectedLanguage = detectLanguageFromHeader(acceptLanguage, supportedCodes)
+          // If languages are configured, redirect to language subdirectory
+          if (app.languages) {
+            // Detect language from Accept-Language header
+            let detectedLanguage: string | undefined = undefined
+            if (app.languages.detectBrowser !== false) {
+              const acceptLanguage = c.req.header('Accept-Language')
+              const supportedCodes = app.languages.supported.map((l) => l.code)
+              detectedLanguage = detectLanguageFromHeader(acceptLanguage, supportedCodes)
+            }
+
+            // Use detected language or default
+            const targetLanguage = detectedLanguage || app.languages.default
+
+            // Redirect to /:lang/
+            return c.redirect(`/${targetLanguage}/`, 302)
           }
 
-          const html = renderHomePage(app, detectedLanguage)
+          // No languages configured - render homepage without language subdirectory
+          const html = renderHomePage(app, undefined)
           return c.html(html)
         } catch (error) {
           // Log rendering error
-
           console.error('Error rendering homepage:', error)
           return c.html(renderErrorPage(), 500)
         }
@@ -178,7 +219,54 @@ function createHonoApp(
         // eslint-disable-next-line functional/no-throw-statements
         throw new Error('Test error')
       })
-      // Dynamic page routes - catch-all for custom pages
+      // Language subdirectory routes - /:lang/ and /:lang/*
+      .get('/:lang/', (c) => {
+        try {
+          // Extract and validate language from URL
+          const supportedCodes = app.languages?.supported.map((l) => l.code) || []
+          const urlLanguage = extractLanguageFromPath(c.req.path, supportedCodes)
+
+          // If language is invalid, return 404
+          if (!urlLanguage) {
+            return c.html(renderNotFoundPage(), 404)
+          }
+
+          // Render homepage with language from URL
+          const html = renderHomePage(app, urlLanguage)
+          return c.html(html)
+        } catch (error) {
+          console.error('Error rendering homepage:', error)
+          return c.html(renderErrorPage(), 500)
+        }
+      })
+      .get('/:lang/*', (c) => {
+        try {
+          // Extract and validate language from URL
+          const supportedCodes = app.languages?.supported.map((l) => l.code) || []
+          const urlLanguage = extractLanguageFromPath(c.req.path, supportedCodes)
+
+          // If language is invalid, return 404
+          if (!urlLanguage) {
+            return c.html(renderNotFoundPage(), 404)
+          }
+
+          // Remove language prefix from path to get actual page path
+          // e.g., '/fr-FR/about' => '/about'
+          const pathWithoutLang = c.req.path.replace(`/${urlLanguage}`, '') || '/'
+
+          // Render dynamic page with language from URL
+          const html = renderPage(app, pathWithoutLang, urlLanguage)
+          if (!html) {
+            return c.html(renderNotFoundPage(), 404)
+          }
+
+          return c.html(html)
+        } catch (error) {
+          console.error('Error rendering page:', error)
+          return c.html(renderErrorPage(), 500)
+        }
+      })
+      // Dynamic page routes - catch-all for custom pages (backward compatibility)
       .get('*', (c) => {
         const { path } = c.req
 

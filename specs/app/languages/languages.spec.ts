@@ -1118,4 +1118,173 @@ test.describe('Languages Configuration', () => {
       // Focus on workflow continuity, not exhaustive coverage
     }
   )
+
+  // ============================================================================
+  // Language Subdirectory Routing Tests
+  // ============================================================================
+
+  test(
+    'APP-LANGUAGES-SUBDIRECTORY-001: should redirect from / to /:lang/ based on Accept-Language',
+    { tag: '@spec' },
+    async ({ page, startServerWithSchema }) => {
+      // GIVEN: an app with languages configured
+      await startServerWithSchema({
+        name: 'test-app',
+        languages: {
+          default: 'en-US',
+          supported: [
+            { code: 'en-US', label: 'English', direction: 'ltr' },
+            { code: 'fr-FR', label: 'Français', direction: 'ltr' },
+          ],
+          detectBrowser: true,
+        },
+        blocks: [
+          {
+            name: 'language-switcher',
+            type: 'language-switcher',
+            props: { variant: 'dropdown' },
+          },
+        ],
+        pages: [
+          {
+            name: 'home',
+            path: '/',
+            meta: { title: 'Home', description: 'Homepage' },
+            sections: [{ block: 'language-switcher' }],
+          },
+        ],
+      })
+
+      // WHEN: user visits / without language subdirectory
+      await page.goto('/')
+
+      // THEN: should redirect to /:lang/ (using default language since no Accept-Language header in test)
+      await expect(page).toHaveURL(/\/(en-US|fr-FR)\/$/)
+
+      // Verify page renders correctly at subdirectory URL
+      await expect(page.locator('[data-testid="current-language"]')).toBeVisible()
+    }
+  )
+
+  test(
+    'APP-LANGUAGES-SUBDIRECTORY-002: should render homepage at /:lang/ with correct language',
+    { tag: '@spec' },
+    async ({ page, startServerWithSchema }) => {
+      // GIVEN: an app with languages configured
+      await startServerWithSchema({
+        name: 'test-app',
+        languages: {
+          default: 'en-US',
+          supported: [
+            { code: 'en-US', label: 'English', direction: 'ltr' },
+            { code: 'fr-FR', label: 'Français', direction: 'ltr' },
+          ],
+        },
+        blocks: [
+          {
+            name: 'language-switcher',
+            type: 'language-switcher',
+            props: { variant: 'dropdown' },
+          },
+        ],
+        pages: [
+          {
+            name: 'home',
+            path: '/',
+            meta: { title: 'Home', description: 'Homepage' },
+            sections: [{ block: 'language-switcher' }],
+          },
+        ],
+      })
+
+      // WHEN: user visits /fr-FR/ directly
+      await page.goto('/fr-FR/')
+
+      // THEN: should render French homepage
+      await expect(page.locator('html')).toHaveAttribute('lang', 'fr-FR')
+      await expect(page.locator('[data-testid="current-language"]')).toHaveText('Français')
+    }
+  )
+
+  test(
+    'APP-LANGUAGES-SUBDIRECTORY-003: should navigate between language subdirectories when switching language',
+    { tag: '@spec' },
+    async ({ page, startServerWithSchema }) => {
+      // GIVEN: an app with languages configured
+      await startServerWithSchema({
+        name: 'test-app',
+        languages: {
+          default: 'en-US',
+          supported: [
+            { code: 'en-US', label: 'English', direction: 'ltr' },
+            { code: 'fr-FR', label: 'Français', direction: 'ltr' },
+            { code: 'es-ES', label: 'Español', direction: 'ltr' },
+          ],
+          persistSelection: true,
+        },
+        blocks: [
+          {
+            name: 'language-switcher',
+            type: 'language-switcher',
+            props: { variant: 'dropdown' },
+          },
+        ],
+        pages: [
+          {
+            name: 'home',
+            path: '/',
+            meta: { title: 'Home', description: 'Homepage' },
+            sections: [{ block: 'language-switcher' }],
+          },
+        ],
+      })
+
+      // WHEN: user visits /fr-FR/
+      await page.goto('/fr-FR/')
+      await expect(page).toHaveURL('/fr-FR/')
+      await expect(page.locator('[data-testid="current-language"]')).toHaveText('Français')
+
+      // AND: switches to English
+      await page.locator('[data-testid="language-switcher"]').click()
+      await page.locator('[data-testid="language-option-en-US"]').click()
+
+      // THEN: should navigate to /en-US/
+      await page.waitForURL('/en-US/')
+      await expect(page).toHaveURL('/en-US/')
+      await expect(page.locator('html')).toHaveAttribute('lang', 'en-US')
+    }
+  )
+
+  test(
+    'APP-LANGUAGES-SUBDIRECTORY-004: should return 404 for invalid language subdirectory',
+    { tag: '@spec' },
+    async ({ page, startServerWithSchema }) => {
+      // GIVEN: an app with languages configured
+      await startServerWithSchema({
+        name: 'test-app',
+        languages: {
+          default: 'en-US',
+          supported: [
+            { code: 'en-US', label: 'English', direction: 'ltr' },
+            { code: 'fr-FR', label: 'Français', direction: 'ltr' },
+          ],
+        },
+        pages: [
+          {
+            name: 'home',
+            path: '/',
+            meta: { title: 'Home', description: 'Homepage' },
+            sections: [],
+          },
+        ],
+      })
+
+      // WHEN: user visits /invalid-lang/ (not in supported languages)
+      const response = await page.goto('/de-DE/')
+
+      // THEN: should return 404
+      expect(response?.status()).toBe(404)
+    }
+  )
+
 })

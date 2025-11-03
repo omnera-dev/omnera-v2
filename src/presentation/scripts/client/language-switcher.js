@@ -201,6 +201,7 @@
   /**
    * Selects a new language and updates the UI
    * Saves to localStorage if persistSelection is enabled
+   * Handles navigation for language subdirectory URLs (/:lang/*)
    * @param {string} code - ISO 639-1 language code (e.g., 'en-US', 'fr-FR')
    */
   function selectLanguage(code) {
@@ -212,6 +213,26 @@
       localStorage.setItem('language', code)
     }
 
+    // Check if current URL uses language subdirectory pattern (/:lang/*)
+    const currentPath = window.location.pathname
+    const supportedCodes = languagesConfig.supported.map((lang) => lang.code)
+
+    // Extract first path segment
+    const segments = currentPath.split('/').filter(Boolean)
+    const firstSegment = segments[0]
+
+    // If current URL starts with a supported language code, navigate to new language subdirectory
+    if (firstSegment && supportedCodes.includes(firstSegment)) {
+      // Replace language segment: /fr-FR/about => /en-US/about
+      const pathWithoutLang = '/' + segments.slice(1).join('/')
+      const newPath = `/${code}${pathWithoutLang}`
+
+      // Navigate to new language URL (preserves query params and hash)
+      window.location.href = newPath + window.location.search + window.location.hash
+      return
+    }
+
+    // No language subdirectory - update UI in place (backward compatibility)
     isOpen = false
     updateUI()
     if (dropdown) {
