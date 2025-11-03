@@ -131,41 +131,46 @@
       "given": "block reference block property",
       "when": "block is block name in kebab-case",
       "then": "it should look up and instantiate matching block template",
-      "x-test": {
-        "setup": {
-          "blocks": [
-            {
-              "name": "icon-badge",
-              "type": "badge",
-              "content": "$text"
-            },
-            {
-              "name": "cta-button",
-              "type": "button",
-              "content": "$label"
-            }
-          ],
-          "references": [
-            {
-              "block": "icon-badge",
-              "vars": {
-                "text": "New"
+      "application": {
+        "blocks": [
+          {
+            "name": "icon-badge",
+            "type": "badge",
+            "content": "$text"
+          },
+          {
+            "name": "cta-button",
+            "type": "button",
+            "content": "$label"
+          }
+        ],
+        "pages": [
+          {
+            "name": "Home",
+            "path": "/",
+            "sections": [
+              {
+                "block": "icon-badge",
+                "vars": {
+                  "text": "New"
+                }
+              },
+              {
+                "block": "cta-button",
+                "vars": {
+                  "label": "Click"
+                }
               }
-            },
-            {
-              "block": "cta-button",
-              "vars": {
-                "label": "Click"
-              }
-            }
-          ]
-        },
-        "expectedDOM": "<div data-testid=\"block-icon-badge\">New</div>\n<button data-testid=\"block-cta-button\">Click</button>",
+            ]
+          }
+        ],
+        "expectedDOM": "<div data-testid=\"block-icon-badge\">New</div><button data-testid=\"block-cta-button\">Click</button>",
         "assertions": [
-          "block='icon-badge' matches block with name='icon-badge'",
-          "block='cta-button' matches block with name='cta-button'",
-          "Each reference instantiates corresponding block template",
-          "block property identifies which template to use"
+          "block property: Template name lookup mechanism",
+          "Reference 1: block='icon-badge' → finds block with name='icon-badge'",
+          "Reference 2: block='cta-button' → finds block with name='cta-button'",
+          "Each reference instantiates its corresponding template",
+          "block property value MUST match existing block name exactly"
         ]
       }
     },
@@ -184,6 +189,60 @@
           "Invalid: 'IconBadge' (uppercase), 'cta_button' (underscore)",
           "Invalid: 'section header' (space), '2-columns' (starts with digit), '' (empty)",
           "Pattern ensures block matches block naming convention"
+        ]
+      },
+      "application": {
+        "blocks": [
+          {
+            "name": "icon-badge",
+            "type": "badge"
+          },
+          {
+            "name": "cta",
+            "type": "button"
+          },
+          {
+            "name": "section-header-2",
+            "type": "section"
+          },
+          {
+            "name": "my-component",
+            "type": "div"
+          }
+        ],
+        "pages": [
+          {
+            "name": "Demo",
+            "path": "/demo",
+            "sections": [
+              {
+                "block": "icon-badge",
+                "vars": {}
+              },
+              {
+                "block": "cta",
+                "vars": {}
+              },
+              {
+                "block": "section-header-2",
+                "vars": {}
+              },
+              {
+                "block": "my-component",
+                "vars": {}
+              }
+            ]
+          }
+        ],
+        "expectedDOM": "<div data-testid=\"block-icon-badge\"></div><button data-testid=\"block-cta\"></button><section data-testid=\"block-section-header-2\"></section><div data-testid=\"block-my-component\"></div>",
+        "assertions": [
+          "Naming pattern: ^[a-z][a-z0-9-]*$ (kebab-case)",
+          "Valid: 'icon-badge', 'cta', 'section-header-2', 'my-component'",
+          "Must start with lowercase letter: [a-z]",
+          "Can contain: lowercase letters, digits, hyphens",
+          "Invalid: 'IconBadge' (uppercase), 'cta_button' (underscore), 'section header' (space)",
+          "Invalid: '2-columns' (starts with digit), '' (empty string)",
+          "Build-time validation enforces consistent naming"
         ]
       }
     },
@@ -219,6 +278,41 @@
           "Build-time validation ensures all references resolve",
           "Prevents runtime errors from missing block templates"
         ]
+      },
+      "application": {
+        "blocks": [
+          {
+            "name": "icon-badge",
+            "type": "badge",
+            "content": "Badge"
+          },
+          {
+            "name": "cta-button",
+            "type": "button",
+            "content": "Button"
+          }
+        ],
+        "pages": [
+          {
+            "name": "Valid",
+            "path": "/valid",
+            "sections": [
+              {
+                "block": "icon-badge",
+                "vars": {}
+              }
+            ]
+          }
+        ],
+        "expectedDOM": "<div data-testid=\"block-icon-badge\">Badge</div>",
+        "assertions": [
+          "Reference validation: block value MUST exist in blocks array",
+          "Valid: block='icon-badge' → Found in blocks[] ✓",
+          "Invalid: block='non-existent-block' → NOT found in blocks[] ✗",
+          "Build-time validation prevents broken references",
+          "Catches typos and missing block definitions early",
+          "Prevents runtime errors from unresolved templates"
+        ]
       }
     },
     {
@@ -226,9 +320,9 @@
       "given": "block reference vars object",
       "when": "vars contains variable name-value pairs",
       "then": "it should provide all data needed for template substitution",
-      "x-test": {
-        "setup": {
-          "blockDefinition": {
+      "application": {
+        "blocks": [
+          {
             "name": "user-card",
             "type": "card",
             "children": [
@@ -248,22 +342,32 @@
                 "content": "$email"
               }
             ]
-          },
-          "reference": {
-            "block": "user-card",
-            "vars": {
-              "name": "John Doe",
-              "role": "Developer",
-              "email": "john@example.com"
-            }
           }
-        },
-        "expectedDOM": "<div data-testid=\"block-user-card\" class=\"card\">\n  <h3>John Doe</h3>\n  <span>Developer</span>\n  <span>john@example.com</span>\n</div>",
+        ],
+        "pages": [
+          {
+            "name": "Team",
+            "path": "/team",
+            "sections": [
+              {
+                "block": "user-card",
+                "vars": {
+                  "name": "John Doe",
+                  "role": "Developer",
+                  "email": "john@example.com"
+                }
+              }
+            ]
+          }
+        ],
+        "expectedDOM": "<div data-testid=\"block-user-card\" class=\"card\"><h3>John Doe</h3><span>Developer</span><span>john@example.com</span></div>",
         "assertions": [
-          "vars.name → $name substitution in h3",
-          "vars.role → $role substitution in first span",
-          "vars.email → $email substitution in second span",
-          "vars object provides all data for template variables"
+          "vars object: Data container for template substitution",
+          "vars.name='John Doe' → replaces $name in h3",
+          "vars.role='Developer' → replaces $role in first span",
+          "vars.email='john@example.com' → replaces $email in second span",
+          "All template variables receive data from vars object",
+          "vars provides complete dataset for single block instance"
         ]
       }
     },
@@ -292,6 +396,49 @@
           "Pattern enforces JavaScript variable naming",
           "Consistent with $variable placeholders in templates"
         ]
+      },
+      "application": {
+        "blocks": [
+          {
+            "name": "demo-block",
+            "type": "div",
+            "props": {
+              "className": "$color icon-$iconName"
+            },
+            "children": [
+              {
+                "type": "text",
+                "content": "$titleText"
+              }
+            ]
+          }
+        ],
+        "pages": [
+          {
+            "name": "Demo",
+            "path": "/demo",
+            "sections": [
+              {
+                "block": "demo-block",
+                "vars": {
+                  "color": "blue",
+                  "iconName": "star",
+                  "titleText": "Hello",
+                  "isActive": true
+                }
+              }
+            ]
+          }
+        ],
+        "expectedDOM": "<div data-testid=\"block-demo-block\" class=\"blue icon-star\"><span>Hello</span></div>",
+        "assertions": [
+          "Variable naming: ^[a-zA-Z][a-zA-Z0-9]*$ (JavaScript convention)",
+          "Valid: 'color', 'iconName', 'titleText', 'isActive' (camelCase)",
+          "Must start with letter: [a-zA-Z]",
+          "Can contain: letters and digits only",
+          "Invalid: 'text-color' (hyphen not allowed), '1stValue' (starts with digit), '' (empty)",
+          "Matches $variable placeholders in templates ($color, $iconName, etc.)"
+        ]
       }
     },
     {
@@ -299,9 +446,9 @@
       "given": "vars property values",
       "when": "values are string, number, or boolean",
       "then": "it should substitute primitive data types into template",
-      "x-test": {
-        "setup": {
-          "blockDefinition": {
+      "application": {
+        "blocks": [
+          {
             "name": "settings-toggle",
             "type": "div",
             "props": {
@@ -324,23 +471,33 @@
                 "content": "Max: $maxValue"
               }
             ]
-          },
-          "reference": {
-            "block": "settings-toggle",
-            "vars": {
-              "priority": "high",
-              "label": "Enable feature",
-              "enabled": true,
-              "maxValue": 100
-            }
           }
-        },
-        "expectedDOM": "<div data-testid=\"block-settings-toggle\" class=\"setting-high\">\n  <span>Enable feature</span>\n  <input type=\"checkbox\" checked />\n  <span>Max: 100</span>\n</div>",
+        ],
+        "pages": [
+          {
+            "name": "Settings",
+            "path": "/settings",
+            "sections": [
+              {
+                "block": "settings-toggle",
+                "vars": {
+                  "priority": "high",
+                  "label": "Enable feature",
+                  "enabled": true,
+                  "maxValue": 100
+                }
+              }
+            ]
+          }
+        ],
+        "expectedDOM": "<div data-testid=\"block-settings-toggle\" class=\"setting-high\"><span>Enable feature</span><input type=\"checkbox\" checked /><span>Max: 100</span></div>",
         "assertions": [
-          "String var: priority='high' → className='setting-high'",
-          "String var: label='Enable feature' → text content",
-          "Boolean var: enabled=true → checked attribute present",
-          "Number var: maxValue=100 → renders as '100' in text"
+          "Primitive data types: string, number, boolean",
+          "String: priority='high' → className='setting-high'",
+          "String: label='Enable feature' → text content 'Enable feature'",
+          "Boolean: enabled=true → checked attribute present on input",
+          "Number: maxValue=100 → renders as '100' in text 'Max: 100'",
+          "All primitive types supported for variable substitution"
         ]
       }
     },
@@ -349,9 +506,9 @@
       "given": "icon-badge reference example",
       "when": "block is 'icon-badge' with vars: color='orange', icon='users', text='6 à 15 personnes'",
       "then": "it should render badge with orange color, users icon, and French text",
-      "x-test": {
-        "setup": {
-          "blockDefinition": {
+      "application": {
+        "blocks": [
+          {
             "name": "icon-badge",
             "type": "badge",
             "props": {
@@ -373,22 +530,32 @@
                 "content": "$text"
               }
             ]
-          },
-          "reference": {
-            "block": "icon-badge",
-            "vars": {
-              "color": "orange",
-              "icon": "users",
-              "text": "6 à 15 personnes"
-            }
           }
-        },
-        "expectedDOM": "<div data-testid=\"block-icon-badge\" data-color=\"orange\">\n  <svg data-testid=\"icon-users\" width=\"16\" height=\"16\"></svg>\n  <span>6 à 15 personnes</span>\n</div>",
+        ],
+        "pages": [
+          {
+            "name": "Workshop",
+            "path": "/workshop",
+            "sections": [
+              {
+                "block": "icon-badge",
+                "vars": {
+                  "color": "orange",
+                  "icon": "users",
+                  "text": "6 à 15 personnes"
+                }
+              }
+            ]
+          }
+        ],
+        "expectedDOM": "<div data-testid=\"block-icon-badge\" data-color=\"orange\"><svg data-testid=\"icon-users\" width=\"16\" height=\"16\"></svg><span>6 à 15 personnes</span></div>",
         "assertions": [
-          "Badge has data-color='orange' (substituted from vars.color)",
-          "Icon has data-testid='icon-users' (substituted from vars.icon)",
-          "Span contains French text '6 à 15 personnes' (substituted from vars.text)",
-          "All 3 variables substituted correctly"
+          "Real-world example: icon-badge for workshop capacity",
+          "vars.color='orange' → data-color='orange'",
+          "vars.icon='users' → data-testid='icon-users', size 16x16 (4*4px)",
+          "vars.text='6 à 15 personnes' → French UTF-8 text with 'à'",
+          "All 3 variables substituted correctly",
+          "Demonstrates multi-language content support"
         ]
       }
     },
@@ -397,9 +564,9 @@
       "given": "section-header reference example",
       "when": "block is 'section-header' with vars: titleColor='pourpre', title='notre mission', subtitle='...'",
       "then": "it should render section header with purple title and French content",
-      "x-test": {
-        "setup": {
-          "blockDefinition": {
+      "application": {
+        "blocks": [
+          {
             "name": "section-header",
             "type": "container",
             "props": {
@@ -422,23 +589,32 @@
                 "content": "$subtitle"
               }
             ]
-          },
-          "reference": {
-            "block": "section-header",
-            "vars": {
-              "titleColor": "pourpre",
-              "title": "notre mission",
-              "subtitle": "Rendre la culture du consentement accessible à tous"
-            }
           }
-        },
-        "expectedDOM": "<div data-testid=\"block-section-header\" class=\"text-center mb-12\">\n  <h2 class=\"text-pourpre text-4xl mb-4\">notre mission</h2>\n  <p>Rendre la culture du consentement accessible à tous</p>\n</div>",
+        ],
+        "pages": [
+          {
+            "name": "Mission",
+            "path": "/mission",
+            "sections": [
+              {
+                "block": "section-header",
+                "vars": {
+                  "titleColor": "pourpre",
+                  "title": "notre mission",
+                  "subtitle": "Rendre la culture du consentement accessible à tous"
+                }
+              }
+            ]
+          }
+        ],
+        "expectedDOM": "<div data-testid=\"block-section-header\" class=\"text-center mb-12\"><h2 class=\"text-pourpre text-4xl mb-4\">notre mission</h2><p>Rendre la culture du consentement accessible à tous</p></div>",
         "assertions": [
-          "Container has classes 'text-center mb-12'",
-          "H2 has class 'text-pourpre' (purple in French, substituted from vars.titleColor)",
-          "H2 contains lowercase French title 'notre mission'",
-          "Paragraph contains French subtitle about consent culture",
-          "Example demonstrates multi-language support"
+          "Real-world example: section-header for mission page (French)",
+          "Container: class='text-center mb-12'",
+          "H2: class includes 'text-pourpre' (purple in French)",
+          "H2: lowercase title 'notre mission'",
+          "Paragraph: subtitle about consent culture (French UTF-8)",
+          "Multi-language support: French text with lowercase styling"
         ]
       }
     },
@@ -447,36 +623,41 @@
       "given": "variable substitution mechanism",
       "when": "vars values replace $variable placeholders in block template",
       "then": "it should transform abstract template into concrete rendered component",
-      "x-test": {
-        "setup": {
-          "template": {
+      "application": {
+        "blocks": [
+          {
             "name": "alert",
             "type": "div",
             "props": {
               "className": "alert alert-$variant"
             },
             "content": "$message"
-          },
-          "reference": {
-            "block": "alert",
-            "vars": {
-              "variant": "success",
-              "message": "Saved successfully!"
-            }
-          },
-          "substitutionProcess": {
-            "step1": "Find all $variable placeholders in template",
-            "step2": "Look up each variable name in vars object",
-            "step3": "Replace $variable with corresponding vars value",
-            "step4": "Render final component with concrete values"
           }
-        },
+        ],
+        "pages": [
+          {
+            "name": "Dashboard",
+            "path": "/dashboard",
+            "sections": [
+              {
+                "block": "alert",
+                "vars": {
+                  "variant": "success",
+                  "message": "Saved successfully!"
+                }
+              }
+            ]
+          }
+        ],
         "expectedDOM": "<div data-testid=\"block-alert\" class=\"alert alert-success\">Saved successfully!</div>",
         "assertions": [
-          "Template placeholder: 'alert-$variant'",
-          "vars lookup: variant='success'",
-          "Substitution: 'alert-$variant' → 'alert-success'",
-          "Final DOM contains no $ placeholders, only concrete values"
+          "Substitution mechanism: $variable → actual value",
+          "Step 1: Find placeholders ($variant, $message)",
+          "Step 2: Look up in vars (variant='success', message='Saved successfully!')",
+          "Step 3: Replace 'alert-$variant' → 'alert-success'",
+          "Step 4: Replace '$message' → 'Saved successfully!'",
+          "Final DOM: NO $ symbols, only concrete values",
+          "Abstract template → Concrete component transformation"
         ]
       }
     },
@@ -485,9 +666,9 @@
       "given": "block reference for template instantiation",
       "when": "reference creates instance of block with specific data",
       "then": "it should enable same template to generate different instances",
-      "x-test": {
-        "setup": {
-          "blockDefinition": {
+      "application": {
+        "blocks": [
+          {
             "name": "team-member",
             "type": "card",
             "children": [
@@ -510,40 +691,49 @@
                 "content": "$position"
               }
             ]
-          },
-          "references": [
-            {
-              "block": "team-member",
-              "vars": {
-                "photo": "/alice.jpg",
-                "name": "Alice",
-                "position": "CEO"
+          }
+        ],
+        "pages": [
+          {
+            "name": "Team",
+            "path": "/team",
+            "sections": [
+              {
+                "block": "team-member",
+                "vars": {
+                  "photo": "/alice.jpg",
+                  "name": "Alice",
+                  "position": "CEO"
+                }
+              },
+              {
+                "block": "team-member",
+                "vars": {
+                  "photo": "/bob.jpg",
+                  "name": "Bob",
+                  "position": "CTO"
+                }
+              },
+              {
+                "block": "team-member",
+                "vars": {
+                  "photo": "/carol.jpg",
+                  "name": "Carol",
+                  "position": "Designer"
+                }
               }
-            },
-            {
-              "block": "team-member",
-              "vars": {
-                "photo": "/bob.jpg",
-                "name": "Bob",
-                "position": "CTO"
-              }
-            },
-            {
-              "block": "team-member",
-              "vars": {
-                "photo": "/carol.jpg",
-                "name": "Carol",
-                "position": "Designer"
-              }
-            }
-          ]
-        },
-        "expectedDOM": "<div data-testid=\"block-team-member-0\" class=\"card\">\n  <img src=\"/alice.jpg\" alt=\"Alice\" />\n  <h4>Alice</h4>\n  <span>CEO</span>\n</div>\n<div data-testid=\"block-team-member-1\" class=\"card\">\n  <img src=\"/bob.jpg\" alt=\"Bob\" />\n  <h4>Bob</h4>\n  <span>CTO</span>\n</div>\n<div data-testid=\"block-team-member-2\" class=\"card\">\n  <img src=\"/carol.jpg\" alt=\"Carol\" />\n  <h4>Carol</h4>\n  <span>Designer</span>\n</div>",
+            ]
+          }
+        ],
+        "expectedDOM": "<div data-testid=\"block-team-member-0\" class=\"card\"><img src=\"/alice.jpg\" alt=\"Alice\" /><h4>Alice</h4><span>CEO</span></div><div data-testid=\"block-team-member-1\" class=\"card\"><img src=\"/bob.jpg\" alt=\"Bob\" /><h4>Bob</h4><span>CTO</span></div><div data-testid=\"block-team-member-2\" class=\"card\"><img src=\"/carol.jpg\" alt=\"Carol\" /><h4>Carol</h4><span>Designer</span></div>",
         "assertions": [
-          "1 template definition creates 3 different instances",
-          "Each instance has unique data (photo, name, position)",
-          "Each instance has unique data-testid suffix (-0, -1, -2)",
-          "Template instantiation pattern enables data-driven components"
+          "Template instantiation: 1 template → 3 instances",
+          "Instance 0: Alice (CEO), /alice.jpg, data-testid='block-team-member-0'",
+          "Instance 1: Bob (CTO), /bob.jpg, data-testid='block-team-member-1'",
+          "Instance 2: Carol (Designer), /carol.jpg, data-testid='block-team-member-2'",
+          "Each instance has unique data but identical structure",
+          "Data-driven components: Same template, different content",
+          "Unique testid suffixes enable individual testing"
         ]
       }
     },
@@ -552,9 +742,9 @@
       "given": "block reference for single source of truth",
       "when": "multiple references point to same block template",
       "then": "it should maintain structural consistency while varying data",
-      "x-test": {
-        "setup": {
-          "blockDefinition": {
+      "application": {
+        "blocks": [
+          {
             "name": "feature-item",
             "type": "div",
             "props": {
@@ -585,17 +775,55 @@
                 ]
               }
             ]
+          }
+        ],
+        "pages": [
+          {
+            "name": "Home",
+            "path": "/",
+            "sections": [
+              {
+                "block": "feature-item",
+                "vars": {
+                  "icon": "shield",
+                  "title": "Secure",
+                  "description": "Enterprise-grade security"
+                }
+              },
+              {
+                "block": "feature-item",
+                "vars": {
+                  "icon": "zap",
+                  "title": "Fast",
+                  "description": "Lightning-fast performance"
+                }
+              }
+            ]
           },
-          "usageScenario": "5 references across homepage, pricing page, and about page",
-          "benefit": "Changing block definition updates all 5 instances simultaneously"
-        },
-        "expectedDOM": "<div data-testid=\"block-feature-item\" class=\"feature flex gap-4\">\n  <svg data-testid=\"icon-{name}\" data-color=\"blue\"></svg>\n  <div>\n    <h5>{title}</h5>\n    <span>{description}</span>\n  </div>\n</div>",
+          {
+            "name": "Pricing",
+            "path": "/pricing",
+            "sections": [
+              {
+                "block": "feature-item",
+                "vars": {
+                  "icon": "dollar",
+                  "title": "Affordable",
+                  "description": "Competitive pricing"
+                }
+              }
+            ]
+          }
+        ],
+        "expectedDOM": "<div data-testid=\"block-feature-item-0\" class=\"feature flex gap-4\"><svg data-testid=\"icon-shield\" data-color=\"blue\"></svg><div><h5>Secure</h5><span>Enterprise-grade security</span></div></div>",
         "assertions": [
-          "All instances share same structure: flex container with icon and text",
-          "All instances share same styling: className='feature flex gap-4'",
+          "Single source of truth: 1 template → 3 instances across 2 pages",
+          "All instances share identical structure: flex container + icon + text",
+          "All instances share identical styling: class='feature flex gap-4', icon color='blue'",
           "Only data varies: icon name, title, description",
-          "Single source of truth: modify 1 template, update all instances",
-          "Consistency guaranteed: impossible for instances to diverge structurally"
+          "Modify 1 template → ALL instances update automatically",
+          "Structural consistency guaranteed: impossible for instances to diverge",
+          "Cross-page consistency: Same block used on Home and Pricing pages"
         ]
       }
     },
