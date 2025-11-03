@@ -328,7 +328,7 @@ test.describe('Color Palette', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-THEME-COLORS-009: should validate comprehensive color system for all UI needs',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
