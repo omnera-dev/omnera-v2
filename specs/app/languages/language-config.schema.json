@@ -62,6 +62,22 @@
           "Label: 'English' (human-readable)",
           "Direction: defaults to 'ltr' (left-to-right)"
         ]
+      },
+      "application": {
+        "language": {
+          "code": "en-US",
+          "label": "English"
+        },
+        "component": "html",
+        "expectedDOM": "<html lang=\"en-US\" dir=\"ltr\"><body>...</body></html>",
+        "assertions": [
+          "HTML lang attribute: lang=\"en-US\" (locale-specific)",
+          "Direction defaults to 'ltr' when not specified",
+          "HTML dir attribute: dir=\"ltr\" (explicit left-to-right)",
+          "Text flows left-to-right (standard Latin script)",
+          "UI elements aligned left (menus, navigation, forms)",
+          "Minimal config: Only code + label required, direction inferred"
+        ]
       }
     },
     {
@@ -115,6 +131,22 @@
           "Code: 'en' (ISO 639-1 language-only format)",
           "Pattern: ^[a-z]{2}$ (2 lowercase letters)",
           "Valid without country code (-US, -GB, etc.)"
+        ]
+      },
+      "application": {
+        "language": {
+          "code": "en",
+          "label": "English"
+        },
+        "component": "html",
+        "expectedDOM": "<html lang=\"en\" dir=\"ltr\"><body>...</body></html>",
+        "assertions": [
+          "HTML lang attribute: lang=\"en\" (language-only, no country)",
+          "Generic language code (not region-specific)",
+          "Useful when content applies to all English speakers (US, GB, AU, etc.)",
+          "Browsers/screen readers interpret as 'any English variant'",
+          "Less specific than en-US, more inclusive than omitting lang",
+          "Direction still defaults to ltr"
         ]
       }
     },
