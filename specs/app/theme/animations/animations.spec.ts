@@ -226,7 +226,7 @@ test.describe('Animation Configuration', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-THEME-ANIMATIONS-007: should validate reusable animation library',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
