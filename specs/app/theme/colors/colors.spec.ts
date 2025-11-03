@@ -191,7 +191,7 @@ test.describe('Color Palette', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-THEME-COLORS-005: should validate hsl color format at build time',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
