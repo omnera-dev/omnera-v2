@@ -950,7 +950,7 @@ test.describe('Languages Configuration', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-LANGUAGES-018: should organize translations by feature and improve maintainability',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -975,11 +975,11 @@ test.describe('Languages Configuration', () => {
         },
         pages: [
           {
-            name: 'Homepage',
+            name: 'homepage',
             path: '/',
-            meta: { lang: 'en-US', title: 'Test' },
+            meta: { lang: 'en-US', title: 'Test', description: 'Test page' },
             sections: [
-              { type: 'nav', children: [{ type: 'a', children: ['$t:nav.home'] }] },
+              { type: 'link', children: ['$t:nav.home'] },
               { type: 'h1', children: ['$t:homepage.hero.title'] },
               { type: 'button', children: ['$t:common.save'] },
               { type: 'div', children: ['$t:errors.404'] },
@@ -992,7 +992,7 @@ test.describe('Languages Configuration', () => {
       await page.goto('/')
 
       // THEN: it should organize translations by feature and improve maintainability
-      await expect(page.locator('nav a')).toHaveText('Home')
+      await expect(page.locator('a')).toHaveText('Home')
       await expect(page.locator('h1')).toHaveText('Welcome')
       await expect(page.locator('button')).toHaveText('Save')
       await expect(page.locator('div').filter({ hasText: 'Not Found' })).toBeVisible()
