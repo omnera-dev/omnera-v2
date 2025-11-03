@@ -1,0 +1,153 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "language-switcher.schema.json",
+  "title": "Language Switcher Block",
+  "description": "A reusable language switcher UI component that displays available languages from app.languages configuration",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "const": "language-switcher",
+      "description": "Block identifier"
+    },
+    "type": {
+      "type": "string",
+      "const": "language-switcher",
+      "description": "Component type for language switcher"
+    },
+    "props": {
+      "type": "object",
+      "required": [],
+      "properties": {
+        "variant": {
+          "type": "string",
+          "enum": ["dropdown", "inline", "tabs"],
+          "default": "dropdown",
+          "description": "Display variant for language switcher UI"
+        },
+        "showFlags": {
+          "type": "boolean",
+          "default": false,
+          "description": "Show flag icons next to language labels"
+        },
+        "position": {
+          "type": "string",
+          "description": "Position on page where switcher should appear",
+          "examples": ["top-right", "header", "footer", "sidebar"]
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "required": ["name", "type"],
+  "additionalProperties": false,
+  "examples": [
+    {
+      "name": "language-switcher",
+      "type": "language-switcher",
+      "props": {
+        "variant": "dropdown"
+      }
+    },
+    {
+      "name": "language-switcher",
+      "type": "language-switcher",
+      "props": {
+        "variant": "inline",
+        "showFlags": true
+      }
+    },
+    {
+      "name": "language-switcher",
+      "type": "language-switcher",
+      "props": {
+        "variant": "tabs",
+        "showFlags": true,
+        "position": "header"
+      }
+    }
+  ],
+  "x-specs": [
+    {
+      "id": "APP-BLOCKS-LANGUAGE-SWITCHER-001",
+      "given": "a language-switcher block with dropdown variant",
+      "when": "variant is set to dropdown",
+      "then": "it should render a dropdown menu with all supported languages",
+      "validation": {
+        "setup": {
+          "block": {
+            "name": "language-switcher",
+            "type": "language-switcher",
+            "props": {
+              "variant": "dropdown"
+            }
+          }
+        },
+        "assertions": [
+          "Block validates with dropdown variant",
+          "Variant is one of: dropdown, inline, tabs",
+          "Props are optional with sensible defaults"
+        ]
+      }
+    },
+    {
+      "id": "APP-BLOCKS-LANGUAGE-SWITCHER-002",
+      "given": "a language-switcher block with showFlags enabled",
+      "when": "showFlags is set to true",
+      "then": "it should display flag emojis next to language labels",
+      "validation": {
+        "setup": {
+          "block": {
+            "name": "language-switcher",
+            "type": "language-switcher",
+            "props": {
+              "variant": "inline",
+              "showFlags": true
+            }
+          }
+        },
+        "assertions": [
+          "Block validates with showFlags enabled",
+          "ShowFlags is a boolean prop",
+          "Flags enhance visual recognition of languages"
+        ]
+      }
+    },
+    {
+      "id": "APP-BLOCKS-LANGUAGE-SWITCHER-003",
+      "given": "a language-switcher block with minimal configuration",
+      "when": "only required properties are provided",
+      "then": "it should use default variant (dropdown) and no flags",
+      "validation": {
+        "setup": {
+          "block": {
+            "name": "language-switcher",
+            "type": "language-switcher"
+          }
+        },
+        "assertions": [
+          "Block validates with minimal config",
+          "Default variant: dropdown",
+          "Default showFlags: false",
+          "Props are entirely optional"
+        ]
+      }
+    },
+    {
+      "id": "APP-BLOCKS-LANGUAGE-SWITCHER-REGRESSION-001",
+      "given": "complete application configuration with all features",
+      "when": "user completes full workflow",
+      "then": "user can complete full language-switcher workflow"
+    }
+  ],
+  "x-usage-notes": {
+    "dataSource": "This block reads available languages from app.languages.supported configuration",
+    "integration": "Requires app.languages to be configured with at least one supported language",
+    "behavior": "When user selects a language, it updates the current language context and triggers re-render with new translations",
+    "variants": {
+      "dropdown": "Compact dropdown menu (good for 3+ languages)",
+      "inline": "Horizontal list of buttons (good for 2-3 languages)",
+      "tabs": "Tab-style navigation (good for 2-4 languages)"
+    }
+  }
+}

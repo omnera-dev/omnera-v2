@@ -642,12 +642,14 @@ If a spec finishes successfully but no PR is created within 2 minutes:
 **Most Common Cause**: Claude Code created PR but didn't enable auto-merge
 
 **Automatic Fix** (via `tdd-queue-stuck-pr-monitor.yml`):
+
 - Workflow runs every 10 minutes
 - Detects PRs with passing CI and mergeable state but no auto-merge
 - Automatically enables auto-merge after 5 minutes
 - Posts comment explaining intervention
 
 **Manual Check**:
+
 ```bash
 # Check if auto-merge is enabled
 gh pr view {pr-number} --json autoMergeRequest
@@ -660,6 +662,7 @@ gh pr view {pr-number} --json autoMergeRequest
 ```
 
 **Expected output** (if successful):
+
 ```json
 {
   "enabledAt": "2025-11-03T...",
@@ -668,6 +671,7 @@ gh pr view {pr-number} --json autoMergeRequest
 ```
 
 **Root Causes**:
+
 - Claude Code workflow incomplete (Step 4B skipped)
 - GitHub API rate limit during auto-merge enablement
 - PR was in UNKNOWN mergeable state temporarily
@@ -677,6 +681,7 @@ gh pr view {pr-number} --json autoMergeRequest
 ### PR has merge conflicts ⚠️ NEW
 
 **Automatic Resolution** (via `tdd-queue-conflict-resolver.yml`):
+
 - Workflow triggers when main branch updates
 - Detects conflicted PRs automatically
 - Posts @claude mention with rebase instructions
@@ -684,6 +689,7 @@ gh pr view {pr-number} --json autoMergeRequest
 - One automatic attempt per PR (prevents infinite loops)
 
 **Manual Resolution** (if automatic fails):
+
 ```bash
 # Fetch latest main
 git fetch origin main:main
@@ -706,6 +712,7 @@ gh pr view {pr-number} --json autoMergeRequest
 ```
 
 **If labeled `needs-manual-resolution`**:
+
 - Automatic resolution already failed
 - Manual intervention required
 - Issue removed from queue to unblock pipeline
@@ -715,11 +722,13 @@ gh pr view {pr-number} --json autoMergeRequest
 If a spec has been in-progress for > 90 minutes with no activity:
 
 **Automatic Recovery** (via `tdd-queue-recovery.yml`):
+
 - Runs every 30 minutes
 - Re-queues stuck specs automatically
 - Preserves retry count labels
 
 **Manual Check**:
+
 1. Check if PR exists and has commits:
    ```bash
    gh pr list --label tdd-automation --state open
@@ -866,16 +875,19 @@ If a spec has been in-progress for > 90 minutes with no activity:
 Three new safeguards prevent the most common causes of pipeline blocking:
 
 #### 1. Stuck PR Monitor (Every 10 minutes)
+
 **Problem Solved**: Claude Code creates PR but forgets to enable auto-merge → PR sits open forever
 **Solution**: Automatically enables auto-merge for stuck PRs after 5 minutes
 **Impact**: Prevents pipeline blocking (like PRs #1541, #1546 incidents)
 
 #### 2. Conflict Resolver (On main push + every 15 minutes)
+
 **Problem Solved**: PRs become conflicted when main advances → PR stuck in CONFLICTING state
 **Solution**: Automatically triggers Claude Code to rebase and resolve conflicts
 **Impact**: Prevents stale PRs and pipeline blocking (like PR #1545 incident)
 
 #### 3. Duplicate PR Prevention (During queue processing)
+
 **Problem Solved**: Queue processor creates duplicate PRs for already-completed issues
 **Solution**: Validates issue state and checks for existing PRs before processing
 **Impact**: Prevents duplicate work and conflicting PRs
@@ -988,6 +1000,7 @@ When updating the queue system:
 **Status**: Active
 
 **Changelog**:
+
 - **2025-11-03 (v2.1.0)**: Added three self-healing safeguards to prevent pipeline blocking:
   - Stuck PR Monitor workflow (auto-enables auto-merge)
   - Conflict Resolver workflow (auto-resolves merge conflicts)

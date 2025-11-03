@@ -1374,7 +1374,7 @@
         "path": "/",
         "sections": [
           {
-            "$ref": "language-switcher",
+            "block": "language-switcher",
             "vars": {
               "variant": "dropdown",
               "showFlags": false,

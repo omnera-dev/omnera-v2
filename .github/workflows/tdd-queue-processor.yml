@@ -113,11 +113,7 @@ jobs:
             echo "   Skipping processing to avoid duplicate PRs"
 
             # Add a comment to the issue explaining the skip
-            gh issue comment "$ISSUE_NUMBER" --body "🤖 **Duplicate PR Prevention**
-
-Skipping processing because an open PR already exists for this issue: #$EXISTING_PRS
-
-The existing PR will be processed to completion. If the PR is stuck or invalid, please close it manually and the queue will retry this spec."
+            gh issue comment "$ISSUE_NUMBER" --body "🤖 Duplicate PR Prevention - Skipping processing because an open PR already exists for this issue (#$EXISTING_PRS). The existing PR will be processed to completion. If the PR is stuck or invalid, please close it manually and the queue will retry this spec."
 
             echo "should_process=false" >> $GITHUB_OUTPUT
             exit 0
