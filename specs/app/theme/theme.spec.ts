@@ -174,7 +174,7 @@ test.describe('Theme Configuration', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-THEME-004: should validate and orchestrate all design token categories',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
