@@ -3,6 +3,7 @@
 ## Overview
 
 The TDD automation pipeline includes **infrastructure-level error handling** to distinguish between:
+
 - **Infrastructure/Environment Errors**: Runtime failures in Claude Code, GitHub Actions, or system resources (RETRIABLE)
 - **Code/Test Errors**: Implementation bugs, test failures, or validation errors (NOT retriable at infrastructure level)
 
@@ -13,6 +14,7 @@ This system automatically retries infrastructure errors up to 3 times before mar
 ### Issue #1339 Example: EPERM Error
 
 **What happened**:
+
 ```
 SystemError: kill() failed: EPERM: Operation not permitted
   at kill (unknown:1:1)
@@ -22,6 +24,7 @@ SystemError: kill() failed: EPERM: Operation not permitted
 **Root cause**: Claude Code tried to kill a subprocess during cleanup but lacked permission in the GitHub Actions runner environment.
 
 **Current behavior** (before fix):
+
 1. Claude Code crashes without creating PR
 2. 2-minute PR verification timer expires
 3. Issue marked as `tdd-spec:failed`
@@ -36,34 +39,34 @@ SystemError: kill() failed: EPERM: Operation not permitted
 
 These errors are **NOT caused by code issues** and can be retried automatically:
 
-| Error Type | Examples | Detection Pattern |
-|------------|----------|-------------------|
-| **Permission Errors** | EPERM, EACCES | `EPERM: Operation not permitted` |
-| **Timeout Errors** | Claude timeout, workflow timeout | `timeout\|timed out\|ETIMEDOUT` |
-| **Network Errors** | Connection reset, DNS failure | `ECONNRESET\|ENOTFOUND\|socket hang up` |
-| **Resource Exhaustion** | Out of memory, disk full | `out of memory\|OOM\|ENOSPC` |
-| **Workflow Cancellation** | Manual cancel, concurrency cancel | `cancelled\|canceled` |
+| Error Type                | Examples                          | Detection Pattern                       |
+| ------------------------- | --------------------------------- | --------------------------------------- |
+| **Permission Errors**     | EPERM, EACCES                     | `EPERM: Operation not permitted`        |
+| **Timeout Errors**        | Claude timeout, workflow timeout  | `timeout\|timed out\|ETIMEDOUT`         |
+| **Network Errors**        | Connection reset, DNS failure     | `ECONNRESET\|ENOTFOUND\|socket hang up` |
+| **Resource Exhaustion**   | Out of memory, disk full          | `out of memory\|OOM\|ENOSPC`            |
+| **Workflow Cancellation** | Manual cancel, concurrency cancel | `cancelled\|canceled`                   |
 
 ### Code Errors (NOT Retriable at Infrastructure Level)
 
 These errors are **caused by code issues** and should be handled by Claude Code's retry logic (max 3 attempts):
 
-| Error Type | Examples | Detection Pattern |
-|------------|----------|-------------------|
-| **Test Failures** | Assertion errors, test timeouts | `Test.*failed\|FAIL\|AssertionError` |
-| **Code Errors** | Syntax errors, type errors | `SyntaxError\|TypeError\|ReferenceError` |
-| **Lint Errors** | ESLint violations | `lint.*error\|ESLint.*error` |
-| **Type Errors** | TypeScript errors | `TS[0-9]+:` |
+| Error Type        | Examples                        | Detection Pattern                        |
+| ----------------- | ------------------------------- | ---------------------------------------- |
+| **Test Failures** | Assertion errors, test timeouts | `Test.*failed\|FAIL\|AssertionError`     |
+| **Code Errors**   | Syntax errors, type errors      | `SyntaxError\|TypeError\|ReferenceError` |
+| **Lint Errors**   | ESLint violations               | `lint.*error\|ESLint.*error`             |
+| **Type Errors**   | TypeScript errors               | `TS[0-9]+:`                              |
 
 ## Architecture
 
-### New Workflow: `claude-tdd-with-retry.yml`
+### Unified Workflow: `claude-tdd.yml`
 
-This workflow wraps Claude Code execution with infrastructure-level retry logic:
+This workflow handles ALL Claude Code execution (both automated queue processing and manual @claude mentions) with infrastructure-level retry logic:
 
 ```mermaid
 graph TD
-    A[Queue Processor] --> B[Trigger claude-tdd-with-retry.yml]
+    A[Queue Processor OR @claude mention] --> B[Trigger claude-tdd.yml]
     B --> C{Previous Retry?}
     C -->|Yes| D[Classify Previous Error]
     C -->|No| E[Execute Claude Code]
@@ -91,11 +94,13 @@ graph TD
 **Inputs**: Retry attempt number (only runs if > 1)
 
 **Outputs**:
+
 - `is_infrastructure_error`: Boolean
 - `error_type`: Classified error type
 - `should_retry`: Whether to continue retrying
 
 **Logic**:
+
 ```bash
 # Get most recent failed run logs
 LOGS=$(gh run view "$RECENT_RUN" --log-failed)
@@ -116,12 +121,14 @@ fi
 **Purpose**: Run Claude Code with timeout monitoring
 
 **Key features**:
+
 - Uses `continue-on-error: true` to capture exit code
 - 60-minute timeout (configurable)
 - Captures error type immediately after failure
 - Updates issue with failure info
 
 **Outputs**:
+
 - `claude_success`: Boolean
 - `claude_exit_code`: Exit status
 - `error_type`: Detected error type
@@ -134,6 +141,7 @@ fi
 **Conditions**: Only runs if Claude Code failed with infrastructure error
 
 **Logic**:
+
 ```bash
 NEXT_RETRY=$((CURRENT_RETRY + 1))
 
@@ -161,6 +169,7 @@ fi
 **Runs**: Only if Claude Code succeeded
 
 **Same behavior as original**:
+
 - Wait up to 2 minutes for PR
 - If no PR, mark issue as failed
 - Prevents spec from completing without PR
@@ -172,31 +181,35 @@ fi
 Updated `tdd-queue-processor.yml` to trigger new workflow:
 
 **Before**:
+
 ```yaml
 # Trigger Claude Code via @claude mention
 gh issue comment "$ISSUE_NUMBER" --body "@claude implement this spec..."
 ```
 
 **After**:
+
 ```yaml
 # Trigger Claude Code workflow with retry support
-gh workflow run claude-tdd-with-retry.yml \
+gh workflow run claude-tdd.yml \
   --field issue_number="$ISSUE_NUMBER" \
   --field retry_attempt=1
 
-# Still add comment for context
+# Still add comment for context (for human readability)
 gh issue comment "$ISSUE_NUMBER" --body "@claude implement this spec..."
 ```
 
+**Note**: Manual @claude mentions also use the same workflow, so they automatically get retry support too!
+
 ### Labels Used
 
-| Label | Meaning |
-|-------|---------|
-| `tdd-spec:in-progress` | Spec is currently being processed |
-| `tdd-spec:failed` | Spec failed after max retries |
-| `infrastructure-retry:N` | Infrastructure retry attempt N (1-3) |
-| `infrastructure-error` | Failed due to infrastructure issue (not code) |
-| `retry:N` | Code retry attempt N (for validation failures) |
+| Label                    | Meaning                                        |
+| ------------------------ | ---------------------------------------------- |
+| `tdd-spec:in-progress`   | Spec is currently being processed              |
+| `tdd-spec:failed`        | Spec failed after max retries                  |
+| `infrastructure-retry:N` | Infrastructure retry attempt N (1-3)           |
+| `infrastructure-error`   | Failed due to infrastructure issue (not code)  |
+| `retry:N`                | Code retry attempt N (for validation failures) |
 
 ## Retry Strategy
 
@@ -278,12 +291,12 @@ If a spec fails with infrastructure error but you want to retry:
 
 ```bash
 # Trigger manual retry (attempt 1)
-gh workflow run claude-tdd-with-retry.yml \
+gh workflow run claude-tdd.yml \
   --field issue_number=1339 \
   --field retry_attempt=1
 
 # Or continue from specific attempt
-gh workflow run claude-tdd-with-retry.yml \
+gh workflow run claude-tdd.yml \
   --field issue_number=1339 \
   --field retry_attempt=2
 ```
@@ -292,10 +305,10 @@ gh workflow run claude-tdd-with-retry.yml \
 
 ### Environment Variables
 
-| Variable | Default | Description |
-|----------|---------|-------------|
-| `MAX_INFRASTRUCTURE_RETRIES` | 3 | Max retry attempts for infrastructure errors |
-| `CLAUDE_TIMEOUT_MINUTES` | 60 | Timeout for Claude Code execution |
+| Variable                     | Default | Description                                  |
+| ---------------------------- | ------- | -------------------------------------------- |
+| `MAX_INFRASTRUCTURE_RETRIES` | 3       | Max retry attempts for infrastructure errors |
+| `CLAUDE_TIMEOUT_MINUTES`     | 60      | Timeout for Claude Code execution            |
 
 ### Timeout Strategy
 
@@ -325,17 +338,20 @@ gh workflow run claude-tdd-with-retry.yml \
 ### Scenario 1: EPERM Error (Infrastructure)
 
 **Symptoms**:
+
 - Claude Code crashes with `EPERM: Operation not permitted`
 - No PR created
 - Branch may or may not exist
 
 **Automatic handling**:
+
 1. Error detected as infrastructure error
 2. Wait 30 seconds
 3. Retry workflow (up to 3x)
 4. If still fails, mark as `tdd-spec:failed` + `infrastructure-error`
 
 **Manual resolution**:
+
 ```bash
 # Check if branch was created
 gh pr list --head "claude/issue-1339-*"
@@ -344,21 +360,24 @@ gh pr list --head "claude/issue-1339-*"
 gh pr create --title "fix: implement APP-THEME-006" --body "Closes #1339" --label "tdd-automation"
 
 # Otherwise, retry workflow
-gh workflow run claude-tdd-with-retry.yml --field issue_number=1339 --field retry_attempt=1
+gh workflow run claude-tdd.yml --field issue_number=1339 --field retry_attempt=1
 ```
 
 ### Scenario 2: Timeout (Infrastructure)
 
 **Symptoms**:
+
 - Claude Code exceeds 60-minute timeout
 - Workflow cancelled mid-execution
 
 **Automatic handling**:
+
 1. Timeout detected as infrastructure error
 2. Retry triggered automatically
 3. If timeout persists 3x, marked as failed
 
 **Manual resolution**:
+
 ```bash
 # Check if spec is too complex
 gh issue view 1339 --json body
@@ -370,17 +389,20 @@ gh issue edit 1339 --add-label "skip-automated" --remove-label "tdd-spec:failed"
 ### Scenario 3: Test Failure (Code Error)
 
 **Symptoms**:
+
 - Claude Code completes successfully
 - PR created and auto-merge enabled
 - test.yml validation fails
 
 **Automatic handling**:
+
 1. NOT classified as infrastructure error
 2. Claude Code's own retry logic handles it
 3. Claude analyzes errors, fixes code, pushes update
 4. Validation re-runs automatically
 
 **Manual resolution**:
+
 - Usually not needed - Claude handles automatically
 - If 3 code retries exhausted, review PR manually
 
@@ -402,6 +424,7 @@ gh issue edit 1339 --add-label "skip-automated" --remove-label "tdd-spec:failed"
 ### Alerts
 
 Set up alerts if:
+
 - Infrastructure retry rate > 20% (runner health issues)
 - Infrastructure failure rate > 5% (persistent infrastructure problems)
 - First-attempt success rate < 50% (consider spec complexity or test quality)
