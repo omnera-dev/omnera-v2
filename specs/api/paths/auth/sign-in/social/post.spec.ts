@@ -33,7 +33,7 @@ import { test, expect } from '@/specs/fixtures'
  */
 // API-AUTH-SIGN-IN-SOCIAL-001: User requests social sign-in with Google provider
 test(
-  'API-AUTH-SIGN-IN-SOCIAL-REGRESSION-001: should return OAuth redirect URL for provider',
+  'API-AUTH-SIGN-IN-SOCIAL-001: should return OAuth redirect URL for provider',
   { tag: '@regression' },
   async ({ page, startServerWithSchema }) => {
     // GIVEN: A running server

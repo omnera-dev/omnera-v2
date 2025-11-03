@@ -383,7 +383,7 @@ test.describe('Hover Interaction', () => {
   // ============================================================================
 
   test.fixme(
-    'APP-PAGES-INTERACTIONS-HOVER_INTERACTION-REGRESSION-001: user can complete full hover interaction workflow',
+    'APP-PAGES-INTERACTIONS-HOVER-INTERACTION-REGRESSION-001: user can complete full hover interaction workflow',
     { tag: '@regression' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: Application with comprehensive hover interactions

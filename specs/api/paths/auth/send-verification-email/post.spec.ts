@@ -36,7 +36,7 @@ const generateTestUser = () => ({
  */
 // API-AUTH-SEND-VERIFICATION-EMAIL-001: User requests verification without email
 test(
-  'API-AUTH-SEND-VERIFICATION-EMAIL-REGRESSION-001: should validate required email field',
+  'API-AUTH-SEND-VERIFICATION-EMAIL-001: should validate required email field',
   { tag: '@regression' },
   async ({ page, startServerWithSchema }) => {
     // GIVEN: A running server

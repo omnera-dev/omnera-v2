@@ -347,7 +347,7 @@ test.describe('Border Radius', () => {
   // ============================================================================
 
   test.fixme(
-    'APP-THEME-BORDER_RADIUS-BORDER_RADIUS-REGRESSION-001: user can complete full border-radius workflow',
+    'APP-THEME-BORDER-RADIUS-BORDER-RADIUS-REGRESSION-001: user can complete full border-radius workflow',
     { tag: '@regression' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: Application with comprehensive border-radius system

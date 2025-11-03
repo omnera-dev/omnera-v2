@@ -176,7 +176,7 @@
       "then": "it should enable Google Knowledge Graph panel in search results"
     },
     {
-      "id": "APP-PAGES-META-STRUCTURED_DATA-ORGANIZATION-REGRESSION-001",
+      "id": "APP-PAGES-META-STRUCTURED-DATA-ORGANIZATION-REGRESSION-001",
       "given": "complete application configuration with all features",
       "when": "user completes full workflow",
       "then": "user can complete full Organization workflow"

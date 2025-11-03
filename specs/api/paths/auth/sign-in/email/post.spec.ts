@@ -36,7 +36,7 @@ const generateTestUser = () => ({
  */
 // API-AUTH-SIGN-IN-EMAIL-001: User signs in with correct credentials
 test(
-  'API-AUTH-SIGN-IN-EMAIL-REGRESSION-001: should authenticate user with valid credentials',
+  'API-AUTH-SIGN-IN-EMAIL-001: should authenticate user with valid credentials',
   { tag: '@regression' },
   async ({ page, startServerWithSchema }) => {
     // GIVEN: A running server

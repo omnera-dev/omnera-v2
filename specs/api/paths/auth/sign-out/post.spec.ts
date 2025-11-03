@@ -36,7 +36,7 @@ const generateTestUser = () => ({
  */
 // API-AUTH-SIGN-OUT-001: User signs out
 test(
-  'API-AUTH-SIGN-OUT-REGRESSION-001: should invalidate session on sign-out',
+  'API-AUTH-SIGN-OUT-001: should invalidate session on sign-out',
   { tag: '@regression' },
   async ({ page, startServerWithSchema }) => {
     // GIVEN: A running server

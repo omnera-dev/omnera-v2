@@ -169,7 +169,8 @@ test.describe('Theme Configuration', () => {
       await page.goto('/')
 
       // THEN: it should validate visual identity, typography, and layout tokens
-      await expect(page.locator('[data-testid="section"]')).toHaveCSS('padding', /4rem/)
+      // Note: toHaveCSS() returns computed values in pixels (4rem × 16px = 64px)
+      await expect(page.locator('[data-testid="section"]')).toHaveCSS('padding', '64px')
       await expect(page.locator('body')).toHaveCSS('font-family', /Inter/)
     }
   )

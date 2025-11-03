@@ -41,7 +41,7 @@ const generateTestUser = () => ({
  */
 // API-AUTH-SIGN-UP-EMAIL-001: User signs up with valid credentials
 test(
-  'API-AUTH-SIGN-UP-EMAIL-REGRESSION-001: should create user account and return session',
+  'API-AUTH-SIGN-UP-EMAIL-001: should create user account and return session',
   { tag: '@regression' },
   async ({ page, startServerWithSchema }) => {
     // GIVEN: A running server

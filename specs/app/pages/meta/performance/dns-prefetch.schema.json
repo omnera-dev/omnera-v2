@@ -76,7 +76,7 @@
       "then": "it should improve perceived page load speed"
     },
     {
-      "id": "APP-PAGES-META-PERFORMANCE-DNS_PREFETCH-REGRESSION-001",
+      "id": "APP-PAGES-META-PERFORMANCE-DNS-PREFETCH-REGRESSION-001",
       "given": "complete application configuration with all features",
       "when": "user completes full workflow",
       "then": "user can complete full DNS prefetch workflow"

@@ -129,7 +129,7 @@
       "then": "it should apply all settings in sequence (wait delay, then animate with duration)"
     },
     {
-      "id": "APP-PAGES-INTERACTIONS-SCROLL_INTERACTION-REGRESSION-001",
+      "id": "APP-PAGES-INTERACTIONS-SCROLL-INTERACTION-REGRESSION-001",
       "given": "complete application configuration with all features",
       "when": "user completes full workflow",
       "then": "user can complete full scroll interaction workflow"

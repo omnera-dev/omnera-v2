@@ -130,7 +130,7 @@
       "then": "it should increase click-through rate from search results"
     },
     {
-      "id": "APP-PAGES-META-STRUCTURED_DATA-FAQ_PAGE-REGRESSION-001",
+      "id": "APP-PAGES-META-STRUCTURED-DATA-FAQ-PAGE-REGRESSION-001",
       "given": "complete application configuration with all features",
       "when": "user completes full workflow",
       "then": "user can complete full FAQ Page workflow"

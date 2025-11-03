@@ -375,7 +375,7 @@ test.describe('External Scripts', () => {
   )
 
   test.fixme(
-    'APP-PAGES-SCRIPTS-EXTERNAL_SCRIPTS-EXTERNAL_SCRIPTS-REGRESSION-001: user can complete full External Scripts workflow',
+    'APP-PAGES-SCRIPTS-EXTERNAL-SCRIPTS-EXTERNAL-SCRIPTS-REGRESSION-001: user can complete full External Scripts workflow',
     { tag: '@regression' },
     async ({ page, startServerWithSchema }) => {
       await startServerWithSchema({

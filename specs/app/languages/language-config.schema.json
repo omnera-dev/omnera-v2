@@ -304,7 +304,7 @@
       }
     },
     {
-      "id": "APP-LANGUAGES-LANGUAGE_CONFIG-REGRESSION-001",
+      "id": "APP-LANGUAGES-LANGUAGE-CONFIG-REGRESSION-001",
       "given": "complete application configuration with all features",
       "when": "user completes full workflow",
       "then": "user can complete full language-config workflow"

@@ -37,7 +37,7 @@ const generateTestUser = () => ({
  */
 // API-AUTH-CHANGE-PASSWORD-001: User requests password change without newPassword
 test(
-  'API-AUTH-CHANGE-PASSWORD-REGRESSION-001: should validate required fields',
+  'API-AUTH-CHANGE-PASSWORD-001: should validate required fields',
   { tag: '@regression' },
   async ({ page, startServerWithSchema }) => {
     // GIVEN: A running server

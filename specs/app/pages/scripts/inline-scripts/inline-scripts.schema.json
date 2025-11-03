@@ -100,7 +100,7 @@
       "then": "it should execute scripts in document order"
     },
     {
-      "id": "APP-PAGES-SCRIPTS-INLINE_SCRIPTS-INLINE_SCRIPTS-REGRESSION-001",
+      "id": "APP-PAGES-SCRIPTS-INLINE-SCRIPTS-INLINE-SCRIPTS-REGRESSION-001",
       "given": "complete application configuration with all features",
       "when": "user completes full workflow",
       "then": "user can complete full Inline Scripts workflow"

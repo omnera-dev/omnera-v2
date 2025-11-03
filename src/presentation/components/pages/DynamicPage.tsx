@@ -45,10 +45,7 @@ function generateThemeStyles(theme?: Theme): string {
 
   // Build spacing styles array
   const spacingStyles: ReadonlyArray<string> = spacing?.section
-    ? [
-        `:root { --section-padding: ${spacing.section}; }`,
-        `[data-testid="section"] { padding: var(--section-padding, ${spacing.section}); }`,
-      ]
+    ? [`[data-testid="section"] { padding: ${spacing.section}; }`]
     : []
 
   // Combine all styles
@@ -258,7 +255,10 @@ export function DynamicPage({
         {page.layout?.banner && <Banner {...page.layout.banner} />}
         {page.layout?.navigation && <Navigation {...page.layout.navigation} />}
 
-        <section data-testid="section">
+        <section
+          data-testid="section"
+          {...(theme?.spacing?.section && { style: { padding: theme.spacing.section } })}
+        >
           <main
             data-testid={page.name ? `page-${page.name}` : undefined}
             data-page-id={page.id}

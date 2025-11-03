@@ -194,7 +194,7 @@
       "then": "it should enable map pin and directions in search results"
     },
     {
-      "id": "APP-PAGES-META-STRUCTURED_DATA-LOCAL_BUSINESS-REGRESSION-001",
+      "id": "APP-PAGES-META-STRUCTURED-DATA-LOCAL-BUSINESS-REGRESSION-001",
       "given": "complete application configuration with all features",
       "when": "user completes full workflow",
       "then": "user can complete full Local Business workflow"

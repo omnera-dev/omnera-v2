@@ -120,7 +120,7 @@
       "then": "it should support fully customized button appearance"
     },
     {
-      "id": "APP-PAGES-LAYOUT-NAVIGATION-CTA_BUTTON-REGRESSION-001",
+      "id": "APP-PAGES-LAYOUT-NAVIGATION-CTA-BUTTON-REGRESSION-001",
       "given": "complete application configuration with all features",
       "when": "user completes full workflow",
       "then": "user can complete full CTA button workflow"

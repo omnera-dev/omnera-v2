@@ -212,7 +212,7 @@
       }
     },
     {
-      "id": "APP-THEME-BORDER_RADIUS-BORDER_RADIUS-REGRESSION-001",
+      "id": "APP-THEME-BORDER-RADIUS-BORDER-RADIUS-REGRESSION-001",
       "given": "complete application configuration with all features",
       "when": "user completes full workflow",
       "then": "user can complete full border-radius workflow"

@@ -464,7 +464,7 @@ test.describe('Scroll Interaction', () => {
   // ============================================================================
 
   test.fixme(
-    'APP-PAGES-INTERACTIONS-SCROLL_INTERACTION-REGRESSION-001: user can complete full scroll interaction workflow',
+    'APP-PAGES-INTERACTIONS-SCROLL-INTERACTION-REGRESSION-001: user can complete full scroll interaction workflow',
     { tag: '@regression' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: Application with comprehensive scroll interactions

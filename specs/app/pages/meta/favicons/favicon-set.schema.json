@@ -101,7 +101,7 @@
       "then": "it should provide comprehensive multi-device icon support"
     },
     {
-      "id": "APP-PAGES-META-FAVICONS-FAVICON_SET-REGRESSION-001",
+      "id": "APP-PAGES-META-FAVICONS-FAVICON-SET-REGRESSION-001",
       "given": "complete application configuration with all features",
       "when": "user completes full workflow",
       "then": "user can complete full favicon set workflow"

@@ -182,7 +182,7 @@
       "then": "it should properly attribute content to authors and publishers"
     },
     {
-      "id": "APP-PAGES-META-STRUCTURED_DATA-ARTICLE-REGRESSION-001",
+      "id": "APP-PAGES-META-STRUCTURED-DATA-ARTICLE-REGRESSION-001",
       "given": "complete application configuration with all features",
       "when": "user completes full workflow",
       "then": "user can complete full Article workflow"

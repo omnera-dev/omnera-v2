@@ -107,7 +107,7 @@
       "then": "it should improve local search ranking and map visibility"
     },
     {
-      "id": "APP-PAGES-META-STRUCTURED_DATA-POSTAL_ADDRESS-REGRESSION-001",
+      "id": "APP-PAGES-META-STRUCTURED-DATA-POSTAL-ADDRESS-REGRESSION-001",
       "given": "complete application configuration with all features",
       "when": "user completes full workflow",
       "then": "user can complete full Postal Address workflow"

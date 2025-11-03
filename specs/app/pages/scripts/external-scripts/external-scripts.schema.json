@@ -138,7 +138,7 @@
       "then": "it should load script with default settings (sync, body-end)"
     },
     {
-      "id": "APP-PAGES-SCRIPTS-EXTERNAL_SCRIPTS-EXTERNAL_SCRIPTS-REGRESSION-001",
+      "id": "APP-PAGES-SCRIPTS-EXTERNAL-SCRIPTS-EXTERNAL-SCRIPTS-REGRESSION-001",
       "given": "complete application configuration with all features",
       "when": "user completes full workflow",
       "then": "user can complete full External Scripts workflow"

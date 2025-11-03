@@ -478,7 +478,7 @@ test.describe('Person Schema', () => {
   )
 
   test.fixme(
-    'APP-PAGES-META-STRUCTURED_DATA-PERSON-REGRESSION-001: user can complete full Person workflow',
+    'APP-PAGES-META-STRUCTURED-DATA-PERSON-REGRESSION-001: user can complete full Person workflow',
     { tag: '@regression' },
     async ({ page, startServerWithSchema }) => {
       await startServerWithSchema({
