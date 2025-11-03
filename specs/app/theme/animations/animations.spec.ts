@@ -24,7 +24,7 @@ test.describe('Animation Configuration', () => {
   // One test per spec in schema - defines EXHAUSTIVE acceptance criteria
   // ============================================================================
 
-  test.fixme(
+  test(
     'APP-THEME-ANIMATIONS-001: should validate animation enablement',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
