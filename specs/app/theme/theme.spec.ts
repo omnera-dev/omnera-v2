@@ -371,7 +371,7 @@ test.describe('Theme Configuration', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-THEME-007: should enable consistent UI across entire application',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -419,7 +419,7 @@ test.describe('Theme Configuration', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-THEME-008: should integrate seamlessly with Tailwind CSS',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -451,8 +451,8 @@ test.describe('Theme Configuration', () => {
       await page.goto('/')
 
       // THEN: it should integrate seamlessly with Tailwind CSS
-      await expect(page.locator('[data-testid="section"]')).toHaveCSS('padding', /4rem/)
-      await expect(page.locator('[data-testid="container"]')).toHaveCSS('max-width', /80rem/)
+      await expect(page.locator('[data-testid="section"]')).toHaveCSS('padding', '64px')
+      await expect(page.locator('[data-testid="container"]')).toHaveCSS('max-width', '1280px')
     }
   )
 

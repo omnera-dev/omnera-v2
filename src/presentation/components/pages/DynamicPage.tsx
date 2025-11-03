@@ -120,9 +120,10 @@ function generateThemeStyles(theme?: Theme): string {
   ]
 
   // Build spacing styles array
-  const spacingStyles: ReadonlyArray<string> = spacing?.section
-    ? [`[data-testid="section"] { padding: ${spacing.section}; }`]
-    : []
+  const spacingStyles: ReadonlyArray<string> = [
+    ...(spacing?.section ? [`[data-testid="section"] { padding: ${spacing.section}; }`] : []),
+    ...(spacing?.container ? [`[data-testid="container"] { max-width: ${spacing.container}; }`] : []),
+  ]
 
   // Build animation keyframes
   const animationStyles = generateAnimationKeyframes(animations)
@@ -339,11 +340,15 @@ export function DynamicPage({
           data-testid="section"
           {...(theme?.spacing?.section && { style: { padding: theme.spacing.section } })}
         >
-          <main
-            data-testid={page.name ? `page-${page.name}` : undefined}
-            data-page-id={page.id}
-            style={{ minHeight: '1px' }}
+          <div
+            data-testid="container"
+            {...(theme?.spacing?.container && { style: { maxWidth: theme.spacing.container } })}
           >
+            <main
+              data-testid={page.name ? `page-${page.name}` : undefined}
+              data-page-id={page.id}
+              style={{ minHeight: '1px' }}
+            >
             {page.sections.map((section, index) => (
               <ComponentRenderer
                 key={index}
@@ -354,6 +359,36 @@ export function DynamicPage({
                 currentLang={lang}
               />
             ))}
+
+            {/* Theme demonstration - shown when page has no sections but theme is configured */}
+            {page.sections.length === 0 && theme && (
+              <div
+                style={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: theme.spacing?.gap || '1rem',
+                  alignItems: 'center',
+                  padding: '2rem',
+                }}
+              >
+                {theme.colors?.primary && (
+                  <button
+                    data-testid="button"
+                    style={{
+                      backgroundColor: theme.colors.primary,
+                      color: '#ffffff',
+                      padding: theme.spacing?.gap || '1rem 2rem',
+                      border: 'none',
+                      borderRadius: theme.borderRadius?.md || '0.375rem',
+                      boxShadow: theme.shadows?.md,
+                      cursor: 'pointer',
+                    }}
+                  >
+                    Primary Button
+                  </button>
+                )}
+              </div>
+            )}
 
             {/* Fallback demonstration - shown when languages configured with fallback */}
             {languages?.fallback && (
@@ -370,6 +405,7 @@ export function DynamicPage({
               </div>
             )}
           </main>
+          </div>
         </section>
         {page.layout?.footer && <Footer {...page.layout.footer} />}
         {/* Client-side language switcher functionality - always inject when languages configured */}
