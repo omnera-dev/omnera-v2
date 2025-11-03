@@ -257,7 +257,7 @@ test.describe('Color Palette', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-THEME-COLORS-007: should validate color variants for hover states and tints',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
