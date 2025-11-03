@@ -124,7 +124,7 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GH_PAT_WORKFLOW || github.token }}
 
-      - name: Mark spec as in-progress and trigger Claude Code via @mention
+      - name: Mark spec as in-progress and trigger Claude Code workflow
         if: steps.check.outputs.should_process == 'true' && steps.validate.outputs.should_process == 'true'
         run: |
           ISSUE_NUMBER="${{ steps.next.outputs.issue_number }}"
@@ -137,9 +137,13 @@ jobs:
           gh issue edit "$ISSUE_NUMBER" --remove-label "tdd-spec:queued"
           gh issue edit "$ISSUE_NUMBER" --add-label "tdd-spec:in-progress"
 
-          # Trigger Claude Code via @claude mention (using user's PAT)
-          # This posts a comment from the token owner's account, which triggers the workflow
-          echo "🤖 Triggering Claude Code via @claude mention..."
+          # Trigger Claude Code workflow with retry support
+          echo "🤖 Triggering Claude Code workflow with infrastructure retry support..."
+          gh workflow run claude-tdd-with-retry.yml \
+            --field issue_number="$ISSUE_NUMBER" \
+            --field retry_attempt=1
+
+          # Add initial comment with workflow instructions
           gh issue comment "$ISSUE_NUMBER" --body "@claude implement this spec using the TDD automation workflow.
 
           ## 🤖 AUTOMATION MODE - OPERATE NON-INTERACTIVELY
