@@ -230,11 +230,11 @@ jobs:
           # Wait up to 2 minutes for PR to appear (Claude may need time to push and create PR)
           PR_FOUND=false
           for i in {1..12}; do
-            # Search for PRs from branches matching claude/* or tdd/* patterns
-            PR_COUNT=$(gh pr list --json number,headRefName --jq "[.[] | select(.headRefName | test(\"^(claude|tdd)/.*$ISSUE_NUMBER.*\"))] | length")
+            # Search for PRs from branches matching claude/issue-* pattern (created automatically by Claude Code)
+            PR_COUNT=$(gh pr list --json number,headRefName --jq "[.[] | select(.headRefName | test(\"^claude/issue-.*$ISSUE_NUMBER.*\"))] | length")
 
             if [ "$PR_COUNT" -gt 0 ]; then
-              PR_NUMBER=$(gh pr list --json number,headRefName --jq "[.[] | select(.headRefName | test(\"^(claude|tdd)/.*$ISSUE_NUMBER.*\"))][0].number")
+              PR_NUMBER=$(gh pr list --json number,headRefName --jq "[.[] | select(.headRefName | test(\"^claude/issue-.*$ISSUE_NUMBER.*\"))][0].number")
               echo "✅ PR #$PR_NUMBER found!"
               echo "pr_created=true" >> $GITHUB_OUTPUT
               echo "pr_number=$PR_NUMBER" >> $GITHUB_OUTPUT
