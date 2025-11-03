@@ -59,61 +59,114 @@
       "id": "APP-PAGES-PRELOAD-001",
       "given": "preload resource with href and as",
       "when": "href is resource URL and as specifies type",
-      "then": "it should preload critical resource"
+      "then": "it should preload critical resource",
+      "application": {
+        "preload": {"href": "./output.css", "as": "style"},
+        "expectedHTML": "<link rel=\"preload\" href=\"/output.css\" as=\"style\" />",
+        "assertions": ["href + as: required properties", "as: Enum (style, script, font, image, video, audio, document, fetch)", "Critical resource optimization"]
+      }
     },
     {
       "id": "APP-PAGES-PRELOAD-002",
       "given": "preload with as='style'",
       "when": "as is 'style' for CSS files",
-      "then": "it should preload critical stylesheet"
+      "then": "it should preload critical stylesheet",
+      "application": {
+        "preload": {"href": "./output.css", "as": "style"},
+        "expectedHTML": "<link rel=\"preload\" href=\"/output.css\" as=\"style\" />",
+        "benefit": "CSS loads earlier, reduces render-blocking time",
+        "assertions": ["as: 'style' for CSS", "Use for: Critical above-the-fold styles", "Improves FCP (First Contentful Paint)"]
+      }
     },
     {
       "id": "APP-PAGES-PRELOAD-003",
       "given": "preload with as='script'",
       "when": "as is 'script' for JavaScript files",
-      "then": "it should preload critical scripts"
+      "then": "it should preload critical scripts",
+      "application": {
+        "preload": {"href": "./app.js", "as": "script"},
+        "expectedHTML": "<link rel=\"preload\" href=\"/app.js\" as=\"script\" />",
+        "assertions": ["as: 'script' for JS", "Use for: Critical JS (app bundle, framework)", "Reduces blocking time"]
+      }
     },
     {
       "id": "APP-PAGES-PRELOAD-004",
       "given": "preload with as='font'",
       "when": "as is 'font' with type and crossorigin",
-      "then": "it should preload web fonts"
+      "then": "it should preload web fonts",
+      "application": {
+        "preload": {"href": "./fonts/Inter.woff2", "as": "font", "type": "font/woff2", "crossorigin": true},
+        "expectedHTML": "<link rel=\"preload\" href=\"/fonts/Inter.woff2\" as=\"font\" type=\"font/woff2\" crossorigin />",
+        "note": "crossorigin is REQUIRED for fonts (even self-hosted)",
+        "assertions": ["as: 'font' for web fonts", "type: 'font/woff2' (MIME type)", "crossorigin: true (always required)", "Prevents FOUT (Flash of Unstyled Text)"]
+      }
     },
     {
       "id": "APP-PAGES-PRELOAD-005",
       "given": "preload with as='image'",
       "when": "as is 'image' for above-the-fold images",
-      "then": "it should preload hero images"
+      "then": "it should preload hero images",
+      "application": {
+        "preload": {"href": "./images/hero.jpg", "as": "image"},
+        "expectedHTML": "<link rel=\"preload\" href=\"/images/hero.jpg\" as=\"image\" />",
+        "assertions": ["as: 'image' for images", "Use for: LCP images (hero, above-fold)", "Improves Largest Contentful Paint (LCP)"]
+      }
     },
     {
       "id": "APP-PAGES-PRELOAD-006",
       "given": "preload with as='fetch'",
       "when": "as is 'fetch' for API data",
-      "then": "it should prefetch critical API responses"
+      "then": "it should prefetch critical API responses",
+      "application": {
+        "preload": {"href": "https://api.example.com/critical-data", "as": "fetch", "crossorigin": "anonymous"},
+        "expectedHTML": "<link rel=\"preload\" href=\"https://api.example.com/critical-data\" as=\"fetch\" crossorigin=\"anonymous\" />",
+        "assertions": ["as: 'fetch' for API/XHR", "Use for: Critical API data", "crossorigin: Required for CORS", "Faster first render (data ready)"]
+      }
     },
     {
       "id": "APP-PAGES-PRELOAD-007",
       "given": "preload with crossorigin for fonts",
       "when": "crossorigin is true or 'anonymous'",
-      "then": "it should set CORS for cross-origin fonts"
+      "then": "it should set CORS for cross-origin fonts",
+      "application": {
+        "options": [{"crossorigin": true, "meaning": "Anonymous mode (default)"}, {"crossorigin": "anonymous", "meaning": "Explicit anonymous"}, {"crossorigin": "use-credentials", "meaning": "Include credentials"}],
+        "assertions": ["crossorigin: true | 'anonymous' | 'use-credentials'", "REQUIRED for fonts (always)", "anonymous: No credentials", "use-credentials: Send cookies"]
+      }
     },
     {
       "id": "APP-PAGES-PRELOAD-008",
       "given": "preload with type attribute",
       "when": "type specifies MIME type like 'font/woff2'",
-      "then": "it should help browser prioritize resource"
+      "then": "it should help browser prioritize resource",
+      "application": {
+        "preload": {"href": "./fonts/Inter.woff2", "as": "font", "type": "font/woff2"},
+        "types": {"font/woff2": "Web Font 2.0", "font/woff": "Web Font 1.0", "font/ttf": "TrueType Font", "image/webp": "WebP image"},
+        "assertions": ["type: MIME type (optional)", "Helps browser prioritize", "Required for fonts", "Optional for others"]
+      }
     },
     {
       "id": "APP-PAGES-PRELOAD-009",
       "given": "preload with media query",
       "when": "media specifies conditional loading",
-      "then": "it should preload only when media query matches"
+      "then": "it should preload only when media query matches",
+      "application": {
+        "preload": {"href": "./hero-large.jpg", "as": "image", "media": "(min-width: 768px)"},
+        "expectedHTML": "<link rel=\"preload\" href=\"/hero-large.jpg\" as=\"image\" media=\"(min-width: 768px)\" />",
+        "behavior": "Preloads only on desktop (≥768px), skips on mobile",
+        "assertions": ["media: Media query (optional)", "Conditional preloading", "Use for: Responsive images", "Saves bandwidth on mobile"]
+      }
     },
     {
       "id": "APP-PAGES-PRELOAD-010",
       "given": "preload for critical rendering path",
       "when": "preloading CSS, fonts, and hero images",
-      "then": "it should optimize First Contentful Paint (FCP)"
+      "then": "it should optimize First Contentful Paint (FCP)",
+      "application": {
+        "preload": [{"href": "./output.css", "as": "style"}, {"href": "./fonts/Inter.woff2", "as": "font", "type": "font/woff2", "crossorigin": true}, {"href": "./hero.jpg", "as": "image"}],
+        "metrics": {"Without preload": "FCP: ~1.8s", "With preload": "FCP: ~1.2s (33% faster)"},
+        "coreWebVitals": "Improves FCP (First Contentful Paint) and LCP (Largest Contentful Paint)",
+        "assertions": ["Critical rendering path optimization", "CSS + fonts + LCP image", "Best practice: Preload 3-5 critical resources", "Improves Core Web Vitals (FCP, LCP)"]
+      }
     },
     {
       "id": "APP-PAGES-META-PERFORMANCE-PRELOAD-REGRESSION-001",
