@@ -902,7 +902,7 @@ test.describe('Languages Configuration', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-LANGUAGES-016: should fall back to default language translation',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -929,9 +929,9 @@ test.describe('Languages Configuration', () => {
         },
         pages: [
           {
-            name: 'Test',
+            name: 'test',
             path: '/',
-            meta: { lang: 'fr-FR', title: 'Test' },
+            meta: { lang: 'fr-FR', title: 'Test', description: 'Test page' },
             sections: [
               { type: 'button', children: ['$t:common.save'] },
               { type: 'button', children: ['$t:common.cancel'] },

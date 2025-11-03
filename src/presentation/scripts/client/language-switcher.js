@@ -69,7 +69,7 @@
 
   /**
    * Detect initial language based on configuration
-   * Respects browser language detection setting and localStorage persistence
+   * Respects page language, browser language detection, and localStorage persistence
    */
   function getInitialLanguage() {
     // Check if persistence is enabled (defaults to true)
@@ -84,6 +84,16 @@
         if (isSupported) {
           return savedLanguage
         }
+      }
+    }
+
+    // Check page language from <html lang="..."> attribute (highest priority after localStorage)
+    const pageLang = document.documentElement.getAttribute('lang')
+    if (pageLang) {
+      // Verify page language is in supported languages
+      const isSupported = languagesConfig.supported.some((lang) => lang.code === pageLang)
+      if (isSupported) {
+        return pageLang
       }
     }
 

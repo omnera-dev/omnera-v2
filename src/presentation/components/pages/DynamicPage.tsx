@@ -238,6 +238,7 @@ export function DynamicPage({
               blocks={blocks}
               theme={theme}
               languages={languages}
+              currentLang={lang}
             />
           ))}
 
