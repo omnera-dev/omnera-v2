@@ -12,6 +12,7 @@ import { Navigation } from '@/presentation/components/layout/navigation'
 import { ComponentRenderer } from '@/presentation/components/sections/component-renderer'
 import { AnimationsRenderer } from '@/presentation/components/theme/animations-renderer'
 import { BreakpointsRenderer } from '@/presentation/components/theme/breakpoints-renderer'
+import { toKebabCase } from '@/presentation/utils/string-utils'
 import type { Blocks } from '@/domain/models/app/blocks'
 import type { Languages } from '@/domain/models/app/languages'
 import type { OpenGraph } from '@/domain/models/app/page/meta/open-graph'
@@ -19,9 +20,84 @@ import type { Page } from '@/domain/models/app/pages'
 import type { Theme } from '@/domain/models/app/theme'
 
 /**
- * Generate CSS from theme colors and spacing
+ * Generate CSS keyframes for theme animations
+ * Creates @keyframes rules for animations defined in theme
+ *
+ * @param animations - Animation configuration from theme
+ * @returns Array of CSS keyframe strings
+ */
+function generateAnimationKeyframes(
+  animations?: Theme['animations']
+): ReadonlyArray<string> {
+  if (!animations) {
+    return []
+  }
+
+  return Object.entries(animations).flatMap<string>(([name, config]) => {
+    // Skip disabled animations
+    if (typeof config === 'object' && 'enabled' in config && config.enabled === false) {
+      return []
+    }
+
+    const kebabName = toKebabCase(name)
+
+    // Generate default keyframes for common animations
+    const defaultKeyframes: Record<string, string> = {
+      'fade-in': `
+        @keyframes ${kebabName} {
+          from { opacity: 0; }
+          to { opacity: 1; }
+        }
+      `,
+      'slide-in': `
+        @keyframes ${kebabName} {
+          from { transform: translateY(-20px); opacity: 0; }
+          to { transform: translateY(0); opacity: 1; }
+        }
+      `,
+      pulse: `
+        @keyframes ${kebabName} {
+          0%, 100% { opacity: 1; }
+          50% { opacity: 0.5; }
+        }
+      `,
+    }
+
+    // Use default keyframes if available
+    const defaultKeyframe = defaultKeyframes[kebabName]
+    if (defaultKeyframe) {
+      return [defaultKeyframe]
+    }
+
+    // If config has custom keyframes, generate them
+    if (typeof config === 'object' && config.keyframes) {
+      const frames = Object.entries(config.keyframes)
+        .map(([percent, styles]) => {
+          const cssProps = Object.entries(styles as Record<string, unknown>)
+            .map(([prop, value]) => `${toKebabCase(prop)}: ${value};`)
+            .join(' ')
+          return `${percent} { ${cssProps} }`
+        })
+        .join('\n          ')
+
+      return [
+        `
+        @keyframes ${kebabName} {
+          ${frames}
+        }
+      `,
+      ]
+    }
+
+    return []
+  })
+}
+
+/**
+ * Generate CSS from theme colors, spacing, and animations
  * Applies theme colors to semantic HTML elements for visual hierarchy
  * Applies theme spacing to section elements for layout consistency
+ * Generates @keyframes for theme animations
  * Note: Theme fonts are applied via inline style attribute on body element (see DynamicPage component)
  *
  * @param theme - Theme configuration from app schema
@@ -31,8 +107,9 @@ function generateThemeStyles(theme?: Theme): string {
   // Apply colors to semantic HTML elements using immutable array patterns
   const colors = theme?.colors
   const spacing = theme?.spacing
+  const animations = theme?.animations
 
-  if (!colors && !spacing) {
+  if (!colors && !spacing && !animations) {
     return ''
   }
 
@@ -49,8 +126,11 @@ function generateThemeStyles(theme?: Theme): string {
     ? [`[data-testid="section"] { padding: ${spacing.section}; }`]
     : []
 
+  // Build animation keyframes
+  const animationStyles = generateAnimationKeyframes(animations)
+
   // Combine all styles
-  const styles: ReadonlyArray<string> = [...colorStyles, ...spacingStyles]
+  const styles: ReadonlyArray<string> = [...colorStyles, ...spacingStyles, ...animationStyles]
 
   return styles.join('\n')
 }
