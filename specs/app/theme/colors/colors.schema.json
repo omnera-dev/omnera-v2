@@ -7,7 +7,7 @@
   "patternProperties": {
     "^[a-z]+(-[a-z]+)*$": {
       "type": "string",
-      "pattern": "^#[0-9A-Fa-f]{6}$|^#[0-9A-Fa-f]{8}$|^rgb\\(|^rgba\\(|^hsl\\(|^hsla\\(",
+      "pattern": "^#[0-9A-Fa-f]{6}$|^#[0-9A-Fa-f]{8}$|^rgb\\(\\s*\\d+\\s*,\\s*\\d+\\s*,\\s*\\d+\\s*\\)$|^rgba\\(\\s*\\d+\\s*,\\s*\\d+\\s*,\\s*\\d+\\s*,\\s*(0|1|0?\\.\\d+)\\s*\\)$|^hsl\\(\\s*\\d+\\s*,\\s*\\d+%\\s*,\\s*\\d+%\\s*\\)$|^hsla\\(\\s*\\d+\\s*,\\s*\\d+%\\s*,\\s*\\d+%\\s*,\\s*(0|1|0?\\.\\d+)\\s*\\)$",
       "description": "Color value in hex, rgb, rgba, hsl, or hsla format"
     }
   },

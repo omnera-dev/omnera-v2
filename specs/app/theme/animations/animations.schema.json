@@ -24,6 +24,7 @@
             },
             "duration": {
               "type": "string",
+              "pattern": "^\\d+(\\.\\d+)?(ms|s)$",
               "description": "Animation duration (e.g., '300ms', '0.5s')"
             },
             "easing": {
@@ -32,7 +33,8 @@
             },
             "delay": {
               "type": "string",
-              "description": "Animation delay"
+              "pattern": "^\\d+(\\.\\d+)?(ms|s)$",
+              "description": "Animation delay (e.g., '200ms', '0.5s')"
             },
             "keyframes": {
               "type": "object",

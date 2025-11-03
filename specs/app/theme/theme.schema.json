@@ -28,6 +28,41 @@
     }
   },
   "additionalProperties": false,
+  "x-reference-syntax": {
+    "theme-token-references": {
+      "pattern": "theme.{category}.{token}(.{property})?",
+      "description": "Reference theme design tokens from any category (colors, fonts, spacing, animations, etc.)",
+      "usage": "Use in component styles, props, or CSS-like properties to apply theme values",
+      "examples": {
+        "colors": "theme.colors.primary → '#007bff'",
+        "fonts-family": "theme.fonts.body.family → 'Inter'",
+        "fonts-size": "theme.fonts.title.size → '2.5rem'",
+        "spacing": "theme.spacing.section → '4rem'",
+        "animations": "theme.animations.fadeIn.duration → '300ms'",
+        "shadows": "theme.shadows.md → '0 4px 6px -1px rgb(0 0 0 / 0.1)'",
+        "borderRadius": "theme.borderRadius.lg → '0.5rem'"
+      },
+      "resolution": {
+        "lookup": "Dot-notation path resolves to token value in theme configuration",
+        "nested": "Supports nested properties: theme.fonts.body.family accesses fonts.body.family",
+        "runtime": "Resolved at build time, compiled into CSS or inline styles",
+        "fallback": "If token not found, should fail build with clear error message"
+      },
+      "benefits": [
+        "DRY: Single source of truth for all design tokens",
+        "Consistency: All components reference same tokens",
+        "Maintainability: Change one token, update entire app",
+        "Type safety: Can be validated at build time",
+        "Themability: Easy to swap themes by changing token values",
+        "Cross-category: Unified syntax for all design token types"
+      ],
+      "integration": {
+        "languages": "Theme tokens work alongside $t: translation references. Example: { color: 'theme.colors.primary', children: ['$t:button.save'] }",
+        "blocks": "Blocks can reference theme tokens in their default styles or variable values",
+        "pages": "Pages apply theme tokens via component props and section styles"
+      }
+    }
+  },
   "examples": [
     {
       "colors": {

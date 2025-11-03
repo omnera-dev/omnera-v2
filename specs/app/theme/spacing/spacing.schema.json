@@ -5,9 +5,9 @@
   "description": "Spacing design tokens for consistent layout",
   "type": "object",
   "patternProperties": {
-    "^[a-zA-Z][a-zA-Z0-9]*$": {
+    "^[a-z]+(-[a-z]+)*$": {
       "type": "string",
-      "description": "Spacing value (can be Tailwind classes or CSS values)"
+      "description": "Spacing value (can be Tailwind classes or CSS values). Use kebab-case for names (e.g., 'container-small', not 'containerSmall')."
     }
   },
   "additionalProperties": false,
@@ -15,17 +15,17 @@
     {
       "section": "py-16 sm:py-20",
       "container": "max-w-7xl mx-auto px-4",
-      "containerSmall": "max-w-4xl mx-auto px-4",
-      "containerXSmall": "max-w-2xl mx-auto px-4",
+      "container-small": "max-w-4xl mx-auto px-4",
+      "container-xsmall": "max-w-2xl mx-auto px-4",
       "gap": "gap-6",
-      "gapSmall": "gap-4",
-      "gapLarge": "gap-8",
+      "gap-small": "gap-4",
+      "gap-large": "gap-8",
       "padding": "p-6",
-      "paddingSmall": "p-4",
-      "paddingLarge": "p-8",
+      "padding-small": "p-4",
+      "padding-large": "p-8",
       "margin": "m-6",
-      "marginSmall": "m-4",
-      "marginLarge": "m-8"
+      "margin-small": "m-4",
+      "margin-large": "m-8"
     }
   ],
   "x-specs": [
@@ -82,15 +82,15 @@
     },
     {
       "id": "APP-THEME-SPACING-004",
-      "given": "spacing variants with size modifiers (gap, gapSmall, gapLarge)",
+      "given": "spacing variants with size modifiers (gap, gap-small, gap-large)",
       "when": "spacing system includes small, medium, and large variants",
       "then": "it should validate consistent spacing scale",
       "validation": {
         "setup": {
           "spacing": {
-            "gapSmall": "gap-4",
+            "gap-small": "gap-4",
             "gap": "gap-6",
-            "gapLarge": "gap-8"
+            "gap-large": "gap-8"
           }
         },
         "assertions": [
@@ -121,15 +121,15 @@
     },
     {
       "id": "APP-THEME-SPACING-006",
-      "given": "multiple container sizes (container, containerSmall, containerXSmall)",
+      "given": "multiple container sizes (container, container-small, container-xsmall)",
       "when": "spacing includes different max-widths for various contexts",
       "then": "it should validate hierarchical content width constraints",
       "validation": {
         "setup": {
           "spacing": {
             "container": "max-w-7xl mx-auto px-4",
-            "containerSmall": "max-w-4xl mx-auto px-4",
-            "containerXSmall": "max-w-2xl mx-auto px-4"
+            "container-small": "max-w-4xl mx-auto px-4",
+            "container-xsmall": "max-w-2xl mx-auto px-4"
           }
         },
         "assertions": [
@@ -142,15 +142,15 @@
     },
     {
       "id": "APP-THEME-SPACING-007",
-      "given": "padding variants (padding, paddingSmall, paddingLarge)",
+      "given": "padding variants (padding, padding-small, padding-large)",
       "when": "spacing system provides padding scale",
       "then": "it should validate consistent internal component spacing",
       "validation": {
         "setup": {
           "spacing": {
-            "paddingSmall": "p-4",
+            "padding-small": "p-4",
             "padding": "p-6",
-            "paddingLarge": "p-8"
+            "padding-large": "p-8"
           }
         },
         "assertions": [
@@ -163,15 +163,15 @@
     },
     {
       "id": "APP-THEME-SPACING-008",
-      "given": "margin variants (margin, marginSmall, marginLarge)",
+      "given": "margin variants (margin, margin-small, margin-large)",
       "when": "spacing system provides margin scale",
       "then": "it should validate consistent external component spacing",
       "validation": {
         "setup": {
           "spacing": {
-            "marginSmall": "m-4",
+            "margin-small": "m-4",
             "margin": "m-6",
-            "marginLarge": "m-8"
+            "margin-large": "m-8"
           }
         },
         "assertions": [

@@ -54,6 +54,45 @@
   },
   "required": ["default", "supported"],
   "additionalProperties": false,
+  "x-validation-rules": {
+    "default-in-supported": {
+      "description": "The 'default' language code must exist in the 'supported' array",
+      "rule": "languages.supported.some(lang => lang.code === languages.default)",
+      "errorMessage": "Default language '{default}' not found in supported languages",
+      "severity": "error"
+    },
+    "fallback-in-supported": {
+      "description": "The 'fallback' language code (if specified) must exist in the 'supported' array",
+      "rule": "!languages.fallback || languages.supported.some(lang => lang.code === languages.fallback)",
+      "errorMessage": "Fallback language '{fallback}' not found in supported languages",
+      "severity": "error"
+    }
+  },
+  "x-reference-syntax": {
+    "translation-references": {
+      "pattern": "$t:{key.path}",
+      "description": "Reference centralized translations from languages.translations dictionary",
+      "usage": "Use in ANY string property: children arrays, component props, meta properties, etc.",
+      "examples": {
+        "children": "['$t:common.save']",
+        "props": "{ 'aria-label': '$t:common.close', placeholder: '$t:forms.email.placeholder' }",
+        "meta": "{ title: '$t:page.title', description: '$t:page.description' }",
+        "image": "{ alt: '$t:images.logo.alt' }"
+      },
+      "resolution": {
+        "lookup": "languages.translations[currentLanguage][key.path]",
+        "fallback": "If key not found in currentLanguage, falls back to languages.fallback (or languages.default if fallback not specified)",
+        "runtime": "Resolved at page render time, reactive to language changes"
+      },
+      "benefits": [
+        "DRY: Single source of truth for all translations",
+        "Reusability: Same key used across multiple components",
+        "Consistency: Centralized management ensures consistent wording",
+        "Type safety: Can be validated at build time",
+        "Hot-reload: Translation changes update all references automatically"
+      ]
+    }
+  },
   "examples": [
     {
       "default": "en-US",
