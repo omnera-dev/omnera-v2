@@ -134,7 +134,7 @@ test.describe('Theme Configuration', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-THEME-003: should validate visual identity, typography, and layout tokens',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
