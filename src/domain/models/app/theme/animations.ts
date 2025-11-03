@@ -6,6 +6,10 @@
  */
 
 import { Schema } from 'effect'
+import {
+  DurationSchema,
+  EasingFunctionSchema,
+} from '@/domain/models/app/page/common/interactions/hover-interaction'
 
 /**
  * Animation configuration object
@@ -26,9 +30,9 @@ import { Schema } from 'effect'
  */
 export const AnimationConfigObjectSchema = Schema.Struct({
   enabled: Schema.optional(Schema.Boolean),
-  duration: Schema.optional(Schema.String),
-  easing: Schema.optional(Schema.String),
-  delay: Schema.optional(Schema.String),
+  duration: Schema.optional(DurationSchema),
+  easing: Schema.optional(EasingFunctionSchema),
+  delay: Schema.optional(DurationSchema),
   keyframes: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Unknown })),
 }).pipe(
   Schema.annotations({
