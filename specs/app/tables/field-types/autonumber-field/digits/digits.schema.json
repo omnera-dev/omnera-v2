@@ -9,19 +9,19 @@
   "maximum": 10,
   "x-specs": [
     {
-      "id": "APP-FIELD-AUTONUMBER-FIELD-DIGITS-001",
+      "id": "APP-FIELD-AUTONUMBER-DIGITS-001",
       "given": "user provides digits between 1 and 10",
       "when": "validating input",
       "then": "value should be accepted"
     },
     {
-      "id": "APP-FIELD-AUTONUMBER-FIELD-DIGITS-002",
+      "id": "APP-FIELD-AUTONUMBER-DIGITS-002",
       "given": "user provides digits below 1",
       "when": "validating input",
       "then": "error should enforce minimum value"
     },
     {
-      "id": "APP-FIELD-AUTONUMBER-FIELD-DIGITS-003",
+      "id": "APP-FIELD-AUTONUMBER-DIGITS-003",
       "given": "user provides digits above 10",
       "when": "validating input",
       "then": "error should enforce maximum value"

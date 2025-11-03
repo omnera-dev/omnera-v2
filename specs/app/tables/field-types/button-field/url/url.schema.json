@@ -6,13 +6,13 @@
   "type": "string",
   "x-specs": [
     {
-      "id": "APP-FIELD-BUTTON-FIELD-URL-001",
+      "id": "APP-FIELD-BUTTON-URL-001",
       "given": "user provides url",
       "when": "validating input",
       "then": "string value should be accepted"
     },
     {
-      "id": "APP-FIELD-BUTTON-FIELD-URL-002",
+      "id": "APP-FIELD-BUTTON-URL-002",
       "given": "url is empty string",
       "when": "validating input",
       "then": "behavior should follow optional/required rules"

@@ -425,7 +425,7 @@ test.describe('Animation Configuration', () => {
   // ============================================================================
 
   test.fixme(
-    'APP-THEME-ANIMATIONS-ANIMATIONS-REGRESSION-001: user can complete full animations workflow',
+    'APP-THEME-ANIMATIONS-REGRESSION-001: user can complete full animations workflow',
     { tag: '@regression' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: Application with comprehensive animation system

@@ -6,13 +6,13 @@
   "type": "object",
   "x-specs": [
     {
-      "id": "APP-FIELD-JSON-FIELD-SCHEMA-001",
+      "id": "APP-FIELD-JSON-SCHEMA-001",
       "given": "user configures schema",
       "when": "validating input",
       "then": "value should meet schema requirements"
     },
     {
-      "id": "APP-FIELD-JSON-FIELD-SCHEMA-002",
+      "id": "APP-FIELD-JSON-SCHEMA-002",
       "given": "schema is set",
       "when": "processing configuration",
       "then": "value should be used correctly"

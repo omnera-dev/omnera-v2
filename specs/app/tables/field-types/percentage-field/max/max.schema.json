@@ -6,13 +6,13 @@
   "type": "number",
   "x-specs": [
     {
-      "id": "APP-FIELD-PERCENTAGE-FIELD-MAX-001",
+      "id": "APP-FIELD-PERCENTAGE-MAX-001",
       "given": "user provides max",
       "when": "validating input",
       "then": "numeric value should be accepted"
     },
     {
-      "id": "APP-FIELD-PERCENTAGE-FIELD-MAX-002",
+      "id": "APP-FIELD-PERCENTAGE-MAX-002",
       "given": "user provides non-numeric max",
       "when": "validating input",
       "then": "error should require number"

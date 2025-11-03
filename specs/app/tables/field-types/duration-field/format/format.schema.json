@@ -8,19 +8,19 @@
   "enum": ["h:mm", "h:mm:ss", "minutes", "seconds"],
   "x-specs": [
     {
-      "id": "APP-FIELD-DURATION-FIELD-FORMAT-001",
+      "id": "APP-FIELD-DURATION-FORMAT-001",
       "given": "user selects format from valid options",
       "when": "validating input",
       "then": "selection should be accepted"
     },
     {
-      "id": "APP-FIELD-DURATION-FIELD-FORMAT-002",
+      "id": "APP-FIELD-DURATION-FORMAT-002",
       "given": "user provides invalid format value",
       "when": "validating input",
       "then": "error should list valid options: h:mm, h:mm:ss, minutes"
     },
     {
-      "id": "APP-FIELD-DURATION-FIELD-FORMAT-003",
+      "id": "APP-FIELD-DURATION-FORMAT-003",
       "given": "format is set to any valid enum value",
       "when": "processing entity",
       "then": "appropriate behavior should execute"

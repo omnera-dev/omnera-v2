@@ -31,19 +31,19 @@
   "additionalProperties": false,
   "x-specs": [
     {
-      "id": "APP-FIELD-URL-FIELD-URL-001",
+      "id": "APP-FIELD-URL-001",
       "given": "I create a URL field",
       "when": "I enter a valid URL with http:// or https://",
       "then": "it should accept the input"
     },
     {
-      "id": "APP-FIELD-URL-FIELD-URL-002",
+      "id": "APP-FIELD-URL-002",
       "given": "I create a URL field",
       "when": "I enter text without protocol",
       "then": "it should show validation error"
     },
     {
-      "id": "APP-FIELD-URL-FIELD-URL-003",
+      "id": "APP-FIELD-URL-003",
       "given": "I create a URL field",
       "when": "I view the record",
       "then": "the URL should display as a clickable link"

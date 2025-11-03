@@ -31,19 +31,19 @@
   "additionalProperties": false,
   "x-specs": [
     {
-      "id": "APP-FIELD-SINGLE-LINE-TEXT-FIELD-SINGLE-LINE-TEXT-001",
+      "id": "APP-FIELD-SINGLE-LINE-TEXT-001",
       "given": "I create a single-line text field",
       "when": "I add a record",
       "then": "it should accept text without line breaks"
     },
     {
-      "id": "APP-FIELD-SINGLE-LINE-TEXT-FIELD-SINGLE-LINE-TEXT-002",
+      "id": "APP-FIELD-SINGLE-LINE-TEXT-002",
       "given": "I create a single-line text field with unique constraint",
       "when": "I add duplicate text",
       "then": "it should reject the input"
     },
     {
-      "id": "APP-FIELD-SINGLE-LINE-TEXT-FIELD-SINGLE-LINE-TEXT-003",
+      "id": "APP-FIELD-SINGLE-LINE-TEXT-003",
       "given": "I create a required single-line text field",
       "when": "I submit without value",
       "then": "it should show validation error"

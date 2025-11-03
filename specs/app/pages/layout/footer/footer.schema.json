@@ -980,7 +980,7 @@
       }
     },
     {
-      "id": "APP-PAGES-LAYOUT-FOOTER-FOOTER-REGRESSION-001",
+      "id": "APP-PAGES-LAYOUT-FOOTER-REGRESSION-001",
       "given": "complete application configuration with all features",
       "when": "user completes full workflow",
       "then": "user can complete full footer workflow"

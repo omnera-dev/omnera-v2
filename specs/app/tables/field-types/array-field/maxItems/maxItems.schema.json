@@ -7,13 +7,13 @@
   "minimum": 1,
   "x-specs": [
     {
-      "id": "APP-FIELD-ARRAY-FIELD-MAXITEMS-001",
+      "id": "APP-FIELD-ARRAY-MAXITEMS-001",
       "given": "user provides maxItems >= 1",
       "when": "validating input",
       "then": "value should be accepted"
     },
     {
-      "id": "APP-FIELD-ARRAY-FIELD-MAXITEMS-002",
+      "id": "APP-FIELD-ARRAY-MAXITEMS-002",
       "given": "user provides maxItems < 1",
       "when": "validating input",
       "then": "error should enforce minimum value"

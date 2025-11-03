@@ -29,7 +29,7 @@
   "additionalProperties": false,
   "x-specs": [
     {
-      "id": "APP-FIELD-CHECKBOX-FIELD-CHECKBOX-001",
+      "id": "APP-FIELD-CHECKBOX-001",
       "given": "I am working with a checkbox field",
       "when": "I create a record",
       "then": "it should complete successfully"

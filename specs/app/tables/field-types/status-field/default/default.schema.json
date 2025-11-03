@@ -5,13 +5,13 @@
   "type": "string",
   "x-specs": [
     {
-      "id": "APP-FIELD-STATUS-FIELD-DEFAULT-001",
+      "id": "APP-FIELD-STATUS-DEFAULT-001",
       "given": "user provides default",
       "when": "validating input",
       "then": "string value should be accepted"
     },
     {
-      "id": "APP-FIELD-STATUS-FIELD-DEFAULT-002",
+      "id": "APP-FIELD-STATUS-DEFAULT-002",
       "given": "default is empty string",
       "when": "validating input",
       "then": "behavior should follow optional/required rules"

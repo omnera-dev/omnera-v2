@@ -13,13 +13,13 @@
   "minLength": 1,
   "x-specs": [
     {
-      "id": "APP-FIELD-FORMULA-FIELD-FORMULA-001",
+      "id": "APP-FIELD-FORMULA-001",
       "given": "user provides formula with at least 1 characters",
       "when": "validating input",
       "then": "value should be accepted"
     },
     {
-      "id": "APP-FIELD-FORMULA-FIELD-FORMULA-002",
+      "id": "APP-FIELD-FORMULA-002",
       "given": "user provides formula shorter than 1 chars",
       "when": "validating input",
       "then": "error should require minimum length"

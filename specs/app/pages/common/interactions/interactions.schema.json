@@ -86,7 +86,7 @@
       "then": "hover effect should apply immediately and click should navigate after animation"
     },
     {
-      "id": "APP-PAGES-INTERACTIONS-INTERACTIONS-REGRESSION-001",
+      "id": "APP-PAGES-INTERACTIONS-REGRESSION-001",
       "given": "complete application configuration with all features",
       "when": "user completes full workflow",
       "then": "user can complete full interactions workflow"

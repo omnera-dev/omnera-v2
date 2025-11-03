@@ -352,7 +352,7 @@
       }
     },
     {
-      "id": "APP-THEME-FONTS-FONTS-REGRESSION-001",
+      "id": "APP-THEME-FONTS-REGRESSION-001",
       "given": "complete application configuration with all features",
       "when": "user completes full workflow",
       "then": "user can complete full fonts workflow"

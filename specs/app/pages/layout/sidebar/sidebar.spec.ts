@@ -453,7 +453,7 @@ test.describe('Sidebar Configuration', () => {
   // ============================================================================
 
   test.fixme(
-    'APP-PAGES-LAYOUT-SIDEBAR-SIDEBAR-REGRESSION-001: user can complete full sidebar workflow',
+    'APP-PAGES-LAYOUT-SIDEBAR-REGRESSION-001: user can complete full sidebar workflow',
     { tag: '@regression' },
     async ({ page, startServerWithSchema }) => {
       await startServerWithSchema({

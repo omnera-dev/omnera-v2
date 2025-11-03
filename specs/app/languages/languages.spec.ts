@@ -1018,7 +1018,7 @@ test.describe('Languages Configuration', () => {
   // ============================================================================
 
   test.fixme(
-    'APP-LANGUAGES-LANGUAGES-REGRESSION-001: user can complete full languages workflow',
+    'APP-LANGUAGES-REGRESSION-001: user can complete full languages workflow',
     { tag: '@regression' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: Application configured with representative multi-language setup

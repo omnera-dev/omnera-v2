@@ -210,7 +210,7 @@
       }
     },
     {
-      "id": "APP-THEME-BREAKPOINTS-BREAKPOINTS-REGRESSION-001",
+      "id": "APP-THEME-BREAKPOINTS-REGRESSION-001",
       "given": "complete application configuration with all features",
       "when": "user completes full workflow",
       "then": "user can complete full breakpoints workflow"

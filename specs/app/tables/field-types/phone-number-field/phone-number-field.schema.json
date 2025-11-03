@@ -31,19 +31,19 @@
   "additionalProperties": false,
   "x-specs": [
     {
-      "id": "APP-FIELD-PHONE-NUMBER-FIELD-PHONE-NUMBER-001",
+      "id": "APP-FIELD-PHONE-NUMBER-001",
       "given": "I create a phone number field",
       "when": "I enter a phone number",
       "then": "it should format it automatically for display"
     },
     {
-      "id": "APP-FIELD-PHONE-NUMBER-FIELD-PHONE-NUMBER-002",
+      "id": "APP-FIELD-PHONE-NUMBER-002",
       "given": "I create a phone number field",
       "when": "I enter an international number",
       "then": "it should accept it without validation errors"
     },
     {
-      "id": "APP-FIELD-PHONE-NUMBER-FIELD-PHONE-NUMBER-003",
+      "id": "APP-FIELD-PHONE-NUMBER-003",
       "given": "I create a phone number field with unique constraint",
       "when": "I enter a duplicate number",
       "then": "it should reject the input"

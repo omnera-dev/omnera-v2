@@ -103,7 +103,7 @@
       "then": "there should be appropriate spacing between title and description"
     },
     {
-      "id": "APP-DESCRIPTION-DESCRIPTION-REGRESSION-001",
+      "id": "APP-DESCRIPTION-REGRESSION-001",
       "given": "complete application configuration with all features",
       "when": "user completes full workflow",
       "then": "user can view complete app description in all scenarios"

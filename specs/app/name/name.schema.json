@@ -82,7 +82,7 @@
       "then": "all name display requirements are met (display, metadata, special characters, accessibility, styling)"
     },
     {
-      "id": "APP-NAME-NAME-REGRESSION-001",
+      "id": "APP-NAME-REGRESSION-001",
       "given": "complete application configuration with all features",
       "when": "user completes full workflow",
       "then": "user can view app name with all display requirements across different configurations"

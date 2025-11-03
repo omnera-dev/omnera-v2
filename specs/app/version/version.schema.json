@@ -60,7 +60,7 @@
       "then": "badge should have proper accessibility attributes (data-testid, data-slot)"
     },
     {
-      "id": "APP-VERSION-VERSION-REGRESSION-001",
+      "id": "APP-VERSION-REGRESSION-001",
       "given": "complete application configuration with all features",
       "when": "user completes full workflow",
       "then": "user can view version badge with all SemVer variations"

@@ -667,7 +667,7 @@ test.describe('Color Palette', () => {
   // ============================================================================
 
   test.fixme(
-    'APP-THEME-COLORS-COLORS-REGRESSION-001: user can complete full colors workflow',
+    'APP-THEME-COLORS-REGRESSION-001: user can complete full colors workflow',
     { tag: '@regression' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: Application with comprehensive color palette

@@ -555,7 +555,7 @@ test.describe('Page Sections', () => {
   )
 
   test.fixme(
-    'APP-PAGES-SECTIONS-SECTIONS-REGRESSION-001: user can complete full Page Sections workflow',
+    'APP-PAGES-SECTIONS-REGRESSION-001: user can complete full Page Sections workflow',
     { tag: '@regression' },
     async ({ page, startServerWithSchema }) => {
       await startServerWithSchema({

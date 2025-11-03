@@ -637,7 +637,7 @@
       }
     },
     {
-      "id": "APP-PAGES-META-META-REGRESSION-001",
+      "id": "APP-PAGES-META-REGRESSION-001",
       "given": "complete application configuration with all features",
       "when": "user completes full workflow",
       "then": "user can complete full metadata workflow"

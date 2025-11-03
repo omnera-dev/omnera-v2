@@ -343,7 +343,7 @@ test.describe('Banner Configuration', () => {
   // ============================================================================
 
   test.fixme(
-    'APP-PAGES-LAYOUT-BANNER-BANNER-REGRESSION-001: user can complete full banner workflow',
+    'APP-PAGES-LAYOUT-BANNER-REGRESSION-001: user can complete full banner workflow',
     { tag: '@regression' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: Application with comprehensive banner system

@@ -636,7 +636,7 @@ test.describe('Theme Configuration', () => {
   // ============================================================================
 
   test.fixme(
-    'APP-THEME-THEME-REGRESSION-001: user can complete full theme workflow',
+    'APP-THEME-REGRESSION-001: user can complete full theme workflow',
     { tag: '@regression' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: Application configured with comprehensive theme system

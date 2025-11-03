@@ -464,7 +464,7 @@ test.describe('Font Configuration', () => {
   // ============================================================================
 
   test.fixme(
-    'APP-THEME-FONTS-FONTS-REGRESSION-001: user can complete full fonts workflow',
+    'APP-THEME-FONTS-REGRESSION-001: user can complete full fonts workflow',
     { tag: '@regression' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: Application with comprehensive font system

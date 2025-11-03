@@ -8,19 +8,19 @@
   "enum": ["one-to-one", "one-to-many", "many-to-many"],
   "x-specs": [
     {
-      "id": "APP-FIELD-RELATIONSHIP-FIELD-RELATIONTYPE-001",
+      "id": "APP-FIELD-RELATIONSHIP-RELATIONTYPE-001",
       "given": "user selects relationType from valid options",
       "when": "validating input",
       "then": "selection should be accepted"
     },
     {
-      "id": "APP-FIELD-RELATIONSHIP-FIELD-RELATIONTYPE-002",
+      "id": "APP-FIELD-RELATIONSHIP-RELATIONTYPE-002",
       "given": "user provides invalid relationType value",
       "when": "validating input",
       "then": "error should list valid options: one-to-one, one-to-many, many-to-many"
     },
     {
-      "id": "APP-FIELD-RELATIONSHIP-FIELD-RELATIONTYPE-003",
+      "id": "APP-FIELD-RELATIONSHIP-RELATIONTYPE-003",
       "given": "relationType is set to any valid enum value",
       "when": "processing entity",
       "then": "appropriate behavior should execute"

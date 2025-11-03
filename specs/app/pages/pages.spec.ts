@@ -630,7 +630,7 @@ test.describe('Pages', () => {
   // ============================================================================
 
   test.fixme(
-    'APP-PAGES-PAGES-REGRESSION-001: user can complete full pages workflow',
+    'APP-PAGES-REGRESSION-001: user can complete full pages workflow',
     { tag: '@regression' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: Application with complete page system

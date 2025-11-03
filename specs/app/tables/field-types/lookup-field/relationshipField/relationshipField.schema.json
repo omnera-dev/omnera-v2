@@ -7,13 +7,13 @@
   "minLength": 1,
   "x-specs": [
     {
-      "id": "APP-FIELD-LOOKUP-FIELD-RELATIONSHIPFIELD-001",
+      "id": "APP-FIELD-LOOKUP-RELATIONSHIPFIELD-001",
       "given": "user provides relationshipField with at least 1 characters",
       "when": "validating input",
       "then": "value should be accepted"
     },
     {
-      "id": "APP-FIELD-LOOKUP-FIELD-RELATIONSHIPFIELD-002",
+      "id": "APP-FIELD-LOOKUP-RELATIONSHIPFIELD-002",
       "given": "user provides relationshipField shorter than 1 chars",
       "when": "validating input",
       "then": "error should require minimum length"
