@@ -18,11 +18,7 @@ import type { App } from '@/domain/models/app'
  * @param detectedLanguage - Optional detected language from Accept-Language header or URL
  * @returns Complete HTML document as string with DOCTYPE, or null if page not found
  */
-function renderPageByPath(
-  app: App,
-  path: string,
-  detectedLanguage?: string
-): string | undefined {
+function renderPageByPath(app: App, path: string, detectedLanguage?: string): string | undefined {
   const page = app.pages?.find((p) => p.path === path)
   if (!page) {
     return undefined

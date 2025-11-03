@@ -5,120 +5,49 @@
  * found in the LICENSE.md file in the root directory of this source tree.
  */
 
-import { type ReactElement, useState, useEffect, useRef } from 'react'
-import { detectBrowserLanguage } from '@/presentation/utils/language-detection'
+import { type ReactElement } from 'react'
 import type { Languages } from '@/domain/models/app/languages'
 
 /**
- * LanguageSwitcher component - Display and select application language
+ * LanguageSwitcher component - Server-side rendered language switcher
  *
- * Shows the current language label and allows switching between supported languages.
- * This component is rendered via the language-switcher block type in ComponentRenderer.
+ * This component renders the static HTML structure for the language switcher.
+ * All client-side interactivity (click handlers, language detection, localStorage)
+ * is handled by the vanilla JavaScript file: language-switcher.js
  *
- * Features:
- * - Automatic browser language detection (when detectBrowser: true)
- * - Language persistence in localStorage (when persistSelection: true)
- * - Fallback to default language
+ * Architecture:
+ * - React component = SSR only (renders HTML structure)
+ * - Vanilla JS = Client-side progressive enhancement (handles interactivity)
+ *
+ * This separation ensures:
+ * - No duplicate logic between React and vanilla JS
+ * - Works without React hydration (pure progressive enhancement)
+ * - Clear separation of concerns (SSR vs client-side)
  *
  * @param props - Component props
  * @param props.languages - Languages configuration from AppSchema
- * @returns React element with language switcher UI
+ * @returns React element with language switcher HTML structure
  */
 export function LanguageSwitcher({
   languages,
 }: {
   readonly languages: Languages
 }): Readonly<ReactElement> {
-  // Initialize with default language for server-side rendering
-  const [currentLanguageCode, setCurrentLanguageCode] = useState(languages.default)
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false)
-  const initializedRef = useRef(false)
-
-  // Initialize language on client-side mount
-  useEffect(() => {
-    // Only run initialization once
-    if (initializedRef.current) {
-      return
-    }
-    initializedRef.current = true
-
-    // Priority: localStorage > browser detection > default
-    const persistSelection = languages.persistSelection ?? false
-
-    // 1. Check localStorage first if persistence is enabled
-    if (persistSelection) {
-      const storedLanguage = localStorage.getItem('language')
-      if (storedLanguage) {
-        // Verify stored language is still supported
-        const isSupported = languages.supported.some((lang) => lang.code === storedLanguage)
-        if (isSupported) {
-          setCurrentLanguageCode(storedLanguage)
-          return
-        }
-      }
-    }
-
-    // 2. Try browser detection if enabled
-    const detectBrowser = languages.detectBrowser ?? true
-    console.log(
-      '[LanguageSwitcher] detectBrowser:',
-      detectBrowser,
-      'navigator.language:',
-      navigator.language
-    )
-    if (detectBrowser) {
-      const detected = detectBrowserLanguage(navigator.language, languages.supported)
-      console.log('[LanguageSwitcher] detected:', detected)
-      if (detected) {
-        console.log('[LanguageSwitcher] Setting language to:', detected)
-        // Use setTimeout to ensure state update happens after hydration
-        setTimeout(() => {
-          setCurrentLanguageCode(detected)
-        }, 0)
-        return
-      }
-    }
-
-    // 3. Keep default language (already set in initial state)
-  }, [languages])
-
-  // Handle language selection
-  const handleLanguageSelect = (code: string) => {
-    setCurrentLanguageCode(code)
-    setIsDropdownOpen(false)
-
-    // Persist to localStorage if enabled
-    const persistSelection = languages.persistSelection ?? false
-    if (persistSelection) {
-      localStorage.setItem('language', code)
-    }
-  }
-
-  // Find current language config for display
-  const currentLanguage = languages.supported.find((lang) => lang.code === currentLanguageCode)
-
-  // Client-side check: detect if we're in browser (for debugging)
-  const isBrowser = typeof window !== 'undefined'
-  const navLang = isBrowser ? navigator.language : 'SSR'
+  // Default language for initial SSR (vanilla JS will update on client)
+  const defaultLanguage = languages.supported.find((lang) => lang.code === languages.default)
 
   return (
-    <div
-      className="relative"
-      data-detect-browser={languages.detectBrowser?.toString()}
-      data-is-browser={isBrowser.toString()}
-      data-nav-lang={navLang}
-    >
-      {/* Language switcher button */}
+    <div className="relative">
+      {/* Language switcher button - vanilla JS will attach click handler */}
       <button
         data-testid="language-switcher"
         type="button"
-        onClick={() => setIsDropdownOpen(!isDropdownOpen)}
       >
         <span
           data-testid="current-language"
-          data-code={currentLanguageCode}
+          data-code={languages.default}
         >
-          {currentLanguage?.label || currentLanguageCode}
+          {defaultLanguage?.label || languages.default}
         </span>
       </button>
 
@@ -133,10 +62,10 @@ export function LanguageSwitcher({
         </div>
       ))}
 
-      {/* Dropdown menu */}
+      {/* Dropdown menu - vanilla JS will handle show/hide */}
       <div
         data-language-dropdown
-        className={`absolute top-full left-0 z-10 ${isDropdownOpen ? 'block' : 'hidden'}`}
+        className="absolute top-full left-0 z-10 hidden"
       >
         {languages.supported.map((lang) => (
           <button
@@ -145,7 +74,6 @@ export function LanguageSwitcher({
             data-language-option
             data-language-code={lang.code}
             type="button"
-            onClick={() => handleLanguageSelect(lang.code)}
           >
             <span data-testid="language-option">
               {lang.flag ? `${lang.flag} ` : ''}

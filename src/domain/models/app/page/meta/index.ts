@@ -138,9 +138,11 @@ export const LanguageCodeSchema = Schema.String.pipe(
  * @see specs/app/pages/meta/meta.schema.json
  */
 export const MetaSchema = Schema.Struct({
-  lang: Schema.optional(LanguageCodeSchema.annotations({
-    description: 'Page language code (optional - uses auto-detection if not specified)',
-  })),
+  lang: Schema.optional(
+    LanguageCodeSchema.annotations({
+      description: 'Page language code (optional - uses auto-detection if not specified)',
+    })
+  ),
   title: Schema.String.pipe(Schema.maxLength(60)).annotations({
     description: 'Page title for browser tab and SEO (max 60 characters for optimal display)',
   }),

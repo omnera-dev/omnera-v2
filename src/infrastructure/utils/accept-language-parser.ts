@@ -48,16 +48,17 @@ export function parseAcceptLanguage(header: string | null | undefined): Readonly
       }
 
       // Extract quality value (default is 1.0 if not specified)
-      const quality = qualityStr
-        ? parseFloat(qualityStr.split('=')[1] || '1.0')
-        : 1.0
+      const quality = qualityStr ? parseFloat(qualityStr.split('=')[1] || '1.0') : 1.0
 
       return {
         language: language.trim(),
         quality: isNaN(quality) ? 0 : quality,
       }
     })
-    .filter((pref): pref is LanguagePreference => pref !== undefined && pref.language.length > 0 && pref.quality > 0)
+    .filter(
+      (pref): pref is LanguagePreference =>
+        pref !== undefined && pref.language.length > 0 && pref.quality > 0
+    )
     .toSorted((a, b) => b.quality - a.quality)
 
   return sortedPreferences.map((pref) => pref.language)

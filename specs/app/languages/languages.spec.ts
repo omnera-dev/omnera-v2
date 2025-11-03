@@ -1286,5 +1286,4 @@ test.describe('Languages Configuration', () => {
       expect(response?.status()).toBe(404)
     }
   )
-
 })
