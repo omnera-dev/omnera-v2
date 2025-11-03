@@ -144,25 +144,43 @@
       "given": "child with props",
       "when": "child has props referencing block-props.schema.json",
       "then": "it should render child with specified properties and attributes",
-      "x-test": {
-        "setup": {
-          "children": [
-            {
-              "type": "div",
-              "props": {
-                "className": "card-header",
-                "id": "header-1",
-                "ariaLabel": "Card header"
+      "application": {
+        "blocks": [
+          {
+            "name": "header-card",
+            "type": "div",
+            "children": [
+              {
+                "type": "div",
+                "props": {
+                  "className": "card-header",
+                  "id": "header-1",
+                  "ariaLabel": "Card header"
+                }
               }
-            }
-          ]
-        },
-        "expectedDOM": "<div data-testid=\"child-0\" class=\"card-header\" id=\"header-1\" aria-label=\"Card header\"></div>",
+            ]
+          }
+        ],
+        "pages": [
+          {
+            "name": "Demo",
+            "path": "/demo",
+            "sections": [
+              {
+                "block": "header-card",
+                "vars": {}
+              }
+            ]
+          }
+        ],
+        "expectedDOM": "<div data-testid=\"block-header-card\"><div class=\"card-header\" id=\"header-1\" aria-label=\"Card header\"></div></div>",
         "assertions": [
-          "Child div has className='card-header'",
-          "Child div has id='header-1'",
-          "Child div has ariaLabel='Card header'",
-          "Props from block-props.schema.json apply to child element"
+          "Child props: References block-props.schema.json",
+          "className='card-header' → class attribute",
+          "id='header-1' → id attribute",
+          "ariaLabel='Card header' → aria-label attribute",
+          "Props object defines child element attributes",
+          "All props apply to rendered child element"
         ]
       }
     },
@@ -171,9 +189,9 @@
       "given": "child with recursive children",
       "when": "child has children property with self-reference (#)",
       "then": "it should render unlimited nesting depth in DOM tree",
-      "x-test": {
-        "setup": {
-          "blockDefinition": {
+      "application": {
+        "blocks": [
+          {
             "name": "nested-list",
             "type": "ul",
             "children": [
@@ -205,13 +223,28 @@
               }
             ]
           }
-        },
-        "expectedDOM": "<ul data-testid=\"block-nested-list\">\n  <li>Level 1\n    <ul>\n      <li>Level 2\n        <ul>\n          <li>Level 3</li>\n        </ul>\n      </li>\n    </ul>\n  </li>\n</ul>",
+        ],
+        "pages": [
+          {
+            "name": "Navigation",
+            "path": "/nav",
+            "sections": [
+              {
+                "block": "nested-list",
+                "vars": {}
+              }
+            ]
+          }
+        ],
+        "expectedDOM": "<ul data-testid=\"block-nested-list\"><li>Level 1<ul><li>Level 2<ul><li>Level 3</li></ul></li></ul></li></ul>",
         "assertions": [
-          "Self-reference (#) enables recursive children property",
-          "DOM tree depth: 3 levels of nested lists",
+          "Recursive children: Self-reference (#) enables unlimited nesting",
+          "Nesting depth: 3 levels (ul → li → ul → li → ul → li)",
           "Each child can have its own children array",
-          "No limit on nesting depth"
+          "Level 1 li has children (nested ul)",
+          "Level 2 li has children (nested ul)",
+          "Level 3 li has no children (leaf node)",
+          "No limit on nesting depth - schema allows infinite recursion"
         ]
       }
     },
@@ -220,9 +253,9 @@
       "given": "child with content",
       "when": "child has content string with $variable support",
       "then": "it should render child with substituted text content",
-      "x-test": {
-        "setup": {
-          "blockDefinition": {
+      "application": {
+        "blocks": [
+          {
             "name": "labeled-input",
             "type": "div",
             "children": [
@@ -240,20 +273,30 @@
                 }
               }
             ]
-          },
-          "reference": {
-            "$ref": "labeled-input",
-            "vars": {
-              "label": "Email Address",
-              "placeholder": "Enter your email"
-            }
           }
-        },
-        "expectedDOM": "<div data-testid=\"block-labeled-input\">\n  <label>Email Address</label>\n  <input placeholder=\"Enter your email\" />\n</div>",
+        ],
+        "pages": [
+          {
+            "name": "Form",
+            "path": "/form",
+            "sections": [
+              {
+                "block": "labeled-input",
+                "vars": {
+                  "label": "Email Address",
+                  "placeholder": "Enter your email"
+                }
+              }
+            ]
+          }
+        ],
+        "expectedDOM": "<div data-testid=\"block-labeled-input\"><label>Email Address</label><input placeholder=\"Enter your email\" /></div>",
         "assertions": [
-          "First child (label) has content 'Email Address' (substituted from $label)",
-          "Second child (input) has placeholder 'Enter your email' (substituted from $placeholder)",
-          "Content property renders as text inside element"
+          "content property: Text content for child elements",
+          "Child 1: type='text', level='label', content='$label' → <label>Email Address</label>",
+          "Child 2: type='input', placeholder='$placeholder' → placeholder='Enter your email'",
+          "content supports $variable substitution",
+          "Content renders as inner text of element"
         ]
       }
     },
@@ -262,9 +305,9 @@
       "given": "children for component composition",
       "when": "multiple children create complex structure",
       "then": "it should render composite UI pattern with all child elements",
-      "x-test": {
-        "setup": {
-          "blockDefinition": {
+      "application": {
+        "blocks": [
+          {
             "name": "pricing-card",
             "type": "card",
             "children": [
@@ -311,24 +354,33 @@
                 "content": "$cta"
               }
             ]
-          },
-          "reference": {
-            "$ref": "pricing-card",
-            "vars": {
-              "plan": "Pro",
-              "price": "$49/mo",
-              "feature1": "Unlimited users",
-              "feature2": "24/7 support",
-              "cta": "Get Started"
-            }
           }
-        },
-        "expectedDOM": "<div data-testid=\"block-pricing-card\" class=\"card\">\n  <div class=\"card-header\">\n    <h3>Pro</h3>\n    <p>$49/mo</p>\n  </div>\n  <ul class=\"features\">\n    <li>Unlimited users</li>\n    <li>24/7 support</li>\n  </ul>\n  <button>Get Started</button>\n</div>",
+        ],
+        "pages": [
+          {
+            "name": "Pricing",
+            "path": "/pricing",
+            "sections": [
+              {
+                "block": "pricing-card",
+                "vars": {
+                  "plan": "Pro",
+                  "price": "$49/mo",
+                  "feature1": "Unlimited users",
+                  "feature2": "24/7 support",
+                  "cta": "Get Started"
+                }
+              }
+            ]
+          }
+        ],
+        "expectedDOM": "<div data-testid=\"block-pricing-card\" class=\"card\"><div class=\"card-header\"><h3>Pro</h3><p>$49/mo</p></div><ul class=\"features\"><li>Unlimited users</li><li>24/7 support</li></ul><button>Get Started</button></div>",
         "assertions": [
-          "Card has 3 top-level children: header div, features ul, button",
-          "Header div has 2 nested children: h3 and p",
-          "Features ul has 2 list items",
-          "Complex 3-level composition renders correctly"
+          "Component composition: Multiple children create complex structure",
+          "Level 1: 3 top-level children (header div, features ul, button)",
+          "Level 2: Header has 2 children (h3, p), Features has 2 children (2 li)",
+          "All 5 variables substituted: plan, price, feature1, feature2, cta",
+          "Real-world pricing card pattern with header, features list, CTA button"
         ]
       }
     },
@@ -337,9 +389,9 @@
       "given": "icon child example",
       "when": "child has type 'icon' with props containing $icon and $color variables",
       "then": "it should render SVG icon with substituted name and color",
-      "x-test": {
-        "setup": {
-          "blockDefinition": {
+      "application": {
+        "blocks": [
+          {
             "name": "badge-with-icon",
             "type": "div",
             "children": [
@@ -351,20 +403,29 @@
                 }
               }
             ]
-          },
-          "reference": {
-            "$ref": "badge-with-icon",
-            "vars": {
-              "icon": "check-circle",
-              "color": "green"
-            }
           }
-        },
-        "expectedDOM": "<div data-testid=\"block-badge-with-icon\">\n  <svg data-testid=\"icon-check-circle\" data-color=\"green\"></svg>\n</div>",
+        ],
+        "pages": [
+          {
+            "name": "Status",
+            "path": "/status",
+            "sections": [
+              {
+                "block": "badge-with-icon",
+                "vars": {
+                  "icon": "check-circle",
+                  "color": "green"
+                }
+              }
+            ]
+          }
+        ],
+        "expectedDOM": "<div data-testid=\"block-badge-with-icon\"><svg data-testid=\"icon-check-circle\" data-color=\"green\"></svg></div>",
         "assertions": [
-          "Icon child renders as SVG element",
-          "SVG has data-testid='icon-check-circle' (substituted from $icon)",
-          "SVG has data-color='green' (substituted from $color)"
+          "Icon child: type='icon' renders as <svg> element",
+          "name prop: '$icon' → 'check-circle' → data-testid='icon-check-circle'",
+          "color prop: '$color' → 'green' → data-color='green'",
+          "Icon children enable SVG graphics in blocks"
         ]
       }
     },
@@ -373,9 +434,9 @@
       "given": "text child example",
       "when": "child has type 'text' with content containing $label variable",
       "then": "it should render text element with substituted content",
-      "x-test": {
-        "setup": {
-          "blockDefinition": {
+      "application": {
+        "blocks": [
+          {
             "name": "simple-message",
             "type": "div",
             "children": [
@@ -384,19 +445,27 @@
                 "content": "$label"
               }
             ]
-          },
-          "reference": {
-            "$ref": "simple-message",
-            "vars": {
-              "label": "Welcome back!"
-            }
           }
-        },
-        "expectedDOM": "<div data-testid=\"block-simple-message\">\n  <span>Welcome back!</span>\n</div>",
+        ],
+        "pages": [
+          {
+            "name": "Dashboard",
+            "path": "/dashboard",
+            "sections": [
+              {
+                "block": "simple-message",
+                "vars": {
+                  "label": "Welcome back!"
+                }
+              }
+            ]
+          }
+        ],
+        "expectedDOM": "<div data-testid=\"block-simple-message\"><span>Welcome back!</span></div>",
         "assertions": [
-          "Text child renders as span element",
-          "Span contains text 'Welcome back!' (substituted from $label)",
-          "Content variable substitution works in children"
+          "Text child: type='text' renders as <span> element",
+          "content='$label' → 'Welcome back!' (variable substitution)",
+          "Text children enable dynamic text content in blocks"
         ]
       }
     },
@@ -405,9 +474,9 @@
       "given": "children with variable references",
       "when": "children contain $variable placeholders in props and content",
       "then": "it should render all children with substituted values throughout tree",
-      "x-test": {
-        "setup": {
-          "blockDefinition": {
+      "application": {
+        "blocks": [
+          {
             "name": "alert-card",
             "type": "div",
             "props": {
@@ -438,24 +507,34 @@
                 ]
               }
             ]
-          },
-          "reference": {
-            "$ref": "alert-card",
-            "vars": {
-              "variant": "success",
-              "icon": "check",
-              "iconColor": "green",
-              "title": "Success!",
-              "message": "Operation completed"
-            }
           }
-        },
-        "expectedDOM": "<div data-testid=\"block-alert-card\" class=\"alert-success\">\n  <svg data-testid=\"icon-check\" class=\"text-green\"></svg>\n  <div>\n    <h4>Success!</h4>\n    <span>Operation completed</span>\n  </div>\n</div>",
+        ],
+        "pages": [
+          {
+            "name": "Alerts",
+            "path": "/alerts",
+            "sections": [
+              {
+                "block": "alert-card",
+                "vars": {
+                  "variant": "success",
+                  "icon": "check",
+                  "iconColor": "green",
+                  "title": "Success!",
+                  "message": "Operation completed"
+                }
+              }
+            ]
+          }
+        ],
+        "expectedDOM": "<div data-testid=\"block-alert-card\" class=\"alert-success\"><svg data-testid=\"icon-check\" class=\"text-green\"></svg><div><h4>Success!</h4><span>Operation completed</span></div></div>",
         "assertions": [
-          "Parent div: $variant → 'success' in className",
-          "Icon child: $icon → 'check', $iconColor → 'green'",
-          "Nested text children: $title → 'Success!', $message → 'Operation completed'",
-          "All 5 variables substituted correctly throughout nested structure"
+          "Variable substitution throughout nested children",
+          "Parent: $variant → 'success' in className='alert-success'",
+          "Icon child: $icon → 'check', $iconColor → 'green' in className='text-green'",
+          "Nested text 1: $title → 'Success!' in h4",
+          "Nested text 2: $message → 'Operation completed' in span",
+          "All 5 variables substituted across 3 nesting levels"
         ]
       }
     },
@@ -464,9 +543,9 @@
       "given": "children for UI tree structure",
       "when": "children array defines parent-child relationships",
       "then": "it should render hierarchical DOM tree with proper nesting",
-      "x-test": {
-        "setup": {
-          "blockDefinition": {
+      "application": {
+        "blocks": [
+          {
             "name": "page-section",
             "type": "section",
             "children": [
@@ -494,20 +573,32 @@
                 ]
               }
             ]
-          },
-          "reference": {
-            "$ref": "page-section",
-            "vars": {
-              "content": "Content here"
-            }
           }
-        },
-        "expectedDOM": "<section data-testid=\"block-page-section\">\n  <div class=\"container\">\n    <div class=\"row\">\n      <div class=\"col\">Content here</div>\n    </div>\n  </div>\n</section>",
+        ],
+        "pages": [
+          {
+            "name": "Home",
+            "path": "/",
+            "sections": [
+              {
+                "block": "page-section",
+                "vars": {
+                  "content": "Content here"
+                }
+              }
+            ]
+          }
+        ],
+        "expectedDOM": "<section data-testid=\"block-page-section\"><div class=\"container\"><div class=\"row\"><div class=\"col\">Content here</div></div></div></section>",
         "assertions": [
-          "Tree depth: 4 levels (section → container → row → col)",
-          "Parent-child relationships preserved: section contains div, div contains div, div contains text",
-          "Children array creates proper hierarchical DOM tree",
-          "Nesting structure matches Bootstrap-like grid system"
+          "UI tree structure: Hierarchical parent-child relationships",
+          "Tree depth: 4 levels (section → container div → row div → col div)",
+          "Level 1: section (root)",
+          "Level 2: div.container (child of section)",
+          "Level 3: div.row (child of container)",
+          "Level 4: div.col with text content (child of row)",
+          "Bootstrap-like grid system: container → row → col pattern",
+          "Children array enables complex nested structures"
         ]
       }
     },
