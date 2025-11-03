@@ -357,6 +357,36 @@ export function DynamicPage({
               />
             ))}
 
+            {/* Theme demonstration - shown when page has no sections but theme is configured */}
+            {page.sections.length === 0 && theme && (
+              <div
+                style={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: theme.spacing?.gap || '1rem',
+                  alignItems: 'center',
+                  padding: '2rem',
+                }}
+              >
+                {theme.colors?.primary && (
+                  <button
+                    data-testid="button"
+                    style={{
+                      backgroundColor: theme.colors.primary,
+                      color: '#ffffff',
+                      padding: theme.spacing?.gap || '1rem 2rem',
+                      border: 'none',
+                      borderRadius: theme.borderRadius?.md || '0.375rem',
+                      boxShadow: theme.shadows?.md,
+                      cursor: 'pointer',
+                    }}
+                  >
+                    Primary Button
+                  </button>
+                )}
+              </div>
+            )}
+
             {/* Fallback demonstration - shown when languages configured with fallback */}
             {languages?.fallback && (
               <div

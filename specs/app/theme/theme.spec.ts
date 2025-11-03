@@ -371,7 +371,7 @@ test.describe('Theme Configuration', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-THEME-007: should enable consistent UI across entire application',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
