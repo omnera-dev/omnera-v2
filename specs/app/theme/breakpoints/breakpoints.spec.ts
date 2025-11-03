@@ -24,7 +24,7 @@ test.describe('Breakpoints', () => {
   // One test per spec in schema - defines EXHAUSTIVE acceptance criteria
   // ============================================================================
 
-  test.fixme(
+  test(
     'APP-THEME-BREAKPOINTS-001: should validate Tailwind breakpoint values',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
