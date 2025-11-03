@@ -5,8 +5,8 @@
  * found in the LICENSE.md file in the root directory of this source tree.
  */
 
-import type { ReactElement } from 'react'
 import type { BreakpointsConfig } from '@/domain/models/app/theme/breakpoints'
+import type { ReactElement } from 'react'
 
 /**
  * BreakpointsRenderer component - Exposes theme breakpoints to JavaScript
