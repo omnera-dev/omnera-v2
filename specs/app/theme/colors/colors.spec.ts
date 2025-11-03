@@ -158,7 +158,7 @@ test.describe('Color Palette', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-THEME-COLORS-004: should validate rgba color format with alpha at build time',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
