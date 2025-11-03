@@ -456,6 +456,42 @@
           "className substituted: 'text-$color text-lg' → 'text-blue text-lg'",
           "Content substituted: '$message' → 'Hello World'"
         ]
+      },
+      "application": {
+        "blocks": [
+          {
+            "name": "simple-text",
+            "type": "text",
+            "props": {
+              "className": "text-$color text-lg"
+            },
+            "content": "$message"
+          }
+        ],
+        "pages": [
+          {
+            "name": "Home",
+            "path": "/",
+            "sections": [
+              {
+                "block": "simple-text",
+                "vars": {
+                  "color": "blue",
+                  "message": "Hello World"
+                }
+              }
+            ]
+          }
+        ],
+        "expectedDOM": "<p data-testid=\"block-simple-text\" class=\"text-blue text-lg\">Hello World</p>",
+        "assertions": [
+          "Type 'text' renders as paragraph (p) element",
+          "Multiple variable substitutions: className and content",
+          "className: 'text-$color text-lg' → 'text-blue text-lg'",
+          "content: '$message' → 'Hello World'",
+          "Combines styling (color, size) with dynamic content",
+          "Example from documentation (simple-text block)"
+        ]
       }
     },
     {
@@ -562,6 +598,71 @@
           "Each instance displays different value and label",
           "Template reused without code duplication"
         ]
+      },
+      "application": {
+        "blocks": [
+          {
+            "name": "stat-card",
+            "type": "card",
+            "children": [
+              {
+                "type": "text",
+                "props": {
+                  "level": "h4"
+                },
+                "content": "$value"
+              },
+              {
+                "type": "text",
+                "props": {
+                  "level": "p"
+                },
+                "content": "$label"
+              }
+            ]
+          }
+        ],
+        "pages": [
+          {
+            "name": "Dashboard",
+            "path": "/dashboard",
+            "sections": [
+              {
+                "block": "stat-card",
+                "vars": {
+                  "value": "1,234",
+                  "label": "Users"
+                }
+              },
+              {
+                "block": "stat-card",
+                "vars": {
+                  "value": "567",
+                  "label": "Projects"
+                }
+              },
+              {
+                "block": "stat-card",
+                "vars": {
+                  "value": "89%",
+                  "label": "Success Rate"
+                }
+              }
+            ]
+          }
+        ],
+        "expectedDOM": "<div data-testid=\"block-stat-card-0\"><h4>1,234</h4><p>Users</p></div><div data-testid=\"block-stat-card-1\"><h4>567</h4><p>Projects</p></div><div data-testid=\"block-stat-card-2\"><h4>89%</h4><p>Success Rate</p></div>",
+        "assertions": [
+          "ONE block template defined (stat-card)",
+          "THREE instances rendered with different data",
+          "Instance 0: value='1,234', label='Users'",
+          "Instance 1: value='567', label='Projects'",
+          "Instance 2: value='89%', label='Success Rate'",
+          "Each instance has unique data-testid suffix: -0, -1, -2",
+          "DRY principle: Single template reused without code duplication",
+          "Template pattern enables data-driven UI (same structure, different content)",
+          "Webflow/WordPress-like reusability: define once, use everywhere"
+        ]
       }
     },
     {
@@ -610,6 +711,63 @@
           "Styling: className combines variant, padding, and border-radius",
           "Content: children render h3 and p with substituted text",
           "All 3 aspects (layout, styling, content) work together"
+        ]
+      },
+      "application": {
+        "blocks": [
+          {
+            "name": "complete-card",
+            "type": "card",
+            "props": {
+              "className": "card-$variant p-6 rounded-lg"
+            },
+            "children": [
+              {
+                "type": "text",
+                "props": {
+                  "level": "h3",
+                  "className": "mb-2"
+                },
+                "content": "$title"
+              },
+              {
+                "type": "text",
+                "props": {
+                  "level": "p"
+                },
+                "content": "$description"
+              }
+            ]
+          }
+        ],
+        "pages": [
+          {
+            "name": "Pricing",
+            "path": "/pricing",
+            "sections": [
+              {
+                "block": "complete-card",
+                "vars": {
+                  "variant": "primary",
+                  "title": "Premium Plan",
+                  "description": "Best value for teams"
+                }
+              }
+            ]
+          }
+        ],
+        "expectedDOM": "<div data-testid=\"block-complete-card\" class=\"card-primary p-6 rounded-lg\"><h3 class=\"mb-2\">Premium Plan</h3><p>Best value for teams</p></div>",
+        "assertions": [
+          "Block composition: layout + styling + content all integrated",
+          "Layout: type='card' defines structure (div container)",
+          "Styling: props.className defines appearance (card-primary p-6 rounded-lg)",
+          "Content: children array defines nested elements (h3 title, p description)",
+          "Variable substitution across all layers:",
+          "  - Styling: $variant → 'primary' (card-primary class)",
+          "  - Content: $title → 'Premium Plan' (h3 text)",
+          "  - Content: $description → 'Best value for teams' (p text)",
+          "Complete component: All aspects work together for full-featured block",
+          "Real-world pattern: Pricing card with variant styling and dynamic content"
         ]
       }
     },
