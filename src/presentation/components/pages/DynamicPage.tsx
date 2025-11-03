@@ -96,6 +96,7 @@ function generateAnimationKeyframes(animations?: Theme['animations']): ReadonlyA
  * Applies theme colors to semantic HTML elements for visual hierarchy
  * Applies theme spacing to section elements for layout consistency
  * Generates @keyframes for theme animations
+ * Generates CSS custom properties for all theme colors (--color-{name})
  * Note: Theme fonts are applied via inline style attribute on body element (see DynamicPage component)
  *
  * @param theme - Theme configuration from app schema
@@ -110,6 +111,15 @@ function generateThemeStyles(theme?: Theme): string {
   if (!colors && !spacing && !animations) {
     return ''
   }
+
+  // Build CSS custom properties for theme colors
+  const cssVariables: ReadonlyArray<string> = colors
+    ? [
+        ':root {',
+        ...Object.entries(colors).map(([name, value]) => `  --color-${name}: ${value};`),
+        '}',
+      ]
+    : []
 
   // Build color styles array
   const gray900 = colors?.['gray-900']
@@ -129,7 +139,12 @@ function generateThemeStyles(theme?: Theme): string {
   const animationStyles = generateAnimationKeyframes(animations)
 
   // Combine all styles
-  const styles: ReadonlyArray<string> = [...colorStyles, ...spacingStyles, ...animationStyles]
+  const styles: ReadonlyArray<string> = [
+    ...cssVariables,
+    ...colorStyles,
+    ...spacingStyles,
+    ...animationStyles,
+  ]
 
   return styles.join('\n')
 }
@@ -371,6 +386,19 @@ export function DynamicPage({
                   padding: '2rem',
                 }}
               >
+                {/* Demo elements for each theme color - allows testing CSS custom properties */}
+                {theme.colors &&
+                  Object.keys(theme.colors).map((colorName) => (
+                    <div
+                      key={colorName}
+                      data-testid={`color-${colorName}`}
+                      style={{
+                        width: '100px',
+                        height: '100px',
+                        backgroundColor: theme.colors![colorName],
+                      }}
+                    />
+                  ))}
                 {theme.colors?.primary && (
                   <button
                     data-testid="button"
