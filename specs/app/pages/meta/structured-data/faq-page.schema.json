@@ -73,61 +73,230 @@
       "id": "APP-PAGES-FAQPAGE-001",
       "given": "FAQPage with required properties",
       "when": "@context is 'https://schema.org', @type is 'FAQPage', and mainEntity is provided",
-      "then": "it should validate minimal FAQPage structured data"
+      "then": "it should validate minimal FAQPage structured data",
+      "application": {
+        "faqPage": {
+          "@context": "https://schema.org",
+          "@type": "FAQPage",
+          "mainEntity": [
+            {
+              "@type": "Question",
+              "name": "What is your shipping policy?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "We offer free standard shipping on all orders over $50."
+              }
+            }
+          ]
+        },
+        "assertions": [
+          "@context: 'https://schema.org' (required)",
+          "@type: 'FAQPage' (required)",
+          "mainEntity: Array of Question objects (required)",
+          "Minimal valid FAQPage"
+        ]
+      }
     },
     {
       "id": "APP-PAGES-FAQPAGE-002",
       "given": "FAQPage with mainEntity array",
       "when": "mainEntity is array of Question objects",
-      "then": "it should contain list of Q&A pairs"
+      "then": "it should contain list of Q&A pairs",
+      "application": {
+        "faqPage": {
+          "@context": "https://schema.org",
+          "@type": "FAQPage",
+          "mainEntity": [
+            {
+              "@type": "Question",
+              "name": "How do I track my order?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Log into your account and go to Order History to track your shipment."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "What payment methods do you accept?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "We accept Visa, Mastercard, American Express, PayPal, and Apple Pay."
+              }
+            }
+          ]
+        },
+        "assertions": [
+          "mainEntity: Array of Question objects",
+          "Each Question: @type, name, acceptedAnswer",
+          "List of Q&A pairs for FAQ page"
+        ]
+      }
     },
     {
       "id": "APP-PAGES-FAQPAGE-003",
       "given": "FAQPage with Question",
       "when": "each item has @type 'Question', name, and acceptedAnswer",
-      "then": "it should define question structure"
+      "then": "it should define question structure",
+      "application": {
+        "question": {
+          "@type": "Question",
+          "name": "Can I return an item?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes, we accept returns within 30 days of purchase with original packaging."
+          }
+        },
+        "assertions": [
+          "@type: 'Question' (required)",
+          "name: Question text (required)",
+          "acceptedAnswer: Answer object (required)",
+          "Standard Q&A pair structure"
+        ]
+      }
     },
     {
       "id": "APP-PAGES-FAQPAGE-004",
       "given": "FAQPage with Question name",
       "when": "name is 'What is the refund policy?'",
-      "then": "it should provide question text"
+      "then": "it should provide question text",
+      "application": {
+        "examples": [
+          "What is your shipping policy?",
+          "How long does delivery take?",
+          "Do you ship internationally?",
+          "Can I change my order after placing it?"
+        ],
+        "assertions": [
+          "name: Question text (user's question)",
+          "Should be concise and clear",
+          "Typically ends with '?' (question mark)"
+        ]
+      }
     },
     {
       "id": "APP-PAGES-FAQPAGE-005",
       "given": "FAQPage with acceptedAnswer",
       "when": "acceptedAnswer has @type 'Answer' and text",
-      "then": "it should provide answer structure"
+      "then": "it should provide answer structure",
+      "application": {
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Standard shipping takes 3-5 business days. Express shipping is available for 1-2 day delivery."
+        },
+        "assertions": [
+          "acceptedAnswer: Answer object (required)",
+          "@type: 'Answer' (required)",
+          "text: Answer content (required)",
+          "Provides the response to the question"
+        ]
+      }
     },
     {
       "id": "APP-PAGES-FAQPAGE-006",
       "given": "FAQPage with Answer text",
       "when": "text is 'We offer a 30-day money-back guarantee'",
-      "then": "it should provide answer content"
+      "then": "it should provide answer content",
+      "application": {
+        "examples": [
+          "We offer free standard shipping on all orders over $50.",
+          "Yes, we ship to over 100 countries worldwide. International shipping takes 7-14 business days.",
+          "You can change or cancel your order within 2 hours of placing it by contacting our support team."
+        ],
+        "assertions": [
+          "text: Answer content (required)",
+          "Should be clear and complete",
+          "Can include HTML for formatting (links, lists, bold)"
+        ]
+      }
     },
     {
       "id": "APP-PAGES-FAQPAGE-007",
       "given": "FAQPage with multiple Q&A pairs",
       "when": "mainEntity has 5+ Question objects",
-      "then": "it should support comprehensive FAQ section"
+      "then": "it should support comprehensive FAQ section",
+      "application": {
+        "faqPage": {
+          "@context": "https://schema.org",
+          "@type": "FAQPage",
+          "mainEntity": [
+            {"@type": "Question", "name": "Q1: Shipping policy?", "acceptedAnswer": {"@type": "Answer", "text": "Answer 1"}},
+            {"@type": "Question", "name": "Q2: Return policy?", "acceptedAnswer": {"@type": "Answer", "text": "Answer 2"}},
+            {"@type": "Question", "name": "Q3: Payment methods?", "acceptedAnswer": {"@type": "Answer", "text": "Answer 3"}},
+            {"@type": "Question", "name": "Q4: Tracking orders?", "acceptedAnswer": {"@type": "Answer", "text": "Answer 4"}},
+            {"@type": "Question", "name": "Q5: International shipping?", "acceptedAnswer": {"@type": "Answer", "text": "Answer 5"}}
+          ]
+        },
+        "note": "5+ Q&A pairs recommended for comprehensive FAQ page",
+        "assertions": [
+          "mainEntity: Array with 5+ Question objects",
+          "Comprehensive FAQ section",
+          "Covers common customer questions"
+        ]
+      }
     },
     {
       "id": "APP-PAGES-FAQPAGE-008",
       "given": "FAQPage for rich results",
       "when": "FAQPage structured data is included in page metadata",
-      "then": "it should display expandable Q&A in Google search results"
+      "then": "it should display expandable Q&A in Google search results",
+      "application": {
+        "richResult": {
+          "display": "Expandable accordion UI in Google search results",
+          "format": "Question shown, answer hidden until clicked",
+          "benefit": "Users can find answers directly in search without clicking through"
+        },
+        "example": "Search: 'return policy example.com' → FAQ rich result with expandable Q&A",
+        "assertions": [
+          "FAQPage rich results in Google search",
+          "Expandable Q&A accordion",
+          "Increases visibility and CTR",
+          "Users get answers without visiting site"
+        ]
+      }
     },
     {
       "id": "APP-PAGES-FAQPAGE-009",
       "given": "FAQPage for support content",
       "when": "FAQ answers common customer questions",
-      "then": "it should reduce support load by surfacing answers in search"
+      "then": "it should reduce support load by surfacing answers in search",
+      "application": {
+        "supportBenefits": {
+          "Reduced tickets": "Common questions answered in search",
+          "Self-service": "Users find answers without contacting support",
+          "24/7 availability": "FAQ answers always accessible"
+        },
+        "metrics": {
+          "Support ticket reduction": "Typically 15-30% for common questions",
+          "User satisfaction": "Faster answer discovery improves satisfaction"
+        },
+        "assertions": [
+          "FAQ rich results reduce support load",
+          "Common questions answered in search",
+          "Best practice for e-commerce, SaaS, support sites"
+        ]
+      }
     },
     {
       "id": "APP-PAGES-FAQPAGE-010",
       "given": "FAQPage for SERP visibility",
       "when": "FAQ rich results show in search",
-      "then": "it should increase click-through rate from search results"
+      "then": "it should increase click-through rate from search results",
+      "application": {
+        "serpBenefits": {
+          "Visual prominence": "FAQ rich results occupy more SERP real estate",
+          "Answer preview": "Users see answers before clicking",
+          "Trust signal": "Structured data shows site authority"
+        },
+        "ctrImpact": {
+          "Typical increase": "10-35% higher CTR with FAQ rich results",
+          "Long-tail queries": "Especially effective for question-based searches"
+        },
+        "assertions": [
+          "FAQ rich results increase SERP visibility",
+          "Higher CTR (10-35% improvement)",
+          "Best for: How-to, troubleshooting, policy pages"
+        ]
+      }
     },
     {
       "id": "APP-PAGES-META-STRUCTURED-DATA-FAQ-PAGE-REGRESSION-001",
