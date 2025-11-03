@@ -299,6 +299,12 @@
           "Enhances perceived responsiveness"
         ]
       }
+    },
+    {
+      "id": "APP-THEME-ANIMATIONS-REGRESSION-001",
+      "given": "complete application configuration with all features",
+      "when": "user completes full workflow",
+      "then": "user can complete full animations workflow"
     }
   ]
 }

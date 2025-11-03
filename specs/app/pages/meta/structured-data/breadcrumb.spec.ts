@@ -453,7 +453,7 @@ test.describe('Breadcrumb Schema', () => {
   )
 
   test.fixme(
-    'user can complete full Breadcrumb workflow',
+    'APP-PAGES-META-STRUCTURED-DATA-BREADCRUMB-REGRESSION-001: user can complete full Breadcrumb workflow',
     { tag: '@regression' },
     async ({ page, startServerWithSchema }) => {
       await startServerWithSchema({

@@ -40,6 +40,12 @@
       "given": "page IDs across multiple pages",
       "when": "each page has unique ID",
       "then": "it should ensure uniqueness across all pages in array"
+    },
+    {
+      "id": "APP-PAGES-ID-REGRESSION-001",
+      "given": "complete application configuration with all features",
+      "when": "user completes full workflow",
+      "then": "user can complete full page ID workflow"
     }
   ]
 }

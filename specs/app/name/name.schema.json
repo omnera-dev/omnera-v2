@@ -80,6 +80,12 @@
       "given": "server with complex app name '@myorg-team.test/dashboard_v2.beta-prod'",
       "when": "user navigates to homepage",
       "then": "all name display requirements are met (display, metadata, special characters, accessibility, styling)"
+    },
+    {
+      "id": "APP-NAME-REGRESSION-001",
+      "given": "complete application configuration with all features",
+      "when": "user completes full workflow",
+      "then": "user can view app name with all display requirements across different configurations"
     }
   ]
 }

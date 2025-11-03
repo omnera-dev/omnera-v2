@@ -69,10 +69,14 @@
 
   /**
    * Detect initial language based on configuration
-   * Respects page language, browser language detection, and localStorage persistence
+   * Priority order:
+   * 1. localStorage (user's explicit choice - highest priority)
+   * 2. Page language from <html lang> (server-rendered, either from page.meta.lang or Accept-Language detection)
+   * 3. Browser detection (user's browser preference, only if no HTML lang set)
+   * 4. Default language (final fallback)
    */
   function getInitialLanguage() {
-    // Check if persistence is enabled (defaults to true)
+    // 1. Check if persistence is enabled (defaults to true)
     const persistSelection = languagesConfig.persistSelection ?? true
 
     if (persistSelection) {
@@ -87,7 +91,8 @@
       }
     }
 
-    // Check page language from <html lang="..."> attribute (highest priority after localStorage)
+    // 2. Check page language from <html lang="..."> attribute (server-rendered)
+    // This takes precedence over browser detection to respect page.meta.lang settings
     const pageLang = document.documentElement.getAttribute('lang')
     if (pageLang) {
       // Verify page language is in supported languages
@@ -97,7 +102,8 @@
       }
     }
 
-    // Check if browser detection is enabled (defaults to true)
+    // 3. Check if browser detection is enabled (defaults to true)
+    // Only used if no HTML lang was set (i.e., server didn't specify a language)
     const detectBrowser = languagesConfig.detectBrowser ?? true
 
     if (detectBrowser) {
@@ -108,7 +114,7 @@
       }
     }
 
-    // Fallback to default language (no match found or detection disabled)
+    // 4. Fallback to default language (no match found or detection disabled)
     return languagesConfig.default
   }
 
@@ -195,6 +201,7 @@
   /**
    * Selects a new language and updates the UI
    * Saves to localStorage if persistSelection is enabled
+   * Handles navigation for language subdirectory URLs (/:lang/*)
    * @param {string} code - ISO 639-1 language code (e.g., 'en-US', 'fr-FR')
    */
   function selectLanguage(code) {
@@ -206,6 +213,26 @@
       localStorage.setItem('language', code)
     }
 
+    // Check if current URL uses language subdirectory pattern (/:lang/*)
+    const currentPath = window.location.pathname
+    const supportedCodes = languagesConfig.supported.map((lang) => lang.code)
+
+    // Extract first path segment
+    const segments = currentPath.split('/').filter(Boolean)
+    const firstSegment = segments[0]
+
+    // If current URL starts with a supported language code, navigate to new language subdirectory
+    if (firstSegment && supportedCodes.includes(firstSegment)) {
+      // Replace language segment: /fr-FR/about => /en-US/about
+      const pathWithoutLang = '/' + segments.slice(1).join('/')
+      const newPath = `/${code}${pathWithoutLang}`
+
+      // Navigate to new language URL (preserves query params and hash)
+      window.location.href = newPath + window.location.search + window.location.hash
+      return
+    }
+
+    // No language subdirectory - update UI in place (backward compatibility)
     isOpen = false
     updateUI()
     if (dropdown) {

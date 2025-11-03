@@ -461,6 +461,12 @@
           "Adds visual interest and emotion to announcements"
         ]
       }
+    },
+    {
+      "id": "APP-PAGES-LAYOUT-BANNER-REGRESSION-001",
+      "given": "complete application configuration with all features",
+      "when": "user completes full workflow",
+      "then": "user can complete full banner workflow"
     }
   ]
 }

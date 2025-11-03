@@ -255,7 +255,7 @@ test.describe('Favicon', () => {
   // ============================================================================
 
   test.fixme(
-    'user can complete full favicon workflow',
+    'APP-PAGES-META-FAVICONS-FAVICON-REGRESSION-001: user can complete full favicon workflow',
     { tag: '@regression' },
     async ({ page, startServerWithSchema }) => {
       await startServerWithSchema({

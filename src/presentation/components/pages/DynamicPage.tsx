@@ -35,30 +35,21 @@ function generateThemeStyles(theme?: Theme): string {
     return ''
   }
 
-  let styles: ReadonlyArray<string> = []
+  // Build color styles array
+  const gray900 = colors?.['gray-900']
+  const gray500 = colors?.['gray-500']
+  const colorStyles: ReadonlyArray<string> = [
+    ...(gray900 ? [`h1, h2, h3, h4, h5, h6 { color: ${gray900}; }`] : []),
+    ...(gray500 ? [`p { color: ${gray500}; }`] : []),
+  ]
 
-  // Apply gray-900 to headings (h1-h6) for strong hierarchy
-  // Apply gray-500 to text elements (p) for secondary/placeholder content
-  if (colors) {
-    const gray900 = colors['gray-900']
-    const gray500 = colors['gray-500']
+  // Build spacing styles array
+  const spacingStyles: ReadonlyArray<string> = spacing?.section
+    ? [`[data-testid="section"] { padding: ${spacing.section}; }`]
+    : []
 
-    styles = [
-      ...styles,
-      ...(gray900 ? [`h1, h2, h3, h4, h5, h6 { color: ${gray900}; }`] : []),
-      ...(gray500 ? [`p { color: ${gray500}; }`] : []),
-    ]
-  }
-
-  // Apply spacing.section to [data-testid="section"] for layout consistency
-  // Use CSS custom property to preserve original value while also computing pixel value
-  if (spacing?.section) {
-    styles = [
-      ...styles,
-      `:root { --section-padding: ${spacing.section}; }`,
-      `[data-testid="section"] { padding: var(--section-padding, ${spacing.section}); }`,
-    ]
-  }
+  // Combine all styles
+  const styles: ReadonlyArray<string> = [...colorStyles, ...spacingStyles]
 
   return styles.join('\n')
 }
@@ -181,6 +172,7 @@ function StructuredDataScript({
  * @param props.blocks - Optional blocks array for resolving block references
  * @param props.theme - Optional theme configuration for styling
  * @param props.languages - Optional languages configuration for language-switcher blocks
+ * @param props.detectedLanguage - Optional detected language from Accept-Language header or URL
  * @returns React element with complete page structure
  */
 export function DynamicPage({
@@ -188,22 +180,25 @@ export function DynamicPage({
   blocks,
   theme,
   languages,
+  detectedLanguage,
 }: {
   readonly page: Page
   readonly blocks?: Blocks
   readonly theme?: Theme
   readonly languages?: Languages
+  readonly detectedLanguage?: string
 }): Readonly<ReactElement> {
-  // Use default metadata if not provided
-  const lang = page.meta?.lang || 'en-US'
+  // Determine the language to use (priority: page.meta.lang > detectedLanguage > default)
+  // Page's explicit language takes precedence over browser detection
+  const lang = page.meta?.lang || detectedLanguage || languages?.default || 'en-US'
   const title = page.meta?.title || page.name || page.path
   const description = page.meta?.description || ''
   const themeStyles = generateThemeStyles(theme)
 
   // Determine text direction from language configuration
-  // Find the direction for the default language, fallback to 'ltr'
-  const defaultLangConfig = languages?.supported.find((l) => l.code === languages.default)
-  const direction = defaultLangConfig?.direction || 'ltr'
+  // Find the direction for the current language, fallback to 'ltr'
+  const langConfig = languages?.supported.find((l) => l.code === lang)
+  const direction = langConfig?.direction || 'ltr'
 
   // Generate inline style for body element to apply theme fonts
   // Using inline style attribute has highest specificity and overrides Tailwind base styles
@@ -260,7 +255,10 @@ export function DynamicPage({
         {page.layout?.banner && <Banner {...page.layout.banner} />}
         {page.layout?.navigation && <Navigation {...page.layout.navigation} />}
 
-        <section data-testid="section">
+        <section
+          data-testid="section"
+          {...(theme?.spacing?.section && { style: { padding: theme.spacing.section } })}
+        >
           <main
             data-testid={page.name ? `page-${page.name}` : undefined}
             data-page-id={page.id}

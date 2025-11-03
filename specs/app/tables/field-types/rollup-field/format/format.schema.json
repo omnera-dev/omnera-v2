@@ -7,13 +7,13 @@
   "examples": ["currency", "number", "percentage"],
   "x-specs": [
     {
-      "id": "APP-FIELD-ROLLUP-FIELD-FORMAT-001",
+      "id": "APP-FIELD-ROLLUP-FORMAT-001",
       "given": "user provides format",
       "when": "validating input",
       "then": "string value should be accepted"
     },
     {
-      "id": "APP-FIELD-ROLLUP-FIELD-FORMAT-002",
+      "id": "APP-FIELD-ROLLUP-FORMAT-002",
       "given": "format is empty string",
       "when": "validating input",
       "then": "behavior should follow optional/required rules"

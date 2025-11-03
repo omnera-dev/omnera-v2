@@ -108,6 +108,12 @@
       "given": "features accessible in client JavaScript",
       "when": "features are injected into page",
       "then": "it should provide runtime feature detection"
+    },
+    {
+      "id": "APP-PAGES-SCRIPTS-FEATURES-REGRESSION-001",
+      "given": "complete application configuration with all features",
+      "when": "user completes full workflow",
+      "then": "user can complete full Feature Flags workflow"
     }
   ]
 }

@@ -32,13 +32,13 @@
   "additionalProperties": false,
   "x-specs": [
     {
-      "id": "APP-FIELD-SINGLE-SELECT-FIELD-SINGLE-SELECT-001",
+      "id": "APP-FIELD-SINGLE-SELECT-001",
       "given": "I am working with a single select field",
       "when": "I create a record",
       "then": "it should complete successfully"
     },
     {
-      "id": "APP-FIELD-SINGLE-SELECT-FIELD-SINGLE-SELECT-002",
+      "id": "APP-FIELD-SINGLE-SELECT-002",
       "given": "I am working with an invalid single select field",
       "when": "I create a record",
       "then": "it should fail with validation error"

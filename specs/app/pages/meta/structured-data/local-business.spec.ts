@@ -610,7 +610,7 @@ test.describe('Local Business Schema', () => {
   )
 
   test.fixme(
-    'user can complete full Local Business workflow',
+    'APP-PAGES-META-STRUCTURED-DATA-LOCAL-BUSINESS-REGRESSION-001: user can complete full Local Business workflow',
     { tag: '@regression' },
     async ({ page, startServerWithSchema }) => {
       await startServerWithSchema({

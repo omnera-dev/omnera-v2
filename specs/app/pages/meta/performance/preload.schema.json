@@ -114,6 +114,12 @@
       "given": "preload for critical rendering path",
       "when": "preloading CSS, fonts, and hero images",
       "then": "it should optimize First Contentful Paint (FCP)"
+    },
+    {
+      "id": "APP-PAGES-META-PERFORMANCE-PRELOAD-REGRESSION-001",
+      "given": "complete application configuration with all features",
+      "when": "user completes full workflow",
+      "then": "user can complete full preload workflow"
     }
   ]
 }

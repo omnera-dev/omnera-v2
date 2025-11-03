@@ -47,18 +47,20 @@ export class PageRenderer extends Context.Tag('PageRenderer')<
      * Renders the application home page
      *
      * @param app - Validated application data from AppSchema
+     * @param detectedLanguage - Optional detected language from Accept-Language header or URL
      * @returns Complete HTML document as string with embedded app data
      */
-    readonly renderHome: (app: App) => string
+    readonly renderHome: (app: App, detectedLanguage?: string) => string
 
     /**
      * Renders any page by path
      *
      * @param app - Validated application data from AppSchema
      * @param path - Page path to render (e.g., '/', '/about')
+     * @param detectedLanguage - Optional detected language from Accept-Language header or URL
      * @returns Complete HTML document as string, or undefined if page not found
      */
-    readonly renderPage: (app: App, path: string) => string | undefined
+    readonly renderPage: (app: App, path: string, detectedLanguage?: string) => string | undefined
 
     /**
      * Renders the 404 Not Found page

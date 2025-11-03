@@ -15,9 +15,10 @@ import type { App } from '@/domain/models/app'
  *
  * @param app - Validated application data from AppSchema
  * @param path - Page path to render (e.g., '/', '/about')
+ * @param detectedLanguage - Optional detected language from Accept-Language header or URL
  * @returns Complete HTML document as string with DOCTYPE, or null if page not found
  */
-function renderPageByPath(app: App, path: string): string | undefined {
+function renderPageByPath(app: App, path: string, detectedLanguage?: string): string | undefined {
   const page = app.pages?.find((p) => p.path === path)
   if (!page) {
     return undefined
@@ -29,6 +30,7 @@ function renderPageByPath(app: App, path: string): string | undefined {
       blocks={app.blocks}
       theme={app.theme}
       languages={app.languages}
+      detectedLanguage={detectedLanguage}
     />
   )
 
@@ -42,12 +44,13 @@ function renderPageByPath(app: App, path: string): string | undefined {
  * Otherwise, renders the default homepage
  *
  * @param app - Validated application data from AppSchema
+ * @param detectedLanguage - Optional detected language from Accept-Language header
  * @returns Complete HTML document as string with DOCTYPE
  */
 // @knip-ignore - Used via dynamic import in StartServer.ts
-export function renderHomePage(app: App): string {
+export function renderHomePage(app: App, detectedLanguage?: string): string {
   // Try to render custom homepage first
-  const customHomePage = renderPageByPath(app, '/')
+  const customHomePage = renderPageByPath(app, '/', detectedLanguage)
   if (customHomePage) {
     return customHomePage
   }
@@ -62,9 +65,10 @@ export function renderHomePage(app: App): string {
  *
  * @param app - Validated application data from AppSchema
  * @param path - Page path to render (e.g., '/', '/about')
+ * @param detectedLanguage - Optional detected language from Accept-Language header
  * @returns Complete HTML document as string with DOCTYPE, or undefined if page not found
  */
 // @knip-ignore - Used via dynamic import in server.ts
-export function renderPage(app: App, path: string): string | undefined {
-  return renderPageByPath(app, path)
+export function renderPage(app: App, path: string, detectedLanguage?: string): string | undefined {
+  return renderPageByPath(app, path, detectedLanguage)
 }

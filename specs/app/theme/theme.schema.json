@@ -395,6 +395,12 @@
           "Single configuration: theme controls both values and thresholds"
         ]
       }
+    },
+    {
+      "id": "APP-THEME-REGRESSION-001",
+      "given": "complete application configuration with all features",
+      "when": "user completes full workflow",
+      "then": "user can complete full theme workflow"
     }
   ]
 }

@@ -400,7 +400,7 @@ test.describe('Navigation Links', () => {
   // ============================================================================
 
   test.fixme(
-    'user can complete full nav links workflow',
+    'APP-PAGES-LAYOUT-NAVIGATION-NAV-LINKS-REGRESSION-001: user can complete full nav links workflow',
     { tag: '@regression' },
     async ({ page, startServerWithSchema }) => {
       await startServerWithSchema({

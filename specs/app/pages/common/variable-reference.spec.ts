@@ -283,7 +283,7 @@ test.describe('Variable Reference', () => {
   // ============================================================================
 
   test.fixme(
-    'user can complete full variable-reference workflow',
+    'APP-PAGES-VARIABLE-REFERENCE-REGRESSION-001: user can complete full variable-reference workflow',
     { tag: '@regression' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: Application with comprehensive variable usage

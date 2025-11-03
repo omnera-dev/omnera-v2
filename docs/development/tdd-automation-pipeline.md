@@ -216,6 +216,68 @@ bun run scripts/tdd-automation/queue-manager.ts status
 4. Comment on issue about timeout recovery
 5. **Result**: Prevents permanent pipeline blocks from stuck specs
 
+#### **tdd-queue-stuck-pr-monitor.yml** (Auto-Merge Safeguard) ⚠️ NEW
+
+**Triggers**:
+
+- Schedule (every 10 minutes)
+- Manual dispatch
+
+**Purpose**: Detects PRs that are stuck in an open state despite being ready to merge, and automatically enables auto-merge
+
+**Key Steps**:
+
+1. Scan all open `tdd-automation` PRs
+2. Identify PRs that:
+   - Have all CI checks passing (SUCCESS)
+   - Are mergeable (MERGEABLE state)
+   - Don't have auto-merge enabled
+   - Are older than 5 minutes (gives Claude Code time to enable it manually)
+3. Enable auto-merge automatically: `gh pr merge --auto --squash`
+4. Post comment explaining the automatic intervention
+5. **Result**: Prevents pipeline from blocking when Claude Code fails to enable auto-merge
+
+**Why This Is Needed**:
+
+- Issue #1319: Claude created PR but didn't enable auto-merge → Pipeline blocked
+- PR #1546: All checks passing, mergeable, but stuck open for 2 hours → Pipeline blocked
+- PR #1541: Same issue → Manual intervention required
+
+**Impact**: This workflow is a **critical safeguard** that prevents the most common cause of pipeline blocking.
+
+#### **tdd-queue-conflict-resolver.yml** (Automatic Conflict Resolution) ⚠️ NEW
+
+**Triggers**:
+
+- Push to main branch (when main updates, existing PRs might become conflicted)
+- Schedule (every 15 minutes as safety net)
+- Manual dispatch
+
+**Purpose**: Automatically resolves merge conflicts in tdd-automation PRs by triggering Claude Code to rebase the branch
+
+**Key Steps**:
+
+1. Scan all open `tdd-automation` PRs
+2. Identify PRs with merge conflicts (CONFLICTING or DIRTY state)
+3. Check if conflict resolution was already attempted (via `conflict-resolution:attempted` label)
+4. If first attempt: Post @claude mention with rebase instructions:
+   - Fetch latest main
+   - Rebase PR branch onto main
+   - Resolve conflicts (prioritize incoming changes from main)
+   - Run tests to verify resolution
+   - Force push rebased branch
+   - Verify auto-merge is still enabled
+5. If second attempt (already has label): Mark for manual review, remove from queue
+6. **Result**: Automatically resolves conflicts to prevent PRs from becoming stale
+
+**Why This Is Needed**:
+
+- PR #1545: Became conflicted after another PR merged → Stuck in CONFLICTING state
+- Long-running PRs: Can become stale when main advances
+- Queue blocking: Conflicted PRs prevent pipeline from progressing
+
+**Retry Limit**: One automatic attempt per PR (prevents infinite loops)
+
 ### 3. Configuration
 
 All configuration is hardcoded in workflow files (no central config file):
@@ -275,9 +337,14 @@ Every 15 minutes (or manual):
 2. **Check in-progress**: Query issues with `tdd-spec:in-progress` label
 3. **If any exist**: Exit (strict serial - one at a time)
 4. **If none**: Pick oldest issue with `tdd-spec:queued` label
-5. **Mark in-progress**: Change label to `tdd-spec:in-progress`
-6. **Auto-invoke Claude**: Post comment with `@claude` mention and implementation instructions
-7. **Exit**: No waiting, queue processor is done (branch and PR created by Claude Code next)
+5. **Validate issue state** (⚠️ NEW - Duplicate Prevention):
+   - Check if issue is still open (not closed)
+   - Check for existing open PRs for this issue
+   - If already closed or has open PR: Skip and post explanation comment
+   - **Result**: Prevents duplicate PRs for same issue (like PR #1545 incident)
+6. **Mark in-progress**: Change label to `tdd-spec:in-progress`
+7. **Auto-invoke Claude**: Post comment with `@claude` mention and implementation instructions
+8. **Exit**: No waiting, queue processor is done (branch and PR created by Claude Code next)
 
 ### Step 3: Automated Implementation (Claude Code)
 
@@ -570,19 +637,103 @@ If a spec finishes successfully but no PR is created within 2 minutes:
 
 **Prevention**: Workflow now enforces PR creation in ALL cases (even if only `.fixme()` removal).
 
+### PR stuck open (ready to merge but not merging) ⚠️ NEW
+
+**Most Common Cause**: Claude Code created PR but didn't enable auto-merge
+
+**Automatic Fix** (via `tdd-queue-stuck-pr-monitor.yml`):
+- Workflow runs every 10 minutes
+- Detects PRs with passing CI and mergeable state but no auto-merge
+- Automatically enables auto-merge after 5 minutes
+- Posts comment explaining intervention
+
+**Manual Check**:
+```bash
+# Check if auto-merge is enabled
+gh pr view {pr-number} --json autoMergeRequest
+
+# If null, enable it manually
+gh pr merge {pr-number} --auto --squash
+
+# Verify it was enabled
+gh pr view {pr-number} --json autoMergeRequest
+```
+
+**Expected output** (if successful):
+```json
+{
+  "enabledAt": "2025-11-03T...",
+  "mergeMethod": "SQUASH"
+}
+```
+
+**Root Causes**:
+- Claude Code workflow incomplete (Step 4B skipped)
+- GitHub API rate limit during auto-merge enablement
+- PR was in UNKNOWN mergeable state temporarily
+
+**Prevention**: Stuck PR Monitor workflow (runs every 10 min) + strengthened Claude Code instructions
+
+### PR has merge conflicts ⚠️ NEW
+
+**Automatic Resolution** (via `tdd-queue-conflict-resolver.yml`):
+- Workflow triggers when main branch updates
+- Detects conflicted PRs automatically
+- Posts @claude mention with rebase instructions
+- Claude Code automatically rebases and resolves conflicts
+- One automatic attempt per PR (prevents infinite loops)
+
+**Manual Resolution** (if automatic fails):
+```bash
+# Fetch latest main
+git fetch origin main:main
+
+# Checkout PR branch
+git checkout {branch-name}
+
+# Rebase onto main
+git rebase origin/main
+
+# Resolve conflicts (if any)
+# - Prioritize incoming changes from main
+# - Keep both changes in test files if possible
+
+# Force push
+git push --force-with-lease
+
+# Verify auto-merge is still enabled
+gh pr view {pr-number} --json autoMergeRequest
+```
+
+**If labeled `needs-manual-resolution`**:
+- Automatic resolution already failed
+- Manual intervention required
+- Issue removed from queue to unblock pipeline
+
 ### Spec stuck in-progress
 
 If a spec has been in-progress for > 90 minutes with no activity:
 
-1. Check if PR has commits:
+**Automatic Recovery** (via `tdd-queue-recovery.yml`):
+- Runs every 30 minutes
+- Re-queues stuck specs automatically
+- Preserves retry count labels
+
+**Manual Check**:
+1. Check if PR exists and has commits:
    ```bash
+   gh pr list --label tdd-automation --state open
    gh pr view {pr-number} --json commits
    ```
-2. Check if validation ran:
+2. Check if PR is stuck without auto-merge:
+   ```bash
+   gh pr view {pr-number} --json autoMergeRequest,mergeable,statusCheckRollup
+   ```
+3. Check if validation ran:
    ```bash
    gh run list --workflow=test.yml --branch "claude/issue-{ISSUE_NUMBER}-*"
    ```
-3. Manually retry or reset:
+4. Manually retry or reset:
    ```bash
    # Reset to queued
    gh issue edit {issue-number} --remove-label "tdd-spec:in-progress"
@@ -693,7 +844,7 @@ If a spec has been in-progress for > 90 minutes with no activity:
 
 - Failed specs are labeled `tdd-spec:failed`
 - Issues remain open for manual review
-- No automatic retries (prevents infinite loops)
+- Automatic retries with retry limit (max 3 attempts)
 - Easy to reset: Change label back to `queued`
 
 ### Branch Protection
@@ -709,6 +860,27 @@ If a spec has been in-progress for > 90 minutes with no activity:
 - **Periodic cleanup**: Weekly safety net removes any missed stale branches
 - **Orphaned branches**: Deleted if >7 days old with no associated PR
 - **Result**: No manual branch cleanup needed, prevents repository clutter
+
+### Pipeline Blocking Prevention ⚠️ NEW (2025-11-03)
+
+Three new safeguards prevent the most common causes of pipeline blocking:
+
+#### 1. Stuck PR Monitor (Every 10 minutes)
+**Problem Solved**: Claude Code creates PR but forgets to enable auto-merge → PR sits open forever
+**Solution**: Automatically enables auto-merge for stuck PRs after 5 minutes
+**Impact**: Prevents pipeline blocking (like PRs #1541, #1546 incidents)
+
+#### 2. Conflict Resolver (On main push + every 15 minutes)
+**Problem Solved**: PRs become conflicted when main advances → PR stuck in CONFLICTING state
+**Solution**: Automatically triggers Claude Code to rebase and resolve conflicts
+**Impact**: Prevents stale PRs and pipeline blocking (like PR #1545 incident)
+
+#### 3. Duplicate PR Prevention (During queue processing)
+**Problem Solved**: Queue processor creates duplicate PRs for already-completed issues
+**Solution**: Validates issue state and checks for existing PRs before processing
+**Impact**: Prevents duplicate work and conflicting PRs
+
+**Combined Result**: Pipeline is now self-healing and requires minimal manual intervention
 
 ## Configuration Options
 
@@ -811,6 +983,14 @@ When updating the queue system:
 
 ---
 
-**Last Updated**: 2025-10-30
-**Version**: 2.0.0 (Queue System)
+**Last Updated**: 2025-11-03
+**Version**: 2.1.0 (Queue System + Self-Healing Safeguards)
 **Status**: Active
+
+**Changelog**:
+- **2025-11-03 (v2.1.0)**: Added three self-healing safeguards to prevent pipeline blocking:
+  - Stuck PR Monitor workflow (auto-enables auto-merge)
+  - Conflict Resolver workflow (auto-resolves merge conflicts)
+  - Duplicate PR Prevention (validates issue state before processing)
+  - Strengthened Claude Code auto-merge instructions (Step 4B with verification)
+- **2025-10-30 (v2.0.0)**: Initial queue system implementation

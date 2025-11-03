@@ -127,6 +127,12 @@
       "given": "nav links with label and href as required",
       "when": "link must have both label and href",
       "then": "it should enforce required properties for valid links"
+    },
+    {
+      "id": "APP-PAGES-LAYOUT-NAVIGATION-NAV-LINKS-REGRESSION-001",
+      "given": "complete application configuration with all features",
+      "when": "user completes full workflow",
+      "then": "user can complete full nav links workflow"
     }
   ]
 }

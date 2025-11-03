@@ -65,6 +65,12 @@
       "given": "complex variable combination",
       "when": "value is '$icon-$size' for dynamic icon sizing",
       "then": "it should support variable composition patterns"
+    },
+    {
+      "id": "APP-PAGES-VARIABLE-REFERENCE-REGRESSION-001",
+      "given": "complete application configuration with all features",
+      "when": "user completes full workflow",
+      "then": "user can complete full variable-reference workflow"
     }
   ]
 }

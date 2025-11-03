@@ -1,0 +1,120 @@
+name: TDD Queue - Stuck PR Monitor
+
+# This workflow monitors for PRs that are stuck in an open state despite:
+# 1. Having all CI checks passing
+# 2. Being mergeable
+# 3. Not having auto-merge enabled
+#
+# This is a safeguard to catch cases where Claude Code creates a PR but
+# fails to enable auto-merge, which would block the entire TDD automation pipeline.
+
+on:
+  schedule:
+    # Run every 10 minutes
+    - cron: '*/10 * * * *'
+  workflow_dispatch: # Allow manual triggering for testing
+
+concurrency:
+  group: tdd-stuck-pr-monitor
+  cancel-in-progress: false
+
+jobs:
+  monitor-stuck-prs:
+    name: Monitor and Fix Stuck PRs
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+      issues: write
+
+    steps:
+      - name: Find and fix stuck PRs
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          echo "🔍 Scanning for stuck PRs..."
+
+          # Get all open tdd-automation PRs
+          OPEN_PRS=$(gh pr list \
+            --repo omnera-dev/omnera-v2 \
+            --label tdd-automation \
+            --state open \
+            --json number,autoMergeRequest,mergeable,statusCheckRollup,createdAt,headRefName \
+            --jq '.[]')
+
+          if [ -z "$OPEN_PRS" ]; then
+            echo "✅ No open tdd-automation PRs found"
+            exit 0
+          fi
+
+          # Process each PR
+          echo "$OPEN_PRS" | jq -c '.' | while IFS= read -r PR; do
+            PR_NUMBER=$(echo "$PR" | jq -r '.number')
+            AUTO_MERGE=$(echo "$PR" | jq -r '.autoMergeRequest')
+            MERGEABLE=$(echo "$PR" | jq -r '.mergeable')
+            CREATED_AT=$(echo "$PR" | jq -r '.createdAt')
+            HEAD_REF=$(echo "$PR" | jq -r '.headRefName')
+
+            echo ""
+            echo "📋 Checking PR #$PR_NUMBER (branch: $HEAD_REF)"
+            echo "   Created: $CREATED_AT"
+            echo "   Mergeable: $MERGEABLE"
+            echo "   Auto-merge: $([ "$AUTO_MERGE" = "null" ] && echo "❌ NOT ENABLED" || echo "✅ Enabled")"
+
+            # Skip if auto-merge is already enabled
+            if [ "$AUTO_MERGE" != "null" ]; then
+              echo "   ✅ Auto-merge already enabled, skipping"
+              continue
+            fi
+
+            # Skip if not mergeable
+            if [ "$MERGEABLE" != "MERGEABLE" ]; then
+              echo "   ⚠️  Not mergeable (status: $MERGEABLE), skipping"
+              continue
+            fi
+
+            # Check if all required checks are passing
+            CHECKS=$(echo "$PR" | jq -r '.statusCheckRollup[]? | select(.name == "Test" or .name == "CodeQL") | select(.conclusion == "SUCCESS" or .conclusion == "SKIPPED") | .name' | wc -l | xargs)
+
+            if [ "$CHECKS" -lt 1 ]; then
+              echo "   ⏳ CI checks not complete yet, skipping"
+              continue
+            fi
+
+            # Calculate PR age in minutes
+            NOW=$(date +%s)
+            CREATED_TIMESTAMP=$(date -d "$CREATED_AT" +%s 2>/dev/null || date -j -f "%Y-%m-%dT%H:%M:%SZ" "$CREATED_AT" +%s 2>/dev/null || echo $NOW)
+            AGE_MINUTES=$(( ($NOW - $CREATED_TIMESTAMP) / 60 ))
+
+            # Only enable auto-merge if PR is older than 5 minutes
+            # This gives Claude Code time to enable it manually
+            if [ $AGE_MINUTES -lt 5 ]; then
+              echo "   ⏳ PR is only $AGE_MINUTES minutes old, waiting for Claude Code to enable auto-merge"
+              continue
+            fi
+
+            # Enable auto-merge for stuck PR
+            echo "   🔧 STUCK PR DETECTED! Enabling auto-merge..."
+            if gh pr merge "$PR_NUMBER" --auto --squash --repo omnera-dev/omnera-v2; then
+              echo "   ✅ Auto-merge enabled successfully for PR #$PR_NUMBER"
+
+              # Add a comment explaining what happened
+              gh pr comment "$PR_NUMBER" --repo omnera-dev/omnera-v2 --body "🤖 **Stuck PR Monitor**
+
+This PR was stuck in an open state despite having all checks passing and being mergeable.
+
+Auto-merge has been automatically enabled by the stuck PR monitor workflow.
+
+**Details**:
+- PR age: $AGE_MINUTES minutes
+- Mergeable status: $MERGEABLE
+- CI checks: Passing ✅
+
+The PR will now merge automatically when all requirements are met."
+            else
+              echo "   ❌ Failed to enable auto-merge for PR #$PR_NUMBER"
+            fi
+          done
+
+          echo ""
+          echo "✅ Stuck PR monitoring complete"
