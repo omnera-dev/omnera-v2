@@ -118,6 +118,12 @@
       "given": "a CTA button with all optional properties",
       "when": "variant, size, color, icon, iconPosition are set",
       "then": "it should support fully customized button appearance"
+    },
+    {
+      "id": "APP-PAGES-LAYOUT-NAVIGATION-CTA_BUTTON-REGRESSION-001",
+      "given": "complete application configuration with all features",
+      "when": "user completes full workflow",
+      "then": "user can complete full CTA button workflow"
     }
   ]
 }

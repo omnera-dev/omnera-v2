@@ -477,6 +477,12 @@
           "Nesting structure matches Bootstrap-like grid system"
         ]
       }
+    },
+    {
+      "id": "APP-BLOCKS-BLOCK_CHILDREN-REGRESSION-001",
+      "given": "complete application configuration with all features",
+      "when": "user completes full workflow",
+      "then": "user can complete full children workflow"
     }
   ]
 }

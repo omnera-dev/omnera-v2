@@ -789,6 +789,12 @@
           "All: sticky + collapsible for optimal UX"
         ]
       }
+    },
+    {
+      "id": "APP-PAGES-LAYOUT-SIDEBAR-SIDEBAR-REGRESSION-001",
+      "given": "complete application configuration with all features",
+      "when": "user completes full workflow",
+      "then": "user can complete full sidebar workflow"
     }
   ]
 }

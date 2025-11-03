@@ -74,6 +74,12 @@
       "given": "DNS prefetch performance benefit",
       "when": "domains are resolved before actual requests",
       "then": "it should improve perceived page load speed"
+    },
+    {
+      "id": "APP-PAGES-META-PERFORMANCE-DNS_PREFETCH-REGRESSION-001",
+      "given": "complete application configuration with all features",
+      "when": "user completes full workflow",
+      "then": "user can complete full DNS prefetch workflow"
     }
   ]
 }

@@ -302,6 +302,12 @@
           "Minimal configuration works correctly"
         ]
       }
+    },
+    {
+      "id": "APP-LANGUAGES-LANGUAGE_CONFIG-REGRESSION-001",
+      "given": "complete application configuration with all features",
+      "when": "user completes full workflow",
+      "then": "user can complete full language-config workflow"
     }
   ]
 }

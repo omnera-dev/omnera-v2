@@ -200,6 +200,12 @@
       "given": "EducationEvent for event discovery",
       "when": "EducationEvent structured data is included in page metadata",
       "then": "it should display event in Google Search, Maps, and event discovery features"
+    },
+    {
+      "id": "APP-PAGES-META-STRUCTURED_DATA-EDUCATION_EVENT-REGRESSION-001",
+      "given": "complete application configuration with all features",
+      "when": "user completes full workflow",
+      "then": "user can complete full Education Event workflow"
     }
   ]
 }

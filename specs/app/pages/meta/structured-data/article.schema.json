@@ -180,6 +180,12 @@
       "given": "Article for content attribution",
       "when": "Article structured data is included in blog posts",
       "then": "it should properly attribute content to authors and publishers"
+    },
+    {
+      "id": "APP-PAGES-META-STRUCTURED_DATA-ARTICLE-REGRESSION-001",
+      "given": "complete application configuration with all features",
+      "when": "user completes full workflow",
+      "then": "user can complete full Article workflow"
     }
   ]
 }

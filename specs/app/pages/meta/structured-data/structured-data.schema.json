@@ -106,6 +106,12 @@
       "given": "structured data for search engine understanding",
       "when": "Schema.org types are included in page metadata",
       "then": "it should enable rich search results and enhanced SERP display"
+    },
+    {
+      "id": "APP-PAGES-META-STRUCTURED_DATA-STRUCTURED_DATA-REGRESSION-001",
+      "given": "complete application configuration with all features",
+      "when": "user completes full workflow",
+      "then": "user can complete full structured data workflow"
     }
   ]
 }

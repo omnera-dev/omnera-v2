@@ -1157,6 +1157,12 @@
           "Rich content pages supported"
         ]
       }
+    },
+    {
+      "id": "APP-PAGES-SECTIONS-SECTIONS-REGRESSION-001",
+      "given": "complete application configuration with all features",
+      "when": "user completes full workflow",
+      "then": "user can complete full Page Sections workflow"
     }
   ]
 }

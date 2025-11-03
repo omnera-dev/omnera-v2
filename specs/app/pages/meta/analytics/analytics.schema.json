@@ -696,6 +696,12 @@
           "Pricing: Free (1M events/month), paid plans from $0.00031/event"
         ]
       }
+    },
+    {
+      "id": "APP-PAGES-META-ANALYTICS-ANALYTICS-REGRESSION-001",
+      "given": "complete application configuration with all features",
+      "when": "user completes full workflow",
+      "then": "user can complete full analytics workflow"
     }
   ]
 }

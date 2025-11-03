@@ -571,6 +571,12 @@
           "Blocks rendered because custom page sections reference them, NOT because of DefaultHomePage"
         ]
       }
+    },
+    {
+      "id": "APP-PAGES-PATH-PATH-REGRESSION-001",
+      "given": "complete application configuration with all features",
+      "when": "user completes full workflow",
+      "then": "user can complete full path workflow"
     }
   ]
 }

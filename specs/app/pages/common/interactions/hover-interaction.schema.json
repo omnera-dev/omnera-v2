@@ -120,6 +120,12 @@
       "given": "a component with hover opacity set to minimum (0.0)",
       "when": "user hovers over the component",
       "then": "it should become completely transparent"
+    },
+    {
+      "id": "APP-PAGES-INTERACTIONS-HOVER_INTERACTION-REGRESSION-001",
+      "given": "complete application configuration with all features",
+      "when": "user completes full workflow",
+      "then": "user can complete full hover interaction workflow"
     }
   ]
 }

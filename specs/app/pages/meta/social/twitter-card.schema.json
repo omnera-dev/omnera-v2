@@ -713,6 +713,12 @@
           "Professional Twitter presence"
         ]
       }
+    },
+    {
+      "id": "APP-PAGES-META-SOCIAL-TWITTER_CARD-REGRESSION-001",
+      "given": "complete application configuration with all features",
+      "when": "user completes full workflow",
+      "then": "user can complete full Twitter Card workflow"
     }
   ]
 }

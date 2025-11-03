@@ -335,6 +335,12 @@
           "Props enable complete component customization"
         ]
       }
+    },
+    {
+      "id": "APP-BLOCKS-BLOCK_PROPS-REGRESSION-001",
+      "given": "complete application configuration with all features",
+      "when": "user completes full workflow",
+      "then": "user can complete full props workflow"
     }
   ]
 }

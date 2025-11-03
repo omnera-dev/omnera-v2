@@ -136,6 +136,12 @@
       "given": "Person for knowledge graph",
       "when": "complete person data is provided",
       "then": "it should enable Google Knowledge Graph panel for notable persons"
+    },
+    {
+      "id": "APP-PAGES-META-STRUCTURED_DATA-PERSON-REGRESSION-001",
+      "given": "complete application configuration with all features",
+      "when": "user completes full workflow",
+      "then": "user can complete full Person workflow"
     }
   ]
 }

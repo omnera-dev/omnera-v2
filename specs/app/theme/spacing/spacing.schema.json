@@ -286,6 +286,12 @@
           "Modern flex gap property"
         ]
       }
+    },
+    {
+      "id": "APP-THEME-SPACING-SPACING-REGRESSION-001",
+      "given": "complete application configuration with all features",
+      "when": "user completes full workflow",
+      "then": "user can complete full spacing workflow"
     }
   ]
 }

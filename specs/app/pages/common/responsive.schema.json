@@ -162,6 +162,12 @@
       "given": "a navigation menu with visible true on mobile, different children on desktop",
       "when": "switching between mobile and desktop views",
       "then": "mobile should show hamburger menu, desktop should show full navigation links"
+    },
+    {
+      "id": "APP-PAGES-RESPONSIVE-REGRESSION-001",
+      "given": "complete application configuration with all features",
+      "when": "user completes full workflow",
+      "then": "user can complete full responsive workflow"
     }
   ]
 }

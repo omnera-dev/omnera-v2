@@ -370,6 +370,12 @@
           "Systematic gray scale creates depth hierarchy"
         ]
       }
+    },
+    {
+      "id": "APP-THEME-COLORS-COLORS-REGRESSION-001",
+      "given": "complete application configuration with all features",
+      "when": "user completes full workflow",
+      "then": "user can complete full colors workflow"
     }
   ]
 }

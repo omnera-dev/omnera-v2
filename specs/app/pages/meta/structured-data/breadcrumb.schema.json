@@ -125,6 +125,12 @@
       "given": "BreadcrumbList for navigation UX",
       "when": "breadcrumb shows user's location in site",
       "then": "it should improve navigation and reduce bounce rate"
+    },
+    {
+      "id": "APP-PAGES-META-STRUCTURED_DATA-BREADCRUMB-REGRESSION-001",
+      "given": "complete application configuration with all features",
+      "when": "user completes full workflow",
+      "then": "user can complete full Breadcrumb workflow"
     }
   ]
 }

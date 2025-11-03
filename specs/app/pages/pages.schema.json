@@ -1590,6 +1590,12 @@
           "Result: Maintainable, scalable, consistent page-building system"
         ]
       }
+    },
+    {
+      "id": "APP-PAGES-PAGES-REGRESSION-001",
+      "given": "complete application configuration with all features",
+      "when": "user completes full workflow",
+      "then": "user can complete full pages workflow"
     }
   ]
 }
