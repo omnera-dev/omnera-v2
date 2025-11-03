@@ -76,7 +76,7 @@ test.describe('Color Palette', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-THEME-COLORS-002: should validate 8-digit hex colors with opacity at build time',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -125,7 +125,7 @@ test.describe('Color Palette', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-THEME-COLORS-003: should validate rgb color format at build time',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
