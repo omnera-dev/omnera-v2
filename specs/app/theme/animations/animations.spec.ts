@@ -120,7 +120,7 @@ test.describe('Animation Configuration', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-THEME-ANIMATIONS-004: should validate animation delay',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
