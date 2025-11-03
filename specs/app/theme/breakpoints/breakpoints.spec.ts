@@ -190,7 +190,7 @@ test.describe('Breakpoints', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-THEME-BREAKPOINTS-006: should validate consistency across responsive system',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
