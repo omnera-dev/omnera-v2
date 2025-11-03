@@ -228,7 +228,11 @@
       const newPath = `/${code}${pathWithoutLang}`
 
       // Navigate to new language URL (preserves query params and hash)
-      window.location.href = newPath + window.location.search + window.location.hash
+      // Security: Use URL API to safely construct URL and prevent XSS
+      const newUrl = new URL(newPath, window.location.origin)
+      newUrl.search = window.location.search
+      newUrl.hash = window.location.hash
+      window.location.href = newUrl.href
       return
     }
 
