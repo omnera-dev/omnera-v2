@@ -134,6 +134,48 @@
           "data-testid attributes directly match block names: 'block-{name}'",
           "Kebab-case enables clean, predictable CSS selectors"
         ]
+      },
+      "application": {
+        "blocks": [
+          {
+            "name": "icon-badge",
+            "type": "badge"
+          },
+          {
+            "name": "section-header",
+            "type": "container"
+          },
+          {
+            "name": "feature-card",
+            "type": "card"
+          }
+        ],
+        "pages": [
+          {
+            "name": "Home",
+            "path": "/",
+            "sections": [
+              {
+                "block": "icon-badge"
+              },
+              {
+                "block": "section-header"
+              },
+              {
+                "block": "feature-card"
+              }
+            ]
+          }
+        ],
+        "expectedDOM": "<div data-testid=\"block-icon-badge\"></div><div data-testid=\"block-section-header\"></div><div data-testid=\"block-feature-card\"></div>",
+        "assertions": [
+          "Kebab-case naming: 'icon-badge', 'section-header', 'feature-card'",
+          "Lowercase with hyphens (no spaces, no underscores, no uppercase)",
+          "data-testid follows pattern: 'block-{name}'",
+          "URL-friendly: Can be used in CSS selectors, URLs, file names",
+          "Predictable: [data-testid='block-icon-badge'] selector works reliably",
+          "Naming convention enforced by schema pattern ^[a-z][a-z0-9-]*$"
+        ]
       }
     },
     {
@@ -151,6 +193,48 @@
           "Invalid: 'Icon-Badge' (uppercase), 'cta_button' (underscore), 'section header' (space)",
           "Invalid: '2-columns' (starts with digit), '' (empty string)",
           "Pattern enforces: start with lowercase letter, only lowercase/digits/hyphens"
+        ]
+      },
+      "application": {
+        "blocks": [
+          {
+            "name": "cta",
+            "type": "button"
+          },
+          {
+            "name": "section-header-2",
+            "type": "container"
+          },
+          {
+            "name": "feature-list-item",
+            "type": "flex"
+          }
+        ],
+        "pages": [
+          {
+            "name": "Home",
+            "path": "/",
+            "sections": [
+              {
+                "block": "cta"
+              },
+              {
+                "block": "section-header-2"
+              },
+              {
+                "block": "feature-list-item"
+              }
+            ]
+          }
+        ],
+        "expectedDOM": "<button data-testid=\"block-cta\"></button><div data-testid=\"block-section-header-2\"></div><div data-testid=\"block-feature-list-item\"></div>",
+        "assertions": [
+          "Pattern ^[a-z][a-z0-9-]*$ enforced at build time",
+          "Valid: 'cta' (short, lowercase)",
+          "Valid: 'section-header-2' (multiple hyphens, ending with digit)",
+          "Valid: 'feature-list-item' (multi-word, descriptive)",
+          "Build fails if invalid names used (uppercase, underscores, spaces, starting with digit)",
+          "Pattern ensures: URL-safe, CSS-safe, predictable naming"
         ]
       }
     },
@@ -193,6 +277,72 @@
           "Each block renders with data-type attribute matching type property",
           "Type determines base HTML element (div, span, button, etc.)",
           "Type also controls CSS classes and behavior (flexbox, grid, card styles)"
+        ]
+      },
+      "application": {
+        "blocks": [
+          {
+            "name": "layout",
+            "type": "container"
+          },
+          {
+            "name": "row",
+            "type": "flex"
+          },
+          {
+            "name": "columns",
+            "type": "grid"
+          },
+          {
+            "name": "panel",
+            "type": "card"
+          },
+          {
+            "name": "heading",
+            "type": "text"
+          },
+          {
+            "name": "cta",
+            "type": "button"
+          }
+        ],
+        "pages": [
+          {
+            "name": "Home",
+            "path": "/",
+            "sections": [
+              {
+                "block": "layout"
+              },
+              {
+                "block": "row"
+              },
+              {
+                "block": "columns"
+              },
+              {
+                "block": "panel"
+              },
+              {
+                "block": "heading"
+              },
+              {
+                "block": "cta"
+              }
+            ]
+          }
+        ],
+        "expectedDOM": "<div data-testid=\"block-layout\" data-type=\"container\"></div><div data-testid=\"block-row\" data-type=\"flex\"></div><div data-testid=\"block-columns\" data-type=\"grid\"></div><div data-testid=\"block-panel\" data-type=\"card\"></div><span data-testid=\"block-heading\" data-type=\"text\"></span><button data-testid=\"block-cta\" data-type=\"button\"></button>",
+        "assertions": [
+          "Type property determines HTML element and behavior",
+          "container → div (generic container)",
+          "flex → div with display: flex (flexbox layout)",
+          "grid → div with display: grid (grid layout)",
+          "card → div with card styling (bordered, shadowed container)",
+          "text → span or p (text content)",
+          "button → button (interactive element)",
+          "data-type attribute preserves type for CSS styling and JS behavior",
+          "Type enables semantic, layout-specific blocks"
         ]
       }
     },
@@ -538,6 +688,59 @@
           "Icon SVG has data-testid='icon-check-circle' and data-color='green'",
           "Text span contains 'Feature enabled'"
         ]
+      },
+      "application": {
+        "blocks": [
+          {
+            "name": "feature-list-item",
+            "type": "flex",
+            "props": {
+              "align": "start",
+              "gap": 3
+            },
+            "children": [
+              {
+                "type": "icon",
+                "props": {
+                  "name": "$icon",
+                  "color": "$iconColor"
+                }
+              },
+              {
+                "type": "text",
+                "content": "$text"
+              }
+            ]
+          }
+        ],
+        "pages": [
+          {
+            "name": "Features",
+            "path": "/features",
+            "sections": [
+              {
+                "block": "feature-list-item",
+                "vars": {
+                  "icon": "check-circle",
+                  "iconColor": "green",
+                  "text": "Feature enabled"
+                }
+              }
+            ]
+          }
+        ],
+        "expectedDOM": "<div data-testid=\"block-feature-list-item\" class=\"flex items-start gap-3\"><svg data-testid=\"icon-check-circle\" data-color=\"green\"></svg><span>Feature enabled</span></div>",
+        "assertions": [
+          "Example from documentation: feature-list-item block",
+          "Type 'flex' renders as flexbox container",
+          "Props: align='start' (items-start), gap=3 (gap-3)",
+          "Children: icon + text components",
+          "Icon child: type='icon' with $icon and $iconColor variables",
+          "Text child: type='text' with $text content",
+          "Variable substitution: $icon → 'check-circle', $iconColor → 'green', $text → 'Feature enabled'",
+          "Real-world use case: Feature lists, benefit lists, checkmark items",
+          "Reusable pattern: Same block for all feature items with different icons/text"
+        ]
       }
     },
     {
@@ -800,6 +1003,47 @@
           "Template: '$price/month' → Instance: '49/month'",
           "All $variable placeholders replaced with vars values",
           "Final DOM contains no $ symbols or placeholder text"
+        ]
+      },
+      "application": {
+        "blocks": [
+          {
+            "name": "pricing-badge",
+            "type": "badge",
+            "props": {
+              "className": "badge-$color"
+            },
+            "content": "$price/month"
+          }
+        ],
+        "pages": [
+          {
+            "name": "Pricing",
+            "path": "/pricing",
+            "sections": [
+              {
+                "block": "pricing-badge",
+                "vars": {
+                  "color": "gold",
+                  "price": "49"
+                }
+              }
+            ]
+          }
+        ],
+        "expectedDOM": "<div data-testid=\"block-pricing-badge\" class=\"badge-gold\">49/month</div>",
+        "assertions": [
+          "Block template instantiation: template + vars = concrete instance",
+          "Template definition: className='badge-$color', content='$price/month'",
+          "Reference with vars: color='gold', price='49'",
+          "Instantiation process:",
+          "  Step 1: Start with template (has $variables)",
+          "  Step 2: Apply vars from reference",
+          "  Step 3: Replace all $variable occurrences",
+          "Result: className 'badge-$color' → 'badge-gold'",
+          "Result: content '$price/month' → '49/month'",
+          "Final DOM has NO $ symbols or placeholder text",
+          "Clean transformation: template → instance"
         ]
       }
     },
