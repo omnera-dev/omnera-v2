@@ -849,7 +849,7 @@ test.describe('Languages Configuration', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-LANGUAGES-015: should resolve translation keys from centralized translations dictionary',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -867,12 +867,24 @@ test.describe('Languages Configuration', () => {
             'fr-FR': { 'common.save': 'Enregistrer' },
           },
         },
+        blocks: [
+          {
+            name: 'language-switcher',
+            type: 'language-switcher',
+            props: {
+              variant: 'dropdown',
+            },
+          },
+        ],
         pages: [
           {
-            name: 'Test',
+            name: 'test',
             path: '/',
-            meta: { lang: 'en-US', title: 'Test' },
-            sections: [{ type: 'button', children: ['$t:common.save'] }],
+            meta: { lang: 'en-US', title: 'Test', description: 'Test page' },
+            sections: [
+              { block: 'language-switcher' },
+              { type: 'button', children: ['$t:common.save'] },
+            ],
           },
         ],
       })
@@ -881,12 +893,12 @@ test.describe('Languages Configuration', () => {
       await page.goto('/')
 
       // THEN: it should resolve translation keys from centralized translations dictionary
-      await expect(page.locator('button')).toHaveText('Save')
+      await expect(page.getByRole('button', { name: 'Save' })).toHaveText('Save')
 
       // Switch to French
       await page.locator('[data-testid="language-switcher"]').click()
       await page.locator('[data-testid="language-option-fr-FR"]').click()
-      await expect(page.locator('button')).toHaveText('Enregistrer')
+      await expect(page.getByRole('button', { name: 'Enregistrer' })).toHaveText('Enregistrer')
     }
   )
 
