@@ -24,7 +24,7 @@ test.describe('Theme Configuration', () => {
   // One test per spec in schema - defines EXHAUSTIVE acceptance criteria
   // ============================================================================
 
-  test.fixme(
+  test(
     'APP-THEME-001: should validate theme with colors as the only design token category',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -84,7 +84,7 @@ test.describe('Theme Configuration', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-THEME-002: should validate color palette and typography system',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -130,11 +130,11 @@ test.describe('Theme Configuration', () => {
       const primaryColor = await page
         .locator('[data-testid="color-primary"]')
         .evaluate((el) => window.getComputedStyle(el).backgroundColor)
-      expect(primaryColor).toContain('7, 123, 255') // rgb(7, 123, 255) = #007bff
+      expect(primaryColor).toContain('0, 123, 255') // rgb(0, 123, 255) = #007bff
     }
   )
 
-  test.fixme(
+  test(
     'APP-THEME-003: should validate visual identity, typography, and layout tokens',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -174,7 +174,7 @@ test.describe('Theme Configuration', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-THEME-004: should validate and orchestrate all design token categories',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
