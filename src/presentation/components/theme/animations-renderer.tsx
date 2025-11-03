@@ -51,11 +51,46 @@ export function AnimationsRenderer({
           )
         }
 
-        // Apply CSS animation string directly
-        const animationStyle: React.CSSProperties =
-          typeof config === 'string'
-            ? { animation: config, width: '1px', height: '1px' }
-            : { width: '1px', height: '1px' }
+        // Build style based on config type (immutable)
+        const animationStyle: React.CSSProperties = (() => {
+          const baseStyle = { width: '1px', height: '1px' }
+
+          if (typeof config === 'string') {
+            // Apply CSS animation string directly
+            return { ...baseStyle, animation: config }
+          }
+
+          if (typeof config === 'object') {
+            // Build animation/transition from object properties
+            // For transition-like animations, use transition property
+            if (config.duration || config.easing) {
+              const duration = config.duration || '0s'
+              const easing = config.easing || 'ease'
+              const delay = config.delay || '0s'
+
+              return {
+                ...baseStyle,
+                transition: `all ${duration} ${easing} ${delay}`.trim(),
+              }
+            }
+
+            // If keyframes are defined, build animation property
+            if (config.keyframes) {
+              const parts = [
+                config.duration,
+                config.easing,
+                config.delay,
+              ].filter((part): part is string => part !== undefined)
+
+              return {
+                ...baseStyle,
+                animation: `${name} ${parts.join(' ')}`.trim(),
+              }
+            }
+          }
+
+          return baseStyle
+        })()
 
         return (
           <div
