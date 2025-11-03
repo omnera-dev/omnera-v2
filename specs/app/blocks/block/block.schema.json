@@ -228,6 +228,45 @@
           "ariaLabel substituted: '$label' → 'Main content'",
           "All prop values support variable substitution"
         ]
+      },
+      "application": {
+        "blocks": [
+          {
+            "name": "styled-box",
+            "type": "div",
+            "props": {
+              "className": "box-$variant",
+              "id": "$boxId",
+              "ariaLabel": "$label"
+            }
+          }
+        ],
+        "pages": [
+          {
+            "name": "Home",
+            "path": "/",
+            "sections": [
+              {
+                "block": "styled-box",
+                "vars": {
+                  "variant": "primary",
+                  "boxId": "main-box",
+                  "label": "Main content"
+                }
+              }
+            ]
+          }
+        ],
+        "expectedDOM": "<div data-testid=\"block-styled-box\" class=\"box-primary\" id=\"main-box\" aria-label=\"Main content\"></div>",
+        "assertions": [
+          "Block template defines props with $variable placeholders",
+          "Page section references block with vars object",
+          "Variable substitution: className 'box-$variant' → 'box-primary'",
+          "Variable substitution: id '$boxId' → 'main-box'",
+          "Variable substitution: ariaLabel '$label' → 'Main content'",
+          "Props enable dynamic, reusable block templates",
+          "Same block can be reused with different vars"
+        ]
       }
     },
     {
@@ -272,6 +311,55 @@
           "Child content substituted from vars (title, subtitle)",
           "Nested structure maintained in DOM"
         ]
+      },
+      "application": {
+        "blocks": [
+          {
+            "name": "card-header",
+            "type": "div",
+            "children": [
+              {
+                "type": "text",
+                "props": {
+                  "level": "h3"
+                },
+                "content": "$title"
+              },
+              {
+                "type": "text",
+                "props": {
+                  "level": "p"
+                },
+                "content": "$subtitle"
+              }
+            ]
+          }
+        ],
+        "pages": [
+          {
+            "name": "Home",
+            "path": "/",
+            "sections": [
+              {
+                "block": "card-header",
+                "vars": {
+                  "title": "Card Title",
+                  "subtitle": "Card subtitle"
+                }
+              }
+            ]
+          }
+        ],
+        "expectedDOM": "<div data-testid=\"block-card-header\"><h3>Card Title</h3><p>Card subtitle</p></div>",
+        "assertions": [
+          "Block template defines children array with nested components",
+          "Parent div renders with data-testid='block-card-header'",
+          "First child: h3 element with $title variable",
+          "Second child: p element with $subtitle variable",
+          "Variable substitution: '$title' → 'Card Title', '$subtitle' → 'Card subtitle'",
+          "Nested structure preserved in final DOM",
+          "Children enable block composition and hierarchy"
+        ]
       }
     },
     {
@@ -301,6 +389,41 @@
           "Div has data-testid='block-alert-message'",
           "Content substituted: '$message' → 'Operation successful!'",
           "Text content rendered inside div element"
+        ]
+      },
+      "application": {
+        "blocks": [
+          {
+            "name": "alert-message",
+            "type": "div",
+            "props": {
+              "className": "alert"
+            },
+            "content": "$message"
+          }
+        ],
+        "pages": [
+          {
+            "name": "Home",
+            "path": "/",
+            "sections": [
+              {
+                "block": "alert-message",
+                "vars": {
+                  "message": "Operation successful!"
+                }
+              }
+            ]
+          }
+        ],
+        "expectedDOM": "<div data-testid=\"block-alert-message\" class=\"alert\">Operation successful!</div>",
+        "assertions": [
+          "Block template defines content property with $variable placeholder",
+          "Div renders with className='alert' and data-testid='block-alert-message'",
+          "Variable substitution: content '$message' → 'Operation successful!'",
+          "Text content rendered as inner text of div element",
+          "Content property simpler than children for plain text blocks",
+          "Same block reusable with different message vars"
         ]
       }
     },
