@@ -40,7 +40,7 @@ jobs:
       - name: Find conflicted PRs
         id: find-conflicts
         env:
-          GH_TOKEN: ${{ github.token }}
+          GH_TOKEN: ${{ secrets.GH_PAT_WORKFLOW || github.token }}
         run: |
           echo "🔍 Scanning for conflicted PRs..."
 
@@ -65,7 +65,7 @@ jobs:
       - name: Resolve conflicts with Claude Code
         if: steps.find-conflicts.outputs.has_conflicts == 'true'
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.GH_PAT_WORKFLOW || github.token }}
         run: |
           echo "🤖 Triggering Claude Code to resolve conflicts..."
 
