@@ -24,7 +24,7 @@ test.describe('Color Palette', () => {
   // One test per spec in schema - defines EXHAUSTIVE acceptance criteria
   // ============================================================================
 
-  test.fixme(
+  test(
     'APP-THEME-COLORS-001: should validate 6-digit hex colors at build time',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
