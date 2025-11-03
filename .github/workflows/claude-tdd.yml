@@ -326,16 +326,8 @@ jobs:
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
           additional_permissions: |
             actions: read
-          prompt: >-
-            Implement TDD spec with 7-step workflow:
-            1) Run @agent-e2e-test-fixer to fix the test
-            2) Run @agent-codebase-refactor-auditor to refactor code (ALWAYS)
-            3) Commit changes (bun run license first)
-            4) ALWAYS create PR to main with tdd-automation label and include "Closes #${{ steps.issue.outputs.issue_number }}" in PR body - REQUIRED even if only .fixme() removal, NO EXCEPTIONS
-            5) Monitor test.yml validation - if fails, analyze errors, fix, push, retry (max 3 attempts with retry:N labels) - if 3 failures, mark issue tdd-spec:failed and exit
-            6) BEFORE enabling auto-merge, check for conflicts: fetch latest main and attempt rebase - if conflicts exist, resolve intelligently by merging both changes (e.g. add both props, combine logic), then re-run validation - use git push --force-with-lease after rebase
-            7) After validation passes, enable PR auto-merge with --squash
-            8) DO NOT close issue manually (closes automatically on PR merge).
+          # NO prompt field - Claude Code will read the @claude comment naturally
+          # This allows the queue processor's detailed instructions to be used
           claude_args: '--agents e2e-test-fixer codebase-refactor-auditor --dangerously-skip-permissions'
 
       - name: Detect error type
