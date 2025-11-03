@@ -49,61 +49,105 @@
       "id": "APP-PAGES-PROPS-001",
       "given": "props with string value",
       "when": "className is 'text-center mb-4'",
-      "then": "it should accept string property"
+      "then": "it should accept string property",
+      "application": {
+        "component": {"type": "div", "props": {"className": "text-center mb-4"}},
+        "assertions": ["String props: className='text-center mb-4'", "Used for: CSS classes, IDs, text"]
+      }
     },
     {
       "id": "APP-PAGES-PROPS-002",
       "given": "props with number value",
       "when": "size is 16",
-      "then": "it should accept numeric property"
+      "then": "it should accept numeric property",
+      "application": {
+        "component": {"type": "div", "props": {"size": 16, "maxItems": 100}},
+        "assertions": ["Numeric props: size=16, maxItems=100", "Used for: dimensions, counts, indexes"]
+      }
     },
     {
       "id": "APP-PAGES-PROPS-003",
       "given": "props with boolean value",
       "when": "enabled is true",
-      "then": "it should accept boolean property"
+      "then": "it should accept boolean property",
+      "application": {
+        "component": {"type": "button", "props": {"enabled": true, "visible": false}},
+        "assertions": ["Boolean props: enabled=true, visible=false", "Used for: flags, toggles, visibility"]
+      }
     },
     {
       "id": "APP-PAGES-PROPS-004",
       "given": "props with object value",
       "when": "style is { padding: '1rem', margin: '2rem' }",
-      "then": "it should accept nested object property"
+      "then": "it should accept nested object property",
+      "application": {
+        "component": {"type": "div", "props": {"style": {"padding": "1rem", "margin": "2rem"}}},
+        "assertions": ["Object props: Nested structures", "Used for: styles, config, metadata"]
+      }
     },
     {
       "id": "APP-PAGES-PROPS-005",
       "given": "props with array value",
       "when": "items is ['one', 'two', 'three']",
-      "then": "it should accept array property"
+      "then": "it should accept array property",
+      "application": {
+        "component": {"type": "list", "props": {"items": ["one", "two", "three"]}},
+        "assertions": ["Array props: items=['one', 'two', 'three']", "Used for: lists, collections, options"]
+      }
     },
     {
       "id": "APP-PAGES-PROPS-006",
       "given": "props with variable reference",
       "when": "text is 'Welcome to $siteName'",
-      "then": "it should accept string with $variable syntax"
+      "then": "it should accept string with $variable syntax",
+      "application": {
+        "component": {"type": "div", "props": {"text": "Welcome to $siteName"}},
+        "substitution": {"before": "Welcome to $siteName", "after": "Welcome to Omnera", "vars": {"siteName": "Omnera"}},
+        "assertions": ["Variable references: $siteName → Omnera", "Runtime substitution"]
+      }
     },
     {
       "id": "APP-PAGES-PROPS-007",
       "given": "props with multiple properties of different types",
       "when": "object has className (string), size (number), enabled (boolean)",
-      "then": "it should support mixed property types"
+      "then": "it should support mixed property types",
+      "application": {
+        "component": {"type": "div", "props": {"className": "text-center", "size": 16, "enabled": true}},
+        "assertions": ["Mixed types: string + number + boolean", "Flexible prop values"]
+      }
     },
     {
       "id": "APP-PAGES-PROPS-008",
       "given": "props with camelCase property names",
       "when": "properties are maxWidth, minHeight, backgroundColor",
-      "then": "it should validate camelCase naming convention"
+      "then": "it should validate camelCase naming convention",
+      "application": {
+        "component": {"type": "div", "props": {"maxWidth": "100%", "minHeight": "50px", "backgroundColor": "#fff"}},
+        "pattern": "^[a-zA-Z][a-zA-Z0-9]*$",
+        "assertions": ["camelCase names: maxWidth, minHeight, backgroundColor", "JavaScript naming convention"]
+      }
     },
     {
       "id": "APP-PAGES-PROPS-009",
       "given": "props object referencing theme tokens",
       "when": "color is '$primaryColor' and text is 'Hello $userName'",
-      "then": "it should support multiple variable references across properties"
+      "then": "it should support multiple variable references across properties",
+      "application": {
+        "component": {"type": "div", "props": {"color": "$primaryColor", "text": "Hello $userName"}},
+        "variables": {"primaryColor": "#007bff", "userName": "John"},
+        "result": {"color": "#007bff", "text": "Hello John"},
+        "assertions": ["Multiple variables: $primaryColor, $userName", "Theme tokens + dynamic data"]
+      }
     },
     {
       "id": "APP-PAGES-PROPS-010",
       "given": "empty props object",
       "when": "no properties are provided",
-      "then": "it should accept empty object for components without props"
+      "then": "it should accept empty object for components without props",
+      "application": {
+        "component": {"type": "div", "props": {}},
+        "assertions": ["Empty props: {} valid", "Optional properties", "Components without configuration"]
+      }
     },
     {
       "id": "APP-PAGES-PROPS-REGRESSION-011",
