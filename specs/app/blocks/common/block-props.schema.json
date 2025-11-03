@@ -65,6 +65,41 @@
           "Invalid: 'class-name' (hyphen), '1stProperty' (starts with digit), '' (empty)",
           "PatternProperties enable any component prop without predefined schema"
         ]
+      },
+      "application": {
+        "blocks": [
+          {
+            "name": "flexible-component",
+            "type": "div",
+            "props": {
+              "className": "text-blue",
+              "id": "main",
+              "ariaLabel": "Main content",
+              "dataTestId": "component-1",
+              "onClick": "handleClick"
+            }
+          }
+        ],
+        "pages": [
+          {
+            "name": "Demo",
+            "path": "/demo",
+            "sections": [
+              {
+                "block": "flexible-component",
+                "vars": {}
+              }
+            ]
+          }
+        ],
+        "expectedDOM": "<div data-testid=\"block-flexible-component\" class=\"text-blue\" id=\"main\" aria-label=\"Main content\" data-test-id=\"component-1\" onclick=\"handleClick\"></div>",
+        "assertions": [
+          "PatternProperties: Flexible prop names (no predefined schema)",
+          "Valid: className, id, ariaLabel, dataTestId, onClick (camelCase)",
+          "Invalid: 'class-name' (hyphen), '1stProperty' (digit), '' (empty)",
+          "Pattern: ^[a-zA-Z][a-zA-Z0-9]*$ (JavaScript naming)",
+          "Enables any component prop without schema updates"
+        ]
       }
     },
     {
@@ -72,9 +107,9 @@
       "given": "property names in camelCase",
       "when": "property names match ^[a-zA-Z][a-zA-Z0-9]*$ pattern",
       "then": "it should render as HTML attributes following camelCase convention",
-      "x-test": {
-        "setup": {
-          "blockDefinition": {
+      "application": {
+        "blocks": [
+          {
             "name": "custom-button",
             "type": "button",
             "props": {
@@ -83,13 +118,26 @@
               "dataTestId": "submit-btn"
             }
           }
-        },
+        ],
+        "pages": [
+          {
+            "name": "Form",
+            "path": "/form",
+            "sections": [
+              {
+                "block": "custom-button",
+                "vars": {}
+              }
+            ]
+          }
+        ],
         "expectedDOM": "<button data-testid=\"block-custom-button\" class=\"btn-primary\" aria-label=\"Click me\" data-test-id=\"submit-btn\"></button>",
         "assertions": [
-          "className (camelCase) → class attribute",
-          "ariaLabel (camelCase) → aria-label attribute (kebab-case)",
-          "dataTestId (camelCase) → data-test-id attribute (kebab-case)",
-          "CamelCase props convert to kebab-case HTML attributes"
+          "CamelCase naming: JavaScript convention for props",
+          "className (camelCase) → class (HTML attribute)",
+          "ariaLabel (camelCase) → aria-label (kebab-case)",
+          "dataTestId (camelCase) → data-test-id (kebab-case)",
+          "Automatic conversion: camelCase props → kebab-case HTML attributes"
         ]
       }
     },
@@ -98,9 +146,9 @@
       "given": "property value as string",
       "when": "value is string (may contain $variable)",
       "then": "it should render string value with variable substitution",
-      "x-test": {
-        "setup": {
-          "blockDefinition": {
+      "application": {
+        "blocks": [
+          {
             "name": "styled-div",
             "type": "div",
             "props": {
@@ -108,22 +156,31 @@
               "id": "$elementId",
               "title": "$tooltipText"
             }
-          },
-          "reference": {
-            "$ref": "styled-div",
-            "vars": {
-              "color": "blue",
-              "elementId": "main-content",
-              "tooltipText": "Hover for info"
-            }
           }
-        },
+        ],
+        "pages": [
+          {
+            "name": "Content",
+            "path": "/content",
+            "sections": [
+              {
+                "block": "styled-div",
+                "vars": {
+                  "color": "blue",
+                  "elementId": "main-content",
+                  "tooltipText": "Hover for info"
+                }
+              }
+            ]
+          }
+        ],
         "expectedDOM": "<div data-testid=\"block-styled-div\" class=\"text-blue\" id=\"main-content\" title=\"Hover for info\"></div>",
         "assertions": [
+          "String props: Support $variable substitution",
           "className: 'text-$color' → 'text-blue'",
           "id: '$elementId' → 'main-content'",
           "title: '$tooltipText' → 'Hover for info'",
-          "All string props support $variable substitution"
+          "All string prop values can contain $variable placeholders"
         ]
       }
     },
@@ -132,9 +189,9 @@
       "given": "property value as number",
       "when": "value is number like 4, 12, 300",
       "then": "it should render numeric value as HTML attribute",
-      "x-test": {
-        "setup": {
-          "blockDefinition": {
+      "application": {
+        "blocks": [
+          {
             "name": "grid-layout",
             "type": "div",
             "props": {
@@ -143,13 +200,26 @@
               "maxWidth": 1200
             }
           }
-        },
+        ],
+        "pages": [
+          {
+            "name": "Gallery",
+            "path": "/gallery",
+            "sections": [
+              {
+                "block": "grid-layout",
+                "vars": {}
+              }
+            ]
+          }
+        ],
         "expectedDOM": "<div data-testid=\"block-grid-layout\" data-columns=\"3\" data-gap=\"4\" data-max-width=\"1200\"></div>",
         "assertions": [
-          "Numeric prop 'columns: 3' renders as data-columns=\"3\"",
-          "Numeric prop 'gap: 4' renders as data-gap=\"4\"",
-          "Numeric prop 'maxWidth: 1200' renders as data-max-width=\"1200\"",
-          "Numbers render as string attributes in HTML"
+          "Numeric props: Direct number values without $variable",
+          "columns: 3 → data-columns=\"3\" (camelCase → kebab-case)",
+          "gap: 4 → data-gap=\"4\"",
+          "maxWidth: 1200 → data-max-width=\"1200\"",
+          "Numbers automatically converted to string attributes in HTML"
         ]
       }
     },
@@ -158,9 +228,9 @@
       "given": "property value as boolean",
       "when": "value is true or false",
       "then": "it should render boolean as HTML boolean attribute",
-      "x-test": {
-        "setup": {
-          "blockDefinition": {
+      "application": {
+        "blocks": [
+          {
             "name": "form-input",
             "type": "input",
             "props": {
@@ -169,13 +239,26 @@
               "hidden": false
             }
           }
-        },
+        ],
+        "pages": [
+          {
+            "name": "Login",
+            "path": "/login",
+            "sections": [
+              {
+                "block": "form-input",
+                "vars": {}
+              }
+            ]
+          }
+        ],
         "expectedDOM": "<input data-testid=\"block-form-input\" disabled required />",
         "assertions": [
-          "disabled: true → 'disabled' attribute present",
-          "required: true → 'required' attribute present",
-          "hidden: false → attribute omitted (false boolean)",
-          "True booleans render as attribute presence, false omits attribute"
+          "Boolean props: true/false values control attribute presence",
+          "disabled: true → 'disabled' attribute present (no value)",
+          "required: true → 'required' attribute present (no value)",
+          "hidden: false → attribute completely omitted from HTML",
+          "HTML boolean attributes: true = present, false = absent"
         ]
       }
     },
@@ -184,9 +267,9 @@
       "given": "property value as object",
       "when": "value is nested object",
       "then": "it should render object as JSON data attribute",
-      "x-test": {
-        "setup": {
-          "blockDefinition": {
+      "application": {
+        "blocks": [
+          {
             "name": "chart-widget",
             "type": "div",
             "props": {
@@ -200,13 +283,26 @@
               }
             }
           }
-        },
+        ],
+        "pages": [
+          {
+            "name": "Analytics",
+            "path": "/analytics",
+            "sections": [
+              {
+                "block": "chart-widget",
+                "vars": {}
+              }
+            ]
+          }
+        ],
         "expectedDOM": "<div data-testid=\"block-chart-widget\" data-chart-config='{\"type\":\"bar\",\"data\":[10,20,30],\"colors\":{\"primary\":\"blue\",\"secondary\":\"green\"}}'></div>",
         "assertions": [
-          "Object prop renders as data-chart-config attribute",
-          "Object serialized to JSON string",
-          "Nested object structure preserved in attribute",
-          "Supports complex configuration objects"
+          "Object props: Complex nested objects serialized to JSON",
+          "chartConfig (object) → data-chart-config (kebab-case attribute)",
+          "JSON serialization: Full object structure preserved",
+          "Nested properties: type, data array, colors object all included",
+          "Enables passing complex configuration to client-side components"
         ]
       }
     },
@@ -215,22 +311,35 @@
       "given": "property value as array",
       "when": "value is array of items",
       "then": "it should render array as JSON data attribute",
-      "x-test": {
-        "setup": {
-          "blockDefinition": {
+      "application": {
+        "blocks": [
+          {
             "name": "tag-list",
             "type": "div",
             "props": {
               "tags": ["react", "typescript", "tailwind"]
             }
           }
-        },
+        ],
+        "pages": [
+          {
+            "name": "Tech Stack",
+            "path": "/stack",
+            "sections": [
+              {
+                "block": "tag-list",
+                "vars": {}
+              }
+            ]
+          }
+        ],
         "expectedDOM": "<div data-testid=\"block-tag-list\" data-tags='[\"react\",\"typescript\",\"tailwind\"]'></div>",
         "assertions": [
-          "Array prop renders as data-tags attribute",
-          "Array serialized to JSON string",
-          "Array items preserved in order",
-          "Supports list-based configuration"
+          "Array props: Lists serialized to JSON",
+          "tags (array) → data-tags (kebab-case attribute)",
+          "JSON array serialization: ['react', 'typescript', 'tailwind']",
+          "Order preserved: Items appear in definition order",
+          "Enables passing lists/arrays to client-side components"
         ]
       }
     },
@@ -239,30 +348,40 @@
       "given": "className with multiple variables",
       "when": "className is 'text-$color bg-$bgColor'",
       "then": "it should render with all variables substituted in className",
-      "x-test": {
-        "setup": {
-          "blockDefinition": {
+      "application": {
+        "blocks": [
+          {
             "name": "multi-var-box",
             "type": "div",
             "props": {
               "className": "text-$color bg-$bgColor border-$borderColor"
             }
-          },
-          "reference": {
-            "$ref": "multi-var-box",
-            "vars": {
-              "color": "blue",
-              "bgColor": "gray-100",
-              "borderColor": "gray-300"
-            }
           }
-        },
+        ],
+        "pages": [
+          {
+            "name": "Themes",
+            "path": "/themes",
+            "sections": [
+              {
+                "block": "multi-var-box",
+                "vars": {
+                  "color": "blue",
+                  "bgColor": "gray-100",
+                  "borderColor": "gray-300"
+                }
+              }
+            ]
+          }
+        ],
         "expectedDOM": "<div data-testid=\"block-multi-var-box\" class=\"text-blue bg-gray-100 border-gray-300\"></div>",
         "assertions": [
-          "className with 3 variables: $color, $bgColor, $borderColor",
-          "All substituted: 'text-blue bg-gray-100 border-gray-300'",
-          "Multiple variables in single property supported",
-          "Enables dynamic Tailwind class combinations"
+          "Multiple variables in single className: 3 variables in one prop",
+          "$color → 'blue' in 'text-blue'",
+          "$bgColor → 'gray-100' in 'bg-gray-100'",
+          "$borderColor → 'gray-300' in 'border-gray-300'",
+          "Final result: 'text-blue bg-gray-100 border-gray-300'",
+          "Enables dynamic Tailwind utility class combinations"
         ]
       }
     },
@@ -271,29 +390,39 @@
       "given": "props mixing variables and literals",
       "when": "maxWidth is 'max-w-$width' (Tailwind utility with variable)",
       "then": "it should render combined static and dynamic className parts",
-      "x-test": {
-        "setup": {
-          "blockDefinition": {
+      "application": {
+        "blocks": [
+          {
             "name": "container",
             "type": "div",
             "props": {
               "className": "container mx-auto max-w-$width px-$padding"
             }
-          },
-          "reference": {
-            "$ref": "container",
-            "vars": {
-              "width": "7xl",
-              "padding": "4"
-            }
           }
-        },
+        ],
+        "pages": [
+          {
+            "name": "Content Page",
+            "path": "/content",
+            "sections": [
+              {
+                "block": "container",
+                "vars": {
+                  "width": "7xl",
+                  "padding": "4"
+                }
+              }
+            ]
+          }
+        ],
         "expectedDOM": "<div data-testid=\"block-container\" class=\"container mx-auto max-w-7xl px-4\"></div>",
         "assertions": [
-          "Static parts: 'container', 'mx-auto' preserved",
-          "Dynamic parts: 'max-w-$width' → 'max-w-7xl', 'px-$padding' → 'px-4'",
-          "Final className: 'container mx-auto max-w-7xl px-4'",
-          "Supports mixing fixed and parameterized Tailwind utilities"
+          "Mixing static and dynamic: Combined literal + variable classes",
+          "Static literals: 'container', 'mx-auto' (no variables)",
+          "Dynamic parts: 'max-w-$width' → 'max-w-7xl'",
+          "Dynamic parts: 'px-$padding' → 'px-4'",
+          "Final: 'container mx-auto max-w-7xl px-4'",
+          "Flexible Tailwind utilities: Fixed layout + variable sizing"
         ]
       }
     },
@@ -302,9 +431,9 @@
       "given": "props for component configuration",
       "when": "props define component appearance and behavior",
       "then": "it should render complete component with all configuration applied",
-      "x-test": {
-        "setup": {
-          "blockDefinition": {
+      "application": {
+        "blocks": [
+          {
             "name": "action-button",
             "type": "button",
             "props": {
@@ -314,25 +443,35 @@
               "dataAction": "$action"
             },
             "content": "$buttonText"
-          },
-          "reference": {
-            "$ref": "action-button",
-            "vars": {
-              "variant": "primary",
-              "isDisabled": false,
-              "label": "Submit form",
-              "action": "submit",
-              "buttonText": "Submit"
-            }
           }
-        },
+        ],
+        "pages": [
+          {
+            "name": "Contact Form",
+            "path": "/contact",
+            "sections": [
+              {
+                "block": "action-button",
+                "vars": {
+                  "variant": "primary",
+                  "isDisabled": false,
+                  "label": "Submit form",
+                  "action": "submit",
+                  "buttonText": "Submit"
+                }
+              }
+            ]
+          }
+        ],
         "expectedDOM": "<button data-testid=\"block-action-button\" class=\"btn btn-primary\" aria-label=\"Submit form\" data-action=\"submit\">Submit</button>",
         "assertions": [
-          "Appearance: className='btn btn-primary' (variant substituted)",
-          "Behavior: disabled omitted (false), data-action='submit'",
-          "Accessibility: aria-label='Submit form'",
-          "Content: 'Submit' text",
-          "Props enable complete component customization"
+          "Complete component configuration: Props define all aspects",
+          "Appearance: className='btn btn-$variant' → 'btn btn-primary'",
+          "Behavior: disabled='$isDisabled' → omitted (false = absent)",
+          "Behavior: dataAction='$action' → data-action='submit'",
+          "Accessibility: ariaLabel='$label' → aria-label='Submit form'",
+          "Content: content='$buttonText' → 'Submit'",
+          "Props enable full component customization via variables"
         ]
       }
     },
