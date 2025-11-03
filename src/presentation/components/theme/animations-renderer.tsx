@@ -51,40 +51,46 @@ export function AnimationsRenderer({
           )
         }
 
-        // Build style based on config type
-        let animationStyle: React.CSSProperties = { width: '1px', height: '1px' }
+        // Build style based on config type (immutable)
+        const animationStyle: React.CSSProperties = (() => {
+          const baseStyle = { width: '1px', height: '1px' }
 
-        if (typeof config === 'string') {
-          // Apply CSS animation string directly
-          animationStyle = { animation: config, width: '1px', height: '1px' }
-        } else if (typeof config === 'object') {
-          // Build animation/transition from object properties
-          const parts: string[] = []
+          if (typeof config === 'string') {
+            // Apply CSS animation string directly
+            return { ...baseStyle, animation: config }
+          }
 
-          // For transition-like animations, use transition property
-          if (config.duration || config.easing) {
-            const duration = config.duration || '0s'
-            const easing = config.easing || 'ease'
-            const delay = config.delay || '0s'
+          if (typeof config === 'object') {
+            // Build animation/transition from object properties
+            // For transition-like animations, use transition property
+            if (config.duration || config.easing) {
+              const duration = config.duration || '0s'
+              const easing = config.easing || 'ease'
+              const delay = config.delay || '0s'
 
-            animationStyle = {
-              ...animationStyle,
-              transition: `all ${duration} ${easing} ${delay}`.trim(),
+              return {
+                ...baseStyle,
+                transition: `all ${duration} ${easing} ${delay}`.trim(),
+              }
+            }
+
+            // If keyframes are defined, build animation property
+            if (config.keyframes) {
+              const parts = [
+                config.duration,
+                config.easing,
+                config.delay,
+              ].filter((part): part is string => part !== undefined)
+
+              return {
+                ...baseStyle,
+                animation: `${name} ${parts.join(' ')}`.trim(),
+              }
             }
           }
 
-          // If keyframes are defined, build animation property
-          if (config.keyframes) {
-            if (config.duration) parts.push(config.duration)
-            if (config.easing) parts.push(config.easing)
-            if (config.delay) parts.push(config.delay)
-
-            animationStyle = {
-              ...animationStyle,
-              animation: `${name} ${parts.join(' ')}`.trim(),
-            }
-          }
-        }
+          return baseStyle
+        })()
 
         return (
           <div
