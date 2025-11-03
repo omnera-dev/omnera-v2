@@ -20,11 +20,13 @@ import type { Theme } from '@/domain/models/app/theme'
 /**
  * Generate CSS from theme colors
  * Applies theme colors to semantic HTML elements for visual hierarchy
+ * Note: Theme fonts are applied via inline style attribute on body element (see DynamicPage component)
  *
  * @param theme - Theme configuration from app schema
  * @returns CSS string with theme-based styles
  */
 function generateThemeStyles(theme?: Theme): string {
+  // Apply colors to semantic HTML elements using immutable array patterns
   if (!theme?.colors) {
     return ''
   }
@@ -35,10 +37,12 @@ function generateThemeStyles(theme?: Theme): string {
   const gray900 = colors['gray-900']
   const gray500 = colors['gray-500']
 
-  const headingStyles = gray900 ? `h1, h2, h3, h4, h5, h6 { color: ${gray900}; }\n` : ''
-  const textStyles = gray500 ? `p { color: ${gray500}; }\n` : ''
+  const styles: ReadonlyArray<string> = [
+    ...(gray900 ? [`h1, h2, h3, h4, h5, h6 { color: ${gray900}; }`] : []),
+    ...(gray500 ? [`p { color: ${gray500}; }`] : []),
+  ]
 
-  return headingStyles + textStyles
+  return styles.join('\n')
 }
 
 /**
@@ -183,6 +187,16 @@ export function DynamicPage({
   const defaultLangConfig = languages?.supported.find((l) => l.code === languages.default)
   const direction = defaultLangConfig?.direction || 'ltr'
 
+  // Generate inline style for body element to apply theme fonts
+  // Using inline style attribute has highest specificity and overrides Tailwind base styles
+  const bodyStyle: { fontFamily: string } | undefined = theme?.fonts?.body?.family
+    ? {
+        fontFamily: theme.fonts.body.fallback
+          ? `${theme.fonts.body.family}, ${theme.fonts.body.fallback}`
+          : theme.fonts.body.family,
+      }
+    : undefined
+
   // Extract external scripts from page.scripts
   // Support both 'external' (test shorthand) and 'externalScripts' (schema property)
   // Prefer 'externalScripts' if both are present (canonical property)
@@ -223,7 +237,7 @@ export function DynamicPage({
           />
         ))}
       </head>
-      <body>
+      <body {...(bodyStyle && { style: bodyStyle })}>
         {theme?.animations && <AnimationsRenderer animations={theme.animations} />}
         {page.layout?.banner && <Banner {...page.layout.banner} />}
         {page.layout?.navigation && <Navigation {...page.layout.navigation} />}
