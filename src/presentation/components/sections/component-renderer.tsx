@@ -6,7 +6,7 @@
  */
 
 import { type ReactElement } from 'react'
-import { parseStyle } from '@/presentation/utils/parse-style'
+import { normalizeStyleAnimations, parseStyle } from '@/presentation/utils/parse-style'
 import {
   collectTranslationsForKey,
   resolveTranslationPattern,
@@ -130,11 +130,13 @@ export function ComponentRenderer({
 
   // Parse style if it's a string (convert CSS string to React style object)
   // React requires style to be an object, but our schema allows CSS strings for convenience
+  // Normalize animation names to kebab-case for consistency with generated keyframes
   const styleValue = substitutedProps?.style
-  const parsedStyle =
+  const parsedStyle = normalizeStyleAnimations(
     typeof styleValue === 'string'
       ? parseStyle(styleValue)
       : (styleValue as Record<string, unknown> | undefined)
+  )
 
   // Merge className with other props and add data-block attribute if blockName is provided
   // For blocks without content, add min-height and display to ensure visibility

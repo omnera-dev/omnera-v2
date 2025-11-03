@@ -320,7 +320,7 @@ test.describe('Theme Configuration', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-THEME-006: should provide animations reusable in interactions.schema.json',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
