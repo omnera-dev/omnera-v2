@@ -157,73 +157,147 @@
       "id": "APP-PAGES-DEFINITIONS-001",
       "given": "a non-empty string",
       "when": "value is 'hello'",
-      "then": "it should validate as nonEmptyString"
+      "then": "it should validate as nonEmptyString",
+      "application": {
+        "examples": ["hello", "world", "any text"],
+        "pattern": {"minLength": 1},
+        "assertions": ["Non-empty: Rejects empty strings ''", "Used for: names, titles, descriptions"]
+      }
     },
     {
       "id": "APP-PAGES-DEFINITIONS-002",
       "given": "a kebab-case string",
       "when": "value is 'my-component-name'",
-      "then": "it should validate as kebabCase pattern"
+      "then": "it should validate as kebabCase pattern",
+      "application": {
+        "valid": ["my-component", "user-profile", "blog-post-123"],
+        "invalid": ["MyComponent", "my_component", "my component"],
+        "pattern": "^[a-z][a-z0-9]*(-[a-z0-9]+)*$",
+        "assertions": ["Lowercase only", "Hyphens separate words", "Used for: IDs, slugs, CSS classes"]
+      }
     },
     {
       "id": "APP-PAGES-DEFINITIONS-003",
       "given": "a variable name",
       "when": "value is 'myVariable123'",
-      "then": "it should validate as variableName pattern"
+      "then": "it should validate as variableName pattern",
+      "application": {
+        "valid": ["myVariable", "userName123", "ItemCount"],
+        "invalid": ["my-variable", "123user", "$name"],
+        "pattern": "^[a-zA-Z][a-zA-Z0-9]*$",
+        "assertions": ["Starts with letter", "camelCase or PascalCase", "Used for: JavaScript identifiers"]
+      }
     },
     {
       "id": "APP-PAGES-DEFINITIONS-004",
       "given": "a string with variable reference",
       "when": "value is 'Welcome to $siteName'",
-      "then": "it should validate as variableReference pattern"
+      "then": "it should validate as variableReference pattern",
+      "application": {
+        "examples": ["Welcome to $siteName", "Hello $userName!", "Total: $count items"],
+        "pattern": ".*\\$[a-zA-Z][a-zA-Z0-9]*.*",
+        "substitution": {"before": "Welcome to $siteName", "after": "Welcome to Omnera", "vars": {"siteName": "Omnera"}},
+        "assertions": ["Contains $variable placeholder", "Runtime substitution", "Used for: dynamic text"]
+      }
     },
     {
       "id": "APP-PAGES-DEFINITIONS-005",
       "given": "a 6-digit hex color",
       "when": "value is '#FF5733'",
-      "then": "it should validate as hexColor pattern"
+      "then": "it should validate as hexColor pattern",
+      "application": {
+        "valid": ["#FF5733", "#000000", "#FFFFFF", "#1a2b3c"],
+        "invalid": ["#FFF", "#GGGGGG", "FF5733", "rgb(255,87,51)"],
+        "pattern": "^#[0-9A-Fa-f]{6}$",
+        "assertions": ["6-digit hex format", "Case-insensitive", "Used for: theme colors, styling"]
+      }
     },
     {
       "id": "APP-PAGES-DEFINITIONS-006",
       "given": "an HTTP URL",
       "when": "value is 'https://example.com/path'",
-      "then": "it should validate as url with http/https protocol"
+      "then": "it should validate as url with http/https protocol",
+      "application": {
+        "valid": ["https://example.com", "http://localhost:3000", "https://api.example.com/v1/users"],
+        "invalid": ["example.com", "ftp://files.com", "//cdn.example.com"],
+        "pattern": "^https?://",
+        "assertions": ["HTTP or HTTPS only", "Full URL required", "Used for: external links, API endpoints"]
+      }
     },
     {
       "id": "APP-PAGES-DEFINITIONS-007",
       "given": "a relative path",
       "when": "value is './public/logo.svg'",
-      "then": "it should validate as relativePath pattern"
+      "then": "it should validate as relativePath pattern",
+      "application": {
+        "valid": ["./public/logo.svg", "../images/hero.jpg", "./assets/icon.png"],
+        "invalid": ["/absolute/path", "https://example.com/file", "file.svg"],
+        "pattern": "^\\.{1,2}/",
+        "assertions": ["Starts with ./ or ../", "Relative to current file", "Used for: local assets"]
+      }
     },
     {
       "id": "APP-PAGES-DEFINITIONS-008",
       "given": "an email address",
       "when": "value is 'user@example.com'",
-      "then": "it should validate as emailAddress format"
+      "then": "it should validate as emailAddress format",
+      "application": {
+        "valid": ["user@example.com", "john.doe+tag@company.co.uk", "admin@localhost"],
+        "invalid": ["user@", "@example.com", "user@.com", "user example.com"],
+        "format": "email",
+        "assertions": ["Standard email format", "RFC 5322 compliant", "Used for: contact forms, user accounts"]
+      }
     },
     {
       "id": "APP-PAGES-DEFINITIONS-009",
       "given": "Tailwind CSS classes",
       "when": "value is 'text-center bg-blue-500 p-4'",
-      "then": "it should validate as className"
+      "then": "it should validate as className",
+      "application": {
+        "examples": ["text-center bg-blue-500 p-4", "flex items-center justify-between", "w-full max-w-7xl mx-auto"],
+        "usage": {"component": {"type": "div", "props": {"className": "text-center bg-blue-500 p-4"}}},
+        "assertions": ["Any string accepted", "Tailwind utility classes", "Used for: styling components"]
+      }
     },
     {
       "id": "APP-PAGES-DEFINITIONS-010",
       "given": "an icon from the icon library",
       "when": "value is 'arrow-right'",
-      "then": "it should validate as iconName enum"
+      "then": "it should validate as iconName enum",
+      "application": {
+        "valid": ["arrow-right", "check", "user", "star", "heart", "settings"],
+        "invalid": ["custom-icon", "my-icon", "icon-123"],
+        "iconLibrary": {"count": "70+", "categories": ["arrows", "actions", "social", "ui"]},
+        "assertions": ["Enum-based validation", "Predefined icon set", "Used for: UI icons, buttons"]
+      }
     },
     {
       "id": "APP-PAGES-DEFINITIONS-011",
       "given": "dimensions with width and height",
       "when": "value is { width: 800, height: 600 }",
-      "then": "it should validate as dimensions object"
+      "then": "it should validate as dimensions object",
+      "application": {
+        "valid": [{"width": 800, "height": 600}, {"width": 1920, "height": 1080}],
+        "invalid": [{"width": 800}, {"height": 600}, {"w": 800, "h": 600}],
+        "required": ["width", "height"],
+        "assertions": ["Both width and height required", "Numeric values", "Used for: image sizing, viewports"]
+      }
     },
     {
       "id": "APP-PAGES-DEFINITIONS-012",
       "given": "multiple icon names in the library",
       "when": "70+ icon names are defined (arrow-right, check, user, star, etc.)",
-      "then": "it should provide comprehensive icon set for all UI needs"
+      "then": "it should provide comprehensive icon set for all UI needs",
+      "application": {
+        "categories": {
+          "arrows": ["arrow-right", "arrow-left", "arrow-up", "arrow-down"],
+          "actions": ["check", "x", "plus", "minus", "search", "filter"],
+          "social": ["heart", "star", "share", "bookmark"],
+          "ui": ["menu", "settings", "user", "users"]
+        },
+        "totalCount": "70+",
+        "assertions": ["Comprehensive icon library", "Categorized by purpose", "Covers common UI needs"]
+      }
     },
     {
       "id": "APP-PAGES-DEFINITIONS-REGRESSION-013",
