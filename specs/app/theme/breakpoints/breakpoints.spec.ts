@@ -158,7 +158,7 @@ test.describe('Breakpoints', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-THEME-BREAKPOINTS-005: should validate custom breakpoint naming',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
