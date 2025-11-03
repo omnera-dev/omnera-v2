@@ -208,6 +208,12 @@
           "Progressive enhancement with multiple breakpoints"
         ]
       }
+    },
+    {
+      "id": "APP-THEME-BREAKPOINTS-REGRESSION-001",
+      "given": "complete application configuration with all features",
+      "when": "user completes full workflow",
+      "then": "user can complete full breakpoints workflow"
     }
   ]
 }

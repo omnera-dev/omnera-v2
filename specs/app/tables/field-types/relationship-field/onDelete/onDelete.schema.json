@@ -8,19 +8,19 @@
   "enum": ["cascade", "set-null", "restrict", "no-action"],
   "x-specs": [
     {
-      "id": "APP-FIELD-RELATIONSHIP-FIELD-ONDELETE-001",
+      "id": "APP-FIELD-RELATIONSHIP-ONDELETE-001",
       "given": "user selects onDelete from valid options",
       "when": "validating input",
       "then": "selection should be accepted"
     },
     {
-      "id": "APP-FIELD-RELATIONSHIP-FIELD-ONDELETE-002",
+      "id": "APP-FIELD-RELATIONSHIP-ONDELETE-002",
       "given": "user provides invalid onDelete value",
       "when": "validating input",
       "then": "error should list valid options: cascade, set-null, restrict"
     },
     {
-      "id": "APP-FIELD-RELATIONSHIP-FIELD-ONDELETE-003",
+      "id": "APP-FIELD-RELATIONSHIP-ONDELETE-003",
       "given": "onDelete is set to any valid enum value",
       "when": "processing entity",
       "then": "appropriate behavior should execute"

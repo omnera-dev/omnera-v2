@@ -523,7 +523,7 @@ test.describe('Product Schema', () => {
   )
 
   test.fixme(
-    'user can complete full Product workflow',
+    'APP-PAGES-META-STRUCTURED-DATA-PRODUCT-REGRESSION-001: user can complete full Product workflow',
     { tag: '@regression' },
     async ({ page, startServerWithSchema }) => {
       await startServerWithSchema({

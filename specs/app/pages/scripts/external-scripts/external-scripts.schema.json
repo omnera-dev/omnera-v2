@@ -136,6 +136,12 @@
       "given": "external script with required src only",
       "when": "only src is provided (all other properties optional)",
       "then": "it should load script with default settings (sync, body-end)"
+    },
+    {
+      "id": "APP-PAGES-SCRIPTS-EXTERNAL-REGRESSION-001",
+      "given": "complete application configuration with all features",
+      "when": "user completes full workflow",
+      "then": "user can complete full External Scripts workflow"
     }
   ]
 }

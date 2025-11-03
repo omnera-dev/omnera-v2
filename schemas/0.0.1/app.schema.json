@@ -120,11 +120,11 @@
           },
           "meta": {
             "type": "object",
-            "required": ["lang", "title", "description"],
+            "required": ["title", "description"],
             "properties": {
               "lang": {
                 "type": "string",
-                "description": "Page language code (ISO 639-1 with optional country)",
+                "description": "Page language code (optional - uses auto-detection if not specified)",
                 "examples": ["en-US", "fr-FR", "es-ES", "de-DE"],
                 "pattern": "^[a-z]{2}(-[A-Z]{2})?$"
               },
@@ -6385,9 +6385,21 @@
                   "required": [],
                   "properties": {
                     "enabled": { "type": "boolean" },
-                    "duration": { "type": "string" },
-                    "easing": { "type": "string" },
-                    "delay": { "type": "string" },
+                    "duration": {
+                      "type": "string",
+                      "description": "a string matching the pattern ^[0-9]+(\\.[0-9]+)?(ms|s)$",
+                      "pattern": "^[0-9]+(\\.[0-9]+)?(ms|s)$"
+                    },
+                    "easing": {
+                      "type": "string",
+                      "enum": ["linear", "ease", "ease-in", "ease-out", "ease-in-out"],
+                      "description": "Transition timing function"
+                    },
+                    "delay": {
+                      "type": "string",
+                      "description": "a string matching the pattern ^[0-9]+(\\.[0-9]+)?(ms|s)$",
+                      "pattern": "^[0-9]+(\\.[0-9]+)?(ms|s)$"
+                    },
                     "keyframes": {
                       "type": "object",
                       "required": [],
@@ -6585,9 +6597,7 @@
           "title": "Centralized Translations"
         }
       },
-      "additionalProperties": false,
-      "description": "Multi-language support configuration for the entire application",
-      "title": "Languages Configuration"
+      "additionalProperties": false
     },
     "blocks": {
       "type": "array",

@@ -1326,6 +1326,12 @@
           "Scale to hundreds of translations without chaos"
         ]
       }
+    },
+    {
+      "id": "APP-LANGUAGES-REGRESSION-001",
+      "given": "complete application configuration with all features",
+      "when": "user completes full workflow",
+      "then": "user can complete full languages workflow"
     }
   ],
   "x-block-architecture-example": {
@@ -1368,7 +1374,7 @@
         "path": "/",
         "sections": [
           {
-            "$ref": "language-switcher",
+            "block": "language-switcher",
             "vars": {
               "variant": "dropdown",
               "showFlags": false,

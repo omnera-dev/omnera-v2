@@ -90,6 +90,12 @@
       "given": "a component with animation, delay, and duration all configured",
       "when": "page loads",
       "then": "it should wait the delay period then animate for the specified duration"
+    },
+    {
+      "id": "APP-PAGES-INTERACTIONS-ENTRANCE-ANIMATION-REGRESSION-001",
+      "given": "complete application configuration with all features",
+      "when": "user completes full workflow",
+      "then": "user can complete full entrance animation workflow"
     }
   ]
 }

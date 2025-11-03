@@ -8,13 +8,13 @@
   "minimum": 1,
   "x-specs": [
     {
-      "id": "APP-FIELD-AUTONUMBER-FIELD-STARTFROM-001",
+      "id": "APP-FIELD-AUTONUMBER-STARTFROM-001",
       "given": "user provides startFrom >= 1",
       "when": "validating input",
       "then": "value should be accepted"
     },
     {
-      "id": "APP-FIELD-AUTONUMBER-FIELD-STARTFROM-002",
+      "id": "APP-FIELD-AUTONUMBER-STARTFROM-002",
       "given": "user provides startFrom < 1",
       "when": "validating input",
       "then": "error should enforce minimum value"

@@ -7,13 +7,13 @@
   "examples": ["INV-", "ORD-", ""],
   "x-specs": [
     {
-      "id": "APP-FIELD-AUTONUMBER-FIELD-PREFIX-001",
+      "id": "APP-FIELD-AUTONUMBER-PREFIX-001",
       "given": "user provides prefix",
       "when": "validating input",
       "then": "string value should be accepted"
     },
     {
-      "id": "APP-FIELD-AUTONUMBER-FIELD-PREFIX-002",
+      "id": "APP-FIELD-AUTONUMBER-PREFIX-002",
       "given": "prefix is empty string",
       "when": "validating input",
       "then": "behavior should follow optional/required rules"

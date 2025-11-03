@@ -7,13 +7,13 @@
   "minimum": 1,
   "x-specs": [
     {
-      "id": "APP-FIELD-RICH-TEXT-FIELD-MAXLENGTH-001",
+      "id": "APP-FIELD-RICH-TEXT-MAXLENGTH-001",
       "given": "user provides maxLength >= 1",
       "when": "validating input",
       "then": "value should be accepted"
     },
     {
-      "id": "APP-FIELD-RICH-TEXT-FIELD-MAXLENGTH-002",
+      "id": "APP-FIELD-RICH-TEXT-MAXLENGTH-002",
       "given": "user provides maxLength < 1",
       "when": "validating input",
       "then": "error should enforce minimum value"

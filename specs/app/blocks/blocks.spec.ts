@@ -418,7 +418,7 @@ test.describe('Reusable Blocks', () => {
   // ============================================================================
 
   test.fixme(
-    'user can complete full blocks workflow',
+    'APP-BLOCKS-REGRESSION-001: user can complete full blocks workflow',
     { tag: '@regression' },
     async ({ page, startServerWithSchema }) => {
       await startServerWithSchema({

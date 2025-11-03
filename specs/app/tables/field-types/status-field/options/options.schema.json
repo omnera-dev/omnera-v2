@@ -20,13 +20,13 @@
   },
   "x-specs": [
     {
-      "id": "APP-FIELD-STATUS-FIELD-OPTIONS-001",
+      "id": "APP-FIELD-STATUS-OPTIONS-001",
       "given": "user provides options with at least 1 items",
       "when": "validating input",
       "then": "array should be accepted"
     },
     {
-      "id": "APP-FIELD-STATUS-FIELD-OPTIONS-002",
+      "id": "APP-FIELD-STATUS-OPTIONS-002",
       "given": "user provides options with fewer than 1 items",
       "when": "validating input",
       "then": "error should enforce minimum items"

@@ -645,6 +645,12 @@
           "Real-world: features, external-scripts, inline-scripts catalogs"
         ]
       }
+    },
+    {
+      "id": "APP-PAGES-SCRIPTS-REGRESSION-001",
+      "given": "complete application configuration with all features",
+      "when": "user completes full workflow",
+      "then": "user can complete full Client Scripts workflow"
     }
   ]
 }

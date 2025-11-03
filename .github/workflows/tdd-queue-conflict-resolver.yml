@@ -1,0 +1,200 @@
+name: TDD Queue - Conflict Resolver
+
+# This workflow automatically resolves merge conflicts in tdd-automation PRs
+# by triggering Claude Code to rebase the PR branch onto the latest main.
+#
+# Triggers:
+# - When main branch is updated (push event)
+# - Every 15 minutes (schedule)
+# - Manual trigger (workflow_dispatch)
+
+on:
+  push:
+    branches:
+      - main
+  schedule:
+    # Run every 15 minutes to catch any conflicts
+    - cron: '*/15 * * * *'
+  workflow_dispatch: # Allow manual triggering
+
+concurrency:
+  group: tdd-conflict-resolver
+  cancel-in-progress: false
+
+jobs:
+  resolve-conflicts:
+    name: Detect and Resolve Conflicts
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+      issues: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Find conflicted PRs
+        id: find-conflicts
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          echo "🔍 Scanning for conflicted PRs..."
+
+          # Get all open tdd-automation PRs
+          CONFLICTED_PRS=$(gh pr list \
+            --repo omnera-dev/omnera-v2 \
+            --label tdd-automation \
+            --state open \
+            --json number,mergeable,mergeStateStatus,headRefName,body \
+            --jq '.[] | select(.mergeable == "CONFLICTING" or .mergeStateStatus == "DIRTY") | .number' || echo "")
+
+          if [ -z "$CONFLICTED_PRS" ]; then
+            echo "✅ No conflicted PRs found"
+            echo "has_conflicts=false" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+
+          echo "⚠️  Found conflicted PRs: $CONFLICTED_PRS"
+          echo "has_conflicts=true" >> $GITHUB_OUTPUT
+          echo "$CONFLICTED_PRS" > conflicted_prs.txt
+
+      - name: Resolve conflicts with Claude Code
+        if: steps.find-conflicts.outputs.has_conflicts == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          echo "🤖 Triggering Claude Code to resolve conflicts..."
+
+          while IFS= read -r PR_NUMBER; do
+            [ -z "$PR_NUMBER" ] && continue
+
+            echo ""
+            echo "📋 Processing PR #$PR_NUMBER"
+
+            # Get PR details
+            PR_DATA=$(gh pr view "$PR_NUMBER" --repo omnera-dev/omnera-v2 --json number,headRefName,body,labels)
+            HEAD_REF=$(echo "$PR_DATA" | jq -r '.headRefName')
+            PR_BODY=$(echo "$PR_DATA" | jq -r '.body')
+
+            # Check if we've already tried to resolve conflicts (check for conflict-resolution label)
+            HAS_RETRY_LABEL=$(echo "$PR_DATA" | jq -r '.labels[] | select(.name == "conflict-resolution:attempted") | .name')
+
+            if [ -n "$HAS_RETRY_LABEL" ]; then
+              echo "⚠️  Already attempted conflict resolution for PR #$PR_NUMBER"
+              echo "   Marking for manual review..."
+
+              gh pr edit "$PR_NUMBER" --repo omnera-dev/omnera-v2 --add-label "needs-manual-resolution"
+              gh pr comment "$PR_NUMBER" --repo omnera-dev/omnera-v2 --body "🤖 **Conflict Resolution Failed**
+
+This PR has merge conflicts that could not be automatically resolved.
+
+**Action Required**: Manual intervention needed to resolve conflicts.
+
+**Steps to resolve**:
+1. Checkout the branch: \`git checkout $HEAD_REF\`
+2. Rebase onto main: \`git rebase origin/main\`
+3. Resolve conflicts manually
+4. Force push: \`git push --force-with-lease\`
+
+The TDD automation pipeline will continue with other specs."
+
+              # Remove from queue to unblock pipeline
+              ISSUE_NUMBER=$(echo "$PR_BODY" | grep -oP 'Closes #\K\d+' | head -1)
+              if [ -n "$ISSUE_NUMBER" ]; then
+                gh issue edit "$ISSUE_NUMBER" --repo omnera-dev/omnera-v2 \
+                  --remove-label "tdd-spec:in-progress" \
+                  --add-label "tdd-spec:failed"
+              fi
+
+              continue
+            fi
+
+            # Add label to track that we're attempting resolution
+            gh pr edit "$PR_NUMBER" --repo omnera-dev/omnera-v2 --add-label "conflict-resolution:attempted"
+
+            # Post @claude mention to trigger conflict resolution
+            gh pr comment "$PR_NUMBER" --repo omnera-dev/omnera-v2 --body "@claude
+
+## 🔧 Automatic Conflict Resolution Required
+
+This PR has merge conflicts with the main branch. Please resolve them automatically.
+
+### Instructions
+
+1. **Fetch latest main branch**:
+   \`\`\`bash
+   git fetch origin main:main
+   \`\`\`
+
+2. **Checkout and rebase the PR branch**:
+   \`\`\`bash
+   git checkout $HEAD_REF
+   git rebase origin/main
+   \`\`\`
+
+3. **Resolve conflicts** (if any):
+   - Prioritize incoming changes from main
+   - For test files: Keep both changes if possible
+   - For implementation files: Prefer main's version unless it breaks tests
+
+4. **Verify resolution**:
+   \`\`\`bash
+   bun run lint
+   bun run typecheck
+   bun test:unit
+   \`\`\`
+
+5. **Force push rebased branch**:
+   \`\`\`bash
+   git push --force-with-lease
+   \`\`\`
+
+6. **Verify auto-merge is still enabled**:
+   \`\`\`bash
+   gh pr view $PR_NUMBER --json autoMergeRequest
+   \`\`\`
+
+   If auto-merge is disabled, re-enable it:
+   \`\`\`bash
+   gh pr merge $PR_NUMBER --auto --squash
+   \`\`\`
+
+### Important Notes
+
+- This is an automatic conflict resolution attempt
+- If conflicts cannot be resolved automatically, mark PR for manual review
+- After resolution, the PR should merge automatically
+- Only ONE attempt will be made (this is it!)
+
+### Completion Checklist
+
+- [ ] Branch rebased onto latest main
+- [ ] Conflicts resolved
+- [ ] Tests passing (lint, typecheck, unit tests)
+- [ ] Changes force-pushed
+- [ ] Auto-merge still enabled
+- [ ] Comment posted confirming resolution"
+
+            echo "✅ Posted conflict resolution request for PR #$PR_NUMBER"
+
+          done < conflicted_prs.txt
+
+          echo ""
+          echo "✅ Conflict resolution requests posted"
+
+      - name: Summary
+        if: always()
+        run: |
+          echo "📊 Conflict Resolution Summary"
+          echo "=============================="
+
+          if [ -f conflicted_prs.txt ]; then
+            PR_COUNT=$(wc -l < conflicted_prs.txt | xargs)
+            echo "Conflicted PRs processed: $PR_COUNT"
+          else
+            echo "No conflicts detected"
+          fi

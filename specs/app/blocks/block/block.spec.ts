@@ -454,7 +454,7 @@ test.describe('Block Template', () => {
   // ============================================================================
 
   test.fixme(
-    'user can complete full block workflow',
+    'APP-BLOCKS-BLOCK-REGRESSION-001: user can complete full block workflow',
     { tag: '@regression' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: Application with comprehensive block templates

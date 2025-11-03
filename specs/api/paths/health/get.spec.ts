@@ -37,7 +37,7 @@ import { test, expect } from '@/specs/fixtures'
  */
 // API-HEALTH-001: User requests health endpoint
 test(
-  'API-HEALTH-001: should return 200 OK status',
+  'API-HEALTH-001: should return 200 OK status and proper JSON structure',
   { tag: '@regression' },
   async ({ page, startServerWithSchema }) => {
     // GIVEN: A running server

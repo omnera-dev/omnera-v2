@@ -635,6 +635,12 @@
           "All metadata categories work together for optimal web presence"
         ]
       }
+    },
+    {
+      "id": "APP-PAGES-META-REGRESSION-001",
+      "given": "complete application configuration with all features",
+      "when": "user completes full workflow",
+      "then": "user can complete full metadata workflow"
     }
   ]
 }

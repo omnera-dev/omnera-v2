@@ -350,6 +350,12 @@
           "LetterSpacing: 0.05em (wider tracking)"
         ]
       }
+    },
+    {
+      "id": "APP-THEME-FONTS-REGRESSION-001",
+      "given": "complete application configuration with all features",
+      "when": "user completes full workflow",
+      "then": "user can complete full fonts workflow"
     }
   ]
 }

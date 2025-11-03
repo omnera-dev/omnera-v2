@@ -76,11 +76,9 @@ export function AnimationsRenderer({
 
             // If keyframes are defined, build animation property
             if (config.keyframes) {
-              const parts = [
-                config.duration,
-                config.easing,
-                config.delay,
-              ].filter((part): part is string => part !== undefined)
+              const parts = [config.duration, config.easing, config.delay].filter(
+                (part): part is string => part !== undefined
+              )
 
               return {
                 ...baseStyle,

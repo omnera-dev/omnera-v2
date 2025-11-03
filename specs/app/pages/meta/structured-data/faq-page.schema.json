@@ -128,6 +128,12 @@
       "given": "FAQPage for SERP visibility",
       "when": "FAQ rich results show in search",
       "then": "it should increase click-through rate from search results"
+    },
+    {
+      "id": "APP-PAGES-META-STRUCTURED-DATA-FAQ-PAGE-REGRESSION-001",
+      "given": "complete application configuration with all features",
+      "when": "user completes full workflow",
+      "then": "user can complete full FAQ Page workflow"
     }
   ]
 }

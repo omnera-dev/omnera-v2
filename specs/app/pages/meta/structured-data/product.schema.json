@@ -162,6 +162,12 @@
       "given": "Product for rich snippets",
       "when": "Product structured data is included in page metadata",
       "then": "it should display price, availability, and ratings in SERPs"
+    },
+    {
+      "id": "APP-PAGES-META-STRUCTURED-DATA-PRODUCT-REGRESSION-001",
+      "given": "complete application configuration with all features",
+      "when": "user completes full workflow",
+      "then": "user can complete full Product workflow"
     }
   ]
 }

@@ -8,19 +8,19 @@
   "enum": ["star", "number", "heart"],
   "x-specs": [
     {
-      "id": "APP-FIELD-RATING-FIELD-STYLE-001",
+      "id": "APP-FIELD-RATING-STYLE-001",
       "given": "user selects style from valid options",
       "when": "validating input",
       "then": "selection should be accepted"
     },
     {
-      "id": "APP-FIELD-RATING-FIELD-STYLE-002",
+      "id": "APP-FIELD-RATING-STYLE-002",
       "given": "user provides invalid style value",
       "when": "validating input",
       "then": "error should list valid options: star, number, heart"
     },
     {
-      "id": "APP-FIELD-RATING-FIELD-STYLE-003",
+      "id": "APP-FIELD-RATING-STYLE-003",
       "given": "style is set to any valid enum value",
       "when": "processing entity",
       "then": "appropriate behavior should execute"

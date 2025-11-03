@@ -7,6 +7,18 @@
 
 import { test, expect } from '@/specs/fixtures'
 
+// Extend Window interface to include APP_LANGUAGES global
+declare global {
+  interface Window {
+    APP_LANGUAGES?: {
+      default: string
+      supported: Array<{ code: string; label: string; direction: string }>
+      detectBrowser?: boolean
+      fallback?: string
+    }
+  }
+}
+
 /**
  * E2E Tests for Languages Configuration
  *
@@ -197,107 +209,109 @@ test.describe('Languages Configuration', () => {
     }
   )
 
-  test(
-    "APP-LANGUAGES-004: should automatically detect and set the browser's preferred language",
-    { tag: '@spec' },
-    async ({ page, startServerWithSchema, context }) => {
-      // GIVEN: an app with detectBrowser set to true
-      await startServerWithSchema({
-        name: 'test-app',
-        languages: {
-          default: 'en-US',
-          supported: [
-            { code: 'en-US', label: 'English', direction: 'ltr' },
-            { code: 'fr-FR', label: 'Français', direction: 'ltr' },
-          ],
-          detectBrowser: true,
-        },
-        blocks: [
-          {
-            name: 'language-switcher',
-            type: 'language-switcher',
-            props: {
-              variant: 'dropdown',
-            },
-          },
-        ],
-        pages: [
-          {
-            name: 'home',
-            path: '/',
-            meta: { lang: 'en-US', title: 'Test', description: 'Test page' },
-            sections: [
-              {
-                block: 'language-switcher',
-              },
+  test.describe('with French browser locale', () => {
+    test.use({ browserLocale: 'fr-FR' })
+
+    test(
+      "APP-LANGUAGES-004: should automatically detect and set the browser's preferred language",
+      { tag: '@spec' },
+      async ({ page, startServerWithSchema }) => {
+        // GIVEN: an app with detectBrowser set to true
+        await startServerWithSchema({
+          name: 'test-app',
+          languages: {
+            default: 'en-US',
+            supported: [
+              { code: 'en-US', label: 'English', direction: 'ltr' },
+              { code: 'fr-FR', label: 'Français', direction: 'ltr' },
             ],
+            detectBrowser: true,
           },
-        ],
-      })
-
-      // Set browser language preference
-      await context.addInitScript(() => {
-        Object.defineProperty(navigator, 'language', { value: 'fr-FR' })
-      })
-
-      // WHEN: user visits the site for the first time
-      await page.goto('/')
-
-      // THEN: it should automatically detect and set the browser's preferred language
-      await expect(page.locator('[data-testid="current-language"]')).toHaveText('Français')
-    }
-  )
-
-  test(
-    'APP-LANGUAGES-005: should use the default language without auto-detection',
-    { tag: '@spec' },
-    async ({ page, startServerWithSchema, context }) => {
-      // GIVEN: an app with detectBrowser set to false
-      await startServerWithSchema({
-        name: 'test-app',
-        languages: {
-          default: 'en-US',
-          supported: [
-            { code: 'en-US', label: 'English', direction: 'ltr' },
-            { code: 'fr-FR', label: 'Français', direction: 'ltr' },
-          ],
-          detectBrowser: false,
-        },
-        blocks: [
-          {
-            name: 'language-switcher',
-            type: 'language-switcher',
-            props: {
-              variant: 'dropdown',
-            },
-          },
-        ],
-        pages: [
-          {
-            name: 'home',
-            path: '/',
-            meta: { lang: 'en-US', title: 'Test', description: 'Test page' },
-            sections: [
-              {
-                block: 'language-switcher',
+          blocks: [
+            {
+              name: 'language-switcher',
+              type: 'language-switcher',
+              props: {
+                variant: 'dropdown',
               },
+            },
+          ],
+          pages: [
+            {
+              name: 'home',
+              path: '/',
+              meta: { title: 'Test', description: 'Test page' },
+              sections: [
+                {
+                  block: 'language-switcher',
+                },
+              ],
+            },
+          ],
+        })
+
+        // WHEN: user visits the site for the first time with browser locale set to French
+        await page.goto('/')
+
+        // Clear localStorage to ensure clean slate
+        await page.evaluate(() => localStorage.clear())
+        await page.reload()
+
+        // Wait for vanilla JS script to update the DOM
+        // The script is deferred and may take a moment to execute
+        await page.waitForTimeout(500)
+
+        // THEN: it should automatically detect and set the browser's preferred language
+        await expect(page.locator('[data-testid="current-language"]')).toHaveText('Français')
+      }
+    )
+
+    test(
+      'APP-LANGUAGES-005: should use the default language without auto-detection',
+      { tag: '@spec' },
+      async ({ page, startServerWithSchema }) => {
+        // GIVEN: an app with detectBrowser set to false
+        await startServerWithSchema({
+          name: 'test-app',
+          languages: {
+            default: 'en-US',
+            supported: [
+              { code: 'en-US', label: 'English', direction: 'ltr' },
+              { code: 'fr-FR', label: 'Français', direction: 'ltr' },
             ],
+            detectBrowser: false,
           },
-        ],
-      })
+          blocks: [
+            {
+              name: 'language-switcher',
+              type: 'language-switcher',
+              props: {
+                variant: 'dropdown',
+              },
+            },
+          ],
+          pages: [
+            {
+              name: 'home',
+              path: '/',
+              meta: { lang: 'en-US', title: 'Test', description: 'Test page' },
+              sections: [
+                {
+                  block: 'language-switcher',
+                },
+              ],
+            },
+          ],
+        })
 
-      // Set browser language preference to French
-      await context.addInitScript(() => {
-        Object.defineProperty(navigator, 'language', { value: 'fr-FR' })
-      })
+        // WHEN: user visits the site with browser locale set to French but detectBrowser=false
+        await page.goto('/')
 
-      // WHEN: user visits the site
-      await page.goto('/')
-
-      // THEN: it should use the default language without auto-detection
-      await expect(page.locator('[data-testid="current-language"]')).toHaveText('English')
-    }
-  )
+        // THEN: it should use the default language without auto-detection
+        await expect(page.locator('[data-testid="current-language"]')).toHaveText('English')
+      }
+    )
+  }) // close describe block
 
   test(
     'APP-LANGUAGES-006: should remember the choice in localStorage for future visits',
@@ -505,73 +519,72 @@ test.describe('Languages Configuration', () => {
     }
   )
 
-  test(
-    'APP-LANGUAGES-010: should provide seamless multi-language UX with auto-detection, persistence, and fallback',
-    { tag: '@spec' },
-    async ({ page, startServerWithSchema, context }) => {
-      // GIVEN: an app with all features enabled (detectBrowser, persistSelection, fallback)
-      await startServerWithSchema({
-        name: 'test-app',
-        languages: {
-          default: 'en-US',
-          supported: [
-            { code: 'en-US', label: 'English', direction: 'ltr' },
-            { code: 'fr-FR', label: 'Français', direction: 'ltr' },
-            { code: 'es-ES', label: 'Español', direction: 'ltr' },
-          ],
-          fallback: 'en-US',
-          detectBrowser: true,
-          persistSelection: true,
-        },
-        blocks: [
-          {
-            name: 'language-switcher',
-            type: 'language-switcher',
-            props: {
-              variant: 'dropdown',
-            },
-          },
-        ],
-        pages: [
-          {
-            name: 'home',
-            path: '/',
-            meta: { lang: 'en-US', title: 'Test', description: 'Test page' },
-            sections: [
-              {
-                block: 'language-switcher',
-              },
+  test.describe('with French browser locale for seamless UX', () => {
+    test.use({ browserLocale: 'fr-FR' })
+
+    test(
+      'APP-LANGUAGES-010: should provide seamless multi-language UX with auto-detection, persistence, and fallback',
+      { tag: '@spec' },
+      async ({ page, startServerWithSchema }) => {
+        // GIVEN: an app with all features enabled (detectBrowser, persistSelection, fallback)
+        await startServerWithSchema({
+          name: 'test-app',
+          languages: {
+            default: 'en-US',
+            supported: [
+              { code: 'en-US', label: 'English', direction: 'ltr' },
+              { code: 'fr-FR', label: 'Français', direction: 'ltr' },
+              { code: 'es-ES', label: 'Español', direction: 'ltr' },
             ],
+            fallback: 'en-US',
+            detectBrowser: true,
+            persistSelection: true,
           },
-        ],
-      })
+          blocks: [
+            {
+              name: 'language-switcher',
+              type: 'language-switcher',
+              props: {
+                variant: 'dropdown',
+              },
+            },
+          ],
+          pages: [
+            {
+              name: 'home',
+              path: '/',
+              meta: { title: 'Test', description: 'Test page' },
+              sections: [
+                {
+                  block: 'language-switcher',
+                },
+              ],
+            },
+          ],
+        })
 
-      // Set browser language to French
-      await context.addInitScript(() => {
-        Object.defineProperty(navigator, 'language', { value: 'fr-FR' })
-      })
+        // WHEN: language configuration is fully utilized with browser locale set to French
+        await page.goto('/')
 
-      // WHEN: language configuration is fully utilized
-      await page.goto('/')
+        // THEN: it should provide seamless multi-language UX
+        // Auto-detection: Should detect French from browser
+        await expect(page.locator('[data-testid="current-language"]')).toHaveText('Français')
 
-      // THEN: it should provide seamless multi-language UX
-      // Auto-detection: Should detect French from browser
-      await expect(page.locator('[data-testid="current-language"]')).toHaveText('Français')
+        // Persistence: Change to Spanish and verify it's stored
+        await page.locator('[data-testid="language-switcher"]').click()
+        await page.locator('[data-testid="language-option-es-ES"]').click()
+        const storedLanguage = await page.evaluate(() => localStorage.getItem('language'))
+        expect(storedLanguage).toBe('es-ES')
 
-      // Persistence: Change to Spanish and verify it's stored
-      await page.locator('[data-testid="language-switcher"]').click()
-      await page.locator('[data-testid="language-option-es-ES"]').click()
-      const storedLanguage = await page.evaluate(() => localStorage.getItem('language'))
-      expect(storedLanguage).toBe('es-ES')
+        // Reload to verify persistence works
+        await page.reload()
+        await expect(page.locator('[data-testid="current-language"]')).toHaveText('Español')
 
-      // Reload to verify persistence works
-      await page.reload()
-      await expect(page.locator('[data-testid="current-language"]')).toHaveText('Español')
-
-      // Fallback: Verify missing translations fall back to English
-      await expect(page.locator('[data-testid="fallback-handled"]')).toBeVisible()
-    }
-  )
+        // Fallback: Verify missing translations fall back to English
+        await expect(page.locator('[data-testid="fallback-handled"]')).toBeVisible()
+      }
+    )
+  }) // close describe block
 
   test(
     'APP-LANGUAGES-011: should fail validation - default language must be in supported array',
@@ -704,7 +717,7 @@ test.describe('Languages Configuration', () => {
           {
             name: 'home',
             path: '/',
-            meta: { lang: 'en-US', title: 'Test', description: 'Test page' },
+            meta: { title: 'Test', description: 'Test page' },
             sections: [
               {
                 block: 'language-switcher',
@@ -1005,7 +1018,7 @@ test.describe('Languages Configuration', () => {
   // ============================================================================
 
   test.fixme(
-    'user can complete full languages workflow',
+    'APP-LANGUAGES-REGRESSION-001: user can complete full languages workflow',
     { tag: '@regression' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: Application configured with representative multi-language setup
@@ -1070,6 +1083,219 @@ test.describe('Languages Configuration', () => {
       await expect(page.locator('[data-testid="current-language"]')).toHaveText('العربية')
 
       // Focus on workflow continuity, not exhaustive coverage
+    }
+  )
+
+  // ============================================================================
+  // Language Subdirectory Routing Tests
+  // ============================================================================
+
+  test(
+    'APP-LANGUAGES-SUBDIRECTORY-001: should serve / with default language (cacheable)',
+    { tag: '@spec' },
+    async ({ page, startServerWithSchema }) => {
+      // GIVEN: an app with detectBrowser disabled
+      await startServerWithSchema({
+        name: 'test-app',
+        languages: {
+          default: 'en-US',
+          supported: [
+            { code: 'en-US', label: 'English', direction: 'ltr' },
+            { code: 'fr-FR', label: 'Français', direction: 'ltr' },
+          ],
+          detectBrowser: false,
+        },
+        blocks: [
+          {
+            name: 'language-switcher',
+            type: 'language-switcher',
+            props: { variant: 'dropdown' },
+          },
+        ],
+        pages: [
+          {
+            name: 'home',
+            path: '/',
+            meta: { title: 'Home', description: 'Homepage' },
+            sections: [{ block: 'language-switcher' }],
+          },
+        ],
+      })
+
+      // WHEN: user visits /
+      await page.goto('/')
+
+      // THEN: should serve default language at / (no redirect, cacheable)
+      await expect(page).toHaveURL('/')
+      await expect(page.locator('html')).toHaveAttribute('lang', 'en-US')
+      await expect(page.locator('[data-testid="current-language"]')).toHaveText('English')
+    }
+  )
+
+  test.describe('with French browser locale (non-default)', () => {
+    test.use({ browserLocale: 'fr-FR' })
+
+    test(
+      'APP-LANGUAGES-SUBDIRECTORY-001b: should redirect from / to /:lang/ when detected language differs from default',
+      { tag: '@spec' },
+      async ({ page, startServerWithSchema }) => {
+        // GIVEN: an app with detectBrowser enabled and default 'en-US'
+        await startServerWithSchema({
+          name: 'test-app',
+          languages: {
+            default: 'en-US',
+            supported: [
+              { code: 'en-US', label: 'English', direction: 'ltr' },
+              { code: 'fr-FR', label: 'Français', direction: 'ltr' },
+            ],
+            detectBrowser: true,
+          },
+          blocks: [
+            {
+              name: 'language-switcher',
+              type: 'language-switcher',
+              props: { variant: 'dropdown' },
+            },
+          ],
+          pages: [
+            {
+              name: 'home',
+              path: '/',
+              meta: { title: 'Home', description: 'Homepage' },
+              sections: [{ block: 'language-switcher' }],
+            },
+          ],
+        })
+
+        // WHEN: user with French browser visits /
+        await page.goto('/')
+
+        // THEN: should redirect to /fr-FR/ (detected language differs from default)
+        await expect(page).toHaveURL('/fr-FR/')
+        await expect(page.locator('html')).toHaveAttribute('lang', 'fr-FR')
+        await expect(page.locator('[data-testid="current-language"]')).toHaveText('Français')
+      }
+    )
+  })
+
+  test(
+    'APP-LANGUAGES-SUBDIRECTORY-002: should render homepage at /:lang/ with correct language',
+    { tag: '@spec' },
+    async ({ page, startServerWithSchema }) => {
+      // GIVEN: an app with languages configured
+      await startServerWithSchema({
+        name: 'test-app',
+        languages: {
+          default: 'en-US',
+          supported: [
+            { code: 'en-US', label: 'English', direction: 'ltr' },
+            { code: 'fr-FR', label: 'Français', direction: 'ltr' },
+          ],
+        },
+        blocks: [
+          {
+            name: 'language-switcher',
+            type: 'language-switcher',
+            props: { variant: 'dropdown' },
+          },
+        ],
+        pages: [
+          {
+            name: 'home',
+            path: '/',
+            meta: { title: 'Home', description: 'Homepage' },
+            sections: [{ block: 'language-switcher' }],
+          },
+        ],
+      })
+
+      // WHEN: user visits /fr-FR/ directly
+      await page.goto('/fr-FR/')
+
+      // THEN: should render French homepage
+      await expect(page.locator('html')).toHaveAttribute('lang', 'fr-FR')
+      await expect(page.locator('[data-testid="current-language"]')).toHaveText('Français')
+    }
+  )
+
+  test(
+    'APP-LANGUAGES-SUBDIRECTORY-003: should navigate between language subdirectories when switching language',
+    { tag: '@spec' },
+    async ({ page, startServerWithSchema }) => {
+      // GIVEN: an app with languages configured
+      await startServerWithSchema({
+        name: 'test-app',
+        languages: {
+          default: 'en-US',
+          supported: [
+            { code: 'en-US', label: 'English', direction: 'ltr' },
+            { code: 'fr-FR', label: 'Français', direction: 'ltr' },
+            { code: 'es-ES', label: 'Español', direction: 'ltr' },
+          ],
+          persistSelection: true,
+        },
+        blocks: [
+          {
+            name: 'language-switcher',
+            type: 'language-switcher',
+            props: { variant: 'dropdown' },
+          },
+        ],
+        pages: [
+          {
+            name: 'home',
+            path: '/',
+            meta: { title: 'Home', description: 'Homepage' },
+            sections: [{ block: 'language-switcher' }],
+          },
+        ],
+      })
+
+      // WHEN: user visits /fr-FR/
+      await page.goto('/fr-FR/')
+      await expect(page).toHaveURL('/fr-FR/')
+      await expect(page.locator('[data-testid="current-language"]')).toHaveText('Français')
+
+      // AND: switches to English
+      await page.locator('[data-testid="language-switcher"]').click()
+      await page.locator('[data-testid="language-option-en-US"]').click()
+
+      // THEN: should navigate to /en-US/
+      await page.waitForURL('/en-US/')
+      await expect(page).toHaveURL('/en-US/')
+      await expect(page.locator('html')).toHaveAttribute('lang', 'en-US')
+    }
+  )
+
+  test(
+    'APP-LANGUAGES-SUBDIRECTORY-004: should return 404 for invalid language subdirectory',
+    { tag: '@spec' },
+    async ({ page, startServerWithSchema }) => {
+      // GIVEN: an app with languages configured
+      await startServerWithSchema({
+        name: 'test-app',
+        languages: {
+          default: 'en-US',
+          supported: [
+            { code: 'en-US', label: 'English', direction: 'ltr' },
+            { code: 'fr-FR', label: 'Français', direction: 'ltr' },
+          ],
+        },
+        pages: [
+          {
+            name: 'home',
+            path: '/',
+            meta: { title: 'Home', description: 'Homepage' },
+            sections: [],
+          },
+        ],
+      })
+
+      // WHEN: user visits /invalid-lang/ (not in supported languages)
+      const response = await page.goto('/de-DE/')
+
+      // THEN: should return 404
+      expect(response?.status()).toBe(404)
     }
   )
 })

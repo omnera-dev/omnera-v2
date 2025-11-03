@@ -224,6 +224,12 @@
       "given": "multiple icon names in the library",
       "when": "70+ icon names are defined (arrow-right, check, user, star, etc.)",
       "then": "it should provide comprehensive icon set for all UI needs"
+    },
+    {
+      "id": "APP-PAGES-DEFINITIONS-REGRESSION-013",
+      "given": "complete application configuration with all features",
+      "when": "user completes full workflow",
+      "then": "user can complete full definitions workflow"
     }
   ]
 }

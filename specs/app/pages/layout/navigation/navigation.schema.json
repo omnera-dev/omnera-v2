@@ -765,6 +765,12 @@
           "Modular, reusable schema design"
         ]
       }
+    },
+    {
+      "id": "APP-PAGES-LAYOUT-NAVIGATION-REGRESSION-001",
+      "given": "complete application configuration with all features",
+      "when": "user completes full workflow",
+      "then": "user can complete full navigation workflow"
     }
   ]
 }

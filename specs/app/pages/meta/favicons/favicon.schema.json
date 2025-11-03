@@ -54,6 +54,12 @@
       "given": "a favicon versus favicons property",
       "when": "favicon is simple string, favicons is array of objects",
       "then": "it should support both simple and complete configurations"
+    },
+    {
+      "id": "APP-PAGES-META-FAVICONS-FAVICON-REGRESSION-001",
+      "given": "complete application configuration with all features",
+      "when": "user completes full workflow",
+      "then": "user can complete full favicon workflow"
     }
   ]
 }

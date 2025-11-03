@@ -78,8 +78,58 @@ jobs:
             echo "should_process=true" >> $GITHUB_OUTPUT
           fi
 
-      - name: Mark spec as in-progress and trigger Claude Code via @mention
+      - name: Validate issue state and check for duplicates
         if: steps.check.outputs.should_process == 'true'
+        id: validate
+        run: |
+          ISSUE_NUMBER="${{ steps.next.outputs.issue_number }}"
+          SPEC_ID="${{ steps.next.outputs.spec_id }}"
+
+          echo "🔍 Validating issue #$ISSUE_NUMBER before processing..."
+
+          # Check if issue is still open
+          ISSUE_STATE=$(gh issue view "$ISSUE_NUMBER" --json state --jq '.state')
+
+          if [ "$ISSUE_STATE" = "CLOSED" ]; then
+            echo "⚠️  Issue #$ISSUE_NUMBER is already CLOSED"
+            echo "   Skipping processing (likely already completed by another PR)"
+
+            # Update the issue to remove in-progress label if present
+            gh issue edit "$ISSUE_NUMBER" --remove-label "tdd-spec:in-progress" || true
+
+            echo "should_process=false" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+
+          # Check for existing open PRs for this issue
+          EXISTING_PRS=$(gh pr list \
+            --label tdd-automation \
+            --state open \
+            --json number,body \
+            --jq ".[] | select(.body | contains(\"Closes #$ISSUE_NUMBER\")) | .number")
+
+          if [ -n "$EXISTING_PRS" ]; then
+            echo "⚠️  Found existing open PR(s) for issue #$ISSUE_NUMBER: $EXISTING_PRS"
+            echo "   Skipping processing to avoid duplicate PRs"
+
+            # Add a comment to the issue explaining the skip
+            gh issue comment "$ISSUE_NUMBER" --body "🤖 **Duplicate PR Prevention**
+
+Skipping processing because an open PR already exists for this issue: #$EXISTING_PRS
+
+The existing PR will be processed to completion. If the PR is stuck or invalid, please close it manually and the queue will retry this spec."
+
+            echo "should_process=false" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+
+          echo "✅ Issue is open and no duplicate PRs found"
+          echo "should_process=true" >> $GITHUB_OUTPUT
+        env:
+          GH_TOKEN: ${{ secrets.GH_PAT_WORKFLOW || github.token }}
+
+      - name: Mark spec as in-progress and trigger Claude Code via @mention
+        if: steps.check.outputs.should_process == 'true' && steps.validate.outputs.should_process == 'true'
         run: |
           ISSUE_NUMBER="${{ steps.next.outputs.issue_number }}"
           SPEC_ID="${{ steps.next.outputs.spec_id }}"
@@ -123,13 +173,15 @@ jobs:
           - [ ] Copyright headers added: \`bun run license\`
           - [ ] Changes committed: \`fix: implement $SPEC_ID\`
           - [ ] Changes pushed to remote branch
-          - [ ] **⚠️ CRITICAL: Pull Request created** (verify: \`gh pr list --label tdd-automation\`)
+          - [ ] **⚠️ CRITICAL (Step 4A): Pull Request created** (verify: \`gh pr list --label tdd-automation\`)
           - [ ] PR has correct format (title, body with \`Closes #$ISSUE_NUMBER\`, label)
-          - [ ] **⚠️ CRITICAL: Auto-merge enabled** after validation passes (command: \`gh pr merge --auto --squash\`)
+          - [ ] **⚠️ CRITICAL (Step 4B): Auto-merge enabled AND verified** (command: \`gh pr view \$PR_NUMBER --json autoMergeRequest\`)
+          - [ ] Auto-merge verification shows non-null result with \`mergeMethod: SQUASH\`
 
           **⚠️ MOST COMMON FAILURES**:
           1. Missing PR creation (issue #1319) → spec marked failed after 2 min
-          2. Missing auto-merge → PR sits open, never merges, issue never closes
+          2. Missing auto-merge enablement (PRs #1541, #1546) → Pipeline blocked for hours
+          3. Auto-merge enabled but not VERIFIED → May silently fail
 
           ---
 
@@ -174,7 +226,7 @@ jobs:
           git push -u origin HEAD
           \`\`\`
 
-          ### Step 4: ⚠️ CREATE PULL REQUEST (MANDATORY - NOT OPTIONAL)
+          ### Step 4A: ⚠️ CREATE PULL REQUEST (MANDATORY - NOT OPTIONAL)
 
           **THIS IS THE MOST CRITICAL STEP. THE WORKFLOW FAILS WITHOUT IT.**
 
@@ -195,29 +247,85 @@ jobs:
 
           **Verify PR was created**:
           \`\`\`bash
-          gh pr list --label tdd-automation | grep \"$SPEC_ID\"
+          gh pr list --label tdd-automation --limit 1 --json number,title | jq '.[0].number'
           \`\`\`
+
+          Save the PR number to a variable for Step 4B:
+          \`\`\`bash
+          PR_NUMBER=\$(gh pr list --label tdd-automation --limit 1 --json number --jq '.[0].number')
+          echo \"Created PR #\$PR_NUMBER\"
+          \`\`\`
+
+          ### Step 4B: ⚠️ ENABLE AUTO-MERGE (EQUALLY CRITICAL - DO NOT SKIP)
+
+          **THIS STEP IS REQUIRED IMMEDIATELY AFTER PR CREATION. DO NOT WAIT FOR CI.**
+
+          Without auto-merge, the PR will sit open forever and block the entire pipeline.
+
+          \`\`\`bash
+          # Enable auto-merge IMMEDIATELY (don't wait for CI to finish)
+          gh pr merge \$PR_NUMBER --auto --squash
+
+          # VERIFY it was enabled (REQUIRED - must show non-null result)
+          gh pr view \$PR_NUMBER --json autoMergeRequest --jq '.autoMergeRequest'
+          \`\`\`
+
+          **Expected output** (if successful):
+          \`\`\`json
+          {
+            "enabledAt": "2025-11-03T...",
+            "enabledBy": {...},
+            "mergeMethod": "SQUASH"
+          }
+          \`\`\`
+
+          **If output is \`null\`**, the command FAILED. You MUST retry:
+          \`\`\`bash
+          # Retry up to 3 times if needed
+          for i in {1..3}; do
+            echo \"Attempt \$i: Enabling auto-merge...\"
+            if gh pr merge \$PR_NUMBER --auto --squash; then
+              sleep 2
+              RESULT=\$(gh pr view \$PR_NUMBER --json autoMergeRequest --jq '.autoMergeRequest')
+              if [ \"\$RESULT\" != \"null\" ]; then
+                echo \"✅ Auto-merge enabled successfully\"
+                break
+              fi
+            fi
+            sleep 3
+          done
+          \`\`\`
+
+          **⚠️ CRITICAL**: Do NOT exit or consider the task complete until auto-merge is verified enabled.
+
+          **Failure Examples**:
+          - Issue #1319: PR created, but auto-merge NOT enabled → Pipeline blocked
+          - PR #1546: All checks passing, mergeable, but stuck open for 2 hours → Pipeline blocked
+          - PR #1541: Same issue → Manual intervention required
 
           ---
 
-          ## 🔄 Validation & Auto-Merge (Your Responsibility)
+          ## 🔄 CI Monitoring & Failure Handling
 
-          After PR creation, you MUST monitor validation and enable auto-merge:
+          After enabling auto-merge in Step 4B, you MUST monitor CI validation:
 
-          ### Phase 1: Monitor Validation
+          ### Phase 1: Monitor CI Status
           - test.yml CI runs: lint, typecheck, unit tests, E2E regression
-          - Check status: \`gh pr checks --watch\`
+          - Check status: \`gh pr checks \$PR_NUMBER\`
+          - Auto-merge is already enabled, so PR will merge automatically when CI passes
 
-          ### Phase 2A: If Validation PASSES ✅
-          **YOU MUST enable auto-merge**:
-          \`\`\`bash
-          gh pr merge --auto --squash
-          \`\`\`
-          - PR will auto-merge when ready
-          - Issue will auto-close (via \`Closes #$ISSUE_NUMBER\`)
+          ### Phase 2A: If CI Validation PASSES ✅
+          - PR will auto-merge automatically (no action needed)
+          - Issue will auto-close via \`Closes #$ISSUE_NUMBER\`
           - Exit successfully
 
-          ### Phase 2B: If Validation FAILS ❌
+          You can verify the PR merged:
+          \`\`\`bash
+          gh pr view \$PR_NUMBER --json state --jq '.state'
+          # Should show: MERGED
+          \`\`\`
+
+          ### Phase 2B: If CI Validation FAILS ❌
           **Retry loop** (max 3 attempts):
           1. Analyze test.yml error logs
           2. Fix code issues
