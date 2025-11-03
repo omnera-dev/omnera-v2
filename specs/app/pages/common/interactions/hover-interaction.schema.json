@@ -65,61 +65,111 @@
       "id": "APP-INTERACTION-HOVER-001",
       "given": "a component with hover transform scale(1.05)",
       "when": "user hovers over the component",
-      "then": "it should smoothly scale up by 5%"
+      "then": "it should smoothly scale up by 5%",
+      "application": {
+        "component": {"type": "button", "interactions": {"hover": {"transform": "scale(1.05)", "duration": "200ms", "easing": "ease-out"}}},
+        "behavior": "Hover → Smooth scale transform: 1.0 → 1.05 (5% larger)",
+        "assertions": ["transform: 'scale(1.05)' CSS value", "Default duration: 200ms", "Default easing: ease-out", "Common card/button hover effect"]
+      }
     },
     {
       "id": "APP-INTERACTION-HOVER-002",
       "given": "a component with hover opacity 0.8",
       "when": "user hovers over the component",
-      "then": "it should fade to 80% opacity"
+      "then": "it should fade to 80% opacity",
+      "application": {
+        "component": {"type": "div", "interactions": {"hover": {"opacity": 0.8}}},
+        "behavior": "Hover → Fade to 80% opacity (0.0 = transparent, 1.0 = opaque)",
+        "assertions": ["opacity: 0.8 (min: 0, max: 1)", "Subtle transparency effect", "Used for: dimming images, cards"]
+      }
     },
     {
       "id": "APP-INTERACTION-HOVER-003",
       "given": "a component with hover backgroundColor and color",
       "when": "user hovers over the component",
-      "then": "it should change background and text colors"
+      "then": "it should change background and text colors",
+      "application": {
+        "component": {"type": "button", "interactions": {"hover": {"backgroundColor": "#007bff", "color": "#ffffff"}}},
+        "behavior": "Hover → backgroundColor: #007bff (blue), color: #ffffff (white text)",
+        "assertions": ["backgroundColor: Hex color or CSS value", "color: Text color", "Common button hover state"]
+      }
     },
     {
       "id": "APP-INTERACTION-HOVER-004",
       "given": "a component with hover shadow",
       "when": "user hovers over the component",
-      "then": "it should apply box shadow effect"
+      "then": "it should apply box shadow effect",
+      "application": {
+        "component": {"type": "div", "interactions": {"hover": {"shadow": "0 10px 25px rgba(0,0,0,0.15)"}}},
+        "behavior": "Hover → Apply box-shadow (elevation effect)",
+        "assertions": ["shadow: CSS box-shadow value", "Elevation effect (Material Design)", "Used for: cards, buttons"]
+      }
     },
     {
       "id": "APP-INTERACTION-HOVER-005",
       "given": "a component with custom duration and easing",
       "when": "user hovers over the component",
-      "then": "it should transition using specified duration and easing function"
+      "then": "it should transition using specified duration and easing function",
+      "application": {
+        "component": {"type": "button", "interactions": {"hover": {"transform": "scale(1.05)", "duration": "500ms", "easing": "ease-in-out"}}},
+        "behavior": "Hover → Transition with duration: 500ms, easing: ease-in-out (slower, smooth acceleration/deceleration)",
+        "assertions": ["duration: Pattern ^[0-9]+(ms|s)$", "easing: Enum (linear, ease, ease-in, ease-out, ease-in-out)", "Custom timing control"]
+      }
     },
     {
       "id": "APP-INTERACTION-HOVER-006",
       "given": "a component with multiple hover effects (transform, shadow, duration)",
       "when": "user hovers over the component",
-      "then": "all effects should apply simultaneously with coordinated timing"
+      "then": "all effects should apply simultaneously with coordinated timing",
+      "application": {
+        "component": {"type": "div", "interactions": {"hover": {"transform": "scale(1.05)", "shadow": "0 10px 25px rgba(0,0,0,0.15)", "duration": "300ms", "easing": "ease-out"}}},
+        "behavior": "Hover → Multiple effects: scale + shadow + timing (all coordinated)",
+        "assertions": ["Combined effects: transform + shadow", "Coordinated timing: duration + easing apply to all", "Common card hover pattern"]
+      }
     },
     {
       "id": "APP-INTERACTION-HOVER-007",
       "given": "a component with hover borderColor",
       "when": "user hovers over the component",
-      "then": "it should change border color smoothly"
+      "then": "it should change border color smoothly",
+      "application": {
+        "component": {"type": "button", "interactions": {"hover": {"borderColor": "#007bff"}}},
+        "behavior": "Hover → Change borderColor to #007bff (blue)",
+        "assertions": ["borderColor: Hex color or CSS value", "Used for: outlined buttons, input focus states"]
+      }
     },
     {
       "id": "APP-INTERACTION-HOVER-008",
       "given": "a component with hover duration set to 0ms",
       "when": "user hovers over the component",
-      "then": "it should apply effects instantly without transition"
+      "then": "it should apply effects instantly without transition",
+      "application": {
+        "component": {"type": "button", "interactions": {"hover": {"backgroundColor": "#007bff", "duration": "0ms"}}},
+        "behavior": "Hover → Instant color change (no transition animation)",
+        "assertions": ["duration: 0ms (instant)", "No smooth transition", "Used for: immediate feedback"]
+      }
     },
     {
       "id": "APP-INTERACTION-HOVER-009",
       "given": "a component with hover opacity set to maximum (1.0)",
       "when": "user hovers over the component",
-      "then": "it should display at full opacity"
+      "then": "it should display at full opacity",
+      "application": {
+        "component": {"type": "img", "interactions": {"hover": {"opacity": 1.0}}},
+        "behavior": "Hover → Full opacity (100%, completely opaque)",
+        "assertions": ["opacity: 1.0 (maximum)", "Used for: brightening faded images on hover"]
+      }
     },
     {
       "id": "APP-INTERACTION-HOVER-010",
       "given": "a component with hover opacity set to minimum (0.0)",
       "when": "user hovers over the component",
-      "then": "it should become completely transparent"
+      "then": "it should become completely transparent",
+      "application": {
+        "component": {"type": "div", "interactions": {"hover": {"opacity": 0.0}}},
+        "behavior": "Hover → Complete transparency (invisible)",
+        "assertions": ["opacity: 0.0 (minimum)", "Completely transparent", "Used for: fade-out effects"]
+      }
     },
     {
       "id": "APP-PAGES-INTERACTIONS-HOVER-INTERACTION-REGRESSION-001",
