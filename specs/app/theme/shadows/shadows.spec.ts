@@ -346,7 +346,7 @@ test.describe('Shadows', () => {
   // ============================================================================
 
   test.fixme(
-    'user can complete full shadows workflow',
+    'APP-THEME-SHADOWS-SHADOWS-REGRESSION-001: user can complete full shadows workflow',
     { tag: '@regression' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: Application with comprehensive shadow system

@@ -37,7 +37,7 @@ const generateTestUser = () => ({
  */
 // API-AUTH-CHANGE-EMAIL-001: User requests email change without newEmail
 test(
-  'API-AUTH-CHANGE-EMAIL-001: should validate required newEmail field',
+  'API-AUTH-CHANGE-EMAIL-REGRESSION-001: should validate required newEmail field',
   { tag: '@regression' },
   async ({ page, startServerWithSchema }) => {
     // GIVEN: A running server

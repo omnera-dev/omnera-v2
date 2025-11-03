@@ -457,7 +457,7 @@ test.describe('Navigation Configuration', () => {
   // ============================================================================
 
   test.fixme(
-    'user can complete full navigation workflow',
+    'APP-PAGES-LAYOUT-NAVIGATION-NAVIGATION-REGRESSION-001: user can complete full navigation workflow',
     { tag: '@regression' },
     async ({ page, startServerWithSchema }) => {
       await startServerWithSchema({

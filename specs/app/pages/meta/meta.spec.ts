@@ -462,7 +462,7 @@ test.describe('Page Metadata', () => {
   // ============================================================================
 
   test.fixme(
-    'user can complete full metadata workflow',
+    'APP-PAGES-META-META-REGRESSION-001: user can complete full metadata workflow',
     { tag: '@regression' },
     async ({ page, startServerWithSchema }) => {
       await startServerWithSchema({

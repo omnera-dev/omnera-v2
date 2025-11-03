@@ -571,7 +571,7 @@ test.describe('Article Schema', () => {
   )
 
   test.fixme(
-    'user can complete full Article workflow',
+    'APP-PAGES-META-STRUCTURED_DATA-ARTICLE-REGRESSION-001: user can complete full Article workflow',
     { tag: '@regression' },
     async ({ page, startServerWithSchema }) => {
       await startServerWithSchema({

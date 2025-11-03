@@ -30,7 +30,7 @@ import { test, expect } from '@/specs/fixtures'
  */
 // API-AUTH-VERIFY-EMAIL-001: User requests verification without token
 test(
-  'API-AUTH-VERIFY-EMAIL-001: should require verification token',
+  'API-AUTH-VERIFY-EMAIL-REGRESSION-001: should require verification token',
   { tag: '@regression' },
   async ({ page, startServerWithSchema }) => {
     // GIVEN: A running server

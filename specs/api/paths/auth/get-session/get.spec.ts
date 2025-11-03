@@ -35,7 +35,7 @@ const generateTestUser = () => ({
  */
 // API-AUTH-GET-SESSION-001: User requests current session
 test(
-  'API-AUTH-GET-SESSION-001: should return current session for authenticated user',
+  'API-AUTH-GET-SESSION-REGRESSION-001: should return current session for authenticated user',
   { tag: '@regression' },
   async ({ page, startServerWithSchema }) => {
     // GIVEN: A running server

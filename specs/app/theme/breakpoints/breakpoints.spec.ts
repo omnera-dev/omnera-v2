@@ -355,7 +355,7 @@ test.describe('Breakpoints', () => {
   // ============================================================================
 
   test.fixme(
-    'user can complete full breakpoints workflow',
+    'APP-THEME-BREAKPOINTS-BREAKPOINTS-REGRESSION-001: user can complete full breakpoints workflow',
     { tag: '@regression' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: Application with comprehensive breakpoint system

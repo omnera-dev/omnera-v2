@@ -557,7 +557,7 @@ test.describe('Footer Configuration', () => {
   // ============================================================================
 
   test.fixme(
-    'user can complete full footer workflow',
+    'APP-PAGES-LAYOUT-FOOTER-FOOTER-REGRESSION-001: user can complete full footer workflow',
     { tag: '@regression' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: Application with comprehensive footer

@@ -459,7 +459,7 @@ test.describe('Spacing Configuration', () => {
   // ============================================================================
 
   test.fixme(
-    'user can complete full spacing workflow',
+    'APP-THEME-SPACING-SPACING-REGRESSION-001: user can complete full spacing workflow',
     { tag: '@regression' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: Application with comprehensive spacing system

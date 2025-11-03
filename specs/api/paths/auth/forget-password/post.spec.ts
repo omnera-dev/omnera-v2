@@ -39,7 +39,7 @@ const generateTestUser = () => ({
  */
 // API-AUTH-FORGET-PASSWORD-001: User requests password reset
 test(
-  'API-AUTH-FORGET-PASSWORD-001: should accept password reset request',
+  'API-AUTH-FORGET-PASSWORD-REGRESSION-001: should accept password reset request',
   { tag: '@regression' },
   async ({ page, startServerWithSchema }) => {
     // GIVEN: A running server

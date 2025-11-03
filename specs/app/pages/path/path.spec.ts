@@ -500,7 +500,7 @@ test.describe('URL Path', () => {
   // ============================================================================
 
   test.fixme(
-    'user can complete full path workflow',
+    'APP-PAGES-PATH-PATH-REGRESSION-001: user can complete full path workflow',
     { tag: '@regression' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: Application with various path patterns

@@ -485,7 +485,7 @@ test.describe('Block Reference', () => {
   // ============================================================================
 
   test.fixme(
-    'user can complete full reference workflow',
+    'APP-BLOCKS-BLOCK_REFERENCE-REGRESSION-001: user can complete full reference workflow',
     { tag: '@regression' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: Application with block templates and references

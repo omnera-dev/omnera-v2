@@ -33,7 +33,7 @@ import { test, expect } from '@/specs/fixtures'
  */
 // API-AUTH-RESET-PASSWORD-001: User submits reset without new password
 test(
-  'API-AUTH-RESET-PASSWORD-001: should validate required fields',
+  'API-AUTH-RESET-PASSWORD-REGRESSION-001: should validate required fields',
   { tag: '@regression' },
   async ({ page, startServerWithSchema }) => {
     // GIVEN: A running server

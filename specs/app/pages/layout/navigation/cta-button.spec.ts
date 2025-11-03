@@ -367,7 +367,7 @@ test.describe('CTA Button', () => {
   // ============================================================================
 
   test.fixme(
-    'user can complete full CTA button workflow',
+    'APP-PAGES-LAYOUT-NAVIGATION-CTA_BUTTON-REGRESSION-001: user can complete full CTA button workflow',
     { tag: '@regression' },
     async ({ page, startServerWithSchema }) => {
       await startServerWithSchema({

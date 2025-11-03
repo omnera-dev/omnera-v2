@@ -575,7 +575,7 @@ test.describe('Organization Schema', () => {
   )
 
   test.fixme(
-    'user can complete full Organization workflow',
+    'APP-PAGES-META-STRUCTURED_DATA-ORGANIZATION-REGRESSION-001: user can complete full Organization workflow',
     { tag: '@regression' },
     async ({ page, startServerWithSchema }) => {
       await startServerWithSchema({

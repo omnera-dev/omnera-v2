@@ -305,7 +305,7 @@ test.describe('Custom Head Elements', () => {
   // ============================================================================
 
   test.fixme(
-    'user can complete full custom elements workflow',
+    'APP-PAGES-META-CUSTOM_ELEMENTS-CUSTOM_ELEMENTS-REGRESSION-001: user can complete full custom elements workflow',
     { tag: '@regression' },
     async ({ page, startServerWithSchema }) => {
       await startServerWithSchema({
