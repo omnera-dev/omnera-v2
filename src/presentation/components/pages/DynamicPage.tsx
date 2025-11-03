@@ -26,23 +26,21 @@ import type { Theme } from '@/domain/models/app/theme'
  * @returns CSS string with theme-based styles
  */
 function generateThemeStyles(theme?: Theme): string {
-  const styles: string[] = []
-
-  // Apply colors to semantic HTML elements
-  if (theme?.colors) {
-    // Apply gray-900 to headings (h1-h6) for strong hierarchy
-    // Apply gray-500 to text elements (p) for secondary/placeholder content
-    const { colors } = theme
-    const gray900 = colors['gray-900']
-    const gray500 = colors['gray-500']
-
-    if (gray900) {
-      styles.push(`h1, h2, h3, h4, h5, h6 { color: ${gray900}; }`)
-    }
-    if (gray500) {
-      styles.push(`p { color: ${gray500}; }`)
-    }
+  // Apply colors to semantic HTML elements using immutable array patterns
+  if (!theme?.colors) {
+    return ''
   }
+
+  // Apply gray-900 to headings (h1-h6) for strong hierarchy
+  // Apply gray-500 to text elements (p) for secondary/placeholder content
+  const { colors } = theme
+  const gray900 = colors['gray-900']
+  const gray500 = colors['gray-500']
+
+  const styles: ReadonlyArray<string> = [
+    ...(gray900 ? [`h1, h2, h3, h4, h5, h6 { color: ${gray900}; }`] : []),
+    ...(gray500 ? [`p { color: ${gray500}; }`] : []),
+  ]
 
   return styles.join('\n')
 }
@@ -191,13 +189,13 @@ export function DynamicPage({
 
   // Generate inline style for body element to apply theme fonts
   // Using inline style attribute has highest specificity and overrides Tailwind base styles
-  let bodyStyle: { fontFamily: string } | undefined
-  if (theme?.fonts?.body?.family) {
-    const fontFamily = theme.fonts.body.fallback
-      ? `${theme.fonts.body.family}, ${theme.fonts.body.fallback}`
-      : theme.fonts.body.family
-    bodyStyle = { fontFamily }
-  }
+  const bodyStyle: { fontFamily: string } | undefined = theme?.fonts?.body?.family
+    ? {
+        fontFamily: theme.fonts.body.fallback
+          ? `${theme.fonts.body.family}, ${theme.fonts.body.fallback}`
+          : theme.fonts.body.family,
+      }
+    : undefined
 
   // Extract external scripts from page.scripts
   // Support both 'external' (test shorthand) and 'externalScripts' (schema property)

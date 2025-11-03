@@ -21,19 +21,17 @@
  * ```
  */
 export function parseStyle(styleString: string): Record<string, string> {
-  const result: Record<string, string> = {}
-
   // Split by semicolon and process each declaration
   const declarations = styleString.split(';').filter((d) => d.trim())
 
-  for (const declaration of declarations) {
+  // Use reduce for immutable accumulation instead of for-of loop with mutations
+  return declarations.reduce<Record<string, string>>((acc, declaration) => {
     const [property, value] = declaration.split(':').map((s) => s.trim())
     if (property && value) {
       // Convert kebab-case to camelCase (e.g., background-color → backgroundColor)
       const camelCaseProperty = property.replace(/-([a-z])/g, (_, letter) => letter.toUpperCase())
-      result[camelCaseProperty] = value
+      return { ...acc, [camelCaseProperty]: value }
     }
-  }
-
-  return result
+    return acc
+  }, {})
 }

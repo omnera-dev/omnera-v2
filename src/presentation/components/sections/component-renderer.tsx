@@ -6,11 +6,11 @@
  */
 
 import { type ReactElement } from 'react'
+import { parseStyle } from '@/presentation/utils/parse-style'
 import {
   collectTranslationsForKey,
   resolveTranslationPattern,
 } from '@/presentation/utils/translation-resolver'
-import { parseStyle } from '@/presentation/utils/parse-style'
 import * as Renderers from './renderers/element-renderers'
 import { resolveBlock } from './utils/block-resolution'
 import { substitutePropsThemeTokens } from './utils/theme-tokens'
