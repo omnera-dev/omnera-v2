@@ -152,6 +152,38 @@
           "minItems: 1 (at least one page required)",
           "Valid single-page site"
         ]
+      },
+      "application": {
+        "pages": [
+          {
+            "name": "Home",
+            "path": "/",
+            "meta": {
+              "lang": "en-US",
+              "title": "Home Page",
+              "description": "Welcome to our website"
+            },
+            "sections": []
+          }
+        ],
+        "expectedRoutes": [
+          {
+            "path": "/",
+            "component": "HomePage",
+            "meta": {
+              "lang": "en-US",
+              "title": "Home Page",
+              "description": "Welcome to our website"
+            }
+          }
+        ],
+        "assertions": [
+          "Single-page site: Only 1 page defined in pages array",
+          "minItems: 1 enforced (at least one page required)",
+          "Valid configuration: All required properties present",
+          "Route generated: GET / → HomePage component",
+          "Smallest valid pages configuration possible"
+        ]
       }
     },
     {
@@ -231,6 +263,45 @@
           "All properties present: id, name, path, meta, layout, sections, scripts",
           "Complete page configuration",
           "All optional properties accepted"
+        ]
+      },
+      "application": {
+        "pages": [
+          {
+            "id": "homepage",
+            "name": "Home",
+            "path": "/",
+            "meta": {
+              "lang": "en-US",
+              "title": "Welcome",
+              "description": "Welcome to our platform"
+            },
+            "layout": {
+              "navigation": {
+                "logo": "/logo.svg",
+                "links": {
+                  "desktop": [
+                    {"label": "Home", "href": "/"},
+                    {"label": "About", "href": "/about"}
+                  ]
+                }
+              }
+            },
+            "sections": [],
+            "scripts": {
+              "features": {
+                "analytics": true
+              }
+            }
+          }
+        ],
+        "expectedDOM": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Welcome</title><meta name=\"description\" content=\"Welcome to our platform\"></head><body><nav><img src=\"/logo.svg\" alt=\"Logo\"><a href=\"/\">Home</a><a href=\"/about\">About</a></nav><script>/* Analytics enabled */</script></body></html>",
+        "assertions": [
+          "Complete page: All 7 properties defined (id, name, path, meta, layout, sections, scripts)",
+          "Required properties: name, path, meta, sections ✓",
+          "Optional properties: id='homepage', layout with navigation, scripts with analytics",
+          "Fully featured page: Navigation header, metadata, analytics tracking",
+          "Maximum configuration: All available page properties utilized"
         ]
       }
     },
@@ -355,6 +426,53 @@
           "Direct component definition: { type, props, children }",
           "No block references",
           "Inline component structure"
+        ]
+      },
+      "application": {
+        "pages": [
+          {
+            "name": "Simple Page",
+            "path": "/simple",
+            "meta": {
+              "lang": "en-US",
+              "title": "Simple",
+              "description": "A simple page with inline components"
+            },
+            "sections": [
+              {
+                "type": "section",
+                "props": {
+                  "id": "hero",
+                  "className": "hero-section"
+                },
+                "children": [
+                  {
+                    "type": "h1",
+                    "props": {
+                      "className": "text-4xl font-bold"
+                    },
+                    "children": ["Welcome"]
+                  },
+                  {
+                    "type": "p",
+                    "props": {
+                      "className": "text-lg"
+                    },
+                    "children": ["Get started today"]
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "expectedDOM": "<section id=\"hero\" class=\"hero-section\"><h1 class=\"text-4xl font-bold\">Welcome</h1><p class=\"text-lg\">Get started today</p></section>",
+        "assertions": [
+          "Direct component definitions: No block references needed",
+          "Inline structure: Components defined directly in sections array",
+          "Component tree: section → h1 + p (nested children)",
+          "Props applied: id='hero', className for styling",
+          "Simple pages: Inline components for one-off layouts",
+          "No DRY: Each page defines its own structure (vs. reusable blocks)"
         ]
       }
     },
