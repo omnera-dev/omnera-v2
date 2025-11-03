@@ -127,7 +127,7 @@ test.describe('Breakpoints', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-THEME-BREAKPOINTS-004: should validate lowercase naming convention',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
