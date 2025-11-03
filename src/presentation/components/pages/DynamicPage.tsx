@@ -159,6 +159,7 @@ function StructuredDataScript({
  * @param props.blocks - Optional blocks array for resolving block references
  * @param props.theme - Optional theme configuration for styling
  * @param props.languages - Optional languages configuration for language-switcher blocks
+ * @param props.detectedLanguage - Optional detected language from Accept-Language header or URL
  * @returns React element with complete page structure
  */
 export function DynamicPage({
@@ -166,22 +167,25 @@ export function DynamicPage({
   blocks,
   theme,
   languages,
+  detectedLanguage,
 }: {
   readonly page: Page
   readonly blocks?: Blocks
   readonly theme?: Theme
   readonly languages?: Languages
+  readonly detectedLanguage?: string
 }): Readonly<ReactElement> {
-  // Use default metadata if not provided
-  const lang = page.meta?.lang || 'en-US'
+  // Determine the language to use (priority: page.meta.lang > detectedLanguage > default)
+  // Page's explicit language takes precedence over browser detection
+  const lang = page.meta?.lang || detectedLanguage || languages?.default || 'en-US'
   const title = page.meta?.title || page.name || page.path
   const description = page.meta?.description || ''
   const themeStyles = generateThemeStyles(theme)
 
   // Determine text direction from language configuration
-  // Find the direction for the default language, fallback to 'ltr'
-  const defaultLangConfig = languages?.supported.find((l) => l.code === languages.default)
-  const direction = defaultLangConfig?.direction || 'ltr'
+  // Find the direction for the current language, fallback to 'ltr'
+  const langConfig = languages?.supported.find((l) => l.code === lang)
+  const direction = langConfig?.direction || 'ltr'
 
   // Extract external scripts from page.scripts
   // Support both 'external' (test shorthand) and 'externalScripts' (schema property)

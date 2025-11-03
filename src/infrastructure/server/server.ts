@@ -12,6 +12,7 @@ import { cors } from 'hono/cors'
 import { ServerCreationError } from '@/infrastructure/errors/server-creation-error'
 import { createApiRoutes } from '@/presentation/api/app'
 import { getOpenAPIDocument } from '@/presentation/api/openapi-schema'
+import { detectLanguageFromHeader } from '@/presentation/utils/accept-language-parser'
 import { auth } from '../auth/better-auth/auth'
 import { compileCSS } from '../css/compiler'
 import type { ServerInstance } from '@/application/models/server'
@@ -30,8 +31,8 @@ export interface ServerConfig {
   readonly app: App
   readonly port?: number
   readonly hostname?: string
-  readonly renderHomePage: (app: App) => string
-  readonly renderPage: (app: App, path: string) => string | undefined
+  readonly renderHomePage: (app: App, detectedLanguage?: string) => string
+  readonly renderPage: (app: App, path: string, detectedLanguage?: string) => string | undefined
   readonly renderNotFoundPage: () => string
   readonly renderErrorPage: () => string
 }
@@ -58,8 +59,8 @@ export interface ServerConfig {
  */
 function createHonoApp(
   app: App,
-  renderHomePage: (app: App) => string,
-  renderPage: (app: App, path: string) => string | undefined,
+  renderHomePage: (app: App, detectedLanguage?: string) => string,
+  renderPage: (app: App, path: string, detectedLanguage?: string) => string | undefined,
   renderNotFoundPage: () => string,
   renderErrorPage: () => string
 ): Readonly<Hono> {
@@ -113,7 +114,15 @@ function createHonoApp(
       .on(['POST', 'GET'], '/api/auth/*', (c) => auth.handler(c.req.raw))
       .get('/', (c) => {
         try {
-          const html = renderHomePage(app)
+          // Detect language from Accept-Language header for SSR
+          let detectedLanguage: string | undefined = undefined
+          if (app.languages?.detectBrowser !== false) {
+            const acceptLanguage = c.req.header('Accept-Language')
+            const supportedCodes = app.languages?.supported.map((l) => l.code) || []
+            detectedLanguage = detectLanguageFromHeader(acceptLanguage, supportedCodes)
+          }
+
+          const html = renderHomePage(app, detectedLanguage)
           return c.html(html)
         } catch (error) {
           // Log rendering error
@@ -173,8 +182,16 @@ function createHonoApp(
       .get('*', (c) => {
         const { path } = c.req
 
+        // Detect language from Accept-Language header for SSR
+        let detectedLanguage: string | undefined = undefined
+        if (app.languages?.detectBrowser !== false) {
+          const acceptLanguage = c.req.header('Accept-Language')
+          const supportedCodes = app.languages?.supported.map((l) => l.code) || []
+          detectedLanguage = detectLanguageFromHeader(acceptLanguage, supportedCodes)
+        }
+
         // Render dynamic page
-        const html = renderPage(app, path)
+        const html = renderPage(app, path, detectedLanguage)
         if (!html) {
           return c.html(renderNotFoundPage(), 404)
         }

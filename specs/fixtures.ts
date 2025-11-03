@@ -201,6 +201,7 @@ async function stopServer(serverProcess: ChildProcess): Promise<void> {
 type ServerFixtures = {
   startServerWithSchema: (appSchema: object, options?: { useDatabase?: boolean }) => Promise<void>
   executeQuery: (sql: string) => Promise<{ rows: any[]; rowCount: number }>
+  browserLocale: string | undefined
 }
 
 /**
@@ -208,10 +209,21 @@ type ServerFixtures = {
  * Provides:
  * - startServerWithSchema: Function to start server with custom AppSchema configuration
  *   - When options.useDatabase is true, creates an isolated test database
+ * - browserLocale: Optional locale string (e.g., 'fr-FR') to set browser language
  * Server and database are automatically cleaned up after test completion
  * Configures baseURL for relative navigation with page.goto('/')
  */
 export const test = base.extend<ServerFixtures>({
+  // Browser locale fixture: allows tests to specify a locale (e.g., 'fr-FR')
+  browserLocale: [undefined, { option: true }],
+
+  // Override context to use browserLocale if specified
+  context: async ({ browser, browserLocale }, use) => {
+    const context = await browser.newContext(browserLocale ? { locale: browserLocale } : {})
+    await use(context)
+    await context.close()
+  },
+
   // Server fixture: Start server with custom schema and optional database
   startServerWithSchema: async ({ page }, use, testInfo) => {
     let serverProcess: ChildProcess | null = null

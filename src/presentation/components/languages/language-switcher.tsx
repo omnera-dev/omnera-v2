@@ -5,7 +5,7 @@
  * found in the LICENSE.md file in the root directory of this source tree.
  */
 
-import { type ReactElement, useState, useEffect } from 'react'
+import { type ReactElement, useState, useEffect, useRef } from 'react'
 import { detectBrowserLanguage } from '@/presentation/utils/language-detection'
 import type { Languages } from '@/domain/models/app/languages'
 
@@ -32,55 +32,54 @@ export function LanguageSwitcher({
   // Initialize with default language for server-side rendering
   const [currentLanguageCode, setCurrentLanguageCode] = useState(languages.default)
   const [isDropdownOpen, setIsDropdownOpen] = useState(false)
+  const initializedRef = useRef(false)
 
   // Initialize language on client-side mount
   useEffect(() => {
-    const detectAndSetLanguage = () => {
-      // Priority: localStorage > browser detection > default
-      const persistSelection = languages.persistSelection ?? false
+    // Only run initialization once
+    if (initializedRef.current) {
+      return
+    }
+    initializedRef.current = true
 
-      // 1. Check localStorage first if persistence is enabled
-      if (persistSelection) {
-        const storedLanguage = localStorage.getItem('language')
-        if (storedLanguage) {
-          // Verify stored language is still supported
-          const isSupported = languages.supported.some((lang) => lang.code === storedLanguage)
-          if (isSupported) {
-            setCurrentLanguageCode(storedLanguage)
-            return true
-          }
+    // Priority: localStorage > browser detection > default
+    const persistSelection = languages.persistSelection ?? false
+
+    // 1. Check localStorage first if persistence is enabled
+    if (persistSelection) {
+      const storedLanguage = localStorage.getItem('language')
+      if (storedLanguage) {
+        // Verify stored language is still supported
+        const isSupported = languages.supported.some((lang) => lang.code === storedLanguage)
+        if (isSupported) {
+          setCurrentLanguageCode(storedLanguage)
+          return
         }
       }
+    }
 
-      // 2. Try browser detection if enabled
-      const detectBrowser = languages.detectBrowser ?? true
-      if (detectBrowser) {
-        // Try navigator.language first, then fall back to navigator.languages[0]
-        const browserLang = navigator.language || (navigator.languages && navigator.languages[0])
-        if (browserLang) {
-          const detected = detectBrowserLanguage(browserLang, languages.supported)
-          if (detected) {
-            setCurrentLanguageCode(detected)
-            return true
-          }
-        }
+    // 2. Try browser detection if enabled
+    const detectBrowser = languages.detectBrowser ?? true
+    console.log(
+      '[LanguageSwitcher] detectBrowser:',
+      detectBrowser,
+      'navigator.language:',
+      navigator.language
+    )
+    if (detectBrowser) {
+      const detected = detectBrowserLanguage(navigator.language, languages.supported)
+      console.log('[LanguageSwitcher] detected:', detected)
+      if (detected) {
+        console.log('[LanguageSwitcher] Setting language to:', detected)
+        // Use setTimeout to ensure state update happens after hydration
+        setTimeout(() => {
+          setCurrentLanguageCode(detected)
+        }, 0)
+        return
       }
-
-      // 3. Keep default language (already set in initial state)
-      return false
     }
 
-    // Try detection immediately
-    const detected = detectAndSetLanguage()
-
-    // If no language detected on first try (using default), check again after a short delay
-    // This handles cases where browser language might be set asynchronously (e.g., test init scripts)
-    if (!detected && (languages.detectBrowser ?? true)) {
-      const timeoutId = setTimeout(() => {
-        detectAndSetLanguage()
-      }, 10)
-      return () => clearTimeout(timeoutId)
-    }
+    // 3. Keep default language (already set in initial state)
   }, [languages])
 
   // Handle language selection
@@ -98,15 +97,29 @@ export function LanguageSwitcher({
   // Find current language config for display
   const currentLanguage = languages.supported.find((lang) => lang.code === currentLanguageCode)
 
+  // Client-side check: detect if we're in browser (for debugging)
+  const isBrowser = typeof window !== 'undefined'
+  const navLang = isBrowser ? navigator.language : 'SSR'
+
   return (
-    <div className="relative">
+    <div
+      className="relative"
+      data-detect-browser={languages.detectBrowser?.toString()}
+      data-is-browser={isBrowser.toString()}
+      data-nav-lang={navLang}
+    >
       {/* Language switcher button */}
       <button
         data-testid="language-switcher"
         type="button"
         onClick={() => setIsDropdownOpen(!isDropdownOpen)}
       >
-        <span data-testid="current-language">{currentLanguage?.label || currentLanguageCode}</span>
+        <span
+          data-testid="current-language"
+          data-code={currentLanguageCode}
+        >
+          {currentLanguage?.label || currentLanguageCode}
+        </span>
       </button>
 
       {/* Available languages count (for test assertions) */}
