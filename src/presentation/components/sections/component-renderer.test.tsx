@@ -36,3 +36,79 @@ describe('ComponentRenderer - Variable Substitution', () => {
     expect(html).not.toContain('$title')
   })
 })
+
+describe('ComponentRenderer - Translation Fallback', () => {
+  test('should render French translation when currentLang is fr-FR', () => {
+    const languages = {
+      default: 'en-US',
+      fallback: 'en-US',
+      supported: [
+        { code: 'en-US', label: 'English', direction: 'ltr' as const },
+        { code: 'fr-FR', label: 'Français', direction: 'ltr' as const },
+      ],
+      translations: {
+        'en-US': {
+          'common.save': 'Save',
+          'common.cancel': 'Cancel',
+        },
+        'fr-FR': {
+          'common.save': 'Enregistrer',
+          // 'common.cancel' is missing
+        },
+      },
+    }
+
+    const component = {
+      type: 'button' as const,
+      children: ['$t:common.save'],
+    }
+
+    const html = renderToString(
+      <ComponentRenderer
+        component={component}
+        languages={languages}
+        currentLang="fr-FR"
+      />
+    )
+
+    expect(html).toContain('>Enregistrer</button>')
+    expect(html).not.toContain('>Save</button>')
+  })
+
+  test('should fall back to English when French translation is missing', () => {
+    const languages = {
+      default: 'en-US',
+      fallback: 'en-US',
+      supported: [
+        { code: 'en-US', label: 'English', direction: 'ltr' as const },
+        { code: 'fr-FR', label: 'Français', direction: 'ltr' as const },
+      ],
+      translations: {
+        'en-US': {
+          'common.save': 'Save',
+          'common.cancel': 'Cancel',
+        },
+        'fr-FR': {
+          'common.save': 'Enregistrer',
+          // 'common.cancel' is missing
+        },
+      },
+    }
+
+    const component = {
+      type: 'button' as const,
+      children: ['$t:common.cancel'],
+    }
+
+    const html = renderToString(
+      <ComponentRenderer
+        component={component}
+        languages={languages}
+        currentLang="fr-FR"
+      />
+    )
+
+    expect(html).toContain('>Cancel</button>')
+    expect(html).not.toContain('>common.cancel</button>')
+  })
+})

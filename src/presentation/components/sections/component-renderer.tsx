@@ -35,6 +35,7 @@ import type { Theme } from '@/domain/models/app/theme'
  * @param props.blocks - Optional blocks array for resolving block references
  * @param props.theme - Optional theme configuration for token substitution
  * @param props.languages - Optional languages configuration for language-switcher blocks
+ * @param props.currentLang - Current page language (defaults to languages.default)
  * @returns React element matching the component type
  */
 export function ComponentRenderer({
@@ -43,12 +44,14 @@ export function ComponentRenderer({
   blocks,
   theme,
   languages,
+  currentLang,
 }: {
   readonly component: Component | SimpleBlockReference | BlockReference
   readonly blockName?: string
   readonly blocks?: Blocks
   readonly theme?: Theme
   readonly languages?: Languages
+  readonly currentLang?: string
 }): Readonly<ReactElement | null> {
   // Handle block references - supports both { block: 'name' } and { $ref: 'name' } syntaxes
   if ('block' in component || '$ref' in component) {
@@ -80,6 +83,7 @@ export function ComponentRenderer({
         blocks={blocks}
         theme={theme}
         languages={languages}
+        currentLang={currentLang}
       />
     )
   }
@@ -101,10 +105,10 @@ export function ComponentRenderer({
   // Render children recursively - children can be Component objects or strings
   const renderedChildren = children?.map((child: Component | string, index: number) => {
     if (typeof child === 'string') {
-      // Resolve translation patterns ($t:key) to default language for SSR
-      // Client-side script will update when language changes
-      const defaultLang = languages?.default || 'en-US'
-      return resolveTranslationPattern(child, defaultLang, languages)
+      // Resolve translation patterns ($t:key) using current page language
+      // Falls back to fallback/default language if translation is missing
+      const lang = currentLang || languages?.default || 'en-US'
+      return resolveTranslationPattern(child, lang, languages)
     }
     return (
       <ComponentRenderer
@@ -113,6 +117,7 @@ export function ComponentRenderer({
         blocks={blocks}
         theme={theme}
         languages={languages}
+        currentLang={currentLang}
       />
     )
   })
