@@ -46,9 +46,9 @@
       "given": "children array for block templates",
       "when": "array contains child component objects",
       "then": "it should render nested component structure in DOM",
-      "x-test": {
-        "setup": {
-          "blockDefinition": {
+      "application": {
+        "blocks": [
+          {
             "name": "card",
             "type": "div",
             "children": [
@@ -66,12 +66,27 @@
               }
             ]
           }
-        },
-        "expectedDOM": "<div data-testid=\"block-card\">\n  <div class=\"header\"></div>\n  <div class=\"body\"></div>\n</div>",
+        ],
+        "pages": [
+          {
+            "name": "Demo",
+            "path": "/demo",
+            "sections": [
+              {
+                "block": "card",
+                "vars": {}
+              }
+            ]
+          }
+        ],
+        "expectedDOM": "<div data-testid=\"block-card\"><div class=\"header\"></div><div class=\"body\"></div></div>",
         "assertions": [
-          "Parent div renders with 2 child divs",
-          "Children array preserves order in DOM",
-          "Each child object becomes a DOM element"
+          "children array: Nested component structure",
+          "Parent: <div data-testid=\"block-card\">",
+          "Child 1: <div class=\"header\">",
+          "Child 2: <div class=\"body\">",
+          "Children order preserved in DOM (header first, body second)",
+          "Each child object → DOM element"
         ]
       }
     },
@@ -80,29 +95,47 @@
       "given": "child with required type",
       "when": "each child has type property",
       "then": "it should render child element based on type",
-      "x-test": {
-        "setup": {
-          "children": [
-            {
-              "type": "div"
-            },
-            {
-              "type": "span"
-            },
-            {
-              "type": "button"
-            },
-            {
-              "type": "text"
-            }
-          ]
-        },
-        "expectedDOM": "<div data-testid=\"child-0\"></div>\n<span data-testid=\"child-1\"></span>\n<button data-testid=\"child-2\"></button>\n<p data-testid=\"child-3\"></p>",
+      "application": {
+        "blocks": [
+          {
+            "name": "multi-type",
+            "type": "div",
+            "children": [
+              {
+                "type": "div"
+              },
+              {
+                "type": "span"
+              },
+              {
+                "type": "button"
+              },
+              {
+                "type": "text"
+              }
+            ]
+          }
+        ],
+        "pages": [
+          {
+            "name": "Types",
+            "path": "/types",
+            "sections": [
+              {
+                "block": "multi-type",
+                "vars": {}
+              }
+            ]
+          }
+        ],
+        "expectedDOM": "<div data-testid=\"block-multi-type\"><div></div><span></span><button></button><span></span></div>",
         "assertions": [
-          "Type 'div' renders <div> element",
-          "Type 'span' renders <span> element",
-          "Type 'button' renders <button> element",
-          "Type 'text' renders <p> element"
+          "type property: REQUIRED for every child",
+          "type='div' → <div> element",
+          "type='span' → <span> element",
+          "type='button' → <button> element",
+          "type='text' → <span> element (text wrapper)",
+          "Each child's type determines HTML element rendered"
         ]
       }
     },
