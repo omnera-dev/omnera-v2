@@ -282,7 +282,7 @@ test.describe('Theme Configuration', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-THEME-005: should ensure consistency between theme.breakpoints and responsive variants',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {

@@ -11,6 +11,7 @@ import { Footer } from '@/presentation/components/layout/footer'
 import { Navigation } from '@/presentation/components/layout/navigation'
 import { ComponentRenderer } from '@/presentation/components/sections/component-renderer'
 import { AnimationsRenderer } from '@/presentation/components/theme/animations-renderer'
+import { BreakpointsRenderer } from '@/presentation/components/theme/breakpoints-renderer'
 import type { Blocks } from '@/domain/models/app/blocks'
 import type { Languages } from '@/domain/models/app/languages'
 import type { OpenGraph } from '@/domain/models/app/page/meta/open-graph'
@@ -252,6 +253,7 @@ export function DynamicPage({
       </head>
       <body {...(bodyStyle && { style: bodyStyle })}>
         {theme?.animations && <AnimationsRenderer animations={theme.animations} />}
+        {theme?.breakpoints && <BreakpointsRenderer breakpoints={theme.breakpoints} />}
         {page.layout?.banner && <Banner {...page.layout.banner} />}
         {page.layout?.navigation && <Navigation {...page.layout.navigation} />}
 
