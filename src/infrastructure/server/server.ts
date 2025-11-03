@@ -10,9 +10,9 @@ import { Console, Effect } from 'effect'
 import { Hono } from 'hono'
 import { cors } from 'hono/cors'
 import { ServerCreationError } from '@/infrastructure/errors/server-creation-error'
+import { detectLanguageFromHeader } from '@/infrastructure/utils/accept-language-parser'
 import { createApiRoutes } from '@/presentation/api/app'
 import { getOpenAPIDocument } from '@/presentation/api/openapi-schema'
-import { detectLanguageFromHeader } from '@/presentation/utils/accept-language-parser'
 import { auth } from '../auth/better-auth/auth'
 import { compileCSS } from '../css/compiler'
 import type { ServerInstance } from '@/application/models/server'
@@ -149,12 +149,13 @@ function createHonoApp(
           // If languages are configured, redirect to language subdirectory
           if (app.languages) {
             // Detect language from Accept-Language header
-            let detectedLanguage: string | undefined = undefined
-            if (app.languages.detectBrowser !== false) {
-              const acceptLanguage = c.req.header('Accept-Language')
-              const supportedCodes = app.languages.supported.map((l) => l.code)
-              detectedLanguage = detectLanguageFromHeader(acceptLanguage, supportedCodes)
-            }
+            const detectedLanguage =
+              app.languages.detectBrowser !== false
+                ? detectLanguageFromHeader(
+                    c.req.header('Accept-Language'),
+                    app.languages.supported.map((l) => l.code)
+                  )
+                : undefined
 
             // Use detected language or default
             const targetLanguage = detectedLanguage || app.languages.default
@@ -271,12 +272,13 @@ function createHonoApp(
         const { path } = c.req
 
         // Detect language from Accept-Language header for SSR
-        let detectedLanguage: string | undefined = undefined
-        if (app.languages?.detectBrowser !== false) {
-          const acceptLanguage = c.req.header('Accept-Language')
-          const supportedCodes = app.languages?.supported.map((l) => l.code) || []
-          detectedLanguage = detectLanguageFromHeader(acceptLanguage, supportedCodes)
-        }
+        const detectedLanguage =
+          app.languages?.detectBrowser !== false
+            ? detectLanguageFromHeader(
+                c.req.header('Accept-Language'),
+                app.languages?.supported.map((l) => l.code) || []
+              )
+            : undefined
 
         // Render dynamic page
         const html = renderPage(app, path, detectedLanguage)

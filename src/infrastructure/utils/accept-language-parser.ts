@@ -36,15 +36,15 @@ export function parseAcceptLanguage(header: string | null | undefined): Readonly
     return []
   }
 
-  // Parse each language-quality pair
-  const preferences: LanguagePreference[] = header
+  // Parse each language-quality pair and sort by quality (highest first)
+  const sortedPreferences: ReadonlyArray<LanguagePreference> = header
     .split(',')
     .map((lang) => {
       const [language, qualityStr] = lang.trim().split(';')
 
       // Skip invalid entries without a language code
       if (!language) {
-        return null
+        return undefined
       }
 
       // Extract quality value (default is 1.0 if not specified)
@@ -57,12 +57,10 @@ export function parseAcceptLanguage(header: string | null | undefined): Readonly
         quality: isNaN(quality) ? 0 : quality,
       }
     })
-    .filter((pref): pref is LanguagePreference => pref !== null && pref.language.length > 0 && pref.quality > 0)
+    .filter((pref): pref is LanguagePreference => pref !== undefined && pref.language.length > 0 && pref.quality > 0)
+    .toSorted((a, b) => b.quality - a.quality)
 
-  // Sort by quality (highest first), then by original order
-  preferences.sort((a, b) => b.quality - a.quality)
-
-  return preferences.map((pref) => pref.language)
+  return sortedPreferences.map((pref) => pref.language)
 }
 
 /**
@@ -82,19 +80,25 @@ export function detectLanguageFromHeader(
   const preferences = parseAcceptLanguage(header)
 
   // Try exact matches first
-  for (const preferred of preferences) {
-    if (supportedLanguages.includes(preferred)) {
-      return preferred
-    }
+  const exactMatch = preferences.find((preferred) => supportedLanguages.includes(preferred))
+  if (exactMatch) {
+    return exactMatch
   }
 
   // Try base language matches (e.g., 'fr' from 'fr-FR')
-  for (const preferred of preferences) {
-    const basePreferred = preferred.split('-')[0]
-    const match = supportedLanguages.find((supported) => supported.split('-')[0] === basePreferred)
-    if (match) {
-      return match
-    }
+  const baseMatch = preferences
+    .map((preferred) => ({
+      preferred,
+      basePreferred: preferred.split('-')[0],
+    }))
+    .find(({ basePreferred }) =>
+      supportedLanguages.some((supported) => supported.split('-')[0] === basePreferred)
+    )
+
+  if (baseMatch) {
+    return supportedLanguages.find(
+      (supported) => supported.split('-')[0] === baseMatch.basePreferred
+    )
   }
 
   return undefined
