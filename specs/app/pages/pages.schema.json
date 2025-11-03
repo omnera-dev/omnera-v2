@@ -281,8 +281,8 @@
                 "logo": "/logo.svg",
                 "links": {
                   "desktop": [
-                    {"label": "Home", "href": "/"},
-                    {"label": "About", "href": "/about"}
+                    { "label": "Home", "href": "/" },
+                    { "label": "About", "href": "/about" }
                   ]
                 }
               }

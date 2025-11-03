@@ -63,7 +63,8 @@ export function parseStyle(styleString: string): Record<string, string> {
       const camelCaseProperty = property.replace(/-([a-z])/g, (_, letter) => letter.toUpperCase())
 
       // Normalize animation names to kebab-case
-      const normalizedValue = camelCaseProperty === 'animation' ? normalizeAnimationValue(value) : value
+      const normalizedValue =
+        camelCaseProperty === 'animation' ? normalizeAnimationValue(value) : value
 
       return { ...acc, [camelCaseProperty]: normalizedValue }
     }

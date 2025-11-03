@@ -160,8 +160,11 @@
       "then": "it should validate as nonEmptyString",
       "application": {
         "examples": ["hello", "world", "any text"],
-        "pattern": {"minLength": 1},
-        "assertions": ["Non-empty: Rejects empty strings ''", "Used for: names, titles, descriptions"]
+        "pattern": { "minLength": 1 },
+        "assertions": [
+          "Non-empty: Rejects empty strings ''",
+          "Used for: names, titles, descriptions"
+        ]
       }
     },
     {
@@ -173,7 +176,11 @@
         "valid": ["my-component", "user-profile", "blog-post-123"],
         "invalid": ["MyComponent", "my_component", "my component"],
         "pattern": "^[a-z][a-z0-9]*(-[a-z0-9]+)*$",
-        "assertions": ["Lowercase only", "Hyphens separate words", "Used for: IDs, slugs, CSS classes"]
+        "assertions": [
+          "Lowercase only",
+          "Hyphens separate words",
+          "Used for: IDs, slugs, CSS classes"
+        ]
       }
     },
     {
@@ -185,7 +192,11 @@
         "valid": ["myVariable", "userName123", "ItemCount"],
         "invalid": ["my-variable", "123user", "$name"],
         "pattern": "^[a-zA-Z][a-zA-Z0-9]*$",
-        "assertions": ["Starts with letter", "camelCase or PascalCase", "Used for: JavaScript identifiers"]
+        "assertions": [
+          "Starts with letter",
+          "camelCase or PascalCase",
+          "Used for: JavaScript identifiers"
+        ]
       }
     },
     {
@@ -196,8 +207,16 @@
       "application": {
         "examples": ["Welcome to $siteName", "Hello $userName!", "Total: $count items"],
         "pattern": ".*\\$[a-zA-Z][a-zA-Z0-9]*.*",
-        "substitution": {"before": "Welcome to $siteName", "after": "Welcome to Omnera", "vars": {"siteName": "Omnera"}},
-        "assertions": ["Contains $variable placeholder", "Runtime substitution", "Used for: dynamic text"]
+        "substitution": {
+          "before": "Welcome to $siteName",
+          "after": "Welcome to Omnera",
+          "vars": { "siteName": "Omnera" }
+        },
+        "assertions": [
+          "Contains $variable placeholder",
+          "Runtime substitution",
+          "Used for: dynamic text"
+        ]
       }
     },
     {
@@ -218,10 +237,18 @@
       "when": "value is 'https://example.com/path'",
       "then": "it should validate as url with http/https protocol",
       "application": {
-        "valid": ["https://example.com", "http://localhost:3000", "https://api.example.com/v1/users"],
+        "valid": [
+          "https://example.com",
+          "http://localhost:3000",
+          "https://api.example.com/v1/users"
+        ],
         "invalid": ["example.com", "ftp://files.com", "//cdn.example.com"],
         "pattern": "^https?://",
-        "assertions": ["HTTP or HTTPS only", "Full URL required", "Used for: external links, API endpoints"]
+        "assertions": [
+          "HTTP or HTTPS only",
+          "Full URL required",
+          "Used for: external links, API endpoints"
+        ]
       }
     },
     {
@@ -233,7 +260,11 @@
         "valid": ["./public/logo.svg", "../images/hero.jpg", "./assets/icon.png"],
         "invalid": ["/absolute/path", "https://example.com/file", "file.svg"],
         "pattern": "^\\.{1,2}/",
-        "assertions": ["Starts with ./ or ../", "Relative to current file", "Used for: local assets"]
+        "assertions": [
+          "Starts with ./ or ../",
+          "Relative to current file",
+          "Used for: local assets"
+        ]
       }
     },
     {
@@ -245,7 +276,11 @@
         "valid": ["user@example.com", "john.doe+tag@company.co.uk", "admin@localhost"],
         "invalid": ["user@", "@example.com", "user@.com", "user example.com"],
         "format": "email",
-        "assertions": ["Standard email format", "RFC 5322 compliant", "Used for: contact forms, user accounts"]
+        "assertions": [
+          "Standard email format",
+          "RFC 5322 compliant",
+          "Used for: contact forms, user accounts"
+        ]
       }
     },
     {
@@ -254,9 +289,19 @@
       "when": "value is 'text-center bg-blue-500 p-4'",
       "then": "it should validate as className",
       "application": {
-        "examples": ["text-center bg-blue-500 p-4", "flex items-center justify-between", "w-full max-w-7xl mx-auto"],
-        "usage": {"component": {"type": "div", "props": {"className": "text-center bg-blue-500 p-4"}}},
-        "assertions": ["Any string accepted", "Tailwind utility classes", "Used for: styling components"]
+        "examples": [
+          "text-center bg-blue-500 p-4",
+          "flex items-center justify-between",
+          "w-full max-w-7xl mx-auto"
+        ],
+        "usage": {
+          "component": { "type": "div", "props": { "className": "text-center bg-blue-500 p-4" } }
+        },
+        "assertions": [
+          "Any string accepted",
+          "Tailwind utility classes",
+          "Used for: styling components"
+        ]
       }
     },
     {
@@ -267,8 +312,12 @@
       "application": {
         "valid": ["arrow-right", "check", "user", "star", "heart", "settings"],
         "invalid": ["custom-icon", "my-icon", "icon-123"],
-        "iconLibrary": {"count": "70+", "categories": ["arrows", "actions", "social", "ui"]},
-        "assertions": ["Enum-based validation", "Predefined icon set", "Used for: UI icons, buttons"]
+        "iconLibrary": { "count": "70+", "categories": ["arrows", "actions", "social", "ui"] },
+        "assertions": [
+          "Enum-based validation",
+          "Predefined icon set",
+          "Used for: UI icons, buttons"
+        ]
       }
     },
     {
@@ -277,10 +326,17 @@
       "when": "value is { width: 800, height: 600 }",
       "then": "it should validate as dimensions object",
       "application": {
-        "valid": [{"width": 800, "height": 600}, {"width": 1920, "height": 1080}],
-        "invalid": [{"width": 800}, {"height": 600}, {"w": 800, "h": 600}],
+        "valid": [
+          { "width": 800, "height": 600 },
+          { "width": 1920, "height": 1080 }
+        ],
+        "invalid": [{ "width": 800 }, { "height": 600 }, { "w": 800, "h": 600 }],
         "required": ["width", "height"],
-        "assertions": ["Both width and height required", "Numeric values", "Used for: image sizing, viewports"]
+        "assertions": [
+          "Both width and height required",
+          "Numeric values",
+          "Used for: image sizing, viewports"
+        ]
       }
     },
     {
@@ -296,7 +352,11 @@
           "ui": ["menu", "settings", "user", "users"]
         },
         "totalCount": "70+",
-        "assertions": ["Comprehensive icon library", "Categorized by purpose", "Covers common UI needs"]
+        "assertions": [
+          "Comprehensive icon library",
+          "Categorized by purpose",
+          "Covers common UI needs"
+        ]
       }
     },
     {

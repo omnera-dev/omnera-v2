@@ -12,8 +12,17 @@
       "when": "value is 'home'",
       "then": "it should validate as internal page name",
       "application": {
-        "page": {"name": "Home", "path": "/", "meta": {"lang": "en-US", "title": "Home"}, "sections": []},
-        "assertions": ["Page name: 'Home' (string type)", "Internal identifier for page", "Used in admin UI and logs"]
+        "page": {
+          "name": "Home",
+          "path": "/",
+          "meta": { "lang": "en-US", "title": "Home" },
+          "sections": []
+        },
+        "assertions": [
+          "Page name: 'Home' (string type)",
+          "Internal identifier for page",
+          "Used in admin UI and logs"
+        ]
       }
     },
     {
@@ -22,9 +31,20 @@
       "when": "schema uses $ref to definitions.schema.json#/definitions/name",
       "then": "it should follow shared name pattern from common definitions",
       "application": {
-        "page": {"name": "About", "path": "/about", "meta": {"lang": "en-US", "title": "About"}, "sections": []},
-        "schemaReference": {"location": "../../common/definitions.schema.json#/definitions/name", "pattern": "string"},
-        "assertions": ["DRY: Name validation defined once in definitions.schema.json", "Shared across pages, blocks, components"]
+        "page": {
+          "name": "About",
+          "path": "/about",
+          "meta": { "lang": "en-US", "title": "About" },
+          "sections": []
+        },
+        "schemaReference": {
+          "location": "../../common/definitions.schema.json#/definitions/name",
+          "pattern": "string"
+        },
+        "assertions": [
+          "DRY: Name validation defined once in definitions.schema.json",
+          "Shared across pages, blocks, components"
+        ]
       }
     },
     {
@@ -33,8 +53,17 @@
       "when": "value is 'about'",
       "then": "it should accept simple lowercase names",
       "application": {
-        "page": {"name": "About Us", "path": "/about", "meta": {"lang": "en-US", "title": "About Us"}, "sections": []},
-        "assertions": ["Descriptive name: 'About Us' (human-readable)", "Can include spaces and capitalization", "Displayed in admin UI"]
+        "page": {
+          "name": "About Us",
+          "path": "/about",
+          "meta": { "lang": "en-US", "title": "About Us" },
+          "sections": []
+        },
+        "assertions": [
+          "Descriptive name: 'About Us' (human-readable)",
+          "Can include spaces and capitalization",
+          "Displayed in admin UI"
+        ]
       }
     },
     {
@@ -44,10 +73,23 @@
       "then": "it should accept single-word page identifiers",
       "application": {
         "pages": [
-          {"name": "Pricing", "path": "/pricing", "meta": {"lang": "en-US", "title": "Pricing"}, "sections": []},
-          {"name": "Contact", "path": "/contact", "meta": {"lang": "en-US", "title": "Contact"}, "sections": []}
+          {
+            "name": "Pricing",
+            "path": "/pricing",
+            "meta": { "lang": "en-US", "title": "Pricing" },
+            "sections": []
+          },
+          {
+            "name": "Contact",
+            "path": "/contact",
+            "meta": { "lang": "en-US", "title": "Contact" },
+            "sections": []
+          }
         ],
-        "assertions": ["Single-word names: 'Pricing', 'Contact'", "Simple identifiers for common pages"]
+        "assertions": [
+          "Single-word names: 'Pricing', 'Contact'",
+          "Simple identifiers for common pages"
+        ]
       }
     },
     {
@@ -57,10 +99,24 @@
       "then": "it should accept human-readable names with spaces",
       "application": {
         "pages": [
-          {"name": "Home Page", "path": "/", "meta": {"lang": "en-US", "title": "Home"}, "sections": []},
-          {"name": "About Us", "path": "/about", "meta": {"lang": "en-US", "title": "About"}, "sections": []}
+          {
+            "name": "Home Page",
+            "path": "/",
+            "meta": { "lang": "en-US", "title": "Home" },
+            "sections": []
+          },
+          {
+            "name": "About Us",
+            "path": "/about",
+            "meta": { "lang": "en-US", "title": "About" },
+            "sections": []
+          }
         ],
-        "assertions": ["Human-readable names: 'Home Page', 'About Us'", "Spaces allowed in names", "Displayed in admin UI and breadcrumbs"]
+        "assertions": [
+          "Human-readable names: 'Home Page', 'About Us'",
+          "Spaces allowed in names",
+          "Displayed in admin UI and breadcrumbs"
+        ]
       }
     },
     {
@@ -70,12 +126,36 @@
       "then": "it should provide examples for typical page names",
       "application": {
         "pages": [
-          {"name": "Home", "path": "/", "meta": {"lang": "en-US", "title": "Home"}, "sections": []},
-          {"name": "About", "path": "/about", "meta": {"lang": "en-US", "title": "About"}, "sections": []},
-          {"name": "Pricing", "path": "/pricing", "meta": {"lang": "en-US", "title": "Pricing"}, "sections": []},
-          {"name": "Contact", "path": "/contact", "meta": {"lang": "en-US", "title": "Contact"}, "sections": []}
+          {
+            "name": "Home",
+            "path": "/",
+            "meta": { "lang": "en-US", "title": "Home" },
+            "sections": []
+          },
+          {
+            "name": "About",
+            "path": "/about",
+            "meta": { "lang": "en-US", "title": "About" },
+            "sections": []
+          },
+          {
+            "name": "Pricing",
+            "path": "/pricing",
+            "meta": { "lang": "en-US", "title": "Pricing" },
+            "sections": []
+          },
+          {
+            "name": "Contact",
+            "path": "/contact",
+            "meta": { "lang": "en-US", "title": "Contact" },
+            "sections": []
+          }
         ],
-        "assertions": ["Standard page names: Home, About, Pricing, Contact", "Typical website structure", "Simple, descriptive identifiers"]
+        "assertions": [
+          "Standard page names: Home, About, Pricing, Contact",
+          "Typical website structure",
+          "Simple, descriptive identifiers"
+        ]
       }
     },
     {
@@ -84,10 +164,23 @@
       "when": "page is created without name",
       "then": "it should fail validation (name is required)",
       "application": {
-        "invalidPage": {"path": "/about", "meta": {"lang": "en-US", "title": "About"}, "sections": []},
-        "validationError": {"field": "name", "message": "name is required"},
-        "fix": {"name": "About", "path": "/about", "meta": {"lang": "en-US", "title": "About"}, "sections": []},
-        "assertions": ["INVALID: name property missing", "Required field: name must be present", "Fix: Add name property"]
+        "invalidPage": {
+          "path": "/about",
+          "meta": { "lang": "en-US", "title": "About" },
+          "sections": []
+        },
+        "validationError": { "field": "name", "message": "name is required" },
+        "fix": {
+          "name": "About",
+          "path": "/about",
+          "meta": { "lang": "en-US", "title": "About" },
+          "sections": []
+        },
+        "assertions": [
+          "INVALID: name property missing",
+          "Required field: name must be present",
+          "Fix: Add name property"
+        ]
       }
     },
     {
@@ -97,16 +190,36 @@
       "then": "it should serve as internal identifier separate from URL path",
       "application": {
         "pages": [
-          {"name": "Homepage", "path": "/", "meta": {"lang": "en-US", "title": "Welcome"}, "sections": []},
-          {"name": "Company Info", "path": "/about", "meta": {"lang": "en-US", "title": "About Us"}, "sections": []},
-          {"name": "Plans", "path": "/pricing", "meta": {"lang": "en-US", "title": "Pricing"}, "sections": []}
+          {
+            "name": "Homepage",
+            "path": "/",
+            "meta": { "lang": "en-US", "title": "Welcome" },
+            "sections": []
+          },
+          {
+            "name": "Company Info",
+            "path": "/about",
+            "meta": { "lang": "en-US", "title": "About Us" },
+            "sections": []
+          },
+          {
+            "name": "Plans",
+            "path": "/pricing",
+            "meta": { "lang": "en-US", "title": "Pricing" },
+            "sections": []
+          }
         ],
         "comparison": {
           "name": "Internal identifier (shown in admin)",
           "path": "URL route (shown to users)",
           "meta.title": "Browser tab title (shown in browser)"
         },
-        "assertions": ["name ≠ path ≠ title: Three separate identifiers", "name: Internal (admin UI, logs)", "path: Public URL", "title: Browser display"]
+        "assertions": [
+          "name ≠ path ≠ title: Three separate identifiers",
+          "name: Internal (admin UI, logs)",
+          "path: Public URL",
+          "title: Browser display"
+        ]
       }
     },
     {

@@ -26,9 +26,7 @@ import type { Theme } from '@/domain/models/app/theme'
  * @param animations - Animation configuration from theme
  * @returns Array of CSS keyframe strings
  */
-function generateAnimationKeyframes(
-  animations?: Theme['animations']
-): ReadonlyArray<string> {
+function generateAnimationKeyframes(animations?: Theme['animations']): ReadonlyArray<string> {
   if (!animations) {
     return []
   }

@@ -3,7 +3,7 @@ name: TDD Queue - Processor
 on:
   # Scheduled runs - Every 15 minutes
   schedule:
-    - cron: '*/15 * * * *'
+    - cron: '*/10 * * * *'
 
   # Manual trigger
   workflow_dispatch:

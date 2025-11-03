@@ -51,8 +51,11 @@
       "when": "className is 'text-center mb-4'",
       "then": "it should accept string property",
       "application": {
-        "component": {"type": "div", "props": {"className": "text-center mb-4"}},
-        "assertions": ["String props: className='text-center mb-4'", "Used for: CSS classes, IDs, text"]
+        "component": { "type": "div", "props": { "className": "text-center mb-4" } },
+        "assertions": [
+          "String props: className='text-center mb-4'",
+          "Used for: CSS classes, IDs, text"
+        ]
       }
     },
     {
@@ -61,8 +64,11 @@
       "when": "size is 16",
       "then": "it should accept numeric property",
       "application": {
-        "component": {"type": "div", "props": {"size": 16, "maxItems": 100}},
-        "assertions": ["Numeric props: size=16, maxItems=100", "Used for: dimensions, counts, indexes"]
+        "component": { "type": "div", "props": { "size": 16, "maxItems": 100 } },
+        "assertions": [
+          "Numeric props: size=16, maxItems=100",
+          "Used for: dimensions, counts, indexes"
+        ]
       }
     },
     {
@@ -71,8 +77,11 @@
       "when": "enabled is true",
       "then": "it should accept boolean property",
       "application": {
-        "component": {"type": "button", "props": {"enabled": true, "visible": false}},
-        "assertions": ["Boolean props: enabled=true, visible=false", "Used for: flags, toggles, visibility"]
+        "component": { "type": "button", "props": { "enabled": true, "visible": false } },
+        "assertions": [
+          "Boolean props: enabled=true, visible=false",
+          "Used for: flags, toggles, visibility"
+        ]
       }
     },
     {
@@ -81,7 +90,10 @@
       "when": "style is { padding: '1rem', margin: '2rem' }",
       "then": "it should accept nested object property",
       "application": {
-        "component": {"type": "div", "props": {"style": {"padding": "1rem", "margin": "2rem"}}},
+        "component": {
+          "type": "div",
+          "props": { "style": { "padding": "1rem", "margin": "2rem" } }
+        },
         "assertions": ["Object props: Nested structures", "Used for: styles, config, metadata"]
       }
     },
@@ -91,8 +103,11 @@
       "when": "items is ['one', 'two', 'three']",
       "then": "it should accept array property",
       "application": {
-        "component": {"type": "list", "props": {"items": ["one", "two", "three"]}},
-        "assertions": ["Array props: items=['one', 'two', 'three']", "Used for: lists, collections, options"]
+        "component": { "type": "list", "props": { "items": ["one", "two", "three"] } },
+        "assertions": [
+          "Array props: items=['one', 'two', 'three']",
+          "Used for: lists, collections, options"
+        ]
       }
     },
     {
@@ -101,8 +116,12 @@
       "when": "text is 'Welcome to $siteName'",
       "then": "it should accept string with $variable syntax",
       "application": {
-        "component": {"type": "div", "props": {"text": "Welcome to $siteName"}},
-        "substitution": {"before": "Welcome to $siteName", "after": "Welcome to Omnera", "vars": {"siteName": "Omnera"}},
+        "component": { "type": "div", "props": { "text": "Welcome to $siteName" } },
+        "substitution": {
+          "before": "Welcome to $siteName",
+          "after": "Welcome to Omnera",
+          "vars": { "siteName": "Omnera" }
+        },
         "assertions": ["Variable references: $siteName → Omnera", "Runtime substitution"]
       }
     },
@@ -112,7 +131,10 @@
       "when": "object has className (string), size (number), enabled (boolean)",
       "then": "it should support mixed property types",
       "application": {
-        "component": {"type": "div", "props": {"className": "text-center", "size": 16, "enabled": true}},
+        "component": {
+          "type": "div",
+          "props": { "className": "text-center", "size": 16, "enabled": true }
+        },
         "assertions": ["Mixed types: string + number + boolean", "Flexible prop values"]
       }
     },
@@ -122,9 +144,15 @@
       "when": "properties are maxWidth, minHeight, backgroundColor",
       "then": "it should validate camelCase naming convention",
       "application": {
-        "component": {"type": "div", "props": {"maxWidth": "100%", "minHeight": "50px", "backgroundColor": "#fff"}},
+        "component": {
+          "type": "div",
+          "props": { "maxWidth": "100%", "minHeight": "50px", "backgroundColor": "#fff" }
+        },
         "pattern": "^[a-zA-Z][a-zA-Z0-9]*$",
-        "assertions": ["camelCase names: maxWidth, minHeight, backgroundColor", "JavaScript naming convention"]
+        "assertions": [
+          "camelCase names: maxWidth, minHeight, backgroundColor",
+          "JavaScript naming convention"
+        ]
       }
     },
     {
@@ -133,10 +161,16 @@
       "when": "color is '$primaryColor' and text is 'Hello $userName'",
       "then": "it should support multiple variable references across properties",
       "application": {
-        "component": {"type": "div", "props": {"color": "$primaryColor", "text": "Hello $userName"}},
-        "variables": {"primaryColor": "#007bff", "userName": "John"},
-        "result": {"color": "#007bff", "text": "Hello John"},
-        "assertions": ["Multiple variables: $primaryColor, $userName", "Theme tokens + dynamic data"]
+        "component": {
+          "type": "div",
+          "props": { "color": "$primaryColor", "text": "Hello $userName" }
+        },
+        "variables": { "primaryColor": "#007bff", "userName": "John" },
+        "result": { "color": "#007bff", "text": "Hello John" },
+        "assertions": [
+          "Multiple variables: $primaryColor, $userName",
+          "Theme tokens + dynamic data"
+        ]
       }
     },
     {
@@ -145,8 +179,12 @@
       "when": "no properties are provided",
       "then": "it should accept empty object for components without props",
       "application": {
-        "component": {"type": "div", "props": {}},
-        "assertions": ["Empty props: {} valid", "Optional properties", "Components without configuration"]
+        "component": { "type": "div", "props": {} },
+        "assertions": [
+          "Empty props: {} valid",
+          "Optional properties",
+          "Components without configuration"
+        ]
       }
     },
     {

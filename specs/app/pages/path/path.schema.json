@@ -63,11 +63,7 @@
         "schemaReference": {
           "location": "../../common/definitions.schema.json#/definitions/path",
           "pattern": "^/[a-z0-9]+(/[a-z0-9]+)*$",
-          "sharedAcross": [
-            "pages[].path",
-            "navigation.links[].href",
-            "footer.links[].href"
-          ]
+          "sharedAcross": ["pages[].path", "navigation.links[].href", "footer.links[].href"]
         },
         "assertions": [
           "DRY principle: Path validation defined once in definitions.schema.json",
@@ -228,10 +224,10 @@
           }
         ],
         "expectedRoutes": [
-          {"path": "/", "url": "https://example.com/"},
-          {"path": "/about", "url": "https://example.com/about"},
-          {"path": "/pricing", "url": "https://example.com/pricing"},
-          {"path": "/contact", "url": "https://example.com/contact"}
+          { "path": "/", "url": "https://example.com/" },
+          { "path": "/about", "url": "https://example.com/about" },
+          { "path": "/pricing", "url": "https://example.com/pricing" },
+          { "path": "/contact", "url": "https://example.com/contact" }
         ],
         "assertions": [
           "Standard website structure: 4 common pages",
