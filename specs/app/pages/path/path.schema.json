@@ -47,6 +47,35 @@
           "DRY: path validation defined once in definitions.schema.json",
           "All path schemas reference common definition"
         ]
+      },
+      "application": {
+        "pages": [
+          {
+            "name": "About",
+            "path": "/about",
+            "meta": {
+              "lang": "en-US",
+              "title": "About Us"
+            },
+            "sections": []
+          }
+        ],
+        "schemaReference": {
+          "location": "../../common/definitions.schema.json#/definitions/path",
+          "pattern": "^/[a-z0-9]+(/[a-z0-9]+)*$",
+          "sharedAcross": [
+            "pages[].path",
+            "navigation.links[].href",
+            "footer.links[].href"
+          ]
+        },
+        "assertions": [
+          "DRY principle: Path validation defined once in definitions.schema.json",
+          "Schema reuse: All path fields reference common definition via $ref",
+          "Consistent validation: Same pattern across pages, navigation, footer",
+          "Centralized maintenance: Update one definition, affects all paths",
+          "No duplication: Pattern ^/[a-z0-9]+(/[a-z0-9]+)*$ defined once"
+        ]
       }
     },
     {
@@ -158,6 +187,61 @@
           "Contact: '/contact'",
           "Standard website structure"
         ]
+      },
+      "application": {
+        "pages": [
+          {
+            "name": "Home",
+            "path": "/",
+            "meta": {
+              "lang": "en-US",
+              "title": "Home"
+            },
+            "sections": []
+          },
+          {
+            "name": "About",
+            "path": "/about",
+            "meta": {
+              "lang": "en-US",
+              "title": "About Us"
+            },
+            "sections": []
+          },
+          {
+            "name": "Pricing",
+            "path": "/pricing",
+            "meta": {
+              "lang": "en-US",
+              "title": "Pricing"
+            },
+            "sections": []
+          },
+          {
+            "name": "Contact",
+            "path": "/contact",
+            "meta": {
+              "lang": "en-US",
+              "title": "Contact Us"
+            },
+            "sections": []
+          }
+        ],
+        "expectedRoutes": [
+          {"path": "/", "url": "https://example.com/"},
+          {"path": "/about", "url": "https://example.com/about"},
+          {"path": "/pricing", "url": "https://example.com/pricing"},
+          {"path": "/contact", "url": "https://example.com/contact"}
+        ],
+        "assertions": [
+          "Standard website structure: 4 common pages",
+          "Homepage: / (root path)",
+          "About page: /about (company information)",
+          "Pricing page: /pricing (product/service pricing)",
+          "Contact page: /contact (contact form)",
+          "Typical URL patterns for marketing websites",
+          "All single-level paths (no nesting)"
+        ]
       }
     },
     {
@@ -182,6 +266,38 @@
           "Cannot route to page without path"
         ],
         "expectValidation": "fail"
+      },
+      "application": {
+        "invalidPage": {
+          "name": "About",
+          "meta": {
+            "lang": "en-US",
+            "title": "About Us"
+          },
+          "sections": []
+        },
+        "validationError": {
+          "field": "path",
+          "message": "path is required",
+          "reason": "Every page must have a URL path for routing"
+        },
+        "fix": {
+          "name": "About",
+          "path": "/about",
+          "meta": {
+            "lang": "en-US",
+            "title": "About Us"
+          },
+          "sections": []
+        },
+        "assertions": [
+          "INVALID configuration: path property missing",
+          "Required field: path must be present on every page",
+          "Validation fails: Cannot create page without path",
+          "Routing requirement: Server needs path to generate routes",
+          "Error message: 'path is required'",
+          "Fix: Add path property with value like '/about'"
+        ]
       }
     },
     {
