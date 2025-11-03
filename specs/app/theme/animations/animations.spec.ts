@@ -260,7 +260,7 @@ test.describe('Animation Configuration', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-THEME-ANIMATIONS-008: should validate default transition behavior',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
