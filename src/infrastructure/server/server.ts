@@ -20,9 +20,9 @@ import type { App } from '@/domain/models/app'
 import type { CSSCompilationError } from '@/infrastructure/errors/css-compilation-error'
 
 /**
- * Cache duration for CSS files in seconds (1 hour)
+ * Cache duration for static assets (CSS, JS) in seconds (1 hour)
  */
-const CSS_CACHE_DURATION_SECONDS = 3600
+const STATIC_ASSET_CACHE_DURATION_SECONDS = 3600
 
 /**
  * Extract and validate language code from URL path
@@ -54,6 +54,55 @@ function extractLanguageFromPath(
 
   // Validate against supported languages
   return supportedLanguages.includes(potentialLang) ? potentialLang : undefined
+}
+
+/**
+ * Get array of supported language codes from app configuration
+ *
+ * @param app - Application configuration
+ * @returns Array of language codes or empty array if languages not configured
+ *
+ * @example
+ * getSupportedLanguageCodes(app) // => ['en-US', 'fr-FR', 'es-ES']
+ */
+function getSupportedLanguageCodes(app: App): ReadonlyArray<string> {
+  return app.languages?.supported.map((l) => l.code) || []
+}
+
+/**
+ * Detect language from Accept-Language header if browser detection is enabled
+ *
+ * @param app - Application configuration
+ * @param header - Accept-Language HTTP header value
+ * @returns Detected language code or undefined
+ *
+ * @example
+ * detectLanguageIfEnabled(app, 'fr-FR,fr;q=0.9,en;q=0.8') // => 'fr-FR'
+ * detectLanguageIfEnabled(appWithDetectionDisabled, 'fr-FR') // => undefined
+ */
+function detectLanguageIfEnabled(
+  app: App,
+  header: string | undefined
+): string | undefined {
+  if (app.languages?.detectBrowser === false) {
+    return undefined
+  }
+  return detectLanguageFromHeader(header, getSupportedLanguageCodes(app))
+}
+
+/**
+ * Validate and extract language code from URL subdirectory path
+ *
+ * @param app - Application configuration
+ * @param path - URL path (e.g., '/fr-FR/', '/en-US/about')
+ * @returns Language code if valid subdirectory, undefined otherwise
+ *
+ * @example
+ * validateLanguageSubdirectory(app, '/fr-FR/') // => 'fr-FR'
+ * validateLanguageSubdirectory(app, '/products/pricing') // => undefined
+ */
+function validateLanguageSubdirectory(app: App, path: string): string | undefined {
+  return extractLanguageFromPath(path, getSupportedLanguageCodes(app))
 }
 
 /**
@@ -159,10 +208,7 @@ function createHonoApp(
           }
 
           // Browser detection enabled - detect language from Accept-Language header
-          const detectedLanguage = detectLanguageFromHeader(
-            c.req.header('Accept-Language'),
-            app.languages.supported.map((l) => l.code)
-          )
+          const detectedLanguage = detectLanguageIfEnabled(app, c.req.header('Accept-Language'))
           const targetLanguage = detectedLanguage || app.languages.default
 
           // Only redirect if detected language is different from default
@@ -187,7 +233,7 @@ function createHonoApp(
 
           return c.text(result.css, 200, {
             'Content-Type': 'text/css',
-            'Cache-Control': `public, max-age=${CSS_CACHE_DURATION_SECONDS}`,
+            'Cache-Control': `public, max-age=${STATIC_ASSET_CACHE_DURATION_SECONDS}`,
           })
         } catch (error) {
           // Log error - intentional side effect for error tracking
@@ -207,7 +253,7 @@ function createHonoApp(
 
           return c.text(content, 200, {
             'Content-Type': 'application/javascript',
-            'Cache-Control': `public, max-age=${CSS_CACHE_DURATION_SECONDS}`,
+            'Cache-Control': `public, max-age=${STATIC_ASSET_CACHE_DURATION_SECONDS}`,
           })
         } catch (error) {
           // Log error - intentional side effect for error tracking
@@ -230,8 +276,7 @@ function createHonoApp(
       .get('/:lang/', (c) => {
         try {
           // Extract and validate language from URL
-          const supportedCodes = app.languages?.supported.map((l) => l.code) || []
-          const urlLanguage = extractLanguageFromPath(c.req.path, supportedCodes)
+          const urlLanguage = validateLanguageSubdirectory(app, c.req.path)
 
           // If language is invalid, return 404
           if (!urlLanguage) {
@@ -249,8 +294,7 @@ function createHonoApp(
       .get('/:lang/*', (c) => {
         try {
           // Extract and validate language from URL
-          const supportedCodes = app.languages?.supported.map((l) => l.code) || []
-          const urlLanguage = extractLanguageFromPath(c.req.path, supportedCodes)
+          const urlLanguage = validateLanguageSubdirectory(app, c.req.path)
 
           // If language is invalid, fall back to rendering as regular page path
           // This handles paths like /products/pricing that shouldn't be treated as language subdirectories
@@ -258,13 +302,7 @@ function createHonoApp(
             const { path } = c.req
 
             // Detect language from Accept-Language header for SSR
-            const detectedLanguage =
-              app.languages?.detectBrowser !== false
-                ? detectLanguageFromHeader(
-                    c.req.header('Accept-Language'),
-                    app.languages?.supported.map((l) => l.code) || []
-                  )
-                : undefined
+            const detectedLanguage = detectLanguageIfEnabled(app, c.req.header('Accept-Language'))
 
             // Render dynamic page
             const html = renderPage(app, path, detectedLanguage)
@@ -296,13 +334,7 @@ function createHonoApp(
         const { path } = c.req
 
         // Detect language from Accept-Language header for SSR
-        const detectedLanguage =
-          app.languages?.detectBrowser !== false
-            ? detectLanguageFromHeader(
-                c.req.header('Accept-Language'),
-                app.languages?.supported.map((l) => l.code) || []
-              )
-            : undefined
+        const detectedLanguage = detectLanguageIfEnabled(app, c.req.header('Accept-Language'))
 
         // Render dynamic page
         const html = renderPage(app, path, detectedLanguage)
