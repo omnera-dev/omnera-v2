@@ -257,42 +257,9 @@ test.describe('Languages Configuration', () => {
         await page.evaluate(() => localStorage.clear())
         await page.reload()
 
-        // Debug: Check what navigator.language actually is
-        const navLang = await page.evaluate(() => navigator.language)
-        console.log('[DEBUG] navigator.language:', navLang)
-
-        // Debug: Check if vanilla JS script is loaded
-        const scriptLoaded = await page.evaluate(() => {
-          const scriptTag = document.querySelector('script[src="/assets/language-switcher.js"]')
-          const configEl = document.querySelector('[data-language-switcher-config]')
-          return {
-            scriptTagExists: !!scriptTag,
-            configExists: !!configEl,
-            windowAPP: typeof window.APP_LANGUAGES !== 'undefined',
-          }
-        })
-        console.log('[DEBUG] Script check:', scriptLoaded)
-
         // Wait for vanilla JS script to update the DOM
         // The script is deferred and may take a moment to execute
         await page.waitForTimeout(500)
-
-        // Check for console errors/warnings
-        const consoleLogs = await page.evaluate(() => {
-          // Check if config element exists
-          const configEl = document.querySelector('[data-language-switcher-config]')
-          const currentLangEl = document.querySelector('[data-testid="current-language"]')
-
-          return {
-            configElExists: !!configEl,
-            currentLangElExists: !!currentLangEl,
-            currentLangText: currentLangEl?.textContent,
-            htmlLang: document.documentElement.getAttribute('lang'),
-            navigatorLang: navigator.language,
-            detectBrowserEnabled: window.APP_LANGUAGES?.detectBrowser,
-          }
-        })
-        console.log('[DEBUG] Console check:', JSON.stringify(consoleLogs, null, 2))
 
         // THEN: it should automatically detect and set the browser's preferred language
         await expect(page.locator('[data-testid="current-language"]')).toHaveText('Français')

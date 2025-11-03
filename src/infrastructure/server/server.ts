@@ -80,10 +80,7 @@ function getSupportedLanguageCodes(app: App): ReadonlyArray<string> {
  * detectLanguageIfEnabled(app, 'fr-FR,fr;q=0.9,en;q=0.8') // => 'fr-FR'
  * detectLanguageIfEnabled(appWithDetectionDisabled, 'fr-FR') // => undefined
  */
-function detectLanguageIfEnabled(
-  app: App,
-  header: string | undefined
-): string | undefined {
+function detectLanguageIfEnabled(app: App, header: string | undefined): string | undefined {
   if (app.languages?.detectBrowser === false) {
     return undefined
   }
