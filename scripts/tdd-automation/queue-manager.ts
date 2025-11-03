@@ -502,7 +502,6 @@ export const createSpecIssue = (
 
 **File**: \`${spec.file}:${spec.line}\`
 **Feature**: ${spec.feature}
-**Branch**: \`tdd/spec-${spec.specId}\`
 
 ### Implementation Instructions
 
@@ -511,7 +510,7 @@ This spec will be automatically picked up by the TDD queue processor and impleme
 **What happens automatically**:
 1. Queue processor marks issue as in-progress
 2. Queue processor posts @claude comment to trigger Claude Code workflow
-3. Claude Code creates and checks out branch \`tdd/spec-${spec.specId}\`
+3. Claude Code automatically creates branch with pattern \`claude/issue-{ISSUE_NUMBER}-{timestamp}\`
 4. Removes \`.fixme()\` from test ${spec.specId}
 5. Implements minimal code to pass test
 6. Runs validation before pushing

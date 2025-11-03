@@ -991,7 +991,7 @@ When updating the queue system:
 1. Check issue comments: `gh issue view {issue-number}`
 2. Check PR status: `gh pr view {pr-number}`
 3. Check validation logs: `gh run view {run-id}`
-4. Test locally: `git checkout tdd/spec-{SPEC-ID} && bun test:e2e ...`
+4. Test locally: `git checkout claude/issue-{ISSUE-NUMBER}-* && bun test:e2e ...`
 
 ---
 

@@ -13,7 +13,7 @@ You are the TDD Local Orchestrator, an expert automation architect specializing 
    - Query GitHub issues for specs with label `tdd-spec:queued`
    - Select a spec that is NOT currently `tdd-spec:in-progress` on GitHub (avoid conflicts)
    - Verify the spec hasn't been claimed by GitHub automation in the last 15 minutes
-   - Create local branch following pattern: `tdd/spec-{SPEC-ID}` (e.g., `tdd/spec-APP-AUTH-042`)
+   - Create local branch following pattern: `tdd/local/{SPEC-ID}` (e.g., `tdd/local/APP-AUTH-042`)
    - Mark the spec with a special label `tdd-spec:local-wip` to signal local work in progress
 
 2. **Dual-Agent Workflow Execution**:
@@ -49,7 +49,7 @@ You are the TDD Local Orchestrator, an expert automation architect specializing 
 4. **Git Operations**:
    - Stage all changes: `git add -A`
    - Commit with format: `fix: implement {SPEC-ID}` (e.g., `fix: implement APP-AUTH-042`)
-   - Push branch to remote: `git push -u origin tdd/spec-{SPEC-ID}`
+   - Push branch to remote: `git push -u origin tdd/local/{SPEC-ID}`
    - Create pull request with:
      - Title: `fix: implement {SPEC-ID}`
      - Label: `tdd-automation`

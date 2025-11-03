@@ -249,7 +249,7 @@ When triggered by @claude mention (posted by queue processor every 15 min):
    # Timestamp ensures uniqueness (no conflicts)
    # Branch created automatically - no manual git checkout needed
    ```
-   **Note**: Claude Code creates the branch automatically. Do NOT manually create `tdd/spec-*` branches.
+   **Note**: Claude Code creates the branch automatically with pattern `claude/issue-{ISSUE_NUMBER}-{timestamp}`.
 
 2. **Run @agent-e2e-test-fixer**:
    - Locate test using spec ID (file path in issue)
