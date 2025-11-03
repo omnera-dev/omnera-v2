@@ -35,30 +35,24 @@ function generateThemeStyles(theme?: Theme): string {
     return ''
   }
 
-  let styles: ReadonlyArray<string> = []
+  // Build color styles array
+  const gray900 = colors?.['gray-900']
+  const gray500 = colors?.['gray-500']
+  const colorStyles: ReadonlyArray<string> = [
+    ...(gray900 ? [`h1, h2, h3, h4, h5, h6 { color: ${gray900}; }`] : []),
+    ...(gray500 ? [`p { color: ${gray500}; }`] : []),
+  ]
 
-  // Apply gray-900 to headings (h1-h6) for strong hierarchy
-  // Apply gray-500 to text elements (p) for secondary/placeholder content
-  if (colors) {
-    const gray900 = colors['gray-900']
-    const gray500 = colors['gray-500']
+  // Build spacing styles array
+  const spacingStyles: ReadonlyArray<string> = spacing?.section
+    ? [
+        `:root { --section-padding: ${spacing.section}; }`,
+        `[data-testid="section"] { padding: var(--section-padding, ${spacing.section}); }`,
+      ]
+    : []
 
-    styles = [
-      ...styles,
-      ...(gray900 ? [`h1, h2, h3, h4, h5, h6 { color: ${gray900}; }`] : []),
-      ...(gray500 ? [`p { color: ${gray500}; }`] : []),
-    ]
-  }
-
-  // Apply spacing.section to [data-testid="section"] for layout consistency
-  // Use CSS custom property to preserve original value while also computing pixel value
-  if (spacing?.section) {
-    styles = [
-      ...styles,
-      `:root { --section-padding: ${spacing.section}; }`,
-      `[data-testid="section"] { padding: var(--section-padding, ${spacing.section}); }`,
-    ]
-  }
+  // Combine all styles
+  const styles: ReadonlyArray<string> = [...colorStyles, ...spacingStyles]
 
   return styles.join('\n')
 }
