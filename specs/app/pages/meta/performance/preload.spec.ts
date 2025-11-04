@@ -77,7 +77,7 @@ test.describe('Resource Preloading', () => {
       await page.goto('/')
 
       // THEN: it should preload critical stylesheet
-      await expect(page.locator('link[rel="preload"][as="style"]')).toBeVisible()
+      await expect(page.locator('link[rel="preload"][as="style"]')).toBeAttached()
     }
   )
 
@@ -107,7 +107,7 @@ test.describe('Resource Preloading', () => {
       await page.goto('/')
 
       // THEN: it should preload critical scripts
-      await expect(page.locator('link[rel="preload"][as="script"]')).toBeVisible()
+      await expect(page.locator('link[rel="preload"][as="script"]')).toBeAttached()
     }
   )
 
@@ -171,7 +171,7 @@ test.describe('Resource Preloading', () => {
       await page.goto('/')
 
       // THEN: it should preload hero images
-      await expect(page.locator('link[rel="preload"][as="image"]')).toBeVisible()
+      await expect(page.locator('link[rel="preload"][as="image"]')).toBeAttached()
     }
   )
 
@@ -201,7 +201,7 @@ test.describe('Resource Preloading', () => {
       await page.goto('/')
 
       // THEN: it should prefetch critical API responses
-      await expect(page.locator('link[rel="preload"][as="fetch"]')).toBeVisible()
+      await expect(page.locator('link[rel="preload"][as="fetch"]')).toBeAttached()
     }
   )
 
@@ -271,7 +271,7 @@ test.describe('Resource Preloading', () => {
       await page.goto('/')
 
       // THEN: it should help browser prioritize resource
-      await expect(page.locator('link[rel="preload"][type="font/woff2"]')).toBeVisible()
+      await expect(page.locator('link[rel="preload"][type="font/woff2"]')).toBeAttached()
     }
   )
 
@@ -303,7 +303,7 @@ test.describe('Resource Preloading', () => {
       await page.goto('/')
 
       // THEN: it should preload only when media query matches
-      await expect(page.locator('link[rel="preload"][media="(max-width: 768px)"]')).toBeVisible()
+      await expect(page.locator('link[rel="preload"][media="(max-width: 768px)"]')).toBeAttached()
     }
   )
 
@@ -376,10 +376,10 @@ test.describe('Resource Preloading', () => {
 
       // Verify all preload links
       await expect(page.locator('link[rel="preload"]')).toHaveCount(4)
-      await expect(page.locator('link[rel="preload"][as="style"]')).toBeVisible()
-      await expect(page.locator('link[rel="preload"][as="font"]')).toBeVisible()
-      await expect(page.locator('link[rel="preload"][as="image"]')).toBeVisible()
-      await expect(page.locator('link[rel="preload"][as="fetch"]')).toBeVisible()
+      await expect(page.locator('link[rel="preload"][as="style"]')).toBeAttached()
+      await expect(page.locator('link[rel="preload"][as="font"]')).toBeAttached()
+      await expect(page.locator('link[rel="preload"][as="image"]')).toBeAttached()
+      await expect(page.locator('link[rel="preload"][as="fetch"]')).toBeAttached()
     }
   )
 })

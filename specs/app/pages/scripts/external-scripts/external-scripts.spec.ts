@@ -45,7 +45,7 @@ test.describe('External Scripts', () => {
       // THEN: it should load external JavaScript from CDN
       await expect(
         page.locator('script[src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"]')
-      ).toBeVisible()
+      ).toBeAttached()
     }
   )
 
@@ -215,7 +215,7 @@ test.describe('External Scripts', () => {
 
       // THEN: it should set CORS policy for script loading
       const script = page.locator('head script[src="https://cdn.example.com/head-script.js"]')
-      await expect(script).toBeVisible()
+      await expect(script).toBeAttached()
     }
   )
 
@@ -311,11 +311,11 @@ test.describe('External Scripts', () => {
       // THEN: it should insert script at start of body
       await expect(
         page.locator('script[src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"]')
-      ).toBeVisible()
+      ).toBeAttached()
       await expect(
         page.locator('script[src="https://cdn.jsdelivr.net/npm/chart.js"]')
-      ).toBeVisible()
-      await expect(page.locator('script[src="./js/app.js"]')).toBeVisible()
+      ).toBeAttached()
+      await expect(page.locator('script[src="./js/app.js"]')).toBeAttached()
     }
   )
 
@@ -341,7 +341,7 @@ test.describe('External Scripts', () => {
       await page.goto('/')
 
       // THEN: it should load multiple external scripts in order
-      await expect(page.locator('script[src="./js/app.js"]')).toBeVisible()
+      await expect(page.locator('script[src="./js/app.js"]')).toBeAttached()
     }
   )
 
@@ -368,7 +368,7 @@ test.describe('External Scripts', () => {
 
       // THEN: it should load local JavaScript file
       const script = page.locator('script[src="https://cdn.example.com/script.js"]')
-      await expect(script).toBeVisible()
+      await expect(script).toBeAttached()
       await expect(script).not.toHaveAttribute('async')
       await expect(script).not.toHaveAttribute('defer')
     }
@@ -405,9 +405,9 @@ test.describe('External Scripts', () => {
       await page.goto('/')
 
       // THEN: it should load script with default settings (sync, body-end)
-      await expect(page.locator('head script[src*="alpinejs"]')).toBeVisible()
-      await expect(page.locator('script[src*="chart.js"]')).toBeVisible()
-      await expect(page.locator('script[src="./js/app.js"][type="module"]')).toBeVisible()
+      await expect(page.locator('head script[src*="alpinejs"]')).toBeAttached()
+      await expect(page.locator('script[src*="chart.js"]')).toBeAttached()
+      await expect(page.locator('script[src="./js/app.js"][type="module"]')).toBeAttached()
     }
   )
 })

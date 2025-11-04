@@ -46,7 +46,7 @@ test.describe('Client Scripts Configuration', () => {
       await page.goto('/')
 
       // THEN: it should orchestrate client-side script management
-      await expect(page.locator('script[src="https://cdn.example.com/lib.js"]')).toBeVisible()
+      await expect(page.locator('script[src="https://cdn.example.com/lib.js"]')).toBeAttached()
       const inlineScript = await page
         .locator('script')
         .filter({ hasText: 'console.log("ready")' })
@@ -108,7 +108,7 @@ test.describe('Client Scripts Configuration', () => {
       await page.goto('/')
 
       // THEN: it should include external JavaScript dependencies
-      await expect(page.locator('script[src="https://cdn.example.com/script.js"]')).toBeVisible()
+      await expect(page.locator('script[src="https://cdn.example.com/script.js"]')).toBeAttached()
     }
   )
 
@@ -314,7 +314,7 @@ test.describe('Client Scripts Configuration', () => {
       await page.goto('/')
 
       // THEN: it should compose scripts from modular schemas
-      await expect(page.locator('script[src="https://cdn.example.com/lib.js"]')).toBeVisible()
+      await expect(page.locator('script[src="https://cdn.example.com/lib.js"]')).toBeAttached()
     }
   )
 
@@ -346,7 +346,7 @@ test.describe('Client Scripts Configuration', () => {
         ],
       })
       await page.goto('/')
-      await expect(page.locator('script[src*="alpinejs"]')).toBeVisible()
+      await expect(page.locator('script[src*="alpinejs"]')).toBeAttached()
       const config = await page.evaluate(() => (window as any).APP_CONFIG)
       expect(config?.ready).toBe(true)
       expect(config?.apiUrl).toBe('https://api.example.com')

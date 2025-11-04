@@ -118,7 +118,7 @@ test.describe('Custom Head Elements', () => {
       await page.goto('/')
 
       // THEN: it should add custom script to head
-      await expect(page.locator('script[src="https://example.com/script.js"]')).toBeVisible()
+      await expect(page.locator('script[src="https://example.com/script.js"]')).toBeAttached()
     }
   )
 

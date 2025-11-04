@@ -250,7 +250,7 @@ test.describe('Page Metadata', () => {
       await page.goto('/')
 
       // THEN: it should include CSS and font resources
-      await expect(page.locator('link[rel="stylesheet"][href="/styles/main.css"]')).toBeVisible()
+      await expect(page.locator('link[rel="stylesheet"][href="/styles/main.css"]')).toBeAttached()
       await expect(
         page.locator('link[rel="preconnect"][href="https://fonts.googleapis.com"]')
       ).toBeVisible()
@@ -377,7 +377,7 @@ test.describe('Page Metadata', () => {
       await page.goto('/')
 
       // THEN: it should optimize page load performance
-      await expect(page.locator('link[rel="preload"][as="font"]')).toBeVisible()
+      await expect(page.locator('link[rel="preload"][as="font"]')).toBeAttached()
       await expect(
         page.locator('link[rel="dns-prefetch"][href="https://fonts.googleapis.com"]')
       ).toBeVisible()
@@ -410,7 +410,7 @@ test.describe('Page Metadata', () => {
       await page.goto('/')
 
       // THEN: it should enable visitor analytics
-      await expect(page.locator('script[src*="googletagmanager.com"]')).toBeVisible()
+      await expect(page.locator('script[src*="googletagmanager.com"]')).toBeAttached()
     }
   )
 
@@ -450,9 +450,9 @@ test.describe('Page Metadata', () => {
       // THEN: it should provide comprehensive page metadata management
       await expect(page.locator('html')).toHaveAttribute('lang', 'en-US')
       await expect(page).toHaveTitle('Complete Page Metadata Example')
-      await expect(page.locator('link[rel="canonical"]')).toBeVisible()
-      await expect(page.locator('meta[property="og:title"]')).toBeVisible()
-      await expect(page.locator('meta[name="twitter:card"]')).toBeVisible()
+      await expect(page.locator('link[rel="canonical"]')).toBeAttached()
+      await expect(page.locator('meta[property="og:title"]')).toBeAttached()
+      await expect(page.locator('meta[name="twitter:card"]')).toBeAttached()
     }
   )
 
@@ -491,17 +491,17 @@ test.describe('Page Metadata', () => {
       // Verify basic metadata
       await expect(page.locator('html')).toHaveAttribute('lang', 'en-US')
       await expect(page).toHaveTitle('Complete Test Page')
-      await expect(page.locator('meta[name="description"]')).toBeVisible()
+      await expect(page.locator('meta[name="description"]')).toBeAttached()
 
       // Verify SEO
-      await expect(page.locator('link[rel="canonical"]')).toBeVisible()
-      await expect(page.locator('meta[name="keywords"]')).toBeVisible()
+      await expect(page.locator('link[rel="canonical"]')).toBeAttached()
+      await expect(page.locator('meta[name="keywords"]')).toBeAttached()
 
       // Verify social
-      await expect(page.locator('meta[property="og:title"]')).toBeVisible()
+      await expect(page.locator('meta[property="og:title"]')).toBeAttached()
 
       // Verify performance
-      await expect(page.locator('link[rel="dns-prefetch"]')).toBeVisible()
+      await expect(page.locator('link[rel="dns-prefetch"]')).toBeAttached()
     }
   )
 })

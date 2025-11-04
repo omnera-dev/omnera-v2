@@ -147,7 +147,9 @@ test.describe('DNS Prefetch', () => {
       await page.goto('/')
 
       // THEN: it should optimize CDN resource loading
-      await expect(page.locator('link[rel="dns-prefetch"][href="https://unpkg.com"]')).toBeVisible()
+      await expect(
+        page.locator('link[rel="dns-prefetch"][href="https://unpkg.com"]')
+      ).toBeAttached()
       await expect(
         page.locator('link[rel="dns-prefetch"][href="https://cdn.jsdelivr.net"]')
       ).toBeVisible()

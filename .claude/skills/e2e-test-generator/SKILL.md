@@ -27,6 +27,8 @@ You are a precise mechanical translator that converts validated `x-specs` arrays
 
 Before translating ANY tests, you MUST verify:
 
+**CRITICAL**: When translating specs to tests, always check `expectedDOM` in x-specs to determine correct assertion type. Elements in `<head>` MUST use `.toBeAttached()`, NEVER `.toBeVisible()`.
+
 ### Mandatory Check 1: Schema File Exists
 
 ```typescript
@@ -294,6 +296,118 @@ const price = await page.locator('.total-price').textContent()
 expect(parseFloat(price.replace('$', ''))).toBeGreaterThan(0)
 ```
 
+### 🔍 Head Elements (Special Case for Non-Visible DOM)
+
+**What they are**: Elements in `<head>` that are attached to DOM but never rendered visually (scripts, meta tags, link elements).
+
+**Critical Distinction**:
+- ❌ **NEVER use `.toBeVisible()`** - Head elements are not rendered, using `.toBeVisible()` forces incorrect implementation in `<body>`
+- ✅ **ALWAYS use `.toBeAttached()`** - Verifies DOM presence without visibility requirement
+- ✅ **Use `.toHaveAttribute()`** - For validating specific attributes (href, content, src, etc.)
+- ✅ **Use `.textContent()`** - For inline script/style content validation
+
+**When to use .toBeAttached()**:
+- ✅ **Analytics scripts** (`<script data-testid="analytics-*">` in head)
+- ✅ **Meta tags** (`<meta name="..." content="...">` for SEO, social, etc.)
+- ✅ **Link elements** (`<link rel="icon|dns-prefetch|preload|stylesheet">`)
+- ✅ **External scripts** (`<script src="...">` with position='head')
+- ✅ **Any element x-specs expectedDOM shows in `<head>`**
+
+**Code patterns**:
+```typescript
+// Analytics (ALWAYS in head)
+test(
+  'APP-PAGES-ANALYTICS-001: should support multiple analytics providers',
+  { tag: '@spec' },
+  async ({ page, startServerWithSchema }) => {
+    await startServerWithSchema({ /* config */ })
+    await page.goto('/')
+
+    // ✅ CORRECT: Use .toBeAttached() for head scripts
+    await expect(page.locator('[data-testid="analytics-plausible"]')).toBeAttached()
+    await expect(page.locator('[data-testid="analytics-google"]')).toBeAttached()
+  }
+)
+
+// Meta tags
+test(
+  'APP-PAGES-META-001: should set meta description',
+  { tag: '@spec' },
+  async ({ page, startServerWithSchema }) => {
+    await startServerWithSchema({ /* config */ })
+    await page.goto('/')
+
+    // ✅ CORRECT: Use .toBeAttached() + .toHaveAttribute() for meta tags
+    const meta = page.locator('meta[name="description"]')
+    await expect(meta).toBeAttached()
+    await expect(meta).toHaveAttribute('content', 'expected description')
+  }
+)
+
+// Link elements (favicon, dns-prefetch, preload, etc.)
+test(
+  'APP-PAGES-FAVICON-001: should set favicon',
+  { tag: '@spec' },
+  async ({ page, startServerWithSchema }) => {
+    await startServerWithSchema({ /* config */ })
+    await page.goto('/')
+
+    // ✅ CORRECT: Use .toBeAttached() for link elements in head
+    await expect(page.locator('link[rel="icon"]')).toBeAttached()
+    await expect(page.locator('link[rel="dns-prefetch"]')).toBeAttached()
+    await expect(page.locator('link[rel="preload"]')).toBeAttached()
+  }
+)
+
+// External scripts in head
+test(
+  'APP-PAGES-SCRIPTS-001: should load external script in head',
+  { tag: '@spec' },
+  async ({ page, startServerWithSchema }) => {
+    await startServerWithSchema({
+      pages: [{
+        scripts: {
+          externalScripts: [{ src: 'https://cdn.example.com/lib.js', position: 'head' }]
+        }
+      }]
+    })
+    await page.goto('/')
+
+    // ✅ CORRECT: Use .toBeAttached() for head scripts
+    await expect(page.locator('head script[src="https://cdn.example.com/lib.js"]')).toBeAttached()
+  }
+)
+```
+
+**Common Mistakes to Avoid**:
+```typescript
+// ❌ WRONG: Using .toBeVisible() forces element into <body>
+await expect(page.locator('[data-testid="analytics-plausible"]')).toBeVisible()
+// Result: Implementation puts analytics in <body> to satisfy test
+// Problem: Analytics scripts should be in <head> for proper loading
+
+// ❌ WRONG: Using .toBeVisible() for meta tags
+await expect(page.locator('meta[name="description"]')).toBeVisible()
+// Result: Implementation tries to render meta in <body> or test fails
+// Problem: Meta tags are NEVER visible, they're metadata
+
+// ✅ CORRECT: Use .toBeAttached() for DOM presence
+await expect(page.locator('[data-testid="analytics-plausible"]')).toBeAttached()
+await expect(page.locator('meta[name="description"]')).toBeAttached()
+```
+
+**Reference x-specs expectedDOM**:
+Always check the `expectedDOM` property in x-specs before choosing assertions:
+
+```json
+{
+  "id": "APP-PAGES-ANALYTICS-001",
+  "expectedDOM": "<head><!-- Analytics --><script data-testid=\"analytics-plausible\" src=\"...\"></script></head>"
+}
+```
+
+If expectedDOM shows `<head>` → Use `.toBeAttached()`, NOT `.toBeVisible()`.
+
 ### 🔄 Combined Approach (Best Practice)
 
 Most specs benefit from combining approaches:
@@ -350,6 +464,7 @@ test.fixme(
 | **Routing/URLs** | Assertions | - | URL changes and params |
 | **Accessibility** | ARIA Snapshot | - | Purpose-built for a11y |
 | **Responsive design** | Visual Screenshot | ARIA | Visual at breakpoints + structure |
+| **Head elements (meta/link/script in head)** | .toBeAttached() | .toHaveAttribute() | DOM presence only, never visible - scripts/links/meta in `<head>` |
 
 ### 🔧 Snapshot Management
 

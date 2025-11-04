@@ -50,7 +50,7 @@ test.describe('Favicon', () => {
       await page.goto('/')
 
       // THEN: it should reference default favicon file
-      await expect(page.locator('link[rel="icon"][href="./public/favicon.ico"]')).toBeVisible()
+      await expect(page.locator('link[rel="icon"][href="./public/favicon.ico"]')).toBeAttached()
     }
   )
 
@@ -189,7 +189,7 @@ test.describe('Favicon', () => {
       await page.goto('/')
 
       // THEN: it should enable quick favicon setup
-      await expect(page.locator('link[rel="icon"]')).toBeVisible()
+      await expect(page.locator('link[rel="icon"]')).toBeAttached()
     }
   )
 
@@ -219,7 +219,7 @@ test.describe('Favicon', () => {
       await page.goto('/')
 
       // THEN: it should provide site branding in tabs
-      await expect(page.locator('link[rel="icon"]')).toBeVisible()
+      await expect(page.locator('link[rel="icon"]')).toBeAttached()
     }
   )
 

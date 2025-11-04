@@ -60,8 +60,8 @@ test.describe('Analytics Configuration', () => {
       await page.goto('/')
 
       // THEN: it should support multiple analytics providers
-      await expect(page.locator('[data-testid="analytics-plausible"]')).toBeVisible()
-      await expect(page.locator('[data-testid="analytics-google"]')).toBeVisible()
+      await expect(page.locator('[data-testid="analytics-plausible"]')).toBeAttached()
+      await expect(page.locator('[data-testid="analytics-google"]')).toBeAttached()
     }
   )
 
@@ -89,7 +89,7 @@ test.describe('Analytics Configuration', () => {
           ],
         })
         await page.goto('/')
-        await expect(page.locator(`[data-testid="analytics-${provider}"]`)).toBeVisible()
+        await expect(page.locator(`[data-testid="analytics-${provider}"]`)).toBeAttached()
       }
     }
   )
@@ -125,7 +125,7 @@ test.describe('Analytics Configuration', () => {
       await page.goto('/')
 
       // THEN: it should support 6 analytics providers
-      await expect(page.locator('[data-testid="analytics-google"]')).toBeVisible()
+      await expect(page.locator('[data-testid="analytics-google"]')).toBeAttached()
       await expect(page.locator('[data-testid="analytics-plausible"]')).toBeHidden()
     }
   )
@@ -163,7 +163,7 @@ test.describe('Analytics Configuration', () => {
       await page.goto('/')
 
       // THEN: it should allow enabling/disabling provider
-      await expect(page.locator('script[src="https://plausible.io/js/script.js"]')).toBeVisible()
+      await expect(page.locator('script[src="https://plausible.io/js/script.js"]')).toBeAttached()
     }
   )
 
@@ -274,7 +274,7 @@ test.describe('Analytics Configuration', () => {
       // THEN: it should execute provider initialization code
       await expect(
         page.locator('link[rel="dns-prefetch"][href="https://plausible.io"]')
-      ).toBeVisible()
+      ).toBeAttached()
     }
   )
 
@@ -353,7 +353,7 @@ test.describe('Analytics Configuration', () => {
       await page.goto('/')
 
       // THEN: it should pass configuration to provider
-      await expect(page.locator('script[src*="googletagmanager.com"]')).toBeVisible()
+      await expect(page.locator('script[src*="googletagmanager.com"]')).toBeAttached()
     }
   )
 
@@ -392,7 +392,7 @@ test.describe('Analytics Configuration', () => {
       await page.goto('/')
 
       // THEN: it should configure Google Analytics
-      await expect(page.locator('script[src="https://plausible.io/js/script.js"]')).toBeVisible()
+      await expect(page.locator('script[src="https://plausible.io/js/script.js"]')).toBeAttached()
     }
   )
 
@@ -437,8 +437,8 @@ test.describe('Analytics Configuration', () => {
       await page.goto('/')
 
       // THEN: it should configure privacy-friendly Plausible analytics
-      await expect(page.locator('script[src="https://plausible.io/js/script.js"]')).toBeVisible()
-      await expect(page.locator('script[src*="googletagmanager.com"]')).toBeVisible()
+      await expect(page.locator('script[src="https://plausible.io/js/script.js"]')).toBeAttached()
+      await expect(page.locator('script[src*="googletagmanager.com"]')).toBeAttached()
     }
   )
 
@@ -477,7 +477,7 @@ test.describe('Analytics Configuration', () => {
       await page.goto('/')
 
       // THEN: it should support multi-provider analytics
-      await expect(page.locator('script[src*="posthog.com"]')).toBeVisible()
+      await expect(page.locator('script[src*="posthog.com"]')).toBeAttached()
     }
   )
 
@@ -531,14 +531,14 @@ test.describe('Analytics Configuration', () => {
       // Verify DNS prefetch
       await expect(
         page.locator('link[rel="dns-prefetch"][href="https://plausible.io"]')
-      ).toBeVisible()
+      ).toBeAttached()
       await expect(
         page.locator('link[rel="dns-prefetch"][href="https://www.googletagmanager.com"]')
-      ).toBeVisible()
+      ).toBeAttached()
 
       // Verify scripts loaded
-      await expect(page.locator('script[src="https://plausible.io/js/script.js"]')).toBeVisible()
-      await expect(page.locator('script[src*="googletagmanager.com"]')).toBeVisible()
+      await expect(page.locator('script[src="https://plausible.io/js/script.js"]')).toBeAttached()
+      await expect(page.locator('script[src*="googletagmanager.com"]')).toBeAttached()
 
       // Verify async loading
       await expect(page.locator('script[src="https://plausible.io/js/script.js"]')).toHaveAttribute(

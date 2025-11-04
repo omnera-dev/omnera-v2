@@ -27,7 +27,7 @@ export default defineConfig({
   reporter: [['list']],
 
   /* Snapshot configuration */
-  snapshotDir: './__snapshots__',
+  snapshotDir: './specs',
   snapshotPathTemplate:
     '{snapshotDir}/{testFileDir}/__snapshots__/{testFileName}-snapshots/{arg}{-projectName}{-snapshotSuffix}{ext}',
 

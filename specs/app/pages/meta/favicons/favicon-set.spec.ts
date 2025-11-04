@@ -45,7 +45,7 @@ test.describe('Favicon Set', () => {
       await page.goto('/')
 
       // THEN: it should define browser icon
-      await expect(page.locator('link[rel="icon"]')).toBeVisible()
+      await expect(page.locator('link[rel="icon"]')).toBeAttached()
     }
   )
 
@@ -140,8 +140,8 @@ test.describe('Favicon Set', () => {
       await page.goto('/')
 
       // THEN: it should specify icon dimensions for different contexts
-      await expect(page.locator('link[rel="icon"][sizes="16x16"]')).toBeVisible()
-      await expect(page.locator('link[rel="icon"][sizes="32x32"]')).toBeVisible()
+      await expect(page.locator('link[rel="icon"][sizes="16x16"]')).toBeAttached()
+      await expect(page.locator('link[rel="icon"][sizes="32x32"]')).toBeAttached()
     }
   )
 
@@ -171,7 +171,7 @@ test.describe('Favicon Set', () => {
       await page.goto('/')
 
       // THEN: it should specify MIME type
-      await expect(page.locator('link[rel="icon"][type="image/svg+xml"]')).toBeVisible()
+      await expect(page.locator('link[rel="icon"][type="image/svg+xml"]')).toBeAttached()
     }
   )
 
@@ -238,8 +238,8 @@ test.describe('Favicon Set', () => {
 
       // THEN: it should provide comprehensive multi-device icon support
       await expect(page.locator('link[rel="icon"]')).toHaveCount(2)
-      await expect(page.locator('link[rel="apple-touch-icon"]')).toBeVisible()
-      await expect(page.locator('link[rel="manifest"]')).toBeVisible()
+      await expect(page.locator('link[rel="apple-touch-icon"]')).toBeAttached()
+      await expect(page.locator('link[rel="manifest"]')).toBeAttached()
     }
   )
 
@@ -273,8 +273,8 @@ test.describe('Favicon Set', () => {
 
       // Verify all icon types
       await expect(page.locator('link[rel="icon"]')).toHaveCount(2)
-      await expect(page.locator('link[rel="apple-touch-icon"]')).toBeVisible()
-      await expect(page.locator('link[rel="mask-icon"]')).toBeVisible()
+      await expect(page.locator('link[rel="apple-touch-icon"]')).toBeAttached()
+      await expect(page.locator('link[rel="mask-icon"]')).toBeAttached()
     }
   )
 })

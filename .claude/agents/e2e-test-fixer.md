@@ -217,6 +217,19 @@ Handoff notification:
 
 **Rationale**: E2E tests are the specification. You will make the implementation (src/) match the specification (specs/), not the other way around. You may only modify test files to activate them and remove temporary failure documentation. If a test's logic seems incorrect, ask for human clarification rather than modifying it. **Production code must never contain demonstration modes or workarounds** - if tests have empty sections, the tests should be updated to define proper sections, not the implementation adjusted to handle the empty case specially.
 
+## Test Correction Authority
+
+**TEST CORRECTION AUTHORITY**:
+- ✅ **ALLOWED**: Fix incorrect assertions that would force wrong implementations
+- ✅ **ALLOWED**: Change `.toBeVisible()` → `.toBeAttached()` for head elements (`<script>`, `<link>`, `<meta>` in `<head>`)
+- ✅ **ALLOWED**: Update assertions when x-specs expectedDOM explicitly shows head placement but test uses wrong assertion
+- ✅ **REQUIRED**: Document test fixes in commit message when assertions are corrected
+- ❌ **FORBIDDEN**: Modify test logic, GIVEN-WHEN-THEN structure, or expected outcomes
+- ❌ **FORBIDDEN**: Change assertions for body elements or behavioral tests
+- ❌ **FORBIDDEN**: Fix tests without verifying x-specs expectedDOM first
+
+**Rationale**: Tests are specifications, but incorrect assertions can force incorrect implementations. When x-specs clearly define head placement (expectedDOM shows `<head>`), but test assertions require visibility (.toBeVisible()), the implementation is forced into body incorrectly. Fixing assertions to match x-specs intent prevents architectural violations.
+
 ## Core Responsibilities
 
 1. **Fix E2E Tests Incrementally**: Address one failing test at a time, never attempting to fix multiple tests simultaneously.
@@ -284,6 +297,43 @@ For each failing E2E test, follow this exact sequence:
 - Understand what behavior the test expects
 - Identify the minimal code needed to satisfy the test
 - Check @docs/architecture/testing-strategy.md for F.I.R.S.T principles
+
+#### Test Assertion Validation
+
+Before implementing, verify test assertions match intended element placement from x-specs:
+
+**Check expectedDOM in x-specs**:
+- If expectedDOM shows `<head>` for element → Assertion MUST use `.toBeAttached()`
+- If expectedDOM shows `<body>` for element → Assertion can use `.toBeVisible()`, ARIA snapshots, or screenshots
+- If x-specs show head placement but test uses `.toBeVisible()` → **FIX THE TEST FIRST** before implementing
+
+**Head Element Patterns** (always use `.toBeAttached()`):
+```typescript
+// Analytics, meta tags, links in head
+await expect(page.locator('script[data-testid="analytics"]')).toBeAttached()
+await expect(page.locator('link[rel="icon"]')).toBeAttached()
+await expect(page.locator('meta[name="description"]')).toBeAttached()
+await expect(page.locator('link[rel="dns-prefetch"]')).toBeAttached()
+```
+
+**Body Element Patterns** (can use `.toBeVisible()`):
+```typescript
+// UI components, interactive elements in body
+await expect(page.locator('button[data-testid="submit"]')).toBeVisible()
+await expect(page.locator('nav')).toBeVisible()
+```
+
+**When to Fix Tests**:
+- ✅ Fix: Head element with `.toBeVisible()` assertion
+- ✅ Fix: x-specs expectedDOM conflicts with test assertion
+- ❌ Don't fix: Body element behavioral assertions
+- ❌ Don't fix: Test logic or expected values
+
+**Fixing Process**:
+1. Verify x-specs expectedDOM shows `<head>` placement
+2. Change `.toBeVisible()` → `.toBeAttached()` for that element
+3. Document fix: "fix(test): correct assertion for head element per x-specs"
+4. Proceed with implementation now that test matches specification
 
 ### Step 2: Ensure Domain Schemas Exist (Autonomous Schema Creation)
 
@@ -443,6 +493,14 @@ Skill({ command: "effect-schema-generator" })
 7. Keep domain layer pure (no side effects)
 8. Follow framework-specific patterns from the start (React 19, Hono, Drizzle, etc.)
 9. **Write it right the first time** - no major refactoring after GREEN
+
+**When test assertions don't match x-specs**:
+1. **STOP** - Don't implement code yet
+2. Read x-specs expectedDOM to understand intended element placement
+3. If expectedDOM shows `<head>` but test uses `.toBeVisible()` → Fix test assertion
+4. If uncertain about placement → Ask for clarification
+5. Only implement after test assertions match x-specs intent
+6. Document test fix in commit message
 
 **When encountering ambiguity:**
 1. Ask for clarification about test expectations

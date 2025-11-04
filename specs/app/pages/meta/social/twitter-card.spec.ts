@@ -465,11 +465,11 @@ test.describe('Twitter Card Metadata', () => {
         'content',
         'summary_large_image'
       )
-      await expect(page.locator('meta[name="twitter:title"]')).toBeVisible()
-      await expect(page.locator('meta[name="twitter:description"]')).toBeVisible()
-      await expect(page.locator('meta[name="twitter:image"]')).toBeVisible()
-      await expect(page.locator('meta[name="twitter:site"]')).toBeVisible()
-      await expect(page.locator('meta[name="twitter:creator"]')).toBeVisible()
+      await expect(page.locator('meta[name="twitter:title"]')).toBeAttached()
+      await expect(page.locator('meta[name="twitter:description"]')).toBeAttached()
+      await expect(page.locator('meta[name="twitter:image"]')).toBeAttached()
+      await expect(page.locator('meta[name="twitter:site"]')).toBeAttached()
+      await expect(page.locator('meta[name="twitter:creator"]')).toBeAttached()
     }
   )
 

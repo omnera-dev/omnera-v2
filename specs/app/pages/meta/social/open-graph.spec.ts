@@ -475,10 +475,10 @@ test.describe('Open Graph Metadata', () => {
       await page.goto('/')
 
       // THEN: it should enable audio content sharing
-      await expect(page.locator('meta[property="og:title"]')).toBeVisible()
-      await expect(page.locator('meta[property="og:description"]')).toBeVisible()
-      await expect(page.locator('meta[property="og:image"]')).toBeVisible()
-      await expect(page.locator('meta[property="og:site_name"]')).toBeVisible()
+      await expect(page.locator('meta[property="og:title"]')).toBeAttached()
+      await expect(page.locator('meta[property="og:description"]')).toBeAttached()
+      await expect(page.locator('meta[property="og:image"]')).toBeAttached()
+      await expect(page.locator('meta[property="og:site_name"]')).toBeAttached()
     }
   )
 

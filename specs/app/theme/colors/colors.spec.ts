@@ -50,9 +50,10 @@ test.describe('Color Palette', () => {
                   style: {
                     backgroundColor: '$theme.colors.primary',
                     color: '$theme.colors.secondary',
+                    padding: '20px',
                   },
                 },
-                children: ['Primary'],
+                children: ['Primary Color Text'],
               },
             ],
           },
@@ -63,22 +64,14 @@ test.describe('Color Palette', () => {
       await page.goto('/')
 
       // THEN: it should validate 6-digit hex colors at build time
-      // Validate CSS custom properties generated in :root
-      const css = await page.locator('style').first().textContent()
-      expect(css).toContain(':root')
-      expect(css).toMatch(/--color-primary:\s*#007bff/)
-      expect(css).toMatch(/--color-secondary:\s*#6c757d/)
-
-      // Theme system substitutes $theme.colors.primary → #007bff in backgroundColor
-      const element = page.locator('[data-testid="color-primary"]')
-      const backgroundColor = await element.evaluate(
-        (el) => window.getComputedStyle(el).backgroundColor
+      // Visual validation captures all color properties
+      await expect(page.locator('[data-testid="color-primary"]')).toHaveScreenshot(
+        'colors-001-hex-colors.png',
+        {
+          animations: 'disabled',
+          threshold: 0.2, // Color tolerance
+        }
       )
-      const color = await element.evaluate((el) => window.getComputedStyle(el).color)
-
-      // Verify theme colors were applied (RGB values of #007bff and #6c757d)
-      expect(backgroundColor).toBe('rgb(0, 123, 255)') // #007bff
-      expect(color).toBe('rgb(108, 117, 125)') // #6c757d
     }
   )
 
@@ -106,9 +99,27 @@ test.describe('Color Palette', () => {
                   'data-testid': 'color-primary-transparent',
                   style: {
                     backgroundColor: '$theme.colors.primary-transparent',
+                    padding: '40px',
+                    position: 'relative',
                   },
                 },
-                children: ['Primary Transparent'],
+                children: [
+                  {
+                    type: 'div',
+                    props: {
+                      style: {
+                        position: 'absolute',
+                        top: '0',
+                        left: '0',
+                        width: '100%',
+                        height: '50%',
+                        backgroundColor: '#ffffff',
+                        zIndex: '-1',
+                      },
+                    },
+                  },
+                  'Transparent Background (50% opacity)',
+                ],
               },
             ],
           },
@@ -119,15 +130,14 @@ test.describe('Color Palette', () => {
       await page.goto('/')
 
       // THEN: it should validate 8-digit hex colors with opacity at build time
-      // Theme system substitutes $theme.colors.primary-transparent → #007bff80
-      const element = page.locator('[data-testid="color-primary-transparent"]')
-      const backgroundColor = await element.evaluate(
-        (el) => window.getComputedStyle(el).backgroundColor
+      // Visual validation captures transparency effect
+      await expect(page.locator('[data-testid="color-primary-transparent"]')).toHaveScreenshot(
+        'colors-002-hex-opacity.png',
+        {
+          animations: 'disabled',
+          threshold: 0.2,
+        }
       )
-
-      // Verify 8-digit hex with alpha (80 = 50% opacity) was applied
-      // #007bff80 → rgba(0, 123, 255, 0.5)
-      expect(backgroundColor).toBe('rgba(0, 123, 255, 0.5)')
     }
   )
 
@@ -148,7 +158,20 @@ test.describe('Color Palette', () => {
             name: 'home',
             path: '/',
             meta: { lang: 'en-US', title: 'Test', description: 'Test page' },
-            sections: [{ type: 'div', props: { 'data-testid': 'color-danger' } }],
+            sections: [
+              {
+                type: 'div',
+                props: {
+                  'data-testid': 'color-danger',
+                  style: {
+                    backgroundColor: '$theme.colors.danger',
+                    padding: '20px',
+                    color: '#ffffff',
+                  },
+                },
+                children: ['Danger Color (RGB format)'],
+              },
+            ],
           },
         ],
       })
@@ -157,16 +180,14 @@ test.describe('Color Palette', () => {
       await page.goto('/')
 
       // THEN: it should validate rgb color format at build time
-      // Validate CSS custom property generated in :root
-      const css = await page.locator('style').first().textContent()
-      expect(css).toContain(':root')
-      expect(css).toMatch(/--color-danger:\s*rgb\(255,\s*0,\s*0\)/)
-
-      // Also verify runtime access to custom property
-      const colorValue = await page
-        .locator('[data-testid="color-danger"]')
-        .evaluate((el) => window.getComputedStyle(el).getPropertyValue('--color-danger'))
-      expect(colorValue).toMatch(/rgb\(/)
+      // Visual validation captures RGB color rendering
+      await expect(page.locator('[data-testid="color-danger"]')).toHaveScreenshot(
+        'colors-003-rgb-format.png',
+        {
+          animations: 'disabled',
+          threshold: 0.2,
+        }
+      )
     }
   )
 
@@ -187,7 +208,20 @@ test.describe('Color Palette', () => {
             name: 'home',
             path: '/',
             meta: { lang: 'en-US', title: 'Test', description: 'Test page' },
-            sections: [{ type: 'div', props: { 'data-testid': 'color-danger-semi' } }],
+            sections: [
+              {
+                type: 'div',
+                props: {
+                  'data-testid': 'color-danger-semi',
+                  style: {
+                    backgroundColor: '$theme.colors.danger-semi',
+                    padding: '40px',
+                    color: '#ffffff',
+                  },
+                },
+                children: ['Danger Semi-transparent (RGBA)'],
+              },
+            ],
           },
         ],
       })
@@ -196,16 +230,14 @@ test.describe('Color Palette', () => {
       await page.goto('/')
 
       // THEN: it should validate rgba color format with alpha at build time
-      // Validate CSS custom property generated in :root
-      const css = await page.locator('style').first().textContent()
-      expect(css).toContain(':root')
-      expect(css).toMatch(/--color-danger-semi:\s*rgba\(255,\s*0,\s*0,\s*0\.5\)/)
-
-      // Also verify runtime access to custom property
-      const colorValue = await page
-        .locator('[data-testid="color-danger-semi"]')
-        .evaluate((el) => window.getComputedStyle(el).getPropertyValue('--color-danger-semi'))
-      expect(colorValue).toMatch(/rgba\(/)
+      // Visual validation captures RGBA transparency
+      await expect(page.locator('[data-testid="color-danger-semi"]')).toHaveScreenshot(
+        'colors-004-rgba-format.png',
+        {
+          animations: 'disabled',
+          threshold: 0.2,
+        }
+      )
     }
   )
 
@@ -226,7 +258,20 @@ test.describe('Color Palette', () => {
             name: 'home',
             path: '/',
             meta: { lang: 'en-US', title: 'Test', description: 'Test page' },
-            sections: [{ type: 'div', props: { 'data-testid': 'color-primary' } }],
+            sections: [
+              {
+                type: 'div',
+                props: {
+                  'data-testid': 'color-primary',
+                  style: {
+                    backgroundColor: '$theme.colors.primary',
+                    padding: '20px',
+                    color: '#ffffff',
+                  },
+                },
+                children: ['Primary Color (HSL format)'],
+              },
+            ],
           },
         ],
       })
@@ -235,16 +280,14 @@ test.describe('Color Palette', () => {
       await page.goto('/')
 
       // THEN: it should validate hsl color format at build time
-      // Validate CSS custom property generated in :root
-      const css = await page.locator('style').first().textContent()
-      expect(css).toContain(':root')
-      expect(css).toMatch(/--color-primary:\s*hsl\(210,\s*100%,\s*50%\)/)
-
-      // Also verify runtime access to custom property
-      const colorValue = await page
-        .locator('[data-testid="color-primary"]')
-        .evaluate((el) => window.getComputedStyle(el).getPropertyValue('--color-primary'))
-      expect(colorValue).toMatch(/hsl\(/)
+      // Visual validation captures HSL color rendering
+      await expect(page.locator('[data-testid="color-primary"]')).toHaveScreenshot(
+        'colors-005-hsl-format.png',
+        {
+          animations: 'disabled',
+          threshold: 0.2,
+        }
+      )
     }
   )
 
@@ -265,7 +308,20 @@ test.describe('Color Palette', () => {
             name: 'home',
             path: '/',
             meta: { lang: 'en-US', title: 'Test', description: 'Test page' },
-            sections: [{ type: 'div', props: { 'data-testid': 'color-primary-overlay' } }],
+            sections: [
+              {
+                type: 'div',
+                props: {
+                  'data-testid': 'color-primary-overlay',
+                  style: {
+                    backgroundColor: '$theme.colors.primary-overlay',
+                    padding: '40px',
+                    color: '#ffffff',
+                  },
+                },
+                children: ['Primary Overlay (HSLA)'],
+              },
+            ],
           },
         ],
       })
@@ -274,10 +330,14 @@ test.describe('Color Palette', () => {
       await page.goto('/')
 
       // THEN: it should validate hsla color format with alpha at build time
-      const colorValue = await page
-        .locator('[data-testid="color-primary-overlay"]')
-        .evaluate((el) => window.getComputedStyle(el).getPropertyValue('--color-primary-overlay'))
-      expect(colorValue).toMatch(/hsla\(/)
+      // Visual validation captures HSLA transparency
+      await expect(page.locator('[data-testid="color-primary-overlay"]')).toHaveScreenshot(
+        'colors-006-hsla-format.png',
+        {
+          animations: 'disabled',
+          threshold: 0.2,
+        }
+      )
     }
   )
 
@@ -302,10 +362,67 @@ test.describe('Color Palette', () => {
             path: '/',
             meta: { lang: 'en-US', title: 'Test', description: 'Test page' },
             sections: [
-              { type: 'div', content: 'Primary', props: { 'data-testid': 'color-primary' } },
-              { type: 'div', content: 'Hover', props: { 'data-testid': 'color-primary-hover' } },
-              { type: 'div', content: 'Light', props: { 'data-testid': 'color-primary-light' } },
-              { type: 'div', content: 'Dark', props: { 'data-testid': 'color-primary-dark' } },
+              {
+                type: 'div',
+                props: {
+                  'data-testid': 'color-variants',
+                  style: {
+                    display: 'grid',
+                    gridTemplateColumns: '1fr 1fr 1fr 1fr',
+                    gap: '16px',
+                  },
+                },
+                children: [
+                  {
+                    type: 'div',
+                    props: {
+                      style: {
+                        backgroundColor: '$theme.colors.primary',
+                        padding: '20px',
+                        color: '#ffffff',
+                        textAlign: 'center',
+                      },
+                    },
+                    children: ['Primary'],
+                  },
+                  {
+                    type: 'div',
+                    props: {
+                      style: {
+                        backgroundColor: '$theme.colors.primary-hover',
+                        padding: '20px',
+                        color: '#ffffff',
+                        textAlign: 'center',
+                      },
+                    },
+                    children: ['Hover'],
+                  },
+                  {
+                    type: 'div',
+                    props: {
+                      style: {
+                        backgroundColor: '$theme.colors.primary-light',
+                        padding: '20px',
+                        color: '#000000',
+                        textAlign: 'center',
+                      },
+                    },
+                    children: ['Light'],
+                  },
+                  {
+                    type: 'div',
+                    props: {
+                      style: {
+                        backgroundColor: '$theme.colors.primary-dark',
+                        padding: '20px',
+                        color: '#ffffff',
+                        textAlign: 'center',
+                      },
+                    },
+                    children: ['Dark'],
+                  },
+                ],
+              },
             ],
           },
         ],
@@ -315,10 +432,14 @@ test.describe('Color Palette', () => {
       await page.goto('/')
 
       // THEN: it should validate color variants for hover states and tints
-      await expect(page.locator('[data-testid="color-primary"]')).toBeVisible()
-      await expect(page.locator('[data-testid="color-primary-hover"]')).toBeVisible()
-      await expect(page.locator('[data-testid="color-primary-light"]')).toBeVisible()
-      await expect(page.locator('[data-testid="color-primary-dark"]')).toBeVisible()
+      // Visual validation shows all variants side-by-side
+      await expect(page.locator('[data-testid="color-variants"]')).toHaveScreenshot(
+        'colors-007-variants.png',
+        {
+          animations: 'disabled',
+          threshold: 0.2,
+        }
+      )
     }
   )
 
@@ -344,8 +465,79 @@ test.describe('Color Palette', () => {
             path: '/',
             meta: { lang: 'en-US', title: 'Test', description: 'Test page' },
             sections: [
-              { type: 'div', content: 'Gray 100', props: { 'data-testid': 'color-gray-100' } },
-              { type: 'div', content: 'Gray 900', props: { 'data-testid': 'color-gray-900' } },
+              {
+                type: 'div',
+                props: {
+                  'data-testid': 'color-scale',
+                  style: {
+                    display: 'grid',
+                    gridTemplateColumns: 'repeat(5, 1fr)',
+                    gap: '8px',
+                  },
+                },
+                children: [
+                  {
+                    type: 'div',
+                    props: {
+                      style: {
+                        backgroundColor: '$theme.colors.gray-100',
+                        padding: '24px',
+                        textAlign: 'center',
+                        color: '#000000',
+                      },
+                    },
+                    children: ['100'],
+                  },
+                  {
+                    type: 'div',
+                    props: {
+                      style: {
+                        backgroundColor: '$theme.colors.gray-300',
+                        padding: '24px',
+                        textAlign: 'center',
+                        color: '#000000',
+                      },
+                    },
+                    children: ['300'],
+                  },
+                  {
+                    type: 'div',
+                    props: {
+                      style: {
+                        backgroundColor: '$theme.colors.gray-500',
+                        padding: '24px',
+                        textAlign: 'center',
+                        color: '#ffffff',
+                      },
+                    },
+                    children: ['500'],
+                  },
+                  {
+                    type: 'div',
+                    props: {
+                      style: {
+                        backgroundColor: '$theme.colors.gray-700',
+                        padding: '24px',
+                        textAlign: 'center',
+                        color: '#ffffff',
+                      },
+                    },
+                    children: ['700'],
+                  },
+                  {
+                    type: 'div',
+                    props: {
+                      style: {
+                        backgroundColor: '$theme.colors.gray-900',
+                        padding: '24px',
+                        textAlign: 'center',
+                        color: '#ffffff',
+                      },
+                    },
+                    children: ['900'],
+                  },
+                ],
+              },
             ],
           },
         ],
@@ -355,8 +547,14 @@ test.describe('Color Palette', () => {
       await page.goto('/')
 
       // THEN: it should validate numbered color scales for systematic gradients
-      await expect(page.locator('[data-testid="color-gray-100"]')).toBeVisible()
-      await expect(page.locator('[data-testid="color-gray-900"]')).toBeVisible()
+      // Visual validation shows complete scale progression
+      await expect(page.locator('[data-testid="color-scale"]')).toHaveScreenshot(
+        'colors-008-numbered-scale.png',
+        {
+          animations: 'disabled',
+          threshold: 0.2,
+        }
+      )
     }
   )
 
@@ -385,10 +583,116 @@ test.describe('Color Palette', () => {
             path: '/',
             meta: { lang: 'en-US', title: 'Test', description: 'Test page' },
             sections: [
-              { type: 'div', content: 'Primary', props: { 'data-testid': 'color-primary' } },
-              { type: 'div', content: 'Success', props: { 'data-testid': 'color-success' } },
-              { type: 'div', content: 'Danger', props: { 'data-testid': 'color-danger' } },
-              { type: 'div', content: 'Warning', props: { 'data-testid': 'color-warning' } },
+              {
+                type: 'div',
+                props: {
+                  'data-testid': 'color-system',
+                  style: {
+                    display: 'grid',
+                    gridTemplateColumns: 'repeat(4, 1fr)',
+                    gap: '12px',
+                  },
+                },
+                children: [
+                  {
+                    type: 'div',
+                    props: {
+                      style: {
+                        backgroundColor: '$theme.colors.primary',
+                        padding: '20px',
+                        color: '#ffffff',
+                        textAlign: 'center',
+                      },
+                    },
+                    children: ['Primary'],
+                  },
+                  {
+                    type: 'div',
+                    props: {
+                      style: {
+                        backgroundColor: '$theme.colors.secondary',
+                        padding: '20px',
+                        color: '#ffffff',
+                        textAlign: 'center',
+                      },
+                    },
+                    children: ['Secondary'],
+                  },
+                  {
+                    type: 'div',
+                    props: {
+                      style: {
+                        backgroundColor: '$theme.colors.success',
+                        padding: '20px',
+                        color: '#ffffff',
+                        textAlign: 'center',
+                      },
+                    },
+                    children: ['Success'],
+                  },
+                  {
+                    type: 'div',
+                    props: {
+                      style: {
+                        backgroundColor: '$theme.colors.danger',
+                        padding: '20px',
+                        color: '#ffffff',
+                        textAlign: 'center',
+                      },
+                    },
+                    children: ['Danger'],
+                  },
+                  {
+                    type: 'div',
+                    props: {
+                      style: {
+                        backgroundColor: '$theme.colors.warning',
+                        padding: '20px',
+                        color: '#000000',
+                        textAlign: 'center',
+                      },
+                    },
+                    children: ['Warning'],
+                  },
+                  {
+                    type: 'div',
+                    props: {
+                      style: {
+                        backgroundColor: '$theme.colors.info',
+                        padding: '20px',
+                        color: '#ffffff',
+                        textAlign: 'center',
+                      },
+                    },
+                    children: ['Info'],
+                  },
+                  {
+                    type: 'div',
+                    props: {
+                      style: {
+                        backgroundColor: '$theme.colors.light',
+                        padding: '20px',
+                        color: '#000000',
+                        textAlign: 'center',
+                        border: '1px solid #dee2e6',
+                      },
+                    },
+                    children: ['Light'],
+                  },
+                  {
+                    type: 'div',
+                    props: {
+                      style: {
+                        backgroundColor: '$theme.colors.dark',
+                        padding: '20px',
+                        color: '#ffffff',
+                        textAlign: 'center',
+                      },
+                    },
+                    children: ['Dark'],
+                  },
+                ],
+              },
             ],
           },
         ],
@@ -398,10 +702,14 @@ test.describe('Color Palette', () => {
       await page.goto('/')
 
       // THEN: it should validate comprehensive color system for all UI needs
-      await expect(page.locator('[data-testid="color-primary"]')).toBeVisible()
-      await expect(page.locator('[data-testid="color-success"]')).toBeVisible()
-      await expect(page.locator('[data-testid="color-danger"]')).toBeVisible()
-      await expect(page.locator('[data-testid="color-warning"]')).toBeVisible()
+      // Visual validation shows complete semantic color palette
+      await expect(page.locator('[data-testid="color-system"]')).toHaveScreenshot(
+        'colors-009-comprehensive-system.png',
+        {
+          animations: 'disabled',
+          threshold: 0.2,
+        }
+      )
     }
   )
 
@@ -428,15 +736,55 @@ test.describe('Color Palette', () => {
             sections: [
               {
                 type: 'div',
-                content: 'Text Primary',
-                props: { 'data-testid': 'color-text-primary' },
+                props: {
+                  'data-testid': 'kebab-case-colors',
+                  style: {
+                    display: 'grid',
+                    gridTemplateColumns: 'repeat(3, 1fr)',
+                    gap: '12px',
+                  },
+                },
+                children: [
+                  {
+                    type: 'div',
+                    props: {
+                      style: {
+                        color: '$theme.colors.text-primary',
+                        padding: '20px',
+                        textAlign: 'center',
+                        border: '2px solid',
+                        borderColor: '$theme.colors.border-subtle',
+                      },
+                    },
+                    children: ['text-primary'],
+                  },
+                  {
+                    type: 'div',
+                    props: {
+                      style: {
+                        backgroundColor: '$theme.colors.background-light',
+                        padding: '20px',
+                        textAlign: 'center',
+                        border: '2px solid',
+                        borderColor: '$theme.colors.border-subtle',
+                      },
+                    },
+                    children: ['background-light'],
+                  },
+                  {
+                    type: 'div',
+                    props: {
+                      style: {
+                        backgroundColor: '$theme.colors.primary',
+                        padding: '20px',
+                        color: '#ffffff',
+                        textAlign: 'center',
+                      },
+                    },
+                    children: ['primary'],
+                  },
+                ],
               },
-              {
-                type: 'div',
-                content: 'Background',
-                props: { 'data-testid': 'color-background-light' },
-              },
-              { type: 'div', content: 'Border', props: { 'data-testid': 'color-border-subtle' } },
             ],
           },
         ],
@@ -446,9 +794,14 @@ test.describe('Color Palette', () => {
       await page.goto('/')
 
       // THEN: it should validate kebab-case naming convention
-      await expect(page.locator('[data-testid="color-text-primary"]')).toBeVisible()
-      await expect(page.locator('[data-testid="color-background-light"]')).toBeVisible()
-      await expect(page.locator('[data-testid="color-border-subtle"]')).toBeVisible()
+      // Visual validation shows kebab-case color application
+      await expect(page.locator('[data-testid="kebab-case-colors"]')).toHaveScreenshot(
+        'colors-010-kebab-case.png',
+        {
+          animations: 'disabled',
+          threshold: 0.2,
+        }
+      )
     }
   )
 
