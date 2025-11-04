@@ -972,6 +972,28 @@ test.describe('Languages Configuration', () => {
         'content',
         'Tienda AudioTech'
       )
+
+      // Validate hreflang alternate links for SEO (multi-language site discovery)
+      const hreflangLinks = page.locator('link[rel="alternate"][hreflang]')
+      await expect(hreflangLinks).toHaveCount(4) // en-US, fr-FR, es-ES, x-default
+
+      // Verify each language has proper hreflang link
+      await expect(page.locator('link[hreflang="en-US"]')).toHaveAttribute(
+        'href',
+        expect.stringMatching(/\/en-US\/?/)
+      )
+      await expect(page.locator('link[hreflang="fr-FR"]')).toHaveAttribute(
+        'href',
+        expect.stringMatching(/\/fr-FR\/?/)
+      )
+      await expect(page.locator('link[hreflang="es-ES"]')).toHaveAttribute(
+        'href',
+        expect.stringMatching(/\/es-ES\/?/)
+      )
+      await expect(page.locator('link[hreflang="x-default"]')).toHaveAttribute(
+        'href',
+        expect.stringMatching(/\/en-US\/?/) // Default language
+      )
     }
   )
 
