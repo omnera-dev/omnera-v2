@@ -24,14 +24,21 @@ test.describe('Common Definitions', () => {
   // One test per spec in schema - defines EXHAUSTIVE acceptance criteria
   // ============================================================================
 
-  test.fixme(
+  test(
     'APP-PAGES-DEFINITIONS-001: should validate as nonEmptyString',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: a non-empty string
       await startServerWithSchema({
         name: 'test-app',
-        pages: [{ name: 'hello', path: '/', meta: { lang: 'en-US', title: 'Test' }, sections: [] }],
+        pages: [
+          {
+            name: 'hello',
+            path: '/',
+            meta: { lang: 'en-US', title: 'Test', description: 'Test page' },
+            sections: [],
+          },
+        ],
       })
 
       // WHEN: value is 'hello'
