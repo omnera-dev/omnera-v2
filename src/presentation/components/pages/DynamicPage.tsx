@@ -235,12 +235,15 @@ function TwitterCardMeta({ page }: { readonly page: Page }): Readonly<ReactEleme
 }
 
 /**
- * Render structured data as JSON-LD script tag
+ * Render structured data as JSON-LD script tags
  * Generates Schema.org structured data for rich search results
  * Supports both 'schema' (canonical) and 'structuredData' (test alias)
  *
+ * Each structured data type (organization, breadcrumb, article, etc.) is rendered
+ * as a separate <script type="application/ld+json"> tag for proper Schema.org validation
+ *
  * @param page - Page configuration
- * @returns Script tag with JSON-LD or undefined
+ * @returns React fragment with script tags or undefined
  */
 function StructuredDataScript({
   page,
@@ -253,13 +256,27 @@ function StructuredDataScript({
     return undefined
   }
 
+  // Extract all structured data types from the orchestrator schema
+  const structuredDataTypes = Object.entries(structuredData).filter(
+    ([, value]) => value !== undefined && value !== null
+  )
+
+  if (structuredDataTypes.length === 0) {
+    return undefined
+  }
+
   return (
-    <script
-      type="application/ld+json"
-      dangerouslySetInnerHTML={{
-        __html: JSON.stringify(structuredData),
-      }}
-    />
+    <>
+      {structuredDataTypes.map(([key, value]) => (
+        <script
+          key={key}
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(value),
+          }}
+        />
+      ))}
+    </>
   )
 }
 

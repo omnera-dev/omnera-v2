@@ -19,7 +19,7 @@ import { test, expect } from '@/specs/fixtures'
  */
 
 test.describe('Breadcrumb Schema', () => {
-  test.fixme(
+  test(
     'APP-PAGES-BREADCRUMB-001: should validate minimal BreadcrumbList structured data',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -28,7 +28,7 @@ test.describe('Breadcrumb Schema', () => {
         name: 'test-app',
         pages: [
           {
-            name: 'Test',
+            name: 'test',
             path: '/',
             meta: {
               lang: 'en-US',
@@ -65,7 +65,7 @@ test.describe('Breadcrumb Schema', () => {
         name: 'test-app',
         pages: [
           {
-            name: 'Test',
+            name: 'test',
             path: '/',
             meta: {
               lang: 'en-US',
@@ -105,7 +105,7 @@ test.describe('Breadcrumb Schema', () => {
         name: 'test-app',
         pages: [
           {
-            name: 'Test',
+            name: 'test',
             path: '/',
             meta: {
               lang: 'en-US',
@@ -144,7 +144,7 @@ test.describe('Breadcrumb Schema', () => {
         name: 'test-app',
         pages: [
           {
-            name: 'Test',
+            name: 'test',
             path: '/',
             meta: {
               lang: 'en-US',
@@ -187,7 +187,7 @@ test.describe('Breadcrumb Schema', () => {
         name: 'test-app',
         pages: [
           {
-            name: 'Test',
+            name: 'test',
             path: '/',
             meta: {
               lang: 'en-US',
@@ -230,7 +230,7 @@ test.describe('Breadcrumb Schema', () => {
         name: 'test-app',
         pages: [
           {
-            name: 'Test',
+            name: 'test',
             path: '/',
             meta: {
               lang: 'en-US',
@@ -275,7 +275,7 @@ test.describe('Breadcrumb Schema', () => {
         name: 'test-app',
         pages: [
           {
-            name: 'Test',
+            name: 'test',
             path: '/',
             meta: {
               lang: 'en-US',
@@ -333,7 +333,7 @@ test.describe('Breadcrumb Schema', () => {
         name: 'test-app',
         pages: [
           {
-            name: 'Test',
+            name: 'test',
             path: '/',
             meta: {
               lang: 'en-US',
@@ -377,7 +377,7 @@ test.describe('Breadcrumb Schema', () => {
         name: 'test-app',
         pages: [
           {
-            name: 'Test',
+            name: 'test',
             path: '/',
             meta: {
               lang: 'en-US',
@@ -422,7 +422,7 @@ test.describe('Breadcrumb Schema', () => {
         name: 'test-app',
         pages: [
           {
-            name: 'Test',
+            name: 'test',
             path: '/',
             meta: {
               lang: 'en-US',
@@ -460,7 +460,7 @@ test.describe('Breadcrumb Schema', () => {
         name: 'test-app',
         pages: [
           {
-            name: 'Test',
+            name: 'test',
             path: '/',
             meta: {
               lang: 'en-US',
