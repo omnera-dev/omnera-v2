@@ -364,16 +364,34 @@ export function DynamicPage({
               data-page-id={page.id}
               style={{ minHeight: '1px' }}
             >
-            {page.sections.map((section, index) => (
-              <ComponentRenderer
-                key={index}
-                component={section}
-                blocks={blocks}
-                theme={theme}
-                languages={languages}
-                currentLang={lang}
-              />
-            ))}
+            {(() => {
+              // Track block instance counts for unique data-testid suffixes
+              // When the same block is used multiple times, each instance gets a unique index
+              const blockInstanceCounts = new Map<string, number>()
+
+              return page.sections.map((section, index) => {
+                // Determine if this section is a block reference and get its instance index
+                let blockInstanceIndex: number | undefined
+                if ('block' in section || '$ref' in section) {
+                  const blockName = 'block' in section ? section.block : section.$ref
+                  const currentCount = blockInstanceCounts.get(blockName) || 0
+                  blockInstanceIndex = currentCount
+                  blockInstanceCounts.set(blockName, currentCount + 1)
+                }
+
+                return (
+                  <ComponentRenderer
+                    key={index}
+                    component={section}
+                    blockInstanceIndex={blockInstanceIndex}
+                    blocks={blocks}
+                    theme={theme}
+                    languages={languages}
+                    currentLang={lang}
+                  />
+                )
+              })
+            })()}
 
             {/* Blocks demonstration - shown when page has no sections but blocks are defined */}
             {page.sections.length === 0 && blocks && blocks.length > 0 && (
