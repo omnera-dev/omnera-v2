@@ -98,8 +98,15 @@ test.describe('Reusable Blocks', () => {
       await page.goto('/')
 
       // THEN: it should render concrete component with substituted values
-      await expect(page.locator('[data-block="single"]')).toBeVisible()
-      await expect(page.locator('[data-block="single"]')).toHaveText('Hello World')
+      const blockElement = page.locator('[data-block="single"]')
+      await expect(blockElement).toBeVisible()
+      await expect(blockElement).toHaveText('Hello World')
+
+      // Validate variable substitution completed (no $ symbols remain)
+      const html = await blockElement.innerHTML()
+      expect(html).not.toContain('$message')
+      expect(html).not.toContain('$')
+      expect(html).toContain('Hello World')
     }
   )
 
@@ -363,6 +370,14 @@ test.describe('Reusable Blocks', () => {
       const button = page.locator('button:has-text("Get Started")')
       await expect(button).toBeVisible()
       await expect(button).toHaveClass(/btn-primary/)
+
+      // Validate variable substitution completed (no $ symbols remain)
+      const buttonHtml = await button.evaluate((el) => el.outerHTML)
+      expect(buttonHtml).not.toContain('$buttonClass')
+      expect(buttonHtml).not.toContain('$buttonText')
+      expect(buttonHtml).not.toContain('$')
+      expect(buttonHtml).toContain('btn-primary')
+      expect(buttonHtml).toContain('Get Started')
     }
   )
 
@@ -533,6 +548,18 @@ test.describe('Reusable Blocks', () => {
       await page.goto('/')
       await expect(page.locator('[data-block="icon-badge"]')).toBeVisible()
       await expect(page.locator('[data-block="feature-card"]')).toBeVisible()
+
+      // Validate variable substitution completed (no $ symbols remain)
+      const iconBadgeHtml = await page.locator('[data-block="icon-badge"]').innerHTML()
+      expect(iconBadgeHtml).not.toContain('$color')
+      expect(iconBadgeHtml).not.toContain('$icon')
+      expect(iconBadgeHtml).not.toContain('$text')
+      expect(iconBadgeHtml).not.toContain('$')
+
+      const featureCardHtml = await page.locator('[data-block="feature-card"]').innerHTML()
+      expect(featureCardHtml).not.toContain('$title')
+      expect(featureCardHtml).not.toContain('$description')
+      expect(featureCardHtml).not.toContain('$')
     }
   )
 })
