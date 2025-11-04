@@ -331,6 +331,35 @@ function renderScriptTag({
 }
 
 /**
+ * Render an inline script tag with JavaScript code
+ * Wraps code in async IIFE if async property is true
+ *
+ * @param props - Inline script configuration
+ * @param props.code - JavaScript code to execute
+ * @param props.async - Wrap in async IIFE
+ * @param props.reactKey - React key for list rendering
+ * @returns Script element with inline code
+ */
+function renderInlineScriptTag({
+  code,
+  async: asyncProp,
+  reactKey,
+}: {
+  readonly code: string
+  readonly async?: boolean
+  readonly reactKey: string | number
+}): Readonly<ReactElement> {
+  const scriptContent = asyncProp ? `(async () => { ${code} })();` : code
+
+  return (
+    <script
+      key={reactKey}
+      dangerouslySetInnerHTML={{ __html: scriptContent }}
+    />
+  )
+}
+
+/**
  * Render analytics provider scripts and configuration in HEAD section
  * Generates DNS prefetch, external scripts with data-testid, and initialization scripts
  *
@@ -698,6 +727,16 @@ export function DynamicPage({
     (script) => !script.position || script.position === 'body-end'
   )
 
+  // Extract inline scripts from page.scripts
+  const inlineScripts = page.scripts?.inlineScripts || []
+
+  // Group inline scripts by position
+  const inlineHeadScripts = inlineScripts.filter((script) => script.position === 'head')
+  const inlineBodyStartScripts = inlineScripts.filter((script) => script.position === 'body-start')
+  const inlineBodyEndScripts = inlineScripts.filter(
+    (script) => !script.position || script.position === 'body-end'
+  )
+
 
   return (
     <html
@@ -746,6 +785,13 @@ export function DynamicPage({
             reactKey: `head-${index}`,
           })
         )}
+        {inlineHeadScripts.map((script, index) =>
+          renderInlineScriptTag({
+            code: script.code,
+            async: script.async,
+            reactKey: `inline-head-${index}`,
+          })
+        )}
       </head>
       <body {...(bodyStyle && { style: bodyStyle })}>
         {bodyStartScripts.map((script, index) =>
@@ -757,6 +803,13 @@ export function DynamicPage({
             integrity: script.integrity,
             crossOrigin: script.crossorigin,
             reactKey: `body-start-${index}`,
+          })
+        )}
+        {inlineBodyStartScripts.map((script, index) =>
+          renderInlineScriptTag({
+            code: script.code,
+            async: script.async,
+            reactKey: `inline-body-start-${index}`,
           })
         )}
         {page.layout?.banner && <Banner {...page.layout.banner} />}
@@ -821,6 +874,13 @@ export function DynamicPage({
             integrity: script.integrity,
             crossOrigin: script.crossorigin,
             reactKey: `body-end-${index}`,
+          })
+        )}
+        {inlineBodyEndScripts.map((script, index) =>
+          renderInlineScriptTag({
+            code: script.code,
+            async: script.async,
+            reactKey: `inline-body-end-${index}`,
           })
         )}
         {/* Client-side language switcher functionality - always inject when languages configured */}
