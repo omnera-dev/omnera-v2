@@ -117,14 +117,24 @@ export function substituteChildrenVariables(
  */
 function normalizeAriaDataProps(key: string): string {
   // Convert ariaLabel → aria-label, dataTestId → data-test-id
-  if (key.startsWith('aria') && key.length > 4 && key[4] === key[4].toUpperCase()) {
+  if (
+    key.startsWith('aria') &&
+    key.length > 4 &&
+    key[4] !== undefined &&
+    key[4] === key[4].toUpperCase()
+  ) {
     // ariaLabel → aria-label
     const suffix = key.slice(4) // 'Label'
     const kebabSuffix = suffix.replace(/([A-Z])/g, '-$1').toLowerCase() // '-label'
     return `aria${kebabSuffix}`
   }
 
-  if (key.startsWith('data') && key.length > 4 && key[4] === key[4].toUpperCase()) {
+  if (
+    key.startsWith('data') &&
+    key.length > 4 &&
+    key[4] !== undefined &&
+    key[4] === key[4].toUpperCase()
+  ) {
     // dataTestId → data-test-id
     const suffix = key.slice(4) // 'TestId'
     const kebabSuffix = suffix.replace(/([A-Z])/g, '-$1').toLowerCase() // '-test-id'
