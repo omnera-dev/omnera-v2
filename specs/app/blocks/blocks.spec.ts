@@ -412,6 +412,82 @@ test.describe('Reusable Blocks', () => {
     }
   )
 
+  test.fixme(
+    'APP-BLOCKS-INTEGRATION-003: should generate structured data and meta tags from block content',
+    { tag: '@spec' },
+    async ({ page, startServerWithSchema }) => {
+      // GIVEN: blocks containing meta/SEO data for structured content
+      await startServerWithSchema({
+        name: 'test-app',
+        blocks: [
+          {
+            name: 'product-card',
+            type: 'article',
+            props: {
+              meta: {
+                title: '$productName',
+                description: '$productDescription',
+                image: '$productImage',
+                price: '$productPrice',
+                currency: '$productCurrency',
+                structuredData: {
+                  type: 'Product',
+                  fields: ['name', 'description', 'image', 'offers'],
+                },
+              },
+            },
+          },
+        ],
+        pages: [
+          {
+            name: 'product',
+            path: '/',
+            meta: { lang: 'en-US', title: 'Product', description: 'Product page' },
+            sections: [
+              {
+                block: 'product-card',
+                vars: {
+                  productName: 'Wireless Headphones',
+                  productDescription: 'Premium noise-cancelling headphones',
+                  productImage: '/images/headphones.jpg',
+                  productPrice: '299.99',
+                  productCurrency: 'USD',
+                },
+              },
+            ],
+          },
+        ],
+      })
+
+      // WHEN: block definition includes meta properties for SEO optimization
+      await page.goto('/')
+
+      // THEN: it should generate structured data and meta tags from block content
+      const productCard = page.locator('[data-testid="block-product-card"]')
+      await expect(productCard).toBeVisible()
+
+      // Verify structured data JSON-LD
+      const structuredData = page.locator('script[type="application/ld+json"]')
+      await expect(structuredData).toBeAttached()
+
+      const jsonLdContent = await structuredData.textContent()
+      const parsedData = JSON.parse(jsonLdContent || '{}')
+
+      expect(parsedData['@type']).toBe('Product')
+      expect(parsedData.name).toBe('Wireless Headphones')
+      expect(parsedData.description).toBe('Premium noise-cancelling headphones')
+      expect(parsedData.image).toBe('/images/headphones.jpg')
+      expect(parsedData.offers.price).toBe('299.99')
+      expect(parsedData.offers.priceCurrency).toBe('USD')
+
+      // Verify meta tags from block
+      await expect(page.locator('meta[property="og:image"]')).toHaveAttribute(
+        'content',
+        '/images/headphones.jpg'
+      )
+    }
+  )
+
   // ============================================================================
   // REGRESSION TEST (@regression)
   // ONE OPTIMIZED test verifying components work together efficiently

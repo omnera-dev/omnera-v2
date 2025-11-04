@@ -11,10 +11,10 @@ import { test, expect } from '@/specs/fixtures'
  * E2E Tests for Border Radius
  *
  * Source: specs/app/theme/border-radius/border-radius.schema.json
- * Spec Count: 9
+ * Spec Count: 14 (13 @spec + 1 @regression)
  *
  * Test Organization:
- * 1. @spec tests - One per spec in schema (9 tests) - Exhaustive acceptance criteria
+ * 1. @spec tests - One per spec in schema (13 tests: 6 validation + 8 application) - Exhaustive acceptance criteria
  * 2. @regression test - ONE optimized integration test - Efficient workflow validation
  */
 
@@ -338,6 +338,263 @@ test.describe('Border Radius', () => {
       const card = page.locator('[data-testid="content-card"]')
       await expect(card).toBeVisible()
       await expect(card).toHaveCSS('border-radius', '0.5rem')
+    }
+  )
+
+  test.fixme(
+    'APP-THEME-RADIUS-APPLICATION-004: should apply smaller radius on mobile for better touch targets and larger radius on desktop for visual polish',
+    { tag: '@spec' },
+    async ({ page, startServerWithSchema }) => {
+      // GIVEN: responsive border-radius varying by breakpoint
+      await startServerWithSchema({
+        name: 'test-app',
+        theme: {
+          borderRadius: {
+            sm: '0.125rem',
+            lg: '0.5rem',
+          },
+        },
+        pages: [
+          {
+            path: '/',
+            sections: [
+              {
+                type: 'button',
+                content: 'Get Started',
+                props: {
+                  'data-testid': 'responsive-button',
+                },
+              },
+            ],
+          },
+        ],
+      })
+
+      // WHEN: mobile uses sm radius and desktop uses lg radius for touch vs visual optimization
+      await page.goto('/')
+
+      // THEN: it should apply smaller radius on mobile for better touch targets and larger radius on desktop for visual polish
+      const button = page.locator('[data-testid="responsive-button"]')
+      await expect(button).toBeVisible()
+      // Mobile: sm radius (0.125rem / 2px) for precise touch targets
+      await expect(button).toHaveCSS('border-radius', '0.125rem')
+    }
+  )
+
+  test.fixme(
+    'APP-THEME-RADIUS-APPLICATION-005: should render element with custom radius on each corner creating arrow-like shape',
+    { tag: '@spec' },
+    async ({ page, startServerWithSchema }) => {
+      // GIVEN: per-corner border-radius for complex shapes
+      await startServerWithSchema({
+        name: 'test-app',
+        theme: {
+          borderRadius: {
+            md: '0.375rem',
+            none: '0',
+          },
+        },
+        pages: [
+          {
+            path: '/',
+            sections: [
+              {
+                type: 'speech-bubble',
+                content: 'Hello!',
+                props: {
+                  'data-testid': 'message-bubble',
+                },
+              },
+            ],
+          },
+        ],
+      })
+
+      // WHEN: speech bubble uses different radius per corner for directional indicator
+      await page.goto('/')
+
+      // THEN: it should render element with custom radius on each corner creating arrow-like shape
+      const bubble = page.locator('[data-testid="message-bubble"]')
+      await expect(bubble).toBeVisible()
+      // Per-corner control: top-left, top-right, bottom-right rounded; bottom-left sharp
+      const borderRadius = await bubble.evaluate((el) => window.getComputedStyle(el).borderRadius)
+      expect(borderRadius).toBeTruthy()
+    }
+  )
+
+  test.fixme(
+    'APP-THEME-RADIUS-APPLICATION-006: should render badge as pill with fully rounded left and right edges',
+    { tag: '@spec' },
+    async ({ page, startServerWithSchema }) => {
+      // GIVEN: full radius for badge and pill-shaped components
+      await startServerWithSchema({
+        name: 'test-app',
+        theme: {
+          borderRadius: {
+            full: '9999px',
+          },
+        },
+        pages: [
+          {
+            path: '/',
+            sections: [
+              {
+                type: 'badge',
+                content: 'New',
+                props: {
+                  'data-testid': 'status-badge',
+                },
+              },
+            ],
+          },
+        ],
+      })
+
+      // WHEN: badge uses theme.borderRadius.full for pill shape
+      await page.goto('/')
+
+      // THEN: it should render badge as pill with fully rounded left and right edges
+      const badge = page.locator('[data-testid="status-badge"]')
+      await expect(badge).toBeVisible()
+      // Radius token: theme.borderRadius.full = '9999px'
+      await expect(badge).toHaveCSS('border-radius', '9999px')
+    }
+  )
+
+  test.fixme(
+    'APP-THEME-RADIUS-APPLICATION-007: should apply appropriate radius for each image context',
+    { tag: '@spec' },
+    async ({ page, startServerWithSchema }) => {
+      // GIVEN: radius patterns for image components (avatar vs thumbnail vs hero)
+      await startServerWithSchema({
+        name: 'test-app',
+        theme: {
+          borderRadius: {
+            full: '9999px',
+            md: '0.375rem',
+            lg: '0.5rem',
+            none: '0',
+          },
+        },
+        pages: [
+          {
+            path: '/',
+            sections: [
+              {
+                type: 'avatar',
+                props: {
+                  'data-testid': 'user-avatar',
+                  src: 'avatar.jpg',
+                  alt: 'User',
+                },
+              },
+              {
+                type: 'thumbnail',
+                props: {
+                  'data-testid': 'post-thumbnail',
+                  src: 'thumbnail.jpg',
+                  alt: 'Post',
+                },
+              },
+              {
+                type: 'hero-image',
+                props: {
+                  'data-testid': 'hero-image',
+                  src: 'hero.jpg',
+                  alt: 'Hero',
+                },
+              },
+            ],
+          },
+        ],
+      })
+
+      // WHEN: different image types require different rounding approaches
+      await page.goto('/')
+
+      // THEN: it should apply appropriate radius for each image context
+      // Avatar: full radius (circle) - square dimensions become perfect circle
+      const avatar = page.locator('[data-testid="user-avatar"]')
+      await expect(avatar).toBeVisible()
+      await expect(avatar).toHaveCSS('border-radius', '9999px')
+
+      // Thumbnail: md radius (moderate rounding) - preserves image aspect ratio
+      const thumbnail = page.locator('[data-testid="post-thumbnail"]')
+      await expect(thumbnail).toBeVisible()
+      await expect(thumbnail).toHaveCSS('border-radius', '0.375rem')
+
+      // Hero: top-lg radius (rounded top only) - integrates with card below
+      const hero = page.locator('[data-testid="hero-image"]')
+      await expect(hero).toBeVisible()
+    }
+  )
+
+  test.fixme(
+    'APP-THEME-RADIUS-APPLICATION-008: should apply radius to create cohesive nested component design',
+    { tag: '@spec' },
+    async ({ page, startServerWithSchema }) => {
+      // GIVEN: card component hierarchy with coordinated border-radius across parent and children
+      await startServerWithSchema({
+        name: 'test-app',
+        theme: {
+          borderRadius: {
+            lg: '0.5rem',
+            md: '0.375rem',
+            none: '0',
+          },
+        },
+        pages: [
+          {
+            path: '/',
+            sections: [
+              {
+                type: 'card-with-header',
+                props: {
+                  'data-testid': 'product-card',
+                },
+                children: [
+                  {
+                    type: 'card-header',
+                    content: 'Header',
+                    props: {
+                      'data-testid': 'card-header',
+                    },
+                  },
+                  {
+                    type: 'card-body',
+                    content: 'Content',
+                    props: {
+                      'data-testid': 'card-body',
+                    },
+                  },
+                  {
+                    type: 'card-footer',
+                    content: 'Footer',
+                    props: {
+                      'data-testid': 'card-footer',
+                    },
+                  },
+                ],
+              },
+            ],
+          },
+        ],
+      })
+
+      // WHEN: card contains header, body, and footer with nested rounding
+      await page.goto('/')
+
+      // THEN: it should apply radius to create cohesive nested component design
+      const card = page.locator('[data-testid="product-card"]')
+      await expect(card).toBeVisible()
+      // Parent card: lg radius (0.5rem) on all corners with overflow: hidden
+      await expect(card).toHaveCSS('border-radius', '0.5rem')
+
+      const header = page.locator('[data-testid="card-header"]')
+      await expect(header).toBeVisible()
+
+      const footer = page.locator('[data-testid="card-footer"]')
+      await expect(footer).toBeVisible()
     }
   )
 

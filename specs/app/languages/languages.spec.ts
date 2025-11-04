@@ -862,6 +862,119 @@ test.describe('Languages Configuration', () => {
     }
   )
 
+  test.fixme(
+    'APP-LANGUAGES-INTEGRATION-003: should generate localized meta tags and structured data per language',
+    { tag: '@spec' },
+    async ({ page, startServerWithSchema }) => {
+      // GIVEN: multi-language pages with localized SEO meta tags
+      await startServerWithSchema({
+        name: 'test-app',
+        languages: {
+          default: 'en-US',
+          supported: [
+            { code: 'en-US', label: 'English', direction: 'ltr' },
+            { code: 'fr-FR', label: 'Français', direction: 'ltr' },
+            { code: 'es-ES', label: 'Español', direction: 'ltr' },
+          ],
+          translations: {
+            'en-US': {
+              'meta.title': 'Premium Wireless Headphones | Shop Now',
+              'meta.description': 'High-quality noise-cancelling headphones with superior sound',
+              'meta.keywords': 'headphones, wireless, noise-cancelling',
+              'meta.og.siteName': 'AudioTech Store',
+            },
+            'fr-FR': {
+              'meta.title': 'Casque Sans Fil Premium | Acheter Maintenant',
+              'meta.description': 'Casque antibruit de haute qualité avec son supérieur',
+              'meta.keywords': 'casque, sans fil, antibruit',
+              'meta.og.siteName': 'Boutique AudioTech',
+            },
+            'es-ES': {
+              'meta.title': 'Auriculares Inalámbricos Premium | Comprar Ahora',
+              'meta.description': 'Auriculares con cancelación de ruido de alta calidad',
+              'meta.keywords': 'auriculares, inalámbricos, cancelación de ruido',
+              'meta.og.siteName': 'Tienda AudioTech',
+            },
+          },
+        },
+        blocks: [
+          {
+            name: 'language-switcher',
+            type: 'language-switcher',
+            props: {
+              variant: 'dropdown',
+            },
+          },
+        ],
+        pages: [
+          {
+            name: 'product',
+            path: '/',
+            meta: {
+              title: '$t:meta.title',
+              description: '$t:meta.description',
+              keywords: '$t:meta.keywords',
+              'og:site_name': '$t:meta.og.siteName',
+            },
+            sections: [
+              {
+                block: 'language-switcher',
+              },
+            ],
+          },
+        ],
+      })
+
+      // WHEN: page meta content uses translation references for different languages
+      await page.goto('/')
+
+      // THEN: it should generate localized meta tags and structured data per language
+      // Verify English (default language)
+      await expect(page).toHaveTitle('Premium Wireless Headphones | Shop Now')
+      await expect(page.locator('html')).toHaveAttribute('lang', 'en-US')
+      await expect(page.locator('meta[name="description"]')).toHaveAttribute(
+        'content',
+        'High-quality noise-cancelling headphones with superior sound'
+      )
+      await expect(page.locator('meta[property="og:site_name"]')).toHaveAttribute(
+        'content',
+        'AudioTech Store'
+      )
+
+      // Switch to French
+      await page.locator('[data-testid="language-switcher"]').click()
+      await page.locator('[data-testid="language-option-fr-FR"]').click()
+
+      // Verify French localized meta tags
+      await expect(page).toHaveTitle('Casque Sans Fil Premium | Acheter Maintenant')
+      await expect(page.locator('html')).toHaveAttribute('lang', 'fr-FR')
+      await expect(page.locator('meta[name="description"]')).toHaveAttribute(
+        'content',
+        'Casque antibruit de haute qualité avec son supérieur'
+      )
+      await expect(page.locator('meta[property="og:site_name"]')).toHaveAttribute(
+        'content',
+        'Boutique AudioTech'
+      )
+
+      // Switch to Spanish
+      await page.locator('[data-testid="language-switcher"]').click()
+      await page.locator('[data-testid="language-option-es-ES"]').click()
+
+      // Verify Spanish localized meta tags
+      await expect(page).toHaveTitle('Auriculares Inalámbricos Premium | Comprar Ahora')
+      await expect(page.locator('html')).toHaveAttribute('lang', 'es-ES')
+      await expect(page.locator('meta[name="description"]')).toHaveAttribute(
+        'content',
+        'Auriculares con cancelación de ruido de alta calidad'
+      )
+      await expect(page.locator('meta[property="og:site_name"]')).toHaveAttribute(
+        'content',
+        'Tienda AudioTech'
+      )
+    }
+  )
+
   test(
     'APP-LANGUAGES-015: should resolve translation keys from centralized translations dictionary',
     { tag: '@spec' },

@@ -630,6 +630,93 @@ test.describe('Theme Configuration', () => {
     }
   )
 
+  test.fixme(
+    'APP-THEME-INTEGRATION-004: should create cohesive branded motion with theme-aware animations',
+    { tag: '@spec' },
+    async ({ page, startServerWithSchema }) => {
+      // GIVEN: theme with animations that use theme color tokens for motion design
+      await startServerWithSchema({
+        name: 'test-app',
+        theme: {
+          colors: {
+            primary: '#007bff',
+            accent: '#ffc107',
+            success: '#28a745',
+          },
+          animations: {
+            duration: {
+              fast: '200ms',
+              normal: '300ms',
+              slow: '500ms',
+            },
+            easing: {
+              smooth: 'cubic-bezier(0.4, 0, 0.2, 1)',
+              bounce: 'cubic-bezier(0.68, -0.55, 0.265, 1.55)',
+              elastic: 'cubic-bezier(0.68, -0.25, 0.265, 1.25)',
+            },
+            keyframes: {
+              fadeIn: {
+                from: { opacity: '0', transform: 'translateY(10px)' },
+                to: { opacity: '1', transform: 'translateY(0)' },
+              },
+              colorPulse: {
+                '0%': { backgroundColor: '$colors.primary' },
+                '50%': { backgroundColor: '$colors.accent' },
+                '100%': { backgroundColor: '$colors.primary' },
+              },
+              successFlash: {
+                '0%': {
+                  backgroundColor: 'transparent',
+                  boxShadow: '0 0 0 0 $colors.success',
+                },
+                '50%': {
+                  backgroundColor: '$colors.success',
+                  boxShadow: '0 0 0 10px transparent',
+                },
+                '100%': {
+                  backgroundColor: 'transparent',
+                  boxShadow: '0 0 0 0 transparent',
+                },
+              },
+            },
+          },
+        },
+        pages: [
+          {
+            path: '/',
+            sections: [
+              {
+                type: 'hero',
+                content: {
+                  button: {
+                    text: 'Get Started',
+                    animation: 'colorPulse 2s $easing.smooth infinite',
+                  },
+                },
+              },
+            ],
+          },
+        ],
+      })
+
+      // WHEN: animations reference theme colors, timing, and easing from design system
+      await page.goto('/')
+
+      // THEN: it should create cohesive branded motion with theme-aware animations
+      // Visual validation: Color pulse animation transitions between primary and accent
+      const ctaButton = page.locator('[data-testid="animated-cta"]')
+      await expect(ctaButton).toHaveScreenshot('theme-integration-004-colorpulse-initial.png')
+
+      // Wait for mid-animation (accent color at 50%)
+      await page.waitForTimeout(1000)
+      await expect(ctaButton).toHaveScreenshot('theme-integration-004-colorpulse-accent.png')
+
+      // Wait for animation cycle completion (back to primary)
+      await page.waitForTimeout(1000)
+      await expect(ctaButton).toHaveScreenshot('theme-integration-004-colorpulse-primary.png')
+    }
+  )
+
   // ============================================================================
   // REGRESSION TEST (@regression)
   // ONE OPTIMIZED test verifying components work together efficiently
