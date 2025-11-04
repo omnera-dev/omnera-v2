@@ -168,8 +168,9 @@ export function ComponentRenderer({
   // For blocks without content, add min-height and display to ensure visibility
   // Add translation key data attribute if children contain $t: patterns
   // Include pre-resolved translations to eliminate client-side resolution logic duplication
-  // Add role="group" for card types to match ARIA accessibility tree structure
+  // Add role="group" for blocks with children to establish proper ARIA tree nesting
   const hasContent = Boolean(content || children?.length)
+  const hasChildren = Boolean(children?.length)
   const testId = blockName
     ? blockInstanceIndex !== undefined
       ? `block-${blockName}-${blockInstanceIndex}`
@@ -184,7 +185,11 @@ export function ComponentRenderer({
       'data-testid': testId,
       'data-type': type,
     }),
-    ...(type === 'card' && { role: 'group' }),
+    ...(blockName &&
+      hasChildren &&
+      (type === 'div' || type === 'container' || type === 'flex' || type === 'grid' || type === 'card') && {
+        role: 'group',
+      }),
     ...(firstTranslationKey &&
       translationData && {
         'data-translation-key': firstTranslationKey,
