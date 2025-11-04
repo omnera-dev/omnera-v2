@@ -151,7 +151,7 @@ test.describe('Block Template', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-BLOCKS-BLOCK-005: should render with properties including variable substitution',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {

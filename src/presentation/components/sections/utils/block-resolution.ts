@@ -5,7 +5,11 @@
  * found in the LICENSE.md file in the root directory of this source tree.
  */
 
-import { substituteBlockVariables, substituteChildrenVariables } from './variable-substitution'
+import {
+  substituteBlockVariables,
+  substituteChildrenVariables,
+  substitutePropsVariables,
+} from './variable-substitution'
 import type { Blocks } from '@/domain/models/app/blocks'
 import type { Component } from '@/domain/models/app/page/sections'
 
@@ -45,7 +49,7 @@ export function resolveBlock(
 
   const component: Component = {
     type: block.type,
-    props: block.props,
+    props: substitutePropsVariables(block.props, vars),
     children: substituteChildrenVariables(blockChildren, vars),
     content:
       typeof block.content === 'string'

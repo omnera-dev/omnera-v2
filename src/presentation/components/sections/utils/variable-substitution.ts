@@ -97,3 +97,99 @@ export function substituteChildrenVariables(
     }
   })
 }
+
+/**
+ * Converts camelCase prop names to kebab-case for HTML attributes
+ *
+ * React JSX expects certain attributes in kebab-case (aria-*, data-*),
+ * but our schema may define them in camelCase for convenience.
+ * This function normalizes prop names to the format React expects.
+ *
+ * @param key - Property key (potentially in camelCase)
+ * @returns Normalized key (kebab-case for aria/data attributes)
+ *
+ * @example
+ * ```typescript
+ * normalizeAriaDataProps('ariaLabel') // 'aria-label'
+ * normalizeAriaDataProps('dataTestId') // 'data-test-id'
+ * normalizeAriaDataProps('className') // 'className' (unchanged)
+ * ```
+ */
+function normalizeAriaDataProps(key: string): string {
+  // Convert ariaLabel → aria-label, dataTestId → data-test-id
+  if (key.startsWith('aria') && key.length > 4 && key[4] === key[4].toUpperCase()) {
+    // ariaLabel → aria-label
+    const suffix = key.slice(4) // 'Label'
+    const kebabSuffix = suffix.replace(/([A-Z])/g, '-$1').toLowerCase() // '-label'
+    return `aria${kebabSuffix}`
+  }
+
+  if (key.startsWith('data') && key.length > 4 && key[4] === key[4].toUpperCase()) {
+    // dataTestId → data-test-id
+    const suffix = key.slice(4) // 'TestId'
+    const kebabSuffix = suffix.replace(/([A-Z])/g, '-$1').toLowerCase() // '-test-id'
+    return `data${kebabSuffix}`
+  }
+
+  return key
+}
+
+/**
+ * Substitutes variables in props recursively
+ *
+ * Walks through props object and replaces all $variable strings with actual values.
+ * Handles nested objects (e.g., style props) recursively.
+ * Supports variable substitution in string values, including partial substitution
+ * within strings (e.g., 'box-$variant' → 'box-primary').
+ * Normalizes aria* and data* prop names to kebab-case for React compatibility.
+ *
+ * @param props - Component props that may contain variable placeholders
+ * @param vars - Variables for substitution
+ * @returns Props with variables replaced and prop names normalized
+ *
+ * @example
+ * ```typescript
+ * const vars = { variant: 'primary', boxId: 'main-box', label: 'Main content' }
+ * const props = {
+ *   className: 'box-$variant',
+ *   id: '$boxId',
+ *   ariaLabel: '$label'
+ * }
+ * substitutePropsVariables(props, vars)
+ * // {
+ * //   className: 'box-primary',
+ * //   id: 'main-box',
+ * //   'aria-label': 'Main content'
+ * // }
+ * ```
+ */
+export function substitutePropsVariables(
+  props: Record<string, unknown> | undefined,
+  vars?: Record<string, string | number | boolean>
+): Record<string, unknown> | undefined {
+  if (!props || !vars) {
+    return props
+  }
+
+  // Use functional Object.entries + reduce for immutable transformation
+  return Object.entries(props).reduce<Record<string, unknown>>((acc, [key, value]) => {
+    // Normalize aria/data prop names (ariaLabel → aria-label)
+    const normalizedKey = normalizeAriaDataProps(key)
+
+    if (typeof value === 'string') {
+      // Handle partial substitution within strings (e.g., 'box-$variant' → 'box-primary')
+      const substituted = Object.entries(vars).reduce<string>((str, [varName, varValue]) => {
+        return str.replace(`$${varName}`, String(varValue))
+      }, value)
+      return { ...acc, [normalizedKey]: substituted }
+    } else if (value && typeof value === 'object' && !Array.isArray(value)) {
+      // Recursively handle nested objects (like style props)
+      return {
+        ...acc,
+        [normalizedKey]: substitutePropsVariables(value as Record<string, unknown>, vars),
+      }
+    } else {
+      return { ...acc, [normalizedKey]: value }
+    }
+  }, {})
+}
