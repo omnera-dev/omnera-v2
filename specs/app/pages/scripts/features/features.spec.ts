@@ -19,7 +19,7 @@ import { test, expect } from '@/specs/fixtures'
  */
 
 test.describe('Feature Flags', () => {
-  test.fixme(
+  test(
     'APP-PAGES-FEATURES-001: should enable simple feature flag',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -28,7 +28,7 @@ test.describe('Feature Flags', () => {
         name: 'test-app',
         pages: [
           {
-            name: 'Test',
+            name: 'test',
             path: '/',
             meta: { lang: 'en-US', title: 'Test', description: 'Test' },
             scripts: { features: { darkMode: true } },
