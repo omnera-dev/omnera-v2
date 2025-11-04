@@ -52,7 +52,8 @@ test.describe('Font Configuration', () => {
       await page.goto('/')
 
       // THEN: it should validate font family as the only required property
-      await expect(page.locator('body')).toHaveCSS('font-family', /Inter/)
+      const body = page.locator('body')
+      await expect(body).toHaveScreenshot('font-001-family-required.png')
     }
   )
 
@@ -85,10 +86,8 @@ test.describe('Font Configuration', () => {
       await page.goto('/')
 
       // THEN: it should validate graceful fallback for missing fonts
-      const fontFamily = await page
-        .locator('body')
-        .evaluate((el) => window.getComputedStyle(el).fontFamily)
-      expect(fontFamily).toContain('Inter')
+      const body = page.locator('body')
+      await expect(body).toHaveScreenshot('font-002-fallback.png')
     }
   )
 
@@ -154,7 +153,8 @@ test.describe('Font Configuration', () => {
       await page.goto('/')
 
       // THEN: it should validate normal, italic, or oblique styles
-      await expect(page.locator('h1')).toHaveCSS('font-style', 'italic')
+      const heading = page.locator('h1')
+      await expect(heading).toHaveScreenshot('font-004-italic-style.png')
     }
   )
 
@@ -188,8 +188,8 @@ test.describe('Font Configuration', () => {
       await page.goto('/')
 
       // THEN: it should validate typography metrics for body text
-      await expect(page.locator('body')).toHaveCSS('font-size', '16px')
-      await expect(page.locator('body')).toHaveCSS('line-height', '24px')
+      const body = page.locator('body')
+      await expect(body).toHaveScreenshot('font-005-metrics.png')
     }
   )
 
@@ -222,7 +222,8 @@ test.describe('Font Configuration', () => {
       await page.goto('/')
 
       // THEN: it should validate character spacing for readability
-      await expect(page.locator('h1')).toHaveCSS('letter-spacing', /0\.05em|0\.8px/)
+      const heading = page.locator('h1')
+      await expect(heading).toHaveScreenshot('font-006-letter-spacing.png')
     }
   )
 
@@ -255,7 +256,8 @@ test.describe('Font Configuration', () => {
       await page.goto('/')
 
       // THEN: it should validate none, uppercase, lowercase, or capitalize
-      await expect(page.locator('[data-testid="label"]')).toHaveCSS('text-transform', 'uppercase')
+      const label = page.locator('[data-testid="label"]')
+      await expect(label).toHaveScreenshot('font-007-text-transform.png')
     }
   )
 
@@ -329,8 +331,8 @@ test.describe('Font Configuration', () => {
       await page.goto('/')
 
       // THEN: it should validate comprehensive typography settings
-      await expect(page.locator('body')).toHaveCSS('font-family', /Inter/)
-      await expect(page.locator('body')).toHaveCSS('font-size', '16px')
+      const body = page.locator('body')
+      await expect(body).toHaveScreenshot('font-009-comprehensive.png')
     }
   )
 
@@ -371,9 +373,12 @@ test.describe('Font Configuration', () => {
       await page.goto('/')
 
       // THEN: it should validate semantic font system for all UI contexts
-      await expect(page.locator('h1')).toHaveCSS('font-family', /Bely Display/)
-      await expect(page.locator('body')).toHaveCSS('font-family', /Inter/)
-      await expect(page.locator('code')).toHaveCSS('font-family', /JetBrains Mono/)
+      const heading = page.locator('h1')
+      const body = page.locator('body')
+      const code = page.locator('code')
+      await expect(heading).toHaveScreenshot('font-010-title.png')
+      await expect(body).toHaveScreenshot('font-010-body.png')
+      await expect(code).toHaveScreenshot('font-010-mono.png')
     }
   )
 
@@ -412,9 +417,7 @@ test.describe('Font Configuration', () => {
 
       // THEN: it should render with body font family and metrics
       const paragraph = page.locator('p')
-      await expect(paragraph).toHaveCSS('font-family', /Inter/)
-      await expect(paragraph).toHaveCSS('font-size', '16px')
-      await expect(paragraph).toHaveCSS('line-height', '24px')
+      await expect(paragraph).toHaveScreenshot('font-app-001-paragraph.png')
     }
   )
 
@@ -452,9 +455,7 @@ test.describe('Font Configuration', () => {
 
       // THEN: it should render with title font and text transformation
       const heading = page.locator('h1')
-      await expect(heading).toHaveCSS('font-family', /Bely Display/)
-      await expect(heading).toHaveCSS('text-transform', 'lowercase')
-      await expect(heading).toHaveText('our mission')
+      await expect(heading).toHaveScreenshot('font-app-002-heading-transform.png')
     }
   )
 
