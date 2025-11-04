@@ -20,10 +20,10 @@ export function Banner({
   enabled,
   message,
   text,
-}: Readonly<BannerProps>): Readonly<ReactElement | null> {
+}: Readonly<BannerProps>): Readonly<ReactElement | undefined> {
   // Don't render if explicitly disabled
   if (enabled === false) {
-    return null
+    return undefined
   }
 
   const content = message || text
