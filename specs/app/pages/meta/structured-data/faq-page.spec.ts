@@ -19,7 +19,7 @@ import { test, expect } from '@/specs/fixtures'
  */
 
 test.describe('FAQ Page Schema', () => {
-  test.fixme(
+  test(
     'APP-PAGES-FAQPAGE-001: should validate minimal FAQPage structured data',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -28,7 +28,7 @@ test.describe('FAQ Page Schema', () => {
         name: 'test-app',
         pages: [
           {
-            name: 'Test',
+            name: 'test',
             path: '/',
             meta: {
               lang: 'en-US',
