@@ -424,7 +424,7 @@ test.describe('Block Template', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-BLOCKS-BLOCK-012: should transform template placeholders into concrete values in DOM',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
