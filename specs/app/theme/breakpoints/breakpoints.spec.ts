@@ -374,16 +374,53 @@ test.describe('Breakpoints', () => {
             path: '/',
             sections: [
               {
-                type: 'grid',
+                type: 'div',
                 props: {
-                  'data-testid': 'grid',
+                  'data-testid': 'responsive-layout',
+                  style: {
+                    padding: '20px',
+                  },
                 },
-              },
-              {
-                type: 'navigation',
-                props: {
-                  'data-testid': 'nav',
-                },
+                children: [
+                  {
+                    type: 'h1',
+                    children: ['Responsive Layout'],
+                  },
+                  {
+                    type: 'div',
+                    props: {
+                      style: {
+                        display: 'grid',
+                        gridTemplateColumns: '1fr',
+                        gap: '16px',
+                      },
+                    },
+                    children: [
+                      {
+                        type: 'div',
+                        props: {
+                          style: {
+                            padding: '16px',
+                            backgroundColor: '#eff6ff',
+                            border: '1px solid #3b82f6',
+                          },
+                        },
+                        children: ['Item 1'],
+                      },
+                      {
+                        type: 'div',
+                        props: {
+                          style: {
+                            padding: '16px',
+                            backgroundColor: '#eff6ff',
+                            border: '1px solid #3b82f6',
+                          },
+                        },
+                        children: ['Item 2'],
+                      },
+                    ],
+                  },
+                ],
               },
             ],
           },
@@ -391,27 +428,43 @@ test.describe('Breakpoints', () => {
       })
 
       // WHEN/THEN: Streamlined workflow testing integration points
+
+      // 1. Mobile layout (375px)
       await page.setViewportSize({ width: 375, height: 667 })
       await page.goto('/')
 
-      // Validate CSS media queries generated for breakpoints
-      const css = await page.locator('style').first().textContent()
-      // Breakpoints should generate @media queries with defined widths
-      expect(css).toMatch(/@media.*640px/) // sm breakpoint
-      expect(css).toMatch(/@media.*768px/) // md breakpoint
-      expect(css).toMatch(/@media.*1024px/) // lg breakpoint
+      await expect(page.locator('[data-testid="responsive-layout"]')).toMatchAriaSnapshot(`
+        - group:
+          - heading "Responsive Layout" [level=1]
+          - group:
+            - generic: "Item 1"
+            - generic: "Item 2"
+      `)
 
-      // Verify mobile layout
-      await expect(page.locator('[data-testid="grid"]')).toBeVisible()
-      await expect(page.locator('[data-testid="nav"]')).toBeVisible()
+      await expect(page.locator('[data-testid="responsive-layout"]')).toHaveScreenshot(
+        'breakpoints-regression-001-mobile.png',
+        {
+          animations: 'disabled',
+        }
+      )
 
-      // Verify tablet layout
+      // 2. Tablet layout (768px - md breakpoint)
       await page.setViewportSize({ width: 768, height: 1024 })
-      await expect(page.locator('[data-testid="grid"]')).toBeVisible()
+      await expect(page.locator('[data-testid="responsive-layout"]')).toHaveScreenshot(
+        'breakpoints-regression-001-tablet.png',
+        {
+          animations: 'disabled',
+        }
+      )
 
-      // Verify desktop layout
+      // 3. Desktop layout (1024px - lg breakpoint)
       await page.setViewportSize({ width: 1024, height: 768 })
-      await expect(page.locator('[data-testid="nav"]')).toBeVisible()
+      await expect(page.locator('[data-testid="responsive-layout"]')).toHaveScreenshot(
+        'breakpoints-regression-001-desktop.png',
+        {
+          animations: 'disabled',
+        }
+      )
 
       // Focus on workflow continuity, not exhaustive coverage
     }
