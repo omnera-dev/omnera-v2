@@ -37,6 +37,28 @@ jobs:
           fetch-depth: 0
           token: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Ensure labels exist
+        env:
+          GH_TOKEN: ${{ secrets.GH_PAT_WORKFLOW || github.token }}
+        run: |
+          echo "🏷️  Ensuring required labels exist..."
+
+          # Create conflict-resolution:attempted label if it doesn't exist
+          gh label create "conflict-resolution:attempted" \
+            --description "Automatic conflict resolution was attempted" \
+            --color "FFA500" \
+            --repo omnera-dev/omnera-v2 \
+            --force || true
+
+          # Create needs-manual-resolution label if it doesn't exist
+          gh label create "needs-manual-resolution" \
+            --description "Requires manual conflict resolution" \
+            --color "D93F0B" \
+            --repo omnera-dev/omnera-v2 \
+            --force || true
+
+          echo "✅ Labels ready"
+
       - name: Find conflicted PRs
         id: find-conflicts
         env:
