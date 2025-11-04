@@ -436,9 +436,7 @@ test.describe('Color Palette', () => {
 
       // THEN: it should render button with primary background color
       const button = page.locator('[data-testid="cta-button"]')
-      await expect(button).toBeVisible()
-      const bgColor = await button.evaluate((el) => window.getComputedStyle(el).backgroundColor)
-      expect(bgColor).toContain('7, 123, 255') // rgb(7, 123, 255) = #007bff
+      await expect(button).toHaveScreenshot('color-app-001-button-primary.png')
     }
   )
 
@@ -474,8 +472,7 @@ test.describe('Color Palette', () => {
       // THEN: it should render darker blue on hover
       const button = page.locator('button')
       await button.hover()
-      const hoverColor = await button.evaluate((el) => window.getComputedStyle(el).backgroundColor)
-      expect(hoverColor).toContain('0, 86, 179') // rgb(0, 86, 179) = #0056b3
+      await expect(button).toHaveScreenshot('color-app-002-button-hover.png')
     }
   )
 
@@ -510,9 +507,7 @@ test.describe('Color Palette', () => {
 
       // THEN: it should render text with theme text color
       const heading = page.locator('h1')
-      await expect(heading).toBeVisible()
-      const textColor = await heading.evaluate((el) => window.getComputedStyle(el).color)
-      expect(textColor).toContain('33, 37, 41') // rgb(33, 37, 41) = #212529
+      await expect(heading).toHaveScreenshot('color-app-003-heading-text.png')
     }
   )
 
@@ -551,9 +546,7 @@ test.describe('Color Palette', () => {
 
       // THEN: it should render green alert indicating success state
       const alert = page.locator('[data-testid="alert-success"]')
-      await expect(alert).toBeVisible()
-      const bgColor = await alert.evaluate((el) => window.getComputedStyle(el).backgroundColor)
-      expect(bgColor).toMatch(/212, 237, 218/) // rgb(212, 237, 218) = #d4edda
+      await expect(alert).toHaveScreenshot('color-app-004-alert-success.png')
     }
   )
 
