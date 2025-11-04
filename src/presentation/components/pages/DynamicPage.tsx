@@ -364,20 +364,23 @@ export function DynamicPage({
               data-page-id={page.id}
               style={{ minHeight: '1px' }}
             >
-            {(() => {
-              // Track block instance counts for unique data-testid suffixes
-              // When the same block is used multiple times, each instance gets a unique index
-              const blockInstanceCounts = new Map<string, number>()
-
-              return page.sections.map((section, index) => {
+            {page.sections.map((section, index) => {
                 // Determine if this section is a block reference and get its instance index
-                let blockInstanceIndex: number | undefined
-                if ('block' in section || '$ref' in section) {
+                // Count how many times this block name appears before the current index
+                const blockInstanceIndex: number | undefined = (() => {
+                  if (!('block' in section || '$ref' in section)) {
+                    return undefined
+                  }
                   const blockName = 'block' in section ? section.block : section.$ref
-                  const currentCount = blockInstanceCounts.get(blockName) || 0
-                  blockInstanceIndex = currentCount
-                  blockInstanceCounts.set(blockName, currentCount + 1)
-                }
+                  // Count previous occurrences of the same block name
+                  const previousOccurrences = page.sections
+                    .slice(0, index)
+                    .filter((s) => {
+                      const sBlockName = 'block' in s ? s.block : '$ref' in s ? s.$ref : undefined
+                      return sBlockName === blockName
+                    })
+                  return previousOccurrences.length
+                })()
 
                 return (
                   <ComponentRenderer
@@ -390,8 +393,7 @@ export function DynamicPage({
                     currentLang={lang}
                   />
                 )
-              })
-            })()}
+              })}
 
             {/* Blocks demonstration - shown when page has no sections but blocks are defined */}
             {page.sections.length === 0 && blocks && blocks.length > 0 && (
