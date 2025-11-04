@@ -260,11 +260,17 @@ test.describe('Block Children', () => {
       await page.goto('/')
 
       // THEN: it should render composite UI pattern with all child elements
-      const card = page.locator('[data-testid="block-pricing-card"]')
-      await expect(card.locator('.card-header h3')).toHaveText('Pro')
-      await expect(card.locator('.card-header p')).toHaveText('$49/mo')
-      await expect(card.locator('ul.features li').nth(0)).toHaveText('Unlimited users')
-      await expect(card.locator('button')).toHaveText('Get Started')
+      // ARIA snapshot validates complete nested structure
+      await expect(page.locator('[data-testid="block-pricing-card"]')).toMatchAriaSnapshot(`
+        - group:
+          - group:
+            - heading "Pro" [level=3]
+            - paragraph: "$49/mo"
+          - list:
+            - listitem: "Unlimited users"
+            - listitem: "24/7 support"
+          - button "Get Started"
+      `)
     }
   )
 
@@ -382,9 +388,15 @@ test.describe('Block Children', () => {
       // THEN: it should render all children with substituted values throughout tree
       const card = page.locator('[data-testid="block-alert-card"]')
       await expect(card).toHaveClass(/alert-success/)
-      await expect(card.locator('[data-testid="icon-check"]')).toHaveClass(/text-green/)
-      await expect(card.locator('h4')).toHaveText('Success!')
-      await expect(card.locator('span')).toHaveText('Operation completed')
+
+      // ARIA snapshot validates nested structure with variable substitution
+      await expect(card).toMatchAriaSnapshot(`
+        - group:
+          - img
+          - group:
+            - heading "Success!" [level=4]
+            - generic: "Operation completed"
+      `)
     }
   )
 
@@ -492,13 +504,23 @@ test.describe('Block Children', () => {
       // WHEN/THEN: Streamlined workflow testing integration points
       await page.goto('/')
 
-      // Verify first card
-      await expect(page.locator('[data-testid="icon-star"]')).toBeVisible()
-      await expect(page.locator('[data-testid="block-feature-card-0"] h4')).toHaveText('Feature 1')
+      // 1. Structure validation (ARIA) - First card
+      await expect(page.locator('[data-testid="block-feature-card-0"]')).toMatchAriaSnapshot(`
+        - group:
+          - img
+          - group:
+            - heading "Feature 1" [level=4]
+            - generic: "Description 1"
+      `)
 
-      // Verify second card
-      await expect(page.locator('[data-testid="icon-heart"]')).toBeVisible()
-      await expect(page.locator('[data-testid="block-feature-card-1"] h4')).toHaveText('Feature 2')
+      // 2. Structure validation (ARIA) - Second card (different data, same structure)
+      await expect(page.locator('[data-testid="block-feature-card-1"]')).toMatchAriaSnapshot(`
+        - group:
+          - img
+          - group:
+            - heading "Feature 2" [level=4]
+            - generic: "Description 2"
+      `)
 
       // Focus on workflow continuity, not exhaustive coverage
     }

@@ -269,7 +269,11 @@ test.describe('Reusable Blocks', () => {
       await page.goto('/')
 
       // THEN: it should reduce code duplication and simplify pattern updates
-      await expect(page.locator('[data-block="parent-block"] span')).toHaveText('child')
+      // ARIA snapshot validates nested structure
+      await expect(page.locator('[data-block="parent-block"]')).toMatchAriaSnapshot(`
+        - group:
+          - generic: "child"
+      `)
     }
   )
 
@@ -546,19 +550,26 @@ test.describe('Reusable Blocks', () => {
         ],
       })
       await page.goto('/')
-      await expect(page.locator('[data-block="icon-badge"]')).toBeVisible()
-      await expect(page.locator('[data-block="feature-card"]')).toBeVisible()
 
-      // Validate variable substitution completed (no $ symbols remain)
+      // 1. Structure validation (ARIA) - Icon badge
+      await expect(page.locator('[data-block="icon-badge"]')).toMatchAriaSnapshot(`
+        - group:
+          - img
+          - generic: "Success"
+      `)
+
+      // 2. Structure validation (ARIA) - Feature card
+      await expect(page.locator('[data-block="feature-card"]')).toMatchAriaSnapshot(`
+        - group:
+          - heading "Feature"
+          - generic: "Description"
+      `)
+
+      // 3. Validate variable substitution completed (no $ symbols remain)
       const iconBadgeHtml = await page.locator('[data-block="icon-badge"]').innerHTML()
-      expect(iconBadgeHtml).not.toContain('$color')
-      expect(iconBadgeHtml).not.toContain('$icon')
-      expect(iconBadgeHtml).not.toContain('$text')
       expect(iconBadgeHtml).not.toContain('$')
 
       const featureCardHtml = await page.locator('[data-block="feature-card"]').innerHTML()
-      expect(featureCardHtml).not.toContain('$title')
-      expect(featureCardHtml).not.toContain('$description')
       expect(featureCardHtml).not.toContain('$')
     }
   )

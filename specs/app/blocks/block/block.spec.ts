@@ -224,8 +224,12 @@ test.describe('Block Template', () => {
       await page.goto('/')
 
       // THEN: it should render nested child components
-      await expect(page.locator('[data-testid="block-card-header"] h3')).toHaveText('Card Title')
-      await expect(page.locator('[data-testid="block-card-header"] p')).toHaveText('Card subtitle')
+      // ARIA snapshot validates hierarchical structure
+      await expect(page.locator('[data-testid="block-card-header"]')).toMatchAriaSnapshot(`
+        - group:
+          - heading "Card Title" [level=3]
+          - paragraph: "Card subtitle"
+      `)
     }
   )
 
@@ -373,10 +377,22 @@ test.describe('Block Template', () => {
       await page.goto('/')
 
       // THEN: it should render multiple instances with different data
-      await expect(page.locator('[data-testid="block-stat-card-0"] h4')).toHaveText('1,234')
-      await expect(page.locator('[data-testid="block-stat-card-0"] p')).toHaveText('Users')
-      await expect(page.locator('[data-testid="block-stat-card-1"] h4')).toHaveText('567')
-      await expect(page.locator('[data-testid="block-stat-card-2"] h4')).toHaveText('89%')
+      // ARIA snapshots validate each instance maintains structure with different data
+      await expect(page.locator('[data-testid="block-stat-card-0"]')).toMatchAriaSnapshot(`
+        - group:
+          - heading "1,234" [level=4]
+          - paragraph: "Users"
+      `)
+      await expect(page.locator('[data-testid="block-stat-card-1"]')).toMatchAriaSnapshot(`
+        - group:
+          - heading "567" [level=4]
+          - paragraph: "Projects"
+      `)
+      await expect(page.locator('[data-testid="block-stat-card-2"]')).toMatchAriaSnapshot(`
+        - group:
+          - heading "89%" [level=4]
+          - paragraph: "Success Rate"
+      `)
     }
   )
 
@@ -423,8 +439,13 @@ test.describe('Block Template', () => {
       await expect(card).toHaveClass(/card-primary/)
       await expect(card).toHaveClass(/p-6/)
       await expect(card).toHaveClass(/rounded-lg/)
-      await expect(card.locator('h3')).toHaveText('Premium Plan')
-      await expect(card.locator('p')).toHaveText('Best value for teams')
+
+      // ARIA snapshot validates content structure
+      await expect(card).toMatchAriaSnapshot(`
+        - group:
+          - heading "Premium Plan" [level=3]
+          - paragraph: "Best value for teams"
+      `)
     }
   )
 
@@ -507,15 +528,22 @@ test.describe('Block Template', () => {
       // WHEN/THEN: Streamlined workflow testing integration points
       await page.goto('/')
 
-      // Verify text block
-      await expect(page.locator('[data-testid="block-simple-text"]')).toHaveText('Welcome')
-      await expect(page.locator('[data-testid="block-simple-text"]')).toHaveClass(/text-blue/)
+      // 1. Text block - structure and styling
+      const textBlock = page.locator('[data-testid="block-simple-text"]')
+      await expect(textBlock).toHaveText('Welcome')
+      await expect(textBlock).toHaveClass(/text-blue/)
 
-      // Verify feature blocks
-      await expect(page.locator('[data-testid="block-feature-item-0"]')).toBeVisible()
-      await expect(page.locator('[data-testid="icon-check"]')).toBeVisible()
-      await expect(page.locator('[data-testid="block-feature-item-1"]')).toBeVisible()
-      await expect(page.locator('[data-testid="icon-star"]')).toBeVisible()
+      // 2. Feature blocks - ARIA validates nested icon + text structure
+      await expect(page.locator('[data-testid="block-feature-item-0"]')).toMatchAriaSnapshot(`
+        - group:
+          - img
+          - generic: "Feature 1"
+      `)
+      await expect(page.locator('[data-testid="block-feature-item-1"]')).toMatchAriaSnapshot(`
+        - group:
+          - img
+          - generic: "Feature 2"
+      `)
 
       // Focus on workflow continuity, not exhaustive coverage
     }
