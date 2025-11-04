@@ -261,10 +261,10 @@ test.describe('Breakpoints', () => {
 
       // THEN: it should render grid with media query at 768px
       const grid = page.locator('[data-testid="responsive-grid"]')
-      await expect(grid).toBeVisible()
+      await expect(grid).toHaveScreenshot('breakpoint-app-001-grid-mobile.png')
 
       await page.setViewportSize({ width: 768, height: 1024 })
-      await expect(grid).toBeVisible()
+      await expect(grid).toHaveScreenshot('breakpoint-app-001-grid-tablet.png')
     }
   )
 
@@ -300,10 +300,11 @@ test.describe('Breakpoints', () => {
       await page.goto('/')
 
       // THEN: it should render hamburger menu below 1024px and full menu above
-      await expect(page.locator('[data-testid="main-nav"]')).toBeVisible()
+      const nav = page.locator('[data-testid="main-nav"]')
+      await expect(nav).toHaveScreenshot('breakpoint-app-002-nav-mobile.png')
 
       await page.setViewportSize({ width: 1024, height: 768 })
-      await expect(page.locator('[data-testid="main-nav"]')).toBeVisible()
+      await expect(nav).toHaveScreenshot('breakpoint-app-002-nav-desktop.png')
     }
   )
 
@@ -342,10 +343,10 @@ test.describe('Breakpoints', () => {
 
       // THEN: it should render with increasing padding at each breakpoint
       const hero = page.locator('[data-testid="hero-section"]')
-      await expect(hero).toBeVisible()
+      await expect(hero).toHaveScreenshot('breakpoint-app-003-hero-mobile.png')
 
       await page.setViewportSize({ width: 1024, height: 768 })
-      await expect(hero).toBeVisible()
+      await expect(hero).toHaveScreenshot('breakpoint-app-003-hero-desktop.png')
     }
   )
 
