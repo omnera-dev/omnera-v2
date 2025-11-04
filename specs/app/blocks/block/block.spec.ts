@@ -376,7 +376,7 @@ test.describe('Block Template', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-BLOCKS-BLOCK-011: should render complete component with all aspects integrated',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {

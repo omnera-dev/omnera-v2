@@ -365,13 +365,25 @@ export function DynamicPage({
               style={{ minHeight: '1px' }}
             >
             {page.sections.map((section, index) => {
-                // Determine if this section is a block reference and get its instance index
-                // Count how many times this block name appears before the current index
-                const blockInstanceIndex: number | undefined = (() => {
+                // Determine if this section is a block reference and get its name and instance index
+                // Count how many times this block name appears in total and before the current index
+                const blockInfo: { name: string; instanceIndex?: number } | undefined = (() => {
                   if (!('block' in section || '$ref' in section)) {
                     return undefined
                   }
                   const blockName = 'block' in section ? section.block : section.$ref
+
+                  // Count total occurrences of this block name in all sections
+                  const totalOccurrences = page.sections.filter((s) => {
+                    const sBlockName = 'block' in s ? s.block : '$ref' in s ? s.$ref : undefined
+                    return sBlockName === blockName
+                  }).length
+
+                  // Only set instanceIndex if there are multiple instances
+                  if (totalOccurrences <= 1) {
+                    return { name: blockName }
+                  }
+
                   // Count previous occurrences of the same block name
                   const previousOccurrences = page.sections
                     .slice(0, index)
@@ -379,14 +391,15 @@ export function DynamicPage({
                       const sBlockName = 'block' in s ? s.block : '$ref' in s ? s.$ref : undefined
                       return sBlockName === blockName
                     })
-                  return previousOccurrences.length
+                  return { name: blockName, instanceIndex: previousOccurrences.length }
                 })()
 
                 return (
                   <ComponentRenderer
                     key={index}
                     component={section}
-                    blockInstanceIndex={blockInstanceIndex}
+                    blockName={blockInfo?.name}
+                    blockInstanceIndex={blockInfo?.instanceIndex}
                     blocks={blocks}
                     theme={theme}
                     languages={languages}
