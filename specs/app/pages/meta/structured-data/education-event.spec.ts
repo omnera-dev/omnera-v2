@@ -631,16 +631,21 @@ test.describe('Education Event Schema', () => {
       const scriptContent = await page.locator('script[type="application/ld+json"]').textContent()
 
       // Validate JSON-LD is valid JSON
-      expect(scriptContent).toBeTruthy()
       const jsonLd = JSON.parse(scriptContent!)
 
       // Validate JSON-LD structure
       expect(jsonLd).toHaveProperty('@type', 'EducationEvent')
       expect(jsonLd).toHaveProperty('name', 'Advanced React Workshop')
-      expect(jsonLd).toHaveProperty('description', 'Learn advanced React patterns and best practices')
+      expect(jsonLd).toHaveProperty(
+        'description',
+        'Learn advanced React patterns and best practices'
+      )
       expect(jsonLd).toHaveProperty('startDate', '2025-06-15T09:00:00Z')
       expect(jsonLd).toHaveProperty('endDate', '2025-06-15T17:00:00Z')
-      expect(jsonLd).toHaveProperty('eventAttendanceMode', 'https://schema.org/MixedEventAttendanceMode')
+      expect(jsonLd).toHaveProperty(
+        'eventAttendanceMode',
+        'https://schema.org/MixedEventAttendanceMode'
+      )
       expect(jsonLd).toHaveProperty('eventStatus', 'https://schema.org/EventScheduled')
 
       // Validate location structure

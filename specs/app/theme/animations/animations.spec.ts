@@ -1031,10 +1031,10 @@ test.describe('Animation Configuration', () => {
       await page.goto('/')
 
       // Validate CSS custom properties or animation definitions generated
-      const css = await page.locator('style').first().textContent()
-      expect(css).toBeTruthy()
       // Animations might generate CSS custom properties or @keyframes
       // At minimum, verify CSS content exists for static site generation
+      const css = page.locator('style').first()
+      await expect(css).toHaveText(/.+/)
 
       // Verify modal fade-in
       await expect(page.locator('[data-testid="modal"]')).toBeVisible()

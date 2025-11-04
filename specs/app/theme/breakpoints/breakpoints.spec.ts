@@ -396,7 +396,6 @@ test.describe('Breakpoints', () => {
 
       // Validate CSS media queries generated for breakpoints
       const css = await page.locator('style').first().textContent()
-      expect(css).toBeTruthy()
       // Breakpoints should generate @media queries with defined widths
       expect(css).toMatch(/@media.*640px/) // sm breakpoint
       expect(css).toMatch(/@media.*768px/) // md breakpoint

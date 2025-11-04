@@ -180,7 +180,7 @@ function calculateSchemaGroupPriority(featurePath: string, hierarchy: SchemaHier
   }
 
   // Fallback for unknown paths
-  return 100000
+  return 100_000
 }
 
 /**

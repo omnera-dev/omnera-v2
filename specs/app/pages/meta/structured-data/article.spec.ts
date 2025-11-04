@@ -612,7 +612,6 @@ test.describe('Article Schema', () => {
       const scriptContent = await page.locator('script[type="application/ld+json"]').textContent()
 
       // Validate JSON-LD is valid JSON
-      expect(scriptContent).toBeTruthy()
       const jsonLd = JSON.parse(scriptContent!)
 
       // Validate JSON-LD structure

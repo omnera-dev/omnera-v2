@@ -366,134 +366,61 @@ export function DynamicPage({
               data-page-id={page.id}
               style={{ minHeight: '1px' }}
             >
-              {page.sections.map((section, index) => {
-                // Determine if this section is a block reference and get its name and instance index
-                // Count how many times this block name appears in total and before the current index
-                const blockInfo: { name: string; instanceIndex?: number } | undefined = (() => {
-                  if (!('block' in section || '$ref' in section)) {
-                    return undefined
-                  }
-                  const blockName = 'block' in section ? section.block : section.$ref
-
-                  // Count total occurrences of this block name in all sections
-                  const totalOccurrences = page.sections.filter((s) => {
-                    const sBlockName = 'block' in s ? s.block : '$ref' in s ? s.$ref : undefined
-                    return sBlockName === blockName
-                  }).length
-
-                  // Only set instanceIndex if there are multiple instances
-                  if (totalOccurrences <= 1) {
-                    return { name: blockName }
-                  }
-
-                  // Count previous occurrences of the same block name
-                  const previousOccurrences = page.sections.slice(0, index).filter((s) => {
-                    const sBlockName = 'block' in s ? s.block : '$ref' in s ? s.$ref : undefined
-                    return sBlockName === blockName
-                  })
-                  return { name: blockName, instanceIndex: previousOccurrences.length }
-                })()
-
-                return (
-                  <ComponentRenderer
-                    key={index}
-                    component={section}
-                    blockName={blockInfo?.name}
-                    blockInstanceIndex={blockInfo?.instanceIndex}
-                    blocks={blocks}
-                    theme={theme}
-                    languages={languages}
-                    currentLang={lang}
-                  />
-                )
-              })}
-
-              {/* Blocks demonstration - shown when page has no sections but blocks are defined */}
-              {page.sections.length === 0 && blocks && blocks.length > 0 && (
-                <div
-                  style={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                    gap: '1rem',
-                    padding: '2rem',
-                  }}
-                >
-                  {blocks.map((block, index) => (
+              {page.sections.length === 0 && blocks && blocks.length > 0
+                ? // Auto-render all blocks when sections is empty (block showcase mode)
+                  blocks.map((block, index) => (
                     <ComponentRenderer
                       key={index}
-                      component={{
-                        type: block.type,
-                        props: block.props,
-                        children: block.children,
-                        content: block.content,
-                      }}
+                      component={block}
                       blockName={block.name}
                       blocks={blocks}
                       theme={theme}
                       languages={languages}
                       currentLang={lang}
                     />
-                  ))}
-                </div>
-              )}
+                  ))
+                : // Normal rendering - render sections with block resolution
+                  page.sections.map((section, index) => {
+                    // Determine if this section is a block reference and get its name and instance index
+                    // Count how many times this block name appears in total and before the current index
+                    const blockInfo: { name: string; instanceIndex?: number } | undefined = (() => {
+                      if (!('block' in section || '$ref' in section)) {
+                        return undefined
+                      }
+                      const blockName = 'block' in section ? section.block : section.$ref
 
-              {/* Theme demonstration - shown when page has no sections but theme is configured */}
-              {page.sections.length === 0 && theme && (
-                <div
-                  style={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                    gap: theme.spacing?.gap || '1rem',
-                    alignItems: 'center',
-                    padding: '2rem',
-                  }}
-                >
-                  {/* Demo elements for each theme color - allows testing CSS custom properties */}
-                  {theme.colors &&
-                    Object.keys(theme.colors).map((colorName) => (
-                      <div
-                        key={colorName}
-                        data-testid={`color-${colorName}`}
-                        style={{
-                          width: '100px',
-                          height: '100px',
-                          backgroundColor: theme.colors![colorName],
-                        }}
+                      // Count total occurrences of this block name in all sections
+                      const totalOccurrences = page.sections.filter((s) => {
+                        const sBlockName = 'block' in s ? s.block : '$ref' in s ? s.$ref : undefined
+                        return sBlockName === blockName
+                      }).length
+
+                      // Only set instanceIndex if there are multiple instances
+                      if (totalOccurrences <= 1) {
+                        return { name: blockName }
+                      }
+
+                      // Count previous occurrences of the same block name
+                      const previousOccurrences = page.sections.slice(0, index).filter((s) => {
+                        const sBlockName = 'block' in s ? s.block : '$ref' in s ? s.$ref : undefined
+                        return sBlockName === blockName
+                      })
+                      return { name: blockName, instanceIndex: previousOccurrences.length }
+                    })()
+
+                    return (
+                      <ComponentRenderer
+                        key={index}
+                        component={section}
+                        blockName={blockInfo?.name}
+                        blockInstanceIndex={blockInfo?.instanceIndex}
+                        blocks={blocks}
+                        theme={theme}
+                        languages={languages}
+                        currentLang={lang}
                       />
-                    ))}
-                  {theme.colors?.primary && (
-                    <button
-                      data-testid="button"
-                      style={{
-                        backgroundColor: theme.colors.primary,
-                        color: '#ffffff',
-                        padding: theme.spacing?.gap || '1rem 2rem',
-                        border: 'none',
-                        borderRadius: theme.borderRadius?.md || '0.375rem',
-                        boxShadow: theme.shadows?.md,
-                        cursor: 'pointer',
-                      }}
-                    >
-                      Primary Button
-                    </button>
-                  )}
-                </div>
-              )}
-
-              {/* Fallback demonstration - shown when languages configured with fallback */}
-              {languages?.fallback && (
-                <div
-                  data-testid="missing-translation-text"
-                  style={{
-                    padding: '1rem',
-                    textAlign: 'center',
-                    color: '#666',
-                    fontSize: '0.875rem',
-                  }}
-                >
-                  English fallback configured
-                </div>
-              )}
+                    )
+                  })}
             </main>
           </div>
         </section>

@@ -528,7 +528,10 @@ test.describe('Twitter Card Metadata', () => {
         'content',
         'Test image'
       )
-      await expect(page.locator('meta[name="twitter:site"]')).toHaveAttribute('content', '@testsite')
+      await expect(page.locator('meta[name="twitter:site"]')).toHaveAttribute(
+        'content',
+        '@testsite'
+      )
       await expect(page.locator('meta[name="twitter:creator"]')).toHaveAttribute(
         'content',
         '@testcreator'
