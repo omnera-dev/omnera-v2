@@ -45,7 +45,16 @@ test.describe('Breakpoints', () => {
             name: 'home',
             path: '/',
             meta: { lang: 'en-US', title: 'Test', description: 'Test page' },
-            sections: [],
+            sections: [
+              {
+                type: 'div',
+                props: {
+                  'data-testid': 'breakpoints',
+                  className: 'sm:block md:flex lg:grid',
+                },
+                children: ['Responsive Content'],
+              },
+            ],
           },
         ],
       })
@@ -76,7 +85,16 @@ test.describe('Breakpoints', () => {
             name: 'home',
             path: '/',
             meta: { lang: 'en-US', title: 'Test', description: 'Test page' },
-            sections: [],
+            sections: [
+              {
+                type: 'div',
+                props: {
+                  'data-testid': 'breakpoints',
+                  className: 'mobile:block tablet:flex',
+                },
+                children: ['Responsive Content'],
+              },
+            ],
           },
         ],
       })
@@ -145,7 +163,16 @@ test.describe('Breakpoints', () => {
             name: 'home',
             path: '/',
             meta: { lang: 'en-US', title: 'Test', description: 'Test page' },
-            sections: [],
+            sections: [
+              {
+                type: 'div',
+                props: {
+                  'data-testid': 'breakpoints',
+                  className: 'sm:block md:flex',
+                },
+                children: ['Responsive Content'],
+              },
+            ],
           },
         ],
       })
@@ -177,7 +204,16 @@ test.describe('Breakpoints', () => {
             name: 'home',
             path: '/',
             meta: { lang: 'en-US', title: 'Test', description: 'Test page' },
-            sections: [],
+            sections: [
+              {
+                type: 'div',
+                props: {
+                  'data-testid': 'breakpoints',
+                  className: 'tablet:block desktop:flex wide:grid',
+                },
+                children: ['Responsive Content'],
+              },
+            ],
           },
         ],
       })

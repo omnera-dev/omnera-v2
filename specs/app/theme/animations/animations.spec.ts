@@ -41,7 +41,16 @@ test.describe('Animation Configuration', () => {
             name: 'home',
             path: '/',
             meta: { lang: 'en-US', title: 'Test', description: 'Test page' },
-            sections: [],
+            sections: [
+              {
+                type: 'div',
+                props: {
+                  'data-testid': 'animation-fadeIn',
+                  style: { animation: 'fade-in 1s ease-in' },
+                },
+                children: ['Fade In Content'],
+              },
+            ],
           },
         ],
       })
@@ -71,7 +80,16 @@ test.describe('Animation Configuration', () => {
             name: 'home',
             path: '/',
             meta: { lang: 'en-US', title: 'Test', description: 'Test page' },
-            sections: [],
+            sections: [
+              {
+                type: 'div',
+                props: {
+                  'data-testid': 'animation-slideIn',
+                  style: { animation: 'slide-in 0.5s ease-out' },
+                },
+                children: ['Slide In Content'],
+              },
+            ],
           },
         ],
       })
@@ -107,7 +125,16 @@ test.describe('Animation Configuration', () => {
             name: 'home',
             path: '/',
             meta: { lang: 'en-US', title: 'Test', description: 'Test page' },
-            sections: [],
+            sections: [
+              {
+                type: 'div',
+                props: {
+                  'data-testid': 'animation-transition',
+                  style: { transition: 'all 300ms ease-in-out' },
+                },
+                children: ['Transition Content'],
+              },
+            ],
           },
         ],
       })
@@ -140,7 +167,16 @@ test.describe('Animation Configuration', () => {
             name: 'home',
             path: '/',
             meta: { lang: 'en-US', title: 'Test', description: 'Test page' },
-            sections: [],
+            sections: [
+              {
+                type: 'div',
+                props: {
+                  'data-testid': 'animation-delayedFade',
+                  style: { animation: 'fade-in 500ms ease-in 200ms' },
+                },
+                children: ['Delayed Fade Content'],
+              },
+            ],
           },
         ],
       })
@@ -179,7 +215,16 @@ test.describe('Animation Configuration', () => {
             name: 'home',
             path: '/',
             meta: { lang: 'en-US', title: 'Test', description: 'Test page' },
-            sections: [],
+            sections: [
+              {
+                type: 'div',
+                props: {
+                  'data-testid': 'animation-custom',
+                  style: { animation: 'custom-animation 1s ease-in' },
+                },
+                children: ['Custom Animation Content'],
+              },
+            ],
           },
         ],
       })
@@ -211,7 +256,16 @@ test.describe('Animation Configuration', () => {
             name: 'home',
             path: '/',
             meta: { lang: 'en-US', title: 'Test', description: 'Test page' },
-            sections: [],
+            sections: [
+              {
+                type: 'div',
+                props: {
+                  'data-testid': 'animation-fadeIn',
+                  style: { animation: 'none' },
+                },
+                children: ['Disabled Animation Content'],
+              },
+            ],
           },
         ],
       })
@@ -246,7 +300,24 @@ test.describe('Animation Configuration', () => {
             name: 'home',
             path: '/',
             meta: { lang: 'en-US', title: 'Test', description: 'Test page' },
-            sections: [],
+            sections: [
+              {
+                type: 'div',
+                props: {
+                  'data-testid': 'animation-fadeIn',
+                  style: { animation: 'fade-in 1s ease-in' },
+                },
+                children: ['Fade In'],
+              },
+              {
+                type: 'div',
+                props: {
+                  'data-testid': 'animation-pulse',
+                  style: { animation: 'pulse 2s ease-in-out infinite' },
+                },
+                children: ['Pulse'],
+              },
+            ],
           },
         ],
       })
@@ -280,7 +351,16 @@ test.describe('Animation Configuration', () => {
             name: 'home',
             path: '/',
             meta: { lang: 'en-US', title: 'Test', description: 'Test page' },
-            sections: [],
+            sections: [
+              {
+                type: 'div',
+                props: {
+                  'data-testid': 'animation-transition',
+                  style: { transition: 'all 300ms ease-in-out' },
+                },
+                children: ['Transition Content'],
+              },
+            ],
           },
         ],
       })
