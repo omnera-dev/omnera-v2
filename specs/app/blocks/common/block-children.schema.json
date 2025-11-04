@@ -606,7 +606,245 @@
       "id": "APP-BLOCKS-BLOCK-CHILDREN-REGRESSION-001",
       "given": "complete application configuration with all features",
       "when": "user completes full workflow",
-      "then": "user can complete full children workflow"
+      "then": "user can complete full children workflow",
+      "workflow": [
+        {
+          "step": 1,
+          "action": "User defines block template with children array containing nested component structure",
+          "validation": "Children array validates with child objects having type (required), props, children (recursive), and content properties",
+          "expectedState": "Block template 'product-card' created with 3 top-level children: header div, body div, footer div"
+        },
+        {
+          "step": 2,
+          "action": "User nests children within children to create hierarchical component tree",
+          "validation": "Recursive children schema allows unlimited nesting depth via self-reference (#)",
+          "expectedState": "Header div contains 2 children (h3 + p), body div contains icon + text list, footer contains button"
+        },
+        {
+          "step": 3,
+          "action": "User adds $variable placeholders in child props and content for dynamic data",
+          "validation": "Child props and content support $variable syntax for substitution from block reference vars",
+          "expectedState": "All text content, images, and attributes use $variables: $title, $price, $description, $icon, $features"
+        },
+        {
+          "step": 4,
+          "action": "System renders nested children as hierarchical DOM tree with proper parent-child relationships",
+          "validation": "Children array order preserved in DOM, nesting depth maintained, each child's type determines HTML element",
+          "expectedState": "DOM tree rendered: card → (header → h3 + p) + (body → icon + ul → li × 3) + (footer → button)"
+        },
+        {
+          "step": 5,
+          "action": "System substitutes all $variables throughout nested children tree",
+          "validation": "Variable substitution works at all nesting levels, from root to deepest leaf nodes",
+          "expectedState": "All $variables replaced across entire component hierarchy with values from block reference vars"
+        }
+      ],
+      "application": {
+        "completeExample": {
+          "blocks": [
+            {
+              "name": "product-card",
+              "type": "card",
+              "props": {
+                "className": "product-card border rounded-lg shadow-md p-6 max-w-sm"
+              },
+              "children": [
+                {
+                  "type": "div",
+                  "props": {
+                    "className": "card-header mb-4 pb-4 border-b"
+                  },
+                  "children": [
+                    {
+                      "type": "text",
+                      "props": {
+                        "level": "h3",
+                        "className": "text-2xl font-bold text-gray-900"
+                      },
+                      "content": "$productName"
+                    },
+                    {
+                      "type": "text",
+                      "props": {
+                        "level": "p",
+                        "className": "text-xl text-blue-600 font-semibold mt-2"
+                      },
+                      "content": "$price"
+                    }
+                  ]
+                },
+                {
+                  "type": "div",
+                  "props": {
+                    "className": "card-body mb-4"
+                  },
+                  "children": [
+                    {
+                      "type": "icon",
+                      "props": {
+                        "name": "$icon",
+                        "color": "$iconColor",
+                        "size": 8,
+                        "className": "mb-3"
+                      }
+                    },
+                    {
+                      "type": "text",
+                      "props": {
+                        "level": "p",
+                        "className": "text-gray-700 mb-4"
+                      },
+                      "content": "$description"
+                    },
+                    {
+                      "type": "ul",
+                      "props": {
+                        "className": "space-y-2"
+                      },
+                      "children": [
+                        {
+                          "type": "li",
+                          "props": {
+                            "className": "flex items-center text-gray-600"
+                          },
+                          "children": [
+                            {
+                              "type": "icon",
+                              "props": {
+                                "name": "check",
+                                "color": "green",
+                                "size": 4,
+                                "className": "mr-2"
+                              }
+                            },
+                            {
+                              "type": "text",
+                              "content": "$feature1"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "li",
+                          "props": {
+                            "className": "flex items-center text-gray-600"
+                          },
+                          "children": [
+                            {
+                              "type": "icon",
+                              "props": {
+                                "name": "check",
+                                "color": "green",
+                                "size": 4,
+                                "className": "mr-2"
+                              }
+                            },
+                            {
+                              "type": "text",
+                              "content": "$feature2"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "li",
+                          "props": {
+                            "className": "flex items-center text-gray-600"
+                          },
+                          "children": [
+                            {
+                              "type": "icon",
+                              "props": {
+                                "name": "check",
+                                "color": "green",
+                                "size": 4,
+                                "className": "mr-2"
+                              }
+                            },
+                            {
+                              "type": "text",
+                              "content": "$feature3"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "div",
+                  "props": {
+                    "className": "card-footer"
+                  },
+                  "children": [
+                    {
+                      "type": "button",
+                      "props": {
+                        "className": "w-full bg-blue-600 text-white py-3 px-6 rounded-lg font-semibold hover:bg-blue-700 transition",
+                        "ariaLabel": "$ctaLabel"
+                      },
+                      "content": "$ctaText"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "pages": [
+            {
+              "name": "Products",
+              "path": "/products",
+              "sections": [
+                {
+                  "block": "product-card",
+                  "vars": {
+                    "productName": "Premium Plan",
+                    "price": "$99/month",
+                    "icon": "star",
+                    "iconColor": "yellow",
+                    "description": "Everything you need to grow your business",
+                    "feature1": "Unlimited projects",
+                    "feature2": "Advanced analytics",
+                    "feature3": "Priority support",
+                    "ctaLabel": "Subscribe to Premium Plan",
+                    "ctaText": "Get Started"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "expectedDOM": "<div data-testid=\"block-product-card\" class=\"product-card border rounded-lg shadow-md p-6 max-w-sm\">\n  <div class=\"card-header mb-4 pb-4 border-b\">\n    <h3 class=\"text-2xl font-bold text-gray-900\">Premium Plan</h3>\n    <p class=\"text-xl text-blue-600 font-semibold mt-2\">$99/month</p>\n  </div>\n  <div class=\"card-body mb-4\">\n    <svg data-testid=\"icon-star\" data-color=\"yellow\" data-size=\"8\" class=\"mb-3\"></svg>\n    <p class=\"text-gray-700 mb-4\">Everything you need to grow your business</p>\n    <ul class=\"space-y-2\">\n      <li class=\"flex items-center text-gray-600\">\n        <svg data-testid=\"icon-check\" data-color=\"green\" data-size=\"4\" class=\"mr-2\"></svg>\n        <span>Unlimited projects</span>\n      </li>\n      <li class=\"flex items-center text-gray-600\">\n        <svg data-testid=\"icon-check\" data-color=\"green\" data-size=\"4\" class=\"mr-2\"></svg>\n        <span>Advanced analytics</span>\n      </li>\n      <li class=\"flex items-center text-gray-600\">\n        <svg data-testid=\"icon-check\" data-color=\"green\" data-size=\"4\" class=\"mr-2\"></svg>\n        <span>Priority support</span>\n      </li>\n    </ul>\n  </div>\n  <div class=\"card-footer\">\n    <button class=\"w-full bg-blue-600 text-white py-3 px-6 rounded-lg font-semibold hover:bg-blue-700 transition\" aria-label=\"Subscribe to Premium Plan\">Get Started</button>\n  </div>\n</div>",
+        "assertions": [
+          "Children array: Nested component structure definition via array of child objects",
+          "Hierarchical composition: Card with 3 sections (header, body, footer), each with nested children",
+          "Nesting depth: 4 levels deep (card → body → ul → li → icon + text)",
+          "Recursive children: Self-reference (#) enables unlimited nesting via children property",
+          "Type property: REQUIRED for every child, determines HTML element (div, text → span, button, ul, li, icon → svg)",
+          "Props integration: Child props follow block-props.schema.json (className, ariaLabel, etc.)",
+          "Content property: Text content with $variable support for dynamic text",
+          "Variable substitution: All $variables replaced at all nesting levels ($productName, $price, $feature1, etc.)",
+          "Order preservation: Children array order maintained in rendered DOM (header → body → footer)",
+          "Component composition: Complex UI patterns built from simple nested components",
+          "Icon children: type='icon' renders SVG elements with name, color, size props",
+          "Text children: type='text' renders span elements with text content",
+          "List patterns: ul → li structures for feature lists with check icons",
+          "Real-world pattern: Product card with header (title + price), body (icon + description + features), footer (CTA button)",
+          "Single source of truth: Nested structure defined once in template, reused with different data via vars"
+        ]
+      },
+      "integrationPoints": [
+        "Props schema: Child props follow block-props.schema.json for flexible attribute definitions",
+        "Variable substitution: Child content and props use $variable syntax resolved from block reference vars",
+        "Recursive schema: children property references self (#) for unlimited nesting depth",
+        "Type system: Child type determines rendered HTML element (div, span, button, ul, li, svg)",
+        "Parent-child relationships: children array defines hierarchical DOM tree structure",
+        "Block composition: Children enable complex component patterns via nesting",
+        "Content property: Separate from children, holds text content with $variable support",
+        "Tailwind CSS: className props support full Tailwind utility class system for styling",
+        "Accessibility: Child props include ARIA attributes (ariaLabel, ariaDescribedBy, role)",
+        "Icon system: Icon children integrate with icon library via name, color, size props",
+        "List structures: Support for semantic HTML lists (ul, ol, li) with proper nesting",
+        "Component library: Children patterns enable design system components (cards, alerts, modals)"
+      ]
     }
   ]
 }

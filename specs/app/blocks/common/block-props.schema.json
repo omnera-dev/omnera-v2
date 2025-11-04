@@ -479,7 +479,128 @@
       "id": "APP-BLOCKS-BLOCK-PROPS-REGRESSION-001",
       "given": "complete application configuration with all features",
       "when": "user completes full workflow",
-      "then": "user can complete full props workflow"
+      "then": "user can complete full props workflow",
+      "workflow": [
+        {
+          "step": 1,
+          "action": "User defines block template with props containing $variable placeholders",
+          "validation": "Props validate with camelCase property names (^[a-zA-Z][a-zA-Z0-9]*$) and string/number/boolean/object/array types",
+          "expectedState": "Block template created with dynamic props: className, id, ariaLabel, dataTestId using $variable syntax"
+        },
+        {
+          "step": 2,
+          "action": "User creates block reference with vars object providing variable values",
+          "validation": "Vars object validates with matching camelCase property names",
+          "expectedState": "Block reference configured with vars: {color: 'blue', elementId: 'main', label: 'Main content'}"
+        },
+        {
+          "step": 3,
+          "action": "System substitutes $variable placeholders in props with vars values",
+          "validation": "Variable substitution logic replaces $color → 'blue', $elementId → 'main', $label → 'Main content'",
+          "expectedState": "Props transformed: className='text-$color' → className='text-blue', id='$elementId' → id='main'"
+        },
+        {
+          "step": 4,
+          "action": "System renders block with all props applied as HTML attributes",
+          "validation": "CamelCase props convert to kebab-case HTML attributes: className → class, ariaLabel → aria-label, dataTestId → data-test-id",
+          "expectedState": "HTML element rendered: <div class=\"text-blue\" id=\"main\" aria-label=\"Main content\" data-test-id=\"component-1\"></div>"
+        },
+        {
+          "step": 5,
+          "action": "System handles all prop value types correctly in rendered attributes",
+          "validation": "String props render as string attributes, number props as data-* attributes, boolean props as presence/absence, objects/arrays as JSON data-* attributes",
+          "expectedState": "All prop types rendered correctly: strings, numbers, booleans (present/absent), objects (JSON), arrays (JSON)"
+        }
+      ],
+      "application": {
+        "completeExample": {
+          "blocks": [
+            {
+              "name": "dynamic-component",
+              "type": "div",
+              "props": {
+                "className": "text-$color bg-$bgColor border-$borderColor",
+                "id": "$elementId",
+                "ariaLabel": "$label",
+                "dataTestId": "$testId",
+                "dataColumns": "$columns",
+                "disabled": "$isDisabled",
+                "chartConfig": {
+                  "type": "$chartType",
+                  "data": "$chartData",
+                  "colors": {
+                    "primary": "$primaryColor",
+                    "secondary": "$secondaryColor"
+                  }
+                },
+                "tags": ["$tag1", "$tag2", "$tag3"]
+              },
+              "content": "$content"
+            }
+          ],
+          "pages": [
+            {
+              "name": "Demo",
+              "path": "/demo",
+              "sections": [
+                {
+                  "block": "dynamic-component",
+                  "vars": {
+                    "color": "blue-600",
+                    "bgColor": "gray-100",
+                    "borderColor": "gray-300",
+                    "elementId": "main-content",
+                    "label": "Main content area",
+                    "testId": "content-block-1",
+                    "columns": 3,
+                    "isDisabled": false,
+                    "chartType": "bar",
+                    "chartData": [10, 20, 30],
+                    "primaryColor": "blue",
+                    "secondaryColor": "green",
+                    "tag1": "react",
+                    "tag2": "typescript",
+                    "tag3": "tailwind",
+                    "content": "Hello World"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "expectedDOM": "<div data-testid=\"block-dynamic-component\" class=\"text-blue-600 bg-gray-100 border-gray-300\" id=\"main-content\" aria-label=\"Main content area\" data-test-id=\"content-block-1\" data-columns=\"3\" data-chart-config='{\"type\":\"bar\",\"data\":[10,20,30],\"colors\":{\"primary\":\"blue\",\"secondary\":\"green\"}}' data-tags='[\"react\",\"typescript\",\"tailwind\"]'>Hello World</div>",
+        "assertions": [
+          "Props object: Flexible property definition via patternProperties (^[a-zA-Z][a-zA-Z0-9]*$)",
+          "Variable placeholders: $variable syntax in props enables dynamic data substitution",
+          "Multi-variable className: Multiple $variables in single className value (text-$color bg-$bgColor border-$borderColor)",
+          "Variable substitution: All $placeholders replaced with actual values from vars object",
+          "CamelCase to kebab-case conversion: className → class, ariaLabel → aria-label, dataTestId → data-test-id",
+          "String props: Direct string values or $variable placeholders render as HTML attributes",
+          "Number props: Numeric values render as data-* attributes with string conversion",
+          "Boolean props: true = attribute present (no value), false = attribute absent from HTML",
+          "Object props: Nested objects serialize to JSON in data-* attributes",
+          "Array props: Lists serialize to JSON arrays in data-* attributes",
+          "Tailwind utility classes: Dynamic Tailwind classes via $variable substitution (text-blue-600, bg-gray-100)",
+          "Accessibility: ariaLabel prop enables dynamic ARIA labels for screen readers",
+          "Test identification: dataTestId prop provides test-friendly element identification",
+          "Complete component configuration: Props define appearance, behavior, accessibility, and data",
+          "Single source of truth: Block template + vars = fully configured component instance"
+        ]
+      },
+      "integrationPoints": [
+        "Variable substitution: Props use $variable placeholders resolved from block reference vars object",
+        "Block reference system: Vars object provides data for all $variables in props",
+        "HTML attribute mapping: CamelCase prop names convert to kebab-case HTML attributes",
+        "Tailwind CSS: className prop supports dynamic Tailwind utility class generation",
+        "Accessibility: ariaLabel, ariaDescribedBy, role props enable ARIA attribute generation",
+        "Test automation: dataTestId prop provides stable test selectors for E2E/unit tests",
+        "JSON serialization: Object and array props serialize to JSON for data-* attributes",
+        "Boolean attributes: HTML boolean attribute presence/absence based on true/false values",
+        "Content property: Separate content property for element text content with $variable support",
+        "CSS class composition: Multiple $variables in className enable complex dynamic styling",
+        "Data attributes: Custom data-* attributes for client-side JavaScript/CSS selectors",
+        "Schema flexibility: patternProperties allow any valid JavaScript property name without predefined schema"
+      ]
     }
   ]
 }

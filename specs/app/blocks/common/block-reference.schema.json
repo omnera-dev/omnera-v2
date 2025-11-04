@@ -831,7 +831,220 @@
       "id": "APP-BLOCKS-BLOCK-REFERENCE-REGRESSION-001",
       "given": "complete application configuration with all features",
       "when": "user completes full workflow",
-      "then": "user can complete full reference workflow"
+      "then": "user can complete full reference workflow",
+      "workflow": [
+        {
+          "step": 1,
+          "action": "User defines reusable block template in blocks array with $variable placeholders",
+          "validation": "Block template validates with name (kebab-case), type, props, children, and content properties",
+          "expectedState": "Block template 'team-member' created with $photo, $name, $position variables"
+        },
+        {
+          "step": 2,
+          "action": "User creates multiple block references in page sections, each with different vars",
+          "validation": "Each reference validates with block (matching template name) and vars object",
+          "expectedState": "3 block references created for 'team-member' with unique data per instance"
+        },
+        {
+          "step": 3,
+          "action": "System looks up block template by name and prepares for instantiation",
+          "validation": "Block reference 'team-member' resolves to matching block in blocks array",
+          "expectedState": "Block template found and ready for variable substitution"
+        },
+        {
+          "step": 4,
+          "action": "System substitutes $variables in template with vars from each reference",
+          "validation": "Variable substitution replaces $photo, $name, $position with instance-specific values",
+          "expectedState": "3 unique instances created: Alice (CEO), Bob (CTO), Carol (Designer)"
+        },
+        {
+          "step": 5,
+          "action": "System renders all instances with unique data-testid suffixes for identification",
+          "validation": "Each instance has unique data-testid: block-team-member-0, block-team-member-1, block-team-member-2",
+          "expectedState": "3 rendered DOM elements with identical structure but different content and unique identifiers"
+        }
+      ],
+      "application": {
+        "completeExample": {
+          "blocks": [
+            {
+              "name": "team-member",
+              "type": "card",
+              "props": {
+                "className": "team-card shadow-lg rounded-lg p-6"
+              },
+              "children": [
+                {
+                  "type": "img",
+                  "props": {
+                    "src": "$photo",
+                    "alt": "$name",
+                    "className": "w-24 h-24 rounded-full mx-auto mb-4"
+                  }
+                },
+                {
+                  "type": "text",
+                  "props": {
+                    "level": "h4",
+                    "className": "text-xl font-bold text-center"
+                  },
+                  "content": "$name"
+                },
+                {
+                  "type": "text",
+                  "props": {
+                    "level": "p",
+                    "className": "text-gray-600 text-center"
+                  },
+                  "content": "$position"
+                },
+                {
+                  "type": "text",
+                  "props": {
+                    "level": "p",
+                    "className": "text-sm text-gray-500 text-center mt-2"
+                  },
+                  "content": "$bio"
+                }
+              ]
+            },
+            {
+              "name": "feature-item",
+              "type": "div",
+              "props": {
+                "className": "feature flex gap-4 p-4"
+              },
+              "children": [
+                {
+                  "type": "icon",
+                  "props": {
+                    "name": "$icon",
+                    "color": "blue",
+                    "size": 6
+                  }
+                },
+                {
+                  "type": "div",
+                  "children": [
+                    {
+                      "type": "text",
+                      "props": {
+                        "level": "h5",
+                        "className": "font-semibold"
+                      },
+                      "content": "$title"
+                    },
+                    {
+                      "type": "text",
+                      "props": {
+                        "className": "text-gray-600"
+                      },
+                      "content": "$description"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "pages": [
+            {
+              "name": "Team",
+              "path": "/team",
+              "sections": [
+                {
+                  "block": "team-member",
+                  "vars": {
+                    "photo": "/images/alice.jpg",
+                    "name": "Alice Johnson",
+                    "position": "CEO & Founder",
+                    "bio": "Leading the company vision and strategy"
+                  }
+                },
+                {
+                  "block": "team-member",
+                  "vars": {
+                    "photo": "/images/bob.jpg",
+                    "name": "Bob Smith",
+                    "position": "CTO",
+                    "bio": "Driving technical innovation and architecture"
+                  }
+                },
+                {
+                  "block": "team-member",
+                  "vars": {
+                    "photo": "/images/carol.jpg",
+                    "name": "Carol White",
+                    "position": "Lead Designer",
+                    "bio": "Crafting beautiful and intuitive user experiences"
+                  }
+                }
+              ]
+            },
+            {
+              "name": "Home",
+              "path": "/",
+              "sections": [
+                {
+                  "block": "feature-item",
+                  "vars": {
+                    "icon": "shield",
+                    "title": "Secure",
+                    "description": "Enterprise-grade security"
+                  }
+                },
+                {
+                  "block": "feature-item",
+                  "vars": {
+                    "icon": "zap",
+                    "title": "Fast",
+                    "description": "Lightning-fast performance"
+                  }
+                },
+                {
+                  "block": "feature-item",
+                  "vars": {
+                    "icon": "dollar",
+                    "title": "Affordable",
+                    "description": "Competitive pricing"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "expectedDOM": "<div data-testid=\"block-team-member-0\" class=\"team-card shadow-lg rounded-lg p-6\">\n  <img src=\"/images/alice.jpg\" alt=\"Alice Johnson\" class=\"w-24 h-24 rounded-full mx-auto mb-4\" />\n  <h4 class=\"text-xl font-bold text-center\">Alice Johnson</h4>\n  <p class=\"text-gray-600 text-center\">CEO & Founder</p>\n  <p class=\"text-sm text-gray-500 text-center mt-2\">Leading the company vision and strategy</p>\n</div>\n<div data-testid=\"block-team-member-1\" class=\"team-card shadow-lg rounded-lg p-6\">\n  <img src=\"/images/bob.jpg\" alt=\"Bob Smith\" class=\"w-24 h-24 rounded-full mx-auto mb-4\" />\n  <h4 class=\"text-xl font-bold text-center\">Bob Smith</h4>\n  <p class=\"text-gray-600 text-center\">CTO</p>\n  <p class=\"text-sm text-gray-500 text-center mt-2\">Driving technical innovation and architecture</p>\n</div>\n<div data-testid=\"block-team-member-2\" class=\"team-card shadow-lg rounded-lg p-6\">\n  <img src=\"/images/carol.jpg\" alt=\"Carol White\" class=\"w-24 h-24 rounded-full mx-auto mb-4\" />\n  <h4 class=\"text-xl font-bold text-center\">Carol White</h4>\n  <p class=\"text-gray-600 text-center\">Lead Designer</p>\n  <p class=\"text-sm text-gray-500 text-center mt-2\">Crafting beautiful and intuitive user experiences</p>\n</div>",
+        "assertions": [
+          "Block reference mechanism: block property references template name, vars provides instance data",
+          "Template lookup: block='team-member' resolves to matching block in blocks array",
+          "Variable substitution: $photo, $name, $position, $bio replaced with vars values",
+          "Multiple instances: Same template generates 3 unique instances with different data",
+          "Unique identifiers: data-testid suffixes (-0, -1, -2) enable individual instance testing",
+          "Structural consistency: All instances share identical HTML structure (card → img → h4 → p → p)",
+          "Content variation: Only data varies (photos, names, positions, bios) while structure stays same",
+          "Single source of truth: Modify template once → all instances update automatically",
+          "DRY principle: No code duplication, reusable components via template + reference pattern",
+          "Cross-page reuse: feature-item block used on Home page with different data",
+          "Naming validation: block names must match ^[a-z][a-z0-9-]*$ (kebab-case)",
+          "Required properties: Both block and vars are required (even if vars is empty {})",
+          "Build-time validation: References to non-existent blocks fail validation",
+          "Template instantiation: Abstract template + concrete data = rendered component",
+          "Data-driven UI: Same component structure, multiple data instances pattern"
+        ]
+      },
+      "integrationPoints": [
+        "Blocks array: Global registry of reusable block templates",
+        "Block template system: Define once, reference many times across pages",
+        "Variable substitution: $variable placeholders in templates resolved from vars object",
+        "Props schema: Block props follow block-props.schema.json for flexible property definitions",
+        "Children schema: Block children follow block-children.schema.json for nested structures",
+        "Page sections: Block references embedded in page sections for composition",
+        "Data-testid generation: Automatic unique suffixes (-0, -1, -2) for instance identification",
+        "Naming convention: Kebab-case block names (^[a-z][a-z0-9-]*$) for consistency",
+        "Build-time validation: Schema validates all references resolve to existing blocks",
+        "Component library: Blocks array acts as design system component library",
+        "Template instantiation: Runtime system clones template and substitutes variables",
+        "DRY architecture: Single template definition eliminates component code duplication"
+      ]
     }
   ]
 }

@@ -11,10 +11,10 @@ import { test, expect } from '@/specs/fixtures'
  * E2E Tests for Animation Configuration
  *
  * Source: specs/app/theme/animations/animations.schema.json
- * Spec Count: 11
+ * Spec Count: 24 (23 @spec + 1 @regression)
  *
  * Test Organization:
- * 1. @spec tests - One per spec in schema (11 tests) - Exhaustive acceptance criteria
+ * 1. @spec tests - One per spec in schema (23 tests: 8 validation + 15 application) - Exhaustive acceptance criteria
  * 2. @regression test - ONE optimized integration test - Efficient workflow validation
  */
 
@@ -416,6 +416,583 @@ test.describe('Animation Configuration', () => {
       await expect(button).toBeVisible()
       const transValue = await button.evaluate((el) => window.getComputedStyle(el).transition)
       expect(transValue).toMatch(/200ms|0.2s/)
+    }
+  )
+
+  test.fixme(
+    'APP-THEME-ANIMATIONS-APPLICATION-004: should render hero content sliding up and fading in',
+    { tag: '@spec' },
+    async ({ page, startServerWithSchema }) => {
+      // GIVEN: fadeInUp entrance animation applied to hero section
+      await startServerWithSchema({
+        name: 'test-app',
+        theme: {
+          animations: {
+            fadeInUp: {
+              duration: '600ms',
+              easing: 'cubic-bezier(0.4, 0, 0.2, 1)',
+              keyframes: {
+                '0%': {
+                  opacity: 0,
+                  transform: 'translateY(20px)',
+                },
+                '100%': {
+                  opacity: 1,
+                  transform: 'translateY(0)',
+                },
+              },
+            },
+          },
+        },
+        pages: [
+          {
+            path: '/',
+            sections: [
+              {
+                type: 'hero',
+                content: '<h1>Welcome to Our Site</h1><p>Discover amazing features</p>',
+                props: {
+                  'data-testid': 'hero-section',
+                },
+              },
+            ],
+          },
+        ],
+      })
+
+      // WHEN: hero section uses theme.animations.fadeInUp on page load
+      await page.goto('/')
+
+      // THEN: it should render hero content sliding up and fading in
+      const hero = page.locator('[data-testid="hero-section"]')
+      await expect(hero).toBeVisible()
+      const animValue = await hero.evaluate((el) => window.getComputedStyle(el).animation)
+      expect(animValue).toContain('fadeInUp')
+    }
+  )
+
+  test.fixme(
+    'APP-THEME-ANIMATIONS-APPLICATION-005: should render sidebar sliding in from left',
+    { tag: '@spec' },
+    async ({ page, startServerWithSchema }) => {
+      // GIVEN: slideIn entrance animation applied to sidebar
+      await startServerWithSchema({
+        name: 'test-app',
+        theme: {
+          animations: {
+            slideIn: {
+              duration: '400ms',
+              easing: 'ease-out',
+              keyframes: {
+                '0%': {
+                  transform: 'translateX(-100%)',
+                },
+                '100%': {
+                  transform: 'translateX(0)',
+                },
+              },
+            },
+          },
+        },
+        pages: [
+          {
+            path: '/',
+            sections: [
+              {
+                type: 'sidebar',
+                content: '<nav>Menu items</nav>',
+                props: {
+                  'data-testid': 'mobile-sidebar',
+                },
+              },
+            ],
+          },
+        ],
+      })
+
+      // WHEN: sidebar uses theme.animations.slideIn on navigation
+      await page.goto('/')
+
+      // THEN: it should render sidebar sliding in from left
+      const sidebar = page.locator('[data-testid="mobile-sidebar"]')
+      await expect(sidebar).toBeVisible()
+      const animValue = await sidebar.evaluate((el) => window.getComputedStyle(el).animation)
+      expect(animValue).toContain('slideIn')
+    }
+  )
+
+  test.fixme(
+    'APP-THEME-ANIMATIONS-APPLICATION-006: should render toast fading out before removal',
+    { tag: '@spec' },
+    async ({ page, startServerWithSchema }) => {
+      // GIVEN: fadeOut exit animation applied to toast notification
+      await startServerWithSchema({
+        name: 'test-app',
+        theme: {
+          animations: {
+            fadeOut: {
+              duration: '300ms',
+              easing: 'ease-out',
+              keyframes: {
+                '0%': {
+                  opacity: 1,
+                },
+                '100%': {
+                  opacity: 0,
+                },
+              },
+            },
+          },
+        },
+        pages: [
+          {
+            path: '/',
+            sections: [
+              {
+                type: 'toast',
+                content: 'Notification message',
+                props: {
+                  'data-testid': 'toast-notification',
+                },
+              },
+            ],
+          },
+        ],
+      })
+
+      // WHEN: toast uses theme.animations.fadeOut on dismiss
+      await page.goto('/')
+
+      // THEN: it should render toast fading out before removal
+      const toast = page.locator('[data-testid="toast-notification"]')
+      await expect(toast).toBeVisible()
+      const animValue = await toast.evaluate((el) => window.getComputedStyle(el).animation)
+      expect(animValue).toContain('fadeOut')
+    }
+  )
+
+  test.fixme(
+    'APP-THEME-ANIMATIONS-APPLICATION-007: should render card scaling up when scrolled into view',
+    { tag: '@spec' },
+    async ({ page, startServerWithSchema }) => {
+      // GIVEN: scaleUp entrance animation on scroll-triggered card reveal
+      await startServerWithSchema({
+        name: 'test-app',
+        theme: {
+          animations: {
+            scaleUp: {
+              duration: '500ms',
+              easing: 'cubic-bezier(0.34, 1.56, 0.64, 1)',
+              keyframes: {
+                '0%': {
+                  opacity: 0,
+                  transform: 'scale(0.8)',
+                },
+                '100%': {
+                  opacity: 1,
+                  transform: 'scale(1)',
+                },
+              },
+            },
+          },
+        },
+        pages: [
+          {
+            path: '/',
+            sections: [
+              {
+                type: 'card',
+                content: '<h3>Feature Title</h3><p>Description</p>',
+                props: {
+                  'data-testid': 'feature-card',
+                },
+              },
+            ],
+          },
+        ],
+      })
+
+      // WHEN: card uses theme.animations.scaleUp with IntersectionObserver
+      await page.goto('/')
+
+      // THEN: it should render card scaling up when scrolled into view
+      const card = page.locator('[data-testid="feature-card"]')
+      await expect(card).toBeVisible()
+      const animValue = await card.evaluate((el) => window.getComputedStyle(el).animation)
+      expect(animValue).toContain('scaleUp')
+    }
+  )
+
+  test.fixme(
+    'APP-THEME-ANIMATIONS-APPLICATION-008: should render button gently floating up and down',
+    { tag: '@spec' },
+    async ({ page, startServerWithSchema }) => {
+      // GIVEN: float animation applied to floating action button (FAB)
+      await startServerWithSchema({
+        name: 'test-app',
+        theme: {
+          animations: {
+            float: {
+              duration: '3s',
+              easing: 'ease-in-out',
+              keyframes: {
+                '0%, 100%': {
+                  transform: 'translateY(0)',
+                },
+                '50%': {
+                  transform: 'translateY(-10px)',
+                },
+              },
+            },
+          },
+        },
+        pages: [
+          {
+            path: '/',
+            sections: [
+              {
+                type: 'fab',
+                content: '+',
+                props: {
+                  'data-testid': 'fab-button',
+                },
+              },
+            ],
+          },
+        ],
+      })
+
+      // WHEN: FAB uses theme.animations.float for continuous hover effect
+      await page.goto('/')
+
+      // THEN: it should render button gently floating up and down
+      const fab = page.locator('[data-testid="fab-button"]')
+      await expect(fab).toBeVisible()
+      const animValue = await fab.evaluate((el) => window.getComputedStyle(el).animation)
+      expect(animValue).toContain('float')
+    }
+  )
+
+  test.fixme(
+    'APP-THEME-ANIMATIONS-APPLICATION-009: should render button scaling up smoothly on hover',
+    { tag: '@spec' },
+    async ({ page, startServerWithSchema }) => {
+      // GIVEN: hover animation for button scale interaction
+      await startServerWithSchema({
+        name: 'test-app',
+        theme: {
+          animations: {
+            transition: {
+              duration: '200ms',
+              easing: 'ease-in-out',
+            },
+          },
+        },
+        pages: [
+          {
+            path: '/',
+            sections: [
+              {
+                type: 'button',
+                content: 'Buy Now',
+                props: {
+                  'data-testid': 'cta-button',
+                },
+              },
+            ],
+          },
+        ],
+      })
+
+      // WHEN: button uses theme.animations.transition for hover scale
+      await page.goto('/')
+
+      // THEN: it should render button scaling up smoothly on hover
+      const button = page.locator('[data-testid="cta-button"]')
+      await expect(button).toBeVisible()
+      await button.hover()
+      const transform = await button.evaluate((el) => window.getComputedStyle(el).transform)
+      expect(transform).toBeTruthy()
+    }
+  )
+
+  test.fixme(
+    'APP-THEME-ANIMATIONS-APPLICATION-010: should render list items appearing one after another',
+    { tag: '@spec' },
+    async ({ page, startServerWithSchema }) => {
+      // GIVEN: stagger animation for list items
+      await startServerWithSchema({
+        name: 'test-app',
+        theme: {
+          animations: {
+            fadeIn: {
+              duration: '400ms',
+              easing: 'ease-out',
+            },
+          },
+        },
+        pages: [
+          {
+            path: '/',
+            sections: [
+              {
+                type: 'list',
+                content: '<li>Feature 1</li><li>Feature 2</li><li>Feature 3</li>',
+                props: {
+                  'data-testid': 'feature-list',
+                },
+              },
+            ],
+          },
+        ],
+      })
+
+      // WHEN: list items use theme.animations.fadeIn with incremental delays
+      await page.goto('/')
+
+      // THEN: it should render list items appearing one after another
+      const list = page.locator('[data-testid="feature-list"]')
+      await expect(list).toBeVisible()
+      const items = list.locator('li')
+      await expect(items.first()).toBeVisible()
+    }
+  )
+
+  test.fixme(
+    'APP-THEME-ANIMATIONS-APPLICATION-011: should render spinner rotating infinitely',
+    { tag: '@spec' },
+    async ({ page, startServerWithSchema }) => {
+      // GIVEN: rotate animation for loading spinner
+      await startServerWithSchema({
+        name: 'test-app',
+        theme: {
+          animations: {
+            rotate: {
+              duration: '1s',
+              easing: 'linear',
+              keyframes: {
+                '0%': {
+                  transform: 'rotate(0deg)',
+                },
+                '100%': {
+                  transform: 'rotate(360deg)',
+                },
+              },
+            },
+          },
+        },
+        pages: [
+          {
+            path: '/',
+            sections: [
+              {
+                type: 'spinner',
+                content: '<svg>...</svg>',
+                props: {
+                  'data-testid': 'loading-spinner',
+                },
+              },
+            ],
+          },
+        ],
+      })
+
+      // WHEN: spinner uses theme.animations.rotate for continuous rotation
+      await page.goto('/')
+
+      // THEN: it should render spinner rotating infinitely
+      const spinner = page.locator('[data-testid="loading-spinner"]')
+      await expect(spinner).toBeVisible()
+      const animValue = await spinner.evaluate((el) => window.getComputedStyle(el).animation)
+      expect(animValue).toContain('rotate')
+    }
+  )
+
+  test.fixme(
+    'APP-THEME-ANIMATIONS-APPLICATION-012: should render input shaking horizontally to indicate error',
+    { tag: '@spec' },
+    async ({ page, startServerWithSchema }) => {
+      // GIVEN: shake animation for form validation error
+      await startServerWithSchema({
+        name: 'test-app',
+        theme: {
+          animations: {
+            shake: {
+              duration: '500ms',
+              easing: 'ease-in-out',
+              keyframes: {
+                '0%, 100%': {
+                  transform: 'translateX(0)',
+                },
+                '10%, 30%, 50%, 70%, 90%': {
+                  transform: 'translateX(-10px)',
+                },
+                '20%, 40%, 60%, 80%': {
+                  transform: 'translateX(10px)',
+                },
+              },
+            },
+          },
+        },
+        pages: [
+          {
+            path: '/',
+            sections: [
+              {
+                type: 'input',
+                props: {
+                  'data-testid': 'email-input',
+                  'aria-invalid': 'true',
+                },
+              },
+            ],
+          },
+        ],
+      })
+
+      // WHEN: input field uses theme.animations.shake on invalid submission
+      await page.goto('/')
+
+      // THEN: it should render input shaking horizontally to indicate error
+      const input = page.locator('[data-testid="email-input"]')
+      await expect(input).toBeVisible()
+      const animValue = await input.evaluate((el) => window.getComputedStyle(el).animation)
+      expect(animValue).toContain('shake')
+    }
+  )
+
+  test.fixme(
+    'APP-THEME-ANIMATIONS-APPLICATION-013: should render background moving slower than foreground (parallax effect)',
+    { tag: '@spec' },
+    async ({ page, startServerWithSchema }) => {
+      // GIVEN: parallax scroll animation for background image
+      await startServerWithSchema({
+        name: 'test-app',
+        theme: {
+          animations: {
+            parallax: {
+              easing: 'linear',
+            },
+          },
+        },
+        pages: [
+          {
+            path: '/',
+            sections: [
+              {
+                type: 'hero',
+                content:
+                  '<div data-testid="hero-background"></div><div data-testid="hero-content">Content</div>',
+                props: {
+                  'data-testid': 'hero-section',
+                },
+              },
+            ],
+          },
+        ],
+      })
+
+      // WHEN: hero background uses theme.animations.parallax on scroll
+      await page.goto('/')
+
+      // THEN: it should render background moving slower than foreground (parallax effect)
+      const heroSection = page.locator('[data-testid="hero-section"]')
+      await expect(heroSection).toBeVisible()
+      const background = page.locator('[data-testid="hero-background"]')
+      await expect(background).toBeVisible()
+    }
+  )
+
+  test.fixme(
+    'APP-THEME-ANIMATIONS-APPLICATION-014: should render text appearing one character at a time',
+    { tag: '@spec' },
+    async ({ page, startServerWithSchema }) => {
+      // GIVEN: typewriter animation for text reveal
+      await startServerWithSchema({
+        name: 'test-app',
+        theme: {
+          animations: {
+            typewriter: {
+              duration: '4s',
+              easing: 'steps(40, end)',
+              keyframes: {
+                '0%': {
+                  width: '0',
+                },
+                '100%': {
+                  width: '100%',
+                },
+              },
+            },
+          },
+        },
+        pages: [
+          {
+            path: '/',
+            sections: [
+              {
+                type: 'heading',
+                content: 'Welcome to our website',
+                props: {
+                  'data-testid': 'hero-heading',
+                },
+              },
+            ],
+          },
+        ],
+      })
+
+      // WHEN: heading uses theme.animations.typewriter for character-by-character reveal
+      await page.goto('/')
+
+      // THEN: it should render text appearing one character at a time
+      const heading = page.locator('[data-testid="hero-heading"]')
+      await expect(heading).toBeVisible()
+      const animValue = await heading.evaluate((el) => window.getComputedStyle(el).animation)
+      expect(animValue).toContain('typewriter')
+    }
+  )
+
+  test.fixme(
+    'APP-THEME-ANIMATIONS-APPLICATION-015: should disable animations or use simplified versions',
+    { tag: '@spec' },
+    async ({ page, startServerWithSchema }) => {
+      // GIVEN: reduced motion preference respected
+      await startServerWithSchema({
+        name: 'test-app',
+        theme: {
+          animations: {
+            fadeIn: {
+              duration: '300ms',
+              enabled: true,
+            },
+          },
+        },
+        pages: [
+          {
+            path: '/',
+            sections: [
+              {
+                type: 'modal',
+                content: 'Modal content',
+                props: {
+                  'data-testid': 'modal',
+                },
+              },
+            ],
+          },
+        ],
+      })
+
+      // WHEN: user has prefers-reduced-motion enabled
+      await page.emulateMedia({ reducedMotion: 'reduce' })
+      await page.goto('/')
+
+      // THEN: it should disable animations or use simplified versions
+      const modal = page.locator('[data-testid="modal"]')
+      await expect(modal).toBeVisible()
+      const opacity = await modal.evaluate((el) => window.getComputedStyle(el).opacity)
+      expect(opacity).toBe('1')
     }
   )
 

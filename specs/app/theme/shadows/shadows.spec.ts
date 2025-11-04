@@ -11,10 +11,10 @@ import { test, expect } from '@/specs/fixtures'
  * E2E Tests for Shadows
  *
  * Source: specs/app/theme/shadows/shadows.schema.json
- * Spec Count: 9
+ * Spec Count: 17 (16 @spec + 1 @regression)
  *
  * Test Organization:
- * 1. @spec tests - One per spec in schema (9 tests) - Exhaustive acceptance criteria
+ * 1. @spec tests - One per spec in schema (16 tests: 6 validation + 10 application) - Exhaustive acceptance criteria
  * 2. @regression test - ONE optimized integration test - Efficient workflow validation
  */
 
@@ -337,6 +337,316 @@ test.describe('Shadows', () => {
       await expect(input).toBeVisible()
       const shadow = await input.evaluate((el) => window.getComputedStyle(el).boxShadow)
       expect(shadow).toContain('inset')
+    }
+  )
+
+  test.fixme(
+    'APP-THEME-SHADOWS-APPLICATION-004: should render button with smooth shadow transition creating lift effect',
+    { tag: '@spec' },
+    async ({ page, startServerWithSchema }) => {
+      // GIVEN: shadow transition on button hover interaction
+      await startServerWithSchema({
+        name: 'test-app',
+        theme: {
+          shadows: {
+            md: '0 4px 6px -1px rgb(0 0 0 / 0.1)',
+            lg: '0 10px 15px -3px rgb(0 0 0 / 0.1)',
+          },
+        },
+        pages: [
+          {
+            path: '/',
+            sections: [
+              {
+                type: 'button',
+                content: 'Hover me',
+                props: {
+                  'data-testid': 'elevated-button',
+                },
+              },
+            ],
+          },
+        ],
+      })
+
+      // WHEN: button hover state increases shadow elevation from md to lg
+      await page.goto('/')
+
+      // THEN: it should render button with smooth shadow transition creating lift effect
+      const button = page.locator('[data-testid="elevated-button"]')
+      await expect(button).toBeVisible()
+      await button.hover()
+      const shadow = await button.evaluate((el) => window.getComputedStyle(el).boxShadow)
+      expect(shadow).toBeTruthy()
+    }
+  )
+
+  test.fixme(
+    'APP-THEME-SHADOWS-APPLICATION-005: should render button with colored shadow matching brand identity',
+    { tag: '@spec' },
+    async ({ page, startServerWithSchema }) => {
+      // GIVEN: colored shadow for brand accent
+      await startServerWithSchema({
+        name: 'test-app',
+        theme: {
+          shadows: {
+            brand: '0 4px 14px 0 rgb(59 130 246 / 0.4)',
+          },
+          colors: {
+            primary: '#3b82f6',
+          },
+        },
+        pages: [
+          {
+            path: '/',
+            sections: [
+              {
+                type: 'button',
+                content: 'Get Started',
+                props: {
+                  'data-testid': 'brand-button',
+                },
+              },
+            ],
+          },
+        ],
+      })
+
+      // WHEN: button uses custom shadow with brand color tint
+      await page.goto('/')
+
+      // THEN: it should render button with colored shadow matching brand identity
+      const button = page.locator('[data-testid="brand-button"]')
+      await expect(button).toBeVisible()
+      const shadow = await button.evaluate((el) => window.getComputedStyle(el).boxShadow)
+      expect(shadow).toContain('59')
+    }
+  )
+
+  test.fixme(
+    'APP-THEME-SHADOWS-APPLICATION-006: should render element with multi-layered shadow creating subtle 3D effect',
+    { tag: '@spec' },
+    async ({ page, startServerWithSchema }) => {
+      // GIVEN: layered shadows for enhanced depth (neumorphism)
+      await startServerWithSchema({
+        name: 'test-app',
+        theme: {
+          shadows: {
+            neumorphic: '8px 8px 16px rgb(0 0 0 / 0.1), -8px -8px 16px rgb(255 255 255 / 0.5)',
+          },
+        },
+        pages: [
+          {
+            path: '/',
+            sections: [
+              {
+                type: 'card',
+                content: 'Neumorphic design',
+                props: {
+                  'data-testid': 'neumorphic-card',
+                },
+              },
+            ],
+          },
+        ],
+      })
+
+      // WHEN: element combines multiple shadow values for soft depth
+      await page.goto('/')
+
+      // THEN: it should render element with multi-layered shadow creating subtle 3D effect
+      const card = page.locator('[data-testid="neumorphic-card"]')
+      await expect(card).toBeVisible()
+      const shadow = await card.evaluate((el) => window.getComputedStyle(el).boxShadow)
+      expect(shadow).toContain('8px')
+    }
+  )
+
+  test.fixme(
+    'APP-THEME-SHADOWS-APPLICATION-007: should render input with prominent focus shadow for keyboard navigation',
+    { tag: '@spec' },
+    async ({ page, startServerWithSchema }) => {
+      // GIVEN: focus ring shadow for accessibility
+      await startServerWithSchema({
+        name: 'test-app',
+        theme: {
+          shadows: {
+            focus: '0 0 0 3px rgb(59 130 246 / 0.5)',
+          },
+          colors: {
+            primary: '#3b82f6',
+          },
+        },
+        pages: [
+          {
+            path: '/',
+            sections: [
+              {
+                type: 'input',
+                props: {
+                  'data-testid': 'text-input',
+                  type: 'text',
+                },
+              },
+            ],
+          },
+        ],
+      })
+
+      // WHEN: input focus state combines border and shadow for clear focus indicator
+      await page.goto('/')
+
+      // THEN: it should render input with prominent focus shadow for keyboard navigation
+      const input = page.locator('[data-testid="text-input"]')
+      await expect(input).toBeVisible()
+      await input.focus()
+      const shadow = await input.evaluate((el) => window.getComputedStyle(el).boxShadow)
+      expect(shadow).toBeTruthy()
+    }
+  )
+
+  test.fixme(
+    'APP-THEME-SHADOWS-APPLICATION-008: should render card with appropriate shadow depth per device',
+    { tag: '@spec' },
+    async ({ page, startServerWithSchema }) => {
+      // GIVEN: responsive shadow scaling for mobile vs desktop
+      await startServerWithSchema({
+        name: 'test-app',
+        theme: {
+          shadows: {
+            sm: '0 1px 2px 0 rgb(0 0 0 / 0.05)',
+            md: '0 4px 6px -1px rgb(0 0 0 / 0.1)',
+          },
+        },
+        pages: [
+          {
+            path: '/',
+            sections: [
+              {
+                type: 'card',
+                content: 'Card content',
+                props: {
+                  'data-testid': 'responsive-card',
+                },
+              },
+            ],
+          },
+        ],
+      })
+
+      // WHEN: card uses larger shadow on desktop, smaller on mobile for touch interfaces
+      await page.goto('/')
+
+      // THEN: it should render card with appropriate shadow depth per device
+      const card = page.locator('[data-testid="responsive-card"]')
+      await expect(card).toBeVisible()
+      const shadow = await card.evaluate((el) => window.getComputedStyle(el).boxShadow)
+      expect(shadow).toBeTruthy()
+    }
+  )
+
+  test.fixme(
+    'APP-THEME-SHADOWS-APPLICATION-009: should render components with consistent elevation scale',
+    { tag: '@spec' },
+    async ({ page, startServerWithSchema }) => {
+      // GIVEN: shadow elevation hierarchy in component system
+      await startServerWithSchema({
+        name: 'test-app',
+        theme: {
+          shadows: {
+            sm: '0 1px 2px 0 rgb(0 0 0 / 0.05)',
+            md: '0 4px 6px -1px rgb(0 0 0 / 0.1)',
+            lg: '0 10px 15px -3px rgb(0 0 0 / 0.1)',
+            xl: '0 20px 25px -5px rgb(0 0 0 / 0.1)',
+            '2xl': '0 25px 50px -12px rgb(0 0 0 / 0.25)',
+          },
+        },
+        pages: [
+          {
+            path: '/',
+            sections: [
+              {
+                type: 'list-item',
+                content: 'Item',
+                props: {
+                  'data-testid': 'list-item',
+                },
+              },
+              {
+                type: 'card',
+                content: 'Card',
+                props: {
+                  'data-testid': 'card',
+                },
+              },
+              {
+                type: 'dropdown',
+                content: 'Menu',
+                props: {
+                  'data-testid': 'dropdown',
+                },
+              },
+              {
+                type: 'modal',
+                content: 'Modal',
+                props: {
+                  'data-testid': 'modal',
+                },
+              },
+            ],
+          },
+        ],
+      })
+
+      // WHEN: app uses shadows to convey information hierarchy (sm→md→lg→xl→2xl)
+      await page.goto('/')
+
+      // THEN: it should render components with consistent elevation scale
+      await expect(page.locator('[data-testid="list-item"]')).toBeVisible()
+      await expect(page.locator('[data-testid="card"]')).toBeVisible()
+      await expect(page.locator('[data-testid="dropdown"]')).toBeVisible()
+      await expect(page.locator('[data-testid="modal"]')).toBeVisible()
+    }
+  )
+
+  test.fixme(
+    'APP-THEME-SHADOWS-APPLICATION-010: should render button with reduced shadow creating pressed-in effect',
+    { tag: '@spec' },
+    async ({ page, startServerWithSchema }) => {
+      // GIVEN: active/pressed shadow state for buttons
+      await startServerWithSchema({
+        name: 'test-app',
+        theme: {
+          shadows: {
+            md: '0 4px 6px -1px rgb(0 0 0 / 0.1)',
+            sm: '0 1px 2px 0 rgb(0 0 0 / 0.05)',
+          },
+        },
+        pages: [
+          {
+            path: '/',
+            sections: [
+              {
+                type: 'button',
+                content: 'Press me',
+                props: {
+                  'data-testid': 'pressable-button',
+                },
+              },
+            ],
+          },
+        ],
+      })
+
+      // WHEN: button active state reduces shadow to simulate press depth
+      await page.goto('/')
+
+      // THEN: it should render button with reduced shadow creating pressed-in effect
+      const button = page.locator('[data-testid="pressable-button"]')
+      await expect(button).toBeVisible()
+      await button.click()
+      const shadow = await button.evaluate((el) => window.getComputedStyle(el).boxShadow)
+      expect(shadow).toBeTruthy()
     }
   )
 

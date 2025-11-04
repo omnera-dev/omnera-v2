@@ -111,7 +111,7 @@
       "given": "block name in kebab-case",
       "when": "name is 'icon-badge', 'section-header', or 'feature-card'",
       "then": "it should use URL-friendly naming convention for data-testid",
-      "x-test": {
+      "validation": {
         "setup": {
           "blocks": [
             {
@@ -128,7 +128,6 @@
             }
           ]
         },
-        "expectedDOM": "<div data-testid=\"block-icon-badge\"></div>\n<div data-testid=\"block-section-header\"></div>\n<div data-testid=\"block-feature-card\"></div>",
         "assertions": [
           "All block names use kebab-case (lowercase with hyphens)",
           "data-testid attributes directly match block names: 'block-{name}'",
@@ -243,7 +242,7 @@
       "given": "block type specification",
       "when": "type is 'container', 'flex', 'grid', 'card', 'text', 'button', etc.",
       "then": "it should render corresponding HTML element or component",
-      "x-test": {
+      "validation": {
         "setup": {
           "blocks": [
             {
@@ -272,7 +271,6 @@
             }
           ]
         },
-        "expectedDOM": "<div data-testid=\"block-layout\" data-type=\"container\"></div>\n<div data-testid=\"block-row\" data-type=\"flex\"></div>\n<div data-testid=\"block-columns\" data-type=\"grid\"></div>\n<div data-testid=\"block-panel\" data-type=\"card\"></div>\n<span data-testid=\"block-heading\" data-type=\"text\"></span>\n<button data-testid=\"block-cta\" data-type=\"button\"></button>",
         "assertions": [
           "Each block renders with data-type attribute matching type property",
           "Type determines base HTML element (div, span, button, etc.)",
@@ -351,7 +349,7 @@
       "given": "block with props",
       "when": "props references block-props.schema.json",
       "then": "it should render with properties including variable substitution",
-      "x-test": {
+      "validation": {
         "setup": {
           "blockDefinition": {
             "name": "styled-box",
@@ -371,7 +369,6 @@
             }
           }
         },
-        "expectedDOM": "<div data-testid=\"block-styled-box\" class=\"box-primary\" id=\"main-box\" aria-label=\"Main content\"></div>",
         "assertions": [
           "className substituted: 'box-$variant' → 'box-primary'",
           "id substituted: '$boxId' → 'main-box'",
@@ -424,7 +421,7 @@
       "given": "block with children",
       "when": "children references block-children.schema.json",
       "then": "it should render nested child components",
-      "x-test": {
+      "validation": {
         "setup": {
           "blockDefinition": {
             "name": "card-header",
@@ -454,7 +451,6 @@
             }
           }
         },
-        "expectedDOM": "<div data-testid=\"block-card-header\">\n  <h3>Card Title</h3>\n  <p>Card subtitle</p>\n</div>",
         "assertions": [
           "Parent div has data-testid='block-card-header'",
           "Children array renders h3 and p elements",
@@ -517,7 +513,7 @@
       "given": "block with content",
       "when": "content is string with $variable references",
       "then": "it should render text content with substituted variables",
-      "x-test": {
+      "validation": {
         "setup": {
           "blockDefinition": {
             "name": "alert-message",
@@ -534,7 +530,6 @@
             }
           }
         },
-        "expectedDOM": "<div data-testid=\"block-alert-message\" class=\"alert\">Operation successful!</div>",
         "assertions": [
           "Div has data-testid='block-alert-message'",
           "Content substituted: '$message' → 'Operation successful!'",
@@ -582,7 +577,7 @@
       "given": "simple text block example",
       "when": "block has type 'text', className with $color, and content with $message",
       "then": "it should render text element with dynamic styling and content",
-      "x-test": {
+      "validation": {
         "setup": {
           "blockDefinition": {
             "name": "simple-text",
@@ -600,7 +595,6 @@
             }
           }
         },
-        "expectedDOM": "<p data-testid=\"block-simple-text\" class=\"text-blue text-lg\">Hello World</p>",
         "assertions": [
           "Text element (p tag) has data-testid='block-simple-text'",
           "className substituted: 'text-$color text-lg' → 'text-blue text-lg'",
@@ -649,7 +643,7 @@
       "given": "feature-list-item block example",
       "when": "block has type 'flex' with icon and text children using $icon, $iconColor, $text",
       "then": "it should render flex container with icon and text components",
-      "x-test": {
+      "validation": {
         "setup": {
           "blockDefinition": {
             "name": "feature-list-item",
@@ -681,7 +675,6 @@
             }
           }
         },
-        "expectedDOM": "<div data-testid=\"block-feature-list-item\" class=\"flex items-start gap-3\">\n  <svg data-testid=\"icon-check-circle\" data-color=\"green\"></svg>\n  <span>Feature enabled</span>\n</div>",
         "assertions": [
           "Flex container has data-testid='block-feature-list-item'",
           "Flex container has classes 'flex items-start gap-3'",
@@ -748,7 +741,7 @@
       "given": "block as reusable template",
       "when": "block defines structure with variable placeholders",
       "then": "it should render multiple instances with different data",
-      "x-test": {
+      "validation": {
         "setup": {
           "blockDefinition": {
             "name": "stat-card",
@@ -794,7 +787,6 @@
             }
           ]
         },
-        "expectedDOM": "<div data-testid=\"block-stat-card-0\">\n  <h4>1,234</h4>\n  <p>Users</p>\n</div>\n<div data-testid=\"block-stat-card-1\">\n  <h4>567</h4>\n  <p>Projects</p>\n</div>\n<div data-testid=\"block-stat-card-2\">\n  <h4>89%</h4>\n  <p>Success Rate</p>\n</div>",
         "assertions": [
           "Same block definition renders 3 different instances",
           "Each instance has unique data-testid suffix: -0, -1, -2",
@@ -873,7 +865,7 @@
       "given": "block composition patterns",
       "when": "block combines layout (type), styling (props), and content (children/content)",
       "then": "it should render complete component with all aspects integrated",
-      "x-test": {
+      "validation": {
         "setup": {
           "blockDefinition": {
             "name": "complete-card",
@@ -908,7 +900,6 @@
             }
           }
         },
-        "expectedDOM": "<div data-testid=\"block-complete-card\" class=\"card-primary p-6 rounded-lg\">\n  <h3 class=\"mb-2\">Premium Plan</h3>\n  <p>Best value for teams</p>\n</div>",
         "assertions": [
           "Layout: type='card' renders as div",
           "Styling: className combines variant, padding, and border-radius",
@@ -979,7 +970,7 @@
       "given": "block template instantiation",
       "when": "block is referenced via block-reference.schema.json with vars",
       "then": "it should transform template placeholders into concrete values in DOM",
-      "x-test": {
+      "validation": {
         "setup": {
           "blockDefinition": {
             "name": "pricing-badge",
@@ -997,7 +988,6 @@
             }
           }
         },
-        "expectedDOM": "<div data-testid=\"block-pricing-badge\" class=\"badge-gold\">49/month</div>",
         "assertions": [
           "Template: 'badge-$color' → Instance: 'badge-gold'",
           "Template: '$price/month' → Instance: '49/month'",
@@ -1051,7 +1041,158 @@
       "id": "APP-BLOCKS-BLOCK-REGRESSION-001",
       "given": "complete application configuration with all features",
       "when": "user completes full workflow",
-      "then": "user can complete full block workflow"
+      "then": "user can complete full block workflow",
+      "workflow": [
+        {
+          "step": 1,
+          "action": "Define reusable block template with name, type, and structure",
+          "validation": "Block has unique name in kebab-case, valid type, and template structure (props/children/content with $variables)",
+          "expectedState": "Block definition created with name='hero-section', type='section', props/children with $variable placeholders"
+        },
+        {
+          "step": 2,
+          "action": "Reference block from page section using block name and vars object",
+          "validation": "Page section references block by name, provides concrete values for all $variable placeholders",
+          "expectedState": "Homepage references hero-section block with vars: title='Welcome', subtitle='Build apps', ctaText='Get Started'"
+        },
+        {
+          "step": 3,
+          "action": "System performs variable substitution: $variables replaced with concrete values from vars",
+          "validation": "All $variable placeholders in props, content, and children replaced with actual values",
+          "expectedState": "Hero block renders with substituted values: title='Welcome', subtitle='Build apps', cta='Get Started'"
+        },
+        {
+          "step": 4,
+          "action": "System renders block instance with data-testid for tracking",
+          "validation": "Block instance has data-testid='block-{name}' or 'block-{name}-{instance}' for multiple uses",
+          "expectedState": "Hero section rendered with data-testid='block-hero-section', all nested children rendered with substituted values"
+        },
+        {
+          "step": 5,
+          "action": "Developer updates block definition centrally (change className, structure, etc.)",
+          "validation": "Single block definition change automatically applies to ALL instances across all pages",
+          "expectedState": "All hero-section instances updated with new structure after changing block definition once (DRY principle)"
+        }
+      ],
+      "application": {
+        "completeExample": {
+          "hero-section": {
+            "name": "hero-section",
+            "type": "section",
+            "props": {
+              "className": "hero bg-gradient py-20 text-center",
+              "data-testid": "hero-section"
+            },
+            "children": [
+              {
+                "type": "container",
+                "props": {
+                  "className": "container mx-auto"
+                },
+                "children": [
+                  {
+                    "type": "text",
+                    "props": {
+                      "level": "h1",
+                      "className": "text-5xl font-bold mb-4 text-$titleColor"
+                    },
+                    "content": "$title"
+                  },
+                  {
+                    "type": "text",
+                    "props": {
+                      "level": "p",
+                      "className": "text-xl mb-8"
+                    },
+                    "content": "$subtitle"
+                  },
+                  {
+                    "type": "button",
+                    "props": {
+                      "className": "btn btn-$ctaVariant btn-lg px-8 py-3"
+                    },
+                    "content": "$ctaText"
+                  }
+                ]
+              }
+            ]
+          },
+          "feature-card": {
+            "name": "feature-card",
+            "type": "card",
+            "props": {
+              "className": "feature-card rounded-lg shadow-lg p-6 bg-white"
+            },
+            "children": [
+              {
+                "type": "icon",
+                "props": {
+                  "name": "$icon",
+                  "size": 8,
+                  "className": "text-$iconColor mb-4"
+                }
+              },
+              {
+                "type": "text",
+                "props": {
+                  "level": "h3",
+                  "className": "text-2xl font-semibold mb-2"
+                },
+                "content": "$title"
+              },
+              {
+                "type": "text",
+                "props": {
+                  "level": "p",
+                  "className": "text-gray-600"
+                },
+                "content": "$description"
+              }
+            ]
+          },
+          "cta-button": {
+            "name": "cta-button",
+            "type": "button",
+            "props": {
+              "className": "btn btn-$variant px-6 py-2 rounded-lg transition-all hover:scale-105"
+            },
+            "content": "$label"
+          }
+        },
+        "expectedDOM": "<section data-testid=\"hero-section\" class=\"hero bg-gradient py-20 text-center\"><div class=\"container mx-auto\"><h1 class=\"text-5xl font-bold mb-4 text-primary\">Welcome to Omnera</h1><p class=\"text-xl mb-8\">Build powerful applications with configuration</p><button class=\"btn btn-primary btn-lg px-8 py-3\">Get Started</button></div></section><div data-testid=\"block-feature-card-0\" class=\"feature-card rounded-lg shadow-lg p-6 bg-white\"><svg data-testid=\"icon-zap\" width=\"32\" height=\"32\" class=\"text-yellow-500 mb-4\"></svg><h3 class=\"text-2xl font-semibold mb-2\">Fast Development</h3><p class=\"text-gray-600\">Build applications in minutes, not days</p></div><div data-testid=\"block-feature-card-1\" class=\"feature-card rounded-lg shadow-lg p-6 bg-white\"><svg data-testid=\"icon-shield\" width=\"32\" height=\"32\" class=\"text-green-500 mb-4\"></svg><h3 class=\"text-2xl font-semibold mb-2\">Secure by Default</h3><p class=\"text-gray-600\">Enterprise-grade security built-in</p></div><div data-testid=\"block-feature-card-2\" class=\"feature-card rounded-lg shadow-lg p-6 bg-white\"><svg data-testid=\"icon-layers\" width=\"32\" height=\"32\" class=\"text-blue-500 mb-4\"></svg><h3 class=\"text-2xl font-semibold mb-2\">Highly Composable</h3><p class=\"text-gray-600\">Mix and match components effortlessly</p></div><button data-testid=\"block-cta-button-0\" class=\"btn btn-primary px-6 py-2 rounded-lg transition-all hover:scale-105\">Start Building</button><button data-testid=\"block-cta-button-1\" class=\"btn btn-secondary px-6 py-2 rounded-lg transition-all hover:scale-105\">View Documentation</button>",
+        "assertions": [
+          "Block definition validates with name, type, and template structure (props/children/content)",
+          "Block name follows kebab-case pattern: ^[a-z][a-z0-9-]*$",
+          "Block type determines HTML element and behavior (section, card, button)",
+          "Props support $variable placeholders for dynamic values: className='btn-$variant'",
+          "Children support nested component structures with variable substitution",
+          "Content property supports simple text with $variable substitution",
+          "Page section references block by name with vars object",
+          "Variable substitution works across props, children, and content",
+          "Multiple block instances render with unique data-testid: block-{name}-{instance}",
+          "Hero section renders once with substituted values (title, subtitle, ctaText)",
+          "Feature cards render 3 times with different data (icon, title, description per instance)",
+          "CTA buttons render 2 times with different variants (primary, secondary)",
+          "All nested children render correctly with proper hierarchy",
+          "Centralized updates: Changing block definition updates ALL instances automatically",
+          "DRY principle: Single block definition reused without code duplication",
+          "Complete workflow from block definition to multi-instance rendering works end-to-end"
+        ]
+      },
+      "integrationPoints": [
+        "Block name validation: kebab-case pattern ^[a-z][a-z0-9-]*$ enforced",
+        "Block type mapping: type property determines HTML element (section, div, button, etc.)",
+        "Props schema: References block-props.schema.json for property validation",
+        "Children schema: References block-children.schema.json for nested structure",
+        "Variable substitution: $variable pattern resolved from vars object at render time",
+        "Page sections integration: Blocks referenced via sections[].block with vars",
+        "Instance tracking: data-testid='block-{name}' or 'block-{name}-{instance}' for multiple uses",
+        "Reusability: Same block template used multiple times with different vars (DRY)",
+        "Nested composition: Blocks support deeply nested children structures",
+        "Centralized updates: Single block definition change affects all instances globally",
+        "Theme integration: Blocks can reference theme tokens via $variable or theme. syntax",
+        "Build-time validation: Block structure validated against block.schema.json"
+      ]
     }
   ]
 }

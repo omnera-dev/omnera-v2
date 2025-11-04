@@ -246,7 +246,142 @@
       "id": "APP-BLOCKS-LANGUAGE-SWITCHER-REGRESSION-001",
       "given": "complete application configuration with all features",
       "when": "user completes full workflow",
-      "then": "user can complete full language-switcher workflow"
+      "then": "user can complete full language-switcher workflow",
+      "workflow": [
+        {
+          "step": 1,
+          "action": "User defines languages configuration with 3 supported languages",
+          "validation": "Languages config validates with default, fallback, and supported array",
+          "expectedState": "Multi-language system configured (en-US, fr-FR, es-ES)"
+        },
+        {
+          "step": 2,
+          "action": "User creates language-switcher block with dropdown variant and flags enabled",
+          "validation": "Block validates with variant='dropdown', showFlags=true, position='header'",
+          "expectedState": "Reusable language-switcher block defined in blocks array"
+        },
+        {
+          "step": 3,
+          "action": "User adds language-switcher block to page header section",
+          "validation": "Page sections array includes block reference to 'language-switcher'",
+          "expectedState": "Language-switcher block referenced in page header"
+        },
+        {
+          "step": 4,
+          "action": "System renders language-switcher as dropdown with all languages and flags",
+          "validation": "Dropdown button shows current language with flag, menu lists all 3 languages with flags",
+          "expectedState": "Dropdown renders: <select> with 3 <option> elements (EN 🇺🇸, FR 🇫🇷, ES 🇪🇸)"
+        },
+        {
+          "step": 5,
+          "action": "User selects new language from dropdown, page reloads with new language",
+          "validation": "Language selection persists to localStorage, page URL updates with language prefix",
+          "expectedState": "Page switches to selected language, all content re-renders in new language"
+        }
+      ],
+      "application": {
+        "completeExample": {
+          "languages": {
+            "default": "en-US",
+            "fallback": "en-US",
+            "supported": [
+              {
+                "code": "en-US",
+                "label": "English",
+                "direction": "ltr"
+              },
+              {
+                "code": "fr-FR",
+                "label": "Français",
+                "direction": "ltr"
+              },
+              {
+                "code": "es-ES",
+                "label": "Español",
+                "direction": "ltr"
+              }
+            ],
+            "detectBrowser": true,
+            "persistSelection": true,
+            "translations": {
+              "en-US": {
+                "nav.home": "Home",
+                "nav.about": "About",
+                "nav.contact": "Contact"
+              },
+              "fr-FR": {
+                "nav.home": "Accueil",
+                "nav.about": "À propos",
+                "nav.contact": "Contact"
+              },
+              "es-ES": {
+                "nav.home": "Inicio",
+                "nav.about": "Acerca de",
+                "nav.contact": "Contacto"
+              }
+            }
+          },
+          "blocks": [
+            {
+              "name": "language-switcher",
+              "type": "language-switcher",
+              "props": {
+                "variant": "dropdown",
+                "showFlags": true,
+                "position": "header"
+              }
+            }
+          ],
+          "pages": [
+            {
+              "name": "Home",
+              "path": "/",
+              "meta": {
+                "title": "$t:nav.home",
+                "description": "Multi-language application homepage"
+              },
+              "sections": [
+                {
+                  "block": "language-switcher",
+                  "vars": {}
+                }
+              ]
+            }
+          ]
+        },
+        "expectedDOM": "<header>\n  <nav>\n    <a href=\"/en/\" data-testid=\"nav-link-home\">Home</a>\n    <a href=\"/en/about\" data-testid=\"nav-link-about\">About</a>\n    <a href=\"/en/contact\" data-testid=\"nav-link-contact\">Contact</a>\n    <select data-testid=\"language-switcher\" class=\"language-switcher-dropdown\" aria-label=\"Select language\">\n      <option value=\"en-US\" selected data-testid=\"language-option-en-US\">🇺🇸 English</option>\n      <option value=\"fr-FR\" data-testid=\"language-option-fr-FR\">🇫🇷 Français</option>\n      <option value=\"es-ES\" data-testid=\"language-option-es-ES\">🇪🇸 Español</option>\n    </select>\n  </nav>\n</header>",
+        "assertions": [
+          "Language-switcher block renders as <select> dropdown element",
+          "Dropdown variant: Compact dropdown menu optimized for 3+ languages",
+          "Each supported language appears as <option> element with code, name, and flag",
+          "Flag emojis displayed (showFlags: true): 🇺🇸 English, 🇫🇷 Français, 🇪🇸 Español",
+          "Current language marked as 'selected' in dropdown (en-US by default)",
+          "Data source: Reads languages from app.languages.supported configuration",
+          "Position property controls placement: header, footer, sidebar, top-right",
+          "Dropdown includes aria-label for screen reader accessibility",
+          "Language selection triggers page reload with new language code in URL prefix (/en/, /fr/, /es/)",
+          "Selection persists to localStorage for cross-session language preference",
+          "Works seamlessly with language detection (detectBrowser: true) on first visit",
+          "Alternative variants supported: inline (horizontal buttons), tabs (tab-style navigation)",
+          "Inline variant better for 2-3 languages, tabs variant for 2-4 languages",
+          "Integration with page meta: Title and description translations via $t: references",
+          "Complete multi-language workflow: config → block → reference → render → switch"
+        ]
+      },
+      "integrationPoints": [
+        "Languages configuration: Reads from app.languages.supported array for available languages",
+        "Language detection: Works with app.languages.detectBrowser for first-visit smart defaults",
+        "Persistent selection: Uses app.languages.persistSelection + localStorage for session persistence",
+        "Page meta integration: Localized page titles and descriptions via $t: translation references",
+        "URL routing: Language prefix in URLs (/en/, /fr/, /es/) for SEO and bookmarking",
+        "Translation system: Centralized translations dictionary with $t:key lookup mechanism",
+        "Navigation links: All nav links update with current language prefix on switch",
+        "SEO meta tags: HTML lang attribute, hreflang alternate links, og:locale tags",
+        "Accept-Language header: Browser language detection for initial language selection",
+        "Block system: Reusable component defined once in blocks array, referenced in pages",
+        "Props customization: Variant, showFlags, position props for flexible display options",
+        "Accessibility: aria-label, semantic HTML, keyboard navigation support"
+      ]
     }
   ],
   "x-usage-notes": {
