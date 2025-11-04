@@ -86,8 +86,7 @@ test.describe('Shadows', () => {
 
       // THEN: it should validate rgb(0 0 0 / 0.1) format
       const element = page.locator('[data-testid="shadow-md"]')
-      const shadow = await element.evaluate((el) => window.getComputedStyle(el).boxShadow)
-      expect(shadow).toContain('rgb')
+      await expect(element).toHaveScreenshot('shadow-002-rgb-format.png')
     }
   )
 
@@ -118,8 +117,7 @@ test.describe('Shadows', () => {
 
       // THEN: it should validate inset box-shadow
       const element = page.locator('[data-testid="shadow-inner"]')
-      const shadow = await element.evaluate((el) => window.getComputedStyle(el).boxShadow)
-      expect(shadow).toContain('inset')
+      await expect(element).toHaveScreenshot('shadow-003-inset-box-shadow.png')
     }
   )
 
@@ -150,8 +148,7 @@ test.describe('Shadows', () => {
 
       // THEN: it should validate shadow removal
       const element = page.locator('[data-testid="shadow-none"]')
-      const shadow = await element.evaluate((el) => window.getComputedStyle(el).boxShadow)
-      expect(shadow).toBe('none')
+      await expect(element).toHaveScreenshot('shadow-004-none.png')
     }
   )
 
@@ -257,9 +254,7 @@ test.describe('Shadows', () => {
 
       // THEN: it should render card with medium box-shadow creating depth
       const card = page.locator('[data-testid="product-card"]')
-      await expect(card).toBeVisible()
-      const shadow = await card.evaluate((el) => window.getComputedStyle(el).boxShadow)
-      expect(shadow).toContain('rgb')
+      await expect(card).toHaveScreenshot('shadow-app-001-card-depth.png')
     }
   )
 
@@ -296,9 +291,7 @@ test.describe('Shadows', () => {
 
       // THEN: it should render modal with dramatic shadow emphasizing importance
       const modal = page.locator('[data-testid="confirmation-modal"]')
-      await expect(modal).toBeVisible()
-      const shadow = await modal.evaluate((el) => window.getComputedStyle(el).boxShadow)
-      expect(shadow).toContain('20px')
+      await expect(modal).toHaveScreenshot('shadow-app-002-modal-dramatic.png')
     }
   )
 
@@ -334,9 +327,7 @@ test.describe('Shadows', () => {
 
       // THEN: it should render input with inset shadow creating depth inward
       const input = page.locator('[data-testid="text-input"]')
-      await expect(input).toBeVisible()
-      const shadow = await input.evaluate((el) => window.getComputedStyle(el).boxShadow)
-      expect(shadow).toContain('inset')
+      await expect(input).toHaveScreenshot('shadow-app-003-input-inset.png')
     }
   )
 
@@ -374,10 +365,8 @@ test.describe('Shadows', () => {
 
       // THEN: it should render button with smooth shadow transition creating lift effect
       const button = page.locator('[data-testid="elevated-button"]')
-      await expect(button).toBeVisible()
       await button.hover()
-      const shadow = await button.evaluate((el) => window.getComputedStyle(el).boxShadow)
-      expect(shadow).toBeTruthy()
+      await expect(button).toHaveScreenshot('shadow-app-004-button-lift.png')
     }
   )
 
@@ -417,9 +406,7 @@ test.describe('Shadows', () => {
 
       // THEN: it should render button with colored shadow matching brand identity
       const button = page.locator('[data-testid="brand-button"]')
-      await expect(button).toBeVisible()
-      const shadow = await button.evaluate((el) => window.getComputedStyle(el).boxShadow)
-      expect(shadow).toContain('59')
+      await expect(button).toHaveScreenshot('shadow-app-005-brand-colored.png')
     }
   )
 
@@ -456,9 +443,7 @@ test.describe('Shadows', () => {
 
       // THEN: it should render element with multi-layered shadow creating subtle 3D effect
       const card = page.locator('[data-testid="neumorphic-card"]')
-      await expect(card).toBeVisible()
-      const shadow = await card.evaluate((el) => window.getComputedStyle(el).boxShadow)
-      expect(shadow).toContain('8px')
+      await expect(card).toHaveScreenshot('shadow-app-006-neumorphic.png')
     }
   )
 
@@ -498,10 +483,8 @@ test.describe('Shadows', () => {
 
       // THEN: it should render input with prominent focus shadow for keyboard navigation
       const input = page.locator('[data-testid="text-input"]')
-      await expect(input).toBeVisible()
       await input.focus()
-      const shadow = await input.evaluate((el) => window.getComputedStyle(el).boxShadow)
-      expect(shadow).toBeTruthy()
+      await expect(input).toHaveScreenshot('shadow-app-007-focus-ring.png')
     }
   )
 
@@ -539,9 +522,7 @@ test.describe('Shadows', () => {
 
       // THEN: it should render card with appropriate shadow depth per device
       const card = page.locator('[data-testid="responsive-card"]')
-      await expect(card).toBeVisible()
-      const shadow = await card.evaluate((el) => window.getComputedStyle(el).boxShadow)
-      expect(shadow).toBeTruthy()
+      await expect(card).toHaveScreenshot('shadow-app-008-responsive.png')
     }
   )
 
@@ -643,10 +624,8 @@ test.describe('Shadows', () => {
 
       // THEN: it should render button with reduced shadow creating pressed-in effect
       const button = page.locator('[data-testid="pressable-button"]')
-      await expect(button).toBeVisible()
       await button.click()
-      const shadow = await button.evaluate((el) => window.getComputedStyle(el).boxShadow)
-      expect(shadow).toBeTruthy()
+      await expect(button).toHaveScreenshot('shadow-app-010-pressed.png')
     }
   )
 
