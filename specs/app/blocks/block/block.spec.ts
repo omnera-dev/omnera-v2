@@ -259,7 +259,7 @@ test.describe('Block Template', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-BLOCKS-BLOCK-008: should render text element with dynamic styling and content',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
