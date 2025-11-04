@@ -147,7 +147,10 @@ export function ComponentRenderer({
     ...substitutedProps,
     className: substitutedProps?.className as string | undefined,
     ...(parsedStyle && { style: parsedStyle }),
-    ...(blockName && { 'data-block': blockName }),
+    ...(blockName && {
+      'data-block': blockName,
+      'data-testid': `block-${blockName}`,
+    }),
     ...(firstTranslationKey &&
       translationData && {
         'data-translation-key': firstTranslationKey,
