@@ -678,6 +678,12 @@ export function DynamicPage({
         <DnsPrefetchLinks dnsPrefetch={page.meta?.dnsPrefetch} />
         <AnalyticsHead analytics={page.meta?.analytics} />
         <CustomElementsHead customElements={page.meta?.customElements} />
+        {page.meta?.favicon && (
+          <link
+            rel="icon"
+            href={page.meta.favicon}
+          />
+        )}
         <link
           rel="stylesheet"
           href="/assets/output.css"

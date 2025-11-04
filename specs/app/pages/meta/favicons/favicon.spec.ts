@@ -24,7 +24,7 @@ test.describe('Favicon', () => {
   // One test per spec in schema - defines EXHAUSTIVE acceptance criteria
   // ============================================================================
 
-  test.fixme(
+  test(
     'APP-PAGES-FAVICON-001: should reference default favicon file',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -33,7 +33,7 @@ test.describe('Favicon', () => {
         name: 'test-app',
         pages: [
           {
-            name: 'Test',
+            name: 'test_page',
             path: '/',
             meta: {
               lang: 'en-US',
