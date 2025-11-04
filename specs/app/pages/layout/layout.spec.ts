@@ -33,9 +33,9 @@ test.describe('Page Layout', () => {
         name: 'test-app',
         pages: [
           {
-            name: 'Test',
+            name: 'test',
             path: '/',
-            meta: { lang: 'en-US', title: 'Test' },
+            meta: { lang: 'en-US', title: 'Test', description: 'Test page description' },
             layout: {
               banner: { enabled: true, text: 'Sale - 50% off' },
               navigation: { logo: '/logo.svg', links: { desktop: [{ label: 'Home', href: '/' }] } },
