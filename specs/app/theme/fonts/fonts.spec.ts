@@ -513,6 +513,13 @@ test.describe('Font Configuration', () => {
       // WHEN/THEN: Streamlined workflow testing integration points
       await page.goto('/')
 
+      // Validate CSS custom properties generated for font system
+      const css = await page.locator('style').first().textContent()
+      expect(css).toContain(':root')
+      expect(css).toMatch(/--font-title-family:\s*["']?Bely Display["']?/)
+      expect(css).toMatch(/--font-body-family:\s*["']?Inter["']?/)
+      expect(css).toMatch(/--font-mono-family:\s*["']?JetBrains Mono["']?/)
+
       // Verify title font
       await expect(page.locator('h1')).toHaveCSS('font-family', /Bely Display/)
 

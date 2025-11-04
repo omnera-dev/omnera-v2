@@ -496,6 +496,13 @@ test.describe('Spacing Configuration', () => {
       // WHEN/THEN: Streamlined workflow testing integration points
       await page.goto('/')
 
+      // Validate CSS custom properties generated for spacing system
+      const css = await page.locator('style').first().textContent()
+      expect(css).toContain(':root')
+      expect(css).toMatch(/--spacing-section:\s*64px/)
+      expect(css).toMatch(/--spacing-container:\s*1280px/)
+      expect(css).toMatch(/--spacing-gap:\s*24px/)
+
       // Verify section spacing
       const section = page.locator('section')
       await expect(section).toHaveCSS('padding-top', '64px')
