@@ -14,9 +14,18 @@ import type { ReactElement } from 'react'
  * Renders a top announcement banner with optional message and link.
  *
  * @param props - Banner configuration
- * @returns Banner element
+ * @returns Banner element or null if disabled
  */
-export function Banner({ message, text }: Readonly<BannerProps>): Readonly<ReactElement> {
+export function Banner({
+  enabled,
+  message,
+  text,
+}: Readonly<BannerProps>): Readonly<ReactElement | null> {
+  // Don't render if explicitly disabled
+  if (enabled === false) {
+    return null
+  }
+
   const content = message || text
 
   return (
