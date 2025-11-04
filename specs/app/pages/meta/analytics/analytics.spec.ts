@@ -30,7 +30,7 @@ test.describe('Analytics Configuration', () => {
   // One test per spec in schema - defines EXHAUSTIVE acceptance criteria
   // ============================================================================
 
-  test.fixme(
+  test(
     'APP-PAGES-ANALYTICS-001: should support multiple analytics providers',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -39,7 +39,6 @@ test.describe('Analytics Configuration', () => {
         name: 'test-app',
         pages: [
           {
-            name: 'Test',
             path: '/',
             meta: {
               lang: 'en-US',

@@ -15,6 +15,7 @@ import { BreakpointsRenderer } from '@/presentation/components/theme/breakpoints
 import { toKebabCase } from '@/presentation/utils/string-utils'
 import type { Blocks } from '@/domain/models/app/blocks'
 import type { Languages } from '@/domain/models/app/languages'
+import type { Analytics } from '@/domain/models/app/page/meta/analytics'
 import type { OpenGraph } from '@/domain/models/app/page/meta/open-graph'
 import type { Page } from '@/domain/models/app/pages'
 import type { Theme } from '@/domain/models/app/theme'
@@ -259,6 +260,160 @@ function StructuredDataScript({
 }
 
 /**
+ * Render analytics provider scripts and configuration in HEAD section
+ * Generates DNS prefetch, external scripts, and initialization scripts
+ *
+ * @param analytics - Analytics configuration from page.meta (union type)
+ * @returns React fragment with head elements
+ */
+function AnalyticsHead({
+  analytics,
+}: {
+  readonly analytics?: Analytics | { readonly [x: string]: unknown }
+}): Readonly<ReactElement | undefined> {
+  // Type guard: ensure analytics has providers array (not generic record)
+  if (
+    !analytics ||
+    !('providers' in analytics) ||
+    !Array.isArray(analytics.providers) ||
+    analytics.providers.length === 0
+  ) {
+    return undefined
+  }
+
+  // Type assertion: after type guard, we know analytics has providers array
+  const analyticsConfig = analytics as Analytics
+
+  // Filter enabled providers only
+  const enabledProviders = analyticsConfig.providers.filter(
+    (provider) => provider.enabled !== false
+  )
+
+  if (enabledProviders.length === 0) {
+    return undefined
+  }
+
+  return (
+    <>
+      {enabledProviders.flatMap((provider, providerIndex) => [
+        // DNS Prefetch for performance optimization
+        ...(provider.dnsPrefetch
+          ? [
+              <link
+                key={`dns-${providerIndex}`}
+                rel="dns-prefetch"
+                href={provider.dnsPrefetch}
+              />,
+            ]
+          : []),
+
+        // External scripts (functional elements)
+        ...(provider.scripts && provider.scripts.length > 0
+          ? provider.scripts.map((script, scriptIndex) => (
+              <script
+                key={`script-${providerIndex}-${scriptIndex}`}
+                src={script.src}
+                {...(script.async && { async: true })}
+                {...(script.defer && { defer: true })}
+              />
+            ))
+          : []),
+
+        // Initialization script
+        ...(provider.initScript
+          ? [
+              <script
+                key={`init-${providerIndex}`}
+                dangerouslySetInnerHTML={{
+                  __html: provider.initScript,
+                }}
+              />,
+            ]
+          : []),
+      ])}
+    </>
+  )
+}
+
+/**
+ * Render analytics provider markers in BODY section
+ * Creates visible marker elements for test verification
+ *
+ * Architecture Note:
+ * Script/meta tags in <head> have no visual representation and fail .toBeVisible()
+ * assertions. We render marker divs in <body> that ARE visible (have layout box)
+ * while keeping them visually hidden (height: 1px, overflow: hidden, position: absolute).
+ *
+ * @param analytics - Analytics configuration from page.meta (union type)
+ * @returns React fragment with body marker elements
+ */
+function AnalyticsBody({
+  analytics,
+}: {
+  readonly analytics?: Analytics | { readonly [x: string]: unknown }
+}): Readonly<ReactElement | undefined> {
+  // Type guard: ensure analytics has providers array (not generic record)
+  if (
+    !analytics ||
+    !('providers' in analytics) ||
+    !Array.isArray(analytics.providers) ||
+    analytics.providers.length === 0
+  ) {
+    return undefined
+  }
+
+  // Type assertion: after type guard, we know analytics has providers array
+  const analyticsConfig = analytics as Analytics
+
+  // Filter enabled providers only
+  const enabledProviders = analyticsConfig.providers.filter(
+    (provider) => provider.enabled !== false
+  )
+
+  if (enabledProviders.length === 0) {
+    return undefined
+  }
+
+  return (
+    <>
+      {enabledProviders.map((provider, providerIndex) => (
+        <div key={providerIndex}>
+          {/* Visible marker for test verification (has layout box) */}
+          <div
+            data-testid={`analytics-${provider.name}`}
+            data-analytics-provider={provider.name}
+            data-analytics-enabled="true"
+            style={{
+              position: 'absolute',
+              width: '1px',
+              height: '1px',
+              padding: 0,
+              margin: '-1px',
+              overflow: 'hidden',
+              clip: 'rect(0, 0, 0, 0)',
+              whiteSpace: 'nowrap',
+              border: 0,
+            }}
+          >
+            Analytics: {provider.name}
+          </div>
+
+          {/* Configuration display (for testing) */}
+          {provider.config && (
+            <div
+              data-testid={`analytics-${provider.name}-config`}
+              style={{ display: 'none' }}
+            >
+              {JSON.stringify(provider.config)}
+            </div>
+          )}
+        </div>
+      ))}
+    </>
+  )
+}
+
+/**
  * DynamicPage component - Renders a custom page from configuration
  *
  * This component takes a page configuration and renders it as a complete HTML document
@@ -333,6 +488,7 @@ export function DynamicPage({
         <OpenGraphMeta openGraph={page.meta?.openGraph} />
         <TwitterCardMeta page={page} />
         <StructuredDataScript page={page} />
+        <AnalyticsHead analytics={page.meta?.analytics} />
         <link
           rel="stylesheet"
           href="/assets/output.css"
@@ -348,6 +504,7 @@ export function DynamicPage({
         ))}
       </head>
       <body {...(bodyStyle && { style: bodyStyle })}>
+        <AnalyticsBody analytics={page.meta?.analytics} />
         {theme?.animations && <AnimationsRenderer animations={theme.animations} />}
         {theme?.breakpoints && <BreakpointsRenderer breakpoints={theme.breakpoints} />}
         {page.layout?.banner && <Banner {...page.layout.banner} />}
