@@ -488,7 +488,9 @@ test.describe('Navigation Configuration', () => {
                 user: { enabled: true, loginUrl: '/login', signupUrl: '/signup' },
               },
             },
-            sections: [{ type: 'div', props: { style: { height: '2000px' } }, children: ['Content'] }],
+            sections: [
+              { type: 'div', props: { style: { height: '2000px' } }, children: ['Content'] },
+            ],
           },
         ],
       })
