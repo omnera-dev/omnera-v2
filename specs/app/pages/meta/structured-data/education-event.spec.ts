@@ -65,7 +65,7 @@ test.describe('Education Event Schema', () => {
         name: 'test-app',
         pages: [
           {
-            name: 'Test',
+            name: 'test',
             path: '/',
             meta: {
               lang: 'en-US',
@@ -104,7 +104,7 @@ test.describe('Education Event Schema', () => {
         name: 'test-app',
         pages: [
           {
-            name: 'Test',
+            name: 'test',
             path: '/',
             meta: {
               lang: 'en-US',
@@ -141,7 +141,7 @@ test.describe('Education Event Schema', () => {
         name: 'test-app',
         pages: [
           {
-            name: 'Test',
+            name: 'test',
             path: '/',
             meta: {
               lang: 'en-US',
@@ -185,7 +185,7 @@ test.describe('Education Event Schema', () => {
           name: 'test-app',
           pages: [
             {
-              name: 'Test',
+              name: 'test',
               path: '/',
               meta: {
                 lang: 'en-US',
@@ -227,7 +227,7 @@ test.describe('Education Event Schema', () => {
           name: 'test-app',
           pages: [
             {
-              name: 'Test',
+              name: 'test',
               path: '/',
               meta: {
                 lang: 'en-US',
@@ -262,7 +262,7 @@ test.describe('Education Event Schema', () => {
         name: 'test-app',
         pages: [
           {
-            name: 'Test',
+            name: 'test',
             path: '/',
             meta: {
               lang: 'en-US',
@@ -305,7 +305,7 @@ test.describe('Education Event Schema', () => {
         name: 'test-app',
         pages: [
           {
-            name: 'Test',
+            name: 'test',
             path: '/',
             meta: {
               lang: 'en-US',
@@ -347,7 +347,7 @@ test.describe('Education Event Schema', () => {
         name: 'test-app',
         pages: [
           {
-            name: 'Test',
+            name: 'test',
             path: '/',
             meta: {
               lang: 'en-US',
@@ -392,7 +392,7 @@ test.describe('Education Event Schema', () => {
         name: 'test-app',
         pages: [
           {
-            name: 'Test',
+            name: 'test',
             path: '/',
             meta: {
               lang: 'en-US',
@@ -438,7 +438,7 @@ test.describe('Education Event Schema', () => {
           name: 'test-app',
           pages: [
             {
-              name: 'Test',
+              name: 'test',
               path: '/',
               meta: {
                 lang: 'en-US',
@@ -473,7 +473,7 @@ test.describe('Education Event Schema', () => {
         name: 'test-app',
         pages: [
           {
-            name: 'Test',
+            name: 'test',
             path: '/',
             meta: {
               lang: 'en-US',
@@ -513,7 +513,7 @@ test.describe('Education Event Schema', () => {
         name: 'test-app',
         pages: [
           {
-            name: 'Test',
+            name: 'test',
             path: '/',
             meta: {
               lang: 'en-US',
@@ -553,7 +553,7 @@ test.describe('Education Event Schema', () => {
         name: 'test-app',
         pages: [
           {
-            name: 'Test',
+            name: 'test',
             path: '/',
             meta: {
               lang: 'en-US',
@@ -591,7 +591,7 @@ test.describe('Education Event Schema', () => {
         name: 'test-app',
         pages: [
           {
-            name: 'Test',
+            name: 'test',
             path: '/',
             meta: {
               lang: 'en-US',
