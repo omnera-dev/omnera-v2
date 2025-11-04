@@ -19,7 +19,7 @@ import { test, expect } from '@/specs/fixtures'
  */
 
 test.describe('Education Event Schema', () => {
-  test.fixme(
+  test(
     'APP-PAGES-EDUCATIONEVENT-001: should validate minimal EducationEvent structured data',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -28,7 +28,7 @@ test.describe('Education Event Schema', () => {
         name: 'test-app',
         pages: [
           {
-            name: 'Test',
+            name: 'test',
             path: '/',
             meta: {
               lang: 'en-US',
