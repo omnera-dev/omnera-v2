@@ -229,11 +229,15 @@ test.describe('Navigation Configuration', () => {
       await page.goto('/')
 
       // THEN: it should render desktop navigation menu
-      const links = page.locator('[data-testid="nav-link"]')
-      await expect(links).toHaveCount(3)
-      await expect(links.nth(0)).toContainText('Products')
-      await expect(links.nth(1)).toContainText('Pricing')
-      await expect(links.nth(2)).toContainText('About')
+      // ARIA snapshot validates structure and accessibility
+      await expect(page.locator('[data-testid="navigation"]')).toMatchAriaSnapshot(`
+        - navigation "Main navigation":
+          - link:
+            - img "Logo"
+          - link "Products"
+          - link "Pricing"
+          - link "About"
+      `)
     }
   )
 
@@ -484,33 +488,42 @@ test.describe('Navigation Configuration', () => {
                 user: { enabled: true, loginUrl: '/login', signupUrl: '/signup' },
               },
             },
-            sections: [{ type: 'div', props: { style: 'height: 2000px' }, children: ['Content'] }],
+            sections: [{ type: 'div', props: { style: { height: '2000px' } }, children: ['Content'] }],
           },
         ],
       })
 
       await page.goto('/')
 
-      // Verify logo and sticky behavior
-      const nav = page.locator('[data-testid="navigation"]')
-      await expect(page.locator('[data-testid="nav-logo"]')).toHaveAttribute('alt', 'Acme Inc')
-      await expect(nav).toHaveCSS('position', 'sticky')
+      // 1. Structure and accessibility validation (ARIA)
+      await expect(page.locator('[data-testid="navigation"]')).toMatchAriaSnapshot(`
+        - navigation "Main navigation":
+          - link:
+            - img "Acme Inc"
+          - link "Features"
+          - link "Pricing"
+          - button "Get Started"
+          - searchbox "Search..."
+          - link "Login"
+          - link "Sign Up"
+      `)
 
-      // Verify transparent to opaque transition
+      // 2. Visual validation - sticky transparent state (before scroll)
+      await expect(page.locator('[data-testid="navigation"]')).toHaveScreenshot(
+        'navigation-regression-001-transparent.png',
+        {
+          animations: 'disabled',
+        }
+      )
+
+      // 3. Visual validation - sticky opaque state (after scroll)
       await page.evaluate(() => window.scrollTo(0, 150))
-      await expect(nav).toBeInViewport()
-
-      // Verify desktop links
-      await expect(page.locator('[data-testid="nav-link"]')).toHaveCount(2)
-
-      // Verify CTA button
-      await expect(page.locator('[data-testid="nav-cta"]')).toContainText('Get Started')
-
-      // Verify search
-      await expect(page.locator('[data-testid="nav-search"] input')).toBeVisible()
-
-      // Verify user menu
-      await expect(page.locator('[data-testid="login-link"]')).toBeVisible()
+      await expect(page.locator('[data-testid="navigation"]')).toHaveScreenshot(
+        'navigation-regression-001-scrolled.png',
+        {
+          animations: 'disabled',
+        }
+      )
     }
   )
 })
