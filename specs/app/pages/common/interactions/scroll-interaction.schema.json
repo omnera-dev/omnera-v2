@@ -62,9 +62,13 @@
       "when": "component enters the viewport",
       "then": "it should fade in while moving up",
       "application": {
-        "component": {"type": "div", "interactions": {"scroll": {"animation": "fadeInUp"}}},
+        "component": { "type": "div", "interactions": { "scroll": { "animation": "fadeInUp" } } },
         "behavior": "Enters viewport → Fade in + translate upward (opacity: 0 → 1, translateY: +20px → 0)",
-        "assertions": ["animation: 'fadeInUp' (required)", "Viewport detection via Intersection Observer", "Default threshold: 0.1 (10%)"]
+        "assertions": [
+          "animation: 'fadeInUp' (required)",
+          "Viewport detection via Intersection Observer",
+          "Default threshold: 0.1 (10%)"
+        ]
       }
     },
     {
@@ -73,9 +77,13 @@
       "when": "component enters the viewport",
       "then": "it should fade in smoothly",
       "application": {
-        "component": {"type": "div", "interactions": {"scroll": {"animation": "fadeIn"}}},
+        "component": { "type": "div", "interactions": { "scroll": { "animation": "fadeIn" } } },
         "behavior": "Enters viewport → Fade in (opacity: 0 → 1)",
-        "assertions": ["animation: 'fadeIn' enum value", "Simple opacity transition", "Default duration: 600ms"]
+        "assertions": [
+          "animation: 'fadeIn' enum value",
+          "Simple opacity transition",
+          "Default duration: 600ms"
+        ]
       }
     },
     {
@@ -84,9 +92,13 @@
       "when": "component enters the viewport",
       "then": "it should zoom in from small to normal size",
       "application": {
-        "component": {"type": "div", "interactions": {"scroll": {"animation": "zoomIn"}}},
+        "component": { "type": "div", "interactions": { "scroll": { "animation": "zoomIn" } } },
         "behavior": "Enters viewport → Zoom in (scale: 0.8 → 1.0)",
-        "assertions": ["animation: 'zoomIn' enum value", "Scale transformation", "Attention-grabbing effect"]
+        "assertions": [
+          "animation: 'zoomIn' enum value",
+          "Scale transformation",
+          "Attention-grabbing effect"
+        ]
       }
     },
     {
@@ -95,9 +107,13 @@
       "when": "component enters the viewport",
       "then": "it should fade in while sliding from the left",
       "application": {
-        "component": {"type": "div", "interactions": {"scroll": {"animation": "fadeInLeft"}}},
+        "component": { "type": "div", "interactions": { "scroll": { "animation": "fadeInLeft" } } },
         "behavior": "Enters viewport → Fade in + translate from left (opacity: 0 → 1, translateX: -20px → 0)",
-        "assertions": ["animation: 'fadeInLeft' enum value", "Horizontal slide effect", "Directional animation"]
+        "assertions": [
+          "animation: 'fadeInLeft' enum value",
+          "Horizontal slide effect",
+          "Directional animation"
+        ]
       }
     },
     {
@@ -106,9 +122,16 @@
       "when": "10% of component becomes visible",
       "then": "it should trigger the animation",
       "application": {
-        "component": {"type": "div", "interactions": {"scroll": {"animation": "fadeIn", "threshold": 0.1}}},
+        "component": {
+          "type": "div",
+          "interactions": { "scroll": { "animation": "fadeIn", "threshold": 0.1 } }
+        },
         "behavior": "10% visible → Animation triggers (early trigger)",
-        "assertions": ["threshold: 0.1 (default)", "Triggers early (component barely visible)", "Used for: below-the-fold content"]
+        "assertions": [
+          "threshold: 0.1 (default)",
+          "Triggers early (component barely visible)",
+          "Used for: below-the-fold content"
+        ]
       }
     },
     {
@@ -117,9 +140,16 @@
       "when": "50% of component becomes visible",
       "then": "it should trigger the animation",
       "application": {
-        "component": {"type": "div", "interactions": {"scroll": {"animation": "fadeIn", "threshold": 0.5}}},
+        "component": {
+          "type": "div",
+          "interactions": { "scroll": { "animation": "fadeIn", "threshold": 0.5 } }
+        },
         "behavior": "50% visible → Animation triggers (half-visible)",
-        "assertions": ["threshold: 0.5 (mid-point)", "Balanced trigger point", "Used for: centered elements"]
+        "assertions": [
+          "threshold: 0.5 (mid-point)",
+          "Balanced trigger point",
+          "Used for: centered elements"
+        ]
       }
     },
     {
@@ -128,9 +158,16 @@
       "when": "100% of component becomes visible",
       "then": "it should trigger the animation",
       "application": {
-        "component": {"type": "div", "interactions": {"scroll": {"animation": "fadeIn", "threshold": 1.0}}},
+        "component": {
+          "type": "div",
+          "interactions": { "scroll": { "animation": "fadeIn", "threshold": 1.0 } }
+        },
         "behavior": "100% visible → Animation triggers (completely visible)",
-        "assertions": ["threshold: 1.0 (maximum)", "Triggers only when fully in viewport", "Used for: critical content"]
+        "assertions": [
+          "threshold: 1.0 (maximum)",
+          "Triggers only when fully in viewport",
+          "Used for: critical content"
+        ]
       }
     },
     {
@@ -139,9 +176,16 @@
       "when": "component enters the viewport",
       "then": "it should wait 200ms before starting the animation",
       "application": {
-        "component": {"type": "div", "interactions": {"scroll": {"animation": "fadeIn", "delay": "200ms"}}},
+        "component": {
+          "type": "div",
+          "interactions": { "scroll": { "animation": "fadeIn", "delay": "200ms" } }
+        },
         "timeline": "Enters viewport → Wait 200ms → Animation starts",
-        "assertions": ["delay: '200ms' (pattern: ^[0-9]+(ms|s)$)", "Delayed animation", "Used for: staggered sequences"]
+        "assertions": [
+          "delay: '200ms' (pattern: ^[0-9]+(ms|s)$)",
+          "Delayed animation",
+          "Used for: staggered sequences"
+        ]
       }
     },
     {
@@ -150,7 +194,10 @@
       "when": "animation starts",
       "then": "it should complete the animation in 1 second",
       "application": {
-        "component": {"type": "div", "interactions": {"scroll": {"animation": "fadeIn", "duration": "1000ms"}}},
+        "component": {
+          "type": "div",
+          "interactions": { "scroll": { "animation": "fadeIn", "duration": "1000ms" } }
+        },
         "behavior": "Slower animation: 1000ms (vs default 600ms)",
         "assertions": ["duration: '1000ms'", "Default: 600ms", "Control animation speed"]
       }
@@ -161,9 +208,16 @@
       "when": "component enters viewport multiple times",
       "then": "it should animate only on the first entry",
       "application": {
-        "component": {"type": "div", "interactions": {"scroll": {"animation": "fadeIn", "once": true}}},
+        "component": {
+          "type": "div",
+          "interactions": { "scroll": { "animation": "fadeIn", "once": true } }
+        },
         "behavior": "First entry: Animates. Subsequent entries: No animation (default behavior)",
-        "assertions": ["once: true (default)", "Animation plays only once", "Performance optimization"]
+        "assertions": [
+          "once: true (default)",
+          "Animation plays only once",
+          "Performance optimization"
+        ]
       }
     },
     {
@@ -172,9 +226,16 @@
       "when": "component enters viewport multiple times",
       "then": "it should animate every time it enters the viewport",
       "application": {
-        "component": {"type": "div", "interactions": {"scroll": {"animation": "fadeIn", "once": false}}},
+        "component": {
+          "type": "div",
+          "interactions": { "scroll": { "animation": "fadeIn", "once": false } }
+        },
         "behavior": "Every entry: Animation replays",
-        "assertions": ["once: false (repeatable)", "Animation replays on every viewport entry", "Used for: attention-grabbing effects"]
+        "assertions": [
+          "once: false (repeatable)",
+          "Animation replays on every viewport entry",
+          "Used for: attention-grabbing effects"
+        ]
       }
     },
     {
@@ -183,10 +244,30 @@
       "when": "component reaches the threshold visibility",
       "then": "it should apply all settings in sequence (wait delay, then animate with duration)",
       "application": {
-        "component": {"type": "div", "interactions": {"scroll": {"animation": "fadeInUp", "threshold": 0.3, "delay": "100ms", "duration": "800ms", "once": true}}},
-        "timeline": ["30% visible (threshold)", "Wait 100ms (delay)", "fadeInUp animation (800ms duration)", "Complete"],
+        "component": {
+          "type": "div",
+          "interactions": {
+            "scroll": {
+              "animation": "fadeInUp",
+              "threshold": 0.3,
+              "delay": "100ms",
+              "duration": "800ms",
+              "once": true
+            }
+          }
+        },
+        "timeline": [
+          "30% visible (threshold)",
+          "Wait 100ms (delay)",
+          "fadeInUp animation (800ms duration)",
+          "Complete"
+        ],
         "totalTime": "900ms (100ms delay + 800ms duration)",
-        "assertions": ["All properties configured", "Full control: trigger point + timing + behavior", "Complete configuration"]
+        "assertions": [
+          "All properties configured",
+          "Full control: trigger point + timing + behavior",
+          "Complete configuration"
+        ]
       }
     },
     {

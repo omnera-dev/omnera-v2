@@ -25,7 +25,7 @@
       "then": "it should validate variable syntax",
       "application": {
         "template": "$color",
-        "vars": {"color": "blue"},
+        "vars": { "color": "blue" },
         "result": "blue",
         "assertions": ["Simple variable: $color → blue", "Runtime substitution"]
       }
@@ -37,7 +37,7 @@
       "then": "it should accept camelCase variable names",
       "application": {
         "template": "$primaryText",
-        "vars": {"primaryText": "Hello World"},
+        "vars": { "primaryText": "Hello World" },
         "result": "Hello World",
         "assertions": ["camelCase: $primaryText → Hello World"]
       }
@@ -49,7 +49,7 @@
       "then": "it should accept variable at start of string",
       "application": {
         "template": "$siteName is the best",
-        "vars": {"siteName": "Omnera"},
+        "vars": { "siteName": "Omnera" },
         "result": "Omnera is the best",
         "assertions": ["Variable at start: '$siteName is...' → 'Omnera is...'"]
       }
@@ -61,7 +61,7 @@
       "then": "it should accept variable in middle of string",
       "application": {
         "template": "Welcome to $siteName today",
-        "vars": {"siteName": "Omnera"},
+        "vars": { "siteName": "Omnera" },
         "result": "Welcome to Omnera today",
         "assertions": ["Variable in middle: 'Welcome to $siteName today'"]
       }
@@ -73,7 +73,7 @@
       "then": "it should accept variable at end of string",
       "application": {
         "template": "The color is $primaryColor",
-        "vars": {"primaryColor": "#007bff"},
+        "vars": { "primaryColor": "#007bff" },
         "result": "The color is #007bff",
         "assertions": ["Variable at end: 'The color is $primaryColor'"]
       }
@@ -85,7 +85,7 @@
       "then": "it should accept multiple $variable references",
       "application": {
         "template": "The $productName costs $price",
-        "vars": {"productName": "Widget", "price": "$99"},
+        "vars": { "productName": "Widget", "price": "$99" },
         "result": "The Widget costs $99",
         "assertions": ["Multiple variables: $productName + $price"]
       }
@@ -97,8 +97,8 @@
       "then": "it should accept alphanumeric variable names",
       "application": {
         "examples": [
-          {"template": "$color1", "vars": {"color1": "red"}, "result": "red"},
-          {"template": "$size2x", "vars": {"size2x": "large"}, "result": "large"}
+          { "template": "$color1", "vars": { "color1": "red" }, "result": "red" },
+          { "template": "$size2x", "vars": { "size2x": "large" }, "result": "large" }
         ],
         "assertions": ["Alphanumeric: $color1, $size2x valid"]
       }
@@ -110,7 +110,7 @@
       "then": "it should support variable composition patterns",
       "application": {
         "template": "$icon-$size",
-        "vars": {"icon": "check", "size": "lg"},
+        "vars": { "icon": "check", "size": "lg" },
         "result": "check-lg",
         "assertions": ["Composition: $icon-$size → check-lg", "Dynamic class names"]
       }

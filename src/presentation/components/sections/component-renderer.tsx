@@ -145,17 +145,17 @@ export function ComponentRenderer({
   // Build flex-specific classes based on props
   const buildFlexClasses = (props?: Record<string, unknown>): string => {
     const baseClasses = ['flex']
-    const alignmentClass = props?.align === 'start' ? 'items-start'
-      : props?.align === 'center' ? 'items-center'
-      : props?.align === 'end' ? 'items-end'
-      : undefined
+    const alignmentClass =
+      props?.align === 'start'
+        ? 'items-start'
+        : props?.align === 'center'
+          ? 'items-center'
+          : props?.align === 'end'
+            ? 'items-end'
+            : undefined
     const gapClass = typeof props?.gap === 'number' ? `gap-${props.gap}` : undefined
 
-    return [
-      ...baseClasses,
-      alignmentClass,
-      gapClass,
-    ].filter(Boolean).join(' ')
+    return [...baseClasses, alignmentClass, gapClass].filter(Boolean).join(' ')
   }
 
   // For flex type, prepend flex classes to className

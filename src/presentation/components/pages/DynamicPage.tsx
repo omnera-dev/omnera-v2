@@ -132,7 +132,9 @@ function generateThemeStyles(theme?: Theme): string {
   // Build spacing styles array
   const spacingStyles: ReadonlyArray<string> = [
     ...(spacing?.section ? [`[data-testid="section"] { padding: ${spacing.section}; }`] : []),
-    ...(spacing?.container ? [`[data-testid="container"] { max-width: ${spacing.container}; }`] : []),
+    ...(spacing?.container
+      ? [`[data-testid="container"] { max-width: ${spacing.container}; }`]
+      : []),
   ]
 
   // Build animation keyframes
@@ -364,7 +366,7 @@ export function DynamicPage({
               data-page-id={page.id}
               style={{ minHeight: '1px' }}
             >
-            {page.sections.map((section, index) => {
+              {page.sections.map((section, index) => {
                 // Determine if this section is a block reference and get its name and instance index
                 // Count how many times this block name appears in total and before the current index
                 const blockInfo: { name: string; instanceIndex?: number } | undefined = (() => {
@@ -385,12 +387,10 @@ export function DynamicPage({
                   }
 
                   // Count previous occurrences of the same block name
-                  const previousOccurrences = page.sections
-                    .slice(0, index)
-                    .filter((s) => {
-                      const sBlockName = 'block' in s ? s.block : '$ref' in s ? s.$ref : undefined
-                      return sBlockName === blockName
-                    })
+                  const previousOccurrences = page.sections.slice(0, index).filter((s) => {
+                    const sBlockName = 'block' in s ? s.block : '$ref' in s ? s.$ref : undefined
+                    return sBlockName === blockName
+                  })
                   return { name: blockName, instanceIndex: previousOccurrences.length }
                 })()
 
@@ -408,88 +408,93 @@ export function DynamicPage({
                 )
               })}
 
-            {/* Blocks demonstration - shown when page has no sections but blocks are defined */}
-            {page.sections.length === 0 && blocks && blocks.length > 0 && (
-              <div
-                style={{
-                  display: 'flex',
-                  flexDirection: 'column',
-                  gap: '1rem',
-                  padding: '2rem',
-                }}
-              >
-                {blocks.map((block, index) => (
-                  <ComponentRenderer
-                    key={index}
-                    component={{ type: block.type, props: block.props, children: block.children, content: block.content }}
-                    blockName={block.name}
-                    blocks={blocks}
-                    theme={theme}
-                    languages={languages}
-                    currentLang={lang}
-                  />
-                ))}
-              </div>
-            )}
-
-            {/* Theme demonstration - shown when page has no sections but theme is configured */}
-            {page.sections.length === 0 && theme && (
-              <div
-                style={{
-                  display: 'flex',
-                  flexDirection: 'column',
-                  gap: theme.spacing?.gap || '1rem',
-                  alignItems: 'center',
-                  padding: '2rem',
-                }}
-              >
-                {/* Demo elements for each theme color - allows testing CSS custom properties */}
-                {theme.colors &&
-                  Object.keys(theme.colors).map((colorName) => (
-                    <div
-                      key={colorName}
-                      data-testid={`color-${colorName}`}
-                      style={{
-                        width: '100px',
-                        height: '100px',
-                        backgroundColor: theme.colors![colorName],
+              {/* Blocks demonstration - shown when page has no sections but blocks are defined */}
+              {page.sections.length === 0 && blocks && blocks.length > 0 && (
+                <div
+                  style={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: '1rem',
+                    padding: '2rem',
+                  }}
+                >
+                  {blocks.map((block, index) => (
+                    <ComponentRenderer
+                      key={index}
+                      component={{
+                        type: block.type,
+                        props: block.props,
+                        children: block.children,
+                        content: block.content,
                       }}
+                      blockName={block.name}
+                      blocks={blocks}
+                      theme={theme}
+                      languages={languages}
+                      currentLang={lang}
                     />
                   ))}
-                {theme.colors?.primary && (
-                  <button
-                    data-testid="button"
-                    style={{
-                      backgroundColor: theme.colors.primary,
-                      color: '#ffffff',
-                      padding: theme.spacing?.gap || '1rem 2rem',
-                      border: 'none',
-                      borderRadius: theme.borderRadius?.md || '0.375rem',
-                      boxShadow: theme.shadows?.md,
-                      cursor: 'pointer',
-                    }}
-                  >
-                    Primary Button
-                  </button>
-                )}
-              </div>
-            )}
+                </div>
+              )}
 
-            {/* Fallback demonstration - shown when languages configured with fallback */}
-            {languages?.fallback && (
-              <div
-                data-testid="missing-translation-text"
-                style={{
-                  padding: '1rem',
-                  textAlign: 'center',
-                  color: '#666',
-                  fontSize: '0.875rem',
-                }}
-              >
-                English fallback configured
-              </div>
-            )}
-          </main>
+              {/* Theme demonstration - shown when page has no sections but theme is configured */}
+              {page.sections.length === 0 && theme && (
+                <div
+                  style={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: theme.spacing?.gap || '1rem',
+                    alignItems: 'center',
+                    padding: '2rem',
+                  }}
+                >
+                  {/* Demo elements for each theme color - allows testing CSS custom properties */}
+                  {theme.colors &&
+                    Object.keys(theme.colors).map((colorName) => (
+                      <div
+                        key={colorName}
+                        data-testid={`color-${colorName}`}
+                        style={{
+                          width: '100px',
+                          height: '100px',
+                          backgroundColor: theme.colors![colorName],
+                        }}
+                      />
+                    ))}
+                  {theme.colors?.primary && (
+                    <button
+                      data-testid="button"
+                      style={{
+                        backgroundColor: theme.colors.primary,
+                        color: '#ffffff',
+                        padding: theme.spacing?.gap || '1rem 2rem',
+                        border: 'none',
+                        borderRadius: theme.borderRadius?.md || '0.375rem',
+                        boxShadow: theme.shadows?.md,
+                        cursor: 'pointer',
+                      }}
+                    >
+                      Primary Button
+                    </button>
+                  )}
+                </div>
+              )}
+
+              {/* Fallback demonstration - shown when languages configured with fallback */}
+              {languages?.fallback && (
+                <div
+                  data-testid="missing-translation-text"
+                  style={{
+                    padding: '1rem',
+                    textAlign: 'center',
+                    color: '#666',
+                    fontSize: '0.875rem',
+                  }}
+                >
+                  English fallback configured
+                </div>
+              )}
+            </main>
           </div>
         </section>
         {page.layout?.footer && <Footer {...page.layout.footer} />}

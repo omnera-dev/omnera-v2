@@ -64,7 +64,12 @@
       "when": "rel is 'icon' for standard favicon",
       "then": "it should define browser icon",
       "application": {
-        "favicon": {"rel": "icon", "type": "image/png", "sizes": "32x32", "href": "./favicon-32x32.png"},
+        "favicon": {
+          "rel": "icon",
+          "type": "image/png",
+          "sizes": "32x32",
+          "href": "./favicon-32x32.png"
+        },
         "expectedHTML": "<link rel=\"icon\" type=\"image/png\" sizes=\"32x32\" href=\"/favicon-32x32.png\" />",
         "assertions": ["rel: 'icon' (standard)", "Common sizes: 16x16, 32x32", "Browser tab icon"]
       }
@@ -75,10 +80,18 @@
       "when": "rel is 'apple-touch-icon' for iOS devices",
       "then": "it should define Apple touch icon",
       "application": {
-        "favicon": {"rel": "apple-touch-icon", "sizes": "180x180", "href": "./apple-touch-icon.png"},
+        "favicon": {
+          "rel": "apple-touch-icon",
+          "sizes": "180x180",
+          "href": "./apple-touch-icon.png"
+        },
         "expectedHTML": "<link rel=\"apple-touch-icon\" sizes=\"180x180\" href=\"/apple-touch-icon.png\" />",
         "usage": "iOS home screen icon (when user adds site to home screen)",
-        "assertions": ["rel: 'apple-touch-icon' (iOS)", "Size: 180x180 (iPhone)", "No type attribute needed (defaults to PNG)"]
+        "assertions": [
+          "rel: 'apple-touch-icon' (iOS)",
+          "Size: 180x180 (iPhone)",
+          "No type attribute needed (defaults to PNG)"
+        ]
       }
     },
     {
@@ -87,10 +100,14 @@
       "when": "rel is 'mask-icon' for Safari pinned tabs",
       "then": "it should define Safari mask icon with color",
       "application": {
-        "favicon": {"rel": "mask-icon", "href": "./safari-pinned-tab.svg", "color": "#5BBAD5"},
+        "favicon": { "rel": "mask-icon", "href": "./safari-pinned-tab.svg", "color": "#5BBAD5" },
         "expectedHTML": "<link rel=\"mask-icon\" href=\"/safari-pinned-tab.svg\" color=\"#5BBAD5\" />",
         "usage": "Safari pinned tabs (SVG monochrome icon with theme color)",
-        "assertions": ["rel: 'mask-icon' (Safari)", "SVG format required", "color: Brand color (hex)"]
+        "assertions": [
+          "rel: 'mask-icon' (Safari)",
+          "SVG format required",
+          "color: Brand color (hex)"
+        ]
       }
     },
     {
@@ -99,8 +116,18 @@
       "when": "sizes is '16x16', '32x32', '180x180', or '192x192'",
       "then": "it should specify icon dimensions for different contexts",
       "application": {
-        "sizes": {"16x16": "Browser tabs (standard)", "32x32": "Browser tabs (Retina)", "180x180": "iOS home screen", "192x192": "Android home screen", "512x512": "PWA splash screen"},
-        "assertions": ["sizes: Pattern ^[0-9]+x[0-9]+$", "Different contexts need different sizes", "Browser picks best match"]
+        "sizes": {
+          "16x16": "Browser tabs (standard)",
+          "32x32": "Browser tabs (Retina)",
+          "180x180": "iOS home screen",
+          "192x192": "Android home screen",
+          "512x512": "PWA splash screen"
+        },
+        "assertions": [
+          "sizes: Pattern ^[0-9]+x[0-9]+$",
+          "Different contexts need different sizes",
+          "Browser picks best match"
+        ]
       }
     },
     {
@@ -109,9 +136,17 @@
       "when": "type is 'image/png', 'image/x-icon', or 'image/svg+xml'",
       "then": "it should specify MIME type",
       "application": {
-        "types": [{"type": "image/png", "description": "PNG format (most common)"}, {"type": "image/x-icon", "description": "ICO format (legacy)"}, {"type": "image/svg+xml", "description": "SVG format (scalable)"}],
+        "types": [
+          { "type": "image/png", "description": "PNG format (most common)" },
+          { "type": "image/x-icon", "description": "ICO format (legacy)" },
+          { "type": "image/svg+xml", "description": "SVG format (scalable)" }
+        ],
         "pattern": "^image/",
-        "assertions": ["type: MIME type starting with 'image/'", "Helps browser render correctly", "Optional for apple-touch-icon"]
+        "assertions": [
+          "type: MIME type starting with 'image/'",
+          "Helps browser render correctly",
+          "Optional for apple-touch-icon"
+        ]
       }
     },
     {
@@ -120,7 +155,7 @@
       "when": "color is hex value like '#FF5733'",
       "then": "it should define Safari pinned tab color",
       "application": {
-        "favicon": {"rel": "mask-icon", "href": "./safari-pinned-tab.svg", "color": "#FF5733"},
+        "favicon": { "rel": "mask-icon", "href": "./safari-pinned-tab.svg", "color": "#FF5733" },
         "usage": "Safari pinned tabs use this color for the monochrome SVG",
         "pattern": "^#[0-9A-Fa-f]{6}$",
         "assertions": ["color: 6-digit hex", "Only for mask-icon", "Brand color (matches logo)"]
@@ -132,9 +167,37 @@
       "when": "array contains icons for all devices (16x16, 32x32, 180x180, 192x192, 512x512, manifest)",
       "then": "it should provide comprehensive multi-device icon support",
       "application": {
-        "favicons": [{"rel": "icon", "type": "image/png", "sizes": "16x16", "href": "./favicon-16x16.png"}, {"rel": "icon", "type": "image/png", "sizes": "32x32", "href": "./favicon-32x32.png"}, {"rel": "apple-touch-icon", "sizes": "180x180", "href": "./apple-touch-icon.png"}, {"rel": "icon", "type": "image/png", "sizes": "192x192", "href": "./android-chrome-192x192.png"}, {"rel": "icon", "type": "image/png", "sizes": "512x512", "href": "./android-chrome-512x512.png"}, {"rel": "mask-icon", "href": "./safari-pinned-tab.svg", "color": "#5BBAD5"}, {"rel": "manifest", "href": "./site.webmanifest"}],
-        "coverage": {"desktop": "16x16, 32x32", "iOS": "180x180 (apple-touch-icon)", "Android": "192x192, 512x512", "Safari": "mask-icon + color", "PWA": "manifest"},
-        "assertions": ["Complete set: All major platforms", "7 items covering desktop + mobile", "Best practice for production sites"]
+        "favicons": [
+          { "rel": "icon", "type": "image/png", "sizes": "16x16", "href": "./favicon-16x16.png" },
+          { "rel": "icon", "type": "image/png", "sizes": "32x32", "href": "./favicon-32x32.png" },
+          { "rel": "apple-touch-icon", "sizes": "180x180", "href": "./apple-touch-icon.png" },
+          {
+            "rel": "icon",
+            "type": "image/png",
+            "sizes": "192x192",
+            "href": "./android-chrome-192x192.png"
+          },
+          {
+            "rel": "icon",
+            "type": "image/png",
+            "sizes": "512x512",
+            "href": "./android-chrome-512x512.png"
+          },
+          { "rel": "mask-icon", "href": "./safari-pinned-tab.svg", "color": "#5BBAD5" },
+          { "rel": "manifest", "href": "./site.webmanifest" }
+        ],
+        "coverage": {
+          "desktop": "16x16, 32x32",
+          "iOS": "180x180 (apple-touch-icon)",
+          "Android": "192x192, 512x512",
+          "Safari": "mask-icon + color",
+          "PWA": "manifest"
+        },
+        "assertions": [
+          "Complete set: All major platforms",
+          "7 items covering desktop + mobile",
+          "Best practice for production sites"
+        ]
       }
     },
     {

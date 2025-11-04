@@ -43,7 +43,10 @@
       "when": "component is configured",
       "then": "it should support hover effects without other interaction types",
       "application": {
-        "component": {"type": "button", "interactions": {"hover": {"transform": "scale(1.05)", "duration": "200ms"}}},
+        "component": {
+          "type": "button",
+          "interactions": { "hover": { "transform": "scale(1.05)", "duration": "200ms" } }
+        },
         "assertions": ["Only hover configured", "Other interactions optional"]
       }
     },
@@ -53,7 +56,7 @@
       "when": "component is configured",
       "then": "it should support click actions without other interaction types",
       "application": {
-        "component": {"type": "button", "interactions": {"click": {"navigate": "/contact"}}},
+        "component": { "type": "button", "interactions": { "click": { "navigate": "/contact" } } },
         "assertions": ["Only click configured", "Navigate on click"]
       }
     },
@@ -63,7 +66,10 @@
       "when": "component is configured",
       "then": "it should support scroll animations without other interaction types",
       "application": {
-        "component": {"type": "div", "interactions": {"scroll": {"animation": "fadeIn", "threshold": 0.5}}},
+        "component": {
+          "type": "div",
+          "interactions": { "scroll": { "animation": "fadeIn", "threshold": 0.5 } }
+        },
         "assertions": ["Only scroll configured", "Triggers on viewport entry"]
       }
     },
@@ -73,7 +79,10 @@
       "when": "component is configured",
       "then": "it should support entrance animations without other interaction types",
       "application": {
-        "component": {"type": "div", "interactions": {"entrance": {"animation": "fadeInUp", "delay": "100ms"}}},
+        "component": {
+          "type": "div",
+          "interactions": { "entrance": { "animation": "fadeInUp", "delay": "100ms" } }
+        },
         "assertions": ["Only entrance configured", "Plays on page load"]
       }
     },
@@ -83,7 +92,13 @@
       "when": "component is configured",
       "then": "it should support both hover effects and click actions",
       "application": {
-        "component": {"type": "button", "interactions": {"hover": {"transform": "scale(1.05)"}, "click": {"navigate": "/contact"}}},
+        "component": {
+          "type": "button",
+          "interactions": {
+            "hover": { "transform": "scale(1.05)" },
+            "click": { "navigate": "/contact" }
+          }
+        },
         "assertions": ["Hover + click combined", "Two interaction types on one component"]
       }
     },
@@ -93,7 +108,13 @@
       "when": "page loads and user scrolls",
       "then": "it should play entrance animation on load and scroll animation on viewport entry",
       "application": {
-        "component": {"type": "div", "interactions": {"entrance": {"animation": "fadeInUp"}, "scroll": {"animation": "slideIn"}}},
+        "component": {
+          "type": "div",
+          "interactions": {
+            "entrance": { "animation": "fadeInUp" },
+            "scroll": { "animation": "slideIn" }
+          }
+        },
         "assertions": ["Entrance on load", "Scroll on viewport entry", "Independent triggers"]
       }
     },
@@ -103,8 +124,20 @@
       "when": "component is fully interactive",
       "then": "all interactions should work independently and not interfere with each other",
       "application": {
-        "component": {"type": "button", "interactions": {"hover": {"transform": "scale(1.05)"}, "click": {"animation": "pulse"}, "scroll": {"animation": "fadeIn"}, "entrance": {"animation": "fadeInUp"}}},
-        "assertions": ["All 4 types: hover + click + scroll + entrance", "Independent triggers", "No interference"]
+        "component": {
+          "type": "button",
+          "interactions": {
+            "hover": { "transform": "scale(1.05)" },
+            "click": { "animation": "pulse" },
+            "scroll": { "animation": "fadeIn" },
+            "entrance": { "animation": "fadeInUp" }
+          }
+        },
+        "assertions": [
+          "All 4 types: hover + click + scroll + entrance",
+          "Independent triggers",
+          "No interference"
+        ]
       }
     },
     {
@@ -113,8 +146,18 @@
       "when": "user hovers then clicks",
       "then": "hover effect should apply immediately and click should navigate after animation",
       "application": {
-        "component": {"type": "button", "interactions": {"hover": {"transform": "scale(1.05)", "duration": "200ms"}, "click": {"navigate": "/contact", "animation": "pulse"}}},
-        "sequence": ["1. Hover → scale(1.05) immediate", "2. Click → pulse animation", "3. Navigate → /contact after animation"],
+        "component": {
+          "type": "button",
+          "interactions": {
+            "hover": { "transform": "scale(1.05)", "duration": "200ms" },
+            "click": { "navigate": "/contact", "animation": "pulse" }
+          }
+        },
+        "sequence": [
+          "1. Hover → scale(1.05) immediate",
+          "2. Click → pulse animation",
+          "3. Navigate → /contact after animation"
+        ],
         "assertions": ["Hover first, then click", "Sequential interactions"]
       }
     },

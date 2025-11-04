@@ -15,7 +15,11 @@
       "application": {
         "favicon": "./public/favicon.ico",
         "expectedHTML": "<link rel=\"icon\" type=\"image/x-icon\" href=\"/public/favicon.ico\" />",
-        "assertions": ["Simple string path", "Pattern: ^\\./.*\\.(ico|png|svg)$", "Relative path starting with ./"]
+        "assertions": [
+          "Simple string path",
+          "Pattern: ^\\./.*\\.(ico|png|svg)$",
+          "Relative path starting with ./"
+        ]
       }
     },
     {
@@ -27,7 +31,11 @@
         "favicon": "./favicon.ico",
         "expectedHTML": "<link rel=\"icon\" type=\"image/x-icon\" href=\"/favicon.ico\" />",
         "browserSupport": "Universal (all browsers, including IE)",
-        "assertions": [".ico: Legacy format (multi-size container)", "Best compatibility", "32x32 or 16x16 pixels typical"]
+        "assertions": [
+          ".ico: Legacy format (multi-size container)",
+          "Best compatibility",
+          "32x32 or 16x16 pixels typical"
+        ]
       }
     },
     {
@@ -39,7 +47,11 @@
         "favicon": "./favicon.png",
         "expectedHTML": "<link rel=\"icon\" type=\"image/png\" href=\"/favicon.png\" />",
         "browserSupport": "Modern browsers",
-        "assertions": [".png: Modern format", "Better quality than ICO", "Transparent backgrounds supported"]
+        "assertions": [
+          ".png: Modern format",
+          "Better quality than ICO",
+          "Transparent backgrounds supported"
+        ]
       }
     },
     {
@@ -51,7 +63,12 @@
         "favicon": "./favicon.svg",
         "expectedHTML": "<link rel=\"icon\" type=\"image/svg+xml\" href=\"/favicon.svg\" />",
         "browserSupport": "Modern browsers (not IE)",
-        "assertions": [".svg: Scalable vector graphics", "Resolution-independent", "Smallest file size", "Best for: logos, icons"]
+        "assertions": [
+          ".svg: Scalable vector graphics",
+          "Resolution-independent",
+          "Smallest file size",
+          "Best for: logos, icons"
+        ]
       }
     },
     {
@@ -61,9 +78,17 @@
       "then": "it should use relative file paths",
       "application": {
         "valid": ["./favicon.ico", "./public/favicon.png", "./assets/icons/favicon.svg"],
-        "invalid": ["/absolute/path/favicon.ico", "https://cdn.example.com/favicon.ico", "favicon.ico"],
+        "invalid": [
+          "/absolute/path/favicon.ico",
+          "https://cdn.example.com/favicon.ico",
+          "favicon.ico"
+        ],
         "pattern": "^\\./.*\\.(ico|png|svg)$",
-        "assertions": ["Must start with ./", "Relative to project root", "Pattern validates extension"]
+        "assertions": [
+          "Must start with ./",
+          "Relative to project root",
+          "Pattern validates extension"
+        ]
       }
     },
     {
@@ -73,9 +98,13 @@
       "then": "it should enable quick favicon setup",
       "application": {
         "simple": "./favicon.ico",
-        "complete": {"favicons": [{"rel": "icon", "href": "./favicon.ico", "sizes": "32x32"}]},
+        "complete": { "favicons": [{ "rel": "icon", "href": "./favicon.ico", "sizes": "32x32" }] },
         "comparison": "Simple: string path (quick setup). Complete: array of objects (full control)",
-        "assertions": ["Single string: minimal config", "Quick setup for basic needs", "Use 'favicons' array for multi-size sets"]
+        "assertions": [
+          "Single string: minimal config",
+          "Quick setup for basic needs",
+          "Use 'favicons' array for multi-size sets"
+        ]
       }
     },
     {
@@ -85,8 +114,18 @@
       "then": "it should provide site branding in tabs",
       "application": {
         "favicon": "./favicon.ico",
-        "displayLocations": ["Browser tab (next to page title)", "Bookmarks bar", "Browser history", "Mobile home screen (with apple-touch-icon)"],
-        "assertions": ["Visible in browser chrome", "Site branding", "User recognition", "Professional appearance"]
+        "displayLocations": [
+          "Browser tab (next to page title)",
+          "Bookmarks bar",
+          "Browser history",
+          "Mobile home screen (with apple-touch-icon)"
+        ],
+        "assertions": [
+          "Visible in browser chrome",
+          "Site branding",
+          "User recognition",
+          "Professional appearance"
+        ]
       }
     },
     {
@@ -95,10 +134,22 @@
       "when": "favicon is simple string, favicons is array of objects",
       "then": "it should support both simple and complete configurations",
       "application": {
-        "option1": {"favicon": "./favicon.ico"},
-        "option2": {"favicons": [{"rel": "icon", "href": "./favicon-32.png", "sizes": "32x32", "type": "image/png"}, {"rel": "icon", "href": "./favicon-16.png", "sizes": "16x16", "type": "image/png"}]},
-        "comparison": {"favicon": "Simple: one default icon", "favicons": "Complete: multiple sizes/formats"},
-        "assertions": ["favicon: Quick setup (string)", "favicons: Advanced (array)", "Choose based on needs"]
+        "option1": { "favicon": "./favicon.ico" },
+        "option2": {
+          "favicons": [
+            { "rel": "icon", "href": "./favicon-32.png", "sizes": "32x32", "type": "image/png" },
+            { "rel": "icon", "href": "./favicon-16.png", "sizes": "16x16", "type": "image/png" }
+          ]
+        },
+        "comparison": {
+          "favicon": "Simple: one default icon",
+          "favicons": "Complete: multiple sizes/formats"
+        },
+        "assertions": [
+          "favicon: Quick setup (string)",
+          "favicons: Advanced (array)",
+          "Choose based on needs"
+        ]
       }
     },
     {

@@ -74,9 +74,13 @@
       "when": "link is { label: 'Home', href: '/' }",
       "then": "it should render navigation link",
       "application": {
-        "link": {"label": "Home", "href": "/"},
+        "link": { "label": "Home", "href": "/" },
         "expectedDOM": "<a href=\"/\" class=\"nav-link\">Home</a>",
-        "assertions": ["label + href: required properties", "Renders as <a> tag", "Basic navigation link"]
+        "assertions": [
+          "label + href: required properties",
+          "Renders as <a> tag",
+          "Basic navigation link"
+        ]
       }
     },
     {
@@ -85,9 +89,17 @@
       "when": "target is '_blank' for external links",
       "then": "it should open link in new tab",
       "application": {
-        "link": {"label": "Documentation", "href": "https://docs.example.com", "target": "_blank"},
+        "link": {
+          "label": "Documentation",
+          "href": "https://docs.example.com",
+          "target": "_blank"
+        },
         "expectedDOM": "<a href=\"https://docs.example.com\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"nav-link\">Documentation</a>",
-        "assertions": ["target: '_blank' opens new tab", "Security: rel='noopener noreferrer' added automatically", "Common for: external links"]
+        "assertions": [
+          "target: '_blank' opens new tab",
+          "Security: rel='noopener noreferrer' added automatically",
+          "Common for: external links"
+        ]
       }
     },
     {
@@ -96,9 +108,13 @@
       "when": "icon is 'arrow-right'",
       "then": "it should display icon alongside label",
       "application": {
-        "link": {"label": "Get Started", "href": "/get-started", "icon": "arrow-right"},
+        "link": { "label": "Get Started", "href": "/get-started", "icon": "arrow-right" },
         "expectedDOM": "<a href=\"/get-started\" class=\"nav-link flex items-center gap-2\"><span>Get Started</span><svg class=\"icon-arrow-right\">...</svg></a>",
-        "assertions": ["icon: Optional icon name", "Icon positioned after label (default)", "Common icons: arrow-right, external-link, chevron-down"]
+        "assertions": [
+          "icon: Optional icon name",
+          "Icon positioned after label (default)",
+          "Common icons: arrow-right, external-link, chevron-down"
+        ]
       }
     },
     {
@@ -107,9 +123,13 @@
       "when": "badge is 'New' or 'Beta'",
       "then": "it should display badge to highlight link",
       "application": {
-        "link": {"label": "Features", "href": "/features", "badge": "New"},
+        "link": { "label": "Features", "href": "/features", "badge": "New" },
         "expectedDOM": "<a href=\"/features\" class=\"nav-link flex items-center gap-2\"><span>Features</span><span class=\"badge badge-new bg-blue-500 text-white text-xs px-2 py-0.5 rounded\">New</span></a>",
-        "assertions": ["badge: Highlight text ('New', 'Beta', 'Pro')", "Styled as pill/badge", "Common for: new features, beta pages"]
+        "assertions": [
+          "badge: Highlight text ('New', 'Beta', 'Pro')",
+          "Styled as pill/badge",
+          "Common for: new features, beta pages"
+        ]
       }
     },
     {
@@ -118,10 +138,21 @@
       "when": "children contains nested nav-links",
       "then": "it should render dropdown menu on hover/click",
       "application": {
-        "link": {"label": "Products", "href": "/products", "children": [{"label": "Product A", "href": "/products/a"}, {"label": "Product B", "href": "/products/b"}]},
+        "link": {
+          "label": "Products",
+          "href": "/products",
+          "children": [
+            { "label": "Product A", "href": "/products/a" },
+            { "label": "Product B", "href": "/products/b" }
+          ]
+        },
         "expectedDOM": "<div class=\"nav-item-dropdown\"><a href=\"/products\" class=\"nav-link\">Products</a><div class=\"dropdown-menu hidden group-hover:block\"><a href=\"/products/a\" class=\"dropdown-item\">Product A</a><a href=\"/products/b\" class=\"dropdown-item\">Product B</a></div></div>",
         "behavior": "Hover over 'Products' → Dropdown reveals children links",
-        "assertions": ["children: Recursive nav-links array", "Dropdown menu (hover or click)", "Unlimited nesting depth (self-reference: $ref: #)"]
+        "assertions": [
+          "children: Recursive nav-links array",
+          "Dropdown menu (hover or click)",
+          "Unlimited nesting depth (self-reference: $ref: #)"
+        ]
       }
     },
     {
@@ -130,9 +161,13 @@
       "when": "href is '#contact' (page anchor)",
       "then": "it should scroll to anchor on same page",
       "application": {
-        "link": {"label": "Contact", "href": "#contact"},
+        "link": { "label": "Contact", "href": "#contact" },
         "behavior": "Click → Smooth scroll to element with id='contact' on same page",
-        "assertions": ["href: '#contact' (anchor link)", "Smooth scroll to section", "No route change (same page)"]
+        "assertions": [
+          "href: '#contact' (anchor link)",
+          "Smooth scroll to section",
+          "No route change (same page)"
+        ]
       }
     },
     {
@@ -141,9 +176,18 @@
       "when": "array contains [Home, About, Products, Contact]",
       "then": "it should render horizontal navigation menu",
       "application": {
-        "links": [{"label": "Home", "href": "/"}, {"label": "About", "href": "/about"}, {"label": "Products", "href": "/products"}, {"label": "Contact", "href": "/contact"}],
+        "links": [
+          { "label": "Home", "href": "/" },
+          { "label": "About", "href": "/about" },
+          { "label": "Products", "href": "/products" },
+          { "label": "Contact", "href": "/contact" }
+        ],
         "expectedDOM": "<nav class=\"flex gap-6\"><a href=\"/\" class=\"nav-link\">Home</a><a href=\"/about\" class=\"nav-link\">About</a><a href=\"/products\" class=\"nav-link\">Products</a><a href=\"/contact\" class=\"nav-link\">Contact</a></nav>",
-        "assertions": ["Array of 4 nav links", "Horizontal layout (flex)", "Standard website navigation"]
+        "assertions": [
+          "Array of 4 nav links",
+          "Horizontal layout (flex)",
+          "Standard website navigation"
+        ]
       }
     },
     {
@@ -152,9 +196,27 @@
       "when": "Products has children (Product A, Product B)",
       "then": "it should support unlimited nesting depth for menus",
       "application": {
-        "link": {"label": "Products", "href": "/products", "children": [{"label": "Category A", "href": "/products/a", "children": [{"label": "Subcategory A1", "href": "/products/a/1"}, {"label": "Subcategory A2", "href": "/products/a/2"}]}, {"label": "Category B", "href": "/products/b"}]},
+        "link": {
+          "label": "Products",
+          "href": "/products",
+          "children": [
+            {
+              "label": "Category A",
+              "href": "/products/a",
+              "children": [
+                { "label": "Subcategory A1", "href": "/products/a/1" },
+                { "label": "Subcategory A2", "href": "/products/a/2" }
+              ]
+            },
+            { "label": "Category B", "href": "/products/b" }
+          ]
+        },
         "structure": "Products → Category A → Subcategory A1, A2 (3 levels)",
-        "assertions": ["Recursive children via $ref: #", "Unlimited nesting depth", "Mega menus / multi-level navigation"]
+        "assertions": [
+          "Recursive children via $ref: #",
+          "Unlimited nesting depth",
+          "Mega menus / multi-level navigation"
+        ]
       }
     },
     {
@@ -163,9 +225,23 @@
       "when": "target enum includes _self, _blank, _parent, _top",
       "then": "it should support all standard HTML link targets",
       "application": {
-        "links": [{"label": "Internal", "href": "/page", "target": "_self"}, {"label": "External", "href": "https://example.com", "target": "_blank"}, {"label": "Parent", "href": "/parent", "target": "_parent"}, {"label": "Top", "href": "/top", "target": "_top"}],
-        "targetBehaviors": {"_self": "Same frame (default)", "_blank": "New tab/window", "_parent": "Parent frame", "_top": "Top-level frame"},
-        "assertions": ["target enum: 4 standard HTML values", "_self: default (same frame)", "_blank: most common for external links"]
+        "links": [
+          { "label": "Internal", "href": "/page", "target": "_self" },
+          { "label": "External", "href": "https://example.com", "target": "_blank" },
+          { "label": "Parent", "href": "/parent", "target": "_parent" },
+          { "label": "Top", "href": "/top", "target": "_top" }
+        ],
+        "targetBehaviors": {
+          "_self": "Same frame (default)",
+          "_blank": "New tab/window",
+          "_parent": "Parent frame",
+          "_top": "Top-level frame"
+        },
+        "assertions": [
+          "target enum: 4 standard HTML values",
+          "_self: default (same frame)",
+          "_blank: most common for external links"
+        ]
       }
     },
     {
@@ -174,9 +250,13 @@
       "when": "link must have both label and href",
       "then": "it should enforce required properties for valid links",
       "application": {
-        "valid": {"label": "Home", "href": "/"},
-        "invalid": [{"label": "No href"}, {"href": "/"}, {}],
-        "assertions": ["required: ['label', 'href']", "label: Display text (string)", "href: Destination URL (string)"]
+        "valid": { "label": "Home", "href": "/" },
+        "invalid": [{ "label": "No href" }, { "href": "/" }, {}],
+        "assertions": [
+          "required: ['label', 'href']",
+          "label: Display text (string)",
+          "href: Destination URL (string)"
+        ]
       }
     },
     {

@@ -67,9 +67,19 @@
       "when": "user hovers over the component",
       "then": "it should smoothly scale up by 5%",
       "application": {
-        "component": {"type": "button", "interactions": {"hover": {"transform": "scale(1.05)", "duration": "200ms", "easing": "ease-out"}}},
+        "component": {
+          "type": "button",
+          "interactions": {
+            "hover": { "transform": "scale(1.05)", "duration": "200ms", "easing": "ease-out" }
+          }
+        },
         "behavior": "Hover → Smooth scale transform: 1.0 → 1.05 (5% larger)",
-        "assertions": ["transform: 'scale(1.05)' CSS value", "Default duration: 200ms", "Default easing: ease-out", "Common card/button hover effect"]
+        "assertions": [
+          "transform: 'scale(1.05)' CSS value",
+          "Default duration: 200ms",
+          "Default easing: ease-out",
+          "Common card/button hover effect"
+        ]
       }
     },
     {
@@ -78,9 +88,13 @@
       "when": "user hovers over the component",
       "then": "it should fade to 80% opacity",
       "application": {
-        "component": {"type": "div", "interactions": {"hover": {"opacity": 0.8}}},
+        "component": { "type": "div", "interactions": { "hover": { "opacity": 0.8 } } },
         "behavior": "Hover → Fade to 80% opacity (0.0 = transparent, 1.0 = opaque)",
-        "assertions": ["opacity: 0.8 (min: 0, max: 1)", "Subtle transparency effect", "Used for: dimming images, cards"]
+        "assertions": [
+          "opacity: 0.8 (min: 0, max: 1)",
+          "Subtle transparency effect",
+          "Used for: dimming images, cards"
+        ]
       }
     },
     {
@@ -89,9 +103,16 @@
       "when": "user hovers over the component",
       "then": "it should change background and text colors",
       "application": {
-        "component": {"type": "button", "interactions": {"hover": {"backgroundColor": "#007bff", "color": "#ffffff"}}},
+        "component": {
+          "type": "button",
+          "interactions": { "hover": { "backgroundColor": "#007bff", "color": "#ffffff" } }
+        },
         "behavior": "Hover → backgroundColor: #007bff (blue), color: #ffffff (white text)",
-        "assertions": ["backgroundColor: Hex color or CSS value", "color: Text color", "Common button hover state"]
+        "assertions": [
+          "backgroundColor: Hex color or CSS value",
+          "color: Text color",
+          "Common button hover state"
+        ]
       }
     },
     {
@@ -100,9 +121,16 @@
       "when": "user hovers over the component",
       "then": "it should apply box shadow effect",
       "application": {
-        "component": {"type": "div", "interactions": {"hover": {"shadow": "0 10px 25px rgba(0,0,0,0.15)"}}},
+        "component": {
+          "type": "div",
+          "interactions": { "hover": { "shadow": "0 10px 25px rgba(0,0,0,0.15)" } }
+        },
         "behavior": "Hover → Apply box-shadow (elevation effect)",
-        "assertions": ["shadow: CSS box-shadow value", "Elevation effect (Material Design)", "Used for: cards, buttons"]
+        "assertions": [
+          "shadow: CSS box-shadow value",
+          "Elevation effect (Material Design)",
+          "Used for: cards, buttons"
+        ]
       }
     },
     {
@@ -111,9 +139,18 @@
       "when": "user hovers over the component",
       "then": "it should transition using specified duration and easing function",
       "application": {
-        "component": {"type": "button", "interactions": {"hover": {"transform": "scale(1.05)", "duration": "500ms", "easing": "ease-in-out"}}},
+        "component": {
+          "type": "button",
+          "interactions": {
+            "hover": { "transform": "scale(1.05)", "duration": "500ms", "easing": "ease-in-out" }
+          }
+        },
         "behavior": "Hover → Transition with duration: 500ms, easing: ease-in-out (slower, smooth acceleration/deceleration)",
-        "assertions": ["duration: Pattern ^[0-9]+(ms|s)$", "easing: Enum (linear, ease, ease-in, ease-out, ease-in-out)", "Custom timing control"]
+        "assertions": [
+          "duration: Pattern ^[0-9]+(ms|s)$",
+          "easing: Enum (linear, ease, ease-in, ease-out, ease-in-out)",
+          "Custom timing control"
+        ]
       }
     },
     {
@@ -122,9 +159,23 @@
       "when": "user hovers over the component",
       "then": "all effects should apply simultaneously with coordinated timing",
       "application": {
-        "component": {"type": "div", "interactions": {"hover": {"transform": "scale(1.05)", "shadow": "0 10px 25px rgba(0,0,0,0.15)", "duration": "300ms", "easing": "ease-out"}}},
+        "component": {
+          "type": "div",
+          "interactions": {
+            "hover": {
+              "transform": "scale(1.05)",
+              "shadow": "0 10px 25px rgba(0,0,0,0.15)",
+              "duration": "300ms",
+              "easing": "ease-out"
+            }
+          }
+        },
         "behavior": "Hover → Multiple effects: scale + shadow + timing (all coordinated)",
-        "assertions": ["Combined effects: transform + shadow", "Coordinated timing: duration + easing apply to all", "Common card hover pattern"]
+        "assertions": [
+          "Combined effects: transform + shadow",
+          "Coordinated timing: duration + easing apply to all",
+          "Common card hover pattern"
+        ]
       }
     },
     {
@@ -133,9 +184,15 @@
       "when": "user hovers over the component",
       "then": "it should change border color smoothly",
       "application": {
-        "component": {"type": "button", "interactions": {"hover": {"borderColor": "#007bff"}}},
+        "component": {
+          "type": "button",
+          "interactions": { "hover": { "borderColor": "#007bff" } }
+        },
         "behavior": "Hover → Change borderColor to #007bff (blue)",
-        "assertions": ["borderColor: Hex color or CSS value", "Used for: outlined buttons, input focus states"]
+        "assertions": [
+          "borderColor: Hex color or CSS value",
+          "Used for: outlined buttons, input focus states"
+        ]
       }
     },
     {
@@ -144,9 +201,16 @@
       "when": "user hovers over the component",
       "then": "it should apply effects instantly without transition",
       "application": {
-        "component": {"type": "button", "interactions": {"hover": {"backgroundColor": "#007bff", "duration": "0ms"}}},
+        "component": {
+          "type": "button",
+          "interactions": { "hover": { "backgroundColor": "#007bff", "duration": "0ms" } }
+        },
         "behavior": "Hover → Instant color change (no transition animation)",
-        "assertions": ["duration: 0ms (instant)", "No smooth transition", "Used for: immediate feedback"]
+        "assertions": [
+          "duration: 0ms (instant)",
+          "No smooth transition",
+          "Used for: immediate feedback"
+        ]
       }
     },
     {
@@ -155,7 +219,7 @@
       "when": "user hovers over the component",
       "then": "it should display at full opacity",
       "application": {
-        "component": {"type": "img", "interactions": {"hover": {"opacity": 1.0}}},
+        "component": { "type": "img", "interactions": { "hover": { "opacity": 1.0 } } },
         "behavior": "Hover → Full opacity (100%, completely opaque)",
         "assertions": ["opacity: 1.0 (maximum)", "Used for: brightening faded images on hover"]
       }
@@ -166,9 +230,13 @@
       "when": "user hovers over the component",
       "then": "it should become completely transparent",
       "application": {
-        "component": {"type": "div", "interactions": {"hover": {"opacity": 0.0}}},
+        "component": { "type": "div", "interactions": { "hover": { "opacity": 0.0 } } },
         "behavior": "Hover → Complete transparency (invisible)",
-        "assertions": ["opacity: 0.0 (minimum)", "Completely transparent", "Used for: fade-out effects"]
+        "assertions": [
+          "opacity: 0.0 (minimum)",
+          "Completely transparent",
+          "Used for: fade-out effects"
+        ]
       }
     },
     {

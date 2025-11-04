@@ -49,9 +49,13 @@
       "when": "page loads",
       "then": "it should fade in smoothly",
       "application": {
-        "component": {"type": "div", "interactions": {"entrance": {"animation": "fadeIn"}}},
+        "component": { "type": "div", "interactions": { "entrance": { "animation": "fadeIn" } } },
         "behavior": "Page load → Fade in (opacity: 0 → 1)",
-        "assertions": ["animation: 'fadeIn' (required)", "Default duration: 600ms", "Plays once on page load"]
+        "assertions": [
+          "animation: 'fadeIn' (required)",
+          "Default duration: 600ms",
+          "Plays once on page load"
+        ]
       }
     },
     {
@@ -60,9 +64,13 @@
       "when": "page loads",
       "then": "it should fade in while moving up from below",
       "application": {
-        "component": {"type": "div", "interactions": {"entrance": {"animation": "fadeInUp"}}},
+        "component": { "type": "div", "interactions": { "entrance": { "animation": "fadeInUp" } } },
         "behavior": "Page load → Fade in + translate upward (opacity: 0 → 1, translateY: +20px → 0)",
-        "assertions": ["animation: 'fadeInUp' enum value", "Combined opacity + transform", "Popular hero section animation"]
+        "assertions": [
+          "animation: 'fadeInUp' enum value",
+          "Combined opacity + transform",
+          "Popular hero section animation"
+        ]
       }
     },
     {
@@ -71,9 +79,13 @@
       "when": "page loads",
       "then": "it should zoom in from small to normal size",
       "application": {
-        "component": {"type": "div", "interactions": {"entrance": {"animation": "zoomIn"}}},
+        "component": { "type": "div", "interactions": { "entrance": { "animation": "zoomIn" } } },
         "behavior": "Page load → Zoom in (scale: 0.8 → 1.0)",
-        "assertions": ["animation: 'zoomIn' enum value", "Scale transformation", "Attention-grabbing effect"]
+        "assertions": [
+          "animation: 'zoomIn' enum value",
+          "Scale transformation",
+          "Attention-grabbing effect"
+        ]
       }
     },
     {
@@ -82,9 +94,16 @@
       "when": "page loads",
       "then": "it should wait 500ms before starting the entrance animation",
       "application": {
-        "component": {"type": "div", "interactions": {"entrance": {"animation": "fadeIn", "delay": "500ms"}}},
+        "component": {
+          "type": "div",
+          "interactions": { "entrance": { "animation": "fadeIn", "delay": "500ms" } }
+        },
         "timeline": "Page load → Wait 500ms → fadeIn animation",
-        "assertions": ["delay: '500ms' (pattern: ^[0-9]+(ms|s)$)", "Default: 0ms", "Choreographed sequences"]
+        "assertions": [
+          "delay: '500ms' (pattern: ^[0-9]+(ms|s)$)",
+          "Default: 0ms",
+          "Choreographed sequences"
+        ]
       }
     },
     {
@@ -93,7 +112,10 @@
       "when": "animation starts",
       "then": "it should complete the entrance animation in 1 second",
       "application": {
-        "component": {"type": "div", "interactions": {"entrance": {"animation": "fadeIn", "duration": "1000ms"}}},
+        "component": {
+          "type": "div",
+          "interactions": { "entrance": { "animation": "fadeIn", "duration": "1000ms" } }
+        },
         "behavior": "Slower animation: 1000ms (vs default 600ms)",
         "assertions": ["duration: '1000ms'", "Default: 600ms", "Control animation speed"]
       }
@@ -105,12 +127,25 @@
       "then": "each component should animate 100ms after the previous sibling",
       "application": {
         "components": [
-          {"type": "div", "interactions": {"entrance": {"animation": "fadeInUp", "stagger": "100ms"}}},
-          {"type": "div", "interactions": {"entrance": {"animation": "fadeInUp", "stagger": "100ms"}}},
-          {"type": "div", "interactions": {"entrance": {"animation": "fadeInUp", "stagger": "100ms"}}}
+          {
+            "type": "div",
+            "interactions": { "entrance": { "animation": "fadeInUp", "stagger": "100ms" } }
+          },
+          {
+            "type": "div",
+            "interactions": { "entrance": { "animation": "fadeInUp", "stagger": "100ms" } }
+          },
+          {
+            "type": "div",
+            "interactions": { "entrance": { "animation": "fadeInUp", "stagger": "100ms" } }
+          }
         ],
         "timeline": ["Item 1: 0ms", "Item 2: 100ms", "Item 3: 200ms"],
-        "assertions": ["stagger: '100ms' per sibling", "Cascading animation effect", "Used for: lists, grids"]
+        "assertions": [
+          "stagger: '100ms' per sibling",
+          "Cascading animation effect",
+          "Used for: lists, grids"
+        ]
       }
     },
     {
@@ -120,12 +155,35 @@
       "then": "it should wait 200ms base delay plus 50ms per sibling index before animating",
       "application": {
         "components": [
-          {"type": "div", "interactions": {"entrance": {"animation": "fadeIn", "delay": "200ms", "stagger": "50ms"}}},
-          {"type": "div", "interactions": {"entrance": {"animation": "fadeIn", "delay": "200ms", "stagger": "50ms"}}},
-          {"type": "div", "interactions": {"entrance": {"animation": "fadeIn", "delay": "200ms", "stagger": "50ms"}}}
+          {
+            "type": "div",
+            "interactions": {
+              "entrance": { "animation": "fadeIn", "delay": "200ms", "stagger": "50ms" }
+            }
+          },
+          {
+            "type": "div",
+            "interactions": {
+              "entrance": { "animation": "fadeIn", "delay": "200ms", "stagger": "50ms" }
+            }
+          },
+          {
+            "type": "div",
+            "interactions": {
+              "entrance": { "animation": "fadeIn", "delay": "200ms", "stagger": "50ms" }
+            }
+          }
         ],
-        "timeline": ["Item 1: 200ms (base delay)", "Item 2: 250ms (200ms + 50ms)", "Item 3: 300ms (200ms + 100ms)"],
-        "assertions": ["Combined: delay + stagger", "delay = base, stagger = incremental", "Complex choreography"]
+        "timeline": [
+          "Item 1: 200ms (base delay)",
+          "Item 2: 250ms (200ms + 50ms)",
+          "Item 3: 300ms (200ms + 100ms)"
+        ],
+        "assertions": [
+          "Combined: delay + stagger",
+          "delay = base, stagger = incremental",
+          "Complex choreography"
+        ]
       }
     },
     {
@@ -134,10 +192,19 @@
       "when": "page loads",
       "then": "it should wait the delay period then animate for the specified duration",
       "application": {
-        "component": {"type": "div", "interactions": {"entrance": {"animation": "fadeInUp", "delay": "300ms", "duration": "800ms"}}},
+        "component": {
+          "type": "div",
+          "interactions": {
+            "entrance": { "animation": "fadeInUp", "delay": "300ms", "duration": "800ms" }
+          }
+        },
         "timeline": ["Page load → Wait 300ms → fadeInUp animation (800ms duration) → Complete"],
         "totalTime": "1100ms (300ms delay + 800ms duration)",
-        "assertions": ["All properties: animation + delay + duration", "Full control over timing", "Complete configuration"]
+        "assertions": [
+          "All properties: animation + delay + duration",
+          "Full control over timing",
+          "Complete configuration"
+        ]
       }
     },
     {

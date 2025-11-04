@@ -63,9 +63,13 @@
       "when": "user clicks the button",
       "then": "it should play a pulse animation",
       "application": {
-        "component": {"type": "button", "interactions": {"click": {"animation": "pulse"}}},
+        "component": { "type": "button", "interactions": { "click": { "animation": "pulse" } } },
         "behavior": "Click → pulse animation (scale + opacity effect)",
-        "assertions": ["animation: 'pulse' enum value", "Visual feedback on click", "CSS animation or JS-driven"]
+        "assertions": [
+          "animation: 'pulse' enum value",
+          "Visual feedback on click",
+          "CSS animation or JS-driven"
+        ]
       }
     },
     {
@@ -74,9 +78,13 @@
       "when": "user clicks the button",
       "then": "it should play a ripple animation from the click point",
       "application": {
-        "component": {"type": "button", "interactions": {"click": {"animation": "ripple"}}},
+        "component": { "type": "button", "interactions": { "click": { "animation": "ripple" } } },
         "behavior": "Click → ripple animation originates from click coordinates (Material Design style)",
-        "assertions": ["animation: 'ripple' enum value", "Origin point: click coordinates", "Material Design pattern"]
+        "assertions": [
+          "animation: 'ripple' enum value",
+          "Origin point: click coordinates",
+          "Material Design pattern"
+        ]
       }
     },
     {
@@ -85,9 +93,13 @@
       "when": "user clicks the button",
       "then": "it should navigate to the contact page",
       "application": {
-        "component": {"type": "button", "interactions": {"click": {"navigate": "/contact"}}},
+        "component": { "type": "button", "interactions": { "click": { "navigate": "/contact" } } },
         "behavior": "Click → Navigate to /contact (internal routing)",
-        "assertions": ["navigate: '/contact' (internal path)", "SPA routing (no page reload)", "URL changes to /contact"]
+        "assertions": [
+          "navigate: '/contact' (internal path)",
+          "SPA routing (no page reload)",
+          "URL changes to /contact"
+        ]
       }
     },
     {
@@ -96,9 +108,16 @@
       "when": "user clicks the button",
       "then": "it should navigate to the pricing section on the same page",
       "application": {
-        "component": {"type": "button", "interactions": {"click": {"navigate": "#pricing-section"}}},
+        "component": {
+          "type": "button",
+          "interactions": { "click": { "navigate": "#pricing-section" } }
+        },
         "behavior": "Click → Scroll to #pricing-section anchor on same page",
-        "assertions": ["navigate: '#pricing-section' (anchor link)", "Smooth scroll to element", "No route change"]
+        "assertions": [
+          "navigate: '#pricing-section' (anchor link)",
+          "Smooth scroll to element",
+          "No route change"
+        ]
       }
     },
     {
@@ -107,9 +126,16 @@
       "when": "user clicks the button",
       "then": "it should open the URL in the same tab",
       "application": {
-        "component": {"type": "button", "interactions": {"click": {"openUrl": "https://example.com"}}},
+        "component": {
+          "type": "button",
+          "interactions": { "click": { "openUrl": "https://example.com" } }
+        },
         "behavior": "Click → Opens https://example.com in same tab (default: openInNewTab = false)",
-        "assertions": ["openUrl: External URL", "Same tab navigation", "Full page load (not SPA routing)"]
+        "assertions": [
+          "openUrl: External URL",
+          "Same tab navigation",
+          "Full page load (not SPA routing)"
+        ]
       }
     },
     {
@@ -118,7 +144,10 @@
       "when": "user clicks the button",
       "then": "it should open the URL in a new tab",
       "application": {
-        "component": {"type": "button", "interactions": {"click": {"openUrl": "https://example.com", "openInNewTab": true}}},
+        "component": {
+          "type": "button",
+          "interactions": { "click": { "openUrl": "https://example.com", "openInNewTab": true } }
+        },
         "behavior": "Click → Opens https://example.com in new tab (target='_blank')",
         "assertions": ["openUrl + openInNewTab: true", "New tab/window", "Preserves current page"]
       }
@@ -129,9 +158,16 @@
       "when": "user clicks the button",
       "then": "it should smoothly scroll to the hero section",
       "application": {
-        "component": {"type": "button", "interactions": {"click": {"scrollTo": "#hero-section"}}},
+        "component": {
+          "type": "button",
+          "interactions": { "click": { "scrollTo": "#hero-section" } }
+        },
         "behavior": "Click → Smooth scroll to element with id='hero-section'",
-        "assertions": ["scrollTo: '#hero-section' (pattern: ^#[a-zA-Z][a-zA-Z0-9-]*$)", "Smooth scroll behavior", "Element must exist"]
+        "assertions": [
+          "scrollTo: '#hero-section' (pattern: ^#[a-zA-Z][a-zA-Z0-9-]*$)",
+          "Smooth scroll behavior",
+          "Element must exist"
+        ]
       }
     },
     {
@@ -140,9 +176,16 @@
       "when": "user clicks the button",
       "then": "it should show the mobile menu if hidden, or hide it if shown",
       "application": {
-        "component": {"type": "button", "interactions": {"click": {"toggleElement": "#mobile-menu"}}},
+        "component": {
+          "type": "button",
+          "interactions": { "click": { "toggleElement": "#mobile-menu" } }
+        },
         "behavior": "Click → Toggle visibility of element with id='mobile-menu' (show ↔ hide)",
-        "assertions": ["toggleElement: '#mobile-menu'", "Toggle display/visibility", "Hamburger menu pattern"]
+        "assertions": [
+          "toggleElement: '#mobile-menu'",
+          "Toggle display/visibility",
+          "Hamburger menu pattern"
+        ]
       }
     },
     {
@@ -151,9 +194,16 @@
       "when": "user clicks the button",
       "then": "it should submit the contact form",
       "application": {
-        "component": {"type": "button", "interactions": {"click": {"submitForm": "#contact-form"}}},
+        "component": {
+          "type": "button",
+          "interactions": { "click": { "submitForm": "#contact-form" } }
+        },
         "behavior": "Click → Programmatically submit form with id='contact-form'",
-        "assertions": ["submitForm: '#contact-form'", "Triggers form submission", "Alternative to <input type='submit'>"]
+        "assertions": [
+          "submitForm: '#contact-form'",
+          "Triggers form submission",
+          "Alternative to <input type='submit'>"
+        ]
       }
     },
     {
@@ -162,9 +212,20 @@
       "when": "user clicks the button",
       "then": "it should play pulse animation then navigate to signup page",
       "application": {
-        "component": {"type": "button", "interactions": {"click": {"animation": "pulse", "navigate": "/signup"}}},
-        "sequence": ["1. Click", "2. Pulse animation plays", "3. Navigation to /signup after animation completes"],
-        "assertions": ["Combined: animation + navigate", "Sequential execution", "Visual feedback before navigation"]
+        "component": {
+          "type": "button",
+          "interactions": { "click": { "animation": "pulse", "navigate": "/signup" } }
+        },
+        "sequence": [
+          "1. Click",
+          "2. Pulse animation plays",
+          "3. Navigation to /signup after animation completes"
+        ],
+        "assertions": [
+          "Combined: animation + navigate",
+          "Sequential execution",
+          "Visual feedback before navigation"
+        ]
       }
     },
     {
@@ -173,7 +234,7 @@
       "when": "user clicks the button",
       "then": "it should play a bounce animation",
       "application": {
-        "component": {"type": "button", "interactions": {"click": {"animation": "bounce"}}},
+        "component": { "type": "button", "interactions": { "click": { "animation": "bounce" } } },
         "behavior": "Click → bounce animation (vertical movement effect)",
         "assertions": ["animation: 'bounce' enum value", "Vertical animation", "Playful feedback"]
       }
@@ -184,9 +245,13 @@
       "when": "user clicks the button",
       "then": "it should not play any animation",
       "application": {
-        "component": {"type": "button", "interactions": {"click": {"animation": "none"}}},
+        "component": { "type": "button", "interactions": { "click": { "animation": "none" } } },
         "behavior": "Click → No animation (explicit opt-out)",
-        "assertions": ["animation: 'none' enum value", "Disables default animations", "Minimal UI preference"]
+        "assertions": [
+          "animation: 'none' enum value",
+          "Disables default animations",
+          "Minimal UI preference"
+        ]
       }
     },
     {

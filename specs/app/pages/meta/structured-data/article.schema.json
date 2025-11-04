@@ -194,7 +194,11 @@
           "@context": "https://schema.org",
           "@type": "Article",
           "headline": "Article Title",
-          "image": ["https://example.com/hero.jpg", "https://example.com/thumb.jpg", "https://example.com/square.jpg"]
+          "image": [
+            "https://example.com/hero.jpg",
+            "https://example.com/thumb.jpg",
+            "https://example.com/square.jpg"
+          ]
         },
         "assertions": [
           "image: String URL or array of URLs",

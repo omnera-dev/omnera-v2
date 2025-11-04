@@ -219,11 +219,31 @@
           "@context": "https://schema.org",
           "@type": "FAQPage",
           "mainEntity": [
-            {"@type": "Question", "name": "Q1: Shipping policy?", "acceptedAnswer": {"@type": "Answer", "text": "Answer 1"}},
-            {"@type": "Question", "name": "Q2: Return policy?", "acceptedAnswer": {"@type": "Answer", "text": "Answer 2"}},
-            {"@type": "Question", "name": "Q3: Payment methods?", "acceptedAnswer": {"@type": "Answer", "text": "Answer 3"}},
-            {"@type": "Question", "name": "Q4: Tracking orders?", "acceptedAnswer": {"@type": "Answer", "text": "Answer 4"}},
-            {"@type": "Question", "name": "Q5: International shipping?", "acceptedAnswer": {"@type": "Answer", "text": "Answer 5"}}
+            {
+              "@type": "Question",
+              "name": "Q1: Shipping policy?",
+              "acceptedAnswer": { "@type": "Answer", "text": "Answer 1" }
+            },
+            {
+              "@type": "Question",
+              "name": "Q2: Return policy?",
+              "acceptedAnswer": { "@type": "Answer", "text": "Answer 2" }
+            },
+            {
+              "@type": "Question",
+              "name": "Q3: Payment methods?",
+              "acceptedAnswer": { "@type": "Answer", "text": "Answer 3" }
+            },
+            {
+              "@type": "Question",
+              "name": "Q4: Tracking orders?",
+              "acceptedAnswer": { "@type": "Answer", "text": "Answer 4" }
+            },
+            {
+              "@type": "Question",
+              "name": "Q5: International shipping?",
+              "acceptedAnswer": { "@type": "Answer", "text": "Answer 5" }
+            }
           ]
         },
         "note": "5+ Q&A pairs recommended for comprehensive FAQ page",

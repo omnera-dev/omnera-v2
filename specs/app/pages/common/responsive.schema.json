@@ -109,7 +109,10 @@
       "when": "viewed on mobile device",
       "then": "it should apply mobile className and styles",
       "application": {
-        "component": {"type": "h1", "responsive": {"mobile": {"props": {"className": "text-2xl text-center"}}}},
+        "component": {
+          "type": "h1",
+          "responsive": { "mobile": { "props": { "className": "text-2xl text-center" } } }
+        },
         "breakpoint": "mobile (<640px)",
         "assertions": ["Mobile: text-2xl text-center", "Optimized for small screens"]
       }
@@ -120,8 +123,19 @@
       "when": "viewport changes from mobile to tablet to desktop",
       "then": "content should update to match each breakpoint",
       "application": {
-        "component": {"type": "h1", "responsive": {"mobile": {"content": "Welcome!"}, "md": {"content": "Welcome to Our Platform"}, "lg": {"content": "Welcome to Our Amazing Platform"}}},
-        "assertions": ["Mobile: 'Welcome!'", "Tablet (md): 'Welcome to Our Platform'", "Desktop (lg): Full text"]
+        "component": {
+          "type": "h1",
+          "responsive": {
+            "mobile": { "content": "Welcome!" },
+            "md": { "content": "Welcome to Our Platform" },
+            "lg": { "content": "Welcome to Our Amazing Platform" }
+          }
+        },
+        "assertions": [
+          "Mobile: 'Welcome!'",
+          "Tablet (md): 'Welcome to Our Platform'",
+          "Desktop (lg): Full text"
+        ]
       }
     },
     {
@@ -130,8 +144,15 @@
       "when": "viewport changes from mobile to desktop",
       "then": "component should be hidden on mobile and shown on large screens",
       "application": {
-        "component": {"type": "div", "responsive": {"mobile": {"visible": false}, "lg": {"visible": true}}},
-        "assertions": ["Mobile: hidden (visible=false)", "Desktop (lg): shown (visible=true)", "Progressive disclosure"]
+        "component": {
+          "type": "div",
+          "responsive": { "mobile": { "visible": false }, "lg": { "visible": true } }
+        },
+        "assertions": [
+          "Mobile: hidden (visible=false)",
+          "Desktop (lg): shown (visible=true)",
+          "Progressive disclosure"
+        ]
       }
     },
     {
@@ -140,8 +161,23 @@
       "when": "viewport changes",
       "then": "it should render different child components based on breakpoint",
       "application": {
-        "component": {"type": "nav", "responsive": {"mobile": {"children": [{"type": "icon", "props": {"name": "menu"}}]}, "lg": {"children": [{"type": "a", "content": "Home"}, {"type": "a", "content": "About"}]}}},
-        "assertions": ["Mobile: Hamburger icon", "Desktop: Full navigation links", "Adaptive UI structure"]
+        "component": {
+          "type": "nav",
+          "responsive": {
+            "mobile": { "children": [{ "type": "icon", "props": { "name": "menu" } }] },
+            "lg": {
+              "children": [
+                { "type": "a", "content": "Home" },
+                { "type": "a", "content": "About" }
+              ]
+            }
+          }
+        },
+        "assertions": [
+          "Mobile: Hamburger icon",
+          "Desktop: Full navigation links",
+          "Adaptive UI structure"
+        ]
       }
     },
     {
@@ -150,7 +186,10 @@
       "when": "viewport reaches 640px (sm)",
       "then": "it should apply sm-specific props",
       "application": {
-        "component": {"type": "div", "responsive": {"sm": {"props": {"className": "max-w-sm"}}}},
+        "component": {
+          "type": "div",
+          "responsive": { "sm": { "props": { "className": "max-w-sm" } } }
+        },
         "breakpoint": "sm (≥640px)",
         "assertions": ["Small screens: max-w-sm", "Tailwind breakpoint: sm"]
       }
@@ -161,7 +200,10 @@
       "when": "viewport reaches 768px (md)",
       "then": "it should apply md-specific props",
       "application": {
-        "component": {"type": "div", "responsive": {"md": {"props": {"className": "max-w-md grid grid-cols-2"}}}},
+        "component": {
+          "type": "div",
+          "responsive": { "md": { "props": { "className": "max-w-md grid grid-cols-2" } } }
+        },
         "breakpoint": "md (≥768px)",
         "assertions": ["Medium screens: max-w-md grid-cols-2", "Tablet layout"]
       }
@@ -172,8 +214,14 @@
       "when": "viewport reaches extra large sizes",
       "then": "it should apply xl/2xl-specific props for very wide screens",
       "application": {
-        "component": {"type": "div", "responsive": {"xl": {"props": {"className": "max-w-7xl"}}, "2xl": {"props": {"className": "max-w-screen-2xl"}}}},
-        "breakpoints": {"xl": "≥1280px", "2xl": "≥1536px"},
+        "component": {
+          "type": "div",
+          "responsive": {
+            "xl": { "props": { "className": "max-w-7xl" } },
+            "2xl": { "props": { "className": "max-w-screen-2xl" } }
+          }
+        },
+        "breakpoints": { "xl": "≥1280px", "2xl": "≥1536px" },
         "assertions": ["Extra large: max-w-7xl", "Ultra wide: max-w-screen-2xl"]
       }
     },
@@ -183,9 +231,26 @@
       "when": "viewport expands from mobile to desktop",
       "then": "each breakpoint should override the previous, creating progressive enhancement",
       "application": {
-        "component": {"type": "h1", "responsive": {"mobile": {"props": {"className": "text-xl"}}, "sm": {"props": {"className": "text-2xl"}}, "md": {"props": {"className": "text-4xl"}}, "lg": {"props": {"className": "text-6xl"}}}},
-        "progression": ["mobile: text-xl", "sm: text-2xl (overrides mobile)", "md: text-4xl (overrides sm)", "lg: text-6xl (overrides md)"],
-        "assertions": ["Mobile-first design", "Progressive enhancement", "Each breakpoint builds on previous"]
+        "component": {
+          "type": "h1",
+          "responsive": {
+            "mobile": { "props": { "className": "text-xl" } },
+            "sm": { "props": { "className": "text-2xl" } },
+            "md": { "props": { "className": "text-4xl" } },
+            "lg": { "props": { "className": "text-6xl" } }
+          }
+        },
+        "progression": [
+          "mobile: text-xl",
+          "sm: text-2xl (overrides mobile)",
+          "md: text-4xl (overrides sm)",
+          "lg: text-6xl (overrides md)"
+        ],
+        "assertions": [
+          "Mobile-first design",
+          "Progressive enhancement",
+          "Each breakpoint builds on previous"
+        ]
       }
     },
     {
@@ -194,8 +259,22 @@
       "when": "viewport changes",
       "then": "all three override types should apply simultaneously at each breakpoint",
       "application": {
-        "component": {"type": "button", "responsive": {"mobile": {"props": {"className": "btn-sm"}, "content": "Menu", "visible": true}, "lg": {"props": {"className": "btn-lg"}, "content": "Open Navigation", "visible": true}}},
-        "assertions": ["Mobile: btn-sm + 'Menu' + visible", "Desktop: btn-lg + 'Open Navigation' + visible", "All override types simultaneously"]
+        "component": {
+          "type": "button",
+          "responsive": {
+            "mobile": { "props": { "className": "btn-sm" }, "content": "Menu", "visible": true },
+            "lg": {
+              "props": { "className": "btn-lg" },
+              "content": "Open Navigation",
+              "visible": true
+            }
+          }
+        },
+        "assertions": [
+          "Mobile: btn-sm + 'Menu' + visible",
+          "Desktop: btn-lg + 'Open Navigation' + visible",
+          "All override types simultaneously"
+        ]
       }
     },
     {
@@ -204,8 +283,34 @@
       "when": "switching between mobile and desktop views",
       "then": "mobile should show hamburger menu, desktop should show full navigation links",
       "application": {
-        "component": {"type": "nav", "responsive": {"mobile": {"visible": true, "children": [{"type": "button", "props": {"ariaLabel": "Menu"}, "children": [{"type": "icon", "props": {"name": "menu"}}]}]}, "lg": {"visible": true, "children": [{"type": "a", "props": {"href": "/"}, "content": "Home"}, {"type": "a", "props": {"href": "/about"}, "content": "About"}, {"type": "a", "props": {"href": "/contact"}, "content": "Contact"}]}}},
-        "assertions": ["Mobile: Hamburger button with menu icon", "Desktop: Full navigation with 3 links", "Responsive navigation pattern"]
+        "component": {
+          "type": "nav",
+          "responsive": {
+            "mobile": {
+              "visible": true,
+              "children": [
+                {
+                  "type": "button",
+                  "props": { "ariaLabel": "Menu" },
+                  "children": [{ "type": "icon", "props": { "name": "menu" } }]
+                }
+              ]
+            },
+            "lg": {
+              "visible": true,
+              "children": [
+                { "type": "a", "props": { "href": "/" }, "content": "Home" },
+                { "type": "a", "props": { "href": "/about" }, "content": "About" },
+                { "type": "a", "props": { "href": "/contact" }, "content": "Contact" }
+              ]
+            }
+          }
+        },
+        "assertions": [
+          "Mobile: Hamburger button with menu icon",
+          "Desktop: Full navigation with 3 links",
+          "Responsive navigation pattern"
+        ]
       }
     },
     {

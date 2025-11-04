@@ -379,9 +379,9 @@
       "then": "it should specify daily operating hours",
       "application": {
         "examples": {
-          "standard": {"opens": "09:00", "closes": "17:00"},
-          "lateNight": {"opens": "18:00", "closes": "02:00"},
-          "24hours": {"opens": "00:00", "closes": "23:59"}
+          "standard": { "opens": "09:00", "closes": "17:00" },
+          "lateNight": { "opens": "18:00", "closes": "02:00" },
+          "24hours": { "opens": "00:00", "closes": "23:59" }
         },
         "assertions": [
           "opens: HH:MM format (24-hour clock)",
@@ -420,7 +420,10 @@
             "latitude": "45.5152",
             "longitude": "-122.6784"
           },
-          "sameAs": ["https://www.facebook.com/riversidevet", "https://www.instagram.com/riversidevet"],
+          "sameAs": [
+            "https://www.facebook.com/riversidevet",
+            "https://www.instagram.com/riversidevet"
+          ],
           "openingHoursSpecification": [
             {
               "@type": "OpeningHoursSpecification",
