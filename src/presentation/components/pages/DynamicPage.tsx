@@ -819,7 +819,8 @@ export function DynamicPage({
         {page.layout?.sidebar && <Sidebar {...page.layout.sidebar} />}
 
         <main
-          data-testid={page.name ? `page-${page.name}` : undefined}
+          data-testid="page-content"
+          data-page-name={page.name}
           data-page-id={page.id}
           style={{ minHeight: '1px' }}
         >

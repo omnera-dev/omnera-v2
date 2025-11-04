@@ -24,7 +24,7 @@ test.describe('Page Layout', () => {
   // One test per spec in schema - defines EXHAUSTIVE acceptance criteria
   // ============================================================================
 
-  test.fixme(
+  test(
     'APP-PAGES-LAYOUT-001: should orchestrate global page layout',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
