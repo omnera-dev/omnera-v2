@@ -111,7 +111,77 @@ test.describe('Font Configuration', () => {
             name: 'home',
             path: '/',
             meta: { lang: 'en-US', title: 'Test', description: 'Test page' },
-            sections: [],
+            sections: [
+              {
+                type: 'div',
+                props: {
+                  'data-testid': 'font-weights',
+                  style: {
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: '16px',
+                    padding: '20px',
+                  },
+                },
+                children: [
+                  {
+                    type: 'div',
+                    props: {
+                      style: {
+                        fontFamily: 'Inter, sans-serif',
+                        fontWeight: '300',
+                        fontSize: '18px',
+                      },
+                    },
+                    children: ['Font Weight 300 - Light'],
+                  },
+                  {
+                    type: 'div',
+                    props: {
+                      style: {
+                        fontFamily: 'Inter, sans-serif',
+                        fontWeight: '400',
+                        fontSize: '18px',
+                      },
+                    },
+                    children: ['Font Weight 400 - Regular'],
+                  },
+                  {
+                    type: 'div',
+                    props: {
+                      style: {
+                        fontFamily: 'Inter, sans-serif',
+                        fontWeight: '500',
+                        fontSize: '18px',
+                      },
+                    },
+                    children: ['Font Weight 500 - Medium'],
+                  },
+                  {
+                    type: 'div',
+                    props: {
+                      style: {
+                        fontFamily: 'Inter, sans-serif',
+                        fontWeight: '600',
+                        fontSize: '18px',
+                      },
+                    },
+                    children: ['Font Weight 600 - Semibold'],
+                  },
+                  {
+                    type: 'div',
+                    props: {
+                      style: {
+                        fontFamily: 'Inter, sans-serif',
+                        fontWeight: '700',
+                        fontSize: '18px',
+                      },
+                    },
+                    children: ['Font Weight 700 - Bold'],
+                  },
+                ],
+              },
+            ],
           },
         ],
       })
@@ -120,7 +190,13 @@ test.describe('Font Configuration', () => {
       await page.goto('/')
 
       // THEN: it should validate weight values from 100-900 in increments of 100
-      await expect(page.locator('[data-testid="font-weights"]')).toBeVisible()
+      // Visual validation shows weight progression
+      await expect(page.locator('[data-testid="font-weights"]')).toHaveScreenshot(
+        'font-003-weights.png',
+        {
+          animations: 'disabled',
+        }
+      )
     }
   )
 
@@ -476,6 +552,7 @@ test.describe('Font Configuration', () => {
             title: {
               family: 'Bely Display',
               fallback: 'Georgia, serif',
+              size: '32px',
             },
             body: {
               family: 'Inter',
@@ -486,6 +563,7 @@ test.describe('Font Configuration', () => {
             mono: {
               family: 'JetBrains Mono',
               fallback: 'monospace',
+              size: '14px',
             },
           },
         },
@@ -494,16 +572,54 @@ test.describe('Font Configuration', () => {
             path: '/',
             sections: [
               {
-                type: 'heading',
-                content: 'Welcome',
-              },
-              {
-                type: 'paragraph',
-                content: 'Body text',
-              },
-              {
-                type: 'code',
-                content: 'console.log()',
+                type: 'div',
+                props: {
+                  'data-testid': 'font-system',
+                  style: {
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: '24px',
+                    padding: '20px',
+                  },
+                },
+                children: [
+                  {
+                    type: 'h1',
+                    props: {
+                      style: {
+                        fontFamily: '$theme.fonts.title.family',
+                        fontSize: '$theme.fonts.title.size',
+                      },
+                    },
+                    children: ['Welcome to Omnera'],
+                  },
+                  {
+                    type: 'p',
+                    props: {
+                      style: {
+                        fontFamily: '$theme.fonts.body.family',
+                        fontSize: '$theme.fonts.body.size',
+                        lineHeight: '$theme.fonts.body.lineHeight',
+                      },
+                    },
+                    children: [
+                      'This is body text using Inter font family with 16px size and 1.5 line-height for optimal readability.',
+                    ],
+                  },
+                  {
+                    type: 'code',
+                    props: {
+                      style: {
+                        fontFamily: '$theme.fonts.mono.family',
+                        fontSize: '$theme.fonts.mono.size',
+                        display: 'block',
+                        padding: '12px',
+                        backgroundColor: '#f5f5f5',
+                      },
+                    },
+                    children: ['console.log("Hello, World!")'],
+                  },
+                ],
               },
             ],
           },
@@ -513,22 +629,21 @@ test.describe('Font Configuration', () => {
       // WHEN/THEN: Streamlined workflow testing integration points
       await page.goto('/')
 
-      // Validate CSS custom properties generated for font system
-      const css = await page.locator('style').first().textContent()
-      expect(css).toContain(':root')
-      expect(css).toMatch(/--font-title-family:\s*["']?Bely Display["']?/)
-      expect(css).toMatch(/--font-body-family:\s*["']?Inter["']?/)
-      expect(css).toMatch(/--font-mono-family:\s*["']?JetBrains Mono["']?/)
+      // 1. Structure validation (ARIA)
+      await expect(page.locator('[data-testid="font-system"]')).toMatchAriaSnapshot(`
+        - group:
+          - heading "Welcome to Omnera" [level=1]
+          - paragraph: "This is body text using Inter font family with 16px size and 1.5 line-height for optimal readability."
+          - code: "console.log(\\"Hello, World!\\")"
+      `)
 
-      // Verify title font
-      await expect(page.locator('h1')).toHaveCSS('font-family', /Bely Display/)
-
-      // Verify body font
-      await expect(page.locator('p')).toHaveCSS('font-family', /Inter/)
-      await expect(page.locator('p')).toHaveCSS('font-size', '16px')
-
-      // Verify mono font
-      await expect(page.locator('code')).toHaveCSS('font-family', /JetBrains Mono/)
+      // 2. Visual validation (Screenshot) - captures all typography rendering
+      await expect(page.locator('[data-testid="font-system"]')).toHaveScreenshot(
+        'font-regression-001-complete-system.png',
+        {
+          animations: 'disabled',
+        }
+      )
 
       // Focus on workflow continuity, not exhaustive coverage
     }
