@@ -24,7 +24,7 @@ test.describe('Block Template', () => {
   // One test per spec in schema - defines EXHAUSTIVE acceptance criteria
   // ============================================================================
 
-  test.fixme(
+  test(
     'APP-BLOCKS-BLOCK-001: should validate minimal block definition at build time',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -37,7 +37,7 @@ test.describe('Block Template', () => {
             name: 'home',
             path: '/',
             meta: { lang: 'en-US', title: 'Test', description: 'Test page' },
-            sections: [],
+            sections: [{ block: 'simple-block' }],
           },
         ],
       })
