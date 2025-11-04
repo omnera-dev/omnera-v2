@@ -50,7 +50,7 @@ test.describe('Block Template', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-BLOCKS-BLOCK-002: should use URL-friendly naming convention for data-testid',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
