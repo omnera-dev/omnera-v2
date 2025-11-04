@@ -67,7 +67,11 @@ test.describe('Block Template', () => {
             name: 'home',
             path: '/',
             meta: { lang: 'en-US', title: 'Test', description: 'Test page' },
-            sections: [],
+            sections: [
+              { block: 'icon-badge' },
+              { block: 'section-header' },
+              { block: 'feature-card' },
+            ],
           },
         ],
       })
@@ -101,7 +105,7 @@ test.describe('Block Template', () => {
             name: 'home',
             path: '/',
             meta: { lang: 'en-US', title: 'Test', description: 'Test page' },
-            sections: [],
+            sections: [{ block: 'icon-badge' }],
           },
         ],
       })
@@ -134,7 +138,7 @@ test.describe('Block Template', () => {
             name: 'home',
             path: '/',
             meta: { lang: 'en-US', title: 'Test', description: 'Test page' },
-            sections: [],
+            sections: [{ block: 'layout' }, { block: 'row' }, { block: 'cta' }],
           },
         ],
       })

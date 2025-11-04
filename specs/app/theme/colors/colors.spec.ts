@@ -148,7 +148,7 @@ test.describe('Color Palette', () => {
             name: 'home',
             path: '/',
             meta: { lang: 'en-US', title: 'Test', description: 'Test page' },
-            sections: [],
+            sections: [{ type: 'div', props: { 'data-testid': 'color-danger' } }],
           },
         ],
       })
@@ -187,7 +187,7 @@ test.describe('Color Palette', () => {
             name: 'home',
             path: '/',
             meta: { lang: 'en-US', title: 'Test', description: 'Test page' },
-            sections: [],
+            sections: [{ type: 'div', props: { 'data-testid': 'color-danger-semi' } }],
           },
         ],
       })
@@ -226,7 +226,7 @@ test.describe('Color Palette', () => {
             name: 'home',
             path: '/',
             meta: { lang: 'en-US', title: 'Test', description: 'Test page' },
-            sections: [],
+            sections: [{ type: 'div', props: { 'data-testid': 'color-primary' } }],
           },
         ],
       })
@@ -265,7 +265,7 @@ test.describe('Color Palette', () => {
             name: 'home',
             path: '/',
             meta: { lang: 'en-US', title: 'Test', description: 'Test page' },
-            sections: [],
+            sections: [{ type: 'div', props: { 'data-testid': 'color-primary-overlay' } }],
           },
         ],
       })
@@ -301,7 +301,12 @@ test.describe('Color Palette', () => {
             name: 'home',
             path: '/',
             meta: { lang: 'en-US', title: 'Test', description: 'Test page' },
-            sections: [],
+            sections: [
+              { type: 'div', content: 'Primary', props: { 'data-testid': 'color-primary' } },
+              { type: 'div', content: 'Hover', props: { 'data-testid': 'color-primary-hover' } },
+              { type: 'div', content: 'Light', props: { 'data-testid': 'color-primary-light' } },
+              { type: 'div', content: 'Dark', props: { 'data-testid': 'color-primary-dark' } },
+            ],
           },
         ],
       })
@@ -338,7 +343,10 @@ test.describe('Color Palette', () => {
             name: 'home',
             path: '/',
             meta: { lang: 'en-US', title: 'Test', description: 'Test page' },
-            sections: [],
+            sections: [
+              { type: 'div', content: 'Gray 100', props: { 'data-testid': 'color-gray-100' } },
+              { type: 'div', content: 'Gray 900', props: { 'data-testid': 'color-gray-900' } },
+            ],
           },
         ],
       })
@@ -376,7 +384,12 @@ test.describe('Color Palette', () => {
             name: 'home',
             path: '/',
             meta: { lang: 'en-US', title: 'Test', description: 'Test page' },
-            sections: [],
+            sections: [
+              { type: 'div', content: 'Primary', props: { 'data-testid': 'color-primary' } },
+              { type: 'div', content: 'Success', props: { 'data-testid': 'color-success' } },
+              { type: 'div', content: 'Danger', props: { 'data-testid': 'color-danger' } },
+              { type: 'div', content: 'Warning', props: { 'data-testid': 'color-warning' } },
+            ],
           },
         ],
       })
@@ -412,7 +425,11 @@ test.describe('Color Palette', () => {
             name: 'home',
             path: '/',
             meta: { lang: 'en-US', title: 'Test', description: 'Test page' },
-            sections: [],
+            sections: [
+              { type: 'div', content: 'Text Primary', props: { 'data-testid': 'color-text-primary' } },
+              { type: 'div', content: 'Background', props: { 'data-testid': 'color-background-light' } },
+              { type: 'div', content: 'Border', props: { 'data-testid': 'color-border-subtle' } },
+            ],
           },
         ],
       })
