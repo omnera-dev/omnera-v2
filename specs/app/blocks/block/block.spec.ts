@@ -189,7 +189,7 @@ test.describe('Block Template', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-BLOCKS-BLOCK-006: should render nested child components',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
