@@ -187,7 +187,11 @@ export function ComponentRenderer({
     }),
     ...(blockName &&
       hasChildren &&
-      (type === 'div' || type === 'container' || type === 'flex' || type === 'grid' || type === 'card') && {
+      (type === 'div' ||
+        type === 'container' ||
+        type === 'flex' ||
+        type === 'grid' ||
+        type === 'card') && {
         role: 'group',
       }),
     ...(firstTranslationKey &&

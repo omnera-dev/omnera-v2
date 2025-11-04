@@ -271,8 +271,7 @@ test.describe('Reusable Blocks', () => {
       // THEN: it should reduce code duplication and simplify pattern updates
       // ARIA snapshot validates nested structure
       await expect(page.locator('[data-block="parent-block"]')).toMatchAriaSnapshot(`
-        - group:
-          - generic: "child"
+        - group: child
       `)
     }
   )
