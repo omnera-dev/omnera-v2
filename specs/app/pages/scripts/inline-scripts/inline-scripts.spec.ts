@@ -19,7 +19,7 @@ import { test, expect } from '@/specs/fixtures'
  */
 
 test.describe('Inline Scripts', () => {
-  test.fixme(
+  test(
     'APP-PAGES-INLINE-001: should inject inline JavaScript code',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -28,7 +28,7 @@ test.describe('Inline Scripts', () => {
         name: 'test-app',
         pages: [
           {
-            name: 'Test',
+            name: 'test_page',
             path: '/',
             meta: { lang: 'en-US', title: 'Test', description: 'Test' },
             scripts: { inlineScripts: [{ code: "console.log('Page loaded');" }] },
