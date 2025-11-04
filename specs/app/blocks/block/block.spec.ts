@@ -82,7 +82,7 @@ test.describe('Block Template', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-BLOCKS-BLOCK-003: should reject invalid names at build time',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -93,7 +93,18 @@ test.describe('Block Template', () => {
         { name: 'section-header-2', type: 'div' },
         { name: 'feature-list-item', type: 'div' },
       ]
-      await startServerWithSchema({ name: 'test-app', blocks: validBlocks })
+      await startServerWithSchema({
+        name: 'test-app',
+        blocks: validBlocks,
+        pages: [
+          {
+            name: 'home',
+            path: '/',
+            meta: { lang: 'en-US', title: 'Test', description: 'Test page' },
+            sections: [],
+          },
+        ],
+      })
 
       // WHEN: name matches ^[a-z][a-z0-9-]*$ (lowercase, hyphens, no spaces)
       await page.goto('/')
