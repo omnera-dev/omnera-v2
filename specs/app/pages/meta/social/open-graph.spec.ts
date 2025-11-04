@@ -519,7 +519,10 @@ test.describe('Open Graph Metadata', () => {
         'content',
         'Complete Open Graph Test'
       )
-      await expect(page.locator('meta[property="og:description"]')).toBeVisible()
+      await expect(page.locator('meta[property="og:description"]')).toHaveAttribute(
+        'content',
+        'Testing all Open Graph features'
+      )
       await expect(page.locator('meta[property="og:type"]')).toHaveAttribute('content', 'website')
       await expect(page.locator('meta[property="og:url"]')).toHaveAttribute(
         'content',
@@ -527,8 +530,19 @@ test.describe('Open Graph Metadata', () => {
       )
 
       // Verify optional properties
-      await expect(page.locator('meta[property="og:image"]')).toBeVisible()
-      await expect(page.locator('meta[property="og:site_name"]')).toBeVisible()
+      await expect(page.locator('meta[property="og:image"]')).toHaveAttribute(
+        'content',
+        'https://example.com/og-image.jpg'
+      )
+      await expect(page.locator('meta[property="og:image:alt"]')).toHaveAttribute(
+        'content',
+        'Test image'
+      )
+      await expect(page.locator('meta[property="og:site_name"]')).toHaveAttribute(
+        'content',
+        'Test Site'
+      )
+      await expect(page.locator('meta[property="og:locale"]')).toHaveAttribute('content', 'en_US')
     }
   )
 })
