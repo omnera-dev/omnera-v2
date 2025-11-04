@@ -598,6 +598,26 @@ export function DynamicPage({
   // Prefer 'externalScripts' if both are present (canonical property)
   const externalScripts = page.scripts?.externalScripts || page.scripts?.external || []
 
+  // Group external scripts by position
+  const headScripts = externalScripts.filter((script) => script.position === 'head')
+  const bodyStartScripts = externalScripts.filter((script) => script.position === 'body-start')
+  const bodyEndScripts = externalScripts.filter(
+    (script) => !script.position || script.position === 'body-end'
+  )
+
+  // Render script element with all attributes
+  const renderScript = (script: (typeof externalScripts)[number], key: string | number) => (
+    <script
+      key={key}
+      src={script.src}
+      {...(script.async && { async: true })}
+      {...(script.defer && { defer: true })}
+      {...(script.module && { type: 'module' })}
+      {...(script.integrity && { integrity: script.integrity })}
+      {...(script.crossorigin && { crossOrigin: script.crossorigin })}
+    />
+  )
+
   return (
     <html
       lang={lang}
@@ -627,16 +647,10 @@ export function DynamicPage({
           href="/assets/output.css"
         />
         {themeStyles && <style dangerouslySetInnerHTML={{ __html: themeStyles }} />}
-        {externalScripts.map((script, index) => (
-          <script
-            key={index}
-            src={script.src}
-            {...(script.async && { async: true })}
-            {...(script.defer && { defer: true })}
-          />
-        ))}
+        {headScripts.map((script, index) => renderScript(script, `head-${index}`))}
       </head>
       <body {...(bodyStyle && { style: bodyStyle })}>
+        {bodyStartScripts.map((script, index) => renderScript(script, `body-start-${index}`))}
         {page.layout?.banner && <Banner {...page.layout.banner} />}
         {page.layout?.navigation && <Navigation {...page.layout.navigation} />}
         {page.layout?.sidebar && <Sidebar {...page.layout.sidebar} />}
@@ -690,6 +704,7 @@ export function DynamicPage({
         </main>
 
         {page.layout?.footer && <Footer {...page.layout.footer} />}
+        {bodyEndScripts.map((script, index) => renderScript(script, `body-end-${index}`))}
         {/* Client-side language switcher functionality - always inject when languages configured */}
         {languages && (
           <>
