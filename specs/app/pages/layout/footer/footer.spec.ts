@@ -24,7 +24,7 @@ test.describe('Footer Configuration', () => {
   // One test per spec in schema - defines EXHAUSTIVE acceptance criteria
   // ============================================================================
 
-  test.fixme(
+  test(
     'APP-PAGES-FOOTER-001: should display footer at bottom of page',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -33,9 +33,9 @@ test.describe('Footer Configuration', () => {
         name: 'test-app',
         pages: [
           {
-            name: 'Test',
+            name: 'test',
             path: '/',
-            meta: { lang: 'en-US', title: 'Test' },
+            meta: { lang: 'en-US', title: 'Test', description: 'Test page' },
             layout: { footer: { enabled: true } },
             sections: [],
           },
