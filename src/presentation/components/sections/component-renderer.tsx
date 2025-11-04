@@ -24,6 +24,11 @@ import type { Component } from '@/domain/models/app/page/sections'
 import type { Theme } from '@/domain/models/app/theme'
 
 /**
+ * Component types that should receive role="group" when used as blocks with children
+ */
+const CONTAINER_TYPES = ['div', 'container', 'flex', 'grid', 'card'] as const
+
+/**
  * ComponentRenderer - Renders a dynamic component based on its type
  *
  * This component handles the recursive rendering of sections, converting
@@ -187,11 +192,7 @@ export function ComponentRenderer({
     }),
     ...(blockName &&
       hasChildren &&
-      (type === 'div' ||
-        type === 'container' ||
-        type === 'flex' ||
-        type === 'grid' ||
-        type === 'card') && {
+      CONTAINER_TYPES.includes(type) && {
         role: 'group',
       }),
     ...(firstTranslationKey &&

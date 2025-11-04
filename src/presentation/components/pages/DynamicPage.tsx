@@ -12,10 +12,15 @@ import { Navigation } from '@/presentation/components/layout/navigation'
 import { Sidebar } from '@/presentation/components/layout/sidebar'
 import { ComponentRenderer } from '@/presentation/components/sections/component-renderer'
 import { toKebabCase } from '@/presentation/utils/string-utils'
+import type {
+  BlockReference,
+  SimpleBlockReference,
+} from '@/domain/models/app/block/common/block-reference'
 import type { Blocks } from '@/domain/models/app/blocks'
 import type { Languages } from '@/domain/models/app/languages'
 import type { Analytics } from '@/domain/models/app/page/meta/analytics'
 import type { OpenGraph } from '@/domain/models/app/page/meta/open-graph'
+import type { Component } from '@/domain/models/app/page/sections'
 import type { Page } from '@/domain/models/app/pages'
 import type { Theme } from '@/domain/models/app/theme'
 
@@ -364,6 +369,48 @@ function AnalyticsHead({
 }
 
 /**
+ * Get block information for a section
+ *
+ * Determines if a section is a block reference and calculates its instance index
+ * when multiple instances of the same block exist.
+ *
+ * @param section - Section to analyze (Component, SimpleBlockReference, or BlockReference)
+ * @param index - Position of this section in the sections array
+ * @param sections - Complete array of sections for counting occurrences
+ * @returns Block info with name and optional instanceIndex, or undefined if not a block reference
+ */
+function getBlockInfo(
+  section: Component | SimpleBlockReference | BlockReference,
+  index: number,
+  sections: ReadonlyArray<Component | SimpleBlockReference | BlockReference>
+): { name: string; instanceIndex?: number } | undefined {
+  if (!('block' in section || '$ref' in section)) {
+    return undefined
+  }
+
+  const blockName = 'block' in section ? section.block : section.$ref
+
+  // Count total occurrences of this block name in all sections
+  const totalOccurrences = sections.filter((s) => {
+    const sBlockName = 'block' in s ? s.block : '$ref' in s ? s.$ref : undefined
+    return sBlockName === blockName
+  }).length
+
+  // Only set instanceIndex if there are multiple instances
+  if (totalOccurrences <= 1) {
+    return { name: blockName }
+  }
+
+  // Count previous occurrences of the same block name
+  const previousOccurrences = sections.slice(0, index).filter((s) => {
+    const sBlockName = 'block' in s ? s.block : '$ref' in s ? s.$ref : undefined
+    return sBlockName === blockName
+  })
+
+  return { name: blockName, instanceIndex: previousOccurrences.length }
+}
+
+/**
  * DynamicPage component - Renders a custom page from configuration
  *
  * This component takes a page configuration and renders it as a complete HTML document
@@ -468,32 +515,7 @@ export function DynamicPage({
             <>
               <section data-testid="section">
                 {page.sections.map((section, index) => {
-                  // Determine if this section is a block reference and get its name and instance index
-                  // Count how many times this block name appears in total and before the current index
-                  const blockInfo: { name: string; instanceIndex?: number } | undefined = (() => {
-                    if (!('block' in section || '$ref' in section)) {
-                      return undefined
-                    }
-                    const blockName = 'block' in section ? section.block : section.$ref
-
-                    // Count total occurrences of this block name in all sections
-                    const totalOccurrences = page.sections.filter((s) => {
-                      const sBlockName = 'block' in s ? s.block : '$ref' in s ? s.$ref : undefined
-                      return sBlockName === blockName
-                    }).length
-
-                    // Only set instanceIndex if there are multiple instances
-                    if (totalOccurrences <= 1) {
-                      return { name: blockName }
-                    }
-
-                    // Count previous occurrences of the same block name
-                    const previousOccurrences = page.sections.slice(0, index).filter((s) => {
-                      const sBlockName = 'block' in s ? s.block : '$ref' in s ? s.$ref : undefined
-                      return sBlockName === blockName
-                    })
-                    return { name: blockName, instanceIndex: previousOccurrences.length }
-                  })()
+                  const blockInfo = getBlockInfo(section, index, page.sections)
 
                   return (
                     <ComponentRenderer
@@ -513,32 +535,7 @@ export function DynamicPage({
             </>
           ) : (
             page.sections.map((section, index) => {
-              // Determine if this section is a block reference and get its name and instance index
-              // Count how many times this block name appears in total and before the current index
-              const blockInfo: { name: string; instanceIndex?: number } | undefined = (() => {
-                if (!('block' in section || '$ref' in section)) {
-                  return undefined
-                }
-                const blockName = 'block' in section ? section.block : section.$ref
-
-                // Count total occurrences of this block name in all sections
-                const totalOccurrences = page.sections.filter((s) => {
-                  const sBlockName = 'block' in s ? s.block : '$ref' in s ? s.$ref : undefined
-                  return sBlockName === blockName
-                }).length
-
-                // Only set instanceIndex if there are multiple instances
-                if (totalOccurrences <= 1) {
-                  return { name: blockName }
-                }
-
-                // Count previous occurrences of the same block name
-                const previousOccurrences = page.sections.slice(0, index).filter((s) => {
-                  const sBlockName = 'block' in s ? s.block : '$ref' in s ? s.$ref : undefined
-                  return sBlockName === blockName
-                })
-                return { name: blockName, instanceIndex: previousOccurrences.length }
-              })()
+              const blockInfo = getBlockInfo(section, index, page.sections)
 
               return (
                 <ComponentRenderer
