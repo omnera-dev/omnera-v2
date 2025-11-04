@@ -417,7 +417,7 @@ test.describe('Pages', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-INTEGRATION-001: should apply global theme to page elements without page-level theme config',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
