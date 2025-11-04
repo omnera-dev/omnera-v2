@@ -1019,12 +1019,26 @@ test.describe('Languages Configuration', () => {
       await page.goto('/')
 
       // THEN: it should resolve translation keys from centralized translations dictionary
-      await expect(page.getByRole('button', { name: 'Save' })).toHaveText('Save')
+      const saveButton = page.getByRole('button', { name: 'Save' })
+      await expect(saveButton).toHaveText('Save')
+
+      // Validate $t: pattern is resolved (no $t: symbols remain)
+      const buttonHtml = await saveButton.innerHTML()
+      expect(buttonHtml).not.toContain('$t:')
+      expect(buttonHtml).not.toContain('common.save')
+      expect(buttonHtml).toContain('Save')
 
       // Switch to French
       await page.locator('[data-testid="language-switcher"]').click()
       await page.locator('[data-testid="language-option-fr-FR"]').click()
-      await expect(page.getByRole('button', { name: 'Enregistrer' })).toHaveText('Enregistrer')
+      const enregistrerButton = page.getByRole('button', { name: 'Enregistrer' })
+      await expect(enregistrerButton).toHaveText('Enregistrer')
+
+      // Validate translation resolved in French
+      const frenchHtml = await enregistrerButton.innerHTML()
+      expect(frenchHtml).not.toContain('$t:')
+      expect(frenchHtml).not.toContain('common.save')
+      expect(frenchHtml).toContain('Enregistrer')
     }
   )
 
@@ -1073,6 +1087,15 @@ test.describe('Languages Configuration', () => {
       const buttons = page.locator('button')
       await expect(buttons.nth(0)).toHaveText('Enregistrer') // French exists
       await expect(buttons.nth(1)).toHaveText('Cancel') // Falls back to English
+
+      // Validate $t: patterns are resolved (no $t: symbols remain)
+      const saveHtml = await buttons.nth(0).innerHTML()
+      expect(saveHtml).not.toContain('$t:')
+      expect(saveHtml).toContain('Enregistrer')
+
+      const cancelHtml = await buttons.nth(1).innerHTML()
+      expect(cancelHtml).not.toContain('$t:')
+      expect(cancelHtml).toContain('Cancel') // Fallback to English works
     }
   )
 

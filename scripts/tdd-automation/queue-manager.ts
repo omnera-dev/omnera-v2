@@ -32,10 +32,7 @@ import {
   logError,
   logWarn,
 } from '../lib/effect'
-import {
-  createSchemaPriorityCalculator,
-  getFeaturePathFromSpecId,
-} from './schema-priority-calculator'
+import { createSchemaPriorityCalculator } from './schema-priority-calculator'
 import type { LoggerService } from '../lib/effect'
 
 /**
@@ -108,8 +105,6 @@ const parseTestFileForSpecs = (
       .join('/')
       .replace('.spec.ts', '')
 
-    const priority = calculatePriority(feature)
-
     // Find ONLY test.fixme() or it.fixme() patterns (RED tests that need implementation)
     // EXCLUDES: test() without fixme (passing tests), test.skip() (skipped tests)
     for (let i = 0; i < lines.length; i++) {
@@ -136,6 +131,9 @@ const parseTestFileForSpecs = (
         }
 
         if (specId) {
+          // Calculate priority based on the spec ID (not the feature path)
+          const priority = calculatePriority(specId)
+
           specs.push({
             specId,
             file: filePath,
@@ -585,9 +583,9 @@ export const getNextSpec = Effect.gen(function* () {
   }
 
   const specsWithPriority: SpecWithPriority[] = queuedSpecs.map((spec) => {
-    // Extract feature path from spec ID (e.g., APP-BLOCKS-001 → app/blocks)
-    const feature = getFeaturePathFromSpecId(spec.specId)
-    const priority = calculatePriority(feature)
+    // Calculate priority based on spec ID (e.g., APP-BLOCKS-001, APP-BLOCKS-REGRESSION)
+    // This ensures tests from same schema are processed together with regression tests last
+    const priority = calculatePriority(spec.specId)
 
     return {
       ...spec,

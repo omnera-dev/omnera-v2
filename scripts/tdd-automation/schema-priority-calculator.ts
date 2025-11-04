@@ -8,13 +8,22 @@
 /**
  * Schema-Based Priority Calculator
  *
- * Calculates spec priority based on app.schema.json hierarchy:
- * - Level 1 (Priority 1-3): Required root properties (name, description, version)
- * - Level 2 (Priority 4-6): Optional root properties (theme, languages, blocks)
- * - Level 3 (Priority 7-9): Nested properties (theme/colors, theme/fonts)
- * - Level 4+ (Priority 10+): Deep nested properties
+ * Processes tests by schema group in serial, with regression tests last for each group.
  *
- * This ensures foundational features are implemented before dependent features.
+ * Priority calculation:
+ * - Schema groups get base priorities (1000, 2000, 3000, etc.) based on hierarchy
+ * - Within each schema: individual tests (+1, +2, +3, etc.)
+ * - Regression tests: +900 (ensures they run last in their schema group)
+ *
+ * Example execution order:
+ * - APP-VERSION-001 (1001), APP-VERSION-002 (1002), APP-VERSION-REGRESSION (1900)
+ * - APP-NAME-001 (2001), APP-NAME-002 (2002), APP-NAME-REGRESSION (2900)
+ * - APP-THEME-001 (3001), APP-THEME-002 (3002), APP-THEME-REGRESSION (3900)
+ *
+ * This ensures:
+ * 1. All tests from same schema are processed together
+ * 2. Regression tests validate the schema after all its tests
+ * 3. Schema order follows hierarchy (required root → optional root → nested)
  */
 
 import * as fs from 'node:fs'
@@ -111,24 +120,50 @@ function processNestedSchema(
 }
 
 /**
- * Calculate priority for a feature path based on schema hierarchy
+ * Calculate priority for a spec ID based on schema hierarchy
  *
  * Priority calculation:
- * - Level 1 Required: 1-3 (name=1, description=2, version=3)
- * - Level 1 Optional: 4-10 (theme=4, languages=5, blocks=6, etc.)
- * - Level 2: 11-20 (theme/colors, theme/fonts, etc.)
- * - Level 3: 21-30
- * - Level 4+: 31+
- * - Unknown: 100 (fallback)
+ * - Schema groups get base priorities (1000, 2000, 3000, etc.)
+ * - Individual tests within schema: base + test number (1, 2, 3, etc.)
+ * - Regression tests: base + 900 (always last in group)
+ *
+ * @param specId The full spec ID (e.g., "APP-VERSION-001" or "APP-VERSION-REGRESSION")
+ * @param hierarchy The schema hierarchy map
+ * @returns Priority number for queue ordering
  */
-export function calculateSchemaBasedPriority(
-  featurePath: string,
-  hierarchy: SchemaHierarchy
-): number {
+export function calculateSchemaBasedPriority(specId: string, hierarchy: SchemaHierarchy): number {
+  // Extract feature path and test identifier
+  const parts = specId.split('-')
+  const testIdentifier = parts[parts.length - 1] || ''
+  const isRegression = testIdentifier.toUpperCase() === 'REGRESSION'
+
+  // Get feature path (without test number/regression suffix)
+  const featurePath = getFeaturePathFromSpecId(specId)
+
+  // Calculate base priority for the schema group
+  const schemaBasePriority = calculateSchemaGroupPriority(featurePath, hierarchy)
+
+  // Add offset within the group
+  if (isRegression) {
+    // Regression tests always run last in their group
+    return schemaBasePriority + 900
+  } else {
+    // Individual test number (001 → 1, 002 → 2, etc.)
+    const testNumber = parseInt(testIdentifier, 10) || 1
+    return schemaBasePriority + testNumber
+  }
+}
+
+/**
+ * Calculate base priority for a schema group
+ * Groups are separated by 1000 to ensure all tests from one schema
+ * complete before moving to the next schema
+ */
+function calculateSchemaGroupPriority(featurePath: string, hierarchy: SchemaHierarchy): number {
   // Direct match in hierarchy
   const property = hierarchy.get(featurePath)
   if (property) {
-    return calculatePropertyPriority(property, hierarchy)
+    return calculatePropertyGroupPriority(property, hierarchy) * 1000
   }
 
   // Try parent paths (for deeply nested features not directly in schema)
@@ -137,64 +172,128 @@ export function calculateSchemaBasedPriority(
     const parentPath = parts.slice(0, i).join('/')
     const parentProp = hierarchy.get(parentPath)
     if (parentProp) {
-      // Inherit parent priority + 10 per additional level
+      // Inherit parent group priority + offset for nesting
+      const baseGroup = calculatePropertyGroupPriority(parentProp, hierarchy)
       const additionalLevels = parts.length - i
-      return calculatePropertyPriority(parentProp, hierarchy) + additionalLevels * 10
+      return (baseGroup + additionalLevels * 0.1) * 1000
     }
   }
 
   // Fallback for unknown paths
-  return 100
+  return 100000
 }
 
 /**
- * Calculate priority for a specific property
+ * Calculate group priority for a specific property
+ * Returns a group number (1, 2, 3, etc.) that will be multiplied by 1000
+ * for the final schema group base priority
  */
-function calculatePropertyPriority(property: SchemaProperty, hierarchy: SchemaHierarchy): number {
-  const baseByLevel = {
-    1: property.required ? 1 : 4, // Root level: required (1-3) or optional (4-10)
-    2: 11, // Nested level 2
-    3: 21, // Nested level 3
-    4: 31, // Nested level 4
+function calculatePropertyGroupPriority(
+  property: SchemaProperty,
+  hierarchy: SchemaHierarchy
+): number {
+  // Group assignment based on schema hierarchy
+  // Required root properties get groups 1-3
+  // Optional root properties get groups 4+
+  // Nested properties get higher groups
+
+  if (property.level === 1 && property.required) {
+    // Required root property: Only 'name' is required in the schema
+    // Priority group 1 for 'name'
+    if (property.name === 'name') {
+      return 1
+    }
+    // If other properties become required in the future
+    return 2
   }
 
-  const base = baseByLevel[property.level as keyof typeof baseByLevel] || 40
+  if (property.level === 1 && !property.required) {
+    // Optional root properties: Priority groups 2+
+    // Prioritize common metadata fields (version, description) before others
 
-  // Add offset based on alphabetical order within same level
-  // This ensures consistent ordering for properties at same level
-  const siblings = Array.from(hierarchy.values()).filter(
-    (p) => p.level === property.level && p.parent === property.parent
-  )
-  siblings.sort((a, b) => a.name.localeCompare(b.name))
-  const offset = siblings.findIndex((p) => p.name === property.name)
+    // High-priority optional metadata fields
+    const metadataOrder = ['version', 'description']
+    const metadataIndex = metadataOrder.indexOf(property.name)
+    if (metadataIndex >= 0) {
+      return 2 + metadataIndex // version=2, description=3
+    }
 
-  return base + offset
+    // Other optional root properties (alphabetical)
+    const otherOptionalProps = Array.from(hierarchy.values())
+      .filter((p) => p.level === 1 && !p.required && !metadataOrder.includes(p.name))
+      .sort((a, b) => a.name.localeCompare(b.name))
+
+    const index = otherOptionalProps.findIndex((p) => p.name === property.name)
+    return 4 + index // Starting from group 4
+  }
+
+  // Nested properties (level 2+): Higher group numbers
+  // Calculate base group based on parent property
+  const parentProp = hierarchy.get(property.parent!)
+  if (parentProp) {
+    const parentGroup = calculatePropertyGroupPriority(parentProp, hierarchy)
+
+    // Get siblings at same level and sort
+    const siblings = Array.from(hierarchy.values())
+      .filter((p) => p.level === property.level && p.parent === property.parent)
+      .sort((a, b) => a.name.localeCompare(b.name))
+
+    const siblingIndex = siblings.findIndex((p) => p.name === property.name)
+
+    // Nested properties start at parent + 100 to ensure they come after parent's regression tests
+    // Each nesting level adds 100, siblings add 10
+    return parentGroup + 100 * property.level + 10 + siblingIndex
+  }
+
+  // Fallback for unknown properties
+  return 100
 }
 
 /**
  * Get feature path from spec ID
  * Examples:
  * - APP-VERSION-001 → app/version
+ * - APP-VERSION-REGRESSION → app/version
  * - APP-THEME-COLORS-001 → app/theme/colors
+ * - APP-THEME-COLORS-REGRESSION → app/theme/colors
  * - API-PATHS-HEALTH-001 → api/paths/health
  */
 export function getFeaturePathFromSpecId(specId: string): string {
   // Split by hyphens and convert to lowercase path
   const parts = specId.split('-')
 
-  // Remove numeric suffix (last part)
-  const pathParts = parts.slice(0, -1)
+  // Check if last part is "REGRESSION" (case-insensitive)
+  const lastPart = parts[parts.length - 1] || ''
+  const isRegression = lastPart.toUpperCase() === 'REGRESSION'
+
+  // Remove suffix (numeric or "REGRESSION")
+  const pathParts = isRegression || /^\d+$/.test(lastPart) ? parts.slice(0, -1) : parts
 
   return pathParts.join('/').toLowerCase()
 }
 
 /**
  * Load schema hierarchy and create priority calculator function
+ * Returns a function that takes a spec ID and returns its priority
+ *
+ * @param rootSchemaPath Path to the root app.schema.json file
+ * @returns Function that calculates priority for spec IDs
  */
-export function createSchemaPriorityCalculator(
-  rootSchemaPath: string
-): (feature: string) => number {
+export function createSchemaPriorityCalculator(rootSchemaPath: string): (specId: string) => number {
   const hierarchy = loadSchemaHierarchy(rootSchemaPath)
 
-  return (feature: string) => calculateSchemaBasedPriority(feature, hierarchy)
+  return (specId: string) => calculateSchemaBasedPriority(specId, hierarchy)
+}
+
+/**
+ * Calculate priority for spec IDs with grouped schema processing
+ * This is the main export for TDD automation queue ordering
+ *
+ * @param specId Full spec ID (e.g., "APP-VERSION-001", "APP-THEME-REGRESSION")
+ * @param rootSchemaPath Path to the root app.schema.json file
+ * @returns Priority number (lower = higher priority)
+ */
+export function calculateSpecPriority(specId: string, rootSchemaPath: string): number {
+  const hierarchy = loadSchemaHierarchy(rootSchemaPath)
+  return calculateSchemaBasedPriority(specId, hierarchy)
 }
