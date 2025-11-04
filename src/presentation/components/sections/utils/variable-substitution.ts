@@ -11,7 +11,8 @@ import type { Component } from '@/domain/models/app/page/sections'
  * Substitutes block variables in a value
  *
  * Replaces `$variableName` patterns with actual variable values.
- * Example: `$title` → `'Welcome to Our Platform'`
+ * Supports both full replacement ($title → 'Welcome') and partial replacement
+ * within strings ($price/month → '49/month').
  *
  * @param value - Value that may contain variable placeholders
  * @param vars - Block variables for substitution
@@ -20,6 +21,7 @@ import type { Component } from '@/domain/models/app/page/sections'
  * @example
  * ```typescript
  * substituteBlockVariables('$title', { title: 'Hello' }) // 'Hello'
+ * substituteBlockVariables('$price/month', { price: '49' }) // '49/month'
  * substituteBlockVariables('static', { title: 'Hello' }) // 'static'
  * substituteBlockVariables(123, { title: 'Hello' })       // 123
  * ```
@@ -32,18 +34,20 @@ export function substituteBlockVariables(
     return value
   }
 
-  if (!vars || !value.startsWith('$')) {
+  if (!vars || !value.includes('$')) {
     return value
   }
 
-  // Extract variable name: $title → 'title'
-  const varName = value.slice(1)
+  // Handle partial substitution within strings (e.g., '$price/month' → '49/month')
+  // Use regex with word boundary to avoid partial matches (e.g., $icon should not match inside $iconColor)
+  const substituted = Object.entries(vars).reduce<string>((str, [varName, varValue]) => {
+    // Create regex that matches $varName as a whole word (not as part of another variable)
+    // Use negative lookahead to ensure we don't match if followed by alphanumeric or underscore
+    const regex = new RegExp(`\\$${varName}(?![a-zA-Z0-9_])`, 'g')
+    return str.replace(regex, String(varValue))
+  }, value)
 
-  // Look up the variable in the vars object
-  const result = vars[varName]
-
-  // If variable not found, return original value
-  return result !== undefined ? result : value
+  return substituted
 }
 
 /**
