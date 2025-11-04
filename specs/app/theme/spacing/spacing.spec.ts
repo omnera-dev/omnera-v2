@@ -308,7 +308,8 @@ test.describe('Spacing Configuration', () => {
       await page.goto('/')
 
       // THEN: it should validate custom CSS spacing values
-      await expect(page.locator('[data-testid="section"]')).toHaveCSS('padding', /4rem/)
+      const section = page.locator('[data-testid="section"]')
+      await expect(section).toHaveScreenshot('spacing-009-custom-css.png')
     }
   )
 
@@ -377,8 +378,7 @@ test.describe('Spacing Configuration', () => {
 
       // THEN: it should render with vertical padding creating rhythm
       const section = page.locator('section')
-      await expect(section).toHaveCSS('padding-top', '64px')
-      await expect(section).toHaveCSS('padding-bottom', '64px')
+      await expect(section).toHaveScreenshot('spacing-app-001-section-rhythm.png')
     }
   )
 
@@ -412,7 +412,7 @@ test.describe('Spacing Configuration', () => {
 
       // THEN: it should render centered with max-width constraint
       const container = page.locator('[data-testid="container"]')
-      await expect(container).toHaveCSS('max-width', '1280px')
+      await expect(container).toHaveScreenshot('spacing-app-002-container-centered.png')
     }
   )
 
@@ -449,7 +449,7 @@ test.describe('Spacing Configuration', () => {
 
       // THEN: it should render with spacing between flex items
       const flex = page.locator('[data-testid="flex"]')
-      await expect(flex).toHaveCSS('gap', '24px')
+      await expect(flex).toHaveScreenshot('spacing-app-003-flex-gap.png')
     }
   )
 
