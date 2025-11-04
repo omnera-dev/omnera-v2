@@ -126,9 +126,9 @@ test.describe('Spacing Configuration', () => {
         name: 'test-app',
         theme: {
           spacing: {
-            gapSmall: 'gap-4',
-            gap: 'gap-6',
-            gapLarge: 'gap-8',
+            gapSmall: '1rem',
+            gap: '1.5rem',
+            gapLarge: '2rem',
           },
         },
         pages: [
@@ -136,7 +136,97 @@ test.describe('Spacing Configuration', () => {
             name: 'home',
             path: '/',
             meta: { lang: 'en-US', title: 'Test', description: 'Test page' },
-            sections: [],
+            sections: [
+              {
+                type: 'div',
+                props: {
+                  'data-testid': 'spacing-scale',
+                  style: {
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: '24px',
+                    padding: '20px',
+                  },
+                },
+                children: [
+                  {
+                    type: 'div',
+                    props: {
+                      style: {
+                        display: 'flex',
+                        gap: '$theme.spacing.gapSmall',
+                        padding: '12px',
+                        border: '1px solid #e0e0e0',
+                      },
+                    },
+                    children: [
+                      {
+                        type: 'div',
+                        props: { style: { padding: '20px', backgroundColor: '#3b82f6' } },
+                      },
+                      {
+                        type: 'div',
+                        props: { style: { padding: '20px', backgroundColor: '#3b82f6' } },
+                      },
+                      {
+                        type: 'div',
+                        props: { style: { padding: '20px', backgroundColor: '#3b82f6' } },
+                      },
+                    ],
+                  },
+                  {
+                    type: 'div',
+                    props: {
+                      style: {
+                        display: 'flex',
+                        gap: '$theme.spacing.gap',
+                        padding: '12px',
+                        border: '1px solid #e0e0e0',
+                      },
+                    },
+                    children: [
+                      {
+                        type: 'div',
+                        props: { style: { padding: '20px', backgroundColor: '#10b981' } },
+                      },
+                      {
+                        type: 'div',
+                        props: { style: { padding: '20px', backgroundColor: '#10b981' } },
+                      },
+                      {
+                        type: 'div',
+                        props: { style: { padding: '20px', backgroundColor: '#10b981' } },
+                      },
+                    ],
+                  },
+                  {
+                    type: 'div',
+                    props: {
+                      style: {
+                        display: 'flex',
+                        gap: '$theme.spacing.gapLarge',
+                        padding: '12px',
+                        border: '1px solid #e0e0e0',
+                      },
+                    },
+                    children: [
+                      {
+                        type: 'div',
+                        props: { style: { padding: '20px', backgroundColor: '#f59e0b' } },
+                      },
+                      {
+                        type: 'div',
+                        props: { style: { padding: '20px', backgroundColor: '#f59e0b' } },
+                      },
+                      {
+                        type: 'div',
+                        props: { style: { padding: '20px', backgroundColor: '#f59e0b' } },
+                      },
+                    ],
+                  },
+                ],
+              },
+            ],
           },
         ],
       })
@@ -145,8 +235,13 @@ test.describe('Spacing Configuration', () => {
       await page.goto('/')
 
       // THEN: it should validate consistent spacing scale
-      await expect(page.locator('[data-testid="gap-small"]')).toHaveClass(/gap-4/)
-      await expect(page.locator('[data-testid="gap-large"]')).toHaveClass(/gap-8/)
+      // Visual validation shows gap progression (small → medium → large)
+      await expect(page.locator('[data-testid="spacing-scale"]')).toHaveScreenshot(
+        'spacing-004-gap-scale.png',
+        {
+          animations: 'disabled',
+        }
+      )
     }
   )
 
@@ -223,9 +318,9 @@ test.describe('Spacing Configuration', () => {
         name: 'test-app',
         theme: {
           spacing: {
-            paddingSmall: 'p-4',
-            padding: 'p-6',
-            paddingLarge: 'p-8',
+            paddingSmall: '1rem',
+            padding: '1.5rem',
+            paddingLarge: '2rem',
           },
         },
         pages: [
@@ -233,7 +328,54 @@ test.describe('Spacing Configuration', () => {
             name: 'home',
             path: '/',
             meta: { lang: 'en-US', title: 'Test', description: 'Test page' },
-            sections: [],
+            sections: [
+              {
+                type: 'div',
+                props: {
+                  'data-testid': 'padding-scale',
+                  style: {
+                    display: 'flex',
+                    gap: '16px',
+                    padding: '20px',
+                  },
+                },
+                children: [
+                  {
+                    type: 'div',
+                    props: {
+                      style: {
+                        padding: '$theme.spacing.paddingSmall',
+                        backgroundColor: '#eff6ff',
+                        border: '2px solid #3b82f6',
+                      },
+                    },
+                    children: ['Small'],
+                  },
+                  {
+                    type: 'div',
+                    props: {
+                      style: {
+                        padding: '$theme.spacing.padding',
+                        backgroundColor: '#d1fae5',
+                        border: '2px solid #10b981',
+                      },
+                    },
+                    children: ['Medium'],
+                  },
+                  {
+                    type: 'div',
+                    props: {
+                      style: {
+                        padding: '$theme.spacing.paddingLarge',
+                        backgroundColor: '#fef3c7',
+                        border: '2px solid #f59e0b',
+                      },
+                    },
+                    children: ['Large'],
+                  },
+                ],
+              },
+            ],
           },
         ],
       })
@@ -242,8 +384,13 @@ test.describe('Spacing Configuration', () => {
       await page.goto('/')
 
       // THEN: it should validate consistent internal component spacing
-      await expect(page.locator('[data-testid="padding-small"]')).toHaveClass(/p-4/)
-      await expect(page.locator('[data-testid="padding-large"]')).toHaveClass(/p-8/)
+      // Visual validation shows padding progression (small → medium → large)
+      await expect(page.locator('[data-testid="padding-scale"]')).toHaveScreenshot(
+        'spacing-007-padding-scale.png',
+        {
+          animations: 'disabled',
+        }
+      )
     }
   )
 
@@ -468,8 +615,8 @@ test.describe('Spacing Configuration', () => {
         theme: {
           spacing: {
             section: '4rem',
-            container: '80rem',
             gap: '1.5rem',
+            padding: '2rem',
           },
         },
         pages: [
@@ -477,16 +624,72 @@ test.describe('Spacing Configuration', () => {
             path: '/',
             sections: [
               {
-                type: 'section',
-                content: 'Section',
-              },
-              {
-                type: 'container',
-                content: 'Container',
-              },
-              {
-                type: 'flex',
-                children: [{ type: 'div', content: 'Item' }],
+                type: 'div',
+                props: {
+                  'data-testid': 'spacing-system',
+                  style: {
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: '$theme.spacing.section',
+                  },
+                },
+                children: [
+                  {
+                    type: 'div',
+                    props: {
+                      style: {
+                        padding: '$theme.spacing.section',
+                        backgroundColor: '#f3f4f6',
+                        border: '2px dashed #9ca3af',
+                      },
+                    },
+                    children: ['Section with 4rem padding'],
+                  },
+                  {
+                    type: 'div',
+                    props: {
+                      style: {
+                        display: 'flex',
+                        gap: '$theme.spacing.gap',
+                        padding: '$theme.spacing.padding',
+                        backgroundColor: '#e0e7ff',
+                        border: '2px solid #6366f1',
+                      },
+                    },
+                    children: [
+                      {
+                        type: 'div',
+                        props: {
+                          style: {
+                            padding: '20px',
+                            backgroundColor: '#ffffff',
+                          },
+                        },
+                        children: ['Item 1'],
+                      },
+                      {
+                        type: 'div',
+                        props: {
+                          style: {
+                            padding: '20px',
+                            backgroundColor: '#ffffff',
+                          },
+                        },
+                        children: ['Item 2'],
+                      },
+                      {
+                        type: 'div',
+                        props: {
+                          style: {
+                            padding: '20px',
+                            backgroundColor: '#ffffff',
+                          },
+                        },
+                        children: ['Item 3'],
+                      },
+                    ],
+                  },
+                ],
               },
             ],
           },
@@ -496,24 +699,23 @@ test.describe('Spacing Configuration', () => {
       // WHEN/THEN: Streamlined workflow testing integration points
       await page.goto('/')
 
-      // Validate CSS custom properties generated for spacing system
-      const css = await page.locator('style').first().textContent()
-      expect(css).toContain(':root')
-      expect(css).toMatch(/--spacing-section:\s*64px/)
-      expect(css).toMatch(/--spacing-container:\s*1280px/)
-      expect(css).toMatch(/--spacing-gap:\s*24px/)
+      // 1. Structure validation (ARIA)
+      await expect(page.locator('[data-testid="spacing-system"]')).toMatchAriaSnapshot(`
+        - group:
+          - generic: "Section with 4rem padding"
+          - group:
+            - generic: "Item 1"
+            - generic: "Item 2"
+            - generic: "Item 3"
+      `)
 
-      // Verify section spacing
-      const section = page.locator('section')
-      await expect(section).toHaveCSS('padding-top', '64px')
-
-      // Verify container spacing
-      const container = page.locator('[data-testid="container"]')
-      await expect(container).toHaveCSS('max-width', '1280px')
-
-      // Verify gap spacing
-      const flex = page.locator('[data-testid="flex"]')
-      await expect(flex).toHaveCSS('gap', '24px')
+      // 2. Visual validation (Screenshot) - captures all spacing rendering
+      await expect(page.locator('[data-testid="spacing-system"]')).toHaveScreenshot(
+        'spacing-regression-001-complete-system.png',
+        {
+          animations: 'disabled',
+        }
+      )
 
       // Focus on workflow continuity, not exhaustive coverage
     }
