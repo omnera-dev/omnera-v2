@@ -21,6 +21,7 @@ permissions:
   pull-requests: write
   issues: write
   actions: read
+  id-token: write
 
 env:
   BUN_VERSION: '1.3.1'
