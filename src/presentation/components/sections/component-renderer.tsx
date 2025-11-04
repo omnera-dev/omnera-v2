@@ -33,6 +33,7 @@ import type { Theme } from '@/domain/models/app/theme'
  * @param props - Component props
  * @param props.component - Component configuration from sections schema (can be a direct component or block reference)
  * @param props.blockName - Optional block name for data-block attribute
+ * @param props.blockInstanceIndex - Optional instance index for blocks used multiple times (for unique data-testid)
  * @param props.blocks - Optional blocks array for resolving block references
  * @param props.theme - Optional theme configuration for token substitution
  * @param props.languages - Optional languages configuration for language-switcher blocks
@@ -42,6 +43,7 @@ import type { Theme } from '@/domain/models/app/theme'
 export function ComponentRenderer({
   component,
   blockName,
+  blockInstanceIndex,
   blocks,
   theme,
   languages,
@@ -49,6 +51,7 @@ export function ComponentRenderer({
 }: {
   readonly component: Component | SimpleBlockReference | BlockReference
   readonly blockName?: string
+  readonly blockInstanceIndex?: number
   readonly blocks?: Blocks
   readonly theme?: Theme
   readonly languages?: Languages
@@ -81,6 +84,7 @@ export function ComponentRenderer({
       <ComponentRenderer
         component={resolved.component}
         blockName={resolved.name}
+        blockInstanceIndex={blockInstanceIndex}
         blocks={blocks}
         theme={theme}
         languages={languages}
@@ -165,13 +169,18 @@ export function ComponentRenderer({
   // Add translation key data attribute if children contain $t: patterns
   // Include pre-resolved translations to eliminate client-side resolution logic duplication
   const hasContent = Boolean(content || children?.length)
+  const testId = blockName
+    ? blockInstanceIndex !== undefined
+      ? `block-${blockName}-${blockInstanceIndex}`
+      : `block-${blockName}`
+    : undefined
   const elementProps = {
     ...substitutedProps,
     className: finalClassName,
     ...(parsedStyle && { style: parsedStyle }),
     ...(blockName && {
       'data-block': blockName,
-      'data-testid': `block-${blockName}`,
+      'data-testid': testId,
       'data-type': type,
     }),
     ...(firstTranslationKey &&

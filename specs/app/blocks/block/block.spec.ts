@@ -336,7 +336,7 @@ test.describe('Block Template', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-BLOCKS-BLOCK-010: should render multiple instances with different data',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
