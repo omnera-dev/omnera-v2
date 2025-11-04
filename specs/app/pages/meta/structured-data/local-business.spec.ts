@@ -19,16 +19,16 @@ import { test, expect } from '@/specs/fixtures'
  */
 
 test.describe('Local Business Schema', () => {
-  test.fixme(
+  test(
     'APP-PAGES-LOCALBUSINESS-001: should validate minimal LocalBusiness structured data',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: LocalBusiness with required properties
       await startServerWithSchema({
-        name: 'test-app',
+        name: 'test_app',
         pages: [
           {
-            name: 'Test',
+            name: 'test_page',
             path: '/',
             meta: {
               lang: 'en-US',
