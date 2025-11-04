@@ -16,13 +16,21 @@ import type { ReactElement } from 'react'
  * @param props - Navigation configuration
  * @returns Navigation header element
  */
-export function Navigation({ logo }: Readonly<NavigationProps>): Readonly<ReactElement> {
+export function Navigation({ logo, cta }: Readonly<NavigationProps>): Readonly<ReactElement> {
   return (
     <nav data-testid="navigation">
       <img
         src={logo}
         alt="Logo"
       />
+      {cta && (
+        <a
+          href={cta.href}
+          data-testid="nav-cta"
+        >
+          {cta.text}
+        </a>
+      )}
     </nav>
   )
 }
