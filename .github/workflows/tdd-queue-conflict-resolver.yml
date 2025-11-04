@@ -75,13 +75,13 @@ jobs:
             echo ""
             echo "📋 Processing PR #$PR_NUMBER"
 
-            # Get PR details
-            PR_DATA=$(gh pr view "$PR_NUMBER" --repo omnera-dev/omnera-v2 --json number,headRefName,body,labels)
-            HEAD_REF=$(echo "$PR_DATA" | jq -r '.headRefName')
+            # Get PR details using REST API (avoids read:org scope requirement)
+            PR_DATA=$(gh api "repos/omnera-dev/omnera-v2/pulls/$PR_NUMBER")
+            HEAD_REF=$(echo "$PR_DATA" | jq -r '.head.ref')
             PR_BODY=$(echo "$PR_DATA" | jq -r '.body')
 
             # Check if we've already tried to resolve conflicts (check for conflict-resolution label)
-            HAS_RETRY_LABEL=$(echo "$PR_DATA" | jq -r '.labels[] | select(.name == "conflict-resolution:attempted") | .name')
+            HAS_RETRY_LABEL=$(echo "$PR_DATA" | jq -r '.labels[]? | select(.name == "conflict-resolution:attempted") | .name')
 
             if [ -n "$HAS_RETRY_LABEL" ]; then
               echo "⚠️  Already attempted conflict resolution for PR #$PR_NUMBER"
