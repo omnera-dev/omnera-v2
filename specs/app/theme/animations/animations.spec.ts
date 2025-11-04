@@ -329,9 +329,7 @@ test.describe('Animation Configuration', () => {
 
       // THEN: it should render modal with fade-in animation on mount
       const modal = page.locator('[data-testid="modal"]')
-      await expect(modal).toBeVisible()
-      const animValue = await modal.evaluate((el) => window.getComputedStyle(el).animation)
-      expect(animValue).toContain('fadeIn')
+      await expect(modal).toHaveScreenshot('animation-app-001-modal-fade.png')
     }
   )
 
@@ -371,9 +369,7 @@ test.describe('Animation Configuration', () => {
 
       // THEN: it should render badge with pulsing animation loop
       const badge = page.locator('[data-testid="notification-badge"]')
-      await expect(badge).toBeVisible()
-      const animValue = await badge.evaluate((el) => window.getComputedStyle(el).animation)
-      expect(animValue).toContain('pulse')
+      await expect(badge).toHaveScreenshot('animation-app-002-badge-pulse.png')
     }
   )
 
@@ -413,9 +409,7 @@ test.describe('Animation Configuration', () => {
 
       // THEN: it should render button with CSS transition on hover
       const button = page.locator('[data-testid="action-button"]')
-      await expect(button).toBeVisible()
-      const transValue = await button.evaluate((el) => window.getComputedStyle(el).transition)
-      expect(transValue).toMatch(/200ms|0.2s/)
+      await expect(button).toHaveScreenshot('animation-app-003-button-transition.png')
     }
   )
 
@@ -465,9 +459,7 @@ test.describe('Animation Configuration', () => {
 
       // THEN: it should render hero content sliding up and fading in
       const hero = page.locator('[data-testid="hero-section"]')
-      await expect(hero).toBeVisible()
-      const animValue = await hero.evaluate((el) => window.getComputedStyle(el).animation)
-      expect(animValue).toContain('fadeInUp')
+      await expect(hero).toHaveScreenshot('animation-app-004-hero-fade-up.png')
     }
   )
 
@@ -515,9 +507,7 @@ test.describe('Animation Configuration', () => {
 
       // THEN: it should render sidebar sliding in from left
       const sidebar = page.locator('[data-testid="mobile-sidebar"]')
-      await expect(sidebar).toBeVisible()
-      const animValue = await sidebar.evaluate((el) => window.getComputedStyle(el).animation)
-      expect(animValue).toContain('slideIn')
+      await expect(sidebar).toHaveScreenshot('animation-app-005-sidebar-slide.png')
     }
   )
 
@@ -565,9 +555,7 @@ test.describe('Animation Configuration', () => {
 
       // THEN: it should render toast fading out before removal
       const toast = page.locator('[data-testid="toast-notification"]')
-      await expect(toast).toBeVisible()
-      const animValue = await toast.evaluate((el) => window.getComputedStyle(el).animation)
-      expect(animValue).toContain('fadeOut')
+      await expect(toast).toHaveScreenshot('animation-app-006-toast-fade-out.png')
     }
   )
 
@@ -617,9 +605,7 @@ test.describe('Animation Configuration', () => {
 
       // THEN: it should render card scaling up when scrolled into view
       const card = page.locator('[data-testid="feature-card"]')
-      await expect(card).toBeVisible()
-      const animValue = await card.evaluate((el) => window.getComputedStyle(el).animation)
-      expect(animValue).toContain('scaleUp')
+      await expect(card).toHaveScreenshot('animation-app-007-card-scale.png')
     }
   )
 
@@ -667,9 +653,7 @@ test.describe('Animation Configuration', () => {
 
       // THEN: it should render button gently floating up and down
       const fab = page.locator('[data-testid="fab-button"]')
-      await expect(fab).toBeVisible()
-      const animValue = await fab.evaluate((el) => window.getComputedStyle(el).animation)
-      expect(animValue).toContain('float')
+      await expect(fab).toHaveScreenshot('animation-app-008-fab-float.png')
     }
   )
 
@@ -709,10 +693,8 @@ test.describe('Animation Configuration', () => {
 
       // THEN: it should render button scaling up smoothly on hover
       const button = page.locator('[data-testid="cta-button"]')
-      await expect(button).toBeVisible()
       await button.hover()
-      const transform = await button.evaluate((el) => window.getComputedStyle(el).transform)
-      expect(transform).toBeTruthy()
+      await expect(button).toHaveScreenshot('animation-app-009-button-hover-scale.png')
     }
   )
 
@@ -802,9 +784,7 @@ test.describe('Animation Configuration', () => {
 
       // THEN: it should render spinner rotating infinitely
       const spinner = page.locator('[data-testid="loading-spinner"]')
-      await expect(spinner).toBeVisible()
-      const animValue = await spinner.evaluate((el) => window.getComputedStyle(el).animation)
-      expect(animValue).toContain('rotate')
+      await expect(spinner).toHaveScreenshot('animation-app-011-spinner-rotate.png')
     }
   )
 
@@ -855,9 +835,7 @@ test.describe('Animation Configuration', () => {
 
       // THEN: it should render input shaking horizontally to indicate error
       const input = page.locator('[data-testid="email-input"]')
-      await expect(input).toBeVisible()
-      const animValue = await input.evaluate((el) => window.getComputedStyle(el).animation)
-      expect(animValue).toContain('shake')
+      await expect(input).toHaveScreenshot('animation-app-012-input-shake.png')
     }
   )
 
@@ -947,9 +925,7 @@ test.describe('Animation Configuration', () => {
 
       // THEN: it should render text appearing one character at a time
       const heading = page.locator('[data-testid="hero-heading"]')
-      await expect(heading).toBeVisible()
-      const animValue = await heading.evaluate((el) => window.getComputedStyle(el).animation)
-      expect(animValue).toContain('typewriter')
+      await expect(heading).toHaveScreenshot('animation-app-014-typewriter.png')
     }
   )
 
