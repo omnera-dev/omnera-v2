@@ -60,6 +60,16 @@
       "given": "preload resource with href and as",
       "when": "href is resource URL and as specifies type",
       "then": "it should preload critical resource",
+      "validation": {
+        "setup": {
+          "preload": { "href": "./output.css", "as": "style" }
+        },
+        "assertions": [
+          "Required: href, as",
+          "as must be enum: style, script, font, image, video, audio, document, fetch",
+          "href: string (resource URL)"
+        ]
+      },
       "application": {
         "preload": { "href": "./output.css", "as": "style" },
         "expectedHTML": "<link rel=\"preload\" href=\"/output.css\" as=\"style\" />",
@@ -75,6 +85,16 @@
       "given": "preload with as='style'",
       "when": "as is 'style' for CSS files",
       "then": "it should preload critical stylesheet",
+      "validation": {
+        "setup": {
+          "preload": { "href": "./output.css", "as": "style" }
+        },
+        "assertions": [
+          "as: 'style' (valid enum value)",
+          "href: CSS file path",
+          "Validates against schema"
+        ]
+      },
       "application": {
         "preload": { "href": "./output.css", "as": "style" },
         "expectedHTML": "<link rel=\"preload\" href=\"/output.css\" as=\"style\" />",
@@ -91,6 +111,16 @@
       "given": "preload with as='script'",
       "when": "as is 'script' for JavaScript files",
       "then": "it should preload critical scripts",
+      "validation": {
+        "setup": {
+          "preload": { "href": "./app.js", "as": "script" }
+        },
+        "assertions": [
+          "as: 'script' (valid enum value)",
+          "href: JS file path",
+          "Required properties present"
+        ]
+      },
       "application": {
         "preload": { "href": "./app.js", "as": "script" },
         "expectedHTML": "<link rel=\"preload\" href=\"/app.js\" as=\"script\" />",
@@ -106,6 +136,22 @@
       "given": "preload with as='font'",
       "when": "as is 'font' with type and crossorigin",
       "then": "it should preload web fonts",
+      "validation": {
+        "setup": {
+          "preload": {
+            "href": "./fonts/Inter.woff2",
+            "as": "font",
+            "type": "font/woff2",
+            "crossorigin": true
+          }
+        },
+        "assertions": [
+          "as: 'font' (valid enum value)",
+          "type: string (MIME type)",
+          "crossorigin: boolean or enum ('anonymous', 'use-credentials')",
+          "All properties validate"
+        ]
+      },
       "application": {
         "preload": {
           "href": "./fonts/Inter.woff2",
@@ -128,6 +174,16 @@
       "given": "preload with as='image'",
       "when": "as is 'image' for above-the-fold images",
       "then": "it should preload hero images",
+      "validation": {
+        "setup": {
+          "preload": { "href": "./images/hero.jpg", "as": "image" }
+        },
+        "assertions": [
+          "as: 'image' (valid enum value)",
+          "href: image file path",
+          "Schema validation passes"
+        ]
+      },
       "application": {
         "preload": { "href": "./images/hero.jpg", "as": "image" },
         "expectedHTML": "<link rel=\"preload\" href=\"/images/hero.jpg\" as=\"image\" />",
@@ -143,6 +199,20 @@
       "given": "preload with as='fetch'",
       "when": "as is 'fetch' for API data",
       "then": "it should prefetch critical API responses",
+      "validation": {
+        "setup": {
+          "preload": {
+            "href": "https://api.example.com/critical-data",
+            "as": "fetch",
+            "crossorigin": "anonymous"
+          }
+        },
+        "assertions": [
+          "as: 'fetch' (valid enum value)",
+          "crossorigin: 'anonymous' (valid enum value)",
+          "href: API URL"
+        ]
+      },
       "application": {
         "preload": {
           "href": "https://api.example.com/critical-data",
@@ -163,6 +233,20 @@
       "given": "preload with crossorigin for fonts",
       "when": "crossorigin is true or 'anonymous'",
       "then": "it should set CORS for cross-origin fonts",
+      "validation": {
+        "setup": {
+          "validOptions": [
+            { "crossorigin": true },
+            { "crossorigin": "anonymous" },
+            { "crossorigin": "use-credentials" }
+          ]
+        },
+        "assertions": [
+          "crossorigin accepts: boolean | 'anonymous' | 'use-credentials'",
+          "oneOf schema validates all three types",
+          "Required for fonts"
+        ]
+      },
       "application": {
         "options": [
           { "crossorigin": true, "meaning": "Anonymous mode (default)" },
@@ -182,6 +266,16 @@
       "given": "preload with type attribute",
       "when": "type specifies MIME type like 'font/woff2'",
       "then": "it should help browser prioritize resource",
+      "validation": {
+        "setup": {
+          "preload": { "href": "./fonts/Inter.woff2", "as": "font", "type": "font/woff2" }
+        },
+        "assertions": [
+          "type: string (MIME type)",
+          "Optional property",
+          "Common values: font/woff2, font/woff, image/webp"
+        ]
+      },
       "application": {
         "preload": { "href": "./fonts/Inter.woff2", "as": "font", "type": "font/woff2" },
         "types": {
@@ -203,6 +297,16 @@
       "given": "preload with media query",
       "when": "media specifies conditional loading",
       "then": "it should preload only when media query matches",
+      "validation": {
+        "setup": {
+          "preload": { "href": "./hero-large.jpg", "as": "image", "media": "(min-width: 768px)" }
+        },
+        "assertions": [
+          "media: string (media query)",
+          "Optional property",
+          "Example: (min-width: 768px)"
+        ]
+      },
       "application": {
         "preload": { "href": "./hero-large.jpg", "as": "image", "media": "(min-width: 768px)" },
         "expectedHTML": "<link rel=\"preload\" href=\"/hero-large.jpg\" as=\"image\" media=\"(min-width: 768px)\" />",
@@ -220,6 +324,25 @@
       "given": "preload for critical rendering path",
       "when": "preloading CSS, fonts, and hero images",
       "then": "it should optimize First Contentful Paint (FCP)",
+      "validation": {
+        "setup": {
+          "preload": [
+            { "href": "./output.css", "as": "style" },
+            {
+              "href": "./fonts/Inter.woff2",
+              "as": "font",
+              "type": "font/woff2",
+              "crossorigin": true
+            },
+            { "href": "./hero.jpg", "as": "image" }
+          ]
+        },
+        "assertions": [
+          "Array of preload objects",
+          "Each object validates individually",
+          "Best practice: 3-5 critical resources"
+        ]
+      },
       "application": {
         "preload": [
           { "href": "./output.css", "as": "style" },

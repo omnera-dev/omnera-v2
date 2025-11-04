@@ -212,6 +212,138 @@
       }
     },
     {
+      "id": "APP-THEME-RADIUS-APPLICATION-004",
+      "given": "responsive border-radius varying by breakpoint",
+      "when": "mobile uses sm radius and desktop uses lg radius for touch vs visual optimization",
+      "then": "it should apply smaller radius on mobile for better touch targets and larger radius on desktop for visual polish",
+      "application": {
+        "theme": {
+          "borderRadius": {
+            "sm": "0.125rem",
+            "lg": "0.5rem"
+          }
+        },
+        "component": "button",
+        "expectedCSS": {
+          "mobile": "border-radius: 0.125rem;",
+          "desktop": "border-radius: 0.5rem;"
+        },
+        "expectedDOM": "<button data-testid=\"responsive-button\" class=\"rounded-sm lg:rounded-lg\" style=\"border-radius: 0.125rem;\">Get Started</button>",
+        "assertions": [
+          "Mobile: sm radius (0.125rem / 2px) for precise touch targets",
+          "Desktop: lg radius (0.5rem / 8px) for softer visual appearance",
+          "Responsive pattern: smaller radius improves mobile usability",
+          "Tailwind classes: rounded-sm lg:rounded-lg"
+        ]
+      }
+    },
+    {
+      "id": "APP-THEME-RADIUS-APPLICATION-005",
+      "given": "per-corner border-radius for complex shapes",
+      "when": "speech bubble uses different radius per corner for directional indicator",
+      "then": "it should render element with custom radius on each corner creating arrow-like shape",
+      "application": {
+        "theme": {
+          "borderRadius": {
+            "md": "0.375rem",
+            "none": "0"
+          }
+        },
+        "component": "speech-bubble",
+        "expectedCSS": "border-radius: 0.375rem 0.375rem 0 0.375rem;",
+        "expectedDOM": "<div data-testid=\"message-bubble\" class=\"rounded-md rounded-bl-none\" style=\"border-top-left-radius: 0.375rem; border-top-right-radius: 0.375rem; border-bottom-right-radius: 0.375rem; border-bottom-left-radius: 0;\">Hello!</div>",
+        "assertions": [
+          "Per-corner control: top-left, top-right, bottom-right rounded; bottom-left sharp",
+          "Creates directional indicator (speech bubble pointing left)",
+          "Complex shapes: mix rounded and sharp corners",
+          "CSS syntax: border-radius: tl tr br bl (clockwise from top-left)"
+        ]
+      }
+    },
+    {
+      "id": "APP-THEME-RADIUS-APPLICATION-006",
+      "given": "full radius for badge and pill-shaped components",
+      "when": "badge uses theme.borderRadius.full for pill shape",
+      "then": "it should render badge as pill with fully rounded left and right edges",
+      "application": {
+        "theme": {
+          "borderRadius": {
+            "full": "9999px"
+          }
+        },
+        "component": "badge",
+        "expectedCSS": "border-radius: 9999px;",
+        "expectedDOM": "<span data-testid=\"status-badge\" class=\"rounded-full\" style=\"border-radius: 9999px; padding: 0.25rem 0.75rem;\">New</span>",
+        "assertions": [
+          "Radius token: theme.borderRadius.full = '9999px'",
+          "Visual result: Pill-shaped badge (fully rounded ends)",
+          "Use case: Status badges, tags, chips, notification counts",
+          "Works with any width: 9999px adapts to element dimensions"
+        ]
+      }
+    },
+    {
+      "id": "APP-THEME-RADIUS-APPLICATION-007",
+      "given": "radius patterns for image components (avatar vs thumbnail vs hero)",
+      "when": "different image types require different rounding approaches",
+      "then": "it should apply appropriate radius for each image context",
+      "application": {
+        "theme": {
+          "borderRadius": {
+            "full": "9999px",
+            "md": "0.375rem",
+            "lg": "0.5rem",
+            "none": "0"
+          }
+        },
+        "components": {
+          "avatar": {
+            "expectedCSS": "border-radius: 9999px;",
+            "expectedDOM": "<img data-testid=\"user-avatar\" class=\"rounded-full\" style=\"border-radius: 9999px; width: 40px; height: 40px;\" src=\"avatar.jpg\" alt=\"User\" />"
+          },
+          "thumbnail": {
+            "expectedCSS": "border-radius: 0.375rem;",
+            "expectedDOM": "<img data-testid=\"post-thumbnail\" class=\"rounded-md\" style=\"border-radius: 0.375rem;\" src=\"thumbnail.jpg\" alt=\"Post\" />"
+          },
+          "hero": {
+            "expectedCSS": "border-radius: 0.5rem 0.5rem 0 0;",
+            "expectedDOM": "<img data-testid=\"hero-image\" class=\"rounded-t-lg\" style=\"border-top-left-radius: 0.5rem; border-top-right-radius: 0.5rem; border-bottom-left-radius: 0; border-bottom-right-radius: 0;\" src=\"hero.jpg\" alt=\"Hero\" />"
+          }
+        },
+        "assertions": [
+          "Avatar: full radius (circle) - square dimensions become perfect circle",
+          "Thumbnail: md radius (moderate rounding) - preserves image aspect ratio",
+          "Hero: top-lg radius (rounded top only) - integrates with card below",
+          "Context-aware: radius choice depends on image purpose and layout"
+        ]
+      }
+    },
+    {
+      "id": "APP-THEME-RADIUS-APPLICATION-008",
+      "given": "card component hierarchy with coordinated border-radius across parent and children",
+      "when": "card contains header, body, and footer with nested rounding",
+      "then": "it should apply radius to create cohesive nested component design",
+      "application": {
+        "theme": {
+          "borderRadius": {
+            "lg": "0.5rem",
+            "md": "0.375rem",
+            "none": "0"
+          }
+        },
+        "component": "card-with-header",
+        "expectedDOM": "<div data-testid=\"product-card\" class=\"rounded-lg\" style=\"border-radius: 0.5rem; overflow: hidden;\">\n  <div data-testid=\"card-header\" class=\"rounded-t-lg\" style=\"border-top-left-radius: 0.5rem; border-top-right-radius: 0.5rem; background: #f3f4f6; padding: 1rem;\">Header</div>\n  <div data-testid=\"card-body\" style=\"padding: 1rem;\">Content</div>\n  <div data-testid=\"card-footer\" class=\"rounded-b-lg\" style=\"border-bottom-left-radius: 0.5rem; border-bottom-right-radius: 0.5rem; background: #f9fafb; padding: 1rem;\">Footer</div>\n</div>",
+        "assertions": [
+          "Parent card: lg radius (0.5rem) on all corners with overflow: hidden",
+          "Header: top-lg radius matches parent's top corners",
+          "Body: no radius (internal content)",
+          "Footer: bottom-lg radius matches parent's bottom corners",
+          "Design system coherence: nested components coordinate radius",
+          "Visual hierarchy: outer corners rounded, inner boundaries sharp"
+        ]
+      }
+    },
+    {
       "id": "APP-THEME-BORDER-RADIUS-REGRESSION-001",
       "given": "complete application configuration with all features",
       "when": "user completes full workflow",

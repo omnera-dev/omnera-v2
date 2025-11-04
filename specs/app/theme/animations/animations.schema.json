@@ -303,6 +303,451 @@
       }
     },
     {
+      "id": "APP-THEME-ANIMATIONS-APPLICATION-004",
+      "given": "fadeInUp entrance animation applied to hero section",
+      "when": "hero section uses theme.animations.fadeInUp on page load",
+      "then": "it should render hero content sliding up and fading in",
+      "application": {
+        "theme": {
+          "animations": {
+            "fadeInUp": {
+              "duration": "600ms",
+              "easing": "cubic-bezier(0.4, 0, 0.2, 1)",
+              "keyframes": {
+                "0%": {
+                  "opacity": 0,
+                  "transform": "translateY(20px)"
+                },
+                "100%": {
+                  "opacity": 1,
+                  "transform": "translateY(0)"
+                }
+              }
+            }
+          }
+        },
+        "component": "hero",
+        "expectedCSS": "animation: fadeInUp 600ms cubic-bezier(0.4, 0, 0.2, 1);",
+        "expectedDOM": "<section data-testid=\"hero-section\" class=\"animate-fade-in-up\" style=\"animation: fadeInUp 600ms cubic-bezier(0.4, 0, 0.2, 1);\"><h1>Welcome to Our Site</h1><p>Discover amazing features</p></section>",
+        "behavior": "Content starts 20px below and invisible, slides up to final position while fading in",
+        "useCases": [
+          "Landing page hero sections",
+          "Above-the-fold content reveal",
+          "First impression animations"
+        ],
+        "assertions": [
+          "Animation token: theme.animations.fadeInUp",
+          "Keyframes: 0% (opacity: 0, translateY: 20px) → 100% (opacity: 1, translateY: 0)",
+          "Visual result: Content slides up 20px while fading in over 600ms",
+          "Webflow-style entrance animation for hero content"
+        ]
+      }
+    },
+    {
+      "id": "APP-THEME-ANIMATIONS-APPLICATION-005",
+      "given": "slideIn entrance animation applied to sidebar",
+      "when": "sidebar uses theme.animations.slideIn on navigation",
+      "then": "it should render sidebar sliding in from left",
+      "application": {
+        "theme": {
+          "animations": {
+            "slideIn": {
+              "duration": "400ms",
+              "easing": "ease-out",
+              "keyframes": {
+                "0%": {
+                  "transform": "translateX(-100%)"
+                },
+                "100%": {
+                  "transform": "translateX(0)"
+                }
+              }
+            }
+          }
+        },
+        "component": "sidebar",
+        "expectedCSS": "animation: slideIn 400ms ease-out;",
+        "expectedDOM": "<aside data-testid=\"mobile-sidebar\" class=\"animate-slide-in\" style=\"animation: slideIn 400ms ease-out;\"><nav>Menu items</nav></aside>",
+        "behavior": "Sidebar starts off-screen left (-100%), slides into view",
+        "useCases": ["Mobile navigation menus", "Off-canvas sidebars", "Drawer components"],
+        "assertions": [
+          "Animation token: theme.animations.slideIn",
+          "Keyframes: translateX(-100%) → translateX(0)",
+          "Visual result: Sidebar slides in from left over 400ms",
+          "Mobile-first navigation pattern"
+        ]
+      }
+    },
+    {
+      "id": "APP-THEME-ANIMATIONS-APPLICATION-006",
+      "given": "fadeOut exit animation applied to toast notification",
+      "when": "toast uses theme.animations.fadeOut on dismiss",
+      "then": "it should render toast fading out before removal",
+      "application": {
+        "theme": {
+          "animations": {
+            "fadeOut": {
+              "duration": "300ms",
+              "easing": "ease-out",
+              "keyframes": {
+                "0%": {
+                  "opacity": 1
+                },
+                "100%": {
+                  "opacity": 0
+                }
+              }
+            }
+          }
+        },
+        "component": "toast",
+        "expectedCSS": "animation: fadeOut 300ms ease-out;",
+        "expectedDOM": "<div data-testid=\"toast-notification\" class=\"animate-fade-out\" style=\"animation: fadeOut 300ms ease-out;\">Notification message</div>",
+        "behavior": "Toast visible (opacity: 1) fades to invisible (opacity: 0), then removed from DOM",
+        "useCases": ["Toast/snackbar dismissal", "Alert auto-hide", "Notification exit"],
+        "assertions": [
+          "Animation token: theme.animations.fadeOut",
+          "Keyframes: opacity 1 → 0",
+          "Visual result: Smooth fade out before DOM removal",
+          "Prevents jarring instant disappearance"
+        ]
+      }
+    },
+    {
+      "id": "APP-THEME-ANIMATIONS-APPLICATION-007",
+      "given": "scaleUp entrance animation on scroll-triggered card reveal",
+      "when": "card uses theme.animations.scaleUp with IntersectionObserver",
+      "then": "it should render card scaling up when scrolled into view",
+      "application": {
+        "theme": {
+          "animations": {
+            "scaleUp": {
+              "duration": "500ms",
+              "easing": "cubic-bezier(0.34, 1.56, 0.64, 1)",
+              "keyframes": {
+                "0%": {
+                  "opacity": 0,
+                  "transform": "scale(0.8)"
+                },
+                "100%": {
+                  "opacity": 1,
+                  "transform": "scale(1)"
+                }
+              }
+            }
+          }
+        },
+        "component": "card",
+        "trigger": "IntersectionObserver (when card enters viewport)",
+        "expectedCSS": "animation: scaleUp 500ms cubic-bezier(0.34, 1.56, 0.64, 1);",
+        "expectedDOM": "<div data-testid=\"feature-card\" class=\"animate-scale-up\" style=\"animation: scaleUp 500ms cubic-bezier(0.34, 1.56, 0.64, 1);\"><h3>Feature Title</h3><p>Description</p></div>",
+        "behavior": "Card starts small (scale: 0.8) and invisible, scales up with slight overshoot (elastic easing)",
+        "useCases": [
+          "Scroll-triggered card reveals",
+          "Feature section animations",
+          "Portfolio item reveals",
+          "Webflow scroll interactions"
+        ],
+        "assertions": [
+          "Animation token: theme.animations.scaleUp",
+          "Trigger: IntersectionObserver detects viewport entry",
+          "Keyframes: scale(0.8) + opacity 0 → scale(1) + opacity 1",
+          "Elastic easing: cubic-bezier(0.34, 1.56, 0.64, 1) creates bounce effect",
+          "Visual result: Card pops into view with elastic bounce"
+        ]
+      }
+    },
+    {
+      "id": "APP-THEME-ANIMATIONS-APPLICATION-008",
+      "given": "float animation applied to floating action button (FAB)",
+      "when": "FAB uses theme.animations.float for continuous hover effect",
+      "then": "it should render button gently floating up and down",
+      "application": {
+        "theme": {
+          "animations": {
+            "float": {
+              "duration": "3s",
+              "easing": "ease-in-out",
+              "keyframes": {
+                "0%, 100%": {
+                  "transform": "translateY(0)"
+                },
+                "50%": {
+                  "transform": "translateY(-10px)"
+                }
+              }
+            }
+          }
+        },
+        "component": "fab",
+        "expectedCSS": "animation: float 3s ease-in-out infinite;",
+        "expectedDOM": "<button data-testid=\"fab-button\" class=\"animate-float\" style=\"animation: float 3s ease-in-out infinite;\">+</button>",
+        "behavior": "Button continuously moves up 10px and back down in 3s cycle",
+        "useCases": [
+          "Floating action buttons (FAB)",
+          "Call-to-action emphasis",
+          "Attention-grabbing subtle motion"
+        ],
+        "assertions": [
+          "Animation token: theme.animations.float",
+          "Keyframes: translateY(0) → translateY(-10px) → translateY(0)",
+          "Infinite loop: animation-iteration-count: infinite",
+          "Visual result: Gentle vertical floating motion",
+          "Draws attention without being distracting"
+        ]
+      }
+    },
+    {
+      "id": "APP-THEME-ANIMATIONS-APPLICATION-009",
+      "given": "hover animation for button scale interaction",
+      "when": "button uses theme.animations.transition for hover scale",
+      "then": "it should render button scaling up smoothly on hover",
+      "application": {
+        "theme": {
+          "animations": {
+            "transition": {
+              "duration": "200ms",
+              "easing": "ease-in-out"
+            }
+          }
+        },
+        "component": "button",
+        "interaction": "hover",
+        "expectedCSS": "transition: transform 200ms ease-in-out; &:hover { transform: scale(1.05); }",
+        "expectedDOM": "<button data-testid=\"cta-button\" style=\"transition: transform 200ms ease-in-out;\" onMouseEnter=\"this.style.transform='scale(1.05)'\" onMouseLeave=\"this.style.transform='scale(1)'\">Buy Now</button>",
+        "behavior": "Button scales up to 105% on hover, returns to 100% on mouse leave",
+        "useCases": [
+          "Button hover micro-interactions",
+          "Card hover effects",
+          "Interactive element feedback",
+          "WordPress-style button animations"
+        ],
+        "assertions": [
+          "Transition token: theme.animations.transition",
+          "Applied to: transform property",
+          "Hover state: transform: scale(1.05) (5% larger)",
+          "Visual result: Button grows slightly on hover",
+          "Provides tactile feedback for interactivity"
+        ]
+      }
+    },
+    {
+      "id": "APP-THEME-ANIMATIONS-APPLICATION-010",
+      "given": "stagger animation for list items",
+      "when": "list items use theme.animations.fadeIn with incremental delays",
+      "then": "it should render list items appearing one after another",
+      "application": {
+        "theme": {
+          "animations": {
+            "fadeIn": {
+              "duration": "400ms",
+              "easing": "ease-out"
+            }
+          }
+        },
+        "component": "list",
+        "pattern": "stagger",
+        "expectedCSS": ".list-item:nth-child(1) { animation-delay: 0ms; } .list-item:nth-child(2) { animation-delay: 100ms; } .list-item:nth-child(3) { animation-delay: 200ms; }",
+        "expectedDOM": "<ul data-testid=\"feature-list\"><li class=\"animate-fade-in\" style=\"animation: fadeIn 400ms ease-out; animation-delay: 0ms;\">Feature 1</li><li class=\"animate-fade-in\" style=\"animation: fadeIn 400ms ease-out; animation-delay: 100ms;\">Feature 2</li><li class=\"animate-fade-in\" style=\"animation: fadeIn 400ms ease-out; animation-delay: 200ms;\">Feature 3</li></ul>",
+        "behavior": "Each list item fades in sequentially with 100ms stagger delay",
+        "useCases": [
+          "Feature lists",
+          "Pricing cards",
+          "Navigation menu items",
+          "Sequential content reveals (Webflow-style)"
+        ],
+        "assertions": [
+          "Animation token: theme.animations.fadeIn",
+          "Stagger pattern: Each item delayed by 100ms increment",
+          "Item 1: 0ms, Item 2: 100ms, Item 3: 200ms, etc.",
+          "Visual result: Cascading entrance animation",
+          "Creates sense of content loading progressively"
+        ]
+      }
+    },
+    {
+      "id": "APP-THEME-ANIMATIONS-APPLICATION-011",
+      "given": "rotate animation for loading spinner",
+      "when": "spinner uses theme.animations.rotate for continuous rotation",
+      "then": "it should render spinner rotating infinitely",
+      "application": {
+        "theme": {
+          "animations": {
+            "rotate": {
+              "duration": "1s",
+              "easing": "linear",
+              "keyframes": {
+                "0%": {
+                  "transform": "rotate(0deg)"
+                },
+                "100%": {
+                  "transform": "rotate(360deg)"
+                }
+              }
+            }
+          }
+        },
+        "component": "spinner",
+        "expectedCSS": "animation: rotate 1s linear infinite;",
+        "expectedDOM": "<div data-testid=\"loading-spinner\" class=\"animate-rotate\" style=\"animation: rotate 1s linear infinite;\"><svg>...</svg></div>",
+        "behavior": "Spinner rotates 360 degrees continuously at constant speed",
+        "useCases": ["Loading indicators", "Progress spinners", "Async operation feedback"],
+        "assertions": [
+          "Animation token: theme.animations.rotate",
+          "Keyframes: rotate(0deg) → rotate(360deg)",
+          "Easing: linear (constant speed, no acceleration)",
+          "Infinite loop: continuous rotation",
+          "Visual result: Smooth loading spinner"
+        ]
+      }
+    },
+    {
+      "id": "APP-THEME-ANIMATIONS-APPLICATION-012",
+      "given": "shake animation for form validation error",
+      "when": "input field uses theme.animations.shake on invalid submission",
+      "then": "it should render input shaking horizontally to indicate error",
+      "application": {
+        "theme": {
+          "animations": {
+            "shake": {
+              "duration": "500ms",
+              "easing": "ease-in-out",
+              "keyframes": {
+                "0%, 100%": {
+                  "transform": "translateX(0)"
+                },
+                "10%, 30%, 50%, 70%, 90%": {
+                  "transform": "translateX(-10px)"
+                },
+                "20%, 40%, 60%, 80%": {
+                  "transform": "translateX(10px)"
+                }
+              }
+            }
+          }
+        },
+        "component": "input",
+        "trigger": "form validation error",
+        "expectedCSS": "animation: shake 500ms ease-in-out;",
+        "expectedDOM": "<input data-testid=\"email-input\" class=\"animate-shake\" style=\"animation: shake 500ms ease-in-out; border-color: red;\" aria-invalid=\"true\" />",
+        "behavior": "Input shakes left-right rapidly to draw attention to error",
+        "useCases": [
+          "Form validation feedback",
+          "Invalid input indication",
+          "Error state micro-interaction"
+        ],
+        "assertions": [
+          "Animation token: theme.animations.shake",
+          "Keyframes: alternating -10px/+10px translateX",
+          "Visual result: Horizontal shake effect (5 oscillations)",
+          "Provides immediate visual feedback for errors",
+          "Accessible: combined with aria-invalid and border color"
+        ]
+      }
+    },
+    {
+      "id": "APP-THEME-ANIMATIONS-APPLICATION-013",
+      "given": "parallax scroll animation for background image",
+      "when": "hero background uses theme.animations.parallax on scroll",
+      "then": "it should render background moving slower than foreground (parallax effect)",
+      "application": {
+        "theme": {
+          "animations": {
+            "parallax": {
+              "easing": "linear"
+            }
+          }
+        },
+        "component": "hero-background",
+        "trigger": "scroll event",
+        "expectedCSS": "transform: translateY(calc(scrollY * 0.5));",
+        "expectedDOM": "<div data-testid=\"hero-section\" style=\"position: relative; overflow: hidden;\"><div data-testid=\"hero-background\" style=\"position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-image: url('hero.jpg'); transform: translateY(0); will-change: transform;\"></div><div data-testid=\"hero-content\">Content</div></div>",
+        "behavior": "Background moves at 50% speed of scroll (parallax factor: 0.5)",
+        "implementation": "JavaScript: background.style.transform = `translateY(${scrollY * 0.5}px)`",
+        "useCases": [
+          "Parallax scroll effects (Webflow-style)",
+          "Hero section depth",
+          "Immersive scrolling experiences"
+        ],
+        "assertions": [
+          "Animation token: theme.animations.parallax",
+          "Parallax factor: 0.5 (background moves at half speed)",
+          "Visual result: Creates depth illusion on scroll",
+          "Performance: uses transform (GPU-accelerated)",
+          "Webflow/WordPress parallax effect"
+        ]
+      }
+    },
+    {
+      "id": "APP-THEME-ANIMATIONS-APPLICATION-014",
+      "given": "typewriter animation for text reveal",
+      "when": "heading uses theme.animations.typewriter for character-by-character reveal",
+      "then": "it should render text appearing one character at a time",
+      "application": {
+        "theme": {
+          "animations": {
+            "typewriter": {
+              "duration": "4s",
+              "easing": "steps(40, end)",
+              "keyframes": {
+                "0%": {
+                  "width": "0"
+                },
+                "100%": {
+                  "width": "100%"
+                }
+              }
+            }
+          }
+        },
+        "component": "heading",
+        "expectedCSS": "animation: typewriter 4s steps(40, end); overflow: hidden; white-space: nowrap;",
+        "expectedDOM": "<h1 data-testid=\"hero-heading\" style=\"animation: typewriter 4s steps(40, end); overflow: hidden; white-space: nowrap; border-right: 2px solid;\">Welcome to our website</h1>",
+        "behavior": "Text width grows from 0 to 100% in 40 discrete steps (character-by-character)",
+        "useCases": ["Hero heading reveals", "Terminal-style text", "Code demo animations"],
+        "assertions": [
+          "Animation token: theme.animations.typewriter",
+          "Keyframes: width 0% → 100%",
+          "Easing: steps(40, end) creates discrete character steps",
+          "Visual result: Typewriter effect (text appears letter by letter)",
+          "Optional: blinking cursor with border-right"
+        ]
+      }
+    },
+    {
+      "id": "APP-THEME-ANIMATIONS-APPLICATION-015",
+      "given": "reduced motion preference respected",
+      "when": "user has prefers-reduced-motion enabled",
+      "then": "it should disable animations or use simplified versions",
+      "application": {
+        "theme": {
+          "animations": {
+            "fadeIn": {
+              "duration": "300ms",
+              "enabled": true
+            }
+          }
+        },
+        "component": "modal",
+        "mediaQuery": "@media (prefers-reduced-motion: reduce)",
+        "expectedCSS": "@media (prefers-reduced-motion: reduce) { .animate-fade-in { animation: none; opacity: 1; } }",
+        "expectedDOM": "<div data-testid=\"modal\" class=\"animate-fade-in\" style=\"animation: fadeIn 300ms; /* disabled if prefers-reduced-motion */\">Modal content</div>",
+        "behavior": "Animations disabled for users with motion sensitivity (accessibility)",
+        "useCases": [
+          "Accessibility compliance",
+          "Vestibular disorder support",
+          "WCAG 2.1 Level AAA (Animation from Interactions)"
+        ],
+        "assertions": [
+          "Respects prefers-reduced-motion media query",
+          "Animations disabled or simplified for affected users",
+          "Content still visible (opacity: 1 immediately)",
+          "Accessibility best practice",
+          "Prevents motion sickness for sensitive users"
+        ]
+      }
+    },
+    {
       "id": "APP-THEME-ANIMATIONS-REGRESSION-001",
       "given": "complete application configuration with all features",
       "when": "user completes full workflow",

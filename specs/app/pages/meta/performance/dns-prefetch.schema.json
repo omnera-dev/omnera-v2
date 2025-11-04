@@ -20,6 +20,21 @@
       "given": "DNS prefetch array with domains",
       "when": "array contains external domain URLs",
       "then": "it should prefetch DNS for listed domains",
+      "validation": {
+        "setup": {
+          "dnsPrefetch": [
+            "https://fonts.googleapis.com",
+            "https://www.google-analytics.com",
+            "https://cdn.example.com"
+          ]
+        },
+        "assertions": [
+          "Type: array",
+          "Items: string with URI format",
+          "Pattern: ^https?://",
+          "uniqueItems: true"
+        ]
+      },
       "application": {
         "dnsPrefetch": [
           "https://fonts.googleapis.com",
@@ -39,6 +54,16 @@
       "given": "DNS prefetch for font domains",
       "when": "array includes 'https://fonts.googleapis.com' and 'https://fonts.gstatic.com'",
       "then": "it should optimize Google Fonts loading",
+      "validation": {
+        "setup": {
+          "dnsPrefetch": ["https://fonts.googleapis.com", "https://fonts.gstatic.com"]
+        },
+        "assertions": [
+          "Google Fonts requires 2 domains",
+          "Both URLs match ^https?:// pattern",
+          "Valid URI format"
+        ]
+      },
       "application": {
         "dnsPrefetch": ["https://fonts.googleapis.com", "https://fonts.gstatic.com"],
         "expectedHTML": "<link rel=\"dns-prefetch\" href=\"https://fonts.googleapis.com\" /><link rel=\"dns-prefetch\" href=\"https://fonts.gstatic.com\" />",
@@ -55,6 +80,16 @@
       "given": "DNS prefetch for analytics domains",
       "when": "array includes 'https://www.google-analytics.com' or 'https://plausible.io'",
       "then": "it should optimize analytics script loading",
+      "validation": {
+        "setup": {
+          "dnsPrefetch": ["https://www.google-analytics.com", "https://plausible.io"]
+        },
+        "assertions": [
+          "Analytics domains: GA, Plausible, etc.",
+          "HTTPS protocol required",
+          "Valid URI format"
+        ]
+      },
       "application": {
         "dnsPrefetch": ["https://www.google-analytics.com", "https://plausible.io"],
         "expectedHTML": "<link rel=\"dns-prefetch\" href=\"https://www.google-analytics.com\" /><link rel=\"dns-prefetch\" href=\"https://plausible.io\" />",
@@ -70,6 +105,20 @@
       "given": "DNS prefetch for CDN domains",
       "when": "array includes 'https://unpkg.com' or 'https://cdn.jsdelivr.net'",
       "then": "it should optimize CDN resource loading",
+      "validation": {
+        "setup": {
+          "dnsPrefetch": [
+            "https://unpkg.com",
+            "https://cdn.jsdelivr.net",
+            "https://cdnjs.cloudflare.com"
+          ]
+        },
+        "assertions": [
+          "CDN domains: unpkg, jsDelivr, cdnjs",
+          "All HTTPS protocol",
+          "Unique items validated"
+        ]
+      },
       "application": {
         "dnsPrefetch": [
           "https://unpkg.com",
@@ -89,6 +138,12 @@
       "given": "DNS prefetch for API domains",
       "when": "array includes API endpoint domains",
       "then": "it should optimize API request latency",
+      "validation": {
+        "setup": {
+          "dnsPrefetch": ["https://api.example.com", "https://graphql.example.com"]
+        },
+        "assertions": ["API domains validated", "HTTPS for secure API calls", "Pattern: ^https?://"]
+      },
       "application": {
         "dnsPrefetch": ["https://api.example.com", "https://graphql.example.com"],
         "expectedHTML": "<link rel=\"dns-prefetch\" href=\"https://api.example.com\" /><link rel=\"dns-prefetch\" href=\"https://graphql.example.com\" />",
@@ -105,6 +160,18 @@
       "given": "DNS prefetch with http/https protocol",
       "when": "URLs start with https:// or http://",
       "then": "it should validate protocol in URL pattern",
+      "validation": {
+        "setup": {
+          "valid": ["https://example.com", "http://legacy.example.com"],
+          "invalid": ["//example.com", "example.com", "ftp://files.example.com"]
+        },
+        "assertions": [
+          "Pattern: ^https?://",
+          "Rejects protocol-relative URLs (//example.com)",
+          "Rejects bare domains (example.com)",
+          "Rejects non-http protocols (ftp://)"
+        ]
+      },
       "application": {
         "valid": ["https://example.com", "http://legacy.example.com"],
         "invalid": ["//example.com", "example.com", "ftp://files.example.com"],
@@ -121,6 +188,17 @@
       "given": "DNS prefetch with unique items",
       "when": "array has uniqueItems constraint",
       "then": "it should prevent duplicate domain entries",
+      "validation": {
+        "setup": {
+          "valid": ["https://fonts.googleapis.com", "https://www.google-analytics.com"],
+          "invalid": ["https://fonts.googleapis.com", "https://fonts.googleapis.com"]
+        },
+        "assertions": [
+          "uniqueItems: true",
+          "Duplicate 'https://fonts.googleapis.com' rejected",
+          "Prevents wasteful duplicate DNS resolution"
+        ]
+      },
       "application": {
         "valid": ["https://fonts.googleapis.com", "https://www.google-analytics.com"],
         "invalid": ["https://fonts.googleapis.com", "https://fonts.googleapis.com"],
@@ -133,6 +211,17 @@
       "given": "DNS prefetch for multiple third-party services",
       "when": "array contains [fonts, analytics, CDN, social] domains",
       "then": "it should optimize multiple external connections",
+      "validation": {
+        "setup": {
+          "dnsPrefetch": [
+            "https://fonts.googleapis.com",
+            "https://www.google-analytics.com",
+            "https://cdn.jsdelivr.net",
+            "https://connect.facebook.net"
+          ]
+        },
+        "assertions": ["4 unique domains", "All HTTPS protocol", "Common production configuration"]
+      },
       "application": {
         "dnsPrefetch": [
           "https://fonts.googleapis.com",
@@ -158,6 +247,16 @@
       "given": "DNS prefetch before resource fetch",
       "when": "DNS resolution happens early in page load",
       "then": "it should reduce connection latency",
+      "validation": {
+        "setup": {
+          "dnsPrefetch": ["https://fonts.googleapis.com"]
+        },
+        "assertions": [
+          "Valid domain for DNS prefetch",
+          "HTTPS protocol",
+          "Placed in <head> for early resolution"
+        ]
+      },
       "application": {
         "timeline": {
           "1. Page loads": "DNS prefetch hints in <head>",
@@ -178,6 +277,20 @@
       "given": "DNS prefetch performance benefit",
       "when": "domains are resolved before actual requests",
       "then": "it should improve perceived page load speed",
+      "validation": {
+        "setup": {
+          "dnsPrefetch": [
+            "https://fonts.googleapis.com",
+            "https://www.google-analytics.com",
+            "https://cdn.jsdelivr.net"
+          ]
+        },
+        "assertions": [
+          "3 domains for performance optimization",
+          "All valid HTTPS URLs",
+          "Best practice: 3-5 critical domains"
+        ]
+      },
       "application": {
         "metrics": {
           "DNS lookup time": "~20-120ms per domain (varies by location)",
