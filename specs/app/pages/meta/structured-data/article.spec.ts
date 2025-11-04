@@ -19,7 +19,7 @@ import { test, expect } from '@/specs/fixtures'
  */
 
 test.describe('Article Schema', () => {
-  test.fixme(
+  test(
     'APP-PAGES-ARTICLE-001: should validate minimal Article structured data',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -28,7 +28,7 @@ test.describe('Article Schema', () => {
         name: 'test-app',
         pages: [
           {
-            name: 'Test',
+            name: 'test',
             path: '/',
             meta: {
               lang: 'en-US',
@@ -68,7 +68,7 @@ test.describe('Article Schema', () => {
           name: 'test-app',
           pages: [
             {
-              name: 'Test',
+              name: 'test',
               path: '/',
               meta: {
                 lang: 'en-US',
@@ -102,7 +102,7 @@ test.describe('Article Schema', () => {
         name: 'test-app',
         pages: [
           {
-            name: 'Test',
+            name: 'test',
             path: '/',
             meta: {
               lang: 'en-US',
@@ -139,7 +139,7 @@ test.describe('Article Schema', () => {
         name: 'test-app',
         pages: [
           {
-            name: 'Test',
+            name: 'test',
             path: '/',
             meta: {
               lang: 'en-US',
@@ -178,7 +178,7 @@ test.describe('Article Schema', () => {
         name: 'test-app',
         pages: [
           {
-            name: 'Test',
+            name: 'test',
             path: '/',
             meta: {
               lang: 'en-US',
@@ -217,7 +217,7 @@ test.describe('Article Schema', () => {
         name: 'test-app',
         pages: [
           {
-            name: 'Test',
+            name: 'test',
             path: '/',
             meta: {
               lang: 'en-US',
@@ -255,7 +255,7 @@ test.describe('Article Schema', () => {
         name: 'test-app',
         pages: [
           {
-            name: 'Test',
+            name: 'test',
             path: '/',
             meta: {
               lang: 'en-US',
@@ -298,7 +298,7 @@ test.describe('Article Schema', () => {
         name: 'test-app',
         pages: [
           {
-            name: 'Test',
+            name: 'test',
             path: '/',
             meta: {
               lang: 'en-US',
@@ -337,7 +337,7 @@ test.describe('Article Schema', () => {
         name: 'test-app',
         pages: [
           {
-            name: 'Test',
+            name: 'test',
             path: '/',
             meta: {
               lang: 'en-US',
@@ -375,7 +375,7 @@ test.describe('Article Schema', () => {
         name: 'test-app',
         pages: [
           {
-            name: 'Test',
+            name: 'test',
             path: '/',
             meta: {
               lang: 'en-US',
@@ -414,7 +414,7 @@ test.describe('Article Schema', () => {
         name: 'test-app',
         pages: [
           {
-            name: 'Test',
+            name: 'test',
             path: '/',
             meta: {
               lang: 'en-US',
@@ -456,7 +456,7 @@ test.describe('Article Schema', () => {
         name: 'test-app',
         pages: [
           {
-            name: 'Test',
+            name: 'test',
             path: '/',
             meta: {
               lang: 'en-US',
@@ -494,7 +494,7 @@ test.describe('Article Schema', () => {
         name: 'test-app',
         pages: [
           {
-            name: 'Test',
+            name: 'test',
             path: '/',
             meta: {
               lang: 'en-US',
@@ -537,7 +537,7 @@ test.describe('Article Schema', () => {
         name: 'test-app',
         pages: [
           {
-            name: 'Test',
+            name: 'test',
             path: '/',
             meta: {
               lang: 'en-US',
@@ -578,7 +578,7 @@ test.describe('Article Schema', () => {
         name: 'test-app',
         pages: [
           {
-            name: 'Test',
+            name: 'test',
             path: '/',
             meta: {
               lang: 'en-US',
