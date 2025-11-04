@@ -400,7 +400,23 @@ test.describe('Theme Configuration', () => {
             name: 'home',
             path: '/',
             meta: { lang: 'en-US', title: 'Test', description: 'Test page' },
-            sections: [],
+            sections: [
+              {
+                type: 'button',
+                content: 'Button 1',
+                props: { 'data-testid': 'button' },
+              },
+              {
+                type: 'button',
+                content: 'Button 2',
+                props: { 'data-testid': 'button' },
+              },
+              {
+                type: 'button',
+                content: 'Button 3',
+                props: { 'data-testid': 'button' },
+              },
+            ],
           },
         ],
       })
