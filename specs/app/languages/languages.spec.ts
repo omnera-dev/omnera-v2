@@ -1166,7 +1166,7 @@ test.describe('Languages Configuration', () => {
       await expect(page.locator('a')).toHaveText('Home')
       await expect(page.locator('h1')).toHaveText('Welcome')
       await expect(page.locator('button')).toHaveText('Save')
-      await expect(page.locator('div').filter({ hasText: 'Not Found' })).toBeVisible()
+      await expect(page.getByText('Not Found', { exact: true })).toBeVisible()
     }
   )
 
