@@ -847,6 +847,14 @@ export function DynamicPage({
             />
           </>
         )}
+        {/* Client-side feature flags - inject when features configured */}
+        {page.scripts?.features && (
+          <script
+            dangerouslySetInnerHTML={{
+              __html: `window.FEATURES = ${JSON.stringify(page.scripts.features)};`,
+            }}
+          />
+        )}
       </body>
     </html>
   )
