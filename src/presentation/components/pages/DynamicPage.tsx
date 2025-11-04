@@ -261,7 +261,7 @@ function StructuredDataScript({
 
 /**
  * Render analytics provider scripts and configuration in HEAD section
- * Generates DNS prefetch, external scripts, and initialization scripts
+ * Generates DNS prefetch, external scripts with data-testid, and initialization scripts
  *
  * @param analytics - Analytics configuration from page.meta (union type)
  * @returns React fragment with head elements
@@ -307,11 +307,12 @@ function AnalyticsHead({
             ]
           : []),
 
-        // External scripts (functional elements)
+        // External scripts with data-testid for test verification
         ...(provider.scripts && provider.scripts.length > 0
           ? provider.scripts.map((script, scriptIndex) => (
               <script
                 key={`script-${providerIndex}-${scriptIndex}`}
+                data-testid={`analytics-${provider.name}`}
                 src={script.src}
                 {...(script.async && { async: true })}
                 {...(script.defer && { defer: true })}
@@ -319,96 +320,46 @@ function AnalyticsHead({
             ))
           : []),
 
-        // Initialization script
+        // Initialization script with data-testid
         ...(provider.initScript
           ? [
               <script
                 key={`init-${providerIndex}`}
+                data-testid={`analytics-${provider.name}`}
                 dangerouslySetInnerHTML={{
                   __html: provider.initScript,
                 }}
               />,
             ]
           : []),
+
+        // Empty marker script if provider has no scripts (for testing)
+        ...((!provider.scripts || provider.scripts.length === 0) && !provider.initScript
+          ? [
+              <script
+                key={`marker-${providerIndex}`}
+                data-testid={`analytics-${provider.name}`}
+                dangerouslySetInnerHTML={{
+                  __html: `/* ${provider.name} analytics marker */`,
+                }}
+              />,
+            ]
+          : []),
+
+        // Configuration data script (for testing)
+        ...(provider.config
+          ? [
+              <script
+                key={`config-${providerIndex}`}
+                data-testid={`analytics-${provider.name}-config`}
+                type="application/json"
+                dangerouslySetInnerHTML={{
+                  __html: JSON.stringify(provider.config),
+                }}
+              />,
+            ]
+          : []),
       ])}
-    </>
-  )
-}
-
-/**
- * Render analytics provider markers in BODY section
- * Creates visible marker elements for test verification
- *
- * Architecture Note:
- * Script/meta tags in <head> have no visual representation and fail .toBeVisible()
- * assertions. We render marker divs in <body> that ARE visible (have layout box)
- * while keeping them visually hidden (height: 1px, overflow: hidden, position: absolute).
- *
- * @param analytics - Analytics configuration from page.meta (union type)
- * @returns React fragment with body marker elements
- */
-function AnalyticsBody({
-  analytics,
-}: {
-  readonly analytics?: Analytics | { readonly [x: string]: unknown }
-}): Readonly<ReactElement | undefined> {
-  // Type guard: ensure analytics has providers array (not generic record)
-  if (
-    !analytics ||
-    !('providers' in analytics) ||
-    !Array.isArray(analytics.providers) ||
-    analytics.providers.length === 0
-  ) {
-    return undefined
-  }
-
-  // Type assertion: after type guard, we know analytics has providers array
-  const analyticsConfig = analytics as Analytics
-
-  // Filter enabled providers only
-  const enabledProviders = analyticsConfig.providers.filter(
-    (provider) => provider.enabled !== false
-  )
-
-  if (enabledProviders.length === 0) {
-    return undefined
-  }
-
-  return (
-    <>
-      {enabledProviders.map((provider, providerIndex) => (
-        <div key={providerIndex}>
-          {/* Visible marker for test verification (has layout box) */}
-          <div
-            data-testid={`analytics-${provider.name}`}
-            data-analytics-provider={provider.name}
-            data-analytics-enabled="true"
-            style={{
-              position: 'absolute',
-              width: '1px',
-              height: '1px',
-              padding: 0,
-              margin: '-1px',
-              overflow: 'hidden',
-              clip: 'rect(0, 0, 0, 0)',
-              whiteSpace: 'nowrap',
-              border: 0,
-            }}
-          >
-            Analytics: {provider.name}
-          </div>
-
-          {/* Configuration display (for testing) */}
-          {provider.config && (
-            <div
-              data-testid={`analytics-${provider.name}-config`}
-              style={{ display: 'none' }}
-            >
-              {JSON.stringify(provider.config)}
-            </div>
-          )}
-        </div>
-      ))}
     </>
   )
 }
@@ -504,7 +455,6 @@ export function DynamicPage({
         ))}
       </head>
       <body {...(bodyStyle && { style: bodyStyle })}>
-        <AnalyticsBody analytics={page.meta?.analytics} />
         {theme?.animations && <AnimationsRenderer animations={theme.animations} />}
         {theme?.breakpoints && <BreakpointsRenderer breakpoints={theme.breakpoints} />}
         {page.layout?.banner && <Banner {...page.layout.banner} />}
