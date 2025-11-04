@@ -150,6 +150,7 @@ export function ComponentRenderer({
     ...(blockName && {
       'data-block': blockName,
       'data-testid': `block-${blockName}`,
+      'data-type': type,
     }),
     ...(firstTranslationKey &&
       translationData && {

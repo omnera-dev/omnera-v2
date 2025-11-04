@@ -114,7 +114,7 @@ test.describe('Block Template', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-BLOCKS-BLOCK-004: should render corresponding HTML element or component',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
