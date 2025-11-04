@@ -375,6 +375,30 @@ export function DynamicPage({
               />
             ))}
 
+            {/* Blocks demonstration - shown when page has no sections but blocks are defined */}
+            {page.sections.length === 0 && blocks && blocks.length > 0 && (
+              <div
+                style={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: '1rem',
+                  padding: '2rem',
+                }}
+              >
+                {blocks.map((block, index) => (
+                  <ComponentRenderer
+                    key={index}
+                    component={{ type: block.type, props: block.props, children: block.children, content: block.content }}
+                    blockName={block.name}
+                    blocks={blocks}
+                    theme={theme}
+                    languages={languages}
+                    currentLang={lang}
+                  />
+                ))}
+              </div>
+            )}
+
             {/* Theme demonstration - shown when page has no sections but theme is configured */}
             {page.sections.length === 0 && theme && (
               <div
