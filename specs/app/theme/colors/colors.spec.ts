@@ -63,6 +63,12 @@ test.describe('Color Palette', () => {
       await page.goto('/')
 
       // THEN: it should validate 6-digit hex colors at build time
+      // Validate CSS custom properties generated in :root
+      const css = await page.locator('style').first().textContent()
+      expect(css).toContain(':root')
+      expect(css).toMatch(/--color-primary:\s*#007bff/)
+      expect(css).toMatch(/--color-secondary:\s*#6c757d/)
+
       // Theme system substitutes $theme.colors.primary → #007bff in backgroundColor
       const element = page.locator('[data-testid="color-primary"]')
       const backgroundColor = await element.evaluate(
@@ -151,6 +157,12 @@ test.describe('Color Palette', () => {
       await page.goto('/')
 
       // THEN: it should validate rgb color format at build time
+      // Validate CSS custom property generated in :root
+      const css = await page.locator('style').first().textContent()
+      expect(css).toContain(':root')
+      expect(css).toMatch(/--color-danger:\s*rgb\(255,\s*0,\s*0\)/)
+
+      // Also verify runtime access to custom property
       const colorValue = await page
         .locator('[data-testid="color-danger"]')
         .evaluate((el) => window.getComputedStyle(el).getPropertyValue('--color-danger'))
@@ -184,6 +196,12 @@ test.describe('Color Palette', () => {
       await page.goto('/')
 
       // THEN: it should validate rgba color format with alpha at build time
+      // Validate CSS custom property generated in :root
+      const css = await page.locator('style').first().textContent()
+      expect(css).toContain(':root')
+      expect(css).toMatch(/--color-danger-semi:\s*rgba\(255,\s*0,\s*0,\s*0\.5\)/)
+
+      // Also verify runtime access to custom property
       const colorValue = await page
         .locator('[data-testid="color-danger-semi"]')
         .evaluate((el) => window.getComputedStyle(el).getPropertyValue('--color-danger-semi'))
@@ -217,6 +235,12 @@ test.describe('Color Palette', () => {
       await page.goto('/')
 
       // THEN: it should validate hsl color format at build time
+      // Validate CSS custom property generated in :root
+      const css = await page.locator('style').first().textContent()
+      expect(css).toContain(':root')
+      expect(css).toMatch(/--color-primary:\s*hsl\(210,\s*100%,\s*50%\)/)
+
+      // Also verify runtime access to custom property
       const colorValue = await page
         .locator('[data-testid="color-primary"]')
         .evaluate((el) => window.getComputedStyle(el).getPropertyValue('--color-primary'))
