@@ -282,6 +282,54 @@ function StructuredDataScript({
 }
 
 /**
+ * Render a script tag with optional attributes
+ * Unified helper for rendering external scripts (analytics, external scripts, etc.)
+ *
+ * @param props - Script configuration
+ * @param props.src - Script source URL
+ * @param props.async - Load asynchronously
+ * @param props.defer - Defer execution
+ * @param props.module - Load as ES module
+ * @param props.integrity - Subresource integrity hash
+ * @param props.crossOrigin - CORS setting ('anonymous' or 'use-credentials')
+ * @param props.dataTestId - Test identifier
+ * @param props.reactKey - React key for list rendering
+ * @returns Script element
+ */
+function renderScriptTag({
+  src,
+  async: asyncProp,
+  defer,
+  module,
+  integrity,
+  crossOrigin,
+  dataTestId,
+  reactKey,
+}: {
+  readonly src: string
+  readonly async?: boolean
+  readonly defer?: boolean
+  readonly module?: boolean
+  readonly integrity?: string
+  readonly crossOrigin?: 'anonymous' | 'use-credentials'
+  readonly dataTestId?: string
+  readonly reactKey: string | number
+}): Readonly<ReactElement> {
+  return (
+    <script
+      key={reactKey}
+      src={src}
+      {...(asyncProp && { async: true })}
+      {...(defer && { defer: true })}
+      {...(module && { type: 'module' })}
+      {...(integrity && { integrity })}
+      {...(crossOrigin && { crossOrigin })}
+      {...(dataTestId && { 'data-testid': dataTestId })}
+    />
+  )
+}
+
+/**
  * Render analytics provider scripts and configuration in HEAD section
  * Generates DNS prefetch, external scripts with data-testid, and initialization scripts
  *
@@ -331,15 +379,15 @@ function AnalyticsHead({
 
         // External scripts with data-testid for test verification
         ...(provider.scripts && provider.scripts.length > 0
-          ? provider.scripts.map((script, scriptIndex) => (
-              <script
-                key={`script-${providerIndex}-${scriptIndex}`}
-                data-testid={`analytics-${provider.name}`}
-                src={script.src}
-                {...(script.async && { async: true })}
-                {...(script.defer && { defer: true })}
-              />
-            ))
+          ? provider.scripts.map((script, scriptIndex) =>
+              renderScriptTag({
+                src: script.src,
+                async: script.async,
+                defer: script.defer,
+                dataTestId: `analytics-${provider.name}`,
+                reactKey: `script-${providerIndex}-${scriptIndex}`,
+              })
+            )
           : []),
 
         // Initialization script with data-testid
@@ -598,6 +646,14 @@ export function DynamicPage({
   // Prefer 'externalScripts' if both are present (canonical property)
   const externalScripts = page.scripts?.externalScripts || page.scripts?.external || []
 
+  // Group external scripts by position
+  const headScripts = externalScripts.filter((script) => script.position === 'head')
+  const bodyStartScripts = externalScripts.filter((script) => script.position === 'body-start')
+  const bodyEndScripts = externalScripts.filter(
+    (script) => !script.position || script.position === 'body-end'
+  )
+
+
   return (
     <html
       lang={lang}
@@ -627,16 +683,30 @@ export function DynamicPage({
           href="/assets/output.css"
         />
         {themeStyles && <style dangerouslySetInnerHTML={{ __html: themeStyles }} />}
-        {externalScripts.map((script, index) => (
-          <script
-            key={index}
-            src={script.src}
-            {...(script.async && { async: true })}
-            {...(script.defer && { defer: true })}
-          />
-        ))}
+        {headScripts.map((script, index) =>
+          renderScriptTag({
+            src: script.src,
+            async: script.async,
+            defer: script.defer,
+            module: script.module,
+            integrity: script.integrity,
+            crossOrigin: script.crossorigin,
+            reactKey: `head-${index}`,
+          })
+        )}
       </head>
       <body {...(bodyStyle && { style: bodyStyle })}>
+        {bodyStartScripts.map((script, index) =>
+          renderScriptTag({
+            src: script.src,
+            async: script.async,
+            defer: script.defer,
+            module: script.module,
+            integrity: script.integrity,
+            crossOrigin: script.crossorigin,
+            reactKey: `body-start-${index}`,
+          })
+        )}
         {page.layout?.banner && <Banner {...page.layout.banner} />}
         {page.layout?.navigation && <Navigation {...page.layout.navigation} />}
         {page.layout?.sidebar && <Sidebar {...page.layout.sidebar} />}
@@ -690,6 +760,17 @@ export function DynamicPage({
         </main>
 
         {page.layout?.footer && <Footer {...page.layout.footer} />}
+        {bodyEndScripts.map((script, index) =>
+          renderScriptTag({
+            src: script.src,
+            async: script.async,
+            defer: script.defer,
+            module: script.module,
+            integrity: script.integrity,
+            crossOrigin: script.crossorigin,
+            reactKey: `body-end-${index}`,
+          })
+        )}
         {/* Client-side language switcher functionality - always inject when languages configured */}
         {languages && (
           <>

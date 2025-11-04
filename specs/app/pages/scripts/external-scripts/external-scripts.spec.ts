@@ -19,7 +19,7 @@ import { test, expect } from '@/specs/fixtures'
  */
 
 test.describe('External Scripts', () => {
-  test.fixme(
+  test(
     'APP-PAGES-EXTERNAL-001: should load external JavaScript from CDN',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -28,7 +28,7 @@ test.describe('External Scripts', () => {
         name: 'test-app',
         pages: [
           {
-            name: 'Test',
+            name: 'test',
             path: '/',
             meta: { lang: 'en-US', title: 'Test', description: 'Test' },
             scripts: {
