@@ -387,6 +387,35 @@ function AnalyticsHead({
 }
 
 /**
+ * Render DNS prefetch link tags
+ * Generates <link rel="dns-prefetch" href="..."> tags for external domains
+ *
+ * @param dnsPrefetch - DNS prefetch configuration from page.meta
+ * @returns React fragment with DNS prefetch link tags
+ */
+function DnsPrefetchLinks({
+  dnsPrefetch,
+}: {
+  readonly dnsPrefetch?: ReadonlyArray<string>
+}): Readonly<ReactElement | undefined> {
+  if (!dnsPrefetch || dnsPrefetch.length === 0) {
+    return undefined
+  }
+
+  return (
+    <>
+      {dnsPrefetch.map((domain) => (
+        <link
+          key={domain}
+          rel="dns-prefetch"
+          href={domain}
+        />
+      ))}
+    </>
+  )
+}
+
+/**
  * Render custom head elements
  * Generates arbitrary HTML elements (meta, link, script, style, base) in <head>
  *
@@ -590,6 +619,7 @@ export function DynamicPage({
         <OpenGraphMeta openGraph={page.meta?.openGraph} />
         <TwitterCardMeta page={page} />
         <StructuredDataScript page={page} />
+        <DnsPrefetchLinks dnsPrefetch={page.meta?.dnsPrefetch} />
         <AnalyticsHead analytics={page.meta?.analytics} />
         <CustomElementsHead customElements={page.meta?.customElements} />
         <link

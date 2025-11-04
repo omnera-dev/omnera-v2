@@ -19,16 +19,16 @@ import { test, expect } from '@/specs/fixtures'
  */
 
 test.describe('DNS Prefetch', () => {
-  test.fixme(
+  test(
     'APP-PAGES-DNS-001: should prefetch DNS for listed domains',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: DNS prefetch array with domains
       await startServerWithSchema({
-        name: 'test-app',
+        name: 'test_app',
         pages: [
           {
-            name: 'Test',
+            name: 'home',
             path: '/',
             meta: {
               lang: 'en-US',
@@ -47,10 +47,10 @@ test.describe('DNS Prefetch', () => {
       // THEN: it should prefetch DNS for listed domains
       await expect(
         page.locator('link[rel="dns-prefetch"][href="https://fonts.googleapis.com"]')
-      ).toBeVisible()
+      ).toBeAttached()
       await expect(
         page.locator('link[rel="dns-prefetch"][href="https://www.google-analytics.com"]')
-      ).toBeVisible()
+      ).toBeAttached()
     }
   )
 
