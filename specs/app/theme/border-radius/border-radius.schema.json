@@ -347,7 +347,103 @@
       "id": "APP-THEME-BORDER-RADIUS-REGRESSION-001",
       "given": "complete application configuration with all features",
       "when": "user completes full workflow",
-      "then": "user can complete full border-radius workflow"
+      "then": "user can complete full border-radius workflow",
+      "workflow": [
+        {
+          "step": 1,
+          "action": "User defines border-radius scale in theme.borderRadius with progressive rounding (none, sm, md, lg, xl, 2xl, 3xl, full)",
+          "validation": "All radius tokens validate as CSS border-radius values (rem, px, or 9999px for full)",
+          "expectedState": "Border-radius design system established with complete rounding scale"
+        },
+        {
+          "step": 2,
+          "action": "System generates CSS custom properties for all radius tokens (--radius-sm, --radius-md, etc.)",
+          "validation": "CSS contains custom properties matching theme.borderRadius configuration",
+          "expectedState": "Radius tokens available for component styling via CSS variables"
+        },
+        {
+          "step": 3,
+          "action": "User applies radius tokens to components (buttons: md, cards: lg, avatars: full, badges: full)",
+          "validation": "Components reference radius tokens via CSS classes or custom properties",
+          "expectedState": "Components styled with theme-consistent border rounding"
+        },
+        {
+          "step": 4,
+          "action": "Browser renders components with correct border-radius creating visual softness and hierarchy",
+          "validation": "Visual rounding matches radius token definitions (subtle to full circles)",
+          "expectedState": "Border-radius design system visible in UI with cohesive rounding patterns"
+        },
+        {
+          "step": 5,
+          "action": "User applies responsive radius variations (mobile: smaller, desktop: larger) for touch vs visual optimization",
+          "validation": "Border-radius changes at breakpoints (sm radius on mobile, lg radius on desktop)",
+          "expectedState": "Responsive border-radius: optimized for touch targets on mobile and visual polish on desktop"
+        }
+      ],
+      "application": {
+        "completeExample": {
+          "theme": {
+            "borderRadius": {
+              "none": "0",
+              "sm": "0.125rem",
+              "md": "0.375rem",
+              "lg": "0.5rem",
+              "xl": "0.75rem",
+              "2xl": "1rem",
+              "3xl": "1.5rem",
+              "full": "9999px"
+            }
+          },
+          "components": {
+            "button": { "radius": "md" },
+            "card": { "radius": "lg" },
+            "input": { "radius": "md" },
+            "avatar": { "radius": "full" },
+            "badge": { "radius": "full" },
+            "modal": { "radius": "xl" },
+            "image-thumbnail": { "radius": "md" },
+            "hero-image": { "radius": "lg", "corners": "top-only" }
+          },
+          "responsivePatterns": {
+            "button": {
+              "mobile": "sm",
+              "desktop": "lg"
+            },
+            "card": {
+              "mobile": "md",
+              "desktop": "xl"
+            }
+          }
+        },
+        "expectedCSS": ":root {\n  --radius-none: 0;\n  --radius-sm: 0.125rem;\n  --radius-md: 0.375rem;\n  --radius-lg: 0.5rem;\n  --radius-xl: 0.75rem;\n  --radius-2xl: 1rem;\n  --radius-3xl: 1.5rem;\n  --radius-full: 9999px;\n}\n\n.rounded-none { border-radius: var(--radius-none); }\n.rounded-sm { border-radius: var(--radius-sm); }\n.rounded-md { border-radius: var(--radius-md); }\n.rounded-lg { border-radius: var(--radius-lg); }\n.rounded-xl { border-radius: var(--radius-xl); }\n.rounded-2xl { border-radius: var(--radius-2xl); }\n.rounded-3xl { border-radius: var(--radius-3xl); }\n.rounded-full { border-radius: var(--radius-full); }\n\n.rounded-t-lg { border-top-left-radius: var(--radius-lg); border-top-right-radius: var(--radius-lg); }\n.rounded-b-lg { border-bottom-left-radius: var(--radius-lg); border-bottom-right-radius: var(--radius-lg); }\n.rounded-l-lg { border-top-left-radius: var(--radius-lg); border-bottom-left-radius: var(--radius-lg); }\n.rounded-r-lg { border-top-right-radius: var(--radius-lg); border-bottom-right-radius: var(--radius-lg); }\n\n@media (min-width: 1024px) {\n  .lg\\:rounded-lg { border-radius: var(--radius-lg); }\n  .lg\\:rounded-xl { border-radius: var(--radius-xl); }\n}",
+        "expectedDOM": "<!-- Button with md radius (moderate rounding) -->\n<button data-testid=\"primary-button\" class=\"rounded-md\" style=\"border-radius: 0.375rem;\">Click me</button>\n\n<!-- Card with lg radius (noticeable rounding) -->\n<div data-testid=\"content-card\" class=\"rounded-lg\" style=\"border-radius: 0.5rem;\">\n  <div class=\"card-content\">Card content</div>\n</div>\n\n<!-- Avatar with full radius (perfect circle) -->\n<img data-testid=\"user-avatar\" class=\"rounded-full\" style=\"border-radius: 9999px; width: 40px; height: 40px;\" src=\"avatar.jpg\" alt=\"User\" />\n\n<!-- Badge with full radius (pill shape) -->\n<span data-testid=\"status-badge\" class=\"rounded-full\" style=\"border-radius: 9999px; padding: 0.25rem 0.75rem;\">New</span>\n\n<!-- Responsive button (sm on mobile, lg on desktop) -->\n<button data-testid=\"responsive-button\" class=\"rounded-sm lg:rounded-lg\" style=\"border-radius: 0.125rem;\">Get Started</button>\n\n<!-- Card with header (coordinated nested rounding) -->\n<div data-testid=\"product-card\" class=\"rounded-lg\" style=\"border-radius: 0.5rem; overflow: hidden;\">\n  <div data-testid=\"card-header\" class=\"rounded-t-lg\" style=\"border-top-left-radius: 0.5rem; border-top-right-radius: 0.5rem; background: #f3f4f6; padding: 1rem;\">Header</div>\n  <div data-testid=\"card-body\" style=\"padding: 1rem;\">Content</div>\n  <div data-testid=\"card-footer\" class=\"rounded-b-lg\" style=\"border-bottom-left-radius: 0.5rem; border-bottom-right-radius: 0.5rem; background: #f9fafb; padding: 1rem;\">Footer</div>\n</div>\n\n<!-- Hero image with top-only rounding -->\n<img data-testid=\"hero-image\" class=\"rounded-t-lg\" style=\"border-top-left-radius: 0.5rem; border-top-right-radius: 0.5rem; border-bottom-left-radius: 0; border-bottom-right-radius: 0;\" src=\"hero.jpg\" alt=\"Hero\" />\n\n<!-- Speech bubble with per-corner radius (directional indicator) -->\n<div data-testid=\"message-bubble\" class=\"rounded-md rounded-bl-none\" style=\"border-top-left-radius: 0.375rem; border-top-right-radius: 0.375rem; border-bottom-right-radius: 0.375rem; border-bottom-left-radius: 0;\">Hello!</div>\n\n<!-- Input field with md radius (form consistency) -->\n<input data-testid=\"email-input\" class=\"rounded-md\" style=\"border-radius: 0.375rem; padding: 0.5rem; border: 1px solid #d1d5db;\" type=\"email\" placeholder=\"Email\" />\n\n<!-- Modal with xl radius (prominent rounding) -->\n<div data-testid=\"modal-dialog\" class=\"rounded-xl\" style=\"border-radius: 0.75rem; padding: 2rem; background: white; box-shadow: 0 20px 25px rgba(0, 0, 0, 0.1);\">\n  <h2>Modal Title</h2>\n  <p>Modal content</p>\n</div>",
+        "assertions": [
+          "Border-radius scale defined in theme.borderRadius with 8 levels (none, sm, md, lg, xl, 2xl, 3xl, full)",
+          "CSS custom properties generated for all radius tokens (--radius-sm: 0.125rem, etc.)",
+          "Button radius: md (0.375rem / 6px) provides moderate rounding for clickable elements",
+          "Card radius: lg (0.5rem / 8px) creates noticeable soft edges for content containers",
+          "Avatar radius: full (9999px) transforms square images into perfect circles",
+          "Badge radius: full (9999px) creates pill-shaped labels with rounded ends",
+          "Responsive radius: buttons use sm on mobile (precise touch targets) and lg on desktop (visual polish)",
+          "Nested components: card headers/footers coordinate radius with parent overflow: hidden",
+          "Per-corner radius: speech bubbles use directional indicators with mixed rounded/sharp corners",
+          "Image rounding patterns: avatars (full circle), thumbnails (md), hero images (top-only lg)",
+          "Form consistency: inputs use md radius matching button style",
+          "Modal prominence: xl radius (0.75rem / 12px) creates prominent visual separation"
+        ]
+      },
+      "integrationPoints": [
+        "Theme design tokens: borderRadius defined in theme.borderRadius as reusable rounding tokens",
+        "CSS custom properties: all radius tokens available as CSS variables (--radius-*)",
+        "Component library: all UI components can reference radius tokens via utility classes",
+        "Responsive design: radius can vary by breakpoint (Tailwind: rounded-sm lg:rounded-lg)",
+        "Shadow integration: larger radius often paired with larger shadows for depth hierarchy",
+        "Color integration: border-radius works with background colors and border colors from theme.colors",
+        "Image components: radius creates visual styles (circles, rounded rectangles, pills)",
+        "Form components: consistent radius across inputs, buttons, and form controls",
+        "Card components: nested radius coordination (header/footer match parent corners)",
+        "Accessibility: adequate radius improves visual affordance without affecting hit targets"
+      ]
     }
   ]
 }

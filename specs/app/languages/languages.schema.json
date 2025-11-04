@@ -1489,7 +1489,191 @@
       "id": "APP-LANGUAGES-REGRESSION-001",
       "given": "complete application configuration with all features",
       "when": "user completes full workflow",
-      "then": "user can complete full languages workflow"
+      "then": "user can complete full languages workflow",
+      "workflow": [
+        {
+          "step": 1,
+          "action": "User defines language configuration with default, fallback, and supported languages",
+          "validation": "All language codes validate against ISO 639-1 + ISO 3166-1 format (e.g., en-US, fr-FR, es-ES)",
+          "expectedState": "Multi-language system configured with 3 languages, English default, browser detection enabled"
+        },
+        {
+          "step": 2,
+          "action": "System detects user language from Accept-Language header or localStorage",
+          "validation": "Language detection logic prioritizes: localStorage > Accept-Language > default language",
+          "expectedState": "Current language determined based on detection priority (e.g., fr-FR from browser)"
+        },
+        {
+          "step": 3,
+          "action": "System renders page in detected language with translated content",
+          "validation": "HTML lang attribute, dir attribute, translated text, and meta tags all reflect current language",
+          "expectedState": "Page displayed in French with correct text direction (LTR), translated meta tags, and localized content"
+        },
+        {
+          "step": 4,
+          "action": "User switches language via language-switcher component dropdown",
+          "validation": "Language switcher renders all supported languages, user selection persists to localStorage",
+          "expectedState": "Page switches to Spanish (es-ES), localStorage updated, content re-rendered in Spanish"
+        },
+        {
+          "step": 5,
+          "action": "System generates localized SEO meta tags and hreflang links",
+          "validation": "hreflang alternate links for all languages, og:locale tags, HTML lang attribute correct",
+          "expectedState": "Search engines see all language versions with proper hreflang tags and Open Graph locale metadata"
+        }
+      ],
+      "application": {
+        "completeExample": {
+          "languages": {
+            "default": "en-US",
+            "fallback": "en-US",
+            "supported": [
+              {
+                "code": "en-US",
+                "label": "English",
+                "direction": "ltr"
+              },
+              {
+                "code": "fr-FR",
+                "label": "Français",
+                "direction": "ltr"
+              },
+              {
+                "code": "es-ES",
+                "label": "Español",
+                "direction": "ltr"
+              }
+            ],
+            "detectBrowser": true,
+            "persistSelection": true,
+            "translations": {
+              "en-US": {
+                "nav.home": "Home",
+                "nav.about": "About",
+                "nav.contact": "Contact",
+                "homepage.hero.title": "Welcome to Our Platform",
+                "homepage.hero.subtitle": "Build amazing applications with ease",
+                "homepage.hero.cta": "Get Started",
+                "common.save": "Save",
+                "common.cancel": "Cancel"
+              },
+              "fr-FR": {
+                "nav.home": "Accueil",
+                "nav.about": "À propos",
+                "nav.contact": "Contact",
+                "homepage.hero.title": "Bienvenue sur Notre Plateforme",
+                "homepage.hero.subtitle": "Créez des applications incroyables facilement",
+                "homepage.hero.cta": "Commencer",
+                "common.save": "Enregistrer",
+                "common.cancel": "Annuler"
+              },
+              "es-ES": {
+                "nav.home": "Inicio",
+                "nav.about": "Acerca de",
+                "nav.contact": "Contacto",
+                "homepage.hero.title": "Bienvenido a Nuestra Plataforma",
+                "homepage.hero.subtitle": "Crea aplicaciones increíbles con facilidad",
+                "homepage.hero.cta": "Empezar",
+                "common.save": "Guardar",
+                "common.cancel": "Cancelar"
+              }
+            }
+          },
+          "blocks": [
+            {
+              "name": "language-switcher",
+              "type": "language-switcher",
+              "props": {
+                "variant": "dropdown",
+                "showFlags": true,
+                "position": "top-right"
+              }
+            }
+          ],
+          "pages": [
+            {
+              "name": "Home",
+              "path": "/",
+              "meta": {
+                "title": "$t:homepage.hero.title",
+                "description": "$t:homepage.hero.subtitle"
+              },
+              "sections": [
+                {
+                  "block": "language-switcher"
+                },
+                {
+                  "type": "hero",
+                  "props": {
+                    "title": "$t:homepage.hero.title",
+                    "subtitle": "$t:homepage.hero.subtitle",
+                    "cta": "$t:homepage.hero.cta"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "expectedDOM": "<html lang=\"fr-FR\" dir=\"ltr\">\n<head>\n  <title>Bienvenue sur Notre Plateforme</title>\n  <meta name=\"description\" content=\"Créez des applications incroyables facilement\" />\n  <meta property=\"og:locale\" content=\"fr_FR\" />\n  <meta property=\"og:locale:alternate\" content=\"en_US\" />\n  <meta property=\"og:locale:alternate\" content=\"es_ES\" />\n  <link rel=\"alternate\" hreflang=\"en-US\" href=\"https://example.com/en/\" />\n  <link rel=\"alternate\" hreflang=\"fr-FR\" href=\"https://example.com/fr/\" />\n  <link rel=\"alternate\" hreflang=\"es-ES\" href=\"https://example.com/es/\" />\n  <link rel=\"alternate\" hreflang=\"x-default\" href=\"https://example.com/en/\" />\n</head>\n<body>\n  <header>\n    <nav>\n      <a href=\"/fr/\" data-testid=\"nav-link-home\">Accueil</a>\n      <a href=\"/fr/about\" data-testid=\"nav-link-about\">À propos</a>\n      <a href=\"/fr/contact\" data-testid=\"nav-link-contact\">Contact</a>\n      <div data-testid=\"language-switcher\" class=\"dropdown\">\n        <button data-testid=\"language-switcher-trigger\">🇫🇷 Français</button>\n        <ul data-testid=\"language-switcher-menu\">\n          <li><button data-testid=\"language-option-en-US\">🇺🇸 English</button></li>\n          <li><button data-testid=\"language-option-fr-FR\" class=\"active\">🇫🇷 Français</button></li>\n          <li><button data-testid=\"language-option-es-ES\">🇪🇸 Español</button></li>\n        </ul>\n      </div>\n    </nav>\n  </header>\n  <main>\n    <section data-testid=\"hero\">\n      <h1>Bienvenue sur Notre Plateforme</h1>\n      <p>Créez des applications incroyables facilement</p>\n      <button data-testid=\"hero-cta\">Commencer</button>\n    </section>\n  </main>\n</body>\n</html>",
+        "expectedMeta": {
+          "htmlLang": "fr-FR",
+          "direction": "ltr",
+          "title": "Bienvenue sur Notre Plateforme",
+          "description": "Créez des applications incroyables facilement",
+          "ogLocale": "fr_FR",
+          "ogLocaleAlternate": ["en_US", "es_ES"],
+          "hreflangLinks": [
+            {
+              "hreflang": "en-US",
+              "href": "https://example.com/en/"
+            },
+            {
+              "hreflang": "fr-FR",
+              "href": "https://example.com/fr/"
+            },
+            {
+              "hreflang": "es-ES",
+              "href": "https://example.com/es/"
+            },
+            {
+              "hreflang": "x-default",
+              "href": "https://example.com/en/"
+            }
+          ]
+        },
+        "assertions": [
+          "Languages configuration validates with default, fallback, supported array, detectBrowser, persistSelection",
+          "Language detection works from Accept-Language header, localStorage, and default fallback",
+          "HTML lang attribute matches current language (fr-FR)",
+          "Text direction (dir) applied correctly based on language direction (ltr for French, rtl for Arabic)",
+          "Language switcher component renders with all supported languages and flags",
+          "Content translations resolve from centralized translations dictionary using $t: prefix",
+          "Fallback to default language for missing translation keys (graceful degradation)",
+          "SEO hreflang links generated for all language versions plus x-default",
+          "Open Graph locale tags include og:locale (current) and og:locale:alternate (others)",
+          "URL routing includes language prefix (/fr/, /en/, /es/) for proper SEO segmentation",
+          "localStorage persists language selection across sessions (persistSelection: true)",
+          "Complete multi-language workflow from config to translated page renders successfully",
+          "International SEO best practices met: hreflang, og:locale, HTML lang, dir attributes",
+          "Translation system supports nested namespaces (nav.*, homepage.*, common.*) for organization",
+          "Browser language detection provides smart defaults on first visit",
+          "RTL support ready for Arabic/Hebrew languages via direction property"
+        ]
+      },
+      "integrationPoints": [
+        "Page meta integration: Localized titles, descriptions, Open Graph tags per language",
+        "URL routing integration: Language prefixes in paths (/en/, /fr/, /es/) for SEO",
+        "Translation system: Centralized translations dictionary with $t:key references",
+        "SEO meta tags: hreflang alternate links, og:locale, og:locale:alternate for international SEO",
+        "Language-switcher block: Reusable component displaying all supported languages",
+        "Content blocks: All text content supports $t: translation references",
+        "Accept-Language header: Browser language detection for smart defaults",
+        "localStorage: Persistent language selection across sessions",
+        "Google Search Console: International targeting via hreflang implementation",
+        "Browser language detection: navigator.language API for first-visit detection",
+        "Accessibility: HTML lang attribute for screen readers and assistive technology",
+        "Theme integration: Direction-aware spacing and layout (RTL/LTR support)"
+      ]
     }
   ],
   "x-block-architecture-example": {

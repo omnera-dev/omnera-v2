@@ -439,7 +439,102 @@
       "id": "APP-PAGES-META-STRUCTURED-DATA-ARTICLE-REGRESSION-001",
       "given": "complete application configuration with all features",
       "when": "user completes full workflow",
-      "then": "user can complete full Article workflow"
+      "then": "user can complete full Article workflow",
+      "workflow": [
+        {
+          "step": 1,
+          "action": "User defines Article metadata in page.meta.schema configuration",
+          "validation": "All required fields present (@context, @type, headline, author, publisher, dates, image)",
+          "expectedState": "Complete article metadata structured with author attribution, publication dates, and images"
+        },
+        {
+          "step": 2,
+          "action": "System generates JSON-LD script from Article schema",
+          "validation": "JSON-LD validates against Schema.org Article/NewsArticle/BlogPosting specification",
+          "expectedState": "Valid JSON-LD structured data embedded in page head"
+        },
+        {
+          "step": 3,
+          "action": "System validates structured data with Google Rich Results Test",
+          "validation": "Google Rich Results Test passes with no errors or warnings",
+          "expectedState": "Structured data eligible for article rich results and Google News"
+        },
+        {
+          "step": 4,
+          "action": "User searches for article on Google",
+          "validation": "Article appears with rich result card showing headline, image, author, date",
+          "expectedState": "Enhanced search snippet displays with thumbnail, publication date, and author attribution"
+        },
+        {
+          "step": 5,
+          "action": "User views article in Google News or AMP carousel",
+          "validation": "Article appears in Google News feed or AMP carousel with complete metadata",
+          "expectedState": "Article discoverable in news aggregators with proper attribution and formatting"
+        }
+      ],
+      "application": {
+        "completeExample": {
+          "page": {
+            "meta": {
+              "schema": {
+                "@context": "https://schema.org",
+                "@type": "NewsArticle",
+                "headline": "Breaking: Revolutionary AI Model Achieves Human-Level Reasoning",
+                "description": "Researchers at leading tech institute unveil groundbreaking AI system with unprecedented natural language understanding and logical reasoning capabilities, marking a significant milestone in artificial intelligence development.",
+                "image": [
+                  "https://technews.example.com/articles/ai-breakthrough-hero-16x9.jpg",
+                  "https://technews.example.com/articles/ai-breakthrough-thumbnail-4x3.jpg",
+                  "https://technews.example.com/articles/ai-breakthrough-square-1x1.jpg"
+                ],
+                "author": {
+                  "@type": "Person",
+                  "name": "Dr. Jane Smith",
+                  "url": "https://technews.example.com/authors/jane-smith"
+                },
+                "datePublished": "2025-01-15T09:00:00Z",
+                "dateModified": "2025-01-15T14:30:00Z",
+                "publisher": {
+                  "@type": "Organization",
+                  "name": "Tech News Daily",
+                  "logo": {
+                    "@type": "ImageObject",
+                    "url": "https://technews.example.com/logo-600x60.png"
+                  }
+                },
+                "mainEntityOfPage": "https://technews.example.com/2025/01/ai-breakthrough-human-reasoning"
+              }
+            }
+          }
+        },
+        "expectedMeta": "{\"@context\":\"https://schema.org\",\"@type\":\"NewsArticle\",\"headline\":\"Breaking: Revolutionary AI Model Achieves Human-Level Reasoning\",\"description\":\"Researchers at leading tech institute unveil groundbreaking AI system with unprecedented natural language understanding and logical reasoning capabilities, marking a significant milestone in artificial intelligence development.\",\"image\":[\"https://technews.example.com/articles/ai-breakthrough-hero-16x9.jpg\",\"https://technews.example.com/articles/ai-breakthrough-thumbnail-4x3.jpg\",\"https://technews.example.com/articles/ai-breakthrough-square-1x1.jpg\"],\"author\":{\"@type\":\"Person\",\"name\":\"Dr. Jane Smith\",\"url\":\"https://technews.example.com/authors/jane-smith\"},\"datePublished\":\"2025-01-15T09:00:00Z\",\"dateModified\":\"2025-01-15T14:30:00Z\",\"publisher\":{\"@type\":\"Organization\",\"name\":\"Tech News Daily\",\"logo\":{\"@type\":\"ImageObject\",\"url\":\"https://technews.example.com/logo-600x60.png\"}},\"mainEntityOfPage\":\"https://technews.example.com/2025/01/ai-breakthrough-human-reasoning\"}",
+        "expectedDOM": "<head>\n  <script type=\"application/ld+json\">\n    {\n      \"@context\": \"https://schema.org\",\n      \"@type\": \"NewsArticle\",\n      \"headline\": \"Breaking: Revolutionary AI Model Achieves Human-Level Reasoning\",\n      \"description\": \"Researchers at leading tech institute unveil groundbreaking AI system with unprecedented natural language understanding and logical reasoning capabilities, marking a significant milestone in artificial intelligence development.\",\n      \"image\": [\n        \"https://technews.example.com/articles/ai-breakthrough-hero-16x9.jpg\",\n        \"https://technews.example.com/articles/ai-breakthrough-thumbnail-4x3.jpg\",\n        \"https://technews.example.com/articles/ai-breakthrough-square-1x1.jpg\"\n      ],\n      \"author\": {\n        \"@type\": \"Person\",\n        \"name\": \"Dr. Jane Smith\",\n        \"url\": \"https://technews.example.com/authors/jane-smith\"\n      },\n      \"datePublished\": \"2025-01-15T09:00:00Z\",\n      \"dateModified\": \"2025-01-15T14:30:00Z\",\n      \"publisher\": {\n        \"@type\": \"Organization\",\n        \"name\": \"Tech News Daily\",\n        \"logo\": {\n          \"@type\": \"ImageObject\",\n          \"url\": \"https://technews.example.com/logo-600x60.png\"\n        }\n      },\n      \"mainEntityOfPage\": \"https://technews.example.com/2025/01/ai-breakthrough-human-reasoning\"\n    }\n  </script>\n</head>",
+        "assertions": [
+          "Article structured data validates against Schema.org specification",
+          "Google Rich Results Test passes with no errors",
+          "Headline displays in search results (max 110 characters)",
+          "Article description appears in search snippet (50-160 characters)",
+          "Hero image (16:9), thumbnail (4:3), and square (1:1) images provided for different display contexts",
+          "Author attribution shows Person schema with name and profile URL",
+          "Publication date (datePublished) displays in search results",
+          "Last modified date (dateModified) shows 'Updated' timestamp",
+          "Publisher organization with logo appears in article card",
+          "Canonical URL (mainEntityOfPage) specified for syndicated content",
+          "Article eligible for Google News inclusion",
+          "Article card displays in search with thumbnail, author, and date"
+        ]
+      },
+      "integrationPoints": [
+        "Page meta integration (title matches headline, description aligns)",
+        "Open Graph integration (og:title, og:description, og:image match Article schema)",
+        "Twitter Cards integration (twitter:title, twitter:description, twitter:image align)",
+        "Author page integration (author.url links to author profile with published articles)",
+        "Google News integration (NewsArticle type enables Google News indexing)",
+        "AMP integration (Article schema supports AMP article carousel eligibility)",
+        "SEO integration (Article schema improves search rankings and click-through rate)",
+        "Content management system integration (CMS auto-generates schema from article metadata)",
+        "Schema.org validator compliance (validates at https://validator.schema.org)",
+        "E-A-T signal integration (author attribution builds Expertise, Authoritativeness, Trustworthiness)"
+      ]
     }
   ]
 }

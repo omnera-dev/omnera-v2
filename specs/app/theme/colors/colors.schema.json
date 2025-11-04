@@ -375,7 +375,116 @@
       "id": "APP-THEME-COLORS-REGRESSION-001",
       "given": "complete application configuration with all features",
       "when": "user completes full workflow",
-      "then": "user can complete full colors workflow"
+      "then": "user can complete full colors workflow",
+      "workflow": [
+        {
+          "step": 1,
+          "action": "User defines complete color palette in theme.colors with semantic colors (primary, secondary, success, danger), gray scale (gray-100 to gray-900), and variants (primary-hover, primary-light)",
+          "validation": "All color values validate as hex (#007bff), rgb (rgb(255,0,0)), rgba (rgba(255,0,0,0.5)), hsl (hsl(210,100%,50%)), or hsla (hsla(210,100%,50%,0.8)) formats",
+          "expectedState": "Color tokens stored in theme.colors object available for component references"
+        },
+        {
+          "step": 2,
+          "action": "System generates CSS custom properties at :root level for all defined colors",
+          "validation": "CSS variables created with --color-{name} syntax for each color token",
+          "expectedState": ":root { --color-primary: #007bff; --color-secondary: #6c757d; --color-success: #28a745; --color-gray-900: #212529; }"
+        },
+        {
+          "step": 3,
+          "action": "Components reference color tokens via theme.colors.primary in button, alert, badge, and semantic HTML elements",
+          "validation": "All components use theme colors, no hardcoded color values in component definitions",
+          "expectedState": "Buttons use primary/secondary colors, alerts use success/danger/warning colors, text uses gray scale"
+        },
+        {
+          "step": 4,
+          "action": "User views application with fully themed colors across all UI components",
+          "validation": "Consistent branded appearance with color system applied to buttons, backgrounds, text, borders, and states",
+          "expectedState": "Complete visual design system with cohesive color usage throughout application"
+        }
+      ],
+      "application": {
+        "completeExample": {
+          "theme": {
+            "colors": {
+              "primary": "#007bff",
+              "primary-hover": "#0056b3",
+              "primary-light": "#e7f1ff",
+              "secondary": "#6c757d",
+              "success": "#28a745",
+              "success-light": "#d4edda",
+              "danger": "#dc3545",
+              "warning": "#ffc107",
+              "info": "#17a2b8",
+              "light": "#f8f9fa",
+              "dark": "#343a40",
+              "white": "#ffffff",
+              "black": "#000000",
+              "gray-100": "#f8f9fa",
+              "gray-200": "#e9ecef",
+              "gray-300": "#dee2e6",
+              "gray-500": "#adb5bd",
+              "gray-700": "#495057",
+              "gray-900": "#212529"
+            }
+          },
+          "pages": [
+            {
+              "name": "home",
+              "sections": [
+                {
+                  "type": "button",
+                  "props": {
+                    "variant": "primary"
+                  },
+                  "children": ["Get Started"]
+                },
+                {
+                  "type": "alert",
+                  "props": {
+                    "variant": "success"
+                  },
+                  "children": ["Your changes have been saved!"]
+                },
+                {
+                  "type": "text",
+                  "props": {
+                    "level": "h1"
+                  },
+                  "children": ["Welcome to Our Platform"]
+                }
+              ]
+            }
+          ]
+        },
+        "expectedCSS": ":root {\n  --color-primary: #007bff;\n  --color-primary-hover: #0056b3;\n  --color-primary-light: #e7f1ff;\n  --color-secondary: #6c757d;\n  --color-success: #28a745;\n  --color-success-light: #d4edda;\n  --color-danger: #dc3545;\n  --color-warning: #ffc107;\n  --color-info: #17a2b8;\n  --color-light: #f8f9fa;\n  --color-dark: #343a40;\n  --color-white: #ffffff;\n  --color-black: #000000;\n  --color-gray-100: #f8f9fa;\n  --color-gray-200: #e9ecef;\n  --color-gray-300: #dee2e6;\n  --color-gray-500: #adb5bd;\n  --color-gray-700: #495057;\n  --color-gray-900: #212529;\n}\n\nbutton.btn-primary {\n  background-color: var(--color-primary);\n  color: var(--color-white);\n}\n\nbutton.btn-primary:hover {\n  background-color: var(--color-primary-hover);\n}\n\n.alert-success {\n  background-color: var(--color-success-light);\n  border-color: var(--color-success);\n  color: var(--color-success);\n}\n\nh1, h2, h3, h4, h5, h6 {\n  color: var(--color-gray-900);\n}\n\np {\n  color: var(--color-gray-700);\n}",
+        "expectedDOM": "<div id=\"app\">\n  <button data-testid=\"cta-button\" class=\"btn-primary\" style=\"background-color: #007bff; color: #ffffff;\">Get Started</button>\n  <div data-testid=\"alert-success\" class=\"alert-success\" style=\"background-color: #d4edda; border-color: #28a745; color: #28a745;\">Your changes have been saved!</div>\n  <h1 style=\"color: #212529;\">Welcome to Our Platform</h1>\n</div>",
+        "assertions": [
+          "All 19 color tokens generate CSS custom properties at :root level",
+          "Semantic colors (primary, secondary, success, danger, warning, info) available for component usage",
+          "Gray scale (gray-100 to gray-900) provides hierarchical text and background colors",
+          "Color variants (primary-hover, primary-light, success-light) enable state-based styling",
+          "Button components automatically apply themed primary/secondary colors",
+          "Alert components use semantic colors (success, danger, warning) with light background variants",
+          "Typography elements (h1-h6, p) receive gray scale colors for text hierarchy",
+          "Hover states use darker variants (primary-hover) for interactive feedback",
+          "Complete color system covers all UI needs: branding, feedback, neutrals, states",
+          "CSS variables enable runtime theme switching without rebuilding styles",
+          "Consistent branded appearance maintained across all pages and components",
+          "Color system integrates with theme, components, and pages seamlessly"
+        ]
+      },
+      "integrationPoints": [
+        "Theme colors integrate with button components (primary, secondary variants)",
+        "Theme colors integrate with alert/badge components (success, danger, warning, info states)",
+        "Theme colors integrate with typography system (gray scale for text hierarchy)",
+        "Theme colors integrate with hover/focus states (variant colors for interactions)",
+        "Theme colors integrate with animations (color transitions use theme tokens)",
+        "Theme colors integrate with spacing system (consistent visual design)",
+        "Theme colors integrate with border-radius system (complete component styling)",
+        "CSS custom properties enable dynamic theme switching at runtime",
+        "Color tokens referenced in component props via theme.colors.{name} syntax",
+        "Webflow/Framer-style visual design system with centralized color management"
+      ]
     }
   ]
 }

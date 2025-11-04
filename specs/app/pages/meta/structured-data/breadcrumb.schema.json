@@ -331,7 +331,111 @@
       "id": "APP-PAGES-META-STRUCTURED-DATA-BREADCRUMB-REGRESSION-001",
       "given": "complete application configuration with all features",
       "when": "user completes full workflow",
-      "then": "user can complete full Breadcrumb workflow"
+      "then": "user can complete full Breadcrumb workflow",
+      "workflow": [
+        {
+          "step": 1,
+          "action": "User defines BreadcrumbList based on page URL path and site hierarchy",
+          "validation": "itemListElement array contains sequential ListItem objects with positions 1, 2, 3, 4...",
+          "expectedState": "Complete breadcrumb trail from Home to current page with proper position ordering"
+        },
+        {
+          "step": 2,
+          "action": "System generates JSON-LD script from BreadcrumbList schema",
+          "validation": "JSON-LD validates against Schema.org BreadcrumbList specification",
+          "expectedState": "Valid JSON-LD structured data embedded in page head"
+        },
+        {
+          "step": 3,
+          "action": "System validates structured data with Google Rich Results Test",
+          "validation": "Google Rich Results Test passes with no errors or warnings",
+          "expectedState": "Breadcrumb trail eligible for SERP display replacing URL"
+        },
+        {
+          "step": 4,
+          "action": "User searches for page on Google",
+          "validation": "Breadcrumb trail displays in search results above page title (e.g., Home > Electronics > Laptops)",
+          "expectedState": "Breadcrumb replaces URL in search snippet, showing site hierarchy"
+        },
+        {
+          "step": 5,
+          "action": "User navigates site and views breadcrumb UI on page",
+          "validation": "Breadcrumb navigation displays on page with clickable links to parent pages",
+          "expectedState": "Users can navigate back through site hierarchy via breadcrumb links"
+        }
+      ],
+      "application": {
+        "completeExample": {
+          "page": {
+            "url": "https://shop.example.com/electronics/laptops/gaming/asus-rog-strix",
+            "meta": {
+              "schema": {
+                "@context": "https://schema.org",
+                "@type": "BreadcrumbList",
+                "itemListElement": [
+                  {
+                    "@type": "ListItem",
+                    "position": 1,
+                    "name": "Home",
+                    "item": "https://shop.example.com"
+                  },
+                  {
+                    "@type": "ListItem",
+                    "position": 2,
+                    "name": "Electronics",
+                    "item": "https://shop.example.com/electronics"
+                  },
+                  {
+                    "@type": "ListItem",
+                    "position": 3,
+                    "name": "Laptops",
+                    "item": "https://shop.example.com/electronics/laptops"
+                  },
+                  {
+                    "@type": "ListItem",
+                    "position": 4,
+                    "name": "Gaming Laptops",
+                    "item": "https://shop.example.com/electronics/laptops/gaming"
+                  },
+                  {
+                    "@type": "ListItem",
+                    "position": 5,
+                    "name": "ASUS ROG Strix"
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "expectedMeta": "{\"@context\":\"https://schema.org\",\"@type\":\"BreadcrumbList\",\"itemListElement\":[{\"@type\":\"ListItem\",\"position\":1,\"name\":\"Home\",\"item\":\"https://shop.example.com\"},{\"@type\":\"ListItem\",\"position\":2,\"name\":\"Electronics\",\"item\":\"https://shop.example.com/electronics\"},{\"@type\":\"ListItem\",\"position\":3,\"name\":\"Laptops\",\"item\":\"https://shop.example.com/electronics/laptops\"},{\"@type\":\"ListItem\",\"position\":4,\"name\":\"Gaming Laptops\",\"item\":\"https://shop.example.com/electronics/laptops/gaming\"},{\"@type\":\"ListItem\",\"position\":5,\"name\":\"ASUS ROG Strix\"}]}",
+        "expectedDOM": "<head>\n  <script type=\"application/ld+json\">\n    {\n      \"@context\": \"https://schema.org\",\n      \"@type\": \"BreadcrumbList\",\n      \"itemListElement\": [\n        {\n          \"@type\": \"ListItem\",\n          \"position\": 1,\n          \"name\": \"Home\",\n          \"item\": \"https://shop.example.com\"\n        },\n        {\n          \"@type\": \"ListItem\",\n          \"position\": 2,\n          \"name\": \"Electronics\",\n          \"item\": \"https://shop.example.com/electronics\"\n        },\n        {\n          \"@type\": \"ListItem\",\n          \"position\": 3,\n          \"name\": \"Laptops\",\n          \"item\": \"https://shop.example.com/electronics/laptops\"\n        },\n        {\n          \"@type\": \"ListItem\",\n          \"position\": 4,\n          \"name\": \"Gaming Laptops\",\n          \"item\": \"https://shop.example.com/electronics/laptops/gaming\"\n        },\n        {\n          \"@type\": \"ListItem\",\n          \"position\": 5,\n          \"name\": \"ASUS ROG Strix\"\n        }\n      ]\n    }\n  </script>\n</head>\n<nav aria-label=\"breadcrumb\">\n  <ol>\n    <li><a href=\"https://shop.example.com\">Home</a></li>\n    <li><a href=\"https://shop.example.com/electronics\">Electronics</a></li>\n    <li><a href=\"https://shop.example.com/electronics/laptops\">Laptops</a></li>\n    <li><a href=\"https://shop.example.com/electronics/laptops/gaming\">Gaming Laptops</a></li>\n    <li aria-current=\"page\">ASUS ROG Strix</li>\n  </ol>\n</nav>",
+        "assertions": [
+          "BreadcrumbList structured data validates against Schema.org specification",
+          "Google Rich Results Test passes with no errors",
+          "Breadcrumb trail displays in Google search results above page title",
+          "Breadcrumb replaces URL in search snippet (Home > Electronics > Laptops > Gaming Laptops)",
+          "Sequential position ordering (1, 2, 3, 4, 5) maintained",
+          "Each ListItem has required @type, position, and name",
+          "All parent items (positions 1-4) include 'item' URL for clickability",
+          "Current page (position 5) omits 'item' URL as it's the active page",
+          "Breadcrumb navigation renders on page with clickable links",
+          "Last breadcrumb item (current page) is non-clickable with aria-current=\"page\"",
+          "Breadcrumb improves CTR by providing better context in search results",
+          "Site hierarchy visible to search engines for improved category SEO"
+        ]
+      },
+      "integrationPoints": [
+        "Page URL structure integration (breadcrumb reflects URL path hierarchy)",
+        "Site navigation integration (breadcrumb matches main navigation categories)",
+        "SEO integration (breadcrumb improves search rankings for category pages)",
+        "SERP display integration (breadcrumb replaces URL in Google search results)",
+        "Accessibility integration (aria-label and aria-current for screen readers)",
+        "User experience integration (breadcrumb reduces bounce rate by 10-20%)",
+        "Analytics integration (track breadcrumb clicks to understand navigation patterns)",
+        "Mobile responsiveness (breadcrumb adapts to small screens with truncation or scrolling)",
+        "Schema.org validator compliance (validates at https://validator.schema.org)",
+        "Google Rich Results Test compliance (validates at https://search.google.com/test/rich-results)"
+      ]
     }
   ]
 }

@@ -291,7 +291,110 @@
       "id": "APP-THEME-SPACING-REGRESSION-001",
       "given": "complete application configuration with all features",
       "when": "user completes full workflow",
-      "then": "user can complete full spacing workflow"
+      "then": "user can complete full spacing workflow",
+      "workflow": [
+        {
+          "step": 1,
+          "action": "User defines spacing system in theme.spacing with tokens for sections, containers, gaps, padding, and margins using Tailwind classes or CSS values",
+          "validation": "Spacing values validate as Tailwind utility classes (py-16 sm:py-20) or raw CSS (4rem, 16px, 1.5em)",
+          "expectedState": "Spacing tokens stored with responsive variants (section: py-16 sm:py-20) and size variants (gap-small, gap, gap-large)"
+        },
+        {
+          "step": 2,
+          "action": "System generates CSS classes or inline styles for spacing tokens with responsive breakpoints",
+          "validation": "Tailwind classes compile to responsive CSS, raw values apply as inline styles",
+          "expectedState": "section class: padding-top: 4rem (base), padding-top: 5rem (sm+); container class: max-width + centering + horizontal padding"
+        },
+        {
+          "step": 3,
+          "action": "Layout components reference spacing tokens via theme.spacing.section for sections, theme.spacing.container for wrappers, theme.spacing.gap for flex/grid",
+          "validation": "All layout components use themed spacing, no hardcoded margin/padding values",
+          "expectedState": "Sections use vertical rhythm (py-16 sm:py-20), containers constrain width (max-w-7xl mx-auto px-4), flex/grid items have consistent gaps"
+        },
+        {
+          "step": 4,
+          "action": "User views application with consistent visual rhythm and spacing hierarchy",
+          "validation": "Vertical rhythm creates breathing room between sections, containers maintain readable width, components have consistent internal/external spacing",
+          "expectedState": "Professional layout system with balanced whitespace and responsive spacing"
+        }
+      ],
+      "application": {
+        "completeExample": {
+          "theme": {
+            "spacing": {
+              "section": "py-16 sm:py-20",
+              "container": "max-w-7xl mx-auto px-4",
+              "container-small": "max-w-4xl mx-auto px-4",
+              "container-xsmall": "max-w-2xl mx-auto px-4",
+              "gap": "gap-6",
+              "gap-small": "gap-4",
+              "gap-large": "gap-8",
+              "padding": "p-6",
+              "padding-small": "p-4",
+              "padding-large": "p-8",
+              "margin": "m-6",
+              "margin-small": "m-4",
+              "margin-large": "m-8"
+            }
+          },
+          "pages": [
+            {
+              "name": "home",
+              "sections": [
+                {
+                  "type": "section",
+                  "props": {
+                    "className": "theme.spacing.section"
+                  },
+                  "children": [
+                    {
+                      "type": "div",
+                      "props": {
+                        "className": "theme.spacing.container"
+                      },
+                      "children": [
+                        {
+                          "type": "div",
+                          "props": {
+                            "className": "flex theme.spacing.gap"
+                          },
+                          "children": ["Feature 1", "Feature 2", "Feature 3"]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "expectedCSS": ".section { padding-top: 4rem; padding-bottom: 4rem; }\n@media (min-width: 640px) {\n  .section { padding-top: 5rem; padding-bottom: 5rem; }\n}\n\n.container { max-width: 80rem; margin-left: auto; margin-right: auto; padding-left: 1rem; padding-right: 1rem; }\n.container-small { max-width: 56rem; margin-left: auto; margin-right: auto; padding-left: 1rem; padding-right: 1rem; }\n.container-xsmall { max-width: 42rem; margin-left: auto; margin-right: auto; padding-left: 1rem; padding-right: 1rem; }\n\n.gap { gap: 1.5rem; }\n.gap-small { gap: 1rem; }\n.gap-large { gap: 2rem; }\n\n.padding { padding: 1.5rem; }\n.padding-small { padding: 1rem; }\n.padding-large { padding: 2rem; }",
+        "expectedDOM": "<section class=\"section\" style=\"padding-top: 4rem; padding-bottom: 4rem;\">\n  <div class=\"container\" style=\"max-width: 80rem; margin: 0 auto; padding: 0 1rem;\">\n    <div class=\"flex gap\" style=\"display: flex; gap: 1.5rem;\">\n      <div>Feature 1</div>\n      <div>Feature 2</div>\n      <div>Feature 3</div>\n    </div>\n  </div>\n</section>",
+        "assertions": [
+          "All 11 spacing tokens generate CSS classes or inline styles",
+          "Section spacing creates vertical rhythm with responsive padding (py-16 base, py-20 sm+)",
+          "Container tokens constrain width with three sizes: large (80rem), small (56rem), xsmall (42rem)",
+          "All containers auto-center with mx-auto and have horizontal padding (px-4) for mobile",
+          "Gap tokens provide consistent spacing in flex/grid layouts with small/medium/large variants",
+          "Padding/margin tokens follow progressive scale: small (1rem), medium (1.5rem), large (2rem)",
+          "Responsive spacing increases on larger screens for better use of space",
+          "Consistent visual rhythm maintained across all sections and components",
+          "Tailwind utility classes compile to responsive CSS with breakpoints",
+          "Complete spacing system covers sections, containers, internal (padding), external (margin), and between-item (gap) spacing",
+          "Professional layout with balanced whitespace and readable content width"
+        ]
+      },
+      "integrationPoints": [
+        "Theme spacing integrates with section components (vertical rhythm)",
+        "Theme spacing integrates with container/wrapper components (width constraints + centering)",
+        "Theme spacing integrates with flex/grid layouts (gap between items)",
+        "Theme spacing integrates with card/panel components (internal padding)",
+        "Theme spacing integrates with responsive design (breakpoint-specific spacing)",
+        "Spacing tokens work with both Tailwind classes and raw CSS values",
+        "Progressive spacing scale (small/medium/large) ensures consistent hierarchy",
+        "Container variants (container-small, container-xsmall) optimize for content type (article vs full-width)",
+        "Webflow/Framer-style layout system with centralized spacing management"
+      ]
     }
   ]
 }

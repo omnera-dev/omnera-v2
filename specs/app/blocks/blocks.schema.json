@@ -956,7 +956,235 @@
       "id": "APP-BLOCKS-REGRESSION-001",
       "given": "complete application configuration with all features",
       "when": "user completes full workflow",
-      "then": "user can complete full blocks workflow"
+      "then": "user can complete full blocks workflow",
+      "workflow": [
+        {
+          "step": 1,
+          "action": "Developer defines reusable blocks in global app.blocks[] array",
+          "validation": "Each block has unique name, type, and template structure (props/children/content with $variable placeholders)",
+          "expectedState": "Block library created with 3 reusable blocks: hero-section, feature-card, cta-button"
+        },
+        {
+          "step": 2,
+          "action": "Developer references blocks from page sections using block name and vars object",
+          "validation": "Page sections reference blocks by name, provide concrete values for $variable placeholders",
+          "expectedState": "Homepage references hero-section block with specific title, subtitle, and CTA text"
+        },
+        {
+          "step": 3,
+          "action": "System performs variable substitution: $variables replaced with concrete values from vars",
+          "validation": "All $variable placeholders in props, content, and children replaced with actual values",
+          "expectedState": "Hero block renders with substituted values: title='Welcome', subtitle='Build apps', cta='Get Started'"
+        },
+        {
+          "step": 4,
+          "action": "System renders block instances with unique data-testid for instance tracking",
+          "validation": "Each block instance has data-testid='block-{name}' or 'block-{name}-{instance}' for multiple uses",
+          "expectedState": "Three block instances rendered: hero-section (once), feature-card (twice with different data)"
+        },
+        {
+          "step": 5,
+          "action": "Developer updates block definition in app.blocks[] array",
+          "validation": "Single block definition change automatically applies to ALL instances across all pages",
+          "expectedState": "All cta-button instances updated with new className after changing block definition once"
+        }
+      ],
+      "application": {
+        "completeExample": {
+          "blocks": [
+            {
+              "name": "hero-section",
+              "type": "section",
+              "props": {
+                "className": "hero bg-gradient py-20 text-center",
+                "data-testid": "hero-section"
+              },
+              "children": [
+                {
+                  "type": "container",
+                  "props": {
+                    "className": "container mx-auto"
+                  },
+                  "children": [
+                    {
+                      "type": "text",
+                      "props": {
+                        "level": "h1",
+                        "className": "text-5xl font-bold mb-4 text-$titleColor"
+                      },
+                      "content": "$title"
+                    },
+                    {
+                      "type": "text",
+                      "props": {
+                        "level": "p",
+                        "className": "text-xl mb-8"
+                      },
+                      "content": "$subtitle"
+                    },
+                    {
+                      "type": "button",
+                      "props": {
+                        "className": "btn btn-$ctaVariant btn-lg px-8 py-3"
+                      },
+                      "content": "$ctaText"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "feature-card",
+              "type": "card",
+              "props": {
+                "className": "feature-card rounded-lg shadow-lg p-6 bg-white"
+              },
+              "children": [
+                {
+                  "type": "icon",
+                  "props": {
+                    "name": "$icon",
+                    "size": 8,
+                    "className": "text-$iconColor mb-4"
+                  }
+                },
+                {
+                  "type": "text",
+                  "props": {
+                    "level": "h3",
+                    "className": "text-2xl font-semibold mb-2"
+                  },
+                  "content": "$title"
+                },
+                {
+                  "type": "text",
+                  "props": {
+                    "level": "p",
+                    "className": "text-gray-600"
+                  },
+                  "content": "$description"
+                }
+              ]
+            },
+            {
+              "name": "cta-button",
+              "type": "button",
+              "props": {
+                "className": "btn btn-$variant px-6 py-2 rounded-lg transition-all hover:scale-105"
+              },
+              "content": "$label"
+            }
+          ],
+          "pages": [
+            {
+              "name": "Home",
+              "path": "/",
+              "sections": [
+                {
+                  "block": "hero-section",
+                  "vars": {
+                    "title": "Welcome to Omnera",
+                    "titleColor": "primary",
+                    "subtitle": "Build powerful applications with configuration",
+                    "ctaText": "Get Started",
+                    "ctaVariant": "primary"
+                  }
+                },
+                {
+                  "type": "container",
+                  "props": {
+                    "className": "features-grid grid grid-cols-3 gap-8 py-16"
+                  },
+                  "children": [
+                    {
+                      "block": "feature-card",
+                      "vars": {
+                        "icon": "zap",
+                        "iconColor": "yellow-500",
+                        "title": "Fast Development",
+                        "description": "Build applications in minutes, not days"
+                      }
+                    },
+                    {
+                      "block": "feature-card",
+                      "vars": {
+                        "icon": "shield",
+                        "iconColor": "green-500",
+                        "title": "Secure by Default",
+                        "description": "Enterprise-grade security built-in"
+                      }
+                    },
+                    {
+                      "block": "feature-card",
+                      "vars": {
+                        "icon": "layers",
+                        "iconColor": "blue-500",
+                        "title": "Highly Composable",
+                        "description": "Mix and match components effortlessly"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "type": "container",
+                  "props": {
+                    "className": "cta-section text-center py-12"
+                  },
+                  "children": [
+                    {
+                      "block": "cta-button",
+                      "vars": {
+                        "variant": "primary",
+                        "label": "Start Building"
+                      }
+                    },
+                    {
+                      "block": "cta-button",
+                      "vars": {
+                        "variant": "secondary",
+                        "label": "View Documentation"
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "expectedDOM": "<main>\n  <section data-testid=\"hero-section\" class=\"hero bg-gradient py-20 text-center\">\n    <div class=\"container mx-auto\">\n      <h1 class=\"text-5xl font-bold mb-4 text-primary\">Welcome to Omnera</h1>\n      <p class=\"text-xl mb-8\">Build powerful applications with configuration</p>\n      <button class=\"btn btn-primary btn-lg px-8 py-3\">Get Started</button>\n    </div>\n  </section>\n  \n  <div class=\"features-grid grid grid-cols-3 gap-8 py-16\">\n    <div data-testid=\"block-feature-card-0\" class=\"feature-card rounded-lg shadow-lg p-6 bg-white\">\n      <svg data-testid=\"icon-zap\" width=\"32\" height=\"32\" class=\"text-yellow-500 mb-4\"></svg>\n      <h3 class=\"text-2xl font-semibold mb-2\">Fast Development</h3>\n      <p class=\"text-gray-600\">Build applications in minutes, not days</p>\n    </div>\n    <div data-testid=\"block-feature-card-1\" class=\"feature-card rounded-lg shadow-lg p-6 bg-white\">\n      <svg data-testid=\"icon-shield\" width=\"32\" height=\"32\" class=\"text-green-500 mb-4\"></svg>\n      <h3 class=\"text-2xl font-semibold mb-2\">Secure by Default</h3>\n      <p class=\"text-gray-600\">Enterprise-grade security built-in</p>\n    </div>\n    <div data-testid=\"block-feature-card-2\" class=\"feature-card rounded-lg shadow-lg p-6 bg-white\">\n      <svg data-testid=\"icon-layers\" width=\"32\" height=\"32\" class=\"text-blue-500 mb-4\"></svg>\n      <h3 class=\"text-2xl font-semibold mb-2\">Highly Composable</h3>\n      <p class=\"text-gray-600\">Mix and match components effortlessly</p>\n    </div>\n  </div>\n  \n  <div class=\"cta-section text-center py-12\">\n    <button data-testid=\"block-cta-button-0\" class=\"btn btn-primary px-6 py-2 rounded-lg transition-all hover:scale-105\">Start Building</button>\n    <button data-testid=\"block-cta-button-1\" class=\"btn btn-secondary px-6 py-2 rounded-lg transition-all hover:scale-105\">View Documentation</button>\n  </div>\n</main>",
+        "assertions": [
+          "Blocks array validates with 3 reusable block definitions (hero-section, feature-card, cta-button)",
+          "Each block has unique name, type, and template structure following block.schema.json",
+          "Variable substitution works across all property types: props, content, children",
+          "Hero section renders once with substituted values: title, titleColor, subtitle, ctaText, ctaVariant",
+          "Feature cards render 3 times with different data: icon, iconColor, title, description per instance",
+          "CTA buttons render 2 times with different variants: primary and secondary",
+          "Instance tracking via data-testid: block-feature-card-0, block-feature-card-1, block-feature-card-2",
+          "Multiple instances use same block definition with different vars (DRY principle)",
+          "Nested children composition: hero-section contains container > h1 + p + button",
+          "Props override: className with $variable placeholders replaced (text-$titleColor → text-primary)",
+          "Block reusability: Same feature-card template used 3 times with unique content",
+          "Centralized updates: Changing block definition updates ALL instances automatically",
+          "Complete workflow from block library definition to rendered multi-instance page works",
+          "Block architecture mirrors Webflow symbols/components for familiar developer experience",
+          "Component library pattern: Global blocks available to all pages",
+          "Variable substitution supports deeply nested children structures"
+        ]
+      },
+      "integrationPoints": [
+        "Page sections integration: Blocks referenced via sections[].block property with vars object",
+        "Component library pattern: app.blocks[] as global reusable component registry",
+        "Props system: $variable placeholders in block props resolved from vars at render time",
+        "Children nesting: Blocks support complex nested children structures for composition",
+        "Theme integration: Blocks use theme tokens (colors, spacing) via $variable or theme references",
+        "Meta/SEO from blocks: Blocks can include meta properties for structured data generation",
+        "Data-testid tracking: Consistent testid pattern (block-{name}-{instance}) for E2E testing",
+        "Variable substitution engine: $variable pattern resolved across props, content, children",
+        "Webflow-like symbols: Block architecture inspired by Webflow reusable symbols pattern",
+        "Design system consistency: Blocks enforce consistent UI patterns across application",
+        "Maintainability: Single source of truth for component definitions reduces duplication",
+        "Type safety: Block definitions validate against block.schema.json at build time"
+      ]
     }
   ]
 }

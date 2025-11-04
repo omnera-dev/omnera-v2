@@ -751,7 +751,159 @@
       "id": "APP-THEME-ANIMATIONS-REGRESSION-001",
       "given": "complete application configuration with all features",
       "when": "user completes full workflow",
-      "then": "user can complete full animations workflow"
+      "then": "user can complete full animations workflow",
+      "workflow": [
+        {
+          "step": 1,
+          "action": "User defines animation library in theme.animations with common animations (fadeIn, slideUp, pulse, rotate)",
+          "validation": "All animation tokens validate with duration, easing, and keyframes properties",
+          "expectedState": "Animation design system established with reusable motion tokens"
+        },
+        {
+          "step": 2,
+          "action": "System generates CSS @keyframes rules for all custom animations with keyframe definitions",
+          "validation": "CSS contains @keyframes rules matching theme.animations configuration",
+          "expectedState": "Animation keyframes available for component usage via CSS"
+        },
+        {
+          "step": 3,
+          "action": "User applies animation tokens to components (entrance: fadeIn, attention: pulse, interaction: transition)",
+          "validation": "Components reference animation tokens via CSS classes or style attributes",
+          "expectedState": "Components animated with theme-consistent motion design"
+        },
+        {
+          "step": 4,
+          "action": "Browser renders animations with correct timing, easing, and motion behavior",
+          "validation": "Visual motion matches animation token definitions (duration, easing, keyframes)",
+          "expectedState": "Motion design system visible in UI with smooth, coordinated animations"
+        },
+        {
+          "step": 5,
+          "action": "System respects prefers-reduced-motion media query for accessibility",
+          "validation": "Animations disabled or simplified when user has motion sensitivity preferences",
+          "expectedState": "Accessible motion: animations conditionally applied based on user preferences"
+        }
+      ],
+      "application": {
+        "completeExample": {
+          "theme": {
+            "animations": {
+              "fadeIn": {
+                "enabled": true,
+                "duration": "400ms",
+                "easing": "ease-out",
+                "keyframes": {
+                  "0%": { "opacity": 0 },
+                  "100%": { "opacity": 1 }
+                }
+              },
+              "fadeInUp": {
+                "enabled": true,
+                "duration": "600ms",
+                "easing": "cubic-bezier(0.4, 0, 0.2, 1)",
+                "keyframes": {
+                  "0%": { "opacity": 0, "transform": "translateY(20px)" },
+                  "100%": { "opacity": 1, "transform": "translateY(0)" }
+                }
+              },
+              "slideIn": {
+                "enabled": true,
+                "duration": "400ms",
+                "easing": "ease-out",
+                "keyframes": {
+                  "0%": { "transform": "translateX(-100%)" },
+                  "100%": { "transform": "translateX(0)" }
+                }
+              },
+              "pulse": {
+                "enabled": true,
+                "duration": "2s",
+                "easing": "ease-in-out"
+              },
+              "rotate": {
+                "enabled": true,
+                "duration": "1s",
+                "easing": "linear",
+                "keyframes": {
+                  "0%": { "transform": "rotate(0deg)" },
+                  "100%": { "transform": "rotate(360deg)" }
+                }
+              },
+              "scaleUp": {
+                "enabled": true,
+                "duration": "500ms",
+                "easing": "cubic-bezier(0.34, 1.56, 0.64, 1)",
+                "keyframes": {
+                  "0%": { "opacity": 0, "transform": "scale(0.8)" },
+                  "100%": { "opacity": 1, "transform": "scale(1)" }
+                }
+              },
+              "float": {
+                "enabled": true,
+                "duration": "3s",
+                "easing": "ease-in-out",
+                "keyframes": {
+                  "0%, 100%": { "transform": "translateY(0)" },
+                  "50%": { "transform": "translateY(-10px)" }
+                }
+              },
+              "shake": {
+                "enabled": true,
+                "duration": "500ms",
+                "easing": "ease-in-out",
+                "keyframes": {
+                  "0%, 100%": { "transform": "translateX(0)" },
+                  "10%, 30%, 50%, 70%, 90%": { "transform": "translateX(-10px)" },
+                  "20%, 40%, 60%, 80%": { "transform": "translateX(10px)" }
+                }
+              },
+              "transition": {
+                "duration": "200ms",
+                "easing": "ease-in-out"
+              }
+            }
+          },
+          "components": {
+            "modal": { "animation": "fadeIn" },
+            "hero": { "animation": "fadeInUp" },
+            "sidebar": { "animation": "slideIn" },
+            "badge": { "animation": "pulse" },
+            "spinner": { "animation": "rotate" },
+            "card": { "animation": "scaleUp", "trigger": "scroll-into-view" },
+            "fab": { "animation": "float" },
+            "input": { "animation": "shake", "trigger": "validation-error" },
+            "button": { "transition": "all 200ms ease-in-out" }
+          }
+        },
+        "expectedCSS": "@keyframes fadeIn { 0% { opacity: 0; } 100% { opacity: 1; } }\n@keyframes fadeInUp { 0% { opacity: 0; transform: translateY(20px); } 100% { opacity: 1; transform: translateY(0); } }\n@keyframes slideIn { 0% { transform: translateX(-100%); } 100% { transform: translateX(0); } }\n@keyframes rotate { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }\n@keyframes scaleUp { 0% { opacity: 0; transform: scale(0.8); } 100% { opacity: 1; transform: scale(1); } }\n@keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }\n@keyframes shake { 0%, 100% { transform: translateX(0); } 10%, 30%, 50%, 70%, 90% { transform: translateX(-10px); } 20%, 40%, 60%, 80% { transform: translateX(10px); } }\n\n.animate-fade-in { animation: fadeIn 400ms ease-out; }\n.animate-fade-in-up { animation: fadeInUp 600ms cubic-bezier(0.4, 0, 0.2, 1); }\n.animate-slide-in { animation: slideIn 400ms ease-out; }\n.animate-pulse { animation: pulse 2s ease-in-out infinite; }\n.animate-rotate { animation: rotate 1s linear infinite; }\n.animate-scale-up { animation: scaleUp 500ms cubic-bezier(0.34, 1.56, 0.64, 1); }\n.animate-float { animation: float 3s ease-in-out infinite; }\n.animate-shake { animation: shake 500ms ease-in-out; }\n.transition-all { transition: all 200ms ease-in-out; }\n\n@media (prefers-reduced-motion: reduce) {\n  .animate-fade-in,\n  .animate-fade-in-up,\n  .animate-slide-in,\n  .animate-pulse,\n  .animate-rotate,\n  .animate-scale-up,\n  .animate-float,\n  .animate-shake { animation: none; opacity: 1; transform: none; }\n  .transition-all { transition: none; }\n}",
+        "expectedDOM": "<!-- Modal with fadeIn entrance animation -->\n<div data-testid=\"modal\" class=\"animate-fade-in\" style=\"animation: fadeIn 400ms ease-out;\">\n  <div class=\"modal-content\">Modal content</div>\n</div>\n\n<!-- Hero section with fadeInUp entrance animation -->\n<section data-testid=\"hero-section\" class=\"animate-fade-in-up\" style=\"animation: fadeInUp 600ms cubic-bezier(0.4, 0, 0.2, 1);\">\n  <h1>Welcome to Our Site</h1>\n  <p>Discover amazing features</p>\n</section>\n\n<!-- Mobile sidebar with slideIn animation -->\n<aside data-testid=\"mobile-sidebar\" class=\"animate-slide-in\" style=\"animation: slideIn 400ms ease-out;\">\n  <nav>Menu items</nav>\n</aside>\n\n<!-- Notification badge with pulse animation (infinite loop) -->\n<span data-testid=\"notification-badge\" class=\"animate-pulse\" style=\"animation: pulse 2s ease-in-out infinite;\">3</span>\n\n<!-- Loading spinner with rotate animation (infinite loop) -->\n<div data-testid=\"loading-spinner\" class=\"animate-rotate\" style=\"animation: rotate 1s linear infinite;\">\n  <svg>...</svg>\n</div>\n\n<!-- Card with scaleUp animation (scroll-triggered) -->\n<div data-testid=\"feature-card\" class=\"animate-scale-up\" style=\"animation: scaleUp 500ms cubic-bezier(0.34, 1.56, 0.64, 1);\">\n  <h3>Feature Title</h3>\n  <p>Description</p>\n</div>\n\n<!-- Floating action button with float animation (infinite loop) -->\n<button data-testid=\"fab-button\" class=\"animate-float\" style=\"animation: float 3s ease-in-out infinite;\">+</button>\n\n<!-- Input with shake animation (validation error) -->\n<input data-testid=\"email-input\" class=\"animate-shake\" style=\"animation: shake 500ms ease-in-out; border-color: red;\" aria-invalid=\"true\" />\n\n<!-- Button with transition on hover -->\n<button data-testid=\"cta-button\" class=\"transition-all\" style=\"transition: all 200ms ease-in-out;\" onMouseEnter=\"this.style.transform='scale(1.05)'\" onMouseLeave=\"this.style.transform='scale(1)'\">Hover me</button>\n\n<!-- Staggered list items with fadeIn animation -->\n<ul data-testid=\"feature-list\">\n  <li class=\"animate-fade-in\" style=\"animation: fadeIn 400ms ease-out; animation-delay: 0ms;\">Feature 1</li>\n  <li class=\"animate-fade-in\" style=\"animation: fadeIn 400ms ease-out; animation-delay: 100ms;\">Feature 2</li>\n  <li class=\"animate-fade-in\" style=\"animation: fadeIn 400ms ease-out; animation-delay: 200ms;\">Feature 3</li>\n</ul>",
+        "assertions": [
+          "Animation library defined in theme.animations with 9 animations (fadeIn, fadeInUp, slideIn, pulse, rotate, scaleUp, float, shake, transition)",
+          "CSS @keyframes generated for all animations with custom keyframe definitions",
+          "Entrance animations: fadeIn (modal), fadeInUp (hero), slideIn (sidebar), scaleUp (card)",
+          "Attention animations: pulse (badge), float (FAB), shake (error input)",
+          "Loading animation: rotate (spinner) with linear easing and infinite loop",
+          "Interactive animations: transition (button hover) with 200ms smooth state changes",
+          "Scroll-triggered animations: scaleUp on card with IntersectionObserver integration",
+          "Staggered animations: fadeIn with incremental delays (0ms, 100ms, 200ms) for sequential reveals",
+          "Error feedback: shake animation on form validation errors",
+          "Accessibility: prefers-reduced-motion media query disables animations for motion-sensitive users",
+          "Performance: GPU-accelerated transforms (translateY, scale, rotate) instead of layout-shifting properties",
+          "Webflow-style motion design: elastic easing (cubic-bezier(0.34, 1.56, 0.64, 1)) creates bounce effects"
+        ]
+      },
+      "integrationPoints": [
+        "Theme design tokens: animations defined in theme.animations as reusable motion tokens",
+        "CSS generation: @keyframes rules generated from animation keyframes property",
+        "Component library: all UI components can reference animation tokens via CSS classes",
+        "Responsive design: animations can vary by breakpoint (e.g., mobile: simplified, desktop: elaborate)",
+        "Color integration: animations can include color transitions using theme.colors tokens",
+        "Typography integration: typewriter animation reveals text using font-related properties",
+        "Scroll interactions: IntersectionObserver triggers animations when elements enter viewport (Webflow pattern)",
+        "Form validation: shake animation provides immediate visual feedback for input errors",
+        "Accessibility standards: prefers-reduced-motion media query ensures WCAG 2.1 compliance",
+        "Performance optimization: will-change CSS property hints browser for transform animations (parallax, scroll effects)"
+      ]
     }
   ]
 }

@@ -355,7 +355,117 @@
       "id": "APP-THEME-FONTS-REGRESSION-001",
       "given": "complete application configuration with all features",
       "when": "user completes full workflow",
-      "then": "user can complete full fonts workflow"
+      "then": "user can complete full fonts workflow",
+      "workflow": [
+        {
+          "step": 1,
+          "action": "User defines font system in theme.fonts with semantic categories (title, body, mono) including family, fallback, weights, and typography properties",
+          "validation": "All font configurations validate with required 'family' property and optional fallback, weights (100-900), size, lineHeight, letterSpacing, transform, url",
+          "expectedState": "Font tokens stored in theme.fonts object with title (display), body (text), and mono (code) categories"
+        },
+        {
+          "step": 2,
+          "action": "System generates CSS @font-face rules for custom fonts and applies font-family declarations to component selectors",
+          "validation": "CSS font stacks created with primary font + fallback (e.g., 'Inter, system-ui, sans-serif')",
+          "expectedState": "@font-face { font-family: 'Inter'; src: url(...); } body { font-family: Inter, system-ui, sans-serif; font-size: 16px; line-height: 1.5; }"
+        },
+        {
+          "step": 3,
+          "action": "Typography components reference font tokens via theme.fonts.body for paragraphs, theme.fonts.title for headings, theme.fonts.mono for code",
+          "validation": "All text elements use themed fonts, no hardcoded font-family values in components",
+          "expectedState": "Headings use title font with lowercase transform, body text uses body font with 16px/1.5, code blocks use mono font"
+        },
+        {
+          "step": 4,
+          "action": "User views application with complete typography system across headings, body text, and code blocks",
+          "validation": "Consistent font hierarchy with display font for headings, readable body font, and monospace code font",
+          "expectedState": "Professional typography system with branded fonts and optimal readability"
+        }
+      ],
+      "application": {
+        "completeExample": {
+          "theme": {
+            "fonts": {
+              "title": {
+                "family": "Bely Display",
+                "fallback": "Georgia, serif",
+                "weights": [400, 700],
+                "transform": "lowercase",
+                "letterSpacing": "0.05em",
+                "url": "https://fonts.example.com/bely-display"
+              },
+              "body": {
+                "family": "Inter",
+                "fallback": "system-ui, sans-serif",
+                "weights": [300, 400, 500, 600, 700],
+                "size": "16px",
+                "lineHeight": "1.5",
+                "url": "https://fonts.googleapis.com/css2?family=Inter:wght@300..700"
+              },
+              "mono": {
+                "family": "JetBrains Mono",
+                "fallback": "monospace",
+                "weights": [400, 700],
+                "url": "https://fonts.googleapis.com/css2?family=JetBrains+Mono"
+              }
+            }
+          },
+          "pages": [
+            {
+              "name": "home",
+              "sections": [
+                {
+                  "type": "text",
+                  "props": {
+                    "level": "h1"
+                  },
+                  "children": ["Our Mission"]
+                },
+                {
+                  "type": "text",
+                  "props": {
+                    "level": "p"
+                  },
+                  "children": [
+                    "We believe in creating meaningful experiences through thoughtful design and technology."
+                  ]
+                },
+                {
+                  "type": "code",
+                  "children": ["const app = new Application();"]
+                }
+              ]
+            }
+          ]
+        },
+        "expectedCSS": "@font-face {\n  font-family: 'Bely Display';\n  src: url('https://fonts.example.com/bely-display');\n  font-weight: 400 700;\n}\n\n@font-face {\n  font-family: 'Inter';\n  src: url('https://fonts.googleapis.com/css2?family=Inter:wght@300..700');\n  font-weight: 300 700;\n}\n\n@font-face {\n  font-family: 'JetBrains Mono';\n  src: url('https://fonts.googleapis.com/css2?family=JetBrains+Mono');\n  font-weight: 400 700;\n}\n\nh1, h2, h3, h4, h5, h6 {\n  font-family: 'Bely Display', Georgia, serif;\n  text-transform: lowercase;\n  letter-spacing: 0.05em;\n}\n\nbody, p, span, div {\n  font-family: Inter, system-ui, sans-serif;\n  font-size: 16px;\n  line-height: 1.5;\n}\n\ncode, pre {\n  font-family: 'JetBrains Mono', monospace;\n}",
+        "expectedDOM": "<div id=\"app\">\n  <h1 style=\"font-family: 'Bely Display', Georgia, serif; text-transform: lowercase; letter-spacing: 0.05em;\">our mission</h1>\n  <p style=\"font-family: Inter, system-ui, sans-serif; font-size: 16px; line-height: 1.5;\">We believe in creating meaningful experiences through thoughtful design and technology.</p>\n  <code style=\"font-family: 'JetBrains Mono', monospace;\">const app = new Application();</code>\n</div>",
+        "assertions": [
+          "All 3 font categories (title, body, mono) generate @font-face rules and CSS declarations",
+          "Title font (Bely Display) used for h1-h6 headings with lowercase transform and letter-spacing",
+          "Body font (Inter) used for paragraphs with 16px size and 1.5 line-height for readability",
+          "Mono font (JetBrains Mono) used for code elements with monospace fallback",
+          "Font weights loaded: title (400, 700), body (300-700), mono (400, 700)",
+          "Fallback fonts specified: title → Georgia, serif; body → system-ui, sans-serif; mono → monospace",
+          "Google Fonts URLs generate <link> tags in <head> for remote font loading",
+          "Text transformation applied: heading 'Our Mission' renders as 'our mission'",
+          "Complete typography system covers all text contexts: headings, body, code",
+          "Font tokens enable consistent typography across all pages and components",
+          "Professional branded typography with display font for impact, readable body font, technical mono font"
+        ]
+      },
+      "integrationPoints": [
+        "Theme fonts integrate with typography components (h1-h6, p, span, code)",
+        "Theme fonts integrate with text transform (lowercase/uppercase/capitalize via transform property)",
+        "Theme fonts integrate with spacing system (letter-spacing for headings)",
+        "Theme fonts integrate with color system (font + color = complete text styling)",
+        "Font URL property enables Google Fonts or self-hosted font loading",
+        "Font weights array specifies which weights to load (reduces font file size)",
+        "Fallback fonts ensure graceful degradation when custom fonts fail to load",
+        "Line-height and size properties establish baseline typography grid",
+        "Font categories (title/body/mono) provide semantic font system",
+        "Webflow/Framer-style typography with centralized font management"
+      ]
     }
   ]
 }
