@@ -525,7 +525,52 @@ test.describe('FAQ Page Schema', () => {
         ],
       })
       await page.goto('/')
+
+      // Enhanced JSON-LD validation
       const scriptContent = await page.locator('script[type="application/ld+json"]').textContent()
+
+      // Validate JSON-LD is valid JSON
+      expect(scriptContent).toBeTruthy()
+      const jsonLd = JSON.parse(scriptContent!)
+
+      // Validate JSON-LD structure
+      expect(jsonLd).toHaveProperty('@context', 'https://schema.org')
+      expect(jsonLd).toHaveProperty('@type', 'FAQPage')
+      expect(jsonLd).toHaveProperty('mainEntity')
+      expect(Array.isArray(jsonLd.mainEntity)).toBe(true)
+      expect(jsonLd.mainEntity).toHaveLength(3)
+
+      // Validate Question 1: Refund policy
+      expect(jsonLd.mainEntity[0]).toMatchObject({
+        '@type': 'Question',
+        name: 'What is the refund policy?',
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: 'We offer a 30-day money-back guarantee on all purchases',
+        },
+      })
+
+      // Validate Question 2: Shipping time
+      expect(jsonLd.mainEntity[1]).toMatchObject({
+        '@type': 'Question',
+        name: 'How long is shipping?',
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: 'Standard shipping takes 5-7 business days',
+        },
+      })
+
+      // Validate Question 3: International shipping
+      expect(jsonLd.mainEntity[2]).toMatchObject({
+        '@type': 'Question',
+        name: 'Do you ship internationally?',
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: 'Yes, we ship to over 100 countries worldwide',
+        },
+      })
+
+      // Backwards compatibility: string containment checks
       expect(scriptContent).toContain('"@type":"FAQPage"')
       expect(scriptContent).toContain('refund policy')
       expect(scriptContent).toContain('shipping')

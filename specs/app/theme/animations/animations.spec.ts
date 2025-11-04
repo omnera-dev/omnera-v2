@@ -1030,6 +1030,12 @@ test.describe('Animation Configuration', () => {
       // WHEN/THEN: Streamlined workflow testing integration points
       await page.goto('/')
 
+      // Validate CSS custom properties or animation definitions generated
+      const css = await page.locator('style').first().textContent()
+      expect(css).toBeTruthy()
+      // Animations might generate CSS custom properties or @keyframes
+      // At minimum, verify CSS content exists for static site generation
+
       // Verify modal fade-in
       await expect(page.locator('[data-testid="modal"]')).toBeVisible()
 

@@ -618,7 +618,44 @@ test.describe('Organization Schema', () => {
         ],
       })
       await page.goto('/')
+
+      // Enhanced JSON-LD validation
       const scriptContent = await page.locator('script[type="application/ld+json"]').textContent()
+
+      // Validate JSON-LD is valid JSON
+      expect(scriptContent).toBeTruthy()
+      const jsonLd = JSON.parse(scriptContent!)
+
+      // Validate JSON-LD structure
+      expect(jsonLd).toHaveProperty('@context', 'https://schema.org')
+      expect(jsonLd).toHaveProperty('@type', 'Organization')
+      expect(jsonLd).toHaveProperty('name', 'Complete Tech Company')
+      expect(jsonLd).toHaveProperty('description', 'Innovative technology solutions')
+      expect(jsonLd).toHaveProperty('url', 'https://example.com')
+      expect(jsonLd).toHaveProperty('logo', 'https://example.com/logo.png')
+      expect(jsonLd).toHaveProperty('email', 'info@example.com')
+      expect(jsonLd).toHaveProperty('telephone', '+1-800-123-4567')
+      expect(jsonLd).toHaveProperty('founder', 'John Smith')
+      expect(jsonLd).toHaveProperty('foundingDate', '2018-01-15')
+      expect(jsonLd).toHaveProperty('employees', 150)
+
+      // Validate address structure
+      expect(jsonLd.address).toMatchObject({
+        '@type': 'PostalAddress',
+        streetAddress: '123 Tech Lane',
+        addressLocality: 'San Francisco',
+        addressRegion: 'CA',
+        postalCode: '94105',
+        addressCountry: 'US',
+      })
+
+      // Validate social media links
+      expect(Array.isArray(jsonLd.sameAs)).toBe(true)
+      expect(jsonLd.sameAs).toHaveLength(2)
+      expect(jsonLd.sameAs).toContain('https://facebook.com/techcompany')
+      expect(jsonLd.sameAs).toContain('https://twitter.com/techcompany')
+
+      // Backwards compatibility: string containment checks
       expect(scriptContent).toContain('"@type":"Organization"')
       expect(scriptContent).toContain('Complete Tech Company')
       expect(scriptContent).toContain('San Francisco')

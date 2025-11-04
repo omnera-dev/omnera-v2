@@ -85,6 +85,12 @@ test.describe('Shadows', () => {
       await page.goto('/')
 
       // THEN: it should validate rgb(0 0 0 / 0.1) format
+      // Validate CSS custom property generated in :root
+      const css = await page.locator('style').first().textContent()
+      expect(css).toContain(':root')
+      expect(css).toMatch(/--shadow-md:\s*0 4px 6px -1px rgb\(0 0 0 \/ 0\.1\)/)
+
+      // Visual validation
       const element = page.locator('[data-testid="shadow-md"]')
       await expect(element).toHaveScreenshot('shadow-002-rgb-format.png')
     }
@@ -679,6 +685,13 @@ test.describe('Shadows', () => {
 
       // WHEN/THEN: Streamlined workflow testing integration points
       await page.goto('/')
+
+      // Validate CSS custom properties generated for shadow system
+      const css = await page.locator('style').first().textContent()
+      expect(css).toContain(':root')
+      expect(css).toMatch(/--shadow-md:\s*0 4px 6px -1px rgb\(0 0 0 \/ 0\.1\)/)
+      expect(css).toMatch(/--shadow-xl:\s*0 20px 25px -5px rgb\(0 0 0 \/ 0\.1\)/)
+      expect(css).toMatch(/--shadow-inner:\s*inset 0 2px 4px 0 rgb\(0 0 0 \/ 0\.05\)/)
 
       // Verify card shadow
       await expect(page.locator('[data-testid="card"]')).toBeVisible()

@@ -770,7 +770,31 @@ test.describe('Theme Configuration', () => {
       // WHEN/THEN: Streamlined workflow testing integration points
       await page.goto('/')
 
-      // Verify theme tokens are applied
+      // Validate CSS custom properties generated for comprehensive theme system
+      const css = await page.locator('style').first().textContent()
+      expect(css).toContain(':root')
+
+      // Validate color tokens in CSS
+      expect(css).toMatch(/--color-primary:\s*#007bff/)
+      expect(css).toMatch(/--color-secondary:\s*#6c757d/)
+      expect(css).toMatch(/--color-background:\s*#ffffff/)
+
+      // Validate font tokens in CSS
+      expect(css).toMatch(/--font-body-family:\s*["']?Inter["']?/)
+      expect(css).toMatch(/--font-heading-family:\s*["']?Poppins["']?/)
+
+      // Validate spacing tokens in CSS
+      expect(css).toMatch(/--spacing-section:\s*64px/) // 4rem = 64px
+      expect(css).toMatch(/--spacing-container:\s*1280px/) // 80rem = 1280px
+
+      // Validate border-radius tokens in CSS
+      expect(css).toMatch(/--radius-DEFAULT:\s*0\.25rem/)
+      expect(css).toMatch(/--radius-lg:\s*0\.5rem/)
+
+      // Validate shadow tokens in CSS
+      expect(css).toMatch(/--shadow-md:\s*0 4px 6px -1px rgba\(0, 0, 0, 0\.1\)/)
+
+      // Verify theme tokens are applied at runtime
       await expect(page.locator('body')).toHaveCSS('font-family', /Inter/)
       await expect(page.locator('h1')).toHaveCSS('font-family', /Poppins/)
 

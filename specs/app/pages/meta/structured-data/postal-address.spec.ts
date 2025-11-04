@@ -464,7 +464,29 @@ test.describe('Postal Address', () => {
       await page.goto('/')
 
       // THEN: it should provide full mailing address
+      // Enhanced JSON-LD validation
       const scriptContent = await page.locator('script[type="application/ld+json"]').textContent()
+
+      // Validate JSON-LD is valid JSON
+      expect(scriptContent).toBeTruthy()
+      const jsonLd = JSON.parse(scriptContent!)
+
+      // Validate JSON-LD structure
+      expect(jsonLd).toHaveProperty('@context', 'https://schema.org')
+      expect(jsonLd).toHaveProperty('@type', 'Organization')
+      expect(jsonLd).toHaveProperty('name', 'Complete Address Test')
+
+      // Validate PostalAddress structure
+      expect(jsonLd.address).toMatchObject({
+        '@type': 'PostalAddress',
+        streetAddress: '100 Business Blvd',
+        addressLocality: 'Strasbourg',
+        addressRegion: 'Grand Est',
+        postalCode: '67000',
+        addressCountry: 'FR',
+      })
+
+      // Backwards compatibility: string containment checks
       expect(scriptContent).toContain('"@type":"PostalAddress"')
       expect(scriptContent).toContain('100 Business Blvd')
       expect(scriptContent).toContain('Strasbourg')

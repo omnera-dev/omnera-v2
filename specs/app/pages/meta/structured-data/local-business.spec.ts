@@ -660,7 +660,48 @@ test.describe('Local Business Schema', () => {
       await page.goto('/')
 
       // THEN: it should enable map pin and directions in search results
+      // Enhanced JSON-LD validation
       const scriptContent = await page.locator('script[type="application/ld+json"]').textContent()
+
+      // Validate JSON-LD is valid JSON
+      expect(scriptContent).toBeTruthy()
+      const jsonLd = JSON.parse(scriptContent!)
+
+      // Validate JSON-LD structure
+      expect(jsonLd).toHaveProperty('@context', 'https://schema.org')
+      expect(jsonLd).toHaveProperty('@type', 'LocalBusiness')
+      expect(jsonLd).toHaveProperty('name', 'Complete Coffee Shop')
+      expect(jsonLd).toHaveProperty('description', 'Best coffee in town')
+      expect(jsonLd).toHaveProperty('url', 'https://example.com')
+      expect(jsonLd).toHaveProperty('telephone', '+1-555-123-4567')
+      expect(jsonLd).toHaveProperty('priceRange', '$$')
+
+      // Validate address structure
+      expect(jsonLd.address).toMatchObject({
+        '@type': 'PostalAddress',
+        streetAddress: '123 Main St',
+        addressLocality: 'Strasbourg',
+        postalCode: '67000',
+        addressCountry: 'FR',
+      })
+
+      // Validate geo coordinates
+      expect(jsonLd.geo).toMatchObject({
+        '@type': 'GeoCoordinates',
+        latitude: '48.5734',
+        longitude: '7.7521',
+      })
+
+      // Validate opening hours
+      expect(Array.isArray(jsonLd.openingHoursSpecification)).toBe(true)
+      expect(jsonLd.openingHoursSpecification[0]).toMatchObject({
+        '@type': 'OpeningHoursSpecification',
+        dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
+        opens: '07:00',
+        closes: '19:00',
+      })
+
+      // Backwards compatibility: string containment checks
       expect(scriptContent).toContain('"@type":"LocalBusiness"')
       expect(scriptContent).toContain('Complete Coffee Shop')
       expect(scriptContent).toContain('Strasbourg')

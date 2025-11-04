@@ -450,12 +450,44 @@ test.describe('Structured Data', () => {
 
       await page.goto('/')
 
-      // Verify structured data scripts exist
+      // Enhanced JSON-LD validation for multiple schemas
       const scripts = await page.locator('script[type="application/ld+json"]').all()
-      expect(scripts.length).toBeGreaterThan(0)
+      expect(scripts.length).toBeGreaterThanOrEqual(2) // At least organization + breadcrumb
 
-      // Verify content includes Schema.org types
+      // Parse all JSON-LD scripts and validate each
       const allContent = await Promise.all(scripts.map((script) => script.textContent()))
+      const jsonLdSchemas = allContent
+        .filter((content) => content !== null)
+        .map((content) => JSON.parse(content!))
+
+      // Validate we have at least 2 valid JSON-LD schemas
+      expect(jsonLdSchemas.length).toBeGreaterThanOrEqual(2)
+
+      // Find Organization schema
+      const orgSchema = jsonLdSchemas.find((schema) => schema['@type'] === 'Organization')
+      expect(orgSchema).toBeDefined()
+      expect(orgSchema).toMatchObject({
+        '@context': 'https://schema.org',
+        '@type': 'Organization',
+        name: 'Complete Test Org',
+        url: 'https://example.com',
+      })
+
+      // Find BreadcrumbList schema
+      const breadcrumbSchema = jsonLdSchemas.find((schema) => schema['@type'] === 'BreadcrumbList')
+      expect(breadcrumbSchema).toBeDefined()
+      expect(breadcrumbSchema).toMatchObject({
+        '@context': 'https://schema.org',
+        '@type': 'BreadcrumbList',
+      })
+      expect(Array.isArray(breadcrumbSchema!.itemListElement)).toBe(true)
+      expect(breadcrumbSchema!.itemListElement[0]).toMatchObject({
+        '@type': 'ListItem',
+        position: 1,
+        name: 'Home',
+      })
+
+      // Backwards compatibility: string containment check
       const combinedContent = allContent.join(' ')
       expect(combinedContent).toContain('schema.org')
     }

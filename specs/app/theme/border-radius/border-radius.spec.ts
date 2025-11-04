@@ -151,6 +151,14 @@ test.describe('Border Radius', () => {
       await page.goto('/')
 
       // THEN: it should validate rem-based radius values
+      // Validate CSS custom properties generated in :root
+      const css = await page.locator('style').first().textContent()
+      expect(css).toContain(':root')
+      expect(css).toMatch(/--radius-sm:\s*0\.125rem/)
+      expect(css).toMatch(/--radius-md:\s*0\.375rem/)
+      expect(css).toMatch(/--radius-lg:\s*0\.5rem/)
+
+      // Visual validation
       await expect(page.locator('[data-testid="radius-sm"]')).toBeVisible()
       await expect(page.locator('[data-testid="radius-lg"]')).toBeVisible()
     }
@@ -651,6 +659,14 @@ test.describe('Border Radius', () => {
 
       // WHEN/THEN: Streamlined workflow testing integration points
       await page.goto('/')
+
+      // Validate CSS custom properties generated for border-radius system
+      const css = await page.locator('style').first().textContent()
+      expect(css).toContain(':root')
+      expect(css).toMatch(/--radius-none:\s*0/)
+      expect(css).toMatch(/--radius-md:\s*0\.375rem/)
+      expect(css).toMatch(/--radius-lg:\s*0\.5rem/)
+      expect(css).toMatch(/--radius-full:\s*9999px/)
 
       // Visual validation of complete border-radius system
       const fullPage = page.locator('body')

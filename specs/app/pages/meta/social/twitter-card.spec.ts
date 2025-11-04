@@ -504,18 +504,35 @@ test.describe('Twitter Card Metadata', () => {
 
       await page.goto('/')
 
+      // Enhanced meta tag validation with explicit content checks
       // Verify required property
       await expect(page.locator('meta[name="twitter:card"]')).toHaveAttribute(
         'content',
         'summary_large_image'
       )
 
-      // Verify optional properties
-      await expect(page.locator('meta[name="twitter:title"]')).toBeVisible()
-      await expect(page.locator('meta[name="twitter:description"]')).toBeVisible()
-      await expect(page.locator('meta[name="twitter:image"]')).toBeVisible()
-      await expect(page.locator('meta[name="twitter:site"]')).toBeVisible()
-      await expect(page.locator('meta[name="twitter:creator"]')).toBeVisible()
+      // Verify optional properties with exact content validation
+      await expect(page.locator('meta[name="twitter:title"]')).toHaveAttribute(
+        'content',
+        'Complete Twitter Card Test'
+      )
+      await expect(page.locator('meta[name="twitter:description"]')).toHaveAttribute(
+        'content',
+        'Testing all Twitter Card features'
+      )
+      await expect(page.locator('meta[name="twitter:image"]')).toHaveAttribute(
+        'content',
+        'https://example.com/twitter-image.jpg'
+      )
+      await expect(page.locator('meta[name="twitter:image:alt"]')).toHaveAttribute(
+        'content',
+        'Test image'
+      )
+      await expect(page.locator('meta[name="twitter:site"]')).toHaveAttribute('content', '@testsite')
+      await expect(page.locator('meta[name="twitter:creator"]')).toHaveAttribute(
+        'content',
+        '@testcreator'
+      )
     }
   )
 })

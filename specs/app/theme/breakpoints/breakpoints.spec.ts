@@ -394,6 +394,14 @@ test.describe('Breakpoints', () => {
       await page.setViewportSize({ width: 375, height: 667 })
       await page.goto('/')
 
+      // Validate CSS media queries generated for breakpoints
+      const css = await page.locator('style').first().textContent()
+      expect(css).toBeTruthy()
+      // Breakpoints should generate @media queries with defined widths
+      expect(css).toMatch(/@media.*640px/) // sm breakpoint
+      expect(css).toMatch(/@media.*768px/) // md breakpoint
+      expect(css).toMatch(/@media.*1024px/) // lg breakpoint
+
       // Verify mobile layout
       await expect(page.locator('[data-testid="grid"]')).toBeVisible()
       await expect(page.locator('[data-testid="nav"]')).toBeVisible()

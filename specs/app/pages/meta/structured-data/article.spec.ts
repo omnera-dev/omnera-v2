@@ -607,7 +607,42 @@ test.describe('Article Schema', () => {
         ],
       })
       await page.goto('/')
+
+      // Enhanced JSON-LD validation
       const scriptContent = await page.locator('script[type="application/ld+json"]').textContent()
+
+      // Validate JSON-LD is valid JSON
+      expect(scriptContent).toBeTruthy()
+      const jsonLd = JSON.parse(scriptContent!)
+
+      // Validate JSON-LD structure
+      expect(jsonLd).toHaveProperty('@context', 'https://schema.org')
+      expect(jsonLd).toHaveProperty('@type', 'Article')
+      expect(jsonLd).toHaveProperty('headline', 'Complete Article Test')
+      expect(jsonLd).toHaveProperty('description', 'Testing all article features')
+      expect(jsonLd).toHaveProperty('image', 'https://example.com/article-image.jpg')
+
+      // Validate author structure
+      expect(jsonLd.author).toMatchObject({
+        '@type': 'Person',
+        name: 'Test Author',
+      })
+
+      // Validate dates
+      expect(jsonLd).toHaveProperty('datePublished', '2025-01-15T09:00:00Z')
+      expect(jsonLd).toHaveProperty('dateModified', '2025-01-20T14:30:00Z')
+
+      // Validate publisher structure
+      expect(jsonLd.publisher).toMatchObject({
+        '@type': 'Organization',
+        name: 'Test Publisher',
+        logo: {
+          '@type': 'ImageObject',
+          url: 'https://example.com/logo.png',
+        },
+      })
+
+      // Backwards compatibility: string containment checks
       expect(scriptContent).toContain('"@type":"Article"')
       expect(scriptContent).toContain('Complete Article Test')
       expect(scriptContent).toContain('Test Author')

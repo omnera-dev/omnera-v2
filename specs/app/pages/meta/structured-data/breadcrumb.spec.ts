@@ -493,7 +493,42 @@ test.describe('Breadcrumb Schema', () => {
         ],
       })
       await page.goto('/')
+
+      // Enhanced JSON-LD validation
       const scriptContent = await page.locator('script[type="application/ld+json"]').textContent()
+
+      // Validate JSON-LD is valid JSON
+      expect(scriptContent).toBeTruthy()
+      const jsonLd = JSON.parse(scriptContent!)
+
+      // Validate JSON-LD structure
+      expect(jsonLd).toHaveProperty('@context', 'https://schema.org')
+      expect(jsonLd).toHaveProperty('@type', 'BreadcrumbList')
+      expect(jsonLd).toHaveProperty('itemListElement')
+      expect(Array.isArray(jsonLd.itemListElement)).toBe(true)
+      expect(jsonLd.itemListElement).toHaveLength(3)
+
+      // Validate breadcrumb items structure
+      expect(jsonLd.itemListElement[0]).toMatchObject({
+        '@type': 'ListItem',
+        position: 1,
+        name: 'Home',
+        item: 'https://example.com',
+      })
+      expect(jsonLd.itemListElement[1]).toMatchObject({
+        '@type': 'ListItem',
+        position: 2,
+        name: 'Products',
+        item: 'https://example.com/products',
+      })
+      expect(jsonLd.itemListElement[2]).toMatchObject({
+        '@type': 'ListItem',
+        position: 3,
+        name: 'Widget',
+        item: 'https://example.com/products/widget',
+      })
+
+      // Backwards compatibility: string containment checks
       expect(scriptContent).toContain('"@type":"BreadcrumbList"')
       expect(scriptContent).toContain('Home')
       expect(scriptContent).toContain('Products')

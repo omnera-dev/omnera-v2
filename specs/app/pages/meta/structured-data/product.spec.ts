@@ -569,7 +569,54 @@ test.describe('Product Schema', () => {
         ],
       })
       await page.goto('/')
+
+      // Enhanced JSON-LD validation
       const scriptContent = await page.locator('script[type="application/ld+json"]').textContent()
+
+      // Validate JSON-LD is valid JSON
+      expect(scriptContent).toBeTruthy()
+      const jsonLd = JSON.parse(scriptContent!)
+
+      // Validate JSON-LD structure
+      expect(jsonLd).toHaveProperty('@context', 'https://schema.org')
+      expect(jsonLd).toHaveProperty('@type', 'Product')
+      expect(jsonLd).toHaveProperty('name', 'Complete Product Test')
+      expect(jsonLd).toHaveProperty(
+        'description',
+        'Premium wireless headphones with active noise cancellation'
+      )
+      expect(jsonLd).toHaveProperty('sku', 'ATP-WH1000-BLK')
+      expect(jsonLd).toHaveProperty('gtin', '0123456789012')
+
+      // Validate product images
+      expect(Array.isArray(jsonLd.image)).toBe(true)
+      expect(jsonLd.image).toHaveLength(2)
+      expect(jsonLd.image).toContain('https://example.com/headphones-1.jpg')
+      expect(jsonLd.image).toContain('https://example.com/headphones-2.jpg')
+
+      // Validate brand structure
+      expect(jsonLd.brand).toMatchObject({
+        '@type': 'Brand',
+        name: 'AudioTech',
+      })
+
+      // Validate offers structure
+      expect(jsonLd.offers).toMatchObject({
+        '@type': 'Offer',
+        price: '299.99',
+        priceCurrency: 'USD',
+        availability: 'https://schema.org/InStock',
+        url: 'https://example.com/buy/headphones',
+      })
+
+      // Validate aggregate rating structure
+      expect(jsonLd.aggregateRating).toMatchObject({
+        '@type': 'AggregateRating',
+        ratingValue: 4.7,
+        reviewCount: 543,
+      })
+
+      // Backwards compatibility: string containment checks
       expect(scriptContent).toContain('"@type":"Product"')
       expect(scriptContent).toContain('Complete Product Test')
       expect(scriptContent).toContain('AudioTech')

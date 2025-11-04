@@ -329,7 +329,16 @@ test.describe('Variable Reference', () => {
       // WHEN/THEN: Streamlined workflow testing integration points
       await page.goto('/')
 
-      // Verify variable replacements
+      // Enhanced variable substitution validation
+      // Ensure no unsubstituted variable patterns remain in HTML (except literal values like $29.99)
+      const html = await page.locator('body').innerHTML()
+      expect(html).not.toContain('$siteName') // Should be substituted
+      expect(html).not.toContain('$productName') // Should be substituted
+      expect(html).not.toContain('$primaryColor') // Should be substituted
+      expect(html).not.toContain('$icon') // Should be substituted
+      expect(html).toContain('$29.99') // Literal value, not a variable
+
+      // Verify variable replacements in rendered content
       await expect(page.locator('h1')).toHaveText('Welcome to Omnera')
       await expect(page.locator('[data-testid="text"]')).toHaveText(
         'The Pro Plan costs $29.99 per month'
