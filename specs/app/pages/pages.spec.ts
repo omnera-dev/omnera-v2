@@ -247,9 +247,17 @@ test.describe('Pages', () => {
       await page.goto('/full')
 
       // THEN: it should orchestrate global layout components
-      await expect(page.locator('[data-testid="banner"]')).toContainText('New feature available!')
-      await expect(page.locator('[data-testid="navigation"]')).toBeVisible()
-      await expect(page.locator('[data-testid="footer"]')).toContainText('© 2025 Company')
+      // ARIA snapshot validates complete page structure
+      await expect(page.locator('body')).toMatchAriaSnapshot(`
+        - banner:
+          - text: /New feature available!/
+        - navigation:
+          - img "Logo"
+        - complementary:
+        - main
+        - contentinfo:
+          - text: /© 2025 Company/
+      `)
     }
   )
 
@@ -658,13 +666,28 @@ test.describe('Pages', () => {
       })
 
       // WHEN/THEN: Streamlined workflow testing integration points
-      await page.goto('/')
-      await expect(page).toHaveTitle('Home')
-      await expect(page.locator('button')).toHaveText('Get Started')
 
+      // 1. Home page structure validation
+      await page.goto('/')
+
+      await expect(page.locator('body')).toMatchAriaSnapshot(`
+        - main:
+          - region:
+            - button "Get Started"
+      `)
+
+      await expect(page).toHaveTitle('Home')
+
+      // 2. About page with navigation
       await page.goto('/about')
+
+      await expect(page.locator('body')).toMatchAriaSnapshot(`
+        - navigation:
+          - img "Logo"
+        - main
+      `)
+
       await expect(page).toHaveTitle('About')
-      await expect(page.locator('[data-testid="navigation"]')).toBeVisible()
 
       // Focus on workflow continuity, not exhaustive coverage
     }
