@@ -49,7 +49,9 @@ export function renderHeading(
  * Renders text element with dynamic level
  *
  * The text element supports a 'level' prop to determine the HTML tag.
- * If level is h1-h6, renders as heading. Otherwise renders as paragraph.
+ * If level is h1-h6, renders as heading.
+ * If level is p, renders as paragraph.
+ * Otherwise renders as span (inline text).
  */
 export function renderTextElement(props: ElementProps, content: string | undefined): ReactElement {
   const { level } = props
@@ -60,9 +62,10 @@ export function renderTextElement(props: ElementProps, content: string | undefin
   if (level === 'h4') return <h4 {...props}>{content}</h4>
   if (level === 'h5') return <h5 {...props}>{content}</h5>
   if (level === 'h6') return <h6 {...props}>{content}</h6>
+  if (level === 'p') return <p {...props}>{content}</p>
 
-  // Default to paragraph
-  return <p {...props}>{content}</p>
+  // Default to span for inline text (no level specified)
+  return <span {...props}>{content}</span>
 }
 
 /**
@@ -161,13 +164,30 @@ export function renderBadge(props: ElementProps, content: string | undefined): R
 }
 
 /**
- * Renders icon (span container) element
+ * Renders icon as SVG element
+ * Uses 'name' prop to generate data-testid="icon-{name}"
+ * Uses 'color' prop to add data-color attribute
+ * Adds minimum dimensions to ensure visibility
  */
 export function renderIcon(
   props: ElementProps,
   children: readonly React.ReactNode[]
 ): ReactElement {
-  return <span {...props}>{children}</span>
+  const iconName = props.name as string | undefined
+  const iconColor = props.color as string | undefined
+  const existingStyle = (props.style as Record<string, unknown> | undefined) || {}
+  const iconProps = {
+    ...props,
+    ...(iconName && { 'data-testid': `icon-${iconName}` }),
+    ...(iconColor && { 'data-color': iconColor }),
+    style: {
+      display: 'inline-block',
+      minWidth: '1rem',
+      minHeight: '1rem',
+      ...existingStyle,
+    },
+  }
+  return <svg {...iconProps}>{children}</svg>
 }
 
 /**
