@@ -205,8 +205,17 @@ Handoff notification:
 - ✅ **ALLOWED**: Invoke effect-schema-generator skill to create missing schemas
 - ❌ **FORBIDDEN**: NEVER modify test logic, assertions, selectors, or expectations in `specs/` directory
 - ❌ **FORBIDDEN**: NEVER modify test configuration files (playwright.config.ts, etc.)
+- ❌ **FORBIDDEN**: NEVER write demonstration, showcase, or debug code in `src/` directory
 
-**Rationale**: E2E tests are the specification. You will make the implementation (src/) match the specification (specs/), not the other way around. You may only modify test files to activate them and remove temporary failure documentation. If a test's logic seems incorrect, ask for human clarification rather than modifying it.
+**CRITICAL - NO DEMONSTRATION CODE**:
+- ❌ **FORBIDDEN**: Auto-rendering modes (e.g., showcase blocks when sections empty)
+- ❌ **FORBIDDEN**: Debug visualizations (e.g., color swatches for testing)
+- ❌ **FORBIDDEN**: Conditional logic that activates only when tests run with empty data
+- ❌ **FORBIDDEN**: Any code path that exists solely to make tests pass without real functionality
+- ✅ **REQUIRED**: All code must be production-ready and serve real user needs
+- ✅ **REQUIRED**: Tests must define proper data that reflects actual usage patterns
+
+**Rationale**: E2E tests are the specification. You will make the implementation (src/) match the specification (specs/), not the other way around. You may only modify test files to activate them and remove temporary failure documentation. If a test's logic seems incorrect, ask for human clarification rather than modifying it. **Production code must never contain demonstration modes or workarounds** - if tests have empty sections, the tests should be updated to define proper sections, not the implementation adjusted to handle the empty case specially.
 
 ## Core Responsibilities
 
@@ -219,6 +228,8 @@ Handoff notification:
    - Correct patterns (following architecture and infrastructure guidelines)
    - No over-engineering or premature optimization
    - No major refactoring after tests pass (handled by `codebase-refactor-auditor`)
+   - **No demonstration or showcase code** - only production-ready functionality
+   - **Update tests if they have improper data** - never add workarounds in src/ to handle test-specific scenarios
 
 4. **Architecture Compliance**: All code must follow the layer-based architecture (Presentation → Application → Domain ← Infrastructure) as defined in @docs/architecture/layer-based-architecture.md, even though the current codebase uses a flat structure.
 
@@ -335,6 +346,8 @@ Skill({ command: "effect-schema-generator" })
 
 ### Step 3: Implement Minimal but Correct Code (RED → GREEN)
 - **Write minimal code that follows best practices from the start**
+- **CRITICAL**: Write ONLY production-ready code - NO demonstration, showcase, or debug modes
+- **If test has empty/incomplete data** (e.g., `sections: []`), update the TEST to define proper sections - NEVER add special handling in src/ for empty cases
 - Place code in the correct architectural layer:
   - UI components → src/components/ui/
   - API routes → Hono routes
@@ -550,6 +563,7 @@ As a CREATIVE agent, **proactive communication is a core responsibility**, not a
 5. ✅ **Infrastructure Best Practices**: Effect.ts, React 19, Hono, Drizzle patterns followed
 6. ✅ **Minimal Implementation**: Only code needed for THIS test (no over-engineering)
 7. ✅ **No Premature Refactoring**: Document duplication but don't refactor after GREEN
+8. ✅ **No Demonstration Code**: Zero showcase modes, debug visualizations, or test-only code paths in src/
 
 **Automated via Hooks (Runs Automatically)**:
 - Code formatting (Prettier), linting (ESLint), type-checking (TypeScript)
@@ -563,6 +577,7 @@ As a CREATIVE agent, **proactive communication is a core responsibility**, not a
 - Is the commit message conventional (feat:/fix:/test:)?
 - Did I avoid refactoring after the test passed GREEN?
 - Did I create missing schemas via effect-schema-generator skill?
+- **Is the code production-ready with zero demonstration/showcase modes?**
 
 ## Output Format
 

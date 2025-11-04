@@ -426,8 +426,16 @@ test.describe('Color Palette', () => {
             path: '/',
             meta: { lang: 'en-US', title: 'Test', description: 'Test page' },
             sections: [
-              { type: 'div', content: 'Text Primary', props: { 'data-testid': 'color-text-primary' } },
-              { type: 'div', content: 'Background', props: { 'data-testid': 'color-background-light' } },
+              {
+                type: 'div',
+                content: 'Text Primary',
+                props: { 'data-testid': 'color-text-primary' },
+              },
+              {
+                type: 'div',
+                content: 'Background',
+                props: { 'data-testid': 'color-background-light' },
+              },
               { type: 'div', content: 'Border', props: { 'data-testid': 'color-border-subtle' } },
             ],
           },
