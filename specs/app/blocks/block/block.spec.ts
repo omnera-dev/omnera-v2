@@ -225,7 +225,7 @@ test.describe('Block Template', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-BLOCKS-BLOCK-007: should render text content with substituted variables',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
