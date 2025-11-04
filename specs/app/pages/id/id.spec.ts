@@ -24,7 +24,7 @@ test.describe('Page ID', () => {
   // One test per spec in schema - defines EXHAUSTIVE acceptance criteria
   // ============================================================================
 
-  test.fixme(
+  test(
     'APP-PAGES-ID-001: should validate as unique identifier',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -34,9 +34,9 @@ test.describe('Page ID', () => {
         pages: [
           {
             id: 'home-page-123',
-            name: 'Home',
+            name: 'home',
             path: '/',
-            meta: { lang: 'en-US', title: 'Home' },
+            meta: { lang: 'en-US', title: 'Home', description: 'Home page description' },
             sections: [],
           },
         ],
