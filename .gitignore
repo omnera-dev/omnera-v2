@@ -40,6 +40,14 @@ report.[0-9]_.[0-9]_.[0-9]_.[0-9]_.json
 /playwright/.cache/
 /playwright/.auth/
 
+# Playwright snapshots (keep baseline, ignore diffs)
+**/__snapshots__/*-actual.*
+**/__snapshots__/*-diff.*
+# Keep baseline snapshots
+!**/__snapshots__/*.png
+!**/__snapshots__/*.yml
+!**/__snapshots__/*.yaml
+
 # Temporary test files
 /tmp/
 /.test-temp/

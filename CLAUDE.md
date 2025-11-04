@@ -57,6 +57,14 @@ bun run export:schema              # Export Effect Schema to JSON files
 bun run export:openapi             # Export OpenAPI schema from runtime API routes
 bun test:unit                      # Unit tests (PATTERN FILTER: .test.ts .test.tsx only)
 
+# E2E Testing & Snapshots (Playwright)
+bun test:e2e                       # Run all E2E tests
+bun test:e2e:spec                  # Run @spec tests only (exhaustive)
+bun test:e2e:regression            # Run @regression tests only (optimized)
+bun test:e2e:update-snapshots      # Update ALL snapshots (ARIA + visual)
+bun test:e2e:update-snapshots:spec # Update @spec test snapshots only
+bun test:snapshots:guide           # Show snapshot testing guide & best practices
+
 # Utility Scripts (Additional)
 bun run quality                    # Check code quality comprehensively
 bun run generate:roadmap           # Generate roadmap from specifications
@@ -140,6 +148,14 @@ git push origin main               # Triggers release ONLY with "release:" type
 - **Why pattern-based**: Bun test runner uses filename patterns (`bun test .test.ts .test.tsx`) to filter test files
 - **Enforcement**: ESLint prevents wrong test runner imports (Playwright in unit tests, Bun Test in E2E tests)
 - **See**: `@docs/architecture/testing-strategy/06-test-file-naming-convention.md` for enforcement details
+
+### Snapshot Testing (E2E Tests)
+- **ARIA Snapshots** (`toMatchAriaSnapshot`): For structure & accessibility validation
+- **Visual Screenshots** (`toHaveScreenshot`): For theme, layout & visual regression
+- **Traditional Assertions**: For behavior, logic & specific values
+- **Storage**: Snapshots saved in `specs/**/__snapshots__/` (committed to git)
+- **Update Command**: `bun test:e2e:update-snapshots` after implementing features
+- **Guide**: Run `bun test:snapshots:guide` for decision matrix & best practices
 
 ### Commit Messages (Conventional Commits - REQUIRED)
 - `release:` → Publish new version (patch bump 0.0.X) - **ONLY this triggers releases**

@@ -16,6 +16,7 @@ You are a precise mechanical translator that converts validated `x-specs` arrays
 - ✅ Create ONE OPTIMIZED @regression test for integration confidence
 - ✅ Apply test.fixme() markers automatically (RED phase)
 - ✅ Co-locate test file with schema file (same directory)
+- ✅ Choose appropriate validation approach: ARIA snapshots, visual screenshots, or assertions
 - ❌ Never create test scenarios (design work, not translation)
 - ❌ Never modify existing test files
 - ❌ Never make decisions about test coverage
@@ -161,6 +162,221 @@ for (const [index, spec] of specs.entries()) {
 
 **Only after ALL checks pass**: Proceed with mechanical translation
 
+## Validation Approach: ARIA Snapshots vs Visual Screenshots vs Assertions
+
+**CRITICAL**: Choose the right validation approach based on what the spec is testing. Modern testing favors snapshots over brittle assertions for visual/structural validation.
+
+### 🎯 ARIA Snapshots (Preferred for Structure & Accessibility)
+
+**What they are**: YAML representation of the page's accessibility tree, capturing the hierarchical structure of accessible elements including roles, attributes, values, and text content.
+
+**Benefits**:
+- ✅ **Accessibility-first**: Tests structure AND accessibility compliance
+- ✅ **Resilient**: Not affected by CSS/styling changes (unlike visual screenshots)
+- ✅ **Human-readable**: YAML format easy to review in diffs
+- ✅ **Flexible matching**: Supports partial, regex, and strict modes
+- ✅ **Maintenance**: Single `--update-snapshots` command updates all
+
+**When to use ARIA snapshots**:
+- ✅ **Page structure** (headings hierarchy, landmark regions)
+- ✅ **Navigation components** (menus, breadcrumbs, sidebars)
+- ✅ **Forms** (controls, labels, validation states)
+- ✅ **Data display** (tables, lists, grids)
+- ✅ **Complex components** (modals, cards, accordions)
+- ✅ **Any spec mentioning accessibility or structure**
+
+**Code patterns**:
+```typescript
+// Basic ARIA snapshot
+await expect(page.locator('main')).toMatchAriaSnapshot(`
+  - heading "Page Title" [level=1]
+  - button "Submit"
+  - link "Learn more"
+`)
+
+// Partial matching for flexibility
+await expect(page.locator('nav')).toMatchAriaSnapshot(`
+  - navigation
+    - link  // Matches any link text
+`)
+
+// Regular expressions for dynamic content
+await expect(page.locator('header')).toMatchAriaSnapshot(`
+  - heading /Welcome .*/  // Matches "Welcome Alice", etc.
+`)
+
+// Separate file for large snapshots
+await expect(page.locator('body')).toMatchAriaSnapshot({
+  name: 'page-structure.aria.yml'
+})
+```
+
+### 📸 Visual Screenshots (For Visual Regression)
+
+**What they are**: Pixel-perfect captures of page/element appearance, compared against baseline images.
+
+**Benefits**:
+- ✅ **Visual fidelity**: Catches CSS regressions, layout shifts
+- ✅ **Theme validation**: Perfect for colors, shadows, spacing
+- ✅ **Cross-browser**: Detects rendering differences
+- ✅ **Full page capture**: Can capture entire scrollable area
+
+**When to use visual screenshots**:
+- ✅ **Theme specifications** (colors, shadows, borders, spacing)
+- ✅ **Typography** (fonts, sizes, line-height, letter-spacing)
+- ✅ **Layout/responsive** (breakpoints, grid systems, flexbox)
+- ✅ **Visual components** (buttons, cards, badges with styling)
+- ✅ **Animations** (capture before/after states)
+- ✅ **Charts/graphs** (visual data representations)
+
+**Code patterns**:
+```typescript
+// Full page screenshot
+await expect(page).toHaveScreenshot('full-page.png', {
+  fullPage: true,
+  animations: 'disabled'
+})
+
+// Element screenshot with masking
+await expect(page.locator('[data-testid="card"]')).toHaveScreenshot('card.png', {
+  mask: [page.locator('.timestamp')],  // Hide dynamic content
+  maxDiffPixels: 100,  // Tolerate small differences
+})
+
+// Theme validation with threshold
+await expect(page.locator('.themed-button')).toHaveScreenshot('button-primary.png', {
+  threshold: 0.2,  // Color tolerance (0=strict, 1=lenient)
+  omitBackground: true  // Transparent background
+})
+
+// Responsive layout at different viewports
+await page.setViewportSize({ width: 768, height: 1024 })
+await expect(page).toHaveScreenshot('tablet-view.png')
+```
+
+**Visual screenshot options**:
+```typescript
+{
+  animations: 'disabled',     // Disable animations for stability
+  fullPage: false,           // Capture viewport or entire page
+  mask: [locator1, locator2], // Hide dynamic elements
+  maxDiffPixels: 100,        // Absolute pixel tolerance
+  maxDiffPixelRatio: 0.02,   // Proportional tolerance (2%)
+  threshold: 0.2,            // YIQ color space tolerance (0-1)
+  clip: { x, y, width, height }, // Capture specific region
+  omitBackground: false,      // Transparent background
+  scale: 'css',              // 'css' or 'device' pixel density
+}
+```
+
+### ✅ Traditional Assertions (For Behavior & Logic)
+
+**What they validate**: Specific properties, values, or behaviors with explicit expectations.
+
+**When to use assertions**:
+- ✅ **User interactions** (clicks, typing, navigation)
+- ✅ **Form validation** (error messages, field states)
+- ✅ **Business rules** (calculations, permissions)
+- ✅ **API responses** (data validation, status codes)
+- ✅ **Dynamic behavior** (state changes, real-time updates)
+- ✅ **Specific values** (counters, computed properties)
+
+**Code patterns**:
+```typescript
+// Behavioral assertions
+await expect(page.locator('input[type="email"]')).toHaveValue('user@example.com')
+await expect(page.locator('.error')).toBeVisible()
+await expect(page).toHaveURL('/dashboard')
+await expect(page).toHaveTitle('Dashboard')
+
+// Business logic
+const price = await page.locator('.total-price').textContent()
+expect(parseFloat(price.replace('$', ''))).toBeGreaterThan(0)
+```
+
+### 🔄 Combined Approach (Best Practice)
+
+Most specs benefit from combining approaches:
+
+```typescript
+test.fixme(
+  'APP-THEME-001: should apply dark theme correctly',
+  { tag: '@spec' },
+  async ({ page, startServerWithSchema }) => {
+    // GIVEN: Dark theme configured
+    await startServerWithSchema({
+      name: 'test-app',
+      theme: { mode: 'dark' }
+    })
+
+    // WHEN: User views the page
+    await page.goto('/')
+
+    // THEN: Structure is correct (ARIA snapshot)
+    await expect(page.locator('body')).toMatchAriaSnapshot(`
+      - heading "test-app" [level=1]
+      - navigation "Main menu"
+      - main
+        - button "Get Started"
+    `)
+
+    // AND: Visual appearance matches (screenshot)
+    await expect(page).toHaveScreenshot('dark-theme.png', {
+      fullPage: true,
+      animations: 'disabled'
+    })
+
+    // AND: Theme is interactive (assertion)
+    await expect(page.locator('body')).toHaveAttribute('data-theme', 'dark')
+  }
+)
+```
+
+### 📊 Decision Matrix
+
+| Spec Type | Primary Approach | Secondary | Rationale |
+|-----------|-----------------|-----------|-----------|
+| **Theme colors/shadows** | Visual Screenshot | ARIA | Visual validation primary, structure secondary |
+| **Typography/fonts** | Visual Screenshot | - | Font rendering needs visual check |
+| **Spacing/layout** | Visual Screenshot | ARIA | Layout visual, structure for responsiveness |
+| **Page structure** | ARIA Snapshot | - | Accessibility tree captures hierarchy |
+| **Navigation menus** | ARIA Snapshot | Assertions | Structure + behavior validation |
+| **Forms (structure)** | ARIA Snapshot | - | Form controls and labels |
+| **Forms (validation)** | Assertions | ARIA | Logic primary, structure secondary |
+| **Data tables/lists** | ARIA Snapshot | Assertions | Structure + specific values |
+| **Interactive widgets** | Combined | - | All three approaches needed |
+| **Animations** | Visual Screenshot | Assertions | Before/after states + timing |
+| **API integration** | Assertions | - | Data validation only |
+| **Routing/URLs** | Assertions | - | URL changes and params |
+| **Accessibility** | ARIA Snapshot | - | Purpose-built for a11y |
+| **Responsive design** | Visual Screenshot | ARIA | Visual at breakpoints + structure |
+
+### 🔧 Snapshot Management
+
+**Updating snapshots after implementation**:
+```bash
+# Update ALL snapshots (ARIA + visual)
+bun test:e2e --update-snapshots
+
+# Update specific test file
+bun test:e2e specs/app/theme/colors.spec.ts --update-snapshots
+
+# Update ONLY visual snapshots
+bun test:e2e --update-snapshots --grep "screenshot"
+```
+
+**Storage locations**:
+- ARIA snapshots: `specs/**/__snapshots__/*.yml`
+- Visual screenshots: `specs/**/__snapshots__/*.png`
+- Both committed to version control
+
+**Best practices**:
+1. **Review diffs carefully** before committing snapshot updates
+2. **Use descriptive names**: `'primary-button-hover.png'` not `'snapshot1.png'`
+3. **Mask dynamic content** in visual tests (timestamps, user data)
+4. **Set appropriate thresholds** for visual tests (default 0.2 is good start)
+5. **Keep snapshots small** - prefer element snapshots over full page when possible
+
 ## Translation Process
 
 ### Step 1: Read Schema File
@@ -209,8 +425,9 @@ test.describe('{title}', () => {
 
 ### Step 4: Translate Each Spec to @spec Test
 
-For each spec in the `x-specs` array, create ONE @spec test:
+For each spec in the `x-specs` array, create ONE @spec test. **Choose validation approach based on spec type** (see Decision Matrix above):
 
+#### Pattern A: ARIA Snapshot (for structure/accessibility specs)
 ```typescript
 test.fixme(
   '{spec.id}: should {extract from "then" clause}',
@@ -227,8 +444,97 @@ test.fixme(
     // Perform action from "when" clause
 
     // THEN: {spec.then}
-    // Add assertions for expected outcome
-    await expect(page.locator('[data-testid="..."]')).toHaveText('...')
+    // Use ARIA snapshot for structural validation
+    await expect(page.locator('main')).toMatchAriaSnapshot(`
+      - heading "{expected title}" [level=1]
+      - navigation
+        - link "Home"
+        - link "About"
+      - button "Submit"
+    `)
+  }
+)
+```
+
+#### Pattern B: Visual Screenshot (for theme/visual specs)
+```typescript
+test.fixme(
+  '{spec.id}: should {extract from "then" clause}',
+  { tag: '@spec' },
+  async ({ page, startServerWithSchema }) => {
+    // GIVEN: {spec.given}
+    await startServerWithSchema({
+      name: 'test-app',
+      theme: { /* theme config from spec */ }
+    })
+
+    // WHEN: {spec.when}
+    await page.goto('/')
+
+    // THEN: {spec.then}
+    // Use visual screenshot for theme validation
+    await expect(page).toHaveScreenshot('{spec.id}.png', {
+      fullPage: true,
+      animations: 'disabled',
+      threshold: 0.2
+    })
+  }
+)
+```
+
+#### Pattern C: Traditional Assertions (for behavioral specs)
+```typescript
+test.fixme(
+  '{spec.id}: should {extract from "then" clause}',
+  { tag: '@spec' },
+  async ({ page, startServerWithSchema }) => {
+    // GIVEN: {spec.given}
+    await startServerWithSchema({
+      name: 'test-app',
+      // Configure based on "given" context
+    })
+
+    // WHEN: {spec.when}
+    await page.goto('/')
+    await page.locator('button').click()
+
+    // THEN: {spec.then}
+    // Use assertions for behavioral validation
+    await expect(page).toHaveURL('/expected-route')
+    await expect(page.locator('.message')).toHaveText('Success')
+  }
+)
+```
+
+#### Pattern D: Combined Approach (for complex specs)
+```typescript
+test.fixme(
+  '{spec.id}: should {extract from "then" clause}',
+  { tag: '@spec' },
+  async ({ page, startServerWithSchema }) => {
+    // GIVEN: {spec.given}
+    await startServerWithSchema({
+      name: 'test-app',
+      // Complex configuration
+    })
+
+    // WHEN: {spec.when}
+    await page.goto('/')
+
+    // THEN: {spec.then}
+    // Combine multiple validation approaches
+
+    // 1. Structure (ARIA)
+    await expect(page.locator('main')).toMatchAriaSnapshot(`
+      - heading "Dashboard" [level=1]
+      - button "Settings"
+    `)
+
+    // 2. Visual (Screenshot)
+    await expect(page.locator('.dashboard')).toHaveScreenshot('dashboard.png')
+
+    // 3. Behavior (Assertions)
+    await expect(page.locator('button')).toBeEnabled()
   }
 )
 ```
@@ -236,9 +542,10 @@ test.fixme(
 **Key Rules**:
 - Test name: `'{spec.id}: should {extract from "then" clause}'` - MUST start with spec ID followed by colon
 - Format: `APP-NAME-001: should validate name` (NO square brackets, colon after ID)
-- Test body: Follow GIVEN-WHEN-THEN structure (no need to repeat spec ID in comments - it's in the test name)
+- Test body: Follow GIVEN-WHEN-THEN structure
 - Tag: `{ tag: '@spec' }`
 - Modifier: `test.fixme()` (RED phase)
+- **Validation approach**: Choose based on spec type (see Decision Matrix)
 
 ### Step 5: Create ONE OPTIMIZED @regression Test
 
@@ -271,11 +578,25 @@ test.fixme(
     // WHEN/THEN: Streamlined workflow testing integration points
     await page.goto('/')
 
-    // Verify critical integration points (not all assertions from @spec tests)
-    // Example: If @spec tests verify h1, title, meta tags separately,
-    // regression test might verify h1 + title together in one assertion block
-    await expect(page.locator('h1')).toHaveText('test-app')
+    // Use appropriate validation based on property type:
+
+    // For structural/navigation properties - use ARIA snapshot
+    await expect(page.locator('body')).toMatchAriaSnapshot(`
+      - heading "test-app" [level=1]
+      - navigation
+      - main
+        - button
+    `)
+
+    // For visual/theme properties - use screenshot
+    await expect(page).toHaveScreenshot('regression-{property}.png', {
+      fullPage: false,  // Viewport only for speed
+      animations: 'disabled'
+    })
+
+    // For behavioral properties - use assertions
     await expect(page).toHaveTitle('test-app - Powered by Omnera')
+    await expect(page.locator('button')).toBeEnabled()
 
     // Focus on workflow continuity, not exhaustive coverage
   }
@@ -363,6 +684,11 @@ Before completing, verify:
 - [ ] @regression test uses representative scenarios and combined assertions
 - [ ] All tests tagged correctly: `{ tag: '@spec' }` or `{ tag: '@regression' }`
 - [ ] Spec IDs included in test names for traceability (not in comments - avoid redundancy)
+- [ ] Appropriate validation approach chosen for each spec:
+  - [ ] ARIA snapshots for structure/accessibility specs
+  - [ ] Visual screenshots for theme/visual specs
+  - [ ] Assertions for behavioral/logic specs
+  - [ ] Combined approach where appropriate
 
 **Code Quality**:
 - [ ] Test titles start with spec ID and colon (e.g., `APP-NAME-001: should...`)
@@ -378,10 +704,13 @@ Before completing, verify:
 - Be explicit about which schema file you're translating
 - Explain the test count: "N @spec tests (exhaustive coverage) + 1 OPTIMIZED @regression test (integration confidence)"
 - Clarify test philosophy: "@spec tests are exhaustive, @regression test is optimized for efficiency"
+- **Explain validation approach**: "Using ARIA snapshots for structure, visual screenshots for theme, assertions for behavior"
 - Provide clear file paths: `specs/app/{property}/{property}.schema.json` → `specs/app/{property}/{property}.spec.ts`
 - Explain optimization strategy: "Regression test uses representative scenarios rather than duplicating all @spec assertions"
+- **Snapshot files**: Mention where snapshots will be stored: `specs/{property}/__snapshots__/`
 - **ALWAYS run validation** after creating tests: `bun run validate:{app|admin|api}-specs`
 - **Iterate until validation passes**: Fix errors and re-run validation until 0 errors
 - Report validation results: "✅ Validation passed with 0 errors" or "❌ Found N errors, fixing..."
+- **Update instructions**: "After implementation, run `bun test:e2e --update-snapshots` to create baseline snapshots"
 - Explain next steps: "These RED tests specify desired behavior. Remove test.fixme() and implement features to make tests pass."
 - If schema is missing or invalid, provide BLOCKING ERROR message with clear remediation steps

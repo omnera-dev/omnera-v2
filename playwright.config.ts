@@ -25,6 +25,28 @@ export default defineConfig({
   workers: process.env.CI ? 1 : undefined,
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
   reporter: [['list']],
+
+  /* Snapshot configuration */
+  snapshotDir: './__snapshots__',
+  snapshotPathTemplate:
+    '{snapshotDir}/{testFileDir}/__snapshots__/{testFileName}-snapshots/{arg}{-projectName}{-snapshotSuffix}{ext}',
+
+  /* Update snapshots settings */
+  updateSnapshots: process.env.UPDATE_SNAPSHOTS === 'true' ? 'all' : 'missing',
+  ignoreSnapshots: process.env.IGNORE_SNAPSHOTS === 'true',
+
+  /* Default timeout and screenshot comparison settings */
+  expect: {
+    timeout: 10000,
+    toHaveScreenshot: {
+      /* Default visual comparison options */
+      maxDiffPixels: 100,
+      threshold: 0.2,
+      animations: 'disabled',
+      scale: 'css',
+    },
+  },
+
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
     /* Base URL to use in actions like `await page.goto('')`. */
@@ -32,6 +54,15 @@ export default defineConfig({
 
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: 'on-first-retry',
+
+    /* Screenshot options for visual regression testing */
+    screenshot: {
+      mode: 'only-on-failure',
+      fullPage: false,
+    },
+
+    /* Visual regression testing options */
+    video: 'retain-on-failure',
   },
 
   /* Configure projects for major browsers */
