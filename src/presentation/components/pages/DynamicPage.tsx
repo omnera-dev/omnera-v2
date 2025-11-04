@@ -19,6 +19,7 @@ import type {
 import type { Blocks } from '@/domain/models/app/blocks'
 import type { Languages } from '@/domain/models/app/languages'
 import type { Analytics } from '@/domain/models/app/page/meta/analytics'
+import type { CustomElements } from '@/domain/models/app/page/meta/custom-elements'
 import type { OpenGraph } from '@/domain/models/app/page/meta/open-graph'
 import type { Component } from '@/domain/models/app/page/sections'
 import type { Page } from '@/domain/models/app/pages'
@@ -386,6 +387,93 @@ function AnalyticsHead({
 }
 
 /**
+ * Render custom head elements
+ * Generates arbitrary HTML elements (meta, link, script, style, base) in <head>
+ *
+ * @param customElements - Custom elements configuration from page.meta
+ * @returns React fragment with custom head elements
+ */
+function CustomElementsHead({
+  customElements,
+}: {
+  readonly customElements?: CustomElements
+}): Readonly<ReactElement | undefined> {
+  if (!customElements || customElements.length === 0) {
+    return undefined
+  }
+
+  return (
+    <>
+      {customElements.map((element, index) => {
+        const key = `custom-${element.type}-${index}`
+
+        // Render meta element
+        if (element.type === 'meta') {
+          return (
+            <meta
+              key={key}
+              {...element.attrs}
+            />
+          )
+        }
+
+        // Render link element
+        if (element.type === 'link') {
+          return (
+            <link
+              key={key}
+              {...element.attrs}
+            />
+          )
+        }
+
+        // Render script element
+        if (element.type === 'script') {
+          if (element.content) {
+            return (
+              <script
+                key={key}
+                {...element.attrs}
+                dangerouslySetInnerHTML={{ __html: element.content }}
+              />
+            )
+          }
+          return (
+            <script
+              key={key}
+              {...element.attrs}
+            />
+          )
+        }
+
+        // Render style element
+        if (element.type === 'style') {
+          return (
+            <style
+              key={key}
+              {...element.attrs}
+              dangerouslySetInnerHTML={{ __html: element.content || '' }}
+            />
+          )
+        }
+
+        // Render base element
+        if (element.type === 'base') {
+          return (
+            <base
+              key={key}
+              {...element.attrs}
+            />
+          )
+        }
+
+        return undefined
+      })}
+    </>
+  )
+}
+
+/**
  * Get block information for a section
  *
  * Determines if a section is a block reference and calculates its instance index
@@ -503,6 +591,7 @@ export function DynamicPage({
         <TwitterCardMeta page={page} />
         <StructuredDataScript page={page} />
         <AnalyticsHead analytics={page.meta?.analytics} />
+        <CustomElementsHead customElements={page.meta?.customElements} />
         <link
           rel="stylesheet"
           href="/assets/output.css"
