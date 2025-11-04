@@ -14,14 +14,14 @@ import type { ReactElement } from 'react'
  * Renders the page footer with copyright and optional legal links.
  *
  * @param props - Footer configuration
- * @returns Footer element or null if disabled
+ * @returns Footer element or undefined if disabled
  */
 export function Footer({
   enabled = true,
   copyright,
-}: Readonly<FooterProps>): Readonly<ReactElement | null> {
+}: Readonly<FooterProps>): Readonly<ReactElement | undefined> {
   if (!enabled) {
-    return null
+    return undefined
   }
 
   return (
