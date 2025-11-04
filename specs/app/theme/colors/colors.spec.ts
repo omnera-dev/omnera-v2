@@ -368,7 +368,7 @@ test.describe('Color Palette', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-THEME-COLORS-010: should validate kebab-case naming convention',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
