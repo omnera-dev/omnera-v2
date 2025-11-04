@@ -1367,6 +1367,125 @@
       }
     },
     {
+      "id": "APP-LANGUAGES-INTEGRATION-003",
+      "given": "multi-language pages with localized SEO meta tags",
+      "when": "page meta content uses translation references for different languages",
+      "then": "it should generate localized meta tags and structured data per language",
+      "validation": {
+        "setup": {
+          "languages": {
+            "default": "en-US",
+            "supported": ["en-US", "fr-FR", "es-ES"],
+            "translations": {
+              "en-US": {
+                "meta.title": "Premium Wireless Headphones | Shop Now",
+                "meta.description": "High-quality noise-cancelling headphones with superior sound",
+                "meta.keywords": "headphones, wireless, noise-cancelling"
+              },
+              "fr-FR": {
+                "meta.title": "Casque Sans Fil Premium | Acheter Maintenant",
+                "meta.description": "Casque antibruit de haute qualité avec son supérieur",
+                "meta.keywords": "casque, sans fil, antibruit"
+              },
+              "es-ES": {
+                "meta.title": "Auriculares Inalámbricos Premium | Comprar Ahora",
+                "meta.description": "Auriculares con cancelación de ruido de alta calidad",
+                "meta.keywords": "auriculares, inalámbricos, cancelación de ruido"
+              }
+            }
+          },
+          "page": {
+            "meta": {
+              "title": "$t:meta.title",
+              "description": "$t:meta.description",
+              "keywords": "$t:meta.keywords"
+            }
+          }
+        },
+        "assertions": [
+          "Meta tags reference translations via $t: prefix",
+          "Each language has complete meta translations",
+          "SEO data varies per language"
+        ]
+      },
+      "application": {
+        "languages": {
+          "default": "en-US",
+          "supported": ["en-US", "fr-FR", "es-ES"],
+          "translations": {
+            "en-US": {
+              "meta.title": "Premium Wireless Headphones | Shop Now",
+              "meta.description": "High-quality noise-cancelling headphones with superior sound",
+              "meta.keywords": "headphones, wireless, noise-cancelling",
+              "meta.og.siteName": "AudioTech Store"
+            },
+            "fr-FR": {
+              "meta.title": "Casque Sans Fil Premium | Acheter Maintenant",
+              "meta.description": "Casque antibruit de haute qualité avec son supérieur",
+              "meta.keywords": "casque, sans fil, antibruit",
+              "meta.og.siteName": "Boutique AudioTech"
+            },
+            "es-ES": {
+              "meta.title": "Auriculares Inalámbricos Premium | Comprar Ahora",
+              "meta.description": "Auriculares con cancelación de ruido de alta calidad",
+              "meta.keywords": "auriculares, inalámbricos, cancelación de ruido",
+              "meta.og.siteName": "Tienda AudioTech"
+            }
+          }
+        },
+        "page": {
+          "meta": {
+            "title": "$t:meta.title",
+            "description": "$t:meta.description",
+            "keywords": "$t:meta.keywords",
+            "og:site_name": "$t:meta.og.siteName",
+            "og:locale": "$lang"
+          }
+        },
+        "expectedMeta": {
+          "en-US": {
+            "title": "Premium Wireless Headphones | Shop Now",
+            "description": "High-quality noise-cancelling headphones with superior sound",
+            "keywords": "headphones, wireless, noise-cancelling",
+            "og:site_name": "AudioTech Store",
+            "og:locale": "en_US",
+            "html:lang": "en-US"
+          },
+          "fr-FR": {
+            "title": "Casque Sans Fil Premium | Acheter Maintenant",
+            "description": "Casque antibruit de haute qualité avec son supérieur",
+            "keywords": "casque, sans fil, antibruit",
+            "og:site_name": "Boutique AudioTech",
+            "og:locale": "fr_FR",
+            "html:lang": "fr-FR"
+          },
+          "es-ES": {
+            "title": "Auriculares Inalámbricos Premium | Comprar Ahora",
+            "description": "Auriculares con cancelación de ruido de alta calidad",
+            "keywords": "auriculares, inalámbricos, cancelación de ruido",
+            "og:site_name": "Tienda AudioTech",
+            "og:locale": "es_ES",
+            "html:lang": "es-ES"
+          }
+        },
+        "expectedHTML": {
+          "en-US": "<html lang=\"en-US\">\n<head>\n  <title>Premium Wireless Headphones | Shop Now</title>\n  <meta name=\"description\" content=\"High-quality noise-cancelling headphones with superior sound\" />\n  <meta name=\"keywords\" content=\"headphones, wireless, noise-cancelling\" />\n  <meta property=\"og:site_name\" content=\"AudioTech Store\" />\n  <meta property=\"og:locale\" content=\"en_US\" />\n</head>",
+          "fr-FR": "<html lang=\"fr-FR\">\n<head>\n  <title>Casque Sans Fil Premium | Acheter Maintenant</title>\n  <meta name=\"description\" content=\"Casque antibruit de haute qualité avec son supérieur\" />\n  <meta name=\"keywords\" content=\"casque, sans fil, antibruit\" />\n  <meta property=\"og:site_name\" content=\"Boutique AudioTech\" />\n  <meta property=\"og:locale\" content=\"fr_FR\" />\n</head>"
+        },
+        "assertions": [
+          "Languages+Meta integration: Translation keys resolve to localized meta content",
+          "SEO per language: Each language version has optimized meta tags",
+          "Open Graph locale: og:locale follows language (en_US, fr_FR, es_ES)",
+          "HTML lang attribute: Matches current language for accessibility",
+          "Localized keywords: Search terms appropriate for each language",
+          "Site name translation: Even brand elements can be localized",
+          "Search engine optimization: Google indexes French page with French meta",
+          "Social media sharing: Facebook shows localized og:site_name",
+          "International SEO: Proper hreflang support via language system"
+        ]
+      }
+    },
+    {
       "id": "APP-LANGUAGES-REGRESSION-001",
       "given": "complete application configuration with all features",
       "when": "user completes full workflow",

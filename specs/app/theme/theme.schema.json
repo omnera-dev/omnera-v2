@@ -908,6 +908,113 @@
       }
     },
     {
+      "id": "APP-THEME-INTEGRATION-004",
+      "given": "theme with animations that use theme color tokens for motion design",
+      "when": "animations reference theme colors, timing, and easing from design system",
+      "then": "it should create cohesive branded motion with theme-aware animations",
+      "validation": {
+        "setup": {
+          "theme": {
+            "colors": {
+              "primary": "#007bff",
+              "accent": "#ffc107"
+            },
+            "animations": {
+              "duration": {
+                "fast": "200ms",
+                "normal": "300ms",
+                "slow": "500ms"
+              },
+              "easing": {
+                "smooth": "cubic-bezier(0.4, 0, 0.2, 1)",
+                "bounce": "cubic-bezier(0.68, -0.55, 0.265, 1.55)"
+              },
+              "keyframes": {
+                "fadeIn": {
+                  "from": { "opacity": "0" },
+                  "to": { "opacity": "1" }
+                },
+                "colorPulse": {
+                  "0%": { "backgroundColor": "$colors.primary" },
+                  "50%": { "backgroundColor": "$colors.accent" },
+                  "100%": { "backgroundColor": "$colors.primary" }
+                }
+              }
+            }
+          }
+        },
+        "assertions": [
+          "Animations can reference theme.colors via $colors prefix",
+          "Duration tokens defined in theme.animations.duration",
+          "Easing functions centralized in theme.animations.easing",
+          "Keyframes can use color tokens for branded motion"
+        ]
+      },
+      "application": {
+        "theme": {
+          "colors": {
+            "primary": "#007bff",
+            "accent": "#ffc107",
+            "success": "#28a745"
+          },
+          "animations": {
+            "duration": {
+              "fast": "200ms",
+              "normal": "300ms",
+              "slow": "500ms"
+            },
+            "easing": {
+              "smooth": "cubic-bezier(0.4, 0, 0.2, 1)",
+              "bounce": "cubic-bezier(0.68, -0.55, 0.265, 1.55)",
+              "elastic": "cubic-bezier(0.68, -0.25, 0.265, 1.25)"
+            },
+            "keyframes": {
+              "fadeIn": {
+                "from": { "opacity": "0", "transform": "translateY(10px)" },
+                "to": { "opacity": "1", "transform": "translateY(0)" }
+              },
+              "colorPulse": {
+                "0%": { "backgroundColor": "$colors.primary" },
+                "50%": { "backgroundColor": "$colors.accent" },
+                "100%": { "backgroundColor": "$colors.primary" }
+              },
+              "successFlash": {
+                "0%": { "backgroundColor": "transparent", "boxShadow": "0 0 0 0 $colors.success" },
+                "50%": {
+                  "backgroundColor": "$colors.success",
+                  "boxShadow": "0 0 0 10px transparent"
+                },
+                "100%": { "backgroundColor": "transparent", "boxShadow": "0 0 0 0 transparent" }
+              }
+            }
+          }
+        },
+        "component": {
+          "type": "button",
+          "props": {
+            "className": "cta-button",
+            "style": {
+              "animation": "colorPulse 2s $easing.smooth infinite"
+            }
+          }
+        },
+        "expectedCSS": "@keyframes colorPulse {\n  0% { background-color: #007bff; }\n  50% { background-color: #ffc107; }\n  100% { background-color: #007bff; }\n}\n\n.cta-button {\n  animation: colorPulse 2s cubic-bezier(0.4, 0, 0.2, 1) infinite;\n}",
+        "expectedDOM": "<button data-testid=\"animated-cta\" class=\"cta-button\" style=\"animation: colorPulse 2s cubic-bezier(0.4, 0, 0.2, 1) infinite;\">Get Started</button>",
+        "assertions": [
+          "Theme+Animations integration: Motion design uses theme color tokens",
+          "Color pulse animation: Primary (#007bff) ↔ Accent (#ffc107)",
+          "Easing from theme: $easing.smooth → cubic-bezier(0.4, 0, 0.2, 1)",
+          "Duration from theme: theme.animations.duration.normal (300ms)",
+          "Branded motion: Animations reflect brand colors automatically",
+          "Design system coherence: Change theme.colors.primary → all animations update",
+          "Success flash: Uses theme.colors.success with expanding shadow effect",
+          "Consistent timing: All animations use centralized duration/easing tokens",
+          "Maintainability: One place to update brand motion (theme.animations)",
+          "Accessibility: prefers-reduced-motion can disable all themed animations"
+        ]
+      }
+    },
+    {
       "id": "APP-THEME-REGRESSION-001",
       "given": "complete application configuration with all features",
       "when": "user completes full workflow",

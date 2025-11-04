@@ -861,6 +861,98 @@
       }
     },
     {
+      "id": "APP-BLOCKS-INTEGRATION-003",
+      "given": "blocks containing meta/SEO data for structured content",
+      "when": "block definition includes meta properties for SEO optimization",
+      "then": "it should generate structured data and meta tags from block content",
+      "validation": {
+        "setup": {
+          "blocks": [
+            {
+              "name": "product-card",
+              "type": "article",
+              "props": {
+                "meta": {
+                  "title": "$productName",
+                  "description": "$productDescription",
+                  "image": "$productImage",
+                  "price": "$productPrice",
+                  "currency": "$productCurrency"
+                }
+              }
+            }
+          ]
+        },
+        "assertions": [
+          "Block meta property contains SEO data",
+          "Variable references for dynamic content",
+          "Structured data generation from block content"
+        ]
+      },
+      "application": {
+        "blocks": [
+          {
+            "name": "product-card",
+            "type": "article",
+            "props": {
+              "meta": {
+                "title": "$productName",
+                "description": "$productDescription",
+                "image": "$productImage",
+                "price": "$productPrice",
+                "currency": "$productCurrency",
+                "structuredData": {
+                  "type": "Product",
+                  "fields": ["name", "description", "image", "offers"]
+                }
+              }
+            }
+          }
+        ],
+        "page": {
+          "sections": [
+            {
+              "block": "product-card",
+              "vars": {
+                "productName": "Wireless Headphones",
+                "productDescription": "Premium noise-cancelling headphones",
+                "productImage": "/images/headphones.jpg",
+                "productPrice": "299.99",
+                "productCurrency": "USD"
+              }
+            }
+          ]
+        },
+        "expectedMeta": {
+          "title": "Wireless Headphones",
+          "description": "Premium noise-cancelling headphones",
+          "og:image": "/images/headphones.jpg",
+          "structuredData": {
+            "@type": "Product",
+            "name": "Wireless Headphones",
+            "description": "Premium noise-cancelling headphones",
+            "image": "/images/headphones.jpg",
+            "offers": {
+              "@type": "Offer",
+              "price": "299.99",
+              "priceCurrency": "USD"
+            }
+          }
+        },
+        "expectedDOM": "<article data-testid=\"block-product-card\">\n  <script type=\"application/ld+json\">\n    {\n      \"@context\": \"https://schema.org\",\n      \"@type\": \"Product\",\n      \"name\": \"Wireless Headphones\",\n      \"description\": \"Premium noise-cancelling headphones\",\n      \"image\": \"/images/headphones.jpg\",\n      \"offers\": {\n        \"@type\": \"Offer\",\n        \"price\": \"299.99\",\n        \"priceCurrency\": \"USD\"\n      }\n    }\n  </script>\n</article>",
+        "assertions": [
+          "Blocks+Meta integration: Block meta generates page meta tags",
+          "Structured data: Block props → Schema.org JSON-LD",
+          "Dynamic SEO: Variable substitution in meta content",
+          "Product schema: Name, description, image, price from block vars",
+          "Open Graph: og:image from block meta",
+          "Reusable SEO: Same block, different products → different structured data",
+          "E-commerce optimization: Product blocks include offer data",
+          "Search engine visibility: Proper structured data markup"
+        ]
+      }
+    },
+    {
       "id": "APP-BLOCKS-REGRESSION-001",
       "given": "complete application configuration with all features",
       "when": "user completes full workflow",
