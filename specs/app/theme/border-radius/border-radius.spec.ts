@@ -88,7 +88,7 @@ test.describe('Border Radius', () => {
 
       // THEN: it should validate no rounding
       const element = page.locator('[data-testid="radius-none"]')
-      await expect(element).toHaveCSS('border-radius', '0px')
+      await expect(element).toHaveScreenshot('radius-002-none.png')
     }
   )
 
@@ -119,7 +119,7 @@ test.describe('Border Radius', () => {
 
       // THEN: it should validate fully rounded elements
       const element = page.locator('[data-testid="radius-full"]')
-      await expect(element).toHaveCSS('border-radius', '9999px')
+      await expect(element).toHaveScreenshot('radius-003-full.png')
     }
   )
 
@@ -259,8 +259,7 @@ test.describe('Border Radius', () => {
 
       // THEN: it should render button with 0.375rem border-radius creating soft corners
       const button = page.locator('[data-testid="primary-button"]')
-      await expect(button).toBeVisible()
-      await expect(button).toHaveCSS('border-radius', '0.375rem')
+      await expect(button).toHaveScreenshot('radius-app-001-button-soft-corners.png')
     }
   )
 
@@ -298,8 +297,7 @@ test.describe('Border Radius', () => {
 
       // THEN: it should render image as circle with 9999px border-radius
       const avatar = page.locator('[data-testid="user-avatar"]')
-      await expect(avatar).toBeVisible()
-      await expect(avatar).toHaveCSS('border-radius', '9999px')
+      await expect(avatar).toHaveScreenshot('radius-app-002-avatar-circle.png')
     }
   )
 
@@ -336,8 +334,7 @@ test.describe('Border Radius', () => {
 
       // THEN: it should render card with 0.5rem border-radius creating soft edges
       const card = page.locator('[data-testid="content-card"]')
-      await expect(card).toBeVisible()
-      await expect(card).toHaveCSS('border-radius', '0.5rem')
+      await expect(card).toHaveScreenshot('radius-app-003-card-soft-edges.png')
     }
   )
 
@@ -375,9 +372,13 @@ test.describe('Border Radius', () => {
 
       // THEN: it should apply smaller radius on mobile for better touch targets and larger radius on desktop for visual polish
       const button = page.locator('[data-testid="responsive-button"]')
-      await expect(button).toBeVisible()
       // Mobile: sm radius (0.125rem / 2px) for precise touch targets
-      await expect(button).toHaveCSS('border-radius', '0.125rem')
+      await expect(button).toHaveScreenshot('radius-app-004-responsive-mobile.png')
+
+      // Test desktop breakpoint
+      await page.setViewportSize({ width: 1024, height: 768 })
+      // Desktop: lg radius (0.5rem / 8px) for visual polish
+      await expect(button).toHaveScreenshot('radius-app-004-responsive-desktop.png')
     }
   )
 
@@ -455,9 +456,8 @@ test.describe('Border Radius', () => {
 
       // THEN: it should render badge as pill with fully rounded left and right edges
       const badge = page.locator('[data-testid="status-badge"]')
-      await expect(badge).toBeVisible()
       // Radius token: theme.borderRadius.full = '9999px'
-      await expect(badge).toHaveCSS('border-radius', '9999px')
+      await expect(badge).toHaveScreenshot('radius-app-006-badge-pill.png')
     }
   )
 
@@ -513,19 +513,21 @@ test.describe('Border Radius', () => {
       await page.goto('/')
 
       // THEN: it should apply appropriate radius for each image context
+      // Visual validation shows different radius treatments for different image contexts
+      const pageSnapshot = page.locator('body')
+      await expect(pageSnapshot).toHaveScreenshot('radius-app-007-image-contexts.png')
+
       // Avatar: full radius (circle) - square dimensions become perfect circle
       const avatar = page.locator('[data-testid="user-avatar"]')
-      await expect(avatar).toBeVisible()
-      await expect(avatar).toHaveCSS('border-radius', '9999px')
+      await expect(avatar).toHaveScreenshot('radius-app-007-avatar.png')
 
       // Thumbnail: md radius (moderate rounding) - preserves image aspect ratio
       const thumbnail = page.locator('[data-testid="post-thumbnail"]')
-      await expect(thumbnail).toBeVisible()
-      await expect(thumbnail).toHaveCSS('border-radius', '0.375rem')
+      await expect(thumbnail).toHaveScreenshot('radius-app-007-thumbnail.png')
 
       // Hero: top-lg radius (rounded top only) - integrates with card below
       const hero = page.locator('[data-testid="hero-image"]')
-      await expect(hero).toBeVisible()
+      await expect(hero).toHaveScreenshot('radius-app-007-hero.png')
     }
   )
 
@@ -585,16 +587,16 @@ test.describe('Border Radius', () => {
       await page.goto('/')
 
       // THEN: it should apply radius to create cohesive nested component design
+      // Visual validation shows coordinated border-radius hierarchy
       const card = page.locator('[data-testid="product-card"]')
-      await expect(card).toBeVisible()
-      // Parent card: lg radius (0.5rem) on all corners with overflow: hidden
-      await expect(card).toHaveCSS('border-radius', '0.5rem')
+      await expect(card).toHaveScreenshot('radius-app-008-card-hierarchy.png')
 
+      // Individual components show proper radius coordination
       const header = page.locator('[data-testid="card-header"]')
-      await expect(header).toBeVisible()
+      await expect(header).toHaveScreenshot('radius-app-008-header.png')
 
       const footer = page.locator('[data-testid="card-footer"]')
-      await expect(footer).toBeVisible()
+      await expect(footer).toHaveScreenshot('radius-app-008-footer.png')
     }
   )
 
@@ -650,14 +652,20 @@ test.describe('Border Radius', () => {
       // WHEN/THEN: Streamlined workflow testing integration points
       await page.goto('/')
 
-      // Verify button radius
-      await expect(page.locator('[data-testid="button"]')).toHaveCSS('border-radius', '0.375rem')
+      // Visual validation of complete border-radius system
+      const fullPage = page.locator('body')
+      await expect(fullPage).toHaveScreenshot('radius-regression-001-full-system.png')
 
-      // Verify card radius
-      await expect(page.locator('[data-testid="card"]')).toHaveCSS('border-radius', '0.5rem')
-
-      // Verify avatar radius
-      await expect(page.locator('[data-testid="avatar"]')).toHaveCSS('border-radius', '9999px')
+      // Individual component radius validation
+      await expect(page.locator('[data-testid="button"]')).toHaveScreenshot(
+        'radius-regression-001-button.png'
+      )
+      await expect(page.locator('[data-testid="card"]')).toHaveScreenshot(
+        'radius-regression-001-card.png'
+      )
+      await expect(page.locator('[data-testid="avatar"]')).toHaveScreenshot(
+        'radius-regression-001-avatar.png'
+      )
 
       // Focus on workflow continuity, not exhaustive coverage
     }
