@@ -138,6 +138,28 @@ export function ComponentRenderer({
       : (styleValue as Record<string, unknown> | undefined)
   )
 
+  // Build flex-specific classes based on props
+  const buildFlexClasses = (props?: Record<string, unknown>): string => {
+    const baseClasses = ['flex']
+    const alignmentClass = props?.align === 'start' ? 'items-start'
+      : props?.align === 'center' ? 'items-center'
+      : props?.align === 'end' ? 'items-end'
+      : undefined
+    const gapClass = typeof props?.gap === 'number' ? `gap-${props.gap}` : undefined
+
+    return [
+      ...baseClasses,
+      alignmentClass,
+      gapClass,
+    ].filter(Boolean).join(' ')
+  }
+
+  // For flex type, prepend flex classes to className
+  const finalClassName =
+    type === 'flex'
+      ? [buildFlexClasses(substitutedProps), substitutedProps?.className].filter(Boolean).join(' ')
+      : (substitutedProps?.className as string | undefined)
+
   // Merge className with other props and add data-block attribute if blockName is provided
   // For blocks without content, add min-height and display to ensure visibility
   // Add translation key data attribute if children contain $t: patterns
@@ -145,7 +167,7 @@ export function ComponentRenderer({
   const hasContent = Boolean(content || children?.length)
   const elementProps = {
     ...substitutedProps,
-    className: substitutedProps?.className as string | undefined,
+    className: finalClassName,
     ...(parsedStyle && { style: parsedStyle }),
     ...(blockName && {
       'data-block': blockName,

@@ -83,7 +83,8 @@ export function substituteChildrenVariables(
       return substituted as string
     }
 
-    // If child is a component, recursively substitute in its children and content
+    // If child is a component, recursively substitute in its props, children and content
+    const substitutedProps = substitutePropsVariables(child.props, vars)
     const substitutedChildren = substituteChildrenVariables(child.children, vars)
     const substitutedContent =
       typeof child.content === 'string'
@@ -92,6 +93,7 @@ export function substituteChildrenVariables(
 
     return {
       ...child,
+      props: substitutedProps,
       children: substitutedChildren,
       content: substitutedContent,
     }
@@ -188,8 +190,12 @@ export function substitutePropsVariables(
 
     if (typeof value === 'string') {
       // Handle partial substitution within strings (e.g., 'box-$variant' → 'box-primary')
+      // Use regex with word boundary to avoid partial matches (e.g., $icon should not match inside $iconColor)
       const substituted = Object.entries(vars).reduce<string>((str, [varName, varValue]) => {
-        return str.replace(`$${varName}`, String(varValue))
+        // Create regex that matches $varName as a whole word (not as part of another variable)
+        // Use negative lookahead to ensure we don't match if followed by alphanumeric or underscore
+        const regex = new RegExp(`\\$${varName}(?![a-zA-Z0-9_])`, 'g')
+        return str.replace(regex, String(varValue))
       }, value)
       return { ...acc, [normalizedKey]: substituted }
     } else if (value && typeof value === 'object' && !Array.isArray(value)) {

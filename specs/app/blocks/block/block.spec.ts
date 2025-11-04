@@ -293,7 +293,7 @@ test.describe('Block Template', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-BLOCKS-BLOCK-009: should render flex container with icon and text components',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
