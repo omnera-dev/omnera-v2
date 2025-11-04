@@ -5,6 +5,7 @@
  * found in the LICENSE.md file in the root directory of this source tree.
  */
 
+import { Button } from '@/presentation/components/ui/button'
 import type { Navigation as NavigationProps } from '@/domain/models/app/page/layout/navigation'
 import type { ReactElement } from 'react'
 
@@ -24,12 +25,12 @@ export function Navigation({ logo, cta }: Readonly<NavigationProps>): Readonly<R
         alt="Logo"
       />
       {cta && (
-        <a
-          href={cta.href}
+        <Button
+          asChild
           data-testid="nav-cta"
         >
-          {cta.text}
-        </a>
+          <a href={cta.href}>{cta.text}</a>
+        </Button>
       )}
     </nav>
   )
