@@ -24,7 +24,7 @@ test.describe('Banner Configuration', () => {
   // One test per spec in schema - defines EXHAUSTIVE acceptance criteria
   // ============================================================================
 
-  test.fixme(
+  test(
     'APP-PAGES-BANNER-001: should display banner at top of page',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -33,9 +33,9 @@ test.describe('Banner Configuration', () => {
         name: 'test-app',
         pages: [
           {
-            name: 'Test',
+            name: 'test',
             path: '/',
-            meta: { lang: 'en-US', title: 'Test' },
+            meta: { lang: 'en-US', title: 'Test', description: 'Test page' },
             layout: { banner: { enabled: true, text: 'Announcement' } },
             sections: [],
           },
