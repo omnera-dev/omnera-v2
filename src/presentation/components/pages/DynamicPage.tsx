@@ -735,9 +735,12 @@ export function DynamicPage({
   // Using inline style attribute has highest specificity and overrides Tailwind base styles
   const bodyStyle:
     | {
-        fontFamily?: string
-        fontSize?: string
-        lineHeight?: string
+        readonly fontFamily?: string
+        readonly fontSize?: string
+        readonly lineHeight?: string
+        readonly fontStyle?: 'normal' | 'italic' | 'oblique'
+        readonly letterSpacing?: string
+        readonly textTransform?: 'none' | 'uppercase' | 'lowercase' | 'capitalize'
       }
     | undefined = theme?.fonts?.body
     ? {
@@ -748,6 +751,17 @@ export function DynamicPage({
         }),
         ...(theme.fonts.body.size && { fontSize: theme.fonts.body.size }),
         ...(theme.fonts.body.lineHeight && { lineHeight: theme.fonts.body.lineHeight }),
+        ...(theme.fonts.body.style && {
+          fontStyle: theme.fonts.body.style as 'normal' | 'italic' | 'oblique',
+        }),
+        ...(theme.fonts.body.letterSpacing && { letterSpacing: theme.fonts.body.letterSpacing }),
+        ...(theme.fonts.body.transform && {
+          textTransform: theme.fonts.body.transform as
+            | 'none'
+            | 'uppercase'
+            | 'lowercase'
+            | 'capitalize',
+        }),
       }
     : undefined
 
