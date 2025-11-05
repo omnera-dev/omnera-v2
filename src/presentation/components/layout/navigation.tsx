@@ -20,10 +20,16 @@ import type { ReactElement } from 'react'
 export function Navigation({ logo, cta }: Readonly<NavigationProps>): Readonly<ReactElement> {
   return (
     <nav data-testid="navigation">
-      <img
-        src={logo}
-        alt="Logo"
-      />
+      <a
+        href="/"
+        data-testid="nav-logo-link"
+      >
+        <img
+          data-testid="nav-logo"
+          src={logo}
+          alt="Logo"
+        />
+      </a>
       {cta && (
         <Button
           asChild
