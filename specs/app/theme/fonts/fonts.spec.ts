@@ -24,7 +24,7 @@ test.describe('Font Configuration', () => {
   // One test per spec in schema - defines EXHAUSTIVE acceptance criteria
   // ============================================================================
 
-  test.fixme(
+  test(
     'APP-THEME-FONTS-001: should validate font family as the only required property',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
