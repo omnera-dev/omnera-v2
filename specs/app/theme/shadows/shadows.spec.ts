@@ -158,7 +158,7 @@ test.describe('Shadows', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-THEME-SHADOWS-005: should validate kebab-case convention',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
