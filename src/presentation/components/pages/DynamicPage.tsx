@@ -153,9 +153,6 @@ function generateThemeStyles(theme?: Theme): string {
   // Build spacing styles array
   const spacingStyles: ReadonlyArray<string> = [
     ...(spacing?.section ? [`[data-testid="section"] { padding: ${spacing.section}; }`] : []),
-    ...(spacing?.container
-      ? [`[data-testid="container"] { max-width: ${spacing.container}; }`]
-      : []),
   ]
 
   // Build font styles for title font (h1-h6)
@@ -932,7 +929,12 @@ export function DynamicPage({
                   )
                 })}
               </section>
-              {theme?.spacing?.container && <div data-testid="container" />}
+              {theme?.spacing?.container && (
+                <div
+                  data-testid="container"
+                  className={theme.spacing.container}
+                />
+              )}
             </>
           ) : (
             page.sections.map((section, index) => {
