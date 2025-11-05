@@ -24,7 +24,7 @@ test.describe('Shadows', () => {
   // One test per spec in schema - defines EXHAUSTIVE acceptance criteria
   // ============================================================================
 
-  test.fixme(
+  test(
     'APP-THEME-SHADOWS-001: should validate elevation system from subtle to dramatic',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
