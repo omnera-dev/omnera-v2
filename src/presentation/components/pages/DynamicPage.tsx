@@ -742,7 +742,6 @@ export function DynamicPage({
     (script) => !script.position || script.position === 'body-end'
   )
 
-
   return (
     <html
       lang={lang}

@@ -172,8 +172,33 @@ function calculateSchemaGroupPriority(featurePath: string, hierarchy: SchemaHier
     const parentPath = parts.slice(0, i).join('/')
     const parentProp = hierarchy.get(parentPath)
     if (parentProp) {
-      // Inherit parent group priority + offset for nesting
+      // Found parent in hierarchy - now calculate priority for this sub-feature
       const baseGroup = calculatePropertyGroupPriority(parentProp, hierarchy)
+
+      // For sub-features not in schema (e.g., app/pages/navlinks when only app/pages exists),
+      // we need to assign different priorities based on alphabetical order
+      // This ensures all tests from same sub-feature are processed together
+
+      // Extract the sub-feature name (the part after parent)
+      const remainingParts = parts.slice(i)
+
+      if (remainingParts.length > 0) {
+        // Get alphabetical index among sibling sub-features
+        // This ensures: footer (001,002,003,REG) → layout (001,002,003,REG) → meta (...)
+        const subFeatureName = remainingParts[0]!
+        const siblingIndex = getAlphabeticalIndexForSubFeature(subFeatureName)
+
+        // Multiply by 2000 to create 2000-slot groups for each sub-feature
+        // This ensures room for 1000 tests (1-999) + regression test (900) without overlap
+        // Example: nav=13.065*2000=26130, navlinks=13.709*2000=27418
+        // Gap of 1288 slots ensures nav-regression (26130+900=27030) < navlinks-001 (27418+1)
+        const scaledSiblingIndex = siblingIndex * 2000
+
+        // Each sub-feature gets its own range with sufficient separation
+        return (baseGroup + scaledSiblingIndex) * 1000
+      }
+
+      // Direct child, use parent priority with small offset
       const additionalLevels = parts.length - i
       return (baseGroup + additionalLevels * 0.1) * 1000
     }
@@ -181,6 +206,51 @@ function calculateSchemaGroupPriority(featurePath: string, hierarchy: SchemaHier
 
   // Fallback for unknown paths
   return 100_000
+}
+
+/**
+ * Get alphabetical index for a sub-feature name
+ * Used to assign consistent priorities to sub-features not in schema
+ *
+ * This creates a unique numeric priority based on the full feature name
+ * to ensure tests from the same sub-feature are always processed together,
+ * while preserving alphabetical ordering across all sub-features.
+ *
+ * The algorithm converts the feature name to a base-26 number representation:
+ * - First char: integer part (0-25)
+ * - Next chars: decimal fractions (each position divided by 26^n)
+ *
+ * Examples (showing first char + first decimal):
+ * - "breadcrumb" → 1.xxx (b=1, r=17)
+ * - "footer" → 5.xxx (f=5, o=14)
+ * - "layout" → 11.xxx (l=11, a=0)
+ * - "meta" → 12.xxx (m=12, e=4)
+ * - "name" → 13.000 (n=13, a=0)
+ * - "nav" → 13.021 (n=13, a=0, v=21)
+ * - "navlinks" → 13.022 (n=13, a=0, v=21, l=11)
+ *
+ * This ensures: name < nav < navlinks (alphabetical order preserved)
+ */
+function getAlphabeticalIndexForSubFeature(subFeatureName: string): number {
+  const name = subFeatureName.toLowerCase()
+
+  // Base offset from first character (0-25)
+  const firstCharOffset = name.charCodeAt(0) - 97
+
+  // Convert remaining characters to decimal fraction preserving order
+  // Each subsequent character adds less weight (divided by 26^position)
+  let decimalOffset = 0
+  const maxChars = Math.min(name.length, 8) // Limit to prevent precision issues
+
+  for (let i = 1; i < maxChars; i++) {
+    const charValue = name.charCodeAt(i) - 97 // 0-25 (handle non-letters as 0)
+    const normalizedValue = Math.max(0, Math.min(25, charValue))
+    decimalOffset += normalizedValue / Math.pow(26, i)
+  }
+
+  // Combine: integer part (first letter) + decimal part (rest of name)
+  // This preserves alphabetical order while ensuring unique priorities
+  return firstCharOffset + decimalOffset
 }
 
 /**

@@ -405,7 +405,7 @@ test.describe('URL Path', () => {
 
       // THEN: custom page renders (NOT DefaultHomePage)
       await expect(page).toHaveTitle('Custom Home')
-      await expect(page.locator('[data-testid="page-custom_home"]')).toBeVisible()
+      await expect(page.locator('[data-testid="page-custom-home"]')).toBeVisible()
       await expect(page.locator('section#hero h1')).toHaveText('Custom Homepage')
 
       // Verify DefaultHomePage is NOT rendered

@@ -249,12 +249,14 @@ test.describe('Pages', () => {
       // THEN: it should orchestrate global layout components
       // ARIA snapshot validates complete page structure
       await expect(page.locator('body')).toMatchAriaSnapshot(`
-        - banner: "New feature available!"
+        - banner: New feature available!
         - navigation:
-          - img "Logo"
+          - link "Logo":
+            - /url: /
+            - img "Logo"
         - complementary
         - main
-        - contentinfo: "© 2025 Company"
+        - contentinfo: © 2025 Company
       `)
     }
   )
