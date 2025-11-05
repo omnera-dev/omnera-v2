@@ -24,14 +24,21 @@ test.describe('Page Name', () => {
   // One test per spec in schema - defines EXHAUSTIVE acceptance criteria
   // ============================================================================
 
-  test.fixme(
+  test(
     'APP-PAGES-NAME-001: should validate as internal page name',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: a page name as string
       await startServerWithSchema({
         name: 'test-app',
-        pages: [{ name: 'home', path: '/', meta: { lang: 'en-US', title: 'Home' }, sections: [] }],
+        pages: [
+          {
+            name: 'home',
+            path: '/',
+            meta: { lang: 'en-US', title: 'Home', description: 'Home page' },
+            sections: [],
+          },
+        ],
       })
 
       // WHEN: value is 'home'

@@ -11,7 +11,7 @@ import { Footer } from '@/presentation/components/layout/footer'
 import { Navigation } from '@/presentation/components/layout/navigation'
 import { Sidebar } from '@/presentation/components/layout/sidebar'
 import { ComponentRenderer } from '@/presentation/components/sections/component-renderer'
-import { toKebabCase } from '@/presentation/utils/string-utils'
+import { toKebabCase, toSlug } from '@/presentation/utils/string-utils'
 import type {
   BlockReference,
   SimpleBlockReference,
@@ -819,7 +819,7 @@ export function DynamicPage({
         {page.layout?.sidebar && <Sidebar {...page.layout.sidebar} />}
 
         <main
-          data-testid="page-content"
+          data-testid={`page-${toSlug(page.name)}`}
           data-page-name={page.name}
           data-page-id={page.id}
           style={{ minHeight: '1px' }}
