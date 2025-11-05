@@ -54,18 +54,18 @@ describe('SpacingConfigSchema', () => {
   test('APP-THEME-SPACING-004: should accept spacing variants', () => {
     // GIVEN: Spacing with small, medium, and large variants
     const spacing = {
-      gapSmall: 'gap-4',
-      gap: 'gap-6',
-      gapLarge: 'gap-8',
+      'gap-small': '1rem',
+      gap: '1.5rem',
+      'gap-large': '2rem',
     }
 
     // WHEN: Schema validation is performed
     const result = Schema.decodeUnknownSync(SpacingConfigSchema)(spacing)
 
     // THEN: All variants should be accepted
-    expect(result.gapSmall).toBe('gap-4')
-    expect(result.gap).toBe('gap-6')
-    expect(result.gapLarge).toBe('gap-8')
+    expect(result['gap-small']).toBe('1rem')
+    expect(result.gap).toBe('1.5rem')
+    expect(result['gap-large']).toBe('2rem')
   })
 
   test('APP-THEME-SPACING-009: should accept CSS values', () => {
@@ -85,12 +85,12 @@ describe('SpacingConfigSchema', () => {
     expect(result.padding).toBe('16px')
   })
 
-  test('should accept alphanumeric keys', () => {
-    // GIVEN: Spacing keys with camelCase
+  test('should accept kebab-case keys', () => {
+    // GIVEN: Spacing keys with kebab-case
     const spacing = {
       section: 'py-16',
-      containerSmall: 'max-w-4xl',
-      gapLarge: 'gap-8',
+      'container-small': 'max-w-4xl',
+      'gap-large': 'gap-8',
     }
 
     // WHEN: Schema validation is performed
@@ -100,16 +100,25 @@ describe('SpacingConfigSchema', () => {
     expect(Object.keys(result)).toHaveLength(3)
   })
 
-  test('should reject keys starting with numbers', () => {
-    // GIVEN: Invalid key starting with number
+  test('should filter out invalid key formats', () => {
+    // GIVEN: Mix of valid and invalid keys
     const spacing = {
-      '2xl': 'py-20',
+      section: 'py-16', // valid
+      Section: 'py-20', // invalid (uppercase)
+      containerSmall: 'max-w-4xl', // invalid (camelCase)
+      '2xl': 'py-20', // invalid (starts with number)
+      'container-small': 'max-w-4xl', // valid (kebab-case)
     }
 
-    // WHEN: Schema validation is performed
+    // WHEN: Schema validation is performed (filters invalid keys)
     const result = Schema.decodeUnknownSync(SpacingConfigSchema)(spacing)
 
-    // THEN: Invalid key should be filtered out
+    // THEN: Only valid keys should be present
+    expect(Object.keys(result)).toHaveLength(2)
+    expect(result.section).toBe('py-16')
+    expect(result['container-small']).toBe('max-w-4xl')
+    expect(result.Section).toBeUndefined()
+    expect(result.containerSmall).toBeUndefined()
     expect(result['2xl']).toBeUndefined()
   })
 })
