@@ -91,7 +91,7 @@ test.describe('Font Configuration', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-THEME-FONTS-003: should validate weight values from 100-900 in increments of 100',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
