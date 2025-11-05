@@ -161,6 +161,7 @@ function generateThemeStyles(theme?: Theme): string {
             `  font-family: ${titleFont.fallback ? `${titleFont.family}, ${titleFont.fallback}` : titleFont.family};`,
           titleFont.style && `  font-style: ${titleFont.style};`,
           titleFont.letterSpacing && `  letter-spacing: ${titleFont.letterSpacing};`,
+          titleFont.transform && `  text-transform: ${titleFont.transform};`,
           '}',
         ]
           .filter(Boolean)
@@ -803,6 +804,17 @@ export function DynamicPage({
           />
         )}
         <FaviconSetLinks favicons={page.meta?.favicons} />
+        {/* Font URL stylesheets - Load remote fonts (Google Fonts, etc.) */}
+        {theme?.fonts &&
+          Object.values(theme.fonts).map((font, index) =>
+            font.url ? (
+              <link
+                key={`font-${index}`}
+                rel="stylesheet"
+                href={font.url}
+              />
+            ) : null
+          )}
         <link
           rel="stylesheet"
           href="/assets/output.css"
