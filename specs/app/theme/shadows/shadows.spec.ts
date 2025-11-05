@@ -190,7 +190,7 @@ test.describe('Shadows', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-THEME-SHADOWS-006: should validate complete shadow system',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
