@@ -127,7 +127,7 @@ test.describe('Shadows', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-THEME-SHADOWS-004: should validate shadow removal',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
