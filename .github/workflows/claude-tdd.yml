@@ -397,7 +397,7 @@ jobs:
         id: retry
         env:
           GH_TOKEN: ${{ github.token }}
-          ISSUE_NUMBER: ${{ github.event.inputs.issue_number || github.event.client_payload.issue_number }}
+          ISSUE_NUMBER: ${{ github.event.inputs.issue_number || github.event.issue.number || github.event.pull_request.number }}
           CURRENT_RETRY: ${{ github.event.inputs.retry_attempt || 1 }}
           MAX_RETRIES: ${{ env.MAX_INFRASTRUCTURE_RETRIES }}
           ERROR_TYPE: ${{ needs.execute-claude.outputs.error_type }}
@@ -463,7 +463,7 @@ jobs:
         if: steps.retry.outputs.should_retry == 'true'
         env:
           GH_TOKEN: ${{ github.token }}
-          ISSUE_NUMBER: ${{ github.event.inputs.issue_number || github.event.client_payload.issue_number }}
+          ISSUE_NUMBER: ${{ github.event.inputs.issue_number || github.event.issue.number || github.event.pull_request.number }}
           NEXT_RETRY: ${{ steps.retry.outputs.next_retry }}
         run: |
           echo "🚀 Triggering retry workflow (attempt $NEXT_RETRY)..."
@@ -487,7 +487,7 @@ jobs:
       - name: Verify PR was created
         env:
           GH_TOKEN: ${{ github.token }}
-          ISSUE_NUMBER: ${{ github.event.inputs.issue_number || github.event.client_payload.issue_number }}
+          ISSUE_NUMBER: ${{ github.event.inputs.issue_number || github.event.issue.number || github.event.pull_request.number }}
         run: |
           echo "🔍 Verifying PR was created for issue #$ISSUE_NUMBER..."
 
