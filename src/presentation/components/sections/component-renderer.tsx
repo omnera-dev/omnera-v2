@@ -99,7 +99,7 @@ export function ComponentRenderer({
   }
 
   // Direct component rendering
-  const { type, props, children, content } = component as Component
+  const { type, props, children, content, interactions } = component as Component
 
   // Apply theme token substitution to props
   const substitutedProps = substitutePropsThemeTokens(props, theme)
@@ -163,11 +163,19 @@ export function ComponentRenderer({
     return [...baseClasses, alignmentClass, gapClass].filter(Boolean).join(' ')
   }
 
+  // Build animation classes from interactions
+  const animationClasses: ReadonlyArray<string> = interactions?.entrance
+    ? // Convert animation name to kebab-case Tailwind class (e.g., fadeIn -> animate-fadeIn)
+      [`animate-${interactions.entrance.animation}`]
+    : []
+
   // For flex type, prepend flex classes to className
-  const finalClassName =
+  const baseClassName =
     type === 'flex'
       ? [buildFlexClasses(substitutedProps), substitutedProps?.className].filter(Boolean).join(' ')
       : (substitutedProps?.className as string | undefined)
+
+  const finalClassName = [baseClassName, ...animationClasses].filter(Boolean).join(' ')
 
   // Merge className with other props and add data-block attribute if blockName is provided
   // For blocks without content, add min-height and display to ensure visibility
@@ -209,6 +217,10 @@ export function ComponentRenderer({
           display: 'inline-block',
         },
       }),
+    ...(interactions?.scroll && {
+      'data-scroll-animation': interactions.scroll.animation,
+      'data-scroll-threshold': interactions.scroll.threshold,
+    }),
   }
 
   // Render based on component type using specialized renderers

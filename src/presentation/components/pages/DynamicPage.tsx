@@ -920,6 +920,80 @@ export function DynamicPage({
             }}
           />
         )}
+        {/* Client-side scroll animations - inline for reliability */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+(function() {
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initScrollAnimations);
+  } else {
+    initScrollAnimations();
+  }
+
+  function initScrollAnimations() {
+    const elements = document.querySelectorAll('[data-scroll-animation]');
+    if (elements.length === 0) return;
+
+    const animatedElements = new WeakSet();
+
+    function applyScrollAnimation(element) {
+      if (animatedElements.has(element)) return;
+      const animation = element.getAttribute('data-scroll-animation');
+      if (!animation) return;
+
+      const existingAnimations = Array.from(element.classList).filter(cls => cls.startsWith('animate-'));
+      existingAnimations.forEach(cls => element.classList.remove(cls));
+      element.classList.add('animate-' + animation);
+      animatedElements.add(element);
+    }
+
+    function isElementInViewport(element, threshold) {
+      const rect = element.getBoundingClientRect();
+      const windowHeight = window.innerHeight || document.documentElement.clientHeight;
+      const windowWidth = window.innerWidth || document.documentElement.clientWidth;
+      const visibleHeight = Math.min(rect.bottom, windowHeight) - Math.max(rect.top, 0);
+      const visibleWidth = Math.min(rect.right, windowWidth) - Math.max(rect.left, 0);
+      const elementArea = rect.height * rect.width;
+      const visibleArea = Math.max(0, visibleHeight) * Math.max(0, visibleWidth);
+      const visiblePercentage = elementArea > 0 ? visibleArea / elementArea : 0;
+      return visiblePercentage >= threshold;
+    }
+
+    function checkVisibility() {
+      elements.forEach(element => {
+        const threshold = parseFloat(element.getAttribute('data-scroll-threshold') || '0.1');
+        if (isElementInViewport(element, threshold)) {
+          applyScrollAnimation(element);
+        }
+      });
+    }
+
+    elements.forEach(element => {
+      const threshold = parseFloat(element.getAttribute('data-scroll-threshold') || '0.1');
+      const observer = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            applyScrollAnimation(entry.target);
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: threshold, rootMargin: '0px' });
+      observer.observe(element);
+    });
+
+    let scrollTimeout;
+    window.addEventListener('scroll', () => {
+      clearTimeout(scrollTimeout);
+      scrollTimeout = setTimeout(checkVisibility, 50);
+    });
+
+    checkVisibility();
+  }
+})();
+            `,
+          }}
+        />
       </body>
     </html>
   )

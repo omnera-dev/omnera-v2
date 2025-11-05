@@ -198,7 +198,7 @@ test.describe('Component Interactions', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-INTERACTION-MAIN-006: should play entrance animation on load and scroll animation on viewport entry',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -207,9 +207,9 @@ test.describe('Component Interactions', () => {
         name: 'test-app',
         pages: [
           {
-            name: 'Test',
+            name: 'test',
             path: '/',
-            meta: { lang: 'en-US', title: 'Test' },
+            meta: { lang: 'en-US', title: 'Test', description: 'Test page' },
             sections: [
               {
                 type: 'div',
