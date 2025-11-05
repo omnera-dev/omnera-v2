@@ -66,7 +66,7 @@ test.describe('Spacing Configuration', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-THEME-SPACING-002: should validate responsive spacing with Tailwind breakpoints',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -83,7 +83,16 @@ test.describe('Spacing Configuration', () => {
             name: 'home',
             path: '/',
             meta: { lang: 'en-US', title: 'Test', description: 'Test page' },
-            sections: [],
+            sections: [
+              {
+                type: 'div',
+                props: {
+                  'data-testid': 'responsive-spacing',
+                  className: '$theme.spacing.section',
+                },
+                children: ['Responsive spacing test'],
+              },
+            ],
           },
         ],
       })
@@ -92,7 +101,9 @@ test.describe('Spacing Configuration', () => {
       await page.goto('/')
 
       // THEN: it should validate responsive spacing with Tailwind breakpoints
-      await expect(page.locator('[data-testid="section"]')).toHaveClass(/py-16/)
+      await expect(page.locator('[data-testid="responsive-spacing"]')).toBeVisible()
+      await expect(page.locator('[data-testid="responsive-spacing"]')).toHaveClass(/py-16/)
+      await expect(page.locator('[data-testid="responsive-spacing"]')).toHaveClass(/sm:py-20/)
     }
   )
 
