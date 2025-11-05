@@ -267,7 +267,7 @@ test.describe('Spacing Configuration', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-THEME-SPACING-005: should validate visual rhythm between sections',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {

@@ -99,6 +99,18 @@ function generateAnimationKeyframes(animations?: Theme['animations']): ReadonlyA
 }
 
 /**
+ * Check if a spacing value is a raw CSS value (not a Tailwind class)
+ * CSS values contain units like rem, px, em, % without spaces
+ * Tailwind classes like "py-16" or "py-16 sm:py-20" should return false
+ *
+ * @param value - Spacing value to check
+ * @returns true if value is a raw CSS value, false if it's a Tailwind class
+ */
+function isCssValue(value: string): boolean {
+  return /\d+(rem|px|em|%|vh|vw)/.test(value) && !value.includes(' ')
+}
+
+/**
  * Generate CSS from theme colors, spacing, animations, fonts, and shadows
  * Applies theme colors to semantic HTML elements for visual hierarchy
  * Applies theme spacing to section elements for layout consistency
@@ -151,8 +163,12 @@ function generateThemeStyles(theme?: Theme): string {
   ]
 
   // Build spacing styles array
+  // Only apply spacing as CSS if it's a raw CSS value (contains units like rem, px, em, %)
+  // Tailwind classes (py-16, sm:py-20, etc.) should be applied as className attributes
   const spacingStyles: ReadonlyArray<string> = [
-    ...(spacing?.section ? [`[data-testid="section"] { padding: ${spacing.section}; }`] : []),
+    ...(spacing?.section && isCssValue(spacing.section)
+      ? [`[data-testid="section"] { padding: ${spacing.section}; }`]
+      : []),
   ]
 
   // Build font styles for title font (h1-h6)
@@ -911,7 +927,10 @@ export function DynamicPage({
           {/* Wrap page sections in a section element when theme spacing is defined */}
           {theme?.spacing?.section || theme?.spacing?.container ? (
             <>
-              <section data-testid="section">
+              <section
+                data-testid="section"
+                {...(theme?.spacing?.section && { className: theme.spacing.section })}
+              >
                 {page.sections.map((section, index) => {
                   const blockInfo = getBlockInfo(section, index, page.sections)
 
