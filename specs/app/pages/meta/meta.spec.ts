@@ -24,16 +24,16 @@ test.describe('Page Metadata', () => {
   // One test per spec in schema - defines EXHAUSTIVE acceptance criteria
   // ============================================================================
 
-  test.fixme(
+  test(
     'APP-PAGES-META-001: should validate minimal metadata configuration',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: page metadata with required properties
       await startServerWithSchema({
-        name: 'test-app',
+        name: 'test_app',
         pages: [
           {
-            name: 'Test',
+            name: 'test',
             path: '/',
             meta: { lang: 'en-US', title: 'My Page', description: 'Page description' },
             sections: [],
