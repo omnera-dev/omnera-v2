@@ -139,7 +139,7 @@ test.describe('Spacing Configuration', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-THEME-SPACING-004: should validate consistent spacing scale',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
