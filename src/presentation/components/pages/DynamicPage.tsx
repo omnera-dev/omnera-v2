@@ -99,12 +99,13 @@ function generateAnimationKeyframes(animations?: Theme['animations']): ReadonlyA
 }
 
 /**
- * Generate CSS from theme colors, spacing, and animations
+ * Generate CSS from theme colors, spacing, animations, and fonts
  * Applies theme colors to semantic HTML elements for visual hierarchy
  * Applies theme spacing to section elements for layout consistency
+ * Applies theme fonts to heading elements (h1-h6) for typography system
  * Generates @keyframes for theme animations
  * Generates CSS custom properties for all theme colors (--color-{name})
- * Note: Theme fonts are applied via inline style attribute on body element (see DynamicPage component)
+ * Note: Theme body font is applied via inline style attribute on body element (see DynamicPage component)
  *
  * @param theme - Theme configuration from app schema
  * @returns CSS string with theme-based styles
@@ -114,8 +115,9 @@ function generateThemeStyles(theme?: Theme): string {
   const colors = theme?.colors
   const spacing = theme?.spacing
   const animations = theme?.animations
+  const fonts = theme?.fonts
 
-  if (!colors && !spacing && !animations) {
+  if (!colors && !spacing && !animations && !fonts) {
     return ''
   }
 
@@ -149,6 +151,22 @@ function generateThemeStyles(theme?: Theme): string {
       : []),
   ]
 
+  // Build font styles for title font (h1-h6)
+  const titleFont = fonts?.title
+  const fontStyles: ReadonlyArray<string> = titleFont
+    ? [
+        [
+          'h1, h2, h3, h4, h5, h6 {',
+          titleFont.family &&
+            `  font-family: ${titleFont.fallback ? `${titleFont.family}, ${titleFont.fallback}` : titleFont.family};`,
+          titleFont.style && `  font-style: ${titleFont.style};`,
+          '}',
+        ]
+          .filter(Boolean)
+          .join('\n'),
+      ]
+    : []
+
   // Build animation keyframes
   const animationStyles = generateAnimationKeyframes(animations)
 
@@ -157,6 +175,7 @@ function generateThemeStyles(theme?: Theme): string {
     ...cssVariables,
     ...colorStyles,
     ...spacingStyles,
+    ...fontStyles,
     ...animationStyles,
   ]
 

@@ -200,7 +200,7 @@ test.describe('Font Configuration', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-THEME-FONTS-004: should validate normal, italic, or oblique styles',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -220,7 +220,13 @@ test.describe('Font Configuration', () => {
             name: 'home',
             path: '/',
             meta: { lang: 'en-US', title: 'Test', description: 'Test page' },
-            sections: [],
+            sections: [
+              {
+                type: 'h1',
+                props: {},
+                children: ['Italic Heading'],
+              },
+            ],
           },
         ],
       })
