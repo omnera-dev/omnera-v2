@@ -7,8 +7,10 @@
 
 import DOMPurify from 'dompurify'
 import { type ReactElement } from 'react'
+import { type ClickInteraction } from '@/domain/models/app/page/common/interactions/click-interaction'
 import { type Languages } from '@/domain/models/app/languages'
 import { LanguageSwitcher } from '@/presentation/components/languages/language-switcher'
+import { ButtonWithInteraction } from './button-with-interaction'
 
 /**
  * Common props for all rendered elements
@@ -118,14 +120,22 @@ export function renderIframe(
 }
 
 /**
- * Renders button element
+ * Renders button element with click interactions
  */
 export function renderButton(
   props: ElementProps,
   content: string | undefined,
-  children: readonly React.ReactNode[]
+  children: readonly React.ReactNode[],
+  clickInteraction?: ClickInteraction
 ): ReactElement {
-  return <button {...props}>{content || children}</button>
+  return (
+    <ButtonWithInteraction
+      {...props}
+      clickInteraction={clickInteraction}
+    >
+      {content || children}
+    </ButtonWithInteraction>
+  )
 }
 
 /**

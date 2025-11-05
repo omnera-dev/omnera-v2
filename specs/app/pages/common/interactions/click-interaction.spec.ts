@@ -24,7 +24,7 @@ test.describe('Click Interaction', () => {
   // One test per spec in schema - defines EXHAUSTIVE acceptance criteria
   // ============================================================================
 
-  test.fixme(
+  test(
     'APP-PAGES-INTERACTION-CLICK-001: should play a pulse animation',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -33,9 +33,9 @@ test.describe('Click Interaction', () => {
         name: 'test-app',
         pages: [
           {
-            name: 'Test',
+            name: 'test',
             path: '/',
-            meta: { lang: 'en-US', title: 'Test' },
+            meta: { lang: 'en-US', title: 'Test', description: 'Test page' },
             sections: [
               {
                 type: 'button',

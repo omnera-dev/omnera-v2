@@ -261,6 +261,26 @@ function createHonoApp(
           })
         }
       })
+      .get('/assets/click-interactions.js', async (c) => {
+        try {
+          // Resolve path from project root (where Bun is executed)
+          const scriptPath = './public/assets/click-interactions.js'
+          const file = Bun.file(scriptPath)
+          const content = await file.text()
+
+          return c.text(content, 200, {
+            'Content-Type': 'application/javascript',
+            'Cache-Control': `public, max-age=${STATIC_ASSET_CACHE_DURATION_SECONDS}`,
+          })
+        } catch (error) {
+          // Log error - intentional side effect for error tracking
+          // eslint-disable-next-line functional/no-expression-statements
+          await Effect.runPromise(Console.error('Failed to load click-interactions.js:', error))
+          return c.text('/* Click interactions script failed to load */', 500, {
+            'Content-Type': 'application/javascript',
+          })
+        }
+      })
       .get('/test/error', (c) => {
         if (process.env.NODE_ENV === 'production') {
           return c.html(renderNotFoundPage(), 404)

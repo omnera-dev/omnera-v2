@@ -99,7 +99,7 @@ export function ComponentRenderer({
   }
 
   // Direct component rendering
-  const { type, props, children, content } = component as Component
+  const { type, props, children, content, interactions } = component as Component
 
   // Apply theme token substitution to props
   const substitutedProps = substitutePropsThemeTokens(props, theme)
@@ -277,7 +277,7 @@ export function ComponentRenderer({
 
     // Interactive elements
     case 'button':
-      return Renderers.renderButton(elementProps, content, renderedChildren)
+      return Renderers.renderButton(elementProps, content, renderedChildren, interactions?.click)
 
     case 'link':
       return Renderers.renderLink(elementProps, content, renderedChildren)

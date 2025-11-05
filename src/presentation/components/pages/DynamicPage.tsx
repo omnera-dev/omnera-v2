@@ -888,6 +888,11 @@ export function DynamicPage({
             reactKey: `inline-body-end-${index}`,
           })
         )}
+        {/* Client-side click interactions - always inject for interactive elements */}
+        <script
+          src="/assets/click-interactions.js"
+          defer={true}
+        />
         {/* Client-side language switcher functionality - always inject when languages configured */}
         {languages && (
           <>
