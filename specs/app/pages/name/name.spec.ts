@@ -307,7 +307,7 @@ test.describe('Page Name', () => {
       await expect(page.locator('[data-testid="page-home"]')).toBeVisible()
 
       await page.goto('/about')
-      await expect(page.locator('[data-testid="page-about_us"]')).toBeVisible()
+      await expect(page.locator('[data-testid="page-about-us"]')).toBeVisible()
 
       await page.goto('/pricing')
       await expect(page.locator('[data-testid="page-pricing"]')).toBeVisible()
