@@ -33,11 +33,11 @@ export function Navigation({ logo, links, cta }: Readonly<NavigationProps>): Rea
       {links?.desktop && (
         <div
           data-testid="nav-links"
-          style={{ display: 'flex', gap: '1rem' }}
+          className="flex gap-4"
         >
-          {links.desktop.map((link, index) => (
+          {links.desktop.map((link) => (
             <a
-              key={index}
+              key={link.href}
               href={link.href}
               data-testid="nav-link"
             >
