@@ -121,11 +121,14 @@ function generateThemeStyles(theme?: Theme): string {
 
   // Build CSS custom properties for theme colors
   // Use highest specificity selector to override Tailwind defaults
+  // Generate both --color-{name} and --{name} for maximum compatibility
   const cssVariables: ReadonlyArray<string> = colors
     ? [
         ':root, html {',
-        ...Object.entries(colors).map(([name, value]) => `  --color-${name}: ${value};`),
-        ...Object.entries(colors).map(([name, value]) => `  --${name}: ${value};`),
+        ...Object.entries(colors).flatMap(([name, value]) => [
+          `  --color-${name}: ${value};`,
+          `  --${name}: ${value};`,
+        ]),
         '}',
       ]
     : []
