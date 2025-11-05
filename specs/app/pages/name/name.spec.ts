@@ -49,7 +49,7 @@ test.describe('Page Name', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-NAME-002: should follow shared name pattern from common definitions',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -59,7 +59,12 @@ test.describe('Page Name', () => {
       await startServerWithSchema({
         name: 'test-app',
         pages: [
-          { name: 'about', path: '/about', meta: { lang: 'en-US', title: 'About' }, sections: [] },
+          {
+            name: 'about',
+            path: '/about',
+            meta: { lang: 'en-US', title: 'About', description: 'About' },
+            sections: [],
+          },
         ],
       })
       await page.goto('/about')
@@ -67,7 +72,7 @@ test.describe('Page Name', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-NAME-003: should accept simple lowercase names',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -75,7 +80,12 @@ test.describe('Page Name', () => {
       await startServerWithSchema({
         name: 'test-app',
         pages: [
-          { name: 'about', path: '/about', meta: { lang: 'en-US', title: 'About' }, sections: [] },
+          {
+            name: 'about',
+            path: '/about',
+            meta: { lang: 'en-US', title: 'About', description: 'About' },
+            sections: [],
+          },
         ],
       })
 
@@ -87,7 +97,7 @@ test.describe('Page Name', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-NAME-004: should accept single-word page identifiers',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -98,13 +108,13 @@ test.describe('Page Name', () => {
           {
             name: 'pricing',
             path: '/pricing',
-            meta: { lang: 'en-US', title: 'Pricing' },
+            meta: { lang: 'en-US', title: 'Pricing', description: 'Pricing' },
             sections: [],
           },
           {
             name: 'contact',
             path: '/contact',
-            meta: { lang: 'en-US', title: 'Contact' },
+            meta: { lang: 'en-US', title: 'Contact', description: 'Contact' },
             sections: [],
           },
         ],
@@ -120,35 +130,40 @@ test.describe('Page Name', () => {
     }
   )
 
-  test.fixme(
-    'APP-PAGES-NAME-005: should accept human-readable names with spaces',
+  test(
+    'APP-PAGES-NAME-005: should accept snake_case names with underscores',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // GIVEN: a page name with spaces for display
+      // GIVEN: a page name with underscores (snake_case)
       await startServerWithSchema({
         name: 'test-app',
         pages: [
-          { name: 'Home Page', path: '/', meta: { lang: 'en-US', title: 'Home' }, sections: [] },
           {
-            name: 'About Us',
+            name: 'home_page',
+            path: '/',
+            meta: { lang: 'en-US', title: 'Home', description: 'Home' },
+            sections: [],
+          },
+          {
+            name: 'about_us',
             path: '/about',
-            meta: { lang: 'en-US', title: 'About' },
+            meta: { lang: 'en-US', title: 'About', description: 'About' },
             sections: [],
           },
         ],
       })
 
-      // WHEN: value is 'Home Page' or 'About Us'
+      // WHEN: value is 'home_page' or 'about_us'
       await page.goto('/')
       await expect(page.locator('[data-testid="page-home-page"]')).toBeVisible()
       await page.goto('/about')
       await expect(page.locator('[data-testid="page-about-us"]')).toBeVisible()
 
-      // THEN: it should accept human-readable names with spaces
+      // THEN: it should accept snake_case names with underscores
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-NAME-006: should provide examples for typical page names',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -156,18 +171,28 @@ test.describe('Page Name', () => {
       await startServerWithSchema({
         name: 'test-app',
         pages: [
-          { name: 'home', path: '/', meta: { lang: 'en-US', title: 'Home' }, sections: [] },
-          { name: 'about', path: '/about', meta: { lang: 'en-US', title: 'About' }, sections: [] },
+          {
+            name: 'home',
+            path: '/',
+            meta: { lang: 'en-US', title: 'Home', description: 'Home' },
+            sections: [],
+          },
+          {
+            name: 'about',
+            path: '/about',
+            meta: { lang: 'en-US', title: 'About', description: 'About' },
+            sections: [],
+          },
           {
             name: 'pricing',
             path: '/pricing',
-            meta: { lang: 'en-US', title: 'Pricing' },
+            meta: { lang: 'en-US', title: 'Pricing', description: 'Pricing' },
             sections: [],
           },
           {
             name: 'contact',
             path: '/contact',
-            meta: { lang: 'en-US', title: 'Contact' },
+            meta: { lang: 'en-US', title: 'Contact', description: 'Contact' },
             sections: [],
           },
         ],
@@ -192,13 +217,19 @@ test.describe('Page Name', () => {
       await expect(async () => {
         await startServerWithSchema({
           name: 'test-app',
-          pages: [{ path: '/', meta: { lang: 'en-US', title: 'Home' }, sections: [] }],
+          pages: [
+            {
+              path: '/',
+              meta: { lang: 'en-US', title: 'Home', description: 'Home' },
+              sections: [],
+            },
+          ],
         })
       }).rejects.toThrow()
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-NAME-008: should serve as internal identifier separate from URL path',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -206,17 +237,22 @@ test.describe('Page Name', () => {
       await startServerWithSchema({
         name: 'test-app',
         pages: [
-          { name: 'Homepage', path: '/', meta: { lang: 'en-US', title: 'Welcome' }, sections: [] },
           {
-            name: 'Company Info',
-            path: '/about',
-            meta: { lang: 'en-US', title: 'About Us' },
+            name: 'homepage',
+            path: '/',
+            meta: { lang: 'en-US', title: 'Welcome', description: 'Welcome' },
             sections: [],
           },
           {
-            name: 'Plans & Pricing',
+            name: 'company_info',
+            path: '/about',
+            meta: { lang: 'en-US', title: 'About Us', description: 'About Us' },
+            sections: [],
+          },
+          {
+            name: 'plans_and_pricing',
             path: '/pricing',
-            meta: { lang: 'en-US', title: 'Pricing' },
+            meta: { lang: 'en-US', title: 'Pricing', description: 'Pricing' },
             sections: [],
           },
         ],
@@ -224,9 +260,9 @@ test.describe('Page Name', () => {
 
       // WHEN: names describe page purpose internally
       await page.goto('/')
-      await expect(page.locator('[data-page-name="Homepage"]')).toBeVisible()
+      await expect(page.locator('[data-page-name="homepage"]')).toBeVisible()
       await page.goto('/about')
-      await expect(page.locator('[data-page-name="Company Info"]')).toBeVisible()
+      await expect(page.locator('[data-page-name="company_info"]')).toBeVisible()
 
       // THEN: it should serve as internal identifier separate from URL path
     }
@@ -237,25 +273,30 @@ test.describe('Page Name', () => {
   // ONE OPTIMIZED test verifying components work together efficiently
   // ============================================================================
 
-  test.fixme(
+  test(
     'APP-PAGES-NAME-REGRESSION-001: user can complete full page name workflow',
     { tag: '@regression' },
     async ({ page, startServerWithSchema }) => {
-      // GIVEN: Application with various page name formats
+      // GIVEN: Application with various page name formats (snake_case)
       await startServerWithSchema({
         name: 'test-app',
         pages: [
-          { name: 'home', path: '/', meta: { lang: 'en-US', title: 'Home' }, sections: [] },
           {
-            name: 'About Us',
+            name: 'home',
+            path: '/',
+            meta: { lang: 'en-US', title: 'Home', description: 'Home' },
+            sections: [],
+          },
+          {
+            name: 'about_us',
             path: '/about',
-            meta: { lang: 'en-US', title: 'About' },
+            meta: { lang: 'en-US', title: 'About', description: 'About' },
             sections: [],
           },
           {
             name: 'pricing',
             path: '/pricing',
-            meta: { lang: 'en-US', title: 'Pricing' },
+            meta: { lang: 'en-US', title: 'Pricing', description: 'Pricing' },
             sections: [],
           },
         ],
