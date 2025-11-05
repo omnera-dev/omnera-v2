@@ -17,7 +17,7 @@ import type { ReactElement } from 'react'
  * @param props - Navigation configuration
  * @returns Navigation header element
  */
-export function Navigation({ logo, cta }: Readonly<NavigationProps>): Readonly<ReactElement> {
+export function Navigation({ logo, links, cta }: Readonly<NavigationProps>): Readonly<ReactElement> {
   return (
     <nav data-testid="navigation">
       <a
@@ -30,6 +30,22 @@ export function Navigation({ logo, cta }: Readonly<NavigationProps>): Readonly<R
           alt="Logo"
         />
       </a>
+      {links?.desktop && (
+        <div
+          data-testid="nav-links"
+          style={{ display: 'flex', gap: '1rem' }}
+        >
+          {links.desktop.map((link, index) => (
+            <a
+              key={index}
+              href={link.href}
+              data-testid="nav-link"
+            >
+              {link.label}
+            </a>
+          ))}
+        </div>
+      )}
       {cta && (
         <Button
           asChild

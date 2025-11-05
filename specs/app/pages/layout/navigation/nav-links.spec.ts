@@ -24,7 +24,7 @@ test.describe('Navigation Links', () => {
   // One test per spec in schema - defines EXHAUSTIVE acceptance criteria
   // ============================================================================
 
-  test.fixme(
+  test(
     'APP-PAGES-NAVLINKS-001: should render navigation link',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -33,9 +33,9 @@ test.describe('Navigation Links', () => {
         name: 'test-app',
         pages: [
           {
-            name: 'Test',
+            name: 'test',
             path: '/',
-            meta: { lang: 'en-US', title: 'Test' },
+            meta: { lang: 'en-US', title: 'Test', description: 'Test page' },
             layout: {
               navigation: {
                 logo: './logo.svg',
