@@ -107,7 +107,7 @@ test.describe('Spacing Configuration', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-THEME-SPACING-003: should validate centering and width constraints',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
