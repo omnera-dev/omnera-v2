@@ -819,7 +819,7 @@ export function DynamicPage({
         {page.layout?.sidebar && <Sidebar {...page.layout.sidebar} />}
 
         <main
-          data-testid={`page-${toSlug(page.name)}`}
+          data-testid={`page-${toSlug(page.name ?? page.path)}`}
           data-page-name={page.name}
           data-page-id={page.id}
           style={{ minHeight: '1px' }}
