@@ -160,6 +160,7 @@ function generateThemeStyles(theme?: Theme): string {
           titleFont.family &&
             `  font-family: ${titleFont.fallback ? `${titleFont.family}, ${titleFont.fallback}` : titleFont.family};`,
           titleFont.style && `  font-style: ${titleFont.style};`,
+          titleFont.letterSpacing && `  letter-spacing: ${titleFont.letterSpacing};`,
           '}',
         ]
           .filter(Boolean)
