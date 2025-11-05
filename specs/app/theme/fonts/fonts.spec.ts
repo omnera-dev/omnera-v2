@@ -57,7 +57,7 @@ test.describe('Font Configuration', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-THEME-FONTS-002: should validate graceful fallback for missing fonts',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
