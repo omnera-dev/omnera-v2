@@ -59,7 +59,7 @@ test.describe('Shadows', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-THEME-SHADOWS-002: should validate rgb(0 0 0 / 0.1) format',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
