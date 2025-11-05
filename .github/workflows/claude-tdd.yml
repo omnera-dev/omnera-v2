@@ -406,6 +406,7 @@ jobs:
         id: retry
         env:
           GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
           ISSUE_NUMBER: ${{ github.event.inputs.issue_number || github.event.issue.number || github.event.pull_request.number }}
           CURRENT_RETRY: ${{ github.event.inputs.retry_attempt || 1 }}
           MAX_RETRIES: ${{ env.MAX_INFRASTRUCTURE_RETRIES }}
@@ -422,10 +423,10 @@ jobs:
             echo "next_retry=$NEXT_RETRY" >> $GITHUB_OUTPUT
 
             # Add retry label
-            gh issue edit "$ISSUE_NUMBER" --add-label "infrastructure-retry:$CURRENT_RETRY"
+            gh issue edit "$ISSUE_NUMBER" --repo "$REPO" --add-label "infrastructure-retry:$CURRENT_RETRY"
 
             # Add comment
-            gh issue comment "$ISSUE_NUMBER" --body "🔄 **Automatic Infrastructure Retry**
+            gh issue comment "$ISSUE_NUMBER" --repo "$REPO" --body "🔄 **Automatic Infrastructure Retry**
 
             **Error Type**: \`$ERROR_TYPE\`
             **Retry Attempt**: $NEXT_RETRY of $MAX_RETRIES
@@ -443,12 +444,12 @@ jobs:
             echo "should_retry=false" >> $GITHUB_OUTPUT
 
             # Mark as failed
-            gh issue edit "$ISSUE_NUMBER" \
+            gh issue edit "$ISSUE_NUMBER" --repo "$REPO" \
               --remove-label "tdd-spec:in-progress" \
               --add-label "tdd-spec:failed" \
               --add-label "infrastructure-error"
 
-            gh issue comment "$ISSUE_NUMBER" --body "❌ **Infrastructure Error - Max Retries Exhausted**
+            gh issue comment "$ISSUE_NUMBER" --repo "$REPO" --body "❌ **Infrastructure Error - Max Retries Exhausted**
 
             **Error Type**: \`$ERROR_TYPE\`
             **Total Attempts**: $MAX_RETRIES
@@ -472,12 +473,13 @@ jobs:
         if: steps.retry.outputs.should_retry == 'true'
         env:
           GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
           ISSUE_NUMBER: ${{ github.event.inputs.issue_number || github.event.issue.number || github.event.pull_request.number }}
           NEXT_RETRY: ${{ steps.retry.outputs.next_retry }}
         run: |
           echo "🚀 Triggering retry workflow (attempt $NEXT_RETRY)..."
 
-          gh workflow run claude-tdd.yml \
+          gh workflow run claude-tdd.yml --repo "$REPO" \
             --field issue_number="$ISSUE_NUMBER" \
             --field retry_attempt="$NEXT_RETRY"
 
@@ -496,6 +498,7 @@ jobs:
       - name: Verify PR was created
         env:
           GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
           ISSUE_NUMBER: ${{ github.event.inputs.issue_number || github.event.issue.number || github.event.pull_request.number }}
         run: |
           echo "🔍 Verifying PR was created for issue #$ISSUE_NUMBER..."
@@ -503,10 +506,10 @@ jobs:
           # Wait up to 2 minutes for PR to appear
           PR_FOUND=false
           for i in {1..12}; do
-            PR_COUNT=$(gh pr list --json number,headRefName --jq "[.[] | select(.headRefName | test(\"^claude/issue-.*$ISSUE_NUMBER.*\"))] | length")
+            PR_COUNT=$(gh pr list --repo "$REPO" --json number,headRefName --jq "[.[] | select(.headRefName | test(\"^claude/issue-.*$ISSUE_NUMBER.*\"))] | length")
 
             if [ "$PR_COUNT" -gt 0 ]; then
-              PR_NUMBER=$(gh pr list --json number,headRefName --jq "[.[] | select(.headRefName | test(\"^claude/issue-.*$ISSUE_NUMBER.*\"))][0].number")
+              PR_NUMBER=$(gh pr list --repo "$REPO" --json number,headRefName --jq "[.[] | select(.headRefName | test(\"^claude/issue-.*$ISSUE_NUMBER.*\"))][0].number")
               echo "✅ PR #$PR_NUMBER found!"
               PR_FOUND=true
               break
@@ -519,11 +522,11 @@ jobs:
           if [ "$PR_FOUND" = false ]; then
             echo "❌ No PR found after 2 minutes - marking issue as failed"
 
-            gh issue edit "$ISSUE_NUMBER" \
+            gh issue edit "$ISSUE_NUMBER" --repo "$REPO" \
               --remove-label "tdd-spec:in-progress" \
               --add-label "tdd-spec:failed"
 
-            gh issue comment "$ISSUE_NUMBER" \
+            gh issue comment "$ISSUE_NUMBER" --repo "$REPO" \
               --body "❌ **TDD Automation Failed: PR Not Created**
 
             Claude Code finished successfully but did not create a pull request. This is required for the TDD automation workflow to complete.
