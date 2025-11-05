@@ -363,7 +363,7 @@ test.describe('Font Configuration', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-THEME-FONTS-008: should validate font URL for remote loading',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
