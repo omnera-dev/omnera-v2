@@ -240,7 +240,7 @@ test.describe('Font Configuration', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-THEME-FONTS-005: should validate typography metrics for body text',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
