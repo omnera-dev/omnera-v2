@@ -319,7 +319,7 @@ jobs:
 
       - name: Run Claude Code
         id: claude
-        uses: anthropics/claude-code-action@v1
+        uses: anthropics/claude-code-action@v1.0.16
         timeout-minutes: 30
         continue-on-error: true # Capture exit code instead of failing immediately
         with:
@@ -344,9 +344,17 @@ jobs:
           ERROR_TYPE="unknown"
 
           if [ "$CLAUDE_OUTCOME" = "cancelled" ]; then
-            IS_INFRA_ERROR=true
-            ERROR_TYPE="workflow_cancelled"
-            echo "🚫 Claude Code was cancelled"
+            # Check if this was a timeout during installation vs execution
+            # Timeouts show as "cancelled" in GitHub Actions
+            if [ "${{ steps.claude.outputs.prepare_success }}" != "true" ]; then
+              IS_INFRA_ERROR=true
+              ERROR_TYPE="installation_timeout"
+              echo "⏱️ Claude Code installation timed out - will retry with fresh runner"
+            else
+              IS_INFRA_ERROR=true
+              ERROR_TYPE="execution_timeout"
+              echo "⏱️ Claude Code execution timed out - may be a code issue"
+            fi
           elif [ "$CLAUDE_OUTCOME" = "failure" ]; then
             # For failures, we need to check logs in retry workflow
             ERROR_TYPE="claude_failure"
