@@ -25,7 +25,7 @@ test.describe('Click Interaction', () => {
   // ============================================================================
 
   test.fixme(
-    'APP-INTERACTION-CLICK-001: should play a pulse animation',
+    'APP-PAGES-INTERACTION-CLICK-001: should play a pulse animation',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: a button with click animation 'pulse'
@@ -59,7 +59,7 @@ test.describe('Click Interaction', () => {
   )
 
   test.fixme(
-    'APP-INTERACTION-CLICK-002: should play a ripple animation from the click point',
+    'APP-PAGES-INTERACTION-CLICK-002: should play a ripple animation from the click point',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: a button with click animation 'ripple'
@@ -93,7 +93,7 @@ test.describe('Click Interaction', () => {
   )
 
   test.fixme(
-    'APP-INTERACTION-CLICK-003: should navigate to the contact page',
+    'APP-PAGES-INTERACTION-CLICK-003: should navigate to the contact page',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: a button with navigate to '/contact'
@@ -133,7 +133,7 @@ test.describe('Click Interaction', () => {
   )
 
   test.fixme(
-    'APP-INTERACTION-CLICK-004: should navigate to the pricing section on the same page',
+    'APP-PAGES-INTERACTION-CLICK-004: should navigate to the pricing section on the same page',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: a button with navigate to anchor '#pricing-section'
@@ -170,7 +170,7 @@ test.describe('Click Interaction', () => {
   )
 
   test.fixme(
-    'APP-INTERACTION-CLICK-005: should open the URL in the same tab',
+    'APP-PAGES-INTERACTION-CLICK-005: should open the URL in the same tab',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: a button with openUrl to external site
@@ -206,7 +206,7 @@ test.describe('Click Interaction', () => {
   )
 
   test.fixme(
-    'APP-INTERACTION-CLICK-006: should open the URL in a new tab',
+    'APP-PAGES-INTERACTION-CLICK-006: should open the URL in a new tab',
     { tag: '@spec' },
     async ({ page, startServerWithSchema, context }) => {
       // GIVEN: a button with openUrl and openInNewTab true
@@ -242,7 +242,7 @@ test.describe('Click Interaction', () => {
   )
 
   test.fixme(
-    'APP-INTERACTION-CLICK-007: should smoothly scroll to the hero section',
+    'APP-PAGES-INTERACTION-CLICK-007: should smoothly scroll to the hero section',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: a button with scrollTo '#hero-section'
@@ -282,7 +282,7 @@ test.describe('Click Interaction', () => {
   )
 
   test.fixme(
-    'APP-INTERACTION-CLICK-008: should show the mobile menu if hidden, or hide it if shown',
+    'APP-PAGES-INTERACTION-CLICK-008: should show the mobile menu if hidden, or hide it if shown',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: a button with toggleElement '#mobile-menu'
@@ -325,7 +325,7 @@ test.describe('Click Interaction', () => {
   )
 
   test.fixme(
-    'APP-INTERACTION-CLICK-009: should submit the contact form',
+    'APP-PAGES-INTERACTION-CLICK-009: should submit the contact form',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: a button with submitForm '#contact-form'
@@ -367,7 +367,7 @@ test.describe('Click Interaction', () => {
   )
 
   test.fixme(
-    'APP-INTERACTION-CLICK-010: should play pulse animation then navigate to signup page',
+    'APP-PAGES-INTERACTION-CLICK-010: should play pulse animation then navigate to signup page',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: a button with animation 'pulse' and navigate '/signup'
@@ -408,7 +408,7 @@ test.describe('Click Interaction', () => {
   )
 
   test.fixme(
-    'APP-INTERACTION-CLICK-011: should play a bounce animation',
+    'APP-PAGES-INTERACTION-CLICK-011: should play a bounce animation',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: a button with animation 'bounce'
@@ -442,7 +442,7 @@ test.describe('Click Interaction', () => {
   )
 
   test.fixme(
-    'APP-INTERACTION-CLICK-012: should not play any animation',
+    'APP-PAGES-INTERACTION-CLICK-012: should not play any animation',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: a button with animation 'none'

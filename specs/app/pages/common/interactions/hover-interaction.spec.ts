@@ -25,7 +25,7 @@ test.describe('Hover Interaction', () => {
   // ============================================================================
 
   test.fixme(
-    'APP-INTERACTION-HOVER-001: should smoothly scale up by 5%',
+    'APP-PAGES-INTERACTION-HOVER-001: should smoothly scale up by 5%',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: a component with hover transform scale(1.05)
@@ -59,7 +59,7 @@ test.describe('Hover Interaction', () => {
   )
 
   test.fixme(
-    'APP-INTERACTION-HOVER-002: should fade to 80% opacity',
+    'APP-PAGES-INTERACTION-HOVER-002: should fade to 80% opacity',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: a component with hover opacity 0.8
@@ -93,7 +93,7 @@ test.describe('Hover Interaction', () => {
   )
 
   test.fixme(
-    'APP-INTERACTION-HOVER-003: should change background and text colors',
+    'APP-PAGES-INTERACTION-HOVER-003: should change background and text colors',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: a component with hover backgroundColor and color
@@ -128,7 +128,7 @@ test.describe('Hover Interaction', () => {
   )
 
   test.fixme(
-    'APP-INTERACTION-HOVER-004: should apply box shadow effect',
+    'APP-PAGES-INTERACTION-HOVER-004: should apply box shadow effect',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: a component with hover shadow
@@ -162,7 +162,7 @@ test.describe('Hover Interaction', () => {
   )
 
   test.fixme(
-    'APP-INTERACTION-HOVER-005: should transition using specified duration and easing function',
+    'APP-PAGES-INTERACTION-HOVER-005: should transition using specified duration and easing function',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: a component with custom duration and easing
@@ -199,7 +199,7 @@ test.describe('Hover Interaction', () => {
   )
 
   test.fixme(
-    'APP-INTERACTION-HOVER-006: all effects should apply simultaneously with coordinated timing',
+    'APP-PAGES-INTERACTION-HOVER-006: all effects should apply simultaneously with coordinated timing',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: a component with multiple hover effects (transform, shadow, duration)
@@ -241,7 +241,7 @@ test.describe('Hover Interaction', () => {
   )
 
   test.fixme(
-    'APP-INTERACTION-HOVER-007: should change border color smoothly',
+    'APP-PAGES-INTERACTION-HOVER-007: should change border color smoothly',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: a component with hover borderColor
@@ -275,7 +275,7 @@ test.describe('Hover Interaction', () => {
   )
 
   test.fixme(
-    'APP-INTERACTION-HOVER-008: should apply effects instantly without transition',
+    'APP-PAGES-INTERACTION-HOVER-008: should apply effects instantly without transition',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: a component with hover duration set to 0ms
@@ -310,7 +310,7 @@ test.describe('Hover Interaction', () => {
   )
 
   test.fixme(
-    'APP-INTERACTION-HOVER-009: should display at full opacity',
+    'APP-PAGES-INTERACTION-HOVER-009: should display at full opacity',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: a component with hover opacity set to maximum (1.0)
@@ -344,7 +344,7 @@ test.describe('Hover Interaction', () => {
   )
 
   test.fixme(
-    'APP-INTERACTION-HOVER-010: should become completely transparent',
+    'APP-PAGES-INTERACTION-HOVER-010: should become completely transparent',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: a component with hover opacity set to minimum (0.0)

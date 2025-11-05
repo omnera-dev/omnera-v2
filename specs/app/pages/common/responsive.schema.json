@@ -104,7 +104,7 @@
   ],
   "x-specs": [
     {
-      "id": "APP-RESPONSIVE-001",
+      "id": "APP-PAGES-RESPONSIVE-001",
       "given": "a heading with mobile-specific props",
       "when": "viewed on mobile device",
       "then": "it should apply mobile className and styles",
@@ -118,7 +118,7 @@
       }
     },
     {
-      "id": "APP-RESPONSIVE-002",
+      "id": "APP-PAGES-RESPONSIVE-002",
       "given": "a heading with different content per breakpoint (mobile, md, lg)",
       "when": "viewport changes from mobile to tablet to desktop",
       "then": "content should update to match each breakpoint",
@@ -139,7 +139,7 @@
       }
     },
     {
-      "id": "APP-RESPONSIVE-003",
+      "id": "APP-PAGES-RESPONSIVE-003",
       "given": "a component with visible false on mobile, visible true on lg",
       "when": "viewport changes from mobile to desktop",
       "then": "component should be hidden on mobile and shown on large screens",
@@ -156,7 +156,7 @@
       }
     },
     {
-      "id": "APP-RESPONSIVE-004",
+      "id": "APP-PAGES-RESPONSIVE-004",
       "given": "a component with different children at mobile vs desktop",
       "when": "viewport changes",
       "then": "it should render different child components based on breakpoint",
@@ -181,7 +181,7 @@
       }
     },
     {
-      "id": "APP-RESPONSIVE-005",
+      "id": "APP-PAGES-RESPONSIVE-005",
       "given": "a component with props overrides at sm breakpoint",
       "when": "viewport reaches 640px (sm)",
       "then": "it should apply sm-specific props",
@@ -195,7 +195,7 @@
       }
     },
     {
-      "id": "APP-RESPONSIVE-006",
+      "id": "APP-PAGES-RESPONSIVE-006",
       "given": "a component with props overrides at md breakpoint",
       "when": "viewport reaches 768px (md)",
       "then": "it should apply md-specific props",
@@ -209,7 +209,7 @@
       }
     },
     {
-      "id": "APP-RESPONSIVE-007",
+      "id": "APP-PAGES-RESPONSIVE-007",
       "given": "a component with props overrides at xl and 2xl breakpoints",
       "when": "viewport reaches extra large sizes",
       "then": "it should apply xl/2xl-specific props for very wide screens",
@@ -226,7 +226,7 @@
       }
     },
     {
-      "id": "APP-RESPONSIVE-008",
+      "id": "APP-PAGES-RESPONSIVE-008",
       "given": "a component with mobile-first progression (mobile → sm → md → lg)",
       "when": "viewport expands from mobile to desktop",
       "then": "each breakpoint should override the previous, creating progressive enhancement",
@@ -254,7 +254,7 @@
       }
     },
     {
-      "id": "APP-RESPONSIVE-009",
+      "id": "APP-PAGES-RESPONSIVE-009",
       "given": "a button with props, content, and visible all configured per breakpoint",
       "when": "viewport changes",
       "then": "all three override types should apply simultaneously at each breakpoint",
@@ -278,7 +278,7 @@
       }
     },
     {
-      "id": "APP-RESPONSIVE-010",
+      "id": "APP-PAGES-RESPONSIVE-010",
       "given": "a navigation menu with visible true on mobile, different children on desktop",
       "when": "switching between mobile and desktop views",
       "then": "mobile should show hamburger menu, desktop should show full navigation links",

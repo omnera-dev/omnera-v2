@@ -62,7 +62,7 @@
   ],
   "x-specs": [
     {
-      "id": "APP-INTERACTION-HOVER-001",
+      "id": "APP-PAGES-INTERACTION-HOVER-001",
       "given": "a component with hover transform scale(1.05)",
       "when": "user hovers over the component",
       "then": "it should smoothly scale up by 5%",
@@ -83,7 +83,7 @@
       }
     },
     {
-      "id": "APP-INTERACTION-HOVER-002",
+      "id": "APP-PAGES-INTERACTION-HOVER-002",
       "given": "a component with hover opacity 0.8",
       "when": "user hovers over the component",
       "then": "it should fade to 80% opacity",
@@ -98,7 +98,7 @@
       }
     },
     {
-      "id": "APP-INTERACTION-HOVER-003",
+      "id": "APP-PAGES-INTERACTION-HOVER-003",
       "given": "a component with hover backgroundColor and color",
       "when": "user hovers over the component",
       "then": "it should change background and text colors",
@@ -116,7 +116,7 @@
       }
     },
     {
-      "id": "APP-INTERACTION-HOVER-004",
+      "id": "APP-PAGES-INTERACTION-HOVER-004",
       "given": "a component with hover shadow",
       "when": "user hovers over the component",
       "then": "it should apply box shadow effect",
@@ -134,7 +134,7 @@
       }
     },
     {
-      "id": "APP-INTERACTION-HOVER-005",
+      "id": "APP-PAGES-INTERACTION-HOVER-005",
       "given": "a component with custom duration and easing",
       "when": "user hovers over the component",
       "then": "it should transition using specified duration and easing function",
@@ -154,7 +154,7 @@
       }
     },
     {
-      "id": "APP-INTERACTION-HOVER-006",
+      "id": "APP-PAGES-INTERACTION-HOVER-006",
       "given": "a component with multiple hover effects (transform, shadow, duration)",
       "when": "user hovers over the component",
       "then": "all effects should apply simultaneously with coordinated timing",
@@ -179,7 +179,7 @@
       }
     },
     {
-      "id": "APP-INTERACTION-HOVER-007",
+      "id": "APP-PAGES-INTERACTION-HOVER-007",
       "given": "a component with hover borderColor",
       "when": "user hovers over the component",
       "then": "it should change border color smoothly",
@@ -196,7 +196,7 @@
       }
     },
     {
-      "id": "APP-INTERACTION-HOVER-008",
+      "id": "APP-PAGES-INTERACTION-HOVER-008",
       "given": "a component with hover duration set to 0ms",
       "when": "user hovers over the component",
       "then": "it should apply effects instantly without transition",
@@ -214,7 +214,7 @@
       }
     },
     {
-      "id": "APP-INTERACTION-HOVER-009",
+      "id": "APP-PAGES-INTERACTION-HOVER-009",
       "given": "a component with hover opacity set to maximum (1.0)",
       "when": "user hovers over the component",
       "then": "it should display at full opacity",
@@ -225,7 +225,7 @@
       }
     },
     {
-      "id": "APP-INTERACTION-HOVER-010",
+      "id": "APP-PAGES-INTERACTION-HOVER-010",
       "given": "a component with hover opacity set to minimum (0.0)",
       "when": "user hovers over the component",
       "then": "it should become completely transparent",

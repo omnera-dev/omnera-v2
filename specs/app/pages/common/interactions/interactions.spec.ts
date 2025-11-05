@@ -25,7 +25,7 @@ test.describe('Component Interactions', () => {
   // ============================================================================
 
   test.fixme(
-    'APP-INTERACTION-MAIN-001: should support hover effects without other interaction types',
+    'APP-PAGES-INTERACTION-MAIN-001: should support hover effects without other interaction types',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: a component with only hover interactions
@@ -59,7 +59,7 @@ test.describe('Component Interactions', () => {
   )
 
   test.fixme(
-    'APP-INTERACTION-MAIN-002: should support click actions without other interaction types',
+    'APP-PAGES-INTERACTION-MAIN-002: should support click actions without other interaction types',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: a component with only click interactions
@@ -93,7 +93,7 @@ test.describe('Component Interactions', () => {
   )
 
   test.fixme(
-    'APP-INTERACTION-MAIN-003: should support scroll animations without other interaction types',
+    'APP-PAGES-INTERACTION-MAIN-003: should support scroll animations without other interaction types',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: a component with only scroll interactions
@@ -127,7 +127,7 @@ test.describe('Component Interactions', () => {
   )
 
   test.fixme(
-    'APP-INTERACTION-MAIN-004: should support entrance animations without other interaction types',
+    'APP-PAGES-INTERACTION-MAIN-004: should support entrance animations without other interaction types',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: a component with only entrance interactions
@@ -160,7 +160,7 @@ test.describe('Component Interactions', () => {
   )
 
   test.fixme(
-    'APP-INTERACTION-MAIN-005: should support both hover effects and click actions',
+    'APP-PAGES-INTERACTION-MAIN-005: should support both hover effects and click actions',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: a button with hover and click interactions
@@ -199,7 +199,7 @@ test.describe('Component Interactions', () => {
   )
 
   test.fixme(
-    'APP-INTERACTION-MAIN-006: should play entrance animation on load and scroll animation on viewport entry',
+    'APP-PAGES-INTERACTION-MAIN-006: should play entrance animation on load and scroll animation on viewport entry',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: a component with entrance and scroll interactions
@@ -237,7 +237,7 @@ test.describe('Component Interactions', () => {
   )
 
   test.fixme(
-    'APP-INTERACTION-MAIN-007: all interactions should work independently and not interfere with each other',
+    'APP-PAGES-INTERACTION-MAIN-007: all interactions should work independently and not interfere with each other',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: a component with all four interaction types (hover, click, scroll, entrance)
@@ -279,7 +279,7 @@ test.describe('Component Interactions', () => {
   )
 
   test.fixme(
-    'APP-INTERACTION-MAIN-008: hover effect should apply immediately and click should navigate after animation',
+    'APP-PAGES-INTERACTION-MAIN-008: hover effect should apply immediately and click should navigate after animation',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: a button with hover transform and click navigation

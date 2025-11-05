@@ -46,7 +46,7 @@
   ],
   "x-specs": [
     {
-      "id": "APP-LANG-CONFIG-001",
+      "id": "APP-LANGUAGES-CONFIG-001",
       "given": "a language config for English (en-US)",
       "when": "language is defined with code and label",
       "then": "it should be valid with LTR direction by default",
@@ -81,7 +81,7 @@
       }
     },
     {
-      "id": "APP-LANG-CONFIG-002",
+      "id": "APP-LANGUAGES-CONFIG-002",
       "given": "a language config for Arabic (ar-SA) with rtl direction",
       "when": "language is defined with RTL direction",
       "then": "it should support right-to-left text rendering",
@@ -116,7 +116,7 @@
       }
     },
     {
-      "id": "APP-LANG-CONFIG-003",
+      "id": "APP-LANGUAGES-CONFIG-003",
       "given": "a language config with 2-letter code (en)",
       "when": "language code uses ISO 639-1 format without country",
       "then": "it should be valid",
@@ -151,7 +151,7 @@
       }
     },
     {
-      "id": "APP-LANG-CONFIG-004",
+      "id": "APP-LANGUAGES-CONFIG-004",
       "given": "a language config with 4-letter code (en-US)",
       "when": "language code includes country code",
       "then": "it should be valid with country-specific format",
@@ -184,7 +184,7 @@
       }
     },
     {
-      "id": "APP-LANG-CONFIG-005",
+      "id": "APP-LANGUAGES-CONFIG-005",
       "given": "a language config with flag emoji (🇫🇷)",
       "when": "flag is provided as unicode emoji",
       "then": "it should display the flag in language switcher",
@@ -218,7 +218,7 @@
       }
     },
     {
-      "id": "APP-LANG-CONFIG-006",
+      "id": "APP-LANGUAGES-CONFIG-006",
       "given": "a language config with flag icon path (/flags/es.svg)",
       "when": "flag is provided as file path",
       "then": "it should load the flag image from the path",
@@ -252,7 +252,7 @@
       }
     },
     {
-      "id": "APP-LANG-CONFIG-007",
+      "id": "APP-LANGUAGES-CONFIG-007",
       "given": "a language config with native language label (Français, Español, العربية)",
       "when": "label uses the language's native name",
       "then": "it should display correctly in all character sets",
@@ -302,7 +302,7 @@
       }
     },
     {
-      "id": "APP-LANG-CONFIG-008",
+      "id": "APP-LANGUAGES-CONFIG-008",
       "given": "a minimal language config with only code and label",
       "when": "direction and flag are omitted",
       "then": "it should use default LTR direction and no flag",

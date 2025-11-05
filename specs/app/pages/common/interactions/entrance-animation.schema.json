@@ -44,7 +44,7 @@
   ],
   "x-specs": [
     {
-      "id": "APP-INTERACTION-ENTRANCE-001",
+      "id": "APP-PAGES-INTERACTION-ENTRANCE-001",
       "given": "a component with entrance animation 'fadeIn'",
       "when": "page loads",
       "then": "it should fade in smoothly",
@@ -59,7 +59,7 @@
       }
     },
     {
-      "id": "APP-INTERACTION-ENTRANCE-002",
+      "id": "APP-PAGES-INTERACTION-ENTRANCE-002",
       "given": "a component with entrance animation 'fadeInUp'",
       "when": "page loads",
       "then": "it should fade in while moving up from below",
@@ -74,7 +74,7 @@
       }
     },
     {
-      "id": "APP-INTERACTION-ENTRANCE-003",
+      "id": "APP-PAGES-INTERACTION-ENTRANCE-003",
       "given": "a component with entrance animation 'zoomIn'",
       "when": "page loads",
       "then": "it should zoom in from small to normal size",
@@ -89,7 +89,7 @@
       }
     },
     {
-      "id": "APP-INTERACTION-ENTRANCE-004",
+      "id": "APP-PAGES-INTERACTION-ENTRANCE-004",
       "given": "a component with entrance delay '500ms'",
       "when": "page loads",
       "then": "it should wait 500ms before starting the entrance animation",
@@ -107,7 +107,7 @@
       }
     },
     {
-      "id": "APP-INTERACTION-ENTRANCE-005",
+      "id": "APP-PAGES-INTERACTION-ENTRANCE-005",
       "given": "a component with entrance duration '1000ms'",
       "when": "animation starts",
       "then": "it should complete the entrance animation in 1 second",
@@ -121,7 +121,7 @@
       }
     },
     {
-      "id": "APP-INTERACTION-ENTRANCE-006",
+      "id": "APP-PAGES-INTERACTION-ENTRANCE-006",
       "given": "multiple sibling components with stagger '100ms'",
       "when": "page loads",
       "then": "each component should animate 100ms after the previous sibling",
@@ -149,7 +149,7 @@
       }
     },
     {
-      "id": "APP-INTERACTION-ENTRANCE-007",
+      "id": "APP-PAGES-INTERACTION-ENTRANCE-007",
       "given": "a component with delay '200ms' and stagger '50ms'",
       "when": "page loads",
       "then": "it should wait 200ms base delay plus 50ms per sibling index before animating",
@@ -187,7 +187,7 @@
       }
     },
     {
-      "id": "APP-INTERACTION-ENTRANCE-008",
+      "id": "APP-PAGES-INTERACTION-ENTRANCE-008",
       "given": "a component with animation, delay, and duration all configured",
       "when": "page loads",
       "then": "it should wait the delay period then animate for the specified duration",
