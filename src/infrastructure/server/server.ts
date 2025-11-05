@@ -264,7 +264,7 @@ function createHonoApp(
       .get('/assets/click-interactions.js', async (c) => {
         try {
           // Resolve path from project root (where Bun is executed)
-          const scriptPath = './public/assets/click-interactions.js'
+          const scriptPath = './src/presentation/scripts/client/click-interactions.js'
           const file = Bun.file(scriptPath)
           const content = await file.text()
 

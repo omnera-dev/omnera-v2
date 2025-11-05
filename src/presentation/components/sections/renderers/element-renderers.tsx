@@ -7,8 +7,8 @@
 
 import DOMPurify from 'dompurify'
 import { type ReactElement } from 'react'
-import { type ClickInteraction } from '@/domain/models/app/page/common/interactions/click-interaction'
 import { type Languages } from '@/domain/models/app/languages'
+import { type ClickInteraction } from '@/domain/models/app/page/common/interactions/click-interaction'
 import { LanguageSwitcher } from '@/presentation/components/languages/language-switcher'
 import { ButtonWithInteraction } from './button-with-interaction'
 
