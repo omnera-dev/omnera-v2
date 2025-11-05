@@ -99,12 +99,13 @@ function generateAnimationKeyframes(animations?: Theme['animations']): ReadonlyA
 }
 
 /**
- * Generate CSS from theme colors, spacing, animations, and fonts
+ * Generate CSS from theme colors, spacing, animations, fonts, and shadows
  * Applies theme colors to semantic HTML elements for visual hierarchy
  * Applies theme spacing to section elements for layout consistency
  * Applies theme fonts to heading elements (h1-h6) for typography system
  * Generates @keyframes for theme animations
  * Generates CSS custom properties for all theme colors (--color-{name})
+ * Generates CSS custom properties for all theme shadows (--shadow-{name})
  * Note: Theme body font is applied via inline style attribute on body element (see DynamicPage component)
  *
  * @param theme - Theme configuration from app schema
@@ -116,24 +117,30 @@ function generateThemeStyles(theme?: Theme): string {
   const spacing = theme?.spacing
   const animations = theme?.animations
   const fonts = theme?.fonts
+  const shadows = theme?.shadows
 
-  if (!colors && !spacing && !animations && !fonts) {
+  if (!colors && !spacing && !animations && !fonts && !shadows) {
     return ''
   }
 
-  // Build CSS custom properties for theme colors
+  // Build CSS custom properties for theme colors and shadows
   // Use highest specificity selector to override Tailwind defaults
   // Generate both --color-{name} and --{name} for maximum compatibility
-  const cssVariables: ReadonlyArray<string> = colors
-    ? [
-        ':root, html {',
-        ...Object.entries(colors).flatMap(([name, value]) => [
-          `  --color-${name}: ${value};`,
-          `  --${name}: ${value};`,
-        ]),
-        '}',
-      ]
+  const colorVariables: ReadonlyArray<string> = colors
+    ? Object.entries(colors).flatMap(([name, value]) => [
+        `  --color-${name}: ${value};`,
+        `  --${name}: ${value};`,
+      ])
     : []
+
+  const shadowVariables: ReadonlyArray<string> = shadows
+    ? Object.entries(shadows).map(([name, value]) => `  --shadow-${name}: ${value};`)
+    : []
+
+  const cssVariables: ReadonlyArray<string> =
+    colorVariables.length > 0 || shadowVariables.length > 0
+      ? [':root, html {', ...colorVariables, ...shadowVariables, '}']
+      : []
 
   // Build color styles array
   const gray900 = colors?.['gray-900']
@@ -945,6 +952,21 @@ export function DynamicPage({
               )
             })
           )}
+          {/* Render shadow demonstration elements when theme.shadows is defined */}
+          {theme?.shadows &&
+            Object.entries(theme.shadows).map(([name, value]) => (
+              <div
+                key={name}
+                data-testid={`shadow-${name}`}
+                style={{
+                  boxShadow: value,
+                  width: '100px',
+                  height: '100px',
+                  margin: '10px',
+                  backgroundColor: 'white',
+                }}
+              />
+            ))}
         </main>
 
         {page.layout?.footer && <Footer {...page.layout.footer} />}
