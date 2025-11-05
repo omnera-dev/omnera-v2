@@ -397,7 +397,7 @@ test.describe('Font Configuration', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-THEME-FONTS-009: should validate comprehensive typography settings',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {

@@ -738,6 +738,9 @@ export function DynamicPage({
         fontFamily?: string
         fontSize?: string
         lineHeight?: string
+        fontStyle?: string
+        letterSpacing?: string
+        textTransform?: string
       }
     | undefined = theme?.fonts?.body
     ? {
@@ -748,6 +751,9 @@ export function DynamicPage({
         }),
         ...(theme.fonts.body.size && { fontSize: theme.fonts.body.size }),
         ...(theme.fonts.body.lineHeight && { lineHeight: theme.fonts.body.lineHeight }),
+        ...(theme.fonts.body.style && { fontStyle: theme.fonts.body.style }),
+        ...(theme.fonts.body.letterSpacing && { letterSpacing: theme.fonts.body.letterSpacing }),
+        ...(theme.fonts.body.transform && { textTransform: theme.fonts.body.transform }),
       }
     : undefined
 
