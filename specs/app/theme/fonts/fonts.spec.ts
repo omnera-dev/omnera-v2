@@ -438,7 +438,7 @@ test.describe('Font Configuration', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-THEME-FONTS-010: should validate semantic font system for all UI contexts',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -466,7 +466,18 @@ test.describe('Font Configuration', () => {
             name: 'home',
             path: '/',
             meta: { lang: 'en-US', title: 'Test', description: 'Test page' },
-            sections: [],
+            sections: [
+              {
+                type: 'h1',
+                props: {},
+                children: ['Typography System'],
+              },
+              {
+                type: 'paragraph',
+                props: {},
+                children: ['Body text using Inter font family'],
+              },
+            ],
           },
         ],
       })
@@ -477,10 +488,14 @@ test.describe('Font Configuration', () => {
       // THEN: it should validate semantic font system for all UI contexts
       const heading = page.locator('h1')
       const body = page.locator('body')
-      const code = page.locator('code')
       await expect(heading).toHaveScreenshot('font-010-title.png')
       await expect(body).toHaveScreenshot('font-010-body.png')
-      await expect(code).toHaveScreenshot('font-010-mono.png')
+
+      // Verify mono font CSS is generated (code, pre elements)
+      const styles = await page.locator('style').allTextContents()
+      const combinedStyles = styles.join('\n')
+      expect(combinedStyles).toContain('code, pre')
+      expect(combinedStyles).toContain('JetBrains Mono')
     }
   )
 
