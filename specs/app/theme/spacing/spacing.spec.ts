@@ -24,7 +24,7 @@ test.describe('Spacing Configuration', () => {
   // One test per spec in schema - defines EXHAUSTIVE acceptance criteria
   // ============================================================================
 
-  test.fixme(
+  test(
     'APP-THEME-SPACING-001: should validate Tailwind spacing utilities',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -42,7 +42,16 @@ test.describe('Spacing Configuration', () => {
             name: 'home',
             path: '/',
             meta: { lang: 'en-US', title: 'Test', description: 'Test page' },
-            sections: [],
+            sections: [
+              {
+                type: 'div',
+                props: {
+                  'data-testid': 'spacing',
+                  className: '$theme.spacing.section $theme.spacing.container',
+                },
+                children: ['Spacing validation test'],
+              },
+            ],
           },
         ],
       })
@@ -52,6 +61,8 @@ test.describe('Spacing Configuration', () => {
 
       // THEN: it should validate Tailwind spacing utilities
       await expect(page.locator('[data-testid="spacing"]')).toBeVisible()
+      await expect(page.locator('[data-testid="spacing"]')).toHaveClass(/py-16/)
+      await expect(page.locator('[data-testid="spacing"]')).toHaveClass(/px-4/)
     }
   )
 

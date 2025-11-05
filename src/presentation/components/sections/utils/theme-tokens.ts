@@ -11,7 +11,7 @@ import type { Theme } from '@/domain/models/app/theme'
  * Substitutes theme tokens in a value
  *
  * Replaces `$theme.category.key` patterns with actual theme values.
- * Example: `$theme.colors.primary` → `#007bff`
+ * Supports multiple tokens in a single string.
  *
  * @param value - Value that may contain theme tokens
  * @param theme - Theme configuration
@@ -19,10 +19,21 @@ import type { Theme } from '@/domain/models/app/theme'
  *
  * @example
  * ```typescript
- * const theme = { colors: { primary: '#007bff' } }
- * substituteThemeTokens('$theme.colors.primary', theme) // '#007bff'
- * substituteThemeTokens('static', theme)                // 'static'
- * substituteThemeTokens(123, theme)                      // 123
+ * const theme = {
+ *   colors: { primary: '#007bff' },
+ *   spacing: { section: 'py-16', container: 'px-4' }
+ * }
+ * substituteThemeTokens('$theme.colors.primary', theme)
+ * // '#007bff'
+ *
+ * substituteThemeTokens('$theme.spacing.section $theme.spacing.container', theme)
+ * // 'py-16 px-4'
+ *
+ * substituteThemeTokens('static', theme)
+ * // 'static'
+ *
+ * substituteThemeTokens(123, theme)
+ * // 123
  * ```
  */
 export function substituteThemeTokens(value: unknown, theme?: Theme): unknown {
@@ -30,24 +41,28 @@ export function substituteThemeTokens(value: unknown, theme?: Theme): unknown {
     return value
   }
 
-  if (!theme || !value.startsWith('$theme.')) {
+  if (!theme || !value.includes('$theme.')) {
     return value
   }
 
-  // Extract the path: $theme.colors.primary → ['colors', 'primary']
-  const path = value.slice(7).split('.')
+  // Handle multiple theme tokens in a single string
+  // Example: "$theme.spacing.section $theme.spacing.container" → "py-16 px-4"
+  return value.replace(/\$theme\.[a-z]+(\.[a-z-]+)+/g, (match) => {
+    // Extract the path: $theme.colors.primary → ['colors', 'primary']
+    const path = match.slice(7).split('.')
 
-  // Navigate through the theme object using functional reduce
-  const result = path.reduce<unknown>((acc, key) => {
-    if (acc && typeof acc === 'object' && key in acc) {
-      return (acc as Record<string, unknown>)[key]
-    }
-    // Return a sentinel to indicate path not found
-    return undefined
-  }, theme as unknown)
+    // Navigate through the theme object using functional reduce
+    const result = path.reduce<unknown>((acc, key) => {
+      if (acc && typeof acc === 'object' && key in acc) {
+        return (acc as Record<string, unknown>)[key]
+      }
+      // Return a sentinel to indicate path not found
+      return undefined
+    }, theme as unknown)
 
-  // If path navigation failed, return original value
-  return result !== undefined ? result : value
+    // If path navigation failed, return original token
+    return result !== undefined ? String(result) : match
+  })
 }
 
 /**
