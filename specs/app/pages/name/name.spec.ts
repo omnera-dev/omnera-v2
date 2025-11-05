@@ -59,7 +59,12 @@ test.describe('Page Name', () => {
       await startServerWithSchema({
         name: 'test-app',
         pages: [
-          { name: 'about', path: '/about', meta: { lang: 'en-US', title: 'About', description: 'About' }, sections: [] },
+          {
+            name: 'about',
+            path: '/about',
+            meta: { lang: 'en-US', title: 'About', description: 'About' },
+            sections: [],
+          },
         ],
       })
       await page.goto('/about')
@@ -75,7 +80,12 @@ test.describe('Page Name', () => {
       await startServerWithSchema({
         name: 'test-app',
         pages: [
-          { name: 'about', path: '/about', meta: { lang: 'en-US', title: 'About', description: 'About' }, sections: [] },
+          {
+            name: 'about',
+            path: '/about',
+            meta: { lang: 'en-US', title: 'About', description: 'About' },
+            sections: [],
+          },
         ],
       })
 
@@ -128,7 +138,12 @@ test.describe('Page Name', () => {
       await startServerWithSchema({
         name: 'test-app',
         pages: [
-          { name: 'home_page', path: '/', meta: { lang: 'en-US', title: 'Home', description: 'Home' }, sections: [] },
+          {
+            name: 'home_page',
+            path: '/',
+            meta: { lang: 'en-US', title: 'Home', description: 'Home' },
+            sections: [],
+          },
           {
             name: 'about_us',
             path: '/about',
@@ -156,8 +171,18 @@ test.describe('Page Name', () => {
       await startServerWithSchema({
         name: 'test-app',
         pages: [
-          { name: 'home', path: '/', meta: { lang: 'en-US', title: 'Home', description: 'Home' }, sections: [] },
-          { name: 'about', path: '/about', meta: { lang: 'en-US', title: 'About', description: 'About' }, sections: [] },
+          {
+            name: 'home',
+            path: '/',
+            meta: { lang: 'en-US', title: 'Home', description: 'Home' },
+            sections: [],
+          },
+          {
+            name: 'about',
+            path: '/about',
+            meta: { lang: 'en-US', title: 'About', description: 'About' },
+            sections: [],
+          },
           {
             name: 'pricing',
             path: '/pricing',
@@ -192,7 +217,13 @@ test.describe('Page Name', () => {
       await expect(async () => {
         await startServerWithSchema({
           name: 'test-app',
-          pages: [{ path: '/', meta: { lang: 'en-US', title: 'Home', description: 'Home' }, sections: [] }],
+          pages: [
+            {
+              path: '/',
+              meta: { lang: 'en-US', title: 'Home', description: 'Home' },
+              sections: [],
+            },
+          ],
         })
       }).rejects.toThrow()
     }
@@ -206,7 +237,12 @@ test.describe('Page Name', () => {
       await startServerWithSchema({
         name: 'test-app',
         pages: [
-          { name: 'homepage', path: '/', meta: { lang: 'en-US', title: 'Welcome', description: 'Welcome' }, sections: [] },
+          {
+            name: 'homepage',
+            path: '/',
+            meta: { lang: 'en-US', title: 'Welcome', description: 'Welcome' },
+            sections: [],
+          },
           {
             name: 'company_info',
             path: '/about',
@@ -245,7 +281,12 @@ test.describe('Page Name', () => {
       await startServerWithSchema({
         name: 'test-app',
         pages: [
-          { name: 'home', path: '/', meta: { lang: 'en-US', title: 'Home', description: 'Home' }, sections: [] },
+          {
+            name: 'home',
+            path: '/',
+            meta: { lang: 'en-US', title: 'Home', description: 'Home' },
+            sections: [],
+          },
           {
             name: 'about_us',
             path: '/about',

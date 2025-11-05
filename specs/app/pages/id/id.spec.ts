@@ -81,7 +81,14 @@ test.describe('Page ID', () => {
       // GIVEN: a page without explicit ID
       await startServerWithSchema({
         name: 'test-app',
-        pages: [{ name: 'home', path: '/', meta: { lang: 'en-US', title: 'Home', description: 'Home' }, sections: [] }],
+        pages: [
+          {
+            name: 'home',
+            path: '/',
+            meta: { lang: 'en-US', title: 'Home', description: 'Home' },
+            sections: [],
+          },
+        ],
       })
 
       // WHEN: ID property is omitted
