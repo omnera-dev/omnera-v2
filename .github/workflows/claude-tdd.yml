@@ -47,7 +47,7 @@ concurrency:
 
 env:
   MAX_INFRASTRUCTURE_RETRIES: 3
-  CLAUDE_TIMEOUT_MINUTES: 60
+  CLAUDE_TIMEOUT_MINUTES: 30
 
 jobs:
   # Pre-check job: Validate context exists before running Claude Code
@@ -260,7 +260,7 @@ jobs:
   # Main Claude Code execution with timeout monitoring
   execute-claude:
     runs-on: ubuntu-latest
-    timeout-minutes: 65 # Slightly longer than Claude timeout to allow cleanup
+    timeout-minutes: 35 # Slightly longer than Claude timeout to allow cleanup
     needs: [validate-context, classify-previous-error]
     if: |
       always() &&
@@ -320,7 +320,7 @@ jobs:
       - name: Run Claude Code
         id: claude
         uses: anthropics/claude-code-action@v1
-        timeout-minutes: 60
+        timeout-minutes: 30
         continue-on-error: true # Capture exit code instead of failing immediately
         with:
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
