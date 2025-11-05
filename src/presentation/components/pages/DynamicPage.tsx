@@ -731,11 +731,21 @@ export function DynamicPage({
 
   // Generate inline style for body element to apply theme fonts
   // Using inline style attribute has highest specificity and overrides Tailwind base styles
-  const bodyStyle: { fontFamily: string } | undefined = theme?.fonts?.body?.family
+  const bodyStyle:
+    | {
+        fontFamily?: string
+        fontSize?: string
+        lineHeight?: string
+      }
+    | undefined = theme?.fonts?.body
     ? {
-        fontFamily: theme.fonts.body.fallback
-          ? `${theme.fonts.body.family}, ${theme.fonts.body.fallback}`
-          : theme.fonts.body.family,
+        ...(theme.fonts.body.family && {
+          fontFamily: theme.fonts.body.fallback
+            ? `${theme.fonts.body.family}, ${theme.fonts.body.fallback}`
+            : theme.fonts.body.family,
+        }),
+        ...(theme.fonts.body.size && { fontSize: theme.fonts.body.size }),
+        ...(theme.fonts.body.lineHeight && { lineHeight: theme.fonts.body.lineHeight }),
       }
     : undefined
 
