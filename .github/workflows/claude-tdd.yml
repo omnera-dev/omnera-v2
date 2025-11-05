@@ -328,7 +328,8 @@ jobs:
             actions: read
           # NO prompt field - Claude Code will read the @claude comment naturally
           # This allows the queue processor's detailed instructions to be used
-          claude_args: '--agents e2e-test-fixer codebase-refactor-auditor --dangerously-skip-permissions'
+          # Agents are auto-discovered from .claude/agents/ directory (no --agents flag needed)
+          claude_args: '--dangerously-skip-permissions'
 
       - name: Detect error type
         id: detect_error
