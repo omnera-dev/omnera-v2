@@ -50,7 +50,7 @@ test.describe('Page ID', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-ID-002: should follow shared ID pattern from common definitions',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -62,9 +62,9 @@ test.describe('Page ID', () => {
         pages: [
           {
             id: 'page-1',
-            name: 'Home',
+            name: 'home',
             path: '/',
-            meta: { lang: 'en-US', title: 'Home' },
+            meta: { lang: 'en-US', title: 'Home', description: 'Home' },
             sections: [],
           },
         ],
@@ -74,14 +74,14 @@ test.describe('Page ID', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-ID-003: should allow auto-generated ID (ID is optional)',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: a page without explicit ID
       await startServerWithSchema({
         name: 'test-app',
-        pages: [{ name: 'Home', path: '/', meta: { lang: 'en-US', title: 'Home' }, sections: [] }],
+        pages: [{ name: 'home', path: '/', meta: { lang: 'en-US', title: 'Home', description: 'Home' }, sections: [] }],
       })
 
       // WHEN: ID property is omitted
@@ -92,7 +92,7 @@ test.describe('Page ID', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-ID-004: should accept UUID as identifier',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -102,9 +102,9 @@ test.describe('Page ID', () => {
         pages: [
           {
             id: '550e8400-e29b-41d4-a716-446655440000',
-            name: 'Home',
+            name: 'home',
             path: '/',
-            meta: { lang: 'en-US', title: 'Home' },
+            meta: { lang: 'en-US', title: 'Home', description: 'Home' },
             sections: [],
           },
         ],
@@ -120,7 +120,7 @@ test.describe('Page ID', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-ID-005: should accept numeric string identifiers',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -130,9 +130,9 @@ test.describe('Page ID', () => {
         pages: [
           {
             id: '12345',
-            name: 'Home',
+            name: 'home',
             path: '/',
-            meta: { lang: 'en-US', title: 'Home' },
+            meta: { lang: 'en-US', title: 'Home', description: 'Home' },
             sections: [],
           },
         ],
@@ -146,7 +146,7 @@ test.describe('Page ID', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-ID-006: should ensure uniqueness across all pages in array',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -156,23 +156,23 @@ test.describe('Page ID', () => {
         pages: [
           {
             id: 'page-1',
-            name: 'Home',
+            name: 'home',
             path: '/',
-            meta: { lang: 'en-US', title: 'Home' },
+            meta: { lang: 'en-US', title: 'Home', description: 'Home' },
             sections: [],
           },
           {
             id: 'page-2',
-            name: 'About',
+            name: 'about',
             path: '/about',
-            meta: { lang: 'en-US', title: 'About' },
+            meta: { lang: 'en-US', title: 'About', description: 'About' },
             sections: [],
           },
           {
             id: 'page-3',
-            name: 'Contact',
+            name: 'contact',
             path: '/contact',
-            meta: { lang: 'en-US', title: 'Contact' },
+            meta: { lang: 'en-US', title: 'Contact', description: 'Contact' },
             sections: [],
           },
         ],
@@ -195,7 +195,7 @@ test.describe('Page ID', () => {
   // ONE OPTIMIZED test verifying components work together efficiently
   // ============================================================================
 
-  test.fixme(
+  test(
     'APP-PAGES-ID-REGRESSION-001: user can complete full page ID workflow',
     { tag: '@regression' },
     async ({ page, startServerWithSchema }) => {
@@ -205,22 +205,22 @@ test.describe('Page ID', () => {
         pages: [
           {
             id: 'home-page',
-            name: 'Home',
+            name: 'home',
             path: '/',
-            meta: { lang: 'en-US', title: 'Home' },
+            meta: { lang: 'en-US', title: 'Home', description: 'Home' },
             sections: [],
           },
           {
             id: '550e8400-e29b-41d4-a716-446655440000',
-            name: 'About',
+            name: 'about',
             path: '/about',
-            meta: { lang: 'en-US', title: 'About' },
+            meta: { lang: 'en-US', title: 'About', description: 'About' },
             sections: [],
           },
           {
-            name: 'Contact',
+            name: 'contact',
             path: '/contact',
-            meta: { lang: 'en-US', title: 'Contact' },
+            meta: { lang: 'en-US', title: 'Contact', description: 'Contact' },
             sections: [],
           },
         ],
