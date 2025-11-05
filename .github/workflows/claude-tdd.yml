@@ -468,7 +468,7 @@ jobs:
         run: |
           echo "🚀 Triggering retry workflow (attempt $NEXT_RETRY)..."
 
-          gh workflow run claude-tdd-with-retry.yml \
+          gh workflow run claude-tdd.yml \
             --field issue_number="$ISSUE_NUMBER" \
             --field retry_attempt="$NEXT_RETRY"
 
