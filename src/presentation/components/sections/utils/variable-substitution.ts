@@ -5,6 +5,7 @@
  * found in the LICENSE.md file in the root directory of this source tree.
  */
 
+import { toKebabCase } from '@/presentation/utils/string-utils'
 import type { Component } from '@/domain/models/app/page/sections'
 
 /**
@@ -131,8 +132,8 @@ function normalizeAriaDataProps(key: string): string {
   ) {
     // ariaLabel → aria-label
     const suffix = key.slice(4) // 'Label'
-    const kebabSuffix = suffix.replace(/([A-Z])/g, '-$1').toLowerCase() // '-label'
-    return `aria${kebabSuffix}`
+    const kebabSuffix = toKebabCase(suffix) // 'label'
+    return `aria-${kebabSuffix}`
   }
 
   if (
@@ -143,8 +144,8 @@ function normalizeAriaDataProps(key: string): string {
   ) {
     // dataTestId → data-test-id
     const suffix = key.slice(4) // 'TestId'
-    const kebabSuffix = suffix.replace(/([A-Z])/g, '-$1').toLowerCase() // '-test-id'
-    return `data${kebabSuffix}`
+    const kebabSuffix = toKebabCase(suffix) // 'test-id'
+    return `data-${kebabSuffix}`
   }
 
   return key
