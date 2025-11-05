@@ -153,7 +153,7 @@ function generateThemeStyles(theme?: Theme): string {
 
   // Build font styles for title font (h1-h6)
   const titleFont = fonts?.title
-  const fontStyles: ReadonlyArray<string> = titleFont
+  const titleFontStyles: ReadonlyArray<string> = titleFont
     ? [
         [
           'h1, h2, h3, h4, h5, h6 {',
@@ -168,6 +168,28 @@ function generateThemeStyles(theme?: Theme): string {
           .join('\n'),
       ]
     : []
+
+  // Build font styles for mono font (code, pre)
+  const monoFont = fonts?.mono
+  const monoFontStyles: ReadonlyArray<string> = monoFont
+    ? [
+        [
+          'code, pre {',
+          monoFont.family &&
+            `  font-family: ${monoFont.fallback ? `${monoFont.family}, ${monoFont.fallback}` : monoFont.family};`,
+          monoFont.style && `  font-style: ${monoFont.style};`,
+          monoFont.size && `  font-size: ${monoFont.size};`,
+          monoFont.lineHeight && `  line-height: ${monoFont.lineHeight};`,
+          monoFont.letterSpacing && `  letter-spacing: ${monoFont.letterSpacing};`,
+          monoFont.transform && `  text-transform: ${monoFont.transform};`,
+          '}',
+        ]
+          .filter(Boolean)
+          .join('\n'),
+      ]
+    : []
+
+  const fontStyles: ReadonlyArray<string> = [...titleFontStyles, ...monoFontStyles]
 
   // Build animation keyframes
   const animationStyles = generateAnimationKeyframes(animations)
