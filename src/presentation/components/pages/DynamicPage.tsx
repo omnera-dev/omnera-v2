@@ -813,7 +813,7 @@ export function DynamicPage({
                 rel="stylesheet"
                 href={font.url}
               />
-            ) : null
+            ) : undefined
           )}
         <link
           rel="stylesheet"
