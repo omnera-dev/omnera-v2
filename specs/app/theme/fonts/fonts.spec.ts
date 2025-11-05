@@ -315,7 +315,7 @@ test.describe('Font Configuration', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-THEME-FONTS-007: should validate none, uppercase, lowercase, or capitalize',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -335,7 +335,21 @@ test.describe('Font Configuration', () => {
             name: 'home',
             path: '/',
             meta: { lang: 'en-US', title: 'Test', description: 'Test page' },
-            sections: [],
+            sections: [
+              {
+                type: 'div',
+                props: {
+                  'data-testid': 'label',
+                  style: {
+                    fontFamily: 'Inter, sans-serif',
+                    textTransform: 'uppercase',
+                    fontSize: '14px',
+                    padding: '8px',
+                  },
+                },
+                children: ['Label Text'],
+              },
+            ],
           },
         ],
       })
