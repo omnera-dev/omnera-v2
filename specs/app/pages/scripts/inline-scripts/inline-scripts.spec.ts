@@ -41,8 +41,13 @@ test.describe('Inline Scripts', () => {
       await page.goto('/')
 
       // THEN: it should inject inline JavaScript code
-      const script = await page.locator('script').filter({ hasText: 'Page loaded' }).textContent()
-      expect(script).toContain("console.log('Page loaded');")
+      // Note: Script element content is accessible via innerHTML (not textContent in Playwright)
+      const scripts = await page.locator('script:not([src])').all()
+      const scriptContents = await Promise.all(scripts.map((s) => s.innerHTML()))
+      const hasExpectedScript = scriptContents.some((content) =>
+        content.includes("console.log('Page loaded');")
+      )
+      expect(hasExpectedScript).toBeTruthy()
     }
   )
 
