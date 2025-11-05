@@ -96,7 +96,7 @@ test.describe('Shadows', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-THEME-SHADOWS-003: should validate inset box-shadow',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
