@@ -351,7 +351,7 @@ test.describe('Analytics Configuration', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-ANALYTICS-010: should configure privacy-friendly Plausible analytics',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -360,7 +360,6 @@ test.describe('Analytics Configuration', () => {
         name: 'test-app',
         pages: [
           {
-            name: 'Test',
             path: '/',
             meta: {
               lang: 'en-US',
