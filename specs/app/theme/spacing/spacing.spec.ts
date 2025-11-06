@@ -331,7 +331,7 @@ test.describe('Spacing Configuration', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-THEME-SPACING-007: should validate consistent internal component spacing',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
