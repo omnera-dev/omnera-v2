@@ -500,7 +500,7 @@ test.describe('Spacing Configuration', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-THEME-SPACING-009: should validate custom CSS spacing values',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
