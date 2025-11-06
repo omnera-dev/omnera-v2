@@ -45,7 +45,22 @@ test.describe('Shadows', () => {
             name: 'home',
             path: '/',
             meta: { lang: 'en-US', title: 'Test', description: 'Test page' },
-            sections: [],
+            sections: [
+              {
+                type: 'div',
+                props: {
+                  'data-testid': 'shadow-sm',
+                  style: { boxShadow: 'var(--shadow-sm)', width: '50px', height: '50px' },
+                },
+              },
+              {
+                type: 'div',
+                props: {
+                  'data-testid': 'shadow-2xl',
+                  style: { boxShadow: 'var(--shadow-2xl)', width: '50px', height: '50px' },
+                },
+              },
+            ],
           },
         ],
       })
@@ -76,7 +91,20 @@ test.describe('Shadows', () => {
             name: 'home',
             path: '/',
             meta: { lang: 'en-US', title: 'Test', description: 'Test page' },
-            sections: [],
+            sections: [
+              {
+                type: 'div',
+                props: {
+                  'data-testid': 'shadow-md',
+                  style: {
+                    boxShadow: 'var(--shadow-md)',
+                    width: '100px',
+                    height: '100px',
+                    backgroundColor: 'white',
+                  },
+                },
+              },
+            ],
           },
         ],
       })
@@ -113,7 +141,20 @@ test.describe('Shadows', () => {
             name: 'home',
             path: '/',
             meta: { lang: 'en-US', title: 'Test', description: 'Test page' },
-            sections: [],
+            sections: [
+              {
+                type: 'div',
+                props: {
+                  'data-testid': 'shadow-inner',
+                  style: {
+                    boxShadow: 'var(--shadow-inner)',
+                    width: '50px',
+                    height: '50px',
+                    backgroundColor: 'white',
+                  },
+                },
+              },
+            ],
           },
         ],
       })
@@ -144,7 +185,21 @@ test.describe('Shadows', () => {
             name: 'home',
             path: '/',
             meta: { lang: 'en-US', title: 'Test', description: 'Test page' },
-            sections: [],
+            sections: [
+              {
+                type: 'div',
+                props: {
+                  'data-testid': 'shadow-none',
+                  style: {
+                    boxShadow: 'var(--shadow-none)',
+                    width: '50px',
+                    height: '50px',
+                    backgroundColor: 'white',
+                    border: '1px solid #ccc',
+                  },
+                },
+              },
+            ],
           },
         ],
       })
@@ -176,7 +231,32 @@ test.describe('Shadows', () => {
             name: 'home',
             path: '/',
             meta: { lang: 'en-US', title: 'Test', description: 'Test page' },
-            sections: [],
+            sections: [
+              {
+                type: 'div',
+                props: {
+                  'data-testid': 'shadow-drop-shadow',
+                  style: {
+                    boxShadow: 'var(--shadow-drop-shadow)',
+                    width: '50px',
+                    height: '50px',
+                    backgroundColor: 'white',
+                  },
+                },
+              },
+              {
+                type: 'div',
+                props: {
+                  'data-testid': 'shadow-card-shadow',
+                  style: {
+                    boxShadow: 'var(--shadow-card-shadow)',
+                    width: '50px',
+                    height: '50px',
+                    backgroundColor: 'white',
+                  },
+                },
+              },
+            ],
           },
         ],
       })
@@ -213,7 +293,33 @@ test.describe('Shadows', () => {
             name: 'home',
             path: '/',
             meta: { lang: 'en-US', title: 'Test', description: 'Test page' },
-            sections: [],
+            sections: [
+              {
+                type: 'div',
+                props: {
+                  'data-testid': 'shadow-sm',
+                  style: {
+                    boxShadow: 'var(--shadow-sm)',
+                    width: '50px',
+                    height: '50px',
+                    backgroundColor: 'white',
+                  },
+                },
+              },
+              {
+                type: 'div',
+                props: {
+                  'data-testid': 'shadow-none',
+                  style: {
+                    boxShadow: 'var(--shadow-none)',
+                    width: '50px',
+                    height: '50px',
+                    backgroundColor: 'white',
+                    border: '1px solid #ccc',
+                  },
+                },
+              },
+            ],
           },
         ],
       })
