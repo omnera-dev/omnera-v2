@@ -201,7 +201,7 @@ test.describe('Analytics Configuration', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-ANALYTICS-006: should execute provider initialization code',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -210,7 +210,6 @@ test.describe('Analytics Configuration', () => {
         name: 'test-app',
         pages: [
           {
-            name: 'Test',
             path: '/',
             meta: {
               lang: 'en-US',
