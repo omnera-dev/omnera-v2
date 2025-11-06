@@ -307,7 +307,7 @@ test.describe('Analytics Configuration', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-ANALYTICS-009: should configure Google Analytics',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -316,7 +316,7 @@ test.describe('Analytics Configuration', () => {
         name: 'test-app',
         pages: [
           {
-            name: 'Test',
+            name: 'test',
             path: '/',
             meta: {
               lang: 'en-US',
