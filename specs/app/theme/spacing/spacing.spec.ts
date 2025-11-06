@@ -533,7 +533,7 @@ test.describe('Spacing Configuration', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-THEME-SPACING-010: should validate comprehensive spacing system',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
