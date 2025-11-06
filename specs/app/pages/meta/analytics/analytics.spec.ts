@@ -128,7 +128,7 @@ test.describe('Analytics Configuration', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-ANALYTICS-004: should load provider scripts',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -137,7 +137,6 @@ test.describe('Analytics Configuration', () => {
         name: 'test-app',
         pages: [
           {
-            name: 'Test',
             path: '/',
             meta: {
               lang: 'en-US',
