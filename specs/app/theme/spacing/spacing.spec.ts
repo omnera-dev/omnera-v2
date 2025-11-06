@@ -416,18 +416,18 @@ test.describe('Spacing Configuration', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-THEME-SPACING-008: should validate consistent external component spacing',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // GIVEN: margin variants (margin, marginSmall, marginLarge)
+      // GIVEN: margin variants (margin, margin-small, margin-large)
       await startServerWithSchema({
         name: 'test-app',
         theme: {
           spacing: {
-            marginSmall: 'm-4',
+            'margin-small': 'm-4',
             margin: 'm-6',
-            marginLarge: 'm-8',
+            'margin-large': 'm-8',
           },
         },
         pages: [
@@ -435,7 +435,58 @@ test.describe('Spacing Configuration', () => {
             name: 'home',
             path: '/',
             meta: { lang: 'en-US', title: 'Test', description: 'Test page' },
-            sections: [],
+            sections: [
+              {
+                type: 'div',
+                props: {
+                  'data-testid': 'margin-scale',
+                  style: {
+                    display: 'flex',
+                    gap: '0',
+                    padding: '20px',
+                  },
+                },
+                children: [
+                  {
+                    type: 'div',
+                    props: {
+                      'data-testid': 'margin-small',
+                      className: '$theme.spacing.margin-small',
+                      style: {
+                        backgroundColor: '#eff6ff',
+                        border: '2px solid #3b82f6',
+                        padding: '8px',
+                      },
+                    },
+                    children: ['Small'],
+                  },
+                  {
+                    type: 'div',
+                    props: {
+                      style: {
+                        backgroundColor: '#d1fae5',
+                        border: '2px solid #10b981',
+                        padding: '8px',
+                      },
+                    },
+                    children: ['Medium'],
+                  },
+                  {
+                    type: 'div',
+                    props: {
+                      'data-testid': 'margin-large',
+                      className: '$theme.spacing.margin-large',
+                      style: {
+                        backgroundColor: '#fef3c7',
+                        border: '2px solid #f59e0b',
+                        padding: '8px',
+                      },
+                    },
+                    children: ['Large'],
+                  },
+                ],
+              },
+            ],
           },
         ],
       })
