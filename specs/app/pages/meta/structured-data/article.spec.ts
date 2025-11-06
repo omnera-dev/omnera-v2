@@ -208,7 +208,7 @@ test.describe('Article Schema', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-ARTICLE-006: should provide simple author name',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
