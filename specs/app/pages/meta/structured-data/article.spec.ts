@@ -57,7 +57,7 @@ test.describe('Article Schema', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-ARTICLE-002: should categorize content type',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
