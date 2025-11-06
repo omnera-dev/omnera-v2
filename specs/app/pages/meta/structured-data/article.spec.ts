@@ -328,7 +328,7 @@ test.describe('Article Schema', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-ARTICLE-009: should provide publication date',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
