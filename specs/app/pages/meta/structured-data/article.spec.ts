@@ -528,7 +528,7 @@ test.describe('Article Schema', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-ARTICLE-014: should properly attribute content to authors and publishers',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
