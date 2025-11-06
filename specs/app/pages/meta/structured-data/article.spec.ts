@@ -130,7 +130,7 @@ test.describe('Article Schema', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-ARTICLE-004: should provide article summary',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
