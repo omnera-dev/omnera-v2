@@ -363,6 +363,7 @@ function StructuredDataScript({
  * @param props.crossOrigin - CORS setting ('anonymous' or 'use-credentials')
  * @param props.dataTestId - Test identifier
  * @param props.reactKey - React key for list rendering
+ * @param props.hidden - Apply display: none style (for disabled analytics providers)
  * @returns Script element
  */
 function renderScriptTag({
@@ -374,6 +375,7 @@ function renderScriptTag({
   crossOrigin,
   dataTestId,
   reactKey,
+  hidden,
 }: {
   readonly src: string
   readonly async?: boolean
@@ -383,6 +385,7 @@ function renderScriptTag({
   readonly crossOrigin?: 'anonymous' | 'use-credentials'
   readonly dataTestId?: string
   readonly reactKey: string | number
+  readonly hidden?: boolean
 }): Readonly<ReactElement> {
   return (
     <script
@@ -394,6 +397,7 @@ function renderScriptTag({
       {...(integrity && { integrity })}
       {...(crossOrigin && { crossOrigin })}
       {...(dataTestId && { 'data-testid': dataTestId })}
+      {...(hidden && { style: { display: 'none' } })}
     />
   )
 }
@@ -452,82 +456,86 @@ function AnalyticsHead({
   // Type assertion: after type guard, we know analytics has providers array
   const analyticsConfig = analytics as Analytics
 
-  // Filter enabled providers only
-  const enabledProviders = analyticsConfig.providers.filter(
-    (provider) => provider.enabled !== false
-  )
-
-  if (enabledProviders.length === 0) {
-    return undefined
-  }
-
+  // Render all providers (enabled and disabled)
+  // Disabled providers are hidden with display: none
   return (
     <>
-      {enabledProviders.flatMap((provider, providerIndex) => [
-        // DNS Prefetch for performance optimization
-        ...(provider.dnsPrefetch
-          ? [
-              <link
-                key={`dns-${providerIndex}`}
-                rel="dns-prefetch"
-                href={provider.dnsPrefetch}
-              />,
-            ]
-          : []),
+      {analyticsConfig.providers.flatMap((provider, providerIndex) => {
+        const isEnabled = provider.enabled !== false
+        const hidden = !isEnabled
+        const styleAttr = hidden ? { style: { display: 'none' } } : {}
 
-        // External scripts with data-testid for test verification
-        ...(provider.scripts && provider.scripts.length > 0
-          ? provider.scripts.map((script, scriptIndex) =>
-              renderScriptTag({
-                src: script.src,
-                async: script.async,
-                defer: script.defer,
-                dataTestId: `analytics-${provider.name}`,
-                reactKey: `script-${providerIndex}-${scriptIndex}`,
-              })
-            )
-          : []),
+        return [
+          // DNS Prefetch for performance optimization
+          ...(provider.dnsPrefetch
+            ? [
+                <link
+                  key={`dns-${providerIndex}`}
+                  rel="dns-prefetch"
+                  href={provider.dnsPrefetch}
+                  {...styleAttr}
+                />,
+              ]
+            : []),
 
-        // Initialization script with data-testid
-        ...(provider.initScript
-          ? [
-              <script
-                key={`init-${providerIndex}`}
-                data-testid={`analytics-${provider.name}`}
-                dangerouslySetInnerHTML={{
-                  __html: provider.initScript,
-                }}
-              />,
-            ]
-          : []),
+          // External scripts with data-testid for test verification
+          ...(provider.scripts && provider.scripts.length > 0
+            ? provider.scripts.map((script, scriptIndex) =>
+                renderScriptTag({
+                  src: script.src,
+                  async: script.async,
+                  defer: script.defer,
+                  dataTestId: `analytics-${provider.name}`,
+                  reactKey: `script-${providerIndex}-${scriptIndex}`,
+                  hidden,
+                })
+              )
+            : []),
 
-        // Empty marker script if provider has no scripts (for testing)
-        ...((!provider.scripts || provider.scripts.length === 0) && !provider.initScript
-          ? [
-              <script
-                key={`marker-${providerIndex}`}
-                data-testid={`analytics-${provider.name}`}
-                dangerouslySetInnerHTML={{
-                  __html: `/* ${provider.name} analytics marker */`,
-                }}
-              />,
-            ]
-          : []),
+          // Initialization script with data-testid
+          ...(provider.initScript
+            ? [
+                <script
+                  key={`init-${providerIndex}`}
+                  data-testid={`analytics-${provider.name}`}
+                  dangerouslySetInnerHTML={{
+                    __html: provider.initScript,
+                  }}
+                  {...styleAttr}
+                />,
+              ]
+            : []),
 
-        // Configuration data script (for testing)
-        ...(provider.config
-          ? [
-              <script
-                key={`config-${providerIndex}`}
-                data-testid={`analytics-${provider.name}-config`}
-                type="application/json"
-                dangerouslySetInnerHTML={{
-                  __html: JSON.stringify(provider.config),
-                }}
-              />,
-            ]
-          : []),
-      ])}
+          // Empty marker script if provider has no scripts (for testing)
+          ...((!provider.scripts || provider.scripts.length === 0) && !provider.initScript
+            ? [
+                <script
+                  key={`marker-${providerIndex}`}
+                  data-testid={`analytics-${provider.name}`}
+                  dangerouslySetInnerHTML={{
+                    __html: `/* ${provider.name} analytics marker */`,
+                  }}
+                  {...styleAttr}
+                />,
+              ]
+            : []),
+
+          // Configuration data script (for testing)
+          ...(provider.config
+            ? [
+                <script
+                  key={`config-${providerIndex}`}
+                  data-testid={`analytics-${provider.name}-config`}
+                  type="application/json"
+                  dangerouslySetInnerHTML={{
+                    __html: JSON.stringify(provider.config),
+                  }}
+                  {...styleAttr}
+                />,
+              ]
+            : []),
+        ]
+      })}
     </>
   )
 }
