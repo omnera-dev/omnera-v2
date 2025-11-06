@@ -239,7 +239,7 @@ test.describe('Analytics Configuration', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-ANALYTICS-007: should optimize DNS resolution for provider',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -248,7 +248,6 @@ test.describe('Analytics Configuration', () => {
         name: 'test-app',
         pages: [
           {
-            name: 'Test',
             path: '/',
             meta: {
               lang: 'en-US',
