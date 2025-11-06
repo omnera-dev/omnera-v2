@@ -65,7 +65,7 @@ test.describe('Analytics Configuration', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-ANALYTICS-002: should support 6 analytics providers',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -76,7 +76,6 @@ test.describe('Analytics Configuration', () => {
           name: 'test-app',
           pages: [
             {
-              name: 'Test',
               path: '/',
               meta: {
                 lang: 'en-US',
