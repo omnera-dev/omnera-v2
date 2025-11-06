@@ -111,6 +111,27 @@ function isCssValue(value: string): boolean {
 }
 
 /**
+ * Check if a container spacing value is a Tailwind class (not a raw CSS value)
+ * Tailwind classes include utility classes like "max-w-7xl", "mx-auto", "px-4"
+ * CSS values like "80rem" or "1280px" should return false
+ *
+ * @param value - Container spacing value to check
+ * @returns true if value contains Tailwind classes, false if it's a raw CSS value
+ */
+function isTailwindClass(value: string): boolean {
+  // If it has spaces, it's multiple classes (Tailwind)
+  if (value.includes(' ')) {
+    return true
+  }
+  // If it matches Tailwind patterns (max-w-*, mx-*, px-*, etc.), it's a class
+  if (/^(max-w-|mx-|px-|py-|p-|m-|w-|h-)/.test(value)) {
+    return true
+  }
+  // Otherwise, assume it's a CSS value
+  return false
+}
+
+/**
  * Generate CSS from theme colors, spacing, animations, fonts, and shadows
  * Applies theme colors to semantic HTML elements for visual hierarchy
  * Applies theme spacing to section elements for layout consistency
@@ -959,23 +980,41 @@ export function DynamicPage({
               {theme?.spacing?.container && (
                 <div
                   data-testid="container"
-                  style={{ maxWidth: theme.spacing.container }}
+                  {...(isTailwindClass(theme.spacing.container)
+                    ? { className: theme.spacing.container }
+                    : { style: { maxWidth: theme.spacing.container } })}
                 />
               )}
               {(theme?.spacing as Record<string, unknown>)?.['container-small'] && (
                 <div
                   data-testid="container-small"
-                  style={{
-                    maxWidth: (theme.spacing as Record<string, string>)['container-small'],
-                  }}
+                  {...(isTailwindClass(
+                    (theme.spacing as Record<string, string>)['container-small']
+                  )
+                    ? {
+                        className: (theme.spacing as Record<string, string>)['container-small'],
+                      }
+                    : {
+                        style: {
+                          maxWidth: (theme.spacing as Record<string, string>)['container-small'],
+                        },
+                      })}
                 />
               )}
               {(theme?.spacing as Record<string, unknown>)?.['container-xsmall'] && (
                 <div
                   data-testid="container-xsmall"
-                  style={{
-                    maxWidth: (theme.spacing as Record<string, string>)['container-xsmall'],
-                  }}
+                  {...(isTailwindClass(
+                    (theme.spacing as Record<string, string>)['container-xsmall']
+                  )
+                    ? {
+                        className: (theme.spacing as Record<string, string>)['container-xsmall'],
+                      }
+                    : {
+                        style: {
+                          maxWidth: (theme.spacing as Record<string, string>)['container-xsmall'],
+                        },
+                      })}
                 />
               )}
             </>
