@@ -379,6 +379,11 @@ export const getInProgressSpecs = Effect.gen(function* () {
  *
  * IMPORTANT: Uses --limit 2000 to handle project growth
  * WARNING: If total spec issues exceed 2000, duplicates may be created
+ *
+ * IMPROVED DEDUPLICATION:
+ * - Filters by bot emoji (🤖) in title to ensure only spec issues are fetched
+ * - Checks both open and closed issues
+ * - Returns both spec IDs and issue metadata for duplicate detection
  */
 export const getAllExistingSpecs = Effect.gen(function* () {
   const cmd = yield* CommandService
@@ -387,10 +392,10 @@ export const getAllExistingSpecs = Effect.gen(function* () {
 
   // Fetch ALL spec issues (open + closed) in one query
   // Using limit 2000 (3x current 647 specs) for growth headroom
-  // IMPORTANT: Use "tdd-automation" label (not "tdd-spec" which doesn't exist)
+  // Filter by bot emoji in search to ensure we only get spec issues
   const output = yield* cmd
     .exec(
-      'gh issue list --label "tdd-automation" --state all --json number,title,state --limit 2000',
+      'gh issue list --label "tdd-automation" --search "🤖 in:title" --state all --json number,title,state,createdAt --limit 2000',
       {
         throwOnError: false,
       }
@@ -409,19 +414,51 @@ export const getAllExistingSpecs = Effect.gen(function* () {
       number: number
       title: string
       state: string
+      createdAt: string
     }>
 
-    // Extract spec IDs from issue titles
+    // Extract spec IDs from issue titles and build metadata map
     const existingSpecIds = new Set<string>()
+    const specMetadata = new Map<
+      string,
+      Array<{ number: number; state: string; createdAt: string }>
+    >()
+
     for (const issue of issues) {
       const specIdMatch = issue.title.match(/🤖\s+([A-Z]+-[A-Z-]+-\d{3}):/)
       const specId = specIdMatch?.[1]
       if (specId) {
         existingSpecIds.add(specId)
+
+        // Track all issues for this spec ID (for duplicate detection)
+        if (!specMetadata.has(specId)) {
+          specMetadata.set(specId, [])
+        }
+        specMetadata.get(specId)?.push({
+          number: issue.number,
+          state: issue.state,
+          createdAt: issue.createdAt,
+        })
       }
     }
 
-    yield* logInfo(`  Found ${existingSpecIds.size} existing spec issues`)
+    // Detect existing duplicates (multiple issues for same spec ID)
+    const duplicates: string[] = []
+    for (const [specId, issueList] of specMetadata.entries()) {
+      if (issueList.length > 1) {
+        duplicates.push(specId)
+      }
+    }
+
+    yield* logInfo(`  Found ${existingSpecIds.size} unique spec IDs`)
+    yield* logInfo(`  Total issues: ${issues.length}`)
+
+    if (duplicates.length > 0) {
+      yield* logWarn(
+        `  ⚠️  Found ${duplicates.length} specs with multiple issues (duplicates exist)`
+      )
+      yield* logInfo(`  First 5 duplicates: ${duplicates.slice(0, 5).join(', ')}`)
+    }
 
     // WARNING: Detect if we're approaching the limit (may miss older issues)
     if (issues.length >= 1900) {
@@ -812,66 +849,173 @@ const commandScan = Effect.gen(function* () {
 })
 
 /**
+ * Check idempotency lock to prevent concurrent populate runs
+ * Returns true if safe to proceed, false if another populate is in progress
+ */
+const checkIdempotencyLock = Effect.gen(function* () {
+  const fs = yield* FileSystemService
+  const cmd = yield* CommandService
+  const lockFilePath = '.github/tdd-queue-populate.lock'
+
+  // Check if lock file exists
+  const lockExists = yield* fs
+    .exists(lockFilePath)
+    .pipe(Effect.catchAll(() => Effect.succeed(false)))
+
+  if (!lockExists) {
+    return true // No lock, safe to proceed
+  }
+
+  // Read lock file to check timestamp
+  const lockContent = yield* fs
+    .readFile(lockFilePath)
+    .pipe(Effect.catchAll(() => Effect.succeed('')))
+
+  if (!lockContent) {
+    return true // Empty lock, safe to proceed
+  }
+
+  try {
+    const lockData = JSON.parse(lockContent) as { timestamp: string; pid?: string }
+    const lockTime = new Date(lockData.timestamp)
+    const now = new Date()
+    const ageMinutes = (now.getTime() - lockTime.getTime()) / 1000 / 60
+
+    // If lock is older than 30 minutes, consider it stale
+    if (ageMinutes > 30) {
+      yield* logWarn(`⚠️  Stale lock file detected (${Math.round(ageMinutes)} minutes old)`)
+      yield* logInfo('Removing stale lock and proceeding')
+      yield* cmd.exec(`rm -f ${lockFilePath}`).pipe(Effect.catchAll(() => Effect.void))
+      return true
+    }
+
+    // Lock is recent, another populate is likely in progress
+    yield* logError('❌ Another populate operation is in progress')
+    yield* logError(`   Started: ${lockData.timestamp} (${Math.round(ageMinutes)} minutes ago)`)
+    yield* logError('   Please wait for it to complete or remove .github/tdd-queue-populate.lock')
+    return false
+  } catch {
+    // Corrupted lock file, remove it
+    yield* logWarn('⚠️  Corrupted lock file detected, removing')
+    yield* cmd.exec(`rm -f ${lockFilePath}`).pipe(Effect.catchAll(() => Effect.void))
+    return true
+  }
+})
+
+/**
+ * Create idempotency lock file
+ */
+const createIdempotencyLock = Effect.gen(function* () {
+  const fs = yield* FileSystemService
+  const lockFilePath = '.github/tdd-queue-populate.lock'
+
+  const lockData = {
+    timestamp: new Date().toISOString(),
+    pid: process.pid.toString(),
+  }
+
+  yield* fs.writeFile(lockFilePath, JSON.stringify(lockData, null, 2))
+  yield* logInfo(`🔒 Created idempotency lock: ${lockFilePath}`)
+})
+
+/**
+ * Remove idempotency lock file
+ */
+const removeIdempotencyLock = Effect.gen(function* () {
+  const cmd = yield* CommandService
+  const lockFilePath = '.github/tdd-queue-populate.lock'
+
+  yield* cmd.exec(`rm -f ${lockFilePath}`).pipe(Effect.catchAll(() => Effect.void))
+  yield* logInfo(`🔓 Removed idempotency lock`)
+})
+
+/**
  * CLI: Create issues for all specs (skip duplicates)
  *
  * PERFORMANCE OPTIMIZATION:
  * - Bulk deduplication: Fetch all existing issues once (1 API call vs N calls)
  * - Parallel batching: Create issues in batches of 10 concurrently
  * - Expected: 15 minutes → 30-60 seconds (~15-30x faster for 647 specs)
+ *
+ * IDEMPOTENCY PROTECTION:
+ * - Lock file prevents concurrent populate runs
+ * - Stale locks (>30 min) are automatically removed
+ * - Lock removed on success or failure
  */
 const commandPopulate = Effect.gen(function* () {
-  const result = yield* scanForFixmeSpecs
-
-  if (result.totalSpecs === 0) {
-    yield* logInfo('No specs with fixme found', '📭')
+  // Check idempotency lock
+  const canProceed = yield* checkIdempotencyLock
+  if (!canProceed) {
+    yield* logError('Aborting populate to prevent duplicates')
     return
   }
 
-  yield* logInfo('')
-  yield* logInfo(`Found ${result.totalSpecs} specs with .fixme()`, '📊')
+  // Create lock file
+  yield* createIdempotencyLock
 
-  // OPTIMIZATION 1: Bulk deduplication (1 API call instead of N)
-  const existingSpecIds = yield* getAllExistingSpecs
+  try {
+    const result = yield* scanForFixmeSpecs
 
-  // Filter specs that don't have issues yet
-  const specsToCreate = result.specs.filter((spec) => !existingSpecIds.has(spec.specId))
-  const alreadyExist = result.totalSpecs - specsToCreate.length
+    if (result.totalSpecs === 0) {
+      yield* logInfo('No specs with fixme found', '📭')
+      yield* removeIdempotencyLock
+      return
+    }
 
-  yield* logInfo('')
-  yield* logInfo(`Creating issues for ${specsToCreate.length} new specs...`, '📝')
-  if (alreadyExist > 0) {
-    yield* logInfo(`Skipping ${alreadyExist} specs (already have issues)`, '⏭️')
-  }
+    yield* logInfo('')
+    yield* logInfo(`Found ${result.totalSpecs} specs with .fixme()`, '📊')
 
-  if (specsToCreate.length === 0) {
-    yield* success('All specs already have issues')
-    return
-  }
+    // OPTIMIZATION 1: Bulk deduplication (1 API call instead of N)
+    const existingSpecIds = yield* getAllExistingSpecs
 
-  // OPTIMIZATION 2: Parallel batching (create 10 issues concurrently)
-  // This respects GitHub API rate limits while dramatically improving speed
-  const createIssueEffect = (spec: SpecItem) =>
-    createSpecIssue(spec, true).pipe(
-      Effect.catchAll(() => Effect.succeed(-1)) // Continue on individual failures
+    // Filter specs that don't have issues yet
+    const specsToCreate = result.specs.filter((spec) => !existingSpecIds.has(spec.specId))
+    const alreadyExist = result.totalSpecs - specsToCreate.length
+
+    yield* logInfo('')
+    yield* logInfo(`Creating issues for ${specsToCreate.length} new specs...`, '📝')
+    if (alreadyExist > 0) {
+      yield* logInfo(`Skipping ${alreadyExist} specs (already have issues)`, '⏭️')
+    }
+
+    if (specsToCreate.length === 0) {
+      yield* success('All specs already have issues')
+      yield* removeIdempotencyLock
+      return
+    }
+
+    // OPTIMIZATION 2: Parallel batching (create 10 issues concurrently)
+    // This respects GitHub API rate limits while dramatically improving speed
+    const createIssueEffect = (spec: SpecItem) =>
+      createSpecIssue(spec, true).pipe(
+        Effect.catchAll(() => Effect.succeed(-1)) // Continue on individual failures
+      )
+
+    yield* progress('Creating issues in parallel batches (concurrency: 10)...')
+    const issueNumbers = yield* Effect.all(specsToCreate.map(createIssueEffect), {
+      concurrency: 10,
+    })
+
+    const created = issueNumbers.filter((num) => num > 0).length
+    const failed = issueNumbers.length - created
+
+    yield* logInfo('')
+    yield* success(`Created ${created} issues`)
+    if (failed > 0) {
+      yield* logError(`Failed to create ${failed} issues (see errors above)`)
+    }
+    yield* logInfo(
+      `Total processing time saved: ~${Math.round((specsToCreate.length * 1.5) / 60)} minutes → ~${Math.round(specsToCreate.length / 10 / 60)} minutes`,
+      '⚡'
     )
 
-  yield* progress('Creating issues in parallel batches (concurrency: 10)...')
-  const issueNumbers = yield* Effect.all(specsToCreate.map(createIssueEffect), {
-    concurrency: 10,
-  })
-
-  const created = issueNumbers.filter((num) => num > 0).length
-  const failed = issueNumbers.length - created
-
-  yield* logInfo('')
-  yield* success(`Created ${created} issues`)
-  if (failed > 0) {
-    yield* logError(`Failed to create ${failed} issues (see errors above)`)
+    // Remove lock on success
+    yield* removeIdempotencyLock
+  } catch (error) {
+    // Remove lock on failure
+    yield* removeIdempotencyLock
+    throw error
   }
-  yield* logInfo(
-    `Total processing time saved: ~${Math.round((specsToCreate.length * 1.5) / 60)} minutes → ~${Math.round(specsToCreate.length / 10 / 60)} minutes`,
-    '⚡'
-  )
 })
 
 /**

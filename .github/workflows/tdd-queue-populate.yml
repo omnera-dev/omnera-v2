@@ -8,12 +8,13 @@ on:
     paths:
       - 'specs/**/*.spec.ts'
 
-  # Scheduled runs - Every 4 hours (reduced from 15 minutes)
-  # Rationale: Populate is now 15-30x faster with parallel batching
-  # + Push trigger handles new tests immediately
+  # Scheduled runs - Daily at 2 AM UTC (reduced from every 4 hours)
+  # Rationale: Push trigger handles new tests immediately
   # + Processor runs every 15 min to pick up queued specs
+  # + Idempotency lock prevents duplicate creation
+  # + Daily schedule is for catching edge cases only
   schedule:
-    - cron: '0 */4 * * *'
+    - cron: '0 2 * * *'
 
   # Manual trigger
   workflow_dispatch:
