@@ -485,7 +485,7 @@ test.describe('Article Schema', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-ARTICLE-013: should enable Google News and article rich results',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -524,7 +524,7 @@ test.describe('Article Schema', () => {
       await page.goto('/')
 
       // THEN: it should enable Google News and article rich results
-      await expect(page.locator('script[type="application/ld+json"]')).toBeVisible()
+      await expect(page.locator('script[type="application/ld+json"]')).toBeAttached()
     }
   )
 
