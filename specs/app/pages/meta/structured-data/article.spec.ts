@@ -93,7 +93,7 @@ test.describe('Article Schema', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-ARTICLE-003: should provide article title for rich results',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
