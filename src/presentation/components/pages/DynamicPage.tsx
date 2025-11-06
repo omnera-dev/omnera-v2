@@ -985,38 +985,38 @@ export function DynamicPage({
                     : { style: { maxWidth: theme.spacing.container } })}
                 />
               )}
-              {(theme?.spacing as Record<string, unknown>)?.['container-small'] && (
-                <div
-                  data-testid="container-small"
-                  {...(isTailwindClass(
-                    (theme.spacing as Record<string, string>)['container-small']
+              {(() => {
+                const containerSmall = (theme?.spacing as Record<string, unknown>)?.[
+                  'container-small'
+                ]
+                if (typeof containerSmall === 'string') {
+                  return (
+                    <div
+                      data-testid="container-small"
+                      {...(isTailwindClass(containerSmall)
+                        ? { className: containerSmall }
+                        : { style: { maxWidth: containerSmall } })}
+                    />
                   )
-                    ? {
-                        className: (theme.spacing as Record<string, string>)['container-small'],
-                      }
-                    : {
-                        style: {
-                          maxWidth: (theme.spacing as Record<string, string>)['container-small'],
-                        },
-                      })}
-                />
-              )}
-              {(theme?.spacing as Record<string, unknown>)?.['container-xsmall'] && (
-                <div
-                  data-testid="container-xsmall"
-                  {...(isTailwindClass(
-                    (theme.spacing as Record<string, string>)['container-xsmall']
+                }
+                return undefined
+              })()}
+              {(() => {
+                const containerXSmall = (theme?.spacing as Record<string, unknown>)?.[
+                  'container-xsmall'
+                ]
+                if (typeof containerXSmall === 'string') {
+                  return (
+                    <div
+                      data-testid="container-xsmall"
+                      {...(isTailwindClass(containerXSmall)
+                        ? { className: containerXSmall }
+                        : { style: { maxWidth: containerXSmall } })}
+                    />
                   )
-                    ? {
-                        className: (theme.spacing as Record<string, string>)['container-xsmall'],
-                      }
-                    : {
-                        style: {
-                          maxWidth: (theme.spacing as Record<string, string>)['container-xsmall'],
-                        },
-                      })}
-                />
-              )}
+                }
+                return undefined
+              })()}
             </>
           ) : (
             page.sections.map((section, index) => {
