@@ -272,7 +272,7 @@ test.describe('Analytics Configuration', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-ANALYTICS-008: should pass configuration to provider',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -281,7 +281,7 @@ test.describe('Analytics Configuration', () => {
         name: 'test-app',
         pages: [
           {
-            name: 'Test',
+            name: 'test',
             path: '/',
             meta: {
               lang: 'en-US',
