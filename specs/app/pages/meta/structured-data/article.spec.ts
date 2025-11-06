@@ -289,7 +289,7 @@ test.describe('Article Schema', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-ARTICLE-008: should attribute content to organization',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
