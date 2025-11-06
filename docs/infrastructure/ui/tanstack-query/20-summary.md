@@ -4,7 +4,7 @@
 
 ## Summary
 
-TanStack Query transforms server-state management in Omnera:
+TanStack Query transforms server-state management in Sovrium:
 
 1. **Zero Boilerplate**: No manual loading/error state management
 2. **Automatic Caching**: Smart caching with configurable stale times
@@ -54,7 +54,7 @@ TanStack Query transforms server-state management in Omnera:
 5. **Implement SSR** with Hono prefetching
 6. **Add optimistic updates** for mutations
 7. **Test components** with mocked query data
-   With TanStack Query, Omnera applications achieve exceptional user experience through intelligent server-state management, perfect integration with Effect.ts, and seamless server-side rendering with Hono.
+   With TanStack Query, Sovrium applications achieve exceptional user experience through intelligent server-state management, perfect integration with Effect.ts, and seamless server-side rendering with Hono.
 
 ---
 
@@ -62,4 +62,4 @@ TanStack Query transforms server-state management in Omnera:
 
 [← Part 19](./19-devtools.md) | [Part 21 →](./21-references.md)
 
-**Parts**: [Part 1](./01-start.md) | [Part 2](./02-overview.md) | [Part 3](./03-why-tanstack-query-for-omnera.md) | [Part 4](./04-installation.md) | [Part 5](./05-basic-setup.md) | [Part 6](./06-core-concepts.md) | [Part 7](./07-usequery-hook.md) | [Part 8](./08-integration-with-effectts.md) | [Part 9](./09-usemutation-hook.md) | [Part 10](./10-usequeries-hook.md) | [Part 11](./11-useinfinitequery-hook.md) | [Part 12](./12-server-side-rendering-ssr-with-hono.md) | [Part 13](./13-integration-with-better-auth.md) | [Part 14](./14-advanced-patterns.md) | [Part 15](./15-testing-with-tanstack-query.md) | [Part 16](./16-best-practices.md) | [Part 17](./17-common-pitfalls-to-avoid.md) | [Part 18](./18-performance-optimization.md) | [Part 19](./19-devtools.md) | **Part 20** | [Part 21](./21-references.md)
+**Parts**: [Part 1](./01-start.md) | [Part 2](./02-overview.md) | [Part 3](./03-why-tanstack-query-for-sovrium.md) | [Part 4](./04-installation.md) | [Part 5](./05-basic-setup.md) | [Part 6](./06-core-concepts.md) | [Part 7](./07-usequery-hook.md) | [Part 8](./08-integration-with-effectts.md) | [Part 9](./09-usemutation-hook.md) | [Part 10](./10-usequeries-hook.md) | [Part 11](./11-useinfinitequery-hook.md) | [Part 12](./12-server-side-rendering-ssr-with-hono.md) | [Part 13](./13-integration-with-better-auth.md) | [Part 14](./14-advanced-patterns.md) | [Part 15](./15-testing-with-tanstack-query.md) | [Part 16](./16-best-practices.md) | [Part 17](./17-common-pitfalls-to-avoid.md) | [Part 18](./18-performance-optimization.md) | [Part 19](./19-devtools.md) | **Part 20** | [Part 21](./21-references.md)

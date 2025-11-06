@@ -226,7 +226,7 @@ test.describe('Language Switcher Block', () => {
       await expect(newHtmlLang).toHaveAttribute('lang', 'fr-FR')
 
       // Step 5: Verify localStorage persisted the choice
-      const storedLanguage = await page.evaluate(() => localStorage.getItem('omnera_language'))
+      const storedLanguage = await page.evaluate(() => localStorage.getItem('sovrium_language'))
       expect(storedLanguage).toBe('fr-FR')
 
       // THEN: user can complete full language-switcher workflow

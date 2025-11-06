@@ -90,7 +90,7 @@ Update branch protection to require "up-to-date" branches.
 **Implementation**:
 
 ```bash
-gh api -X PATCH repos/omnera-dev/omnera-v2/branches/main/protection/required_status_checks \
+gh api -X PATCH repos/sovrium/sovrium/branches/main/protection/required_status_checks \
   -F 'strict=true' \
   -F 'contexts[]=Test'
 ```
@@ -187,7 +187,7 @@ gh pr merge --auto --squash
 Enable strict branch protection after workflows updated:
 
 ```bash
-gh api -X PATCH repos/omnera-dev/omnera-v2/branches/main/protection/required_status_checks \
+gh api -X PATCH repos/sovrium/sovrium/branches/main/protection/required_status_checks \
   -F 'strict=true' \
   -F 'contexts[]=Test'
 ```

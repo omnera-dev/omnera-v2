@@ -4,7 +4,7 @@
 
 ## Testing Approach
 
-Omnera uses a **dual-timing strategy** that optimizes for both feature clarity and implementation quality:
+Sovrium uses a **dual-timing strategy** that optimizes for both feature clarity and implementation quality:
 **E2E Tests (TDD - Test-Driven Development)**:
 
 - Write E2E tests **BEFORE** implementing features

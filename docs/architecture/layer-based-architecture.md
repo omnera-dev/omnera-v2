@@ -1,14 +1,14 @@
-# Layer-Based Architecture in Omnera
+# Layer-Based Architecture in Sovrium
 
 ## Overview
 
-Omnera follows a **Layer-Based Architecture** (also known as **Layered Architecture**), organizing code into four distinct horizontal layers with well-defined responsibilities and clear boundaries. This pattern aligns perfectly with Omnera's Functional Programming principles and Effect.ts's dependency injection system.
+Sovrium follows a **Layer-Based Architecture** (also known as **Layered Architecture**), organizing code into four distinct horizontal layers with well-defined responsibilities and clear boundaries. This pattern aligns perfectly with Sovrium's Functional Programming principles and Effect.ts's dependency injection system.
 
 > **Note**: This document provides a high-level summary. For comprehensive coverage with detailed examples, see the split documentation in [`docs/architecture/layer-based-architecture/`](./layer-based-architecture/).
 
 **Reference**: [Bitloops Layered Architecture Documentation](https://bitloops.com/docs/bitloops-language/learning/software-architecture/layered-architecture)
 
-## Why Layer-Based Architecture for Omnera?
+## Why Layer-Based Architecture for Sovrium?
 
 ### Benefits
 
@@ -564,7 +564,7 @@ Test repository implementations with real or test databases. See [Testing Strate
 ## File Structure
 
 ```
-omnera-v2/
+sovrium/
 ├── src/
 │   ├── domain/                      # Domain Layer
 │   │   ├── models/                  # Domain models
@@ -622,7 +622,7 @@ omnera-v2/
 
 ## Comprehensive Documentation
 
-This summary provides an overview of Layer-Based Architecture in Omnera. For detailed coverage including:
+This summary provides an overview of Layer-Based Architecture in Sovrium. For detailed coverage including:
 
 - Extensive code examples for each layer
 - Complete communication patterns
@@ -635,13 +635,13 @@ This summary provides an overview of Layer-Based Architecture in Omnera. For det
 ## Resources
 
 - [Bitloops Layered Architecture](https://bitloops.com/docs/bitloops-language/learning/software-architecture/layered-architecture)
-- [Functional Programming in Omnera](./functional-programming.md)
+- [Functional Programming in Sovrium](./functional-programming.md)
 - [Effect.ts Documentation](https://effect.website/docs/introduction)
 - [Testing Strategy](./testing-strategy.md)
 
 ## Summary
 
-Layer-Based Architecture in Omnera provides:
+Layer-Based Architecture in Sovrium provides:
 
 1. **Clear structure** - Four layers with specific responsibilities
 2. **Pure Domain** - Business logic isolated in pure functions
@@ -650,4 +650,4 @@ Layer-Based Architecture in Omnera provides:
 5. **Testability** - Each layer tested independently
 6. **Maintainability** - Changes isolated to specific layers
 
-By following Layer-Based Architecture with Functional Programming principles, Omnera achieves predictable structure, maintainable code, and scalable architecture.
+By following Layer-Based Architecture with Functional Programming principles, Sovrium achieves predictable structure, maintainable code, and scalable architecture.

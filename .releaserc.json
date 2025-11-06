@@ -1,6 +1,6 @@
 {
   "branches": ["main"],
-  "repositoryUrl": "https://github.com/omnera-dev/omnera-v2",
+  "repositoryUrl": "https://github.com/sovrium/sovrium",
   "plugins": [
     [
       "@semantic-release/commit-analyzer",

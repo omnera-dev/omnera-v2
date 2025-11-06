@@ -165,7 +165,7 @@
           "nav.contact": "Contact",
           "nav.login": "Login",
           "nav.logout": "Logout",
-          "homepage.hero.title": "Welcome to Omnera",
+          "homepage.hero.title": "Welcome to Sovrium",
           "homepage.hero.subtitle": "Build your app with configuration",
           "homepage.hero.cta": "Get Started",
           "homepage.features.title": "Features",
@@ -197,7 +197,7 @@
           "nav.contact": "Contact",
           "nav.login": "Connexion",
           "nav.logout": "Déconnexion",
-          "homepage.hero.title": "Bienvenue sur Omnera",
+          "homepage.hero.title": "Bienvenue sur Sovrium",
           "homepage.hero.subtitle": "Créez votre application avec configuration",
           "homepage.hero.cta": "Commencer",
           "homepage.features.title": "Fonctionnalités",
@@ -592,13 +592,13 @@
         "userAction": "Click fr-FR button",
         "component": "language-switcher",
         "localStorage": {
-          "key": "omnera_language",
+          "key": "sovrium_language",
           "value": "fr-FR"
         },
         "expectedDOM": "<html lang=\"fr-FR\"><body>...</body></html>",
         "assertions": [
           "User selects French",
-          "localStorage.setItem('omnera_language', 'fr-FR')",
+          "localStorage.setItem('sovrium_language', 'fr-FR')",
           "HTML updates to lang=\"fr-FR\"",
           "On next visit: reads localStorage and restores French",
           "Persistent language preference"
@@ -1138,7 +1138,7 @@
           "after": "<html lang=\"fr-FR\"><head><title>Bienvenue sur Notre App</title><meta name=\"description\" content=\"Découvrez nos fonctionnalités\" /></head><body><h1>Bienvenue sur Notre App</h1></body></html>"
         },
         "localStorage": {
-          "key": "omnera_language",
+          "key": "sovrium_language",
           "value": "fr-FR"
         },
         "assertions": [
@@ -1339,7 +1339,7 @@
               "common.cancel": "Cancel",
               "nav.home": "Home",
               "nav.about": "About",
-              "homepage.hero.title": "Welcome to Omnera",
+              "homepage.hero.title": "Welcome to Sovrium",
               "homepage.hero.cta": "Get Started",
               "errors.404": "Page not found",
               "errors.500": "Server error"

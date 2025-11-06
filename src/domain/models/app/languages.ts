@@ -70,7 +70,7 @@ export const TranslationKeySchema = Schema.String.pipe(
  *   'common.save': 'Save',
  *   'common.cancel': 'Cancel',
  *   'nav.home': 'Home',
- *   'homepage.hero.title': 'Welcome to Omnera'
+ *   'homepage.hero.title': 'Welcome to Sovrium'
  * }
  * ```
  */

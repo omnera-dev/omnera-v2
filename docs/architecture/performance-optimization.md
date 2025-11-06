@@ -2,7 +2,7 @@
 
 ## Overview
 
-This guide provides performance optimization strategies for the Omnera stack, covering React 19, Effect.ts, Bun, and related technologies. Performance optimization should be applied strategically based on actual measurements, not premature optimization.
+This guide provides performance optimization strategies for the Sovrium stack, covering React 19, Effect.ts, Bun, and related technologies. Performance optimization should be applied strategically based on actual measurements, not premature optimization.
 
 ## Core Principles
 
@@ -70,7 +70,7 @@ function VeryExpensiveComponent() {
 const StableChildComponent = React.memo(ExpensiveChild) // Only if measured benefit
 ```
 
-**ESLint Enforcement**: Omnera's ESLint configuration warns when `useMemo`, `useCallback`, or `React.memo` are used, guiding developers to rely on the React 19 Compiler. These are warnings (not errors) to allow manual optimization when measured as necessary.
+**ESLint Enforcement**: Sovrium's ESLint configuration warns when `useMemo`, `useCallback`, or `React.memo` are used, guiding developers to rely on the React 19 Compiler. These are warnings (not errors) to allow manual optimization when measured as necessary.
 
 **See**: `eslint.config.ts` lines 84-101 for the no-restricted-syntax rules.
 
@@ -621,7 +621,7 @@ return result[0].name
 
 ## Performance Goals
 
-Target metrics for Omnera applications:
+Target metrics for Sovrium applications:
 
 | Metric                             | Target  | Tool            |
 | ---------------------------------- | ------- | --------------- |

@@ -1,6 +1,6 @@
 # specs/admin/ - Admin Interface Specifications
 
-> **Purpose**: This directory contains E2E test specifications for the Omnera™ administrative interface (`/_admin/*` routes). These specs define user workflows and acceptance criteria for admin-level operations like managing tables, connections, automations, and pages.
+> **Purpose**: This directory contains E2E test specifications for the Sovrium™ administrative interface (`/_admin/*` routes). These specs define user workflows and acceptance criteria for admin-level operations like managing tables, connections, automations, and pages.
 
 ## Overview
 
@@ -564,7 +564,7 @@ API request context for testing API endpoints directly.
 
 ## Architecture Alignment
 
-This testing structure aligns with Omnera™'s core principles:
+This testing structure aligns with Sovrium™'s core principles:
 
 - **Specification-driven development**: Specs define behavior before implementation
 - **TDD workflow**: Red-Green-Refactor cycle with `test.fixme()` → `test()`

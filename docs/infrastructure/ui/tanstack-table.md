@@ -1,6 +1,6 @@
 # TanStack Table - Headless Table Library
 
-> **Note**: This document provides a high-level summary with essential patterns for building data tables in Omnera. For comprehensive coverage including advanced features (grouping, column pinning, expanding rows, faceted filters, column resizing) and detailed integration patterns, see the full TanStack Table documentation at https://tanstack.com/table/latest.
+> **Note**: This document provides a high-level summary with essential patterns for building data tables in Sovrium. For comprehensive coverage including advanced features (grouping, column pinning, expanding rows, faceted filters, column resizing) and detailed integration patterns, see the full TanStack Table documentation at https://tanstack.com/table/latest.
 
 ## Overview
 
@@ -9,7 +9,7 @@
 
 TanStack Table (formerly React Table) is a headless UI library for building feature-rich data tables. Unlike traditional component libraries that provide pre-styled tables, TanStack Table focuses solely on state management and table logic, giving you 100% control over markup, styling, and rendering.
 
-## Why TanStack Table for Omnera?
+## Why TanStack Table for Sovrium?
 
 ### Perfect Fit for Our Stack
 
@@ -21,7 +21,7 @@ TanStack Table (formerly React Table) is a headless UI library for building feat
 - **Feature-Rich**: Sorting, filtering, pagination, row selection, and more built-in
 - **Framework Agnostic**: Core logic works across frameworks (React, Vue, Solid, etc.)
 
-### Integration with Omnera Stack
+### Integration with Sovrium Stack
 
 | Technology         | Integration                                          |
 | ------------------ | ---------------------------------------------------- |
@@ -730,7 +730,7 @@ function UsersPage() {
 
 ## Layered Architecture Integration
 
-TanStack Table fits perfectly into Omnera's layered architecture:
+TanStack Table fits perfectly into Sovrium's layered architecture:
 
 ```
 ┌─────────────────────────────────────────────┐
@@ -866,4 +866,4 @@ test('renders table with user data', () => {
 - TanStack Query integration: https://tanstack.com/query/latest
 - React Virtual (virtualization): https://tanstack.com/virtual/latest
 - Examples and demos: https://tanstack.com/table/latest/docs/framework/react/examples/basic
-- Omnera Layer-Based Architecture: [../../architecture/layer-based-architecture.md](../../architecture/layer-based-architecture.md)
+- Sovrium Layer-Based Architecture: [../../architecture/layer-based-architecture.md](../../architecture/layer-based-architecture.md)

@@ -632,7 +632,7 @@ test.describe('Font Configuration', () => {
                         fontSize: '$theme.fonts.title.size',
                       },
                     },
-                    children: ['Welcome to Omnera'],
+                    children: ['Welcome to Sovrium'],
                   },
                   {
                     type: 'p',
@@ -673,7 +673,7 @@ test.describe('Font Configuration', () => {
       // 1. Structure validation (ARIA)
       await expect(page.locator('[data-testid="font-system"]')).toMatchAriaSnapshot(`
         - group:
-          - heading "Welcome to Omnera" [level=1]
+          - heading "Welcome to Sovrium" [level=1]
           - paragraph: "This is body text using Inter font family with 16px size and 1.5 line-height for optimal readability."
           - code: "console.log(\\"Hello, World!\\")"
       `)

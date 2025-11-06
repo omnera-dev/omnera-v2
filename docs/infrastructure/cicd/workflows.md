@@ -248,8 +248,8 @@ bunx semantic-release --dry-run
 Add workflow status badges to README:
 
 ```markdown
-![Test](https://github.com/omnera-dev/omnera-v2/workflows/Test/badge.svg)
-![Release](https://github.com/omnera-dev/omnera-v2/workflows/Release/badge.svg)
+![Test](https://github.com/sovrium/sovrium/workflows/Test/badge.svg)
+![Release](https://github.com/sovrium/sovrium/workflows/Release/badge.svg)
 ```
 
 ## Troubleshooting

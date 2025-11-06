@@ -33,7 +33,7 @@ export interface StartOptions {
 }
 
 /**
- * Use case for starting an Omnera web server
+ * Use case for starting an Sovrium web server
  *
  * This orchestrates the server startup process:
  * 1. Validates the app configuration using Effect Schema

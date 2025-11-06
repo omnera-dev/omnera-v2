@@ -8,7 +8,7 @@
 
 ## Critical Architectural Decision: Zod vs Effect Schema
 
-**Omnera uses two validation libraries with strict separation**:
+**Sovrium uses two validation libraries with strict separation**:
 
 | Library           | Version | Usage                     | Allowed Locations                     | Why                                |
 | ----------------- | ------- | ------------------------- | ------------------------------------- | ---------------------------------- |
@@ -358,7 +358,7 @@ export const getOpenAPIDocument = () => {
   return app.getOpenAPIDocument({
     openapi: '3.1.0',
     info: {
-      title: 'Omnera API',
+      title: 'Sovrium API',
       version: '0.0.1',
     },
     servers: [{ url: 'http://localhost:3000' }],

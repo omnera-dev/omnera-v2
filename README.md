@@ -1,10 +1,10 @@
-# Omnera™
+# Sovrium™
 
-> **⚠️ Early Development**: Omnera is in Phase 0 (Foundation). See [ROADMAP.md](ROADMAP.md) for implementation progress and [docs/specifications/vision.md](docs/specifications/vision.md) for the full product vision.
+> **⚠️ Early Development**: Sovrium is in Phase 0 (Foundation). See [ROADMAP.md](ROADMAP.md) for implementation progress and [docs/specifications/vision.md](docs/specifications/vision.md) for the full product vision.
 
 A configuration-driven web application platform built with Bun, Effect, React, and Tailwind CSS.
 
-**Note**: Omnera™ is a trademark of ESSENTIAL SERVICES. See [TRADEMARK.md](TRADEMARK.md) for trademark usage guidelines.
+**Note**: Sovrium™ is a trademark of ESSENTIAL SERVICES. See [TRADEMARK.md](TRADEMARK.md) for trademark usage guidelines.
 
 **Current Version**: 0.0.1 - Minimal web server with React SSR and dynamic CSS compilation
 
@@ -42,7 +42,7 @@ bun run templates/landing-page.ts
 
 ```typescript
 // app.ts
-import { start } from 'omnera'
+import { start } from 'sovrium'
 
 const myApp = {
   name: 'My App',
@@ -61,7 +61,7 @@ Visit **http://localhost:3000** to see your app running!
 ### 3. Customize Configuration
 
 ```typescript
-import { start } from 'omnera'
+import { start } from 'sovrium'
 
 start(myApp, {
   port: 8080, // Custom port (default: 3000)
@@ -128,7 +128,7 @@ bun --watch src/index.ts         # Auto-reload on changes
 ## Project Structure
 
 ```
-omnera-v2/
+sovrium/
 ├── docs/                           # Detailed documentation
 │   ├── specifications/             # Product vision
 │   ├── architecture/               # Architecture patterns
@@ -175,7 +175,7 @@ All detailed documentation is imported on-demand when needed (see [CLAUDE.md](CL
 
 ## Why Bun?
 
-Omnera uses **Bun** instead of Node.js:
+Sovrium uses **Bun** instead of Node.js:
 
 - ⚡ **Native TypeScript** - Execute `.ts` files directly, no compilation needed
 - 🚀 **4x Faster** - Cold starts and package installs
@@ -214,11 +214,11 @@ Releases are **fully automated** via GitHub Actions and semantic-release.
 ## License
 
 [![License: BSL-1.1](https://img.shields.io/badge/License-BSL--1.1-blue.svg)](LICENSE.md)
-[![Source Available](https://img.shields.io/badge/Source-Available-green.svg)](https://github.com/omnera-dev/omnera-v2)
+[![Source Available](https://img.shields.io/badge/Source-Available-green.svg)](https://github.com/sovrium/sovrium)
 
 **Business Source License 1.1 (BSL 1.1)**
 
-Omnera is **source-available** under the Business Source License 1.1. The source code is public, and you are free to use, modify, and redistribute it with some restrictions.
+Sovrium is **source-available** under the Business Source License 1.1. The source code is public, and you are free to use, modify, and redistribute it with some restrictions.
 
 ✅ **Free for**:
 
@@ -229,19 +229,19 @@ Omnera is **source-available** under the Business Source License 1.1. The source
 
 ❌ **Commercial license required for**:
 
-- Offering Omnera as a hosted/managed service to third parties
-- Providing Omnera SaaS where it's the primary value
+- Offering Sovrium as a hosted/managed service to third parties
+- Providing Sovrium SaaS where it's the primary value
 - Competitive use cases (contact us for licensing)
 
-🕐 **Becomes Open Source**: On **January 1, 2029**, Omnera automatically converts to **Apache License 2.0** with no restrictions.
+🕐 **Becomes Open Source**: On **January 1, 2029**, Sovrium automatically converts to **Apache License 2.0** with no restrictions.
 
-📧 **Commercial Licensing**: For competitive SaaS/hosting use cases, contact **license@omnera.dev**
+📧 **Commercial Licensing**: For competitive SaaS/hosting use cases, contact **license@sovrium.com**
 
 See [LICENSE.md](LICENSE.md) for full BSL 1.1 terms and [TRADEMARK.md](TRADEMARK.md) for trademark usage.
 
 **Copyright**: © 2025 ESSENTIAL SERVICES
-**Trademark**: Omnera™ is a trademark of ESSENTIAL SERVICES
+**Trademark**: Sovrium™ is a trademark of ESSENTIAL SERVICES
 
 ---
 
-**Questions or feedback?** Open an issue on [GitHub](https://github.com/omnera-dev/omnera-v2) or check the [documentation](docs/specifications/vision.md).
+**Questions or feedback?** Open an issue on [GitHub](https://github.com/sovrium/sovrium) or check the [documentation](docs/specifications/vision.md).

@@ -7,7 +7,7 @@
 **Scope**: Client-side only (Presentation layer) - specifically for date-picker components
 **Server-side Alternative**: Use `Effect.DateTime` instead
 
-## Why date-fns for Omnera
+## Why date-fns for Sovrium
 
 - **Client-side Date Pickers**: Required by shadcn/ui date-picker component
 - **Lightweight**: Tree-shakable, only import functions you use
@@ -62,7 +62,7 @@ bun add date-fns  # ^4.1.0
 
 ## shadcn/ui Date Picker Integration
 
-The primary use case for date-fns in Omnera is the shadcn/ui date-picker component:
+The primary use case for date-fns in Sovrium is the shadcn/ui date-picker component:
 
 ```typescript
 import { Calendar } from '@/components/ui/calendar'
@@ -184,7 +184,7 @@ isWithinInterval(new Date(), {
 differenceInDays(date2, date1) // 5
 ```
 
-## Common Patterns in Omnera
+## Common Patterns in Sovrium
 
 ### Date Range Picker
 
@@ -379,7 +379,7 @@ const modified = addDays(original, 5)
 console.log(original) // Still Jan 15
 console.log(modified) // Jan 20
 
-// ✅ Aligns with Omnera's functional programming principles
+// ✅ Aligns with Sovrium's functional programming principles
 ```
 
 ## Format Tokens Reference

@@ -2,7 +2,7 @@
 
 ## Overview
 
-This directory contains Architecture Decision Records (ADRs) - documents that capture important architectural decisions made in the Omnera project, along with their context and consequences.
+This directory contains Architecture Decision Records (ADRs) - documents that capture important architectural decisions made in the Sovrium project, along with their context and consequences.
 
 ## Why ADRs?
 

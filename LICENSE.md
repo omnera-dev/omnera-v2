@@ -4,7 +4,7 @@
 
 **Licensor**: ESSENTIAL SERVICES
 
-**Licensed Work**: Omnera™
+**Licensed Work**: Sovrium™
 
 The Licensed Work is Copyright (c) 2025 ESSENTIAL SERVICES.
 
@@ -22,10 +22,10 @@ Examples of **permitted uses**:
 - Contributing improvements back to the Licensed Work
 
 Examples of **restricted uses** (require separate commercial license):
-- Offering "Omnera Cloud Hosting" as a service to customers
-- Embedding Omnera as the core feature of a SaaS platform offered to third parties
-- Providing managed Omnera instances to customers as a commercial offering
-- White-labeling Omnera and selling it as a hosted service
+- Offering "Sovrium Cloud Hosting" as a service to customers
+- Embedding Sovrium as the core feature of a SaaS platform offered to third parties
+- Providing managed Sovrium instances to customers as a commercial offering
+- White-labeling Sovrium and selling it as a hosted service
 
 **Change Date**: 2029-01-01 (Four years from first production release v1.0.0)
 
@@ -65,7 +65,7 @@ TO THE EXTENT PERMITTED BY APPLICABLE LAW, THE LICENSED WORK IS PROVIDED ON AN "
 
 "Licensor" means ESSENTIAL SERVICES, the legal entity offering these terms.
 
-"Licensed Work" means the Omnera™ software the Licensor makes available under this License.
+"Licensed Work" means the Sovrium™ software the Licensor makes available under this License.
 
 "You" refers to the individual or legal entity exercising rights under this License.
 
@@ -77,44 +77,44 @@ TO THE EXTENT PERMITTED BY APPLICABLE LAW, THE LICENSED WORK IS PROVIDED ON AN "
 
 ## Enterprise Features
 
-Source code files or directories containing `.ee.` in their name are **NOT** covered by this License and require a separate **Omnera Enterprise License**. See `LICENSE_EE.md` for Enterprise License terms.
+Source code files or directories containing `.ee.` in their name are **NOT** covered by this License and require a separate **Sovrium Enterprise License**. See `LICENSE_EE.md` for Enterprise License terms.
 
 ---
 
 ## Frequently Asked Questions
 
-### Can I use Omnera for free?
+### Can I use Sovrium for free?
 
 **Yes**, for internal business use, personal projects, educational purposes, and non-competing client deployments. See the Additional Use Grant above for details.
 
-### Can I modify and redistribute Omnera?
+### Can I modify and redistribute Sovrium?
 
 **Yes**, as long as:
 1. You comply with the Additional Use Grant restrictions
 2. You include this License with all copies
 3. You conspicuously mark any modifications you make
 
-### Can I offer Omnera as a hosted service to my customers?
+### Can I offer Sovrium as a hosted service to my customers?
 
-**No**, not under this License. That use case requires a separate commercial license. Contact **license@omnera.dev** for commercial licensing.
+**No**, not under this License. That use case requires a separate commercial license. Contact **license@sovrium.com** for commercial licensing.
 
-### When does Omnera become fully open source?
+### When does Sovrium become fully open source?
 
-On **January 1, 2029** (or 4 years after v1.0.0 release, whichever comes first), Omnera automatically converts to **Apache License 2.0**. After that date, all restrictions are lifted.
+On **January 1, 2029** (or 4 years after v1.0.0 release, whichever comes first), Sovrium automatically converts to **Apache License 2.0**. After that date, all restrictions are lifted.
 
-### Can I fork Omnera and compete with it?
+### Can I fork Sovrium and compete with it?
 
-You can fork Omnera for **non-competing purposes**. If your fork becomes a commercial hosted service competing with Omnera, you need a commercial license or must wait until the Change Date (2029-01-01).
+You can fork Sovrium for **non-competing purposes**. If your fork becomes a commercial hosted service competing with Sovrium, you need a commercial license or must wait until the Change Date (2029-01-01).
 
-### What if I'm already using Omnera when the license changes?
+### What if I'm already using Sovrium when the license changes?
 
-Your existing deployment continues to work. When Omnera becomes Apache 2.0, you get **more** rights, not fewer.
+Your existing deployment continues to work. When Sovrium becomes Apache 2.0, you get **more** rights, not fewer.
 
 ### How do I get a commercial license?
 
-Contact **license@omnera.dev** with details about your use case. We offer flexible licensing for:
+Contact **license@sovrium.com** with details about your use case. We offer flexible licensing for:
 - Managed hosting providers
-- SaaS platforms embedding Omnera
+- SaaS platforms embedding Sovrium
 - OEM/white-label redistributors
 - Organizations needing custom terms
 
@@ -123,10 +123,10 @@ Contact **license@omnera.dev** with details about your use case. We offer flexib
 ## Additional Resources
 
 - **Enterprise Features**: See `LICENSE_EE.md` for `.ee.` file licensing
-- **Trademark**: See `TRADEMARK.md` for Omnera™ trademark usage
-- **Website**: https://omnera.dev
-- **GitHub**: https://github.com/omnera-dev/omnera-v2
-- **Commercial Licensing**: license@omnera.dev
+- **Trademark**: See `TRADEMARK.md` for Sovrium™ trademark usage
+- **Website**: https://sovrium.com
+- **GitHub**: https://github.com/sovrium/sovrium
+- **Commercial Licensing**: license@sovrium.com
 
 ---
 
@@ -136,12 +136,12 @@ The Change License referenced above is the **Apache License, Version 2.0**. The 
 
 https://www.apache.org/licenses/LICENSE-2.0
 
-When the Change Date arrives, this entire License will be replaced by the Apache License 2.0, making Omnera a fully open-source project with no usage restrictions.
+When the Change Date arrives, this entire License will be replaced by the Apache License 2.0, making Sovrium a fully open-source project with no usage restrictions.
 
 ---
 
 **Copyright (c) 2025 ESSENTIAL SERVICES**
 
-**Omnera™ is a trademark of ESSENTIAL SERVICES.**
+**Sovrium™ is a trademark of ESSENTIAL SERVICES.**
 
-For questions about this License, contact: **license@omnera.dev**
+For questions about this License, contact: **license@sovrium.com**

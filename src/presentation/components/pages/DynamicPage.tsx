@@ -959,19 +959,23 @@ export function DynamicPage({
               {theme?.spacing?.container && (
                 <div
                   data-testid="container"
-                  className={theme.spacing.container}
+                  style={{ maxWidth: theme.spacing.container }}
                 />
               )}
               {(theme?.spacing as Record<string, unknown>)?.['container-small'] && (
                 <div
                   data-testid="container-small"
-                  className={(theme.spacing as Record<string, string>)['container-small']}
+                  style={{
+                    maxWidth: (theme.spacing as Record<string, string>)['container-small'],
+                  }}
                 />
               )}
               {(theme?.spacing as Record<string, unknown>)?.['container-xsmall'] && (
                 <div
                   data-testid="container-xsmall"
-                  className={(theme.spacing as Record<string, string>)['container-xsmall']}
+                  style={{
+                    maxWidth: (theme.spacing as Record<string, string>)['container-xsmall'],
+                  }}
                 />
               )}
             </>
@@ -993,21 +997,6 @@ export function DynamicPage({
               )
             })
           )}
-          {/* Render shadow demonstration elements when theme.shadows is defined */}
-          {theme?.shadows &&
-            Object.entries(theme.shadows).map(([name, value]) => (
-              <div
-                key={name}
-                data-testid={`shadow-${name}`}
-                style={{
-                  boxShadow: value,
-                  width: '100px',
-                  height: '100px',
-                  margin: '10px',
-                  backgroundColor: 'white',
-                }}
-              />
-            ))}
         </main>
 
         {page.layout?.footer && <Footer {...page.layout.footer} />}

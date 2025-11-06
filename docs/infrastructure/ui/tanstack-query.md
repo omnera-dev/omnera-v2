@@ -10,7 +10,7 @@
 
 TanStack Query solves the fundamental challenge of managing **server state** in React applications. Unlike client state (UI state, form inputs), server state is remote, asynchronous, shared ownership, and can become stale without notice.
 
-## Why TanStack Query for Omnera?
+## Why TanStack Query for Sovrium?
 
 ### The Server State Problem
 
@@ -27,7 +27,7 @@ Traditional data fetching in React requires manual management of:
 
 **TanStack Query handles all of this automatically.**
 
-### Perfect Integration with Omnera Stack
+### Perfect Integration with Sovrium Stack
 
 | Component           | Integration                                                                   |
 | ------------------- | ----------------------------------------------------------------------------- |
@@ -51,7 +51,7 @@ Traditional data fetching in React requires manual management of:
 
 ## Installation
 
-TanStack Query is already installed in Omnera:
+TanStack Query is already installed in Sovrium:
 
 ```json
 {
@@ -547,7 +547,7 @@ app.get('/', async (c) => {
     <!DOCTYPE html>
     <html>
       <head>
-        <title>Omnera App</title>
+        <title>Sovrium App</title>
         <script>
           window.__TANSTACK_QUERY_STATE__ = ${JSON.stringify(dehydratedState)}
         </script>
@@ -1115,7 +1115,7 @@ DevTools are automatically excluded from production builds (tree-shaken).
 
 ## Summary
 
-TanStack Query transforms server-state management in Omnera:
+TanStack Query transforms server-state management in Sovrium:
 
 1. **Zero Boilerplate**: No manual loading/error state management
 2. **Automatic Caching**: Smart caching with configurable stale times
@@ -1145,7 +1145,7 @@ TanStack Query transforms server-state management in Omnera:
 - Static data that never changes - use constants
 - One-time fetches that don't need caching - use useEffect + fetch
 
-With TanStack Query, Omnera applications achieve exceptional user experience through intelligent server-state management, perfect integration with Effect.ts, and seamless server-side rendering with Hono.
+With TanStack Query, Sovrium applications achieve exceptional user experience through intelligent server-state management, perfect integration with Effect.ts, and seamless server-side rendering with Hono.
 
 ## References
 

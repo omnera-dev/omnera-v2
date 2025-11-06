@@ -2,7 +2,7 @@
 
 ## Overview
 
-Omnera™ uses a **pure centralized i18n approach** with all translations defined in `languages.translations`. This provides better reusability, maintainability, and translator workflow by maintaining a single source of truth for all translations.
+Sovrium™ uses a **pure centralized i18n approach** with all translations defined in `languages.translations`. This provides better reusability, maintainability, and translator workflow by maintaining a single source of truth for all translations.
 
 ## The Centralized Pattern
 
@@ -18,13 +18,13 @@ Omnera™ uses a **pure centralized i18n approach** with all translations define
         "common.save": "Save",
         "common.cancel": "Cancel",
         "nav.home": "Home",
-        "homepage.hero.title": "Welcome to Omnera"
+        "homepage.hero.title": "Welcome to Sovrium"
       },
       "fr-FR": {
         "common.save": "Enregistrer",
         "common.cancel": "Annuler",
         "nav.home": "Accueil",
-        "homepage.hero.title": "Bienvenue sur Omnera"
+        "homepage.hero.title": "Bienvenue sur Sovrium"
       }
     }
   },
@@ -267,7 +267,7 @@ Translator receives `en-US.json`:
 {
   "common.save": "Save",
   "common.cancel": "Cancel",
-  "homepage.hero.title": "Welcome to Omnera"
+  "homepage.hero.title": "Welcome to Sovrium"
 }
 ```
 
@@ -277,7 +277,7 @@ Returns `fr-FR.json`:
 {
   "common.save": "Enregistrer",
   "common.cancel": "Annuler",
-  "homepage.hero.title": "Bienvenue sur Omnera"
+  "homepage.hero.title": "Bienvenue sur Sovrium"
 }
 ```
 

@@ -6,9 +6,9 @@
  */
 
 /**
- * Omnera - A Bun web framework with React SSR and Tailwind CSS
+ * Sovrium - A Bun web framework with React SSR and Tailwind CSS
  *
- * This is the main entry point for Omnera applications. It provides a simple
+ * This is the main entry point for Sovrium applications. It provides a simple
  * Promise-based API for starting a web server with automatic:
  * - React 19 server-side rendering
  * - Tailwind CSS compilation (no build step)
@@ -48,9 +48,9 @@ const toSimpleServer = (server: Readonly<ServerInstance>): SimpleServer => ({
 })
 
 /**
- * Start an Omnera server with automatic logging and graceful shutdown
+ * Start an Sovrium server with automatic logging and graceful shutdown
  *
- * This is the main entry point for Omnera applications. It:
+ * This is the main entry point for Sovrium applications. It:
  * 1. Validates the app configuration using Effect Schema
  * 2. Compiles Tailwind CSS dynamically using PostCSS
  * 3. Creates a Hono web server with React SSR
@@ -65,7 +65,7 @@ const toSimpleServer = (server: Readonly<ServerInstance>): SimpleServer => ({
  * @example
  * Basic usage:
  * ```typescript
- * import { start } from 'omnera'
+ * import { start } from 'sovrium'
  *
  * const myApp = {
  *   name: 'My App',
@@ -98,7 +98,7 @@ const toSimpleServer = (server: Readonly<ServerInstance>): SimpleServer => ({
  */
 export const start = async (app: unknown, options: StartOptions = {}): Promise<SimpleServer> => {
   const program = Effect.gen(function* () {
-    console.log('Starting Omnera server...')
+    console.log('Starting Sovrium server...')
 
     // Start the server (dependencies injected via AppLayer)
     const server = yield* startServer(app, options)

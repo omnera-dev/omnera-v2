@@ -61,7 +61,7 @@ const addSchemaId = (
   const schema = jsonSchema as Record<string, unknown>
   const { $id: _existingId, ...rest } = schema
   return {
-    $id: `https://omnera.dev/schemas/${version}/${schemaName}.schema.json`,
+    $id: `https://sovrium.com/schemas/${version}/${schemaName}.schema.json`,
     ...rest,
   }
 }

@@ -8,7 +8,7 @@ Drizzle ORM is a lightweight, performant ORM designed for TypeScript developers 
 
 > **Note**: This document provides a high-level summary with essential examples. For comprehensive coverage including advanced patterns, all query types, migration strategies, and detailed PostgreSQL optimizations, see the full documentation at `docs/infrastructure/database/drizzle/` directory.
 
-## Why Drizzle for Omnera
+## Why Drizzle for Sovrium
 
 - **Zero Runtime Overhead**: Schema and query types resolved at compile time
 - **SQL-Like Syntax**: Familiar SQL-style API (no learning curve for SQL developers)
@@ -23,7 +23,7 @@ Drizzle ORM is a lightweight, performant ORM designed for TypeScript developers 
 
 ## Installation
 
-Drizzle is already installed in Omnera:
+Drizzle is already installed in Sovrium:
 
 ```json
 {
@@ -61,7 +61,7 @@ export type DrizzleDB = typeof db
 // Alternative: With explicit client configuration
 // import { SQL } from 'bun'
 // const client = new SQL({
-//   url: process.env.DATABASE_URL || 'postgres://localhost:5432/omnera',
+//   url: process.env.DATABASE_URL || 'postgres://localhost:5432/sovrium',
 //   max: 20, // Connection pool size
 //   idleTimeout: 60, // Idle timeout in seconds
 //   connectionTimeout: 30, // Connection timeout in seconds
@@ -73,7 +73,7 @@ export type DrizzleDB = typeof db
 
 ```bash
 # .env
-DATABASE_URL=postgres://user:password@localhost:5432/omnera
+DATABASE_URL=postgres://user:password@localhost:5432/sovrium
 ```
 
 ### Effect Layer for Database
@@ -689,7 +689,7 @@ const usersWithPosts = await Promise.all(
 
 ## Summary
 
-Drizzle ORM in Omnera provides:
+Drizzle ORM in Sovrium provides:
 
 1. **Zero-Cost Type Safety** - Full TypeScript inference from schema definitions
 2. **Bun Native Integration** - Uses built-in `bun:sql` for PostgreSQL connections
@@ -699,7 +699,7 @@ Drizzle ORM in Omnera provides:
 6. **Migration System** - Declarative migrations with drizzle-kit
 7. **Performance** - Lightweight, zero runtime overhead, optimized queries
 
-By following the repository pattern with Effect.ts, Drizzle enables type-safe, testable, and maintainable database operations that align with Omnera's functional programming principles and layer-based architecture.
+By following the repository pattern with Effect.ts, Drizzle enables type-safe, testable, and maintainable database operations that align with Sovrium's functional programming principles and layer-based architecture.
 
 ## References
 

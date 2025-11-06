@@ -33,7 +33,7 @@ Confidential credential used to authenticate the application during OAuth 2.0 to
 2. Create new OAuth integration (same as Client ID setup)
 3. Copy the generated **Client Secret** immediately (shown only once)
 4. Store securely in password manager or secrets vault
-5. Configure in Omnera connection settings
+5. Configure in Sovrium connection settings
 
 WARNING: Client secret is shown only once during creation. If lost, must regenerate new secret.
 
@@ -73,7 +73,7 @@ await db.connections.insert({
 - **Frequency**: Rotate every 90 days (recommended security policy)
 - **Process**:
   1. Generate new secret in Google Sheets OAuth settings
-  2. Update Omnera connection with new secret
+  2. Update Sovrium connection with new secret
   3. Test OAuth flow with new credentials
   4. Revoke old secret in Google Sheets
   5. Document rotation in audit log
@@ -98,7 +98,7 @@ grant_type=authorization_code
 &code=AUTH_CODE_FROM_CALLBACK
 &client_id=google-sheets_client_abc123
 &client_secret=secret_google-sheets_xyz789
-&redirect_uri=https://app.omnera.io/oauth/callback
+&redirect_uri=https://app.sovrium.io/oauth/callback
 ```
 
 ### Decryption for Use

@@ -119,10 +119,10 @@
         "component": { "type": "div", "props": { "text": "Welcome to $siteName" } },
         "substitution": {
           "before": "Welcome to $siteName",
-          "after": "Welcome to Omnera",
-          "vars": { "siteName": "Omnera" }
+          "after": "Welcome to Sovrium",
+          "vars": { "siteName": "Sovrium" }
         },
-        "assertions": ["Variable references: $siteName → Omnera", "Runtime substitution"]
+        "assertions": ["Variable references: $siteName → Sovrium", "Runtime substitution"]
       }
     },
     {

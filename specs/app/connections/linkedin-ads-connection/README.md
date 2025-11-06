@@ -6,7 +6,7 @@ OAuth 2.0 integration with LinkedIn Ads, enabling access to LinkedIn Ads bases, 
 
 ## Use Cases
 
-- **Data Sync**: Sync records between Omnera tables and LinkedIn Ads bases
+- **Data Sync**: Sync records between Sovrium tables and LinkedIn Ads bases
 - **Automation Triggers**: React to new/updated records in LinkedIn Ads
 - **Webhook Integration**: Subscribe to LinkedIn Ads webhook events
 - **API Actions**: Create, read, update, delete records via LinkedIn Ads API
@@ -42,12 +42,12 @@ OAuth 2.0 integration with LinkedIn Ads, enabling access to LinkedIn Ads bases, 
 1. Navigate to [LinkedIn Ads Developer Hub](https://linkedin-ads.com/developers)
 2. Click "Create OAuth Integration"
 3. Fill in integration details:
-   - **Name**: Omnera Integration
+   - **Name**: Sovrium Integration
    - **Redirect URI**: `https://yourdomain.com/oauth/linkedin-ads/callback`
    - **Scopes**: Select required permissions (e.g., `data.records:read`, `data.records:write`)
 4. Copy **Client ID** and **Client Secret**
 
-### 2. Configure Connection in Omnera
+### 2. Configure Connection in Sovrium
 
 1. Go to Settings > Connections
 2. Click "Add Connection" > "LinkedIn Ads"
@@ -60,7 +60,7 @@ OAuth 2.0 integration with LinkedIn Ads, enabling access to LinkedIn Ads bases, 
 1. Click "Connect" button next to saved connection
 2. Redirected to LinkedIn Ads authorization page
 3. Grant requested permissions
-4. Redirected back to Omnera
+4. Redirected back to Sovrium
 5. Connection status changes to "Connected"
 
 ## Runtime Behavior
@@ -69,15 +69,15 @@ OAuth 2.0 integration with LinkedIn Ads, enabling access to LinkedIn Ads bases, 
 
 ```mermaid
 sequenceDiagram
-    User->>Omnera: Click "Connect"
-    Omnera->>LinkedIn Ads: Redirect to /oauth/authorize
+    User->>Sovrium: Click "Connect"
+    Sovrium->>LinkedIn Ads: Redirect to /oauth/authorize
     LinkedIn Ads->>User: Show authorization page
     User->>LinkedIn Ads: Grant permissions
-    LinkedIn Ads->>Omnera: Redirect with auth code
-    Omnera->>LinkedIn Ads: Exchange code for tokens
-    LinkedIn Ads->>Omnera: Return access + refresh tokens
-    Omnera->>Database: Store encrypted tokens
-    Omnera->>User: Show "Connected" status
+    LinkedIn Ads->>Sovrium: Redirect with auth code
+    Sovrium->>LinkedIn Ads: Exchange code for tokens
+    LinkedIn Ads->>Sovrium: Return access + refresh tokens
+    Sovrium->>Database: Store encrypted tokens
+    Sovrium->>User: Show "Connected" status
 ```
 
 ### Token Management
@@ -108,7 +108,7 @@ sequenceDiagram
 - **Delete Record**: Remove record from table
 - **Webhooks**: Subscribe to record changes
 
-### Example API Call (via Omnera)
+### Example API Call (via Sovrium)
 
 ```typescript
 // Automation action: Create LinkedIn Ads record
@@ -169,7 +169,7 @@ Request only necessary scopes:
 
 ### Webhook Payload Delivery Failed
 
-**Cause**: Omnera webhook endpoint unreachable
+**Cause**: Sovrium webhook endpoint unreachable
 **Resolution**: LinkedIn Ads retries up to 3 times; check endpoint availability
 
 ## Testing Specifications
@@ -186,4 +186,4 @@ Run tests: `bun test:e2e --grep="CONN-LINKEDIN_ADS"`
 
 - [LinkedIn Ads OAuth Documentation](https://linkedin-ads.com/developers/web/api/oauth-reference)
 - [LinkedIn Ads API Reference](https://linkedin-ads.com/developers/web/api/introduction)
-- [Omnera Connection Management Guide](../../../admin/connections/README.md)
+- [Sovrium Connection Management Guide](../../../admin/connections/README.md)

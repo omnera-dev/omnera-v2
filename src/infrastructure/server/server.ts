@@ -160,7 +160,7 @@ function createHonoApp(
       .get(
         '/api/scalar',
         Scalar({
-          pageTitle: 'Omnera API Documentation',
+          pageTitle: 'Sovrium API Documentation',
           theme: 'default',
           sources: [
             { url: '/api/openapi.json', title: 'API' },

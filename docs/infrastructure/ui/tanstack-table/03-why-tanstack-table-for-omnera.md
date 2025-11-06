@@ -2,7 +2,7 @@
 
 > **Note**: This is part 3 of the split documentation. See navigation links below.
 
-## Why TanStack Table for Omnera?
+## Why TanStack Table for Sovrium?
 
 ### Perfect Fit for Our Stack
 
@@ -14,7 +14,7 @@
 - **Feature-Rich**: Sorting, filtering, pagination, row selection, and more built-in
 - **Framework Agnostic**: Core logic works across frameworks (React, Vue, Solid, etc.)
 
-### Benefits for Omnera
+### Benefits for Sovrium
 
 1. **Design Freedom**: Build tables that perfectly match shadcn/ui aesthetic
 2. **Type Safety**: Full TypeScript support with generic type inference

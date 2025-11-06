@@ -11,7 +11,7 @@ import type { ApiType } from './app'
 /**
  * Hono RPC Client Factory
  *
- * Creates a fully typed API client for making requests to the Omnera API.
+ * Creates a fully typed API client for making requests to the Sovrium API.
  * The client provides:
  * - Full TypeScript autocomplete for all endpoints
  * - Type-safe request parameters and response data

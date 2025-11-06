@@ -45,7 +45,7 @@ test(
 )
 
 test(
-  'APP-NAME-002: should show app name in page title with Omnera branding',
+  'APP-NAME-002: should show app name in page title with Sovrium branding',
   { tag: '@spec' },
   async ({ page, startServerWithSchema }) => {
     // GIVEN: server with app name 'my-dashboard'
@@ -54,8 +54,8 @@ test(
     // WHEN: user navigates to homepage
     await page.goto('/')
 
-    // THEN: page title shows 'my-dashboard - Powered by Omnera'
-    await expect(page).toHaveTitle('my-dashboard - Powered by Omnera')
+    // THEN: page title shows 'my-dashboard - Powered by Sovrium'
+    await expect(page).toHaveTitle('my-dashboard - Powered by Sovrium')
   }
 )
 
@@ -253,7 +253,7 @@ test(
     await expect(heading).toHaveText(complexName)
 
     // 2. Metadata in page title
-    await expect(page).toHaveTitle(`${complexName} - Powered by Omnera`)
+    await expect(page).toHaveTitle(`${complexName} - Powered by Sovrium`)
 
     // 3. Special characters rendered correctly
     await expect(heading).toHaveText(complexName)
@@ -313,7 +313,7 @@ test(
     await expect(heading).toHaveText(complexName) // Exact match, no modification
 
     // 2. Metadata Integration (APP-NAME-002)
-    await expect(page).toHaveTitle(`${complexName} - Powered by Omnera`)
+    await expect(page).toHaveTitle(`${complexName} - Powered by Sovrium`)
 
     // 3. Special Characters Preserved (APP-NAME-012)
     const textContent = await heading.textContent()

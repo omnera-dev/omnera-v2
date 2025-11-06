@@ -2,7 +2,7 @@
 
 > **Note**: This is part 3 of the split documentation. See navigation links below.
 
-## Why TanStack Query for Omnera?
+## Why TanStack Query for Sovrium?
 
 ### The Server State Problem
 
@@ -18,7 +18,7 @@ Traditional data fetching in React requires manual management of:
 - **Optimistic updates**: Update UI before server response
   **TanStack Query handles all of this automatically.**
 
-### Perfect Integration with Omnera Stack
+### Perfect Integration with Sovrium Stack
 
 | Component           | Integration                                                                   |
 | ------------------- | ----------------------------------------------------------------------------- |

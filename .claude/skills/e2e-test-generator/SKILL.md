@@ -710,7 +710,7 @@ test.fixme(
     })
 
     // For behavioral properties - use assertions
-    await expect(page).toHaveTitle('test-app - Powered by Omnera')
+    await expect(page).toHaveTitle('test-app - Powered by Sovrium')
     await expect(page.locator('button')).toBeEnabled()
 
     // Focus on workflow continuity, not exhaustive coverage

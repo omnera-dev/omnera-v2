@@ -21,7 +21,7 @@ Public identifier for the OAuth 2.0 application registered with Google Gmail. Th
 
 ```json
 {
-  "clientId": "app.omnera.google-gmail.1234567890"
+  "clientId": "app.sovrium.google-gmail.1234567890"
 }
 ```
 
@@ -38,9 +38,9 @@ Public identifier for the OAuth 2.0 application registered with Google Gmail. Th
 ### Example OAuth Integration Config
 
 ```
-Integration Name: Omnera Google Gmail Integration
+Integration Name: Sovrium Google Gmail Integration
 Client ID: google-gmail_client_abc123xyz
-Redirect URI: https://app.omnera.io/oauth/google-gmail/callback
+Redirect URI: https://app.sovrium.io/oauth/google-gmail/callback
 Scopes: data.records:read data.records:write
 ```
 
@@ -53,7 +53,7 @@ Client ID is included in authorization URL:
 ```
 GET https://google-gmail.com/oauth2/v1/authorize?
   client_id=google-gmail_client_xyz789
-  &redirect_uri=https://app.omnera.io/oauth/callback
+  &redirect_uri=https://app.sovrium.io/oauth/callback
   &response_type=code
   &scope=data.records:read
 ```
@@ -129,7 +129,7 @@ Use different OAuth apps per environment:
   },
   "production": {
     "clientId": "google-gmail_prod_789",
-    "redirectUri": "https://app.omnera.io/oauth/callback"
+    "redirectUri": "https://app.sovrium.io/oauth/callback"
   }
 }
 ```

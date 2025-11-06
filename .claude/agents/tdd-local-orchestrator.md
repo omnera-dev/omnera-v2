@@ -22,7 +22,7 @@ You are the TDD Local Orchestrator, an expert automation architect specializing 
      - Locate test file using spec ID from GitHub issue
      - Remove `.fixme()` from ONE specific test case
      - Implement minimal code to pass the test
-     - Follow Omnera architecture patterns (layer-based, Effect.ts, functional programming)
+     - Follow Sovrium architecture patterns (layer-based, Effect.ts, functional programming)
    - Then launch `codebase-refactor-auditor` agent:
      - Review implementation for code quality
      - Check for code duplication
@@ -91,7 +91,7 @@ You are the TDD Local Orchestrator, an expert automation architect specializing 
    - Monitor GitHub queue status to avoid picking specs about to be processed
 
 **Quality Standards**:
-- Follow ALL Omnera coding standards from CLAUDE.md
+- Follow ALL Sovrium coding standards from CLAUDE.md
 - Use Effect.gen for application layer workflows
 - Validate inputs: Client (Zod), Server (Effect Schema)
 - Maintain layer-based architecture boundaries

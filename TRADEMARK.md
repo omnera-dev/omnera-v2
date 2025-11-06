@@ -1,13 +1,13 @@
 # Trademark Notice
 
-## Omnera™ Trademark
+## Sovrium™ Trademark
 
-**Omnera™** is a registered trademark of **ESSENTIAL SERVICES** in France (and potentially other jurisdictions).
+**Sovrium™** is a registered trademark of **ESSENTIAL SERVICES** in France (and potentially other jurisdictions).
 
 - **Trademark Owner**: ESSENTIAL SERVICES
-- **Trademark**: Omnera™
+- **Trademark**: Sovrium™
 - **Registration**: France
-- **Domain**: omnera.dev
+- **Domain**: sovrium.com
 
 ## Relationship Between Copyright and Trademark
 
@@ -16,8 +16,8 @@ This project demonstrates the standard separation between copyright and trademar
 | Legal Aspect  | Owner              | What It Protects                                   |
 | ------------- | ------------------ | -------------------------------------------------- |
 | **Copyright** | ESSENTIAL SERVICES | The source code, documentation, and creative works |
-| **Trademark** | ESSENTIAL SERVICES | The "Omnera" brand name and logo                   |
-| **Domain**    | ESSENTIAL SERVICES | The omnera.dev web property                        |
+| **Trademark** | ESSENTIAL SERVICES | The "Sovrium" brand name and logo                  |
+| **Domain**    | ESSENTIAL SERVICES | The sovrium.com web property                       |
 
 ### Copyright (Code Protection)
 
@@ -31,7 +31,7 @@ This protects the **code itself** under the Business Source License 1.1 (see LIC
 
 ### Trademark (Brand Protection)
 
-The Omnera™ trademark protects the **brand identity** and ensures:
+The Sovrium™ trademark protects the **brand identity** and ensures:
 
 - Users know the official/authentic product
 - Third parties cannot create confusion by using similar names
@@ -41,37 +41,37 @@ The Omnera™ trademark protects the **brand identity** and ensures:
 
 ### ✅ Permitted Use
 
-You may use the name "Omnera" when:
+You may use the name "Sovrium" when:
 
-- Referring to this software factually ("built with Omnera", "compatible with Omnera")
-- Describing your project that uses Omnera ("MyApp uses Omnera for backend")
-- Contributing to the Omnera project
-- Writing tutorials or documentation about Omnera
+- Referring to this software factually ("built with Sovrium", "compatible with Sovrium")
+- Describing your project that uses Sovrium ("MyApp uses Sovrium for backend")
+- Contributing to the Sovrium project
+- Writing tutorials or documentation about Sovrium
 
 ### ❌ Prohibited Use
 
-You may **NOT** use "Omnera" to:
+You may **NOT** use "Sovrium" to:
 
-- Name your own product/service (e.g., "Omnera Cloud", "Omnera Plus")
+- Name your own product/service (e.g., "Sovrium Cloud", "Sovrium Plus")
 - Imply official endorsement without permission
 - Create confusion about the source or origin
 - Register similar trademarks or domain names
 
 ### Commercial Use
 
-Commercial use of the Omnera software requires a commercial license (see LICENSE.md).
+Commercial use of the Sovrium software requires a commercial license (see LICENSE.md).
 
-Use of the Omnera trademark in commercial contexts requires explicit permission from ESSENTIAL SERVICES.
+Use of the Sovrium trademark in commercial contexts requires explicit permission from ESSENTIAL SERVICES.
 
-Contact: **license@omnera.dev**
+Contact: **license@sovrium.com**
 
 ## Legal Structure
 
 ```
 ESSENTIAL SERVICES (Legal Entity - France)
 ├── Copyright Holder ──────► Source code (LICENSE.md)
-├── Trademark Owner ───────► "Omnera™" brand
-└── Domain Owner ──────────► omnera.dev
+├── Trademark Owner ───────► "Sovrium™" brand
+└── Domain Owner ──────────► sovrium.com
 ```
 
 This structure is intentional and provides:
@@ -83,9 +83,9 @@ This structure is intentional and provides:
 
 ## Questions?
 
-For trademark licensing inquiries, contact: **license@omnera.dev**
+For trademark licensing inquiries, contact: **license@sovrium.com**
 
-For general questions, see: [GitHub Issues](https://github.com/omnera-dev/omnera-v2/issues)
+For general questions, see: [GitHub Issues](https://github.com/sovrium/sovrium/issues)
 
 ---
 

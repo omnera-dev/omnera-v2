@@ -1,10 +1,10 @@
 # API Conventions
 
-> **Convention over Configuration**: Omnera automatically generates RESTful API routes based on your application configuration. No need to define endpoints manually.
+> **Convention over Configuration**: Sovrium automatically generates RESTful API routes based on your application configuration. No need to define endpoints manually.
 
 ## Overview
 
-Omnera follows a convention-based approach to API generation. When you define tables, pages, and automations in your `app.schema.json`, corresponding API routes are automatically created and exposed.
+Sovrium follows a convention-based approach to API generation. When you define tables, pages, and automations in your `app.schema.json`, corresponding API routes are automatically created and exposed.
 
 ## Tables API
 

@@ -1,6 +1,6 @@
 # API Specifications - Modular OpenAPI Structure
 
-This directory contains the **modular OpenAPI specifications** and **co-located E2E tests** for the Omnera API. The structure follows a **specification-driven development** pattern where OpenAPI specs and Playwright E2E tests live side-by-side.
+This directory contains the **modular OpenAPI specifications** and **co-located E2E tests** for the Sovrium API. The structure follows a **specification-driven development** pattern where OpenAPI specs and Playwright E2E tests live side-by-side.
 
 ## 📁 Directory Structure
 

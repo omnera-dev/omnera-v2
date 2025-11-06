@@ -56,7 +56,7 @@ import { Button } from '@/components/ui/button'
 4. **Composability first**: Build complex UIs by composing simple components
 5. **Accessibility built-in**: Radix UI primitives ensure WCAG compliance
 
-## Integration with Omnera Stack
+## Integration with Sovrium Stack
 
 ### Tailwind CSS (4.1.14)
 
@@ -69,7 +69,7 @@ shadcn/ui components are built with Tailwind CSS utility classes:
 </button>
 ```
 
-**Perfect fit**: Omnera uses Tailwind CSS, so shadcn/ui components integrate seamlessly.
+**Perfect fit**: Sovrium uses Tailwind CSS, so shadcn/ui components integrate seamlessly.
 
 ### React (19.2.0)
 
@@ -87,7 +87,7 @@ export function Button({ variant = 'default', className, ...props }: ButtonProps
 }
 ```
 
-**Perfect fit**: Omnera uses React 19, providing all modern React features for components.
+**Perfect fit**: Sovrium uses React 19, providing all modern React features for components.
 
 ### TypeScript (^5)
 
@@ -103,7 +103,7 @@ const MyHeading: TypographyH1Props = {
 }
 ```
 
-**Perfect fit**: Omnera uses strict TypeScript, ensuring type safety across all components.
+**Perfect fit**: Sovrium uses strict TypeScript, ensuring type safety across all components.
 
 ## Key Dependencies
 

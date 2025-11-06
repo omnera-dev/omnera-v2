@@ -151,8 +151,8 @@ async function startCliServer(
   const serverProcess = spawn('bun', ['run', 'src/cli.ts'], {
     env: {
       ...process.env,
-      OMNERA_APP_SCHEMA: JSON.stringify(appSchema),
-      OMNERA_PORT: '0', // Let Bun select an available port
+      SOVRIUM_APP_SCHEMA: JSON.stringify(appSchema),
+      SOVRIUM_PORT: '0', // Let Bun select an available port
       ...(databaseUrl && { DATABASE_URL: databaseUrl }),
     },
     stdio: 'pipe',

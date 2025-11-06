@@ -4,7 +4,7 @@
 
 ## Overview
 
-Omnera uses a **dual-timing testing strategy** that optimizes for both feature clarity and implementation quality:
+Sovrium uses a **dual-timing testing strategy** that optimizes for both feature clarity and implementation quality:
 
 - **E2E Tests (TDD)**: Written BEFORE implementation as executable specifications defining feature completion
 - **Unit Tests (Test-After)**: Written AFTER implementation to document the actual solution and enable confident refactoring

@@ -1,6 +1,6 @@
 # specs/app/ - Application Specification Schemas
 
-> **Purpose**: This directory contains JSON Schema specifications for the Omnera™ application domain model. These schemas define the structure, validation rules, and behavioral specifications for all application entities.
+> **Purpose**: This directory contains JSON Schema specifications for the Sovrium™ application domain model. These schemas define the structure, validation rules, and behavioral specifications for all application entities.
 
 ## Overview
 
@@ -603,7 +603,7 @@ This schema structure evolved through several refactoring phases:
 
 ## Architecture Alignment
 
-This schema structure aligns with Omnera™'s core architectural principles:
+This schema structure aligns with Sovrium™'s core architectural principles:
 
 - **Layer-based architecture**: Schemas define domain models consumed by all layers
 - **Functional programming**: Schemas are immutable, composable, pure data structures

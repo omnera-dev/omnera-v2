@@ -26,7 +26,7 @@ import * as schema from '@/infrastructure/auth/better-auth/schema'
  */
 
 export class DatabaseTemplateManager {
-  private templateDbName = 'omnera_test_template'
+  private templateDbName = 'sovrium_test_template'
   private adminConnectionUrl: string
 
   constructor(private containerConnectionUrl: string) {
@@ -274,5 +274,5 @@ export class DatabaseTemplateManager {
 export function generateTestDatabaseName(testInfo: { workerIndex: number }): string {
   const timestamp = Date.now()
   const random = Math.random().toString(36).substring(7)
-  return `omnera_test_${testInfo.workerIndex}_${timestamp}_${random}`
+  return `sovrium_test_${testInfo.workerIndex}_${timestamp}_${random}`
 }

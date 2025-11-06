@@ -1,4 +1,4 @@
-# Omnera Enterprise License
+# Sovrium Enterprise License
 
 Version 1.0
 
@@ -8,11 +8,11 @@ Copyright (c) 2025 ESSENTIAL SERVICES
 
 ## Overview
 
-This Enterprise License governs the use of **Omnera Enterprise Edition** features, which are
+This Enterprise License governs the use of **Sovrium Enterprise Edition** features, which are
 source code files containing `.ee.` in their filename or `.ee` in their directory name
 ("Enterprise Features").
 
-**Core Omnera** (files without `.ee.`) is licensed under the Business Source License 1.1 (see
+**Core Sovrium** (files without `.ee.`) is licensed under the Business Source License 1.1 (see
 LICENSE.md). This Enterprise License applies **only** to Enterprise Features.
 
 ---
@@ -52,11 +52,11 @@ License Agreement or purchase order.
 
 ### 3. **Enterprise OEM**
 
-- Embed Omnera Enterprise in your commercial product
+- Embed Sovrium Enterprise in your commercial product
 - White-label and rebrand
 - Distribute to your customers
 - Custom licensing terms negotiated separately
-- **Contact**: license@omnera.dev for OEM pricing
+- **Contact**: license@sovrium.com for OEM pricing
 
 ---
 
@@ -70,7 +70,7 @@ You may **NOT**:
 4. **Share your license key** with unauthorized parties
 5. **Provide hosted services** to third parties using the Self-Hosted tier (requires Cloud or OEM)
 6. **Sublicense or resell** Enterprise Features without an OEM agreement
-7. **Use for competitive products** that directly compete with Omnera's commercial offerings
+7. **Use for competitive products** that directly compete with Sovrium's commercial offerings
 
 ---
 
@@ -107,7 +107,7 @@ Your Enterprise License includes:
 - **Dedicated success manager**: For Enterprise Cloud customers
 - **On-site support**: Available for large deployments (additional fees apply)
 
-Contact license@omnera.dev for support upgrade options.
+Contact license@sovrium.com for support upgrade options.
 
 ---
 
@@ -145,7 +145,7 @@ If payment is not received within 30 days of invoice:
 
 ### Termination by You
 
-- You may cancel by emailing license@omnera.dev at least 30 days before renewal
+- You may cancel by emailing license@sovrium.com at least 30 days before renewal
 - No refunds for mid-term cancellations
 - You must cease use of Enterprise Features upon cancellation
 
@@ -163,7 +163,7 @@ We may terminate your license immediately if you:
 Upon termination:
 
 1. **Remove Enterprise Features**: You must immediately stop using and remove all `.ee.` files
-2. **Core Omnera remains**: You may continue using core features under the SUL (LICENSE.md)
+2. **Core Sovrium remains**: You may continue using core features under the SUL (LICENSE.md)
 3. **Data export**: You have 30 days to export your data before access is revoked
 4. **Survival**: Confidentiality, liability limitations, and dispute resolution terms survive
 
@@ -203,7 +203,7 @@ TO THE MAXIMUM EXTENT PERMITTED BY LAW:
 ### Confidential Information
 
 Enterprise Features may include proprietary algorithms, optimizations, or business logic not
-present in core Omnera. You agree to:
+present in core Sovrium. You agree to:
 
 1. **Keep confidential**: Not disclose our proprietary implementations
 2. **Protect**: Use reasonable security measures to prevent unauthorized access
@@ -252,12 +252,12 @@ oral, regarding Enterprise Features.
 ## Definitions
 
 **ESSENTIAL SERVICES** refers to the legal entity ESSENTIAL SERVICES, the licensor and copyright
-holder of Omnera.
+holder of Sovrium.
 
 **Enterprise Features** means source code files containing `.ee.` in their filename or directory
 name, as identified in the LICENSE.md preamble.
 
-**Core Omnera** means all Omnera source code files that are not Enterprise Features (licensed
+**Core Sovrium** means all Sovrium source code files that are not Enterprise Features (licensed
 under the Business Source License 1.1).
 
 **You** or **Your organization** means the legal entity or individual purchasing the Enterprise
@@ -273,9 +273,9 @@ authorized to use Enterprise Features on your behalf.
 
 ## Contact Information
 
-**License purchases and inquiries**: license@omnera.dev
-**Technical support**: support@omnera.dev
-**Legal and compliance**: legal@omnera.dev
+**License purchases and inquiries**: license@sovrium.com
+**Technical support**: support@sovrium.com
+**Legal and compliance**: legal@sovrium.com
 
 **ESSENTIAL SERVICES**
 128, Rue La Boétie

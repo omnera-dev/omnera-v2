@@ -179,7 +179,7 @@ export default defineConfig([
 
 ## Architectural Enforcement (Critical)
 
-ESLint enforces Omnera's layer-based architecture automatically via **eslint-plugin-boundaries**. This ensures dependency rules are followed at compile-time, preventing architectural violations.
+ESLint enforces Sovrium's layer-based architecture automatically via **eslint-plugin-boundaries**. This ensures dependency rules are followed at compile-time, preventing architectural violations.
 
 ### Layer Dependency Rules
 

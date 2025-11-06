@@ -6,7 +6,7 @@ OAuth 2.0 integration with Calendly, enabling access to Calendly bases, tables, 
 
 ## Use Cases
 
-- **Data Sync**: Sync records between Omnera tables and Calendly bases
+- **Data Sync**: Sync records between Sovrium tables and Calendly bases
 - **Automation Triggers**: React to new/updated records in Calendly
 - **Webhook Integration**: Subscribe to Calendly webhook events
 - **API Actions**: Create, read, update, delete records via Calendly API
@@ -42,12 +42,12 @@ OAuth 2.0 integration with Calendly, enabling access to Calendly bases, tables, 
 1. Navigate to [Calendly Developer Hub](https://calendly.com/developers)
 2. Click "Create OAuth Integration"
 3. Fill in integration details:
-   - **Name**: Omnera Integration
+   - **Name**: Sovrium Integration
    - **Redirect URI**: `https://yourdomain.com/oauth/calendly/callback`
    - **Scopes**: Select required permissions (e.g., `data.records:read`, `data.records:write`)
 4. Copy **Client ID** and **Client Secret**
 
-### 2. Configure Connection in Omnera
+### 2. Configure Connection in Sovrium
 
 1. Go to Settings > Connections
 2. Click "Add Connection" > "Calendly"
@@ -60,7 +60,7 @@ OAuth 2.0 integration with Calendly, enabling access to Calendly bases, tables, 
 1. Click "Connect" button next to saved connection
 2. Redirected to Calendly authorization page
 3. Grant requested permissions
-4. Redirected back to Omnera
+4. Redirected back to Sovrium
 5. Connection status changes to "Connected"
 
 ## Runtime Behavior
@@ -69,15 +69,15 @@ OAuth 2.0 integration with Calendly, enabling access to Calendly bases, tables, 
 
 ```mermaid
 sequenceDiagram
-    User->>Omnera: Click "Connect"
-    Omnera->>Calendly: Redirect to /oauth/authorize
+    User->>Sovrium: Click "Connect"
+    Sovrium->>Calendly: Redirect to /oauth/authorize
     Calendly->>User: Show authorization page
     User->>Calendly: Grant permissions
-    Calendly->>Omnera: Redirect with auth code
-    Omnera->>Calendly: Exchange code for tokens
-    Calendly->>Omnera: Return access + refresh tokens
-    Omnera->>Database: Store encrypted tokens
-    Omnera->>User: Show "Connected" status
+    Calendly->>Sovrium: Redirect with auth code
+    Sovrium->>Calendly: Exchange code for tokens
+    Calendly->>Sovrium: Return access + refresh tokens
+    Sovrium->>Database: Store encrypted tokens
+    Sovrium->>User: Show "Connected" status
 ```
 
 ### Token Management
@@ -108,7 +108,7 @@ sequenceDiagram
 - **Delete Record**: Remove record from table
 - **Webhooks**: Subscribe to record changes
 
-### Example API Call (via Omnera)
+### Example API Call (via Sovrium)
 
 ```typescript
 // Automation action: Create Calendly record
@@ -169,7 +169,7 @@ Request only necessary scopes:
 
 ### Webhook Payload Delivery Failed
 
-**Cause**: Omnera webhook endpoint unreachable
+**Cause**: Sovrium webhook endpoint unreachable
 **Resolution**: Calendly retries up to 3 times; check endpoint availability
 
 ## Testing Specifications
@@ -186,4 +186,4 @@ Run tests: `bun test:e2e --grep="CONN-CALENDLY"`
 
 - [Calendly OAuth Documentation](https://calendly.com/developers/web/api/oauth-reference)
 - [Calendly API Reference](https://calendly.com/developers/web/api/introduction)
-- [Omnera Connection Management Guide](../../../admin/connections/README.md)
+- [Sovrium Connection Management Guide](../../../admin/connections/README.md)

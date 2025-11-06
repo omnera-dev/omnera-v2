@@ -1,10 +1,10 @@
-# Functional Programming in Omnera
+# Functional Programming in Sovrium
 
 ## Overview
 
-Omnera embraces Functional Programming (FP) as its core architectural philosophy. This document outlines the principles, patterns, and practices that guide how we write code in the Omnera project using TypeScript and Effect.ts.
+Sovrium embraces Functional Programming (FP) as its core architectural philosophy. This document outlines the principles, patterns, and practices that guide how we write code in the Sovrium project using TypeScript and Effect.ts.
 
-## Why Functional Programming for Omnera?
+## Why Functional Programming for Sovrium?
 
 ### Benefits for Our Stack
 
@@ -30,7 +30,7 @@ Omnera embraces Functional Programming (FP) as its core architectural philosophy
 
 **Definition**: Every piece of knowledge should have a single, unambiguous, authoritative representation within a system.
 
-#### Why DRY Matters in Omnera
+#### Why DRY Matters in Sovrium
 
 DRY is foundational to all other FP principles—repeated code is:
 
@@ -837,7 +837,7 @@ function retryUntilSuccess<A, E>(
 }
 ```
 
-## Functional Programming Patterns in Omnera
+## Functional Programming Patterns in Sovrium
 
 ### Pattern 1: Pure Business Logic
 
@@ -1057,7 +1057,7 @@ Effect.runPromise(Effect.provide(program, AppLayer))
 
 ## Enforcement
 
-Omnera's functional programming principles are **automatically enforced** via ESLint rules with different severity levels: **errors** (blocking) and **warnings** (guidance).
+Sovrium's functional programming principles are **automatically enforced** via ESLint rules with different severity levels: **errors** (blocking) and **warnings** (guidance).
 
 ### Enforcement Levels
 
@@ -1654,7 +1654,7 @@ const cachedUser = fetchUser(1).pipe(Effect.cached)
 
 ## Summary
 
-Functional Programming in Omnera means:
+Functional Programming in Sovrium means:
 
 1. **DRY (Don't Repeat Yourself)** - Single source of truth for all logic
 2. **Pure Functions** - No side effects, deterministic behavior
@@ -1665,7 +1665,7 @@ Functional Programming in Omnera means:
 7. **Declarative Code** - Express WHAT to do, not HOW
 8. **Testability** - Pure functions and Effect programs are easy to test
 
-By following these principles, Omnera achieves:
+By following these principles, Sovrium achieves:
 
 - **Predictable code** - Pure functions behave consistently
 - **Maintainable systems** - Composable, testable, understandable code

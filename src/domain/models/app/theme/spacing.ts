@@ -53,13 +53,11 @@ import { Schema } from 'effect'
 export const SpacingConfigSchema = Schema.Record({
   key: Schema.String.pipe(
     Schema.pattern(/^[a-z]+(-[a-z]+)*$/, {
-      message: () =>
-        'Spacing key must use kebab-case (e.g., container-small, not containerSmall)',
+      message: () => 'Spacing key must use kebab-case (e.g., container-small, not containerSmall)',
     }),
     Schema.annotations({
       title: 'Spacing Token Name',
-      description:
-        'Kebab-case name for spacing token (e.g., container-small, not containerSmall)',
+      description: 'Kebab-case name for spacing token (e.g., container-small, not containerSmall)',
       examples: [
         'section',
         'container',

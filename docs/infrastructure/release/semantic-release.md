@@ -11,7 +11,7 @@ Semantic-release eliminates manual version bumping, changelog writing, and relea
 
 1. **Automated Versioning** - Determines next version (major.minor.patch) from commit messages
 2. **Changelog Generation** - Auto-generates CHANGELOG.md from commit history
-3. **npm Publishing** - Publishes package "omnera" to npm registry automatically
+3. **npm Publishing** - Publishes package "sovrium" to npm registry automatically
 4. **GitHub Releases** - Creates GitHub releases with release notes
 5. **Git Commits** - Commits version bumps and changelog back to repository
 6. **Version Validation** - Ensures semantic versioning (semver) compliance
@@ -20,7 +20,7 @@ Semantic-release eliminates manual version bumping, changelog writing, and relea
 
 - **Configuration File**: `.releaserc.json`
 - **Trigger**: Push to `main` branch (via GitHub Actions workflow)
-- **Package Name**: "omnera" (published to npm)
+- **Package Name**: "sovrium" (published to npm)
 
 ## Semantic Versioning Rules
 
@@ -112,7 +112,7 @@ The release process executes these plugins in sequence (defined in `.releaserc.j
 
 ### 4. @semantic-release/npm
 
-- Publishes package "omnera" to npm registry
+- Publishes package "sovrium" to npm registry
 - Requires `NPM_TOKEN` secret configured in GitHub
 - Updates package.json version (committed later by git plugin)
 
@@ -179,7 +179,7 @@ Generate release notes
          ↓
 Update CHANGELOG.md
          ↓
-Publish to npm as "omnera"
+Publish to npm as "sovrium"
          ↓
 Commit changes (with [skip ci])
          ↓
@@ -193,7 +193,7 @@ Release complete
 ```json
 {
   "branches": ["main"],
-  "repositoryUrl": "https://github.com/omnera-dev/omnera-v2",
+  "repositoryUrl": "https://github.com/sovrium/sovrium",
   "plugins": [
     "@semantic-release/commit-analyzer",
     "@semantic-release/release-notes-generator",
@@ -354,7 +354,7 @@ No release when:
 | **Playwright**     | Not in release workflow | E2E tests run separately in CI             |
 | **Prettier**       | No integration          | Formatting checked in separate CI workflow |
 | **GitHub Actions** | Release orchestration   | Workflow triggers semantic-release         |
-| **npm Registry**   | Package publishing      | "omnera" package published on release      |
+| **npm Registry**   | Package publishing      | "sovrium" package published on release     |
 
 ## Semantic Release vs Manual Releases
 
@@ -382,7 +382,7 @@ No release when:
 
 - Verify `NPM_TOKEN` secret is configured in repository settings
 - Check npm token has publish permissions
-- Ensure package name "omnera" is available or owned by you
+- Ensure package name "sovrium" is available or owned by you
 - Review npm publish logs in workflow
 
 ### Workflow Skipped

@@ -47,7 +47,8 @@ export function substituteThemeTokens(value: unknown, theme?: Theme): unknown {
 
   // Handle multiple theme tokens in a single string
   // Example: "$theme.spacing.section $theme.spacing.container" → "py-16 px-4"
-  return value.replace(/\$theme\.[a-z]+(\.[a-z-]+)+/g, (match) => {
+  // Supports color names with numbers like gray-100, primary-500, etc.
+  return value.replace(/\$theme\.[a-z]+(\.[a-z0-9-]+)+/g, (match) => {
     // Extract the path: $theme.colors.primary → ['colors', 'primary']
     const path = match.slice(7).split('.')
 

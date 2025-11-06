@@ -19,7 +19,7 @@ import { VersionSchema } from './version'
  * AppSchema defines the structure of an application configuration.
  *
  * This schema represents the core metadata for any application built
- * with Omnera, including its name, optional version, and optional description.
+ * with Sovrium, including its name, optional version, and optional description.
  *
  * @example
  * ```typescript
@@ -117,7 +117,7 @@ export const AppSchema = Schema.Struct({
   Schema.annotations({
     title: 'Application Configuration',
     description:
-      'Complete application configuration including name, version, description, and data tables. This is the root schema for Omnera applications.',
+      'Complete application configuration including name, version, description, and data tables. This is the root schema for Sovrium applications.',
     examples: [
       {
         name: 'todo-app',

@@ -7,7 +7,7 @@
 
 Better Auth is a comprehensive authentication library designed to work seamlessly with any TypeScript framework. It provides production-ready auth features out of the box while remaining flexible and extensible through a powerful plugin system.
 
-## Why Better Auth for Omnera
+## Why Better Auth for Sovrium
 
 - **Framework Agnostic**: Works with Hono, React, Next.js, and all major frameworks
 - **TypeScript First**: Full type safety for auth flows, errors, and sessions
@@ -721,7 +721,7 @@ app.get('/api/protected', async (c) => {
 export default app
 ```
 
-## Common Patterns in Omnera
+## Common Patterns in Sovrium
 
 ### Pattern 1: Authentication Middleware
 

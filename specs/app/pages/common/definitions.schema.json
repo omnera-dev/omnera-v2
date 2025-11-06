@@ -209,8 +209,8 @@
         "pattern": ".*\\$[a-zA-Z][a-zA-Z0-9]*.*",
         "substitution": {
           "before": "Welcome to $siteName",
-          "after": "Welcome to Omnera",
-          "vars": { "siteName": "Omnera" }
+          "after": "Welcome to Sovrium",
+          "vars": { "siteName": "Sovrium" }
         },
         "assertions": [
           "Contains $variable placeholder",

@@ -1,5 +1,5 @@
 {
-  "$id": "https://omnera.dev/schemas/0.0.1/app.schema.json",
+  "$id": "https://sovrium.com/schemas/0.0.1/app.schema.json",
   "$schema": "http://json-schema.org/draft-07/schema#",
   "$defs": {
     "Int": { "type": "integer", "description": "an integer", "title": "int" },
@@ -6356,20 +6356,56 @@
           "patternProperties": {
             "": {
               "type": "string",
-              "description": "Spacing value (Tailwind classes or CSS values)",
+              "description": "Spacing value as Tailwind utility classes or CSS values (rem, px, em, %). Supports responsive variants (sm:, md:, lg:) and multiple classes.",
               "title": "Spacing Value",
-              "examples": ["py-16 sm:py-20", "max-w-7xl mx-auto px-4", "2rem", "16px"]
+              "examples": [
+                "py-16",
+                "px-4",
+                "py-16 sm:py-20",
+                "max-w-7xl mx-auto px-4",
+                "gap-6",
+                "p-6",
+                "m-6",
+                "4rem",
+                "16px",
+                "1.5em"
+              ]
             }
           },
           "propertyNames": {
             "type": "string",
-            "description": "Semantic spacing name (alphanumeric)",
-            "title": "Spacing Key",
-            "examples": ["section", "container", "gap", "padding"],
-            "pattern": "^[a-zA-Z][a-zA-Z0-9]*$"
+            "description": "Kebab-case name for spacing token (e.g., container-small, not containerSmall)",
+            "title": "Spacing Token Name",
+            "examples": [
+              "section",
+              "container",
+              "container-small",
+              "gap",
+              "gap-small",
+              "padding",
+              "margin"
+            ],
+            "pattern": "^[a-z]+(-[a-z]+)*$"
           },
           "description": "Spacing design tokens for consistent layout",
-          "title": "Spacing Configuration"
+          "title": "Spacing Configuration",
+          "examples": [
+            {
+              "section": "py-16 sm:py-20",
+              "container": "max-w-7xl mx-auto px-4",
+              "container-small": "max-w-4xl mx-auto px-4",
+              "container-xsmall": "max-w-2xl mx-auto px-4",
+              "gap": "gap-6",
+              "gap-small": "gap-4",
+              "gap-large": "gap-8",
+              "padding": "p-6",
+              "padding-small": "p-4",
+              "padding-large": "p-8",
+              "margin": "m-6",
+              "margin-small": "m-4",
+              "margin-large": "m-8"
+            }
+          ]
         },
         "animations": {
           "type": "object",
@@ -6744,7 +6780,7 @@
     "pages": { "$ref": "#/$defs/Pages" }
   },
   "additionalProperties": false,
-  "description": "Complete application configuration including name, version, description, and data tables. This is the root schema for Omnera applications.",
+  "description": "Complete application configuration including name, version, description, and data tables. This is the root schema for Sovrium applications.",
   "title": "Application Configuration",
   "examples": [
     {

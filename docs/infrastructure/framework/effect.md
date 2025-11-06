@@ -7,7 +7,7 @@
 
 Effect.ts is a powerful library that brings advanced functional programming patterns to TypeScript. It provides a complete toolkit for managing complexity in modern applications through type-safe effects, composable operations, and declarative error handling.
 
-## Why Effect for Omnera
+## Why Effect for Sovrium
 
 - **Type-Safe Error Handling**: Errors are tracked at the type level, making them impossible to ignore
 - **Dependency Injection**: Built-in, type-safe dependency injection via Context and Layer
@@ -18,7 +18,7 @@ Effect.ts is a powerful library that brings advanced functional programming patt
 - **Performance**: Highly optimized runtime with efficient memory usage
 - **Excellent TypeScript Integration**: First-class TypeScript support with full type inference
 
-> **TypeScript Strict Mode Required**: Effect.ts relies on TypeScript's strict mode for accurate type inference and error tracking. Ensure `"strict": true` is enabled in `tsconfig.json` (already configured in Omnera). Without strict mode, Effect's type-level error tracking and Context requirements won't work correctly.
+> **TypeScript Strict Mode Required**: Effect.ts relies on TypeScript's strict mode for accurate type inference and error tracking. Ensure `"strict": true` is enabled in `tsconfig.json` (already configured in Sovrium). Without strict mode, Effect's type-level error tracking and Context requirements won't work correctly.
 
 ## Core Concepts
 
@@ -335,7 +335,7 @@ Effect.runFork(program)
 
 ## Effect.gen vs async/await: When to Use Each
 
-Understanding when to use Effect.gen versus async/await is crucial for writing idiomatic Omnera code.
+Understanding when to use Effect.gen versus async/await is crucial for writing idiomatic Sovrium code.
 
 ### When to Use Effect.gen ✅
 
@@ -527,7 +527,7 @@ function UserProfile({ userId }: { userId: number }) {
 
 **Best Practice**: Write business logic with Effect.gen, consume it with async/await in routes and components.
 
-## Common Patterns in Omnera
+## Common Patterns in Sovrium
 
 ### Pattern 1: API Request with Error Handling
 

@@ -29,18 +29,18 @@
       "id": "APP-NAME-002",
       "given": "server with app name 'my-dashboard'",
       "when": "user navigates to homepage",
-      "then": "page title shows 'my-dashboard - Powered by Omnera'",
+      "then": "page title shows 'my-dashboard - Powered by Sovrium'",
       "application": {
         "name": "my-dashboard",
         "expectedDOM": {
-          "title": "<title>my-dashboard - Powered by Omnera</title>",
+          "title": "<title>my-dashboard - Powered by Sovrium</title>",
           "h1": "<h1 data-testid=\"app-name\">my-dashboard</h1>"
         },
         "assertions": [
-          "Page title: 'my-dashboard - Powered by Omnera'",
+          "Page title: 'my-dashboard - Powered by Sovrium'",
           "H1 heading: 'my-dashboard'",
           "SEO: Title includes app name",
-          "Branding: 'Powered by Omnera' suffix"
+          "Branding: 'Powered by Sovrium' suffix"
         ]
       }
     },
@@ -286,7 +286,7 @@
         "name": "@myorg-team.test/dashboard_v2.beta-prod",
         "expectedDOM": {
           "h1": "<h1 data-testid=\"app-name\" class=\"typography-h1 text-center\">@myorg-team.test/dashboard_v2.beta-prod</h1>",
-          "title": "<title>@myorg-team.test/dashboard_v2.beta-prod - Powered by Omnera</title>",
+          "title": "<title>@myorg-team.test/dashboard_v2.beta-prod - Powered by Sovrium</title>",
           "meta": "<meta name=\"application-name\" content=\"@myorg-team.test/dashboard_v2.beta-prod\">"
         },
         "validation": {

@@ -7,7 +7,7 @@
  */
 
 /**
- * Snapshot Testing Guide for Omnera
+ * Snapshot Testing Guide for Sovrium
  *
  * This script provides guidance on working with snapshots in E2E tests.
  * Run: bun run scripts/snapshot-guide.ts
@@ -24,7 +24,7 @@ const CYAN = '\x1b[36m'
 
 console.log(`
 ${BOLD}${BLUE}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${RESET}
-${BOLD}${CYAN}                    🎯 Snapshot Testing Guide for Omnera${RESET}
+${BOLD}${CYAN}                    🎯 Snapshot Testing Guide for Sovrium${RESET}
 ${BOLD}${BLUE}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${RESET}
 
 ${BOLD}${GREEN}📸 Visual Snapshots (toHaveScreenshot)${RESET}

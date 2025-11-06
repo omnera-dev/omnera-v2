@@ -6,7 +6,7 @@ OAuth 2.0 integration with Airtable, enabling access to Airtable bases, tables, 
 
 ## Use Cases
 
-- **Data Sync**: Sync records between Omnera tables and Airtable bases
+- **Data Sync**: Sync records between Sovrium tables and Airtable bases
 - **Automation Triggers**: React to new/updated records in Airtable
 - **Webhook Integration**: Subscribe to Airtable webhook events
 - **API Actions**: Create, read, update, delete records via Airtable API
@@ -42,12 +42,12 @@ OAuth 2.0 integration with Airtable, enabling access to Airtable bases, tables, 
 1. Navigate to [Airtable Developer Hub](https://airtable.com/developers)
 2. Click "Create OAuth Integration"
 3. Fill in integration details:
-   - **Name**: Omnera Integration
+   - **Name**: Sovrium Integration
    - **Redirect URI**: `https://yourdomain.com/oauth/airtable/callback`
    - **Scopes**: Select required permissions (e.g., `data.records:read`, `data.records:write`)
 4. Copy **Client ID** and **Client Secret**
 
-### 2. Configure Connection in Omnera
+### 2. Configure Connection in Sovrium
 
 1. Go to Settings > Connections
 2. Click "Add Connection" > "Airtable"
@@ -60,7 +60,7 @@ OAuth 2.0 integration with Airtable, enabling access to Airtable bases, tables, 
 1. Click "Connect" button next to saved connection
 2. Redirected to Airtable authorization page
 3. Grant requested permissions
-4. Redirected back to Omnera
+4. Redirected back to Sovrium
 5. Connection status changes to "Connected"
 
 ## Runtime Behavior
@@ -69,15 +69,15 @@ OAuth 2.0 integration with Airtable, enabling access to Airtable bases, tables, 
 
 ```mermaid
 sequenceDiagram
-    User->>Omnera: Click "Connect"
-    Omnera->>Airtable: Redirect to /oauth/authorize
+    User->>Sovrium: Click "Connect"
+    Sovrium->>Airtable: Redirect to /oauth/authorize
     Airtable->>User: Show authorization page
     User->>Airtable: Grant permissions
-    Airtable->>Omnera: Redirect with auth code
-    Omnera->>Airtable: Exchange code for tokens
-    Airtable->>Omnera: Return access + refresh tokens
-    Omnera->>Database: Store encrypted tokens
-    Omnera->>User: Show "Connected" status
+    Airtable->>Sovrium: Redirect with auth code
+    Sovrium->>Airtable: Exchange code for tokens
+    Airtable->>Sovrium: Return access + refresh tokens
+    Sovrium->>Database: Store encrypted tokens
+    Sovrium->>User: Show "Connected" status
 ```
 
 ### Token Management
@@ -108,7 +108,7 @@ sequenceDiagram
 - **Delete Record**: Remove record from table
 - **Webhooks**: Subscribe to record changes
 
-### Example API Call (via Omnera)
+### Example API Call (via Sovrium)
 
 ```typescript
 // Automation action: Create Airtable record
@@ -169,7 +169,7 @@ Request only necessary scopes:
 
 ### Webhook Payload Delivery Failed
 
-**Cause**: Omnera webhook endpoint unreachable
+**Cause**: Sovrium webhook endpoint unreachable
 **Resolution**: Airtable retries up to 3 times; check endpoint availability
 
 ## Testing Specifications
@@ -186,4 +186,4 @@ Run tests: `bun test:e2e --grep="CONN-AIRTABLE"`
 
 - [Airtable OAuth Documentation](https://airtable.com/developers/web/api/oauth-reference)
 - [Airtable API Reference](https://airtable.com/developers/web/api/introduction)
-- [Omnera Connection Management Guide](../../../admin/connections/README.md)
+- [Sovrium Connection Management Guide](../../../admin/connections/README.md)

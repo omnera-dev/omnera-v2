@@ -1,6 +1,6 @@
-# Contributing to Omnera
+# Contributing to Sovrium
 
-Thank you for your interest in contributing to Omnera! We welcome contributions from the community while maintaining a sustainable business model through our fair-code licensing approach.
+Thank you for your interest in contributing to Sovrium! We welcome contributions from the community while maintaining a sustainable business model through our fair-code licensing approach.
 
 ## Table of Contents
 
@@ -33,12 +33,12 @@ By participating in this project, you agree to maintain a respectful, inclusive,
 1. **Fork the repository** on GitHub
 2. **Clone your fork**:
    ```bash
-   git clone https://github.com/YOUR-USERNAME/omnera-v2.git
-   cd omnera-v2
+   git clone https://github.com/YOUR-USERNAME/sovrium.git
+   cd sovrium
    ```
 3. **Add upstream remote**:
    ```bash
-   git remote add upstream https://github.com/omnera-dev/omnera-v2.git
+   git remote add upstream https://github.com/sovrium/sovrium.git
    ```
 4. **Install dependencies**:
    ```bash
@@ -140,7 +140,7 @@ Existing configurations need to be migrated using the provided script."
 
 ## Contributor License Agreement (CLA)
 
-**Important**: By submitting a contribution to Omnera, you agree to the following terms:
+**Important**: By submitting a contribution to Sovrium, you agree to the following terms:
 
 ### Grant of Rights
 
@@ -164,7 +164,7 @@ By contributing, you certify that:
 - ✅ You have the right to grant the above licenses
 - ✅ Your contribution is your original creation or you have rights to submit it
 - ✅ Your contribution does not violate any third-party rights
-- ✅ You are aware that Omnera is fair-code licensed and may be commercially licensed
+- ✅ You are aware that Sovrium is fair-code licensed and may be commercially licensed
 - ✅ You understand that ESSENTIAL SERVICES may earn revenue from commercial licenses
 
 ### Why We Need a CLA
@@ -254,14 +254,14 @@ The CLA allows us to:
 
 ## Questions?
 
-- **General Questions**: Open a [GitHub Discussion](https://github.com/omnera-dev/omnera-v2/discussions)
-- **Bug Reports**: Open a [GitHub Issue](https://github.com/omnera-dev/omnera-v2/issues)
-- **Commercial Licensing**: Contact license@omnera.dev
+- **General Questions**: Open a [GitHub Discussion](https://github.com/sovrium/sovrium/discussions)
+- **Bug Reports**: Open a [GitHub Issue](https://github.com/sovrium/sovrium/issues)
+- **Commercial Licensing**: Contact license@sovrium.com
 - **Documentation**: See [CLAUDE.md](CLAUDE.md) for technical details
 
 ---
 
-**Thank you for contributing to Omnera!** 🎉
+**Thank you for contributing to Sovrium!** 🎉
 
 Your contributions help build a sustainable, community-driven project that balances open collaboration with commercial viability.
 

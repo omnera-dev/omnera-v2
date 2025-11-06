@@ -149,7 +149,7 @@ jobs:
           ## 🤖 AUTOMATION MODE - OPERATE NON-INTERACTIVELY
 
           You are in **pipeline/automation mode**:
-          - ✅ Make autonomous decisions following Omnera architectural patterns
+          - ✅ Make autonomous decisions following Sovrium architectural patterns
           - ✅ Implement minimal code to pass the test
           - ✅ Use Effect.ts for side effects in Application/Infrastructure layers
           - ❌ DO NOT ask clarifying questions - proceed with best judgment
@@ -214,7 +214,7 @@ jobs:
           - Agent checks for code duplication
           - Agent ensures architectural compliance
           - Agent refactors and optimizes as needed
-          - Agent validates against Omnera best practices
+          - Agent validates against Sovrium best practices
 
           **IMPORTANT**: This step is MANDATORY even if Step 1 code seems clean.
 

@@ -1,6 +1,6 @@
-# Omnera Vision & Mission
+# Sovrium Vision & Mission
 
-> **⚠️ Vision Document**: This document describes the **purpose, vision, and target state** for Omnera. Most features described here are **not yet implemented**. For current capabilities, see [ROADMAP.md](../../ROADMAP.md).
+> **⚠️ Vision Document**: This document describes the **purpose, vision, and target state** for Sovrium. Most features described here are **not yet implemented**. For current capabilities, see [ROADMAP.md](../../ROADMAP.md).
 
 ---
 
@@ -40,13 +40,13 @@ No-code tools promised to make software development accessible, but instead crea
 
 ---
 
-## The Solution: Omnera
+## The Solution: Sovrium
 
-**Omnera breaks the SaaS dependency cycle** by providing a **self-hosted, configuration-driven platform** that puts organizations back in control.
+**Sovrium breaks the SaaS dependency cycle** by providing a **self-hosted, configuration-driven platform** that puts organizations back in control.
 
-### What Omnera Does
+### What Sovrium Does
 
-Omnera is a **source-available runtime** that interprets JSON configuration files to build and serve full-featured web applications—without code generation, without vendor lock-in, without loss of control.
+Sovrium is a **source-available runtime** that interprets JSON configuration files to build and serve full-featured web applications—without code generation, without vendor lock-in, without loss of control.
 
 ```typescript
 // Your entire business application in one JSON file
@@ -62,7 +62,7 @@ Omnera is a **source-available runtime** that interprets JSON configuration file
 **One command to run:**
 
 ```bash
-bun run omnera start config.json
+bun run sovrium start config.json
 ```
 
 **Result**: A complete web application with database, authentication, API, and UI—running on your infrastructure, under your control.
@@ -70,18 +70,18 @@ bun run omnera start config.json
 ### How It Works
 
 ```
-JSON Configuration → Omnera Runtime → Live Application
+JSON Configuration → Sovrium Runtime → Live Application
      (Your business logic)  (Our engine)    (Your infrastructure)
 ```
 
 1. **You write**: JSON configuration describing your business needs
-2. **Omnera interprets**: Configuration at runtime (no code generation)
+2. **Sovrium interprets**: Configuration at runtime (no code generation)
 3. **You own**: Full application running on your servers
 4. **You control**: Data, features, deployment, everything
 
 ---
 
-## Core Principles: Why We Build Omnera This Way
+## Core Principles: Why We Build Sovrium This Way
 
 ### 1. **Digital Sovereignty**
 
@@ -114,7 +114,7 @@ Reduce technical dependencies to **only essential infrastructure**.
 
 Engineering teams should focus on **business logic**, not **infrastructure complexity**.
 
-- **No DevOps overhead**: Omnera handles server, database, auth, APIs
+- **No DevOps overhead**: Sovrium handles server, database, auth, APIs
 - **No integration hell**: One platform, one configuration, one deployment
 - **No vendor research**: Stop evaluating SaaS tools, start building
 - **Instant iteration**: Change configuration, refresh browser, done
@@ -139,19 +139,19 @@ const partnerCRM = { ...crmTemplate, permissions: [...] }
 
 ---
 
-## What Omnera Is (and Isn't)
+## What Sovrium Is (and Isn't)
 
-### ✅ Omnera IS
+### ✅ Sovrium IS
 
 - **Alternative to**: Airtable, Retool, Notion, Webflow, Zapier (self-hosted, config-driven)
-- **Installation**: Bun package (`npm install omnera`)
+- **Installation**: Bun package (`npm install sovrium`)
 - **Deployment**: Your infrastructure (AWS, Vercel, Docker, bare metal)
 - **Configuration**: JSON/TypeScript files (version-controlled)
 - **Source**: Source-available, fair-code model
 - **Target users**: Developers, DevOps teams, technical organizations
 - **Best for**: Internal tools, customer portals, business applications, APIs
 
-### ❌ Omnera IS NOT
+### ❌ Sovrium IS NOT
 
 - **Not a SaaS**: No cloud hosting, no vendor servers
 - **Not visual**: No drag-and-drop GUI (configuration-as-code)
@@ -161,11 +161,11 @@ const partnerCRM = { ...crmTemplate, permissions: [...] }
 
 ---
 
-## The Omnera Advantage
+## The Sovrium Advantage
 
 ### vs. Traditional No-Code SaaS
 
-| Aspect              | Omnera                         | Airtable/Retool/Notion        |
+| Aspect              | Sovrium                        | Airtable/Retool/Notion        |
 | ------------------- | ------------------------------ | ----------------------------- |
 | **Data Ownership**  | ✅ Your servers                | ❌ Vendor cloud               |
 | **Source Code**     | ✅ Available (fair-code)       | ❌ Proprietary                |
@@ -178,7 +178,7 @@ const partnerCRM = { ...crmTemplate, permissions: [...] }
 
 ### vs. Traditional Development
 
-| Aspect               | Omnera                   | Custom Development   |
+| Aspect               | Sovrium                  | Custom Development   |
 | -------------------- | ------------------------ | -------------------- |
 | **Development Time** | Days                     | Months               |
 | **Infrastructure**   | ✅ Included              | Build from scratch   |
@@ -189,7 +189,7 @@ const partnerCRM = { ...crmTemplate, permissions: [...] }
 | **Maintenance**      | ✅ Zero (config changes) | Ongoing code updates |
 | **Flexibility**      | ⚠️ Config-limited        | ✅ Unlimited         |
 
-**Omnera hits the sweet spot**: **80% faster than custom development**, **100% more control than SaaS**.
+**Sovrium hits the sweet spot**: **80% faster than custom development**, **100% more control than SaaS**.
 
 ---
 
@@ -218,22 +218,22 @@ const partnerCRM = { ...crmTemplate, permissions: [...] }
 **Phase 3**: Ecosystem maturity
 
 - **Template marketplace**: Community-contributed application templates
-- **Plugin system**: Extend Omnera with custom modules
-- **Multi-tenancy**: One Omnera instance, multiple organizations
+- **Plugin system**: Extend Sovrium with custom modules
+- **Multi-tenancy**: One Sovrium instance, multiple organizations
 - **Enterprise features**: SSO, compliance, advanced RBAC
 - **Developer tools**: CLI, IDE plugins, testing frameworks
 
 ### The Ultimate Goal
 
-**Make Omnera the default choice for organizations seeking digital sovereignty.**
+**Make Sovrium the default choice for organizations seeking digital sovereignty.**
 
 When businesses need internal tools, customer portals, or business applications, they should think:
 
-> "Instead of buying another SaaS subscription, let's configure it in Omnera."
+> "Instead of buying another SaaS subscription, let's configure it in Sovrium."
 
 ---
 
-## Who Omnera Is For
+## Who Sovrium Is For
 
 ### Primary Audience
 
@@ -251,9 +251,9 @@ When businesses need internal tools, customer portals, or business applications,
 4. **API Platforms**: REST endpoints, webhooks, third-party integrations
 5. **Static Websites**: Marketing sites, landing pages, documentation
 
-### When to Choose Omnera
+### When to Choose Sovrium
 
-✅ **Choose Omnera if you**:
+✅ **Choose Sovrium if you**:
 
 - Value data ownership and privacy
 - Have engineering resources (can write JSON)
@@ -261,7 +261,7 @@ When businesses need internal tools, customer portals, or business applications,
 - Need to build multiple internal tools
 - Require customization beyond vendor offerings
 
-❌ **Don't choose Omnera if you**:
+❌ **Don't choose Sovrium if you**:
 
 - Prefer visual drag-and-drop interfaces
 - Don't have technical staff
@@ -296,24 +296,24 @@ All features are defined in `docs/specifications/specs.schema.json`:
 
 ### How to Contribute
 
-- **GitHub**: [github.com/omnera-dev/omnera-v2](https://github.com/omnera-dev/omnera-v2)
+- **GitHub**: [github.com/sovrium/sovrium](https://github.com/sovrium/sovrium)
 - **Documentation**: Improve docs, write guides, create templates
 - **Code**: Submit PRs for features or bug fixes
 - **Feedback**: Share use cases, report issues, suggest improvements
 
 ### Contact
 
-- **Website**: omnera.dev
-- **License inquiries**: license@omnera.dev
+- **Website**: sovrium.com
+- **License inquiries**: license@sovrium.com
 - **General questions**: GitHub Issues
 
 ---
 
-## Summary: Why Omnera Exists
+## Summary: Why Sovrium Exists
 
 **The Problem**: Organizations are trapped in SaaS dependency—paying monthly fees, losing data control, and adapting their business to vendor limitations.
 
-**The Solution**: Omnera gives organizations **digital sovereignty**—own your data, define your features, build your tools, all through simple JSON configuration.
+**The Solution**: Sovrium gives organizations **digital sovereignty**—own your data, define your features, build your tools, all through simple JSON configuration.
 
 **The Vision**: A world where every organization can build the software they need, without surrendering control to SaaS vendors or drowning in infrastructure complexity.
 
@@ -322,4 +322,4 @@ All features are defined in `docs/specifications/specs.schema.json`:
 ---
 
 > **"Own your data. Own your tools. Own your future."**
-> — The Omnera Mission
+> — The Sovrium Mission

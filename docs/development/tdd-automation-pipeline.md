@@ -375,7 +375,7 @@ Every 15 minutes (or manual):
 **Pipeline Mode Behavior**:
 
 - Non-interactive (no questions to user)
-- Automatic decision-making following Omnera patterns
+- Automatic decision-making following Sovrium patterns
 - Minimal implementation (just enough to pass test)
 - Uses Effect.ts for side effects, proper type safety
 

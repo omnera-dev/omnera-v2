@@ -21,7 +21,7 @@ Public identifier for the OAuth 2.0 application registered with Calendly. This I
 
 ```json
 {
-  "clientId": "app.omnera.calendly.1234567890"
+  "clientId": "app.sovrium.calendly.1234567890"
 }
 ```
 
@@ -38,9 +38,9 @@ Public identifier for the OAuth 2.0 application registered with Calendly. This I
 ### Example OAuth Integration Config
 
 ```
-Integration Name: Omnera Calendly Integration
+Integration Name: Sovrium Calendly Integration
 Client ID: calendly_client_abc123xyz
-Redirect URI: https://app.omnera.io/oauth/calendly/callback
+Redirect URI: https://app.sovrium.io/oauth/calendly/callback
 Scopes: data.records:read data.records:write
 ```
 
@@ -53,7 +53,7 @@ Client ID is included in authorization URL:
 ```
 GET https://calendly.com/oauth2/v1/authorize?
   client_id=calendly_client_xyz789
-  &redirect_uri=https://app.omnera.io/oauth/callback
+  &redirect_uri=https://app.sovrium.io/oauth/callback
   &response_type=code
   &scope=data.records:read
 ```
@@ -129,7 +129,7 @@ Use different OAuth apps per environment:
   },
   "production": {
     "clientId": "calendly_prod_789",
-    "redirectUri": "https://app.omnera.io/oauth/callback"
+    "redirectUri": "https://app.sovrium.io/oauth/callback"
   }
 }
 ```

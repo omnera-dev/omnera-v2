@@ -1,6 +1,6 @@
 # File Naming Conventions
 
-> **Purpose**: Establish consistent, predictable file naming patterns across all layers of the Omnera architecture.
+> **Purpose**: Establish consistent, predictable file naming patterns across all layers of the Sovrium architecture.
 >
 > **Status**: ✅ Active - Enforced via `eslint-plugin-check-file`
 >
@@ -23,7 +23,7 @@
 
 ## Philosophy
 
-Omnera's file naming conventions follow these guiding principles:
+Sovrium's file naming conventions follow these guiding principles:
 
 ### 1. **Simplicity First**
 
@@ -111,7 +111,7 @@ src/presentation/components/pages/LoginPage.tsx
 
 **Pattern**: `{name}.ee.ts` or `{name}.ee.tsx` (enterprise features)
 
-**Purpose**: Mark files that require an Omnera Enterprise License
+**Purpose**: Mark files that require an Sovrium Enterprise License
 
 **Location**: Any layer (domain, application, infrastructure, presentation)
 
@@ -889,7 +889,7 @@ src / presentation / api / middleware / auth - middleware.ts // Don't add "middl
 
 ## Test File Conventions
 
-Omnera follows **F.I.R.S.T principles** with separate conventions for unit tests and E2E tests.
+Sovrium follows **F.I.R.S.T principles** with separate conventions for unit tests and E2E tests.
 
 ### Unit Test Files
 
@@ -1127,7 +1127,7 @@ echo "✅ Migration complete. Run: bun run typecheck && bun test"
 
 ### ESLint Enforcement (eslint-plugin-check-file)
 
-Omnera uses `eslint-plugin-check-file` to automatically enforce file and folder naming conventions with pattern-specific rules.
+Sovrium uses `eslint-plugin-check-file` to automatically enforce file and folder naming conventions with pattern-specific rules.
 
 **Configuration** (`eslint.config.ts` lines 329-387):
 
@@ -1431,7 +1431,7 @@ jobs:
 
 ## Summary
 
-Omnera's file naming conventions prioritize **simplicity** and **consistency**:
+Sovrium's file naming conventions prioritize **simplicity** and **consistency**:
 
 ### The Two-Style System
 

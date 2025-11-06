@@ -63,7 +63,7 @@ const createOpenApiApp = () => {
       status: 'ok',
       timestamp: new Date().toISOString(),
       app: {
-        name: 'Omnera',
+        name: 'Sovrium',
       },
     })
   })
@@ -92,10 +92,10 @@ export const getOpenAPIDocument = () => {
   return app.getOpenAPIDocument({
     openapi: '3.1.0',
     info: {
-      title: 'Omnera API',
+      title: 'Sovrium API',
       version: '0.0.1',
       description:
-        'REST API specification for Omnera application.\n\n' +
+        'REST API specification for Sovrium application.\n\n' +
         '**Generated Schema**: This schema is automatically generated from the runtime implementation. ' +
         'It reflects the currently implemented endpoints and their schemas.\n\n' +
         '**Design Specs**: Hand-written OpenAPI specs in `docs/specifications/app/` define the complete API design. ' +

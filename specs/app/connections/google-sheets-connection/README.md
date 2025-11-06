@@ -6,7 +6,7 @@ OAuth 2.0 integration with Google Sheets, enabling access to Google Sheets bases
 
 ## Use Cases
 
-- **Data Sync**: Sync records between Omnera tables and Google Sheets bases
+- **Data Sync**: Sync records between Sovrium tables and Google Sheets bases
 - **Automation Triggers**: React to new/updated records in Google Sheets
 - **Webhook Integration**: Subscribe to Google Sheets webhook events
 - **API Actions**: Create, read, update, delete records via Google Sheets API
@@ -42,12 +42,12 @@ OAuth 2.0 integration with Google Sheets, enabling access to Google Sheets bases
 1. Navigate to [Google Sheets Developer Hub](https://google-sheets.com/developers)
 2. Click "Create OAuth Integration"
 3. Fill in integration details:
-   - **Name**: Omnera Integration
+   - **Name**: Sovrium Integration
    - **Redirect URI**: `https://yourdomain.com/oauth/google-sheets/callback`
    - **Scopes**: Select required permissions (e.g., `data.records:read`, `data.records:write`)
 4. Copy **Client ID** and **Client Secret**
 
-### 2. Configure Connection in Omnera
+### 2. Configure Connection in Sovrium
 
 1. Go to Settings > Connections
 2. Click "Add Connection" > "Google Sheets"
@@ -60,7 +60,7 @@ OAuth 2.0 integration with Google Sheets, enabling access to Google Sheets bases
 1. Click "Connect" button next to saved connection
 2. Redirected to Google Sheets authorization page
 3. Grant requested permissions
-4. Redirected back to Omnera
+4. Redirected back to Sovrium
 5. Connection status changes to "Connected"
 
 ## Runtime Behavior
@@ -69,15 +69,15 @@ OAuth 2.0 integration with Google Sheets, enabling access to Google Sheets bases
 
 ```mermaid
 sequenceDiagram
-    User->>Omnera: Click "Connect"
-    Omnera->>Google Sheets: Redirect to /oauth/authorize
+    User->>Sovrium: Click "Connect"
+    Sovrium->>Google Sheets: Redirect to /oauth/authorize
     Google Sheets->>User: Show authorization page
     User->>Google Sheets: Grant permissions
-    Google Sheets->>Omnera: Redirect with auth code
-    Omnera->>Google Sheets: Exchange code for tokens
-    Google Sheets->>Omnera: Return access + refresh tokens
-    Omnera->>Database: Store encrypted tokens
-    Omnera->>User: Show "Connected" status
+    Google Sheets->>Sovrium: Redirect with auth code
+    Sovrium->>Google Sheets: Exchange code for tokens
+    Google Sheets->>Sovrium: Return access + refresh tokens
+    Sovrium->>Database: Store encrypted tokens
+    Sovrium->>User: Show "Connected" status
 ```
 
 ### Token Management
@@ -108,7 +108,7 @@ sequenceDiagram
 - **Delete Record**: Remove record from table
 - **Webhooks**: Subscribe to record changes
 
-### Example API Call (via Omnera)
+### Example API Call (via Sovrium)
 
 ```typescript
 // Automation action: Create Google Sheets record
@@ -169,7 +169,7 @@ Request only necessary scopes:
 
 ### Webhook Payload Delivery Failed
 
-**Cause**: Omnera webhook endpoint unreachable
+**Cause**: Sovrium webhook endpoint unreachable
 **Resolution**: Google Sheets retries up to 3 times; check endpoint availability
 
 ## Testing Specifications
@@ -186,4 +186,4 @@ Run tests: `bun test:e2e --grep="CONN-GOOGLE_SHEETS"`
 
 - [Google Sheets OAuth Documentation](https://google-sheets.com/developers/web/api/oauth-reference)
 - [Google Sheets API Reference](https://google-sheets.com/developers/web/api/introduction)
-- [Omnera Connection Management Guide](../../../admin/connections/README.md)
+- [Sovrium Connection Management Guide](../../../admin/connections/README.md)

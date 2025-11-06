@@ -6,7 +6,7 @@
 **Purpose**: Performant, flexible form management library for React with built-in validation support
 **Scope**: Client-side only (Presentation layer)
 
-## Why React Hook Form for Omnera
+## Why React Hook Form for Sovrium
 
 - **Performance**: Minimizes re-renders using uncontrolled components
 - **Developer Experience**: Simple API with minimal boilerplate
@@ -37,7 +37,7 @@ React Hook Form manages form state internally and only triggers re-renders when 
 
 ## Integration with Zod
 
-**Critical**: In Omnera, client-side validation uses Zod, NOT Effect Schema.
+**Critical**: In Sovrium, client-side validation uses Zod, NOT Effect Schema.
 
 - **Client-side**: React Hook Form + Zod (browser validation)
 - **Server-side**: Effect Schema (API validation)
@@ -203,7 +203,7 @@ const {
 | `onTouched` | After blur, then onChange | Best of both: no errors until blur, then real-time |
 
 ```typescript
-// Recommended for Omnera
+// Recommended for Sovrium
 const form = useForm({
   mode: 'onSubmit', // Don't show errors while typing
   reValidateMode: 'onChange', // After first submit, show errors in real-time
@@ -451,7 +451,7 @@ function CreateUserForm() {
 }
 ```
 
-## Common Patterns in Omnera
+## Common Patterns in Sovrium
 
 ### Login Form
 

@@ -32,7 +32,7 @@ export function DefaultHomePage({ app }: { readonly app: App }): Readonly<ReactE
           name="viewport"
           content="width=device-width, initial-scale=1.0"
         />
-        <title>{`${app.name} - Powered by Omnera`}</title>
+        <title>{`${app.name} - Powered by Sovrium`}</title>
         <link
           rel="stylesheet"
           href="/assets/output.css"

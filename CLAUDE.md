@@ -1,10 +1,10 @@
-# CLAUDE.md - Omnera™ Project Documentation
+# CLAUDE.md - Sovrium™ Project Documentation
 
 > **Note**: This is a streamlined version. Detailed documentation is available in `docs/` directory and imported on-demand when needed.
 
 ## Project Context
 
-**Vision**: Omnera™ aims to be a configuration-driven application platform (see `@docs/specifications/vision.md` for full vision)
+**Vision**: Sovrium™ aims to be a configuration-driven application platform (see `@docs/specifications/vision.md` for full vision)
 **Current Status**: Phase 0 - Foundation (minimal schema with metadata only)
 **Implementation Progress**: See `ROADMAP.md` for detailed feature tracking and development phases
 
@@ -12,7 +12,7 @@
 
 ## Quick Reference
 
-**Project**: Omnera™ (npm package: "omnera")
+**Project**: Sovrium™ (npm package: "sovrium")
 **Legal Entity**: ESSENTIAL SERVICES (copyright holder & trademark owner)
 **Version**: 0.0.1 (managed by semantic-release)
 **License**: Business Source License 1.1 (BSL 1.1)
@@ -23,7 +23,7 @@
 **Runtime**: Bun 1.3.0 (NOT Node.js)
 **Entry Points**:
 - Library: `src/index.ts` (module import)
-- CLI: `src/cli.ts` (binary executable via `bun run start` or `omnera` command)
+- CLI: `src/cli.ts` (binary executable via `bun run start` or `sovrium` command)
 
 ## Core Stack
 
@@ -192,7 +192,7 @@ git push origin main               # Triggers release ONLY with "release:" type
 ## File Structure
 
 ```
-omnera-v2/
+sovrium/
 ├── docs/                        # Detailed documentation (import on-demand)
 │   ├── infrastructure/          # Tech stack docs
 │   └── architecture/            # Architecture patterns
@@ -271,7 +271,7 @@ When triggered by @claude mention (posted by queue processor every 15 min):
    - Locate test using spec ID (file path in issue)
    - Remove `.fixme()` from ONE specific test
    - Implement minimal code to pass test
-   - Follow Omnera architecture patterns
+   - Follow Sovrium architecture patterns
 
 3. **Run @agent-codebase-refactor-auditor** (ALWAYS):
    - Review implementation for code quality
@@ -498,10 +498,10 @@ To track your token usage and cost:
 
 **License**: Business Source License 1.1 (BSL 1.1)
 - **Copyright**: ESSENTIAL SERVICES (legal entity, owns the code)
-- **Trademark**: Omnera™ is a trademark of ESSENTIAL SERVICES (registered in France)
+- **Trademark**: Sovrium™ is a trademark of ESSENTIAL SERVICES (registered in France)
 - **Free for**: Internal business use, personal projects, educational purposes, non-competing client deployments
 - **NOT allowed**: Commercial hosted/managed services to third parties (requires commercial license)
 - **Change Date**: 2029-01-01 (automatically becomes Apache License 2.0)
-- **Commercial licensing**: Contact license@omnera.dev for competitive SaaS/hosting use cases
+- **Commercial licensing**: Contact license@sovrium.com for competitive SaaS/hosting use cases
 - **Philosophy**: Source-available with time-based open source conversion
 - See `LICENSE.md` for BSL 1.1 terms and `TRADEMARK.md` for trademark usage guidelines

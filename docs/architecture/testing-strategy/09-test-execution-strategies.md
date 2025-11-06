@@ -17,7 +17,7 @@ As your E2E test suite grows, running all tests becomes time-consuming. This sec
 
 ### Test Categories and Tags
 
-Omnera uses Playwright's tagging system to categorize E2E tests by purpose:
+Sovrium uses Playwright's tagging system to categorize E2E tests by purpose:
 | Tag | Purpose | When to Run | Speed | Coverage |
 | ------------- | ------------------------------- | ------------------------------------ | --------- | --------- |
 | `@spec` | Specification tests (TDD) | During development, pre-commit | Fast | Granular |
@@ -229,7 +229,7 @@ export default defineConfig({
 
 ### NPM Scripts Configuration
 
-Omnera uses **grep-based** execution for all test filtering:
+Sovrium uses **grep-based** execution for all test filtering:
 
 - Tag tests with `{ tag: '@spec' }` metadata in test definitions
 - Use `--grep='@tag'` pattern matching for flexible tag combinations
@@ -247,7 +247,7 @@ Omnera uses **grep-based** execution for all test filtering:
 }
 ```
 
-**Note**: The `test:e2e:critical` command serves as both the critical path test suite and production smoke tests. Use `--base-url` flag to run against different environments (e.g., `bun test:e2e:critical -- --base-url=https://production.omnera.app`).
+**Note**: The `test:e2e:critical` command serves as both the critical path test suite and production smoke tests. Use `--base-url` flag to run against different environments (e.g., `bun test:e2e:critical -- --base-url=https://production.sovrium.app`).
 
 ### TDD Workflow with Tags
 

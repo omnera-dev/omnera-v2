@@ -6,7 +6,7 @@ Accepted
 
 ## Context
 
-Omnera requires robust data validation at multiple layers:
+Sovrium requires robust data validation at multiple layers:
 
 1. **Domain models** - Core business logic validation
 2. **API contracts** - HTTP request/response validation

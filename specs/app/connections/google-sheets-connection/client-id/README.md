@@ -21,7 +21,7 @@ Public identifier for the OAuth 2.0 application registered with Google Sheets. T
 
 ```json
 {
-  "clientId": "app.omnera.google-sheets.1234567890"
+  "clientId": "app.sovrium.google-sheets.1234567890"
 }
 ```
 
@@ -38,9 +38,9 @@ Public identifier for the OAuth 2.0 application registered with Google Sheets. T
 ### Example OAuth Integration Config
 
 ```
-Integration Name: Omnera Google Sheets Integration
+Integration Name: Sovrium Google Sheets Integration
 Client ID: google-sheets_client_abc123xyz
-Redirect URI: https://app.omnera.io/oauth/google-sheets/callback
+Redirect URI: https://app.sovrium.io/oauth/google-sheets/callback
 Scopes: data.records:read data.records:write
 ```
 
@@ -53,7 +53,7 @@ Client ID is included in authorization URL:
 ```
 GET https://google-sheets.com/oauth2/v1/authorize?
   client_id=google-sheets_client_xyz789
-  &redirect_uri=https://app.omnera.io/oauth/callback
+  &redirect_uri=https://app.sovrium.io/oauth/callback
   &response_type=code
   &scope=data.records:read
 ```
@@ -129,7 +129,7 @@ Use different OAuth apps per environment:
   },
   "production": {
     "clientId": "google-sheets_prod_789",
-    "redirectUri": "https://app.omnera.io/oauth/callback"
+    "redirectUri": "https://app.sovrium.io/oauth/callback"
   }
 }
 ```

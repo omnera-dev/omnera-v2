@@ -14,7 +14,7 @@ export function generateSummaryRoadmap(data: NewRoadmapData): string {
   const sections: string[] = []
 
   // Header
-  sections.push(`# Omnera Development Roadmap
+  sections.push(`# Sovrium Development Roadmap
 
 > **Last Generated**: ${data.timestamp}
 

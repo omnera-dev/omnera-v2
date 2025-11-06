@@ -6,7 +6,7 @@ OAuth 2.0 integration with Notion, enabling access to Notion bases, tables, reco
 
 ## Use Cases
 
-- **Data Sync**: Sync records between Omnera tables and Notion bases
+- **Data Sync**: Sync records between Sovrium tables and Notion bases
 - **Automation Triggers**: React to new/updated records in Notion
 - **Webhook Integration**: Subscribe to Notion webhook events
 - **API Actions**: Create, read, update, delete records via Notion API
@@ -42,12 +42,12 @@ OAuth 2.0 integration with Notion, enabling access to Notion bases, tables, reco
 1. Navigate to [Notion Developer Hub](https://notion.com/developers)
 2. Click "Create OAuth Integration"
 3. Fill in integration details:
-   - **Name**: Omnera Integration
+   - **Name**: Sovrium Integration
    - **Redirect URI**: `https://yourdomain.com/oauth/notion/callback`
    - **Scopes**: Select required permissions (e.g., `data.records:read`, `data.records:write`)
 4. Copy **Client ID** and **Client Secret**
 
-### 2. Configure Connection in Omnera
+### 2. Configure Connection in Sovrium
 
 1. Go to Settings > Connections
 2. Click "Add Connection" > "Notion"
@@ -60,7 +60,7 @@ OAuth 2.0 integration with Notion, enabling access to Notion bases, tables, reco
 1. Click "Connect" button next to saved connection
 2. Redirected to Notion authorization page
 3. Grant requested permissions
-4. Redirected back to Omnera
+4. Redirected back to Sovrium
 5. Connection status changes to "Connected"
 
 ## Runtime Behavior
@@ -69,15 +69,15 @@ OAuth 2.0 integration with Notion, enabling access to Notion bases, tables, reco
 
 ```mermaid
 sequenceDiagram
-    User->>Omnera: Click "Connect"
-    Omnera->>Notion: Redirect to /oauth/authorize
+    User->>Sovrium: Click "Connect"
+    Sovrium->>Notion: Redirect to /oauth/authorize
     Notion->>User: Show authorization page
     User->>Notion: Grant permissions
-    Notion->>Omnera: Redirect with auth code
-    Omnera->>Notion: Exchange code for tokens
-    Notion->>Omnera: Return access + refresh tokens
-    Omnera->>Database: Store encrypted tokens
-    Omnera->>User: Show "Connected" status
+    Notion->>Sovrium: Redirect with auth code
+    Sovrium->>Notion: Exchange code for tokens
+    Notion->>Sovrium: Return access + refresh tokens
+    Sovrium->>Database: Store encrypted tokens
+    Sovrium->>User: Show "Connected" status
 ```
 
 ### Token Management
@@ -108,7 +108,7 @@ sequenceDiagram
 - **Delete Record**: Remove record from table
 - **Webhooks**: Subscribe to record changes
 
-### Example API Call (via Omnera)
+### Example API Call (via Sovrium)
 
 ```typescript
 // Automation action: Create Notion record
@@ -169,7 +169,7 @@ Request only necessary scopes:
 
 ### Webhook Payload Delivery Failed
 
-**Cause**: Omnera webhook endpoint unreachable
+**Cause**: Sovrium webhook endpoint unreachable
 **Resolution**: Notion retries up to 3 times; check endpoint availability
 
 ## Testing Specifications
@@ -186,4 +186,4 @@ Run tests: `bun test:e2e --grep="CONN-NOTION"`
 
 - [Notion OAuth Documentation](https://notion.com/developers/web/api/oauth-reference)
 - [Notion API Reference](https://notion.com/developers/web/api/introduction)
-- [Omnera Connection Management Guide](../../../admin/connections/README.md)
+- [Sovrium Connection Management Guide](../../../admin/connections/README.md)

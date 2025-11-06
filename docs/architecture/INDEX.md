@@ -2,7 +2,7 @@
 
 ## Overview
 
-This index provides a comprehensive guide to Omnera's architecture documentation, showing relationships between architectural concepts and their implementation in infrastructure, enforcement mechanisms, and cross-references.
+This index provides a comprehensive guide to Sovrium's architecture documentation, showing relationships between architectural concepts and their implementation in infrastructure, enforcement mechanisms, and cross-references.
 
 ---
 
@@ -230,7 +230,7 @@ This index provides a comprehensive guide to Omnera's architecture documentation
 
 ## Enforcement Mechanisms
 
-Omnera uses multiple layers of enforcement to ensure architectural principles are followed:
+Sovrium uses multiple layers of enforcement to ensure architectural principles are followed:
 
 ### 1. ESLint Enforcement (Build-Time)
 
@@ -287,7 +287,7 @@ Omnera uses multiple layers of enforcement to ensure architectural principles ar
 
 ## Validation Split: Client vs Server
 
-Omnera uses different validation libraries depending on the context:
+Sovrium uses different validation libraries depending on the context:
 
 | Context         | Library           | Use Case                                    | Architecture Document      |
 | --------------- | ----------------- | ------------------------------------------- | -------------------------- |
@@ -308,7 +308,7 @@ Omnera uses different validation libraries depending on the context:
 
 ## Date Handling Split: Client vs Server
 
-Omnera uses different date libraries depending on the context:
+Sovrium uses different date libraries depending on the context:
 
 | Context         | Library             | Use Case                             | Architecture Document       |
 | --------------- | ------------------- | ------------------------------------ | --------------------------- |

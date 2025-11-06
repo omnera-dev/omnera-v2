@@ -21,7 +21,7 @@ Public identifier for the OAuth 2.0 application registered with Airtable. This I
 
 ```json
 {
-  "clientId": "app.omnera.airtable.1234567890"
+  "clientId": "app.sovrium.airtable.1234567890"
 }
 ```
 
@@ -38,9 +38,9 @@ Public identifier for the OAuth 2.0 application registered with Airtable. This I
 ### Example OAuth Integration Config
 
 ```
-Integration Name: Omnera Airtable Integration
+Integration Name: Sovrium Airtable Integration
 Client ID: airtable_client_abc123xyz
-Redirect URI: https://app.omnera.io/oauth/airtable/callback
+Redirect URI: https://app.sovrium.io/oauth/airtable/callback
 Scopes: data.records:read data.records:write
 ```
 
@@ -53,7 +53,7 @@ Client ID is included in authorization URL:
 ```
 GET https://airtable.com/oauth2/v1/authorize?
   client_id=airtable_client_xyz789
-  &redirect_uri=https://app.omnera.io/oauth/callback
+  &redirect_uri=https://app.sovrium.io/oauth/callback
   &response_type=code
   &scope=data.records:read
 ```
@@ -129,7 +129,7 @@ Use different OAuth apps per environment:
   },
   "production": {
     "clientId": "airtable_prod_789",
-    "redirectUri": "https://app.omnera.io/oauth/callback"
+    "redirectUri": "https://app.sovrium.io/oauth/callback"
   }
 }
 ```

@@ -3,11 +3,11 @@
 ## Overview
 
 **Version**: ^4.1.12
-**Purpose**: TypeScript-first schema validation with static type inference, specifically used for OpenAPI schema generation and client-side form validation in Omnera
+**Purpose**: TypeScript-first schema validation with static type inference, specifically used for OpenAPI schema generation and client-side form validation in Sovrium
 
-Zod is a TypeScript-first schema declaration and validation library. In Omnera, it serves a specific purpose: handling OpenAPI schema generation for HTTP contracts and client-side form validation with React Hook Form.
+Zod is a TypeScript-first schema declaration and validation library. In Sovrium, it serves a specific purpose: handling OpenAPI schema generation for HTTP contracts and client-side form validation with React Hook Form.
 
-## Why Zod in Omnera (Limited Scope)
+## Why Zod in Sovrium (Limited Scope)
 
 While Effect Schema is the primary validation library for domain models, Zod is used in two specific contexts:
 
@@ -300,4 +300,4 @@ ESLint enforces Zod usage restrictions:
 
 ---
 
-**Remember**: In Omnera, Zod is a specialized tool for OpenAPI and forms. For all other validation needs, use Effect Schema.
+**Remember**: In Sovrium, Zod is a specialized tool for OpenAPI and forms. For all other validation needs, use Effect Schema.

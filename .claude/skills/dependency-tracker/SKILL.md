@@ -484,7 +484,7 @@ bun add {package}@{version}
 
 {team conventions for using this package}
 
-## Integration with Omnera
+## Integration with Sovrium
 
 {how this integrates with the rest of the stack}
 

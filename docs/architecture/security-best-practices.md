@@ -2,7 +2,7 @@
 
 ## Overview
 
-This guide provides security best practices for the Omnera stack, covering Better Auth authentication, input validation with Effect Schema, CSRF/XSS protection, and secure coding patterns. Security should be built into the application from the start, not added as an afterthought.
+This guide provides security best practices for the Sovrium stack, covering Better Auth authentication, input validation with Effect Schema, CSRF/XSS protection, and secure coding patterns. Security should be built into the application from the start, not added as an afterthought.
 
 ## Core Security Principles
 
@@ -206,7 +206,7 @@ const user = await db.execute(query) // Vulnerable to SQL injection!
 - Drizzle automatically escapes special characters
 - No way to inject malicious SQL
 
-**ESLint Enforcement**: Omnera's ESLint configuration automatically enforces WHERE clauses on DELETE and UPDATE operations via eslint-plugin-drizzle, preventing accidental mass operations that could compromise data integrity or expose security vulnerabilities.
+**ESLint Enforcement**: Sovrium's ESLint configuration automatically enforces WHERE clauses on DELETE and UPDATE operations via eslint-plugin-drizzle, preventing accidental mass operations that could compromise data integrity or expose security vulnerabilities.
 
 **See**: `eslint.config.ts` lines 1090-1094 for the drizzle plugin enforcement rules.
 

@@ -375,7 +375,7 @@ As your E2E suite grows, use Playwright's tagging system to run specific test ca
 
 ### Test Tags
 
-Omnera uses three test tags for efficient test execution:
+Sovrium uses three test tags for efficient test execution:
 
 | Tag           | Purpose             | When to Run  | Command                                |
 | ------------- | ------------------- | ------------ | -------------------------------------- |

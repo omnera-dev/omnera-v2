@@ -1,6 +1,6 @@
 # Naming Conventions
 
-> **Purpose**: Comprehensive naming standards for files, code elements, and patterns across the Omnera project.
+> **Purpose**: Comprehensive naming standards for files, code elements, and patterns across the Sovrium project.
 >
 > **Status**: ✅ Active - File naming AND code naming enforced via ESLint
 >

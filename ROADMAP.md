@@ -1,12 +1,12 @@
-# Omnera Development Roadmap
+# Sovrium Development Roadmap
 
-> **Last Generated**: 2025-11-04
+> **Last Generated**: 2025-11-06
 
 ## Overall Progress
 
-██████████████░░░░░░░░░░░░░░░░ 47%
+██████████████░░░░░░░░░░░░░░░░ 48%
 
-**Combined Progress**: 47% Complete
+**Combined Progress**: 48% Complete
 
 ### Individual Metrics
 
@@ -16,8 +16,8 @@
 **🌐 API Schema Progress**: 63% (12/19 endpoints, 29 current)
 ███████████████████░░░░░░░░░░░ 63%
 
-**🧪 Test Implementation**: 7% (141/1884 specs passing)
-██░░░░░░░░░░░░░░░░░░░░░░░░░░░░ 7%
+**🧪 Test Implementation**: 11% (205/1884 specs passing)
+███░░░░░░░░░░░░░░░░░░░░░░░░░░░ 11%
 
 ---
 
@@ -48,8 +48,8 @@
 ## 3. Test Implementation Status
 
 🧪 **Total Specs**: 1884
-✅ **DONE**: 141 (7%)
-🚧 **WIP**: 591 (31%)
+✅ **DONE**: 205 (11%)
+🚧 **WIP**: 527 (28%)
 ⏳ **TODO**: 1152 (61%)
 
 **Next Steps**: Convert TODO specs to WIP, then to DONE

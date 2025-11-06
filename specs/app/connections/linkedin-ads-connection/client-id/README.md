@@ -21,7 +21,7 @@ Public identifier for the OAuth 2.0 application registered with LinkedIn Ads. Th
 
 ```json
 {
-  "clientId": "app.omnera.linkedin-ads.1234567890"
+  "clientId": "app.sovrium.linkedin-ads.1234567890"
 }
 ```
 
@@ -38,9 +38,9 @@ Public identifier for the OAuth 2.0 application registered with LinkedIn Ads. Th
 ### Example OAuth Integration Config
 
 ```
-Integration Name: Omnera LinkedIn Ads Integration
+Integration Name: Sovrium LinkedIn Ads Integration
 Client ID: linkedin-ads_client_abc123xyz
-Redirect URI: https://app.omnera.io/oauth/linkedin-ads/callback
+Redirect URI: https://app.sovrium.io/oauth/linkedin-ads/callback
 Scopes: data.records:read data.records:write
 ```
 
@@ -53,7 +53,7 @@ Client ID is included in authorization URL:
 ```
 GET https://linkedin-ads.com/oauth2/v1/authorize?
   client_id=linkedin-ads_client_xyz789
-  &redirect_uri=https://app.omnera.io/oauth/callback
+  &redirect_uri=https://app.sovrium.io/oauth/callback
   &response_type=code
   &scope=data.records:read
 ```
@@ -129,7 +129,7 @@ Use different OAuth apps per environment:
   },
   "production": {
     "clientId": "linkedin-ads_prod_789",
-    "redirectUri": "https://app.omnera.io/oauth/callback"
+    "redirectUri": "https://app.sovrium.io/oauth/callback"
   }
 }
 ```

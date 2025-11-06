@@ -4,11 +4,11 @@
 
 ## Overview
 
-Omnera uses a **dual-track API architecture** that provides both type-safe RPC client access and comprehensive OpenAPI documentation from a single set of Zod schemas.
+Sovrium uses a **dual-track API architecture** that provides both type-safe RPC client access and comprehensive OpenAPI documentation from a single set of Zod schemas.
 
 ### Critical Architectural Decision: Zod vs Effect Schema
 
-**Omnera uses two validation libraries with strict separation**:
+**Sovrium uses two validation libraries with strict separation**:
 
 | Library           | Version | Usage                            | Allowed Locations                                         | Enforced By       |
 | ----------------- | ------- | -------------------------------- | --------------------------------------------------------- | ----------------- |
@@ -376,7 +376,7 @@ export const getOpenAPIDocument = () => {
   return app.getOpenAPIDocument({
     openapi: '3.1.0',
     info: {
-      title: 'Omnera API',
+      title: 'Sovrium API',
       version: '0.0.1',
     },
     servers: [{ url: 'http://localhost:3000' }],

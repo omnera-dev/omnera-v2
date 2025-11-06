@@ -6,7 +6,7 @@ OAuth 2.0 integration with Qonto, enabling access to Qonto bases, tables, record
 
 ## Use Cases
 
-- **Data Sync**: Sync records between Omnera tables and Qonto bases
+- **Data Sync**: Sync records between Sovrium tables and Qonto bases
 - **Automation Triggers**: React to new/updated records in Qonto
 - **Webhook Integration**: Subscribe to Qonto webhook events
 - **API Actions**: Create, read, update, delete records via Qonto API
@@ -42,12 +42,12 @@ OAuth 2.0 integration with Qonto, enabling access to Qonto bases, tables, record
 1. Navigate to [Qonto Developer Hub](https://qonto.com/developers)
 2. Click "Create OAuth Integration"
 3. Fill in integration details:
-   - **Name**: Omnera Integration
+   - **Name**: Sovrium Integration
    - **Redirect URI**: `https://yourdomain.com/oauth/qonto/callback`
    - **Scopes**: Select required permissions (e.g., `data.records:read`, `data.records:write`)
 4. Copy **Client ID** and **Client Secret**
 
-### 2. Configure Connection in Omnera
+### 2. Configure Connection in Sovrium
 
 1. Go to Settings > Connections
 2. Click "Add Connection" > "Qonto"
@@ -60,7 +60,7 @@ OAuth 2.0 integration with Qonto, enabling access to Qonto bases, tables, record
 1. Click "Connect" button next to saved connection
 2. Redirected to Qonto authorization page
 3. Grant requested permissions
-4. Redirected back to Omnera
+4. Redirected back to Sovrium
 5. Connection status changes to "Connected"
 
 ## Runtime Behavior
@@ -69,15 +69,15 @@ OAuth 2.0 integration with Qonto, enabling access to Qonto bases, tables, record
 
 ```mermaid
 sequenceDiagram
-    User->>Omnera: Click "Connect"
-    Omnera->>Qonto: Redirect to /oauth/authorize
+    User->>Sovrium: Click "Connect"
+    Sovrium->>Qonto: Redirect to /oauth/authorize
     Qonto->>User: Show authorization page
     User->>Qonto: Grant permissions
-    Qonto->>Omnera: Redirect with auth code
-    Omnera->>Qonto: Exchange code for tokens
-    Qonto->>Omnera: Return access + refresh tokens
-    Omnera->>Database: Store encrypted tokens
-    Omnera->>User: Show "Connected" status
+    Qonto->>Sovrium: Redirect with auth code
+    Sovrium->>Qonto: Exchange code for tokens
+    Qonto->>Sovrium: Return access + refresh tokens
+    Sovrium->>Database: Store encrypted tokens
+    Sovrium->>User: Show "Connected" status
 ```
 
 ### Token Management
@@ -108,7 +108,7 @@ sequenceDiagram
 - **Delete Record**: Remove record from table
 - **Webhooks**: Subscribe to record changes
 
-### Example API Call (via Omnera)
+### Example API Call (via Sovrium)
 
 ```typescript
 // Automation action: Create Qonto record
@@ -169,7 +169,7 @@ Request only necessary scopes:
 
 ### Webhook Payload Delivery Failed
 
-**Cause**: Omnera webhook endpoint unreachable
+**Cause**: Sovrium webhook endpoint unreachable
 **Resolution**: Qonto retries up to 3 times; check endpoint availability
 
 ## Testing Specifications
@@ -186,4 +186,4 @@ Run tests: `bun test:e2e --grep="CONN-QONTO"`
 
 - [Qonto OAuth Documentation](https://qonto.com/developers/web/api/oauth-reference)
 - [Qonto API Reference](https://qonto.com/developers/web/api/introduction)
-- [Omnera Connection Management Guide](../../../admin/connections/README.md)
+- [Sovrium Connection Management Guide](../../../admin/connections/README.md)

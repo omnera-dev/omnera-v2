@@ -7,29 +7,29 @@
  */
 
 /**
- * Omnera CLI - Command-line interface for starting an Omnera server
+ * Sovrium CLI - Command-line interface for starting an Sovrium server
  *
- * This script allows running an Omnera server from the command line using
+ * This script allows running an Sovrium server from the command line using
  * environment variables for configuration.
  *
  * ## Usage
  *
  * ```bash
  * # Using JSON schema environment variable
- * OMNERA_APP_SCHEMA='{"name":"My App","description":"Description"}' bun run omnera
+ * SOVRIUM_APP_SCHEMA='{"name":"My App","description":"Description"}' bun run sovrium
  *
  * # Or with npx
- * OMNERA_APP_SCHEMA='{"name":"My App"}' npx omnera
+ * SOVRIUM_APP_SCHEMA='{"name":"My App"}' npx sovrium
  *
  * # With custom port and hostname
- * OMNERA_PORT=8080 OMNERA_HOSTNAME="0.0.0.0" OMNERA_APP_SCHEMA='{"name":"My App"}' bun run omnera
+ * SOVRIUM_PORT=8080 SOVRIUM_HOSTNAME="0.0.0.0" SOVRIUM_APP_SCHEMA='{"name":"My App"}' bun run sovrium
  * ```
  *
  * ## Environment Variables
  *
- * - `OMNERA_APP_SCHEMA` (required) - JSON string containing app configuration (name, description, etc.)
- * - `OMNERA_PORT` (optional) - Server port (default: 3000)
- * - `OMNERA_HOSTNAME` (optional) - Server hostname (default: localhost)
+ * - `SOVRIUM_APP_SCHEMA` (required) - JSON string containing app configuration (name, description, etc.)
+ * - `SOVRIUM_PORT` (optional) - Server port (default: 3000)
+ * - `SOVRIUM_HOSTNAME` (optional) - Server hostname (default: localhost)
  */
 
 import { Effect, Console } from 'effect'
@@ -42,27 +42,27 @@ interface AppSchema {
 }
 
 // Read environment variables (Bun-specific)
-const appSchemaString = Bun.env.OMNERA_APP_SCHEMA
-const port = Bun.env.OMNERA_PORT
-const hostname = Bun.env.OMNERA_HOSTNAME
+const appSchemaString = Bun.env.SOVRIUM_APP_SCHEMA
+const port = Bun.env.SOVRIUM_PORT
+const hostname = Bun.env.SOVRIUM_HOSTNAME
 
 // Validate required environment variables
 if (!appSchemaString) {
   Effect.runSync(
     Effect.gen(function* () {
-      yield* Console.error('Error: OMNERA_APP_SCHEMA environment variable is required')
+      yield* Console.error('Error: SOVRIUM_APP_SCHEMA environment variable is required')
       yield* Console.error('')
       yield* Console.error('Usage:')
-      yield* Console.error('  OMNERA_APP_SCHEMA=\'{"name":"My App"}\' bun run omnera')
+      yield* Console.error('  SOVRIUM_APP_SCHEMA=\'{"name":"My App"}\' bun run sovrium')
       yield* Console.error('')
       yield* Console.error('Example with description:')
       yield* Console.error(
-        '  OMNERA_APP_SCHEMA=\'{"name":"My App","description":"My Description"}\' bun run omnera'
+        '  SOVRIUM_APP_SCHEMA=\'{"name":"My App","description":"My Description"}\' bun run sovrium'
       )
       yield* Console.error('')
       yield* Console.error('Optional environment variables:')
-      yield* Console.error('  OMNERA_PORT - Server port (default: 3000)')
-      yield* Console.error('  OMNERA_HOSTNAME - Server hostname (default: localhost)')
+      yield* Console.error('  SOVRIUM_PORT - Server port (default: 3000)')
+      yield* Console.error('  SOVRIUM_HOSTNAME - Server hostname (default: localhost)')
     })
   )
   // Terminate process - imperative statement required for CLI
@@ -77,13 +77,13 @@ const app: Readonly<AppSchema> = (() => {
   } catch {
     Effect.runSync(
       Effect.gen(function* () {
-        yield* Console.error('Error: OMNERA_APP_SCHEMA must be valid JSON')
+        yield* Console.error('Error: SOVRIUM_APP_SCHEMA must be valid JSON')
         yield* Console.error('')
         yield* Console.error('Received:', appSchemaString)
         yield* Console.error('')
         yield* Console.error('Example:')
         yield* Console.error(
-          '  OMNERA_APP_SCHEMA=\'{"name":"My App","description":"My Description"}\' bun run omnera'
+          '  SOVRIUM_APP_SCHEMA=\'{"name":"My App","description":"My Description"}\' bun run sovrium'
         )
       })
     )
@@ -120,7 +120,7 @@ const options: StartOptions = (() => {
 // Start the server
 Effect.runSync(
   Effect.gen(function* () {
-    yield* Console.log('Starting Omnera server from CLI...')
+    yield* Console.log('Starting Sovrium server from CLI...')
     yield* Console.log(`App: ${app.name}${app.description ? ` - ${app.description}` : ''}`)
     if (options.port) yield* Console.log(`Port: ${options.port}`)
     if (options.hostname) yield* Console.log(`Hostname: ${options.hostname}`)

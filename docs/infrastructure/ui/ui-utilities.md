@@ -2,7 +2,7 @@
 
 ## Overview
 
-Omnera includes several specialized UI utility libraries that complement the core shadcn/ui components. These libraries provide common UI patterns and components that are frequently needed in modern web applications.
+Sovrium includes several specialized UI utility libraries that complement the core shadcn/ui components. These libraries provide common UI patterns and components that are frequently needed in modern web applications.
 
 **Purpose**: Pre-built, accessible UI utilities for common interaction patterns
 
@@ -1061,9 +1061,9 @@ function NestedDrawers() {
 
 ---
 
-## Integration with Omnera Stack
+## Integration with Sovrium Stack
 
-All these UI utilities integrate seamlessly with Omnera's core technologies:
+All these UI utilities integrate seamlessly with Sovrium's core technologies:
 
 ### React Integration
 

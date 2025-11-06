@@ -97,7 +97,7 @@ test.describe('Variable Reference', () => {
           {
             path: '/',
             vars: {
-              siteName: 'Omnera',
+              siteName: 'Sovrium',
             },
             sections: [
               {
@@ -113,7 +113,7 @@ test.describe('Variable Reference', () => {
       await page.goto('/')
 
       // THEN: it should accept variable at start of string
-      await expect(page.locator('[data-testid="text"]')).toHaveText('Omnera is the best')
+      await expect(page.locator('[data-testid="text"]')).toHaveText('Sovrium is the best')
     }
   )
 
@@ -128,7 +128,7 @@ test.describe('Variable Reference', () => {
           {
             path: '/',
             vars: {
-              siteName: 'Omnera',
+              siteName: 'Sovrium',
             },
             sections: [
               {
@@ -144,7 +144,7 @@ test.describe('Variable Reference', () => {
       await page.goto('/')
 
       // THEN: it should accept variable in middle of string
-      await expect(page.locator('[data-testid="text"]')).toHaveText('Welcome to Omnera today')
+      await expect(page.locator('[data-testid="text"]')).toHaveText('Welcome to Sovrium today')
     }
   )
 
@@ -293,7 +293,7 @@ test.describe('Variable Reference', () => {
           {
             path: '/',
             vars: {
-              siteName: 'Omnera',
+              siteName: 'Sovrium',
               primaryColor: 'blue',
               productName: 'Pro Plan',
               price: '$29.99',
@@ -339,7 +339,7 @@ test.describe('Variable Reference', () => {
       expect(html).toContain('$29.99') // Literal value, not a variable
 
       // Verify variable replacements in rendered content
-      await expect(page.locator('h1')).toHaveText('Welcome to Omnera')
+      await expect(page.locator('h1')).toHaveText('Welcome to Sovrium')
       await expect(page.locator('[data-testid="text"]')).toHaveText(
         'The Pro Plan costs $29.99 per month'
       )

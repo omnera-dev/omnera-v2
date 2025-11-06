@@ -8,7 +8,7 @@
 
 React is a modern UI library created by Facebook (Meta) that revolutionized web development with its component-based architecture and virtual DOM. React 19 introduces significant improvements including the React Compiler for automatic optimization, Actions for simplified form handling, and enhanced server-side rendering capabilities.
 
-## Why React for Omnera
+## Why React for Sovrium
 
 - **Component-Based Architecture**: Build complex UIs from small, isolated, reusable pieces
 - **Declarative Approach**: Describe what the UI should look like, React handles updates
@@ -23,9 +23,9 @@ React is a modern UI library created by Facebook (Meta) that revolutionized web 
 
 ## React 19 Major Features
 
-### ⚠️ React Compilation in Omnera - Important Distinction
+### ⚠️ React Compilation in Sovrium - Important Distinction
 
-There are **two different types of "React compilation"** - Omnera uses Bun which supports one but not the other:
+There are **two different types of "React compilation"** - Sovrium uses Bun which supports one but not the other:
 
 #### ✅ JSX Transpilation (Available with Bun)
 
@@ -59,13 +59,13 @@ This is **performance optimization** - automatic memoization to reduce unnecessa
 **What it would enable**: Automatic `useMemo`, `useCallback`, and `React.memo` optimizations
 **Workaround**: Use manual optimization patterns (see Performance Optimization section below) when needed
 
-**Key Takeaway**: All React 19 features work in Omnera EXCEPT the Compiler's automatic memoization. You can use Actions, `use()` hook, Server Components, document metadata, and ref as prop - but manual performance optimization is still required for computationally expensive components.
+**Key Takeaway**: All React 19 features work in Sovrium EXCEPT the Compiler's automatic memoization. You can use Actions, `use()` hook, Server Components, document metadata, and ref as prop - but manual performance optimization is still required for computationally expensive components.
 
 ---
 
-### 1. React Compiler (Automatic Optimization) - NOT AVAILABLE IN OMNERA
+### 1. React Compiler (Automatic Optimization) - NOT AVAILABLE IN SOVRIUM
 
-> **⚠️ IMPORTANT**: The automatic React Compiler optimization described below is **NOT currently available** in Omnera. Bun does not yet support `babel-plugin-react-compiler`. The examples show the target architecture, but manual optimization is still required.
+> **⚠️ IMPORTANT**: The automatic React Compiler optimization described below is **NOT currently available** in Sovrium. Bun does not yet support `babel-plugin-react-compiler`. The examples show the target architecture, but manual optimization is still required.
 
 React 19 introduces an automatic compiler that would optimize components without manual intervention:
 
@@ -212,7 +212,7 @@ function ProductCard({ product }: { product: Product }) {
 }
 ```
 
-**Benefits for Omnera**:
+**Benefits for Sovrium**:
 
 - **Server-Side Data Fetching**: Fetch data directly in components on the server
 - **Smaller Client Bundles**: Server components don't ship JavaScript to client
@@ -227,7 +227,7 @@ React 19 natively supports `<title>`, `<meta>`, and `<link>` tags anywhere in co
 function BlogPost({ post }: { post: Post }) {
   return (
     <>
-      <title>{post.title} - Omnera Blog</title>
+      <title>{post.title} - Sovrium Blog</title>
       <meta
         name="description"
         content={post.excerpt}
@@ -293,7 +293,7 @@ React 19 provides better error messages and debugging:
 
 ## Installation
 
-React 19 is already installed in Omnera:
+React 19 is already installed in Sovrium:
 
 ```json
 {
@@ -315,7 +315,7 @@ React components are JavaScript/TypeScript functions that return JSX:
 ```tsx
 // Simple functional component
 function Welcome() {
-  return <h1>Welcome to Omnera!</h1>
+  return <h1>Welcome to Sovrium!</h1>
 }
 
 // Component with props and TypeScript
@@ -640,9 +640,9 @@ function SearchResults({ query, filters }: { query: string; filters: Filters }) 
 
 ## Additional Resources
 
-For advanced React topics and integrations with the Omnera stack, see:
+For advanced React topics and integrations with the Sovrium stack, see:
 
-### Omnera Stack Integration
+### Sovrium Stack Integration
 
 - **Server-Side Rendering**: `@docs/infrastructure/framework/hono.md` - Rendering React with Hono
 - **Styling**: `@docs/infrastructure/ui/tailwind.md` - Tailwind CSS patterns for React components
@@ -659,7 +659,7 @@ For advanced React topics and integrations with the Omnera stack, see:
 - **React Patterns**: [https://reactpatterns.com](https://reactpatterns.com)
 - **React Server Components**: [https://react.dev/reference/rsc/server-components](https://react.dev/reference/rsc/server-components)
 
-## Best Practices for Omnera
+## Best Practices for Sovrium
 
 1. **Use Functional Components**: Always use functional components with hooks
 2. **TypeScript for Props**: Define prop interfaces for all components

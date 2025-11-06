@@ -1,7 +1,7 @@
 /**
- * Example usage of Omnera's start function
+ * Example usage of Sovrium's start function
  *
- * This file demonstrates the basic usage of Omnera to create and run
+ * This file demonstrates the basic usage of Sovrium to create and run
  * a web application with minimal boilerplate.
  *
  * ## Running this example
@@ -25,9 +25,9 @@ import { start, type App } from '@/index'
 
 // Define your application configuration
 const myApp: App = {
-  name: 'omnera-landing-page-demo',
+  name: 'sovrium-landing-page-demo',
   version: '1.0.0',
-  description: 'This a demo landing page with omnera',
+  description: 'This a demo landing page with sovrium',
 }
 
 // Start the server (handles everything automatically with defaults)

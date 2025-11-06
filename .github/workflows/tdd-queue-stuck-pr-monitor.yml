@@ -36,7 +36,7 @@ jobs:
 
           # Get all open tdd-automation PRs
           OPEN_PRS=$(gh pr list \
-            --repo omnera-dev/omnera-v2 \
+            --repo sovrium/sovrium \
             --label tdd-automation \
             --state open \
             --json number,autoMergeRequest,mergeable,statusCheckRollup,createdAt,headRefName \
@@ -95,12 +95,12 @@ jobs:
 
             # Enable auto-merge for stuck PR
             echo "   🔧 STUCK PR DETECTED! Enabling auto-merge..."
-            if gh pr merge "$PR_NUMBER" --auto --squash --repo omnera-dev/omnera-v2; then
+            if gh pr merge "$PR_NUMBER" --auto --squash --repo sovrium/sovrium; then
               echo "   ✅ Auto-merge enabled successfully for PR #$PR_NUMBER"
 
               # Add a comment explaining what happened
 
-              gh pr comment "$PR_NUMBER" --repo omnera-dev/omnera-v2 --body "🤖 Stuck PR Monitor - This PR was stuck in an open state despite having all checks passing and being mergeable. Auto-merge has been automatically enabled. Details: PR age $AGE_MINUTES minutes, Mergeable status $MERGEABLE, CI checks Passing. The PR will now merge automatically when all requirements are met."
+              gh pr comment "$PR_NUMBER" --repo sovrium/sovrium --body "🤖 Stuck PR Monitor - This PR was stuck in an open state despite having all checks passing and being mergeable. Auto-merge has been automatically enabled. Details: PR age $AGE_MINUTES minutes, Mergeable status $MERGEABLE, CI checks Passing. The PR will now merge automatically when all requirements are met."
             else
               echo "   ❌ Failed to enable auto-merge for PR #$PR_NUMBER"
             fi

@@ -1,6 +1,6 @@
 # Copyright Header Automation
 
-This document explains how copyright headers are managed in the Omnera codebase.
+This document explains how copyright headers are managed in the Sovrium codebase.
 
 ## Required Header Format
 

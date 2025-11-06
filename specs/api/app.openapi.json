@@ -1,9 +1,9 @@
 {
   "openapi": "3.1.0",
   "info": {
-    "title": "Omnera API",
+    "title": "Sovrium API",
     "version": "0.0.1",
-    "description": "REST API specification for Omnera application platform.\n\n**Architecture**: This specification uses a modular structure where paths, schemas, and responses are split into separate files for better maintainability and reusability."
+    "description": "REST API specification for Sovrium application platform.\n\n**Architecture**: This specification uses a modular structure where paths, schemas, and responses are split into separate files for better maintainability and reusability."
   },
   "servers": [
     {

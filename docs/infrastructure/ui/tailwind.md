@@ -10,7 +10,7 @@
 
 Tailwind CSS is a highly customizable, low-level CSS framework that provides utility classes for building designs directly in HTML/JSX. Version 4 represents a complete rewrite with a new engine, CSS-first configuration, and significantly improved performance.
 
-## Why Tailwind CSS for Omnera
+## Why Tailwind CSS for Sovrium
 
 - **Utility-First Approach**: Build complex designs without writing custom CSS
 - **Rapid Development**: Compose interfaces quickly using pre-built utility classes
@@ -46,7 +46,7 @@ Tailwind CSS is a highly customizable, low-level CSS framework that provides uti
 
 ## Installation
 
-Tailwind CSS v4 is already installed in Omnera:
+Tailwind CSS v4 is already installed in Sovrium:
 
 ```json
 {
@@ -222,7 +222,7 @@ Tailwind provides thousands of utility classes for styling:
 ```html
 <!-- Typography -->
 <h1 class="text-4xl font-bold text-gray-900">Hello World</h1>
-<p class="text-base leading-relaxed text-gray-600">Welcome to Omnera</p>
+<p class="text-base leading-relaxed text-gray-600">Welcome to Sovrium</p>
 
 <!-- Layout -->
 <div class="flex items-center justify-between p-4">
@@ -383,13 +383,13 @@ app.get('/', (c) => {
       <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Omnera App</title>
+        <title>Sovrium App</title>
         <link rel="stylesheet" href="/styles.css">
       </head>
       <body class="bg-gray-50 font-sans antialiased">
         <div class="min-h-screen flex items-center justify-center">
           <div class="max-w-md w-full bg-white rounded-lg shadow-lg p-8">
-            <h1 class="text-3xl font-bold text-gray-900 mb-4">Welcome to Omnera</h1>
+            <h1 class="text-3xl font-bold text-gray-900 mb-4">Welcome to Sovrium</h1>
             <p class="text-gray-600 mb-6">
               Built with Hono, Bun, and Tailwind CSS
             </p>
@@ -442,7 +442,7 @@ app.get('/dashboard', (c) => {
       <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Dashboard - Omnera</title>
+        <title>Dashboard - Sovrium</title>
         <link rel="stylesheet" href="/styles.css">
       </head>
       <body class="bg-gray-50">
@@ -482,7 +482,7 @@ app.get('/register', (c) => {
       <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Register - Omnera</title>
+        <title>Register - Sovrium</title>
         <link rel="stylesheet" href="/styles.css">
       </head>
       <body class="bg-gray-100">
@@ -669,7 +669,7 @@ No explicit `content` configuration needed (zero-config approach).
         <a
           href="/"
           class="text-xl font-bold text-gray-900"
-          >Omnera</a
+          >Sovrium</a
         >
       </div>
 
@@ -930,7 +930,7 @@ Use custom values without configuration:
 <div class="min-[820px]:flex">Custom breakpoint</div>
 ```
 
-## Best Practices for Omnera
+## Best Practices for Sovrium
 
 1. **Use Utility Classes Directly**: Build designs in HTML/JSX without custom CSS files
 2. **Extract Components for Reuse**: Create functions returning HTML strings for repeated patterns
@@ -979,7 +979,7 @@ Install "Tailwind CSS IntelliSense" for:
 
 ### Prettier Plugin for Tailwind CSS (v0.7.0)
 
-The `prettier-plugin-tailwindcss` plugin is already installed and configured in Omnera. This plugin automatically sorts Tailwind CSS classes according to the recommended class order.
+The `prettier-plugin-tailwindcss` plugin is already installed and configured in Sovrium. This plugin automatically sorts Tailwind CSS classes according to the recommended class order.
 
 **Installation** (already done):
 

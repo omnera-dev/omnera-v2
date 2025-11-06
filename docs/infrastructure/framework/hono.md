@@ -7,7 +7,7 @@
 
 Hono is a modern web framework built on Web Standard APIs. It's designed to be blazing fast, under 14kB, and works seamlessly across multiple JavaScript runtimes without runtime-specific code.
 
-## Why Hono for Omnera
+## Why Hono for Sovrium
 
 - **Ultra-Lightweight**: Under 14kB, no dependencies
 - **Blazing Fast**: Optimized routing engine, one of the fastest frameworks
@@ -396,11 +396,11 @@ function HomePage() {
   return (
     <html lang="en">
       <head>
-        <title>Omnera</title>
+        <title>Sovrium</title>
         <link rel="stylesheet" href="/styles.css" />
       </head>
       <body>
-        <h1>Welcome to Omnera</h1>
+        <h1>Welcome to Sovrium</h1>
         <p>Built with Hono and React</p>
       </body>
     </html>
@@ -504,7 +504,7 @@ test('POST /users creates user', async () => {
 })
 ```
 
-## Common Patterns in Omnera
+## Common Patterns in Sovrium
 
 ### Pattern 1: RESTful API
 

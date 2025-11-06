@@ -7,7 +7,7 @@
 **Role**: Foundation layer for shadcn/ui components
 **Scope**: Client-side only (Presentation layer)
 
-## Why Radix UI for Omnera
+## Why Radix UI for Sovrium
 
 - **Accessibility First**: WAI-ARIA compliant, keyboard navigation, focus management built-in
 - **Unstyled**: Provides behavior/accessibility without styling constraints
@@ -44,7 +44,7 @@
 
 ## Installed Radix Primitives
 
-Omnera includes 21 Radix UI primitive packages:
+Sovrium includes 21 Radix UI primitive packages:
 
 | Primitive               | Usage in shadcn/ui | Purpose                             |
 | ----------------------- | ------------------ | ----------------------------------- |
@@ -94,7 +94,7 @@ import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog'
 </Dialog>
 ```
 
-**Why?** shadcn/ui components are pre-styled, consistent, and follow Omnera's design system.
+**Why?** shadcn/ui components are pre-styled, consistent, and follow Sovrium's design system.
 
 ### ⚠️ Use Radix Directly (Rare Cases Only)
 
