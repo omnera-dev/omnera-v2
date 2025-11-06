@@ -405,7 +405,7 @@ test.describe('Article Schema', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-ARTICLE-011: should identify publishing organization',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
