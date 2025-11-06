@@ -989,7 +989,7 @@ export function DynamicPage({
                 <div
                   data-testid="container-small"
                   {...(isTailwindClass(
-                    (theme.spacing as Record<string, string>)['container-small']
+                    (theme.spacing as Record<string, string>)['container-small']!
                   )
                     ? {
                         className: (theme.spacing as Record<string, string>)['container-small'],
@@ -1005,7 +1005,7 @@ export function DynamicPage({
                 <div
                   data-testid="container-xsmall"
                   {...(isTailwindClass(
-                    (theme.spacing as Record<string, string>)['container-xsmall']
+                    (theme.spacing as Record<string, string>)['container-xsmall']!
                   )
                     ? {
                         className: (theme.spacing as Record<string, string>)['container-xsmall'],
