@@ -954,6 +954,18 @@ export function DynamicPage({
                   className={theme.spacing.container}
                 />
               )}
+              {(theme?.spacing as Record<string, unknown>)?.['container-small'] && (
+                <div
+                  data-testid="container-small"
+                  className={(theme.spacing as Record<string, string>)['container-small']}
+                />
+              )}
+              {(theme?.spacing as Record<string, unknown>)?.['container-xsmall'] && (
+                <div
+                  data-testid="container-xsmall"
+                  className={(theme.spacing as Record<string, string>)['container-xsmall']}
+                />
+              )}
             </>
           ) : (
             page.sections.map((section, index) => {

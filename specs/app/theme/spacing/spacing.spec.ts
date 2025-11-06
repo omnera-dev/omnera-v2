@@ -297,18 +297,18 @@ test.describe('Spacing Configuration', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-THEME-SPACING-006: should validate hierarchical content width constraints',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // GIVEN: multiple container sizes (container, containerSmall, containerXSmall)
+      // GIVEN: multiple container sizes (container, container-small, container-xsmall)
       await startServerWithSchema({
         name: 'test-app',
         theme: {
           spacing: {
             container: 'max-w-7xl mx-auto px-4',
-            containerSmall: 'max-w-4xl mx-auto px-4',
-            containerXSmall: 'max-w-2xl mx-auto px-4',
+            'container-small': 'max-w-4xl mx-auto px-4',
+            'container-xsmall': 'max-w-2xl mx-auto px-4',
           },
         },
         pages: [
