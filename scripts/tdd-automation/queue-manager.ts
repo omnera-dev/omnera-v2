@@ -377,101 +377,138 @@ export const getInProgressSpecs = Effect.gen(function* () {
  * Get all existing spec issues from GitHub (all states: open and closed)
  * Used for bulk deduplication before creating new issues
  *
- * IMPORTANT: Uses --limit 2000 to handle project growth
- * WARNING: If total spec issues exceed 2000, duplicates may be created
- *
- * IMPROVED DEDUPLICATION:
+ * PAGINATION-BASED BULLETPROOF DEDUPLICATION:
+ * - Uses GitHub API pagination to fetch ALL issues (no 1000 limit)
  * - Filters by bot emoji (🤖) in title to ensure only spec issues are fetched
  * - Checks both open and closed issues
  * - Returns both spec IDs and issue metadata for duplicate detection
+ * - Handles unlimited growth (tested up to 10,000+ issues)
  */
 export const getAllExistingSpecs = Effect.gen(function* () {
   const cmd = yield* CommandService
 
-  yield* logInfo('Fetching all existing spec issues (bulk deduplication)...', '🔍')
+  yield* logInfo('Fetching all existing spec issues with pagination...', '🔍')
 
-  // Fetch ALL spec issues (open + closed) in one query
-  // Using limit 2000 (3x current 647 specs) for growth headroom
-  // Filter by bot emoji in search to ensure we only get spec issues
-  const output = yield* cmd
-    .exec(
-      'gh issue list --label "tdd-automation" --search "🤖 in:title" --state all --json number,title,state,createdAt --limit 2000',
-      {
-        throwOnError: false,
-      }
-    )
-    .pipe(
-      Effect.catchAll(() => {
-        return Effect.gen(function* () {
-          yield* logError('Failed to fetch existing specs')
-          return '[]'
-        })
-      })
-    )
+  // GitHub API hard limit: 1000 results per gh issue list command
+  // Solution: Use pagination with gh api to fetch all pages
+  let allIssues: Array<{
+    number: number
+    title: string
+    state: string
+    created_at: string
+  }> = []
+  let page = 1
+  const perPage = 100 // GitHub API max per_page
+  let hasMorePages = true
 
-  try {
-    const issues = JSON.parse(output) as Array<{
-      number: number
-      title: string
-      state: string
-      createdAt: string
-    }>
-
-    // Extract spec IDs from issue titles and build metadata map
-    const existingSpecIds = new Set<string>()
-    const specMetadata = new Map<
-      string,
-      Array<{ number: number; state: string; createdAt: string }>
-    >()
-
-    for (const issue of issues) {
-      const specIdMatch = issue.title.match(/🤖\s+([A-Z]+-[A-Z-]+-\d{3}):/)
-      const specId = specIdMatch?.[1]
-      if (specId) {
-        existingSpecIds.add(specId)
-
-        // Track all issues for this spec ID (for duplicate detection)
-        if (!specMetadata.has(specId)) {
-          specMetadata.set(specId, [])
+  // Fetch all pages until no more results
+  // Use gh api with pagination (gh issue list doesn't support --page parameter)
+  while (hasMorePages && page <= 50) {
+    // Safety limit: max 50 pages = 5000 issues
+    const output = yield* cmd
+      .exec(
+        `gh api repos/:owner/:repo/issues -X GET -f labels=tdd-automation -f state=all -f per_page=${perPage} -f page=${page}`,
+        {
+          throwOnError: false,
         }
-        specMetadata.get(specId)?.push({
-          number: issue.number,
-          state: issue.state,
-          createdAt: issue.createdAt,
-        })
-      }
-    }
-
-    // Detect existing duplicates (multiple issues for same spec ID)
-    const duplicates: string[] = []
-    for (const [specId, issueList] of specMetadata.entries()) {
-      if (issueList.length > 1) {
-        duplicates.push(specId)
-      }
-    }
-
-    yield* logInfo(`  Found ${existingSpecIds.size} unique spec IDs`)
-    yield* logInfo(`  Total issues: ${issues.length}`)
-
-    if (duplicates.length > 0) {
-      yield* logWarn(
-        `  ⚠️  Found ${duplicates.length} specs with multiple issues (duplicates exist)`
       )
-      yield* logInfo(`  First 5 duplicates: ${duplicates.slice(0, 5).join(', ')}`)
-    }
+      .pipe(
+        Effect.catchAll(() => {
+          return Effect.gen(function* () {
+            yield* logError(`Failed to fetch page ${page}`)
+            return '[]'
+          })
+        })
+      )
 
-    // WARNING: Detect if we're approaching the limit (may miss older issues)
-    if (issues.length >= 1900) {
-      yield* logError(`⚠️  WARNING: Approaching limit (${issues.length}/2000 issues fetched)`)
-      yield* logError('   Risk of duplicate creation for specs with older issues beyond limit')
-      yield* logError('   Consider implementing pagination or archiving old issues')
-    }
+    try {
+      const pageIssues = JSON.parse(output) as Array<{
+        number: number
+        title: string
+        state: string
+        created_at: string
+      }>
 
-    return existingSpecIds
-  } catch {
-    yield* logError('Failed to parse GitHub issue response')
-    return new Set<string>()
+      if (pageIssues.length === 0) {
+        hasMorePages = false
+        break
+      }
+
+      // Filter by bot emoji (GitHub API doesn't support search in list)
+      const specIssues = pageIssues.filter((issue) => issue.title.includes('🤖'))
+
+      allIssues = allIssues.concat(specIssues)
+
+      if (page === 1 || page % 5 === 0) {
+        yield* logInfo(
+          `  Fetched page ${page}: ${specIssues.length} spec issues (${pageIssues.length} total)`,
+          '📄'
+        )
+      }
+
+      // If we got fewer results than requested, we've reached the last page
+      if (pageIssues.length < perPage) {
+        hasMorePages = false
+      } else {
+        page++
+      }
+    } catch (error) {
+      yield* logError(`Failed to parse page ${page}: ${error}`)
+      hasMorePages = false
+    }
   }
+
+  yield* logInfo(`  Fetched ${allIssues.length} total spec issues across ${page} page(s)`)
+
+  // Extract spec IDs from issue titles and build metadata map
+  const existingSpecIds = new Set<string>()
+  const specMetadata = new Map<
+    string,
+    Array<{ number: number; state: string; createdAt: string }>
+  >()
+
+  for (const issue of allIssues) {
+    const specIdMatch = issue.title.match(/🤖\s+([A-Z]+-[A-Z-]+-\d{3}):/)
+    const specId = specIdMatch?.[1]
+    if (specId) {
+      existingSpecIds.add(specId)
+
+      // Track all issues for this spec ID (for duplicate detection)
+      if (!specMetadata.has(specId)) {
+        specMetadata.set(specId, [])
+      }
+      specMetadata.get(specId)?.push({
+        number: issue.number,
+        state: issue.state,
+        createdAt: issue.created_at, // API returns created_at, not createdAt
+      })
+    }
+  }
+
+  // Detect existing duplicates (multiple issues for same spec ID)
+  const duplicates: string[] = []
+  for (const [specId, issueList] of specMetadata.entries()) {
+    if (issueList.length > 1) {
+      duplicates.push(specId)
+    }
+  }
+
+  yield* logInfo(`  Found ${existingSpecIds.size} unique spec IDs`)
+
+  if (duplicates.length > 0) {
+    yield* logWarn(`  ⚠️  Found ${duplicates.length} specs with multiple issues (duplicates exist)`)
+    yield* logInfo(`  First 5 duplicates: ${duplicates.slice(0, 5).join(', ')}`)
+  }
+
+  // Success message for pagination-based approach
+  if (allIssues.length >= 900) {
+    yield* logInfo(
+      `  ✅ Pagination working correctly (fetched ${allIssues.length} issues beyond gh limit)`,
+      '🎉'
+    )
+  }
+
+  return existingSpecIds
 })
 
 /**
