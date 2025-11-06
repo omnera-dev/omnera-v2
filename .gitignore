@@ -59,3 +59,6 @@ drizzle-kit.log
 # Keep generated migrations
 !drizzle/*.sql
 test-output.log
+
+# TDD automation lock files (idempotency)
+.github/tdd-queue-populate.lock
