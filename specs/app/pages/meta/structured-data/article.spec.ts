@@ -366,7 +366,7 @@ test.describe('Article Schema', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-ARTICLE-010: should indicate last update date',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
