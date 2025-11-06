@@ -169,7 +169,7 @@ test.describe('Article Schema', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-ARTICLE-005: should support single or multiple article images',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
