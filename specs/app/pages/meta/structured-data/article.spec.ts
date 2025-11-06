@@ -448,7 +448,7 @@ test.describe('Article Schema', () => {
     }
   )
 
-  test.fixme(
+  test(
     "APP-PAGES-ARTICLE-012: should specify article's primary page URL",
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
