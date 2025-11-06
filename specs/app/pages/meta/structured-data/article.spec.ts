@@ -246,7 +246,7 @@ test.describe('Article Schema', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-ARTICLE-007: should provide structured author information',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
