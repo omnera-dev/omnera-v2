@@ -389,7 +389,7 @@ test.describe('Analytics Configuration', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-ANALYTICS-011: should support multi-provider analytics',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -398,7 +398,6 @@ test.describe('Analytics Configuration', () => {
         name: 'test-app',
         pages: [
           {
-            name: 'Test',
             path: '/',
             meta: {
               lang: 'en-US',
