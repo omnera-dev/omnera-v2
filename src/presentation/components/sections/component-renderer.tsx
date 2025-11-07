@@ -33,9 +33,7 @@ const CONTAINER_TYPES = ['div', 'container', 'flex', 'grid', 'card'] as const
  * @param config - Animation configuration (can be object with duration or primitive value)
  * @returns Duration string (defaults to '300ms' if not specified)
  */
-const getAnimationDuration = (
-  config: unknown
-): string => {
+const getAnimationDuration = (config: unknown): string => {
   return typeof config === 'object' &&
     config !== null &&
     'duration' in config &&
@@ -49,9 +47,7 @@ const getAnimationDuration = (
  * @param config - Animation configuration (can be object with easing or primitive value)
  * @returns Easing string (defaults to 'ease-out' if not specified)
  */
-const getAnimationEasing = (
-  config: unknown
-): string => {
+const getAnimationEasing = (config: unknown): string => {
   return typeof config === 'object' &&
     config !== null &&
     'easing' in config &&
