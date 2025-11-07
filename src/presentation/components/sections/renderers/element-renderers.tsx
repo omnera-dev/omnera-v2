@@ -261,6 +261,85 @@ export function renderLanguageSwitcher(_props: ElementProps, languages?: Languag
 }
 
 /**
+ * Renders alert element with variant support
+ *
+ * Creates an alert component with semantic variants (success, danger, warning, info).
+ * The variant prop determines the visual styling based on theme colors.
+ * Uses inline styles derived from theme tokens for color variants.
+ *
+ * @param props - Element props including variant and data-testid
+ * @param content - Alert message text
+ * @param children - Optional child elements
+ * @param theme - Theme configuration for color resolution
+ * @returns React element for alert component
+ */
+export function renderAlert(
+  props: ElementProps,
+  content: string | undefined,
+  children: readonly React.ReactNode[],
+  theme?: Theme
+): ReactElement {
+  const variant = props.variant as string | undefined
+  const existingStyle = (props.style as Record<string, unknown> | undefined) || {}
+
+  // Build variant-specific styles using theme colors (functional approach)
+  const getVariantStyles = (): Record<string, unknown> => {
+    if (variant === 'success' && theme?.colors) {
+      const successColor = theme.colors.success as string | undefined
+      const successLightColor = theme.colors['success-light'] as string | undefined
+      return {
+        ...(successColor && { color: successColor, borderColor: successColor }),
+        ...(successLightColor && { backgroundColor: successLightColor }),
+      }
+    }
+    if (variant === 'danger' && theme?.colors) {
+      const dangerColor = theme.colors.danger as string | undefined
+      const dangerLightColor = theme.colors['danger-light'] as string | undefined
+      return {
+        ...(dangerColor && { color: dangerColor, borderColor: dangerColor }),
+        ...(dangerLightColor && { backgroundColor: dangerLightColor }),
+      }
+    }
+    if (variant === 'warning' && theme?.colors) {
+      const warningColor = theme.colors.warning as string | undefined
+      const warningLightColor = theme.colors['warning-light'] as string | undefined
+      return {
+        ...(warningColor && { color: warningColor, borderColor: warningColor }),
+        ...(warningLightColor && { backgroundColor: warningLightColor }),
+      }
+    }
+    if (variant === 'info' && theme?.colors) {
+      const infoColor = theme.colors.info as string | undefined
+      const infoLightColor = theme.colors['info-light'] as string | undefined
+      return {
+        ...(infoColor && { color: infoColor, borderColor: infoColor }),
+        ...(infoLightColor && { backgroundColor: infoLightColor }),
+      }
+    }
+    return {}
+  }
+
+  // Merge existing styles with variant styles
+  const mergedStyle = {
+    padding: '12px 16px',
+    borderRadius: '4px',
+    border: '1px solid',
+    ...getVariantStyles(),
+    ...existingStyle,
+  }
+
+  return (
+    <div
+      {...props}
+      role="alert"
+      style={mergedStyle}
+    >
+      {content || children}
+    </div>
+  )
+}
+
+/**
  * Renders list element with staggered fadeIn animations for items
  *
  * Parses HTML content to extract <li> elements and applies incremental

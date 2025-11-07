@@ -344,6 +344,9 @@ export function ComponentRenderer({
     case 'link':
       return Renderers.renderLink(elementProps, content, renderedChildren)
 
+    case 'alert':
+      return Renderers.renderAlert(elementProps, content, renderedChildren, theme)
+
     case 'form':
       return Renderers.renderForm(elementProps, renderedChildren)
 
