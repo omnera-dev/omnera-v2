@@ -141,29 +141,57 @@ export function ComponentRenderer({
   // React requires style to be an object, but our schema allows CSS strings for convenience
   // Normalize animation names to kebab-case for consistency with generated keyframes
   const styleValue = substitutedProps?.style
-  let parsedStyle = normalizeStyleAnimations(
+  const baseStyle = normalizeStyleAnimations(
     typeof styleValue === 'string'
       ? parseStyle(styleValue)
       : (styleValue as Record<string, unknown> | undefined)
   )
 
-  // Apply fadeOut animation to toast components automatically
-  if (type === 'toast' && theme?.animations?.fadeOut) {
-    const fadeOutConfig = theme.animations.fadeOut
-    const duration =
-      typeof fadeOutConfig === 'object' && 'duration' in fadeOutConfig
-        ? fadeOutConfig.duration
-        : '300ms'
-    const easing =
-      typeof fadeOutConfig === 'object' && 'easing' in fadeOutConfig
-        ? fadeOutConfig.easing
-        : 'ease-out'
+  // Apply animations functionally using composition instead of mutation
+  // Compose fadeOut animation for toast components
+  const styleWithFadeOut =
+    type === 'toast' && theme?.animations?.fadeOut
+      ? (() => {
+          const fadeOutConfig = theme.animations.fadeOut
+          const duration =
+            typeof fadeOutConfig === 'object' && 'duration' in fadeOutConfig
+              ? fadeOutConfig.duration
+              : '300ms'
+          const easing =
+            typeof fadeOutConfig === 'object' && 'easing' in fadeOutConfig
+              ? fadeOutConfig.easing
+              : 'ease-out'
 
-    parsedStyle = {
-      ...parsedStyle,
-      animation: `fade-out ${duration} ${easing}`,
-    }
-  }
+          return {
+            ...baseStyle,
+            animation: `fade-out ${duration} ${easing}`,
+          }
+        })()
+      : baseStyle
+
+  // Compose scaleUp animation for card components with scroll trigger
+  const parsedStyle =
+    type === 'card' && theme?.animations?.scaleUp
+      ? (() => {
+          const scaleUpConfig = theme.animations.scaleUp
+          const duration =
+            typeof scaleUpConfig === 'object' && 'duration' in scaleUpConfig
+              ? scaleUpConfig.duration
+              : '500ms'
+          const easing =
+            typeof scaleUpConfig === 'object' && 'easing' in scaleUpConfig
+              ? scaleUpConfig.easing
+              : 'cubic-bezier(0.34, 1.56, 0.64, 1)'
+
+          return {
+            ...styleWithFadeOut,
+            animation: `scale-up ${duration} ${easing}`,
+            animationPlayState: 'paused',
+            animationFillMode: 'forwards',
+            opacity: 0,
+          }
+        })()
+      : styleWithFadeOut
 
   // Build flex-specific classes based on props
   const buildFlexClasses = (props?: Record<string, unknown>): string => {
@@ -192,8 +220,10 @@ export function ComponentRenderer({
   // Add translation key data attribute if children contain $t: patterns
   // Include pre-resolved translations to eliminate client-side resolution logic duplication
   // Add role="group" for blocks with children to establish proper ARIA tree nesting
+  // Add data-scroll-animation attribute for card elements with scaleUp animation
   const hasContent = Boolean(content || children?.length)
   const hasChildren = Boolean(children?.length)
+  const hasScrollAnimation = type === 'card' && theme?.animations?.scaleUp
   const testId = blockName
     ? blockInstanceIndex !== undefined
       ? `block-${blockName}-${blockInstanceIndex}`
@@ -218,6 +248,9 @@ export function ComponentRenderer({
         'data-translation-key': firstTranslationKey,
         'data-translations': JSON.stringify(translationData),
       }),
+    ...(hasScrollAnimation && {
+      'data-scroll-animation': 'scale-up',
+    }),
     ...(blockName &&
       !hasContent && {
         style: {

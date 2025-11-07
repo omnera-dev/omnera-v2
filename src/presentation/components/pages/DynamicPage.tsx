@@ -1071,6 +1071,13 @@ export function DynamicPage({
             reactKey: `inline-body-end-${index}`,
           })
         )}
+        {/* Client-side scroll animation functionality - inject when scroll animations configured */}
+        {theme?.animations?.scaleUp && (
+          <script
+            src="/assets/scroll-animation.js"
+            defer={true}
+          />
+        )}
         {/* Client-side language switcher functionality - always inject when languages configured */}
         {languages && (
           <>

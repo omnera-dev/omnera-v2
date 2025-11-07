@@ -639,7 +639,7 @@ test.describe('Animation Configuration', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-THEME-ANIMATIONS-APPLICATION-007: should render card scaling up when scrolled into view',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
