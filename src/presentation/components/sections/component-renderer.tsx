@@ -29,6 +29,38 @@ import type { Theme } from '@/domain/models/app/theme'
 const CONTAINER_TYPES = ['div', 'container', 'flex', 'grid', 'card'] as const
 
 /**
+ * Extract animation duration from theme animation config
+ * @param config - Animation configuration (can be object with duration or primitive value)
+ * @returns Duration string (defaults to '300ms' if not specified)
+ */
+const getAnimationDuration = (
+  config: unknown
+): string => {
+  return typeof config === 'object' &&
+    config !== null &&
+    'duration' in config &&
+    typeof config.duration === 'string'
+    ? config.duration
+    : '300ms'
+}
+
+/**
+ * Extract animation easing from theme animation config
+ * @param config - Animation configuration (can be object with easing or primitive value)
+ * @returns Easing string (defaults to 'ease-out' if not specified)
+ */
+const getAnimationEasing = (
+  config: unknown
+): string => {
+  return typeof config === 'object' &&
+    config !== null &&
+    'easing' in config &&
+    typeof config.easing === 'string'
+    ? config.easing
+    : 'ease-out'
+}
+
+/**
  * ComponentRenderer - Renders a dynamic component based on its type
  *
  * This component handles the recursive rendering of sections, converting
@@ -141,11 +173,45 @@ export function ComponentRenderer({
   // React requires style to be an object, but our schema allows CSS strings for convenience
   // Normalize animation names to kebab-case for consistency with generated keyframes
   const styleValue = substitutedProps?.style
-  const parsedStyle = normalizeStyleAnimations(
+  const baseStyle = normalizeStyleAnimations(
     typeof styleValue === 'string'
       ? parseStyle(styleValue)
       : (styleValue as Record<string, unknown> | undefined)
   )
+
+  // Apply animations functionally using composition instead of mutation
+  // Compose fadeOut animation for toast components
+  const styleWithFadeOut =
+    type === 'toast' && theme?.animations?.fadeOut
+      ? (() => {
+          const fadeOutConfig = theme.animations.fadeOut
+          const duration = getAnimationDuration(fadeOutConfig)
+          const easing = getAnimationEasing(fadeOutConfig)
+
+          return {
+            ...baseStyle,
+            animation: `fade-out ${duration} ${easing}`,
+          }
+        })()
+      : baseStyle
+
+  // Compose scaleUp animation for card components with scroll trigger
+  const parsedStyle =
+    type === 'card' && theme?.animations?.scaleUp
+      ? (() => {
+          const scaleUpConfig = theme.animations.scaleUp
+          const duration = getAnimationDuration(scaleUpConfig)
+          const easing = getAnimationEasing(scaleUpConfig)
+
+          return {
+            ...styleWithFadeOut,
+            animation: `scale-up ${duration} ${easing}`,
+            animationPlayState: 'paused',
+            animationFillMode: 'forwards',
+            opacity: 0,
+          }
+        })()
+      : styleWithFadeOut
 
   // Build flex-specific classes based on props
   const buildFlexClasses = (props?: Record<string, unknown>): string => {
@@ -174,8 +240,10 @@ export function ComponentRenderer({
   // Add translation key data attribute if children contain $t: patterns
   // Include pre-resolved translations to eliminate client-side resolution logic duplication
   // Add role="group" for blocks with children to establish proper ARIA tree nesting
+  // Add data-scroll-animation attribute for card elements with scaleUp animation
   const hasContent = Boolean(content || children?.length)
   const hasChildren = Boolean(children?.length)
+  const hasScrollAnimation = type === 'card' && theme?.animations?.scaleUp
   const testId = blockName
     ? blockInstanceIndex !== undefined
       ? `block-${blockName}-${blockInstanceIndex}`
@@ -200,6 +268,9 @@ export function ComponentRenderer({
         'data-translation-key': firstTranslationKey,
         'data-translations': JSON.stringify(translationData),
       }),
+    ...(hasScrollAnimation && {
+      'data-scroll-animation': 'scale-up',
+    }),
     ...(blockName &&
       !hasContent && {
         style: {
@@ -294,6 +365,16 @@ export function ComponentRenderer({
 
     case 'language-switcher':
       return Renderers.renderLanguageSwitcher(elementProps, languages)
+
+    // Layout components
+    case 'modal':
+    case 'sidebar':
+    case 'toast':
+    case 'hero':
+    case 'fab':
+    case 'spinner':
+    case 'list':
+      return Renderers.renderHTMLElement('div', elementProps, content, renderedChildren)
 
     // Fallback for unknown types
     default:
