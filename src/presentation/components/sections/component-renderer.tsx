@@ -6,6 +6,7 @@
  */
 
 import { type ReactElement } from 'react'
+import { composeAnimation } from '@/presentation/utils/animation-composer'
 import { normalizeStyleAnimations, parseStyle } from '@/presentation/utils/parse-style'
 import {
   collectTranslationsForKey,
@@ -27,34 +28,6 @@ import type { Theme } from '@/domain/models/app/theme'
  * Component types that should receive role="group" when used as blocks with children
  */
 const CONTAINER_TYPES = ['div', 'container', 'flex', 'grid', 'card'] as const
-
-/**
- * Extract animation duration from theme animation config
- * @param config - Animation configuration (can be object with duration or primitive value)
- * @returns Duration string (defaults to '300ms' if not specified)
- */
-const getAnimationDuration = (config: unknown): string => {
-  return typeof config === 'object' &&
-    config !== null &&
-    'duration' in config &&
-    typeof config.duration === 'string'
-    ? config.duration
-    : '300ms'
-}
-
-/**
- * Extract animation easing from theme animation config
- * @param config - Animation configuration (can be object with easing or primitive value)
- * @returns Easing string (defaults to 'ease-out' if not specified)
- */
-const getAnimationEasing = (config: unknown): string => {
-  return typeof config === 'object' &&
-    config !== null &&
-    'easing' in config &&
-    typeof config.easing === 'string'
-    ? config.easing
-    : 'ease-out'
-}
 
 /**
  * ComponentRenderer - Renders a dynamic component based on its type
@@ -178,36 +151,27 @@ export function ComponentRenderer({
   // Apply animations functionally using composition instead of mutation
   // Compose fadeOut animation for toast components
   const styleWithFadeOut =
-    type === 'toast' && theme?.animations?.fadeOut
-      ? (() => {
-          const fadeOutConfig = theme.animations.fadeOut
-          const duration = getAnimationDuration(fadeOutConfig)
-          const easing = getAnimationEasing(fadeOutConfig)
-
-          return {
-            ...baseStyle,
-            animation: `fade-out ${duration} ${easing}`,
-          }
-        })()
+    type === 'toast'
+      ? composeAnimation(baseStyle, type, 'fadeOut', theme, '300ms', 'ease-out')
       : baseStyle
 
   // Compose scaleUp animation for card components with scroll trigger
-  const parsedStyle =
-    type === 'card' && theme?.animations?.scaleUp
-      ? (() => {
-          const scaleUpConfig = theme.animations.scaleUp
-          const duration = getAnimationDuration(scaleUpConfig)
-          const easing = getAnimationEasing(scaleUpConfig)
-
-          return {
-            ...styleWithFadeOut,
-            animation: `scale-up ${duration} ${easing}`,
-            animationPlayState: 'paused',
-            animationFillMode: 'forwards',
-            opacity: 0,
-          }
-        })()
+  const styleWithScaleUp =
+    type === 'card'
+      ? composeAnimation(styleWithFadeOut, type, 'scaleUp', theme, '500ms', 'cubic-bezier(0.34, 1.56, 0.64, 1)', {
+          animationPlayState: 'paused',
+          animationFillMode: 'forwards',
+          opacity: 0,
+        })
       : styleWithFadeOut
+
+  // Compose float animation for fab components (continuous floating effect)
+  const parsedStyle =
+    type === 'fab'
+      ? composeAnimation(styleWithScaleUp, type, 'float', theme, '3s', 'ease-in-out', {
+          infinite: true,
+        })
+      : styleWithScaleUp
 
   // Build flex-specific classes based on props
   const buildFlexClasses = (props?: Record<string, unknown>): string => {
