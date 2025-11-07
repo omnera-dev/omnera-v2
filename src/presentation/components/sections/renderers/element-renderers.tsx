@@ -8,6 +8,7 @@
 import DOMPurify from 'dompurify'
 import { type ReactElement } from 'react'
 import { type Languages } from '@/domain/models/app/languages'
+import { type Theme } from '@/domain/models/app/theme'
 import { LanguageSwitcher } from '@/presentation/components/languages/language-switcher'
 
 /**
@@ -239,4 +240,70 @@ export function renderLanguageSwitcher(_props: ElementProps, languages?: Languag
 
   // Languages already validated at server startup (start-server.ts)
   return <LanguageSwitcher languages={languages} />
+}
+
+/**
+ * Renders list element with staggered fadeIn animations for items
+ *
+ * Parses HTML content to extract <li> elements and applies incremental
+ * animation delays for a cascading appearance effect.
+ *
+ * @param props - Element props including data-testid
+ * @param content - HTML string containing <li> elements
+ * @param theme - Theme configuration for animation settings
+ * @returns React element with list items animated with stagger effect
+ */
+export function renderList(
+  props: ElementProps,
+  content: string | undefined,
+  theme?: Theme
+): ReactElement {
+  // If no content, return empty list
+  if (!content) {
+    return <ul {...props} />
+  }
+
+  // Sanitize HTML content for security
+  const sanitizedContent = DOMPurify.sanitize(content)
+
+  // Extract <li> items using simple regex matching
+  // This approach works in both server and client environments
+  const liMatches = sanitizedContent.match(/<li[^>]*>.*?<\/li>/gs) || []
+
+  // Get animation config from theme with proper type narrowing
+  // AnimationValue is union: boolean | string | AnimationConfigObject
+  // Only AnimationConfigObject has duration/easing properties
+  const fadeInConfig = theme?.animations?.fadeIn
+  const animationConfig =
+    fadeInConfig && typeof fadeInConfig === 'object' && !Array.isArray(fadeInConfig)
+      ? fadeInConfig
+      : undefined
+
+  const duration = animationConfig?.duration || '400ms'
+  const easing = animationConfig?.easing || 'ease-out'
+
+  // Parse duration to number for delay calculation (remove 'ms' suffix)
+  const durationMs = parseInt(duration.replace('ms', ''), 10)
+  const staggerDelay = Math.max(50, durationMs / 4) // 25% of duration, min 50ms
+
+  // Render list items with staggered animation delays
+  const renderedItems = liMatches.map((liHtml, index) => {
+    const delay = `${index * staggerDelay}ms`
+    const animationValue = `fade-in ${duration} ${easing} ${delay} both`
+
+    // Extract inner HTML (content between <li> and </li>)
+    const innerHtml = liHtml.replace(/<li[^>]*>|<\/li>/g, '')
+
+    return (
+      <li
+        key={index}
+        style={{
+          animation: animationValue,
+        }}
+        dangerouslySetInnerHTML={{ __html: innerHtml }}
+      />
+    )
+  })
+
+  return <ul {...props}>{renderedItems}</ul>
 }

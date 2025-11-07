@@ -341,8 +341,10 @@ export function ComponentRenderer({
     case 'hero':
     case 'fab':
     case 'spinner':
-    case 'list':
       return Renderers.renderHTMLElement('div', elementProps, content, renderedChildren)
+
+    case 'list':
+      return Renderers.renderList(elementProps, content, theme)
 
     // Fallback for unknown types
     default:
