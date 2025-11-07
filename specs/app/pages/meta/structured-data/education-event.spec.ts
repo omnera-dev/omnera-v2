@@ -56,7 +56,7 @@ test.describe('Education Event Schema', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-EDUCATIONEVENT-002: should provide event identity',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -95,7 +95,7 @@ test.describe('Education Event Schema', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-EDUCATIONEVENT-003: should specify when event begins',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -132,7 +132,7 @@ test.describe('Education Event Schema', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-EDUCATIONEVENT-004: should specify when event ends',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -170,7 +170,7 @@ test.describe('Education Event Schema', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-EDUCATIONEVENT-005: should specify whether event is in-person, online, or hybrid',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -211,7 +211,7 @@ test.describe('Education Event Schema', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-EDUCATIONEVENT-006: should communicate event status',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -253,7 +253,7 @@ test.describe('Education Event Schema', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-EDUCATIONEVENT-007: should provide event venue information',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -296,7 +296,7 @@ test.describe('Education Event Schema', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-EDUCATIONEVENT-008: should identify event organizer',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -338,7 +338,7 @@ test.describe('Education Event Schema', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-EDUCATIONEVENT-009: should provide ticket pricing and availability',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -383,7 +383,7 @@ test.describe('Education Event Schema', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-EDUCATIONEVENT-010: should specify event ticket price',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -422,7 +422,7 @@ test.describe('Education Event Schema', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-EDUCATIONEVENT-011: should indicate ticket availability status',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -464,7 +464,7 @@ test.describe('Education Event Schema', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-EDUCATIONEVENT-012: should specify event capacity limits',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -544,7 +544,7 @@ test.describe('Education Event Schema', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-EDUCATIONEVENT-014: should display event in Google Search, Maps, and event discovery features',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -583,7 +583,7 @@ test.describe('Education Event Schema', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-META-STRUCTURED-DATA-EDUCATION-EVENT-REGRESSION-001: user can complete full Education Event workflow',
     { tag: '@regression' },
     async ({ page, startServerWithSchema }) => {

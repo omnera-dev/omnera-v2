@@ -737,7 +737,7 @@ test.describe('Animation Configuration', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-THEME-ANIMATIONS-APPLICATION-009: should render button scaling up smoothly on hover',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -820,7 +820,7 @@ test.describe('Animation Configuration', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-THEME-ANIMATIONS-APPLICATION-011: should render spinner rotating infinitely',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -868,7 +868,7 @@ test.describe('Animation Configuration', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-THEME-ANIMATIONS-APPLICATION-012: should render input shaking horizontally to indicate error',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -1009,7 +1009,7 @@ test.describe('Animation Configuration', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-THEME-ANIMATIONS-APPLICATION-015: should disable animations or use simplified versions',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {

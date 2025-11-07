@@ -56,7 +56,7 @@ test.describe('Breadcrumb Schema', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-BREADCRUMB-002: should define navigation path',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -96,7 +96,7 @@ test.describe('Breadcrumb Schema', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-BREADCRUMB-003: should define breadcrumb item structure',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -135,7 +135,7 @@ test.describe('Breadcrumb Schema', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-BREADCRUMB-004: should order breadcrumb trail',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -178,7 +178,7 @@ test.describe('Breadcrumb Schema', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-BREADCRUMB-005: should provide human-readable breadcrumb label',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -221,7 +221,7 @@ test.describe('Breadcrumb Schema', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-BREADCRUMB-006: should provide clickable breadcrumb link',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -266,7 +266,7 @@ test.describe('Breadcrumb Schema', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-BREADCRUMB-007: should represent multi-level navigation path',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -368,7 +368,7 @@ test.describe('Breadcrumb Schema', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-BREADCRUMB-009: should display breadcrumb trail in Google search results',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -452,7 +452,7 @@ test.describe('Breadcrumb Schema', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-META-STRUCTURED-DATA-BREADCRUMB-REGRESSION-001: user can complete full Breadcrumb workflow',
     { tag: '@regression' },
     async ({ page, startServerWithSchema }) => {

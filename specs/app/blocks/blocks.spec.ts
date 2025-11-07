@@ -76,7 +76,7 @@ test.describe('Reusable Blocks', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-BLOCKS-003: should render concrete component with substituted values',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -336,7 +336,7 @@ test.describe('Reusable Blocks', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-BLOCKS-INTEGRATION-001: should render blocks within page layout with full variable substitution',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {

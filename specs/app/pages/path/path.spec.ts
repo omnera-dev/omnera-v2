@@ -201,7 +201,7 @@ test.describe('URL Path', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-PATH-007: should fail validation (path is required)',
     { tag: '@spec' },
     async ({ startServerWithSchema }) => {

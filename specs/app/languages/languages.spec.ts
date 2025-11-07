@@ -1175,7 +1175,7 @@ test.describe('Languages Configuration', () => {
   // ONE OPTIMIZED test verifying components work together efficiently
   // ============================================================================
 
-  test.fixme(
+  test(
     'APP-LANGUAGES-REGRESSION-001: user can complete full languages workflow',
     { tag: '@regression' },
     async ({ page, startServerWithSchema }) => {

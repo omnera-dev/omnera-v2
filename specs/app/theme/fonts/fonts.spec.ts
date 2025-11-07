@@ -499,7 +499,7 @@ test.describe('Font Configuration', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-THEME-FONTS-APPLICATION-001: should render with body font family and metrics',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -538,7 +538,7 @@ test.describe('Font Configuration', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-THEME-FONTS-APPLICATION-002: should render with title font and text transformation',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {

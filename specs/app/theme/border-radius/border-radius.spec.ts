@@ -24,7 +24,7 @@ test.describe('Border Radius', () => {
   // One test per spec in schema - defines EXHAUSTIVE acceptance criteria
   // ============================================================================
 
-  test.fixme(
+  test(
     'APP-THEME-RADIUS-001: should validate radius tokens from 0 to 1.5rem',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -220,7 +220,7 @@ test.describe('Border Radius', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-THEME-RADIUS-004: should validate rem-based radius values',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -393,7 +393,7 @@ test.describe('Border Radius', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-THEME-RADIUS-APPLICATION-001: should render button with 0.375rem border-radius creating soft corners',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -468,7 +468,7 @@ test.describe('Border Radius', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-THEME-RADIUS-APPLICATION-003: should render card with 0.5rem border-radius creating soft edges',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -505,7 +505,7 @@ test.describe('Border Radius', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-THEME-RADIUS-APPLICATION-004: should apply smaller radius on mobile for better touch targets and larger radius on desktop for visual polish',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -590,7 +590,7 @@ test.describe('Border Radius', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-THEME-RADIUS-APPLICATION-006: should render badge as pill with fully rounded left and right edges',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {

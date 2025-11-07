@@ -24,7 +24,7 @@ test.describe('Block Props', () => {
   // One test per spec in schema - defines EXHAUSTIVE acceptance criteria
   // ============================================================================
 
-  test.fixme(
+  test(
     'APP-BLOCKS-PROPS-001: should validate any valid JavaScript property name at build time',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -57,7 +57,7 @@ test.describe('Block Props', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-BLOCKS-PROPS-002: should render as HTML attributes following camelCase convention',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -85,7 +85,7 @@ test.describe('Block Props', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-BLOCKS-PROPS-003: should render string value with variable substitution',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -151,7 +151,7 @@ test.describe('Block Props', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-BLOCKS-PROPS-005: should render boolean as HTML boolean attribute',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -244,7 +244,7 @@ test.describe('Block Props', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-BLOCKS-PROPS-008: should render with all variables substituted in className',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -282,7 +282,7 @@ test.describe('Block Props', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-BLOCKS-PROPS-009: should render combined static and dynamic className parts',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -313,7 +313,7 @@ test.describe('Block Props', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-BLOCKS-PROPS-010: should render complete component with all configuration applied',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -369,7 +369,7 @@ test.describe('Block Props', () => {
   // ONE OPTIMIZED test verifying components work together efficiently
   // ============================================================================
 
-  test.fixme(
+  test(
     'APP-BLOCKS-BLOCK-PROPS-REGRESSION-001: user can complete full props workflow',
     { tag: '@regression' },
     async ({ page, startServerWithSchema }) => {

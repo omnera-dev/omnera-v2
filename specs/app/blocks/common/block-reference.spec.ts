@@ -24,7 +24,7 @@ test.describe('Block Reference', () => {
   // One test per spec in schema - defines EXHAUSTIVE acceptance criteria
   // ============================================================================
 
-  test.fixme(
+  test(
     'APP-BLOCKS-REFERENCE-001: should validate minimal block reference structure at build time',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -43,7 +43,7 @@ test.describe('Block Reference', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-BLOCKS-REFERENCE-002: should look up and instantiate matching block template',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -74,7 +74,7 @@ test.describe('Block Reference', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-BLOCKS-REFERENCE-003: should validate kebab-case naming at build time',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -99,7 +99,7 @@ test.describe('Block Reference', () => {
     }
   )
 
-  test.fixme(
+  test(
     "APP-BLOCKS-REFERENCE-004: should fail validation if referenced block doesn't exist",
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -118,7 +118,7 @@ test.describe('Block Reference', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-BLOCKS-REFERENCE-005: should provide all data needed for template substitution',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -160,7 +160,7 @@ test.describe('Block Reference', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-BLOCKS-REFERENCE-006: should validate JavaScript naming convention for variables',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -193,7 +193,7 @@ test.describe('Block Reference', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-BLOCKS-REFERENCE-007: should substitute primitive data types into template',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -279,7 +279,7 @@ test.describe('Block Reference', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-BLOCKS-REFERENCE-009: should render section header with purple title and French content',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -332,7 +332,7 @@ test.describe('Block Reference', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-BLOCKS-REFERENCE-010: should transform abstract template into concrete rendered component',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -419,7 +419,7 @@ test.describe('Block Reference', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-BLOCKS-REFERENCE-012: should maintain structural consistency while varying data',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
