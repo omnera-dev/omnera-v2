@@ -263,6 +263,22 @@ function generateThemeStyles(theme?: Theme): string {
         ]
       : []
 
+  // Build typewriter styles for heading elements with typewriter animation
+  const typewriterConfig = animations?.typewriter
+  const typewriterStyles: ReadonlyArray<string> =
+    typewriterConfig && typeof typewriterConfig === 'object'
+      ? [
+          [
+            '[data-testid="hero-heading"] {',
+            `  animation: typewriter ${typewriterConfig.duration || '4s'} ${typewriterConfig.easing || 'steps(40, end)'};`,
+            '  overflow: hidden;',
+            '  white-space: nowrap;',
+            '  border-right: 2px solid;',
+            '}',
+          ].join('\n'),
+        ]
+      : []
+
   // Combine all styles
   const styles: ReadonlyArray<string> = [
     ...cssVariables,
@@ -272,6 +288,7 @@ function generateThemeStyles(theme?: Theme): string {
     ...animationStyles,
     ...transitionStyles,
     ...parallaxStyles,
+    ...typewriterStyles,
   ]
 
   return styles.join('\n')

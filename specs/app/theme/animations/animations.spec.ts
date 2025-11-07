@@ -961,7 +961,7 @@ test.describe('Animation Configuration', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-THEME-ANIMATIONS-APPLICATION-014: should render text appearing one character at a time',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
