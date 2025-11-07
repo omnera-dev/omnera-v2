@@ -270,10 +270,17 @@ export function renderList(
   // This approach works in both server and client environments
   const liMatches = sanitizedContent.match(/<li[^>]*>.*?<\/li>/gs) || []
 
-  // Get animation config from theme
+  // Get animation config from theme with proper type narrowing
+  // AnimationValue is union: boolean | string | AnimationConfigObject
+  // Only AnimationConfigObject has duration/easing properties
   const fadeInConfig = theme?.animations?.fadeIn
-  const duration = fadeInConfig?.duration || '400ms'
-  const easing = fadeInConfig?.easing || 'ease-out'
+  const animationConfig =
+    fadeInConfig && typeof fadeInConfig === 'object' && !Array.isArray(fadeInConfig)
+      ? fadeInConfig
+      : undefined
+
+  const duration = animationConfig?.duration || '400ms'
+  const easing = animationConfig?.easing || 'ease-out'
 
   // Parse duration to number for delay calculation (remove 'ms' suffix)
   const durationMs = parseInt(duration.replace('ms', ''), 10)
