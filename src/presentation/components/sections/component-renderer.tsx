@@ -295,6 +295,16 @@ export function ComponentRenderer({
     case 'language-switcher':
       return Renderers.renderLanguageSwitcher(elementProps, languages)
 
+    // Layout components
+    case 'modal':
+    case 'sidebar':
+    case 'toast':
+    case 'hero':
+    case 'fab':
+    case 'spinner':
+    case 'list':
+      return Renderers.renderHTMLElement('div', elementProps, content, renderedChildren)
+
     // Fallback for unknown types
     default:
       return Renderers.renderHTMLElement('div', elementProps, content, renderedChildren)
