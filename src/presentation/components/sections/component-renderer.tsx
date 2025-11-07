@@ -30,38 +30,6 @@ import type { Theme } from '@/domain/models/app/theme'
 const CONTAINER_TYPES = ['div', 'container', 'flex', 'grid', 'card'] as const
 
 /**
- * Extract animation duration from theme animation config
- * @param config - Animation configuration (can be object with duration or primitive value)
- * @returns Duration string (defaults to '300ms' if not specified)
- */
-const getAnimationDuration = (
-  config: unknown
-): string => {
-  return typeof config === 'object' &&
-    config !== null &&
-    'duration' in config &&
-    typeof config.duration === 'string'
-    ? config.duration
-    : '300ms'
-}
-
-/**
- * Extract animation easing from theme animation config
- * @param config - Animation configuration (can be object with easing or primitive value)
- * @returns Easing string (defaults to 'ease-out' if not specified)
- */
-const getAnimationEasing = (
-  config: unknown
-): string => {
-  return typeof config === 'object' &&
-    config !== null &&
-    'easing' in config &&
-    typeof config.easing === 'string'
-    ? config.easing
-    : 'ease-out'
-}
-
-/**
  * ComponentRenderer - Renders a dynamic component based on its type
  *
  * This component handles the recursive rendering of sections, converting
