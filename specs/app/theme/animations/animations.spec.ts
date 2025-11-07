@@ -373,7 +373,7 @@ test.describe('Animation Configuration', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-THEME-ANIMATIONS-APPLICATION-001: should render modal with fade-in animation on mount',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
