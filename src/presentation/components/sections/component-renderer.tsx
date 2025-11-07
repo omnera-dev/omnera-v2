@@ -196,7 +196,7 @@ export function ComponentRenderer({
       : baseStyle
 
   // Compose scaleUp animation for card components with scroll trigger
-  const parsedStyle =
+  const styleWithScaleUp =
     type === 'card' && theme?.animations?.scaleUp
       ? (() => {
           const scaleUpConfig = theme.animations.scaleUp
@@ -212,6 +212,27 @@ export function ComponentRenderer({
           }
         })()
       : styleWithFadeOut
+
+  // Compose float animation for fab components (continuous floating effect)
+  const parsedStyle =
+    type === 'fab' && theme?.animations?.float
+      ? (() => {
+          const floatConfig = theme.animations.float
+          const duration =
+            typeof floatConfig === 'object' && 'duration' in floatConfig
+              ? floatConfig.duration
+              : '3s'
+          const easing =
+            typeof floatConfig === 'object' && 'easing' in floatConfig
+              ? floatConfig.easing
+              : 'ease-in-out'
+
+          return {
+            ...styleWithScaleUp,
+            animation: `float ${duration} ${easing} infinite`,
+          }
+        })()
+      : styleWithScaleUp
 
   // Build flex-specific classes based on props
   const buildFlexClasses = (props?: Record<string, unknown>): string => {

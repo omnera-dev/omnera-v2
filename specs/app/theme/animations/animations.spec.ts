@@ -689,7 +689,7 @@ test.describe('Animation Configuration', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-THEME-ANIMATIONS-APPLICATION-008: should render button gently floating up and down',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
