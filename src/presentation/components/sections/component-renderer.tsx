@@ -141,11 +141,29 @@ export function ComponentRenderer({
   // React requires style to be an object, but our schema allows CSS strings for convenience
   // Normalize animation names to kebab-case for consistency with generated keyframes
   const styleValue = substitutedProps?.style
-  const parsedStyle = normalizeStyleAnimations(
+  let parsedStyle = normalizeStyleAnimations(
     typeof styleValue === 'string'
       ? parseStyle(styleValue)
       : (styleValue as Record<string, unknown> | undefined)
   )
+
+  // Apply fadeOut animation to toast components automatically
+  if (type === 'toast' && theme?.animations?.fadeOut) {
+    const fadeOutConfig = theme.animations.fadeOut
+    const duration =
+      typeof fadeOutConfig === 'object' && 'duration' in fadeOutConfig
+        ? fadeOutConfig.duration
+        : '300ms'
+    const easing =
+      typeof fadeOutConfig === 'object' && 'easing' in fadeOutConfig
+        ? fadeOutConfig.easing
+        : 'ease-out'
+
+    parsedStyle = {
+      ...parsedStyle,
+      animation: `fade-out ${duration} ${easing}`,
+    }
+  }
 
   // Build flex-specific classes based on props
   const buildFlexClasses = (props?: Record<string, unknown>): string => {
