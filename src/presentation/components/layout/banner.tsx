@@ -20,6 +20,7 @@ export function Banner({
   enabled,
   message,
   text,
+  link,
 }: Readonly<BannerProps>): Readonly<ReactElement | undefined> {
   // Don't render if explicitly disabled
   if (enabled === false) {
@@ -34,13 +35,22 @@ export function Banner({
       data-testid="banner"
       className="py-3"
     >
-      <div className="container text-center">
+      <div className="container flex items-center justify-center gap-4">
         <p
           data-testid="banner-text"
           className="font-medium"
         >
           {content}
         </p>
+        {link && (
+          <a
+            data-testid="banner-link"
+            href={link.href}
+            className="font-semibold underline hover:opacity-80"
+          >
+            {link.label}
+          </a>
+        )}
       </div>
     </div>
   )
