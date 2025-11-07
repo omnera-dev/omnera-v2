@@ -453,7 +453,7 @@ test.describe('Animation Configuration', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-THEME-ANIMATIONS-APPLICATION-003: should render button with CSS transition on hover',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {

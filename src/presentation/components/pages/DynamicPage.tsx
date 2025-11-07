@@ -235,6 +235,19 @@ function generateThemeStyles(theme?: Theme): string {
   // Build animation keyframes
   const animationStyles = generateAnimationKeyframes(animations)
 
+  // Build transition styles for interactive elements
+  const transitionConfig = animations?.transition
+  const transitionStyles: ReadonlyArray<string> =
+    transitionConfig && typeof transitionConfig === 'object'
+      ? [
+          [
+            'button {',
+            `  transition: all ${transitionConfig.duration || '200ms'} ${transitionConfig.easing || 'ease-in-out'};`,
+            '}',
+          ].join('\n'),
+        ]
+      : []
+
   // Combine all styles
   const styles: ReadonlyArray<string> = [
     ...cssVariables,
@@ -242,6 +255,7 @@ function generateThemeStyles(theme?: Theme): string {
     ...spacingStyles,
     ...fontStyles,
     ...animationStyles,
+    ...transitionStyles,
   ]
 
   return styles.join('\n')
