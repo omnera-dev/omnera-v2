@@ -344,7 +344,7 @@ test.describe('Breakpoints', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-THEME-BREAKPOINTS-APPLICATION-003: should render with increasing padding at each breakpoint',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {

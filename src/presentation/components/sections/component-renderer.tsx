@@ -6,6 +6,7 @@
  */
 
 import { type ReactElement } from 'react'
+import { Hero } from '@/presentation/components/layout/hero'
 import { ResponsiveNavigation } from '@/presentation/components/layout/responsive-navigation'
 import { composeAnimation } from '@/presentation/utils/animation-composer'
 import { normalizeStyleAnimations, parseStyle } from '@/presentation/utils/parse-style'
@@ -360,10 +361,19 @@ export function ComponentRenderer({
     case 'modal':
     case 'sidebar':
     case 'toast':
-    case 'hero':
     case 'fab':
     case 'spinner':
       return Renderers.renderHTMLElement('div', elementProps, content, renderedChildren)
+
+    case 'hero':
+      return (
+        <Hero
+          theme={theme}
+          data-testid={elementProps['data-testid'] as string | undefined}
+        >
+          {renderedChildren}
+        </Hero>
+      )
 
     case 'list':
       return Renderers.renderList(elementProps, content, theme)
