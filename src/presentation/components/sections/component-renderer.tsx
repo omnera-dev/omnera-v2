@@ -158,11 +158,19 @@ export function ComponentRenderer({
   // Compose scaleUp animation for card components with scroll trigger
   const styleWithScaleUp =
     type === 'card'
-      ? composeAnimation(styleWithFadeOut, type, 'scaleUp', theme, '500ms', 'cubic-bezier(0.34, 1.56, 0.64, 1)', {
-          animationPlayState: 'paused',
-          animationFillMode: 'forwards',
-          opacity: 0,
-        })
+      ? composeAnimation(
+          styleWithFadeOut,
+          type,
+          'scaleUp',
+          theme,
+          '500ms',
+          'cubic-bezier(0.34, 1.56, 0.64, 1)',
+          {
+            animationPlayState: 'paused',
+            animationFillMode: 'forwards',
+            opacity: 0,
+          }
+        )
       : styleWithFadeOut
 
   // Compose float animation for fab components (continuous floating effect)
