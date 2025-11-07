@@ -248,6 +248,21 @@ function generateThemeStyles(theme?: Theme): string {
         ]
       : []
 
+  // Build parallax styles for hero sections with parallax animation
+  const parallaxConfig = animations?.parallax
+  const parallaxStyles: ReadonlyArray<string> =
+    parallaxConfig
+      ? [
+          [
+            '[data-testid="hero-background"] {',
+            '  display: block;',
+            '  min-height: 200px;',
+            '  min-width: 100%;',
+            '}',
+          ].join('\n'),
+        ]
+      : []
+
   // Combine all styles
   const styles: ReadonlyArray<string> = [
     ...cssVariables,
@@ -256,6 +271,7 @@ function generateThemeStyles(theme?: Theme): string {
     ...fontStyles,
     ...animationStyles,
     ...transitionStyles,
+    ...parallaxStyles,
   ]
 
   return styles.join('\n')

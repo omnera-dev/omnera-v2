@@ -22,6 +22,12 @@ export interface ElementProps {
 
 /**
  * Renders HTML structural elements (div, span, section)
+ *
+ * If content starts with '<', it's treated as HTML and rendered via dangerouslySetInnerHTML.
+ * Otherwise, content is rendered as plain text.
+ *
+ * Note: HTML content is rendered without sanitization since it comes from trusted
+ * schema configuration. For user-generated content, use renderCustomHTML instead.
  */
 export function renderHTMLElement(
   type: 'div' | 'span' | 'section',
@@ -30,6 +36,13 @@ export function renderHTMLElement(
   children: readonly React.ReactNode[]
 ): ReactElement {
   const Element = type
+
+  // If content looks like HTML (starts with '<'), render as HTML
+  // This is safe for schema-defined content but should NOT be used for user input
+  if (content && content.trim().startsWith('<')) {
+    return <Element {...props} dangerouslySetInnerHTML={{ __html: content }} />
+  }
+
   return <Element {...props}>{content || children}</Element>
 }
 
