@@ -636,7 +636,7 @@ test.describe('Spacing Configuration', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-THEME-SPACING-APPLICATION-003: should render with spacing between flex items',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
