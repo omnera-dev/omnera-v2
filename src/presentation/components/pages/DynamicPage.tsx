@@ -250,18 +250,17 @@ function generateThemeStyles(theme?: Theme): string {
 
   // Build parallax styles for hero sections with parallax animation
   const parallaxConfig = animations?.parallax
-  const parallaxStyles: ReadonlyArray<string> =
-    parallaxConfig
-      ? [
-          [
-            '[data-testid="hero-background"] {',
-            '  display: block;',
-            '  min-height: 200px;',
-            '  min-width: 100%;',
-            '}',
-          ].join('\n'),
-        ]
-      : []
+  const parallaxStyles: ReadonlyArray<string> = parallaxConfig
+    ? [
+        [
+          '[data-testid="hero-background"] {',
+          '  display: block;',
+          '  min-height: 200px;',
+          '  min-width: 100%;',
+          '}',
+        ].join('\n'),
+      ]
+    : []
 
   // Build typewriter styles for heading elements with typewriter animation
   const typewriterConfig = animations?.typewriter

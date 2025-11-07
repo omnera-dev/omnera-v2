@@ -6,6 +6,7 @@
  */
 
 import { type ReactElement } from 'react'
+import { ResponsiveNavigation } from '@/presentation/components/layout/responsive-navigation'
 import { composeAnimation } from '@/presentation/utils/animation-composer'
 import { normalizeStyleAnimations, parseStyle } from '@/presentation/utils/parse-style'
 import {
@@ -366,6 +367,14 @@ export function ComponentRenderer({
 
     case 'list':
       return Renderers.renderList(elementProps, content, theme)
+
+    case 'navigation':
+      return (
+        <ResponsiveNavigation
+          theme={theme}
+          data-testid={elementProps['data-testid'] as string | undefined}
+        />
+      )
 
     // Fallback for unknown types
     default:
