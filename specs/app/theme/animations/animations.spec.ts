@@ -591,7 +591,7 @@ test.describe('Animation Configuration', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-THEME-ANIMATIONS-APPLICATION-006: should render toast fading out before removal',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
