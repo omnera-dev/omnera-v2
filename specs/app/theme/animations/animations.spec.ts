@@ -413,7 +413,7 @@ test.describe('Animation Configuration', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-THEME-ANIMATIONS-APPLICATION-002: should render badge with pulsing animation loop',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
