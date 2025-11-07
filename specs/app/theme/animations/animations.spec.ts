@@ -493,7 +493,7 @@ test.describe('Animation Configuration', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-THEME-ANIMATIONS-APPLICATION-004: should render hero content sliding up and fading in',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
