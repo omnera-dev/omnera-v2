@@ -778,7 +778,7 @@ test.describe('Animation Configuration', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-THEME-ANIMATIONS-APPLICATION-010: should render list items appearing one after another',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
