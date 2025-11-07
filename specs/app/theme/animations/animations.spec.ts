@@ -543,7 +543,7 @@ test.describe('Animation Configuration', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-THEME-ANIMATIONS-APPLICATION-005: should render sidebar sliding in from left',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
