@@ -602,7 +602,7 @@ test.describe('Spacing Configuration', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-THEME-SPACING-APPLICATION-002: should render centered with max-width constraint',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {

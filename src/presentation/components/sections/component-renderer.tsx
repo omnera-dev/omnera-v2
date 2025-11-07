@@ -306,14 +306,15 @@ export function ComponentRenderer({
     ? blockInstanceIndex !== undefined
       ? `block-${blockName}-${blockInstanceIndex}`
       : `block-${blockName}`
-    : substitutedProps?.['data-testid'] || undefined
+    : substitutedProps?.['data-testid'] ||
+      (type === 'container' ? 'container' : undefined)
   const elementProps = {
     ...substitutedProps,
     className: finalClassName,
     ...(styleWithShadow && { style: styleWithShadow }),
+    ...(testId && { 'data-testid': testId }),
     ...(blockName && {
       'data-block': blockName,
-      'data-testid': testId,
       'data-type': type,
     }),
     ...(blockName &&
@@ -356,6 +357,13 @@ export function ComponentRenderer({
       ? { padding: sectionSpacing }
       : undefined
 
+  // Apply theme spacing to container elements when spacing.container is a CSS value
+  const containerSpacing = type === 'container' && theme?.spacing?.container
+  const containerSpacingStyle =
+    containerSpacing && isCssValue(containerSpacing)
+      ? { maxWidth: containerSpacing, margin: '0 auto' }
+      : undefined
+
   const elementPropsWithSectionSpacing = sectionSpacingStyle
     ? {
         ...elementProps,
@@ -366,13 +374,23 @@ export function ComponentRenderer({
       }
     : elementProps
 
+  const elementPropsWithSpacing = containerSpacingStyle
+    ? {
+        ...elementPropsWithSectionSpacing,
+        style: {
+          ...(elementPropsWithSectionSpacing.style as Record<string, unknown> | undefined),
+          ...containerSpacingStyle,
+        },
+      }
+    : elementPropsWithSectionSpacing
+
   // Render based on component type using specialized renderers
   switch (type) {
     // HTML structural elements
     case 'section':
       return Renderers.renderHTMLElement(
         'section',
-        elementPropsWithSectionSpacing,
+        elementPropsWithSpacing,
         content,
         renderedChildren
       )
@@ -384,7 +402,7 @@ export function ComponentRenderer({
     case 'card':
     case 'timeline':
     case 'accordion':
-      return Renderers.renderHTMLElement('div', elementProps, content, renderedChildren)
+      return Renderers.renderHTMLElement('div', elementPropsWithSpacing, content, renderedChildren)
 
     case 'span':
     case 'badge':

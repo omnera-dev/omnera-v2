@@ -1052,14 +1052,15 @@ export function DynamicPage({
                   })}
                 </>
               )}
-              {theme?.spacing?.container && (
-                <div
-                  data-testid="container"
-                  {...(isTailwindClass(theme.spacing.container)
-                    ? { className: theme.spacing.container }
-                    : { style: { maxWidth: theme.spacing.container } })}
-                />
-              )}
+              {theme?.spacing?.container &&
+                !page.sections.some((s) => 'type' in s && s.type === 'container') && (
+                  <div
+                    data-testid="container"
+                    {...(isTailwindClass(theme.spacing.container)
+                      ? { className: theme.spacing.container }
+                      : { style: { maxWidth: theme.spacing.container } })}
+                  />
+                )}
               {(() => {
                 const containerSmall = (theme?.spacing as Record<string, unknown>)?.[
                   'container-small'
