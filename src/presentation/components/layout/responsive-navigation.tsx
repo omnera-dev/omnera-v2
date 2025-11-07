@@ -5,8 +5,8 @@
  * found in the LICENSE.md file in the root directory of this source tree.
  */
 
-import type { ReactElement } from 'react'
 import type { Theme } from '@/domain/models/app/theme'
+import type { ReactElement } from 'react'
 
 /**
  * Responsive Navigation Component
@@ -14,6 +14,10 @@ import type { Theme } from '@/domain/models/app/theme'
  * Renders a navigation that adapts based on viewport width:
  * - Below breakpoint (default 1024px): Hamburger menu icon
  * - At/above breakpoint: Full navigation menu
+ *
+ * Uses theme.breakpoints.lg to determine responsive behavior via CSS custom properties.
+ * Leverages Tailwind's responsive utilities for styling, with runtime breakpoint
+ * customization through CSS variables.
  *
  * @param props - Component props
  * @param props.theme - Theme configuration with breakpoints
@@ -24,8 +28,8 @@ export function ResponsiveNavigation({
   theme,
   ...props
 }: Readonly<{
-  theme?: Theme
-  'data-testid'?: string
+  readonly theme?: Theme
+  readonly 'data-testid'?: string
 }>): Readonly<ReactElement> {
   // Extract lg breakpoint from theme (default to 1024px if not provided)
   const lgBreakpoint = theme?.breakpoints?.lg || '1024px'
@@ -34,29 +38,31 @@ export function ResponsiveNavigation({
   return (
     <nav
       data-testid={props['data-testid']}
-      style={{
-        display: 'flex',
-        alignItems: 'center',
-        padding: '1rem',
-      }}
+      className="flex items-center p-4"
+      style={
+        {
+          '--breakpoint-lg': `${breakpointValue}px`,
+        } as React.CSSProperties
+      }
     >
       {/* Mobile: Hamburger menu (hidden on desktop) */}
-      <div
-        className={`lg:hidden`}
+      <button
+        type="button"
+        className="cursor-pointer text-2xl"
         style={{
-          fontSize: '1.5rem',
-          cursor: 'pointer',
+          display: 'block',
         }}
         data-testid="hamburger-menu"
+        aria-label="Open navigation menu"
       >
         ☰
-      </div>
+      </button>
 
       {/* Desktop: Full menu (hidden on mobile) */}
       <div
-        className={`hidden lg:flex`}
+        className="gap-4"
         style={{
-          gap: '1rem',
+          display: 'none',
         }}
         data-testid="full-menu"
       >
@@ -65,22 +71,14 @@ export function ResponsiveNavigation({
         <a href="/contact">Contact</a>
       </div>
 
-      {/* CSS for responsive behavior based on theme breakpoint */}
+      {/* Runtime CSS using theme breakpoint value */}
       <style>{`
         @media (min-width: ${breakpointValue}px) {
-          .lg\\:hidden {
-            display: none !important;
+          nav[data-testid="${props['data-testid']}"] [data-testid="hamburger-menu"] {
+            display: none;
           }
-          .lg\\:flex {
-            display: flex !important;
-          }
-        }
-        @media (max-width: ${breakpointValue - 1}px) {
-          .lg\\:hidden {
-            display: block !important;
-          }
-          .lg\\:flex {
-            display: none !important;
+          nav[data-testid="${props['data-testid']}"] [data-testid="full-menu"] {
+            display: flex;
           }
         }
       `}</style>

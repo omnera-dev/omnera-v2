@@ -31,10 +31,13 @@ export const EasingFunctionSchema = Schema.Union(
     )
   ),
   Schema.String.pipe(
-    Schema.pattern(/^steps\(\s*\d+\s*,\s*(start|end|jump-start|jump-end|jump-none|jump-both)\s*\)$/, {
-      message: () =>
-        'Steps function must have a number of steps and a position (e.g., steps(40, end))',
-    })
+    Schema.pattern(
+      /^steps\(\s*\d+\s*,\s*(start|end|jump-start|jump-end|jump-none|jump-both)\s*\)$/,
+      {
+        message: () =>
+          'Steps function must have a number of steps and a position (e.g., steps(40, end))',
+      }
+    )
   )
 ).annotations({
   description: 'Transition timing function',

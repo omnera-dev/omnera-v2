@@ -6,6 +6,7 @@
  */
 
 import { type ReactElement } from 'react'
+import { ResponsiveNavigation } from '@/presentation/components/layout/responsive-navigation'
 import { composeAnimation } from '@/presentation/utils/animation-composer'
 import { normalizeStyleAnimations, parseStyle } from '@/presentation/utils/parse-style'
 import {
@@ -15,7 +16,6 @@ import {
 import * as Renderers from './renderers/element-renderers'
 import { resolveBlock } from './utils/block-resolution'
 import { substitutePropsThemeTokens } from './utils/theme-tokens'
-import { ResponsiveNavigation } from '@/presentation/components/layout/responsive-navigation'
 import type {
   BlockReference,
   SimpleBlockReference,

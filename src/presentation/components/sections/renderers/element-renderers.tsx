@@ -40,7 +40,12 @@ export function renderHTMLElement(
   // If content looks like HTML (starts with '<'), render as HTML
   // This is safe for schema-defined content but should NOT be used for user input
   if (content && content.trim().startsWith('<')) {
-    return <Element {...props} dangerouslySetInnerHTML={{ __html: content }} />
+    return (
+      <Element
+        {...props}
+        dangerouslySetInnerHTML={{ __html: content }}
+      />
+    )
   }
 
   return <Element {...props}>{content || children}</Element>
