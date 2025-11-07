@@ -1000,29 +1000,58 @@ export function DynamicPage({
           style={{ minHeight: '1px' }}
         >
           {/* Wrap page sections in a section element when theme spacing is defined */}
+          {/* Only create wrapper section if there are no section components in the page */}
           {theme?.spacing?.section || theme?.spacing?.container ? (
             <>
-              <section
-                data-testid="section"
-                {...(theme?.spacing?.section && { className: theme.spacing.section })}
-              >
-                {page.sections.map((section, index) => {
-                  const blockInfo = getBlockInfo(section, index, page.sections)
+              {!page.sections.some(
+                (s) => 'type' in s && s.type === 'section'
+              ) && theme?.spacing?.section ? (
+                <section
+                  data-testid="section"
+                  {...(theme?.spacing?.section &&
+                    !isCssValue(theme.spacing.section) && { className: theme.spacing.section })}
+                  {...(theme?.spacing?.section &&
+                    isCssValue(theme.spacing.section) && {
+                      style: { padding: theme.spacing.section },
+                    })}
+                >
+                  {page.sections.map((section, index) => {
+                    const blockInfo = getBlockInfo(section, index, page.sections)
 
-                  return (
-                    <ComponentRenderer
-                      key={index}
-                      component={section}
-                      blockName={blockInfo?.name}
-                      blockInstanceIndex={blockInfo?.instanceIndex}
-                      blocks={blocks}
-                      theme={theme}
-                      languages={languages}
-                      currentLang={lang}
-                    />
-                  )
-                })}
-              </section>
+                    return (
+                      <ComponentRenderer
+                        key={index}
+                        component={section}
+                        blockName={blockInfo?.name}
+                        blockInstanceIndex={blockInfo?.instanceIndex}
+                        blocks={blocks}
+                        theme={theme}
+                        languages={languages}
+                        currentLang={lang}
+                      />
+                    )
+                  })}
+                </section>
+              ) : (
+                <>
+                  {page.sections.map((section, index) => {
+                    const blockInfo = getBlockInfo(section, index, page.sections)
+
+                    return (
+                      <ComponentRenderer
+                        key={index}
+                        component={section}
+                        blockName={blockInfo?.name}
+                        blockInstanceIndex={blockInfo?.instanceIndex}
+                        blocks={blocks}
+                        theme={theme}
+                        languages={languages}
+                        currentLang={lang}
+                      />
+                    )
+                  })}
+                </>
+              )}
               {theme?.spacing?.container && (
                 <div
                   data-testid="container"

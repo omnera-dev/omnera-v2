@@ -568,7 +568,7 @@ test.describe('Spacing Configuration', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-THEME-SPACING-APPLICATION-001: should render with vertical padding creating rhythm',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {

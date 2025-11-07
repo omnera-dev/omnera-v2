@@ -341,11 +341,38 @@ export function ComponentRenderer({
       }),
   }
 
+  // Apply theme spacing to section elements when spacing.section is a CSS value
+  // CSS values contain units like rem, px, em, % without spaces
+  const isCssValue = (value: string): boolean => {
+    return /\d+(rem|px|em|%|vh|vw)/.test(value) && !value.includes(' ')
+  }
+
+  const sectionSpacing = type === 'section' && theme?.spacing?.section
+  const sectionSpacingStyle =
+    sectionSpacing && isCssValue(theme.spacing.section)
+      ? { padding: theme.spacing.section }
+      : undefined
+
+  const elementPropsWithSectionSpacing = sectionSpacingStyle
+    ? {
+        ...elementProps,
+        style: {
+          ...(elementProps.style as Record<string, unknown> | undefined),
+          ...sectionSpacingStyle,
+        },
+      }
+    : elementProps
+
   // Render based on component type using specialized renderers
   switch (type) {
     // HTML structural elements
     case 'section':
-      return Renderers.renderHTMLElement('section', elementProps, content, renderedChildren)
+      return Renderers.renderHTMLElement(
+        'section',
+        elementPropsWithSectionSpacing,
+        content,
+        renderedChildren
+      )
 
     case 'div':
     case 'container':
