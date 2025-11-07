@@ -264,7 +264,7 @@ test.describe('Breakpoints', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-THEME-BREAKPOINTS-APPLICATION-001: should render grid with media query at 768px',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
