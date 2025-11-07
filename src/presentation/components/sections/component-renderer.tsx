@@ -32,6 +32,14 @@ import type { Theme } from '@/domain/models/app/theme'
 const CONTAINER_TYPES = ['div', 'container', 'flex', 'grid', 'card'] as const
 
 /**
+ * Checks if a value is a CSS value with units (rem, px, em, %, vh, vw)
+ * CSS values must contain units and not include spaces (to distinguish from Tailwind classes)
+ */
+const isCssValue = (value: string): boolean => {
+  return /\d+(rem|px|em|%|vh|vw)/.test(value) && !value.includes(' ')
+}
+
+/**
  * ComponentRenderer - Renders a dynamic component based on its type
  *
  * This component handles the recursive rendering of sections, converting
@@ -342,15 +350,10 @@ export function ComponentRenderer({
   }
 
   // Apply theme spacing to section elements when spacing.section is a CSS value
-  // CSS values contain units like rem, px, em, % without spaces
-  const isCssValue = (value: string): boolean => {
-    return /\d+(rem|px|em|%|vh|vw)/.test(value) && !value.includes(' ')
-  }
-
   const sectionSpacing = type === 'section' && theme?.spacing?.section
   const sectionSpacingStyle =
-    sectionSpacing && isCssValue(theme.spacing.section)
-      ? { padding: theme.spacing.section }
+    sectionSpacing && isCssValue(sectionSpacing)
+      ? { padding: sectionSpacing }
       : undefined
 
   const elementPropsWithSectionSpacing = sectionSpacingStyle
