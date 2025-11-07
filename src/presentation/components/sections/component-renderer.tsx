@@ -197,11 +197,8 @@ export function ComponentRenderer({
     return [...baseClasses, alignmentClass, gapClass].filter(Boolean).join(' ')
   }
 
-  // Build grid-specific classes based on props and theme breakpoints
-  const buildGridClasses = (
-    props?: Record<string, unknown>,
-    theme?: Theme
-  ): string | undefined => {
+  // Build grid-specific classes based on theme breakpoints
+  const buildGridClasses = (theme?: Theme): string | undefined => {
     const baseClasses = ['grid']
     const breakpointClass = theme?.breakpoints?.md ? 'md:grid-cols-2' : undefined
 
@@ -214,9 +211,7 @@ export function ComponentRenderer({
     type === 'flex'
       ? [buildFlexClasses(substitutedProps), substitutedProps?.className].filter(Boolean).join(' ')
       : type === 'grid'
-        ? [buildGridClasses(substitutedProps, theme), substitutedProps?.className]
-            .filter(Boolean)
-            .join(' ')
+        ? [buildGridClasses(theme), substitutedProps?.className].filter(Boolean).join(' ')
         : (substitutedProps?.className as string | undefined)
 
   // Merge className with other props and add data-block attribute if blockName is provided
