@@ -32,8 +32,16 @@ export function Banner({
     <div
       role="banner"
       data-testid="banner"
+      className="py-3"
     >
-      {content}
+      <div className="container text-center">
+        <p
+          data-testid="banner-text"
+          className="font-medium"
+        >
+          {content}
+        </p>
+      </div>
     </div>
   )
 }
