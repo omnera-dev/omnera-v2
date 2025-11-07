@@ -29,6 +29,38 @@ import type { Theme } from '@/domain/models/app/theme'
 const CONTAINER_TYPES = ['div', 'container', 'flex', 'grid', 'card'] as const
 
 /**
+ * Extract animation duration from theme animation config
+ * @param config - Animation configuration (can be object with duration or primitive value)
+ * @returns Duration string (defaults to '300ms' if not specified)
+ */
+const getAnimationDuration = (
+  config: unknown
+): string => {
+  return typeof config === 'object' &&
+    config !== null &&
+    'duration' in config &&
+    typeof config.duration === 'string'
+    ? config.duration
+    : '300ms'
+}
+
+/**
+ * Extract animation easing from theme animation config
+ * @param config - Animation configuration (can be object with easing or primitive value)
+ * @returns Easing string (defaults to 'ease-out' if not specified)
+ */
+const getAnimationEasing = (
+  config: unknown
+): string => {
+  return typeof config === 'object' &&
+    config !== null &&
+    'easing' in config &&
+    typeof config.easing === 'string'
+    ? config.easing
+    : 'ease-out'
+}
+
+/**
  * ComponentRenderer - Renders a dynamic component based on its type
  *
  * This component handles the recursive rendering of sections, converting
@@ -153,14 +185,8 @@ export function ComponentRenderer({
     type === 'toast' && theme?.animations?.fadeOut
       ? (() => {
           const fadeOutConfig = theme.animations.fadeOut
-          const duration =
-            typeof fadeOutConfig === 'object' && 'duration' in fadeOutConfig
-              ? fadeOutConfig.duration
-              : '300ms'
-          const easing =
-            typeof fadeOutConfig === 'object' && 'easing' in fadeOutConfig
-              ? fadeOutConfig.easing
-              : 'ease-out'
+          const duration = getAnimationDuration(fadeOutConfig)
+          const easing = getAnimationEasing(fadeOutConfig)
 
           return {
             ...baseStyle,
@@ -174,14 +200,8 @@ export function ComponentRenderer({
     type === 'card' && theme?.animations?.scaleUp
       ? (() => {
           const scaleUpConfig = theme.animations.scaleUp
-          const duration =
-            typeof scaleUpConfig === 'object' && 'duration' in scaleUpConfig
-              ? scaleUpConfig.duration
-              : '500ms'
-          const easing =
-            typeof scaleUpConfig === 'object' && 'easing' in scaleUpConfig
-              ? scaleUpConfig.easing
-              : 'cubic-bezier(0.34, 1.56, 0.64, 1)'
+          const duration = getAnimationDuration(scaleUpConfig)
+          const easing = getAnimationEasing(scaleUpConfig)
 
           return {
             ...styleWithFadeOut,
