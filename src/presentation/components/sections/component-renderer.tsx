@@ -221,9 +221,16 @@ export function ComponentRenderer({
   // Modal components use xl shadow
   // Input components use inner shadow
   // Button components use md shadow (or custom like brand)
+  // List-item components use sm shadow (lowest elevation)
+  // Dropdown components use lg shadow (higher than card, lower than modal)
   const getComponentShadow = (): Record<string, unknown> | undefined => {
     if (!theme?.shadows) {
       return undefined
+    }
+
+    // List-item: Use sm shadow (lowest elevation in hierarchy)
+    if (type === 'list-item' && theme.shadows.sm) {
+      return { boxShadow: 'var(--shadow-sm)' }
     }
 
     // Card: Use first available shadow (prioritize custom names like neumorphic, then md)
@@ -239,6 +246,11 @@ export function ComponentRenderer({
       if (theme.shadows.md) {
         return { boxShadow: 'var(--shadow-md)' }
       }
+    }
+
+    // Dropdown: Use lg shadow (higher elevation than card)
+    if (type === 'dropdown' && theme.shadows.lg) {
+      return { boxShadow: 'var(--shadow-lg)' }
     }
 
     // Modal: Use xl shadow
@@ -422,6 +434,8 @@ export function ComponentRenderer({
     case 'toast':
     case 'fab':
     case 'spinner':
+    case 'list-item':
+    case 'dropdown':
       return Renderers.renderHTMLElement('div', elementProps, content, renderedChildren)
 
     case 'hero':

@@ -638,7 +638,7 @@ test.describe('Shadows', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-THEME-SHADOWS-APPLICATION-009: should render components with consistent elevation scale',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
