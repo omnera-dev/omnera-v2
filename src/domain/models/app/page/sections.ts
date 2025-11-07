@@ -21,7 +21,7 @@ import { ResponsiveSchema } from './common/responsive'
  * - Grouping: card, badge, timeline
  * - Media: video, audio, iframe
  * - Forms: form, input
- * - Feedback: toast, spinner
+ * - Feedback: toast, spinner, alert
  * - UI Elements: fab (floating action button), list
  */
 export const ComponentTypeSchema = Schema.Literal(
@@ -61,7 +61,8 @@ export const ComponentTypeSchema = Schema.Literal(
   'fab',
   'spinner',
   'list',
-  'navigation'
+  'navigation',
+  'alert'
 ).annotations({
   description: 'Component type for page building',
 })
