@@ -919,7 +919,7 @@ test.describe('Animation Configuration', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-THEME-ANIMATIONS-APPLICATION-013: should render background moving slower than foreground (parallax effect)',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
