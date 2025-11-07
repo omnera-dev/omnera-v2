@@ -10,6 +10,7 @@ import { Hero } from '@/presentation/components/layout/hero'
 import { ResponsiveNavigation } from '@/presentation/components/layout/responsive-navigation'
 import { composeAnimation } from '@/presentation/utils/animation-composer'
 import { normalizeStyleAnimations, parseStyle } from '@/presentation/utils/parse-style'
+import { isCssValue } from '@/presentation/utils/style-utils'
 import {
   collectTranslationsForKey,
   resolveTranslationPattern,
@@ -30,14 +31,6 @@ import type { Theme } from '@/domain/models/app/theme'
  * Component types that should receive role="group" when used as blocks with children
  */
 const CONTAINER_TYPES = ['div', 'container', 'flex', 'grid', 'card'] as const
-
-/**
- * Checks if a value is a CSS value with units (rem, px, em, %, vh, vw)
- * CSS values must contain units and not include spaces (to distinguish from Tailwind classes)
- */
-const isCssValue = (value: string): boolean => {
-  return /\d+(rem|px|em|%|vh|vw)/.test(value) && !value.includes(' ')
-}
 
 /**
  * ComponentRenderer - Renders a dynamic component based on its type

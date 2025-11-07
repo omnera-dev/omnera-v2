@@ -12,6 +12,7 @@ import { Navigation } from '@/presentation/components/layout/navigation'
 import { Sidebar } from '@/presentation/components/layout/sidebar'
 import { ComponentRenderer } from '@/presentation/components/sections/component-renderer'
 import { toKebabCase, toSlug } from '@/presentation/utils/string-utils'
+import { isCssValue, isTailwindClass } from '@/presentation/utils/style-utils'
 import type {
   BlockReference,
   SimpleBlockReference,
@@ -96,39 +97,6 @@ function generateAnimationKeyframes(animations?: Theme['animations']): ReadonlyA
 
     return []
   })
-}
-
-/**
- * Check if a spacing value is a raw CSS value (not a Tailwind class)
- * CSS values contain units like rem, px, em, % without spaces
- * Tailwind classes like "py-16" or "py-16 sm:py-20" should return false
- *
- * @param value - Spacing value to check
- * @returns true if value is a raw CSS value, false if it's a Tailwind class
- */
-function isCssValue(value: string): boolean {
-  return /\d+(rem|px|em|%|vh|vw)/.test(value) && !value.includes(' ')
-}
-
-/**
- * Check if a container spacing value is a Tailwind class (not a raw CSS value)
- * Tailwind classes include utility classes like "max-w-7xl", "mx-auto", "px-4"
- * CSS values like "80rem" or "1280px" should return false
- *
- * @param value - Container spacing value to check
- * @returns true if value contains Tailwind classes, false if it's a raw CSS value
- */
-function isTailwindClass(value: string): boolean {
-  // If it has spaces, it's multiple classes (Tailwind)
-  if (value.includes(' ')) {
-    return true
-  }
-  // If it matches Tailwind patterns (max-w-*, mx-*, px-*, etc.), it's a class
-  if (/^(max-w-|mx-|px-|py-|p-|m-|w-|h-)/.test(value)) {
-    return true
-  }
-  // Otherwise, assume it's a CSS value
-  return false
 }
 
 /**
