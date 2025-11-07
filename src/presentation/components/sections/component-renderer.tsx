@@ -197,14 +197,26 @@ export function ComponentRenderer({
     return [...baseClasses, alignmentClass, gapClass].filter(Boolean).join(' ')
   }
 
+  // Build grid-specific classes based on theme breakpoints
+  const buildGridClasses = (theme?: Theme): string | undefined => {
+    const baseClasses = ['grid']
+    const breakpointClass = theme?.breakpoints?.md ? 'md:grid-cols-2' : undefined
+
+    return [...baseClasses, breakpointClass].filter(Boolean).join(' ')
+  }
+
   // For flex type, prepend flex classes to className
+  // For grid type, prepend grid classes to className
   const finalClassName =
     type === 'flex'
       ? [buildFlexClasses(substitutedProps), substitutedProps?.className].filter(Boolean).join(' ')
-      : (substitutedProps?.className as string | undefined)
+      : type === 'grid'
+        ? [buildGridClasses(theme), substitutedProps?.className].filter(Boolean).join(' ')
+        : (substitutedProps?.className as string | undefined)
 
   // Merge className with other props and add data-block attribute if blockName is provided
   // For blocks without content, add min-height and display to ensure visibility
+  // For grid elements without content, ensure minimum dimensions for rendering
   // Add translation key data attribute if children contain $t: patterns
   // Include pre-resolved translations to eliminate client-side resolution logic duplication
   // Add role="group" for blocks with children to establish proper ARIA tree nesting
@@ -216,7 +228,7 @@ export function ComponentRenderer({
     ? blockInstanceIndex !== undefined
       ? `block-${blockName}-${blockInstanceIndex}`
       : `block-${blockName}`
-    : undefined
+    : substitutedProps?.['data-testid'] || undefined
   const elementProps = {
     ...substitutedProps,
     className: finalClassName,
@@ -246,6 +258,15 @@ export function ComponentRenderer({
           minHeight: '1px',
           minWidth: '1px',
           display: 'inline-block',
+        },
+      }),
+    ...(!blockName &&
+      type === 'grid' &&
+      !hasContent && {
+        style: {
+          ...parsedStyle,
+          minHeight: '100px',
+          minWidth: '100px',
         },
       }),
   }
