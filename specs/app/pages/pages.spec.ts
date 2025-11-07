@@ -493,7 +493,7 @@ test.describe('Pages', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-INTEGRATION-003: should compose pages from reusable blocks without duplicating block definitions',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -538,7 +538,7 @@ test.describe('Pages', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-INTEGRATION-004: should support responsive design via className utilities without separate mobile pages',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {

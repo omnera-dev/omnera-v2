@@ -333,7 +333,7 @@ test.describe('Shadows', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-THEME-SHADOWS-APPLICATION-001: should render card with medium box-shadow creating depth',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -370,7 +370,7 @@ test.describe('Shadows', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-THEME-SHADOWS-APPLICATION-002: should render modal with dramatic shadow emphasizing importance',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -407,7 +407,7 @@ test.describe('Shadows', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-THEME-SHADOWS-APPLICATION-003: should render input with inset shadow creating depth inward',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -443,7 +443,7 @@ test.describe('Shadows', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-THEME-SHADOWS-APPLICATION-004: should render button with smooth shadow transition creating lift effect',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -482,7 +482,7 @@ test.describe('Shadows', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-THEME-SHADOWS-APPLICATION-005: should render button with colored shadow matching brand identity',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -522,7 +522,7 @@ test.describe('Shadows', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-THEME-SHADOWS-APPLICATION-006: should render element with multi-layered shadow creating subtle 3D effect',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -559,7 +559,7 @@ test.describe('Shadows', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-THEME-SHADOWS-APPLICATION-007: should render input with prominent focus shadow for keyboard navigation',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -600,7 +600,7 @@ test.describe('Shadows', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-THEME-SHADOWS-APPLICATION-008: should render card with appropriate shadow depth per device',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -702,7 +702,7 @@ test.describe('Shadows', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-THEME-SHADOWS-APPLICATION-010: should render button with reduced shadow creating pressed-in effect',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -746,7 +746,7 @@ test.describe('Shadows', () => {
   // ONE OPTIMIZED test verifying components work together efficiently
   // ============================================================================
 
-  test.fixme(
+  test(
     'APP-THEME-SHADOWS-REGRESSION-001: user can complete full shadows workflow',
     { tag: '@regression' },
     async ({ page, startServerWithSchema }) => {

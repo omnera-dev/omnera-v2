@@ -18,7 +18,7 @@ import { test, expect } from '@/specs/fixtures'
  * 2. @regression test - ONE consolidated workflow test
  *
  * These tests specify the desired behavior for the name property.
- * All tests use test.fixme() for RED phase (TDD) - they will fail initially.
+ * All tests use test() for RED phase (TDD) - they will fail initially.
  * Implementation should focus on making each test pass.
  */
 

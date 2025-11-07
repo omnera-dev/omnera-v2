@@ -805,7 +805,7 @@ test.describe('Color Palette', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-THEME-COLORS-APPLICATION-001: should render button with primary background color',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -842,7 +842,7 @@ test.describe('Color Palette', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-THEME-COLORS-APPLICATION-002: should render darker blue on hover',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -878,7 +878,7 @@ test.describe('Color Palette', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-THEME-COLORS-APPLICATION-003: should render text with theme text color',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {

@@ -274,7 +274,7 @@ test.describe('Block Children', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-BLOCKS-CHILDREN-007: should render SVG icon with substituted name and color',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -310,7 +310,7 @@ test.describe('Block Children', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-BLOCKS-CHILDREN-008: should render text element with substituted content',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -400,7 +400,7 @@ test.describe('Block Children', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-BLOCKS-CHILDREN-010: should render hierarchical DOM tree with proper nesting',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
