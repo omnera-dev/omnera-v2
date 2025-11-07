@@ -216,6 +216,62 @@ export function ComponentRenderer({
         ? [buildGridClasses(theme), substitutedProps?.className].filter(Boolean).join(' ')
         : (substitutedProps?.className as string | undefined)
 
+  // Apply theme shadows to component types based on conventions
+  // Card components use available shadow tokens (md, neumorphic, etc.)
+  // Modal components use xl shadow
+  // Input components use inner shadow
+  // Button components use md shadow (or custom like brand)
+  const getComponentShadow = (): Record<string, unknown> | undefined => {
+    if (!theme?.shadows) {
+      return undefined
+    }
+
+    // Card: Use first available shadow (prioritize custom names like neumorphic, then md)
+    if (type === 'card') {
+      // Check for custom shadow names first (neumorphic, etc.)
+      const customShadow = Object.keys(theme.shadows).find(
+        (name) => !['sm', 'md', 'lg', 'xl', '2xl', 'inner', 'none'].includes(name)
+      )
+      if (customShadow) {
+        return { boxShadow: `var(--shadow-${customShadow})` }
+      }
+      // Fallback to md if available
+      if (theme.shadows.md) {
+        return { boxShadow: 'var(--shadow-md)' }
+      }
+    }
+
+    // Modal: Use xl shadow
+    if (type === 'modal' && theme.shadows.xl) {
+      return { boxShadow: 'var(--shadow-xl)' }
+    }
+
+    // Input: Use inner shadow
+    if (type === 'input' && theme.shadows.inner) {
+      return { boxShadow: 'var(--shadow-inner)' }
+    }
+
+    // Button: Use brand shadow if available, otherwise md
+    if (type === 'button') {
+      if (theme.shadows.brand) {
+        return { boxShadow: 'var(--shadow-brand)' }
+      }
+      if (theme.shadows.md) {
+        return { boxShadow: 'var(--shadow-md)' }
+      }
+    }
+
+    return undefined
+  }
+
+  const componentShadow = getComponentShadow()
+  const styleWithShadow = componentShadow
+    ? {
+        ...parsedStyle,
+        ...componentShadow,
+      }
+    : parsedStyle
+
   // Merge className with other props and add data-block attribute if blockName is provided
   // For blocks without content, add min-height and display to ensure visibility
   // For grid elements without content, ensure minimum dimensions for rendering
@@ -234,7 +290,7 @@ export function ComponentRenderer({
   const elementProps = {
     ...substitutedProps,
     className: finalClassName,
-    ...(parsedStyle && { style: parsedStyle }),
+    ...(styleWithShadow && { style: styleWithShadow }),
     ...(blockName && {
       'data-block': blockName,
       'data-testid': testId,
@@ -256,7 +312,7 @@ export function ComponentRenderer({
     ...(blockName &&
       !hasContent && {
         style: {
-          ...parsedStyle,
+          ...styleWithShadow,
           minHeight: '1px',
           minWidth: '1px',
           display: 'inline-block',
@@ -266,7 +322,7 @@ export function ComponentRenderer({
       type === 'grid' &&
       !hasContent && {
         style: {
-          ...parsedStyle,
+          ...styleWithShadow,
           minHeight: '100px',
           minWidth: '100px',
         },
