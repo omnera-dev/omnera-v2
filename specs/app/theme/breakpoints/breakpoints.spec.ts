@@ -304,7 +304,7 @@ test.describe('Breakpoints', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-THEME-BREAKPOINTS-APPLICATION-002: should render hamburger menu below 1024px and full menu above',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
