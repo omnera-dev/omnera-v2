@@ -300,7 +300,7 @@ export function ComponentRenderer({
       ? `block-${blockName}-${blockInstanceIndex}`
       : `block-${blockName}`
     : substitutedProps?.['data-testid'] ||
-      (type === 'container' ? 'container' : undefined)
+      (type === 'container' ? 'container' : type === 'flex' ? 'flex' : undefined)
   const elementProps = {
     ...substitutedProps,
     className: finalClassName,
@@ -357,6 +357,11 @@ export function ComponentRenderer({
       ? { maxWidth: containerSpacing, margin: '0 auto' }
       : undefined
 
+  // Apply theme spacing to flex elements when spacing.gap is a CSS value
+  const flexSpacing = type === 'flex' && theme?.spacing?.gap
+  const flexSpacingStyle =
+    flexSpacing && isCssValue(flexSpacing) ? { display: 'flex', gap: flexSpacing } : undefined
+
   const elementPropsWithSectionSpacing = sectionSpacingStyle
     ? {
         ...elementProps,
@@ -367,7 +372,7 @@ export function ComponentRenderer({
       }
     : elementProps
 
-  const elementPropsWithSpacing = containerSpacingStyle
+  const elementPropsWithContainerSpacing = containerSpacingStyle
     ? {
         ...elementPropsWithSectionSpacing,
         style: {
@@ -376,6 +381,16 @@ export function ComponentRenderer({
         },
       }
     : elementPropsWithSectionSpacing
+
+  const elementPropsWithSpacing = flexSpacingStyle
+    ? {
+        ...elementPropsWithContainerSpacing,
+        style: {
+          ...(elementPropsWithContainerSpacing.style as Record<string, unknown> | undefined),
+          ...flexSpacingStyle,
+        },
+      }
+    : elementPropsWithContainerSpacing
 
   // Render based on component type using specialized renderers
   switch (type) {
