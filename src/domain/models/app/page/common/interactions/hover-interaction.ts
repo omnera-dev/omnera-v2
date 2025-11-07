@@ -16,13 +16,15 @@ import { Schema } from 'effect'
  * - ease-in: Slow start, fast end
  * - ease-out: Fast start, slow end
  * - ease-in-out: Slow start and end, fast middle
+ * - cubic-bezier(): Custom cubic bezier function (e.g., cubic-bezier(0.4, 0, 0.2, 1))
  */
-export const EasingFunctionSchema = Schema.Literal(
-  'linear',
-  'ease',
-  'ease-in',
-  'ease-out',
-  'ease-in-out'
+export const EasingFunctionSchema = Schema.Union(
+  Schema.Literal('linear', 'ease', 'ease-in', 'ease-out', 'ease-in-out'),
+  Schema.String.pipe(
+    Schema.pattern(/^cubic-bezier\([\d.\s,-]+\)$/, {
+      message: () => 'Custom easing must be a cubic-bezier function (e.g., cubic-bezier(0.4, 0, 0.2, 1))',
+    })
+  )
 ).annotations({
   description: 'Transition timing function',
 })
