@@ -6,6 +6,7 @@
  */
 
 import { type ReactElement } from 'react'
+import { composeAnimation } from '@/presentation/utils/animation-composer'
 import { normalizeStyleAnimations, parseStyle } from '@/presentation/utils/parse-style'
 import {
   collectTranslationsForKey,
@@ -182,56 +183,26 @@ export function ComponentRenderer({
   // Apply animations functionally using composition instead of mutation
   // Compose fadeOut animation for toast components
   const styleWithFadeOut =
-    type === 'toast' && theme?.animations?.fadeOut
-      ? (() => {
-          const fadeOutConfig = theme.animations.fadeOut
-          const duration = getAnimationDuration(fadeOutConfig)
-          const easing = getAnimationEasing(fadeOutConfig)
-
-          return {
-            ...baseStyle,
-            animation: `fade-out ${duration} ${easing}`,
-          }
-        })()
+    type === 'toast'
+      ? composeAnimation(baseStyle, type, 'fadeOut', theme, '300ms', 'ease-out')
       : baseStyle
 
   // Compose scaleUp animation for card components with scroll trigger
   const styleWithScaleUp =
-    type === 'card' && theme?.animations?.scaleUp
-      ? (() => {
-          const scaleUpConfig = theme.animations.scaleUp
-          const duration = getAnimationDuration(scaleUpConfig)
-          const easing = getAnimationEasing(scaleUpConfig)
-
-          return {
-            ...styleWithFadeOut,
-            animation: `scale-up ${duration} ${easing}`,
-            animationPlayState: 'paused',
-            animationFillMode: 'forwards',
-            opacity: 0,
-          }
-        })()
+    type === 'card'
+      ? composeAnimation(styleWithFadeOut, type, 'scaleUp', theme, '500ms', 'cubic-bezier(0.34, 1.56, 0.64, 1)', {
+          animationPlayState: 'paused',
+          animationFillMode: 'forwards',
+          opacity: 0,
+        })
       : styleWithFadeOut
 
   // Compose float animation for fab components (continuous floating effect)
   const parsedStyle =
-    type === 'fab' && theme?.animations?.float
-      ? (() => {
-          const floatConfig = theme.animations.float
-          const duration =
-            typeof floatConfig === 'object' && 'duration' in floatConfig
-              ? floatConfig.duration
-              : '3s'
-          const easing =
-            typeof floatConfig === 'object' && 'easing' in floatConfig
-              ? floatConfig.easing
-              : 'ease-in-out'
-
-          return {
-            ...styleWithScaleUp,
-            animation: `float ${duration} ${easing} infinite`,
-          }
-        })()
+    type === 'fab'
+      ? composeAnimation(styleWithScaleUp, type, 'float', theme, '3s', 'ease-in-out', {
+          infinite: true,
+        })
       : styleWithScaleUp
 
   // Build flex-specific classes based on props
