@@ -154,7 +154,7 @@ test.describe('Banner Configuration', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-BANNER-005: should apply solid background color',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -163,9 +163,9 @@ test.describe('Banner Configuration', () => {
         name: 'test-app',
         pages: [
           {
-            name: 'Test',
+            name: 'test',
             path: '/',
-            meta: { lang: 'en-US', title: 'Test' },
+            meta: { lang: 'en-US', title: 'Test', description: 'Test page' },
             layout: { banner: { enabled: true, text: 'Announcement', backgroundColor: '#FF5733' } },
             sections: [],
           },

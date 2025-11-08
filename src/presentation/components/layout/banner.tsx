@@ -22,6 +22,8 @@ export function Banner({
   text,
   link,
   gradient,
+  backgroundColor,
+  textColor,
 }: Readonly<BannerProps>): Readonly<ReactElement | undefined> {
   // Don't render if explicitly disabled
   if (enabled === false) {
@@ -30,12 +32,30 @@ export function Banner({
 
   const content = message || text
 
+  // Build inline styles (gradient takes precedence over backgroundColor)
+  // Use immutable pattern: construct object directly instead of mutating
+  const bannerStyle: React.CSSProperties | undefined = (() => {
+    const hasGradient = gradient !== undefined
+    const hasBackgroundColor = backgroundColor !== undefined
+    const hasTextColor = textColor !== undefined
+
+    if (!hasGradient && !hasBackgroundColor && !hasTextColor) {
+      return undefined
+    }
+
+    return {
+      ...(hasGradient ? { background: gradient } : {}),
+      ...(hasBackgroundColor && !hasGradient ? { backgroundColor } : {}),
+      ...(hasTextColor ? { color: textColor } : {}),
+    }
+  })()
+
   return (
     <div
       role="banner"
       data-testid="banner"
       className="py-3"
-      style={gradient ? { background: gradient } : undefined}
+      style={bannerStyle}
     >
       <div className="container flex items-center justify-center gap-4">
         <p
