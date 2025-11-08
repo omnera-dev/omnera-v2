@@ -638,7 +638,7 @@ test.describe('Pages', () => {
   // ONE OPTIMIZED test verifying components work together efficiently
   // ============================================================================
 
-  test.fixme(
+  test(
     'APP-PAGES-REGRESSION-001: user can complete full pages workflow',
     { tag: '@regression' },
     async ({ page, startServerWithSchema }) => {
@@ -684,7 +684,8 @@ test.describe('Pages', () => {
 
       await expect(page.locator('body')).toMatchAriaSnapshot(`
         - navigation:
-          - img "Logo"
+          - link:
+            - img "Logo"
         - main
       `)
 
