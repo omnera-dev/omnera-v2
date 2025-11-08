@@ -29,9 +29,8 @@ export interface ElementProps {
  * Note: HTML content is rendered without sanitization since it comes from trusted
  * schema configuration. For user-generated content, use renderCustomHTML instead.
  *
- * For section elements, automatically adds role="region" for accessibility best practices.
- * For div elements with children (not just content), adds role="group" to ensure proper
- * ARIA tree structure when the div acts as a container grouping related elements.
+ * For section elements, automatically adds role="region" for accessibility best practices,
+ * ensuring sections are properly identified in the accessibility tree.
  */
 export function renderHTMLElement(
   type: 'div' | 'span' | 'section',
@@ -42,14 +41,20 @@ export function renderHTMLElement(
   const Element = type
 
   // Add appropriate ARIA role for accessibility
-  let elementProps = props
-  if (type === 'section') {
-    elementProps = { ...props, role: 'region' }
-  } else if (type === 'div' && children.length > 0 && !content) {
-    // Add role="group" to div containers with children (not plain content)
-    // This ensures ARIA tree properly identifies grouped elements
-    elementProps = { ...props, role: 'group' }
-  }
+  //  - section elements get role="region"
+  //  - div containers with children (not content) get role="group" unless already set
+  const elementProps =
+    type === 'section'
+      ? { ...props, role: 'region' }
+      : type === 'div' &&
+          Array.isArray(children) &&
+          children.length > 0 &&
+          !content &&
+          !props.role
+        ? // Only add role="group" if not already set (avoid conflicts with component-renderer)
+          // Check Array.isArray to avoid runtime errors if children is somehow not an array
+          { ...props, role: 'group' }
+        : props
 
   // If content looks like HTML (starts with '<'), render as HTML
   // This is safe for schema-defined content but should NOT be used for user input

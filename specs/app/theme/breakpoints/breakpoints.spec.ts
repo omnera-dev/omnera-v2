@@ -470,8 +470,11 @@ test.describe('Breakpoints', () => {
       await page.goto('/')
 
       await expect(page.locator('[data-testid="responsive-layout"]')).toMatchAriaSnapshot(`
-        - heading "Responsive Layout" [level=1]
-        - text: Item 1 Item 2
+        - group:
+          - heading "Responsive Layout" [level=1]
+          - group:
+            - group: Item 1
+            - group: Item 2
       `)
 
       await expect(page.locator('[data-testid="responsive-layout"]')).toHaveScreenshot(
