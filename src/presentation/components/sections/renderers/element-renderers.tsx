@@ -28,6 +28,9 @@ export interface ElementProps {
  *
  * Note: HTML content is rendered without sanitization since it comes from trusted
  * schema configuration. For user-generated content, use renderCustomHTML instead.
+ *
+ * For section elements, automatically adds role="region" for accessibility best practices,
+ * ensuring sections are properly identified in the accessibility tree.
  */
 export function renderHTMLElement(
   type: 'div' | 'span' | 'section',
@@ -37,18 +40,21 @@ export function renderHTMLElement(
 ): ReactElement {
   const Element = type
 
+  // Add role="region" to section elements for accessibility
+  const elementProps = type === 'section' ? { ...props, role: 'region' } : props
+
   // If content looks like HTML (starts with '<'), render as HTML
   // This is safe for schema-defined content but should NOT be used for user input
   if (content && content.trim().startsWith('<')) {
     return (
       <Element
-        {...props}
+        {...elementProps}
         dangerouslySetInnerHTML={{ __html: content }}
       />
     )
   }
 
-  return <Element {...props}>{content || children}</Element>
+  return <Element {...elementProps}>{content || children}</Element>
 }
 
 /**
