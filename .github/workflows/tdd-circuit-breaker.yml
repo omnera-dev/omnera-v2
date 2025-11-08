@@ -88,10 +88,11 @@ jobs:
           echo "🔍 Checking circuit breaker status..."
 
           # Check if circuit breaker is already open (workflow disabled)
-          STATUS=$(gh workflow view "tdd-queue-processor.yml" \
+          STATUS=$(gh workflow list \
             --repo ${{ github.repository }} \
-            --json state \
-            --jq '.state')
+            --all \
+            --json name,state \
+            --jq '.[] | select(.name == "TDD Queue - Processor") | .state')
 
           if [ "$STATUS" = "disabled_manually" ]; then
             echo "is_open=true" >> $GITHUB_OUTPUT
