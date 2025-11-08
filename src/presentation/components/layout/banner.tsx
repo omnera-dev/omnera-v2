@@ -12,6 +12,7 @@ import type { ReactElement } from 'react'
  * Banner Component
  *
  * Renders a top announcement banner with optional message and link.
+ * Client-side interactivity (dismiss functionality) is handled by banner-dismiss.js
  *
  * @param props - Banner configuration
  * @returns Banner element or null if disabled
@@ -24,6 +25,7 @@ export function Banner({
   gradient,
   backgroundColor,
   textColor,
+  dismissible,
 }: Readonly<BannerProps>): Readonly<ReactElement | undefined> {
   // Don't render if explicitly disabled
   if (enabled === false) {
@@ -72,6 +74,15 @@ export function Banner({
           >
             {link.label}
           </a>
+        )}
+        {dismissible && (
+          <button
+            data-testid="banner-dismiss"
+            className="ml-auto font-bold hover:opacity-80"
+            aria-label="Dismiss banner"
+          >
+            ×
+          </button>
         )}
       </div>
     </div>

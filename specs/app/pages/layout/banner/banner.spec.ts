@@ -215,7 +215,7 @@ test.describe('Banner Configuration', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-BANNER-007: should allow users to close banner permanently',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -224,9 +224,9 @@ test.describe('Banner Configuration', () => {
         name: 'test-app',
         pages: [
           {
-            name: 'Test',
+            name: 'test',
             path: '/',
-            meta: { lang: 'en-US', title: 'Test' },
+            meta: { lang: 'en-US', title: 'Test', description: 'Test page' },
             layout: { banner: { enabled: true, text: 'Announcement', dismissible: true } },
             sections: [],
           },
