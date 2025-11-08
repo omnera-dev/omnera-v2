@@ -127,7 +127,11 @@ function processNestedSchema(
  * - Individual tests within schema: base + test number (1, 2, 3, etc.)
  * - Regression tests: base + 900 (always last in group)
  *
- * @param specId The full spec ID (e.g., "APP-VERSION-001" or "APP-VERSION-REGRESSION")
+ * Supported regression patterns:
+ * - APP-THEME-ANIMATIONS-REGRESSION → priority: base + 900
+ * - APP-THEME-ANIMATIONS-REGRESSION-001 → priority: base + 900
+ *
+ * @param specId The full spec ID (e.g., "APP-VERSION-001", "APP-VERSION-REGRESSION", "APP-VERSION-REGRESSION-001")
  * @param hierarchy The schema hierarchy map
  * @returns Priority number for queue ordering
  */
@@ -135,7 +139,17 @@ export function calculateSchemaBasedPriority(specId: string, hierarchy: SchemaHi
   // Extract feature path and test identifier
   const parts = specId.split('-')
   const testIdentifier = parts[parts.length - 1] || ''
-  const isRegression = testIdentifier.toUpperCase() === 'REGRESSION'
+
+  // Check if this is a regression test
+  // Pattern 1: *-REGRESSION (e.g., APP-THEME-ANIMATIONS-REGRESSION)
+  // Pattern 2: *-REGRESSION-NNN (e.g., APP-THEME-ANIMATIONS-REGRESSION-001)
+  const isRegressionOnly = testIdentifier.toUpperCase() === 'REGRESSION'
+  const secondToLastPart = parts.length >= 2 ? parts[parts.length - 2] : undefined
+  const isRegressionWithNumber =
+    secondToLastPart !== undefined &&
+    secondToLastPart.toUpperCase() === 'REGRESSION' &&
+    /^\d+$/.test(testIdentifier)
+  const isRegression = isRegressionOnly || isRegressionWithNumber
 
   // Get feature path (without test number/regression suffix)
   const featurePath = getFeaturePathFromSpecId(specId)
@@ -324,8 +338,10 @@ function calculatePropertyGroupPriority(
  * Examples:
  * - APP-VERSION-001 → app/version
  * - APP-VERSION-REGRESSION → app/version
+ * - APP-VERSION-REGRESSION-001 → app/version
  * - APP-THEME-COLORS-001 → app/theme/colors
  * - APP-THEME-COLORS-REGRESSION → app/theme/colors
+ * - APP-THEME-COLORS-REGRESSION-001 → app/theme/colors
  * - API-PATHS-HEALTH-001 → api/paths/health
  */
 export function getFeaturePathFromSpecId(specId: string): string {
@@ -334,10 +350,31 @@ export function getFeaturePathFromSpecId(specId: string): string {
 
   // Check if last part is "REGRESSION" (case-insensitive)
   const lastPart = parts[parts.length - 1] || ''
-  const isRegression = lastPart.toUpperCase() === 'REGRESSION'
+  const isRegressionOnly = lastPart.toUpperCase() === 'REGRESSION'
 
-  // Remove suffix (numeric or "REGRESSION")
-  const pathParts = isRegression || /^\d+$/.test(lastPart) ? parts.slice(0, -1) : parts
+  // Check if second-to-last part is "REGRESSION" with numeric suffix
+  // Pattern: *-REGRESSION-NNN (e.g., APP-THEME-ANIMATIONS-REGRESSION-001)
+  const secondToLastPart = parts.length >= 2 ? parts[parts.length - 2] : undefined
+  const isRegressionWithNumber =
+    secondToLastPart !== undefined &&
+    secondToLastPart.toUpperCase() === 'REGRESSION' &&
+    /^\d+$/.test(lastPart)
+
+  // Remove suffix based on pattern
+  let pathParts: string[]
+  if (isRegressionWithNumber) {
+    // Pattern: APP-THEME-ANIMATIONS-REGRESSION-001 → app/theme/animations
+    pathParts = parts.slice(0, -2)
+  } else if (isRegressionOnly) {
+    // Pattern: APP-THEME-ANIMATIONS-REGRESSION → app/theme/animations
+    pathParts = parts.slice(0, -1)
+  } else if (/^\d+$/.test(lastPart)) {
+    // Pattern: APP-THEME-ANIMATIONS-001 → app/theme/animations
+    pathParts = parts.slice(0, -1)
+  } else {
+    // No recognized suffix
+    pathParts = parts
+  }
 
   return pathParts.join('/').toLowerCase()
 }
