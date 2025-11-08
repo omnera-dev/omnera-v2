@@ -9,6 +9,37 @@ import { toKebabCase } from '@/presentation/utils/string-utils'
 import type { Component } from '@/domain/models/app/page/sections'
 
 /**
+ * Replaces variable placeholders in a string with actual values
+ *
+ * Uses regex with word boundary checking to avoid partial matches.
+ * For example, $icon will not match inside $iconColor.
+ *
+ * @param value - String that may contain $variable placeholders
+ * @param vars - Variables for substitution
+ * @returns String with all variables replaced
+ *
+ * @example
+ * ```typescript
+ * replaceVariables('$title', { title: 'Hello' })  // 'Hello'
+ * replaceVariables('$price/month', { price: '49' })  // '49/month'
+ * replaceVariables('box-$variant', { variant: 'primary' })  // 'box-primary'
+ * ```
+ */
+function replaceVariables(
+  value: string,
+  vars: Record<string, string | number | boolean>
+): string {
+  // Use regex with word boundary to avoid partial matches
+  // e.g., $icon should not match inside $iconColor
+  return Object.entries(vars).reduce<string>((str, [varName, varValue]) => {
+    // Create regex that matches $varName as a whole word
+    // Use negative lookahead to ensure we don't match if followed by alphanumeric or underscore
+    const regex = new RegExp(`\\$${varName}(?![a-zA-Z0-9_])`, 'g')
+    return str.replace(regex, String(varValue))
+  }, value)
+}
+
+/**
  * Substitutes block variables in a value
  *
  * Replaces `$variableName` patterns with actual variable values.
@@ -39,16 +70,7 @@ export function substituteBlockVariables(
     return value
   }
 
-  // Handle partial substitution within strings (e.g., '$price/month' → '49/month')
-  // Use regex with word boundary to avoid partial matches (e.g., $icon should not match inside $iconColor)
-  const substituted = Object.entries(vars).reduce<string>((str, [varName, varValue]) => {
-    // Create regex that matches $varName as a whole word (not as part of another variable)
-    // Use negative lookahead to ensure we don't match if followed by alphanumeric or underscore
-    const regex = new RegExp(`\\$${varName}(?![a-zA-Z0-9_])`, 'g')
-    return str.replace(regex, String(varValue))
-  }, value)
-
-  return substituted
+  return replaceVariables(value, vars)
 }
 
 /**
@@ -195,14 +217,7 @@ export function substitutePropsVariables(
 
     if (typeof value === 'string') {
       // Handle partial substitution within strings (e.g., 'box-$variant' → 'box-primary')
-      // Use regex with word boundary to avoid partial matches (e.g., $icon should not match inside $iconColor)
-      const substituted = Object.entries(vars).reduce<string>((str, [varName, varValue]) => {
-        // Create regex that matches $varName as a whole word (not as part of another variable)
-        // Use negative lookahead to ensure we don't match if followed by alphanumeric or underscore
-        const regex = new RegExp(`\\$${varName}(?![a-zA-Z0-9_])`, 'g')
-        return str.replace(regex, String(varValue))
-      }, value)
-      return { ...acc, [normalizedKey]: substituted }
+      return { ...acc, [normalizedKey]: replaceVariables(value, vars) }
     } else if (value && typeof value === 'object' && !Array.isArray(value)) {
       // Recursively handle nested objects (like style props)
       return {

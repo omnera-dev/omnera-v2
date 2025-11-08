@@ -30,7 +30,7 @@ import type { Theme } from '@/domain/models/app/theme'
 /**
  * Component types that should receive role="group" when used as blocks with children
  */
-const CONTAINER_TYPES = ['div', 'container', 'flex', 'grid', 'card'] as const
+const CONTAINER_TYPES = ['div', 'container', 'flex', 'grid', 'card', 'badge'] as const
 
 /**
  * ComponentRenderer - Renders a dynamic component based on its type
