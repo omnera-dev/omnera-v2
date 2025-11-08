@@ -346,9 +346,7 @@ export function ComponentRenderer({
   // Apply theme spacing to section elements when spacing.section is a CSS value
   const sectionSpacing = type === 'section' && theme?.spacing?.section
   const sectionSpacingStyle =
-    sectionSpacing && isCssValue(sectionSpacing)
-      ? { padding: sectionSpacing }
-      : undefined
+    sectionSpacing && isCssValue(sectionSpacing) ? { padding: sectionSpacing } : undefined
 
   // Apply theme spacing to container elements when spacing.container is a CSS value
   const containerSpacing = type === 'container' && theme?.spacing?.container

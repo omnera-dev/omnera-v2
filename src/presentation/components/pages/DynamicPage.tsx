@@ -971,9 +971,8 @@ export function DynamicPage({
           {/* Only create wrapper section if there are no section components in the page */}
           {theme?.spacing?.section || theme?.spacing?.container ? (
             <>
-              {!page.sections.some(
-                (s) => 'type' in s && s.type === 'section'
-              ) && theme?.spacing?.section ? (
+              {!page.sections.some((s) => 'type' in s && s.type === 'section') &&
+              theme?.spacing?.section ? (
                 <section
                   data-testid="section"
                   {...(theme?.spacing?.section &&

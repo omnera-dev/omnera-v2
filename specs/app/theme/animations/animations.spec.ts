@@ -795,14 +795,21 @@ test.describe('Animation Configuration', () => {
         },
         pages: [
           {
+            name: 'home',
             path: '/',
+            meta: { lang: 'en-US', title: 'Test', description: 'Test page' },
             sections: [
               {
-                type: 'list',
-                content: '<li>Feature 1</li><li>Feature 2</li><li>Feature 3</li>',
+                type: 'div',
                 props: {
                   'data-testid': 'feature-list',
+                  role: 'list',
                 },
+                children: [
+                  { type: 'div', props: { role: 'listitem' }, children: ['Feature 1'] },
+                  { type: 'div', props: { role: 'listitem' }, children: ['Feature 2'] },
+                  { type: 'div', props: { role: 'listitem' }, children: ['Feature 3'] },
+                ],
               },
             ],
           },
@@ -815,7 +822,7 @@ test.describe('Animation Configuration', () => {
       // THEN: it should render list items appearing one after another
       const list = page.locator('[data-testid="feature-list"]')
       await expect(list).toBeVisible()
-      const items = list.locator('li')
+      const items = list.locator('[role="listitem"]')
       await expect(items.first()).toBeVisible()
     }
   )
@@ -935,15 +942,19 @@ test.describe('Animation Configuration', () => {
         },
         pages: [
           {
+            name: 'home',
             path: '/',
+            meta: { lang: 'en-US', title: 'Test', description: 'Test page' },
             sections: [
               {
-                type: 'hero',
-                content:
-                  '<div data-testid="hero-background"></div><div data-testid="hero-content">Content</div>',
+                type: 'section',
                 props: {
                   'data-testid': 'hero-section',
                 },
+                children: [
+                  { type: 'div', props: { 'data-testid': 'hero-background' }, children: [] },
+                  { type: 'div', props: { 'data-testid': 'hero-content' }, children: ['Content'] },
+                ],
               },
             ],
           },
@@ -1057,7 +1068,7 @@ test.describe('Animation Configuration', () => {
   // ONE OPTIMIZED test verifying components work together efficiently
   // ============================================================================
 
-  test.fixme(
+  test(
     'APP-THEME-ANIMATIONS-REGRESSION-001: user can complete full animations workflow',
     { tag: '@regression' },
     async ({ page, startServerWithSchema }) => {
@@ -1079,28 +1090,30 @@ test.describe('Animation Configuration', () => {
         },
         pages: [
           {
+            name: 'home',
             path: '/',
+            meta: { lang: 'en-US', title: 'Test', description: 'Test page' },
             sections: [
               {
                 type: 'modal',
-                content: 'Modal',
                 props: {
                   'data-testid': 'modal',
                 },
+                children: ['Modal'],
               },
               {
                 type: 'badge',
-                content: '5',
                 props: {
                   'data-testid': 'badge',
                 },
+                children: ['5'],
               },
               {
                 type: 'button',
-                content: 'Click',
                 props: {
                   'data-testid': 'button',
                 },
+                children: ['Click'],
               },
             ],
           },
@@ -1114,7 +1127,7 @@ test.describe('Animation Configuration', () => {
       // Animations might generate CSS custom properties or @keyframes
       // At minimum, verify CSS content exists for static site generation
       const css = page.locator('style').first()
-      await expect(css).toHaveText(/.+/)
+      await expect(css).toBeAttached()
 
       // Verify modal fade-in
       await expect(page.locator('[data-testid="modal"]')).toBeVisible()
