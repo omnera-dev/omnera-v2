@@ -132,6 +132,17 @@ function hexToRgb(hex: string): string {
 }
 
 /**
+ * Convert space-separated RGB to rgb() format for CSS color properties
+ *
+ * @param color - Color value (hex or already converted RGB)
+ * @returns rgb() wrapped color or original value
+ */
+function toRgbColor(color: string): string {
+  const rgb = hexToRgb(color)
+  return rgb.includes(' ') ? `rgb(${rgb})` : color
+}
+
+/**
  * Generate CSS from theme colors, spacing, animations, fonts, and shadows
  * Applies theme colors to semantic HTML elements for visual hierarchy
  * Applies theme spacing to section elements for layout consistency
@@ -224,10 +235,6 @@ function generateThemeStyles(theme?: Theme): string {
   const gray900 = colors?.['gray-900']
   const gray500 = colors?.['gray-500']
   const text = colors?.text
-  const toRgbColor = (color: string): string => {
-    const rgb = hexToRgb(color)
-    return rgb.includes(' ') ? `rgb(${rgb})` : color
-  }
   const primary = colors?.primary
   const primaryHover = colors?.['primary-hover']
   const colorStyles: ReadonlyArray<string> = [
