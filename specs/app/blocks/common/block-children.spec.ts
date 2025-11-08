@@ -451,7 +451,7 @@ test.describe('Block Children', () => {
   // ONE OPTIMIZED test verifying components work together efficiently
   // ============================================================================
 
-  test.fixme(
+  test(
     'APP-BLOCKS-BLOCK-CHILDREN-REGRESSION-001: user can complete full children workflow',
     { tag: '@regression' },
     async ({ page, startServerWithSchema }) => {
@@ -510,7 +510,7 @@ test.describe('Block Children', () => {
           - img
           - group:
             - heading "Feature 1" [level=4]
-            - generic: "Description 1"
+            - text: Description 1
       `)
 
       // 2. Structure validation (ARIA) - Second card (different data, same structure)
@@ -519,7 +519,7 @@ test.describe('Block Children', () => {
           - img
           - group:
             - heading "Feature 2" [level=4]
-            - generic: "Description 2"
+            - text: Description 2
       `)
 
       // Focus on workflow continuity, not exhaustive coverage
