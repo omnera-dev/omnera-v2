@@ -21,6 +21,7 @@ export function Banner({
   message,
   text,
   link,
+  gradient,
 }: Readonly<BannerProps>): Readonly<ReactElement | undefined> {
   // Don't render if explicitly disabled
   if (enabled === false) {
@@ -34,6 +35,7 @@ export function Banner({
       role="banner"
       data-testid="banner"
       className="py-3"
+      style={gradient ? { background: gradient } : undefined}
     >
       <div className="container flex items-center justify-center gap-4">
         <p
