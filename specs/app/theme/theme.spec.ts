@@ -738,7 +738,7 @@ test.describe('Theme Configuration', () => {
   // ONE OPTIMIZED test verifying components work together efficiently
   // ============================================================================
 
-  test.fixme(
+  test(
     'APP-THEME-REGRESSION-001: user can complete full theme workflow',
     { tag: '@regression' },
     async ({ page, startServerWithSchema }) => {
@@ -778,7 +778,17 @@ test.describe('Theme Configuration', () => {
             name: 'home',
             path: '/',
             meta: { lang: 'en-US', title: 'Test', description: 'Test page' },
-            sections: [],
+            sections: [
+              {
+                type: 'heading',
+                level: 1,
+                text: 'Theme Test Heading',
+              },
+              {
+                type: 'paragraph',
+                text: 'Theme test paragraph content',
+              },
+            ],
           },
         ],
       })

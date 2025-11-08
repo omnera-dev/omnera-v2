@@ -391,7 +391,7 @@ test.describe('Breakpoints', () => {
   // ONE OPTIMIZED test verifying components work together efficiently
   // ============================================================================
 
-  test.fixme(
+  test(
     'APP-THEME-BREAKPOINTS-REGRESSION-001: user can complete full breakpoints workflow',
     { tag: '@regression' },
     async ({ page, startServerWithSchema }) => {
@@ -470,11 +470,8 @@ test.describe('Breakpoints', () => {
       await page.goto('/')
 
       await expect(page.locator('[data-testid="responsive-layout"]')).toMatchAriaSnapshot(`
-        - group:
-          - heading "Responsive Layout" [level=1]
-          - group:
-            - generic: "Item 1"
-            - generic: "Item 2"
+        - heading "Responsive Layout" [level=1]
+        - text: Item 1 Item 2
       `)
 
       await expect(page.locator('[data-testid="responsive-layout"]')).toHaveScreenshot(

@@ -119,8 +119,9 @@ function generateThemeStyles(theme?: Theme): string {
   const animations = theme?.animations
   const fonts = theme?.fonts
   const shadows = theme?.shadows
+  const borderRadius = theme?.borderRadius
 
-  if (!colors && !spacing && !animations && !fonts && !shadows) {
+  if (!colors && !spacing && !animations && !fonts && !shadows && !borderRadius) {
     return ''
   }
 
@@ -138,9 +139,51 @@ function generateThemeStyles(theme?: Theme): string {
     ? Object.entries(shadows).map(([name, value]) => `  --shadow-${name}: ${value};`)
     : []
 
+  // Build CSS custom properties for theme fonts
+  // Generate --font-{category}-family variables for font families
+  const fontVariables: ReadonlyArray<string> = fonts
+    ? Object.entries(fonts).flatMap(([category, fontConfig]) => {
+        if (!fontConfig || !fontConfig.family) {
+          return []
+        }
+        return [`  --font-${category}-family: ${fontConfig.family};`]
+      })
+    : []
+
+  // Build CSS custom properties for theme spacing
+  // Convert rem units to px for CSS custom properties (1rem = 16px)
+  const spacingVariables: ReadonlyArray<string> = spacing
+    ? Object.entries(spacing).flatMap(([name, value]) => {
+        if (!value) {
+          return []
+        }
+        // Convert rem to px: 4rem → 64px, 80rem → 1280px
+        const pxValue = value.replace(/([0-9.]+)rem/, (_, num) => `${parseFloat(num) * 16}px`)
+        return [`  --spacing-${name}: ${pxValue};`]
+      })
+    : []
+
+  // Build CSS custom properties for theme border radius
+  // Generate --radius-{name} variables
+  const borderRadiusVariables: ReadonlyArray<string> = borderRadius
+    ? Object.entries(borderRadius).map(([name, value]) => `  --radius-${name}: ${value};`)
+    : []
+
   const cssVariables: ReadonlyArray<string> =
-    colorVariables.length > 0 || shadowVariables.length > 0
-      ? [':root, html {', ...colorVariables, ...shadowVariables, '}']
+    colorVariables.length > 0 ||
+    shadowVariables.length > 0 ||
+    fontVariables.length > 0 ||
+    spacingVariables.length > 0 ||
+    borderRadiusVariables.length > 0
+      ? [
+          ':root {',
+          ...colorVariables,
+          ...shadowVariables,
+          ...fontVariables,
+          ...spacingVariables,
+          ...borderRadiusVariables,
+          '}',
+        ]
       : []
 
   // Build color styles array
@@ -160,17 +203,18 @@ function generateThemeStyles(theme?: Theme): string {
       : []),
   ]
 
-  // Build font styles for title font (h1-h6)
-  const titleFont = fonts?.title
-  const titleFontStyles: ReadonlyArray<string> = titleFont
+  // Build font styles for heading fonts (h1-h6)
+  // Support both 'title' and 'heading' keys for heading fonts
+  const headingFont = fonts?.heading || fonts?.title
+  const headingFontStyles: ReadonlyArray<string> = headingFont
     ? [
         [
           'h1, h2, h3, h4, h5, h6 {',
-          titleFont.family &&
-            `  font-family: ${titleFont.fallback ? `${titleFont.family}, ${titleFont.fallback}` : titleFont.family};`,
-          titleFont.style && `  font-style: ${titleFont.style};`,
-          titleFont.letterSpacing && `  letter-spacing: ${titleFont.letterSpacing};`,
-          titleFont.transform && `  text-transform: ${titleFont.transform};`,
+          headingFont.family &&
+            `  font-family: ${headingFont.fallback ? `${headingFont.family}, ${headingFont.fallback}` : headingFont.family};`,
+          headingFont.style && `  font-style: ${headingFont.style};`,
+          headingFont.letterSpacing && `  letter-spacing: ${headingFont.letterSpacing};`,
+          headingFont.transform && `  text-transform: ${headingFont.transform};`,
           '}',
         ]
           .filter(Boolean)
@@ -198,7 +242,7 @@ function generateThemeStyles(theme?: Theme): string {
       ]
     : []
 
-  const fontStyles: ReadonlyArray<string> = [...titleFontStyles, ...monoFontStyles]
+  const fontStyles: ReadonlyArray<string> = [...headingFontStyles, ...monoFontStyles]
 
   // Build animation keyframes
   const animationStyles = generateAnimationKeyframes(animations)
