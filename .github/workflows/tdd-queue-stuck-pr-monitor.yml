@@ -318,9 +318,7 @@ jobs:
                 --add-label "max-retries-exhausted" || true
 
               # Add comment explaining failure
-              gh issue comment "$ISSUE_NUMBER" \
-                --repo sovrium/sovrium \
-                --body "❌ **Automatic Retries Exhausted**
+              COMMENT_BODY="❌ **Automatic Retries Exhausted**
 
 Test failures persisted after $MAX_CODE_RETRIES automatic retry attempts.
 
@@ -331,15 +329,23 @@ Test failures persisted after $MAX_CODE_RETRIES automatic retry attempts.
 The spec has been marked as \`tdd-spec:failed\`. The queue processor will continue with the next spec.
 
 ---
-*🤖 Automated Test Failure Handler*" || true
+*🤖 Automated Test Failure Handler*"
+
+              gh issue comment "$ISSUE_NUMBER" \
+                --repo sovrium/sovrium \
+                --body "$COMMENT_BODY" || true
 
               continue
             fi
 
             # Calculate exponential backoff based on retry count
             # 1st retry: 5 minutes, 2nd: 15 minutes, 3rd: 45 minutes
-            BACKOFF_MINUTES=$((5 * (3 ** CURRENT_RETRY)))
-            if [ "$BACKOFF_MINUTES" -gt 45 ]; then
+            # Using pow function for better shell compatibility
+            if [ "$CURRENT_RETRY" -eq 0 ]; then
+              BACKOFF_MINUTES=5
+            elif [ "$CURRENT_RETRY" -eq 1 ]; then
+              BACKOFF_MINUTES=15
+            else
               BACKOFF_MINUTES=45
             fi
 
@@ -402,9 +408,7 @@ The spec has been marked as \`tdd-spec:failed\`. The queue processor will contin
             RUN_ID=$(echo "$LATEST_RUN" | jq -r '.databaseId' || echo "")
 
             # Post retry comment on issue with enhanced diagnostics
-            gh issue comment "$ISSUE_NUMBER" \
-              --repo sovrium/sovrium \
-              --body "🔄 **Automatic Test Retry**
+            RETRY_COMMENT="🔄 **Automatic Test Retry**
 
 **Reason**: Test workflow failed on PR #$PR_NUMBER
 **Retry Attempt**: $NEXT_RETRY of $MAX_CODE_RETRIES
@@ -435,7 +439,11 @@ fi)
 - If it's a timeout, consider increasing test timeouts or optimizing the code
 
 ---
-*🤖 Automated Test Failure Handler - Retry $NEXT_RETRY/$MAX_CODE_RETRIES*" || true
+*🤖 Automated Test Failure Handler - Retry $NEXT_RETRY/$MAX_CODE_RETRIES*"
+
+            gh issue comment "$ISSUE_NUMBER" \
+              --repo sovrium/sovrium \
+              --body "$RETRY_COMMENT" || true
 
             echo "   ✅ Retry triggered for issue #$ISSUE_NUMBER"
             RETRY_TRIGGERED_COUNT=$((RETRY_TRIGGERED_COUNT + 1))
