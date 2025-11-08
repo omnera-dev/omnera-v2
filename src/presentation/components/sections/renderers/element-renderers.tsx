@@ -40,8 +40,21 @@ export function renderHTMLElement(
 ): ReactElement {
   const Element = type
 
-  // Add role="region" to section elements for accessibility
-  const elementProps = type === 'section' ? { ...props, role: 'region' } : props
+  // Add appropriate ARIA role for accessibility
+  //  - section elements get role="region"
+  //  - div containers with children (not content) get role="group" unless already set
+  const elementProps =
+    type === 'section'
+      ? { ...props, role: 'region' }
+      : type === 'div' &&
+          Array.isArray(children) &&
+          children.length > 0 &&
+          !content &&
+          !props.role
+        ? // Only add role="group" if not already set (avoid conflicts with component-renderer)
+          // Check Array.isArray to avoid runtime errors if children is somehow not an array
+          { ...props, role: 'group' }
+        : props
 
   // If content looks like HTML (starts with '<'), render as HTML
   // This is safe for schema-defined content but should NOT be used for user input
@@ -97,8 +110,34 @@ export function renderTextElement(props: ElementProps, content: string | undefin
 /**
  * Renders paragraph element
  */
-export function renderParagraph(props: ElementProps, content: string | undefined): ReactElement {
-  return <p {...props}>{content}</p>
+export function renderParagraph(
+  props: ElementProps,
+  content: string | undefined,
+  children: readonly React.ReactNode[]
+): ReactElement {
+  return <p {...props}>{content || children}</p>
+}
+
+/**
+ * Renders code element (inline code)
+ */
+export function renderCode(
+  props: ElementProps,
+  content: string | undefined,
+  children: readonly React.ReactNode[]
+): ReactElement {
+  return <code {...props}>{content || children}</code>
+}
+
+/**
+ * Renders pre element (preformatted text block)
+ */
+export function renderPre(
+  props: ElementProps,
+  content: string | undefined,
+  children: readonly React.ReactNode[]
+): ReactElement {
+  return <pre {...props}>{content || children}</pre>
 }
 
 /**
