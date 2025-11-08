@@ -41,11 +41,11 @@ jobs:
           # Also check for stuck retries specifically
           echo ""
           echo "🔍 Checking for stuck retry attempts..."
-          RETRY_ISSUES=$(echo "$ISSUES" | jq -r '.[] | select(.labels[] | contains("infrastructure-retry:"))')
+          RETRY_ISSUES=$(echo "$ISSUES" | jq -r '.[] | select(.labels[].name | contains("infrastructure-retry:"))')
 
           if [ -n "$RETRY_ISSUES" ]; then
             echo "Found specs with retry labels:"
-            echo "$RETRY_ISSUES" | jq -r '.number as $num | .title as $title | .labels[] | select(contains("infrastructure-retry:")) as $label | "\($num): \($title) [\($label)]"'
+            echo "$RETRY_ISSUES" | jq -r '.number as $num | .title as $title | .labels[].name | select(contains("infrastructure-retry:")) as $label | "\($num): \($title) [\($label)]"'
           fi
 
           # Current time (epoch seconds)
