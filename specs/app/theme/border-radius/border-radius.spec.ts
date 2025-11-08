@@ -772,7 +772,7 @@ test.describe('Border Radius', () => {
   // ONE OPTIMIZED test verifying components work together efficiently
   // ============================================================================
 
-  test.fixme(
+  test(
     'APP-THEME-BORDER-RADIUS-REGRESSION-001: user can complete full border-radius workflow',
     { tag: '@regression' },
     async ({ page, startServerWithSchema }) => {
@@ -869,9 +869,8 @@ test.describe('Border Radius', () => {
       await expect(page.locator('[data-testid="radius-system"]')).toMatchAriaSnapshot(`
         - group:
           - button "Button with md radius"
-          - generic: "Card with lg radius"
-          - generic: "Avatar"
-          - generic
+          - group: Card with lg radius
+          - group: Avatar
       `)
 
       // 2. Visual validation (Screenshot) - captures all border-radius rendering
