@@ -166,13 +166,22 @@
                   "properties": {
                     "rel": {
                       "type": "string",
-                      "enum": ["icon", "apple-touch-icon", "manifest", "mask-icon"],
+                      "enum": [
+                        "icon",
+                        "apple-touch-icon",
+                        "manifest",
+                        "mask-icon"
+                      ],
                       "description": "Favicon relationship type"
                     },
                     "type": {
                       "type": "string",
                       "description": "MIME type",
-                      "examples": ["image/png", "image/x-icon", "image/svg+xml"],
+                      "examples": [
+                        "image/png",
+                        "image/x-icon",
+                        "image/svg+xml"
+                      ],
                       "pattern": "^image\\/"
                     },
                     "sizes": {
@@ -228,7 +237,14 @@
                   },
                   "type": {
                     "type": "string",
-                    "enum": ["website", "article", "book", "profile", "video", "music"],
+                    "enum": [
+                      "website",
+                      "article",
+                      "book",
+                      "profile",
+                      "video",
+                      "music"
+                    ],
                     "description": "Open Graph object type"
                   },
                   "url": {
@@ -476,7 +492,12 @@
                           "description": "Social media profile URL"
                         },
                         "description": "Social media profile URLs",
-                        "examples": [["https://facebook.com/myorg", "https://twitter.com/myorg"]]
+                        "examples": [
+                          [
+                            "https://facebook.com/myorg",
+                            "https://twitter.com/myorg"
+                          ]
+                        ]
                       },
                       "founder": {
                         "type": "string",
@@ -856,7 +877,10 @@
                             "description": "Schema.org type"
                           },
                           "price": {
-                            "anyOf": [{ "type": "string" }, { "type": "number" }],
+                            "anyOf": [
+                              { "type": "string" },
+                              { "type": "number" }
+                            ],
                             "description": "Product price"
                           },
                           "priceCurrency": {
@@ -1251,7 +1275,10 @@
                             "description": "Schema.org type"
                           },
                           "price": {
-                            "anyOf": [{ "type": "string" }, { "type": "number" }],
+                            "anyOf": [
+                              { "type": "string" },
+                              { "type": "number" }
+                            ],
                             "description": "Ticket price"
                           },
                           "priceCurrency": {
@@ -1776,7 +1803,13 @@
                       },
                       "variant": {
                         "type": "string",
-                        "enum": ["primary", "secondary", "outline", "ghost", "link"],
+                        "enum": [
+                          "primary",
+                          "secondary",
+                          "outline",
+                          "ghost",
+                          "link"
+                        ],
                         "description": "Button style variant"
                       },
                       "size": {
@@ -2113,7 +2146,18 @@
                         "form",
                         "input",
                         "div",
-                        "span"
+                        "span",
+                        "modal",
+                        "sidebar",
+                        "toast",
+                        "hero",
+                        "fab",
+                        "spinner",
+                        "list",
+                        "list-item",
+                        "dropdown",
+                        "navigation",
+                        "alert"
                       ],
                       "description": "Component type for page building"
                     },
@@ -2179,7 +2223,11 @@
                             "transform": {
                               "type": "string",
                               "description": "CSS transform (scale, rotate, translate)",
-                              "examples": ["scale(1.05)", "translateY(-4px)", "rotate(5deg)"]
+                              "examples": [
+                                "scale(1.05)",
+                                "translateY(-4px)",
+                                "rotate(5deg)"
+                              ]
                             },
                             "opacity": {
                               "type": "number",
@@ -2211,8 +2259,28 @@
                               "pattern": "^[0-9]+(\\.[0-9]+)?(ms|s)$"
                             },
                             "easing": {
-                              "type": "string",
-                              "enum": ["linear", "ease", "ease-in", "ease-out", "ease-in-out"],
+                              "anyOf": [
+                                {
+                                  "type": "string",
+                                  "enum": [
+                                    "linear",
+                                    "ease",
+                                    "ease-in",
+                                    "ease-out",
+                                    "ease-in-out"
+                                  ]
+                                },
+                                {
+                                  "type": "string",
+                                  "description": "a string matching the pattern ^cubic-bezier\\(\\s*-?[\\d.]+\\s*,\\s*-?[\\d.]+\\s*,\\s*-?[\\d.]+\\s*,\\s*-?[\\d.]+\\s*\\)$",
+                                  "pattern": "^cubic-bezier\\(\\s*-?[\\d.]+\\s*,\\s*-?[\\d.]+\\s*,\\s*-?[\\d.]+\\s*,\\s*-?[\\d.]+\\s*\\)$"
+                                },
+                                {
+                                  "type": "string",
+                                  "description": "a string matching the pattern ^steps\\(\\s*\\d+\\s*,\\s*(start|end|jump-start|jump-end|jump-none|jump-both)\\s*\\)$",
+                                  "pattern": "^steps\\(\\s*\\d+\\s*,\\s*(start|end|jump-start|jump-end|jump-none|jump-both)\\s*\\)$"
+                                }
+                              ],
                               "description": "Transition timing function"
                             }
                           },
@@ -2226,13 +2294,24 @@
                           "properties": {
                             "animation": {
                               "type": "string",
-                              "enum": ["pulse", "bounce", "shake", "flash", "ripple", "none"],
+                              "enum": [
+                                "pulse",
+                                "bounce",
+                                "shake",
+                                "flash",
+                                "ripple",
+                                "none"
+                              ],
                               "description": "Animation to trigger on click"
                             },
                             "navigate": {
                               "type": "string",
                               "description": "Path to navigate to",
-                              "examples": ["/contact", "/pricing", "#section-id"]
+                              "examples": [
+                                "/contact",
+                                "/pricing",
+                                "#section-id"
+                              ]
                             },
                             "openUrl": {
                               "type": "string",
@@ -2729,7 +2808,11 @@
                           "type": "string",
                           "description": "Name of the block to reference (kebab-case)",
                           "title": "Block Reference Name",
-                          "examples": ["icon-badge", "section-header", "call-to-action"],
+                          "examples": [
+                            "icon-badge",
+                            "section-header",
+                            "call-to-action"
+                          ],
                           "pattern": "^[a-z][a-z0-9-]*$"
                         },
                         "vars": {
@@ -2768,7 +2851,11 @@
                           "type": "string",
                           "description": "Name of the block to reference (kebab-case)",
                           "title": "Block Reference Name",
-                          "examples": ["icon-badge", "section-header", "call-to-action"],
+                          "examples": [
+                            "icon-badge",
+                            "section-header",
+                            "call-to-action"
+                          ],
                           "pattern": "^[a-z][a-z0-9-]*$"
                         },
                         "vars": {
@@ -2807,7 +2894,11 @@
                           "type": "string",
                           "description": "Name of the block to reference (kebab-case)",
                           "title": "Block Reference Name",
-                          "examples": ["icon-badge", "section-header", "call-to-action"],
+                          "examples": [
+                            "icon-badge",
+                            "section-header",
+                            "call-to-action"
+                          ],
                           "pattern": "^[a-z][a-z0-9-]*$"
                         }
                       },
@@ -3121,7 +3212,18 @@
                 "form",
                 "input",
                 "div",
-                "span"
+                "span",
+                "modal",
+                "sidebar",
+                "toast",
+                "hero",
+                "fab",
+                "spinner",
+                "list",
+                "list-item",
+                "dropdown",
+                "navigation",
+                "alert"
               ],
               "description": "Component type for page building"
             },
@@ -3184,7 +3286,11 @@
                     "transform": {
                       "type": "string",
                       "description": "CSS transform (scale, rotate, translate)",
-                      "examples": ["scale(1.05)", "translateY(-4px)", "rotate(5deg)"]
+                      "examples": [
+                        "scale(1.05)",
+                        "translateY(-4px)",
+                        "rotate(5deg)"
+                      ]
                     },
                     "opacity": {
                       "type": "number",
@@ -3216,8 +3322,28 @@
                       "pattern": "^[0-9]+(\\.[0-9]+)?(ms|s)$"
                     },
                     "easing": {
-                      "type": "string",
-                      "enum": ["linear", "ease", "ease-in", "ease-out", "ease-in-out"],
+                      "anyOf": [
+                        {
+                          "type": "string",
+                          "enum": [
+                            "linear",
+                            "ease",
+                            "ease-in",
+                            "ease-out",
+                            "ease-in-out"
+                          ]
+                        },
+                        {
+                          "type": "string",
+                          "description": "a string matching the pattern ^cubic-bezier\\(\\s*-?[\\d.]+\\s*,\\s*-?[\\d.]+\\s*,\\s*-?[\\d.]+\\s*,\\s*-?[\\d.]+\\s*\\)$",
+                          "pattern": "^cubic-bezier\\(\\s*-?[\\d.]+\\s*,\\s*-?[\\d.]+\\s*,\\s*-?[\\d.]+\\s*,\\s*-?[\\d.]+\\s*\\)$"
+                        },
+                        {
+                          "type": "string",
+                          "description": "a string matching the pattern ^steps\\(\\s*\\d+\\s*,\\s*(start|end|jump-start|jump-end|jump-none|jump-both)\\s*\\)$",
+                          "pattern": "^steps\\(\\s*\\d+\\s*,\\s*(start|end|jump-start|jump-end|jump-none|jump-both)\\s*\\)$"
+                        }
+                      ],
                       "description": "Transition timing function"
                     }
                   },
@@ -3231,7 +3357,14 @@
                   "properties": {
                     "animation": {
                       "type": "string",
-                      "enum": ["pulse", "bounce", "shake", "flash", "ripple", "none"],
+                      "enum": [
+                        "pulse",
+                        "bounce",
+                        "shake",
+                        "flash",
+                        "ripple",
+                        "none"
+                      ],
                       "description": "Animation to trigger on click"
                     },
                     "navigate": {
@@ -3734,7 +3867,11 @@
                   "type": "string",
                   "description": "Name of the block to reference (kebab-case)",
                   "title": "Block Reference Name",
-                  "examples": ["icon-badge", "section-header", "call-to-action"],
+                  "examples": [
+                    "icon-badge",
+                    "section-header",
+                    "call-to-action"
+                  ],
                   "pattern": "^[a-z][a-z0-9-]*$"
                 },
                 "vars": {
@@ -3743,7 +3880,11 @@
                   "properties": {},
                   "patternProperties": {
                     "": {
-                      "anyOf": [{ "type": "string" }, { "type": "number" }, { "type": "boolean" }]
+                      "anyOf": [
+                        { "type": "string" },
+                        { "type": "number" },
+                        { "type": "boolean" }
+                      ]
                     }
                   },
                   "propertyNames": {
@@ -3769,7 +3910,11 @@
                   "type": "string",
                   "description": "Name of the block to reference (kebab-case)",
                   "title": "Block Reference Name",
-                  "examples": ["icon-badge", "section-header", "call-to-action"],
+                  "examples": [
+                    "icon-badge",
+                    "section-header",
+                    "call-to-action"
+                  ],
                   "pattern": "^[a-z][a-z0-9-]*$"
                 },
                 "vars": {
@@ -3778,7 +3923,11 @@
                   "properties": {},
                   "patternProperties": {
                     "": {
-                      "anyOf": [{ "type": "string" }, { "type": "number" }, { "type": "boolean" }]
+                      "anyOf": [
+                        { "type": "string" },
+                        { "type": "number" },
+                        { "type": "boolean" }
+                      ]
                     }
                   },
                   "propertyNames": {
@@ -3804,7 +3953,11 @@
                   "type": "string",
                   "description": "Name of the block to reference (kebab-case)",
                   "title": "Block Reference Name",
-                  "examples": ["icon-badge", "section-header", "call-to-action"],
+                  "examples": [
+                    "icon-badge",
+                    "section-header",
+                    "call-to-action"
+                  ],
                   "pattern": "^[a-z][a-z0-9-]*$"
                 }
               },
@@ -3829,7 +3982,13 @@
       "title": "Application Name",
       "minLength": 1,
       "maxLength": 214,
-      "examples": ["my-app", "todo-app", "@myorg/my-app", "blog-system", "dashboard-admin"],
+      "examples": [
+        "my-app",
+        "todo-app",
+        "@myorg/my-app",
+        "blog-system",
+        "dashboard-admin"
+      ],
       "pattern": "^(?:@[a-z0-9-~][a-z0-9-._~]*\\/)?[a-z0-9-~][a-z0-9-._~]*$"
     },
     "version": {
@@ -4739,7 +4898,13 @@
                 },
                 {
                   "type": "object",
-                  "required": ["id", "name", "type", "relatedTable", "relationType"],
+                  "required": [
+                    "id",
+                    "name",
+                    "type",
+                    "relatedTable",
+                    "relationType"
+                  ],
                   "properties": {
                     "id": {
                       "$ref": "#/$defs/Int",
@@ -5095,7 +5260,13 @@
                 },
                 {
                   "type": "object",
-                  "required": ["id", "name", "type", "relationshipField", "relatedField"],
+                  "required": [
+                    "id",
+                    "name",
+                    "type",
+                    "relationshipField",
+                    "relatedField"
+                  ],
                   "properties": {
                     "id": {
                       "$ref": "#/$defs/Int",
@@ -6133,7 +6304,11 @@
                   "description": "Name of the index. Use descriptive names like 'idx_tablename_fieldname'",
                   "title": "minLength(1)",
                   "minLength": 1,
-                  "examples": ["idx_users_email", "idx_products_sku", "idx_orders_status"],
+                  "examples": [
+                    "idx_users_email",
+                    "idx_products_sku",
+                    "idx_orders_status"
+                  ],
                   "pattern": "^[a-z][a-z0-9_]*$"
                 },
                 "fields": {
@@ -6244,7 +6419,12 @@
               "type": "string",
               "description": "Color value in hex, rgb, rgba, hsl, or hsla format",
               "title": "Color Value",
-              "examples": ["#007bff", "#007bff80", "rgb(0, 123, 255)", "hsl(210, 100%, 50%)"],
+              "examples": [
+                "#007bff",
+                "#007bff80",
+                "rgb(0, 123, 255)",
+                "hsl(210, 100%, 50%)"
+              ],
               "pattern": "^#[0-9A-Fa-f]{6}$|^#[0-9A-Fa-f]{8}$|^rgb\\(|^rgba\\(|^hsl\\(|^hsla\\("
             }
           },
@@ -6276,7 +6456,11 @@
                   "type": "string",
                   "description": "Fallback font stack",
                   "title": "Fallback Font Stack",
-                  "examples": ["system-ui, sans-serif", "Georgia, serif", "monospace"]
+                  "examples": [
+                    "system-ui, sans-serif",
+                    "Georgia, serif",
+                    "monospace"
+                  ]
                 },
                 "weights": {
                   "type": "array",
@@ -6427,8 +6611,28 @@
                       "pattern": "^[0-9]+(\\.[0-9]+)?(ms|s)$"
                     },
                     "easing": {
-                      "type": "string",
-                      "enum": ["linear", "ease", "ease-in", "ease-out", "ease-in-out"],
+                      "anyOf": [
+                        {
+                          "type": "string",
+                          "enum": [
+                            "linear",
+                            "ease",
+                            "ease-in",
+                            "ease-out",
+                            "ease-in-out"
+                          ]
+                        },
+                        {
+                          "type": "string",
+                          "description": "a string matching the pattern ^cubic-bezier\\(\\s*-?[\\d.]+\\s*,\\s*-?[\\d.]+\\s*,\\s*-?[\\d.]+\\s*,\\s*-?[\\d.]+\\s*\\)$",
+                          "pattern": "^cubic-bezier\\(\\s*-?[\\d.]+\\s*,\\s*-?[\\d.]+\\s*,\\s*-?[\\d.]+\\s*,\\s*-?[\\d.]+\\s*\\)$"
+                        },
+                        {
+                          "type": "string",
+                          "description": "a string matching the pattern ^steps\\(\\s*\\d+\\s*,\\s*(start|end|jump-start|jump-end|jump-none|jump-both)\\s*\\)$",
+                          "pattern": "^steps\\(\\s*\\d+\\s*,\\s*(start|end|jump-start|jump-end|jump-none|jump-both)\\s*\\)$"
+                        }
+                      ],
                       "description": "Transition timing function"
                     },
                     "delay": {
@@ -6615,7 +6819,12 @@
                 "type": "string",
                 "description": "Key for centralized translations dictionary",
                 "title": "Translation Key",
-                "examples": ["common.save", "nav.home", "homepage.hero.title", "errors.404"],
+                "examples": [
+                  "common.save",
+                  "nav.home",
+                  "homepage.hero.title",
+                  "errors.404"
+                ],
                 "pattern": "^[a-zA-Z0-9._-]+$"
               },
               "description": "Maps translation keys to localized strings for a single language",
@@ -6645,7 +6854,12 @@
             "type": "string",
             "description": "Unique block identifier in kebab-case",
             "title": "Block Name",
-            "examples": ["icon-badge", "section-header", "feature-card", "cta-button-2"],
+            "examples": [
+              "icon-badge",
+              "section-header",
+              "feature-card",
+              "cta-button-2"
+            ],
             "pattern": "^[a-z][a-z0-9-]*$"
           },
           "type": {
@@ -6683,7 +6897,14 @@
               "type": "string",
               "description": "Valid JavaScript property name (camelCase) or HTML data-*/aria-* attribute (kebab-case)",
               "title": "Block Prop Key",
-              "examples": ["className", "size", "enabled", "maxWidth", "data-testid", "aria-label"],
+              "examples": [
+                "className",
+                "size",
+                "enabled",
+                "maxWidth",
+                "data-testid",
+                "aria-label"
+              ],
               "pattern": "^([a-zA-Z][a-zA-Z0-9]*|data-[a-z]+(-[a-z]+)*|aria-[a-z]+(-[a-z]+)*)$"
             },
             "description": "Properties for block templates, supporting variable references",
