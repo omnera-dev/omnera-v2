@@ -318,7 +318,10 @@ jobs:
                 --add-label "max-retries-exhausted" || true
 
               # Add comment explaining failure
-              COMMENT_BODY="❌ **Automatic Retries Exhausted**
+              gh issue comment "$ISSUE_NUMBER" \
+                --repo sovrium/sovrium \
+                --body "$(cat <<EOF
+❌ **Automatic Retries Exhausted**
 
 Test failures persisted after $MAX_CODE_RETRIES automatic retry attempts.
 
@@ -329,11 +332,9 @@ Test failures persisted after $MAX_CODE_RETRIES automatic retry attempts.
 The spec has been marked as \`tdd-spec:failed\`. The queue processor will continue with the next spec.
 
 ---
-*🤖 Automated Test Failure Handler*"
-
-              gh issue comment "$ISSUE_NUMBER" \
-                --repo sovrium/sovrium \
-                --body "$COMMENT_BODY" || true
+*🤖 Automated Test Failure Handler*
+EOF
+              )" || true
 
               continue
             fi
@@ -408,7 +409,10 @@ The spec has been marked as \`tdd-spec:failed\`. The queue processor will contin
             RUN_ID=$(echo "$LATEST_RUN" | jq -r '.databaseId' || echo "")
 
             # Post retry comment on issue with enhanced diagnostics
-            RETRY_COMMENT="🔄 **Automatic Test Retry**
+            gh issue comment "$ISSUE_NUMBER" \
+              --repo sovrium/sovrium \
+              --body "$(cat <<EOF
+🔄 **Automatic Test Retry**
 
 **Reason**: Test workflow failed on PR #$PR_NUMBER
 **Retry Attempt**: $NEXT_RETRY of $MAX_CODE_RETRIES
@@ -439,11 +443,9 @@ fi)
 - If it's a timeout, consider increasing test timeouts or optimizing the code
 
 ---
-*🤖 Automated Test Failure Handler - Retry $NEXT_RETRY/$MAX_CODE_RETRIES*"
-
-            gh issue comment "$ISSUE_NUMBER" \
-              --repo sovrium/sovrium \
-              --body "$RETRY_COMMENT" || true
+*🤖 Automated Test Failure Handler - Retry $NEXT_RETRY/$MAX_CODE_RETRIES*
+EOF
+            )" || true
 
             echo "   ✅ Retry triggered for issue #$ISSUE_NUMBER"
             RETRY_TRIGGERED_COUNT=$((RETRY_TRIGGERED_COUNT + 1))
