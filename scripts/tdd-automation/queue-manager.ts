@@ -57,6 +57,7 @@ export interface SpecIssue {
   url: string
   createdAt: string
   updatedAt: string
+  labels?: string[]
 }
 
 /**
@@ -264,7 +265,7 @@ export const getQueuedSpecs = Effect.gen(function* () {
 
   const output = yield* cmd
     .exec(
-      'gh issue list --label "tdd-spec:queued" --search "-label:skip-automated" --json number,title,url,createdAt,updatedAt --limit 1000',
+      'gh issue list --label "tdd-spec:queued" --search "-label:skip-automated" --json number,title,url,createdAt,updatedAt,labels --limit 1000',
       { throwOnError: false }
     )
     .pipe(
@@ -283,6 +284,7 @@ export const getQueuedSpecs = Effect.gen(function* () {
       url: string
       createdAt: string
       updatedAt: string
+      labels: Array<{ name: string }>
     }>
 
     const specIssues: SpecIssue[] = issues
@@ -300,6 +302,7 @@ export const getQueuedSpecs = Effect.gen(function* () {
           url: issue.url,
           createdAt: issue.createdAt,
           updatedAt: issue.updatedAt,
+          labels: issue.labels.map((label) => label.name),
         }
       })
       .filter((issue): issue is SpecIssue => issue !== null)
@@ -327,7 +330,7 @@ export const getInProgressSpecs = Effect.gen(function* () {
 
   const output = yield* cmd
     .exec(
-      'gh issue list --label "tdd-spec:in-progress" --json number,title,url,createdAt,updatedAt --limit 100',
+      'gh issue list --label "tdd-spec:in-progress" --json number,title,url,createdAt,updatedAt,labels --limit 100',
       { throwOnError: false }
     )
     .pipe(
@@ -346,6 +349,7 @@ export const getInProgressSpecs = Effect.gen(function* () {
       url: string
       createdAt: string
       updatedAt: string
+      labels: Array<{ name: string }>
     }>
 
     const specIssues: SpecIssue[] = issues
@@ -362,6 +366,7 @@ export const getInProgressSpecs = Effect.gen(function* () {
           url: issue.url,
           createdAt: issue.createdAt,
           updatedAt: issue.updatedAt,
+          labels: issue.labels.map((label) => label.name),
         }
       })
       .filter((issue): issue is SpecIssue => issue !== null)
@@ -636,9 +641,7 @@ export const getNextSpec = Effect.gen(function* () {
     // Check if all in-progress specs are infrastructure retries
     const nonRetryingSpecs = inProgressSpecs.filter((spec) => {
       // Check if spec has infrastructure-retry label (indicates it's retrying due to infra error)
-      const hasRetryLabel = spec.labels?.some((label) =>
-        label.startsWith('infrastructure-retry:'),
-      )
+      const hasRetryLabel = spec.labels?.some((label: string) => label.startsWith('infrastructure-retry:'))
       return !hasRetryLabel
     })
 
@@ -653,7 +656,7 @@ export const getNextSpec = Effect.gen(function* () {
       // Allow processing if only infrastructure retries are in progress
       yield* logInfo(
         `${inProgressSpecs.length} spec(s) retrying due to infrastructure errors`,
-        '🔄',
+        '🔄'
       )
       yield* logInfo('Continuing to process next queued spec...', '➡️')
     }
