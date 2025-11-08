@@ -250,7 +250,7 @@ test.describe('Banner Configuration', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-BANNER-008: should remain at top during page scroll',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -259,9 +259,9 @@ test.describe('Banner Configuration', () => {
         name: 'test-app',
         pages: [
           {
-            name: 'Test',
+            name: 'test',
             path: '/',
-            meta: { lang: 'en-US', title: 'Test' },
+            meta: { lang: 'en-US', title: 'Test', description: 'Test page' },
             layout: { banner: { enabled: true, text: 'Announcement', sticky: true } },
             sections: [
               { type: 'div', props: { style: 'height: 3000px' }, children: ['Long content'] },

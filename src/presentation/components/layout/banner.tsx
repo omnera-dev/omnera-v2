@@ -26,6 +26,7 @@ export function Banner({
   backgroundColor,
   textColor,
   dismissible,
+  sticky,
 }: Readonly<BannerProps>): Readonly<ReactElement | undefined> {
   // Don't render if explicitly disabled
   if (enabled === false) {
@@ -40,8 +41,9 @@ export function Banner({
     const hasGradient = gradient !== undefined
     const hasBackgroundColor = backgroundColor !== undefined
     const hasTextColor = textColor !== undefined
+    const isSticky = sticky === true
 
-    if (!hasGradient && !hasBackgroundColor && !hasTextColor) {
+    if (!hasGradient && !hasBackgroundColor && !hasTextColor && !isSticky) {
       return undefined
     }
 
@@ -49,6 +51,7 @@ export function Banner({
       ...(hasGradient ? { background: gradient } : {}),
       ...(hasBackgroundColor && !hasGradient ? { backgroundColor } : {}),
       ...(hasTextColor ? { color: textColor } : {}),
+      ...(isSticky ? { position: 'sticky' as const, top: 0, zIndex: 50 } : {}),
     }
   })()
 
