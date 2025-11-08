@@ -34,7 +34,7 @@ jobs:
             --repo ${{ github.repository }} \
             --label "tdd-spec:in-progress" \
             --json number,labels,updatedAt,title \
-            --jq '.[] | select(.labels[] | contains("infrastructure-retry:"))')
+            --jq '.[] | select(.labels[].name | contains("infrastructure-retry:"))')
 
           if [ -z "$RETRY_ISSUES" ]; then
             echo "✅ No issues with retry labels found"
@@ -49,7 +49,7 @@ jobs:
             NUMBER=$(echo "$issue" | jq -r '.number')
             TITLE=$(echo "$issue" | jq -r '.title')
             UPDATED=$(echo "$issue" | jq -r '.updatedAt')
-            LABELS=$(echo "$issue" | jq -r '.labels[]' | tr '\n' ' ')
+            LABELS=$(echo "$issue" | jq -r '.labels[].name' | tr '\n' ' ')
 
             # Convert update time to epoch
             UPDATED_EPOCH=$(date -d "$UPDATED" +%s 2>/dev/null || date -j -f "%Y-%m-%dT%H:%M:%SZ" "$UPDATED" +%s 2>/dev/null || echo "$NOW")
