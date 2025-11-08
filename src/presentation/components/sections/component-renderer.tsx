@@ -444,7 +444,14 @@ export function ComponentRenderer({
       return Renderers.renderTextElement(elementProps, content)
 
     case 'paragraph':
-      return Renderers.renderParagraph(elementProps, content)
+    case 'p':
+      return Renderers.renderParagraph(elementProps, content, renderedChildren)
+
+    case 'code':
+      return Renderers.renderCode(elementProps, content, renderedChildren)
+
+    case 'pre':
+      return Renderers.renderPre(elementProps, content, renderedChildren)
 
     // Media elements
     case 'image':

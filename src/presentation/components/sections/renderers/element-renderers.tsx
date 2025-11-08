@@ -29,8 +29,9 @@ export interface ElementProps {
  * Note: HTML content is rendered without sanitization since it comes from trusted
  * schema configuration. For user-generated content, use renderCustomHTML instead.
  *
- * For section elements, automatically adds role="region" for accessibility best practices,
- * ensuring sections are properly identified in the accessibility tree.
+ * For section elements, automatically adds role="region" for accessibility best practices.
+ * For div elements with children (not just content), adds role="group" to ensure proper
+ * ARIA tree structure when the div acts as a container grouping related elements.
  */
 export function renderHTMLElement(
   type: 'div' | 'span' | 'section',
@@ -40,8 +41,15 @@ export function renderHTMLElement(
 ): ReactElement {
   const Element = type
 
-  // Add role="region" to section elements for accessibility
-  const elementProps = type === 'section' ? { ...props, role: 'region' } : props
+  // Add appropriate ARIA role for accessibility
+  let elementProps = props
+  if (type === 'section') {
+    elementProps = { ...props, role: 'region' }
+  } else if (type === 'div' && children.length > 0 && !content) {
+    // Add role="group" to div containers with children (not plain content)
+    // This ensures ARIA tree properly identifies grouped elements
+    elementProps = { ...props, role: 'group' }
+  }
 
   // If content looks like HTML (starts with '<'), render as HTML
   // This is safe for schema-defined content but should NOT be used for user input
@@ -97,8 +105,34 @@ export function renderTextElement(props: ElementProps, content: string | undefin
 /**
  * Renders paragraph element
  */
-export function renderParagraph(props: ElementProps, content: string | undefined): ReactElement {
-  return <p {...props}>{content}</p>
+export function renderParagraph(
+  props: ElementProps,
+  content: string | undefined,
+  children: readonly React.ReactNode[]
+): ReactElement {
+  return <p {...props}>{content || children}</p>
+}
+
+/**
+ * Renders code element (inline code)
+ */
+export function renderCode(
+  props: ElementProps,
+  content: string | undefined,
+  children: readonly React.ReactNode[]
+): ReactElement {
+  return <code {...props}>{content || children}</code>
+}
+
+/**
+ * Renders pre element (preformatted text block)
+ */
+export function renderPre(
+  props: ElementProps,
+  content: string | undefined,
+  children: readonly React.ReactNode[]
+): ReactElement {
+  return <pre {...props}>{content || children}</pre>
 }
 
 /**
