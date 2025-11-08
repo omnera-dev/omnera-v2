@@ -121,7 +121,7 @@ test.describe('Banner Configuration', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-BANNER-004: should apply CSS gradient as background',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -130,9 +130,9 @@ test.describe('Banner Configuration', () => {
         name: 'test-app',
         pages: [
           {
-            name: 'Test',
+            name: 'test',
             path: '/',
-            meta: { lang: 'en-US', title: 'Test' },
+            meta: { lang: 'en-US', title: 'Test', description: 'Test page' },
             layout: {
               banner: {
                 enabled: true,
