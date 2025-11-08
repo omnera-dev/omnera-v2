@@ -16,8 +16,8 @@ on:
 
 # Security: Define minimal required permissions
 permissions:
-  actions: read  # To check workflow runs
-  issues: write  # To create incident issues
+  actions: read # To check workflow runs
+  issues: write # To create incident issues
   contents: read # To read repository
 
 jobs:

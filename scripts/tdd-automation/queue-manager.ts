@@ -641,7 +641,9 @@ export const getNextSpec = Effect.gen(function* () {
     // Check if all in-progress specs are infrastructure retries
     const nonRetryingSpecs = inProgressSpecs.filter((spec) => {
       // Check if spec has infrastructure-retry label (indicates it's retrying due to infra error)
-      const hasRetryLabel = spec.labels?.some((label: string) => label.startsWith('infrastructure-retry:'))
+      const hasRetryLabel = spec.labels?.some((label: string) =>
+        label.startsWith('infrastructure-retry:')
+      )
       return !hasRetryLabel
     })
 
