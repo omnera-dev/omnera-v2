@@ -39,7 +39,7 @@ jobs:
             --repo sovrium/sovrium \
             --label tdd-automation \
             --state open \
-            --json number,autoMergeRequest,mergeable,statusCheckRollup,createdAt,headRefName \
+            --json number,autoMergeRequest,mergeable,statusCheckRollup,createdAt,headRefName,mergeStateStatus \
             --jq '.[]')
 
           if [ -z "$OPEN_PRS" ]; then
@@ -54,11 +54,13 @@ jobs:
             MERGEABLE=$(echo "$PR" | jq -r '.mergeable')
             CREATED_AT=$(echo "$PR" | jq -r '.createdAt')
             HEAD_REF=$(echo "$PR" | jq -r '.headRefName')
+            MERGE_STATE=$(echo "$PR" | jq -r '.mergeStateStatus')
 
             echo ""
             echo "📋 Checking PR #$PR_NUMBER (branch: $HEAD_REF)"
             echo "   Created: $CREATED_AT"
             echo "   Mergeable: $MERGEABLE"
+            echo "   Merge State: $MERGE_STATE"
             echo "   Auto-merge: $([ "$AUTO_MERGE" = "null" ] && echo "❌ NOT ENABLED" || echo "✅ Enabled")"
 
             # Skip if auto-merge is already enabled
@@ -67,7 +69,39 @@ jobs:
               continue
             fi
 
-            # Skip if not mergeable
+            # Track if we updated the branch
+            BRANCH_UPDATED="false"
+
+            # Check if branch needs updating (behind main)
+            if [ "$MERGE_STATE" = "BEHIND" ] || [ "$MERGEABLE" = "CONFLICTING" ]; then
+              echo "   🔄 Branch is behind main or has conflicts, attempting to update..."
+
+              # Try to update the branch with main using GitHub API
+              UPDATE_RESULT=$(gh api \
+                --method PUT \
+                "/repos/sovrium/sovrium/pulls/$PR_NUMBER/update-branch" \
+                2>&1 || echo "FAILED")
+
+              if [ "$UPDATE_RESULT" != "FAILED" ]; then
+                echo "   ✅ Branch update initiated successfully"
+                BRANCH_UPDATED="true"
+
+                # Wait for GitHub to complete the update
+                sleep 10
+
+                # Re-fetch PR status after update
+                UPDATED_PR=$(gh pr view "$PR_NUMBER" --repo sovrium/sovrium --json mergeable,mergeStateStatus)
+                MERGEABLE=$(echo "$UPDATED_PR" | jq -r '.mergeable')
+                MERGE_STATE=$(echo "$UPDATED_PR" | jq -r '.mergeStateStatus')
+
+                echo "   📊 New status after update: Mergeable=$MERGEABLE, MergeState=$MERGE_STATE"
+              else
+                echo "   ⚠️  Failed to update branch (may require manual intervention for conflicts)"
+                echo "   Error: $UPDATE_RESULT"
+              fi
+            fi
+
+            # Skip if still not mergeable after update attempt
             if [ "$MERGEABLE" != "MERGEABLE" ]; then
               echo "   ⚠️  Not mergeable (status: $MERGEABLE), skipping"
               continue
@@ -99,8 +133,23 @@ jobs:
               echo "   ✅ Auto-merge enabled successfully for PR #$PR_NUMBER"
 
               # Add a comment explaining what happened
+              COMMENT_BODY="🤖 **Stuck PR Monitor**
 
-              gh pr comment "$PR_NUMBER" --repo sovrium/sovrium --body "🤖 Stuck PR Monitor - This PR was stuck in an open state despite having all checks passing and being mergeable. Auto-merge has been automatically enabled. Details: PR age $AGE_MINUTES minutes, Mergeable status $MERGEABLE, CI checks Passing. The PR will now merge automatically when all requirements are met."
+              This PR was stuck in an open state despite having all checks passing and being mergeable. Auto-merge has been automatically enabled.
+
+              **Actions taken:**
+              - $([ "$BRANCH_UPDATED" = "true" ] && echo "✅ Updated branch with latest main" || echo "Branch was already up to date")
+              - ✅ Enabled auto-merge
+
+              **Details:**
+              - PR age: $AGE_MINUTES minutes
+              - Mergeable status: $MERGEABLE
+              - Merge state: $MERGE_STATE
+              - CI checks: Passing
+
+              The PR will now merge automatically when all requirements are met."
+
+              gh pr comment "$PR_NUMBER" --repo sovrium/sovrium --body "$COMMENT_BODY"
             else
               echo "   ❌ Failed to enable auto-merge for PR #$PR_NUMBER"
             fi
