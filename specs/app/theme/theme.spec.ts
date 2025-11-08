@@ -800,10 +800,10 @@ test.describe('Theme Configuration', () => {
       const css = await page.locator('style').first().textContent()
       expect(css).toContain(':root')
 
-      // Validate color tokens in CSS
-      expect(css).toMatch(/--color-primary:\s*#007bff/)
-      expect(css).toMatch(/--color-secondary:\s*#6c757d/)
-      expect(css).toMatch(/--color-background:\s*#ffffff/)
+      // Validate color tokens in CSS (converted to space-separated RGB for Tailwind v4)
+      expect(css).toMatch(/--color-primary:\s*0 123 255/)
+      expect(css).toMatch(/--color-secondary:\s*108 117 125/)
+      expect(css).toMatch(/--color-background:\s*255 255 255/)
 
       // Validate font tokens in CSS
       expect(css).toMatch(/--font-body-family:\s*["']?Inter["']?/)
