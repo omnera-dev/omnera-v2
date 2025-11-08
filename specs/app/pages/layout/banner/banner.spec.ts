@@ -52,7 +52,7 @@ test.describe('Banner Configuration', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-BANNER-002: should render announcement text',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -61,9 +61,9 @@ test.describe('Banner Configuration', () => {
         name: 'test-app',
         pages: [
           {
-            name: 'Test',
+            name: 'test',
             path: '/',
-            meta: { lang: 'en-US', title: 'Test' },
+            meta: { lang: 'en-US', title: 'Test', description: 'Test page' },
             layout: { banner: { enabled: true, text: '🎉 New feature available!' } },
             sections: [],
           },
@@ -79,7 +79,7 @@ test.describe('Banner Configuration', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-BANNER-003: should add clickable link to banner',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -88,9 +88,9 @@ test.describe('Banner Configuration', () => {
         name: 'test-app',
         pages: [
           {
-            name: 'Home',
+            name: 'home',
             path: '/',
-            meta: { lang: 'en-US', title: 'Home' },
+            meta: { lang: 'en-US', title: 'Home', description: 'Home page' },
             layout: {
               banner: {
                 enabled: true,
@@ -101,9 +101,9 @@ test.describe('Banner Configuration', () => {
             sections: [],
           },
           {
-            name: 'Features',
+            name: 'features',
             path: '/features',
-            meta: { lang: 'en-US', title: 'Features' },
+            meta: { lang: 'en-US', title: 'Features', description: 'Features page' },
             sections: [],
           },
         ],
@@ -121,7 +121,7 @@ test.describe('Banner Configuration', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-BANNER-004: should apply CSS gradient as background',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -130,9 +130,9 @@ test.describe('Banner Configuration', () => {
         name: 'test-app',
         pages: [
           {
-            name: 'Test',
+            name: 'test',
             path: '/',
-            meta: { lang: 'en-US', title: 'Test' },
+            meta: { lang: 'en-US', title: 'Test', description: 'Test page' },
             layout: {
               banner: {
                 enabled: true,

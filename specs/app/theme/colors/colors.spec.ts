@@ -913,7 +913,7 @@ test.describe('Color Palette', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-THEME-COLORS-APPLICATION-004: should render green alert indicating success state',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {

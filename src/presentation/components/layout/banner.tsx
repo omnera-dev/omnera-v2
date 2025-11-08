@@ -20,6 +20,8 @@ export function Banner({
   enabled,
   message,
   text,
+  link,
+  gradient,
 }: Readonly<BannerProps>): Readonly<ReactElement | undefined> {
   // Don't render if explicitly disabled
   if (enabled === false) {
@@ -32,8 +34,26 @@ export function Banner({
     <div
       role="banner"
       data-testid="banner"
+      className="py-3"
+      style={gradient ? { background: gradient } : undefined}
     >
-      {content}
+      <div className="container flex items-center justify-center gap-4">
+        <p
+          data-testid="banner-text"
+          className="font-medium"
+        >
+          {content}
+        </p>
+        {link && (
+          <a
+            data-testid="banner-link"
+            href={link.href}
+            className="font-semibold underline hover:opacity-80"
+          >
+            {link.label}
+          </a>
+        )}
+      </div>
     </div>
   )
 }

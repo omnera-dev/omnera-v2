@@ -12,6 +12,7 @@ import { Navigation } from '@/presentation/components/layout/navigation'
 import { Sidebar } from '@/presentation/components/layout/sidebar'
 import { ComponentRenderer } from '@/presentation/components/sections/component-renderer'
 import { toKebabCase, toSlug } from '@/presentation/utils/string-utils'
+import { isCssValue, isTailwindClass } from '@/presentation/utils/style-utils'
 import type {
   BlockReference,
   SimpleBlockReference,
@@ -96,39 +97,6 @@ function generateAnimationKeyframes(animations?: Theme['animations']): ReadonlyA
 
     return []
   })
-}
-
-/**
- * Check if a spacing value is a raw CSS value (not a Tailwind class)
- * CSS values contain units like rem, px, em, % without spaces
- * Tailwind classes like "py-16" or "py-16 sm:py-20" should return false
- *
- * @param value - Spacing value to check
- * @returns true if value is a raw CSS value, false if it's a Tailwind class
- */
-function isCssValue(value: string): boolean {
-  return /\d+(rem|px|em|%|vh|vw)/.test(value) && !value.includes(' ')
-}
-
-/**
- * Check if a container spacing value is a Tailwind class (not a raw CSS value)
- * Tailwind classes include utility classes like "max-w-7xl", "mx-auto", "px-4"
- * CSS values like "80rem" or "1280px" should return false
- *
- * @param value - Container spacing value to check
- * @returns true if value contains Tailwind classes, false if it's a raw CSS value
- */
-function isTailwindClass(value: string): boolean {
-  // If it has spaces, it's multiple classes (Tailwind)
-  if (value.includes(' ')) {
-    return true
-  }
-  // If it matches Tailwind patterns (max-w-*, mx-*, px-*, etc.), it's a class
-  if (/^(max-w-|mx-|px-|py-|p-|m-|w-|h-)/.test(value)) {
-    return true
-  }
-  // Otherwise, assume it's a CSS value
-  return false
 }
 
 /**
@@ -248,6 +216,36 @@ function generateThemeStyles(theme?: Theme): string {
         ]
       : []
 
+  // Build parallax styles for hero sections with parallax animation
+  const parallaxConfig = animations?.parallax
+  const parallaxStyles: ReadonlyArray<string> = parallaxConfig
+    ? [
+        [
+          '[data-testid="hero-background"] {',
+          '  display: block;',
+          '  min-height: 200px;',
+          '  min-width: 100%;',
+          '}',
+        ].join('\n'),
+      ]
+    : []
+
+  // Build typewriter styles for heading elements with typewriter animation
+  const typewriterConfig = animations?.typewriter
+  const typewriterStyles: ReadonlyArray<string> =
+    typewriterConfig && typeof typewriterConfig === 'object'
+      ? [
+          [
+            '[data-testid="hero-heading"] {',
+            `  animation: typewriter ${typewriterConfig.duration || '4s'} ${typewriterConfig.easing || 'steps(40, end)'};`,
+            '  overflow: hidden;',
+            '  white-space: nowrap;',
+            '  border-right: 2px solid;',
+            '}',
+          ].join('\n'),
+        ]
+      : []
+
   // Combine all styles
   const styles: ReadonlyArray<string> = [
     ...cssVariables,
@@ -256,6 +254,8 @@ function generateThemeStyles(theme?: Theme): string {
     ...fontStyles,
     ...animationStyles,
     ...transitionStyles,
+    ...parallaxStyles,
+    ...typewriterStyles,
   ]
 
   return styles.join('\n')
@@ -968,37 +968,67 @@ export function DynamicPage({
           style={{ minHeight: '1px' }}
         >
           {/* Wrap page sections in a section element when theme spacing is defined */}
+          {/* Only create wrapper section if there are no section components in the page */}
           {theme?.spacing?.section || theme?.spacing?.container ? (
             <>
-              <section
-                data-testid="section"
-                {...(theme?.spacing?.section && { className: theme.spacing.section })}
-              >
-                {page.sections.map((section, index) => {
-                  const blockInfo = getBlockInfo(section, index, page.sections)
+              {!page.sections.some(
+                (s) => 'type' in s && s.type === 'section'
+              ) && theme?.spacing?.section ? (
+                <section
+                  data-testid="section"
+                  {...(theme?.spacing?.section &&
+                    !isCssValue(theme.spacing.section) && { className: theme.spacing.section })}
+                  {...(theme?.spacing?.section &&
+                    isCssValue(theme.spacing.section) && {
+                      style: { padding: theme.spacing.section },
+                    })}
+                >
+                  {page.sections.map((section, index) => {
+                    const blockInfo = getBlockInfo(section, index, page.sections)
 
-                  return (
-                    <ComponentRenderer
-                      key={index}
-                      component={section}
-                      blockName={blockInfo?.name}
-                      blockInstanceIndex={blockInfo?.instanceIndex}
-                      blocks={blocks}
-                      theme={theme}
-                      languages={languages}
-                      currentLang={lang}
-                    />
-                  )
-                })}
-              </section>
-              {theme?.spacing?.container && (
-                <div
-                  data-testid="container"
-                  {...(isTailwindClass(theme.spacing.container)
-                    ? { className: theme.spacing.container }
-                    : { style: { maxWidth: theme.spacing.container } })}
-                />
+                    return (
+                      <ComponentRenderer
+                        key={index}
+                        component={section}
+                        blockName={blockInfo?.name}
+                        blockInstanceIndex={blockInfo?.instanceIndex}
+                        blocks={blocks}
+                        theme={theme}
+                        languages={languages}
+                        currentLang={lang}
+                      />
+                    )
+                  })}
+                </section>
+              ) : (
+                <>
+                  {page.sections.map((section, index) => {
+                    const blockInfo = getBlockInfo(section, index, page.sections)
+
+                    return (
+                      <ComponentRenderer
+                        key={index}
+                        component={section}
+                        blockName={blockInfo?.name}
+                        blockInstanceIndex={blockInfo?.instanceIndex}
+                        blocks={blocks}
+                        theme={theme}
+                        languages={languages}
+                        currentLang={lang}
+                      />
+                    )
+                  })}
+                </>
               )}
+              {theme?.spacing?.container &&
+                !page.sections.some((s) => 'type' in s && s.type === 'container') && (
+                  <div
+                    data-testid="container"
+                    {...(isTailwindClass(theme.spacing.container)
+                      ? { className: theme.spacing.container }
+                      : { style: { maxWidth: theme.spacing.container } })}
+                  />
+                )}
               {(() => {
                 const containerSmall = (theme?.spacing as Record<string, unknown>)?.[
                   'container-small'

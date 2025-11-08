@@ -6,8 +6,11 @@
  */
 
 import { type ReactElement } from 'react'
+import { Hero } from '@/presentation/components/layout/hero'
+import { ResponsiveNavigation } from '@/presentation/components/layout/responsive-navigation'
 import { composeAnimation } from '@/presentation/utils/animation-composer'
 import { normalizeStyleAnimations, parseStyle } from '@/presentation/utils/parse-style'
+import { isCssValue } from '@/presentation/utils/style-utils'
 import {
   collectTranslationsForKey,
   resolveTranslationPattern,
@@ -197,14 +200,94 @@ export function ComponentRenderer({
     return [...baseClasses, alignmentClass, gapClass].filter(Boolean).join(' ')
   }
 
+  // Build grid-specific classes based on theme breakpoints
+  const buildGridClasses = (theme?: Theme): string | undefined => {
+    const baseClasses = ['grid']
+    const breakpointClass = theme?.breakpoints?.md ? 'md:grid-cols-2' : undefined
+
+    return [...baseClasses, breakpointClass].filter(Boolean).join(' ')
+  }
+
   // For flex type, prepend flex classes to className
+  // For grid type, prepend grid classes to className
   const finalClassName =
     type === 'flex'
       ? [buildFlexClasses(substitutedProps), substitutedProps?.className].filter(Boolean).join(' ')
-      : (substitutedProps?.className as string | undefined)
+      : type === 'grid'
+        ? [buildGridClasses(theme), substitutedProps?.className].filter(Boolean).join(' ')
+        : (substitutedProps?.className as string | undefined)
+
+  // Apply theme shadows to component types based on conventions
+  // Card components use available shadow tokens (md, neumorphic, etc.)
+  // Modal components use xl shadow
+  // Input components use inner shadow
+  // Button components use md shadow (or custom like brand)
+  // List-item components use sm shadow (lowest elevation)
+  // Dropdown components use lg shadow (higher than card, lower than modal)
+  const getComponentShadow = (): Record<string, unknown> | undefined => {
+    if (!theme?.shadows) {
+      return undefined
+    }
+
+    // List-item: Use sm shadow (lowest elevation in hierarchy)
+    if (type === 'list-item' && theme.shadows.sm) {
+      return { boxShadow: 'var(--shadow-sm)' }
+    }
+
+    // Card: Use first available shadow (prioritize custom names like neumorphic, then md)
+    if (type === 'card') {
+      // Check for custom shadow names first (neumorphic, etc.)
+      const customShadow = Object.keys(theme.shadows).find(
+        (name) => !['sm', 'md', 'lg', 'xl', '2xl', 'inner', 'none'].includes(name)
+      )
+      if (customShadow) {
+        return { boxShadow: `var(--shadow-${customShadow})` }
+      }
+      // Fallback to md if available
+      if (theme.shadows.md) {
+        return { boxShadow: 'var(--shadow-md)' }
+      }
+    }
+
+    // Dropdown: Use lg shadow (higher elevation than card)
+    if (type === 'dropdown' && theme.shadows.lg) {
+      return { boxShadow: 'var(--shadow-lg)' }
+    }
+
+    // Modal: Use xl shadow
+    if (type === 'modal' && theme.shadows.xl) {
+      return { boxShadow: 'var(--shadow-xl)' }
+    }
+
+    // Input: Use inner shadow
+    if (type === 'input' && theme.shadows.inner) {
+      return { boxShadow: 'var(--shadow-inner)' }
+    }
+
+    // Button: Use brand shadow if available, otherwise md
+    if (type === 'button') {
+      if (theme.shadows.brand) {
+        return { boxShadow: 'var(--shadow-brand)' }
+      }
+      if (theme.shadows.md) {
+        return { boxShadow: 'var(--shadow-md)' }
+      }
+    }
+
+    return undefined
+  }
+
+  const componentShadow = getComponentShadow()
+  const styleWithShadow = componentShadow
+    ? {
+        ...parsedStyle,
+        ...componentShadow,
+      }
+    : parsedStyle
 
   // Merge className with other props and add data-block attribute if blockName is provided
   // For blocks without content, add min-height and display to ensure visibility
+  // For grid elements without content, ensure minimum dimensions for rendering
   // Add translation key data attribute if children contain $t: patterns
   // Include pre-resolved translations to eliminate client-side resolution logic duplication
   // Add role="group" for blocks with children to establish proper ARIA tree nesting
@@ -216,14 +299,15 @@ export function ComponentRenderer({
     ? blockInstanceIndex !== undefined
       ? `block-${blockName}-${blockInstanceIndex}`
       : `block-${blockName}`
-    : undefined
+    : substitutedProps?.['data-testid'] ||
+      (type === 'container' ? 'container' : type === 'flex' ? 'flex' : undefined)
   const elementProps = {
     ...substitutedProps,
     className: finalClassName,
-    ...(parsedStyle && { style: parsedStyle }),
+    ...(styleWithShadow && { style: styleWithShadow }),
+    ...(testId && { 'data-testid': testId }),
     ...(blockName && {
       'data-block': blockName,
-      'data-testid': testId,
       'data-type': type,
     }),
     ...(blockName &&
@@ -242,19 +326,82 @@ export function ComponentRenderer({
     ...(blockName &&
       !hasContent && {
         style: {
-          ...parsedStyle,
+          ...styleWithShadow,
           minHeight: '1px',
           minWidth: '1px',
           display: 'inline-block',
         },
       }),
+    ...(!blockName &&
+      type === 'grid' &&
+      !hasContent && {
+        style: {
+          ...styleWithShadow,
+          minHeight: '100px',
+          minWidth: '100px',
+        },
+      }),
   }
+
+  // Apply theme spacing to section elements when spacing.section is a CSS value
+  const sectionSpacing = type === 'section' && theme?.spacing?.section
+  const sectionSpacingStyle =
+    sectionSpacing && isCssValue(sectionSpacing)
+      ? { padding: sectionSpacing }
+      : undefined
+
+  // Apply theme spacing to container elements when spacing.container is a CSS value
+  const containerSpacing = type === 'container' && theme?.spacing?.container
+  const containerSpacingStyle =
+    containerSpacing && isCssValue(containerSpacing)
+      ? { maxWidth: containerSpacing, margin: '0 auto' }
+      : undefined
+
+  // Apply theme spacing to flex elements when spacing.gap is a CSS value
+  const flexSpacing = type === 'flex' && theme?.spacing?.gap
+  const flexSpacingStyle =
+    flexSpacing && isCssValue(flexSpacing) ? { display: 'flex', gap: flexSpacing } : undefined
+
+  const elementPropsWithSectionSpacing = sectionSpacingStyle
+    ? {
+        ...elementProps,
+        style: {
+          ...(elementProps.style as Record<string, unknown> | undefined),
+          ...sectionSpacingStyle,
+        },
+      }
+    : elementProps
+
+  const elementPropsWithContainerSpacing = containerSpacingStyle
+    ? {
+        ...elementPropsWithSectionSpacing,
+        style: {
+          ...(elementPropsWithSectionSpacing.style as Record<string, unknown> | undefined),
+          ...containerSpacingStyle,
+        },
+      }
+    : elementPropsWithSectionSpacing
+
+  const elementPropsWithSpacing = flexSpacingStyle
+    ? {
+        ...elementPropsWithContainerSpacing,
+        style: {
+          ...(elementPropsWithContainerSpacing.style as Record<string, unknown> | undefined),
+          ...flexSpacingStyle,
+        },
+      }
+    : elementPropsWithContainerSpacing
 
   // Render based on component type using specialized renderers
   switch (type) {
     // HTML structural elements
     case 'section':
-      return Renderers.renderHTMLElement('section', elementProps, content, renderedChildren)
+      return Renderers.renderHTMLElement(
+        'section',
+        elementPropsWithSpacing,
+        content,
+        renderedChildren
+      )
 
     case 'div':
     case 'container':
@@ -263,7 +410,7 @@ export function ComponentRenderer({
     case 'card':
     case 'timeline':
     case 'accordion':
-      return Renderers.renderHTMLElement('div', elementProps, content, renderedChildren)
+      return Renderers.renderHTMLElement('div', elementPropsWithSpacing, content, renderedChildren)
 
     case 'span':
     case 'badge':
@@ -321,6 +468,9 @@ export function ComponentRenderer({
     case 'link':
       return Renderers.renderLink(elementProps, content, renderedChildren)
 
+    case 'alert':
+      return Renderers.renderAlert(elementProps, content, renderedChildren, theme)
+
     case 'form':
       return Renderers.renderForm(elementProps, renderedChildren)
 
@@ -338,11 +488,32 @@ export function ComponentRenderer({
     case 'modal':
     case 'sidebar':
     case 'toast':
-    case 'hero':
     case 'fab':
     case 'spinner':
-    case 'list':
+    case 'list-item':
+    case 'dropdown':
       return Renderers.renderHTMLElement('div', elementProps, content, renderedChildren)
+
+    case 'hero':
+      return (
+        <Hero
+          theme={theme}
+          data-testid={elementProps['data-testid'] as string | undefined}
+        >
+          {renderedChildren}
+        </Hero>
+      )
+
+    case 'list':
+      return Renderers.renderList(elementProps, content, theme)
+
+    case 'navigation':
+      return (
+        <ResponsiveNavigation
+          theme={theme}
+          data-testid={elementProps['data-testid'] as string | undefined}
+        />
+      )
 
     // Fallback for unknown types
     default:

@@ -15,13 +15,13 @@ import { ResponsiveSchema } from './common/responsive'
  * Component type enum for page sections
  *
  * Comprehensive set of component types for building pages:
- * - Layout: section, container, flex, grid, div, modal, sidebar, hero
+ * - Layout: section, container, flex, grid, div, modal, sidebar, hero, navigation
  * - Content: text, heading, paragraph, h1, h2, h3, h4, h5, h6, icon, image, customHTML, span
- * - Interactive: button, link, accordion
- * - Grouping: card, badge, timeline
+ * - Interactive: button, link, accordion, dropdown
+ * - Grouping: card, badge, timeline, list-item
  * - Media: video, audio, iframe
  * - Forms: form, input
- * - Feedback: toast, spinner
+ * - Feedback: toast, spinner, alert
  * - UI Elements: fab (floating action button), list
  */
 export const ComponentTypeSchema = Schema.Literal(
@@ -60,7 +60,11 @@ export const ComponentTypeSchema = Schema.Literal(
   'hero',
   'fab',
   'spinner',
-  'list'
+  'list',
+  'list-item',
+  'dropdown',
+  'navigation',
+  'alert'
 ).annotations({
   description: 'Component type for page building',
 })

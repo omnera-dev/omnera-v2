@@ -8,6 +8,7 @@
 import DOMPurify from 'dompurify'
 import { type ReactElement } from 'react'
 import { type Languages } from '@/domain/models/app/languages'
+import { type Theme } from '@/domain/models/app/theme'
 import { LanguageSwitcher } from '@/presentation/components/languages/language-switcher'
 
 /**
@@ -21,6 +22,12 @@ export interface ElementProps {
 
 /**
  * Renders HTML structural elements (div, span, section)
+ *
+ * If content starts with '<', it's treated as HTML and rendered via dangerouslySetInnerHTML.
+ * Otherwise, content is rendered as plain text.
+ *
+ * Note: HTML content is rendered without sanitization since it comes from trusted
+ * schema configuration. For user-generated content, use renderCustomHTML instead.
  */
 export function renderHTMLElement(
   type: 'div' | 'span' | 'section',
@@ -29,6 +36,18 @@ export function renderHTMLElement(
   children: readonly React.ReactNode[]
 ): ReactElement {
   const Element = type
+
+  // If content looks like HTML (starts with '<'), render as HTML
+  // This is safe for schema-defined content but should NOT be used for user input
+  if (content && content.trim().startsWith('<')) {
+    return (
+      <Element
+        {...props}
+        dangerouslySetInnerHTML={{ __html: content }}
+      />
+    )
+  }
+
   return <Element {...props}>{content || children}</Element>
 }
 
@@ -239,4 +258,149 @@ export function renderLanguageSwitcher(_props: ElementProps, languages?: Languag
 
   // Languages already validated at server startup (start-server.ts)
   return <LanguageSwitcher languages={languages} />
+}
+
+/**
+ * Renders alert element with variant support
+ *
+ * Creates an alert component with semantic variants (success, danger, warning, info).
+ * The variant prop determines the visual styling based on theme colors.
+ * Uses inline styles derived from theme tokens for color variants.
+ *
+ * @param props - Element props including variant and data-testid
+ * @param content - Alert message text
+ * @param children - Optional child elements
+ * @param theme - Theme configuration for color resolution
+ * @returns React element for alert component
+ */
+export function renderAlert(
+  props: ElementProps,
+  content: string | undefined,
+  children: readonly React.ReactNode[],
+  theme?: Theme
+): ReactElement {
+  const variant = props.variant as string | undefined
+  const existingStyle = (props.style as Record<string, unknown> | undefined) || {}
+
+  // Build variant-specific styles using theme colors (functional approach)
+  const getVariantStyles = (): Record<string, unknown> => {
+    if (variant === 'success' && theme?.colors) {
+      const successColor = theme.colors.success as string | undefined
+      const successLightColor = theme.colors['success-light'] as string | undefined
+      return {
+        ...(successColor && { color: successColor, borderColor: successColor }),
+        ...(successLightColor && { backgroundColor: successLightColor }),
+      }
+    }
+    if (variant === 'danger' && theme?.colors) {
+      const dangerColor = theme.colors.danger as string | undefined
+      const dangerLightColor = theme.colors['danger-light'] as string | undefined
+      return {
+        ...(dangerColor && { color: dangerColor, borderColor: dangerColor }),
+        ...(dangerLightColor && { backgroundColor: dangerLightColor }),
+      }
+    }
+    if (variant === 'warning' && theme?.colors) {
+      const warningColor = theme.colors.warning as string | undefined
+      const warningLightColor = theme.colors['warning-light'] as string | undefined
+      return {
+        ...(warningColor && { color: warningColor, borderColor: warningColor }),
+        ...(warningLightColor && { backgroundColor: warningLightColor }),
+      }
+    }
+    if (variant === 'info' && theme?.colors) {
+      const infoColor = theme.colors.info as string | undefined
+      const infoLightColor = theme.colors['info-light'] as string | undefined
+      return {
+        ...(infoColor && { color: infoColor, borderColor: infoColor }),
+        ...(infoLightColor && { backgroundColor: infoLightColor }),
+      }
+    }
+    return {}
+  }
+
+  // Merge existing styles with variant styles
+  const mergedStyle = {
+    padding: '12px 16px',
+    borderRadius: '4px',
+    border: '1px solid',
+    ...getVariantStyles(),
+    ...existingStyle,
+  }
+
+  return (
+    <div
+      {...props}
+      role="alert"
+      style={mergedStyle}
+    >
+      {content || children}
+    </div>
+  )
+}
+
+/**
+ * Renders list element with staggered fadeIn animations for items
+ *
+ * Parses HTML content to extract <li> elements and applies incremental
+ * animation delays for a cascading appearance effect.
+ *
+ * @param props - Element props including data-testid
+ * @param content - HTML string containing <li> elements
+ * @param theme - Theme configuration for animation settings
+ * @returns React element with list items animated with stagger effect
+ */
+export function renderList(
+  props: ElementProps,
+  content: string | undefined,
+  theme?: Theme
+): ReactElement {
+  // If no content, return empty list
+  if (!content) {
+    return <ul {...props} />
+  }
+
+  // Sanitize HTML content for security
+  const sanitizedContent = DOMPurify.sanitize(content)
+
+  // Extract <li> items using simple regex matching
+  // This approach works in both server and client environments
+  const liMatches = sanitizedContent.match(/<li[^>]*>.*?<\/li>/gs) || []
+
+  // Get animation config from theme with proper type narrowing
+  // AnimationValue is union: boolean | string | AnimationConfigObject
+  // Only AnimationConfigObject has duration/easing properties
+  const fadeInConfig = theme?.animations?.fadeIn
+  const animationConfig =
+    fadeInConfig && typeof fadeInConfig === 'object' && !Array.isArray(fadeInConfig)
+      ? fadeInConfig
+      : undefined
+
+  const duration = animationConfig?.duration || '400ms'
+  const easing = animationConfig?.easing || 'ease-out'
+
+  // Parse duration to number for delay calculation (remove 'ms' suffix)
+  const durationMs = parseInt(duration.replace('ms', ''), 10)
+  const staggerDelay = Math.max(50, durationMs / 4) // 25% of duration, min 50ms
+
+  // Render list items with staggered animation delays
+  const renderedItems = liMatches.map((liHtml, index) => {
+    const delay = `${index * staggerDelay}ms`
+    const animationValue = `fade-in ${duration} ${easing} ${delay} both`
+
+    // Extract inner HTML (content between <li> and </li>)
+    const innerHtml = liHtml.replace(/<li[^>]*>|<\/li>/g, '')
+
+    return (
+      <li
+        key={index}
+        style={{
+          animation: animationValue,
+        }}
+        dangerouslySetInnerHTML={{ __html: innerHtml }}
+      />
+    )
+  })
+
+  return <ul {...props}>{renderedItems}</ul>
 }

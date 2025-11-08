@@ -778,7 +778,7 @@ test.describe('Animation Configuration', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-THEME-ANIMATIONS-APPLICATION-010: should render list items appearing one after another',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -919,7 +919,7 @@ test.describe('Animation Configuration', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-THEME-ANIMATIONS-APPLICATION-013: should render background moving slower than foreground (parallax effect)',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -961,7 +961,7 @@ test.describe('Animation Configuration', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-THEME-ANIMATIONS-APPLICATION-014: should render text appearing one character at a time',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {

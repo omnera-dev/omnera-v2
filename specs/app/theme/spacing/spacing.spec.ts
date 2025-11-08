@@ -568,7 +568,7 @@ test.describe('Spacing Configuration', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-THEME-SPACING-APPLICATION-001: should render with vertical padding creating rhythm',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -602,7 +602,7 @@ test.describe('Spacing Configuration', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-THEME-SPACING-APPLICATION-002: should render centered with max-width constraint',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -636,7 +636,7 @@ test.describe('Spacing Configuration', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-THEME-SPACING-APPLICATION-003: should render with spacing between flex items',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {

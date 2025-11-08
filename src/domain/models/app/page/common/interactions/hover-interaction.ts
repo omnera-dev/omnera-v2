@@ -17,6 +17,7 @@ import { Schema } from 'effect'
  * - ease-out: Fast start, slow end
  * - ease-in-out: Slow start and end, fast middle
  * - cubic-bezier(): Custom cubic bezier function (e.g., cubic-bezier(0.4, 0, 0.2, 1))
+ * - steps(): Step function for discrete animations (e.g., steps(40, end) for typewriter effect)
  */
 export const EasingFunctionSchema = Schema.Union(
   Schema.Literal('linear', 'ease', 'ease-in', 'ease-out', 'ease-in-out'),
@@ -26,6 +27,15 @@ export const EasingFunctionSchema = Schema.Union(
       {
         message: () =>
           'Custom easing must be a cubic-bezier function with exactly 4 numeric values (e.g., cubic-bezier(0.4, 0, 0.2, 1))',
+      }
+    )
+  ),
+  Schema.String.pipe(
+    Schema.pattern(
+      /^steps\(\s*\d+\s*,\s*(start|end|jump-start|jump-end|jump-none|jump-both)\s*\)$/,
+      {
+        message: () =>
+          'Steps function must have a number of steps and a position (e.g., steps(40, end))',
       }
     )
   )
