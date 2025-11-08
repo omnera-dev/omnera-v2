@@ -478,7 +478,7 @@ test.describe('Analytics Configuration', () => {
   // ONE OPTIMIZED test verifying components work together efficiently
   // ============================================================================
 
-  test.fixme(
+  test(
     'APP-PAGES-META-ANALYTICS-REGRESSION-001: user can complete full analytics workflow',
     { tag: '@regression' },
     async ({ page, startServerWithSchema }) => {
