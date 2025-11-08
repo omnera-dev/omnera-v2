@@ -678,7 +678,7 @@ test.describe('Spacing Configuration', () => {
   // ONE OPTIMIZED test verifying components work together efficiently
   // ============================================================================
 
-  test.fixme(
+  test(
     'APP-THEME-SPACING-REGRESSION-001: user can complete full spacing workflow',
     { tag: '@regression' },
     async ({ page, startServerWithSchema }) => {
@@ -775,11 +775,8 @@ test.describe('Spacing Configuration', () => {
       // 1. Structure validation (ARIA)
       await expect(page.locator('[data-testid="spacing-system"]')).toMatchAriaSnapshot(`
         - group:
-          - generic: "Section with 4rem padding"
-          - group:
-            - generic: "Item 1"
-            - generic: "Item 2"
-            - generic: "Item 3"
+          - text: Section with 4rem padding
+          - group: Item 1 Item 2 Item 3
       `)
 
       // 2. Visual validation (Screenshot) - captures all spacing rendering
