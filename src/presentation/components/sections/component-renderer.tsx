@@ -411,8 +411,36 @@ export function ComponentRenderer({
       return Renderers.renderHTMLElement('div', elementPropsWithSpacing, content, renderedChildren)
 
     case 'span':
-    case 'badge':
       return Renderers.renderHTMLElement('span', elementProps, content, renderedChildren)
+
+    case 'badge': {
+      // Convert custom props to data-* attributes for badges
+      // Standard HTML attributes (className, style, id, etc.) pass through unchanged
+      const standardHtmlAttrs = [
+        'className',
+        'style',
+        'id',
+        'role',
+        'data-testid',
+        'data-block',
+        'data-type',
+        'data-translation-key',
+        'data-translations',
+      ]
+      const badgeProps: Record<string, unknown> = {}
+
+      Object.entries(elementProps).forEach(([key, value]) => {
+        if (standardHtmlAttrs.includes(key) || key.startsWith('data-') || key.startsWith('aria-')) {
+          // Keep standard HTML attrs, data-*, and aria-* unchanged
+          badgeProps[key] = value
+        } else {
+          // Convert custom props to data-* attributes
+          badgeProps[`data-${key}`] = value
+        }
+      })
+
+      return Renderers.renderHTMLElement('span', badgeProps, content, renderedChildren)
+    }
 
     case 'icon':
       return Renderers.renderIcon(elementProps, renderedChildren)
