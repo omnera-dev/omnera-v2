@@ -1061,7 +1061,7 @@ test.describe('Color Palette', () => {
   // ONE OPTIMIZED test verifying components work together efficiently
   // ============================================================================
 
-  test.fixme(
+  test(
     'APP-THEME-COLORS-REGRESSION-001: user can complete full colors workflow',
     { tag: '@regression' },
     async ({ page, startServerWithSchema }) => {
@@ -1118,7 +1118,7 @@ test.describe('Color Palette', () => {
       const button = page.locator('[data-testid="cta-button"]')
       await expect(button).toBeVisible()
       const btnColor = await button.evaluate((el) => window.getComputedStyle(el).backgroundColor)
-      expect(btnColor).toContain('7, 123, 255')
+      expect(btnColor).toContain('0, 123, 255')
 
       // Focus on workflow continuity, not exhaustive coverage
     }
