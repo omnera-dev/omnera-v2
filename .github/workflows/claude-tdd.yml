@@ -319,7 +319,7 @@ jobs:
 
       - name: Run Claude Code
         id: claude
-        uses: anthropics/claude-code-action@v1.0.16
+        uses: anthropics/claude-code-action@v1
         timeout-minutes: 30
         continue-on-error: true # Capture exit code instead of failing immediately
         with:
