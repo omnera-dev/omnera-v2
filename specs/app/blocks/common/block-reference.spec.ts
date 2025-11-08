@@ -484,7 +484,7 @@ test.describe('Block Reference', () => {
   // ONE OPTIMIZED test verifying components work together efficiently
   // ============================================================================
 
-  test.fixme(
+  test(
     'APP-BLOCKS-BLOCK-REFERENCE-REGRESSION-001: user can complete full reference workflow',
     { tag: '@regression' },
     async ({ page, startServerWithSchema }) => {
