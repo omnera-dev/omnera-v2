@@ -416,7 +416,7 @@ export function ComponentRenderer({
     case 'badge': {
       // Convert custom props to data-* attributes for badges
       // Standard HTML attributes (className, style, id, etc.) pass through unchanged
-      const standardHtmlAttrs = [
+      const standardHtmlAttrs = new Set([
         'className',
         'style',
         'id',
@@ -426,18 +426,19 @@ export function ComponentRenderer({
         'data-type',
         'data-translation-key',
         'data-translations',
-      ]
-      const badgeProps: Record<string, unknown> = {}
+      ])
 
-      Object.entries(elementProps).forEach(([key, value]) => {
-        if (standardHtmlAttrs.includes(key) || key.startsWith('data-') || key.startsWith('aria-')) {
-          // Keep standard HTML attrs, data-*, and aria-* unchanged
-          badgeProps[key] = value
-        } else {
+      const badgeProps = Object.entries(elementProps).reduce<Record<string, unknown>>(
+        (acc, [key, value]) => {
+          if (standardHtmlAttrs.has(key) || key.startsWith('data-') || key.startsWith('aria-')) {
+            // Keep standard HTML attrs, data-*, and aria-* unchanged
+            return { ...acc, [key]: value }
+          }
           // Convert custom props to data-* attributes
-          badgeProps[`data-${key}`] = value
-        }
-      })
+          return { ...acc, [`data-${key}`]: value }
+        },
+        {}
+      )
 
       return Renderers.renderHTMLElement('span', badgeProps, content, renderedChildren)
     }
