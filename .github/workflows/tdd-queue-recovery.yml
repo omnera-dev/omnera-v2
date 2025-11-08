@@ -14,7 +14,7 @@ permissions:
   issues: write
 
 env:
-  TIMEOUT_HOURS: 1.5 # Consider spec stuck if no activity for 90 minutes (Claude timeout 60 min + buffer)
+  TIMEOUT_MINUTES: 90 # Consider spec stuck if no activity for 90 minutes (Claude timeout 60 min + buffer)
 
 jobs:
   recover-stuck-specs:
@@ -40,7 +40,7 @@ jobs:
 
           # Current time (epoch seconds)
           NOW=$(date +%s)
-          TIMEOUT_SECONDS=$(($TIMEOUT_HOURS * 60 * 60))
+          TIMEOUT_SECONDS=$((TIMEOUT_MINUTES * 60))
 
           STUCK_ISSUES=""
           STUCK_COUNT=0
@@ -107,7 +107,7 @@ jobs:
             # Add timeout recovery comment
             gh issue comment "$ISSUE_NUMBER" --body "⏱️ **Timeout recovery**
 
-          This spec was stuck in-progress for > $TIMEOUT_HOURS hours with no activity.
+          This spec was stuck in-progress for > $TIMEOUT_MINUTES minutes with no activity.
 
           **Automatically re-queued** - the spec will be retried by the queue processor.
 

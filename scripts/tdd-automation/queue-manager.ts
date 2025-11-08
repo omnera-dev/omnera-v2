@@ -633,11 +633,30 @@ export const getNextSpec = Effect.gen(function* () {
   // Check if any specs are in-progress
   const inProgressSpecs = yield* getInProgressSpecs
   if (inProgressSpecs.length > 0) {
-    yield* logInfo(`${inProgressSpecs.length} spec(s) already in-progress:`, '⏸️')
-    inProgressSpecs.forEach((spec) => {
-      console.log(`     - ${spec.specId} (#${spec.number})`)
+    // Check if all in-progress specs are infrastructure retries
+    const nonRetryingSpecs = inProgressSpecs.filter((spec) => {
+      // Check if spec has infrastructure-retry label (indicates it's retrying due to infra error)
+      const hasRetryLabel = spec.labels?.some((label) =>
+        label.startsWith('infrastructure-retry:'),
+      )
+      return !hasRetryLabel
     })
-    return null
+
+    if (nonRetryingSpecs.length > 0) {
+      // Block if there are non-retry specs in progress
+      yield* logInfo(`${nonRetryingSpecs.length} spec(s) in-progress (non-retry):`, '⏸️')
+      nonRetryingSpecs.forEach((spec) => {
+        console.log(`     - ${spec.specId} (#${spec.number})`)
+      })
+      return null
+    } else {
+      // Allow processing if only infrastructure retries are in progress
+      yield* logInfo(
+        `${inProgressSpecs.length} spec(s) retrying due to infrastructure errors`,
+        '🔄',
+      )
+      yield* logInfo('Continuing to process next queued spec...', '➡️')
+    }
   }
 
   // Get queued specs

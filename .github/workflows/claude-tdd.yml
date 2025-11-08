@@ -333,9 +333,9 @@ jobs:
 
       - name: Detect error type
         id: detect_error
-        if: steps.claude.outcome != 'success'
+        if: always()
         run: |
-          echo "🔍 Analyzing Claude Code failure..."
+          echo "🔍 Analyzing Claude Code execution..."
 
           # Check Claude Code exit behavior
           CLAUDE_OUTCOME="${{ steps.claude.outcome }}"
@@ -343,27 +343,54 @@ jobs:
           IS_INFRA_ERROR=false
           ERROR_TYPE="unknown"
 
-          if [ "$CLAUDE_OUTCOME" = "cancelled" ]; then
-            # Check if this was a timeout during installation vs execution
-            # Timeouts show as "cancelled" in GitHub Actions
-            if [ "${{ steps.claude.outputs.prepare_success }}" != "true" ]; then
-              IS_INFRA_ERROR=true
-              ERROR_TYPE="installation_timeout"
-              echo "⏱️ Claude Code installation timed out - will retry with fresh runner"
-            else
-              IS_INFRA_ERROR=true
-              ERROR_TYPE="execution_timeout"
-              echo "⏱️ Claude Code execution timed out - may be a code issue"
+          # Calculate step duration to detect timeout (GitHub marks some timeouts as "success")
+          START_TIME="${{ steps.claude.outputs.startedAt || '' }}"
+          END_TIME="${{ steps.claude.outputs.completedAt || '' }}"
+
+          # If timestamps are available, calculate duration
+          if [ -n "$START_TIME" ] && [ -n "$END_TIME" ]; then
+            START_EPOCH=$(date -d "$START_TIME" +%s 2>/dev/null || echo "0")
+            END_EPOCH=$(date -d "$END_TIME" +%s 2>/dev/null || echo "0")
+
+            if [ "$START_EPOCH" -ne 0 ] && [ "$END_EPOCH" -ne 0 ]; then
+              DURATION=$((END_EPOCH - START_EPOCH))
+              echo "📊 Step duration: ${DURATION}s"
+
+              # Timeout detection: anything > 29 minutes (1740 seconds) is likely a timeout
+              if [ "$DURATION" -ge 1740 ]; then
+                IS_INFRA_ERROR=true
+                ERROR_TYPE="timeout_confirmed"
+                echo "⏱️ TIMEOUT DETECTED: Step ran for ${DURATION}s (>= 1740s threshold)"
+              fi
             fi
-          elif [ "$CLAUDE_OUTCOME" = "failure" ]; then
-            # For failures, we need to check logs in retry workflow
-            ERROR_TYPE="claude_failure"
-            echo "❌ Claude Code failed - will classify in retry logic"
-            IS_INFRA_ERROR=true # Assume infrastructure until proven otherwise
-          else
-            ERROR_TYPE="unknown_outcome"
-            echo "❓ Unknown outcome: $CLAUDE_OUTCOME"
-            IS_INFRA_ERROR=true
+          fi
+
+          # If not already classified as timeout, check outcome
+          if [ "$ERROR_TYPE" = "unknown" ]; then
+            if [ "$CLAUDE_OUTCOME" = "cancelled" ]; then
+              # Cancelled usually means timeout or manual cancellation
+              IS_INFRA_ERROR=true
+              ERROR_TYPE="cancelled_timeout"
+              echo "⏱️ Step was cancelled - treating as timeout"
+            elif [ "$CLAUDE_OUTCOME" = "failure" ]; then
+              # For failures, check if it's infrastructure or code issue
+              # Look for common infrastructure error patterns in logs if available
+              ERROR_TYPE="claude_failure"
+              echo "❌ Claude Code failed - checking for infrastructure issues..."
+
+              # Default to infrastructure error for retries (conservative approach)
+              IS_INFRA_ERROR=true
+            elif [ "$CLAUDE_OUTCOME" = "success" ]; then
+              # Even success might be a timeout if duration is suspicious
+              if [ "$ERROR_TYPE" != "timeout_confirmed" ]; then
+                ERROR_TYPE="success"
+                echo "✅ Claude Code completed successfully"
+              fi
+            else
+              ERROR_TYPE="unknown_outcome"
+              echo "❓ Unknown outcome: $CLAUDE_OUTCOME"
+              IS_INFRA_ERROR=true
+            fi
           fi
 
           echo "is_infrastructure_error=$IS_INFRA_ERROR" >> $GITHUB_OUTPUT
@@ -432,13 +459,27 @@ jobs:
             **Retry Attempt**: $NEXT_RETRY of $MAX_RETRIES
             **Reason**: Infrastructure/environment error (not code-related)
 
-            Retrying workflow automatically in 30 seconds...
+            Retrying workflow automatically with exponential backoff...
 
             ---
             *🤖 Infrastructure Error Handler*"
 
-            # Wait before retry to avoid race conditions
-            sleep 30
+            # Exponential backoff with jitter to avoid thundering herd
+            # Delays: 60s (retry 1→2), 120s (retry 2→3), 240s (retry 3→4)
+            BASE_DELAY=$((60 * (1 << (CURRENT_RETRY - 1))))
+
+            # Add jitter (±25% randomness)
+            JITTER_RANGE=$((BASE_DELAY / 4))
+            JITTER=$((RANDOM % (JITTER_RANGE * 2 + 1) - JITTER_RANGE))
+            ACTUAL_DELAY=$((BASE_DELAY + JITTER))
+
+            # Ensure minimum 30s delay
+            if [ "$ACTUAL_DELAY" -lt 30 ]; then
+              ACTUAL_DELAY=30
+            fi
+
+            echo "⏱️  Waiting ${ACTUAL_DELAY}s before retry (base: ${BASE_DELAY}s, jitter: ${JITTER}s)"
+            sleep "$ACTUAL_DELAY"
           else
             echo "❌ Max retries exhausted ($MAX_RETRIES)"
             echo "should_retry=false" >> $GITHUB_OUTPUT
