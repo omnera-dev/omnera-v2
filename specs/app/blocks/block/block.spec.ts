@@ -489,7 +489,7 @@ test.describe('Block Template', () => {
   // ONE OPTIMIZED test verifying components work together efficiently
   // ============================================================================
 
-  test.fixme(
+  test(
     'APP-BLOCKS-BLOCK-REGRESSION-001: user can complete full block workflow',
     { tag: '@regression' },
     async ({ page, startServerWithSchema }) => {
