@@ -40,6 +40,7 @@ jobs:
             echo "⚠️  TEST MODE: Simulating high failure rate"
             FAILURES=8
             TOTAL=10
+            RETRY_ISSUES=5
           else
             # Get last 10 workflow runs from claude-tdd.yml
             RECENT_RUNS=$(gh run list \
@@ -53,6 +54,12 @@ jobs:
 
             # Count failures (including cancelled which often means timeout)
             FAILURES=$(echo "$RECENT_RUNS" | jq '[.[] | select(.conclusion == "failure" or .conclusion == "cancelled")] | length')
+
+            # Count specs currently in retry state
+            RETRY_ISSUES=$(gh issue list \
+              --repo ${{ github.repository }} \
+              --search "label:infrastructure-retry:1 OR label:infrastructure-retry:2 OR label:infrastructure-retry:3" \
+              --json number --jq 'length')
           fi
 
           # Calculate failure rate
@@ -63,6 +70,7 @@ jobs:
             FAILURE_RATE=$((FAILURES * 100 / TOTAL))
             echo "📈 Recent runs: $TOTAL"
             echo "❌ Failures: $FAILURES"
+            echo "🔄 Issues in retry: $RETRY_ISSUES"
             echo "📊 Failure rate: ${FAILURE_RATE}%"
           fi
 
@@ -70,11 +78,16 @@ jobs:
           echo "failure_rate=$FAILURE_RATE" >> $GITHUB_OUTPUT
           echo "failures=$FAILURES" >> $GITHUB_OUTPUT
           echo "total=$TOTAL" >> $GITHUB_OUTPUT
+          echo "retry_issues=$RETRY_ISSUES" >> $GITHUB_OUTPUT
 
-          # Determine if circuit should open (>50% failure rate with at least 5 runs)
+          # Determine if circuit should open
+          # Open if: >50% failure rate OR >5 issues in retry state
           if [ "$TOTAL" -ge 5 ] && [ "$FAILURE_RATE" -gt 50 ]; then
             echo "should_open_circuit=true" >> $GITHUB_OUTPUT
             echo "🚨 CIRCUIT BREAKER THRESHOLD EXCEEDED: ${FAILURE_RATE}% failure rate"
+          elif [ "$RETRY_ISSUES" -gt 5 ]; then
+            echo "should_open_circuit=true" >> $GITHUB_OUTPUT
+            echo "🚨 CIRCUIT BREAKER THRESHOLD EXCEEDED: $RETRY_ISSUES issues requiring retries"
           else
             echo "should_open_circuit=false" >> $GITHUB_OUTPUT
             echo "✅ Pipeline health is acceptable"
@@ -119,26 +132,30 @@ jobs:
 
           **Failure Rate**: ${{ steps.analyze.outputs.failure_rate }}%
           **Recent Runs**: ${{ steps.analyze.outputs.failures }}/${{ steps.analyze.outputs.total }} failed
+          **Issues in Retry**: ${{ steps.analyze.outputs.retry_issues }}
           **Timestamp**: $(date -u +"%Y-%m-%d %H:%M:%S UTC")
           **Action Taken**: Queue processor workflow disabled
 
           ### Possible Causes
           - Claude Code API issues or rate limiting
-          - GitHub Actions runner issues
+          - GitHub Actions runner issues (workflow_dispatch failures)
           - Network/CDN problems
           - Recent code changes breaking automation
+          - Systematic retry failures (workflow_dispatch API issues)
 
           ### Investigation Steps
           1. Check recent failed runs: [claude-tdd.yml runs](https://github.com/${{ github.repository }}/actions/workflows/claude-tdd.yml)
-          2. Look for patterns in error types (timeout, installation, API errors)
-          3. Check Claude Code service status
-          4. Review recent changes to workflow files
+          2. Check issues requiring retries: \`gh issue list --search \"label:infrastructure-retry:1 OR label:infrastructure-retry:2 OR label:infrastructure-retry:3\"\`
+          3. Look for patterns in error types (timeout, installation, API errors, workflow_dispatch failures)
+          4. Check Claude Code service status
+          5. Review recent changes to workflow files
 
           ### Recovery
           Once the issue is resolved:
           1. Re-enable the queue processor: \`gh workflow enable tdd-queue-processor.yml\`
           2. Close this issue to indicate resolution
           3. Monitor the next few runs to ensure stability
+          4. Check if retry monitor is recovering stuck retries
 
           ---
           *🤖 Automated Circuit Breaker*"
@@ -197,14 +214,23 @@ jobs:
           echo "============================"
           echo "Failure Rate: ${{ steps.analyze.outputs.failure_rate }}%"
           echo "Recent Runs: ${{ steps.analyze.outputs.failures }}/${{ steps.analyze.outputs.total }} failed"
+          echo "Issues in Retry: ${{ steps.analyze.outputs.retry_issues }}"
           echo "Circuit Status: ${{ steps.circuit_status.outputs.is_open == 'true' && 'OPEN (queue disabled)' || 'CLOSED (queue active)' }}"
-          echo "Threshold: 50% (opens circuit)"
-          echo "Recovery: <50% (closes circuit)"
+          echo "Thresholds:"
+          echo "  - Failure rate: >50% (opens circuit)"
+          echo "  - Retry issues: >5 (opens circuit)"
+          echo "Recovery: <50% failure rate AND ≤5 retry issues (closes circuit)"
 
           # Add warning if approaching threshold
           FAILURE_RATE="${{ steps.analyze.outputs.failure_rate }}"
+          RETRY_ISSUES="${{ steps.analyze.outputs.retry_issues }}"
           if [ "$FAILURE_RATE" -ge 30 ] && [ "$FAILURE_RATE" -lt 50 ]; then
             echo ""
             echo "⚠️  WARNING: Failure rate approaching circuit breaker threshold"
             echo "   Consider investigating recent failures before circuit opens"
+          fi
+          if [ "$RETRY_ISSUES" -ge 3 ] && [ "$RETRY_ISSUES" -le 5 ]; then
+            echo ""
+            echo "⚠️  WARNING: Multiple issues requiring retries ($RETRY_ISSUES)"
+            echo "   This may indicate infrastructure issues with workflow_dispatch"
           fi

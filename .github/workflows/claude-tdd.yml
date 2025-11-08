@@ -266,28 +266,30 @@ jobs:
       always() &&
       needs.validate-context.outputs.has_context == 'true' &&
       (needs.classify-previous-error.result == 'skipped' ||
-       needs.classify-previous-error.outputs.should_retry == 'true') && (
+       needs.classify-previous-error.outputs.should_retry == 'true') &&
+      github.event.sender.login != 'claude[bot]' &&
+      (
         github.event_name == 'workflow_dispatch' ||
-        github.event.comment.author_association == 'OWNER' ||
-        github.event.comment.author_association == 'MEMBER' ||
-        github.event.comment.author_association == 'COLLABORATOR' ||
-        github.event.issue.author_association == 'OWNER' ||
-        github.event.issue.author_association == 'MEMBER' ||
-        github.event.issue.author_association == 'COLLABORATOR' ||
-        github.event.review.author_association == 'OWNER' ||
-        github.event.review.author_association == 'MEMBER' ||
-        github.event.review.author_association == 'COLLABORATOR' ||
-        github.event.sender.login == 'github-actions[bot]' ||
-        github.event.sender.login == 'github-actions' ||
-        github.event.sender.login == 'app/github-actions' ||
-        github.event.issue.user.login == 'github-actions[bot]' ||
-        github.event.issue.user.login == 'github-actions' ||
-        github.event.issue.user.login == 'app/github-actions' ||
-        github.event.comment.user.login == 'github-actions[bot]' ||
-        github.event.comment.user.login == 'github-actions' ||
-        github.event.comment.user.login == 'app/github-actions'
-      ) && (
-        github.event.sender.login != 'claude[bot]'
+        (github.event_name != 'workflow_dispatch' && (
+          github.event.comment.author_association == 'OWNER' ||
+          github.event.comment.author_association == 'MEMBER' ||
+          github.event.comment.author_association == 'COLLABORATOR' ||
+          github.event.issue.author_association == 'OWNER' ||
+          github.event.issue.author_association == 'MEMBER' ||
+          github.event.issue.author_association == 'COLLABORATOR' ||
+          github.event.review.author_association == 'OWNER' ||
+          github.event.review.author_association == 'MEMBER' ||
+          github.event.review.author_association == 'COLLABORATOR' ||
+          github.event.sender.login == 'github-actions[bot]' ||
+          github.event.sender.login == 'github-actions' ||
+          github.event.sender.login == 'app/github-actions' ||
+          github.event.issue.user.login == 'github-actions[bot]' ||
+          github.event.issue.user.login == 'github-actions' ||
+          github.event.issue.user.login == 'app/github-actions' ||
+          github.event.comment.user.login == 'github-actions[bot]' ||
+          github.event.comment.user.login == 'github-actions' ||
+          github.event.comment.user.login == 'app/github-actions'
+        ))
       )
     permissions:
       contents: write
@@ -520,11 +522,49 @@ jobs:
         run: |
           echo "🚀 Triggering retry workflow (attempt $NEXT_RETRY)..."
 
+          # Trigger the workflow
           gh workflow run claude-tdd.yml --repo "$REPO" \
             --field issue_number="$ISSUE_NUMBER" \
             --field retry_attempt="$NEXT_RETRY"
 
-          echo "✅ Retry workflow triggered successfully"
+          # Wait for workflow to start
+          echo "⏳ Verifying retry workflow started..."
+          sleep 15
+
+          # Check if workflow started in the last 20 seconds
+          NOW=$(date +%s)
+          RETRY_STARTED=false
+
+          RECENT_RUNS=$(gh run list \
+            --workflow claude-tdd.yml \
+            --repo "$REPO" \
+            --limit 5 \
+            --json event,createdAt,status)
+
+          # Check for a workflow_dispatch run created in the last 20 seconds
+          echo "$RECENT_RUNS" | jq -r '.[] | select(.event == "workflow_dispatch")' | while read -r run; do
+            if [ -n "$run" ]; then
+              CREATED_AT=$(echo "$run" | jq -r '.createdAt')
+              CREATED_EPOCH=$(date -d "$CREATED_AT" +%s 2>/dev/null || date -j -f "%Y-%m-%dT%H:%M:%SZ" "$CREATED_AT" +%s 2>/dev/null || echo 0)
+              AGE=$((NOW - CREATED_EPOCH))
+
+              if [ "$AGE" -lt 20 ]; then
+                RETRY_STARTED=true
+                echo "✅ Retry workflow started successfully"
+                break
+              fi
+            fi
+          done
+
+          # If workflow didn't start, use issue comment as fallback
+          if [ "$RETRY_STARTED" != "true" ]; then
+            echo "⚠️ Workflow dispatch may have failed, triggering via issue comment as fallback..."
+
+            gh issue comment "$ISSUE_NUMBER" --repo "$REPO" \
+              --body "@claude retry implementation (automated retry $NEXT_RETRY of 3 - workflow dispatch fallback)"
+
+            echo "✅ Fallback retry triggered via issue comment"
+          fi
 
   # Success path: Verify PR was created (same as original workflow)
   verify-success:

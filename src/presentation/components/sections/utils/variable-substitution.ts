@@ -25,10 +25,7 @@ import type { Component } from '@/domain/models/app/page/sections'
  * replaceVariables('box-$variant', { variant: 'primary' })  // 'box-primary'
  * ```
  */
-function replaceVariables(
-  value: string,
-  vars: Record<string, string | number | boolean>
-): string {
+function replaceVariables(value: string, vars: Record<string, string | number | boolean>): string {
   // Use regex with word boundary to avoid partial matches
   // e.g., $icon should not match inside $iconColor
   return Object.entries(vars).reduce<string>((str, [varName, varValue]) => {

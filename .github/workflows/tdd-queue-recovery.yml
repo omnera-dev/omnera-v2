@@ -28,15 +28,25 @@ jobs:
         run: |
           echo "🔍 Looking for specs stuck in-progress > 90 minutes..."
 
-          # Get all in-progress specs
+          # Get all in-progress specs (including labels to detect retries)
           ISSUES=$(gh issue list \
             --repo ${{ github.repository }} \
             --label "tdd-spec:in-progress" \
-            --json number,title,updatedAt \
+            --json number,title,updatedAt,labels \
             --limit 100)
 
           echo "Found in-progress specs:"
           echo "$ISSUES" | jq -r '.[] | "\(.number): \(.title)"'
+
+          # Also check for stuck retries specifically
+          echo ""
+          echo "🔍 Checking for stuck retry attempts..."
+          RETRY_ISSUES=$(echo "$ISSUES" | jq -r '.[] | select(.labels[] | contains("infrastructure-retry:"))')
+
+          if [ -n "$RETRY_ISSUES" ]; then
+            echo "Found specs with retry labels:"
+            echo "$RETRY_ISSUES" | jq -r '.number as $num | .title as $title | .labels[] | select(contains("infrastructure-retry:")) as $label | "\($num): \($title) [\($label)]"'
+          fi
 
           # Current time (epoch seconds)
           NOW=$(date +%s)
@@ -93,32 +103,93 @@ jobs:
             echo ""
             echo "Processing issue #$ISSUE_NUMBER..."
 
-            # Get current labels to preserve retry count
+            # Get current labels to check retry status
             LABELS=$(gh issue view "$ISSUE_NUMBER" --json labels --jq '.labels[].name' || echo "")
-            RETRY_LABEL=$(echo "$LABELS" | grep "retry:" || echo "")
+            RETRY_LABEL=$(echo "$LABELS" | grep "infrastructure-retry:" || echo "")
 
             echo "  Current labels: $LABELS"
             echo "  Retry label: $RETRY_LABEL"
 
-            # Reset to queued state (preserve retry label if exists)
-            gh issue edit "$ISSUE_NUMBER" --remove-label "tdd-spec:in-progress"
-            gh issue edit "$ISSUE_NUMBER" --add-label "tdd-spec:queued"
+            # Special handling for retry attempts
+            if [ -n "$RETRY_LABEL" ]; then
+              RETRY_NUM=$(echo "$RETRY_LABEL" | sed 's/infrastructure-retry://')
+              echo "  ⚠️  This is a stuck retry attempt #$RETRY_NUM"
 
-            # Add timeout recovery comment
-            gh issue comment "$ISSUE_NUMBER" --body "⏱️ **Timeout recovery**
+              # Check if we've hit max retries
+              if [ "$RETRY_NUM" -ge 3 ]; then
+                echo "  ❌ Max retries reached, marking as failed..."
 
-          This spec was stuck in-progress for > $TIMEOUT_MINUTES minutes with no activity.
+                # Remove all retry and progress labels, mark as failed
+                gh issue edit "$ISSUE_NUMBER" \
+                  --remove-label "tdd-spec:in-progress" \
+                  --remove-label "$RETRY_LABEL" \
+                  --add-label "tdd-spec:failed"
 
-          **Automatically re-queued** - the spec will be retried by the queue processor.
+                gh issue comment "$ISSUE_NUMBER" --body "❌ **Retry Exhausted After Timeout**
 
-          If this spec continues to timeout repeatedly:
-          - It may be too complex for automation
-          - Consider adding \`skip-automated\` label
-          - Or manually implement and push to the branch
+                This spec was stuck in retry attempt #$RETRY_NUM for > $TIMEOUT_MINUTES minutes.
 
-          The queue will continue processing other specs."
+                **All retry attempts exhausted** - manual intervention required.
 
-            echo "  ✅ Re-queued spec #$ISSUE_NUMBER"
+                **Next steps:**
+                1. Review the workflow logs for errors
+                2. Check if Claude Code service is operational
+                3. Consider manually implementing the spec
+                4. Or add \`skip-automated\` label to skip this spec
+
+                ---
+                *🤖 Automated Recovery Workflow*"
+              else
+                # Trigger next retry attempt
+                NEXT_RETRY=$((RETRY_NUM + 1))
+                echo "  🔄 Triggering retry attempt $NEXT_RETRY of 3..."
+
+                # Remove old retry label, add new one
+                gh issue edit "$ISSUE_NUMBER" \
+                  --remove-label "$RETRY_LABEL" \
+                  --add-label "infrastructure-retry:$NEXT_RETRY"
+
+                # Keep in-progress for retry monitor to pick up
+                gh issue comment "$ISSUE_NUMBER" --body "🔄 **Stuck Retry Recovery**
+
+                Retry attempt #$RETRY_NUM was stuck for > $TIMEOUT_MINUTES minutes.
+
+                **Triggering retry attempt $NEXT_RETRY of 3**
+
+                The retry monitor will pick this up and attempt to restart the workflow.
+
+                @claude retry implementation (recovery from stuck retry)
+
+                ---
+                *🤖 Automated Recovery Workflow*"
+              fi
+            else
+              # Regular stuck spec (not a retry)
+              echo "  📋 Regular spec stuck without retries"
+
+              # Reset to queued state
+              gh issue edit "$ISSUE_NUMBER" --remove-label "tdd-spec:in-progress"
+              gh issue edit "$ISSUE_NUMBER" --add-label "tdd-spec:queued"
+
+              # Add timeout recovery comment
+              gh issue comment "$ISSUE_NUMBER" --body "⏱️ **Timeout Recovery**
+
+              This spec was stuck in-progress for > $TIMEOUT_MINUTES minutes with no activity.
+
+              **Automatically re-queued** - the spec will be retried by the queue processor.
+
+              If this spec continues to timeout repeatedly:
+              - It may be too complex for automation
+              - Consider adding \`skip-automated\` label
+              - Or manually implement and push to the branch
+
+              The queue will continue processing other specs.
+
+              ---
+              *🤖 Automated Recovery Workflow*"
+            fi
+
+            echo "  ✅ Processed issue #$ISSUE_NUMBER"
           done
 
           echo ""
