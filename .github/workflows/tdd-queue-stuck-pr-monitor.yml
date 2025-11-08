@@ -1,13 +1,16 @@
 name: TDD Queue - PR Monitor & Auto-Retry
 
-# This workflow monitors TDD automation PRs for two issues:
+# This workflow monitors TDD automation PRs for three issues:
 # 1. PRs stuck in open state despite passing checks (missing auto-merge)
 # 2. PRs with failed tests that need automatic retry
+# 3. PRs that succeeded and need retry label cleanup
 #
 # It automatically:
 # - Enables auto-merge for stuck PRs
-# - Triggers @claude retry for test failures (up to 3 times)
+# - Triggers @claude retry for test failures (up to 3 times with exponential backoff)
 # - Tracks retry attempts to prevent infinite loops
+# - Cleans up retry labels on successful PRs
+# - Provides detailed failure diagnostics
 
 on:
   schedule:
@@ -21,6 +24,7 @@ concurrency:
 
 env:
   MAX_CODE_RETRIES: 3  # Max retries for code/test failures
+  MAX_DAILY_RETRIES: 10  # Max retries per day across all PRs
 
 jobs:
   monitor-stuck-prs:
@@ -162,6 +166,62 @@ jobs:
           echo ""
           echo "✅ Stuck PR monitoring complete"
 
+      - name: Clean up retry labels on successful PRs
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          echo "🧹 Cleaning up retry labels from successful PRs..."
+
+          # Get all open tdd-automation PRs with retry labels
+          SUCCESSFUL_PRS=$(gh pr list \
+            --repo sovrium/sovrium \
+            --label tdd-automation \
+            --state open \
+            --json number,labels,statusCheckRollup \
+            --jq '[.[] | select(.labels[]?.name | startswith("code-retry:"))]')
+
+          if [ -z "$SUCCESSFUL_PRS" ] || [ "$SUCCESSFUL_PRS" = "[]" ]; then
+            echo "✅ No PRs with retry labels found"
+          else
+            echo "$SUCCESSFUL_PRS" | jq -c '.[]' | while IFS= read -r PR; do
+              PR_NUMBER=$(echo "$PR" | jq -r '.number')
+
+              # Check if all tests are passing
+              TEST_STATUS=$(echo "$PR" | jq -r '.statusCheckRollup[]? | select(.name == "Test") | .conclusion' || echo "")
+
+              if [ "$TEST_STATUS" = "SUCCESS" ]; then
+                echo "✅ PR #$PR_NUMBER has passing tests, cleaning up retry labels..."
+
+                # Get all retry labels
+                RETRY_LABELS=$(echo "$PR" | jq -r '.labels[]?.name | select(startswith("code-retry:"))' || echo "")
+
+                if [ -n "$RETRY_LABELS" ]; then
+                  for label in $RETRY_LABELS; do
+                    gh pr edit "$PR_NUMBER" \
+                      --repo sovrium/sovrium \
+                      --remove-label "$label" || true
+                    echo "   Removed label: $label"
+                  done
+
+                  # Also clean up from the related issue
+                  HEAD_REF=$(gh pr view "$PR_NUMBER" --repo sovrium/sovrium --json headRefName -q '.headRefName')
+                  ISSUE_NUMBER=$(echo "$HEAD_REF" | grep -oE 'issue-[0-9]+' | cut -d- -f2 || echo "")
+
+                  if [ -n "$ISSUE_NUMBER" ]; then
+                    for label in $RETRY_LABELS; do
+                      gh issue edit "$ISSUE_NUMBER" \
+                        --repo sovrium/sovrium \
+                        --remove-label "$label" || true
+                    done
+                    echo "   Also cleaned labels from issue #$ISSUE_NUMBER"
+                  fi
+                fi
+              fi
+            done
+          fi
+
+          echo "✅ Retry label cleanup complete"
+
       - name: Auto-retry failed tests
         env:
           GH_TOKEN: ${{ github.token }}
@@ -183,6 +243,23 @@ jobs:
 
           RETRY_TRIGGERED_COUNT=0
           FAILED_COUNT=0
+
+          # Check today's retry count across all PRs
+          TODAY=$(date +%Y-%m-%d)
+          DAILY_RETRIES=$(gh issue list \
+            --repo sovrium/sovrium \
+            --label tdd-automation \
+            --state all \
+            --search "created:$TODAY" \
+            --json comments \
+            --jq '[.[] | .comments[] | select(.body | contains("Automated Test Failure Handler") and contains("$TODAY"))] | length' || echo "0")
+
+          echo "📊 Daily retry count: $DAILY_RETRIES / $MAX_DAILY_RETRIES"
+
+          if [ "$DAILY_RETRIES" -ge "$MAX_DAILY_RETRIES" ]; then
+            echo "⚠️  Daily retry limit reached ($MAX_DAILY_RETRIES). Pausing automatic retries until tomorrow."
+            exit 0
+          fi
 
           # Process each PR for test failures
           echo "$OPEN_PRS" | jq -c '.' | while IFS= read -r PR; do
@@ -259,16 +336,24 @@ The spec has been marked as \`tdd-spec:failed\`. The queue processor will contin
               continue
             fi
 
+            # Calculate exponential backoff based on retry count
+            # 1st retry: 5 minutes, 2nd: 15 minutes, 3rd: 45 minutes
+            BACKOFF_MINUTES=$((5 * (3 ** CURRENT_RETRY)))
+            if [ "$BACKOFF_MINUTES" -gt 45 ]; then
+              BACKOFF_MINUTES=45
+            fi
+
             # Check when last updated to avoid retrying too quickly
             NOW=$(date +%s)
             UPDATED_EPOCH=$(date -d "$UPDATED" +%s 2>/dev/null || date -j -f "%Y-%m-%dT%H:%M:%SZ" "$UPDATED" +%s 2>/dev/null || echo "$NOW")
             AGE_MINUTES=$(( (NOW - UPDATED_EPOCH) / 60 ))
 
             echo "   ⏱️  Test failed ${AGE_MINUTES} minutes ago"
+            echo "   ⏰ Required wait time: ${BACKOFF_MINUTES} minutes (exponential backoff)"
 
-            # Skip if failure is very recent (< 5 minutes) to allow CI to complete
-            if [ "$AGE_MINUTES" -lt 5 ]; then
-              echo "   ⏳ Test failure too recent, waiting for CI to settle"
+            # Skip if not enough time has passed based on exponential backoff
+            if [ "$AGE_MINUTES" -lt "$BACKOFF_MINUTES" ]; then
+              echo "   ⏳ Waiting for backoff period (${BACKOFF_MINUTES} minutes)"
               continue
             fi
 
@@ -298,25 +383,59 @@ The spec has been marked as \`tdd-spec:failed\`. The queue processor will contin
               --repo sovrium/sovrium \
               --add-label "code-retry:$NEXT_RETRY" || true
 
-            # Post retry comment on issue (more reliable than PR)
+            # Get more detailed failure information
+            FAILURE_DETAILS=$(gh pr checks "$PR_NUMBER" \
+              --repo sovrium/sovrium \
+              --json name,conclusion,detailsUrl \
+              --jq '[.[] | select(.conclusion == "FAILURE" or .conclusion == "CANCELLED")] | map("\(.name): \(.conclusion)") | join(", ")' || echo "Unable to fetch details")
+
+            # Get test failure summary from workflow run
+            LATEST_RUN=$(gh run list \
+              --repo sovrium/sovrium \
+              --branch "$HEAD_REF" \
+              --workflow "test.yml" \
+              --limit 1 \
+              --json conclusion,url,databaseId \
+              --jq '.[0]' || echo "{}")
+
+            RUN_URL=$(echo "$LATEST_RUN" | jq -r '.url' || echo "")
+            RUN_ID=$(echo "$LATEST_RUN" | jq -r '.databaseId' || echo "")
+
+            # Post retry comment on issue with enhanced diagnostics
             gh issue comment "$ISSUE_NUMBER" \
               --repo sovrium/sovrium \
               --body "🔄 **Automatic Test Retry**
 
 **Reason**: Test workflow failed on PR #$PR_NUMBER
 **Retry Attempt**: $NEXT_RETRY of $MAX_CODE_RETRIES
-**Failed after**: ${AGE_MINUTES} minutes
+**Backoff Period**: Waited ${AGE_MINUTES} minutes (required: ${BACKOFF_MINUTES} minutes)
+**Failed Checks**: $FAILURE_DETAILS
 
 @claude retry implementation - Please fix the failing tests and ensure all checks pass.
 
-**Debugging tips:**
-- Check the test logs in PR #$PR_NUMBER
-- Review recent changes that might have broken tests
-- Ensure all dependencies are properly installed
-- Verify environment-specific configurations
+**📋 Failure Analysis:**
+$(if [ -n "$RUN_URL" ]; then
+  echo "- [View full test logs]($RUN_URL)"
+fi)
+- PR: #$PR_NUMBER
+- Spec ID: Extract from title: $TITLE
+- Previous retry attempts: $CURRENT_RETRY
+
+**🔍 Debugging Checklist:**
+1. Check the [test logs in PR #$PR_NUMBER](https://github.com/sovrium/sovrium/pull/$PR_NUMBER/checks)
+2. Look for specific test failures in the logs
+3. Check if it's a flaky test or genuine implementation issue
+4. Verify all dependencies are installed
+5. Check for race conditions or timing issues
+6. Review recent changes that might have affected this spec
+
+**⚡ Quick Actions:**
+- If tests are passing locally but failing in CI, check environment differences
+- If it's a snapshot mismatch, run \`bun test:e2e:update-snapshots\`
+- If it's a timeout, consider increasing test timeouts or optimizing the code
 
 ---
-*🤖 Automated Test Failure Handler*" || true
+*🤖 Automated Test Failure Handler - Retry $NEXT_RETRY/$MAX_CODE_RETRIES*" || true
 
             echo "   ✅ Retry triggered for issue #$ISSUE_NUMBER"
             RETRY_TRIGGERED_COUNT=$((RETRY_TRIGGERED_COUNT + 1))
@@ -326,4 +445,6 @@ The spec has been marked as \`tdd-spec:failed\`. The queue processor will contin
           echo "📊 Test Failure Summary:"
           echo "   Failed PRs found: $FAILED_COUNT"
           echo "   Retries triggered: $RETRY_TRIGGERED_COUNT"
+          echo "   Daily retry total: $((DAILY_RETRIES + RETRY_TRIGGERED_COUNT)) / $MAX_DAILY_RETRIES"
+          echo "   Retry strategy: Exponential backoff (5 → 15 → 45 minutes)"
           echo "✅ Test failure monitoring complete"
