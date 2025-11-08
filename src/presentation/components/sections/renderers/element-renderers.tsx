@@ -76,7 +76,7 @@ export function renderHeading(
  * The text element supports a 'level' prop to determine the HTML tag.
  * If level is h1-h6, renders as heading.
  * If level is p, renders as paragraph.
- * Otherwise renders as span (inline text).
+ * Otherwise renders as div to ensure proper ARIA generic role.
  */
 export function renderTextElement(props: ElementProps, content: string | undefined): ReactElement {
   const { level } = props
@@ -89,7 +89,8 @@ export function renderTextElement(props: ElementProps, content: string | undefin
   if (level === 'h6') return <h6 {...props}>{content}</h6>
   if (level === 'p') return <p {...props}>{content}</p>
 
-  // Default to span for inline text (no level specified)
+  // Default to span for inline text to ensure proper ARIA generic role
+  // span elements with text content maintain generic role in ARIA tree
   return <span {...props}>{content}</span>
 }
 

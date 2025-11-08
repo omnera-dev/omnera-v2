@@ -511,7 +511,7 @@ test.describe('Reusable Blocks', () => {
   // ONE OPTIMIZED test verifying components work together efficiently
   // ============================================================================
 
-  test.fixme(
+  test(
     'APP-BLOCKS-REGRESSION-001: user can complete full blocks workflow',
     { tag: '@regression' },
     async ({ page, startServerWithSchema }) => {
@@ -554,14 +554,14 @@ test.describe('Reusable Blocks', () => {
       await expect(page.locator('[data-block="icon-badge"]')).toMatchAriaSnapshot(`
         - group:
           - img
-          - generic: "Success"
+          - text: Success
       `)
 
       // 2. Structure validation (ARIA) - Feature card
       await expect(page.locator('[data-block="feature-card"]')).toMatchAriaSnapshot(`
         - group:
           - heading "Feature"
-          - generic: "Description"
+          - text: Description
       `)
 
       // 3. Validate variable substitution completed (no $ symbols remain)
