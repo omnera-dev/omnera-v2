@@ -1,12 +1,13 @@
-name: TDD Queue - Stuck PR Monitor
+name: TDD Queue - PR Monitor & Auto-Retry
 
-# This workflow monitors for PRs that are stuck in an open state despite:
-# 1. Having all CI checks passing
-# 2. Being mergeable
-# 3. Not having auto-merge enabled
+# This workflow monitors TDD automation PRs for two issues:
+# 1. PRs stuck in open state despite passing checks (missing auto-merge)
+# 2. PRs with failed tests that need automatic retry
 #
-# This is a safeguard to catch cases where Claude Code creates a PR but
-# fails to enable auto-merge, which would block the entire TDD automation pipeline.
+# It automatically:
+# - Enables auto-merge for stuck PRs
+# - Triggers @claude retry for test failures (up to 3 times)
+# - Tracks retry attempts to prevent infinite loops
 
 on:
   schedule:
@@ -18,9 +19,12 @@ concurrency:
   group: tdd-stuck-pr-monitor
   cancel-in-progress: false
 
+env:
+  MAX_CODE_RETRIES: 3  # Max retries for code/test failures
+
 jobs:
   monitor-stuck-prs:
-    name: Monitor and Fix Stuck PRs
+    name: Monitor and Fix PRs
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -157,3 +161,169 @@ jobs:
 
           echo ""
           echo "✅ Stuck PR monitoring complete"
+
+      - name: Auto-retry failed tests
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          echo "🔄 Checking for PRs with failed tests..."
+
+          # Get all open tdd-automation PRs with their status
+          OPEN_PRS=$(gh pr list \
+            --repo sovrium/sovrium \
+            --label tdd-automation \
+            --state open \
+            --json number,labels,statusCheckRollup,headRefName,updatedAt,title \
+            --jq '.[]')
+
+          if [ -z "$OPEN_PRS" ]; then
+            echo "✅ No open tdd-automation PRs found"
+            exit 0
+          fi
+
+          RETRY_TRIGGERED_COUNT=0
+          FAILED_COUNT=0
+
+          # Process each PR for test failures
+          echo "$OPEN_PRS" | jq -c '.' | while IFS= read -r PR; do
+            PR_NUMBER=$(echo "$PR" | jq -r '.number')
+            TITLE=$(echo "$PR" | jq -r '.title')
+            HEAD_REF=$(echo "$PR" | jq -r '.headRefName')
+            UPDATED=$(echo "$PR" | jq -r '.updatedAt')
+
+            # Check if Test workflow failed
+            TEST_STATUS=$(echo "$PR" | jq -r '.statusCheckRollup[]? | select(.name == "Test") | .conclusion' || echo "")
+
+            if [ "$TEST_STATUS" != "FAILURE" ]; then
+              # Not a test failure, skip
+              continue
+            fi
+
+            echo ""
+            echo "❌ PR #$PR_NUMBER has failed tests: $TITLE"
+            FAILED_COUNT=$((FAILED_COUNT + 1))
+
+            # Extract issue number from branch name
+            ISSUE_NUMBER=$(echo "$HEAD_REF" | grep -oE 'issue-[0-9]+' | cut -d- -f2 || echo "")
+
+            if [ -z "$ISSUE_NUMBER" ]; then
+              echo "   ⚠️  Could not extract issue number from branch: $HEAD_REF"
+              continue
+            fi
+
+            echo "   📝 Related issue: #$ISSUE_NUMBER"
+
+            # Check for existing code retry labels
+            CURRENT_RETRY=0
+            CODE_RETRY_LABELS=$(echo "$PR" | jq -r '.labels[]?.name | select(startswith("code-retry:"))' || echo "")
+
+            if [ -n "$CODE_RETRY_LABELS" ]; then
+              # Extract highest retry number
+              for label in $CODE_RETRY_LABELS; do
+                NUM=$(echo "$label" | cut -d: -f2)
+                if [ "$NUM" -gt "$CURRENT_RETRY" ]; then
+                  CURRENT_RETRY=$NUM
+                fi
+              done
+            fi
+
+            echo "   📊 Current code retry count: $CURRENT_RETRY"
+
+            # Check if max retries reached
+            if [ "$CURRENT_RETRY" -ge "$MAX_CODE_RETRIES" ]; then
+              echo "   ❌ Max retries reached ($MAX_CODE_RETRIES), marking as failed"
+
+              # Mark issue as failed
+              gh issue edit "$ISSUE_NUMBER" \
+                --repo sovrium/sovrium \
+                --remove-label "tdd-spec:in-progress" \
+                --add-label "tdd-spec:failed" \
+                --add-label "max-retries-exhausted" || true
+
+              # Add comment explaining failure
+              gh issue comment "$ISSUE_NUMBER" \
+                --repo sovrium/sovrium \
+                --body "❌ **Automatic Retries Exhausted**
+
+Test failures persisted after $MAX_CODE_RETRIES automatic retry attempts.
+
+**PR**: #$PR_NUMBER
+**Final Status**: Tests continue to fail
+**Action Required**: Manual intervention needed
+
+The spec has been marked as \`tdd-spec:failed\`. The queue processor will continue with the next spec.
+
+---
+*🤖 Automated Test Failure Handler*" || true
+
+              continue
+            fi
+
+            # Check when last updated to avoid retrying too quickly
+            NOW=$(date +%s)
+            UPDATED_EPOCH=$(date -d "$UPDATED" +%s 2>/dev/null || date -j -f "%Y-%m-%dT%H:%M:%SZ" "$UPDATED" +%s 2>/dev/null || echo "$NOW")
+            AGE_MINUTES=$(( (NOW - UPDATED_EPOCH) / 60 ))
+
+            echo "   ⏱️  Test failed ${AGE_MINUTES} minutes ago"
+
+            # Skip if failure is very recent (< 5 minutes) to allow CI to complete
+            if [ "$AGE_MINUTES" -lt 5 ]; then
+              echo "   ⏳ Test failure too recent, waiting for CI to settle"
+              continue
+            fi
+
+            # Check for recent retry comments (within last 30 minutes)
+            RECENT_RETRY=$(gh issue view "$ISSUE_NUMBER" \
+              --repo sovrium/sovrium \
+              --comments \
+              --json comments \
+              --jq '[.comments[] | select(.createdAt > (now - 1800 | todate) and .body | contains("@claude retry"))] | length' || echo "0")
+
+            if [ "$RECENT_RETRY" -gt 0 ]; then
+              echo "   ⏳ Recent retry already in progress (within last 30 minutes), skipping"
+              continue
+            fi
+
+            # Trigger retry
+            NEXT_RETRY=$((CURRENT_RETRY + 1))
+            echo "   🔄 Triggering automatic retry (attempt $NEXT_RETRY of $MAX_CODE_RETRIES)..."
+
+            # Add retry label to PR
+            gh pr edit "$PR_NUMBER" \
+              --repo sovrium/sovrium \
+              --add-label "code-retry:$NEXT_RETRY" || true
+
+            # Add retry label to issue
+            gh issue edit "$ISSUE_NUMBER" \
+              --repo sovrium/sovrium \
+              --add-label "code-retry:$NEXT_RETRY" || true
+
+            # Post retry comment on issue (more reliable than PR)
+            gh issue comment "$ISSUE_NUMBER" \
+              --repo sovrium/sovrium \
+              --body "🔄 **Automatic Test Retry**
+
+**Reason**: Test workflow failed on PR #$PR_NUMBER
+**Retry Attempt**: $NEXT_RETRY of $MAX_CODE_RETRIES
+**Failed after**: ${AGE_MINUTES} minutes
+
+@claude retry implementation - Please fix the failing tests and ensure all checks pass.
+
+**Debugging tips:**
+- Check the test logs in PR #$PR_NUMBER
+- Review recent changes that might have broken tests
+- Ensure all dependencies are properly installed
+- Verify environment-specific configurations
+
+---
+*🤖 Automated Test Failure Handler*" || true
+
+            echo "   ✅ Retry triggered for issue #$ISSUE_NUMBER"
+            RETRY_TRIGGERED_COUNT=$((RETRY_TRIGGERED_COUNT + 1))
+          done
+
+          echo ""
+          echo "📊 Test Failure Summary:"
+          echo "   Failed PRs found: $FAILED_COUNT"
+          echo "   Retries triggered: $RETRY_TRIGGERED_COUNT"
+          echo "✅ Test failure monitoring complete"
