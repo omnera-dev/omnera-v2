@@ -1201,6 +1201,13 @@ export function DynamicPage({
             reactKey: `inline-body-end-${index}`,
           })
         )}
+        {/* Client-side banner dismiss functionality - inject when banner is dismissible */}
+        {page.layout?.banner?.dismissible && (
+          <script
+            src="/assets/banner-dismiss.js"
+            defer={true}
+          />
+        )}
         {/* Client-side scroll animation functionality - inject when scroll animations configured */}
         {theme?.animations?.scaleUp && (
           <script
