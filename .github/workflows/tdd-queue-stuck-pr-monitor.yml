@@ -318,9 +318,7 @@ jobs:
                 --add-label "max-retries-exhausted" || true
 
               # Add comment explaining failure
-              gh issue comment "$ISSUE_NUMBER" \
-                --repo sovrium/sovrium \
-                --body "$(cat <<EOF
+              cat > /tmp/comment_body.md <<EOF
 ❌ **Automatic Retries Exhausted**
 
 Test failures persisted after $MAX_CODE_RETRIES automatic retry attempts.
@@ -334,7 +332,10 @@ The spec has been marked as \`tdd-spec:failed\`. The queue processor will contin
 ---
 *🤖 Automated Test Failure Handler*
 EOF
-              )" || true
+
+              gh issue comment "$ISSUE_NUMBER" \
+                --repo sovrium/sovrium \
+                --body-file /tmp/comment_body.md || true
 
               continue
             fi
@@ -409,9 +410,14 @@ EOF
             RUN_ID=$(echo "$LATEST_RUN" | jq -r '.databaseId' || echo "")
 
             # Post retry comment on issue with enhanced diagnostics
-            gh issue comment "$ISSUE_NUMBER" \
-              --repo sovrium/sovrium \
-              --body "$(cat <<EOF
+            # Create the comment body with proper variable expansion
+            if [ -n "$RUN_URL" ]; then
+              FAILURE_LOG_LINK="- [View full test logs]($RUN_URL)"
+            else
+              FAILURE_LOG_LINK=""
+            fi
+
+            cat > /tmp/retry_comment.md <<EOF
 🔄 **Automatic Test Retry**
 
 **Reason**: Test workflow failed on PR #$PR_NUMBER
@@ -422,9 +428,7 @@ EOF
 @claude retry implementation - Please fix the failing tests and ensure all checks pass.
 
 **📋 Failure Analysis:**
-$(if [ -n "$RUN_URL" ]; then
-  echo "- [View full test logs]($RUN_URL)"
-fi)
+$FAILURE_LOG_LINK
 - PR: #$PR_NUMBER
 - Spec ID: Extract from title: $TITLE
 - Previous retry attempts: $CURRENT_RETRY
@@ -445,7 +449,10 @@ fi)
 ---
 *🤖 Automated Test Failure Handler - Retry $NEXT_RETRY/$MAX_CODE_RETRIES*
 EOF
-            )" || true
+
+            gh issue comment "$ISSUE_NUMBER" \
+              --repo sovrium/sovrium \
+              --body-file /tmp/retry_comment.md || true
 
             echo "   ✅ Retry triggered for issue #$ISSUE_NUMBER"
             RETRY_TRIGGERED_COUNT=$((RETRY_TRIGGERED_COUNT + 1))
