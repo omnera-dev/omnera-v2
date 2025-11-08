@@ -318,20 +318,19 @@ jobs:
                 --add-label "max-retries-exhausted" || true
 
               # Add comment explaining failure
-              cat > /tmp/comment_body.md <<EOF
-❌ **Automatic Retries Exhausted**
-
-Test failures persisted after $MAX_CODE_RETRIES automatic retry attempts.
-
-**PR**: #$PR_NUMBER
-**Final Status**: Tests continue to fail
-**Action Required**: Manual intervention needed
-
-The spec has been marked as \`tdd-spec:failed\`. The queue processor will continue with the next spec.
-
----
-*🤖 Automated Test Failure Handler*
-EOF
+              printf '%s\n' \
+                "❌ **Automatic Retries Exhausted**" \
+                "" \
+                "Test failures persisted after $MAX_CODE_RETRIES automatic retry attempts." \
+                "" \
+                "**PR**: #$PR_NUMBER" \
+                "**Final Status**: Tests continue to fail" \
+                "**Action Required**: Manual intervention needed" \
+                "" \
+                "The spec has been marked as \`tdd-spec:failed\`. The queue processor will continue with the next spec." \
+                "" \
+                "---" \
+                "*🤖 Automated Test Failure Handler*" > /tmp/comment_body.md
 
               gh issue comment "$ISSUE_NUMBER" \
                 --repo sovrium/sovrium \
@@ -417,38 +416,37 @@ EOF
               FAILURE_LOG_LINK=""
             fi
 
-            cat > /tmp/retry_comment.md <<EOF
-🔄 **Automatic Test Retry**
-
-**Reason**: Test workflow failed on PR #$PR_NUMBER
-**Retry Attempt**: $NEXT_RETRY of $MAX_CODE_RETRIES
-**Backoff Period**: Waited ${AGE_MINUTES} minutes (required: ${BACKOFF_MINUTES} minutes)
-**Failed Checks**: $FAILURE_DETAILS
-
-@claude retry implementation - Please fix the failing tests and ensure all checks pass.
-
-**📋 Failure Analysis:**
-$FAILURE_LOG_LINK
-- PR: #$PR_NUMBER
-- Spec ID: Extract from title: $TITLE
-- Previous retry attempts: $CURRENT_RETRY
-
-**🔍 Debugging Checklist:**
-1. Check the [test logs in PR #$PR_NUMBER](https://github.com/sovrium/sovrium/pull/$PR_NUMBER/checks)
-2. Look for specific test failures in the logs
-3. Check if it's a flaky test or genuine implementation issue
-4. Verify all dependencies are installed
-5. Check for race conditions or timing issues
-6. Review recent changes that might have affected this spec
-
-**⚡ Quick Actions:**
-- If tests are passing locally but failing in CI, check environment differences
-- If it's a snapshot mismatch, run \`bun test:e2e:update-snapshots\`
-- If it's a timeout, consider increasing test timeouts or optimizing the code
-
----
-*🤖 Automated Test Failure Handler - Retry $NEXT_RETRY/$MAX_CODE_RETRIES*
-EOF
+            printf '%s\n' \
+              "🔄 **Automatic Test Retry**" \
+              "" \
+              "**Reason**: Test workflow failed on PR #$PR_NUMBER" \
+              "**Retry Attempt**: $NEXT_RETRY of $MAX_CODE_RETRIES" \
+              "**Backoff Period**: Waited ${AGE_MINUTES} minutes (required: ${BACKOFF_MINUTES} minutes)" \
+              "**Failed Checks**: $FAILURE_DETAILS" \
+              "" \
+              "@claude retry implementation - Please fix the failing tests and ensure all checks pass." \
+              "" \
+              "**📋 Failure Analysis:**" \
+              "$FAILURE_LOG_LINK" \
+              "- PR: #$PR_NUMBER" \
+              "- Spec ID: Extract from title: $TITLE" \
+              "- Previous retry attempts: $CURRENT_RETRY" \
+              "" \
+              "**🔍 Debugging Checklist:**" \
+              "1. Check the [test logs in PR #$PR_NUMBER](https://github.com/sovrium/sovrium/pull/$PR_NUMBER/checks)" \
+              "2. Look for specific test failures in the logs" \
+              "3. Check if it's a flaky test or genuine implementation issue" \
+              "4. Verify all dependencies are installed" \
+              "5. Check for race conditions or timing issues" \
+              "6. Review recent changes that might have affected this spec" \
+              "" \
+              "**⚡ Quick Actions:**" \
+              "- If tests are passing locally but failing in CI, check environment differences" \
+              "- If it's a snapshot mismatch, run \`bun test:e2e:update-snapshots\`" \
+              "- If it's a timeout, consider increasing test timeouts or optimizing the code" \
+              "" \
+              "---" \
+              "*🤖 Automated Test Failure Handler - Retry $NEXT_RETRY/$MAX_CODE_RETRIES*" > /tmp/retry_comment.md
 
             gh issue comment "$ISSUE_NUMBER" \
               --repo sovrium/sovrium \
