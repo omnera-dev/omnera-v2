@@ -148,6 +148,39 @@ export default defineConfig([
         },
       ],
 
+      // Code Size and Complexity Limits - Prevent overly large files and functions
+      // These rules help maintain manageable, testable code
+      'max-lines': [
+        'warn',
+        {
+          max: 400, // Warn at 400 lines (ideal target)
+          skipBlankLines: true,
+          skipComments: true,
+        },
+      ],
+
+      'max-lines-per-function': [
+        'warn',
+        {
+          max: 50, // Warn at 50 lines per function
+          skipBlankLines: true,
+          skipComments: true,
+          IIFEs: true, // Skip immediately invoked function expressions
+        },
+      ],
+
+      // Cognitive complexity - prevents overly complex functions
+      complexity: ['warn', { max: 10 }], // Cyclomatic complexity limit
+
+      // Prevent deeply nested code
+      'max-depth': ['warn', { max: 4 }], // Max nesting depth
+
+      // Limit function parameters (encourages using objects for many params)
+      'max-params': ['warn', { max: 4 }],
+
+      // Prevent too many statements in a single function
+      'max-statements': ['warn', { max: 20 }, { ignoreTopLevelFunctions: false }],
+
       // Code Naming Conventions - Enforce consistent naming patterns
       '@typescript-eslint/naming-convention': [
         'error',
@@ -1303,6 +1336,11 @@ export default defineConfig([
       'functional/prefer-immutable-types': 'off', // Allow mutable types in tests
       'functional/no-throw-statements': 'off', // Allow throwing in tests
       'unicorn/no-null': 'off', // Allow null in tests for edge cases
+      // Size limits relaxed for test files (comprehensive test suites can be longer)
+      'max-lines': ['warn', { max: 800, skipBlankLines: true, skipComments: true }],
+      'max-lines-per-function': ['warn', { max: 100, skipBlankLines: true, skipComments: true }],
+      'max-statements': 'off', // Test setup can have many statements
+      complexity: 'off', // Test scenarios can be complex
     },
   },
 
@@ -1346,6 +1384,45 @@ export default defineConfig([
     },
   },
 
+  // Configuration files and Schema definitions - Can be longer
+  {
+    files: [
+      '**/*.config.{ts,js,mjs,cjs}',
+      '**/schemas/**/*.ts',
+      'src/domain/models/**/*.ts', // Schema definitions can be comprehensive
+      '**/types/**/*.ts', // Type definition files
+    ],
+    rules: {
+      'max-lines': ['warn', { max: 800, skipBlankLines: true, skipComments: true }],
+      'max-lines-per-function': 'off', // Schema/config objects can be large
+      'max-statements': 'off', // Config setup can have many statements
+    },
+  },
+
+  // Strict limits for React components - Should be modular
+  {
+    files: ['src/presentation/components/**/*.tsx'],
+    ignores: ['src/presentation/components/**/*.test.tsx'],
+    rules: {
+      'max-lines': [
+        'error',
+        {
+          max: 300, // Stricter limit for React components
+          skipBlankLines: true,
+          skipComments: true,
+        },
+      ],
+      'max-lines-per-function': [
+        'warn',
+        {
+          max: 40, // Components should be small and focused
+          skipBlankLines: true,
+          skipComments: true,
+        },
+      ],
+    },
+  },
+
   // Scripts - Allow mutations for build-time utilities
   {
     files: ['scripts/**/*.{js,mjs,cjs,ts}', 'example.ts'],
@@ -1360,6 +1437,11 @@ export default defineConfig([
       'functional/no-loop-statements': 'off', // Allow loops in scripts
       'functional/no-throw-statements': 'off', // Allow throwing in scripts
       'unicorn/no-null': 'off', // Allow null in scripts
+      // Scripts can be longer for complex build processes
+      'max-lines': ['warn', { max: 600, skipBlankLines: true, skipComments: true }],
+      'max-lines-per-function': 'off',
+      'max-statements': 'off',
+      complexity: 'off',
     },
   },
 

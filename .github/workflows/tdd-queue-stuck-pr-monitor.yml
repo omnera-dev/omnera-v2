@@ -23,8 +23,8 @@ concurrency:
   cancel-in-progress: false
 
 env:
-  MAX_CODE_RETRIES: 3  # Max retries for code/test failures
-  MAX_DAILY_RETRIES: 10  # Max retries per day across all PRs
+  MAX_CODE_RETRIES: 3 # Max retries for code/test failures
+  MAX_DAILY_RETRIES: 10 # Max retries per day across all PRs
 
 jobs:
   monitor-stuck-prs:

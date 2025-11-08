@@ -46,11 +46,7 @@ export function renderHTMLElement(
   const elementProps =
     type === 'section'
       ? { ...props, role: 'region' }
-      : type === 'div' &&
-          Array.isArray(children) &&
-          children.length > 0 &&
-          !content &&
-          !props.role
+      : type === 'div' && Array.isArray(children) && children.length > 0 && !content && !props.role
         ? // Only add role="group" if not already set (avoid conflicts with component-renderer)
           // Check Array.isArray to avoid runtime errors if children is somehow not an array
           { ...props, role: 'group' }
