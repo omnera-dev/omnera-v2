@@ -33,22 +33,29 @@ export function Banner({
   const content = message || text
 
   // Build inline styles (gradient takes precedence over backgroundColor)
-  const bannerStyle: React.CSSProperties = {}
-  if (gradient) {
-    bannerStyle.background = gradient
-  } else if (backgroundColor) {
-    bannerStyle.backgroundColor = backgroundColor
-  }
-  if (textColor) {
-    bannerStyle.color = textColor
-  }
+  // Use immutable pattern: construct object directly instead of mutating
+  const bannerStyle: React.CSSProperties | undefined = (() => {
+    const hasGradient = gradient !== undefined
+    const hasBackgroundColor = backgroundColor !== undefined
+    const hasTextColor = textColor !== undefined
+
+    if (!hasGradient && !hasBackgroundColor && !hasTextColor) {
+      return undefined
+    }
+
+    return {
+      ...(hasGradient ? { background: gradient } : {}),
+      ...(hasBackgroundColor && !hasGradient ? { backgroundColor } : {}),
+      ...(hasTextColor ? { color: textColor } : {}),
+    }
+  })()
 
   return (
     <div
       role="banner"
       data-testid="banner"
       className="py-3"
-      style={Object.keys(bannerStyle).length > 0 ? bannerStyle : undefined}
+      style={bannerStyle}
     >
       <div className="container flex items-center justify-center gap-4">
         <p
