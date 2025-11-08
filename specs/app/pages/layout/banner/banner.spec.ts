@@ -181,7 +181,7 @@ test.describe('Banner Configuration', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-BANNER-006: should apply text color for contrast',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -190,9 +190,9 @@ test.describe('Banner Configuration', () => {
         name: 'test-app',
         pages: [
           {
-            name: 'Test',
+            name: 'test',
             path: '/',
-            meta: { lang: 'en-US', title: 'Test' },
+            meta: { lang: 'en-US', title: 'Test', description: 'Test page' },
             layout: {
               banner: {
                 enabled: true,
