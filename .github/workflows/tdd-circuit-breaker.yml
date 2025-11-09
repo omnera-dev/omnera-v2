@@ -16,7 +16,7 @@ on:
 
 # Security: Define minimal required permissions
 permissions:
-  actions: read # To check workflow runs
+  actions: write # To check workflow runs AND disable/enable workflows
   issues: write # To create incident issues
   contents: read # To read repository
 
@@ -56,10 +56,11 @@ jobs:
             FAILURES=$(echo "$RECENT_RUNS" | jq '[.[] | select(.conclusion == "failure" or .conclusion == "cancelled")] | length')
 
             # Count specs currently in retry state
-            RETRY_ISSUES=$(gh issue list \
-              --repo ${{ github.repository }} \
-              --search "label:infrastructure-retry:1 OR label:infrastructure-retry:2 OR label:infrastructure-retry:3" \
-              --json number --jq 'length')
+            # Query each label separately since --search OR syntax is unreliable
+            RETRY_1=$(gh issue list --repo ${{ github.repository }} --label "infrastructure-retry:1" --json number --jq 'length')
+            RETRY_2=$(gh issue list --repo ${{ github.repository }} --label "infrastructure-retry:2" --json number --jq 'length')
+            RETRY_3=$(gh issue list --repo ${{ github.repository }} --label "infrastructure-retry:3" --json number --jq 'length')
+            RETRY_ISSUES=$((RETRY_1 + RETRY_2 + RETRY_3))
           fi
 
           # Calculate failure rate
@@ -145,7 +146,7 @@ jobs:
 
           ### Investigation Steps
           1. Check recent failed runs: [claude-tdd.yml runs](https://github.com/${{ github.repository }}/actions/workflows/claude-tdd.yml)
-          2. Check issues requiring retries: \`gh issue list --search \"label:infrastructure-retry:1 OR label:infrastructure-retry:2 OR label:infrastructure-retry:3\"\`
+          2. Check issues requiring retries: \`gh issue list --label \"infrastructure-retry:1\"\` (and retry:2, retry:3)
           3. Look for patterns in error types (timeout, installation, API errors, workflow_dispatch failures)
           4. Check Claude Code service status
           5. Review recent changes to workflow files
