@@ -57,6 +57,7 @@ export function ComponentRenderer({
   theme,
   languages,
   currentLang,
+  childIndex,
 }: {
   readonly component: Component | SimpleBlockReference | BlockReference
   readonly blockName?: string
@@ -65,6 +66,7 @@ export function ComponentRenderer({
   readonly theme?: Theme
   readonly languages?: Languages
   readonly currentLang?: string
+  readonly childIndex?: number
 }): Readonly<ReactElement | null> {
   // Handle block references - supports both { block: 'name' } and { $ref: 'name' } syntaxes
   if ('block' in component || '$ref' in component) {
@@ -132,6 +134,7 @@ export function ComponentRenderer({
         theme={theme}
         languages={languages}
         currentLang={currentLang}
+        childIndex={index}
       />
     )
   })
@@ -299,8 +302,10 @@ export function ComponentRenderer({
     ? blockInstanceIndex !== undefined
       ? `block-${blockName}-${blockInstanceIndex}`
       : `block-${blockName}`
-    : substitutedProps?.['data-testid'] ||
-      (type === 'container' ? 'container' : type === 'flex' ? 'flex' : undefined)
+    : childIndex !== undefined
+      ? `child-${childIndex}`
+      : substitutedProps?.['data-testid'] ||
+        (type === 'container' ? 'container' : type === 'flex' ? 'flex' : undefined)
   const elementProps = {
     ...substitutedProps,
     className: finalClassName,
@@ -323,7 +328,7 @@ export function ComponentRenderer({
     ...(hasScrollAnimation && {
       'data-scroll-animation': 'scale-up',
     }),
-    ...(blockName &&
+    ...((blockName || childIndex !== undefined) &&
       !hasContent && {
         style: {
           ...styleWithShadow,

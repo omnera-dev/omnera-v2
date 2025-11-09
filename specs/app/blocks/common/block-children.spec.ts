@@ -24,7 +24,7 @@ test.describe('Block Children', () => {
   // One test per spec in schema - defines EXHAUSTIVE acceptance criteria
   // ============================================================================
 
-  test.fixme(
+  test(
     'APP-BLOCKS-CHILDREN-001: should render nested component structure in DOM',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
