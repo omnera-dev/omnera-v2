@@ -54,6 +54,7 @@ export function Navigation({
         <Button
           asChild
           variant={cta.variant}
+          size={cta.size}
           data-testid="nav-cta"
         >
           <a href={cta.href}>{cta.text}</a>
