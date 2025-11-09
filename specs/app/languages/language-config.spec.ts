@@ -59,7 +59,7 @@ test.describe('Language Configuration', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-LANGUAGES-CONFIG-002: should support right-to-left text rendering',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -80,7 +80,7 @@ test.describe('Language Configuration', () => {
           {
             name: 'home',
             path: '/',
-            meta: { lang: 'en-US', title: 'Test', description: 'Test page' },
+            meta: { lang: 'ar-SA', title: 'Test', description: 'Test page' },
             sections: [],
           },
         ],

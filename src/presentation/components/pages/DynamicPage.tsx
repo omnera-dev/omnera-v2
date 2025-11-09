@@ -918,6 +918,14 @@ export function DynamicPage({
   const langConfig = languages?.supported.find((l) => l.code === lang)
   const direction = langConfig?.direction || 'ltr'
 
+  // Generate CSS for body direction to ensure RTL/LTR is applied as CSS property
+  // The CSS must be more specific than Tailwind's base styles
+  // Using [lang] attribute selector for higher specificity
+  const directionStyles = `
+    html[lang="${lang}"] { direction: ${direction}; }
+    html[lang="${lang}"] body { direction: ${direction}; }
+  `
+
   // Check if page has a language-switcher section already
   const hasLanguageSwitcher = page.sections.some((section) => {
     if ('type' in section && section.type === 'language-switcher') {
@@ -1035,6 +1043,7 @@ export function DynamicPage({
           href="/assets/output.css"
         />
         {themeStyles && <style dangerouslySetInnerHTML={{ __html: themeStyles }} />}
+        <style dangerouslySetInnerHTML={{ __html: directionStyles }} />
         {headScripts.map((script, index) =>
           renderScriptTag({
             src: script.src,
