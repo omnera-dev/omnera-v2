@@ -324,7 +324,7 @@ test.describe('Breadcrumb Schema', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-BREADCRUMB-008: should help search engines understand site architecture',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -364,7 +364,7 @@ test.describe('Breadcrumb Schema', () => {
       await page.goto('/')
 
       // THEN: it should help search engines understand site architecture
-      await expect(page.locator('script[type="application/ld+json"]')).toBeVisible()
+      await expect(page.locator('script[type="application/ld+json"]')).toBeAttached()
     }
   )
 
