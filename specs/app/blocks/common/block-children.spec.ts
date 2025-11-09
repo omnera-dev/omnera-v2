@@ -54,7 +54,7 @@ test.describe('Block Children', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-BLOCKS-CHILDREN-002: should render child element based on type',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
