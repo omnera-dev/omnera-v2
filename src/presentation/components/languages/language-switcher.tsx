@@ -58,12 +58,6 @@ export function LanguageSwitcher({
         type="button"
       >
         <span
-          data-testid="language-code"
-          className="hidden"
-        >
-          {languages.default}
-        </span>
-        <span
           data-testid="language-flag"
           className={shouldShowFlag(defaultLanguage?.flag) ? '' : 'hidden'}
         >
@@ -76,6 +70,14 @@ export function LanguageSwitcher({
           {defaultLanguage?.label || languages.default}
         </span>
       </button>
+
+      {/* Language code display - for test assertions */}
+      <span
+        data-testid="language-code"
+        className="hidden"
+      >
+        {languages.default}
+      </span>
 
       {/* Available languages count (for test assertions) */}
       {languages.supported.map((lang) => (
