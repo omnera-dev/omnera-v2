@@ -339,7 +339,7 @@ test.describe('Block Children', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-BLOCKS-CHILDREN-009: should render all children with substituted values throughout tree',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -395,7 +395,7 @@ test.describe('Block Children', () => {
           - img
           - group:
             - heading "Success!" [level=4]
-            - generic: "Operation completed"
+            - text: Operation completed
       `)
     }
   )
