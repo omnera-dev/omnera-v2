@@ -6,6 +6,7 @@
  */
 
 import { type ReactElement } from 'react'
+import { LanguageSwitcher } from '@/presentation/components/languages/language-switcher'
 import { Banner } from '@/presentation/components/layout/banner'
 import { Footer } from '@/presentation/components/layout/footer'
 import { Navigation } from '@/presentation/components/layout/navigation'
@@ -917,6 +918,20 @@ export function DynamicPage({
   const langConfig = languages?.supported.find((l) => l.code === lang)
   const direction = langConfig?.direction || 'ltr'
 
+  // Check if page has a language-switcher section already
+  const hasLanguageSwitcher = page.sections.some((section) => {
+    if ('type' in section && section.type === 'language-switcher') {
+      return true
+    }
+    // Check if it's a block reference to language-switcher
+    if ('block' in section || '$ref' in section) {
+      const blockName = 'block' in section ? section.block : section.$ref
+      const block = blocks?.find((b) => b.name === blockName)
+      return block?.type === 'language-switcher'
+    }
+    return false
+  })
+
   // Generate inline style for body element to apply theme fonts
   // Using inline style attribute has highest specificity and overrides Tailwind base styles
   const bodyStyle:
@@ -1061,6 +1076,7 @@ export function DynamicPage({
         {page.layout?.banner && <Banner {...page.layout.banner} />}
         {page.layout?.navigation && <Navigation {...page.layout.navigation} />}
         {page.layout?.sidebar && <Sidebar {...page.layout.sidebar} />}
+        {languages && !hasLanguageSwitcher && <LanguageSwitcher languages={languages} />}
 
         <main
           data-testid={`page-${toSlug(page.name ?? page.path)}`}

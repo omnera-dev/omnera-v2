@@ -24,7 +24,7 @@ test.describe('Language Configuration', () => {
   // One test per spec in schema - defines EXHAUSTIVE acceptance criteria
   // ============================================================================
 
-  test.fixme(
+  test(
     'APP-LANGUAGES-CONFIG-001: should be valid with LTR direction by default',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
