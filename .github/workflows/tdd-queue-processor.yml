@@ -65,7 +65,7 @@ jobs:
           bun run scripts/tdd-automation/queue-manager.ts next
         env:
           GITHUB_OUTPUT: ${{ github.output }}
-          GH_TOKEN: ${{ secrets.GH_PAT_WORKFLOW || github.token }}
+          GH_TOKEN: ${{ secrets.GH_PAT_WORKFLOW }}
 
       - name: Check if spec available
         id: check
@@ -122,7 +122,7 @@ jobs:
           echo "✅ Issue is open and no duplicate PRs found"
           echo "should_process=true" >> $GITHUB_OUTPUT
         env:
-          GH_TOKEN: ${{ secrets.GH_PAT_WORKFLOW || github.token }}
+          GH_TOKEN: ${{ secrets.GH_PAT_WORKFLOW }}
 
       - name: Mark spec as in-progress and trigger Claude Code workflow
         if: steps.check.outputs.should_process == 'true' && steps.validate.outputs.should_process == 'true'
@@ -353,4 +353,4 @@ jobs:
 
           echo "✅ Issue updated and @claude mentioned - Claude Code will trigger automatically"
         env:
-          GH_TOKEN: ${{ secrets.GH_PAT_WORKFLOW || github.token }}
+          GH_TOKEN: ${{ secrets.GH_PAT_WORKFLOW }}

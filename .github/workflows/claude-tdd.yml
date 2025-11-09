@@ -434,7 +434,7 @@ jobs:
       - name: Determine retry action
         id: retry
         env:
-          GH_TOKEN: ${{ github.token }}
+          GH_TOKEN: ${{ secrets.GH_PAT_WORKFLOW }}
           REPO: ${{ github.repository }}
           ISSUE_NUMBER: ${{ github.event.inputs.issue_number || github.event.issue.number || github.event.pull_request.number }}
           CURRENT_RETRY: ${{ github.event.inputs.retry_attempt || 1 }}
@@ -515,7 +515,7 @@ jobs:
       - name: Trigger retry workflow
         if: steps.retry.outputs.should_retry == 'true'
         env:
-          GH_TOKEN: ${{ github.token }}
+          GH_TOKEN: ${{ secrets.GH_PAT_WORKFLOW }}
           REPO: ${{ github.repository }}
           ISSUE_NUMBER: ${{ github.event.inputs.issue_number || github.event.issue.number || github.event.pull_request.number }}
           NEXT_RETRY: ${{ steps.retry.outputs.next_retry }}
@@ -578,7 +578,7 @@ jobs:
     steps:
       - name: Verify PR was created
         env:
-          GH_TOKEN: ${{ github.token }}
+          GH_TOKEN: ${{ secrets.GH_PAT_WORKFLOW }}
           REPO: ${{ github.repository }}
           ISSUE_NUMBER: ${{ github.event.inputs.issue_number || github.event.issue.number || github.event.pull_request.number }}
         run: |

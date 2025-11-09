@@ -25,7 +25,7 @@ jobs:
     steps:
       - name: Find and recover stuck retry attempts
         env:
-          GH_TOKEN: ${{ github.token }}
+          GH_TOKEN: ${{ secrets.GH_PAT_WORKFLOW }}
         run: |
           echo "🔍 Checking for stuck retry attempts..."
 
@@ -155,7 +155,7 @@ jobs:
 
       - name: Check for systematic retry failures
         env:
-          GH_TOKEN: ${{ github.token }}
+          GH_TOKEN: ${{ secrets.GH_PAT_WORKFLOW }}
         run: |
           echo "🔍 Checking for systematic retry failures..."
 
