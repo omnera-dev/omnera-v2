@@ -8,10 +8,10 @@
 import { Slot } from '@radix-ui/react-slot'
 import { type VariantProps } from 'class-variance-authority'
 import * as React from 'react'
-import type { CtaButtonColor } from '@/domain/models/app/page/layout/navigation/cta-button'
 import { cn } from '@/presentation/styling/cn'
 import { resolveThemeColor } from '@/presentation/styling/theme-colors'
 import { buttonVariants } from './button-variants'
+import type { CtaButtonColor } from '@/domain/models/app/page/layout/navigation/cta-button'
 
 function Button({
   className,
@@ -21,7 +21,7 @@ function Button({
   asChild = false,
   ...props
 }: Readonly<
-  React.ComponentProps<'button'> &
+  Omit<React.ComponentProps<'button'>, 'color'> &
     VariantProps<typeof buttonVariants> & {
       asChild?: boolean
       color?: CtaButtonColor
