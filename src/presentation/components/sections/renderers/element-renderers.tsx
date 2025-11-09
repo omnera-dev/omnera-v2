@@ -42,20 +42,18 @@ export function renderHTMLElement(
 
   // Add appropriate ARIA role for accessibility
   //  - section elements get role="region"
-  //  - div elements with component children (not just text) get role="group" (layout containers)
-  //  - component-renderer also handles role="group" for blocks
-  const hasComponentChildren =
-    type === 'div' &&
-    Array.isArray(children) &&
-    children.length > 0 &&
-    !content &&
-    children.some((child) => typeof child === 'object' && child !== null)
-
+  //  - div containers with children (not content) get role="group" unless already set
   const elementProps =
     type === 'section'
       ? { ...props, role: 'region' }
-      : hasComponentChildren && !props.role
-        ? { ...props, role: 'group' }
+      : type === 'div' &&
+          Array.isArray(children) &&
+          children.length > 0 &&
+          !content &&
+          !props.role
+        ? // Only add role="group" if not already set (avoid conflicts with component-renderer)
+          // Check Array.isArray to avoid runtime errors if children is somehow not an array
+          { ...props, role: 'group' }
         : props
 
   // If content looks like HTML (starts with '<'), render as HTML

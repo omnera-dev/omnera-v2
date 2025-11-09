@@ -775,8 +775,11 @@ test.describe('Spacing Configuration', () => {
       // 1. Structure validation (ARIA)
       await expect(page.locator('[data-testid="spacing-system"]')).toMatchAriaSnapshot(`
         - group:
-          - text: Section with 4rem padding
-          - group: Item 1 Item 2 Item 3
+          - group: Section with 4rem padding
+          - group:
+            - group: Item 1
+            - group: Item 2
+            - group: Item 3
       `)
 
       // 2. Visual validation (Screenshot) - captures all spacing rendering
