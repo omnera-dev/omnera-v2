@@ -205,7 +205,7 @@ test.describe('Block Children', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-BLOCKS-CHILDREN-006: should render composite UI pattern with all child elements',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
