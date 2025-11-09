@@ -166,7 +166,7 @@ test.describe('Language Configuration', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-LANGUAGES-CONFIG-005: should display the flag in language switcher',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
