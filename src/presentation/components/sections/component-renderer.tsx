@@ -302,10 +302,14 @@ export function ComponentRenderer({
     ? blockInstanceIndex !== undefined
       ? `block-${blockName}-${blockInstanceIndex}`
       : `block-${blockName}`
-    : childIndex !== undefined
-      ? `child-${childIndex}`
-      : substitutedProps?.['data-testid'] ||
-        (type === 'container' ? 'container' : type === 'flex' ? 'flex' : undefined)
+    : substitutedProps?.['data-testid'] ||
+        (childIndex !== undefined
+          ? `child-${childIndex}`
+          : type === 'container'
+            ? 'container'
+            : type === 'flex'
+              ? 'flex'
+              : undefined)
   const elementProps = {
     ...substitutedProps,
     className: finalClassName,
