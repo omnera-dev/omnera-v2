@@ -554,6 +554,12 @@ export function ComponentRenderer({
         />
       )
 
+    case 'ul':
+      return Renderers.renderUnorderedList(elementProps, content, renderedChildren)
+
+    case 'li':
+      return Renderers.renderListItem(elementProps, content, renderedChildren)
+
     // Fallback for unknown types
     default:
       return Renderers.renderHTMLElement('div', elementProps, content, renderedChildren)
