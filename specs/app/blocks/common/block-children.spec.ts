@@ -116,7 +116,7 @@ test.describe('Block Children', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-BLOCKS-CHILDREN-004: should render unlimited nesting depth in DOM tree',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -160,9 +160,9 @@ test.describe('Block Children', () => {
 
       // THEN: it should render unlimited nesting depth in DOM tree
       const list = page.locator('[data-testid="block-nested-list"]')
-      await expect(list.locator('li')).toContainText('Level 1')
-      await expect(list.locator('li li')).toContainText('Level 2')
-      await expect(list.locator('li li li')).toContainText('Level 3')
+      await expect(list.locator('li').first()).toContainText('Level 1')
+      await expect(list.locator('li li').first()).toContainText('Level 2')
+      await expect(list.locator('li li li').first()).toContainText('Level 3')
     }
   )
 
