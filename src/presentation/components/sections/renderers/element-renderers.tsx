@@ -85,6 +85,7 @@ export function renderHeading(
  * The text element supports a 'level' prop to determine the HTML tag.
  * If level is h1-h6, renders as heading.
  * If level is p, renders as paragraph.
+ * If level is label, renders as label.
  * Otherwise renders as div to ensure proper ARIA generic role.
  */
 export function renderTextElement(props: ElementProps, content: string | undefined): ReactElement {
@@ -97,6 +98,7 @@ export function renderTextElement(props: ElementProps, content: string | undefin
   if (level === 'h5') return <h5 {...props}>{content}</h5>
   if (level === 'h6') return <h6 {...props}>{content}</h6>
   if (level === 'p') return <p {...props}>{content}</p>
+  if (level === 'label') return <label {...props}>{content}</label>
 
   // Default to span for inline text to ensure proper ARIA generic role
   // span elements with text content maintain generic role in ARIA tree
@@ -445,4 +447,52 @@ export function renderList(
   })
 
   return <ul {...props}>{renderedItems}</ul>
+}
+
+/**
+ * Renders unordered list element (ul)
+ *
+ * Supports recursive children rendering for nested lists.
+ * Used by block system for component-based list structures.
+ *
+ * @param props - Element props including data-testid
+ * @param content - Optional text content
+ * @param children - Child elements (typically li elements)
+ * @returns React element for unordered list
+ */
+export function renderUnorderedList(
+  props: ElementProps,
+  content: string | undefined,
+  children: readonly React.ReactNode[]
+): ReactElement {
+  return <ul {...props}>{content || children}</ul>
+}
+
+/**
+ * Renders list item element (li)
+ *
+ * Supports recursive children rendering for nested list structures.
+ * Content and children can be combined - content appears first if both present.
+ *
+ * @param props - Element props including data-testid
+ * @param content - Optional text content
+ * @param children - Optional child elements (for nested lists)
+ * @returns React element for list item
+ */
+export function renderListItem(
+  props: ElementProps,
+  content: string | undefined,
+  children: readonly React.ReactNode[]
+): ReactElement {
+  // If both content and children exist, render both (content first)
+  if (content && children && children.length > 0) {
+    return (
+      <li {...props}>
+        {content}
+        {children}
+      </li>
+    )
+  }
+  // Otherwise use content or children (whichever is present)
+  return <li {...props}>{content || children}</li>
 }

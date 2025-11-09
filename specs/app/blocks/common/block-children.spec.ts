@@ -24,7 +24,7 @@ test.describe('Block Children', () => {
   // One test per spec in schema - defines EXHAUSTIVE acceptance criteria
   // ============================================================================
 
-  test.fixme(
+  test(
     'APP-BLOCKS-CHILDREN-001: should render nested component structure in DOM',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -54,7 +54,7 @@ test.describe('Block Children', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-BLOCKS-CHILDREN-002: should render child element based on type',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -83,7 +83,7 @@ test.describe('Block Children', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-BLOCKS-CHILDREN-003: should render child with specified properties and attributes',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -116,7 +116,7 @@ test.describe('Block Children', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-BLOCKS-CHILDREN-004: should render unlimited nesting depth in DOM tree',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -160,13 +160,13 @@ test.describe('Block Children', () => {
 
       // THEN: it should render unlimited nesting depth in DOM tree
       const list = page.locator('[data-testid="block-nested-list"]')
-      await expect(list.locator('li')).toContainText('Level 1')
-      await expect(list.locator('li li')).toContainText('Level 2')
-      await expect(list.locator('li li li')).toContainText('Level 3')
+      await expect(list.locator('li').first()).toContainText('Level 1')
+      await expect(list.locator('li li').first()).toContainText('Level 2')
+      await expect(list.locator('li li li').first()).toContainText('Level 3')
     }
   )
 
-  test.fixme(
+  test(
     'APP-BLOCKS-CHILDREN-005: should render child with substituted text content',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -339,7 +339,7 @@ test.describe('Block Children', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-BLOCKS-CHILDREN-009: should render all children with substituted values throughout tree',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -395,7 +395,7 @@ test.describe('Block Children', () => {
           - img
           - group:
             - heading "Success!" [level=4]
-            - generic: "Operation completed"
+            - text: Operation completed
       `)
     }
   )

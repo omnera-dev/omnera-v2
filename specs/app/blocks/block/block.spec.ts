@@ -489,7 +489,7 @@ test.describe('Block Template', () => {
   // ONE OPTIMIZED test verifying components work together efficiently
   // ============================================================================
 
-  test.fixme(
+  test(
     'APP-BLOCKS-BLOCK-REGRESSION-001: user can complete full block workflow',
     { tag: '@regression' },
     async ({ page, startServerWithSchema }) => {
@@ -537,12 +537,12 @@ test.describe('Block Template', () => {
       await expect(page.locator('[data-testid="block-feature-item-0"]')).toMatchAriaSnapshot(`
         - group:
           - img
-          - generic: "Feature 1"
+          - text: Feature 1
       `)
       await expect(page.locator('[data-testid="block-feature-item-1"]')).toMatchAriaSnapshot(`
         - group:
           - img
-          - generic: "Feature 2"
+          - text: Feature 2
       `)
 
       // Focus on workflow continuity, not exhaustive coverage

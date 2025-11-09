@@ -24,7 +24,7 @@ test.describe('Language Configuration', () => {
   // One test per spec in schema - defines EXHAUSTIVE acceptance criteria
   // ============================================================================
 
-  test.fixme(
+  test(
     'APP-LANGUAGES-CONFIG-001: should be valid with LTR direction by default',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -59,7 +59,7 @@ test.describe('Language Configuration', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-LANGUAGES-CONFIG-002: should support right-to-left text rendering',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -80,7 +80,7 @@ test.describe('Language Configuration', () => {
           {
             name: 'home',
             path: '/',
-            meta: { lang: 'en-US', title: 'Test', description: 'Test page' },
+            meta: { lang: 'ar-SA', title: 'Test', description: 'Test page' },
             sections: [],
           },
         ],
@@ -96,7 +96,7 @@ test.describe('Language Configuration', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-LANGUAGES-CONFIG-003: should be valid with 2-letter code',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -204,7 +204,7 @@ test.describe('Language Configuration', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-LANGUAGES-CONFIG-006: should load the flag image from the path',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
