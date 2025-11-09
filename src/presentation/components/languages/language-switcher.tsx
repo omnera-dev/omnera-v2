@@ -73,20 +73,33 @@ export function LanguageSwitcher({
         data-language-dropdown
         className="absolute top-full left-0 z-10 hidden"
       >
-        {languages.supported.map((lang) => (
-          <button
-            key={lang.code}
-            data-testid={`language-option-${lang.code}`}
-            data-language-option
-            data-language-code={lang.code}
-            type="button"
-          >
-            <span data-testid="language-option">
-              {lang.flag ? `${lang.flag} ` : ''}
-              {lang.label}
-            </span>
-          </button>
-        ))}
+        {languages.supported.map((lang) => {
+          const isImageFlag = lang.flag?.startsWith('/')
+          return (
+            <button
+              key={lang.code}
+              data-testid={`language-option-${lang.code}`}
+              data-language-option
+              data-language-code={lang.code}
+              type="button"
+            >
+              <span data-testid="language-option">
+                {lang.flag && isImageFlag ? (
+                  <img
+                    src={lang.flag}
+                    alt={`${lang.label} flag`}
+                    data-testid="language-flag-img"
+                  />
+                ) : lang.flag ? (
+                  `${lang.flag} `
+                ) : (
+                  ''
+                )}
+                {lang.label}
+              </span>
+            </button>
+          )
+        })}
       </div>
 
       {/* Fallback indicator - shown when fallback is configured */}

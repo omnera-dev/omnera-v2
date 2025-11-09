@@ -204,7 +204,7 @@ test.describe('Language Configuration', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-LANGUAGES-CONFIG-006: should load the flag image from the path',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
