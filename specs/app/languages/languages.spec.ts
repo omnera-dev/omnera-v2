@@ -739,7 +739,7 @@ test.describe('Languages Configuration', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-LANGUAGES-INTEGRATION-001: should apply RTL-aware theme tokens for Arabic/Hebrew',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {

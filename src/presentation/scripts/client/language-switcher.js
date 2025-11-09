@@ -170,6 +170,7 @@
    * Updates the language switcher UI to reflect current language
    * Finds the label for currentLanguage and updates DOM element
    * Also updates the HTML dir attribute for RTL/LTR text direction
+   * Also updates window.APP_THEME.direction for theme integration
    */
   function updateUI() {
     const currentLang = languagesConfig.supported.find((lang) => lang.code === currentLanguage)
@@ -182,6 +183,11 @@
     // Update HTML dir attribute based on language direction
     const direction = currentLang?.direction || 'ltr'
     document.documentElement.setAttribute('dir', direction)
+
+    // Update window.APP_THEME.direction for theme integration
+    if (window.APP_THEME) {
+      window.APP_THEME.direction = direction
+    }
 
     // Update all translated text when language changes
     updateTranslations()
