@@ -286,7 +286,7 @@ test.describe('Language Configuration', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-LANGUAGES-CONFIG-008: should use default LTR direction and no flag',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {

@@ -49,9 +49,12 @@ export function LanguageSwitcher({
         >
           {languages.default}
         </span>
-        {defaultLanguage?.flag && !defaultLanguage.flag.startsWith('/') && (
-          <span data-testid="language-flag">{defaultLanguage.flag} </span>
-        )}
+        <span
+          data-testid="language-flag"
+          className={!defaultLanguage?.flag || defaultLanguage.flag.startsWith('/') ? 'hidden' : ''}
+        >
+          {defaultLanguage?.flag && !defaultLanguage.flag.startsWith('/') && `${defaultLanguage.flag} `}
+        </span>
         <span
           data-testid="current-language"
           data-code={languages.default}
