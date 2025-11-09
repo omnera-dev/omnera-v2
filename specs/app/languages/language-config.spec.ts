@@ -96,7 +96,7 @@ test.describe('Language Configuration', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-LANGUAGES-CONFIG-003: should be valid with 2-letter code',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
