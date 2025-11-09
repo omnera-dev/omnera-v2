@@ -1,0 +1,88 @@
+/**
+ * Copyright (c) 2025 ESSENTIAL SERVICES
+ *
+ * This source code is licensed under the Business Source License 1.1
+ * found in the LICENSE.md file in the root directory of this source tree.
+ */
+
+import type { Linter } from 'eslint'
+
+export default [
+  // Code Size and Complexity Limits - Prevent overly large files and functions
+  // These rules help maintain manageable, testable code
+  {
+    files: ['**/*.{ts,tsx,mts,cts}'],
+    ignores: ['*.config.ts', '**/*.config.ts'], // Exclude config files from naming rules
+    rules: {
+      'max-lines': [
+        'warn',
+        {
+          max: 400, // Warn at 400 lines (ideal target)
+          skipBlankLines: true,
+          skipComments: true,
+        },
+      ],
+
+      'max-lines-per-function': [
+        'warn',
+        {
+          max: 50, // Warn at 50 lines per function
+          skipBlankLines: true,
+          skipComments: true,
+          IIFEs: true, // Skip immediately invoked function expressions
+        },
+      ],
+
+      // Cognitive complexity - prevents overly complex functions
+      complexity: ['warn', { max: 10 }], // Cyclomatic complexity limit
+
+      // Prevent deeply nested code
+      'max-depth': ['warn', { max: 4 }], // Max nesting depth
+
+      // Limit function parameters (encourages using objects for many params)
+      'max-params': ['warn', { max: 4 }],
+
+      // Prevent too many statements in a single function
+      'max-statements': ['warn', { max: 20 }, { ignoreTopLevelFunctions: false }],
+    },
+  },
+
+  // Configuration files and Schema definitions - Can be longer
+  {
+    files: [
+      '**/*.config.{ts,js,mjs,cjs}',
+      '**/schemas/**/*.ts',
+      'src/domain/models/**/*.ts', // Schema definitions can be comprehensive
+      '**/types/**/*.ts', // Type definition files
+    ],
+    rules: {
+      'max-lines': ['warn', { max: 800, skipBlankLines: true, skipComments: true }],
+      'max-lines-per-function': 'off', // Schema/config objects can be large
+      'max-statements': 'off', // Config setup can have many statements
+    },
+  },
+
+  // Strict limits for React components - Should be modular
+  {
+    files: ['src/presentation/components/**/*.tsx'],
+    ignores: ['src/presentation/components/**/*.test.tsx'],
+    rules: {
+      'max-lines': [
+        'error',
+        {
+          max: 300, // Stricter limit for React components
+          skipBlankLines: true,
+          skipComments: true,
+        },
+      ],
+      'max-lines-per-function': [
+        'warn',
+        {
+          max: 40, // Components should be small and focused
+          skipBlankLines: true,
+          skipComments: true,
+        },
+      ],
+    },
+  },
+] satisfies Linter.Config[]

@@ -6,9 +6,9 @@
  */
 
 import { type ReactElement } from 'react'
+import { renderSectionWithSpacing } from '@/presentation/components/pages/utils/SectionSpacing'
 import { ComponentRenderer } from '@/presentation/components/sections/component-renderer'
 import { getBlockInfo } from '@/presentation/utils/block-utils'
-import { isCssValue, isTailwindClass } from '@/presentation/utils/style-utils'
 import type {
   BlockReference,
   SimpleBlockReference,
@@ -43,78 +43,22 @@ export function SectionRenderer({
   languages,
   currentLang,
 }: SectionRendererProps): Readonly<ReactElement> {
-  // Helper to render sections with ComponentRenderer
-  const renderSections = () =>
-    sections.map((section, index) => {
-      const blockInfo = getBlockInfo(section, index, sections)
+  const renderedSections = sections.map((section, index) => {
+    const blockInfo = getBlockInfo(section, index, sections)
 
-      return (
-        <ComponentRenderer
-          key={index}
-          component={section}
-          blockName={blockInfo?.name}
-          blockInstanceIndex={blockInfo?.instanceIndex}
-          blocks={blocks}
-          theme={theme}
-          languages={languages}
-          currentLang={currentLang}
-        />
-      )
-    })
+    return (
+      <ComponentRenderer
+        key={index}
+        component={section}
+        blockName={blockInfo?.name}
+        blockInstanceIndex={blockInfo?.instanceIndex}
+        blocks={blocks}
+        theme={theme}
+        languages={languages}
+        currentLang={currentLang}
+      />
+    )
+  })
 
-  // Helper to render container divs
-  const renderContainer = (testId: string, value: string) => (
-    <div
-      data-testid={testId}
-      {...(isTailwindClass(value) ? { className: value } : { style: { maxWidth: value } })}
-    />
-  )
-
-  // No theme spacing - render sections directly
-  if (!theme?.spacing?.section && !theme?.spacing?.container) {
-    return <>{renderSections()}</>
-  }
-
-  // Theme spacing defined - apply wrappers and containers
-  return (
-    <>
-      {/* Wrap in section if no section components exist and theme has section spacing */}
-      {!sections.some((s) => 'type' in s && s.type === 'section') && theme?.spacing?.section ? (
-        <section
-          data-testid="section"
-          {...(theme?.spacing?.section &&
-            !isCssValue(theme.spacing.section) && { className: theme.spacing.section })}
-          {...(theme?.spacing?.section &&
-            isCssValue(theme.spacing.section) && {
-              style: { padding: theme.spacing.section },
-            })}
-        >
-          {renderSections()}
-        </section>
-      ) : (
-        <>{renderSections()}</>
-      )}
-
-      {/* Container spacing elements */}
-      {theme?.spacing?.container &&
-        !sections.some((s) => 'type' in s && s.type === 'container') &&
-        renderContainer('container', theme.spacing.container)}
-
-      {(() => {
-        const containerSmall = (theme?.spacing as Record<string, unknown>)?.['container-small']
-        if (typeof containerSmall === 'string') {
-          return renderContainer('container-small', containerSmall)
-        }
-        return undefined
-      })()}
-
-      {(() => {
-        const containerXSmall = (theme?.spacing as Record<string, unknown>)?.['container-xsmall']
-        if (typeof containerXSmall === 'string') {
-          return renderContainer('container-xsmall', containerXSmall)
-        }
-        return undefined
-      })()}
-    </>
-  )
+  return renderSectionWithSpacing(theme, sections, renderedSections)
 }

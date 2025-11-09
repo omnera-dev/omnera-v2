@@ -14,7 +14,7 @@ import { Input } from '@/presentation/components/ui/input'
 import { Sheet, SheetContent } from '@/presentation/components/ui/sheet'
 import { useSidebar } from '@/presentation/components/ui/sidebar-hook'
 import { cn } from '@/presentation/utils/cn'
-import { SIDEBAR_WIDTH_MOBILE } from './sidebar-provider'
+import { SIDEBAR_WIDTH_MOBILE } from './sidebar-constants'
 
 export function Sidebar({
   side = 'left',
@@ -121,7 +121,9 @@ export function SidebarTrigger({
       size="icon"
       className={cn('h-7 w-7', className)}
       onClick={(event) => {
+        // eslint-disable-next-line functional/no-expression-statements -- Event handlers need side effects
         onClick?.(event)
+
         toggleSidebar()
       }}
       {...props}

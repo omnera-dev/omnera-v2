@@ -61,6 +61,31 @@
   .text-center {
     text-align: center;
   }
+
+  /* Theme color utilities - support runtime theme changes via CSS variables */
+  .bg-primary {
+    background-color: rgb(var(--primary));
+  }
+
+  .text-primary {
+    color: rgb(var(--primary));
+  }
+
+  .border-primary {
+    border-color: rgb(var(--primary));
+  }
+
+  .bg-secondary {
+    background-color: rgb(var(--secondary));
+  }
+
+  .text-secondary {
+    color: rgb(var(--secondary));
+  }
+
+  .border-secondary {
+    border-color: rgb(var(--secondary));
+  }
 }
 /*---break---
  */
@@ -167,7 +192,7 @@
 }
 /*---break---
  */
-@theme inline {
+@theme {
   /* Base colors */
   --color-background: var(--background);
   --color-foreground: var(--foreground);

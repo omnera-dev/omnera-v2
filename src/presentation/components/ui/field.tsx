@@ -6,7 +6,6 @@
  */
 
 import { cva, type VariantProps } from 'class-variance-authority'
-import { useMemo } from 'react'
 import { Label } from '@/presentation/components/ui/label'
 import { Separator } from '@/presentation/components/ui/separator'
 import { cn } from '@/presentation/utils/cn'
@@ -190,7 +189,8 @@ function FieldError({
     errors?: ReadonlyArray<{ readonly message?: string } | undefined>
   }
 >) {
-  const content = useMemo(() => {
+  // React 19 Compiler handles memoization automatically
+  const getContent = () => {
     if (children) {
       return children
     }
@@ -208,7 +208,9 @@ function FieldError({
         {errors.map((error, index) => error?.message && <li key={index}>{error.message}</li>)}
       </ul>
     )
-  }, [children, errors])
+  }
+
+  const content = getContent()
 
   if (!content) {
     return undefined

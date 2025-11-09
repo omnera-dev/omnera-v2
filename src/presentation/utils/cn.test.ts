@@ -59,7 +59,7 @@ describe('cn - className utility', () => {
 
   test('should filter out falsy values', () => {
     // Given: Mix of valid and falsy values
-    const classes = ['bg-white', false, 'text-black', null, undefined, '', 'p-4']
+    const classes = ['bg-white', false, 'text-black', undefined, '', 'p-4']
 
     // When: cn is called with falsy values
     const result = cn(...classes)

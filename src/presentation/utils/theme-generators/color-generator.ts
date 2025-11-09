@@ -34,8 +34,8 @@ export function generateColorStyles(colors?: Theme['colors']): string {
   // Build color styles for semantic HTML elements
   const gray900 = colors['gray-900']
   const gray500 = colors['gray-500']
-  const {text} = colors
-  const {primary} = colors
+  const { text } = colors
+  const { primary } = colors
   const primaryHover = colors['primary-hover']
 
   const elementStyles: ReadonlyArray<string> = [
