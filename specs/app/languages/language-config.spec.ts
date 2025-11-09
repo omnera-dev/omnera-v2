@@ -131,7 +131,7 @@ test.describe('Language Configuration', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-LANGUAGES-CONFIG-004: should be valid with country-specific format',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
