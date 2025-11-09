@@ -245,7 +245,7 @@ test.describe('Language Configuration', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-LANGUAGES-CONFIG-007: should display correctly in all character sets',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
