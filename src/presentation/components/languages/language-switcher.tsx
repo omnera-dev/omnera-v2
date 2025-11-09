@@ -71,6 +71,14 @@ export function LanguageSwitcher({
         </span>
       </button>
 
+      {/* Language code display - for test assertions */}
+      <span
+        data-testid="language-code"
+        className="hidden"
+      >
+        {languages.default}
+      </span>
+
       {/* Available languages count (for test assertions) */}
       {languages.supported.map((lang) => (
         <div
