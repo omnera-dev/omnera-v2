@@ -83,7 +83,7 @@ test.describe('Block Children', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-BLOCKS-CHILDREN-003: should render child with specified properties and attributes',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
