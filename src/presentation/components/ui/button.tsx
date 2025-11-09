@@ -8,7 +8,9 @@
 import { Slot } from '@radix-ui/react-slot'
 import { type VariantProps } from 'class-variance-authority'
 import * as React from 'react'
-import { cn } from '@/presentation/utils/cn'
+import type { CtaButtonColor } from '@/domain/models/app/page/layout/navigation/cta-button'
+import { cn } from '@/presentation/styling/cn'
+import { resolveThemeColor } from '@/presentation/styling/theme-colors'
 import { buttonVariants } from './button-variants'
 
 function Button({
@@ -22,22 +24,16 @@ function Button({
   React.ComponentProps<'button'> &
     VariantProps<typeof buttonVariants> & {
       asChild?: boolean
-      color?: string
+      color?: CtaButtonColor
     }
 >) {
   const Comp = asChild ? Slot : 'button'
   const variantClass = variant ? `btn-${variant}` : undefined
   const sizeClass = size ? `btn-${size}` : undefined
 
-  // Theme color mapping
-  const themeColors: Record<string, string> = {
-    orange: '#F97316',
-    blue: '#3B82F6',
-    green: '#10B981',
-    red: '#EF4444',
-  }
-
-  const style = color && themeColors[color] ? { backgroundColor: themeColors[color] } : undefined
+  // Resolve theme color to hex value
+  const colorValue = resolveThemeColor(color)
+  const style = colorValue ? { backgroundColor: colorValue } : undefined
 
   return (
     <Comp
