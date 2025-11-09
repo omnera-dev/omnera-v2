@@ -44,6 +44,12 @@ export function LanguageSwitcher({
         type="button"
       >
         <span
+          data-testid="language-code"
+          className="hidden"
+        >
+          {languages.default}
+        </span>
+        <span
           data-testid="current-language"
           data-code={languages.default}
         >
