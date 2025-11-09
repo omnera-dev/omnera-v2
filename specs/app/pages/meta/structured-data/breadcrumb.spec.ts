@@ -413,7 +413,7 @@ test.describe('Breadcrumb Schema', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-BREADCRUMB-010: should improve navigation and reduce bounce rate',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -448,7 +448,7 @@ test.describe('Breadcrumb Schema', () => {
       await page.goto('/')
 
       // THEN: it should improve navigation and reduce bounce rate
-      await expect(page.locator('script[type="application/ld+json"]')).toBeVisible()
+      await expect(page.locator('script[type="application/ld+json"]')).toBeAttached()
     }
   )
 
