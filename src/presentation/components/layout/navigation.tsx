@@ -53,6 +53,7 @@ export function Navigation({
       {cta && (
         <Button
           asChild
+          variant={cta.variant}
           data-testid="nav-cta"
         >
           <a href={cta.href}>{cta.text}</a>
