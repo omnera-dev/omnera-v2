@@ -9,6 +9,20 @@ import { type ReactElement } from 'react'
 import type { Languages } from '@/domain/models/app/languages'
 
 /**
+ * Helper to check if flag is an image path (starts with /)
+ * @param flag - Flag string (emoji or path)
+ * @returns true if flag is an image path
+ */
+const isImageFlag = (flag: string | undefined): boolean => Boolean(flag?.startsWith('/'))
+
+/**
+ * Helper to determine if flag should be shown (emoji flags only, not image paths)
+ * @param flag - Flag string (emoji or path)
+ * @returns true if flag should be shown (emoji, not path)
+ */
+const shouldShowFlag = (flag: string | undefined): boolean => Boolean(flag && !isImageFlag(flag))
+
+/**
  * LanguageSwitcher component - Server-side rendered language switcher
  *
  * This component renders the static HTML structure for the language switcher.
@@ -51,9 +65,9 @@ export function LanguageSwitcher({
         </span>
         <span
           data-testid="language-flag"
-          className={!defaultLanguage?.flag || defaultLanguage.flag.startsWith('/') ? 'hidden' : ''}
+          className={shouldShowFlag(defaultLanguage?.flag) ? '' : 'hidden'}
         >
-          {defaultLanguage?.flag && !defaultLanguage.flag.startsWith('/') && `${defaultLanguage.flag} `}
+          {shouldShowFlag(defaultLanguage?.flag) && `${defaultLanguage!.flag} `}
         </span>
         <span
           data-testid="current-language"
@@ -79,33 +93,27 @@ export function LanguageSwitcher({
         data-language-dropdown
         className="absolute top-full left-0 z-10 hidden"
       >
-        {languages.supported.map((lang) => {
-          const isImageFlag = lang.flag?.startsWith('/')
-          return (
-            <button
-              key={lang.code}
-              data-testid={`language-option-${lang.code}`}
-              data-language-option
-              data-language-code={lang.code}
-              type="button"
-            >
-              <span data-testid="language-option">
-                {lang.flag && isImageFlag ? (
-                  <img
-                    src={lang.flag}
-                    alt={`${lang.label} flag`}
-                    data-testid="language-flag-img"
-                  />
-                ) : lang.flag ? (
-                  `${lang.flag} `
-                ) : (
-                  ''
-                )}
-                {lang.label}
-              </span>
-            </button>
-          )
-        })}
+        {languages.supported.map((lang) => (
+          <button
+            key={lang.code}
+            data-testid={`language-option-${lang.code}`}
+            data-language-option
+            data-language-code={lang.code}
+            type="button"
+          >
+            <span data-testid="language-option">
+              {isImageFlag(lang.flag) && (
+                <img
+                  src={lang.flag}
+                  alt={`${lang.label} flag`}
+                  data-testid="language-flag-img"
+                />
+              )}
+              {shouldShowFlag(lang.flag) && `${lang.flag} `}
+              {lang.label}
+            </span>
+          </button>
+        ))}
       </div>
 
       {/* Fallback indicator - shown when fallback is configured */}
