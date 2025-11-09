@@ -166,7 +166,7 @@ test.describe('Block Children', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-BLOCKS-CHILDREN-005: should render child with substituted text content',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
