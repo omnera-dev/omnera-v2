@@ -25,11 +25,12 @@ function Button({
 >) {
   const Comp = asChild ? Slot : 'button'
   const variantClass = variant ? `btn-${variant}` : undefined
+  const sizeClass = size ? `btn-${size}` : undefined
 
   return (
     <Comp
       data-slot="button"
-      className={cn(buttonVariants({ variant, size, className }), variantClass)}
+      className={cn(buttonVariants({ variant, size, className }), variantClass, sizeClass)}
       {...props}
     />
   )
