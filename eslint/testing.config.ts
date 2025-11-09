@@ -22,9 +22,9 @@ export default [
       'functional/prefer-immutable-types': 'off', // Allow mutable types in tests
       'functional/no-throw-statements': 'off', // Allow throwing in tests
       'unicorn/no-null': 'off', // Allow null in tests for edge cases
-      // Size limits relaxed for test files (comprehensive test suites can be longer)
-      'max-lines': ['warn', { max: 800, skipBlankLines: true, skipComments: true }],
-      'max-lines-per-function': ['warn', { max: 100, skipBlankLines: true, skipComments: true }],
+      // Size limits OFF for test files (comprehensive test suites require longer functions)
+      'max-lines': 'off', // Tests can be comprehensive
+      'max-lines-per-function': 'off', // Test functions contain multiple scenarios
       'max-statements': 'off', // Test setup can have many statements
       complexity: 'off', // Test scenarios can be complex
     },

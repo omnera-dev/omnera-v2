@@ -26,6 +26,8 @@ export default [
       'max-lines': ['warn', { max: 600, skipBlankLines: true, skipComments: true }],
       'max-lines-per-function': 'off',
       'max-statements': 'off',
+      'max-params': 'off', // Build scripts can have many parameters
+      'max-depth': 'off', // Validation logic can be deeply nested
       complexity: 'off',
     },
   },

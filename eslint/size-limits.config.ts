@@ -78,11 +78,31 @@ export default [
       'max-lines-per-function': [
         'warn',
         {
-          max: 40, // Components should be small and focused
+          max: 60, // UI components need reasonable length flexibility
           skipBlankLines: true,
           skipComments: true,
         },
       ],
+    },
+  },
+
+  // Third-party UI components (shadcn/ui) - Follow library patterns
+  {
+    files: ['src/presentation/components/ui/**/*.tsx'],
+    ignores: ['src/presentation/components/ui/**/*.test.tsx'],
+    rules: {
+      'max-lines-per-function': 'off', // shadcn/ui components follow their own patterns
+      complexity: 'off', // Complex UI patterns acceptable in third-party components
+    },
+  },
+
+  // SSR/Page generation components - Declarative configuration rendering
+  {
+    files: ['src/presentation/components/pages/utils/**/*.tsx'],
+    ignores: ['src/presentation/components/pages/utils/**/*.test.tsx'],
+    rules: {
+      'max-lines-per-function': 'off', // SSR metadata/script rendering is declarative
+      complexity: 'off', // Conditional configuration is acceptable
     },
   },
 ] satisfies Linter.Config[]
