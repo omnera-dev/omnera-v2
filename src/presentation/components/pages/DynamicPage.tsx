@@ -6,9 +6,9 @@
  */
 
 import { type ReactElement } from 'react'
+import { LanguageSwitcher } from '@/presentation/components/languages/language-switcher'
 import { Banner } from '@/presentation/components/layout/banner'
 import { Footer } from '@/presentation/components/layout/footer'
-import { LanguageSwitcher } from '@/presentation/components/languages/language-switcher'
 import { Navigation } from '@/presentation/components/layout/navigation'
 import { Sidebar } from '@/presentation/components/layout/sidebar'
 import { ComponentRenderer } from '@/presentation/components/sections/component-renderer'
