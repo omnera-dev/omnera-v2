@@ -31,7 +31,7 @@ export default defineConfig({
   /* Snapshot configuration */
   snapshotDir: './specs',
   snapshotPathTemplate:
-    '{snapshotDir}/{testFileDir}/__snapshots__/{testFileName}-snapshots/{arg}{-projectName}{-platform}{-snapshotSuffix}{ext}',
+    '{snapshotDir}/{testFileDir}/__snapshots__/{testFileName}-snapshots/{arg}{-projectName}{-platform}{ext}',
 
   /* Update snapshots settings */
   updateSnapshots: process.env.UPDATE_SNAPSHOTS === 'true' ? 'all' : 'missing',
