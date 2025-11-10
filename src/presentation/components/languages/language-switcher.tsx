@@ -10,17 +10,71 @@ import type { Languages } from '@/domain/models/app/languages'
 
 /**
  * Helper to check if flag is an image path (starts with /)
- * @param flag - Flag string (emoji or path)
- * @returns true if flag is an image path
  */
 const isImageFlag = (flag: string | undefined): boolean => Boolean(flag?.startsWith('/'))
 
 /**
  * Helper to determine if flag should be shown (emoji flags only, not image paths)
- * @param flag - Flag string (emoji or path)
- * @returns true if flag should be shown (emoji, not path)
  */
 const shouldShowFlag = (flag: string | undefined): boolean => Boolean(flag && !isImageFlag(flag))
+
+/**
+ * Language switcher button component
+ */
+function LanguageSwitcherButton({
+  defaultLanguage,
+  defaultCode,
+}: {
+  readonly defaultLanguage: Languages['supported'][number] | undefined
+  readonly defaultCode: string
+}): ReactElement {
+  return (
+    <button
+      data-testid="language-switcher"
+      type="button"
+    >
+      <span
+        data-testid="language-flag"
+        className={shouldShowFlag(defaultLanguage?.flag) ? '' : 'hidden'}
+      >
+        {shouldShowFlag(defaultLanguage?.flag) && `${defaultLanguage!.flag} `}
+      </span>
+      <span
+        data-testid="current-language"
+        data-code={defaultCode}
+      >
+        {defaultLanguage?.label || defaultCode}
+      </span>
+    </button>
+  )
+}
+
+/**
+ * Language option button component
+ */
+function LanguageOption({ lang }: { readonly lang: Languages['supported'][number] }): ReactElement {
+  return (
+    <button
+      key={lang.code}
+      data-testid={`language-option-${lang.code}`}
+      data-language-option
+      data-language-code={lang.code}
+      type="button"
+    >
+      <span data-testid="language-option">
+        {isImageFlag(lang.flag) && (
+          <img
+            src={lang.flag}
+            alt={`${lang.label} flag`}
+            data-testid="language-flag-img"
+          />
+        )}
+        {shouldShowFlag(lang.flag) && `${lang.flag} `}
+        {lang.label}
+      </span>
+    </button>
+  )
+}
 
 /**
  * LanguageSwitcher component - Server-side rendered language switcher
@@ -47,29 +101,14 @@ export function LanguageSwitcher({
 }: {
   readonly languages: Languages
 }): Readonly<ReactElement> {
-  // Default language for initial SSR (vanilla JS will update on client)
   const defaultLanguage = languages.supported.find((lang) => lang.code === languages.default)
 
   return (
     <div className="relative">
-      {/* Language switcher button - vanilla JS will attach click handler */}
-      <button
-        data-testid="language-switcher"
-        type="button"
-      >
-        <span
-          data-testid="language-flag"
-          className={shouldShowFlag(defaultLanguage?.flag) ? '' : 'hidden'}
-        >
-          {shouldShowFlag(defaultLanguage?.flag) && `${defaultLanguage!.flag} `}
-        </span>
-        <span
-          data-testid="current-language"
-          data-code={languages.default}
-        >
-          {defaultLanguage?.label || languages.default}
-        </span>
-      </button>
+      <LanguageSwitcherButton
+        defaultLanguage={defaultLanguage}
+        defaultCode={languages.default}
+      />
 
       {/* Language code display - for test assertions */}
       <span
@@ -96,25 +135,10 @@ export function LanguageSwitcher({
         className="absolute top-full left-0 z-10 hidden"
       >
         {languages.supported.map((lang) => (
-          <button
+          <LanguageOption
             key={lang.code}
-            data-testid={`language-option-${lang.code}`}
-            data-language-option
-            data-language-code={lang.code}
-            type="button"
-          >
-            <span data-testid="language-option">
-              {isImageFlag(lang.flag) && (
-                <img
-                  src={lang.flag}
-                  alt={`${lang.label} flag`}
-                  data-testid="language-flag-img"
-                />
-              )}
-              {shouldShowFlag(lang.flag) && `${lang.flag} `}
-              {lang.label}
-            </span>
-          </button>
+            lang={lang}
+          />
         ))}
       </div>
 

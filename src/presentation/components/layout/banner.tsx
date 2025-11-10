@@ -9,6 +9,32 @@ import type { Banner as BannerProps } from '@/domain/models/app/page/layout/bann
 import type { ReactElement } from 'react'
 
 /**
+ * Build banner inline styles from props
+ */
+function buildBannerStyle(
+  gradient: string | undefined,
+  backgroundColor: string | undefined,
+  textColor: string | undefined,
+  sticky: boolean | undefined
+): React.CSSProperties | undefined {
+  const hasGradient = gradient !== undefined
+  const hasBackgroundColor = backgroundColor !== undefined
+  const hasTextColor = textColor !== undefined
+  const isSticky = sticky === true
+
+  if (!hasGradient && !hasBackgroundColor && !hasTextColor && !isSticky) {
+    return undefined
+  }
+
+  return {
+    ...(hasGradient && { background: gradient }),
+    ...(!hasGradient && hasBackgroundColor && { backgroundColor }),
+    ...(hasTextColor && { color: textColor }),
+    ...(isSticky && { position: 'sticky' as const, top: 0, zIndex: 50 }),
+  }
+}
+
+/**
  * Banner Component
  *
  * Renders a top announcement banner with optional message and link.
@@ -28,32 +54,12 @@ export function Banner({
   dismissible,
   sticky,
 }: Readonly<BannerProps>): Readonly<ReactElement | undefined> {
-  // Don't render if explicitly disabled
   if (enabled === false) {
     return undefined
   }
 
   const content = message || text
-
-  // Build inline styles (gradient takes precedence over backgroundColor)
-  // Use immutable pattern: construct object directly instead of mutating
-  const bannerStyle: React.CSSProperties | undefined = (() => {
-    const hasGradient = gradient !== undefined
-    const hasBackgroundColor = backgroundColor !== undefined
-    const hasTextColor = textColor !== undefined
-    const isSticky = sticky === true
-
-    if (!hasGradient && !hasBackgroundColor && !hasTextColor && !isSticky) {
-      return undefined
-    }
-
-    return {
-      ...(hasGradient ? { background: gradient } : {}),
-      ...(hasBackgroundColor && !hasGradient ? { backgroundColor } : {}),
-      ...(hasTextColor ? { color: textColor } : {}),
-      ...(isSticky ? { position: 'sticky' as const, top: 0, zIndex: 50 } : {}),
-    }
-  })()
+  const bannerStyle = buildBannerStyle(gradient, backgroundColor, textColor, sticky)
 
   return (
     <div

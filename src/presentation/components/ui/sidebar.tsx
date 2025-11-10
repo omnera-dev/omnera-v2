@@ -36,6 +36,3 @@ export {
   SidebarMenuSubItem,
   SidebarMenuSubButton,
 } from './sidebar/sidebar-menu'
-
-// Re-export hook and types from their original locations
-export { useSidebar, type SidebarContextProps } from '@/presentation/components/ui/sidebar-hook'

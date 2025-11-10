@@ -6,17 +6,18 @@
  */
 
 import { type ReactElement } from 'react'
-import { Hero } from '@/presentation/components/layout/hero'
-import { ResponsiveNavigation } from '@/presentation/components/layout/responsive-navigation'
-import { composeAnimation } from '@/presentation/utils/animation-composer'
 import { normalizeStyleAnimations, parseStyle } from '@/presentation/utils/parse-style'
-import { isCssValue } from '@/presentation/utils/style-utils'
 import {
   collectTranslationsForKey,
   resolveTranslationPattern,
 } from '@/presentation/utils/translation-resolver'
-import * as Renderers from './renderers/element-renderers'
+import { applyComponentAnimations } from './utils/animation-composer-wrapper'
 import { resolveBlock } from './utils/block-resolution'
+import { buildFlexClasses, buildGridClasses } from './utils/class-builders'
+import { dispatchComponentType } from './utils/component-type-dispatcher'
+import { buildElementProps } from './utils/props-builder'
+import { getComponentShadow } from './utils/shadow-resolver'
+import { applySpacingStyles } from './utils/spacing-resolver'
 import { substitutePropsThemeTokens } from './utils/theme-tokens'
 import type {
   BlockReference,
@@ -26,11 +27,6 @@ import type { Blocks } from '@/domain/models/app/blocks'
 import type { Languages } from '@/domain/models/app/languages'
 import type { Component } from '@/domain/models/app/page/sections'
 import type { Theme } from '@/domain/models/app/theme'
-
-/**
- * Component types that should receive role="group" when used as blocks with children
- */
-const CONTAINER_TYPES = ['div', 'container', 'flex', 'grid', 'card', 'badge'] as const
 
 /**
  * ComponentRenderer - Renders a dynamic component based on its type
@@ -155,61 +151,7 @@ export function ComponentRenderer({
   )
 
   // Apply animations functionally using composition instead of mutation
-  // Compose fadeOut animation for toast components
-  const styleWithFadeOut =
-    type === 'toast'
-      ? composeAnimation(baseStyle, type, 'fadeOut', theme, '300ms', 'ease-out')
-      : baseStyle
-
-  // Compose scaleUp animation for card components with scroll trigger
-  const styleWithScaleUp =
-    type === 'card'
-      ? composeAnimation(
-          styleWithFadeOut,
-          type,
-          'scaleUp',
-          theme,
-          '500ms',
-          'cubic-bezier(0.34, 1.56, 0.64, 1)',
-          {
-            animationPlayState: 'paused',
-            animationFillMode: 'forwards',
-            opacity: 0,
-          }
-        )
-      : styleWithFadeOut
-
-  // Compose float animation for fab components (continuous floating effect)
-  const parsedStyle =
-    type === 'fab'
-      ? composeAnimation(styleWithScaleUp, type, 'float', theme, '3s', 'ease-in-out', {
-          infinite: true,
-        })
-      : styleWithScaleUp
-
-  // Build flex-specific classes based on props
-  const buildFlexClasses = (props?: Record<string, unknown>): string => {
-    const baseClasses = ['flex']
-    const alignmentClass =
-      props?.align === 'start'
-        ? 'items-start'
-        : props?.align === 'center'
-          ? 'items-center'
-          : props?.align === 'end'
-            ? 'items-end'
-            : undefined
-    const gapClass = typeof props?.gap === 'number' ? `gap-${props.gap}` : undefined
-
-    return [...baseClasses, alignmentClass, gapClass].filter(Boolean).join(' ')
-  }
-
-  // Build grid-specific classes based on theme breakpoints
-  const buildGridClasses = (theme?: Theme): string | undefined => {
-    const baseClasses = ['grid']
-    const breakpointClass = theme?.breakpoints?.md ? 'md:grid-cols-2' : undefined
-
-    return [...baseClasses, breakpointClass].filter(Boolean).join(' ')
-  }
+  const parsedStyle = applyComponentAnimations(type, baseStyle, theme)
 
   // For flex type, prepend flex classes to className
   // For grid type, prepend grid classes to className
@@ -221,351 +163,38 @@ export function ComponentRenderer({
         : (substitutedProps?.className as string | undefined)
 
   // Apply theme shadows to component types based on conventions
-  // Card components use available shadow tokens (md, neumorphic, etc.)
-  // Modal components use xl shadow
-  // Input components use inner shadow
-  // Button components use md shadow (or custom like brand)
-  // List-item components use sm shadow (lowest elevation)
-  // Dropdown components use lg shadow (higher than card, lower than modal)
-  const getComponentShadow = (): Record<string, unknown> | undefined => {
-    if (!theme?.shadows) {
-      return undefined
-    }
+  const componentShadow = getComponentShadow(type, theme)
+  const styleWithShadow = componentShadow ? { ...parsedStyle, ...componentShadow } : parsedStyle
 
-    // List-item: Use sm shadow (lowest elevation in hierarchy)
-    if (type === 'list-item' && theme.shadows.sm) {
-      return { boxShadow: 'var(--shadow-sm)' }
-    }
-
-    // Card: Use first available shadow (prioritize custom names like neumorphic, then md)
-    if (type === 'card') {
-      // Check for custom shadow names first (neumorphic, etc.)
-      const customShadow = Object.keys(theme.shadows).find(
-        (name) => !['sm', 'md', 'lg', 'xl', '2xl', 'inner', 'none'].includes(name)
-      )
-      if (customShadow) {
-        return { boxShadow: `var(--shadow-${customShadow})` }
-      }
-      // Fallback to md if available
-      if (theme.shadows.md) {
-        return { boxShadow: 'var(--shadow-md)' }
-      }
-    }
-
-    // Dropdown: Use lg shadow (higher elevation than card)
-    if (type === 'dropdown' && theme.shadows.lg) {
-      return { boxShadow: 'var(--shadow-lg)' }
-    }
-
-    // Modal: Use xl shadow
-    if (type === 'modal' && theme.shadows.xl) {
-      return { boxShadow: 'var(--shadow-xl)' }
-    }
-
-    // Input: Use inner shadow
-    if (type === 'input' && theme.shadows.inner) {
-      return { boxShadow: 'var(--shadow-inner)' }
-    }
-
-    // Button: Use brand shadow if available, otherwise md
-    if (type === 'button') {
-      if (theme.shadows.brand) {
-        return { boxShadow: 'var(--shadow-brand)' }
-      }
-      if (theme.shadows.md) {
-        return { boxShadow: 'var(--shadow-md)' }
-      }
-    }
-
-    return undefined
-  }
-
-  const componentShadow = getComponentShadow()
-  const styleWithShadow = componentShadow
-    ? {
-        ...parsedStyle,
-        ...componentShadow,
-      }
-    : parsedStyle
-
-  // Merge className with other props and add data-block attribute if blockName is provided
-  // For blocks without content, add min-height and display to ensure visibility
-  // For grid elements without content, ensure minimum dimensions for rendering
-  // Add translation key data attribute if children contain $t: patterns
-  // Include pre-resolved translations to eliminate client-side resolution logic duplication
-  // Add role="group" for blocks with children to establish proper ARIA tree nesting
-  // Add data-scroll-animation attribute for card elements with scaleUp animation
+  // Build element props with all attributes and data attributes
   const hasContent = Boolean(content || children?.length)
   const hasChildren = Boolean(children?.length)
-  const hasScrollAnimation = type === 'card' && theme?.animations?.scaleUp
-  const testId = blockName
-    ? blockInstanceIndex !== undefined
-      ? `block-${blockName}-${blockInstanceIndex}`
-      : `block-${blockName}`
-    : substitutedProps?.['data-testid'] ||
-        (childIndex !== undefined
-          ? `child-${childIndex}`
-          : type === 'container'
-            ? 'container'
-            : type === 'flex'
-              ? 'flex'
-              : undefined)
-  const elementProps = {
-    ...substitutedProps,
-    className: finalClassName,
-    ...(styleWithShadow && { style: styleWithShadow }),
-    ...(testId && { 'data-testid': testId }),
-    ...(blockName && {
-      'data-block': blockName,
-      'data-type': type,
-    }),
-    ...(blockName &&
-      hasChildren &&
-      CONTAINER_TYPES.includes(type) && {
-        role: 'group',
-      }),
-    ...(firstTranslationKey &&
-      translationData && {
-        'data-translation-key': firstTranslationKey,
-        'data-translations': JSON.stringify(translationData),
-      }),
-    ...(hasScrollAnimation && {
-      'data-scroll-animation': 'scale-up',
-    }),
-    ...((blockName || childIndex !== undefined) &&
-      !hasContent && {
-        style: {
-          ...styleWithShadow,
-          minHeight: '1px',
-          minWidth: '1px',
-          display: 'inline-block',
-        },
-      }),
-    ...(!blockName &&
-      type === 'grid' &&
-      !hasContent && {
-        style: {
-          ...styleWithShadow,
-          minHeight: '100px',
-          minWidth: '100px',
-        },
-      }),
-  }
+  const elementProps = buildElementProps(
+    type,
+    substitutedProps,
+    finalClassName,
+    styleWithShadow,
+    blockName,
+    blockInstanceIndex,
+    firstTranslationKey,
+    translationData,
+    hasContent,
+    hasChildren,
+    theme,
+    childIndex
+  )
 
-  // Apply theme spacing to section elements when spacing.section is a CSS value
-  const sectionSpacing = type === 'section' && theme?.spacing?.section
-  const sectionSpacingStyle =
-    sectionSpacing && isCssValue(sectionSpacing) ? { padding: sectionSpacing } : undefined
+  // Apply theme spacing styles (section → container → flex)
+  const elementPropsWithSpacing = applySpacingStyles(type, elementProps, theme)
 
-  // Apply theme spacing to container elements when spacing.container is a CSS value
-  const containerSpacing = type === 'container' && theme?.spacing?.container
-  const containerSpacingStyle =
-    containerSpacing && isCssValue(containerSpacing)
-      ? { maxWidth: containerSpacing, margin: '0 auto' }
-      : undefined
-
-  // Apply theme spacing to flex elements when spacing.gap is a CSS value
-  const flexSpacing = type === 'flex' && theme?.spacing?.gap
-  const flexSpacingStyle =
-    flexSpacing && isCssValue(flexSpacing) ? { display: 'flex', gap: flexSpacing } : undefined
-
-  const elementPropsWithSectionSpacing = sectionSpacingStyle
-    ? {
-        ...elementProps,
-        style: {
-          ...(elementProps.style as Record<string, unknown> | undefined),
-          ...sectionSpacingStyle,
-        },
-      }
-    : elementProps
-
-  const elementPropsWithContainerSpacing = containerSpacingStyle
-    ? {
-        ...elementPropsWithSectionSpacing,
-        style: {
-          ...(elementPropsWithSectionSpacing.style as Record<string, unknown> | undefined),
-          ...containerSpacingStyle,
-        },
-      }
-    : elementPropsWithSectionSpacing
-
-  const elementPropsWithSpacing = flexSpacingStyle
-    ? {
-        ...elementPropsWithContainerSpacing,
-        style: {
-          ...(elementPropsWithContainerSpacing.style as Record<string, unknown> | undefined),
-          ...flexSpacingStyle,
-        },
-      }
-    : elementPropsWithContainerSpacing
-
-  // Render based on component type using specialized renderers
-  switch (type) {
-    // HTML structural elements
-    case 'section':
-      return Renderers.renderHTMLElement(
-        'section',
-        elementPropsWithSpacing,
-        content,
-        renderedChildren
-      )
-
-    case 'div':
-    case 'container':
-    case 'flex':
-    case 'grid':
-    case 'card':
-    case 'timeline':
-    case 'accordion':
-      return Renderers.renderHTMLElement('div', elementPropsWithSpacing, content, renderedChildren)
-
-    case 'span':
-      return Renderers.renderHTMLElement('span', elementProps, content, renderedChildren)
-
-    case 'badge': {
-      // Convert custom props to data-* attributes for badges
-      // Standard HTML attributes (className, style, id, etc.) pass through unchanged
-      const standardHtmlAttrs = new Set([
-        'className',
-        'style',
-        'id',
-        'role',
-        'data-testid',
-        'data-block',
-        'data-type',
-        'data-translation-key',
-        'data-translations',
-      ])
-
-      const badgeProps = Object.entries(elementProps).reduce<Record<string, unknown>>(
-        (acc, [key, value]) => {
-          if (standardHtmlAttrs.has(key) || key.startsWith('data-') || key.startsWith('aria-')) {
-            // Keep standard HTML attrs, data-*, and aria-* unchanged
-            return { ...acc, [key]: value }
-          }
-          // Convert custom props to data-* attributes
-          return { ...acc, [`data-${key}`]: value }
-        },
-        {}
-      )
-
-      return Renderers.renderHTMLElement('span', badgeProps, content, renderedChildren)
-    }
-
-    case 'icon':
-      return Renderers.renderIcon(elementProps, renderedChildren)
-
-    // Heading elements
-    case 'h1':
-      return Renderers.renderHeading(1, elementProps, content, renderedChildren)
-
-    case 'h2':
-      return Renderers.renderHeading(2, elementProps, content, renderedChildren)
-
-    case 'h3':
-      return Renderers.renderHeading(3, elementProps, content, renderedChildren)
-
-    case 'h4':
-      return Renderers.renderHeading(4, elementProps, content, renderedChildren)
-
-    case 'h5':
-      return Renderers.renderHeading(5, elementProps, content, renderedChildren)
-
-    case 'h6':
-      return Renderers.renderHeading(6, elementProps, content, renderedChildren)
-
-    case 'heading':
-      return Renderers.renderHeading(1, elementProps, content, renderedChildren)
-
-    // Content elements
-    case 'text':
-      return Renderers.renderTextElement(elementProps, content)
-
-    case 'paragraph':
-    case 'p':
-      return Renderers.renderParagraph(elementProps, content, renderedChildren)
-
-    case 'code':
-      return Renderers.renderCode(elementProps, content, renderedChildren)
-
-    case 'pre':
-      return Renderers.renderPre(elementProps, content, renderedChildren)
-
-    // Media elements
-    case 'image':
-      return Renderers.renderImage(elementProps)
-
-    case 'video':
-      return Renderers.renderVideo(elementProps, renderedChildren)
-
-    case 'audio':
-      return Renderers.renderAudio(elementProps, renderedChildren)
-
-    case 'iframe':
-      return Renderers.renderIframe(elementProps, renderedChildren)
-
-    // Interactive elements
-    case 'button':
-      return Renderers.renderButton(elementProps, content, renderedChildren)
-
-    case 'link':
-      return Renderers.renderLink(elementProps, content, renderedChildren)
-
-    case 'alert':
-      return Renderers.renderAlert(elementProps, content, renderedChildren, theme)
-
-    case 'form':
-      return Renderers.renderForm(elementProps, renderedChildren)
-
-    case 'input':
-      return Renderers.renderInput(elementProps)
-
-    // Custom blocks
-    case 'customHTML':
-      return Renderers.renderCustomHTML(elementProps)
-
-    case 'language-switcher':
-      return Renderers.renderLanguageSwitcher(elementProps, languages)
-
-    // Layout components
-    case 'modal':
-    case 'sidebar':
-    case 'toast':
-    case 'fab':
-    case 'spinner':
-    case 'list-item':
-    case 'dropdown':
-      return Renderers.renderHTMLElement('div', elementProps, content, renderedChildren)
-
-    case 'hero':
-      return (
-        <Hero
-          theme={theme}
-          data-testid={elementProps['data-testid'] as string | undefined}
-        >
-          {renderedChildren}
-        </Hero>
-      )
-
-    case 'list':
-      return Renderers.renderList(elementProps, content, theme)
-
-    case 'navigation':
-      return (
-        <ResponsiveNavigation
-          theme={theme}
-          data-testid={elementProps['data-testid'] as string | undefined}
-        />
-      )
-
-    case 'ul':
-      return Renderers.renderUnorderedList(elementProps, content, renderedChildren)
-
-    case 'li':
-      return Renderers.renderListItem(elementProps, content, renderedChildren)
-
-    // Fallback for unknown types
-    default:
-      return Renderers.renderHTMLElement('div', elementProps, content, renderedChildren)
-  }
+  // Dispatch component rendering based on type
+  return dispatchComponentType(
+    type,
+    elementProps,
+    elementPropsWithSpacing,
+    content,
+    renderedChildren,
+    theme,
+    languages
+  )
 }

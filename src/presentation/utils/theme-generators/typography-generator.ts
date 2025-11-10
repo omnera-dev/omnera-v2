@@ -7,6 +7,47 @@
 
 import type { Theme } from '@/domain/models/app/theme'
 
+type FontConfig = NonNullable<Theme['fonts']>[keyof NonNullable<Theme['fonts']>]
+
+/**
+ * Build font-family string with fallback
+ */
+function buildFontFamily(family?: string, fallback?: string): string | undefined {
+  if (!family) {
+    return undefined
+  }
+  return fallback ? `${family}, ${fallback}` : family
+}
+
+/**
+ * Build font style properties for a font config
+ */
+function buildFontProperties(font: FontConfig): readonly (string | false | undefined)[] {
+  const family = buildFontFamily(font.family, font.fallback)
+  return [
+    family && `  font-family: ${family};`,
+    font.style && `  font-style: ${font.style};`,
+    font.size && `  font-size: ${font.size};`,
+    font.lineHeight && `  line-height: ${font.lineHeight};`,
+    font.letterSpacing && `  letter-spacing: ${font.letterSpacing};`,
+    font.transform && `  text-transform: ${font.transform};`,
+  ]
+}
+
+/**
+ * Build CSS block for element font styles
+ */
+function buildElementFontStyles(selector: string, font: FontConfig | undefined): string {
+  if (!font) {
+    return ''
+  }
+  const properties = buildFontProperties(font).filter(Boolean)
+  if (properties.length === 0) {
+    return ''
+  }
+  return [selector + ' {', ...properties, '}'].join('\n')
+}
+
 /**
  * Generate CSS custom properties and styles for theme fonts
  * Creates font-family custom properties and applies fonts to semantic elements
@@ -19,59 +60,21 @@ export function generateTypographyStyles(fonts?: Theme['fonts']): string {
     return ''
   }
 
-  // Build CSS custom properties for theme fonts
-  const fontVariables: ReadonlyArray<string> = Object.entries(fonts).flatMap(
-    ([category, fontConfig]) => {
-      if (!fontConfig || !fontConfig.family) {
-        return []
-      }
-      return [`  --font-${category}-family: ${fontConfig.family};`]
+  const fontVariables = Object.entries(fonts).flatMap(([category, fontConfig]) => {
+    if (!fontConfig?.family) {
+      return []
     }
-  )
+    return [`  --font-${category}-family: ${fontConfig.family};`]
+  })
 
   const cssVariablesBlock =
     fontVariables.length > 0 ? [':root {', ...fontVariables, '}'].join('\n') : ''
 
-  // Build font styles for heading fonts (h1-h6)
-  // Support both 'title' and 'heading' keys for heading fonts
   const headingFont = fonts.heading || fonts.title
-  const headingFontStyles: ReadonlyArray<string> = headingFont
-    ? [
-        [
-          'h1, h2, h3, h4, h5, h6 {',
-          headingFont.family &&
-            `  font-family: ${headingFont.fallback ? `${headingFont.family}, ${headingFont.fallback}` : headingFont.family};`,
-          headingFont.style && `  font-style: ${headingFont.style};`,
-          headingFont.letterSpacing && `  letter-spacing: ${headingFont.letterSpacing};`,
-          headingFont.transform && `  text-transform: ${headingFont.transform};`,
-          '}',
-        ]
-          .filter(Boolean)
-          .join('\n'),
-      ]
-    : []
+  const headingStyles = buildElementFontStyles('h1, h2, h3, h4, h5, h6', headingFont)
+  const monoStyles = buildElementFontStyles('code, pre', fonts.mono)
 
-  // Build font styles for mono font (code, pre)
-  const monoFont = fonts.mono
-  const monoFontStyles: ReadonlyArray<string> = monoFont
-    ? [
-        [
-          'code, pre {',
-          monoFont.family &&
-            `  font-family: ${monoFont.fallback ? `${monoFont.family}, ${monoFont.fallback}` : monoFont.family};`,
-          monoFont.style && `  font-style: ${monoFont.style};`,
-          monoFont.size && `  font-size: ${monoFont.size};`,
-          monoFont.lineHeight && `  line-height: ${monoFont.lineHeight};`,
-          monoFont.letterSpacing && `  letter-spacing: ${monoFont.letterSpacing};`,
-          monoFont.transform && `  text-transform: ${monoFont.transform};`,
-          '}',
-        ]
-          .filter(Boolean)
-          .join('\n'),
-      ]
-    : []
-
-  const elementStylesBlock = [...headingFontStyles, ...monoFontStyles].join('\n')
+  const elementStylesBlock = [headingStyles, monoStyles].filter(Boolean).join('\n')
 
   return [cssVariablesBlock, elementStylesBlock].filter(Boolean).join('\n')
 }

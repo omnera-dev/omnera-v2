@@ -317,6 +317,28 @@ export function renderLanguageSwitcher(_props: ElementProps, languages?: Languag
  * @param theme - Theme configuration for color resolution
  * @returns React element for alert component
  */
+/**
+ * Builds alert variant styles from theme colors
+ */
+function buildAlertVariantStyles(
+  variant: string | undefined,
+  theme: Theme | undefined
+): Record<string, unknown> {
+  if (!variant || !theme?.colors) {
+    return {}
+  }
+
+  const colorKey = variant as keyof typeof theme.colors
+  const lightColorKey = `${variant}-light` as keyof typeof theme.colors
+  const color = theme.colors[colorKey] as string | undefined
+  const lightColor = theme.colors[lightColorKey] as string | undefined
+
+  return {
+    ...(color && { color, borderColor: color }),
+    ...(lightColor && { backgroundColor: lightColor }),
+  }
+}
+
 export function renderAlert(
   props: ElementProps,
   content: string | undefined,
@@ -326,49 +348,12 @@ export function renderAlert(
   const variant = props.variant as string | undefined
   const existingStyle = (props.style as Record<string, unknown> | undefined) || {}
 
-  // Build variant-specific styles using theme colors (functional approach)
-  const getVariantStyles = (): Record<string, unknown> => {
-    if (variant === 'success' && theme?.colors) {
-      const successColor = theme.colors.success as string | undefined
-      const successLightColor = theme.colors['success-light'] as string | undefined
-      return {
-        ...(successColor && { color: successColor, borderColor: successColor }),
-        ...(successLightColor && { backgroundColor: successLightColor }),
-      }
-    }
-    if (variant === 'danger' && theme?.colors) {
-      const dangerColor = theme.colors.danger as string | undefined
-      const dangerLightColor = theme.colors['danger-light'] as string | undefined
-      return {
-        ...(dangerColor && { color: dangerColor, borderColor: dangerColor }),
-        ...(dangerLightColor && { backgroundColor: dangerLightColor }),
-      }
-    }
-    if (variant === 'warning' && theme?.colors) {
-      const warningColor = theme.colors.warning as string | undefined
-      const warningLightColor = theme.colors['warning-light'] as string | undefined
-      return {
-        ...(warningColor && { color: warningColor, borderColor: warningColor }),
-        ...(warningLightColor && { backgroundColor: warningLightColor }),
-      }
-    }
-    if (variant === 'info' && theme?.colors) {
-      const infoColor = theme.colors.info as string | undefined
-      const infoLightColor = theme.colors['info-light'] as string | undefined
-      return {
-        ...(infoColor && { color: infoColor, borderColor: infoColor }),
-        ...(infoLightColor && { backgroundColor: infoLightColor }),
-      }
-    }
-    return {}
-  }
-
   // Merge existing styles with variant styles
   const mergedStyle = {
     padding: '12px 16px',
     borderRadius: '4px',
     border: '1px solid',
-    ...getVariantStyles(),
+    ...buildAlertVariantStyles(variant, theme),
     ...existingStyle,
   }
 
@@ -381,6 +366,24 @@ export function renderAlert(
       {content || children}
     </div>
   )
+}
+
+/**
+ * Extracts animation config from theme
+ */
+function getAnimationConfig(theme: Theme | undefined) {
+  const fadeInConfig = theme?.animations?.fadeIn
+  return fadeInConfig && typeof fadeInConfig === 'object' && !Array.isArray(fadeInConfig)
+    ? fadeInConfig
+    : undefined
+}
+
+/**
+ * Calculates stagger delay from duration
+ */
+function calculateStaggerDelay(duration: string): number {
+  const durationMs = parseInt(duration.replace('ms', ''), 10)
+  return Math.max(50, durationMs / 4) // 25% of duration, min 50ms
 }
 
 /**
@@ -399,48 +402,27 @@ export function renderList(
   content: string | undefined,
   theme?: Theme
 ): ReactElement {
-  // If no content, return empty list
   if (!content) {
     return <ul {...props} />
   }
 
-  // Sanitize HTML content for security
   const sanitizedContent = DOMPurify.sanitize(content)
-
-  // Extract <li> items using simple regex matching
-  // This approach works in both server and client environments
   const liMatches = sanitizedContent.match(/<li[^>]*>.*?<\/li>/gs) || []
 
-  // Get animation config from theme with proper type narrowing
-  // AnimationValue is union: boolean | string | AnimationConfigObject
-  // Only AnimationConfigObject has duration/easing properties
-  const fadeInConfig = theme?.animations?.fadeIn
-  const animationConfig =
-    fadeInConfig && typeof fadeInConfig === 'object' && !Array.isArray(fadeInConfig)
-      ? fadeInConfig
-      : undefined
-
+  const animationConfig = getAnimationConfig(theme)
   const duration = animationConfig?.duration || '400ms'
   const easing = animationConfig?.easing || 'ease-out'
+  const staggerDelay = calculateStaggerDelay(duration)
 
-  // Parse duration to number for delay calculation (remove 'ms' suffix)
-  const durationMs = parseInt(duration.replace('ms', ''), 10)
-  const staggerDelay = Math.max(50, durationMs / 4) // 25% of duration, min 50ms
-
-  // Render list items with staggered animation delays
   const renderedItems = liMatches.map((liHtml, index) => {
     const delay = `${index * staggerDelay}ms`
     const animationValue = `fade-in ${duration} ${easing} ${delay} both`
-
-    // Extract inner HTML (content between <li> and </li>)
     const innerHtml = liHtml.replace(/<li[^>]*>|<\/li>/g, '')
 
     return (
       <li
         key={index}
-        style={{
-          animation: animationValue,
-        }}
+        style={{ animation: animationValue }}
         dangerouslySetInnerHTML={{ __html: innerHtml }}
       />
     )

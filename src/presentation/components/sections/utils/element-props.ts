@@ -55,6 +55,62 @@ export function buildClassName(
 }
 
 /**
+ * Build block data attributes
+ */
+function buildBlockDataAttrs(blockName?: string, type?: string) {
+  if (!blockName) {
+    return {}
+  }
+  return {
+    'data-block': blockName,
+    'data-type': type,
+  }
+}
+
+/**
+ * Build translation data attributes
+ */
+function buildTranslationDataAttrs(
+  firstTranslationKey?: string,
+  translationData?: Record<string, unknown>
+) {
+  if (!firstTranslationKey || !translationData) {
+    return {}
+  }
+  return {
+    'data-translation-key': firstTranslationKey,
+    'data-translations': JSON.stringify(translationData),
+  }
+}
+
+/**
+ * Build empty content style
+ */
+function buildEmptyStyle(
+  blockName?: string,
+  type?: string,
+  hasContent?: boolean,
+  styleWithShadow?: Record<string, unknown>
+) {
+  if (blockName && !hasContent) {
+    return {
+      ...styleWithShadow,
+      minHeight: '1px',
+      minWidth: '1px',
+      display: 'inline-block',
+    }
+  }
+  if (!blockName && type === 'grid' && !hasContent) {
+    return {
+      ...styleWithShadow,
+      minHeight: '100px',
+      minWidth: '100px',
+    }
+  }
+  return styleWithShadow
+}
+
+/**
  * Build element props including data attributes, ARIA, and styling
  */
 export function buildElementProps({
@@ -84,47 +140,17 @@ export function buildElementProps({
 }): Record<string, unknown> {
   const { type } = component
   const hasChildren = Boolean(children?.length)
+  const finalStyle = buildEmptyStyle(blockName, type, hasContent, styleWithShadow)
 
   return {
     ...substitutedProps,
     className: finalClassName,
-    ...(styleWithShadow && { style: styleWithShadow }),
+    ...(finalStyle && { style: finalStyle }),
     ...(testId && { 'data-testid': testId }),
-    ...(blockName && {
-      'data-block': blockName,
-      'data-type': type,
-    }),
-    ...(blockName &&
-      hasChildren &&
-      CONTAINER_TYPES.includes(type) && {
-        role: 'group',
-      }),
-    ...(firstTranslationKey &&
-      translationData && {
-        'data-translation-key': firstTranslationKey,
-        'data-translations': JSON.stringify(translationData),
-      }),
-    ...(hasScrollAnimation && {
-      'data-scroll-animation': 'scale-up',
-    }),
-    ...(blockName &&
-      !hasContent && {
-        style: {
-          ...styleWithShadow,
-          minHeight: '1px',
-          minWidth: '1px',
-          display: 'inline-block',
-        },
-      }),
-    ...(!blockName &&
-      type === 'grid' &&
-      !hasContent && {
-        style: {
-          ...styleWithShadow,
-          minHeight: '100px',
-          minWidth: '100px',
-        },
-      }),
+    ...buildBlockDataAttrs(blockName, type),
+    ...(blockName && hasChildren && CONTAINER_TYPES.includes(type) && { role: 'group' }),
+    ...buildTranslationDataAttrs(firstTranslationKey, translationData),
+    ...(hasScrollAnimation && { 'data-scroll-animation': 'scale-up' }),
   }
 }
 

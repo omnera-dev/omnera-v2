@@ -65,6 +65,68 @@ export function getShadowForType(
 }
 
 /**
+ * Build block-related attributes
+ */
+function buildBlockAttrs(blockName?: string, blockInstanceIndex?: number) {
+  if (!blockName) {
+    return {}
+  }
+  return {
+    'data-block': blockName,
+    'data-testid':
+      blockInstanceIndex !== undefined ? `${blockName}-${blockInstanceIndex}` : blockName,
+  }
+}
+
+/**
+ * Build style attributes for empty content
+ */
+function buildEmptyContentStyle(
+  contentEmpty?: boolean,
+  gridElementNoContent?: boolean,
+  parsedStyle?: Record<string, unknown>,
+  blockName?: string
+) {
+  if (gridElementNoContent) {
+    return { ...parsedStyle, minHeight: '1px', minWidth: '1px' }
+  }
+  if (contentEmpty && !blockName) {
+    return { ...parsedStyle, minHeight: '1px', display: 'block' }
+  }
+  return parsedStyle
+}
+
+/**
+ * Build translation attributes
+ */
+function buildTranslationAttrs(
+  firstTranslationKey?: string,
+  translationData?: Record<string, unknown>
+) {
+  return {
+    ...(firstTranslationKey && { 'data-translation-key': firstTranslationKey }),
+    ...(translationData && { 'data-translations': JSON.stringify(translationData) }),
+  }
+}
+
+/**
+ * Build animation attributes
+ */
+function buildAnimationAttrs(
+  hasScrollAnimation?: boolean,
+  hasHoverAnimation?: boolean,
+  hasClickAnimation?: boolean,
+  hasEntranceAnimation?: boolean
+) {
+  return {
+    ...(hasScrollAnimation && { 'data-scroll-animation': 'scaleUp' }),
+    ...(hasHoverAnimation && { 'data-hover-animation': 'true' }),
+    ...(hasClickAnimation && { 'data-click-interaction': 'true' }),
+    ...(hasEntranceAnimation && { 'data-entrance-animation': 'fadeIn' }),
+  }
+}
+
+/**
  * Build component props with all necessary attributes
  */
 export function buildComponentProps({
@@ -102,41 +164,17 @@ export function buildComponentProps({
 }): Record<string, unknown> {
   return {
     ...substitutedProps,
-    style: parsedStyle,
+    style: buildEmptyContentStyle(contentEmpty, gridElementNoContent, parsedStyle, blockName),
     className,
-    ...(blockName && {
-      'data-block': blockName,
-      'data-testid':
-        blockInstanceIndex !== undefined ? `${blockName}-${blockInstanceIndex}` : blockName,
-    }),
-    ...(contentEmpty &&
-      !blockName && {
-        style: { ...parsedStyle, minHeight: '1px', display: 'block' },
-      }),
-    ...(gridElementNoContent && {
-      style: { ...parsedStyle, minHeight: '1px', minWidth: '1px' },
-    }),
-    ...(firstTranslationKey && {
-      'data-translation-key': firstTranslationKey,
-    }),
-    ...(translationData && {
-      'data-translations': JSON.stringify(translationData),
-    }),
-    ...(isBlockWithChildren && {
-      role: 'group',
-    }),
-    ...(hasScrollAnimation && {
-      'data-scroll-animation': 'scaleUp',
-    }),
-    ...(hasHoverAnimation && {
-      'data-hover-animation': 'true',
-    }),
-    ...(hasClickAnimation && {
-      'data-click-interaction': 'true',
-    }),
-    ...(hasEntranceAnimation && {
-      'data-entrance-animation': 'fadeIn',
-    }),
+    ...buildBlockAttrs(blockName, blockInstanceIndex),
+    ...buildTranslationAttrs(firstTranslationKey, translationData),
+    ...(isBlockWithChildren && { role: 'group' }),
+    ...buildAnimationAttrs(
+      hasScrollAnimation,
+      hasHoverAnimation,
+      hasClickAnimation,
+      hasEntranceAnimation
+    ),
   }
 }
 

@@ -30,6 +30,16 @@ export type PageMetadata = {
 }
 
 /**
+ * Build font-family string with fallback
+ */
+function buildFontFamily(family?: string, fallback?: string): string | undefined {
+  if (!family) {
+    return undefined
+  }
+  return fallback ? `${family}, ${fallback}` : family
+}
+
+/**
  * Build body style object from theme fonts configuration
  */
 function buildBodyStyle(theme: Theme | undefined): PageMetadata['bodyStyle'] {
@@ -38,21 +48,44 @@ function buildBodyStyle(theme: Theme | undefined): PageMetadata['bodyStyle'] {
   }
 
   const { body } = theme.fonts
+  const fontFamily = buildFontFamily(body.family, body.fallback)
 
   return {
-    ...(body.family && {
-      fontFamily: body.fallback ? `${body.family}, ${body.fallback}` : body.family,
-    }),
+    ...(fontFamily && { fontFamily }),
     ...(body.size && { fontSize: body.size }),
     ...(body.lineHeight && { lineHeight: body.lineHeight }),
-    ...(body.style && {
-      fontStyle: body.style as 'normal' | 'italic' | 'oblique',
-    }),
+    ...(body.style && { fontStyle: body.style as 'normal' | 'italic' | 'oblique' }),
     ...(body.letterSpacing && { letterSpacing: body.letterSpacing }),
     ...(body.transform && {
       textTransform: body.transform as 'none' | 'uppercase' | 'lowercase' | 'capitalize',
     }),
   }
+}
+
+/**
+ * Determine language code (priority: page.meta.lang > detectedLanguage > default)
+ */
+function determineLanguage(
+  page: Page,
+  languages: Languages | undefined,
+  detectedLanguage: string | undefined
+): string {
+  return page.meta?.lang || detectedLanguage || languages?.default || 'en-US'
+}
+
+/**
+ * Determine text direction from language configuration
+ */
+function determineDirection(languages: Languages | undefined, lang: string): 'ltr' | 'rtl' {
+  const langConfig = languages?.supported.find((l) => l.code === lang)
+  return langConfig?.direction || 'ltr'
+}
+
+/**
+ * Determine page title
+ */
+function determineTitle(page: Page): string {
+  return page.meta?.title || page.name || page.path
 }
 
 /**
@@ -73,14 +106,9 @@ export function extractPageMetadata(
   languages: Languages | undefined,
   detectedLanguage: string | undefined
 ): Readonly<PageMetadata> {
-  // Determine the language to use (priority: page.meta.lang > detectedLanguage > default)
-  const lang = page.meta?.lang || detectedLanguage || languages?.default || 'en-US'
-
-  // Determine text direction from language configuration
-  const langConfig = languages?.supported.find((l) => l.code === lang)
-  const direction = langConfig?.direction || 'ltr'
-
-  const title = page.meta?.title || page.name || page.path
+  const lang = determineLanguage(page, languages, detectedLanguage)
+  const direction = determineDirection(languages, lang)
+  const title = determineTitle(page)
   const description = page.meta?.description || ''
   const bodyStyle = buildBodyStyle(theme)
 
