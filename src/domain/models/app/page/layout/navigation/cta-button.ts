@@ -41,6 +41,22 @@ export const CtaButtonSizeSchema = Schema.Literal('sm', 'md', 'lg', 'xl').annota
 })
 
 /**
+ * Button color (theme color name)
+ *
+ * 4 predefined theme colors:
+ * - orange: Orange brand color (#F97316)
+ * - blue: Blue brand color (#3B82F6)
+ * - green: Success/confirmation green (#10B981)
+ * - red: Error/danger red (#EF4444)
+ *
+ * NOTE: This is a simplified color palette. Future enhancement:
+ * Support custom colors from theme configuration.
+ */
+export const CtaButtonColorSchema = Schema.Literal('orange', 'blue', 'green', 'red').annotations({
+  description: 'Button color (theme color name)',
+})
+
+/**
  * Icon position relative to button text
  *
  * - left: Icon before text (default, most common)
@@ -101,11 +117,7 @@ export const CtaButtonSchema = Schema.Struct({
   }),
   variant: Schema.optional(CtaButtonVariantSchema),
   size: Schema.optional(CtaButtonSizeSchema),
-  color: Schema.optional(
-    Schema.String.annotations({
-      description: 'Button color (references theme colors)',
-    })
-  ),
+  color: Schema.optional(CtaButtonColorSchema),
   icon: Schema.optional(
     Schema.String.annotations({
       description: 'Optional icon name',
@@ -119,5 +131,6 @@ export const CtaButtonSchema = Schema.Struct({
 
 export type CtaButtonVariant = Schema.Schema.Type<typeof CtaButtonVariantSchema>
 export type CtaButtonSize = Schema.Schema.Type<typeof CtaButtonSizeSchema>
+export type CtaButtonColor = Schema.Schema.Type<typeof CtaButtonColorSchema>
 export type CtaButtonIconPosition = Schema.Schema.Type<typeof CtaButtonIconPositionSchema>
 export type CtaButton = Schema.Schema.Type<typeof CtaButtonSchema>
