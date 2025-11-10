@@ -1062,6 +1062,333 @@
       }
     },
     {
+      "id": "APP-LANGUAGES-019",
+      "given": "a page with translation tokens ($t:) in children arrays",
+      "when": "the page is server-side rendered",
+      "then": "translation tokens should be resolved to actual translated text in initial HTML (no $t: symbols remain)",
+      "validation": {
+        "setup": {
+          "languages": {
+            "default": "en-US",
+            "supported": [
+              {
+                "code": "en-US",
+                "label": "English"
+              },
+              {
+                "code": "fr-FR",
+                "label": "Français"
+              }
+            ],
+            "translations": {
+              "en-US": {
+                "button.save": "Save",
+                "button.cancel": "Cancel"
+              },
+              "fr-FR": {
+                "button.save": "Enregistrer",
+                "button.cancel": "Annuler"
+              }
+            }
+          }
+        },
+        "assertions": [
+          "$t: tokens in children resolve during SSR",
+          "No $t: symbols in server-rendered HTML",
+          "Translations applied before client hydration"
+        ]
+      },
+      "application": {
+        "languages": {
+          "default": "en-US",
+          "translations": {
+            "en-US": {
+              "hero.title": "Welcome to Our Platform",
+              "hero.cta": "Get Started"
+            },
+            "fr-FR": {
+              "hero.title": "Bienvenue sur Notre Plateforme",
+              "hero.cta": "Commencer"
+            }
+          }
+        },
+        "page": {
+          "sections": [
+            {
+              "type": "h1",
+              "children": ["$t:hero.title"]
+            },
+            {
+              "type": "button",
+              "children": ["$t:hero.cta"]
+            }
+          ]
+        },
+        "expectedDOM": {
+          "en-US": "<h1>Welcome to Our Platform</h1><button>Get Started</button>",
+          "fr-FR": "<h1>Bienvenue sur Notre Plateforme</h1><button>Commencer</button>"
+        },
+        "assertions": [
+          "SSR resolution: $t:hero.title → 'Welcome to Our Platform' (en-US)",
+          "SSR resolution: $t:hero.cta → 'Get Started' (en-US)",
+          "Language switching: $t:hero.title → 'Bienvenue sur Notre Plateforme' (fr-FR)",
+          "No $t: symbols in HTML: Content fully resolved before sending to browser",
+          "Server-side rendering: Translations applied during React renderToString()",
+          "Client hydration ready: HTML contains final translated text"
+        ]
+      }
+    },
+    {
+      "id": "APP-LANGUAGES-020",
+      "given": "a page with translation tokens ($t:) in component props",
+      "when": "the page is server-side rendered",
+      "then": "translation tokens in props (aria-label, placeholder, title) should be resolved in initial HTML",
+      "validation": {
+        "setup": {
+          "languages": {
+            "default": "en-US",
+            "translations": {
+              "en-US": {
+                "button.close": "Close",
+                "input.search.placeholder": "Search..."
+              },
+              "fr-FR": {
+                "button.close": "Fermer",
+                "input.search.placeholder": "Rechercher..."
+              }
+            }
+          }
+        },
+        "assertions": [
+          "$t: tokens in props resolve during SSR",
+          "ARIA labels contain translated text",
+          "No $t: in HTML attributes"
+        ]
+      },
+      "application": {
+        "languages": {
+          "default": "en-US",
+          "translations": {
+            "en-US": {
+              "close.label": "Close dialog",
+              "search.placeholder": "Type to search",
+              "save.tooltip": "Save changes"
+            },
+            "fr-FR": {
+              "close.label": "Fermer le dialogue",
+              "search.placeholder": "Tapez pour rechercher",
+              "save.tooltip": "Enregistrer les modifications"
+            }
+          }
+        },
+        "page": {
+          "sections": [
+            {
+              "type": "button",
+              "props": {
+                "aria-label": "$t:close.label",
+                "title": "$t:save.tooltip"
+              },
+              "children": ["×"]
+            },
+            {
+              "type": "input",
+              "props": {
+                "placeholder": "$t:search.placeholder"
+              }
+            }
+          ]
+        },
+        "expectedDOM": {
+          "en-US": "<button aria-label=\"Close dialog\" title=\"Save changes\">×</button><input placeholder=\"Type to search\" />",
+          "fr-FR": "<button aria-label=\"Fermer le dialogue\" title=\"Enregistrer les modifications\">×</button><input placeholder=\"Tapez pour rechercher\" />"
+        },
+        "assertions": [
+          "Prop translation: aria-label='$t:close.label' → 'Close dialog' (en-US)",
+          "Prop translation: placeholder='$t:search.placeholder' → 'Type to search' (en-US)",
+          "Prop translation: title='$t:save.tooltip' → 'Save changes' (en-US)",
+          "Accessibility: ARIA labels translated for screen readers",
+          "UX: Placeholder text translated in initial HTML",
+          "No $t: in attributes: All prop values fully resolved"
+        ]
+      }
+    },
+    {
+      "id": "APP-LANGUAGES-021",
+      "given": "a page with translation tokens ($t:) in content property",
+      "when": "the page is server-side rendered",
+      "then": "translation tokens in content should be resolved to translated text in initial HTML",
+      "validation": {
+        "setup": {
+          "languages": {
+            "default": "en-US",
+            "translations": {
+              "en-US": {
+                "welcome.message": "Welcome back!"
+              },
+              "fr-FR": {
+                "welcome.message": "Bon retour!"
+              }
+            }
+          }
+        },
+        "assertions": [
+          "$t: tokens in content resolve during SSR",
+          "Content text fully translated",
+          "No $t: in text nodes"
+        ]
+      },
+      "application": {
+        "languages": {
+          "default": "en-US",
+          "translations": {
+            "en-US": {
+              "hero.tagline": "Build amazing apps with configuration",
+              "footer.copyright": "© 2025 All rights reserved"
+            },
+            "fr-FR": {
+              "hero.tagline": "Créez des applications incroyables avec configuration",
+              "footer.copyright": "© 2025 Tous droits réservés"
+            }
+          }
+        },
+        "page": {
+          "sections": [
+            {
+              "type": "p",
+              "content": "$t:hero.tagline"
+            },
+            {
+              "type": "footer",
+              "content": "$t:footer.copyright"
+            }
+          ]
+        },
+        "expectedDOM": {
+          "en-US": "<p>Build amazing apps with configuration</p><footer>© 2025 All rights reserved</footer>",
+          "fr-FR": "<p>Créez des applications incroyables avec configuration</p><footer>© 2025 Tous droits réservés</footer>"
+        },
+        "assertions": [
+          "Content translation: content='$t:hero.tagline' → 'Build amazing apps with configuration'",
+          "Content translation: content='$t:footer.copyright' → '© 2025 All rights reserved'",
+          "Server-side rendering: Content resolved during renderToString()",
+          "No $t: in text: All content fully translated before sending HTML",
+          "Language switching: French content when fr-FR selected"
+        ]
+      }
+    },
+    {
+      "id": "APP-LANGUAGES-022",
+      "given": "a complete page with $t: tokens in children, props, and content",
+      "when": "the page HTML is generated via server-side rendering",
+      "then": "no $t: symbols should remain anywhere in the rendered HTML output",
+      "validation": {
+        "setup": {
+          "languages": {
+            "default": "en-US",
+            "translations": {
+              "en-US": {
+                "nav.home": "Home",
+                "hero.title": "Welcome",
+                "button.cta": "Get Started",
+                "input.email.placeholder": "Enter email",
+                "footer.text": "© 2025 Company"
+              }
+            }
+          }
+        },
+        "assertions": [
+          "No $t: symbols in HTML output",
+          "All translation tokens fully resolved",
+          "SSR produces complete translated HTML"
+        ]
+      },
+      "application": {
+        "languages": {
+          "default": "en-US",
+          "translations": {
+            "en-US": {
+              "page.title": "Home Page",
+              "nav.home": "Home",
+              "nav.about": "About",
+              "hero.title": "Welcome to Sovrium",
+              "hero.subtitle": "Build your next app",
+              "button.cta": "Get Started",
+              "input.email.placeholder": "Enter your email",
+              "input.email.label": "Email address",
+              "footer.copyright": "© 2025 Sovrium"
+            }
+          }
+        },
+        "page": {
+          "meta": {
+            "title": "$t:page.title"
+          },
+          "sections": [
+            {
+              "type": "nav",
+              "children": [
+                {
+                  "type": "a",
+                  "children": ["$t:nav.home"]
+                },
+                {
+                  "type": "a",
+                  "children": ["$t:nav.about"]
+                }
+              ]
+            },
+            {
+              "type": "section",
+              "children": [
+                {
+                  "type": "h1",
+                  "content": "$t:hero.title"
+                },
+                {
+                  "type": "p",
+                  "content": "$t:hero.subtitle"
+                },
+                {
+                  "type": "button",
+                  "children": ["$t:button.cta"]
+                }
+              ]
+            },
+            {
+              "type": "form",
+              "children": [
+                {
+                  "type": "input",
+                  "props": {
+                    "type": "email",
+                    "placeholder": "$t:input.email.placeholder",
+                    "aria-label": "$t:input.email.label"
+                  }
+                }
+              ]
+            },
+            {
+              "type": "footer",
+              "content": "$t:footer.copyright"
+            }
+          ]
+        },
+        "expectedDOM": "<html lang=\"en-US\"><head><title>Home Page</title></head><body><nav><a>Home</a><a>About</a></nav><section><h1>Welcome to Sovrium</h1><p>Build your next app</p><button>Get Started</button></section><form><input type=\"email\" placeholder=\"Enter your email\" aria-label=\"Email address\" /></form><footer>© 2025 Sovrium</footer></body></html>",
+        "assertions": [
+          "Complete SSR validation: Entire page rendered with all translations resolved",
+          "Children arrays: $t:nav.home → 'Home', $t:button.cta → 'Get Started'",
+          "Content property: $t:hero.title → 'Welcome to Sovrium'",
+          "Props (ARIA/placeholder): $t:input.email.placeholder → 'Enter your email'",
+          "Meta tags: $t:page.title → 'Home Page' in <title>",
+          "CRITICAL VALIDATION: HTML content MUST NOT contain '$t:' anywhere",
+          "Regex test: page.content().match(/\\$t:/) === null",
+          "SSR complete: All translation tokens resolved before HTML sent to browser",
+          "No client-side translation needed: HTML ready for immediate display"
+        ]
+      }
+    },
+    {
       "id": "APP-LANGUAGES-INTEGRATION-001",
       "given": "a multi-language app with theme integration",
       "when": "language direction affects theme spacing and layout",
