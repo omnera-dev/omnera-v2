@@ -307,18 +307,34 @@ function generateBaseLayer(theme?: Theme): string {
   const headingClasses = buildHeadingClasses(hasTextColor, hasTitleFont)
   const linkClasses = buildLinkClasses(hasPrimaryColor, hasPrimaryHoverColor)
 
-  // Check if title font has a custom style
-  const titleFontStyle =
+  // Extract title font properties for headings
+  const titleFont =
     theme?.fonts?.title && typeof theme.fonts.title === 'object'
-      ? (theme.fonts.title as { style?: string }).style
+      ? (theme.fonts.title as {
+          style?: string
+          transform?: string
+          letterSpacing?: string
+        })
       : undefined
-  const hasTitleFontStyle = Boolean(titleFontStyle && titleFontStyle !== 'normal')
 
-  // Build heading styles with optional font-style
-  const headingStyles = hasTitleFontStyle
-    ? `@apply ${headingClasses.join(' ')};
-        font-style: var(--font-title-style);`
-    : `@apply ${headingClasses.join(' ')};`
+  // Build additional CSS properties for headings
+  const headingStyleProps: string[] = []
+  if (titleFont?.style && titleFont.style !== 'normal') {
+    headingStyleProps.push(`font-style: var(--font-title-style);`)
+  }
+  if (titleFont?.transform && titleFont.transform !== 'none') {
+    headingStyleProps.push(`text-transform: var(--font-title-transform);`)
+  }
+  if (titleFont?.letterSpacing) {
+    headingStyleProps.push(`letter-spacing: var(--font-title-letter-spacing);`)
+  }
+
+  // Build heading styles with optional properties
+  const headingStyles =
+    headingStyleProps.length > 0
+      ? `@apply ${headingClasses.join(' ')};
+        ${headingStyleProps.join('\n        ')}`
+      : `@apply ${headingClasses.join(' ')};`
 
   return `@layer base {
       body {

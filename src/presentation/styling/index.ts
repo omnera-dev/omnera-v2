@@ -7,14 +7,8 @@
 
 // Utility functions
 export { cn } from './cn'
-export { hexToRgb, toRgbColor } from './color-utils'
 export { parseStyle, normalizeStyleAnimations } from './parse-style'
 export { isCssValue, isTailwindClass } from './style-utils'
-export {
-  FOCUS_RING_CLASSES,
-  VALIDATION_RING_CLASSES,
-  COMMON_INTERACTIVE_CLASSES,
-} from './variant-classes'
 
 // Animation composition
 export { composeAnimation } from './animation-composer'

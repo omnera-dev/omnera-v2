@@ -291,7 +291,7 @@ function setupHomepageRoute(honoApp: Readonly<Hono>, config: HonoAppConfig): Rea
       const html = renderHomePage(app, undefined)
       return c.html(html)
     } catch (error) {
-      console.error('Error rendering homepage:', error)
+      Effect.runSync(Console.error('Error rendering homepage:', error))
       return c.html(renderErrorPage(), 500)
     }
   })
@@ -313,7 +313,7 @@ function setupLanguageRoutes(honoApp: Readonly<Hono>, config: HonoAppConfig): Re
         const html = renderHomePage(app, urlLanguage)
         return c.html(html)
       } catch (error) {
-        console.error('Error rendering homepage:', error)
+        Effect.runSync(Console.error('Error rendering homepage:', error))
         return c.html(renderErrorPage(), 500)
       }
     })
@@ -338,7 +338,7 @@ function setupLanguageRoutes(honoApp: Readonly<Hono>, config: HonoAppConfig): Re
         }
         return c.html(html)
       } catch (error) {
-        console.error('Error rendering page:', error)
+        Effect.runSync(Console.error('Error rendering page:', error))
         return c.html(renderErrorPage(), 500)
       }
     })

@@ -16,7 +16,7 @@
  * - Graceful shutdown handling
  */
 
-import { Effect } from 'effect'
+import { Console, Effect } from 'effect'
 import { startServer } from '@/application/use-cases/server/start-server'
 import { AppLayer } from '@/infrastructure/layers/app-layer'
 import { withGracefulShutdown } from '@/infrastructure/server/lifecycle'
@@ -98,7 +98,7 @@ const toSimpleServer = (server: Readonly<ServerInstance>): SimpleServer => ({
  */
 export const start = async (app: unknown, options: StartOptions = {}): Promise<SimpleServer> => {
   const program = Effect.gen(function* () {
-    console.log('Starting Sovrium server...')
+    yield* Console.log('Starting Sovrium server...')
 
     // Start the server (dependencies injected via AppLayer)
     const server = yield* startServer(app, options)
