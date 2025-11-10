@@ -29,6 +29,7 @@ const COMPONENT_SHADOW_MAP: Record<string, readonly string[]> = {
  * Find first available custom shadow (non-standard)
  */
 function findCustomShadow(shadows: Theme['shadows']): string | undefined {
+  if (!shadows) return undefined
   return Object.keys(shadows).find((name) => !STANDARD_SHADOWS.includes(name as never))
 }
 
@@ -36,6 +37,8 @@ function findCustomShadow(shadows: Theme['shadows']): string | undefined {
  * Get shadow value for component type
  */
 function getShadowForType(type: Component['type'], shadows: Theme['shadows']): string | undefined {
+  if (!shadows) return undefined
+
   // Special handling for card: custom shadows first, then md
   if (type === 'card') {
     const customShadow = findCustomShadow(shadows)

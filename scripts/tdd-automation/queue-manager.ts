@@ -49,7 +49,6 @@ import {
 } from './services/queue-operations'
 import { scanForFixmeSpecs } from './services/spec-scanner'
 import type { SpecItem, SpecIssue, QueueScanResult } from './services/types'
-import type { LoggerService } from '../lib/effect'
 
 // Re-export types for backward compatibility
 export type { SpecItem, SpecIssue, QueueScanResult }
@@ -130,8 +129,7 @@ const commandPopulate = Effect.gen(function* () {
     yield* checkRateLimit
 
     // Get all existing spec IDs in one call (efficient bulk query)
-    const existingSpecs = yield* getAllExistingSpecs
-    const existingSpecIds = new Set(existingSpecs.map((s: SpecIssue) => s.specId))
+    const existingSpecIds = yield* getAllExistingSpecs
 
     // Filter out specs that already have issues
     const newSpecs = scanResult.specs.filter((spec) => !existingSpecIds.has(spec.specId))
@@ -151,9 +149,9 @@ const commandPopulate = Effect.gen(function* () {
 
     // Create issues for new specs (skip existence check since we did bulk query)
     for (const spec of newSpecs) {
-      const result = yield* createSpecIssue(spec, true) // skipExistenceCheck=true
+      const issueNumber = yield* createSpecIssue(spec, true) // skipExistenceCheck=true
 
-      if (result.created) {
+      if (issueNumber > 0) {
         created++
         yield* progress(`Created ${created}/${newSpecs.length} issues`)
       } else {
@@ -236,18 +234,17 @@ const commandStatus = Effect.gen(function* () {
  * Main CLI entry point
  */
 const main = Effect.gen(function* () {
-  const logger = yield* LoggerService
   const command = process.argv[2]
 
   if (!command) {
-    yield* logger.error('Usage: bun run queue-manager <command>')
-    yield* logger.error('')
-    yield* logger.error('Commands:')
-    yield* logger.error('  scan      - Scan for test.fixme() and save results')
-    yield* logger.error('  populate  - Create GitHub issues for all specs')
-    yield* logger.error('  next      - Get next queued spec (sorted by priority)')
-    yield* logger.error('  status    - Show queue status')
-    yield* logger.error('')
+    yield* logError('Usage: bun run queue-manager <command>')
+    yield* logError('')
+    yield* logError('Commands:')
+    yield* logError('  scan      - Scan for test.fixme() and save results')
+    yield* logError('  populate  - Create GitHub issues for all specs')
+    yield* logError('  next      - Get next queued spec (sorted by priority)')
+    yield* logError('  status    - Show queue status')
+    yield* logError('')
     process.exit(1)
   }
 
@@ -265,7 +262,7 @@ const main = Effect.gen(function* () {
       yield* commandStatus
       break
     default:
-      yield* logger.error(`Unknown command: ${command}`)
+      yield* logError(`Unknown command: ${command}`)
       process.exit(1)
   }
 })

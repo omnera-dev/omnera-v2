@@ -100,7 +100,7 @@ function buildAnimationStyle(
 export function composeAnimation(config: AnimationComposerConfig): Record<string, unknown> {
   const animationConfig = config.theme?.animations?.[config.animationName]
   if (!animationConfig) {
-    return config.baseStyle
+    return config.baseStyle || {}
   }
 
   const { duration, easing } = extractAnimationTiming(

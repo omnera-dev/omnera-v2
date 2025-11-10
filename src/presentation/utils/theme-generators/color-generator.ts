@@ -12,6 +12,7 @@ import type { Theme } from '@/domain/models/app/theme'
  * Build heading color styles
  */
 function buildHeadingStyles(colors: Theme['colors']): readonly string[] {
+  if (!colors) return []
   if (colors.text) {
     return [`h1, h2, h3, h4, h5, h6, p { color: ${toRgbColor(colors.text)}; }`]
   }
@@ -25,7 +26,7 @@ function buildHeadingStyles(colors: Theme['colors']): readonly string[] {
  * Build paragraph color styles
  */
 function buildParagraphStyles(colors: Theme['colors']): readonly string[] {
-  if (colors.text || !colors['gray-500']) {
+  if (!colors || colors.text || !colors['gray-500']) {
     return []
   }
   return [`p { color: ${toRgbColor(colors['gray-500'])}; }`]
@@ -35,7 +36,7 @@ function buildParagraphStyles(colors: Theme['colors']): readonly string[] {
  * Build button color styles
  */
 function buildButtonStyles(colors: Theme['colors']): readonly string[] {
-  if (!colors.primary) {
+  if (!colors || !colors.primary) {
     return []
   }
   const baseStyle = `button { background-color: ${toRgbColor(colors.primary)}; color: #ffffff; border: none; padding: 0.5rem 1rem; border-radius: 0.375rem; cursor: pointer; }`
