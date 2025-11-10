@@ -192,9 +192,7 @@ This index provides a comprehensive guide to Sovrium's architecture documentatio
 | ----------------------- | -------------------------------- | ---------------------------------------------------- |
 | `ui/react.md`           | React 19, automatic compiler     | Layer-Based Architecture (Presentation), Performance |
 | `ui/tailwind.md`        | Tailwind CSS v4, JIT compilation | Performance Optimization                             |
-| `ui/shadcn.md`          | shadcn/ui component library      | Layer-Based Architecture (Presentation)              |
 | `ui/react-hook-form.md` | Form management with Zod         | Security (client-side validation)                    |
-| `ui/radix-ui.md`        | Accessible UI primitives         | Layer-Based Architecture (Presentation)              |
 | `ui/tanstack-query.md`  | Server state management, caching | Performance Optimization                             |
 | `ui/tanstack-table.md`  | Data tables                      | Layer-Based Architecture (Presentation)              |
 
@@ -317,7 +315,7 @@ Sovrium uses different date libraries depending on the context:
 
 **Why Split?**
 
-- date-fns: Optimized for browser, required by shadcn/ui date-picker
+- date-fns: Optimized for browser, better for client-side date manipulation
 - Effect.DateTime: Integrates with Effect.ts ecosystem, better for server logic
 
 **See**:
@@ -338,8 +336,7 @@ Sovrium uses different date libraries depending on the context:
 1. React 19 (`ui/react.md`) - Component rendering
 2. React Hook Form (`ui/react-hook-form.md`) - Form state management
 3. Zod (`ui/react-hook-form.md`) - Client-side validation
-4. shadcn/ui (`ui/shadcn.md`) - Form UI components
-5. Radix UI (`ui/radix-ui.md`) - Accessible primitives
+4. Tailwind CSS (`ui/tailwind.md`) - Styling with utility classes
 
 **Example Location**: Presentation Layer (aspirational: `src/presentation/components/`)
 

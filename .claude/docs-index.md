@@ -36,9 +36,7 @@
 ### UI & Frontend
 - `@docs/infrastructure/ui/react.md` - React 19 patterns
 - `@docs/infrastructure/ui/react-hook-form.md` - Form management (client-side, Zod validation)
-- `@docs/infrastructure/ui/radix-ui.md` - Accessible UI primitives (shadcn/ui foundation)
 - `@docs/infrastructure/ui/tailwind.md` - Tailwind CSS
-- `@docs/infrastructure/ui/shadcn.md` - shadcn/ui components
 - `@docs/infrastructure/ui/tanstack-query.md` - TanStack Query
 - `@docs/infrastructure/ui/tanstack-table.md` - TanStack Table
 
@@ -85,7 +83,7 @@ Import: @docs/infrastructure/framework/better-auth.md
 ### Working with Forms
 ```
 Import: @docs/infrastructure/ui/react-hook-form.md
-Import: @docs/infrastructure/ui/shadcn.md
+Import: @docs/infrastructure/ui/tailwind.md
 ```
 
 ### Working with API Routes

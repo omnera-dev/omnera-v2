@@ -39,7 +39,6 @@
 | **Drizzle ORM** | ^0.44.7 | Database (PostgreSQL via bun:sql) |
 | **React** | 19.2.0 | UI library |
 | **Tailwind CSS** | 4.1.16 | Styling |
-| **shadcn/ui** | N/A | Component collection (copy-paste, not npm) |
 | **TanStack Query** | 5.90.5 | Server state management |
 | **TanStack Table** | ^8.21.3 | Data tables |
 
@@ -136,10 +135,10 @@ git push origin main               # Triggers release ONLY with "release:" type
 - **Omit file extensions** in imports (extensionless)
 - **Use path aliases** for components (`@/components/ui/button`)
 
-### UI Components (shadcn/ui Pattern)
-- **Location**: `src/components/ui/{component-name}.tsx`
+### UI Components
+- **Location**: `src/presentation/components/` (organized by feature)
 - **Props**: Extend native HTML element props
-- **className merging**: Always use `cn()` from `@/lib/utils`
+- **Styling**: Plain Tailwind CSS classes
 - **Exports**: Export both component and props interface
 
 ### Test File Naming Convention (CRITICAL - Pattern-Based)
@@ -457,10 +456,9 @@ This generates:
 - ❌ **NOT npm/yarn/pnpm** - Use Bun package manager
 - ❌ **NOT CommonJS** - ES Modules only
 - ❌ **NOT manual memoization** - React 19 Compiler handles it
-- ❌ **NOT npm package for shadcn/ui** - Copy components directly
 - ✅ **DO use TypeScript directly** - Bun executes .ts files natively
 - ✅ **DO use Effect.gen** - Application layer workflows
-- ✅ **DO use path aliases** - `@/components/ui/button`
+- ✅ **DO use path aliases** - `@/presentation/components/pages/HomePage`
 - ✅ **DO validate inputs** - Client: Zod (React Hook Form), Server: Effect Schema
 - ✅ **DO use correct date library** - Client: date-fns (date-picker), Server: Effect.DateTime
 

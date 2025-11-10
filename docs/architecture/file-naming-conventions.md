@@ -57,7 +57,7 @@ Naming patterns match ecosystem conventions:
 - **Web URLs** - kebab-case for routes (`/api/health`)
 - **CLI tools** - kebab-case for scripts (`update-license.sh`)
 - **React hooks** - kebab-case with `use-` prefix (`use-mobile.ts`)
-- **shadcn/ui** - kebab-case for UI primitives (`button.tsx`)
+- **UI components** - kebab-case for reusable components (`button.tsx`)
 
 ---
 
@@ -675,11 +675,11 @@ src/presentation/components/
 ├── pages/
 │   ├── DefaultHomePage.tsx    # Page component (PascalCase)
 │   └── LoginPage.tsx          # Page component (PascalCase)
-└── ui/
-    ├── button.tsx             # ✅ UI primitive (kebab-case)
-    ├── input.tsx              # ✅ UI primitive (kebab-case)
-    ├── card.tsx               # ✅ UI primitive (kebab-case)
-    └── alert-dialog.tsx       # ✅ UI primitive (kebab-case)
+└── common/
+    ├── button.tsx             # ✅ Reusable component (kebab-case)
+    ├── input.tsx              # ✅ Reusable component (kebab-case)
+    ├── card.tsx               # ✅ Reusable component (kebab-case)
+    └── alert-dialog.tsx       # ✅ Reusable component (kebab-case)
 ```
 
 **Examples:**
@@ -689,51 +689,48 @@ src/presentation/components/
 // File: src/presentation/components/pages/DefaultHomePage.tsx
 export function DefaultHomePage({ app }) { /* ... */ }
 
-// ✅ CORRECT - UI primitives (kebab-case, shadcn/ui pattern)
-// File: src/presentation/components/ui/button.tsx
+// ✅ CORRECT - Reusable components (kebab-case)
+// File: src/presentation/components/common/button.tsx
 export function Button({ children }) { /* ... */ }
 
-// File: src/presentation/components/ui/alert-dialog.tsx
+// File: src/presentation/components/common/alert-dialog.tsx
 export function AlertDialog({ children }) { /* ... */ }
 
 // ❌ INCORRECT
 src/presentation/components/pages/default-home-page.tsx  // Page components use PascalCase
-src/presentation/components/ui/Button.tsx                // UI primitives use kebab-case
+src/presentation/components/common/Button.tsx            // Reusable components use kebab-case
 ```
 
 **Why this dual convention:**
 
 - **Page components (PascalCase)** - Full-page, application-specific components
-- **UI primitives (kebab-case)** - Reusable primitives following shadcn/ui ecosystem
+- **Reusable components (kebab-case)** - Reusable primitives used across the application
 - **Clear distinction** - Naming reveals component type immediately
-- **Ecosystem alignment** - Matches shadcn/ui conventions for primitives
 
 **Edge cases:**
 
-- **Multi-word UI components** - Use kebab-case: `alert-dialog.tsx`, `input-group.tsx`
+- **Multi-word components** - Use kebab-case: `alert-dialog.tsx`, `input-group.tsx`
 - **Component variants** - Separate file: `button-variants.ts` (see Variant Files below)
 
 ### Variant Files (CVA)
 
 **Pattern**: `{component}-variants.ts`
 
-**Location**: `src/presentation/components/ui/`
+**Location**: `src/presentation/components/common/` or `src/presentation/styling/`
 
-**Purpose**: Class Variance Authority (CVA) variant definitions
+**Purpose**: Class Variance Authority (CVA) variant definitions for components with multiple visual variants
 
 ```
-src/presentation/components/ui/
-├── button.tsx              # Button component
-├── button-variants.ts      # ✅ EXISTING - buttonVariants CVA definition
-├── badge.tsx               # Badge component
-└── badge-variants.ts       # ✅ EXISTING - badgeVariants CVA definition
+src/presentation/styling/
+├── button-variants.ts      # buttonVariants CVA definition
+└── badge-variants.ts       # badgeVariants CVA definition
 ```
 
 **Examples:**
 
 ```typescript
 // ✅ CORRECT
-src / presentation / components / ui / button - variants.ts
+src / presentation / styling / button - variants.ts
 export const buttonVariants = cva('inline-flex items-center...', {
   variants: {
     /* ... */
@@ -741,26 +738,22 @@ export const buttonVariants = cva('inline-flex items-center...', {
 })
 
 // ❌ INCORRECT
-src / presentation / components / ui / ButtonVariants.ts // Use kebab-case
-src / presentation / components / ui / button.variants.ts // Use hyphen, not dot
+src / presentation / styling / ButtonVariants.ts // Use kebab-case
+src / presentation / styling / button.variants.ts // Use hyphen, not dot
 ```
 
 ### React Hook Files
 
-**Pattern**:
+**Pattern**: `use-{hook-name}.ts`
 
-- `use-{hook-name}.ts` for **standalone hooks** in `src/presentation/hooks/`
-- `{component}-hook.ts` for **component-specific hooks** in `src/presentation/components/ui/`
+**Location**: `src/presentation/hooks/`
 
 **Purpose**: React hook definitions
 
 ```
 src/presentation/hooks/
-└── use-mobile.ts          # ✅ EXISTING - useIsMobile hook (standalone)
-
-src/presentation/components/ui/
-├── sidebar-hook.ts        # ✅ EXISTING - useSidebar hook (component-specific, shadcn pattern)
-└── form-hook.ts           # ✅ EXISTING - useForm hook (component-specific, shadcn pattern)
+├── use-mobile.ts          # ✅ EXISTING - useIsMobile hook
+└── use-sidebar.ts         # ✅ EXISTING - useSidebar hook
 ```
 
 **Examples:**
@@ -772,8 +765,7 @@ export function useIsMobile() {
   /* ... */
 }
 
-// ✅ CORRECT - Component-specific hooks (*-hook pattern in components/ui/ directory)
-src / presentation / components / ui / sidebar - hook.ts
+src / presentation / hooks / use - sidebar.ts
 export function useSidebar() {
   /* ... */
 }
@@ -781,22 +773,22 @@ export function useSidebar() {
 // ❌ INCORRECT
 src / presentation / hooks / mobile.ts // Missing "use-" prefix
 src / presentation / hooks / useMobile.ts // Use kebab-case
-src / presentation / hooks / sidebar - hook.ts // Use "use-*" pattern in hooks/, not "*-hook"
-src / presentation / components / ui / use - sidebar.ts // Use "*-hook" pattern in components/ui/, not "use-*"
 ```
 
 ### Utility Files
 
 **Pattern**: `{utility-name}.ts` (kebab-case)
 
-**Location**: `src/presentation/utils/`
+**Location**: `src/presentation/utils/` or `src/presentation/styling/`
 
 **Purpose**: Presentation layer utilities (pure functions)
 
 ```
+src/presentation/styling/
+├── cn.ts                  # ✅ EXISTING - className merger (Tailwind utility)
+└── variant-classes.ts     # ✅ EXISTING - Common variant utilities
+
 src/presentation/utils/
-├── cn.ts                  # ✅ EXISTING - className merger
-├── variant-classes.ts     # ✅ EXISTING - Common variant utilities
 └── render-homepage.tsx    # ✅ EXISTING - SSR homepage rendering
 ```
 
@@ -804,17 +796,17 @@ src/presentation/utils/
 
 ```typescript
 // ✅ CORRECT
-src / presentation / utils / cn.ts
+src / presentation / styling / cn.ts
 export function cn(...inputs) {
   /* ... */
 }
 
-src / presentation / utils / variant - classes.ts
+src / presentation / styling / variant - classes.ts
 export const COMMON_INTERACTIVE_CLASSES = '...'
 
 // ❌ INCORRECT
-src / presentation / utils / CN.ts // Use lowercase
-src / presentation / utils / classNameMerger.ts // Use kebab-case
+src / presentation / styling / CN.ts // Use lowercase
+src / presentation / styling / classNameMerger.ts // Use kebab-case
 ```
 
 ### API Route Files
@@ -1019,7 +1011,6 @@ tests/
 | UI Component  | `{component}.tsx`         | `button.tsx`              | Presentation   |
 | Variants      | `{component}-variants.ts` | `button-variants.ts`      | Presentation   |
 | Hook          | `use-{name}.ts`           | `use-mobile.ts`           | Presentation   |
-| Hook (comp)   | `{component}-hook.ts`     | `sidebar-hook.ts`         | Presentation   |
 | Utility       | `{utility}.ts`            | `cn.ts`                   | Presentation   |
 | API Route     | `{route}.ts`              | `health.ts`               | Presentation   |
 | Dynamic Route | `[{param}].ts`            | `[table].ts`              | Presentation   |
