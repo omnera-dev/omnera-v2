@@ -22,7 +22,7 @@ interface AnimationStyleOptions {
  */
 interface AnimationComposerConfig {
   readonly baseStyle?: Record<string, unknown>
-  readonly componentType: string
+  readonly componentType?: string
   readonly animationName: string
   readonly theme?: Theme
   readonly defaultDuration: string

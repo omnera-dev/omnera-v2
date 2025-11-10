@@ -67,12 +67,7 @@ export type RenderPropsConfig = {
 export function buildComponentProps(config: ComponentPropsConfig): {
   readonly substitutedProps: Record<string, unknown> | undefined
   readonly firstTranslationKey: string | undefined
-  readonly translationData:
-    | {
-        readonly currentLangKey: string
-        readonly defaultLangKey: string
-      }
-    | undefined
+  readonly translationData: Record<string, string> | undefined
   readonly styleWithShadow: Record<string, unknown> | undefined
   readonly finalClassName: string | undefined
   readonly elementProps: Record<string, unknown>

@@ -51,7 +51,7 @@ export function renderBlockReferenceError({
  */
 export function extractBlockReference(component: SimpleBlockReference | BlockReference): {
   refName: string
-  vars: Record<string, string> | undefined
+  vars: Record<string, string | number | boolean> | undefined
 } {
   const refName = 'block' in component ? component.block : component.$ref
   const vars = 'vars' in component ? component.vars : undefined

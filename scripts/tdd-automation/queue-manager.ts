@@ -270,7 +270,17 @@ const main = Effect.gen(function* () {
 // Run with dependencies
 const MainLayer = Layer.merge(
   FileSystemServiceLive,
-  Layer.merge(CommandServiceLive, LoggerServicePretty)
+  Layer.merge(CommandServiceLive, LoggerServicePretty())
 )
 
-Effect.runPromise(main.pipe(Effect.provide(MainLayer)))
+Effect.runPromise(
+  main.pipe(
+    Effect.provide(MainLayer),
+    Effect.catchAll((error) =>
+      Effect.sync(() => {
+        console.error('Queue manager error:', error)
+        process.exit(1)
+      })
+    )
+  )
+)
