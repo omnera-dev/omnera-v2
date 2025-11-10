@@ -23,10 +23,10 @@ declare global {
  * E2E Tests for Languages Configuration
  *
  * Source: specs/app/languages/languages.schema.json
- * Spec Count: 10
+ * Spec Count: 22
  *
  * Test Organization:
- * 1. @spec tests - One per spec in schema (10 tests) - Exhaustive acceptance criteria
+ * 1. @spec tests - One per spec in schema (22 tests) - Exhaustive acceptance criteria
  * 2. @regression test - ONE optimized integration test - Efficient workflow validation
  */
 
@@ -1167,6 +1167,271 @@ test.describe('Languages Configuration', () => {
       await expect(page.locator('h1')).toHaveText('Welcome')
       await expect(page.locator('button')).toHaveText('Save')
       await expect(page.getByText('Not Found', { exact: true })).toBeVisible()
+    }
+  )
+
+  test.fixme(
+    'APP-LANGUAGES-019: should resolve translation tokens in children arrays during SSR',
+    { tag: '@spec' },
+    async ({ page, startServerWithSchema }) => {
+      // GIVEN: a page with translation tokens ($t:) in children arrays
+      await startServerWithSchema({
+        name: 'test-app',
+        languages: {
+          default: 'en-US',
+          supported: [
+            { code: 'en-US', label: 'English', direction: 'ltr' },
+            { code: 'fr-FR', label: 'Français', direction: 'ltr' },
+          ],
+          translations: {
+            'en-US': {
+              'hero.title': 'Welcome to Our Platform',
+              'hero.cta': 'Get Started',
+            },
+            'fr-FR': {
+              'hero.title': 'Bienvenue sur Notre Plateforme',
+              'hero.cta': 'Commencer',
+            },
+          },
+        },
+        pages: [
+          {
+            name: 'homepage',
+            path: '/',
+            meta: { lang: 'en-US', title: 'Test', description: 'Test page' },
+            sections: [
+              {
+                type: 'h1',
+                children: ['$t:hero.title'],
+              },
+              {
+                type: 'button',
+                children: ['$t:hero.cta'],
+              },
+            ],
+          },
+        ],
+      })
+
+      // WHEN: the page is server-side rendered
+      await page.goto('/')
+
+      // THEN: translation tokens should be resolved to actual translated text in initial HTML (no $t: symbols remain)
+      const html = await page.content()
+      expect(html).not.toContain('$t:')
+      expect(html).toContain('Welcome to Our Platform')
+      expect(html).toContain('Get Started')
+
+      await expect(page.locator('h1')).toHaveText('Welcome to Our Platform')
+      await expect(page.locator('button')).toHaveText('Get Started')
+    }
+  )
+
+  test.fixme(
+    'APP-LANGUAGES-020: should resolve translation tokens in component props during SSR',
+    { tag: '@spec' },
+    async ({ page, startServerWithSchema }) => {
+      // GIVEN: a page with translation tokens ($t:) in component props
+      await startServerWithSchema({
+        name: 'test-app',
+        languages: {
+          default: 'en-US',
+          supported: [{ code: 'en-US', label: 'English', direction: 'ltr' }],
+          translations: {
+            'en-US': {
+              'close.label': 'Close dialog',
+              'search.placeholder': 'Type to search',
+              'save.tooltip': 'Save changes',
+            },
+          },
+        },
+        pages: [
+          {
+            name: 'homepage',
+            path: '/',
+            meta: { lang: 'en-US', title: 'Test', description: 'Test page' },
+            sections: [
+              {
+                type: 'button',
+                props: {
+                  'aria-label': '$t:close.label',
+                  title: '$t:save.tooltip',
+                },
+                children: ['×'],
+              },
+              {
+                type: 'input',
+                props: {
+                  placeholder: '$t:search.placeholder',
+                },
+              },
+            ],
+          },
+        ],
+      })
+
+      // WHEN: the page is server-side rendered
+      await page.goto('/')
+
+      // THEN: translation tokens in props (aria-label, placeholder, title) should be resolved in initial HTML
+      const html = await page.content()
+      expect(html).not.toContain('$t:')
+      expect(html).toContain('aria-label="Close dialog"')
+      expect(html).toContain('placeholder="Type to search"')
+      expect(html).toContain('title="Save changes"')
+
+      await expect(page.locator('button')).toHaveAttribute('aria-label', 'Close dialog')
+      await expect(page.locator('button')).toHaveAttribute('title', 'Save changes')
+      await expect(page.locator('input')).toHaveAttribute('placeholder', 'Type to search')
+    }
+  )
+
+  test.fixme(
+    'APP-LANGUAGES-021: should resolve translation tokens in content property during SSR',
+    { tag: '@spec' },
+    async ({ page, startServerWithSchema }) => {
+      // GIVEN: a page with translation tokens ($t:) in content property
+      await startServerWithSchema({
+        name: 'test-app',
+        languages: {
+          default: 'en-US',
+          supported: [{ code: 'en-US', label: 'English', direction: 'ltr' }],
+          translations: {
+            'en-US': {
+              'hero.tagline': 'Build amazing apps with configuration',
+              'footer.copyright': '© 2025 All rights reserved',
+            },
+          },
+        },
+        pages: [
+          {
+            name: 'homepage',
+            path: '/',
+            meta: { lang: 'en-US', title: 'Test', description: 'Test page' },
+            sections: [
+              {
+                type: 'p',
+                content: '$t:hero.tagline',
+              },
+              {
+                type: 'footer',
+                content: '$t:footer.copyright',
+              },
+            ],
+          },
+        ],
+      })
+
+      // WHEN: the page is server-side rendered
+      await page.goto('/')
+
+      // THEN: translation tokens in content should be resolved to translated text in initial HTML
+      const html = await page.content()
+      expect(html).not.toContain('$t:')
+      expect(html).toContain('Build amazing apps with configuration')
+      expect(html).toContain('© 2025 All rights reserved')
+
+      await expect(page.locator('p')).toHaveText('Build amazing apps with configuration')
+      await expect(page.locator('footer')).toHaveText('© 2025 All rights reserved')
+    }
+  )
+
+  test.fixme(
+    'APP-LANGUAGES-022: should have no $t: symbols anywhere in rendered HTML output',
+    { tag: '@spec' },
+    async ({ page, startServerWithSchema }) => {
+      // GIVEN: a complete page with $t: tokens in children, props, and content
+      await startServerWithSchema({
+        name: 'test-app',
+        languages: {
+          default: 'en-US',
+          supported: [{ code: 'en-US', label: 'English', direction: 'ltr' }],
+          translations: {
+            'en-US': {
+              'page.title': 'Home Page',
+              'nav.home': 'Home',
+              'nav.about': 'About',
+              'hero.title': 'Welcome to Sovrium',
+              'hero.subtitle': 'Build your next app',
+              'button.cta': 'Get Started',
+              'input.email.placeholder': 'Enter your email',
+              'input.email.label': 'Email address',
+              'footer.copyright': '© 2025 Sovrium',
+            },
+          },
+        },
+        pages: [
+          {
+            name: 'homepage',
+            path: '/',
+            meta: {
+              lang: 'en-US',
+              title: '$t:page.title',
+              description: 'Test page',
+            },
+            sections: [
+              {
+                type: 'nav',
+                children: [
+                  { type: 'a', children: ['$t:nav.home'] },
+                  { type: 'a', children: ['$t:nav.about'] },
+                ],
+              },
+              {
+                type: 'section',
+                children: [
+                  { type: 'h1', content: '$t:hero.title' },
+                  { type: 'p', content: '$t:hero.subtitle' },
+                  { type: 'button', children: ['$t:button.cta'] },
+                ],
+              },
+              {
+                type: 'form',
+                children: [
+                  {
+                    type: 'input',
+                    props: {
+                      type: 'email',
+                      placeholder: '$t:input.email.placeholder',
+                      'aria-label': '$t:input.email.label',
+                    },
+                  },
+                ],
+              },
+              {
+                type: 'footer',
+                content: '$t:footer.copyright',
+              },
+            ],
+          },
+        ],
+      })
+
+      // WHEN: the page HTML is generated via server-side rendering
+      await page.goto('/')
+
+      // THEN: no $t: symbols should remain anywhere in the rendered HTML output
+      const html = await page.content()
+
+      // CRITICAL VALIDATION: HTML content MUST NOT contain '$t:' anywhere
+      expect(html.match(/\$t:/)).toBeNull()
+
+      // Verify all translations were resolved
+      await expect(page).toHaveTitle('Home Page')
+      await expect(page.locator('nav a').first()).toHaveText('Home')
+      await expect(page.locator('nav a').last()).toHaveText('About')
+      await expect(page.locator('h1')).toHaveText('Welcome to Sovrium')
+      await expect(page.locator('p')).toHaveText('Build your next app')
+      await expect(page.locator('button')).toHaveText('Get Started')
+      await expect(page.locator('input[type="email"]')).toHaveAttribute(
+        'placeholder',
+        'Enter your email'
+      )
+      await expect(page.locator('input[type="email"]')).toHaveAttribute(
+        'aria-label',
+        'Email address'
+      )
+      await expect(page.locator('footer')).toHaveText('© 2025 Sovrium')
     }
   )
 

@@ -11,10 +11,10 @@ import { test, expect } from '@/specs/fixtures'
  * E2E Tests for Block Props
  *
  * Source: specs/app/blocks/common/block-props.schema.json
- * Spec Count: 10
+ * Spec Count: 14
  *
  * Test Organization:
- * 1. @spec tests - One per spec in schema (10 tests) - Exhaustive acceptance criteria
+ * 1. @spec tests - One per spec in schema (14 tests) - Exhaustive acceptance criteria
  * 2. @regression test - ONE optimized integration test - Efficient workflow validation
  */
 
@@ -361,6 +361,290 @@ test.describe('Block Props', () => {
       await expect(button).toHaveAttribute('aria-label', 'Submit form')
       await expect(button).toHaveAttribute('data-action', 'submit')
       await expect(button).toHaveText('Submit')
+    }
+  )
+
+  test.fixme(
+    'APP-BLOCKS-PROPS-011: should resolve translation tokens in block props during rendering',
+    { tag: '@spec' },
+    async ({ page, startServerWithSchema }) => {
+      // GIVEN: block props containing translation tokens ($t:)
+      await startServerWithSchema({
+        name: 'test-app',
+        languages: {
+          default: 'en-US',
+          supported: [
+            { code: 'en-US', label: 'English', direction: 'ltr' },
+            { code: 'fr-FR', label: 'Français', direction: 'ltr' },
+          ],
+          translations: {
+            'en-US': {
+              'close.label': 'Close',
+              'save.tooltip': 'Save changes',
+            },
+            'fr-FR': {
+              'close.label': 'Fermer',
+              'save.tooltip': 'Enregistrer les modifications',
+            },
+          },
+        },
+        blocks: [
+          {
+            name: 'action-button',
+            type: 'button',
+            props: {
+              'aria-label': '$t:close.label',
+              title: '$t:save.tooltip',
+              className: 'btn btn-$variant',
+            },
+            children: ['×'],
+          },
+        ],
+        pages: [
+          {
+            name: 'form',
+            path: '/',
+            meta: { lang: 'en-US', title: 'Test', description: 'Test page' },
+            sections: [
+              {
+                block: 'action-button',
+                vars: {
+                  variant: 'primary',
+                },
+              },
+            ],
+          },
+        ],
+      })
+
+      // WHEN: block is rendered with $t: references in props values
+      await page.goto('/')
+
+      // THEN: translation tokens should be resolved to actual translated text during rendering
+      const html = await page.content()
+      expect(html).not.toContain('$t:')
+      expect(html).toContain('aria-label="Close"')
+      expect(html).toContain('title="Save changes"')
+
+      const button = page.locator('[data-testid="block-action-button"]')
+      await expect(button).toHaveAttribute('aria-label', 'Close')
+      await expect(button).toHaveAttribute('title', 'Save changes')
+      await expect(button).toHaveClass(/btn-primary/)
+    }
+  )
+
+  test.fixme(
+    'APP-BLOCKS-PROPS-012: should resolve translation tokens in block children during rendering',
+    { tag: '@spec' },
+    async ({ page, startServerWithSchema }) => {
+      // GIVEN: block children containing translation tokens ($t:)
+      await startServerWithSchema({
+        name: 'test-app',
+        languages: {
+          default: 'en-US',
+          supported: [{ code: 'en-US', label: 'English', direction: 'ltr' }],
+          translations: {
+            'en-US': {
+              'menu.home': 'Home',
+              'menu.products': 'Products',
+              'menu.contact': 'Contact',
+            },
+          },
+        },
+        blocks: [
+          {
+            name: 'nav-menu',
+            type: 'nav',
+            children: [
+              {
+                type: 'a',
+                children: ['$t:menu.home'],
+              },
+              {
+                type: 'a',
+                children: ['$t:menu.products'],
+              },
+              {
+                type: 'a',
+                children: ['$t:menu.contact'],
+              },
+            ],
+          },
+        ],
+        pages: [
+          {
+            name: 'main',
+            path: '/',
+            meta: { lang: 'en-US', title: 'Test', description: 'Test page' },
+            sections: [
+              {
+                block: 'nav-menu',
+              },
+            ],
+          },
+        ],
+      })
+
+      // WHEN: block is rendered with $t: references in children arrays
+      await page.goto('/')
+
+      // THEN: translation tokens in children should be resolved to translated text
+      const html = await page.content()
+      expect(html).not.toContain('$t:')
+
+      const nav = page.locator('[data-testid="block-nav-menu"]')
+      await expect(nav.locator('a').nth(0)).toHaveText('Home')
+      await expect(nav.locator('a').nth(1)).toHaveText('Products')
+      await expect(nav.locator('a').nth(2)).toHaveText('Contact')
+    }
+  )
+
+  test.fixme(
+    'APP-BLOCKS-PROPS-013: should resolve translation tokens in block content during rendering',
+    { tag: '@spec' },
+    async ({ page, startServerWithSchema }) => {
+      // GIVEN: block content containing translation tokens ($t:)
+      await startServerWithSchema({
+        name: 'test-app',
+        languages: {
+          default: 'en-US',
+          supported: [{ code: 'en-US', label: 'English', direction: 'ltr' }],
+          translations: {
+            'en-US': {
+              'hero.tagline': 'Build your next great app',
+              'footer.copyright': '© 2025 All rights reserved',
+            },
+          },
+        },
+        blocks: [
+          {
+            name: 'hero-heading',
+            type: 'h1',
+            content: '$t:hero.tagline',
+          },
+          {
+            name: 'footer-text',
+            type: 'footer',
+            content: '$t:footer.copyright',
+          },
+        ],
+        pages: [
+          {
+            name: 'landing',
+            path: '/',
+            meta: { lang: 'en-US', title: 'Test', description: 'Test page' },
+            sections: [
+              {
+                block: 'hero-heading',
+              },
+              {
+                block: 'footer-text',
+              },
+            ],
+          },
+        ],
+      })
+
+      // WHEN: block is rendered with $t: reference in content property
+      await page.goto('/')
+
+      // THEN: translation token in content should be resolved to translated text
+      const html = await page.content()
+      expect(html).not.toContain('$t:')
+
+      await expect(page.locator('[data-testid="block-hero-heading"]')).toHaveText(
+        'Build your next great app'
+      )
+      await expect(page.locator('[data-testid="block-footer-text"]')).toHaveText(
+        '© 2025 All rights reserved'
+      )
+    }
+  )
+
+  test.fixme(
+    'APP-BLOCKS-PROPS-014: should work with both translation tokens ($t:) and variable references ($variable)',
+    { tag: '@spec' },
+    async ({ page, startServerWithSchema }) => {
+      // GIVEN: block with both translation tokens ($t:) and variable references ($variable)
+      await startServerWithSchema({
+        name: 'test-app',
+        languages: {
+          default: 'en-US',
+          supported: [{ code: 'en-US', label: 'English', direction: 'ltr' }],
+          translations: {
+            'en-US': {
+              'card.title': 'Product',
+              'card.price': 'Price:',
+              'card.action': 'Add to Cart',
+            },
+          },
+        },
+        blocks: [
+          {
+            name: 'product-card',
+            type: 'div',
+            props: {
+              className: 'card card-$variant',
+              'data-product-id': '$productId',
+            },
+            children: [
+              {
+                type: 'h3',
+                content: '$t:card.title',
+              },
+              {
+                type: 'p',
+                content: '$t:card.price',
+              },
+              {
+                type: 'span',
+                content: '$price',
+              },
+              {
+                type: 'button',
+                props: {
+                  'aria-label': '$t:card.action',
+                },
+                children: ['$t:card.action'],
+              },
+            ],
+          },
+        ],
+        pages: [
+          {
+            name: 'shop',
+            path: '/',
+            meta: { lang: 'en-US', title: 'Test', description: 'Test page' },
+            sections: [
+              {
+                block: 'product-card',
+                vars: {
+                  variant: 'primary',
+                  productId: '12345',
+                  price: '$99.99',
+                },
+              },
+            ],
+          },
+        ],
+      })
+
+      // WHEN: block uses $t: for translations AND $variable for dynamic data
+      await page.goto('/')
+
+      // THEN: both patterns should work together: translations resolved first, then variables substituted
+      const html = await page.content()
+      expect(html).not.toContain('$t:')
+      expect(html).not.toMatch(/\$(?!99\.99)[a-zA-Z]/) // No unresolved variables except $99.99
+
+      const card = page.locator('[data-testid="block-product-card"]')
+      await expect(card).toHaveClass(/card-primary/)
+      await expect(card).toHaveAttribute('data-product-id', '12345')
+      await expect(card.locator('h3')).toHaveText('Product')
+      await expect(card.locator('p')).toHaveText('Price:')
+      await expect(card.locator('span')).toHaveText('$99.99')
+      await expect(card.locator('button')).toHaveText('Add to Cart')
+      await expect(card.locator('button')).toHaveAttribute('aria-label', 'Add to Cart')
     }
   )
 
