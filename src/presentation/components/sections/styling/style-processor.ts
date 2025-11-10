@@ -26,6 +26,12 @@ export function parseComponentStyle(styleValue: unknown): Record<string, unknown
 }
 
 /**
+ * Component types that have corresponding CSS classes in @layer components
+ * These classes are automatically added to the element when rendering
+ */
+const COMPONENT_TYPE_CLASSES = new Set(['card', 'badge', 'btn'])
+
+/**
  * Build final className based on component type
  */
 export function buildFinalClassName(
@@ -34,15 +40,26 @@ export function buildFinalClassName(
   theme: Theme | undefined,
   substitutedProps: Record<string, unknown> | undefined
 ): string | undefined {
+  const classes: Array<string | undefined> = []
+
+  // Add component type class if defined in @layer components
+  if (COMPONENT_TYPE_CLASSES.has(type)) {
+    classes.push(type)
+  }
+
   if (type === 'flex') {
-    return [buildFlexClasses(substitutedProps), className].filter(Boolean).join(' ')
+    classes.push(buildFlexClasses(substitutedProps))
   }
 
   if (type === 'grid') {
-    return [buildGridClasses(theme), className].filter(Boolean).join(' ')
+    classes.push(buildGridClasses(theme))
   }
 
-  return className as string | undefined
+  // Add any custom className
+  classes.push(className as string | undefined)
+
+  const result = classes.filter(Boolean).join(' ')
+  return result || undefined
 }
 
 /**

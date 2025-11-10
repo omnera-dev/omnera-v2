@@ -2124,7 +2124,10 @@
                         "list-item",
                         "dropdown",
                         "navigation",
-                        "alert"
+                        "alert",
+                        "p",
+                        "code",
+                        "pre"
                       ],
                       "description": "Component type for page building"
                     },
@@ -3157,7 +3160,10 @@
                 "list-item",
                 "dropdown",
                 "navigation",
-                "alert"
+                "alert",
+                "p",
+                "code",
+                "pre"
               ],
               "description": "Component type for page building"
             },
@@ -6592,10 +6598,10 @@
           },
           "propertyNames": {
             "type": "string",
-            "description": "Semantic radius name (kebab-case with numbers)",
+            "description": "Semantic radius name (kebab-case with numbers) or DEFAULT for base radius",
             "title": "Border Radius Key",
-            "examples": ["none", "sm", "md", "lg", "2xl", "3xl", "full"],
-            "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
+            "examples": ["DEFAULT", "none", "sm", "md", "lg", "2xl", "3xl", "full"],
+            "pattern": "^(DEFAULT|[a-z0-9]+(-[a-z0-9]+)*)$"
           },
           "description": "Border radius design tokens",
           "title": "Border Radius"

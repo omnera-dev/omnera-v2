@@ -118,7 +118,7 @@ test.describe('Theme Configuration', () => {
                 type: 'div',
                 props: {
                   'data-testid': 'color-primary',
-                  style: 'background-color: #007bff; padding: 1rem;',
+                  className: 'bg-primary p-4',
                 },
                 children: ['Primary Color'],
               },

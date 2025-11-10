@@ -54,6 +54,7 @@ export default [
       '**/schemas/**/*.ts',
       'src/domain/models/**/*.ts', // Schema definitions can be comprehensive
       '**/types/**/*.ts', // Type definition files
+      'templates/**/*.ts',
     ],
     rules: {
       'max-lines': ['warn', { max: 800, skipBlankLines: true, skipComments: true }],

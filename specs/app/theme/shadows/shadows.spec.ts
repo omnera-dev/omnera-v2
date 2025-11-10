@@ -235,7 +235,7 @@ test.describe('Shadows', () => {
       const cssResponse = await page.request.get('/assets/output.css')
       expect(cssResponse.ok()).toBeTruthy()
       const css = await cssResponse.text()
-      expect(css).toContain('--shadow-none: none')
+      expect(css).toContain('--shadow-none: 0 0 #0000')
 
       // 2. Visual validation captures no shadow
       const element = page.locator('[data-testid="shadow-none"]')

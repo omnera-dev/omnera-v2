@@ -55,13 +55,37 @@ function generateThemeColors(colors?: ColorsConfig): string {
 function generateThemeFonts(fonts?: FontsConfig): string {
   if (!fonts || Object.keys(fonts).length === 0) return ''
 
-  const fontEntries = Object.entries(fonts).map(([category, config]) => {
+  const fontEntries = Object.entries(fonts).flatMap(([category, config]) => {
     // Type assertion needed because Record values are unknown in TypeScript
-    const fontConfig = config as { family: string; fallback?: string }
+    const fontConfig = config as {
+      family: string
+      fallback?: string
+      style?: string
+      transform?: string
+      letterSpacing?: string
+    }
     const fontStack = fontConfig.fallback
       ? `${fontConfig.family}, ${fontConfig.fallback}`
       : fontConfig.family
-    return `    --font-${category}: ${fontStack};`
+
+    const entries = [`    --font-${category}: ${fontStack};`]
+
+    // Add font-style CSS variable if specified
+    if (fontConfig.style && fontConfig.style !== 'normal') {
+      entries.push(`    --font-${category}-style: ${fontConfig.style};`)
+    }
+
+    // Add text-transform CSS variable if specified
+    if (fontConfig.transform && fontConfig.transform !== 'none') {
+      entries.push(`    --font-${category}-transform: ${fontConfig.transform};`)
+    }
+
+    // Add letter-spacing CSS variable if specified
+    if (fontConfig.letterSpacing) {
+      entries.push(`    --font-${category}-letter-spacing: ${fontConfig.letterSpacing};`)
+    }
+
+    return entries
   })
 
   return fontEntries.join('\n')
@@ -91,11 +115,9 @@ function generateThemeShadows(shadows?: ShadowsConfig): string {
   if (!shadows || Object.keys(shadows).length === 0) return ''
 
   const shadowEntries = Object.entries(shadows).map(([name, value]) => {
-    // Convert transparent shadow values to 'none' for proper CSS representation
-    // Values like '0 0 #0000' or '0 0 transparent' should become 'none'
-    const normalizedValue =
-      value === '0 0 #0000' || value === '0 0 transparent' ? 'none' : value
-    return `    --shadow-${name}: ${normalizedValue};`
+    // Preserve original shadow values as-is
+    // The .shadow-none utility class override handles the actual rendering
+    return `    --shadow-${name}: ${value};`
   })
 
   return shadowEntries.join('\n')
@@ -236,19 +258,22 @@ const STATIC_IMPORTS = `@import 'tailwindcss';
     @custom-variant dark (&:is(.dark *));`
 
 /**
- * Build body classes with optional text color
+ * Build body classes with optional text color and font
  */
-function buildBodyClasses(hasTextColor: boolean): readonly string[] {
-  return hasTextColor ? ['font-sans', 'antialiased', 'text-text'] : ['font-sans', 'antialiased']
+function buildBodyClasses(hasTextColor: boolean, hasBodyFont: boolean): readonly string[] {
+  const fontClass = hasBodyFont ? 'font-body' : 'font-sans'
+  return hasTextColor ? [fontClass, 'antialiased', 'text-text'] : [fontClass, 'antialiased']
 }
 
 /**
- * Build heading classes with optional text color
+ * Build heading classes with optional text color and font
  */
-function buildHeadingClasses(hasTextColor: boolean): readonly string[] {
-  return hasTextColor
-    ? ['font-semibold', 'tracking-tight', 'text-text']
-    : ['font-semibold', 'tracking-tight']
+function buildHeadingClasses(hasTextColor: boolean, hasTitleFont: boolean): readonly string[] {
+  const fontClass = hasTitleFont ? 'font-title' : 'font-sans'
+  const baseClasses = hasTextColor
+    ? [fontClass, 'font-semibold', 'tracking-tight', 'text-text']
+    : [fontClass, 'font-semibold', 'tracking-tight']
+  return baseClasses
 }
 
 /**
@@ -268,17 +293,32 @@ function buildLinkClasses(
 }
 
 /**
- * Generate base layer styles with theme color applications
- * Applies theme colors to base HTML elements if theme defines those colors
+ * Generate base layer styles with theme color and font applications
+ * Applies theme colors and fonts to base HTML elements if theme defines those tokens
  */
 function generateBaseLayer(theme?: Theme): string {
   const hasTextColor = Boolean(theme?.colors?.text)
   const hasPrimaryColor = Boolean(theme?.colors?.primary)
   const hasPrimaryHoverColor = Boolean(theme?.colors?.['primary-hover'])
+  const hasTitleFont = Boolean(theme?.fonts?.title)
+  const hasBodyFont = Boolean(theme?.fonts?.body)
 
-  const bodyClasses = buildBodyClasses(hasTextColor)
-  const headingClasses = buildHeadingClasses(hasTextColor)
+  const bodyClasses = buildBodyClasses(hasTextColor, hasBodyFont)
+  const headingClasses = buildHeadingClasses(hasTextColor, hasTitleFont)
   const linkClasses = buildLinkClasses(hasPrimaryColor, hasPrimaryHoverColor)
+
+  // Check if title font has a custom style
+  const titleFontStyle =
+    theme?.fonts?.title && typeof theme.fonts.title === 'object'
+      ? (theme.fonts.title as { style?: string }).style
+      : undefined
+  const hasTitleFontStyle = Boolean(titleFontStyle && titleFontStyle !== 'normal')
+
+  // Build heading styles with optional font-style
+  const headingStyles = hasTitleFontStyle
+    ? `@apply ${headingClasses.join(' ')};
+        font-style: var(--font-title-style);`
+    : `@apply ${headingClasses.join(' ')};`
 
   return `@layer base {
       body {
@@ -291,7 +331,7 @@ function generateBaseLayer(theme?: Theme): string {
       h4,
       h5,
       h6 {
-        @apply ${headingClasses.join(' ')};
+        ${headingStyles}
       }
 
       a {
@@ -388,6 +428,11 @@ const UTILITIES_LAYER = `@layer utilities {
       /* Safelist: Ensure critical utility classes are always included */
       .text-center {
         text-align: center;
+      }
+
+      /* Override Tailwind v4's multi-layer shadow system for shadow-none */
+      .shadow-none {
+        box-shadow: none !important;
       }
     }`
 
