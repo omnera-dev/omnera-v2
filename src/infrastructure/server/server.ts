@@ -103,6 +103,17 @@ function validateLanguageSubdirectory(app: App, path: string): string | undefine
 }
 
 /**
+ * Hono app configuration for route setup
+ */
+interface HonoAppConfig {
+  readonly app: App
+  readonly renderHomePage: (app: App, detectedLanguage?: string) => string
+  readonly renderPage: (app: App, path: string, detectedLanguage?: string) => string | undefined
+  readonly renderNotFoundPage: () => string
+  readonly renderErrorPage: () => string
+}
+
+/**
  * Server configuration options
  */
 export interface ServerConfig {
@@ -113,6 +124,266 @@ export interface ServerConfig {
   readonly renderPage: (app: App, path: string, detectedLanguage?: string) => string | undefined
   readonly renderNotFoundPage: () => string
   readonly renderErrorPage: () => string
+}
+
+/**
+ * Setup OpenAPI documentation routes
+ */
+function setupOpenApiRoutes(honoApp: Readonly<Hono>): Readonly<Hono> {
+  return honoApp
+    .get('/api/openapi.json', (c) => {
+      const openApiDoc = getOpenAPIDocument()
+      return c.json(openApiDoc)
+    })
+    .get('/api/auth/openapi.json', async (c) => {
+      const authOpenApiDoc = await auth.api.generateOpenAPISchema()
+      return c.json(authOpenApiDoc)
+    })
+    .get(
+      '/api/scalar',
+      Scalar({
+        pageTitle: 'Sovrium API Documentation',
+        theme: 'default',
+        sources: [
+          { url: '/api/openapi.json', title: 'API' },
+          { url: '/api/auth/openapi.json', title: 'Auth' },
+        ],
+      })
+    )
+}
+
+/**
+ * Setup CORS middleware for Better Auth endpoints
+ */
+function setupAuthMiddleware(honoApp: Readonly<Hono>): Readonly<Hono> {
+  return honoApp.use(
+    '/api/auth/*',
+    cors({
+      origin: (origin) => {
+        // Allow all localhost origins for development and testing
+        if (origin.startsWith('http://localhost:') || origin.startsWith('http://127.0.0.1:')) {
+          return origin
+        }
+        // In production, this should be configured with specific allowed origins
+        return origin
+      },
+      allowHeaders: ['Content-Type', 'Authorization'],
+      allowMethods: ['POST', 'GET', 'OPTIONS'],
+      exposeHeaders: ['Content-Length'],
+      maxAge: 600,
+      credentials: true, // Required for cookie-based authentication
+    })
+  )
+}
+
+/**
+ * Setup Better Auth routes
+ */
+function setupAuthRoutes(honoApp: Readonly<Hono>): Readonly<Hono> {
+  return honoApp.on(['POST', 'GET'], '/api/auth/*', (c) => auth.handler(c.req.raw))
+}
+
+/**
+ * Setup CSS compilation route
+ */
+function setupCSSRoute(honoApp: Readonly<Hono>): Readonly<Hono> {
+  return honoApp.get('/assets/output.css', async (c) => {
+    try {
+      const result = await Effect.runPromise(
+        compileCSS().pipe(Effect.tap(() => Console.log('CSS compiled successfully')))
+      )
+
+      return c.text(result.css, 200, {
+        'Content-Type': 'text/css',
+        'Cache-Control': `public, max-age=${STATIC_ASSET_CACHE_DURATION_SECONDS}`,
+      })
+    } catch (error) {
+      // Log error - intentional side effect for error tracking
+      // eslint-disable-next-line functional/no-expression-statements
+      await Effect.runPromise(Console.error('CSS compilation failed:', error))
+      return c.text('/* CSS compilation failed */', 500, {
+        'Content-Type': 'text/css',
+      })
+    }
+  })
+}
+
+/**
+ * Setup JavaScript asset routes
+ */
+function setupJavaScriptRoutes(honoApp: Readonly<Hono>): Readonly<Hono> {
+  return honoApp
+    .get('/assets/language-switcher.js', async (c) => {
+      try {
+        const scriptPath = './src/presentation/scripts/client/language-switcher.js'
+        const file = Bun.file(scriptPath)
+        const content = await file.text()
+
+        return c.text(content, 200, {
+          'Content-Type': 'application/javascript',
+          'Cache-Control': `public, max-age=${STATIC_ASSET_CACHE_DURATION_SECONDS}`,
+        })
+      } catch (error) {
+        // eslint-disable-next-line functional/no-expression-statements
+        await Effect.runPromise(Console.error('Failed to load language-switcher.js:', error))
+        return c.text('/* Language switcher script failed to load */', 500, {
+          'Content-Type': 'application/javascript',
+        })
+      }
+    })
+    .get('/assets/banner-dismiss.js', async (c) => {
+      try {
+        const scriptPath = './src/presentation/scripts/client/banner-dismiss.js'
+        const file = Bun.file(scriptPath)
+        const content = await file.text()
+
+        return c.text(content, 200, {
+          'Content-Type': 'application/javascript',
+          'Cache-Control': `public, max-age=${STATIC_ASSET_CACHE_DURATION_SECONDS}`,
+        })
+      } catch (error) {
+        // eslint-disable-next-line functional/no-expression-statements
+        await Effect.runPromise(Console.error('Failed to load banner-dismiss.js:', error))
+        return c.text('/* Banner dismiss script failed to load */', 500, {
+          'Content-Type': 'application/javascript',
+        })
+      }
+    })
+}
+
+/**
+ * Setup static asset routes (CSS and JavaScript)
+ */
+function setupStaticAssets(honoApp: Readonly<Hono>): Readonly<Hono> {
+  return setupJavaScriptRoutes(setupCSSRoute(honoApp))
+}
+
+/**
+ * Setup homepage route
+ */
+function setupHomepageRoute(honoApp: Readonly<Hono>, config: HonoAppConfig): Readonly<Hono> {
+  const { app, renderHomePage, renderErrorPage } = config
+
+  return honoApp.get('/', (c) => {
+    try {
+      // If no languages configured, render with default (en-US)
+      if (!app.languages) {
+        const html = renderHomePage(app, undefined)
+        return c.html(html)
+      }
+
+      // If browser detection disabled, always serve default language at /
+      if (app.languages.detectBrowser === false) {
+        const html = renderHomePage(app, undefined)
+        return c.html(html)
+      }
+
+      // Browser detection enabled - detect language from Accept-Language header
+      const detectedLanguage = detectLanguageIfEnabled(app, c.req.header('Accept-Language'))
+      const targetLanguage = detectedLanguage || app.languages.default
+
+      // Only redirect if detected language is different from default
+      if (targetLanguage !== app.languages.default) {
+        return c.redirect(`/${targetLanguage}/`, 302)
+      }
+
+      // Same as default - serve at / (no redirect, cacheable)
+      const html = renderHomePage(app, undefined)
+      return c.html(html)
+    } catch (error) {
+      console.error('Error rendering homepage:', error)
+      return c.html(renderErrorPage(), 500)
+    }
+  })
+}
+
+/**
+ * Setup language subdirectory routes
+ */
+function setupLanguageRoutes(honoApp: Readonly<Hono>, config: HonoAppConfig): Readonly<Hono> {
+  const { app, renderHomePage, renderPage, renderNotFoundPage, renderErrorPage } = config
+
+  return honoApp
+    .get('/:lang/', (c) => {
+      try {
+        const urlLanguage = validateLanguageSubdirectory(app, c.req.path)
+        if (!urlLanguage) {
+          return c.html(renderNotFoundPage(), 404)
+        }
+        const html = renderHomePage(app, urlLanguage)
+        return c.html(html)
+      } catch (error) {
+        console.error('Error rendering homepage:', error)
+        return c.html(renderErrorPage(), 500)
+      }
+    })
+    .get('/:lang/*', (c) => {
+      try {
+        const urlLanguage = validateLanguageSubdirectory(app, c.req.path)
+
+        if (!urlLanguage) {
+          const { path } = c.req
+          const detectedLanguage = detectLanguageIfEnabled(app, c.req.header('Accept-Language'))
+          const html = renderPage(app, path, detectedLanguage)
+          if (!html) {
+            return c.html(renderNotFoundPage(), 404)
+          }
+          return c.html(html)
+        }
+
+        const pathWithoutLang = c.req.path.replace(`/${urlLanguage}`, '') || '/'
+        const html = renderPage(app, pathWithoutLang, urlLanguage)
+        if (!html) {
+          return c.html(renderNotFoundPage(), 404)
+        }
+        return c.html(html)
+      } catch (error) {
+        console.error('Error rendering page:', error)
+        return c.html(renderErrorPage(), 500)
+      }
+    })
+}
+
+/**
+ * Setup dynamic page routes
+ */
+function setupDynamicPageRoutes(honoApp: Readonly<Hono>, config: HonoAppConfig): Readonly<Hono> {
+  const { app, renderPage, renderNotFoundPage } = config
+
+  return honoApp.get('*', (c) => {
+    const { path } = c.req
+    const detectedLanguage = detectLanguageIfEnabled(app, c.req.header('Accept-Language'))
+    const html = renderPage(app, path, detectedLanguage)
+    if (!html) {
+      return c.html(renderNotFoundPage(), 404)
+    }
+    return c.html(html)
+  })
+}
+
+/**
+ * Setup test error route
+ */
+function setupTestErrorRoute(honoApp: Readonly<Hono>, config: HonoAppConfig): Readonly<Hono> {
+  const { renderNotFoundPage } = config
+
+  return honoApp.get('/test/error', (c) => {
+    if (process.env.NODE_ENV === 'production') {
+      return c.html(renderNotFoundPage(), 404)
+    }
+    // eslint-disable-next-line functional/no-throw-statements
+    throw new Error('Test error')
+  })
+}
+
+/**
+ * Setup page routes (homepage, language subdirectories, dynamic pages)
+ */
+function setupPageRoutes(honoApp: Readonly<Hono>, config: HonoAppConfig): Readonly<Hono> {
+  return setupDynamicPageRoutes(
+    setupLanguageRoutes(setupTestErrorRoute(setupHomepageRoute(honoApp, config), config), config),
+    config
+  )
 }
 
 /**
@@ -128,248 +399,43 @@ export interface ServerConfig {
  * - GET /assets/output.css - Compiled Tailwind CSS
  * - GET /test/error - Test error handler (non-production only)
  *
- * @param app - Validated application data from AppSchema
- * @param renderHomePage - Function to render the homepage
- * @param renderPage - Function to render any page by path
- * @param renderNotFoundPage - Function to render 404 page
- * @param renderErrorPage - Function to render error page
+ * @param config - Configuration object with app data and render functions
  * @returns Configured Hono app instance
  */
-function createHonoApp(
-  app: App,
-  renderHomePage: (app: App, detectedLanguage?: string) => string,
-  renderPage: (app: App, path: string, detectedLanguage?: string) => string | undefined,
-  renderNotFoundPage: () => string,
-  renderErrorPage: () => string
-): Readonly<Hono> {
+function createHonoApp(config: HonoAppConfig): Readonly<Hono> {
+  const { app, renderNotFoundPage, renderErrorPage } = config
+
   // Create base Hono app and chain API routes directly
   // This pattern is required for Hono RPC type inference to work correctly
-  const honoApp = createApiRoutes(app, new Hono())
-
-  // Continue chaining with other routes
-  return (
-    honoApp
-      .get('/api/openapi.json', (c) => {
-        const openApiDoc = getOpenAPIDocument()
-        return c.json(openApiDoc)
-      })
-      .get('/api/auth/openapi.json', async (c) => {
-        const authOpenApiDoc = await auth.api.generateOpenAPISchema()
-        return c.json(authOpenApiDoc)
-      })
-      .get(
-        '/api/scalar',
-        Scalar({
-          pageTitle: 'Sovrium API Documentation',
-          theme: 'default',
-          sources: [
-            { url: '/api/openapi.json', title: 'API' },
-            { url: '/api/auth/openapi.json', title: 'Auth' },
-          ],
-        })
-      )
-      // Configure CORS for Better Auth endpoints
-      // IMPORTANT: CORS middleware must be registered BEFORE auth routes
-      // See: https://www.better-auth.com/docs/integrations/hono
-      .use(
-        '/api/auth/*',
-        cors({
-          origin: (origin) => {
-            // Allow all localhost origins for development and testing
-            if (origin.startsWith('http://localhost:') || origin.startsWith('http://127.0.0.1:')) {
-              return origin
-            }
-            // In production, this should be configured with specific allowed origins
-            return origin
-          },
-          allowHeaders: ['Content-Type', 'Authorization'],
-          allowMethods: ['POST', 'GET', 'OPTIONS'],
-          exposeHeaders: ['Content-Length'],
-          maxAge: 600,
-          credentials: true, // Required for cookie-based authentication
-        })
-      )
-      .on(['POST', 'GET'], '/api/auth/*', (c) => auth.handler(c.req.raw))
-      .get('/', (c) => {
-        try {
-          // If no languages configured, render with default (en-US)
-          if (!app.languages) {
-            const html = renderHomePage(app, undefined)
-            return c.html(html)
-          }
-
-          // If browser detection disabled, always serve default language at /
-          if (app.languages.detectBrowser === false) {
-            const html = renderHomePage(app, undefined) // uses languages.default
-            return c.html(html)
-          }
-
-          // Browser detection enabled - detect language from Accept-Language header
-          const detectedLanguage = detectLanguageIfEnabled(app, c.req.header('Accept-Language'))
-          const targetLanguage = detectedLanguage || app.languages.default
-
-          // Only redirect if detected language is different from default
-          if (targetLanguage !== app.languages.default) {
-            return c.redirect(`/${targetLanguage}/`, 302)
-          }
-
-          // Same as default - serve at / (no redirect, cacheable)
-          const html = renderHomePage(app, undefined) // uses languages.default
-          return c.html(html)
-        } catch (error) {
-          // Log rendering error
-          console.error('Error rendering homepage:', error)
-          return c.html(renderErrorPage(), 500)
-        }
-      })
-      .get('/assets/output.css', async (c) => {
-        try {
-          const result = await Effect.runPromise(
-            compileCSS().pipe(Effect.tap(() => Console.log('CSS compiled successfully')))
-          )
-
-          return c.text(result.css, 200, {
-            'Content-Type': 'text/css',
-            'Cache-Control': `public, max-age=${STATIC_ASSET_CACHE_DURATION_SECONDS}`,
-          })
-        } catch (error) {
-          // Log error - intentional side effect for error tracking
-          // eslint-disable-next-line functional/no-expression-statements
-          await Effect.runPromise(Console.error('CSS compilation failed:', error))
-          return c.text('/* CSS compilation failed */', 500, {
-            'Content-Type': 'text/css',
-          })
-        }
-      })
-      .get('/assets/language-switcher.js', async (c) => {
-        try {
-          // Resolve path from project root (where Bun is executed)
-          const scriptPath = './src/presentation/scripts/client/language-switcher.js'
-          const file = Bun.file(scriptPath)
-          const content = await file.text()
-
-          return c.text(content, 200, {
-            'Content-Type': 'application/javascript',
-            'Cache-Control': `public, max-age=${STATIC_ASSET_CACHE_DURATION_SECONDS}`,
-          })
-        } catch (error) {
-          // Log error - intentional side effect for error tracking
-          // eslint-disable-next-line functional/no-expression-statements
-          await Effect.runPromise(Console.error('Failed to load language-switcher.js:', error))
-          return c.text('/* Language switcher script failed to load */', 500, {
-            'Content-Type': 'application/javascript',
-          })
-        }
-      })
-      .get('/assets/banner-dismiss.js', async (c) => {
-        try {
-          // Resolve path from project root (where Bun is executed)
-          const scriptPath = './src/presentation/scripts/client/banner-dismiss.js'
-          const file = Bun.file(scriptPath)
-          const content = await file.text()
-
-          return c.text(content, 200, {
-            'Content-Type': 'application/javascript',
-            'Cache-Control': `public, max-age=${STATIC_ASSET_CACHE_DURATION_SECONDS}`,
-          })
-        } catch (error) {
-          // Log error - intentional side effect for error tracking
-          // eslint-disable-next-line functional/no-expression-statements
-          await Effect.runPromise(Console.error('Failed to load banner-dismiss.js:', error))
-          return c.text('/* Banner dismiss script failed to load */', 500, {
-            'Content-Type': 'application/javascript',
-          })
-        }
-      })
-      .get('/test/error', (c) => {
-        if (process.env.NODE_ENV === 'production') {
-          return c.html(renderNotFoundPage(), 404)
-        }
-        // Intentionally trigger error handler for testing
-        // eslint-disable-next-line functional/no-throw-statements
-        throw new Error('Test error')
-      })
-      // Language subdirectory routes - /:lang/ and /:lang/*
-      .get('/:lang/', (c) => {
-        try {
-          // Extract and validate language from URL
-          const urlLanguage = validateLanguageSubdirectory(app, c.req.path)
-
-          // If language is invalid, return 404
-          if (!urlLanguage) {
-            return c.html(renderNotFoundPage(), 404)
-          }
-
-          // Render homepage with language from URL
-          const html = renderHomePage(app, urlLanguage)
-          return c.html(html)
-        } catch (error) {
-          console.error('Error rendering homepage:', error)
-          return c.html(renderErrorPage(), 500)
-        }
-      })
-      .get('/:lang/*', (c) => {
-        try {
-          // Extract and validate language from URL
-          const urlLanguage = validateLanguageSubdirectory(app, c.req.path)
-
-          // If language is invalid, fall back to rendering as regular page path
-          // This handles paths like /products/pricing that shouldn't be treated as language subdirectories
-          if (!urlLanguage) {
-            const { path } = c.req
-
-            // Detect language from Accept-Language header for SSR
-            const detectedLanguage = detectLanguageIfEnabled(app, c.req.header('Accept-Language'))
-
-            // Render dynamic page
-            const html = renderPage(app, path, detectedLanguage)
-            if (!html) {
-              return c.html(renderNotFoundPage(), 404)
-            }
-
-            return c.html(html)
-          }
-
-          // Remove language prefix from path to get actual page path
-          // e.g., '/fr-FR/about' => '/about'
-          const pathWithoutLang = c.req.path.replace(`/${urlLanguage}`, '') || '/'
-
-          // Render dynamic page with language from URL
-          const html = renderPage(app, pathWithoutLang, urlLanguage)
-          if (!html) {
-            return c.html(renderNotFoundPage(), 404)
-          }
-
-          return c.html(html)
-        } catch (error) {
-          console.error('Error rendering page:', error)
-          return c.html(renderErrorPage(), 500)
-        }
-      })
-      // Dynamic page routes - catch-all for custom pages (backward compatibility)
-      .get('*', (c) => {
-        const { path } = c.req
-
-        // Detect language from Accept-Language header for SSR
-        const detectedLanguage = detectLanguageIfEnabled(app, c.req.header('Accept-Language'))
-
-        // Render dynamic page
-        const html = renderPage(app, path, detectedLanguage)
-        if (!html) {
-          return c.html(renderNotFoundPage(), 404)
-        }
-
-        return c.html(html)
-      })
-      .notFound((c) => c.html(renderNotFoundPage(), 404))
-      .onError((error, c) => {
-        // Fire-and-forget error logging (onError handler is synchronous)
-        Effect.runPromise(Console.error('Server error:', error)).catch(() => {
-          // Silently ignore logging failures to prevent unhandled promise rejections
-        })
-        return c.html(renderErrorPage(), 500)
-      })
+  // Setup all routes by chaining the setup functions
+  const honoWithRoutes = setupPageRoutes(
+    setupStaticAssets(
+      setupAuthRoutes(setupAuthMiddleware(setupOpenApiRoutes(createApiRoutes(app, new Hono()))))
+    ),
+    config
   )
+
+  // Add error handlers
+  return honoWithRoutes
+    .notFound((c) => c.html(renderNotFoundPage(), 404))
+    .onError((error, c) => {
+      // Fire-and-forget error logging (onError handler is synchronous)
+      Effect.runPromise(Console.error('Server error:', error)).catch(() => {
+        // Silently ignore logging failures to prevent unhandled promise rejections
+      })
+      return c.html(renderErrorPage(), 500)
+    })
+}
+
+/**
+ * Create server stop effect
+ */
+function createStopEffect(server: ReturnType<typeof Bun.serve>): Effect.Effect<void, never> {
+  return Effect.gen(function* () {
+    yield* Console.log('Stopping server...')
+    yield* Effect.sync(() => server.stop())
+    yield* Console.log('Server stopped')
+  })
 }
 
 /**
@@ -417,14 +483,14 @@ export const createServer = (
     const cssResult = yield* compileCSS()
     yield* Console.log(`CSS compiled: ${cssResult.css.length} bytes`)
 
-    // Create Hono app
-    const honoApp = createHonoApp(
+    // Create Hono app with config object
+    const honoApp = createHonoApp({
       app,
       renderHomePage,
       renderPage,
       renderNotFoundPage,
-      renderErrorPage
-    )
+      renderErrorPage,
+    })
 
     // Start Bun server
     const server = yield* Effect.try({
@@ -450,11 +516,7 @@ export const createServer = (
     yield* Console.log(`✓ Compiled CSS: ${url}/assets/output.css`)
 
     // Create stop effect
-    const stop = Effect.gen(function* () {
-      yield* Console.log('Stopping server...')
-      yield* Effect.sync(() => server.stop())
-      yield* Console.log('Server stopped')
-    })
+    const stop = createStopEffect(server)
 
     return {
       server,
