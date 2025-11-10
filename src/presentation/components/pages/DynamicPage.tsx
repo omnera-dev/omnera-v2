@@ -13,7 +13,6 @@ import { PageLayout } from '@/presentation/components/pages/PageLayout'
 import { PageMain } from '@/presentation/components/pages/PageMain'
 import { extractPageMetadata } from '@/presentation/components/pages/PageMetadata'
 import { groupScriptsByPosition } from '@/presentation/components/pages/PageScripts'
-import { generateThemeStyles } from '@/presentation/theming/generators/theme-generator'
 import type { Blocks } from '@/domain/models/app/blocks'
 import type { Languages } from '@/domain/models/app/languages'
 import type { Page } from '@/domain/models/app/pages'
@@ -29,6 +28,8 @@ type DynamicPageProps = {
 
 /**
  * Renders a page from configuration as a complete HTML document
+ * Theme CSS is compiled globally at server startup via /assets/output.css
+ * Theme is still passed for font URLs, animation flags, and debugging
  */
 export function DynamicPage({
   page,
@@ -40,7 +41,6 @@ export function DynamicPage({
   const metadata = extractPageMetadata(page, theme, languages, detectedLanguage)
   const langConfig = resolvePageLanguage(page, languages, detectedLanguage)
   const scripts = groupScriptsByPosition(page)
-  const themeStyles = generateThemeStyles(theme)
 
   return (
     <html
@@ -51,7 +51,6 @@ export function DynamicPage({
         <PageHead
           page={page}
           theme={theme}
-          themeStyles={themeStyles}
           directionStyles={langConfig.directionStyles}
           title={metadata.title}
           description={metadata.description}

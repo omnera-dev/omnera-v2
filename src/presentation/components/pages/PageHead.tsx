@@ -26,7 +26,6 @@ import type { Theme } from '@/domain/models/app/theme'
 type PageHeadProps = {
   readonly page: Page
   readonly theme: Theme | undefined
-  readonly themeStyles: string | undefined
   readonly directionStyles: string
   readonly title: string
   readonly description: string
@@ -83,22 +82,16 @@ function ThemeFonts({ theme }: { readonly theme: Theme | undefined }): ReactElem
 }
 
 /**
- * Renders theme and direction styles
+ * Renders global CSS and direction styles
+ * Theme CSS is compiled globally at /assets/output.css
  */
-function ThemeStyles({
-  themeStyles,
-  directionStyles,
-}: {
-  readonly themeStyles: string | undefined
-  readonly directionStyles: string
-}): ReactElement {
+function GlobalStyles({ directionStyles }: { readonly directionStyles: string }): ReactElement {
   return (
     <>
       <link
         rel="stylesheet"
         href="/assets/output.css"
       />
-      {themeStyles && <style dangerouslySetInnerHTML={{ __html: themeStyles }} />}
       <style dangerouslySetInnerHTML={{ __html: directionStyles }} />
     </>
   )
@@ -143,8 +136,9 @@ function HeadScripts({ scripts }: { readonly scripts: GroupedScripts }): ReactEl
  * - Analytics scripts
  * - Custom elements
  * - Favicon links
- * - Font stylesheets
- * - Theme styles
+ * - Font stylesheets from theme
+ * - Global CSS with compiled theme tokens
+ * - Direction styles for RTL support
  * - External and inline scripts positioned in head
  *
  * @param props - Component props
@@ -153,7 +147,6 @@ function HeadScripts({ scripts }: { readonly scripts: GroupedScripts }): ReactEl
 export function PageHead({
   page,
   theme,
-  themeStyles,
   directionStyles,
   title,
   description,
@@ -179,10 +172,7 @@ export function PageHead({
       )}
       <FaviconSetLinks favicons={page.meta?.favicons} />
       <ThemeFonts theme={theme} />
-      <ThemeStyles
-        themeStyles={themeStyles}
-        directionStyles={directionStyles}
-      />
+      <GlobalStyles directionStyles={directionStyles} />
       <HeadScripts scripts={scripts} />
     </>
   )

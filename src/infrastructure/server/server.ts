@@ -186,11 +186,11 @@ function setupAuthRoutes(honoApp: Readonly<Hono>): Readonly<Hono> {
 /**
  * Setup CSS compilation route
  */
-function setupCSSRoute(honoApp: Readonly<Hono>): Readonly<Hono> {
+function setupCSSRoute(honoApp: Readonly<Hono>, app: App): Readonly<Hono> {
   return honoApp.get('/assets/output.css', async (c) => {
     try {
       const result = await Effect.runPromise(
-        compileCSS().pipe(Effect.tap(() => Console.log('CSS compiled successfully')))
+        compileCSS(app).pipe(Effect.tap(() => Console.log('CSS compiled successfully')))
       )
 
       return c.text(result.css, 200, {
@@ -254,8 +254,8 @@ function setupJavaScriptRoutes(honoApp: Readonly<Hono>): Readonly<Hono> {
 /**
  * Setup static asset routes (CSS and JavaScript)
  */
-function setupStaticAssets(honoApp: Readonly<Hono>): Readonly<Hono> {
-  return setupJavaScriptRoutes(setupCSSRoute(honoApp))
+function setupStaticAssets(honoApp: Readonly<Hono>, app: App): Readonly<Hono> {
+  return setupJavaScriptRoutes(setupCSSRoute(honoApp, app))
 }
 
 /**
@@ -410,7 +410,8 @@ function createHonoApp(config: HonoAppConfig): Readonly<Hono> {
   // Setup all routes by chaining the setup functions
   const honoWithRoutes = setupPageRoutes(
     setupStaticAssets(
-      setupAuthRoutes(setupAuthMiddleware(setupOpenApiRoutes(createApiRoutes(app, new Hono()))))
+      setupAuthRoutes(setupAuthMiddleware(setupOpenApiRoutes(createApiRoutes(app, new Hono())))),
+      app
     ),
     config
   )
@@ -480,7 +481,7 @@ export const createServer = (
 
     // Pre-compile CSS on startup
     yield* Console.log('Compiling CSS...')
-    const cssResult = yield* compileCSS()
+    const cssResult = yield* compileCSS(app)
     yield* Console.log(`CSS compiled: ${cssResult.css.length} bytes`)
 
     // Create Hono app with config object
