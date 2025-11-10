@@ -31,7 +31,7 @@ export default defineConfig({
   /* Snapshot configuration */
   snapshotDir: './specs',
   snapshotPathTemplate:
-    '{snapshotDir}/{testFileDir}/__snapshots__/{testFileName}-snapshots/{arg}{-projectName}{-snapshotSuffix}{ext}',
+    '{snapshotDir}/{testFileDir}/__snapshots__/{testFileName}-snapshots/{arg}{-projectName}{-platform}{-snapshotSuffix}{ext}',
 
   /* Update snapshots settings */
   updateSnapshots: process.env.UPDATE_SNAPSHOTS === 'true' ? 'all' : 'missing',
@@ -72,7 +72,22 @@ export default defineConfig({
     // Default - All tests (chromium only)
     {
       name: 'chromium',
-      use: { ...devices['Desktop Chrome'] },
+      use: {
+        ...devices['Desktop Chrome'],
+        launchOptions: {
+          args: [
+            '--disable-gpu',
+            '--disable-dev-shm-usage',
+            '--disable-setuid-sandbox',
+            '--no-sandbox',
+            '--disable-web-security',
+            '--disable-features=IsolateOrigins,site-per-process',
+            '--disable-blink-features=AutomationControlled',
+            '--font-render-hinting=none',
+            '--disable-font-subpixel-positioning',
+          ],
+        },
+      },
     },
 
     /* Cross-browser testing (uncomment when needed) */
