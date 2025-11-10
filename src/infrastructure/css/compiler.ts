@@ -232,31 +232,51 @@ const STATIC_IMPORTS = `@import 'tailwindcss';
     @custom-variant dark (&:is(.dark *));`
 
 /**
+ * Build body classes with optional text color
+ */
+function buildBodyClasses(hasTextColor: boolean): readonly string[] {
+  return hasTextColor
+    ? ['font-sans', 'antialiased', 'text-text']
+    : ['font-sans', 'antialiased']
+}
+
+/**
+ * Build heading classes with optional text color
+ */
+function buildHeadingClasses(hasTextColor: boolean): readonly string[] {
+  return hasTextColor
+    ? ['font-semibold', 'tracking-tight', 'text-text']
+    : ['font-semibold', 'tracking-tight']
+}
+
+/**
+ * Build link classes with optional primary colors
+ */
+function buildLinkClasses(
+  hasPrimaryColor: boolean,
+  hasPrimaryHoverColor: boolean
+): readonly string[] {
+  if (hasPrimaryColor && hasPrimaryHoverColor) {
+    return ['transition-colors', 'text-primary', 'hover:text-primary-hover']
+  }
+  if (hasPrimaryColor) {
+    return ['transition-colors', 'text-primary']
+  }
+  return ['transition-colors', 'text-blue-600', 'hover:text-blue-700']
+}
+
+/**
  * Generate base layer styles with theme color applications
  * Applies theme colors to base HTML elements if theme defines those colors
  */
 function generateBaseLayer(theme?: Theme): string {
-  const hasTextColor = theme?.colors?.text
-  const hasPrimaryColor = theme?.colors?.primary
-  const hasPrimaryHoverColor = theme?.colors?.['primary-hover']
+  const hasTextColor = Boolean(theme?.colors?.text)
+  const hasPrimaryColor = Boolean(theme?.colors?.primary)
+  const hasPrimaryHoverColor = Boolean(theme?.colors?.['primary-hover'])
 
-  // Build body classes
-  const bodyClasses = hasTextColor
-    ? ['font-sans', 'antialiased', 'text-text']
-    : ['font-sans', 'antialiased']
-
-  // Build heading classes
-  const headingClasses = hasTextColor
-    ? ['font-semibold', 'tracking-tight', 'text-text']
-    : ['font-semibold', 'tracking-tight']
-
-  // Build link classes - only use primary-hover if it exists
-  const linkClasses =
-    hasPrimaryColor && hasPrimaryHoverColor
-      ? ['transition-colors', 'text-primary', 'hover:text-primary-hover']
-      : hasPrimaryColor
-        ? ['transition-colors', 'text-primary']
-        : ['transition-colors', 'text-blue-600', 'hover:text-blue-700']
+  const bodyClasses = buildBodyClasses(hasTextColor)
+  const headingClasses = buildHeadingClasses(hasTextColor)
+  const linkClasses = buildLinkClasses(hasPrimaryColor, hasPrimaryHoverColor)
 
   return `@layer base {
       body {
@@ -279,15 +299,13 @@ function generateBaseLayer(theme?: Theme): string {
 }
 
 /**
- * Generate components layer styles with theme color applications
- * Applies theme colors to component classes and button elements
+ * Build button classes with optional primary colors
  */
-function generateComponentsLayer(theme?: Theme): string {
-  const hasPrimaryColor = theme?.colors?.primary
-  const hasPrimaryHoverColor = theme?.colors?.['primary-hover']
-
-  // Build button classes - apply to all button elements by default
-  const baseButtonClasses = [
+function buildButtonClasses(
+  hasPrimaryColor: boolean,
+  hasPrimaryHoverColor: boolean
+): readonly string[] {
+  const baseClasses = [
     'inline-flex',
     'items-center',
     'justify-center',
@@ -298,20 +316,41 @@ function generateComponentsLayer(theme?: Theme): string {
     'transition-colors',
   ]
 
-  const btnClasses =
-    hasPrimaryColor && hasPrimaryHoverColor
-      ? [...baseButtonClasses, 'bg-primary', 'text-white', 'hover:bg-primary-hover']
-      : hasPrimaryColor
-        ? [...baseButtonClasses, 'bg-primary', 'text-white']
-        : [...baseButtonClasses, 'bg-blue-600', 'text-white', 'hover:bg-blue-700']
+  if (hasPrimaryColor && hasPrimaryHoverColor) {
+    return [...baseClasses, 'bg-primary', 'text-white', 'hover:bg-primary-hover']
+  }
+  if (hasPrimaryColor) {
+    return [...baseClasses, 'bg-primary', 'text-white']
+  }
+  return [...baseClasses, 'bg-blue-600', 'text-white', 'hover:bg-blue-700']
+}
 
-  // Build btn-primary utility class for explicit styling
-  const btnPrimaryClasses =
-    hasPrimaryColor && hasPrimaryHoverColor
-      ? 'bg-primary text-white hover:bg-primary-hover'
-      : hasPrimaryColor
-        ? 'bg-primary text-white'
-        : 'bg-blue-600 text-white hover:bg-blue-700'
+/**
+ * Build button primary utility classes
+ */
+function buildButtonPrimaryClasses(
+  hasPrimaryColor: boolean,
+  hasPrimaryHoverColor: boolean
+): string {
+  if (hasPrimaryColor && hasPrimaryHoverColor) {
+    return 'bg-primary text-white hover:bg-primary-hover'
+  }
+  if (hasPrimaryColor) {
+    return 'bg-primary text-white'
+  }
+  return 'bg-blue-600 text-white hover:bg-blue-700'
+}
+
+/**
+ * Generate components layer styles with theme color applications
+ * Applies theme colors to component classes and button elements
+ */
+function generateComponentsLayer(theme?: Theme): string {
+  const hasPrimaryColor = Boolean(theme?.colors?.primary)
+  const hasPrimaryHoverColor = Boolean(theme?.colors?.['primary-hover'])
+
+  const btnClasses = buildButtonClasses(hasPrimaryColor, hasPrimaryHoverColor)
+  const btnPrimaryClasses = buildButtonPrimaryClasses(hasPrimaryColor, hasPrimaryHoverColor)
 
   return `@layer components {
       .container-page {

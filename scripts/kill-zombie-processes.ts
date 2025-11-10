@@ -29,7 +29,7 @@ try {
       encoding: 'utf-8',
     })
     count = parseInt(countOutput.trim()) || 0
-  } catch (error) {
+  } catch {
     // Ignore errors
   }
 
@@ -67,7 +67,7 @@ try {
     } else {
       console.log('✅ All zombie processes killed')
     }
-  } catch (error) {
+  } catch {
     console.log('✅ Cleanup complete')
   }
 } catch (error) {

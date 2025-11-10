@@ -31,7 +31,7 @@ export default async function globalTeardown() {
         encoding: 'utf-8',
       })
       count = parseInt(countOutput.trim()) || 0
-    } catch (error) {
+    } catch {
       // Ignore errors
     }
 

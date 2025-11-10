@@ -157,7 +157,7 @@ export async function killAllServerProcesses(): Promise<void> {
     if (process.platform === 'darwin' || process.platform === 'linux') {
       execSync('pkill -9 -f "bun.*src/cli.ts" || true', { stdio: 'ignore' })
     }
-  } catch (error) {
+  } catch {
     // Ignore errors - processes might already be dead
   }
 
@@ -192,6 +192,7 @@ async function startCliServer(
 
   // Ensure cleanup on process crash/exit
   serverProcess.once('exit', () => {
+    // eslint-disable-next-line drizzle/enforce-delete-with-where
     activeServerProcesses.delete(serverProcess)
   })
 
@@ -209,6 +210,7 @@ async function startCliServer(
     return { process: serverProcess, url, port }
   } catch (error) {
     // Cleanup on startup failure
+    // eslint-disable-next-line drizzle/enforce-delete-with-where
     activeServerProcesses.delete(serverProcess)
     await stopServer(serverProcess)
     throw error
@@ -236,7 +238,7 @@ async function killProcessTree(pid: number): Promise<void> {
       const { execSync } = await import('node:child_process')
       execSync(`taskkill /pid ${pid} /T /F`, { stdio: 'ignore' })
     }
-  } catch (error) {
+  } catch {
     // Process might already be dead, ignore errors
   }
 }
@@ -257,6 +259,7 @@ async function stopServer(serverProcess: ChildProcess): Promise<void> {
       if (!resolved) {
         resolved = true
         if (timeoutId) clearTimeout(timeoutId)
+        // eslint-disable-next-line drizzle/enforce-delete-with-where
         activeServerProcesses.delete(serverProcess)
         resolve()
       }
@@ -268,7 +271,7 @@ async function stopServer(serverProcess: ChildProcess): Promise<void> {
     // Try graceful shutdown with SIGTERM
     try {
       serverProcess.kill('SIGTERM')
-    } catch (error) {
+    } catch {
       // Process might already be dead
       cleanup()
       return
@@ -284,7 +287,7 @@ async function stopServer(serverProcess: ChildProcess): Promise<void> {
           }
           // Also try direct SIGKILL as fallback
           serverProcess.kill('SIGKILL')
-        } catch (error) {
+        } catch {
           // Process might already be dead
         }
         cleanup()
