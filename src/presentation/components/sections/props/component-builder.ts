@@ -56,16 +56,31 @@ export type RenderPropsConfig = {
 }
 
 /**
+ * Applies token substitutions to component props
+ *
+ * @param props - Original props
+ * @param currentLang - Current language
+ * @param languages - Languages configuration
+ * @param theme - Theme configuration
+ * @returns Props with all tokens substituted
+ */
+function applyTokenSubstitutions(
+  props: Record<string, unknown> | undefined,
+  currentLang: string | undefined,
+  languages: Languages | undefined,
+  theme: Theme | undefined
+): Record<string, unknown> | undefined {
+  // Translation token substitution (must happen before theme tokens)
+  const translationSubstitutedProps = substitutePropsTranslationTokens(props, currentLang, languages)
+  // Theme token substitution
+  return substitutePropsThemeTokens(translationSubstitutedProps, theme)
+}
+
+/**
  * Builds complete component props with all transformations applied
  *
- * This function orchestrates:
- * 1. Translation token substitution in props ($t:key)
- * 2. Theme token substitution in props ($theme.category.key)
- * 3. Translation key extraction
- * 4. Style processing (animations, shadows)
- * 5. ClassName finalization
- * 6. Element props building
- * 7. Spacing styles application
+ * Orchestrates: token substitution, translation handling, style processing,
+ * className finalization, element props building, and spacing styles application.
  *
  * @param config - Component props configuration
  * @returns Complete element props with spacing
@@ -79,41 +94,14 @@ export function buildComponentProps(config: ComponentPropsConfig): {
   readonly elementProps: Record<string, unknown>
   readonly elementPropsWithSpacing: Record<string, unknown>
 } {
-  const {
-    type,
-    props,
-    children,
-    content,
-    blockName,
-    blockInstanceIndex,
-    theme,
-    languages,
-    currentLang,
-    childIndex,
-  } = config
+  const { type, props, children, content, blockName, blockInstanceIndex, theme, languages, currentLang, childIndex } = config
 
-  // Translation token substitution (must happen before theme tokens)
-  const translationSubstitutedProps = substitutePropsTranslationTokens(props, currentLang, languages)
-
-  // Theme token substitution
-  const substitutedProps = substitutePropsThemeTokens(translationSubstitutedProps, theme)
-
-  // Translation handling
+  const substitutedProps = applyTokenSubstitutions(props, currentLang, languages, theme)
   const firstTranslationKey = findFirstTranslationKey(children)
   const translationData = getTranslationData(firstTranslationKey, config.languages)
-
-  // Style processing with animations and shadows
   const styleWithShadow = processComponentStyle(type, substitutedProps?.style, theme)
+  const finalClassName = buildFinalClassName(type, substitutedProps?.className, theme, substitutedProps)
 
-  // Build final className based on component type
-  const finalClassName = buildFinalClassName(
-    type,
-    substitutedProps?.className,
-    theme,
-    substitutedProps
-  )
-
-  // Build element props with all attributes
   const elementProps = buildElementProps({
     type,
     substitutedProps,
