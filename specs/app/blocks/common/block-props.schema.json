@@ -476,6 +476,353 @@
       }
     },
     {
+      "id": "APP-BLOCKS-PROPS-011",
+      "given": "block props containing translation tokens ($t:)",
+      "when": "block is rendered with $t: references in props values",
+      "then": "translation tokens should be resolved to actual translated text during rendering",
+      "validation": {
+        "setup": {
+          "languages": {
+            "default": "en-US",
+            "translations": {
+              "en-US": {
+                "button.save": "Save",
+                "button.cancel": "Cancel"
+              },
+              "fr-FR": {
+                "button.save": "Enregistrer",
+                "button.cancel": "Annuler"
+              }
+            }
+          }
+        },
+        "assertions": [
+          "$t: tokens in block props resolve during rendering",
+          "Props contain translated text, not $t: symbols",
+          "Translation happens before variable substitution"
+        ]
+      },
+      "application": {
+        "languages": {
+          "default": "en-US",
+          "translations": {
+            "en-US": {
+              "close.label": "Close",
+              "save.tooltip": "Save changes"
+            },
+            "fr-FR": {
+              "close.label": "Fermer",
+              "save.tooltip": "Enregistrer les modifications"
+            }
+          }
+        },
+        "blocks": [
+          {
+            "name": "action-button",
+            "type": "button",
+            "props": {
+              "aria-label": "$t:close.label",
+              "title": "$t:save.tooltip",
+              "className": "btn btn-$variant"
+            },
+            "children": ["×"]
+          }
+        ],
+        "pages": [
+          {
+            "name": "Form",
+            "path": "/form",
+            "sections": [
+              {
+                "block": "action-button",
+                "vars": {
+                  "variant": "primary"
+                }
+              }
+            ]
+          }
+        ],
+        "expectedDOM": {
+          "en-US": "<button class=\"btn btn-primary\" aria-label=\"Close\" title=\"Save changes\">×</button>",
+          "fr-FR": "<button class=\"btn btn-primary\" aria-label=\"Fermer\" title=\"Enregistrer les modifications\">×</button>"
+        },
+        "assertions": [
+          "Translation tokens in block props: aria-label='$t:close.label' → 'Close'",
+          "Translation tokens in block props: title='$t:save.tooltip' → 'Save changes'",
+          "Variable substitution works alongside translation: className='btn btn-$variant' → 'btn btn-primary'",
+          "Both patterns coexist: $t: (translation) + $variable (substitution)",
+          "No $t: symbols in rendered HTML",
+          "Language switching: French translations applied when fr-FR selected"
+        ]
+      }
+    },
+    {
+      "id": "APP-BLOCKS-PROPS-012",
+      "given": "block children containing translation tokens ($t:)",
+      "when": "block is rendered with $t: references in children arrays",
+      "then": "translation tokens in children should be resolved to translated text",
+      "validation": {
+        "setup": {
+          "languages": {
+            "default": "en-US",
+            "translations": {
+              "en-US": {
+                "nav.home": "Home",
+                "nav.about": "About"
+              },
+              "fr-FR": {
+                "nav.home": "Accueil",
+                "nav.about": "À propos"
+              }
+            }
+          }
+        },
+        "assertions": [
+          "$t: tokens in children resolve during rendering",
+          "Children contain translated text, not $t: symbols",
+          "Translation happens for all children items"
+        ]
+      },
+      "application": {
+        "languages": {
+          "default": "en-US",
+          "translations": {
+            "en-US": {
+              "menu.home": "Home",
+              "menu.products": "Products",
+              "menu.contact": "Contact"
+            },
+            "fr-FR": {
+              "menu.home": "Accueil",
+              "menu.products": "Produits",
+              "menu.contact": "Contact"
+            }
+          }
+        },
+        "blocks": [
+          {
+            "name": "nav-menu",
+            "type": "nav",
+            "children": [
+              {
+                "type": "a",
+                "children": ["$t:menu.home"]
+              },
+              {
+                "type": "a",
+                "children": ["$t:menu.products"]
+              },
+              {
+                "type": "a",
+                "children": ["$t:menu.contact"]
+              }
+            ]
+          }
+        ],
+        "pages": [
+          {
+            "name": "Main",
+            "path": "/",
+            "sections": [
+              {
+                "block": "nav-menu"
+              }
+            ]
+          }
+        ],
+        "expectedDOM": {
+          "en-US": "<nav><a>Home</a><a>Products</a><a>Contact</a></nav>",
+          "fr-FR": "<nav><a>Accueil</a><a>Produits</a><a>Contact</a></nav>"
+        },
+        "assertions": [
+          "Children translation: children=['$t:menu.home'] → ['Home']",
+          "All children translated: 3 $t: references → 3 translated strings",
+          "No $t: in children text nodes",
+          "Block reusability: Same block renders in multiple languages",
+          "Translation per language: French children when fr-FR selected"
+        ]
+      }
+    },
+    {
+      "id": "APP-BLOCKS-PROPS-013",
+      "given": "block content containing translation tokens ($t:)",
+      "when": "block is rendered with $t: reference in content property",
+      "then": "translation token in content should be resolved to translated text",
+      "validation": {
+        "setup": {
+          "languages": {
+            "default": "en-US",
+            "translations": {
+              "en-US": {
+                "hero.title": "Welcome"
+              },
+              "fr-FR": {
+                "hero.title": "Bienvenue"
+              }
+            }
+          }
+        },
+        "assertions": [
+          "$t: token in content resolves during rendering",
+          "Content contains translated text, not $t: symbol",
+          "Translation applies to content property"
+        ]
+      },
+      "application": {
+        "languages": {
+          "default": "en-US",
+          "translations": {
+            "en-US": {
+              "hero.tagline": "Build your next great app",
+              "footer.copyright": "© 2025 All rights reserved"
+            },
+            "fr-FR": {
+              "hero.tagline": "Créez votre prochaine grande application",
+              "footer.copyright": "© 2025 Tous droits réservés"
+            }
+          }
+        },
+        "blocks": [
+          {
+            "name": "hero-heading",
+            "type": "h1",
+            "content": "$t:hero.tagline"
+          },
+          {
+            "name": "footer-text",
+            "type": "footer",
+            "content": "$t:footer.copyright"
+          }
+        ],
+        "pages": [
+          {
+            "name": "Landing",
+            "path": "/landing",
+            "sections": [
+              {
+                "block": "hero-heading"
+              },
+              {
+                "block": "footer-text"
+              }
+            ]
+          }
+        ],
+        "expectedDOM": {
+          "en-US": "<h1>Build your next great app</h1><footer>© 2025 All rights reserved</footer>",
+          "fr-FR": "<h1>Créez votre prochaine grande application</h1><footer>© 2025 Tous droits réservés</footer>"
+        },
+        "assertions": [
+          "Content translation: content='$t:hero.tagline' → 'Build your next great app'",
+          "Content translation: content='$t:footer.copyright' → '© 2025 All rights reserved'",
+          "No $t: in text content",
+          "Block content supports translation tokens",
+          "Multi-language support: French content when fr-FR selected"
+        ]
+      }
+    },
+    {
+      "id": "APP-BLOCKS-PROPS-014",
+      "given": "block with both translation tokens ($t:) and variable references ($variable)",
+      "when": "block uses $t: for translations AND $variable for dynamic data",
+      "then": "both patterns should work together: translations resolved first, then variables substituted",
+      "validation": {
+        "setup": {
+          "languages": {
+            "default": "en-US",
+            "translations": {
+              "en-US": {
+                "product.price": "Price:",
+                "product.buy": "Buy Now"
+              }
+            }
+          }
+        },
+        "assertions": [
+          "$t: tokens resolve to translations",
+          "$variable references substitute with vars",
+          "Both patterns coexist in same block",
+          "Resolution order: translations → variables"
+        ]
+      },
+      "application": {
+        "languages": {
+          "default": "en-US",
+          "translations": {
+            "en-US": {
+              "card.title": "Product",
+              "card.price": "Price:",
+              "card.action": "Add to Cart"
+            },
+            "fr-FR": {
+              "card.title": "Produit",
+              "card.price": "Prix:",
+              "card.action": "Ajouter au panier"
+            }
+          }
+        },
+        "blocks": [
+          {
+            "name": "product-card",
+            "type": "div",
+            "props": {
+              "className": "card card-$variant",
+              "data-product-id": "$productId"
+            },
+            "children": [
+              {
+                "type": "h3",
+                "content": "$t:card.title"
+              },
+              {
+                "type": "p",
+                "content": "$t:card.price"
+              },
+              {
+                "type": "span",
+                "content": "$price"
+              },
+              {
+                "type": "button",
+                "props": {
+                  "aria-label": "$t:card.action"
+                },
+                "children": ["$t:card.action"]
+              }
+            ]
+          }
+        ],
+        "pages": [
+          {
+            "name": "Shop",
+            "path": "/shop",
+            "sections": [
+              {
+                "block": "product-card",
+                "vars": {
+                  "variant": "primary",
+                  "productId": "12345",
+                  "price": "$99.99"
+                }
+              }
+            ]
+          }
+        ],
+        "expectedDOM": {
+          "en-US": "<div class=\"card card-primary\" data-product-id=\"12345\"><h3>Product</h3><p>Price:</p><span>$99.99</span><button aria-label=\"Add to Cart\">Add to Cart</button></div>",
+          "fr-FR": "<div class=\"card card-primary\" data-product-id=\"12345\"><h3>Produit</h3><p>Prix:</p><span>$99.99</span><button aria-label=\"Ajouter au panier\">Ajouter au panier</button></div>"
+        },
+        "assertions": [
+          "Translation resolution: $t:card.title → 'Product', $t:card.price → 'Price:', $t:card.action → 'Add to Cart'",
+          "Variable substitution: $variant → 'primary', $productId → '12345', $price → '$99.99'",
+          "Both patterns work: className='card card-$variant' (variable) + content='$t:card.title' (translation)",
+          "No conflicts: $t: and $variable coexist peacefully",
+          "Multi-language + dynamic: French translations with same vars",
+          "No $t: or $ in final HTML (both fully resolved)"
+        ]
+      }
+    },
+    {
       "id": "APP-BLOCKS-BLOCK-PROPS-REGRESSION-001",
       "given": "complete application configuration with all features",
       "when": "user completes full workflow",
