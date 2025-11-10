@@ -47,7 +47,7 @@ test.describe('Spacing Configuration', () => {
                 type: 'div',
                 props: {
                   'data-testid': 'spacing',
-                  className: '$theme.spacing.section $theme.spacing.container',
+                  className: 'py-16 px-4',
                 },
                 children: ['Spacing validation test'],
               },
@@ -88,7 +88,7 @@ test.describe('Spacing Configuration', () => {
                 type: 'div',
                 props: {
                   'data-testid': 'responsive-spacing',
-                  className: '$theme.spacing.section',
+                  className: 'py-16 sm:py-20',
                 },
                 children: ['Responsive spacing test'],
               },
@@ -438,34 +438,21 @@ test.describe('Spacing Configuration', () => {
                 type: 'div',
                 props: {
                   'data-testid': 'margin-scale',
-                  style: {
-                    display: 'flex',
-                    gap: '0',
-                    padding: '20px',
-                  },
+                  className: 'flex gap-0 p-5',
                 },
                 children: [
                   {
                     type: 'div',
                     props: {
                       'data-testid': 'margin-small',
-                      className: '$theme.spacing.margin-small',
-                      style: {
-                        backgroundColor: '#eff6ff',
-                        border: '2px solid #3b82f6',
-                        padding: '8px',
-                      },
+                      className: 'm-4 bg-blue-50 border-2 border-blue-500 p-2',
                     },
                     children: ['Small'],
                   },
                   {
                     type: 'div',
                     props: {
-                      style: {
-                        backgroundColor: '#d1fae5',
-                        border: '2px solid #10b981',
-                        padding: '8px',
-                      },
+                      className: 'bg-emerald-50 border-2 border-emerald-500 p-2',
                     },
                     children: ['Medium'],
                   },
@@ -473,12 +460,7 @@ test.describe('Spacing Configuration', () => {
                     type: 'div',
                     props: {
                       'data-testid': 'margin-large',
-                      className: '$theme.spacing.margin-large',
-                      style: {
-                        backgroundColor: '#fef3c7',
-                        border: '2px solid #f59e0b',
-                        padding: '8px',
-                      },
+                      className: 'm-8 bg-amber-50 border-2 border-amber-500 p-2',
                     },
                     children: ['Large'],
                   },
