@@ -506,7 +506,9 @@ function FormattedDatePicker() {
   const [selected, setSelected] = useState<Date>()
 
   const footer = selected ? (
-    <p className="text-sm text-gray-600">Selected: {selected.toLocaleDateString('en-US', { dateStyle: 'long' })}</p>
+    <p className="text-sm text-gray-600">
+      Selected: {selected.toLocaleDateString('en-US', { dateStyle: 'long' })}
+    </p>
   ) : (
     <p className="text-sm text-gray-400">Please pick a day</p>
   )
@@ -1177,18 +1179,18 @@ function BookingForm() {
 
 ## Summary Table
 
-| Library                    | Use Case           | Key Feature          | Mobile-Friendly |
-| -------------------------- | ------------------ | -------------------- | --------------- |
-| **@hookform/resolvers**    | Form validation    | Zod integration      | ✅              |
-| **cmdk**                   | Command menus      | Keyboard-first       | ✅              |
-| **embla-carousel**         | Image galleries    | Touch gestures       | ✅✅            |
-| **input-otp**              | OTP verification   | Auto-focus           | ✅              |
-| **next-themes**            | Dark mode          | System detection     | ✅              |
-| **react-day-picker**       | Date selection     | Native Date support  | ✅              |
-| **react-resizable-panels** | Split layouts      | Drag-to-resize       | ⚠️              |
-| **recharts**               | Data visualization | Declarative API      | ✅              |
-| **sonner**                 | Notifications      | Beautiful toasts     | ✅              |
-| **vaul**                   | Mobile drawers     | Swipe gestures       | ✅✅            |
+| Library                    | Use Case           | Key Feature         | Mobile-Friendly |
+| -------------------------- | ------------------ | ------------------- | --------------- |
+| **@hookform/resolvers**    | Form validation    | Zod integration     | ✅              |
+| **cmdk**                   | Command menus      | Keyboard-first      | ✅              |
+| **embla-carousel**         | Image galleries    | Touch gestures      | ✅✅            |
+| **input-otp**              | OTP verification   | Auto-focus          | ✅              |
+| **next-themes**            | Dark mode          | System detection    | ✅              |
+| **react-day-picker**       | Date selection     | Native Date support | ✅              |
+| **react-resizable-panels** | Split layouts      | Drag-to-resize      | ⚠️              |
+| **recharts**               | Data visualization | Declarative API     | ✅              |
+| **sonner**                 | Notifications      | Beautiful toasts    | ✅              |
+| **vaul**                   | Mobile drawers     | Swipe gestures      | ✅✅            |
 
 ---
 
