@@ -6,7 +6,7 @@
  */
 
 import * as React from 'react'
-import { cn } from '@/presentation/utils/cn'
+import { cn } from '@/presentation/styling/cn'
 
 function Table({ className, ...props }: Readonly<React.ComponentProps<'table'>>) {
   return (

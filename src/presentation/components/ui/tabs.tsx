@@ -9,7 +9,7 @@
 
 import * as TabsPrimitive from '@radix-ui/react-tabs'
 import * as React from 'react'
-import { cn } from '@/presentation/utils/cn'
+import { cn } from '@/presentation/styling/cn'
 
 function Tabs({ className, ...props }: Readonly<React.ComponentProps<typeof TabsPrimitive.Root>>) {
   return (

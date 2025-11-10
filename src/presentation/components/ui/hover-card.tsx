@@ -9,7 +9,7 @@
 
 import * as HoverCardPrimitive from '@radix-ui/react-hover-card'
 import * as React from 'react'
-import { cn } from '@/presentation/utils/cn'
+import { cn } from '@/presentation/styling/cn'
 
 function HoverCard({ ...props }: Readonly<React.ComponentProps<typeof HoverCardPrimitive.Root>>) {
   return (

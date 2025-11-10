@@ -22,7 +22,7 @@ import {
   useFormField,
 } from '@/presentation/components/ui/form-hook'
 import { Label } from '@/presentation/components/ui/label'
-import { cn } from '@/presentation/utils/cn'
+import { cn } from '@/presentation/styling/cn'
 import type * as LabelPrimitive from '@radix-ui/react-label'
 
 const Form = FormProvider

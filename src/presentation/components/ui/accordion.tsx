@@ -8,7 +8,7 @@
 import * as AccordionPrimitive from '@radix-ui/react-accordion'
 import { ChevronDownIcon } from 'lucide-react'
 import * as React from 'react'
-import { cn } from '@/presentation/utils/cn'
+import { cn } from '@/presentation/styling/cn'
 
 function Accordion({ ...props }: Readonly<React.ComponentProps<typeof AccordionPrimitive.Root>>) {
   return (

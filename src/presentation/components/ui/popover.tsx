@@ -9,7 +9,7 @@
 
 import * as PopoverPrimitive from '@radix-ui/react-popover'
 import * as React from 'react'
-import { cn } from '@/presentation/utils/cn'
+import { cn } from '@/presentation/styling/cn'
 
 function Popover({ ...props }: Readonly<React.ComponentProps<typeof PopoverPrimitive.Root>>) {
   return (

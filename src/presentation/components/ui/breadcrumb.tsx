@@ -8,7 +8,7 @@
 import { Slot } from '@radix-ui/react-slot'
 import { ChevronRight, MoreHorizontal } from 'lucide-react'
 import * as React from 'react'
-import { cn } from '@/presentation/utils/cn'
+import { cn } from '@/presentation/styling/cn'
 
 function Breadcrumb({ ...props }: Readonly<React.ComponentProps<'nav'>>) {
   return (

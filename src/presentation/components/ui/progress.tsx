@@ -7,7 +7,7 @@
 
 import * as ProgressPrimitive from '@radix-ui/react-progress'
 import * as React from 'react'
-import { cn } from '@/presentation/utils/cn'
+import { cn } from '@/presentation/styling/cn'
 
 function Progress({
   className,

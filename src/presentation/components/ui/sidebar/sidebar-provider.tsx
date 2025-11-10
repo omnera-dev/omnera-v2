@@ -11,7 +11,7 @@ import * as React from 'react'
 import { SidebarContext } from '@/presentation/components/ui/sidebar-hook'
 import { TooltipProvider } from '@/presentation/components/ui/tooltip'
 import { useIsMobile } from '@/presentation/hooks/use-mobile'
-import { cn } from '@/presentation/utils/cn'
+import { cn } from '@/presentation/styling/cn'
 import {
   SIDEBAR_COOKIE_NAME,
   SIDEBAR_COOKIE_MAX_AGE,

@@ -12,7 +12,7 @@ import * as React from 'react'
 import { Button } from '@/presentation/components/ui/button'
 import { Input } from '@/presentation/components/ui/input'
 import { Textarea } from '@/presentation/components/ui/textarea'
-import { cn } from '@/presentation/utils/cn'
+import { cn } from '@/presentation/styling/cn'
 
 function InputGroup({ className, ...props }: Readonly<React.ComponentProps<'div'>>) {
   return (

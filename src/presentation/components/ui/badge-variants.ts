@@ -6,7 +6,7 @@
  */
 
 import { cva } from 'class-variance-authority'
-import { COMMON_INTERACTIVE_CLASSES } from '@/presentation/utils/variant-classes'
+import { COMMON_INTERACTIVE_CLASSES } from '@/presentation/styling/variant-classes'
 
 export const badgeVariants = cva(
   `inline-flex items-center justify-center rounded-md border px-2 py-0.5 text-xs font-medium w-fit whitespace-nowrap shrink-0 [&>svg]:size-3 gap-1 [&>svg]:pointer-events-none ${COMMON_INTERACTIVE_CLASSES} transition-[color,box-shadow] overflow-hidden`,

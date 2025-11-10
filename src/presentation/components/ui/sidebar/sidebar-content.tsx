@@ -10,7 +10,7 @@
 import { Slot } from '@radix-ui/react-slot'
 import * as React from 'react'
 import { Separator } from '@/presentation/components/ui/separator'
-import { cn } from '@/presentation/utils/cn'
+import { cn } from '@/presentation/styling/cn'
 
 export function SidebarHeader({ className, ...props }: Readonly<React.ComponentProps<'div'>>) {
   return (

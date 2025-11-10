@@ -6,8 +6,8 @@
  */
 
 import { type ReactElement } from 'react'
-import { buildProviderElements } from './utils/analytics-builders'
-import { buildCustomElement } from './utils/custom-elements-builders'
+import { buildProviderElements } from './analytics-builders'
+import { buildCustomElement } from './custom-elements-builders'
 import type { Analytics } from '@/domain/models/app/page/meta/analytics'
 import type { CustomElements } from '@/domain/models/app/page/meta/custom-elements'
 import type { FaviconSet } from '@/domain/models/app/page/meta/favicon-set'

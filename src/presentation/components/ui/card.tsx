@@ -6,7 +6,7 @@
  */
 
 import * as React from 'react'
-import { cn } from '@/presentation/utils/cn'
+import { cn } from '@/presentation/styling/cn'
 
 function Card({ className, ...props }: Readonly<React.ComponentProps<'div'>>) {
   return (

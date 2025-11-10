@@ -8,7 +8,7 @@
 import { type ReactElement } from 'react'
 import { Hero } from '@/presentation/components/layout/hero'
 import { ResponsiveNavigation } from '@/presentation/components/layout/responsive-navigation'
-import { convertBadgeProps } from '../utils/element-props'
+import { convertBadgeProps } from '../props/element-props'
 import * as Renderers from './element-renderers'
 import type { Languages } from '@/domain/models/app/languages'
 import type { Component } from '@/domain/models/app/page/sections'

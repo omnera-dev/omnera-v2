@@ -13,7 +13,7 @@ import { Button } from '@/presentation/components/ui/button'
 import { Input } from '@/presentation/components/ui/input'
 import { Sheet, SheetContent } from '@/presentation/components/ui/sheet'
 import { useSidebar } from '@/presentation/components/ui/sidebar-hook'
-import { cn } from '@/presentation/utils/cn'
+import { cn } from '@/presentation/styling/cn'
 import { SIDEBAR_WIDTH_MOBILE } from './sidebar-constants'
 
 export function Sidebar({

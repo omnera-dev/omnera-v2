@@ -6,11 +6,11 @@
  */
 
 import { type ReactElement } from 'react'
-import { extractBlockReference, renderBlockReferenceError } from './utils/block-reference-handler'
-import { resolveBlock } from './utils/block-resolution'
-import { buildComponentProps } from './utils/component-builder'
-import { dispatchComponentType } from './utils/component-type-dispatcher'
-import { resolveChildTranslation } from './utils/translation-handler'
+import { extractBlockReference, renderBlockReferenceError } from './blocks/block-reference-handler'
+import { resolveBlock } from './blocks/block-resolution'
+import { buildComponentProps } from './props/component-builder'
+import { dispatchComponentType } from './rendering/component-type-dispatcher'
+import { resolveChildTranslation } from './translations/translation-handler'
 import type {
   BlockReference,
   SimpleBlockReference,

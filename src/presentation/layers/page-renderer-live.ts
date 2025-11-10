@@ -7,8 +7,8 @@
 
 import { Layer } from 'effect'
 import { PageRenderer } from '@/application/ports/page-renderer'
-import { renderErrorPage, renderNotFoundPage } from '@/presentation/utils/render-error-pages'
-import { renderHomePage, renderPage } from '@/presentation/utils/render-homepage'
+import { renderErrorPage, renderNotFoundPage } from '@/presentation/rendering/render-error-pages'
+import { renderHomePage, renderPage } from '@/presentation/rendering/render-homepage'
 
 /**
  * Live implementation of PageRenderer using React SSR

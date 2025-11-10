@@ -9,7 +9,7 @@
 
 import * as SliderPrimitive from '@radix-ui/react-slider'
 import * as React from 'react'
-import { cn } from '@/presentation/utils/cn'
+import { cn } from '@/presentation/styling/cn'
 
 /**
  * Slider component built on Radix UI primitives

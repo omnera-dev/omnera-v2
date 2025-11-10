@@ -9,7 +9,7 @@
 
 import * as SeparatorPrimitive from '@radix-ui/react-separator'
 import * as React from 'react'
-import { cn } from '@/presentation/utils/cn'
+import { cn } from '@/presentation/styling/cn'
 
 function Separator({
   className,

@@ -13,7 +13,7 @@ import { useSidebar } from '@/presentation/components/ui/sidebar-hook'
 import { sidebarMenuButtonVariants } from '@/presentation/components/ui/sidebar-variants'
 import { Skeleton } from '@/presentation/components/ui/skeleton'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/presentation/components/ui/tooltip'
-import { cn } from '@/presentation/utils/cn'
+import { cn } from '@/presentation/styling/cn'
 import type { VariantProps } from 'class-variance-authority'
 
 export function SidebarMenu({ className, ...props }: Readonly<React.ComponentProps<'ul'>>) {

@@ -6,8 +6,8 @@
  */
 
 import * as React from 'react'
-import { cn } from '@/presentation/utils/cn'
-import { COMMON_INTERACTIVE_CLASSES } from '@/presentation/utils/variant-classes'
+import { cn } from '@/presentation/styling/cn'
+import { COMMON_INTERACTIVE_CLASSES } from '@/presentation/styling/variant-classes'
 
 function Textarea({ className, ...props }: Readonly<React.ComponentProps<'textarea'>>) {
   return (
