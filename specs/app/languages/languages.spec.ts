@@ -1227,7 +1227,7 @@ test.describe('Languages Configuration', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-LANGUAGES-020: should resolve translation tokens in component props during SSR',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {

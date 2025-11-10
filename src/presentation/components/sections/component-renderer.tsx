@@ -88,6 +88,7 @@ function renderDirectComponent(
     blockInstanceIndex: props.blockInstanceIndex,
     theme: props.theme,
     languages: props.languages,
+    currentLang: props.currentLang,
     childIndex: props.childIndex,
   })
 

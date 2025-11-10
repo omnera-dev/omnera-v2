@@ -8,7 +8,11 @@
 import { applySpacingStyles } from '../styling/spacing-resolver'
 import { buildFinalClassName, processComponentStyle } from '../styling/style-processor'
 import { substitutePropsThemeTokens } from '../styling/theme-tokens'
-import { findFirstTranslationKey, getTranslationData } from '../translations/translation-handler'
+import {
+  findFirstTranslationKey,
+  getTranslationData,
+  substitutePropsTranslationTokens,
+} from '../translations/translation-handler'
 import { buildElementProps } from './props-builder'
 import type { Languages } from '@/domain/models/app/languages'
 import type { Component } from '@/domain/models/app/page/sections'
@@ -27,6 +31,7 @@ export type ComponentPropsConfig = {
   readonly blockInstanceIndex: number | undefined
   readonly theme: Theme | undefined
   readonly languages: Languages | undefined
+  readonly currentLang: string | undefined
   readonly childIndex: number | undefined
 }
 
@@ -54,12 +59,13 @@ export type RenderPropsConfig = {
  * Builds complete component props with all transformations applied
  *
  * This function orchestrates:
- * 1. Theme token substitution in props
- * 2. Translation key extraction
- * 3. Style processing (animations, shadows)
- * 4. ClassName finalization
- * 5. Element props building
- * 6. Spacing styles application
+ * 1. Translation token substitution in props ($t:key)
+ * 2. Theme token substitution in props ($theme.category.key)
+ * 3. Translation key extraction
+ * 4. Style processing (animations, shadows)
+ * 5. ClassName finalization
+ * 6. Element props building
+ * 7. Spacing styles application
  *
  * @param config - Component props configuration
  * @returns Complete element props with spacing
@@ -73,11 +79,24 @@ export function buildComponentProps(config: ComponentPropsConfig): {
   readonly elementProps: Record<string, unknown>
   readonly elementPropsWithSpacing: Record<string, unknown>
 } {
-  const { type, props, children, content, blockName, blockInstanceIndex, theme, childIndex } =
-    config
+  const {
+    type,
+    props,
+    children,
+    content,
+    blockName,
+    blockInstanceIndex,
+    theme,
+    languages,
+    currentLang,
+    childIndex,
+  } = config
+
+  // Translation token substitution (must happen before theme tokens)
+  const translationSubstitutedProps = substitutePropsTranslationTokens(props, currentLang, languages)
 
   // Theme token substitution
-  const substitutedProps = substitutePropsThemeTokens(props, theme)
+  const substitutedProps = substitutePropsThemeTokens(translationSubstitutedProps, theme)
 
   // Translation handling
   const firstTranslationKey = findFirstTranslationKey(children)
