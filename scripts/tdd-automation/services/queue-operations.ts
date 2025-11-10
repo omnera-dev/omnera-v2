@@ -604,6 +604,22 @@ export const getNextSpec = Effect.gen(function* () {
     return null
   }
 
+  // Fetch issue body to extract test file path
+  const cmd = yield* CommandService
+  const issueBody = yield* cmd
+    .exec(`gh issue view ${nextSpec.number} --json body --jq '.body'`, { throwOnError: false })
+    .pipe(Effect.catchAll(() => Effect.succeed('')))
+
+  // Extract file path from body: **File**: `path/to/file.spec.ts:123`
+  const fileMatch = issueBody.match(/\*\*File\*\*:\s*`([^:]+):\d+`/)
+  const testFile = fileMatch?.[1] || ''
+
+  // Add test file to spec object
+  const nextSpecWithFile: SpecIssue = {
+    ...nextSpec,
+    testFile,
+  }
+
   yield* success(
     `Next spec: ${nextSpec.specId} (#${nextSpec.number}) [Priority: ${nextSpec.priority}]`
   )
@@ -618,5 +634,5 @@ export const getNextSpec = Effect.gen(function* () {
     }
   }
 
-  return nextSpec
+  return nextSpecWithFile
 })

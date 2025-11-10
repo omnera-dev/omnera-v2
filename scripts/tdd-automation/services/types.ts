@@ -32,6 +32,7 @@ export interface SpecIssue {
   createdAt: string
   updatedAt: string
   labels?: string[]
+  testFile?: string // Optional: test file path extracted from issue body
 }
 
 /**

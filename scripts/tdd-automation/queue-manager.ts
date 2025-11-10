@@ -175,10 +175,16 @@ const commandPopulate = Effect.gen(function* () {
  * CLI: Get next queued spec (sorted by priority)
  */
 const commandNext = Effect.gen(function* () {
+  const fs = yield* FileSystemService
   const next = yield* getNextSpec
 
   if (!next) {
     yield* skip('No queued specs found')
+    // Output for GitHub Actions
+    if (process.env.GITHUB_OUTPUT) {
+      const output = `has_next=false\n`
+      yield* fs.writeFile(process.env.GITHUB_OUTPUT, output).pipe(Effect.catchAll(() => Effect.void))
+    }
     return
   }
 
@@ -190,6 +196,16 @@ const commandNext = Effect.gen(function* () {
   yield* logInfo(`   Issue: ${next.url}`)
   yield* logInfo(`   State: ${next.state}`)
   yield* logInfo('')
+
+  // Output for GitHub Actions
+  if (process.env.GITHUB_OUTPUT) {
+    const output = `has_next=true
+spec_id=${next.specId}
+issue_number=${next.number}
+test_file=${next.testFile || ''}
+`
+    yield* fs.writeFile(process.env.GITHUB_OUTPUT, output).pipe(Effect.catchAll(() => Effect.void))
+  }
 })
 
 /**
