@@ -6,6 +6,8 @@
  */
 
 import { type ReactElement } from 'react'
+import { createNotFoundPageConfig } from '@/presentation/components/pages/DefaultPageConfigs'
+import { DynamicPage } from '@/presentation/components/pages/DynamicPage'
 
 /**
  * NotFoundPage component - 404 error page
@@ -13,35 +15,11 @@ import { type ReactElement } from 'react'
  * This page is displayed when a user navigates to a route that doesn't exist.
  * It provides a clear message and a link back to the homepage.
  *
+ * Uses DynamicPage pattern with theme-generated styles for consistency across the application.
+ *
  * @returns React element for 404 error page
  */
 export function NotFoundPage(): Readonly<ReactElement> {
-  return (
-    <html lang="en">
-      <head>
-        <meta charSet="UTF-8" />
-        <meta
-          name="viewport"
-          content="width=device-width, initial-scale=1.0"
-        />
-        <title>404 - Not Found</title>
-        <link
-          rel="stylesheet"
-          href="/assets/output.css"
-        />
-      </head>
-      <body className="flex min-h-screen items-center justify-center bg-gray-50">
-        <div className="text-center">
-          <h1 className="mb-4 text-6xl font-bold text-gray-900">404</h1>
-          <p className="mb-8 text-xl text-gray-600">Page not found</p>
-          <a
-            href="/"
-            className="font-medium text-blue-600 hover:text-blue-700"
-          >
-            Go back home
-          </a>
-        </div>
-      </body>
-    </html>
-  )
+  const pageConfig = createNotFoundPageConfig()
+  return <DynamicPage page={pageConfig} />
 }

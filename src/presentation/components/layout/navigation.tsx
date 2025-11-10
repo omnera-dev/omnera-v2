@@ -5,9 +5,46 @@
  * found in the LICENSE.md file in the root directory of this source tree.
  */
 
-import { Button } from '@/presentation/components/ui/button'
 import type { Navigation as NavigationProps } from '@/domain/models/app/page/layout/navigation'
 import type { ReactElement } from 'react'
+
+/**
+ * Maps CTA button variant to Tailwind CSS classes
+ */
+function getButtonVariantClasses(variant?: string): string {
+  switch (variant) {
+    case 'primary':
+      return 'bg-primary text-primary-foreground hover:bg-primary/90'
+    case 'secondary':
+      return 'bg-secondary text-secondary-foreground hover:bg-secondary/80'
+    case 'outline':
+      return 'border border-input bg-background hover:bg-accent hover:text-accent-foreground'
+    case 'ghost':
+      return 'hover:bg-accent hover:text-accent-foreground'
+    case 'link':
+      return 'text-primary underline-offset-4 hover:underline'
+    default:
+      return 'bg-primary text-primary-foreground hover:bg-primary/90'
+  }
+}
+
+/**
+ * Maps CTA button size to Tailwind CSS classes
+ */
+function getButtonSizeClasses(size?: string): string {
+  switch (size) {
+    case 'sm':
+      return 'h-9 rounded-md px-3 text-xs'
+    case 'md':
+      return 'h-10 px-4 py-2'
+    case 'lg':
+      return 'h-11 rounded-md px-8'
+    case 'xl':
+      return 'h-12 rounded-md px-10 text-lg'
+    default:
+      return 'h-10 px-4 py-2'
+  }
+}
 
 /**
  * Navigation Component
@@ -51,14 +88,13 @@ export function Navigation({
         </div>
       )}
       {cta && (
-        <Button
-          asChild
-          variant={cta.variant}
-          size={cta.size}
+        <a
+          href={cta.href}
           data-testid="nav-cta"
+          className={`ring-offset-background focus-visible:ring-ring inline-flex items-center justify-center gap-2 rounded-md text-sm font-medium whitespace-nowrap transition-colors focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 ${getButtonVariantClasses(cta.variant)} ${getButtonSizeClasses(cta.size)}`}
         >
-          <a href={cta.href}>{cta.text}</a>
-        </Button>
+          {cta.text}
+        </a>
       )}
     </nav>
   )
