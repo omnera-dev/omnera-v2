@@ -15,6 +15,8 @@ export default defineConfig({
   testDir: './specs',
   /* Global setup for database testcontainers (teardown handled by setup return value) */
   globalSetup: './specs/global-setup.ts',
+  /* Global teardown for emergency process cleanup */
+  globalTeardown: './specs/global-teardown.ts',
   /* Run tests in files in parallel */
   fullyParallel: true,
   /* Fail the build on CI if you accidentally left test.only in the source code. */

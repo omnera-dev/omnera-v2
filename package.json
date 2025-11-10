@@ -70,6 +70,7 @@
     "test:e2e:update-snapshots:regression": "playwright test --grep='@regression' --update-snapshots",
     "test:snapshots:guide": "bun run scripts/snapshot-guide.ts",
     "test:all": "bun test:unit && bun test:e2e:regression",
+    "test:cleanup": "bun run scripts/kill-zombie-processes.ts",
     "license": "bun run scripts/add-license-headers.ts",
     "generate:roadmap": "bun run scripts/generate-roadmap.ts",
     "export:schema": "bun run scripts/export-schema.ts",

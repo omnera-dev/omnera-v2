@@ -36,37 +36,14 @@ export interface CompiledCSS {
 const cssCache = Ref.unsafeMake<Map<string, CompiledCSS>>(new Map())
 
 /**
- * Convert hex color to space-separated RGB for Tailwind v4
- * Tailwind expects colors as "r g b" for opacity support
- */
-function hexToRgb(hex: string): string {
-  if (!hex.startsWith('#')) return hex
-
-  const cleanHex = hex.slice(1)
-  const fullHex =
-    cleanHex.length === 3
-      ? cleanHex
-          .split('')
-          .map((char) => char + char)
-          .join('')
-      : cleanHex
-
-  const r = parseInt(fullHex.slice(0, 2), 16)
-  const g = parseInt(fullHex.slice(2, 4), 16)
-  const b = parseInt(fullHex.slice(4, 6), 16)
-
-  return `${r} ${g} ${b}`
-}
-
-/**
  * Generate Tailwind @theme colors from domain color config
+ * Uses hex format directly - Tailwind v4 handles color format conversion
  */
 function generateThemeColors(colors?: ColorsConfig): string {
   if (!colors || Object.keys(colors).length === 0) return ''
 
   const colorEntries = Object.entries(colors).map(([name, value]) => {
-    const rgbValue = hexToRgb(value as string)
-    return `    --color-${name}: ${rgbValue};`
+    return `    --color-${name}: ${value};`
   })
 
   return colorEntries.join('\n')
@@ -255,11 +232,35 @@ const STATIC_IMPORTS = `@import 'tailwindcss';
     @custom-variant dark (&:is(.dark *));`
 
 /**
- * Base layer styles for global elements
+ * Generate base layer styles with theme color applications
+ * Applies theme colors to base HTML elements if theme defines those colors
  */
-const BASE_LAYER = `@layer base {
+function generateBaseLayer(theme?: Theme): string {
+  const hasTextColor = theme?.colors?.text
+  const hasPrimaryColor = theme?.colors?.primary
+  const hasPrimaryHoverColor = theme?.colors?.['primary-hover']
+
+  // Build body classes
+  const bodyClasses = hasTextColor
+    ? ['font-sans', 'antialiased', 'text-text']
+    : ['font-sans', 'antialiased']
+
+  // Build heading classes
+  const headingClasses = hasTextColor
+    ? ['font-semibold', 'tracking-tight', 'text-text']
+    : ['font-semibold', 'tracking-tight']
+
+  // Build link classes - only use primary-hover if it exists
+  const linkClasses =
+    hasPrimaryColor && hasPrimaryHoverColor
+      ? ['transition-colors', 'text-primary', 'hover:text-primary-hover']
+      : hasPrimaryColor
+        ? ['transition-colors', 'text-primary']
+        : ['transition-colors', 'text-blue-600', 'hover:text-blue-700']
+
+  return `@layer base {
       body {
-        @apply font-sans antialiased;
+        @apply ${bodyClasses.join(' ')};
       }
 
       h1,
@@ -268,18 +269,51 @@ const BASE_LAYER = `@layer base {
       h4,
       h5,
       h6 {
-        @apply font-semibold tracking-tight;
+        @apply ${headingClasses.join(' ')};
       }
 
       a {
-        @apply text-blue-600 transition-colors hover:text-blue-700;
+        @apply ${linkClasses.join(' ')};
       }
     }`
+}
 
 /**
- * Components layer styles
+ * Generate components layer styles with theme color applications
+ * Applies theme colors to component classes and button elements
  */
-const COMPONENTS_LAYER = `@layer components {
+function generateComponentsLayer(theme?: Theme): string {
+  const hasPrimaryColor = theme?.colors?.primary
+  const hasPrimaryHoverColor = theme?.colors?.['primary-hover']
+
+  // Build button classes - apply to all button elements by default
+  const baseButtonClasses = [
+    'inline-flex',
+    'items-center',
+    'justify-center',
+    'rounded-md',
+    'px-4',
+    'py-2',
+    'font-medium',
+    'transition-colors',
+  ]
+
+  const btnClasses =
+    hasPrimaryColor && hasPrimaryHoverColor
+      ? [...baseButtonClasses, 'bg-primary', 'text-white', 'hover:bg-primary-hover']
+      : hasPrimaryColor
+        ? [...baseButtonClasses, 'bg-primary', 'text-white']
+        : [...baseButtonClasses, 'bg-blue-600', 'text-white', 'hover:bg-blue-700']
+
+  // Build btn-primary utility class for explicit styling
+  const btnPrimaryClasses =
+    hasPrimaryColor && hasPrimaryHoverColor
+      ? 'bg-primary text-white hover:bg-primary-hover'
+      : hasPrimaryColor
+        ? 'bg-primary text-white'
+        : 'bg-blue-600 text-white hover:bg-blue-700'
+
+  return `@layer components {
       .container-page {
         @apply mx-auto max-w-4xl px-4 py-8;
       }
@@ -288,14 +322,19 @@ const COMPONENTS_LAYER = `@layer components {
         @apply rounded-lg border border-gray-200 bg-white p-6 shadow-sm;
       }
 
+      button {
+        @apply ${btnClasses.join(' ')};
+      }
+
       .btn {
-        @apply inline-flex items-center justify-center rounded-md px-4 py-2 font-medium transition-colors;
+        @apply ${btnClasses.join(' ')};
       }
 
       .btn-primary {
-        @apply bg-blue-600 text-white hover:bg-blue-700;
+        @apply ${btnPrimaryClasses};
       }
     }`
+}
 
 /**
  * Utilities layer styles
@@ -325,11 +364,13 @@ const FINAL_BASE_LAYER = ''
 function buildSourceCSS(theme?: Theme): string {
   const themeCSS = generateThemeCSS(theme)
   const animationCSS = generateAnimationStyles(theme?.animations)
+  const baseLayerCSS = generateBaseLayer(theme)
+  const componentsLayerCSS = generateComponentsLayer(theme)
 
   return [
     STATIC_IMPORTS,
-    BASE_LAYER,
-    COMPONENTS_LAYER,
+    baseLayerCSS,
+    componentsLayerCSS,
     UTILITIES_LAYER,
     '/*---break---\n     */',
     themeCSS,

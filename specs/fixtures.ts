@@ -136,6 +136,35 @@ export async function cleanupGlobalDatabase(): Promise<void> {
 }
 
 /**
+ * Emergency cleanup: Kill all active server processes
+ * Called by global teardown or can be invoked manually
+ * Useful for cleaning up zombie processes left by crashed tests
+ */
+export async function killAllServerProcesses(): Promise<void> {
+  if (activeServerProcesses.size === 0) {
+    return
+  }
+
+  console.log(`🧹 Killing ${activeServerProcesses.size} active server processes...`)
+
+  const killPromises = Array.from(activeServerProcesses).map((process) => stopServer(process))
+
+  await Promise.allSettled(killPromises)
+
+  // Final check: kill any remaining Bun processes running src/cli.ts
+  try {
+    const { execSync } = await import('node:child_process')
+    if (process.platform === 'darwin' || process.platform === 'linux') {
+      execSync('pkill -9 -f "bun.*src/cli.ts" || true', { stdio: 'ignore' })
+    }
+  } catch (error) {
+    // Ignore errors - processes might already be dead
+  }
+
+  console.log('✅ All server processes cleaned up')
+}
+
+/**
  * Helper function to start the CLI server with given app schema
  * Uses port 0 to let Bun automatically select an available port
  */
@@ -158,6 +187,14 @@ async function startCliServer(
     stdio: 'pipe',
   })
 
+  // Register process in global registry for emergency cleanup
+  activeServerProcesses.add(serverProcess)
+
+  // Ensure cleanup on process crash/exit
+  serverProcess.once('exit', () => {
+    activeServerProcesses.delete(serverProcess)
+  })
+
   try {
     // Wait for server to start and extract the actual port Bun selected
     const port = await waitForServerPort(serverProcess)
@@ -171,27 +208,88 @@ async function startCliServer(
 
     return { process: serverProcess, url, port }
   } catch (error) {
-    serverProcess.kill('SIGTERM')
+    // Cleanup on startup failure
+    activeServerProcesses.delete(serverProcess)
+    await stopServer(serverProcess)
     throw error
   }
 }
 
 /**
- * Helper function to stop the server gracefully
+ * Global process registry to track all spawned server processes
+ * Used for emergency cleanup in case tests crash before fixture teardown
+ */
+const activeServerProcesses = new Set<ChildProcess>()
+
+/**
+ * Helper function to kill process tree (parent + all children)
+ * More reliable than just killing parent process
+ */
+async function killProcessTree(pid: number): Promise<void> {
+  try {
+    // On macOS/Linux: kill entire process group
+    if (process.platform === 'darwin' || process.platform === 'linux') {
+      // Use negative PID to kill process group
+      process.kill(-pid, 'SIGKILL')
+    } else {
+      // Windows: use taskkill
+      const { execSync } = await import('node:child_process')
+      execSync(`taskkill /pid ${pid} /T /F`, { stdio: 'ignore' })
+    }
+  } catch (error) {
+    // Process might already be dead, ignore errors
+  }
+}
+
+/**
+ * Helper function to stop the server gracefully with improved reliability
+ * - Tries SIGTERM first (graceful shutdown)
+ * - Falls back to SIGKILL after 1 second
+ * - Kills entire process tree to prevent zombie child processes
+ * - Removes from global registry
  */
 async function stopServer(serverProcess: ChildProcess): Promise<void> {
   return new Promise((resolve) => {
-    serverProcess.on('exit', () => {
-      resolve()
-    })
-    serverProcess.kill('SIGTERM')
-    // Force kill if not stopped within 2 seconds
-    setTimeout(() => {
-      if (!serverProcess.killed) {
-        serverProcess.kill('SIGKILL')
+    let resolved = false
+    let timeoutId: NodeJS.Timeout | null = null
+
+    const cleanup = () => {
+      if (!resolved) {
+        resolved = true
+        if (timeoutId) clearTimeout(timeoutId)
+        activeServerProcesses.delete(serverProcess)
+        resolve()
       }
-      resolve()
-    }, 2000)
+    }
+
+    // Listen for exit event
+    serverProcess.once('exit', cleanup)
+
+    // Try graceful shutdown with SIGTERM
+    try {
+      serverProcess.kill('SIGTERM')
+    } catch (error) {
+      // Process might already be dead
+      cleanup()
+      return
+    }
+
+    // Force kill after 1 second if still running
+    timeoutId = setTimeout(async () => {
+      if (!resolved) {
+        try {
+          // Kill entire process tree (more reliable than just parent)
+          if (serverProcess.pid) {
+            await killProcessTree(serverProcess.pid)
+          }
+          // Also try direct SIGKILL as fallback
+          serverProcess.kill('SIGKILL')
+        } catch (error) {
+          // Process might already be dead
+        }
+        cleanup()
+      }
+    }, 1000)
   })
 }
 
