@@ -52,7 +52,12 @@ describe('Style Processor', () => {
 
   describe('buildFinalClassName', () => {
     test('returns undefined when no classes apply', () => {
-      const result = buildFinalClassName('section' as Component['type'], undefined, undefined, undefined)
+      const result = buildFinalClassName(
+        'section' as Component['type'],
+        undefined,
+        undefined,
+        undefined
+      )
       expect(result).toBeUndefined()
     })
 
@@ -63,7 +68,9 @@ describe('Style Processor', () => {
     })
 
     test('does not add type class for other component types', () => {
-      expect(buildFinalClassName('section' as Component['type'], undefined, undefined, undefined)).toBeUndefined()
+      expect(
+        buildFinalClassName('section' as Component['type'], undefined, undefined, undefined)
+      ).toBeUndefined()
       expect(buildFinalClassName('container', undefined, undefined, undefined)).toBeUndefined()
     })
 
@@ -92,12 +99,7 @@ describe('Style Processor', () => {
       const theme: Theme = {
         breakpoints: { md: '768px' },
       }
-      const result = buildFinalClassName(
-        'card',
-        'my-custom-class',
-        theme,
-        { some: 'prop' }
-      )
+      const result = buildFinalClassName('card', 'my-custom-class', theme, { some: 'prop' })
       expect(result).toContain('card')
       expect(result).toContain('my-custom-class')
     })
@@ -189,7 +191,11 @@ describe('Style Processor', () => {
     })
 
     test('processes string style', () => {
-      const result = processComponentStyle('section' as Component['type'], 'color: red; padding: 10px', undefined)
+      const result = processComponentStyle(
+        'section' as Component['type'],
+        'color: red; padding: 10px',
+        undefined
+      )
       expect(result).toBeDefined()
       expect(result).toHaveProperty('color')
       expect(result).toHaveProperty('padding')

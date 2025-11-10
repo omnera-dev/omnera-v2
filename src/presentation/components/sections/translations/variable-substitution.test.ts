@@ -252,11 +252,7 @@ describe('Variable Substitution', () => {
         '!',
       ]
       const result = substituteChildrenVariables(children, vars)
-      expect(result).toEqual([
-        'Hello',
-        { type: 'strong', props: {}, content: 'Alice' },
-        '!',
-      ])
+      expect(result).toEqual(['Hello', { type: 'strong', props: {}, content: 'Alice' }, '!'])
     })
 
     test('preserves components without variables', () => {

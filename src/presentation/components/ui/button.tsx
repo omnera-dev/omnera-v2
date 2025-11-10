@@ -6,16 +6,20 @@
  */
 
 import * as React from 'react'
+import { Icon } from '@/presentation/components/ui/icon'
 import { resolveThemeColor } from '@/presentation/styling/theme-colors'
 import type { CtaButtonColor } from '@/domain/models/app/page/layout/navigation/cta-button'
 
 type ButtonVariant = 'primary' | 'secondary' | 'outline' | 'ghost' | 'link'
 type ButtonSize = 'sm' | 'md' | 'lg' | 'xl'
+type IconPosition = 'left' | 'right'
 
 interface ButtonProps extends Omit<React.ComponentProps<'button'>, 'color'> {
   variant?: ButtonVariant
   size?: ButtonSize
   color?: CtaButtonColor
+  icon?: string
+  iconPosition?: IconPosition
   asChild?: boolean
   children: React.ReactNode
 }
@@ -61,10 +65,10 @@ function getButtonSizeClasses(size?: ButtonSize): string {
 /**
  * Button Component
  *
- * Renders a button with variant, size, and optional theme color support.
+ * Renders a button with variant, size, optional theme color, and icon support.
  * When asChild is true, renders children directly (useful for wrapping anchor tags).
  *
- * @param props - Button props including variant, size, color, and asChild
+ * @param props - Button props including variant, size, color, icon, iconPosition, and asChild
  * @returns Button element or children if asChild is true
  */
 function Button({
@@ -72,6 +76,8 @@ function Button({
   variant,
   size,
   color,
+  icon,
+  iconPosition = 'left',
   asChild = false,
   children,
   ...props
@@ -82,7 +88,17 @@ function Button({
 
   const baseClasses =
     'ring-offset-background focus-visible:ring-ring inline-flex items-center justify-center gap-2 rounded-md text-sm font-medium whitespace-nowrap transition-colors focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0'
-  const classes = `${baseClasses} ${getButtonVariantClasses(variant)} ${getButtonSizeClasses(size)} ${className}`.trim()
+  const classes =
+    `${baseClasses} ${getButtonVariantClasses(variant)} ${getButtonSizeClasses(size)} ${className}`.trim()
+
+  // Render button content with optional icon
+  const buttonContent = (
+    <>
+      {icon && iconPosition === 'left' && <Icon name={icon} />}
+      {children}
+      {icon && iconPosition === 'right' && <Icon name={icon} />}
+    </>
+  )
 
   // If asChild is true, clone the child element and apply button props to it
   if (asChild && React.isValidElement(children)) {
@@ -90,6 +106,7 @@ function Button({
       ...props,
       className: classes,
       style,
+      children: icon ? buttonContent : children,
     }
     return React.cloneElement(children, childProps)
   }
@@ -100,7 +117,7 @@ function Button({
       style={style}
       {...props}
     >
-      {children}
+      {buttonContent}
     </button>
   )
 }

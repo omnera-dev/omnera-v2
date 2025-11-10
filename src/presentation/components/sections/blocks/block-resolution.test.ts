@@ -22,9 +22,7 @@ describe('Block Resolution', () => {
     })
 
     test('returns undefined when block not found', () => {
-      const blocks: Blocks = [
-        { name: 'card', type: 'div', props: {} },
-      ]
+      const blocks: Blocks = [{ name: 'card', type: 'div', props: {} }]
       const result = resolveBlock('hero', blocks)
       expect(result).toBeUndefined()
     })
@@ -44,9 +42,7 @@ describe('Block Resolution', () => {
     })
 
     test('resolves block with content', () => {
-      const blocks: Blocks = [
-        { name: 'text', type: 'p', props: {}, content: 'Static text' },
-      ]
+      const blocks: Blocks = [{ name: 'text', type: 'p', props: {}, content: 'Static text' }]
       const result = resolveBlock('text', blocks)
 
       expect(result?.component).toMatchObject({
@@ -77,18 +73,14 @@ describe('Block Resolution', () => {
     })
 
     test('substitutes variables in props', () => {
-      const blocks: Blocks = [
-        { name: 'card', type: 'div', props: { className: 'card-$variant' } },
-      ]
+      const blocks: Blocks = [{ name: 'card', type: 'div', props: { className: 'card-$variant' } }]
       const result = resolveBlock('card', blocks, { variant: 'primary' })
 
       expect(result?.component.props).toEqual({ className: 'card-primary' })
     })
 
     test('substitutes variables in content', () => {
-      const blocks: Blocks = [
-        { name: 'greeting', type: 'p', props: {}, content: '$message' },
-      ]
+      const blocks: Blocks = [{ name: 'greeting', type: 'p', props: {}, content: '$message' }]
       const result = resolveBlock('greeting', blocks, { message: 'Hello World' })
 
       expect(result?.component.content).toBe('Hello World')
@@ -176,9 +168,7 @@ describe('Block Resolution', () => {
     })
 
     test('leaves variables unsubstituted when vars empty', () => {
-      const blocks: Blocks = [
-        { name: 'template', type: 'div', props: {}, content: '$placeholder' },
-      ]
+      const blocks: Blocks = [{ name: 'template', type: 'div', props: {}, content: '$placeholder' }]
       const result = resolveBlock('template', blocks, {})
 
       expect(result?.component.content).toBe('$placeholder')
@@ -215,9 +205,7 @@ describe('Block Resolution', () => {
     })
 
     test('handles block with empty props', () => {
-      const blocks: Blocks = [
-        { name: 'simple', type: 'div', props: {} },
-      ]
+      const blocks: Blocks = [{ name: 'simple', type: 'div', props: {} }]
       const result = resolveBlock('simple', blocks)
 
       expect(result?.component).toMatchObject({
@@ -227,18 +215,14 @@ describe('Block Resolution', () => {
     })
 
     test('handles block with undefined content', () => {
-      const blocks: Blocks = [
-        { name: 'empty', type: 'div', props: {}, content: undefined },
-      ]
+      const blocks: Blocks = [{ name: 'empty', type: 'div', props: {}, content: undefined }]
       const result = resolveBlock('empty', blocks)
 
       expect(result?.component.content).toBeUndefined()
     })
 
     test('handles block with undefined children', () => {
-      const blocks: Blocks = [
-        { name: 'leaf', type: 'span', props: {}, children: undefined },
-      ]
+      const blocks: Blocks = [{ name: 'leaf', type: 'span', props: {}, children: undefined }]
       const result = resolveBlock('leaf', blocks)
 
       expect(result?.component.children).toBeUndefined()

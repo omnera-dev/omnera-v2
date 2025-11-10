@@ -56,6 +56,8 @@ export function Navigation({
           variant={cta.variant}
           size={cta.size}
           color={cta.color}
+          icon={cta.icon}
+          iconPosition={cta.iconPosition}
           data-testid="nav-cta"
         >
           <a href={cta.href}>{cta.text}</a>

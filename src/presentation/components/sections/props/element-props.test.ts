@@ -6,12 +6,7 @@
  */
 
 import { describe, expect, test } from 'bun:test'
-import {
-  buildClassName,
-  buildElementProps,
-  buildTestId,
-  convertBadgeProps,
-} from './element-props'
+import { buildClassName, buildElementProps, buildTestId, convertBadgeProps } from './element-props'
 import type { Component } from '@/domain/models/app/page/sections'
 import type { Theme } from '@/domain/models/app/theme'
 

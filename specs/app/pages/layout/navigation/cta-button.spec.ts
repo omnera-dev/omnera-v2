@@ -174,7 +174,7 @@ test.describe('CTA Button', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-CTA-006: should display icon on right side of text',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -183,7 +183,7 @@ test.describe('CTA Button', () => {
         name: 'test-app',
         pages: [
           {
-            name: 'Test',
+            name: 'test',
             path: '/',
             meta: { lang: 'en-US', title: 'Test' },
             layout: {

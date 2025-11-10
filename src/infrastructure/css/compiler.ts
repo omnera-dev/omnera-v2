@@ -476,6 +476,15 @@ function buildButtonPrimaryClasses(
 }
 
 /**
+ * Build badge border-radius based on theme configuration
+ * Uses theme.borderRadius.full if defined, otherwise falls back to rounded-full
+ */
+function buildBadgeBorderRadius(theme?: Theme): string {
+  const hasFullRadius = Boolean(theme?.borderRadius?.full)
+  return hasFullRadius ? 'border-radius: var(--radius-full);' : '@apply rounded-full;'
+}
+
+/**
  * Generate components layer styles with theme color applications
  * Applies theme colors to component classes and button elements
  */
@@ -485,6 +494,7 @@ function generateComponentsLayer(theme?: Theme): string {
 
   const btnClasses = buildButtonClasses(hasPrimaryColor, hasPrimaryHoverColor)
   const btnPrimaryClasses = buildButtonPrimaryClasses(hasPrimaryColor, hasPrimaryHoverColor)
+  const badgeBorderRadius = buildBadgeBorderRadius(theme)
 
   return `@layer components {
       .container-page {
@@ -496,7 +506,8 @@ function generateComponentsLayer(theme?: Theme): string {
       }
 
       .badge {
-        @apply rounded-full border border-gray-200 bg-white px-2 py-1 text-xs font-medium;
+        @apply border border-gray-200 bg-white px-2 py-1 text-xs font-medium;
+        ${badgeBorderRadius}
       }
 
       button {
