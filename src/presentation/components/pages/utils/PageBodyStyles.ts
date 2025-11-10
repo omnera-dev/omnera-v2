@@ -20,6 +20,13 @@ export type BodyStyle = {
 }
 
 /**
+ * Builds font family string with optional fallback
+ */
+function buildFontFamily(family: string, fallback?: string): string {
+  return fallback ? `${family}, ${fallback}` : family
+}
+
+/**
  * Generates inline body styles from theme fonts configuration
  *
  * Inline styles have highest specificity and override Tailwind base styles.
@@ -33,9 +40,7 @@ export function generateBodyStyle(theme: Theme | undefined): BodyStyle | undefin
   const bodyFont = theme.fonts.body
 
   return {
-    ...(bodyFont.family && {
-      fontFamily: bodyFont.fallback ? `${bodyFont.family}, ${bodyFont.fallback}` : bodyFont.family,
-    }),
+    ...(bodyFont.family && { fontFamily: buildFontFamily(bodyFont.family, bodyFont.fallback) }),
     ...(bodyFont.size && { fontSize: bodyFont.size }),
     ...(bodyFont.lineHeight && { lineHeight: bodyFont.lineHeight }),
     ...(bodyFont.style && { fontStyle: bodyFont.style as 'normal' | 'italic' | 'oblique' }),

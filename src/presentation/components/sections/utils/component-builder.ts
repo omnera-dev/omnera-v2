@@ -9,10 +9,7 @@ import { buildElementProps } from './props-builder'
 import { applySpacingStyles } from './spacing-resolver'
 import { buildFinalClassName, processComponentStyle } from './style-processor'
 import { substitutePropsThemeTokens } from './theme-tokens'
-import {
-  findFirstTranslationKey,
-  getTranslationData,
-} from './translation-handler'
+import { findFirstTranslationKey, getTranslationData } from './translation-handler'
 import type { Languages } from '@/domain/models/app/languages'
 import type { Component } from '@/domain/models/app/page/sections'
 import type { Theme } from '@/domain/models/app/theme'
@@ -103,8 +100,6 @@ export function buildComponentProps(config: ComponentPropsConfig): {
   )
 
   // Build element props with all attributes
-  const hasContent = Boolean(content || children?.length)
-  const hasChildren = Boolean(children?.length)
   const elementProps = buildElementProps({
     type,
     substitutedProps,
@@ -114,14 +109,11 @@ export function buildComponentProps(config: ComponentPropsConfig): {
     blockInstanceIndex,
     firstTranslationKey,
     translationData,
-    hasContent,
-    hasChildren,
+    hasContent: Boolean(content || children?.length),
+    hasChildren: Boolean(children?.length),
     theme,
     childIndex,
   })
-
-  // Apply theme spacing
-  const elementPropsWithSpacing = applySpacingStyles(type, elementProps, theme)
 
   return {
     substitutedProps,
@@ -130,6 +122,6 @@ export function buildComponentProps(config: ComponentPropsConfig): {
     styleWithShadow,
     finalClassName,
     elementProps,
-    elementPropsWithSpacing,
+    elementPropsWithSpacing: applySpacingStyles(type, elementProps, theme),
   }
 }

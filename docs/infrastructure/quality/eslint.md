@@ -1,24 +1,21 @@
-# ESLint Code Linter
+# ESLint v9.38.0
 
 ## Overview
 
-**Version**: ^9.38.0
-**Purpose**: Static code analysis tool that identifies and catches potential bugs, code quality issues, and enforces coding standards
+Static code analysis tool that catches bugs, enforces best practices, and maintains code quality beyond TypeScript's type system.
 
-## What ESLint Provides
+**Key Capabilities**:
+- Logic error detection (unused variables, unreachable code, etc.)
+- Functional programming enforcement (immutability, Effect.ts patterns)
+- Layer-based architecture validation (eslint-plugin-boundaries)
+- Database safety (Drizzle ORM WHERE clause enforcement)
+- Code size/complexity limits
+- Auto-fixing for many violations
 
-1. **Bug Detection** - Catches logic errors TypeScript's type system misses (unused variables, unreachable code, etc.)
-2. **Code Quality Rules** - Enforces best practices and identifies anti-patterns
-3. **Consistency Enforcement** - Ensures coding standards across the codebase
-4. **TypeScript Integration** - Type-aware linting via typescript-eslint v8.46.1
-5. **Auto-Fixing** - Many issues can be automatically fixed with `--fix` flag
-
-## ESLint v9 Features
-
-- New flat configuration system (eslint.config.ts)
-- Improved TypeScript support via typescript-eslint v8
-- Better performance and more intuitive configuration
-- Unified package for TypeScript ESLint integration
+**ESLint v9 Features**:
+- Flat configuration system (`eslint.config.ts`)
+- Improved TypeScript support (typescript-eslint v8.46.1)
+- Modular config structure (`eslint/*.config.ts`)
 
 ## ESLint vs Other Tools
 
@@ -36,30 +33,37 @@
 - **Prettier**: Formats code appearance (quotes, semicolons, indentation)
 - **Together**: Comprehensive code quality (types + logic + style)
 
-## Running ESLint with Bun
+## Configuration Modules Quick Reference
+
+| Module | Focus | Key Rules | Details |
+|--------|-------|-----------|---------|
+| **size-limits** | Code complexity | max-lines (400), max-lines-per-function (50), complexity (10) | [Jump to section](#code-size-and-complexity-limits-eslintsize-limitsconfigts) |
+| **boundaries** | Architecture layers | domain/application/infrastructure/presentation isolation | [Jump to section](#architectural-enforcement-critical) |
+| **functional** | FP patterns | immutability, no-let, no-throw, prefer-map/filter | [Jump to section](#functional-programming-enforcement-eslintfunctionalconfigts) |
+| **drizzle** | Database safety | enforce-delete-with-where, enforce-update-with-where | [Jump to section](#database-safety-rules-eslintdrizzleconfigts) |
+| **react** | React 19 | hooks rules, discourage manual memoization | [Jump to section](#react-19-compiler-guidance-eslintreactconfigts) |
+| **typescript** | TypeScript | no-explicit-any, strict types | See `eslint/typescript.config.ts` |
+| **testing** | Test patterns | .test.ts vs .spec.ts enforcement | See `eslint/testing.config.ts` |
+| **import** | Import order | organization, no-duplicates | See `eslint/import.config.ts` |
+| **file-naming** | Naming | kebab-case files, PascalCase components | See `eslint/file-naming.config.ts` |
+
+## Installation
 
 ```bash
-# Lint all files in the project
-bun run lint
-bunx eslint .
+bun add -d eslint @eslint/js typescript-eslint \
+  eslint-plugin-boundaries eslint-plugin-drizzle \
+  eslint-plugin-functional eslint-plugin-react \
+  eslint-plugin-react-hooks eslint-plugin-react-refresh \
+  eslint-plugin-unicorn eslint-import-resolver-typescript
+```
 
-# Lint and auto-fix issues
-bunx eslint . --fix
+## Commands
 
-# Lint specific files or directories
-bunx eslint src/
-bunx eslint "src/**/*.ts"
-bunx eslint index.ts
-
-# Lint with detailed output
-bunx eslint . --format=stylish
-bunx eslint . --format=json > eslint-report.json
-
-# Lint only TypeScript files
-bunx eslint "**/*.{ts,tsx}"
-
-# Check specific rule
-bunx eslint . --rule "no-unused-vars: error"
+```bash
+bun run lint              # Lint all files
+bun run lint:fix          # Lint and auto-fix issues
+bunx eslint src/          # Lint specific directory
+bunx eslint . --fix       # Manual fix command
 ```
 
 ## The --fix Flag
@@ -110,43 +114,46 @@ Requires manual intervention:
 4. **Re-run ESLint**: Verify all issues resolved: `bun run lint`
 5. **Never ignore errors**: Fix root causes instead of using `// eslint-disable`
 
-## Configuration: eslint.config.ts (Flat Config Format)
+## Configuration Structure (Modular)
 
-### Active Configuration
+**Root**: `eslint.config.ts` composes all modules
+**Modules**: `eslint/*.config.ts` - Focused, single-responsibility configs
 
 ```typescript
-import js from '@eslint/js'
-import globals from 'globals'
-import tseslint from 'typescript-eslint'
-import { defineConfig } from 'eslint/config'
-
-export default defineConfig([
-  {
-    files: ['**/*.{js,mjs,cjs,ts,mts,cts}'],
-    plugins: { js },
-    extends: ['js/recommended'],
-    languageOptions: { globals: globals.browser },
-  },
-  {
-    files: ['scripts/**/*.{js,mjs,cjs}'],
-    languageOptions: {
-      globals: {
-        ...globals.node,
-      },
-    },
-  },
-  tseslint.configs.recommended,
-])
+// eslint.config.ts
+export default [
+  ...baseConfig,           // Base JavaScript/TypeScript rules
+  ...typescriptConfig,     // TypeScript-specific rules
+  ...reactConfig,          // React 19, hooks, refresh
+  ...functionalConfig,     // FP patterns (immutability, Effect.ts)
+  ...importConfig,         // Import/export organization
+  ...unicornConfig,        // Additional code quality rules
+  ...fileNamingConfig,     // File/folder naming conventions
+  ...boundariesConfig,     // Layer-based architecture enforcement
+  ...drizzleConfig,        // Database safety (WHERE clause required)
+  ...sizeLimitsConfig,     // Code size/complexity limits
+  ...testingConfig,        // Test file patterns, Bun Test vs Playwright
+  ...uiComponentsConfig,   // shadcn/ui patterns
+  ...infrastructureConfig, // Infrastructure file patterns
+  ...scriptsConfig,        // Scripts directory rules
+  ...playwrightConfig,     // E2E test rules
+] as Linter.Config[]
 ```
 
-### Configuration Breakdown
+### Module Responsibilities
 
-- **Files**: Lints all JavaScript and TypeScript files (including module variants)
-- **Plugins**: Uses `@eslint/js` for JavaScript rule definitions
-- **Extends**: Applies ESLint's recommended JavaScript rules
-- **Language Options**: Defines browser globals (window, document, etc.)
-- **Scripts Directory**: Applies Node.js globals for scripts
-- **TypeScript Config**: Applies typescript-eslint's recommended rules for TypeScript files
+| Module | Purpose | Key Rules |
+|--------|---------|-----------|
+| **base.config.ts** | JavaScript fundamentals | no-unused-vars, eqeqeq, prefer-const |
+| **typescript.config.ts** | TypeScript rules | no-explicit-any, no-unused-vars, strict types |
+| **react.config.ts** | React 19 patterns | hooks rules, discourage manual memoization |
+| **functional.config.ts** | FP enforcement | immutability, no-let, no-throw, prefer-map/filter |
+| **boundaries.config.ts** | Architecture layers | domain/application/infrastructure/presentation |
+| **drizzle.config.ts** | Database safety | enforce-delete-with-where, enforce-update-with-where |
+| **size-limits.config.ts** | Code complexity | max-lines, max-lines-per-function, complexity |
+| **testing.config.ts** | Test patterns | .test.ts vs .spec.ts enforcement |
+| **import.config.ts** | Import organization | import order, no-duplicates |
+| **file-naming.config.ts** | Naming conventions | kebab-case files, PascalCase components |
 
 ## Key Dependencies
 
@@ -177,9 +184,96 @@ export default defineConfig([
 | `@typescript-eslint/no-explicit-any` | Using `any` type                   | `const x: any = 42` (use proper types)                  |
 | `@typescript-eslint/no-unused-vars`  | TypeScript unused variables        | Catches unused function parameters, destructured values |
 
+## Code Size and Complexity Limits (eslint/size-limits.config.ts)
+
+ESLint enforces file size and function complexity limits to maintain readable, testable code. These rules prevent god objects and overly complex functions.
+
+### Default Limits (All TypeScript Files)
+
+| Metric | Limit | Level | Purpose |
+|--------|-------|-------|---------|
+| **max-lines** | 400 | warn | Prevent overly large files |
+| **max-lines-per-function** | 50 | warn | Keep functions focused |
+| **complexity** | 10 | warn | Cyclomatic complexity (branches/paths) |
+| **max-depth** | 4 | warn | Prevent deeply nested code |
+| **max-params** | 4 | warn | Encourage object parameters |
+| **max-statements** | 20 | warn | Limit statements per function |
+
+**Note**: `skipBlankLines: true` and `skipComments: true` - Only counts code lines.
+
+### Configuration Files and Schemas (Relaxed)
+
+```typescript
+// Files: **/*.config.{ts,js}, **/schemas/**/*.ts, src/domain/models/**/*.ts
+{
+  'max-lines': 800,                  // Schemas can be comprehensive
+  'max-lines-per-function': 'off',   // Config objects can be large
+  'max-statements': 'off'            // Config setup has many statements
+}
+```
+
+**Rationale**: Configuration files and schema definitions are declarative. Large size doesn't indicate complexity.
+
+### React Components (Strict)
+
+```typescript
+// Files: src/presentation/components/**/*.tsx
+{
+  'max-lines': 300,                  // ERROR if exceeded
+  'max-lines-per-function': 60       // WARN if exceeded
+}
+```
+
+**Rationale**: UI components should be modular. Large components indicate poor separation of concerns.
+
+### Third-Party Components (Exempted)
+
+```typescript
+// Files: src/presentation/components/ui/**/*.tsx (shadcn/ui)
+{
+  'max-lines-per-function': 'off',   // Follow library patterns
+  'complexity': 'off'                // Complex UI patterns acceptable
+}
+```
+
+**Rationale**: shadcn/ui components are copied from library. Their patterns are pre-validated.
+
+### SSR/Page Generation Components (Exempted)
+
+```typescript
+// Files: src/presentation/components/pages/utils/**/*.tsx
+{
+  'max-lines-per-function': 'off',   // Declarative rendering
+  'complexity': 'off'                // Conditional configuration OK
+}
+```
+
+**Rationale**: SSR metadata and script rendering is declarative configuration, not imperative logic.
+
+### Temporary Overrides (TODO: Refactor)
+
+```typescript
+// Files: DynamicPage.tsx, component-renderer.tsx
+{
+  'max-lines': 'warn'  // Downgraded from error temporarily
+}
+```
+
+**Action Required**: These files exceed 300 lines and need refactoring into smaller modules. Tracked in codebase-refactor-auditor findings.
+
+### When You Hit a Limit
+
+1. **Extract functions**: Break large functions into smaller, focused ones
+2. **Extract modules**: Split large files into separate files by concern
+3. **Extract components**: Break large React components into smaller ones
+4. **Simplify logic**: Reduce cyclomatic complexity with early returns, guard clauses
+5. **Use composition**: Build complex behavior from simple functions
+
+**Anti-Pattern**: Disabling rules without refactoring. Fix root cause, don't hide the symptom.
+
 ## Architectural Enforcement (Critical)
 
-ESLint enforces Sovrium's layer-based architecture automatically via **eslint-plugin-boundaries**. This ensures dependency rules are followed at compile-time, preventing architectural violations.
+ESLint enforces Sovrium's layer-based architecture automatically via **eslint-plugin-boundaries** (see `eslint/boundaries.config.ts`). This ensures dependency rules are followed at compile-time, preventing architectural violations.
 
 ### Layer Dependency Rules
 
@@ -192,15 +286,20 @@ Infrastructure → Domain
 
 ### Enforcement Configuration
 
+**Full details**: See `eslint/boundaries.config.ts` for complete layer definitions and dependency rules.
+
+**Layer Patterns**:
 ```typescript
-// Layer definitions in eslint.config.ts
+// Simplified - Full config has granular sub-layers
 'boundaries/elements': [
-  { type: 'domain', pattern: 'src/domain/**/*' },
-  { type: 'application', pattern: 'src/application/**/*' },
-  { type: 'infrastructure', pattern: 'src/infrastructure/**/*' },
-  { type: 'presentation', pattern: 'src/presentation/**/*' }
+  { type: 'domain-model-*', pattern: 'src/domain/models/**/*' },
+  { type: 'application-use-case-*', pattern: 'src/application/use-cases/**/*' },
+  { type: 'infrastructure-*', pattern: 'src/infrastructure/**/*' },
+  { type: 'presentation-*', pattern: 'src/presentation/**/*' }
 ]
 ```
+
+**Key Feature**: Strict feature isolation within domain layer (table models ≠> page models).
 
 ### What Gets Caught
 
@@ -257,9 +356,11 @@ import { Effect } from 'effect' // OK: Effect is Application layer's coordinatio
 - **Enforces Patterns**: Dependency Inversion Principle enforced automatically
 - **Catch Violations Early**: Architectural mistakes caught at lint time, not runtime
 
-## Functional Programming Enforcement
+## Functional Programming Enforcement (eslint/functional.config.ts)
 
-ESLint enforces functional programming patterns via **eslint-plugin-functional** and custom rules to align with Effect.ts and immutability principles.
+ESLint enforces functional programming patterns via **eslint-plugin-functional** to align with Effect.ts and immutability principles.
+
+**Configuration**: See `eslint/functional.config.ts` for complete rule set.
 
 ### Immutability Rules
 
@@ -341,9 +442,11 @@ items.reduce(accumulate, initial)
 - **Testability**: Pure functions with no side effects are trivial to test
 - **Concurrency Safety**: Immutable data structures prevent race conditions
 
-## Database Safety Rules (Drizzle ORM)
+## Database Safety Rules (eslint/drizzle.config.ts)
 
 ESLint enforces **WHERE clause requirements** on database operations via **eslint-plugin-drizzle** to prevent catastrophic mass operations.
+
+**Configuration**: See `eslint/drizzle.config.ts` for complete rule set.
 
 ### Enforced Rules
 
@@ -402,9 +505,11 @@ async function clearUserSessions(userId: string) {
 - **Explicit Intent**: Forces developers to consciously decide on operation scope
 - **Production Safety**: Critical for protecting customer data
 
-## React 19 Compiler Guidance
+## React 19 Compiler Guidance (eslint/react.config.ts)
 
 ESLint provides **warnings** (not errors) to guide developers away from manual memoization, since React 19 Compiler handles optimizations automatically.
+
+**Configuration**: See `eslint/react.config.ts` for complete rule set.
 
 ### What React 19 Compiler Does
 
@@ -641,25 +746,50 @@ if ((x = 10)) {
 
 ## Configuration Customization
 
+### Adding Custom Rules
+
+**Approach 1**: Add to existing module in `eslint/*.config.ts`
 ```typescript
-// Add custom rules to eslint.config.ts
-export default defineConfig([
-  // ... existing config
+// eslint/typescript.config.ts - Add TypeScript-specific rule
+export default [
   {
+    files: ['**/*.{ts,tsx}'],
     rules: {
-      'no-console': 'warn', // Warn on console.log
-      'prefer-const': 'error', // Enforce const usage
-      '@typescript-eslint/no-explicit-any': 'error', // Disallow 'any' type
-      '@typescript-eslint/no-unused-vars': [
-        'error',
-        {
-          argsIgnorePattern: '^_', // Allow unused args starting with _
-        },
-      ],
+      '@typescript-eslint/no-floating-promises': 'error', // Add new rule
     },
   },
-])
+] satisfies Linter.Config[]
 ```
+
+**Approach 2**: Create new module for project-specific rules
+```typescript
+// eslint/custom.config.ts
+export default [
+  {
+    files: ['**/*.{ts,tsx}'],
+    rules: {
+      'no-console': 'warn',
+      'prefer-const': 'error',
+    },
+  },
+] satisfies Linter.Config[]
+
+// eslint.config.ts - Import and compose
+import customConfig from './eslint/custom.config'
+export default [
+  ...baseConfig,
+  // ... other configs
+  ...customConfig,  // Add at end
+] as Linter.Config[]
+```
+
+### Modular Configuration Benefits
+
+1. **Single Responsibility**: Each module focuses on one concern
+2. **Easy Navigation**: Find rules by category (React, FP, boundaries, etc.)
+3. **Maintainability**: Update rules without touching unrelated configs
+4. **Testability**: Each module can be tested independently
+5. **Reusability**: Modules can be shared across projects
 
 ## Ignoring Files
 
@@ -709,14 +839,16 @@ bun.lock
 
 ## Best Practices
 
-1. **Run ESLint before commits** - Catch issues early
+1. **Run ESLint before commits** - Catch issues early (`bun run lint`)
 2. **Use --fix liberally** - Auto-fix simple issues quickly
 3. **Don't disable rules without reason** - Fix root causes instead
 4. **Combine with TypeScript** - Both are necessary for quality code
 5. **Configure IDE integration** - Get real-time feedback while coding
 6. **Include in CI/CD** - Prevent linting errors from reaching production
 7. **Review ESLint output** - Learn from caught issues to avoid them
-8. **Keep configuration simple** - Start with recommended rules, customize gradually
+8. **Add copyright headers** - Run `bun run license` after creating new .ts/.tsx files
+9. **Respect size limits** - Refactor large files/functions instead of disabling rules
+10. **Use modular config** - Add rules to appropriate module in `eslint/` directory
 
 ## References
 
