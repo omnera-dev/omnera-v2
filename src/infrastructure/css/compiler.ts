@@ -68,24 +68,26 @@ function generateThemeFonts(fonts?: FontsConfig): string {
       ? `${fontConfig.family}, ${fontConfig.fallback}`
       : fontConfig.family
 
-    const entries = [`    --font-${category}: ${fontStack};`]
+    const baseEntry = `    --font-${category}: ${fontStack};`
 
-    // Add font-style CSS variable if specified
-    if (fontConfig.style && fontConfig.style !== 'normal') {
-      entries.push(`    --font-${category}-style: ${fontConfig.style};`)
-    }
+    // Build entries array immutably
+    const styleEntry =
+      fontConfig.style && fontConfig.style !== 'normal'
+        ? `    --font-${category}-style: ${fontConfig.style};`
+        : undefined
 
-    // Add text-transform CSS variable if specified
-    if (fontConfig.transform && fontConfig.transform !== 'none') {
-      entries.push(`    --font-${category}-transform: ${fontConfig.transform};`)
-    }
+    const transformEntry =
+      fontConfig.transform && fontConfig.transform !== 'none'
+        ? `    --font-${category}-transform: ${fontConfig.transform};`
+        : undefined
 
-    // Add letter-spacing CSS variable if specified
-    if (fontConfig.letterSpacing) {
-      entries.push(`    --font-${category}-letter-spacing: ${fontConfig.letterSpacing};`)
-    }
+    const letterSpacingEntry = fontConfig.letterSpacing
+      ? `    --font-${category}-letter-spacing: ${fontConfig.letterSpacing};`
+      : undefined
 
-    return entries
+    return [baseEntry, styleEntry, transformEntry, letterSpacingEntry].filter(
+      (entry): entry is string => entry !== undefined
+    )
   })
 
   return fontEntries.join('\n')
@@ -157,7 +159,7 @@ function generateKeyframes(name: string, keyframes: Record<string, unknown>): st
   const keyframeSteps = Object.entries(keyframes)
     .map(([step, props]) => {
       const propsStr =
-        typeof props === 'object' && props !== null
+        typeof props === 'object' && props !== undefined
           ? Object.entries(props as Record<string, unknown>)
               .map(([prop, val]) => `${prop}: ${val};`)
               .join(' ')
@@ -194,7 +196,7 @@ function generateAnimationStyles(animations?: AnimationsConfig): string {
     if (typeof config === 'boolean' && !config) return []
     if (typeof config === 'string') return []
 
-    if (typeof config === 'object' && config !== null) {
+    if (typeof config === 'object' && config !== undefined) {
       const animConfig = config as AnimationConfigObject
       if (!animConfig.keyframes) return []
 
@@ -293,48 +295,122 @@ function buildLinkClasses(
 }
 
 /**
+ * Title font configuration type
+ */
+interface TitleFontConfig {
+  readonly style?: string
+  readonly transform?: string
+  readonly letterSpacing?: string
+}
+
+/**
+ * Extract title font properties from theme fonts config
+ * Returns undefined if no title font is configured
+ */
+function extractTitleFontProperties(theme?: Theme): TitleFontConfig | undefined {
+  if (!theme?.fonts?.title || typeof theme.fonts.title !== 'object') {
+    return undefined
+  }
+
+  return theme.fonts.title as TitleFontConfig
+}
+
+/**
+ * Build CSS property strings for heading styles
+ * Returns array of CSS properties based on title font configuration
+ */
+function buildHeadingStyleProperties(titleFont?: TitleFontConfig): readonly string[] {
+  if (!titleFont) return []
+
+  const styleProperty =
+    titleFont.style && titleFont.style !== 'normal'
+      ? `font-style: var(--font-title-style);`
+      : undefined
+
+  const transformProperty =
+    titleFont.transform && titleFont.transform !== 'none'
+      ? `text-transform: var(--font-title-transform);`
+      : undefined
+
+  const letterSpacingProperty = titleFont.letterSpacing
+    ? `letter-spacing: var(--font-title-letter-spacing);`
+    : undefined
+
+  return [styleProperty, transformProperty, letterSpacingProperty].filter(
+    (prop): prop is string => prop !== undefined
+  )
+}
+
+/**
+ * Generate heading CSS with base classes and optional style properties
+ * Combines heading classes with additional CSS properties
+ */
+function generateHeadingStyles(
+  headingClasses: readonly string[],
+  styleProps: readonly string[]
+): string {
+  const baseStyles = `@apply ${headingClasses.join(' ')};`
+  if (styleProps.length === 0) return baseStyles
+
+  return `${baseStyles}
+        ${styleProps.join('\n        ')}`
+}
+
+/**
+ * Theme color flags extracted from theme configuration
+ */
+interface ThemeColorFlags {
+  readonly hasTextColor: boolean
+  readonly hasPrimaryColor: boolean
+  readonly hasPrimaryHoverColor: boolean
+}
+
+/**
+ * Extract color availability flags from theme
+ * Returns flags indicating which colors are defined in the theme
+ */
+function extractThemeColorFlags(theme?: Theme): ThemeColorFlags {
+  return {
+    hasTextColor: Boolean(theme?.colors?.text),
+    hasPrimaryColor: Boolean(theme?.colors?.primary),
+    hasPrimaryHoverColor: Boolean(theme?.colors?.['primary-hover']),
+  }
+}
+
+/**
+ * Theme font flags extracted from theme configuration
+ */
+interface ThemeFontFlags {
+  readonly hasTitleFont: boolean
+  readonly hasBodyFont: boolean
+}
+
+/**
+ * Extract font availability flags from theme
+ * Returns flags indicating which fonts are defined in the theme
+ */
+function extractThemeFontFlags(theme?: Theme): ThemeFontFlags {
+  return {
+    hasTitleFont: Boolean(theme?.fonts?.title),
+    hasBodyFont: Boolean(theme?.fonts?.body),
+  }
+}
+
+/**
  * Generate base layer styles with theme color and font applications
  * Applies theme colors and fonts to base HTML elements if theme defines those tokens
  */
 function generateBaseLayer(theme?: Theme): string {
-  const hasTextColor = Boolean(theme?.colors?.text)
-  const hasPrimaryColor = Boolean(theme?.colors?.primary)
-  const hasPrimaryHoverColor = Boolean(theme?.colors?.['primary-hover'])
-  const hasTitleFont = Boolean(theme?.fonts?.title)
-  const hasBodyFont = Boolean(theme?.fonts?.body)
+  const colorFlags = extractThemeColorFlags(theme)
+  const fontFlags = extractThemeFontFlags(theme)
 
-  const bodyClasses = buildBodyClasses(hasTextColor, hasBodyFont)
-  const headingClasses = buildHeadingClasses(hasTextColor, hasTitleFont)
-  const linkClasses = buildLinkClasses(hasPrimaryColor, hasPrimaryHoverColor)
+  const bodyClasses = buildBodyClasses(colorFlags.hasTextColor, fontFlags.hasBodyFont)
+  const headingClasses = buildHeadingClasses(colorFlags.hasTextColor, fontFlags.hasTitleFont)
+  const linkClasses = buildLinkClasses(colorFlags.hasPrimaryColor, colorFlags.hasPrimaryHoverColor)
 
-  // Extract title font properties for headings
-  const titleFont =
-    theme?.fonts?.title && typeof theme.fonts.title === 'object'
-      ? (theme.fonts.title as {
-          style?: string
-          transform?: string
-          letterSpacing?: string
-        })
-      : undefined
-
-  // Build additional CSS properties for headings
-  const headingStyleProps: string[] = []
-  if (titleFont?.style && titleFont.style !== 'normal') {
-    headingStyleProps.push(`font-style: var(--font-title-style);`)
-  }
-  if (titleFont?.transform && titleFont.transform !== 'none') {
-    headingStyleProps.push(`text-transform: var(--font-title-transform);`)
-  }
-  if (titleFont?.letterSpacing) {
-    headingStyleProps.push(`letter-spacing: var(--font-title-letter-spacing);`)
-  }
-
-  // Build heading styles with optional properties
-  const headingStyles =
-    headingStyleProps.length > 0
-      ? `@apply ${headingClasses.join(' ')};
-        ${headingStyleProps.join('\n        ')}`
-      : `@apply ${headingClasses.join(' ')};`
+  const titleFont = extractTitleFontProperties(theme)
+  const headingStyleProps = buildHeadingStyleProperties(titleFont)
+  const headingStyles = generateHeadingStyles(headingClasses, headingStyleProps)
 
   return `@layer base {
       body {

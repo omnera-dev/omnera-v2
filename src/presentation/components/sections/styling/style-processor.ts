@@ -40,26 +40,14 @@ export function buildFinalClassName(
   theme: Theme | undefined,
   substitutedProps: Record<string, unknown> | undefined
 ): string | undefined {
-  const classes: Array<string | undefined> = []
+  // Build classes array immutably
+  const typeClass = COMPONENT_TYPE_CLASSES.has(type) ? type : undefined
+  const flexClass = type === 'flex' ? buildFlexClasses(substitutedProps) : undefined
+  const gridClass = type === 'grid' ? buildGridClasses(theme) : undefined
+  const customClass = className as string | undefined
 
-  // Add component type class if defined in @layer components
-  if (COMPONENT_TYPE_CLASSES.has(type)) {
-    classes.push(type)
-  }
-
-  if (type === 'flex') {
-    classes.push(buildFlexClasses(substitutedProps))
-  }
-
-  if (type === 'grid') {
-    classes.push(buildGridClasses(theme))
-  }
-
-  // Add any custom className
-  classes.push(className as string | undefined)
-
-  const result = classes.filter(Boolean).join(' ')
-  return result || undefined
+  const classes = [typeClass, flexClass, gridClass, customClass].filter(Boolean).join(' ')
+  return classes || undefined
 }
 
 /**

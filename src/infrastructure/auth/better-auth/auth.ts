@@ -35,8 +35,10 @@ export const auth = betterAuth({
       url: string
       token: string
     }>) => {
-      // TODO: Implement email sending in production
-      // For now, just log the reset link (for E2E tests to pass)
+      // TODO (Phase 2): Implement email service integration for production
+      // Current: Console logging for development and E2E test verification
+      // Future: Integrate with email service (e.g., Resend, SendGrid, AWS SES)
+      // Track: https://github.com/omnera-dev/sovrium/issues/[TBD]
       console.log(`[TEST] Password reset for ${user.email}: ${url}?token=${token}`)
     },
     // Email verification configuration
@@ -49,8 +51,10 @@ export const auth = betterAuth({
       url: string
       token: string
     }>) => {
-      // TODO: Implement email sending in production
-      // For now, just log the verification link (for E2E tests to pass)
+      // TODO (Phase 2): Implement email service integration for production
+      // Current: Console logging for development and E2E test verification
+      // Future: Integrate with email service (e.g., Resend, SendGrid, AWS SES)
+      // Track: https://github.com/omnera-dev/sovrium/issues/[TBD]
       console.log(`[TEST] Email verification for ${user.email}: ${url}?token=${token}`)
     },
   },
