@@ -460,7 +460,7 @@ This generates:
 - ✅ **DO use Effect.gen** - Application layer workflows
 - ✅ **DO use path aliases** - `@/presentation/components/pages/HomePage`
 - ✅ **DO validate inputs** - Client: Zod (React Hook Form), Server: Effect Schema
-- ✅ **DO use correct date library** - Client: date-fns (date-picker), Server: Effect.DateTime
+- ✅ **DO use Effect.DateTime** - For all date handling (client and server)
 
 ## Claude Code Usage Optimization
 

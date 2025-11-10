@@ -442,8 +442,8 @@ function ThemeSelector() {
 
 - Fully customizable calendar UI
 - Date range selection support
-- Integrates with date-fns
 - Accessible and keyboard-navigable
+- Native Date object support
 
 ### Basic Usage
 
@@ -497,17 +497,16 @@ function DateRangePicker() {
 }
 ```
 
-### Integration with date-fns
+### Custom Formatting
 
 ```tsx
 import { DayPicker } from 'react-day-picker'
-import { format } from 'date-fns'
 
 function FormattedDatePicker() {
   const [selected, setSelected] = useState<Date>()
 
   const footer = selected ? (
-    <p className="text-sm text-gray-600">Selected: {format(selected, 'PPP')}</p>
+    <p className="text-sm text-gray-600">Selected: {selected.toLocaleDateString('en-US', { dateStyle: 'long' })}</p>
   ) : (
     <p className="text-sm text-gray-400">Please pick a day</p>
   )
@@ -527,7 +526,6 @@ function FormattedDatePicker() {
 ### References
 
 - [react-day-picker documentation](https://daypicker.dev/)
-- [date-fns integration](https://daypicker.dev/guides/formatters)
 
 ---
 
@@ -1186,7 +1184,7 @@ function BookingForm() {
 | **embla-carousel**         | Image galleries    | Touch gestures       | ✅✅            |
 | **input-otp**              | OTP verification   | Auto-focus           | ✅              |
 | **next-themes**            | Dark mode          | System detection     | ✅              |
-| **react-day-picker**       | Date selection     | date-fns integration | ✅              |
+| **react-day-picker**       | Date selection     | Native Date support  | ✅              |
 | **react-resizable-panels** | Split layouts      | Drag-to-resize       | ⚠️              |
 | **recharts**               | Data visualization | Declarative API      | ✅              |
 | **sonner**                 | Notifications      | Beautiful toasts     | ✅              |

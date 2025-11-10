@@ -120,7 +120,7 @@ export const ExternalScriptSchema = Schema.Struct({
  *
  * Common use cases:
  * - Frameworks: Alpine.js, htmx (defer for order preservation)
- * - Libraries: Chart.js, date-fns (async for parallel loading)
+ * - Libraries: Chart.js, D3.js (async for parallel loading)
  * - Analytics: Google Analytics, Plausible (async, non-blocking)
  * - UI widgets: Intercom, Crisp chat (async, low priority)
  *

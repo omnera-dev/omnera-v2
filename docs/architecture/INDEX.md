@@ -196,12 +196,6 @@ This index provides a comprehensive guide to Sovrium's architecture documentatio
 | `ui/tanstack-query.md`  | Server state management, caching | Performance Optimization                             |
 | `ui/tanstack-table.md`  | Data tables                      | Layer-Based Architecture (Presentation)              |
 
-### Utilities
-
-| Document              | Purpose                       | Used By                                 |
-| --------------------- | ----------------------------- | --------------------------------------- |
-| `utility/date-fns.md` | Client-side date manipulation | Layer-Based Architecture (Presentation) |
-
 ### Quality
 
 | Document              | Purpose                            | Used By                                 |
@@ -301,27 +295,6 @@ Sovrium uses different validation libraries depending on the context:
 
 - `@docs/infrastructure/ui/react-hook-form.md` for client-side validation
 - `@docs/infrastructure/framework/effect.md` for server-side validation
-
----
-
-## Date Handling Split: Client vs Server
-
-Sovrium uses different date libraries depending on the context:
-
-| Context         | Library             | Use Case                             | Architecture Document       |
-| --------------- | ------------------- | ------------------------------------ | --------------------------- |
-| **Client-side** | **date-fns**        | Date pickers, formatting for display | performance-optimization.md |
-| **Server-side** | **Effect.DateTime** | API date handling, business logic    | performance-optimization.md |
-
-**Why Split?**
-
-- date-fns: Optimized for browser, better for client-side date manipulation
-- Effect.DateTime: Integrates with Effect.ts ecosystem, better for server logic
-
-**See**:
-
-- `@docs/infrastructure/utility/date-fns.md` for client-side dates
-- `@docs/infrastructure/framework/effect.md` for server-side dates
 
 ---
 

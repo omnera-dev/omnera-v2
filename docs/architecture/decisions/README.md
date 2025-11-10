@@ -33,13 +33,12 @@ Each ADR follows this structure:
 
 These decisions should be documented in future ADRs:
 
-1. **Client vs Server Date Libraries** - Why date-fns for client and Effect.DateTime for server?
-2. **Singular vs Plural Directory Names** - Why `table/` not `tables/`?
-3. **Effect Schema in Domain Layer** - Why allow this external dependency in the "pure" domain?
-4. **Layer-Based vs Feature-Based Architecture** - Why combine both patterns?
-5. **Root Aggregation Pattern** - Why have `tables.ts`, `pages.ts` files that re-export?
-6. **Strict Array Immutability** - Why enforce at ERROR level with ESLint?
-7. **Phase-Based Application Organization** - Why organize application layer by phases?
+1. **Singular vs Plural Directory Names** - Why `table/` not `tables/`?
+2. **Effect Schema in Domain Layer** - Why allow this external dependency in the "pure" domain?
+3. **Layer-Based vs Feature-Based Architecture** - Why combine both patterns?
+4. **Root Aggregation Pattern** - Why have `tables.ts`, `pages.ts` files that re-export?
+5. **Strict Array Immutability** - Why enforce at ERROR level with ESLint?
+6. **Phase-Based Application Organization** - Why organize application layer by phases?
 
 ## Creating New ADRs
 

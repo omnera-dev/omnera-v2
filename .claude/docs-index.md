@@ -41,7 +41,7 @@
 - `@docs/infrastructure/ui/tanstack-table.md` - TanStack Table
 
 ### Utilities
-- `@docs/infrastructure/utility/date-fns.md` - Date utilities (client-side, date-picker)
+(No utilities currently documented - use Effect.DateTime for date handling)
 
 ### Quality & Testing
 - `@docs/infrastructure/quality/eslint.md` - ESLint linting

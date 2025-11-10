@@ -92,7 +92,7 @@ Unused exports (3)
   src/types.ts: OldInterface
 
 Unlisted dependencies (1)
-  date-fns (imported in src/formatter.ts)
+  lodash (imported in src/formatter.ts)
 ```
 
 ## Addressing Knip Findings
@@ -148,7 +148,6 @@ Knip can be configured via:
     "drizzle-orm",
     "zod",
     "cmdk",
-    "date-fns",
     "embla-carousel-react",
     "input-otp",
     "next-themes",
@@ -190,7 +189,6 @@ Knip can be configured via:
   - **Validation**: `zod` - Schema validation
   - **UI Components**: Various UI component libraries used by shadcn/ui:
     - `cmdk` - Command palette
-    - `date-fns` - Date utilities
     - `embla-carousel-react` - Carousel component
     - `input-otp` - OTP input component
     - `next-themes` - Theme management

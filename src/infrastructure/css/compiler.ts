@@ -309,7 +309,7 @@ export const compileCSS = (): Effect.Effect<CompiledCSS, CSSCompilationError> =>
       try: async () => {
         const processor = postcss([tailwindcss()])
         return await processor.process(SOURCE_CSS, {
-          from: process.cwd() + '/src/styles/main.css', // Source context for import resolution
+          from: process.cwd() + '/src/styles/global.css', // Source context for import resolution
           to: undefined, // No output file (in-memory compilation)
         })
       },
