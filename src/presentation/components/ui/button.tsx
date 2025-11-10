@@ -91,6 +91,26 @@ function Button({
   const classes =
     `${baseClasses} ${getButtonVariantClasses(variant)} ${getButtonSizeClasses(size)} ${className}`.trim()
 
+  // If asChild is true, clone the child element and apply button props to it
+  if (asChild && React.isValidElement(children)) {
+    const childProps: React.HTMLAttributes<HTMLElement> = {
+      ...props,
+      className: classes,
+      style,
+    }
+    // When icon is present, render icon alongside the original child content
+    if (icon) {
+      const childContent = children.props.children
+      const contentWithIcon = [
+        icon && iconPosition === 'left' && <Icon key="icon-left" name={icon} />,
+        childContent,
+        icon && iconPosition === 'right' && <Icon key="icon-right" name={icon} />,
+      ].filter(Boolean)
+      return React.cloneElement(children, childProps, ...contentWithIcon)
+    }
+    return React.cloneElement(children, childProps)
+  }
+
   // Render button content with optional icon
   const buttonContent = (
     <>
@@ -99,17 +119,6 @@ function Button({
       {icon && iconPosition === 'right' && <Icon name={icon} />}
     </>
   )
-
-  // If asChild is true, clone the child element and apply button props to it
-  if (asChild && React.isValidElement(children)) {
-    const childProps: React.HTMLAttributes<HTMLElement> = {
-      ...props,
-      className: classes,
-      style,
-      ...(icon && { children: buttonContent }),
-    }
-    return React.cloneElement(children, childProps)
-  }
 
   return (
     <button

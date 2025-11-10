@@ -326,9 +326,8 @@ const myApp: App = {
 
         // Hero Section (using block)
         {
-          type: 'block',
-          props: {
-            block: 'hero-section',
+          block: 'hero-section',
+          vars: {
             title: '$t:hero.title',
             subtitle: '$t:hero.subtitle',
             ctaPrimary: '$t:hero.cta',
@@ -371,27 +370,24 @@ const myApp: App = {
                   },
                   children: [
                     {
-                      type: 'block',
-                      props: {
-                        block: 'feature-card',
+                      block: 'feature-card',
+                      vars: {
                         icon: 'code',
                         title: '$t:feature.declarative.title',
                         description: '$t:feature.declarative.description',
                       },
                     },
                     {
-                      type: 'block',
-                      props: {
-                        block: 'feature-card',
+                      block: 'feature-card',
+                      vars: {
                         icon: 'shield-check',
                         title: '$t:feature.typesafe.title',
                         description: '$t:feature.typesafe.description',
                       },
                     },
                     {
-                      type: 'block',
-                      props: {
-                        block: 'feature-card',
+                      block: 'feature-card',
+                      vars: {
                         icon: 'zap',
                         title: '$t:feature.reactive.title',
                         description: '$t:feature.reactive.description',
@@ -432,9 +428,8 @@ const myApp: App = {
                   content: '$t:cta.subtitle',
                 },
                 {
-                  type: 'block',
-                  props: {
-                    block: 'cta-button',
+                  block: 'cta-button',
+                  vars: {
                     label: '$t:cta.button',
                   },
                 },

@@ -108,12 +108,17 @@ function renderDirectComponent(
     )
   )
 
+  // Resolve content translation if content is a string with $t: pattern
+  const resolvedContent = content
+    ? resolveChildTranslation(content, props.currentLang, props.languages)
+    : content
+
   // Dispatch rendering based on component type
   return dispatchComponentType({
     type,
     elementProps,
     elementPropsWithSpacing,
-    content,
+    content: resolvedContent,
     renderedChildren,
     theme: props.theme,
     languages: props.languages,
