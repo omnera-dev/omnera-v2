@@ -34,6 +34,12 @@ export function buildTestId(
 }
 
 /**
+ * Component types that have corresponding CSS classes
+ * These types will automatically get their type name added as a CSS class
+ */
+const COMPONENT_TYPES_WITH_CSS_CLASSES = new Set(['card', 'badge'])
+
+/**
  * Build final className based on component type and theme
  */
 export function buildClassName(
@@ -49,6 +55,11 @@ export function buildClassName(
 
   if (type === 'grid') {
     return [buildGridClasses(theme), substitutedProps?.className].filter(Boolean).join(' ')
+  }
+
+  // Auto-apply component type as CSS class for types with CSS definitions
+  if (COMPONENT_TYPES_WITH_CSS_CLASSES.has(type)) {
+    return [type, substitutedProps?.className].filter(Boolean).join(' ')
   }
 
   return substitutedProps?.className as string | undefined

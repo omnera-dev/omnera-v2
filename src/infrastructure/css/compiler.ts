@@ -403,6 +403,10 @@ function generateComponentsLayer(theme?: Theme): string {
         @apply rounded-lg border border-gray-200 bg-white p-6 shadow-sm;
       }
 
+      .badge {
+        @apply rounded-full border border-gray-200 bg-white px-2 py-1 text-xs font-medium;
+      }
+
       button {
         @apply ${btnClasses.join(' ')};
       }
