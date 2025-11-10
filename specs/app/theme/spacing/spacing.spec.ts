@@ -163,86 +163,75 @@ test.describe('Spacing Configuration', () => {
                 type: 'div',
                 props: {
                   'data-testid': 'spacing-scale',
-                  style: {
-                    display: 'flex',
-                    flexDirection: 'column',
-                    gap: '24px',
-                    padding: '20px',
-                  },
+                  className: 'flex flex-col gap-6 p-5',
                 },
                 children: [
                   {
                     type: 'div',
                     props: {
+                      className: 'flex p-3 border border-gray-200',
                       style: {
-                        display: 'flex',
-                        gap: '$theme.spacing.gapSmall',
-                        padding: '12px',
-                        border: '1px solid #e0e0e0',
+                        gap: 'var(--spacing-gapSmall)',
                       },
                     },
                     children: [
                       {
                         type: 'div',
-                        props: { style: { padding: '20px', backgroundColor: '#3b82f6' } },
+                        props: { className: 'p-5 bg-blue-500' },
                       },
                       {
                         type: 'div',
-                        props: { style: { padding: '20px', backgroundColor: '#3b82f6' } },
+                        props: { className: 'p-5 bg-blue-500' },
                       },
                       {
                         type: 'div',
-                        props: { style: { padding: '20px', backgroundColor: '#3b82f6' } },
+                        props: { className: 'p-5 bg-blue-500' },
                       },
                     ],
                   },
                   {
                     type: 'div',
                     props: {
+                      className: 'flex p-3 border border-gray-200',
                       style: {
-                        display: 'flex',
-                        gap: '$theme.spacing.gap',
-                        padding: '12px',
-                        border: '1px solid #e0e0e0',
+                        gap: 'var(--spacing-gap)',
                       },
                     },
                     children: [
                       {
                         type: 'div',
-                        props: { style: { padding: '20px', backgroundColor: '#10b981' } },
+                        props: { className: 'p-5 bg-emerald-500' },
                       },
                       {
                         type: 'div',
-                        props: { style: { padding: '20px', backgroundColor: '#10b981' } },
+                        props: { className: 'p-5 bg-emerald-500' },
                       },
                       {
                         type: 'div',
-                        props: { style: { padding: '20px', backgroundColor: '#10b981' } },
+                        props: { className: 'p-5 bg-emerald-500' },
                       },
                     ],
                   },
                   {
                     type: 'div',
                     props: {
+                      className: 'flex p-3 border border-gray-200',
                       style: {
-                        display: 'flex',
-                        gap: '$theme.spacing.gapLarge',
-                        padding: '12px',
-                        border: '1px solid #e0e0e0',
+                        gap: 'var(--spacing-gapLarge)',
                       },
                     },
                     children: [
                       {
                         type: 'div',
-                        props: { style: { padding: '20px', backgroundColor: '#f59e0b' } },
+                        props: { className: 'p-5 bg-amber-500' },
                       },
                       {
                         type: 'div',
-                        props: { style: { padding: '20px', backgroundColor: '#f59e0b' } },
+                        props: { className: 'p-5 bg-amber-500' },
                       },
                       {
                         type: 'div',
-                        props: { style: { padding: '20px', backgroundColor: '#f59e0b' } },
+                        props: { className: 'p-5 bg-amber-500' },
                       },
                     ],
                   },
@@ -257,7 +246,15 @@ test.describe('Spacing Configuration', () => {
       await page.goto('/')
 
       // THEN: it should validate consistent spacing scale
-      // Visual validation shows gap progression (small → medium → large)
+      // 1. Verify CSS compilation contains spacing custom properties
+      const cssResponse = await page.request.get('/assets/output.css')
+      expect(cssResponse.ok()).toBeTruthy()
+      const css = await cssResponse.text()
+      expect(css).toContain('--spacing-gapSmall: 1rem')
+      expect(css).toContain('--spacing-gap: 1.5rem')
+      expect(css).toContain('--spacing-gapLarge: 2rem')
+
+      // 2. Visual validation shows gap progression (small → medium → large)
       await expect(page.locator('[data-testid="spacing-scale"]')).toHaveScreenshot(
         'spacing-004-gap-scale.png',
         {
@@ -355,20 +352,15 @@ test.describe('Spacing Configuration', () => {
                 type: 'div',
                 props: {
                   'data-testid': 'padding-scale',
-                  style: {
-                    display: 'flex',
-                    gap: '16px',
-                    padding: '20px',
-                  },
+                  className: 'flex gap-4 p-5',
                 },
                 children: [
                   {
                     type: 'div',
                     props: {
+                      className: 'bg-blue-50 border-2 border-blue-500',
                       style: {
-                        padding: '$theme.spacing.paddingSmall',
-                        backgroundColor: '#eff6ff',
-                        border: '2px solid #3b82f6',
+                        padding: 'var(--spacing-paddingSmall)',
                       },
                     },
                     children: ['Small'],
@@ -376,10 +368,9 @@ test.describe('Spacing Configuration', () => {
                   {
                     type: 'div',
                     props: {
+                      className: 'bg-emerald-50 border-2 border-emerald-500',
                       style: {
-                        padding: '$theme.spacing.padding',
-                        backgroundColor: '#d1fae5',
-                        border: '2px solid #10b981',
+                        padding: 'var(--spacing-padding)',
                       },
                     },
                     children: ['Medium'],
@@ -387,10 +378,9 @@ test.describe('Spacing Configuration', () => {
                   {
                     type: 'div',
                     props: {
+                      className: 'bg-amber-50 border-2 border-amber-500',
                       style: {
-                        padding: '$theme.spacing.paddingLarge',
-                        backgroundColor: '#fef3c7',
-                        border: '2px solid #f59e0b',
+                        padding: 'var(--spacing-paddingLarge)',
                       },
                     },
                     children: ['Large'],
@@ -406,7 +396,15 @@ test.describe('Spacing Configuration', () => {
       await page.goto('/')
 
       // THEN: it should validate consistent internal component spacing
-      // Visual validation shows padding progression (small → medium → large)
+      // 1. Verify CSS compilation contains spacing custom properties
+      const cssResponse = await page.request.get('/assets/output.css')
+      expect(cssResponse.ok()).toBeTruthy()
+      const css = await cssResponse.text()
+      expect(css).toContain('--spacing-paddingSmall: 1rem')
+      expect(css).toContain('--spacing-padding: 1.5rem')
+      expect(css).toContain('--spacing-paddingLarge: 2rem')
+
+      // 2. Visual validation shows padding progression (small → medium → large)
       await expect(page.locator('[data-testid="padding-scale"]')).toHaveScreenshot(
         'spacing-007-padding-scale.png',
         {
@@ -528,6 +526,15 @@ test.describe('Spacing Configuration', () => {
       await page.goto('/')
 
       // THEN: it should validate custom CSS spacing values
+      // 1. Verify CSS compilation contains spacing custom properties
+      const cssResponse = await page.request.get('/assets/output.css')
+      expect(cssResponse.ok()).toBeTruthy()
+      const css = await cssResponse.text()
+      expect(css).toContain('--spacing-section: 4rem')
+      expect(css).toContain('--spacing-gap: 1rem')
+      expect(css).toContain('--spacing-padding: 16px')
+
+      // 2. Visual validation
       const section = page.locator('[data-testid="section"]')
       await expect(section).toHaveScreenshot('spacing-009-custom-css.png')
     }
@@ -597,6 +604,13 @@ test.describe('Spacing Configuration', () => {
       await page.goto('/')
 
       // THEN: it should render with vertical padding creating rhythm
+      // 1. Verify CSS compilation contains spacing custom property
+      const cssResponse = await page.request.get('/assets/output.css')
+      expect(cssResponse.ok()).toBeTruthy()
+      const css = await cssResponse.text()
+      expect(css).toContain('--spacing-section: 4rem')
+
+      // 2. Visual validation
       const section = page.locator('section')
       await expect(section).toHaveScreenshot('spacing-app-001-section-rhythm.png')
     }
@@ -631,6 +645,13 @@ test.describe('Spacing Configuration', () => {
       await page.goto('/')
 
       // THEN: it should render centered with max-width constraint
+      // 1. Verify CSS compilation contains spacing custom property
+      const cssResponse = await page.request.get('/assets/output.css')
+      expect(cssResponse.ok()).toBeTruthy()
+      const css = await cssResponse.text()
+      expect(css).toContain('--spacing-container: 80rem')
+
+      // 2. Visual validation
       const container = page.locator('[data-testid="container"]')
       await expect(container).toHaveScreenshot('spacing-app-002-container-centered.png')
     }
@@ -668,6 +689,13 @@ test.describe('Spacing Configuration', () => {
       await page.goto('/')
 
       // THEN: it should render with spacing between flex items
+      // 1. Verify CSS compilation contains spacing custom property
+      const cssResponse = await page.request.get('/assets/output.css')
+      expect(cssResponse.ok()).toBeTruthy()
+      const css = await cssResponse.text()
+      expect(css).toContain('--spacing-gap: 1.5rem')
+
+      // 2. Visual validation
       const flex = page.locator('[data-testid="flex"]')
       await expect(flex).toHaveScreenshot('spacing-app-003-flex-gap.png')
     }
@@ -700,20 +728,18 @@ test.describe('Spacing Configuration', () => {
                 type: 'div',
                 props: {
                   'data-testid': 'spacing-system',
+                  className: 'flex flex-col',
                   style: {
-                    display: 'flex',
-                    flexDirection: 'column',
-                    gap: '$theme.spacing.section',
+                    gap: 'var(--spacing-section)',
                   },
                 },
                 children: [
                   {
                     type: 'div',
                     props: {
+                      className: 'bg-gray-100 border-2 border-dashed border-gray-400',
                       style: {
-                        padding: '$theme.spacing.section',
-                        backgroundColor: '#f3f4f6',
-                        border: '2px dashed #9ca3af',
+                        padding: 'var(--spacing-section)',
                       },
                     },
                     children: ['Section with 4rem padding'],
@@ -721,42 +747,31 @@ test.describe('Spacing Configuration', () => {
                   {
                     type: 'div',
                     props: {
+                      className: 'flex bg-indigo-100 border-2 border-indigo-500',
                       style: {
-                        display: 'flex',
-                        gap: '$theme.spacing.gap',
-                        padding: '$theme.spacing.padding',
-                        backgroundColor: '#e0e7ff',
-                        border: '2px solid #6366f1',
+                        gap: 'var(--spacing-gap)',
+                        padding: 'var(--spacing-padding)',
                       },
                     },
                     children: [
                       {
                         type: 'div',
                         props: {
-                          style: {
-                            padding: '20px',
-                            backgroundColor: '#ffffff',
-                          },
+                          className: 'p-5 bg-white',
                         },
                         children: ['Item 1'],
                       },
                       {
                         type: 'div',
                         props: {
-                          style: {
-                            padding: '20px',
-                            backgroundColor: '#ffffff',
-                          },
+                          className: 'p-5 bg-white',
                         },
                         children: ['Item 2'],
                       },
                       {
                         type: 'div',
                         props: {
-                          style: {
-                            padding: '20px',
-                            backgroundColor: '#ffffff',
-                          },
+                          className: 'p-5 bg-white',
                         },
                         children: ['Item 3'],
                       },
@@ -772,7 +787,15 @@ test.describe('Spacing Configuration', () => {
       // WHEN/THEN: Streamlined workflow testing integration points
       await page.goto('/')
 
-      // 1. Structure validation (ARIA)
+      // 1. Verify CSS compilation contains spacing custom properties
+      const cssResponse = await page.request.get('/assets/output.css')
+      expect(cssResponse.ok()).toBeTruthy()
+      const css = await cssResponse.text()
+      expect(css).toContain('--spacing-section: 4rem')
+      expect(css).toContain('--spacing-gap: 1.5rem')
+      expect(css).toContain('--spacing-padding: 2rem')
+
+      // 2. Structure validation (ARIA)
       await expect(page.locator('[data-testid="spacing-system"]')).toMatchAriaSnapshot(`
         - group:
           - group: Section with 4rem padding
@@ -782,7 +805,7 @@ test.describe('Spacing Configuration', () => {
             - group: Item 3
       `)
 
-      // 2. Visual validation (Screenshot) - captures all spacing rendering
+      // 3. Visual validation (Screenshot) - captures all spacing rendering
       await expect(page.locator('[data-testid="spacing-system"]')).toHaveScreenshot(
         'spacing-regression-001-complete-system.png',
         {

@@ -63,6 +63,17 @@ test.describe('Breakpoints', () => {
       await page.goto('/')
 
       // THEN: it should validate Tailwind breakpoint values
+      // 1. Verify CSS compilation contains breakpoint definitions
+      const cssResponse = await page.request.get('/assets/output.css')
+      expect(cssResponse.ok()).toBeTruthy()
+      const css = await cssResponse.text()
+      expect(css).toContain('--breakpoint-sm: 640px')
+      expect(css).toContain('--breakpoint-md: 768px')
+      expect(css).toContain('--breakpoint-lg: 1024px')
+      expect(css).toContain('--breakpoint-xl: 1280px')
+      expect(css).toContain('--breakpoint-2xl: 1536px')
+
+      // 2. Verify element renders with responsive classes
       await expect(page.locator('[data-testid="breakpoints"]')).toBeVisible()
     }
   )
@@ -413,9 +424,7 @@ test.describe('Breakpoints', () => {
                 type: 'div',
                 props: {
                   'data-testid': 'responsive-layout',
-                  style: {
-                    padding: '20px',
-                  },
+                  className: 'p-5',
                 },
                 children: [
                   {
@@ -425,32 +434,20 @@ test.describe('Breakpoints', () => {
                   {
                     type: 'div',
                     props: {
-                      style: {
-                        display: 'grid',
-                        gridTemplateColumns: '1fr',
-                        gap: '16px',
-                      },
+                      className: 'grid grid-cols-1 gap-4',
                     },
                     children: [
                       {
                         type: 'div',
                         props: {
-                          style: {
-                            padding: '16px',
-                            backgroundColor: '#eff6ff',
-                            border: '1px solid #3b82f6',
-                          },
+                          className: 'p-4 bg-blue-50 border border-blue-500',
                         },
                         children: ['Item 1'],
                       },
                       {
                         type: 'div',
                         props: {
-                          style: {
-                            padding: '16px',
-                            backgroundColor: '#eff6ff',
-                            border: '1px solid #3b82f6',
-                          },
+                          className: 'p-4 bg-blue-50 border border-blue-500',
                         },
                         children: ['Item 2'],
                       },
@@ -465,10 +462,18 @@ test.describe('Breakpoints', () => {
 
       // WHEN/THEN: Streamlined workflow testing integration points
 
-      // 1. Mobile layout (375px)
+      // 1. Verify CSS compilation contains breakpoint definitions
       await page.setViewportSize({ width: 375, height: 667 })
       await page.goto('/')
 
+      const cssResponse = await page.request.get('/assets/output.css')
+      expect(cssResponse.ok()).toBeTruthy()
+      const css = await cssResponse.text()
+      expect(css).toContain('--breakpoint-sm: 640px')
+      expect(css).toContain('--breakpoint-md: 768px')
+      expect(css).toContain('--breakpoint-lg: 1024px')
+
+      // 2. Structure validation (ARIA) - Mobile layout (375px)
       await expect(page.locator('[data-testid="responsive-layout"]')).toMatchAriaSnapshot(`
         - group:
           - heading "Responsive Layout" [level=1]
@@ -477,6 +482,7 @@ test.describe('Breakpoints', () => {
             - group: Item 2
       `)
 
+      // 3. Visual validation across breakpoints
       await expect(page.locator('[data-testid="responsive-layout"]')).toHaveScreenshot(
         'breakpoints-regression-001-mobile.png',
         {
@@ -484,7 +490,7 @@ test.describe('Breakpoints', () => {
         }
       )
 
-      // 2. Tablet layout (768px - md breakpoint)
+      // Tablet layout (768px - md breakpoint)
       await page.setViewportSize({ width: 768, height: 1024 })
       await expect(page.locator('[data-testid="responsive-layout"]')).toHaveScreenshot(
         'breakpoints-regression-001-tablet.png',
@@ -493,7 +499,7 @@ test.describe('Breakpoints', () => {
         }
       )
 
-      // 3. Desktop layout (1024px - lg breakpoint)
+      // Desktop layout (1024px - lg breakpoint)
       await page.setViewportSize({ width: 1024, height: 768 })
       await expect(page.locator('[data-testid="responsive-layout"]')).toHaveScreenshot(
         'breakpoints-regression-001-desktop.png',

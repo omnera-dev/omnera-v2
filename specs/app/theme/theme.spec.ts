@@ -53,10 +53,7 @@ test.describe('Theme Configuration', () => {
                     type: 'div',
                     props: {
                       'data-testid': 'color-primary',
-                      style: {
-                        backgroundColor: '$theme.colors.primary',
-                        color: '$theme.colors.secondary',
-                      },
+                      className: 'bg-primary text-secondary',
                     },
                     children: ['Primary'],
                   },
@@ -71,14 +68,22 @@ test.describe('Theme Configuration', () => {
       await page.goto('/')
 
       // THEN: it should validate theme with colors as the only design token category
+      // 1. Verify CSS compilation contains color definitions
+      const cssResponse = await page.request.get('/assets/output.css')
+      expect(cssResponse.ok()).toBeTruthy()
+      const css = await cssResponse.text()
+      expect(css).toContain('--color-primary: #007bff')
+      expect(css).toContain('--color-secondary: #6c757d')
+
+      // 2. Verify element renders
       await expect(page.locator('[data-testid="theme-colors"]')).toBeVisible()
+
+      // 3. Verify computed styles - theme colors were applied via token substitution
       const element = page.locator('[data-testid="color-primary"]')
       const backgroundColor = await element.evaluate(
         (el) => window.getComputedStyle(el).backgroundColor
       )
       const color = await element.evaluate((el) => window.getComputedStyle(el).color)
-
-      // Verify theme colors were applied via token substitution
       expect(backgroundColor).toBe('rgb(0, 123, 255)') // #007bff
       expect(color).toBe('rgb(108, 117, 125)') // #6c757d
     }
@@ -217,7 +222,7 @@ test.describe('Theme Configuration', () => {
                 type: 'div',
                 props: {
                   'data-testid': 'theme-colors',
-                  style: { backgroundColor: '$theme.colors.primary', padding: '16px' },
+                  className: 'bg-primary p-4',
                 },
                 children: ['Colors'],
               },
@@ -225,7 +230,7 @@ test.describe('Theme Configuration', () => {
                 type: 'div',
                 props: {
                   'data-testid': 'theme-fonts',
-                  style: { fontFamily: '$theme.fonts.body.family' },
+                  className: 'font-body',
                 },
                 children: ['Fonts'],
               },
@@ -233,7 +238,7 @@ test.describe('Theme Configuration', () => {
                 type: 'div',
                 props: {
                   'data-testid': 'theme-spacing',
-                  style: { padding: '$theme.spacing.section' },
+                  className: 'p-section',
                 },
                 children: ['Spacing'],
               },
@@ -251,7 +256,7 @@ test.describe('Theme Configuration', () => {
                 type: 'div',
                 props: {
                   'data-testid': 'theme-shadows',
-                  style: { boxShadow: '$theme.shadows.md' },
+                  className: 'shadow-md',
                 },
                 children: ['Shadows'],
               },
@@ -259,7 +264,7 @@ test.describe('Theme Configuration', () => {
                 type: 'div',
                 props: {
                   'data-testid': 'theme-border-radius',
-                  style: { borderRadius: '$theme.borderRadius.md', border: '1px solid' },
+                  className: 'rounded-md border',
                 },
                 children: ['Border Radius'],
               },
@@ -272,6 +277,18 @@ test.describe('Theme Configuration', () => {
       await page.goto('/')
 
       // THEN: it should validate and orchestrate all design token categories
+      // 1. Verify CSS compilation contains all design token definitions
+      const cssResponse = await page.request.get('/assets/output.css')
+      expect(cssResponse.ok()).toBeTruthy()
+      const css = await cssResponse.text()
+      expect(css).toContain('--color-primary: #007bff')
+      expect(css).toContain('--font-body')
+      expect(css).toContain('--spacing-section: 4rem')
+      expect(css).toContain('--breakpoint-md: 768px')
+      expect(css).toContain('--shadow-md')
+      expect(css).toContain('--radius-md: 0.375rem')
+
+      // 2. Verify all elements render with theme tokens
       await expect(page.locator('[data-testid="theme-colors"]')).toBeVisible()
       await expect(page.locator('[data-testid="theme-fonts"]')).toBeVisible()
       await expect(page.locator('[data-testid="theme-spacing"]')).toBeVisible()
@@ -796,13 +813,19 @@ test.describe('Theme Configuration', () => {
       // WHEN/THEN: Validate full theme workflow
       await page.goto('/')
 
-      // Validate CSS compilation succeeded
+      // 1. Verify CSS compilation contains all theme definitions
       const cssResponse = await page.request.get('/assets/output.css')
       expect(cssResponse.ok()).toBeTruthy()
       const css = await cssResponse.text()
       expect(css.length).toBeGreaterThan(1000) // Tailwind CSS is substantial
+      expect(css).toContain('--color-primary: #007bff')
+      expect(css).toContain('--color-secondary: #6c757d')
+      expect(css).toContain('--color-background: #ffffff')
+      expect(css).toContain('--spacing-section: 4rem')
+      expect(css).toContain('--spacing-container: 80rem')
+      expect(css).toContain('--radius-lg: 0.5rem')
 
-      // Verify CSS link exists in head (theme CSS loaded globally)
+      // 2. Structure validation - CSS link exists in head (theme CSS loaded globally)
       const cssLink = page.locator('link[href="/assets/output.css"]')
       await expect(cssLink).toHaveCount(1)
 
@@ -810,8 +833,14 @@ test.describe('Theme Configuration', () => {
       const themeStyleTags = page.locator('style:has-text(":root"), style:has-text("--color-")')
       await expect(themeStyleTags).toHaveCount(0)
 
-      // Verify page renders successfully
+      // 3. Visual validation - page renders successfully
       await expect(page.locator('html')).toBeVisible()
+      await expect(page.locator('body')).toHaveScreenshot(
+        'theme-regression-001-complete-system.png',
+        {
+          animations: 'disabled',
+        }
+      )
 
       // Regression test validates: theme compiles → CSS serves → page renders
     }

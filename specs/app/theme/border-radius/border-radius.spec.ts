@@ -52,89 +52,49 @@ test.describe('Border Radius', () => {
                 type: 'div',
                 props: {
                   'data-testid': 'radius-scale',
-                  style: {
-                    display: 'grid',
-                    gridTemplateColumns: 'repeat(4, 1fr)',
-                    gap: '16px',
-                    padding: '20px',
-                  },
+                  className: 'grid grid-cols-4 gap-4 p-5',
                 },
                 children: [
                   {
                     type: 'div',
                     props: {
-                      style: {
-                        width: '80px',
-                        height: '80px',
-                        backgroundColor: '#3b82f6',
-                        borderRadius: '$theme.borderRadius.none',
-                      },
+                      className: 'w-20 h-20 bg-blue-500 rounded-none',
                     },
                   },
                   {
                     type: 'div',
                     props: {
-                      style: {
-                        width: '80px',
-                        height: '80px',
-                        backgroundColor: '#3b82f6',
-                        borderRadius: '$theme.borderRadius.sm',
-                      },
+                      className: 'w-20 h-20 bg-blue-500 rounded-sm',
                     },
                   },
                   {
                     type: 'div',
                     props: {
-                      style: {
-                        width: '80px',
-                        height: '80px',
-                        backgroundColor: '#3b82f6',
-                        borderRadius: '$theme.borderRadius.md',
-                      },
+                      className: 'w-20 h-20 bg-blue-500 rounded-md',
                     },
                   },
                   {
                     type: 'div',
                     props: {
-                      style: {
-                        width: '80px',
-                        height: '80px',
-                        backgroundColor: '#3b82f6',
-                        borderRadius: '$theme.borderRadius.lg',
-                      },
+                      className: 'w-20 h-20 bg-blue-500 rounded-lg',
                     },
                   },
                   {
                     type: 'div',
                     props: {
-                      style: {
-                        width: '80px',
-                        height: '80px',
-                        backgroundColor: '#3b82f6',
-                        borderRadius: '$theme.borderRadius.xl',
-                      },
+                      className: 'w-20 h-20 bg-blue-500 rounded-xl',
                     },
                   },
                   {
                     type: 'div',
                     props: {
-                      style: {
-                        width: '80px',
-                        height: '80px',
-                        backgroundColor: '#3b82f6',
-                        borderRadius: '$theme.borderRadius.2xl',
-                      },
+                      className: 'w-20 h-20 bg-blue-500 rounded-2xl',
                     },
                   },
                   {
                     type: 'div',
                     props: {
-                      style: {
-                        width: '80px',
-                        height: '80px',
-                        backgroundColor: '#3b82f6',
-                        borderRadius: '$theme.borderRadius.3xl',
-                      },
+                      className: 'w-20 h-20 bg-blue-500 rounded-3xl',
                     },
                   },
                 ],
@@ -148,7 +108,19 @@ test.describe('Border Radius', () => {
       await page.goto('/')
 
       // THEN: it should validate radius tokens from 0 to 1.5rem
-      // Visual validation shows complete radius scale progression
+      // 1. Verify CSS compilation contains radius definitions
+      const cssResponse = await page.request.get('/assets/output.css')
+      expect(cssResponse.ok()).toBeTruthy()
+      const css = await cssResponse.text()
+      expect(css).toContain('--radius-none: 0')
+      expect(css).toContain('--radius-sm: 0.125rem')
+      expect(css).toContain('--radius-md: 0.375rem')
+      expect(css).toContain('--radius-lg: 0.5rem')
+      expect(css).toContain('--radius-xl: 0.75rem')
+      expect(css).toContain('--radius-2xl: 1rem')
+      expect(css).toContain('--radius-3xl: 1.5rem')
+
+      // 2. Visual validation shows complete radius scale progression
       await expect(page.locator('[data-testid="radius-scale"]')).toHaveScreenshot(
         'radius-001-scale-progression.png',
         {
@@ -244,61 +216,30 @@ test.describe('Border Radius', () => {
                 type: 'div',
                 props: {
                   'data-testid': 'rem-radius',
-                  style: {
-                    display: 'flex',
-                    gap: '16px',
-                    padding: '20px',
-                  },
+                  className: 'flex gap-4 p-5',
                 },
                 children: [
                   {
                     type: 'div',
                     props: {
-                      style: {
-                        width: '80px',
-                        height: '80px',
-                        backgroundColor: '#10b981',
-                        borderRadius: '$theme.borderRadius.sm',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        color: '#ffffff',
-                        fontSize: '12px',
-                      },
+                      className:
+                        'w-20 h-20 bg-green-500 rounded-sm flex items-center justify-center text-white text-xs',
                     },
                     children: ['0.125rem'],
                   },
                   {
                     type: 'div',
                     props: {
-                      style: {
-                        width: '80px',
-                        height: '80px',
-                        backgroundColor: '#10b981',
-                        borderRadius: '$theme.borderRadius.md',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        color: '#ffffff',
-                        fontSize: '12px',
-                      },
+                      className:
+                        'w-20 h-20 bg-green-500 rounded-md flex items-center justify-center text-white text-xs',
                     },
                     children: ['0.375rem'],
                   },
                   {
                     type: 'div',
                     props: {
-                      style: {
-                        width: '80px',
-                        height: '80px',
-                        backgroundColor: '#10b981',
-                        borderRadius: '$theme.borderRadius.lg',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        color: '#ffffff',
-                        fontSize: '12px',
-                      },
+                      className:
+                        'w-20 h-20 bg-green-500 rounded-lg flex items-center justify-center text-white text-xs',
                     },
                     children: ['0.5rem'],
                   },
@@ -313,7 +254,15 @@ test.describe('Border Radius', () => {
       await page.goto('/')
 
       // THEN: it should validate rem-based radius values
-      // Visual validation shows rem-based radius progression
+      // 1. Verify CSS compilation contains rem-based radius definitions
+      const cssResponse = await page.request.get('/assets/output.css')
+      expect(cssResponse.ok()).toBeTruthy()
+      const css = await cssResponse.text()
+      expect(css).toContain('--radius-sm: 0.125rem')
+      expect(css).toContain('--radius-md: 0.375rem')
+      expect(css).toContain('--radius-lg: 0.5rem')
+
+      // 2. Visual validation shows rem-based radius progression
       await expect(page.locator('[data-testid="rem-radius"]')).toHaveScreenshot(
         'radius-004-rem-values.png',
         {
@@ -425,8 +374,19 @@ test.describe('Border Radius', () => {
       await page.goto('/')
 
       // THEN: it should render button with 0.375rem border-radius creating soft corners
+      // 1. Verify CSS compilation contains radius definition
+      const cssResponse = await page.request.get('/assets/output.css')
+      expect(cssResponse.ok()).toBeTruthy()
+      const css = await cssResponse.text()
+      expect(css).toContain('--radius-md: 0.375rem')
+
+      // 2. Visual validation
       const button = page.locator('[data-testid="primary-button"]')
       await expect(button).toHaveScreenshot('radius-app-001-button-soft-corners.png')
+
+      // 3. Verify computed border-radius
+      const borderRadius = await button.evaluate((el) => window.getComputedStyle(el).borderRadius)
+      expect(borderRadius).toBe('6px') // 0.375rem × 16px = 6px
     }
   )
 
@@ -500,8 +460,19 @@ test.describe('Border Radius', () => {
       await page.goto('/')
 
       // THEN: it should render card with 0.5rem border-radius creating soft edges
+      // 1. Verify CSS compilation contains radius definition
+      const cssResponse = await page.request.get('/assets/output.css')
+      expect(cssResponse.ok()).toBeTruthy()
+      const css = await cssResponse.text()
+      expect(css).toContain('--radius-lg: 0.5rem')
+
+      // 2. Visual validation
       const card = page.locator('[data-testid="content-card"]')
       await expect(card).toHaveScreenshot('radius-app-003-card-soft-edges.png')
+
+      // 3. Verify computed border-radius
+      const borderRadius = await card.evaluate((el) => window.getComputedStyle(el).borderRadius)
+      expect(borderRadius).toBe('8px') // 0.5rem × 16px = 8px
     }
   )
 
@@ -538,13 +509,19 @@ test.describe('Border Radius', () => {
       await page.goto('/')
 
       // THEN: it should apply smaller radius on mobile for better touch targets and larger radius on desktop for visual polish
+      // 1. Verify CSS compilation contains radius definitions
+      const cssResponse = await page.request.get('/assets/output.css')
+      expect(cssResponse.ok()).toBeTruthy()
+      const css = await cssResponse.text()
+      expect(css).toContain('--radius-sm: 0.125rem')
+      expect(css).toContain('--radius-lg: 0.5rem')
+
+      // 2. Visual validation - Mobile: sm radius (0.125rem / 2px) for precise touch targets
       const button = page.locator('[data-testid="responsive-button"]')
-      // Mobile: sm radius (0.125rem / 2px) for precise touch targets
       await expect(button).toHaveScreenshot('radius-app-004-responsive-mobile.png')
 
-      // Test desktop breakpoint
+      // 3. Visual validation - Desktop: lg radius (0.5rem / 8px) for visual polish
       await page.setViewportSize({ width: 1024, height: 768 })
-      // Desktop: lg radius (0.5rem / 8px) for visual polish
       await expect(button).toHaveScreenshot('radius-app-004-responsive-desktop.png')
     }
   )
@@ -622,9 +599,19 @@ test.describe('Border Radius', () => {
       await page.goto('/')
 
       // THEN: it should render badge as pill with fully rounded left and right edges
+      // 1. Verify CSS compilation contains full radius definition
+      const cssResponse = await page.request.get('/assets/output.css')
+      expect(cssResponse.ok()).toBeTruthy()
+      const css = await cssResponse.text()
+      expect(css).toContain('--radius-full: 9999px')
+
+      // 2. Visual validation - Radius token: theme.borderRadius.full = '9999px'
       const badge = page.locator('[data-testid="status-badge"]')
-      // Radius token: theme.borderRadius.full = '9999px'
       await expect(badge).toHaveScreenshot('radius-app-006-badge-pill.png')
+
+      // 3. Verify computed border-radius is a very large value
+      const borderRadius = await badge.evaluate((el) => window.getComputedStyle(el).borderRadius)
+      expect(borderRadius).toBe('9999px')
     }
   )
 
@@ -795,64 +782,35 @@ test.describe('Border Radius', () => {
                 type: 'div',
                 props: {
                   'data-testid': 'radius-system',
-                  style: {
-                    display: 'flex',
-                    flexDirection: 'column',
-                    gap: '24px',
-                    padding: '20px',
-                  },
+                  className: 'flex flex-col gap-6 p-5',
                 },
                 children: [
                   {
                     type: 'button',
                     props: {
-                      style: {
-                        borderRadius: '$theme.borderRadius.md',
-                        padding: '12px 24px',
-                        backgroundColor: '#3b82f6',
-                        color: '#ffffff',
-                        border: 'none',
-                      },
+                      className: 'rounded-md py-3 px-6 bg-blue-500 text-white border-none',
                     },
                     children: ['Button with md radius'],
                   },
                   {
                     type: 'div',
                     props: {
-                      style: {
-                        borderRadius: '$theme.borderRadius.lg',
-                        padding: '24px',
-                        backgroundColor: '#f3f4f6',
-                        border: '1px solid #d1d5db',
-                      },
+                      className: 'rounded-lg p-6 bg-gray-100 border border-gray-300',
                     },
                     children: ['Card with lg radius'],
                   },
                   {
                     type: 'div',
                     props: {
-                      style: {
-                        width: '64px',
-                        height: '64px',
-                        borderRadius: '$theme.borderRadius.full',
-                        backgroundColor: '#10b981',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        color: '#ffffff',
-                      },
+                      className:
+                        'w-16 h-16 rounded-full bg-green-500 flex items-center justify-center text-white',
                     },
                     children: ['Avatar'],
                   },
                   {
                     type: 'div',
                     props: {
-                      style: {
-                        width: '100px',
-                        height: '100px',
-                        borderRadius: '$theme.borderRadius.none',
-                        backgroundColor: '#ef4444',
-                      },
+                      className: 'w-[100px] h-[100px] rounded-none bg-red-500',
                     },
                   },
                 ],
@@ -865,7 +823,16 @@ test.describe('Border Radius', () => {
       // WHEN/THEN: Streamlined workflow testing integration points
       await page.goto('/')
 
-      // 1. Structure validation (ARIA)
+      // 1. Verify CSS compilation contains all radius definitions
+      const cssResponse = await page.request.get('/assets/output.css')
+      expect(cssResponse.ok()).toBeTruthy()
+      const css = await cssResponse.text()
+      expect(css).toContain('--radius-none: 0')
+      expect(css).toContain('--radius-md: 0.375rem')
+      expect(css).toContain('--radius-lg: 0.5rem')
+      expect(css).toContain('--radius-full: 9999px')
+
+      // 2. Structure validation (ARIA)
       await expect(page.locator('[data-testid="radius-system"]')).toMatchAriaSnapshot(`
         - group:
           - button "Button with md radius"
@@ -873,7 +840,7 @@ test.describe('Border Radius', () => {
           - group: Avatar
       `)
 
-      // 2. Visual validation (Screenshot) - captures all border-radius rendering
+      // 3. Visual validation (Screenshot) - captures all border-radius rendering
       await expect(page.locator('[data-testid="radius-system"]')).toHaveScreenshot(
         'radius-regression-001-complete-system.png',
         {

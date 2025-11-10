@@ -47,11 +47,7 @@ test.describe('Color Palette', () => {
                 type: 'div',
                 props: {
                   'data-testid': 'color-primary',
-                  style: {
-                    backgroundColor: '$theme.colors.primary',
-                    color: '$theme.colors.secondary',
-                    padding: '20px',
-                  },
+                  className: 'bg-primary text-secondary p-5',
                 },
                 children: ['Primary Color Text'],
               },
@@ -64,7 +60,15 @@ test.describe('Color Palette', () => {
       await page.goto('/')
 
       // THEN: it should validate 6-digit hex colors at build time
-      // Visual validation captures all color properties
+
+      // 1. Verify CSS compilation contains theme colors
+      const cssResponse = await page.request.get('/assets/output.css')
+      expect(cssResponse.ok()).toBeTruthy()
+      const css = await cssResponse.text()
+      expect(css).toContain('--color-primary: #007bff')
+      expect(css).toContain('--color-secondary: #6c757d')
+
+      // 2. Visual validation captures rendered output with CSS classes
       await expect(page.locator('[data-testid="color-primary"]')).toHaveScreenshot(
         'colors-001-hex-colors.png',
         {
@@ -72,6 +76,13 @@ test.describe('Color Palette', () => {
           threshold: 0.2, // Color tolerance
         }
       )
+
+      // 3. Verify computed styles match theme colors
+      const element = page.locator('[data-testid="color-primary"]')
+      const bgColor = await element.evaluate((el) => window.getComputedStyle(el).backgroundColor)
+      const textColor = await element.evaluate((el) => window.getComputedStyle(el).color)
+      expect(bgColor).toBe('rgb(0, 123, 255)') // #007bff
+      expect(textColor).toBe('rgb(108, 117, 125)') // #6c757d
     }
   )
 
@@ -97,25 +108,13 @@ test.describe('Color Palette', () => {
                 type: 'div',
                 props: {
                   'data-testid': 'color-primary-transparent',
-                  style: {
-                    backgroundColor: '$theme.colors.primary-transparent',
-                    padding: '40px',
-                    position: 'relative',
-                  },
+                  className: 'bg-primary-transparent p-10 relative',
                 },
                 children: [
                   {
                     type: 'div',
                     props: {
-                      style: {
-                        position: 'absolute',
-                        top: '0',
-                        left: '0',
-                        width: '100%',
-                        height: '50%',
-                        backgroundColor: '#ffffff',
-                        zIndex: '-1',
-                      },
+                      className: 'absolute inset-x-0 top-0 h-1/2 bg-white -z-10',
                     },
                   },
                   'Transparent Background (50% opacity)',
@@ -130,7 +129,14 @@ test.describe('Color Palette', () => {
       await page.goto('/')
 
       // THEN: it should validate 8-digit hex colors with opacity at build time
-      // Visual validation captures transparency effect
+
+      // 1. Verify CSS compilation contains theme color with opacity
+      const cssResponse = await page.request.get('/assets/output.css')
+      expect(cssResponse.ok()).toBeTruthy()
+      const css = await cssResponse.text()
+      expect(css).toContain('--color-primary-transparent: #007bff80')
+
+      // 2. Visual validation captures transparency effect
       await expect(page.locator('[data-testid="color-primary-transparent"]')).toHaveScreenshot(
         'colors-002-hex-opacity.png',
         {
@@ -163,11 +169,7 @@ test.describe('Color Palette', () => {
                 type: 'div',
                 props: {
                   'data-testid': 'color-danger',
-                  style: {
-                    backgroundColor: '$theme.colors.danger',
-                    padding: '20px',
-                    color: '#ffffff',
-                  },
+                  className: 'bg-danger text-white p-5',
                 },
                 children: ['Danger Color (RGB format)'],
               },
@@ -180,7 +182,14 @@ test.describe('Color Palette', () => {
       await page.goto('/')
 
       // THEN: it should validate rgb color format at build time
-      // Visual validation captures RGB color rendering
+
+      // 1. Verify CSS compilation contains RGB color
+      const cssResponse = await page.request.get('/assets/output.css')
+      expect(cssResponse.ok()).toBeTruthy()
+      const css = await cssResponse.text()
+      expect(css).toContain('--color-danger: rgb(255, 0, 0)')
+
+      // 2. Visual validation captures RGB color rendering
       await expect(page.locator('[data-testid="color-danger"]')).toHaveScreenshot(
         'colors-003-rgb-format.png',
         {
@@ -188,6 +197,11 @@ test.describe('Color Palette', () => {
           threshold: 0.2,
         }
       )
+
+      // 3. Verify computed style matches RGB color
+      const element = page.locator('[data-testid="color-danger"]')
+      const bgColor = await element.evaluate((el) => window.getComputedStyle(el).backgroundColor)
+      expect(bgColor).toBe('rgb(255, 0, 0)')
     }
   )
 
@@ -213,11 +227,7 @@ test.describe('Color Palette', () => {
                 type: 'div',
                 props: {
                   'data-testid': 'color-danger-semi',
-                  style: {
-                    backgroundColor: '$theme.colors.danger-semi',
-                    padding: '40px',
-                    color: '#ffffff',
-                  },
+                  className: 'bg-danger-semi text-white p-10',
                 },
                 children: ['Danger Semi-transparent (RGBA)'],
               },
@@ -230,7 +240,14 @@ test.describe('Color Palette', () => {
       await page.goto('/')
 
       // THEN: it should validate rgba color format with alpha at build time
-      // Visual validation captures RGBA transparency
+
+      // 1. Verify CSS compilation contains RGBA color
+      const cssResponse = await page.request.get('/assets/output.css')
+      expect(cssResponse.ok()).toBeTruthy()
+      const css = await cssResponse.text()
+      expect(css).toContain('--color-danger-semi: rgba(255, 0, 0, 0.5)')
+
+      // 2. Visual validation captures RGBA transparency
       await expect(page.locator('[data-testid="color-danger-semi"]')).toHaveScreenshot(
         'colors-004-rgba-format.png',
         {
@@ -238,6 +255,11 @@ test.describe('Color Palette', () => {
           threshold: 0.2,
         }
       )
+
+      // 3. Verify computed style matches RGBA color
+      const element = page.locator('[data-testid="color-danger-semi"]')
+      const bgColor = await element.evaluate((el) => window.getComputedStyle(el).backgroundColor)
+      expect(bgColor).toBe('rgba(255, 0, 0, 0.5)')
     }
   )
 
@@ -263,11 +285,7 @@ test.describe('Color Palette', () => {
                 type: 'div',
                 props: {
                   'data-testid': 'color-primary',
-                  style: {
-                    backgroundColor: '$theme.colors.primary',
-                    padding: '20px',
-                    color: '#ffffff',
-                  },
+                  className: 'bg-primary text-white p-5',
                 },
                 children: ['Primary Color (HSL format)'],
               },
@@ -280,7 +298,14 @@ test.describe('Color Palette', () => {
       await page.goto('/')
 
       // THEN: it should validate hsl color format at build time
-      // Visual validation captures HSL color rendering
+
+      // 1. Verify CSS compilation contains HSL color
+      const cssResponse = await page.request.get('/assets/output.css')
+      expect(cssResponse.ok()).toBeTruthy()
+      const css = await cssResponse.text()
+      expect(css).toContain('--color-primary: hsl(210, 100%, 50%)')
+
+      // 2. Visual validation captures HSL color rendering
       await expect(page.locator('[data-testid="color-primary"]')).toHaveScreenshot(
         'colors-005-hsl-format.png',
         {
@@ -288,6 +313,11 @@ test.describe('Color Palette', () => {
           threshold: 0.2,
         }
       )
+
+      // 3. Verify computed style matches HSL color
+      const element = page.locator('[data-testid="color-primary"]')
+      const bgColor = await element.evaluate((el) => window.getComputedStyle(el).backgroundColor)
+      expect(bgColor).toBe('rgb(0, 128, 255)') // hsl(210, 100%, 50%) converts to this RGB
     }
   )
 
@@ -313,11 +343,7 @@ test.describe('Color Palette', () => {
                 type: 'div',
                 props: {
                   'data-testid': 'color-primary-overlay',
-                  style: {
-                    backgroundColor: '$theme.colors.primary-overlay',
-                    padding: '40px',
-                    color: '#ffffff',
-                  },
+                  className: 'bg-primary-overlay text-white p-10',
                 },
                 children: ['Primary Overlay (HSLA)'],
               },
@@ -330,7 +356,14 @@ test.describe('Color Palette', () => {
       await page.goto('/')
 
       // THEN: it should validate hsla color format with alpha at build time
-      // Visual validation captures HSLA transparency
+
+      // 1. Verify CSS compilation contains HSLA color
+      const cssResponse = await page.request.get('/assets/output.css')
+      expect(cssResponse.ok()).toBeTruthy()
+      const css = await cssResponse.text()
+      expect(css).toContain('--color-primary-overlay: hsla(210, 100%, 50%, 0.8)')
+
+      // 2. Visual validation captures HSLA transparency
       await expect(page.locator('[data-testid="color-primary-overlay"]')).toHaveScreenshot(
         'colors-006-hsla-format.png',
         {
@@ -338,6 +371,11 @@ test.describe('Color Palette', () => {
           threshold: 0.2,
         }
       )
+
+      // 3. Verify computed style matches HSLA color
+      const element = page.locator('[data-testid="color-primary-overlay"]')
+      const bgColor = await element.evaluate((el) => window.getComputedStyle(el).backgroundColor)
+      expect(bgColor).toBe('rgba(0, 128, 255, 0.8)')
     }
   )
 
@@ -366,58 +404,34 @@ test.describe('Color Palette', () => {
                 type: 'div',
                 props: {
                   'data-testid': 'color-variants',
-                  style: {
-                    display: 'grid',
-                    gridTemplateColumns: '1fr 1fr 1fr 1fr',
-                    gap: '16px',
-                  },
+                  className: 'grid grid-cols-4 gap-4',
                 },
                 children: [
                   {
                     type: 'div',
                     props: {
-                      style: {
-                        backgroundColor: '$theme.colors.primary',
-                        padding: '20px',
-                        color: '#ffffff',
-                        textAlign: 'center',
-                      },
+                      className: 'bg-primary text-white p-5 text-center',
                     },
                     children: ['Primary'],
                   },
                   {
                     type: 'div',
                     props: {
-                      style: {
-                        backgroundColor: '$theme.colors.primary-hover',
-                        padding: '20px',
-                        color: '#ffffff',
-                        textAlign: 'center',
-                      },
+                      className: 'bg-primary-hover text-white p-5 text-center',
                     },
                     children: ['Hover'],
                   },
                   {
                     type: 'div',
                     props: {
-                      style: {
-                        backgroundColor: '$theme.colors.primary-light',
-                        padding: '20px',
-                        color: '#000000',
-                        textAlign: 'center',
-                      },
+                      className: 'bg-primary-light text-black p-5 text-center',
                     },
                     children: ['Light'],
                   },
                   {
                     type: 'div',
                     props: {
-                      style: {
-                        backgroundColor: '$theme.colors.primary-dark',
-                        padding: '20px',
-                        color: '#ffffff',
-                        textAlign: 'center',
-                      },
+                      className: 'bg-primary-dark text-white p-5 text-center',
                     },
                     children: ['Dark'],
                   },
@@ -432,7 +446,17 @@ test.describe('Color Palette', () => {
       await page.goto('/')
 
       // THEN: it should validate color variants for hover states and tints
-      // Visual validation shows all variants side-by-side
+
+      // 1. Verify CSS compilation contains all color variants
+      const cssResponse = await page.request.get('/assets/output.css')
+      expect(cssResponse.ok()).toBeTruthy()
+      const css = await cssResponse.text()
+      expect(css).toContain('--color-primary: #007bff')
+      expect(css).toContain('--color-primary-hover: #0056b3')
+      expect(css).toContain('--color-primary-light: #e7f1ff')
+      expect(css).toContain('--color-primary-dark: #003d7a')
+
+      // 2. Visual validation shows all variants side-by-side
       await expect(page.locator('[data-testid="color-variants"]')).toHaveScreenshot(
         'colors-007-variants.png',
         {
@@ -469,70 +493,41 @@ test.describe('Color Palette', () => {
                 type: 'div',
                 props: {
                   'data-testid': 'color-scale',
-                  style: {
-                    display: 'grid',
-                    gridTemplateColumns: 'repeat(5, 1fr)',
-                    gap: '8px',
-                  },
+                  className: 'grid grid-cols-5 gap-2',
                 },
                 children: [
                   {
                     type: 'div',
                     props: {
-                      style: {
-                        backgroundColor: '$theme.colors.gray-100',
-                        padding: '24px',
-                        textAlign: 'center',
-                        color: '#000000',
-                      },
+                      className: 'bg-gray-100 text-black p-6 text-center',
                     },
                     children: ['100'],
                   },
                   {
                     type: 'div',
                     props: {
-                      style: {
-                        backgroundColor: '$theme.colors.gray-300',
-                        padding: '24px',
-                        textAlign: 'center',
-                        color: '#000000',
-                      },
+                      className: 'bg-gray-300 text-black p-6 text-center',
                     },
                     children: ['300'],
                   },
                   {
                     type: 'div',
                     props: {
-                      style: {
-                        backgroundColor: '$theme.colors.gray-500',
-                        padding: '24px',
-                        textAlign: 'center',
-                        color: '#ffffff',
-                      },
+                      className: 'bg-gray-500 text-white p-6 text-center',
                     },
                     children: ['500'],
                   },
                   {
                     type: 'div',
                     props: {
-                      style: {
-                        backgroundColor: '$theme.colors.gray-700',
-                        padding: '24px',
-                        textAlign: 'center',
-                        color: '#ffffff',
-                      },
+                      className: 'bg-gray-700 text-white p-6 text-center',
                     },
                     children: ['700'],
                   },
                   {
                     type: 'div',
                     props: {
-                      style: {
-                        backgroundColor: '$theme.colors.gray-900',
-                        padding: '24px',
-                        textAlign: 'center',
-                        color: '#ffffff',
-                      },
+                      className: 'bg-gray-900 text-white p-6 text-center',
                     },
                     children: ['900'],
                   },
@@ -547,7 +542,18 @@ test.describe('Color Palette', () => {
       await page.goto('/')
 
       // THEN: it should validate numbered color scales for systematic gradients
-      // Visual validation shows complete scale progression
+
+      // 1. Verify CSS compilation contains all gray scale colors
+      const cssResponse = await page.request.get('/assets/output.css')
+      expect(cssResponse.ok()).toBeTruthy()
+      const css = await cssResponse.text()
+      expect(css).toContain('--color-gray-100: #f8f9fa')
+      expect(css).toContain('--color-gray-300: #dee2e6')
+      expect(css).toContain('--color-gray-500: #adb5bd')
+      expect(css).toContain('--color-gray-700: #495057')
+      expect(css).toContain('--color-gray-900: #212529')
+
+      // 2. Visual validation shows complete scale progression
       await expect(page.locator('[data-testid="color-scale"]')).toHaveScreenshot(
         'colors-008-numbered-scale.png',
         {
@@ -587,107 +593,62 @@ test.describe('Color Palette', () => {
                 type: 'div',
                 props: {
                   'data-testid': 'color-system',
-                  style: {
-                    display: 'grid',
-                    gridTemplateColumns: 'repeat(4, 1fr)',
-                    gap: '12px',
-                  },
+                  className: 'grid grid-cols-4 gap-3',
                 },
                 children: [
                   {
                     type: 'div',
                     props: {
-                      style: {
-                        backgroundColor: '$theme.colors.primary',
-                        padding: '20px',
-                        color: '#ffffff',
-                        textAlign: 'center',
-                      },
+                      className: 'bg-primary text-white p-5 text-center',
                     },
                     children: ['Primary'],
                   },
                   {
                     type: 'div',
                     props: {
-                      style: {
-                        backgroundColor: '$theme.colors.secondary',
-                        padding: '20px',
-                        color: '#ffffff',
-                        textAlign: 'center',
-                      },
+                      className: 'bg-secondary text-white p-5 text-center',
                     },
                     children: ['Secondary'],
                   },
                   {
                     type: 'div',
                     props: {
-                      style: {
-                        backgroundColor: '$theme.colors.success',
-                        padding: '20px',
-                        color: '#ffffff',
-                        textAlign: 'center',
-                      },
+                      className: 'bg-success text-white p-5 text-center',
                     },
                     children: ['Success'],
                   },
                   {
                     type: 'div',
                     props: {
-                      style: {
-                        backgroundColor: '$theme.colors.danger',
-                        padding: '20px',
-                        color: '#ffffff',
-                        textAlign: 'center',
-                      },
+                      className: 'bg-danger text-white p-5 text-center',
                     },
                     children: ['Danger'],
                   },
                   {
                     type: 'div',
                     props: {
-                      style: {
-                        backgroundColor: '$theme.colors.warning',
-                        padding: '20px',
-                        color: '#000000',
-                        textAlign: 'center',
-                      },
+                      className: 'bg-warning text-black p-5 text-center',
                     },
                     children: ['Warning'],
                   },
                   {
                     type: 'div',
                     props: {
-                      style: {
-                        backgroundColor: '$theme.colors.info',
-                        padding: '20px',
-                        color: '#ffffff',
-                        textAlign: 'center',
-                      },
+                      className: 'bg-info text-white p-5 text-center',
                     },
                     children: ['Info'],
                   },
                   {
                     type: 'div',
                     props: {
-                      style: {
-                        backgroundColor: '$theme.colors.light',
-                        padding: '20px',
-                        color: '#000000',
-                        textAlign: 'center',
-                        border: '1px solid #dee2e6',
-                      },
+                      className: 'bg-light text-black p-5 text-center border border-gray-300',
                     },
                     children: ['Light'],
                   },
                   {
                     type: 'div',
                     props: {
-                      style: {
-                        backgroundColor: '$theme.colors.dark',
-                        padding: '20px',
-                        color: '#ffffff',
-                        textAlign: 'center',
-                      },
+                      className: 'bg-dark text-white p-5 text-center',
                     },
                     children: ['Dark'],
                   },
@@ -702,7 +663,21 @@ test.describe('Color Palette', () => {
       await page.goto('/')
 
       // THEN: it should validate comprehensive color system for all UI needs
-      // Visual validation shows complete semantic color palette
+
+      // 1. Verify CSS compilation contains all semantic colors
+      const cssResponse = await page.request.get('/assets/output.css')
+      expect(cssResponse.ok()).toBeTruthy()
+      const css = await cssResponse.text()
+      expect(css).toContain('--color-primary: #007bff')
+      expect(css).toContain('--color-secondary: #6c757d')
+      expect(css).toContain('--color-success: #28a745')
+      expect(css).toContain('--color-danger: #dc3545')
+      expect(css).toContain('--color-warning: #ffc107')
+      expect(css).toContain('--color-info: #17a2b8')
+      expect(css).toContain('--color-light: #f8f9fa')
+      expect(css).toContain('--color-dark: #343a40')
+
+      // 2. Visual validation shows complete semantic color palette
       await expect(page.locator('[data-testid="color-system"]')).toHaveScreenshot(
         'colors-009-comprehensive-system.png',
         {
@@ -738,48 +713,28 @@ test.describe('Color Palette', () => {
                 type: 'div',
                 props: {
                   'data-testid': 'kebab-case-colors',
-                  style: {
-                    display: 'grid',
-                    gridTemplateColumns: 'repeat(3, 1fr)',
-                    gap: '12px',
-                  },
+                  className: 'grid grid-cols-3 gap-3',
                 },
                 children: [
                   {
                     type: 'div',
                     props: {
-                      style: {
-                        color: '$theme.colors.text-primary',
-                        padding: '20px',
-                        textAlign: 'center',
-                        border: '2px solid',
-                        borderColor: '$theme.colors.border-subtle',
-                      },
+                      className: 'text-text-primary p-5 text-center border-2 border-border-subtle',
                     },
                     children: ['text-primary'],
                   },
                   {
                     type: 'div',
                     props: {
-                      style: {
-                        backgroundColor: '$theme.colors.background-light',
-                        padding: '20px',
-                        textAlign: 'center',
-                        border: '2px solid',
-                        borderColor: '$theme.colors.border-subtle',
-                      },
+                      className:
+                        'bg-background-light p-5 text-center border-2 border-border-subtle',
                     },
                     children: ['background-light'],
                   },
                   {
                     type: 'div',
                     props: {
-                      style: {
-                        backgroundColor: '$theme.colors.primary',
-                        padding: '20px',
-                        color: '#ffffff',
-                        textAlign: 'center',
-                      },
+                      className: 'bg-primary text-white p-5 text-center',
                     },
                     children: ['primary'],
                   },
@@ -794,7 +749,17 @@ test.describe('Color Palette', () => {
       await page.goto('/')
 
       // THEN: it should validate kebab-case naming convention
-      // Visual validation shows kebab-case color application
+
+      // 1. Verify CSS compilation contains kebab-case color names
+      const cssResponse = await page.request.get('/assets/output.css')
+      expect(cssResponse.ok()).toBeTruthy()
+      const css = await cssResponse.text()
+      expect(css).toContain('--color-primary: #007bff')
+      expect(css).toContain('--color-text-primary: #212529')
+      expect(css).toContain('--color-background-light: #f8f9fa')
+      expect(css).toContain('--color-border-subtle: #dee2e6')
+
+      // 2. Visual validation shows kebab-case color application
       await expect(page.locator('[data-testid="kebab-case-colors"]')).toHaveScreenshot(
         'colors-010-kebab-case.png',
         {
@@ -981,22 +946,14 @@ test.describe('Color Palette', () => {
                 type: 'div',
                 props: {
                   'data-testid': 'page-background',
-                  style: {
-                    backgroundColor: '$theme.colors.gray-100',
-                    padding: '20px',
-                  },
+                  className: 'bg-gray-100 p-5',
                 },
                 children: [
                   {
                     type: 'div',
                     props: {
                       'data-testid': 'card',
-                      style: {
-                        backgroundColor: '#ffffff',
-                        border: '1px solid',
-                        borderColor: '$theme.colors.gray-300',
-                        padding: '16px',
-                      },
+                      className: 'bg-white border border-gray-300 p-4',
                     },
                     children: [
                       {
@@ -1004,9 +961,7 @@ test.describe('Color Palette', () => {
                         content: 'Main Heading',
                         props: {
                           'data-testid': 'heading',
-                          style: {
-                            color: '$theme.colors.gray-900',
-                          },
+                          className: 'text-gray-900',
                         },
                       },
                       {
@@ -1014,9 +969,7 @@ test.describe('Color Palette', () => {
                         children: ['Placeholder text'],
                         props: {
                           'data-testid': 'placeholder',
-                          style: {
-                            color: '$theme.colors.gray-500',
-                          },
+                          className: 'text-gray-500',
                         },
                       },
                     ],
@@ -1032,24 +985,34 @@ test.describe('Color Palette', () => {
       await page.goto('/')
 
       // THEN: it should create visual hierarchy through tonal variation
-      // 1. Page background: gray-100 (#f8f9fa)
+
+      // 1. Verify CSS compilation contains gray scale colors
+      const cssResponse = await page.request.get('/assets/output.css')
+      expect(cssResponse.ok()).toBeTruthy()
+      const css = await cssResponse.text()
+      expect(css).toContain('--color-gray-100: #f8f9fa')
+      expect(css).toContain('--color-gray-300: #dee2e6')
+      expect(css).toContain('--color-gray-500: #adb5bd')
+      expect(css).toContain('--color-gray-900: #212529')
+
+      // 2. Page background: gray-100 (#f8f9fa)
       const pageBackground = page.locator('[data-testid="page-background"]')
       const pageBgColor = await pageBackground.evaluate(
         (el) => window.getComputedStyle(el).backgroundColor
       )
       expect(pageBgColor).toBe('rgb(248, 249, 250)') // gray-100
 
-      // 2. Card border: gray-300 (#dee2e6)
+      // 3. Card border: gray-300 (#dee2e6)
       const card = page.locator('[data-testid="card"]')
       const cardBorderColor = await card.evaluate((el) => window.getComputedStyle(el).borderColor)
       expect(cardBorderColor).toBe('rgb(222, 226, 230)') // gray-300
 
-      // 3. Placeholder text: gray-500 (#adb5bd)
+      // 4. Placeholder text: gray-500 (#adb5bd)
       const placeholder = page.locator('[data-testid="placeholder"]')
       const placeholderColor = await placeholder.evaluate((el) => window.getComputedStyle(el).color)
       expect(placeholderColor).toBe('rgb(173, 181, 189)') // gray-500
 
-      // 4. Heading text: gray-900 (#212529)
+      // 5. Heading text: gray-900 (#212529)
       const heading = page.locator('[data-testid="heading"]')
       const headingColor = await heading.evaluate((el) => window.getComputedStyle(el).color)
       expect(headingColor).toBe('rgb(33, 37, 41)') // gray-900

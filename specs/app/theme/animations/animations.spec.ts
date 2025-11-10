@@ -1123,20 +1123,25 @@ test.describe('Animation Configuration', () => {
       // WHEN/THEN: Streamlined workflow testing integration points
       await page.goto('/')
 
-      // Validate CSS custom properties or animation definitions generated
-      // Animations might generate CSS custom properties or @keyframes
-      // At minimum, verify CSS content exists for static site generation
-      const css = page.locator('style').first()
-      await expect(css).toBeAttached()
+      // 1. Verify CSS compilation contains animation definitions
+      const cssResponse = await page.request.get('/assets/output.css')
+      expect(cssResponse.ok()).toBeTruthy()
+      const css = await cssResponse.text()
+      // Animations may generate @keyframes or CSS custom properties
+      expect(css.length).toBeGreaterThan(1000) // Tailwind CSS with animations is substantial
 
-      // Verify modal fade-in
+      // 2. Structure validation (ARIA)
       await expect(page.locator('[data-testid="modal"]')).toBeVisible()
-
-      // Verify badge pulse
       await expect(page.locator('[data-testid="badge"]')).toBeVisible()
-
-      // Verify button transition
       await expect(page.locator('[data-testid="button"]')).toBeVisible()
+
+      // 3. Visual validation - captures animation rendering state
+      await expect(page.locator('body')).toHaveScreenshot(
+        'animations-regression-001-complete-system.png',
+        {
+          animations: 'disabled',
+        }
+      )
 
       // Focus on workflow continuity, not exhaustive coverage
     }
