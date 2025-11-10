@@ -5,6 +5,7 @@
 Static code analysis tool that catches bugs, enforces best practices, and maintains code quality beyond TypeScript's type system.
 
 **Key Capabilities**:
+
 - Logic error detection (unused variables, unreachable code, etc.)
 - Functional programming enforcement (immutability, Effect.ts patterns)
 - Layer-based architecture validation (eslint-plugin-boundaries)
@@ -13,6 +14,7 @@ Static code analysis tool that catches bugs, enforces best practices, and mainta
 - Auto-fixing for many violations
 
 **ESLint v9 Features**:
+
 - Flat configuration system (`eslint.config.ts`)
 - Improved TypeScript support (typescript-eslint v8.46.1)
 - Modular config structure (`eslint/*.config.ts`)
@@ -35,17 +37,17 @@ Static code analysis tool that catches bugs, enforces best practices, and mainta
 
 ## Configuration Modules Quick Reference
 
-| Module | Focus | Key Rules | Details |
-|--------|-------|-----------|---------|
-| **size-limits** | Code complexity | max-lines (400), max-lines-per-function (50), complexity (10) | [Jump to section](#code-size-and-complexity-limits-eslintsize-limitsconfigts) |
-| **boundaries** | Architecture layers | domain/application/infrastructure/presentation isolation | [Jump to section](#architectural-enforcement-critical) |
-| **functional** | FP patterns | immutability, no-let, no-throw, prefer-map/filter | [Jump to section](#functional-programming-enforcement-eslintfunctionalconfigts) |
-| **drizzle** | Database safety | enforce-delete-with-where, enforce-update-with-where | [Jump to section](#database-safety-rules-eslintdrizzleconfigts) |
-| **react** | React 19 | hooks rules, discourage manual memoization | [Jump to section](#react-19-compiler-guidance-eslintreactconfigts) |
-| **typescript** | TypeScript | no-explicit-any, strict types | See `eslint/typescript.config.ts` |
-| **testing** | Test patterns | .test.ts vs .spec.ts enforcement | See `eslint/testing.config.ts` |
-| **import** | Import order | organization, no-duplicates | See `eslint/import.config.ts` |
-| **file-naming** | Naming | kebab-case files, PascalCase components | See `eslint/file-naming.config.ts` |
+| Module          | Focus               | Key Rules                                                     | Details                                                                         |
+| --------------- | ------------------- | ------------------------------------------------------------- | ------------------------------------------------------------------------------- |
+| **size-limits** | Code complexity     | max-lines (400), max-lines-per-function (50), complexity (10) | [Jump to section](#code-size-and-complexity-limits-eslintsize-limitsconfigts)   |
+| **boundaries**  | Architecture layers | domain/application/infrastructure/presentation isolation      | [Jump to section](#architectural-enforcement-critical)                          |
+| **functional**  | FP patterns         | immutability, no-let, no-throw, prefer-map/filter             | [Jump to section](#functional-programming-enforcement-eslintfunctionalconfigts) |
+| **drizzle**     | Database safety     | enforce-delete-with-where, enforce-update-with-where          | [Jump to section](#database-safety-rules-eslintdrizzleconfigts)                 |
+| **react**       | React 19            | hooks rules, discourage manual memoization                    | [Jump to section](#react-19-compiler-guidance-eslintreactconfigts)              |
+| **typescript**  | TypeScript          | no-explicit-any, strict types                                 | See `eslint/typescript.config.ts`                                               |
+| **testing**     | Test patterns       | .test.ts vs .spec.ts enforcement                              | See `eslint/testing.config.ts`                                                  |
+| **import**      | Import order        | organization, no-duplicates                                   | See `eslint/import.config.ts`                                                   |
+| **file-naming** | Naming              | kebab-case files, PascalCase components                       | See `eslint/file-naming.config.ts`                                              |
 
 ## Installation
 
@@ -122,38 +124,38 @@ Requires manual intervention:
 ```typescript
 // eslint.config.ts
 export default [
-  ...baseConfig,           // Base JavaScript/TypeScript rules
-  ...typescriptConfig,     // TypeScript-specific rules
-  ...reactConfig,          // React 19, hooks, refresh
-  ...functionalConfig,     // FP patterns (immutability, Effect.ts)
-  ...importConfig,         // Import/export organization
-  ...unicornConfig,        // Additional code quality rules
-  ...fileNamingConfig,     // File/folder naming conventions
-  ...boundariesConfig,     // Layer-based architecture enforcement
-  ...drizzleConfig,        // Database safety (WHERE clause required)
-  ...sizeLimitsConfig,     // Code size/complexity limits
-  ...testingConfig,        // Test file patterns, Bun Test vs Playwright
-  ...uiComponentsConfig,   // shadcn/ui patterns
+  ...baseConfig, // Base JavaScript/TypeScript rules
+  ...typescriptConfig, // TypeScript-specific rules
+  ...reactConfig, // React 19, hooks, refresh
+  ...functionalConfig, // FP patterns (immutability, Effect.ts)
+  ...importConfig, // Import/export organization
+  ...unicornConfig, // Additional code quality rules
+  ...fileNamingConfig, // File/folder naming conventions
+  ...boundariesConfig, // Layer-based architecture enforcement
+  ...drizzleConfig, // Database safety (WHERE clause required)
+  ...sizeLimitsConfig, // Code size/complexity limits
+  ...testingConfig, // Test file patterns, Bun Test vs Playwright
+  ...uiComponentsConfig, // shadcn/ui patterns
   ...infrastructureConfig, // Infrastructure file patterns
-  ...scriptsConfig,        // Scripts directory rules
-  ...playwrightConfig,     // E2E test rules
+  ...scriptsConfig, // Scripts directory rules
+  ...playwrightConfig, // E2E test rules
 ] as Linter.Config[]
 ```
 
 ### Module Responsibilities
 
-| Module | Purpose | Key Rules |
-|--------|---------|-----------|
-| **base.config.ts** | JavaScript fundamentals | no-unused-vars, eqeqeq, prefer-const |
-| **typescript.config.ts** | TypeScript rules | no-explicit-any, no-unused-vars, strict types |
-| **react.config.ts** | React 19 patterns | hooks rules, discourage manual memoization |
-| **functional.config.ts** | FP enforcement | immutability, no-let, no-throw, prefer-map/filter |
-| **boundaries.config.ts** | Architecture layers | domain/application/infrastructure/presentation |
-| **drizzle.config.ts** | Database safety | enforce-delete-with-where, enforce-update-with-where |
-| **size-limits.config.ts** | Code complexity | max-lines, max-lines-per-function, complexity |
-| **testing.config.ts** | Test patterns | .test.ts vs .spec.ts enforcement |
-| **import.config.ts** | Import organization | import order, no-duplicates |
-| **file-naming.config.ts** | Naming conventions | kebab-case files, PascalCase components |
+| Module                    | Purpose                 | Key Rules                                            |
+| ------------------------- | ----------------------- | ---------------------------------------------------- |
+| **base.config.ts**        | JavaScript fundamentals | no-unused-vars, eqeqeq, prefer-const                 |
+| **typescript.config.ts**  | TypeScript rules        | no-explicit-any, no-unused-vars, strict types        |
+| **react.config.ts**       | React 19 patterns       | hooks rules, discourage manual memoization           |
+| **functional.config.ts**  | FP enforcement          | immutability, no-let, no-throw, prefer-map/filter    |
+| **boundaries.config.ts**  | Architecture layers     | domain/application/infrastructure/presentation       |
+| **drizzle.config.ts**     | Database safety         | enforce-delete-with-where, enforce-update-with-where |
+| **size-limits.config.ts** | Code complexity         | max-lines, max-lines-per-function, complexity        |
+| **testing.config.ts**     | Test patterns           | .test.ts vs .spec.ts enforcement                     |
+| **import.config.ts**      | Import organization     | import order, no-duplicates                          |
+| **file-naming.config.ts** | Naming conventions      | kebab-case files, PascalCase components              |
 
 ## Key Dependencies
 
@@ -190,14 +192,14 @@ ESLint enforces file size and function complexity limits to maintain readable, t
 
 ### Default Limits (All TypeScript Files)
 
-| Metric | Limit | Level | Purpose |
-|--------|-------|-------|---------|
-| **max-lines** | 400 | warn | Prevent overly large files |
-| **max-lines-per-function** | 50 | warn | Keep functions focused |
-| **complexity** | 10 | warn | Cyclomatic complexity (branches/paths) |
-| **max-depth** | 4 | warn | Prevent deeply nested code |
-| **max-params** | 4 | warn | Encourage object parameters |
-| **max-statements** | 20 | warn | Limit statements per function |
+| Metric                     | Limit | Level | Purpose                                |
+| -------------------------- | ----- | ----- | -------------------------------------- |
+| **max-lines**              | 400   | warn  | Prevent overly large files             |
+| **max-lines-per-function** | 50    | warn  | Keep functions focused                 |
+| **complexity**             | 10    | warn  | Cyclomatic complexity (branches/paths) |
+| **max-depth**              | 4     | warn  | Prevent deeply nested code             |
+| **max-params**             | 4     | warn  | Encourage object parameters            |
+| **max-statements**         | 20    | warn  | Limit statements per function          |
 
 **Note**: `skipBlankLines: true` and `skipComments: true` - Only counts code lines.
 
@@ -289,6 +291,7 @@ Infrastructure → Domain
 **Full details**: See `eslint/boundaries.config.ts` for complete layer definitions and dependency rules.
 
 **Layer Patterns**:
+
 ```typescript
 // Simplified - Full config has granular sub-layers
 'boundaries/elements': [
@@ -749,6 +752,7 @@ if ((x = 10)) {
 ### Adding Custom Rules
 
 **Approach 1**: Add to existing module in `eslint/*.config.ts`
+
 ```typescript
 // eslint/typescript.config.ts - Add TypeScript-specific rule
 export default [
@@ -762,6 +766,7 @@ export default [
 ```
 
 **Approach 2**: Create new module for project-specific rules
+
 ```typescript
 // eslint/custom.config.ts
 export default [
@@ -779,7 +784,7 @@ import customConfig from './eslint/custom.config'
 export default [
   ...baseConfig,
   // ... other configs
-  ...customConfig,  // Add at end
+  ...customConfig, // Add at end
 ] as Linter.Config[]
 ```
 

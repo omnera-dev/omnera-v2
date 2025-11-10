@@ -376,7 +376,7 @@ The agent respects pipeline configuration:
    - **Database** (@docs/infrastructure/database/drizzle.md): Drizzle schema patterns, query optimization, transaction handling with Effect, migration management
    - **UI Frameworks** (@docs/infrastructure/ui/*.md): React 19 (no manual memoization), TanStack Query/Table integration, shadcn/ui composition, Tailwind utility-first patterns, React Hook Form with Zod
    - **Language & Runtime** (@docs/infrastructure/language/typescript.md, runtime/bun.md): TypeScript strict mode, type inference, branded types, Bun-specific APIs
-   - **Code Quality** (@docs/infrastructure/quality/*.md): ESLint functional programming rules, Prettier formatting (no semicolons, single quotes), Knip dead code detection
+   - **Code Quality** (@docs/infrastructure/quality/*.md): ESLint functional programming rules (modular config in `eslint/*.config.ts`), code size/complexity limits (`eslint/size-limits.config.ts`), Prettier formatting (no semicolons, single quotes), Knip dead code detection
    - **Testing** (@docs/infrastructure/testing/*.md): F.I.R.S.T principles (Bun Test), Playwright test tags (@spec, @regression, @spec)
 
    **Approach**: For each file audited, check against RELEVANT infrastructure docs (not all categories apply to all files). Reference specific sections when flagging violations (e.g., "@docs/infrastructure/ui/react.md - React 19 Compiler").
@@ -403,6 +403,14 @@ The agent respects pipeline configuration:
    - Eliminating unnecessary abstractions or over-engineering
    - Simplifying complex conditional logic
    - Removing dead code (coordinate with Knip tool findings)
+   - **Enforcing ESLint size/complexity limits** (`eslint/size-limits.config.ts`):
+     - **Default limits**: 400 lines/file, 50 lines/function, complexity 10, max depth 4, max params 4, max statements 20
+     - **React components** (`src/presentation/components/**/*.tsx`): Stricter 300 lines (ERROR level), 60 lines/function
+     - **Config/schemas** (`**/*.config.ts`, `src/domain/models/**/*.ts`, `**/schemas/**/*.ts`, `**/types/**/*.ts`): Relaxed 800 lines, complexity off
+     - **shadcn/ui components** (`src/presentation/components/ui/**/*.tsx`): Exempted (follow library patterns)
+     - **SSR components** (`src/presentation/components/pages/utils/**/*.tsx`): Exempted (declarative config)
+     - **Temporary overrides** requiring refactoring: `src/presentation/components/pages/DynamicPage.tsx`, `src/presentation/components/sections/component-renderer.tsx`
+     - **Violation handling**: Extract functions, split modules, break into smaller components (see `@docs/infrastructure/quality/eslint.md` for guidance)
 
 5. **Security Issue Detection**: Identify security vulnerabilities in `src/` that should be covered by E2E tests:
    - **Input Validation Gaps**: Missing validation on user inputs (should have @spec tests)
@@ -609,10 +617,12 @@ Classify by severity for immediate action:
   - Violations of core architectural principles (e.g., side effects in domain layer)
   - **Security vulnerabilities** (input validation gaps, authentication issues, data exposure)
   - **Framework-critical violations** (e.g., manual memoization in React 19, missing CSRF in Better Auth, improper Effect error handling)
+  - **Size limit violations at ERROR level** (React components exceeding 300 lines per `eslint/size-limits.config.ts`)
 - **High**:
   - Significant code duplication or architectural misalignment
   - **Missing E2E test coverage for security-critical paths**
   - **Major best practices violations** (e.g., missing TypeScript strict mode, improper Drizzle transaction handling, incorrect TanStack Query cache setup)
+  - **Size/complexity violations at WARN level** (files >400 lines, functions >50 lines, complexity >10, depth >4)
 - **Medium**:
   - Test redundancy or minor pattern inconsistencies
   - **Moderate best practices deviations** (e.g., suboptimal Tailwind usage, missing query key conventions, non-idiomatic Effect patterns)
@@ -680,8 +690,9 @@ When proposing refactorings:
    - **MUST check**: Effect.ts patterns, Hono middleware, Better Auth security, Drizzle transactions
    - **MUST verify**: React 19 (no manual memoization), TanStack Query cache config, shadcn/ui patterns
    - **MUST validate**: TypeScript strict mode, Bun-specific APIs, ESLint/Prettier compliance
+   - **MUST enforce**: Code size/complexity limits from `eslint/size-limits.config.ts` (400 lines/file, 50 lines/function, 300 lines for React components, complexity 10, depth 4, params 4, statements 20)
    - **Flag violations** in dedicated "Best Practices Violations" section of audit report
-   - **Prioritize framework-critical violations** (e.g., manual memoization in React 19) as Critical severity
+   - **Prioritize framework-critical violations** (e.g., manual memoization in React 19, React components >300 lines) as Critical severity
 
 3. **Security Issue Reporting (NON-NEGOTIABLE)**:
    - **ALWAYS flag security vulnerabilities** found during audit (Critical priority)
@@ -861,7 +872,18 @@ These files were modified in recent major commits and will be refactored immedia
 **Severity**: Critical/High/Medium/Low
 **Action**: Will be implemented immediately
 
-[Repeat for all immediate violations across all categories]
+[Repeat for all immediate violations across all categories: Framework, Database, UI Frameworks, Language/Runtime, Code Quality, Testing]
+
+#### Code Quality Best Practices (Immediate)
+##### ESLint Size/Complexity Violations
+**Issue**: [Description - e.g., Component exceeds size limit, function too complex]
+**Location**: `src/path/to/recent-file.tsx:line`
+**Source**: Recent commit `abc123`
+**Violates**: @docs/infrastructure/quality/eslint.md - Size Limits + `eslint/size-limits.config.ts`
+**Current Code**: [Example - e.g., 350-line React component]
+**Recommended Fix**: [Specific refactoring - extract components, split logic]
+**Severity**: Critical (if ERROR level) / High (if WARN level)
+**Action**: Will be implemented immediately
 
 ### Security Issues (Immediate)
 [Follow existing format, mark each as "Action: Will be implemented immediately"]
@@ -944,7 +966,32 @@ These issues were found in older code (not part of recent major commits). **Huma
 
 #### Code Quality Best Practices
 ##### ESLint Violations
-[Same pattern]
+**Issue**: [Description - e.g., File exceeds size limit, function too complex, too many parameters]
+**Location**: `src/path/to/file.ts:line`
+**Last Modified**: [date/commit if relevant]
+**Violates**: @docs/infrastructure/quality/eslint.md - [Section] + `eslint/[config-name].config.ts`
+**Current Code**: [Example showing violation - e.g., 450-line file, 80-line function]
+**Recommended Fix**: [Specific refactoring - e.g., extract helper functions, split into multiple modules]
+**Severity**: Critical/High/Medium/Low
+**Effort**: Small/Medium/Large
+**Impact**: Low/Medium/High
+**Benefit-to-Effort Ratio**: High/Medium/Low
+**Action**: ⏸️ AWAITING HUMAN APPROVAL
+
+**Example - Size Limit Violation**:
+**Issue**: React component exceeds 300-line limit (current: 425 lines)
+**Location**: `src/presentation/components/forms/UserForm.tsx`
+**Violates**: @docs/infrastructure/quality/eslint.md - Size Limits + `eslint/size-limits.config.ts` (max-lines: 300 for React components)
+**Current Code**: Single 425-line component with form logic, validation, and submission
+**Recommended Fix**: Split into 3 files:
+- `UserForm.tsx` (main component, 150 lines)
+- `UserFormFields.tsx` (field definitions, 120 lines)
+- `useUserFormLogic.ts` (validation/submission hook, 100 lines)
+**Severity**: High (ERROR level in ESLint)
+**Effort**: Medium (3 hours)
+**Impact**: High (improves testability and maintainability)
+**Benefit-to-Effort Ratio**: High
+**Action**: ⏸️ AWAITING HUMAN APPROVAL
 
 ##### Prettier Violations
 [Same pattern]
