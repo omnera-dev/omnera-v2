@@ -313,15 +313,10 @@ const UTILITIES_LAYER = `@layer utilities {
 
 /**
  * Final base layer for global resets
+ * Note: Removed hardcoded utilities (border-border, bg-background, etc.)
+ * These should be defined in the app theme if needed
  */
-const FINAL_BASE_LAYER = `@layer base {
-      * {
-        @apply border-border outline-ring/50;
-      }
-      body {
-        @apply bg-background text-foreground;
-      }
-    }`
+const FINAL_BASE_LAYER = ''
 
 /**
  * Build dynamic SOURCE_CSS with theme tokens
@@ -411,9 +406,7 @@ export const compileCSS = (app?: App): Effect.Effect<CompiledCSS, CSSCompilation
     }
 
     // Update cache using immutable approach
-    yield* Ref.update(cssCache, (currentCache) =>
-      new Map([...currentCache, [cacheKey, compiled]])
-    )
+    yield* Ref.update(cssCache, (currentCache) => new Map([...currentCache, [cacheKey, compiled]]))
 
     return compiled
   })
