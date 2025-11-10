@@ -90,9 +90,13 @@ function generateThemeSpacing(spacing?: SpacingConfig): string {
 function generateThemeShadows(shadows?: ShadowsConfig): string {
   if (!shadows || Object.keys(shadows).length === 0) return ''
 
-  const shadowEntries = Object.entries(shadows).map(
-    ([name, value]) => `    --shadow-${name}: ${value};`
-  )
+  const shadowEntries = Object.entries(shadows).map(([name, value]) => {
+    // Convert transparent shadow values to 'none' for proper CSS representation
+    // Values like '0 0 #0000' or '0 0 transparent' should become 'none'
+    const normalizedValue =
+      value === '0 0 #0000' || value === '0 0 transparent' ? 'none' : value
+    return `    --shadow-${name}: ${normalizedValue};`
+  })
 
   return shadowEntries.join('\n')
 }
@@ -235,9 +239,7 @@ const STATIC_IMPORTS = `@import 'tailwindcss';
  * Build body classes with optional text color
  */
 function buildBodyClasses(hasTextColor: boolean): readonly string[] {
-  return hasTextColor
-    ? ['font-sans', 'antialiased', 'text-text']
-    : ['font-sans', 'antialiased']
+  return hasTextColor ? ['font-sans', 'antialiased', 'text-text'] : ['font-sans', 'antialiased']
 }
 
 /**
