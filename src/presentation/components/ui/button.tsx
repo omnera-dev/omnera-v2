@@ -106,7 +106,7 @@ function Button({
       ...props,
       className: classes,
       style,
-      children: icon ? buttonContent : children,
+      ...(icon && { children: buttonContent }),
     }
     return React.cloneElement(children, childProps)
   }

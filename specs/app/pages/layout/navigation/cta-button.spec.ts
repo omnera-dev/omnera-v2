@@ -185,7 +185,7 @@ test.describe('CTA Button', () => {
           {
             name: 'test',
             path: '/',
-            meta: { lang: 'en-US', title: 'Test' },
+            meta: { lang: 'en-US', title: 'Test', description: 'Test page' },
             layout: {
               navigation: {
                 logo: './logo.svg',
