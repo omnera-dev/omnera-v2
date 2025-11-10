@@ -23,32 +23,44 @@ export function applyComponentAnimations(
   // Compose fadeOut animation for toast components
   const styleWithFadeOut =
     type === 'toast'
-      ? composeAnimation(baseStyle, type, 'fadeOut', theme, '300ms', 'ease-out')
+      ? composeAnimation({
+          baseStyle,
+          animationName: 'fadeOut',
+          theme,
+          defaultDuration: '300ms',
+          defaultEasing: 'ease-out',
+        })
       : baseStyle
 
   // Compose scaleUp animation for card components with scroll trigger
   const styleWithScaleUp =
     type === 'card'
-      ? composeAnimation(
-          styleWithFadeOut,
-          type,
-          'scaleUp',
+      ? composeAnimation({
+          baseStyle: styleWithFadeOut,
+          animationName: 'scaleUp',
           theme,
-          '500ms',
-          'cubic-bezier(0.34, 1.56, 0.64, 1)',
-          {
+          defaultDuration: '500ms',
+          defaultEasing: 'cubic-bezier(0.34, 1.56, 0.64, 1)',
+          options: {
             animationPlayState: 'paused',
             animationFillMode: 'forwards',
             opacity: 0,
-          }
-        )
+          },
+        })
       : styleWithFadeOut
 
   // Compose float animation for fab components (continuous floating effect)
   const finalStyle =
     type === 'fab'
-      ? composeAnimation(styleWithScaleUp, type, 'float', theme, '3s', 'ease-in-out', {
-          infinite: true,
+      ? composeAnimation({
+          baseStyle: styleWithScaleUp,
+          animationName: 'float',
+          theme,
+          defaultDuration: '3s',
+          defaultEasing: 'ease-in-out',
+          options: {
+            infinite: true,
+          },
         })
       : styleWithScaleUp
 

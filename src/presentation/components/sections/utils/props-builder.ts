@@ -5,8 +5,7 @@
  * found in the LICENSE.md file in the root directory of this source tree.
  */
 
-import type { Component } from '@/domain/models/app/page/sections'
-import type { Theme } from '@/domain/models/app/theme'
+import type { ElementPropsConfig, TestIdConfig } from './props-builder-config'
 
 /**
  * Component types that should receive role="group" when used as blocks with children
@@ -14,15 +13,11 @@ import type { Theme } from '@/domain/models/app/theme'
 const CONTAINER_TYPES = ['div', 'container', 'flex', 'grid', 'card', 'badge'] as const
 
 /**
- * Build test ID for component
+ * Build test ID for component using config object
  */
-function buildTestId(
-  type: Component['type'],
-  blockName?: string,
-  blockInstanceIndex?: number,
-  substitutedProps?: Record<string, unknown>,
-  childIndex?: number
-): string | undefined {
+function buildTestId(config: TestIdConfig): string | undefined {
+  const { type, blockName, blockInstanceIndex, substitutedProps, childIndex } = config
+
   if (blockName) {
     return blockInstanceIndex !== undefined
       ? `block-${blockName}-${blockInstanceIndex}`
@@ -49,64 +44,117 @@ function buildTestId(
 }
 
 /**
- * Build element props with all attributes
+ * Build element props with all attributes using config object
+ * Complexity reduced by extracting helper functions
  */
-export function buildElementProps(
-  type: Component['type'],
-  substitutedProps: Record<string, unknown> | undefined,
-  finalClassName: string | undefined,
-  styleWithShadow: Record<string, unknown> | undefined,
-  blockName: string | undefined,
-  blockInstanceIndex: number | undefined,
-  firstTranslationKey: string | undefined,
-  translationData: Record<string, string> | undefined,
-  hasContent: boolean,
-  hasChildren: boolean,
-  theme: Theme | undefined,
-  childIndex?: number
-): Record<string, unknown> {
-  const hasScrollAnimation = type === 'card' && theme?.animations?.scaleUp
-  const testId = buildTestId(type, blockName, blockInstanceIndex, substitutedProps, childIndex)
+export function buildElementProps(config: ElementPropsConfig): Record<string, unknown> {
+  return buildElementPropsFromConfig(config)
+}
+
+/**
+ * Build element props from config object
+ */
+function buildElementPropsFromConfig(config: ElementPropsConfig): Record<string, unknown> {
+  const hasScrollAnimation = config.type === 'card' && Boolean(config.theme?.animations?.scaleUp)
+  const testId = buildTestId({
+    type: config.type,
+    blockName: config.blockName,
+    blockInstanceIndex: config.blockInstanceIndex,
+    substitutedProps: config.substitutedProps,
+    childIndex: config.childIndex,
+  })
 
   return {
-    ...substitutedProps,
-    className: finalClassName,
-    ...(styleWithShadow && { style: styleWithShadow }),
+    ...config.substitutedProps,
+    ...buildCoreProps(config, testId),
+    ...buildBlockProps(config),
+    ...buildTranslationProps(config),
+    ...buildAnimationProps(hasScrollAnimation),
+    ...buildEmptyElementStyles(config),
+  }
+}
+
+/**
+ * Build core props (className, style, data-testid)
+ */
+function buildCoreProps(
+  config: ElementPropsConfig,
+  testId: string | undefined
+): Record<string, unknown> {
+  return {
+    className: config.finalClassName,
+    ...(config.styleWithShadow && { style: config.styleWithShadow }),
     ...(testId && { 'data-testid': testId }),
-    ...(blockName && {
-      'data-block': blockName,
-      'data-type': type,
-    }),
-    ...(blockName &&
-      hasChildren &&
-      CONTAINER_TYPES.includes(type) && {
+  }
+}
+
+/**
+ * Build block-related props (data-block, data-type, role)
+ */
+function buildBlockProps(config: ElementPropsConfig): Record<string, unknown> {
+  if (!config.blockName) return {}
+
+  return {
+    'data-block': config.blockName,
+    'data-type': config.type,
+    ...(config.hasChildren &&
+      CONTAINER_TYPES.includes(config.type) && {
         role: 'group',
       }),
-    ...(firstTranslationKey &&
-      translationData && {
-        'data-translation-key': firstTranslationKey,
-        'data-translations': JSON.stringify(translationData),
-      }),
-    ...(hasScrollAnimation && {
-      'data-scroll-animation': 'scale-up',
-    }),
-    ...((blockName || childIndex !== undefined) &&
-      !hasContent && {
-        style: {
-          ...styleWithShadow,
-          minHeight: '1px',
-          minWidth: '1px',
-          display: 'inline-block',
-        },
-      }),
-    ...(!blockName &&
-      type === 'grid' &&
-      !hasContent && {
-        style: {
-          ...styleWithShadow,
-          minHeight: '100px',
-          minWidth: '100px',
-        },
-      }),
   }
+}
+
+/**
+ * Build translation props (data-translation-key, data-translations)
+ */
+function buildTranslationProps(config: ElementPropsConfig): Record<string, unknown> {
+  if (!config.firstTranslationKey || !config.translationData) return {}
+
+  return {
+    'data-translation-key': config.firstTranslationKey,
+    'data-translations': JSON.stringify(config.translationData),
+  }
+}
+
+/**
+ * Build animation props (data-scroll-animation)
+ */
+function buildAnimationProps(hasScrollAnimation: boolean): Record<string, unknown> {
+  if (!hasScrollAnimation) return {}
+
+  return {
+    'data-scroll-animation': 'scale-up',
+  }
+}
+
+/**
+ * Build styles for empty elements (blocks and grids without content)
+ */
+function buildEmptyElementStyles(config: ElementPropsConfig): Record<string, unknown> {
+  if (config.hasContent) return {}
+
+  // Block or child without content
+  if (config.blockName || config.childIndex !== undefined) {
+    return {
+      style: {
+        ...config.styleWithShadow,
+        minHeight: '1px',
+        minWidth: '1px',
+        display: 'inline-block',
+      },
+    }
+  }
+
+  // Grid without content and not a block
+  if (!config.blockName && config.type === 'grid') {
+    return {
+      style: {
+        ...config.styleWithShadow,
+        minHeight: '100px',
+        minWidth: '100px',
+      },
+    }
+  }
+
+  return {}
 }

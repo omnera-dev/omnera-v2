@@ -6,7 +6,8 @@
  */
 
 import { type ReactElement } from 'react'
-import { renderScriptTag } from '@/presentation/utils/script-renderers'
+import { buildProviderElements } from './utils/analytics-builders'
+import { buildCustomElement } from './utils/custom-elements-builders'
 import type { Analytics } from '@/domain/models/app/page/meta/analytics'
 import type { CustomElements } from '@/domain/models/app/page/meta/custom-elements'
 import type { FaviconSet } from '@/domain/models/app/page/meta/favicon-set'
@@ -166,88 +167,8 @@ export function AnalyticsHead({
   // Type assertion: after type guard, we know analytics has providers array
   const analyticsConfig = analytics as Analytics
 
-  // Render all providers (enabled and disabled)
-  // Disabled providers are hidden with display: none
-  return (
-    <>
-      {analyticsConfig.providers.flatMap((provider, providerIndex) => {
-        const isEnabled = provider.enabled !== false
-        const hidden = !isEnabled
-        const styleAttr = hidden ? { style: { display: 'none' } } : {}
-
-        return [
-          // DNS Prefetch for performance optimization
-          ...(provider.dnsPrefetch
-            ? [
-                <link
-                  key={`dns-${providerIndex}`}
-                  rel="dns-prefetch"
-                  href={provider.dnsPrefetch}
-                  {...styleAttr}
-                />,
-              ]
-            : []),
-
-          // External scripts with data-testid for test verification
-          ...(provider.scripts && provider.scripts.length > 0
-            ? provider.scripts.map((script, scriptIndex) =>
-                renderScriptTag({
-                  src: script.src,
-                  async: script.async,
-                  defer: script.defer,
-                  dataTestId: `analytics-${provider.name}`,
-                  reactKey: `script-${providerIndex}-${scriptIndex}`,
-                  hidden,
-                })
-              )
-            : []),
-
-          // Initialization script with data-testid
-          ...(provider.initScript
-            ? [
-                <script
-                  key={`init-${providerIndex}`}
-                  data-testid={`analytics-${provider.name}`}
-                  dangerouslySetInnerHTML={{
-                    __html: provider.initScript,
-                  }}
-                  {...styleAttr}
-                />,
-              ]
-            : []),
-
-          // Empty marker script if provider has no scripts (for testing)
-          ...((!provider.scripts || provider.scripts.length === 0) && !provider.initScript
-            ? [
-                <script
-                  key={`marker-${providerIndex}`}
-                  data-testid={`analytics-${provider.name}`}
-                  dangerouslySetInnerHTML={{
-                    __html: `/* ${provider.name} analytics marker */`,
-                  }}
-                  {...styleAttr}
-                />,
-              ]
-            : []),
-
-          // Configuration data script (for testing)
-          ...(provider.config
-            ? [
-                <script
-                  key={`config-${providerIndex}`}
-                  data-testid={`analytics-${provider.name}-config`}
-                  type="application/json"
-                  dangerouslySetInnerHTML={{
-                    __html: JSON.stringify(provider.config),
-                  }}
-                  {...styleAttr}
-                />,
-              ]
-            : []),
-        ]
-      })}
-    </>
-  )
+  // Render all providers using builder pattern
+  return <>{analyticsConfig.providers.flatMap(buildProviderElements)}</>
 }
 
 /**
@@ -295,75 +216,7 @@ export function CustomElementsHead({
     return undefined
   }
 
-  return (
-    <>
-      {customElements.map((element, index) => {
-        const key = `custom-${element.type}-${index}`
-
-        // Render meta element
-        if (element.type === 'meta') {
-          return (
-            <meta
-              key={key}
-              {...element.attrs}
-            />
-          )
-        }
-
-        // Render link element
-        if (element.type === 'link') {
-          return (
-            <link
-              key={key}
-              {...element.attrs}
-            />
-          )
-        }
-
-        // Render script element
-        if (element.type === 'script') {
-          if (element.content) {
-            return (
-              <script
-                key={key}
-                {...element.attrs}
-                dangerouslySetInnerHTML={{ __html: element.content }}
-              />
-            )
-          }
-          return (
-            <script
-              key={key}
-              {...element.attrs}
-            />
-          )
-        }
-
-        // Render style element
-        if (element.type === 'style') {
-          return (
-            <style
-              key={key}
-              {...element.attrs}
-              dangerouslySetInnerHTML={{ __html: element.content || '' }}
-            />
-          )
-        }
-
-        // Render base element
-        if (element.type === 'base') {
-          return (
-            <base
-              key={key}
-              {...element.attrs}
-            />
-          )
-        }
-
-        return undefined
-      })}
-    </>
-  )
+  return <>{customElements.map(buildCustomElement)}</>
 }
 
 /**

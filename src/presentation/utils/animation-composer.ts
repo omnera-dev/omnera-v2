@@ -97,62 +97,19 @@ function buildAnimationStyle(
  * // Returns: { ...baseStyle, animation: 'fade-out 300ms ease-out' }
  * ```
  */
-export function composeAnimation(config: AnimationComposerConfig): Record<string, unknown>
-export function composeAnimation(
-  baseStyle: Record<string, unknown> | undefined,
-  _componentType: string,
-  animationName: string,
-  theme: Theme | undefined,
-  defaultDuration: string,
-  defaultEasing: string,
-  options?: AnimationStyleOptions
-): Record<string, unknown> | undefined
-export function composeAnimation(
-  configOrBaseStyle: AnimationComposerConfig | Record<string, unknown> | undefined,
-  _componentType?: string,
-  animationName?: string,
-  theme?: Theme,
-  defaultDuration?: string,
-  defaultEasing?: string,
-  options?: AnimationStyleOptions
-): Record<string, unknown> | undefined {
-  // Handle new config object signature
-  if (
-    configOrBaseStyle &&
-    typeof configOrBaseStyle === 'object' &&
-    'animationName' in configOrBaseStyle
-  ) {
-    const cfg = configOrBaseStyle as AnimationComposerConfig
-    const animationConfig = cfg.theme?.animations?.[cfg.animationName]
-    if (!animationConfig) {
-      return cfg.baseStyle
-    }
-
-    const { duration, easing } = extractAnimationTiming(
-      animationConfig,
-      cfg.defaultDuration,
-      cfg.defaultEasing
-    )
-    const infiniteSuffix = cfg.options?.infinite ? ' infinite' : ''
-    const animationValue = `${toKebabCase(cfg.animationName)} ${duration} ${easing}${infiniteSuffix}`
-
-    return buildAnimationStyle(cfg.baseStyle, animationValue, cfg.options)
-  }
-
-  // Handle legacy positional parameters (backwards compatibility)
-  const baseStyle = configOrBaseStyle as Record<string, unknown> | undefined
-  const animationConfig = theme?.animations?.[animationName!]
+export function composeAnimation(config: AnimationComposerConfig): Record<string, unknown> {
+  const animationConfig = config.theme?.animations?.[config.animationName]
   if (!animationConfig) {
-    return baseStyle
+    return config.baseStyle
   }
 
   const { duration, easing } = extractAnimationTiming(
     animationConfig,
-    defaultDuration!,
-    defaultEasing!
+    config.defaultDuration,
+    config.defaultEasing
   )
-  const infiniteSuffix = options?.infinite ? ' infinite' : ''
-  const animationValue = `${toKebabCase(animationName!)} ${duration} ${easing}${infiniteSuffix}`
+  const infiniteSuffix = config.options?.infinite ? ' infinite' : ''
+  const animationValue = `${toKebabCase(config.animationName)} ${duration} ${easing}${infiniteSuffix}`
 
-  return buildAnimationStyle(baseStyle, animationValue, options)
+  return buildAnimationStyle(config.baseStyle, animationValue, config.options)
 }
