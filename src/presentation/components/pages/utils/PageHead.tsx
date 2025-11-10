@@ -27,6 +27,7 @@ type PageHeadProps = {
   readonly page: Page
   readonly theme: Theme | undefined
   readonly themeStyles: string | undefined
+  readonly directionStyles: string
   readonly title: string
   readonly description: string
   readonly scripts: GroupedScripts
@@ -54,6 +55,7 @@ export function PageHead({
   page,
   theme,
   themeStyles,
+  directionStyles,
   title,
   description,
   scripts,
@@ -101,6 +103,7 @@ export function PageHead({
         href="/assets/output.css"
       />
       {themeStyles && <style dangerouslySetInnerHTML={{ __html: themeStyles }} />}
+      <style dangerouslySetInnerHTML={{ __html: directionStyles }} />
       {scripts.external.head.map((script, index) =>
         renderScriptTag({
           src: script.src,

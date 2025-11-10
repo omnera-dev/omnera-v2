@@ -19,6 +19,7 @@ type PageBodyScriptsProps = {
   readonly page: Page
   readonly theme: Theme | undefined
   readonly languages: Languages | undefined
+  readonly direction: 'ltr' | 'rtl'
   readonly scripts: GroupedScripts
   readonly position: 'start' | 'end'
 }
@@ -43,6 +44,7 @@ export function PageBodyScripts({
   page,
   theme,
   languages,
+  direction,
   scripts,
   position,
 }: PageBodyScriptsProps): Readonly<ReactElement> {
@@ -120,6 +122,15 @@ export function PageBodyScripts({
               __html: `window.APP_LANGUAGES = ${JSON.stringify({
                 ...languages,
                 fallback: languages.fallback ?? languages.default,
+              })};`,
+            }}
+          />
+          {/* Expose theme config with RTL-aware direction to window for testing/debugging */}
+          <script
+            dangerouslySetInnerHTML={{
+              __html: `window.APP_THEME = ${JSON.stringify({
+                ...(theme || {}),
+                direction: direction,
               })};`,
             }}
           />

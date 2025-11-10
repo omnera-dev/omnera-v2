@@ -202,6 +202,7 @@ type ServerFixtures = {
   startServerWithSchema: (appSchema: object, options?: { useDatabase?: boolean }) => Promise<void>
   executeQuery: (sql: string) => Promise<{ rows: any[]; rowCount: number }>
   browserLocale: string | undefined
+  mockAnalytics: boolean
 }
 
 /**
@@ -210,6 +211,9 @@ type ServerFixtures = {
  * - startServerWithSchema: Function to start server with custom AppSchema configuration
  *   - When options.useDatabase is true, creates an isolated test database
  * - browserLocale: Optional locale string (e.g., 'fr-FR') to set browser language
+ * - mockAnalytics: Boolean flag to mock external analytics providers (default: true)
+ *   - Prevents flakiness from external script loading (Google, Plausible, Matomo, etc.)
+ *   - Disable with: test.use({ mockAnalytics: false })
  * Server and database are automatically cleaned up after test completion
  * Configures baseURL for relative navigation with page.goto('/')
  */
@@ -217,11 +221,36 @@ export const test = base.extend<ServerFixtures>({
   // Browser locale fixture: allows tests to specify a locale (e.g., 'fr-FR')
   browserLocale: [undefined, { option: true }],
 
+  // Analytics mocking fixture: automatically mocks external analytics providers
+  // Enabled by default to prevent flakiness from external script loading
+  mockAnalytics: [true, { option: true }],
+
   // Override context to use browserLocale if specified
   context: async ({ browser, browserLocale }, use) => {
     const context = await browser.newContext(browserLocale ? { locale: browserLocale } : {})
     await use(context)
     await context.close()
+  },
+
+  // Override page to mock analytics providers if mockAnalytics is enabled
+  page: async ({ page, mockAnalytics }, use) => {
+    if (mockAnalytics) {
+      // Mock all common analytics providers to prevent flakiness
+      // Returns empty 200 responses - we're testing DOM rendering, not actual analytics
+      await page.route('**/plausible.io/**', (route) => route.fulfill({ status: 200, body: '' }))
+      await page.route('**/googletagmanager.com/**', (route) =>
+        route.fulfill({ status: 200, body: '' })
+      )
+      await page.route('**/google-analytics.com/**', (route) =>
+        route.fulfill({ status: 200, body: '' })
+      )
+      await page.route('**/posthog.com/**', (route) => route.fulfill({ status: 200, body: '' }))
+      await page.route('**/matomo.org/**', (route) => route.fulfill({ status: 200, body: '' }))
+      await page.route('**/usefathom.com/**', (route) => route.fulfill({ status: 200, body: '' }))
+      await page.route('**/mixpanel.com/**', (route) => route.fulfill({ status: 200, body: '' }))
+    }
+
+    await use(page)
   },
 
   // Server fixture: Start server with custom schema and optional database
