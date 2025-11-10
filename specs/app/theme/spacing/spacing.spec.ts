@@ -143,14 +143,14 @@ test.describe('Spacing Configuration', () => {
     'APP-THEME-SPACING-004: should validate consistent spacing scale',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // GIVEN: spacing variants with size modifiers (gap, gapSmall, gapLarge)
+      // GIVEN: spacing variants with size modifiers (gap, gap-small, gap-large)
       await startServerWithSchema({
         name: 'test-app',
         theme: {
           spacing: {
-            gapSmall: '1rem',
+            'gap-small': '1rem',
             gap: '1.5rem',
-            gapLarge: '2rem',
+            'gap-large': '2rem',
           },
         },
         pages: [
@@ -171,7 +171,7 @@ test.describe('Spacing Configuration', () => {
                     props: {
                       className: 'flex p-3 border border-gray-200',
                       style: {
-                        gap: 'var(--spacing-gapSmall)',
+                        gap: 'var(--spacing-gap-small)',
                       },
                     },
                     children: [
@@ -217,7 +217,7 @@ test.describe('Spacing Configuration', () => {
                     props: {
                       className: 'flex p-3 border border-gray-200',
                       style: {
-                        gap: 'var(--spacing-gapLarge)',
+                        gap: 'var(--spacing-gap-large)',
                       },
                     },
                     children: [
@@ -250,9 +250,9 @@ test.describe('Spacing Configuration', () => {
       const cssResponse = await page.request.get('/assets/output.css')
       expect(cssResponse.ok()).toBeTruthy()
       const css = await cssResponse.text()
-      expect(css).toContain('--spacing-gapSmall: 1rem')
+      expect(css).toContain('--spacing-gap-small: 1rem')
       expect(css).toContain('--spacing-gap: 1.5rem')
-      expect(css).toContain('--spacing-gapLarge: 2rem')
+      expect(css).toContain('--spacing-gap-large: 2rem')
 
       // 2. Visual validation shows gap progression (small → medium → large)
       await expect(page.locator('[data-testid="spacing-scale"]')).toHaveScreenshot(
@@ -332,14 +332,14 @@ test.describe('Spacing Configuration', () => {
     'APP-THEME-SPACING-007: should validate consistent internal component spacing',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
-      // GIVEN: padding variants (padding, paddingSmall, paddingLarge)
+      // GIVEN: padding variants (padding, padding-small, padding-large)
       await startServerWithSchema({
         name: 'test-app',
         theme: {
           spacing: {
-            paddingSmall: '1rem',
+            'padding-small': '1rem',
             padding: '1.5rem',
-            paddingLarge: '2rem',
+            'padding-large': '2rem',
           },
         },
         pages: [
@@ -360,7 +360,7 @@ test.describe('Spacing Configuration', () => {
                     props: {
                       className: 'bg-blue-50 border-2 border-blue-500',
                       style: {
-                        padding: 'var(--spacing-paddingSmall)',
+                        padding: 'var(--spacing-padding-small)',
                       },
                     },
                     children: ['Small'],
@@ -380,7 +380,7 @@ test.describe('Spacing Configuration', () => {
                     props: {
                       className: 'bg-amber-50 border-2 border-amber-500',
                       style: {
-                        padding: 'var(--spacing-paddingLarge)',
+                        padding: 'var(--spacing-padding-large)',
                       },
                     },
                     children: ['Large'],
@@ -400,9 +400,9 @@ test.describe('Spacing Configuration', () => {
       const cssResponse = await page.request.get('/assets/output.css')
       expect(cssResponse.ok()).toBeTruthy()
       const css = await cssResponse.text()
-      expect(css).toContain('--spacing-paddingSmall: 1rem')
+      expect(css).toContain('--spacing-padding-small: 1rem')
       expect(css).toContain('--spacing-padding: 1.5rem')
-      expect(css).toContain('--spacing-paddingLarge: 2rem')
+      expect(css).toContain('--spacing-padding-large: 2rem')
 
       // 2. Visual validation shows padding progression (small → medium → large)
       await expect(page.locator('[data-testid="padding-scale"]')).toHaveScreenshot(
