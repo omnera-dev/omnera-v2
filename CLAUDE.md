@@ -38,7 +38,7 @@
 | **Better Auth** | 1.3.34 | Authentication |
 | **Drizzle ORM** | ^0.44.7 | Database (PostgreSQL via bun:sql) |
 | **React** | 19.2.0 | UI library |
-| **Tailwind CSS** | 4.1.16 | Styling |
+| **Tailwind CSS** | 4.1.17 | Styling (programmatic CSS compiler) |
 | **TanStack Query** | 5.90.5 | Server state management |
 | **TanStack Table** | ^8.21.3 | Data tables |
 
@@ -226,6 +226,8 @@ sovrium/
 - API Routes: `@docs/infrastructure/api/hono-rpc-openapi.md`
 - Database: `@docs/infrastructure/database/drizzle.md`
 - Schemas: `@docs/infrastructure/framework/effect.md`
+- **Styling & CSS**: `@docs/infrastructure/ui/tailwind.md`, `@docs/infrastructure/css/css-compiler.md`
+- **Theming Architecture**: `@docs/architecture/patterns/theming-architecture.md`
 - **Internationalization (i18n)**: `@docs/architecture/patterns/i18n-centralized-translations.md`
 
 **Slash Command**: Use `/docs` to list all available documentation files

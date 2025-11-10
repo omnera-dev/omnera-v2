@@ -2,13 +2,20 @@
 
 ## Overview
 
-**Version**: 4.1.16
-**PostCSS Integration**: @tailwindcss/postcss 4.1.16
+**Version**: 4.1.17
+**PostCSS Integration**: @tailwindcss/postcss 4.1.17
 **PostCSS Version**: ^8.5.6 (flexible range, minimum 8.5.6)
-**Prettier Plugin**: prettier-plugin-tailwindcss 0.7.1
+**CSS Compiler**: Custom programmatic compiler (`src/infrastructure/css/compiler.ts`)
 **Purpose**: Modern utility-first CSS framework for rapidly building custom user interfaces with exceptional performance
 
 Tailwind CSS is a highly customizable, low-level CSS framework that provides utility classes for building designs directly in HTML/JSX. Version 4 represents a complete rewrite with a new engine, CSS-first configuration, and significantly improved performance.
+
+**Sovrium-Specific Implementation**: Tailwind CSS is integrated via a custom CSS compiler that generates theme-aware CSS on-demand from domain theme models. This approach enables:
+
+- Dynamic theme generation from app schema configuration
+- In-memory CSS caching per theme
+- Runtime CSS compilation without static configuration files
+- Seamless integration with Effect.ts for functional error handling
 
 ## Why Tailwind CSS for Sovrium
 
@@ -51,17 +58,133 @@ Tailwind CSS v4 is already installed in Sovrium:
 ```json
 {
   "dependencies": {
-    "tailwindcss": "^4.1.14",
+    "tailwindcss": "^4.1.17",
     "postcss": "^8.5.6",
-    "@tailwindcss/postcss": "^4.1.14"
-  },
-  "devDependencies": {
-    "prettier-plugin-tailwindcss": "^0.7.0"
+    "@tailwindcss/postcss": "^4.1.17",
+    "tw-animate-css": "^1.4.0"
   }
 }
 ```
 
+**Additional Dependencies**:
+
+- `tw-animate-css`: Pre-built animation library for Tailwind CSS
+- `tailwind-merge`: Utility for merging Tailwind classes (version ^3.4.0)
+
 No additional installation needed.
+
+## Sovrium CSS Compilation Architecture
+
+### Overview
+
+Sovrium uses a **programmatic CSS compilation approach** instead of static configuration files. The CSS compiler (`src/infrastructure/css/compiler.ts`) generates Tailwind CSS dynamically from domain theme models.
+
+**Key Characteristics**:
+
+- **No `tailwind.config.js`**: Configuration is generated programmatically from app schema
+- **No static CSS files**: CSS is compiled on-demand at runtime
+- **Theme-aware**: CSS adapts to `app.theme` configuration in schema
+- **Effect.ts integration**: Compilation uses Effect for error handling and caching
+- **In-memory caching**: Compiled CSS cached per theme hash
+
+### Architecture Flow
+
+```
+App Schema (JSON)
+    ↓
+Domain Theme Models (Effect Schema)
+    ↓
+CSS Compiler (src/infrastructure/css/compiler.ts)
+    ↓
+PostCSS + Tailwind Plugin
+    ↓
+Compiled CSS (cached in memory)
+    ↓
+Served as /assets/output.css
+```
+
+### CSS Compiler Features
+
+1. **Dynamic `@theme` Generation**: Converts domain models to Tailwind CSS variables
+   - `theme.colors` → `--color-*` CSS variables
+   - `theme.fonts` → `--font-*` CSS variables
+   - `theme.spacing` → `--spacing-*` CSS variables
+   - `theme.shadows` → `--shadow-*` CSS variables
+   - `theme.borderRadius` → `--radius-*` CSS variables
+   - `theme.breakpoints` → `--breakpoint-*` CSS variables
+   - `theme.animations` → `@keyframes` + animation classes
+
+2. **Layer-Based CSS Structure**:
+   - `@layer base`: Global HTML element styles (body, headings, links)
+   - `@layer components`: Reusable component classes (.btn, .card, .container-page)
+   - `@layer utilities`: Custom utility classes (.text-balance)
+
+3. **Theme-Aware Defaults**: Compiler conditionally applies theme colors if defined
+   - If `theme.colors.primary` exists → Uses `bg-primary` in buttons
+   - If not defined → Falls back to `bg-blue-600`
+
+4. **Functional Error Handling**: Uses `CSSCompilationError` for type-safe error propagation
+
+### Usage in Application Code
+
+```typescript
+import { compileCSS } from '@/infrastructure/css'
+import { Effect } from 'effect'
+
+// Compile CSS with app theme
+const program = Effect.gen(function* () {
+  const compiled = yield* compileCSS(app)
+  console.log(`Compiled ${compiled.css.length} bytes`)
+  return compiled
+})
+
+// Run Effect program
+const result = await Effect.runPromise(program)
+```
+
+### CSS Caching Strategy
+
+The compiler implements per-theme caching using `Effect.Ref`:
+
+- **Cache Key**: JSON stringified theme object
+- **Cache Storage**: In-memory Map with theme hash → compiled CSS
+- **Cache Invalidation**: Automatic when theme changes (different hash)
+- **Performance**: Subsequent requests with same theme are instant (no recompilation)
+
+### Integration with Hono Routes
+
+CSS is served dynamically via Hono route:
+
+```typescript
+app.get('/assets/output.css', async (c) => {
+  const compiled = yield * compileCSS(app)
+  return c.text(compiled.css, 200, {
+    'Content-Type': 'text/css',
+    'Cache-Control': 'public, max-age=31536000',
+  })
+})
+```
+
+### Configuration Files
+
+**No configuration files needed**. Sovrium does NOT use:
+
+- ❌ `tailwind.config.js`
+- ❌ `tailwind.config.ts`
+- ❌ `postcss.config.js`
+- ❌ Static CSS source files
+
+Instead, CSS is generated programmatically in `src/infrastructure/css/compiler.ts`.
+
+**Why This Approach?**
+
+1. **Schema-Driven**: CSS follows app schema configuration
+2. **Multi-Tenancy Ready**: Each app can have different themes
+3. **Type-Safe**: Domain models enforce valid theme structures
+4. **Testable**: Compiler is a pure Effect program
+5. **Cacheable**: Compiled CSS cached efficiently per theme
+
+See `@docs/infrastructure/css/css-compiler.md` for detailed technical documentation.
 
 ## CSS-First Configuration (v4)
 
@@ -932,16 +1055,27 @@ Use custom values without configuration:
 
 ## Best Practices for Sovrium
 
+### General Tailwind Practices
+
 1. **Use Utility Classes Directly**: Build designs in HTML/JSX without custom CSS files
-2. **Extract Components for Reuse**: Create functions returning HTML strings for repeated patterns
-3. **Leverage @layer for Custom Styles**: Organize custom CSS using `@layer` directives
-4. **Use @theme for Theming**: Define design tokens in CSS, not JavaScript
-5. **Mobile-First Responsive Design**: Start with mobile layout, add breakpoints upward
-6. **Consistent Spacing Scale**: Use default spacing (4, 8, 12, 16, etc.) for consistency
-7. **Dark Mode from Start**: Plan dark mode variants early in development
-8. **Keep Classes Readable**: Use line breaks for long class lists in HTML
-9. **Test Across Breakpoints**: Verify responsive design at all screen sizes
-10. **Optimize for Production**: Always minify CSS and purge unused utilities
+2. **Mobile-First Responsive Design**: Start with mobile layout, add breakpoints upward
+3. **Consistent Spacing Scale**: Use default spacing (4, 8, 12, 16, etc.) for consistency
+4. **Dark Mode from Start**: Plan dark mode variants early in development
+5. **Keep Classes Readable**: Use line breaks for long class lists in HTML
+6. **Test Across Breakpoints**: Verify responsive design at all screen sizes
+
+### Sovrium-Specific Practices
+
+1. **Define Theme in App Schema**: Configure colors, fonts, spacing in `app.theme` (not CSS files)
+2. **Use Theme Tokens**: Reference schema-defined tokens (`bg-primary`, `text-text`, `p-section`)
+3. **Avoid Hardcoded Colors**: Use theme colors or Tailwind defaults (don't use arbitrary colors like `bg-[#1da1f2]`)
+4. **Test Theme Variations**: Verify UI works with different theme configurations
+5. **Leverage Compiler Defaults**: Compiler provides sensible fallbacks if theme tokens missing
+6. **Don't Create Static CSS Files**: CSS is generated programmatically from domain models
+7. **Trust the Cache**: Compiled CSS is cached per theme for performance
+8. **Use Effect.ts Patterns**: Wrap CSS compilation in Effect programs for error handling
+9. **Component Classes Available**: Use `.btn`, `.card`, `.container-page` from compiled CSS
+10. **Animation Library**: Use `tw-animate-css` animations or define custom in `theme.animations`
 
 ## Common Pitfalls to Avoid
 
@@ -976,78 +1110,6 @@ Install "Tailwind CSS IntelliSense" for:
 - Linting and warnings
 - Hover preview of CSS values
 - Syntax highlighting
-
-### Prettier Plugin for Tailwind CSS (v0.7.0)
-
-The `prettier-plugin-tailwindcss` plugin is already installed and configured in Sovrium. This plugin automatically sorts Tailwind CSS classes according to the recommended class order.
-
-**Installation** (already done):
-
-```bash
-bun add -d prettier-plugin-tailwindcss
-```
-
-**Configuration** (already configured in `.prettierrc.json`):
-
-```json
-{
-  "semi": false,
-  "trailingComma": "es5",
-  "singleQuote": true,
-  "tabWidth": 2,
-  "useTabs": false,
-  "printWidth": 100,
-  "singleAttributePerLine": true,
-  "plugins": ["prettier-plugin-tailwindcss"]
-}
-```
-
-**What It Does**:
-
-- Automatically sorts Tailwind classes in the recommended order
-- Ensures consistent class ordering across the codebase
-- Follows Tailwind's official class order conventions
-- Works seamlessly with Prettier's formatting workflow
-
-**Class Ordering**:
-The plugin sorts classes in this order:
-
-1. Layout properties (display, position, etc.)
-2. Flexbox/Grid properties
-3. Spacing (padding, margin)
-4. Sizing (width, height)
-5. Typography
-6. Visual effects (backgrounds, borders, shadows)
-7. Transitions and animations
-8. Variants (hover:, focus:, etc.)
-
-**Example** - Classes will auto-sort on save:
-
-```html
-<!-- Before (manually written, unsorted) -->
-<div class="rounded bg-blue-500 p-4 font-bold text-white hover:bg-blue-600">Button</div>
-
-<!-- After (automatically sorted by Prettier) -->
-<div class="rounded bg-blue-500 p-4 font-bold text-white hover:bg-blue-600">Button</div>
-```
-
-**Benefits**:
-
-- **Consistency**: All developers write classes in the same order
-- **Readability**: Easier to scan and understand class lists
-- **Maintainability**: Reduces cognitive load when reviewing code
-- **Best Practices**: Follows Tailwind's official recommendations
-- **Zero Configuration**: Works automatically with `bun run format`
-
-**Usage**:
-
-```bash
-# Format all files (sorts Tailwind classes automatically)
-bun run format
-
-# Check formatting (includes class order validation)
-bun run format:check
-```
 
 ## References
 

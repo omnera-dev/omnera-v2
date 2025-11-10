@@ -18,6 +18,13 @@ This index provides a comprehensive guide to Sovrium's architecture documentatio
 | **performance-optimization.md** | React 19 Compiler, Effect.ts, Bun optimization   | ESLint React warnings              |
 | **security-best-practices.md**  | Authentication, validation, CSRF/XSS protection  | ESLint Drizzle rules               |
 
+### Cross-Cutting Architecture Patterns
+
+| Document                                      | Purpose                                                      | Enforcement                                 |
+| --------------------------------------------- | ------------------------------------------------------------ | ------------------------------------------- |
+| **patterns/theming-architecture.md**          | Domain-driven CSS compilation with Tailwind @theme directive | ESLint boundaries + functional + TypeScript |
+| **patterns/i18n-centralized-translations.md** | Centralized translations with config-driven i18n             | Effect Schema validation                    |
+
 ---
 
 ## Cross-References: Architecture → Infrastructure
@@ -160,6 +167,34 @@ This index provides a comprehensive guide to Sovrium's architecture documentatio
 - SQL injection prevention (Drizzle parameterized queries)
 - XSS prevention (React auto-escaping)
 - CSRF protection (sameSite cookies)
+
+---
+
+### Theming Architecture
+
+**Architecture Document**: `patterns/theming-architecture.md`
+
+**Related Infrastructure**:
+
+- `@docs/infrastructure/ui/tailwind.md` - Tailwind CSS v4, @theme directive, JIT compilation
+- `@docs/infrastructure/framework/effect.md` - Effect Schema for theme validation, functional compilation
+- `@docs/infrastructure/quality/eslint.md#functional-programming-enforcement` - Immutability rules for theme models
+- `@docs/infrastructure/quality/eslint.md#architectural-enforcement` - Layer boundaries for theme/CSS compiler
+
+**Enforcement**:
+
+- ✅ **eslint-plugin-boundaries**: Enforces domain theme models cannot import infrastructure
+- ✅ **eslint-plugin-functional**: Enforces theme immutability, no mutations
+- ✅ **TypeScript strict mode**: Type safety for theme models and CSS compiler
+- ⚠️ **Manual review**: Semantic naming conventions, progressive scales, design system quality
+
+**Key Concepts**:
+
+- Domain-driven theme models (pure Effect Schemas)
+- Infrastructure CSS compiler (Tailwind @theme generation)
+- Zero variable substitution (direct Tailwind utilities only)
+- Functional compilation with in-memory caching (Effect.Ref)
+- Layer-based architecture integration (domain → infrastructure flow)
 
 ---
 
@@ -416,5 +451,5 @@ Sovrium uses different validation libraries depending on the context:
 
 ---
 
-**Last Updated**: 2025-10-16
+**Last Updated**: 2025-11-10
 **Maintained By**: architecture-docs-maintainer agent
