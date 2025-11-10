@@ -1170,7 +1170,7 @@ test.describe('Languages Configuration', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-LANGUAGES-019: should resolve translation tokens in children arrays during SSR',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
