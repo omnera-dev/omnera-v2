@@ -25,6 +25,139 @@ type PageBodyScriptsProps = {
 }
 
 /**
+ * Renders external and inline scripts for a given position
+ */
+function renderScripts(
+  externalScripts: readonly {
+    readonly src: string
+    readonly async?: boolean
+    readonly defer?: boolean
+    readonly module?: boolean
+    readonly integrity?: string
+    readonly crossorigin?: string
+  }[],
+  inlineScripts: readonly { readonly code: string; readonly async?: boolean }[],
+  keyPrefix: string
+): ReactElement {
+  return (
+    <>
+      {externalScripts.map((script, index) =>
+        renderScriptTag({
+          src: script.src,
+          async: script.async,
+          defer: script.defer,
+          module: script.module,
+          integrity: script.integrity,
+          crossOrigin: script.crossorigin as 'anonymous' | 'use-credentials' | undefined,
+          reactKey: `${keyPrefix}-${index}`,
+        })
+      )}
+      {inlineScripts.map((script, index) =>
+        renderInlineScriptTag({
+          code: script.code,
+          async: script.async,
+          reactKey: `inline-${keyPrefix}-${index}`,
+        })
+      )}
+    </>
+  )
+}
+
+/**
+ * Renders language switcher scripts and configuration
+ */
+function LanguageSwitcherScripts({
+  languages,
+  theme,
+  direction,
+}: {
+  readonly languages: Languages
+  readonly theme: Theme | undefined
+  readonly direction: 'ltr' | 'rtl'
+}): ReactElement {
+  return (
+    <>
+      {/* Configuration data for external script (CSP-compliant) */}
+      <div
+        data-language-switcher-config={JSON.stringify(languages)}
+        style={{ display: 'none' }}
+      />
+      {/* Expose languages config to window for testing/debugging - fallback defaults to default language */}
+      <script
+        dangerouslySetInnerHTML={{
+          __html: `window.APP_LANGUAGES = ${JSON.stringify({
+            ...languages,
+            fallback: languages.fallback ?? languages.default,
+          })};`,
+        }}
+      />
+      {/* Expose theme config with RTL-aware direction to window for testing/debugging */}
+      <script
+        dangerouslySetInnerHTML={{
+          __html: `window.APP_THEME = ${JSON.stringify({
+            ...(theme || {}),
+            direction: direction,
+          })};`,
+        }}
+      />
+      {/* External script file loaded only when needed (defer ensures DOM is ready) */}
+      <script
+        src="/assets/language-switcher.js"
+        defer={true}
+      />
+    </>
+  )
+}
+
+/**
+ * Renders scripts for body end position
+ */
+function renderBodyEndScripts(config: {
+  readonly page: Page
+  readonly theme: Theme | undefined
+  readonly languages: Languages | undefined
+  readonly direction: 'ltr' | 'rtl'
+  readonly scripts: GroupedScripts
+}): ReactElement {
+  const { page, theme, languages, direction, scripts } = config
+  return (
+    <>
+      {renderScripts(scripts.external.bodyEnd, scripts.inline.bodyEnd, 'body-end')}
+      {/* Client-side banner dismiss functionality - inject when banner is dismissible */}
+      {page.layout?.banner?.dismissible && (
+        <script
+          src="/assets/banner-dismiss.js"
+          defer={true}
+        />
+      )}
+      {/* Client-side scroll animation functionality - inject when scroll animations configured */}
+      {theme?.animations?.scaleUp && (
+        <script
+          src="/assets/scroll-animation.js"
+          defer={true}
+        />
+      )}
+      {/* Client-side language switcher functionality - always inject when languages configured */}
+      {languages && (
+        <LanguageSwitcherScripts
+          languages={languages}
+          theme={theme}
+          direction={direction}
+        />
+      )}
+      {/* Client-side feature flags - inject when features configured */}
+      {page.scripts?.features && (
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `window.FEATURES = ${JSON.stringify(page.scripts.features)};`,
+          }}
+        />
+      )}
+    </>
+  )
+}
+
+/**
  * Renders scripts for body start or end position
  *
  * For 'start' position:
@@ -49,106 +182,8 @@ export function PageBodyScripts({
   position,
 }: PageBodyScriptsProps): Readonly<ReactElement> {
   if (position === 'start') {
-    return (
-      <>
-        {scripts.external.bodyStart.map((script, index) =>
-          renderScriptTag({
-            src: script.src,
-            async: script.async,
-            defer: script.defer,
-            module: script.module,
-            integrity: script.integrity,
-            crossOrigin: script.crossorigin,
-            reactKey: `body-start-${index}`,
-          })
-        )}
-        {scripts.inline.bodyStart.map((script, index) =>
-          renderInlineScriptTag({
-            code: script.code,
-            async: script.async,
-            reactKey: `inline-body-start-${index}`,
-          })
-        )}
-      </>
-    )
+    return renderScripts(scripts.external.bodyStart, scripts.inline.bodyStart, 'body-start')
   }
 
-  // position === 'end'
-  return (
-    <>
-      {scripts.external.bodyEnd.map((script, index) =>
-        renderScriptTag({
-          src: script.src,
-          async: script.async,
-          defer: script.defer,
-          module: script.module,
-          integrity: script.integrity,
-          crossOrigin: script.crossorigin,
-          reactKey: `body-end-${index}`,
-        })
-      )}
-      {scripts.inline.bodyEnd.map((script, index) =>
-        renderInlineScriptTag({
-          code: script.code,
-          async: script.async,
-          reactKey: `inline-body-end-${index}`,
-        })
-      )}
-      {/* Client-side banner dismiss functionality - inject when banner is dismissible */}
-      {page.layout?.banner?.dismissible && (
-        <script
-          src="/assets/banner-dismiss.js"
-          defer={true}
-        />
-      )}
-      {/* Client-side scroll animation functionality - inject when scroll animations configured */}
-      {theme?.animations?.scaleUp && (
-        <script
-          src="/assets/scroll-animation.js"
-          defer={true}
-        />
-      )}
-      {/* Client-side language switcher functionality - always inject when languages configured */}
-      {languages && (
-        <>
-          {/* Configuration data for external script (CSP-compliant) */}
-          <div
-            data-language-switcher-config={JSON.stringify(languages)}
-            style={{ display: 'none' }}
-          />
-          {/* Expose languages config to window for testing/debugging - fallback defaults to default language */}
-          <script
-            dangerouslySetInnerHTML={{
-              __html: `window.APP_LANGUAGES = ${JSON.stringify({
-                ...languages,
-                fallback: languages.fallback ?? languages.default,
-              })};`,
-            }}
-          />
-          {/* Expose theme config with RTL-aware direction to window for testing/debugging */}
-          <script
-            dangerouslySetInnerHTML={{
-              __html: `window.APP_THEME = ${JSON.stringify({
-                ...(theme || {}),
-                direction: direction,
-              })};`,
-            }}
-          />
-          {/* External script file loaded only when needed (defer ensures DOM is ready) */}
-          <script
-            src="/assets/language-switcher.js"
-            defer={true}
-          />
-        </>
-      )}
-      {/* Client-side feature flags - inject when features configured */}
-      {page.scripts?.features && (
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `window.FEATURES = ${JSON.stringify(page.scripts.features)};`,
-          }}
-        />
-      )}
-    </>
-  )
+  return renderBodyEndScripts({ page, theme, languages, direction, scripts })
 }

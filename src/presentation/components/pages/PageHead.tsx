@@ -34,6 +34,105 @@ type PageHeadProps = {
 }
 
 /**
+ * Renders basic meta tags (charset, viewport, title, description)
+ */
+function BasicMetaTags({
+  title,
+  description,
+}: {
+  readonly title: string
+  readonly description: string
+}): ReactElement {
+  return (
+    <>
+      <meta charSet="UTF-8" />
+      <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+      />
+      <title>{title}</title>
+      {description && (
+        <meta
+          name="description"
+          content={description}
+        />
+      )}
+    </>
+  )
+}
+
+/**
+ * Renders font stylesheets from theme configuration
+ */
+function ThemeFonts({ theme }: { readonly theme: Theme | undefined }): ReactElement | undefined {
+  if (!theme?.fonts) return undefined
+
+  return (
+    <>
+      {Object.values(theme.fonts).map((font, index) =>
+        font.url ? (
+          <link
+            key={`font-${index}`}
+            rel="stylesheet"
+            href={font.url}
+          />
+        ) : undefined
+      )}
+    </>
+  )
+}
+
+/**
+ * Renders theme and direction styles
+ */
+function ThemeStyles({
+  themeStyles,
+  directionStyles,
+}: {
+  readonly themeStyles: string | undefined
+  readonly directionStyles: string
+}): ReactElement {
+  return (
+    <>
+      <link
+        rel="stylesheet"
+        href="/assets/output.css"
+      />
+      {themeStyles && <style dangerouslySetInnerHTML={{ __html: themeStyles }} />}
+      <style dangerouslySetInnerHTML={{ __html: directionStyles }} />
+    </>
+  )
+}
+
+/**
+ * Renders external and inline scripts for head section
+ */
+function HeadScripts({ scripts }: { readonly scripts: GroupedScripts }): ReactElement {
+  return (
+    <>
+      {scripts.external.head.map((script, index) =>
+        renderScriptTag({
+          src: script.src,
+          async: script.async,
+          defer: script.defer,
+          module: script.module,
+          integrity: script.integrity,
+          crossOrigin: script.crossorigin,
+          reactKey: `head-${index}`,
+        })
+      )}
+      {scripts.inline.head.map((script, index) =>
+        renderInlineScriptTag({
+          code: script.code,
+          async: script.async,
+          reactKey: `inline-head-${index}`,
+        })
+      )}
+    </>
+  )
+}
+
+/**
  * Renders the complete <head> section of a dynamic page
  *
  * Includes:
@@ -62,18 +161,10 @@ export function PageHead({
 }: PageHeadProps): Readonly<ReactElement> {
   return (
     <>
-      <meta charSet="UTF-8" />
-      <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
+      <BasicMetaTags
+        title={title}
+        description={description}
       />
-      <title>{title}</title>
-      {description && (
-        <meta
-          name="description"
-          content={description}
-        />
-      )}
       <OpenGraphMeta openGraph={page.meta?.openGraph} />
       <TwitterCardMeta page={page} />
       <StructuredDataScript page={page} />
@@ -87,41 +178,12 @@ export function PageHead({
         />
       )}
       <FaviconSetLinks favicons={page.meta?.favicons} />
-      {/* Font URL stylesheets - Load remote fonts (Google Fonts, etc.) */}
-      {theme?.fonts &&
-        Object.values(theme.fonts).map((font, index) =>
-          font.url ? (
-            <link
-              key={`font-${index}`}
-              rel="stylesheet"
-              href={font.url}
-            />
-          ) : undefined
-        )}
-      <link
-        rel="stylesheet"
-        href="/assets/output.css"
+      <ThemeFonts theme={theme} />
+      <ThemeStyles
+        themeStyles={themeStyles}
+        directionStyles={directionStyles}
       />
-      {themeStyles && <style dangerouslySetInnerHTML={{ __html: themeStyles }} />}
-      <style dangerouslySetInnerHTML={{ __html: directionStyles }} />
-      {scripts.external.head.map((script, index) =>
-        renderScriptTag({
-          src: script.src,
-          async: script.async,
-          defer: script.defer,
-          module: script.module,
-          integrity: script.integrity,
-          crossOrigin: script.crossorigin,
-          reactKey: `head-${index}`,
-        })
-      )}
-      {scripts.inline.head.map((script, index) =>
-        renderInlineScriptTag({
-          code: script.code,
-          async: script.async,
-          reactKey: `inline-head-${index}`,
-        })
-      )}
+      <HeadScripts scripts={scripts} />
     </>
   )
 }

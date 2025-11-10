@@ -17,6 +17,7 @@ After completing a major ESLint refactoring that reduced complexity from 41 warn
 - `src/presentation/components/metadata/utils/` (2 files, ~150 lines) - Too small for separate directory
 
 **Issues identified**:
+
 1. **Poor discoverability**: Related files scattered across multiple `utils/` directories
 2. **Cognitive overload**: `sections/utils/` had 20 files with mixed concerns (props, styling, rendering, translations)
 3. **Deep nesting**: 3-4 directory levels making navigation difficult
@@ -39,11 +40,13 @@ After completing a major ESLint refactoring that reduced complexity from 41 warn
 **Approach**: Only fix duplication and consolidate `animation-composer.ts`
 
 **Pros**:
+
 - Minimal disruption
 - No breaking changes
 - Quick to implement
 
 **Cons**:
+
 - Doesn't address root cause (poor organization)
 - Technical debt continues to accumulate
 - Developer experience remains poor
@@ -56,11 +59,13 @@ After completing a major ESLint refactoring that reduced complexity from 41 warn
 **Approach**: Remove all subdirectories, put all 146 files directly in `presentation/`
 
 **Pros**:
+
 - Simple structure
 - No deep nesting
 - Easy imports
 
 **Cons**:
+
 - Cognitive overload (146 files in one directory)
 - No logical grouping
 - Difficult to navigate
@@ -73,6 +78,7 @@ After completing a major ESLint refactoring that reduced complexity from 41 warn
 **Approach**: Organize by component type (pages/, sections/, metadata/) with utils/ under each
 
 **Structure**:
+
 ```
 components/
 ├── pages/
@@ -87,11 +93,13 @@ components/
 ```
 
 **Pros**:
+
 - Co-locates component-specific utilities
 - Clear component boundaries
 - Good for component-focused development
 
 **Cons**:
+
 - Duplicates cross-cutting concerns (theming, styling)
 - Doesn't address presentation-level utilities
 - Still has deep nesting issues
@@ -103,6 +111,7 @@ components/
 **Approach**: Feature-based at presentation level, component-centric within components/
 
 **Structure**:
+
 ```
 src/presentation/
 ├── rendering/          # High-level page rendering
@@ -126,6 +135,7 @@ src/presentation/
 ```
 
 **Pros**:
+
 - Best of both worlds (feature-based + component-centric)
 - Clear separation of concerns
 - Scalable and maintainable
@@ -134,6 +144,7 @@ src/presentation/
 - 5-7 files per directory (optimal cognitive load)
 
 **Cons**:
+
 - More upfront work to migrate
 - Requires team buy-in
 - Breaking changes during migration
@@ -147,11 +158,13 @@ src/presentation/
 ### Implementation Summary
 
 **Phase 1: Preparation**
+
 - Audited `animation-composer.ts` duplication (found duplicate in `sections/utils/`)
 - Created new directory structure with placeholder `index.ts` files
 - Documented comprehensive import mapping (`.github/IMPORT_MAPPING.md`)
 
 **Phase 2: File Movement** (8 levels, dependency order)
+
 1. **Level 1**: String utilities → `utilities/`
 2. **Level 2**: Styling utilities → `styling/`
 3. **Level 3**: Theme system → `theming/`
@@ -162,16 +175,19 @@ src/presentation/
 8. **Level 8**: Delete empty `utils/` directories
 
 **Phase 3: Import Updates**
+
 - Updated 78+ files with new import paths
 - Fixed relative imports within sections/ directories
 - Used automated script (`scripts/update-imports.sh`) for bulk replacements
 
 **Phase 4: Validation**
+
 - ✅ TypeScript: 0 errors
 - ✅ ESLint: 0 errors, 4 warnings (acceptable - promoted components)
 - ✅ Unit Tests: 1,393/1,393 passing
 
 **Phase 5: Documentation**
+
 - Created ADR (this document)
 - Updated import mapping reference
 
@@ -218,14 +234,14 @@ src/presentation/
 
 ## Pros and Cons of the Options
 
-| Criteria | Option 1: Minimal | Option 2: Flatten | Option 3: Component-Centric | Option 4: Feature-Based (SELECTED) |
-|----------|-------------------|-------------------|----------------------------|----------------------------------|
-| Discoverability | ❌ Poor | ⚠️ Medium | ✅ Good | ✅ Excellent |
-| Scalability | ❌ Poor | ❌ Poor | ⚠️ Medium | ✅ Excellent |
-| Cognitive Load | ❌ High | ❌ Very High | ⚠️ Medium | ✅ Low |
-| Separation of Concerns | ❌ Poor | ❌ None | ⚠️ Partial | ✅ Excellent |
-| Migration Effort | ✅ Low | ⚠️ Medium | ⚠️ Medium | ❌ High |
-| Long-term Maintainability | ❌ Poor | ❌ Poor | ⚠️ Medium | ✅ Excellent |
+| Criteria                  | Option 1: Minimal | Option 2: Flatten | Option 3: Component-Centric | Option 4: Feature-Based (SELECTED) |
+| ------------------------- | ----------------- | ----------------- | --------------------------- | ---------------------------------- |
+| Discoverability           | ❌ Poor           | ⚠️ Medium         | ✅ Good                     | ✅ Excellent                       |
+| Scalability               | ❌ Poor           | ❌ Poor           | ⚠️ Medium                   | ✅ Excellent                       |
+| Cognitive Load            | ❌ High           | ❌ Very High      | ⚠️ Medium                   | ✅ Low                             |
+| Separation of Concerns    | ❌ Poor           | ❌ None           | ⚠️ Partial                  | ✅ Excellent                       |
+| Migration Effort          | ✅ Low            | ⚠️ Medium         | ⚠️ Medium                   | ❌ High                            |
+| Long-term Maintainability | ❌ Poor           | ❌ Poor           | ⚠️ Medium                   | ✅ Excellent                       |
 
 ## Links
 
