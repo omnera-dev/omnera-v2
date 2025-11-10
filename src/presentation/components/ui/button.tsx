@@ -100,11 +100,22 @@ function Button({
     }
     // When icon is present, render icon alongside the original child content
     if (icon) {
-      const childContent = children.props.children
+      const childContent = (children as React.ReactElement<{ children?: React.ReactNode }>).props
+        .children
       const contentWithIcon = [
-        icon && iconPosition === 'left' && <Icon key="icon-left" name={icon} />,
+        icon && iconPosition === 'left' && (
+          <Icon
+            key="icon-left"
+            name={icon}
+          />
+        ),
         childContent,
-        icon && iconPosition === 'right' && <Icon key="icon-right" name={icon} />,
+        icon && iconPosition === 'right' && (
+          <Icon
+            key="icon-right"
+            name={icon}
+          />
+        ),
       ].filter(Boolean)
       return React.cloneElement(children, childProps, ...contentWithIcon)
     }
