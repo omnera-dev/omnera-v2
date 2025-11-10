@@ -46,6 +46,24 @@ export const COMPONENT_REGISTRY: Partial<Record<Component['type'], ComponentRend
   section: ({ elementPropsWithSpacing, content, renderedChildren }) =>
     Renderers.renderHTMLElement('section', elementPropsWithSpacing, content, renderedChildren),
 
+  header: ({ elementPropsWithSpacing, content, renderedChildren }) =>
+    Renderers.renderHTMLElement('header', elementPropsWithSpacing, content, renderedChildren),
+
+  footer: ({ elementPropsWithSpacing, content, renderedChildren }) =>
+    Renderers.renderHTMLElement('footer', elementPropsWithSpacing, content, renderedChildren),
+
+  main: ({ elementPropsWithSpacing, content, renderedChildren }) =>
+    Renderers.renderHTMLElement('main', elementPropsWithSpacing, content, renderedChildren),
+
+  article: ({ elementPropsWithSpacing, content, renderedChildren }) =>
+    Renderers.renderHTMLElement('article', elementPropsWithSpacing, content, renderedChildren),
+
+  aside: ({ elementPropsWithSpacing, content, renderedChildren }) =>
+    Renderers.renderHTMLElement('aside', elementPropsWithSpacing, content, renderedChildren),
+
+  nav: ({ elementPropsWithSpacing, content, renderedChildren }) =>
+    Renderers.renderHTMLElement('nav', elementPropsWithSpacing, content, renderedChildren),
+
   div: ({ elementPropsWithSpacing, content, renderedChildren }) =>
     Renderers.renderHTMLElement('div', elementPropsWithSpacing, content, renderedChildren),
 
