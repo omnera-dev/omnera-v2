@@ -14,17 +14,17 @@ import type { ReactElement } from 'react'
 function getButtonVariantClasses(variant?: string): string {
   switch (variant) {
     case 'primary':
-      return 'bg-primary text-primary-foreground hover:bg-primary/90'
+      return 'btn-primary bg-primary text-primary-foreground hover:bg-primary/90'
     case 'secondary':
-      return 'bg-secondary text-secondary-foreground hover:bg-secondary/80'
+      return 'btn-secondary bg-secondary text-secondary-foreground hover:bg-secondary/80'
     case 'outline':
-      return 'border border-input bg-background hover:bg-accent hover:text-accent-foreground'
+      return 'btn-outline border border-input bg-background hover:bg-accent hover:text-accent-foreground'
     case 'ghost':
-      return 'hover:bg-accent hover:text-accent-foreground'
+      return 'btn-ghost hover:bg-accent hover:text-accent-foreground'
     case 'link':
-      return 'text-primary underline-offset-4 hover:underline'
+      return 'btn-link text-primary underline-offset-4 hover:underline'
     default:
-      return 'bg-primary text-primary-foreground hover:bg-primary/90'
+      return 'btn-primary bg-primary text-primary-foreground hover:bg-primary/90'
   }
 }
 
@@ -34,15 +34,15 @@ function getButtonVariantClasses(variant?: string): string {
 function getButtonSizeClasses(size?: string): string {
   switch (size) {
     case 'sm':
-      return 'h-9 rounded-md px-3 text-xs'
+      return 'btn-sm h-9 rounded-md px-3 text-xs'
     case 'md':
-      return 'h-10 px-4 py-2'
+      return 'btn-md h-10 px-4 py-2'
     case 'lg':
-      return 'h-11 rounded-md px-8'
+      return 'btn-lg h-11 rounded-md px-8'
     case 'xl':
-      return 'h-12 rounded-md px-10 text-lg'
+      return 'btn-xl h-12 rounded-md px-10 text-lg'
     default:
-      return 'h-10 px-4 py-2'
+      return 'btn-md h-10 px-4 py-2'
   }
 }
 
