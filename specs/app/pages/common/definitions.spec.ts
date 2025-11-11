@@ -304,7 +304,7 @@ test.describe('Common Definitions', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-DEFINITIONS-011: should validate as dimensions object',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -317,7 +317,7 @@ test.describe('Common Definitions', () => {
             path: '/',
             meta: { lang: 'en-US', title: 'Test' },
             sections: [
-              { type: 'img', props: { src: '/image.jpg', width: 800, height: 600 }, children: [] },
+              { type: 'image', props: { src: '/image.jpg', width: 800, height: 600 }, children: [] },
             ],
           },
         ],
