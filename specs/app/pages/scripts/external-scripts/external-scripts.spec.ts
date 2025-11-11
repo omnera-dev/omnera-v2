@@ -129,7 +129,7 @@ test.describe('External Scripts', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-EXTERNAL-005: should verify subresource integrity for security',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
