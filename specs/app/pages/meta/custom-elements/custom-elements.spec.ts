@@ -122,16 +122,16 @@ test.describe('Custom Head Elements', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-CUSTOM-004: should add inline style to head',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: custom element with type style
       await startServerWithSchema({
-        name: 'test-app',
+        name: 'test_app',
         pages: [
           {
-            name: 'Test',
+            name: 'test_page',
             path: '/',
             meta: {
               lang: 'en-US',
@@ -148,7 +148,7 @@ test.describe('Custom Head Elements', () => {
       await page.goto('/')
 
       // THEN: it should add inline style to head
-      const styleContent = await page.locator('style').textContent()
+      const styleContent = await page.locator('style').first().textContent()
       expect(styleContent).toContain('body { background-color: red; }')
     }
   )
