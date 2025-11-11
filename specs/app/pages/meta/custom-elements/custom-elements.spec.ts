@@ -90,16 +90,16 @@ test.describe('Custom Head Elements', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-CUSTOM-003: should add custom script to head',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: custom element with type script
       await startServerWithSchema({
-        name: 'test-app',
+        name: 'test_app',
         pages: [
           {
-            name: 'Test',
+            name: 'test_page',
             path: '/',
             meta: {
               lang: 'en-US',
