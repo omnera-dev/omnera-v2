@@ -333,7 +333,7 @@ test.describe('Common Definitions', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-DEFINITIONS-012: should provide comprehensive icon set for all UI needs',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
