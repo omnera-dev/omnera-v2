@@ -38,7 +38,7 @@ jobs:
     steps:
       - name: Find and fix stuck PRs
         env:
-          GH_TOKEN: ${{ github.token }}
+          GH_TOKEN: ${{ secrets.GH_PAT_WORKFLOW }}
         run: |
           echo "🔍 Scanning for stuck PRs..."
 
@@ -168,7 +168,7 @@ jobs:
 
       - name: Clean up retry labels on successful PRs
         env:
-          GH_TOKEN: ${{ github.token }}
+          GH_TOKEN: ${{ secrets.GH_PAT_WORKFLOW }}
         run: |
           echo "🧹 Cleaning up retry labels from successful PRs..."
 
@@ -224,7 +224,7 @@ jobs:
 
       - name: Auto-retry failed tests
         env:
-          GH_TOKEN: ${{ github.token }}
+          GH_TOKEN: ${{ secrets.GH_PAT_WORKFLOW }}
         run: |
           echo "🔄 Checking for PRs with failed tests..."
 

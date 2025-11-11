@@ -89,7 +89,7 @@ jobs:
             echo "stuck_issues=$STUCK_ISSUES" >> $GITHUB_OUTPUT
           fi
         env:
-          GH_TOKEN: ${{ github.token }}
+          GH_TOKEN: ${{ secrets.GH_PAT_WORKFLOW }}
 
       - name: Re-queue stuck specs
         if: steps.stuck.outputs.has_stuck == 'true'
@@ -195,7 +195,7 @@ jobs:
           echo ""
           echo "✅ Successfully recovered $COUNT stuck spec(s)"
         env:
-          GH_TOKEN: ${{ github.token }}
+          GH_TOKEN: ${{ secrets.GH_PAT_WORKFLOW }}
 
       - name: Summary
         if: always()
