@@ -6,6 +6,7 @@
  */
 
 import { test, expect } from '@/specs/fixtures'
+import type { Locator } from '@playwright/test'
 
 /**
  * E2E Tests for CTA Button
@@ -17,6 +18,27 @@ import { test, expect } from '@/specs/fixtures'
  * 1. @spec tests - One per spec in schema (10 tests) - Exhaustive acceptance criteria
  * 2. @regression test - ONE optimized integration test - Efficient workflow validation
  */
+
+// ============================================================================
+// TEST HELPERS
+// ============================================================================
+
+/**
+ * Gets the icon position within a button element.
+ * @param button - The button locator containing the icon
+ * @returns 'left' | 'right' | null
+ */
+async function getIconPosition(button: Locator): Promise<'left' | 'right' | null> {
+  return await button.evaluate((el: HTMLElement) => {
+    const text = el.textContent?.trim()
+    const icon = el.querySelector('[data-testid="icon"]')
+    return icon && text
+      ? Array.from(el.childNodes).indexOf(icon) > 0
+        ? 'right'
+        : 'left'
+      : null
+  })
+}
 
 test.describe('CTA Button', () => {
   // ============================================================================
@@ -202,21 +224,14 @@ test.describe('CTA Button', () => {
         ],
       })
 
-      // WHEN: size is 'lg' (sm, md, lg, xl)
+      // WHEN: iconPosition is 'right'
       await page.goto('/')
 
-      // THEN: it should apply size styling
+      // THEN: it should display icon on right side of text
       const cta = page.locator('[data-testid="nav-cta"]')
       await expect(cta.locator('[data-testid="icon"]')).toBeVisible()
-      const iconPosition = await cta.evaluate((el) => {
-        const text = el.textContent?.trim()
-        const icon = el.querySelector('[data-testid="icon"]')
-        return icon && text
-          ? Array.from(el.childNodes).indexOf(icon) > 0
-            ? 'right'
-            : 'left'
-          : null
-      })
+
+      const iconPosition = await getIconPosition(cta)
       expect(iconPosition).toBe('right')
     }
   )
@@ -250,15 +265,8 @@ test.describe('CTA Button', () => {
       // THEN: it should display icon on left side of text
       const cta = page.locator('[data-testid="nav-cta"]')
       await expect(cta.locator('[data-testid="icon"]')).toBeVisible()
-      const iconPosition = await cta.evaluate((el) => {
-        const text = el.textContent?.trim()
-        const icon = el.querySelector('[data-testid="icon"]')
-        return icon && text
-          ? Array.from(el.childNodes).indexOf(icon) > 0
-            ? 'right'
-            : 'left'
-          : null
-      })
+
+      const iconPosition = await getIconPosition(cta)
       expect(iconPosition).toBe('left')
     }
   )
