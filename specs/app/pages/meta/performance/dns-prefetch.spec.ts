@@ -222,7 +222,7 @@ test.describe('DNS Prefetch', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-DNS-007: should prevent duplicate domain entries',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
