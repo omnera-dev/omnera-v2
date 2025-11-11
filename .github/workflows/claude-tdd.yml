@@ -594,26 +594,34 @@ jobs:
           NOW=$(date +%s)
           RETRY_STARTED=false
 
+          # Get recent runs with error handling
           RECENT_RUNS=$(gh run list \
             --workflow claude-tdd.yml \
             --repo "$REPO" \
             --limit 5 \
-            --json event,createdAt,status)
+            --json event,createdAt,status 2>&1) || true
 
-          # Check for a workflow_dispatch run created in the last 20 seconds
-          echo "$RECENT_RUNS" | jq -r '.[] | select(.event == "workflow_dispatch")' | while read -r run; do
-            if [ -n "$run" ]; then
-              CREATED_AT=$(echo "$run" | jq -r '.createdAt')
-              CREATED_EPOCH=$(date -d "$CREATED_AT" +%s 2>/dev/null || date -j -f "%Y-%m-%dT%H:%M:%SZ" "$CREATED_AT" +%s 2>/dev/null || echo 0)
-              AGE=$((NOW - CREATED_EPOCH))
+          # Validate JSON before parsing
+          if echo "$RECENT_RUNS" | jq empty 2>/dev/null; then
+            # Check for a workflow_dispatch run created in the last 20 seconds
+            echo "$RECENT_RUNS" | jq -r '.[] | select(.event == "workflow_dispatch")' 2>/dev/null | while read -r run; do
+              if [ -n "$run" ]; then
+                CREATED_AT=$(echo "$run" | jq -r '.createdAt' 2>/dev/null || echo "")
+                if [ -n "$CREATED_AT" ]; then
+                  CREATED_EPOCH=$(date -d "$CREATED_AT" +%s 2>/dev/null || date -j -f "%Y-%m-%dT%H:%M:%SZ" "$CREATED_AT" +%s 2>/dev/null || echo 0)
+                  AGE=$((NOW - CREATED_EPOCH))
 
-              if [ "$AGE" -lt 20 ]; then
-                RETRY_STARTED=true
-                echo "✅ Retry workflow started successfully"
-                break
+                  if [ "$AGE" -lt 20 ]; then
+                    RETRY_STARTED=true
+                    echo "✅ Retry workflow started successfully"
+                    break
+                  fi
+                fi
               fi
-            fi
-          done
+            done
+          else
+            echo "⚠️ Failed to parse workflow runs (JSON error) - will use fallback method"
+          fi
 
           # If workflow didn't start, use issue comment as fallback
           if [ "$RETRY_STARTED" != "true" ]; then
