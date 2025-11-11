@@ -56,16 +56,16 @@ test.describe('Custom Head Elements', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-CUSTOM-002: should add custom link element to head',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: custom element with type link
       await startServerWithSchema({
-        name: 'test-app',
+        name: 'test_app',
         pages: [
           {
-            name: 'Test',
+            name: 'test_page',
             path: '/',
             meta: {
               lang: 'en-US',
@@ -86,7 +86,7 @@ test.describe('Custom Head Elements', () => {
       // THEN: it should add custom link element to head
       await expect(
         page.locator('link[rel="preconnect"][href="https://fonts.gstatic.com"]')
-      ).toBeVisible()
+      ).toBeAttached()
     }
   )
 
