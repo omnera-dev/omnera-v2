@@ -123,8 +123,13 @@ export function buildComponentProps(config: ComponentPropsConfig): {
 } {
   const { type, content, children, blockName, blockInstanceIndex, theme, childIndex } = config
 
-  const { substitutedProps, firstTranslationKey, translationData, styleWithShadow, finalClassName } =
-    prepareProcessedValues(config)
+  const {
+    substitutedProps,
+    firstTranslationKey,
+    translationData,
+    styleWithShadow,
+    finalClassName,
+  } = prepareProcessedValues(config)
 
   const elementProps = buildElementProps({
     type,

@@ -1786,7 +1786,8 @@
                       },
                       "color": {
                         "type": "string",
-                        "description": "Button color (references theme colors)"
+                        "enum": ["orange", "blue", "green", "red"],
+                        "description": "Button color (theme color name)"
                       },
                       "icon": {
                         "type": "string",
@@ -2103,6 +2104,7 @@
                         "image",
                         "button",
                         "link",
+                        "a",
                         "timeline",
                         "accordion",
                         "badge",
@@ -2127,7 +2129,13 @@
                         "alert",
                         "p",
                         "code",
-                        "pre"
+                        "pre",
+                        "header",
+                        "footer",
+                        "main",
+                        "article",
+                        "aside",
+                        "nav"
                       ],
                       "description": "Component type for page building"
                     },
@@ -3139,6 +3147,7 @@
                 "image",
                 "button",
                 "link",
+                "a",
                 "timeline",
                 "accordion",
                 "badge",
@@ -3163,7 +3172,13 @@
                 "alert",
                 "p",
                 "code",
-                "pre"
+                "pre",
+                "header",
+                "footer",
+                "main",
+                "article",
+                "aside",
+                "nav"
               ],
               "description": "Component type for page building"
             },
