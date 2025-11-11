@@ -153,16 +153,16 @@ test.describe('Custom Head Elements', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-CUSTOM-005: should apply attributes to element',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: custom element with attrs object
       await startServerWithSchema({
-        name: 'test-app',
+        name: 'test_app',
         pages: [
           {
-            name: 'Test',
+            name: 'test_page',
             path: '/',
             meta: {
               lang: 'en-US',
