@@ -290,7 +290,7 @@ test.describe('DNS Prefetch', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-DNS-009: should reduce connection latency',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -318,7 +318,7 @@ test.describe('DNS Prefetch', () => {
       // THEN: it should reduce connection latency
       await expect(
         page.locator('link[rel="dns-prefetch"][href="https://fonts.googleapis.com"]')
-      ).toBeVisible()
+      ).toBeAttached()
     }
   )
 
