@@ -1,18 +1,11 @@
 name: TDD Queue - Populate (Scan for RED tests with .fixme)
 
 on:
-  # Trigger on push to main (when new tests are added)
-  push:
-    branches:
-      - main
-    paths:
-      - 'specs/**/*.spec.ts'
-
-  # Scheduled runs - Daily at 2 AM UTC (reduced from every 4 hours)
-  # Rationale: Push trigger handles new tests immediately
+  # Scheduled runs - Daily at 2 AM UTC
+  # Rationale: Daily scan is sufficient for detecting new RED tests
   # + Processor runs every 15 min to pick up queued specs
   # + Idempotency lock prevents duplicate creation
-  # + Daily schedule is for catching edge cases only
+  # + Push trigger REMOVED to prevent duplicate issue creation (caused timing/API consistency issues)
   schedule:
     - cron: '0 2 * * *'
 

@@ -161,7 +161,7 @@ describe('PageSchema', () => {
           variant: 'info',
         },
         navigation: {
-          logo: '/logo.svg',
+          logo: './logo.svg',
           links: {
             desktop: [
               {
@@ -190,7 +190,7 @@ describe('PageSchema', () => {
 
     // THEN: Layout configuration should be accepted
     expect(result.layout?.banner?.enabled).toBe(true)
-    expect(result.layout?.navigation?.logo).toBe('/logo.svg')
+    expect(result.layout?.navigation?.logo).toBe('./logo.svg')
     expect(result.layout?.footer?.enabled).toBe(true)
     expect(result.layout?.sidebar?.position).toBe('left')
   })
@@ -432,7 +432,7 @@ describe('PagesSchema', () => {
         },
         layout: {
           navigation: {
-            logo: '/logo.svg',
+            logo: './logo.svg',
             links: {
               desktop: [],
             },

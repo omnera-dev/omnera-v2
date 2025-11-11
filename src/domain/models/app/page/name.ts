@@ -5,17 +5,34 @@
  * found in the LICENSE.md file in the root directory of this source tree.
  */
 
-import { NameSchema as CommonNameSchema } from '../common/definitions'
+import { Schema } from 'effect'
 
 /**
- * Page Name (internal name for the page)
+ * Page Name (human-readable display name for the page)
  *
- * Re-exports the common Name schema from definitions.
- * See NameSchema in common/definitions for full documentation.
+ * Unlike the common NameSchema (database identifier with snake_case), page names
+ * are human-readable labels used in admin interfaces, logs, and internal references.
+ * They can contain spaces, capital letters, and other readable characters.
+ *
+ * Must be non-empty with max 63 characters to match database constraints for
+ * internal identifiers, but doesn't enforce snake_case pattern since this is
+ * a display name, not a database column name.
+ *
+ * @example "Home"
+ * @example "About Us"
+ * @example "Home Page"
+ * @example "Pricing Plans"
  *
  * @see specs/app/pages/name/name.schema.json
- * @see specs/app/common/definitions.schema.json#/definitions/name
  */
-export const PageNameSchema = CommonNameSchema
+export const PageNameSchema = Schema.String.pipe(
+  Schema.minLength(1),
+  Schema.maxLength(63),
+  Schema.annotations({
+    title: 'Page Name',
+    description: 'Human-readable name for the page',
+    examples: ['Home', 'About Us', 'Home Page', 'Pricing', 'Contact'],
+  })
+)
 
-export type PageName = typeof PageNameSchema.Type
+export type PageName = Schema.Schema.Type<typeof PageNameSchema>

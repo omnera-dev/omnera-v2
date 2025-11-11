@@ -105,6 +105,37 @@ export const PathSchema = Schema.String.pipe(
   })
 )
 
+/**
+ * Relative file path for local assets
+ *
+ * Must:
+ * - Start with ./ or ../
+ * - Be relative to current file or parent directory
+ *
+ * Used for referencing local assets like images, fonts, and stylesheets.
+ * Relative paths are resolved at build time and work across different environments.
+ *
+ * @example
+ * ```typescript
+ * const logo = './public/logo.svg'
+ * const image = '../images/hero.jpg'
+ * const icon = './assets/icon.png'
+ * ```
+ *
+ * @see specs/app/pages/common/definitions.schema.json#/definitions/relativePath
+ */
+export const RelativePathSchema = Schema.String.pipe(
+  Schema.pattern(/^\.{1,2}\//, {
+    message: () => 'Relative path must start with ./ or ../',
+  }),
+  Schema.annotations({
+    title: 'Relative Path',
+    description: 'Relative file path for local assets',
+    examples: ['./public/logo.svg', '../images/hero.jpg', './assets/icon.png'],
+  })
+)
+
 export type Id = Schema.Schema.Type<typeof IdSchema>
 export type Name = Schema.Schema.Type<typeof NameSchema>
 export type Path = Schema.Schema.Type<typeof PathSchema>
+export type RelativePath = Schema.Schema.Type<typeof RelativePathSchema>
