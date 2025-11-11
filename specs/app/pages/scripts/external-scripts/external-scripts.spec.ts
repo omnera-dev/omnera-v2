@@ -49,7 +49,7 @@ test.describe('External Scripts', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-EXTERNAL-002: should load script asynchronously (non-blocking)',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
