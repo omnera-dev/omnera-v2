@@ -322,7 +322,7 @@ test.describe('DNS Prefetch', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-DNS-010: should improve perceived page load speed',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
