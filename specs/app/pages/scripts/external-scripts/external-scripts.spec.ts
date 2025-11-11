@@ -78,7 +78,7 @@ test.describe('External Scripts', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-EXTERNAL-003: should defer script execution until DOM loaded',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
