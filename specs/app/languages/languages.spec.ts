@@ -1286,7 +1286,7 @@ test.describe('Languages Configuration', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-LANGUAGES-021: should resolve translation tokens in content property during SSR',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
