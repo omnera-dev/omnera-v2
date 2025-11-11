@@ -183,7 +183,9 @@ const commandNext = Effect.gen(function* () {
     // Output for GitHub Actions
     if (process.env.GITHUB_OUTPUT) {
       const output = `has_next=false\n`
-      yield* fs.writeFile(process.env.GITHUB_OUTPUT, output).pipe(Effect.catchAll(() => Effect.void))
+      yield* fs
+        .writeFile(process.env.GITHUB_OUTPUT, output)
+        .pipe(Effect.catchAll(() => Effect.void))
     }
     return
   }

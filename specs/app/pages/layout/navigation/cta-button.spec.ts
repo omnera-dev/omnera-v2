@@ -32,11 +32,7 @@ async function getIconPosition(button: Locator): Promise<'left' | 'right' | null
   return await button.evaluate((el: HTMLElement) => {
     const text = el.textContent?.trim()
     const icon = el.querySelector('[data-testid="icon"]')
-    return icon && text
-      ? Array.from(el.childNodes).indexOf(icon) > 0
-        ? 'right'
-        : 'left'
-      : null
+    return icon && text ? (Array.from(el.childNodes).indexOf(icon) > 0 ? 'right' : 'left') : null
   })
 }
 

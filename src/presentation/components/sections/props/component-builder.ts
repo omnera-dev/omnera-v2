@@ -71,7 +71,11 @@ function applyTokenSubstitutions(
   theme: Theme | undefined
 ): Record<string, unknown> | undefined {
   // Translation token substitution (must happen before theme tokens)
-  const translationSubstitutedProps = substitutePropsTranslationTokens(props, currentLang, languages)
+  const translationSubstitutedProps = substitutePropsTranslationTokens(
+    props,
+    currentLang,
+    languages
+  )
   // Theme token substitution
   return substitutePropsThemeTokens(translationSubstitutedProps, theme)
 }
@@ -94,13 +98,29 @@ export function buildComponentProps(config: ComponentPropsConfig): {
   readonly elementProps: Record<string, unknown>
   readonly elementPropsWithSpacing: Record<string, unknown>
 } {
-  const { type, props, children, content, blockName, blockInstanceIndex, theme, languages, currentLang, childIndex } = config
+  const {
+    type,
+    props,
+    children,
+    content,
+    blockName,
+    blockInstanceIndex,
+    theme,
+    languages,
+    currentLang,
+    childIndex,
+  } = config
 
   const substitutedProps = applyTokenSubstitutions(props, currentLang, languages, theme)
   const firstTranslationKey = findFirstTranslationKey(children)
   const translationData = getTranslationData(firstTranslationKey, config.languages)
   const styleWithShadow = processComponentStyle(type, substitutedProps?.style, theme)
-  const finalClassName = buildFinalClassName(type, substitutedProps?.className, theme, substitutedProps)
+  const finalClassName = buildFinalClassName(
+    type,
+    substitutedProps?.className,
+    theme,
+    substitutedProps
+  )
 
   const elementProps = buildElementProps({
     type,

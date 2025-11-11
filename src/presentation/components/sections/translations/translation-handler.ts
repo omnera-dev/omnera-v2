@@ -105,7 +105,11 @@ export function substitutePropsTranslationTokens(
       // Recursively handle nested objects (like style props)
       return {
         ...acc,
-        [key]: substitutePropsTranslationTokens(value as Record<string, unknown>, currentLang, languages),
+        [key]: substitutePropsTranslationTokens(
+          value as Record<string, unknown>,
+          currentLang,
+          languages
+        ),
       }
     } else {
       return { ...acc, [key]: value }
