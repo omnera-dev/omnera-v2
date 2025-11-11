@@ -160,7 +160,7 @@ test.describe('External Scripts', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-EXTERNAL-006: should set CORS policy for script loading',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
