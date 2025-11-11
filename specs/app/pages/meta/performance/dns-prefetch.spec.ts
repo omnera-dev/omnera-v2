@@ -156,7 +156,7 @@ test.describe('DNS Prefetch', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-DNS-005: should optimize API request latency',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -184,7 +184,7 @@ test.describe('DNS Prefetch', () => {
       // THEN: it should optimize API request latency
       await expect(
         page.locator('link[rel="dns-prefetch"][href="https://api.example.com"]')
-      ).toBeVisible()
+      ).toBeAttached()
     }
   )
 
