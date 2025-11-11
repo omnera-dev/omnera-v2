@@ -54,7 +54,7 @@ test.describe('DNS Prefetch', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-DNS-002: should optimize Google Fonts loading',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -82,10 +82,10 @@ test.describe('DNS Prefetch', () => {
       // THEN: it should optimize Google Fonts loading
       await expect(
         page.locator('link[rel="dns-prefetch"][href="https://fonts.googleapis.com"]')
-      ).toBeVisible()
+      ).toBeAttached()
       await expect(
         page.locator('link[rel="dns-prefetch"][href="https://fonts.gstatic.com"]')
-      ).toBeVisible()
+      ).toBeAttached()
     }
   )
 
