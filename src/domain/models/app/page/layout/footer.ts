@@ -342,6 +342,12 @@ export const FooterSchema = Schema.Struct({
     })
   ),
   legal: Schema.optional(Schema.Array(FooterLinkSchema)),
+  email: Schema.optional(
+    Schema.String.annotations({
+      description: 'Contact email address',
+      format: 'email',
+    })
+  ),
 }).annotations({
   title: 'Footer Configuration',
   description: 'Footer layout and content configuration',

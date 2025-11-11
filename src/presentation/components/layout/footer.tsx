@@ -11,7 +11,7 @@ import type { ReactElement } from 'react'
 /**
  * Footer Component
  *
- * Renders the page footer with copyright and optional legal links.
+ * Renders the page footer with copyright, optional legal links, and contact email.
  *
  * @param props - Footer configuration
  * @returns Footer element or undefined if disabled
@@ -19,6 +19,7 @@ import type { ReactElement } from 'react'
 export function Footer({
   enabled = true,
   copyright,
+  email,
 }: Readonly<FooterProps>): Readonly<ReactElement | undefined> {
   if (!enabled) {
     return undefined
@@ -30,6 +31,9 @@ export function Footer({
       style={{ display: 'block', minHeight: '1px' }}
     >
       {copyright}
+      {email && (
+        <a href={`mailto:${email}`}>{email}</a>
+      )}
     </footer>
   )
 }

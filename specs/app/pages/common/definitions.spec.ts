@@ -212,7 +212,7 @@ test.describe('Common Definitions', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-DEFINITIONS-008: should validate as emailAddress format',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
