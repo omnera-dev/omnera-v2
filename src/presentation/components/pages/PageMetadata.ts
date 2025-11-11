@@ -5,6 +5,7 @@
  * found in the LICENSE.md file in the root directory of this source tree.
  */
 
+import { resolveTranslationPattern } from '@/presentation/translations/translation-resolver'
 import type { Languages } from '@/domain/models/app/languages'
 import type { Page } from '@/domain/models/app/pages'
 import type { Theme } from '@/domain/models/app/theme'
@@ -82,10 +83,11 @@ function determineDirection(languages: Languages | undefined, lang: string): 'lt
 }
 
 /**
- * Determine page title
+ * Determine page title with translation resolution
  */
-function determineTitle(page: Page): string {
-  return page.meta?.title || page.name || page.path
+function determineTitle(page: Page, lang: string, languages: Languages | undefined): string {
+  const rawTitle = page.meta?.title || page.name || page.path
+  return resolveTranslationPattern(rawTitle, lang, languages)
 }
 
 /**
@@ -108,8 +110,9 @@ export function extractPageMetadata(
 ): Readonly<PageMetadata> {
   const lang = determineLanguage(page, languages, detectedLanguage)
   const direction = determineDirection(languages, lang)
-  const title = determineTitle(page)
-  const description = page.meta?.description || ''
+  const title = determineTitle(page, lang, languages)
+  const rawDescription = page.meta?.description || ''
+  const description = resolveTranslationPattern(rawDescription, lang, languages)
   const bodyStyle = buildBodyStyle(theme)
 
   return {
