@@ -101,7 +101,7 @@ test.describe('Common Definitions', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-DEFINITIONS-004: should validate as variableReference pattern',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -111,9 +111,9 @@ test.describe('Common Definitions', () => {
         blocks: [{ name: 'welcome', type: 'div', content: 'Welcome to $siteName' }],
         pages: [
           {
-            name: 'Test',
+            name: 'test',
             path: '/',
-            meta: { lang: 'en-US', title: 'Test' },
+            meta: { lang: 'en-US', title: 'Test', description: 'Test page' },
             sections: [{ block: 'welcome', vars: { siteName: 'My Site' } }],
           },
         ],
