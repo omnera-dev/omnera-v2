@@ -28,15 +28,8 @@ type PageBodyScriptsProps = {
  * Renders external and inline scripts for a given position
  */
 function renderScripts(
-  externalScripts: readonly {
-    readonly src: string
-    readonly async?: boolean
-    readonly defer?: boolean
-    readonly module?: boolean
-    readonly integrity?: string
-    readonly crossorigin?: string
-  }[],
-  inlineScripts: readonly { readonly code: string; readonly async?: boolean }[],
+  externalScripts: GroupedScripts['external']['head'],
+  inlineScripts: GroupedScripts['inline']['head'],
   keyPrefix: string
 ): ReactElement {
   return (
