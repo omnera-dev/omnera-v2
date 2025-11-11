@@ -272,7 +272,7 @@ test.describe('Common Definitions', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-DEFINITIONS-010: should validate as iconName enum',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
