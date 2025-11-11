@@ -59,7 +59,7 @@ test.describe('Common Definitions', () => {
         blocks: [{ name: 'my-component-name', type: 'div' }],
         pages: [
           {
-            name: 'Test',
+            name: 'test',
             path: '/',
             meta: { lang: 'en-US', title: 'Test' },
             sections: [{ block: 'my-component-name', vars: {} }],
