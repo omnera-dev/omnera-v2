@@ -255,7 +255,7 @@ test.describe('DNS Prefetch', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-DNS-008: should optimize multiple external connections',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
