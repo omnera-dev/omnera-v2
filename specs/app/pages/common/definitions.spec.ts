@@ -49,7 +49,7 @@ test.describe('Common Definitions', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-DEFINITIONS-002: should validate as kebabCase pattern',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -59,7 +59,7 @@ test.describe('Common Definitions', () => {
         blocks: [{ name: 'my-component-name', type: 'div' }],
         pages: [
           {
-            name: 'Test',
+            name: 'test',
             path: '/',
             meta: { lang: 'en-US', title: 'Test' },
             sections: [{ block: 'my-component-name', vars: {} }],
@@ -75,7 +75,7 @@ test.describe('Common Definitions', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-DEFINITIONS-003: should validate as variableName pattern',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -101,7 +101,7 @@ test.describe('Common Definitions', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-DEFINITIONS-004: should validate as variableReference pattern',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -111,9 +111,9 @@ test.describe('Common Definitions', () => {
         blocks: [{ name: 'welcome', type: 'div', content: 'Welcome to $siteName' }],
         pages: [
           {
-            name: 'Test',
+            name: 'test',
             path: '/',
-            meta: { lang: 'en-US', title: 'Test' },
+            meta: { lang: 'en-US', title: 'Test', description: 'Test page' },
             sections: [{ block: 'welcome', vars: { siteName: 'My Site' } }],
           },
         ],
@@ -127,7 +127,7 @@ test.describe('Common Definitions', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-DEFINITIONS-005: should validate as hexColor pattern',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -137,9 +137,9 @@ test.describe('Common Definitions', () => {
         theme: { colors: { custom: '#FF5733' } },
         pages: [
           {
-            name: 'Test',
+            name: 'test',
             path: '/',
-            meta: { lang: 'en-US', title: 'Test' },
+            meta: { lang: 'en-US', title: 'Test', description: 'Test page' },
             sections: [{ type: 'div', props: { className: 'bg-custom' }, children: ['Test'] }],
           },
         ],
@@ -154,7 +154,7 @@ test.describe('Common Definitions', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-DEFINITIONS-006: should validate as url with http/https protocol',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {

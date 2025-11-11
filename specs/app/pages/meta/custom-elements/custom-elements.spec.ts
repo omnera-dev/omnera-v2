@@ -196,7 +196,7 @@ test.describe('Custom Head Elements', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-CUSTOM-006: should set element inner content',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -205,7 +205,7 @@ test.describe('Custom Head Elements', () => {
         name: 'test-app',
         pages: [
           {
-            name: 'Test',
+            name: 'test_page',
             path: '/',
             meta: {
               lang: 'en-US',
@@ -229,16 +229,16 @@ test.describe('Custom Head Elements', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-CUSTOM-007: should customize browser chrome color',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: custom elements for theme-color meta
       await startServerWithSchema({
-        name: 'test-app',
+        name: 'test_app',
         pages: [
           {
-            name: 'Test',
+            name: 'test_page',
             path: '/',
             meta: {
               lang: 'en-US',
@@ -261,16 +261,16 @@ test.describe('Custom Head Elements', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-CUSTOM-008: should configure mobile viewport',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
       // GIVEN: custom elements for viewport meta
       await startServerWithSchema({
-        name: 'test-app',
+        name: 'test_app',
         pages: [
           {
-            name: 'Test',
+            name: 'test_page',
             path: '/',
             meta: {
               lang: 'en-US',

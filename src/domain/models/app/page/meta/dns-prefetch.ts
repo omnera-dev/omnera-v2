@@ -6,6 +6,7 @@
  */
 
 import { Schema } from 'effect'
+import { HttpUrlSchema } from '../common/url'
 
 /**
  * DNS prefetch domain URL
@@ -15,13 +16,8 @@ import { Schema } from 'effect'
  * - Examples: https://fonts.googleapis.com, https://www.google-analytics.com
  * - Format: uri (valid URL)
  */
-export const DnsPrefetchDomainSchema = Schema.String.pipe(
-  Schema.pattern(/^https?:\/\//, {
-    message: () => 'Domain must be an absolute URL starting with http:// or https://',
-  })
-).annotations({
+export const DnsPrefetchDomainSchema = HttpUrlSchema.annotations({
   description: 'Domain to prefetch DNS for',
-  format: 'uri',
 })
 
 /**
