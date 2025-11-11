@@ -186,7 +186,7 @@ test.describe('Common Definitions', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-DEFINITIONS-007: should validate as relativePath pattern',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
