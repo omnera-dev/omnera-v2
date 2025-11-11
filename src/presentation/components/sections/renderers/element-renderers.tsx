@@ -21,7 +21,7 @@ export interface ElementProps {
 }
 
 /**
- * Renders HTML structural elements (div, span, section)
+ * Renders HTML structural elements (div, span, section, and HTML5 semantic elements)
  *
  * If content starts with '<', it's treated as HTML and rendered via dangerouslySetInnerHTML.
  * Otherwise, content is rendered as plain text.
@@ -33,7 +33,7 @@ export interface ElementProps {
  * ensuring sections are properly identified in the accessibility tree.
  */
 export function renderHTMLElement(
-  type: 'div' | 'span' | 'section',
+  type: 'div' | 'span' | 'section' | 'header' | 'footer' | 'main' | 'article' | 'aside' | 'nav',
   props: ElementProps,
   content: string | undefined,
   children: readonly React.ReactNode[]
