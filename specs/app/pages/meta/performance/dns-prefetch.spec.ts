@@ -188,7 +188,7 @@ test.describe('DNS Prefetch', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-DNS-006: should validate protocol in URL pattern',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
