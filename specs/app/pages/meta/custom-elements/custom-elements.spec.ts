@@ -196,7 +196,7 @@ test.describe('Custom Head Elements', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-CUSTOM-006: should set element inner content',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -205,7 +205,7 @@ test.describe('Custom Head Elements', () => {
         name: 'test-app',
         pages: [
           {
-            name: 'Test',
+            name: 'test_page',
             path: '/',
             meta: {
               lang: 'en-US',
