@@ -238,7 +238,7 @@ test.describe('Common Definitions', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-DEFINITIONS-009: should validate as className',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
