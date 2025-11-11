@@ -504,7 +504,7 @@ test.describe('Education Event Schema', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-EDUCATIONEVENT-013: should enable Google Events rich results',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -536,11 +536,11 @@ test.describe('Education Event Schema', () => {
         ],
       })
 
-      // WHEN: price is '0' or '29.99' and priceCurrency is 'EUR' (ISO 4217)
+      // WHEN: complete event data with dates, location, and offers is provided
       await page.goto('/')
 
-      // THEN: it should specify event ticket price
-      await expect(page.locator('script[type="application/ld+json"]')).toBeVisible()
+      // THEN: it should enable Google Events rich results
+      await expect(page.locator('script[type="application/ld+json"]')).toBeAttached()
     }
   )
 
