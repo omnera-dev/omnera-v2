@@ -380,7 +380,7 @@ test.describe('Common Definitions', () => {
   // ONE OPTIMIZED test verifying components work together efficiently
   // ============================================================================
 
-  test.fixme(
+  test(
     'APP-PAGES-DEFINITIONS-REGRESSION-013: user can complete full definitions workflow',
     { tag: '@regression' },
     async ({ page, startServerWithSchema }) => {
