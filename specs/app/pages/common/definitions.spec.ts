@@ -49,7 +49,7 @@ test.describe('Common Definitions', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-DEFINITIONS-002: should validate as kebabCase pattern',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
