@@ -336,7 +336,7 @@ test.describe('CTA Button', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-CTA-010: should support fully customized button appearance',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -345,9 +345,9 @@ test.describe('CTA Button', () => {
         name: 'test-app',
         pages: [
           {
-            name: 'Test',
+            name: 'test',
             path: '/',
-            meta: { lang: 'en-US', title: 'Test' },
+            meta: { lang: 'en-US', title: 'Test', description: 'Test page' },
             layout: {
               navigation: {
                 logo: './logo.svg',
