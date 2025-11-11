@@ -123,13 +123,21 @@ export const OpenGraphSchema = Schema.Struct({
   ),
   type: Schema.optional(OpenGraphTypeSchema),
   url: Schema.optional(
-    Schema.String.annotations({
+    Schema.String.pipe(
+      Schema.pattern(/^https?:\/\//, {
+        message: () => 'URL must start with http:// or https://',
+      })
+    ).annotations({
       description: 'Canonical URL for this page',
       format: 'uri',
     })
   ),
   image: Schema.optional(
-    Schema.String.annotations({
+    Schema.String.pipe(
+      Schema.pattern(/^https?:\/\//, {
+        message: () => 'URL must start with http:// or https://',
+      })
+    ).annotations({
       description: 'Image URL for social sharing (recommended: 1200x630px)',
       format: 'uri',
     })
@@ -147,13 +155,21 @@ export const OpenGraphSchema = Schema.Struct({
   locale: Schema.optional(OpenGraphLocaleSchema),
   determiner: Schema.optional(OpenGraphDeterminerSchema),
   video: Schema.optional(
-    Schema.String.annotations({
+    Schema.String.pipe(
+      Schema.pattern(/^https?:\/\//, {
+        message: () => 'URL must start with http:// or https://',
+      })
+    ).annotations({
       description: 'Video URL if sharing video content',
       format: 'uri',
     })
   ),
   audio: Schema.optional(
-    Schema.String.annotations({
+    Schema.String.pipe(
+      Schema.pattern(/^https?:\/\//, {
+        message: () => 'URL must start with http:// or https://',
+      })
+    ).annotations({
       description: 'Audio URL if sharing audio content',
       format: 'uri',
     })

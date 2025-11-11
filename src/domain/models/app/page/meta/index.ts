@@ -146,9 +146,11 @@ export const MetaSchema = Schema.Struct({
   title: Schema.String.pipe(Schema.maxLength(60)).annotations({
     description: 'Page title for browser tab and SEO (max 60 characters for optimal display)',
   }),
-  description: Schema.String.pipe(Schema.maxLength(160)).annotations({
-    description: 'Page description for SEO and social sharing (max 160 characters)',
-  }),
+  description: Schema.optional(
+    Schema.String.pipe(Schema.maxLength(160)).annotations({
+      description: 'Page description for SEO and social sharing (max 160 characters)',
+    })
+  ),
   keywords: Schema.optional(
     Schema.String.annotations({
       description: 'Comma-separated keywords for SEO',

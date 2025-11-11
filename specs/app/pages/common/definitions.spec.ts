@@ -154,7 +154,7 @@ test.describe('Common Definitions', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-DEFINITIONS-006: should validate as url with http/https protocol',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
