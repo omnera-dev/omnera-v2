@@ -17,8 +17,10 @@ import {
 } from '@/presentation/components/metadata'
 import { renderInlineScriptTag, renderScriptTag } from '@/presentation/scripts/script-renderers'
 import type { GroupedScripts } from './PageScripts'
+import type { CustomElement } from '@/domain/models/app/page/meta/custom-elements'
 import type { Page } from '@/domain/models/app/pages'
 import type { Theme } from '@/domain/models/app/theme'
+
 
 /**
  * Props for PageHead component
@@ -30,6 +32,16 @@ type PageHeadProps = {
   readonly title: string
   readonly description: string
   readonly scripts: GroupedScripts
+}
+
+/**
+ * Checks if custom elements include a viewport meta tag
+ */
+function hasCustomViewportMeta(customElements: readonly CustomElement[] | undefined): boolean {
+  if (!customElements) return false
+  return customElements.some(
+    (element) => element.type === 'meta' && element.attrs?.name === 'viewport'
+  )
 }
 
 /**
@@ -156,11 +168,7 @@ export function PageHead({
   description,
   scripts,
 }: PageHeadProps): Readonly<ReactElement> {
-  // Check if custom elements include a viewport meta tag
-  const hasCustomViewport =
-    page.meta?.customElements?.some(
-      (element) => element.type === 'meta' && element.attrs?.name === 'viewport'
-    ) ?? false
+  const hasCustomViewport = hasCustomViewportMeta(page.meta?.customElements)
 
   return (
     <>
