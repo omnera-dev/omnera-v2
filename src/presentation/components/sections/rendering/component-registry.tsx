@@ -152,6 +152,9 @@ export const COMPONENT_REGISTRY: Partial<Record<Component['type'], ComponentRend
   link: ({ elementProps, content, renderedChildren }) =>
     Renderers.renderLink(elementProps, content, renderedChildren),
 
+  a: ({ elementProps, content, renderedChildren }) =>
+    Renderers.renderLink(elementProps, content, renderedChildren),
+
   alert: ({ elementProps, content, renderedChildren, theme }) =>
     Renderers.renderAlert(elementProps, content, renderedChildren, theme),
 

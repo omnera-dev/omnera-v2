@@ -1336,7 +1336,7 @@ test.describe('Languages Configuration', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-LANGUAGES-022: should have no $t: symbols anywhere in rendered HTML output',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
