@@ -121,7 +121,7 @@ test.describe('DNS Prefetch', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-DNS-004: should optimize CDN resource loading',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -152,7 +152,7 @@ test.describe('DNS Prefetch', () => {
       ).toBeAttached()
       await expect(
         page.locator('link[rel="dns-prefetch"][href="https://cdn.jsdelivr.net"]')
-      ).toBeVisible()
+      ).toBeAttached()
     }
   )
 
