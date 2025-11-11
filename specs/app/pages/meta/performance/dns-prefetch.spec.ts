@@ -89,7 +89,7 @@ test.describe('DNS Prefetch', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-DNS-003: should optimize analytics script loading',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -117,7 +117,7 @@ test.describe('DNS Prefetch', () => {
       // THEN: it should optimize analytics script loading
       await expect(
         page.locator('link[rel="dns-prefetch"][href="https://www.google-analytics.com"]')
-      ).toBeVisible()
+      ).toBeAttached()
     }
   )
 
