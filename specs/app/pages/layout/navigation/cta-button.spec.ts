@@ -221,7 +221,7 @@ test.describe('CTA Button', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-CTA-007: should display icon on left side of text',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -230,9 +230,9 @@ test.describe('CTA Button', () => {
         name: 'test-app',
         pages: [
           {
-            name: 'Test',
+            name: 'test',
             path: '/',
-            meta: { lang: 'en-US', title: 'Test' },
+            meta: { lang: 'en-US', title: 'Test', description: 'Test page' },
             layout: {
               navigation: {
                 logo: './logo.svg',
@@ -244,12 +244,22 @@ test.describe('CTA Button', () => {
         ],
       })
 
-      // WHEN: color is 'orange' (references theme colors)
+      // WHEN: iconPosition is 'left'
       await page.goto('/')
 
-      // THEN: it should apply theme-based color
+      // THEN: it should display icon on left side of text
       const cta = page.locator('[data-testid="nav-cta"]')
       await expect(cta.locator('[data-testid="icon"]')).toBeVisible()
+      const iconPosition = await cta.evaluate((el) => {
+        const text = el.textContent?.trim()
+        const icon = el.querySelector('[data-testid="icon"]')
+        return icon && text
+          ? Array.from(el.childNodes).indexOf(icon) > 0
+            ? 'right'
+            : 'left'
+          : null
+      })
+      expect(iconPosition).toBe('left')
     }
   )
 
