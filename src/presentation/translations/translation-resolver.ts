@@ -117,8 +117,9 @@ export function collectTranslationsForKey(
   // Collect translation for this key from all available languages (functional approach)
   const result = Object.entries(languages.translations).reduce(
     (acc, [lang, translations]) => {
-      if (translations[key]) {
-        return { ...acc, [lang]: translations[key] }
+      const translationDict = translations as Record<string, string>
+      if (translationDict[key]) {
+        return { ...acc, [lang]: translationDict[key] }
       }
       return acc
     },
