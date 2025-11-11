@@ -107,7 +107,7 @@ test.describe('External Scripts', () => {
     }
   )
 
-  test.fixme(
+  test(
     "APP-PAGES-EXTERNAL-004: should load script with type='module'",
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
