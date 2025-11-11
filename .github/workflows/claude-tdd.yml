@@ -153,6 +153,65 @@ jobs:
             fi
           fi
 
+          # Additional validation: Check if issue is closed or has existing PRs
+          if [ "$HAS_CONTEXT" = "true" ] && [ -n "$ISSUE_NUMBER" ]; then
+            echo ""
+            echo "🔍 Checking issue state and existing PRs for #$ISSUE_NUMBER..."
+
+            # Check if issue is closed
+            ISSUE_STATE=$(gh issue view "$ISSUE_NUMBER" --json state --jq '.state' 2>/dev/null || echo "UNKNOWN")
+
+            if [ "$ISSUE_STATE" = "CLOSED" ]; then
+              echo "⚠️  Issue #$ISSUE_NUMBER is CLOSED - skipping to prevent duplicate PR"
+              echo "   A PR has already been merged or the issue was closed manually"
+              HAS_CONTEXT="false"
+              ISSUE_NUMBER=""
+              ISSUE_BODY=""
+            else
+              # Check for any existing PR (open or closed) for this issue
+              EXISTING_PR_COUNT=$(gh pr list \
+                --repo ${{ github.repository }} \
+                --search "Closes #$ISSUE_NUMBER in:body" \
+                --state all \
+                --json number \
+                --jq 'length' 2>/dev/null || echo "0")
+
+              if [ "$EXISTING_PR_COUNT" -gt 0 ]; then
+                EXISTING_PRS=$(gh pr list \
+                  --repo ${{ github.repository }} \
+                  --search "Closes #$ISSUE_NUMBER in:body" \
+                  --state all \
+                  --json number,state \
+                  --jq '[.[] | "#\(.number) (\(.state))"] | join(", ")' 2>/dev/null || echo "")
+
+                echo "⚠️  Found $EXISTING_PR_COUNT existing PR(s) for issue #$ISSUE_NUMBER: $EXISTING_PRS"
+                echo "   Skipping to prevent duplicate PR creation"
+                echo "   If you need to retry, close/delete the existing PR first"
+
+                # Post comment on issue explaining why we're skipping
+                COMMENT_BODY="🤖 **Duplicate PR Prevention**
+
+                Skipping Claude Code execution because PR(s) already exist for this issue: $EXISTING_PRS
+
+                **To retry this spec:**
+                1. Close or delete the existing PR if it's invalid
+                2. Re-open this issue if it was closed
+                3. Post a new @claude comment to trigger the workflow
+
+                ---
+                *🤖 Automated via Claude TDD Workflow*"
+
+                gh issue comment "$ISSUE_NUMBER" --body "$COMMENT_BODY" 2>/dev/null || true
+
+                HAS_CONTEXT="false"
+                ISSUE_NUMBER=""
+                ISSUE_BODY=""
+              else
+                echo "✅ Issue is open with no existing PRs - safe to proceed"
+              fi
+            fi
+          fi
+
           # Output results
           echo "has_context=$HAS_CONTEXT" >> $GITHUB_OUTPUT
           echo "issue_number=$ISSUE_NUMBER" >> $GITHUB_OUTPUT
