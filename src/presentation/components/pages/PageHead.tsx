@@ -38,17 +38,21 @@ type PageHeadProps = {
 function BasicMetaTags({
   title,
   description,
+  hasCustomViewport,
 }: {
   readonly title: string
   readonly description: string
+  readonly hasCustomViewport: boolean
 }): ReactElement {
   return (
     <>
       <meta charSet="UTF-8" />
-      <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-      />
+      {!hasCustomViewport && (
+        <meta
+          name="viewport"
+          content="width=device-width, initial-scale=1.0"
+        />
+      )}
       <title>{title}</title>
       {description && (
         <meta
@@ -152,11 +156,18 @@ export function PageHead({
   description,
   scripts,
 }: PageHeadProps): Readonly<ReactElement> {
+  // Check if custom elements include a viewport meta tag
+  const hasCustomViewport =
+    page.meta?.customElements?.some(
+      (element) => element.type === 'meta' && element.attrs?.name === 'viewport'
+    ) ?? false
+
   return (
     <>
       <BasicMetaTags
         title={title}
         description={description}
+        hasCustomViewport={hasCustomViewport}
       />
       <OpenGraphMeta openGraph={page.meta?.openGraph} />
       <TwitterCardMeta page={page} />
