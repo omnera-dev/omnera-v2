@@ -75,7 +75,7 @@ test.describe('Common Definitions', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-DEFINITIONS-003: should validate as variableName pattern',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
