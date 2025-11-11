@@ -133,6 +133,11 @@
         },
         "required": ["label", "href"]
       }
+    },
+    "email": {
+      "type": "string",
+      "format": "email",
+      "description": "Contact email address"
     }
   },
   "required": ["enabled"],
