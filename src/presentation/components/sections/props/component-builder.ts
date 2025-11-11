@@ -81,6 +81,29 @@ function applyTokenSubstitutions(
 }
 
 /**
+ * Prepares processed component values (tokens, translations, styles, className)
+ *
+ * @param config - Component props configuration
+ * @returns Processed intermediate values
+ */
+function prepareProcessedValues(config: ComponentPropsConfig) {
+  const { type, props, children, currentLang, languages, theme } = config
+
+  const substitutedProps = applyTokenSubstitutions(props, currentLang, languages, theme)
+  const firstTranslationKey = findFirstTranslationKey(children)
+  const translationData = getTranslationData(firstTranslationKey, languages)
+  const styleWithShadow = processComponentStyle(type, substitutedProps?.style, theme)
+  const finalClassName = buildFinalClassName(
+    type,
+    substitutedProps?.className,
+    theme,
+    substitutedProps
+  )
+
+  return { substitutedProps, firstTranslationKey, translationData, styleWithShadow, finalClassName }
+}
+
+/**
  * Builds complete component props with all transformations applied
  *
  * Orchestrates: token substitution, translation handling, style processing,
@@ -98,29 +121,10 @@ export function buildComponentProps(config: ComponentPropsConfig): {
   readonly elementProps: Record<string, unknown>
   readonly elementPropsWithSpacing: Record<string, unknown>
 } {
-  const {
-    type,
-    props,
-    children,
-    content,
-    blockName,
-    blockInstanceIndex,
-    theme,
-    languages,
-    currentLang,
-    childIndex,
-  } = config
+  const { type, content, children, blockName, blockInstanceIndex, theme, childIndex } = config
 
-  const substitutedProps = applyTokenSubstitutions(props, currentLang, languages, theme)
-  const firstTranslationKey = findFirstTranslationKey(children)
-  const translationData = getTranslationData(firstTranslationKey, config.languages)
-  const styleWithShadow = processComponentStyle(type, substitutedProps?.style, theme)
-  const finalClassName = buildFinalClassName(
-    type,
-    substitutedProps?.className,
-    theme,
-    substitutedProps
-  )
+  const { substitutedProps, firstTranslationKey, translationData, styleWithShadow, finalClassName } =
+    prepareProcessedValues(config)
 
   const elementProps = buildElementProps({
     type,
