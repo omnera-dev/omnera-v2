@@ -54,7 +54,7 @@ test.describe('Favicon', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-FAVICON-002: should support legacy ICO format',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
