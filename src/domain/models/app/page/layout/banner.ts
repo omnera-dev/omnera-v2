@@ -6,25 +6,7 @@
  */
 
 import { Schema } from 'effect'
-
-/**
- * Hex color pattern (6-digit hex code)
- *
- * Validates hex color format: #RRGGBB
- * - Starts with #
- * - Followed by exactly 6 hex digits (0-9, A-F, case-insensitive)
- *
- * @example
- * Valid: #FF5733, #ffffff, #1A2B3C
- * Invalid: #FFF (too short), #GGGGGG (invalid chars), FF5733 (missing #)
- */
-export const HexColorSchema = Schema.String.pipe(
-  Schema.pattern(/^#[0-9A-Fa-f]{6}$/, {
-    message: () => 'Color must be a 6-digit hex code (e.g., #FF5733, #1A2B3C)',
-  })
-).annotations({
-  description: 'Hex color code (#RRGGBB)',
-})
+import { HexColorSchema } from '@/domain/models/app/common/definitions'
 
 /**
  * Banner link configuration
@@ -148,6 +130,5 @@ export const BannerSchema = Schema.Struct({
   description: 'Top banner/announcement bar configuration',
 })
 
-export type HexColor = Schema.Schema.Type<typeof HexColorSchema>
 export type BannerLink = Schema.Schema.Type<typeof BannerLinkSchema>
 export type Banner = Schema.Schema.Type<typeof BannerSchema>
