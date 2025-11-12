@@ -54,7 +54,7 @@ test.describe('Favicon', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-FAVICON-002: should support legacy ICO format',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -106,7 +106,7 @@ test.describe('Favicon', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-FAVICON-004: should support modern SVG format',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -137,7 +137,7 @@ test.describe('Favicon', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-FAVICON-005: should use relative file paths',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -168,7 +168,7 @@ test.describe('Favicon', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-FAVICON-006: should enable quick favicon setup',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -193,7 +193,7 @@ test.describe('Favicon', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-FAVICON-007: should provide site branding in tabs',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
