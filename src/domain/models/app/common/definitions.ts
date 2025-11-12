@@ -135,7 +135,41 @@ export const RelativePathSchema = Schema.String.pipe(
   })
 )
 
+/**
+ * Hex color code (6-digit format)
+ *
+ * Validates hex color format: #RRGGBB
+ * - Starts with #
+ * - Followed by exactly 6 hex digits (0-9, A-F, case-insensitive)
+ *
+ * Used for:
+ * - Banner background/text colors
+ * - Safari mask-icon color attribute
+ * - Theme color customization
+ *
+ * @example
+ * ```typescript
+ * const primary = '#007BFF'
+ * const success = '#28A745'
+ * const danger = '#DC3545'
+ * const safariMask = '#5BBAD5'
+ * ```
+ *
+ * @see specs/app/common/definitions.schema.json#/definitions/hexColor
+ */
+export const HexColorSchema = Schema.String.pipe(
+  Schema.pattern(/^#[0-9A-Fa-f]{6}$/, {
+    message: () => 'Color must be a 6-digit hex code (e.g., #007BFF, #5BBAD5)',
+  }),
+  Schema.annotations({
+    title: 'Hex Color',
+    description: 'Hex color code in #RRGGBB format',
+    examples: ['#007BFF', '#28A745', '#DC3545', '#5BBAD5'],
+  })
+)
+
 export type Id = Schema.Schema.Type<typeof IdSchema>
 export type Name = Schema.Schema.Type<typeof NameSchema>
 export type Path = Schema.Schema.Type<typeof PathSchema>
 export type RelativePath = Schema.Schema.Type<typeof RelativePathSchema>
+export type HexColor = Schema.Schema.Type<typeof HexColorSchema>
