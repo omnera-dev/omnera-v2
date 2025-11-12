@@ -165,7 +165,7 @@ test.describe('Feature Flags', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-FEATURES-006: should validate camelCase naming convention',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
