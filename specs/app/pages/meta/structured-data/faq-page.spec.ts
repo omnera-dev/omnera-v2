@@ -427,7 +427,7 @@ test.describe('FAQ Page Schema', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-FAQPAGE-010: should increase click-through rate from search results',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
