@@ -175,7 +175,7 @@ test.describe('Favicon Set', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-FAVICONSET-006: should define Safari pinned tab color',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
