@@ -281,7 +281,7 @@ test.describe('External Scripts', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-EXTERNAL-010: should load multiple external scripts in order',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
