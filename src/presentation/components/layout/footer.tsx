@@ -11,13 +11,14 @@ import type { ReactElement } from 'react'
 /**
  * Footer Component
  *
- * Renders the page footer with copyright, optional legal links, and contact email.
+ * Renders the page footer with logo, copyright, optional legal links, and contact email.
  *
  * @param props - Footer configuration
  * @returns Footer element or undefined if disabled
  */
 export function Footer({
   enabled = true,
+  logo,
   copyright,
   email,
 }: Readonly<FooterProps>): Readonly<ReactElement | undefined> {
@@ -30,6 +31,13 @@ export function Footer({
       data-testid="footer"
       style={{ display: 'block', minHeight: '1px' }}
     >
+      {logo && (
+        <img
+          data-testid="footer-logo"
+          src={logo}
+          alt="Footer logo"
+        />
+      )}
       {copyright}
       {email && (
         <a href={`mailto:${email}`}>{email}</a>

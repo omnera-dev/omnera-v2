@@ -50,7 +50,7 @@ test.describe('Footer Configuration', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-FOOTER-002: should display footer logo',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
