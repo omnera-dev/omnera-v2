@@ -73,7 +73,7 @@ test.describe('Feature Flags', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-FEATURES-003: should provide feature with configuration data',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
