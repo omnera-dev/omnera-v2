@@ -24,6 +24,7 @@ export function Footer({
   social,
   newsletter,
   copyright,
+  legal,
   email,
 }: Readonly<FooterProps>): Readonly<ReactElement | undefined> {
   if (!enabled) {
@@ -116,6 +117,20 @@ export function Footer({
       )}
       {copyright && (
         <div data-testid="footer-copyright">{copyright}</div>
+      )}
+      {legal && legal.length > 0 && (
+        <div data-testid="footer-legal">
+          {legal.map((link, index) => (
+            <a
+              key={index}
+              href={link.href}
+              target={link.target}
+              rel={link.target === '_blank' ? 'noopener noreferrer' : undefined}
+            >
+              {link.label}
+            </a>
+          ))}
+        </div>
       )}
       {email && (
         <a href={`mailto:${email}`}>{email}</a>
