@@ -194,7 +194,7 @@ test.describe('Feature Flags', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-FEATURES-007: should support both simple and complex feature definitions',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
