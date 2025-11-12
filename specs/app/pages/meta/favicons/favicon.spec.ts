@@ -106,7 +106,7 @@ test.describe('Favicon', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-FAVICON-004: should support modern SVG format',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
