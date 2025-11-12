@@ -46,7 +46,7 @@ test.describe('Feature Flags', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-FEATURES-002: should disable feature',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
