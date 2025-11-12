@@ -80,7 +80,7 @@ test.describe('Favicon', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-FAVICON-003: should support PNG format',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
