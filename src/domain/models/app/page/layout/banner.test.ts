@@ -7,7 +7,8 @@
 
 import { describe, test, expect } from 'bun:test'
 import { Schema } from 'effect'
-import { HexColorSchema, BannerLinkSchema, BannerSchema } from './banner'
+import { BannerLinkSchema, BannerSchema } from './banner'
+import { HexColorSchema } from '@/domain/models/app/common/definitions'
 
 describe('HexColorSchema', () => {
   test('should accept valid hex colors', () => {

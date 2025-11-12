@@ -6,6 +6,7 @@
  */
 
 import { Schema } from 'effect'
+import { HexColorSchema } from '@/domain/models/app/common/definitions'
 
 /**
  * Favicon relationship type
@@ -103,11 +104,7 @@ export const FaviconItemSchema = Schema.Struct({
     description: 'Path to the favicon file',
   }),
   color: Schema.optional(
-    Schema.String.pipe(
-      Schema.pattern(/^#[0-9A-Fa-f]{6}$/, {
-        message: () => 'Color must be a 6-digit hex code (e.g., #5BBAD5)',
-      })
-    ).annotations({
+    HexColorSchema.annotations({
       description: 'Color for mask-icon (Safari pinned tab)',
     })
   ),
