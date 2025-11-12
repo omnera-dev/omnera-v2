@@ -219,7 +219,7 @@ test.describe('External Scripts', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-EXTERNAL-008: should insert script at end of body',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -241,12 +241,12 @@ test.describe('External Scripts', () => {
         ],
       })
 
-      // WHEN: position is 'head'
+      // WHEN: position is 'body-end'
       await page.goto('/')
 
-      // THEN: it should insert script in document head
+      // THEN: it should insert script at end of body
       const script = page.locator('body script[src="https://cdn.example.com/body-script.js"]')
-      await expect(script).toBeVisible()
+      await expect(script).toBeAttached()
     }
   )
 
