@@ -337,7 +337,7 @@ test.describe('FAQ Page Schema', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-FAQPAGE-008: should display expandable Q&A in Google search results',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -378,7 +378,7 @@ test.describe('FAQ Page Schema', () => {
       await page.goto('/')
 
       // THEN: it should display expandable Q&A in Google search results
-      await expect(page.locator('script[type="application/ld+json"]')).toBeVisible()
+      await expect(page.locator('script[type="application/ld+json"]')).toBeAttached()
     }
   )
 
