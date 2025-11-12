@@ -296,7 +296,7 @@ test.describe('Feature Flags', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-FEATURES-010: should provide runtime feature detection',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
