@@ -193,7 +193,7 @@ test.describe('Favicon', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-FAVICON-007: should provide site branding in tabs',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
