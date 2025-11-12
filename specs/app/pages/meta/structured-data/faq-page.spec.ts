@@ -140,7 +140,7 @@ test.describe('FAQ Page Schema', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-FAQPAGE-004: should provide question text',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
