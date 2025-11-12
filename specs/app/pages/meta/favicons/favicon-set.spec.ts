@@ -206,7 +206,7 @@ test.describe('Favicon Set', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-FAVICONSET-007: should provide comprehensive multi-device icon support',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
