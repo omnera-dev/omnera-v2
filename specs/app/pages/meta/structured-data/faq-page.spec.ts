@@ -52,7 +52,7 @@ test.describe('FAQ Page Schema', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-FAQPAGE-002: should contain list of Q&A pairs',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -95,7 +95,7 @@ test.describe('FAQ Page Schema', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-FAQPAGE-003: should define question structure',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -140,7 +140,7 @@ test.describe('FAQ Page Schema', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-FAQPAGE-004: should provide question text',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -183,7 +183,7 @@ test.describe('FAQ Page Schema', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-FAQPAGE-005: should provide answer structure',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {

@@ -250,7 +250,7 @@ test.describe('External Scripts', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-EXTERNAL-009: should insert script at start of body',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -275,13 +275,13 @@ test.describe('External Scripts', () => {
       // WHEN: position is 'body-end' (default)
       await page.goto('/')
 
-      // THEN: it should insert script at end of body
+      // THEN: it should insert script at start of body
       const script = page.locator('body script[src="https://cdn.example.com/body-start-script.js"]')
-      await expect(script).toBeVisible()
+      await expect(script).toBeAttached()
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-EXTERNAL-010: should load multiple external scripts in order',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -319,7 +319,7 @@ test.describe('External Scripts', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-EXTERNAL-011: should load local JavaScript file',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -345,7 +345,7 @@ test.describe('External Scripts', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-EXTERNAL-012: should load script with default settings (sync, body-end)',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
