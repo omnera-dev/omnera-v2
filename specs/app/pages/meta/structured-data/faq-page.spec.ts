@@ -227,7 +227,7 @@ test.describe('FAQ Page Schema', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-FAQPAGE-006: should provide answer content',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
