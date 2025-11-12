@@ -145,7 +145,7 @@ test.describe('Favicon Set', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-FAVICONSET-005: should specify MIME type',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
