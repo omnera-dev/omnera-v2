@@ -199,7 +199,7 @@ test.describe('Footer Configuration', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-FOOTER-006: should support external link targets',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
