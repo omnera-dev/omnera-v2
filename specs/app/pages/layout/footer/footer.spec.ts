@@ -403,7 +403,7 @@ test.describe('Footer Configuration', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-FOOTER-011: should render legal link list',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
