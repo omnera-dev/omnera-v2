@@ -441,7 +441,7 @@ test.describe('Footer Configuration', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-FOOTER-012: should not render footer',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
