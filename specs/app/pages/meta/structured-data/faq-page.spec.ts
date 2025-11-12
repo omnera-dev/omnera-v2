@@ -273,7 +273,7 @@ test.describe('FAQ Page Schema', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-FAQPAGE-007: should support comprehensive FAQ section',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
