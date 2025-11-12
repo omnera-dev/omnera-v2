@@ -345,7 +345,7 @@ test.describe('External Scripts', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-EXTERNAL-012: should load script with default settings (sync, body-end)',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
