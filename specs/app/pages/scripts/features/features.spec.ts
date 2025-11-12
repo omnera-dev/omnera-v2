@@ -133,7 +133,7 @@ test.describe('Feature Flags', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-FEATURES-005: should pass configuration to feature implementation',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
