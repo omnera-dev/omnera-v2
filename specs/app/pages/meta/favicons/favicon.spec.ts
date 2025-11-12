@@ -223,7 +223,7 @@ test.describe('Favicon', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-FAVICON-008: should support both simple and complete configurations',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
