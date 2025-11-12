@@ -319,7 +319,7 @@ test.describe('External Scripts', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-EXTERNAL-011: should load local JavaScript file',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
