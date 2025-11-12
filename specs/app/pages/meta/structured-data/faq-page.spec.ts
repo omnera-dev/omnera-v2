@@ -95,7 +95,7 @@ test.describe('FAQ Page Schema', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-FAQPAGE-003: should define question structure',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
