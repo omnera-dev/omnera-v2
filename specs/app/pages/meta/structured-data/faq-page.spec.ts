@@ -382,7 +382,7 @@ test.describe('FAQ Page Schema', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-FAQPAGE-009: should reduce support load by surfacing answers in search',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -423,7 +423,7 @@ test.describe('FAQ Page Schema', () => {
       await page.goto('/')
 
       // THEN: it should reduce support load by surfacing answers in search
-      await expect(page.locator('script[type="application/ld+json"]')).toBeVisible()
+      await expect(page.locator('script[type="application/ld+json"]')).toBeAttached()
     }
   )
 
