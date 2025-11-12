@@ -81,7 +81,7 @@ test.describe('Favicon Set', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-FAVICONSET-003: should define Safari mask icon with color',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -111,7 +111,7 @@ test.describe('Favicon Set', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-FAVICONSET-004: should specify icon dimensions for different contexts',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
