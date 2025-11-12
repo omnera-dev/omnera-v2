@@ -80,7 +80,7 @@ export function Footer({
                 href={link.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                data-testid={`social-link-${link.platform}`}
+                data-testid={`social-${link.platform}`}
                 aria-label={link.platform}
               >
                 {link.platform}
