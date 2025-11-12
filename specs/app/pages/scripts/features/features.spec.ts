@@ -259,7 +259,7 @@ test.describe('Feature Flags', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-FEATURES-009: should enable/disable UI features dynamically',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
