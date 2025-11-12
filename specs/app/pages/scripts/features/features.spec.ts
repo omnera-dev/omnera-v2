@@ -106,7 +106,7 @@ test.describe('Feature Flags', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-FEATURES-004: should toggle feature via enabled boolean',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
