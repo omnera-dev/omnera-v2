@@ -227,7 +227,7 @@ test.describe('Feature Flags', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-FEATURES-008: should support flexible feature configuration',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
