@@ -114,7 +114,9 @@ export function Footer({
           </form>
         </div>
       )}
-      {copyright}
+      {copyright && (
+        <div data-testid="footer-copyright">{copyright}</div>
+      )}
       {email && (
         <a href={`mailto:${email}`}>{email}</a>
       )}

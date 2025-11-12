@@ -373,7 +373,7 @@ test.describe('Footer Configuration', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-FOOTER-010: should display copyright notice',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
