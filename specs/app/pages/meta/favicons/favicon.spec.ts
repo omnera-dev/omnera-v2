@@ -137,7 +137,7 @@ test.describe('Favicon', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-FAVICON-005: should use relative file paths',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
