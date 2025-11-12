@@ -188,7 +188,7 @@ test.describe('External Scripts', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-EXTERNAL-007: should insert script in document head',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
