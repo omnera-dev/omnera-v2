@@ -168,7 +168,7 @@ test.describe('Favicon', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-FAVICON-006: should enable quick favicon setup',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
