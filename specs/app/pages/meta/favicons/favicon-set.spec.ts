@@ -111,7 +111,7 @@ test.describe('Favicon Set', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-FAVICONSET-004: should specify icon dimensions for different contexts',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
