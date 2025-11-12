@@ -20,6 +20,7 @@ export function Footer({
   enabled = true,
   logo,
   description,
+  columns,
   copyright,
   email,
 }: Readonly<FooterProps>): Readonly<ReactElement | undefined> {
@@ -41,6 +42,25 @@ export function Footer({
       )}
       {description && (
         <div data-testid="footer-description">{description}</div>
+      )}
+      {columns && columns.length > 0 && (
+        <div>
+          {columns.map((column, index) => (
+            <div
+              key={index}
+              data-testid={`footer-column-${index}`}
+            >
+              <h3>{column.title}</h3>
+              <ul>
+                {column.links.map((link, linkIndex) => (
+                  <li key={linkIndex}>
+                    <a href={link.href}>{link.label}</a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
       )}
       {copyright}
       {email && (

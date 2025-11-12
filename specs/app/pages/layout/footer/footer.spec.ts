@@ -109,7 +109,7 @@ test.describe('Footer Configuration', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-FOOTER-004: should render multi-column link layout',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
