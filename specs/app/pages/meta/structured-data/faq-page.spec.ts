@@ -52,7 +52,7 @@ test.describe('FAQ Page Schema', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-FAQPAGE-002: should contain list of Q&A pairs',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
