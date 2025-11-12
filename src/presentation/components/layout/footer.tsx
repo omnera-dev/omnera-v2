@@ -19,6 +19,7 @@ import type { ReactElement } from 'react'
 export function Footer({
   enabled = true,
   logo,
+  description,
   copyright,
   email,
 }: Readonly<FooterProps>): Readonly<ReactElement | undefined> {
@@ -37,6 +38,9 @@ export function Footer({
           src={logo}
           alt="Footer logo"
         />
+      )}
+      {description && (
+        <div data-testid="footer-description">{description}</div>
       )}
       {copyright}
       {email && (
