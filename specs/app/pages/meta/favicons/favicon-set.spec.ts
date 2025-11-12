@@ -49,7 +49,7 @@ test.describe('Favicon Set', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-FAVICONSET-002: should define Apple touch icon',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
