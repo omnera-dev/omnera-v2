@@ -329,7 +329,7 @@ test.describe('Footer Configuration', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-FOOTER-009: should render email subscription form',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {

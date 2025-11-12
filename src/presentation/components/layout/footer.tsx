@@ -22,6 +22,7 @@ export function Footer({
   description,
   columns,
   social,
+  newsletter,
   copyright,
   email,
 }: Readonly<FooterProps>): Readonly<ReactElement | undefined> {
@@ -87,6 +88,30 @@ export function Footer({
               </a>
             ))}
           </div>
+        </div>
+      )}
+      {newsletter && newsletter.enabled && (
+        <div data-testid="footer-newsletter">
+          {newsletter.title && (
+            <h3 data-testid="newsletter-title">{newsletter.title}</h3>
+          )}
+          {newsletter.description && (
+            <p data-testid="newsletter-description">{newsletter.description}</p>
+          )}
+          <form>
+            <input
+              type="email"
+              data-testid="newsletter-input"
+              placeholder={newsletter.placeholder || 'Enter your email'}
+              aria-label="Email address"
+            />
+            <button
+              type="submit"
+              data-testid="newsletter-button"
+            >
+              {newsletter.buttonText || 'Subscribe'}
+            </button>
+          </form>
         </div>
       )}
       {copyright}
