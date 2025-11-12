@@ -243,7 +243,7 @@ test.describe('Footer Configuration', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-FOOTER-007: should render social media icons',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {

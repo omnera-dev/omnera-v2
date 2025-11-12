@@ -21,6 +21,7 @@ export function Footer({
   logo,
   description,
   columns,
+  social,
   copyright,
   email,
 }: Readonly<FooterProps>): Readonly<ReactElement | undefined> {
@@ -67,6 +68,25 @@ export function Footer({
               </ul>
             </div>
           ))}
+        </div>
+      )}
+      {social && social.links && social.links.length > 0 && (
+        <div data-testid="footer-social">
+          {social.title && <h3>{social.title}</h3>}
+          <div>
+            {social.links.map((link, index) => (
+              <a
+                key={index}
+                href={link.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                data-testid={`social-link-${link.platform}`}
+                aria-label={link.platform}
+              >
+                {link.platform}
+              </a>
+            ))}
+          </div>
         </div>
       )}
       {copyright}
