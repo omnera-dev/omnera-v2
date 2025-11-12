@@ -54,7 +54,14 @@ export function Footer({
               <ul data-testid="column-links">
                 {column.links.map((link, linkIndex) => (
                   <li key={linkIndex}>
-                    <a href={link.href}>{link.label}</a>
+                    <a
+                      href={link.href}
+                      target={link.target}
+                      rel={link.target === '_blank' ? 'noopener noreferrer' : undefined}
+                      data-testid={link.target === '_blank' ? 'footer-link-external' : undefined}
+                    >
+                      {link.label}
+                    </a>
                   </li>
                 ))}
               </ul>
