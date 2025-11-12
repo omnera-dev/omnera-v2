@@ -50,8 +50,8 @@ export function Footer({
               key={index}
               data-testid={`footer-column-${index}`}
             >
-              <h3>{column.title}</h3>
-              <ul>
+              <h3 data-testid="column-title">{column.title}</h3>
+              <ul data-testid="column-links">
                 {column.links.map((link, linkIndex) => (
                   <li key={linkIndex}>
                     <a href={link.href}>{link.label}</a>

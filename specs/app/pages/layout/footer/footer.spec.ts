@@ -158,7 +158,7 @@ test.describe('Footer Configuration', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-FOOTER-005: should render column heading and link list',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
