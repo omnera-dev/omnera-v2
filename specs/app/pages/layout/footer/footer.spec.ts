@@ -79,7 +79,7 @@ test.describe('Footer Configuration', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-FOOTER-003: should render company description',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
