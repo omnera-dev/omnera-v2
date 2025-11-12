@@ -145,7 +145,7 @@ test.describe('Favicon Set', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-FAVICONSET-005: should specify MIME type',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -175,7 +175,7 @@ test.describe('Favicon Set', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-FAVICONSET-006: should define Safari pinned tab color',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -206,7 +206,7 @@ test.describe('Favicon Set', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-FAVICONSET-007: should provide comprehensive multi-device icon support',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
