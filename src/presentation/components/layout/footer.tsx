@@ -21,6 +21,8 @@ export function Footer({
   logo,
   description,
   columns,
+  social,
+  newsletter,
   copyright,
   email,
 }: Readonly<FooterProps>): Readonly<ReactElement | undefined> {
@@ -67,6 +69,49 @@ export function Footer({
               </ul>
             </div>
           ))}
+        </div>
+      )}
+      {social && social.links && social.links.length > 0 && (
+        <div data-testid="footer-social">
+          {social.title && <h3>{social.title}</h3>}
+          <div>
+            {social.links.map((link, index) => (
+              <a
+                key={index}
+                href={link.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                data-testid={`social-${link.platform}`}
+                aria-label={link.platform}
+              >
+                {link.platform}
+              </a>
+            ))}
+          </div>
+        </div>
+      )}
+      {newsletter && newsletter.enabled && (
+        <div data-testid="footer-newsletter">
+          {newsletter.title && (
+            <h3 data-testid="newsletter-title">{newsletter.title}</h3>
+          )}
+          {newsletter.description && (
+            <p data-testid="newsletter-description">{newsletter.description}</p>
+          )}
+          <form>
+            <input
+              type="email"
+              data-testid="newsletter-input"
+              placeholder={newsletter.placeholder || 'Enter your email'}
+              aria-label="Email address"
+            />
+            <button
+              type="submit"
+              data-testid="newsletter-button"
+            >
+              {newsletter.buttonText || 'Subscribe'}
+            </button>
+          </form>
         </div>
       )}
       {copyright}

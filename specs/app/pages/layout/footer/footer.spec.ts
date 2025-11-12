@@ -243,7 +243,7 @@ test.describe('Footer Configuration', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-FOOTER-007: should render social media icons',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -277,18 +277,18 @@ test.describe('Footer Configuration', () => {
 
       // THEN: it should render social media icons
       await expect(page.locator('[data-testid="footer-social"]')).toContainText('Follow Us')
-      await expect(page.locator('[data-testid="social-link-twitter"]')).toHaveAttribute(
+      await expect(page.locator('[data-testid="social-twitter"]')).toHaveAttribute(
         'href',
         'https://twitter.com/company'
       )
-      await expect(page.locator('[data-testid="social-link-github"]')).toHaveAttribute(
+      await expect(page.locator('[data-testid="social-github"]')).toHaveAttribute(
         'href',
         'https://github.com/company'
       )
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-FOOTER-008: should support 7 social platforms with auto icons',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -329,7 +329,7 @@ test.describe('Footer Configuration', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-FOOTER-009: should render email subscription form',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
