@@ -70,6 +70,7 @@ function buildElementPropsFromConfig(config: ElementPropsConfig): Record<string,
     ...buildBlockProps(config),
     ...buildTranslationProps(config),
     ...buildAnimationProps(hasScrollAnimation),
+    ...buildScrollInteractionProps(config),
     ...buildEmptyElementStyles(config),
   }
 }
@@ -125,6 +126,41 @@ function buildAnimationProps(hasScrollAnimation: boolean): Record<string, unknow
   return {
     'data-scroll-animation': 'scale-up',
   }
+}
+
+/**
+ * Build scroll interaction props (data-scroll-*, style for animations)
+ */
+function buildScrollInteractionProps(config: ElementPropsConfig): Record<string, unknown> {
+  if (!config.interactions?.scroll) return {}
+
+  const { animation, threshold, delay, duration, once } = config.interactions.scroll
+  const props: Record<string, unknown> = {
+    'data-scroll-animation': animation,
+  }
+
+  if (threshold !== undefined) {
+    props['data-scroll-threshold'] = threshold.toString()
+  }
+
+  if (once !== undefined) {
+    props['data-scroll-once'] = once.toString()
+  }
+
+  // Apply animation delay and duration via inline styles
+  const animationStyles: Record<string, string> = {}
+  if (delay) {
+    animationStyles['animationDelay'] = delay
+  }
+  if (duration) {
+    animationStyles['animationDuration'] = duration
+  }
+
+  if (Object.keys(animationStyles).length > 0) {
+    props['style'] = { ...config.styleWithShadow, ...animationStyles }
+  }
+
+  return props
 }
 
 /**

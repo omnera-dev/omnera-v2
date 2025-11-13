@@ -11,8 +11,8 @@
  * Immediately Invoked Function Expression (IIFE) that:
  * - Detects elements with data-scroll-animation attribute
  * - Uses IntersectionObserver to watch when elements enter viewport
- * - Triggers animations by adding 'scroll-animated' class
- * - Handles animation completion and cleanup
+ * - Applies animation classes when elements become visible
+ * - Respects threshold, once, and other configuration options
  *
  * CSP-compliant: No inline event handlers, runs from external file
  */
@@ -31,35 +31,34 @@
       return
     }
 
-    // Create IntersectionObserver with threshold
-    // Trigger when at least 10% of the element is visible
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            // Element is now visible, trigger animation
-            const element = entry.target
-
-            // Apply the animation by modifying style
-            // This makes the element visible and triggers the animation
-            element.style.opacity = '1'
-            element.style.animationPlayState = 'running'
-
-            // Stop observing this element (one-time animation)
-            observer.unobserve(element)
-          }
-        })
-      },
-      {
-        threshold: 0.1, // Trigger when 10% of element is visible
-        rootMargin: '0px 0px -50px 0px', // Trigger slightly before element reaches bottom
-      }
-    )
-
-    // Observe all animated elements
+    // Process each element to create observers with custom thresholds
     animatedElements.forEach((element) => {
-      // Ensure animation is paused initially
-      element.style.animationPlayState = 'paused'
+      const animation = element.getAttribute('data-scroll-animation')
+      const threshold = parseFloat(element.getAttribute('data-scroll-threshold') || '0.1')
+      const once = element.getAttribute('data-scroll-once') !== 'false'
+
+      // Create observer for this element with its specific threshold
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              // Element is now visible, animation class already applied via className
+              // The animation will play automatically via CSS
+
+              // If once is true, stop observing
+              if (once) {
+                observer.unobserve(element)
+              }
+            }
+          })
+        },
+        {
+          threshold: threshold,
+          rootMargin: '0px',
+        }
+      )
+
+      // Start observing this element
       observer.observe(element)
     })
   }
