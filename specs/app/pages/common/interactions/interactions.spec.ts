@@ -127,7 +127,7 @@ test.describe('Component Interactions', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-INTERACTION-MAIN-004: should support entrance animations without other interaction types',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
