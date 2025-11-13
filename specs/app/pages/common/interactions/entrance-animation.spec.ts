@@ -57,7 +57,7 @@ test.describe('Entrance Animation', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-INTERACTION-ENTRANCE-002: should fade in while moving up from below',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
