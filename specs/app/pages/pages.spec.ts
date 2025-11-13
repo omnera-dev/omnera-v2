@@ -456,7 +456,7 @@ test.describe('Pages', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-INTEGRATION-002: should adapt page content based on selected language without page-level translations',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -464,21 +464,27 @@ test.describe('Pages', () => {
       await startServerWithSchema({
         name: 'test-app',
         languages: {
-          default: 'en',
-          supported: ['en', 'fr'],
-          translations: { en: { 'hero.title': 'Welcome' }, fr: { 'hero.title': 'Bienvenue' } },
+          default: 'en-US',
+          supported: [
+            { code: 'en-US', label: 'English', direction: 'ltr' },
+            { code: 'fr-FR', label: 'Français', direction: 'ltr' },
+          ],
+          translations: {
+            'en-US': { 'hero.title': 'Welcome' },
+            'fr-FR': { 'hero.title': 'Bienvenue' },
+          },
         },
         pages: [
           {
             name: 'home',
             path: '/',
-            meta: { lang: 'en', title: 'Home', description: 'Home page' },
+            meta: { lang: 'en-US', title: 'Home', description: 'Home page' },
             sections: [{ type: 'h1', children: ['$t:hero.title'] }],
           },
           {
             name: 'home_french',
             path: '/fr',
-            meta: { lang: 'fr', title: 'Accueil', description: 'Page accueil' },
+            meta: { lang: 'fr-FR', title: 'Accueil', description: 'Page accueil' },
             sections: [{ type: 'h1', children: ['$t:hero.title'] }],
           },
         ],

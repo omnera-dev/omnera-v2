@@ -24,7 +24,7 @@ test.describe('Entrance Animation', () => {
   // One test per spec in schema - defines EXHAUSTIVE acceptance criteria
   // ============================================================================
 
-  test.fixme(
+  test(
     'APP-PAGES-INTERACTION-ENTRANCE-001: should fade in smoothly',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {

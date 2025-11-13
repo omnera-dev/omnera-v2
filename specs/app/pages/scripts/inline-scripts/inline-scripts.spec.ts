@@ -230,8 +230,10 @@ test.describe('Inline Scripts', () => {
       await page.goto('/')
 
       // THEN: it should inject multiple inline scripts in order
-      const firstScript = await page.locator('script').filter({ hasText: 'first' }).textContent()
-      expect(firstScript).toContain("console.log('first');")
+      const scripts = await page.locator('script:not([src])').all()
+      const scriptContents = await Promise.all(scripts.map((s) => s.innerHTML()))
+      const hasFirstScript = scriptContents.some((content) => content.includes("console.log('first');"))
+      expect(hasFirstScript).toBeTruthy()
       const config = await page.evaluate(() => (window as any).config)
       expect(config?.ready).toBe(true)
     }
