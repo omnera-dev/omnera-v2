@@ -9,8 +9,8 @@ import { normalizeStyleAnimations, parseStyle } from '@/presentation/styling/par
 import { applyComponentAnimations } from './animation-composer-wrapper'
 import { buildFlexClasses, buildGridClasses } from './class-builders'
 import { getComponentShadow } from './shadow-resolver'
-import type { Component } from '@/domain/models/app/page/sections'
 import type { Interactions } from '@/domain/models/app/page/common/interactions/interactions'
+import type { Component } from '@/domain/models/app/page/sections'
 import type { Theme } from '@/domain/models/app/theme'
 
 /**
@@ -36,35 +36,37 @@ const COMPONENT_TYPE_CLASSES = new Set(['card', 'badge', 'btn'])
  * Build entrance animation class from interactions
  *
  * @param interactions - Component interactions
- * @param childIndex - Child index for stagger calculation
  * @returns Animation class or undefined
  */
-function buildEntranceAnimationClass(
-  interactions: Interactions | undefined,
-  childIndex: number | undefined
-): string | undefined {
+function buildEntranceAnimationClass(interactions: Interactions | undefined): string | undefined {
   if (!interactions?.entrance?.animation) return undefined
 
   return `animate-${interactions.entrance.animation}`
 }
 
 /**
+ * Configuration for building final className
+ */
+type BuildClassNameConfig = {
+  readonly type: Component['type']
+  readonly className: unknown
+  readonly theme: Theme | undefined
+  readonly substitutedProps: Record<string, unknown> | undefined
+  readonly interactions: Interactions | undefined
+}
+
+/**
  * Build final className based on component type
  */
-export function buildFinalClassName(
-  type: Component['type'],
-  className: unknown,
-  theme: Theme | undefined,
-  substitutedProps: Record<string, unknown> | undefined,
-  interactions: Interactions | undefined,
-  childIndex: number | undefined
-): string | undefined {
+export function buildFinalClassName(config: BuildClassNameConfig): string | undefined {
+  const { type, className, theme, substitutedProps, interactions } = config
+
   // Build classes array immutably
   const typeClass = COMPONENT_TYPE_CLASSES.has(type) ? type : undefined
   const flexClass = type === 'flex' ? buildFlexClasses(substitutedProps) : undefined
   const gridClass = type === 'grid' ? buildGridClasses(theme) : undefined
   const customClass = className as string | undefined
-  const entranceClass = buildEntranceAnimationClass(interactions, childIndex)
+  const entranceClass = buildEntranceAnimationClass(interactions)
 
   const classes = [typeClass, flexClass, gridClass, customClass, entranceClass]
     .filter(Boolean)

@@ -15,8 +15,8 @@ import {
 } from '../translations/translation-handler'
 import { buildElementProps } from './props-builder'
 import type { Languages } from '@/domain/models/app/languages'
-import type { Component } from '@/domain/models/app/page/sections'
 import type { Interactions } from '@/domain/models/app/page/common/interactions/interactions'
+import type { Component } from '@/domain/models/app/page/sections'
 import type { Theme } from '@/domain/models/app/theme'
 import type { ReactElement } from 'react'
 
@@ -89,20 +89,19 @@ function applyTokenSubstitutions(
  * @returns Processed intermediate values
  */
 function prepareProcessedValues(config: ComponentPropsConfig) {
-  const { type, props, children, currentLang, languages, theme, interactions, childIndex } = config
+  const { type, props, children, currentLang, languages, theme, interactions } = config
 
   const substitutedProps = applyTokenSubstitutions(props, currentLang, languages, theme)
   const firstTranslationKey = findFirstTranslationKey(children)
   const translationData = getTranslationData(firstTranslationKey, languages)
   const styleWithShadow = processComponentStyle(type, substitutedProps?.style, theme)
-  const finalClassName = buildFinalClassName(
+  const finalClassName = buildFinalClassName({
     type,
-    substitutedProps?.className,
+    className: substitutedProps?.className,
     theme,
     substitutedProps,
     interactions,
-    childIndex
-  )
+  })
 
   return { substitutedProps, firstTranslationKey, translationData, styleWithShadow, finalClassName }
 }
