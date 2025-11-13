@@ -111,7 +111,7 @@ test.describe('Inline Scripts', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-INLINE-004: should insert code at start of body',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
