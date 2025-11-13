@@ -23,10 +23,11 @@ export function dispatchComponentType(config: ComponentDispatchConfig): ReactEle
   }
 
   // Fallback for unknown types
-  return Renderers.renderHTMLElement(
-    'div',
-    config.elementProps,
-    config.content,
-    config.renderedChildren
-  )
+  return Renderers.renderHTMLElement({
+    type: 'div',
+    props: config.elementProps,
+    content: config.content,
+    children: config.renderedChildren,
+    interactions: config.interactions,
+  })
 }

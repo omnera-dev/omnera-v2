@@ -8,6 +8,7 @@
 import tailwindcss from '@tailwindcss/postcss'
 import { Effect, Ref } from 'effect'
 import postcss from 'postcss'
+import { generateClickAnimationCSS } from '@/infrastructure/css/click-animations'
 import { CSSCompilationError } from '@/infrastructure/errors/css-compilation-error'
 import type { App } from '@/domain/models/app'
 import type { Theme } from '@/domain/models/app/theme'
@@ -525,9 +526,13 @@ function generateComponentsLayer(theme?: Theme): string {
 }
 
 /**
- * Utilities layer styles
+ * Generate utilities layer styles
+ * Combines static utilities with click interaction animations
  */
-const UTILITIES_LAYER = `@layer utilities {
+function generateUtilitiesLayer(): string {
+  const clickAnimations = generateClickAnimationCSS()
+
+  return `@layer utilities {
       .text-balance {
         text-wrap: balance;
       }
@@ -542,36 +547,9 @@ const UTILITIES_LAYER = `@layer utilities {
         box-shadow: none !important;
       }
 
-      /* Click interaction animations */
-      @keyframes ripple {
-        0% {
-          transform: scale(0);
-          opacity: 1;
-        }
-        100% {
-          transform: scale(4);
-          opacity: 0;
-        }
-      }
-
-      .animate-ripple {
-        position: relative;
-        overflow: hidden;
-      }
-
-      .animate-ripple::after {
-        content: '';
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        width: 100px;
-        height: 100px;
-        background: rgba(255, 255, 255, 0.5);
-        border-radius: 50%;
-        transform: translate(-50%, -50%) scale(0);
-        animation: ripple 600ms ease-out;
-      }
+      ${clickAnimations}
     }`
+}
 
 /**
  * Final base layer for global resets
@@ -589,12 +567,13 @@ function buildSourceCSS(theme?: Theme): string {
   const animationCSS = generateAnimationStyles(theme?.animations)
   const baseLayerCSS = generateBaseLayer(theme)
   const componentsLayerCSS = generateComponentsLayer(theme)
+  const utilitiesLayerCSS = generateUtilitiesLayer()
 
   return [
     STATIC_IMPORTS,
     baseLayerCSS,
     componentsLayerCSS,
-    UTILITIES_LAYER,
+    utilitiesLayerCSS,
     '/*---break---\n     */',
     themeCSS,
     '/*---break---\n     */',

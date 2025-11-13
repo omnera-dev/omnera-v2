@@ -70,6 +70,7 @@ function buildElementPropsFromConfig(config: ElementPropsConfig): Record<string,
     ...buildBlockProps(config),
     ...buildTranslationProps(config),
     ...buildAnimationProps(hasScrollAnimation),
+    ...buildScrollInteractionProps(config),
     ...buildEmptyElementStyles(config),
   }
 }
@@ -124,6 +125,41 @@ function buildAnimationProps(hasScrollAnimation: boolean): Record<string, unknow
 
   return {
     'data-scroll-animation': 'scale-up',
+  }
+}
+
+/**
+ * Build scroll interaction props (data-scroll-*, style for animations)
+ */
+function buildScrollInteractionProps(config: ElementPropsConfig): Record<string, unknown> {
+  if (!config.interactions?.scroll) return {}
+
+  const { animation, threshold, delay, duration, once } = config.interactions.scroll
+
+  // Build base data attributes immutably
+  const baseProps: Record<string, unknown> = {
+    'data-scroll-animation': animation,
+  }
+
+  const thresholdProps = threshold !== undefined ? { 'data-scroll-threshold': threshold.toString() } : {}
+  const onceProps = once !== undefined ? { 'data-scroll-once': once.toString() } : {}
+
+  // Build animation styles immutably
+  const delayStyle = delay ? { animationDelay: delay } : {}
+  const durationStyle = duration ? { animationDuration: duration } : {}
+  const animationStyles = { ...delayStyle, ...durationStyle }
+
+  // Combine all props immutably
+  const hasAnimationStyles = Object.keys(animationStyles).length > 0
+  const styleProps = hasAnimationStyles
+    ? { style: { ...config.styleWithShadow, ...animationStyles } }
+    : {}
+
+  return {
+    ...baseProps,
+    ...thresholdProps,
+    ...onceProps,
+    ...styleProps,
   }
 }
 

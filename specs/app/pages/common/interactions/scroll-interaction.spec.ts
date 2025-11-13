@@ -24,7 +24,7 @@ test.describe('Scroll Interaction', () => {
   // One test per spec in schema - defines EXHAUSTIVE acceptance criteria
   // ============================================================================
 
-  test.fixme(
+  test(
     'APP-PAGES-INTERACTION-SCROLL-001: should fade in while moving up',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {

@@ -5,6 +5,7 @@
  * found in the LICENSE.md file in the root directory of this source tree.
  */
 
+import type { Interactions } from '@/domain/models/app/page/common/interactions/interactions'
 import type { Component } from '@/domain/models/app/page/sections'
 import type { Theme } from '@/domain/models/app/theme'
 
@@ -37,4 +38,5 @@ export interface ElementPropsConfig {
   readonly hasChildren: boolean
   readonly theme: Theme | undefined
   readonly childIndex?: number
+  readonly interactions?: Interactions
 }

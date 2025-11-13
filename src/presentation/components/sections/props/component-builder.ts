@@ -160,6 +160,7 @@ export function buildComponentProps(config: ComponentPropsConfig): {
     hasChildren: Boolean(children?.length),
     theme,
     childIndex,
+    interactions: config.interactions,
   })
 
   return {
