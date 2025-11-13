@@ -103,19 +103,17 @@ function LanguageSwitcherScripts({
 }
 
 /**
- * Renders scripts for body end position
+ * Renders conditional script tags (banner, animation, features)
  */
-function renderBodyEndScripts(config: {
+function renderConditionalScripts(config: {
   readonly page: Page
   readonly theme: Theme | undefined
   readonly languages: Languages | undefined
   readonly direction: 'ltr' | 'rtl'
-  readonly scripts: GroupedScripts
 }): ReactElement {
-  const { page, theme, languages, direction, scripts } = config
+  const { page, theme, languages, direction } = config
   return (
     <>
-      {renderScripts(scripts.external.bodyEnd, scripts.inline.bodyEnd, 'body-end')}
       {/* Client-side banner dismiss functionality - inject when banner is dismissible */}
       {page.layout?.banner?.dismissible && (
         <script
@@ -146,10 +144,18 @@ function renderBodyEndScripts(config: {
           }}
         />
       )}
-      {/* Client-side click interaction functionality - always inject for button interactions */}
-      <script
-        dangerouslySetInnerHTML={{
-          __html: `
+    </>
+  )
+}
+
+/**
+ * Renders click interaction script
+ */
+function renderClickInteractionScript(): ReactElement {
+  return (
+    <script
+      dangerouslySetInnerHTML={{
+        __html: `
 (function() {
   document.addEventListener('click', function(event) {
     const button = event.target.closest('[data-click-animation]');
@@ -168,9 +174,28 @@ function renderBodyEndScripts(config: {
     button.addEventListener('animationend', removeAnimation);
   });
 })();
-          `.trim(),
-        }}
-      />
+        `.trim(),
+      }}
+    />
+  )
+}
+
+/**
+ * Renders scripts for body end position
+ */
+function renderBodyEndScripts(config: {
+  readonly page: Page
+  readonly theme: Theme | undefined
+  readonly languages: Languages | undefined
+  readonly direction: 'ltr' | 'rtl'
+  readonly scripts: GroupedScripts
+}): ReactElement {
+  const { page, theme, languages, direction, scripts } = config
+  return (
+    <>
+      {renderScripts(scripts.external.bodyEnd, scripts.inline.bodyEnd, 'body-end')}
+      {renderConditionalScripts({ page, theme, languages, direction })}
+      {renderClickInteractionScript()}
     </>
   )
 }

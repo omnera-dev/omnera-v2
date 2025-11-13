@@ -306,7 +306,17 @@ function setupLanguageRoutes(honoApp: Readonly<Hono>, config: HonoAppConfig): Re
   return honoApp
     .get('/:lang/', (c) => {
       try {
-        const urlLanguage = validateLanguageSubdirectory(app, c.req.path)
+        const { path } = c.req
+
+        // Check if there's an exact page match first (pages take priority over language subdirectories)
+        const detectedLanguage = detectLanguageIfEnabled(app, c.req.header('Accept-Language'))
+        const exactPageMatch = renderPage(app, path, detectedLanguage)
+        if (exactPageMatch) {
+          return c.html(exactPageMatch)
+        }
+
+        // No exact page match - try language subdirectory
+        const urlLanguage = validateLanguageSubdirectory(app, path)
         if (!urlLanguage) {
           return c.html(renderNotFoundPage(), 404)
         }
@@ -319,19 +329,22 @@ function setupLanguageRoutes(honoApp: Readonly<Hono>, config: HonoAppConfig): Re
     })
     .get('/:lang/*', (c) => {
       try {
-        const urlLanguage = validateLanguageSubdirectory(app, c.req.path)
+        const { path } = c.req
+        const detectedLanguage = detectLanguageIfEnabled(app, c.req.header('Accept-Language'))
 
-        if (!urlLanguage) {
-          const { path } = c.req
-          const detectedLanguage = detectLanguageIfEnabled(app, c.req.header('Accept-Language'))
-          const html = renderPage(app, path, detectedLanguage)
-          if (!html) {
-            return c.html(renderNotFoundPage(), 404)
-          }
-          return c.html(html)
+        // Check if there's an exact page match first (pages take priority over language subdirectories)
+        const exactPageMatch = renderPage(app, path, detectedLanguage)
+        if (exactPageMatch) {
+          return c.html(exactPageMatch)
         }
 
-        const pathWithoutLang = c.req.path.replace(`/${urlLanguage}`, '') || '/'
+        // No exact page match - try language subdirectory pattern
+        const urlLanguage = validateLanguageSubdirectory(app, path)
+        if (!urlLanguage) {
+          return c.html(renderNotFoundPage(), 404)
+        }
+
+        const pathWithoutLang = path.replace(`/${urlLanguage}`, '') || '/'
         const html = renderPage(app, pathWithoutLang, urlLanguage)
         if (!html) {
           return c.html(renderNotFoundPage(), 404)
