@@ -43,54 +43,54 @@ function convertBadgeProps(elementProps: Record<string, unknown>): Record<string
  */
 export const COMPONENT_REGISTRY: Partial<Record<Component['type'], ComponentRenderer>> = {
   // HTML structural elements
-  section: ({ elementPropsWithSpacing, content, renderedChildren }) =>
-    Renderers.renderHTMLElement('section', elementPropsWithSpacing, content, renderedChildren),
+  section: ({ elementPropsWithSpacing, content, renderedChildren, interactions }) =>
+    Renderers.renderHTMLElement('section', elementPropsWithSpacing, content, renderedChildren, interactions),
 
-  header: ({ elementPropsWithSpacing, content, renderedChildren }) =>
-    Renderers.renderHTMLElement('header', elementPropsWithSpacing, content, renderedChildren),
+  header: ({ elementPropsWithSpacing, content, renderedChildren, interactions }) =>
+    Renderers.renderHTMLElement('header', elementPropsWithSpacing, content, renderedChildren, interactions),
 
-  footer: ({ elementPropsWithSpacing, content, renderedChildren }) =>
-    Renderers.renderHTMLElement('footer', elementPropsWithSpacing, content, renderedChildren),
+  footer: ({ elementPropsWithSpacing, content, renderedChildren, interactions }) =>
+    Renderers.renderHTMLElement('footer', elementPropsWithSpacing, content, renderedChildren, interactions),
 
-  main: ({ elementPropsWithSpacing, content, renderedChildren }) =>
-    Renderers.renderHTMLElement('main', elementPropsWithSpacing, content, renderedChildren),
+  main: ({ elementPropsWithSpacing, content, renderedChildren, interactions }) =>
+    Renderers.renderHTMLElement('main', elementPropsWithSpacing, content, renderedChildren, interactions),
 
-  article: ({ elementPropsWithSpacing, content, renderedChildren }) =>
-    Renderers.renderHTMLElement('article', elementPropsWithSpacing, content, renderedChildren),
+  article: ({ elementPropsWithSpacing, content, renderedChildren, interactions }) =>
+    Renderers.renderHTMLElement('article', elementPropsWithSpacing, content, renderedChildren, interactions),
 
-  aside: ({ elementPropsWithSpacing, content, renderedChildren }) =>
-    Renderers.renderHTMLElement('aside', elementPropsWithSpacing, content, renderedChildren),
+  aside: ({ elementPropsWithSpacing, content, renderedChildren, interactions }) =>
+    Renderers.renderHTMLElement('aside', elementPropsWithSpacing, content, renderedChildren, interactions),
 
-  nav: ({ elementPropsWithSpacing, content, renderedChildren }) =>
-    Renderers.renderHTMLElement('nav', elementPropsWithSpacing, content, renderedChildren),
+  nav: ({ elementPropsWithSpacing, content, renderedChildren, interactions }) =>
+    Renderers.renderHTMLElement('nav', elementPropsWithSpacing, content, renderedChildren, interactions),
 
-  div: ({ elementPropsWithSpacing, content, renderedChildren }) =>
-    Renderers.renderHTMLElement('div', elementPropsWithSpacing, content, renderedChildren),
+  div: ({ elementPropsWithSpacing, content, renderedChildren, interactions }) =>
+    Renderers.renderHTMLElement('div', elementPropsWithSpacing, content, renderedChildren, interactions),
 
-  container: ({ elementPropsWithSpacing, content, renderedChildren }) =>
-    Renderers.renderHTMLElement('div', elementPropsWithSpacing, content, renderedChildren),
+  container: ({ elementPropsWithSpacing, content, renderedChildren, interactions }) =>
+    Renderers.renderHTMLElement('div', elementPropsWithSpacing, content, renderedChildren, interactions),
 
-  flex: ({ elementPropsWithSpacing, content, renderedChildren }) =>
-    Renderers.renderHTMLElement('div', elementPropsWithSpacing, content, renderedChildren),
+  flex: ({ elementPropsWithSpacing, content, renderedChildren, interactions }) =>
+    Renderers.renderHTMLElement('div', elementPropsWithSpacing, content, renderedChildren, interactions),
 
-  grid: ({ elementPropsWithSpacing, content, renderedChildren }) =>
-    Renderers.renderHTMLElement('div', elementPropsWithSpacing, content, renderedChildren),
+  grid: ({ elementPropsWithSpacing, content, renderedChildren, interactions }) =>
+    Renderers.renderHTMLElement('div', elementPropsWithSpacing, content, renderedChildren, interactions),
 
-  card: ({ elementPropsWithSpacing, content, renderedChildren }) =>
-    Renderers.renderHTMLElement('div', elementPropsWithSpacing, content, renderedChildren),
+  card: ({ elementPropsWithSpacing, content, renderedChildren, interactions }) =>
+    Renderers.renderHTMLElement('div', elementPropsWithSpacing, content, renderedChildren, interactions),
 
-  timeline: ({ elementPropsWithSpacing, content, renderedChildren }) =>
-    Renderers.renderHTMLElement('div', elementPropsWithSpacing, content, renderedChildren),
+  timeline: ({ elementPropsWithSpacing, content, renderedChildren, interactions }) =>
+    Renderers.renderHTMLElement('div', elementPropsWithSpacing, content, renderedChildren, interactions),
 
-  accordion: ({ elementPropsWithSpacing, content, renderedChildren }) =>
-    Renderers.renderHTMLElement('div', elementPropsWithSpacing, content, renderedChildren),
+  accordion: ({ elementPropsWithSpacing, content, renderedChildren, interactions }) =>
+    Renderers.renderHTMLElement('div', elementPropsWithSpacing, content, renderedChildren, interactions),
 
-  span: ({ elementProps, content, renderedChildren }) =>
-    Renderers.renderHTMLElement('span', elementProps, content, renderedChildren),
+  span: ({ elementProps, content, renderedChildren, interactions }) =>
+    Renderers.renderHTMLElement('span', elementProps, content, renderedChildren, interactions),
 
-  badge: ({ elementProps, content, renderedChildren }) => {
+  badge: ({ elementProps, content, renderedChildren, interactions }) => {
     const badgeProps = convertBadgeProps(elementProps)
-    return Renderers.renderHTMLElement('span', badgeProps, content, renderedChildren)
+    return Renderers.renderHTMLElement('span', badgeProps, content, renderedChildren, interactions)
   },
 
   icon: ({ elementProps, renderedChildren }) =>
@@ -170,26 +170,26 @@ export const COMPONENT_REGISTRY: Partial<Record<Component['type'], ComponentRend
     Renderers.renderLanguageSwitcher(elementProps, languages),
 
   // Layout components
-  modal: ({ elementProps, content, renderedChildren }) =>
-    Renderers.renderHTMLElement('div', elementProps, content, renderedChildren),
+  modal: ({ elementProps, content, renderedChildren, interactions }) =>
+    Renderers.renderHTMLElement('div', elementProps, content, renderedChildren, interactions),
 
-  sidebar: ({ elementProps, content, renderedChildren }) =>
-    Renderers.renderHTMLElement('div', elementProps, content, renderedChildren),
+  sidebar: ({ elementProps, content, renderedChildren, interactions }) =>
+    Renderers.renderHTMLElement('div', elementProps, content, renderedChildren, interactions),
 
-  toast: ({ elementProps, content, renderedChildren }) =>
-    Renderers.renderHTMLElement('div', elementProps, content, renderedChildren),
+  toast: ({ elementProps, content, renderedChildren, interactions }) =>
+    Renderers.renderHTMLElement('div', elementProps, content, renderedChildren, interactions),
 
-  fab: ({ elementProps, content, renderedChildren }) =>
-    Renderers.renderHTMLElement('div', elementProps, content, renderedChildren),
+  fab: ({ elementProps, content, renderedChildren, interactions }) =>
+    Renderers.renderHTMLElement('div', elementProps, content, renderedChildren, interactions),
 
-  spinner: ({ elementProps, content, renderedChildren }) =>
-    Renderers.renderHTMLElement('div', elementProps, content, renderedChildren),
+  spinner: ({ elementProps, content, renderedChildren, interactions }) =>
+    Renderers.renderHTMLElement('div', elementProps, content, renderedChildren, interactions),
 
-  'list-item': ({ elementProps, content, renderedChildren }) =>
-    Renderers.renderHTMLElement('div', elementProps, content, renderedChildren),
+  'list-item': ({ elementProps, content, renderedChildren, interactions }) =>
+    Renderers.renderHTMLElement('div', elementProps, content, renderedChildren, interactions),
 
-  dropdown: ({ elementProps, content, renderedChildren }) =>
-    Renderers.renderHTMLElement('div', elementProps, content, renderedChildren),
+  dropdown: ({ elementProps, content, renderedChildren, interactions }) =>
+    Renderers.renderHTMLElement('div', elementProps, content, renderedChildren, interactions),
 
   hero: ({ elementProps, theme, renderedChildren }) => (
     <Hero

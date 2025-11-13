@@ -31,19 +31,25 @@ export interface ElementProps {
  *
  * For section elements, automatically adds role="region" for accessibility best practices,
  * ensuring sections are properly identified in the accessibility tree.
+ *
+ * Supports scroll interactions via data attributes for IntersectionObserver.
  */
 export function renderHTMLElement(
   type: 'div' | 'span' | 'section' | 'header' | 'footer' | 'main' | 'article' | 'aside' | 'nav',
   props: ElementProps,
   content: string | undefined,
-  children: readonly React.ReactNode[]
+  children: readonly React.ReactNode[],
+  interactions?: unknown
 ): ReactElement {
   const Element = type
+  const scrollInteractions = interactions as
+    | { scroll?: { animation?: string; threshold?: number; delay?: string; duration?: string; once?: boolean } }
+    | undefined
 
   // Add appropriate ARIA role for accessibility
   //  - section elements get role="region"
   //  - div containers with children (not content) get role="group" unless already set
-  const elementProps =
+  let elementProps =
     type === 'section'
       ? { ...props, role: 'region' }
       : type === 'div' && Array.isArray(children) && children.length > 0 && !content && !props.role
@@ -51,6 +57,19 @@ export function renderHTMLElement(
           // Check Array.isArray to avoid runtime errors if children is somehow not an array
           { ...props, role: 'group' }
         : props
+
+  // Add scroll interaction data attributes
+  if (scrollInteractions?.scroll) {
+    const scroll = scrollInteractions.scroll
+    elementProps = {
+      ...elementProps,
+      'data-scroll-animation': scroll.animation,
+      ...(scroll.threshold !== undefined && { 'data-scroll-threshold': scroll.threshold }),
+      ...(scroll.delay && { 'data-scroll-delay': scroll.delay }),
+      ...(scroll.duration && { 'data-scroll-duration': scroll.duration }),
+      ...(scroll.once !== undefined && { 'data-scroll-once': scroll.once }),
+    }
+  }
 
   // If content looks like HTML (starts with '<'), render as HTML
   // This is safe for schema-defined content but should NOT be used for user input

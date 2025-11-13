@@ -27,6 +27,7 @@ export function dispatchComponentType(config: ComponentDispatchConfig): ReactEle
     'div',
     config.elementProps,
     config.content,
-    config.renderedChildren
+    config.renderedChildren,
+    config.interactions
   )
 }

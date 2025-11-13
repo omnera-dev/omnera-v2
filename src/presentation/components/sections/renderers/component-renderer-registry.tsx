@@ -23,14 +23,15 @@ type ComponentRenderer = (params: {
   readonly renderedChildren: readonly ReactElement[]
   readonly theme?: Theme
   readonly languages?: Languages
+  readonly interactions?: unknown
 }) => ReactElement | null
 
 /**
  * Creates a renderer that wraps content in an HTML element
  */
 function createHTMLRenderer(tag: 'div' | 'span' | 'section'): ComponentRenderer {
-  return ({ elementPropsWithSpacing, content, renderedChildren }) =>
-    Renderers.renderHTMLElement(tag, elementPropsWithSpacing, content, renderedChildren)
+  return ({ elementPropsWithSpacing, content, renderedChildren, interactions }) =>
+    Renderers.renderHTMLElement(tag, elementPropsWithSpacing, content, renderedChildren, interactions)
 }
 
 /**
@@ -67,9 +68,9 @@ const COMPONENT_RENDERERS: Readonly<Record<string, ComponentRenderer>> = {
   dropdown: createHTMLRenderer('div'),
 
   // Badge (with props conversion)
-  badge: ({ elementPropsWithSpacing, content, renderedChildren }) => {
+  badge: ({ elementPropsWithSpacing, content, renderedChildren, interactions }) => {
     const badgeProps = convertBadgeProps(elementPropsWithSpacing)
-    return Renderers.renderHTMLElement('span', badgeProps, content, renderedChildren)
+    return Renderers.renderHTMLElement('span', badgeProps, content, renderedChildren, interactions)
   },
 
   // Icon
