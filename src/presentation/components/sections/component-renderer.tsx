@@ -90,6 +90,7 @@ function renderDirectComponent(
     languages: props.languages,
     currentLang: props.currentLang,
     childIndex: props.childIndex,
+    interactions,
   })
 
   // Render children recursively
