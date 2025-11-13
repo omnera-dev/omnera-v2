@@ -7,9 +7,7 @@
 
 import DOMPurify from 'dompurify'
 import { type ReactElement } from 'react'
-import { type Languages } from '@/domain/models/app/languages'
-import { type Theme } from '@/domain/models/app/theme'
-import { LanguageSwitcher } from '@/presentation/components/languages/language-switcher'
+import { buildAccessibilityRole, buildScrollAttributes } from './html-element-helpers'
 
 /**
  * Common props for all rendered elements
@@ -31,30 +29,33 @@ export interface ElementProps {
  *
  * For section elements, automatically adds role="region" for accessibility best practices,
  * ensuring sections are properly identified in the accessibility tree.
+ *
+ * Supports scroll interactions via data attributes for IntersectionObserver.
  */
-export function renderHTMLElement(
-  type: 'div' | 'span' | 'section' | 'header' | 'footer' | 'main' | 'article' | 'aside' | 'nav',
-  props: ElementProps,
-  content: string | undefined,
-  children: readonly React.ReactNode[]
-): ReactElement {
+
+/**
+ * Configuration for renderHTMLElement
+ */
+type HTMLElementConfig = {
+  readonly type: 'div' | 'span' | 'section' | 'header' | 'footer' | 'main' | 'article' | 'aside' | 'nav'
+  readonly props: ElementProps
+  readonly content: string | undefined
+  readonly children: readonly React.ReactNode[]
+  readonly interactions?: unknown
+}
+
+export function renderHTMLElement(config: HTMLElementConfig): ReactElement {
+  const { type, props, content, children, interactions } = config
   const Element = type
 
-  // Add appropriate ARIA role for accessibility
-  //  - section elements get role="region"
-  //  - div containers with children (not content) get role="group" unless already set
-  const elementProps =
-    type === 'section'
-      ? { ...props, role: 'region' }
-      : type === 'div' && Array.isArray(children) && children.length > 0 && !content && !props.role
-        ? // Only add role="group" if not already set (avoid conflicts with component-renderer)
-          // Check Array.isArray to avoid runtime errors if children is somehow not an array
-          { ...props, role: 'group' }
-        : props
+  // Build element props immutably
+  const accessibilityRole = buildAccessibilityRole(type, children.length > 0, !!content, props.role)
+  const scrollAttributes = buildScrollAttributes(interactions)
+  const elementProps = { ...props, ...accessibilityRole, ...scrollAttributes }
 
   // If content looks like HTML (starts with '<'), render as HTML
   // This is safe for schema-defined content but should NOT be used for user input
-  if (content && content.trim().startsWith('<')) {
+  if (content?.trim().startsWith('<')) {
     return (
       <Element
         {...elementProps}
@@ -283,209 +284,13 @@ export function renderCustomHTML(props: ElementProps): ReactElement {
 }
 
 /**
- * Renders language switcher block
- *
- * This is a special block that requires languages configuration from app schema.
- * If languages is not provided, renders a warning message.
- *
- * Note: Languages are already validated at server startup via AppSchema validation.
- * No need to re-validate here since the data comes from the validated app config.
- *
- * Note: Props like variant, showFlags, and position are currently not used but may
- * be supported in future versions of the LanguageSwitcher component.
+ * Specialized renderers (alert, list, language-switcher) are in specialized-renderers.tsx
+ * Re-export them here for backward compatibility
  */
-export function renderLanguageSwitcher(_props: ElementProps, languages?: Languages): ReactElement {
-  if (!languages) {
-    console.warn('language-switcher block requires languages configuration')
-    return (
-      <div
-        style={{
-          padding: '1rem',
-          border: '2px dashed orange',
-          color: 'orange',
-          fontFamily: 'monospace',
-        }}
-      >
-        language-switcher: missing app.languages configuration
-      </div>
-    )
-  }
-
-  // Languages already validated at server startup (start-server.ts)
-  return <LanguageSwitcher languages={languages} />
-}
-
-/**
- * Renders alert element with variant support
- *
- * Creates an alert component with semantic variants (success, danger, warning, info).
- * The variant prop determines the visual styling based on theme colors.
- * Uses inline styles derived from theme tokens for color variants.
- *
- * @param props - Element props including variant and data-testid
- * @param content - Alert message text
- * @param children - Optional child elements
- * @param theme - Theme configuration for color resolution
- * @returns React element for alert component
- */
-/**
- * Builds alert variant styles from theme colors
- */
-function buildAlertVariantStyles(
-  variant: string | undefined,
-  theme: Theme | undefined
-): Record<string, unknown> {
-  if (!variant || !theme?.colors) {
-    return {}
-  }
-
-  const colorKey = variant as keyof typeof theme.colors
-  const lightColorKey = `${variant}-light` as keyof typeof theme.colors
-  const color = theme.colors[colorKey] as string | undefined
-  const lightColor = theme.colors[lightColorKey] as string | undefined
-
-  return {
-    ...(color && { color, borderColor: color }),
-    ...(lightColor && { backgroundColor: lightColor }),
-  }
-}
-
-export function renderAlert(
-  props: ElementProps,
-  content: string | undefined,
-  children: readonly React.ReactNode[],
-  theme?: Theme
-): ReactElement {
-  const variant = props.variant as string | undefined
-  const existingStyle = (props.style as Record<string, unknown> | undefined) || {}
-
-  // Merge existing styles with variant styles
-  const mergedStyle = {
-    padding: '12px 16px',
-    borderRadius: '4px',
-    border: '1px solid',
-    ...buildAlertVariantStyles(variant, theme),
-    ...existingStyle,
-  }
-
-  return (
-    <div
-      {...props}
-      role="alert"
-      style={mergedStyle}
-    >
-      {content || children}
-    </div>
-  )
-}
-
-/**
- * Extracts animation config from theme
- */
-function getAnimationConfig(theme: Theme | undefined) {
-  const fadeInConfig = theme?.animations?.fadeIn
-  return fadeInConfig && typeof fadeInConfig === 'object' && !Array.isArray(fadeInConfig)
-    ? fadeInConfig
-    : undefined
-}
-
-/**
- * Calculates stagger delay from duration
- */
-function calculateStaggerDelay(duration: string): number {
-  const durationMs = parseInt(duration.replace('ms', ''), 10)
-  return Math.max(50, durationMs / 4) // 25% of duration, min 50ms
-}
-
-/**
- * Renders list element with staggered fadeIn animations for items
- *
- * Parses HTML content to extract <li> elements and applies incremental
- * animation delays for a cascading appearance effect.
- *
- * @param props - Element props including data-testid
- * @param content - HTML string containing <li> elements
- * @param theme - Theme configuration for animation settings
- * @returns React element with list items animated with stagger effect
- */
-export function renderList(
-  props: ElementProps,
-  content: string | undefined,
-  theme?: Theme
-): ReactElement {
-  if (!content) {
-    return <ul {...props} />
-  }
-
-  const sanitizedContent = DOMPurify.sanitize(content)
-  const liMatches = sanitizedContent.match(/<li[^>]*>.*?<\/li>/gs) || []
-
-  const animationConfig = getAnimationConfig(theme)
-  const duration = animationConfig?.duration || '400ms'
-  const easing = animationConfig?.easing || 'ease-out'
-  const staggerDelay = calculateStaggerDelay(duration)
-
-  const renderedItems = liMatches.map((liHtml, index) => {
-    const delay = `${index * staggerDelay}ms`
-    const animationValue = `fade-in ${duration} ${easing} ${delay} both`
-    const innerHtml = liHtml.replace(/<li[^>]*>|<\/li>/g, '')
-
-    return (
-      <li
-        key={index}
-        style={{ animation: animationValue }}
-        dangerouslySetInnerHTML={{ __html: innerHtml }}
-      />
-    )
-  })
-
-  return <ul {...props}>{renderedItems}</ul>
-}
-
-/**
- * Renders unordered list element (ul)
- *
- * Supports recursive children rendering for nested lists.
- * Used by block system for component-based list structures.
- *
- * @param props - Element props including data-testid
- * @param content - Optional text content
- * @param children - Child elements (typically li elements)
- * @returns React element for unordered list
- */
-export function renderUnorderedList(
-  props: ElementProps,
-  content: string | undefined,
-  children: readonly React.ReactNode[]
-): ReactElement {
-  return <ul {...props}>{content || children}</ul>
-}
-
-/**
- * Renders list item element (li)
- *
- * Supports recursive children rendering for nested list structures.
- * Content and children can be combined - content appears first if both present.
- *
- * @param props - Element props including data-testid
- * @param content - Optional text content
- * @param children - Optional child elements (for nested lists)
- * @returns React element for list item
- */
-export function renderListItem(
-  props: ElementProps,
-  content: string | undefined,
-  children: readonly React.ReactNode[]
-): ReactElement {
-  // If both content and children exist, render both (content first)
-  if (content && children && children.length > 0) {
-    return (
-      <li {...props}>
-        {content}
-        {children}
-      </li>
-    )
-  }
-  // Otherwise use content or children (whichever is present)
-  return <li {...props}>{content || children}</li>
-}
+export {
+  renderLanguageSwitcher,
+  renderAlert,
+  renderList,
+  renderUnorderedList,
+  renderListItem,
+} from './specialized-renderers'
