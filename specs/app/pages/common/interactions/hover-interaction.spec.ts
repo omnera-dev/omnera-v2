@@ -59,7 +59,7 @@ test.describe('Hover Interaction', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-INTERACTION-HOVER-002: should fade to 80% opacity',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
