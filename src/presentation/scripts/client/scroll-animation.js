@@ -33,7 +33,6 @@
 
     // Process each element to create observers with custom thresholds
     animatedElements.forEach((element) => {
-      const animation = element.getAttribute('data-scroll-animation')
       const threshold = parseFloat(element.getAttribute('data-scroll-threshold') || '0.1')
       const once = element.getAttribute('data-scroll-once') !== 'false'
 

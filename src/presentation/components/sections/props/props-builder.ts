@@ -135,32 +135,32 @@ function buildScrollInteractionProps(config: ElementPropsConfig): Record<string,
   if (!config.interactions?.scroll) return {}
 
   const { animation, threshold, delay, duration, once } = config.interactions.scroll
-  const props: Record<string, unknown> = {
+
+  // Build base data attributes immutably
+  const baseProps: Record<string, unknown> = {
     'data-scroll-animation': animation,
   }
 
-  if (threshold !== undefined) {
-    props['data-scroll-threshold'] = threshold.toString()
-  }
+  const thresholdProps = threshold !== undefined ? { 'data-scroll-threshold': threshold.toString() } : {}
+  const onceProps = once !== undefined ? { 'data-scroll-once': once.toString() } : {}
 
-  if (once !== undefined) {
-    props['data-scroll-once'] = once.toString()
-  }
+  // Build animation styles immutably
+  const delayStyle = delay ? { animationDelay: delay } : {}
+  const durationStyle = duration ? { animationDuration: duration } : {}
+  const animationStyles = { ...delayStyle, ...durationStyle }
 
-  // Apply animation delay and duration via inline styles
-  const animationStyles: Record<string, string> = {}
-  if (delay) {
-    animationStyles['animationDelay'] = delay
-  }
-  if (duration) {
-    animationStyles['animationDuration'] = duration
-  }
+  // Combine all props immutably
+  const hasAnimationStyles = Object.keys(animationStyles).length > 0
+  const styleProps = hasAnimationStyles
+    ? { style: { ...config.styleWithShadow, ...animationStyles } }
+    : {}
 
-  if (Object.keys(animationStyles).length > 0) {
-    props['style'] = { ...config.styleWithShadow, ...animationStyles }
+  return {
+    ...baseProps,
+    ...thresholdProps,
+    ...onceProps,
+    ...styleProps,
   }
-
-  return props
 }
 
 /**
