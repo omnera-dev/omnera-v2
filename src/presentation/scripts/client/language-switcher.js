@@ -70,13 +70,27 @@
   /**
    * Detect initial language based on configuration
    * Priority order:
-   * 1. localStorage (user's explicit choice - highest priority)
-   * 2. Page language from <html lang> (server-rendered, either from page.meta.lang or Accept-Language detection)
-   * 3. Browser detection (user's browser preference, only if no HTML lang set)
-   * 4. Default language (final fallback)
+   * 1. Page language from <html lang> IF it differs from default (explicit page.meta.lang - highest priority)
+   * 2. localStorage (user's explicit manual choice - persists across reloads)
+   * 3. Page language from <html lang> IF it matches default (server-detected or default)
+   * 4. Browser detection (user's browser preference, only if no HTML lang set)
+   * 5. Default language (final fallback)
    */
   function getInitialLanguage() {
-    // 1. Check if persistence is enabled (defaults to true)
+    const pageLang = document.documentElement.getAttribute('lang')
+    const defaultLang = languagesConfig.default
+
+    // 1. Check if page has explicit non-default language (page.meta.lang set explicitly)
+    // If HTML lang differs from default, it means the page explicitly set a language
+    if (pageLang && pageLang !== defaultLang) {
+      // Verify page language is in supported languages
+      const isSupported = languagesConfig.supported.some((lang) => lang.code === pageLang)
+      if (isSupported) {
+        return pageLang
+      }
+    }
+
+    // 2. Check if persistence is enabled (defaults to true)
     const persistSelection = languagesConfig.persistSelection ?? true
 
     if (persistSelection) {
@@ -91,19 +105,15 @@
       }
     }
 
-    // 2. Check page language from <html lang="..."> attribute (server-rendered)
-    // This takes precedence over browser detection to respect page.meta.lang settings
-    const pageLang = document.documentElement.getAttribute('lang')
+    // 3. Use HTML lang attribute if it matches default (server's default or Accept-Language detection)
     if (pageLang) {
-      // Verify page language is in supported languages
       const isSupported = languagesConfig.supported.some((lang) => lang.code === pageLang)
       if (isSupported) {
         return pageLang
       }
     }
 
-    // 3. Check if browser detection is enabled (defaults to true)
-    // Only used if no HTML lang was set (i.e., server didn't specify a language)
+    // 4. Check if browser detection is enabled (defaults to true)
     const detectBrowser = languagesConfig.detectBrowser ?? true
 
     if (detectBrowser) {
@@ -114,7 +124,7 @@
       }
     }
 
-    // 4. Fallback to default language (no match found or detection disabled)
+    // 5. Fallback to default language (no match found or detection disabled)
     return languagesConfig.default
   }
 
