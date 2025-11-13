@@ -162,7 +162,7 @@ test.describe('Hover Interaction', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-INTERACTION-HOVER-005: should transition using specified duration and easing function',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
