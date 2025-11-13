@@ -93,7 +93,7 @@ test.describe('Hover Interaction', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-INTERACTION-HOVER-003: should change background and text colors',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
