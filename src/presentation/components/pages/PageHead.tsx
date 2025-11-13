@@ -21,7 +21,6 @@ import type { CustomElement } from '@/domain/models/app/page/meta/custom-element
 import type { Page } from '@/domain/models/app/pages'
 import type { Theme } from '@/domain/models/app/theme'
 
-
 /**
  * Props for PageHead component
  */

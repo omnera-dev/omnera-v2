@@ -44,53 +44,149 @@ function convertBadgeProps(elementProps: Record<string, unknown>): Record<string
 export const COMPONENT_REGISTRY: Partial<Record<Component['type'], ComponentRenderer>> = {
   // HTML structural elements
   section: ({ elementPropsWithSpacing, content, renderedChildren, interactions }) =>
-    Renderers.renderHTMLElement({ type: 'section', props: elementPropsWithSpacing, content: content, children: renderedChildren, interactions: interactions }),
+    Renderers.renderHTMLElement({
+      type: 'section',
+      props: elementPropsWithSpacing,
+      content: content,
+      children: renderedChildren,
+      interactions: interactions,
+    }),
 
   header: ({ elementPropsWithSpacing, content, renderedChildren, interactions }) =>
-    Renderers.renderHTMLElement({ type: 'header', props: elementPropsWithSpacing, content: content, children: renderedChildren, interactions: interactions }),
+    Renderers.renderHTMLElement({
+      type: 'header',
+      props: elementPropsWithSpacing,
+      content: content,
+      children: renderedChildren,
+      interactions: interactions,
+    }),
 
   footer: ({ elementPropsWithSpacing, content, renderedChildren, interactions }) =>
-    Renderers.renderHTMLElement({ type: 'footer', props: elementPropsWithSpacing, content: content, children: renderedChildren, interactions: interactions }),
+    Renderers.renderHTMLElement({
+      type: 'footer',
+      props: elementPropsWithSpacing,
+      content: content,
+      children: renderedChildren,
+      interactions: interactions,
+    }),
 
   main: ({ elementPropsWithSpacing, content, renderedChildren, interactions }) =>
-    Renderers.renderHTMLElement({ type: 'main', props: elementPropsWithSpacing, content: content, children: renderedChildren, interactions: interactions }),
+    Renderers.renderHTMLElement({
+      type: 'main',
+      props: elementPropsWithSpacing,
+      content: content,
+      children: renderedChildren,
+      interactions: interactions,
+    }),
 
   article: ({ elementPropsWithSpacing, content, renderedChildren, interactions }) =>
-    Renderers.renderHTMLElement({ type: 'article', props: elementPropsWithSpacing, content: content, children: renderedChildren, interactions: interactions }),
+    Renderers.renderHTMLElement({
+      type: 'article',
+      props: elementPropsWithSpacing,
+      content: content,
+      children: renderedChildren,
+      interactions: interactions,
+    }),
 
   aside: ({ elementPropsWithSpacing, content, renderedChildren, interactions }) =>
-    Renderers.renderHTMLElement({ type: 'aside', props: elementPropsWithSpacing, content: content, children: renderedChildren, interactions: interactions }),
+    Renderers.renderHTMLElement({
+      type: 'aside',
+      props: elementPropsWithSpacing,
+      content: content,
+      children: renderedChildren,
+      interactions: interactions,
+    }),
 
   nav: ({ elementPropsWithSpacing, content, renderedChildren, interactions }) =>
-    Renderers.renderHTMLElement({ type: 'nav', props: elementPropsWithSpacing, content: content, children: renderedChildren, interactions: interactions }),
+    Renderers.renderHTMLElement({
+      type: 'nav',
+      props: elementPropsWithSpacing,
+      content: content,
+      children: renderedChildren,
+      interactions: interactions,
+    }),
 
   div: ({ elementPropsWithSpacing, content, renderedChildren, interactions }) =>
-    Renderers.renderHTMLElement({ type: 'div', props: elementPropsWithSpacing, content: content, children: renderedChildren, interactions: interactions }),
+    Renderers.renderHTMLElement({
+      type: 'div',
+      props: elementPropsWithSpacing,
+      content: content,
+      children: renderedChildren,
+      interactions: interactions,
+    }),
 
   container: ({ elementPropsWithSpacing, content, renderedChildren, interactions }) =>
-    Renderers.renderHTMLElement({ type: 'div', props: elementPropsWithSpacing, content: content, children: renderedChildren, interactions: interactions }),
+    Renderers.renderHTMLElement({
+      type: 'div',
+      props: elementPropsWithSpacing,
+      content: content,
+      children: renderedChildren,
+      interactions: interactions,
+    }),
 
   flex: ({ elementPropsWithSpacing, content, renderedChildren, interactions }) =>
-    Renderers.renderHTMLElement({ type: 'div', props: elementPropsWithSpacing, content: content, children: renderedChildren, interactions: interactions }),
+    Renderers.renderHTMLElement({
+      type: 'div',
+      props: elementPropsWithSpacing,
+      content: content,
+      children: renderedChildren,
+      interactions: interactions,
+    }),
 
   grid: ({ elementPropsWithSpacing, content, renderedChildren, interactions }) =>
-    Renderers.renderHTMLElement({ type: 'div', props: elementPropsWithSpacing, content: content, children: renderedChildren, interactions: interactions }),
+    Renderers.renderHTMLElement({
+      type: 'div',
+      props: elementPropsWithSpacing,
+      content: content,
+      children: renderedChildren,
+      interactions: interactions,
+    }),
 
   card: ({ elementPropsWithSpacing, content, renderedChildren, interactions }) =>
-    Renderers.renderHTMLElement({ type: 'div', props: elementPropsWithSpacing, content: content, children: renderedChildren, interactions: interactions }),
+    Renderers.renderHTMLElement({
+      type: 'div',
+      props: elementPropsWithSpacing,
+      content: content,
+      children: renderedChildren,
+      interactions: interactions,
+    }),
 
   timeline: ({ elementPropsWithSpacing, content, renderedChildren, interactions }) =>
-    Renderers.renderHTMLElement({ type: 'div', props: elementPropsWithSpacing, content: content, children: renderedChildren, interactions: interactions }),
+    Renderers.renderHTMLElement({
+      type: 'div',
+      props: elementPropsWithSpacing,
+      content: content,
+      children: renderedChildren,
+      interactions: interactions,
+    }),
 
   accordion: ({ elementPropsWithSpacing, content, renderedChildren, interactions }) =>
-    Renderers.renderHTMLElement({ type: 'div', props: elementPropsWithSpacing, content: content, children: renderedChildren, interactions: interactions }),
+    Renderers.renderHTMLElement({
+      type: 'div',
+      props: elementPropsWithSpacing,
+      content: content,
+      children: renderedChildren,
+      interactions: interactions,
+    }),
 
   span: ({ elementProps, content, renderedChildren, interactions }) =>
-    Renderers.renderHTMLElement({ type: 'span', props: elementProps, content: content, children: renderedChildren, interactions: interactions }),
+    Renderers.renderHTMLElement({
+      type: 'span',
+      props: elementProps,
+      content: content,
+      children: renderedChildren,
+      interactions: interactions,
+    }),
 
   badge: ({ elementProps, content, renderedChildren, interactions }) => {
     const badgeProps = convertBadgeProps(elementProps)
-    return Renderers.renderHTMLElement({ type: 'span', props: badgeProps, content: content, children: renderedChildren, interactions: interactions })
+    return Renderers.renderHTMLElement({
+      type: 'span',
+      props: badgeProps,
+      content: content,
+      children: renderedChildren,
+      interactions: interactions,
+    })
   },
 
   icon: ({ elementProps, renderedChildren }) =>
@@ -171,25 +267,67 @@ export const COMPONENT_REGISTRY: Partial<Record<Component['type'], ComponentRend
 
   // Layout components
   modal: ({ elementProps, content, renderedChildren, interactions }) =>
-    Renderers.renderHTMLElement({ type: 'div', props: elementProps, content: content, children: renderedChildren, interactions: interactions }),
+    Renderers.renderHTMLElement({
+      type: 'div',
+      props: elementProps,
+      content: content,
+      children: renderedChildren,
+      interactions: interactions,
+    }),
 
   sidebar: ({ elementProps, content, renderedChildren, interactions }) =>
-    Renderers.renderHTMLElement({ type: 'div', props: elementProps, content: content, children: renderedChildren, interactions: interactions }),
+    Renderers.renderHTMLElement({
+      type: 'div',
+      props: elementProps,
+      content: content,
+      children: renderedChildren,
+      interactions: interactions,
+    }),
 
   toast: ({ elementProps, content, renderedChildren, interactions }) =>
-    Renderers.renderHTMLElement({ type: 'div', props: elementProps, content: content, children: renderedChildren, interactions: interactions }),
+    Renderers.renderHTMLElement({
+      type: 'div',
+      props: elementProps,
+      content: content,
+      children: renderedChildren,
+      interactions: interactions,
+    }),
 
   fab: ({ elementProps, content, renderedChildren, interactions }) =>
-    Renderers.renderHTMLElement({ type: 'div', props: elementProps, content: content, children: renderedChildren, interactions: interactions }),
+    Renderers.renderHTMLElement({
+      type: 'div',
+      props: elementProps,
+      content: content,
+      children: renderedChildren,
+      interactions: interactions,
+    }),
 
   spinner: ({ elementProps, content, renderedChildren, interactions }) =>
-    Renderers.renderHTMLElement({ type: 'div', props: elementProps, content: content, children: renderedChildren, interactions: interactions }),
+    Renderers.renderHTMLElement({
+      type: 'div',
+      props: elementProps,
+      content: content,
+      children: renderedChildren,
+      interactions: interactions,
+    }),
 
   'list-item': ({ elementProps, content, renderedChildren, interactions }) =>
-    Renderers.renderHTMLElement({ type: 'div', props: elementProps, content: content, children: renderedChildren, interactions: interactions }),
+    Renderers.renderHTMLElement({
+      type: 'div',
+      props: elementProps,
+      content: content,
+      children: renderedChildren,
+      interactions: interactions,
+    }),
 
   dropdown: ({ elementProps, content, renderedChildren, interactions }) =>
-    Renderers.renderHTMLElement({ type: 'div', props: elementProps, content: content, children: renderedChildren, interactions: interactions }),
+    Renderers.renderHTMLElement({
+      type: 'div',
+      props: elementProps,
+      content: content,
+      children: renderedChildren,
+      interactions: interactions,
+    }),
 
   hero: ({ elementProps, theme, renderedChildren }) => (
     <Hero
