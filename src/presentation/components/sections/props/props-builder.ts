@@ -142,6 +142,8 @@ function buildScrollInteractionProps(config: ElementPropsConfig): Record<string,
   }
 
   const thresholdProps = threshold !== undefined ? { 'data-scroll-threshold': threshold.toString() } : {}
+  const delayProps = delay ? { 'data-scroll-delay': delay } : {}
+  const durationProps = duration ? { 'data-scroll-duration': duration } : {}
   const onceProps = once !== undefined ? { 'data-scroll-once': once.toString() } : {}
 
   // Build animation styles immutably
@@ -158,6 +160,8 @@ function buildScrollInteractionProps(config: ElementPropsConfig): Record<string,
   return {
     ...baseProps,
     ...thresholdProps,
+    ...delayProps,
+    ...durationProps,
     ...onceProps,
     ...styleProps,
   }
