@@ -491,7 +491,6 @@ test.describe('Pages', () => {
       await page.goto('/')
       await expect(page.locator('h1')).toHaveText('Welcome')
       await page.goto('/fr')
-      await page.waitForLoadState('networkidle')
       await expect(page.locator('h1')).toHaveText('Bienvenue')
 
       // THEN: it should adapt page content based on selected language without page-level translations
