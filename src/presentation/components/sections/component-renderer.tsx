@@ -5,11 +5,12 @@
  * found in the LICENSE.md file in the root directory of this source tree.
  */
 
-import { type ReactElement } from 'react'
+import { type ReactElement, Fragment, useId } from 'react'
 import { extractBlockReference, renderBlockReferenceError } from './blocks/block-reference-handler'
 import { resolveBlock } from './blocks/block-resolution'
 import { buildComponentProps } from './props/component-builder'
 import { dispatchComponentType } from './rendering/component-type-dispatcher'
+import { buildHoverData } from './styling/hover-interaction-handler'
 import { resolveChildTranslation } from './translations/translation-handler'
 import type {
   BlockReference,
@@ -78,6 +79,9 @@ function renderDirectComponent(
 ): ReactElement | null {
   const { type, props: componentProps, children, content, interactions } = component
 
+  // Generate unique ID for hover styles (only if hover interactions exist)
+  const uniqueId = useId()
+
   // Build component props (theme tokens, styles, className, etc.)
   const { elementProps, elementPropsWithSpacing } = buildComponentProps({
     type,
@@ -92,6 +96,17 @@ function renderDirectComponent(
     childIndex: props.childIndex,
     interactions,
   })
+
+  // Build hover data (attributes and style content)
+  const hoverData = buildHoverData(interactions?.hover, uniqueId)
+
+  // Merge hover attributes into element props
+  const finalElementProps = hoverData
+    ? { ...elementProps, ...hoverData.attributes }
+    : elementProps
+  const finalElementPropsWithSpacing = hoverData
+    ? { ...elementPropsWithSpacing, ...hoverData.attributes }
+    : elementPropsWithSpacing
 
   // Render children recursively
   const renderedChildren = children?.map((child: Component | string, index: number) =>
@@ -116,16 +131,28 @@ function renderDirectComponent(
     : content
 
   // Dispatch rendering based on component type
-  return dispatchComponentType({
+  const renderedComponent = dispatchComponentType({
     type,
-    elementProps,
-    elementPropsWithSpacing,
+    elementProps: finalElementProps,
+    elementPropsWithSpacing: finalElementPropsWithSpacing,
     content: resolvedContent,
     renderedChildren,
     theme: props.theme,
     languages: props.languages,
     interactions,
   })
+
+  // Wrap with Fragment and style tag if hover interactions exist
+  if (hoverData) {
+    return (
+      <Fragment>
+        <style>{hoverData.styleContent}</style>
+        {renderedComponent}
+      </Fragment>
+    )
+  }
+
+  return renderedComponent
 }
 
 /**

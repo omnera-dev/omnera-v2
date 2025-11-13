@@ -24,7 +24,7 @@ test.describe('Hover Interaction', () => {
   // One test per spec in schema - defines EXHAUSTIVE acceptance criteria
   // ============================================================================
 
-  test.fixme(
+  test(
     'APP-PAGES-INTERACTION-HOVER-001: should smoothly scale up by 5%',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -54,7 +54,8 @@ test.describe('Hover Interaction', () => {
       await button.hover()
 
       // THEN: it should smoothly scale up by 5%
-      await expect(button).toHaveCSS('transform', /scale/)
+      // Note: Browsers compute scale(1.05) to matrix(1.05, 0, 0, 1.05, 0, 0)
+      await expect(button).toHaveCSS('transform', /matrix\(1\.05,.*\)/)
     }
   )
 
