@@ -22,6 +22,7 @@ export interface ComponentDispatchConfig {
   readonly renderedChildren: readonly ReactElement[]
   readonly theme: Theme | undefined
   readonly languages: Languages | undefined
+  readonly interactions?: Component['interactions']
 }
 
 /**
