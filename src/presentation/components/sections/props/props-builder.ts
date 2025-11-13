@@ -129,23 +129,37 @@ function buildAnimationProps(hasScrollAnimation: boolean): Record<string, unknow
 }
 
 /**
- * Build scroll interaction props from interactions config
+ * Build scroll interaction props (data-scroll-*, style for animations)
  */
 function buildScrollInteractionProps(config: ElementPropsConfig): Record<string, unknown> {
-  const scrollConfig = config.interactions?.scroll
-  if (!scrollConfig) return {}
+  if (!config.interactions?.scroll) return {}
 
-  const once = scrollConfig.once ?? true
+  const { animation, threshold, delay, duration, once } = config.interactions.scroll
+
+  // Build base data attributes immutably
+  const baseProps: Record<string, unknown> = {
+    'data-scroll-animation': animation,
+  }
+
+  const thresholdProps = threshold !== undefined ? { 'data-scroll-threshold': threshold.toString() } : {}
+  const onceProps = once !== undefined ? { 'data-scroll-once': once.toString() } : {}
+
+  // Build animation styles immutably
+  const delayStyle = delay ? { animationDelay: delay } : {}
+  const durationStyle = duration ? { animationDuration: duration } : {}
+  const animationStyles = { ...delayStyle, ...durationStyle }
+
+  // Combine all props immutably
+  const hasAnimationStyles = Object.keys(animationStyles).length > 0
+  const styleProps = hasAnimationStyles
+    ? { style: { ...config.styleWithShadow, ...animationStyles } }
+    : {}
 
   return {
-    'data-scroll-animation': scrollConfig.animation,
-    ...(scrollConfig.threshold !== undefined && {
-      'data-scroll-threshold': String(scrollConfig.threshold),
-    }),
-    ...(scrollConfig.delay && { 'data-scroll-delay': scrollConfig.delay }),
-    ...(scrollConfig.duration && { 'data-scroll-duration': scrollConfig.duration }),
-    ...(once && { 'data-scroll-once': 'true' }),
-    ...(!once && { 'data-scroll-once': 'false' }),
+    ...baseProps,
+    ...thresholdProps,
+    ...onceProps,
+    ...styleProps,
   }
 }
 

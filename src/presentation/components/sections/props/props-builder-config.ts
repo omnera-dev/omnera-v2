@@ -38,5 +38,5 @@ export interface ElementPropsConfig {
   readonly hasChildren: boolean
   readonly theme: Theme | undefined
   readonly childIndex?: number
-  readonly interactions: Interactions | undefined
+  readonly interactions?: Interactions
 }
