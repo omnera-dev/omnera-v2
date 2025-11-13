@@ -16,6 +16,7 @@ import {
 import { buildElementProps } from './props-builder'
 import type { Languages } from '@/domain/models/app/languages'
 import type { Component } from '@/domain/models/app/page/sections'
+import type { Interactions } from '@/domain/models/app/page/common/interactions/interactions'
 import type { Theme } from '@/domain/models/app/theme'
 import type { ReactElement } from 'react'
 
@@ -33,6 +34,7 @@ export type ComponentPropsConfig = {
   readonly languages: Languages | undefined
   readonly currentLang: string | undefined
   readonly childIndex: number | undefined
+  readonly interactions: Interactions | undefined
 }
 
 /**
@@ -87,7 +89,7 @@ function applyTokenSubstitutions(
  * @returns Processed intermediate values
  */
 function prepareProcessedValues(config: ComponentPropsConfig) {
-  const { type, props, children, currentLang, languages, theme } = config
+  const { type, props, children, currentLang, languages, theme, interactions, childIndex } = config
 
   const substitutedProps = applyTokenSubstitutions(props, currentLang, languages, theme)
   const firstTranslationKey = findFirstTranslationKey(children)
@@ -97,7 +99,9 @@ function prepareProcessedValues(config: ComponentPropsConfig) {
     type,
     substitutedProps?.className,
     theme,
-    substitutedProps
+    substitutedProps,
+    interactions,
+    childIndex
   )
 
   return { substitutedProps, firstTranslationKey, translationData, styleWithShadow, finalClassName }
