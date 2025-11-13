@@ -147,7 +147,7 @@ test.describe('Inline Scripts', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-INLINE-005: should wrap code in async IIFE (async function)',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
