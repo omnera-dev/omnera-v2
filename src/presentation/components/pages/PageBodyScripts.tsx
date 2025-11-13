@@ -154,20 +154,46 @@ function renderConditionalScripts(config: {
 const CLICK_INTERACTION_SCRIPT = `
 (function() {
   document.addEventListener('click', function(event) {
-    const button = event.target.closest('[data-click-animation]');
+    const button = event.target.closest('[data-click-animation], [data-click-navigate]');
     if (!button) return;
 
     const animation = button.getAttribute('data-click-animation');
-    if (!animation || animation === 'none') return;
+    const navigate = button.getAttribute('data-click-navigate');
 
-    const animationClass = 'animate-' + animation;
-    button.classList.add(animationClass);
+    // Handle animation and navigation together
+    if (animation && animation !== 'none') {
+      const animationClass = 'animate-' + animation;
+      button.classList.add(animationClass);
 
-    const removeAnimation = function() {
-      button.classList.remove(animationClass);
-      button.removeEventListener('animationend', removeAnimation);
-    };
-    button.addEventListener('animationend', removeAnimation);
+      if (navigate) {
+        // Navigate after animation completes (with timeout fallback)
+        let navigated = false;
+        const doNavigate = function() {
+          if (!navigated) {
+            navigated = true;
+            button.classList.remove(animationClass);
+            window.location.href = navigate;
+          }
+        };
+
+        // Listen for animation end
+        button.addEventListener('animationend', doNavigate, { once: true });
+
+        // Fallback timeout in case animation doesn't exist or fails (300ms default animation duration)
+        setTimeout(doNavigate, 300);
+      } else {
+        // Just remove animation class when done
+        const removeAnimation = function() {
+          button.classList.remove(animationClass);
+        };
+        button.addEventListener('animationend', removeAnimation, { once: true });
+        // Fallback to remove class after timeout
+        setTimeout(removeAnimation, 300);
+      }
+    } else if (navigate) {
+      // No animation, navigate immediately
+      window.location.href = navigate;
+    }
   });
 })();
 `.trim()
