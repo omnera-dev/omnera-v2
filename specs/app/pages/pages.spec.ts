@@ -579,7 +579,7 @@ test.describe('Pages', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-INTEGRATION-005: should demonstrate end-to-end integration of all page-building features',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -589,7 +589,10 @@ test.describe('Pages', () => {
         theme: { colors: { primary: '#3B82F6', secondary: '#10B981' } },
         languages: {
           default: 'en',
-          supported: ['en', 'fr'],
+          supported: [
+            { code: 'en', label: 'English' },
+            { code: 'fr', label: 'Français' },
+          ],
           translations: { en: { 'hero.title': 'Welcome' }, fr: { 'hero.title': 'Bienvenue' } },
         },
         blocks: [
