@@ -77,18 +77,24 @@ function FooterSocialLinks({ social }: { social: SocialSection }) {
     <div data-testid="footer-social">
       {social.title && <h3>{social.title}</h3>}
       <div>
-        {social.links.map((link: SocialLink, index: number) => (
-          <a
-            key={index}
-            href={link.url}
-            target="_blank"
-            rel="noopener noreferrer"
-            data-testid={`social-${link.platform}`}
-            aria-label={link.platform}
-          >
-            {link.platform}
-          </a>
-        ))}
+        {social.links.map((link: SocialLink, index: number) => {
+          const iconTestId = link.icon
+            ? `custom-icon-${link.icon}`
+            : `default-icon-${link.platform}`
+
+          return (
+            <a
+              key={index}
+              href={link.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              data-testid={`social-${link.platform}`}
+              aria-label={link.platform}
+            >
+              <span data-testid={iconTestId}>{link.icon || link.platform}</span>
+            </a>
+          )
+        })}
       </div>
     </div>
   )

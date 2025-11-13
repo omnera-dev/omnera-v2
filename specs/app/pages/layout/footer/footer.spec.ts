@@ -510,7 +510,7 @@ test.describe('Footer Configuration', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-FOOTER-014: should override default platform icon',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
