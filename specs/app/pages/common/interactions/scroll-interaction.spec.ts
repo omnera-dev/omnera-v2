@@ -92,7 +92,7 @@ test.describe('Scroll Interaction', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-INTERACTION-SCROLL-003: should zoom in from small to normal size',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
