@@ -35,15 +35,26 @@
     animatedElements.forEach((element) => {
       const animationName = element.getAttribute('data-scroll-animation')
       const threshold = parseFloat(element.getAttribute('data-scroll-threshold') || '0.1')
+      const delay = element.getAttribute('data-scroll-delay') || '0ms'
+      const duration = element.getAttribute('data-scroll-duration') || '600ms'
       const once = element.getAttribute('data-scroll-once') !== 'false'
+
+      // Apply animation delay and duration via inline styles (if non-default)
+      if (delay !== '0ms') {
+        element.style.animationDelay = delay
+      }
+      if (duration !== '600ms') {
+        element.style.animationDuration = duration
+      }
 
       // Create observer for this element with its specific threshold
       const observer = new IntersectionObserver(
         (entries) => {
           entries.forEach((entry) => {
+            const animationClass = `animate-${animationName}`
+
             if (entry.isIntersecting) {
               // Element is now visible, add animation class
-              const animationClass = `animate-${animationName}`
               if (!element.classList.contains(animationClass)) {
                 element.classList.add(animationClass)
               }
@@ -52,6 +63,9 @@
               if (once) {
                 observer.unobserve(element)
               }
+            } else if (!once) {
+              // Element left viewport and once is false, remove animation class for re-trigger
+              element.classList.remove(animationClass)
             }
           })
         },
