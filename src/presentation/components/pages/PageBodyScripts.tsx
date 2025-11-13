@@ -146,6 +146,31 @@ function renderBodyEndScripts(config: {
           }}
         />
       )}
+      {/* Client-side click interaction functionality - always inject for button interactions */}
+      <script
+        dangerouslySetInnerHTML={{
+          __html: `
+(function() {
+  document.addEventListener('click', function(event) {
+    const button = event.target.closest('[data-click-animation]');
+    if (!button) return;
+
+    const animation = button.getAttribute('data-click-animation');
+    if (!animation || animation === 'none') return;
+
+    const animationClass = 'animate-' + animation;
+    button.classList.add(animationClass);
+
+    const removeAnimation = function() {
+      button.classList.remove(animationClass);
+      button.removeEventListener('animationend', removeAnimation);
+    };
+    button.addEventListener('animationend', removeAnimation);
+  });
+})();
+          `.trim(),
+        }}
+      />
     </>
   )
 }
