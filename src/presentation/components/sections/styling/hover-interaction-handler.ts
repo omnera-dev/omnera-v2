@@ -8,6 +8,23 @@
 import type { HoverInteraction } from '@/domain/models/app/page/common/interactions/hover-interaction'
 
 /**
+ * Maps hover interaction properties to CSS property names
+ *
+ * @param hover - Hover interaction configuration
+ * @returns Array of CSS property names
+ */
+function getAnimatableProperties(hover: HoverInteraction): ReadonlyArray<string> {
+  return [
+    hover.transform && 'transform',
+    hover.opacity !== undefined && 'opacity',
+    hover.backgroundColor && 'background-color',
+    hover.color && 'color',
+    hover.borderColor && 'border-color',
+    hover.shadow && 'box-shadow',
+  ].filter((prop): prop is string => Boolean(prop))
+}
+
+/**
  * Build CSS transition styles for base element state
  *
  * Generates transition property for smooth hover animations.
@@ -23,15 +40,7 @@ export function buildHoverTransitionStyles(
 
   const duration = hover.duration ?? '200ms'
   const easing = hover.easing ?? 'ease-out'
-
-  // Build transition property list for all animatable properties
-  const transitionProps: string[] = []
-  if (hover.transform) transitionProps.push('transform')
-  if (hover.opacity !== undefined) transitionProps.push('opacity')
-  if (hover.backgroundColor) transitionProps.push('background-color')
-  if (hover.color) transitionProps.push('color')
-  if (hover.borderColor) transitionProps.push('border-color')
-  if (hover.shadow) transitionProps.push('box-shadow')
+  const transitionProps = getAnimatableProperties(hover)
 
   if (transitionProps.length === 0) return undefined
 
@@ -59,14 +68,15 @@ export function buildHoverData(
 } | undefined {
   if (!hover) return undefined
 
-  const hoverRules: string[] = []
-
-  if (hover.transform) hoverRules.push(`transform: ${hover.transform}`)
-  if (hover.opacity !== undefined) hoverRules.push(`opacity: ${hover.opacity}`)
-  if (hover.backgroundColor) hoverRules.push(`background-color: ${hover.backgroundColor}`)
-  if (hover.color) hoverRules.push(`color: ${hover.color}`)
-  if (hover.borderColor) hoverRules.push(`border-color: ${hover.borderColor}`)
-  if (hover.shadow) hoverRules.push(`box-shadow: ${hover.shadow}`)
+  // Build hover rules list (immutable)
+  const hoverRules = [
+    hover.transform && `transform: ${hover.transform}`,
+    hover.opacity !== undefined && `opacity: ${hover.opacity}`,
+    hover.backgroundColor && `background-color: ${hover.backgroundColor}`,
+    hover.color && `color: ${hover.color}`,
+    hover.borderColor && `border-color: ${hover.borderColor}`,
+    hover.shadow && `box-shadow: ${hover.shadow}`,
+  ].filter((rule): rule is string => Boolean(rule))
 
   if (hoverRules.length === 0) return undefined
 

@@ -5,8 +5,8 @@
  * found in the LICENSE.md file in the root directory of this source tree.
  */
 
-import { applySpacingStyles } from '../styling/spacing-resolver'
 import { buildHoverTransitionStyles } from '../styling/hover-interaction-handler'
+import { applySpacingStyles } from '../styling/spacing-resolver'
 import { buildFinalClassName, processComponentStyle } from '../styling/style-processor'
 import { substitutePropsThemeTokens } from '../styling/theme-tokens'
 import {

@@ -149,13 +149,9 @@ function renderConditionalScripts(config: {
 }
 
 /**
- * Renders click interaction script
+ * Click interaction handler script
  */
-function renderClickInteractionScript(): ReactElement {
-  return (
-    <script
-      dangerouslySetInnerHTML={{
-        __html: `
+const CLICK_INTERACTION_SCRIPT = `
 (function() {
   document.addEventListener('click', function(event) {
     const button = event.target.closest('[data-click-animation]');
@@ -174,11 +170,7 @@ function renderClickInteractionScript(): ReactElement {
     button.addEventListener('animationend', removeAnimation);
   });
 })();
-        `.trim(),
-      }}
-    />
-  )
-}
+`.trim()
 
 /**
  * Renders scripts for body end position
@@ -195,7 +187,7 @@ function renderBodyEndScripts(config: {
     <>
       {renderScripts(scripts.external.bodyEnd, scripts.inline.bodyEnd, 'body-end')}
       {renderConditionalScripts({ page, theme, languages, direction })}
-      {renderClickInteractionScript()}
+      <script dangerouslySetInnerHTML={{ __html: CLICK_INTERACTION_SCRIPT }} />
     </>
   )
 }
