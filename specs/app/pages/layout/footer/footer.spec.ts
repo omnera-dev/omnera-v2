@@ -467,7 +467,7 @@ test.describe('Footer Configuration', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-FOOTER-013: should render comprehensive footer layout',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
