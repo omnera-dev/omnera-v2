@@ -297,7 +297,7 @@ test.describe('Inline Scripts', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-INLINE-010: should execute scripts in document order',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
