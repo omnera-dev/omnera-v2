@@ -541,6 +541,36 @@ const UTILITIES_LAYER = `@layer utilities {
       .shadow-none {
         box-shadow: none !important;
       }
+
+      /* Click interaction animations */
+      @keyframes ripple {
+        0% {
+          transform: scale(0);
+          opacity: 1;
+        }
+        100% {
+          transform: scale(4);
+          opacity: 0;
+        }
+      }
+
+      .animate-ripple {
+        position: relative;
+        overflow: hidden;
+      }
+
+      .animate-ripple::after {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 100px;
+        height: 100px;
+        background: rgba(255, 255, 255, 0.5);
+        border-radius: 50%;
+        transform: translate(-50%, -50%) scale(0);
+        animation: ripple 600ms ease-out;
+      }
     }`
 
 /**

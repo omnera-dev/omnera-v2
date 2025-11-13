@@ -58,7 +58,7 @@ test.describe('Click Interaction', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-INTERACTION-CLICK-002: should play a ripple animation from the click point',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
