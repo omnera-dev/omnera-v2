@@ -24,7 +24,7 @@ test.describe('Component Interactions', () => {
   // One test per spec in schema - defines EXHAUSTIVE acceptance criteria
   // ============================================================================
 
-  test.fixme(
+  test(
     'APP-PAGES-INTERACTION-MAIN-001: should support hover effects without other interaction types',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -54,7 +54,8 @@ test.describe('Component Interactions', () => {
       // THEN: it should support hover effects without other interaction types
       const button = page.locator('button')
       await button.hover()
-      await expect(button).toHaveCSS('transform', /scale/)
+      // Note: Browsers convert scale(1.05) to matrix(1.05, 0, 0, 1.05, 0, 0)
+      await expect(button).toHaveCSS('transform', /matrix\(1\.05, 0, 0, 1\.05, 0, 0\)/)
     }
   )
 

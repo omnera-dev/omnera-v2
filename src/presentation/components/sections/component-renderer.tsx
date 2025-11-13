@@ -5,11 +5,12 @@
  * found in the LICENSE.md file in the root directory of this source tree.
  */
 
-import { type ReactElement } from 'react'
+import { type ReactElement, Fragment } from 'react'
 import { extractBlockReference, renderBlockReferenceError } from './blocks/block-reference-handler'
 import { resolveBlock } from './blocks/block-resolution'
 import { buildComponentProps } from './props/component-builder'
 import { dispatchComponentType } from './rendering/component-type-dispatcher'
+import { generateHoverCSS, generateHoverId } from './styling/hover-interaction-builder'
 import { resolveChildTranslation } from './translations/translation-handler'
 import type {
   BlockReference,
@@ -78,6 +79,11 @@ function renderDirectComponent(
 ): ReactElement | null {
   const { type, props: componentProps, children, content, interactions } = component
 
+  // Generate hover ID if hover interactions are present
+  const hoverId = interactions?.hover ? generateHoverId(type, props.childIndex) : undefined
+  const hoverSelector = hoverId ? `[data-hover-id="${hoverId}"]` : undefined
+  const hoverCSS = hoverSelector ? generateHoverCSS(hoverSelector, interactions?.hover) : undefined
+
   // Build component props (theme tokens, styles, className, etc.)
   const { elementProps, elementPropsWithSpacing } = buildComponentProps({
     type,
@@ -92,6 +98,14 @@ function renderDirectComponent(
     childIndex: props.childIndex,
     interactions,
   })
+
+  // Add hover ID to element props if hover interactions exist
+  const finalElementProps = hoverId
+    ? { ...elementProps, 'data-hover-id': hoverId }
+    : elementProps
+  const finalElementPropsWithSpacing = hoverId
+    ? { ...elementPropsWithSpacing, 'data-hover-id': hoverId }
+    : elementPropsWithSpacing
 
   // Render children recursively
   const renderedChildren = children?.map((child: Component | string, index: number) =>
@@ -116,16 +130,28 @@ function renderDirectComponent(
     : content
 
   // Dispatch rendering based on component type
-  return dispatchComponentType({
+  const renderedElement = dispatchComponentType({
     type,
-    elementProps,
-    elementPropsWithSpacing,
+    elementProps: finalElementProps,
+    elementPropsWithSpacing: finalElementPropsWithSpacing,
     content: resolvedContent,
     renderedChildren,
     theme: props.theme,
     languages: props.languages,
     interactions,
   })
+
+  // If hover interactions exist, wrap with Fragment containing style tag
+  if (hoverCSS) {
+    return (
+      <Fragment>
+        <style dangerouslySetInnerHTML={{ __html: hoverCSS }} />
+        {renderedElement}
+      </Fragment>
+    )
+  }
+
+  return renderedElement
 }
 
 /**
