@@ -146,8 +146,8 @@ export const COMPONENT_REGISTRY: Partial<Record<Component['type'], ComponentRend
     Renderers.renderIframe(elementProps, renderedChildren),
 
   // Interactive elements
-  button: ({ elementProps, content, renderedChildren }) =>
-    Renderers.renderButton(elementProps, content, renderedChildren),
+  button: ({ elementProps, content, renderedChildren, interactions }) =>
+    Renderers.renderButton(elementProps, content, renderedChildren, interactions),
 
   link: ({ elementProps, content, renderedChildren }) =>
     Renderers.renderLink(elementProps, content, renderedChildren),
