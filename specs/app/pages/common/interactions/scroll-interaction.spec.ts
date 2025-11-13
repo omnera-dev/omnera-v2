@@ -58,7 +58,7 @@ test.describe('Scroll Interaction', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-INTERACTION-SCROLL-002: should fade in smoothly',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
