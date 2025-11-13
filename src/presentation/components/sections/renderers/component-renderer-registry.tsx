@@ -31,7 +31,13 @@ type ComponentRenderer = (params: {
  */
 function createHTMLRenderer(tag: 'div' | 'span' | 'section'): ComponentRenderer {
   return ({ elementPropsWithSpacing, content, renderedChildren, interactions }) =>
-    Renderers.renderHTMLElement(tag, elementPropsWithSpacing, content, renderedChildren, interactions)
+    Renderers.renderHTMLElement({
+      type: tag,
+      props: elementPropsWithSpacing,
+      content,
+      children: renderedChildren,
+      interactions,
+    })
 }
 
 /**
@@ -70,7 +76,13 @@ const COMPONENT_RENDERERS: Readonly<Record<string, ComponentRenderer>> = {
   // Badge (with props conversion)
   badge: ({ elementPropsWithSpacing, content, renderedChildren, interactions }) => {
     const badgeProps = convertBadgeProps(elementPropsWithSpacing)
-    return Renderers.renderHTMLElement('span', badgeProps, content, renderedChildren, interactions)
+    return Renderers.renderHTMLElement({
+      type: 'span',
+      props: badgeProps,
+      content,
+      children: renderedChildren,
+      interactions,
+    })
   },
 
   // Icon

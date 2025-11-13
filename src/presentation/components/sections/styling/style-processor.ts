@@ -45,18 +45,6 @@ function buildEntranceAnimationClass(interactions: Interactions | undefined): st
 }
 
 /**
- * Build scroll animation class from interactions
- *
- * @param interactions - Component interactions
- * @returns Animation class or undefined
- */
-function buildScrollAnimationClass(interactions: Interactions | undefined): string | undefined {
-  if (!interactions?.scroll?.animation) return undefined
-
-  return `animate-${interactions.scroll.animation}`
-}
-
-/**
  * Configuration for building final className
  */
 type BuildClassNameConfig = {
