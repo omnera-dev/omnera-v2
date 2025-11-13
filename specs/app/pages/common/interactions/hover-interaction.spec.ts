@@ -128,7 +128,7 @@ test.describe('Hover Interaction', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-INTERACTION-HOVER-004: should apply box shadow effect',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
