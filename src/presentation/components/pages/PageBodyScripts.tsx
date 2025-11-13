@@ -154,25 +154,35 @@ function renderConditionalScripts(config: {
 const CLICK_INTERACTION_SCRIPT = `
 (function() {
   document.addEventListener('click', function(event) {
-    const button = event.target.closest('[data-click-animation], [data-click-navigate]');
+    const button = event.target.closest('[data-click-animation], [data-click-navigate], [data-click-open-url]');
     if (!button) return;
 
     const animation = button.getAttribute('data-click-animation');
     const navigate = button.getAttribute('data-click-navigate');
+    const openUrl = button.getAttribute('data-click-open-url');
+    const openInNewTab = button.getAttribute('data-click-open-in-new-tab') === 'true';
 
-    // Handle animation and navigation together
+    // Determine target action (navigate or openUrl)
+    const targetUrl = openUrl || navigate;
+    const isExternalUrl = !!openUrl;
+
+    // Handle animation and navigation/openUrl together
     if (animation && animation !== 'none') {
       const animationClass = 'animate-' + animation;
       button.classList.add(animationClass);
 
-      if (navigate) {
-        // Navigate after animation completes (with timeout fallback)
+      if (targetUrl) {
+        // Navigate/open after animation completes (with timeout fallback)
         let navigated = false;
         const doNavigate = function() {
           if (!navigated) {
             navigated = true;
             button.classList.remove(animationClass);
-            window.location.href = navigate;
+            if (isExternalUrl && openInNewTab) {
+              window.open(targetUrl, '_blank');
+            } else {
+              window.location.href = targetUrl;
+            }
           }
         };
 
@@ -190,9 +200,13 @@ const CLICK_INTERACTION_SCRIPT = `
         // Fallback to remove class after timeout
         setTimeout(removeAnimation, 300);
       }
-    } else if (navigate) {
-      // No animation, navigate immediately
-      window.location.href = navigate;
+    } else if (targetUrl) {
+      // No animation, navigate/open immediately
+      if (isExternalUrl && openInNewTab) {
+        window.open(targetUrl, '_blank');
+      } else {
+        window.location.href = targetUrl;
+      }
     }
   });
 })();

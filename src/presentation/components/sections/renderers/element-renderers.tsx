@@ -191,7 +191,14 @@ export function renderButton(
   interactions?: unknown
 ): ReactElement {
   const interactionsTyped = interactions as
-    | { click?: { animation?: string; navigate?: string } }
+    | {
+        click?: {
+          animation?: string
+          navigate?: string
+          openUrl?: string
+          openInNewTab?: boolean
+        }
+      }
     | undefined
 
   const clickInteraction = interactionsTyped?.click
@@ -202,6 +209,10 @@ export function renderButton(
         ...props,
         ...(clickInteraction.animation && { 'data-click-animation': clickInteraction.animation }),
         ...(clickInteraction.navigate && { 'data-click-navigate': clickInteraction.navigate }),
+        ...(clickInteraction.openUrl && { 'data-click-open-url': clickInteraction.openUrl }),
+        ...(clickInteraction.openInNewTab !== undefined && {
+          'data-click-open-in-new-tab': String(clickInteraction.openInNewTab),
+        }),
       }
     : props
 
