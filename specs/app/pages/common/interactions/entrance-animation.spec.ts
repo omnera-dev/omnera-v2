@@ -157,7 +157,7 @@ test.describe('Entrance Animation', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-INTERACTION-ENTRANCE-005: should complete the entrance animation in 1 second',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -186,7 +186,8 @@ test.describe('Entrance Animation', () => {
 
       // THEN: it should complete the entrance animation in 1 second
       const element = page.locator('div').first()
-      await expect(element).toHaveCSS('animation-duration', '1000ms')
+      // Note: Browsers normalize '1000ms' to '1s' - both are equivalent
+      await expect(element).toHaveCSS('animation-duration', '1s')
     }
   )
 
