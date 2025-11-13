@@ -5,11 +5,12 @@
  * found in the LICENSE.md file in the root directory of this source tree.
  */
 
-import { type ReactElement } from 'react'
+import { type ReactElement, Fragment, useId } from 'react'
 import { extractBlockReference, renderBlockReferenceError } from './blocks/block-reference-handler'
 import { resolveBlock } from './blocks/block-resolution'
 import { buildComponentProps } from './props/component-builder'
 import { dispatchComponentType } from './rendering/component-type-dispatcher'
+import { buildHoverData } from './styling/hover-interaction-handler'
 import { resolveChildTranslation } from './translations/translation-handler'
 import type {
   BlockReference,
@@ -66,19 +67,69 @@ function renderBlockReference(
 }
 
 /**
+ * Merges hover attributes into element props
+ *
+ * @param elementProps - Base element props
+ * @param hoverData - Hover data with attributes
+ * @returns Element props with hover attributes merged
+ */
+function mergeHoverAttributes(
+  elementProps: Record<string, unknown>,
+  hoverData: { readonly attributes: Record<string, string> } | undefined
+): Record<string, unknown> {
+  return hoverData ? { ...elementProps, ...hoverData.attributes } : elementProps
+}
+
+/**
+ * Renders children recursively
+ *
+ * @param children - Child components or strings
+ * @param props - Component renderer props
+ * @returns Rendered children elements (cast to ReactElement[] for compatibility)
+ */
+function renderChildren(
+  children: ReadonlyArray<Component | string> | undefined,
+  props: ComponentRendererProps
+): readonly ReactElement[] {
+  if (!children) return []
+
+  return children.map((child: Component | string, index: number) =>
+    typeof child === 'string' ? (
+      resolveChildTranslation(child, props.currentLang, props.languages)
+    ) : (
+      <ComponentRenderer
+        key={index}
+        component={child}
+        blocks={props.blocks}
+        theme={props.theme}
+        languages={props.languages}
+        currentLang={props.currentLang}
+        childIndex={index}
+      />
+    )
+  ) as ReactElement[]
+}
+
+/**
  * Renders direct component (non-block-reference)
+ *
+ * This is a React component (not a helper function) because it uses the useId hook.
+ * React components must start with an uppercase letter.
  *
  * @param component - Direct component
  * @param props - Component renderer props
  * @returns Rendered component
  */
-function renderDirectComponent(
-  component: Component,
+function RenderDirectComponent({
+  component,
+  props,
+}: {
+  component: Component
   props: ComponentRendererProps
-): ReactElement | null {
+}): ReactElement | null {
   const { type, props: componentProps, children, content, interactions } = component
+  const uniqueId = useId()
 
-  // Build component props (theme tokens, styles, className, etc.)
   const { elementProps, elementPropsWithSpacing } = buildComponentProps({
     type,
     props: componentProps,
@@ -93,39 +144,35 @@ function renderDirectComponent(
     interactions,
   })
 
-  // Render children recursively
-  const renderedChildren = children?.map((child: Component | string, index: number) =>
-    typeof child === 'string' ? (
-      resolveChildTranslation(child, props.currentLang, props.languages)
-    ) : (
-      <ComponentRenderer
-        key={index}
-        component={child}
-        blocks={props.blocks}
-        theme={props.theme}
-        languages={props.languages}
-        currentLang={props.currentLang}
-        childIndex={index}
-      />
-    )
-  )
-
-  // Resolve content translation if content is a string with $t: pattern
+  const hoverData = buildHoverData(interactions?.hover, uniqueId)
+  const finalElementProps = mergeHoverAttributes(elementProps, hoverData)
+  const finalElementPropsWithSpacing = mergeHoverAttributes(elementPropsWithSpacing, hoverData)
+  const renderedChildren = renderChildren(children, props)
   const resolvedContent = content
     ? resolveChildTranslation(content, props.currentLang, props.languages)
     : content
 
-  // Dispatch rendering based on component type
-  return dispatchComponentType({
+  const renderedComponent = dispatchComponentType({
     type,
-    elementProps,
-    elementPropsWithSpacing,
+    elementProps: finalElementProps,
+    elementPropsWithSpacing: finalElementPropsWithSpacing,
     content: resolvedContent,
     renderedChildren,
     theme: props.theme,
     languages: props.languages,
     interactions,
   })
+
+  if (hoverData) {
+    return (
+      <Fragment>
+        <style>{hoverData.styleContent}</style>
+        {renderedComponent}
+      </Fragment>
+    )
+  }
+
+  return renderedComponent
 }
 
 /**
@@ -154,5 +201,10 @@ export function ComponentRenderer(props: ComponentRendererProps): Readonly<React
   }
 
   // Direct component rendering
-  return renderDirectComponent(component as Component, props)
+  return (
+    <RenderDirectComponent
+      component={component as Component}
+      props={props}
+    />
+  )
 }
