@@ -174,7 +174,7 @@ test.describe('Inline Scripts', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-INLINE-006: should inject global configuration',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -203,7 +203,7 @@ test.describe('Inline Scripts', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-INLINE-007: should inject multiple inline scripts in order',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -268,7 +268,7 @@ test.describe('Inline Scripts', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-INLINE-009: should enable custom tracking code',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -301,7 +301,7 @@ test.describe('Inline Scripts', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-INLINE-010: should execute scripts in document order',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {

@@ -181,14 +181,25 @@ export function renderIframe(
 }
 
 /**
- * Renders button element
+ * Renders button element with click interactions
  */
 export function renderButton(
   props: ElementProps,
   content: string | undefined,
-  children: readonly React.ReactNode[]
+  children: readonly React.ReactNode[],
+  interactions?: unknown
 ): ReactElement {
-  return <button {...props}>{content || children}</button>
+  const clickInteractions = interactions as { click?: { animation?: string } } | undefined
+
+  // Store interaction data in data attribute for client-side JavaScript handler
+  const buttonProps = clickInteractions
+    ? {
+        ...props,
+        'data-click-animation': clickInteractions.click?.animation,
+      }
+    : props
+
+  return <button {...buttonProps}>{content || children}</button>
 }
 
 /**
