@@ -5,6 +5,7 @@
  * found in the LICENSE.md file in the root directory of this source tree.
  */
 
+import { buildHoverTransitionStyles } from '../styling/hover-interaction-handler'
 import { applySpacingStyles } from '../styling/spacing-resolver'
 import { buildFinalClassName, processComponentStyle } from '../styling/style-processor'
 import { substitutePropsThemeTokens } from '../styling/theme-tokens'
@@ -95,6 +96,7 @@ function prepareProcessedValues(config: ComponentPropsConfig) {
   const firstTranslationKey = findFirstTranslationKey(children)
   const translationData = getTranslationData(firstTranslationKey, languages)
   const styleWithShadow = processComponentStyle(type, substitutedProps?.style, theme)
+  const hoverTransitionStyles = buildHoverTransitionStyles(interactions?.hover)
   const finalClassName = buildFinalClassName({
     type,
     className: substitutedProps?.className,
@@ -103,7 +105,18 @@ function prepareProcessedValues(config: ComponentPropsConfig) {
     interactions,
   })
 
-  return { substitutedProps, firstTranslationKey, translationData, styleWithShadow, finalClassName }
+  // Merge hover transition styles with existing styles
+  const styleWithHover = hoverTransitionStyles
+    ? { ...styleWithShadow, ...hoverTransitionStyles }
+    : styleWithShadow
+
+  return {
+    substitutedProps,
+    firstTranslationKey,
+    translationData,
+    styleWithShadow: styleWithHover,
+    finalClassName,
+  }
 }
 
 /**
