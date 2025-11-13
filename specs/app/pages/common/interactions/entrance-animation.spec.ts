@@ -123,7 +123,7 @@ test.describe('Entrance Animation', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-INTERACTION-ENTRANCE-004: should wait 500ms before starting the entrance animation',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -152,7 +152,8 @@ test.describe('Entrance Animation', () => {
 
       // THEN: it should wait 500ms before starting the entrance animation
       const element = page.locator('div').first()
-      await expect(element).toHaveCSS('animation-delay', '500ms')
+      // Note: Browsers normalize '500ms' to '0.5s' - both are equivalent
+      await expect(element).toHaveCSS('animation-delay', '0.5s')
     }
   )
 

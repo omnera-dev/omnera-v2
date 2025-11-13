@@ -70,6 +70,7 @@ function buildElementPropsFromConfig(config: ElementPropsConfig): Record<string,
     ...buildBlockProps(config),
     ...buildTranslationProps(config),
     ...buildAnimationProps(hasScrollAnimation),
+    ...buildEntranceInteractionProps(config),
     ...buildScrollInteractionProps(config),
     ...buildEmptyElementStyles(config),
   }
@@ -126,6 +127,28 @@ function buildAnimationProps(hasScrollAnimation: boolean): Record<string, unknow
   return {
     'data-scroll-animation': 'scale-up',
   }
+}
+
+/**
+ * Build entrance interaction props (style for animations)
+ */
+function buildEntranceInteractionProps(config: ElementPropsConfig): Record<string, unknown> {
+  if (!config.interactions?.entrance) return {}
+
+  const { delay, duration } = config.interactions.entrance
+
+  // Build animation styles immutably
+  const delayStyle = delay ? { animationDelay: delay } : {}
+  const durationStyle = duration ? { animationDuration: duration } : {}
+  const animationStyles = { ...delayStyle, ...durationStyle }
+
+  // Combine all props immutably
+  const hasAnimationStyles = Object.keys(animationStyles).length > 0
+  const styleProps = hasAnimationStyles
+    ? { style: { ...config.styleWithShadow, ...animationStyles } }
+    : {}
+
+  return styleProps
 }
 
 /**
