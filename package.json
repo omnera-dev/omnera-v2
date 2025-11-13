@@ -119,6 +119,7 @@
     "globals": "^16.5.0",
     "knip": "^5.68.0",
     "pg": "^8.16.3",
+    "playwright": "^1.56.1",
     "prettier": "3.6.2",
     "semantic-release": "^25.0.2",
     "typescript": "^5.9.3",
