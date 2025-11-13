@@ -126,7 +126,7 @@ test.describe('Scroll Interaction', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-INTERACTION-SCROLL-004: should fade in while sliding from the left',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
