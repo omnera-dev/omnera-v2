@@ -132,7 +132,7 @@ test.describe('Click Interaction', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-INTERACTION-CLICK-004: should navigate to the pricing section on the same page',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
