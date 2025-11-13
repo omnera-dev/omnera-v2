@@ -84,7 +84,7 @@ test.describe('Inline Scripts', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-INLINE-003: should insert code in document head',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -106,8 +106,12 @@ test.describe('Inline Scripts', () => {
       await page.goto('/')
 
       // THEN: it should insert code in document head
-      const headScript = await page.locator('head script').filter({ hasText: 'head' }).textContent()
-      expect(headScript).toContain("console.log('head');")
+      const headScripts = await page.locator('head script').all()
+      const headScriptContents = await Promise.all(headScripts.map((s) => s.innerHTML()))
+      const hasExpectedScript = headScriptContents.some((content) =>
+        content.includes("console.log('head');")
+      )
+      expect(hasExpectedScript).toBeTruthy()
     }
   )
 
