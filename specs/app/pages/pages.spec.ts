@@ -464,24 +464,27 @@ test.describe('Pages', () => {
       await startServerWithSchema({
         name: 'test-app',
         languages: {
-          default: 'en',
+          default: 'en-US',
           supported: [
-            { code: 'en', label: 'English', direction: 'ltr' },
-            { code: 'fr', label: 'Français', direction: 'ltr' },
+            { code: 'en-US', label: 'English', direction: 'ltr' },
+            { code: 'fr-FR', label: 'Français', direction: 'ltr' },
           ],
-          translations: { en: { 'hero.title': 'Welcome' }, fr: { 'hero.title': 'Bienvenue' } },
+          translations: {
+            'en-US': { 'hero.title': 'Welcome' },
+            'fr-FR': { 'hero.title': 'Bienvenue' },
+          },
         },
         pages: [
           {
             name: 'home',
             path: '/',
-            meta: { lang: 'en', title: 'Home', description: 'Home page' },
+            meta: { lang: 'en-US', title: 'Home', description: 'Home page' },
             sections: [{ type: 'h1', children: ['$t:hero.title'] }],
           },
           {
             name: 'home_french',
             path: '/fr',
-            meta: { lang: 'fr', title: 'Accueil', description: 'Page accueil' },
+            meta: { lang: 'fr-FR', title: 'Accueil', description: 'Page accueil' },
             sections: [{ type: 'h1', children: ['$t:hero.title'] }],
           },
         ],
