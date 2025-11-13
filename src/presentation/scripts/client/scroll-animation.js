@@ -33,6 +33,7 @@
 
     // Process each element to create observers with custom thresholds
     animatedElements.forEach((element) => {
+      const animationName = element.getAttribute('data-scroll-animation')
       const threshold = parseFloat(element.getAttribute('data-scroll-threshold') || '0.1')
       const once = element.getAttribute('data-scroll-once') !== 'false'
 
@@ -41,8 +42,11 @@
         (entries) => {
           entries.forEach((entry) => {
             if (entry.isIntersecting) {
-              // Element is now visible, animation class already applied via className
-              // The animation will play automatically via CSS
+              // Element is now visible, add animation class
+              const animationClass = `animate-${animationName}`
+              if (!element.classList.contains(animationClass)) {
+                element.classList.add(animationClass)
+              }
 
               // If once is true, stop observing
               if (once) {

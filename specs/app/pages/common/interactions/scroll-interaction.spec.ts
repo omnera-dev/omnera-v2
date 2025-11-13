@@ -160,7 +160,7 @@ test.describe('Scroll Interaction', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-INTERACTION-SCROLL-005: should trigger the animation',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
