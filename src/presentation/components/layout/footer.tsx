@@ -5,13 +5,12 @@
  * found in the LICENSE.md file in the root directory of this source tree.
  */
 
+import { FooterSocial } from '@/presentation/components/layout/footer/footer-social'
 import type {
   Footer as FooterProps,
   FooterColumn,
   FooterLink,
   Newsletter,
-  SocialLink,
-  SocialSection,
 } from '@/domain/models/app/page/layout/footer'
 import type { ReactElement } from 'react'
 
@@ -65,34 +64,6 @@ function FooterColumnLink({ link }: { link: FooterLink }) {
   )
 }
 
-/**
- * Renders social media links section
- */
-function FooterSocialLinks({ social }: { social: SocialSection }) {
-  if (!social.links || social.links.length === 0) {
-    return undefined
-  }
-
-  return (
-    <div data-testid="footer-social">
-      {social.title && <h3>{social.title}</h3>}
-      <div>
-        {social.links.map((link: SocialLink, index: number) => (
-          <a
-            key={index}
-            href={link.url}
-            target="_blank"
-            rel="noopener noreferrer"
-            data-testid={`social-${link.platform}`}
-            aria-label={link.platform}
-          >
-            {link.platform}
-          </a>
-        ))}
-      </div>
-    </div>
-  )
-}
 
 /**
  * Renders newsletter subscription section
@@ -222,7 +193,7 @@ export function Footer({
       <FooterLogo logo={logo} />
       {description && <div data-testid="footer-description">{description}</div>}
       <FooterColumns columns={columns} />
-      {social && <FooterSocialLinks social={social} />}
+      {social && <FooterSocial social={social} />}
       {newsletter && <FooterNewsletterSection newsletter={newsletter} />}
       {copyright && <div data-testid="footer-copyright">{copyright}</div>}
       {legal && <FooterLegalLinks legal={legal} />}
