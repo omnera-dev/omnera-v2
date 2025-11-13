@@ -164,7 +164,8 @@ function buildScrollInteractionProps(config: ElementPropsConfig): Record<string,
     'data-scroll-animation': animation,
   }
 
-  const thresholdProps = threshold !== undefined ? { 'data-scroll-threshold': threshold.toString() } : {}
+  const thresholdProps =
+    threshold !== undefined ? { 'data-scroll-threshold': threshold.toString() } : {}
   const delayProps = delay ? { 'data-scroll-delay': delay } : {}
   const durationProps = duration ? { 'data-scroll-duration': duration } : {}
   const onceProps = once !== undefined ? { 'data-scroll-once': once.toString() } : {}

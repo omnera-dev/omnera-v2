@@ -35,7 +35,15 @@ export function buildAccessibilityRole(
  */
 export function buildScrollAttributes(interactions: unknown): Record<string, unknown> {
   const scrollInteractions = interactions as
-    | { scroll?: { animation?: string; threshold?: number; delay?: string; duration?: string; once?: boolean } }
+    | {
+        scroll?: {
+          animation?: string
+          threshold?: number
+          delay?: string
+          duration?: string
+          once?: boolean
+        }
+      }
     | undefined
 
   const { scroll } = scrollInteractions ?? {}

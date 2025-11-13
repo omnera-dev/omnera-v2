@@ -64,7 +64,6 @@ function FooterColumnLink({ link }: { link: FooterLink }) {
   )
 }
 
-
 /**
  * Renders newsletter subscription section
  */

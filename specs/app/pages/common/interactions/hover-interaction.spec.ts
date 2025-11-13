@@ -194,7 +194,8 @@ test.describe('Hover Interaction', () => {
       await button.hover()
 
       // THEN: it should transition using specified duration and easing function
-      await expect(button).toHaveCSS('transition-duration', /500ms/)
+      // Note: Browsers may normalize 500ms to 0.5s
+      await expect(button).toHaveCSS('transition-duration', /0\.5s|500ms/)
       await expect(button).toHaveCSS('transition-timing-function', /ease-in-out/)
     }
   )
