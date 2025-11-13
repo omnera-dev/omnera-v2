@@ -203,7 +203,7 @@ test.describe('Inline Scripts', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-INLINE-007: should inject multiple inline scripts in order',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
