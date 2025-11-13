@@ -456,7 +456,7 @@ test.describe('Pages', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-INTEGRATION-002: should adapt page content based on selected language without page-level translations',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
@@ -465,7 +465,10 @@ test.describe('Pages', () => {
         name: 'test-app',
         languages: {
           default: 'en',
-          supported: ['en', 'fr'],
+          supported: [
+            { code: 'en', label: 'English' },
+            { code: 'fr', label: 'Français' },
+          ],
           translations: { en: { 'hero.title': 'Welcome' }, fr: { 'hero.title': 'Bienvenue' } },
         },
         pages: [

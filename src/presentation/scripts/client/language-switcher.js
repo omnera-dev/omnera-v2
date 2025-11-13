@@ -70,13 +70,24 @@
   /**
    * Detect initial language based on configuration
    * Priority order:
-   * 1. localStorage (user's explicit choice - highest priority)
-   * 2. Page language from <html lang> (server-rendered, either from page.meta.lang or Accept-Language detection)
+   * 1. Page language from <html lang> (server-rendered, either from page.meta.lang or Accept-Language detection - highest priority)
+   * 2. localStorage (user's explicit choice, if persistence enabled)
    * 3. Browser detection (user's browser preference, only if no HTML lang set)
    * 4. Default language (final fallback)
    */
   function getInitialLanguage() {
-    // 1. Check if persistence is enabled (defaults to true)
+    // 1. Check page language from <html lang="..."> attribute (server-rendered)
+    // This has highest priority to respect page.meta.lang settings
+    const pageLang = document.documentElement.getAttribute('lang')
+    if (pageLang) {
+      // Verify page language is in supported languages
+      const isSupported = languagesConfig.supported.some((lang) => lang.code === pageLang)
+      if (isSupported) {
+        return pageLang
+      }
+    }
+
+    // 2. Check if persistence is enabled (defaults to true)
     const persistSelection = languagesConfig.persistSelection ?? true
 
     if (persistSelection) {
@@ -88,17 +99,6 @@
         if (isSupported) {
           return savedLanguage
         }
-      }
-    }
-
-    // 2. Check page language from <html lang="..."> attribute (server-rendered)
-    // This takes precedence over browser detection to respect page.meta.lang settings
-    const pageLang = document.documentElement.getAttribute('lang')
-    if (pageLang) {
-      // Verify page language is in supported languages
-      const isSupported = languagesConfig.supported.some((lang) => lang.code === pageLang)
-      if (isSupported) {
-        return pageLang
       }
     }
 
