@@ -264,7 +264,7 @@ test.describe('Inline Scripts', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-INLINE-009: should enable custom tracking code',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
