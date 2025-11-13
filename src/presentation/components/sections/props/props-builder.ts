@@ -70,6 +70,7 @@ function buildElementPropsFromConfig(config: ElementPropsConfig): Record<string,
     ...buildBlockProps(config),
     ...buildTranslationProps(config),
     ...buildAnimationProps(hasScrollAnimation),
+    ...buildScrollInteractionProps(config),
     ...buildEmptyElementStyles(config),
   }
 }
@@ -124,6 +125,27 @@ function buildAnimationProps(hasScrollAnimation: boolean): Record<string, unknow
 
   return {
     'data-scroll-animation': 'scale-up',
+  }
+}
+
+/**
+ * Build scroll interaction props from interactions config
+ */
+function buildScrollInteractionProps(config: ElementPropsConfig): Record<string, unknown> {
+  const scrollConfig = config.interactions?.scroll
+  if (!scrollConfig) return {}
+
+  const once = scrollConfig.once ?? true
+
+  return {
+    'data-scroll-animation': scrollConfig.animation,
+    ...(scrollConfig.threshold !== undefined && {
+      'data-scroll-threshold': String(scrollConfig.threshold),
+    }),
+    ...(scrollConfig.delay && { 'data-scroll-delay': scrollConfig.delay }),
+    ...(scrollConfig.duration && { 'data-scroll-duration': scrollConfig.duration }),
+    ...(once && { 'data-scroll-once': 'true' }),
+    ...(!once && { 'data-scroll-once': 'false' }),
   }
 }
 
