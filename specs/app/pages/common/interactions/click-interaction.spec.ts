@@ -205,7 +205,7 @@ test.describe('Click Interaction', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-INTERACTION-CLICK-006: should open the URL in a new tab',
     { tag: '@spec' },
     async ({ page, startServerWithSchema, context }) => {
