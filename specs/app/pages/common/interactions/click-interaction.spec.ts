@@ -92,7 +92,7 @@ test.describe('Click Interaction', () => {
     }
   )
 
-  test.fixme(
+  test(
     'APP-PAGES-INTERACTION-CLICK-003: should navigate to the contact page',
     { tag: '@spec' },
     async ({ page, startServerWithSchema }) => {
